@@ -97,6 +97,57 @@ describe("applyDebugEdit FORESEE", () => {
   });
 });
 
+describe("viewer-aware hidden information", () => {
+  it("reveals one side's hand to the requested canonical viewer only", () => {
+    const state = createTestState();
+    const enemyHandId = state.sides.enemy.hand[0];
+    const result = applyDebugEdit(state, {
+      kind: "SET_SIDE_HAND_VISIBILITY",
+      side: "enemy",
+      viewer: "player",
+      isRevealed: true,
+    }, EMISSION);
+
+    expect(result.state.cardInstances[enemyHandId].revealedTo).toEqual({
+      player: true,
+      enemy: true,
+    });
+    expect(state.cardInstances[enemyHandId].revealedTo).toEqual({
+      player: false,
+      enemy: true,
+    });
+  });
+
+  it("interprets a legacy visibility edit as player-viewer knowledge", () => {
+    const state = createTestState();
+    const enemyHandId = state.sides.enemy.hand[0];
+    const result = applyDebugEdit(state, {
+      kind: "SET_CARD_VISIBILITY",
+      battleCardId: enemyHandId,
+      isRevealedToPlayer: true,
+    }, EMISSION);
+
+    expect(result.state.cardInstances[enemyHandId].revealedTo?.player).toBe(true);
+    expect(result.state.cardInstances[enemyHandId].revealedTo?.enemy).toBe(true);
+  });
+
+  it("records Foresee knowledge for the acting viewer", () => {
+    const state = createTestState();
+    const viewedCardIds = state.sides.enemy.deck.slice(0, 2);
+    const result = applyDebugEdit(state, {
+      kind: "FORESEE",
+      side: "enemy",
+      viewer: "enemy",
+      viewedCardIds,
+      orderedCardIds: viewedCardIds,
+      voidCardIds: [],
+    }, EMISSION);
+
+    expect(viewedCardIds.every((id) => result.state.cardInstances[id].revealedTo?.enemy)).toBe(true);
+    expect(viewedCardIds.every((id) => !result.state.cardInstances[id].revealedTo?.player)).toBe(true);
+  });
+});
+
 describe("applyDebugEdit Figments leaving play", () => {
   function createBattlefieldFigment(): {
     state: BattleMutableState;

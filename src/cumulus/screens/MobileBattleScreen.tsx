@@ -97,12 +97,30 @@ export interface MobileBattleStatusView {
 
 /** Every zone owned by one side of the battle. */
 export interface MobileBattleSideView {
+  readonly owner: MobileBattleOwner;
+  readonly position: BattleBoardPosition;
   readonly deckCardIds: readonly string[];
   readonly banishedCardCount: number;
   readonly voidCards: readonly MobileBattleCardView[];
   readonly backRank: readonly MobileBattleSlotView[];
   readonly frontRank: readonly MobileBattleSlotView[];
   readonly status: MobileBattleStatusView;
+}
+
+export type BattlePerspectiveSide = MobileBattleOwner;
+export type BattleBoardPosition = "near" | "far";
+
+export interface MobileBattleHandView {
+  readonly owner: MobileBattleOwner;
+  readonly position: BattleBoardPosition;
+  readonly cardIds: readonly string[];
+  /** Face-up models available to the current local viewer. */
+  readonly cards: readonly MobileBattleCardView[];
+}
+
+export interface MobileBattlePromptNoticeView {
+  readonly promptSide: MobileBattleOwner;
+  readonly message: string;
 }
 
 /** The complete, presentation-ready mobile battle board. */
@@ -127,6 +145,12 @@ export interface MobileBattleDreamwellView {
 
 export interface MobileBattleView {
   readonly battleId: string;
+  readonly perspective: BattlePerspectiveSide;
+  readonly near: MobileBattleSideView;
+  readonly far: MobileBattleSideView;
+  readonly nearHand: MobileBattleHandView;
+  readonly farHand: MobileBattleHandView;
+  readonly promptNotice: MobileBattlePromptNoticeView | null;
   readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
   readonly choicePrompt: MobileBattleChoicePromptView | null;
@@ -147,6 +171,7 @@ export interface MobileBattleCardPickerView {
   readonly key: string;
   readonly label: string;
   readonly side: MobileBattleOwner;
+  readonly candidateOwner?: MobileBattleOwner | null;
   readonly candidates: readonly MobileBattleCardPickerCandidateView[];
   readonly candidateIds: readonly string[];
   readonly count: number;
@@ -190,14 +215,14 @@ export interface MobileBattleScreenProps {
 
 export type MobileBattleOwner = "enemy" | "player";
 export type MobileBattleRank = "back" | "front";
-export type MobileBattleCardSource = "player-hand" | "battlefield";
+export type MobileBattleCardSource = "near-hand" | "battlefield";
 export type MobileBattleDropZone = "deck" | "hand" | "void";
 export type MobileBattleBrowseZone = "deck" | "void" | "banished";
 export type MobileBattleDebugAdjustment = -1 | 1;
 
 export interface MobileBattleInspectorSideView {
   readonly side: MobileBattleOwner;
-  readonly heading: "Your" | "Enemy";
+  readonly heading: "Player" | "Enemy";
   readonly points: number;
   readonly currentEnergy: number;
   readonly maxEnergy: number;
@@ -224,6 +249,7 @@ export interface MobileBattleInspectorAiView {
 
 export interface MobileBattleInspectorView {
   readonly opponentName: string;
+  readonly perspective: MobileBattleOwner;
   readonly turn: string;
   readonly phase: string;
   readonly activeSide: string;
@@ -231,6 +257,8 @@ export interface MobileBattleInspectorView {
   readonly nextDreamwellOrder: string;
   readonly isOpponentHandRevealed: boolean;
   readonly isPlayerHandHidden: boolean;
+  readonly isFarHandRevealed: boolean;
+  readonly isNearHandHidden: boolean;
   readonly sides: Readonly<Record<MobileBattleOwner, MobileBattleInspectorSideView>>;
   readonly ai: MobileBattleInspectorAiView | null;
 }
@@ -273,6 +301,7 @@ export interface MobileBattleBrowseZoneTarget {
 /** Intent-only gesture bridge owned by the live battle controller. */
 export interface MobileBattleInteractions {
   readonly canInteract: boolean;
+  readonly nearSide?: MobileBattleOwner;
   readonly pendingCardId: string | null;
   readonly pendingCardSource?: MobileBattleCardSource | null;
   readonly pendingCardOwner?: MobileBattleOwner | null;
@@ -299,6 +328,7 @@ export interface MobileBattleInteractions {
   readonly onCardPickerSubmit?: (chosenIds: readonly string[]) => void;
   readonly onCardPickerSkip?: () => void;
   readonly onChoicePromptChoose?: (optionIndex: number) => void;
+  readonly onPerspectiveToggle?: () => void;
   readonly onResultAction?: (action: MobileBattleResultAction) => void;
   readonly onFillBattlefieldPreview?: () => void;
   readonly onFillTwentyCardBattlefieldPreview?: () => void;
@@ -516,9 +546,11 @@ function BattleBackdrop({ isDesktop }: { readonly isDesktop: boolean }) {
 
 function BattleTurnAnnouncement({
   activeSide,
+  perspective,
   isDesktop,
 }: {
   readonly activeSide: MobileBattleOwner;
+  readonly perspective: BattlePerspectiveSide;
   readonly isDesktop: boolean;
 }) {
   const sequence = useRef(1);
@@ -548,7 +580,7 @@ function BattleTurnAnnouncement({
 
   if (announcement === null) return null;
 
-  const label = announcement.side === "player" ? "Your Turn" : "Opponent Turn";
+  const label = announcement.side === perspective ? "Your Turn" : "Opponent Turn";
   const size = isDesktop
     ? TURN_ANNOUNCEMENT_DESKTOP_SIZE
     : TURN_ANNOUNCEMENT_MOBILE_SIZE;
@@ -657,7 +689,8 @@ function centeredFanPosition(params: {
   };
 }
 
-function EnemyHand({
+function FarHand({
+  owner,
   cardIds,
   cards,
   revealed,
@@ -666,6 +699,7 @@ function EnemyHand({
   selectedPickerCardIds,
   onPickerCardToggle,
 }: {
+  readonly owner: MobileBattleOwner;
   readonly cardIds: readonly string[];
   readonly cards: readonly MobileBattleCardView[];
   readonly revealed: boolean;
@@ -674,19 +708,23 @@ function EnemyHand({
   readonly selectedPickerCardIds: readonly string[];
   readonly onPickerCardToggle: (cardId: string) => void;
 }) {
-  const enemyHandCandidates = cardPicker?.candidates.filter(
-    (candidate) => candidate.owner === "enemy" && candidate.zone === "hand",
+  const farHandCandidates = cardPicker?.candidates.filter(
+    (candidate) => candidate.owner === owner && candidate.zone === "hand",
   ) ?? [];
   const pickerCandidateIds = new Set(
-    enemyHandCandidates.map((candidate) => candidate.instanceId),
+    farHandCandidates.map((candidate) => candidate.instanceId),
   );
-  const showFaceUp = revealed || enemyHandCandidates.length > 0;
-  const visibleCardIds = enemyHandCandidates.length === 0
-    ? cardIds.slice(0, ENEMY_HAND_VISIBLE_CARD_CAP)
-    : cardIds;
+  const importantCardIds = new Set([
+    ...cards.map((card) => card.id),
+    ...farHandCandidates.map((candidate) => candidate.instanceId),
+  ]);
+  const visibleCardIds = cardIds.filter(
+    (cardId, index) => index < ENEMY_HAND_VISIBLE_CARD_CAP || importantCardIds.has(cardId),
+  );
   return (
     <div
-      data-battle-mobile-row="enemy-hand"
+      data-battle-mobile-row="far-hand"
+      data-battle-hand-owner={owner}
       data-battle-hand-count={cardIds.length}
       data-battle-hand-visible-count={visibleCardIds.length}
       style={{
@@ -700,8 +738,9 @@ function EnemyHand({
       }}
     >
       {visibleCardIds.map((cardId, index) => {
-        const card = cards.find((candidate) => candidate.id === cardId);
         const candidate = pickerCandidate(cardPicker, cardId);
+        const card = cards.find((visibleCard) => visibleCard.id === cardId) ?? candidate?.card;
+        const showFaceUp = revealed || card !== undefined || candidate !== null;
         const highlighted = candidate?.highlighted === true;
         const { left, normalized } = centeredFanPosition({
           index,
@@ -715,7 +754,7 @@ function EnemyHand({
           <div
             key={cardId}
             data-battle-card-id={cardId}
-            data-battle-card-zone="enemy-hand"
+            data-battle-card-zone="far-hand"
             data-battle-card-face={showFaceUp ? "up" : "down"}
             data-battle-card-picker-candidate={
               pickerCandidateIds.has(cardId) ? "true" : undefined
@@ -743,7 +782,7 @@ function EnemyHand({
             {showFaceUp && card !== undefined ? (
               <FaceUpCard
                 card={card}
-                zone="enemy-hand"
+                zone="far-hand"
                 showRulesText
                 selection={
                   candidate === null
@@ -774,7 +813,7 @@ function EnemyHand({
                 data-battle-card-motion=""
                 style={{ width: "100%", height: "100%" }}
               >
-                <CardBack label="Enemy card" />
+                <CardBack label="Opponent card" />
               </motion.div>
             )}
           </div>
@@ -805,6 +844,7 @@ function SideZones({
   dreamwell,
   isDesktop,
   owner,
+  position,
   phase,
   side,
   interactions,
@@ -813,6 +853,7 @@ function SideZones({
   readonly dreamwell: MobileBattleDreamwellView | null;
   readonly isDesktop: boolean;
   readonly owner: MobileBattleOwner;
+  readonly position: BattleBoardPosition;
   readonly phase: MobileBattlePhase;
   readonly side: MobileBattleSideView;
   readonly interactions?: MobileBattleInteractions;
@@ -822,7 +863,7 @@ function SideZones({
   const canDrop =
     interactions?.canInteract === true
     && interactions.pendingCardId !== null
-    && interactions.pendingCardSource !== "player-hand";
+    && interactions.pendingCardSource !== "near-hand";
   const zoneDropProps = (zone: "deck" | "void") => ({
     "data-battle-mobile-drop-kind": "zone",
     "data-battle-mobile-drop-owner": owner,
@@ -843,8 +884,8 @@ function SideZones({
       style={{
         ...ROW_STYLE,
         gridColumn: 1,
-        gridRow: owner === "enemy" ? 2 : isDesktop ? 5 : 6,
-        ...(owner === "player"
+        gridRow: position === "far" ? 2 : isDesktop ? 5 : 6,
+        ...(position === "near"
           ? isDesktop
             ? {
                 alignSelf: "stretch",
@@ -883,7 +924,7 @@ function SideZones({
         style={{
           minWidth: 0,
           minHeight: 0,
-          height: owner === "player" ? "100%" : "72%",
+          height: position === "near" ? "100%" : "72%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -902,7 +943,7 @@ function SideZones({
           <CardPile
             cards={deck}
             orientation="landscape"
-            label={`${owner === "enemy" ? "Enemy" : "Player"} deck`}
+            label={`${position === "near" ? "Your" : "Opponent"} deck`}
             cardInteraction="inactive"
             onActivate={interactions?.onZoneOpen === undefined
               ? undefined
@@ -916,7 +957,7 @@ function SideZones({
         style={{
           minWidth: 0,
           minHeight: 0,
-          height: owner === "player" ? "100%" : "82%",
+          height: position === "near" ? "100%" : "82%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -932,6 +973,7 @@ function SideZones({
         >
           <BattleStatusDisplay
             owner={owner}
+            relationship={position}
             dreamcaller={side.status.dreamcaller}
             dreamcallerProfile={side.status.dreamcallerProfile}
             currentEnergy={side.status.currentEnergy}
@@ -939,7 +981,7 @@ function SideZones({
             points={side.status.points}
             testId={`${owner}-battle-status`}
           />
-          {owner === "player" && dreamwell !== null ? (
+          {position === "near" && dreamwell !== null ? (
             <div
               data-battle-dreamwell-layer=""
               data-battle-dreamwell-side={dreamwell.side}
@@ -962,7 +1004,7 @@ function SideZones({
             </div>
           ) : null}
           {activeSide === owner ? (
-            <PhaseIndicator owner={owner} phase={phase} />
+            <PhaseIndicator owner={owner} position={position} phase={phase} />
           ) : null}
         </div>
       </div>
@@ -974,7 +1016,7 @@ function SideZones({
         style={{
           minWidth: 0,
           minHeight: 0,
-          height: owner === "player" ? "100%" : "72%",
+          height: position === "near" ? "100%" : "72%",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -992,7 +1034,7 @@ function SideZones({
           <CardPile
             cards={voidPile}
             orientation="landscape"
-            label={`${owner === "enemy" ? "Enemy" : "Player"} void`}
+            label={`${position === "near" ? "Your" : "Opponent"} void`}
             cardInteraction="inactive"
             emptyState="outlined"
             onActivate={interactions?.onZoneOpen === undefined
@@ -1008,12 +1050,14 @@ function SideZones({
 
 function PhaseIndicator({
   owner,
+  position,
   phase,
 }: {
   readonly owner: MobileBattleOwner;
+  readonly position: BattleBoardPosition;
   readonly phase: MobileBattlePhase;
 }) {
-  const ownerLabel = owner === "player" ? "Player" : "Opponent";
+  const ownerLabel = position === "near" ? "Your" : "Opponent";
   return (
     <div
       role="img"
@@ -1024,7 +1068,7 @@ function PhaseIndicator({
         position: "absolute",
         left: 0,
         right: 0,
-        top: owner === "player" ? 0 : "100%",
+        top: position === "near" ? 0 : "100%",
         height: 0,
         pointerEvents: "none",
       }}
@@ -1034,7 +1078,7 @@ function PhaseIndicator({
         data-battle-phase-light=""
         style={{
           position: "absolute",
-          top: owner === "player"
+          top: position === "near"
             ? -PHASE_LIGHT_VERTICAL_OFFSET
             : PHASE_LIGHT_VERTICAL_OFFSET,
           left: PHASE_LIGHT_LEFT[phase],
@@ -1042,7 +1086,7 @@ function PhaseIndicator({
           height: PHASE_LIGHT_SIZE,
           // Follow the phase track along the status edge; the tuned signed
           // offset determines how much of the disc seats into the bar.
-          transform: owner === "player"
+          transform: position === "near"
             ? "translate(-50%, -100%)"
             : "translate(-50%, 0%)",
           transition: `left ${token("--motion-object-travel")}`,
@@ -1584,6 +1628,7 @@ function desktopRankSlots(
 function Rank({
   isDesktop,
   owner,
+  position,
   rank,
   slots,
   layoutBackSlotCount,
@@ -1600,6 +1645,7 @@ function Rank({
 }: {
   readonly isDesktop: boolean;
   readonly owner: MobileBattleOwner;
+  readonly position: BattleBoardPosition;
   readonly rank: MobileBattleRank;
   readonly slots: readonly MobileBattleSlotView[];
   readonly layoutBackSlotCount: number;
@@ -1620,7 +1666,7 @@ function Rank({
   const canDrop =
     interactions?.canInteract === true
     && interactions.pendingCardId !== null
-    && interactions.pendingCardSource !== "player-hand"
+    && interactions.pendingCardSource !== "near-hand"
     && (interactions.pendingCardOwner === null
       || interactions.pendingCardOwner === undefined
       || interactions.pendingCardOwner === owner);
@@ -1633,8 +1679,8 @@ function Rank({
     : slots;
   const trackSlotCount = Math.max(visibleSlots.length, 1);
   const isCenterFacingRank =
-    (owner === "enemy" && order === 1) ||
-    (owner === "player" && order === 0);
+    (position === "far" && order === 1) ||
+    (position === "near" && order === 0);
   const centerOffset = token("--space-1");
   const outerOffset = `calc(${cardSize} + ${token("--space-2")} + ${centerOffset})`;
   return (
@@ -1647,13 +1693,13 @@ function Rank({
         right: `${String(isDesktop ? DESKTOP_BATTLEFIELD_SIDE_INSET_PERCENT : BATTLEFIELD_SIDE_INSET_PERCENT)}%`,
         height: cardSize,
         top:
-          owner === "player"
+          position === "near"
             ? isCenterFacingRank
               ? centerOffset
               : outerOffset
             : undefined,
         bottom:
-          owner === "enemy"
+          position === "far"
             ? isCenterFacingRank
               ? centerOffset
               : outerOffset
@@ -1805,6 +1851,7 @@ function Rank({
 function PlayArea({
   isDesktop,
   owner,
+  position,
   side,
   layoutBackSlotCount,
   centerAsymmetricDesktopRanks,
@@ -1819,6 +1866,7 @@ function PlayArea({
 }: {
   readonly isDesktop: boolean;
   readonly owner: MobileBattleOwner;
+  readonly position: BattleBoardPosition;
   readonly side: MobileBattleSideView;
   readonly layoutBackSlotCount: number;
   readonly centerAsymmetricDesktopRanks: boolean;
@@ -1835,7 +1883,7 @@ function PlayArea({
   readonly interactions?: MobileBattleInteractions;
 }) {
   const ranks =
-    owner === "enemy"
+    position === "far"
       ? ([
           ["back", side.backRank],
           ["front", side.frontRank],
@@ -1850,7 +1898,7 @@ function PlayArea({
       data-battle-play-area={owner}
       style={{
         ...ROW_STYLE,
-        gridRow: owner === "enemy" ? 3 : 4,
+        gridRow: position === "far" ? 3 : 4,
         overflow: "hidden",
         containerType: "size",
       }}
@@ -1860,6 +1908,7 @@ function PlayArea({
           key={rank}
           isDesktop={isDesktop}
           owner={owner}
+          position={position}
           rank={rank}
           slots={slots}
           layoutBackSlotCount={layoutBackSlotCount}
@@ -1879,7 +1928,8 @@ function PlayArea({
   );
 }
 
-function PlayerHand({
+function NearHand({
+  owner,
   cards,
   isDesktop,
   snapLayoutCardId,
@@ -1889,6 +1939,7 @@ function PlayerHand({
   onCardDragChange,
   interactions,
 }: {
+  readonly owner: MobileBattleOwner;
   readonly cards: readonly MobileBattleCardView[];
   readonly isDesktop: boolean;
   readonly snapLayoutCardId: string | null;
@@ -1903,14 +1954,15 @@ function PlayerHand({
     cardPicker === null &&
     interactions?.canInteract === true
     && interactions.pendingCardId !== null
-    && interactions.pendingCardSource !== "player-hand";
+    && interactions.pendingCardSource !== "near-hand";
   return (
     <div
-      data-battle-mobile-row="player-hand"
+      data-battle-mobile-row="near-hand"
+      data-battle-hand-owner={owner}
       data-battle-hand-count={cards.length}
       data-battle-hand-visible-count={cards.length}
       data-battle-mobile-drop-kind="zone"
-      data-battle-mobile-drop-owner="player"
+      data-battle-mobile-drop-owner={owner}
       data-battle-mobile-drop-zone="hand"
       data-battle-drop-target={canDrop ? "true" : undefined}
       onDragOver={(event) => {
@@ -1919,7 +1971,7 @@ function PlayerHand({
       onDrop={(event) => {
         if (!canDrop) return;
         event.preventDefault();
-        interactions.onZoneDrop({ owner: "player", zone: "hand" });
+        interactions.onZoneDrop({ owner, zone: "hand" });
       }}
       style={{
         ...ROW_STYLE,
@@ -1965,7 +2017,7 @@ function PlayerHand({
         const cardContent = (
           <FaceUpCard
             card={card}
-            zone="player-hand"
+            zone="near-hand"
             showRulesText
             snapLayout={snapLayoutCardId === card.id}
             selection={
@@ -2002,13 +2054,13 @@ function PlayerHand({
                           onDebugActivate: (invocation) =>
                             interactions.onCardDebugActivate?.(
                               card.id,
-                              "player-hand",
+                              "near-hand",
                               invocation,
                             ),
                         }),
                     onDragStart: () => {
                       onCardDragChange(true, card.id);
-                      interactions.onCardDragStart(card.id, "player-hand");
+                      interactions.onCardDragStart(card.id, "near-hand");
                     },
                     onDragEnd: () => {
                       onCardDragChange(false);
@@ -2033,7 +2085,7 @@ function PlayerHand({
           return (
             <div
               key={card.id}
-              data-battle-player-hand-slot=""
+              data-battle-near-hand-slot=""
               style={{
                 position: "relative",
                 height: "94%",
@@ -2109,14 +2161,19 @@ function dropMobileCardAtPoint(
   clientY: number,
 ): void {
   const hitTarget = document.elementFromPoint(clientX, clientY);
-  if (interactions.pendingCardSource === "player-hand") {
+  if (interactions.pendingCardSource === "near-hand") {
     const battleScreen = hitTarget?.closest<HTMLElement>(
       "[data-battle-mobile]",
     );
     interactions.onHandCardDrop?.(
       battleScreen === undefined || battleScreen === null
         ? undefined
-        : closestOpenBackRankSlot(battleScreen, "player", clientX, clientY),
+        : closestOpenBackRankSlot(
+            battleScreen,
+            interactions.nearSide ?? interactions.pendingCardOwner ?? "player",
+            clientX,
+            clientY,
+          ),
     );
     return;
   }
@@ -2178,8 +2235,9 @@ function closestOpenBackRankSlot(
 
 function pickerZoneCaption(
   candidate: MobileBattleCardPickerCandidateView,
+  perspective: BattlePerspectiveSide,
 ): string {
-  const owner = candidate.owner === "player" ? "Your" : "Enemy";
+  const owner = candidate.owner === perspective ? "Your" : "Opponent";
   const zone = candidate.zone === "backRank"
     ? "Back Rank"
     : candidate.zone === "frontRank"
@@ -2203,12 +2261,14 @@ function CardPickerGallery({
   isDesktop,
   onPickerCardToggle,
   interactions,
+  perspective,
 }: {
   readonly cardPicker: MobileBattleCardPickerView;
   readonly selectedPickerCardIds: readonly string[];
   readonly isDesktop: boolean;
   readonly onPickerCardToggle: (cardId: string) => void;
   readonly interactions?: MobileBattleInteractions;
+  readonly perspective: BattlePerspectiveSide;
 }) {
   const requiredCount = Math.min(
     cardPicker.count,
@@ -2272,7 +2332,7 @@ function CardPickerGallery({
               selectionColor: selected ? "gold-light" : "gold",
               caption: {
                 kind: "text" as const,
-                text: pickerZoneCaption(candidate),
+                text: pickerZoneCaption(candidate, perspective),
               },
               testId: `battle-card-picker-candidate-${candidate.instanceId}`,
             };
@@ -2311,6 +2371,7 @@ function ControlRow({
   interactions,
   layoutBackSlotCount,
   phaseNavigation,
+  perspective,
 }: {
   readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
@@ -2320,6 +2381,7 @@ function ControlRow({
   readonly interactions?: MobileBattleInteractions;
   readonly layoutBackSlotCount: number;
   readonly phaseNavigation: "both" | "hidden";
+  readonly perspective: BattlePerspectiveSide;
 }) {
   const disabled = interactions?.canInteract !== true;
   const hasAlternateNextControls =
@@ -2385,9 +2447,9 @@ function ControlRow({
               whiteSpace: "nowrap",
             }}
           >
-            {cardPicker.label} from {cardPicker.side === "player"
+            {cardPicker.label} from {(cardPicker.candidateOwner ?? cardPicker.side) === perspective
               ? "your hand"
-              : "the enemy hand"} · {String(selectedPickerCardIds.length)}/{String(requiredPickerCount)}
+              : "the opponent hand"} · {String(selectedPickerCardIds.length)}/{String(requiredPickerCount)}
           </span>
           {cardPicker.optional ? (
             <GlassButton
@@ -2505,11 +2567,13 @@ function ControlRow({
 function BattleControlMessage({
   aiApproval,
   choicePrompt,
+  promptNotice,
 }: {
   readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly choicePrompt: MobileBattleChoicePromptView | null;
+  readonly promptNotice: MobileBattlePromptNoticeView | null;
 }) {
-  const message = choicePrompt?.label ?? aiApproval?.description;
+  const message = promptNotice?.message ?? choicePrompt?.label ?? aiApproval?.description;
   if (message === undefined) return null;
   return (
     <div
@@ -2520,6 +2584,7 @@ function BattleControlMessage({
       data-battle-choice-prompt-message={
         choicePrompt === null ? undefined : ""
       }
+      data-battle-prompt-waiting={promptNotice === null ? undefined : promptNotice.promptSide}
       style={{
         maxWidth: 320,
         overflow: "hidden",
@@ -2780,8 +2845,8 @@ function BattleInspectorContent({
       <DisclosureSection title="View & Visibility" summary="Pool and hidden hands" expanded={visibilityOpen} onExpandedChange={setVisibilityOpen}>
         <div style={{ ...actionGrid, marginTop: token("--space-4") }}>
           <InspectorButton label="Pool Viewer" onPress={() => onAction?.({ kind: "open-pool-viewer" })} disabled={onAction === undefined} />
-          <InspectorButton label={inspector.isOpponentHandRevealed ? "Hide Enemy Hand" : "Show Enemy Hand"} onPress={() => onAction?.({ kind: "toggle-opponent-hand" })} disabled={onAction === undefined} />
-          <InspectorButton label={inspector.isPlayerHandHidden ? "Show Your Hand" : "Hide Your Hand"} onPress={() => onAction?.({ kind: "toggle-player-hand" })} disabled={onAction === undefined} />
+          <InspectorButton label={inspector.isFarHandRevealed ? "Hide Far Hand" : "Reveal Far Hand"} onPress={() => onAction?.({ kind: "toggle-opponent-hand" })} disabled={onAction === undefined} />
+          <InspectorButton label={inspector.isNearHandHidden ? "Show Near Hand" : "Hide Near Hand"} onPress={() => onAction?.({ kind: "toggle-player-hand" })} disabled={onAction === undefined} />
         </div>
       </DisclosureSection>
 
@@ -2829,7 +2894,7 @@ function BattleInspectorRail({
         id={INSPECTOR_ID}
         side="right"
         title="Battle Inspector"
-        subtitle={`Opponent: ${inspector.opponentName}`}
+        subtitle={`Opponent: ${inspector.opponentName} · Perspective: ${inspector.perspective}`}
         onClose={onClose}
       >
         <BattleInspectorContent inspector={inspector} selectedSide={selectedSide} onSelectSide={onSelectSide} onAction={onAction} />
@@ -2866,16 +2931,30 @@ export function MobileBattleScreen({
   const [selectedSide, setSelectedSide] = useState<MobileBattleOwner>("player");
   const inspectorTriggerRef = useRef<HTMLElement | null>(null);
   const previousDockLayout = useRef(isDockLayout);
+  const previousPerspective = useRef(view.perspective);
   const openedLogKey = useRef<string | null>(null);
   const snapLayoutOriginView = useRef<MobileBattleView | null>(null);
+  const near = view.perspective === "player" ? view.player : view.enemy;
+  const far = view.perspective === "player" ? view.enemy : view.player;
+  const nearHandNeededByPrompt = view.cardPicker?.candidates.some(
+    (candidate) => candidate.owner === near.owner && candidate.zone === "hand",
+  ) === true;
+  const nearHandCards = view.inspector.isNearHandHidden && !nearHandNeededByPrompt
+    ? []
+    : view.perspective === "player"
+      ? view.playerHand
+      : view.nearHand.cards;
+  const farHandCards = view.inspector.isFarHandRevealed
+    ? (far.owner === "enemy" ? view.enemyHand : view.playerHand)
+    : view.farHand.cards;
   const layoutBackSlotCount = battlefieldLayoutBackSlotCount(view, isDesktop);
   const cardSize = battlefieldCardSize(layoutBackSlotCount);
   const centerAsymmetricDesktopRanks = isDesktop && (
-    view.enemy.backRank.length >= MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS
-    || view.player.backRank.length >= MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS
+    far.backRank.length >= MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS
+    || near.backRank.length >= MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS
   ) && (
-    view.enemy.backRank.length !== view.player.backRank.length
-    || view.enemy.frontRank.length !== view.player.frontRank.length
+    far.backRank.length !== near.backRank.length
+    || far.frontRank.length !== near.frontRank.length
   );
   const cardPickerKey = view.cardPicker?.key ?? null;
   const boardCardPicker = view.cardPicker?.presentation === "board"
@@ -2895,6 +2974,18 @@ export function MobileBattleScreen({
     setSnapLayoutCardId(null);
     setCardPickerSelection({ pickerKey: null, ids: [] });
   }, [inspectorStartsOpen, setInspectorOpen, view.battleId]);
+
+  useEffect(() => {
+    const perspectiveChanged = previousPerspective.current !== view.perspective;
+    previousPerspective.current = view.perspective;
+    if (perspectiveChanged) {
+      setSelectedSide("player");
+      setInspectorOpen(false);
+    }
+    setIsCardDragActive(false);
+    setSnapLayoutCardId(null);
+    setCardPickerSelection({ pickerKey: null, ids: [] });
+  }, [setInspectorOpen, view.perspective]);
 
   const handlePickerCardToggle = useCallback((cardId: string): void => {
     if (view.cardPicker === null) return;
@@ -2994,18 +3085,19 @@ export function MobileBattleScreen({
       className="cumulus"
       data-battle-mobile={view.battleId}
       data-battle-layout={isDesktop ? "desktop" : "mobile"}
+      data-battle-perspective={view.perspective}
       onDragOver={(event) => {
-        if (interactions?.pendingCardSource === "player-hand") {
+        if (interactions?.pendingCardSource === "near-hand") {
           event.preventDefault();
         }
       }}
       onDrop={(event) => {
-        if (interactions?.pendingCardSource !== "player-hand") return;
+        if (interactions?.pendingCardSource !== "near-hand") return;
         event.preventDefault();
         interactions.onHandCardDrop?.(
           closestOpenBackRankSlot(
             event.currentTarget,
-            "player",
+            near.owner,
             event.clientX,
             event.clientY,
           ),
@@ -3025,22 +3117,24 @@ export function MobileBattleScreen({
         <BattleTurnAnnouncement
           key={view.battleId}
           activeSide={view.activeSide}
+          perspective={view.perspective}
           isDesktop={isDesktop}
         />
       ) : null}
       <LayoutGroup id={`mobile-battle:${view.battleId}`}>
-        <EnemyHand
-          cardIds={view.enemyHandCardIds}
-          cards={view.enemyHand}
-          revealed={view.inspector.isOpponentHandRevealed}
+        <FarHand
+          owner={far.owner}
+          cardIds={view.farHand.cardIds}
+          cards={farHandCards}
+          revealed={view.inspector.isFarHandRevealed}
           isDesktop={isDesktop}
           cardPicker={boardCardPicker}
           selectedPickerCardIds={selectedPickerCardIds}
           onPickerCardToggle={handlePickerCardToggle}
         />
-        <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="enemy" phase={view.phase} side={view.enemy} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner="enemy" side={view.enemy} layoutBackSlotCount={layoutBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner="player" side={view.player} layoutBackSlotCount={layoutBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
+        <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner={far.owner} position="far" phase={view.phase} side={far} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner={far.owner} position="far" side={far} layoutBackSlotCount={layoutBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner={near.owner} position="near" side={near} layoutBackSlotCount={layoutBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
         <ControlRow
           aiApproval={view.aiApproval}
           cardPicker={boardCardPicker}
@@ -3050,18 +3144,12 @@ export function MobileBattleScreen({
           interactions={interactions}
           layoutBackSlotCount={layoutBackSlotCount}
           phaseNavigation={phaseNavigation}
+          perspective={view.perspective}
         />
-        <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner="player" phase={view.phase} side={view.player} interactions={interactions} />
-        <PlayerHand
-          cards={
-            view.inspector.isPlayerHandHidden &&
-            !boardCardPicker?.candidates.some(
-              (candidate) =>
-                candidate.owner === "player" && candidate.zone === "hand",
-            )
-              ? []
-              : view.playerHand
-          }
+        <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner={near.owner} position="near" phase={view.phase} side={near} interactions={interactions} />
+        <NearHand
+          owner={near.owner}
+          cards={nearHandCards}
           isDesktop={isDesktop}
           snapLayoutCardId={snapLayoutCardId}
           cardPicker={boardCardPicker}
@@ -3085,19 +3173,19 @@ export function MobileBattleScreen({
         }}
       >
         {isDesktop
-        && view.player.banishedCardCount > 0
+        && near.banishedCardCount > 0
         && interactions?.onZoneOpen !== undefined ? (
           <div
-            data-battle-zone="player-banished"
-            data-battle-zone-count={String(view.player.banishedCardCount)}
+            data-battle-zone={`${near.owner}-banished`}
+            data-battle-zone-count={String(near.banishedCardCount)}
           >
             <IconButton
               glyph={GLYPHS.block}
               size="sm"
-              label={`Open banished cards, ${String(view.player.banishedCardCount)} ${view.player.banishedCardCount === 1 ? "card" : "cards"}`}
-              testId="player-battle-banished"
+              label={`Open your banished cards, ${String(near.banishedCardCount)} ${near.banishedCardCount === 1 ? "card" : "cards"}`}
+              testId="near-battle-banished"
               onPress={() => interactions.onZoneOpen?.({
-                owner: "player",
+                owner: near.owner,
                 zone: "banished",
               })}
             />
@@ -3106,6 +3194,7 @@ export function MobileBattleScreen({
         <BattleControlMessage
           aiApproval={view.aiApproval}
           choicePrompt={view.choicePrompt}
+          promptNotice={view.promptNotice}
         />
       </div>
       <div
@@ -3119,6 +3208,18 @@ export function MobileBattleScreen({
           gap: token("--space-3"),
         }}
       >
+        <GlassButton
+          label={view.perspective === "player" ? "Control Opponent" : "Return to Your Side"}
+          widthReservations={[
+            { label: "Control Opponent" },
+            { label: "Return to Your Side" },
+          ]}
+          variant={view.perspective === "enemy" ? "accent" : "default"}
+          pressed={view.perspective === "enemy"}
+          disabled={interactions?.onPerspectiveToggle === undefined}
+          testId="battle-perspective-toggle"
+          onPress={() => interactions?.onPerspectiveToggle?.()}
+        />
         <BattleDebugMenu
           onFillBattlefieldPreview={interactions?.onFillBattlefieldPreview}
           onFillTwentyCardBattlefieldPreview={interactions?.onFillTwentyCardBattlefieldPreview}
@@ -3151,6 +3252,7 @@ export function MobileBattleScreen({
           isDesktop={isDesktop}
           onPickerCardToggle={handlePickerCardToggle}
           interactions={interactions}
+          perspective={view.perspective}
         />
       ) : null}
     </main>

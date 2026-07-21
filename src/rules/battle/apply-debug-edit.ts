@@ -1,4 +1,9 @@
-import type { BattleDebugEdit, BattleDebugZoneDestination } from "../../battle/debug/commands";
+import {
+  visibilityEditValue,
+  visibilityEditViewer,
+  type BattleDebugEdit,
+  type BattleDebugZoneDestination,
+} from "../../battle/debug/commands";
 import {
   createBattleResultChangedLogFields,
   createEmptyTransitionData,
@@ -57,6 +62,10 @@ import {
   selectFigmentSparks,
 } from "../../battle/state/figments";
 import { lookupFigmentCatalogEntry, type FigmentKeyword } from "../../battle/state/figment-catalog";
+import {
+  revealCardPublicly,
+  setCardRevealedTo,
+} from "../../battle/state/card-visibility";
 
 export function applyDebugEdit(
   state: BattleMutableState,
@@ -264,16 +273,16 @@ export function applyDebugEdit(
           transition: createEmptyTransitionData(),
         };
       }
-      if (
-        nextState.cardInstances[edit.battleCardId].isRevealedToPlayer
-        === edit.isRevealedToPlayer
-      ) {
+      if (!setCardRevealedTo(
+        nextState.cardInstances[edit.battleCardId],
+        visibilityEditViewer(edit),
+        visibilityEditValue(edit),
+      )) {
         return {
           state,
           transition: createEmptyTransitionData(),
         };
       }
-      nextState.cardInstances[edit.battleCardId].isRevealedToPlayer = edit.isRevealedToPlayer;
       return {
         state: nextState,
         transition: createEmptyTransitionData(),
@@ -283,7 +292,8 @@ export function applyDebugEdit(
         state,
         nextState,
         edit.side,
-        edit.isRevealedToPlayer,
+        visibilityEditViewer(edit),
+        visibilityEditValue(edit),
         context,
       );
     case "ADD_CARD_NOTE":
@@ -368,12 +378,13 @@ export function applyDebugEdit(
         edit.viewedCardIds,
         edit.orderedCardIds,
         edit.voidCardIds,
+        edit.viewer ?? "player",
         context,
       );
     case "REVEAL_DECK_TOP":
-      return revealDeckTop(state, nextState, edit.side, edit.count);
+      return revealDeckTop(state, nextState, edit.side, edit.count, edit.viewer ?? "player");
     case "HIDE_DECK_TOP":
-      return hideDeckTop(state, nextState, edit.side, edit.count);
+      return hideDeckTop(state, nextState, edit.side, edit.count, edit.viewer ?? "player");
     case "PLAY_FROM_DECK_TOP":
       return playFromDeckTop(state, edit.side, edit.target);
     case "SET_PHASE":
@@ -460,6 +471,7 @@ function resolveForesee(
   viewedCardIds: readonly string[],
   orderedCardIds: readonly string[],
   voidCardIds: readonly string[],
+  viewer: BattleSide,
   context: BattleEngineEmissionContext,
 ): {
   state: BattleMutableState;
@@ -491,7 +503,7 @@ function resolveForesee(
   for (const battleCardId of viewedCardIds) {
     const instance = nextState.cardInstances[battleCardId];
     if (instance !== undefined) {
-      instance.isRevealedToPlayer = true;
+      setCardRevealedTo(instance, viewer, true);
     }
   }
 
@@ -510,6 +522,7 @@ function resolveForesee(
           fields: {
             ...createBattleLogBaseFields(nextState, context),
             side,
+            viewer,
             viewedCardIds: [...viewedCardIds],
             viewedCardUuids: cardUuids(viewedCardIds),
             orderedCardIds: [...orderedCardIds],
@@ -569,11 +582,12 @@ function revealDeckTop(
   nextState: BattleMutableState,
   side: BattleSide,
   count: number,
+  viewer: BattleSide,
 ): {
   state: BattleMutableState;
   transition: BattleTransitionData;
 } {
-  return setDeckTopVisibility(state, nextState, side, count, true);
+  return setDeckTopVisibility(state, nextState, side, count, viewer, true);
 }
 
 function hideDeckTop(
@@ -581,11 +595,12 @@ function hideDeckTop(
   nextState: BattleMutableState,
   side: BattleSide,
   count: number,
+  viewer: BattleSide,
 ): {
   state: BattleMutableState;
   transition: BattleTransitionData;
 } {
-  return setDeckTopVisibility(state, nextState, side, count, false);
+  return setDeckTopVisibility(state, nextState, side, count, viewer, false);
 }
 
 function setDeckTopVisibility(
@@ -593,7 +608,8 @@ function setDeckTopVisibility(
   nextState: BattleMutableState,
   side: BattleSide,
   count: number,
-  isRevealedToPlayer: boolean,
+  viewer: BattleSide,
+  isRevealed: boolean,
 ): {
   state: BattleMutableState;
   transition: BattleTransitionData;
@@ -614,10 +630,7 @@ function setDeckTopVisibility(
     if (instance === undefined) {
       continue;
     }
-    if (instance.isRevealedToPlayer !== isRevealedToPlayer) {
-      instance.isRevealedToPlayer = isRevealedToPlayer;
-      changed = true;
-    }
+    changed = setCardRevealedTo(instance, viewer, isRevealed) || changed;
   }
 
   if (!changed) {
@@ -673,7 +686,7 @@ function playFromDeckTop(
   nextState.sides[side].deck = nextState.sides[side].deck.slice(1);
   insertBattleCardAtDebugDestination(nextState, topBattleCardId, resolvedTarget);
   nextState.cardInstances[topBattleCardId].controller = resolvedTarget.side;
-  nextState.cardInstances[topBattleCardId].isRevealedToPlayer = true;
+  revealCardPublicly(nextState.cardInstances[topBattleCardId]);
 
   return {
     state: nextState,
@@ -685,7 +698,8 @@ function setSideHandVisibility(
   state: BattleMutableState,
   nextState: BattleMutableState,
   side: BattleSide,
-  isRevealedToPlayer: boolean,
+  viewer: BattleSide,
+  isRevealed: boolean,
   context: BattleEngineEmissionContext,
 ): {
   state: BattleMutableState;
@@ -694,10 +708,9 @@ function setSideHandVisibility(
   let affectedCount = 0;
   for (const battleCardId of nextState.sides[side].hand) {
     const card = nextState.cardInstances[battleCardId];
-    if (card === undefined || card.isRevealedToPlayer === isRevealedToPlayer) {
+    if (card === undefined || !setCardRevealedTo(card, viewer, isRevealed)) {
       continue;
     }
-    card.isRevealedToPlayer = isRevealedToPlayer;
     affectedCount += 1;
   }
 
@@ -718,8 +731,9 @@ function setSideHandVisibility(
           fields: {
             ...createBattleLogBaseFields(nextState, context),
             affectedCount,
-            isRevealedToPlayer,
+            isRevealed,
             side,
+            viewer,
           },
         },
       ],
@@ -1094,11 +1108,11 @@ function createCardCopy(
     definition,
     owner: destination.side,
     controller: destination.side,
-    isRevealedToPlayer: true,
     provenance,
   });
 
   insertBattleCardAtDebugDestination(nextState, battleCardId, destination);
+  revealPublicDestination(nextState.cardInstances[battleCardId], destination);
 
   return {
     state: nextState,
@@ -1223,11 +1237,11 @@ function createFigment(
     definition,
     owner: side,
     controller: destination.side,
-    isRevealedToPlayer: true,
     provenance,
   });
 
   insertBattleCardAtDebugDestination(nextState, battleCardId, destination);
+  revealPublicDestination(nextState.cardInstances[battleCardId], destination);
 
   applyFigmentKeywordToStatus(nextState, battleCardId, catalogEntry?.keyword);
 
@@ -1331,11 +1345,11 @@ function createCardFromDefinition(
     definition: clonedDefinition,
     owner: destination.side,
     controller: destination.side,
-    isRevealedToPlayer: true,
     provenance,
   });
 
   insertBattleCardAtDebugDestination(nextState, battleCardId, destination);
+  revealPublicDestination(nextState.cardInstances[battleCardId], destination);
 
   return {
     state: nextState,
@@ -1651,6 +1665,11 @@ function moveCardToDebugZone(
     insertBattleCardAtDebugDestination(nextState, battleCardId, destination);
     const moved = nextState.cardInstances[battleCardId];
     moved.controller = destination.side;
+    if (destination.zone === "backRank" || destination.zone === "frontRank" || destination.zone === "void" || destination.zone === "banished") {
+      revealCardPublicly(moved);
+    } else {
+      setCardRevealedTo(moved, destination.side, true);
+    }
     clearCountersOnLeavingPlay(moved, source.zone, destination.zone);
   }
 
@@ -2194,6 +2213,20 @@ function insertBattleCardAtDebugDestination(
   }
 
   state.sides[destination.side][destination.zone].push(battleCardId);
+}
+
+function revealPublicDestination(
+  instance: BattleCardInstance,
+  destination: BattleDebugZoneDestination,
+): void {
+  if (
+    destination.zone === "backRank" ||
+    destination.zone === "frontRank" ||
+    destination.zone === "void" ||
+    destination.zone === "banished"
+  ) {
+    revealCardPublicly(instance);
+  }
 }
 
 function setBattlefieldSlotOccupant(

@@ -96,6 +96,8 @@ export interface GlassButtonProps {
   placement?: GlassControlPlacement;
   /** Dims the control, detaches click / press feedback, and marks it `aria-disabled`. */
   disabled?: boolean;
+  /** Toggle state for controls whose action switches a persistent local mode. */
+  pressed?: boolean;
   /** A `data-testid` for selecting the button in tests. */
   testId?: string;
 }
@@ -115,6 +117,7 @@ export function GlassButton({
   variant = "default",
   placement = "onMedia",
   disabled = false,
+  pressed,
   testId,
 }: GlassButtonProps): ReactElement {
   const chrome = controlChrome(placement);
@@ -125,6 +128,8 @@ export function GlassButton({
       data-glass-placement={placement}
       data-glass-variant={variant}
       data-testid={testId}
+      aria-pressed={pressed}
+      data-pressed={pressed === undefined ? undefined : String(pressed)}
       disabled={disabled}
       onClick={disabled ? undefined : onPress}
       style={{

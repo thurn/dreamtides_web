@@ -262,6 +262,7 @@ function runQueue(
           kind: "REVEAL_DECK_TOP",
           side: run.side,
           count: plan.active.count,
+          viewer: run.side,
         },
         EMISSION,
       ).state;

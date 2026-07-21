@@ -24,11 +24,24 @@ The labeled glass action — a bold text label with optional numerical essence c
 | `variant` | `GlassButtonVariant` = `"default" \| "danger" \| "accent"` | no | `default` | Strict surface treatment: accent for primary/commit actions, default for secondary actions, or danger for destructive actions. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
 | `disabled` | `boolean` | no | `false` | Dims the control, detaches click / press feedback, and marks it `aria-disabled`. |
+| `pressed` | `boolean` | no | — | Toggle state for controls whose action switches a persistent local mode. |
 | `testId` | `string` | no | — | A `data-testid` for selecting the button in tests. |
 
 ## Usage
 
-### Variant 1
+### Pressed toggle
+
+Use `pressed` only when the action represents a persistent toggle state; the component exposes the state through `aria-pressed`.
+
+```tsx
+<GlassButton
+  label={controllingOpponent ? "Return to Your Side" : "Control Opponent"}
+  pressed={controllingOpponent}
+  onPress={togglePerspective}
+/>
+```
+
+### Variant 2
 
 A plain text label on the glass surface. `label` is a resolved string; `onPress` fires on activation.
 

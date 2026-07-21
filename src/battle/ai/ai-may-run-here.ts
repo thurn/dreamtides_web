@@ -47,3 +47,11 @@ export function aiMayRunHere({ connectedCount }: AiMayRunHereInput): boolean {
   }
   return connectedCount <= 1;
 }
+
+export function battleAiDriverEnabled(input: {
+  aiMode: boolean;
+  mayRunHere: boolean;
+  perspectiveSide: "player" | "enemy";
+}): boolean {
+  return input.aiMode && input.mayRunHere && input.perspectiveSide !== "enemy";
+}

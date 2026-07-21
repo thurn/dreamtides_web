@@ -431,6 +431,7 @@ describe("applyPromptResolution — foresee", () => {
     expect(edits).toEqual([{
       kind: "FORESEE",
       side: "player",
+      viewer: "player",
       viewedCardIds: ["card-a", "card-b"],
       orderedCardIds: ["card-b"],
       voidCardIds: ["card-a"],
@@ -462,6 +463,7 @@ describe("applyPromptResolution — foresee", () => {
     expect(edits).toEqual([{
       kind: "FORESEE",
       side: "player",
+      viewer: "player",
       viewedCardIds: ["card-a", "card-b", "card-c"],
       orderedCardIds: ["card-c", "card-a"],
       voidCardIds: ["card-b"],

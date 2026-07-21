@@ -158,6 +158,7 @@ export function applyPromptResolution(
         edits: [{
           kind: "FORESEE",
           side: ctx.side,
+          viewer: ctx.side,
           viewedCardIds: resolution.viewedCardIds ??
             ctx.state.sides[ctx.side].deck.slice(0, prompt.count),
           orderedCardIds: resolution.orderedCardIds,

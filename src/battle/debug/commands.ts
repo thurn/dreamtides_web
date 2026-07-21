@@ -157,12 +157,18 @@ export type BattleDebugEdit =
   | {
     kind: "SET_CARD_VISIBILITY";
     battleCardId: string;
-    isRevealedToPlayer: boolean;
+    viewer?: BattleSide;
+    isRevealed?: boolean;
+    /** Legacy event field; omitted `viewer` means the canonical player. */
+    isRevealedToPlayer?: boolean;
   }
   | {
     kind: "SET_SIDE_HAND_VISIBILITY";
     side: BattleSide;
-    isRevealedToPlayer: boolean;
+    viewer?: BattleSide;
+    isRevealed?: boolean;
+    /** Legacy event field; omitted `viewer` means the canonical player. */
+    isRevealedToPlayer?: boolean;
   }
   | {
     kind: "ADD_CARD_NOTE";
@@ -249,6 +255,7 @@ export type BattleDebugEdit =
      */
     kind: "FORESEE";
     side: BattleSide;
+    viewer?: BattleSide;
     viewedCardIds: readonly string[];
     orderedCardIds: readonly string[];
     voidCardIds: readonly string[];
@@ -257,6 +264,7 @@ export type BattleDebugEdit =
     kind: "REVEAL_DECK_TOP";
     side: BattleSide;
     count: number;
+    viewer?: BattleSide;
   }
   | {
     // bug-103: inverse of `REVEAL_DECK_TOP`; hides the top N cards of the
@@ -265,6 +273,7 @@ export type BattleDebugEdit =
     kind: "HIDE_DECK_TOP";
     side: BattleSide;
     count: number;
+    viewer?: BattleSide;
   }
   | {
     kind: "PLAY_FROM_DECK_TOP";
@@ -329,6 +338,18 @@ export type BattleCommand =
   | ({
     id: "SKIP_TO_REWARDS";
   } & BattleCommandEnvelope);
+
+export function visibilityEditViewer(
+  edit: Extract<BattleDebugEdit, { kind: "SET_CARD_VISIBILITY" | "SET_SIDE_HAND_VISIBILITY" }>,
+): BattleSide {
+  return edit.viewer ?? "player";
+}
+
+export function visibilityEditValue(
+  edit: Extract<BattleDebugEdit, { kind: "SET_CARD_VISIBILITY" | "SET_SIDE_HAND_VISIBILITY" }>,
+): boolean {
+  return edit.isRevealed ?? edit.isRevealedToPlayer ?? false;
+}
 
 export function createBattleCommandMetadata(
   command: BattleCommand,
@@ -751,9 +772,9 @@ function createDebugEditLabel(
       return `Kindle ${String(edit.amount)} on ${readCardName(state, targetId)}`;
     }
     case "SET_CARD_VISIBILITY":
-      return `${edit.isRevealedToPlayer ? "Reveal" : "Hide"} Opponent Hand Card`;
+      return `${visibilityEditValue(edit) ? "Reveal" : "Hide"} Hand Card`;
     case "SET_SIDE_HAND_VISIBILITY":
-      return `${edit.isRevealedToPlayer ? "Reveal" : "Hide"} All ${formatSideLabel(edit.side)} Hand Cards`;
+      return `${visibilityEditValue(edit) ? "Reveal" : "Hide"} All ${formatSideLabel(edit.side)} Hand Cards`;
     case "ADD_CARD_NOTE":
       return `Add Note to ${readCardName(state, edit.battleCardId)}`;
     case "DISMISS_CARD_NOTE":
@@ -844,11 +865,11 @@ function createStatusEditLabel(
 function formatDebugEditCommandId(edit: BattleDebugEdit): string {
   switch (edit.kind) {
     case "SET_CARD_VISIBILITY":
-      return edit.isRevealedToPlayer
+      return visibilityEditValue(edit)
         ? "REVEAL_OPPONENT_HAND_CARD"
         : "HIDE_OPPONENT_HAND_CARD";
     case "SET_SIDE_HAND_VISIBILITY":
-      return edit.isRevealedToPlayer
+      return visibilityEditValue(edit)
         ? `REVEAL_ALL_${edit.side.toUpperCase()}_HAND_CARDS`
         : `HIDE_ALL_${edit.side.toUpperCase()}_HAND_CARDS`;
     default:

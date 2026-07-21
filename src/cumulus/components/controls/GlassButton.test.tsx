@@ -46,6 +46,15 @@ afterEach(() => {
 });
 
 describe("GlassButton", () => {
+  it("exposes semantic pressed state for persistent toggles", () => {
+    const { container, root } = mount(
+      <GlassButton label="Return to Your Side" pressed onPress={() => {}} />,
+    );
+    const button = container.querySelector("button");
+    expect(button?.getAttribute("aria-pressed")).toBe("true");
+    expect(button?.getAttribute("data-pressed")).toBe("true");
+    act(() => root.unmount());
+  });
   it("renders its text label inside a button", () => {
     const { container, root } = mount(
       <GlassButton

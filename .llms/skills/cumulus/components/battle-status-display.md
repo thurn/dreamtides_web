@@ -10,13 +10,14 @@ Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
 The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Dreamcaller portrait or loading placeholder at center, and centered current points at right.
 
-> **Guidance:** This display has no phase, active-state, debug, or interaction API. Place the complete fixed object through a wrapper.
+> **Guidance:** Pass the canonical owner and its near/far relationship separately so accessibility copy follows the current perspective.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `owner` | `BattleStatusOwner` = `"player" \| "enemy"` | yes | — | Combatant represented by this status card. |
+| `relationship` | `BattleStatusRelationship` = `"near" \| "far"` | no | — | Relationship of this canonical combatant to the current local perspective. |
 | `dreamcaller` | `DreamcallerVisual \| null` | yes | — | Dreamcaller whose head portrait anchors the card, or null while it loads. |
 | `dreamcallerProfile` | `BattleStatusDreamcallerProfile` | no | — | Optional identity and ability copy revealed from the portrait. |
 | `currentEnergy` | `number` | yes | — | Energy currently available to this combatant. |
@@ -43,6 +44,7 @@ import { BattleStatusDisplay } from "src/cumulus/components/battle/BattleStatusD
 
 <BattleStatusDisplay
   owner="player"
+  relationship="near"
   dreamcaller={playerDreamcaller}
   currentEnergy={2}
   maxEnergy={3}

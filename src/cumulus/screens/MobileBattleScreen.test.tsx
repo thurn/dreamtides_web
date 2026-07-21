@@ -77,6 +77,8 @@ function makeSide(
   cardOffset: number,
 ): MobileBattleSideView {
   return {
+    owner,
+    position: owner === "player" ? "near" : "far",
     deckCardIds: Array.from(
       { length: 4 },
       (_, index) => `${owner}-deck-${String(index)}`,
@@ -115,29 +117,41 @@ function makeSide(
 }
 
 function makeView(): MobileBattleView {
+  const enemy = makeSide("enemy", 1);
+  const player = makeSide("player", 20);
+  const enemyHandCardIds = Array.from(
+    { length: 8 },
+    (_, index) => `enemy-hand-${String(index)}`,
+  );
+  const enemyHand = Array.from({ length: 8 }, (_, index) =>
+    makeCard(60 + index, `enemy-hand-${String(index)}`),
+  );
+  const playerHand = Array.from({ length: 4 }, (_, index) =>
+    makeCard(40 + index, `player-hand-${String(index)}`),
+  );
   return {
     battleId: "battle-mobile-fixture",
+    perspective: "player",
+    near: player,
+    far: enemy,
+    nearHand: { owner: "player", position: "near", cardIds: playerHand.map((card) => card.id), cards: playerHand },
+    farHand: { owner: "enemy", position: "far", cardIds: enemyHandCardIds, cards: [] },
+    promptNotice: null,
     aiApproval: null,
     cardPicker: null,
     choicePrompt: null,
     dreamwell: null,
     activeSide: "player",
     phase: "day",
-    enemyHandCardIds: Array.from(
-      { length: 8 },
-      (_, index) => `enemy-hand-${String(index)}`,
-    ),
-    enemyHand: Array.from({ length: 8 }, (_, index) =>
-      makeCard(60 + index, `enemy-hand-${String(index)}`),
-    ),
-    enemy: makeSide("enemy", 1),
-    player: makeSide("player", 20),
-    playerHand: Array.from({ length: 4 }, (_, index) =>
-      makeCard(40 + index, `player-hand-${String(index)}`),
-    ),
+    enemyHandCardIds,
+    enemyHand,
+    enemy,
+    player,
+    playerHand,
     result: null,
     inspector: {
       opponentName: "Enemy Dreamcaller",
+      perspective: "player",
       turn: "3",
       phase: "Day",
       activeSide: "Player",
@@ -145,8 +159,10 @@ function makeView(): MobileBattleView {
       nextDreamwellOrder: "4",
       isOpponentHandRevealed: false,
       isPlayerHandHidden: false,
+      isFarHandRevealed: false,
+      isNearHandHidden: false,
       sides: {
-        player: { side: "player", heading: "Your", points: 6, currentEnergy: 3, maxEnergy: 3, zones: { hand: 4, deck: 4, void: 2, banished: 0, backRank: 1, frontRank: 1 }, canDiscard: true, canShuffle: true },
+        player: { side: "player", heading: "Player", points: 6, currentEnergy: 3, maxEnergy: 3, zones: { hand: 4, deck: 4, void: 2, banished: 0, backRank: 1, frontRank: 1 }, canDiscard: true, canShuffle: true },
         enemy: { side: "enemy", heading: "Enemy", points: 5, currentEnergy: 2, maxEnergy: 4, zones: { hand: 8, deck: 4, void: 2, banished: 0, backRank: 1, frontRank: 1 }, canDiscard: true, canShuffle: true },
       },
       ai: null,
@@ -264,7 +280,7 @@ describe("MobileBattleScreen", () => {
       '[data-battle-card-id="player-front-card"][data-battle-card-zone="player-front-rank"]',
     );
     const hand = container.querySelector<HTMLElement>(
-      '[data-battle-card-id="player-hand-0"][data-battle-card-zone="player-hand"]',
+      '[data-battle-card-id="player-hand-0"][data-battle-card-zone="near-hand"]',
     );
     expect(battlefield?.dataset.battleCardExhausted).toBe("true");
     expect(battlefield?.dataset.battleCardStoredTime).toBe("4");
@@ -483,14 +499,140 @@ describe("MobileBattleScreen", () => {
     );
     expect(safeAreaBackdrop?.style.background).toBe("var(--bg-app)");
     expect(rowNames).toEqual([
-      "enemy-hand",
+      "far-hand",
       "enemy-zones",
       "enemy-play-area",
       "player-play-area",
       "control-row",
       "player-zones",
-      "player-hand",
+      "near-hand",
     ]);
+
+    act(() => root.unmount());
+  });
+
+  it("renders the reversed canonical perspective and exposes a stable pressed toggle", () => {
+    const base = makeView();
+    const near = { ...base.enemy, position: "near" as const };
+    const far = { ...base.player, position: "far" as const };
+    const onPerspectiveToggle = vi.fn();
+    const view: MobileBattleView = {
+      ...base,
+      perspective: "enemy",
+      near,
+      far,
+      nearHand: {
+        owner: "enemy",
+        position: "near",
+        cardIds: base.enemyHandCardIds,
+        cards: base.enemyHand,
+      },
+      farHand: {
+        owner: "player",
+        position: "far",
+        cardIds: base.playerHand.map((card) => card.id),
+        cards: [],
+      },
+      inspector: { ...base.inspector, perspective: "enemy" },
+    };
+    const { container, root } = mount(view, {
+      canInteract: true,
+      nearSide: "enemy",
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onPerspectiveToggle,
+    });
+
+    expect(container.querySelector("[data-battle-mobile]")?.getAttribute("data-battle-perspective")).toBe("enemy");
+    expect(container.querySelector('[data-battle-mobile-row="enemy-zones"]')?.getAttribute("style")).toContain("grid-row: 6");
+    expect(container.querySelector('[data-battle-mobile-row="player-zones"]')?.getAttribute("style")).toContain("grid-row: 2");
+    expect(container.querySelector('[data-battle-play-area="enemy"]')?.getAttribute("style")).toContain("grid-row: 4");
+    expect(container.querySelector('[data-battle-play-area="player"]')?.getAttribute("style")).toContain("grid-row: 3");
+    expect(container.querySelector('[data-battle-mobile-row="near-hand"]')?.getAttribute("data-battle-hand-owner")).toBe("enemy");
+    const toggle = container.querySelector<HTMLButtonElement>('[data-testid="battle-perspective-toggle"]');
+    expect(toggle?.textContent).toContain("Return to Your Side");
+    expect(toggle?.getAttribute("aria-pressed")).toBe("true");
+    act(() => toggle?.click());
+    expect(onPerspectiveToggle).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+  });
+
+  it("closes the developer inspector when the perspective changes", () => {
+    mockDesktopViewport(true);
+    const view = makeView();
+    const { container, root } = mount(view);
+    expect(container.querySelector('[data-battle-inspector="docked"]')).not.toBeNull();
+
+    const reversed: MobileBattleView = {
+      ...view,
+      perspective: "enemy",
+      near: { ...view.enemy, position: "near" },
+      far: { ...view.player, position: "far" },
+      nearHand: {
+        owner: "enemy",
+        position: "near",
+        cardIds: view.enemyHandCardIds,
+        cards: view.enemyHand,
+      },
+      farHand: {
+        owner: "player",
+        position: "far",
+        cardIds: view.playerHand.map((card) => card.id),
+        cards: [],
+      },
+      inspector: { ...view.inspector, perspective: "enemy" },
+    };
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <MobileBattleScreen view={reversed} />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(container.querySelector('[data-battle-inspector="docked"]')).toBeNull();
+    act(() => root.unmount());
+  });
+
+  it("locks ordinary controls and shows recovery copy for a far-side prompt", () => {
+    const view: MobileBattleView = {
+      ...makeView(),
+      promptNotice: {
+        promptSide: "enemy",
+        message: "Switch to the Opponent side to resolve this choice.",
+      },
+    };
+    const { container, root } = mount(view, {
+      canInteract: false,
+      nearSide: "player",
+      pendingCardId: null,
+      pendingCardSource: null,
+      pendingCardOwner: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+      onPerspectiveToggle: vi.fn(),
+    });
+
+    expect(container.querySelector('[data-battle-prompt-waiting="enemy"]')?.textContent)
+      .toContain("Switch to the Opponent side");
+    expect(
+      Array.from(container.querySelectorAll("button"))
+        .find((button) => button.textContent?.trim() === "Next Phase")
+        ?.getAttribute("aria-disabled"),
+    ).toBe("true");
+    expect(container.querySelectorAll("[data-battle-card-picker-candidate]")).toHaveLength(0);
 
     act(() => root.unmount());
   });
@@ -509,10 +651,10 @@ describe("MobileBattleScreen", () => {
       '[data-battle-mobile-row="player-zones"]',
     );
     const playerHand = container.querySelector<HTMLElement>(
-      '[data-battle-mobile-row="player-hand"]',
+      '[data-battle-mobile-row="near-hand"]',
     );
     const enemyHand = container.querySelector<HTMLElement>(
-      '[data-battle-mobile-row="enemy-hand"]',
+      '[data-battle-mobile-row="far-hand"]',
     );
     const firstEnemyCard = enemyHand?.querySelector<HTMLElement>(
       '[data-battle-card-id="enemy-hand-0"]',
@@ -581,10 +723,10 @@ describe("MobileBattleScreen", () => {
       "--battle-hud-end-clearance",
     );
     const playerCards = playerHand?.querySelectorAll<HTMLElement>(
-      '[data-battle-card-zone="player-hand"]',
+      '[data-battle-card-zone="near-hand"]',
     );
     const playerSlots = playerHand?.querySelectorAll<HTMLElement>(
-      "[data-battle-player-hand-slot]",
+      "[data-battle-near-hand-slot]",
     );
     expect(playerSlots).toHaveLength(playerCards?.length ?? 0);
     expect(playerSlots?.[0]?.style.flex).toBe("0 1 auto");
@@ -641,7 +783,7 @@ describe("MobileBattleScreen", () => {
     expect(container.querySelector('[data-battle-inspector="docked"]')).not.toBeNull();
     expect(container.querySelector('[data-battle-debug="player-state-panel"]')).toBeNull();
     expect(container.textContent).toContain("Battle Snapshot");
-    expect(container.textContent).toContain("Your Resources");
+    expect(container.textContent).toContain("Player Resources");
     expect(container.textContent).toContain("Back Rank");
     expect(container.textContent).not.toContain("Stack cards");
 
@@ -903,7 +1045,7 @@ describe("MobileBattleScreen", () => {
       '[data-battle-mobile-row="player-zones"]',
     );
     const playerHand = container.querySelector<HTMLElement>(
-      '[data-battle-mobile-row="player-hand"]',
+      '[data-battle-mobile-row="near-hand"]',
     );
     expect(playerZones?.style.gridRow).toBe("6");
     expect(playerZones?.style.gridColumn).toBe("1");
@@ -1010,7 +1152,7 @@ describe("MobileBattleScreen", () => {
       '[data-battle-zone="player-banished"]',
     );
     const button = controlFrame?.querySelector<HTMLButtonElement>(
-      '[data-testid="player-battle-banished"]',
+      '[data-testid="near-battle-banished"]',
     );
     const topLeftControls = container.querySelector<HTMLElement>(
       "[data-battle-top-left-controls]",
@@ -1022,7 +1164,7 @@ describe("MobileBattleScreen", () => {
     );
     expect(controlFrame?.dataset.battleZoneCount).toBe("2");
     expect(button?.getAttribute("aria-label")).toBe(
-      "Open banished cards, 2 cards",
+      "Open your banished cards, 2 cards",
     );
     expect(button?.querySelector(".bx-block")).not.toBeNull();
 
@@ -1130,7 +1272,7 @@ describe("MobileBattleScreen", () => {
     ).toBeNull();
     expect(indicator?.dataset.battleMobilePhase).toBe("day");
     expect(indicator?.getAttribute("aria-label")).toBe(
-      "Player turn, Day phase",
+      "Your turn, Day phase",
     );
     expect(indicator?.parentElement?.dataset.battleStatusPhaseAnchor).toBe("");
     expect(indicator?.style.top).toBe("0px");
@@ -1308,7 +1450,7 @@ describe("MobileBattleScreen", () => {
     );
     const handCards = Array.from(
       container.querySelectorAll<HTMLElement>(
-        '[data-battle-card-zone="player-hand"] [data-game-card-source]',
+        '[data-battle-card-zone="near-hand"] [data-game-card-source]',
       ),
     );
 
@@ -1358,7 +1500,7 @@ describe("MobileBattleScreen", () => {
     const { container, root } = mount(outlinedView);
     const handCards = Array.from(
       container.querySelectorAll<HTMLElement>(
-        '[data-battle-card-zone="player-hand"] [data-game-card-source]',
+        '[data-battle-card-zone="near-hand"] [data-game-card-source]',
       ),
     );
 
@@ -1415,7 +1557,7 @@ describe("MobileBattleScreen", () => {
 
     const handCards = () => Array.from(
       container.querySelectorAll<HTMLElement>(
-        '[data-battle-card-zone="player-hand"]',
+        '[data-battle-card-zone="near-hand"]',
       ),
     );
     const cardShadow = (index: number): string =>
@@ -1594,10 +1736,10 @@ describe("MobileBattleScreen", () => {
       onCardPickerSubmit,
     });
     const enemyHand = container.querySelector<HTMLElement>(
-      '[data-battle-mobile-row="enemy-hand"]',
+      '[data-battle-mobile-row="far-hand"]',
     );
     const enemyCards = enemyHand?.querySelectorAll<HTMLElement>(
-      ':scope > [data-battle-card-zone="enemy-hand"]',
+      ':scope > [data-battle-card-zone="far-hand"]',
     );
     const candidate = enemyHand?.querySelector<HTMLElement>(
       `[data-battle-card-id="${candidateId}"]`,
@@ -1607,18 +1749,18 @@ describe("MobileBattleScreen", () => {
     expect(enemyCards).toHaveLength(8);
     expect(candidate?.dataset.battleCardFace).toBe("up");
     expect(container.querySelector("[data-battle-card-picker-progress]")?.textContent)
-      .toBe("Choose a card to discard from the enemy hand · 0/1");
+      .toBe("Choose a card to discard from the opponent hand · 0/1");
 
     act(() => {
       container.querySelector<HTMLElement>(
-        '[data-battle-card-zone="player-hand"]',
+        '[data-battle-card-zone="near-hand"]',
       )?.click();
     });
     expect(onHandCardActivate).not.toHaveBeenCalled();
 
     act(() => {
       candidate?.querySelector<HTMLElement>(
-        '[data-battle-card-zone="enemy-hand"]',
+        '[data-battle-card-zone="far-hand"]',
       )?.click();
     });
 
@@ -1729,9 +1871,9 @@ describe("MobileBattleScreen", () => {
       .toBe("Choose cards from hidden zones");
     expect(container.querySelectorAll("[data-gallery-entry-id]")).toHaveLength(4);
     expect(container.textContent).toContain("Your Void");
-    expect(container.textContent).toContain("Enemy Void");
+    expect(container.textContent).toContain("Opponent Void");
     expect(container.textContent).toContain("Your Deck");
-    expect(container.textContent).toContain("Enemy Deck");
+    expect(container.textContent).toContain("Opponent Deck");
 
     act(() => container.querySelector<HTMLElement>(
       `[data-testid="battle-card-picker-candidate-${candidates[0].instanceId}"]`,
@@ -2031,16 +2173,16 @@ describe("MobileBattleScreen", () => {
     const view = makeView();
     const { container, root } = mount(view);
     const enemyHand = container.querySelector<HTMLElement>(
-      '[data-battle-mobile-row="enemy-hand"]',
+      '[data-battle-mobile-row="far-hand"]',
     );
     const playerHand = container.querySelector<HTMLElement>(
-      '[data-battle-mobile-row="player-hand"]',
+      '[data-battle-mobile-row="near-hand"]',
     );
     const enemyCards = enemyHand?.querySelectorAll<HTMLElement>(
-      '[data-battle-card-zone="enemy-hand"]',
+      '[data-battle-card-zone="far-hand"]',
     );
     const playerCards = playerHand?.querySelectorAll<HTMLElement>(
-      '[data-battle-card-zone="player-hand"]',
+      '[data-battle-card-zone="near-hand"]',
     );
 
     expect(enemyHand?.dataset.battleHandCount).toBe("8");
@@ -2059,7 +2201,7 @@ describe("MobileBattleScreen", () => {
       Array.from(enemyHand?.querySelectorAll("img") ?? []).map((image) =>
         image.getAttribute("alt"),
       ),
-    ).toEqual(Array.from({ length: 6 }, () => "Enemy card"));
+    ).toEqual(Array.from({ length: 6 }, () => "Opponent card"));
     expect(playerHand?.dataset.battleHandCount).toBe("4");
     expect(playerCards).toHaveLength(view.playerHand.length);
     expect(playerCards?.[0]?.parentElement?.style.top).toBe(
@@ -2067,7 +2209,25 @@ describe("MobileBattleScreen", () => {
     );
     expect(playerCards?.[0]?.parentElement?.style.bottom).toBe("");
 
+    const rulesRevealedCard = view.enemyHand[7];
+    if (rulesRevealedCard === undefined) throw new Error("fixture missing revealed far-hand card");
+    const revealedView: MobileBattleView = {
+      ...view,
+      farHand: { ...view.farHand, cards: [rulesRevealedCard] },
+    };
     act(() => root.unmount());
+    const revealed = mount(revealedView);
+    expect(
+      revealed.container.querySelector('[data-battle-mobile-row="far-hand"]')
+        ?.querySelectorAll(':scope > [data-battle-card-zone="far-hand"]'),
+    ).toHaveLength(7);
+    expect(
+      revealed.container.querySelector(
+        `[data-battle-mobile-row="far-hand"] [data-battle-card-id="${rulesRevealedCard.id}"]`,
+      )?.getAttribute("data-battle-card-face"),
+    ).toBe("up");
+
+    act(() => revealed.root.unmount());
   });
 
   it("places a back arrow to the left of Next Phase in the upper control position", () => {
@@ -2257,7 +2417,7 @@ describe("MobileBattleScreen", () => {
     const controls = container.querySelectorAll(
       "button, input, select, textarea, [role=button]",
     );
-    expect(controls).toHaveLength(4);
+    expect(controls).toHaveLength(5);
     expect(
       container.querySelector('[data-testid="battle-debug-menu-trigger"]'),
     ).not.toBeNull();
@@ -2363,7 +2523,7 @@ describe("MobileBattleScreen", () => {
     const interactions = {
       canInteract: true,
       pendingCardId: "player-hand-0",
-      pendingCardSource: "player-hand" as const,
+      pendingCardSource: "near-hand" as const,
       pendingCardOwner: "player" as const,
       onHandCardActivate: vi.fn(),
       onHandCardDrop: vi.fn(),
@@ -2382,7 +2542,7 @@ describe("MobileBattleScreen", () => {
       '[data-battle-rank="enemy-back"] [data-battle-slot-filled="false"]',
     );
     const playerHand = container.querySelector<HTMLElement>(
-      '[data-battle-mobile-row="player-hand"]',
+      '[data-battle-mobile-row="near-hand"]',
     );
     expect(playerHand?.style.overflow).toBe("visible");
 
@@ -2402,7 +2562,7 @@ describe("MobileBattleScreen", () => {
     expect(interactions.onSlotDrop).not.toHaveBeenCalled();
     expect(interactions.onZoneDrop).not.toHaveBeenCalled();
     expect(interactions.onCardDragEnd).not.toHaveBeenCalled();
-    expect(container.querySelectorAll("button")).toHaveLength(4);
+    expect(container.querySelectorAll("button")).toHaveLength(5);
 
     act(() => root.unmount());
   });
@@ -2411,7 +2571,7 @@ describe("MobileBattleScreen", () => {
     const interactions = {
       canInteract: true,
       pendingCardId: "player-hand-0",
-      pendingCardSource: "player-hand" as const,
+      pendingCardSource: "near-hand" as const,
       pendingCardOwner: "player" as const,
       onHandCardActivate: vi.fn(),
       onHandCardDrop: vi.fn(),
@@ -3103,7 +3263,7 @@ describe("MobileBattleScreen", () => {
     expect(handCard?.dataset.battlePointerDragging).toBe("true");
     expect(interactions.onCardDragStart).toHaveBeenCalledWith(
       "player-hand-0",
-      "player-hand",
+      "near-hand",
     );
 
     act(() => {
@@ -3170,7 +3330,7 @@ describe("MobileBattleScreen", () => {
     expect(interactions.onHandCardActivate).not.toHaveBeenCalled();
     expect(interactions.onCardDebugActivate).toHaveBeenCalledWith(
       "player-hand-0",
-      "player-hand",
+      "near-hand",
       { presentation: "sheet" },
     );
 
@@ -3239,7 +3399,7 @@ describe("MobileBattleScreen", () => {
     expect(interactions.onCardDebugActivate).toHaveBeenNthCalledWith(
       1,
       "player-hand-0",
-      "player-hand",
+      "near-hand",
       { presentation: "context-menu", x: 240, y: 720 },
     );
     expect(interactions.onCardDebugActivate).toHaveBeenNthCalledWith(
@@ -3391,7 +3551,7 @@ describe("MobileBattleScreen", () => {
     );
     expect(interactions.onCardDragStart).toHaveBeenCalledWith(
       "player-hand-0",
-      "player-hand",
+      "near-hand",
     );
     expect(revealSource?.dataset.revealActive).toBe("false");
     expect(handCard?.dataset.battlePointerDragging).toBe("true");

@@ -20,6 +20,7 @@ export function MobileBattleScreenAdapter({
   aiMode,
   isOpponentHandRevealed,
   isPlayerHandHidden,
+  perspectiveSide,
   pendingPrompt,
   confirmedPromptId,
   isResultOverlayDismissed,
@@ -32,6 +33,7 @@ export function MobileBattleScreenAdapter({
   aiMode: boolean;
   isOpponentHandRevealed: boolean;
   isPlayerHandHidden: boolean;
+  perspectiveSide: "player" | "enemy";
   pendingPrompt: MobileBattlePendingPrompt | null;
   confirmedPromptId: number | null;
   isResultOverlayDismissed: boolean;
@@ -43,6 +45,9 @@ export function MobileBattleScreenAdapter({
         aiMode,
         isOpponentHandRevealed,
         isPlayerHandHidden,
+        perspectiveSide,
+        isFarHandRevealed: isOpponentHandRevealed,
+        isNearHandHidden: isPlayerHandHidden,
         pendingPrompt,
         confirmedPromptId,
         isResultOverlayDismissed,
@@ -55,6 +60,7 @@ export function MobileBattleScreenAdapter({
       aiMode,
       isOpponentHandRevealed,
       isPlayerHandHidden,
+      perspectiveSide,
       pendingPrompt,
       confirmedPromptId,
       isResultOverlayDismissed,

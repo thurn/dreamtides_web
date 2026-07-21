@@ -24,6 +24,7 @@ import {
   selectEffectiveSparkForInstance,
   selectFigmentSparkContext,
 } from "./figments";
+import { cardIsRevealedTo } from "./card-visibility";
 
 /**
  * Summary of B-5 quest deck metadata captured at battle-init time. The
@@ -298,7 +299,18 @@ export function selectIsOpponentHandCardHidden(
   if (instance === undefined) {
     return true;
   }
-  return !instance.isRevealedToPlayer;
+  return !cardIsRevealedTo(instance, "player");
+}
+
+export function selectIsHandCardHiddenTo(
+  state: BattleMutableState,
+  battleCardId: string,
+  viewer: BattleSide,
+): boolean {
+  const location = selectBattleCardLocation(state, battleCardId);
+  if (location?.zone !== "hand" || location.side === viewer) return false;
+  const instance = state.cardInstances[battleCardId];
+  return instance === undefined || !cardIsRevealedTo(instance, viewer);
 }
 
 /**

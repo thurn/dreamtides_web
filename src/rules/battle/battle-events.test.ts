@@ -932,7 +932,7 @@ function parkForeseePrompt(extraQueue: EffectRun[] = []): {
     0,
     prompt.options.count,
   )) {
-    expect(parkedBoard.cardInstances[battleCardId]?.isRevealedToPlayer).toBe(
+    expect(parkedBoard.cardInstances[battleCardId]?.revealedTo?.player).toBe(
       true,
     );
   }

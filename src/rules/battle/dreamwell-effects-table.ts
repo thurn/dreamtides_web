@@ -129,7 +129,12 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
     steps: [
       {
         kind: "edits",
-        build: (ctx) => [{ kind: "SET_SIDE_HAND_VISIBILITY", side: opponentOf(ctx.side), isRevealedToPlayer: true }],
+        build: (ctx) => [{
+          kind: "SET_SIDE_HAND_VISIBILITY",
+          side: opponentOf(ctx.side),
+          viewer: ctx.side,
+          isRevealed: true,
+        }],
       },
     ],
   },

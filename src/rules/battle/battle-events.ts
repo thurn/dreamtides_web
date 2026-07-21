@@ -744,16 +744,28 @@ function coerceBattleDebugEdit(raw: unknown): BattleDebugEdit | null {
     case "ERODE":
     case "REVEAL_DECK_TOP":
     case "HIDE_DECK_TOP":
-      return isBattleSide(raw.side) && Number.isInteger(raw.count) ? raw as unknown as BattleDebugEdit : null;
+      return isBattleSide(raw.side) &&
+        Number.isInteger(raw.count) &&
+        (raw.viewer === undefined || isBattleSide(raw.viewer))
+        ? raw as unknown as BattleDebugEdit
+        : null;
     case "DISCARD_CARD":
     case "ABANDON":
     case "REMATERIALIZE":
     case "CLEAR_CARD_NOTES":
       return isNonEmptyString(raw.battleCardId) ? raw as unknown as BattleDebugEdit : null;
     case "SET_CARD_VISIBILITY":
-      return isNonEmptyString(raw.battleCardId) && typeof raw.isRevealedToPlayer === "boolean" ? raw as unknown as BattleDebugEdit : null;
+      return isNonEmptyString(raw.battleCardId) &&
+        (raw.viewer === undefined || isBattleSide(raw.viewer)) &&
+        (typeof raw.isRevealed === "boolean" || typeof raw.isRevealedToPlayer === "boolean")
+        ? raw as unknown as BattleDebugEdit
+        : null;
     case "SET_SIDE_HAND_VISIBILITY":
-      return isBattleSide(raw.side) && typeof raw.isRevealedToPlayer === "boolean" ? raw as unknown as BattleDebugEdit : null;
+      return isBattleSide(raw.side) &&
+        (raw.viewer === undefined || isBattleSide(raw.viewer)) &&
+        (typeof raw.isRevealed === "boolean" || typeof raw.isRevealedToPlayer === "boolean")
+        ? raw as unknown as BattleDebugEdit
+        : null;
     case "ADD_CARD_NOTE":
       return isNonEmptyString(raw.battleCardId) &&
         isNonEmptyString(raw.noteId) &&
@@ -802,6 +814,7 @@ function coerceBattleDebugEdit(raw: unknown): BattleDebugEdit | null {
         : null;
     case "FORESEE":
       return isBattleSide(raw.side) &&
+        (raw.viewer === undefined || isBattleSide(raw.viewer)) &&
         isStringArray(raw.viewedCardIds) &&
         isStringArray(raw.orderedCardIds) &&
         isStringArray(raw.voidCardIds)

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { aiMayRunHere } from "./ai-may-run-here";
+import { aiMayRunHere, battleAiDriverEnabled } from "./ai-may-run-here";
 
 describe("aiMayRunHere", () => {
   it("runs when this client is the sole connected client (count 1)", () => {
@@ -22,5 +22,14 @@ describe("aiMayRunHere", () => {
   it("does NOT run with three or more connected clients", () => {
     expect(aiMayRunHere({ connectedCount: 3 })).toBe(false);
     expect(aiMayRunHere({ connectedCount: 10 })).toBe(false);
+  });
+});
+
+describe("battleAiDriverEnabled", () => {
+  it("runs only for a permitted solo player perspective", () => {
+    expect(battleAiDriverEnabled({ aiMode: true, mayRunHere: true, perspectiveSide: "player" })).toBe(true);
+    expect(battleAiDriverEnabled({ aiMode: true, mayRunHere: true, perspectiveSide: "enemy" })).toBe(false);
+    expect(battleAiDriverEnabled({ aiMode: true, mayRunHere: false, perspectiveSide: "player" })).toBe(false);
+    expect(battleAiDriverEnabled({ aiMode: false, mayRunHere: true, perspectiveSide: "player" })).toBe(false);
   });
 });

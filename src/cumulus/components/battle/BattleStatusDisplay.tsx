@@ -8,6 +8,7 @@ import { ResourceChip } from "../hud/ResourceChip";
 
 /** Which combatant this status card describes. */
 export type BattleStatusOwner = "player" | "enemy";
+export type BattleStatusRelationship = "near" | "far";
 
 /** Semantic profile revealed from a populated battle Dreamcaller portrait. */
 export interface BattleStatusDreamcallerProfile {
@@ -19,6 +20,8 @@ export interface BattleStatusDreamcallerProfile {
 export interface BattleStatusDisplayProps {
   /** Combatant represented by this status card. */
   readonly owner: BattleStatusOwner;
+  /** Relationship of this canonical combatant to the current local perspective. */
+  readonly relationship?: BattleStatusRelationship;
   /** Dreamcaller whose head portrait anchors the card, or null while it loads. */
   readonly dreamcaller: DreamcallerVisual | null;
   /** Optional identity and ability copy revealed from the portrait. */
@@ -40,6 +43,7 @@ export interface BattleStatusDisplayProps {
  */
 export function BattleStatusDisplay({
   owner,
+  relationship,
   dreamcaller,
   dreamcallerProfile,
   currentEnergy,
@@ -47,7 +51,11 @@ export function BattleStatusDisplay({
   points,
   testId,
 }: BattleStatusDisplayProps) {
-  const ownerLabel = owner === "player" ? "Player" : "Enemy";
+  const ownerLabel = relationship === "near"
+    ? "Your side"
+    : relationship === "far"
+      ? "Opponent"
+      : owner === "player" ? "Player" : "Enemy";
 
   return (
     <div
@@ -55,6 +63,7 @@ export function BattleStatusDisplay({
       aria-label={`${ownerLabel}: ${String(currentEnergy)} of ${String(maxEnergy)} energy, ${String(points)} points`}
       data-battle-status=""
       data-owner={owner}
+      data-relationship={relationship}
       data-current-energy={String(currentEnergy)}
       data-max-energy={String(maxEnergy)}
       data-points={String(points)}

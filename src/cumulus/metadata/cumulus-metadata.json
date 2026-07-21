@@ -413,6 +413,17 @@
       "description": "Combatant represented by this status card."
     },
     {
+      "name": "relationship",
+      "tsType": "BattleStatusRelationship",
+      "unionMembers": [
+        "near",
+        "far"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Relationship of this canonical combatant to the current local perspective."
+    },
+    {
       "name": "dreamcaller",
       "tsType": "DreamcallerVisual | null",
       "unionMembers": [],
@@ -2411,6 +2422,14 @@
       "required": false,
       "defaultValue": "false",
       "description": "Dims the control, detaches click / press feedback, and marks it `aria-disabled`."
+    },
+    {
+      "name": "pressed",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Toggle state for controls whose action switches a persistent local mode."
     },
     {
       "name": "testId",

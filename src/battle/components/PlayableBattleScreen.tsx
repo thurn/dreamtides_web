@@ -39,7 +39,7 @@ import type { QuestContent } from "../../data/quest-content";
 import type { BattleCommand } from "../debug/commands";
 import type { PromptResolution } from "../../rules/battle/effect-runner-core";
 import { useBattleAi } from "../ai/use-battle-ai";
-import { aiMayRunHere } from "../ai/ai-may-run-here";
+import { aiMayRunHere, battleAiDriverEnabled } from "../ai/ai-may-run-here";
 import { BattleContextMenu } from "./BattleContextMenu";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
 import { BattleFigmentCreator } from "./BattleFigmentCreator";
@@ -105,6 +105,54 @@ type PendingDragState =
     }
   | null;
 
+function isDeveloperBattleSurface(
+  source: BattleCommandSourceSurface,
+): boolean {
+  return source === "inspector" ||
+    source === "debug-menu" ||
+    source === "debug-panel" ||
+    source === "pool-viewer" ||
+    source === "note-editor" ||
+    source === "card-badges" ||
+    source === "figment-creator" ||
+    source === "deck-order-picker";
+}
+
+function affectedBattleCardIds(command: BattleCommand): readonly string[] {
+  if (command.id !== "DEBUG_EDIT") return [];
+  const edit = command.edit;
+  const ids = new Set<string>();
+  if ("battleCardId" in edit) ids.add(edit.battleCardId);
+  if ("sourceBattleCardId" in edit) ids.add(edit.sourceBattleCardId);
+  if (edit.kind === "FORESEE") {
+    for (const id of [...edit.viewedCardIds, ...edit.orderedCardIds, ...edit.voidCardIds]) {
+      ids.add(id);
+    }
+  } else if (edit.kind === "REORDER_DECK") {
+    for (const id of edit.order) ids.add(id);
+  }
+  return [...ids];
+}
+
+function selectedBattleCardId(command: BattleCommand): string | null {
+  return affectedBattleCardIds(command)[0] ?? null;
+}
+
+function canonicalCommandTargets(command: BattleCommand): Record<string, unknown> {
+  if (command.id === "FORCE_RESULT") return { result: command.result };
+  if (command.id !== "DEBUG_EDIT") return {};
+  const edit = command.edit;
+  return {
+    ...("side" in edit ? { side: edit.side } : {}),
+    ...("destination" in edit ? { destination: edit.destination } : {}),
+    ...("source" in edit ? { source: edit.source } : {}),
+    ...("target" in edit ? { target: edit.target } : {}),
+    ...("phase" in edit ? { phase: edit.phase } : {}),
+    ...("activeSide" in edit ? { activeSide: edit.activeSide } : {}),
+    ...("viewer" in edit ? { viewer: edit.viewer } : {}),
+  };
+}
+
 export function PlayableBattleScreen({
   site,
   aiMode = false,
@@ -117,7 +165,7 @@ export function PlayableBattleScreen({
     return null; // BattleSiteRoute already shows the loading/reveal state.
   }
   void site;
-  return <PlayableBattleScreenInner aiMode={aiMode} />;
+  return <PlayableBattleScreenInner key={battle.init.battleId} aiMode={aiMode} />;
 }
 
 function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
@@ -144,6 +192,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
 
   const { state: questState, cardDatabase, questContent } = useQuest();
   const isCumulusDesktopLayout = useIsDesktop();
+  const [perspectiveSide, setPerspectiveSide] = useState<BattleSide>("player");
   const [isBattleLogOpen, setIsBattleLogOpen] = useState(false);
   const [isDreamwellHistoryOpen, setIsDreamwellHistoryOpen] = useState(false);
   const [isOpponentHandRevealed, setIsOpponentHandRevealed] = useState(false);
@@ -167,6 +216,43 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   const [isResultOverlayDismissed, setIsResultOverlayDismissed] =
     useState(false);
 
+  const clearPerspectiveBoundPresentation = useCallback((): void => {
+    setPendingDrag(null);
+    pendingDragDropHandledRef.current = false;
+    setContextMenu(null);
+    setOpenForeseeOverlay(null);
+    setOpenDeckOrderPicker(null);
+    setOpenFigmentCreator(null);
+    setOpenZoneBrowser(null);
+    setIsPoolViewerOpen(false);
+    setOpenNoteEditor(null);
+    setIsBattleLogOpen(false);
+    setIsDreamwellHistoryOpen(false);
+    setIsOpponentHandRevealed(false);
+    setIsPlayerHandHidden(false);
+  }, []);
+
+  useEffect(() => {
+    setPerspectiveSide("player");
+    clearPerspectiveBoundPresentation();
+  }, [battleInit.battleId, clearPerspectiveBoundPresentation]);
+
+  const handlePerspectiveToggle = useCallback((): void => {
+    const nextSide: BattleSide = perspectiveSide === "player" ? "enemy" : "player";
+    clearPerspectiveBoundPresentation();
+    logEvent("battle_perspective_changed", {
+      ...createBattleLogBaseFields(board, {
+        sourceSurface: "battlefield",
+        selectedCardId: null,
+      }),
+      clientId,
+      previousPerspectiveSide: perspectiveSide,
+      perspectiveSide: nextSide,
+      aiDriverPaused: aiMode && nextSide === "enemy",
+    });
+    setPerspectiveSide(nextSide);
+  }, [aiMode, board, clearPerspectiveBoundPresentation, clientId, perspectiveSide]);
+
   // Win/turn/energy caps for the AI planner, sourced from the battle init.
   // Wrapped in `useMemo` so the object is referentially stable across renders;
   // an inline literal would bust the hook's proposal memo every render.
@@ -185,6 +271,11 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   // an ADDITIONAL condition on top of `aiMode`; single-player (one connected
   // client) leaves the AI fully enabled.
   const aiMayRun = aiMayRunHere({ connectedCount });
+  const aiDriverEnabled = battleAiDriverEnabled({
+    aiMode,
+    mayRunHere: aiMayRun,
+    perspectiveSide,
+  });
 
   // The AI approval loop. Inert unless `aiMode` is true AND this client may run
   // the AI: when disabled the hook holds no proposal and submits nothing. It
@@ -212,7 +303,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     board,
     submitCommand: submitAiCommand,
     submitGesture: submitAiGesture,
-    enabled: aiMode && aiMayRun,
+    enabled: aiDriverEnabled,
     aiSide: "enemy",
     caps: aiCaps,
     basicAutomation: true,
@@ -221,8 +312,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   const aiDefenseTurn = battle.aiDefenseTurn;
   useEffect(() => {
     if (
-      !aiMode ||
-      !aiMayRun ||
+      !aiDriverEnabled ||
       board.result !== null ||
       board.activeSide === "enemy" ||
       board.phase !== "dusk"
@@ -239,8 +329,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   }, [
     actions,
     aiDefenseTurn,
-    aiMayRun,
-    aiMode,
+    aiDriverEnabled,
     board.activeSide,
     board.phase,
     board.result,
@@ -255,7 +344,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   // still deciding. Normal controls (phase arrows, hand, battlefield) return once
   // no proposal is held and the AI is idle — on the human's own turn, and during
   // the AI's Dusk/Night/Challenge after its plays are done.
-  const canPlayerAct = !(aiMode && (proposal !== null || aiThinking));
+  const canPlayerAct = !(aiDriverEnabled && (proposal !== null || aiThinking));
   const failureResult = selectFailureOverlayResult(board.result);
   const pendingDragCardId =
     pendingDrag === null
@@ -270,7 +359,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   const pendingCardSource =
     pendingDragLocation?.zone === "hand" &&
     pendingDrag?.sourceSurface === "hand-tray"
-      ? "player-hand"
+      ? "near-hand"
       : pendingDrag?.kind === "battle-card"
         ? "battlefield"
         : null;
@@ -285,6 +374,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     (resolution: PromptResolution): void => {
       if (
         pendingPrompt === null ||
+        perspectiveSide !== pendingPrompt.run.side ||
         confirmedPromptId !== pendingPrompt.promptId
       ) {
         return;
@@ -302,10 +392,12 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           pendingPrompt,
           resolution,
         ),
+        perspectiveSide,
+        promptSide: pendingPrompt.run.side,
       });
       void actions.resolvePrompt(pendingPrompt.promptId, resolution);
     },
-    [actions, board, pendingPrompt, confirmedPromptId],
+    [actions, board, pendingPrompt, confirmedPromptId, perspectiveSide],
   );
 
   const logCumulusCardPickerInteraction = useCallback(
@@ -325,6 +417,8 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
             ? pendingPrompt.run.scriptRef.id
             : null,
         promptId: pendingPrompt.promptId,
+        perspectiveSide,
+        promptSide: pendingPrompt.run.side,
         candidateBattleCardInstanceIds: pendingPrompt.options.candidateIds,
         candidateBackingCardUuids: pendingPrompt.options.candidateIds.map(
           (instanceId) =>
@@ -343,7 +437,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         optional: pendingPrompt.options.optional,
       });
     },
-    [board, pendingPrompt],
+    [board, pendingPrompt, perspectiveSide],
   );
 
   const handleCumulusChoicePrompt = useCallback(
@@ -355,26 +449,51 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           selectedCardId: null,
         }),
         promptId: pendingPrompt.promptId,
+        perspectiveSide,
+        promptSide: pendingPrompt.run.side,
         promptLabel: pendingPrompt.options.label,
         optionIndex,
         optionLabel: pendingPrompt.options.options[optionIndex]?.label ?? null,
       });
       resolvePendingPrompt({ kind: "choice", optionIndex });
     },
-    [board, pendingPrompt, resolvePendingPrompt],
+    [board, pendingPrompt, perspectiveSide, resolvePendingPrompt],
   );
 
   const handleCommand = useCallback(
     (command: BattleCommand): void => {
       setPendingDrag(null);
+      const sourceSurface = command.sourceSurface ?? "action-bar";
+      const actor = command.actor ?? (
+        sourceSurface === "auto-system"
+          ? "system"
+          : isDeveloperBattleSurface(sourceSurface)
+            ? "debug"
+            : perspectiveSide
+      );
+      const attributedCommand: BattleCommand = { ...command, actor };
+      if (actor === "player" || actor === "enemy") {
+        logEvent("battle_perspective_action_requested", {
+          ...createBattleLogBaseFields(board, {
+            sourceSurface,
+            selectedCardId: selectedBattleCardId(attributedCommand),
+          }),
+          perspectiveSide,
+          semanticActingSide: actor,
+          commandId: attributedCommand.id,
+          editKind: attributedCommand.id === "DEBUG_EDIT" ? attributedCommand.edit.kind : null,
+          affectedBattleCardIds: affectedBattleCardIds(attributedCommand),
+          canonicalTargets: canonicalCommandTargets(attributedCommand),
+        });
+      }
       const intentKey = automaticBattleIntentKey(
         battleInit.battleId,
         board,
-        command,
+        attributedCommand,
       );
-      void actions.battleCommand(command, intentKey);
+      void actions.battleCommand(attributedCommand, intentKey);
     },
-    [actions, board, battleInit.battleId],
+    [actions, board, battleInit.battleId, perspectiveSide],
   );
 
   const handleOpenForesee = useCallback(
@@ -385,12 +504,12 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     ): void => {
       handleCommand({
         id: "DEBUG_EDIT",
-        edit: { kind: "REVEAL_DECK_TOP", side, count },
+        edit: { kind: "REVEAL_DECK_TOP", side, count, viewer: perspectiveSide },
         sourceSurface,
       });
       setOpenForeseeOverlay({ side, count });
     },
-    [handleCommand],
+    [handleCommand, perspectiveSide],
   );
 
   // Deck-aware companion to the reducer's `battle_proto_dreamwell_card_drawn`:
@@ -511,7 +630,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     if (activeTurnNumber > 1) {
       return;
     }
-    if (aiMode && activeSide === "enemy") {
+    if (aiDriverEnabled && activeSide === "enemy") {
       return;
     }
     // Wait for this turn's Dreamwell reveal to land so its energy is applied
@@ -526,7 +645,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     });
   }, [
     handleCommand,
-    aiMode,
+    aiDriverEnabled,
     activeSide,
     activePhase,
     activeTurnNumber,
@@ -555,15 +674,15 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       "battle_proto_opening_hands",
       {
         ...baseFields,
-        enemyHand: board.sides.enemy.hand.map(
-          (battleCardId) =>
-            board.cardInstances[battleCardId]?.definition.name ?? "Card",
+        enemyHandBattleCardIds: [...board.sides.enemy.hand],
+        enemyHandCardUuids: board.sides.enemy.hand.map(
+          (battleCardId) => board.cardInstances[battleCardId]?.definition.cardId ?? null,
         ),
         enemyHandSize: board.sides.enemy.hand.length,
         openingHandSize: battleInit.openingHandSize,
-        playerHand: board.sides.player.hand.map(
-          (battleCardId) =>
-            board.cardInstances[battleCardId]?.definition.name ?? "Card",
+        playerHandBattleCardIds: [...board.sides.player.hand],
+        playerHandCardUuids: board.sides.player.hand.map(
+          (battleCardId) => board.cardInstances[battleCardId]?.definition.cardId ?? null,
         ),
       },
     );
@@ -1257,6 +1376,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
               edit: {
                 kind: "FORESEE",
                 side: openForeseeOverlay.side,
+                viewer: perspectiveSide,
                 viewedCardIds,
                 orderedCardIds,
                 voidCardIds,
@@ -1268,6 +1388,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         />
       ) : null}
       {pendingPrompt !== null &&
+      perspectiveSide === pendingPrompt.run.side &&
       pendingPrompt.options.kind === "foresee" &&
       openForeseeOverlay === null ? (
         <CumulusBattleForeseeOverlay
@@ -1330,15 +1451,17 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         init={battleInit}
         board={board}
         enemyDreamcaller={enemyDreamcallerSummary}
-        aiProposal={proposal}
+        aiProposal={aiDriverEnabled ? proposal : null}
         aiMode={aiMode}
         isOpponentHandRevealed={isOpponentHandRevealed}
         isPlayerHandHidden={isPlayerHandHidden}
+        perspectiveSide={perspectiveSide}
         pendingPrompt={pendingPrompt}
         confirmedPromptId={confirmedPromptId}
         isResultOverlayDismissed={isResultOverlayDismissed}
         interactions={{
           canInteract: canPlayerAct && pendingPrompt === null,
+          nearSide: perspectiveSide,
           pendingCardId: pendingDragCardId,
           pendingCardSource,
           pendingCardOwner,
@@ -1347,13 +1470,13 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           onCardDebugActivate: (battleCardId, source, invocation) =>
             handleCumulusCardDebugActivate(
               battleCardId,
-              source === "player-hand" ? "hand-tray" : "battlefield",
+              source === "near-hand" ? "hand-tray" : "battlefield",
               invocation,
             ),
           onCardDragStart: (battleCardId, source) => {
             handleCardDragStart(
               battleCardId,
-              source === "player-hand" ? "hand-tray" : "battlefield",
+              source === "near-hand" ? "hand-tray" : "battlefield",
             );
           },
           onCardDragEnd: handleCardDragEnd,
@@ -1380,8 +1503,9 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           onNextPhase: () => {
             handleSetBattleFlow(computePhaseControlTarget(board, "next"));
           },
-          onApproveAiProposal: approve,
-          onRejectAiProposal: reject,
+          onApproveAiProposal: aiDriverEnabled ? approve : undefined,
+          onRejectAiProposal: aiDriverEnabled ? reject : undefined,
+          onPerspectiveToggle: handlePerspectiveToggle,
           onCardPickerSelectionChange: (ids) => {
             logCumulusCardPickerInteraction("selection-changed", ids);
           },

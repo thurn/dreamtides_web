@@ -21,6 +21,7 @@ interface GlassButtonDemoArgs {
   variant?: GlassButtonVariant;
   placement?: GlassControlPlacement;
   disabled?: boolean;
+  pressed?: boolean;
 }
 
 /**
@@ -36,6 +37,7 @@ function GlassButtonDemo({
   variant = "accent",
   placement = "onMedia",
   disabled = false,
+  pressed,
 }: GlassButtonDemoArgs) {
   return (
     <GlassButton
@@ -45,6 +47,7 @@ function GlassButtonDemo({
       variant={variant}
       placement={placement}
       disabled={disabled}
+      pressed={pressed}
       onPress={() => {}}
     />
   );
@@ -61,6 +64,15 @@ export const glassButtonDemo: CumulusComponent = {
   docName: "GlassButton",
   Component: GlassButtonDemo,
   usage: [
+    {
+      label: "Pressed toggle",
+      note: "Use `pressed` only when the action represents a persistent toggle state; the component exposes the state through `aria-pressed`.",
+      code: `<GlassButton
+  label={controllingOpponent ? "Return to Your Side" : "Control Opponent"}
+  pressed={controllingOpponent}
+  onPress={togglePerspective}
+/>`,
+    },
     {
       note: "A plain text label on the glass surface. `label` is a resolved string; `onPress` fires on activation.",
       code: `import { GlassButton } from "src/cumulus/components/controls/GlassButton";
@@ -140,6 +152,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
       variant: "accent",
       placement: "onMedia",
       disabled: false,
+      pressed: false,
     },
   },
 };

@@ -10,6 +10,7 @@ const DREAMCALLER: DreamcallerVisual = {
 
 function BattleStatusDisplayDemo(args: Record<string, unknown>) {
   const owner = args.owner === "enemy" ? "enemy" : "player";
+  const relationship = args.relationship === "far" ? "far" : "near";
   const dreamcaller = args.placeholder === true ? null : DREAMCALLER;
   const currentEnergy =
     typeof args.currentEnergy === "number" ? args.currentEnergy : 2;
@@ -19,6 +20,7 @@ function BattleStatusDisplayDemo(args: Record<string, unknown>) {
     <div style={{ width: 280 }}>
       <BattleStatusDisplay
         owner={owner}
+        relationship={relationship}
         dreamcaller={dreamcaller}
         currentEnergy={currentEnergy}
         maxEnergy={maxEnergy}
@@ -34,7 +36,7 @@ export const battleStatusDisplayDemo: CumulusComponent = {
   blurb:
     "The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Dreamcaller portrait or loading placeholder at center, and centered current points at right.",
   callout:
-    "This display has no phase, active-state, debug, or interaction API. Place the complete fixed object through a wrapper.",
+    "Pass the canonical owner and its near/far relationship separately so accessibility copy follows the current perspective.",
   group: "Components",
   docName: "BattleStatusDisplay",
   Component: BattleStatusDisplayDemo,
@@ -45,6 +47,7 @@ export const battleStatusDisplayDemo: CumulusComponent = {
 
 <BattleStatusDisplay
   owner="player"
+  relationship="near"
   dreamcaller={playerDreamcaller}
   currentEnergy={2}
   maxEnergy={3}
@@ -65,6 +68,7 @@ export const battleStatusDisplayDemo: CumulusComponent = {
   demo: {
     defaultArgs: {
       owner: "player",
+      relationship: "near",
       currentEnergy: 2,
       maxEnergy: 3,
       points: 4,

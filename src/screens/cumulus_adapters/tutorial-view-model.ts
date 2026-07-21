@@ -102,6 +102,8 @@ function emptySlots(
 
 function emptySide(owner: "enemy" | "player"): MobileBattleSideView {
   return {
+    owner,
+    position: owner === "player" ? "near" : "far",
     deckCardIds: tutorialDeckIds(owner),
     banishedCardCount: 0,
     voidCards: [],
@@ -121,7 +123,7 @@ function emptyInspectorSide(
 ): MobileBattleInspectorSideView {
   return {
     side,
-    heading: side === "player" ? "Your" : "Enemy",
+    heading: side === "player" ? "Player" : "Enemy",
     points: 0,
     currentEnergy: 0,
     maxEnergy: 0,
@@ -258,8 +260,12 @@ export function buildTutorialView(
             },
     playbackRunId: playback?.runId ?? null,
     currentAction,
-    battle: {
+    battle: (() => {
+      const player = emptySide("player");
+      const farHandCards = tutorialCard === null || opponentCardPlayed ? [] : [tutorialCard];
+      return {
       battleId: TUTORIAL_BATTLE_ID,
+      perspective: "player",
       aiApproval: null,
       cardPicker: null,
       choicePrompt: null,
@@ -267,17 +273,22 @@ export function buildTutorialView(
       activeSide: "enemy",
       phase: "day",
       enemyHandCardIds,
-      enemyHand:
-        tutorialCard === null || opponentCardPlayed ? [] : [tutorialCard],
+      enemyHand: farHandCards,
       enemy: {
         ...enemy,
         deckCardIds: enemyDeck,
         backRank: enemyBackRank,
       },
-      player: emptySide("player"),
+      player,
       playerHand: [],
+      near: player,
+      far: { ...enemy, position: "far", deckCardIds: enemyDeck, backRank: enemyBackRank },
+      nearHand: { owner: "player", position: "near", cardIds: [], cards: [] },
+      farHand: { owner: "enemy", position: "far", cardIds: enemyHandCardIds, cards: farHandCards },
+      promptNotice: null,
       inspector: {
         opponentName: "Awaiting Dreamcaller",
+        perspective: "player",
         turn: "1",
         phase: "Day",
         activeSide: "Enemy",
@@ -285,6 +296,8 @@ export function buildTutorialView(
         nextDreamwellOrder: "Complete",
         isOpponentHandRevealed: false,
         isPlayerHandHidden: false,
+        isFarHandRevealed: false,
+        isNearHandHidden: false,
         sides: {
           player: emptyInspectorSide("player"),
           enemy: {
@@ -300,6 +313,7 @@ export function buildTutorialView(
         ai: null,
       },
       result: null,
-    },
+    };
+    })(),
   };
 }

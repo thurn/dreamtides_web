@@ -50,7 +50,7 @@ describe("createInitialBattleState", () => {
       state.cardInstances[state.sides.player.hand[0]].definition.sourceDeckEntryId,
     ).toBe(battleInit.playerDeckOrder[0].sourceDeckEntryId);
     expect(
-      state.sides.enemy.hand.every((battleCardId) => state.cardInstances[battleCardId]?.isRevealedToPlayer),
+      state.sides.enemy.hand.every((battleCardId) => state.cardInstances[battleCardId]?.revealedTo?.player),
     ).toBe(false);
   });
 
@@ -248,8 +248,8 @@ describe("allocateBattleCardInstance", () => {
     expect(firstInstance.owner).toBe("player");
     expect(secondInstance.owner).toBe("enemy");
     expect(firstInstance.controller).toBe("player");
-    expect(firstInstance.isRevealedToPlayer).toBe(true);
-    expect(secondInstance.isRevealedToPlayer).toBe(false);
+    expect(firstInstance.revealedTo).toEqual({ player: true, enemy: false });
+    expect(secondInstance.revealedTo).toEqual({ player: false, enemy: true });
     expect(firstInstance.sparkDelta).toBe(0);
     expect(firstInstance.status).toEqual({
       isExhausted: false,

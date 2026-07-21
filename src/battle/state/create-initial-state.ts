@@ -5,6 +5,10 @@ import {
   createEmptySlotRecord,
   frontRankSlotIds,
 } from "../types";
+import {
+  createControllerVisibility,
+  normalizeCardVisibility,
+} from "./card-visibility";
 import type {
   BattleCardInstance,
   BattleCardProvenance,
@@ -62,10 +66,10 @@ export function createInitialBattleState(battleInit: BattleInit): BattleMutableS
     cardInstances: {},
   };
   const playerDeckCardIds = battleInit.playerDeckOrder.map((definition) =>
-    createBattleCardInstance(state, definition, "player", true),
+    createBattleCardInstance(state, definition, "player"),
   );
   const enemyDeckCardIds = battleInit.enemyDeckDefinition.map((definition) =>
-    createBattleCardInstance(state, definition, "enemy", false),
+    createBattleCardInstance(state, definition, "enemy"),
   );
   const openingHandSize = Math.max(0, battleInit.openingHandSize);
   const playerOpeningHand = playerDeckCardIds.slice(0, openingHandSize);
@@ -99,21 +103,20 @@ export function cloneBattleMutableState(state: BattleMutableState): BattleMutabl
         .sort()
         .map((battleCardId) => {
           const instance = state.cardInstances[battleCardId];
-          return [
-            battleCardId,
-            {
-              ...instance,
-              definition: cloneBattleDeckCardDefinition(instance.definition),
-              ...(instance.figments === undefined ? {} : { figments: [...instance.figments] }),
-              status: { ...instance.status },
-              markers: { ...instance.markers },
-              notes: instance.notes.map((note) => ({
-                ...note,
-                expiry: { ...note.expiry },
-              })),
-              provenance: { ...instance.provenance },
-            },
-          ];
+          const cloned: BattleCardInstance = {
+            ...instance,
+            definition: cloneBattleDeckCardDefinition(instance.definition),
+            ...(instance.figments === undefined ? {} : { figments: [...instance.figments] }),
+            status: { ...instance.status },
+            markers: { ...instance.markers },
+            notes: instance.notes.map((note) => ({
+              ...note,
+              expiry: { ...note.expiry },
+            })),
+            provenance: { ...instance.provenance },
+          };
+          normalizeCardVisibility(cloned);
+          return [battleCardId, cloned];
         }),
     ),
   };
@@ -131,7 +134,7 @@ export function allocateBattleCardInstance(
     definition: BattleDeckCardDefinition;
     owner: BattleSide;
     controller: BattleSide;
-    isRevealedToPlayer: boolean;
+    isRevealedToPlayer?: boolean;
     provenance: BattleCardProvenance;
   },
 ): string {
@@ -146,7 +149,13 @@ export function allocateBattleCardInstance(
       : {}),
     sparkDelta: 0,
     staticSparkBonus: 0,
-    isRevealedToPlayer: params.isRevealedToPlayer,
+    revealedTo:
+      params.isRevealedToPlayer === undefined
+        ? createControllerVisibility(params.controller)
+        : {
+            player: params.isRevealedToPlayer,
+            enemy: params.controller === "enemy",
+          },
     status: createDefaultBattleCardStatus(),
     markers: { isPrevented: false, isCopied: false },
     notes: [],
@@ -159,13 +168,11 @@ function createBattleCardInstance(
   state: BattleMutableState,
   definition: BattleDeckCardDefinition,
   owner: BattleSide,
-  isRevealedToPlayer: boolean,
 ): string {
   return allocateBattleCardInstance(state, {
     definition,
     owner,
     controller: owner,
-    isRevealedToPlayer,
     provenance: {
       kind: "quest-deck",
       sourceBattleCardId: null,

@@ -15,6 +15,25 @@ beforeEach(() => {
 });
 
 describe("BattleStatusDisplay", () => {
+  it("labels canonical ownership relative to the current perspective", () => {
+    const container = document.createElement("div");
+    const root = createRoot(container);
+    act(() => {
+      root.render(
+        <BattleStatusDisplay
+          owner="enemy"
+          relationship="near"
+          dreamcaller={null}
+          currentEnergy={1}
+          maxEnergy={2}
+          points={3}
+        />,
+      );
+    });
+    expect(container.querySelector("[data-battle-status]")?.getAttribute("aria-label"))
+      .toBe("Your side: 1 of 2 energy, 3 points");
+    act(() => root.unmount());
+  });
   it("composes centered resources and a head portrait on standard Cumulus glass", () => {
     const container = document.createElement("div");
     document.body.append(container);

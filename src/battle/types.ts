@@ -478,7 +478,10 @@ export interface BattleCardInstance {
    * stack, while `sparkDelta` is the targeted gain riding the topmost figment.
    */
   staticSparkBonus: number;
-  isRevealedToPlayer: boolean;
+  /** Shared rules knowledge, indexed by the canonical side viewing the card. */
+  revealedTo?: Readonly<Record<BattleSide, boolean>>;
+  /** Legacy snapshot field. New battle state writes `revealedTo`. */
+  isRevealedToPlayer?: boolean;
   status: BattleCardStatus;
   markers: BattleCardMarkers;
   notes: readonly BattleCardNote[];

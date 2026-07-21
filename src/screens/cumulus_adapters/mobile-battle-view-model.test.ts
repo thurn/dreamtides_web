@@ -216,6 +216,13 @@ describe("buildMobileBattleView", () => {
     expect(view.activeSide).toBe(board.activeSide);
     expect(view.aiApproval).toBeNull();
     expect(view.phase).toBe("dawn");
+    expect(view.perspective).toBe("player");
+    expect(view.near).toBe(view.player);
+    expect(view.far).toBe(view.enemy);
+    expect(view.near.owner).toBe("player");
+    expect(view.near.position).toBe("near");
+    expect(view.far.owner).toBe("enemy");
+    expect(view.far.position).toBe("far");
     expect(view.playerHand.map((card) => card.id)).toEqual(
       board.sides.player.hand,
     );
@@ -239,6 +246,29 @@ describe("buildMobileBattleView", () => {
       figmentCount: 1,
       storedTime: 0,
     });
+  });
+
+  it("reverses board position without changing canonical lane order or result semantics", () => {
+    const init = makeInit();
+    const board = makeBoard(init);
+    board.result = "victory";
+    const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER, null, {
+      aiMode: false,
+      isOpponentHandRevealed: false,
+      isPlayerHandHidden: false,
+      perspectiveSide: "enemy",
+    });
+
+    expect(view.perspective).toBe("enemy");
+    expect(view.near.owner).toBe("enemy");
+    expect(view.far.owner).toBe("player");
+    expect(view.near.backRank.map((slot) => slot.id)).toEqual(["B0", "B1", "B2", "B3", "B4"]);
+    expect(view.near.frontRank.map((slot) => slot.id)).toEqual(["F0", "F1", "F2", "F3"]);
+    expect(view.nearHand.cardIds).toEqual(board.sides.enemy.hand);
+    expect(view.nearHand.cards.map((card) => card.id)).toEqual(board.sides.enemy.hand);
+    expect(view.farHand.cardIds).toEqual(board.sides.player.hand);
+    expect(view.farHand.cards).toEqual([]);
+    expect(view.result).toMatchObject({ outcome: "victory", essenceReward: 30 });
   });
 
   it("rebuilds complete card status from the committed battle instance", () => {
@@ -371,6 +401,26 @@ describe("buildMobileBattleView", () => {
       },
     );
     expect(confirmed.cardPicker?.canResolve).toBe(true);
+
+    const mismatched = buildMobileBattleView(
+      init,
+      board,
+      ENEMY_DREAMCALLER,
+      null,
+      {
+        aiMode: false,
+        isOpponentHandRevealed: false,
+        isPlayerHandHidden: false,
+        perspectiveSide: "enemy",
+        pendingPrompt: prompt,
+        confirmedPromptId: prompt.promptId,
+      },
+    );
+    expect(mismatched.cardPicker).toBeNull();
+    expect(mismatched.promptNotice).toEqual({
+      promptSide: "player",
+      message: "Switch to the Player side to resolve this choice.",
+    });
   });
 
   it("maps choice prompts into confirmed inline option controls", () => {
@@ -474,7 +524,8 @@ describe("buildMobileBattleView", () => {
     });
 
     expect(view.cardPicker).toMatchObject({
-      side,
+      side: "player",
+      candidateOwner: side,
       candidateIds: [candidateId],
       canResolve: true,
       presentation: zone === "deck" || zone === "void" ? "gallery" : "board",
@@ -569,7 +620,7 @@ describe("buildMobileBattleView", () => {
       isPlayerHandHidden: true,
     });
     expect(view.inspector.sides.player).toMatchObject({
-      heading: "Your",
+      heading: "Player",
       points: 5,
       canDiscard: true,
       canShuffle: true,

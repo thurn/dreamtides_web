@@ -32,8 +32,10 @@ import {
   type MobileBattleInspectorView,
   type MobileBattleDreamwellView,
   type MobileBattleView,
+  type BattleBoardPosition,
 } from "../../cumulus/screens/MobileBattleScreen";
 import type { MobileBattleResultView } from "../../cumulus/screens/BattleResultSurface";
+import { cardIsRevealedTo } from "../../battle/state/card-visibility";
 
 const FALLBACK_PLAYER_DREAMCALLER = {
   imageNumber: "001",
@@ -52,6 +54,9 @@ export interface MobileBattleViewOptions {
   readonly aiMode: boolean;
   readonly isOpponentHandRevealed: boolean;
   readonly isPlayerHandHidden: boolean;
+  readonly perspectiveSide?: BattleSide;
+  readonly isFarHandRevealed?: boolean;
+  readonly isNearHandHidden?: boolean;
   readonly pendingPrompt?: PendingPrompt | null;
   readonly confirmedPromptId?: number | null;
   readonly isResultOverlayDismissed?: boolean;
@@ -68,8 +73,66 @@ export function buildMobileBattleView(
     isPlayerHandHidden: false,
   },
 ): MobileBattleView {
+  const perspective = viewOptions.perspectiveSide ?? "player";
+  const farSide: BattleSide = perspective === "player" ? "enemy" : "player";
+  const player = buildSideView(
+    "player",
+    "player" === perspective ? "near" : "far",
+    init.dreamcallerSummary ?? FALLBACK_PLAYER_DREAMCALLER,
+    board,
+  );
+  const enemy = buildSideView(
+    "enemy",
+    "enemy" === perspective ? "near" : "far",
+    enemyDreamcaller,
+    board,
+  );
+  const near = perspective === "player" ? player : enemy;
+  const far = farSide === "player" ? player : enemy;
+  const promptSide = viewOptions.pendingPrompt?.run.side ?? null;
+  const ownsPrompt = promptSide === null || promptSide === perspective;
+  const nearHandCards = buildCardViews(
+    board.sides[perspective].hand,
+    board,
+    (instance) =>
+      board.activeSide === perspective &&
+      board.phase === "day" &&
+      instance.definition.energyCost <= board.sides[perspective].currentEnergy,
+  );
+  const promptCandidateIds = ownsPrompt && viewOptions.pendingPrompt?.options.kind === "pick-cards"
+    ? new Set(viewOptions.pendingPrompt.options.candidateIds)
+    : new Set<string>();
+  const farVisibleIds = board.sides[farSide].hand.filter((battleCardId) => {
+    const instance = board.cardInstances[battleCardId];
+    return (viewOptions.isFarHandRevealed ?? viewOptions.isOpponentHandRevealed) ||
+      promptCandidateIds.has(battleCardId) ||
+      (instance !== undefined && cardIsRevealedTo(instance, perspective));
+  });
   return {
     battleId: init.battleId,
+    perspective,
+    near,
+    far,
+    nearHand: {
+      owner: perspective,
+      position: "near",
+      cardIds: [...board.sides[perspective].hand],
+      cards: (viewOptions.isNearHandHidden ?? viewOptions.isPlayerHandHidden)
+        ? []
+        : nearHandCards,
+    },
+    farHand: {
+      owner: farSide,
+      position: "far",
+      cardIds: [...board.sides[farSide].hand],
+      cards: buildCardViews(farVisibleIds, board),
+    },
+    promptNotice: promptSide !== null && !ownsPrompt
+      ? {
+          promptSide,
+          message: `Switch to the ${promptSide === "enemy" ? "Opponent" : "Player"} side to resolve this choice.`,
+        }
+      : null,
     aiApproval:
       aiProposal === null
         ? null
@@ -78,12 +141,12 @@ export function buildMobileBattleView(
             canReject: aiProposal.kind === "action",
           },
     cardPicker: buildCardPickerView(
-      viewOptions.pendingPrompt ?? null,
+      ownsPrompt ? viewOptions.pendingPrompt ?? null : null,
       viewOptions.confirmedPromptId ?? null,
       board,
     ),
     choicePrompt: buildChoicePromptView(
-      viewOptions.pendingPrompt ?? null,
+      ownsPrompt ? viewOptions.pendingPrompt ?? null : null,
       viewOptions.confirmedPromptId ?? null,
     ),
     dreamwell: buildDreamwellView(init, board),
@@ -91,12 +154,8 @@ export function buildMobileBattleView(
     phase: mobileBattlePhase(board.phase),
     enemyHandCardIds: [...board.sides.enemy.hand],
     enemyHand: buildCardViews(board.sides.enemy.hand, board),
-    enemy: buildSideView("enemy", enemyDreamcaller, board),
-    player: buildSideView(
-      "player",
-      init.dreamcallerSummary ?? FALLBACK_PLAYER_DREAMCALLER,
-      board,
-    ),
+    enemy,
+    player,
     playerHand: buildCardViews(
       board.sides.player.hand,
       board,
@@ -187,7 +246,8 @@ function buildCardPickerView(
   return {
     key: String(pendingPrompt.promptId),
     label: pendingPrompt.options.label,
-    side: candidates[0]?.owner ?? pendingPrompt.run.side,
+    side: pendingPrompt.run.side,
+    candidateOwner: candidates[0]?.owner ?? null,
     candidates,
     candidateIds: [...pendingPrompt.options.candidateIds],
     count: pendingPrompt.options.count,
@@ -238,6 +298,7 @@ function buildInspectorView(
   const nextDreamwell = init.dreamwellDeck[board.dreamwellDeckIndex];
   return {
     opponentName: init.enemyDescriptor.name,
+    perspective: options.perspectiveSide ?? "player",
     turn: String(board.turnNumber),
     phase: formatPhaseLabel(board.phase),
     activeSide: formatSideLabel(board.activeSide),
@@ -246,6 +307,8 @@ function buildInspectorView(
       nextDreamwell === undefined ? "Complete" : String(nextDreamwell.order),
     isOpponentHandRevealed: options.isOpponentHandRevealed,
     isPlayerHandHidden: options.isPlayerHandHidden,
+    isFarHandRevealed: options.isFarHandRevealed ?? options.isOpponentHandRevealed,
+    isNearHandHidden: options.isNearHandHidden ?? options.isPlayerHandHidden,
     sides: {
       player: buildInspectorSideView("player", board),
       enemy: buildInspectorSideView("enemy", board),
@@ -261,7 +324,7 @@ function buildInspectorSideView(
   const state = board.sides[side];
   return {
     side,
-    heading: side === "player" ? "Your" : "Enemy",
+    heading: side === "player" ? "Player" : "Enemy",
     points: state.score,
     currentEnergy: state.currentEnergy,
     maxEnergy: state.maxEnergy,
@@ -350,12 +413,15 @@ export function buildMobileBattleCardView(
 
 function buildSideView(
   side: BattleSide,
+  position: BattleBoardPosition,
   dreamcaller: BattleDreamcallerSummary | typeof FALLBACK_PLAYER_DREAMCALLER,
   board: BattleMutableState,
 ): MobileBattleSideView {
   const sideState = board.sides[side];
   const { frontSize, backSize } = selectSidePlayAreaSize(board, side);
   return {
+    owner: side,
+    position,
     deckCardIds: [...sideState.deck],
     banishedCardCount: sideState.banished.length,
     voidCards: buildCardViews([...sideState.void].reverse(), board),

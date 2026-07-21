@@ -22,6 +22,7 @@ import type { EffectStep } from "../battle/effect-step";
 import { resolveScript } from "../battle/fold";
 import type { EffectRun, ScriptRef } from "../battle/fold";
 import type { EventContext } from "../../eventlog/types";
+import { cloneBattleMutableState } from "../../battle/state/create-initial-state";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (SELECT_DREAMCALLER / START_QUEST)
@@ -549,7 +550,13 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   if (pendingPrompt !== null) {
     if (!isValidPendingPrompt(pendingPrompt)) return null;
   }
-  return value as unknown as BattleFoldState;
+  const loaded = value as unknown as BattleFoldState;
+  const board = loaded.board as unknown as Record<string, unknown>;
+  const canNormalizeCards = isRecord(board.cardInstances) && isRecord(board.sides);
+  return {
+    ...loaded,
+    board: canNormalizeCards ? cloneBattleMutableState(loaded.board) : loaded.board,
+  };
 }
 
 function isValidPendingPrompt(value: unknown): boolean {
