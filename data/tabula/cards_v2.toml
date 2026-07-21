@@ -4493,10 +4493,10 @@ art = { x = -0.084, y = 0.369, scale = 1.17 }
 name = "Last Beacon"
 mtg-name = "Kaito Shizuki"
 id = "8e003d04-e489-4c55-9c72-fc5612909d07"
-rendered-text = """
+rendered-text = '''
 3●, ☪: Materialize a 1✦ outsider figment.
 
-When an outsider you control scores ⍟, draw a card and gain ⍟ equal to its ● cost."""
+When an outsider you control scores ⍟, draw a card and gain an additional 1⍟.'''
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -6306,10 +6306,11 @@ art = { x = 0.522, y = 0.032, scale = 1.17 }
 name = "Sage of the Prelude"
 mtg-name = "Ice-Fang Coatl"
 id = "41d0aa36-f15a-487d-b97c-7fd765973921"
-rendered-text = """
-Vengeful
+rendered-text = '''
+▸Materialized: Draw a card.
 
-▸Materialized: Draw a card."""
+1●: This character gains vengeful until end of turn.
+'''
 energy-cost = 2
 card-type = "Character"
 subtype = "Musician"
