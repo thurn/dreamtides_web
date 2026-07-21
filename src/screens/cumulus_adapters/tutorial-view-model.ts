@@ -271,6 +271,7 @@ export function buildTutorialView(
       choicePrompt: null,
       dreamwell: null,
       activeSide: "enemy",
+      isOpeningTurn: true,
       phase: "day",
       enemyHandCardIds,
       enemyHand: farHandCards,

@@ -151,6 +151,8 @@ export function buildMobileBattleView(
     ),
     dreamwell: buildDreamwellView(init, board),
     activeSide: board.activeSide,
+    isOpeningTurn:
+      board.turnNumber === 1 && board.activeSide === init.startingSide,
     phase: mobileBattlePhase(board.phase),
     enemyHandCardIds: [...board.sides.enemy.hand],
     enemyHand: buildCardViews(board.sides.enemy.hand, board),

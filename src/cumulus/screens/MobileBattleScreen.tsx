@@ -156,6 +156,7 @@ export interface MobileBattleView {
   readonly choicePrompt: MobileBattleChoicePromptView | null;
   readonly dreamwell: MobileBattleDreamwellView | null;
   readonly activeSide: MobileBattleOwner;
+  readonly isOpeningTurn: boolean;
   readonly phase: MobileBattlePhase;
   readonly enemyHandCardIds: readonly string[];
   readonly enemyHand: readonly MobileBattleCardView[];
@@ -546,10 +547,12 @@ function BattleBackdrop({ isDesktop }: { readonly isDesktop: boolean }) {
 
 function BattleTurnAnnouncement({
   activeSide,
+  isOpeningTurn,
   perspective,
   isDesktop,
 }: {
   readonly activeSide: MobileBattleOwner;
+  readonly isOpeningTurn: boolean;
   readonly perspective: BattlePerspectiveSide;
   readonly isDesktop: boolean;
 }) {
@@ -558,7 +561,7 @@ function BattleTurnAnnouncement({
   const [announcement, setAnnouncement] = useState<{
     readonly key: number;
     readonly side: MobileBattleOwner;
-  } | null>({ key: 0, side: activeSide });
+  } | null>(isOpeningTurn ? null : { key: 0, side: activeSide });
 
   useEffect(() => {
     if (previousSide.current === activeSide) return;
@@ -3148,6 +3151,7 @@ export function MobileBattleScreen({
         <BattleTurnAnnouncement
           key={view.battleId}
           activeSide={view.activeSide}
+          isOpeningTurn={view.isOpeningTurn}
           perspective={view.perspective}
           isDesktop={isDesktop}
         />

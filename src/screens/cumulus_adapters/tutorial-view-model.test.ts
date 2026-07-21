@@ -192,6 +192,7 @@ describe("buildTutorialView", () => {
 
     expect(view.battleId).toBe("tutorial-battle");
     expect(view.activeSide).toBe("enemy");
+    expect(view.isOpeningTurn).toBe(true);
     expect(view.phase).toBe("day");
     expect(view.playerHand).toEqual([]);
     expect(view.enemyHand).toEqual([]);

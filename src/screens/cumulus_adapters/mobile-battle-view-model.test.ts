@@ -214,6 +214,7 @@ describe("buildMobileBattleView", () => {
 
     expect(view.battleId).toBe(board.battleId);
     expect(view.activeSide).toBe(board.activeSide);
+    expect(view.isOpeningTurn).toBe(true);
     expect(view.aiApproval).toBeNull();
     expect(view.phase).toBe("dawn");
     expect(view.perspective).toBe("player");
@@ -246,6 +247,11 @@ describe("buildMobileBattleView", () => {
       figmentCount: 1,
       storedTime: 0,
     });
+
+    board.activeSide = "enemy";
+    expect(
+      buildMobileBattleView(init, board, ENEMY_DREAMCALLER).isOpeningTurn,
+    ).toBe(false);
   });
 
   it("reverses board position without changing canonical lane order or result semantics", () => {

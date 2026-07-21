@@ -142,6 +142,7 @@ function makeView(): MobileBattleView {
     choicePrompt: null,
     dreamwell: null,
     activeSide: "player",
+    isOpeningTurn: false,
     phase: "day",
     enemyHandCardIds,
     enemyHand,
@@ -1221,9 +1222,9 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("announces each turn with only the requested text on a circular surface", () => {
+  it("skips the opening turn and announces later turns on a circular surface", () => {
     vi.useFakeTimers();
-    const view = makeView();
+    const view = { ...makeView(), isOpeningTurn: true };
     const { container, root } = mount(view);
     const render = (nextView: MobileBattleView): void => {
       act(() => {
@@ -1235,6 +1236,16 @@ describe("MobileBattleScreen", () => {
       });
     };
 
+    expect(container.querySelector("[data-battle-turn-announcement]")).toBeNull();
+
+    render({ ...view, activeSide: "enemy" });
+    const opponentAnnouncement = container.querySelector<HTMLElement>(
+      '[data-battle-turn-announcement="enemy"]',
+    );
+    expect(opponentAnnouncement?.textContent).toBe("Opponent Turn");
+    expect(opponentAnnouncement?.querySelector("i, svg")).toBeNull();
+
+    render({ ...view, activeSide: "player" });
     const playerAnnouncement = container.querySelector<HTMLElement>(
       '[data-battle-turn-announcement="player"]',
     );
@@ -1251,17 +1262,23 @@ describe("MobileBattleScreen", () => {
       "battle-turn-announcement-disc",
     );
 
-    render({ ...view, activeSide: "enemy" });
-    const opponentAnnouncement = container.querySelector<HTMLElement>(
-      '[data-battle-turn-announcement="enemy"]',
-    );
-    expect(opponentAnnouncement?.textContent).toBe("Opponent Turn");
-    expect(opponentAnnouncement?.querySelector("i, svg")).toBeNull();
-
     act(() => {
       vi.advanceTimersByTime(2_500);
     });
     expect(container.querySelector("[data-battle-turn-announcement]")).toBeNull();
+
+    act(() => root.unmount());
+    vi.useRealTimers();
+  });
+
+  it("announces the current turn when a battle mounts after its opening turn", () => {
+    vi.useFakeTimers();
+    const { container, root } = mount(makeView());
+
+    expect(
+      container.querySelector('[data-battle-turn-announcement="player"]')
+        ?.textContent,
+    ).toBe("Your Turn");
 
     act(() => root.unmount());
     vi.useRealTimers();
