@@ -158,6 +158,13 @@ describe("GameCard reveal contract", () => {
     expect(createsLabel?.style.font).toBe("var(--t-eyebrow)");
     expect(createsLabel?.style.textTransform).toBe("uppercase");
     expect(createsLabel?.style.textShadow).toBe("var(--text-outline-media)");
+    const measurementLabel = document.querySelector<HTMLElement>(
+      '[data-reveal-measure="adjacent"] [data-cumulus-reveal-adjacent-label]',
+    );
+    expect(measurementLabel?.style.visibility).toBe("");
+    expect(measurementLabel?.closest<HTMLElement>(
+      "[data-reveal-measurement-layer]",
+    )?.style.visibility).toBe("hidden");
     expect(figment?.querySelector('[data-card-id="bb1a5acd-1a03-4aa3-826d-f0a301843845"]')?.getAttribute("data-figment")).toBe("true");
     expect(Number.parseFloat(figment!.style.left)).toBe(
       Number.parseFloat(definition!.style.left)

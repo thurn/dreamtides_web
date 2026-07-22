@@ -57,7 +57,7 @@ function renderAdjacentCard(
           letterSpacing: token("--tracking-eyebrow"),
           textShadow: token("--text-outline-media"),
           textTransform: "uppercase",
-          visibility: showCreatesLabel ? "visible" : "hidden",
+          visibility: showCreatesLabel ? undefined : "hidden",
         }}
       >
         Creates:
