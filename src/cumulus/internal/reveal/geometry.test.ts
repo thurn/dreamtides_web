@@ -67,6 +67,27 @@ describe("selectRevealPlacement", () => {
     expect(supported.primaryRect).toEqual(alone.primaryRect);
   });
 
+  it("grows desktop source definitions upward from the source bottom edge", () => {
+    const sourceRect = { x: 400, y: 500, width: 300, height: 40 };
+    const result = selectRevealPlacement({
+      ...base,
+      viewport: { ...viewport, layout: "desktop", width: 1200, height: 900, safeArea: { top: 0, right: 0, bottom: 0, left: 0 } },
+      reason: "hover",
+      touchPoint: undefined,
+      primaryKind: "source",
+      sourceRect,
+      primarySize: { width: 300, height: 40 },
+      secondarySizes: [{ width: 248, height: 80 }, { width: 248, height: 100 }],
+    });
+
+    expect(result.family).toBe("desktop-source-in-place");
+    expect(result.primaryRect).toEqual(sourceRect);
+    expect(result.secondaryRects).toHaveLength(2);
+    expect(result.secondaryRects[1].y + result.secondaryRects[1].height).toBe(
+      sourceRect.y + sourceRect.height,
+    );
+  });
+
   it.each([
     { sourceX: 120, expectedX: 234, family: "desktop-battlefield-near-right", orientation: "primary-left" },
     { sourceX: 1000, expectedX: 746, family: "desktop-battlefield-near-left", orientation: "primary-right" },

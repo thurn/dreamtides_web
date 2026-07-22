@@ -96,6 +96,11 @@ describe("RevealOverlay", () => {
     expect(Number.parseFloat(definitions[1].style.top)).toBeGreaterThan(
       Number.parseFloat(definitions[0].style.top),
     );
+    const lastDefinition = definitions[definitions.length - 1];
+    expect(
+      Number.parseFloat(lastDefinition.style.top)
+        + Number.parseFloat(lastDefinition.style.height),
+    ).toBe(300);
   });
 
   it("has no opacity, scale, or travel animation and disappears in one render frame", () => {

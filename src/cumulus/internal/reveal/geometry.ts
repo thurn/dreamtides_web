@@ -242,11 +242,36 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
   const safeBottom = viewport.offsetTop + viewport.height - viewport.safeArea.bottom;
   const safeLeft = viewport.offsetLeft + viewport.safeArea.left;
   const safeRight = viewport.offsetLeft + viewport.width - viewport.safeArea.right;
+  const secondarySizes = input.secondarySizes;
+  const secondaryWidth = secondarySizes.reduce((width, size) => Math.max(width, size.width), 0);
+  if (input.primaryKind === "source") {
+    const rightX = sourceRect.x + sourceRect.width + CARD_GAP;
+    const leftX = sourceRect.x - CARD_GAP - secondaryWidth;
+    const canUseRight = secondarySizes.length > 0 && rightX + secondaryWidth <= safeRight;
+    const canUseLeft = secondarySizes.length > 0 && leftX >= safeLeft;
+    const sourceCenter = sourceRect.x + sourceRect.width / 2;
+    const preferRight = sourceCenter <= viewport.offsetLeft + viewport.width / 2;
+    const useRight = canUseRight && (!canUseLeft || preferRight);
+    const orientation = useRight ? "primary-left" : "primary-right";
+    const secondaryX = useRight ? rightX : leftX;
+    const anchorBottom = Math.min(safeBottom, sourceRect.y + sourceRect.height);
+    const count = canUseRight || canUseLeft
+      ? fitSecondaryPrefix(secondarySizes, anchorBottom - safeTop)
+      : 0;
+    const secondaryY = anchorBottom - stackHeight(secondarySizes, count);
+    return result(input, {
+      family: "desktop-source-in-place",
+      orientation,
+      primaryRect: sourceRect,
+      secondaryRects: secondaryRectsAt(secondarySizes, count, secondaryX, secondaryY),
+      pressInPlace: false,
+      sideFallback: !useRight && canUseLeft,
+      bestEffortPrimaryOverlap: false,
+    });
+  }
   const cardShaped = input.primaryKind !== "infoCard";
   const primaryWidth = cardShaped ? Math.max(DESKTOP_GAME_CARD_WIDTH, sourceRect.width) : input.primarySize.width;
   const primarySize = scaled(input.primarySize, primaryWidth);
-  const secondarySizes = input.secondarySizes;
-  const secondaryWidth = secondarySizes.reduce((width, size) => Math.max(width, size.width), 0);
   if (cardShaped) {
     if (input.sourceIsBattlefieldGameCard) {
       const sourceCenter = sourceRect.x + sourceRect.width / 2;
