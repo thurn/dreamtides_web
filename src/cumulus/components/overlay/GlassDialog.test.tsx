@@ -25,7 +25,7 @@ function mount(element: ReactElement): {
 }
 
 function stubMatchMedia(matches: boolean): void {
-  window.matchMedia = ((query: string) => ({
+  window.matchMedia = (query: string) => ({
     matches,
     media: query,
     onchange: null,
@@ -34,7 +34,7 @@ function stubMatchMedia(matches: boolean): void {
     addListener: () => {},
     removeListener: () => {},
     dispatchEvent: () => false,
-  }));
+  });
 }
 
 beforeEach(() => {
@@ -105,7 +105,11 @@ describe("GlassDialog", () => {
   it("renders the title as an <h2>, the subtitle, the children, and a labeled close that fires onClose", () => {
     const onClose = vi.fn();
     const { container, root } = mount(
-      <GlassDialog title="Starting Deck" subtitle="An intro line" onClose={onClose}>
+      <GlassDialog
+        title="Starting Deck"
+        subtitle="An intro line"
+        onClose={onClose}
+      >
         <p data-testid="body">body content</p>
       </GlassDialog>,
     );
@@ -118,7 +122,9 @@ describe("GlassDialog", () => {
 
     // Subtitle present.
     const paragraphs = Array.from(container.querySelectorAll("p"));
-    expect(paragraphs.some((p) => p.textContent === "An intro line")).toBe(true);
+    expect(paragraphs.some((p) => p.textContent === "An intro line")).toBe(
+      true,
+    );
     expect(container.querySelector('[data-testid="body"]')).not.toBeNull();
 
     expect(
@@ -129,7 +135,9 @@ describe("GlassDialog", () => {
 
     act(() => {
       (
-        container.querySelector('button[aria-label="Close"]') as HTMLButtonElement
+        container.querySelector(
+          'button[aria-label="Close"]',
+        ) as HTMLButtonElement
       ).click();
     });
     expect(onClose).toHaveBeenCalledTimes(1);
@@ -192,6 +200,33 @@ describe("GlassDialog", () => {
     });
   });
 
+  it("keeps the popup presentation bounded and content-sized on mobile", () => {
+    const { container, root } = mount(
+      <GlassDialog title="How to Play" presentation="popup" onClose={() => {}}>
+        <div data-testid="popup-content">content</div>
+      </GlassDialog>,
+    );
+
+    const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
+    const panel = dialog?.querySelector<HTMLElement>(
+      "[data-glass-dialog-panel]",
+    );
+    expect(dialog?.children).toHaveLength(1);
+    expect(dialog?.getAttribute("data-glass-dialog-presentation")).toBe(
+      "popup",
+    );
+    expect(dialog?.style.paddingTop).toBe("var(--gutter)");
+    expect(panel?.style.width).toBe("fit-content");
+    expect(panel?.style.maxWidth).toBe("100%");
+    expect(panel?.style.maxHeight).toBe("100%");
+    expect(panel?.style.height).toBe("");
+    expect(panel?.style.borderRadius).not.toBe("0px");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("centers a desktop panel within the measured battlefield while retaining the viewport modal layer", () => {
     stubMatchMedia(true);
     Object.defineProperty(window, "innerWidth", {
@@ -224,8 +259,9 @@ describe("GlassDialog", () => {
     expect(dialog?.style.inset).toBe("0px");
     expect(dialog?.style.paddingLeft).toBe("var(--space-7)");
     expect(dialog?.style.paddingRight).toBe("calc(var(--space-7) + 360px)");
-    expect(dialog?.getAttribute("data-glass-dialog-desktop-center-target"))
-      .toBe("battlefield");
+    expect(
+      dialog?.getAttribute("data-glass-dialog-desktop-center-target"),
+    ).toBe("battlefield");
 
     act(() => {
       root.unmount();

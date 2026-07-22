@@ -14,10 +14,11 @@
 //     frost; childless, it is `aria-hidden` decoration.
 //
 //   - GlassDialog: a modal overlay with a bounded, centered glass panel on
-//     desktop and a full-bleed frosted overlay on mobile, with a hairline-closed
-//     header (title + optional subtitle + an optional trailing glass close
-//     disc) over a scrolling body. Commit-gated dialogs omit `onClose` and
-//     expose no dismissal control.
+//     desktop and a full-bleed frosted overlay on mobile, plus a strict popup
+//     presentation that stays bounded and content-sized at every viewport.
+//     Both presentations carry a hairline-closed header (title + optional
+//     subtitle + an optional trailing glass close disc) over a scrolling body.
+//     Commit-gated dialogs omit `onClose` and expose no dismissal control.
 //
 // The close disc is the shared `IconButton` at size `md` (48px) so the close
 // matches the IconButton size scale rather than inventing a bespoke disc. The
@@ -114,6 +115,13 @@ export interface GlassDialogProps {
   /** Force the edge-to-edge takeover treatment at any viewport width. */
   fullScreen?: boolean;
   /**
+   * Responsive behavior for the dialog surface. `"responsive"` uses the
+   * standard bounded desktop panel and full-bleed mobile takeover. `"popup"`
+   * keeps a centered, content-sized glass panel at every viewport width.
+   * `fullScreen` takes precedence. Defaults to `"responsive"`.
+   */
+  presentation?: "responsive" | "popup";
+  /**
    * Region used to center a bounded desktop panel. `"battlefield"` measures
    * the visible `main[data-battle-mobile]` stage, keeping a docked inspector
    * rail outside the centering calculation while the modal layer continues to
@@ -129,8 +137,9 @@ export interface GlassDialogProps {
  * A `role="dialog" aria-modal="true"` overlay: a fixed full-screen layer holding
  * a glass panel that is bounded and centered on desktop (`maxWidth: min(900px,
  * 90vw)`, `maxHeight: 85vh`) and full-bleed below `DESKTOP_MIN_WIDTH`, where the
- * mobile shell also carries the {@link GlassBackdrop}. With `wide`, the desktop
- * panel widens to
+ * mobile shell also carries the {@link GlassBackdrop}. The `"popup"`
+ * presentation keeps the glass panel centered, bounded, and content-sized on
+ * every viewport. With `wide`, the standard desktop panel widens to
  * `min(1120px, 90vw)` and trades the `85vh` cap for explicit viewport padding so
  * a roomy grid fits in two rows without internal scroll. The header pairs the
  * title `<h2>` and optional subtitle `<p>` with an optional trailing
@@ -147,15 +156,18 @@ export function GlassDialog({
   cutoutAwareClose = false,
   wide = false,
   fullScreen = false,
+  presentation = "responsive",
   desktopCenterTarget = "viewport",
   children,
 }: GlassDialogProps): ReactElement {
   const isDesktop = useIsDesktop();
   const glass = glassSurfaceStyle();
-  const boundedDesktop = isDesktop && !fullScreen;
-  const wideDesktop = boundedDesktop && wide;
+  const popup = presentation === "popup" && !fullScreen;
+  const boundedPanel = (isDesktop && !fullScreen) || popup;
+  const fullBleed = !boundedPanel;
+  const wideDesktop = isDesktop && boundedPanel && !popup && wide;
   const centerOnBattlefield =
-    boundedDesktop && desktopCenterTarget === "battlefield";
+    isDesktop && boundedPanel && desktopCenterTarget === "battlefield";
   const [battlefieldEndInset, setBattlefieldEndInset] = useState(0);
 
   useLayoutEffect(() => {
@@ -175,9 +187,10 @@ export function GlassDialog({
     };
     measure();
     window.addEventListener("resize", measure);
-    const observer = typeof ResizeObserver === "undefined"
-      ? null
-      : new ResizeObserver(measure);
+    const observer =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(measure);
     observer?.observe(battlefield);
     return () => {
       window.removeEventListener("resize", measure);
@@ -194,26 +207,30 @@ export function GlassDialog({
     setBesideCutout(
       onClose !== undefined &&
         cutoutAwareClose &&
-        !boundedDesktop &&
+        fullBleed &&
         hasInjectedDisplayCutout(),
     );
-  }, [boundedDesktop, cutoutAwareClose, onClose]);
+  }, [cutoutAwareClose, fullBleed, onClose]);
 
-  // Desktop is a bounded, centered dialog; mobile is a full-bleed overlay whose
-  // fill + blur stay but whose card rim, radius, and shadow drop so it reads
-  // edge to edge.
-  const panelStyle: CSSProperties = boundedDesktop
+  // Standard desktop and popup presentations are bounded glass panels. The
+  // standard mobile presentation is a full-bleed overlay whose fill + blur stay
+  // but whose card rim, radius, and shadow drop so it reads edge to edge.
+  const panelStyle: CSSProperties = boundedPanel
     ? {
         ...glass,
         position: "relative",
         zIndex: 1,
-        width: "100%",
-        maxWidth: wideDesktop
-          ? `min(${String(WIDE_PANEL_MAX_WIDTH_PX)}px, 90vw)`
-          : "min(900px, 90vw)",
-        maxHeight: wideDesktop
-          ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
-          : "85vh",
+        width: popup ? "fit-content" : "100%",
+        maxWidth: popup
+          ? "100%"
+          : wideDesktop
+            ? `min(${String(WIDE_PANEL_MAX_WIDTH_PX)}px, 90vw)`
+            : "min(900px, 90vw)",
+        maxHeight: popup
+          ? "100%"
+          : wideDesktop
+            ? `calc(100vh - ${token("--space-8")} - ${token("--space-8")})`
+            : "85vh",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -239,7 +256,7 @@ export function GlassDialog({
     justifyContent: "space-between",
     gap: token("--space-4"),
     borderBottom: `1px solid ${token("--border-strong")}`,
-    ...(boundedDesktop
+    ...(boundedPanel
       ? { padding: token("--space-6") }
       : {
           // Clear a device screen cutout on the full-bleed overlay: the safe-area
@@ -252,16 +269,22 @@ export function GlassDialog({
         }),
   };
 
-  const closeButton = onClose === undefined ? null : (
-    <IconButton
-      placement="onGlass"
-      glyph={GLYPHS.close}
-      size="md"
-      label={closeLabel}
-      onPress={onClose}
-    />
-  );
-  const desktopPadding = wideDesktop ? token("--space-8") : token("--space-7");
+  const closeButton =
+    onClose === undefined ? null : (
+      <IconButton
+        placement="onGlass"
+        glyph={GLYPHS.close}
+        size="md"
+        label={closeLabel}
+        onPress={onClose}
+      />
+    );
+  const boundedPadding =
+    popup && !isDesktop
+      ? token("--gutter")
+      : wideDesktop
+        ? token("--space-8")
+        : token("--space-7");
 
   return (
     <div
@@ -270,6 +293,7 @@ export function GlassDialog({
       aria-label={title}
       className="cumulus"
       data-glass-dialog-desktop-center-target={desktopCenterTarget}
+      data-glass-dialog-presentation={presentation}
       style={{
         position: "fixed",
         inset: 0,
@@ -277,18 +301,18 @@ export function GlassDialog({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        paddingTop: boundedDesktop ? desktopPadding : 0,
-        paddingBottom: boundedDesktop ? desktopPadding : 0,
-        paddingLeft: boundedDesktop ? desktopPadding : 0,
-        paddingRight: boundedDesktop
+        paddingTop: boundedPanel ? boundedPadding : 0,
+        paddingBottom: boundedPanel ? boundedPadding : 0,
+        paddingLeft: boundedPanel ? boundedPadding : 0,
+        paddingRight: boundedPanel
           ? centerOnBattlefield
-            ? `calc(${desktopPadding} + ${String(battlefieldEndInset)}px)`
-            : desktopPadding
+            ? `calc(${boundedPadding} + ${String(battlefieldEndInset)}px)`
+            : boundedPadding
           : 0,
       }}
     >
-      {!boundedDesktop && <GlassBackdrop />}
-      <div style={panelStyle}>
+      {fullBleed && <GlassBackdrop />}
+      <div data-glass-dialog-panel="" style={panelStyle}>
         {besideCutout && (
           // The disc floats up beside the device island (vertically centered on
           // it, at the trailing gutter), so the header title clears the safe
@@ -339,7 +363,7 @@ export function GlassDialog({
         </header>
         <div
           style={{
-            flex: "1 1 auto",
+            flex: popup ? "0 1 auto" : "1 1 auto",
             minHeight: 0,
             overflowY: "auto",
             WebkitOverflowScrolling: "touch",

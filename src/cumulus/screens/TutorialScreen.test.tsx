@@ -109,9 +109,7 @@ vi.mock("framer-motion", () => ({
         screenMocks.cardAnimate = animate;
         screenMocks.cardTransition = transition;
         screenMocks.cardAnimationComplete = onAnimationComplete ?? null;
-      } else if (
-        elementProps["data-tutorial-card-full-layer"] !== undefined
-      ) {
+      } else if (elementProps["data-tutorial-card-full-layer"] !== undefined) {
         screenMocks.cardFullAnimate = animate;
         screenMocks.cardFullTransition = transition;
       } else if (
@@ -912,12 +910,13 @@ describe("TutorialScreen", () => {
       )?.style.filter,
     ).toBe("grayscale(0.5) brightness(0.62)");
     expect(
-      container.querySelector('[data-tutorial-card-id="229ab3a1-3720-41a2-924c-8fe112188f8e"]'),
+      container.querySelector(
+        '[data-tutorial-card-id="229ab3a1-3720-41a2-924c-8fe112188f8e"]',
+      ),
     ).not.toBeNull();
     expect(
-      container.querySelector<HTMLElement>(
-        '[data-battle-card-zone="far-hand"]',
-      )?.style.visibility,
+      container.querySelector<HTMLElement>('[data-battle-card-zone="far-hand"]')
+        ?.style.visibility,
     ).toBe("hidden");
 
     act(() => screenMocks.cardAnimationComplete?.());
@@ -988,14 +987,19 @@ describe("TutorialScreen", () => {
 
     const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
     expect(dialog?.getAttribute("aria-label")).toBe("How to Play");
+    expect(dialog?.getAttribute("data-glass-dialog-presentation")).toBe(
+      "popup",
+    );
     expect(dialog?.querySelector("h2")?.textContent).toBe("How to Play");
     const content = dialog?.querySelector<HTMLElement>(
       "[data-tutorial-how-to-play-content]",
     );
     const paragraphs = [...(content?.querySelectorAll("p") ?? [])];
     expect(paragraphs).toHaveLength(2);
-    expect(content?.style.gap).toBe("var(--space-7)");
+    expect(content?.style.gap).toBe("20px");
+    expect(content?.style.padding).toBe("12px");
     expect(paragraphs[0]?.style.font).toBe("var(--t-lead)");
+    expect(paragraphs[0]?.style.fontSize).toBe("19px");
     expect(paragraphs[0]?.textContent).toContain(
       "Play characters and challenge with them to score",
     );
@@ -1012,6 +1016,29 @@ describe("TutorialScreen", () => {
     expect(dialog?.querySelector('[aria-label="spark"]')?.className).toContain(
       "bxf bx-sparkle",
     );
+    const tweaks = document.querySelector<HTMLElement>(
+      "[data-tutorial-how-to-play-tweaks]",
+    );
+    expect(tweaks).not.toBeNull();
+    const fontSizeInput = tweaks?.querySelector<HTMLInputElement>(
+      '[data-tutorial-tweak-key="fontSize"]',
+    );
+    act(() => {
+      Object.getOwnPropertyDescriptor(
+        HTMLInputElement.prototype,
+        "value",
+      )?.set?.call(fontSizeInput, "28");
+      fontSizeInput?.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    expect(paragraphs[0]?.style.fontSize).toBe("28px");
+    expect(
+      tweaks?.querySelector('[data-tutorial-tweak-output="fontSize"]')
+        ?.textContent,
+    ).toBe("28px");
+    expect(
+      tweaks?.querySelector("[data-tutorial-how-to-play-tweak-json]")
+        ?.textContent,
+    ).toContain('"fontSize": 28');
     expect(onHowToPlayPresented).toHaveBeenCalledWith(
       "event:player-turn",
       "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
@@ -1025,6 +1052,9 @@ describe("TutorialScreen", () => {
         ?.click();
     });
     expect(container.querySelector('[role="dialog"]')).toBeNull();
+    expect(
+      document.querySelector("[data-tutorial-how-to-play-tweaks]"),
+    ).toBeNull();
     expect(onHowToPlayDismissed).toHaveBeenCalledWith(
       "event:player-turn",
       "e83014d3-9d35-4e80-a1b3-9b25360ad2af",

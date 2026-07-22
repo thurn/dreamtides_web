@@ -2527,6 +2527,17 @@
       "description": "Force the edge-to-edge takeover treatment at any viewport width."
     },
     {
+      "name": "presentation",
+      "tsType": "\"responsive\" | \"popup\"",
+      "unionMembers": [
+        "responsive",
+        "popup"
+      ],
+      "required": false,
+      "defaultValue": "responsive",
+      "description": "Responsive behavior for the dialog surface. `\"responsive\"` uses the\nstandard bounded desktop panel and full-bleed mobile takeover. `\"popup\"`\nkeeps a centered, content-sized glass panel at every viewport width.\n`fullScreen` takes precedence. Defaults to `\"responsive\"`."
+    },
+    {
       "name": "desktopCenterTarget",
       "tsType": "\"battlefield\" | \"viewport\"",
       "unionMembers": [

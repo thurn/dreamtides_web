@@ -47,6 +47,10 @@ import {
   TutorialEditorRail,
   TutorialEditorTakeover,
 } from "./TutorialEditorRail";
+import {
+  DEFAULT_TUTORIAL_HOW_TO_PLAY_TWEAKS,
+  TutorialHowToPlayTweaks,
+} from "./devtools/TutorialHowToPlayTweaks";
 import { MOBILE_BATTLE_INSPECTOR_RAIL_TRACK } from "./mobile-battle-layout";
 import type {
   TutorialAction,
@@ -100,8 +104,14 @@ export interface TutorialScreenProps {
     dreamcallerId: string,
     owner: TutorialDreamcallerOwner,
   ) => void;
-  readonly onHowToPlayPresented?: (runId: string, triggerCardId: string) => void;
-  readonly onHowToPlayDismissed?: (runId: string, triggerCardId: string) => void;
+  readonly onHowToPlayPresented?: (
+    runId: string,
+    triggerCardId: string,
+  ) => void;
+  readonly onHowToPlayDismissed?: (
+    runId: string,
+    triggerCardId: string,
+  ) => void;
   readonly onEditorActionsChange?: (
     actions: readonly TutorialAction[],
     persist: boolean,
@@ -151,10 +161,13 @@ function TutorialHowToPlayDialog({
 }: {
   readonly onClose: () => void;
 }): ReactElement {
+  const [tweaks, setTweaks] = useState(DEFAULT_TUTORIAL_HOW_TO_PLAY_TWEAKS);
   const paragraphStyle = {
     margin: 0,
     color: token("--text-on-glass"),
     font: token("--t-lead"),
+    fontSize: tweaks.fontSize,
+    lineHeight: tweaks.lineHeight,
   } as const;
   const inlineIconStyle = {
     display: "inline-flex",
@@ -163,54 +176,60 @@ function TutorialHowToPlayDialog({
   } as const;
 
   return (
-    <GlassDialog
-      title="How to Play"
-      closeLabel="Close how to play"
-      onClose={onClose}
-    >
-      <div
-        data-tutorial-how-to-play-content=""
-        style={{
-          display: "grid",
-          gap: token("--space-7"),
-          maxWidth: 680,
-          marginInline: "auto",
-          padding: token("--space-5"),
-        }}
+    <>
+      <GlassDialog
+        title="How to Play"
+        closeLabel="Close how to play"
+        presentation="popup"
+        onClose={onClose}
       >
-        <p style={paragraphStyle}>
-          Play characters and{" "}
-          <strong style={{ color: token("--spark") }}>challenge</strong> with
-          them to{" "}
-          <span style={inlineIconStyle}>
-            score{" "}
+        <div
+          data-tutorial-how-to-play-content=""
+          style={{
+            display: "grid",
+            gap: tweaks.paragraphGap,
+            width: 680,
+            maxWidth: "100%",
+            boxSizing: "border-box",
+            marginInline: "auto",
+            padding: tweaks.internalPadding,
+          }}
+        >
+          <p style={paragraphStyle}>
+            Play characters and{" "}
+            <strong style={{ color: token("--spark") }}>challenge</strong> with
+            them to{" "}
+            <span style={inlineIconStyle}>
+              score{" "}
+              <GlowIcon
+                iconClass={GLYPHS.points}
+                color="text-primary"
+                title="points"
+              />
+            </span>{" "}
+            equal to their{" "}
             <GlowIcon
-              iconClass={GLYPHS.points}
-              color="text-primary"
-              title="points"
+              iconClass={GLYPHS.sparkInline}
+              color="spark"
+              title="spark"
             />
-          </span>{" "}
-          equal to their{" "}
-          <GlowIcon
-            iconClass={GLYPHS.sparkInline}
-            color="spark"
-            title="spark"
-          />
-        </p>
-        <p style={paragraphStyle}>
-          Score{" "}
-          <span style={inlineIconStyle}>
-            10
-            <GlowIcon
-              iconClass={GLYPHS.points}
-              color="text-primary"
-              title="points"
-            />
-          </span>{" "}
-          to win this dream battle
-        </p>
-      </div>
-    </GlassDialog>
+          </p>
+          <p style={paragraphStyle}>
+            Score{" "}
+            <span style={inlineIconStyle}>
+              10
+              <GlowIcon
+                iconClass={GLYPHS.points}
+                color="text-primary"
+                title="points"
+              />
+            </span>{" "}
+            to win this dream battle
+          </p>
+        </div>
+      </GlassDialog>
+      <TutorialHowToPlayTweaks values={tweaks} onChange={setTweaks} />
+    </>
   );
 }
 
@@ -271,7 +290,9 @@ function withOpponentCardPlayed(
     farHand: {
       ...battle.farHand,
       cardIds: battle.farHand.cardIds.filter((id) => id !== card.id),
-      cards: battle.farHand.cards.filter((candidate) => candidate.id !== card.id),
+      cards: battle.farHand.cards.filter(
+        (candidate) => candidate.id !== card.id,
+      ),
     },
     enemy: { ...battle.enemy, backRank },
     inspector: {

@@ -1,2 +1,3 @@
 src/cumulus/screens/quest-start-mobile.tsx: ScreenHeader declares the same `position: "absolute"` style property twice.
 src/logging.ts: logEvent's sink error handler repeats the same best-effort transport comment twice.
+scripts/cumulus-ui-baselines.test.mjs: The integrity check shells out to a full ESLint run under a hard 30-second timeout; on a loaded development machine the lint completes too slowly and the otherwise-clean test times out.
