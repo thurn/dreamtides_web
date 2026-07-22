@@ -74,6 +74,7 @@ function tutorialCardView(
   instanceId: string,
   layoutMotion: MobileBattleCardView["layoutMotion"],
   exhausted: boolean,
+  showPlayableOutline: boolean,
 ): MobileBattleCardView {
   return {
     id: instanceId,
@@ -84,7 +85,7 @@ function tutorialCardView(
     layoutMotion,
     figmentCount: 0,
     storedTime: 0,
-    showPlayableOutline: false,
+    showPlayableOutline,
   };
 }
 
@@ -189,7 +190,13 @@ export function buildTutorialView(
   const tutorialCardInstanceId = drawnEnemyCardIds[0] ?? null;
   const tutorialCard =
     opponentCard !== null && tutorialCardInstanceId !== null
-      ? tutorialCardView(opponentCard, tutorialCardInstanceId, "snap", true)
+      ? tutorialCardView(
+          opponentCard,
+          tutorialCardInstanceId,
+          "snap",
+          true,
+          false,
+        )
       : null;
   const opponentCardPlayed = completedOpponentPlays > 0;
   const playerTurnStarted =
@@ -200,7 +207,13 @@ export function buildTutorialView(
     playerTurnStarted &&
     playerCard !== null &&
     playerTurnCardInstanceId !== null
-      ? tutorialCardView(playerCard, playerTurnCardInstanceId, "travel", false)
+      ? tutorialCardView(
+          playerCard,
+          playerTurnCardInstanceId,
+          "travel",
+          false,
+          true,
+        )
       : null;
   const playerDeck = playerTurnStarted
     ? playerDeckCardIds.slice(1)

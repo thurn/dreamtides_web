@@ -213,6 +213,7 @@ describe("TutorialScreenAdapter", () => {
         {
           id: "tutorial-player-deck-1",
           layoutMotion: "travel",
+          showPlayableOutline: true,
           model: {
             cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
           },

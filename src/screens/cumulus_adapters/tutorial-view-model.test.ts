@@ -435,6 +435,7 @@ describe("buildTutorialView", () => {
       id: "tutorial-player-deck-1",
       layoutMotion: "travel",
       exhausted: false,
+      showPlayableOutline: true,
     });
     expect(played.playerHand[0]?.model.cardId).toBe(TUTORIAL_PLAYER_CARD_ID);
     expect(played.nearHand.cardIds).toEqual(["tutorial-player-deck-1"]);
