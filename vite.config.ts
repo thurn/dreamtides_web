@@ -846,22 +846,6 @@ export default defineConfig({
     configDataHotReloadPlugin(),
     generatedCardDataDriftPlugin(),
   ],
-  test: {
-    include: [
-      "src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
-      "scripts/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
-      "eslint-rules/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
-    ],
-    exclude: [
-      "**/node_modules/**",
-      "**/dist/**",
-      "**/.git/**",
-      "**/.cache/**",
-      "**/.output/**",
-      "**/.temp/**",
-      "**/.claude/worktrees/**",
-    ],
-  },
   server: {
     watch: {
       // The card editor APIs write card and tag TOML files under data/tabula

@@ -207,6 +207,7 @@ rendered-text = "Use the canonical Dreamsign text."
     vi.spyOn(console, "warn").mockImplementation(() => {});
 
     setupAssets({
+      catalogFixtureOnly: true,
       cardTomlPath,
       dreamcallerV2TomlPath,
       dreamsignTomlPath,
@@ -369,6 +370,7 @@ rendered-text = ""
     vi.spyOn(console, "warn").mockImplementation(() => {});
 
     setupAssets({
+      catalogFixtureOnly: true,
       cardTomlPath,
       dreamcallerV2TomlPath,
       dreamsignTomlPath,
@@ -455,6 +457,7 @@ rendered-text = ""
     vi.spyOn(console, "warn").mockImplementation(() => {});
 
     setupAssets({
+      catalogFixtureOnly: true,
       cardTomlPath,
       dreamcallerV2TomlPath,
       dreamsignTomlPath,

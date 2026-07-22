@@ -1,7 +1,7 @@
 import { readFileSync, mkdirSync, rmSync, symlinkSync, existsSync, readdirSync } from "node:fs";
 import { writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { resolve, join } from "node:path";
+import { dirname, resolve, join } from "node:path";
 import { homedir } from "node:os";
 import { pathToFileURL } from "node:url";
 import { parse } from "smol-toml";
@@ -942,6 +942,80 @@ export function regenerateCardData({
   return { jsonCards, jsonCardsV2, cardMaps };
 }
 
+function setupCatalogFixture({
+  cardTomlPath,
+  dreamcallerV2TomlPath,
+  dreamsignTomlPath,
+  publicDir,
+  imageCacheDir,
+  dreamcallerArtDir,
+  dreamsignArtDir,
+  mainMenuBackgroundArtPath,
+  tutorialDialogueFrameArtPath,
+}) {
+  const parsedCards = parse(readFileSync(cardTomlPath, "utf8"));
+  const jsonCards = (parsedCards.cards ?? []).map(transformCard);
+  const parsedDreamcallers = parse(
+    readFileSync(dreamcallerV2TomlPath, "utf8"),
+  );
+  const jsonDreamcallers = (parsedDreamcallers.dreamcaller ?? []).map(
+    transformDreamcaller,
+  );
+  const parsedDreamsigns = parse(readFileSync(dreamsignTomlPath, "utf8"));
+  const altTextByImageName = readDreamsignAltText(dreamsignArtDir);
+  const jsonDreamsigns = (parsedDreamsigns.dreamsign ?? []).map((dreamsign) =>
+    transformDreamsign(dreamsign, altTextByImageName),
+  );
+
+  mkdirSync(publicDir, { recursive: true });
+  writeFileSync(
+    join(publicDir, "card-data.json"),
+    `${JSON.stringify(jsonCards, null, 2)}\n`,
+  );
+  writeFileSync(
+    join(publicDir, "dreamcallers-v2-data.json"),
+    `${JSON.stringify(jsonDreamcallers, null, 2)}\n`,
+  );
+  writeFileSync(
+    join(publicDir, "dreamsign-data.json"),
+    `${JSON.stringify(jsonDreamsigns, null, 2)}\n`,
+  );
+
+  const linkCatalogArt = (sourcePath, destinationPath) => {
+    if (!existsSync(sourcePath)) return;
+    mkdirSync(dirname(destinationPath), { recursive: true });
+    symlinkSync(sourcePath, destinationPath);
+  };
+  for (const card of jsonCards) {
+    if (card.imageNumber === null || card.imageNumber === undefined) continue;
+    linkCatalogArt(
+      join(imageCacheDir, imageHash(card.imageNumber)),
+      join(publicDir, "cards", `${card.imageNumber}.webp`),
+    );
+  }
+  for (const dreamcaller of jsonDreamcallers) {
+    if (typeof dreamcaller.imageNumber !== "string") continue;
+    linkCatalogArt(
+      join(dreamcallerArtDir, `${dreamcaller.imageNumber}.png`),
+      join(publicDir, "dreamcallers", `${dreamcaller.imageNumber}.png`),
+    );
+  }
+  for (const dreamsign of jsonDreamsigns) {
+    linkCatalogArt(
+      join(dreamsignArtDir, dreamsign.imageName),
+      join(publicDir, "dreamsigns", dreamsign.imageName),
+    );
+  }
+  linkCatalogArt(
+    mainMenuBackgroundArtPath,
+    join(publicDir, "main-menu", "background.jpg"),
+  );
+  linkCatalogArt(
+    tutorialDialogueFrameArtPath,
+    join(publicDir, "atlas", "Round_frame.png"),
+  );
+}
+
 export function setupAssets({
   cardTomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
   cardV2TomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
@@ -973,7 +1047,22 @@ export function setupAssets({
   dreamscapeIconArtDir = DREAMSCAPE_ICON_ART_DIR,
   dreamGuideArtDir = DREAM_GUIDE_ART_DIR,
   tutorialDialogueFrameArtPath = TUTORIAL_DIALOGUE_FRAME_ART_PATH,
+  catalogFixtureOnly = false,
 } = {}) {
+  if (catalogFixtureOnly) {
+    setupCatalogFixture({
+      cardTomlPath,
+      dreamcallerV2TomlPath,
+      dreamsignTomlPath,
+      publicDir,
+      imageCacheDir,
+      dreamcallerArtDir,
+      dreamsignArtDir,
+      mainMenuBackgroundArtPath,
+      tutorialDialogueFrameArtPath,
+    });
+    return;
+  }
   const cardsDir = join(publicDir, "cards");
   const cardFrameDir = join(publicDir, "card-frame");
   const dreamcallersDir = join(publicDir, "dreamcallers");

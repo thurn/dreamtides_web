@@ -1,50 +1,59 @@
 // @vitest-environment node
 
-import { dirname, relative, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-import { ESLint } from "eslint";
 import { describe, expect, it } from "vitest";
 import { OUTER_UI_BASELINES } from "../eslint-rules/ui-boundary-baselines.js";
-import { OUTER_UI_FILE_ROLES } from "../eslint-rules/ui-boundary-roles.js";
-
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const OUTER_UI_TSX_FILES = Object.keys(OUTER_UI_FILE_ROLES).filter((file) =>
-  file.endsWith(".tsx"),
-);
-
-function normalizedMessages(results) {
-  return results.flatMap((result) =>
-    result.messages
-      .filter((message) => message.ruleId?.startsWith("cumulus/"))
-      .map((message) => ({
-        file: relative(ROOT, result.filePath).split("\\").join("/"),
-        rule: message.ruleId,
-      })),
-  );
-}
+import { reconcileLintBaselines } from "./lint-baselines.mjs";
 
 describe("Cumulus outer UI lint baselines", () => {
-  it("names every current debt exactly and rejects stale or expanded baselines", async () => {
-    const previous = process.env.CUMULUS_REPORT_BASELINES;
-    process.env.CUMULUS_REPORT_BASELINES = "1";
-    try {
-      const eslint = new ESLint({ cwd: ROOT });
-      const actual = normalizedMessages(await eslint.lintFiles(OUTER_UI_TSX_FILES));
-      const counts = new Map();
-      for (const message of actual) {
-        const key = `${message.file}:${message.rule}`;
-        counts.set(key, (counts.get(key) ?? 0) + 1);
-      }
-      const expected = new Map(
-        OUTER_UI_BASELINES.map(({ file, rule, count }) => [`${file}:${rule}`, count]),
-      );
-      expect([...counts.entries()].sort()).toEqual([...expected.entries()].sort());
-      for (const baseline of OUTER_UI_BASELINES) {
-        expect(baseline.reason).not.toHaveLength(0);
-      }
-    } finally {
-      if (previous === undefined) delete process.env.CUMULUS_REPORT_BASELINES;
-      else process.env.CUMULUS_REPORT_BASELINES = previous;
+  const root = "/repo";
+  const result = (messages) => ({
+    filePath: "/repo/src/example.tsx",
+    messages,
+    errorCount: messages.length,
+    warningCount: 0,
+    fatalErrorCount: 0,
+    fixableErrorCount: 0,
+    fixableWarningCount: 0,
+  });
+  const debt = {
+    file: "src/example.tsx",
+    rule: "cumulus/no-hardcoded-values",
+    count: 1,
+    reason: "fixture debt",
+  };
+  const message = {
+    ruleId: debt.rule,
+    severity: 2,
+    message: "fixture violation",
+    line: 1,
+    column: 1,
+  };
+
+  it("suppresses an exact baseline match", () => {
+    const reconciled = reconcileLintBaselines([result([message])], [debt], root);
+    expect(reconciled.mismatches).toEqual([]);
+    expect(reconciled.results[0].messages).toEqual([]);
+  });
+
+  it("rejects stale and expanded baseline counts", () => {
+    const stale = reconcileLintBaselines([result([])], [debt], root);
+    const expanded = reconcileLintBaselines(
+      [result([message, message])],
+      [debt],
+      root,
+    );
+    expect(stale.mismatches).toEqual([
+      { key: `${debt.file}:${debt.rule}`, expected: 1, actual: 0 },
+    ]);
+    expect(expanded.mismatches).toEqual([
+      { key: `${debt.file}:${debt.rule}`, expected: 1, actual: 2 },
+    ]);
+    expect(expanded.results[0].messages).toHaveLength(2);
+  });
+
+  it("keeps every real baseline reason non-empty", () => {
+    for (const baseline of OUTER_UI_BASELINES) {
+      expect(baseline.reason).not.toHaveLength(0);
     }
-  }, 30_000);
+  });
 });

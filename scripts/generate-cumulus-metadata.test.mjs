@@ -27,6 +27,8 @@ const NESTED_FIXTURE = resolve(
 const result = extractPropMeta([FIXTURE]);
 const props = result["DocgenFixture"];
 const byName = (name) => (props ?? []).find((p) => p.name === name);
+const nestedProps = extractPropMeta([NESTED_FIXTURE])["NestedFixture"];
+const filteredComponents = extractPropMeta([NAME_FILTER_FIXTURE]);
 
 describe("extractPropMeta (Cumulus docgen)", () => {
   it("extracts the fixture component under its display name", () => {
@@ -96,8 +98,7 @@ describe("extractPropMeta (Cumulus docgen)", () => {
     // A prop like `model: NestedFixtureModel` arrives from react-docgen as the
     // bare type name; buildNestedResolver must attach its one-level field list
     // so the props table can document the required shape.
-    const nested = extractPropMeta([NESTED_FIXTURE])["NestedFixture"];
-    const model = (nested ?? []).find((p) => p.name === "model");
+    const model = (nestedProps ?? []).find((p) => p.name === "model");
     expect(model).toBeTruthy();
     expect(model.nested).toBeTruthy();
     expect(model.nested.name).toBe("NestedFixtureModel");
@@ -120,8 +121,7 @@ describe("extractPropMeta (Cumulus docgen)", () => {
   it("expands an array-of-model prop using the element model", () => {
     // `models: NestedFixtureModel[]` should resolve to the element type's
     // fields, not be skipped because of the trailing [].
-    const nested = extractPropMeta([NESTED_FIXTURE])["NestedFixture"];
-    const models = (nested ?? []).find((p) => p.name === "models");
+    const models = (nestedProps ?? []).find((p) => p.name === "models");
     expect(models.nested).toBeTruthy();
     expect(models.nested.name).toBe("NestedFixtureModel");
     expect(models.nested.fields.length).toBe(3);
@@ -130,8 +130,7 @@ describe("extractPropMeta (Cumulus docgen)", () => {
   it("leaves a non-model prop without a nested field list", () => {
     // A plain boolean carries no nested shape; the key must be absent rather
     // than an empty object so downstream `meta.nested ? ...` checks stay simple.
-    const nested = extractPropMeta([NESTED_FIXTURE])["NestedFixture"];
-    const active = (nested ?? []).find((p) => p.name === "active");
+    const active = (nestedProps ?? []).find((p) => p.name === "active");
     expect(active).toBeTruthy();
     expect(active.nested).toBeUndefined();
   });
@@ -143,9 +142,8 @@ describe("extractPropMeta (Cumulus docgen)", () => {
     // only the PascalCase component should end up in the metadata. Without
     // the isComponentName filter, `useNameFilterFixtureThing` (camelCase) and
     // `FILTER_FIXTURE_DELAY_MS` (ALL-CAPS) would leak in alongside it.
-    const filtered = extractPropMeta([NAME_FILTER_FIXTURE]);
-    expect(Object.keys(filtered)).toEqual(["NameFilterFixture"]);
-    expect(filtered["NameFilterFixture"]).toEqual([
+    expect(Object.keys(filteredComponents)).toEqual(["NameFilterFixture"]);
+    expect(filteredComponents["NameFilterFixture"]).toEqual([
       {
         name: "children",
         tsType: "ReactNode",

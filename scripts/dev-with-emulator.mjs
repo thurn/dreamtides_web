@@ -1,5 +1,11 @@
 import { spawn } from "node:child_process";
-import { rmSync } from "node:fs";
+import {
+  mkdirSync,
+  renameSync,
+  rmSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -13,9 +19,17 @@ const preferredHubPort = 4400;
 const preferredLoggingPort = 4500;
 const projectId = "demo-quest-prototype";
 const children = new Set();
+const runtimeStateDir = join(
+  process.cwd(),
+  "node_modules",
+  ".cache",
+  "quest-dev",
+);
+const runtimeStatePath = join(runtimeStateDir, `${String(process.pid)}.json`);
 const reservedPorts = new Set();
 let shuttingDown = false;
 let tempConfigDir = null;
+const runtimeStartedAt = new Date().toISOString();
 const baseChildEnv = {
   ...process.env,
   PATH: [
@@ -55,10 +69,41 @@ function spawnChild(command, args, envOverrides = {}) {
     shell: process.platform === "win32",
   });
   children.add(child);
+  writeRuntimeState();
   child.on("exit", () => {
     children.delete(child);
+    writeRuntimeState();
   });
   return child;
+}
+
+function writeRuntimeState() {
+  mkdirSync(runtimeStateDir, { recursive: true });
+  const temporaryPath = `${runtimeStatePath}.tmp`;
+  writeFileSync(
+    temporaryPath,
+    `${JSON.stringify({
+      pid: process.pid,
+      cwd: process.cwd(),
+      startedAt: runtimeStartedAt,
+      children: [...children]
+        .filter((child) => child.pid !== undefined)
+        .map((child) => ({
+          pid: child.pid,
+          command: child.spawnfile,
+          args: child.spawnargs.slice(1),
+        })),
+    }, null, 2)}\n`,
+  );
+  renameSync(temporaryPath, runtimeStatePath);
+}
+
+function removeRuntimeState() {
+  try {
+    unlinkSync(runtimeStatePath);
+  } catch (error) {
+    if (error?.code !== "ENOENT") throw error;
+  }
 }
 
 function killChild(child, signal) {
@@ -249,11 +294,13 @@ function registerShutdownHandlers() {
       }
     }
     cleanupTempConfig();
+    removeRuntimeState();
   });
 }
 
 export async function runDevWithEmulator(argv = process.argv.slice(2)) {
   registerShutdownHandlers();
+  writeRuntimeState();
 
   try {
     const databasePort = await findAvailablePort(preferredDatabasePort);

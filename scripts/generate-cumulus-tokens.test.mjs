@@ -5,7 +5,7 @@
 // contents of src/cumulus/primitives/cumulus-tokens.css.
 //
 // Run with `npx vitest run scripts/generate-cumulus-tokens.test.mjs`, matching
-// every sibling scripts test file (vite.config.ts's `test.include` picks up
+// every sibling scripts test file (vitest.config.ts's `test.include` picks up
 // scripts/**/*.test.mjs for `npm test`, so a node:test-only file here would
 // make vitest fail with "No test suite found in file").
 
