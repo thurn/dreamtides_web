@@ -1,8 +1,9 @@
 // The mobile (narrow-viewport) Dreamcaller-select layout: a full-bleed swipe
 // carousel, one Dreamcaller per page, with the full-body character cutout
 // standing on an ambient backdrop behind a flat GroupPanel console. It shares
-// the view types and the ability / essence reveals with the desktop triptych via
-// `quest-start-shared`; `QuestStartScreen` picks between the two by viewport.
+// the view types and console primitives with the desktop triptych via
+// `quest-start-shared`, and both layouts use the same named Dreamcaller ability
+// source; `QuestStartScreen` picks between the two by viewport.
 // PURE: renders from a view-model and reports the chosen Dreamcaller via `onPick`.
 
 import { useRef, useState } from "react";
@@ -14,7 +15,6 @@ import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
 import {
-  AbilityReveal,
   ConsoleDivider,
   OnMediaEyebrow,
   QuestStartRerollControl,
@@ -22,6 +22,7 @@ import {
   type DreamcallerOfferView,
   type QuestStartScreenProps,
 } from "./quest-start-shared";
+import { DreamcallerAbilityText } from "../components/hud/DreamcallerAbilityText";
 
 /** Invisible touch slop padded around each mobile tide disc so it is easier to
  * press; the disc row reabsorbs it with negative margins so the visual layout
@@ -39,7 +40,10 @@ function DreamcallerConsole({
 }) {
   return (
     <GroupPanel>
-      <AbilityReveal text={dreamcaller.renderedText} />
+      <DreamcallerAbilityText
+        dreamcallerId={dreamcaller.id}
+        text={dreamcaller.renderedText}
+      />
 
       {/* An even --space-6 rhythm around the divider, matching the desktop card:
           one step above (equal to the GroupPanel's own --space-6 top padding, so

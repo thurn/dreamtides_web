@@ -1,10 +1,9 @@
 import type { CardData } from "../../../types/cards";
 import { cardImageUrl } from "../../../data/card-database";
-import { extractGlossaryTerms } from "../../../data/glossary-terms";
 import { useRevealSource } from "../../internal/reveal/context";
 import { Pressable } from "../../primitives/Pressable";
 import { PipBadge } from "../controls/PipBadge";
-import { richText } from "./rich-text";
+import { rulesTextDefinitionCards } from "./rules-text-reveal";
 
 export interface CompactGameCardRowProps {
   /** Canonical UUID-backed card semantics. */
@@ -25,7 +24,7 @@ export function CompactGameCardRow({ card, count, testId, revealTestId, entryIds
     identity: { entityType: "game-card", entityId: card.id },
     spec: {
       primary: { kind: "gameCard", cardId: card.id, displaySnapshot: card },
-      secondaries: extractGlossaryTerms(card.renderedText).map((entry) => ({ variant: "text" as const, title: entry.term, body: richText.rules(entry.definition) })),
+      secondaries: rulesTextDefinitionCards(card.renderedText),
     },
   });
   const accentColor = card.cardType === "Event" ? "#c084fc" : "#facc15";

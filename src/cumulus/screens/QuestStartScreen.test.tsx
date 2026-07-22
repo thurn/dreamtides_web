@@ -9,6 +9,7 @@ import {
   type DreamcallerOfferView,
 } from "./QuestStartScreen";
 import { CumulusRoot } from "../CumulusRoot";
+import { lookupGlossaryTerm } from "../../data/glossary";
 
 const OFFERED: DreamcallerOfferView[] = [
   {
@@ -183,6 +184,51 @@ describe("Cumulus QuestStartScreen (carousel)", () => {
       button?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     expect(onReroll).toHaveBeenCalledOnce();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("reveals every defined term from the whole Dreamcaller ability box", () => {
+    const reclaim = lookupGlossaryTerm("reclaim");
+    const bane = lookupGlossaryTerm("bane");
+    if (reclaim === undefined || bane === undefined) {
+      throw new Error("Expected representative glossary fixtures");
+    }
+    const ability = `Reclaim a bane, then ${reclaim.variants?.[0] ?? "reclaim"} it.`;
+    const dreamcaller = { ...OFFERED[0], renderedText: ability };
+    const { container, root } = mount(
+      <QuestStartScreen
+        dreamcallers={[dreamcaller]}
+        onPick={vi.fn()}
+        onReroll={vi.fn()}
+      />,
+    );
+
+    const source = container.querySelector<HTMLElement>(
+      `[data-dreamcaller-ability="${dreamcaller.id}"]`,
+    );
+    expect(source?.dataset.revealPrimaryVariant).toBe("text");
+    expect(source?.dataset.revealSecondaryTitles).toBe(bane.term);
+    expect(source?.querySelector("[data-glossary-term]")).toBeNull();
+
+    const description = document.querySelector(
+      "[data-cumulus-reveal-descriptions]",
+    )?.textContent;
+    expect(description).toContain(reclaim.definition);
+    expect(description).toContain(bane.definition);
+
+    act(() => {
+      source?.dispatchEvent(
+        new PointerEvent("pointerover", {
+          bubbles: true,
+          pointerId: 1,
+          pointerType: "mouse",
+        }),
+      );
+    });
+    expect(source?.dataset.revealActive).toBe("true");
 
     act(() => {
       root.unmount();

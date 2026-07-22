@@ -8,7 +8,6 @@ import {
   cardImageUrl,
   hasAssignedImage,
 } from "../../../data/card-database";
-import { extractGlossaryTerms } from "../../../data/glossary-terms";
 import { GLOSSARY_IDS } from "../../../data/glossary";
 import { identiconsForced } from "../../../runtime/identicon-mode";
 import {
@@ -31,13 +30,13 @@ import type { CardTransfigurationDisplay } from "../../../runtime/transfiguratio
 import { renderRulesText } from "./RulesText";
 import { useFitText } from "../controls/useFitText";
 import { DESKTOP_MIN_WIDTH } from "../../screens/use-is-desktop";
-import { richText } from "./rich-text";
 import { Pressable } from "../../primitives/Pressable";
 import { useRevealSource } from "../../internal/reveal/context";
 import {
   DEFAULT_ART_CROP,
   resolveCardArtImageStyle,
 } from "./card-art-crop";
+import { rulesTextDefinitionCards } from "./rules-text-reveal";
 
 export {
   DEFAULT_ART_CROP,
@@ -1522,11 +1521,9 @@ export function GameCard({
   testId,
 }: GameCardProps) {
   const lastPointerType = useRef<string | null>(null);
-  const glossaryCards = extractGlossaryTerms(model.displaySnapshot.renderedText).map((entry) => ({
-    variant: "text" as const,
-    title: entry.term,
-    body: richText.rules(entry.definition),
-  }));
+  const glossaryCards = rulesTextDefinitionCards(
+    model.displaySnapshot.renderedText,
+  );
   const binding = useRevealSource({
     identity: { entityType: "game-card", entityId: model.cardId },
     spec: {

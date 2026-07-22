@@ -29,7 +29,7 @@ import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import { artRef, type ArtRef } from "../../primitives/art";
 import { richText } from "../card/rich-text";
-import { extractGlossaryTerms } from "../../../data/glossary-terms";
+import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 import type { RevealSpec } from "../../internal/reveal/model";
 
 /** The minimal dreamcaller shape a portrait needs: which art to load and the
@@ -116,7 +116,7 @@ export function dreamcallerRevealSpec(dreamcaller: DreamcallerVisual, abilityTex
   const ability = abilityText.trim();
   return {
     primary: { kind: "infoCard", card: { variant: "fullBleed", image, imageCrop: "top", title: dreamcaller.name, subtitle: dreamcaller.title, body: ability ? richText.rules(ability) : undefined } },
-    secondaries: extractGlossaryTerms(ability).map((entry) => ({ variant: "text" as const, title: entry.term, body: richText.rules(entry.definition) })),
+    secondaries: rulesTextDefinitionCards(ability),
   };
 }
 

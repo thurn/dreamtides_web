@@ -4,9 +4,9 @@
 // floating above the head, and a locked-size console card riding up over the
 // legs (ability text, a row of hover-only tide discs + starting-essence chip,
 // and a full-width purple accent GlassButton). All columns render at exactly
-// the same size. It
-// shares the view types and the ability / essence reveals with the mobile
-// carousel via `quest-start-shared`; `QuestStartScreen` picks by viewport.
+// the same size. It shares the view types and console primitives with the mobile
+// carousel via `quest-start-shared`, and both layouts use the same named
+// Dreamcaller ability source; `QuestStartScreen` picks by viewport.
 // PURE: renders from a view-model and reports the chosen Dreamcaller via `onPick`.
 
 import { Motes } from "../components/hud/Motes";
@@ -14,8 +14,8 @@ import { GroupPanel } from "../components/controls/GroupPanel";
 import { GlassButton } from "../components/controls/GlassButton";
 import { token } from "../primitives/tokens";
 import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
+import { DreamcallerAbilityText } from "../components/hud/DreamcallerAbilityText";
 import {
-  AbilityReveal,
   ConsoleDivider,
   QuestStartRerollControl,
   TidesEssenceBlock,
@@ -30,12 +30,6 @@ const COLUMN_W = 400; // the figure stage's width
 const PORTRAIT_H = 715; // the standing figure's stage height
 const CARD_W = 320; // console-card width (narrower than the column, centered)
 const CARD_OVERLAP = 275; // how far the card's center rides up over the figure
-/** The minimum height of the desktop ability-text box — two lines of the rules
- * voice (14px × 1.36 ≈ 38px, rounded to a round 40). Short abilities center
- * within this two-line floor so the common case aligns across columns; longer
- * copy grows the box and is nudged down by a gentle scale rather than crammed.
- * Box measures are content-driven layout, so this is a caller number. */
-const ABILITY_BOX_MIN_H = 40;
 
 /** The desktop screen's small purple eyebrow title, pinned near the top of the
  * screen — the mobile ScreenHeader's uppercase accent treatment, in flow. */
@@ -136,9 +130,10 @@ function DreamcallerCard({
         flexDirection: "column",
       }}
     >
-      <AbilityReveal
+      <DreamcallerAbilityText
+        dreamcallerId={dreamcaller.id}
         text={dreamcaller.renderedText}
-        minHeight={ABILITY_BOX_MIN_H}
+        presentation="selectionCard"
       />
 
       <div style={{ marginTop: token("--space-6") }}>

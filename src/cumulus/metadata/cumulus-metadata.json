@@ -1824,6 +1824,35 @@
       "description": "Stable test id for the section."
     }
   ],
+  "DreamcallerAbilityText": [
+    {
+      "name": "dreamcallerId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Stable Dreamcaller UUID that owns this ability."
+    },
+    {
+      "name": "text",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Complete rendered rules text for the Dreamcaller ability."
+    },
+    {
+      "name": "presentation",
+      "tsType": "\"natural\" | \"selectionCard\"",
+      "unionMembers": [
+        "natural",
+        "selectionCard"
+      ],
+      "required": false,
+      "defaultValue": "natural",
+      "description": "Natural copy for flowing layouts, or the two-line aligned selection-card\ntreatment used by the desktop Dreamcaller offer triptych."
+    }
+  ],
   "DreamcallerPortrait": [
     {
       "name": "dreamcaller",

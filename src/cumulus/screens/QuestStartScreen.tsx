@@ -4,10 +4,10 @@
 //     (`quest-start-mobile`).
 //   - Desktop (wide): the offered Dreamcallers side by side as standing figures
 //     over locked-size console cards (`quest-start-desktop`).
-// The shared view types and the ability / essence reveals both layouts render
-// live in `quest-start-shared`. This module is the public entry: it re-exports
-// the view types the adapter and view-model builder import, and switches layouts
-// by viewport.
+// Shared view types and console primitives live in `quest-start-shared`; both
+// layouts compose the named Dreamcaller ability source. This module is the
+// public entry: it re-exports the view types the adapter and view-model builder
+// import, and switches layouts by viewport.
 // PURE: it renders from a view-model and reports the chosen Dreamcaller through
 // `onPick`; the adapter owns state, the offer, the seed, and startQuest.
 

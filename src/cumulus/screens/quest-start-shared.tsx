@@ -1,14 +1,11 @@
 // Shared core for the Cumulus Dreamcaller-select screen. Both the mobile carousel
 // (`quest-start-mobile`) and the desktop triptych (`quest-start-desktop`) render
-// from these view types and reuse these interaction primitives — the ability /
-// essence reveals and the console hairline — so the two layouts stay in lockstep
-// on the glossary-keyword and essence-explanation behaviour a player relies on.
+// from these view types and reuse the essence/tide interaction primitives and
+// console hairline, while both compose the named DreamcallerAbilityText source.
 // PURE: no state ownership; the adapter owns the offer, the seed, and startQuest.
 
-import { useLayoutEffect, useRef, useState } from "react";
 import { ResourceChip } from "../components/hud/ResourceChip";
 import { IconButton } from "../components/controls/IconButton";
-import { RulesText } from "../components/card/RulesText";
 import { TideDisc, type TideDiscSize } from "../components/hud/TideDisc";
 import { type Tide } from "../components/hud/tide-spec";
 import { token } from "../primitives/tokens";
@@ -253,101 +250,6 @@ export function ConsoleDivider({ flush = false }: { flush?: boolean }) {
       }}
     />
   );
-}
-
-/** The smallest the ability text is allowed to auto-shrink to (fraction of its
- * natural size). A gentle floor: past two lines the box grows rather than
- * cramming, so the shrink only ever nudges the font a little (never the harsh
- * squeeze needed to force every ability into two lines). */
-const ABILITY_MIN_SCALE = 0.9;
-
-/** A box that reserves `minHeight` (so short abilities align across columns and
- * center within two lines) but GROWS for longer copy instead of clipping it.
- * Content past the minimum is nudged down by a gentle uniform scale — floored
- * at {@link ABILITY_MIN_SCALE} — and the box is sized to the scaled content so
- * it stays tight with no clipping. The scale reads as a slightly smaller font
- * while keeping the rich-text pips/carets in proportion; `offsetHeight` is
- * pre-transform, so the natural size is measured directly with no reset dance. */
-function AutoShrinkText({
-  minHeight,
-  children,
-}: {
-  minHeight: number;
-  children: React.ReactNode;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [{ scale, boxHeight }, setFit] = useState({
-    scale: 1,
-    boxHeight: minHeight,
-  });
-
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    // offsetHeight ignores the visual transform, so it is always the content's
-    // natural (unscaled) height regardless of the scale currently applied.
-    const natural = el.offsetHeight;
-    const nextScale =
-      natural > minHeight
-        ? Math.max(ABILITY_MIN_SCALE, minHeight / natural)
-        : 1;
-    // Grow to fit the scaled content (never below the two-line minimum), so a
-    // long ability takes the room it needs at a gently reduced size.
-    const nextBox = Math.max(minHeight, Math.round(natural * nextScale));
-    setFit({ scale: nextScale, boxHeight: nextBox });
-  }, [children, minHeight]);
-
-  return (
-    <div
-      style={{
-        height: boxHeight,
-        display: "flex",
-        alignItems: "center",
-        overflow: "hidden",
-      }}
-    >
-      <div
-        ref={ref}
-        style={{
-          width: "100%",
-          transform: scale < 1 ? `scale(${String(scale)})` : undefined,
-          transformOrigin: "left center",
-        }}
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
-
-/** Ability text with a press/hover reveal of its glossary-keyword definitions.
- * When the text has no terms it renders plain, with no reveal wiring. When
- * `minHeight` is set (the desktop card) the text renders in a two-line-minimum,
- * vertically-centered box that grows for longer copy and gently auto-shrinks it;
- * without it the text takes its natural height (the mobile console). */
-export function AbilityReveal({
-  text,
-  minHeight,
-}: {
-  text: string;
-  minHeight?: number;
-}) {
-  const body = (
-    <div
-      style={{
-        font: token("--t-rules"),
-        color: token("--text-primary"),
-        lineHeight: 1.36,
-      }}
-    >
-      <RulesText text={text} />
-    </div>
-  );
-  const content = body;
-  if (minHeight == null) {
-    return content;
-  }
-  return <AutoShrinkText minHeight={minHeight}>{content}</AutoShrinkText>;
 }
 
 /** The starting-essence value with a press/hover explanation. Informational —

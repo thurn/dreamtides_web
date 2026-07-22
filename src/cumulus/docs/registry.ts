@@ -22,6 +22,7 @@ import { cardTermDefinitionsDemo } from "./demos/card-term-definitions";
 import { characterDialogueDemo } from "./demos/character-dialogue";
 import { coopPresenceStatusDemo } from "./demos/coop-presence-status";
 import { commandMenusDemo, contextActionMenuDemo } from "./demos/command-menus";
+import { dreamcallerAbilityTextDemo } from "./demos/dreamcaller-ability-text";
 import { dreamcallerPortraitDemo } from "./demos/dreamcaller-portrait";
 import { dreamwellCardDemo } from "./demos/dreamwell-card";
 import { dreamsignDemo } from "./demos/dreamsign";
@@ -183,6 +184,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   coopPresenceStatusDemo,
   battleStatusDisplayDemo,
   dreamwellCardDemo,
+  dreamcallerAbilityTextDemo,
   dreamcallerPortraitDemo,
   richTextDemo,
   rulesTextDemo,

@@ -15,10 +15,10 @@ import type { Dreamsign as DreamsignData } from "../../../types/quest";
 import { assetUrl } from "../../../runtime/asset-url";
 import { artRef } from "../../primitives/art";
 import { requireDreamsignId } from "../../../data/dreamsigns";
-import { extractGlossaryTerms } from "../../../data/glossary-terms";
 import { useRevealSource } from "../../internal/reveal/context";
 import { Pressable } from "../../primitives/Pressable";
 import { revealEntityId } from "../../internal/reveal/identity";
+import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 
 /** Desaturation applied to bane art so a bane reads as a warning before its
  * art does — the one signal that survives the chrome-free tile. */
@@ -95,11 +95,7 @@ export function Dreamsign({
           ? { variant: "object", image: artRef.dreamsign(String(dreamsign.imageName)), imageFilter: dreamsign.isBane ? "dreamsign-portrait-bane" : "dreamsign-portrait", title: dreamsign.name, body: effect ? richText.rules(effect) : undefined }
           : { variant: "text", title: dreamsign.name, body: effect ? richText.rules(effect) : undefined },
       },
-      secondaries: extractGlossaryTerms(effect).map((entry) => ({
-        variant: "text" as const,
-        title: entry.term,
-        body: richText.rules(entry.definition),
-      })),
+      secondaries: rulesTextDefinitionCards(effect),
     },
     onActivate: unavailable ? undefined : onPress,
   });
