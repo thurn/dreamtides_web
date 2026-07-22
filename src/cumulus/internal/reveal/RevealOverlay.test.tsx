@@ -51,6 +51,9 @@ beforeEach(() => {
       const height = this.dataset.revealIndex === "0" ? 80 : 90;
       return { x: 0, y: 0, left: 0, top: 0, right: 80, bottom: height, width: 80, height, toJSON: () => ({}) };
     }
+    if (this.dataset.revealMeasure === "adjacent") {
+      return { x: 0, y: 0, left: 0, top: 0, right: 150, bottom: 225, width: 150, height: 225, toJSON: () => ({}) };
+    }
     return { x: 0, y: 0, left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0, toJSON: () => ({}) };
   });
   container = document.createElement("div"); document.body.append(container); root = createRoot(container);
@@ -118,6 +121,36 @@ describe("RevealOverlay", () => {
     const portal = document.querySelector<HTMLElement>("[data-cumulus-reveal-portal]")!;
     expect(portal.getAttribute("aria-hidden")).toBe("true");
     expect(portal.querySelector("[tabindex]")).toBeNull();
+  });
+
+  it("omits adjacent tangible previews from the mobile reveal branch", () => {
+    Object.defineProperty(window, "visualViewport", { configurable: true, value: { width: 390, height: 844, offsetLeft: 0, offsetTop: 0 } });
+    const cardId = asCardId(UUID);
+    const spec: RevealSpec = {
+      ...makeTextRevealSpec("Primary", "Body"),
+      adjacentCards: [{
+        kind: "gameCard",
+        cardId,
+        displaySnapshot: {
+          id: cardId,
+          name: asCardName("Warrior"),
+          cardNumber: 1,
+          cardType: "Character",
+          subtype: "Warrior",
+          isStarter: false,
+          energyCost: 0,
+          spark: 1,
+          isFast: false,
+          renderedText: "",
+          imageNumber: 1,
+          artOwned: false,
+        },
+        figment: true,
+      }],
+    };
+    act(() => renderOverlay(<RevealOverlay active={active({ spec })} />));
+    expect(document.querySelector('[data-reveal-measure="adjacent"]')).toBeNull();
+    expect(document.querySelector('[data-cumulus-reveal-card="adjacent"]')).toBeNull();
   });
 
   it("reports the captured visual viewport offsets used for placement", () => {

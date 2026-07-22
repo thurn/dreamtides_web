@@ -18,6 +18,7 @@
 import { useEffect, useState } from "react";
 import type { CardData } from "../../../types/cards";
 import { loadCardDatabase } from "../../../data/card-database";
+import { loadFigmentDatabase } from "../../../data/figment-database";
 import {
   GameCard,
   type GameCardPresentation,
@@ -41,6 +42,8 @@ const CURATED_CARD_IDS = [
   "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
   // Event, 3● — Legendary rarity (the shimmer overlay).
   "a911ef71-799c-4240-ad13-8fabd3caeafa",
+  // Character, 2●/2✦ — glossary definitions plus a Warrior figment preview.
+  "41044897-b70a-4e2b-8eb6-baf843a14a43",
 ] as const;
 
 interface GameCardDemoArgs {
@@ -68,8 +71,11 @@ function GameCardDemo({
 
   useEffect(() => {
     let cancelled = false;
-    loadCardDatabase()
-      .then((database) => {
+    Promise.all([
+      loadCardDatabase(),
+      loadFigmentDatabase().catch(() => undefined),
+    ])
+      .then(([database]) => {
         if (cancelled) {
           return;
         }
@@ -137,7 +143,7 @@ export const gameCardDemo: CumulusComponent = {
   blurb:
     "The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name.",
   callout:
-    "GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment. The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, focus, press, activation, and drag dismissal are automatic.",
+    "GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment. The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, focus, press, activation, and drag dismissal are automatic. On desktop, rules that explicitly materialize an authored figment add its small UUID-backed card beyond the definition stack; touch layouts keep the compact reading pair.",
   group: "Components",
   docName: "GameCard",
   Component: GameCardDemo,

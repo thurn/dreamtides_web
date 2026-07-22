@@ -6,7 +6,7 @@ import {
 import { logEvent } from "../../../logging";
 import type { RichText } from "../../components/card/rich-text";
 import { tideAlignmentLabel } from "../../components/hud/tide-spec";
-import { infoCardVariant, type RevealCoordinatorSource, type RevealDismissalReason, type RevealInfoCardModel, type RevealSourceIdentity, type RevealSpec } from "./model";
+import { infoCardVariant, type RevealCoordinatorSource, type RevealDismissalReason, type RevealGameCard, type RevealInfoCardModel, type RevealSourceIdentity, type RevealSpec } from "./model";
 import {
   activationOutcomeForTouch, initialRevealCoordinatorState, reduceRevealState,
   REVEAL_INTENT_MS,
@@ -76,13 +76,16 @@ function revealDescription(spec: RevealSpec): string {
   return [primary, ...spec.secondaries.map(infoCardDescription)].filter(Boolean).join(". ");
 }
 
+function isValidGameCard(card: RevealGameCard): boolean {
+  return UUID_PATTERN.test(card.cardId)
+    && card.displaySnapshot !== undefined
+    && card.displaySnapshot.id.toLowerCase() === card.cardId.toLowerCase();
+}
+
 function isValidRegistration(identity: RevealSourceIdentity, spec: RevealSpec): boolean {
   if (identity.entityType.trim() === "" || !UUID_PATTERN.test(identity.entityId)) return false;
-  if (spec.primary.kind === "gameCard") {
-    if (!UUID_PATTERN.test(spec.primary.cardId)) return false;
-    if (spec.primary.displaySnapshot === undefined) return false;
-    if (spec.primary.displaySnapshot.id.toLowerCase() !== spec.primary.cardId.toLowerCase()) return false;
-  }
+  if (spec.primary.kind === "gameCard" && !isValidGameCard(spec.primary)) return false;
+  if (!(spec.adjacentCards ?? []).every(isValidGameCard)) return false;
   return revealDescription(spec).trim().length > 0;
 }
 
@@ -276,15 +279,21 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
             : infoCardVariant(primary.card),
       },
       secondaryVariants: overlayActive.spec.secondaries.map(infoCardVariant),
+      adjacentCardIds: (overlayActive.spec.adjacentCards ?? []).map(
+        (card) => card.cardId,
+      ),
       modality: overlayActive.modality,
       reason: overlayActive.reason,
       geometry,
       shownSecondaryCount: decision.shownSecondaryCount,
       droppedSecondaryCount: decision.droppedSecondaryCount,
+      shownAdjacentCount: decision.shownAdjacentCount,
+      droppedAdjacentCount: decision.droppedAdjacentCount,
       fallbacks: {
         pressInPlace: decision.pressInPlace,
         sideFallback: decision.sideFallback,
         secondaryTruncation: decision.secondaryTruncation,
+        adjacentTruncation: decision.adjacentTruncation,
         bestEffortPrimaryOverlap: decision.bestEffortPrimaryOverlap,
       },
     });

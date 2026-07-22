@@ -13,6 +13,8 @@
  * defaults for the base spark and keyword) and by the figment-creator UI.
  */
 
+import type { ArtCrop } from "../../types/cards";
+
 /**
  * A keyword a figment type carries implicitly. Each maps onto the matching
  * combat-keyword `granted*` status flag, carried by every figment of that type.
@@ -43,6 +45,10 @@ export interface FigmentCatalogEntry {
   renderedText?: string;
   /** The figment's art image number, sourced from `figments.toml` when hydrated. */
   imageNumber?: number;
+  /** Whether the assigned art is owned, sourced from `figments.toml`. */
+  artOwned?: boolean;
+  /** The authored crop applied to the figment's art. */
+  art?: ArtCrop;
 }
 
 /**
@@ -59,6 +65,8 @@ export interface FigmentCatalogRecord {
   name?: string;
   renderedText?: string;
   imageNumber?: number;
+  artOwned?: boolean;
+  art?: ArtCrop;
 }
 
 function normalizeHydratedKeyword(keyword: string | undefined): FigmentKeyword | undefined {
@@ -149,6 +157,8 @@ export function hydrateFigmentCatalog(records: readonly FigmentCatalogRecord[]):
       ...(record.imageNumber === undefined
         ? {}
         : { imageNumber: record.imageNumber }),
+      ...(record.artOwned === undefined ? {} : { artOwned: record.artOwned }),
+      ...(record.art === undefined ? {} : { art: record.art }),
     } satisfies FigmentCatalogEntry;
   });
   hydratedEntries = entries;

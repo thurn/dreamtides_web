@@ -9,6 +9,7 @@ import {
   hasAssignedImage,
 } from "../../../data/card-database";
 import { GLOSSARY_IDS } from "../../../data/glossary";
+import { extractMaterializedFigmentPreviews } from "../../../data/materialized-figments";
 import { identiconsForced } from "../../../runtime/identicon-mode";
 import {
   ART_EXTENSION_FRACTION,
@@ -1524,6 +1525,15 @@ export function GameCard({
   const glossaryCards = rulesTextDefinitionCards(
     model.displaySnapshot.renderedText,
   );
+  const figmentCards = extractMaterializedFigmentPreviews(
+    model.displaySnapshot.renderedText,
+  ).map((preview) => ({
+    kind: "gameCard" as const,
+    cardId: preview.card.id,
+    displaySnapshot: preview.card,
+    figment: true,
+    figmentTitleBar: preview.titleBar,
+  }));
   const binding = useRevealSource({
     identity: { entityType: "game-card", entityId: model.cardId },
     spec: {
@@ -1537,6 +1547,7 @@ export function GameCard({
         ...(selected ? { selected: true, selectionColor } : {}),
       },
       secondaries: glossaryCards,
+      adjacentCards: figmentCards,
     },
     onActivate: unavailable ? undefined : onActivate,
   });

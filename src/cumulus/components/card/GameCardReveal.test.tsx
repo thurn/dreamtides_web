@@ -6,7 +6,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
+import { extractMaterializedFigmentPreviews } from "../../../data/materialized-figments";
 import { GameCard, type GameCardModel } from "./CardView";
+
+vi.mock("../../../data/materialized-figments", () => ({
+  extractMaterializedFigmentPreviews: vi.fn(() => []),
+}));
 
 const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
 let resizeCallbacks: ResizeObserverCallback[] = [];
@@ -51,6 +56,7 @@ function pointer(type: string, init: PointerEventInit): Event {
 }
 
 beforeEach(() => {
+  vi.mocked(extractMaterializedFigmentPreviews).mockReset().mockReturnValue([]);
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
   window.matchMedia = (query: string) => ({
     matches: query.includes("pointer: fine"), media: query, onchange: null,
@@ -70,6 +76,7 @@ beforeEach(() => {
     if (this.hasAttribute("data-game-card-source")) return rect(Number(this.parentElement?.dataset.testWidth ?? 160));
     if (this.getAttribute("data-reveal-measure") === "primary") return rect(240, 0, 0);
     if (this.getAttribute("data-reveal-measure") === "secondary") return rect(248, 0, 0);
+    if (this.getAttribute("data-reveal-measure") === "adjacent") return rect(150, 0, 0);
     if (this.classList.contains("card-view")) return rect(160);
     return rect(100);
   });
@@ -95,6 +102,61 @@ describe("GameCard reveal contract", () => {
     expect(description).toContain("Archive Sentry");
     expect(description).toContain("Bane, then discard another bane");
     expect(description.match(/A penalty card forced into your deck\./g)).toHaveLength(1);
+    act(() => root.unmount());
+  });
+
+  it("shows an authored figment card beyond glossary definitions on desktop", async () => {
+    vi.mocked(extractMaterializedFigmentPreviews).mockReturnValue([{
+      titleBar: false,
+      card: Object.freeze({
+        id: asCardId("bb1a5acd-1a03-4aa3-826d-f0a301843845"),
+        name: asCardName("Warrior"),
+        cardNumber: 1,
+        cardType: "Character",
+        subtype: "Warrior",
+        isStarter: false,
+        energyCost: 0,
+        spark: 1,
+        isFast: false,
+        renderedText: "",
+        imageNumber: 436090582,
+        artOwned: false,
+        art: { x: 0, y: 0.123, scale: 1.2 },
+      }),
+    }]);
+    const { container, root } = mount(
+      <div data-test-width="240">
+        <GameCard
+          model={model(card({
+            renderedText: "Bane. Materialize a 1✦ warrior figment.",
+          }))}
+        />
+      </div>,
+    );
+    const source = container.querySelector<HTMLElement>("[data-game-card-source]");
+    act(() => {
+      source?.dispatchEvent(
+        pointer("pointerover", { pointerType: "mouse", pointerId: 1 }),
+      );
+    });
+    await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); });
+    remeasure();
+    await vi.waitFor(() =>
+      expect(document.querySelector('[data-cumulus-reveal-card="adjacent"]')).not.toBeNull(),
+    );
+    const definition = document.querySelector<HTMLElement>(
+      '[data-cumulus-reveal-card="secondary"]',
+    );
+    const figment = document.querySelector<HTMLElement>(
+      '[data-cumulus-reveal-card="adjacent"]',
+    );
+    expect(figment?.style.width).toBe("150px");
+    expect(figment?.querySelector('[data-card-id="bb1a5acd-1a03-4aa3-826d-f0a301843845"]')?.getAttribute("data-figment")).toBe("true");
+    expect(Number.parseFloat(figment!.style.left)).toBe(
+      Number.parseFloat(definition!.style.left)
+        + Number.parseFloat(definition!.style.width)
+        + 10,
+    );
     act(() => root.unmount());
   });
 

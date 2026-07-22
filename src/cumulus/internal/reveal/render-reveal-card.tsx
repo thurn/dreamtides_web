@@ -29,6 +29,8 @@ export function renderRevealCard(card: RevealCard, width: number): ReactElement 
           transfiguration={card.transfiguration}
           selected={card.selected}
           selectionColor={card.selectionColor}
+          figment={card.figment}
+          figmentTitleBar={card.figmentTitleBar}
           eagerRulesFit
         />
       </div>

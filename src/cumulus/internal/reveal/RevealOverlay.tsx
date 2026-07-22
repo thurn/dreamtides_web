@@ -1,6 +1,7 @@
 import { useLayoutEffect, useMemo, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import {
+  DESKTOP_ADJACENT_CARD_WIDTH,
   DESKTOP_GAME_CARD_WIDTH,
   selectRevealPlacement,
   type RevealPlacementDecision,
@@ -44,12 +45,17 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
     if (layer?.dataset.revealMeasurementKey !== key) return;
     const primary = layer.querySelector<HTMLElement>("[data-reveal-measure=\"primary\"]");
     const secondaries = [...layer.querySelectorAll<HTMLElement>("[data-reveal-measure=\"secondary\"]")];
+    const adjacents = [...layer.querySelectorAll<HTMLElement>("[data-reveal-measure=\"adjacent\"]")];
     if (primary === null) return;
     const measure = (): void => {
       if (disposed) return;
-      if (primary.querySelector("[data-reveal-render-pending]") !== null) return;
+      if (layer.querySelector("[data-reveal-render-pending]") !== null) return;
       const primaryRect = primary.getBoundingClientRect();
       const secondarySizes: RevealSize[] = secondaries.map((node) => {
+        const value = node.getBoundingClientRect();
+        return { width: value.width, height: value.height };
+      });
+      const adjacentSizes: RevealSize[] = adjacents.map((node) => {
         const value = node.getBoundingClientRect();
         return { width: value.width, height: value.height };
       });
@@ -62,6 +68,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
         ...(active.touchPoint === undefined ? {} : { touchPoint: active.touchPoint }),
         primarySize: { width: primaryRect.width, height: primaryRect.height },
         secondarySizes,
+        adjacentSizes,
         sourceShowsCompleteGameCard: active.sourceShowsCompleteGameCard,
         sourceIsBattlefieldGameCard: active.sourceIsBattlefieldGameCard,
       });
@@ -71,7 +78,13 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
         sourceRect: active.sourceRect,
         ...(active.touchPoint === undefined ? {} : { touchPoint: active.touchPoint }),
         placement: { family: decision.family, orientation: decision.orientation },
-        finalRects: { primary: decision.primaryRect, secondaries: decision.secondaryRects },
+        finalRects: {
+          primary: decision.primaryRect,
+          secondaries: decision.secondaryRects,
+          ...(decision.adjacentRects.length === 0
+            ? {}
+            : { adjacents: decision.adjacentRects }),
+        },
         ...(decision.circleClearance === undefined ? {} : { circleClearance: decision.circleClearance }),
       });
     };
@@ -80,6 +93,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
     const observer = new ResizeObserver(measure);
     observer.observe(primary);
     for (const secondary of secondaries) observer.observe(secondary);
+    for (const adjacent of adjacents) observer.observe(adjacent);
     return () => { disposed = true; observer.disconnect(); };
   }, [active, key, onPlaced, viewport]);
 
@@ -103,6 +117,9 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
     ? mobileWidth
     : primaryIsCardShaped ? Math.max(DESKTOP_GAME_CARD_WIDTH, active.sourceRect.width) : 248;
   const measureSecondaryWidth = viewport.layout === "mobile" ? mobileWidth : 248;
+  const adjacentCards = viewport.layout === "desktop"
+    ? active.spec.adjacentCards ?? []
+    : [];
 
   return createPortal(
     <div className="cumulus" data-cumulus-reveal-portal="" aria-hidden="true" style={{ position: "fixed", inset: 0, zIndex: "var(--layer-reveal)", pointerEvents: "none" }}>
@@ -118,6 +135,9 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
           {active.spec.secondaries.map((card, index) => (
             <div data-reveal-measure="secondary" data-reveal-index={index} key={index} style={{ ...transparent, width: measureSecondaryWidth }}>{renderRevealInfoCard(card, measureSecondaryWidth)}</div>
           ))}
+          {adjacentCards.map((card, index) => (
+            <div data-reveal-measure="adjacent" data-reveal-index={index} key={card.cardId} style={{ ...transparent, width: DESKTOP_ADJACENT_CARD_WIDTH }}>{renderRevealCard(card, DESKTOP_ADJACENT_CARD_WIDTH)}</div>
+          ))}
       </div>
       {decision !== null && (
         <div data-cumulus-reveal-group="" style={{ position: "fixed", inset: 0, visibility: "visible", pointerEvents: "none" }}>
@@ -127,6 +147,11 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
           {decision.secondaryRects.map((cardRect, index) => (
             <div data-cumulus-reveal-card="secondary" key={index} style={{ position: "fixed", left: cardRect.x, top: cardRect.y, width: cardRect.width, height: cardRect.height, pointerEvents: "none" }}>
               {renderRevealInfoCard(active.spec.secondaries[index], cardRect.width)}
+            </div>
+          ))}
+          {decision.adjacentRects.map((cardRect, index) => (
+            <div data-cumulus-reveal-card="adjacent" key={adjacentCards[index]?.cardId ?? index} style={{ position: "fixed", left: cardRect.x, top: cardRect.y, width: cardRect.width, height: cardRect.height, pointerEvents: "none" }}>
+              {renderRevealCard(adjacentCards[index], cardRect.width)}
             </div>
           ))}
         </div>

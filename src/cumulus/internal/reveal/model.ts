@@ -23,24 +23,30 @@ export interface RevealGalleryActionModel {
   readonly label: string;
 }
 
+export interface RevealGameCard {
+  readonly kind: "gameCard";
+  readonly cardId: CardId;
+  /** Strict resolved display semantics; its id must equal the canonical cardId. */
+  readonly displaySnapshot: FrozenCardData;
+  /** Optional applied transfiguration rendered on the reading copy. */
+  readonly transfiguration?: CardTransfigurationDisplay;
+  /** Whether the reading copy carries the source card's selection ring. */
+  readonly selected?: boolean;
+  /** Selection-ring color inherited from the source card. */
+  readonly selectionColor?: CumulusColor;
+  /** Render the reading copy with the authored figment frame. */
+  readonly figment?: boolean;
+  /** Render the optional named-figment title bar. */
+  readonly figmentTitleBar?: boolean;
+}
+
 export type RevealCard =
   | {
       /** The mounted source already contains the complete primary content. */
       readonly kind: "source";
       readonly description: string;
     }
-  | {
-      readonly kind: "gameCard";
-      readonly cardId: CardId;
-      /** Strict resolved display semantics; its id must equal the canonical cardId. */
-      readonly displaySnapshot: FrozenCardData;
-      /** Optional applied transfiguration rendered on the reading copy. */
-      readonly transfiguration?: CardTransfigurationDisplay;
-      /** Whether the reading copy carries the source card's selection ring. */
-      readonly selected?: boolean;
-      /** Selection-ring color inherited from the source card. */
-      readonly selectionColor?: CumulusColor;
-    }
+  | RevealGameCard
   | { readonly kind: "galleryAction"; readonly action: RevealGalleryActionModel }
   | { readonly kind: "infoCard"; readonly card: RevealInfoCardModel };
 
@@ -48,6 +54,11 @@ export interface RevealSpec {
   readonly primary: RevealCard;
   /** Descending semantic priority. */
   readonly secondaries: readonly RevealInfoCardModel[];
+  /**
+   * Small card objects laid in a horizontal desktop row beyond the definition
+   * stack. Touch layouts deliberately omit them.
+   */
+  readonly adjacentCards?: readonly RevealGameCard[];
 }
 
 export type RevealPointerType = "mouse" | "pen" | "touch";
@@ -105,7 +116,11 @@ export interface RevealGeometrySnapshot {
   readonly sourceRect: RevealRect;
   readonly touchPoint?: RevealPoint;
   readonly placement: { readonly family: string; readonly orientation: string };
-  readonly finalRects: { readonly primary: RevealRect; readonly secondaries: readonly RevealRect[] };
+  readonly finalRects: {
+    readonly primary: RevealRect;
+    readonly secondaries: readonly RevealRect[];
+    readonly adjacents?: readonly RevealRect[];
+  };
   readonly circleClearance?: number;
 }
 

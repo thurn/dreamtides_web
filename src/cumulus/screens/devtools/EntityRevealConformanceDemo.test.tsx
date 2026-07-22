@@ -126,7 +126,7 @@ describe("EntityRevealConformanceDemo", () => {
     expect(opened.shownSecondaryCount).toBe(rendered.length - 1);
     expect(opened.droppedSecondaryCount).toBe(0);
     expect(opened.fallbacks.pressInPlace).toBe(false);
-    expect(opened.fallbacks).toEqual({ pressInPlace: false, sideFallback: false, secondaryTruncation: false, bestEffortPrimaryOverlap: false });
+    expect(opened.fallbacks).toEqual({ pressInPlace: false, sideFallback: false, secondaryTruncation: false, adjacentTruncation: false, bestEffortPrimaryOverlap: false });
     void act(() => { window.dispatchEvent(new Event("resize")); });
     const closes = getLogEntries().slice(baseline).filter((entry) => entry.event === "cumulus_entity_reveal_closed");
     expect(closes).toHaveLength(1);
@@ -155,7 +155,7 @@ describe("EntityRevealConformanceDemo", () => {
     expect(opened.placement).toEqual({ family: "mobile-touch-corner", orientation: "primary-right" });
     expect(opened.shownSecondaryCount).toBe(8);
     expect(opened.droppedSecondaryCount).toBe(21);
-    expect(opened.fallbacks).toEqual({ pressInPlace: false, sideFallback: true, secondaryTruncation: true, bestEffortPrimaryOverlap: true });
+    expect(opened.fallbacks).toEqual({ pressInPlace: false, sideFallback: true, secondaryTruncation: true, adjacentTruncation: false, bestEffortPrimaryOverlap: true });
     const primary = document.querySelector<HTMLElement>("[data-cumulus-reveal-card=primary]")!.getBoundingClientRect();
     const renderedSecondaries = [...document.querySelectorAll<HTMLElement>("[data-cumulus-reveal-card=secondary]")].map((node) => {
       const rect = node.getBoundingClientRect();

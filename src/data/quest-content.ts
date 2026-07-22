@@ -748,12 +748,6 @@ export async function loadQuestContent(
   // The `tides5` variant combines its own committed artifact; only it fetches
   // `/tides5-data.json`.
   const poolNeedsTides5 = POOL_VARIANTS_NEEDING_TIDES5.has(poolVariant);
-  // Hydrate the figment catalog from figments.toml in the background so battle
-  // figments render with their editor-authored name, character type, spark,
-  // rules text, and art. A failure is non-fatal: the catalog keeps its built-in
-  // rules defaults.
-  void loadFigmentDatabase().catch(() => undefined);
-
   const [
     cardDatabase,
     draftDreamcallers,
@@ -777,6 +771,7 @@ export async function loadQuestContent(
     guides,
     atlasConfig,
     apollyonIncarnations,
+    _figmentCatalog,
   ] = await Promise.all([
     loadCardsV2Database(),
     loadDreamcallersV2(),
@@ -834,6 +829,11 @@ export async function loadQuestContent(
     // Apollyon's incarnations are small and always loaded so the Atlas can
     // present a per-run guise for the boss node.
     loadApollyonIncarnations(),
+    // Complete this small load before publishing quest content so every
+    // GameCard registers its materialized-figment preview from the authored
+    // UUID, rules, and art on the first render. Failure remains non-fatal: the
+    // fixed rules catalog still provides gameplay defaults.
+    loadFigmentDatabase().catch(() => undefined),
   ]);
 
   const dreamcallers: DreamcallerContent[] = draftDreamcallers.map((dc) => ({

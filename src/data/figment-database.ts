@@ -2,6 +2,7 @@ import {
   hydrateFigmentCatalog,
   type FigmentCatalogRecord,
 } from "../battle/state/figment-catalog";
+import type { ArtCrop } from "../types/cards";
 
 /**
  * The shape of a figment entry in `/figments-data.json` (generated from
@@ -16,6 +17,8 @@ interface FigmentDataEntry {
   keyword?: string;
   renderedText?: string;
   imageNumber?: number;
+  artOwned?: boolean;
+  art?: ArtCrop;
 }
 
 function toCatalogRecord(entry: FigmentDataEntry): FigmentCatalogRecord {
@@ -31,6 +34,8 @@ function toCatalogRecord(entry: FigmentDataEntry): FigmentCatalogRecord {
     ...(entry.imageNumber === undefined
       ? {}
       : { imageNumber: entry.imageNumber }),
+    ...(entry.artOwned === undefined ? {} : { artOwned: entry.artOwned }),
+    ...(entry.art === undefined ? {} : { art: entry.art }),
   };
 }
 

@@ -16,7 +16,7 @@ describe("reveal diagnostic logging", () => {
       sourceRect: rectangle,
       touchPoint: { x: 30, y: 40 },
       placement: { family: "touch-corner", orientation: "primary-right" },
-      finalRects: { primary: rectangle, secondaries: [rectangle] },
+      finalRects: { primary: rectangle, secondaries: [rectangle], adjacents: [rectangle] },
       circleClearance: -3,
     } as const;
     logRevealOpened({
@@ -24,8 +24,10 @@ describe("reveal diagnostic logging", () => {
       interactionId: 7,
       primary: { kind: "gameCard", variant: "complete" },
       secondaryVariants: ["text", "icon"], modality: "touch", reason: "press",
+      adjacentCardIds: ["00000000-0000-4000-8000-000000000003"],
       geometry, shownSecondaryCount: 1, droppedSecondaryCount: 1,
-      fallbacks: { pressInPlace: false, sideFallback: true, secondaryTruncation: true, bestEffortPrimaryOverlap: true },
+      shownAdjacentCount: 1, droppedAdjacentCount: 0,
+      fallbacks: { pressInPlace: false, sideFallback: true, secondaryTruncation: true, adjacentTruncation: false, bestEffortPrimaryOverlap: true },
     });
     expect(getLogEntries()[getLogEntries().length - 1]).toMatchObject({
       event: "cumulus_entity_reveal_opened", sourceEntityType: "card",
@@ -33,13 +35,16 @@ describe("reveal diagnostic logging", () => {
       sourceEntityId: "00000000-0000-4000-8000-000000000001",
       primaryKind: "gameCard", primaryVariant: "complete",
       secondaryVariants: ["text", "icon"], viewport: geometry.viewport,
+      adjacentCardIds: ["00000000-0000-4000-8000-000000000003"],
       modality: "touch", reason: "press", sourceRect: rectangle,
       touchPoint: { x: 30, y: 40 }, placement: geometry.placement,
       finalRects: geometry.finalRects, shownSecondaryCount: 1,
       droppedSecondaryCount: 1, fallbacks: {
         pressInPlace: false, sideFallback: true, secondaryTruncation: true,
+        adjacentTruncation: false,
         bestEffortPrimaryOverlap: true,
       },
+      shownAdjacentCount: 1, droppedAdjacentCount: 0,
       circleClearance: -3,
     });
   });

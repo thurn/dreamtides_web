@@ -88,6 +88,54 @@ describe("selectRevealPlacement", () => {
     );
   });
 
+  it("places small tangible previews horizontally beyond the glossary stack", () => {
+    const result = selectRevealPlacement({
+      ...base,
+      viewport: { ...viewport, layout: "desktop", width: 1200, height: 900 },
+      reason: "hover",
+      touchPoint: undefined,
+      primaryKind: "gameCard",
+      sourceRect: { x: 400, y: 250, width: 100, height: 150 },
+      primarySize: { width: 240, height: 360 },
+      secondarySizes: [{ width: 248, height: 120 }],
+      adjacentSizes: [{ width: 150, height: 225 }],
+    });
+
+    expect(result.orientation).toBe("primary-left");
+    expect(result.secondaryRects).toHaveLength(1);
+    expect(result.adjacentRects).toHaveLength(1);
+    expect(result.secondaryRects[0]?.x).toBe(
+      result.primaryRect.x + result.primaryRect.width + 10,
+    );
+    expect(result.adjacentRects[0]?.x).toBe(
+      result.secondaryRects[0].x + result.secondaryRects[0].width + 10,
+    );
+    expect(result.adjacentRects[0].x + result.adjacentRects[0].width).toBeLessThanOrEqual(1200);
+  });
+
+  it("moves the complete help row left when the source is near the right edge", () => {
+    const result = selectRevealPlacement({
+      ...base,
+      viewport: { ...viewport, layout: "desktop", width: 1200, height: 900 },
+      reason: "hover",
+      touchPoint: undefined,
+      primaryKind: "gameCard",
+      sourceRect: { x: 1040, y: 250, width: 100, height: 150 },
+      primarySize: { width: 240, height: 360 },
+      secondarySizes: [{ width: 248, height: 120 }],
+      adjacentSizes: [{ width: 150, height: 225 }],
+    });
+
+    expect(result.orientation).toBe("primary-right");
+    expect(result.adjacentRects[0].x).toBeGreaterThanOrEqual(0);
+    expect(result.secondaryRects[0].x).toBe(
+      result.adjacentRects[0].x + result.adjacentRects[0].width + 10,
+    );
+    expect(result.primaryRect.x).toBe(
+      result.secondaryRects[0].x + result.secondaryRects[0].width + 10,
+    );
+  });
+
   it.each([
     { sourceX: 120, expectedX: 234, family: "desktop-battlefield-near-right", orientation: "primary-left" },
     { sourceX: 1000, expectedX: 746, family: "desktop-battlefield-near-left", orientation: "primary-right" },

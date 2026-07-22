@@ -7,6 +7,8 @@ const DESKTOP_SOURCE_GAP = 14;
 const MOBILE_SOURCE_GAP = DESKTOP_SOURCE_GAP;
 const TOUCH_RADIUS = 24;
 export const DESKTOP_GAME_CARD_WIDTH = 240;
+/** Matches the shared small-card preset used by card and figment browsers. */
+export const DESKTOP_ADJACENT_CARD_WIDTH = 150;
 
 export interface RevealSize { readonly width: number; readonly height: number }
 export interface RevealPlacementInput {
@@ -17,6 +19,8 @@ export interface RevealPlacementInput {
   readonly touchPoint?: RevealPoint;
   readonly primarySize: RevealSize;
   readonly secondarySizes: readonly RevealSize[];
+  /** Small tangible cards shown beyond the desktop definition stack. */
+  readonly adjacentSizes?: readonly RevealSize[];
   readonly sourceShowsCompleteGameCard: boolean;
   readonly sourceIsBattlefieldGameCard: boolean;
 }
@@ -26,11 +30,15 @@ export interface RevealPlacementDecision {
   readonly orientation: "primary-left" | "primary-right";
   readonly primaryRect: RevealRect;
   readonly secondaryRects: readonly RevealRect[];
+  readonly adjacentRects: readonly RevealRect[];
   readonly shownSecondaryCount: number;
   readonly droppedSecondaryCount: number;
+  readonly shownAdjacentCount: number;
+  readonly droppedAdjacentCount: number;
   readonly pressInPlace: boolean;
   readonly sideFallback: boolean;
   readonly secondaryTruncation: boolean;
+  readonly adjacentTruncation: boolean;
   readonly bestEffortPrimaryOverlap: boolean;
   readonly circleClearance?: number;
 }
@@ -78,6 +86,109 @@ function stackHeight(sizes: readonly RevealSize[], count: number): number {
   return sizes.slice(0, count).reduce((height, size, index) => height + size.height + (index === 0 ? 0 : CARD_GAP), 0);
 }
 
+function rowWidth(sizes: readonly RevealSize[], count: number): number {
+  return sizes
+    .slice(0, count)
+    .reduce(
+      (width, size, index) => width + size.width + (index === 0 ? 0 : CARD_GAP),
+      0,
+    );
+}
+
+function fitAdjacentPrefix(
+  sizes: readonly RevealSize[],
+  availableWidth: number,
+  availableHeight: number,
+): number {
+  let count = 0;
+  for (let next = 1; next <= sizes.length; next += 1) {
+    if (sizes[next - 1].height > availableHeight) break;
+    if (rowWidth(sizes, next) > availableWidth) break;
+    count = next;
+  }
+  return count;
+}
+
+interface DesktopSideContent {
+  readonly secondaryCount: number;
+  readonly adjacentCount: number;
+  readonly secondaryWidth: number;
+  readonly adjacentWidth: number;
+  readonly width: number;
+  readonly score: number;
+}
+
+function desktopSideContent(
+  secondarySizes: readonly RevealSize[],
+  adjacentSizes: readonly RevealSize[],
+  availableWidth: number,
+  availableHeight: number,
+): DesktopSideContent {
+  const maxSecondaryWidth = secondarySizes.reduce(
+    (width, size) => Math.max(width, size.width),
+    0,
+  );
+  const secondaryCount = maxSecondaryWidth <= availableWidth
+    ? fitSecondaryPrefix(secondarySizes, availableHeight)
+    : 0;
+  const secondaryWidth = secondaryCount > 0 ? maxSecondaryWidth : 0;
+  const adjacentAvailableWidth = Math.max(
+    0,
+    availableWidth - secondaryWidth - (secondaryCount > 0 ? CARD_GAP : 0),
+  );
+  const adjacentCount = fitAdjacentPrefix(
+    adjacentSizes,
+    adjacentAvailableWidth,
+    availableHeight,
+  );
+  const adjacentWidth = rowWidth(adjacentSizes, adjacentCount);
+  return {
+    secondaryCount,
+    adjacentCount,
+    secondaryWidth,
+    adjacentWidth,
+    width:
+      secondaryWidth +
+      adjacentWidth +
+      (secondaryCount > 0 && adjacentCount > 0 ? CARD_GAP : 0),
+    // Glossary definitions keep their descending semantic priority. Once both
+    // sides show the same definition prefix, prefer the side that also fits
+    // more tangible previews.
+    score: secondaryCount * 1_000 + adjacentCount,
+  };
+}
+
+function sideContentRects(
+  side: "left" | "right",
+  content: DesktopSideContent,
+  secondarySizes: readonly RevealSize[],
+  adjacentSizes: readonly RevealSize[],
+  x: number,
+  y: number,
+): { readonly secondaries: readonly RevealRect[]; readonly adjacents: readonly RevealRect[] } {
+  const adjacentStart = side === "right"
+    ? x + content.secondaryWidth + (content.secondaryCount > 0 && content.adjacentCount > 0 ? CARD_GAP : 0)
+    : x;
+  const secondaryX = side === "right"
+    ? x
+    : x + content.adjacentWidth + (content.secondaryCount > 0 && content.adjacentCount > 0 ? CARD_GAP : 0);
+  let adjacentX = adjacentStart;
+  const adjacents = adjacentSizes.slice(0, content.adjacentCount).map((size) => {
+    const value = rect(adjacentX, y, size);
+    adjacentX += size.width + CARD_GAP;
+    return value;
+  });
+  return {
+    secondaries: secondaryRectsAt(
+      secondarySizes,
+      content.secondaryCount,
+      secondaryX,
+      y,
+    ),
+    adjacents,
+  };
+}
+
 function fitGroupPrefix(sizes: readonly RevealSize[], availableHeight: number, primaryHeight: number): number {
   if (primaryHeight > availableHeight) return 0;
   let count = 0;
@@ -96,15 +207,34 @@ function cornerScore(card: RevealRect, point: RevealPoint): number {
   return primaryClearance * 100 + textClearance * 200 + centerDistance;
 }
 
-function result(input: RevealPlacementInput, values: Omit<RevealPlacementDecision, "shownSecondaryCount" | "droppedSecondaryCount" | "secondaryTruncation">): RevealPlacementDecision {
+function result(
+  input: RevealPlacementInput,
+  values: Omit<
+    RevealPlacementDecision,
+    | "adjacentRects"
+    | "shownSecondaryCount"
+    | "droppedSecondaryCount"
+    | "shownAdjacentCount"
+    | "droppedAdjacentCount"
+    | "secondaryTruncation"
+    | "adjacentTruncation"
+  > & { readonly adjacentRects?: readonly RevealRect[] },
+): RevealPlacementDecision {
   const shownSecondaryCount = values.secondaryRects.length;
+  const adjacentRects = values.adjacentRects ?? [];
+  const shownAdjacentCount = adjacentRects.length;
+  const adjacentSizes = input.adjacentSizes ?? [];
   return Object.freeze({
     ...values,
     primaryRect: Object.freeze(values.primaryRect),
     secondaryRects: Object.freeze(values.secondaryRects.map((cardRect) => Object.freeze(cardRect))),
+    adjacentRects: Object.freeze(adjacentRects.map((cardRect) => Object.freeze(cardRect))),
     shownSecondaryCount,
     droppedSecondaryCount: input.secondarySizes.length - shownSecondaryCount,
+    shownAdjacentCount,
+    droppedAdjacentCount: adjacentSizes.length - shownAdjacentCount,
     secondaryTruncation: shownSecondaryCount < input.secondarySizes.length,
+    adjacentTruncation: shownAdjacentCount < adjacentSizes.length,
   });
 }
 
@@ -243,6 +373,7 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
   const safeLeft = viewport.offsetLeft + viewport.safeArea.left;
   const safeRight = viewport.offsetLeft + viewport.width - viewport.safeArea.right;
   const secondarySizes = input.secondarySizes;
+  const adjacentSizes = input.adjacentSizes ?? [];
   const secondaryWidth = secondarySizes.reduce((width, size) => Math.max(width, size.width), 0);
   if (input.primaryKind === "source") {
     const rightX = sourceRect.x + sourceRect.width + CARD_GAP;
@@ -278,34 +409,51 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
       const preferRight = sourceCenter <= viewport.offsetLeft + viewport.width / 2;
       const rightPrimaryX = sourceRect.x + sourceRect.width + DESKTOP_SOURCE_GAP;
       const leftPrimaryX = sourceRect.x - DESKTOP_SOURCE_GAP - primaryWidth;
-      const pairWidth = primaryWidth + CARD_GAP + secondaryWidth;
-      const rightPairFits = secondarySizes.length > 0 && rightPrimaryX + pairWidth <= safeRight;
-      const leftPairFits = secondarySizes.length > 0 && leftPrimaryX - CARD_GAP - secondaryWidth >= safeLeft;
       const rightPrimaryFits = rightPrimaryX + primaryWidth <= safeRight;
       const leftPrimaryFits = leftPrimaryX >= safeLeft;
-      const useRight = rightPairFits || leftPairFits
-        ? rightPairFits && (!leftPairFits || preferRight)
-        : rightPrimaryFits && (!leftPrimaryFits || preferRight);
-      const orientation = useRight ? "primary-left" : "primary-right";
-      const primaryX = useRight ? rightPrimaryX : leftPrimaryX;
       const primaryY = Math.max(
         safeTop,
         sourceRect.y - DESKTOP_SOURCE_GAP - primarySize.height,
       );
-      const secondaryX = useRight
+      const availableHeight = safeBottom - primaryY;
+      const rightContent = desktopSideContent(
+        secondarySizes,
+        adjacentSizes,
+        Math.max(0, safeRight - (rightPrimaryX + primaryWidth + CARD_GAP)),
+        availableHeight,
+      );
+      const leftContent = desktopSideContent(
+        secondarySizes,
+        adjacentSizes,
+        Math.max(0, leftPrimaryX - CARD_GAP - safeLeft),
+        availableHeight,
+      );
+      const rightScore = rightPrimaryFits ? rightContent.score : -1;
+      const leftScore = leftPrimaryFits ? leftContent.score : -1;
+      const useRight = rightScore > leftScore
+        || (rightScore === leftScore && (preferRight || !leftPrimaryFits));
+      const orientation = useRight ? "primary-left" : "primary-right";
+      const primaryX = useRight ? rightPrimaryX : leftPrimaryX;
+      const content = useRight ? rightContent : leftContent;
+      const contentX = useRight
         ? primaryX + primaryWidth + CARD_GAP
-        : primaryX - CARD_GAP - secondaryWidth;
-      const pairFits = useRight ? rightPairFits : leftPairFits;
-      const count = pairFits
-        ? fitSecondaryPrefix(secondarySizes, safeBottom - primaryY)
-        : 0;
+        : primaryX - CARD_GAP - content.width;
+      const contentRects = sideContentRects(
+        useRight ? "right" : "left",
+        content,
+        secondarySizes,
+        adjacentSizes,
+        contentX,
+        primaryY,
+      );
       return result(input, {
         family: useRight
           ? "desktop-battlefield-near-right"
           : "desktop-battlefield-near-left",
         orientation,
         primaryRect: rect(primaryX, primaryY, primarySize),
-        secondaryRects: secondaryRectsAt(secondarySizes, count, secondaryX, primaryY),
+        secondaryRects: contentRects.secondaries,
+        adjacentRects: contentRects.adjacents,
         pressInPlace: false,
         sideFallback: false,
         bestEffortPrimaryOverlap: false,
@@ -314,18 +462,38 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
     const primaryX = clamp(sourceRect.x + sourceRect.width / 2 - primaryWidth / 2, safeLeft, safeRight - primaryWidth);
     const primaryY = clamp(sourceRect.y + sourceRect.height / 2 - primarySize.height / 2, safeTop, Math.max(safeTop, safeBottom - primarySize.height));
     const rightX = primaryX + primaryWidth + CARD_GAP;
-    const leftX = primaryX - CARD_GAP - secondaryWidth;
-    const canUseRight = secondarySizes.length > 0 && rightX + secondaryWidth <= safeRight;
-    const canUseLeft = secondarySizes.length > 0 && leftX >= safeLeft;
-    const secondaryX = canUseRight ? rightX : leftX;
-    const count = canUseRight || canUseLeft ? fitSecondaryPrefix(secondarySizes, safeBottom - primaryY) : 0;
+    const availableHeight = safeBottom - primaryY;
+    const rightContent = desktopSideContent(
+      secondarySizes,
+      adjacentSizes,
+      Math.max(0, safeRight - rightX),
+      availableHeight,
+    );
+    const leftContent = desktopSideContent(
+      secondarySizes,
+      adjacentSizes,
+      Math.max(0, primaryX - CARD_GAP - safeLeft),
+      availableHeight,
+    );
+    const useRight = rightContent.score >= leftContent.score;
+    const content = useRight ? rightContent : leftContent;
+    const contentX = useRight ? rightX : primaryX - CARD_GAP - content.width;
+    const contentRects = sideContentRects(
+      useRight ? "right" : "left",
+      content,
+      secondarySizes,
+      adjacentSizes,
+      contentX,
+      primaryY,
+    );
     return result(input, {
       family: "desktop-game-card-reading",
-      orientation: canUseRight || !canUseLeft ? "primary-left" : "primary-right",
+      orientation: useRight ? "primary-left" : "primary-right",
       primaryRect: rect(primaryX, primaryY, primarySize),
-      secondaryRects: secondaryRectsAt(secondarySizes, count, secondaryX, primaryY),
+      secondaryRects: contentRects.secondaries,
+      adjacentRects: contentRects.adjacents,
       pressInPlace: false,
-      sideFallback: !canUseRight && canUseLeft,
+      sideFallback: !useRight,
       bestEffortPrimaryOverlap: false,
     });
   }

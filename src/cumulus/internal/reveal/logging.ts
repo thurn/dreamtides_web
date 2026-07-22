@@ -10,15 +10,19 @@ export interface RevealOpenedDiagnostic {
   readonly interactionId: number;
   readonly primary: { readonly kind: "source" | "gameCard" | "galleryAction" | "infoCard"; readonly variant: string };
   readonly secondaryVariants: readonly InfoCardVariant[];
+  readonly adjacentCardIds: readonly string[];
   readonly modality: "mouse" | "pen" | "touch" | "keyboard";
   readonly reason: RevealReason;
   readonly geometry: RevealGeometrySnapshot;
   readonly shownSecondaryCount: number;
   readonly droppedSecondaryCount: number;
+  readonly shownAdjacentCount: number;
+  readonly droppedAdjacentCount: number;
   readonly fallbacks: {
     readonly pressInPlace: boolean;
     readonly sideFallback: boolean;
     readonly secondaryTruncation: boolean;
+    readonly adjacentTruncation: boolean;
     readonly bestEffortPrimaryOverlap: boolean;
   };
 }
@@ -32,6 +36,7 @@ export function logRevealOpened(value: RevealOpenedDiagnostic): void {
     primaryKind: value.primary.kind,
     primaryVariant: value.primary.variant,
     secondaryVariants: [...value.secondaryVariants],
+    adjacentCardIds: [...value.adjacentCardIds],
     viewport: geometry.viewport,
     modality: value.modality,
     reason: value.reason,
@@ -41,6 +46,8 @@ export function logRevealOpened(value: RevealOpenedDiagnostic): void {
     finalRects: geometry.finalRects,
     shownSecondaryCount: value.shownSecondaryCount,
     droppedSecondaryCount: value.droppedSecondaryCount,
+    shownAdjacentCount: value.shownAdjacentCount,
+    droppedAdjacentCount: value.droppedAdjacentCount,
     fallbacks: value.fallbacks,
     ...(geometry.circleClearance === undefined ? {} : { circleClearance: geometry.circleClearance }),
   });
