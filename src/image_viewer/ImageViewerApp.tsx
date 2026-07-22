@@ -5,6 +5,7 @@ import ImageViewerToolbar from "./ImageViewerToolbar";
 import {
   loadImageManifest,
   moveImageCategory,
+  setFavorite,
   setManualUsed,
 } from "./image-viewer-api";
 import {
@@ -12,10 +13,6 @@ import {
   parseImageViewerDisplayState,
   serializeImageViewerDisplayState,
 } from "./image-viewer-url-state";
-import {
-  loadFavoriteImageNumbers,
-  persistFavoriteImageNumbers,
-} from "./image-viewer-favorites";
 import {
   ALL_CATEGORY,
   GENERIC_CATEGORY,
@@ -80,9 +77,6 @@ export default function ImageViewerApp() {
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [manifest, setManifest] = useState<ImageManifest | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
-  const [favoriteImageNumbers, setFavoriteImageNumbers] = useState(() =>
-    loadFavoriteImageNumbers(),
-  );
   const [displayState, setDisplayState] = useState<ImageViewerDisplayState>(
     () =>
       typeof window === "undefined"
@@ -100,6 +94,16 @@ export default function ImageViewerApp() {
   const isFavoritesPage =
     typeof window !== "undefined" &&
     window.location.pathname.replace(/\/+$/u, "") === "/images/favorites";
+
+  const favoriteImageNumbers = useMemo(
+    () =>
+      new Set(
+        manifest?.images
+          .filter((image) => image.favorite)
+          .map((image) => image.imageNumber) ?? [],
+      ),
+    [manifest],
+  );
 
   useEffect(() => {
     const controller = new AbortController();
@@ -186,32 +190,10 @@ export default function ImageViewerApp() {
 
   const handleToggleFavorite = useCallback(
     (entry: ImageManifestEntry) => {
-      const next = new Set(favoriteImageNumbers);
-      const favorite = !next.has(entry.imageNumber);
-      if (favorite) {
-        next.add(entry.imageNumber);
-      } else {
-        next.delete(entry.imageNumber);
-      }
-      persistFavoriteImageNumbers(next);
-      setFavoriteImageNumbers(next);
-      logEvent("image_viewer_favorite_toggled", {
-        imageNumber: entry.imageNumber,
-        category: entry.category,
-        filename: entry.filename,
-        favorite,
-        favoriteCount: next.size,
-      });
-    },
-    [favoriteImageNumbers],
-  );
-
-  // Toggle an image's manual-used mark. The mark is keyed by image number on the
-  // server, so every manifest entry sharing that number flips together. The grid
-  // updates optimistically and reverts if the request fails.
-  const handleToggleUsed = useCallback(
-    (entry: ImageManifestEntry) => {
-      const nextUsed = !entry.manuallyUsed;
+      const favorite = !entry.favorite;
+      const nextFavoriteCount = favorite
+        ? favoriteImageNumbers.size + 1
+        : favoriteImageNumbers.size - 1;
       setActionError(null);
       setManifest((current) =>
         current === null
@@ -220,12 +202,19 @@ export default function ImageViewerApp() {
               ...current,
               images: current.images.map((image) =>
                 image.imageNumber === entry.imageNumber
-                  ? { ...image, manuallyUsed: nextUsed }
+                  ? { ...image, favorite }
                   : image,
               ),
             },
       );
-      setManualUsed(entry.imageNumber, nextUsed).catch((error: unknown) => {
+      logEvent("image_viewer_favorite_toggled", {
+        imageNumber: entry.imageNumber,
+        category: entry.category,
+        filename: entry.filename,
+        favorite,
+        favoriteCount: nextFavoriteCount,
+      });
+      setFavorite(entry.imageNumber, favorite).catch((error: unknown) => {
         setActionError(
           error instanceof Error ? error.message : "Failed to update.",
         );
@@ -236,15 +225,58 @@ export default function ImageViewerApp() {
                 ...current,
                 images: current.images.map((image) =>
                   image.imageNumber === entry.imageNumber
-                    ? { ...image, manuallyUsed: !nextUsed }
+                    ? { ...image, favorite: !favorite }
                     : image,
                 ),
               },
         );
       });
     },
-    [],
+    [favoriteImageNumbers],
   );
+
+  // Toggle an image's manual-used mark. The mark is keyed by image number on the
+  // server, so every manifest entry sharing that number flips together. The grid
+  // updates optimistically and reverts if the request fails.
+  const handleToggleUsed = useCallback((entry: ImageManifestEntry) => {
+    const nextUsed = !entry.manuallyUsed;
+    setActionError(null);
+    setManifest((current) =>
+      current === null
+        ? current
+        : {
+            ...current,
+            images: current.images.map((image) =>
+              image.imageNumber === entry.imageNumber
+                ? { ...image, manuallyUsed: nextUsed }
+                : image,
+            ),
+          },
+    );
+    logEvent("image_viewer_manual_used_toggled", {
+      imageNumber: entry.imageNumber,
+      category: entry.category,
+      filename: entry.filename,
+      manuallyUsed: nextUsed,
+    });
+    setManualUsed(entry.imageNumber, nextUsed).catch((error: unknown) => {
+      setActionError(
+        error instanceof Error ? error.message : "Failed to update.",
+      );
+      setManifest((current) =>
+        current === null
+          ? current
+          : {
+              ...current,
+              images: current.images.map((image) =>
+                image.imageNumber === entry.imageNumber
+                  ? { ...image, manuallyUsed: !nextUsed }
+                  : image,
+              ),
+            },
+      );
+    });
+  }, []);
 
   // Move an image to a different category subdirectory. The grid updates
   // optimistically and reverts to the original category if the move fails.
@@ -333,7 +365,7 @@ export default function ImageViewerApp() {
         <span
           style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}
         >
-          {isFavoritesPage ? "Saved in this browser" : "Candidate card art"}
+          {isFavoritesPage ? "Saved in tracked JSON" : "Candidate card art"}
         </span>
       </header>
 

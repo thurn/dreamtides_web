@@ -5,11 +5,11 @@ import type { ColumnCount, ImageManifestEntry } from "./types";
 export interface ImageGridProps {
   images: readonly ImageManifestEntry[];
   columns: ColumnCount;
-  /** Shutterstock image numbers favorited in this browser. */
+  /** Shutterstock image numbers favorited in tracked editor state. */
   favoriteImageNumbers: ReadonlySet<string>;
   /** Every category an image can be moved into, in display order. */
   categories: readonly string[];
-  /** Toggle this browser's favorite mark for an image. */
+  /** Toggle the tracked favorite mark for an image. */
   onToggleFavorite: (image: ImageManifestEntry) => void;
   /** Toggle the curator's manual-used mark for an image. */
   onToggleUsed: (image: ImageManifestEntry) => void;

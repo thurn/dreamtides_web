@@ -15,9 +15,10 @@ import {
   readApprovedImageNumbers,
   readFigmentImageNumbers,
   readImageMetadata,
-  readManualUsedImageNumbers,
+  readImageViewerState,
   readNameHistory,
   readUsedImageNumbers,
+  setFavorite,
   setManualUsed,
 } from "./image-viewer-data.mjs";
 
@@ -38,12 +39,14 @@ describe("data helpers over a temp working set", () => {
   let cardsTomlPath;
   let extraTomlPath;
   let figmentsTomlPath;
+  let statePath;
 
   beforeEach(() => {
     root = mkdtempSync(join(tmpdir(), "image-viewer-"));
     cardsTomlPath = join(root, "cards.toml");
     extraTomlPath = join(root, "cards_extra.toml");
     figmentsTomlPath = join(root, "figments.toml");
+    statePath = join(root, "image-viewer-state.json");
 
     mkdirSync(join(root, "warrior"));
     mkdirSync(join(root, "child"));
@@ -64,11 +67,11 @@ describe("data helpers over a temp working set", () => {
       [
         "[[cards]]",
         'name = "Old Gate Knight"',
-        "image-number = 1111",
+        'image-number = 1111',
         "",
         "[[cards]]",
         'name = "Archer"',
-        "image-number = 2222",
+        'image-number = 2222',
         "",
       ].join("\n"),
     );
@@ -94,13 +97,13 @@ describe("data helpers over a temp working set", () => {
         "[[cards]]",
         'id = "00000000-0000-0000-0000-000000000001"',
         'name = "Gate Knight"',
-        'image-number = 1111',
+        "image-number = 1111",
         "tags = []",
         "",
         "[[cards]]",
         'id = "00000000-0000-0000-0000-000000000002"',
         'name = "Archer"',
-        'image-number = 2222',
+        "image-number = 2222",
         'tags = ["Art Rework"]',
         "",
         "[[cards]]",
@@ -166,6 +169,7 @@ describe("data helpers over a temp working set", () => {
       cardsTomlPath,
       figmentsTomlPath,
       nameHistoryTomlPaths: [cardsTomlPath],
+      statePath,
     });
     const byNumber = new Map(manifest.images.map((i) => [i.imageNumber, i]));
     // 3333 has no card, but a figment claims it.
@@ -198,6 +202,7 @@ describe("data helpers over a temp working set", () => {
       root,
       cardsTomlPath,
       nameHistoryTomlPaths: [cardsTomlPath, extraTomlPath],
+      statePath,
     });
     expect(manifest.categories).toEqual(["child", "warrior"]);
 
@@ -218,31 +223,45 @@ describe("data helpers over a temp working set", () => {
     expect(byNumber.get("3333")).toMatchObject({
       category: "child",
       used: false,
+      favorite: false,
       manuallyUsed: false,
       cardName: null,
       cardNames: [],
     });
   });
 
-  it("round-trips manual-used marks and reflects them in the manifest", () => {
-    expect(readManualUsedImageNumbers(root).size).toBe(0);
+  it("round-trips tracked favorite and manual-used marks", () => {
+    expect(readImageViewerState(statePath)).toMatchObject({
+      favoriteImageNumbers: new Set(),
+      manuallyUsedImageNumbers: new Set(),
+    });
 
-    setManualUsed(root, "3333", true);
-    expect(readManualUsedImageNumbers(root).has("3333")).toBe(true);
+    setFavorite(statePath, "2222", true);
+    setManualUsed(statePath, "3333", true);
+    expect(readImageViewerState(statePath)).toMatchObject({
+      favoriteImageNumbers: new Set(["2222"]),
+      manuallyUsedImageNumbers: new Set(["3333"]),
+    });
 
     const manifest = buildImageManifest({
       root,
       cardsTomlPath,
       nameHistoryTomlPaths: [cardsTomlPath],
+      statePath,
     });
     const byNumber = new Map(manifest.images.map((i) => [i.imageNumber, i]));
+    expect(byNumber.get("2222")?.favorite).toBe(true);
     expect(byNumber.get("3333")?.manuallyUsed).toBe(true);
     // Card-derived used is unaffected by the manual mark.
     expect(byNumber.get("1111")?.manuallyUsed).toBe(false);
     expect(byNumber.get("1111")?.used).toBe(true);
 
-    setManualUsed(root, "3333", false);
-    expect(readManualUsedImageNumbers(root).has("3333")).toBe(false);
+    setFavorite(statePath, "2222", false);
+    setManualUsed(statePath, "3333", false);
+    expect(readImageViewerState(statePath)).toMatchObject({
+      favoriteImageNumbers: new Set(),
+      manuallyUsedImageNumbers: new Set(),
+    });
   });
 
   it("moves an image to a different category, preserving the filename", () => {

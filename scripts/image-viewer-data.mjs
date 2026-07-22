@@ -26,12 +26,13 @@ export const DEFAULT_TAGGED_ROOT = join(
 export const METADATA_FILENAME = "untagged-categorized.json";
 
 /**
- * Editorial overrides authored from the image viewer live alongside the images
- * in the tagged root. The manual-used file records image numbers a curator has
- * hand-marked as "used" so they hide from the candidate grid even though no card
- * claims them yet.
+ * Editorial state authored from the image viewer lives in the repository so it
+ * can be reviewed and shared with every checkout.
  */
-export const MANUAL_USED_FILENAME = "manual-used.json";
+export const DEFAULT_IMAGE_VIEWER_STATE_PATH = join(
+  "data",
+  "image-viewer-state.json",
+);
 
 /**
  * The "Generic" pool combines every non-specialized character subdirectory
@@ -267,60 +268,95 @@ export function readImageMetadata(metadataPath) {
   return byImageNumber;
 }
 
-/** Absolute path of the manual-used override file inside the tagged root. */
-export function manualUsedPath(root) {
-  return join(root, MANUAL_USED_FILENAME);
+/**
+ * Normalize an image-number list from persisted JSON. Invalid entries are
+ * ignored and duplicates collapse into one set member.
+ */
+function normalizeImageNumbers(value) {
+  return new Set(
+    (Array.isArray(value) ? value : [])
+      .filter((entry) => typeof entry === "string")
+      .map((entry) => entry.trim())
+      .filter((entry) => entry !== ""),
+  );
 }
 
 /**
- * Read the set of image numbers a curator has hand-marked as used. The override
- * file is a JSON array of image-number strings. A missing or malformed file
- * yields an empty set, so the viewer degrades gracefully on a fresh working set.
- * Returns a `Set<string>` keyed the same way as `imageNumberFromFilename`.
+ * Read the tracked image-viewer state. Missing or malformed JSON yields empty
+ * sets so a fresh checkout still renders the editor.
  */
-export function readManualUsedImageNumbers(root) {
-  const path = manualUsedPath(root);
-  if (!existsSync(path)) {
-    return new Set();
+export function readImageViewerState(
+  statePath = DEFAULT_IMAGE_VIEWER_STATE_PATH,
+) {
+  if (!existsSync(statePath)) {
+    return {
+      favoriteImageNumbers: new Set(),
+      manuallyUsedImageNumbers: new Set(),
+    };
   }
   try {
-    const parsed = JSON.parse(readFileSync(path, "utf8"));
-    if (!Array.isArray(parsed)) {
-      return new Set();
-    }
-    return new Set(
-      parsed
-        .filter((value) => typeof value === "string" && value.trim() !== "")
-        .map((value) => value.trim()),
-    );
+    const parsed = JSON.parse(readFileSync(statePath, "utf8"));
+    return {
+      favoriteImageNumbers: normalizeImageNumbers(parsed?.favoriteImageNumbers),
+      manuallyUsedImageNumbers: normalizeImageNumbers(
+        parsed?.manuallyUsedImageNumbers,
+      ),
+    };
   } catch {
-    return new Set();
+    return {
+      favoriteImageNumbers: new Set(),
+      manuallyUsedImageNumbers: new Set(),
+    };
   }
 }
 
-/** Persist the manual-used override set as a sorted JSON array. */
-export function writeManualUsedImageNumbers(root, imageNumbers) {
-  const sorted = [...imageNumbers].sort((a, b) => a.localeCompare(b));
-  writeFileSync(manualUsedPath(root), `${JSON.stringify(sorted, null, 2)}\n`);
+/** Persist both editorial sets in stable order for reviewable diffs. */
+export function writeImageViewerState(statePath, state) {
+  const stableState = {
+    favoriteImageNumbers: [...state.favoriteImageNumbers].sort((a, b) =>
+      a.localeCompare(b),
+    ),
+    manuallyUsedImageNumbers: [...state.manuallyUsedImageNumbers].sort((a, b) =>
+      a.localeCompare(b),
+    ),
+  };
+  writeFileSync(statePath, `${JSON.stringify(stableState, null, 2)}\n`);
 }
 
-/**
- * Mark or unmark a single image number as manually used and persist the change.
- * Returns the updated set so callers can report the new state.
- */
-export function setManualUsed(root, imageNumber, used) {
+/** Toggle one member of a tracked image-number set. */
+function setTrackedImageNumber(statePath, field, imageNumber, enabled) {
   const key = String(imageNumber).trim();
   if (key === "") {
     throw new Error("imageNumber is required.");
   }
-  const current = readManualUsedImageNumbers(root);
-  if (used) {
-    current.add(key);
+  const state = readImageViewerState(statePath);
+  if (enabled) {
+    state[field].add(key);
   } else {
-    current.delete(key);
+    state[field].delete(key);
   }
-  writeManualUsedImageNumbers(root, current);
-  return current;
+  writeImageViewerState(statePath, state);
+  return state;
+}
+
+/** Mark or unmark one image number as a favorite. */
+export function setFavorite(statePath, imageNumber, favorite) {
+  return setTrackedImageNumber(
+    statePath,
+    "favoriteImageNumbers",
+    imageNumber,
+    favorite,
+  );
+}
+
+/** Mark or unmark one image number as manually used. */
+export function setManualUsed(statePath, imageNumber, used) {
+  return setTrackedImageNumber(
+    statePath,
+    "manuallyUsedImageNumbers",
+    imageNumber,
+    used,
+  );
 }
 
 /**
@@ -405,16 +441,16 @@ export function listCategories(root) {
  * image number, the authored card name / narrative (when present in the
  * metadata JSON), the names the image has ever been published under in the
  * card-data TOMLs, whether a non-rework card or a figment already uses the
- * image, and whether a curator has hand-marked the image as used. Images whose card
- * carries the `Art OK` tag are approved final art and are dropped from the
- * manifest entirely. The frontend filters the remainder by category and by the
- * used flags.
+ * image, and the curator's tracked favorite and manual-used marks. Images whose
+ * card carries the `Art OK` tag are approved final art and are dropped from the
+ * manifest entirely. The frontend filters the remainder by category and state.
  */
 export function buildImageManifest({
   root = DEFAULT_TAGGED_ROOT,
   cardsTomlPath = DEFAULT_CARDS_TOML,
   figmentsTomlPath = DEFAULT_FIGMENTS_TOML,
   nameHistoryTomlPaths = DEFAULT_NAME_HISTORY_TOMLS,
+  statePath = DEFAULT_IMAGE_VIEWER_STATE_PATH,
 } = {}) {
   const categories = listCategories(root);
   const usedImageNumbers = existsSync(cardsTomlPath)
@@ -428,7 +464,8 @@ export function buildImageManifest({
     : new Set();
   const nameHistory = readNameHistory(nameHistoryTomlPaths);
   const metadata = readImageMetadata(join(root, METADATA_FILENAME));
-  const manualUsedImageNumbers = readManualUsedImageNumbers(root);
+  const { favoriteImageNumbers, manuallyUsedImageNumbers } =
+    readImageViewerState(statePath);
 
   const images = [];
   for (const category of categories) {
@@ -455,7 +492,8 @@ export function buildImageManifest({
         used:
           usedImageNumbers.has(imageNumber) ||
           figmentImageNumbers.has(imageNumber),
-        manuallyUsed: manualUsedImageNumbers.has(imageNumber),
+        favorite: favoriteImageNumbers.has(imageNumber),
+        manuallyUsed: manuallyUsedImageNumbers.has(imageNumber),
         cardName: meta?.cardName ?? null,
         narrative: meta?.narrative ?? null,
         subtype: meta?.subtype ?? null,

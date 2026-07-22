@@ -65,6 +65,23 @@ export async function setManualUsed(
   }
 }
 
+/** Mark or unmark an image number as a favorite in tracked editor state. */
+export async function setFavorite(
+  imageNumber: string,
+  favorite: boolean,
+): Promise<void> {
+  const response = await fetch("/api/images/favorite", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ imageNumber, favorite }),
+  });
+  if (!response.ok) {
+    throw new Error(
+      await mutationErrorMessage(response, "Failed to update the favorite."),
+    );
+  }
+}
+
 /**
  * Move an image to a different category subdirectory, returning its new
  * `{ category, filename }` (the filename is preserved).

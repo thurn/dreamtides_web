@@ -2,15 +2,18 @@ import { createReadStream, existsSync, statSync } from "node:fs";
 import { join, normalize, resolve } from "node:path";
 import {
   DEFAULT_CARDS_TOML,
+  DEFAULT_IMAGE_VIEWER_STATE_PATH,
   DEFAULT_NAME_HISTORY_TOMLS,
   DEFAULT_TAGGED_ROOT,
   buildImageManifest,
   moveImageCategory,
+  setFavorite,
   setManualUsed,
 } from "./image-viewer-data.mjs";
 
 const MANIFEST_PATH = "/api/images/manifest";
 const FILE_PATH_PREFIX = "/api/images/file/";
+const FAVORITE_PATH = "/api/images/favorite";
 const MANUAL_USED_PATH = "/api/images/manual-used";
 const CATEGORY_PATH = "/api/images/category";
 
@@ -87,8 +90,8 @@ function resolveImagePath(root, rawPath) {
  * Vite dev-server middleware backing `npm run images`. It exposes the
  * candidate-image manifest, streams the individual image files (which live
  * outside the repository in the local Shutterstock working set and therefore
- * cannot be served as static `public/` assets), and accepts the viewer's two
- * editorial mutations: toggling an image's manual-used mark and moving an image
+ * cannot be served as static `public/` assets), and accepts the viewer's
+ * editorial mutations: toggling favorite/manual-used marks and moving an image
  * between category subdirectories.
  */
 export function createImageViewerApiMiddleware({
@@ -97,6 +100,7 @@ export function createImageViewerApiMiddleware({
   nameHistoryTomlPaths = DEFAULT_NAME_HISTORY_TOMLS.map((relativePath) =>
     join(resolve("."), relativePath),
   ),
+  statePath = join(resolve("."), DEFAULT_IMAGE_VIEWER_STATE_PATH),
 } = {}) {
   return function imageViewerApiMiddleware(req, res, next) {
     const rawPath = rawPathFromUrl(req.url);
@@ -119,7 +123,12 @@ export function createImageViewerApiMiddleware({
         jsonResponse(
           res,
           200,
-          buildImageManifest({ root, cardsTomlPath, nameHistoryTomlPaths }),
+          buildImageManifest({
+            root,
+            cardsTomlPath,
+            nameHistoryTomlPaths,
+            statePath,
+          }),
         );
       } catch (error) {
         errorResponse(
@@ -129,6 +138,45 @@ export function createImageViewerApiMiddleware({
           error instanceof Error ? error.message : "Failed to build manifest.",
         );
       }
+      return;
+    }
+
+    if (rawPath === FAVORITE_PATH) {
+      if (req.method !== "POST") {
+        errorResponse(res, 405, "METHOD_NOT_ALLOWED", "Use POST.");
+        return;
+      }
+      readJsonBody(req)
+        .then((body) => {
+          const imageNumber = body?.imageNumber;
+          const favorite = body?.favorite;
+          if (typeof imageNumber !== "string" || imageNumber.trim() === "") {
+            errorResponse(res, 400, "BAD_REQUEST", "imageNumber is required.");
+            return;
+          }
+          if (typeof favorite !== "boolean") {
+            errorResponse(
+              res,
+              400,
+              "BAD_REQUEST",
+              "favorite must be a boolean.",
+            );
+            return;
+          }
+          setFavorite(statePath, imageNumber, favorite);
+          jsonResponse(res, 200, {
+            imageNumber: imageNumber.trim(),
+            favorite,
+          });
+        })
+        .catch((error) => {
+          errorResponse(
+            res,
+            400,
+            "FAVORITE_FAILED",
+            error instanceof Error ? error.message : "Failed to update.",
+          );
+        });
       return;
     }
 
@@ -149,7 +197,7 @@ export function createImageViewerApiMiddleware({
             errorResponse(res, 400, "BAD_REQUEST", "used must be a boolean.");
             return;
           }
-          setManualUsed(root, imageNumber, used);
+          setManualUsed(statePath, imageNumber, used);
           jsonResponse(res, 200, { imageNumber: imageNumber.trim(), used });
         })
         .catch((error) => {

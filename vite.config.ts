@@ -30,6 +30,11 @@ import { regenerateCardData } from "./scripts/setup-assets.mjs";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const buildGitSha = resolveBuildGitSha();
 const buildHash = resolveBuildHash();
+const imageViewerStatePath = path.join(
+  __dirname,
+  "data",
+  "image-viewer-state.json",
+);
 export const generatedCardDataWatchPaths = [
   path.join(__dirname, "data", "tabula", "cards_v2.toml"),
   path.join(__dirname, "public", "card-data.json"),
@@ -464,6 +469,7 @@ function imageViewerApiPlugin(): Plugin {
           nameHistoryTomlPaths: [
             path.join(__dirname, "data", "tabula", "cards_v2.toml"),
           ],
+          statePath: imageViewerStatePath,
         }),
       );
     },
@@ -825,6 +831,7 @@ export default defineConfig({
       // creating a worktree from reloading the dev server.
       ignored: [
         path.resolve(path.join(__dirname, "data", "tabula")) + "/**",
+        imageViewerStatePath,
         // Saving a quest writes a JSON file here; ignore it so the save does
         // not trigger a full page reload that would close the debug overlay.
         path.resolve(path.join(__dirname, "saved-quests")) + "/**",

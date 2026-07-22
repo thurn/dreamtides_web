@@ -267,11 +267,10 @@ http://localhost:5173/editor?q=moon&type=event&sort=name&dir=desc&size=large
 
 ## Image Viewer
 
-The standalone `/images` route browses candidate card art. Each image has a
-Favorite checkbox backed by browser-local storage and keyed by its Shutterstock
-image number, so the mark survives reloads and category changes. The toolbar's
-Favorites link opens `/images/favorites`, which shows every favorite including
-images marked as used.
+The standalone `/images` route browses candidate card art. Favorite and manual
+used marks are keyed by Shutterstock image number in the tracked
+`data/image-viewer-state.json` file. The toolbar's Favorites link opens
+`/images/favorites`, which shows every favorite including images marked as used.
 
 ## Examples
 
