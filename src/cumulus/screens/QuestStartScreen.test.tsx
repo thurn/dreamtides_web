@@ -76,7 +76,11 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
 describe("Cumulus QuestStartScreen (carousel)", () => {
   it("renders a page with identity, essence, and a Choose action per Dreamcaller", () => {
     const { container, root } = mount(
-      <QuestStartScreen dreamcallers={OFFERED} onPick={vi.fn()} />,
+      <QuestStartScreen
+        dreamcallers={OFFERED}
+        onPick={vi.fn()}
+        onReroll={vi.fn()}
+      />,
     );
 
     expect(container.textContent).toContain("Choose Your Dreamcaller");
@@ -105,7 +109,11 @@ describe("Cumulus QuestStartScreen (carousel)", () => {
 
   it("shows the tides cluster only for Dreamcallers that have tides", () => {
     const { container, root } = mount(
-      <QuestStartScreen dreamcallers={OFFERED} onPick={vi.fn()} />,
+      <QuestStartScreen
+        dreamcallers={OFFERED}
+        onPick={vi.fn()}
+        onReroll={vi.fn()}
+      />,
     );
 
     // caller-1 has no tides → no cluster.
@@ -128,7 +136,11 @@ describe("Cumulus QuestStartScreen (carousel)", () => {
   it("calls onPick with the Dreamcaller's id when its Choose action is pressed", () => {
     const onPick = vi.fn();
     const { container, root } = mount(
-      <QuestStartScreen dreamcallers={OFFERED} onPick={onPick} />,
+      <QuestStartScreen
+        dreamcallers={OFFERED}
+        onPick={onPick}
+        onReroll={vi.fn()}
+      />,
     );
 
     const button = container.querySelector<HTMLButtonElement>(
@@ -147,6 +159,35 @@ describe("Cumulus QuestStartScreen (carousel)", () => {
       root.unmount();
     });
   });
+
+  it("renders the top-right reroll icon and reports its debug action", () => {
+    const onReroll = vi.fn();
+    const { container, root } = mount(
+      <QuestStartScreen
+        dreamcallers={OFFERED}
+        onPick={vi.fn()}
+        onReroll={onReroll}
+      />,
+    );
+
+    const control = container.querySelector<HTMLElement>(
+      "[data-dreamcaller-reroll-control]",
+    );
+    const button = container.querySelector<HTMLButtonElement>(
+      '[data-testid="reroll-dreamcallers"]',
+    );
+    expect(control?.style.position).toBe("absolute");
+    expect(control?.style.right).not.toBe("");
+    expect(button?.getAttribute("aria-label")).toBe("Reroll Dreamcallers");
+    act(() => {
+      button?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(onReroll).toHaveBeenCalledOnce();
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });
 
 describe("Cumulus QuestStartScreen (desktop)", () => {
@@ -156,7 +197,11 @@ describe("Cumulus QuestStartScreen (desktop)", () => {
 
   it("renders every Dreamcaller as a standalone column, not a carousel", () => {
     const { container, root } = mount(
-      <QuestStartScreen dreamcallers={OFFERED} onPick={vi.fn()} />,
+      <QuestStartScreen
+        dreamcallers={OFFERED}
+        onPick={vi.fn()}
+        onReroll={vi.fn()}
+      />,
     );
 
     expect(container.textContent).toContain("Choose Your Dreamcaller");
@@ -187,7 +232,11 @@ describe("Cumulus QuestStartScreen (desktop)", () => {
 
   it("shows a hover-only tide disc per tide for tided Dreamcallers", () => {
     const { container, root } = mount(
-      <QuestStartScreen dreamcallers={OFFERED} onPick={vi.fn()} />,
+      <QuestStartScreen
+        dreamcallers={OFFERED}
+        onPick={vi.fn()}
+        onReroll={vi.fn()}
+      />,
     );
 
     // caller-1 has no tides → no tides node.

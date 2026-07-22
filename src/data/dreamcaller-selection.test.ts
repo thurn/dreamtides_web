@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   selectDreamcallerOffer,
+  selectDreamcallerOfferForReroll,
   selectDreamcallerOfferForSeed,
   toQuestDreamcaller,
 } from "./dreamcaller-selection";
@@ -60,6 +61,32 @@ describe("selectDreamcallerOffer", () => {
     expect(first.map((dreamcaller) => dreamcaller.id)).toEqual(
       second.map((dreamcaller) => dreamcaller.id),
     );
+  });
+
+  it("derives deterministic rerolls that change at least one shown id", () => {
+    const dreamcallers = ["a", "b", "c", "d", "e", "f"].map(makeDreamcaller);
+    const initial = selectDreamcallerOfferForReroll(
+      dreamcallers,
+      "room-seed",
+      0,
+    );
+    const rerolled = selectDreamcallerOfferForReroll(
+      dreamcallers,
+      "room-seed",
+      1,
+    );
+    const repeated = selectDreamcallerOfferForReroll(
+      dreamcallers,
+      "room-seed",
+      1,
+    );
+
+    expect(rerolled.map((dreamcaller) => dreamcaller.id)).toEqual(
+      repeated.map((dreamcaller) => dreamcaller.id),
+    );
+    expect(rerolled.some(
+      (dreamcaller) => !initial.some((shown) => shown.id === dreamcaller.id),
+    )).toBe(true);
   });
 });
 

@@ -145,6 +145,7 @@ function makeMutations(): QuestMutations {
   return {
     changeEssence: vi.fn(),
     startQuest: vi.fn(),
+    rerollDreamcallerOffer: vi.fn(),
     completeSite: vi.fn(),
     ensureRewardSiteRuntime: vi.fn(),
     acceptRewardSite: vi.fn(),

@@ -61,6 +61,53 @@ export function selectDreamcallerOfferForSeed<T = DreamcallerContent>(
   return selectDreamcallerOffer(dreamcallers, offerSize, offerRng(seed));
 }
 
+/**
+ * Derive the Dreamcaller offer for a shared debug-reroll count. Count zero is
+ * the room's original offer. Later counts use distinct deterministic salts and,
+ * when another Dreamcaller exists, guarantee that at least one shown id changes
+ * from the preceding offer.
+ */
+export function selectDreamcallerOfferForReroll<
+  T extends { readonly id: string } = DreamcallerContent,
+>(
+  dreamcallers: readonly T[],
+  seed: string,
+  rerollCount: number,
+  offerSize = 3,
+): T[] {
+  let offer = selectDreamcallerOfferForSeed(dreamcallers, seed, offerSize);
+  const normalizedCount = Math.max(0, Math.floor(rerollCount));
+
+  for (let count = 1; count <= normalizedCount; count += 1) {
+    const previousIds = new Set(offer.map((dreamcaller) => dreamcaller.id));
+    const replacementPool = dreamcallers.filter(
+      (dreamcaller) => !previousIds.has(dreamcaller.id),
+    );
+    const rerollSeed = `${seed}:debug-reroll:${String(count)}`;
+    const candidate = selectDreamcallerOfferForSeed(
+      dreamcallers,
+      rerollSeed,
+      offerSize,
+    );
+
+    if (
+      replacementPool.length > 0 &&
+      candidate.every((dreamcaller) => previousIds.has(dreamcaller.id))
+    ) {
+      const replacement = selectDreamcallerOfferForSeed(
+        replacementPool,
+        `${rerollSeed}:replacement`,
+        1,
+      )[0];
+      offer = [...candidate.slice(0, -1), replacement];
+    } else {
+      offer = candidate;
+    }
+  }
+
+  return offer;
+}
+
 /** Convert normalized Dreamcaller content into quest-state display data. */
 export function toQuestDreamcaller(
   dreamcaller: DreamcallerContent,

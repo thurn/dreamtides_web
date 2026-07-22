@@ -7,10 +7,12 @@
 
 import { useLayoutEffect, useRef, useState } from "react";
 import { ResourceChip } from "../components/hud/ResourceChip";
+import { IconButton } from "../components/controls/IconButton";
 import { RulesText } from "../components/card/RulesText";
 import { TideDisc, type TideDiscSize } from "../components/hud/TideDisc";
 import { type Tide } from "../components/hud/tide-spec";
 import { token } from "../primitives/tokens";
+import { GLYPHS } from "../primitives/glyph";
 import type { DreamcallerPortraitFocus } from "../../types/content";
 
 /** One tide shown on a Dreamcaller, already resolved to display copy. Both the
@@ -181,6 +183,37 @@ export interface QuestStartScreenProps {
   dreamcallers: DreamcallerOfferView[];
   /** Called with a Dreamcaller's id when the player commits to it. */
   onPick: (dreamcallerId: string) => void;
+  /** Requests a shared debug reroll of the shown Dreamcallers. */
+  onReroll: () => void;
+}
+
+/** Shared top-right debug action used by both quest-start layouts. */
+export function QuestStartRerollControl({
+  onReroll,
+}: {
+  readonly onReroll: () => void;
+}) {
+  return (
+    <div
+      data-dreamcaller-reroll-control
+      onPointerDown={(event) => {
+        event.stopPropagation();
+      }}
+      style={{
+        position: "absolute",
+        top: `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${token("--space-5")})`,
+        right: `max(var(--safe-area-inset-right), ${token("--gutter")})`,
+        zIndex: 8,
+      }}
+    >
+      <IconButton
+        glyph={GLYPHS.refresh}
+        label="Reroll Dreamcallers"
+        onPress={onReroll}
+        testId="reroll-dreamcallers"
+      />
+    </div>
+  );
 }
 
 /** The small purple uppercase context label painted directly over scene art. */

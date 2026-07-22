@@ -66,6 +66,7 @@ export interface CoopActions {
 
   // --- dreamcaller ---
   selectDreamcaller: (dreamcallerId: string) => Promise<number>;
+  rerollDreamcallerOffer: () => Promise<number>;
 
   // --- navigation ---
   setScreen: (screen: unknown, activeSiteId?: string | null) => Promise<number>;
@@ -269,6 +270,7 @@ export function makeActions(append: AppendFn): CoopActions {
     // --- dreamcaller ---
     selectDreamcaller: (dreamcallerId) =>
       emit("SELECT_DREAMCALLER", { dreamcallerId }),
+    rerollDreamcallerOffer: () => emit("REROLL_DREAMCALLER_OFFER", {}),
 
     // --- navigation ---
     setScreen: (screen, activeSiteId) =>

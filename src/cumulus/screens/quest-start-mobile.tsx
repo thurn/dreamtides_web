@@ -17,6 +17,7 @@ import {
   AbilityReveal,
   ConsoleDivider,
   OnMediaEyebrow,
+  QuestStartRerollControl,
   TidesEssenceBlock,
   type DreamcallerOfferView,
   type QuestStartScreenProps,
@@ -217,6 +218,7 @@ function DreamcallerPage({
 export function CarouselSelect({
   dreamcallers,
   onPick,
+  onReroll,
 }: QuestStartScreenProps) {
   const [index, setIndex] = useState(0);
   const [dx, setDx] = useState(0);
@@ -264,6 +266,7 @@ export function CarouselSelect({
       onPointerCancel={onPointerUp}
     >
       <ScreenHeader />
+      <QuestStartRerollControl onReroll={onReroll} />
 
       {/* Track */}
       <div

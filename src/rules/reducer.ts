@@ -244,6 +244,8 @@ export function routeDomain(
     // --- dreamcaller & run assembly ---
     case "SELECT_DREAMCALLER":
       return questCase(state, lifecycle.selectDreamcaller(quest, payload));
+    case "REROLL_DREAMCALLER_OFFER":
+      return questCase(state, lifecycle.rerollDreamcallerOffer(quest));
     case "START_QUEST":
       return questCase(state, lifecycle.startQuest(quest, payload, ctx));
 

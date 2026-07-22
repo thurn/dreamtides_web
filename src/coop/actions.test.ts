@@ -81,6 +81,7 @@ function captureAllDrafts(): EventDraft[] {
   void actions.resetQuest();
   void actions.loadState({});
   void actions.selectDreamcaller("dc-1");
+  void actions.rerollDreamcallerOffer();
   void actions.setScreen({ type: "questStart" });
   void actions.travelToDreamscape("node-1");
   void actions.markSiteVisited("site-1");

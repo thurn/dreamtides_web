@@ -35,6 +35,8 @@ export { deriveEntryIdCounter };
 export interface QuestMutations {
   changeEssence: (delta: number, source: string) => void;
   startQuest: (dreamcaller: DreamcallerContent, seedOverride?: string) => void;
+  /** Request a shared debug reroll of the quest-start Dreamcaller offer. */
+  rerollDreamcallerOffer: () => void;
   completeSite: (siteId: string, source: string) => void;
   ensureRewardSiteRuntime: (siteId: string) => void;
   /**

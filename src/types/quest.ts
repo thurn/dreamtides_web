@@ -400,7 +400,11 @@ export type SiteRuntimeState =
 
 /** Discriminated union for the current screen. */
 export type Screen =
-  | { type: "questStart" }
+  | {
+      type: "questStart";
+      /** Shared debug-reroll count used to derive the shown Dreamcaller offer. */
+      rerollCount?: number;
+    }
   | { type: "atlas" }
   | { type: "dreamscape" }
   | { type: "site"; siteId: string }

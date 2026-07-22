@@ -138,6 +138,8 @@ export function CoopQuestProvider({
       // ---- lifecycle ----
       startQuest: (dreamcaller) =>
         dispatch(actions.startQuest({ dreamcallerId: dreamcaller.id })),
+      rerollDreamcallerOffer: () =>
+        dispatch(actions.rerollDreamcallerOffer()),
       setDreamcallerSelection: (resolvedPackage) =>
         dispatch(actions.selectDreamcaller(resolvedPackage.dreamcaller.id)),
       resetQuest: () => dispatch(actions.resetQuest()),

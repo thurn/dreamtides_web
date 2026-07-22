@@ -293,6 +293,26 @@ export function dismissStartingDeckPopup(quest: QuestState): QuestState | null {
   return { ...quest, hasSeenStartingDeckPopup: true };
 }
 
+/**
+ * `REROLL_DREAMCALLER_OFFER { }` — increment the shared quest-start reroll
+ * count. The screen adapter combines this count with the immutable room seed,
+ * so the event log reproduces the same offer on every client and reload.
+ */
+export function rerollDreamcallerOffer(
+  quest: QuestState,
+): QuestState | null {
+  if (quest.dreamcaller !== null || quest.screen.type !== "questStart") {
+    return null;
+  }
+  return {
+    ...quest,
+    screen: {
+      type: "questStart",
+      rerollCount: (quest.screen.rerollCount ?? 0) + 1,
+    },
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Dreamcaller selection & run assembly
 // ---------------------------------------------------------------------------

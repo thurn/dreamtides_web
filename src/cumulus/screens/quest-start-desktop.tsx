@@ -17,6 +17,7 @@ import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
 import {
   AbilityReveal,
   ConsoleDivider,
+  QuestStartRerollControl,
   TidesEssenceBlock,
   type DreamcallerOfferView,
   type QuestStartScreenProps,
@@ -201,7 +202,11 @@ function DreamcallerColumn({
 /** The desktop Dreamcaller-selection layout: a small purple eyebrow title near
  * the top of a shared background, then the offered Dreamcallers side by side as
  * fixed-width portrait columns. */
-export function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
+export function DesktopSelect({
+  dreamcallers,
+  onPick,
+  onReroll,
+}: QuestStartScreenProps) {
   return (
     <div
       className="cumulus"
@@ -229,6 +234,7 @@ export function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
         }}
       />
       <Motes on tint="violet" zIndex={0} />
+      <QuestStartRerollControl onReroll={onReroll} />
 
       {/* Small purple eyebrow title, near the top. */}
       <div

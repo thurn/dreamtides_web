@@ -6,9 +6,10 @@
 // (`quest-start-view-model.ts`); the Cumulus screen itself stays pure and
 // data-driven, per the isolation boundary.
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useQuest } from "../../state/quest-context";
-import { selectDreamcallerOfferForSeed } from "../../data/dreamcaller-selection";
+import { selectDreamcallerOfferForReroll } from "../../data/dreamcaller-selection";
+import { logEventOnce } from "../../logging";
 import { buildDreamcallerOfferViews } from "./quest-start-view-model";
 import { QuestStartScreen } from "../../cumulus/screens/QuestStartScreen";
 
@@ -19,10 +20,26 @@ import { QuestStartScreen } from "../../cumulus/screens/QuestStartScreen";
 export function QuestStartScreenAdapter() {
   const { state, mutations, questContent } = useQuest();
   const questSeed = state.seed;
+  const rerollCount =
+    state.screen.type === "questStart" ? (state.screen.rerollCount ?? 0) : 0;
   const offered = useMemo(
-    () => selectDreamcallerOfferForSeed(questContent.dreamcallers, questSeed),
-    [questContent.dreamcallers, questSeed],
+    () =>
+      selectDreamcallerOfferForReroll(
+        questContent.dreamcallers,
+        questSeed,
+        rerollCount,
+      ),
+    [questContent.dreamcallers, questSeed, rerollCount],
   );
+
+  useEffect(() => {
+    const dreamcallerIds = offered.map((dreamcaller) => dreamcaller.id);
+    logEventOnce(
+      `dreamcaller-offer:${questSeed}:${String(rerollCount)}:${dreamcallerIds.join(",")}`,
+      "dreamcaller_offer_shown",
+      { dreamcallerIds, questSeed, rerollCount },
+    );
+  }, [offered, questSeed, rerollCount]);
 
   const dreamcallers = useMemo(
     () =>
@@ -41,5 +58,16 @@ export function QuestStartScreenAdapter() {
     [mutations, offered, questSeed],
   );
 
-  return <QuestStartScreen dreamcallers={dreamcallers} onPick={handlePick} />;
+  const handleReroll = useCallback(() => {
+    mutations.rerollDreamcallerOffer();
+  }, [mutations]);
+
+  return (
+    <QuestStartScreen
+      key={rerollCount}
+      dreamcallers={dreamcallers}
+      onPick={handlePick}
+      onReroll={handleReroll}
+    />
+  );
 }

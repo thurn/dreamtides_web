@@ -1,0 +1,2 @@
+src/cumulus/screens/quest-start-mobile.tsx: ScreenHeader declares the same `position: "absolute"` style property twice.
+src/logging.ts: logEvent's sink error handler repeats the same best-effort transport comment twice.

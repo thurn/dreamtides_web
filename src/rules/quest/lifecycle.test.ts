@@ -388,6 +388,34 @@ describe("TRAVEL_TO_DREAMSCAPE", () => {
 });
 
 // ---------------------------------------------------------------------------
+// REROLL_DREAMCALLER_OFFER — shared quest-start debug state
+// ---------------------------------------------------------------------------
+
+describe("REROLL_DREAMCALLER_OFFER", () => {
+  it("increments the persisted reroll count while choosing a Dreamcaller", () => {
+    const start = genesis();
+    const once = apply(start, "REROLL_DREAMCALLER_OFFER", {});
+    const twice = apply(once, "REROLL_DREAMCALLER_OFFER", {});
+
+    expect(once.quest.screen).toEqual({ type: "questStart", rerollCount: 1 });
+    expect(twice.quest.screen).toEqual({ type: "questStart", rerollCount: 2 });
+  });
+
+  it("bounces after the quest has started", () => {
+    registerQuestLifecycleContentProvider(deterministicProvider());
+    const started = apply(genesis(), "START_QUEST", { dreamcallerId: "dc-1" });
+    const out = reduceGameEvent(
+      started,
+      event("REROLL_DREAMCALLER_OFFER", {}),
+      ctx(),
+    );
+
+    expect(out.outcome).toBe("bounced");
+    expect(out.state).toBe(started);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // SELECT_DREAMCALLER — determinism
 // ---------------------------------------------------------------------------
 

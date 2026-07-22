@@ -53,6 +53,7 @@ export interface EventPayloads {
 
   // --- dreamcaller ---
   SELECT_DREAMCALLER: { dreamcallerId: string };
+  REROLL_DREAMCALLER_OFFER: Record<string, never>;
 
   // --- navigation ---
   SET_SCREEN: { screen: unknown; activeSiteId?: string | null };
@@ -227,6 +228,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   RESET_QUEST: true,
   LOAD_STATE: true,
   SELECT_DREAMCALLER: true,
+  REROLL_DREAMCALLER_OFFER: true,
   SET_SCREEN: true,
   TRAVEL_TO_DREAMSCAPE: true,
   MARK_SITE_VISITED: true,
