@@ -209,8 +209,10 @@ describe("Cumulus QuestStartScreen (carousel)", () => {
     const source = container.querySelector<HTMLElement>(
       `[data-dreamcaller-ability="${dreamcaller.id}"]`,
     );
-    expect(source?.dataset.revealPrimaryVariant).toBe("text");
-    expect(source?.dataset.revealSecondaryTitles).toBe(bane.term);
+    expect(source?.dataset.revealPrimaryVariant).toBe("source");
+    expect(source?.dataset.revealSecondaryTitles).toBe(
+      [reclaim.term, bane.term].join("\u001f"),
+    );
     expect(source?.querySelector("[data-glossary-term]")).toBeNull();
 
     const description = document.querySelector(

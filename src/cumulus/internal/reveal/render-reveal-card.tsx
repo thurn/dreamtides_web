@@ -12,6 +12,7 @@ const RevealGameCard = lazy(async () => {
 });
 
 export function renderRevealCard(card: RevealCard, width: number): ReactElement {
+  if (card.kind === "source") return <div data-reveal-render="source" style={{ width }} />;
   if (card.kind === "infoCard") return <div style={{ width, "--info-card-width": `${String(width)}px` } as CSSProperties}><InfoCard {...card.card} /></div>;
   if (card.kind === "galleryAction") {
     return (

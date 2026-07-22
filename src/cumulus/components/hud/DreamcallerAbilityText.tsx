@@ -1,7 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { renderRulesText } from "../card/RulesText";
 import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
-import type { InfoCardProps } from "../overlay/InfoCard";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
@@ -97,12 +96,8 @@ function AbilityCopy({ text }: { readonly text: string }) {
 function AbilityDefinitionSource({
   dreamcallerId,
   text,
-  primary,
-  secondaries,
   presentation,
 }: DreamcallerAbilityTextProps & {
-  readonly primary: Readonly<InfoCardProps>;
-  readonly secondaries: readonly Readonly<InfoCardProps>[];
   readonly presentation: NonNullable<
     DreamcallerAbilityTextProps["presentation"]
   >;
@@ -113,8 +108,8 @@ function AbilityDefinitionSource({
       entityId: revealEntityId("dreamcaller-ability", dreamcallerId),
     },
     spec: {
-      primary: { kind: "infoCard", card: primary },
-      secondaries,
+      primary: { kind: "source", description: text },
+      secondaries: rulesTextDefinitionCards(text),
     },
     feedback: "stationary",
   });
@@ -154,9 +149,9 @@ export function DreamcallerAbilityText({
   text,
   presentation = "natural",
 }: DreamcallerAbilityTextProps) {
-  const [primary, ...secondaries] = rulesTextDefinitionCards(text);
+  const definitions = rulesTextDefinitionCards(text);
   const copy = <AbilityCopy text={text} />;
-  if (primary === undefined) {
+  if (definitions.length === 0) {
     return presentation === "selectionCard" ? (
       <AlignedAbilityBox>{copy}</AlignedAbilityBox>
     ) : (
@@ -168,8 +163,6 @@ export function DreamcallerAbilityText({
       dreamcallerId={dreamcallerId}
       text={text}
       presentation={presentation}
-      primary={primary}
-      secondaries={secondaries}
     />
   );
 }

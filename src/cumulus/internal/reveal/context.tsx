@@ -64,8 +64,10 @@ function gameCardDescription(card: NonNullable<Extract<RevealSpec["primary"], { 
 }
 
 function revealDescription(spec: RevealSpec): string {
-  const primary = spec.primary.kind === "infoCard"
-    ? infoCardDescription(spec.primary.card)
+  const primary = spec.primary.kind === "source"
+    ? spec.primary.description
+    : spec.primary.kind === "infoCard"
+      ? infoCardDescription(spec.primary.card)
     : spec.primary.kind === "galleryAction"
       ? spec.primary.action.label
     : spec.primary.displaySnapshot === undefined
@@ -265,8 +267,10 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
       interactionId: overlayActive.interactionId,
       primary: {
         kind: primary.kind,
-        variant: primary.kind === "gameCard"
-          ? "complete"
+        variant: primary.kind === "source"
+          ? "in-place"
+          : primary.kind === "gameCard"
+            ? "complete"
           : primary.kind === "galleryAction"
             ? "card-shaped"
             : infoCardVariant(primary.card),
@@ -371,8 +375,10 @@ export function useRevealSource(registration: RevealSourceRegistration): RevealS
       "data-reveal-feedback": feedbackVariant === "stationary" ? "stationary" : "measured",
       "data-reveal-entity-type": identity.entityType,
       "data-reveal-entity-id": identity.entityId,
-      "data-reveal-primary-variant": spec.primary.kind === "gameCard"
-        ? "gameCard"
+      "data-reveal-primary-variant": spec.primary.kind === "source"
+        ? "source"
+        : spec.primary.kind === "gameCard"
+          ? "gameCard"
         : spec.primary.kind === "galleryAction"
           ? "galleryAction"
           : (spec.primary.card.variant ?? "text"),

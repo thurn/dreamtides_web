@@ -86,9 +86,10 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
   const decision = measured?.key === key ? measured.decision : null;
   const primaryIsCardShaped = active !== null && active.spec.primary.kind !== "infoCard";
   const sourcePrimaryInPlace = active !== null && decision !== null
-    && active.spec.primary.kind === "gameCard"
-    && (decision.pressInPlace || (viewport?.layout === "desktop" && active.sourceShowsCompleteGameCard
-      && active.sourceRect.width >= DESKTOP_GAME_CARD_WIDTH));
+    && (active.spec.primary.kind === "source"
+      || (active.spec.primary.kind === "gameCard"
+        && (decision.pressInPlace || (viewport?.layout === "desktop" && active.sourceShowsCompleteGameCard
+          && active.sourceRect.width >= DESKTOP_GAME_CARD_WIDTH))));
   useLayoutEffect(() => {
     if (active === null || viewport?.layout !== "desktop" || !primaryIsCardShaped || decision === null || sourcePrimaryInPlace || active.sourceIsBattlefieldGameCard) return;
     const previousOpacity = active.element.style.opacity;
@@ -106,7 +107,14 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
   return createPortal(
     <div className="cumulus" data-cumulus-reveal-portal="" aria-hidden="true" style={{ position: "fixed", inset: 0, zIndex: "var(--layer-reveal)", pointerEvents: "none" }}>
       <div data-reveal-measurement-layer="" data-reveal-measurement-key={key} style={{ position: "fixed", inset: 0, visibility: "hidden", pointerEvents: "none" }}>
-          <div data-reveal-measure="primary" style={{ ...transparent, width: measurePrimaryWidth }}>{renderRevealCard(active.spec.primary, measurePrimaryWidth)}</div>
+          <div
+            data-reveal-measure="primary"
+            style={active.spec.primary.kind === "source"
+              ? { ...transparent, width: active.sourceRect.width, height: active.sourceRect.height }
+              : { ...transparent, width: measurePrimaryWidth }}
+          >
+            {active.spec.primary.kind === "source" ? null : renderRevealCard(active.spec.primary, measurePrimaryWidth)}
+          </div>
           {active.spec.secondaries.map((card, index) => (
             <div data-reveal-measure="secondary" data-reveal-index={index} key={index} style={{ ...transparent, width: measureSecondaryWidth }}>{renderRevealInfoCard(card, measureSecondaryWidth)}</div>
           ))}

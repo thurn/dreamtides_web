@@ -80,6 +80,24 @@ describe("RevealOverlay", () => {
     expect(document.querySelector<HTMLElement>("[data-reveal-measurement-layer]")?.style.visibility).toBe("hidden");
   });
 
+  it("keeps complete source content in place and stacks all definition cards in one column", () => {
+    const spec: RevealSpec = {
+      primary: { kind: "source", description: "Complete ability text" },
+      secondaries: [
+        { variant: "text", title: "First", body: { kind: "plain", text: "First definition" } },
+        { variant: "text", title: "Second", body: { kind: "plain", text: "Second definition" } },
+      ],
+    };
+    act(() => renderOverlay(<RevealOverlay active={active({ spec })} />));
+    expect(document.querySelector('[data-cumulus-reveal-card="primary"]')).toBeNull();
+    const definitions = [...document.querySelectorAll<HTMLElement>('[data-cumulus-reveal-card="secondary"]')];
+    expect(definitions).toHaveLength(2);
+    expect(definitions[0].style.left).toBe(definitions[1].style.left);
+    expect(Number.parseFloat(definitions[1].style.top)).toBeGreaterThan(
+      Number.parseFloat(definitions[0].style.top),
+    );
+  });
+
   it("has no opacity, scale, or travel animation and disappears in one render frame", () => {
     act(() => renderOverlay(<RevealOverlay active={active()} />));
     const group = document.querySelector<HTMLElement>("[data-cumulus-reveal-group]")!;

@@ -12,7 +12,7 @@ export interface RevealSize { readonly width: number; readonly height: number }
 export interface RevealPlacementInput {
   readonly viewport: VisualViewportSnapshot;
   readonly reason: RevealReason;
-  readonly primaryKind: "gameCard" | "galleryAction" | "infoCard";
+  readonly primaryKind: "source" | "gameCard" | "galleryAction" | "infoCard";
   readonly sourceRect: RevealRect;
   readonly touchPoint?: RevealPoint;
   readonly primarySize: RevealSize;

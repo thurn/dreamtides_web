@@ -25,6 +25,11 @@ export interface RevealGalleryActionModel {
 
 export type RevealCard =
   | {
+      /** The mounted source already contains the complete primary content. */
+      readonly kind: "source";
+      readonly description: string;
+    }
+  | {
       readonly kind: "gameCard";
       readonly cardId: CardId;
       /** Strict resolved display semantics; its id must equal the canonical cardId. */
