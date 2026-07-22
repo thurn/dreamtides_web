@@ -3063,6 +3063,31 @@
       }
     },
     {
+      "name": "slots",
+      "tsType": "InfoCardSlots",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional wrappers for the rendered headline and body content.",
+      "nested": {
+        "name": "InfoCardSlots",
+        "fields": [
+          {
+            "name": "title",
+            "tsType": "((context: InfoCardSlotContext, defaultNode: React.ReactNode) => React.ReactNode)",
+            "optional": true,
+            "description": "Wraps the rendered headline content inside its canonical type container."
+          },
+          {
+            "name": "body",
+            "tsType": "((context: InfoCardSlotContext, defaultNode: React.ReactNode) => React.ReactNode)",
+            "optional": true,
+            "description": "Wraps the rendered body content inside its canonical type container."
+          }
+        ]
+      }
+    },
+    {
       "name": "figure",
       "tsType": "ArtRef",
       "unionMembers": [],

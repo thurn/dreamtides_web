@@ -232,6 +232,36 @@ interface InfoCardCommonProps {
   title?: string;
   /** The reveal copy, as a {@link RichText} value (plain / rules / note / stack). */
   body?: RichText;
+  /** Optional wrappers for the rendered headline and body content. */
+  slots?: InfoCardSlots;
+}
+
+/** Render context supplied to the Info Card's named content slots. */
+export interface InfoCardSlotContext {
+  /** The resolved visual treatment, including the default text variant. */
+  variant: InfoCardVariant;
+  /** The plain headline value passed to the card. */
+  title?: string;
+  /** The structured body value passed to the card. */
+  body?: RichText;
+}
+
+/**
+ * Named wrappers for authoring surfaces that edit rendered Info Card copy in
+ * place while preserving the component's strict shell, typography, and rich
+ * text rendering.
+ */
+export interface InfoCardSlots {
+  /** Wraps the rendered headline content inside its canonical type container. */
+  title?: (
+    context: InfoCardSlotContext,
+    defaultNode: React.ReactNode,
+  ) => React.ReactNode;
+  /** Wraps the rendered body content inside its canonical type container. */
+  body?: (
+    context: InfoCardSlotContext,
+    defaultNode: React.ReactNode,
+  ) => React.ReactNode;
 }
 
 /**
@@ -372,11 +402,19 @@ export type InfoCardProps =
  * so the body never has to read screen size.
  */
 function InfoCardBody(props: InfoCardProps): React.ReactElement {
-  const { title, body } = props;
+  const { title, body, slots = {} } = props;
   // `variant` is optional only on the text member; resolve the default once for
   // the shared body/title styling. The per-variant branches below narrow on the
   // discriminant directly so each reads only the media its interface carries.
   const variant: InfoCardVariant = props.variant ?? "text";
+  const slotContext: InfoCardSlotContext = { variant, title, body };
+  const titleContent =
+    slots.title?.(slotContext, title ?? "") ?? title;
+  const bodyContent =
+    body == null
+      ? null
+      : (slots.body?.(slotContext, renderRichText(body)) ??
+        renderRichText(body));
   const Body =
     body == null ? null : (
       <div
@@ -385,10 +423,9 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
           textAlign: variant === "object" ? "center" : "left",
         }}
       >
-        {renderRichText(body)}
+        {bodyContent}
       </div>
     );
-  const titleContent = title;
 
   /* --- object: a centered media block (framed portrait OR contained
      transparent object) above its name + text. --- */
@@ -571,7 +608,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
             </div>
           )}
           {body != null && (
-            <div style={{ ...tBody }}>{renderRichText(body)}</div>
+            <div style={{ ...tBody }}>{bodyContent}</div>
           )}
         </div>
       </div>
@@ -686,7 +723,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
               )}
             </div>
             {body != null && (
-              <div style={tAtlasBody}>{renderRichText(body)}</div>
+              <div style={tAtlasBody}>{bodyContent}</div>
             )}
           </div>
         </div>
@@ -731,7 +768,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
           <div style={tHeadline}>{titleContent}</div>
         </div>
         {body != null && (
-          <div style={{ ...tBody, marginTop: 11 }}>{renderRichText(body)}</div>
+          <div style={{ ...tBody, marginTop: 11 }}>{bodyContent}</div>
         )}
       </div>
     );
@@ -782,7 +819,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
           </div>
         </div>
         {body != null && (
-          <div style={{ ...tBody, marginTop: 11 }}>{renderRichText(body)}</div>
+          <div style={{ ...tBody, marginTop: 11 }}>{bodyContent}</div>
         )}
       </div>
     );

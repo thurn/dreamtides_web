@@ -23,6 +23,7 @@ The strict information-card presentation. Its media treatment varies by content 
 | `frame` | `boolean` | no | — | true = framed portrait, false = contained transparent object. Default false. |
 | `title` | `string` | no | — | The card's headline. Plain text — resolve names before display. |
 | `body` | `RichText` | no | — | The reveal copy, as a {@link RichText} value (plain / rules / note / stack). |
+| `slots` | `InfoCardSlots` | no | — | Optional wrappers for the rendered headline and body content. |
 | `figure` | `ArtRef` | no | — | An optional foreground character render (a transparent full-body cutout — a Dream Guide, the boss) laid centered and prominent OVER the hero image, standing above the glass text card. Its own subject of the card; omit for a scene-only hero. An {@link ArtRef}, resolved by the component. Optional transparent full-body figure standing on the card's right side. |
 | `meta` | `string` | no | — | Small mono/uppercase overline above the title, on the glass card. Small mono/uppercase overline above the title. |
 | `subtitle` | `string` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. The resident guide / boss title under the place headline. An epithet under the name — a smaller serif subtitle in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. |
@@ -35,6 +36,13 @@ The strict information-card presentation. Its media treatment varies by content 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `kind` | `"plain" \| "rules" \| "underline" \| "inline" \| "note" \| "stack"` | no |  |
+
+### `slots`: the `InfoCardSlots` model
+
+| Field | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `title` | `((context: InfoCardSlotContext, defaultNode: React.ReactNode) => React.ReactNode)` | yes | Wraps the rendered headline content inside its canonical type container. |
+| `body` | `((context: InfoCardSlotContext, defaultNode: React.ReactNode) => React.ReactNode)` | yes | Wraps the rendered body content inside its canonical type container. |
 
 ## Usage
 
@@ -66,6 +74,25 @@ Pass a `subtitle` to render an epithet under the name — a smaller serif line i
   title="Kragg"
   subtitle="Spent-Blood Chieftain"
   body={richText.rules("At the start of your first turn, gain 1 essence.")}
+/>
+```
+
+### Authoring slots
+
+Editor surfaces may wrap the canonical headline and body content with their interaction layer. InfoCard continues to own the shell, typography, and rich-text rendering.
+
+```tsx
+<InfoCard
+  title="Reclaim"
+  body={richText.rules("Return a card from your void.")}
+  slots={{
+    title: (_context, defaultNode) => (
+      <EditableField field="title">{defaultNode}</EditableField>
+    ),
+    body: (_context, defaultNode) => (
+      <EditableField field="description">{defaultNode}</EditableField>
+    ),
+  }}
 />
 ```
 

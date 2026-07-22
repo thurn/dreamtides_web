@@ -276,9 +276,9 @@ used marks are keyed by Shutterstock image number in the tracked
 
 The standalone `/glossary` route edits the reusable explanatory Info Cards
 shown for rules terms, resources, tides, sites, and other shared game concepts.
-It provides a searchable catalog, a live rendered Info Card preview, and writes
-saved titles, descriptions, and rules-text variants to
-`data/tabula/glossary.toml` through the local Vite development server.
+It provides a searchable catalog and an interactive Info Card whose rendered
+title and description edit in place. Saved copy and rules-text variants write
+to `data/tabula/glossary.toml` through the local Vite development server.
 
 ## Examples
 

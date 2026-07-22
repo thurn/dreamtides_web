@@ -63,6 +63,22 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
 />`,
     },
     {
+      label: "Authoring slots",
+      note: "Editor surfaces may wrap the canonical headline and body content with their interaction layer. InfoCard continues to own the shell, typography, and rich-text rendering.",
+      code: `<InfoCard
+  title="Reclaim"
+  body={richText.rules("Return a card from your void.")}
+  slots={{
+    title: (_context, defaultNode) => (
+      <EditableField field="title">{defaultNode}</EditableField>
+    ),
+    body: (_context, defaultNode) => (
+      <EditableField field="description">{defaultNode}</EditableField>
+    ),
+  }}
+/>`,
+    },
+    {
       label: "Object variant",
       note: "A media object with `image` (an `ArtRef`); set `frame` for a framed portrait, omit it for a contained transparent object.",
       code: `<InfoCard

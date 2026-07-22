@@ -41,6 +41,16 @@ function setTextareaValue(textarea: HTMLTextAreaElement, value: string): void {
   textarea.dispatchEvent(new Event("input", { bubbles: true }));
 }
 
+function setInputValue(input: HTMLInputElement, value: string): void {
+  const descriptor = Object.getOwnPropertyDescriptor(
+    HTMLInputElement.prototype,
+    "value",
+  );
+  if (descriptor?.set === undefined) throw new Error("Missing value setter");
+  descriptor.set.call(input, value);
+  input.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
 beforeEach(() => {
   (
     globalThis as typeof globalThis & {
@@ -55,7 +65,7 @@ afterEach(() => {
 });
 
 describe("GlossaryEditorApp", () => {
-  it("previews and persists edited Info Card copy by stable id", async () => {
+  it("edits the rendered Info Card title and body in place, then persists by stable id", async () => {
     const loadEntries = vi.fn().mockResolvedValue(ENTRIES);
     const saveEntry = vi.fn().mockImplementation(
       (
@@ -78,15 +88,39 @@ describe("GlossaryEditorApp", () => {
     });
 
     expect(container.textContent).toContain("Info Card Glossary");
+    expect(container.textContent).toContain("Interactive Info Card");
+    expect(container.textContent).not.toContain("Rendered Preview");
     expect(
       container.querySelector("[data-testid='glossary-preview']")?.textContent,
     ).toContain("A character's combat power.");
 
+    const description = container.querySelector<HTMLElement>(
+      "[data-editor-field='description']",
+    );
+    expect(description).not.toBeNull();
+    act(() => {
+      description?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
     const textarea = container.querySelector<HTMLTextAreaElement>(
-      "[data-testid='glossary-definition-input']",
+      "[data-editor-input-field='description']",
     );
     expect(textarea).not.toBeNull();
     act(() => setTextareaValue(textarea!, "Power used during a challenge."));
+
+    const title = container.querySelector<HTMLElement>(
+      "[data-editor-field='title']",
+    );
+    expect(title).not.toBeNull();
+    act(() => {
+      title?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    const titleInput = container.querySelector<HTMLInputElement>(
+      "[data-editor-input-field='title']",
+    );
+    expect(titleInput).not.toBeNull();
+    act(() => setInputValue(titleInput!, "Challenge Spark"));
 
     expect(
       container.querySelector("[data-testid='glossary-preview']")?.textContent,
@@ -102,7 +136,7 @@ describe("GlossaryEditorApp", () => {
 
     expect(saveEntry).toHaveBeenCalledWith({
       id: "spark",
-      term: "Spark",
+      term: "Challenge Spark",
       definition: "Power used during a challenge.",
       variants: [],
     });

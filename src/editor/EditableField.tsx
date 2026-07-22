@@ -21,6 +21,10 @@ export interface EditableFieldProps {
   value: EditableFieldValue;
   layout?: "block" | "inline" | "pip";
   mode?: "single-line" | "multiline";
+  /** Textarea height preset used only in multiline mode. */
+  multilineSize?: "compact" | "expanded";
+  /** Pointer gesture that replaces the rendered value with its editor. */
+  activation?: "click" | "double-click";
   saveEntry: EditableFieldSaveEntry | null | undefined;
   /** Card root element used to anchor the floating save-status badge. */
   cardAnchorRef: RefObject<HTMLElement | null>;
@@ -163,6 +167,8 @@ export default function EditableField({
   value,
   layout = "block",
   mode = "single-line",
+  multilineSize = "compact",
+  activation = "double-click",
   saveEntry,
   cardAnchorRef,
   children,
@@ -269,6 +275,7 @@ export default function EditableField({
       <textarea
         aria-label={`${field} editor`}
         data-editor-input-field={field}
+        rows={multilineSize === "expanded" ? 4 : 2}
         ref={(element) => {
           editorRef.current = element;
         }}
@@ -308,7 +315,16 @@ export default function EditableField({
     <span
       data-editor-field={field}
       data-editor-save-status={saveEntry?.status ?? "idle"}
-      onDoubleClick={() => onBeginEdit(value)}
+      onClick={
+        activation === "click" && !isEditing
+          ? () => onBeginEdit(value)
+          : undefined
+      }
+      onDoubleClick={
+        activation === "double-click" && !isEditing
+          ? () => onBeginEdit(value)
+          : undefined
+      }
       style={{ display: "contents" }}
     >
       {isEditing ? editor : children}

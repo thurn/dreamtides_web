@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { GlossaryCatalogEntry } from "../data/glossary";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
-import { TextArea } from "../cumulus/components/controls/TextArea";
 import { TextField } from "../cumulus/components/controls/TextField";
 import { richText } from "../cumulus/components/card/rich-text";
 import { GlassPanel } from "../cumulus/components/overlay/GlassPanel";
 import { InfoCard } from "../cumulus/components/overlay/InfoCard";
 import { Pressable } from "../cumulus/primitives/Pressable";
 import { logEvent } from "../logging";
+import EditableField from "./EditableField";
+import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 import {
   loadGlossaryEntries,
   saveGlossaryEntry,
@@ -24,6 +25,8 @@ type SaveState =
   | { readonly kind: "saving" }
   | { readonly kind: "saved" }
   | { readonly kind: "error"; readonly message: string };
+
+type InlineGlossaryField = "title" | "description";
 
 function messageFor(error: unknown): string {
   return error instanceof Error ? error.message : "The glossary request failed.";
@@ -58,7 +61,11 @@ export default function GlossaryEditorApp({
   const [definitionDraft, setDefinitionDraft] = useState("");
   const [variantsDraft, setVariantsDraft] = useState("");
   const [saveState, setSaveState] = useState<SaveState>({ kind: "idle" });
+  const [editingField, setEditingField] = useState<InlineGlossaryField | null>(null);
+  const [editingError, setEditingError] = useState<string | null>(null);
   const hydratedEntryId = useRef<string | null>(null);
+  const editingStartValue = useRef("");
+  const interactiveCardRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -91,6 +98,8 @@ export default function GlossaryEditorApp({
     setDefinitionDraft(selectedEntry.definition);
     setVariantsDraft(selectedEntry.variants.join(", "));
     setSaveState({ kind: "idle" });
+    setEditingField(null);
+    setEditingError(null);
   }, [selectedEntry]);
 
   const filteredEntries = useMemo(() => {
@@ -131,6 +140,86 @@ export default function GlossaryEditorApp({
     definitionError === undefined &&
     saveState.kind !== "saving";
 
+  const setInlineDraft = (
+    field: InlineGlossaryField,
+    value: EditableFieldValue,
+  ): void => {
+    const text = String(value);
+    if (field === "title") {
+      setTermDraft(text);
+    } else {
+      setDefinitionDraft(text);
+    }
+    setEditingError(null);
+    setSaveState({ kind: "idle" });
+  };
+
+  const inlineValidationMessage = (
+    field: InlineGlossaryField,
+    value: EditableFieldValue,
+  ): string | null => {
+    if (String(value).trim() !== "") return null;
+    return field === "title"
+      ? "Info Card title cannot be blank."
+      : "Description cannot be blank.";
+  };
+
+  const beginInlineEdit = (
+    field: InlineGlossaryField,
+    value: EditableFieldValue,
+  ): void => {
+    editingStartValue.current = String(value);
+    setEditingField(field);
+    setEditingError(null);
+  };
+
+  const finishInlineEdit = (
+    field: InlineGlossaryField,
+    value: EditableFieldValue,
+  ): void => {
+    const message = inlineValidationMessage(field, value);
+    if (message !== null) {
+      setEditingError(message);
+      return;
+    }
+    setEditingField(null);
+    setEditingError(null);
+  };
+
+  const blurInlineEdit = (
+    field: InlineGlossaryField,
+    value: EditableFieldValue,
+  ): void => {
+    if (inlineValidationMessage(field, value) !== null) {
+      setInlineDraft(field, editingStartValue.current);
+    }
+    setEditingField(null);
+    setEditingError(null);
+  };
+
+  const cancelInlineEdit = (field: InlineGlossaryField): void => {
+    setInlineDraft(field, editingStartValue.current);
+    setEditingField(null);
+    setEditingError(null);
+  };
+
+  const inlineEntryFor = (
+    field: InlineGlossaryField,
+    draftValue: string,
+  ): EditableFieldSaveEntry | null =>
+    editingField === field && selectedEntry !== null
+      ? {
+          cardId: selectedEntry.id,
+          field,
+          status: "editing",
+          clientRevision: 0,
+          submittedRevision: 0,
+          draftValue,
+          confirmedValue: editingStartValue.current,
+          message: editingError,
+        }
+      : null;
+
   const commit = (): void => {
     if (!canSave || selectedEntry === null || loadState.kind !== "loaded") return;
     const submitted = {
@@ -156,6 +245,8 @@ export default function GlossaryEditorApp({
             : current,
         );
         setSaveState({ kind: "saved" });
+        setEditingField(null);
+        setEditingError(null);
         logEvent("glossary_editor_entry_saved", {
           glossaryId: entry.id,
           matchesRulesText: entry.matchesRulesText,
@@ -243,95 +334,116 @@ export default function GlossaryEditorApp({
           </aside>
 
           {selectedEntry === null ? null : (
-            <section className="glossary-editor-form">
-              <GlassPanel
-                eyebrow={selectedEntry.category}
-                title={selectedEntry.term}
-                subtitle={`Stable id: ${selectedEntry.id}`}
-                frame="floating"
-                testId="glossary-editor-form"
-              >
-                <div className="glossary-editor-fields">
-                  <TextField
-                    label="Info Card Title"
-                    value={termDraft}
-                    onChange={(value) => {
-                      setTermDraft(value);
-                      setSaveState({ kind: "idle" });
-                    }}
-                    error={termError}
-                    testId="glossary-term-input"
-                  />
-                  <TextArea
-                    label="Description"
-                    value={definitionDraft}
-                    onChange={(value) => {
-                      setDefinitionDraft(value);
-                      setSaveState({ kind: "idle" });
-                    }}
-                    onCommit={commit}
-                    error={definitionError}
-                    supportingText="Command/Ctrl+Enter saves the current definition."
-                    testId="glossary-definition-input"
-                  />
-                  {selectedEntry.matchesRulesText ? (
-                    <TextField
-                      label="Additional Rules-Text Forms"
-                      value={variantsDraft}
-                      onChange={(value) => {
-                        setVariantsDraft(value);
-                        setSaveState({ kind: "idle" });
-                      }}
-                      supportingText="Comma-separated plurals, tenses, or trigger forms."
-                      testId="glossary-variants-input"
-                    />
-                  ) : null}
-                  <div className="glossary-editor-save-row">
-                    <GlassButton
-                      label={saveState.kind === "saving" ? "Saving…" : "Save Definition"}
-                      widthReservations={[
-                        { label: "Save Definition", essenceCost: null },
-                        { label: "Saving…", essenceCost: null },
-                      ]}
-                      variant="accent"
-                      placement="onGlass"
-                      disabled={!canSave}
-                      onPress={commit}
-                      testId="glossary-save"
-                    />
-                    <p role="status" data-save-state={saveState.kind}>
-                      {saveState.kind === "saved"
-                        ? "Saved to glossary.toml"
-                        : saveState.kind === "error"
-                          ? saveState.message
-                          : dirty
-                            ? "Unsaved changes"
-                            : "Up to date"}
-                    </p>
-                  </div>
-                </div>
-              </GlassPanel>
-            </section>
-          )}
-
-          {selectedEntry === null ? null : (
-            <aside className="glossary-editor-preview" aria-label="Rendered Info Card preview">
+            <section className="glossary-editor-workspace" aria-label="Interactive Info Card editor">
               <div className="glossary-editor-preview-heading">
-                <p>Rendered Preview</p>
+                <div>
+                  <p>Interactive Info Card</p>
+                  <span>Click the title or description to edit it in place.</span>
+                </div>
                 <span>{selectedEntry.matchesRulesText ? "Rules text" : "Plain text"}</span>
               </div>
               <div className="glossary-editor-preview-stage" data-testid="glossary-preview">
-                <InfoCard
-                  variant="text"
-                  title={termDraft.trim() === "" ? "Untitled Term" : termDraft}
-                  body={
-                    selectedEntry.matchesRulesText
-                      ? richText.rules(definitionDraft)
-                      : richText.plain(definitionDraft)
-                  }
-                />
+                <div ref={interactiveCardRef} className="glossary-editor-interactive-card">
+                  <InfoCard
+                    variant="text"
+                    title={termDraft.trim() === "" ? "Untitled Term" : termDraft}
+                    body={
+                      selectedEntry.matchesRulesText
+                        ? richText.rules(definitionDraft)
+                        : richText.plain(definitionDraft)
+                    }
+                    slots={{
+                      title: (_context, defaultNode) => (
+                        <EditableField
+                          field="title"
+                          value={termDraft}
+                          activation="click"
+                          saveEntry={inlineEntryFor("title", termDraft)}
+                          cardAnchorRef={interactiveCardRef}
+                          onBeginEdit={(value) => beginInlineEdit("title", value)}
+                          onDraftChange={(value) => setInlineDraft("title", value)}
+                          onCancel={() => cancelInlineEdit("title")}
+                          onSave={(value) => finishInlineEdit("title", value)}
+                          onCommit={(value) => blurInlineEdit("title", value)}
+                        >
+                          {defaultNode}
+                        </EditableField>
+                      ),
+                      body: (_context, defaultNode) => (
+                        <EditableField
+                          field="description"
+                          value={definitionDraft}
+                          mode="multiline"
+                          multilineSize="expanded"
+                          activation="click"
+                          saveEntry={inlineEntryFor("description", definitionDraft)}
+                          cardAnchorRef={interactiveCardRef}
+                          onBeginEdit={(value) => beginInlineEdit("description", value)}
+                          onDraftChange={(value) => setInlineDraft("description", value)}
+                          onCancel={() => cancelInlineEdit("description")}
+                          onSave={(value) => finishInlineEdit("description", value)}
+                          onCommit={(value) => blurInlineEdit("description", value)}
+                        >
+                          {defaultNode}
+                        </EditableField>
+                      ),
+                    }}
+                  />
+                </div>
               </div>
-            </aside>
+
+              <div className="glossary-editor-details">
+                <GlassPanel
+                  eyebrow={selectedEntry.category}
+                  title="Definition Details"
+                  subtitle={`Stable id: ${selectedEntry.id}`}
+                  frame="floating"
+                  testId="glossary-editor-details"
+                >
+                  <div className="glossary-editor-details-body">
+                    {selectedEntry.matchesRulesText ? (
+                      <TextField
+                        label="Additional Rules-Text Forms"
+                        value={variantsDraft}
+                        onChange={(value) => {
+                          setVariantsDraft(value);
+                          setSaveState({ kind: "idle" });
+                        }}
+                        supportingText="Comma-separated plurals, tenses, or trigger forms."
+                        testId="glossary-variants-input"
+                      />
+                    ) : (
+                      <p className="glossary-editor-entry-kind">
+                        This explanation appears as an Info Card and is not matched in rules text.
+                      </p>
+                    )}
+                    <div className="glossary-editor-save-row">
+                      <GlassButton
+                        label={saveState.kind === "saving" ? "Saving…" : "Save Definition"}
+                        widthReservations={[
+                          { label: "Save Definition", essenceCost: null },
+                          { label: "Saving…", essenceCost: null },
+                        ]}
+                        variant="accent"
+                        placement="onGlass"
+                        disabled={!canSave}
+                        onPress={commit}
+                        testId="glossary-save"
+                      />
+                      <p role="status" data-save-state={saveState.kind}>
+                        {saveState.kind === "saved"
+                          ? "Saved to glossary.toml"
+                          : saveState.kind === "error"
+                            ? saveState.message
+                            : dirty
+                              ? "Unsaved changes"
+                              : "Up to date"}
+                      </p>
+                    </div>
+                  </div>
+                </GlassPanel>
+              </div>
+            </section>
           )}
         </div>
       ) : null}
