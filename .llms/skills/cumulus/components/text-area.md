@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/text-area`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
 The reusable multiline authoring field on Cumulus control chrome, with explicit draft and commit callbacks.
 

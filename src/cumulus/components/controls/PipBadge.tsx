@@ -4,6 +4,7 @@ export { ENERGY_PIP_COLOR, SPARK_PIP_COLOR } from "./pip-colors";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
+import { glossaryInfoCard } from "../card/glossary-info-card";
 
 /**
  * A circular numeric badge ("pip") used on card corners for stats like
@@ -13,12 +14,12 @@ import { Pressable } from "../../primitives/Pressable";
  * white with a thin black text-shadow outline so it stays legible against
  * the colored fill at small card sizes.
  *
- * The badge supports an optional `tooltip` node — when set, the badge wraps
+ * The badge supports an optional `glossaryId` — when set, the badge wraps
  * itself as a semantic reveal source so first-time players can learn what the
  * number represents on long hover. The longer 1000ms delay (vs the 500ms
  * default used for inline glossary terms in `RulesText`) is intentional:
  * pip badges sit at the corners of cards and are easy to brush past with
- * the cursor — a quicker tooltip would feel twitchy.
+ * the cursor — a quicker reveal would feel twitchy.
  *
  * This compact pip appears in dense card rows and inline rules text. Full game
  * card corners use the larger, art-aware `CardStatOrb` surface.
@@ -45,10 +46,10 @@ interface PipBadgeProps {
    */
   ariaLabel?: string;
   /**
-   * Optional hover/focus tooltip. When provided, the badge becomes its own
-   * hover anchor. A short plain-language description string.
+   * Optional stable TOML glossary id. When provided, the badge becomes its own
+   * hover anchor and reveals that glossary entry.
    */
-  tooltip?: string;
+  glossaryId?: string;
 }
 
 /**
@@ -122,7 +123,7 @@ export function PipBadge({
   size = "sm",
   scale = 1,
   ariaLabel,
-  tooltip,
+  glossaryId,
 }: PipBadgeProps) {
   const spec = SIZES[size];
   const label = ariaLabel ?? VARIANT_DEFAULT_LABEL[variant];
@@ -151,18 +152,18 @@ export function PipBadge({
     </span>
   );
 
-  if (tooltip === undefined) {
+  if (glossaryId === undefined) {
     return badge;
   }
 
-  return <PipBadgeReveal variant={variant} label={label} tooltip={tooltip}>{badge}</PipBadgeReveal>;
+  return <PipBadgeReveal variant={variant} glossaryId={glossaryId}>{badge}</PipBadgeReveal>;
 }
 
-function PipBadgeReveal({ variant, label, tooltip, children }: { variant: PipBadgeVariant; label: string; tooltip: string; children: ReactElement }) {
+function PipBadgeReveal({ variant, glossaryId, children }: { variant: PipBadgeVariant; glossaryId: string; children: ReactElement }) {
   const binding = useRevealSource({
-    identity: { entityType: `card-${variant}-pip`, entityId: revealEntityId(`card-${variant}-pip`, `${label}:${tooltip}`) },
+    identity: { entityType: `card-${variant}-pip`, entityId: revealEntityId(`card-${variant}-pip`, glossaryId) },
     spec: {
-      primary: { kind: "infoCard", card: { variant: "text", title: label, body: { kind: "plain", text: tooltip } } },
+      primary: { kind: "infoCard", card: glossaryInfoCard(glossaryId) },
       secondaries: [],
     },
   });

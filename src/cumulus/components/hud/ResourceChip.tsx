@@ -30,16 +30,14 @@ import { token } from "../../primitives/tokens";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
-import { richText } from "../card/rich-text";
+import { glossaryInfoCard } from "../card/glossary-info-card";
 import type { ReactElement } from "react";
 
 export interface ResourceEntity {
   /** Stable domain identity of this resource source. */
   id: string;
-  /** Display title for its reveal. */
-  label: string;
-  /** Player-facing explanation. */
-  description: string;
+  /** Stable TOML glossary entry used for the explanatory Info Card. */
+  glossaryId: string;
 }
 
 /** Inline scale of a ResourceChip. `md` (16px) is the default HUD size. */
@@ -148,7 +146,7 @@ function ResourceChipReveal({ kind, entity, children }: { kind: EconomyKind; ent
   const mark = ECONOMY_MARKS[kind];
   const binding = useRevealSource({
     identity: { entityType: `resource-${kind}`, entityId: revealEntityId(`resource-${kind}`, entity.id) },
-    spec: { primary: { kind: "infoCard", card: { variant: "icon", glyph: mark.glyph, title: entity.label, body: richText.plain(entity.description) } }, secondaries: [] },
+    spec: { primary: { kind: "infoCard", card: glossaryInfoCard(entity.glossaryId, { variant: "icon", glyph: mark.glyph }) }, secondaries: [] },
   });
   return <Pressable as="span" ref={binding.ref} {...binding.sourceProps} tabIndex={0} data-resource-source={entity.id} style={{ ...binding.sourceProps.style, display: "inline-flex" }}>{children}</Pressable>;
 }

@@ -38,6 +38,8 @@
 import * as React from "react";
 import type { CSSProperties, ReactElement } from "react";
 import { richText } from "../card/rich-text";
+import { glossaryInfoCard } from "../card/glossary-info-card";
+import { GLOSSARY_IDS } from "../../../data/glossary";
 import { token } from "../../primitives/tokens";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import { IconButton } from "../controls/IconButton";
@@ -460,7 +462,7 @@ function QsbEssence({
 }): ReactElement {
   const binding = useRevealSource({
     identity: { entityType: "resource-essence", entityId: revealEntityId("resource-essence", "quest-total") },
-    spec: { primary: { kind: "infoCard", card: { variant: "icon", glyph: GLYPHS.essence, title: "Essence Total", body: richText.plain("A currency you use during quests to modify your deck.") } }, secondaries: [] },
+    spec: { primary: { kind: "infoCard", card: glossaryInfoCard(GLOSSARY_IDS.essence, { variant: "icon", glyph: GLYPHS.essence }) }, secondaries: [] },
   });
   return (
     <Pressable

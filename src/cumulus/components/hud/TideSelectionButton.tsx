@@ -3,8 +3,8 @@ import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import { richText } from "../card/rich-text";
-
-const TIDES_DEFINITION = "Pools of cards you will see during the quest. Different tides are used every time you play.";
+import { glossaryInfoCard } from "../card/glossary-info-card";
+import { GLOSSARY_IDS } from "../../../data/glossary";
 
 export type TideSelectionRole = "starter" | "facet-drawn" | "facet-fill" | "neutral-fill";
 
@@ -27,7 +27,7 @@ export function TideSelectionButton({ id, label, description, selectionRole, act
     identity: { entityType: "tide", entityId: revealEntityId("tide", id) },
     spec: {
       primary: { kind: "infoCard", card: { variant: "text", title: label, body: richText.plain(description) } },
-      secondaries: [{ variant: "text", title: "Tides", body: richText.plain(TIDES_DEFINITION) }],
+      secondaries: [glossaryInfoCard(GLOSSARY_IDS.tides)],
     },
     onActivate,
   });

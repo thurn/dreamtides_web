@@ -12,6 +12,7 @@ import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
+import { glossaryInfoCard } from "./glossary-info-card";
 
 export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";
 export type CardStatChangeBadge = "empowered" | "kindled";
@@ -115,8 +116,8 @@ interface CardStatOrbProps {
    */
   numberCapPx: number;
   ariaLabel?: string;
-  /** Optional hover tooltip: a short plain-language description string. */
-  tooltip?: string;
+  /** Optional stable TOML glossary id for the stat's explanatory Info Card. */
+  glossaryId?: string;
   /**
    * Monochrome hammer marker for a transfiguration-changed stat, shared with
    * the Transfiguration site's atlas icon.
@@ -146,7 +147,7 @@ export function CardStatOrb({
   numberSizeVar,
   numberCapPx,
   ariaLabel,
-  tooltip,
+  glossaryId,
   changeBadge,
 }: CardStatOrbProps) {
   const label = ariaLabel ?? DEFAULT_LABEL[variant];
@@ -268,17 +269,17 @@ export function CardStatOrb({
     </span>
   );
 
-  if (tooltip === undefined) {
+  if (glossaryId === undefined) {
     return orb;
   }
 
-  return <CardStatOrbReveal variant={variant} label={label} tooltip={tooltip}>{orb}</CardStatOrbReveal>;
+  return <CardStatOrbReveal variant={variant} glossaryId={glossaryId}>{orb}</CardStatOrbReveal>;
 }
 
-function CardStatOrbReveal({ variant, label, tooltip, children }: { variant: CardStatOrbVariant; label: string; tooltip: string; children: ReactElement }) {
+function CardStatOrbReveal({ variant, glossaryId, children }: { variant: CardStatOrbVariant; glossaryId: string; children: ReactElement }) {
   const binding = useRevealSource({
-    identity: { entityType: `card-${variant}-stat`, entityId: revealEntityId(`card-${variant}-stat`, `${label}:${tooltip}`) },
-    spec: { primary: { kind: "infoCard", card: { variant: "text", title: label, body: { kind: "plain", text: tooltip } } }, secondaries: [] },
+    identity: { entityType: `card-${variant}-stat`, entityId: revealEntityId(`card-${variant}-stat`, glossaryId) },
+    spec: { primary: { kind: "infoCard", card: glossaryInfoCard(glossaryId) }, secondaries: [] },
   });
   return <Pressable as="span" ref={binding.ref} {...binding.sourceProps} tabIndex={0} style={{ ...binding.sourceProps.style, display: "inline-flex" }}>{children}</Pressable>;
 }

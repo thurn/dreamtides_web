@@ -14,7 +14,7 @@ import { IconButton } from "../controls/IconButton";
 import { Dreamsign } from "../hud/Dreamsign";
 import { EssenceValue } from "../hud/EssenceValue";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
-import { richText } from "./rich-text";
+import { glossaryInfoCard } from "./glossary-info-card";
 
 /** One UUID-keyed Dreamsign offered by a gallery. */
 export interface DreamsignGalleryEntryView {
@@ -36,8 +36,8 @@ export interface DreamsignGalleryActionView {
   glyph: Glyph;
   /** Visible and accessible action label. */
   label: string;
-  /** Plain-language explanation revealed through the shared InfoCard. */
-  description: string;
+  /** Stable TOML glossary id for the action's explanatory Info Card. */
+  glossaryId: string;
   /** Essence price, or null for a free/spent text caption. */
   price: number | null;
   /** Caption used when the action is free or already spent. */
@@ -112,12 +112,10 @@ function DreamsignGalleryEndAction({
     spec: {
       primary: {
         kind: "infoCard",
-        card: {
+        card: glossaryInfoCard(action.glossaryId, {
           variant: "icon",
           glyph: action.glyph,
-          title: action.label,
-          body: richText.plain(action.description),
-        },
+        }),
       },
       secondaries: [],
     },

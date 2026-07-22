@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/glass-panel`
 
-Real consumers: **8** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **9** (imports outside `src/cumulus/docs/` and tests).
 
 The shared liquid-glass content container: an optional structured header, a composed body, and an optional footer on the canonical floating material.
 

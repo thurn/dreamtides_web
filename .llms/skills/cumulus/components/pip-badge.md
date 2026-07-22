@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/pip-badge`
 
 Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
-The compact circled number used in dense card rows and inline rules text for spark or energy values. The value renders in white with a thin outline at small sizes; full game-card corners use the larger, art-aware CardStatOrb. An optional tooltip turns a pip into its own semantic reveal source.
+The compact circled number used in dense card rows and inline rules text for spark or energy values. The value renders in white with a thin outline at small sizes; full game-card corners use the larger, art-aware CardStatOrb. An optional glossary entry turns a pip into its own semantic reveal source.
 
 > **Guidance:** The compact pip fills live in pip-colors.ts: SPARK_PIP_COLOR is gold #facc15 and ENERGY_PIP_COLOR is teal #0ea5e9. GlowIcon shares the energy constant for inline energy marks; larger CardStatOrb glyphs use the card-stat color treatment. Import the named constants rather than re-typing their values.
 
@@ -21,7 +21,7 @@ The compact circled number used in dense card rows and inline rules text for spa
 | `size` | `"sm" \| "md"` | no | `sm` | `"sm"` matches the small card stat row; `"md"` matches the larger `large` GameCard variant. Sizes are tuned so the number stays readable but the badge does not overpower adjacent text. |
 | `scale` | `number` | no | `1` | Multiplier for card renderers that need the pip to follow card text scale. |
 | `ariaLabel` | `string` | no | — | Optional accessible label for screen readers. If omitted, the badge uses a sensible default for its variant. |
-| `tooltip` | `string` | no | — | Optional hover/focus tooltip. When provided, the badge becomes its own hover anchor. A short plain-language description string. |
+| `glossaryId` | `string` | no | — | Optional stable TOML glossary id. When provided, the badge becomes its own hover anchor and reveals that glossary entry. |
 
 ## Usage
 
@@ -35,17 +35,18 @@ import { PipBadge } from "src/cumulus/components/controls/PipBadge";
 <PipBadge variant="spark" value="3" size="sm" />
 ```
 
-### Energy-cost pip with tooltip
+### Energy-cost pip with glossary entry
 
-The energy cost as a pip, with a tooltip so a first-time player can learn what the number means. The pip becomes its own hover anchor; the tooltip fires on a full-second hold so brushing past a card corner does not trigger it.
+The energy cost as a pip, with a glossary-backed Info Card so a first-time player can learn what the number means. The pip becomes its own hover anchor; the reveal fires on a full-second hold so brushing past a card corner does not trigger it.
 
 ```tsx
+import { GLOSSARY_IDS } from "src/data/glossary";
 import { PipBadge } from "src/cumulus/components/controls/PipBadge";
 
 <PipBadge
   variant="energy"
   value="2"
   size="sm"
-  tooltip="Energy is the cost you pay to play this card."
+  glossaryId={GLOSSARY_IDS.energyCost}
 />
 ```

@@ -33,7 +33,7 @@ The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art
 | `entryId` | `string` | no | Stable action id. |
 | `glyph` | `Glyph` | no | Glyph that identifies the action. |
 | `label` | `string` | no | Visible and accessible action label. |
-| `description` | `string` | no | Plain-language explanation revealed through the shared InfoCard. |
+| `glossaryId` | `string` | no | Stable TOML glossary id for the action's explanatory Info Card. |
 | `price` | `number \| null` | no | Essence price, or null for a free/spent text caption. |
 | `text` | `string \| null` | no | Caption used when the action is free or already spent. |
 | `disabled` | `boolean` | no | Whether the action can currently be triggered. |

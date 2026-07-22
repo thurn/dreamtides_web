@@ -27,8 +27,7 @@ The sized, self-contained value-and-mark chip for the game economy. It owns the 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `id` | `string` | no | Stable domain identity of this resource source. |
-| `label` | `string` | no | Display title for its reveal. |
-| `description` | `string` | no | Player-facing explanation. |
+| `glossaryId` | `string` | no | Stable TOML glossary entry used for the explanatory Info Card. |
 
 ## Usage
 

@@ -272,6 +272,14 @@ used marks are keyed by Shutterstock image number in the tracked
 `data/image-viewer-state.json` file. The toolbar's Favorites link opens
 `/images/favorites`, which shows every favorite including images marked as used.
 
+## Info Card Glossary
+
+The standalone `/glossary` route edits the reusable explanatory Info Cards
+shown for rules terms, resources, tides, sites, and other shared game concepts.
+It provides a searchable catalog, a live rendered Info Card preview, and writes
+saved titles, descriptions, and rules-text variants to
+`data/tabula/glossary.toml` through the local Vite development server.
+
 ## Examples
 
 ```
@@ -288,4 +296,5 @@ http://localhost:5173/?goto=battle              # Layer I battle preview vs the 
 http://localhost:5173/?goto=battle5             # Layer V battle preview with a stronger opponent
 http://localhost:5173/?goto=battle&ai=0         # manual battle, no AI opponent
 http://localhost:5173/editor?q=moon&type=event
+http://localhost:5173/glossary                    # edit explanatory Info Card copy
 ```

@@ -20,9 +20,9 @@ A renderable keyword-definition tile for normal document flow: one glossary entr
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `term` | `string` | no | Canonical term shown as the popover heading. The term itself is matched directly (case-insensitively), so it does not need to be repeated in `variants`. |
-| `definition` | `string` | no | Short, plain-language definition. |
-| `variants` | `readonly string[]` | yes | Extra word forms that should match this entry beyond the term itself, such as plurals and past-tense forms (e.g. `banes`, `transfigured`). Omit when the term is the only form. Matching is case-insensitive. |
+| `term` | `string` | no | Canonical heading displayed on the Info Card. |
+| `definition` | `string` | no | Player-facing explanatory copy displayed on the Info Card. |
+| `variants` | `readonly string[]` | yes | Extra rules-text word forms beyond the canonical term. |
 
 ## Usage
 

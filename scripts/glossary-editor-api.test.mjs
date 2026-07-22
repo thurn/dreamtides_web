@@ -1,0 +1,86 @@
+import { afterEach, describe, expect, it } from "vitest";
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { createServer } from "node:http";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
+import { parseGlossarySource, serializeGlossarySource } from "./glossary-source.mjs";
+import { createGlossaryEditorApiMiddleware } from "./glossary-editor-api.mjs";
+
+const roots = [];
+const servers = [];
+
+afterEach(async () => {
+  await Promise.all(servers.splice(0).map((server) => new Promise((resolve) => server.close(resolve))));
+  for (const root of roots.splice(0)) rmSync(root, { recursive: true, force: true });
+});
+
+function fixtureEntries() {
+  return [
+    { id: "spark", category: "Resources", term: "Spark", definition: "Combat power.", matchesRulesText: true, variants: [] },
+    { id: "site-draft", category: "Sites", term: "Draft", definition: "Choose cards.", matchesRulesText: false, variants: [] },
+  ];
+}
+
+async function startApi() {
+  const root = mkdtempSync(join(tmpdir(), "glossary-api-"));
+  roots.push(root);
+  const dataDir = join(root, "data", "tabula");
+  mkdirSync(dataDir, { recursive: true });
+  writeFileSync(join(dataDir, "glossary.toml"), serializeGlossarySource(fixtureEntries()));
+  const middleware = createGlossaryEditorApiMiddleware({ rootDir: root });
+  const server = createServer((req, res) => {
+    void middleware(req, res, () => {
+      res.writeHead(404);
+      res.end();
+    });
+  });
+  servers.push(server);
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const address = server.address();
+  return { root, origin: `http://127.0.0.1:${String(address.port)}` };
+}
+
+describe("glossary editor API", () => {
+  it("loads every TOML-backed entry", async () => {
+    const { origin } = await startApi();
+    const response = await fetch(`${origin}/api/editor/glossary`);
+    expect(response.status).toBe(200);
+    expect((await response.json()).entries).toEqual(fixtureEntries());
+  });
+
+  it("persists an edited title, definition, and rules-text forms", async () => {
+    const { root, origin } = await startApi();
+    const response = await fetch(`${origin}/api/editor/glossary/spark`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: "spark",
+        term: "Spark Power",
+        definition: "A character's power during a challenge.",
+        variants: ["spark"],
+      }),
+    });
+    expect(response.status).toBe(200);
+    const source = readFileSync(join(root, "data", "tabula", "glossary.toml"), "utf8");
+    const entries = parseGlossarySource(source);
+    expect(entries[0]).toMatchObject({
+      id: "spark",
+      term: "Spark Power",
+      definition: "A character's power during a challenge.",
+      variants: ["spark"],
+    });
+  });
+
+  it("rejects duplicate rules-text forms without changing the TOML", async () => {
+    const { root, origin } = await startApi();
+    const path = join(root, "data", "tabula", "glossary.toml");
+    const before = readFileSync(path, "utf8");
+    const response = await fetch(`${origin}/api/editor/glossary/spark`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ variants: ["Spark"] }),
+    });
+    expect(response.status).toBe(400);
+    expect(readFileSync(path, "utf8")).toBe(before);
+  });
+});

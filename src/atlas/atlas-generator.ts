@@ -17,6 +17,7 @@ import {
   layerOrdinal,
 } from "../types/layer-name";
 import { otherGuideSignatureSites } from "../data/dreamscapes";
+import { GLOSSARY_IDS, requireGlossaryEntry } from "../data/glossary";
 import { draftSiteData } from "../draft/draft-site-config";
 import { logEvent } from "../logging";
 
@@ -1420,79 +1421,64 @@ const SITE_TYPE_META: Record<
   SiteType,
   {
     icon: string;
-    name: string;
-    description: string;
+    glossaryId: string;
   }
 > = {
   Battle: {
     icon: "bxf bx-sword-alt",
-    name: "Battle",
-    description: "A battle against this dream's guardian.",
+    glossaryId: GLOSSARY_IDS.sites.Battle,
   },
   Draft: {
     icon: "bxf bx-rectangle-vertical",
-    name: "Draft",
-    description: "Pick 5 cards to add to your deck.",
+    glossaryId: GLOSSARY_IDS.sites.Draft,
   },
   Shop: {
     icon: "bxf bx-store-alt-2",
-    name: "Card Shop",
-    description: "Spend essence to buy cards.",
+    glossaryId: GLOSSARY_IDS.sites.Shop,
   },
   Purge: {
     icon: "bxf bx-hot",
-    name: "Purge",
-    description: "Remove cards from your deck.",
+    glossaryId: GLOSSARY_IDS.sites.Purge,
   },
   Essence: {
     icon: "bxf bx-diamond-alt",
-    name: "Essence",
-    description: "Collect a trove of essence.",
+    glossaryId: GLOSSARY_IDS.sites.Essence,
   },
   Transfiguration: {
     icon: "fa-solid fa-hammer",
-    name: "Transfiguration",
-    description: "Modify and upgrade a card in your deck.",
+    glossaryId: GLOSSARY_IDS.sites.Transfiguration,
   },
   Duplication: {
     icon: "bxf bx-copy",
-    name: "Duplication",
-    description: "Make a copy of a card in your deck.",
+    glossaryId: GLOSSARY_IDS.sites.Duplication,
   },
   Reward: {
     icon: "bxf bx-treasure-chest",
-    name: "Reward",
-    description: "Claim a reward.",
+    glossaryId: GLOSSARY_IDS.sites.Reward,
   },
   DreamAugury: {
     icon: "bxf bx-eye",
-    name: "Dream Augury",
-    description: "Choose one of two foreseen rewards.",
+    glossaryId: GLOSSARY_IDS.sites.DreamAugury,
   },
   DreamsignMarket: {
     icon: "bxf bx-pyramid",
-    name: "Dreamsign Market",
-    description: "Purchase dreamsigns from a rotating selection.",
+    glossaryId: GLOSSARY_IDS.sites.DreamsignMarket,
   },
   DreamsignRevelation: {
     icon: "bxf bx-meteor",
-    name: "Dreamsign Revelation",
-    description: "Receive a dreamsign.",
+    glossaryId: GLOSSARY_IDS.sites.DreamsignRevelation,
   },
   TemptingOffer: {
     icon: "bxf bx-law",
-    name: "Offer",
-    description: "Pay a cost for an outsized payoff.",
+    glossaryId: GLOSSARY_IDS.sites.TemptingOffer,
   },
   Gamble: {
     icon: "bxf bx-coin",
-    name: "Gamble",
-    description: "Take a risk for an uncertain reward.",
+    glossaryId: GLOSSARY_IDS.sites.Gamble,
   },
   TemporalFork: {
     icon: "bxf bx-clock",
-    name: "Temporal Fork",
-    description: "Gain a temporary bonus or future reward.",
+    glossaryId: GLOSSARY_IDS.sites.TemporalFork,
   },
 };
 
@@ -1528,29 +1514,32 @@ const FALLBACK_SITE_TYPE_META = {
  */
 function siteTypeMeta(siteType: SiteType): {
   icon: string;
-  name: string;
-  description: string;
-} {
-  return (
-    (SITE_TYPE_META as Record<string, (typeof SITE_TYPE_META)[SiteType]>)[
-      siteType
-    ] ?? FALLBACK_SITE_TYPE_META
-  );
+  glossaryId: string;
+} | null {
+  return (SITE_TYPE_META as Record<string, (typeof SITE_TYPE_META)[SiteType]>)[
+    siteType
+  ] ?? null;
 }
 
 /** Returns the Boxicons class name for the given site type. */
 export function siteTypeIcon(siteType: SiteType): string {
-  return siteTypeMeta(siteType).icon;
+  return siteTypeMeta(siteType)?.icon ?? FALLBACK_SITE_TYPE_META.icon;
 }
 
 /** Returns the display name for the given site type. */
 export function siteTypeName(siteType: SiteType): string {
-  return siteTypeMeta(siteType).name;
+  const meta = siteTypeMeta(siteType);
+  return meta === null
+    ? FALLBACK_SITE_TYPE_META.name
+    : requireGlossaryEntry(meta.glossaryId).term;
 }
 
 /** Returns a one-line description for the given site type. */
 export function siteTypeDescription(siteType: SiteType): string {
-  return siteTypeMeta(siteType).description;
+  const meta = siteTypeMeta(siteType);
+  return meta === null
+    ? FALLBACK_SITE_TYPE_META.description
+    : requireGlossaryEntry(meta.glossaryId).definition;
 }
 
 /**

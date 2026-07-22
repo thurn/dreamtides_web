@@ -1,4 +1,5 @@
 import { CardStatOrb } from "../../components/card/CardStatOrb";
+import { GLOSSARY_IDS } from "../../../data/glossary";
 import type { CumulusComponent } from "../registry";
 
 function CardStatOrbDemo(args: Record<string, unknown>) {
@@ -16,7 +17,9 @@ function CardStatOrbDemo(args: Record<string, unknown>) {
       }
       numberCapPx={typeof args.numberCapPx === "number" ? args.numberCapPx : 22}
       ariaLabel={typeof args.ariaLabel === "string" ? args.ariaLabel : undefined}
-      tooltip={typeof args.tooltip === "string" ? args.tooltip : undefined}
+      glossaryId={
+        typeof args.glossaryId === "string" ? args.glossaryId : undefined
+      }
       changeBadge={
         args.changeBadge === "empowered" || args.changeBadge === "kindled"
           ? args.changeBadge
@@ -58,7 +61,7 @@ export const cardStatOrbDemo: CumulusComponent = {
       numberSizeVar: "22px",
       numberCapPx: 22,
       ariaLabel: "energy cost",
-      tooltip: "Energy is paid to play the card.",
+      glossaryId: GLOSSARY_IDS.energyCost,
       changeBadge: "empowered",
     },
   },

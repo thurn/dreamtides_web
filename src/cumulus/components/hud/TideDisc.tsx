@@ -19,8 +19,8 @@ import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import { richText } from "../card/rich-text";
-
-const TIDES_DEFINITION = "Pools of cards you will see during the quest. Different tides are used every time you play.";
+import { glossaryInfoCard } from "../card/glossary-info-card";
+import { GLOSSARY_IDS } from "../../../data/glossary";
 
 /** The `sm` tide disc's diameter, in px. The desktop select's tide-row sizing
  * reads this constant, so the compact disc is one size everywhere. */
@@ -72,7 +72,7 @@ export function TideDisc({
     identity: { entityType: "tide", entityId: revealEntityId("tide", id) },
     spec: {
       primary: { kind: "infoCard", card: { variant: "tide", tide, title: label, body: richText.plain(description) } },
-      secondaries: [{ variant: "text", title: "Tides", body: richText.plain(TIDES_DEFINITION) }],
+      secondaries: [glossaryInfoCard(GLOSSARY_IDS.tides)],
     },
   });
   return (

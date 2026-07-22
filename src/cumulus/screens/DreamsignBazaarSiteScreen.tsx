@@ -8,6 +8,7 @@ import { DreamsignGalleryPanel } from "../components/card/DreamsignGalleryPanel"
 import { Dreamsign } from "../components/hud/Dreamsign";
 import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
+import { GLOSSARY_IDS } from "../../data/glossary";
 import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
 import {
@@ -230,8 +231,7 @@ function DreamsignBazaarGallery({
               : desktop
                 ? "Restock Offers"
                 : "Restock",
-          description:
-            "Replace the current offers with three new Dreamsigns. You may restock once per visit.",
+          glossaryId: GLOSSARY_IDS.dreamsignRestock,
           price: restock.state === "used" || restock.price === 0 ? null : restock.price,
           text: restock.state === "used" ? "Restocked" : restock.price === 0 ? "Free" : null,
           disabled: restock.state !== "available",

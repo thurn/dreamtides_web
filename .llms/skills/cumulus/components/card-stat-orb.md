@@ -22,7 +22,7 @@ The card-corner resource stat: a fitted white numeral over the energy, spark, or
 | `numberSizeVar` | `string` | yes | — | CSS length for the digit size — the single-digit ceiling, which doubles as the digit box edge (e.g. `var(--cv-energy-orb-font-size)`). Multi-digit values auto-shrink below this to fit. |
 | `numberCapPx` | `number` | yes | — | Upper bound (px) for the digit auto-shrink search. The displayed size is the smaller of the CSS digit ceiling and the fitted size, so this only needs to sit at or above the rendered digit size. |
 | `ariaLabel` | `string` | no | — |  |
-| `tooltip` | `string` | no | — | Optional hover tooltip: a short plain-language description string. |
+| `glossaryId` | `string` | no | — | Optional stable TOML glossary id for the stat's explanatory Info Card. |
 | `changeBadge` | `CardStatChangeBadge` = `"empowered" \| "kindled"` | no | — | Monochrome hammer marker for a transfiguration-changed stat, shared with the Transfiguration site's atlas icon. |
 
 ## Usage

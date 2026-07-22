@@ -1007,12 +1007,12 @@
       "description": ""
     },
     {
-      "name": "tooltip",
+      "name": "glossaryId",
       "tsType": "string",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Optional hover tooltip: a short plain-language description string."
+      "description": "Optional stable TOML glossary id for the stat's explanatory Info Card."
     },
     {
       "name": "changeBadge",
@@ -2051,10 +2051,10 @@
             "description": "Visible and accessible action label."
           },
           {
-            "name": "description",
+            "name": "glossaryId",
             "tsType": "string",
             "optional": false,
-            "description": "Plain-language explanation revealed through the shared InfoCard."
+            "description": "Stable TOML glossary id for the action's explanatory Info Card."
           },
           {
             "name": "price",
@@ -2706,19 +2706,19 @@
             "name": "term",
             "tsType": "string",
             "optional": false,
-            "description": "Canonical term shown as the popover heading. The term itself is matched\ndirectly (case-insensitively), so it does not need to be repeated in\n`variants`."
+            "description": "Canonical heading displayed on the Info Card."
           },
           {
             "name": "definition",
             "tsType": "string",
             "optional": false,
-            "description": "Short, plain-language definition."
+            "description": "Player-facing explanatory copy displayed on the Info Card."
           },
           {
             "name": "variants",
             "tsType": "readonly string[]",
             "optional": true,
-            "description": "Extra word forms that should match this entry beyond the term itself, such\nas plurals and past-tense forms (e.g. `banes`, `transfigured`). Omit when\nthe term is the only form. Matching is case-insensitive."
+            "description": "Extra rules-text word forms beyond the canonical term."
           }
         ]
       }
@@ -2739,19 +2739,19 @@
             "name": "term",
             "tsType": "string",
             "optional": false,
-            "description": "Canonical term shown as the popover heading. The term itself is matched\ndirectly (case-insensitively), so it does not need to be repeated in\n`variants`."
+            "description": "Canonical heading displayed on the Info Card."
           },
           {
             "name": "definition",
             "tsType": "string",
             "optional": false,
-            "description": "Short, plain-language definition."
+            "description": "Player-facing explanatory copy displayed on the Info Card."
           },
           {
             "name": "variants",
             "tsType": "readonly string[]",
             "optional": true,
-            "description": "Extra word forms that should match this entry beyond the term itself, such\nas plurals and past-tense forms (e.g. `banes`, `transfigured`). Omit when\nthe term is the only form. Matching is case-insensitive."
+            "description": "Extra rules-text word forms beyond the canonical term."
           }
         ]
       }
@@ -3391,12 +3391,12 @@
       "description": "Optional accessible label for screen readers. If omitted, the badge\nuses a sensible default for its variant."
     },
     {
-      "name": "tooltip",
+      "name": "glossaryId",
       "tsType": "string",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Optional hover/focus tooltip. When provided, the badge becomes its own\nhover anchor. A short plain-language description string."
+      "description": "Optional stable TOML glossary id. When provided, the badge becomes its own\nhover anchor and reveals that glossary entry."
     }
   ],
   "Pressable": [
@@ -3870,16 +3870,10 @@
             "description": "Stable domain identity of this resource source."
           },
           {
-            "name": "label",
+            "name": "glossaryId",
             "tsType": "string",
             "optional": false,
-            "description": "Display title for its reveal."
-          },
-          {
-            "name": "description",
-            "tsType": "string",
-            "optional": false,
-            "description": "Player-facing explanation."
+            "description": "Stable TOML glossary entry used for the explanatory Info Card."
           }
         ]
       }

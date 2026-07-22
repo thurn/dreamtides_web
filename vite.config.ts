@@ -24,6 +24,7 @@ import { createImageViewerApiMiddleware } from "./scripts/image-viewer-api.mjs";
 import { createCardImageApiMiddleware } from "./scripts/card-image-api.mjs";
 import { createSavedQuestsApiMiddleware } from "./scripts/saved-quests-api.mjs";
 import { createTutorialEditorApiMiddleware } from "./scripts/tutorial-editor-api.mjs";
+import { createGlossaryEditorApiMiddleware } from "./scripts/glossary-editor-api.mjs";
 import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs";
 import { regenerateCardData } from "./scripts/setup-assets.mjs";
 
@@ -117,6 +118,57 @@ function dreamsignEditorApiPlugin(): Plugin {
     apply: "serve",
     configureServer(server) {
       server.middlewares.use(createDreamsignEditorApiMiddleware({ rootDir: __dirname }));
+    },
+  };
+}
+
+/** Vite plugin that serves the TOML-backed Info Card glossary editor. */
+function glossaryEditorApiPlugin(): Plugin {
+  return {
+    name: "glossary-editor-api",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(
+        createGlossaryEditorApiMiddleware({ rootDir: __dirname }),
+      );
+    },
+  };
+}
+
+/**
+ * Notify every non-glossary page when glossary.toml changes. The tracked TOML
+ * directory is outside Vite's watcher, so this small direct watcher lets open
+ * gameplay/card surfaces reload their bundled explanatory copy while the
+ * glossary editor keeps its local draft and save state.
+ */
+function glossaryDataHotReloadPlugin(): Plugin {
+  return {
+    name: "glossary-data-hot-reload",
+    apply: "serve",
+    configureServer(server) {
+      const tomlDir = path.resolve(path.join(__dirname, "data", "tabula"));
+      let pendingReload: ReturnType<typeof setTimeout> | null = null;
+      const watcher = fs.watch(
+        tomlDir,
+        { persistent: false },
+        (_eventType, filename) => {
+          if (filename !== null && filename.toString() !== "glossary.toml") {
+            return;
+          }
+          if (pendingReload !== null) clearTimeout(pendingReload);
+          pendingReload = setTimeout(() => {
+            pendingReload = null;
+            server.ws.send({ type: "custom", event: "glossary-data:changed" });
+          }, 120);
+        },
+      );
+      const close = (): void => {
+        if (pendingReload !== null) clearTimeout(pendingReload);
+        pendingReload = null;
+        watcher.close();
+      };
+      server.httpServer?.once("close", close);
+      server.watcher.once("close", close);
     },
   };
 }
@@ -777,6 +829,8 @@ export default defineConfig({
     questLogPlugin(),
     cardEditorApiPlugin(),
     dreamsignEditorApiPlugin(),
+    glossaryEditorApiPlugin(),
+    glossaryDataHotReloadPlugin(),
     dreamcallerEditorApiPlugin(),
     tidesEditorApiPlugin(),
     dreamscapeEditorApiPlugin(),

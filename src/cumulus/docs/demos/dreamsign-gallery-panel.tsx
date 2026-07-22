@@ -2,6 +2,7 @@ import type { Dreamsign as DreamsignData } from "../../../types/quest";
 import { DreamsignGalleryPanel } from "../../components/card/DreamsignGalleryPanel";
 import { GLYPHS } from "../../primitives/glyph";
 import type { CumulusComponent } from "../registry";
+import { GLOSSARY_IDS } from "../../../data/glossary";
 
 const DEMO_DREAMSIGNS: DreamsignData[] = [
   {
@@ -50,8 +51,7 @@ function DreamsignGalleryPanelDemo() {
           entryId: "restock",
           glyph: GLYPHS.refresh,
           label: "Restock Offers",
-          description:
-            "Replace the current offers with three new Dreamsigns. You may restock once per visit.",
+          glossaryId: GLOSSARY_IDS.dreamsignRestock,
           price: null,
           text: "Restocked",
           disabled: true,

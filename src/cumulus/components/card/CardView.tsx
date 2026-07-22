@@ -9,6 +9,7 @@ import {
   hasAssignedImage,
 } from "../../../data/card-database";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
+import { GLOSSARY_IDS } from "../../../data/glossary";
 import { identiconsForced } from "../../../runtime/identicon-mode";
 import {
   ART_EXTENSION_FRACTION,
@@ -484,11 +485,6 @@ function buildAttributeChips(
   return [];
 }
 
-const ENERGY_PIP_TOOLTIP =
-  "Energy cost. Spend this much energy to play the card.";
-const SPARK_PIP_TOOLTIP =
-  "Spark. A character's combat power — higher spark wins combat.";
-
 /**
  * Tracks the rendered card width. The width drives both the legacy text-scale
  * metadata (`data-card-text-scale`, still asserted by tests and used as the
@@ -792,7 +788,7 @@ function GameCardSurface(props: CardViewProps) {
       sizeVar="var(--cv-energy-orb-size)"
       numberSizeVar="var(--cv-energy-orb-font-size)"
       numberCapPx={energyOrbCapPx}
-      tooltip={statTooltips ? ENERGY_PIP_TOOLTIP : undefined}
+      glossaryId={statTooltips ? GLOSSARY_IDS.energyCost : undefined}
       changeBadge={
         transfiguration?.energyChanged === true ? "empowered" : undefined
       }
@@ -1028,7 +1024,7 @@ function GameCardSurface(props: CardViewProps) {
         sizeVar={sparkSizeVar}
         numberSizeVar={sparkFontVar}
         numberCapPx={sparkCapPx}
-        tooltip={statTooltips ? SPARK_PIP_TOOLTIP : undefined}
+        glossaryId={statTooltips ? GLOSSARY_IDS.spark : undefined}
         changeBadge={
           !battlefieldPresentation && transfiguration?.sparkChanged === true
             ? "kindled"

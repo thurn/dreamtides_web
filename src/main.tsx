@@ -43,6 +43,12 @@ function renderStrict(children: ReactNode) {
 
 const pathname = window.location.pathname.replace(/\/+$/, "");
 
+if (import.meta.hot && pathname !== "/glossary") {
+  import.meta.hot.on("glossary-data:changed", () => {
+    window.location.reload();
+  });
+}
+
 if (pathname === "/editor" || pathname === "/cards") {
   // `/cards` is the canonical card editor URL. `/editor` is a legacy alias that
   // redirects to `/cards` (rewriting the address bar in place, no reload) while
@@ -59,6 +65,10 @@ if (pathname === "/editor" || pathname === "/cards") {
   const { default: DreamsignEditorApp } =
     await import("./editor/DreamsignEditorApp");
   renderStrict(<DreamsignEditorApp />);
+} else if (pathname === "/glossary") {
+  const { default: GlossaryEditorApp } =
+    await import("./editor/GlossaryEditorApp");
+  renderStrict(<GlossaryEditorApp />);
 } else if (pathname === "/dreamcallers") {
   const { default: DreamcallerEditorApp } =
     await import("./editor/DreamcallerEditorApp");

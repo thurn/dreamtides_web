@@ -37,6 +37,12 @@ vi.mock("./DreamscapeEditorApp", () => ({
   },
 }));
 
+vi.mock("./GlossaryEditorApp", () => ({
+  default: function MockGlossaryEditorApp() {
+    return null;
+  },
+}));
+
 vi.mock("../debug/OffersDebugApp", () => ({
   default: function MockOffersDebugApp() {
     return null;
@@ -127,6 +133,18 @@ describe("main editor route", () => {
 
   it("mounts the isolated dreamscape editor for the Vite-served /dreamscapes/ path", async () => {
     window.history.pushState(null, "", "/dreamscapes/");
+
+    await import("../main.tsx");
+
+    expect(mocks.appImport).not.toHaveBeenCalled();
+    expect(mocks.createRoot).toHaveBeenCalledWith(
+      document.getElementById("root"),
+    );
+    expect(mocks.render).toHaveBeenCalledTimes(1);
+  });
+
+  it("mounts the isolated glossary editor for the Vite-served /glossary/ path", async () => {
+    window.history.pushState(null, "", "/glossary/");
 
     await import("../main.tsx");
 

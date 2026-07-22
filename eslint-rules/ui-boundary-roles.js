@@ -25,6 +25,7 @@ const fileRoles = {
   "src/index.css": OUTER_UI_ROLES.APP_SHELL,
   "src/editor/card-editor.css": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/editor/editable-figment.css": OUTER_UI_ROLES.OPERATOR_TOOL,
+  "src/editor/glossary-editor.css": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/vendor/boxicons/boxicons.css": OUTER_UI_ROLES.VENDOR_ASSET,
   "src/vendor/boxicons/boxicons-filled.css": OUTER_UI_ROLES.VENDOR_ASSET,
   "src/vendor/boxicons/boxicons-logos.css": OUTER_UI_ROLES.VENDOR_ASSET,
@@ -97,6 +98,7 @@ for (const name of [
   "EditableCard", "EditableDreamcaller", "EditableDreamscape", "EditableDreamsign",
   "EditableDreamwell", "EditableField", "EditableFigment", "FigmentEditorApp",
   "FocusedCardEditor", "ManageTagsModal", "TagChip", "TagFilterControl",
+  "GlossaryEditorApp",
   "TidePoolModal", "TideSourcePreview", "TidesDetailView", "TidesEditorApp",
   "TidesListView",
 ]) {

@@ -2,13 +2,14 @@
 // for card corner stats (spark, energy cost) and for the inline spark reference
 // inside rules text. The live Component shows a control-driven hero above a
 // static showcase of the spark and energy variants at both sizes ('sm', 'md'),
-// with one energy pip carrying a tooltip so a reader can see the long-delay
+// with one energy pip carrying a glossary reveal so a reader can see the long-delay
 // hover anchor. The resource fills are exported from PipBadge.tsx as the single
 // source of truth (see the callout), so a corner pip and the inline energy
 // glyph in rules text paint the same resource.
 
 import { PipBadge } from "../../components/controls/PipBadge";
 import { token } from "../../primitives/tokens";
+import { GLOSSARY_IDS } from "../../../data/glossary";
 import type { CumulusComponent } from "../registry";
 
 function coerceString(value: unknown, fallback: string): string {
@@ -22,7 +23,8 @@ function PipBadgeDemo(args: Record<string, unknown>) {
   const scale = typeof args.scale === "number" ? args.scale : 1;
   const ariaLabel =
     typeof args.ariaLabel === "string" ? args.ariaLabel : undefined;
-  const tooltip = typeof args.tooltip === "string" ? args.tooltip : undefined;
+  const glossaryId =
+    typeof args.glossaryId === "string" ? args.glossaryId : undefined;
 
   return (
     <div
@@ -40,10 +42,10 @@ function PipBadgeDemo(args: Record<string, unknown>) {
         size={size}
         scale={scale}
         ariaLabel={ariaLabel}
-        tooltip={tooltip}
+        glossaryId={glossaryId}
       />
       {/* Static showcase: the spark and energy variants at both sizes. The
-          energy 'md' pip carries a tooltip — hover and hold it for a full
+          energy 'md' pip carries a glossary Info Card — hover and hold it for a full
           second (the corner-tuned delay) to reveal the description. */}
       <div
         style={{
@@ -98,7 +100,7 @@ function PipBadgeDemo(args: Record<string, unknown>) {
               variant="energy"
               value="2"
               size="md"
-              tooltip="Energy is the cost you pay to play this card."
+              glossaryId={GLOSSARY_IDS.energyCost}
             />
           </div>
           <span
@@ -116,7 +118,7 @@ export const pipBadgeDemo: CumulusComponent = {
   id: "pip-badge",
   title: "Pip Badge",
   blurb:
-    "The compact circled number used in dense card rows and inline rules text for spark or energy values. The value renders in white with a thin outline at small sizes; full game-card corners use the larger, art-aware CardStatOrb. An optional tooltip turns a pip into its own semantic reveal source.",
+    "The compact circled number used in dense card rows and inline rules text for spark or energy values. The value renders in white with a thin outline at small sizes; full game-card corners use the larger, art-aware CardStatOrb. An optional glossary entry turns a pip into its own semantic reveal source.",
   callout:
     "The compact pip fills live in pip-colors.ts: SPARK_PIP_COLOR is gold #facc15 and ENERGY_PIP_COLOR is teal #0ea5e9. GlowIcon shares the energy constant for inline energy marks; larger CardStatOrb glyphs use the card-stat color treatment. Import the named constants rather than re-typing their values.",
   group: "Components",
@@ -131,15 +133,16 @@ export const pipBadgeDemo: CumulusComponent = {
 <PipBadge variant="spark" value="3" size="sm" />`,
     },
     {
-      label: "Energy-cost pip with tooltip",
-      note: "The energy cost as a pip, with a tooltip so a first-time player can learn what the number means. The pip becomes its own hover anchor; the tooltip fires on a full-second hold so brushing past a card corner does not trigger it.",
-      code: `import { PipBadge } from "src/cumulus/components/controls/PipBadge";
+      label: "Energy-cost pip with glossary entry",
+      note: "The energy cost as a pip, with a glossary-backed Info Card so a first-time player can learn what the number means. The pip becomes its own hover anchor; the reveal fires on a full-second hold so brushing past a card corner does not trigger it.",
+      code: `import { GLOSSARY_IDS } from "src/data/glossary";
+import { PipBadge } from "src/cumulus/components/controls/PipBadge";
 
 <PipBadge
   variant="energy"
   value="2"
   size="sm"
-  tooltip="Energy is the cost you pay to play this card."
+  glossaryId={GLOSSARY_IDS.energyCost}
 />`,
     },
   ],

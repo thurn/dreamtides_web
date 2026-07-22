@@ -5,6 +5,7 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { PipBadge } from "./PipBadge";
+import { GLOSSARY_IDS, requireGlossaryEntry } from "../../../data/glossary";
 import { CumulusRoot } from "../../CumulusRoot";
 
 function mount(element: ReactElement): {
@@ -95,12 +96,12 @@ describe("PipBadge", () => {
     });
   });
 
-  it("owns strict tooltip reveal semantics and remains keyboard focusable", () => {
+  it("owns strict glossary reveal semantics and remains keyboard focusable", () => {
     const { container, root } = mount(
       <PipBadge
         variant="spark"
         value="2"
-        tooltip="Spark: damage this character deals."
+        glossaryId={GLOSSARY_IDS.spark}
       />,
     );
 
@@ -117,7 +118,9 @@ describe("PipBadge", () => {
     expect(source?.dataset.revealSecondaryTitles).toBe("");
     expect(source?.tabIndex).toBe(0);
     const description = document.getElementById(source?.getAttribute("aria-describedby") ?? "");
-    expect(description?.textContent).toContain("Spark: damage this character deals.");
+    expect(description?.textContent).toContain(
+      requireGlossaryEntry(GLOSSARY_IDS.spark).definition,
+    );
 
     act(() => {
       root.unmount();

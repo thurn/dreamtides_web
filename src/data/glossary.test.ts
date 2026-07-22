@@ -3,9 +3,11 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
   GLOSSARY,
+  GLOSSARY_IDS,
   GLOSSARY_INDEX,
   hasGlossaryTerm,
   lookupGlossaryTerm,
+  requireGlossaryEntry,
 } from "./glossary";
 import { tokenizeRulesText } from "../cumulus/components/card/card-text";
 
@@ -24,6 +26,19 @@ describe("glossary", () => {
 
   it("has a non-empty list of entries", () => {
     expect(GLOSSARY.length).toBeGreaterThan(0);
+  });
+
+  it("resolves every stable explanatory Info Card id", () => {
+    const ids = [
+      GLOSSARY_IDS.energyCost,
+      GLOSSARY_IDS.spark,
+      GLOSSARY_IDS.essence,
+      GLOSSARY_IDS.startingEssence,
+      GLOSSARY_IDS.tides,
+      GLOSSARY_IDS.dreamsignRestock,
+      ...Object.values(GLOSSARY_IDS.sites),
+    ];
+    for (const id of ids) expect(requireGlossaryEntry(id).id).toBe(id);
   });
 
   it("indexes each term and variant exactly once", () => {

@@ -14,6 +14,7 @@ import { type Tide } from "../components/hud/tide-spec";
 import { token } from "../primitives/tokens";
 import { GLYPHS } from "../primitives/glyph";
 import type { DreamcallerPortraitFocus } from "../../types/content";
+import { GLOSSARY_IDS } from "../../data/glossary";
 
 /** One tide shown on a Dreamcaller, already resolved to display copy. Both the
  * desktop triptych and the mobile carousel render their tide discs (and each
@@ -372,9 +373,7 @@ export function EssenceReveal({
         value={dreamcaller.startingEssence}
         entity={{
           id: dreamcaller.id,
-          label: "Starting Essence",
-          description:
-            "The essence this Dreamcaller begins the quest with, spent at sites this run.",
+          glossaryId: GLOSSARY_IDS.startingEssence,
         }}
       />
     </span>
