@@ -401,7 +401,7 @@ describe("buildTutorialView", () => {
       hand: 1,
     });
 
-    const played = buildTutorialView(
+    const playedTutorial = buildTutorialView(
       {
         runId: "event:draw",
         currentActionIndex: null,
@@ -409,7 +409,11 @@ describe("buildTutorialView", () => {
       },
       OPPONENT_CARD,
       PLAYER_CARD,
-    ).battle;
+    );
+    const played = playedTutorial.battle;
+    expect(playedTutorial.howToPlay).toEqual({
+      triggerCardId: TUTORIAL_PLAYER_CARD_ID,
+    });
     expect(played.enemyHandCardIds).toEqual([]);
     expect(played.enemyHand).toEqual([]);
     expect(played.enemy.backRank[0]?.card).toMatchObject({

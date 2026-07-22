@@ -344,6 +344,7 @@ describe("TutorialScreen", () => {
                 },
               },
               playbackRunId: "event:1",
+              howToPlay: null,
               currentAction: {
                 id: "welcome",
                 action: "display-speech-bubble",
@@ -398,6 +399,7 @@ describe("TutorialScreen", () => {
                 },
               },
               playbackRunId: "event:1",
+              howToPlay: null,
               currentAction: {
                 id: "welcome",
                 action: "display-speech-bubble",
@@ -493,6 +495,7 @@ describe("TutorialScreen", () => {
                 },
               },
               playbackRunId: "event:2",
+              howToPlay: null,
               currentAction: {
                 id: "dreamcaller-arrival",
                 action: "animate-dreamcaller-portrait",
@@ -604,6 +607,7 @@ describe("TutorialScreen", () => {
               dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: null,
               playbackRunId: "event:3",
+              howToPlay: null,
               currentAction: {
                 id: "vrakmoth-arrival",
                 action: "animate-dreamcaller-portrait",
@@ -690,6 +694,7 @@ describe("TutorialScreen", () => {
                 text: "For the Abyss!",
               },
               playbackRunId: "event:draw",
+              howToPlay: null,
               currentAction: {
                 id: "vrakmoth-draw",
                 action: "draw-opponent-card",
@@ -839,6 +844,7 @@ describe("TutorialScreen", () => {
               dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: null,
               playbackRunId: "event:play",
+              howToPlay: null,
               currentAction: {
                 id: "vrakmoth-reveal-and-play",
                 action: "reveal-and-play-opponent-card",
@@ -937,6 +943,97 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
+  it("opens the formatted How to Play dialog after the player card finishes drawing and closes it from the X button", () => {
+    vi.useFakeTimers();
+    const onHowToPlayPresented = vi.fn();
+    const onHowToPlayDismissed = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: null,
+              playbackRunId: "event:player-turn",
+              currentAction: null,
+              howToPlay: {
+                triggerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                enemy: { backRank: [], frontRank: [], deckCardIds: [] },
+                player: { backRank: [], frontRank: [] },
+              } as unknown as MobileBattleView,
+            }}
+            onHowToPlayPresented={onHowToPlayPresented}
+            onHowToPlayDismissed={onHowToPlayDismissed}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    act(() => screenMocks.sceneAnimationComplete?.());
+    act(() => {
+      vi.advanceTimersByTime(419);
+    });
+    expect(container.querySelector('[role="dialog"]')).toBeNull();
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+
+    const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
+    expect(dialog?.getAttribute("aria-label")).toBe("How to Play");
+    expect(dialog?.querySelector("h2")?.textContent).toBe("How to Play");
+    const content = dialog?.querySelector<HTMLElement>(
+      "[data-tutorial-how-to-play-content]",
+    );
+    const paragraphs = [...(content?.querySelectorAll("p") ?? [])];
+    expect(paragraphs).toHaveLength(2);
+    expect(content?.style.gap).toBe("var(--space-7)");
+    expect(paragraphs[0]?.style.font).toBe("var(--t-lead)");
+    expect(paragraphs[0]?.textContent).toContain(
+      "Play characters and challenge with them to score",
+    );
+    expect(paragraphs[1]?.textContent).toContain(
+      "Score 10 to win this dream battle",
+    );
+    const challenge = paragraphs[0]?.querySelector("strong");
+    expect(challenge?.textContent).toBe("challenge");
+    expect(challenge?.style.color).toBe("var(--spark)");
+    expect(dialog?.querySelectorAll('[aria-label="points"]')).toHaveLength(2);
+    expect(dialog?.querySelector('[aria-label="points"]')?.className).toContain(
+      "bxf bx-star-circle",
+    );
+    expect(dialog?.querySelector('[aria-label="spark"]')?.className).toContain(
+      "bxf bx-sparkle",
+    );
+    expect(onHowToPlayPresented).toHaveBeenCalledWith(
+      "event:player-turn",
+      "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+    );
+
+    act(() => {
+      dialog
+        ?.querySelector<HTMLButtonElement>(
+          'button[aria-label="Close how to play"]',
+        )
+        ?.click();
+    });
+    expect(container.querySelector('[role="dialog"]')).toBeNull();
+    expect(onHowToPlayDismissed).toHaveBeenCalledWith(
+      "event:player-turn",
+      "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("places opposing speech above all UI with a top-left pointer on the portrait rim", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
       function rectForElement(this: HTMLElement) {
@@ -972,6 +1069,7 @@ describe("TutorialScreen", () => {
                 text: "For the Abyss!",
               },
               playbackRunId: "event:4",
+              howToPlay: null,
               currentAction: {
                 id: "vrakmoth-taunt",
                 action: "display-speech-bubble",
@@ -1069,6 +1167,7 @@ describe("TutorialScreen", () => {
                 },
               },
               playbackRunId: "event:1",
+              howToPlay: null,
               currentAction: {
                 id: "welcome",
                 action: "display-speech-bubble",

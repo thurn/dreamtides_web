@@ -4,7 +4,10 @@ import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
 import * as tutorialEditor from "../../state/use-tutorial-editor";
 import { useTutorialCards } from "../../state/use-tutorial-opponent-card";
-import { useTutorialPresentationLogging } from "../../state/use-tutorial-presentation-logging";
+import {
+  useTutorialHowToPlayLogging,
+  useTutorialPresentationLogging,
+} from "../../state/use-tutorial-presentation-logging";
 import type { TutorialDreamcallerOwner } from "../../types/tutorial";
 import * as tutorialView from "./tutorial-view-model";
 /** Standalone `/tutorial` wiring, shared playback, and local authoring saves. */
@@ -60,6 +63,7 @@ export function TutorialScreenAdapter() {
     [state.tutorial, tutorialCards],
   );
   useTutorialPresentationLogging(state.tutorial, view);
+  const howToPlayLogging = useTutorialHowToPlayLogging(view.battle.battleId);
 
   const handleActionComplete = useCallback(
     (runId: string, actionId: string): void => {
@@ -100,6 +104,7 @@ export function TutorialScreenAdapter() {
       }
       onActionComplete={handleActionComplete}
       onDreamcallerArrivalComplete={handleDreamcallerArrivalComplete}
+      {...howToPlayLogging}
       onEditorActionsChange={handleEditorActionsChange}
       onReplay={handleReplay}
       onPlayFromAction={handleReplay}

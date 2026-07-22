@@ -1,5 +1,8 @@
-import { useEffect, useRef } from "react";
-import type { TutorialView } from "../cumulus/screens/TutorialScreen";
+import { useCallback, useEffect, useRef } from "react";
+import type {
+  TutorialScreenProps,
+  TutorialView,
+} from "../cumulus/screens/TutorialScreen";
 import { logEvent } from "../logging";
 import { tutorialActionLogDetails } from "../screens/cumulus_adapters/tutorial-view-model";
 import type { TutorialPlaybackState } from "../types/tutorial";
@@ -57,4 +60,36 @@ export function useTutorialPresentationLogging(
       actionCount: playback?.actions.length ?? 0,
     });
   }, [playback, view.currentAction, view.dialogue, view.playbackRunId]);
+}
+
+/** Log the local How to Play overlay lifecycle with its UUID-backed trigger. */
+export function useTutorialHowToPlayLogging(
+  battleId: string,
+): Pick<
+  TutorialScreenProps,
+  "onHowToPlayPresented" | "onHowToPlayDismissed"
+> {
+  const onHowToPlayPresented = useCallback(
+    (runId: string, triggerCardId: string): void => {
+      logEvent("tutorial_how_to_play_presented", {
+        runId,
+        battleId,
+        triggerCardId,
+        trigger: "player-card-draw-complete",
+        title: "How to Play",
+      });
+    },
+    [battleId],
+  );
+  const onHowToPlayDismissed = useCallback(
+    (runId: string, triggerCardId: string): void => {
+      logEvent("tutorial_how_to_play_dismissed", {
+        runId,
+        battleId,
+        triggerCardId,
+      });
+    },
+    [battleId],
+  );
+  return { onHowToPlayPresented, onHowToPlayDismissed };
 }

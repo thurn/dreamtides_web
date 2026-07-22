@@ -220,6 +220,9 @@ describe("TutorialScreenAdapter", () => {
         },
       ],
     });
+    expect(adapterMocks.props?.view.howToPlay).toEqual({
+      triggerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+    });
     expect(getLogEntries()).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -235,6 +238,35 @@ describe("TutorialScreenAdapter", () => {
           destinationZone: "player-hand",
           playerDeckCount: 29,
           playerHandCount: 1,
+        }),
+      ]),
+    );
+
+    act(() => {
+      adapterMocks.props?.onHowToPlayPresented?.(
+        "event:1",
+        "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      );
+      adapterMocks.props?.onHowToPlayDismissed?.(
+        "event:1",
+        "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      );
+    });
+    expect(getLogEntries()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          event: "tutorial_how_to_play_presented",
+          runId: "event:1",
+          battleId: "tutorial-battle",
+          triggerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          trigger: "player-card-draw-complete",
+          title: "How to Play",
+        }),
+        expect.objectContaining({
+          event: "tutorial_how_to_play_dismissed",
+          runId: "event:1",
+          battleId: "tutorial-battle",
+          triggerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
         }),
       ]),
     );

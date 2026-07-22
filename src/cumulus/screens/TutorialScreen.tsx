@@ -13,6 +13,7 @@ import { token } from "../primitives/tokens";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { GLYPHS } from "../primitives/glyph";
 import { IconButton } from "../components/controls/IconButton";
+import { GlowIcon } from "../components/controls/GlowIcon";
 import type { BattleStatusDreamcallerProfile } from "../components/battle/BattleStatusDisplay";
 import { CardBack } from "../components/battle/CardBack";
 import { GameCard } from "../components/card/CardView";
@@ -28,6 +29,7 @@ import {
   CharacterDialogue,
   type CharacterDialogueModel,
 } from "../components/overlay/CharacterDialogue";
+import { GlassDialog } from "../components/overlay/GlassDialog";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
 import {
   speechBubblePointerTip,
@@ -79,6 +81,9 @@ export interface TutorialView {
   >;
   readonly playbackRunId: string | null;
   readonly currentAction: TutorialAction | null;
+  readonly howToPlay: {
+    readonly triggerCardId: string;
+  } | null;
 }
 
 export interface TutorialEditorView {
@@ -95,6 +100,8 @@ export interface TutorialScreenProps {
     dreamcallerId: string,
     owner: TutorialDreamcallerOwner,
   ) => void;
+  readonly onHowToPlayPresented?: (runId: string, triggerCardId: string) => void;
+  readonly onHowToPlayDismissed?: (runId: string, triggerCardId: string) => void;
   readonly onEditorActionsChange?: (
     actions: readonly TutorialAction[],
     persist: boolean,
@@ -138,6 +145,74 @@ const TUTORIAL_REVEAL_CARD_DESKTOP_WIDTH = 240;
 const TUTORIAL_REVEAL_CARD_MOBILE_WIDTH_RATIO = 0.45;
 // The pointer overlaps the portrait rim so it visibly connects to the frame.
 const TUTORIAL_PORTRAIT_POINTER_OVERLAP = 2;
+
+function TutorialHowToPlayDialog({
+  onClose,
+}: {
+  readonly onClose: () => void;
+}): ReactElement {
+  const paragraphStyle = {
+    margin: 0,
+    color: token("--text-on-glass"),
+    font: token("--t-lead"),
+  } as const;
+  const inlineIconStyle = {
+    display: "inline-flex",
+    alignItems: "center",
+    whiteSpace: "nowrap",
+  } as const;
+
+  return (
+    <GlassDialog
+      title="How to Play"
+      closeLabel="Close how to play"
+      onClose={onClose}
+    >
+      <div
+        data-tutorial-how-to-play-content=""
+        style={{
+          display: "grid",
+          gap: token("--space-7"),
+          maxWidth: 680,
+          marginInline: "auto",
+          padding: token("--space-5"),
+        }}
+      >
+        <p style={paragraphStyle}>
+          Play characters and{" "}
+          <strong style={{ color: token("--spark") }}>challenge</strong> with
+          them to{" "}
+          <span style={inlineIconStyle}>
+            score{" "}
+            <GlowIcon
+              iconClass={GLYPHS.points}
+              color="text-primary"
+              title="points"
+            />
+          </span>{" "}
+          equal to their{" "}
+          <GlowIcon
+            iconClass={GLYPHS.sparkInline}
+            color="spark"
+            title="spark"
+          />
+        </p>
+        <p style={paragraphStyle}>
+          Score{" "}
+          <span style={inlineIconStyle}>
+            10
+            <GlowIcon
+              iconClass={GLYPHS.points}
+              color="text-primary"
+              title="points"
+            />
+          </span>{" "}
+          to win this dream battle
+        </p>
+      </div>
+    </GlassDialog>
+  );
+}
 
 function tutorialOpponentBackRankIndex(slotCount: number): number {
   return Math.max(0, Math.floor(slotCount / 2) - 1);
@@ -714,6 +789,8 @@ export function TutorialScreen({
   editor,
   onActionComplete,
   onDreamcallerArrivalComplete,
+  onHowToPlayPresented,
+  onHowToPlayDismissed,
   onEditorActionsChange,
   onReplay,
   onPlayFromAction,
@@ -728,6 +805,12 @@ export function TutorialScreen({
   const [arrivedActionKey, setArrivedActionKey] = useState<string | null>(null);
   const [drawnActionKey, setDrawnActionKey] = useState<string | null>(null);
   const [playedActionKey, setPlayedActionKey] = useState<string | null>(null);
+  const [howToPlayPresentedRunId, setHowToPlayPresentedRunId] = useState<
+    string | null
+  >(null);
+  const [howToPlayDismissedRunId, setHowToPlayDismissedRunId] = useState<
+    string | null
+  >(null);
   const reportedDrawKeys = useRef<Set<string>>(new Set());
   const reportedArrivalKeys = useRef<Set<string>>(new Set());
   const reportedPlayKeys = useRef<Set<string>>(new Set());
@@ -983,6 +1066,44 @@ export function TutorialScreen({
     view.currentAction,
     view.playbackRunId,
   ]);
+
+  useEffect(() => {
+    const runId = view.playbackRunId;
+    const howToPlay = view.howToPlay;
+    if (
+      !sceneEntered ||
+      runId === null ||
+      howToPlay === null ||
+      howToPlayPresentedRunId === runId ||
+      howToPlayDismissedRunId === runId
+    ) {
+      return undefined;
+    }
+    const timeout = window.setTimeout(
+      () => {
+        setHowToPlayPresentedRunId(runId);
+        onHowToPlayPresented?.(runId, howToPlay.triggerCardId);
+      },
+      (reduceMotion ? 0 : TUTORIAL_CARD_TRAVEL_SECONDS) * 1_000,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [
+    howToPlayDismissedRunId,
+    howToPlayPresentedRunId,
+    onHowToPlayPresented,
+    reduceMotion,
+    sceneEntered,
+    view.howToPlay,
+    view.playbackRunId,
+  ]);
+
+  const closeHowToPlay = useCallback((): void => {
+    const runId = view.playbackRunId;
+    const howToPlay = view.howToPlay;
+    if (runId === null || howToPlay === null) return;
+    setHowToPlayDismissedRunId(runId);
+    onHowToPlayDismissed?.(runId, howToPlay.triggerCardId);
+  }, [onHowToPlayDismissed, view.howToPlay, view.playbackRunId]);
 
   useEffect(() => {
     if (
@@ -1295,6 +1416,12 @@ export function TutorialScreen({
       ) : null}
       {!dockEditor && editorOpen && editorSurface !== null ? (
         <TutorialEditorTakeover {...editorSurface} />
+      ) : null}
+      {view.howToPlay !== null &&
+      view.playbackRunId !== null &&
+      howToPlayPresentedRunId === view.playbackRunId &&
+      howToPlayDismissedRunId !== view.playbackRunId ? (
+        <TutorialHowToPlayDialog onClose={closeHowToPlay} />
       ) : null}
     </motion.main>
   );

@@ -293,6 +293,10 @@ export function buildTutorialView(
             },
     playbackRunId: playback?.runId ?? null,
     currentAction,
+    howToPlay:
+      playerTurnCard === null
+        ? null
+        : { triggerCardId: playerTurnCard.model.cardId },
     battle: (() => {
       const emptyPlayer = emptySide("player");
       const player = {
