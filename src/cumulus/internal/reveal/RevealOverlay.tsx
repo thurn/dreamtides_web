@@ -7,7 +7,8 @@ import {
   type RevealPlacementDecision,
   type RevealSize,
 } from "./geometry";
-import type { RevealCoordinatorSource, RevealGeometrySnapshot, RevealPoint, RevealReason, RevealRect, RevealSpec } from "./model";
+import { token } from "../../primitives/tokens";
+import type { RevealCoordinatorSource, RevealGameCard, RevealGeometrySnapshot, RevealPoint, RevealReason, RevealRect, RevealSpec } from "./model";
 import { renderRevealCard, renderRevealInfoCard } from "./render-reveal-card";
 import { captureVisualViewport } from "./viewport";
 
@@ -32,6 +33,39 @@ export interface RevealOverlayProps {
 interface MeasuredDecision { readonly key: string; readonly decision: RevealPlacementDecision; readonly sourceRect: RevealRect }
 
 const transparent: CSSProperties = { pointerEvents: "none" };
+
+function renderAdjacentCard(
+  card: RevealGameCard,
+  width: number,
+  showCreatesLabel: boolean,
+) {
+  return (
+    <div
+      data-cumulus-reveal-adjacent-content=""
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: token("--space-2"),
+        width,
+      }}
+    >
+      <span
+        data-cumulus-reveal-adjacent-label={showCreatesLabel ? "" : undefined}
+        style={{
+          color: token("--accent-bright"),
+          font: token("--t-eyebrow"),
+          letterSpacing: token("--tracking-eyebrow"),
+          textShadow: token("--text-outline-media"),
+          textTransform: "uppercase",
+          visibility: showCreatesLabel ? "visible" : "hidden",
+        }}
+      >
+        Creates:
+      </span>
+      {renderRevealCard(card, width)}
+    </div>
+  );
+}
 
 export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
   const key = active === null ? "" : `${active.source.registrationId}:${active.reason}:${String(active.interactionId)}`;
@@ -136,7 +170,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
             <div data-reveal-measure="secondary" data-reveal-index={index} key={index} style={{ ...transparent, width: measureSecondaryWidth }}>{renderRevealInfoCard(card, measureSecondaryWidth)}</div>
           ))}
           {adjacentCards.map((card, index) => (
-            <div data-reveal-measure="adjacent" data-reveal-index={index} key={card.cardId} style={{ ...transparent, width: DESKTOP_ADJACENT_CARD_WIDTH }}>{renderRevealCard(card, DESKTOP_ADJACENT_CARD_WIDTH)}</div>
+            <div data-reveal-measure="adjacent" data-reveal-index={index} key={card.cardId} style={{ ...transparent, width: DESKTOP_ADJACENT_CARD_WIDTH }}>{renderAdjacentCard(card, DESKTOP_ADJACENT_CARD_WIDTH, index === 0)}</div>
           ))}
       </div>
       {decision !== null && (
@@ -151,7 +185,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
           ))}
           {decision.adjacentRects.map((cardRect, index) => (
             <div data-cumulus-reveal-card="adjacent" key={adjacentCards[index]?.cardId ?? index} style={{ position: "fixed", left: cardRect.x, top: cardRect.y, width: cardRect.width, height: cardRect.height, pointerEvents: "none" }}>
-              {renderRevealCard(adjacentCards[index], cardRect.width)}
+              {renderAdjacentCard(adjacentCards[index], cardRect.width, index === 0)}
             </div>
           ))}
         </div>

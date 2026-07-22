@@ -151,6 +151,13 @@ describe("GameCard reveal contract", () => {
       '[data-cumulus-reveal-card="adjacent"]',
     );
     expect(figment?.style.width).toBe("150px");
+    const createsLabel = figment?.querySelector<HTMLElement>(
+      "[data-cumulus-reveal-adjacent-label]",
+    );
+    expect(createsLabel?.textContent).toBe("Creates:");
+    expect(createsLabel?.style.font).toBe("var(--t-eyebrow)");
+    expect(createsLabel?.style.textTransform).toBe("uppercase");
+    expect(createsLabel?.style.textShadow).toBe("var(--text-outline-media)");
     expect(figment?.querySelector('[data-card-id="bb1a5acd-1a03-4aa3-826d-f0a301843845"]')?.getAttribute("data-figment")).toBe("true");
     expect(Number.parseFloat(figment!.style.left)).toBe(
       Number.parseFloat(definition!.style.left)
