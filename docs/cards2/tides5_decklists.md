@@ -414,10 +414,10 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Sky Collapse
 - 1× Part the Veil
 - 1× Entropy Spike
-- 1× Wreckborn
+- 1× Cinderkeeper
 - 1× Secrets of the Deep
 - 1× Clockwork Salvager
-- 1× The Devourer
+- 1× Underroot Diviner
 - 1× Salvage Colossus
 - 1× Catastrophe Broker
 - 1× Embrace the Infinite
@@ -626,9 +626,9 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Sky Collapse
 - 1× The Dread Sovereign
 - 1× Entropy Spike
-- 1× Wreckborn
+- 1× Cinderkeeper
 - 1× Clockwork Salvager
-- 1× The Devourer
+- 1× Underroot Diviner
 - 1× Apocalypse
 - 1× Embrace the Infinite
 - 1× Pyrestone Avatar
@@ -729,7 +729,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× The Dread Sovereign
 - 1× Part the Veil
 - 1× Entropy Spike
-- 1× The Devourer
+- 1× Underroot Diviner
 - 1× Salvage Colossus
 - 1× Apocalypse
 - 1× Catastrophe Broker
@@ -1140,7 +1140,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Archive of the Forgotten
 - 1× Secrets of the Deep
 - 1× Clockwork Salvager
-- 1× The Devourer
+- 1× Underroot Diviner
 - 1× Salvage Colossus
 - 1× Catastrophe Broker
 - 1× Embrace the Infinite
@@ -1238,10 +1238,10 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Desperation
 - 1× Chronicle Reclaimer
 - 1× Archive of the Forgotten
-- 1× Wreckborn
+- 1× Cinderkeeper
 - 1× Secrets of the Deep
 - 1× Clockwork Salvager
-- 1× The Devourer
+- 1× Underroot Diviner
 - 1× Salvage Colossus
 - 1× Radiants' Captain
 - 1× Shatterpoint Agent
@@ -1296,7 +1296,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 
 - 2× Echo Architect
 - 2× Archive of the Forgotten
-- 2× The Devourer
+- 2× Underroot Diviner
 - 2× Salvage Colossus
 - 2× Abandon Constraints
 - 2× Smoke Siphoner
@@ -1383,7 +1383,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Ripple Through Reality
 - 1× Echoes of Eternity
 - 1× Evacuation Enforcer
-- 1× Manufactured Abomination
+- 1× Lantern Keeper
 - 1× Oracle of Shifting Skies
 - 1× Pinnacle Ascendant
 - 1× Thief of Memory
@@ -1780,7 +1780,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Sworn Defender
 - 1× Dreadcall Warden
 - 1× Through the Rift
-- 1× Tidecaller
+- 1× Firebrand Saboteur
 - 1× Sky Legion Captain
 - 1× Burning Revenant
 - 1× Relentless Pursuer
@@ -2550,7 +2550,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Molten Duel
 - 1× Part the Veil
 - 1× Clockwork Salvager
-- 1× The Devourer
+- 1× Underroot Diviner
 - 1× Salvage Colossus
 - 1× Catastrophe Broker
 - 1× Headtaker
@@ -2599,7 +2599,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Pathfinder Adrift
 - 1× Seeker for the Way
 - 1× Part the Veil
-- 1× The Devourer
+- 1× Underroot Diviner
 - 1× Salvage Colossus
 - 1× Catastrophe Broker
 - 1× Pyrestone Avatar
@@ -2804,7 +2804,7 @@ This tide is almost entirely characters (43 of 45 copies), with warriors making 
 - 1× Sky Collapse
 - 1× Part the Veil
 - 1× Entropy Spike
-- 1× Wreckborn
+- 1× Cinderkeeper
 - 1× Apocalypse
 - 1× Catastrophe Broker
 - 1× Duskwall Delver
@@ -2946,7 +2946,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Part the Veil
 - 1× Mystic Boatman
 - 1× Secrets of the Deep
-- 1× The Devourer
+- 1× Underroot Diviner
 - 1× Salvage Colossus
 - 1× Catastrophe Broker
 - 1× Pyrestone Avatar
@@ -3374,7 +3374,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Molten Duel
 - 1× Part the Veil
 - 1× Clockwork Salvager
-- 1× The Devourer
+- 1× Underroot Diviner
 - 1× Salvage Colossus
 - 1× Catastrophe Broker
 - 1× Headtaker
@@ -3422,7 +3422,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Pathfinder Adrift
 - 1× Seeker for the Way
 - 1× Part the Veil
-- 1× The Devourer
+- 1× Underroot Diviner
 - 1× Salvage Colossus
 - 1× Catastrophe Broker
 - 1× Pyrestone Avatar
@@ -3907,7 +3907,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Shaper of Memory
 - 1× Pathfinder Adrift
 - 1× Part the Veil
-- 1× The Devourer
+- 1× Underroot Diviner
 - 1× Salvage Colossus
 - 1× Catastrophe Broker
 - 1× Pyrestone Avatar

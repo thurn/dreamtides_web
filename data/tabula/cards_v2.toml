@@ -2888,7 +2888,7 @@ card-number = 153
 art = { x = 0, y = 1, scale = 1 }
 
 [[cards]]
-name = "Wreckborn"
+name = "Cinderkeeper"
 mtg-name = "Anax, Hardened in the Forge"
 id = "6d6ce556-60df-486f-b2d8-5df168a6f75e"
 rendered-text = "When a non-figment character you control is dissolved, materialize a 1✦ ember figment with awakened. When an ember figment is dissolved, this character gains +1✦."
@@ -2899,10 +2899,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Figment Maker", "Art Rework", "July22", "Ally Audit"]
-image-number = 608687435
+tags = ["Figment Maker", "Art Rework", "July22", "Ally Audit", "Art OK"]
+image-number = 2018053217
 art-owned = false
 card-number = 154
+art = { x = 0, y = 1, scale = 1.28 }
 
 [[cards]]
 name = "Gloomantler"
@@ -4829,21 +4830,22 @@ art-owned = false
 card-number = 258
 
 [[cards]]
-name = "Twilight Troubadour"
+name = "Battlefield Calligrapher"
 mtg-name = "Saheeli, Sublime Artificer"
 id = "174a5909-48e2-4aab-8cc5-fa3292281d1d"
 rendered-text = "When you play an event, materialize a 1✦ warrior figment."
 energy-cost = 2
 card-type = "Character"
-subtype = "Musician"
+subtype = "Mage"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Figment Maker", "Event Payoff", "Art Rework", "July22"]
-image-number = 1792373848
+tags = ["Figment Maker", "Event Payoff", "Art Rework", "July22", "Art OK"]
+image-number = 2320845233
 art-owned = false
 card-number = 259
+art = { x = 0, y = -0.266, scale = 2.57 }
 
 [[cards]]
 name = "Simulacra"
@@ -5922,21 +5924,22 @@ card-number = 317
 art = { x = -0.198, y = -0.71, scale = 2.27 }
 
 [[cards]]
-name = "The Devourer"
+name = "Underroot Diviner"
 mtg-name = "Grim Lavamancer"
 id = "6fa9c440-3912-4b1e-868c-840ae772fe1c"
 rendered-text = "☪, Banish 3 cards from your void: Draw a card."
 energy-cost = 1
 card-type = "Character"
-subtype = "Ancient"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July22"]
-image-number = 700254508
+tags = ["Art Rework", "July22", "Art OK"]
+image-number = 2025883235
 art-owned = true
 card-number = 318
+art = { x = 0, y = -0.471, scale = 1.77 }
 
 [[cards]]
 name = "Defiant Parry"
@@ -6575,7 +6578,7 @@ card-number = 351
 art = { x = -0.042, y = 1, scale = 1.1 }
 
 [[cards]]
-name = "Tidecaller"
+name = "Firebrand Saboteur"
 mtg-name = "Refurbished Familiar"
 id = "382dafa1-f8ff-47b4-9151-15b84067a5b2"
 rendered-text = "▸Materialized: The opponent discards a card. If they can't, draw a card."
@@ -6586,10 +6589,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July22"]
-image-number = 309018608
+tags = ["Art Rework", "July22", "Art OK"]
+image-number = 670293463
 art-owned = false
 card-number = 352
+art = { x = 0, y = -0.352, scale = 1.37 }
 
 [[cards]]
 name = "Wired Duelist"
@@ -7199,21 +7203,22 @@ art-owned = false
 card-number = 384
 
 [[cards]]
-name = "Manufactured Abomination"
+name = "Lantern Keeper"
 mtg-name = "Jace, Vryn's Prodigy // Jace, Telepath Unbound"
 id = "e26e0ac8-d6c9-4b0c-8672-4f73651f2586"
 rendered-text = "☪, Discard a card: Draw a card."
-energy-cost = 2
+energy-cost = 1
 card-type = "Character"
 subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = 2
-tags = ["Merfolk Looter", "Art Rework", "July22"]
-image-number = 2281682691
+spark = 1
+tags = ["Merfolk Looter", "Art Rework", "July22", "Art OK"]
+image-number = 1047769036
 art-owned = false
 card-number = 385
+art = { x = -0.286, y = 0.032, scale = 1.77 }
 
 [[cards]]
 name = "Blood Sun Oppressor"

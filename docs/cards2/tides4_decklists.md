@@ -95,7 +95,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Sunrise Strummer
 - 1× The Thinning
 - 1× Sage of the High Hills
-- 1× Tidecaller
+- 1× Firebrand Saboteur
 - 1× Immolate and Rise
 - 1× Graywatch
 - 1× Abomination of Memory
@@ -407,9 +407,9 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Molten Duel
 - 1× Desperation
 - 1× Mystic Boatman
-- 1× Wreckborn
+- 1× Cinderkeeper
 - 1× Secrets of the Deep
-- 1× The Devourer
+- 1× Underroot Diviner
 - 1× Salvage Colossus
 - 1× Embrace the Infinite
 - 1× Canopy of Stars
@@ -950,7 +950,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Silent Mourner
 - 1× Ripple of Defiance
 - 1× Door to Possibility
-- 1× Manufactured Abomination
+- 1× Lantern Keeper
 - 1× Return to Nowhere
 - 1× Oracle of Shifting Skies
 - 1× Mind's Door
@@ -1061,7 +1061,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Illumination of Glory
 - 1× Echoes of Eternity
 - 1× Door to Possibility
-- 1× Manufactured Abomination
+- 1× Lantern Keeper
 - 1× Return to Nowhere
 - 1× Oracle of Shifting Skies
 - 1× Mind's Door
@@ -1112,7 +1112,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Fell the Mighty
 - 1× Inverted Reflection
 - 1× Overwhelm
-- 1× Twilight Troubadour
+- 1× Battlefield Calligrapher
 - 1× Rite of Summoning
 - 1× Storm Soloist
 - 1× Wheel of the Heavens
@@ -1196,7 +1196,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Inverted Reflection
 - 1× Woodland Apparition
 - 1× Pulse of Sacrifice
-- 1× Twilight Troubadour
+- 1× Battlefield Calligrapher
 - 1× Sunrise Virtuoso
 - 1× Fell Swoop
 - 1× Burst of Obliteration
@@ -1226,7 +1226,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Skysign
 - 1× Desperation
 - 1× Archive of the Forgotten
-- 1× The Devourer
+- 1× Underroot Diviner
 - 1× Salvage Colossus
 - 1× Embrace the Infinite
 - 1× Pyrestone Avatar
@@ -1299,7 +1299,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Path to Redemption
 - 1× Woodland Apparition
 - 1× Pulse of Sacrifice
-- 1× Twilight Troubadour
+- 1× Battlefield Calligrapher
 - 1× Sunrise Virtuoso
 - 1× Fell Swoop
 - 1× Burst of Obliteration
@@ -1327,7 +1327,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Part the Veil
 - 1× Archive of the Forgotten
 - 1× Secrets of the Deep
-- 1× The Devourer
+- 1× Underroot Diviner
 - 1× Salvage Colossus
 - 1× Catastrophe Broker
 - 1× Embrace the Infinite
@@ -1364,7 +1364,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Door to Possibility
 - 1× Evacuation Enforcer
 - 1× Threshold Seeker
-- 1× Manufactured Abomination
+- 1× Lantern Keeper
 - 1× Return to Nowhere
 - 1× Oracle of Shifting Skies
 - 1× Pinnacle Ascendant
@@ -1740,11 +1740,11 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Inferno's Herald
 - 1× Standard Bearer
 - 1× Overwhelm
-- 1× Twilight Troubadour
+- 1× Battlefield Calligrapher
 - 1× Night Raid Commando
 - 1× Dreadcall Warden
 - 1× Sylvan Matriarch
-- 1× Tidecaller
+- 1× Firebrand Saboteur
 - 1× Spellweaver
 - 1× Relentless Pursuer
 - 1× Vengeance Taker
@@ -1940,7 +1940,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Storm Soloist
 - 1× Through the Rift
 - 1× Sylvan Matriarch
-- 1× Tidecaller
+- 1× Firebrand Saboteur
 - 1× Spellweaver
 - 1× Vengeance Taker
 - 1× Haunted Betrayer
@@ -3068,7 +3068,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Light of Emergence
 - 1× Dreadwood Emissary
 - 1× Ripple Through Reality
-- 1× Manufactured Abomination
+- 1× Lantern Keeper
 - 1× Mind's Door
 - 1× The Power Within
 - 1× Soul Channeling

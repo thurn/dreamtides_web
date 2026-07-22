@@ -2451,7 +2451,7 @@
       ]
     },
     "e26e0ac8-d6c9-4b0c-8672-4f73651f2586": {
-      "name": "Manufactured Abomination",
+      "name": "Lantern Keeper",
       "needs": [],
       "supports": [
         "discard",
@@ -4187,7 +4187,7 @@
       ]
     },
     "6fa9c440-3912-4b1e-868c-840ae772fe1c": {
-      "name": "The Devourer",
+      "name": "Underroot Diviner",
       "needs": [
         {
           "theme": "void",
@@ -4306,7 +4306,7 @@
       ]
     },
     "382dafa1-f8ff-47b4-9151-15b84067a5b2": {
-      "name": "Tidecaller",
+      "name": "Firebrand Saboteur",
       "needs": [],
       "supports": [
         "cheap-characters"
@@ -4442,7 +4442,7 @@
       ]
     },
     "174a5909-48e2-4aab-8cc5-fa3292281d1d": {
-      "name": "Twilight Troubadour",
+      "name": "Battlefield Calligrapher",
       "needs": [
         {
           "theme": "events",
@@ -4900,7 +4900,7 @@
       ]
     },
     "6d6ce556-60df-486f-b2d8-5df168a6f75e": {
-      "name": "Wreckborn",
+      "name": "Cinderkeeper",
       "needs": [
         {
           "theme": "abandon",
