@@ -1177,7 +1177,7 @@
       "supports": []
     },
     "8d35aec1-29ad-432c-9c23-25a52804cbae": {
-      "name": "Duskshore Virtuoso",
+      "name": "Surge Evoker",
       "needs": [
         {
           "theme": "events",
@@ -1543,7 +1543,7 @@
       ]
     },
     "b6bad2a1-b857-4dd7-8b22-050eb68433a5": {
-      "name": "God of Ruin",
+      "name": "The Annihilator",
       "needs": [
         {
           "theme": "cheap-characters",
@@ -1705,7 +1705,7 @@
       ]
     },
     "85251f03-c873-46d8-81be-ab421c901a53": {
-      "name": "Fractured Vessel",
+      "name": "Grief Shaman",
       "needs": [
         {
           "theme": "abandon",
@@ -4036,7 +4036,7 @@
       ]
     },
     "f9a65b32-537b-457c-9eaf-b512cf1f3791": {
-      "name": "Still Dreamer",
+      "name": "Dragonfly Engine",
       "needs": [],
       "supports": [
         "cheap-characters"

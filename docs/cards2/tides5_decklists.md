@@ -227,7 +227,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Duskwall Delver
 - 1× Dark Lord's Champion
 - 1× Headtaker
-- 1× Fractured Vessel
+- 1× Grief Shaman
 - 1× Cinderheart
 - 1× Cost of Victory
 - 1× Skybreak Ascendant
@@ -317,7 +317,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Ambersting
 - 1× Ethereal Courser
 - 1× Boundless Wanderer
-- 1× Fractured Vessel
+- 1× Grief Shaman
 - 1× Angel of Memory
 - 1× Aether Diver
 - 1× Horizon Chaser
@@ -737,7 +737,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Pyrestone Avatar
 - 1× Stolen Genesis
 - 1× Resilient Wanderer
-- 1× Fractured Vessel
+- 1× Grief Shaman
 - 1× Cinderheart
 - 1× Cost of Victory
 - 1× Skybreak Ascendant
@@ -845,7 +845,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Dark Lord's Champion
 - 1× Collapse Protocol
 - 1× Headtaker
-- 1× Fractured Vessel
+- 1× Grief Shaman
 - 1× Cost of Victory
 - 1× Pyrokinetic Surge
 - 1× Clockwork Conductor
@@ -943,7 +943,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Breach Artist
 - 1× Cost of Victory
 - 1× Exile
-- 1× Duskshore Virtuoso
+- 1× Surge Evoker
 - 1× Paradox Corps Enforcer
 - 1× Pyrokinetic Surge
 - 1× Keeper of the Tides
@@ -1736,7 +1736,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Quiet Reflection
 - 1× Dawnprowler Panther
 - 1× Sunset Chronicler
-- 1× Still Dreamer
+- 1× Dragonfly Engine
 - 1× Heavenward Penitent
 - 1× God of the Veil
 - 1× Reforged Construct
@@ -2223,7 +2223,7 @@ Tide-fac-04 is built almost entirely around spirit animals, with 35 characters a
 - 1× Turquoise Aurelia
 - 1× Quiet Reflection
 - 1× Dawnprowler Panther
-- 1× Still Dreamer
+- 1× Dragonfly Engine
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
 - 1× Nexus Wayfinder
@@ -3986,7 +3986,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Blight Weaver
 - 1× Essence Devourer
 - 1× The Forsaker
-- 1× God of Ruin
+- 1× The Annihilator
 - 1× Reckless Vigilante
 - 1× Ruin Scavenger
 - 1× Ruptured Dynamo

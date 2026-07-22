@@ -754,7 +754,7 @@ art-owned = false
 card-number = 40
 
 [[cards]]
-name = "Duskshore Virtuoso"
+name = "Surge Evoker"
 mtg-name = "Thing in the Ice // Awoken Horror"
 id = "8d35aec1-29ad-432c-9c23-25a52804cbae"
 rendered-text = """
@@ -763,15 +763,16 @@ When you play an event, store 1⧗.
 3⧗: This character gains +5✦."""
 energy-cost = 2
 card-type = "Character"
-subtype = "Musician"
+subtype = "Mage"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Event Payoff", "Art Rework", "July22"]
-image-number = 631097744
+tags = ["Event Payoff", "Art Rework", "July22", "Art OK"]
+image-number = 533945362
 art-owned = false
 card-number = 41
+art = { x = 0.681, y = 0.126, scale = 1.8 }
 
 [[cards]]
 name = "Horizon Chaser"
@@ -3354,7 +3355,7 @@ card-number = 178
 art = { x = -0.294, y = 0.369, scale = 1.17 }
 
 [[cards]]
-name = "God of Ruin"
+name = "The Annihilator"
 mtg-name = "The Gitrog Monster"
 id = "b6bad2a1-b857-4dd7-8b22-050eb68433a5"
 rendered-text = """
@@ -3369,10 +3370,10 @@ is-fast = false
 is-interrupt = false
 spark = 8
 tags = ["Art Rework", "July20", "Art OK"]
-image-number = 2287054243
+image-number = 700254508
 art-owned = false
 card-number = 179
-art = { x = -0.366, y = 1, scale = 1.47 }
+art = { x = 0, y = 1, scale = 1.27 }
 
 [[cards]]
 name = "Dreamborne Leviathan"
@@ -3876,21 +3877,22 @@ card-number = 207
 art = { x = 0, y = 0, scale = 1.77 }
 
 [[cards]]
-name = "Abyssal Enforcer"
+name = "Repulsion Detail"
 mtg-name = "Reflector Mage"
 id = "dbd014b1-1ec8-4762-bd96-48a2a4824de2"
 rendered-text = "▸Materialized: Return an enemy to hand. It costs 2● more."
 energy-cost = 3
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Squad"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July22"]
-image-number = 2212744819
+tags = ["Art Rework", "July22", "Art OK"]
+image-number = 2590831711
 art-owned = false
 card-number = 208
+art = { x = 0, y = 0.258, scale = 1.47 }
 
 [[cards]]
 name = "Celestial Reverie"
@@ -5174,21 +5176,22 @@ art-owned = false
 card-number = 277
 
 [[cards]]
-name = "Fractured Vessel"
+name = "Grief Shaman"
 mtg-name = "Witch's Oven"
 id = "85251f03-c873-46d8-81be-ab421c901a53"
-rendered-text = "☪, Abandon a character: Materialize a 1✦ spirit animal figment."
-energy-cost = 2
+rendered-text = "☪, Abandon a character: Materialize a 2✦ shadow figment."
+energy-cost = 1
 card-type = "Character"
-subtype = "Synth"
+subtype = "Mage"
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = 2
-tags = ["Art Rework", "July22"]
-image-number = 658076044
+spark = 1
+tags = ["Art Rework", "July22", "Art OK"]
+image-number = 306660617
 art-owned = false
 card-number = 278
+art = { x = 0, y = 0.644, scale = 1.17 }
 
 [[cards]]
 name = "Clockwork Prodigy"
@@ -5808,21 +5811,22 @@ card-number = 311
 art = { x = 0, y = 0.043, scale = 1 }
 
 [[cards]]
-name = "Still Dreamer"
+name = "Dragonfly Engine"
 mtg-name = "Whitemane Lion"
 id = "f9a65b32-537b-457c-9eaf-b512cf1f3791"
 rendered-text = "▸Materialized: Return a character you control to hand."
 energy-cost = 2
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Thopter"
 rarity = ""
 is-fast = true
 is-interrupt = false
 spark = 2
-tags = ["ETB Bounce", "Art Rework", "July22", "Ally Audit"]
-image-number = 758082490
+tags = ["ETB Bounce", "Art Rework", "July22", "Ally Audit", "Art OK"]
+image-number = 511427890
 art-owned = false
 card-number = 312
+art = { x = 0.45, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Spellweaver"
@@ -8111,6 +8115,7 @@ tags = ["Art Rework", "July22", "Art OK"]
 image-number = 1180104511
 art-owned = false
 card-number = 432
+art = { x = 0.175, y = 1, scale = 2.07 }
 
 [[cards]]
 name = "Grounded"

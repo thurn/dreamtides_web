@@ -120,7 +120,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Dune Reaper
 - 1× Collapse Protocol
 - 1× Headtaker
-- 1× Fractured Vessel
+- 1× Grief Shaman
 - 1× Cinderheart
 - 1× Cost of Victory
 - 1× Exile
@@ -216,7 +216,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Shatter the Frail
 - 1× Dune Reaper
 - 1× Headtaker
-- 1× Fractured Vessel
+- 1× Grief Shaman
 - 1× Exile
 - 1× Pyrokinetic Surge
 - 1× Haunted Mariner
@@ -304,7 +304,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Duskwall Delver
 - 1× Headtaker
 - 1× God of Wrath
-- 1× Fractured Vessel
+- 1× Grief Shaman
 - 1× Iconoclast
 - 1× Cost of Victory
 - 1× Dreamvale Monarch
@@ -419,7 +419,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Smoke Siphoner
 - 1× Eruption
 - 1× Skybreak Ascendant
-- 1× Duskshore Virtuoso
+- 1× Surge Evoker
 - 1× Liminal Dreamer
 - 1× Starcatcher
 - 1× Ash Harbinger
@@ -534,7 +534,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Defiant Holdout
 - 1× Fractured Vessel
 - 1× Exiles of the Last Light
-- 1× God of Ruin
+- 1× The Annihilator
 - 1× Soul Harvester
 - 1× Lurking Dread
 - 1× Titan of Forgotten Echoes
@@ -930,7 +930,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Spirit of Smoldering Echoes
 - 1× Cost of Victory
 - 1× Exile
-- 1× Duskshore Virtuoso
+- 1× Surge Evoker
 - 1× Starcatcher
 - 1× Paradox Corps Enforcer
 - 1× Pyrokinetic Surge
@@ -1037,7 +1037,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Spirit of Smoldering Echoes
 - 1× Cost of Victory
 - 1× Exile
-- 1× Duskshore Virtuoso
+- 1× Surge Evoker
 - 1× Last Beacon
 - 1× Starcatcher
 - 1× Paradox Corps Enforcer
@@ -1139,7 +1139,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Ecliptic Vantage
 - 1× Echoes of the Journey
 - 1× Minstrel of Falling Light
-- 1× Duskshore Virtuoso
+- 1× Surge Evoker
 - 1× Seek Answers
 - 1× Somber Flockmaster
 - 1× Annihilation from Below
@@ -1236,7 +1236,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Smoke Siphoner
 - 1× Eruption
 - 1× Skybreak Ascendant
-- 1× Duskshore Virtuoso
+- 1× Surge Evoker
 - 1× Seek Answers
 - 1× Starcatcher
 - 1× Ash Harbinger
@@ -1341,7 +1341,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Spirit of Smoldering Echoes
 - 1× Eruption
 - 1× Skybreak Ascendant
-- 1× Duskshore Virtuoso
+- 1× Surge Evoker
 - 1× Seek Answers
 - 1× Ash Harbinger
 - 1× Somber Flockmaster
@@ -1701,7 +1701,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Nightprowler Panther
 - 1× Memory Tracer
 - 1× Rower of Changing Seas
-- 1× Still Dreamer
+- 1× Dragonfly Engine
 - 1× Heavenward Penitent
 - 1× Reforged Construct
 - 1× Augur Crow
@@ -2253,7 +2253,7 @@ This tide runs an even split of characters and events, with its mechanical ident
 - 1× Dark Lord's Champion
 - 1× Collapse Protocol
 - 1× Breach Artist
-- 1× Duskshore Virtuoso
+- 1× Surge Evoker
 - 1× Last Beacon
 - 1× Paradox Corps Enforcer
 - 1× Keeper of the Tides
@@ -2405,7 +2405,7 @@ Tide-fac-09 is almost entirely characters (39 of 45 copies), built around a tigh
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
 - 1× Minstrel of Falling Light
-- 1× Duskshore Virtuoso
+- 1× Surge Evoker
 - 1× Seek Answers
 - 1× Somber Flockmaster
 - 1× Ritekeeper
@@ -2812,7 +2812,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Twice-Lit Portal
 - 1× Abandon Constraints
 - 1× Minstrel of Falling Light
-- 1× Duskshore Virtuoso
+- 1× Surge Evoker
 - 1× Seek Answers
 - 1× Starcatcher
 - 1× Ritekeeper
@@ -3061,7 +3061,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Echoes of the Journey
 - 1× Spirit of Smoldering Echoes
 - 1× Cloud Drifter
-- 1× Duskshore Virtuoso
+- 1× Surge Evoker
 - 1× Last Beacon
 - 1× Paradox Corps Enforcer
 - 1× Keeper of the Tides
@@ -3112,7 +3112,7 @@ Tide-fac-24 is built almost entirely on characters (41 of 45 copies), with a sur
 - 1× Dark Lord's Champion
 - 1× Resilient Wanderer
 - 1× Breach Artist
-- 1× Duskshore Virtuoso
+- 1× Surge Evoker
 - 1× Paradox Corps Enforcer
 - 1× Keeper of the Tides
 - 1× Annular Recall
@@ -3862,7 +3862,7 @@ Tide-neu-08 is a character-dense deck (27 of 30 cards are characters) built almo
 - 1× Essence Devourer
 - 1× The Forsaker
 - 1× Forsaken Pact
-- 1× God of Ruin
+- 1× The Annihilator
 - 1× Starsea Traveler
 - 1× Cloudstrider
 - 1× Ruin Scavenger
