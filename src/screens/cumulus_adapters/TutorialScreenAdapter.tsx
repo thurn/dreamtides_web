@@ -3,7 +3,8 @@ import { TutorialScreen } from "../../cumulus/screens/TutorialScreen";
 import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
 import * as tutorialEditor from "../../state/use-tutorial-editor";
-import { useTutorialOpponentCard } from "../../state/use-tutorial-opponent-card";
+import { useTutorialCards } from "../../state/use-tutorial-opponent-card";
+import { useTutorialPresentationLogging } from "../../state/use-tutorial-presentation-logging";
 import type { TutorialDreamcallerOwner } from "../../types/tutorial";
 import * as tutorialView from "./tutorial-view-model";
 /** Standalone `/tutorial` wiring, shared playback, and local authoring saves. */
@@ -17,8 +18,7 @@ export function TutorialScreenAdapter() {
     onActionsChange: handleEditorActionsChange,
   } = tutorialEditor.useTutorialEditor();
   const beginRequestedKey = useRef<string | null>(null);
-  const loggedActionKey = useRef<string | null>(null);
-  const opponentCard = useTutorialOpponentCard();
+  const tutorialCards = useTutorialCards();
   const handleReplay = tutorialEditor.useTutorialReplay(
     authoredActions,
     mutations.beginTutorial,
@@ -26,7 +26,7 @@ export function TutorialScreenAdapter() {
   useEffect(() => {
     if (
       !actionsLoaded ||
-      opponentCard === null ||
+      tutorialCards === null ||
       state.tutorial !== null ||
       state.journeyId === null
     )
@@ -46,35 +46,20 @@ export function TutorialScreenAdapter() {
     actionsLoaded,
     authoredActions,
     mutations,
-    opponentCard,
+    tutorialCards,
     state.journeyId,
     state.tutorial,
   ]);
   const view = useMemo(
-    () => tutorialView.buildTutorialView(state.tutorial, opponentCard),
-    [opponentCard, state.tutorial],
+    () =>
+      tutorialView.buildTutorialView(
+        state.tutorial,
+        tutorialCards?.opponent ?? null,
+        tutorialCards?.player ?? null,
+      ),
+    [state.tutorial, tutorialCards],
   );
-
-  useEffect(() => {
-    const current = view.currentAction;
-    if (current === null || view.playbackRunId === null) return;
-    const key = `${view.playbackRunId}:${current.id}`;
-    if (loggedActionKey.current === key) return;
-    loggedActionKey.current = key;
-    logEvent("tutorial_action_presented", {
-      runId: view.playbackRunId,
-      ...tutorialView.tutorialActionLogDetails(current),
-      dialogueVisible: view.dialogue !== null,
-      dialogueText:
-        view.dialogue === null
-          ? null
-          : view.dialogue.kind === "guide"
-            ? view.dialogue.model.text
-            : view.dialogue.text,
-      actionIndex: state.tutorial?.currentActionIndex ?? null,
-      actionCount: state.tutorial?.actions.length ?? 0,
-    });
-  }, [state.tutorial, view.currentAction, view.dialogue, view.playbackRunId]);
+  useTutorialPresentationLogging(state.tutorial, view);
 
   const handleActionComplete = useCallback(
     (runId: string, actionId: string): void => {

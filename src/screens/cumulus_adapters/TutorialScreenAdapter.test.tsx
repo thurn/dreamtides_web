@@ -66,19 +66,35 @@ vi.mock("../../data/tutorial-actions", async (importOriginal) => {
 });
 
 vi.mock("../../state/use-tutorial-opponent-card", () => ({
-  useTutorialOpponentCard: () => ({
-    id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
-    name: "Tutorial Opponent Card",
-    cardNumber: 519,
-    cardType: "Character",
-    subtype: "Musician",
-    isStarter: false,
-    energyCost: 2,
-    spark: 2,
-    isFast: false,
-    renderedText: "",
-    imageNumber: 1792373848,
-    artOwned: false,
+  useTutorialCards: () => ({
+    opponent: {
+      id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+      name: "Tutorial Opponent Card",
+      cardNumber: 519,
+      cardType: "Character",
+      subtype: "Musician",
+      isStarter: false,
+      energyCost: 2,
+      spark: 2,
+      isFast: false,
+      renderedText: "",
+      imageNumber: 1792373848,
+      artOwned: false,
+    },
+    player: {
+      id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      name: "Tutorial Player Card",
+      cardNumber: 512,
+      cardType: "Character",
+      subtype: "Spirit Animal",
+      isStarter: false,
+      energyCost: 4,
+      spark: 4,
+      isFast: false,
+      renderedText: "",
+      imageNumber: 1011175312,
+      artOwned: false,
+    },
   }),
 }));
 
@@ -95,6 +111,11 @@ beforeEach(() => {
   vi.spyOn(console, "log").mockImplementation(() => {});
   mocks.beginTutorial.mockClear();
   mocks.completeTutorialAction.mockClear();
+  (
+    mocks.state.tutorial as unknown as {
+      currentActionIndex: number | null;
+    }
+  ).currentActionIndex = 1;
   resetLog();
   adapterMocks.props = null;
 });
@@ -157,6 +178,62 @@ describe("TutorialScreenAdapter", () => {
           owner: "player",
           actionId: "dreamcaller-arrival",
           abilityActive: false,
+        }),
+      ]),
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("logs the completed tutorial transition and UUID-backed player draw", async () => {
+    (
+      mocks.state.tutorial as unknown as {
+        currentActionIndex: number | null;
+      }
+    ).currentActionIndex = null;
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    await act(async () => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreenAdapter />
+        </CumulusRoot>,
+      );
+      await Promise.resolve();
+    });
+
+    expect(adapterMocks.props?.view.battle).toMatchObject({
+      activeSide: "player",
+      isOpeningTurn: false,
+      player: { status: { currentEnergy: 4, maxEnergy: 4 } },
+      playerHand: [
+        {
+          id: "tutorial-player-deck-1",
+          layoutMotion: "travel",
+          model: {
+            cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          },
+        },
+      ],
+    });
+    expect(getLogEntries()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          event: "tutorial_player_turn_presented",
+          runId: "event:1",
+          battleId: "tutorial-battle",
+          activeSide: "player",
+          currentEnergy: 4,
+          maxEnergy: 4,
+          cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          cardInstanceId: "tutorial-player-deck-1",
+          sourceZone: "player-deck",
+          destinationZone: "player-hand",
+          playerDeckCount: 29,
+          playerHandCount: 1,
         }),
       ]),
     );

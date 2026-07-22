@@ -4,6 +4,7 @@ import type { CardData } from "../../types/cards";
 import {
   buildTutorialView,
   TUTORIAL_OPPONENT_CARD_ID,
+  TUTORIAL_PLAYER_CARD_ID,
   tutorialActionLogDetails,
 } from "./tutorial-view-model";
 
@@ -20,6 +21,22 @@ const OPPONENT_CARD: CardData = {
   isFast: false,
   renderedText: "",
   imageNumber: 1792373848,
+  artOwned: false,
+};
+
+const PLAYER_CARD: CardData = {
+  id: asCardId(TUTORIAL_PLAYER_CARD_ID),
+  name: asCardName("Tutorial Player Card"),
+  cardNumber: 512,
+  cardType: "Character",
+  subtype: "Spirit Animal",
+  isStarter: false,
+  rarity: "Special",
+  energyCost: 4,
+  spark: 4,
+  isFast: false,
+  renderedText: "",
+  imageNumber: 1011175312,
   artOwned: false,
 };
 
@@ -391,6 +408,7 @@ describe("buildTutorialView", () => {
         actions,
       },
       OPPONENT_CARD,
+      PLAYER_CARD,
     ).battle;
     expect(played.enemyHandCardIds).toEqual([]);
     expect(played.enemyHand).toEqual([]);
@@ -403,6 +421,33 @@ describe("buildTutorialView", () => {
       deck: 29,
       hand: 0,
       backRank: 1,
+    });
+    expect(played.activeSide).toBe("player");
+    expect(played.isOpeningTurn).toBe(false);
+    expect(played.player.status).toMatchObject({
+      currentEnergy: 4,
+      maxEnergy: 4,
+    });
+    expect(played.player.deckCardIds).toHaveLength(29);
+    expect(played.player.deckCardIds[0]).toBe("tutorial-player-deck-2");
+    expect(played.playerHand).toHaveLength(1);
+    expect(played.playerHand[0]).toMatchObject({
+      id: "tutorial-player-deck-1",
+      layoutMotion: "travel",
+      exhausted: false,
+    });
+    expect(played.playerHand[0]?.model.cardId).toBe(TUTORIAL_PLAYER_CARD_ID);
+    expect(played.nearHand.cardIds).toEqual(["tutorial-player-deck-1"]);
+    expect(played.inspector).toMatchObject({
+      turn: "2",
+      activeSide: "Player",
+      sides: {
+        player: {
+          currentEnergy: 4,
+          maxEnergy: 4,
+          zones: { deck: 29, hand: 1 },
+        },
+      },
     });
   });
 
