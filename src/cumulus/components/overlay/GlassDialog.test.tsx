@@ -227,6 +227,35 @@ describe("GlassDialog", () => {
     });
   });
 
+  it("keeps the title accessible while rendering only the floating close chrome", () => {
+    const { container, root } = mount(
+      <GlassDialog
+        title="How to Play"
+        presentation="popup"
+        chrome="close-only"
+        onClose={() => {}}
+      >
+        <div>Two paragraphs</div>
+      </GlassDialog>,
+    );
+
+    const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
+    const closeOnly = container.querySelector<HTMLElement>(
+      "[data-glass-dialog-close-only]",
+    );
+    expect(dialog?.getAttribute("aria-label")).toBe("How to Play");
+    expect(dialog?.querySelector("header")).toBeNull();
+    expect(dialog?.querySelector("h2")).toBeNull();
+    expect(closeOnly?.style.position).toBe("absolute");
+    expect(
+      closeOnly?.querySelector('button[aria-label="Close"]'),
+    ).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("centers a desktop panel within the measured battlefield while retaining the viewport modal layer", () => {
     stubMatchMedia(true);
     Object.defineProperty(window, "innerWidth", {

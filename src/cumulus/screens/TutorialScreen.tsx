@@ -181,6 +181,7 @@ function TutorialHowToPlayDialog({
         title="How to Play"
         closeLabel="Close how to play"
         presentation="popup"
+        chrome="close-only"
         onClose={onClose}
       >
         <div
@@ -188,7 +189,7 @@ function TutorialHowToPlayDialog({
           style={{
             display: "grid",
             gap: tweaks.paragraphGap,
-            width: 680,
+            width: 720,
             maxWidth: "100%",
             boxSizing: "border-box",
             marginInline: "auto",

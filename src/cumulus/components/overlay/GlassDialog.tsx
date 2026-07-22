@@ -122,6 +122,13 @@ export interface GlassDialogProps {
    */
   presentation?: "responsive" | "popup";
   /**
+   * Visible dialog chrome. `"standard"` renders the title/subtitle header and
+   * its divider. `"close-only"` keeps `title` as the accessible dialog name,
+   * omits the visible header, and floats the optional close disc in the panel's
+   * top-right corner. Defaults to `"standard"`.
+   */
+  chrome?: "standard" | "close-only";
+  /**
    * Region used to center a bounded desktop panel. `"battlefield"` measures
    * the visible `main[data-battle-mobile]` stage, keeping a docked inspector
    * rail outside the centering calculation while the modal layer continues to
@@ -146,7 +153,9 @@ export interface GlassDialogProps {
  * `IconButton size="md"` close, closed by a `--border-strong` hairline; omit
  * `onClose` for a commit-gated dialog with no dismissal control. On mobile the
  * header pads its top by the safe-area inset so the title clears a device
- * cutout. The body scrolls.
+ * cutout. `chrome="close-only"` retains the accessible title while omitting the
+ * visible header and floating the optional close disc over the panel corner.
+ * The body scrolls.
  */
 export function GlassDialog({
   title,
@@ -157,6 +166,7 @@ export function GlassDialog({
   wide = false,
   fullScreen = false,
   presentation = "responsive",
+  chrome = "standard",
   desktopCenterTarget = "viewport",
   children,
 }: GlassDialogProps): ReactElement {
@@ -207,10 +217,11 @@ export function GlassDialog({
     setBesideCutout(
       onClose !== undefined &&
         cutoutAwareClose &&
+        chrome === "standard" &&
         fullBleed &&
         hasInjectedDisplayCutout(),
     );
-  }, [cutoutAwareClose, fullBleed, onClose]);
+  }, [chrome, cutoutAwareClose, fullBleed, onClose]);
 
   // Standard desktop and popup presentations are bounded glass panels. The
   // standard mobile presentation is a full-bleed overlay whose fill + blur stay
@@ -313,6 +324,19 @@ export function GlassDialog({
     >
       {fullBleed && <GlassBackdrop />}
       <div data-glass-dialog-panel="" style={panelStyle}>
+        {chrome === "close-only" && closeButton !== null ? (
+          <div
+            data-glass-dialog-close-only=""
+            style={{
+              position: "absolute",
+              top: token("--space-2"),
+              right: token("--space-2"),
+              zIndex: 2,
+            }}
+          >
+            {closeButton}
+          </div>
+        ) : null}
         {besideCutout && (
           // The disc floats up beside the device island (vertically centered on
           // it, at the trailing gutter), so the header title clears the safe
@@ -330,38 +354,41 @@ export function GlassDialog({
             {closeButton}
           </div>
         )}
-        <header style={headerStyle}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: token("--space-1"),
-            }}
-          >
-            <h2
+        {chrome === "standard" ? (
+          <header style={headerStyle}>
+            <div
               style={{
-                margin: 0,
-                font: token("--t-title-sm"),
-                color: token("--text-primary"),
+                display: "flex",
+                flexDirection: "column",
+                gap: token("--space-1"),
               }}
             >
-              {title}
-            </h2>
-            {subtitle !== undefined && (
-              <p
+              <h2
                 style={{
                   margin: 0,
-                  font: token("--t-body"),
-                  color: token("--text-on-glass-muted"),
+                  font: token("--t-title-sm"),
+                  color: token("--text-primary"),
                 }}
               >
-                {subtitle}
-              </p>
-            )}
-          </div>
-          {!besideCutout && closeButton}
-        </header>
+                {title}
+              </h2>
+              {subtitle !== undefined && (
+                <p
+                  style={{
+                    margin: 0,
+                    font: token("--t-body"),
+                    color: token("--text-on-glass-muted"),
+                  }}
+                >
+                  {subtitle}
+                </p>
+              )}
+            </div>
+            {!besideCutout && closeButton}
+          </header>
+        ) : null}
         <div
+          data-glass-dialog-body=""
           style={{
             flex: popup ? "0 1 auto" : "1 1 auto",
             minHeight: 0,

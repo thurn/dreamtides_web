@@ -15,7 +15,7 @@ export const DEFAULT_TUTORIAL_HOW_TO_PLAY_TWEAKS: TutorialHowToPlayTweakValues =
     popupHeight: 0,
     fontSize: 19,
     lineHeight: 1.3,
-    internalPadding: 12,
+    internalPadding: 32,
     paragraphGap: 20,
   };
 

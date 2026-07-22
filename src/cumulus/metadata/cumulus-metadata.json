@@ -2538,6 +2538,17 @@
       "description": "Responsive behavior for the dialog surface. `\"responsive\"` uses the\nstandard bounded desktop panel and full-bleed mobile takeover. `\"popup\"`\nkeeps a centered, content-sized glass panel at every viewport width.\n`fullScreen` takes precedence. Defaults to `\"responsive\"`."
     },
     {
+      "name": "chrome",
+      "tsType": "\"standard\" | \"close-only\"",
+      "unionMembers": [
+        "standard",
+        "close-only"
+      ],
+      "required": false,
+      "defaultValue": "standard",
+      "description": "Visible dialog chrome. `\"standard\"` renders the title/subtitle header and\nits divider. `\"close-only\"` keeps `title` as the accessible dialog name,\nomits the visible header, and floats the optional close disc in the panel's\ntop-right corner. Defaults to `\"standard\"`."
+    },
+    {
       "name": "desktopCenterTarget",
       "tsType": "\"battlefield\" | \"viewport\"",
       "unionMembers": [

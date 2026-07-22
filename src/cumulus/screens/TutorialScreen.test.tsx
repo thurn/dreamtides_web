@@ -990,14 +990,18 @@ describe("TutorialScreen", () => {
     expect(dialog?.getAttribute("data-glass-dialog-presentation")).toBe(
       "popup",
     );
-    expect(dialog?.querySelector("h2")?.textContent).toBe("How to Play");
+    expect(dialog?.querySelector("header")).toBeNull();
+    expect(dialog?.querySelector("h2")).toBeNull();
+    expect(
+      dialog?.querySelector("[data-glass-dialog-close-only]"),
+    ).not.toBeNull();
     const content = dialog?.querySelector<HTMLElement>(
       "[data-tutorial-how-to-play-content]",
     );
     const paragraphs = [...(content?.querySelectorAll("p") ?? [])];
     expect(paragraphs).toHaveLength(2);
     expect(content?.style.gap).toBe("20px");
-    expect(content?.style.padding).toBe("12px");
+    expect(content?.style.padding).toBe("32px");
     expect(paragraphs[0]?.style.font).toBe("var(--t-lead)");
     expect(paragraphs[0]?.style.fontSize).toBe("19px");
     expect(paragraphs[0]?.textContent).toContain(
