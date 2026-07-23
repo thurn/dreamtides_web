@@ -11,6 +11,8 @@ export const DEFAULT_TUTORIAL_TOML_PATH = join(
 );
 export const DEFAULT_TUTORIAL_JSON_PATH = join("public", "tutorial-data.json");
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
+const CARD_UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 
 function invalid(message) {
   const error = new Error(message);
@@ -84,7 +86,18 @@ export function validateTutorialActions(value) {
           `Tutorial action ${JSON.stringify(id)} must have How to Play text.`,
         );
       }
-      return { id, action, text: candidate.text, wait };
+      const trigger =
+        candidate.trigger ?? "player-turn-announcement-complete";
+      if (
+        trigger !== "immediate" &&
+        trigger !== "player-turn-announcement-complete" &&
+        trigger !== "enemy-turn-announcement-complete"
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must have a supported How to Play trigger.`,
+        );
+      }
+      return { id, action, trigger, text: candidate.text, wait };
     }
     if (action === "animate-dreamcaller-portrait") {
       const owner = candidate.owner ?? "player";
@@ -113,6 +126,23 @@ export function validateTutorialActions(value) {
     }
     if (action === "draw-opponent-card") {
       return { id, action, wait };
+    }
+    if (action === "draw-dreamwell-card") {
+      const owner = candidate.owner ?? "enemy";
+      if (owner !== "player" && owner !== "enemy") {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must target the player or enemy.`,
+        );
+      }
+      if (
+        typeof candidate.cardId !== "string" ||
+        !CARD_UUID_PATTERN.test(candidate.cardId)
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must identify a Dreamwell card by UUID.`,
+        );
+      }
+      return { id, action, owner, cardId: candidate.cardId, wait };
     }
     if (action === "end-turn") {
       return { id, action, wait };

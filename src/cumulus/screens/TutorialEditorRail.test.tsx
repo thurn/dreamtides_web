@@ -71,7 +71,7 @@ function EditorHarness({
 }
 
 describe("TutorialEditorRail", () => {
-  it("replays the whole sequence, its last three actions, or one selected action", () => {
+  it("replays the whole sequence, its last four actions, or one selected action", () => {
     const actions: readonly TutorialAction[] = [
       INITIAL_ACTIONS[0],
       {
@@ -130,7 +130,7 @@ describe("TutorialEditorRail", () => {
         )
         ?.click(),
     );
-    expect(onPlayFromAction).toHaveBeenLastCalledWith("second");
+    expect(onPlayFromAction).toHaveBeenLastCalledWith("welcome");
 
     act(() =>
       container
@@ -211,6 +211,7 @@ describe("TutorialEditorRail", () => {
         {
           id: "display-how-to-play",
           action: "display-how-to-play",
+          trigger: "immediate",
           text: expectedText,
           wait: 0,
         },
@@ -436,6 +437,49 @@ describe("TutorialEditorRail", () => {
       ],
       true,
     );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("authors a UUID-backed opponent Dreamwell draw", () => {
+    const onChange = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<EditorHarness onChange={onChange} />));
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>('button[aria-label="Add an action"]')
+        ?.click(),
+    );
+    const dreamwellOption = [
+      ...document.body.querySelectorAll<HTMLButtonElement>(
+        'button[role="option"]',
+      ),
+    ].find((option) => option.textContent?.trim() === "Draw Dreamwell Card");
+    expect(dreamwellOption).toBeDefined();
+    act(() => dreamwellOption?.click());
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "draw-dreamwell-card",
+          action: "draw-dreamwell-card",
+          owner: "enemy",
+          cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+          wait: 0,
+        },
+      ],
+      true,
+    );
+    expect(
+      container.querySelector<HTMLInputElement>(
+        '[data-testid="tutorial-action-card-id-draw-dreamwell-card"]',
+      )?.value,
+    ).toBe("02e8ea92-1218-413c-9f0b-4c865a3921d3");
 
     act(() => root.unmount());
     container.remove();

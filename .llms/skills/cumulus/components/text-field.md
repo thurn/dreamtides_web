@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/text-field`
 
-Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **7** (imports outside `src/cumulus/docs/` and tests).
 
 The reusable labeled text and search input on Cumulus control chrome, with supporting and validation messaging.
 

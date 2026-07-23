@@ -6,6 +6,8 @@ import type {
 } from "../../cumulus/screens/MobileBattleScreen";
 import type { TutorialView } from "../../cumulus/screens/TutorialScreen";
 import type { CardData } from "../../types/cards";
+import type { DreamwellCard } from "../../data/dreamwell-database";
+import { asCardId } from "../../types/card-identity";
 import { TUTORIAL_OPPONENT_CARD_ID } from "../../data/tutorial-opponent-card";
 import type {
   DisplaySpeechBubbleTutorialAction,
@@ -52,8 +54,21 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       actionId: action.id,
       action: action.action,
       waitSeconds: action.wait,
+      trigger: action.trigger ?? "player-turn-announcement-complete",
       title: "How to Play",
       messageText: action.text,
+    };
+  }
+  if (action.action === "draw-dreamwell-card") {
+    return {
+      actionId: action.id,
+      action: action.action,
+      waitSeconds: action.wait,
+      cardId: action.cardId,
+      cardFace: "up",
+      owner: action.owner,
+      sourceZone: "dreamwell",
+      destinationPhase: "dawn",
     };
   }
   if (action.action === "reveal-and-play-opponent-card") {
@@ -115,6 +130,21 @@ function tutorialDeckIds(owner: "enemy" | "player"): readonly string[] {
     { length: TUTORIAL_DECK_SIZE },
     (_unused, index) => `tutorial-${owner}-deck-${String(index + 1)}`,
   );
+}
+
+function tutorialDreamwellModel(card: DreamwellCard) {
+  const cardId = asCardId(card.id);
+  return {
+    cardId,
+    displaySnapshot: {
+      id: cardId,
+      name: card.name,
+      renderedText: card.renderedText,
+      energyAdded: card.energyAdded,
+      imageNumber: card.imageNumber ?? 0,
+      ...(card.art === undefined ? {} : { art: card.art }),
+    },
+  };
 }
 
 function emptySlots(
@@ -187,6 +217,7 @@ export function buildTutorialView(
   playback: TutorialPlaybackState | null = null,
   opponentCard: CardData | null = null,
   playerCard: CardData | null = null,
+  dreamwellCards: readonly DreamwellCard[] | null = null,
 ): TutorialView {
   const currentAction =
     playback?.currentActionIndex === null ||
@@ -198,6 +229,31 @@ export function buildTutorialView(
     playback === null
       ? 0
       : (playback.currentActionIndex ?? playback.actions.length);
+  const visibleActionCount =
+    playback === null
+      ? 0
+      : playback.currentActionIndex === null
+        ? playback.actions.length
+        : playback.currentActionIndex + 1;
+  const revealedDreamwellAction = playback?.actions
+    .slice(0, visibleActionCount)
+    .reverse()
+    .find((action) => action.action === "draw-dreamwell-card");
+  const revealedDreamwellCard =
+    revealedDreamwellAction?.action === "draw-dreamwell-card"
+      ? dreamwellCards?.find(
+          (card) => card.id === revealedDreamwellAction.cardId,
+        ) ?? null
+      : null;
+  if (
+    revealedDreamwellAction?.action === "draw-dreamwell-card" &&
+    dreamwellCards !== null &&
+    revealedDreamwellCard === null
+  ) {
+    throw new Error(
+      `Tutorial Dreamwell card ${revealedDreamwellAction.cardId} is missing from the Dreamwell catalog.`,
+    );
+  }
   const completedOpponentDraws =
     playback?.actions
       .slice(0, completedActionCount)
@@ -272,7 +328,24 @@ export function buildTutorialView(
         playback.currentActionIndex > actionIndex)
     );
   };
-  const enemy = emptySide("enemy");
+  const enemyDreamwellEnergy =
+    revealedDreamwellAction?.action === "draw-dreamwell-card" &&
+    revealedDreamwellAction.owner === "enemy"
+      ? (revealedDreamwellCard?.energyAdded ?? 0)
+      : 0;
+  const playerDreamwellEnergy =
+    revealedDreamwellAction?.action === "draw-dreamwell-card" &&
+    revealedDreamwellAction.owner === "player"
+      ? (revealedDreamwellCard?.energyAdded ?? 0)
+      : 0;
+  const enemy = {
+    ...emptySide("enemy"),
+    status: {
+      ...emptySide("enemy").status,
+      currentEnergy: enemyDreamwellEnergy,
+      maxEnergy: enemyDreamwellEnergy,
+    },
+  };
   const enemyBackRank = enemy.backRank.map((slot, index) =>
     opponentCardPlayed && index === TUTORIAL_OPPONENT_BACK_RANK_INDEX
       ? {
@@ -339,15 +412,14 @@ export function buildTutorialView(
     playbackRunId: playback?.runId ?? null,
     currentAction,
     howToPlay:
-      playerTurnCard === null ||
-      playerCardPlayed ||
       currentAction?.action !== "display-how-to-play"
         ? null
         : {
             actionId: currentAction.id,
             text: currentAction.text,
             wait: currentAction.wait,
-            triggerCardId: playerTurnCard.model.cardId,
+            trigger:
+              currentAction.trigger ?? "player-turn-announcement-complete",
           },
     endTurn:
       currentAction?.action !== "end-turn" || playerTurnCard === null
@@ -359,6 +431,9 @@ export function buildTutorialView(
           },
     battle: (() => {
       const emptyPlayer = emptySide("player");
+      const playerTurnEnergy =
+        (playerTurnStarted ? TUTORIAL_PLAYER_TURN_ENERGY : 0) +
+        playerDreamwellEnergy;
       const player = {
         ...emptyPlayer,
         deckCardIds: playerDeck,
@@ -381,11 +456,11 @@ export function buildTutorialView(
           currentEnergy: playerTurnStarted
             ? Math.max(
                 0,
-                TUTORIAL_PLAYER_TURN_ENERGY -
+                playerTurnEnergy -
                   (playerCardPlayed ? (playerCard?.energyCost ?? 0) : 0),
               )
-            : 0,
-          maxEnergy: playerTurnStarted ? TUTORIAL_PLAYER_TURN_ENERGY : 0,
+            : playerDreamwellEnergy,
+          maxEnergy: playerTurnEnergy,
         },
       };
       const playerHandCards =
@@ -398,7 +473,14 @@ export function buildTutorialView(
       aiApproval: null,
       cardPicker: null,
       choicePrompt: null,
-      dreamwell: null,
+      dreamwell:
+        revealedDreamwellAction?.action === "draw-dreamwell-card" &&
+        revealedDreamwellCard !== null
+          ? {
+              side: revealedDreamwellAction.owner,
+              model: tutorialDreamwellModel(revealedDreamwellCard),
+            }
+          : null,
       activeSide: endTurnCompleted
         ? "enemy"
         : playerTurnStarted
@@ -455,6 +537,8 @@ export function buildTutorialView(
           },
           enemy: {
             ...enemyInspector,
+            currentEnergy: enemy.status.currentEnergy,
+            maxEnergy: enemy.status.maxEnergy,
             zones: {
               ...enemyInspector.zones,
               hand: enemyHandCardIds.length,

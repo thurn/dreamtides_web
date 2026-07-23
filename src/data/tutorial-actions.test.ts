@@ -92,6 +92,7 @@ describe("parseTutorialActions", () => {
       {
         id: "how-to-play",
         action: "display-how-to-play",
+        trigger: "player-turn-announcement-complete",
         text,
         wait: 0,
       },
@@ -106,6 +107,17 @@ describe("parseTutorialActions", () => {
         },
       ]),
     ).toThrow(/How to Play text/u);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "bad-how-to-play-trigger",
+          action: "display-how-to-play",
+          trigger: "after-a-card-name",
+          text,
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/supported How to Play trigger/u);
   });
 
   it("normalizes legacy portrait actions and preserves opponent pauses", () => {
@@ -179,6 +191,39 @@ describe("parseTutorialActions", () => {
         wait: 0,
       },
     ]);
+  });
+
+  it("preserves a UUID-authored Dreamwell draw and rejects display names", () => {
+    expect(
+      parseTutorialActions([
+        {
+          id: "autumn-glade",
+          action: "draw-dreamwell-card",
+          owner: "enemy",
+          cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+          wait: 0,
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "autumn-glade",
+        action: "draw-dreamwell-card",
+        owner: "enemy",
+        cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+        wait: 0,
+      },
+    ]);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "named-card",
+          action: "draw-dreamwell-card",
+          owner: "enemy",
+          cardId: "Autumn Glade",
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/by UUID/u);
   });
 
   it("normalizes and validates the opponent card reveal duration", () => {

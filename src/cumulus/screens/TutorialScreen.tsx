@@ -53,6 +53,7 @@ import type {
   TutorialAction,
   TutorialDreamcallerOwner,
   TutorialEditorSaveStatus,
+  TutorialHowToPlayTrigger,
 } from "../../types/tutorial";
 
 export interface TutorialDreamcallerView {
@@ -86,7 +87,7 @@ export interface TutorialView {
     readonly actionId: string;
     readonly text: string;
     readonly wait: number;
-    readonly triggerCardId: string;
+    readonly trigger: TutorialHowToPlayTrigger;
   } | null;
   readonly endTurn: {
     readonly actionId: string;
@@ -112,12 +113,12 @@ export interface TutorialScreenProps {
   readonly onHowToPlayPresented?: (
     runId: string,
     actionId: string,
-    triggerCardId: string,
+    trigger: TutorialHowToPlayTrigger,
   ) => void;
   readonly onHowToPlayDismissed?: (
     runId: string,
     actionId: string,
-    triggerCardId: string,
+    trigger: TutorialHowToPlayTrigger,
   ) => void;
   readonly onPlayerCardPlay?: (
     runId: string,
@@ -930,6 +931,8 @@ export function TutorialScreen({
   const [howToPlayDismissedActionKey, setHowToPlayDismissedActionKey] = useState<
     string | null
   >(null);
+  const [completedTurnAnnouncementSide, setCompletedTurnAnnouncementSide] =
+    useState<"enemy" | "player" | null>(null);
   const [pendingTutorialCardId, setPendingTutorialCardId] = useState<
     string | null
   >(null);
@@ -1121,11 +1124,17 @@ export function TutorialScreen({
 
   const completeTurnAnnouncement = useCallback(
     (side: "enemy" | "player"): void => {
-      if (side !== "player" || !sceneEntered || view.howToPlay === null) return;
+      setCompletedTurnAnnouncementSide(side);
+      if (!sceneEntered || view.howToPlay === null) return;
       const runId = view.playbackRunId;
       if (runId === null) {
         return;
       }
+      const expectedTrigger: TutorialHowToPlayTrigger =
+        side === "player"
+          ? "player-turn-announcement-complete"
+          : "enemy-turn-announcement-complete";
+      if (view.howToPlay.trigger !== expectedTrigger) return;
       const actionKey = `${runId}:${view.howToPlay.actionId}`;
       if (
         howToPlayPresentedActionKey === actionKey ||
@@ -1137,7 +1146,7 @@ export function TutorialScreen({
       onHowToPlayPresented?.(
         runId,
         view.howToPlay.actionId,
-        view.howToPlay.triggerCardId,
+        view.howToPlay.trigger,
       );
     },
     [
@@ -1149,6 +1158,41 @@ export function TutorialScreen({
       view.playbackRunId,
     ],
   );
+
+  useEffect(() => {
+    const howToPlay = view.howToPlay;
+    const runId = view.playbackRunId;
+    if (!sceneEntered || howToPlay === null || runId === null) return;
+    const announcementTrigger =
+      completedTurnAnnouncementSide === null
+        ? null
+        : completedTurnAnnouncementSide === "player"
+          ? "player-turn-announcement-complete"
+          : "enemy-turn-announcement-complete";
+    if (
+      howToPlay.trigger !== "immediate" &&
+      howToPlay.trigger !== announcementTrigger
+    ) {
+      return;
+    }
+    const actionKey = `${runId}:${howToPlay.actionId}`;
+    if (
+      howToPlayPresentedActionKey === actionKey ||
+      howToPlayDismissedActionKey === actionKey
+    ) {
+      return;
+    }
+    setHowToPlayPresentedActionKey(actionKey);
+    onHowToPlayPresented?.(runId, howToPlay.actionId, howToPlay.trigger);
+  }, [
+    completedTurnAnnouncementSide,
+    howToPlayDismissedActionKey,
+    howToPlayPresentedActionKey,
+    onHowToPlayPresented,
+    sceneEntered,
+    view.howToPlay,
+    view.playbackRunId,
+  ]);
 
   useEffect(() => {
     if (
@@ -1200,6 +1244,30 @@ export function TutorialScreen({
 
   useEffect(() => {
     if (
+      !sceneEntered ||
+      view.currentAction?.action !== "draw-dreamwell-card" ||
+      view.playbackRunId === null ||
+      view.battle.dreamwell?.model.cardId !== view.currentAction.cardId
+    ) {
+      return undefined;
+    }
+    const { id, wait } = view.currentAction;
+    const runId = view.playbackRunId;
+    const timeout = window.setTimeout(
+      () => onActionComplete?.(runId, id),
+      wait * 1_000,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [
+    onActionComplete,
+    sceneEntered,
+    view.battle.dreamwell,
+    view.currentAction,
+    view.playbackRunId,
+  ]);
+
+  useEffect(() => {
+    if (
       opponentCardPlay === null ||
       playedActionKey !== opponentCardPlay.key ||
       view.currentAction?.action !== "reveal-and-play-opponent-card" ||
@@ -1230,7 +1298,7 @@ export function TutorialScreen({
     onHowToPlayDismissed?.(
       runId,
       howToPlay.actionId,
-      howToPlay.triggerCardId,
+      howToPlay.trigger,
     );
   }, [onHowToPlayDismissed, view.howToPlay, view.playbackRunId]);
 

@@ -999,7 +999,7 @@ describe("TutorialScreen", () => {
                 actionId: "how-to-play",
                 text: howToPlayText,
                 wait: 0,
-                triggerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+                trigger: "player-turn-announcement-complete",
               },
               battle: {
                 battleId: "tutorial-battle",
@@ -1124,7 +1124,7 @@ describe("TutorialScreen", () => {
     expect(onHowToPlayPresented).toHaveBeenCalledWith(
       "event:player-turn",
       "how-to-play",
-      "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      "player-turn-announcement-complete",
     );
 
     act(() => {
@@ -1138,7 +1138,7 @@ describe("TutorialScreen", () => {
     expect(onHowToPlayDismissed).toHaveBeenCalledWith(
       "event:player-turn",
       "how-to-play",
-      "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      "player-turn-announcement-complete",
     );
     act(() => {
       vi.advanceTimersByTime(0);
@@ -1146,6 +1146,137 @@ describe("TutorialScreen", () => {
     expect(onActionComplete).toHaveBeenCalledWith(
       "event:player-turn",
       "how-to-play",
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("opens a generalized How to Play action after the opponent turn announcement", () => {
+    const onHowToPlayPresented = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: null,
+              playbackRunId: "event:dreamwell",
+              endTurn: null,
+              currentAction: {
+                id: "dreamwell-how-to-play",
+                action: "display-how-to-play",
+                trigger: "enemy-turn-announcement-complete",
+                text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
+                wait: 0,
+              },
+              howToPlay: {
+                actionId: "dreamwell-how-to-play",
+                text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
+                wait: 0,
+                trigger: "enemy-turn-announcement-complete",
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                enemy: { backRank: [], frontRank: [], deckCardIds: [] },
+                player: { backRank: [], frontRank: [] },
+              } as unknown as MobileBattleView,
+            }}
+            onHowToPlayPresented={onHowToPlayPresented}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    act(() => screenMocks.sceneAnimationComplete?.());
+    act(() => {
+      screenMocks.props?.onTurnAnnouncementComplete?.("player");
+    });
+    expect(container.querySelector('[role="dialog"]')).toBeNull();
+
+    act(() => {
+      screenMocks.props?.onTurnAnnouncementComplete?.("enemy");
+    });
+    expect(
+      container.querySelector('[role="dialog"]')?.textContent,
+    ).toContain(
+      "From turn 2, each player draws a Dreamwell card at the start of their turn",
+    );
+    expect(onHowToPlayPresented).toHaveBeenCalledWith(
+      "event:dreamwell",
+      "dreamwell-how-to-play",
+      "enemy-turn-announcement-complete",
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("advances a revealed Dreamwell action after its authored wait", () => {
+    vi.useFakeTimers();
+    const onActionComplete = vi.fn();
+    const cardId = asCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3");
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: null,
+              playbackRunId: "event:dreamwell",
+              endTurn: null,
+              howToPlay: null,
+              currentAction: {
+                id: "autumn-glade",
+                action: "draw-dreamwell-card",
+                owner: "enemy",
+                cardId,
+                wait: 0.5,
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                dreamwell: {
+                  side: "enemy",
+                  model: {
+                    cardId,
+                    displaySnapshot: {
+                      id: cardId,
+                      name: "Autumn Glade",
+                      renderedText: "Gain 2⍟.",
+                      energyAdded: 1,
+                      imageNumber: 1789989917,
+                    },
+                  },
+                },
+                enemy: { backRank: [], frontRank: [], deckCardIds: [] },
+                player: { backRank: [], frontRank: [] },
+              } as unknown as MobileBattleView,
+            }}
+            onActionComplete={onActionComplete}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    act(() => screenMocks.sceneAnimationComplete?.());
+    act(() => {
+      vi.advanceTimersByTime(499);
+    });
+    expect(onActionComplete).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(onActionComplete).toHaveBeenCalledWith(
+      "event:dreamwell",
+      "autumn-glade",
     );
 
     act(() => root.unmount());

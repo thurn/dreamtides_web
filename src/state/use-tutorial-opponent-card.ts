@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   loadTutorialCards,
+  TUTORIAL_DREAMWELL_CARD_ID,
   TUTORIAL_OPPONENT_CARD_ID,
   TUTORIAL_PLAYER_CARD_ID,
   type TutorialCards,
@@ -18,7 +19,11 @@ export function useTutorialCards(): TutorialCards | null {
       },
       (error: unknown) => {
         logEvent("tutorial_cards_load_failed", {
-          cardIds: [TUTORIAL_OPPONENT_CARD_ID, TUTORIAL_PLAYER_CARD_ID],
+          cardIds: [
+            TUTORIAL_OPPONENT_CARD_ID,
+            TUTORIAL_PLAYER_CARD_ID,
+            TUTORIAL_DREAMWELL_CARD_ID,
+          ],
           message: error instanceof Error ? error.message : String(error),
         });
       },

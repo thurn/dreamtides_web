@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
+import type { DreamwellCard } from "../../data/dreamwell-database";
 import {
   buildTutorialView,
   TUTORIAL_OPPONENT_CARD_ID,
@@ -39,6 +40,16 @@ const PLAYER_CARD: CardData = {
   renderedText: "",
   imageNumber: 1011175312,
   artOwned: false,
+};
+
+const AUTUMN_GLADE: DreamwellCard = {
+  id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+  name: "Autumn Glade",
+  renderedText: "Gain 2⍟.",
+  order: 1,
+  energyAdded: 1,
+  cardNumber: 5,
+  imageNumber: 1789989917,
 };
 
 describe("buildTutorialView", () => {
@@ -131,6 +142,7 @@ describe("buildTutorialView", () => {
     ).toEqual({
       actionId: "how-to-play",
       action: "display-how-to-play",
+      trigger: "player-turn-announcement-complete",
       title: "How to Play",
       messageText: "Configured instructions.",
       waitSeconds: 0,
@@ -189,6 +201,27 @@ describe("buildTutorialView", () => {
       waitSeconds: 0,
       sourceSide: "player",
       destinationSide: "enemy",
+      destinationPhase: "dawn",
+    });
+  });
+
+  it("logs a UUID-authored Dreamwell reveal for sequence reconstruction", () => {
+    expect(
+      tutorialActionLogDetails({
+        id: "autumn-glade",
+        action: "draw-dreamwell-card",
+        owner: "enemy",
+        cardId: AUTUMN_GLADE.id,
+        wait: 0,
+      }),
+    ).toEqual({
+      actionId: "autumn-glade",
+      action: "draw-dreamwell-card",
+      waitSeconds: 0,
+      cardId: AUTUMN_GLADE.id,
+      cardFace: "up",
+      owner: "enemy",
+      sourceZone: "dreamwell",
       destinationPhase: "dawn",
     });
   });
@@ -452,6 +485,20 @@ describe("buildTutorialView", () => {
         action: "end-turn" as const,
         wait: 0,
       },
+      {
+        id: "autumn-glade",
+        action: "draw-dreamwell-card" as const,
+        owner: "enemy" as const,
+        cardId: AUTUMN_GLADE.id,
+        wait: 2.5,
+      },
+      {
+        id: "dreamwell-how-to-play",
+        action: "display-how-to-play" as const,
+        trigger: "immediate" as const,
+        text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
+        wait: 0,
+      },
     ];
 
     const drawing = buildTutorialView({
@@ -499,7 +546,7 @@ describe("buildTutorialView", () => {
       actionId: "how-to-play",
       text: "Configured instructions.\n\nScore 10 ⍟ to win.",
       wait: 0,
-      triggerCardId: TUTORIAL_PLAYER_CARD_ID,
+      trigger: "player-turn-announcement-complete",
     });
     expect(playedTutorial.currentAction?.action).toBe("display-how-to-play");
     expect(playedTutorial.dialogue).toBeNull();
@@ -588,6 +635,97 @@ describe("buildTutorialView", () => {
       backRank: 1,
     });
 
+    const drawingDreamwell = buildTutorialView(
+      {
+        runId: "event:draw",
+        currentActionIndex: 5,
+        actions,
+        playerCardPlay: {
+          cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+          cardId: TUTORIAL_PLAYER_CARD_ID,
+          targetSlotId: "player-back-4",
+        },
+      },
+      OPPONENT_CARD,
+      PLAYER_CARD,
+      [AUTUMN_GLADE],
+    );
+    expect(drawingDreamwell.currentAction?.action).toBe(
+      "draw-dreamwell-card",
+    );
+    expect(drawingDreamwell.battle).toMatchObject({
+      activeSide: "enemy",
+      phase: "dawn",
+      dreamwell: {
+        side: "enemy",
+        model: {
+          cardId: AUTUMN_GLADE.id,
+          displaySnapshot: {
+            name: "Autumn Glade",
+            renderedText: "Gain 2⍟.",
+          },
+        },
+      },
+      enemy: {
+        status: {
+          currentEnergy: 1,
+          maxEnergy: 1,
+        },
+      },
+      inspector: {
+        activeSide: "Enemy",
+        phase: "Dawn",
+        sides: {
+          enemy: {
+            currentEnergy: 1,
+            maxEnergy: 1,
+          },
+        },
+      },
+    });
+
+    const loadingDreamwellCatalog = buildTutorialView(
+      {
+        runId: "event:draw",
+        currentActionIndex: 5,
+        actions,
+        playerCardPlay: {
+          cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+          cardId: TUTORIAL_PLAYER_CARD_ID,
+          targetSlotId: "player-back-4",
+        },
+      },
+      OPPONENT_CARD,
+      PLAYER_CARD,
+      null,
+    );
+    expect(loadingDreamwellCatalog.battle.dreamwell).toBeNull();
+
+    const explainingDreamwell = buildTutorialView(
+      {
+        runId: "event:draw",
+        currentActionIndex: 6,
+        actions,
+        playerCardPlay: {
+          cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+          cardId: TUTORIAL_PLAYER_CARD_ID,
+          targetSlotId: "player-back-4",
+        },
+      },
+      OPPONENT_CARD,
+      PLAYER_CARD,
+      [AUTUMN_GLADE],
+    );
+    expect(explainingDreamwell.battle.dreamwell?.model.cardId).toBe(
+      AUTUMN_GLADE.id,
+    );
+    expect(explainingDreamwell.howToPlay).toEqual({
+      actionId: "dreamwell-how-to-play",
+      text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
+      wait: 0,
+      trigger: "immediate",
+    });
+
     const ended = buildTutorialView(
       {
         runId: "event:draw",
@@ -601,6 +739,7 @@ describe("buildTutorialView", () => {
       },
       OPPONENT_CARD,
       PLAYER_CARD,
+      [AUTUMN_GLADE],
     );
     expect(ended.endTurn).toBeNull();
     expect(ended.battle.activeSide).toBe("enemy");

@@ -1,3 +1,4 @@
+import { isCardId } from "../types/card-identity";
 import type { TutorialAction } from "../types/tutorial";
 
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
@@ -71,9 +72,21 @@ export function parseTutorialActions(
           `Tutorial action ${JSON.stringify(id)} must have How to Play text.`,
         );
       }
+      const trigger =
+        record.trigger ?? "player-turn-announcement-complete";
+      if (
+        trigger !== "immediate" &&
+        trigger !== "player-turn-announcement-complete" &&
+        trigger !== "enemy-turn-announcement-complete"
+      ) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must have a supported How to Play trigger.`,
+        );
+      }
       return {
         id,
         action: "display-how-to-play",
+        trigger,
         text: record.text,
         wait,
       } satisfies TutorialAction;
@@ -114,6 +127,26 @@ export function parseTutorialActions(
       return {
         id,
         action: "draw-opponent-card",
+        wait,
+      } satisfies TutorialAction;
+    }
+    if (record.action === "draw-dreamwell-card") {
+      const owner = record.owner ?? "enemy";
+      if (owner !== "player" && owner !== "enemy") {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must target the player or enemy.`,
+        );
+      }
+      if (typeof record.cardId !== "string" || !isCardId(record.cardId)) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must identify a Dreamwell card by UUID.`,
+        );
+      }
+      return {
+        id,
+        action: "draw-dreamwell-card",
+        owner,
+        cardId: record.cardId,
         wait,
       } satisfies TutorialAction;
     }

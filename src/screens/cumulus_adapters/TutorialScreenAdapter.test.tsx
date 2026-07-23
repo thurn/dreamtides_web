@@ -55,6 +55,20 @@ const mocks = vi.hoisted(() => ({
           action: "end-turn" as const,
           wait: 0,
         },
+        {
+          id: "autumn-glade",
+          action: "draw-dreamwell-card" as const,
+          owner: "enemy" as const,
+          cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+          wait: 2.5,
+        },
+        {
+          id: "dreamwell-how-to-play",
+          action: "display-how-to-play" as const,
+          trigger: "immediate" as const,
+          text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
+          wait: 0,
+        },
       ],
     },
   },
@@ -109,6 +123,17 @@ vi.mock("../../state/use-tutorial-opponent-card", () => ({
       imageNumber: 1011175312,
       artOwned: false,
     },
+    dreamwell: [
+      {
+        id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+        name: "Autumn Glade",
+        renderedText: "Gain 2⍟.",
+        order: 1,
+        energyAdded: 1,
+        cardNumber: 5,
+        imageNumber: 1789989917,
+      },
+    ],
   }),
 }));
 
@@ -166,13 +191,15 @@ describe("TutorialScreenAdapter", () => {
       expect.arrayContaining([
         expect.objectContaining({
           event: "tutorial_actions_loaded",
-          actionCount: 5,
+          actionCount: 7,
           actionIds: [
             "welcome",
             "dreamcaller-arrival",
             "nightmare-call",
             "how-to-play",
             "end-turn",
+            "autumn-glade",
+            "dreamwell-how-to-play",
           ],
         }),
         expect.objectContaining({
@@ -251,7 +278,7 @@ describe("TutorialScreenAdapter", () => {
       actionId: "how-to-play",
       text: "Configured adapter instructions.\n\nScore 10 ⍟ to win.",
       wait: 0,
-      triggerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      trigger: "player-turn-announcement-complete",
     });
     expect(getLogEntries()).toEqual(
       expect.arrayContaining([
@@ -276,12 +303,12 @@ describe("TutorialScreenAdapter", () => {
       adapterMocks.props?.onHowToPlayPresented?.(
         "event:1",
         "how-to-play",
-        "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "player-turn-announcement-complete",
       );
       adapterMocks.props?.onHowToPlayDismissed?.(
         "event:1",
         "how-to-play",
-        "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "player-turn-announcement-complete",
       );
       adapterMocks.props?.onPlayerCardPlay?.(
         "event:1",
@@ -304,7 +331,6 @@ describe("TutorialScreenAdapter", () => {
           runId: "event:1",
           actionId: "how-to-play",
           battleId: "tutorial-battle",
-          triggerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
           trigger: "player-turn-announcement-complete",
           title: "How to Play",
         }),
@@ -313,7 +339,7 @@ describe("TutorialScreenAdapter", () => {
           runId: "event:1",
           actionId: "how-to-play",
           battleId: "tutorial-battle",
-          triggerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          trigger: "player-turn-announcement-complete",
         }),
         expect.objectContaining({
           event: "tutorial_player_card_play_requested",
@@ -394,6 +420,67 @@ describe("TutorialScreenAdapter", () => {
           sourceSide: "player",
           destinationSide: "enemy",
           destinationPhase: "dawn",
+        }),
+      ]),
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("maps the opponent Dreamwell reveal and follow-up instructions", async () => {
+    (
+      mocks.state.tutorial as unknown as {
+        currentActionIndex: number | null;
+      }
+    ).currentActionIndex = 6;
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    await act(async () => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreenAdapter />
+        </CumulusRoot>,
+      );
+      await Promise.resolve();
+    });
+
+    expect(adapterMocks.props?.view.battle).toMatchObject({
+      activeSide: "enemy",
+      phase: "dawn",
+      dreamwell: {
+        side: "enemy",
+        model: {
+          cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+          displaySnapshot: {
+            name: "Autumn Glade",
+            renderedText: "Gain 2⍟.",
+          },
+        },
+      },
+      enemy: {
+        status: {
+          currentEnergy: 1,
+          maxEnergy: 1,
+        },
+      },
+    });
+    expect(adapterMocks.props?.view.howToPlay).toEqual({
+      actionId: "dreamwell-how-to-play",
+      text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
+      wait: 0,
+      trigger: "immediate",
+    });
+    expect(getLogEntries()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          event: "tutorial_action_presented",
+          actionId: "dreamwell-how-to-play",
+          trigger: "immediate",
+          messageText:
+            "From turn 2, each player draws a Dreamwell card at the start of their turn",
         }),
       ]),
     );

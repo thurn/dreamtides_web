@@ -10,6 +10,7 @@ import { IconButton } from "../components/controls/IconButton";
 import { NumberStepper } from "../components/controls/NumberStepper";
 import { Select } from "../components/controls/Select";
 import { TextArea } from "../components/controls/TextArea";
+import { TextField } from "../components/controls/TextField";
 import { DeveloperRail } from "../components/overlay/DeveloperRail";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { Pressable } from "../primitives/Pressable";
@@ -20,8 +21,11 @@ import type {
   TutorialActionName,
   TutorialDreamcallerOwner,
   TutorialEditorSaveStatus,
+  TutorialHowToPlayTrigger,
   TutorialSpeechBubbleSpeaker,
 } from "../../types/tutorial";
+import { isCardId } from "../../types/card-identity";
+import { TUTORIAL_DREAMWELL_CARD_ID } from "../../data/tutorial-opponent-card";
 
 export interface TutorialEditorRailProps {
   readonly actions: readonly TutorialAction[];
@@ -36,7 +40,7 @@ export interface TutorialEditorRailProps {
   readonly onClose: () => void;
 }
 
-const TUTORIAL_TAIL_ACTION_COUNT = 3;
+const TUTORIAL_TAIL_ACTION_COUNT = 4;
 const DEFAULT_HOW_TO_PLAY_TEXT =
   "Play characters and challenge with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle.";
 
@@ -52,6 +56,7 @@ const ACTION_OPTIONS = [
     value: "reveal-and-play-opponent-card",
     label: "Reveal & Play Opponent Card",
   },
+  { value: "draw-dreamwell-card", label: "Draw Dreamwell Card" },
   { value: "end-turn", label: "End Turn" },
 ] satisfies readonly { value: TutorialActionName; label: string }[];
 
@@ -65,6 +70,18 @@ const SPEECH_BUBBLE_SPEAKER_OPTIONS = [
   { value: "player", label: "Player Dreamcaller" },
   { value: "enemy", label: "Opposing Dreamcaller" },
 ] satisfies readonly { value: TutorialSpeechBubbleSpeaker; label: string }[];
+
+const HOW_TO_PLAY_TRIGGER_OPTIONS = [
+  { value: "immediate", label: "Immediately" },
+  {
+    value: "player-turn-announcement-complete",
+    label: "After Player Turn Announcement",
+  },
+  {
+    value: "enemy-turn-announcement-complete",
+    label: "After Opponent Turn Announcement",
+  },
+] satisfies readonly { value: TutorialHowToPlayTrigger; label: string }[];
 
 function nextActionId(
   actionName: TutorialActionName,
@@ -95,6 +112,7 @@ function defaultAction(
     return {
       id,
       action: "display-how-to-play",
+      trigger: "immediate",
       text: DEFAULT_HOW_TO_PLAY_TEXT,
       wait: 0,
     };
@@ -114,6 +132,15 @@ function defaultAction(
       id,
       action: "reveal-and-play-opponent-card",
       revealDuration: 2,
+      wait: 0,
+    };
+  }
+  if (actionName === "draw-dreamwell-card") {
+    return {
+      id,
+      action: "draw-dreamwell-card",
+      owner: "enemy",
+      cardId: TUTORIAL_DREAMWELL_CARD_ID,
       wait: 0,
     };
   }
@@ -150,6 +177,10 @@ function changedActionType(
         action.action === "display-how-to-play"
           ? action.text
           : DEFAULT_HOW_TO_PLAY_TEXT,
+      trigger:
+        action.action === "display-how-to-play"
+          ? (action.trigger ?? "player-turn-announcement-complete")
+          : "immediate",
       wait: action.wait,
     };
   }
@@ -167,6 +198,19 @@ function changedActionType(
         action.action === "reveal-and-play-opponent-card"
           ? action.revealDuration
           : 2,
+      wait: action.wait,
+    };
+  }
+  if (actionName === "draw-dreamwell-card") {
+    return {
+      id: action.id,
+      action: actionName,
+      owner:
+        action.action === "draw-dreamwell-card" ? action.owner : "enemy",
+      cardId:
+        action.action === "draw-dreamwell-card"
+          ? action.cardId
+          : TUTORIAL_DREAMWELL_CARD_ID,
       wait: action.wait,
     };
   }
@@ -309,6 +353,7 @@ function TutorialActionRow({
                   value !== "animate-dreamcaller-portrait" &&
                   value !== "draw-opponent-card" &&
                   value !== "reveal-and-play-opponent-card" &&
+                  value !== "draw-dreamwell-card" &&
                   value !== "end-turn"
                 ) {
                   return;
@@ -374,19 +419,38 @@ function TutorialActionRow({
         ) : null}
 
         {action.action === "display-how-to-play" ? (
-          <TextArea
-            label="Instruction Text"
-            value={action.text}
-            supportingText="Use a blank line between paragraphs. ⍟ renders points; ✦ renders spark."
-            error={
-              action.text.trim().length === 0
-                ? "Text cannot be blank."
-                : undefined
-            }
-            testId={`tutorial-action-text-${action.id}`}
-            onChange={(text) => update({ ...action, text }, false)}
-            onCommit={(text) => update({ ...action, text }, true)}
-          />
+          <>
+            <Select
+              full
+              size="sm"
+              ariaLabel={`How to Play trigger for action ${String(index + 1)}`}
+              options={[...HOW_TO_PLAY_TRIGGER_OPTIONS]}
+              value={action.trigger ?? "player-turn-announcement-complete"}
+              onChange={(trigger) => {
+                if (
+                  trigger !== "immediate" &&
+                  trigger !== "player-turn-announcement-complete" &&
+                  trigger !== "enemy-turn-announcement-complete"
+                ) {
+                  return;
+                }
+                update({ ...action, trigger }, true);
+              }}
+            />
+            <TextArea
+              label="Instruction Text"
+              value={action.text}
+              supportingText="Use a blank line between paragraphs. ⍟ renders points; ✦ renders spark."
+              error={
+                action.text.trim().length === 0
+                  ? "Text cannot be blank."
+                  : undefined
+              }
+              testId={`tutorial-action-text-${action.id}`}
+              onChange={(text) => update({ ...action, text }, false)}
+              onCommit={(text) => update({ ...action, text }, true)}
+            />
+          </>
         ) : null}
 
         {action.action === "animate-dreamcaller-portrait" ? (
@@ -497,6 +561,35 @@ function TutorialActionRow({
               )
             }
           />
+        ) : null}
+
+        {action.action === "draw-dreamwell-card" ? (
+          <>
+            <Select
+              full
+              size="sm"
+              ariaLabel={`Dreamwell owner for action ${String(index + 1)}`}
+              options={[...DREAMCALLER_OWNER_OPTIONS]}
+              value={action.owner}
+              onChange={(owner) => {
+                if (owner !== "player" && owner !== "enemy") return;
+                update({ ...action, owner }, true);
+              }}
+            />
+            <TextField
+              label="Dreamwell Card UUID"
+              value={action.cardId}
+              error={
+                isCardId(action.cardId)
+                  ? undefined
+                  : "Enter a Dreamwell card UUID."
+              }
+              testId={`tutorial-action-card-id-${action.id}`}
+              onChange={(cardId) =>
+                update({ ...action, cardId }, isCardId(cardId))
+              }
+            />
+          </>
         ) : null}
 
         <NumberStepper
@@ -654,6 +747,7 @@ function TutorialEditorContent({
             value !== "animate-dreamcaller-portrait" &&
             value !== "draw-opponent-card" &&
             value !== "reveal-and-play-opponent-card" &&
+            value !== "draw-dreamwell-card" &&
             value !== "end-turn"
           ) {
             return;

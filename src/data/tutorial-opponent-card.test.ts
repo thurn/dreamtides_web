@@ -22,25 +22,50 @@ describe("loadTutorialOpponentCard", () => {
       id: TUTORIAL_PLAYER_CARD_ID,
       cardNumber: 512,
     } as CardData;
+    const dreamwell = {
+      id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+      name: "Autumn Glade",
+      renderedText: "Gain 2⍟.",
+      order: 1,
+      energyAdded: 1,
+      cardNumber: 5,
+    };
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve([other, player, opponent]),
-      }),
+      vi.fn((path: string) =>
+        Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve(
+              path === "/dreamwell-data.json"
+                ? [dreamwell]
+                : [other, player, opponent],
+            ),
+        }),
+      ),
     );
 
-    await expect(loadTutorialCards()).resolves.toEqual({ opponent, player });
+    await expect(loadTutorialCards()).resolves.toEqual({
+      opponent,
+      player,
+      dreamwell: [dreamwell],
+    });
   });
 
   it("reports a missing UUID and fetch failures", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: () =>
-          Promise.resolve([{ id: TUTORIAL_OPPONENT_CARD_ID } as CardData]),
-      }),
+      vi.fn((path: string) =>
+        Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve(
+              path === "/dreamwell-data.json"
+                ? []
+                : [{ id: TUTORIAL_OPPONENT_CARD_ID } as CardData],
+            ),
+        }),
+      ),
     );
     await expect(loadTutorialCards()).rejects.toThrow(
       TUTORIAL_PLAYER_CARD_ID,
@@ -64,10 +89,15 @@ describe("loadTutorialOpponentCard", () => {
     const player = { id: TUTORIAL_PLAYER_CARD_ID } as CardData;
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve([opponent, player]),
-      }),
+      vi.fn((path: string) =>
+        Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve(
+              path === "/dreamwell-data.json" ? [] : [opponent, player],
+            ),
+        }),
+      ),
     );
 
     await expect(loadTutorialOpponentCard()).resolves.toBe(opponent);

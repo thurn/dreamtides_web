@@ -61,6 +61,7 @@ export function TutorialScreenAdapter() {
         state.tutorial,
         tutorialCards?.opponent ?? null,
         tutorialCards?.player ?? null,
+        tutorialCards?.dreamwell ?? null,
       ),
     [state.tutorial, tutorialCards],
   );

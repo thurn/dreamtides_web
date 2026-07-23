@@ -5,6 +5,7 @@ export type TutorialActionName =
   | "animate-dreamcaller-portrait"
   | "draw-opponent-card"
   | "reveal-and-play-opponent-card"
+  | "draw-dreamwell-card"
   | "end-turn";
 
 /** Battle-status destination for an arriving tutorial Dreamcaller. */
@@ -12,6 +13,12 @@ export type TutorialDreamcallerOwner = "player" | "enemy";
 
 /** Character whose portrait anchors an authored tutorial speech bubble. */
 export type TutorialSpeechBubbleSpeaker = "mira" | TutorialDreamcallerOwner;
+
+/** Presentation event that opens an authored How to Play popup. */
+export type TutorialHowToPlayTrigger =
+  | "immediate"
+  | "player-turn-announcement-complete"
+  | "enemy-turn-announcement-complete";
 
 /** Fields shared by every authored tutorial action. */
 export interface TutorialActionBase {
@@ -32,6 +39,8 @@ export interface DisplaySpeechBubbleTutorialAction extends TutorialActionBase {
 /** Shows the dismissible How to Play instruction popup. */
 export interface DisplayHowToPlayTutorialAction extends TutorialActionBase {
   readonly action: "display-how-to-play";
+  /** Defaults to the player-turn announcement for older authored snapshots. */
+  readonly trigger?: TutorialHowToPlayTrigger;
   /**
    * Authored instruction copy. Blank lines separate paragraphs; `⍟` and `✦`
    * render as the points and spark glyphs.
@@ -61,6 +70,13 @@ export interface RevealAndPlayOpponentCardTutorialAction extends TutorialActionB
   readonly revealDuration: number;
 }
 
+/** Draws and reveals one UUID-authored Dreamwell card for the selected side. */
+export interface DrawDreamwellCardTutorialAction extends TutorialActionBase {
+  readonly action: "draw-dreamwell-card";
+  readonly owner: TutorialDreamcallerOwner;
+  readonly cardId: string;
+}
+
 /** Waits for the player to play their tutorial card, then offers End Turn. */
 export interface EndTurnTutorialAction extends TutorialActionBase {
   readonly action: "end-turn";
@@ -73,6 +89,7 @@ export type TutorialAction =
   | AnimateDreamcallerPortraitTutorialAction
   | DrawOpponentCardTutorialAction
   | RevealAndPlayOpponentCardTutorialAction
+  | DrawDreamwellCardTutorialAction
   | EndTurnTutorialAction;
 
 /** Local filesystem persistence state shown by the Tutorial Editor. */

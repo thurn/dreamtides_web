@@ -40,6 +40,7 @@ const FIXTURE_ACTIONS = [
   {
     id: "how-to-play",
     action: "display-how-to-play",
+    trigger: "player-turn-announcement-complete",
     text: "Play characters to score points (⍟).\n\nScore 10 ⍟ to win.",
     wait: 0,
   },
@@ -101,6 +102,44 @@ describe("tutorial data", () => {
     expect(() =>
       validateTutorialActions([{ ...FIXTURE_ACTIONS[4], text: " " }]),
     ).toThrow(/How to Play text/u);
+    expect(() =>
+      validateTutorialActions([
+        { ...FIXTURE_ACTIONS[4], trigger: "after-card-name" },
+      ]),
+    ).toThrow(/supported How to Play trigger/u);
+  });
+
+  it("validates UUID-authored Dreamwell draws", () => {
+    expect(
+      validateTutorialActions([
+        {
+          id: "autumn-glade",
+          action: "draw-dreamwell-card",
+          owner: "enemy",
+          cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+          wait: 0,
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "autumn-glade",
+        action: "draw-dreamwell-card",
+        owner: "enemy",
+        cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+        wait: 0,
+      },
+    ]);
+    expect(() =>
+      validateTutorialActions([
+        {
+          id: "named-card",
+          action: "draw-dreamwell-card",
+          owner: "enemy",
+          cardId: "Autumn Glade",
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/by UUID/u);
   });
 
   it("normalizes legacy portrait actions to the player with no pause", () => {

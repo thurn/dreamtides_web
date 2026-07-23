@@ -49,10 +49,25 @@ wait = 0
 [[actions]]
 id = "how-to-play"
 action = "display-how-to-play"
+trigger = "player-turn-announcement-complete"
 text = "Play characters and challenge with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle."
 wait = 0
 
 [[actions]]
 id = "end-turn"
 action = "end-turn"
+wait = 0
+
+[[actions]]
+id = "autumn-glade"
+action = "draw-dreamwell-card"
+owner = "enemy"
+cardId = "02e8ea92-1218-413c-9f0b-4c865a3921d3"
+wait = 2.5
+
+[[actions]]
+id = "dreamwell-how-to-play"
+action = "display-how-to-play"
+trigger = "immediate"
+text = "From turn 2, each player draws a Dreamwell card at the start of their turn"
 wait = 0

@@ -5,7 +5,10 @@ import type {
 } from "../cumulus/screens/TutorialScreen";
 import { logEvent } from "../logging";
 import { tutorialActionLogDetails } from "../screens/cumulus_adapters/tutorial-view-model";
-import type { TutorialPlaybackState } from "../types/tutorial";
+import type {
+  TutorialHowToPlayTrigger,
+  TutorialPlaybackState,
+} from "../types/tutorial";
 
 /** Log each shared tutorial presentation state once per playback run. */
 export function useTutorialPresentationLogging(
@@ -70,25 +73,32 @@ export function useTutorialHowToPlayLogging(
   "onHowToPlayPresented" | "onHowToPlayDismissed"
 > {
   const onHowToPlayPresented = useCallback(
-    (runId: string, actionId: string, triggerCardId: string): void => {
+    (
+      runId: string,
+      actionId: string,
+      trigger: TutorialHowToPlayTrigger,
+    ): void => {
       logEvent("tutorial_how_to_play_presented", {
         runId,
         actionId,
         battleId,
-        triggerCardId,
-        trigger: "player-turn-announcement-complete",
+        trigger,
         title: "How to Play",
       });
     },
     [battleId],
   );
   const onHowToPlayDismissed = useCallback(
-    (runId: string, actionId: string, triggerCardId: string): void => {
+    (
+      runId: string,
+      actionId: string,
+      trigger: TutorialHowToPlayTrigger,
+    ): void => {
       logEvent("tutorial_how_to_play_dismissed", {
         runId,
         actionId,
         battleId,
-        triggerCardId,
+        trigger,
       });
     },
     [battleId],
