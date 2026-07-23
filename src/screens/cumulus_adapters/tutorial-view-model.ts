@@ -464,7 +464,7 @@ export function buildTutorialView(
                 ...slot,
                 card: {
                   ...playerTurnCard,
-                  exhausted: true,
+                  exhausted: !endTurnCompleted,
                   showPlayableOutline: false,
                 },
               }

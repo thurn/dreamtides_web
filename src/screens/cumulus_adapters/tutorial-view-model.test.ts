@@ -684,6 +684,11 @@ describe("buildTutorialView", () => {
         },
       },
     });
+    expect(drawingDreamwell.battle.player.backRank[1]?.card).toMatchObject({
+      id: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+      exhausted: false,
+      model: { cardId: TUTORIAL_PLAYER_CARD_ID },
+    });
 
     const loadingDreamwellCatalog = buildTutorialView(
       {
