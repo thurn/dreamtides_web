@@ -351,6 +351,44 @@ describe("buildTutorialView", () => {
     );
   });
 
+  it("dismisses completed speech while non-portrait actions play", () => {
+    const actions = [
+      {
+        id: "vrakmoth-taunt",
+        action: "display-speech-bubble" as const,
+        speaker: "enemy" as const,
+        text: "For the Abyss!",
+        wait: 3,
+      },
+      {
+        id: "vrakmoth-draw",
+        action: "draw-opponent-card" as const,
+        wait: 0,
+      },
+      {
+        id: "vrakmoth-reveal-and-play",
+        action: "reveal-and-play-opponent-card" as const,
+        revealDuration: 2,
+        wait: 0,
+      },
+    ];
+
+    expect(
+      buildTutorialView({
+        runId: "event:dismiss-speech",
+        currentActionIndex: 1,
+        actions,
+      }).dialogue,
+    ).toBeNull();
+    expect(
+      buildTutorialView({
+        runId: "event:dismiss-speech",
+        currentActionIndex: 2,
+        actions,
+      }).dialogue,
+    ).toBeNull();
+  });
+
   it("attaches authored Dreamcaller speech to that side's battle portrait", () => {
     const tutorial = buildTutorialView({
       runId: "event:11",

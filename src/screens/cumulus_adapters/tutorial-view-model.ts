@@ -172,12 +172,9 @@ function activeDialogueAction(
   playback: TutorialPlaybackState | null,
 ): DisplaySpeechBubbleTutorialAction | null {
   if (playback?.currentActionIndex === null || playback === null) return null;
-  if (
-    playback.actions[playback.currentActionIndex]?.action ===
-    "display-how-to-play"
-  ) {
-    return null;
-  }
+  const currentAction = playback.actions[playback.currentActionIndex];
+  if (currentAction?.action === "display-speech-bubble") return currentAction;
+  if (currentAction?.action !== "animate-dreamcaller-portrait") return null;
   for (let index = playback.currentActionIndex; index >= 0; index -= 1) {
     const action = playback.actions[index];
     if (action?.action === "display-speech-bubble") return action;
