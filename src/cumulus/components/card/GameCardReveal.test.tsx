@@ -314,6 +314,39 @@ describe("GameCard reveal contract", () => {
     act(() => root.unmount());
   });
 
+  it("uses the card's primary reveal when hovering a corner stat", async () => {
+    const { container, root } = mount(<GameCard model={model()} />);
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    const spark = source?.querySelector<HTMLElement>(
+      '[data-card-stat="spark"]',
+    );
+
+    expect(spark?.closest("[data-reveal-entity-type]")).toBe(source);
+
+    act(() => {
+      spark?.dispatchEvent(
+        pointer("pointerover", { pointerType: "mouse", pointerId: 1 }),
+      );
+    });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    remeasure();
+
+    await vi.waitFor(() =>
+      expect(
+        document.querySelector('[data-cumulus-reveal-card="primary"]'),
+      ).not.toBeNull(),
+    );
+    expect(
+      document.querySelector('[data-cumulus-reveal-card="primary"]')?.textContent,
+    ).toContain("Archive Sentry");
+
+    act(() => root.unmount());
+  });
+
   it.each(["full", "battlefield"] as const)(
     "snaps the %s card back to its original size when a press ends",
     (presentation) => {

@@ -1,4 +1,4 @@
-import { type CSSProperties, type ReactElement } from "react";
+import { type CSSProperties } from "react";
 import {
   ENERGY_ICON_CLASS,
   ENERGY_ICON_COLOR,
@@ -9,10 +9,6 @@ import {
 import { useFitText } from "../controls/useFitText";
 import { type Glyph, GLYPHS } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
-import { useRevealSource } from "../../internal/reveal/context";
-import { revealEntityId } from "../../internal/reveal/identity";
-import { Pressable } from "../../primitives/Pressable";
-import { glossaryInfoCard } from "./glossary-info-card";
 
 export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";
 export type CardStatChangeBadge = "empowered" | "kindled";
@@ -116,8 +112,6 @@ interface CardStatOrbProps {
    */
   numberCapPx: number;
   ariaLabel?: string;
-  /** Optional stable TOML glossary id for the stat's explanatory Info Card. */
-  glossaryId?: string;
   /**
    * Monochrome hammer marker for a transfiguration-changed stat, shared with
    * the Transfiguration site's atlas icon.
@@ -147,7 +141,6 @@ export function CardStatOrb({
   numberSizeVar,
   numberCapPx,
   ariaLabel,
-  glossaryId,
   changeBadge,
 }: CardStatOrbProps) {
   const label = ariaLabel ?? DEFAULT_LABEL[variant];
@@ -269,17 +262,5 @@ export function CardStatOrb({
     </span>
   );
 
-  if (glossaryId === undefined) {
-    return orb;
-  }
-
-  return <CardStatOrbReveal variant={variant} glossaryId={glossaryId}>{orb}</CardStatOrbReveal>;
-}
-
-function CardStatOrbReveal({ variant, glossaryId, children }: { variant: CardStatOrbVariant; glossaryId: string; children: ReactElement }) {
-  const binding = useRevealSource({
-    identity: { entityType: `card-${variant}-stat`, entityId: revealEntityId(`card-${variant}-stat`, glossaryId) },
-    spec: { primary: { kind: "infoCard", card: glossaryInfoCard(glossaryId) }, secondaries: [] },
-  });
-  return <Pressable as="span" ref={binding.ref} {...binding.sourceProps} tabIndex={0} style={{ ...binding.sourceProps.style, display: "inline-flex" }}>{children}</Pressable>;
+  return orb;
 }

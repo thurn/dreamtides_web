@@ -607,8 +607,6 @@ export interface CardViewProps {
   figmentTitleBar?: boolean;
   /** Hide rules text for dense card surfaces that show identity and stats. */
   hideRulesText?: boolean;
-  /** Whether corner stats expose their standalone tooltips. */
-  statTooltips?: boolean;
   /**
    * Visual treatment for the source card. `"battlefield"` uses a rounded square
    * frame that widens the art viewport at its existing vertical scale, keeping
@@ -667,7 +665,6 @@ function GameCardSurface(props: CardViewProps) {
     figment = false,
     figmentTitleBar = false,
     hideRulesText = false,
-    statTooltips = true,
     presentation = "full",
     slots = {},
     onRulesFontSizeChange,
@@ -789,7 +786,6 @@ function GameCardSurface(props: CardViewProps) {
       sizeVar="var(--cv-energy-orb-size)"
       numberSizeVar="var(--cv-energy-orb-font-size)"
       numberCapPx={energyOrbCapPx}
-      glossaryId={statTooltips ? GLOSSARY_IDS.energyCost : undefined}
       changeBadge={
         transfiguration?.energyChanged === true ? "empowered" : undefined
       }
@@ -1025,7 +1021,6 @@ function GameCardSurface(props: CardViewProps) {
         sizeVar={sparkSizeVar}
         numberSizeVar={sparkFontVar}
         numberCapPx={sparkCapPx}
-        glossaryId={statTooltips ? GLOSSARY_IDS.spark : undefined}
         changeBadge={
           !battlefieldPresentation && transfiguration?.sparkChanged === true
             ? "kindled"
@@ -1484,8 +1479,6 @@ export interface GameCardProps {
   readonly selectionColor?: CumulusColor;
   /** Hide source rules on dense surfaces; the reveal stays complete. */
   readonly hideRulesText?: boolean;
-  /** Whether corner stats expose their standalone tooltips. */
-  readonly statTooltips?: boolean;
   /** Whether this card is currently exhausted in battle. */
   readonly exhausted?: boolean;
   /**
@@ -1518,7 +1511,6 @@ export function GameCard({
   selected = false,
   selectionColor,
   hideRulesText = false,
-  statTooltips = true,
   exhausted = false,
   presentation = "full",
   figment = false,
@@ -1612,7 +1604,6 @@ export function GameCard({
         selected={selected}
         selectionColor={selectionColor}
         hideRulesText={hideRulesText}
-        statTooltips={statTooltips}
         presentation={presentation}
         figment={figment}
         figmentTitleBar={figmentTitleBar}

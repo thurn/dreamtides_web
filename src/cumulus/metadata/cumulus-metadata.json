@@ -1007,14 +1007,6 @@
       "description": ""
     },
     {
-      "name": "glossaryId",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional stable TOML glossary id for the stat's explanatory Info Card."
-    },
-    {
       "name": "changeBadge",
       "tsType": "CardStatChangeBadge",
       "unionMembers": [
@@ -1189,14 +1181,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Hide rules text for dense card surfaces that show identity and stats."
-    },
-    {
-      "name": "statTooltips",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Whether corner stats expose their standalone tooltips."
     },
     {
       "name": "presentation",
@@ -2325,14 +2309,6 @@
       "required": false,
       "defaultValue": "false",
       "description": "Hide source rules on dense surfaces; the reveal stays complete."
-    },
-    {
-      "name": "statTooltips",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "true",
-      "description": "Whether corner stats expose their standalone tooltips."
     },
     {
       "name": "exhausted",

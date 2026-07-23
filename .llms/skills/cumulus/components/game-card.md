@@ -22,7 +22,6 @@ The playable card object — art, cost, stats, and rules text — rendered at an
 | `selected` | `boolean` | no | `false` | Draw the semantic selection state. |
 | `selectionColor` | `CumulusColor` = `"danger" \| "accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "energy-bright" \| "spark" \| "points" \| "positive" \| "selected" \| "sale" \| "gold" \| "gold-light" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | no | — | Selection-ring color. Defaults to the shared selected role. |
 | `hideRulesText` | `boolean` | no | `false` | Hide source rules on dense surfaces; the reveal stays complete. |
-| `statTooltips` | `boolean` | no | `true` | Whether corner stats expose their standalone tooltips. |
 | `exhausted` | `boolean` | no | `false` | Whether this card is currently exhausted in battle. |
 | `presentation` | `GameCardPresentation` = `"full" \| "battlefield"` | no | `full` | Visual treatment for the source card. `"battlefield"` uses a rounded square frame that widens the art viewport at its existing vertical scale, showing only art and an enlarged top-right spark value while preserving the complete reveal. |
 | `figment` | `boolean` | no | `false` | Render the figment frame. |
