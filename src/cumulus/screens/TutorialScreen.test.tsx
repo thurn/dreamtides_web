@@ -1161,6 +1161,9 @@ describe("TutorialScreen", () => {
               playbackRunId: "event:player-turn",
               currentAction: null,
               howToPlay: {
+                actionId: "how-to-play",
+                text: "Configured instructions.",
+                wait: 0,
                 triggerCardId: TUTORIAL_PLAYER_CARD.model.cardId,
               },
               battle: {
