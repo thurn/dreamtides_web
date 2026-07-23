@@ -2557,7 +2557,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Optional tangible object paired with a popup panel. On desktop the\ncompanion leads an equal-width horizontal pair; on mobile it sits above\nthe equally wide panel. The complete pair is centered in the target\nregion. Only applies to `presentation=\"popup\"`."
+      "description": "Optional tangible object paired with a popup panel. On desktop the\ncompanion leads a horizontal pair with a wider prose panel; on mobile it\nsits centered above the panel. The complete pair is centered in the target\nregion. Only applies to `presentation=\"popup\"`."
     },
     {
       "name": "children",

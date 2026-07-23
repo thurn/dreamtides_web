@@ -2990,6 +2990,11 @@ export function MobileBattleScreen({
     readonly ids: readonly string[];
   }>({ pickerKey: null, ids: [] });
   const [selectedSide, setSelectedSide] = useState<MobileBattleOwner>("player");
+  const [completedTurnAnnouncement, setCompletedTurnAnnouncement] = useState<{
+    readonly battleId: string;
+    readonly turn: string;
+    readonly side: MobileBattleOwner;
+  } | null>(null);
   const inspectorTriggerRef = useRef<HTMLElement | null>(null);
   const previousDockLayout = useRef(isDockLayout);
   const previousPerspective = useRef(view.perspective);
@@ -3027,6 +3032,23 @@ export function MobileBattleScreen({
   const selectedPickerCardIds = cardPickerSelection.pickerKey === cardPickerKey
     ? cardPickerSelection.ids
     : [];
+  const turnAnnouncementComplete =
+    view.isOpeningTurn ||
+    (completedTurnAnnouncement?.battleId === view.battleId &&
+      completedTurnAnnouncement.turn === view.inspector.turn &&
+      completedTurnAnnouncement.side === view.activeSide);
+  const visibleDreamwell = turnAnnouncementComplete ? view.dreamwell : null;
+  const handleTurnAnnouncementComplete = useCallback(
+    (side: MobileBattleOwner): void => {
+      setCompletedTurnAnnouncement({
+        battleId: view.battleId,
+        turn: view.inspector.turn,
+        side,
+      });
+      onTurnAnnouncementComplete?.(side);
+    },
+    [onTurnAnnouncementComplete, view.battleId, view.inspector.turn],
+  );
 
   useEffect(() => {
     setSelectedSide("player");
@@ -3181,7 +3203,7 @@ export function MobileBattleScreen({
           isOpeningTurn={view.isOpeningTurn}
           perspective={view.perspective}
           isDesktop={isDesktop}
-          onComplete={onTurnAnnouncementComplete}
+          onComplete={handleTurnAnnouncementComplete}
         />
       ) : null}
       <LayoutGroup id={`mobile-battle:${view.battleId}`}>
@@ -3195,7 +3217,7 @@ export function MobileBattleScreen({
           selectedPickerCardIds={selectedPickerCardIds}
           onPickerCardToggle={handlePickerCardToggle}
         />
-        <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner={far.owner} position="far" phase={view.phase} side={far} interactions={interactions} />
+        <SideZones activeSide={view.activeSide} dreamwell={visibleDreamwell} isDesktop={isDesktop} owner={far.owner} position="far" phase={view.phase} side={far} interactions={interactions} />
         <PlayArea isDesktop={isDesktop} owner={far.owner} position="far" side={far} layoutBackSlotCount={layoutBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
         <PlayArea isDesktop={isDesktop} owner={near.owner} position="near" side={near} layoutBackSlotCount={layoutBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} interactions={interactions} />
         <ControlRow
@@ -3209,7 +3231,7 @@ export function MobileBattleScreen({
           phaseNavigation={phaseNavigation}
           perspective={view.perspective}
         />
-        <SideZones activeSide={view.activeSide} dreamwell={view.dreamwell} isDesktop={isDesktop} owner={near.owner} position="near" phase={view.phase} side={near} interactions={interactions} />
+        <SideZones activeSide={view.activeSide} dreamwell={visibleDreamwell} isDesktop={isDesktop} owner={near.owner} position="near" phase={view.phase} side={near} interactions={interactions} />
         <NearHand
           owner={near.owner}
           cards={nearHandCards}

@@ -50,10 +50,16 @@ const CLOSE_DISC_PX = 48;
 const WIDE_PANEL_MAX_WIDTH_PX = 1120;
 
 /**
- * Shared item width (px) for a popup paired with a tangible companion object.
- * This matches the canonical desktop Dreamwell-card presentation.
+ * Desktop width (px) for a tangible popup companion. This matches the
+ * canonical desktop Dreamwell-card presentation.
  */
-const PAIRED_POPUP_DESKTOP_ITEM_WIDTH_PX = 360;
+const PAIRED_POPUP_DESKTOP_COMPANION_WIDTH_PX = 360;
+
+/**
+ * Desktop width (px) for the explanation panel paired with a tangible object.
+ * Prose gets a wider measure than the object so it stays compact and readable.
+ */
+const PAIRED_POPUP_DESKTOP_PANEL_WIDTH_PX = 480;
 
 /** Props for {@link GlassBackdrop}. */
 export interface GlassBackdropProps {
@@ -144,8 +150,8 @@ export interface GlassDialogProps {
   desktopCenterTarget?: "viewport" | "battlefield";
   /**
    * Optional tangible object paired with a popup panel. On desktop the
-   * companion leads an equal-width horizontal pair; on mobile it sits above
-   * the equally wide panel. The complete pair is centered in the target
+   * companion leads a horizontal pair with a wider prose panel; on mobile it
+   * sits centered above the panel. The complete pair is centered in the target
    * region. Only applies to `presentation="popup"`.
    */
   companion?: ReactNode;
@@ -429,14 +435,14 @@ export function GlassDialog({
             zIndex: 1,
             display: "grid",
             gridTemplateColumns: isDesktop
-              ? `repeat(2, minmax(0, ${String(PAIRED_POPUP_DESKTOP_ITEM_WIDTH_PX)}px))`
+              ? `${String(PAIRED_POPUP_DESKTOP_COMPANION_WIDTH_PX)}px minmax(0, ${String(PAIRED_POPUP_DESKTOP_PANEL_WIDTH_PX)}px)`
               : "minmax(0, 1fr)",
             gap: token(isDesktop ? "--space-7" : "--space-5"),
             alignItems: "center",
             width: isDesktop
-              ? `calc(${String(PAIRED_POPUP_DESKTOP_ITEM_WIDTH_PX * 2)}px + ${token("--space-7")})`
-              : "76vw",
-            maxWidth: isDesktop ? "100%" : "340px",
+              ? `calc(${String(PAIRED_POPUP_DESKTOP_COMPANION_WIDTH_PX + PAIRED_POPUP_DESKTOP_PANEL_WIDTH_PX)}px + ${token("--space-7")})`
+              : "90vw",
+            maxWidth: isDesktop ? "100%" : "420px",
             maxHeight: "100%",
           }}
         >
@@ -445,7 +451,9 @@ export function GlassDialog({
             style={{
               minWidth: 0,
               minHeight: 0,
-              width: "100%",
+              width: isDesktop ? "100%" : "76vw",
+              maxWidth: isDesktop ? undefined : "340px",
+              justifySelf: isDesktop ? undefined : "center",
             }}
           >
             {companion}

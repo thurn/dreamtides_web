@@ -10,7 +10,7 @@ Real consumers: **14** (imports outside `src/cumulus/docs/` and tests).
 
 The glass overlay shell: a modal dialog with a bounded desktop panel and a full-bleed mobile overlay by default, plus centered content-sized and companion-paired popup presentations. Standard chrome places the title, optional subtitle, and close disc in a hairline-closed header; close-only chrome keeps the title accessible while floating just the close disc over the body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.
 
-> **Guidance:** Dreamsign Revelation uses this shell for its Purge replacement dialog. Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Use `presentation="popup"` for a bounded content-sized surface on both desktop and mobile. Add `companion` when one tangible object should lead an equal-width popup pair: the object sits left of the panel on desktop and above it on mobile. `chrome="close-only"` retains the accessible title while omitting the visible header and divider. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant. Battle overlays use `desktopCenterTarget="battlefield"` so a docked inspector rail stays outside the panel's centering region.
+> **Guidance:** Dreamsign Revelation uses this shell for its Purge replacement dialog. Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Use `presentation="popup"` for a bounded content-sized surface on both desktop and mobile. Add `companion` when one tangible object should lead a popup pair: the object sits left of a wider prose panel on desktop and centered above it on mobile. `chrome="close-only"` retains the accessible title while omitting the visible header and divider. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant. Battle overlays use `desktopCenterTarget="battlefield"` so a docked inspector rail stays outside the panel's centering region.
 
 ## Props
 
@@ -26,7 +26,7 @@ The glass overlay shell: a modal dialog with a bounded desktop panel and a full-
 | `presentation` | `"responsive" \| "popup"` | no | `responsive` | Responsive behavior for the dialog surface. `"responsive"` uses the standard bounded desktop panel and full-bleed mobile takeover. `"popup"` keeps a centered, content-sized glass panel at every viewport width. `fullScreen` takes precedence. Defaults to `"responsive"`. |
 | `chrome` | `"standard" \| "close-only"` | no | `standard` | Visible dialog chrome. `"standard"` renders the title/subtitle header and its divider. `"close-only"` keeps `title` as the accessible dialog name, omits the visible header, and floats the optional close disc in the panel's top-right corner. Defaults to `"standard"`. |
 | `desktopCenterTarget` | `"battlefield" \| "viewport"` | no | `viewport` | Region used to center a bounded desktop panel. `"battlefield"` measures the visible `main[data-battle-mobile]` stage, keeping a docked inspector rail outside the centering calculation while the modal layer continues to block the complete viewport. Mobile and full-screen dialogs remain viewport-aligned. Defaults to `"viewport"`. |
-| `companion` | `ReactNode` | no | — | Optional tangible object paired with a popup panel. On desktop the companion leads an equal-width horizontal pair; on mobile it sits above the equally wide panel. The complete pair is centered in the target region. Only applies to `presentation="popup"`. |
+| `companion` | `ReactNode` | no | — | Optional tangible object paired with a popup panel. On desktop the companion leads a horizontal pair with a wider prose panel; on mobile it sits centered above the panel. The complete pair is centered in the target region. Only applies to `presentation="popup"`. |
 | `children` | `ReactNode` | yes | — | The scrolling body content. |
 
 ## Usage
@@ -70,7 +70,7 @@ Use the popup presentation for compact guidance or confirmation copy that should
 
 ### Companion popup
 
-Pair one tangible object with an equal-width popup. The complete pair is centered horizontally on desktop and stacks object-first on mobile.
+Pair one tangible object with a prose popup. The complete pair is centered horizontally on desktop and stacks object-first on mobile.
 
 ```tsx
 <GlassDialog

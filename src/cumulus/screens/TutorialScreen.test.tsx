@@ -4,6 +4,7 @@ import { act, type CSSProperties, type ReactNode, type Ref } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../CumulusRoot";
+import { ENERGY_ICON_COLOR } from "../components/controls/GlowIcon";
 import type { CharacterDialogueProps } from "../components/overlay/CharacterDialogue";
 import { TutorialScreen, type TutorialView } from "./TutorialScreen";
 import type {
@@ -1059,7 +1060,10 @@ describe("TutorialScreen", () => {
     const paragraphs = [...(content?.querySelectorAll("p") ?? [])];
     expect(paragraphs).toHaveLength(2);
     expect(content?.style.gap).toBe("var(--space-7)");
-    expect(content?.style.padding).toBe("var(--space-9)");
+    expect(content?.style.paddingTop).toBe("var(--space-9)");
+    expect(content?.style.paddingRight).toBe("var(--space-9)");
+    expect(content?.style.paddingBottom).toBe("var(--space-9)");
+    expect(content?.style.paddingLeft).toBe("var(--space-9)");
     expect(paragraphs[0]?.style.font).toBe(
       "var(--t-tutorial-instruction)",
     );
@@ -1184,12 +1188,12 @@ describe("TutorialScreen", () => {
                 id: "dreamwell-how-to-play",
                 action: "display-how-to-play",
                 trigger: "enemy-turn-announcement-complete",
-                text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
+                text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
                 wait: 0,
               },
               howToPlay: {
                 actionId: "dreamwell-how-to-play",
-                text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
+                text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
                 wait: 0,
                 trigger: "enemy-turn-announcement-complete",
               },
@@ -1217,7 +1221,7 @@ describe("TutorialScreen", () => {
     expect(
       container.querySelector('[role="dialog"]')?.textContent,
     ).toContain(
-      "From turn 2, each player draws a Dreamwell card at the start of their turn",
+      "From turn 2, players draw dreamwell cards that increase their energy () production and have other effects.",
     );
     expect(onHowToPlayPresented).toHaveBeenCalledWith(
       "event:dreamwell",
@@ -1259,12 +1263,12 @@ describe("TutorialScreen", () => {
                 action: "display-how-to-play",
                 trigger: "immediate",
                 companion: "dreamwell-card",
-                text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
+                text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
                 wait: 0,
               },
               howToPlay: {
                 actionId: "dreamwell-how-to-play",
-                text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
+                text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
                 wait: 0,
                 trigger: "immediate",
                 companion: TUTORIAL_DREAMWELL_CARD,
@@ -1303,6 +1307,36 @@ describe("TutorialScreen", () => {
         "[data-tutorial-how-to-play-content]",
       )?.style.width,
     ).toBe("100%");
+    expect(
+      dialog?.querySelector<HTMLElement>(
+        "[data-tutorial-how-to-play-content]",
+      )?.style.paddingTop,
+    ).toBe("var(--space-9)");
+    const closeClearance = dialog?.querySelector<HTMLElement>(
+      "[data-tutorial-how-to-play-close-clearance]",
+    );
+    expect(closeClearance?.style.cssFloat).toBe("right");
+    expect(closeClearance?.style.width).toBe("var(--space-9)");
+    expect(closeClearance?.style.height).toBe("var(--space-9)");
+    const dreamwellTerm = dialog?.querySelector<HTMLElement>(
+      "[data-tutorial-how-to-play-dreamwell]",
+    );
+    expect(dreamwellTerm?.textContent).toBe("dreamwell");
+    expect(dreamwellTerm?.style.color).toBe("var(--spark)");
+    const energyTerm = dialog?.querySelector<HTMLElement>(
+      "[data-tutorial-how-to-play-energy-term]",
+    );
+    const energyIcon = energyTerm?.querySelector<HTMLElement>(
+      '[aria-label="energy"]',
+    );
+    expect(energyIcon?.className).toContain("bxf bx-fire-alt");
+    const expectedEnergyColor = document.createElement("span");
+    expectedEnergyColor.style.color = ENERGY_ICON_COLOR;
+    expect(energyIcon?.style.color).toBe(expectedEnergyColor.style.color);
+    expect(energyIcon?.parentElement?.style.verticalAlign).toBe("middle");
+    expect(energyIcon?.parentElement?.style.transform).toBe(
+      "translateY(-0.08em)",
+    );
     expect(screenMocks.props?.view.dreamwell).toBeNull();
     expect(onHowToPlayPresented).toHaveBeenCalledWith(
       "event:dreamwell-pair",
@@ -1314,7 +1348,7 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
-  it("advances a revealed Dreamwell action after its authored wait", () => {
+  it("keeps a tutorial Dreamwell hidden until the opponent announcement completes", () => {
     vi.useFakeTimers();
     const onActionComplete = vi.fn();
     const cardId = asCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3");
@@ -1365,6 +1399,21 @@ describe("TutorialScreen", () => {
     });
 
     act(() => screenMocks.sceneAnimationComplete?.());
+    expect(screenMocks.props?.view.dreamwell).toBeNull();
+    act(() => {
+      vi.advanceTimersByTime(1_000);
+    });
+    expect(onActionComplete).not.toHaveBeenCalled();
+    act(() => {
+      screenMocks.props?.onTurnAnnouncementComplete?.("player");
+    });
+    act(() => {
+      vi.advanceTimersByTime(1_000);
+    });
+    expect(onActionComplete).not.toHaveBeenCalled();
+    act(() => {
+      screenMocks.props?.onTurnAnnouncementComplete?.("enemy");
+    });
     act(() => {
       vi.advanceTimersByTime(499);
     });

@@ -488,9 +488,11 @@ describe("MobileBattleScreen", () => {
   });
 
   it("places an opponent Dreamwell card below the opponent status display", () => {
+    vi.useFakeTimers();
     const cardId = asCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
     const view: MobileBattleView = {
       ...makeView(),
+      activeSide: "enemy",
       dreamwell: {
         side: "enemy",
         model: {
@@ -510,6 +512,15 @@ describe("MobileBattleScreen", () => {
     const enemyStatus = container.querySelector<HTMLElement>(
       '[data-battle-zone="enemy-status"]',
     );
+    expect(
+      enemyStatus?.querySelector("[data-battle-dreamwell-layer]"),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-battle-turn-announcement="enemy"]'),
+    ).not.toBeNull();
+    act(() => {
+      vi.advanceTimersByTime(2_100);
+    });
     const layer = enemyStatus?.querySelector<HTMLElement>(
       "[data-battle-dreamwell-layer]",
     );
@@ -529,9 +540,11 @@ describe("MobileBattleScreen", () => {
     ).toBeNull();
 
     act(() => root.unmount());
+    vi.useRealTimers();
   });
 
   it("places a player Dreamwell card above the player status display", () => {
+    vi.useFakeTimers();
     const cardId = asCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
     const view: MobileBattleView = {
       ...makeView(),
@@ -554,6 +567,12 @@ describe("MobileBattleScreen", () => {
     const playerStatus = container.querySelector<HTMLElement>(
       '[data-battle-zone="player-status"]',
     );
+    expect(
+      playerStatus?.querySelector("[data-battle-dreamwell-layer]"),
+    ).toBeNull();
+    act(() => {
+      vi.advanceTimersByTime(2_100);
+    });
     const layer = playerStatus?.querySelector<HTMLElement>(
       "[data-battle-dreamwell-layer]",
     );
@@ -567,6 +586,7 @@ describe("MobileBattleScreen", () => {
     ).toBeNull();
 
     act(() => root.unmount());
+    vi.useRealTimers();
   });
 
   it("renders the mobile control row between the battlefield and player status", () => {

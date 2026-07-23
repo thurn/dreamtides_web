@@ -52,7 +52,7 @@ export const glassDialogDemo: CumulusComponent = {
   blurb:
     "The glass overlay shell: a modal dialog with a bounded desktop panel and a full-bleed mobile overlay by default, plus centered content-sized and companion-paired popup presentations. Standard chrome places the title, optional subtitle, and close disc in a hairline-closed header; close-only chrome keeps the title accessible while floating just the close disc over the body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.",
   callout:
-    'Dreamsign Revelation uses this shell for its Purge replacement dialog. Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Use `presentation="popup"` for a bounded content-sized surface on both desktop and mobile. Add `companion` when one tangible object should lead an equal-width popup pair: the object sits left of the panel on desktop and above it on mobile. `chrome="close-only"` retains the accessible title while omitting the visible header and divider. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant. Battle overlays use `desktopCenterTarget="battlefield"` so a docked inspector rail stays outside the panel\'s centering region.',
+    'Dreamsign Revelation uses this shell for its Purge replacement dialog. Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Use `presentation="popup"` for a bounded content-sized surface on both desktop and mobile. Add `companion` when one tangible object should lead a popup pair: the object sits left of a wider prose panel on desktop and centered above it on mobile. `chrome="close-only"` retains the accessible title while omitting the visible header and divider. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant. Battle overlays use `desktopCenterTarget="battlefield"` so a docked inspector rail stays outside the panel\'s centering region.',
   group: "Components",
   docName: "GlassDialog",
   Component: GlassDialogDemo,
@@ -86,7 +86,7 @@ export const glassDialogDemo: CumulusComponent = {
     },
     {
       label: "Companion popup",
-      note: "Pair one tangible object with an equal-width popup. The complete pair is centered horizontally on desktop and stacks object-first on mobile.",
+      note: "Pair one tangible object with a prose popup. The complete pair is centered horizontally on desktop and stacks object-first on mobile.",
       code: `<GlassDialog
   title="How to Play"
   presentation="popup"

@@ -227,7 +227,7 @@ describe("GlassDialog", () => {
     });
   });
 
-  it("centers an equal-width popup pair horizontally on desktop", () => {
+  it("centers a tangible companion beside a wider prose panel on desktop", () => {
     stubMatchMedia(true);
     const { container, root } = mount(
       <GlassDialog
@@ -248,9 +248,9 @@ describe("GlassDialog", () => {
     );
     expect(layout?.dataset.glassDialogCompanionLayout).toBe("horizontal");
     expect(layout?.style.gridTemplateColumns).toBe(
-      "repeat(2, minmax(0, 360px))",
+      "360px minmax(0, 480px)",
     );
-    expect(layout?.style.width).toBe("calc(720px + var(--space-7))");
+    expect(layout?.style.width).toBe("calc(840px + var(--space-7))");
     expect(panel?.style.width).toBe("100%");
     expect(panel?.style.boxSizing).toBe("border-box");
     expect(container.querySelector('[data-testid="companion"]')).not.toBeNull();
@@ -260,7 +260,7 @@ describe("GlassDialog", () => {
     });
   });
 
-  it("stacks a popup companion above its equal-width panel on mobile", () => {
+  it("centers a narrower companion above the prose panel on mobile", () => {
     const { container, root } = mount(
       <GlassDialog
         title="How to Play"
@@ -277,9 +277,15 @@ describe("GlassDialog", () => {
     );
     expect(layout?.dataset.glassDialogCompanionLayout).toBe("vertical");
     expect(layout?.style.gridTemplateColumns).toBe("minmax(0, 1fr)");
-    expect(layout?.style.width).toBe("76vw");
-    expect(layout?.style.maxWidth).toBe("340px");
+    expect(layout?.style.width).toBe("90vw");
+    expect(layout?.style.maxWidth).toBe("420px");
     expect(layout?.style.gap).toBe("var(--space-5)");
+    const companion = container.querySelector<HTMLElement>(
+      "[data-glass-dialog-companion]",
+    );
+    expect(companion?.style.width).toBe("76vw");
+    expect(companion?.style.maxWidth).toBe("340px");
+    expect(companion?.style.justifySelf).toBe("center");
 
     act(() => {
       root.unmount();

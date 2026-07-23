@@ -13,7 +13,11 @@ import { token } from "../primitives/tokens";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { GLYPHS } from "../primitives/glyph";
 import { IconButton } from "../components/controls/IconButton";
-import { GlowIcon } from "../components/controls/GlowIcon";
+import {
+  ENERGY_ICON_CLASS,
+  ENERGY_ICON_COLOR,
+  GlowIcon,
+} from "../components/controls/GlowIcon";
 import type { BattleStatusDreamcallerProfile } from "../components/battle/BattleStatusDisplay";
 import { CardBack } from "../components/battle/CardBack";
 import {
@@ -208,6 +212,13 @@ function TutorialHowToPlayDialog({
     alignItems: "center",
     whiteSpace: "nowrap",
   } as const;
+  const inlineEnergyIconStyle = {
+    display: "inline-flex",
+    width: "1em",
+    height: "1em",
+    verticalAlign: "middle",
+    transform: "translateY(-0.08em)",
+  } as const;
   const paragraphs = text
     .split(/\n\s*\n/u)
     .map((paragraph) => paragraph.trim())
@@ -215,7 +226,7 @@ function TutorialHowToPlayDialog({
 
   const renderInstructionText = (paragraph: string): ReactElement => {
     const tokens = paragraph.split(
-      /(\b(?:points|spark)\s+\(\s*[⍟✦]\s*\)|\(\s*[⍟✦]\s*\)|\bchallenge\b|\d+\s+⍟|[⍟✦])/giu,
+      /(\b(?:points|spark)\s+\(\s*[⍟✦]\s*\)|\(\s*[⍟✦●]\s*\)|\b(?:challenge|dreamwell)\b|\d+\s+⍟|[⍟✦●])/giu,
     );
     return (
       <>
@@ -242,7 +253,30 @@ function TutorialHowToPlayDialog({
             );
           }
           const compact = part.replace(/\s/gu, "");
-          if (compact === "(⍟)" || compact === "(✦)") {
+          if (
+            compact === "(⍟)" ||
+            compact === "(✦)" ||
+            compact === "(●)"
+          ) {
+            if (compact === "(●)") {
+              return (
+                <span
+                  key={index}
+                  data-tutorial-how-to-play-energy-term=""
+                  style={parenthesizedIconStyle}
+                >
+                  (
+                  <span style={inlineEnergyIconStyle}>
+                    <GlowIcon
+                      iconClass={ENERGY_ICON_CLASS}
+                      color={ENERGY_ICON_COLOR}
+                      title="energy"
+                    />
+                  </span>
+                  )
+                </span>
+              );
+            }
             const points = compact === "(⍟)";
             return (
               <span
@@ -286,9 +320,31 @@ function TutorialHowToPlayDialog({
               </span>
             );
           }
+          if (part === "●") {
+            return (
+              <span key={index} style={inlineEnergyIconStyle}>
+                <GlowIcon
+                  iconClass={ENERGY_ICON_CLASS}
+                  color={ENERGY_ICON_COLOR}
+                  title="energy"
+                />
+              </span>
+            );
+          }
           if (part.toLowerCase() === "challenge") {
             return (
               <strong key={index} style={{ color: token("--spark") }}>
+                {part}
+              </strong>
+            );
+          }
+          if (part.toLowerCase() === "dreamwell") {
+            return (
+              <strong
+                key={index}
+                data-tutorial-how-to-play-dreamwell=""
+                style={{ color: token("--spark") }}
+              >
                 {part}
               </strong>
             );
@@ -323,11 +379,25 @@ function TutorialHowToPlayDialog({
           maxWidth: "100%",
           boxSizing: "border-box",
           marginInline: "auto",
-          padding: token("--space-9"),
+          paddingTop: token("--space-9"),
+          paddingRight: token("--space-9"),
+          paddingBottom: token("--space-9"),
+          paddingLeft: token("--space-9"),
         }}
       >
         {paragraphs.map((paragraph, index) => (
           <p key={index} style={paragraphStyle}>
+            {index === 0 && companion !== null ? (
+              <span
+                aria-hidden="true"
+                data-tutorial-how-to-play-close-clearance=""
+                style={{
+                  float: "right",
+                  width: token("--space-9"),
+                  height: token("--space-9"),
+                }}
+              />
+            ) : null}
             {renderInstructionText(paragraph)}
           </p>
         ))}
@@ -1259,7 +1329,8 @@ export function TutorialScreen({
       !sceneEntered ||
       view.currentAction?.action !== "draw-dreamwell-card" ||
       view.playbackRunId === null ||
-      view.battle.dreamwell?.model.cardId !== view.currentAction.cardId
+      view.battle.dreamwell?.model.cardId !== view.currentAction.cardId ||
+      completedTurnAnnouncementSide !== view.currentAction.owner
     ) {
       return undefined;
     }
@@ -1271,6 +1342,7 @@ export function TutorialScreen({
     );
     return () => window.clearTimeout(timeout);
   }, [
+    completedTurnAnnouncementSide,
     onActionComplete,
     sceneEntered,
     view.battle.dreamwell,
@@ -1665,7 +1737,8 @@ export function TutorialScreen({
   const howToPlayCompanion =
     howToPlayVisible ? (view.howToPlay?.companion ?? null) : null;
   const displayedBattleView =
-    howToPlayCompanion === null
+    howToPlayCompanion === null &&
+    view.currentAction?.action !== "draw-dreamwell-card"
       ? battleView
       : { ...battleView, dreamwell: null };
 

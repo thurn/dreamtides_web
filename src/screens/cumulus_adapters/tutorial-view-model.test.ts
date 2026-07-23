@@ -490,14 +490,14 @@ describe("buildTutorialView", () => {
         action: "draw-dreamwell-card" as const,
         owner: "enemy" as const,
         cardId: AUTUMN_GLADE.id,
-        wait: 2.5,
+        wait: 0,
       },
       {
         id: "dreamwell-how-to-play",
         action: "display-how-to-play" as const,
         trigger: "immediate" as const,
         companion: "dreamwell-card" as const,
-        text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
+        text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
         wait: 0,
       },
     ];
@@ -722,7 +722,7 @@ describe("buildTutorialView", () => {
     );
     expect(explainingDreamwell.howToPlay).toEqual({
       actionId: "dreamwell-how-to-play",
-      text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
+      text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
       wait: 0,
       trigger: "immediate",
       companion: {

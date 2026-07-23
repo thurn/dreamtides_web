@@ -60,13 +60,13 @@ const mocks = vi.hoisted(() => ({
           action: "draw-dreamwell-card" as const,
           owner: "enemy" as const,
           cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
-          wait: 2.5,
+          wait: 0,
         },
         {
           id: "dreamwell-how-to-play",
           action: "display-how-to-play" as const,
           trigger: "immediate" as const,
-          text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
+          text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
           wait: 0,
         },
       ],
@@ -469,7 +469,7 @@ describe("TutorialScreenAdapter", () => {
     });
     expect(adapterMocks.props?.view.howToPlay).toEqual({
       actionId: "dreamwell-how-to-play",
-      text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
+      text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
       wait: 0,
       trigger: "immediate",
     });
@@ -480,7 +480,7 @@ describe("TutorialScreenAdapter", () => {
           actionId: "dreamwell-how-to-play",
           trigger: "immediate",
           messageText:
-            "From turn 2, each player draws a Dreamwell card at the start of their turn",
+            "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
         }),
       ]),
     );
