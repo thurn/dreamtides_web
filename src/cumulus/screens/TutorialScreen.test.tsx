@@ -973,6 +973,101 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
+  it("centers the repositioned opponent character in the closest front cell and completes after travel", () => {
+    vi.useFakeTimers();
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: query.includes("min-width"),
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+    const onActionComplete = vi.fn();
+    const emptyBackRank = Array.from({ length: 3 }, (_, index) => ({
+      id: `enemy-back-${String(index)}`,
+      card: null,
+    }));
+    const enemyFrontRank = Array.from({ length: 2 }, (_, index) => ({
+      id: `enemy-front-${String(index)}`,
+      card:
+        index === 0
+          ? { ...TUTORIAL_OPPONENT_CARD, layoutMotion: "travel" as const }
+          : null,
+    }));
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: null,
+              playbackRunId: "event:reposition",
+              endTurn: null,
+              howToPlay: null,
+              currentAction: {
+                id: "opponent-character-advance",
+                action: "reposition-opponent-character",
+                cardId: TUTORIAL_OPPONENT_CARD.model.cardId,
+                wait: 0,
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                enemy: {
+                  backRank: emptyBackRank,
+                  frontRank: enemyFrontRank,
+                  deckCardIds: [],
+                },
+                player: {
+                  backRank: [],
+                  frontRank: [],
+                  deckCardIds: [],
+                },
+              } as unknown as MobileBattleView,
+            }}
+            onActionComplete={onActionComplete}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    act(() => screenMocks.sceneAnimationComplete?.());
+    expect(screenMocks.props?.view.enemy.backRank).toHaveLength(10);
+    expect(
+      screenMocks.props?.view.enemy.backRank.every(
+        (slot) => slot.card === null,
+      ),
+    ).toBe(true);
+    expect(screenMocks.props?.view.enemy.frontRank).toHaveLength(9);
+    expect(screenMocks.props?.view.enemy.frontRank[4]?.card).toMatchObject({
+      id: TUTORIAL_OPPONENT_CARD.id,
+      layoutMotion: "travel",
+    });
+    expect(screenMocks.props?.view.enemy.frontRank[3]?.card).toBeNull();
+    expect(onActionComplete).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(419);
+    });
+    expect(onActionComplete).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(onActionComplete).toHaveBeenCalledWith(
+      "event:reposition",
+      "opponent-character-advance",
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("opens the authored How to Play action after the player turn announcement and completes it from the X button", () => {
     vi.useFakeTimers();
     window.matchMedia = vi.fn().mockImplementation((query: string) => ({

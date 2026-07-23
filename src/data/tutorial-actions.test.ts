@@ -225,6 +225,36 @@ describe("parseTutorialActions", () => {
     ]);
   });
 
+  it("preserves a UUID-backed opponent reposition and rejects display names", () => {
+    expect(
+      parseTutorialActions([
+        {
+          id: "opponent-character-advance",
+          action: "reposition-opponent-character",
+          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          wait: 0,
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "opponent-character-advance",
+        action: "reposition-opponent-character",
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        wait: 0,
+      },
+    ]);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "named-opponent",
+          action: "reposition-opponent-character",
+          cardId: "Twilight Troubadour",
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/by UUID/u);
+  });
+
   it("preserves a UUID-authored Dreamwell draw and rejects display names", () => {
     expect(
       parseTutorialActions([

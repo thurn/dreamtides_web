@@ -26,7 +26,10 @@ import type {
   TutorialSpeechBubbleSpeaker,
 } from "../../types/tutorial";
 import { isCardId } from "../../types/card-identity";
-import { TUTORIAL_DREAMWELL_CARD_ID } from "../../data/tutorial-opponent-card";
+import {
+  TUTORIAL_DREAMWELL_CARD_ID,
+  TUTORIAL_OPPONENT_CARD_ID,
+} from "../../data/tutorial-opponent-card";
 
 export interface TutorialEditorRailProps {
   readonly actions: readonly TutorialAction[];
@@ -56,6 +59,10 @@ const ACTION_OPTIONS = [
   {
     value: "reveal-and-play-opponent-card",
     label: "Reveal & Play Opponent Card",
+  },
+  {
+    value: "reposition-opponent-character",
+    label: "Reposition Opponent Character",
   },
   { value: "draw-dreamwell-card", label: "Draw Dreamwell Card" },
   { value: "end-turn", label: "End Turn" },
@@ -153,6 +160,14 @@ function defaultAction(
       wait: 0,
     };
   }
+  if (actionName === "reposition-opponent-character") {
+    return {
+      id,
+      action: "reposition-opponent-character",
+      cardId: TUTORIAL_OPPONENT_CARD_ID,
+      wait: 0,
+    };
+  }
   if (actionName === "end-turn") {
     return { id, action: "end-turn", wait: 0 };
   }
@@ -199,6 +214,17 @@ function changedActionType(
   }
   if (actionName === "draw-opponent-card") {
     return { id: action.id, action: actionName, wait: action.wait };
+  }
+  if (actionName === "reposition-opponent-character") {
+    return {
+      id: action.id,
+      action: actionName,
+      cardId:
+        action.action === "reposition-opponent-character"
+          ? action.cardId
+          : TUTORIAL_OPPONENT_CARD_ID,
+      wait: action.wait,
+    };
   }
   if (actionName === "end-turn") {
     return { id: action.id, action: actionName, wait: action.wait };
@@ -366,6 +392,7 @@ function TutorialActionRow({
                   value !== "animate-dreamcaller-portrait" &&
                   value !== "draw-opponent-card" &&
                   value !== "reveal-and-play-opponent-card" &&
+                  value !== "reposition-opponent-character" &&
                   value !== "draw-dreamwell-card" &&
                   value !== "end-turn"
                 ) {
@@ -629,6 +656,22 @@ function TutorialActionRow({
           </>
         ) : null}
 
+        {action.action === "reposition-opponent-character" ? (
+          <TextField
+            label="Opponent Character UUID"
+            value={action.cardId}
+            error={
+              isCardId(action.cardId)
+                ? undefined
+                : "Enter an opponent character UUID."
+            }
+            testId={`tutorial-action-card-id-${action.id}`}
+            onChange={(cardId) =>
+              update({ ...action, cardId }, isCardId(cardId))
+            }
+          />
+        ) : null}
+
         <NumberStepper
           label="Wait"
           value={action.wait}
@@ -784,6 +827,7 @@ function TutorialEditorContent({
             value !== "animate-dreamcaller-portrait" &&
             value !== "draw-opponent-card" &&
             value !== "reveal-and-play-opponent-card" &&
+            value !== "reposition-opponent-character" &&
             value !== "draw-dreamwell-card" &&
             value !== "end-turn"
           ) {

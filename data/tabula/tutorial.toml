@@ -72,3 +72,16 @@ trigger = "immediate"
 companion = "dreamwell-card"
 text = "From turn 2, players draw dreamwell cards that increase their energy (●) production and have special effects."
 wait = 0
+
+[[actions]]
+id = "vrakmoth-worthy-challenger"
+action = "display-speech-bubble"
+speaker = "enemy"
+text = "A worthy challenger!"
+wait = 3
+
+[[actions]]
+id = "opponent-character-advance"
+action = "reposition-opponent-character"
+cardId = "229ab3a1-3720-41a2-924c-8fe112188f8e"
+wait = 0

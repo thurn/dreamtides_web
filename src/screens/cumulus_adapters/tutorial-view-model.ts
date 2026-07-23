@@ -88,6 +88,17 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       destinationSlot: "center",
     };
   }
+  if (action.action === "reposition-opponent-character") {
+    return {
+      actionId: action.id,
+      action: action.action,
+      waitSeconds: action.wait,
+      cardId: action.cardId,
+      sourceZone: "opponent-back-rank",
+      destinationZone: "opponent-front-rank",
+      destinationSlot: "closest",
+    };
+  }
   if (action.action === "end-turn") {
     return {
       actionId: action.id,
@@ -279,17 +290,35 @@ export function buildTutorialView(
   const enemyHandCardIds = drawnEnemyCardIds.slice(completedOpponentPlays);
   const enemyDeck = enemyDeckCardIds.slice(completedOpponentDraws);
   const tutorialCardInstanceId = drawnEnemyCardIds[0] ?? null;
+  const opponentCardPlayed = completedOpponentPlays > 0;
   const tutorialCard =
     opponentCard !== null && tutorialCardInstanceId !== null
       ? tutorialCardView(
           opponentCard,
           tutorialCardInstanceId,
-          "snap",
+          opponentCardPlayed ? "travel" : "snap",
           true,
           false,
         )
       : null;
-  const opponentCardPlayed = completedOpponentPlays > 0;
+  const visibleOpponentRepositionAction = playback?.actions
+    .slice(0, visibleActionCount)
+    .reverse()
+    .find((action) => action.action === "reposition-opponent-character");
+  if (
+    visibleOpponentRepositionAction?.action ===
+      "reposition-opponent-character" &&
+    opponentCard !== null &&
+    visibleOpponentRepositionAction.cardId !== opponentCard.id
+  ) {
+    throw new Error(
+      `Tutorial opponent character ${visibleOpponentRepositionAction.cardId} does not match the loaded tutorial card ${opponentCard.id}.`,
+    );
+  }
+  const opponentCardRepositioned =
+    visibleOpponentRepositionAction?.action ===
+      "reposition-opponent-character" &&
+    tutorialCard?.model.cardId === visibleOpponentRepositionAction.cardId;
   const howToPlayActionIndex =
     playback?.actions.findIndex(
       (action) => action.action === "display-how-to-play",
@@ -358,13 +387,26 @@ export function buildTutorialView(
     },
   };
   const enemyBackRank = enemy.backRank.map((slot, index) =>
-    opponentCardPlayed && index === TUTORIAL_OPPONENT_BACK_RANK_INDEX
+    opponentCardPlayed &&
+    !opponentCardRepositioned &&
+    index === TUTORIAL_OPPONENT_BACK_RANK_INDEX
       ? {
           ...slot,
           card:
             tutorialCard === null
               ? null
               : { ...tutorialCard, exhausted: !playerTurnStarted },
+        }
+      : slot,
+  );
+  const enemyFrontRank = enemy.frontRank.map((slot, index) =>
+    opponentCardRepositioned && index === TUTORIAL_OPPONENT_BACK_RANK_INDEX
+      ? {
+          ...slot,
+          card:
+            tutorialCard === null
+              ? null
+              : { ...tutorialCard, exhausted: false },
         }
       : slot,
   );
@@ -515,11 +557,18 @@ export function buildTutorialView(
         ...enemy,
         deckCardIds: enemyDeck,
         backRank: enemyBackRank,
+        frontRank: enemyFrontRank,
       },
       player,
       playerHand: playerHandCards,
       near: player,
-      far: { ...enemy, position: "far", deckCardIds: enemyDeck, backRank: enemyBackRank },
+      far: {
+        ...enemy,
+        position: "far",
+        deckCardIds: enemyDeck,
+        backRank: enemyBackRank,
+        frontRank: enemyFrontRank,
+      },
       nearHand: {
         owner: "player",
         position: "near",
@@ -565,7 +614,14 @@ export function buildTutorialView(
               ...enemyInspector.zones,
               hand: enemyHandCardIds.length,
               deck: enemyDeck.length,
-              backRank: opponentCardPlayed && tutorialCard !== null ? 1 : 0,
+              backRank:
+                opponentCardPlayed &&
+                !opponentCardRepositioned &&
+                tutorialCard !== null
+                  ? 1
+                  : 0,
+              frontRank:
+                opponentCardRepositioned && tutorialCard !== null ? 1 : 0,
             },
           },
         },

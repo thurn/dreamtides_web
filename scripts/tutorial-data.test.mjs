@@ -38,6 +38,12 @@ const FIXTURE_ACTIONS = [
     wait: 0,
   },
   {
+    id: "opponent-reposition",
+    action: "reposition-opponent-character",
+    cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+    wait: 0,
+  },
+  {
     id: "how-to-play",
     action: "display-how-to-play",
     trigger: "player-turn-announcement-complete",
@@ -100,16 +106,21 @@ describe("tutorial data", () => {
       ]),
     ).toThrow(/non-negative card reveal duration/u);
     expect(() =>
-      validateTutorialActions([{ ...FIXTURE_ACTIONS[4], text: " " }]),
+      validateTutorialActions([
+        { ...FIXTURE_ACTIONS[4], cardId: "Twilight Troubadour" },
+      ]),
+    ).toThrow(/by UUID/u);
+    expect(() =>
+      validateTutorialActions([{ ...FIXTURE_ACTIONS[5], text: " " }]),
     ).toThrow(/How to Play text/u);
     expect(() =>
       validateTutorialActions([
-        { ...FIXTURE_ACTIONS[4], trigger: "after-card-name" },
+        { ...FIXTURE_ACTIONS[5], trigger: "after-card-name" },
       ]),
     ).toThrow(/supported How to Play trigger/u);
     expect(() =>
       validateTutorialActions([
-        { ...FIXTURE_ACTIONS[4], companion: "named-card" },
+        { ...FIXTURE_ACTIONS[5], companion: "named-card" },
       ]),
     ).toThrow(/supported How to Play companion/u);
   });
@@ -118,13 +129,13 @@ describe("tutorial data", () => {
     expect(
       validateTutorialActions([
         {
-          ...FIXTURE_ACTIONS[4],
+          ...FIXTURE_ACTIONS[5],
           companion: "dreamwell-card",
         },
       ]),
     ).toEqual([
       {
-        ...FIXTURE_ACTIONS[4],
+        ...FIXTURE_ACTIONS[5],
         companion: "dreamwell-card",
       },
     ]);

@@ -511,6 +511,51 @@ describe("TutorialEditorRail", () => {
     container.remove();
   });
 
+  it("authors a UUID-backed opponent character reposition", () => {
+    const onChange = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<EditorHarness onChange={onChange} />));
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>('button[aria-label="Add an action"]')
+        ?.click(),
+    );
+    const repositionOption = [
+      ...document.body.querySelectorAll<HTMLButtonElement>(
+        'button[role="option"]',
+      ),
+    ].find(
+      (option) =>
+        option.textContent?.trim() === "Reposition Opponent Character",
+    );
+    expect(repositionOption).toBeDefined();
+    act(() => repositionOption?.click());
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "reposition-opponent-character",
+          action: "reposition-opponent-character",
+          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          wait: 0,
+        },
+      ],
+      true,
+    );
+    expect(
+      container.querySelector<HTMLInputElement>(
+        '[data-testid="tutorial-action-card-id-reposition-opponent-character"]',
+      )?.value,
+    ).toBe("229ab3a1-3720-41a2-924c-8fe112188f8e");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("authors the face-up reading time for an opponent card play", () => {
     const onChange = vi.fn();
     const container = document.createElement("div");

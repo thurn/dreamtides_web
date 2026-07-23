@@ -137,6 +137,19 @@ export function parseTutorialActions(
         wait,
       } satisfies TutorialAction;
     }
+    if (record.action === "reposition-opponent-character") {
+      if (typeof record.cardId !== "string" || !isCardId(record.cardId)) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must identify an opponent character by UUID.`,
+        );
+      }
+      return {
+        id,
+        action: "reposition-opponent-character",
+        cardId: record.cardId,
+        wait,
+      } satisfies TutorialAction;
+    }
     if (record.action === "draw-dreamwell-card") {
       const owner = record.owner ?? "enemy";
       if (owner !== "player" && owner !== "enemy") {

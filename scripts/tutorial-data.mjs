@@ -140,6 +140,17 @@ export function validateTutorialActions(value) {
     if (action === "draw-opponent-card") {
       return { id, action, wait };
     }
+    if (action === "reposition-opponent-character") {
+      if (
+        typeof candidate.cardId !== "string" ||
+        !CARD_UUID_PATTERN.test(candidate.cardId)
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must identify an opponent character by UUID.`,
+        );
+      }
+      return { id, action, cardId: candidate.cardId, wait };
+    }
     if (action === "draw-dreamwell-card") {
       const owner = candidate.owner ?? "enemy";
       if (owner !== "player" && owner !== "enemy") {

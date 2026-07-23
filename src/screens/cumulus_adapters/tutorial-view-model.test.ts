@@ -205,6 +205,25 @@ describe("buildTutorialView", () => {
     });
   });
 
+  it("logs the UUID-backed opponent reposition for sequence reconstruction", () => {
+    expect(
+      tutorialActionLogDetails({
+        id: "opponent-character-advance",
+        action: "reposition-opponent-character",
+        cardId: TUTORIAL_OPPONENT_CARD_ID,
+        wait: 0,
+      }),
+    ).toEqual({
+      actionId: "opponent-character-advance",
+      action: "reposition-opponent-character",
+      waitSeconds: 0,
+      cardId: TUTORIAL_OPPONENT_CARD_ID,
+      sourceZone: "opponent-back-rank",
+      destinationZone: "opponent-front-rank",
+      destinationSlot: "closest",
+    });
+  });
+
   it("logs a UUID-authored Dreamwell reveal for sequence reconstruction", () => {
     expect(
       tutorialActionLogDetails({
@@ -500,6 +519,19 @@ describe("buildTutorialView", () => {
         text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
         wait: 0,
       },
+      {
+        id: "vrakmoth-worthy-challenger",
+        action: "display-speech-bubble" as const,
+        speaker: "enemy" as const,
+        text: "A worthy challenger!",
+        wait: 3,
+      },
+      {
+        id: "opponent-character-advance",
+        action: "reposition-opponent-character" as const,
+        cardId: TUTORIAL_OPPONENT_CARD_ID,
+        wait: 0,
+      },
     ];
 
     const drawing = buildTutorialView({
@@ -554,7 +586,7 @@ describe("buildTutorialView", () => {
     expect(played.enemyHandCardIds).toEqual([]);
     expect(played.enemyHand).toEqual([]);
     expect(played.enemy.backRank[0]?.card).toMatchObject({
-      layoutMotion: "snap",
+      layoutMotion: "travel",
       exhausted: false,
       model: { cardId: TUTORIAL_OPPONENT_CARD_ID },
     });
@@ -742,6 +774,77 @@ describe("buildTutorialView", () => {
       },
     });
 
+    const worthyChallenger = buildTutorialView(
+      {
+        runId: "event:draw",
+        currentActionIndex: 7,
+        actions,
+        playerCardPlay: {
+          cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+          cardId: TUTORIAL_PLAYER_CARD_ID,
+          targetSlotId: "player-back-4",
+        },
+      },
+      OPPONENT_CARD,
+      PLAYER_CARD,
+      [AUTUMN_GLADE],
+    );
+    expect(worthyChallenger.dialogue).toEqual({
+      kind: "dreamcaller",
+      owner: "enemy",
+      speakerName: "Vrakmoth",
+      text: "A worthy challenger!",
+    });
+    expect(worthyChallenger.battle).toMatchObject({
+      activeSide: "enemy",
+      phase: "day",
+      inspector: {
+        activeSide: "Enemy",
+        phase: "Day",
+      },
+    });
+    expect(
+      worthyChallenger.battle.enemy.backRank[0]?.card,
+    ).toMatchObject({
+      layoutMotion: "travel",
+      exhausted: false,
+      model: { cardId: TUTORIAL_OPPONENT_CARD_ID },
+    });
+    expect(
+      worthyChallenger.battle.enemy.frontRank.every(
+        (slot) => slot.card === null,
+      ),
+    ).toBe(true);
+
+    const advancing = buildTutorialView(
+      {
+        runId: "event:draw",
+        currentActionIndex: 8,
+        actions,
+        playerCardPlay: {
+          cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+          cardId: TUTORIAL_PLAYER_CARD_ID,
+          targetSlotId: "player-back-4",
+        },
+      },
+      OPPONENT_CARD,
+      PLAYER_CARD,
+      [AUTUMN_GLADE],
+    );
+    expect(advancing.dialogue).toBeNull();
+    expect(
+      advancing.battle.enemy.backRank.every((slot) => slot.card === null),
+    ).toBe(true);
+    expect(advancing.battle.enemy.frontRank[0]?.card).toMatchObject({
+      layoutMotion: "travel",
+      exhausted: false,
+      model: { cardId: TUTORIAL_OPPONENT_CARD_ID },
+    });
+    expect(advancing.battle.inspector.sides.enemy.zones).toMatchObject({
+      backRank: 0,
+      frontRank: 1,
+    });
+
     const ended = buildTutorialView(
       {
         runId: "event:draw",
@@ -761,6 +864,12 @@ describe("buildTutorialView", () => {
     expect(ended.battle.activeSide).toBe("enemy");
     expect(ended.battle.phase).toBe("day");
     expect(ended.battle.dreamwell).toBeNull();
+    expect(
+      ended.battle.enemy.backRank.every((slot) => slot.card === null),
+    ).toBe(true);
+    expect(ended.battle.enemy.frontRank[0]?.card?.model.cardId).toBe(
+      TUTORIAL_OPPONENT_CARD_ID,
+    );
     expect(ended.battle.inspector).toMatchObject({
       activeSide: "Enemy",
       phase: "Day",

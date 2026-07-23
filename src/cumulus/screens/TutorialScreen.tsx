@@ -397,6 +397,10 @@ function tutorialOpponentBackRankIndex(slotCount: number): number {
   return Math.max(0, Math.floor(slotCount / 2) - 1);
 }
 
+function tutorialOpponentFrontRankIndex(slotCount: number): number {
+  return Math.max(0, Math.floor(slotCount / 2));
+}
+
 function expandedTutorialSide(
   side: MobileBattleSideView,
   owner: "enemy" | "player",
@@ -427,10 +431,24 @@ function expandedTutorialSide(
               ? existingCard
               : null,
         }));
+  const frontRank = pad(side.frontRank, 9, "front");
+  const existingFrontCard = side.frontRank.find(
+    (slot) => slot.card !== null,
+  )?.card;
+  const centeredFrontRank =
+    existingFrontCard === undefined || existingFrontCard === null
+      ? frontRank
+      : frontRank.map((slot, index, slots) => ({
+          ...slot,
+          card:
+            index === tutorialOpponentFrontRankIndex(slots.length)
+              ? existingFrontCard
+              : null,
+        }));
   return {
     ...side,
     backRank: centeredBackRank,
-    frontRank: pad(side.frontRank, 9, "front"),
+    frontRank: centeredFrontRank,
   };
 }
 
@@ -1360,6 +1378,23 @@ export function TutorialScreen({
     view.currentAction,
     view.playbackRunId,
   ]);
+
+  useEffect(() => {
+    if (
+      !sceneEntered ||
+      view.currentAction?.action !== "reposition-opponent-character" ||
+      view.playbackRunId === null
+    ) {
+      return undefined;
+    }
+    const { id, wait } = view.currentAction;
+    const runId = view.playbackRunId;
+    const timeout = window.setTimeout(
+      () => onActionComplete?.(runId, id),
+      (TUTORIAL_CARD_TRAVEL_SECONDS + wait) * 1_000,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [onActionComplete, sceneEntered, view.currentAction, view.playbackRunId]);
 
   const closeHowToPlay = useCallback((): void => {
     const runId = view.playbackRunId;

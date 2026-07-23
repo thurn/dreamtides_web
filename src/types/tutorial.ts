@@ -5,6 +5,7 @@ export type TutorialActionName =
   | "animate-dreamcaller-portrait"
   | "draw-opponent-card"
   | "reveal-and-play-opponent-card"
+  | "reposition-opponent-character"
   | "draw-dreamwell-card"
   | "end-turn";
 
@@ -75,6 +76,13 @@ export interface RevealAndPlayOpponentCardTutorialAction extends TutorialActionB
   readonly revealDuration: number;
 }
 
+/** Moves one UUID-authored opponent character to its closest front-rank cell. */
+export interface RepositionOpponentCharacterTutorialAction
+  extends TutorialActionBase {
+  readonly action: "reposition-opponent-character";
+  readonly cardId: string;
+}
+
 /** Draws and reveals one UUID-authored Dreamwell card for the selected side. */
 export interface DrawDreamwellCardTutorialAction extends TutorialActionBase {
   readonly action: "draw-dreamwell-card";
@@ -94,6 +102,7 @@ export type TutorialAction =
   | AnimateDreamcallerPortraitTutorialAction
   | DrawOpponentCardTutorialAction
   | RevealAndPlayOpponentCardTutorialAction
+  | RepositionOpponentCharacterTutorialAction
   | DrawDreamwellCardTutorialAction
   | EndTurnTutorialAction;
 
