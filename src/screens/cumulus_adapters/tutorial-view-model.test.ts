@@ -4,6 +4,7 @@ import type { CardData } from "../../types/cards";
 import {
   buildTutorialView,
   TUTORIAL_OPPONENT_CARD_ID,
+  TUTORIAL_PLAYER_CARD_INSTANCE_ID,
   TUTORIAL_PLAYER_CARD_ID,
   tutorialActionLogDetails,
 } from "./tutorial-view-model";
@@ -453,6 +454,43 @@ describe("buildTutorialView", () => {
           zones: { deck: 29, hand: 1 },
         },
       },
+    });
+
+    const afterPlayerCardPlay = buildTutorialView(
+      {
+        runId: "event:draw",
+        currentActionIndex: null,
+        actions,
+        playerCardPlay: {
+          cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+          cardId: TUTORIAL_PLAYER_CARD_ID,
+          targetSlotId: "player-back-4",
+        },
+      },
+      OPPONENT_CARD,
+      PLAYER_CARD,
+    );
+    expect(afterPlayerCardPlay.howToPlay).toBeNull();
+    expect(afterPlayerCardPlay.battle.playerHand).toEqual([]);
+    expect(afterPlayerCardPlay.battle.nearHand.cardIds).toEqual([]);
+    expect(
+      afterPlayerCardPlay.battle.player.backRank[1]?.card,
+    ).toMatchObject({
+      id: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+      exhausted: true,
+      showPlayableOutline: false,
+      model: { cardId: TUTORIAL_PLAYER_CARD_ID },
+    });
+    expect(afterPlayerCardPlay.battle.player.status).toMatchObject({
+      currentEnergy: 0,
+      maxEnergy: 4,
+    });
+    expect(
+      afterPlayerCardPlay.battle.inspector.sides.player.zones,
+    ).toMatchObject({
+      hand: 0,
+      deck: 29,
+      backRank: 1,
     });
   });
 

@@ -39,6 +39,7 @@ import {
   BATTLEFIELD_CARD_EXHAUSTED_FILTER,
   MobileBattleScreen,
   type MobileBattleCardView,
+  type MobileBattleInteractions,
   type MobileBattleSideView,
   type MobileBattleView,
 } from "./MobileBattleScreen";
@@ -107,6 +108,12 @@ export interface TutorialScreenProps {
   readonly onHowToPlayDismissed?: (
     runId: string,
     triggerCardId: string,
+  ) => void;
+  readonly onPlayerCardPlay?: (
+    runId: string,
+    cardInstanceId: string,
+    cardId: string,
+    targetSlotId: string | null,
   ) => void;
   readonly onEditorActionsChange?: (
     actions: readonly TutorialAction[],
@@ -827,6 +834,7 @@ export function TutorialScreen({
   onDreamcallerArrivalComplete,
   onHowToPlayPresented,
   onHowToPlayDismissed,
+  onPlayerCardPlay,
   onEditorActionsChange,
   onReplay,
   onPlayFromAction,
@@ -847,6 +855,11 @@ export function TutorialScreen({
   const [howToPlayDismissedRunId, setHowToPlayDismissedRunId] = useState<
     string | null
   >(null);
+  const [pendingTutorialCardId, setPendingTutorialCardId] = useState<
+    string | null
+  >(null);
+  const pendingTutorialCardIdRef = useRef<string | null>(null);
+  const tutorialCardDropHandledRef = useRef(false);
   const reportedDrawKeys = useRef<Set<string>>(new Set());
   const reportedArrivalKeys = useRef<Set<string>>(new Set());
   const reportedPlayKeys = useRef<Set<string>>(new Set());
@@ -1135,6 +1148,117 @@ export function TutorialScreen({
     onHowToPlayDismissed?.(runId, howToPlay.triggerCardId);
   }, [onHowToPlayDismissed, view.howToPlay, view.playbackRunId]);
 
+  const tutorialPlayableCard =
+    view.howToPlay === null
+      ? null
+      : ((view.battle.playerHand ?? []).find(
+          (card) => card.model.cardId === view.howToPlay?.triggerCardId,
+        ) ?? null);
+  const canPlayTutorialCard =
+    view.currentAction === null &&
+    view.playbackRunId !== null &&
+    tutorialPlayableCard !== null &&
+    onPlayerCardPlay !== undefined;
+
+  useEffect(() => {
+    if (canPlayTutorialCard) return;
+    pendingTutorialCardIdRef.current = null;
+    tutorialCardDropHandledRef.current = false;
+    setPendingTutorialCardId(null);
+  }, [canPlayTutorialCard]);
+
+  const playTutorialCard = useCallback(
+    (targetSlotId: string | null): void => {
+      const runId = view.playbackRunId;
+      const card = tutorialPlayableCard;
+      if (
+        runId === null ||
+        card === null ||
+        onPlayerCardPlay === undefined ||
+        pendingTutorialCardIdRef.current !== card.id
+      ) {
+        return;
+      }
+      tutorialCardDropHandledRef.current = true;
+      pendingTutorialCardIdRef.current = null;
+      setPendingTutorialCardId(null);
+      onPlayerCardPlay(
+        runId,
+        card.id,
+        card.model.cardId,
+        targetSlotId,
+      );
+    },
+    [onPlayerCardPlay, tutorialPlayableCard, view.playbackRunId],
+  );
+
+  const tutorialInteractions = useMemo<MobileBattleInteractions | undefined>(
+    () =>
+      !canPlayTutorialCard || tutorialPlayableCard === null
+        ? undefined
+        : {
+            canInteract: true,
+            nearSide: "player",
+            pendingCardId: pendingTutorialCardId,
+            pendingCardSource:
+              pendingTutorialCardId === null ? null : "near-hand",
+            pendingCardOwner:
+              pendingTutorialCardId === null ? null : "player",
+            onHandCardActivate: (battleCardId) => {
+              if (battleCardId !== tutorialPlayableCard.id) return;
+              pendingTutorialCardIdRef.current = battleCardId;
+              tutorialCardDropHandledRef.current = false;
+              playTutorialCard(null);
+            },
+            onHandCardDrop: (target) => {
+              playTutorialCard(
+                target?.owner === "player" && target.rank === "back"
+                  ? target.slotId
+                  : null,
+              );
+            },
+            onCardDragStart: (battleCardId, source) => {
+              if (
+                source !== "near-hand" ||
+                battleCardId !== tutorialPlayableCard.id
+              ) {
+                return;
+              }
+              tutorialCardDropHandledRef.current = false;
+              pendingTutorialCardIdRef.current = battleCardId;
+              setPendingTutorialCardId(battleCardId);
+            },
+            onCardDragEnd: () => {
+              if (
+                !tutorialCardDropHandledRef.current &&
+                pendingTutorialCardIdRef.current === tutorialPlayableCard.id
+              ) {
+                playTutorialCard(null);
+                return;
+              }
+              tutorialCardDropHandledRef.current = false;
+              pendingTutorialCardIdRef.current = null;
+              setPendingTutorialCardId(null);
+            },
+            onSlotDrop: (target) => {
+              playTutorialCard(
+                target.owner === "player" && target.rank === "back"
+                  ? target.slotId
+                  : null,
+              );
+            },
+            onZoneDrop: () => {},
+            onPreviousPhase: () => {},
+            onNextPhase: () => {},
+          },
+    [
+      canPlayTutorialCard,
+      pendingTutorialCardId,
+      playTutorialCard,
+      tutorialPlayableCard,
+    ],
+  );
+
   useEffect(() => {
     if (
       !sceneEntered ||
@@ -1355,6 +1479,7 @@ export function TutorialScreen({
         <div style={{ position: "relative", minWidth: 0, minHeight: 0 }}>
           <MobileBattleScreen
             view={battleView}
+            interactions={tutorialInteractions}
             viewport="contained"
             inspectorDefault="collapsed"
             inspectorOpen={battleInspectorOpen}

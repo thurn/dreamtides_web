@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { EventContext, GameEvent, Genesis } from "../eventlog/types";
+import {
+  TUTORIAL_PLAYER_CARD_ID,
+  TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+} from "../data/tutorial-opponent-card";
 import { genesisFoldState } from "./fold-state";
 import { reduceGameEvent } from "./reducer";
 
@@ -185,6 +189,7 @@ describe("front-door reducer", () => {
     expect(begun.state.frontDoor.tutorial).toMatchObject({
       runId: "event:1",
       currentActionIndex: 0,
+      playerCardPlay: null,
     });
 
     const wrong = reduceGameEvent(
@@ -218,6 +223,43 @@ describe("front-door reducer", () => {
     );
     expect(second.outcome).toBe("applied");
     expect(second.state.frontDoor.tutorial?.currentActionIndex).toBeNull();
+
+    const played = reduceGameEvent(
+      second.state,
+      event("FRONT_DOOR_ACTION", {
+        surface: "tutorial",
+        actionId: "play-card",
+        detail: {
+          runId: "event:1",
+          cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+          cardId: TUTORIAL_PLAYER_CARD_ID,
+          targetSlotId: "player-back-4",
+        },
+      }),
+      context(4),
+    );
+    expect(played.outcome).toBe("applied");
+    expect(played.state.frontDoor.tutorial?.playerCardPlay).toEqual({
+      cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+      cardId: TUTORIAL_PLAYER_CARD_ID,
+      targetSlotId: "player-back-4",
+    });
+
+    const duplicate = reduceGameEvent(
+      played.state,
+      event("FRONT_DOOR_ACTION", {
+        surface: "tutorial",
+        actionId: "play-card",
+        detail: {
+          runId: "event:1",
+          cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+          cardId: TUTORIAL_PLAYER_CARD_ID,
+          targetSlotId: null,
+        },
+      }),
+      context(5),
+    );
+    expect(duplicate.outcome).toBe("bounced");
   });
 
   it("starts a tutorial at a validated authored action id", () => {

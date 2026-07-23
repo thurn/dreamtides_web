@@ -3,6 +3,7 @@ import { TutorialScreen } from "../../cumulus/screens/TutorialScreen";
 import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
 import * as tutorialEditor from "../../state/use-tutorial-editor";
+import { useTutorialCardPlay } from "../../state/use-tutorial-card-play";
 import { useTutorialCards } from "../../state/use-tutorial-opponent-card";
 import {
   useTutorialHowToPlayLogging,
@@ -94,6 +95,11 @@ export function TutorialScreenAdapter() {
     [view.battle.battleId, view.currentAction?.id],
   );
 
+  const handlePlayerCardPlay = useTutorialCardPlay(
+    mutations.action,
+    view.battle.battleId,
+  );
+
   return (
     <TutorialScreen
       view={view}
@@ -105,6 +111,7 @@ export function TutorialScreenAdapter() {
       onActionComplete={handleActionComplete}
       onDreamcallerArrivalComplete={handleDreamcallerArrivalComplete}
       {...howToPlayLogging}
+      onPlayerCardPlay={handlePlayerCardPlay}
       onEditorActionsChange={handleEditorActionsChange}
       onReplay={handleReplay}
       onPlayFromAction={handleReplay}

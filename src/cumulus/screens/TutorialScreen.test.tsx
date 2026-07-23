@@ -259,6 +259,17 @@ const TUTORIAL_OPPONENT_CARD: MobileBattleView["enemyHand"][number] = {
   showPlayableOutline: false,
 };
 
+const TUTORIAL_PLAYER_CARD: MobileBattleView["playerHand"][number] = {
+  ...TUTORIAL_OPPONENT_CARD,
+  id: "tutorial-player-deck-1",
+  model: {
+    ...TUTORIAL_OPPONENT_CARD.model,
+    cardId: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
+  },
+  exhausted: false,
+  showPlayableOutline: true,
+};
+
 class ResizeObserverStub {
   static callbacks: ResizeObserverCallback[] = [];
 
@@ -1108,6 +1119,79 @@ describe("TutorialScreen", () => {
       "event:player-turn",
       "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
     );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("bridges the tutorial hand card drag into a shared player-card play", () => {
+    const onPlayerCardPlay = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: null,
+              playbackRunId: "event:player-turn",
+              currentAction: null,
+              howToPlay: {
+                triggerCardId: TUTORIAL_PLAYER_CARD.model.cardId,
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                playerHand: [TUTORIAL_PLAYER_CARD],
+                enemy: { backRank: [], frontRank: [], deckCardIds: [] },
+                player: { backRank: [], frontRank: [] },
+              } as unknown as MobileBattleView,
+            }}
+            onPlayerCardPlay={onPlayerCardPlay}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(screenMocks.props?.interactions).toMatchObject({
+      canInteract: true,
+      pendingCardId: null,
+      pendingCardSource: null,
+      pendingCardOwner: null,
+    });
+
+    act(() => {
+      screenMocks.props?.interactions?.onCardDragStart(
+        TUTORIAL_PLAYER_CARD.id,
+        "near-hand",
+      );
+    });
+    expect(screenMocks.props?.interactions).toMatchObject({
+      pendingCardId: TUTORIAL_PLAYER_CARD.id,
+      pendingCardSource: "near-hand",
+      pendingCardOwner: "player",
+    });
+
+    act(() => {
+      screenMocks.props?.interactions?.onSlotDrop({
+        owner: "player",
+        rank: "back",
+        slotId: "player-back-4",
+      });
+    });
+    expect(onPlayerCardPlay).toHaveBeenCalledWith(
+      "event:player-turn",
+      TUTORIAL_PLAYER_CARD.id,
+      TUTORIAL_PLAYER_CARD.model.cardId,
+      "player-back-4",
+    );
+    expect(screenMocks.props?.interactions).toMatchObject({
+      pendingCardId: null,
+      pendingCardSource: null,
+      pendingCardOwner: null,
+    });
 
     act(() => root.unmount());
     container.remove();

@@ -13,6 +13,7 @@ const adapterMocks = vi.hoisted(() => ({
 }));
 
 const mocks = vi.hoisted(() => ({
+  action: vi.fn(() => Promise.resolve(3)),
   beginTutorial: vi.fn(() => Promise.resolve(1)),
   completeTutorialAction: vi.fn(() => Promise.resolve(2)),
   state: {
@@ -21,6 +22,7 @@ const mocks = vi.hoisted(() => ({
     tutorial: {
       runId: "event:1",
       currentActionIndex: 1,
+      playerCardPlay: null,
       actions: [
         {
           id: "welcome",
@@ -51,6 +53,7 @@ vi.mock("../../state/front-door-context", () => ({
   useFrontDoor: () => ({
     state: mocks.state,
     mutations: {
+      action: mocks.action,
       beginTutorial: mocks.beginTutorial,
       completeTutorialAction: mocks.completeTutorialAction,
     },
@@ -111,6 +114,7 @@ beforeEach(() => {
   vi.spyOn(console, "log").mockImplementation(() => {});
   mocks.beginTutorial.mockClear();
   mocks.completeTutorialAction.mockClear();
+  mocks.action.mockClear();
   (
     mocks.state.tutorial as unknown as {
       currentActionIndex: number | null;
@@ -251,6 +255,18 @@ describe("TutorialScreenAdapter", () => {
         "event:1",
         "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
       );
+      adapterMocks.props?.onPlayerCardPlay?.(
+        "event:1",
+        "tutorial-player-deck-1",
+        "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "player-back-4",
+      );
+    });
+    expect(mocks.action).toHaveBeenCalledWith("tutorial", "play-card", {
+      runId: "event:1",
+      cardInstanceId: "tutorial-player-deck-1",
+      cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      targetSlotId: "player-back-4",
     });
     expect(getLogEntries()).toEqual(
       expect.arrayContaining([
@@ -267,6 +283,16 @@ describe("TutorialScreenAdapter", () => {
           runId: "event:1",
           battleId: "tutorial-battle",
           triggerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        }),
+        expect.objectContaining({
+          event: "tutorial_player_card_play_requested",
+          runId: "event:1",
+          battleId: "tutorial-battle",
+          cardInstanceId: "tutorial-player-deck-1",
+          cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          sourceZone: "player-hand",
+          destinationZone: "player-back-rank",
+          targetSlotId: "player-back-4",
         }),
       ]),
     );

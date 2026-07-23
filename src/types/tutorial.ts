@@ -67,10 +67,18 @@ export interface BeginTutorialOptions {
   readonly intentKey?: string;
 }
 
+/** Shared result of the tutorial player's first card-play gesture. */
+export interface TutorialPlayerCardPlay {
+  readonly cardInstanceId: string;
+  readonly cardId: string;
+  readonly targetSlotId: string | null;
+}
+
 /** Event-log-owned progress for one shared tutorial playback. */
 export interface TutorialPlaybackState {
   readonly runId: string;
   readonly actions: readonly TutorialAction[];
   /** Null after the last action completes. */
   readonly currentActionIndex: number | null;
+  readonly playerCardPlay?: TutorialPlayerCardPlay | null;
 }

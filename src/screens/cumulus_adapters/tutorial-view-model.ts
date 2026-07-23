@@ -19,9 +19,11 @@ const TUTORIAL_DECK_SIZE = 30;
 const TUTORIAL_DREAMCALLER_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
 const TUTORIAL_OPPONENT_DREAMCALLER_ID = "86026206-1B11-4F38-A24E-FD3C697F5353";
 const TUTORIAL_OPPONENT_BACK_RANK_INDEX = 0;
+const TUTORIAL_PLAYER_BACK_RANK_INDEX = 1;
 const TUTORIAL_PLAYER_TURN_ENERGY = 4;
 export {
   TUTORIAL_OPPONENT_CARD_ID,
+  TUTORIAL_PLAYER_CARD_INSTANCE_ID,
   TUTORIAL_PLAYER_CARD_ID,
 } from "../../data/tutorial-opponent-card";
 
@@ -215,6 +217,10 @@ export function buildTutorialView(
           true,
         )
       : null;
+  const playerCardPlayed =
+    playerTurnCard !== null &&
+    playback?.playerCardPlay?.cardInstanceId === playerTurnCard.id &&
+    playback.playerCardPlay.cardId === playerTurnCard.model.cardId;
   const playerDeck = playerTurnStarted
     ? playerDeckCardIds.slice(1)
     : playerDeckCardIds;
@@ -294,7 +300,7 @@ export function buildTutorialView(
     playbackRunId: playback?.runId ?? null,
     currentAction,
     howToPlay:
-      playerTurnCard === null
+      playerTurnCard === null || playerCardPlayed
         ? null
         : { triggerCardId: playerTurnCard.model.cardId },
     battle: (() => {
@@ -302,13 +308,34 @@ export function buildTutorialView(
       const player = {
         ...emptyPlayer,
         deckCardIds: playerDeck,
+        backRank: emptyPlayer.backRank.map((slot, index) =>
+          playerCardPlayed &&
+          playerTurnCard !== null &&
+          index === TUTORIAL_PLAYER_BACK_RANK_INDEX
+            ? {
+                ...slot,
+                card: {
+                  ...playerTurnCard,
+                  exhausted: true,
+                  showPlayableOutline: false,
+                },
+              }
+            : slot,
+        ),
         status: {
           ...emptyPlayer.status,
-          currentEnergy: playerTurnStarted ? TUTORIAL_PLAYER_TURN_ENERGY : 0,
+          currentEnergy: playerTurnStarted
+            ? Math.max(
+                0,
+                TUTORIAL_PLAYER_TURN_ENERGY -
+                  (playerCardPlayed ? (playerCard?.energyCost ?? 0) : 0),
+              )
+            : 0,
           maxEnergy: playerTurnStarted ? TUTORIAL_PLAYER_TURN_ENERGY : 0,
         },
       };
-      const playerHandCards = playerTurnCard === null ? [] : [playerTurnCard];
+      const playerHandCards =
+        playerTurnCard === null || playerCardPlayed ? [] : [playerTurnCard];
       const playerHandCardIds = playerHandCards.map((card) => card.id);
       const farHandCards = tutorialCard === null || opponentCardPlayed ? [] : [tutorialCard];
       return {
@@ -361,6 +388,7 @@ export function buildTutorialView(
               ...emptyInspectorSide("player").zones,
               hand: playerHandCardIds.length,
               deck: playerDeck.length,
+              backRank: playerCardPlayed ? 1 : 0,
             },
           },
           enemy: {

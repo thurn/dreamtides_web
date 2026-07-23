@@ -4,6 +4,7 @@ export const TUTORIAL_OPPONENT_CARD_ID =
   "229ab3a1-3720-41a2-924c-8fe112188f8e";
 export const TUTORIAL_PLAYER_CARD_ID =
   "e83014d3-9d35-4e80-a1b3-9b25360ad2af";
+export const TUTORIAL_PLAYER_CARD_INSTANCE_ID = "tutorial-player-deck-1";
 
 export interface TutorialCards {
   readonly opponent: CardData;
