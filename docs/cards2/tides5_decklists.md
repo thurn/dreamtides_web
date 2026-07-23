@@ -145,7 +145,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Hungering Mass
 - 1× The Rising God
 - 1× Wreckborn
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× The Calling Night
 - 1× Flagbearer of Decay
 - 1× Eviscerator of Hope
@@ -239,7 +239,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Lurking Dread
 - 1× Shadowcaller
 - 1× The Rising God
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× The Calling Night
 - 1× Eviscerator of Hope
 - 1× Soul Channeling
@@ -293,7 +293,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Soulflame Predator
 - 1× Soulcleft Spinner
 - 1× Shadowbinder
-- 1× Nomad of Endless Paths
+- 1× Brawler Battlesuit
 - 1× Emerald Guardian
 - 1× Vizier of Portents
 - 1× Hope's Vanguard
@@ -554,7 +554,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× The Rising God
 - 1× Overstory Explorer
 - 1× Memory Tracer
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× Sunshadow Eagle
 - 1× Turquoise Aurelia
 - 1× Flagbearer of Decay
@@ -643,7 +643,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Ash Sower
 - 1× Seek Answers
 - 1× Pattern Seeker
-- 1× Astral Angler
+- 1× Combat Extractor
 - 1× Annihilation from Below
 - 1× Kindred Sparks
 - 1× Blight Weaver
@@ -657,12 +657,12 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Titan of Forgotten Echoes
 - 1× Shadowcaller
 - 1× The Rising God
-- 1× Wreckage Prowler
+- 1× Remnant Curator
 - 1× Evacuation Enforcer
 - 1× Threshold Seeker
 - 1× Oracle of Shifting Skies
 - 1× Pinnacle Ascendant
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× Chaos Crasher
 - 1× The Calling Night
 - 1× Vigil Keeper
@@ -763,7 +763,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Vessel of Echoes
 - 1× Skies of Change
 - 1× Pinnacle Ascendant
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× Flagbearer of Decay
 - 1× Soul Channeling
 - 1× Ghostcaller
@@ -859,7 +859,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× The Rising God
 - 1× Door to Possibility
 - 1× Ordained Collapse
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× The Calling Night
 - 1× Eviscerator of Hope
 - 1× Soul Channeling
@@ -926,15 +926,15 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Ashen Remnant
 - 1× Sanctum Approach
 - 1× Whisper of the Past
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Null Sphere
 - 1× Desperation
 - 1× Sky Collapse
 - 1× The Dread Sovereign
 - 1× Entropy Spike
-- 1× Clockwork Prodigy
+- 1× Nomad of Endless Paths
 - 1× Dream Sever
-- 1× Pilgrim of Old Stones
+- 1× Neural Interrogator
 - 1× Shatter the Frail
 - 1× Duskwall Delver
 - 1× Collapse Protocol
@@ -963,7 +963,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Door to Possibility
 - 1× Return to Nowhere
 - 1× Oracle of Shifting Skies
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× The Calling Night
 - 1× The Power Within
 - 1× Vigil Keeper
@@ -1031,15 +1031,15 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Cosmic Puppeteer
 - 1× Ashen Remnant
 - 1× Whisper of the Past
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Null Sphere
 - 1× Desperation
 - 1× The Dread Sovereign
 - 1× Entropy Spike
-- 1× Clockwork Prodigy
+- 1× Nomad of Endless Paths
 - 1× Dream Sever
 - 1× Terminus
-- 1× Pilgrim of Old Stones
+- 1× Neural Interrogator
 - 1× Apocalypse
 - 1× Shatter the Frail
 - 1× Cragfall
@@ -1070,7 +1070,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Evacuation Enforcer
 - 1× Return to Nowhere
 - 1× Oracle of Shifting Skies
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× The Calling Night
 - 1× The Power Within
 - 1× Vigil Keeper
@@ -1340,7 +1340,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Oblivion Guide
 - 1× Cleansing Flame
 - 1× Reset
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Seeker for the Way
 - 1× Molten Duel
 - 1× Part the Veil
@@ -1438,7 +1438,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Blind Butcher
 - 1× Soulflame Predator
 - 1× Soulcleft Spinner
-- 1× Nomad of Endless Paths
+- 1× Brawler Battlesuit
 - 1× Emerald Guardian
 - 1× Futuresight Host
 - 1× Curio Dealer
@@ -2074,7 +2074,7 @@ Tide-fac-01 is an almost entirely character-based (40 of 45 copies) midrange eng
 - 1× Wasteland Arbitrator
 - 1× Shadowcaller
 - 1× Silent Mourner
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× Eviscerator of Hope
 - 1× Soul Channeling
 - 1× Vigil Keeper
@@ -2303,13 +2303,13 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Signal Resonant
 - 1× Vanishing Inquisitor
 - 1× Ashen Remnant
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Skysign
 - 1× Sky Collapse
 - 1× The Dread Sovereign
 - 1× Dream Sever
 - 1× Terminus
-- 1× Pilgrim of Old Stones
+- 1× Neural Interrogator
 - 1× Resilient Wanderer
 - 1× Cost of Victory
 - 1× Exile
@@ -2320,7 +2320,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Shadowcaller
 - 1× Ripple Through Reality
 - 1× Mind's Door
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× The Power Within
 - 1× Soul Channeling
 - 1× Ossuary Offering
@@ -2350,10 +2350,10 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Signal Resonant
 - 1× Cosmic Puppeteer
 - 1× Vanishing Inquisitor
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Skysign
 - 1× Null Sphere
-- 1× Clockwork Prodigy
+- 1× Nomad of Endless Paths
 - 1× Dream Sever
 - 1× Collapse Protocol
 - 1× Resilient Wanderer
@@ -2596,7 +2596,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Abyssal Plunge
 - 1× Shaper of Memory
 - 1× Price of Redemption
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Seeker for the Way
 - 1× Part the Veil
 - 1× Underroot Diviner
@@ -2941,7 +2941,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Unbroken
 - 1× Shaper of Memory
 - 1× Vanishing Inquisitor
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Seeker for the Way
 - 1× Part the Veil
 - 1× Mystic Boatman
@@ -2968,7 +2968,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Threshold Seeker
 - 1× Oracle of Shifting Skies
 - 1× Pinnacle Ascendant
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× Forgotten Sleeper
 
 ## Lean: Duskreaper
@@ -3183,13 +3183,13 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Signal Resonant
 - 1× Vanishing Inquisitor
 - 1× Ashen Remnant
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Skysign
 - 1× Sky Collapse
 - 1× The Dread Sovereign
 - 1× Dream Sever
 - 1× Terminus
-- 1× Pilgrim of Old Stones
+- 1× Neural Interrogator
 - 1× Resilient Wanderer
 - 1× Cost of Victory
 - 1× Exile
@@ -3200,7 +3200,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Shadowcaller
 - 1× Ripple Through Reality
 - 1× Mind's Door
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× The Power Within
 - 1× Soul Channeling
 - 1× Ossuary Offering
@@ -3236,10 +3236,10 @@ This tide runs an even split of characters and events, with its mechanical ident
 - 1× Ancient Descent
 - 1× Signal Resonant
 - 1× Immolate
-- 1× Pathfinder Adrift
-- 1× Clockwork Prodigy
+- 1× Resonance Surveyor
+- 1× Nomad of Endless Paths
 - 1× Dream Sever
-- 1× Pilgrim of Old Stones
+- 1× Neural Interrogator
 - 1× Resilient Wanderer
 - 1× Cost of Victory
 - 1× Exile
@@ -3419,7 +3419,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Abyssal Plunge
 - 1× Shaper of Memory
 - 1× Price of Redemption
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Seeker for the Way
 - 1× Part the Veil
 - 1× Underroot Diviner
@@ -3841,10 +3841,10 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Fragments of Vision
 - 1× Signal Resonant
 - 1× Immolate
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Skysign
 - 1× Dream Sever
-- 1× Pilgrim of Old Stones
+- 1× Neural Interrogator
 - 1× Resilient Wanderer
 - 1× Breach Artist
 - 1× Cloud Drifter
@@ -3905,7 +3905,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Sage of the High Hills
 - 1× Unbroken
 - 1× Shaper of Memory
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Part the Veil
 - 1× Underroot Diviner
 - 1× Salvage Colossus

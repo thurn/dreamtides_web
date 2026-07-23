@@ -307,7 +307,7 @@
       ]
     },
     "9af63811-7fef-4e28-b672-95ea82796f45": {
-      "name": "Astral Angler",
+      "name": "Combat Extractor",
       "supports": [
         "discard",
         "cheap-characters"
@@ -695,7 +695,7 @@
       ]
     },
     "6cf545ba-b014-4333-a0da-573e8f97d734": {
-      "name": "Clockwork Prodigy",
+      "name": "Nomad of Endless Paths",
       "needs": [],
       "supports": [
         "cheap-characters",
@@ -2844,7 +2844,7 @@
       ]
     },
     "5b2b2188-b9f0-4b3b-9185-26a820d343c7": {
-      "name": "Pathfinder Adrift",
+      "name": "Resonance Surveyor",
       "supports": [
         "discard",
         "cheap-characters"
@@ -2919,7 +2919,7 @@
       ]
     },
     "7530e916-e4b9-4988-b3ac-0e400c7a04ff": {
-      "name": "Pilgrim of Old Stones",
+      "name": "Neural Interrogator",
       "needs": [],
       "supports": [
         "cheap-characters"
@@ -3346,7 +3346,7 @@
       ]
     },
     "ecf77f27-df0f-47c4-99c2-48d7fa46a137": {
-      "name": "Scrapyard Custodian",
+      "name": "Revenant Automaton",
       "needs": [],
       "supports": [
         "cheap-characters",
@@ -4887,7 +4887,7 @@
       ]
     },
     "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b": {
-      "name": "Wreckage Prowler",
+      "name": "Remnant Curator",
       "needs": [
         {
           "theme": "cheap-characters",

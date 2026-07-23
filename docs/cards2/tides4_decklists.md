@@ -136,7 +136,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Ruin Scavenger
 - 1× Urban Desperado
 - 1× Wreckborn
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× The Calling Night
 - 1× Flagbearer of Decay
 - 1× Eviscerator of Hope
@@ -182,7 +182,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 2× Exiles of the Last Light
 - 2× Soul Harvester
 - 2× Silent Mourner
-- 2× Scrapyard Custodian
+- 2× Revenant Automaton
 - 2× Vigil Keeper
 - 2× Ghostcaller
 - 2× Skull Weaver
@@ -331,7 +331,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Ruin Scavenger
 - 1× Dreamcatcher's Call
 - 1× Dreamborne Leviathan
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× Sunshadow Eagle
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
@@ -403,7 +403,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Reset
 - 1× Sanctum Approach
 - 1× Pyre Caller
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Molten Duel
 - 1× Desperation
 - 1× Mystic Boatman
@@ -546,7 +546,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Vessel of Echoes
 - 1× Memory Tracer
 - 1× Pinnacle Ascendant
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× Flagbearer of Decay
 - 1× Eviscerator of Hope
 - 1× Vigil Keeper
@@ -649,7 +649,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Threshold Seeker
 - 1× Return to Nowhere
 - 1× Oracle of Shifting Skies
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× Chaos Crasher
 - 1× The Calling Night
 - 1× Mnemonic Operator
@@ -750,7 +750,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Threshold Seeker
 - 1× Pinnacle Ascendant
 - 1× Mind's Door
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× Chaos Crasher
 - 1× Flagbearer of Decay
 - 1× Vigil Keeper
@@ -846,7 +846,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Vessel of Echoes
 - 1× Pinnacle Ascendant
 - 1× Mind's Door
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× The Calling Night
 - 1× Eviscerator of Hope
 - 1× Soul Channeling
@@ -866,7 +866,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 2× Impending Fury
 - 2× Vanishing Inquisitor
 - 2× Skysign
-- 2× Pilgrim of Old Stones
+- 2× Neural Interrogator
 - 2× Dark Lord's Champion
 - 2× Cloud Drifter
 - 2× Last Beacon
@@ -912,11 +912,11 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Profane Summons
 - 1× Sanctum Approach
 - 1× Whisper of the Past
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Harvest the Forgotten
 - 1× Null Sphere
 - 1× Sky Collapse
-- 1× Clockwork Prodigy
+- 1× Nomad of Endless Paths
 - 1× Dream Sever
 - 1× Shatterpoint Agent
 - 1× Shatter the Frail
@@ -1015,14 +1015,14 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Rebirth
 - 1× Reset
 - 1× Sanctum Approach
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Harvest the Forgotten
 - 1× Null Sphere
 - 1× Archive of the Forgotten
-- 1× Clockwork Prodigy
+- 1× Nomad of Endless Paths
 - 1× Dream Sever
 - 1× Terminus
-- 1× Pilgrim of Old Stones
+- 1× Neural Interrogator
 - 1× Shatterpoint Agent
 - 1× Cragfall
 - 1× Canopy of Stars
@@ -1222,7 +1222,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Reset
 - 1× Sanctum Approach
 - 1× Pyre Caller
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Skysign
 - 1× Desperation
 - 1× Archive of the Forgotten
@@ -2026,7 +2026,7 @@ Tide-fac-01 is an almost entirely character-based (40 of 45 copies) midrange eng
 - 1× Soul Harvester
 - 1× Shadowcaller
 - 1× Silent Mourner
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× Eviscerator of Hope
 - 1× Vigil Keeper
 - 1× Ghostcaller
@@ -2243,12 +2243,12 @@ This tide runs an even split of characters and events, with its mechanical ident
 - 1× The Waking Titan
 - 1× Cosmic Puppeteer
 - 1× Vanishing Inquisitor
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Skysign
 - 1× Null Sphere
-- 1× Clockwork Prodigy
+- 1× Nomad of Endless Paths
 - 1× Dream Sever
-- 1× Pilgrim of Old Stones
+- 1× Neural Interrogator
 - 1× Cragfall
 - 1× Dark Lord's Champion
 - 1× Collapse Protocol
@@ -2443,7 +2443,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Shaper of Memory
 - 1× From the Barrow
 - 1× Reset
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Molten Duel
 - 1× Part the Veil
 - 1× Archive of the Forgotten
@@ -3050,12 +3050,12 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Signal Resonant
 - 1× The Waking Titan
 - 1× Vanishing Inquisitor
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Skysign
 - 1× Null Sphere
 - 1× Dream Sever
 - 1× Terminus
-- 1× Pilgrim of Old Stones
+- 1× Neural Interrogator
 - 1× Dark Lord's Champion
 - 1× Resilient Wanderer
 - 1× Echoes of the Journey
@@ -3102,12 +3102,12 @@ Tide-fac-24 is built almost entirely on characters (41 of 45 copies), with a sur
 - 1× The Waking Titan
 - 1× Cosmic Puppeteer
 - 1× Profane Summons
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Skysign
 - 1× Null Sphere
-- 1× Clockwork Prodigy
+- 1× Nomad of Endless Paths
 - 1× Dream Sever
-- 1× Pilgrim of Old Stones
+- 1× Neural Interrogator
 - 1× Cragfall
 - 1× Dark Lord's Champion
 - 1× Resilient Wanderer
@@ -3220,7 +3220,7 @@ Tide-fac-26 is a character-heavy survivor tide built around the abandon trigger 
 - 1× Shadowcaller
 - 1× Silent Mourner
 - 1× The Rising God
-- 1× Scrapyard Custodian
+- 1× Revenant Automaton
 - 1× Ghostcaller
 - 1× Skull Weaver
 
@@ -3353,7 +3353,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Shaper of Memory
 - 1× From the Barrow
 - 1× Reset
-- 1× Pathfinder Adrift
+- 1× Resonance Surveyor
 - 1× Molten Duel
 - 1× Part the Veil
 - 1× Archive of the Forgotten
@@ -3603,7 +3603,7 @@ tide-neu-01 is a broad neutral tide built almost entirely from events (23 of 30 
 - 1× Dreamscatter
 - 1× Rebirth
 - 1× Reset
-- 1× Pilgrim of Old Stones
+- 1× Neural Interrogator
 - 1× Cragfall
 - 1× Ecliptic Vantage
 - 1× Starcatcher

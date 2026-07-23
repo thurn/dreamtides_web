@@ -619,21 +619,22 @@ card-number = 33
 art = { x = -0.022, y = -0.517, scale = 1.77 }
 
 [[cards]]
-name = "Pathfinder Adrift"
+name = "Resonance Surveyor"
 mtg-name = "Ledger Shredder"
 id = "5b2b2188-b9f0-4b3b-9185-26a820d343c7"
 rendered-text = "When you play your second card in a turn, draw a card, then discard a card."
-energy-cost = 2
+energy-cost = 1
 card-type = "Character"
 subtype = "Explorer"
 rarity = ""
 is-fast = true
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July23"]
+tags = ["Art Rework", "July23", "Art OK"]
 image-number = 2290648805
 art-owned = false
 card-number = 34
+art = { x = 0, y = -0.522, scale = 2.07 }
 
 [[cards]]
 name = "Woodland Apparition"
@@ -849,7 +850,7 @@ card-number = 45
 art = { x = -0.336, y = 0.369, scale = 1.17 }
 
 [[cards]]
-name = "Nomad of Endless Paths"
+name = "Brawler Battlesuit"
 mtg-name = "Stonecloaker"
 id = "44ae8838-4714-43a5-a7bd-e9f806f35ca9"
 rendered-text = """
@@ -858,15 +859,16 @@ Unstoppable.
 ▸Materialized: Return a character you control to hand."""
 energy-cost = 2
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Vehicle"
 rarity = ""
 is-fast = true
 is-interrupt = false
-spark = 5
+spark = 4
 tags = ["Art Rework", "Art OK", "July23", "Ally Audit"]
-image-number = 1529898275
+image-number = 425039824
 art-owned = false
 card-number = 46
+art = { x = 0, y = -0.399, scale = 1.17 }
 
 [[cards]]
 name = "Driftcaller Sovereign"
@@ -1551,21 +1553,22 @@ card-number = 82
 art = { x = 0.206, y = -0.374, scale = 2.57 }
 
 [[cards]]
-name = "Pilgrim of Old Stones"
+name = "Neural Interrogator"
 mtg-name = "Vendilion Clique"
 id = "7530e916-e4b9-4988-b3ac-0e400c7a04ff"
 rendered-text = "▸Materialized: Discard a chosen card from the opponent's hand. They draw a card."
 energy-cost = 2
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Agent"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July23"]
-image-number = 2622590193
+tags = ["Art Rework", "July23", "Art OK"]
+image-number = 2216124455
 art-owned = false
 card-number = 83
+art = { x = 0, y = -0.533, scale = 1.67 }
 
 [[cards]]
 name = "Echoes of the Journey"
@@ -3571,13 +3574,13 @@ art-owned = true
 card-number = 190
 
 [[cards]]
-name = "Scrapyard Custodian"
+name = "Revenant Automaton"
 mtg-name = "Cauldron Familiar"
 id = "ecf77f27-df0f-47c4-99c2-48d7fa46a137"
-rendered-text = """
+rendered-text = '''
 ▸Materialized: Gain 1⍟.
 
-Abandon a non-figment character: Materialize this character from your void."""
+Abandon a character: Materialize this character from your void.'''
 energy-cost = 1
 card-type = "Character"
 subtype = "Synth"
@@ -3585,10 +3588,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July23"]
-image-number = 695511850
+tags = ["Art Rework", "July23", "Art OK"]
+image-number = 2530614279
 art-owned = false
 card-number = 191
+art = { x = 0.256, y = 0.115, scale = 1.77 }
 
 [[cards]]
 name = "Exiles of the Last Light"
@@ -5196,21 +5200,22 @@ card-number = 278
 art = { x = 0, y = 0.644, scale = 1.17 }
 
 [[cards]]
-name = "Clockwork Prodigy"
+name = "Nomad of Endless Paths"
 mtg-name = "Force of Will"
 id = "6cf545ba-b014-4333-a0da-573e8f97d734"
 rendered-text = "Cards in your hand have offering."
 energy-cost = 2
 card-type = "Character"
-subtype = "Child"
+subtype = "Explorer"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July23"]
-image-number = 1095632909
+tags = ["Art Rework", "July23", "Art OK"]
+image-number = 1529898275
 art-owned = false
 card-number = 279
+art = { x = -0.313, y = -0.471, scale = 1.77 }
 
 [[cards]]
 name = "Echoing Denial"
@@ -6098,7 +6103,7 @@ art-owned = false
 card-number = 326
 
 [[cards]]
-name = "Wreckage Prowler"
+name = "Remnant Curator"
 mtg-name = "Living Twister"
 id = "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b"
 rendered-text = """
@@ -6112,13 +6117,14 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July23"]
-image-number = 1129012511
+tags = ["Art Rework", "July23", "Art OK"]
+image-number = 1727859046
 art-owned = false
 card-number = 327
+art = { x = -0.049, y = 0.897, scale = 1.07 }
 
 [[cards]]
-name = "Astral Angler"
+name = "Combat Extractor"
 mtg-name = "Living Twister"
 id = "9af63811-7fef-4e28-b672-95ea82796f45"
 rendered-text = """
@@ -6127,15 +6133,16 @@ rendered-text = """
 1●: Return a character you control to hand."""
 energy-cost = 3
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Warrior"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Removal", "Art Rework", "July23", "Ally Audit"]
-image-number = 318372281
+tags = ["Removal", "Art Rework", "July23", "Ally Audit", "Art OK"]
+image-number = 1694993299
 art-owned = false
 card-number = 328
+art = { x = -0.1, y = -0.348, scale = 1.47 }
 
 [[cards]]
 name = "Forgotten Sleeper"
@@ -8279,7 +8286,7 @@ Awakened
 ▸Materialized: Return a character you control to hand."""
 energy-cost = 2
 card-type = "Character"
-subtype = "Synth"
+subtype = "Vehicle"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -9028,10 +9035,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July23", "Ally Audit"]
+tags = ["Art Rework", "July23", "Ally Audit", "Art OK"]
 image-number = 768349750
 art-owned = false
 card-number = 481
+art = { x = 0, y = -0.668, scale = 1.67 }
 
 [[cards]]
 name = "Veil of the Wastes"
