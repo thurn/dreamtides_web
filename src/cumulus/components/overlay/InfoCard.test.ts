@@ -67,6 +67,18 @@ describe("InfoCard shell treatment", () => {
     expect(html).toContain(`box-shadow:${String(glass.boxShadow)}`);
   });
 
+  it("gives body-only text cards even shell padding without an empty headline row", () => {
+    const html = renderToStaticMarkup(
+      React.createElement(InfoCard, {
+        variant: "text",
+        body: richText.plain("Body only."),
+      }),
+    );
+
+    expect(html).toContain("Body only.");
+    expect(html).not.toContain("font-family:var(--font-title)");
+  });
+
   it("renders the atlas reveal as an InfoCard variant with the shared glass fill", () => {
     const html = renderToStaticMarkup(
       React.createElement(InfoCard, {

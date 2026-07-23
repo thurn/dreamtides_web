@@ -65,7 +65,7 @@ describe("CardTermDefinitions", () => {
     expect(stack?.getAttribute("data-definition-count")).toBe(
       String(TWO_TERMS.terms.length),
     );
-    expect(container.textContent).toContain("Rules Glossary");
+    expect(container.textContent).not.toContain("Rules Glossary");
     expect(stack?.children).toHaveLength(1);
 
     // Each row starts with its term. Assert the rows retain first-occurrence

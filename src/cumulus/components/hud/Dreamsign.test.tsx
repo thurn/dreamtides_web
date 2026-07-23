@@ -71,7 +71,7 @@ describe("Dreamsign", () => {
     expect(tile?.dataset.revealEntityType).toBe("dreamsign");
     expect(tile?.dataset.revealEntityId).toBe(sign.id);
     expect(tile?.dataset.revealPrimaryVariant).toBe("object");
-    expect(tile?.dataset.revealSecondaryTitles).toBe("Rules Glossary");
+    expect(tile?.dataset.revealSecondaryTitles).toBe("");
     expect(tile?.tabIndex).toBe(0);
     expect(tile?.style.touchAction).toBe("pan-x pan-y");
     const description = document.getElementById(tile?.getAttribute("aria-describedby") ?? "");

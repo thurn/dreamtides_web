@@ -65,7 +65,7 @@ describe("EntityRevealConformanceDemo", () => {
     expect(container.querySelector("[data-conformance-generated-battle-fixture] [data-game-card-source]" )).not.toBeNull();
     expect(container.querySelectorAll("[data-conformance-scenario]").length).toBeGreaterThanOrEqual(6);
     const infoSource = container.querySelector<HTMLElement>("[data-conformance-info-secondaries] [data-reveal-entity-type=dreamcaller]")!;
-    expect(infoSource.dataset.revealSecondaryTitles).toBe("Rules Glossary");
+    expect(infoSource.dataset.revealSecondaryTitles).toBe("");
     expect(infoSource.querySelector<HTMLImageElement>("img")?.src).toContain(
       "/dreamcallers/cutout/0071.png",
     );

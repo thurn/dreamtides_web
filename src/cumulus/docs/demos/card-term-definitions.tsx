@@ -49,14 +49,14 @@ export const cardTermDefinitionsDemo: CumulusComponent = {
   id: "card-term-definitions",
   title: "Card Term Definitions",
   blurb:
-    "An incubating compact Rules Glossary card containing every gameplay term in a stretch of rules text. It is the normal-flow surface for layouts that need definitions beside or beneath an object; named entity reveals use the same consolidated card model. It renders nothing when the text references no terms.",
+    "An incubating compact title-free card containing every gameplay term in a stretch of rules text. It is the normal-flow surface for layouts that need definitions beside or beneath an object; named entity reveals use the same consolidated card model. It renders nothing when the text references no terms.",
   group: "Components",
   docName: "CardTermDefinitions",
   Component: CardTermDefinitionsDemo,
   usage: [
     {
       label: "Definitions beside a card",
-      note: "Pass a card's rules text and the side the panel sits on; one compact card renders every referenced keyword and definition in reading order, or nothing when there are no terms.",
+      note: "Pass a card's rules text and the side the panel sits on; one compact, title-free card renders every referenced keyword and definition in reading order as a bold white term, colon, and white definition. Tight leading groups wrapped copy while a larger gap separates definitions; cards with no terms render nothing.",
       code: `import { CardTermDefinitions } from "src/cumulus/components/card/CardTermDefinitions";
 
 <CardTermDefinitions text={card.rulesText} side="right" />`,

@@ -10,7 +10,7 @@
 
 import { Fragment, type ReactElement, type ReactNode } from "react";
 import { token } from "../../primitives/tokens";
-import { renderRulesText, renderRulesTextInline } from "./RulesText";
+import { renderRulesText } from "./RulesText";
 
 export interface RichTextDefinition {
   /** Canonical glossary term shown as the compact row label. */
@@ -31,8 +31,8 @@ export interface RichTextDefinition {
  *  - `note`  — a de-emphasized secondary line (muted + italic), e.g. a
  *    "Locked" / "Visited" status shown under a site blurb.
  *  - `stack` — several parts laid out vertically as separate lines.
- *  - `definitions` — a compact semantic definition list whose labels and
- *    rules-aware descriptions share one line whenever space permits.
+ *  - `definitions` — a compact, monochrome semantic definition list whose
+ *    labels and descriptions share one line whenever space permits.
  */
 export type RichText =
   | { readonly kind: "plain"; readonly text: string }
@@ -112,8 +112,10 @@ export function renderRichText(
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: token("--space-2"),
+            gap: token("--space-4"),
             margin: 0,
+            color: token("--text-primary"),
+            lineHeight: 1.25,
           }}
         >
           {value.entries.map((entry, index) => (
@@ -121,14 +123,14 @@ export function renderRichText(
               <dt
                 style={{
                   display: "inline",
-                  color: token("--spark"),
+                  fontWeight: 700,
                 }}
               >
-                <strong>{entry.term}</strong>
+                {entry.term}
               </dt>
               <dd style={{ display: "inline", margin: 0 }}>
-                {" — "}
-                {renderRulesTextInline(entry.definition)}
+                {": "}
+                {entry.definition}
               </dd>
             </div>
           ))}

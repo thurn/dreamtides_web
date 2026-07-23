@@ -828,6 +828,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
   /* --- text: optional small lead glyph + title, an optional epithet under the
      name, description below --- */
   const { meta, leadGlyph, subtitle } = props;
+  const hasHeadline = title !== undefined || leadGlyph !== undefined;
   const Meta = meta ? (
     <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div>
   ) : null;
@@ -836,26 +837,28 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
       style={{ ...shell, padding: `${geometryPx(PADY)} ${geometryPx(PADX)}` }}
     >
       {Meta}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: geometryPx(9),
-          marginBottom: subtitle ? 2 : body ? 7 : 0,
-        }}
-      >
-        {leadGlyph !== undefined && (
-          <i
-            className={leadGlyph}
-            aria-hidden="true"
-            style={{
-              fontSize: geometryPx(20),
-              color: token("--text-secondary"),
-            }}
-          />
-        )}
-        <div style={tHeadline}>{titleContent}</div>
-      </div>
+      {hasHeadline && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: geometryPx(9),
+            marginBottom: subtitle ? 2 : body ? 7 : 0,
+          }}
+        >
+          {leadGlyph !== undefined && (
+            <i
+              className={leadGlyph}
+              aria-hidden="true"
+              style={{
+                fontSize: geometryPx(20),
+                color: token("--text-secondary"),
+              }}
+            />
+          )}
+          <div style={tHeadline}>{titleContent}</div>
+        </div>
+      )}
       {subtitle !== undefined && subtitle !== "" && (
         <div style={{ ...tEpithet, marginBottom: body ? 7 : 0 }}>
           {subtitle}

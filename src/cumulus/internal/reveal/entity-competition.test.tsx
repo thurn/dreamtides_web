@@ -102,8 +102,7 @@ describe("cross-family reveal competition", () => {
     await vi.waitFor(() => expect(document.querySelector("[data-cumulus-reveal-group]")).not.toBeNull());
     expect(activeSources()).toEqual([card]);
     expect(document.querySelectorAll("[data-cumulus-reveal-group]")).toHaveLength(1);
-    const orderedSecondaries = card.dataset.revealSecondaryTitles?.split("\u001f") ?? [];
-    expect(orderedSecondaries).toEqual(["Rules Glossary"]);
+    expect(card.dataset.revealSecondaryTitles).toBe("");
     const shownSecondaries = document.querySelectorAll('[data-cumulus-reveal-card="secondary"]');
     expect(shownSecondaries).toHaveLength(1);
     const description = document.getElementById(card.getAttribute("aria-describedby") ?? "")?.textContent ?? "";

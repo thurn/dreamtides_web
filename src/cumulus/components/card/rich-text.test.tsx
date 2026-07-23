@@ -19,7 +19,7 @@ describe("RichText", () => {
     );
   });
 
-  it("keeps glossary labels and rules-aware definitions in compact rows", () => {
+  it("keeps glossary labels and definitions in compact monochrome rows", () => {
     const markup = renderToStaticMarkup(
       <RichTextView
         value={richText.definitions([
@@ -36,8 +36,17 @@ describe("RichText", () => {
     );
 
     expect(markup).toContain("<dl");
-    expect(markup).toContain("<strong>Bane</strong>");
-    expect(markup).toContain(" — <span>A penalty card forced into your deck.</span>");
+    expect(markup).toContain(
+      '<dl style="display:flex;flex-direction:column;gap:var(--space-4);margin:0;color:var(--text-primary);line-height:1.25">',
+    );
+    expect(markup).toContain(
+      '<dt style="display:inline;font-weight:700">Bane</dt>',
+    );
+    expect(markup).toContain(
+      '<dt style="display:inline;font-weight:700">Discover</dt>',
+    );
+    expect(markup).toContain(": A penalty card forced into your deck.");
+    expect(markup).not.toContain("--cv-rules-highlight-color");
     expect(markup).not.toContain("data-rules-text-paragraph");
   });
 });

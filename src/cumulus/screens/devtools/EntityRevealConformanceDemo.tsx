@@ -20,7 +20,7 @@ const CARD: CardData = {
   id: CARD_ID, name: asCardName("Conformance Sentry"), cardNumber: 1,
   cardType: "Character", subtype: "Guide", isStarter: false, rarity: "Special",
   energyCost: 2, spark: 3, isFast: false,
-  renderedText: "Bane. Discover. Ephemeral. Reclaim. Foresee.", imageNumber: CONFORMANCE_CARD_IMAGE, artOwned: false,
+  renderedText: "Awakened. ▸Dawn. Ephemeral. Reclaim. Foresee.", imageNumber: CONFORMANCE_CARD_IMAGE, artOwned: false,
 };
 
 const ATLAS_MODEL: AtlasNodeModel = {

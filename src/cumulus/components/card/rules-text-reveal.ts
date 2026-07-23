@@ -10,6 +10,8 @@ import { richText } from "./rich-text";
  * Build the compact glossary card shared by semantic rules-text sources. Each
  * definition remains a distinct reading-order row, but the rows share one
  * InfoCard shell so rules copy with several terms stays coherent and compact.
+ * The glossary body is monochrome so definitions read as one reference block
+ * without competing with the source card's semantic rules-text colors.
  */
 export function glossaryDefinitionsCardModel(
   entries: readonly GlossaryEntry[],
@@ -19,7 +21,6 @@ export function glossaryDefinitionsCardModel(
   }
   return {
     variant: "text",
-    title: "Rules Glossary",
     body: richText.definitions(entries),
   };
 }

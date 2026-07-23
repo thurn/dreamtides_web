@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/card-term-definitions`
 
 Real consumers: **0** (imports outside `src/cumulus/docs/` and tests).
 
-An incubating compact Rules Glossary card containing every gameplay term in a stretch of rules text. It is the normal-flow surface for layouts that need definitions beside or beneath an object; named entity reveals use the same consolidated card model. It renders nothing when the text references no terms.
+An incubating compact title-free card containing every gameplay term in a stretch of rules text. It is the normal-flow surface for layouts that need definitions beside or beneath an object; named entity reveals use the same consolidated card model. It renders nothing when the text references no terms.
 
 ## Props
 
@@ -22,7 +22,7 @@ An incubating compact Rules Glossary card containing every gameplay term in a st
 
 ### Definitions beside a card
 
-Pass a card's rules text and the side the panel sits on; one compact card renders every referenced keyword and definition in reading order, or nothing when there are no terms.
+Pass a card's rules text and the side the panel sits on; one compact, title-free card renders every referenced keyword and definition in reading order as a bold white term, colon, and white definition. Tight leading groups wrapped copy while a larger gap separates definitions; cards with no terms render nothing.
 
 ```tsx
 import { CardTermDefinitions } from "src/cumulus/components/card/CardTermDefinitions";
