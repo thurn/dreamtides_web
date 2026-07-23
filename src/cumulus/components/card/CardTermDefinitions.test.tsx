@@ -9,7 +9,7 @@ import { extractGlossaryTerms } from "../../../data/glossary-terms";
 
 // Derive fixtures from the LIVE glossary so a content edit can never invalidate
 // the test (per AGENTS.md). Pick two distinct terms and build prose that uses
-// both; assert the count of tiles equals the number of distinct terms detected.
+// both; assert that every detected definition appears inside one shared card.
 const TWO_TERMS = (() => {
   // A sentence known to reference at least two glossary keywords in the
   // prototype's vocabulary; resolve the actual detected terms from it.
@@ -49,7 +49,7 @@ describe("CardTermDefinitions", () => {
     });
   });
 
-  it("renders one InfoCard tile per distinct glossary term, in reading order", () => {
+  it("renders distinct glossary terms in reading order inside one InfoCard", () => {
     // Skip if the sample somehow detects fewer than two terms in this build's
     // glossary — the behavior under test needs multiple terms.
     if (TWO_TERMS.terms.length < 2) {
@@ -62,9 +62,14 @@ describe("CardTermDefinitions", () => {
     const stack = container.querySelector('[data-testid="defs"]');
     expect(stack).not.toBeNull();
     expect((stack as HTMLElement | null)?.style.overflow).toBe("visible");
+    expect(stack?.getAttribute("data-definition-count")).toBe(
+      String(TWO_TERMS.terms.length),
+    );
+    expect(container.textContent).toContain("Rules Glossary");
+    expect(stack?.children).toHaveLength(1);
 
-    // Each tile is an InfoCard whose headline is the term. Assert the term
-    // headings appear in first-occurrence order.
+    // Each row starts with its term. Assert the rows retain first-occurrence
+    // order inside the consolidated card.
     const text = container.textContent ?? "";
     const positions = TWO_TERMS.terms.map((entry) => text.indexOf(entry.term));
     expect(positions.every((position) => position >= 0)).toBe(true);

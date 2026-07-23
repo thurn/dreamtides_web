@@ -65,7 +65,7 @@ describe("EntityRevealConformanceDemo", () => {
     expect(container.querySelector("[data-conformance-generated-battle-fixture] [data-game-card-source]" )).not.toBeNull();
     expect(container.querySelectorAll("[data-conformance-scenario]").length).toBeGreaterThanOrEqual(6);
     const infoSource = container.querySelector<HTMLElement>("[data-conformance-info-secondaries] [data-reveal-entity-type=dreamcaller]")!;
-    expect(infoSource.dataset.revealSecondaryTitles?.split("\u001f")).toEqual(["Bane", "Discover", "Ephemeral"]);
+    expect(infoSource.dataset.revealSecondaryTitles).toBe("Rules Glossary");
     expect(infoSource.querySelector<HTMLImageElement>("img")?.src).toContain(
       "/dreamcallers/cutout/0071.png",
     );
@@ -121,7 +121,7 @@ describe("EntityRevealConformanceDemo", () => {
     expect(opened.viewport).toEqual({ layout: "desktop", width: 1200, height: 800, offsetLeft: 7, offsetTop: 13, safeArea: { top: 11, right: 12, bottom: 13, left: 14 } });
     expect(opened.placement).toEqual({ family: "desktop-game-card-reading", orientation: "primary-left" });
     expect(opened.finalRects).toEqual({ primary: rendered[0], secondaries: rendered.slice(1) });
-    expect(opened.finalRects).toEqual({ primary: { x: 40, y: 244, width: 240, height: 336 }, secondaries: [{ x: 290, y: 244, width: 248, height: 120 }, { x: 290, y: 374, width: 248, height: 120 }, { x: 290, y: 504, width: 248, height: 120 }] });
+    expect(opened.finalRects).toEqual({ primary: { x: 40, y: 244, width: 240, height: 336 }, secondaries: [{ x: 290, y: 244, width: 248, height: 120 }] });
     expect(opened.circleClearance).toBeUndefined();
     expect(opened.shownSecondaryCount).toBe(rendered.length - 1);
     expect(opened.droppedSecondaryCount).toBe(0);
@@ -153,9 +153,9 @@ describe("EntityRevealConformanceDemo", () => {
     expect(opened.viewport).toEqual({ layout: "mobile", width: 390, height: 844, offsetLeft: 3, offsetTop: 5, safeArea: { top: 52, right: 6, bottom: 7, left: 8 } });
     expect(opened.touchPoint).toEqual(point);
     expect(opened.placement).toEqual({ family: "mobile-touch-corner", orientation: "primary-right" });
-    expect(opened.shownSecondaryCount).toBe(8);
-    expect(opened.droppedSecondaryCount).toBe(21);
-    expect(opened.fallbacks).toEqual({ pressInPlace: false, sideFallback: true, secondaryTruncation: true, adjacentTruncation: false, bestEffortPrimaryOverlap: true });
+    expect(opened.shownSecondaryCount).toBe(1);
+    expect(opened.droppedSecondaryCount).toBe(0);
+    expect(opened.fallbacks).toEqual({ pressInPlace: false, sideFallback: true, secondaryTruncation: false, adjacentTruncation: false, bestEffortPrimaryOverlap: true });
     const primary = document.querySelector<HTMLElement>("[data-cumulus-reveal-card=primary]")!.getBoundingClientRect();
     const renderedSecondaries = [...document.querySelectorAll<HTMLElement>("[data-cumulus-reveal-card=secondary]")].map((node) => {
       const rect = node.getBoundingClientRect();

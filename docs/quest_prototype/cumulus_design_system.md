@@ -151,7 +151,7 @@ Zero-consumer components are permitted only with the visible `incubating`
 catalog status and a named adoption role. Incubation lasts through one
 subsequent health sweep: a component that still has no production consumer at
 the following sweep is adopted or deleted. `CardTermDefinitions` is currently
-the incubating normal-flow glossary stack intended for definitions placed
+the incubating normal-flow consolidated glossary card intended for definitions placed
 beside or beneath rules text; entity-reveal glossary cards are a separate
 coordinator-owned surface and do not count as its adoption.
 

@@ -3061,7 +3061,7 @@
         "fields": [
           {
             "name": "kind",
-            "tsType": "\"plain\" | \"rules\" | \"underline\" | \"inline\" | \"note\" | \"stack\"",
+            "tsType": "\"plain\" | \"rules\" | \"underline\" | \"inline\" | \"note\" | \"stack\" | \"definitions\"",
             "optional": false,
             "description": ""
           }
@@ -3952,7 +3952,7 @@
         "fields": [
           {
             "name": "kind",
-            "tsType": "\"plain\" | \"rules\" | \"underline\" | \"inline\" | \"note\" | \"stack\"",
+            "tsType": "\"plain\" | \"rules\" | \"underline\" | \"inline\" | \"note\" | \"stack\" | \"definitions\"",
             "optional": false,
             "description": ""
           }

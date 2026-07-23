@@ -1,7 +1,8 @@
 // Registry demo entry for RichTextView — the renderable for the design system's
 // RichText model. A caller describes WHAT a run of copy is (plain prose, rules
-// text, an inline underlined name, a muted note, or a stack of parts) with the `richText`
-// constructors, and RichTextView owns HOW it looks. This is distinct from the
+// text, an inline underlined name, a compact definition list, a muted note, or a
+// stack of parts) with the `richText` constructors, and RichTextView owns HOW it
+// looks. This is distinct from the
 // `rules-text` demo (RulesText, the raw markup parser): RichText is the model a
 // screen states declaratively, and `rules` is just one of its kinds.
 //
@@ -37,9 +38,9 @@ export const richTextDemo: CumulusComponent = {
   id: "rich-text",
   title: "Rich Text",
   blurb:
-    "The design system's model for a run of formatted copy. The caller describes what the text is — plain prose, Dreamtides rules text with glossary-keyword emphasis and inline resource glyphs, an underlined named subject inside continuous prose, a muted note, or a stack of parts — and the renderer owns how it looks. Copy slots take a RichText, never an arbitrary node.",
+    "The design system's model for a run of formatted copy. The caller describes what the text is — plain prose, Dreamtides rules text with glossary-keyword emphasis and inline resource glyphs, an underlined named subject inside continuous prose, a compact definition list, a muted note, or a stack of parts — and the renderer owns how it looks. Copy slots take a RichText, never an arbitrary node.",
   callout:
-    "Build values with the `richText` constructors — `richText.plain`, `richText.rules`, `richText.inline`, `richText.underline`, `richText.note`, and `richText.stack` — and hand them to a copy slot (like `InfoCard.body`); reach for `RichTextView` only to render a standalone value inline. Use underline only for a semantically named subject, not general emphasis.",
+    "Build values with the `richText` constructors — `richText.plain`, `richText.rules`, `richText.inline`, `richText.underline`, `richText.definitions`, `richText.note`, and `richText.stack` — and hand them to a copy slot (like `InfoCard.body`); reach for `RichTextView` only to render a standalone value inline. Use underline only for a semantically named subject, not general emphasis.",
   group: "Components",
   docName: "RichTextView",
   Component: RichTextViewDemo,

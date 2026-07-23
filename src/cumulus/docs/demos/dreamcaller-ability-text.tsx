@@ -32,7 +32,7 @@ export const dreamcallerAbilityTextDemo: CumulusComponent = {
   id: "dreamcaller-ability-text",
   title: "Dreamcaller Ability Text",
   blurb:
-    "The complete Dreamcaller rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals InfoCards for every defined term in reading order.",
+    "The complete Dreamcaller rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals one compact Rules Glossary card containing every defined term in reading order.",
   group: "Components",
   docName: "DreamcallerAbilityText",
   Component: DreamcallerAbilityTextDemo,

@@ -497,7 +497,22 @@ function renderParagraph(
 }
 
 /**
- * Renders rules text inline.
+ * Renders rules text markup without paragraph containers so a structured copy
+ * model can keep a label and its definition in one continuous line. Multiple
+ * authored paragraphs are joined with a space because the caller owns the
+ * surrounding block layout.
+ */
+export function renderRulesTextInline(text: string): ReactNode[] {
+  return splitRulesTextIntoParagraphs(text).flatMap((paragraph, index) => [
+    ...(index === 0
+      ? []
+      : [<span key={`separator-${String(index)}`}> </span>]),
+    ...renderParagraph(paragraph, index, { interactiveTerms: false }),
+  ]);
+}
+
+/**
+ * Renders rules text in authored ability paragraphs.
  *
  * Use as a drop-in for any place that prints `card.renderedText`,
  * `dreamcaller.renderedText`, or `dreamsign.effectDescription` raw — the

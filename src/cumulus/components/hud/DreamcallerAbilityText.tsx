@@ -142,7 +142,8 @@ function AbilityDefinitionSource({
 /**
  * Complete Dreamcaller ability copy. If the rules text references glossary
  * terms, the whole ability box becomes one semantic reveal source: hovering,
- * focusing, or touch-holding it shows every definition in reading order.
+ * focusing, or touch-holding it shows one compact card containing every
+ * definition in reading order.
  */
 export function DreamcallerAbilityText({
   dreamcallerId,

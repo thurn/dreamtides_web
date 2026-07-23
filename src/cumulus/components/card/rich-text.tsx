@@ -10,7 +10,14 @@
 
 import { Fragment, type ReactElement, type ReactNode } from "react";
 import { token } from "../../primitives/tokens";
-import { renderRulesText } from "./RulesText";
+import { renderRulesText, renderRulesTextInline } from "./RulesText";
+
+export interface RichTextDefinition {
+  /** Canonical glossary term shown as the compact row label. */
+  readonly term: string;
+  /** Rules-aware explanatory copy shown after the label. */
+  readonly definition: string;
+}
 
 /**
  * A piece of formatted copy the design system knows how to render.
@@ -24,6 +31,8 @@ import { renderRulesText } from "./RulesText";
  *  - `note`  — a de-emphasized secondary line (muted + italic), e.g. a
  *    "Locked" / "Visited" status shown under a site blurb.
  *  - `stack` — several parts laid out vertically as separate lines.
+ *  - `definitions` — a compact semantic definition list whose labels and
+ *    rules-aware descriptions share one line whenever space permits.
  */
 export type RichText =
   | { readonly kind: "plain"; readonly text: string }
@@ -31,7 +40,11 @@ export type RichText =
   | { readonly kind: "underline"; readonly text: string }
   | { readonly kind: "inline"; readonly parts: readonly RichText[] }
   | { readonly kind: "note"; readonly text: string }
-  | { readonly kind: "stack"; readonly parts: readonly RichText[] };
+  | { readonly kind: "stack"; readonly parts: readonly RichText[] }
+  | {
+      readonly kind: "definitions";
+      readonly entries: readonly RichTextDefinition[];
+    };
 
 /** Ergonomic constructors for {@link RichText} values. */
 export const richText = {
@@ -41,6 +54,9 @@ export const richText = {
   inline: (...parts: RichText[]): RichText => ({ kind: "inline", parts }),
   note: (text: string): RichText => ({ kind: "note", text }),
   stack: (...parts: RichText[]): RichText => ({ kind: "stack", parts }),
+  definitions: (
+    entries: readonly RichTextDefinition[],
+  ): RichText => ({ kind: "definitions", entries }),
 };
 
 /** Vertical gap (px) between stacked rich-text parts. */
@@ -88,6 +104,35 @@ export function renderRichText(
         >
           {value.parts.map((part, i) => renderRichText(part, i))}
         </div>
+      );
+    case "definitions":
+      return (
+        <dl
+          key={key}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: token("--space-2"),
+            margin: 0,
+          }}
+        >
+          {value.entries.map((entry, index) => (
+            <div key={`${entry.term}-${String(index)}`}>
+              <dt
+                style={{
+                  display: "inline",
+                  color: token("--spark"),
+                }}
+              >
+                <strong>{entry.term}</strong>
+              </dt>
+              <dd style={{ display: "inline", margin: 0 }}>
+                {" — "}
+                {renderRulesTextInline(entry.definition)}
+              </dd>
+            </div>
+          ))}
+        </dl>
       );
   }
 }

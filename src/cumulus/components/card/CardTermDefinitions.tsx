@@ -1,20 +1,17 @@
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
-import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
-import { token } from "../../primitives/tokens";
+import { InfoCard } from "../overlay/InfoCard";
+import { glossaryDefinitionsCardModel } from "./rules-text-reveal";
 
 /**
- * Vertical stack of glossary definitions for every gameplay term that appears in
- * a stretch of rules text, in reading order with duplicates collapsed. Each term
- * renders as a {@link GlossaryDefinitionCard} — the one keyword-definition tile,
- * an {@link InfoCard} carrying the keyword name and its rules text — so the
- * definitions read in the same vocabulary as every other reveal (the object card
- * they sit beside, the tide pill, the site disc): one shell, one radius, one
- * type scale.
+ * One compact glossary card for every gameplay term that appears in a stretch of
+ * rules text, in reading order with duplicates collapsed. Each term keeps its own
+ * definition row inside a shared {@link InfoCard}, avoiding repeated shell,
+ * title, and padding space when several terms appear together.
  *
  * The catalog marks this stack as incubating. Named card, Dreamsign, and
  * Dreamcaller surfaces currently carry glossary definitions in their shared
- * reveal specifications; this component remains the renderable multi-card
- * stack for a surface that needs definitions in normal document flow.
+ * reveal specifications; this component is the equivalent normal-flow surface
+ * for definitions placed beside or beneath rules text.
  *
  * Returns `null` when the text references no glossary terms, so callers place it
  * unconditionally and it renders nothing for plain text.
@@ -32,7 +29,8 @@ export function CardTermDefinitions({
   side?: "left" | "right";
 }) {
   const terms = extractGlossaryTerms(text);
-  if (terms.length === 0) {
+  const card = glossaryDefinitionsCardModel(terms);
+  if (card === null) {
     return null;
   }
   return (
@@ -44,19 +42,18 @@ export function CardTermDefinitions({
       className="cumulus"
       data-testid={testId}
       data-definition-side={side}
+      data-definition-count={terms.length}
       style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: token("--space-3"),
-        // Keep the stack itself visually inert. Each definition owns its glass
-        // shell; the wrapper must not create a scroll track or clipped backdrop
-        // behind multiple keyword cards.
+        // Keep the wrapper visually inert so the shared InfoCard remains the
+        // only surface and its backdrop is never clipped.
         overflow: "visible",
       }}
     >
-      {terms.map((entry) => (
-        <GlossaryDefinitionCard key={entry.term} entry={entry} />
-      ))}
+      <InfoCard
+        variant="text"
+        title={card.title}
+        body={card.body}
+      />
     </div>
   );
 }

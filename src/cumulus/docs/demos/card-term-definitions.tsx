@@ -1,8 +1,8 @@
-// Registry demo entry for CardTermDefinitions — the reading-order, de-duped
-// stack of GlossaryDefinitionCards for every gameplay term in a stretch of rules
-// text. It renders `null` when the text references no terms, so callers place it
-// unconditionally; when it does render, it re-establishes its own `.cumulus` scope
-// so it works inside a portalled hover-help popover.
+// Registry demo entry for CardTermDefinitions — one compact InfoCard containing
+// reading-order, de-duped definitions for every gameplay term in a stretch of
+// rules text. It renders `null` when the text references no terms, so callers
+// place it unconditionally; when it does render, it re-establishes its own
+// `.cumulus` scope so it works inside a portalled hover-help popover.
 //
 // `text` is a string (a text control) and `side` a string-literal union (a
 // select control), both seeded from defaultArgs. `testId` is an optional string.
@@ -19,7 +19,7 @@ import type { CumulusComponent } from "../registry";
 // first two terms whose bare keyword form appears in rules text (skipping the
 // trigger-arrow-only entries, which match only their `▸`-prefixed form). Naming
 // them in a sentence guarantees `extractGlossaryTerms` returns exactly these two
-// entries, so the demo stacks a real, non-empty set of definitions and stays
+// entries, so the demo shows a real, non-empty set of definitions and stays
 // valid as the glossary is edited.
 const SAMPLE_TERMS = GLOSSARY.filter(
   (entry) => !entry.term.startsWith(TRIGGER_ARROW),
@@ -49,14 +49,14 @@ export const cardTermDefinitionsDemo: CumulusComponent = {
   id: "card-term-definitions",
   title: "Card Term Definitions",
   blurb:
-    "An incubating reading-order stack of Glossary Definition Cards for every gameplay term in a stretch of rules text. It is the normal-flow multi-card surface for layouts that need definitions beside or beneath an object; named entity reveals carry equivalent glossary cards in their reveal specifications. It renders nothing when the text references no terms.",
+    "An incubating compact Rules Glossary card containing every gameplay term in a stretch of rules text. It is the normal-flow surface for layouts that need definitions beside or beneath an object; named entity reveals use the same consolidated card model. It renders nothing when the text references no terms.",
   group: "Components",
   docName: "CardTermDefinitions",
   Component: CardTermDefinitionsDemo,
   usage: [
     {
       label: "Definitions beside a card",
-      note: "Pass a card's rules text and the side the panel sits on; the stack renders one definition per referenced keyword in reading order, or nothing when there are no terms.",
+      note: "Pass a card's rules text and the side the panel sits on; one compact card renders every referenced keyword and definition in reading order, or nothing when there are no terms.",
       code: `import { CardTermDefinitions } from "src/cumulus/components/card/CardTermDefinitions";
 
 <CardTermDefinitions text={card.rulesText} side="right" />`,

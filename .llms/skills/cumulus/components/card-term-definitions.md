@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/card-term-definitions`
 
 Real consumers: **0** (imports outside `src/cumulus/docs/` and tests).
 
-An incubating reading-order stack of Glossary Definition Cards for every gameplay term in a stretch of rules text. It is the normal-flow multi-card surface for layouts that need definitions beside or beneath an object; named entity reveals carry equivalent glossary cards in their reveal specifications. It renders nothing when the text references no terms.
+An incubating compact Rules Glossary card containing every gameplay term in a stretch of rules text. It is the normal-flow surface for layouts that need definitions beside or beneath an object; named entity reveals use the same consolidated card model. It renders nothing when the text references no terms.
 
 ## Props
 
@@ -22,7 +22,7 @@ An incubating reading-order stack of Glossary Definition Cards for every gamepla
 
 ### Definitions beside a card
 
-Pass a card's rules text and the side the panel sits on; the stack renders one definition per referenced keyword in reading order, or nothing when there are no terms.
+Pass a card's rules text and the side the panel sits on; one compact card renders every referenced keyword and definition in reading order, or nothing when there are no terms.
 
 ```tsx
 import { CardTermDefinitions } from "src/cumulus/components/card/CardTermDefinitions";

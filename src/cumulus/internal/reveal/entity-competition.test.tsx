@@ -61,7 +61,7 @@ afterEach(() => {
 });
 
 describe("cross-family reveal competition", () => {
-  it("enforces replacement, Escape suppression, unavailable activation, and accessible truncation", async () => {
+  it("enforces replacement, Escape suppression, unavailable activation, and consolidated definitions", async () => {
     const unavailableActivation = vi.fn();
     act(() => root.render(<CumulusRoot>
       <GameCard model={{ cardId: CARD_ID, displaySnapshot: CARD }} />
@@ -103,14 +103,13 @@ describe("cross-family reveal competition", () => {
     expect(activeSources()).toEqual([card]);
     expect(document.querySelectorAll("[data-cumulus-reveal-group]")).toHaveLength(1);
     const orderedSecondaries = card.dataset.revealSecondaryTitles?.split("\u001f") ?? [];
-    expect(orderedSecondaries).toEqual(["Bane", "Discover", "Ephemeral"]);
+    expect(orderedSecondaries).toEqual(["Rules Glossary"]);
     const shownSecondaries = document.querySelectorAll('[data-cumulus-reveal-card="secondary"]');
-    expect(shownSecondaries.length).toBeGreaterThan(0);
-    expect(shownSecondaries.length).toBeLessThan(orderedSecondaries.length);
+    expect(shownSecondaries).toHaveLength(1);
     const description = document.getElementById(card.getAttribute("aria-describedby") ?? "")?.textContent ?? "";
     let previousIndex = -1;
-    for (const title of orderedSecondaries) {
-      const index = description.indexOf(title);
+    for (const term of ["Bane", "Discover", "Ephemeral"]) {
+      const index = description.indexOf(term);
       expect(index).toBeGreaterThan(previousIndex);
       previousIndex = index;
     }

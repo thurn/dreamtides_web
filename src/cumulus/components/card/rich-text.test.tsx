@@ -18,4 +18,26 @@ describe("RichText", () => {
       '<span>Gain </span><span style="text-decoration:underline">Rainbow Horn</span><span>.</span>',
     );
   });
+
+  it("keeps glossary labels and rules-aware definitions in compact rows", () => {
+    const markup = renderToStaticMarkup(
+      <RichTextView
+        value={richText.definitions([
+          {
+            term: "Bane",
+            definition: "A penalty card forced into your deck.",
+          },
+          {
+            term: "Discover",
+            definition: "Reveal three matching cards and choose one to draw.",
+          },
+        ])}
+      />,
+    );
+
+    expect(markup).toContain("<dl");
+    expect(markup).toContain("<strong>Bane</strong>");
+    expect(markup).toContain(" — <span>A penalty card forced into your deck.</span>");
+    expect(markup).not.toContain("data-rules-text-paragraph");
+  });
 });

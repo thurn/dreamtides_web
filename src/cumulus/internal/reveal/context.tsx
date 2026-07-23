@@ -26,6 +26,11 @@ function sameSource(state: ReturnType<typeof reduceRevealState>, source: RevealC
 
 function richTextDescription(value: RichText | undefined): string {
   if (value === undefined) return "";
+  if (value.kind === "definitions") {
+    return value.entries
+      .map((entry) => `${entry.term}. ${entry.definition}`)
+      .join(" ");
+  }
   if (value.kind === "stack") {
     return value.parts.map(richTextDescription).filter(Boolean).join(" ");
   }

@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/info-card`
 
-Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **7** (imports outside `src/cumulus/docs/` and tests).
 
 The strict information-card presentation. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell; named semantic sources register cards with the root reveal coordinator. On a narrow viewport a card lays out at 45% of screen width capped at its native 248px, so below ~551px (248 ÷ 0.45) it begins scaling down — an intentional content-driven cutoff, distinct from the 900px desktop/mobile breakpoint.
 
@@ -35,7 +35,7 @@ The strict information-card presentation. Its media treatment varies by content 
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `kind` | `"plain" \| "rules" \| "underline" \| "inline" \| "note" \| "stack"` | no |  |
+| `kind` | `"plain" \| "rules" \| "underline" \| "inline" \| "note" \| "stack" \| "definitions"` | no |  |
 
 ### `slots`: the `InfoCardSlots` model
 

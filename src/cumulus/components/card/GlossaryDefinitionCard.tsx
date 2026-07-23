@@ -10,9 +10,8 @@ import { richText } from "./rich-text";
  * nothing else.
  *
  * The signature-deck inspector uses this renderable tile in normal document
- * flow. CardTermDefinitions composes the same tile for its documented reading
- * order surface. Named entity reveals carry equivalent text-card models through
- * the shared reveal coordinator.
+ * flow. Multi-term rules-text surfaces use CardTermDefinitions and the shared
+ * consolidated glossary-card model.
  *
  * The tile establishes its own `.cumulus` token scope so it renders correctly on
  * any surface, including popovers portalled outside a Cumulus subtree. The body is
