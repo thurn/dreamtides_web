@@ -432,7 +432,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Skybreak Ascendant
 - 1× Ash Sower
 - 1× Seek Answers
-- 1× Somber Flockmaster
+- 1× Pastward Wanderer
 - 1× Pattern Seeker
 - 1× Blight Weaver
 - 1× Defiant Holdout
@@ -1155,7 +1155,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Eruption
 - 1× Skybreak Ascendant
 - 1× Ash Harbinger
-- 1× Somber Flockmaster
+- 1× Pastward Wanderer
 - 1× Ritekeeper
 - 1× Pattern Seeker
 - 1× Annihilation from Below
@@ -1258,7 +1258,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Seek Answers
 - 1× Starcatcher
 - 1× Ash Harbinger
-- 1× Somber Flockmaster
+- 1× Pastward Wanderer
 - 1× Keeper of the Tides
 - 1× Pattern Seeker
 - 1× Haunted Mariner
@@ -1362,7 +1362,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Ash Sower
 - 1× Starcatcher
 - 1× Ash Harbinger
-- 1× Somber Flockmaster
+- 1× Pastward Wanderer
 - 1× Keeper of the Tides
 - 1× Ritekeeper
 - 1× Pattern Seeker

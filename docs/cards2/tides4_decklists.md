@@ -423,7 +423,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Liminal Dreamer
 - 1× Starcatcher
 - 1× Ash Harbinger
-- 1× Somber Flockmaster
+- 1× Pastward Wanderer
 - 1× Pattern Seeker
 - 1× Blight Weaver
 - 1× Spiral Offering
@@ -1141,7 +1141,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Minstrel of Falling Light
 - 1× Surge Evoker
 - 1× Seek Answers
-- 1× Somber Flockmaster
+- 1× Pastward Wanderer
 - 1× Annihilation from Below
 - 1× Revelation Explorer
 - 1× Guiding Light
@@ -1240,7 +1240,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Seek Answers
 - 1× Starcatcher
 - 1× Ash Harbinger
-- 1× Somber Flockmaster
+- 1× Pastward Wanderer
 - 1× Ritekeeper
 - 1× Pattern Seeker
 - 1× Annihilation from Below
@@ -1344,7 +1344,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Surge Evoker
 - 1× Seek Answers
 - 1× Ash Harbinger
-- 1× Somber Flockmaster
+- 1× Pastward Wanderer
 - 1× Ritekeeper
 - 1× Pattern Seeker
 - 1× Annihilation from Below
@@ -2407,7 +2407,7 @@ Tide-fac-09 is almost entirely characters (39 of 45 copies), built around a tigh
 - 1× Minstrel of Falling Light
 - 1× Surge Evoker
 - 1× Seek Answers
-- 1× Somber Flockmaster
+- 1× Pastward Wanderer
 - 1× Ritekeeper
 - 1× Annihilation from Below
 - 1× Gateweaver
