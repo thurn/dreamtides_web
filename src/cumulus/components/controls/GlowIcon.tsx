@@ -30,10 +30,9 @@ export const SPARK_ICON_CLASS: Glyph = GLYPHS.spark;
 export const ENERGY_ICON_CLASS: Glyph = GLYPHS.energy;
 
 /**
- * Filled lightning-bolt mark for activated abilities. Shared by the card
- * title-bar fast/interrupt chips (`CardView`) and the inline `❖` / `❖❖`
- * activated-ability markers in rules text (`RulesText`) so both read as the
- * same glyph.
+ * Filled lightning-bolt mark for ability timing. Shared by the card title-bar
+ * fast/interrupt chips (`CardView`) and the inline `❖` / `❖❖` fast/interrupt
+ * markers in rules text (`RulesText`) so both read as the same glyph.
  */
 export const BOLT_ICON_CLASS: Glyph = GLYPHS.bolt;
 

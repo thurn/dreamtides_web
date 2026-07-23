@@ -112,7 +112,7 @@ describe("tokenizeRulesText", () => {
       "Pay ●2 to gain 1✦.",
       "When you abandon an ally, trigger its ▸Materialized and ▸Dawn abilities.",
       "▸ Judgment: gain 2⍟.",
-      "Your cards have ↯fast and cost ≤2● less.",
+      "❖ — Draw a card.",
       "❖❖ — Abandon an ally: gain ⍏2.",
     ]) {
       expect(reconstructText(tokenizeRulesText(text))).toBe(text);
@@ -158,8 +158,8 @@ describe("tokenizeRulesText", () => {
     });
   });
 
-  // The activated-ability marker collapses into a bolt segment carrying the
-  // count (one bolt for an activated ability, two for an interrupt).
+  // The timing marker collapses into a bolt segment carrying the count (one
+  // bolt for fast, two for an interrupt).
   it("collapses a single ❖ into a bolt segment with count 1", () => {
     const result = tokenizeRulesText("❖ — 1●: Move this character.");
     expect(flatten(result).filter((s) => s.kind === "bolt")).toEqual([
@@ -210,16 +210,6 @@ describe("tokenizeRulesText", () => {
       char: "▸",
     });
     expect(reconstructText(result)).toBe("▸When played:");
-  });
-
-  it("identifies the fast/lightning symbol ↯ when surrounded by spaces", () => {
-    const result = tokenizeRulesText("Cast at ↯ speed.");
-    expect(collectSymbols(result)).toContainEqual({
-      kind: "symbol",
-      symbol: "fast",
-      char: "↯",
-    });
-    expect(reconstructText(result)).toBe("Cast at ↯ speed.");
   });
 
   // Icon line-break protection. Every inline icon stays on one line with the
@@ -325,23 +315,6 @@ describe("tokenizeRulesText", () => {
         ],
       });
     }
-  });
-
-  it("groups ↯ with a directly attached lowercase keyword and wraps as term", () => {
-    const entry = BARE_ENTRIES[0];
-    const keyword = entry.term.toLowerCase();
-    const result = tokenizeRulesText(`Your cards have ↯${keyword}.`);
-    expect(result).toEqual([
-      { kind: "text", value: "Your cards have " },
-      {
-        kind: "nobreak",
-        segments: [
-          { kind: "symbol", symbol: "fast", char: "↯" },
-          { kind: "term", word: keyword, entry },
-        ],
-      },
-      { kind: "text", value: "." },
-    ]);
   });
 
   // Glossary tokenization. The tokenizer wraps recognized keywords in `term`

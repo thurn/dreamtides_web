@@ -1,10 +1,19 @@
-import type { GlossaryEntry } from "../../../data/glossary";
+import {
+  GLOSSARY_IDS,
+  type GlossaryCatalogEntry,
+} from "../../../data/glossary";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
-import type {
-  InfoCardProps,
-  InfoCardTextProps,
-} from "../overlay/InfoCard";
-import { richText } from "./rich-text";
+import type { InfoCardProps, InfoCardTextProps } from "../overlay/InfoCard";
+import { richText, type RichTextDefinitionSymbol } from "./rich-text";
+
+const DEFINITION_SYMBOL_BY_ID: Readonly<
+  Partial<Record<string, RichTextDefinitionSymbol>>
+> = {
+  [GLOSSARY_IDS.fast]: "fast",
+  [GLOSSARY_IDS.interrupt]: "interrupt",
+  [GLOSSARY_IDS.exhaustCost]: "exhaust",
+  [GLOSSARY_IDS.nightTrigger]: "trigger",
+};
 
 /**
  * Build the compact glossary card shared by semantic rules-text sources. Each
@@ -14,14 +23,20 @@ import { richText } from "./rich-text";
  * without competing with the source card's semantic rules-text colors.
  */
 export function glossaryDefinitionsCardModel(
-  entries: readonly GlossaryEntry[],
+  entries: readonly GlossaryCatalogEntry[],
 ): InfoCardTextProps | null {
   if (entries.length === 0) {
     return null;
   }
   return {
     variant: "text",
-    body: richText.definitions(entries),
+    body: richText.definitions(
+      entries.map((entry) => ({
+        term: entry.term,
+        definition: entry.definition,
+        symbol: DEFINITION_SYMBOL_BY_ID[entry.id],
+      })),
+    ),
   };
 }
 

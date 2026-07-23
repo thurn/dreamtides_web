@@ -1,4 +1,9 @@
-import { lookupGlossaryTerm, type GlossaryEntry } from "./glossary";
+import {
+  glossaryEntry,
+  GLOSSARY_IDS,
+  lookupGlossaryTerm,
+  type GlossaryCatalogEntry,
+} from "./glossary";
 
 /**
  * Reusable utility that scans a string for glossary terms and returns the
@@ -7,12 +12,14 @@ import { lookupGlossaryTerm, type GlossaryEntry } from "./glossary";
  * Tokenization rules:
  *   * Words are runs of ASCII letters (`[A-Za-z]+`), optionally led by the
  *     trigger arrow `▸` when it is glued to the word (e.g. `▸Materialized`).
- *     The fast `↯`, interrupt `❖❖`, and exhaust-cost `☪` glyphs are also
- *     glossary tokens. A single activated-ability `❖` is not an interrupt.
- *     Other punctuation, numbers, and symbols split runs apart, so `bane,` and
- *     `bane.` both yield the bare word `bane`. An arrow-prefixed token resolves
- *     to an arrow-specific glossary entry when one exists (`▸Materialized`),
- *     otherwise to the bare keyword (`▸Dawn` → `Dawn`).
+ *     The single-bolt fast marker `❖`, double-bolt interrupt marker `❖❖`, and
+ *     exhaust-cost `☪` glyph are also glossary tokens. Other punctuation,
+ *     numbers, and symbols split runs apart, so `bane,` and `bane.` both yield
+ *     the bare word `bane`. An arrow-prefixed token resolves to an
+ *     arrow-specific glossary entry when one exists (`▸Materialized`),
+ *     otherwise to the bare keyword (`▸Dawn` → `Dawn`). `▸Night` resolves to
+ *     its symbol-only Night definition without treating prose uses of “night”
+ *     as the trigger.
  *   * Matching is case-insensitive. The glossary's variant list also covers
  *     simple plural / past-tense forms (e.g. `banes`, `transfigured`), so
  *     casual prose like "transfigure your banes" matches the `Transfigure`
@@ -34,24 +41,38 @@ import { lookupGlossaryTerm, type GlossaryEntry } from "./glossary";
  */
 
 /**
- * Rules-text forms that can own glossary definitions. Match the double-bolt
- * interrupt before scanning words; a lone `❖` deliberately remains invisible
- * to the glossary.
+ * Rules-text forms that can own glossary definitions. The double-bolt
+ * interrupt must match before the single-bolt fast marker.
  */
-const GLOSSARY_FORM_RE = /❖❖|↯|☪|▸?[A-Za-z]+/g;
+const GLOSSARY_FORM_RE = /❖❖|❖|☪|▸?[A-Za-z]+/g;
+
+const SYMBOL_ENTRY_IDS: Readonly<Record<string, string>> = {
+  "❖": GLOSSARY_IDS.fast,
+  "❖❖": GLOSSARY_IDS.interrupt,
+  "☪": GLOSSARY_IDS.exhaustCost,
+  "▸night": GLOSSARY_IDS.nightTrigger,
+};
+
+function entryForForm(form: string): GlossaryCatalogEntry | undefined {
+  const symbolEntryId = SYMBOL_ENTRY_IDS[form.toLocaleLowerCase()];
+  if (symbolEntryId !== undefined) {
+    return glossaryEntry(symbolEntryId);
+  }
+  return lookupGlossaryTerm(form);
+}
 
 /**
  * Returns the glossary entries referenced in `text`, in first-occurrence
  * order, deduplicated.
  */
-export function extractGlossaryTerms(text: string): GlossaryEntry[] {
+export function extractGlossaryTerms(text: string): GlossaryCatalogEntry[] {
   if (text.length === 0) {
     return [];
   }
-  const seen = new Set<GlossaryEntry>();
-  const ordered: GlossaryEntry[] = [];
+  const seen = new Set<GlossaryCatalogEntry>();
+  const ordered: GlossaryCatalogEntry[] = [];
   for (const match of text.matchAll(GLOSSARY_FORM_RE)) {
-    const entry = lookupGlossaryTerm(match[0]);
+    const entry = entryForForm(match[0]);
     if (entry === undefined) {
       continue;
     }

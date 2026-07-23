@@ -20,12 +20,11 @@ import { GlossaryTerm } from "./GlossaryTerm";
  * Renders rules text with:
  *   - the energy `●` glyph swapped for the blue flame (`bxf bx-fire-alt`)
  *   - the spark `✦` glyph swapped for the amber-gold sparkle mark
- *   - the activated-ability marker `❖` (and interrupt `❖❖`) swapped for the
- *     filled lightning bolt(s) shown before the card name in the title bar
+ *   - the fast marker `❖` (and interrupt `❖❖`) swapped for the filled
+ *     lightning bolt(s) shown before the card name in the title bar
  *   - the points `⍟`, lunar `☪`, store `⧗`, and trigger `▸` glyphs swapped
  *     for their filled marks (star-circle, moon, hourglass, caret), the
  *     trigger keeping its muted slate
- *   - the fast `↯` glyph colored
  *   - glossary terms rendered as plain prose by default, with a curated set
  *     of keyword effects and action verbs (`dissolve`, `banish`, `prevent`,
  *     `foresee`, `veil`, `unstoppable`, `reclaim`, …) emphasized in the spark
@@ -49,7 +48,6 @@ import { GlossaryTerm } from "./GlossaryTerm";
  */
 const SYMBOL_COLORS: Readonly<Record<string, string>> = {
   trigger: "#94a3b8",
-  fast: "#facc15",
 };
 
 /**
@@ -254,7 +252,10 @@ function renderSegment(
     // stays on one line; the icon's mass sits low in its em box, so a small
     // upward nudge centers it on the text.
     return (
-      <span key={key} style={{ color: ESSENCE_TEXT_COLOR, whiteSpace: "nowrap" }}>
+      <span
+        key={key}
+        style={{ color: ESSENCE_TEXT_COLOR, whiteSpace: "nowrap" }}
+      >
         {segment.amount !== null ? segment.amount : null}
         <i
           aria-label="essence"
@@ -279,7 +280,16 @@ function renderSegment(
     // set of keyword effects and action verbs carries a spark-amber emphasis so
     // the eye still catches them.
     return options.interactiveTerms !== true ? (
-      <span key={key} style={isHighlightedRulesTextTerm(segment.word) ? HIGHLIGHTED_TERM_STYLE : undefined}>{segment.word}</span>
+      <span
+        key={key}
+        style={
+          isHighlightedRulesTextTerm(segment.word)
+            ? HIGHLIGHTED_TERM_STYLE
+            : undefined
+        }
+      >
+        {segment.word}
+      </span>
     ) : (
       <GlossaryTerm
         key={key}
@@ -302,16 +312,16 @@ function renderSegment(
     );
   }
   if (segment.kind === "bolt") {
-    // The activated-ability marker renders as the filled lightning bolt — the
-    // same white mark the title bar shows before the card name. A single bolt
-    // opens a normal activated ability; an interrupt draws two bolts pulled
-    // together so they almost touch (matching the title-bar treatment). The
-    // bolt's mass sits low in its em box, so a small upward nudge centers it on
-    // the text. The whole group stays on one line.
+    // The fast/interrupt marker renders as the filled lightning bolt — the same
+    // white mark the title bar shows before the card name. A fast ability draws
+    // one bolt; an interrupt draws two bolts pulled together so they almost
+    // touch (matching the title-bar treatment). The bolt's mass sits low in its
+    // em box, so a small upward nudge centers it on the text. The whole group
+    // stays on one line.
     return (
       <span
         key={key}
-        aria-label={segment.count >= 2 ? "interrupt" : "activated ability"}
+        aria-label={segment.count >= 2 ? "interrupt" : "fast"}
         style={{ color: BOLT_ICON_COLOR, whiteSpace: "nowrap" }}
       >
         {Array.from({ length: segment.count }, (_, index) => (
@@ -504,9 +514,7 @@ function renderParagraph(
  */
 export function renderRulesTextInline(text: string): ReactNode[] {
   return splitRulesTextIntoParagraphs(text).flatMap((paragraph, index) => [
-    ...(index === 0
-      ? []
-      : [<span key={`separator-${String(index)}`}> </span>]),
+    ...(index === 0 ? [] : [<span key={`separator-${String(index)}`}> </span>]),
     ...renderParagraph(paragraph, index, { interactiveTerms: false }),
   ]);
 }

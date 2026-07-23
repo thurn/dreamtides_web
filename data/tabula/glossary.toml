@@ -25,9 +25,9 @@ variants = [ "dawn" ]
 [[entries]]
 id = "night-trigger"
 category = "Triggers & Timing"
-term = "▸Night"
+term = "Night"
 definition = "Triggers at the end of your turn."
-matches-rules-text = true
+matches-rules-text = false
 variants = []
 
 [[entries]]
@@ -131,24 +131,24 @@ id = "fast"
 category = "Keywords"
 term = "Fast"
 definition = "You may use this ability at the end of either player's turn."
-matches-rules-text = true
-variants = [ "↯" ]
+matches-rules-text = false
+variants = []
 
 [[entries]]
 id = "interrupt"
 category = "Keywords"
 term = "Interrupt"
 definition = "You may use this ability in response to an opponent card or ability, or at the end of either player's turn."
-matches-rules-text = true
-variants = [ "❖❖" ]
+matches-rules-text = false
+variants = []
 
 [[entries]]
 id = "exhaust-cost"
 category = "Keywords"
 term = "Exhaust Cost"
 definition = "You may exhaust this character to activate an ability instead of challenging this turn."
-matches-rules-text = true
-variants = [ "☪" ]
+matches-rules-text = false
+variants = []
 
 [[entries]]
 id = "awakened"

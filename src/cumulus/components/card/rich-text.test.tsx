@@ -49,4 +49,37 @@ describe("RichText", () => {
     expect(markup).not.toContain("--cv-rules-highlight-color");
     expect(markup).not.toContain("data-rules-text-paragraph");
   });
+
+  it("renders the defined timing and cost symbols beside their glossary labels", () => {
+    const markup = renderToStaticMarkup(
+      <RichTextView
+        value={richText.definitions([
+          { term: "Fast", definition: "Fast definition.", symbol: "fast" },
+          {
+            term: "Interrupt",
+            definition: "Interrupt definition.",
+            symbol: "interrupt",
+          },
+          {
+            term: "Exhaust Cost",
+            definition: "Exhaust definition.",
+            symbol: "exhaust",
+          },
+          {
+            term: "Night",
+            definition: "Night definition.",
+            symbol: "trigger",
+          },
+        ])}
+      />,
+    );
+
+    expect(markup.match(/bxf bx-bolt/g)).toHaveLength(3);
+    expect(markup.match(/bxf bx-moon/g)).toHaveLength(1);
+    expect(markup.match(/bxf bx-caret-right/g)).toHaveLength(1);
+    expect(markup).toContain('data-definition-symbol="fast"');
+    expect(markup).toContain('data-definition-symbol="interrupt"');
+    expect(markup).toContain('data-definition-symbol="exhaust"');
+    expect(markup).toContain('data-definition-symbol="trigger"');
+  });
 });

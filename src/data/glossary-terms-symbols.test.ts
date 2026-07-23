@@ -1,49 +1,66 @@
 import { describe, expect, it, vi } from "vitest";
 
 const FIXTURES = vi.hoisted(() => ({
-  fast: { term: "Fast", definition: "Fast definition." },
-  interrupt: { term: "Interrupt", definition: "Interrupt definition." },
+  fast: { id: "fast", term: "Fast", definition: "Fast definition." },
+  interrupt: {
+    id: "interrupt",
+    term: "Interrupt",
+    definition: "Interrupt definition.",
+  },
   exhaustCost: {
+    id: "exhaust-cost",
     term: "Exhaust Cost",
     definition: "Exhaust cost definition.",
+  },
+  night: {
+    id: "night-trigger",
+    term: "Night",
+    definition: "Night definition.",
   },
 }));
 
 vi.mock("./glossary", () => ({
-  lookupGlossaryTerm: (form: string) => {
-    switch (form.toLocaleLowerCase()) {
-      case "↯":
-      case "fast":
-        return FIXTURES.fast;
-      case "❖❖":
-      case "interrupt":
-        return FIXTURES.interrupt;
-      case "☪":
-        return FIXTURES.exhaustCost;
-      default:
-        return undefined;
-    }
+  GLOSSARY_IDS: {
+    fast: "fast",
+    interrupt: "interrupt",
+    exhaustCost: "exhaust-cost",
+    nightTrigger: "night-trigger",
   },
+  glossaryEntry: (id: string) =>
+    [
+      FIXTURES.fast,
+      FIXTURES.interrupt,
+      FIXTURES.exhaustCost,
+      FIXTURES.night,
+    ].find((entry) => entry.id === id),
+  lookupGlossaryTerm: () => undefined,
 }));
 
 import { extractGlossaryTerms } from "./glossary-terms";
 
 describe("extractGlossaryTerms symbol forms", () => {
-  it("extracts fast, interrupt, and exhaust-cost glyphs in reading order", () => {
-    expect(
-      extractGlossaryTerms("↯fast, then ❖❖ – 2●, ☪: Draw a card."),
-    ).toEqual([FIXTURES.fast, FIXTURES.interrupt, FIXTURES.exhaustCost]);
-  });
-
-  it("does not treat a single activated-ability bolt as an interrupt", () => {
-    expect(extractGlossaryTerms("❖ – ☪: Draw a card.")).toEqual([
+  it("extracts one-bolt fast, two-bolt interrupt, and exhaust cost in reading order", () => {
+    expect(extractGlossaryTerms("❖ – Draw. ❖❖ – 2●, ☪: Draw again.")).toEqual([
+      FIXTURES.fast,
+      FIXTURES.interrupt,
       FIXTURES.exhaustCost,
     ]);
   });
 
-  it("deduplicates glyph and word forms of the same entry", () => {
-    expect(extractGlossaryTerms("↯fast. Fast abilities stay fast.")).toEqual([
+  it("treats a single bolt as fast rather than interrupt", () => {
+    expect(extractGlossaryTerms("❖ – ☪: Draw a card.")).toEqual([
       FIXTURES.fast,
+      FIXTURES.exhaustCost,
+    ]);
+  });
+
+  it("does not treat the prose word fast as a glossary form", () => {
+    expect(extractGlossaryTerms("Fast abilities stay fast.")).toEqual([]);
+  });
+
+  it("maps the Night trigger without matching prose uses of night", () => {
+    expect(extractGlossaryTerms("At night, wait. ▸Night: Draw.")).toEqual([
+      FIXTURES.night,
     ]);
   });
 });

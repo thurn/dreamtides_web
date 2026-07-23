@@ -10,13 +10,20 @@
 
 import { Fragment, type ReactElement, type ReactNode } from "react";
 import { token } from "../../primitives/tokens";
+import { GLYPHS, type Glyph } from "../../primitives/glyph";
+import { GlowIcon } from "../controls/GlowIcon";
 import { renderRulesText } from "./RulesText";
+
+export type RichTextDefinitionSymbol =
+  "fast" | "interrupt" | "exhaust" | "trigger";
 
 export interface RichTextDefinition {
   /** Canonical glossary term shown as the compact row label. */
   readonly term: string;
   /** Rules-aware explanatory copy shown after the label. */
   readonly definition: string;
+  /** Optional rules symbol rendered directly before the glossary term. */
+  readonly symbol?: RichTextDefinitionSymbol;
 }
 
 /**
@@ -54,13 +61,61 @@ export const richText = {
   inline: (...parts: RichText[]): RichText => ({ kind: "inline", parts }),
   note: (text: string): RichText => ({ kind: "note", text }),
   stack: (...parts: RichText[]): RichText => ({ kind: "stack", parts }),
-  definitions: (
-    entries: readonly RichTextDefinition[],
-  ): RichText => ({ kind: "definitions", entries }),
+  definitions: (entries: readonly RichTextDefinition[]): RichText => ({
+    kind: "definitions",
+    entries,
+  }),
 };
 
 /** Vertical gap (px) between stacked rich-text parts. */
 const STACK_GAP = 8;
+
+function definitionSymbolSpec(symbol: RichTextDefinitionSymbol): {
+  readonly glyph: Glyph;
+  readonly count: number;
+} {
+  switch (symbol) {
+    case "fast":
+      return { glyph: GLYPHS.bolt, count: 1 };
+    case "interrupt":
+      return { glyph: GLYPHS.bolt, count: 2 };
+    case "exhaust":
+      return { glyph: GLYPHS.exhaust, count: 1 };
+    case "trigger":
+      return { glyph: GLYPHS.caretRight, count: 1 };
+  }
+}
+
+function DefinitionSymbol({
+  symbol,
+}: {
+  readonly symbol: RichTextDefinitionSymbol;
+}) {
+  const { glyph, count } = definitionSymbolSpec(symbol);
+  return (
+    <span
+      data-definition-symbol={symbol}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        verticalAlign: "middle",
+        marginRight: token("--space-1"),
+      }}
+    >
+      {Array.from({ length: count }, (_, index) => (
+        <span
+          key={index}
+          style={{
+            display: "inline-flex",
+            marginLeft: index === 0 ? undefined : "-0.35em",
+          }}
+        >
+          <GlowIcon iconClass={glyph} color="text-primary" />
+        </span>
+      ))}
+    </span>
+  );
+}
 
 /**
  * Renders a {@link RichText} value to nodes. Pure. `key` is applied to the
@@ -126,6 +181,9 @@ export function renderRichText(
                   fontWeight: 700,
                 }}
               >
+                {entry.symbol === undefined ? null : (
+                  <DefinitionSymbol symbol={entry.symbol} />
+                )}
                 {entry.term}
               </dt>
               <dd style={{ display: "inline", margin: 0 }}>

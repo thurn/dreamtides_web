@@ -6,7 +6,7 @@ import type { CumulusComponent } from "../registry";
 
 const SAMPLE_DREAMCALLER_ID = "11111111-1111-4111-8111-111111111111";
 const SAMPLE_ABILITY = [
-  "↯fast",
+  "❖ – Draw a card.",
   "❖❖ – 2●, ☪: Return a card from your void.",
   "▸Night: Draw a card.",
 ].join("\n");

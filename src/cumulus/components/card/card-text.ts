@@ -3,13 +3,7 @@ import { lookupGlossaryTerm, type GlossaryEntry } from "../../../data/glossary";
 
 /** Symbol types recognized in card rules text. */
 export type SymbolType =
-  | "energy"
-  | "spark"
-  | "trigger"
-  | "fast"
-  | "points"
-  | "lunar"
-  | "store";
+  "energy" | "spark" | "trigger" | "points" | "lunar" | "store";
 
 /**
  * A parsed segment of rules text.
@@ -18,8 +12,7 @@ export type SymbolType =
  * - `symbol` is a recognized glyph rendered with its own styling. Most are
  *   swapped for a Boxicons mark by the renderer: energy → flame, spark →
  *   sparkle, points `⍟` → star-circle, lunar `☪` → moon, store `⧗` →
- *   hourglass, trigger `▸` → caret. The fast bolt `↯` renders as a colored
- *   character.
+ *   hourglass, trigger `▸` → caret.
  * - `nobreak` groups inner segments that must render on the same line. The
  *   renderer wraps them in a `white-space: nowrap` span. A post-tokenization
  *   pass (`bindIconsToText`) wraps every inline icon together with the text it
@@ -31,10 +24,10 @@ export type SymbolType =
  * - `sparkPip` represents the spark glyph followed immediately by an integer
  *   (e.g. `⍏2`). The renderer draws this as a circled-number `PipBadge` so
  *   inline references match the spark stat badge on character cards.
- * - `bolt` represents the activated-ability marker `❖` (and the interrupt
- *   marker `❖❖`). The renderer draws `count` filled lightning bolts, the same
- *   mark shown before the card name in the title bar — one bolt for a normal
- *   activated ability, two almost-touching bolts for an interrupt.
+ * - `bolt` represents the fast marker `❖` (and the interrupt marker `❖❖`).
+ *   The renderer draws `count` filled lightning bolts, the same mark shown
+ *   before the card name in the title bar — one bolt for fast, two
+ *   almost-touching bolts for an interrupt.
  * - `essence` represents the essence currency. `amount` carries the number
  *   written in front of it (`"50"` for `50 essence`) or is `null` for a bare
  *   reference (`the essence you gain`). The renderer draws the amount glued
@@ -62,7 +55,6 @@ const SYMBOL_MAP: Readonly<Record<string, SymbolType>> = {
   "⍏": "spark",
   "✦": "spark",
   "▸": "trigger",
-  "↯": "fast",
   // Points scored toward winning (rendered as the filled star-circle).
   "⍟": "points",
   // The lunar activation cost (rendered as the filled moon).
@@ -72,12 +64,11 @@ const SYMBOL_MAP: Readonly<Record<string, SymbolType>> = {
 };
 
 const TRIGGER_CHAR = "▸";
-const FAST_CHAR = "↯";
 const SPARK_CHAR = "⍏";
 
 /**
- * Activated-ability marker. A single `❖` opens a normal activated ability; two
- * `❖❖` open an interrupt. The renderer collapses a run of these into a single
+ * Ability timing marker. A single `❖` identifies a fast ability; two `❖❖`
+ * identify an interrupt. The renderer collapses a run of these into a single
  * `bolt` segment carrying the count so it can draw one or two filled lightning
  * bolts (the same mark the title bar shows before the card name).
  */
@@ -99,12 +90,6 @@ const SPARK_PIP_RE = /^⍏(\d+)/;
  * renderer.
  */
 const TRIGGER_GROUP_RE = /^▸ ([A-Z][A-Za-z]*)([:,])?/;
-
-/**
- * Matches a fast keyword group: the `↯` bolt directly attached to a
- * lowercase word (e.g. `↯fast`). The whole match is kept on one line.
- */
-const FAST_GROUP_RE = /^↯([a-z]+)/;
 
 /**
  * Matches the next "word" at position 0 of the slice — a run of ASCII
@@ -186,10 +171,10 @@ function splitSiteNames(text: string): TextSegment[] {
 
 /**
  * Splits the contents of a `nobreak` keyword text fragment (e.g. ` Judgment:`
- * or ` Judgment` or `fast`) into a leading whitespace prefix, the bare word,
- * and a trailing punctuation suffix. Used so the keyword itself can be
- * tokenized as a glossary `term` while keeping the surrounding whitespace
- * and punctuation intact.
+ * or ` Judgment`) into a leading whitespace prefix, the bare word, and a
+ * trailing punctuation suffix. Used so the keyword itself can be tokenized as
+ * a glossary `term` while keeping the surrounding whitespace and punctuation
+ * intact.
  */
 function splitKeywordFragment(fragment: string): {
   prefix: string;
@@ -425,7 +410,7 @@ function groupAtoms(atoms: Atom[], protectedSet: Set<number>): TextSegment[] {
  * Keeps every inline icon glued to the text it reads with so it never wraps to
  * a line by itself. See `protectedSpaces` for which spaces are held and
  * `groupAtoms` for how runs become `nobreak` segments. Existing `nobreak`
- * groups (the trigger/fast keyword groups) pass through untouched.
+ * trigger groups pass through untouched.
  */
 function bindIconsToText(segments: TextSegment[]): TextSegment[] {
   const atoms = toAtoms(segments);
@@ -512,23 +497,6 @@ function scanSegments(text: string): TextSegment[] {
       }
     }
 
-    if (char === FAST_CHAR) {
-      const rest = text.slice(i);
-      const match = FAST_GROUP_RE.exec(rest);
-      if (match) {
-        flushBufferAndExtractTerms();
-        segments.push({
-          kind: "nobreak",
-          segments: [
-            { kind: "symbol", symbol: "fast", char: FAST_CHAR },
-            ...maybeWrapKeyword(match[1], false),
-          ],
-        });
-        i += match[0].length;
-        continue;
-      }
-    }
-
     if (char === SPARK_CHAR) {
       const rest = text.slice(i);
       const match = SPARK_PIP_RE.exec(rest);
@@ -542,7 +510,8 @@ function scanSegments(text: string): TextSegment[] {
 
     if (char === ACTIVATED_CHAR) {
       // Collapse a run of `❖` into one bolt segment carrying the count, so a
-      // single marker draws one bolt and the interrupt marker `❖❖` draws two.
+      // single fast marker draws one bolt and the interrupt marker `❖❖` draws
+      // two.
       flushBufferAndExtractTerms();
       let count = 0;
       while (text[i] === ACTIVATED_CHAR) {
@@ -599,7 +568,9 @@ export function tokenizeRulesText(text: string): TextSegment[] {
 }
 
 /** Format the card type and subtype line. */
-export function formatTypeLine(card: Pick<CardData, "cardType" | "subtype">): string {
+export function formatTypeLine(
+  card: Pick<CardData, "cardType" | "subtype">,
+): string {
   if (card.cardType === "Character") {
     if (card.subtype) {
       return card.subtype;

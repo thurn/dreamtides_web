@@ -27,9 +27,8 @@ export const INFO_CARD_GLOSSARY: readonly GlossaryCatalogEntry[] =
   parseGlossarySource(glossarySource);
 
 /** Rules-text entries used by the card keyword tokenizer. */
-export const GLOSSARY: readonly GlossaryCatalogEntry[] = INFO_CARD_GLOSSARY.filter(
-  (entry) => entry.matchesRulesText,
-);
+export const GLOSSARY: readonly GlossaryCatalogEntry[] =
+  INFO_CARD_GLOSSARY.filter((entry) => entry.matchesRulesText);
 
 const ENTRY_BY_ID = new Map(
   INFO_CARD_GLOSSARY.map((entry) => [entry.id, entry]),
@@ -40,6 +39,10 @@ export const GLOSSARY_IDS = {
   energyCost: "energy-cost",
   spark: "spark",
   exhausted: "exhausted",
+  fast: "fast",
+  interrupt: "interrupt",
+  exhaustCost: "exhaust-cost",
+  nightTrigger: "night-trigger",
   essence: "essence",
   startingEssence: "starting-essence",
   tides: "tides",
@@ -71,7 +74,9 @@ export function glossaryEntry(id: string): GlossaryCatalogEntry | undefined {
 export function requireGlossaryEntry(id: string): GlossaryCatalogEntry {
   const entry = glossaryEntry(id);
   if (entry === undefined) {
-    throw new Error(`Missing glossary entry "${id}" in data/tabula/glossary.toml.`);
+    throw new Error(
+      `Missing glossary entry "${id}" in data/tabula/glossary.toml.`,
+    );
   }
   return entry;
 }
@@ -80,21 +85,24 @@ export function requireGlossaryEntry(id: string): GlossaryCatalogEntry {
  * Lookup index from a lowercase rules-text form to its glossary entry. Each
  * entry is keyed by its term plus any extra variants.
  */
-export const GLOSSARY_INDEX: Readonly<Record<string, GlossaryEntry>> = (() => {
-  const index: Record<string, GlossaryEntry> = {};
-  for (const entry of GLOSSARY) {
-    for (const form of [entry.term, ...entry.variants]) {
-      index[form.toLocaleLowerCase()] = entry;
+export const GLOSSARY_INDEX: Readonly<Record<string, GlossaryCatalogEntry>> =
+  (() => {
+    const index: Record<string, GlossaryCatalogEntry> = {};
+    for (const entry of GLOSSARY) {
+      for (const form of [entry.term, ...entry.variants]) {
+        index[form.toLocaleLowerCase()] = entry;
+      }
     }
-  }
-  return index;
-})();
+    return index;
+  })();
 
 /** Trigger arrow that can prefix a rules keyword. */
 export const TRIGGER_ARROW = "▸";
 
 /** Resolve a rules-text word by canonical term or variant. */
-export function lookupGlossaryTerm(word: string): GlossaryEntry | undefined {
+export function lookupGlossaryTerm(
+  word: string,
+): GlossaryCatalogEntry | undefined {
   const key = word.toLocaleLowerCase();
   const direct = GLOSSARY_INDEX[key];
   if (direct !== undefined) return direct;

@@ -35,9 +35,7 @@ afterEach(() => {
 
 describe("RulesText", () => {
   it("renders recognized glossary terms as plain text without an underline", () => {
-    const { container, root } = mount(
-      <RulesText text="Reclaim this card." />,
-    );
+    const { container, root } = mount(<RulesText text="Reclaim this card." />);
 
     // The "Reclaim" word renders as plain prose; its definition surfaces in the
     // card's hover-help panel rather than as a per-word underline/tooltip.
@@ -74,7 +72,9 @@ describe("RulesText", () => {
   // light-box surface (the figment frame) can override it, with the shared
   // constant as the fallback everywhere else, so the two cannot drift apart.
   it("colors the inline energy flame with ENERGY_PIP_COLOR (matches the energy-cost pip)", () => {
-    const { container, root } = mount(<RulesText text="Pay ●2 to draw a card." />);
+    const { container, root } = mount(
+      <RulesText text="Pay ●2 to draw a card." />,
+    );
 
     const flame = container.querySelector<HTMLElement>("i.bxf.bx-fire-alt");
     expect(flame).not.toBeNull();
@@ -94,10 +94,10 @@ describe("RulesText", () => {
     });
   });
 
-  // The activated-ability marker `❖` renders as the filled lightning bolt
-  // (the same `bxf bx-bolt` mark the title bar shows before the card name), not
-  // the literal diamond character.
-  it("renders the activated-ability marker ❖ as the boxicons bolt icon", () => {
+  // The fast marker `❖` renders as the filled lightning bolt (the same
+  // `bxf bx-bolt` mark the title bar shows before the card name), not the
+  // literal diamond character.
+  it("renders the fast marker ❖ as one boxicons bolt icon", () => {
     const { container, root } = mount(
       <RulesText text="❖ – 1●: Move this character." />,
     );
