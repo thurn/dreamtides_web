@@ -1164,7 +1164,7 @@ card-number = 61
 art = { x = 0.597, y = 1, scale = 1.07 }
 
 [[cards]]
-name = "Weblight Waif"
+name = "Cloudtop Chronicler"
 mtg-name = "Pinnacle Monk // Mystic Peak"
 id = "3811a0a2-66af-4c06-b179-948dfa9b2ee3"
 rendered-text = "▸Materialized: Return an event from your void to your hand."
@@ -1175,10 +1175,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "July24"]
-image-number = 748956895
+tags = ["Art Rework", "July24", "Art OK"]
+image-number = 700253824
 art-owned = false
 card-number = 62
+art = { x = 0, y = 1, scale = 1.67 }
 
 [[cards]]
 name = "Scuttled Fortune"
@@ -4998,21 +4999,22 @@ card-number = 267
 art = { x = 0.057, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Doorlight Foundling"
+name = "Prism Caller"
 mtg-name = "Coiling Oracle"
 id = "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e"
 rendered-text = "▸Materialized: If the top card of your deck is a ≤2● cost character, materialize it. Otherwise, draw that card."
 energy-cost = 2
 card-type = "Character"
-subtype = "Child"
+subtype = "Explorer"
 rarity = ""
 is-fast = true
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July24"]
-image-number = 2033123273
+tags = ["Art Rework", "July24", "Art OK"]
+image-number = 2287054241
 art-owned = false
 card-number = 268
+art = { x = 0, y = -0.152, scale = 1.87 }
 
 [[cards]]
 name = "Quiet Reflection"
@@ -6627,7 +6629,7 @@ card-number = 353
 art = { x = -0.126, y = -0.131, scale = 1.17 }
 
 [[cards]]
-name = "Steel Abomination"
+name = "Veilpath Gatekeeper"
 mtg-name = "Slogurk, the Overslime"
 id = "cc21a902-e482-46c0-bf07-e04035f39190"
 rendered-text = "▸Materialized, Dissolved: Return a ≤2● cost character from your void to your hand."
@@ -6638,10 +6640,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "July24"]
-image-number = 1037215513
+tags = ["Art Rework", "July24", "Art OK"]
+image-number = 2285036623
 art-owned = false
 card-number = 354
+art = { x = -0.016, y = -0.683, scale = 2.27 }
 
 [[cards]]
 name = "Advance Gunner"

@@ -386,7 +386,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Fallen One
 - 1× Soulbinder
 - 1× Fragments of Vision
-- 1× Weblight Waif
+- 1× Cloudtop Chronicler
 - 1× Keeper of the Lightpath
 - 1× Graywatch
 - 1× Soulrender
@@ -1119,7 +1119,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Architect of Memory
 - 1× Weight of Memory
 - 1× Soulbinder
-- 1× Weblight Waif
+- 1× Cloudtop Chronicler
 - 1× Ancient Descent
 - 1× Shared Revelation
 - 1× Abyssal Plunge
@@ -1208,7 +1208,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Fallen One
 - 1× Soulbinder
 - 1× Fragments of Vision
-- 1× Weblight Waif
+- 1× Cloudtop Chronicler
 - 1× Keeper of the Lightpath
 - 1× Soulrender
 - 1× Unbroken
@@ -1311,7 +1311,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Fallen One
 - 1× Soulbinder
 - 1× Fragments of Vision
-- 1× Weblight Waif
+- 1× Cloudtop Chronicler
 - 1× Ancient Descent
 - 1× Unbroken
 - 1× Abyssal Plunge
@@ -2103,7 +2103,7 @@ Tide-fac-03 is an event-heavy (34 events, 11 characters) tide built around assem
 - 1× Stratospheric Voyage
 - 1× Call the Lost
 - 1× Sunken Radiance
-- 1× Weblight Waif
+- 1× Cloudtop Chronicler
 - 1× Ancient Descent
 - 1× The Ringleader
 - 1× Dreamscatter
@@ -2439,7 +2439,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Blooming Horror
 - 1× Soulbinder
 - 1× Fragments of Vision
-- 1× Weblight Waif
+- 1× Cloudtop Chronicler
 - 1× Shaper of Memory
 - 1× From the Barrow
 - 1× Reset
@@ -2801,7 +2801,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Blooming Horror
 - 1× Weight of Memory
 - 1× Fragments of Vision
-- 1× Weblight Waif
+- 1× Cloudtop Chronicler
 - 1× From the Barrow
 - 1× The Waking Titan
 - 1× Reset
@@ -3349,7 +3349,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Blooming Horror
 - 1× Soulbinder
 - 1× Fragments of Vision
-- 1× Weblight Waif
+- 1× Cloudtop Chronicler
 - 1× Shaper of Memory
 - 1× From the Barrow
 - 1× Reset

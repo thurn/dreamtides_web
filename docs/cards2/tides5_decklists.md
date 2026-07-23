@@ -550,7 +550,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Lurking Dread
 - 1× Shadowcaller
 - 1× Silent Mourner
-- 1× Steel Abomination
+- 1× Veilpath Gatekeeper
 - 1× The Rising God
 - 1× Overstory Explorer
 - 1× Memory Tracer
@@ -1122,7 +1122,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Architect of Memory
 - 1× Sage of the High Hills
 - 1× Soulbinder
-- 1× Weblight Waif
+- 1× Cloudtop Chronicler
 - 1× Unbroken
 - 1× Abyssal Plunge
 - 1× Shaper of Memory
@@ -1222,7 +1222,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Sage of the High Hills
 - 1× Fallen One
 - 1× Soulbinder
-- 1× Weblight Waif
+- 1× Cloudtop Chronicler
 - 1× Soulrender
 - 1× Abomination of Memory
 - 1× Unbroken
@@ -1327,7 +1327,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Sage of the High Hills
 - 1× Fallen One
 - 1× Soulbinder
-- 1× Weblight Waif
+- 1× Cloudtop Chronicler
 - 1× Graywatch
 - 1× Abomination of Memory
 - 1× Unbroken
@@ -2154,7 +2154,7 @@ Tide-fac-03 is an event-heavy (34 events, 11 characters) tide built around assem
 - 1× Stratospheric Voyage
 - 1× Call the Lost
 - 1× Sunken Radiance
-- 1× Weblight Waif
+- 1× Cloudtop Chronicler
 - 1× Abyssal Plunge
 - 1× From the Barrow
 - 1× Glimmerwood Scout
@@ -3040,7 +3040,7 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 1× Architect of Memory
 - 1× Blooming Horror
 - 1× Soulbinder
-- 1× Weblight Waif
+- 1× Cloudtop Chronicler
 - 1× From the Barrow
 - 1× The Ringleader
 - 1× Dreamscatter

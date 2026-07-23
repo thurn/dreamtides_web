@@ -970,7 +970,7 @@
       ]
     },
     "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e": {
-      "name": "Doorlight Foundling",
+      "name": "Prism Caller",
       "needs": [],
       "supports": [
         "cheap-characters"
@@ -4020,7 +4020,7 @@
       ]
     },
     "cc21a902-e482-46c0-bf07-e04035f39190": {
-      "name": "Steel Abomination",
+      "name": "Veilpath Gatekeeper",
       "needs": [
         {
           "theme": "void",
@@ -4748,7 +4748,7 @@
       ]
     },
     "3811a0a2-66af-4c06-b179-948dfa9b2ee3": {
-      "name": "Weblight Waif",
+      "name": "Cloudtop Chronicler",
       "needs": [
         {
           "theme": "events",
