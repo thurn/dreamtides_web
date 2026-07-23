@@ -1021,7 +1021,7 @@ describe("TutorialScreen", () => {
       "var(--t-tutorial-instruction)",
     );
     expect(paragraphs[0]?.textContent).toContain(
-      "Play characters and challenge with them to score",
+      "Play characters and challenge with them to score points () equal to their spark ()",
     );
     expect(paragraphs[1]?.textContent?.replace(/\s+/g, " ")).toContain(
       "Score 10 to win this dream battle",
@@ -1029,12 +1029,49 @@ describe("TutorialScreen", () => {
     const challenge = paragraphs[0]?.querySelector("strong");
     expect(challenge?.textContent).toBe("challenge");
     expect(challenge?.style.color).toBe("var(--spark)");
-    expect(dialog?.querySelectorAll('[aria-label="points"]')).toHaveLength(2);
+    expect(dialog?.querySelectorAll('[aria-label="points"]')).toHaveLength(1);
     expect(dialog?.querySelector('[aria-label="points"]')?.className).toContain(
       "bxf bx-star-circle",
     );
-    expect(dialog?.querySelector('[aria-label="spark"]')?.className).toContain(
-      "bxf bx-sparkle",
+    expect(
+      paragraphs[0]?.querySelector(
+        "[data-tutorial-how-to-play-points-term] i",
+      )?.className,
+    ).toContain("bxf bx-star-circle");
+    expect(
+      paragraphs[0]?.querySelector(
+        "[data-tutorial-how-to-play-spark-term] i",
+      )?.className,
+    ).toContain("bxf bx-sparkle");
+    expect(
+      paragraphs[0]?.querySelector(
+        "[data-tutorial-how-to-play-points-term] i",
+      )?.getAttribute("aria-hidden"),
+    ).toBe("true");
+    expect(
+      paragraphs[0]?.querySelector(
+        "[data-tutorial-how-to-play-spark-term] i",
+      )?.getAttribute("aria-hidden"),
+    ).toBe("true");
+    expect(
+      paragraphs[0]?.querySelector<HTMLElement>(
+        "[data-tutorial-how-to-play-spark-term]",
+      )?.style.alignItems,
+    ).toBe("center");
+    expect(
+      paragraphs[0]?.querySelector<HTMLElement>(
+        "[data-tutorial-how-to-play-spark-term]",
+      )?.textContent,
+    ).toBe("spark ()");
+    expect(
+      paragraphs[0]?.querySelector<HTMLElement>(
+        "[data-tutorial-how-to-play-points-term]",
+      )?.textContent,
+    ).toBe("points ()");
+    expect(
+      paragraphs[1]?.querySelector('[aria-label="points"]')?.className,
+    ).toContain(
+      "bxf bx-star-circle",
     );
     expect(
       paragraphs[1]?.querySelector('[aria-label="points"]')?.parentElement
@@ -1044,11 +1081,6 @@ describe("TutorialScreen", () => {
       paragraphs[1]?.querySelector<HTMLElement>('[aria-label="points"]')
         ?.parentElement?.style.columnGap,
     ).toBe("var(--space-2)");
-    expect(
-      paragraphs[0]?.querySelector<HTMLElement>(
-        "[data-tutorial-how-to-play-spark]",
-      )?.style.verticalAlign,
-    ).toBe("-0.14em");
     expect(
       document.querySelector("[data-tutorial-how-to-play-tweaks]"),
     ).toBeNull();

@@ -174,6 +174,11 @@ function TutorialHowToPlayDialog({
     columnGap: token("--space-2"),
     whiteSpace: "nowrap",
   } as const;
+  const parenthesizedIconStyle = {
+    display: "inline-flex",
+    alignItems: "center",
+    whiteSpace: "nowrap",
+  } as const;
 
   return (
     <GlassDialog
@@ -200,25 +205,29 @@ function TutorialHowToPlayDialog({
         <p style={paragraphStyle}>
           Play characters and{" "}
           <strong style={{ color: token("--spark") }}>challenge</strong> with
-          them to{" "}
-          <span style={inlineIconStyle}>
-            score
+          them to score{" "}
+          <span
+            data-tutorial-how-to-play-points-term=""
+            style={parenthesizedIconStyle}
+          >
+            points (
             <GlowIcon
               iconClass={GLYPHS.points}
               color="text-primary"
-              title="points"
             />
+            )
           </span>{" "}
           equal to their{" "}
           <span
-            data-tutorial-how-to-play-spark=""
-            style={{ display: "inline-flex", verticalAlign: "-0.14em" }}
+            data-tutorial-how-to-play-spark-term=""
+            style={parenthesizedIconStyle}
           >
+            spark (
             <GlowIcon
               iconClass={GLYPHS.sparkInline}
               color="spark"
-              title="spark"
             />
+            )
           </span>
           .
         </p>
