@@ -32,6 +32,7 @@ describe("glossary", () => {
     const ids = [
       GLOSSARY_IDS.energyCost,
       GLOSSARY_IDS.spark,
+      GLOSSARY_IDS.exhausted,
       GLOSSARY_IDS.essence,
       GLOSSARY_IDS.startingEssence,
       GLOSSARY_IDS.tides,

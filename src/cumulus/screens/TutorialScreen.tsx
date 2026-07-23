@@ -799,7 +799,11 @@ function TutorialOpponentCardPlay({
       }}
     >
       {reduceMotion ? (
-        <GameCard model={card.model} testId="tutorial-opponent-card-reveal" />
+        <GameCard
+          model={card.model}
+          exhausted={card.exhausted}
+          testId="tutorial-opponent-card-reveal"
+        />
       ) : (
         <div style={{ position: "absolute", inset: 0 }}>
           <motion.div
@@ -850,6 +854,7 @@ function TutorialOpponentCardPlay({
               >
                 <GameCard
                   model={card.model}
+                  exhausted={card.exhausted}
                   testId="tutorial-opponent-card-reveal"
                 />
               </div>
@@ -878,6 +883,7 @@ function TutorialOpponentCardPlay({
           >
             <GameCard
               model={card.model}
+              exhausted={card.exhausted}
               presentation="battlefield"
               testId="tutorial-opponent-card-battlefield"
             />

@@ -105,6 +105,53 @@ describe("GameCard reveal contract", () => {
     act(() => root.unmount());
   });
 
+  it("stacks the glossary-backed exhausted status before rules-text definitions", async () => {
+    const { container, root } = mount(
+      <GameCard
+        model={model(card({ renderedText: "Discard a bane." }))}
+        exhausted
+      />,
+    );
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    const description = document.getElementById(
+      source?.getAttribute("aria-describedby") ?? "",
+    )?.textContent ?? "";
+    expect(description).toContain("Exhausted");
+    expect(description).toContain(
+      "This character cannot move or use ☪ abilities until next turn",
+    );
+    expect(description.indexOf("Exhausted")).toBeLessThan(
+      description.indexOf("Bane"),
+    );
+
+    act(() => {
+      source?.dispatchEvent(
+        pointer("pointerover", { pointerType: "mouse", pointerId: 1 }),
+      );
+    });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    remeasure();
+    await vi.waitFor(() =>
+      expect(
+        document.querySelectorAll('[data-cumulus-reveal-card="secondary"]'),
+      ).toHaveLength(2),
+    );
+    const secondaries = [
+      ...document.querySelectorAll<HTMLElement>(
+        '[data-cumulus-reveal-card="secondary"]',
+      ),
+    ];
+    expect(secondaries[0]?.textContent).toContain("Exhausted");
+    expect(secondaries[0]?.querySelectorAll("i.bxf.bx-moon")).toHaveLength(2);
+    expect(secondaries[1]?.textContent).toContain("Bane");
+
+    act(() => root.unmount());
+  });
+
   it("shows an authored figment card beyond glossary definitions on desktop", async () => {
     vi.mocked(extractMaterializedFigmentPreviews).mockReturnValue([{
       titleBar: false,

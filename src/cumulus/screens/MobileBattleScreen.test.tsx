@@ -336,6 +336,15 @@ describe("MobileBattleScreen", () => {
       battlefield?.querySelector<HTMLElement>("[data-battle-card-motion]")
         ?.style.filter,
     ).toContain("grayscale");
+    const battlefieldDescription = document.getElementById(
+      battlefield
+        ?.querySelector<HTMLElement>("[data-game-card-source]")
+        ?.getAttribute("aria-describedby") ?? "",
+    )?.textContent ?? "";
+    expect(battlefieldDescription).toContain("Exhausted");
+    expect(battlefieldDescription).toContain(
+      "This character cannot move or use ☪ abilities until next turn",
+    );
 
     expect(hand?.querySelector('[aria-label="Exhausted"]')).not.toBeNull();
     expect(hand?.querySelector('[aria-label="2 Figments"]')).not.toBeNull();
@@ -346,6 +355,12 @@ describe("MobileBattleScreen", () => {
       hand?.querySelector('[data-battle-card-status="figment-count"]')
         ?.textContent,
     ).toBe("x2");
+    const handDescription = document.getElementById(
+      hand
+        ?.querySelector<HTMLElement>("[data-game-card-source]")
+        ?.getAttribute("aria-describedby") ?? "",
+    )?.textContent ?? "";
+    expect(handDescription).toContain("Exhausted");
 
     const committedView: MobileBattleView = {
       ...statusView,
@@ -379,6 +394,12 @@ describe("MobileBattleScreen", () => {
     expect(updatedBattlefield?.dataset.battleCardStoredTime).toBe("0");
     expect(updatedBattlefield?.dataset.battleCardFigmentCount).toBe("1");
     expect(updatedBattlefield?.querySelector("[data-battle-card-status]")).toBeNull();
+    const updatedDescription = document.getElementById(
+      updatedBattlefield
+        ?.querySelector<HTMLElement>("[data-game-card-source]")
+        ?.getAttribute("aria-describedby") ?? "",
+    )?.textContent ?? "";
+    expect(updatedDescription).not.toContain("Exhausted");
 
     act(() => root.unmount());
   });

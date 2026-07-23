@@ -2335,6 +2335,14 @@
       "description": "Whether corner stats expose their standalone tooltips."
     },
     {
+      "name": "exhausted",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Whether this card is currently exhausted in battle."
+    },
+    {
       "name": "presentation",
       "tsType": "GameCardPresentation",
       "unionMembers": [

@@ -39,6 +39,7 @@ const ENTRY_BY_ID = new Map(
 export const GLOSSARY_IDS = {
   energyCost: "energy-cost",
   spark: "spark",
+  exhausted: "exhausted",
   essence: "essence",
   startingEssence: "starting-essence",
   tides: "tides",

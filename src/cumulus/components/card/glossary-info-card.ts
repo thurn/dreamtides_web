@@ -5,7 +5,7 @@ import type { InfoCardProps } from "../overlay/InfoCard";
 import { richText } from "./rich-text";
 
 type GlossaryCardPresentation =
-  | { readonly variant?: "text" }
+  | { readonly variant?: "text"; readonly leadGlyph?: Glyph }
   | { readonly variant: "icon"; readonly glyph: Glyph }
   | { readonly variant: "tide"; readonly tide: Tide };
 
@@ -34,5 +34,12 @@ export function glossaryInfoCard(
       body,
     };
   }
-  return { variant: "text", title: entry.term, body };
+  return {
+    variant: "text",
+    title: entry.term,
+    body,
+    ...(presentation.leadGlyph === undefined
+      ? {}
+      : { leadGlyph: presentation.leadGlyph }),
+  };
 }

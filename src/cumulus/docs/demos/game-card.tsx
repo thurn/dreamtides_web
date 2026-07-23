@@ -53,6 +53,8 @@ interface GameCardDemoArgs {
   selectionColor?: CumulusColor;
   /** Dense/compact surface: hide the rules text, keep identity + stats. */
   hideRulesText?: boolean;
+  /** Include the glossary-backed exhausted status in the reveal stack. */
+  exhausted?: boolean;
   /** Render the full-bleed figment frame. */
   figment?: boolean;
   /** Show the complete card or its art-and-spark battlefield face. */
@@ -63,6 +65,7 @@ function GameCardDemo({
   selected = false,
   selectionColor,
   hideRulesText = false,
+  exhausted = false,
   figment = false,
   presentation = "full",
 }: GameCardDemoArgs) {
@@ -128,6 +131,7 @@ function GameCardDemo({
             selected={selected}
             selectionColor={selectionColor}
             hideRulesText={hideRulesText}
+            exhausted={exhausted}
             figment={figment}
             presentation={presentation}
           />
@@ -143,7 +147,7 @@ export const gameCardDemo: CumulusComponent = {
   blurb:
     "The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name.",
   callout:
-    "GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment. The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, focus, press, activation, and drag dismissal are automatic. On desktop, rules that explicitly materialize an authored figment add a small UUID-backed card under a Creates heading beyond the definition stack; touch layouts keep the compact reading pair.",
+    "GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment. The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, exhausted status, focus, press, activation, and drag dismissal are automatic. On desktop, rules that explicitly materialize an authored figment add a small UUID-backed card under a Creates heading beyond the definition stack; touch layouts keep the compact reading pair.",
   group: "Components",
   docName: "GameCard",
   Component: GameCardDemo,
@@ -169,9 +173,10 @@ export const gameCardDemo: CumulusComponent = {
     },
     {
       label: "On the battlefield",
-      note: "Use the strict battlefield presentation for in-play cards. Its rounded square frame widens the art viewport at the portrait card's vertical scale, showing only art and enlarged spark while hover, focus, or touch-hold reveals the complete original card.",
+      note: "Use the strict battlefield presentation for in-play cards. Its rounded square frame widens the art viewport at the portrait card's vertical scale, showing only art and enlarged spark while hover, focus, or touch-hold reveals the complete original card. Pass `exhausted` when the battle instance is exhausted so its glossary definition joins the reveal stack.",
       code: `<GameCard
   model={{ cardId: card.id, displaySnapshot: card }}
+  exhausted={instance.status.isExhausted}
   presentation="battlefield"
 />`,
     },
@@ -180,6 +185,7 @@ export const gameCardDemo: CumulusComponent = {
     defaultArgs: {
       selected: false,
       hideRulesText: false,
+      exhausted: false,
       figment: false,
       presentation: "full",
     },

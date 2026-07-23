@@ -1475,6 +1475,7 @@ function FaceUpCard({
           selected={selection?.selected ?? card.showPlayableOutline}
           selectionColor={selection?.color ?? "positive"}
           hideRulesText={!showRulesText}
+          exhausted={card.exhausted}
           presentation={showRulesText ? "full" : "battlefield"}
           figment={card.figment}
           figmentTitleBar={card.figmentTitleBar}

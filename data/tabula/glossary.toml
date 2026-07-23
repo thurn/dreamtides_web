@@ -135,6 +135,14 @@ matches-rules-text = true
 variants = [ "awaken", "awakens" ]
 
 [[entries]]
+id = "exhausted"
+category = "Battle Status"
+term = "Exhausted"
+definition = "This character cannot move or use ☪ abilities until next turn"
+matches-rules-text = true
+variants = []
+
+[[entries]]
 id = "unstoppable"
 category = "Keywords"
 term = "Unstoppable"

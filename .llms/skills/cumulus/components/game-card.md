@@ -10,7 +10,7 @@ Real consumers: **26** (imports outside `src/cumulus/docs/` and tests).
 
 The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name.
 
-> **Guidance:** GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment. The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, focus, press, activation, and drag dismissal are automatic. On desktop, rules that explicitly materialize an authored figment add a small UUID-backed card under a Creates heading beyond the definition stack; touch layouts keep the compact reading pair.
+> **Guidance:** GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment. The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, exhausted status, focus, press, activation, and drag dismissal are automatic. On desktop, rules that explicitly materialize an authored figment add a small UUID-backed card under a Creates heading beyond the definition stack; touch layouts keep the compact reading pair.
 
 ## Props
 
@@ -23,6 +23,7 @@ The playable card object — art, cost, stats, and rules text — rendered at an
 | `selectionColor` | `CumulusColor` = `"danger" \| "accent" \| "accent-bright" \| "accent-strong" \| "essence" \| "energy" \| "energy-bright" \| "spark" \| "points" \| "positive" \| "selected" \| "sale" \| "gold" \| "gold-light" \| "text-primary" \| "text-secondary" \| "text-muted" \| "text-faint" \| "text-on-accent" \| "white"` | no | — | Selection-ring color. Defaults to the shared selected role. |
 | `hideRulesText` | `boolean` | no | `false` | Hide source rules on dense surfaces; the reveal stays complete. |
 | `statTooltips` | `boolean` | no | `true` | Whether corner stats expose their standalone tooltips. |
+| `exhausted` | `boolean` | no | `false` | Whether this card is currently exhausted in battle. |
 | `presentation` | `GameCardPresentation` = `"full" \| "battlefield"` | no | `full` | Visual treatment for the source card. `"battlefield"` uses a rounded square frame that widens the art viewport at its existing vertical scale, showing only art and an enlarged top-right spark value while preserving the complete reveal. |
 | `figment` | `boolean` | no | `false` | Render the figment frame. |
 | `figmentTitleBar` | `boolean` | no | `false` | Render a title bar on a named figment. |
@@ -65,11 +66,12 @@ Draw the selection ring with `selected`; `hideRulesText` gives the dense identit
 
 ### On the battlefield
 
-Use the strict battlefield presentation for in-play cards. Its rounded square frame widens the art viewport at the portrait card's vertical scale, showing only art and enlarged spark while hover, focus, or touch-hold reveals the complete original card.
+Use the strict battlefield presentation for in-play cards. Its rounded square frame widens the art viewport at the portrait card's vertical scale, showing only art and enlarged spark while hover, focus, or touch-hold reveals the complete original card. Pass `exhausted` when the battle instance is exhausted so its glossary definition joins the reveal stack.
 
 ```tsx
 <GameCard
   model={{ cardId: card.id, displaySnapshot: card }}
+  exhausted={instance.status.isExhausted}
   presentation="battlefield"
 />
 ```

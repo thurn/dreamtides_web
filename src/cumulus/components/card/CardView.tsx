@@ -23,7 +23,7 @@ import {
 import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
 import { BOLT_ICON_CLASS } from "../controls/GlowIcon";
-import { glyph } from "../../primitives/glyph";
+import { glyph, GLYPHS } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { CardStatOrb } from "./CardStatOrb";
 import { TRANSFIGURATION_ICONS } from "../../../runtime/transfiguration-display";
@@ -38,6 +38,7 @@ import {
   resolveCardArtImageStyle,
 } from "./card-art-crop";
 import { rulesTextDefinitionCards } from "./rules-text-reveal";
+import { glossaryInfoCard } from "./glossary-info-card";
 
 export {
   DEFAULT_ART_CROP,
@@ -1485,6 +1486,8 @@ export interface GameCardProps {
   readonly hideRulesText?: boolean;
   /** Whether corner stats expose their standalone tooltips. */
   readonly statTooltips?: boolean;
+  /** Whether this card is currently exhausted in battle. */
+  readonly exhausted?: boolean;
   /**
    * Visual treatment for the source card. `"battlefield"` uses a rounded square
    * frame that widens the art viewport at its existing vertical scale, showing
@@ -1516,6 +1519,7 @@ export function GameCard({
   selectionColor,
   hideRulesText = false,
   statTooltips = true,
+  exhausted = false,
   presentation = "full",
   figment = false,
   figmentTitleBar = false,
@@ -1525,6 +1529,14 @@ export function GameCard({
   const glossaryCards = rulesTextDefinitionCards(
     model.displaySnapshot.renderedText,
   );
+  const statusCards = exhausted
+    ? [
+        glossaryInfoCard(GLOSSARY_IDS.exhausted, {
+          variant: "text",
+          leadGlyph: GLYPHS.exhaust,
+        }),
+      ]
+    : [];
   const figmentCards = extractMaterializedFigmentPreviews(
     model.displaySnapshot.renderedText,
   ).map((preview) => ({
@@ -1546,7 +1558,7 @@ export function GameCard({
           : { transfiguration: model.transfiguration }),
         ...(selected ? { selected: true, selectionColor } : {}),
       },
-      secondaries: glossaryCards,
+      secondaries: [...statusCards, ...glossaryCards],
       adjacentCards: figmentCards,
     },
     onActivate: unavailable ? undefined : onActivate,
