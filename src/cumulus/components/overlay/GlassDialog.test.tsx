@@ -248,9 +248,9 @@ describe("GlassDialog", () => {
     );
     expect(layout?.dataset.glassDialogCompanionLayout).toBe("horizontal");
     expect(layout?.style.gridTemplateColumns).toBe(
-      "360px minmax(0, 502px)",
+      "360px minmax(0, 460px)",
     );
-    expect(layout?.style.width).toBe("calc(862px + var(--space-7))");
+    expect(layout?.style.width).toBe("calc(820px + var(--space-7))");
     expect(panel?.style.width).toBe("100%");
     expect(panel?.style.boxSizing).toBe("border-box");
     expect(container.querySelector('[data-testid="companion"]')).not.toBeNull();
@@ -280,7 +280,7 @@ describe("GlassDialog", () => {
     expect(layout?.style.width).toBe(
       "calc(100vw - var(--gutter) - var(--gutter))",
     );
-    expect(layout?.style.maxWidth).toBe("502px");
+    expect(layout?.style.maxWidth).toBe("460px");
     expect(layout?.style.gap).toBe("var(--space-5)");
     const companion = container.querySelector<HTMLElement>(
       "[data-glass-dialog-companion]",

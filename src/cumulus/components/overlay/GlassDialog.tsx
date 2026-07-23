@@ -59,7 +59,7 @@ const PAIRED_POPUP_DESKTOP_COMPANION_WIDTH_PX = 360;
  * Desktop width (px) for the explanation panel paired with a tangible object.
  * Prose gets a wider measure than the object so it stays compact and readable.
  */
-const PAIRED_POPUP_DESKTOP_PANEL_WIDTH_PX = 502;
+const PAIRED_POPUP_DESKTOP_PANEL_WIDTH_PX = 460;
 
 /** Props for {@link GlassBackdrop}. */
 export interface GlassBackdropProps {
