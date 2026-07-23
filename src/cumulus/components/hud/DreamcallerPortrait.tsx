@@ -6,11 +6,12 @@
 // soft ambient glow, feet anchored to the stage floor — the desktop
 // Dreamcaller-select column), `cutout` (the unframed art alone, for scenes that
 // must remain completely untouched), and `fullBleed` (an edge-to-edge cinematic
-// cutout over a tinted backdrop — the mobile carousel page). The art is the
-// transparent full-body cutout standing on a tinted radial backdrop. The frame
-// (radius, border, backdrop, shadow) and the per-variant image crop ARE the
-// design system's; a caller supplies only the dreamcaller data, the variant,
-// and an optional pixel `size`.
+// cutout over a tinted backdrop — the mobile carousel page). Framed variants
+// composite the transparent full-body cutout over an opaque tinted radial
+// backdrop so scene art cannot show through the portrait. The frame (radius,
+// border, backdrop, shadow) and the per-variant image crop ARE the design
+// system's; a caller supplies only the dreamcaller data, the variant, and an
+// optional pixel `size`.
 //
 // When the art asset 404s the portrait falls back to a tinted monogram disc so
 // a missing image never leaves an empty hole.
@@ -126,6 +127,14 @@ function portraitBackdrop(): string {
   return `radial-gradient(circle at 50% 20%, color-mix(in srgb, ${token("--gold")} 24%, transparent) 0%, color-mix(in srgb, ${token("--accent")} 24%, transparent) 38%, ${token("--bg-sunken")} 100%)`;
 }
 
+/** Opaque base plus translucent tint used by every self-framing portrait. */
+function framedPortraitBackdrop(): CSSProperties {
+  return {
+    backgroundColor: token("--bg-sunken"),
+    backgroundImage: portraitBackdrop(),
+  };
+}
+
 /** Per-variant frame chrome (radius / border / tinted backing / shadow). */
 function frameStyle(variant: FramedVariant): CSSProperties {
   switch (variant) {
@@ -133,7 +142,7 @@ function frameStyle(variant: FramedVariant): CSSProperties {
       return {
         overflow: "hidden",
         borderRadius: token("--radius-panel"),
-        background: portraitBackdrop(),
+        ...framedPortraitBackdrop(),
         border: `1px solid ${token("--border-mid")}`,
         boxShadow: token("--shadow-card"),
       };
@@ -142,7 +151,7 @@ function frameStyle(variant: FramedVariant): CSSProperties {
         overflow: "hidden",
         borderRadius: token("--radius-control"),
         aspectRatio: "1 / 1",
-        background: portraitBackdrop(),
+        ...framedPortraitBackdrop(),
         border: `1px solid ${token("--border-mid")}`,
       };
     case "thumb":
@@ -150,7 +159,7 @@ function frameStyle(variant: FramedVariant): CSSProperties {
         overflow: "hidden",
         borderRadius: token("--radius-inset"),
         aspectRatio: "1 / 1",
-        background: portraitBackdrop(),
+        ...framedPortraitBackdrop(),
         border: `1px solid ${token("--border-mid")}`,
       };
   }
@@ -209,7 +218,7 @@ function fallbackStyle(variant: FramedVariant): CSSProperties {
     minHeight: variant === "hero" ? 220 : undefined,
     height: variant === "hero" ? undefined : "100%",
     aspectRatio: variant === "hero" ? undefined : "1 / 1",
-    background: portraitBackdrop(),
+    ...framedPortraitBackdrop(),
     color: token("--text-primary"),
     fontWeight: 800,
     letterSpacing: "0.08em",

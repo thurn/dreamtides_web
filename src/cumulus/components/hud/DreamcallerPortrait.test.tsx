@@ -46,7 +46,20 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-describe("DreamcallerPortrait standing/fullBleed variants", () => {
+describe("DreamcallerPortrait variants", () => {
+  it.each(["hero", "panel", "thumb"] as const)(
+    "%s composites the transparent cutout over an opaque base",
+    (variant) => {
+      const { container } = mountInto(
+        <DreamcallerPortrait dreamcaller={DC} variant={variant} />,
+      );
+
+      const frame = container.firstElementChild as HTMLElement | null;
+      expect(frame?.style.backgroundColor).toBe("var(--bg-sunken)");
+      expect(frame?.style.backgroundImage).toContain("radial-gradient");
+    },
+  );
+
   it("registers a strict profile reveal only when semantic profile data is supplied", () => {
     const { container } = mountInto(
       <CumulusRoot>
