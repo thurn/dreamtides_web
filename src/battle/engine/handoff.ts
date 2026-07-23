@@ -26,11 +26,10 @@ export interface HandoffPlan {
    */
   flowEdit: BattleDebugEdit;
   /**
-   * Dawn bookend for the INCOMING side: every in-play character it controls
-   * loses the exhausted status (rules §Dawn). Applied after the side flip,
-   * alongside the incoming side's draw.
+   * Ending bookend: every in-play character loses the exhausted status before
+   * the side flip.
    */
-  dawnClearEdits: BattleDebugEdit[];
+  exhaustionClearEdits: BattleDebugEdit[];
   drawEdits: BattleDebugEdit[];       // DRAW_CARD for the next side (empty on the first player's first turn)
 }
 
@@ -81,12 +80,12 @@ function appendBanishEdit(
 }
 
 /**
- * Dawn: clears the exhausted status from every in-play character (front or back
- * rank) of `side` (rules §Dawn). Emits a `SET_CARD_STATUS` clear only for
- * characters that are currently exhausted, so a board with nothing to wake
- * produces no edits.
+ * Ending: clears the exhausted status from every in-play character (front or
+ * back rank) of `side`. Emits a `SET_CARD_STATUS` clear only for characters
+ * that are currently exhausted, so a board with nothing to awaken produces no
+ * edits.
  */
-export function dawnClearEdits(
+export function endOfTurnExhaustionClearEdits(
   state: BattleMutableState,
   side: BattleSide,
 ): BattleDebugEdit[] {
@@ -197,15 +196,18 @@ export function planHandoff(input: HandoffInput): HandoffPlan {
     ? [{ kind: "DRAW_CARD", side: next.activeSide }]
     : [];
 
-  // --- Ending (outgoing) and Dawn (incoming) bookend edits ---
+  // --- Ending bookend edits ---
   const banishEdits = endingBanishEdits(state, state.activeSide);
-  const clearEdits = dawnClearEdits(state, next.activeSide);
+  const clearEdits = [
+    ...endOfTurnExhaustionClearEdits(state, "player"),
+    ...endOfTurnExhaustionClearEdits(state, "enemy"),
+  ];
 
   return {
     result,
     endingBanishEdits: banishEdits,
     flowEdit,
-    dawnClearEdits: clearEdits,
+    exhaustionClearEdits: clearEdits,
     drawEdits,
   };
 }

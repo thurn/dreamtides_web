@@ -22,7 +22,7 @@ const NO_SUPPORT_CONTRIBUTION: ReadonlyMap<string, number> = new Map();
  * The eight battle phases in turn order (rules §Turn Structure). Five phases —
  * Dawn, Day, Dusk, Night, and Challenge — are surfaced in the UI, but only four
  * of those (Day, Dusk, Night, Challenge) carry player actions. Dawn auto-advances
- * after clearing exhaustion, as do the Dreamwell, Draw, and Ending bookends.
+ * after its triggers resolve, as do the Dreamwell, Draw, and Ending bookends.
  */
 const PHASE_SEQUENCE: readonly BattlePhase[] = [
   "dreamwell",
@@ -38,8 +38,9 @@ const PHASE_SEQUENCE: readonly BattlePhase[] = [
 /**
  * The bookend phases (rules §Turn Structure). Each carries no player action:
  * entering one immediately applies its effect and advances to the next phase.
- * Draw draws, Dawn clears exhaustion, and Ending enforces the hand limit and
- * banishes end-of-turn statuses. The Dreamwell phase is NOT a bookend: it is a
+ * Draw draws, Dawn resolves its triggers, and Ending enforces the hand limit,
+ * clears exhaustion, and banishes end-of-turn statuses. The Dreamwell phase is
+ * NOT a bookend: it is a
  * surfaced stop the player clicks through after seeing the drawn Dreamwell card,
  * and its energy is applied when its reveal (`DRAW_DREAMWELL_CARD`) is expanded.
  */
@@ -83,8 +84,8 @@ const BOOKEND_PHASES: ReadonlySet<BattlePhase> = new Set<BattlePhase>([
  *  - **Start of turn draws.** The incoming player draws a card on the handoff
  *    (skipped on the very first turn of the battle) (rules §Turn Structure —
  *    Draw).
- *  - **Dawn is the reducer's job.** The exhaustion clear a side gets when it
- *    begins its turn is fired by the reducer's `BATTLE_COMMAND`.
+ *  - **Ending exhaustion clear is the reducer's job.** Every in-play character
+ *    is awakened when the reducer folds the turn handoff.
  *  - **End-of-turn hand limit.** The outgoing player discards down to ten cards
  *    (rules §Turn Structure — Ending).
  *  - **Ending banishes end-of-turn statuses.** After the hand-limit discard, the
@@ -240,8 +241,8 @@ function planDreamwellReveal(
  * into Challenge (a same-side `SET_BATTLE_FLOW`, handled below). By the time the
  * handoff fires the side already sits in `challenge` with its scoring committed,
  * so the handoff does not re-resolve; it only runs the rest of the Ending
- * bookend (hand-limit discard, end-of-turn banishes) plus the incoming side's
- * Dawn clear, ramp, and draw.
+ * bookend (hand-limit discard, end-of-turn banishes and exhaustion clear) plus
+ * the incoming side's ramp and draw.
  */
 function planTurnHandoff(
   state: BattleMutableState,
@@ -290,11 +291,11 @@ function planTurnHandoff(
     commands.push(autoCommand(banishEdit));
   }
 
-  // The user's own flow edit performs the side flip. The incoming side's Dawn
-  // exhaustion clear is fired by the reducer's `BATTLE_COMMAND` when it folds
-  // this flip edit. The incoming side's
-  // energy is raised separately when its Dreamwell card is revealed on the
-  // Dreamwell phase the handoff lands on (see `planDreamwellReveal`).
+  // The user's own flow edit performs the side flip. The reducer's
+  // `BATTLE_COMMAND` clears exhaustion from every in-play character when it
+  // folds this edit. The incoming side's energy is raised separately when its Dreamwell
+  // card is revealed on the Dreamwell phase the handoff lands on (see
+  // `planDreamwellReveal`).
   commands.push(command);
 
   // Draw for the incoming side, skipping only the first player's first turn
@@ -381,8 +382,8 @@ function nextSurfaceableTarget(phase: BattlePhase): BattlePhase {
  *
  *  - **Draw:** draw one card for the active side, skipping only the first
  *    player's first turn (see `drawsAtStartOfTurn`).
- *  - **Dawn:** no edits — the reducer owns the exhaustion clear when it folds
- *    the committed `SET_PHASE dawn` edit.
+ *  - **Dawn:** no structural edits; authored Dawn triggers run in the rules
+ *    reducer.
  *  - **Ending:** discard the active side down to the hand limit, then banish its
  *    end-of-turn statuses (ephemeral in hand, offering in play).
  */
@@ -398,7 +399,6 @@ function bookendEffectEdits(
         ? [{ kind: "DRAW_CARD", side }]
         : [];
     case "dawn":
-      // The reducer clears exhaustion on the committed Dawn phase edge.
       return [];
     case "ending":
       return [

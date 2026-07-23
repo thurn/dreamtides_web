@@ -166,7 +166,7 @@ A turn runs eight phases in order: `dreamwell`, `draw`, `dawn`, `day`, `dusk`,
 `night`, `challenge`, `ending`. Five phases are surfaced in the UI (Dawn, Day,
 Dusk, Night, Challenge), and four of those carry player actions (Day, Dusk,
 Night, Challenge). The `dreamwell`, `draw`, and `ending` bookends auto-advance,
-and Dawn auto-advances after its exhaust-clear.
+and Dawn auto-advances after its triggers resolve.
 
 ### Structural automation
 
@@ -180,8 +180,8 @@ into the ordered edits the rules require:
   max ● ramps on a configurable per-turn schedule (capped at `maxEnergyCap`) and
   current ● refills to max.
 - **Draw.** The incoming side draws a card, skipped on the very first turn.
-- **Dawn clears exhaustion.** Each of the incoming side's in-play characters
-  loses the exhausted status.
+- **Ending clears exhaustion.** Every in-play character loses the exhausted
+  status before control passes to the opponent.
 - **Challenge resolution.** Entering the `challenge` phase resolves each
   front-rank lane (`F0`–`F3`) by spark: the lower-spark character dissolves to
   the void, an unpaired challenger scores ⍟ equal to its spark, and the keyword

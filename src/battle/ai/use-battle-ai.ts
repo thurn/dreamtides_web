@@ -480,7 +480,7 @@ function enrichDeferredCommands(
  * Builds the endTurn proposal: the challenge-resolution edits from the unified,
  * keyword-aware {@link resolveChallenge} (using the card-keyed support map from
  * {@link buildSupportContribution}), followed by the handoff edits
- * (`endingBanishEdits`, `flowEdit`, `dawnClearEdits`, `drawEdits`,
+ * (`endingBanishEdits`, `exhaustionClearEdits`, `flowEdit`, `drawEdits`,
  * `energyEdits`) from {@link planHandoff}. Every edit is wrapped as an
  * AI-authored DEBUG_EDIT command.
  *
@@ -513,14 +513,14 @@ function buildEndTurnProposal(
   // intentionally omitted from the AI proposal.
   const edits: BattleDebugEdit[] = [
     ...challenge.edits,
-    // Ending (outgoing side) precedes the side flip; Dawn clear (incoming side)
-    // follows it, matching the Basic Automation handoff order so the AI's
-    // end-of-turn composes the same bookend effects. The flow edit lands the
+    // Ending effects precede the side flip: outgoing ephemeral/offering cards
+    // are banished and every in-play card is awakened, matching the Basic
+    // Automation handoff order. The flow edit lands the
     // incoming side on its Dreamwell phase; that side's energy is raised when
     // the human clicks through and the Dreamwell card is revealed.
     ...handoff.endingBanishEdits,
+    ...handoff.exhaustionClearEdits,
     handoff.flowEdit,
-    ...handoff.dawnClearEdits,
     ...handoff.drawEdits,
   ];
   const commands = edits.map((edit) => makeAiCommand(edit, aiSide));

@@ -759,12 +759,13 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     expect(result.state.battle?.pendingPrompt).toBeNull();
   });
 
-  it("runs only the structural Dawn bookend for a character with Dawn text", () => {
+  it("does not clear exhaustion when the active side crosses Dawn", () => {
     const instance = makeInstance(
       "bc-dawn",
       "0458658d-7e02-4286-9249-93674d16620b",
       "player",
     );
+    instance.status.isExhausted = true;
     const board = makeRichBoard({
       turnNumber: 4,
       phase: "day",
@@ -777,9 +778,56 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     const first = reduce(state, "BATTLE_COMMAND", debugEdit(setDawn));
     expect(first.outcome).toBe("applied");
     expect(first.state.battle?.board.phase).toBe("day");
-    expect(first.state.battle?.dawnFired.player).toBe(4);
+    expect(
+      first.state.battle?.board.cardInstances["bc-dawn"]?.status.isExhausted,
+    ).toBe(true);
+    expect(first.state.battle?.dawnFired.player).toBeNull();
     expect(first.state.battle?.effectQueue).toEqual([]);
     expect(first.state.battle?.pendingPrompt).toBeNull();
+  });
+
+  it("clears exhaustion from both sides when the turn ends", () => {
+    const outgoing = makeInstance("bc-outgoing", "outgoing-card", "player");
+    const incoming = makeInstance("bc-incoming", "incoming-card", "enemy");
+    outgoing.status.isExhausted = true;
+    incoming.status.isExhausted = true;
+    const board = makeRichBoard({
+      turnNumber: 1,
+      phase: "day",
+      playerBack: { B0: outgoing.battleCardId },
+      instances: [outgoing, incoming],
+    });
+    board.sides.enemy.backRank.B0 = incoming.battleCardId;
+    const state = { ...baseState(), battle: battleFrom(board) };
+
+    const result = reduce(
+      state,
+      "BATTLE_COMMAND",
+      debugEdit({
+        kind: "SET_BATTLE_FLOW",
+        phase: "dreamwell",
+        activeSide: "enemy",
+        turnNumber: 1,
+      }),
+    );
+
+    expect({
+      outcome: result.outcome,
+      activeSide: result.state.battle?.board.activeSide,
+      outgoingExhausted:
+        result.state.battle?.board.cardInstances[outgoing.battleCardId]?.status
+          .isExhausted,
+      incomingExhausted:
+        result.state.battle?.board.cardInstances[incoming.battleCardId]?.status
+          .isExhausted,
+      marker: result.state.battle?.dawnFired,
+    }).toEqual({
+      outcome: "applied",
+      activeSide: "enemy",
+      outgoingExhausted: false,
+      incomingExhausted: false,
+      marker: { player: 1, enemy: null },
+    });
   });
 
   // --- dreamwell reveal queues the revealed card's script ---

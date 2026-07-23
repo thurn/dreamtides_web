@@ -173,7 +173,7 @@ describe("planHandoff", () => {
       const energyEdits = [
         plan.flowEdit,
         ...plan.endingBanishEdits,
-        ...plan.dawnClearEdits,
+        ...plan.exhaustionClearEdits,
         ...plan.drawEdits,
       ].filter(
         (edit) =>
@@ -216,7 +216,7 @@ describe("planHandoff", () => {
     });
   });
 
-  describe("bookend edits — Ending banish (outgoing) and Dawn clear (incoming)", () => {
+  describe("bookend edits", () => {
     function instanceWithStatus(
       battleCardId: string,
       status: { isExhausted?: boolean; ephemeral?: boolean; offering?: boolean },
@@ -233,23 +233,24 @@ describe("planHandoff", () => {
       } as BattleMutableState["cardInstances"][string];
     }
 
-    it("clears exhaustion for the INCOMING side's in-play characters", () => {
-      // enemy ends turn → player (incoming) is the side whose Dawn clears.
+    it("clears exhaustion from both sides' in-play characters", () => {
       const state = makeHandoffState({ activeSide: "enemy", turnNumber: 2 });
+      state.sides.enemy.frontRank.F0 = "e-front";
+      state.sides.enemy.backRank.B0 = "e-back";
       state.sides.player.frontRank.F0 = "p-front";
-      state.sides.player.backRank.B0 = "p-back";
       state.cardInstances = {
+        "e-front": instanceWithStatus("e-front", { isExhausted: true }),
+        "e-back": instanceWithStatus("e-back", { isExhausted: false }),
         "p-front": instanceWithStatus("p-front", { isExhausted: true }),
-        "p-back": instanceWithStatus("p-back", { isExhausted: false }),
       };
 
       const plan = planHandoff({ state, ...DEFAULT_CONFIG });
 
       // Only the exhausted character is cleared.
-      expect(plan.dawnClearEdits).toEqual([
+      expect(plan.exhaustionClearEdits).toEqual([
         { kind: "SET_CARD_STATUS", battleCardId: "p-front", status: { isExhausted: false } },
+        { kind: "SET_CARD_STATUS", battleCardId: "e-front", status: { isExhausted: false } },
       ]);
-      // The outgoing side's exhaustion is untouched here.
       expect(plan.endingBanishEdits).toEqual([]);
     });
 

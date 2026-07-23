@@ -275,7 +275,13 @@ export function buildTutorialView(
   const enemy = emptySide("enemy");
   const enemyBackRank = enemy.backRank.map((slot, index) =>
     opponentCardPlayed && index === TUTORIAL_OPPONENT_BACK_RANK_INDEX
-      ? { ...slot, card: tutorialCard }
+      ? {
+          ...slot,
+          card:
+            tutorialCard === null
+              ? null
+              : { ...tutorialCard, exhausted: !playerTurnStarted },
+        }
       : slot,
   );
   return {

@@ -94,7 +94,7 @@ function playCardCommands(action: PlannedAction, aiSide: BattleSide): BattleComm
     // just-played character into the front rank — declaring it an illegal
     // challenger. Marking it exhausted here mirrors the forward model
     // (`playCharacterToBackRank` clears `canChallengeThisTurn`), and the body's
-    // own Dawn clears the status on the AI's next turn.
+    // Ending clears the status when the AI finishes this turn.
     commands.push(
       edit(
         {

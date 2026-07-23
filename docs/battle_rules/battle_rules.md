@@ -219,9 +219,8 @@ and Ending run as automatic bookends.
    bonus effect on the card is applied. Auto-advances.
 2. **Draw** — The active player draws one card. (Skipped on the very first turn
    of the battle.) Auto-advances.
-3. **Dawn** — The active player's exhausted characters lose the exhausted
-   status. Then ▸Dawn triggered abilities fire and resolve. Auto-advances when
-   the stack is empty.
+3. **Dawn** — The active player's ▸Dawn triggered abilities fire and resolve.
+   Auto-advances when the stack is empty.
 4. **Day** — The active player plays cards, repositions characters, and
    activates abilities. By the end of the Day phase the active player has
    positioned the characters they want as challengers in the front rank. The
@@ -248,7 +247,8 @@ and Ending run as automatic bookends.
    abilities still function and can modify spark.
 8. **Ending** — If the active player has more than 10 cards in hand, they
    discard down to 10. Cards with the relevant end-of-turn statuses (Ephemeral,
-   Offering) are banished. Auto-advances when the stack is empty, after which the
+   Offering) are banished, and every exhausted character in play loses the
+   exhausted status. Auto-advances when the stack is empty, after which the
    turn passes to the opponent.
 
 **Battle start:** Each player draws 5 cards as their opening hand. The first
@@ -257,8 +257,8 @@ player's first turn skips the Draw phase.
 ## Exhaust and Awaken
 
 The **exhausted** status marks a character that cannot challenge, defend, or
-activate abilities with ☪ costs. The status persists until the start of the
-character's controller's next turn, when it is cleared during the Dawn phase.
+activate abilities with ☪ costs. The status persists until the current turn's
+Ending phase, when it is cleared from every character in play.
 
 - Characters enter play exhausted and therefore cannot challenge, defend, or pay
   ☪ costs on the turn they are played.
@@ -512,8 +512,7 @@ resolves from the stack, then the event moves to the void.
 occurs. The named (▸) triggers are:
 
 - **▸Materialized** — fires when the character enters play.
-- **▸Dawn** — fires during the controller's Dawn phase, after the exhausted
-  status is cleared.
+- **▸Dawn** — fires during the controller's Dawn phase.
 - **▸Dusk** — fires during the controller's Dusk phase.
 - **▸Night** — fires at the start of the controller's Night phase.
 - **▸Challenge** — fires at the start of the controller's Night phase if the
@@ -647,7 +646,7 @@ set of **reserve** figments beneath it:
 - **Exhausted and awakened are properties of the stack.** A stack that has been
   in play since the start of its controller's turn is awakened and can challenge
   that turn, regardless of figments added or removed during the turn. A stack
-  created this turn is exhausted until its controller's next Dawn.
+  created this turn is exhausted until the current turn's Ending phase.
 - Every **other** status — a granted keyword such as Unstoppable or Veil — rides
   the **topmost** figment and is gone when the topmost is removed.
 - A figment type's **inherent** keyword (the Keyword column above) is carried by

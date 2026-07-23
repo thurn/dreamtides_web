@@ -58,7 +58,7 @@ import {
   resolvePendingPromptWithStream,
 } from "./driver";
 import type { PromptResolution } from "./effect-runner-core";
-import { dawnClearEdits } from "../../battle/engine/handoff";
+import { endOfTurnExhaustionClearEdits } from "../../battle/engine/handoff";
 import { forwardModelFromState } from "../../battle/ai/forward-model";
 import { planDefense } from "../../battle/ai/defense";
 import { actionToCommands } from "../../battle/ai/driver";
@@ -376,8 +376,8 @@ const BATTLE_SIDES: readonly BattleSide[] = ["player", "enemy"];
  * In order (design spec §Battle events):
  *   1. Apply the command (`DEBUG_EDIT` → `applyDebugEdit`; `FORCE_RESULT` /
  *      `SKIP_TO_REWARDS` → `forceBattleResult`).
- *   2. Dawn: when the edit advances into Dawn or hands off to a new active side,
- *      clear that side's exhaustion once for the turn.
+ *   2. Ending: when the edit hands off to a new active side, clear exhaustion
+ *      from every in-play character once for the turn.
  *   3. Dreamwell: for EACH side, when this edit LANDED that side's Dreamwell
  *      reveal (`dreamwellDrawnTurn` transitioned to `turnNumber`) during the
  *      `"dreamwell"` phase on `turnNumber > 1`, queue the revealed card's script
@@ -416,26 +416,25 @@ function applyBattleCommandStep(
   let board = boardAfter;
   let dawnFired = battle.dawnFired;
 
-  // Step 2 — structural Dawn bookend, fired exactly once per side and turn.
-  // The incoming side's Dawn is due when this edit either:
-  //   - crossed into the committed `dawn` phase (an explicit `SET_PHASE dawn`,
-  //     e.g. from the inspector) — the "entered dawn" edge; or
-  //   - handed the turn off by flipping the active side. The automation turn
-  //     handoff (`SET_BATTLE_FLOW`) lands the incoming side on `dreamwell` and
-  //     never crosses the dawn phase, so the handoff edge is what fires the
-  //     incoming side's Dawn.
-  // Turn 1 has no Dawn, and Dawn never fires once the battle has a result.
-  const enteredDawn = boardBefore.phase !== "dawn" && boardAfter.phase === "dawn";
+  // Step 2 — structural Ending exhaustion clear, fired exactly once when the
+  // active side flips.
   const handedOff = boardBefore.activeSide !== boardAfter.activeSide;
   if (
-    (enteredDawn || handedOff) &&
-    boardAfter.turnNumber > 1 &&
+    handedOff &&
     boardAfter.result === null &&
-    dawnFired[boardAfter.activeSide] !== boardAfter.turnNumber
+    dawnFired[boardBefore.activeSide] !== boardBefore.turnNumber
   ) {
-    const side = boardAfter.activeSide;
-    board = applyBoardEdits(board, dawnClearEdits(board, side));
-    dawnFired = { ...dawnFired, [side]: boardAfter.turnNumber };
+    const outgoingSide = boardBefore.activeSide;
+    for (const side of BATTLE_SIDES) {
+      board = applyBoardEdits(
+        board,
+        endOfTurnExhaustionClearEdits(board, side),
+      );
+    }
+    dawnFired = {
+      ...dawnFired,
+      [outgoingSide]: boardBefore.turnNumber,
+    };
   }
 
   // Step 3 — Dreamwell reveal → queue the revealed card's script. Checked
@@ -490,7 +489,7 @@ function applyBattleCommandStep(
 /**
  * `BATTLE_COMMAND { command }`: the single synchronous fold step for one battle
  * command. Applies the command through {@link applyBattleCommandStep} — its edit
- * plus structural Dawn, Dreamwell, Support, and force-result routing — so a
+ * plus structural Ending, Dreamwell, Support, and force-result routing — so a
  * single event in yields a fully-triggered state
  * out and two clients folding the same (seed, seq) converge byte-for-byte.
  *

@@ -104,26 +104,20 @@ export interface BattleFoldState {
     turnNumber: number;
   };
   /**
-   * Per-side once-per-turn Dawn guard: the last turn number for which each
-   * side's structural Dawn bookend fired. The reducer fires a side's Dawn exactly
-   * once per turn — on the committed-`dawn`-phase edge OR on the turn handoff
-   * that flips the active side into a new turn (the automation flow lands the
-   * incoming side on `dreamwell`, never crossing the dawn phase) — applying it
-   * only when `dawnFired[side] !== turnNumber`, then stamping the turn here. This
-   * per-(side,turn) processed marker is pure data on committed state, so the fold
-   * fires each side's Dawn at most once per turn.
-   * `null` means that side's Dawn has not fired yet this battle.
+   * Per-side once-per-turn exhaustion-clear guard. The reducer stamps the
+   * outgoing side's turn number when a committed handoff clears all in-play
+   * characters. `null` means that side has not completed a turn this battle.
    */
   dawnFired: DawnFiredMarker;
 }
 
-/** Per-side last-turn-Dawn-fired marker (see {@link BattleFoldState.dawnFired}). */
+/** Per-side last cleared turn marker (see {@link BattleFoldState.dawnFired}). */
 export interface DawnFiredMarker {
   player: number | null;
   enemy: number | null;
 }
 
-/** The initial {@link DawnFiredMarker} for a fresh battle: no Dawn has fired. */
+/** The initial {@link DawnFiredMarker} for a fresh battle. */
 export function emptyDawnFired(): DawnFiredMarker {
   return { player: null, enemy: null };
 }

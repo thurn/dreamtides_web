@@ -42,7 +42,7 @@ export interface AiCard {
    * {@link BattleCardStatus.isExhausted} flag: an exhausted body cannot
    * challenge, defend, or pay ☪ costs, so a character with `isExhausted` set is
    * `false` and an awakened body is `true`. Characters enter play exhausted and
-   * the active side's exhaustion is cleared during the Dawn phase (see
+   * in-play exhaustion is cleared during Ending (see
    * `battle_rules.md` §Exhaust and Awaken). The planner additionally sets this
    * to `false` on cards it plays during the simulated turn.
    */
@@ -105,8 +105,8 @@ function opposingSide(side: BattleSide): BattleSide {
 function projectAiCard(instance: BattleCardInstance): AiCard {
   const rawCost: number | null = instance.definition.energyCost;
   // An exhausted body cannot challenge or be moved up to defend. The status is
-  // authoritative: it is set on entering play (unless awakened) and cleared for
-  // the active side during the Dawn phase.
+  // authoritative: it is set on entering play (unless awakened) and cleared
+  // during Ending.
   return {
     battleCardId: instance.battleCardId,
     cardNumber: instance.definition.cardNumber,

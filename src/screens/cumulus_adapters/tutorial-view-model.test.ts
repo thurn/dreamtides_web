@@ -507,6 +507,7 @@ describe("buildTutorialView", () => {
     expect(played.enemyHand).toEqual([]);
     expect(played.enemy.backRank[0]?.card).toMatchObject({
       layoutMotion: "snap",
+      exhausted: false,
       model: { cardId: TUTORIAL_OPPONENT_CARD_ID },
     });
     expect(played.enemy.backRank[1]?.card).toBeNull();

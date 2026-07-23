@@ -406,9 +406,9 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     expect(result).toContainEqual({ id: "FORCE_RESULT", result: "victory", sourceSurface: "auto-system" });
   });
 
-  it("delegates the incoming side's Dawn exhaustion-clear to the reducer (emits no status clear)", () => {
-    // The reducer's `BATTLE_COMMAND` owns the incoming side's exhaustion clear
-    // when it folds the handoff flip edit. The client expansion emits no
+  it("delegates Ending exhaustion-clear to the reducer (emits no status clear)", () => {
+    // The reducer's `BATTLE_COMMAND` owns the all-card exhaustion clear when it
+    // folds the handoff flip edit. The client expansion emits no
     // duplicate status-clear edits.
     const incomingFront = makeInstance("e-front", { owner: "enemy", printedSpark: 2 });
     const incomingBack = makeInstance("e-back", { owner: "enemy", printedSpark: 1 });
@@ -436,14 +436,14 @@ describe("planBasicAutomationCommands — turn handoff", () => {
 
     const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
 
-    // No exhaustion-clear for either side — Dawn is the reducer's job now.
+    // No explicit exhaustion-clear for either side; the reducer owns it.
     expect(result.some((edit) => edit.kind === "SET_CARD_STATUS")).toBe(false);
     // The flip and the incoming draw are still expanded.
     expect(result).toContainEqual({ kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 5 });
     expect(result).toContainEqual({ kind: "DRAW_CARD", side: "enemy" });
   });
 
-  it("emits no status clear when the incoming side has no characters in play", () => {
+  it("emits no explicit status clear when no characters are in play", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 3,
@@ -665,9 +665,8 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
     expect(result.some((edit) => edit.kind === "DRAW_CARD")).toBe(false);
   });
 
-  it("expands a dawn gesture into a bare crossing into day (Dawn is the reducer's job)", () => {
-    // A `SET_PHASE dawn` navigation just steps dawn → day; the reducer clears
-    // exhaustion when it folds the committed Dawn edit.
+  it("expands a Dawn gesture into a bare crossing into Day", () => {
+    // A `SET_PHASE dawn` navigation steps dawn → day without an exhaustion edit.
     const exhausted = makeInstance("p0", { owner: "player", printedSpark: 2 });
     exhausted.status.isExhausted = true;
     const state = makeState({
