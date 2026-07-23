@@ -7,7 +7,9 @@ import { lookupGlossaryTerm, type GlossaryEntry } from "./glossary";
  * Tokenization rules:
  *   * Words are runs of ASCII letters (`[A-Za-z]+`), optionally led by the
  *     trigger arrow `▸` when it is glued to the word (e.g. `▸Materialized`).
- *     Punctuation, numbers, and other symbols split runs apart, so `bane,` and
+ *     The fast `↯`, interrupt `❖❖`, and exhaust-cost `☪` glyphs are also
+ *     glossary tokens. A single activated-ability `❖` is not an interrupt.
+ *     Other punctuation, numbers, and symbols split runs apart, so `bane,` and
  *     `bane.` both yield the bare word `bane`. An arrow-prefixed token resolves
  *     to an arrow-specific glossary entry when one exists (`▸Materialized`),
  *     otherwise to the bare keyword (`▸Dawn` → `Dawn`).
@@ -31,8 +33,12 @@ import { lookupGlossaryTerm, type GlossaryEntry } from "./glossary";
  * this same helper instead of re-implementing extraction.
  */
 
-/** Word run; ASCII letters, optionally led by a glued trigger arrow. */
-const WORD_RE = /▸?[A-Za-z]+/g;
+/**
+ * Rules-text forms that can own glossary definitions. Match the double-bolt
+ * interrupt before scanning words; a lone `❖` deliberately remains invisible
+ * to the glossary.
+ */
+const GLOSSARY_FORM_RE = /❖❖|↯|☪|▸?[A-Za-z]+/g;
 
 /**
  * Returns the glossary entries referenced in `text`, in first-occurrence
@@ -44,7 +50,7 @@ export function extractGlossaryTerms(text: string): GlossaryEntry[] {
   }
   const seen = new Set<GlossaryEntry>();
   const ordered: GlossaryEntry[] = [];
-  for (const match of text.matchAll(WORD_RE)) {
+  for (const match of text.matchAll(GLOSSARY_FORM_RE)) {
     const entry = lookupGlossaryTerm(match[0]);
     if (entry === undefined) {
       continue;

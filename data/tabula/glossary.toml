@@ -23,6 +23,14 @@ matches-rules-text = true
 variants = [ "dawn" ]
 
 [[entries]]
+id = "night-trigger"
+category = "Triggers & Timing"
+term = "▸Night"
+definition = "Triggers at the end of your turn."
+matches-rules-text = true
+variants = []
+
+[[entries]]
 id = "day"
 category = "Triggers & Timing"
 term = "Day"
@@ -122,9 +130,25 @@ variants = [ "eroded", "erodes" ]
 id = "fast"
 category = "Keywords"
 term = "Fast"
-definition = "Can be played during your Night phase or the opponent's Dusk phase."
+definition = "You may use this ability at the end of either player's turn."
 matches-rules-text = true
-variants = []
+variants = [ "↯" ]
+
+[[entries]]
+id = "interrupt"
+category = "Keywords"
+term = "Interrupt"
+definition = "You may use this ability in response to an opponent card or ability, or at the end of either player's turn."
+matches-rules-text = true
+variants = [ "❖❖" ]
+
+[[entries]]
+id = "exhaust-cost"
+category = "Keywords"
+term = "Exhaust Cost"
+definition = "You may exhaust this character to activate an ability instead of challenging this turn."
+matches-rules-text = true
+variants = [ "☪" ]
 
 [[entries]]
 id = "awakened"
@@ -275,6 +299,14 @@ id = "essence"
 category = "Quest Terms"
 term = "Essence"
 definition = "Currency you gain and spend over the course of a run."
+matches-rules-text = true
+variants = []
+
+[[entries]]
+id = "void"
+category = "Quest Terms"
+term = "Void"
+definition = "Your discard pile"
 matches-rules-text = true
 variants = []
 
