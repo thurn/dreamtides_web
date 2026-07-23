@@ -37,6 +37,12 @@ const FIXTURE_ACTIONS = [
     revealDuration: 2,
     wait: 0,
   },
+  {
+    id: "how-to-play",
+    action: "display-how-to-play",
+    text: "Play characters to score points (⍟).\n\nScore 10 ⍟ to win.",
+    wait: 0,
+  },
 ];
 
 describe("tutorial data", () => {
@@ -87,6 +93,9 @@ describe("tutorial data", () => {
         { ...FIXTURE_ACTIONS[3], revealDuration: -1 },
       ]),
     ).toThrow(/non-negative card reveal duration/u);
+    expect(() =>
+      validateTutorialActions([{ ...FIXTURE_ACTIONS[4], text: " " }]),
+    ).toThrow(/How to Play text/u);
   });
 
   it("normalizes legacy portrait actions to the player with no pause", () => {

@@ -184,6 +184,49 @@ describe("TutorialEditorRail", () => {
     container.remove();
   });
 
+  it("authors How to Play copy as a tutorial action", () => {
+    const onChange = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<EditorHarness onChange={onChange} />));
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>('button[aria-label="Add an action"]')
+        ?.click(),
+    );
+    const messageOption = [
+      ...document.body.querySelectorAll<HTMLButtonElement>(
+        'button[role="option"]',
+      ),
+    ].find((option) => option.textContent?.includes("Display How to Play"));
+    act(() => messageOption?.click());
+
+    const expectedText =
+      "Play characters and challenge with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle.";
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "display-how-to-play",
+          action: "display-how-to-play",
+          text: expectedText,
+          wait: 0,
+        },
+      ],
+      true,
+    );
+    expect(
+      container.querySelector<HTMLTextAreaElement>(
+        '[data-testid="tutorial-action-text-display-how-to-play"]',
+      )?.value,
+    ).toBe(expectedText);
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("authors speech against the opposing Dreamcaller portrait", () => {
     const onChange = vi.fn();
     const container = document.createElement("div");

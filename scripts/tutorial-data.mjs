@@ -75,6 +75,17 @@ export function validateTutorialActions(value) {
         wait,
       };
     }
+    if (action === "display-how-to-play") {
+      if (
+        typeof candidate.text !== "string" ||
+        candidate.text.trim().length === 0
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must have How to Play text.`,
+        );
+      }
+      return { id, action, text: candidate.text, wait };
+    }
     if (action === "animate-dreamcaller-portrait") {
       const owner = candidate.owner ?? "player";
       const pause = candidate.pause ?? 0;

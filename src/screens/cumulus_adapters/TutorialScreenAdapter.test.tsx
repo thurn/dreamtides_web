@@ -44,6 +44,12 @@ const mocks = vi.hoisted(() => ({
           text: "A follow-up.",
           wait: 3,
         },
+        {
+          id: "how-to-play",
+          action: "display-how-to-play" as const,
+          text: "Configured adapter instructions.\n\nScore 10 ⍟ to win.",
+          wait: 0,
+        },
       ],
     },
   },
@@ -149,8 +155,13 @@ describe("TutorialScreenAdapter", () => {
       expect.arrayContaining([
         expect.objectContaining({
           event: "tutorial_actions_loaded",
-          actionCount: 3,
-          actionIds: ["welcome", "dreamcaller-arrival", "nightmare-call"],
+          actionCount: 4,
+          actionIds: [
+            "welcome",
+            "dreamcaller-arrival",
+            "nightmare-call",
+            "how-to-play",
+          ],
         }),
         expect.objectContaining({
           event: "tutorial_action_presented",
@@ -190,12 +201,12 @@ describe("TutorialScreenAdapter", () => {
     container.remove();
   });
 
-  it("logs the completed tutorial transition and UUID-backed player draw", async () => {
+  it("maps the authored How to Play action into the player turn and shared completion flow", async () => {
     (
       mocks.state.tutorial as unknown as {
         currentActionIndex: number | null;
       }
-    ).currentActionIndex = null;
+    ).currentActionIndex = 3;
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -225,6 +236,9 @@ describe("TutorialScreenAdapter", () => {
       ],
     });
     expect(adapterMocks.props?.view.howToPlay).toEqual({
+      actionId: "how-to-play",
+      text: "Configured adapter instructions.\n\nScore 10 ⍟ to win.",
+      wait: 0,
       triggerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
     });
     expect(getLogEntries()).toEqual(
@@ -249,10 +263,12 @@ describe("TutorialScreenAdapter", () => {
     act(() => {
       adapterMocks.props?.onHowToPlayPresented?.(
         "event:1",
+        "how-to-play",
         "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
       );
       adapterMocks.props?.onHowToPlayDismissed?.(
         "event:1",
+        "how-to-play",
         "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
       );
       adapterMocks.props?.onPlayerCardPlay?.(
@@ -261,6 +277,7 @@ describe("TutorialScreenAdapter", () => {
         "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
         "player-back-4",
       );
+      adapterMocks.props?.onActionComplete?.("event:1", "how-to-play");
     });
     expect(mocks.action).toHaveBeenCalledWith("tutorial", "play-card", {
       runId: "event:1",
@@ -273,14 +290,16 @@ describe("TutorialScreenAdapter", () => {
         expect.objectContaining({
           event: "tutorial_how_to_play_presented",
           runId: "event:1",
+          actionId: "how-to-play",
           battleId: "tutorial-battle",
           triggerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-          trigger: "player-card-draw-complete",
+          trigger: "player-turn-announcement-complete",
           title: "How to Play",
         }),
         expect.objectContaining({
           event: "tutorial_how_to_play_dismissed",
           runId: "event:1",
+          actionId: "how-to-play",
           battleId: "tutorial-battle",
           triggerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
         }),
@@ -295,6 +314,10 @@ describe("TutorialScreenAdapter", () => {
           targetSlotId: "player-back-4",
         }),
       ]),
+    );
+    expect(mocks.completeTutorialAction).toHaveBeenCalledWith(
+      "event:1",
+      "how-to-play",
     );
 
     act(() => root.unmount());

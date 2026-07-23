@@ -83,6 +83,9 @@ export interface TutorialView {
   readonly playbackRunId: string | null;
   readonly currentAction: TutorialAction | null;
   readonly howToPlay: {
+    readonly actionId: string;
+    readonly text: string;
+    readonly wait: number;
     readonly triggerCardId: string;
   } | null;
 }
@@ -103,10 +106,12 @@ export interface TutorialScreenProps {
   ) => void;
   readonly onHowToPlayPresented?: (
     runId: string,
+    actionId: string,
     triggerCardId: string,
   ) => void;
   readonly onHowToPlayDismissed?: (
     runId: string,
+    actionId: string,
     triggerCardId: string,
   ) => void;
   readonly onPlayerCardPlay?: (
@@ -163,8 +168,10 @@ const TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH = 500;
 const TUTORIAL_PORTRAIT_POINTER_OVERLAP = 2;
 
 function TutorialHowToPlayDialog({
+  text,
   onClose,
 }: {
+  readonly text: string;
   readonly onClose: () => void;
 }): ReactElement {
   const desktop = useIsDesktop();
@@ -174,6 +181,7 @@ function TutorialHowToPlayDialog({
     font: desktop
       ? token("--t-tutorial-instruction")
       : token("--t-lead"),
+    whiteSpace: "pre-line",
   } as const;
   const inlineIconStyle = {
     display: "inline-flex",
@@ -186,6 +194,96 @@ function TutorialHowToPlayDialog({
     alignItems: "center",
     whiteSpace: "nowrap",
   } as const;
+  const paragraphs = text
+    .split(/\n\s*\n/u)
+    .map((paragraph) => paragraph.trim())
+    .filter((paragraph) => paragraph.length > 0);
+
+  const renderInstructionText = (paragraph: string): ReactElement => {
+    const tokens = paragraph.split(
+      /(\b(?:points|spark)\s+\(\s*[⍟✦]\s*\)|\(\s*[⍟✦]\s*\)|\bchallenge\b|\d+\s+⍟|[⍟✦])/giu,
+    );
+    return (
+      <>
+        {tokens.map((part, index) => {
+          const resourceTerm =
+            /^(points|spark)\s+\(\s*([⍟✦])\s*\)$/iu.exec(part);
+          if (resourceTerm !== null) {
+            const points = resourceTerm[2] === "⍟";
+            return (
+              <span
+                key={index}
+                {...(points
+                  ? { "data-tutorial-how-to-play-points-term": "" }
+                  : { "data-tutorial-how-to-play-spark-term": "" })}
+                style={parenthesizedIconStyle}
+              >
+                {resourceTerm[1]} (
+                <GlowIcon
+                  iconClass={points ? GLYPHS.points : GLYPHS.sparkInline}
+                  color={points ? "text-primary" : "spark"}
+                />
+                )
+              </span>
+            );
+          }
+          const compact = part.replace(/\s/gu, "");
+          if (compact === "(⍟)" || compact === "(✦)") {
+            const points = compact === "(⍟)";
+            return (
+              <span
+                key={index}
+                {...(points
+                  ? { "data-tutorial-how-to-play-points-term": "" }
+                  : { "data-tutorial-how-to-play-spark-term": "" })}
+                style={parenthesizedIconStyle}
+              >
+                (
+                <GlowIcon
+                  iconClass={points ? GLYPHS.points : GLYPHS.sparkInline}
+                  color={points ? "text-primary" : "spark"}
+                />
+                )
+              </span>
+            );
+          }
+          const pointsValue = /^(\d+)\s+⍟$/u.exec(part);
+          if (pointsValue !== null) {
+            return (
+              <span key={index} style={inlineIconStyle}>
+                {pointsValue[1]}
+                <GlowIcon
+                  iconClass={GLYPHS.points}
+                  color="text-primary"
+                  title="points"
+                />
+              </span>
+            );
+          }
+          if (part === "⍟" || part === "✦") {
+            const points = part === "⍟";
+            return (
+              <span key={index} style={parenthesizedIconStyle}>
+                <GlowIcon
+                  iconClass={points ? GLYPHS.points : GLYPHS.sparkInline}
+                  color={points ? "text-primary" : "spark"}
+                  title={points ? "points" : "spark"}
+                />
+              </span>
+            );
+          }
+          if (part.toLowerCase() === "challenge") {
+            return (
+              <strong key={index} style={{ color: token("--spark") }}>
+                {part}
+              </strong>
+            );
+          }
+          return part;
+        })}
+      </>
+    );
+  };
 
   return (
     <GlassDialog
@@ -209,47 +307,11 @@ function TutorialHowToPlayDialog({
           padding: token("--space-9"),
         }}
       >
-        <p style={paragraphStyle}>
-          Play characters and{" "}
-          <strong style={{ color: token("--spark") }}>challenge</strong> with
-          them to score{" "}
-          <span
-            data-tutorial-how-to-play-points-term=""
-            style={parenthesizedIconStyle}
-          >
-            points (
-            <GlowIcon
-              iconClass={GLYPHS.points}
-              color="text-primary"
-            />
-            )
-          </span>{" "}
-          equal to their{" "}
-          <span
-            data-tutorial-how-to-play-spark-term=""
-            style={parenthesizedIconStyle}
-          >
-            spark (
-            <GlowIcon
-              iconClass={GLYPHS.sparkInline}
-              color="spark"
-            />
-            )
-          </span>
-          .
-        </p>
-        <p style={paragraphStyle}>
-          Score{" "}
-          <span style={inlineIconStyle}>
-            10
-            <GlowIcon
-              iconClass={GLYPHS.points}
-              color="text-primary"
-              title="points"
-            />
-          </span>{" "}
-          to win this dream battle.
-        </p>
+        {paragraphs.map((paragraph, index) => (
+          <p key={index} style={paragraphStyle}>
+            {renderInstructionText(paragraph)}
+          </p>
+        ))}
       </div>
     </GlassDialog>
   );
@@ -849,10 +911,10 @@ export function TutorialScreen({
   const [arrivedActionKey, setArrivedActionKey] = useState<string | null>(null);
   const [drawnActionKey, setDrawnActionKey] = useState<string | null>(null);
   const [playedActionKey, setPlayedActionKey] = useState<string | null>(null);
-  const [howToPlayPresentedRunId, setHowToPlayPresentedRunId] = useState<
+  const [howToPlayPresentedActionKey, setHowToPlayPresentedActionKey] = useState<
     string | null
   >(null);
-  const [howToPlayDismissedRunId, setHowToPlayDismissedRunId] = useState<
+  const [howToPlayDismissedActionKey, setHowToPlayDismissedActionKey] = useState<
     string | null
   >(null);
   const [pendingTutorialCardId, setPendingTutorialCardId] = useState<
@@ -1048,19 +1110,26 @@ export function TutorialScreen({
     (side: "enemy" | "player"): void => {
       if (side !== "player" || !sceneEntered || view.howToPlay === null) return;
       const runId = view.playbackRunId;
+      if (runId === null) {
+        return;
+      }
+      const actionKey = `${runId}:${view.howToPlay.actionId}`;
       if (
-        runId === null ||
-        howToPlayPresentedRunId === runId ||
-        howToPlayDismissedRunId === runId
+        howToPlayPresentedActionKey === actionKey ||
+        howToPlayDismissedActionKey === actionKey
       ) {
         return;
       }
-      setHowToPlayPresentedRunId(runId);
-      onHowToPlayPresented?.(runId, view.howToPlay.triggerCardId);
+      setHowToPlayPresentedActionKey(actionKey);
+      onHowToPlayPresented?.(
+        runId,
+        view.howToPlay.actionId,
+        view.howToPlay.triggerCardId,
+      );
     },
     [
-      howToPlayDismissedRunId,
-      howToPlayPresentedRunId,
+      howToPlayDismissedActionKey,
+      howToPlayPresentedActionKey,
       onHowToPlayPresented,
       sceneEntered,
       view.howToPlay,
@@ -1144,8 +1213,12 @@ export function TutorialScreen({
     const runId = view.playbackRunId;
     const howToPlay = view.howToPlay;
     if (runId === null || howToPlay === null) return;
-    setHowToPlayDismissedRunId(runId);
-    onHowToPlayDismissed?.(runId, howToPlay.triggerCardId);
+    setHowToPlayDismissedActionKey(`${runId}:${howToPlay.actionId}`);
+    onHowToPlayDismissed?.(
+      runId,
+      howToPlay.actionId,
+      howToPlay.triggerCardId,
+    );
   }, [onHowToPlayDismissed, view.howToPlay, view.playbackRunId]);
 
   const tutorialPlayableCard =
@@ -1258,6 +1331,28 @@ export function TutorialScreen({
       tutorialPlayableCard,
     ],
   );
+
+  useEffect(() => {
+    const runId = view.playbackRunId;
+    const howToPlay = view.howToPlay;
+    if (
+      runId === null ||
+      howToPlay === null ||
+      howToPlayDismissedActionKey !== `${runId}:${howToPlay.actionId}`
+    ) {
+      return undefined;
+    }
+    const timeout = window.setTimeout(
+      () => onActionComplete?.(runId, howToPlay.actionId),
+      howToPlay.wait * 1_000,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [
+    howToPlayDismissedActionKey,
+    onActionComplete,
+    view.howToPlay,
+    view.playbackRunId,
+  ]);
 
   useEffect(() => {
     if (
@@ -1575,9 +1670,14 @@ export function TutorialScreen({
       ) : null}
       {view.howToPlay !== null &&
       view.playbackRunId !== null &&
-      howToPlayPresentedRunId === view.playbackRunId &&
-      howToPlayDismissedRunId !== view.playbackRunId ? (
-        <TutorialHowToPlayDialog onClose={closeHowToPlay} />
+      howToPlayPresentedActionKey ===
+        `${view.playbackRunId}:${view.howToPlay.actionId}` &&
+      howToPlayDismissedActionKey !==
+        `${view.playbackRunId}:${view.howToPlay.actionId}` ? (
+        <TutorialHowToPlayDialog
+          text={view.howToPlay.text}
+          onClose={closeHowToPlay}
+        />
       ) : null}
     </motion.main>
   );

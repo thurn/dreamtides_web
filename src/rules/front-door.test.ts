@@ -175,10 +175,10 @@ describe("front-door reducer", () => {
             wait: 0.5,
           },
           {
-            id: "second",
-            action: "display-speech-bubble",
-            text: "A second line.",
-            wait: 3,
+            id: "how-to-play",
+            action: "display-how-to-play",
+            text: "Shared configured instructions.",
+            wait: 0,
           },
         ],
       }),
@@ -196,7 +196,7 @@ describe("front-door reducer", () => {
       begun.state,
       event("COMPLETE_TUTORIAL_ACTION", {
         runId: "event:1",
-        actionId: "second",
+        actionId: "how-to-play",
       }),
       context(2),
     );
@@ -217,7 +217,7 @@ describe("front-door reducer", () => {
       first.state,
       event("COMPLETE_TUTORIAL_ACTION", {
         runId: "event:1",
-        actionId: "second",
+        actionId: "how-to-play",
       }),
       context(3),
     );

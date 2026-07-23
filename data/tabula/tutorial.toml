@@ -45,3 +45,12 @@ id = "vrakmoth-reveal-and-play"
 action = "reveal-and-play-opponent-card"
 revealDuration = 2
 wait = 0
+
+[[actions]]
+id = "how-to-play"
+action = "display-how-to-play"
+text = """
+Play characters and challenge with them to score points (⍟) equal to their spark (✦).
+
+Score 10 ⍟ to win this dream battle."""
+wait = 0

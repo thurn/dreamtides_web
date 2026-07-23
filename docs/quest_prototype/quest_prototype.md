@@ -104,6 +104,24 @@ The hidden package stays out of normal player UI. Debug surfaces can show the
 resolved package, selected optional subset, draft pool size, and the remaining
 and spent Dreamsign pools.
 
+### Tutorial authoring
+
+The standalone tutorial is an ordered action sequence authored in
+`data/tabula/tutorial.toml`. `scripts/setup-assets.mjs` validates that source
+and generates the browser-readable `public/tutorial-data.json` snapshot. The
+Tutorial Editor reads and writes the same action model during development.
+
+Every tutorial beat, including instructional messages, is represented by a
+typed `TutorialAction`. Player-facing copy belongs on the authored action so it
+can be revised without changing a Cumulus screen. The shared event-log cursor
+advances through `beginTutorial` and `completeTutorialAction` in
+`src/coop/actions.ts`; local animation completion may determine when an action
+becomes visible, while completing the action remains a shared intent.
+
+When a tutorial request adds a new kind of beat, extend the action type,
+runtime and build-time validators, Tutorial Editor controls, view-model
+mapping, and presentation tests together.
+
 ## Hidden-Tides Behavior
 
 - Dreamcaller selection is a quest-start choice, not a mid-run site.

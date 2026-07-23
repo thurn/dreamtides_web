@@ -76,6 +76,38 @@ describe("parseTutorialActions", () => {
     ).toThrow(/Mira, the player, or the enemy/u);
   });
 
+  it("preserves authored How to Play copy and rejects blank messages", () => {
+    const text =
+      "Play characters to score points (⍟).\n\nScore 10 ⍟ to win.";
+    expect(
+      parseTutorialActions([
+        {
+          id: "how-to-play",
+          action: "display-how-to-play",
+          text,
+          wait: 0,
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "how-to-play",
+        action: "display-how-to-play",
+        text,
+        wait: 0,
+      },
+    ]);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "blank-how-to-play",
+          action: "display-how-to-play",
+          text: "  ",
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/How to Play text/u);
+  });
+
   it("normalizes legacy portrait actions and preserves opponent pauses", () => {
     expect(
       parseTutorialActions([

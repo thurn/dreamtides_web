@@ -47,6 +47,15 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       speaker: action.speaker ?? "mira",
     };
   }
+  if (action.action === "display-how-to-play") {
+    return {
+      actionId: action.id,
+      action: action.action,
+      waitSeconds: action.wait,
+      title: "How to Play",
+      messageText: action.text,
+    };
+  }
   if (action.action === "reveal-and-play-opponent-card") {
     return {
       actionId: action.id,
@@ -153,6 +162,12 @@ function activeDialogueAction(
   playback: TutorialPlaybackState | null,
 ): DisplaySpeechBubbleTutorialAction | null {
   if (playback?.currentActionIndex === null || playback === null) return null;
+  if (
+    playback.actions[playback.currentActionIndex]?.action ===
+    "display-how-to-play"
+  ) {
+    return null;
+  }
   for (let index = playback.currentActionIndex; index >= 0; index -= 1) {
     const action = playback.actions[index];
     if (action?.action === "display-speech-bubble") return action;
@@ -201,8 +216,15 @@ export function buildTutorialView(
         )
       : null;
   const opponentCardPlayed = completedOpponentPlays > 0;
+  const howToPlayActionIndex =
+    playback?.actions.findIndex(
+      (action) => action.action === "display-how-to-play",
+    ) ?? -1;
   const playerTurnStarted =
-    playback !== null && playback.currentActionIndex === null;
+    playback !== null &&
+    (playback.currentActionIndex === null ||
+      (howToPlayActionIndex >= 0 &&
+        playback.currentActionIndex >= howToPlayActionIndex));
   const playerDeckCardIds = tutorialDeckIds("player");
   const playerTurnCardInstanceId = playerDeckCardIds[0] ?? null;
   const playerTurnCard =
@@ -300,9 +322,16 @@ export function buildTutorialView(
     playbackRunId: playback?.runId ?? null,
     currentAction,
     howToPlay:
-      playerTurnCard === null || playerCardPlayed
+      playerTurnCard === null ||
+      playerCardPlayed ||
+      currentAction?.action !== "display-how-to-play"
         ? null
-        : { triggerCardId: playerTurnCard.model.cardId },
+        : {
+            actionId: currentAction.id,
+            text: currentAction.text,
+            wait: currentAction.wait,
+            triggerCardId: playerTurnCard.model.cardId,
+          },
     battle: (() => {
       const emptyPlayer = emptySide("player");
       const player = {

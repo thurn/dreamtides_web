@@ -37,9 +37,12 @@ export interface TutorialEditorRailProps {
 }
 
 const TUTORIAL_TAIL_ACTION_COUNT = 3;
+const DEFAULT_HOW_TO_PLAY_TEXT =
+  "Play characters and challenge with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle.";
 
 const ACTION_OPTIONS = [
   { value: "display-speech-bubble", label: "Display Speech Bubble" },
+  { value: "display-how-to-play", label: "Display How to Play" },
   {
     value: "animate-dreamcaller-portrait",
     label: "Animate Dreamcaller Portrait",
@@ -87,6 +90,14 @@ function defaultAction(
       wait: 3,
     };
   }
+  if (actionName === "display-how-to-play") {
+    return {
+      id,
+      action: "display-how-to-play",
+      text: DEFAULT_HOW_TO_PLAY_TEXT,
+      wait: 0,
+    };
+  }
   if (actionName === "animate-dreamcaller-portrait") {
     return {
       id,
@@ -124,6 +135,17 @@ function changedActionType(
         action.action === "display-speech-bubble"
           ? action.text
           : "New tutorial message.",
+      wait: action.wait,
+    };
+  }
+  if (actionName === "display-how-to-play") {
+    return {
+      id: action.id,
+      action: actionName,
+      text:
+        action.action === "display-how-to-play"
+          ? action.text
+          : DEFAULT_HOW_TO_PLAY_TEXT,
       wait: action.wait,
     };
   }
@@ -276,6 +298,7 @@ function TutorialActionRow({
               onChange={(value) => {
                 if (
                   value !== "display-speech-bubble" &&
+                  value !== "display-how-to-play" &&
                   value !== "animate-dreamcaller-portrait" &&
                   value !== "draw-opponent-card" &&
                   value !== "reveal-and-play-opponent-card"
@@ -340,6 +363,22 @@ function TutorialActionRow({
               onCommit={(text) => update({ ...action, text }, true)}
             />
           </>
+        ) : null}
+
+        {action.action === "display-how-to-play" ? (
+          <TextArea
+            label="Instruction Text"
+            value={action.text}
+            supportingText="Use a blank line between paragraphs. ⍟ renders points; ✦ renders spark."
+            error={
+              action.text.trim().length === 0
+                ? "Text cannot be blank."
+                : undefined
+            }
+            testId={`tutorial-action-text-${action.id}`}
+            onChange={(text) => update({ ...action, text }, false)}
+            onCommit={(text) => update({ ...action, text }, true)}
+          />
         ) : null}
 
         {action.action === "animate-dreamcaller-portrait" ? (
@@ -603,6 +642,7 @@ function TutorialEditorContent({
         onChange={(value) => {
           if (
             value !== "display-speech-bubble" &&
+            value !== "display-how-to-play" &&
             value !== "animate-dreamcaller-portrait" &&
             value !== "draw-opponent-card" &&
             value !== "reveal-and-play-opponent-card"

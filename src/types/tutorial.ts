@@ -1,6 +1,7 @@
 /** Stable action names authored by the Tutorial Editor. */
 export type TutorialActionName =
   | "display-speech-bubble"
+  | "display-how-to-play"
   | "animate-dreamcaller-portrait"
   | "draw-opponent-card"
   | "reveal-and-play-opponent-card";
@@ -24,6 +25,16 @@ export interface DisplaySpeechBubbleTutorialAction extends TutorialActionBase {
   readonly action: "display-speech-bubble";
   /** Defaults to Mira for tutorial snapshots authored before speaker selection. */
   readonly speaker?: TutorialSpeechBubbleSpeaker;
+  readonly text: string;
+}
+
+/** Shows the dismissible How to Play instruction popup. */
+export interface DisplayHowToPlayTutorialAction extends TutorialActionBase {
+  readonly action: "display-how-to-play";
+  /**
+   * Authored instruction copy. Blank lines separate paragraphs; `⍟` and `✦`
+   * render as the points and spark glyphs.
+   */
   readonly text: string;
 }
 
@@ -52,6 +63,7 @@ export interface RevealAndPlayOpponentCardTutorialAction extends TutorialActionB
 /** Exhaustive authored tutorial action model. */
 export type TutorialAction =
   | DisplaySpeechBubbleTutorialAction
+  | DisplayHowToPlayTutorialAction
   | AnimateDreamcallerPortraitTutorialAction
   | DrawOpponentCardTutorialAction
   | RevealAndPlayOpponentCardTutorialAction;

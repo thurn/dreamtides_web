@@ -65,6 +65,19 @@ export function parseTutorialActions(
         wait,
       } satisfies TutorialAction;
     }
+    if (record.action === "display-how-to-play") {
+      if (typeof record.text !== "string" || record.text.trim().length === 0) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must have How to Play text.`,
+        );
+      }
+      return {
+        id,
+        action: "display-how-to-play",
+        text: record.text,
+        wait,
+      } satisfies TutorialAction;
+    }
     if (record.action === "animate-dreamcaller-portrait") {
       const owner = record.owner ?? "player";
       const pause = record.pause ?? 0;

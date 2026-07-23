@@ -953,7 +953,7 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
-  it("opens the formatted How to Play dialog only after the first player turn announcement finishes and closes it from the X button", () => {
+  it("opens the authored How to Play action after the player turn announcement and completes it from the X button", () => {
     vi.useFakeTimers();
     window.matchMedia = vi.fn().mockImplementation((query: string) => ({
       matches: query.includes("min-width"),
@@ -967,6 +967,9 @@ describe("TutorialScreen", () => {
     }));
     const onHowToPlayPresented = vi.fn();
     const onHowToPlayDismissed = vi.fn();
+    const onActionComplete = vi.fn();
+    const howToPlayText =
+      "Play characters and challenge with them to score points (⍟) equal to their spark (✦).\n\nScore 12 ⍟ to win this configured battle.";
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -979,8 +982,16 @@ describe("TutorialScreen", () => {
               dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: null,
               playbackRunId: "event:player-turn",
-              currentAction: null,
+              currentAction: {
+                id: "how-to-play",
+                action: "display-how-to-play",
+                text: howToPlayText,
+                wait: 0,
+              },
               howToPlay: {
+                actionId: "how-to-play",
+                text: howToPlayText,
+                wait: 0,
                 triggerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
               },
               battle: {
@@ -989,6 +1000,7 @@ describe("TutorialScreen", () => {
                 player: { backRank: [], frontRank: [] },
               } as unknown as MobileBattleView,
             }}
+            onActionComplete={onActionComplete}
             onHowToPlayPresented={onHowToPlayPresented}
             onHowToPlayDismissed={onHowToPlayDismissed}
           />
@@ -1035,7 +1047,7 @@ describe("TutorialScreen", () => {
       "Play characters and challenge with them to score points () equal to their spark ()",
     );
     expect(paragraphs[1]?.textContent?.replace(/\s+/g, " ")).toContain(
-      "Score 10 to win this dream battle",
+      "Score 12 to win this configured battle",
     );
     const challenge = paragraphs[0]?.querySelector("strong");
     expect(challenge?.textContent).toBe("challenge");
@@ -1087,7 +1099,7 @@ describe("TutorialScreen", () => {
     expect(
       paragraphs[1]?.querySelector('[aria-label="points"]')?.parentElement
         ?.textContent,
-    ).toBe("10");
+    ).toBe("12");
     expect(
       paragraphs[1]?.querySelector<HTMLElement>('[aria-label="points"]')
         ?.parentElement?.style.columnGap,
@@ -1104,6 +1116,7 @@ describe("TutorialScreen", () => {
     );
     expect(onHowToPlayPresented).toHaveBeenCalledWith(
       "event:player-turn",
+      "how-to-play",
       "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
     );
 
@@ -1117,7 +1130,15 @@ describe("TutorialScreen", () => {
     expect(container.querySelector('[role="dialog"]')).toBeNull();
     expect(onHowToPlayDismissed).toHaveBeenCalledWith(
       "event:player-turn",
+      "how-to-play",
       "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+    );
+    act(() => {
+      vi.advanceTimersByTime(0);
+    });
+    expect(onActionComplete).toHaveBeenCalledWith(
+      "event:player-turn",
+      "how-to-play",
     );
 
     act(() => root.unmount());

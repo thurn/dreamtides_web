@@ -62,7 +62,7 @@ export function useTutorialPresentationLogging(
   }, [playback, view.currentAction, view.dialogue, view.playbackRunId]);
 }
 
-/** Log the local How to Play overlay lifecycle with its UUID-backed trigger. */
+/** Log the authored How to Play action's local presentation lifecycle. */
 export function useTutorialHowToPlayLogging(
   battleId: string,
 ): Pick<
@@ -70,21 +70,23 @@ export function useTutorialHowToPlayLogging(
   "onHowToPlayPresented" | "onHowToPlayDismissed"
 > {
   const onHowToPlayPresented = useCallback(
-    (runId: string, triggerCardId: string): void => {
+    (runId: string, actionId: string, triggerCardId: string): void => {
       logEvent("tutorial_how_to_play_presented", {
         runId,
+        actionId,
         battleId,
         triggerCardId,
-        trigger: "player-card-draw-complete",
+        trigger: "player-turn-announcement-complete",
         title: "How to Play",
       });
     },
     [battleId],
   );
   const onHowToPlayDismissed = useCallback(
-    (runId: string, triggerCardId: string): void => {
+    (runId: string, actionId: string, triggerCardId: string): void => {
       logEvent("tutorial_how_to_play_dismissed", {
         runId,
+        actionId,
         battleId,
         triggerCardId,
       });

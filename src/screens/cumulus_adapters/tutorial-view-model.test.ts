@@ -120,6 +120,23 @@ describe("buildTutorialView", () => {
     });
   });
 
+  it("logs the authored How to Play copy for sequence reconstruction", () => {
+    expect(
+      tutorialActionLogDetails({
+        id: "how-to-play",
+        action: "display-how-to-play",
+        text: "Configured instructions.",
+        wait: 0,
+      }),
+    ).toEqual({
+      actionId: "how-to-play",
+      action: "display-how-to-play",
+      title: "How to Play",
+      messageText: "Configured instructions.",
+      waitSeconds: 0,
+    });
+  });
+
   it("logs the face-down opponent draw path for sequence reconstruction", () => {
     expect(
       tutorialActionLogDetails({
@@ -369,6 +386,12 @@ describe("buildTutorialView", () => {
         revealDuration: 2,
         wait: 0,
       },
+      {
+        id: "how-to-play",
+        action: "display-how-to-play" as const,
+        text: "Configured instructions.\n\nScore 10 ⍟ to win.",
+        wait: 0,
+      },
     ];
 
     const drawing = buildTutorialView({
@@ -405,7 +428,7 @@ describe("buildTutorialView", () => {
     const playedTutorial = buildTutorialView(
       {
         runId: "event:draw",
-        currentActionIndex: null,
+        currentActionIndex: 3,
         actions,
       },
       OPPONENT_CARD,
@@ -413,8 +436,13 @@ describe("buildTutorialView", () => {
     );
     const played = playedTutorial.battle;
     expect(playedTutorial.howToPlay).toEqual({
+      actionId: "how-to-play",
+      text: "Configured instructions.\n\nScore 10 ⍟ to win.",
+      wait: 0,
       triggerCardId: TUTORIAL_PLAYER_CARD_ID,
     });
+    expect(playedTutorial.currentAction?.action).toBe("display-how-to-play");
+    expect(playedTutorial.dialogue).toBeNull();
     expect(played.enemyHandCardIds).toEqual([]);
     expect(played.enemyHand).toEqual([]);
     expect(played.enemy.backRank[0]?.card).toMatchObject({
@@ -455,7 +483,6 @@ describe("buildTutorialView", () => {
         },
       },
     });
-
     const afterPlayerCardPlay = buildTutorialView(
       {
         runId: "event:draw",
@@ -492,6 +519,18 @@ describe("buildTutorialView", () => {
       deck: 29,
       backRank: 1,
     });
+
+    const dismissed = buildTutorialView(
+      {
+        runId: "event:draw",
+        currentActionIndex: null,
+        actions,
+      },
+      OPPONENT_CARD,
+      PLAYER_CARD,
+    );
+    expect(dismissed.howToPlay).toBeNull();
+    expect(dismissed.battle.activeSide).toBe("player");
   });
 
   it("settles Vrakmoth only after the opponent portrait action advances", () => {
