@@ -88,6 +88,7 @@ Hairlines and dividers.
 | `--border-soft` | `var(--primitive-line-soft)` |  |
 | `--border-mid` | `var(--primitive-line-mid)` |  |
 | `--border-strong` | `var(--primitive-line-strong)` |  |
+| `--border-glossary-definition` | `var(--primitive-line-glossary-definition)` |  |
 | `--border-accent` | `var(--primitive-line-violet)` |  |
 | `--line-strong` | `var(--atlas-badge-border)` | rgba(168,85,247,.42) |
 

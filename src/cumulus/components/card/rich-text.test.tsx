@@ -47,7 +47,9 @@ describe("RichText", () => {
     );
     expect(markup).toContain(": A penalty card forced into your deck.");
     expect(markup.match(/data-definition-divider=""/g)).toHaveLength(1);
-    expect(markup).toContain("background:rgba(246, 246, 245, 0.23)");
+    expect(markup).toContain(
+      "margin:var(--space-4) auto;background:var(--border-glossary-definition)",
+    );
     expect(markup).not.toContain("--cv-rules-highlight-color");
     expect(markup).not.toContain("data-rules-text-paragraph");
   });

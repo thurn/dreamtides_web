@@ -73,14 +73,13 @@ export const richText = {
 const STACK_GAP = 8;
 const INLINE_RULE_SYMBOL_RE = /[●✦▸⍟☪⧗❖]/;
 
-/** Baseline glossary divider treatment shared with the temporary tweaks panel. */
-export const DEFAULT_GLOSSARY_DIVIDER_STYLE = {
-  length: "100%",
-  thickness: "1px",
-  gapBefore: "12px",
-  gapAfter: "8px",
-  paint: "rgba(246, 246, 245, 0.23)",
-  shadow: "none",
+/** One visible hairline with an even, compact rhythm between definition rows. */
+const GLOSSARY_DEFINITION_DIVIDER_STYLE = {
+  display: "block",
+  width: "100%",
+  height: "1px",
+  margin: `${token("--space-4")} auto`,
+  background: token("--border-glossary-definition"),
 } as const;
 
 function renderDefinitionText(definition: string): ReactNode {
@@ -204,14 +203,7 @@ export function renderRichText(
                 <span
                   aria-hidden="true"
                   data-definition-divider=""
-                  style={{
-                    display: "block",
-                    width: DEFAULT_GLOSSARY_DIVIDER_STYLE.length,
-                    height: DEFAULT_GLOSSARY_DIVIDER_STYLE.thickness,
-                    margin: `${DEFAULT_GLOSSARY_DIVIDER_STYLE.gapBefore} auto ${DEFAULT_GLOSSARY_DIVIDER_STYLE.gapAfter}`,
-                    background: DEFAULT_GLOSSARY_DIVIDER_STYLE.paint,
-                    boxShadow: DEFAULT_GLOSSARY_DIVIDER_STYLE.shadow,
-                  }}
+                  style={GLOSSARY_DEFINITION_DIVIDER_STYLE}
                 />
               )}
               <dt

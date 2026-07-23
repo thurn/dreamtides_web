@@ -134,6 +134,7 @@
   --primitive-line-soft: rgba(255, 255, 255, 0.07);
   --primitive-line-mid:  rgba(255, 255, 255, 0.12);
   --primitive-line-strong: rgba(255, 255, 255, 0.18);
+  --primitive-line-glossary-definition: rgba(246, 246, 245, 0.23);
   --primitive-line-violet: rgba(168, 85, 247, 0.40);
   --primitive-line-black: #000;
   --primitive-line-battlefield: rgba(24, 24, 28, 0.30);
@@ -255,6 +256,7 @@
   --border-soft: var(--primitive-line-soft);
   --border-mid: var(--primitive-line-mid);
   --border-strong: var(--primitive-line-strong);
+  --border-glossary-definition: var(--primitive-line-glossary-definition);
   --border-accent: var(--primitive-line-violet);
   --battlefield-slot-border: 2px dotted var(--primitive-line-battlefield);
 

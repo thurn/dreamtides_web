@@ -18,7 +18,6 @@ import CardEditorApp from "./editor/CardEditorApp";
 import { verifyFonts } from "./runtime/verify-fonts";
 import { applyDeviceFrameFromSearch } from "./runtime/device-frame";
 import { CumulusRoot } from "./cumulus/CumulusRoot";
-import { GlossaryDividerTweaks } from "./cumulus/screens/devtools/GlossaryDividerTweaks";
 
 // Screenshot mock-ups load the app in an iframe with no physical display
 // cutout, so `env(safe-area-inset-*)` reads 0. When the device-screenshot tool
@@ -181,7 +180,6 @@ if (pathname === "/editor" || pathname === "/cards") {
       ) : (
         <App runtimeConfig={runtimeConfig} />
       )}
-      {import.meta.env.DEV ? <GlossaryDividerTweaks /> : null}
     </>,
   );
 }
