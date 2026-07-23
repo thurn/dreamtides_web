@@ -22,7 +22,7 @@ const TUTORIAL_DREAMCALLER_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
 const TUTORIAL_OPPONENT_DREAMCALLER_ID = "86026206-1B11-4F38-A24E-FD3C697F5353";
 const TUTORIAL_OPPONENT_BACK_RANK_INDEX = 0;
 const TUTORIAL_PLAYER_BACK_RANK_INDEX = 1;
-const TUTORIAL_PLAYER_TURN_ENERGY = 4;
+const TUTORIAL_STARTING_ENERGY = 4;
 export {
   TUTORIAL_OPPONENT_CARD_ID,
   TUTORIAL_PLAYER_CARD_INSTANCE_ID,
@@ -368,22 +368,31 @@ export function buildTutorialView(
         playback.currentActionIndex > actionIndex)
     );
   };
-  const enemyDreamwellEnergy =
+  const enemyDreamwellDrawn =
     revealedDreamwellAction?.action === "draw-dreamwell-card" &&
-    revealedDreamwellAction.owner === "enemy"
-      ? (revealedDreamwellCard?.energyAdded ?? 0)
-      : 0;
+    revealedDreamwellAction.owner === "enemy";
+  const enemyDreamwellEnergy = enemyDreamwellDrawn
+    ? (revealedDreamwellCard?.energyAdded ?? 0)
+    : 0;
   const playerDreamwellEnergy =
     revealedDreamwellAction?.action === "draw-dreamwell-card" &&
     revealedDreamwellAction.owner === "player"
       ? (revealedDreamwellCard?.energyAdded ?? 0)
       : 0;
+  const enemyMaxEnergy = TUTORIAL_STARTING_ENERGY + enemyDreamwellEnergy;
+  const enemyCurrentEnergy = enemyDreamwellDrawn
+    ? enemyMaxEnergy
+    : Math.max(
+        0,
+        TUTORIAL_STARTING_ENERGY -
+          (opponentCardPlayed ? (opponentCard?.energyCost ?? 0) : 0),
+      );
   const enemy = {
     ...emptySide("enemy"),
     status: {
       ...emptySide("enemy").status,
-      currentEnergy: enemyDreamwellEnergy,
-      maxEnergy: enemyDreamwellEnergy,
+      currentEnergy: enemyCurrentEnergy,
+      maxEnergy: enemyMaxEnergy,
     },
   };
   const enemyBackRank = enemy.backRank.map((slot, index) =>
@@ -493,7 +502,7 @@ export function buildTutorialView(
     battle: (() => {
       const emptyPlayer = emptySide("player");
       const playerTurnEnergy =
-        (playerTurnStarted ? TUTORIAL_PLAYER_TURN_ENERGY : 0) +
+        (playerTurnStarted ? TUTORIAL_STARTING_ENERGY : 0) +
         playerDreamwellEnergy;
       const player = {
         ...emptyPlayer,

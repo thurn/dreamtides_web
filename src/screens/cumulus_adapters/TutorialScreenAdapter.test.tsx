@@ -462,8 +462,8 @@ describe("TutorialScreenAdapter", () => {
       },
       enemy: {
         status: {
-          currentEnergy: 1,
-          maxEnergy: 1,
+          currentEnergy: 5,
+          maxEnergy: 5,
         },
       },
     });

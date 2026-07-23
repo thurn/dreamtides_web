@@ -308,13 +308,19 @@ describe("buildTutorialView", () => {
       expect(side.voidCards).toEqual([]);
       expect(side.backRank.every((slot) => slot.card === null)).toBe(true);
       expect(side.frontRank.every((slot) => slot.card === null)).toBe(true);
-      expect(side.status).toEqual({
-        dreamcaller: null,
-        currentEnergy: 0,
-        maxEnergy: 0,
-        points: 0,
-      });
     }
+    expect(view.player.status).toEqual({
+      dreamcaller: null,
+      currentEnergy: 0,
+      maxEnergy: 0,
+      points: 0,
+    });
+    expect(view.enemy.status).toEqual({
+      dreamcaller: null,
+      currentEnergy: 4,
+      maxEnergy: 4,
+      points: 0,
+    });
 
     expect(view.inspector.sides.player.zones.deck).toBe(30);
     expect(view.inspector.sides.enemy.zones.deck).toBe(30);
@@ -539,6 +545,10 @@ describe("buildTutorialView", () => {
       currentActionIndex: 1,
       actions,
     }).battle;
+    expect(drawing.enemy.status).toMatchObject({
+      currentEnergy: 4,
+      maxEnergy: 4,
+    });
     expect(drawing.enemy.deckCardIds[0]).toBe("tutorial-enemy-deck-1");
     expect(drawing.enemy.deckCardIds).toHaveLength(30);
     expect(drawing.enemyHandCardIds).toEqual([]);
@@ -563,6 +573,10 @@ describe("buildTutorialView", () => {
     expect(drawn.inspector.sides.enemy.zones).toMatchObject({
       deck: 29,
       hand: 1,
+    });
+    expect(drawn.enemy.status).toMatchObject({
+      currentEnergy: 4,
+      maxEnergy: 4,
     });
 
     const playedTutorial = buildTutorialView(
@@ -591,6 +605,10 @@ describe("buildTutorialView", () => {
       model: { cardId: TUTORIAL_OPPONENT_CARD_ID },
     });
     expect(played.enemy.backRank[1]?.card).toBeNull();
+    expect(played.enemy.status).toMatchObject({
+      currentEnergy: 2,
+      maxEnergy: 4,
+    });
     expect(played.inspector.sides.enemy.zones).toMatchObject({
       deck: 29,
       hand: 0,
@@ -701,8 +719,8 @@ describe("buildTutorialView", () => {
       },
       enemy: {
         status: {
-          currentEnergy: 1,
-          maxEnergy: 1,
+          currentEnergy: 5,
+          maxEnergy: 5,
         },
       },
       inspector: {
@@ -710,8 +728,8 @@ describe("buildTutorialView", () => {
         phase: "Dawn",
         sides: {
           enemy: {
-            currentEnergy: 1,
-            maxEnergy: 1,
+            currentEnergy: 5,
+            maxEnergy: 5,
           },
         },
       },
