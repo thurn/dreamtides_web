@@ -64,6 +64,7 @@ describe("RichText", () => {
             term: "Exhaust Cost",
             definition: "Exhaust definition.",
             symbol: "exhaust",
+            termPresentation: "symbolOnly",
           },
           {
             term: "Night",
@@ -81,5 +82,7 @@ describe("RichText", () => {
     expect(markup).toContain('data-definition-symbol="interrupt"');
     expect(markup).toContain('data-definition-symbol="exhaust"');
     expect(markup).toContain('data-definition-symbol="trigger"');
+    expect(markup).not.toContain(">Exhaust Cost</dt>");
+    expect(markup).toContain('role="img" aria-label="Exhaust Cost"');
   });
 });

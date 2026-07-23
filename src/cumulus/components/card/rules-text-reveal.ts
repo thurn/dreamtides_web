@@ -35,6 +35,8 @@ export function glossaryDefinitionsCardModel(
         term: entry.term,
         definition: entry.definition,
         symbol: DEFINITION_SYMBOL_BY_ID[entry.id],
+        termPresentation:
+          entry.id === GLOSSARY_IDS.exhaustCost ? "symbolOnly" : undefined,
       })),
     ),
   };

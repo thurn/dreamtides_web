@@ -18,12 +18,14 @@ export type RichTextDefinitionSymbol =
   "fast" | "interrupt" | "exhaust" | "trigger";
 
 export interface RichTextDefinition {
-  /** Canonical glossary term shown as the compact row label. */
+  /** Canonical glossary term used as the compact row label. */
   readonly term: string;
   /** Rules-aware explanatory copy shown after the label. */
   readonly definition: string;
   /** Optional rules symbol rendered directly before the glossary term. */
   readonly symbol?: RichTextDefinitionSymbol;
+  /** Whether the visible row label uses the term or its rules symbol alone. */
+  readonly termPresentation?: "text" | "symbolOnly";
 }
 
 /**
@@ -88,8 +90,12 @@ function definitionSymbolSpec(symbol: RichTextDefinitionSymbol): {
 
 function DefinitionSymbol({
   symbol,
+  title,
+  trailingGap,
 }: {
   readonly symbol: RichTextDefinitionSymbol;
+  readonly title?: string;
+  readonly trailingGap: boolean;
 }) {
   const { glyph, count } = definitionSymbolSpec(symbol);
   return (
@@ -99,7 +105,7 @@ function DefinitionSymbol({
         display: "inline-flex",
         alignItems: "center",
         verticalAlign: "middle",
-        marginRight: token("--space-1"),
+        marginRight: trailingGap ? token("--space-1") : undefined,
       }}
     >
       {Array.from({ length: count }, (_, index) => (
@@ -110,7 +116,7 @@ function DefinitionSymbol({
             marginLeft: index === 0 ? undefined : "-0.35em",
           }}
         >
-          <GlowIcon iconClass={glyph} color="text-primary" />
+          <GlowIcon iconClass={glyph} color="text-primary" title={title} />
         </span>
       ))}
     </span>
@@ -182,9 +188,17 @@ export function renderRichText(
                 }}
               >
                 {entry.symbol === undefined ? null : (
-                  <DefinitionSymbol symbol={entry.symbol} />
+                  <DefinitionSymbol
+                    symbol={entry.symbol}
+                    title={
+                      entry.termPresentation === "symbolOnly"
+                        ? entry.term
+                        : undefined
+                    }
+                    trailingGap={entry.termPresentation !== "symbolOnly"}
+                  />
                 )}
-                {entry.term}
+                {entry.termPresentation === "symbolOnly" ? null : entry.term}
               </dt>
               <dd style={{ display: "inline", margin: 0 }}>
                 {": "}

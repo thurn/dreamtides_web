@@ -33,26 +33,31 @@ describe("glossaryDefinitionsCardModel", () => {
           term: "Fast",
           definition: "Fast definition.",
           symbol: "fast",
+          termPresentation: undefined,
         },
         {
           term: "Interrupt",
           definition: "Interrupt definition.",
           symbol: "interrupt",
+          termPresentation: undefined,
         },
         {
           term: "Exhaust Cost",
           definition: "Exhaust Cost definition.",
           symbol: "exhaust",
+          termPresentation: "symbolOnly",
         },
         {
           term: "Night",
           definition: "Night definition.",
           symbol: "trigger",
+          termPresentation: undefined,
         },
         {
           term: "Void",
           definition: "Void definition.",
           symbol: undefined,
+          termPresentation: undefined,
         },
       ],
     });
