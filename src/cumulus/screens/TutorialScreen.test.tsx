@@ -1145,7 +1145,7 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
-  it("bridges the tutorial hand card drag into a shared player-card play", () => {
+  it("bridges the tutorial hand card after the how-to-play action completes", () => {
     const onPlayerCardPlay = vi.fn();
     const container = document.createElement("div");
     document.body.append(container);
@@ -1160,12 +1160,7 @@ describe("TutorialScreen", () => {
               dialogue: null,
               playbackRunId: "event:player-turn",
               currentAction: null,
-              howToPlay: {
-                actionId: "how-to-play",
-                text: "Configured instructions.",
-                wait: 0,
-                triggerCardId: TUTORIAL_PLAYER_CARD.model.cardId,
-              },
+              howToPlay: null,
               battle: {
                 battleId: "tutorial-battle",
                 playerHand: [TUTORIAL_PLAYER_CARD],

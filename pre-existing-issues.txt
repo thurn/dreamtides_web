@@ -2,6 +2,8 @@ src/cumulus/screens/quest-start-mobile.tsx: ScreenHeader declares the same `posi
 src/logging.ts: logEvent's sink error handler repeats the same best-effort transport comment twice.
 scripts/cumulus-ui-baselines.test.mjs: The integrity check shells out to a full ESLint run under a hard 30-second timeout; on a loaded development machine the lint completes too slowly and the otherwise-clean test times out.
 
+src/cumulus/components/card/CardView.hover-zoom.test.tsx: The explicit editor-variant test expects the Bane glossary title in the complete-card reveal metadata, but the current render supplies an empty secondary-title value. `npx vitest run src/cumulus/components/card/CardView.hover-zoom.test.tsx` fails at line 44 on the master baseline.
+
 Battle card play does not mark a character exhausted
 
 In the playable battle at `?goto=battle&ai=0`, dragging a character from the

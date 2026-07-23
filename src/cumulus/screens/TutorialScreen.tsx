@@ -1227,12 +1227,15 @@ export function TutorialScreen({
     );
   }, [onHowToPlayDismissed, view.howToPlay, view.playbackRunId]);
 
+  // The instructional action has completed by the time the player receives
+  // control. Its view data is therefore absent, while the hand still carries
+  // the authoritative playable marker from the tutorial view model.
   const tutorialPlayableCard =
-    view.howToPlay === null
-      ? null
-      : ((view.battle.playerHand ?? []).find(
-          (card) => card.model.cardId === view.howToPlay?.triggerCardId,
-        ) ?? null);
+    view.currentAction === null
+      ? ((view.battle.playerHand ?? []).find(
+          (card) => card.showPlayableOutline,
+        ) ?? null)
+      : null;
   const canPlayTutorialCard =
     view.currentAction === null &&
     view.playbackRunId !== null &&
