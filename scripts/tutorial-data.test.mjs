@@ -107,6 +107,27 @@ describe("tutorial data", () => {
         { ...FIXTURE_ACTIONS[4], trigger: "after-card-name" },
       ]),
     ).toThrow(/supported How to Play trigger/u);
+    expect(() =>
+      validateTutorialActions([
+        { ...FIXTURE_ACTIONS[4], companion: "named-card" },
+      ]),
+    ).toThrow(/supported How to Play companion/u);
+  });
+
+  it("preserves a Dreamwell companion on How to Play actions", () => {
+    expect(
+      validateTutorialActions([
+        {
+          ...FIXTURE_ACTIONS[4],
+          companion: "dreamwell-card",
+        },
+      ]),
+    ).toEqual([
+      {
+        ...FIXTURE_ACTIONS[4],
+        companion: "dreamwell-card",
+      },
+    ]);
   });
 
   it("validates UUID-authored Dreamwell draws", () => {

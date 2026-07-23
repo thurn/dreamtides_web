@@ -49,6 +49,12 @@ const CLOSE_DISC_PX = 48;
  */
 const WIDE_PANEL_MAX_WIDTH_PX = 1120;
 
+/**
+ * Shared item width (px) for a popup paired with a tangible companion object.
+ * This matches the canonical desktop Dreamwell-card presentation.
+ */
+const PAIRED_POPUP_DESKTOP_ITEM_WIDTH_PX = 360;
+
 /** Props for {@link GlassBackdrop}. */
 export interface GlassBackdropProps {
   /**
@@ -136,6 +142,13 @@ export interface GlassDialogProps {
    * viewport-aligned. Defaults to `"viewport"`.
    */
   desktopCenterTarget?: "viewport" | "battlefield";
+  /**
+   * Optional tangible object paired with a popup panel. On desktop the
+   * companion leads an equal-width horizontal pair; on mobile it sits above
+   * the equally wide panel. The complete pair is centered in the target
+   * region. Only applies to `presentation="popup"`.
+   */
+  companion?: ReactNode;
   /** The scrolling body content. */
   children: ReactNode;
 }
@@ -168,11 +181,13 @@ export function GlassDialog({
   presentation = "responsive",
   chrome = "standard",
   desktopCenterTarget = "viewport",
+  companion,
   children,
 }: GlassDialogProps): ReactElement {
   const isDesktop = useIsDesktop();
   const glass = glassSurfaceStyle();
   const popup = presentation === "popup" && !fullScreen;
+  const pairedPopup = popup && companion !== undefined;
   const boundedPanel = (isDesktop && !fullScreen) || popup;
   const fullBleed = !boundedPanel;
   const wideDesktop = isDesktop && boundedPanel && !popup && wide;
@@ -231,7 +246,8 @@ export function GlassDialog({
         ...glass,
         position: "relative",
         zIndex: 1,
-        width: popup ? "fit-content" : "100%",
+        width: pairedPopup ? "100%" : popup ? "fit-content" : "100%",
+        boxSizing: pairedPopup ? "border-box" : undefined,
         maxWidth: popup
           ? "100%"
           : wideDesktop
@@ -297,6 +313,86 @@ export function GlassDialog({
         ? token("--space-8")
         : token("--space-7");
 
+  const panel = (
+    <div data-glass-dialog-panel="" style={panelStyle}>
+      {chrome === "close-only" && closeButton !== null ? (
+        <div
+          data-glass-dialog-close-only=""
+          style={{
+            position: "absolute",
+            top: token("--space-6"),
+            right: token("--space-6"),
+            zIndex: 2,
+          }}
+        >
+          {closeButton}
+        </div>
+      ) : null}
+      {besideCutout && (
+        // The disc floats up beside the device island (vertically centered on
+        // it, at the trailing gutter), so the header title clears the safe
+        // area below rather than sharing the row with the disc.
+        <div
+          style={{
+            position: "absolute",
+            top: `calc(var(--display-cutout-top) + (var(--display-cutout-height) - ${String(
+              CLOSE_DISC_PX,
+            )}px) / 2)`,
+            right: token("--gutter"),
+            zIndex: 1,
+          }}
+        >
+          {closeButton}
+        </div>
+      )}
+      {chrome === "standard" ? (
+        <header style={headerStyle}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: token("--space-1"),
+            }}
+          >
+            <h2
+              style={{
+                margin: 0,
+                font: token("--t-title-sm"),
+                color: token("--text-primary"),
+              }}
+            >
+              {title}
+            </h2>
+            {subtitle !== undefined && (
+              <p
+                style={{
+                  margin: 0,
+                  font: token("--t-body"),
+                  color: token("--text-on-glass-muted"),
+                }}
+              >
+                {subtitle}
+              </p>
+            )}
+          </div>
+          {!besideCutout && closeButton}
+        </header>
+      ) : null}
+      <div
+        data-glass-dialog-body=""
+        style={{
+          flex: popup ? "0 1 auto" : "1 1 auto",
+          minHeight: 0,
+          overflowY: "auto",
+          WebkitOverflowScrolling: "touch",
+          padding: wideDesktop ? token("--space-6") : token("--space-5"),
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+
   return (
     <div
       role="dialog"
@@ -323,83 +419,42 @@ export function GlassDialog({
       }}
     >
       {fullBleed && <GlassBackdrop />}
-      <div data-glass-dialog-panel="" style={panelStyle}>
-        {chrome === "close-only" && closeButton !== null ? (
-          <div
-            data-glass-dialog-close-only=""
-            style={{
-              position: "absolute",
-              top: token("--space-6"),
-              right: token("--space-6"),
-              zIndex: 2,
-            }}
-          >
-            {closeButton}
-          </div>
-        ) : null}
-        {besideCutout && (
-          // The disc floats up beside the device island (vertically centered on
-          // it, at the trailing gutter), so the header title clears the safe
-          // area below rather than sharing the row with the disc.
-          <div
-            style={{
-              position: "absolute",
-              top: `calc(var(--display-cutout-top) + (var(--display-cutout-height) - ${String(
-                CLOSE_DISC_PX,
-              )}px) / 2)`,
-              right: token("--gutter"),
-              zIndex: 1,
-            }}
-          >
-            {closeButton}
-          </div>
-        )}
-        {chrome === "standard" ? (
-          <header style={headerStyle}>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: token("--space-1"),
-              }}
-            >
-              <h2
-                style={{
-                  margin: 0,
-                  font: token("--t-title-sm"),
-                  color: token("--text-primary"),
-                }}
-              >
-                {title}
-              </h2>
-              {subtitle !== undefined && (
-                <p
-                  style={{
-                    margin: 0,
-                    font: token("--t-body"),
-                    color: token("--text-on-glass-muted"),
-                  }}
-                >
-                  {subtitle}
-                </p>
-              )}
-            </div>
-            {!besideCutout && closeButton}
-          </header>
-        ) : null}
+      {pairedPopup ? (
         <div
-          data-glass-dialog-body=""
+          data-glass-dialog-companion-layout={
+            isDesktop ? "horizontal" : "vertical"
+          }
           style={{
-            flex: popup ? "0 1 auto" : "1 1 auto",
-            minHeight: 0,
-            overflowY: "auto",
-            WebkitOverflowScrolling: "touch",
-            padding: wideDesktop ? token("--space-6") : token("--space-5"),
+            position: "relative",
+            zIndex: 1,
+            display: "grid",
+            gridTemplateColumns: isDesktop
+              ? `repeat(2, minmax(0, ${String(PAIRED_POPUP_DESKTOP_ITEM_WIDTH_PX)}px))`
+              : "minmax(0, 1fr)",
+            gap: token(isDesktop ? "--space-7" : "--space-5"),
+            alignItems: "center",
+            width: isDesktop
+              ? `calc(${String(PAIRED_POPUP_DESKTOP_ITEM_WIDTH_PX * 2)}px + ${token("--space-7")})`
+              : "76vw",
+            maxWidth: isDesktop ? "100%" : "340px",
+            maxHeight: "100%",
           }}
         >
-          {children}
+          <div
+            data-glass-dialog-companion=""
+            style={{
+              minWidth: 0,
+              minHeight: 0,
+              width: "100%",
+            }}
+          >
+            {companion}
+          </div>
+          {panel}
         </div>
-      </div>
+      ) : (
+        panel
+      )}
     </div>
   );
 }

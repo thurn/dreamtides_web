@@ -55,6 +55,9 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       action: action.action,
       waitSeconds: action.wait,
       trigger: action.trigger ?? "player-turn-announcement-complete",
+      ...(action.companion === undefined
+        ? {}
+        : { companion: action.companion }),
       title: "How to Play",
       messageText: action.text,
     };
@@ -420,6 +423,14 @@ export function buildTutorialView(
             wait: currentAction.wait,
             trigger:
               currentAction.trigger ?? "player-turn-announcement-complete",
+            ...(currentAction.companion === "dreamwell-card"
+              ? {
+                  companion:
+                    revealedDreamwellCard === null
+                      ? null
+                      : tutorialDreamwellModel(revealedDreamwellCard),
+                }
+              : {}),
           },
     endTurn:
       currentAction?.action !== "end-turn" || playerTurnCard === null

@@ -97,7 +97,20 @@ export function validateTutorialActions(value) {
           `Tutorial action ${JSON.stringify(id)} must have a supported How to Play trigger.`,
         );
       }
-      return { id, action, trigger, text: candidate.text, wait };
+      const companion = candidate.companion;
+      if (companion !== undefined && companion !== "dreamwell-card") {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must have a supported How to Play companion.`,
+        );
+      }
+      return {
+        id,
+        action,
+        trigger,
+        ...(companion === undefined ? {} : { companion }),
+        text: candidate.text,
+        wait,
+      };
     }
     if (action === "animate-dreamcaller-portrait") {
       const owner = candidate.owner ?? "player";

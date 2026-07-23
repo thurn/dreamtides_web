@@ -224,6 +224,32 @@ describe("TutorialEditorRail", () => {
       )?.value,
     ).toBe(expectedText);
 
+    const companionTrigger = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="How to Play companion for action 2"]',
+    );
+    expect(companionTrigger?.textContent).toContain("No Companion");
+    act(() => companionTrigger?.click());
+    const dreamwellCompanionOption = [
+      ...document.body.querySelectorAll<HTMLButtonElement>(
+        'button[role="option"]',
+      ),
+    ].find((option) => option.textContent?.includes("Current Dreamwell Card"));
+    act(() => dreamwellCompanionOption?.click());
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "display-how-to-play",
+          action: "display-how-to-play",
+          trigger: "immediate",
+          companion: "dreamwell-card",
+          text: expectedText,
+          wait: 0,
+        },
+      ],
+      true,
+    );
+
     act(() => root.unmount());
     container.remove();
   });

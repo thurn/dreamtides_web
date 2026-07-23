@@ -118,6 +118,38 @@ describe("parseTutorialActions", () => {
         },
       ]),
     ).toThrow(/supported How to Play trigger/u);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "bad-how-to-play-companion",
+          action: "display-how-to-play",
+          companion: "named-card",
+          text,
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/supported How to Play companion/u);
+    expect(
+      parseTutorialActions([
+        {
+          id: "dreamwell-how-to-play",
+          action: "display-how-to-play",
+          trigger: "immediate",
+          companion: "dreamwell-card",
+          text,
+          wait: 0,
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "dreamwell-how-to-play",
+        action: "display-how-to-play",
+        trigger: "immediate",
+        companion: "dreamwell-card",
+        text,
+        wait: 0,
+      },
+    ]);
   });
 
   it("normalizes legacy portrait actions and preserves opponent pauses", () => {

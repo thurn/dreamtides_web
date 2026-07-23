@@ -83,10 +83,17 @@ export function parseTutorialActions(
           `Tutorial action ${JSON.stringify(id)} must have a supported How to Play trigger.`,
         );
       }
+      const companion = record.companion;
+      if (companion !== undefined && companion !== "dreamwell-card") {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must have a supported How to Play companion.`,
+        );
+      }
       return {
         id,
         action: "display-how-to-play",
         trigger,
+        ...(companion === undefined ? {} : { companion }),
         text: record.text,
         wait,
       } satisfies TutorialAction;

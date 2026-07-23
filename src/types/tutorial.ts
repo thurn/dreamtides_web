@@ -20,6 +20,9 @@ export type TutorialHowToPlayTrigger =
   | "player-turn-announcement-complete"
   | "enemy-turn-announcement-complete";
 
+/** Tangible game object presented alongside an authored instruction popup. */
+export type TutorialHowToPlayCompanion = "dreamwell-card";
+
 /** Fields shared by every authored tutorial action. */
 export interface TutorialActionBase {
   readonly id: string;
@@ -41,6 +44,8 @@ export interface DisplayHowToPlayTutorialAction extends TutorialActionBase {
   readonly action: "display-how-to-play";
   /** Defaults to the player-turn announcement for older authored snapshots. */
   readonly trigger?: TutorialHowToPlayTrigger;
+  /** Optional game object paired with the instruction card. */
+  readonly companion?: TutorialHowToPlayCompanion;
   /**
    * Authored instruction copy. Blank lines separate paragraphs; `⍟` and `✦`
    * render as the points and spark glyphs.

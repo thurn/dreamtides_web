@@ -227,6 +227,65 @@ describe("GlassDialog", () => {
     });
   });
 
+  it("centers an equal-width popup pair horizontally on desktop", () => {
+    stubMatchMedia(true);
+    const { container, root } = mount(
+      <GlassDialog
+        title="How to Play"
+        presentation="popup"
+        companion={<div data-testid="companion">card</div>}
+        onClose={() => {}}
+      >
+        <div>instruction</div>
+      </GlassDialog>,
+    );
+
+    const layout = container.querySelector<HTMLElement>(
+      "[data-glass-dialog-companion-layout]",
+    );
+    const panel = container.querySelector<HTMLElement>(
+      "[data-glass-dialog-panel]",
+    );
+    expect(layout?.dataset.glassDialogCompanionLayout).toBe("horizontal");
+    expect(layout?.style.gridTemplateColumns).toBe(
+      "repeat(2, minmax(0, 360px))",
+    );
+    expect(layout?.style.width).toBe("calc(720px + var(--space-7))");
+    expect(panel?.style.width).toBe("100%");
+    expect(panel?.style.boxSizing).toBe("border-box");
+    expect(container.querySelector('[data-testid="companion"]')).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("stacks a popup companion above its equal-width panel on mobile", () => {
+    const { container, root } = mount(
+      <GlassDialog
+        title="How to Play"
+        presentation="popup"
+        companion={<div data-testid="companion">card</div>}
+        onClose={() => {}}
+      >
+        <div>instruction</div>
+      </GlassDialog>,
+    );
+
+    const layout = container.querySelector<HTMLElement>(
+      "[data-glass-dialog-companion-layout]",
+    );
+    expect(layout?.dataset.glassDialogCompanionLayout).toBe("vertical");
+    expect(layout?.style.gridTemplateColumns).toBe("minmax(0, 1fr)");
+    expect(layout?.style.width).toBe("76vw");
+    expect(layout?.style.maxWidth).toBe("340px");
+    expect(layout?.style.gap).toBe("var(--space-5)");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("keeps the title accessible while rendering only the floating close chrome", () => {
     const { container, root } = mount(
       <GlassDialog

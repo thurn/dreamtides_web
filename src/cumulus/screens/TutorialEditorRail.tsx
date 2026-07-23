@@ -21,6 +21,7 @@ import type {
   TutorialActionName,
   TutorialDreamcallerOwner,
   TutorialEditorSaveStatus,
+  TutorialHowToPlayCompanion,
   TutorialHowToPlayTrigger,
   TutorialSpeechBubbleSpeaker,
 } from "../../types/tutorial";
@@ -82,6 +83,14 @@ const HOW_TO_PLAY_TRIGGER_OPTIONS = [
     label: "After Opponent Turn Announcement",
   },
 ] satisfies readonly { value: TutorialHowToPlayTrigger; label: string }[];
+
+const HOW_TO_PLAY_COMPANION_OPTIONS = [
+  { value: "none", label: "No Companion" },
+  { value: "dreamwell-card", label: "Current Dreamwell Card" },
+] satisfies readonly {
+  value: TutorialHowToPlayCompanion | "none";
+  label: string;
+}[];
 
 function nextActionId(
   actionName: TutorialActionName,
@@ -181,6 +190,10 @@ function changedActionType(
         action.action === "display-how-to-play"
           ? (action.trigger ?? "player-turn-announcement-complete")
           : "immediate",
+      ...(action.action === "display-how-to-play" &&
+      action.companion !== undefined
+        ? { companion: action.companion }
+        : {}),
       wait: action.wait,
     };
   }
@@ -435,6 +448,30 @@ function TutorialActionRow({
                   return;
                 }
                 update({ ...action, trigger }, true);
+              }}
+            />
+            <Select
+              full
+              size="sm"
+              ariaLabel={`How to Play companion for action ${String(index + 1)}`}
+              options={[...HOW_TO_PLAY_COMPANION_OPTIONS]}
+              value={action.companion ?? "none"}
+              onChange={(companion) => {
+                if (companion === "dreamwell-card") {
+                  update({ ...action, companion }, true);
+                  return;
+                }
+                if (companion !== "none") return;
+                update(
+                  {
+                    id: action.id,
+                    action: action.action,
+                    trigger: action.trigger,
+                    text: action.text,
+                    wait: action.wait,
+                  },
+                  true,
+                );
               }}
             />
             <TextArea

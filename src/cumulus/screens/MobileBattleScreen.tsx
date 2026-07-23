@@ -993,16 +993,23 @@ function SideZones({
             points={side.status.points}
             testId={`${owner}-battle-status`}
           />
-          {position === "near" && dreamwell !== null ? (
+          {dreamwell !== null && dreamwell.side === owner ? (
             <div
               data-battle-dreamwell-layer=""
               data-battle-dreamwell-side={dreamwell.side}
               style={{
                 position: "absolute",
                 left: "50%",
-                bottom: isDesktop
-                  ? `calc(100% + ${token("--space-3")})`
-                  : `calc(100% + ${token("--space-3")} + ${token("--space-12")} + ${token("--space-4")})`,
+                top:
+                  position === "far"
+                    ? `calc(100% + ${token("--space-3")})`
+                    : undefined,
+                bottom:
+                  position === "near"
+                    ? isDesktop
+                      ? `calc(100% + ${token("--space-3")})`
+                      : `calc(100% + ${token("--space-3")} + ${token("--space-12")} + ${token("--space-4")})`
+                    : undefined,
                 width: isDesktop ? 360 : "min(76vw, 340px)",
                 maxWidth: "calc(100vw - 2 * var(--gutter))",
                 transform: "translateX(-50%)",

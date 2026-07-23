@@ -16,6 +16,10 @@ import { IconButton } from "../components/controls/IconButton";
 import { GlowIcon } from "../components/controls/GlowIcon";
 import type { BattleStatusDreamcallerProfile } from "../components/battle/BattleStatusDisplay";
 import { CardBack } from "../components/battle/CardBack";
+import {
+  DreamwellCard,
+  type DreamwellCardModel,
+} from "../components/battle/DreamwellCard";
 import { GameCard } from "../components/card/CardView";
 import {
   BATTLEFIELD_CARD_ASPECT_RATIO,
@@ -88,6 +92,7 @@ export interface TutorialView {
     readonly text: string;
     readonly wait: number;
     readonly trigger: TutorialHowToPlayTrigger;
+    readonly companion?: DreamwellCardModel | null;
   } | null;
   readonly endTurn: {
     readonly actionId: string;
@@ -176,9 +181,11 @@ const TUTORIAL_PORTRAIT_POINTER_OVERLAP = 2;
 
 function TutorialHowToPlayDialog({
   text,
+  companion,
   onClose,
 }: {
   readonly text: string;
+  readonly companion: DreamwellCardModel | null;
   readonly onClose: () => void;
 }): ReactElement {
   const desktop = useIsDesktop();
@@ -298,6 +305,9 @@ function TutorialHowToPlayDialog({
       closeLabel="Close how to play"
       presentation="popup"
       chrome="close-only"
+      companion={
+        companion === null ? undefined : <DreamwellCard model={companion} />
+      }
       onClose={onClose}
     >
       <div
@@ -306,7 +316,9 @@ function TutorialHowToPlayDialog({
           display: "grid",
           gap: token("--space-7"),
           width: desktop
-            ? `calc(${String(TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH)}px - ${token("--space-5")} - ${token("--space-5")})`
+            ? companion === null
+              ? `calc(${String(TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH)}px - ${token("--space-5")} - ${token("--space-5")})`
+              : "100%"
             : "100%",
           maxWidth: "100%",
           boxSizing: "border-box",
@@ -1642,6 +1654,20 @@ export function TutorialScreen({
     },
     [dockEditor],
   );
+  const howToPlayActionKey =
+    view.howToPlay === null || view.playbackRunId === null
+      ? null
+      : `${view.playbackRunId}:${view.howToPlay.actionId}`;
+  const howToPlayVisible =
+    howToPlayActionKey !== null &&
+    howToPlayPresentedActionKey === howToPlayActionKey &&
+    howToPlayDismissedActionKey !== howToPlayActionKey;
+  const howToPlayCompanion =
+    howToPlayVisible ? (view.howToPlay?.companion ?? null) : null;
+  const displayedBattleView =
+    howToPlayCompanion === null
+      ? battleView
+      : { ...battleView, dreamwell: null };
 
   return (
     <motion.main
@@ -1681,7 +1707,7 @@ export function TutorialScreen({
         ) : null}
         <div style={{ position: "relative", minWidth: 0, minHeight: 0 }}>
           <MobileBattleScreen
-            view={battleView}
+            view={displayedBattleView}
             interactions={tutorialInteractions}
             viewport="contained"
             inspectorDefault="collapsed"
@@ -1776,14 +1802,10 @@ export function TutorialScreen({
       {!dockEditor && editorOpen && editorSurface !== null ? (
         <TutorialEditorTakeover {...editorSurface} />
       ) : null}
-      {view.howToPlay !== null &&
-      view.playbackRunId !== null &&
-      howToPlayPresentedActionKey ===
-        `${view.playbackRunId}:${view.howToPlay.actionId}` &&
-      howToPlayDismissedActionKey !==
-        `${view.playbackRunId}:${view.howToPlay.actionId}` ? (
+      {howToPlayVisible && view.howToPlay !== null ? (
         <TutorialHowToPlayDialog
           text={view.howToPlay.text}
+          companion={howToPlayCompanion}
           onClose={closeHowToPlay}
         />
       ) : null}

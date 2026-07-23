@@ -496,6 +496,7 @@ describe("buildTutorialView", () => {
         id: "dreamwell-how-to-play",
         action: "display-how-to-play" as const,
         trigger: "immediate" as const,
+        companion: "dreamwell-card" as const,
         text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
         wait: 0,
       },
@@ -724,6 +725,16 @@ describe("buildTutorialView", () => {
       text: "From turn 2, each player draws a Dreamwell card at the start of their turn",
       wait: 0,
       trigger: "immediate",
+      companion: {
+        cardId: AUTUMN_GLADE.id,
+        displaySnapshot: {
+          id: AUTUMN_GLADE.id,
+          name: "Autumn Glade",
+          renderedText: "Gain 2⍟.",
+          energyAdded: 1,
+          imageNumber: 1789989917,
+        },
+      },
     });
 
     const ended = buildTutorialView(

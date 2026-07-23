@@ -2552,6 +2552,14 @@
       "description": "Region used to center a bounded desktop panel. `\"battlefield\"` measures\nthe visible `main[data-battle-mobile]` stage, keeping a docked inspector\nrail outside the centering calculation while the modal layer continues to\nblock the complete viewport. Mobile and full-screen dialogs remain\nviewport-aligned. Defaults to `\"viewport\"`."
     },
     {
+      "name": "companion",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional tangible object paired with a popup panel. On desktop the\ncompanion leads an equal-width horizontal pair; on mobile it sits above\nthe equally wide panel. The complete pair is centered in the target\nregion. Only applies to `presentation=\"popup\"`."
+    },
+    {
       "name": "children",
       "tsType": "ReactNode",
       "unionMembers": [],
