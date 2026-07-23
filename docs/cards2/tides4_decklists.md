@@ -898,7 +898,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Abolish
 - 1× Architect of Memory
 - 1× Blooming Horror
-- 1× Headtaker Wurm
+- 1× Foundry Horror
 - 1× Fragments of Vision
 - 1× Immolate and Rise
 - 1× Ancient Descent
@@ -1000,7 +1000,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Abolish
 - 1× Architect of Memory
 - 1× Blooming Horror
-- 1× Headtaker Wurm
+- 1× Foundry Horror
 - 1× Impending Fury
 - 1× Ancient Descent
 - 1× Shared Revelation
@@ -2235,7 +2235,7 @@ This tide runs an even split of characters and events, with its mechanical ident
 - 1× Sunrise Strummer
 - 1× The Thinning
 - 1× Stratospheric Voyage
-- 1× Headtaker Wurm
+- 1× Foundry Horror
 - 1× Fragments of Vision
 - 1× Impending Fury
 - 1× Ancient Descent
@@ -3044,7 +3044,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Sunrise Strummer
 - 1× Stratospheric Voyage
 - 1× Abolish
-- 1× Headtaker Wurm
+- 1× Foundry Horror
 - 1× Impending Fury
 - 1× Ancient Descent
 - 1× Signal Resonant
@@ -3094,7 +3094,7 @@ Tide-fac-24 is built almost entirely on characters (41 of 45 copies), with a sur
 - 1× Rift Pilgrim
 - 1× Stratospheric Voyage
 - 1× Abolish
-- 1× Headtaker Wurm
+- 1× Foundry Horror
 - 1× Fragments of Vision
 - 1× Ancient Descent
 - 1× Signal Resonant

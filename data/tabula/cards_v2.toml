@@ -1290,7 +1290,7 @@ card-number = 68
 art = { x = -0.228, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Headtaker Wurm"
+name = "Foundry Horror"
 mtg-name = "Brazen Borrower // Petty Theft"
 id = "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7"
 rendered-text = '''
@@ -1304,10 +1304,11 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "July23"]
-image-number = 515170831
+tags = ["Art Rework", "July23", "Art OK"]
+image-number = 1037215513
 art-owned = false
 card-number = 69
+art = { x = -0.504, y = -0.637, scale = 1.87 }
 
 [[cards]]
 name = "Skull Weaver"
@@ -9021,7 +9022,7 @@ card-number = 480
 art = { x = 0.353, y = 0.266, scale = 1.17 }
 
 [[cards]]
-name = "Duskmount"
+name = "Duskmount Rider"
 mtg-name = "Soulherder"
 id = "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c"
 rendered-text = """

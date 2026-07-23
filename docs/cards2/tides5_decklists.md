@@ -908,7 +908,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Architect of Memory
 - 1× Scuttled Fortune
 - 1× Watcher in the Ruins
-- 1× Headtaker Wurm
+- 1× Foundry Horror
 - 1× Tidewreck Navigator
 - 1× Fragments of Vision
 - 1× Guide of Lost Souls
@@ -1013,7 +1013,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Architect of Memory
 - 1× Scuttled Fortune
 - 1× Watcher in the Ruins
-- 1× Headtaker Wurm
+- 1× Foundry Horror
 - 1× Soulbinder
 - 1× Fragments of Vision
 - 1× Guide of Lost Souls
@@ -2296,7 +2296,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Lanternhearted
 - 1× Sunrise Strummer
 - 1× Stratospheric Voyage
-- 1× Headtaker Wurm
+- 1× Foundry Horror
 - 1× Fragments of Vision
 - 1× Immolate and Rise
 - 1× Impending Fury
@@ -3176,7 +3176,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Lanternhearted
 - 1× Sunrise Strummer
 - 1× Stratospheric Voyage
-- 1× Headtaker Wurm
+- 1× Foundry Horror
 - 1× Fragments of Vision
 - 1× Immolate and Rise
 - 1× Impending Fury
