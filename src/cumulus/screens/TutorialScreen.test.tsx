@@ -1152,14 +1152,13 @@ describe("TutorialScreen", () => {
     expect(dialog?.querySelector("header")).toBeNull();
     expect(dialog?.querySelector("h2")).toBeNull();
     expect(
-      dialog?.querySelector("[data-glass-dialog-close-only]"),
+      dialog?.querySelector("[data-glass-dialog-flowing-close]"),
     ).not.toBeNull();
     const content = dialog?.querySelector<HTMLElement>(
       "[data-tutorial-how-to-play-content]",
     );
     const paragraphs = [...(content?.querySelectorAll("p") ?? [])];
     expect(paragraphs).toHaveLength(2);
-    expect(content?.style.gap).toBe("var(--space-7)");
     expect(content?.style.paddingTop).toBe("var(--space-9)");
     expect(content?.style.paddingRight).toBe("var(--space-9)");
     expect(content?.style.paddingBottom).toBe("var(--space-9)");
@@ -1167,6 +1166,8 @@ describe("TutorialScreen", () => {
     expect(paragraphs[0]?.style.font).toBe(
       "var(--t-tutorial-instruction)",
     );
+    expect(paragraphs[0]?.style.marginTop).toBe("0px");
+    expect(paragraphs[1]?.style.marginTop).toBe("var(--space-7)");
     expect(paragraphs[0]?.textContent).toContain(
       "Play characters and challenge with them to score points () equal to their spark (), or accept a challenge",
     );

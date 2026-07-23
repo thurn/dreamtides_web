@@ -16,8 +16,9 @@
 //   - GlassDialog: a modal overlay with a bounded, centered glass panel on
 //     desktop and a full-bleed frosted overlay on mobile, plus a strict popup
 //     presentation that stays bounded and content-sized at every viewport.
-//     Both presentations carry a hairline-closed header (title + optional
+//     Standard chrome carries a hairline-closed header (title + optional
 //     subtitle + an optional trailing glass close disc) over a scrolling body.
+//     Titleless variants either overlay the disc or float it in prose flow.
 //     Commit-gated dialogs omit `onClose` and expose no dismissal control.
 //
 // The close disc is the shared `IconButton` at size `md` (48px) so the close
@@ -136,10 +137,12 @@ export interface GlassDialogProps {
   /**
    * Visible dialog chrome. `"standard"` renders the title/subtitle header and
    * its divider. `"close-only"` keeps `title` as the accessible dialog name,
-   * omits the visible header, and floats the optional close disc in the panel's
-   * top-right corner. Defaults to `"standard"`.
+   * omits the visible header, and overlays the optional close disc in the
+   * panel's top-right corner. `"flowing-close"` also omits the visible header,
+   * but floats the close disc in the scrolling body so nearby prose wraps
+   * around its circular footprint. Defaults to `"standard"`.
    */
-  chrome?: "standard" | "close-only";
+  chrome?: "standard" | "close-only" | "flowing-close";
   /**
    * Region used to center a bounded desktop panel. `"battlefield"` measures
    * the visible `main[data-battle-mobile]` stage, keeping a docked inspector
@@ -172,9 +175,10 @@ export interface GlassDialogProps {
  * `IconButton size="md"` close, closed by a `--border-strong` hairline; omit
  * `onClose` for a commit-gated dialog with no dismissal control. On mobile the
  * header pads its top by the safe-area inset so the title clears a device
- * cutout. `chrome="close-only"` retains the accessible title while omitting the
- * visible header and floating the optional close disc over the panel corner.
- * The body scrolls.
+ * cutout. The titleless chrome variants retain the accessible title while
+ * omitting the visible header: `"close-only"` overlays the disc at the panel
+ * corner, while `"flowing-close"` floats it in the body so adjacent prose can
+ * wrap around the disc. The body scrolls.
  */
 export function GlassDialog({
   title,
@@ -394,6 +398,20 @@ export function GlassDialog({
           padding: wideDesktop ? token("--space-6") : token("--space-5"),
         }}
       >
+        {chrome === "flowing-close" && closeButton !== null ? (
+          <div
+            data-glass-dialog-flowing-close=""
+            style={{
+              float: "right",
+              marginTop: token("--space-1"),
+              marginRight: token("--space-1"),
+              shapeOutside: "circle(50%)",
+              shapeMargin: token("--space-2"),
+            }}
+          >
+            {closeButton}
+          </div>
+        ) : null}
         {children}
       </div>
     </div>

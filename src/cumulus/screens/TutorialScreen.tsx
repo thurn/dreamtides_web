@@ -363,7 +363,7 @@ function TutorialHowToPlayDialog({
       title="How to Play"
       closeLabel="Close how to play"
       presentation="popup"
-      chrome="close-only"
+      chrome="flowing-close"
       companion={
         companion === null ? undefined : <DreamwellCard model={companion} />
       }
@@ -372,8 +372,6 @@ function TutorialHowToPlayDialog({
       <div
         data-tutorial-how-to-play-content=""
         style={{
-          display: "grid",
-          gap: token("--space-7"),
           width: desktop
             ? `calc(${String(TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH)}px - ${token("--space-5")} - ${token("--space-5")})`
             : "100%",
@@ -387,7 +385,13 @@ function TutorialHowToPlayDialog({
         }}
       >
         {paragraphs.map((paragraph, index) => (
-          <p key={index} style={paragraphStyle}>
+          <p
+            key={index}
+            style={{
+              ...paragraphStyle,
+              marginTop: index === 0 ? 0 : token("--space-7"),
+            }}
+          >
             {renderInstructionParagraph(paragraph)}
           </p>
         ))}

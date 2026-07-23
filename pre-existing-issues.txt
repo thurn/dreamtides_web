@@ -1,0 +1,5 @@
+Tutorial Editor: At a 1920x1080 desktop viewport, pointer activation of an
+action's "Play tutorial from action N" button is intercepted by the underlying
+tutorial-screen Cumulus layer, including after the button is scrolled into the
+center of the editor. Programmatic button activation works, so the editor rail
+appears to have a pre-existing stacking or hit-testing issue.

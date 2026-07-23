@@ -325,6 +325,44 @@ describe("GlassDialog", () => {
     });
   });
 
+  it("floats the close disc in body flow for prose wrapping", () => {
+    const { container, root } = mount(
+      <GlassDialog
+        title="How to Play"
+        presentation="popup"
+        chrome="flowing-close"
+        onClose={() => {}}
+      >
+        <p>Two paragraphs</p>
+      </GlassDialog>,
+    );
+
+    const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
+    const flowingClose = container.querySelector<HTMLElement>(
+      "[data-glass-dialog-flowing-close]",
+    );
+    const body = container.querySelector<HTMLElement>(
+      "[data-glass-dialog-body]",
+    );
+    expect(dialog?.getAttribute("aria-label")).toBe("How to Play");
+    expect(dialog?.querySelector("header")).toBeNull();
+    expect(dialog?.querySelector("h2")).toBeNull();
+    expect(body?.firstElementChild).toBe(flowingClose);
+    expect(flowingClose?.style.cssFloat).toBe("right");
+    expect(flowingClose?.style.marginTop).toBe("var(--space-1)");
+    expect(flowingClose?.style.marginRight).toBe("var(--space-1)");
+    expect(
+      flowingClose?.querySelector('button[aria-label="Close"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector("[data-glass-dialog-close-only]"),
+    ).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("centers a desktop panel within the measured battlefield while retaining the viewport modal layer", () => {
     stubMatchMedia(true);
     Object.defineProperty(window, "innerWidth", {

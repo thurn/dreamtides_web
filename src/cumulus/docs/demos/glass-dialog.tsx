@@ -50,9 +50,9 @@ export const glassDialogDemo: CumulusComponent = {
   id: "glass-dialog",
   title: "Glass Dialog",
   blurb:
-    "The glass overlay shell: a modal dialog with a bounded desktop panel and a full-bleed mobile overlay by default, plus centered content-sized and companion-paired popup presentations. Standard chrome places the title, optional subtitle, and close disc in a hairline-closed header; close-only chrome keeps the title accessible while floating just the close disc over the body. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.",
+    "The glass overlay shell: a modal dialog with a bounded desktop panel and a full-bleed mobile overlay by default, plus centered content-sized and companion-paired popup presentations. Standard chrome places the title, optional subtitle, and close disc in a hairline-closed header; titleless chrome can overlay the close disc or float it in prose flow. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.",
   callout:
-    'Dreamsign Revelation uses this shell for its Purge replacement dialog. Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Use `presentation="popup"` for a bounded content-sized surface on both desktop and mobile. Add `companion` when one tangible object should lead a popup pair: the object sits left of a wider prose panel on desktop and centered above it on mobile. `chrome="close-only"` retains the accessible title while omitting the visible header and divider. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant. Battle overlays use `desktopCenterTarget="battlefield"` so a docked inspector rail stays outside the panel\'s centering region.',
+    'Dreamsign Revelation uses this shell for its Purge replacement dialog. Pass `onClose` for the shared close disc, or omit it when one explicit commit action must own completion. Use `presentation="popup"` for a bounded content-sized surface on both desktop and mobile. Add `companion` when one tangible object should lead a popup pair: the object sits left of a wider prose panel on desktop and centered above it on mobile. `chrome="close-only"` overlays a titleless close disc; `chrome="flowing-close"` places that disc in body flow so ordinary prose wraps around it. Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. `wide` opts into the roomy-desktop variant. Battle overlays use `desktopCenterTarget="battlefield"` so a docked inspector rail stays outside the panel\'s centering region.',
   group: "Components",
   docName: "GlassDialog",
   Component: GlassDialogDemo,
@@ -81,6 +81,13 @@ export const glassDialogDemo: CumulusComponent = {
       label: "Content-sized popup",
       note: "Use the popup presentation for compact guidance or confirmation copy that should remain a centered glass window on mobile as well as desktop.",
       code: `<GlassDialog title="How to Play" presentation="popup" chrome="close-only" onClose={closeGuide}>
+  <HowToPlayCopy />
+</GlassDialog>`,
+    },
+    {
+      label: "Flowing prose close",
+      note: "Use flowing-close chrome for titleless prose whose opening lines should wrap around the close disc and then regain the full content measure.",
+      code: `<GlassDialog title="How to Play" presentation="popup" chrome="flowing-close" onClose={closeGuide}>
   <HowToPlayCopy />
 </GlassDialog>`,
     },
