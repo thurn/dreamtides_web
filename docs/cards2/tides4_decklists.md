@@ -890,7 +890,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Lanternhearted
 - 1× Rite of Summoning
 - 1× Echo Architect
-- 1× Rift Pilgrim
+- 1× Mirrorsea Pilgrim
 - 1× Sunrise Strummer
 - 1× The Thinning
 - 1× Stratospheric Voyage
@@ -992,7 +992,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Blood Sun Oppressor
 - 1× Rite of Summoning
 - 1× Echo Architect
-- 1× Rift Pilgrim
+- 1× Mirrorsea Pilgrim
 - 1× Sunrise Strummer
 - 1× The Thinning
 - 1× Wheel of the Heavens
@@ -3091,7 +3091,7 @@ Tide-fac-24 is built almost entirely on characters (41 of 45 copies), with a sur
 - 1× Echoing Denial
 - 1× Defiant Parry
 - 1× Threadbreaker
-- 1× Rift Pilgrim
+- 1× Mirrorsea Pilgrim
 - 1× Stratospheric Voyage
 - 1× Abolish
 - 1× Foundry Horror

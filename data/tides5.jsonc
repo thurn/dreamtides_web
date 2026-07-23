@@ -4107,7 +4107,7 @@
         {"id":"071bcab4-ed02-48a0-93dc-8fd0f36611c8","name":"Consumed Berserker","subtype":"Outsider","text":"Phasing\n\nWhen this character scores ⍟, draw a card.","copies":1},
         {"id":"13c45db4-ebab-4364-a14a-59a2e9c52bb5","name":"Call of Corruption","text":"Discard a chosen event from the opponent's hand.","copies":1},
         {"id":"1bae969b-0bc4-4777-86f3-1e860d601c5c","name":"Blood Sun Oppressor","subtype":"Visitor","text":"▸Materialized: Banish a chosen card from the opponent's hand until this character leaves play.","copies":1},
-        {"id":"22239029-f53c-4ba9-b9b6-29f6592bb722","name":"Rift Pilgrim","subtype":"Explorer","text":"▸Materialized: Look at the top 4 cards of your deck and banish one.\n\n▸Dissolved: Put the banished card into your hand.","copies":1},
+        {"id":"22239029-f53c-4ba9-b9b6-29f6592bb722","name":"Mirrorsea Pilgrim","subtype":"Explorer","text":"▸Materialized: Look at the top 4 cards of your deck and banish one.\n\n▸Dissolved: Put the banished card into your hand.","copies":1},
         {"id":"22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf","name":"Sunrise Strummer","subtype":"Visitor","text":"▸Dawn: Materialize a 1✦ ethereal figment.","copies":1},
         {"id":"3725379c-676d-4efd-81ee-7e45d80db6d0","name":"Fragments of Vision","text":"Draw 3 cards, then shuffle 2 cards from your hand into your deck.","copies":1},
         {"id":"42427d15-c019-4786-9d7e-285829c4f3cb","name":"Signal Resonant","subtype":"Synth","text":"This character has all character types.\n\n❖ – 1●: Move this character to an unoccupied character position.","copies":1},

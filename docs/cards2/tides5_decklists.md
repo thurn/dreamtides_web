@@ -3836,7 +3836,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Consumed Berserker
 - 1× Call of Corruption
 - 1× Blood Sun Oppressor
-- 1× Rift Pilgrim
+- 1× Mirrorsea Pilgrim
 - 1× Sunrise Strummer
 - 1× Fragments of Vision
 - 1× Signal Resonant

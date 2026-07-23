@@ -1396,10 +1396,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July24"]
+tags = ["Art Rework", "July24", "Art OK"]
 image-number = 2023111778
 art-owned = false
 card-number = 74
+art = { x = 0, y = 0, scale = 1.47 }
 
 [[cards]]
 name = "Abyssal Deputy"
@@ -5686,25 +5687,25 @@ card-number = 304
 art = { x = 0, y = 1, scale = 1.11 }
 
 [[cards]]
-name = "Rift Pilgrim"
+name = "Mirrorsea Pilgrim"
 mtg-name = "Watcher for Tomorrow"
 id = "22239029-f53c-4ba9-b9b6-29f6592bb722"
 rendered-text = """
 ▸Materialized: Look at the top 4 cards of your deck and banish one.
 
 ▸Dissolved: Put the banished card into your hand."""
-energy-cost = 3
+energy-cost = 1
 card-type = "Character"
 subtype = "Explorer"
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = 3
-tags = ["Art Rework", "July24"]
-image-number = 2256745741
+spark = 1
+tags = ["Art Rework", "July24", "Art OK"]
+image-number = 2127752141
 art-owned = false
 card-number = 305
-art = { x = -0.048, y = 1, scale = 1.47 }
+art = { x = 0.04, y = -0.691, scale = 1.77 }
 
 [[cards]]
 name = "Sunset Chronicler"
