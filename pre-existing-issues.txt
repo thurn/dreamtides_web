@@ -4,6 +4,7 @@ scripts/cumulus-ui-baselines.test.mjs: The integrity check shells out to a full 
 
 src/cumulus/components/card/CardView.hover-zoom.test.tsx: The explicit editor-variant test expects the Bane glossary title in the complete-card reveal metadata, but the current render supplies an empty secondary-title value. `npx vitest run src/cumulus/components/card/CardView.hover-zoom.test.tsx` fails at line 44 on the master baseline.
 
+scripts/review.mjs: The shared review lock has a race between `mkdirSync(lockDir)` and `writeOwner()`. A competing reviewer can observe the newly created directory without `owner.json`, classify it as stale, remove it, and cause `writeOwner()` to fail with `ENOENT`.
 Battle card play does not mark a character exhausted
 
 In the playable battle at `?goto=battle&ai=0`, dragging a character from the
