@@ -214,6 +214,7 @@ function TutorialHowToPlayDialog({
               color="spark"
               title="spark"
             />
+            .
           </p>
           <p style={paragraphStyle}>
             Score{" "}
@@ -225,7 +226,7 @@ function TutorialHowToPlayDialog({
                 title="points"
               />
             </span>{" "}
-            to win this dream battle
+            to win this dream battle.
           </p>
         </div>
       </GlassDialog>
