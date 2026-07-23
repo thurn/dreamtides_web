@@ -63,6 +63,10 @@ import type {
   TutorialEditorSaveStatus,
   TutorialHowToPlayTrigger,
 } from "../../types/tutorial";
+import {
+  parseTutorialInstructionMarkup,
+  type TutorialInstructionParagraph,
+} from "../../data/tutorial-instruction-markup";
 
 export interface TutorialDreamcallerView {
   readonly visual: DreamcallerVisual;
@@ -219,14 +223,11 @@ function TutorialHowToPlayDialog({
     verticalAlign: "middle",
     transform: "translateY(-0.08em)",
   } as const;
-  const paragraphs = text
-    .split(/\n\s*\n/u)
-    .map((paragraph) => paragraph.trim())
-    .filter((paragraph) => paragraph.length > 0);
+  const paragraphs = parseTutorialInstructionMarkup(text);
 
-  const renderInstructionText = (paragraph: string): ReactElement => {
-    const tokens = paragraph.split(
-      /(\b(?:points|spark)\s+\(\s*[⍟✦]\s*\)|\(\s*[⍟✦●]\s*\)|\b(?:challenge|dreamwell)\b|\d+\s+⍟|[⍟✦●])/giu,
+  const renderInstructionText = (instruction: string): ReactElement => {
+    const tokens = instruction.split(
+      /(\b(?:points|spark)\s+\(\s*[⍟✦]\s*\)|\(\s*[⍟✦●]\s*\)|\d+\s+⍟|[⍟✦●])/giu,
     );
     return (
       <>
@@ -331,29 +332,31 @@ function TutorialHowToPlayDialog({
               </span>
             );
           }
-          if (part.toLowerCase() === "challenge") {
-            return (
-              <strong key={index} style={{ color: token("--spark") }}>
-                {part}
-              </strong>
-            );
-          }
-          if (part.toLowerCase() === "dreamwell") {
-            return (
-              <strong
-                key={index}
-                data-tutorial-how-to-play-dreamwell=""
-                style={{ color: token("--spark") }}
-              >
-                {part}
-              </strong>
-            );
-          }
           return part;
         })}
       </>
     );
   };
+
+  const renderInstructionParagraph = (
+    paragraph: TutorialInstructionParagraph,
+  ): ReactElement => (
+    <>
+      {paragraph.spans.map((span, index) =>
+        span.highlight === "yellow" ? (
+          <span
+            key={index}
+            data-tutorial-instruction-highlight="yellow"
+            style={{ color: token("--spark") }}
+          >
+            {renderInstructionText(span.text)}
+          </span>
+        ) : (
+          <span key={index}>{renderInstructionText(span.text)}</span>
+        ),
+      )}
+    </>
+  );
 
   return (
     <GlassDialog
@@ -385,7 +388,7 @@ function TutorialHowToPlayDialog({
       >
         {paragraphs.map((paragraph, index) => (
           <p key={index} style={paragraphStyle}>
-            {renderInstructionText(paragraph)}
+            {renderInstructionParagraph(paragraph)}
           </p>
         ))}
       </div>

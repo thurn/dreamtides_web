@@ -1,5 +1,6 @@
 import { isCardId } from "../types/card-identity";
 import type { TutorialAction } from "../types/tutorial";
+import { parseTutorialInstructionMarkup } from "./tutorial-instruction-markup";
 
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
 
@@ -83,6 +84,7 @@ export function parseTutorialActions(
           `Tutorial action ${JSON.stringify(id)} must have How to Play text.`,
         );
       }
+      parseTutorialInstructionMarkup(record.text);
       const trigger =
         record.trigger ?? "player-turn-announcement-complete";
       if (

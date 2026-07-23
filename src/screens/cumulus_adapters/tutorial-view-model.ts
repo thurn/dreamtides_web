@@ -15,6 +15,7 @@ import type {
   TutorialDreamcallerOwner,
   TutorialPlaybackState,
 } from "../../types/tutorial";
+import { tutorialInstructionPlainText } from "../../data/tutorial-instruction-markup";
 
 const TUTORIAL_BATTLE_ID = "tutorial-battle";
 const TUTORIAL_DECK_SIZE = 30;
@@ -51,6 +52,7 @@ export function tutorialActionLogDetails(action: TutorialAction) {
     };
   }
   if (action.action === "display-how-to-play") {
+    const messageText = tutorialInstructionPlainText(action.text);
     return {
       actionId: action.id,
       action: action.action,
@@ -60,7 +62,8 @@ export function tutorialActionLogDetails(action: TutorialAction) {
         ? {}
         : { companion: action.companion }),
       title: "How to Play",
-      messageText: action.text,
+      messageText,
+      ...(messageText === action.text ? {} : { messageMarkup: action.text }),
     };
   }
   if (action.action === "draw-dreamwell-card") {
@@ -328,6 +331,13 @@ export function buildTutorialView(
     playback?.actions.findIndex((action) => action.action === "end-turn") ?? -1;
   const endTurnCompleted =
     endTurnActionIndex >= 0 && completedActionCount > endTurnActionIndex;
+  const opponentRepositionActionIndex =
+    playback?.actions.findIndex(
+      (action) => action.action === "reposition-opponent-character",
+    ) ?? -1;
+  const duskStarted =
+    opponentRepositionActionIndex >= 0 &&
+    completedActionCount > opponentRepositionActionIndex;
   const playerTurnStarted =
     playback !== null &&
     (playback.currentActionIndex === null ||
@@ -538,6 +548,12 @@ export function buildTutorialView(
         playerTurnCard === null || playerCardPlayed ? [] : [playerTurnCard];
       const playerHandCardIds = playerHandCards.map((card) => card.id);
       const farHandCards = tutorialCard === null || opponentCardPlayed ? [] : [tutorialCard];
+      const phase =
+        endTurnCompleted && !dreamwellExplanationCompleted
+          ? "dawn"
+          : duskStarted
+            ? "dusk"
+            : "day";
       return {
       battleId: TUTORIAL_BATTLE_ID,
       perspective: "player",
@@ -559,8 +575,7 @@ export function buildTutorialView(
           ? "player"
           : "enemy",
       isOpeningTurn: !playerTurnStarted,
-      phase:
-        endTurnCompleted && !dreamwellExplanationCompleted ? "dawn" : "day",
+      phase,
       enemyHandCardIds,
       enemyHand: farHandCards,
       enemy: {
@@ -592,7 +607,7 @@ export function buildTutorialView(
         perspective: "player",
         turn: playerTurnStarted ? "2" : "1",
         phase:
-          endTurnCompleted && !dreamwellExplanationCompleted ? "Dawn" : "Day",
+          phase === "dawn" ? "Dawn" : phase === "dusk" ? "Dusk" : "Day",
         activeSide: endTurnCompleted
           ? "Enemy"
           : playerTurnStarted

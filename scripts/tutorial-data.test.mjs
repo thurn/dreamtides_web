@@ -48,7 +48,7 @@ const FIXTURE_ACTIONS = [
     id: "how-to-play",
     action: "display-how-to-play",
     trigger: "player-turn-announcement-complete",
-    text: "Play characters to score points (⍟).\n\nScore 10 ⍟ to win.",
+    text: "Play characters to [yellow]challenge[/yellow] and score points (⍟).\n\nScore 10 ⍟ to win.",
     wait: 0,
   },
   {
@@ -129,6 +129,14 @@ describe("tutorial data", () => {
         { ...FIXTURE_ACTIONS[5], companion: "named-card" },
       ]),
     ).toThrow(/supported How to Play companion/u);
+    expect(() =>
+      validateTutorialActions([
+        {
+          ...FIXTURE_ACTIONS[5],
+          text: "Position a character to [yellow]challenge.",
+        },
+      ]),
+    ).toThrow(/unclosed yellow highlight/u);
   });
 
   it("preserves a Dreamwell companion on How to Play actions", () => {

@@ -111,7 +111,7 @@ describe("parseTutorialActions", () => {
 
   it("preserves authored How to Play copy and rejects blank messages", () => {
     const text =
-      "Play characters to score points (⍟).\n\nScore 10 ⍟ to win.";
+      "Play characters to [yellow]challenge[/yellow] and score points (⍟).\n\nScore 10 ⍟ to win.";
     expect(
       parseTutorialActions([
         {
@@ -162,6 +162,16 @@ describe("parseTutorialActions", () => {
         },
       ]),
     ).toThrow(/supported How to Play companion/u);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "bad-how-to-play-markup",
+          action: "display-how-to-play",
+          text: "Position a character to [yellow]challenge.",
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/unclosed yellow highlight/u);
     expect(
       parseTutorialActions([
         {

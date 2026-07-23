@@ -51,7 +51,7 @@ wait = 0
 id = "how-to-play"
 action = "display-how-to-play"
 trigger = "player-turn-announcement-complete"
-text = "Play characters and challenge with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle."
+text = "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle."
 wait = 0
 
 [[actions]]
@@ -71,7 +71,7 @@ id = "dreamwell-how-to-play"
 action = "display-how-to-play"
 trigger = "immediate"
 companion = "dreamwell-card"
-text = "From turn 2, players draw dreamwell cards that increase their energy (●) production and have special effects."
+text = "From turn 2, players draw [yellow]dreamwell[/yellow] cards that increase their energy (●) production and have special effects."
 wait = 0
 
 [[actions]]
@@ -85,4 +85,11 @@ wait = 3
 id = "opponent-character-advance"
 action = "reposition-opponent-character"
 cardId = "229ab3a1-3720-41a2-924c-8fe112188f8e"
+wait = 0
+
+[[actions]]
+id = "challenge-positioning-how-to-play"
+action = "display-how-to-play"
+trigger = "immediate"
+text = "Position characters in the front rank to [yellow]challenge[/yellow] with them during your turn, or [yellow]accept[/yellow] a challenge during the opponent's turn."
 wait = 0

@@ -1089,7 +1089,7 @@ describe("TutorialScreen", () => {
     const onHowToPlayDismissed = vi.fn();
     const onActionComplete = vi.fn();
     const howToPlayText =
-      "Play characters and challenge with them to score points (⍟) equal to their spark (✦).\n\nScore 12 ⍟ to win this configured battle.";
+      "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦), or [yellow]accept[/yellow] a challenge.\n\nScore 12 ⍟ to win this configured battle.";
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -1168,14 +1168,26 @@ describe("TutorialScreen", () => {
       "var(--t-tutorial-instruction)",
     );
     expect(paragraphs[0]?.textContent).toContain(
-      "Play characters and challenge with them to score points () equal to their spark ()",
+      "Play characters and challenge with them to score points () equal to their spark (), or accept a challenge",
     );
     expect(paragraphs[1]?.textContent?.replace(/\s+/g, " ")).toContain(
       "Score 12 to win this configured battle",
     );
-    const challenge = paragraphs[0]?.querySelector("strong");
-    expect(challenge?.textContent).toBe("challenge");
-    expect(challenge?.style.color).toBe("var(--spark)");
+    const highlights = [
+      ...(paragraphs[0]?.querySelectorAll<HTMLElement>(
+        '[data-tutorial-instruction-highlight="yellow"]',
+      ) ?? []),
+    ];
+    expect(highlights.map((highlight) => highlight.textContent)).toEqual([
+      "challenge",
+      "accept",
+    ]);
+    expect(highlights.every((highlight) => highlight.style.color === "var(--spark)")).toBe(
+      true,
+    );
+    expect(highlights.some((highlight) => highlight.textContent === "a challenge")).toBe(
+      false,
+    );
     expect(dialog?.querySelectorAll('[aria-label="points"]')).toHaveLength(1);
     expect(dialog?.querySelector('[aria-label="points"]')?.className).toContain(
       "bxf bx-star-circle",
@@ -1363,12 +1375,12 @@ describe("TutorialScreen", () => {
                 action: "display-how-to-play",
                 trigger: "immediate",
                 companion: "dreamwell-card",
-                text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
+                text: "From turn 2, players draw [yellow]dreamwell[/yellow] cards that increase their energy (●) production and have other effects.",
                 wait: 0,
               },
               howToPlay: {
                 actionId: "dreamwell-how-to-play",
-                text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
+                text: "From turn 2, players draw [yellow]dreamwell[/yellow] cards that increase their energy (●) production and have other effects.",
                 wait: 0,
                 trigger: "immediate",
                 companion: TUTORIAL_DREAMWELL_CARD,
@@ -1418,7 +1430,7 @@ describe("TutorialScreen", () => {
       ),
     ).toBeNull();
     const dreamwellTerm = dialog?.querySelector<HTMLElement>(
-      "[data-tutorial-how-to-play-dreamwell]",
+      '[data-tutorial-instruction-highlight="yellow"]',
     );
     expect(dreamwellTerm?.textContent).toBe("dreamwell");
     expect(dreamwellTerm?.style.color).toBe("var(--spark)");

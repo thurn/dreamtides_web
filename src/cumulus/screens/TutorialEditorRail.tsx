@@ -44,9 +44,9 @@ export interface TutorialEditorRailProps {
   readonly onClose: () => void;
 }
 
-const TUTORIAL_TAIL_ACTION_COUNT = 4;
+const TUTORIAL_TAIL_ACTION_COUNT = 5;
 const DEFAULT_HOW_TO_PLAY_TEXT =
-  "Play characters and challenge with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle.";
+  "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle.";
 
 const ACTION_OPTIONS = [
   { value: "display-speech-bubble", label: "Display Speech Bubble" },
@@ -537,7 +537,7 @@ function TutorialActionRow({
             <TextArea
               label="Instruction Text"
               value={action.text}
-              supportingText="Use a blank line between paragraphs. ⍟ renders points; ✦ renders spark."
+              supportingText="Use a blank line between paragraphs. [yellow]copy[/yellow] highlights an exact run; ⍟ renders points; ✦ renders spark."
               error={
                 action.text.trim().length === 0
                   ? "Text cannot be blank."

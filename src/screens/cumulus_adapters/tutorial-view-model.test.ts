@@ -137,7 +137,7 @@ describe("buildTutorialView", () => {
       tutorialActionLogDetails({
         id: "how-to-play",
         action: "display-how-to-play",
-        text: "Configured instructions.",
+        text: "Configured [yellow]instructions[/yellow].",
         wait: 0,
       }),
     ).toEqual({
@@ -146,6 +146,7 @@ describe("buildTutorialView", () => {
       trigger: "player-turn-announcement-complete",
       title: "How to Play",
       messageText: "Configured instructions.",
+      messageMarkup: "Configured [yellow]instructions[/yellow].",
       waitSeconds: 0,
     });
   });
@@ -546,6 +547,13 @@ describe("buildTutorialView", () => {
         cardId: TUTORIAL_OPPONENT_CARD_ID,
         wait: 0,
       },
+      {
+        id: "challenge-positioning-how-to-play",
+        action: "display-how-to-play" as const,
+        trigger: "immediate" as const,
+        text: "Position characters in the front rank to [yellow]challenge[/yellow] with them during your turn, or [yellow]accept[/yellow] a challenge during the opponent's turn.",
+        wait: 0,
+      },
     ];
 
     const drawing = buildTutorialView({
@@ -874,6 +882,40 @@ describe("buildTutorialView", () => {
       backRank: 0,
       frontRank: 1,
     });
+    expect(advancing.battle.phase).toBe("day");
+
+    const duskInstructions = buildTutorialView(
+      {
+        runId: "event:draw",
+        currentActionIndex: 9,
+        actions,
+        playerCardPlay: {
+          cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+          cardId: TUTORIAL_PLAYER_CARD_ID,
+          targetSlotId: "player-back-4",
+        },
+      },
+      OPPONENT_CARD,
+      PLAYER_CARD,
+      [AUTUMN_GLADE],
+    );
+    expect(duskInstructions.currentAction?.id).toBe(
+      "challenge-positioning-how-to-play",
+    );
+    expect(duskInstructions.howToPlay).toEqual({
+      actionId: "challenge-positioning-how-to-play",
+      text: "Position characters in the front rank to [yellow]challenge[/yellow] with them during your turn, or [yellow]accept[/yellow] a challenge during the opponent's turn.",
+      wait: 0,
+      trigger: "immediate",
+    });
+    expect(duskInstructions.battle).toMatchObject({
+      activeSide: "enemy",
+      phase: "dusk",
+      inspector: {
+        activeSide: "Enemy",
+        phase: "Dusk",
+      },
+    });
 
     const ended = buildTutorialView(
       {
@@ -892,7 +934,7 @@ describe("buildTutorialView", () => {
     );
     expect(ended.endTurn).toBeNull();
     expect(ended.battle.activeSide).toBe("enemy");
-    expect(ended.battle.phase).toBe("day");
+    expect(ended.battle.phase).toBe("dusk");
     expect(ended.battle.dreamwell).toBeNull();
     expect(ended.battle.enemy.status).toMatchObject({
       currentEnergy: 5,
@@ -906,7 +948,7 @@ describe("buildTutorialView", () => {
     );
     expect(ended.battle.inspector).toMatchObject({
       activeSide: "Enemy",
-      phase: "Day",
+      phase: "Dusk",
     });
   });
 

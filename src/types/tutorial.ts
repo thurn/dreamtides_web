@@ -50,7 +50,8 @@ export interface DisplayHowToPlayTutorialAction extends TutorialActionBase {
   /** Optional game object paired with the instruction card. */
   readonly companion?: TutorialHowToPlayCompanion;
   /**
-   * Authored instruction copy. Blank lines separate paragraphs; `⍟` and `✦`
+   * Authored instruction copy. Blank lines separate paragraphs,
+   * `[yellow]copy[/yellow]` highlights an exact inline run, and `⍟` and `✦`
    * render as the points and spark glyphs.
    */
   readonly text: string;

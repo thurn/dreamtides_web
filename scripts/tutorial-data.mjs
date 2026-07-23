@@ -13,11 +13,63 @@ export const DEFAULT_TUTORIAL_JSON_PATH = join("public", "tutorial-data.json");
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
 const CARD_UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
+const TUTORIAL_HIGHLIGHT_TAG_PATTERN = /\[\/?yellow\]/gu;
+const MARKUP_LIKE_TAG_PATTERN = /\[\/?[A-Za-z][A-Za-z0-9-]*\]/gu;
 
 function invalid(message) {
   const error = new Error(message);
   error.code = "INVALID_TUTORIAL_ACTIONS";
   return error;
+}
+
+function validateInstructionMarkup(text, id) {
+  const paragraphs = text
+    .split(/\n\s*\n/u)
+    .map((paragraph) => paragraph.trim())
+    .filter((paragraph) => paragraph.length > 0);
+  for (const [paragraphIndex, paragraph] of paragraphs.entries()) {
+    const unsupportedTag = paragraph
+      .match(MARKUP_LIKE_TAG_PATTERN)
+      ?.find((tag) => tag !== "[yellow]" && tag !== "[/yellow]");
+    if (unsupportedTag !== undefined) {
+      throw invalid(
+        `Tutorial action ${JSON.stringify(id)} paragraph ${paragraphIndex + 1} uses unsupported highlight tag ${JSON.stringify(unsupportedTag)}.`,
+      );
+    }
+    let highlighted = false;
+    let highlightedTextStart = -1;
+    for (const match of paragraph.matchAll(TUTORIAL_HIGHLIGHT_TAG_PATTERN)) {
+      const tag = match[0];
+      const index = match.index;
+      if (tag === "[yellow]") {
+        if (highlighted) {
+          throw invalid(
+            `Tutorial action ${JSON.stringify(id)} paragraph ${paragraphIndex + 1} cannot nest yellow highlights.`,
+          );
+        }
+        highlighted = true;
+        highlightedTextStart = index + tag.length;
+        continue;
+      }
+      if (!highlighted) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} paragraph ${paragraphIndex + 1} has a closing yellow tag without an opening tag.`,
+        );
+      }
+      if (index === highlightedTextStart) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} paragraph ${paragraphIndex + 1} has an empty yellow highlight.`,
+        );
+      }
+      highlighted = false;
+      highlightedTextStart = -1;
+    }
+    if (highlighted) {
+      throw invalid(
+        `Tutorial action ${JSON.stringify(id)} paragraph ${paragraphIndex + 1} has an unclosed yellow highlight.`,
+      );
+    }
+  }
 }
 
 /** Validate and normalize tutorial actions from TOML or the editor API. */
@@ -97,6 +149,7 @@ export function validateTutorialActions(value) {
           `Tutorial action ${JSON.stringify(id)} must have How to Play text.`,
         );
       }
+      validateInstructionMarkup(candidate.text, id);
       const trigger =
         candidate.trigger ?? "player-turn-announcement-complete";
       if (
