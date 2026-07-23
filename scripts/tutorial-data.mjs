@@ -69,10 +69,21 @@ export function validateTutorialActions(value) {
           `Tutorial action ${JSON.stringify(id)} must target Mira, the player, or the enemy.`,
         );
       }
+      const verticalOffset = candidate.verticalOffset;
+      if (
+        verticalOffset !== undefined &&
+        (typeof verticalOffset !== "number" ||
+          !Number.isFinite(verticalOffset))
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must have a finite vertical offset.`,
+        );
+      }
       return {
         id,
         action,
         ...(speaker === undefined ? {} : { speaker }),
+        ...(verticalOffset === undefined ? {} : { verticalOffset }),
         text: candidate.text,
         wait,
       };

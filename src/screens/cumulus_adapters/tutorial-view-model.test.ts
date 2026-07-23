@@ -127,6 +127,7 @@ describe("buildTutorialView", () => {
       actionId: "enemy-taunt",
       action: "display-speech-bubble",
       speaker: "enemy",
+      verticalOffsetPx: 0,
       waitSeconds: 3,
     });
   });
@@ -276,6 +277,7 @@ describe("buildTutorialView", () => {
 
     expect(tutorial.dialogue).toEqual({
       kind: "guide",
+      verticalOffset: 0,
       model: {
         portrait: { kind: "character-portrait", characterId: "mira" },
         portraitAlt: "Mira",
@@ -348,6 +350,7 @@ describe("buildTutorialView", () => {
         {
           id: "nightmare-call",
           action: "display-speech-bubble",
+          verticalOffset: 100,
           text: "You are called to stand against Nightmare.",
           wait: 3,
         },
@@ -358,6 +361,11 @@ describe("buildTutorialView", () => {
     expect(
       tutorial.dialogue?.kind === "guide" ? tutorial.dialogue.model.text : null,
     ).toContain("Nightmare");
+    expect(
+      tutorial.dialogue?.kind === "guide"
+        ? tutorial.dialogue.verticalOffset
+        : null,
+    ).toBe(100);
     expect(tutorial.dreamcallers.player.settled).toBe(true);
     expect(tutorial.dreamcallers.enemy).toMatchObject({
       visual: { imageNumber: "0087", name: "Vrakmoth" },

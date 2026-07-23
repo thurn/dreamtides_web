@@ -73,6 +73,7 @@ export interface TutorialDreamcallerView {
 export type TutorialDialogueView =
   | {
       readonly kind: "guide";
+      readonly verticalOffset: number;
       readonly model: CharacterDialogueModel;
     }
   | {
@@ -172,7 +173,6 @@ interface TutorialCardTrajectory {
 }
 
 const TUTORIAL_FADE_SECONDS = motionTimeSeconds("--dur-loading-screen-fade");
-const TUTORIAL_DREAMCALLER_FADE_SECONDS = motionTimeSeconds("--dur-fast");
 const TUTORIAL_CARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow");
 const TUTORIAL_EDITOR_DOCK_MIN_WIDTH = 1280;
 const TUTORIAL_REVEAL_CARD_DESKTOP_WIDTH = 240;
@@ -675,6 +675,20 @@ function TutorialDreamcallerArrival({
 
   if (trajectory === null) return null;
 
+  const totalDuration = pause + duration;
+  const frames =
+    totalDuration === 0
+      ? {
+          y: [trajectory.targetY, trajectory.targetY],
+          scale: [1, 1],
+          times: [0, 1],
+        }
+      : {
+          y: [trajectory.startY, trajectory.startY, trajectory.targetY],
+          scale: [trajectory.startScale, trajectory.startScale, 1],
+          times: [0, pause / totalDuration, 1],
+        };
+
   return (
     <motion.div
       data-tutorial-dreamcaller-arrival=""
@@ -683,23 +697,17 @@ function TutorialDreamcallerArrival({
         x: trajectory.startX,
         y: trajectory.startY,
         scale: trajectory.startScale,
-        opacity: 0,
+        opacity: 1,
       }}
       animate={{
-        y: [trajectory.startY, trajectory.startY, trajectory.targetY],
-        scale: [trajectory.startScale, trajectory.startScale, 1],
+        y: frames.y,
+        scale: frames.scale,
         opacity: 1,
       }}
       transition={{
-        duration: TUTORIAL_DREAMCALLER_FADE_SECONDS + pause + duration,
-        times: [
-          0,
-          (TUTORIAL_DREAMCALLER_FADE_SECONDS + pause) /
-            (TUTORIAL_DREAMCALLER_FADE_SECONDS + pause + duration),
-          1,
-        ],
+        duration: totalDuration,
+        times: frames.times,
         ease: [0.22, 0.61, 0.36, 1],
-        opacity: { duration: TUTORIAL_DREAMCALLER_FADE_SECONDS },
       }}
       onAnimationComplete={onComplete}
       style={{
@@ -1691,7 +1699,12 @@ export function TutorialScreen({
             ) / 10,
           top:
             Math.round(
-              (frontIntersectionY - screenBox.top - dialogueBox.height / 2) *
+              (frontIntersectionY -
+                screenBox.top -
+                dialogueBox.height / 2 +
+                (renderedDialogue?.kind === "guide"
+                  ? renderedDialogue.verticalOffset
+                  : 0)) *
                 10,
             ) / 10,
         };
@@ -1705,7 +1718,10 @@ export function TutorialScreen({
             Math.round(
               ((screenBox.height - dialogueBox.height) / 2 -
                 dialogueBox.height -
-                (Number.isFinite(dialogueGap) ? dialogueGap : 0)) *
+                (Number.isFinite(dialogueGap) ? dialogueGap : 0) +
+                (renderedDialogue?.kind === "guide"
+                  ? renderedDialogue.verticalOffset
+                  : 0)) *
                 10,
             ) / 10,
         };

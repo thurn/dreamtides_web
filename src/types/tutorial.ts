@@ -37,6 +37,8 @@ export interface DisplaySpeechBubbleTutorialAction extends TutorialActionBase {
   readonly action: "display-speech-bubble";
   /** Defaults to Mira for tutorial snapshots authored before speaker selection. */
   readonly speaker?: TutorialSpeechBubbleSpeaker;
+  /** Signed pixels added to Mira's computed vertical dialogue position. */
+  readonly verticalOffset?: number;
   readonly text: string;
 }
 

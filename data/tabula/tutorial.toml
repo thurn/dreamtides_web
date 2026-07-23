@@ -17,6 +17,7 @@ wait = 0
 [[actions]]
 id = "nightmare-call"
 action = "display-speech-bubble"
+verticalOffset = 100
 text = "You are called to stand against\nthe power of Nightmare."
 wait = 3
 

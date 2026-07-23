@@ -76,6 +76,39 @@ describe("parseTutorialActions", () => {
     ).toThrow(/Mira, the player, or the enemy/u);
   });
 
+  it("preserves finite Mira vertical offsets and rejects invalid offsets", () => {
+    expect(
+      parseTutorialActions([
+        {
+          id: "lower-line",
+          action: "display-speech-bubble",
+          verticalOffset: 100,
+          text: "A lower line.",
+          wait: 3,
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "lower-line",
+        action: "display-speech-bubble",
+        verticalOffset: 100,
+        text: "A lower line.",
+        wait: 3,
+      },
+    ]);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "bad-offset",
+          action: "display-speech-bubble",
+          verticalOffset: "lower",
+          text: "No.",
+          wait: 1,
+        },
+      ]),
+    ).toThrow(/finite vertical offset/u);
+  });
+
   it("preserves authored How to Play copy and rejects blank messages", () => {
     const text =
       "Play characters to score points (⍟).\n\nScore 10 ⍟ to win.";

@@ -359,6 +359,7 @@ describe("TutorialScreen", () => {
               dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: {
                 kind: "guide",
+                verticalOffset: 0,
                 model: {
                   portrait: { kind: "character-portrait", characterId: "mira" },
                   portraitAlt: "Mira",
@@ -412,6 +413,7 @@ describe("TutorialScreen", () => {
               dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: {
                 kind: "guide",
+                verticalOffset: 100,
                 model: {
                   portrait: {
                     kind: "character-portrait",
@@ -458,7 +460,7 @@ describe("TutorialScreen", () => {
       "[data-tutorial-dialogue-anchor]",
     );
     expect(dialogueAnchor?.style.left).toBe("var(--gutter)");
-    expect(dialogueAnchor?.style.top).toBe("0px");
+    expect(dialogueAnchor?.style.top).toBe("100px");
     expect(dialogueAnchor?.style.bottom).toBe("");
     expect(dialogueAnchor?.style.justifyContent).toBe("flex-start");
     expect(
@@ -487,7 +489,7 @@ describe("TutorialScreen", () => {
     dialogue!.getBoundingClientRect = () =>
       DOMRect.fromRect({ width: 300, height: 64 });
     act(() => ResizeObserverStub.flush());
-    expect(dialogueAnchor?.style.top).toBe("310px");
+    expect(dialogueAnchor?.style.top).toBe("410px");
 
     act(() => root.unmount());
     container.remove();
@@ -509,6 +511,7 @@ describe("TutorialScreen", () => {
               dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: {
                 kind: "guide",
+                verticalOffset: 0,
                 model: {
                   portrait: {
                     kind: "character-portrait",
@@ -578,18 +581,20 @@ describe("TutorialScreen", () => {
       x: 173,
       y: 400,
       scale: 4,
+      opacity: 1,
     });
     expect(screenMocks.arrivalAnimate).toMatchObject({
       y: [400, 400, 700],
       scale: [4, 4, 1],
+      opacity: 1,
     });
     const arrivalTransition = screenMocks.arrivalTransition as {
       readonly duration: number;
       readonly times: readonly number[];
     };
-    expect(arrivalTransition.duration).toBeCloseTo(1.74);
+    expect(arrivalTransition.duration).toBeCloseTo(1.6);
     expect(arrivalTransition.times[0]).toBe(0);
-    expect(arrivalTransition.times[1]).toBeCloseTo(1.14 / 1.74);
+    expect(arrivalTransition.times[1]).toBeCloseTo(1 / 1.6);
     expect(arrivalTransition.times[2]).toBe(1);
     expect(onActionComplete).not.toHaveBeenCalled();
 
@@ -1774,6 +1779,7 @@ describe("TutorialScreen", () => {
               dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: {
                 kind: "guide",
+                verticalOffset: 0,
                 model: {
                   portrait: {
                     kind: "character-portrait",

@@ -120,6 +120,7 @@ function defaultAction(
       id,
       action: "display-speech-bubble",
       speaker: "mira",
+      verticalOffset: 0,
       text: "New tutorial message.",
       wait: 3,
     };
@@ -186,6 +187,10 @@ function changedActionType(
         action.action === "display-speech-bubble"
           ? (action.speaker ?? "mira")
           : "mira",
+      verticalOffset:
+        action.action === "display-speech-bubble"
+          ? (action.verticalOffset ?? 0)
+          : 0,
       text:
         action.action === "display-speech-bubble"
           ? action.text
@@ -455,6 +460,34 @@ function TutorialActionRow({
               onChange={(text) => update({ ...action, text }, false)}
               onCommit={(text) => update({ ...action, text }, true)}
             />
+            {(action.speaker ?? "mira") === "mira" ? (
+              <NumberStepper
+                label="Vertical Offset"
+                value={action.verticalOffset ?? 0}
+                displayValue={`${waitLabel(action.verticalOffset ?? 0)}px`}
+                size="sm"
+                decrementLabel={`Move Mira speech up for action ${String(index + 1)}`}
+                incrementLabel={`Move Mira speech down for action ${String(index + 1)}`}
+                onDecrement={() =>
+                  update(
+                    {
+                      ...action,
+                      verticalOffset: (action.verticalOffset ?? 0) - 10,
+                    },
+                    true,
+                  )
+                }
+                onIncrement={() =>
+                  update(
+                    {
+                      ...action,
+                      verticalOffset: (action.verticalOffset ?? 0) + 10,
+                    },
+                    true,
+                  )
+                }
+              />
+            ) : null}
           </>
         ) : null}
 

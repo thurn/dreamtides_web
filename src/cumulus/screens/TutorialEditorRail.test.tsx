@@ -27,6 +27,7 @@ const INITIAL_ACTIONS: readonly TutorialAction[] = [
     id: "welcome",
     action: "display-speech-bubble",
     speaker: "mira",
+    verticalOffset: 0,
     text: "Welcome, Dreamer.",
     wait: 3,
   },
@@ -170,6 +171,7 @@ describe("TutorialEditorRail", () => {
           id: "display-speech-bubble",
           action: "display-speech-bubble",
           speaker: "mira",
+          verticalOffset: 0,
           text: "New tutorial message.",
           wait: 3,
         },
@@ -282,6 +284,35 @@ describe("TutorialEditorRail", () => {
       ],
       true,
     );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("authors a signed vertical offset for Mira speech", () => {
+    const onChange = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<EditorHarness onChange={onChange} />));
+
+    const moveDown = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="Move Mira speech down for action 1"]',
+    );
+    expect(moveDown).not.toBeNull();
+    expect(container.textContent).toContain("0px");
+    act(() => moveDown?.click());
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        {
+          ...INITIAL_ACTIONS[0],
+          verticalOffset: 10,
+        },
+      ],
+      true,
+    );
+    expect(container.textContent).toContain("10px");
 
     act(() => root.unmount());
     container.remove();

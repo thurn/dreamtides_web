@@ -47,6 +47,7 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       action: action.action,
       waitSeconds: action.wait,
       speaker: action.speaker ?? "mira",
+      verticalOffsetPx: action.verticalOffset ?? 0,
     };
   }
   if (action.action === "display-how-to-play") {
@@ -466,6 +467,7 @@ export function buildTutorialView(
             }
           : {
               kind: "guide",
+              verticalOffset: dialogueAction.verticalOffset ?? 0,
               model: {
                 portrait: { kind: "character-portrait", characterId: "mira" },
                 portraitAlt: "Mira",
