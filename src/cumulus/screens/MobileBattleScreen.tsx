@@ -210,6 +210,8 @@ export interface MobileBattleScreenProps {
   readonly inspectorOpen?: boolean;
   /** Reports inspector disclosure changes in controlled compositions. */
   readonly onInspectorOpenChange?: (open: boolean) => void;
+  /** Reports when a turn announcement has finished displaying. */
+  readonly onTurnAnnouncementComplete?: (side: MobileBattleOwner) => void;
   /** Fill a positioned parent instead of owning the browser viewport. */
   readonly viewport?: "fixed" | "contained";
 }
@@ -550,18 +552,23 @@ function BattleTurnAnnouncement({
   isOpeningTurn,
   perspective,
   isDesktop,
+  onComplete,
 }: {
   readonly activeSide: MobileBattleOwner;
   readonly isOpeningTurn: boolean;
   readonly perspective: BattlePerspectiveSide;
   readonly isDesktop: boolean;
+  readonly onComplete?: (side: MobileBattleOwner) => void;
 }) {
   const sequence = useRef(1);
   const previousSide = useRef(activeSide);
+  const onCompleteRef = useRef(onComplete);
   const [announcement, setAnnouncement] = useState<{
     readonly key: number;
     readonly side: MobileBattleOwner;
   } | null>(isOpeningTurn ? null : { key: 0, side: activeSide });
+
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
     if (previousSide.current === activeSide) return;
@@ -573,10 +580,12 @@ function BattleTurnAnnouncement({
   useEffect(() => {
     if (announcement === null) return;
     const announcementKey = announcement.key;
+    const announcementSide = announcement.side;
     const timeout = window.setTimeout(() => {
       setAnnouncement((current) =>
         current?.key === announcementKey ? null : current,
       );
+      onCompleteRef.current?.(announcementSide);
     }, TURN_ANNOUNCEMENT_DURATION_MS);
     return () => window.clearTimeout(timeout);
   }, [announcement]);
@@ -2945,6 +2954,7 @@ export function MobileBattleScreen({
   phaseNavigation = "both",
   inspectorOpen: controlledInspectorOpen,
   onInspectorOpenChange,
+  onTurnAnnouncementComplete,
   viewport = "fixed",
 }: MobileBattleScreenProps) {
   const isDesktop = useIsDesktop();
@@ -3154,6 +3164,7 @@ export function MobileBattleScreen({
           isOpeningTurn={view.isOpeningTurn}
           perspective={view.perspective}
           isDesktop={isDesktop}
+          onComplete={onTurnAnnouncementComplete}
         />
       ) : null}
       <LayoutGroup id={`mobile-battle:${view.battleId}`}>

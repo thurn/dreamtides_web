@@ -329,8 +329,8 @@ export function GlassDialog({
             data-glass-dialog-close-only=""
             style={{
               position: "absolute",
-              top: token("--space-2"),
-              right: token("--space-2"),
+              top: token("--space-6"),
+              right: token("--space-6"),
               zIndex: 2,
             }}
           >

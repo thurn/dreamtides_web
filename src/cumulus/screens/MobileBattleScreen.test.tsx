@@ -1224,17 +1224,24 @@ describe("MobileBattleScreen", () => {
 
   it("skips the opening turn and announces later turns on a circular surface", () => {
     vi.useFakeTimers();
+    const onTurnAnnouncementComplete = vi.fn();
     const view = { ...makeView(), isOpeningTurn: true };
-    const { container, root } = mount(view);
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
     const render = (nextView: MobileBattleView): void => {
       act(() => {
         root.render(
           <CumulusRoot>
-            <MobileBattleScreen view={nextView} />
+            <MobileBattleScreen
+              view={nextView}
+              onTurnAnnouncementComplete={onTurnAnnouncementComplete}
+            />
           </CumulusRoot>,
         );
       });
     };
+    render(view);
 
     expect(container.querySelector("[data-battle-turn-announcement]")).toBeNull();
 
@@ -1263,8 +1270,16 @@ describe("MobileBattleScreen", () => {
     );
 
     act(() => {
-      vi.advanceTimersByTime(2_500);
+      vi.advanceTimersByTime(2_099);
     });
+    expect(onTurnAnnouncementComplete).not.toHaveBeenCalled();
+    expect(container.querySelector("[data-battle-turn-announcement]")).not.toBeNull();
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(onTurnAnnouncementComplete).toHaveBeenCalledOnce();
+    expect(onTurnAnnouncementComplete).toHaveBeenCalledWith("player");
     expect(container.querySelector("[data-battle-turn-announcement]")).toBeNull();
 
     act(() => root.unmount());

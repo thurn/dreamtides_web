@@ -942,8 +942,18 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
-  it("opens the formatted How to Play dialog after the player card finishes drawing and closes it from the X button", () => {
+  it("opens the formatted How to Play dialog only after the first player turn announcement finishes and closes it from the X button", () => {
     vi.useFakeTimers();
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: query.includes("min-width"),
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
     const onHowToPlayPresented = vi.fn();
     const onHowToPlayDismissed = vi.fn();
     const container = document.createElement("div");
@@ -977,12 +987,17 @@ describe("TutorialScreen", () => {
 
     act(() => screenMocks.sceneAnimationComplete?.());
     act(() => {
-      vi.advanceTimersByTime(419);
+      vi.advanceTimersByTime(10_000);
     });
     expect(container.querySelector('[role="dialog"]')).toBeNull();
 
     act(() => {
-      vi.advanceTimersByTime(1);
+      screenMocks.props?.onTurnAnnouncementComplete?.("enemy");
+    });
+    expect(container.querySelector('[role="dialog"]')).toBeNull();
+
+    act(() => {
+      screenMocks.props?.onTurnAnnouncementComplete?.("player");
     });
 
     const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
@@ -1000,14 +1015,15 @@ describe("TutorialScreen", () => {
     );
     const paragraphs = [...(content?.querySelectorAll("p") ?? [])];
     expect(paragraphs).toHaveLength(2);
-    expect(content?.style.gap).toBe("20px");
-    expect(content?.style.padding).toBe("32px");
-    expect(paragraphs[0]?.style.font).toBe("var(--t-lead)");
-    expect(paragraphs[0]?.style.fontSize).toBe("19px");
+    expect(content?.style.gap).toBe("var(--space-7)");
+    expect(content?.style.padding).toBe("var(--space-9)");
+    expect(paragraphs[0]?.style.font).toBe(
+      "var(--t-tutorial-instruction)",
+    );
     expect(paragraphs[0]?.textContent).toContain(
       "Play characters and challenge with them to score",
     );
-    expect(paragraphs[1]?.textContent).toContain(
+    expect(paragraphs[1]?.textContent?.replace(/\s+/g, " ")).toContain(
       "Score 10 to win this dream battle",
     );
     const challenge = paragraphs[0]?.querySelector("strong");
@@ -1020,29 +1036,29 @@ describe("TutorialScreen", () => {
     expect(dialog?.querySelector('[aria-label="spark"]')?.className).toContain(
       "bxf bx-sparkle",
     );
-    const tweaks = document.querySelector<HTMLElement>(
-      "[data-tutorial-how-to-play-tweaks]",
-    );
-    expect(tweaks).not.toBeNull();
-    const fontSizeInput = tweaks?.querySelector<HTMLInputElement>(
-      '[data-tutorial-tweak-key="fontSize"]',
-    );
-    act(() => {
-      Object.getOwnPropertyDescriptor(
-        HTMLInputElement.prototype,
-        "value",
-      )?.set?.call(fontSizeInput, "28");
-      fontSizeInput?.dispatchEvent(new Event("input", { bubbles: true }));
-    });
-    expect(paragraphs[0]?.style.fontSize).toBe("28px");
     expect(
-      tweaks?.querySelector('[data-tutorial-tweak-output="fontSize"]')
+      paragraphs[1]?.querySelector('[aria-label="points"]')?.parentElement
         ?.textContent,
-    ).toBe("28px");
+    ).toBe("10");
     expect(
-      tweaks?.querySelector("[data-tutorial-how-to-play-tweak-json]")
-        ?.textContent,
-    ).toContain('"fontSize": 28');
+      paragraphs[1]?.querySelector<HTMLElement>('[aria-label="points"]')
+        ?.parentElement?.style.columnGap,
+    ).toBe("var(--space-2)");
+    expect(
+      paragraphs[0]?.querySelector<HTMLElement>(
+        "[data-tutorial-how-to-play-spark]",
+      )?.style.verticalAlign,
+    ).toBe("-0.14em");
+    expect(
+      document.querySelector("[data-tutorial-how-to-play-tweaks]"),
+    ).toBeNull();
+    expect(
+      dialog?.querySelector<HTMLElement>("[data-glass-dialog-panel]")?.style
+        .height,
+    ).toBe("");
+    expect(content?.style.width).toBe(
+      "calc(500px - var(--space-5) - var(--space-5))",
+    );
     expect(onHowToPlayPresented).toHaveBeenCalledWith(
       "event:player-turn",
       "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
@@ -1056,9 +1072,6 @@ describe("TutorialScreen", () => {
         ?.click();
     });
     expect(container.querySelector('[role="dialog"]')).toBeNull();
-    expect(
-      document.querySelector("[data-tutorial-how-to-play-tweaks]"),
-    ).toBeNull();
     expect(onHowToPlayDismissed).toHaveBeenCalledWith(
       "event:player-turn",
       "e83014d3-9d35-4e80-a1b3-9b25360ad2af",

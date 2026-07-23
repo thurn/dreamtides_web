@@ -247,6 +247,8 @@ describe("GlassDialog", () => {
     expect(dialog?.querySelector("header")).toBeNull();
     expect(dialog?.querySelector("h2")).toBeNull();
     expect(closeOnly?.style.position).toBe("absolute");
+    expect(closeOnly?.style.top).toBe("var(--space-6)");
+    expect(closeOnly?.style.right).toBe("var(--space-6)");
     expect(
       closeOnly?.querySelector('button[aria-label="Close"]'),
     ).not.toBeNull();

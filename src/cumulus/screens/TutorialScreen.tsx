@@ -47,10 +47,6 @@ import {
   TutorialEditorRail,
   TutorialEditorTakeover,
 } from "./TutorialEditorRail";
-import {
-  DEFAULT_TUTORIAL_HOW_TO_PLAY_TWEAKS,
-  TutorialHowToPlayTweaks,
-} from "./devtools/TutorialHowToPlayTweaks";
 import { MOBILE_BATTLE_INSPECTOR_RAIL_TRACK } from "./mobile-battle-layout";
 import type {
   TutorialAction,
@@ -153,6 +149,9 @@ const TUTORIAL_CARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow");
 const TUTORIAL_EDITOR_DOCK_MIN_WIDTH = 1280;
 const TUTORIAL_REVEAL_CARD_DESKTOP_WIDTH = 240;
 const TUTORIAL_REVEAL_CARD_MOBILE_WIDTH_RATIO = 0.45;
+// The popup panel is a content-driven desktop box measure. GlassDialog adds
+// --space-5 body padding on each side around this intrinsic content width.
+const TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH = 500;
 // The pointer overlaps the portrait rim so it visibly connects to the frame.
 const TUTORIAL_PORTRAIT_POINTER_OVERLAP = 2;
 
@@ -161,77 +160,82 @@ function TutorialHowToPlayDialog({
 }: {
   readonly onClose: () => void;
 }): ReactElement {
-  const [tweaks, setTweaks] = useState(DEFAULT_TUTORIAL_HOW_TO_PLAY_TWEAKS);
+  const desktop = useIsDesktop();
   const paragraphStyle = {
     margin: 0,
     color: token("--text-on-glass"),
-    font: token("--t-lead"),
-    fontSize: tweaks.fontSize,
-    lineHeight: tweaks.lineHeight,
+    font: desktop
+      ? token("--t-tutorial-instruction")
+      : token("--t-lead"),
   } as const;
   const inlineIconStyle = {
     display: "inline-flex",
     alignItems: "center",
+    columnGap: token("--space-2"),
     whiteSpace: "nowrap",
   } as const;
 
   return (
-    <>
-      <GlassDialog
-        title="How to Play"
-        closeLabel="Close how to play"
-        presentation="popup"
-        chrome="close-only"
-        onClose={onClose}
+    <GlassDialog
+      title="How to Play"
+      closeLabel="Close how to play"
+      presentation="popup"
+      chrome="close-only"
+      onClose={onClose}
+    >
+      <div
+        data-tutorial-how-to-play-content=""
+        style={{
+          display: "grid",
+          gap: token("--space-7"),
+          width: desktop
+            ? `calc(${String(TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH)}px - ${token("--space-5")} - ${token("--space-5")})`
+            : "100%",
+          maxWidth: "100%",
+          boxSizing: "border-box",
+          marginInline: "auto",
+          padding: token("--space-9"),
+        }}
       >
-        <div
-          data-tutorial-how-to-play-content=""
-          style={{
-            display: "grid",
-            gap: tweaks.paragraphGap,
-            width: 720,
-            maxWidth: "100%",
-            boxSizing: "border-box",
-            marginInline: "auto",
-            padding: tweaks.internalPadding,
-          }}
-        >
-          <p style={paragraphStyle}>
-            Play characters and{" "}
-            <strong style={{ color: token("--spark") }}>challenge</strong> with
-            them to{" "}
-            <span style={inlineIconStyle}>
-              score{" "}
-              <GlowIcon
-                iconClass={GLYPHS.points}
-                color="text-primary"
-                title="points"
-              />
-            </span>{" "}
-            equal to their{" "}
+        <p style={paragraphStyle}>
+          Play characters and{" "}
+          <strong style={{ color: token("--spark") }}>challenge</strong> with
+          them to{" "}
+          <span style={inlineIconStyle}>
+            score
+            <GlowIcon
+              iconClass={GLYPHS.points}
+              color="text-primary"
+              title="points"
+            />
+          </span>{" "}
+          equal to their{" "}
+          <span
+            data-tutorial-how-to-play-spark=""
+            style={{ display: "inline-flex", verticalAlign: "-0.14em" }}
+          >
             <GlowIcon
               iconClass={GLYPHS.sparkInline}
               color="spark"
               title="spark"
             />
-            .
-          </p>
-          <p style={paragraphStyle}>
-            Score{" "}
-            <span style={inlineIconStyle}>
-              10
-              <GlowIcon
-                iconClass={GLYPHS.points}
-                color="text-primary"
-                title="points"
-              />
-            </span>{" "}
-            to win this dream battle.
-          </p>
-        </div>
-      </GlassDialog>
-      <TutorialHowToPlayTweaks values={tweaks} onChange={setTweaks} />
-    </>
+          </span>
+          .
+        </p>
+        <p style={paragraphStyle}>
+          Score{" "}
+          <span style={inlineIconStyle}>
+            10
+            <GlowIcon
+              iconClass={GLYPHS.points}
+              color="text-primary"
+              title="points"
+            />
+          </span>{" "}
+          to win this dream battle.
+        </p>
+      </div>
+    </GlassDialog>
   );
 }
 
@@ -1018,6 +1022,30 @@ export function TutorialScreen({
     setPlayedActionKey(opponentCardPlay.key);
   }, [opponentCardPlay]);
 
+  const completeTurnAnnouncement = useCallback(
+    (side: "enemy" | "player"): void => {
+      if (side !== "player" || !sceneEntered || view.howToPlay === null) return;
+      const runId = view.playbackRunId;
+      if (
+        runId === null ||
+        howToPlayPresentedRunId === runId ||
+        howToPlayDismissedRunId === runId
+      ) {
+        return;
+      }
+      setHowToPlayPresentedRunId(runId);
+      onHowToPlayPresented?.(runId, view.howToPlay.triggerCardId);
+    },
+    [
+      howToPlayDismissedRunId,
+      howToPlayPresentedRunId,
+      onHowToPlayPresented,
+      sceneEntered,
+      view.howToPlay,
+      view.playbackRunId,
+    ],
+  );
+
   useEffect(() => {
     if (
       !sceneEntered ||
@@ -1087,36 +1115,6 @@ export function TutorialScreen({
     opponentCardPlay,
     playedActionKey,
     view.currentAction,
-    view.playbackRunId,
-  ]);
-
-  useEffect(() => {
-    const runId = view.playbackRunId;
-    const howToPlay = view.howToPlay;
-    if (
-      !sceneEntered ||
-      runId === null ||
-      howToPlay === null ||
-      howToPlayPresentedRunId === runId ||
-      howToPlayDismissedRunId === runId
-    ) {
-      return undefined;
-    }
-    const timeout = window.setTimeout(
-      () => {
-        setHowToPlayPresentedRunId(runId);
-        onHowToPlayPresented?.(runId, howToPlay.triggerCardId);
-      },
-      (reduceMotion ? 0 : TUTORIAL_CARD_TRAVEL_SECONDS) * 1_000,
-    );
-    return () => window.clearTimeout(timeout);
-  }, [
-    howToPlayDismissedRunId,
-    howToPlayPresentedRunId,
-    onHowToPlayPresented,
-    reduceMotion,
-    sceneEntered,
-    view.howToPlay,
     view.playbackRunId,
   ]);
 
@@ -1352,6 +1350,7 @@ export function TutorialScreen({
             inspectorDefault="collapsed"
             inspectorOpen={battleInspectorOpen}
             onInspectorOpenChange={handleBattleInspectorOpenChange}
+            onTurnAnnouncementComplete={completeTurnAnnouncement}
             phaseNavigation="hidden"
           />
         </div>
