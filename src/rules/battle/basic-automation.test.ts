@@ -141,7 +141,7 @@ function firstPromptDreamwellEffectId(): string {
 }
 
 describe("planBasicAutomationCommands — playing cards", () => {
-  it("spends energy equal to the cost when a character is played to a slot", () => {
+  it("spends energy and exhausts a character played to a slot", () => {
     const state = makeState({
       player: {
         currentEnergy: 5,
@@ -163,6 +163,11 @@ describe("planBasicAutomationCommands — playing cards", () => {
 
     expect(edits(result)).toEqual([
       { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: -3 },
+      {
+        kind: "SET_CARD_STATUS",
+        battleCardId: "c1",
+        status: { isExhausted: true },
+      },
       {
         kind: "MOVE_CARD_TO_ZONE",
         battleCardId: "c1",
@@ -197,6 +202,11 @@ describe("planBasicAutomationCommands — playing cards", () => {
 
     expect(edits(planBasicAutomationCommands(state, play, CAPS))).toEqual([
       { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: -3 },
+      {
+        kind: "SET_CARD_STATUS",
+        battleCardId: "interactive-c1",
+        status: { isExhausted: true },
+      },
       {
         kind: "MOVE_CARD_TO_ZONE",
         battleCardId: "interactive-c1",

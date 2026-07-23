@@ -2,11 +2,15 @@ import { spawn } from "node:child_process";
 import { execFileSync } from "node:child_process";
 import {
   mkdirSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
 } from "node:fs";
 import { dirname, join, resolve } from "node:path";
+import {
+  readReviewLockOwner,
+  removeReviewLockIfUnchanged,
+  replaceReviewLockOwner,
+  snapshotReviewLock,
+  tryCreateReviewLock,
+} from "./review-lock.mjs";
 
 const root = process.cwd();
 const commonGitDir = resolve(
@@ -16,8 +20,7 @@ const commonGitDir = resolve(
     encoding: "utf8",
   }).trim(),
 );
-const lockDir = join(commonGitDir, "quest-review.lock");
-const ownerPath = join(lockDir, "owner.json");
+const lockPath = join(commonGitDir, "quest-review.lock");
 const task = process.argv[2];
 const passthrough = process.argv.slice(3);
 const validTasks = new Set(["lint", "typecheck", "validate", "test", "all"]);
@@ -38,11 +41,7 @@ function pidIsAlive(pid) {
 }
 
 function readOwner() {
-  try {
-    return JSON.parse(readFileSync(ownerPath, "utf8"));
-  } catch {
-    return null;
-  }
+  return readReviewLockOwner(lockPath);
 }
 
 function ownerIsAlive(owner) {
@@ -50,33 +49,31 @@ function ownerIsAlive(owner) {
     (pidIsAlive(owner.pid) || pidIsAlive(owner.childPid));
 }
 
+function ownerRecord(extra = {}) {
+  return {
+    pid: process.pid,
+    cwd: root,
+    task,
+    startedAt: new Date().toISOString(),
+    ...extra,
+  };
+}
+
 function writeOwner(extra = {}) {
-  writeFileSync(
-    ownerPath,
-    `${JSON.stringify({
-      pid: process.pid,
-      cwd: root,
-      task,
-      startedAt: new Date().toISOString(),
-      ...extra,
-    }, null, 2)}\n`,
-  );
+  replaceReviewLockOwner(lockPath, ownerRecord(extra));
 }
 
 async function acquireLock() {
   let lastNotice = 0;
   for (;;) {
-    try {
-      mkdirSync(lockDir);
-      writeOwner();
+    if (tryCreateReviewLock(lockPath, ownerRecord())) {
       return;
-    } catch (error) {
-      if (error?.code !== "EEXIST") throw error;
     }
 
+    const snapshot = snapshotReviewLock(lockPath);
     const owner = readOwner();
     if (!ownerIsAlive(owner)) {
-      rmSync(lockDir, { recursive: true, force: true });
+      removeReviewLockIfUnchanged(lockPath, snapshot);
       continue;
     }
 
@@ -97,7 +94,11 @@ let lockHeld = false;
 function releaseLock() {
   if (!lockHeld) return;
   lockHeld = false;
-  rmSync(lockDir, { recursive: true, force: true });
+  const snapshot = snapshotReviewLock(lockPath);
+  const owner = readOwner();
+  if (owner?.pid === process.pid) {
+    removeReviewLockIfUnchanged(lockPath, snapshot);
+  }
 }
 
 for (const signal of ["SIGINT", "SIGTERM"]) {

@@ -753,8 +753,16 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     const result = reduce(state, "BATTLE_COMMAND", debugEdit(moveEdit));
     expect(result.outcome).toBe("applied");
 
-    const commandOnly = applyDebugEdit(board, moveEdit as never, EMISSION).state;
-    expect(hashBoard(result.state.battle!.board)).toBe(hashBoard(commandOnly));
+    const exhausted = applyDebugEdit(board, {
+      kind: "SET_CARD_STATUS",
+      battleCardId: "bc-mat",
+      status: { isExhausted: true },
+    }, EMISSION).state;
+    const expected = applyDebugEdit(exhausted, moveEdit as never, EMISSION).state;
+    expect(hashBoard(result.state.battle!.board)).toBe(hashBoard(expected));
+    expect(
+      result.state.battle?.board.cardInstances["bc-mat"]?.status.isExhausted,
+    ).toBe(true);
     expect(result.state.battle?.effectQueue).toEqual([]);
     expect(result.state.battle?.pendingPrompt).toBeNull();
   });
@@ -1380,6 +1388,12 @@ describe("battle automation", () => {
     expect(persistedFalse.state.battle?.basicAutomationEnabled).toBe(false);
     expect(automated.state.battle?.board.sides.player.backRank[backRankSlotId(0)]).toBe("bc-play");
     expect(persistedFalse.state.battle?.board.sides.player.backRank[backRankSlotId(0)]).toBe("bc-play");
+    expect(
+      automated.state.battle?.board.cardInstances["bc-play"]?.status.isExhausted,
+    ).toBe(true);
+    expect(
+      persistedFalse.state.battle?.board.cardInstances["bc-play"]?.status.isExhausted,
+    ).toBe(true);
   });
 
   it("keeps automation enabled when folding a persisted setting event", () => {
