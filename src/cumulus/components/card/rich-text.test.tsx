@@ -37,7 +37,7 @@ describe("RichText", () => {
 
     expect(markup).toContain("<dl");
     expect(markup).toContain(
-      '<dl style="display:flex;flex-direction:column;gap:var(--space-4);margin:0;color:var(--text-primary);line-height:1.25">',
+      '<dl style="display:flex;flex-direction:column;margin:0;color:var(--text-primary);line-height:1.25">',
     );
     expect(markup).toContain(
       '<dt style="display:inline;font-weight:700">Bane</dt>',
@@ -46,6 +46,8 @@ describe("RichText", () => {
       '<dt style="display:inline;font-weight:700">Discover</dt>',
     );
     expect(markup).toContain(": A penalty card forced into your deck.");
+    expect(markup.match(/data-definition-divider=""/g)).toHaveLength(1);
+    expect(markup).toContain("background:rgba(246, 246, 245, 0.23)");
     expect(markup).not.toContain("--cv-rules-highlight-color");
     expect(markup).not.toContain("data-rules-text-paragraph");
   });

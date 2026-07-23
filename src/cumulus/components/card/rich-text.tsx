@@ -73,6 +73,16 @@ export const richText = {
 const STACK_GAP = 8;
 const INLINE_RULE_SYMBOL_RE = /[●✦▸⍟☪⧗❖]/;
 
+/** Baseline glossary divider treatment shared with the temporary tweaks panel. */
+export const DEFAULT_GLOSSARY_DIVIDER_STYLE = {
+  length: "100%",
+  thickness: "1px",
+  gapBefore: "12px",
+  gapAfter: "8px",
+  paint: "rgba(246, 246, 245, 0.23)",
+  shadow: "none",
+} as const;
+
 function renderDefinitionText(definition: string): ReactNode {
   return INLINE_RULE_SYMBOL_RE.test(definition)
     ? renderRulesTextInline(definition)
@@ -180,14 +190,30 @@ export function renderRichText(
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: token("--space-4"),
             margin: 0,
             color: token("--text-primary"),
             lineHeight: 1.25,
           }}
         >
           {value.entries.map((entry, index) => (
-            <div key={`${entry.term}-${String(index)}`}>
+            <div
+              key={`${entry.term}-${String(index)}`}
+              data-definition-row={index}
+            >
+              {index === 0 ? null : (
+                <span
+                  aria-hidden="true"
+                  data-definition-divider=""
+                  style={{
+                    display: "block",
+                    width: DEFAULT_GLOSSARY_DIVIDER_STYLE.length,
+                    height: DEFAULT_GLOSSARY_DIVIDER_STYLE.thickness,
+                    margin: `${DEFAULT_GLOSSARY_DIVIDER_STYLE.gapBefore} auto ${DEFAULT_GLOSSARY_DIVIDER_STYLE.gapAfter}`,
+                    background: DEFAULT_GLOSSARY_DIVIDER_STYLE.paint,
+                    boxShadow: DEFAULT_GLOSSARY_DIVIDER_STYLE.shadow,
+                  }}
+                />
+              )}
               <dt
                 style={{
                   display: "inline",
