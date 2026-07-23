@@ -227,9 +227,8 @@ describe("CardPile", () => {
     expect(pile?.style.aspectRatio).toBe(
       `${String(CARD_ASPECT_H)} / ${String(CARD_ASPECT_W)}`,
     );
-    expect(outline?.style.borderStyle).toBe("dotted");
+    expect(outline?.style.border).toBe("var(--battlefield-slot-border)");
     expect(outline?.style.borderRadius).toBe("var(--radius-card)");
-    expect(outline?.style.borderWidth).toBe("var(--space-1)");
 
     act(() => root.unmount());
     container.remove();

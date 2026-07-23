@@ -104,9 +104,7 @@ function EmptyPileOutline() {
         position: "absolute",
         inset: 0,
         boxSizing: "border-box",
-        borderWidth: token("--space-1"),
-        borderStyle: "dotted",
-        borderColor: token("--border-mid"),
+        border: token("--battlefield-slot-border"),
         borderRadius: token("--radius-card"),
         pointerEvents: "none",
       }}

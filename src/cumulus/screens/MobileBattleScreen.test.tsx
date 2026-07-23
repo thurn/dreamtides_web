@@ -1122,7 +1122,7 @@ describe("MobileBattleScreen", () => {
     expect(voidPile?.dataset.pileCount).toBe("0");
     expect(voidPile?.dataset.pileEmptyState).toBe("outlined");
     expect(voidPile?.style.aspectRatio).toBe("7 / 5");
-    expect(outline?.style.borderStyle).toBe("dotted");
+    expect(outline?.style.border).toBe("var(--battlefield-slot-border)");
 
     act(() => root.unmount());
   });
