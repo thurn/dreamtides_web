@@ -1,4 +1,4 @@
-import { extractGlossaryTerms } from "../../../data/glossary-terms";
+import { extractContextualGlossaryTerms } from "../../../data/glossary-terms";
 import { InfoCard } from "../overlay/InfoCard";
 import { glossaryDefinitionsCardModel } from "./rules-text-reveal";
 
@@ -28,7 +28,7 @@ export function CardTermDefinitions({
   /** Which side of the card the panel sits on, exposed for layout/tests. */
   side?: "left" | "right";
 }) {
-  const terms = extractGlossaryTerms(text);
+  const terms = extractContextualGlossaryTerms(text);
   const card = glossaryDefinitionsCardModel(terms);
   if (card === null) {
     return null;

@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/rules-text`
 
 Real consumers: **10** (imports outside `src/cumulus/docs/` and tests).
 
-Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — so ability text reads the same everywhere it appears.
+Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — with definition cards adapted to the exact rules sentence.
 
 ## Props
 
@@ -18,7 +18,7 @@ Renders Dreamtides rules copy from card data — resource pips, ability carets, 
 
 ## Usage
 
-Renders authored rules-text markup: energy / spark glyphs become inline pips, `▸` / `❖` markers become caret / bolt icons, and the curated keyword set is emphasized. Pass the card's rendered-text string as `text`.
+Renders authored rules-text markup: energy / spark glyphs become inline pips, `▸` / `❖` markers become caret / bolt icons, and the curated keyword set is emphasized. Numeric Foresee and granted Reclaim definitions reflect the source sentence. Pass the card's rendered-text string as `text`.
 
 ```tsx
 import { RulesText } from "src/cumulus/components/card/RulesText";

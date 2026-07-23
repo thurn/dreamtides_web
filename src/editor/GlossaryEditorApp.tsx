@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { GlossaryCatalogEntry } from "../data/glossary";
+import {
+  glossaryDefinitionUsesRulesText,
+  type GlossaryCatalogEntry,
+} from "../data/glossary";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
 import { TextField } from "../cumulus/components/controls/TextField";
 import { richText } from "../cumulus/components/card/rich-text";
@@ -340,7 +343,11 @@ export default function GlossaryEditorApp({
                   <p>Interactive Info Card</p>
                   <span>Click the title or description to edit it in place.</span>
                 </div>
-                <span>{selectedEntry.matchesRulesText ? "Rules text" : "Plain text"}</span>
+                <span>
+                  {glossaryDefinitionUsesRulesText(selectedEntry)
+                    ? "Rules text"
+                    : "Plain text"}
+                </span>
               </div>
               <div className="glossary-editor-preview-stage" data-testid="glossary-preview">
                 <div ref={interactiveCardRef} className="glossary-editor-interactive-card">
@@ -348,7 +355,7 @@ export default function GlossaryEditorApp({
                     variant="text"
                     title={termDraft.trim() === "" ? "Untitled Term" : termDraft}
                     body={
-                      selectedEntry.matchesRulesText
+                      glossaryDefinitionUsesRulesText(selectedEntry)
                         ? richText.rules(definitionDraft)
                         : richText.plain(definitionDraft)
                     }
@@ -401,7 +408,7 @@ export default function GlossaryEditorApp({
                   testId="glossary-editor-details"
                 >
                   <div className="glossary-editor-details-body">
-                    {selectedEntry.matchesRulesText ? (
+                    {glossaryDefinitionUsesRulesText(selectedEntry) ? (
                       <TextField
                         label="Additional Rules-Text Forms"
                         value={variantsDraft}

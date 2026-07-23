@@ -15,6 +15,10 @@ import {
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { GLYPHS } from "../../primitives/glyph";
 import { GlossaryTerm } from "./GlossaryTerm";
+import {
+  contextualizeGlossaryEntry,
+  type RulesTextGlossaryOwner,
+} from "../../../data/glossary-terms";
 
 /**
  * Renders rules text with:
@@ -178,6 +182,10 @@ interface RenderRulesTextOptions {
   pipScale?: number;
   /** Inline terms own reveal semantics on readable source copy. */
   interactiveTerms?: boolean;
+  /** Complete source copy used to contextualize matched glossary terms. */
+  glossarySourceText?: string;
+  /** Semantic owner used for owner-specific glossary definitions. */
+  glossaryOwner?: RulesTextGlossaryOwner;
   /**
    * When set, runs of text wrapped in transfigure markers (see
    * `TRANSFIGURE_MARK_START` / `TRANSFIGURE_MARK_END`) are painted in this color
@@ -293,7 +301,11 @@ function renderSegment(
     ) : (
       <GlossaryTerm
         key={key}
-        entry={segment.entry}
+        entry={contextualizeGlossaryEntry(
+          segment.entry,
+          options.glossarySourceText ?? segment.word,
+          options.glossaryOwner,
+        )}
         emphasized={isHighlightedRulesTextTerm(segment.word)}
         text={segment.word}
       />
@@ -453,12 +465,16 @@ export function renderRulesText(
   text: string,
   options: RenderRulesTextOptions = {},
 ): ReactNode[] {
+  const contextualOptions = {
+    ...options,
+    glossarySourceText: options.glossarySourceText ?? text,
+  };
   const paragraphs = splitRulesTextIntoParagraphs(text);
   return paragraphs.map((paragraph, p) => {
     const style: CSSProperties = p === 0 ? {} : { marginTop: PARAGRAPH_GAP };
     return (
       <div key={p} data-rules-text-paragraph="" style={style}>
-        {renderParagraph(paragraph, p, options)}
+        {renderParagraph(paragraph, p, contextualOptions)}
       </div>
     );
   });
@@ -515,7 +531,10 @@ function renderParagraph(
 export function renderRulesTextInline(text: string): ReactNode[] {
   return splitRulesTextIntoParagraphs(text).flatMap((paragraph, index) => [
     ...(index === 0 ? [] : [<span key={`separator-${String(index)}`}> </span>]),
-    ...renderParagraph(paragraph, index, { interactiveTerms: false }),
+    ...renderParagraph(paragraph, index, {
+      interactiveTerms: false,
+      glossarySourceText: text,
+    }),
   ]);
 }
 

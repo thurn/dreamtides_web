@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/dreamcaller-ability-text
 
 Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
-The complete Dreamcaller rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals one compact title-free card containing every defined term in reading order.
+The complete Dreamcaller rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals one compact title-free card containing every defined term in reading order, using Dreamcaller-specific exhaust guidance.
 
 ## Props
 
@@ -20,7 +20,7 @@ The complete Dreamcaller rules-text source: hovering, focusing, or touch-holding
 
 ## Usage
 
-Pass the Dreamcaller UUID and complete rendered rules text. Use the selection-card presentation for the aligned desktop offer triptych.
+Pass the Dreamcaller UUID and complete rendered rules text. The stationary source keeps the default text cursor and explains exhaust as a once-per-turn Dreamcaller ability. Use the selection-card presentation for the aligned desktop offer triptych.
 
 ```tsx
 import { DreamcallerAbilityText } from "src/cumulus/components/hud/DreamcallerAbilityText";

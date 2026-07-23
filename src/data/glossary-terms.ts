@@ -5,6 +5,9 @@ import {
   type GlossaryCatalogEntry,
 } from "./glossary";
 
+/** The semantic owner whose rules text is being explained. */
+export type RulesTextGlossaryOwner = "card" | "dreamcaller";
+
 /**
  * Reusable utility that scans a string for glossary terms and returns the
  * matched glossary entries.
@@ -61,6 +64,54 @@ function entryForForm(form: string): GlossaryCatalogEntry | undefined {
   return lookupGlossaryTerm(form);
 }
 
+const FORESEE_COUNT_RE = /\bforesee\s+(\d+)\b/i;
+const GRANTED_RECLAIM_RE = /\b(?:gain|gains|gained)\s+reclaim\b/i;
+
+/**
+ * Adapt one canonical glossary entry to the sentence that references it.
+ *
+ * Canonical glossary data remains the fallback for standalone glossary cards.
+ * Rules-text reveals use this projection so numeric actions and granted
+ * abilities explain the exact instance the player is reading.
+ */
+export function contextualizeGlossaryEntry(
+  entry: GlossaryCatalogEntry,
+  text: string,
+  owner: RulesTextGlossaryOwner = "card",
+): GlossaryCatalogEntry {
+  if (entry.id === GLOSSARY_IDS.foresee) {
+    const countMatch = FORESEE_COUNT_RE.exec(text);
+    if (countMatch !== null) {
+      const count = Number.parseInt(countMatch[1], 10);
+      return {
+        ...entry,
+        term: `${entry.term} ${String(count)}`,
+        definition:
+          count === 1
+            ? "Look at the top card of your deck. You may put it into your void."
+            : `Look at the top ${String(count)} cards of your deck, then put any number of them into your void and the rest on top in any order.`,
+      };
+    }
+  }
+
+  if (entry.id === GLOSSARY_IDS.reclaim && GRANTED_RECLAIM_RE.test(text)) {
+    return {
+      ...entry,
+      definition: entry.definition.replace(/\bthis card\b/i, "that card"),
+    };
+  }
+
+  if (entry.id === GLOSSARY_IDS.exhaustCost && owner === "dreamcaller") {
+    return {
+      ...entry,
+      definition:
+        "You may exhaust (☪) this dreamcaller to activate this ability once per turn.",
+    };
+  }
+
+  return entry;
+}
+
 /**
  * Returns the glossary entries referenced in `text`, in first-occurrence
  * order, deduplicated.
@@ -83,4 +134,17 @@ export function extractGlossaryTerms(text: string): GlossaryCatalogEntry[] {
     ordered.push(entry);
   }
   return ordered;
+}
+
+/**
+ * Returns the glossary entries referenced in `text`, projected into the
+ * sentence and semantic-owner context used by a rendered definition card.
+ */
+export function extractContextualGlossaryTerms(
+  text: string,
+  owner: RulesTextGlossaryOwner = "card",
+): GlossaryCatalogEntry[] {
+  return extractGlossaryTerms(text).map((entry) =>
+    contextualizeGlossaryEntry(entry, text, owner),
+  );
 }

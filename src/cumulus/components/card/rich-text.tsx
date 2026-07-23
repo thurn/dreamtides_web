@@ -12,7 +12,7 @@ import { Fragment, type ReactElement, type ReactNode } from "react";
 import { token } from "../../primitives/tokens";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { GlowIcon } from "../controls/GlowIcon";
-import { renderRulesText } from "./RulesText";
+import { renderRulesText, renderRulesTextInline } from "./RulesText";
 
 export type RichTextDefinitionSymbol =
   "fast" | "interrupt" | "exhaust" | "trigger";
@@ -71,6 +71,13 @@ export const richText = {
 
 /** Vertical gap (px) between stacked rich-text parts. */
 const STACK_GAP = 8;
+const INLINE_RULE_SYMBOL_RE = /[●✦▸⍟☪⧗❖]/;
+
+function renderDefinitionText(definition: string): ReactNode {
+  return INLINE_RULE_SYMBOL_RE.test(definition)
+    ? renderRulesTextInline(definition)
+    : definition;
+}
 
 function definitionSymbolSpec(symbol: RichTextDefinitionSymbol): {
   readonly glyph: Glyph;
@@ -202,7 +209,7 @@ export function renderRichText(
               </dt>
               <dd style={{ display: "inline", margin: 0 }}>
                 {": "}
-                {entry.definition}
+                {renderDefinitionText(entry.definition)}
               </dd>
             </div>
           ))}

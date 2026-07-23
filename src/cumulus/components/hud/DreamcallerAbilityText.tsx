@@ -86,6 +86,7 @@ function AbilityCopy({ text }: { readonly text: string }) {
         font: token("--t-rules"),
         color: token("--text-primary"),
         lineHeight: 1.36,
+        cursor: "default",
       }}
     >
       {renderRulesText(text, { interactiveTerms: false })}
@@ -109,7 +110,7 @@ function AbilityDefinitionSource({
     },
     spec: {
       primary: { kind: "source", description: text },
-      secondaries: rulesTextDefinitionCards(text),
+      secondaries: rulesTextDefinitionCards(text, "dreamcaller"),
     },
     feedback: "stationary",
   });
@@ -128,6 +129,7 @@ function AbilityDefinitionSource({
         ...binding.sourceProps.style,
         display: "block",
         width: "100%",
+        cursor: "default",
       }}
     >
       {presentation === "selectionCard" ? (
@@ -150,7 +152,7 @@ export function DreamcallerAbilityText({
   text,
   presentation = "natural",
 }: DreamcallerAbilityTextProps) {
-  const definitions = rulesTextDefinitionCards(text);
+  const definitions = rulesTextDefinitionCards(text, "dreamcaller");
   const copy = <AbilityCopy text={text} />;
   if (definitions.length === 0) {
     return presentation === "selectionCard" ? (

@@ -1,7 +1,11 @@
 import { describe, it, expect } from "vitest";
 
-import { extractGlossaryTerms } from "./glossary-terms";
+import {
+  contextualizeGlossaryEntry,
+  extractGlossaryTerms,
+} from "./glossary-terms";
 import { GLOSSARY } from "./glossary";
+import type { GlossaryCatalogEntry } from "./glossary";
 
 // Derive representative entries from the live glossary so these tests track the
 // data rather than hardcoding term names that churn as entries are added,
@@ -16,7 +20,8 @@ const pluralVariant = (pluralEntry?.variants ?? []).find(
 const arrowTermEntry = GLOSSARY.find((e) => e.term.startsWith("▸"));
 const arrowGatedEntry = GLOSSARY.find(
   (e) =>
-    e.term.startsWith("▸") && (e.variants ?? []).every((v) => v.startsWith("▸")),
+    e.term.startsWith("▸") &&
+    (e.variants ?? []).every((v) => v.startsWith("▸")),
 );
 
 describe("extractGlossaryTerms", () => {
@@ -80,7 +85,9 @@ describe("extractGlossaryTerms", () => {
 
   it("tolerates punctuation around terms", () => {
     const [t0, t1, t2] = bareTerms;
-    const terms = extractGlossaryTerms(`(${t0.term}) — ${t1.term}: ${t2.term}.`);
+    const terms = extractGlossaryTerms(
+      `(${t0.term}) — ${t1.term}: ${t2.term}.`,
+    );
     expect(terms.map((entry) => entry.term)).toEqual([
       t0.term,
       t1.term,
@@ -93,7 +100,9 @@ describe("extractGlossaryTerms", () => {
       return;
     }
     // The arrow form (e.g. `▸Materialized`, no space) shows the tile.
-    const trigger = extractGlossaryTerms(`${arrowGatedEntry.term}: draw a card.`);
+    const trigger = extractGlossaryTerms(
+      `${arrowGatedEntry.term}: draw a card.`,
+    );
     expect(trigger.map((entry) => entry.term)).toEqual([arrowGatedEntry.term]);
 
     // The bare word does not, so it never duplicates the trigger.
@@ -106,7 +115,9 @@ describe("extractGlossaryTerms", () => {
     if (arrowTermEntry === undefined) {
       return;
     }
-    const terms = extractGlossaryTerms(`${arrowTermEntry.term}: gain 1 energy.`);
+    const terms = extractGlossaryTerms(
+      `${arrowTermEntry.term}: gain 1 energy.`,
+    );
     expect(terms.map((entry) => entry.term)).toEqual([arrowTermEntry.term]);
   });
 
@@ -121,5 +132,90 @@ describe("extractGlossaryTerms", () => {
       t2.term,
       t3.term,
     ]);
+  });
+});
+
+function fixture(
+  id: string,
+  term: string,
+  definition: string,
+): GlossaryCatalogEntry {
+  return {
+    id,
+    category: "Test",
+    term,
+    definition,
+    matchesRulesText: true,
+    variants: [],
+  };
+}
+
+describe("contextual glossary definitions", () => {
+  it("explains foresee 1 with its singular card flow", () => {
+    const foresee = fixture("foresee", "Foresee", "Generic definition.");
+
+    expect(
+      contextualizeGlossaryEntry(foresee, "When you play an event, foresee 1."),
+    ).toMatchObject({
+      term: "Foresee 1",
+      definition:
+        "Look at the top card of your deck. You may put it into your void.",
+    });
+  });
+
+  it("incorporates larger foresee counts into the term and definition", () => {
+    const foresee = fixture("foresee", "Foresee", "Generic definition.");
+
+    expect(
+      contextualizeGlossaryEntry(foresee, "Foresee 3, then draw a card."),
+    ).toMatchObject({
+      term: "Foresee 3",
+      definition:
+        "Look at the top 3 cards of your deck, then put any number of them into your void and the rest on top in any order.",
+    });
+  });
+
+  it("refers to a granted reclaim target as that card", () => {
+    const reclaim = fixture(
+      "reclaim",
+      "Reclaim",
+      "You may play this card from your void, then banish it when it leaves play.",
+    );
+
+    expect(
+      contextualizeGlossaryEntry(
+        reclaim,
+        "An event in your void gains reclaim.",
+      ).definition,
+    ).toBe(
+      "You may play that card from your void, then banish it when it leaves play.",
+    );
+  });
+
+  it("keeps self-referential reclaim copy for a printed reclaim ability", () => {
+    const reclaim = fixture(
+      "reclaim",
+      "Reclaim",
+      "You may play this card from your void, then banish it when it leaves play.",
+    );
+
+    expect(contextualizeGlossaryEntry(reclaim, "Reclaim 2●.").definition).toBe(
+      reclaim.definition,
+    );
+  });
+
+  it("uses dreamcaller-specific exhaust instructions", () => {
+    const exhaust = fixture(
+      "exhaust-cost",
+      "Exhaust Cost",
+      "Generic exhaust definition.",
+    );
+
+    expect(
+      contextualizeGlossaryEntry(exhaust, "2●, ☪: Draw a card.", "dreamcaller")
+        .definition,
+    ).toBe(
+      "You may exhaust (☪) this dreamcaller to activate this ability once per turn.",
+    );
   });
 });

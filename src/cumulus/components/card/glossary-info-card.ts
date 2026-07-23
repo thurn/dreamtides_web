@@ -1,4 +1,7 @@
-import { glossaryEntry } from "../../../data/glossary";
+import {
+  glossaryDefinitionUsesRulesText,
+  glossaryEntry,
+} from "../../../data/glossary";
 import { logEventOnce } from "../../../logging";
 import type { Glyph } from "../../primitives/glyph";
 import type { Tide } from "../hud/tide-spec";
@@ -21,11 +24,12 @@ export function glossaryInfoCard(
       glossaryId: id,
     });
   }
-  const body = entry?.matchesRulesText
-    ? richText.rules(entry.definition)
-    : richText.plain(
-        entry?.definition ?? "This rule's definition is temporarily unavailable.",
-      );
+  const body =
+    entry === undefined
+      ? richText.plain("This rule's definition is temporarily unavailable.")
+      : glossaryDefinitionUsesRulesText(entry)
+        ? richText.rules(entry.definition)
+        : richText.plain(entry.definition);
   const title = entry?.term ?? "Rule definition unavailable";
   if (presentation.variant === "icon") {
     return {

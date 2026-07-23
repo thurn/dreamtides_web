@@ -13,11 +13,25 @@ export interface GlossaryTermProps {
 }
 
 /** Stationary inline terminology that reveals its own strict definition card. */
-export function GlossaryTerm({ entry, text, emphasized = false }: GlossaryTermProps) {
+export function GlossaryTerm({
+  entry,
+  text,
+  emphasized = false,
+}: GlossaryTermProps) {
   const binding = useRevealSource({
-    identity: { entityType: "glossary-term", entityId: revealEntityId("glossary-term", entry.term) },
+    identity: {
+      entityType: "glossary-term",
+      entityId: revealEntityId("glossary-term", entry.term),
+    },
     spec: {
-      primary: { kind: "infoCard", card: { variant: "text", title: entry.term, body: { kind: "rules", text: entry.definition } } },
+      primary: {
+        kind: "infoCard",
+        card: {
+          variant: "text",
+          title: entry.term,
+          body: { kind: "rules", text: entry.definition },
+        },
+      },
       secondaries: [],
     },
     feedback: "stationary",
@@ -30,7 +44,13 @@ export function GlossaryTerm({ entry, text, emphasized = false }: GlossaryTermPr
       pressFeedback="stationary"
       tabIndex={0}
       data-glossary-term={entry.term}
-      style={{ ...binding.sourceProps.style, color: emphasized ? "var(--cv-rules-highlight-color, #facc15)" : undefined }}
+      style={{
+        ...binding.sourceProps.style,
+        cursor: "default",
+        color: emphasized
+          ? "var(--cv-rules-highlight-color, #facc15)"
+          : undefined,
+      }}
     >
       {text}
     </Pressable>

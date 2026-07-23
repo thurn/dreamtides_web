@@ -82,7 +82,7 @@ variants = [ "banished", "banishes" ]
 id = "abandon"
 category = "Triggers & Timing"
 term = "Abandon"
-definition = "Send a character you control to the void."
+definition = "Dissolve a character you control."
 matches-rules-text = true
 variants = [ "abandoned", "abandons" ]
 
@@ -146,7 +146,7 @@ variants = []
 id = "exhaust-cost"
 category = "Keywords"
 term = "Exhaust Cost"
-definition = "You may exhaust this character to activate an ability instead of challenging this turn."
+definition = "You may exhaust (☪) this character to activate this ability instead of challenging this turn."
 matches-rules-text = false
 variants = []
 

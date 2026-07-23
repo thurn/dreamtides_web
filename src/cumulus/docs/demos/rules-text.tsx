@@ -36,13 +36,13 @@ export const rulesTextDemo: CumulusComponent = {
   id: "rules-text",
   title: "Rules Text",
   blurb:
-    "Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — so ability text reads the same everywhere it appears.",
+    "Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — with definition cards adapted to the exact rules sentence.",
   group: "Components",
   docName: "RulesText",
   Component: RulesTextDemo,
   usage: [
     {
-      note: "Renders authored rules-text markup: energy / spark glyphs become inline pips, `▸` / `❖` markers become caret / bolt icons, and the curated keyword set is emphasized. Pass the card's rendered-text string as `text`.",
+      note: "Renders authored rules-text markup: energy / spark glyphs become inline pips, `▸` / `❖` markers become caret / bolt icons, and the curated keyword set is emphasized. Numeric Foresee and granted Reclaim definitions reflect the source sentence. Pass the card's rendered-text string as `text`.",
       code: `import { RulesText } from "src/cumulus/components/card/RulesText";
 
 <RulesText text={"Support – Supported allies have +2✦ and unstoppable."} />`,

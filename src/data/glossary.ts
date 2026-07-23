@@ -42,6 +42,8 @@ export const GLOSSARY_IDS = {
   fast: "fast",
   interrupt: "interrupt",
   exhaustCost: "exhaust-cost",
+  foresee: "foresee",
+  reclaim: "reclaim",
   nightTrigger: "night-trigger",
   essence: "essence",
   startingEssence: "starting-essence",
@@ -115,4 +117,18 @@ export function lookupGlossaryTerm(
 /** Returns whether a lowercase word is recognized by the rules glossary. */
 export function hasGlossaryTerm(word: string): boolean {
   return GLOSSARY_INDEX[word.toLocaleLowerCase()] !== undefined;
+}
+
+/**
+ * Whether a glossary definition uses rules-aware inline rendering.
+ *
+ * Rules-text entries use it by default; semantic Info Cards can opt in when
+ * their explanatory prose includes a rules glyph.
+ */
+export function glossaryDefinitionUsesRulesText(
+  entry: Pick<GlossaryCatalogEntry, "id" | "matchesRulesText">,
+): boolean {
+  return (
+    entry.matchesRulesText === true || entry.id === GLOSSARY_IDS.exhaustCost
+  );
 }

@@ -5,6 +5,7 @@ import {
   GLOSSARY,
   GLOSSARY_IDS,
   GLOSSARY_INDEX,
+  glossaryDefinitionUsesRulesText,
   hasGlossaryTerm,
   lookupGlossaryTerm,
   requireGlossaryEntry,
@@ -36,6 +37,8 @@ describe("glossary", () => {
       GLOSSARY_IDS.fast,
       GLOSSARY_IDS.interrupt,
       GLOSSARY_IDS.exhaustCost,
+      GLOSSARY_IDS.foresee,
+      GLOSSARY_IDS.reclaim,
       GLOSSARY_IDS.nightTrigger,
       GLOSSARY_IDS.essence,
       GLOSSARY_IDS.startingEssence,
@@ -96,6 +99,27 @@ describe("glossary", () => {
     expect(hasGlossaryTerm(term)).toBe(true);
     expect(hasGlossaryTerm(term.toLowerCase())).toBe(true);
     expect(hasGlossaryTerm("definitely-not-a-glossary-term")).toBe(false);
+  });
+
+  it("uses rules-aware rendering for rules terms and exhaust guidance", () => {
+    expect(
+      glossaryDefinitionUsesRulesText({
+        id: "fixture-rules-term",
+        matchesRulesText: true,
+      }),
+    ).toBe(true);
+    expect(
+      glossaryDefinitionUsesRulesText({
+        id: GLOSSARY_IDS.exhaustCost,
+        matchesRulesText: false,
+      }),
+    ).toBe(true);
+    expect(
+      glossaryDefinitionUsesRulesText({
+        id: "fixture-plain-card",
+        matchesRulesText: false,
+      }),
+    ).toBe(false);
   });
 
   // Card-text term reveals resolve entries from the canonical glossary module.

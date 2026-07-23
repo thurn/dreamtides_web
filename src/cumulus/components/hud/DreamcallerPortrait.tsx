@@ -116,7 +116,7 @@ export function dreamcallerRevealSpec(dreamcaller: DreamcallerVisual, abilityTex
   const ability = abilityText.trim();
   return {
     primary: { kind: "infoCard", card: { variant: "fullBleed", image, imageCrop: "top", title: dreamcaller.name, subtitle: dreamcaller.title, body: ability ? richText.rules(ability) : undefined } },
-    secondaries: rulesTextDefinitionCards(ability),
+    secondaries: rulesTextDefinitionCards(ability, "dreamcaller"),
   };
 }
 

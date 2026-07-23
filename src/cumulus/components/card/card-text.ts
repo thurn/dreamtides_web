@@ -1,5 +1,8 @@
 import type { CardData } from "../../../types/cards";
-import { lookupGlossaryTerm, type GlossaryEntry } from "../../../data/glossary";
+import {
+  lookupGlossaryTerm,
+  type GlossaryCatalogEntry,
+} from "../../../data/glossary";
 
 /** Symbol types recognized in card rules text. */
 export type SymbolType =
@@ -40,7 +43,7 @@ export type TextSegment =
   | { kind: "text"; value: string }
   | { kind: "symbol"; symbol: SymbolType; char: string }
   | { kind: "nobreak"; segments: TextSegment[] }
-  | { kind: "term"; word: string; entry: GlossaryEntry }
+  | { kind: "term"; word: string; entry: GlossaryCatalogEntry }
   | { kind: "sparkPip"; value: string }
   | { kind: "bolt"; count: number }
   | { kind: "essence"; amount: string | null }

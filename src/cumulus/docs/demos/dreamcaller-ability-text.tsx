@@ -35,13 +35,13 @@ export const dreamcallerAbilityTextDemo: CumulusComponent = {
   id: "dreamcaller-ability-text",
   title: "Dreamcaller Ability Text",
   blurb:
-    "The complete Dreamcaller rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals one compact title-free card containing every defined term in reading order.",
+    "The complete Dreamcaller rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals one compact title-free card containing every defined term in reading order, using Dreamcaller-specific exhaust guidance.",
   group: "Components",
   docName: "DreamcallerAbilityText",
   Component: DreamcallerAbilityTextDemo,
   usage: [
     {
-      note: "Pass the Dreamcaller UUID and complete rendered rules text. Use the selection-card presentation for the aligned desktop offer triptych.",
+      note: "Pass the Dreamcaller UUID and complete rendered rules text. The stationary source keeps the default text cursor and explains exhaust as a once-per-turn Dreamcaller ability. Use the selection-card presentation for the aligned desktop offer triptych.",
       code: `import { DreamcallerAbilityText } from "src/cumulus/components/hud/DreamcallerAbilityText";
 
 <DreamcallerAbilityText

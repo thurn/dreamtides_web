@@ -85,4 +85,23 @@ describe("RichText", () => {
     expect(markup).not.toContain(">Exhaust Cost</dt>");
     expect(markup).toContain('role="img" aria-label="Exhaust Cost"');
   });
+
+  it("renders rules symbols inside glossary definitions as Boxicons", () => {
+    const markup = renderToStaticMarkup(
+      <RichTextView
+        value={richText.definitions([
+          {
+            term: "Exhaust Cost",
+            definition:
+              "You may exhaust (☪) this character to activate this ability.",
+            symbol: "exhaust",
+            termPresentation: "symbolOnly",
+          },
+        ])}
+      />,
+    );
+
+    expect(markup.match(/bxf bx-moon/g)).toHaveLength(2);
+    expect(markup).not.toContain("☪");
+  });
 });

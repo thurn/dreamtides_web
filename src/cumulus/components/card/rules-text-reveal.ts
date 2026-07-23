@@ -2,7 +2,10 @@ import {
   GLOSSARY_IDS,
   type GlossaryCatalogEntry,
 } from "../../../data/glossary";
-import { extractGlossaryTerms } from "../../../data/glossary-terms";
+import {
+  extractContextualGlossaryTerms,
+  type RulesTextGlossaryOwner,
+} from "../../../data/glossary-terms";
 import type { InfoCardProps, InfoCardTextProps } from "../overlay/InfoCard";
 import { richText, type RichTextDefinitionSymbol } from "./rich-text";
 
@@ -49,7 +52,10 @@ export function glossaryDefinitionsCardModel(
  */
 export function rulesTextDefinitionCards(
   text: string,
+  owner: RulesTextGlossaryOwner = "card",
 ): Readonly<InfoCardProps>[] {
-  const card = glossaryDefinitionsCardModel(extractGlossaryTerms(text));
+  const card = glossaryDefinitionsCardModel(
+    extractContextualGlossaryTerms(text, owner),
+  );
   return card === null ? [] : [card];
 }
