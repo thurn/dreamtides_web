@@ -1150,7 +1150,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Headtaker
 - 1× Frontline Martyr
 - 1× Echoes of the Journey
-- 1× Minstrel of Falling Light
+- 1× Flameforged
 - 1× Smoke Siphoner
 - 1× Eruption
 - 1× Skybreak Ascendant
@@ -2168,7 +2168,7 @@ Tide-fac-03 is an event-heavy (34 events, 11 characters) tide built around assem
 - 1× Abandon Constraints
 - 1× Genesis Burst
 - 1× Echoes of the Journey
-- 1× Minstrel of Falling Light
+- 1× Flameforged
 - 1× Eruption
 - 1× Ritekeeper
 - 1× Spiral Offering
@@ -3054,7 +3054,7 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 1× Abandon Constraints
 - 1× Genesis Burst
 - 1× Echoes of the Journey
-- 1× Minstrel of Falling Light
+- 1× Flameforged
 - 1× Eruption
 - 1× Starcatcher
 - 1× Ritekeeper

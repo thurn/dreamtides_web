@@ -1760,7 +1760,7 @@ card-number = 93
 art = { x = 0.168, y = 0.032, scale = 1.17 }
 
 [[cards]]
-name = "Minstrel of Falling Light"
+name = "Flameforged"
 mtg-name = "Rielle, the Everwise"
 id = "8896c178-757e-4775-b117-a4357ebfe30f"
 rendered-text = """
@@ -1769,15 +1769,16 @@ rendered-text = """
 This character has +1✦ for each event in your void."""
 energy-cost = 2
 card-type = "Character"
-subtype = "Musician"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July24"]
-image-number = 1794244540
+tags = ["Art Rework", "July24", "Art OK"]
+image-number = 1486924802
 art-owned = true
 card-number = 94
+art = { x = 0, y = -0.585, scale = 1.7 }
 
 [[cards]]
 name = "Key Sifter"
@@ -6635,7 +6636,7 @@ id = "cc21a902-e482-46c0-bf07-e04035f39190"
 rendered-text = "▸Materialized, Dissolved: Return a ≤2● cost character from your void to your hand."
 energy-cost = 2
 card-type = "Character"
-subtype = "Tinkerer"
+subtype = "Mage"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -6644,7 +6645,7 @@ tags = ["Art Rework", "July24", "Art OK"]
 image-number = 2285036623
 art-owned = false
 card-number = 354
-art = { x = -0.016, y = -0.683, scale = 2.27 }
+art = { x = 0, y = -0.096, scale = 1.37 }
 
 [[cards]]
 name = "Advance Gunner"

@@ -415,7 +415,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Canopy of Stars
 - 1× Abandon Constraints
 - 1× Iconoclast
-- 1× Minstrel of Falling Light
+- 1× Flameforged
 - 1× Smoke Siphoner
 - 1× Eruption
 - 1× Skybreak Ascendant
@@ -625,7 +625,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Duskwall Delver
 - 1× Abandon Constraints
 - 1× Iconoclast
-- 1× Minstrel of Falling Light
+- 1× Flameforged
 - 1× Smoke Siphoner
 - 1× Eruption
 - 1× Cost of Victory
@@ -1138,7 +1138,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Genesis Burst
 - 1× Ecliptic Vantage
 - 1× Echoes of the Journey
-- 1× Minstrel of Falling Light
+- 1× Flameforged
 - 1× Surge Evoker
 - 1× Seek Answers
 - 1× Pastward Wanderer
@@ -1183,7 +1183,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 2× Secrets of the Deep
 - 2× Catastrophe Broker
 - 2× Twice-Lit Portal
-- 2× Minstrel of Falling Light
+- 2× Flameforged
 - 2× Thought Merchant
 - 2× Arc Gate Opening
 - 2× Key Sifter
@@ -1336,7 +1336,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Genesis Burst
 - 1× Ecliptic Vantage
 - 1× Echoes of the Journey
-- 1× Minstrel of Falling Light
+- 1× Flameforged
 - 1× Smoke Siphoner
 - 1× Spirit of Smoldering Echoes
 - 1× Eruption
@@ -2114,7 +2114,7 @@ Tide-fac-03 is an event-heavy (34 events, 11 characters) tide built around assem
 - 1× Twice-Lit Portal
 - 1× Genesis Burst
 - 1× Echoes of the Journey
-- 1× Minstrel of Falling Light
+- 1× Flameforged
 - 1× Gateweaver
 - 1× Surge of Fury
 - 1× Flash of Power
@@ -2404,7 +2404,7 @@ Tide-fac-09 is almost entirely characters (39 of 45 copies), built around a tigh
 - 1× Embrace the Infinite
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
-- 1× Minstrel of Falling Light
+- 1× Flameforged
 - 1× Surge Evoker
 - 1× Seek Answers
 - 1× Pastward Wanderer
@@ -2452,7 +2452,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
 - 1× Abandon Constraints
-- 1× Minstrel of Falling Light
+- 1× Flameforged
 - 1× Seek Answers
 - 1× Starcatcher
 - 1× Ritekeeper
@@ -2811,7 +2811,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
 - 1× Abandon Constraints
-- 1× Minstrel of Falling Light
+- 1× Flameforged
 - 1× Surge Evoker
 - 1× Seek Answers
 - 1× Starcatcher
@@ -2914,7 +2914,7 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
 - 1× Echoes of the Journey
-- 1× Minstrel of Falling Light
+- 1× Flameforged
 - 1× Seek Answers
 - 1× Spiral Offering
 - 1× Gateweaver
@@ -3308,7 +3308,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Twice-Lit Portal
 - 1× Abandon Constraints
 - 1× Headtaker
-- 1× Minstrel of Falling Light
+- 1× Flameforged
 - 1× Smoke Siphoner
 - 1× Skybreak Ascendant
 - 1× Ash Harbinger
@@ -3362,7 +3362,7 @@ This tide is split between characters and events (22 characters, 23 events), wit
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
 - 1× Abandon Constraints
-- 1× Minstrel of Falling Light
+- 1× Flameforged
 - 1× Seek Answers
 - 1× Starcatcher
 - 1× Ritekeeper
@@ -3562,7 +3562,7 @@ This is a character-heavy discard engine (35 characters, 10 events) whose lean a
 - 1× Salvage Colossus
 - 1× Pyrestone Avatar
 - 1× Abandon Constraints
-- 1× Minstrel of Falling Light
+- 1× Flameforged
 - 1× Smoke Siphoner
 - 1× Skybreak Ascendant
 - 1× Seek Answers
