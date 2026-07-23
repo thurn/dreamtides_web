@@ -1,4 +1,5 @@
-import { requireGlossaryEntry } from "../../../data/glossary";
+import { glossaryEntry } from "../../../data/glossary";
+import { logEventOnce } from "../../../logging";
 import type { Glyph } from "../../primitives/glyph";
 import type { Tide } from "../hud/tide-spec";
 import type { InfoCardProps } from "../overlay/InfoCard";
@@ -14,15 +15,23 @@ export function glossaryInfoCard(
   id: string,
   presentation: GlossaryCardPresentation = { variant: "text" },
 ): InfoCardProps {
-  const entry = requireGlossaryEntry(id);
-  const body = entry.matchesRulesText
+  const entry = glossaryEntry(id);
+  if (entry === undefined) {
+    logEventOnce(`missing-glossary-entry:${id}`, "glossary_entry_missing", {
+      glossaryId: id,
+    });
+  }
+  const body = entry?.matchesRulesText
     ? richText.rules(entry.definition)
-    : richText.plain(entry.definition);
+    : richText.plain(
+        entry?.definition ?? "This rule's definition is temporarily unavailable.",
+      );
+  const title = entry?.term ?? "Rule definition unavailable";
   if (presentation.variant === "icon") {
     return {
       variant: "icon",
       glyph: presentation.glyph,
-      title: entry.term,
+      title,
       body,
     };
   }
@@ -30,13 +39,13 @@ export function glossaryInfoCard(
     return {
       variant: "tide",
       tide: presentation.tide,
-      title: entry.term,
+      title,
       body,
     };
   }
   return {
     variant: "text",
-    title: entry.term,
+    title,
     body,
     ...(presentation.leadGlyph === undefined
       ? {}

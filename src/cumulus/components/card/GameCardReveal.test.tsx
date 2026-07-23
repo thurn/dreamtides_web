@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
+import * as glossary from "../../../data/glossary";
 import { extractMaterializedFigmentPreviews } from "../../../data/materialized-figments";
 import { GameCard, type GameCardModel } from "./CardView";
 
@@ -148,6 +149,30 @@ describe("GameCard reveal contract", () => {
     expect(secondaries[0]?.textContent).toContain("Exhausted");
     expect(secondaries[0]?.querySelectorAll("i.bxf.bx-moon")).toHaveLength(2);
     expect(secondaries[1]?.textContent).toContain("Bane");
+
+    act(() => root.unmount());
+  });
+
+  it("keeps the card interactive when its exhausted glossary entry is unavailable", () => {
+    vi.spyOn(glossary, "glossaryEntry").mockReturnValue(undefined);
+    const { container, root } = mount(
+      <GameCard
+        model={model(card({ renderedText: "Discard a bane." }))}
+        exhausted
+      />,
+    );
+
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    const description = document.getElementById(
+      source?.getAttribute("aria-describedby") ?? "",
+    )?.textContent ?? "";
+    expect(source).not.toBeNull();
+    expect(description).toContain("Rule definition unavailable");
+    expect(description).toContain(
+      "This rule's definition is temporarily unavailable.",
+    );
 
     act(() => root.unmount());
   });
