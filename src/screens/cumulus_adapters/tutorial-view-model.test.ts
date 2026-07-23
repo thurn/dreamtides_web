@@ -311,8 +311,8 @@ describe("buildTutorialView", () => {
     }
     expect(view.player.status).toEqual({
       dreamcaller: null,
-      currentEnergy: 0,
-      maxEnergy: 0,
+      currentEnergy: 4,
+      maxEnergy: 4,
       points: 0,
     });
     expect(view.enemy.status).toEqual({
@@ -719,8 +719,8 @@ describe("buildTutorialView", () => {
       },
       enemy: {
         status: {
-          currentEnergy: 5,
-          maxEnergy: 5,
+          currentEnergy: 2,
+          maxEnergy: 4,
         },
       },
       inspector: {
@@ -728,8 +728,8 @@ describe("buildTutorialView", () => {
         phase: "Dawn",
         sides: {
           enemy: {
-            currentEnergy: 5,
-            maxEnergy: 5,
+            currentEnergy: 2,
+            maxEnergy: 4,
           },
         },
       },
@@ -775,6 +775,10 @@ describe("buildTutorialView", () => {
     expect(explainingDreamwell.battle.dreamwell?.model.cardId).toBe(
       AUTUMN_GLADE.id,
     );
+    expect(explainingDreamwell.battle.enemy.status).toMatchObject({
+      currentEnergy: 2,
+      maxEnergy: 4,
+    });
     expect(explainingDreamwell.howToPlay).toEqual({
       actionId: "dreamwell-how-to-play",
       text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
@@ -882,6 +886,10 @@ describe("buildTutorialView", () => {
     expect(ended.battle.activeSide).toBe("enemy");
     expect(ended.battle.phase).toBe("day");
     expect(ended.battle.dreamwell).toBeNull();
+    expect(ended.battle.enemy.status).toMatchObject({
+      currentEnergy: 5,
+      maxEnergy: 5,
+    });
     expect(
       ended.battle.enemy.backRank.every((slot) => slot.card === null),
     ).toBe(true);

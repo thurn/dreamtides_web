@@ -371,7 +371,9 @@ export function buildTutorialView(
   const enemyDreamwellDrawn =
     revealedDreamwellAction?.action === "draw-dreamwell-card" &&
     revealedDreamwellAction.owner === "enemy";
-  const enemyDreamwellEnergy = enemyDreamwellDrawn
+  const enemyDreamwellApplied =
+    enemyDreamwellDrawn && dreamwellExplanationCompleted;
+  const enemyDreamwellEnergy = enemyDreamwellApplied
     ? (revealedDreamwellCard?.energyAdded ?? 0)
     : 0;
   const playerDreamwellEnergy =
@@ -380,7 +382,7 @@ export function buildTutorialView(
       ? (revealedDreamwellCard?.energyAdded ?? 0)
       : 0;
   const enemyMaxEnergy = TUTORIAL_STARTING_ENERGY + enemyDreamwellEnergy;
-  const enemyCurrentEnergy = enemyDreamwellDrawn
+  const enemyCurrentEnergy = enemyDreamwellApplied
     ? enemyMaxEnergy
     : Math.max(
         0,
@@ -502,8 +504,7 @@ export function buildTutorialView(
     battle: (() => {
       const emptyPlayer = emptySide("player");
       const playerTurnEnergy =
-        (playerTurnStarted ? TUTORIAL_STARTING_ENERGY : 0) +
-        playerDreamwellEnergy;
+        TUTORIAL_STARTING_ENERGY + playerDreamwellEnergy;
       const player = {
         ...emptyPlayer,
         deckCardIds: playerDeck,
@@ -523,13 +524,11 @@ export function buildTutorialView(
         ),
         status: {
           ...emptyPlayer.status,
-          currentEnergy: playerTurnStarted
-            ? Math.max(
-                0,
-                playerTurnEnergy -
-                  (playerCardPlayed ? (playerCard?.energyCost ?? 0) : 0),
-              )
-            : playerDreamwellEnergy,
+          currentEnergy: Math.max(
+            0,
+            playerTurnEnergy -
+              (playerCardPlayed ? (playerCard?.energyCost ?? 0) : 0),
+          ),
           maxEnergy: playerTurnEnergy,
         },
       };
