@@ -1622,7 +1622,11 @@ function GlossaryInfoCardView(props: CardViewProps) {
   const binding = useRevealSource({
     identity: { entityType: "game-card", entityId: props.card.id },
     spec: {
-      primary: { kind: "source", description: props.card.name },
+      primary: {
+        kind: "gameCard",
+        cardId: props.card.id,
+        displaySnapshot: props.card,
+      },
       secondaries: rulesTextDefinitionCards(props.card.renderedText),
     },
     feedback: "stationary",
@@ -1633,6 +1637,7 @@ function GlossaryInfoCardView(props: CardViewProps) {
       ref={binding.ref}
       {...binding.sourceProps}
       data-card-view-glossary-hover-source="true"
+      data-reveal-complete-game-card="true"
       style={{ ...binding.sourceProps.style, display: "block" }}
     >
       <GameCardSurface {...props} />

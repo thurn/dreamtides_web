@@ -39,6 +39,8 @@ describe("CardView visual editor surface", () => {
     const source = container.querySelector<HTMLElement>(
       "[data-card-view-glossary-hover-source]",
     );
+    expect(source?.getAttribute("data-reveal-primary-variant")).toBe("gameCard");
+    expect(source?.getAttribute("data-reveal-complete-game-card")).toBe("true");
     expect(source?.getAttribute("data-reveal-secondary-titles")).toBe("Bane");
 
     act(() => root.unmount());
