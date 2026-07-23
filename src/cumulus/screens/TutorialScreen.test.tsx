@@ -1306,18 +1306,17 @@ describe("TutorialScreen", () => {
       dialog?.querySelector<HTMLElement>(
         "[data-tutorial-how-to-play-content]",
       )?.style.width,
-    ).toBe("100%");
+    ).toBe("calc(500px - var(--space-5) - var(--space-5))");
     expect(
       dialog?.querySelector<HTMLElement>(
         "[data-tutorial-how-to-play-content]",
       )?.style.paddingTop,
     ).toBe("var(--space-9)");
-    const closeClearance = dialog?.querySelector<HTMLElement>(
-      "[data-tutorial-how-to-play-close-clearance]",
-    );
-    expect(closeClearance?.style.cssFloat).toBe("right");
-    expect(closeClearance?.style.width).toBe("var(--space-9)");
-    expect(closeClearance?.style.height).toBe("var(--space-9)");
+    expect(
+      dialog?.querySelector(
+        "[data-tutorial-how-to-play-close-clearance]",
+      ),
+    ).toBeNull();
     const dreamwellTerm = dialog?.querySelector<HTMLElement>(
       "[data-tutorial-how-to-play-dreamwell]",
     );

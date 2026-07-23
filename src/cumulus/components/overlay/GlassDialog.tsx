@@ -59,7 +59,7 @@ const PAIRED_POPUP_DESKTOP_COMPANION_WIDTH_PX = 360;
  * Desktop width (px) for the explanation panel paired with a tangible object.
  * Prose gets a wider measure than the object so it stays compact and readable.
  */
-const PAIRED_POPUP_DESKTOP_PANEL_WIDTH_PX = 480;
+const PAIRED_POPUP_DESKTOP_PANEL_WIDTH_PX = 502;
 
 /** Props for {@link GlassBackdrop}. */
 export interface GlassBackdropProps {
@@ -441,8 +441,10 @@ export function GlassDialog({
             alignItems: "center",
             width: isDesktop
               ? `calc(${String(PAIRED_POPUP_DESKTOP_COMPANION_WIDTH_PX + PAIRED_POPUP_DESKTOP_PANEL_WIDTH_PX)}px + ${token("--space-7")})`
-              : "90vw",
-            maxWidth: isDesktop ? "100%" : "420px",
+              : `calc(100vw - ${token("--gutter")} - ${token("--gutter")})`,
+            maxWidth: isDesktop
+              ? "100%"
+              : `${String(PAIRED_POPUP_DESKTOP_PANEL_WIDTH_PX)}px`,
             maxHeight: "100%",
           }}
         >

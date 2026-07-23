@@ -754,10 +754,11 @@ describe("buildTutorialView", () => {
     );
     expect(ended.endTurn).toBeNull();
     expect(ended.battle.activeSide).toBe("enemy");
-    expect(ended.battle.phase).toBe("dawn");
+    expect(ended.battle.phase).toBe("day");
+    expect(ended.battle.dreamwell).toBeNull();
     expect(ended.battle.inspector).toMatchObject({
       activeSide: "Enemy",
-      phase: "Dawn",
+      phase: "Day",
     });
   });
 

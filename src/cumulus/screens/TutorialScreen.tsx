@@ -372,9 +372,7 @@ function TutorialHowToPlayDialog({
           display: "grid",
           gap: token("--space-7"),
           width: desktop
-            ? companion === null
-              ? `calc(${String(TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH)}px - ${token("--space-5")} - ${token("--space-5")})`
-              : "100%"
+            ? `calc(${String(TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH)}px - ${token("--space-5")} - ${token("--space-5")})`
             : "100%",
           maxWidth: "100%",
           boxSizing: "border-box",
@@ -387,17 +385,6 @@ function TutorialHowToPlayDialog({
       >
         {paragraphs.map((paragraph, index) => (
           <p key={index} style={paragraphStyle}>
-            {index === 0 && companion !== null ? (
-              <span
-                aria-hidden="true"
-                data-tutorial-how-to-play-close-clearance=""
-                style={{
-                  float: "right",
-                  width: token("--space-9"),
-                  height: token("--space-9"),
-                }}
-              />
-            ) : null}
             {renderInstructionText(paragraph)}
           </p>
         ))}

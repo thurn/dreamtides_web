@@ -232,6 +232,14 @@ export function buildTutorialView(
     playback === null
       ? 0
       : (playback.currentActionIndex ?? playback.actions.length);
+  const dreamwellExplanationCompleted =
+    playback?.actions
+      .slice(0, completedActionCount)
+      .some(
+        (action) =>
+          action.action === "display-how-to-play" &&
+          action.companion === "dreamwell-card",
+      ) ?? false;
   const visibleActionCount =
     playback === null
       ? 0
@@ -485,6 +493,7 @@ export function buildTutorialView(
       cardPicker: null,
       choicePrompt: null,
       dreamwell:
+        !dreamwellExplanationCompleted &&
         revealedDreamwellAction?.action === "draw-dreamwell-card" &&
         revealedDreamwellCard !== null
           ? {
@@ -498,7 +507,8 @@ export function buildTutorialView(
           ? "player"
           : "enemy",
       isOpeningTurn: !playerTurnStarted,
-      phase: endTurnCompleted ? "dawn" : "day",
+      phase:
+        endTurnCompleted && !dreamwellExplanationCompleted ? "dawn" : "day",
       enemyHandCardIds,
       enemyHand: farHandCards,
       enemy: {
@@ -522,7 +532,8 @@ export function buildTutorialView(
         opponentName: "Awaiting Dreamcaller",
         perspective: "player",
         turn: playerTurnStarted ? "2" : "1",
-        phase: endTurnCompleted ? "Dawn" : "Day",
+        phase:
+          endTurnCompleted && !dreamwellExplanationCompleted ? "Dawn" : "Day",
         activeSide: endTurnCompleted
           ? "Enemy"
           : playerTurnStarted
