@@ -617,6 +617,12 @@ export interface CardViewProps {
   /** Optional editor wrappers for individual rendered card slots. */
   slots?: CardViewSlots;
   /**
+   * Reveal glossary Info Cards on hover for editor and inspector surfaces.
+   * Player-facing cards use {@link GameCard}, which always carries its complete
+   * semantic reveal contract.
+   */
+  glossaryInfoOnHover?: boolean;
+  /**
    * Called with the rules-text font size (in px) the auto-shrink fitter
    * computed to fit the rules box, whenever it changes. The card editor uses
    * this to drive its font-size overlay and font-size sort.
@@ -1612,7 +1618,33 @@ export function GameCard({
   );
 }
 
-/** Visual-only editor surface. Player UI uses {@link GameCard}. */
+function GlossaryInfoCardView(props: CardViewProps) {
+  const binding = useRevealSource({
+    identity: { entityType: "game-card", entityId: props.card.id },
+    spec: {
+      primary: { kind: "source", description: props.card.name },
+      secondaries: rulesTextDefinitionCards(props.card.renderedText),
+    },
+    feedback: "stationary",
+  });
+
+  return (
+    <div
+      ref={binding.ref}
+      {...binding.sourceProps}
+      data-card-view-glossary-hover-source="true"
+      style={{ ...binding.sourceProps.style, display: "block" }}
+    >
+      <GameCardSurface {...props} />
+    </div>
+  );
+}
+
+/** Visual editor surface; player UI uses {@link GameCard}. */
 export function CardView(props: CardViewProps) {
-  return <GameCardSurface {...props} />;
+  return props.glossaryInfoOnHover ? (
+    <GlossaryInfoCardView {...props} />
+  ) : (
+    <GameCardSurface {...props} />
+  );
 }

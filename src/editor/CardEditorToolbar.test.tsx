@@ -150,6 +150,28 @@ describe("CardEditorToolbar", () => {
     });
   });
 
+  it("toggles glossary info cards on hover", () => {
+    const onChange = vi.fn();
+    const { container, root } = mount(<StatefulToolbar onChange={onChange} />);
+    const checkbox = container.querySelector<HTMLInputElement>(
+      '[aria-label="Show glossary info cards on hover"]',
+    );
+
+    if (checkbox === null) {
+      throw new Error("Missing glossary hover checkbox");
+    }
+
+    act(() => checkbox.click());
+
+    expect(checkbox.checked).toBe(true);
+    expect(onChange).toHaveBeenLastCalledWith({
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      showGlossaryInfoOnHover: true,
+    });
+
+    act(() => root.unmount());
+  });
+
   it("updates segmented, select, and direction controls", () => {
     const onChange = vi.fn();
     const { container, root } = mount(<StatefulToolbar onChange={onChange} />);

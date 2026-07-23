@@ -1,5 +1,6 @@
 import { asCardName } from "../types/card-identity";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { logEvent } from "../logging";
 import "./card-editor.css";
 import {
   editorTomlParam,
@@ -104,6 +105,9 @@ function displayStateDataAttributes(displayState: EditorDisplayState) {
     "data-editor-art-editing": String(displayState.artEditing),
     "data-editor-checkbox-tag": displayState.checkboxTag,
     "data-editor-show-font-size": String(displayState.showFontSize),
+    "data-editor-show-glossary-info-on-hover": String(
+      displayState.showGlossaryInfoOnHover,
+    ),
     "data-editor-sort": displayState.sort,
     "data-editor-dir": displayState.dir,
     "data-editor-size": displayState.size,
@@ -630,6 +634,14 @@ export default function CardEditorApp({
   }, [loadedCards]);
 
   function handleDisplayStateChange(nextState: EditorDisplayState) {
+    if (
+      nextState.showGlossaryInfoOnHover !==
+      displayState.showGlossaryInfoOnHover
+    ) {
+      logEvent("card_editor_glossary_hover_changed", {
+        enabled: nextState.showGlossaryInfoOnHover,
+      });
+    }
     setDisplayState(nextState);
     replaceEditorDisplayStateInUrl(nextState);
   }
@@ -1156,6 +1168,7 @@ export default function CardEditorApp({
                 artEditing={displayState.artEditing}
                 checkboxTag={displayState.checkboxTag}
                 showFontSize={displayState.showFontSize}
+                showGlossaryInfoOnHover={displayState.showGlossaryInfoOnHover}
                 eagerRulesFit={sortByFontSize}
                 availableTags={tags}
                 availableTides={tides}

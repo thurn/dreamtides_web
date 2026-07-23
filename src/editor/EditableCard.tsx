@@ -2,6 +2,7 @@ import { asCardName } from "../types/card-identity";
 import { useCallback, useRef, useState, type ReactNode } from "react";
 import { CardView } from "../cumulus/components/card/CardView";
 import type { CardViewSlots } from "../cumulus/components/card/CardView";
+import { extractGlossaryTerms } from "../data/glossary-terms";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import { MtgNameTooltip } from "./card-browser/MtgNameTooltip";
 import type { CardDuplicateUsage } from "./card-duplicate-usage";
@@ -39,6 +40,8 @@ export interface EditableCardProps {
    * size the fitter computed (in px).
    */
   showFontSize: boolean;
+  /** Whether cards with glossary terms reveal their Info Cards on hover. */
+  showGlossaryInfoOnHover: boolean;
   /**
    * Measure the rules-text fit immediately rather than on scroll. Set while the
    * grid sorts by font size so every card contributes a stable sort key.
@@ -252,6 +255,7 @@ export default function EditableCard({
   artEditing,
   checkboxTag,
   showFontSize,
+  showGlossaryInfoOnHover,
   eagerRulesFit,
   availableTags,
   availableTides,
@@ -391,6 +395,9 @@ export default function EditableCard({
     sparkVariable: visibleSparkVariable,
     subtype: visibleSubtype,
   };
+  const shouldShowGlossaryInfoOnHover =
+    showGlossaryInfoOnHover &&
+    extractGlossaryTerms(visibleRulesText).length > 0;
 
   // Common props for an editable region. EditableField is a `display: contents`
   // wrapper, so the rendered card geometry is exactly CardView's; the editor
@@ -545,6 +552,7 @@ export default function EditableCard({
           onClick={() => onOpenArtEditor(card)}
           onRulesFontSizeChange={handleRulesFontSize}
           eagerRulesFit={eagerRulesFit}
+          glossaryInfoOnHover={shouldShowGlossaryInfoOnHover}
         />
         {fontSizeOverlay}
         {checkboxControl}
@@ -571,6 +579,7 @@ export default function EditableCard({
         onRulesFontSizeChange={handleRulesFontSize}
         eagerRulesFit={eagerRulesFit}
         rulesTextboxExpanded={rulesTextEditing}
+        glossaryInfoOnHover={shouldShowGlossaryInfoOnHover}
       />
       {fontSizeOverlay}
       {/* Checkbox tagging hides the tag and tide chip editors so only the one

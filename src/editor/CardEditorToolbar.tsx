@@ -181,6 +181,30 @@ export default function CardEditorToolbar({
 
   const barExtras = (
     <>
+      <label
+        title="Show glossary definitions in Info Cards when hovering cards"
+        style={{
+          ...inputStyle,
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "6px",
+          cursor: "pointer",
+          fontSize: "0.78rem",
+          fontWeight: 700,
+          whiteSpace: "nowrap",
+        }}
+      >
+        <input
+          type="checkbox"
+          aria-label="Show glossary info cards on hover"
+          checked={displayState.showGlossaryInfoOnHover}
+          onChange={(event) =>
+            updateDisplayState({ showGlossaryInfoOnHover: event.target.checked })
+          }
+        />
+        Info on hover
+      </label>
+
       <ModeToggle
         active={displayState.tagEditing}
         icon="🏷"

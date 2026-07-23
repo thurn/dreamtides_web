@@ -1243,6 +1243,14 @@
       }
     },
     {
+      "name": "glossaryInfoOnHover",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Reveal glossary Info Cards on hover for editor and inspector surfaces.\nPlayer-facing cards use {@link GameCard}, which always carries its complete\nsemantic reveal contract."
+    },
+    {
       "name": "onRulesFontSizeChange",
       "tsType": "((fontSizePx: number) => void)",
       "unionMembers": [],

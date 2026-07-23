@@ -25,6 +25,7 @@ export interface CardEditorGridProps {
   artEditing: boolean;
   checkboxTag: string;
   showFontSize: boolean;
+  showGlossaryInfoOnHover: boolean;
   eagerRulesFit: boolean;
   availableTags: EditorTag[];
   availableTides: EditorTag[];
@@ -77,6 +78,7 @@ export default function CardEditorGrid({
   artEditing,
   checkboxTag,
   showFontSize,
+  showGlossaryInfoOnHover,
   eagerRulesFit,
   availableTags,
   availableTides,
@@ -137,6 +139,7 @@ export default function CardEditorGrid({
           artEditing={artEditing}
           checkboxTag={checkboxTag}
           showFontSize={showFontSize}
+          showGlossaryInfoOnHover={showGlossaryInfoOnHover}
           eagerRulesFit={eagerRulesFit}
           availableTags={availableTags}
           availableTides={availableTides}

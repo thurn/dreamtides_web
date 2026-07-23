@@ -56,6 +56,7 @@ describe("editor URL display state", () => {
       artEditing: false,
       checkboxTag: "",
       showFontSize: false,
+      showGlossaryInfoOnHover: false,
       sort: "cost",
       dir: "desc",
       size: "small",
@@ -186,6 +187,19 @@ describe("editor URL display state", () => {
       "Elves",
     );
     expect(parseEditorDisplayState("").checkboxTag).toBe("");
+  });
+
+  it("round-trips glossary hover info cards", () => {
+    const state = {
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      showGlossaryInfoOnHover: true,
+    };
+
+    const params = serializeEditorDisplayState(state);
+
+    expect(params.get("glossaryhover")).toBe("1");
+    expect(parseEditorDisplayState(params).showGlossaryInfoOnHover).toBe(true);
+    expect(parseEditorDisplayState("").showGlossaryInfoOnHover).toBe(false);
   });
 
   it("round-trips the font-size overlay toggle", () => {

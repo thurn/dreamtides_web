@@ -145,6 +145,11 @@ export interface EditorDisplayState {
    * diagnostic aid for spotting cards whose text was shrunk the most.
    */
   showFontSize: boolean;
+  /**
+   * When true, hovering a card with recognized glossary terms reveals their
+   * explanatory Info Cards.
+   */
+  showGlossaryInfoOnHover: boolean;
   sort: EditorSortField;
   dir: EditorSortDirection;
   size: EditorCardSize;
