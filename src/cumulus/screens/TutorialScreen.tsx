@@ -88,6 +88,11 @@ export interface TutorialView {
     readonly wait: number;
     readonly triggerCardId: string;
   } | null;
+  readonly endTurn: {
+    readonly actionId: string;
+    readonly triggerCardId: string;
+    readonly ready: boolean;
+  } | null;
 }
 
 export interface TutorialEditorView {
@@ -120,6 +125,7 @@ export interface TutorialScreenProps {
     cardId: string,
     targetSlotId: string | null,
   ) => void;
+  readonly onEndTurn?: (runId: string, actionId: string) => void;
   readonly onEditorActionsChange?: (
     actions: readonly TutorialAction[],
     persist: boolean,
@@ -903,6 +909,7 @@ export function TutorialScreen({
   onHowToPlayPresented,
   onHowToPlayDismissed,
   onPlayerCardPlay,
+  onEndTurn,
   onEditorActionsChange,
   onReplay,
   onPlayFromAction,
@@ -1231,16 +1238,22 @@ export function TutorialScreen({
   // control. Its view data is therefore absent, while the hand still carries
   // the authoritative playable marker from the tutorial view model.
   const tutorialPlayableCard =
-    view.currentAction === null
+    view.currentAction?.action === "end-turn" &&
+    view.endTurn?.ready !== true
       ? ((view.battle.playerHand ?? []).find(
           (card) => card.showPlayableOutline,
         ) ?? null)
       : null;
   const canPlayTutorialCard =
-    view.currentAction === null &&
+    view.currentAction?.action === "end-turn" &&
     view.playbackRunId !== null &&
     tutorialPlayableCard !== null &&
     onPlayerCardPlay !== undefined;
+  const canEndTurn =
+    view.currentAction?.action === "end-turn" &&
+    view.endTurn?.ready === true &&
+    view.playbackRunId !== null &&
+    onEndTurn !== undefined;
 
   useEffect(() => {
     if (canPlayTutorialCard) return;
@@ -1276,7 +1289,7 @@ export function TutorialScreen({
 
   const tutorialInteractions = useMemo<MobileBattleInteractions | undefined>(
     () =>
-      !canPlayTutorialCard || tutorialPlayableCard === null
+      (!canPlayTutorialCard || tutorialPlayableCard === null) && !canEndTurn
         ? undefined
         : {
             canInteract: true,
@@ -1287,12 +1300,14 @@ export function TutorialScreen({
             pendingCardOwner:
               pendingTutorialCardId === null ? null : "player",
             onHandCardActivate: (battleCardId) => {
+              if (!canPlayTutorialCard || tutorialPlayableCard === null) return;
               if (battleCardId !== tutorialPlayableCard.id) return;
               pendingTutorialCardIdRef.current = battleCardId;
               tutorialCardDropHandledRef.current = false;
               playTutorialCard(null);
             },
             onHandCardDrop: (target) => {
+              if (!canPlayTutorialCard) return;
               playTutorialCard(
                 target?.owner === "player" && target.rank === "back"
                   ? target.slotId
@@ -1300,6 +1315,7 @@ export function TutorialScreen({
               );
             },
             onCardDragStart: (battleCardId, source) => {
+              if (!canPlayTutorialCard || tutorialPlayableCard === null) return;
               if (
                 source !== "near-hand" ||
                 battleCardId !== tutorialPlayableCard.id
@@ -1311,6 +1327,7 @@ export function TutorialScreen({
               setPendingTutorialCardId(battleCardId);
             },
             onCardDragEnd: () => {
+              if (!canPlayTutorialCard || tutorialPlayableCard === null) return;
               if (
                 !tutorialCardDropHandledRef.current &&
                 pendingTutorialCardIdRef.current === tutorialPlayableCard.id
@@ -1323,6 +1340,7 @@ export function TutorialScreen({
               setPendingTutorialCardId(null);
             },
             onSlotDrop: (target) => {
+              if (!canPlayTutorialCard) return;
               playTutorialCard(
                 target.owner === "player" && target.rank === "back"
                   ? target.slotId
@@ -1331,13 +1349,26 @@ export function TutorialScreen({
             },
             onZoneDrop: () => {},
             onPreviousPhase: () => {},
-            onNextPhase: () => {},
+            onNextPhase: () => {
+              if (
+                !canEndTurn ||
+                view.playbackRunId === null ||
+                view.endTurn === null
+              ) {
+                return;
+              }
+              onEndTurn?.(view.playbackRunId, view.endTurn.actionId);
+            },
           },
     [
+      canEndTurn,
       canPlayTutorialCard,
+      onEndTurn,
       pendingTutorialCardId,
       playTutorialCard,
       tutorialPlayableCard,
+      view.endTurn,
+      view.playbackRunId,
     ],
   );
 
@@ -1589,7 +1620,7 @@ export function TutorialScreen({
             inspectorOpen={battleInspectorOpen}
             onInspectorOpenChange={handleBattleInspectorOpenChange}
             onTurnAnnouncementComplete={completeTurnAnnouncement}
-            phaseNavigation="hidden"
+            phaseNavigation={canEndTurn ? "end-turn" : "hidden"}
           />
         </div>
       </div>

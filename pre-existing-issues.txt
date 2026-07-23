@@ -12,3 +12,10 @@ play, but the resulting battle instance retains `status.isExhausted = false`.
 This conflicts with the documented battle behavior that a character enters
 play exhausted. `planCardPlay` in `src/rules/battle/basic-automation.ts`
 currently plans the energy adjustment and move without a status edit.
+
+CardView editor glossary metadata test expects stale Bane content
+
+`src/cumulus/components/card/CardView.hover-zoom.test.tsx` consistently fails
+its editor-variant assertion because `data-reveal-secondary-titles` is empty
+instead of `Bane`. The failure reproduces in isolation and is unrelated to the
+tutorial end-turn action.

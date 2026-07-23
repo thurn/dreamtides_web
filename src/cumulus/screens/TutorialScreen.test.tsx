@@ -353,6 +353,7 @@ describe("TutorialScreen", () => {
                 },
               },
               playbackRunId: "event:1",
+              endTurn: null,
               howToPlay: null,
               currentAction: {
                 id: "welcome",
@@ -408,6 +409,7 @@ describe("TutorialScreen", () => {
                 },
               },
               playbackRunId: "event:1",
+              endTurn: null,
               howToPlay: null,
               currentAction: {
                 id: "welcome",
@@ -504,6 +506,7 @@ describe("TutorialScreen", () => {
                 },
               },
               playbackRunId: "event:2",
+              endTurn: null,
               howToPlay: null,
               currentAction: {
                 id: "dreamcaller-arrival",
@@ -616,6 +619,7 @@ describe("TutorialScreen", () => {
               dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: null,
               playbackRunId: "event:3",
+              endTurn: null,
               howToPlay: null,
               currentAction: {
                 id: "vrakmoth-arrival",
@@ -703,6 +707,7 @@ describe("TutorialScreen", () => {
                 text: "For the Abyss!",
               },
               playbackRunId: "event:draw",
+              endTurn: null,
               howToPlay: null,
               currentAction: {
                 id: "vrakmoth-draw",
@@ -853,6 +858,7 @@ describe("TutorialScreen", () => {
               dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: null,
               playbackRunId: "event:play",
+              endTurn: null,
               howToPlay: null,
               currentAction: {
                 id: "vrakmoth-reveal-and-play",
@@ -982,6 +988,7 @@ describe("TutorialScreen", () => {
               dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: null,
               playbackRunId: "event:player-turn",
+              endTurn: null,
               currentAction: {
                 id: "how-to-play",
                 action: "display-how-to-play",
@@ -1159,8 +1166,17 @@ describe("TutorialScreen", () => {
               dreamcallers: TUTORIAL_DREAMCALLERS,
               dialogue: null,
               playbackRunId: "event:player-turn",
-              currentAction: null,
+              currentAction: {
+                id: "end-turn",
+                action: "end-turn",
+                wait: 0,
+              },
               howToPlay: null,
+              endTurn: {
+                actionId: "end-turn",
+                triggerCardId: TUTORIAL_PLAYER_CARD.model.cardId,
+                ready: false,
+              },
               battle: {
                 battleId: "tutorial-battle",
                 playerHand: [TUTORIAL_PLAYER_CARD],
@@ -1216,6 +1232,53 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
+  it("offers End Turn after the shared card play and submits the authored action", () => {
+    const onEndTurn = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: null,
+              playbackRunId: "event:player-turn",
+              currentAction: {
+                id: "end-turn",
+                action: "end-turn",
+                wait: 0,
+              },
+              howToPlay: null,
+              endTurn: {
+                actionId: "end-turn",
+                triggerCardId: TUTORIAL_PLAYER_CARD.model.cardId,
+                ready: true,
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                playerHand: [],
+                enemy: { backRank: [], frontRank: [], deckCardIds: [] },
+                player: { backRank: [], frontRank: [] },
+              } as unknown as MobileBattleView,
+            }}
+            onEndTurn={onEndTurn}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(screenMocks.props?.phaseNavigation).toBe("end-turn");
+    expect(screenMocks.props?.interactions?.canInteract).toBe(true);
+    act(() => screenMocks.props?.interactions?.onNextPhase());
+    expect(onEndTurn).toHaveBeenCalledWith("event:player-turn", "end-turn");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("places opposing speech above all UI with a top-left pointer on the portrait rim", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
       function rectForElement(this: HTMLElement) {
@@ -1251,6 +1314,7 @@ describe("TutorialScreen", () => {
                 text: "For the Abyss!",
               },
               playbackRunId: "event:4",
+              endTurn: null,
               howToPlay: null,
               currentAction: {
                 id: "vrakmoth-taunt",
@@ -1349,6 +1413,7 @@ describe("TutorialScreen", () => {
                 },
               },
               playbackRunId: "event:1",
+              endTurn: null,
               howToPlay: null,
               currentAction: {
                 id: "welcome",

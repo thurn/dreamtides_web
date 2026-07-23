@@ -114,6 +114,9 @@ export function validateTutorialActions(value) {
     if (action === "draw-opponent-card") {
       return { id, action, wait };
     }
+    if (action === "end-turn") {
+      return { id, action, wait };
+    }
     if (action === "reveal-and-play-opponent-card") {
       const revealDuration = candidate.revealDuration ?? 2;
       if (

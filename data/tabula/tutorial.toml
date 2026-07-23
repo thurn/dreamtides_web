@@ -51,3 +51,8 @@ id = "how-to-play"
 action = "display-how-to-play"
 text = "Play characters and challenge with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle."
 wait = 0
+
+[[actions]]
+id = "end-turn"
+action = "end-turn"
+wait = 0

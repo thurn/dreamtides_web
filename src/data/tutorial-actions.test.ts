@@ -163,6 +163,24 @@ describe("parseTutorialActions", () => {
     ]);
   });
 
+  it("preserves an authored end-turn action", () => {
+    expect(
+      parseTutorialActions([
+        {
+          id: "end-turn",
+          action: "end-turn",
+          wait: 0,
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "end-turn",
+        action: "end-turn",
+        wait: 0,
+      },
+    ]);
+  });
+
   it("normalizes and validates the opponent card reveal duration", () => {
     expect(
       parseTutorialActions([

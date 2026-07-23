@@ -405,6 +405,42 @@ describe("TutorialEditorRail", () => {
     container.remove();
   });
 
+  it("adds the end-turn interaction as an authored action", () => {
+    const onChange = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<EditorHarness onChange={onChange} />));
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>('button[aria-label="Add an action"]')
+        ?.click(),
+    );
+    const endTurnOption = [
+      ...document.body.querySelectorAll<HTMLButtonElement>(
+        'button[role="option"]',
+      ),
+    ].find((option) => option.textContent?.trim() === "End Turn");
+    expect(endTurnOption).toBeDefined();
+    act(() => endTurnOption?.click());
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "end-turn",
+          action: "end-turn",
+          wait: 0,
+        },
+      ],
+      true,
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("authors the face-up reading time for an opponent card play", () => {
     const onChange = vi.fn();
     const container = document.createElement("div");

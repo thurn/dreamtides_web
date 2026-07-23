@@ -50,6 +50,11 @@ const mocks = vi.hoisted(() => ({
           text: "Configured adapter instructions.\n\nScore 10 ⍟ to win.",
           wait: 0,
         },
+        {
+          id: "end-turn",
+          action: "end-turn" as const,
+          wait: 0,
+        },
       ],
     },
   },
@@ -124,8 +129,14 @@ beforeEach(() => {
   (
     mocks.state.tutorial as unknown as {
       currentActionIndex: number | null;
+      playerCardPlay: {
+        cardInstanceId: string;
+        cardId: string;
+        targetSlotId: string | null;
+      } | null;
     }
   ).currentActionIndex = 1;
+  mocks.state.tutorial.playerCardPlay = null;
   resetLog();
   adapterMocks.props = null;
 });
@@ -155,12 +166,13 @@ describe("TutorialScreenAdapter", () => {
       expect.arrayContaining([
         expect.objectContaining({
           event: "tutorial_actions_loaded",
-          actionCount: 4,
+          actionCount: 5,
           actionIds: [
             "welcome",
             "dreamcaller-arrival",
             "nightmare-call",
             "how-to-play",
+            "end-turn",
           ],
         }),
         expect.objectContaining({
@@ -318,6 +330,72 @@ describe("TutorialScreenAdapter", () => {
     expect(mocks.completeTutorialAction).toHaveBeenCalledWith(
       "event:1",
       "how-to-play",
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("logs and completes the authored end-turn handoff", async () => {
+    (
+      mocks.state.tutorial as unknown as {
+        currentActionIndex: number | null;
+        playerCardPlay: {
+          cardInstanceId: string;
+          cardId: string;
+          targetSlotId: string | null;
+        } | null;
+      }
+    ).currentActionIndex = 4;
+    (
+      mocks.state.tutorial as unknown as {
+        playerCardPlay: {
+          cardInstanceId: string;
+          cardId: string;
+          targetSlotId: string | null;
+        } | null;
+      }
+    ).playerCardPlay = {
+        cardInstanceId: "tutorial-player-deck-1",
+        cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        targetSlotId: "player-back-4",
+      };
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    await act(async () => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreenAdapter />
+        </CumulusRoot>,
+      );
+      await Promise.resolve();
+    });
+
+    expect(adapterMocks.props?.view.endTurn).toEqual({
+      actionId: "end-turn",
+      triggerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      ready: true,
+    });
+    act(() => adapterMocks.props?.onEndTurn?.("event:1", "end-turn"));
+
+    expect(mocks.completeTutorialAction).toHaveBeenCalledWith(
+      "event:1",
+      "end-turn",
+    );
+    expect(getLogEntries()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          event: "tutorial_end_turn_requested",
+          runId: "event:1",
+          actionId: "end-turn",
+          battleId: "tutorial-battle",
+          sourceSide: "player",
+          destinationSide: "enemy",
+          destinationPhase: "dawn",
+        }),
+      ]),
     );
 
     act(() => root.unmount());

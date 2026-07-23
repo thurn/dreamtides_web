@@ -117,6 +117,13 @@ export function parseTutorialActions(
         wait,
       } satisfies TutorialAction;
     }
+    if (record.action === "end-turn") {
+      return {
+        id,
+        action: "end-turn",
+        wait,
+      } satisfies TutorialAction;
+    }
     if (record.action === "reveal-and-play-opponent-card") {
       const revealDuration = record.revealDuration ?? 2;
       if (

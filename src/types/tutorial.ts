@@ -4,7 +4,8 @@ export type TutorialActionName =
   | "display-how-to-play"
   | "animate-dreamcaller-portrait"
   | "draw-opponent-card"
-  | "reveal-and-play-opponent-card";
+  | "reveal-and-play-opponent-card"
+  | "end-turn";
 
 /** Battle-status destination for an arriving tutorial Dreamcaller. */
 export type TutorialDreamcallerOwner = "player" | "enemy";
@@ -60,13 +61,19 @@ export interface RevealAndPlayOpponentCardTutorialAction extends TutorialActionB
   readonly revealDuration: number;
 }
 
+/** Waits for the player to play their tutorial card, then offers End Turn. */
+export interface EndTurnTutorialAction extends TutorialActionBase {
+  readonly action: "end-turn";
+}
+
 /** Exhaustive authored tutorial action model. */
 export type TutorialAction =
   | DisplaySpeechBubbleTutorialAction
   | DisplayHowToPlayTutorialAction
   | AnimateDreamcallerPortraitTutorialAction
   | DrawOpponentCardTutorialAction
-  | RevealAndPlayOpponentCardTutorialAction;
+  | RevealAndPlayOpponentCardTutorialAction
+  | EndTurnTutorialAction;
 
 /** Local filesystem persistence state shown by the Tutorial Editor. */
 export type TutorialEditorSaveStatus = "idle" | "saving" | "saved" | "error";

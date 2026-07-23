@@ -4,6 +4,7 @@ import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
 import * as tutorialEditor from "../../state/use-tutorial-editor";
 import { useTutorialCardPlay } from "../../state/use-tutorial-card-play";
+import { useTutorialEndTurn } from "../../state/use-tutorial-end-turn";
 import { useTutorialCards } from "../../state/use-tutorial-opponent-card";
 import {
   useTutorialHowToPlayLogging,
@@ -95,8 +96,9 @@ export function TutorialScreenAdapter() {
     [view.battle.battleId, view.currentAction?.id],
   );
 
-  const handlePlayerCardPlay = useTutorialCardPlay(
-    mutations.action,
+  const handlePlayerCardPlay = useTutorialCardPlay(mutations.action, view.battle.battleId);
+  const handleEndTurn = useTutorialEndTurn(
+    mutations.completeTutorialAction,
     view.battle.battleId,
   );
 
@@ -112,6 +114,7 @@ export function TutorialScreenAdapter() {
       onDreamcallerArrivalComplete={handleDreamcallerArrivalComplete}
       {...howToPlayLogging}
       onPlayerCardPlay={handlePlayerCardPlay}
+      onEndTurn={handleEndTurn}
       onEditorActionsChange={handleEditorActionsChange}
       onReplay={handleReplay}
       onPlayFromAction={handleReplay}

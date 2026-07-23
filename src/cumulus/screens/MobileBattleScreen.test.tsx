@@ -244,6 +244,54 @@ describe("MobileBattleScreen", () => {
     container.remove();
   });
 
+  it("renders the tutorial End Turn action as the sole purple primary control", () => {
+    mockDesktopViewport(true);
+    const onNextPhase = vi.fn();
+    const interactions: MobileBattleInteractions = {
+      canInteract: true,
+      nearSide: "player",
+      pendingCardId: null,
+      pendingCardSource: null,
+      pendingCardOwner: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase,
+    };
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <MobileBattleScreen
+            view={makeView()}
+            interactions={interactions}
+            phaseNavigation="end-turn"
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const endTurn = container.querySelector<HTMLButtonElement>(
+      '[data-testid="tutorial-end-turn"]',
+    );
+    expect(endTurn?.textContent).toBe("End Turn");
+    expect(endTurn?.dataset.glassVariant).toBe("accent");
+    expect(
+      container.querySelector('button[aria-label="Back"]'),
+    ).toBeNull();
+    act(() => endTurn?.click());
+    expect(onNextPhase).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("keeps battle-instance status readable on battlefield and hand cards", () => {
     const view = makeView();
     const battlefieldCard = view.player.frontRank[0]?.card;

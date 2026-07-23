@@ -43,6 +43,11 @@ const FIXTURE_ACTIONS = [
     text: "Play characters to score points (⍟).\n\nScore 10 ⍟ to win.",
     wait: 0,
   },
+  {
+    id: "end-turn",
+    action: "end-turn",
+    wait: 0,
+  },
 ];
 
 describe("tutorial data", () => {

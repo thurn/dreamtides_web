@@ -176,6 +176,23 @@ describe("buildTutorialView", () => {
     });
   });
 
+  it("logs the authored handoff destination for sequence reconstruction", () => {
+    expect(
+      tutorialActionLogDetails({
+        id: "end-turn",
+        action: "end-turn",
+        wait: 0,
+      }),
+    ).toEqual({
+      actionId: "end-turn",
+      action: "end-turn",
+      waitSeconds: 0,
+      sourceSide: "player",
+      destinationSide: "enemy",
+      destinationPhase: "dawn",
+    });
+  });
+
   it("builds a quest-independent opposing Day phase with full decks and empty hands", () => {
     const tutorial = buildTutorialView({
       runId: "event:7",
@@ -392,6 +409,11 @@ describe("buildTutorialView", () => {
         text: "Configured instructions.\n\nScore 10 ⍟ to win.",
         wait: 0,
       },
+      {
+        id: "end-turn",
+        action: "end-turn" as const,
+        wait: 0,
+      },
     ];
 
     const drawing = buildTutorialView({
@@ -486,7 +508,7 @@ describe("buildTutorialView", () => {
     const afterPlayerCardPlay = buildTutorialView(
       {
         runId: "event:draw",
-        currentActionIndex: null,
+        currentActionIndex: 4,
         actions,
         playerCardPlay: {
           cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
@@ -498,6 +520,13 @@ describe("buildTutorialView", () => {
       PLAYER_CARD,
     );
     expect(afterPlayerCardPlay.howToPlay).toBeNull();
+    expect(afterPlayerCardPlay.endTurn).toEqual({
+      actionId: "end-turn",
+      triggerCardId: TUTORIAL_PLAYER_CARD_ID,
+      ready: true,
+    });
+    expect(afterPlayerCardPlay.battle.activeSide).toBe("player");
+    expect(afterPlayerCardPlay.battle.phase).toBe("day");
     expect(afterPlayerCardPlay.battle.playerHand).toEqual([]);
     expect(afterPlayerCardPlay.battle.nearHand.cardIds).toEqual([]);
     expect(
@@ -520,17 +549,27 @@ describe("buildTutorialView", () => {
       backRank: 1,
     });
 
-    const dismissed = buildTutorialView(
+    const ended = buildTutorialView(
       {
         runId: "event:draw",
         currentActionIndex: null,
         actions,
+        playerCardPlay: {
+          cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+          cardId: TUTORIAL_PLAYER_CARD_ID,
+          targetSlotId: "player-back-4",
+        },
       },
       OPPONENT_CARD,
       PLAYER_CARD,
     );
-    expect(dismissed.howToPlay).toBeNull();
-    expect(dismissed.battle.activeSide).toBe("player");
+    expect(ended.endTurn).toBeNull();
+    expect(ended.battle.activeSide).toBe("enemy");
+    expect(ended.battle.phase).toBe("dawn");
+    expect(ended.battle.inspector).toMatchObject({
+      activeSide: "Enemy",
+      phase: "Dawn",
+    });
   });
 
   it("settles Vrakmoth only after the opponent portrait action advances", () => {

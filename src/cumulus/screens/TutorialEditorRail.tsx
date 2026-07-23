@@ -52,6 +52,7 @@ const ACTION_OPTIONS = [
     value: "reveal-and-play-opponent-card",
     label: "Reveal & Play Opponent Card",
   },
+  { value: "end-turn", label: "End Turn" },
 ] satisfies readonly { value: TutorialActionName; label: string }[];
 
 const DREAMCALLER_OWNER_OPTIONS = [
@@ -116,6 +117,9 @@ function defaultAction(
       wait: 0,
     };
   }
+  if (actionName === "end-turn") {
+    return { id, action: "end-turn", wait: 0 };
+  }
   return { id, action: "draw-opponent-card", wait: 0 };
 }
 
@@ -150,6 +154,9 @@ function changedActionType(
     };
   }
   if (actionName === "draw-opponent-card") {
+    return { id: action.id, action: actionName, wait: action.wait };
+  }
+  if (actionName === "end-turn") {
     return { id: action.id, action: actionName, wait: action.wait };
   }
   if (actionName === "reveal-and-play-opponent-card") {
@@ -301,7 +308,8 @@ function TutorialActionRow({
                   value !== "display-how-to-play" &&
                   value !== "animate-dreamcaller-portrait" &&
                   value !== "draw-opponent-card" &&
-                  value !== "reveal-and-play-opponent-card"
+                  value !== "reveal-and-play-opponent-card" &&
+                  value !== "end-turn"
                 ) {
                   return;
                 }
@@ -645,7 +653,8 @@ function TutorialEditorContent({
             value !== "display-how-to-play" &&
             value !== "animate-dreamcaller-portrait" &&
             value !== "draw-opponent-card" &&
-            value !== "reveal-and-play-opponent-card"
+            value !== "reveal-and-play-opponent-card" &&
+            value !== "end-turn"
           ) {
             return;
           }

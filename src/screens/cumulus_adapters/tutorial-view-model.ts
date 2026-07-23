@@ -70,6 +70,16 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       destinationSlot: "center",
     };
   }
+  if (action.action === "end-turn") {
+    return {
+      actionId: action.id,
+      action: action.action,
+      waitSeconds: action.wait,
+      sourceSide: "player",
+      destinationSide: "enemy",
+      destinationPhase: "dawn",
+    };
+  }
   return {
     actionId: action.id,
     action: action.action,
@@ -220,6 +230,10 @@ export function buildTutorialView(
     playback?.actions.findIndex(
       (action) => action.action === "display-how-to-play",
     ) ?? -1;
+  const endTurnActionIndex =
+    playback?.actions.findIndex((action) => action.action === "end-turn") ?? -1;
+  const endTurnCompleted =
+    endTurnActionIndex >= 0 && completedActionCount > endTurnActionIndex;
   const playerTurnStarted =
     playback !== null &&
     (playback.currentActionIndex === null ||
@@ -332,6 +346,14 @@ export function buildTutorialView(
             wait: currentAction.wait,
             triggerCardId: playerTurnCard.model.cardId,
           },
+    endTurn:
+      currentAction?.action !== "end-turn" || playerTurnCard === null
+        ? null
+        : {
+            actionId: currentAction.id,
+            triggerCardId: playerTurnCard.model.cardId,
+            ready: playerCardPlayed,
+          },
     battle: (() => {
       const emptyPlayer = emptySide("player");
       const player = {
@@ -374,9 +396,13 @@ export function buildTutorialView(
       cardPicker: null,
       choicePrompt: null,
       dreamwell: null,
-      activeSide: playerTurnStarted ? "player" : "enemy",
+      activeSide: endTurnCompleted
+        ? "enemy"
+        : playerTurnStarted
+          ? "player"
+          : "enemy",
       isOpeningTurn: !playerTurnStarted,
-      phase: "day",
+      phase: endTurnCompleted ? "dawn" : "day",
       enemyHandCardIds,
       enemyHand: farHandCards,
       enemy: {
@@ -400,8 +426,12 @@ export function buildTutorialView(
         opponentName: "Awaiting Dreamcaller",
         perspective: "player",
         turn: playerTurnStarted ? "2" : "1",
-        phase: "Day",
-        activeSide: playerTurnStarted ? "Player" : "Enemy",
+        phase: endTurnCompleted ? "Dawn" : "Day",
+        activeSide: endTurnCompleted
+          ? "Enemy"
+          : playerTurnStarted
+            ? "Player"
+            : "Enemy",
         result: "In progress",
         nextDreamwellOrder: "Complete",
         isOpponentHandRevealed: false,

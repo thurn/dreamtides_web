@@ -205,7 +205,7 @@ export interface MobileBattleScreenProps {
   /** Initial inspector state at desktop widths. */
   readonly inspectorDefault?: "responsive" | "collapsed";
   /** Phase controls exposed by this presentation. */
-  readonly phaseNavigation?: "both" | "hidden";
+  readonly phaseNavigation?: "both" | "end-turn" | "hidden";
   /** Optional controlled inspector state for a parent shell with another rail. */
   readonly inspectorOpen?: boolean;
   /** Reports inspector disclosure changes in controlled compositions. */
@@ -2393,7 +2393,7 @@ function ControlRow({
   readonly isDesktop: boolean;
   readonly interactions?: MobileBattleInteractions;
   readonly layoutBackSlotCount: number;
-  readonly phaseNavigation: "both" | "hidden";
+  readonly phaseNavigation: "both" | "end-turn" | "hidden";
   readonly perspective: BattlePerspectiveSide;
 }) {
   const disabled = interactions?.canInteract !== true;
@@ -2480,7 +2480,7 @@ function ControlRow({
             onPress={() => interactions?.onCardPickerSubmit?.(selectedPickerCardIds)}
           />
         </div>
-      ) : phaseNavigation === "both" ? (
+      ) : phaseNavigation !== "hidden" ? (
         <div
           data-battle-phase-controls="row"
           style={{
@@ -2500,15 +2500,17 @@ function ControlRow({
             pointerEvents: "auto",
           }}
         >
-          <div data-battle-phase-back="">
-            <IconButton
-              glyph={GLYPHS.arrowLeft}
-              size="sm"
-              label="Back"
-              disabled={disabled}
-              onPress={() => interactions?.onPreviousPhase()}
-            />
-          </div>
+          {phaseNavigation === "both" ? (
+            <div data-battle-phase-back="">
+              <IconButton
+                glyph={GLYPHS.arrowLeft}
+                size="sm"
+                label="Back"
+                disabled={disabled}
+                onPress={() => interactions?.onPreviousPhase()}
+              />
+            </div>
+          ) : null}
           <div
             data-battle-phase-next=""
             data-battle-ai-approval-controls={
@@ -2546,9 +2548,16 @@ function ControlRow({
               ))
             ) : aiApproval === null ? (
               <GlassButton
-                label="Next Phase"
+                label={
+                  phaseNavigation === "end-turn" ? "End Turn" : "Next Phase"
+                }
                 variant="accent"
                 disabled={disabled}
+                testId={
+                  phaseNavigation === "end-turn"
+                    ? "tutorial-end-turn"
+                    : undefined
+                }
                 onPress={() => interactions?.onNextPhase()}
               />
             ) : (

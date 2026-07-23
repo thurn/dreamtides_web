@@ -180,6 +180,11 @@ describe("front-door reducer", () => {
             text: "Shared configured instructions.",
             wait: 0,
           },
+          {
+            id: "end-turn",
+            action: "end-turn",
+            wait: 0,
+          },
         ],
       }),
       context(1),
@@ -222,7 +227,17 @@ describe("front-door reducer", () => {
       context(3),
     );
     expect(second.outcome).toBe("applied");
-    expect(second.state.frontDoor.tutorial?.currentActionIndex).toBeNull();
+    expect(second.state.frontDoor.tutorial?.currentActionIndex).toBe(2);
+
+    const prematureEnd = reduceGameEvent(
+      second.state,
+      event("COMPLETE_TUTORIAL_ACTION", {
+        runId: "event:1",
+        actionId: "end-turn",
+      }),
+      context(4),
+    );
+    expect(prematureEnd.outcome).toBe("bounced");
 
     const played = reduceGameEvent(
       second.state,
@@ -236,7 +251,7 @@ describe("front-door reducer", () => {
           targetSlotId: "player-back-4",
         },
       }),
-      context(4),
+      context(5),
     );
     expect(played.outcome).toBe("applied");
     expect(played.state.frontDoor.tutorial?.playerCardPlay).toEqual({
@@ -257,9 +272,20 @@ describe("front-door reducer", () => {
           targetSlotId: null,
         },
       }),
-      context(5),
+      context(6),
     );
     expect(duplicate.outcome).toBe("bounced");
+
+    const ended = reduceGameEvent(
+      played.state,
+      event("COMPLETE_TUTORIAL_ACTION", {
+        runId: "event:1",
+        actionId: "end-turn",
+      }),
+      context(7),
+    );
+    expect(ended.outcome).toBe("applied");
+    expect(ended.state.frontDoor.tutorial?.currentActionIndex).toBeNull();
   });
 
   it("starts a tutorial at a validated authored action id", () => {

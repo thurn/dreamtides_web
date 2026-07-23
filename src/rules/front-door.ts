@@ -29,11 +29,16 @@ export function frontDoorAction(
   if (surface === "tutorial") {
     const tutorial = state.tutorial;
     const detail = payload.detail;
+    const currentAction =
+      tutorial?.currentActionIndex === null ||
+      tutorial?.currentActionIndex === undefined
+        ? null
+        : (tutorial.actions[tutorial.currentActionIndex] ?? null);
     if (
       state.phase !== "tutorial" ||
       actionId !== "play-card" ||
       tutorial === null ||
-      tutorial.currentActionIndex !== null ||
+      (currentAction !== null && currentAction.action !== "end-turn") ||
       tutorial.playerCardPlay != null ||
       typeof detail !== "object" ||
       detail === null ||
@@ -150,6 +155,9 @@ export function completeTutorialAction(
   }
   const current = tutorial.actions[tutorial.currentActionIndex];
   if (current === undefined || payload.actionId !== current.id) return null;
+  if (current.action === "end-turn" && tutorial.playerCardPlay == null) {
+    return null;
+  }
   const nextIndex = tutorial.currentActionIndex + 1;
   return {
     ...state,
