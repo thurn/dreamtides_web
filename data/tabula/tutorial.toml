@@ -70,5 +70,5 @@ id = "dreamwell-how-to-play"
 action = "display-how-to-play"
 trigger = "immediate"
 companion = "dreamwell-card"
-text = "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects."
+text = "From turn 2, players draw dreamwell cards that increase their energy (●) production and have special effects."
 wait = 0
