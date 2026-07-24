@@ -13,9 +13,9 @@ export type SymbolType =
  *
  * - `text` is a plain string run.
  * - `symbol` is a recognized glyph rendered with its own styling. Most are
- *   swapped for a Boxicons mark by the renderer: energy → flame, spark →
+ *   swapped for an icon-font mark by the renderer: energy → flame, spark →
  *   sparkle, points `⍟` → star-circle, lunar `☪` → moon, store `⧗` →
- *   hourglass, trigger `▸` → caret.
+ *   brain, trigger `▸` → caret.
  * - `nobreak` groups inner segments that must render on the same line. The
  *   renderer wraps them in a `white-space: nowrap` span. A post-tokenization
  *   pass (`bindIconsToText`) wraps every inline icon together with the text it
@@ -68,7 +68,7 @@ const SYMBOL_MAP: Readonly<Record<string, SymbolType>> = {
   "⍟": "points",
   // The lunar activation cost (rendered as the filled moon).
   "☪": "lunar",
-  // Stored-time counters (rendered as the filled hourglass).
+  // Memories stored on cards (rendered as the filled brain).
   "⧗": "store",
 };
 

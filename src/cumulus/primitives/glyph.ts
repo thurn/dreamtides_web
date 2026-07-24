@@ -40,6 +40,8 @@ export const GLYPHS = {
   sparkInline: g("bxf bx-sparkle"),
   points: g("bxf bx-star-circle"),
   counter: g("bxf bx-hourglass"),
+  /** Memory stored on cards, rendered as the Font Awesome filled brain. */
+  memory: g("fa-solid fa-brain"),
   /** The exhaust / tap activation mark (the filled moon). */
   exhaust: g("bxf bx-moon"),
   /** Activated-ability lightning bolt. */

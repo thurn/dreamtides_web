@@ -26,8 +26,8 @@ import {
  *   - the spark `✦` glyph swapped for the amber-gold sparkle mark
  *   - the fast marker `❖` (and interrupt `❖❖`) swapped for the filled
  *     lightning bolt(s) shown before the card name in the title bar
- *   - the points `⍟`, lunar `☪`, store `⧗`, and trigger `▸` glyphs swapped
- *     for their filled marks (star-circle, moon, hourglass, caret), the
+ *   - the points `⍟`, lunar `☪`, memory `⧗`, and trigger `▸` glyphs swapped
+ *     for their filled marks (star-circle, moon, brain, caret), the
  *     trigger keeping its muted slate
  *   - glossary terms rendered as plain prose by default, with a curated set
  *     of keyword effects and action verbs (`dissolve`, `banish`, `prevent`,
@@ -97,7 +97,7 @@ const SYMBOL_ICON_CLASSES: Readonly<
   },
   points: { className: GLYPHS.points, label: "points" },
   lunar: { className: GLYPHS.exhaust, label: "lunar" },
-  store: { className: GLYPHS.counter, label: "stored time" },
+  store: { className: GLYPHS.memory, label: "memory" },
 };
 
 /**
@@ -413,7 +413,7 @@ function renderSegment(
         />
       );
     }
-    // The glyph renders as a filled Boxicons mark flowing inline with the text.
+    // The glyph renders as a filled icon-font mark flowing inline with the text.
     // The marks' mass sits low in their em box, so a small upward nudge centers
     // them on the line instead of riding the baseline.
     return (

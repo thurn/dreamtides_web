@@ -111,6 +111,17 @@ definition-uses-rules-text = true
 term-presentation = "definition-only"
 
 [[entries]]
+id = "memory"
+category = "Resources"
+term = "Memory"
+definition = "The memory icon (⧗) marks memories stored on a card. Cards can expend those memories later."
+priority = 60
+matches-rules-text = false
+variants = []
+rules-text-forms = [ "⧗" ]
+definition-uses-rules-text = true
+
+[[entries]]
 id = "reclaim"
 category = "Keywords"
 term = "Reclaim"

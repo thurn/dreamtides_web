@@ -209,11 +209,15 @@ describe("tokenizeRulesText", () => {
 
   it("identifies the store symbol ⧗", () => {
     const result = tokenizeRulesText("Store 1⧗.");
-    expect(collectSymbols(result)).toContainEqual({
+    const memory = collectSymbols(result).find(
+      (segment) => segment.symbol === "store",
+    );
+    expect(memory).toMatchObject({
       kind: "symbol",
       symbol: "store",
       char: "⧗",
     });
+    expect(memory?.entry?.id).toBe("memory");
     expect(reconstructText(result)).toBe("Store 1⧗.");
   });
 

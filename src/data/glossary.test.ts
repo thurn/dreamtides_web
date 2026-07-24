@@ -36,6 +36,7 @@ describe("glossary", () => {
       GLOSSARY_IDS.energyCost,
       GLOSSARY_IDS.spark,
       GLOSSARY_IDS.points,
+      GLOSSARY_IDS.memory,
       GLOSSARY_IDS.exhausted,
       GLOSSARY_IDS.fast,
       GLOSSARY_IDS.interrupt,
@@ -143,6 +144,12 @@ describe("glossary", () => {
       expect(glossaryEntryDisplayTitle(entry)).toBeUndefined();
     }
     expect(GLOSSARY_INDEX["⍟"]).toBe(requireGlossaryEntry(GLOSSARY_IDS.points));
+  });
+
+  it("defines the memory symbol as a rules-aware glossary entry", () => {
+    const memory = requireGlossaryEntry(GLOSSARY_IDS.memory);
+    expect(memory.definitionUsesRulesText).toBe(true);
+    expect(GLOSSARY_INDEX["⧗"]).toBe(memory);
   });
 
   // Card-text term reveals resolve entries from the canonical glossary module.

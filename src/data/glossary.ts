@@ -72,6 +72,7 @@ export const GLOSSARY_IDS = {
   energyCost: "energy-cost",
   spark: "spark",
   points: "points",
+  memory: "memory",
   exhausted: "exhausted",
   fast: "fast",
   interrupt: "interrupt",

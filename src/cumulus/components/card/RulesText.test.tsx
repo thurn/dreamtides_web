@@ -192,28 +192,31 @@ describe("RulesText", () => {
     });
   });
 
-  // The points `⍟`, lunar `☪`, and store `⧗` glyphs each swap for their filled
-  // Boxicons mark rather than printing the literal character.
-  it("renders points ⍟, lunar ☪, and store ⧗ as filled boxicons marks", () => {
+  // The points `⍟`, lunar `☪`, and memory `⧗` glyphs each swap for their filled
+  // icon-font mark rather than printing the literal character.
+  it("renders points ⍟, lunar ☪, and memory ⧗ as filled marks", () => {
     const { container, root } = mount(
       <RulesText text="Gain 2⍟. ☪: Store 1⧗." />,
     );
 
     expect(container.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-moon")).not.toBeNull();
-    expect(container.querySelector("i.bxf.bx-hourglass")).not.toBeNull();
-    expect(
-      container.querySelector('[data-glossary-term="Exhaust Cost"]')
-        ?.textContent,
-    ).not.toContain("☪");
-    expect(
-      container.querySelector("i.bxf.bx-hourglass")?.parentElement?.textContent,
-    ).not.toContain("⧗");
+    expect(container.querySelector("i.fa-solid.fa-brain")).not.toBeNull();
+    expect(container.querySelector("i.bxf.bx-hourglass")).toBeNull();
+    const renderedRules = container.querySelector(
+      "[data-rules-text-paragraph]",
+    );
+    expect(renderedRules?.textContent).not.toContain("☪");
+    expect(renderedRules?.textContent).not.toContain("⧗");
 
     const pointsEntry = requireGlossaryEntry(GLOSSARY_IDS.points);
     expect(
       container.querySelector(`[data-glossary-term="${pointsEntry.term}"]`),
     ).toContain(container.querySelector("i.bxf.bx-star-circle"));
+    const memoryEntry = requireGlossaryEntry(GLOSSARY_IDS.memory);
+    expect(
+      container.querySelector(`[data-glossary-term="${memoryEntry.term}"]`),
+    ).toContain(container.querySelector("i.fa-solid.fa-brain"));
 
     act(() => {
       root.unmount();

@@ -18,7 +18,7 @@ Renders Dreamtides rules copy from card data — resource pips, ability carets, 
 
 ## Usage
 
-Renders authored rules-text markup: energy / spark glyphs become inline pips, `▸` / `❖` markers become caret / bolt icons, and the curated keyword set is emphasized. Numeric Foresee and granted Reclaim definitions reflect the source sentence. Pass the card's rendered-text string as `text`.
+Renders authored rules-text markup: energy / spark glyphs become inline pips, `⧗` becomes the memory brain, `▸` / `❖` markers become caret / bolt icons, and the curated keyword set is emphasized. Numeric Foresee and granted Reclaim definitions reflect the source sentence. Pass the card's rendered-text string as `text`.
 
 ```tsx
 import { RulesText } from "src/cumulus/components/card/RulesText";
