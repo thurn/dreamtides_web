@@ -108,4 +108,20 @@ describe("RichText", () => {
     expect(markup.match(/bxf bx-moon/g)).toHaveLength(2);
     expect(markup).not.toContain("☪");
   });
+
+  it("renders the points symbol inside glossary definitions as a Boxicon", () => {
+    const markup = renderToStaticMarkup(
+      <RichTextView
+        value={richText.definitions([
+          {
+            term: "Points",
+            definition: "The ⍟ symbol represents points.",
+          },
+        ])}
+      />,
+    );
+
+    expect(markup).toContain("bxf bx-star-circle");
+    expect(markup).not.toContain("⍟");
+  });
 });
