@@ -109,8 +109,14 @@ defenderCardId = "e83014d3-9d35-4e80-a1b3-9b25360ad2af"
 wait = 0
 
 [[actions]]
-id = "challenge-resolution-how-to-play"
-action = "display-how-to-play"
-trigger = "immediate"
-text = "A [yellow]blocked[/yellow] character doesn't score points (⍟).\n\nInstead, the lowest spark (✦) character participating in the challenge is dissolved (or both, when tied)."
-wait = 0
+id = "challenge-resolution-points"
+action = "display-speech-bubble"
+text = "A [yellow]blocked[/yellow] character doesn't score points (⍟)."
+wait = 3
+
+[[actions]]
+id = "challenge-resolution-dissolved"
+action = "display-speech-bubble"
+verticalOffset = 100
+text = "Instead, the lowest spark (✦) character participating in the challenge is dissolved (or both, when tied)."
+wait = 3
