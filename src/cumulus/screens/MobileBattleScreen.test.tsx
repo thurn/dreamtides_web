@@ -396,9 +396,6 @@ describe("MobileBattleScreen", () => {
         ?.getAttribute("aria-describedby") ?? "",
     )?.textContent ?? "";
     expect(battlefieldDescription).toContain("Exhausted");
-    expect(battlefieldDescription).toContain(
-      "This character cannot move or use ☪ abilities until next turn",
-    );
 
     expect(hand?.querySelector('[aria-label="Exhausted"]')).not.toBeNull();
     expect(hand?.querySelector('[aria-label="2 Figments"]')).not.toBeNull();

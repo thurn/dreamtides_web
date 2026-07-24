@@ -102,7 +102,9 @@ describe("GameCard reveal contract", () => {
     const description = document.querySelector("[data-cumulus-reveal-descriptions]")?.textContent ?? "";
     expect(description).toContain("Archive Sentry");
     expect(description).toContain("Bane, then discard another bane");
-    expect(description.match(/A penalty card forced into your deck\./g)).toHaveLength(1);
+    const baneEntry = glossary.lookupGlossaryTerm("bane");
+    if (baneEntry === undefined) throw new Error("Bane glossary fixture missing");
+    expect(description.split(baneEntry.definition).length - 1).toBe(1);
     act(() => root.unmount());
   });
 
@@ -121,7 +123,7 @@ describe("GameCard reveal contract", () => {
     )?.textContent ?? "";
     expect(description).toContain("Exhausted");
     expect(description).toContain(
-      "This character cannot move or use ☪ abilities until next turn",
+      glossary.requireGlossaryEntry(glossary.GLOSSARY_IDS.exhausted).definition,
     );
     expect(description.indexOf("Exhausted")).toBeLessThan(
       description.indexOf("Bane"),

@@ -1,9 +1,3 @@
-Full `npm test` has two stale Exhausted-description assertions:
-`src/cumulus/components/card/GameCardReveal.test.tsx` and
-`src/cumulus/screens/MobileBattleScreen.test.tsx` expect “cannot move,” while
-the rendered glossary copy says “cannot challenge.” These tests couple their
-expectations to mutable production glossary copy.
-
 `src/affiliations/affiliation-weights.test.ts` reproducibly exceeds its
 5-second timeout in “nudges transfiguration/duplication candidate selection
 toward affiliated deck cards,” including when the test file runs in isolation.
