@@ -17,6 +17,8 @@ export interface GlossaryCatalogEntry extends GlossaryEntry {
   readonly id: string;
   /** Editor grouping label. */
   readonly category: string;
+  /** Higher values place the entry earlier in a multi-term rules-text reveal. */
+  readonly priority: number;
   /** Whether card rules text recognizes this entry as an inline term. */
   readonly matchesRulesText: boolean;
   readonly variants: readonly string[];

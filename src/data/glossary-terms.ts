@@ -32,8 +32,8 @@ export type RulesTextGlossaryOwner = "card" | "dreamcaller";
  *   * Each entry appears at most once in the returned array — duplicates are
  *     deduplicated by glossary entry identity so two mentions of `bane` and
  *     `banes` collapse to one panel.
- *   * The order matches first-occurrence order in `text`, which lets the
- *     UI render definition panels in reading order.
+ *   * Entries are ordered by descending TOML priority. Equal-priority entries
+ *     retain their first-occurrence order in `text`.
  *   * Empty input or input with no recognized terms returns an empty array.
  *
  * Consumers: the journey hover stack auto-renders one
@@ -66,6 +66,17 @@ function entryForForm(form: string): GlossaryCatalogEntry | undefined {
 
 const FORESEE_COUNT_RE = /\bforesee\s+(\d+)\b/i;
 const GRANTED_RECLAIM_RE = /\b(?:gain|gains|gained)\s+reclaim\b/i;
+
+/**
+ * Orders glossary entries for a shared rules-text reveal. JavaScript's stable
+ * sort preserves source order for ties, which is the extractor's
+ * first-occurrence order.
+ */
+export function orderGlossaryEntriesByPriority(
+  entries: readonly GlossaryCatalogEntry[],
+): GlossaryCatalogEntry[] {
+  return [...entries].sort((left, right) => right.priority - left.priority);
+}
 
 /**
  * Adapt one canonical glossary entry to the sentence that references it.
@@ -133,7 +144,7 @@ export function extractGlossaryTerms(text: string): GlossaryCatalogEntry[] {
     seen.add(entry);
     ordered.push(entry);
   }
-  return ordered;
+  return orderGlossaryEntriesByPriority(ordered);
 }
 
 /**

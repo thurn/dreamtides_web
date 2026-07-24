@@ -23,6 +23,14 @@ function stringArray(value, field, index) {
   return value.map((entry) => entry.trim()).filter((entry) => entry !== "");
 }
 
+function integer(value, field, index) {
+  if (value === undefined) return 0;
+  if (!Number.isSafeInteger(value)) {
+    throw invalid(`Glossary entry ${String(index + 1)} ${field} must be an integer.`);
+  }
+  return value;
+}
+
 /** Validate and normalize parsed glossary records. */
 export function validateGlossaryEntries(input) {
   if (!Array.isArray(input)) {
@@ -47,6 +55,7 @@ export function validateGlossaryEntries(input) {
     const category = requiredString(value.category, "category", index);
     const term = requiredString(value.term, "term", index);
     const definition = requiredString(value.definition, "definition", index);
+    const priority = integer(value.priority, "priority", index);
     const variants = stringArray(value.variants, "variants", index);
     const matchesRulesText = value["matches-rules-text"] === true || value.matchesRulesText === true;
 
@@ -61,7 +70,7 @@ export function validateGlossaryEntries(input) {
       }
     }
 
-    return { id, category, term, definition, matchesRulesText, variants };
+    return { id, category, term, definition, priority, matchesRulesText, variants };
   });
 }
 
@@ -83,6 +92,7 @@ export function serializeGlossarySource(entries) {
       category: entry.category,
       term: entry.term,
       definition: entry.definition,
+      priority: entry.priority,
       "matches-rules-text": entry.matchesRulesText,
       variants: entry.variants,
     })),

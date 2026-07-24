@@ -16,8 +16,8 @@ afterEach(async () => {
 
 function fixtureEntries() {
   return [
-    { id: "spark", category: "Resources", term: "Spark", definition: "Combat power.", matchesRulesText: true, variants: [] },
-    { id: "site-draft", category: "Sites", term: "Draft", definition: "Choose cards.", matchesRulesText: false, variants: [] },
+    { id: "spark", category: "Resources", term: "Spark", definition: "Combat power.", priority: 10, matchesRulesText: true, variants: [] },
+    { id: "site-draft", category: "Sites", term: "Draft", definition: "Choose cards.", priority: 0, matchesRulesText: false, variants: [] },
   ];
 }
 
@@ -67,8 +67,22 @@ describe("glossary editor API", () => {
       id: "spark",
       term: "Spark Power",
       definition: "A character's power during a challenge.",
+      priority: 10,
       variants: ["spark"],
     });
+  });
+
+  it("rejects a non-integer priority without changing the TOML", async () => {
+    const { root, origin } = await startApi();
+    const path = join(root, "data", "tabula", "glossary.toml");
+    const before = readFileSync(path, "utf8");
+    const response = await fetch(`${origin}/api/editor/glossary/spark`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ priority: 1.5 }),
+    });
+    expect(response.status).toBe(400);
+    expect(readFileSync(path, "utf8")).toBe(before);
   });
 
   it("rejects duplicate rules-text forms without changing the TOML", async () => {

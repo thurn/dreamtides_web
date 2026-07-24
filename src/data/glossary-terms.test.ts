@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import {
   contextualizeGlossaryEntry,
   extractGlossaryTerms,
+  orderGlossaryEntriesByPriority,
 } from "./glossary-terms";
 import { GLOSSARY } from "./glossary";
 import type { GlossaryCatalogEntry } from "./glossary";
@@ -53,16 +54,16 @@ describe("extractGlossaryTerms", () => {
     expect(terms.map((entry) => entry.term)).toEqual([pluralEntry.term]);
   });
 
-  it("matches multiple distinct terms in first-occurrence order", () => {
+  it("matches multiple distinct terms in priority order", () => {
     const [t0, t1, t2] = bareTerms;
     const terms = extractGlossaryTerms(
       `${t0.term} a ${t1.term}, then ${t2.term} two cards.`,
     );
-    expect(terms.map((entry) => entry.term)).toEqual([
-      t0.term,
-      t1.term,
-      t2.term,
-    ]);
+    expect(terms.map((entry) => entry.term)).toEqual(
+      [t0, t1, t2]
+        .sort((left, right) => right.priority - left.priority)
+        .map((entry) => entry.term),
+    );
   });
 
   it("deduplicates repeated mentions of the same term", () => {
@@ -88,11 +89,11 @@ describe("extractGlossaryTerms", () => {
     const terms = extractGlossaryTerms(
       `(${t0.term}) — ${t1.term}: ${t2.term}.`,
     );
-    expect(terms.map((entry) => entry.term)).toEqual([
-      t0.term,
-      t1.term,
-      t2.term,
-    ]);
+    expect(terms.map((entry) => entry.term)).toEqual(
+      [t0, t1, t2]
+        .sort((left, right) => right.priority - left.priority)
+        .map((entry) => entry.term),
+    );
   });
 
   it("surfaces an arrow-gated term only when the arrow is present", () => {
@@ -121,17 +122,16 @@ describe("extractGlossaryTerms", () => {
     expect(terms.map((entry) => entry.term)).toEqual([arrowTermEntry.term]);
   });
 
-  it("preserves order across heterogeneous mentions", () => {
+  it("orders heterogeneous mentions by priority", () => {
     const [t0, t1, t2, t3] = bareTerms;
     const terms = extractGlossaryTerms(
       `After ${t0.term}, ${t1.term} a ${t2.term}, then ${t3.term}.`,
     );
-    expect(terms.map((entry) => entry.term)).toEqual([
-      t0.term,
-      t1.term,
-      t2.term,
-      t3.term,
-    ]);
+    expect(terms.map((entry) => entry.term)).toEqual(
+      [t0, t1, t2, t3]
+        .sort((left, right) => right.priority - left.priority)
+        .map((entry) => entry.term),
+    );
   });
 });
 
@@ -139,16 +139,32 @@ function fixture(
   id: string,
   term: string,
   definition: string,
+  priority = 0,
 ): GlossaryCatalogEntry {
   return {
     id,
     category: "Test",
     term,
     definition,
+    priority,
     matchesRulesText: true,
     variants: [],
   };
 }
+
+describe("glossary priority", () => {
+  it("orders higher-priority entries first and preserves input order for ties", () => {
+    const firstLow = fixture("first-low", "First Low", "Low.", 10);
+    const high = fixture("high", "High", "High.", 100);
+    const secondLow = fixture("second-low", "Second Low", "Low.", 10);
+
+    expect(
+      orderGlossaryEntriesByPriority([firstLow, high, secondLow]).map(
+        (entry) => entry.id,
+      ),
+    ).toEqual(["high", "first-low", "second-low"]);
+  });
+});
 
 describe("contextual glossary definitions", () => {
   it("explains foresee 1 with its singular card flow", () => {

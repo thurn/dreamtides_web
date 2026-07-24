@@ -3,6 +3,7 @@ export interface GlossarySourceEntry {
   readonly category: string;
   readonly term: string;
   readonly definition: string;
+  readonly priority: number;
   readonly matchesRulesText: boolean;
   readonly variants: readonly string[];
 }

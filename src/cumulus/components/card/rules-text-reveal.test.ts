@@ -11,6 +11,7 @@ function entry(id: string, term: string): GlossaryCatalogEntry {
     category: "Test",
     term,
     definition: `${term} definition.`,
+    priority: 0,
     matchesRulesText: false,
     variants: [],
   };

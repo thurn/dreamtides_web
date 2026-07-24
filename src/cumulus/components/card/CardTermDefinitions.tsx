@@ -4,8 +4,8 @@ import { glossaryDefinitionsCardModel } from "./rules-text-reveal";
 
 /**
  * One compact glossary card for every gameplay term that appears in a stretch of
- * rules text, in reading order with duplicates collapsed. Each term keeps its own
- * definition row inside a shared {@link InfoCard}, avoiding repeated shell,
+ * rules text, in glossary-priority order with duplicates collapsed. Each term
+ * keeps its own definition row inside a shared {@link InfoCard}, avoiding repeated shell,
  * title, and padding space when several terms appear together.
  *
  * The catalog marks this stack as incubating. Named card, Dreamsign, and

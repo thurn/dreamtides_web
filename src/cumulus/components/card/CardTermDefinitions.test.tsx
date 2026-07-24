@@ -49,7 +49,7 @@ describe("CardTermDefinitions", () => {
     });
   });
 
-  it("renders distinct glossary terms in reading order inside one InfoCard", () => {
+  it("renders distinct glossary terms in priority order inside one InfoCard", () => {
     // Skip if the sample somehow detects fewer than two terms in this build's
     // glossary — the behavior under test needs multiple terms.
     if (TWO_TERMS.terms.length < 2) {
@@ -68,7 +68,7 @@ describe("CardTermDefinitions", () => {
     expect(container.textContent).not.toContain("Rules Glossary");
     expect(stack?.children).toHaveLength(1);
 
-    // Each row starts with its term. Assert the rows retain first-occurrence
+    // Each row starts with its term. Assert the rows retain extractor priority
     // order inside the consolidated card.
     const text = container.textContent ?? "";
     const positions = TWO_TERMS.terms.map((entry) => text.indexOf(entry.term));

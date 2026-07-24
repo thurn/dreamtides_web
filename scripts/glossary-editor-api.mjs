@@ -100,6 +100,7 @@ function validatedEdit(body, id, current) {
     term: typeof body.term === "string" ? body.term : current.term,
     definition:
       typeof body.definition === "string" ? body.definition : current.definition,
+    priority: body.priority === undefined ? current.priority : body.priority,
     variants: body.variants === undefined ? current.variants : body.variants,
   };
 }

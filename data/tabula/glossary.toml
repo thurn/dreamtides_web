@@ -3,6 +3,7 @@ id = "figment"
 category = "Card Types"
 term = "Figment"
 definition = "A token representation of character created by an effect."
+priority = 60
 matches-rules-text = true
 variants = [ "figments" ]
 
@@ -11,6 +12,7 @@ id = "materialized-trigger"
 category = "Triggers & Timing"
 term = "▸Materialized"
 definition = "Triggers when this character enters play."
+priority = 5
 matches-rules-text = true
 variants = []
 
@@ -19,6 +21,7 @@ id = "dawn-trigger"
 category = "Triggers & Timing"
 term = "▸Dawn"
 definition = "Triggers at the start of your turn."
+priority = 40
 matches-rules-text = true
 variants = [ "dawn" ]
 
@@ -27,6 +30,7 @@ id = "night-trigger"
 category = "Triggers & Timing"
 term = "Night"
 definition = "Triggers at the end of your turn."
+priority = 40
 matches-rules-text = false
 variants = []
 
@@ -35,6 +39,7 @@ id = "day"
 category = "Triggers & Timing"
 term = "Day"
 definition = "The turn phase when the active player plays standard cards."
+priority = 10
 matches-rules-text = true
 variants = []
 
@@ -43,6 +48,7 @@ id = "materialize"
 category = "Triggers & Timing"
 term = "Materialize"
 definition = "Put a character into play"
+priority = 5
 matches-rules-text = true
 variants = [ "materializes" ]
 
@@ -51,6 +57,7 @@ id = "rematerialize"
 category = "Triggers & Timing"
 term = "Rematerialize"
 definition = "Trigger an in-play character's materialization again."
+priority = 75
 matches-rules-text = true
 variants = []
 
@@ -59,6 +66,7 @@ id = "dissolved-trigger"
 category = "Triggers & Timing"
 term = "▸Dissolved"
 definition = "Triggers when this character is dissolved."
+priority = 40
 matches-rules-text = true
 variants = []
 
@@ -67,6 +75,7 @@ id = "dissolve"
 category = "Triggers & Timing"
 term = "Dissolve"
 definition = "Destroy a character, sending it to the void."
+priority = 60
 matches-rules-text = true
 variants = [ "dissolves", "dissolved" ]
 
@@ -75,6 +84,7 @@ id = "banish"
 category = "Triggers & Timing"
 term = "Banish"
 definition = "Remove a card from the game."
+priority = 60
 matches-rules-text = true
 variants = [ "banished", "banishes" ]
 
@@ -83,6 +93,7 @@ id = "abandon"
 category = "Triggers & Timing"
 term = "Abandon"
 definition = "Dissolve a character you control."
+priority = 75
 matches-rules-text = true
 variants = [ "abandoned", "abandons" ]
 
@@ -91,6 +102,7 @@ id = "score"
 category = "Triggers & Timing"
 term = "Score"
 definition = "Convert a character's spark into victory points."
+priority = 60
 matches-rules-text = true
 variants = [ "scores", "scored", "scoring" ]
 
@@ -99,6 +111,7 @@ id = "reclaim"
 category = "Keywords"
 term = "Reclaim"
 definition = "You may play this card from your void, then banish it when it leaves play."
+priority = 100
 matches-rules-text = true
 variants = [ "reclaimed" ]
 
@@ -107,6 +120,7 @@ id = "foresee"
 category = "Keywords"
 term = "Foresee"
 definition = "Look at the top N cards of your deck, put any number into your void, and put the rest back on top in any order."
+priority = 95
 matches-rules-text = true
 variants = []
 
@@ -115,6 +129,7 @@ id = "discover"
 category = "Keywords"
 term = "Discover"
 definition = "Reveal three matching cards and choose one to draw."
+priority = 95
 matches-rules-text = true
 variants = []
 
@@ -123,6 +138,7 @@ id = "erode"
 category = "Keywords"
 term = "Erode"
 definition = "Put cards from the top of your deck into the void."
+priority = 95
 matches-rules-text = true
 variants = [ "eroded", "erodes" ]
 
@@ -131,6 +147,7 @@ id = "fast"
 category = "Keywords"
 term = "Fast"
 definition = "You may use this ability at the end of either player's turn."
+priority = 95
 matches-rules-text = false
 variants = []
 
@@ -139,6 +156,7 @@ id = "interrupt"
 category = "Keywords"
 term = "Interrupt"
 definition = "You may use this ability in response to an opponent card or ability, or at the end of either player's turn."
+priority = 95
 matches-rules-text = false
 variants = []
 
@@ -147,6 +165,7 @@ id = "exhaust-cost"
 category = "Keywords"
 term = "Exhaust Cost"
 definition = "You may exhaust (☪) this character to activate this ability instead of challenging this turn."
+priority = 95
 matches-rules-text = false
 variants = []
 
@@ -155,6 +174,7 @@ id = "awakened"
 category = "Keywords"
 term = "Awakened"
 definition = "Can challenge and activate ☪ abilities on the same turn in which it is materialized."
+priority = 90
 matches-rules-text = true
 variants = [ "awaken", "awakens" ]
 
@@ -163,6 +183,7 @@ id = "exhausted"
 category = "Battle Status"
 term = "Exhausted"
 definition = "This character cannot move or use ☪ abilities until next turn"
+priority = 30
 matches-rules-text = true
 variants = []
 
@@ -171,6 +192,7 @@ id = "unstoppable"
 category = "Keywords"
 term = "Unstoppable"
 definition = "Scores points equal to its ✦ when dissolving a defender during a challenge."
+priority = 90
 matches-rules-text = true
 variants = []
 
@@ -179,6 +201,7 @@ id = "preeminence"
 category = "Keywords"
 term = "Preeminence"
 definition = "Wins ✦ ties during challenges."
+priority = 90
 matches-rules-text = true
 variants = []
 
@@ -187,6 +210,7 @@ id = "veil"
 category = "Keywords"
 term = "Veil"
 definition = "If this character would be dissolved by an effect the opponent controls, instead it loses Veil."
+priority = 90
 matches-rules-text = true
 variants = [ "veiled" ]
 
@@ -195,6 +219,7 @@ id = "vengeful"
 category = "Keywords"
 term = "Vengeful"
 definition = "When this character loses a challenge, it dissolves the opposing character."
+priority = 90
 matches-rules-text = true
 variants = []
 
@@ -203,6 +228,7 @@ id = "support"
 category = "Keywords"
 term = "Support"
 definition = "A back-rank character supports the up-to-two front-rank allies ahead of it; non-figment characters only."
+priority = 70
 matches-rules-text = true
 variants = [ "supports", "supporting" ]
 
@@ -211,6 +237,7 @@ id = "supported"
 category = "Keywords"
 term = "Supported"
 definition = "A front-rank character benefiting from the allies behind it."
+priority = 70
 matches-rules-text = true
 variants = []
 
@@ -219,6 +246,7 @@ id = "challenger"
 category = "Keywords"
 term = "Challenger"
 definition = "A front-rank ally during your Night phase."
+priority = 70
 matches-rules-text = true
 variants = [ "challengers" ]
 
@@ -227,6 +255,7 @@ id = "unpaired"
 category = "Keywords"
 term = "Unpaired"
 definition = "A challenger with no defender opposite it."
+priority = 70
 matches-rules-text = true
 variants = []
 
@@ -235,6 +264,7 @@ id = "prevent"
 category = "Keywords"
 term = "Prevent"
 definition = "Counter a card on the stack and send it to the void."
+priority = 95
 matches-rules-text = true
 variants = [ "prevented" ]
 
@@ -243,6 +273,7 @@ id = "offering"
 category = "Keywords"
 term = "Offering"
 definition = "You may play this card for 0● by banishing a card from your hand. If you do, banish this card at end of turn."
+priority = 95
 matches-rules-text = true
 variants = []
 
@@ -251,6 +282,7 @@ id = "phasing"
 category = "Keywords"
 term = "Phasing"
 definition = "To play this character, return an ally to hand. Materialize this character in that ally's position."
+priority = 95
 matches-rules-text = true
 variants = []
 
@@ -259,6 +291,7 @@ id = "ephemeral"
 category = "Keywords"
 term = "Ephemeral"
 definition = "If an ephemeral card is in your hand at end of turn, banish it."
+priority = 95
 matches-rules-text = true
 variants = []
 
@@ -267,6 +300,7 @@ id = "transfigure"
 category = "Verbs"
 term = "Transfigure"
 definition = "Permanently upgrade a card in your deck."
+priority = 80
 matches-rules-text = true
 variants = [ "transfigured", "transfigures" ]
 
@@ -275,6 +309,7 @@ id = "purge"
 category = "Verbs"
 term = "Purge"
 definition = "Permanently remove a card from your deck for the run."
+priority = 80
 matches-rules-text = true
 variants = [ "purged", "purges" ]
 
@@ -283,6 +318,7 @@ id = "duplicate"
 category = "Verbs"
 term = "Duplicate"
 definition = "Add an exact copy of a card to your deck."
+priority = 80
 matches-rules-text = true
 variants = [ "duplicated", "duplicates" ]
 
@@ -291,6 +327,7 @@ id = "bane"
 category = "Quest Terms"
 term = "Bane"
 definition = "A penalty card forced into your deck."
+priority = 65
 matches-rules-text = true
 variants = [ "banes" ]
 
@@ -299,6 +336,7 @@ id = "essence"
 category = "Quest Terms"
 term = "Essence"
 definition = "Currency you gain and spend over the course of a run."
+priority = 10
 matches-rules-text = true
 variants = []
 
@@ -307,6 +345,7 @@ id = "void"
 category = "Quest Terms"
 term = "Void"
 definition = "Your discard pile"
+priority = 10
 matches-rules-text = true
 variants = []
 
@@ -315,6 +354,7 @@ id = "enhanced"
 category = "Quest Terms"
 term = "Enhanced"
 definition = "An improved site that offers better or additional rewards."
+priority = 65
 matches-rules-text = true
 variants = []
 
@@ -323,6 +363,7 @@ id = "transfiguration"
 category = "Transfigurations"
 term = "Transfiguration"
 definition = "A permanent modification to a card."
+priority = 85
 matches-rules-text = true
 variants = [ "transfigurations" ]
 
@@ -331,6 +372,7 @@ id = "empowered"
 category = "Transfigurations"
 term = "Empowered"
 definition = "Transfiguration: reduces this card's energy cost by 50%, rounded to the nearest whole number."
+priority = 85
 matches-rules-text = true
 variants = []
 
@@ -339,6 +381,7 @@ id = "amplified"
 category = "Transfigurations"
 term = "Amplified"
 definition = "Transfiguration: increases or decreases a number in this card's rules text by 1."
+priority = 85
 matches-rules-text = true
 variants = []
 
@@ -347,6 +390,7 @@ id = "kindled"
 category = "Transfigurations"
 term = "Kindled"
 definition = "Transfiguration: doubles a character's base spark, or sets it to 1 if zero."
+priority = 85
 matches-rules-text = true
 variants = []
 
@@ -355,6 +399,7 @@ id = "resonant"
 category = "Transfigurations"
 term = "Resonant"
 definition = "Transfiguration: increases the frequency of named triggers on this card."
+priority = 85
 matches-rules-text = true
 variants = []
 
@@ -363,6 +408,7 @@ id = "inspired"
 category = "Transfigurations"
 term = "Inspired"
 definition = "Transfiguration: appends \"draw a card\" to this event card's text."
+priority = 85
 matches-rules-text = true
 variants = []
 
@@ -371,6 +417,7 @@ id = "enduring"
 category = "Transfigurations"
 term = "Enduring"
 definition = "Transfiguration: adds \"reclaim\" to this event card's text."
+priority = 85
 matches-rules-text = true
 variants = []
 
@@ -379,6 +426,7 @@ id = "attuned"
 category = "Transfigurations"
 term = "Attuned"
 definition = "Transfiguration: reduces an activated ability's energy cost by 1."
+priority = 85
 matches-rules-text = true
 variants = []
 
@@ -387,6 +435,7 @@ id = "perfected"
 category = "Transfigurations"
 term = "Perfected"
 definition = "Transfiguration: applies every other eligible transfiguration to a card."
+priority = 85
 matches-rules-text = true
 variants = []
 
@@ -403,6 +452,7 @@ id = "spark"
 category = "Resources"
 term = "Spark"
 definition = "A character's combat power; higher spark wins a challenge."
+priority = 10
 matches-rules-text = true
 variants = []
 
