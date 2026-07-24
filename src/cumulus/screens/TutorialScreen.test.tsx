@@ -271,17 +271,19 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
               />
             )}
           </div>
-          {props.view.dreamwell === null ||
-          props.view.dreamwell === undefined ? null : (
-            <div
-              data-battle-dreamwell-layer=""
-              data-battle-dreamwell-side={props.view.dreamwell.side}
-            >
+          <div data-battle-mobile-row="enemy-zones">
+            {props.view.dreamwell === null ||
+            props.view.dreamwell === undefined ? null : (
               <div
-                data-dreamwell-card={props.view.dreamwell.model.cardId}
-              />
-            </div>
-          )}
+                data-battle-dreamwell-layer=""
+                data-battle-dreamwell-side={props.view.dreamwell.side}
+              >
+                <div
+                  data-dreamwell-card={props.view.dreamwell.model.cardId}
+                />
+              </div>
+            )}
+          </div>
           <div data-testid="player-battle-status">
             {playerStatus?.dreamcaller === undefined ||
             playerStatus.dreamcaller === null ? (
@@ -1699,6 +1701,13 @@ describe("TutorialScreen", () => {
         "[data-battle-dreamwell-layer]",
       )?.dataset.tutorialDreamwellEmergence,
     ).toBe("emerging");
+    const dreamwellSideZone = container.querySelector<HTMLElement>(
+      '[data-battle-mobile-row="enemy-zones"]',
+    );
+    expect(
+      dreamwellSideZone?.dataset.tutorialDreamwellEmergenceLayer,
+    ).toBe("");
+    expect(dreamwellSideZone?.style.zIndex).toBe("5");
     expect(screenMocks.props?.view.dreamwell?.model.cardId).toBe(
       TUTORIAL_DREAMWELL_CARD.cardId,
     );
@@ -1759,6 +1768,10 @@ describe("TutorialScreen", () => {
       "translateY(-0.08em)",
     );
     expect(screenMocks.props?.view.dreamwell).toBeNull();
+    expect(
+      dreamwellSideZone?.dataset.tutorialDreamwellEmergenceLayer,
+    ).toBeUndefined();
+    expect(dreamwellSideZone?.style.zIndex).toBe("");
     expect(onHowToPlayPresented).toHaveBeenCalledWith(
       "event:dreamwell-pair",
       "dreamwell-how-to-play",

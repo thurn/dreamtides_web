@@ -217,6 +217,9 @@ const TUTORIAL_DREAMWELL_EMERGE_SECONDS = motionTimeSeconds(
 // The Dreamwell card begins tucked behind its status display before traveling
 // to full physical size.
 const TUTORIAL_DREAMWELL_EMERGE_START_SCALE = 0.72;
+// Lift the Dreamwell's transformed side-zone stacking context above battlefield
+// ranks during emergence while keeping it beneath battle controls and dialogs.
+const TUTORIAL_DREAMWELL_EMERGENCE_LAYER = 5;
 const TUTORIAL_EDITOR_DOCK_MIN_WIDTH = 1280;
 const TUTORIAL_REVEAL_CARD_DESKTOP_WIDTH = 240;
 const TUTORIAL_REVEAL_CARD_MOBILE_WIDTH_RATIO = 0.45;
@@ -537,6 +540,16 @@ function TutorialDreamwellEmergence({
       "[data-battle-dreamwell-layer]",
     );
     if (layer === null) return undefined;
+    const sideZoneRow = layer.closest<HTMLElement>(
+      "[data-battle-mobile-row]",
+    );
+    const previousSideZoneZIndex = sideZoneRow?.style.zIndex ?? "";
+    if (sideZoneRow !== null) {
+      sideZoneRow.dataset.tutorialDreamwellEmergenceLayer = "";
+      sideZoneRow.style.zIndex = String(
+        TUTORIAL_DREAMWELL_EMERGENCE_LAYER,
+      );
+    }
     layer.dataset.tutorialDreamwellEmergence = "emerging";
 
     let timeout: number | null = null;
@@ -577,6 +590,10 @@ function TutorialDreamwellEmergence({
       if (timeout !== null) window.clearTimeout(timeout);
       animation?.cancel();
       delete layer.dataset.tutorialDreamwellEmergence;
+      if (sideZoneRow !== null) {
+        delete sideZoneRow.dataset.tutorialDreamwellEmergenceLayer;
+        sideZoneRow.style.zIndex = previousSideZoneZIndex;
+      }
     };
   }, [actionKey, onComplete, reduceMotion, screen]);
 
