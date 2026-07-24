@@ -113,19 +113,13 @@
   font: var(--t-caption);
 }
 
-.glossary-editor-save-row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-.glossary-editor-save-row p {
+.glossary-editor-save-status p {
   margin: 0;
   color: var(--text-on-glass-muted);
   font: var(--t-caption);
 }
 
-.glossary-editor-save-row p[data-save-state="error"] {
+.glossary-editor-save-status p[data-save-state="error"] {
   color: var(--danger);
 }
 
@@ -252,8 +246,4 @@
     flex-direction: column;
   }
 
-  .glossary-editor-save-row {
-    align-items: start;
-    flex-direction: column;
-  }
 }

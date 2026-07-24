@@ -67,7 +67,7 @@ afterEach(() => {
 });
 
 describe("GlossaryEditorApp", () => {
-  it("edits the rendered Info Card title and body in place, then persists by stable id", async () => {
+  it("persists an edited Info Card field by stable id when the field blurs", async () => {
     const loadEntries = vi.fn().mockResolvedValue(ENTRIES);
     const saveEntry = vi.fn().mockImplementation(
       (
@@ -110,39 +110,66 @@ describe("GlossaryEditorApp", () => {
     expect(textarea).not.toBeNull();
     act(() => setTextareaValue(textarea!, "Power used during a challenge."));
 
-    const title = container.querySelector<HTMLElement>(
-      "[data-editor-field='title']",
-    );
-    expect(title).not.toBeNull();
-    act(() => {
-      title?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-    });
-
-    const titleInput = container.querySelector<HTMLInputElement>(
-      "[data-editor-input-field='title']",
-    );
-    expect(titleInput).not.toBeNull();
-    act(() => setInputValue(titleInput!, "Challenge Spark"));
-
     expect(
       container.querySelector("[data-testid='glossary-preview']")?.textContent,
     ).toContain("Power used during a challenge.");
 
-    const saveButton = container.querySelector<HTMLButtonElement>(
-      "[data-testid='glossary-save']",
-    );
     await act(async () => {
-      saveButton?.click();
+      textarea?.dispatchEvent(new FocusEvent("focusout", { bubbles: true }));
       await Promise.resolve();
     });
 
     expect(saveEntry).toHaveBeenCalledWith({
       id: "spark",
-      term: "Challenge Spark",
+      term: "Spark",
       definition: "Power used during a challenge.",
       variants: [],
     });
     expect(container.textContent).toContain("Saved to glossary.toml");
+    expect(container.textContent).not.toContain("Save Definition");
+
+    act(() => root.unmount());
+  });
+
+  it("saves additional rules-text forms when their field blurs", async () => {
+    const loadEntries = vi.fn().mockResolvedValue(ENTRIES);
+    const saveEntry = vi.fn().mockImplementation(
+      (
+        edit: Pick<
+          GlossaryCatalogEntry,
+          "id" | "term" | "definition" | "variants"
+        >,
+      ) => Promise.resolve({ ...ENTRIES[0], ...edit }),
+    );
+    const { container, root } = mount();
+
+    await act(async () => {
+      root.render(
+        <GlossaryEditorApp
+          loadEntries={loadEntries}
+          saveEntry={saveEntry}
+        />,
+      );
+      await Promise.resolve();
+    });
+
+    const variantsInput = container.querySelector<HTMLInputElement>(
+      "[data-testid='glossary-variants-input']",
+    );
+    expect(variantsInput).not.toBeNull();
+    act(() => setInputValue(variantsInput!, "Sparks, Sparked"));
+
+    await act(async () => {
+      variantsInput?.dispatchEvent(new FocusEvent("focusout", { bubbles: true }));
+      await Promise.resolve();
+    });
+
+    expect(saveEntry).toHaveBeenCalledWith({
+      id: "spark",
+      term: "Spark",
+      definition: "A character's combat power.",
+      variants: ["Sparks", "Sparked"],
+    });
 
     act(() => root.unmount());
   });

@@ -10,3 +10,12 @@ battle therefore has no player character for subsequent positioning actions.
 
 Cumulus Rules Text demo: At a 390px viewport, the Usage code example is clipped
 horizontally instead of wrapping or exposing its full text.
+
+Glossary Editor: Saving one entry serializes the complete glossary and rewrites
+unrelated source formatting, including triple-quoted regex patterns and omitted
+zero priorities. A one-field edit therefore creates unrelated TOML churn.
+
+Rules Text: The core test suite has two existing failures around the ☪ glossary
+symbol. `card-text.test.ts` expects the lunar symbol token without its glossary
+entry, while `RulesText.test.tsx` expects rendered definition copy not to retain
+the ☪ character even though the current Exhaust Cost definition includes it.

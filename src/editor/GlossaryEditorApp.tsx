@@ -31,6 +31,7 @@ type SaveState =
   | { readonly kind: "error"; readonly message: string };
 
 type InlineGlossaryField = "title" | "description";
+type GlossaryDraftField = InlineGlossaryField | "variants";
 
 function messageFor(error: unknown): string {
   return error instanceof Error ? error.message : "The glossary request failed.";
@@ -70,6 +71,8 @@ export default function GlossaryEditorApp({
   const hydratedEntryId = useRef<string | null>(null);
   const editingStartValue = useRef("");
   const interactiveCardRef = useRef<HTMLDivElement | null>(null);
+  const saveQueueRef = useRef<Promise<void>>(Promise.resolve());
+  const latestSaveRevision = useRef(0);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -102,6 +105,7 @@ export default function GlossaryEditorApp({
     setDefinitionDraft(selectedEntry.definition);
     setVariantsDraft(selectedEntry.variants.join(", "));
     setSaveState({ kind: "idle" });
+    latestSaveRevision.current += 1;
     setEditingField(null);
     setEditingError(null);
   }, [selectedEntry]);
@@ -130,19 +134,80 @@ export default function GlossaryEditorApp({
   }, [filteredEntries]);
 
   const variants = variantsFromDraft(variantsDraft);
-  const termError = termDraft.trim() === "" ? "Info Card title cannot be blank." : undefined;
-  const definitionError = definitionDraft.trim() === "" ? "Description cannot be blank." : undefined;
   const dirty =
     selectedEntry !== null &&
     (termDraft.trim() !== selectedEntry.term ||
       definitionDraft.trim() !== selectedEntry.definition ||
       !sameStrings(variants, selectedEntry.variants));
-  const canSave =
-    selectedEntry !== null &&
-    dirty &&
-    termError === undefined &&
-    definitionError === undefined &&
-    saveState.kind !== "saving";
+
+  const persistDraft = (
+    changedField: GlossaryDraftField,
+    changedValue: string,
+  ): void => {
+    if (selectedEntry === null || loadState.kind !== "loaded") return;
+
+    const nextTerm =
+      changedField === "title" ? changedValue.trim() : termDraft.trim();
+    const nextDefinition =
+      changedField === "description"
+        ? changedValue.trim()
+        : definitionDraft.trim();
+    const nextVariants =
+      changedField === "variants"
+        ? variantsFromDraft(changedValue)
+        : variants;
+
+    if (nextTerm === "" || nextDefinition === "") return;
+    if (
+      nextTerm === selectedEntry.term &&
+      nextDefinition === selectedEntry.definition &&
+      sameStrings(nextVariants, selectedEntry.variants)
+    ) {
+      return;
+    }
+
+    const submitted = {
+      id: selectedEntry.id,
+      term: nextTerm,
+      definition: nextDefinition,
+      variants: nextVariants,
+    };
+    const revision = latestSaveRevision.current + 1;
+    latestSaveRevision.current = revision;
+    setSaveState({ kind: "saving" });
+
+    saveQueueRef.current = saveQueueRef.current.then(async () => {
+      try {
+        const entry = await saveEntry(submitted);
+        setLoadState((current) =>
+          current.kind === "loaded"
+            ? {
+                kind: "loaded",
+                entries: current.entries.map((candidate) =>
+                  candidate.id === entry.id ? entry : candidate,
+                ),
+              }
+            : current,
+        );
+        if (latestSaveRevision.current === revision) {
+          setSaveState({ kind: "saved" });
+        }
+        logEvent("glossary_editor_entry_saved", {
+          glossaryId: entry.id,
+          matchesRulesText: entry.matchesRulesText,
+        });
+      } catch (error: unknown) {
+        const message = messageFor(error);
+        if (latestSaveRevision.current === revision) {
+          setSaveState({ kind: "error", message });
+        }
+        logEvent("glossary_editor_entry_save_failed", {
+          glossaryId: submitted.id,
+          message,
+        });
+      }
+    });
+  };
 
   const setInlineDraft = (
     field: InlineGlossaryField,
@@ -188,6 +253,7 @@ export default function GlossaryEditorApp({
     }
     setEditingField(null);
     setEditingError(null);
+    persistDraft(field, String(value));
   };
 
   const blurInlineEdit = (
@@ -199,6 +265,7 @@ export default function GlossaryEditorApp({
     }
     setEditingField(null);
     setEditingError(null);
+    persistDraft(field, String(value));
   };
 
   const cancelInlineEdit = (field: InlineGlossaryField): void => {
@@ -223,48 +290,6 @@ export default function GlossaryEditorApp({
           message: editingError,
         }
       : null;
-
-  const commit = (): void => {
-    if (!canSave || selectedEntry === null || loadState.kind !== "loaded") return;
-    const submitted = {
-      id: selectedEntry.id,
-      term: termDraft.trim(),
-      definition: definitionDraft.trim(),
-      variants,
-    };
-    setSaveState({ kind: "saving" });
-    void saveEntry(submitted)
-      .then((entry) => {
-        setTermDraft(entry.term);
-        setDefinitionDraft(entry.definition);
-        setVariantsDraft(entry.variants.join(", "));
-        setLoadState((current) =>
-          current.kind === "loaded"
-            ? {
-                kind: "loaded",
-                entries: current.entries.map((candidate) =>
-                  candidate.id === entry.id ? entry : candidate,
-                ),
-              }
-            : current,
-        );
-        setSaveState({ kind: "saved" });
-        setEditingField(null);
-        setEditingError(null);
-        logEvent("glossary_editor_entry_saved", {
-          glossaryId: entry.id,
-          matchesRulesText: entry.matchesRulesText,
-        });
-      })
-      .catch((error: unknown) => {
-        const message = messageFor(error);
-        setSaveState({ kind: "error", message });
-        logEvent("glossary_editor_entry_save_failed", {
-          glossaryId: selectedEntry.id,
-          message,
-        });
-      });
-  };
 
   return (
     <main className="cumulus glossary-editor-shell" data-testid="glossary-editor">
@@ -444,41 +469,35 @@ export default function GlossaryEditorApp({
                       />
                     ) : null}
                     {glossaryDefinitionUsesRulesText(selectedEntry) ? (
-                      <TextField
-                        label="Additional Rules-Text Forms"
-                        value={variantsDraft}
-                        onChange={(value) => {
-                          setVariantsDraft(value);
-                          setSaveState({ kind: "idle" });
-                        }}
-                        supportingText="Comma-separated plurals, tenses, or trigger forms."
-                        testId="glossary-variants-input"
-                      />
+                      <div
+                        onBlur={() => persistDraft("variants", variantsDraft)}
+                      >
+                        <TextField
+                          label="Additional Rules-Text Forms"
+                          value={variantsDraft}
+                          onChange={(value) => {
+                            setVariantsDraft(value);
+                            setSaveState({ kind: "idle" });
+                          }}
+                          supportingText="Comma-separated plurals, tenses, or trigger forms."
+                          testId="glossary-variants-input"
+                        />
+                      </div>
                     ) : (
                       <p className="glossary-editor-entry-kind">
                         This explanation appears as an Info Card and is not matched in rules text.
                       </p>
                     )}
-                    <div className="glossary-editor-save-row">
-                      <GlassButton
-                        label={saveState.kind === "saving" ? "Saving…" : "Save Definition"}
-                        widthReservations={[
-                          { label: "Save Definition", essenceCost: null },
-                          { label: "Saving…", essenceCost: null },
-                        ]}
-                        variant="accent"
-                        placement="onGlass"
-                        disabled={!canSave}
-                        onPress={commit}
-                        testId="glossary-save"
-                      />
+                    <div className="glossary-editor-save-status">
                       <p role="status" data-save-state={saveState.kind}>
-                        {saveState.kind === "saved"
+                        {saveState.kind === "saving"
+                          ? "Saving to glossary.toml…"
+                          : saveState.kind === "saved"
                           ? "Saved to glossary.toml"
                           : saveState.kind === "error"
                             ? saveState.message
                             : dirty
-                              ? "Unsaved changes"
+                              ? "Changes save when the field loses focus"
                               : "Up to date"}
                       </p>
                     </div>
