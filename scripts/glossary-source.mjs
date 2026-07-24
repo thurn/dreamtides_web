@@ -176,11 +176,13 @@ export function validateGlossaryEntries(input) {
     const termPresentation =
       termPresentationSource === "symbol-only"
         ? "symbolOnly"
+        : termPresentationSource === "definition-only"
+          ? "definitionOnly"
         : optionalEnum(
             termPresentationSource,
             "term-presentation",
             index,
-            ["symbolOnly"],
+            ["symbolOnly", "definitionOnly"],
           );
 
     const matchedEntryForms = rulesTextForms ??
@@ -251,7 +253,9 @@ export function serializeGlossarySource(entries) {
             "term-presentation":
               entry.termPresentation === "symbolOnly"
                 ? "symbol-only"
-                : entry.termPresentation,
+                : entry.termPresentation === "definitionOnly"
+                  ? "definition-only"
+                  : entry.termPresentation,
           }),
       ...(entry.contexts.length === 0
         ? {}

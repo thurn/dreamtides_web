@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/glossary-definition-card
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-A renderable keyword-definition tile for normal document flow: one glossary entry in an InfoCard text card whose headline is the keyword and whose body is the keyword's rules text. The signature-deck inspector uses it directly; multi-term rules-text surfaces use CardTermDefinitions and the shared consolidated glossary-card model. It re-establishes its own `.cumulus` token scope for portalled surfaces.
+A renderable keyword-definition tile for normal document flow: one glossary entry in an InfoCard text card whose body is the keyword's rules text. The glossary entry supplies the headline by default and may select definition-only presentation for a complete explanatory sentence. The signature-deck inspector uses it directly; multi-term rules-text surfaces use CardTermDefinitions and the shared consolidated glossary-card model. It re-establishes its own `.cumulus` token scope for portalled surfaces.
 
 ## Props
 
@@ -23,12 +23,13 @@ A renderable keyword-definition tile for normal document flow: one glossary entr
 | `term` | `string` | no | Canonical heading displayed on the Info Card. |
 | `definition` | `string` | no | Player-facing explanatory copy displayed on the Info Card. |
 | `variants` | `readonly string[]` | yes | Extra rules-text word forms beyond the canonical term. |
+| `termPresentation` | `"symbolOnly" \| "definitionOnly"` | yes | Optional treatment for the entry's label in definition surfaces. |
 
 ## Usage
 
 ### One definition beside a card
 
-Render a single keyword's definition tile next to the card that references it, so the player reads the keyword without an inline tooltip.
+Render a single keyword's definition tile next to the card that references it. Entries with `termPresentation: "definitionOnly"` omit the headline and rely on their complete explanatory sentence.
 
 ```tsx
 import { GlossaryDefinitionCard } from "src/cumulus/components/card/GlossaryDefinitionCard";

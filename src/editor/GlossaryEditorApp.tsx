@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   glossaryDefinitionUsesRulesText,
+  glossaryEntryDisplayTitle,
   type GlossaryCatalogEntry,
 } from "../data/glossary";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
@@ -353,29 +354,51 @@ export default function GlossaryEditorApp({
                 <div ref={interactiveCardRef} className="glossary-editor-interactive-card">
                   <InfoCard
                     variant="text"
-                    title={termDraft.trim() === "" ? "Untitled Term" : termDraft}
+                    title={
+                      selectedEntry.termPresentation === "definitionOnly"
+                        ? undefined
+                        : glossaryEntryDisplayTitle({
+                            ...selectedEntry,
+                            term:
+                              termDraft.trim() === ""
+                                ? "Untitled Term"
+                                : termDraft,
+                          })
+                    }
                     body={
                       glossaryDefinitionUsesRulesText(selectedEntry)
                         ? richText.rules(definitionDraft)
                         : richText.plain(definitionDraft)
                     }
                     slots={{
-                      title: (_context, defaultNode) => (
-                        <EditableField
-                          field="title"
-                          value={termDraft}
-                          activation="click"
-                          saveEntry={inlineEntryFor("title", termDraft)}
-                          cardAnchorRef={interactiveCardRef}
-                          onBeginEdit={(value) => beginInlineEdit("title", value)}
-                          onDraftChange={(value) => setInlineDraft("title", value)}
-                          onCancel={() => cancelInlineEdit("title")}
-                          onSave={(value) => finishInlineEdit("title", value)}
-                          onCommit={(value) => blurInlineEdit("title", value)}
-                        >
-                          {defaultNode}
-                        </EditableField>
-                      ),
+                      ...(selectedEntry.termPresentation === "definitionOnly"
+                        ? {}
+                        : {
+                            title: (_context, defaultNode) => (
+                              <EditableField
+                                field="title"
+                                value={termDraft}
+                                activation="click"
+                                saveEntry={inlineEntryFor("title", termDraft)}
+                                cardAnchorRef={interactiveCardRef}
+                                onBeginEdit={(value) =>
+                                  beginInlineEdit("title", value)
+                                }
+                                onDraftChange={(value) =>
+                                  setInlineDraft("title", value)
+                                }
+                                onCancel={() => cancelInlineEdit("title")}
+                                onSave={(value) =>
+                                  finishInlineEdit("title", value)
+                                }
+                                onCommit={(value) =>
+                                  blurInlineEdit("title", value)
+                                }
+                              >
+                                {defaultNode}
+                              </EditableField>
+                            ),
+                          }),
                       body: (_context, defaultNode) => (
                         <EditableField
                           field="description"
@@ -408,6 +431,18 @@ export default function GlossaryEditorApp({
                   testId="glossary-editor-details"
                 >
                   <div className="glossary-editor-details-body">
+                    {selectedEntry.termPresentation === "definitionOnly" ? (
+                      <TextField
+                        label="Catalog Term"
+                        value={termDraft}
+                        onChange={(value) => {
+                          setTermDraft(value);
+                          setSaveState({ kind: "idle" });
+                        }}
+                        supportingText="Used for matching and catalog search; hidden from the Info Card."
+                        testId="glossary-term-input"
+                      />
+                    ) : null}
                     {glossaryDefinitionUsesRulesText(selectedEntry) ? (
                       <TextField
                         label="Additional Rules-Text Forms"

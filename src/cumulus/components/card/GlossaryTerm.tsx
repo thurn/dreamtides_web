@@ -1,4 +1,7 @@
-import type { GlossaryEntry } from "../../../data/glossary";
+import {
+  glossaryEntryDisplayTitle,
+  type GlossaryEntry,
+} from "../../../data/glossary";
 import { useRevealSource } from "../../internal/reveal/context";
 import { Pressable } from "../../primitives/Pressable";
 import { revealEntityId } from "../../internal/reveal/identity";
@@ -32,7 +35,7 @@ export function GlossaryTerm({
         kind: "infoCard",
         card: {
           variant: "text",
-          title: entry.term,
+          title: glossaryEntryDisplayTitle(entry),
           body: { kind: "rules", text: entry.definition },
         },
       },

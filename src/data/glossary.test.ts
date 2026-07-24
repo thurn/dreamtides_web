@@ -6,6 +6,7 @@ import {
   GLOSSARY_IDS,
   GLOSSARY_INDEX,
   glossaryDefinitionUsesRulesText,
+  glossaryEntryDisplayTitle,
   glossaryRulesTextForms,
   hasGlossaryTerm,
   lookupGlossaryTerm,
@@ -125,6 +126,35 @@ describe("glossary", () => {
         matchesRulesText: false,
       }),
     ).toBe(false);
+  });
+
+  it("loads symbol explanations as definition-only copy", () => {
+    const expectedDefinitions = new Map([
+      [
+        "exhaust-cost",
+        "You may exhaust (☪) this character to activate an ability instead of challenging this turn.",
+      ],
+      [
+        "interrupt",
+        "You may use an interrupt (❖❖) ability in response to an opponent card or ability, or at the end of either player's turn.",
+      ],
+      [
+        "fast",
+        "You may use a fast (❖) ability at the end of either player's turn.",
+      ],
+      [
+        "points",
+        "Characters score points (⍟) when they challenge and are not blocked.",
+      ],
+    ]);
+
+    for (const [id, definition] of expectedDefinitions) {
+      const entry = requireGlossaryEntry(id);
+      expect(entry.definition).toBe(definition);
+      expect(entry.termPresentation).toBe("definitionOnly");
+      expect(glossaryEntryDisplayTitle(entry)).toBeUndefined();
+    }
+    expect(GLOSSARY_INDEX["⍟"]).toBe(requireGlossaryEntry("points"));
   });
 
   // Card-text term reveals resolve entries from the canonical glossary module.

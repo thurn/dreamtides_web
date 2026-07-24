@@ -56,7 +56,7 @@ export const cardTermDefinitionsDemo: CumulusComponent = {
   usage: [
     {
       label: "Definitions beside a card",
-      note: "Pass a card's rules text and the side the panel sits on; one compact, title-free card renders every referenced keyword and definition in glossary-priority order as a bold white term, colon, and white definition. Tight leading groups wrapped copy while a larger gap separates definitions; cards with no terms render nothing.",
+      note: "Pass a card's rules text and the side the panel sits on; one compact, title-free card renders every referenced definition in glossary-priority order. Rows use a bold white term and colon by default, while glossary entries authored as definition-only render their complete sentence without either. Tight leading groups wrapped copy while a larger gap separates definitions; cards with no terms render nothing.",
       code: `import { CardTermDefinitions } from "src/cumulus/components/card/CardTermDefinitions";
 
 <CardTermDefinitions text={card.rulesText} side="right" />`,

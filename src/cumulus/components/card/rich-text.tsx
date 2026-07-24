@@ -24,8 +24,8 @@ export interface RichTextDefinition {
   readonly definition: string;
   /** Optional rules symbol rendered directly before the glossary term. */
   readonly symbol?: RichTextDefinitionSymbol;
-  /** Whether the visible row label uses the term or its rules symbol alone. */
-  readonly termPresentation?: "text" | "symbolOnly";
+  /** Whether the row uses its term, its rules symbol, or definition copy alone. */
+  readonly termPresentation?: "text" | "symbolOnly" | "definitionOnly";
 }
 
 /**
@@ -41,7 +41,8 @@ export interface RichTextDefinition {
  *    "Locked" / "Visited" status shown under a site blurb.
  *  - `stack` — several parts laid out vertically as separate lines.
  *  - `definitions` — a compact, monochrome semantic definition list whose
- *    labels and descriptions share one line whenever space permits.
+ *    labels and descriptions share one line whenever space permits; complete
+ *    authored sentences may omit the label and colon.
  */
 export type RichText =
   | { readonly kind: "plain"; readonly text: string }
@@ -206,29 +207,37 @@ export function renderRichText(
                   style={GLOSSARY_DEFINITION_DIVIDER_STYLE}
                 />
               )}
-              <dt
-                style={{
-                  display: "inline",
-                  fontWeight: 700,
-                }}
-              >
-                {entry.symbol === undefined ? null : (
-                  <DefinitionSymbol
-                    symbol={entry.symbol}
-                    title={
-                      entry.termPresentation === "symbolOnly"
-                        ? entry.term
-                        : undefined
-                    }
-                    trailingGap={entry.termPresentation !== "symbolOnly"}
-                  />
-                )}
-                {entry.termPresentation === "symbolOnly" ? null : entry.term}
-              </dt>
-              <dd style={{ display: "inline", margin: 0 }}>
-                {": "}
-                {renderDefinitionText(entry.definition)}
-              </dd>
+              {entry.termPresentation === "definitionOnly" ? (
+                <dd style={{ display: "inline", margin: 0 }}>
+                  {renderDefinitionText(entry.definition)}
+                </dd>
+              ) : (
+                <>
+                  <dt
+                    style={{
+                      display: "inline",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {entry.symbol === undefined ? null : (
+                      <DefinitionSymbol
+                        symbol={entry.symbol}
+                        title={
+                          entry.termPresentation === "symbolOnly"
+                            ? entry.term
+                            : undefined
+                        }
+                        trailingGap={entry.termPresentation !== "symbolOnly"}
+                      />
+                    )}
+                    {entry.termPresentation === "symbolOnly" ? null : entry.term}
+                  </dt>
+                  <dd style={{ display: "inline", margin: 0 }}>
+                    {": "}
+                    {renderDefinitionText(entry.definition)}
+                  </dd>
+                </>
+              )}
             </div>
           ))}
         </dl>

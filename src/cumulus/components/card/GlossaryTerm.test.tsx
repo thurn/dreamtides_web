@@ -98,6 +98,7 @@ vi.mock("../../../data/glossary", () => ({
     nightTrigger: "night-trigger",
   },
   glossaryEntry: () => undefined,
+  glossaryEntryDisplayTitle: (entry: typeof FIXTURE) => entry.term,
   lookupGlossaryTerm: (term: string) =>
     term.toLocaleLowerCase() === FIXTURE.term.toLocaleLowerCase()
       ? FIXTURE

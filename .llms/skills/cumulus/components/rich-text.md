@@ -10,7 +10,7 @@ Real consumers: **15** (imports outside `src/cumulus/docs/` and tests).
 
 The design system's model for a run of formatted copy. The caller describes what the text is — plain prose, Dreamtides rules text with glossary-keyword emphasis and inline resource glyphs, an underlined named subject inside continuous prose, a compact definition list, a muted note, or a stack of parts — and the renderer owns how it looks. Copy slots take a RichText, never an arbitrary node.
 
-> **Guidance:** Build values with the `richText` constructors — `richText.plain`, `richText.rules`, `richText.inline`, `richText.underline`, `richText.definitions`, `richText.note`, and `richText.stack` — and hand them to a copy slot (like `InfoCard.body`); reach for `RichTextView` only to render a standalone value inline. Use underline only for a semantically named subject, not general emphasis.
+> **Guidance:** Build values with the `richText` constructors — `richText.plain`, `richText.rules`, `richText.inline`, `richText.underline`, `richText.definitions`, `richText.note`, and `richText.stack` — and hand them to a copy slot (like `InfoCard.body`); reach for `RichTextView` only to render a standalone value inline. Definition rows use their term and colon by default; set `termPresentation: "definitionOnly"` when the authored sentence carries its own symbol and context. Use underline only for a semantically named subject, not general emphasis.
 
 ## Props
 
@@ -39,6 +39,20 @@ import { richText } from "src/cumulus/components/card/rich-text";
   title="Woodland Apparition"
   body={richText.rules("Support - Supported allies have +2 and unstoppable.")}
 />
+```
+
+### Definition copy without a label
+
+Use the closed `definitionOnly` presentation for an authored explanation that reads as a complete sentence; the row omits its catalog term and colon while rules glyphs still render inline.
+
+```tsx
+import { richText } from "src/cumulus/components/card/rich-text";
+
+const pointsDefinition = richText.definitions([{
+  term: "Score",
+  definition: "Characters score points (⍟) when they challenge and are not blocked.",
+  termPresentation: "definitionOnly",
+}]);
 ```
 
 ### Underline a named subject

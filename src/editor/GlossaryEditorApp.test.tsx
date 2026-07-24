@@ -146,4 +146,44 @@ describe("GlossaryEditorApp", () => {
 
     act(() => root.unmount());
   });
+
+  it("previews and edits a definition-only entry without a visible title", async () => {
+    const definitionOnlyEntry: GlossaryCatalogEntry = {
+      ...ENTRIES[0],
+      id: "score",
+      term: "Score",
+      definition:
+        "Characters score points (⍟) when they challenge and are not blocked.",
+      termPresentation: "definitionOnly",
+    };
+    const { container, root } = mount();
+
+    await act(async () => {
+      root.render(
+        <GlossaryEditorApp
+          loadEntries={vi.fn().mockResolvedValue([definitionOnlyEntry])}
+          saveEntry={vi.fn()}
+        />,
+      );
+      await Promise.resolve();
+    });
+
+    const preview = container.querySelector(
+      "[data-testid='glossary-preview']",
+    );
+    expect(preview?.textContent).toBe(
+      "Characters score points () when they challenge and are not blocked.",
+    );
+    expect(preview?.querySelector('[aria-label="points"]')).not.toBeNull();
+    expect(
+      preview?.querySelector("[data-editor-field='title']"),
+    ).toBeNull();
+    expect(
+      container.querySelector<HTMLInputElement>(
+        "[data-testid='glossary-term-input']",
+      )?.value,
+    ).toBe("Score");
+
+    act(() => root.unmount());
+  });
 });

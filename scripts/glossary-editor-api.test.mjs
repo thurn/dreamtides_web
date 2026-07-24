@@ -113,6 +113,10 @@ describe("glossary editor API", () => {
         },
       ],
     };
+    entries[1] = {
+      ...entries[1],
+      termPresentation: "definitionOnly",
+    };
     const serialized = serializeGlossarySource(entries);
     expect(parseGlossarySource(serialized)[0]).toMatchObject({
       rulesTextForms: ["❖"],
@@ -125,6 +129,10 @@ describe("glossary editor API", () => {
           definition: "Dreamcaller-specific explanation.",
         },
       ],
+    });
+    expect(serialized).toContain('term-presentation = "definition-only"');
+    expect(parseGlossarySource(serialized)[1]).toMatchObject({
+      termPresentation: "definitionOnly",
     });
   });
 });

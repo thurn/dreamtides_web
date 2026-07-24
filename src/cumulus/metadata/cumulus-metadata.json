@@ -2771,6 +2771,12 @@
             "tsType": "readonly string[]",
             "optional": true,
             "description": "Extra rules-text word forms beyond the canonical term."
+          },
+          {
+            "name": "termPresentation",
+            "tsType": "\"symbolOnly\" | \"definitionOnly\"",
+            "optional": true,
+            "description": "Optional treatment for the entry's label in definition surfaces."
           }
         ]
       }
@@ -2804,6 +2810,12 @@
             "tsType": "readonly string[]",
             "optional": true,
             "description": "Extra rules-text word forms beyond the canonical term."
+          },
+          {
+            "name": "termPresentation",
+            "tsType": "\"symbolOnly\" | \"definitionOnly\"",
+            "optional": true,
+            "description": "Optional treatment for the entry's label in definition surfaces."
           }
         ]
       }

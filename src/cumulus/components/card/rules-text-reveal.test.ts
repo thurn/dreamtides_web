@@ -32,6 +32,7 @@ describe("glossaryDefinitionsCardModel", () => {
         termPresentation: "symbolOnly",
       }),
       entry("night-trigger", "▸Night"),
+      entry("points", "Points", { termPresentation: "definitionOnly" }),
       entry("void", "Void"),
     ]);
 
@@ -61,6 +62,12 @@ describe("glossaryDefinitionsCardModel", () => {
           definition: "▸Night definition.",
           symbol: undefined,
           termPresentation: undefined,
+        },
+        {
+          term: "Points",
+          definition: "Points definition.",
+          symbol: undefined,
+          termPresentation: "definitionOnly",
         },
         {
           term: "Void",

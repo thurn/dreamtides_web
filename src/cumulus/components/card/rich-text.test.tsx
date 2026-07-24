@@ -108,7 +108,6 @@ describe("RichText", () => {
     expect(markup.match(/bxf bx-moon/g)).toHaveLength(2);
     expect(markup).not.toContain("☪");
   });
-
   it("renders the points symbol inside glossary definitions as a Boxicon", () => {
     const markup = renderToStaticMarkup(
       <RichTextView
@@ -123,5 +122,28 @@ describe("RichText", () => {
 
     expect(markup).toContain("bxf bx-star-circle");
     expect(markup).not.toContain("⍟");
+  });
+
+  it("renders definition-only rows without a label or colon", () => {
+    const markup = renderToStaticMarkup(
+      <RichTextView
+        value={richText.definitions([
+          {
+            term: "Points",
+            definition:
+              "Characters score points (⍟) when they challenge and are not blocked.",
+            termPresentation: "definitionOnly",
+          },
+        ])}
+      />,
+    );
+
+    expect(markup).not.toContain("<dt");
+    expect(markup).not.toContain("Points:");
+    expect(markup).not.toContain(": Characters score points");
+    expect(markup).toContain("<span>Characters </span>");
+    expect(markup).toContain("<span>score</span>");
+    expect(markup).toContain("<span> points </span>");
+    expect(markup).toContain('aria-label="points"');
   });
 });

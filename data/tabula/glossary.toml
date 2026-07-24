@@ -102,12 +102,13 @@ variants = [ "abandoned", "abandons" ]
 id = "points"
 category = "Resources"
 term = "Points"
-definition = "The ⍟ symbol represents points, which track progress toward victory. Reach the battle's win total to win."
+definition = "Characters score points (⍟) when they challenge and are not blocked."
 priority = 60
 matches-rules-text = false
 variants = []
 rules-text-forms = [ "⍟" ]
 definition-uses-rules-text = true
+term-presentation = "definition-only"
 
 [[entries]]
 id = "reclaim"
@@ -160,36 +161,35 @@ variants = [ "eroded", "erodes" ]
 id = "fast"
 category = "Keywords"
 term = "Fast"
-definition = "You may use this ability at the end of either player's turn."
+definition = "You may use a fast (❖) ability at the end of either player's turn."
 priority = 95
 matches-rules-text = false
 variants = []
 rules-text-forms = [ "❖" ]
-definition-symbol = "fast"
+term-presentation = "definition-only"
 
 [[entries]]
 id = "interrupt"
 category = "Keywords"
 term = "Interrupt"
-definition = "You may use this ability in response to an opponent card or ability, or at the end of either player's turn."
+definition = "You may use an interrupt (❖❖) ability in response to an opponent card or ability, or at the end of either player's turn."
 priority = 95
 matches-rules-text = false
 variants = []
 rules-text-forms = [ "❖❖" ]
-definition-symbol = "interrupt"
+term-presentation = "definition-only"
 
 [[entries]]
 id = "exhaust-cost"
 category = "Keywords"
 term = "Exhaust Cost"
-definition = "You may exhaust (☪) this character to activate this ability instead of challenging this turn."
+definition = "You may exhaust (☪) this character to activate an ability instead of challenging this turn."
 priority = 95
 matches-rules-text = false
 variants = []
 rules-text-forms = [ "☪" ]
 definition-uses-rules-text = true
-definition-symbol = "exhaust"
-term-presentation = "symbol-only"
+term-presentation = "definition-only"
 
 [[entries.contexts]]
 owner = "dreamcaller"

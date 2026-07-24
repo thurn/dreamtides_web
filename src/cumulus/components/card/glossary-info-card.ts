@@ -1,5 +1,6 @@
 import {
   glossaryDefinitionUsesRulesText,
+  glossaryEntryDisplayTitle,
   glossaryEntry,
 } from "../../../data/glossary";
 import { logEventOnce } from "../../../logging";
@@ -30,7 +31,10 @@ export function glossaryInfoCard(
       : glossaryDefinitionUsesRulesText(entry)
         ? richText.rules(entry.definition)
         : richText.plain(entry.definition);
-  const title = entry?.term ?? "Rule definition unavailable";
+  const title =
+    entry === undefined
+      ? "Rule definition unavailable"
+      : glossaryEntryDisplayTitle(entry);
   if (presentation.variant === "icon") {
     return {
       variant: "icon",

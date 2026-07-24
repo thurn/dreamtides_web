@@ -18,7 +18,7 @@ export interface GlossarySourceEntry {
   readonly rulesTextForms?: readonly string[];
   readonly definitionUsesRulesText?: boolean;
   readonly definitionSymbol?: "fast" | "interrupt" | "exhaust" | "trigger";
-  readonly termPresentation?: "symbolOnly";
+  readonly termPresentation?: "symbolOnly" | "definitionOnly";
   readonly contexts: readonly GlossaryContext[];
 }
 

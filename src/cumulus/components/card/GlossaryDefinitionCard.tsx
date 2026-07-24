@@ -1,13 +1,15 @@
-import type { GlossaryEntry } from "../../../data/glossary";
+import {
+  glossaryEntryDisplayTitle,
+  type GlossaryEntry,
+} from "../../../data/glossary";
 import { InfoCard } from "../overlay/InfoCard";
 import { richText } from "./rich-text";
 
 /**
  * The one keyword-definition tile: a single glossary entry rendered as an
- * {@link InfoCard} (text variant) whose headline is the keyword and whose body
- * is the keyword's rules text. No overline — the reveal beside a keyword is
- * self-evidently a keyword, so it carries the name and the rules text and
- * nothing else.
+ * {@link InfoCard} (text variant) whose body is the keyword's rules text.
+ * Entries carry their canonical headline by default; definition-only entries
+ * present their complete explanatory sentence without a headline.
  *
  * The signature-deck inspector uses this renderable tile in normal document
  * flow. Multi-term rules-text surfaces use CardTermDefinitions and the shared
@@ -32,7 +34,7 @@ export function GlossaryDefinitionCard({
     <div className="cumulus" data-glossary-term={entry.term}>
       <InfoCard
         variant="text"
-        title={entry.term}
+        title={glossaryEntryDisplayTitle(entry)}
         body={richText.rules(entry.definition)}
       />
     </div>

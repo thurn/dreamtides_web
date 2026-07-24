@@ -9,6 +9,8 @@ export interface GlossaryEntry {
   readonly definition: string;
   /** Extra rules-text word forms beyond the canonical term. */
   readonly variants?: readonly string[];
+  /** Optional treatment for the entry's label in definition surfaces. */
+  readonly termPresentation?: "symbolOnly" | "definitionOnly";
 }
 
 /** A TOML-authored contextual projection of one canonical entry. */
@@ -45,7 +47,6 @@ export interface GlossaryCatalogEntry extends GlossaryEntry {
   /** Optional symbol shown beside this entry in a combined definition card. */
   readonly definitionSymbol?: "fast" | "interrupt" | "exhaust" | "trigger";
   /** Optional term treatment in a combined definition card. */
-  readonly termPresentation?: "symbolOnly";
   /** Ordered sentence/owner-specific projections. */
   readonly contexts?: readonly GlossaryContext[];
 }
@@ -114,6 +115,13 @@ export function requireGlossaryEntry(id: string): GlossaryCatalogEntry {
     );
   }
   return entry;
+}
+
+/** Visible Info Card title for an entry whose definition may stand alone. */
+export function glossaryEntryDisplayTitle(
+  entry: Pick<GlossaryEntry, "term" | "termPresentation">,
+): string | undefined {
+  return entry.termPresentation === "definitionOnly" ? undefined : entry.term;
 }
 
 /**
