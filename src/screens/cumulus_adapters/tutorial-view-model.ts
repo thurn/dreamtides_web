@@ -116,6 +116,18 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       destinationSlot: "across-from-opponent",
     };
   }
+  if (action.action === "resolve-challenge") {
+    return {
+      actionId: action.id,
+      action: action.action,
+      waitSeconds: action.wait,
+      challengerCardId: action.challengerCardId,
+      defenderCardId: action.defenderCardId,
+      sourceZone: "front-rank",
+      loserDestinationZone: "controller-void",
+      resolution: "compare-spark",
+    };
+  }
   if (action.action === "end-turn") {
     return {
       actionId: action.id,
@@ -403,6 +415,54 @@ export function buildTutorialView(
       `Tutorial opposing character ${playerRepositionAction.opposingCardId} does not match the loaded tutorial card ${opponentCard.id}.`,
     );
   }
+  const challengeActionIndex =
+    playback?.actions.findIndex(
+      (action) => action.action === "resolve-challenge",
+    ) ?? -1;
+  const challengeAction =
+    challengeActionIndex < 0
+      ? null
+      : (playback?.actions[challengeActionIndex] ?? null);
+  if (
+    challengeAction?.action === "resolve-challenge" &&
+    opponentCard !== null &&
+    challengeAction.challengerCardId !== opponentCard.id
+  ) {
+    throw new Error(
+      `Tutorial challenger ${challengeAction.challengerCardId} does not match the loaded tutorial opponent card ${opponentCard.id}.`,
+    );
+  }
+  if (
+    challengeAction?.action === "resolve-challenge" &&
+    playerCard !== null &&
+    challengeAction.defenderCardId !== playerCard.id
+  ) {
+    throw new Error(
+      `Tutorial defender ${challengeAction.defenderCardId} does not match the loaded tutorial player card ${playerCard.id}.`,
+    );
+  }
+  const challengerSpark = opponentCard?.spark ?? null;
+  const defenderSpark = playerCard?.spark ?? null;
+  if (
+    challengeAction?.action === "resolve-challenge" &&
+    challengerSpark !== null &&
+    defenderSpark !== null &&
+    challengerSpark === defenderSpark
+  ) {
+    throw new Error(
+      `Tutorial challenge ${challengeAction.id} requires unequal printed spark.`,
+    );
+  }
+  const challengeLoserOwner =
+    challengerSpark === null || defenderSpark === null
+      ? null
+      : challengerSpark < defenderSpark
+        ? "enemy"
+        : "player";
+  const challengeResolved =
+    challengeActionIndex >= 0 &&
+    completedActionCount > challengeActionIndex &&
+    challengeLoserOwner !== null;
   const playerDeck = playerTurnStarted
     ? playerDeckCardIds.slice(1)
     : playerDeckCardIds;
@@ -444,6 +504,12 @@ export function buildTutorialView(
       );
   const enemy = {
     ...emptySide("enemy"),
+    voidCards:
+      challengeResolved &&
+      challengeLoserOwner === "enemy" &&
+      tutorialCard !== null
+        ? [{ ...tutorialCard, layoutMotion: "snap" as const }]
+        : [],
     status: {
       ...emptySide("enemy").status,
       currentEnergy: enemyCurrentEnergy,
@@ -464,7 +530,9 @@ export function buildTutorialView(
       : slot,
   );
   const enemyFrontRank = enemy.frontRank.map((slot, index) =>
-    opponentCardRepositioned && index === TUTORIAL_OPPONENT_BACK_RANK_INDEX
+    opponentCardRepositioned &&
+    !(challengeResolved && challengeLoserOwner === "enemy") &&
+    index === TUTORIAL_OPPONENT_BACK_RANK_INDEX
       ? {
           ...slot,
           card:
@@ -568,6 +636,29 @@ export function buildTutorialView(
             cardId: playerRepositionAction.cardId,
             opposingCardId: playerRepositionAction.opposingCardId,
           },
+    challenge:
+      currentAction?.action !== "resolve-challenge" ||
+      tutorialCard === null ||
+      playerTurnCard === null ||
+      challengerSpark === null ||
+      defenderSpark === null ||
+      challengeLoserOwner === null
+        ? null
+        : {
+            actionId: currentAction.id,
+            challenger: {
+              owner: "enemy",
+              card: tutorialCard,
+              spark: challengerSpark,
+            },
+            defender: {
+              owner: "player",
+              card: playerTurnCard,
+              spark: defenderSpark,
+            },
+            winnerOwner: challengeLoserOwner === "enemy" ? "player" : "enemy",
+            loserOwner: challengeLoserOwner,
+          },
     battle: (() => {
       const emptyPlayer = emptySide("player");
       const playerTurnEnergy =
@@ -575,6 +666,12 @@ export function buildTutorialView(
       const player = {
         ...emptyPlayer,
         deckCardIds: playerDeck,
+        voidCards:
+          challengeResolved &&
+          challengeLoserOwner === "player" &&
+          playerTurnCard !== null
+            ? [{ ...playerTurnCard, layoutMotion: "snap" as const }]
+            : [],
         backRank: emptyPlayer.backRank.map((slot, index) =>
           playerCardPlayed &&
           !playerCardRepositioned &&
@@ -593,6 +690,7 @@ export function buildTutorialView(
         frontRank: emptyPlayer.frontRank.map((slot, index) =>
           playerCardPlayed &&
           playerCardRepositioned &&
+          !(challengeResolved && challengeLoserOwner === "player") &&
           playerTurnCard !== null &&
           index === TUTORIAL_PLAYER_FRONT_RANK_INDEX
             ? {
@@ -620,7 +718,10 @@ export function buildTutorialView(
       const playerHandCardIds = playerHandCards.map((card) => card.id);
       const farHandCards = tutorialCard === null || opponentCardPlayed ? [] : [tutorialCard];
       const phase =
-        endTurnCompleted && !dreamwellExplanationCompleted
+        challengeActionIndex >= 0 &&
+        completedActionCount >= challengeActionIndex
+          ? "challenge"
+          : endTurnCompleted && !dreamwellExplanationCompleted
           ? "dawn"
           : duskStarted
             ? "dusk"
@@ -678,7 +779,13 @@ export function buildTutorialView(
         perspective: "player",
         turn: playerTurnStarted ? "2" : "1",
         phase:
-          phase === "dawn" ? "Dawn" : phase === "dusk" ? "Dusk" : "Day",
+          phase === "challenge"
+            ? "Challenge"
+            : phase === "dawn"
+              ? "Dawn"
+              : phase === "dusk"
+                ? "Dusk"
+                : "Day",
         activeSide: endTurnCompleted
           ? "Enemy"
           : playerTurnStarted
@@ -700,7 +807,13 @@ export function buildTutorialView(
               hand: playerHandCardIds.length,
               deck: playerDeck.length,
               backRank: playerCardPlayed && !playerCardRepositioned ? 1 : 0,
-              frontRank: playerCardRepositioned ? 1 : 0,
+              frontRank:
+                playerCardRepositioned &&
+                !(challengeResolved && challengeLoserOwner === "player")
+                  ? 1
+                  : 0,
+              void:
+                challengeResolved && challengeLoserOwner === "player" ? 1 : 0,
             },
           },
           enemy: {
@@ -718,7 +831,13 @@ export function buildTutorialView(
                   ? 1
                   : 0,
               frontRank:
-                opponentCardRepositioned && tutorialCard !== null ? 1 : 0,
+                opponentCardRepositioned &&
+                tutorialCard !== null &&
+                !(challengeResolved && challengeLoserOwner === "enemy")
+                  ? 1
+                  : 0,
+              void:
+                challengeResolved && challengeLoserOwner === "enemy" ? 1 : 0,
             },
           },
         },

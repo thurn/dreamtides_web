@@ -185,6 +185,36 @@ export function parseTutorialActions(
         wait,
       } satisfies TutorialAction;
     }
+    if (record.action === "resolve-challenge") {
+      if (
+        typeof record.challengerCardId !== "string" ||
+        !isCardId(record.challengerCardId)
+      ) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must identify the challenger by UUID.`,
+        );
+      }
+      if (
+        typeof record.defenderCardId !== "string" ||
+        !isCardId(record.defenderCardId)
+      ) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must identify the defender by UUID.`,
+        );
+      }
+      if (record.challengerCardId === record.defenderCardId) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must identify two different challenge characters.`,
+        );
+      }
+      return {
+        id,
+        action: "resolve-challenge",
+        challengerCardId: record.challengerCardId,
+        defenderCardId: record.defenderCardId,
+        wait,
+      } satisfies TutorialAction;
+    }
     if (record.action === "draw-dreamwell-card") {
       const owner = record.owner ?? "enemy";
       if (owner !== "player" && owner !== "enemy") {

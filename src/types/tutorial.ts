@@ -7,6 +7,7 @@ export type TutorialActionName =
   | "reveal-and-play-opponent-card"
   | "reposition-opponent-character"
   | "reposition-player-character"
+  | "resolve-challenge"
   | "draw-dreamwell-card"
   | "end-turn";
 
@@ -95,6 +96,13 @@ export interface RepositionPlayerCharacterTutorialAction
   readonly opposingCardId: string;
 }
 
+/** Resolves one UUID-authored challenger/defender pairing with unequal spark. */
+export interface ResolveChallengeTutorialAction extends TutorialActionBase {
+  readonly action: "resolve-challenge";
+  readonly challengerCardId: string;
+  readonly defenderCardId: string;
+}
+
 /** Draws and reveals one UUID-authored Dreamwell card for the selected side. */
 export interface DrawDreamwellCardTutorialAction extends TutorialActionBase {
   readonly action: "draw-dreamwell-card";
@@ -116,6 +124,7 @@ export type TutorialAction =
   | RevealAndPlayOpponentCardTutorialAction
   | RepositionOpponentCharacterTutorialAction
   | RepositionPlayerCharacterTutorialAction
+  | ResolveChallengeTutorialAction
   | DrawDreamwellCardTutorialAction
   | EndTurnTutorialAction;
 

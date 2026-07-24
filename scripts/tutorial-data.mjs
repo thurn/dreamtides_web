@@ -240,6 +240,36 @@ export function validateTutorialActions(value) {
         wait,
       };
     }
+    if (action === "resolve-challenge") {
+      if (
+        typeof candidate.challengerCardId !== "string" ||
+        !CARD_UUID_PATTERN.test(candidate.challengerCardId)
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must identify the challenger by UUID.`,
+        );
+      }
+      if (
+        typeof candidate.defenderCardId !== "string" ||
+        !CARD_UUID_PATTERN.test(candidate.defenderCardId)
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must identify the defender by UUID.`,
+        );
+      }
+      if (candidate.challengerCardId === candidate.defenderCardId) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must identify two different challenge characters.`,
+        );
+      }
+      return {
+        id,
+        action,
+        challengerCardId: candidate.challengerCardId,
+        defenderCardId: candidate.defenderCardId,
+        wait,
+      };
+    }
     if (action === "draw-dreamwell-card") {
       const owner = candidate.owner ?? "enemy";
       if (owner !== "player" && owner !== "enemy") {

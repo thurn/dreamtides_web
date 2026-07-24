@@ -87,6 +87,20 @@ export type TutorialDialogueView =
       readonly text: string;
     };
 
+export interface TutorialChallengeParticipantView {
+  readonly owner: TutorialDreamcallerOwner;
+  readonly card: MobileBattleCardView;
+  readonly spark: number;
+}
+
+export interface TutorialChallengeView {
+  readonly actionId: string;
+  readonly challenger: TutorialChallengeParticipantView;
+  readonly defender: TutorialChallengeParticipantView;
+  readonly winnerOwner: TutorialDreamcallerOwner;
+  readonly loserOwner: TutorialDreamcallerOwner;
+}
+
 export interface TutorialView {
   readonly battle: MobileBattleView;
   readonly dialogue: TutorialDialogueView | null;
@@ -114,6 +128,7 @@ export interface TutorialView {
     readonly cardId: string;
     readonly opposingCardId: string;
   } | null;
+  readonly challenge?: TutorialChallengeView | null;
 }
 
 export interface TutorialEditorView {
@@ -194,6 +209,8 @@ const TUTORIAL_CARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow");
 const TUTORIAL_EDITOR_DOCK_MIN_WIDTH = 1280;
 const TUTORIAL_REVEAL_CARD_DESKTOP_WIDTH = 240;
 const TUTORIAL_REVEAL_CARD_MOBILE_WIDTH_RATIO = 0.45;
+const TUTORIAL_CHALLENGE_TOTAL_SECONDS = TUTORIAL_CARD_TRAVEL_SECONDS * 6;
+const TUTORIAL_CHALLENGE_MOTE_COUNT = 16;
 // The popup panel is a content-driven desktop box measure. GlassDialog adds
 // --space-5 body padding on each side around this intrinsic content width.
 const TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH = 500;
@@ -1094,6 +1111,403 @@ function TutorialOpponentCardPlay({
   );
 }
 
+interface TutorialChallengeGeometry {
+  readonly challenger: TutorialCardFrame;
+  readonly defender: TutorialCardFrame;
+  readonly void: TutorialCardFrame;
+}
+
+function tutorialChallengeCardElement(
+  screen: HTMLElement,
+  participant: TutorialChallengeParticipantView,
+): HTMLElement | null {
+  const rank = screen.querySelector<HTMLElement>(
+    `[data-battle-rank="${participant.owner}-front"]`,
+  );
+  if (rank === null) return null;
+  return (
+    [...rank.querySelectorAll<HTMLElement>("[data-battle-card-id]")].find(
+      (element) => element.dataset.battleCardId === participant.card.id,
+    ) ?? null
+  );
+}
+
+function frameRelativeTo(
+  element: HTMLElement,
+  container: HTMLElement,
+): TutorialCardFrame {
+  const elementBox = element.getBoundingClientRect();
+  const containerBox = container.getBoundingClientRect();
+  return {
+    x: elementBox.left - containerBox.left,
+    y: elementBox.top - containerBox.top,
+    width: elementBox.width,
+    height: elementBox.height,
+  };
+}
+
+function TutorialChallengeAnimation({
+  screen,
+  challenge,
+  wait,
+  reduceMotion,
+  onComplete,
+}: {
+  readonly screen: HTMLElement;
+  readonly challenge: TutorialChallengeView;
+  readonly wait: number;
+  readonly reduceMotion: boolean;
+  readonly onComplete: () => void;
+}): ReactElement | null {
+  const [started, setStarted] = useState(false);
+  const [geometry, setGeometry] =
+    useState<TutorialChallengeGeometry | null>(null);
+  const completionReported = useRef(false);
+  const completionTimeout = useRef<number | null>(null);
+
+  const finish = useCallback((): void => {
+    if (completionReported.current) return;
+    completionReported.current = true;
+    if (wait === 0) {
+      onComplete();
+      return;
+    }
+    completionTimeout.current = window.setTimeout(onComplete, wait * 1_000);
+  }, [onComplete, wait]);
+
+  useEffect(() => {
+    const timeout = window.setTimeout(
+      () => setStarted(true),
+      reduceMotion ? 0 : TUTORIAL_CARD_TRAVEL_SECONDS * 1_000,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [reduceMotion]);
+
+  useEffect(
+    () => () => {
+      if (completionTimeout.current !== null) {
+        window.clearTimeout(completionTimeout.current);
+      }
+    },
+    [],
+  );
+
+  useEffect(() => {
+    if (!started || !reduceMotion) return;
+    finish();
+  }, [finish, reduceMotion, started]);
+
+  useLayoutEffect(() => {
+    if (!started || reduceMotion) return undefined;
+    const challengerElement = tutorialChallengeCardElement(
+      screen,
+      challenge.challenger,
+    );
+    const defenderElement = tutorialChallengeCardElement(
+      screen,
+      challenge.defender,
+    );
+    const voidElement = screen.querySelector<HTMLElement>(
+      `[data-battle-zone="${challenge.loserOwner}-void"] [data-battle-pile-frame]`,
+    );
+    if (
+      challengerElement === null ||
+      defenderElement === null ||
+      voidElement === null
+    ) {
+      return undefined;
+    }
+    setGeometry({
+      challenger: frameRelativeTo(challengerElement, screen),
+      defender: frameRelativeTo(defenderElement, screen),
+      void: frameRelativeTo(voidElement, screen),
+    });
+    const previousChallengerVisibility =
+      challengerElement.style.visibility;
+    const previousDefenderVisibility = defenderElement.style.visibility;
+    challengerElement.style.visibility = "hidden";
+    defenderElement.style.visibility = "hidden";
+    return () => {
+      challengerElement.style.visibility = previousChallengerVisibility;
+      defenderElement.style.visibility = previousDefenderVisibility;
+    };
+  }, [challenge, reduceMotion, screen, started]);
+
+  if (geometry === null || reduceMotion) return null;
+
+  const frameFor = (
+    participant: TutorialChallengeParticipantView,
+  ): TutorialCardFrame =>
+    participant.owner === challenge.challenger.owner
+      ? geometry.challenger
+      : geometry.defender;
+  const winner =
+    challenge.winnerOwner === challenge.challenger.owner
+      ? challenge.challenger
+      : challenge.defender;
+  const loser =
+    challenge.loserOwner === challenge.challenger.owner
+      ? challenge.challenger
+      : challenge.defender;
+  const winnerFrame = frameFor(winner);
+  const loserFrame = frameFor(loser);
+  const challengerCenterX =
+    geometry.challenger.x + geometry.challenger.width / 2;
+  const defenderCenterX = geometry.defender.x + geometry.defender.width / 2;
+  const challengerCenterY =
+    geometry.challenger.y + geometry.challenger.height / 2;
+  const defenderCenterY =
+    geometry.defender.y + geometry.defender.height / 2;
+  const clashCenterX = (challengerCenterX + defenderCenterX) / 2;
+  const clashCenterY = (challengerCenterY + defenderCenterY) / 2;
+  const clashGap =
+    Math.min(geometry.challenger.height, geometry.defender.height) * 0.04;
+  const clashFrame = (
+    participant: TutorialChallengeParticipantView,
+    frame: TutorialCardFrame,
+  ): TutorialCardFrame => ({
+    ...frame,
+    x: clashCenterX - frame.width / 2,
+    y:
+      participant.owner === "enemy"
+        ? clashCenterY - frame.height - clashGap / 2
+        : clashCenterY + clashGap / 2,
+  });
+  const loserClash = clashFrame(loser, loserFrame);
+  const voidCenterX = geometry.void.x + geometry.void.width / 2;
+  const voidCenterY = geometry.void.y + geometry.void.height / 2;
+  const rematerializedWidth = geometry.void.height;
+  const rematerializedHeight = geometry.void.width;
+  const loserClashCenterX = loserClash.x + loserClash.width / 2;
+  const loserClashCenterY = loserClash.y + loserClash.height / 2;
+  const sequenceTimes = [0, 0.16, 0.42, 0.56, 0.78, 1];
+  const participants = [challenge.challenger, challenge.defender] as const;
+
+  return (
+    <div
+      role="status"
+      aria-label={`${winner.card.model.displaySnapshot.name} wins the challenge. ${loser.card.model.displaySnapshot.name} dissolves into the ${loser.owner === "enemy" ? "opponent" : "player"} void.`}
+      data-tutorial-challenge-animation=""
+      data-tutorial-challenge-winner-card-id={winner.card.model.cardId}
+      data-tutorial-challenge-loser-card-id={loser.card.model.cardId}
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 40,
+        overflow: "hidden",
+        pointerEvents: "none",
+      }}
+    >
+      {participants.map((participant) => {
+        const source = frameFor(participant);
+        const clash = clashFrame(participant, source);
+        const won = participant.owner === challenge.winnerOwner;
+        return (
+          <motion.div
+            key={participant.card.id}
+            data-tutorial-challenge-card={participant.owner}
+            data-tutorial-challenge-outcome={won ? "winner" : "loser"}
+            initial={{
+              x: source.x,
+              y: source.y,
+              scale: 1,
+              rotate: 0,
+              opacity: 1,
+            }}
+            animate={{
+              x: [
+                source.x,
+                source.x,
+                clash.x,
+                clash.x,
+                won ? source.x : clash.x,
+                won ? source.x : clash.x,
+              ],
+              y: [
+                source.y,
+                source.y - source.height * 0.08,
+                clash.y,
+                clash.y,
+                won ? source.y - source.height * 0.08 : clash.y,
+                won ? source.y : clash.y,
+              ],
+              scale: won
+                ? [1, 1.08, 1.12, 1.16, 1.08, 1]
+                : [1, 1.08, 1.12, 1.18, 0.58, 0.4],
+              rotate: won
+                ? [0, -1, 2, -2, 1, 0]
+                : [0, 1, -2, 3, 14, 24],
+              opacity: won
+                ? [1, 1, 1, 1, 1, 1]
+                : [1, 1, 1, 1, 0, 0],
+            }}
+            transition={{
+              duration: TUTORIAL_CHALLENGE_TOTAL_SECONDS,
+              times: sequenceTimes,
+              ease: [0.22, 0.61, 0.36, 1],
+            }}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: source.width,
+              height: source.height,
+              containerType: "inline-size",
+              transformOrigin: "center",
+              filter: participant.card.exhausted
+                ? BATTLEFIELD_CARD_EXHAUSTED_FILTER
+                : undefined,
+            }}
+          >
+            <GameCard
+              model={participant.card.model}
+              exhausted={participant.card.exhausted}
+              presentation="battlefield"
+              testId={`tutorial-challenge-card-${participant.owner}`}
+            />
+          </motion.div>
+        );
+      })}
+      {[0, 1].map((ring) => (
+        <motion.div
+          key={ring}
+          aria-hidden="true"
+          data-tutorial-challenge-impact-ring={String(ring + 1)}
+          initial={{ scale: 0.2, opacity: 0 }}
+          animate={{
+            scale: [0.2, 0.2, 0.2, 1 + ring * 0.45, 1.7 + ring * 0.5, 2],
+            opacity: [0, 0, 0, 0.95, 0, 0],
+          }}
+          transition={{
+            duration: TUTORIAL_CHALLENGE_TOTAL_SECONDS,
+            times: sequenceTimes,
+            ease: [0.22, 0.61, 0.36, 1],
+          }}
+          style={{
+            position: "absolute",
+            left: clashCenterX - winnerFrame.width * 0.62,
+            top: clashCenterY - winnerFrame.width * 0.62,
+            width: winnerFrame.width * 1.24,
+            height: winnerFrame.width * 1.24,
+            border: `${token("--space-1")} solid ${token(ring === 0 ? "--spark" : "--accent-bright")}`,
+            borderRadius: token("--radius-pill"),
+            boxShadow:
+              ring === 0
+                ? token("--shadow-card")
+                : token("--glow-accent-soft"),
+          }}
+        />
+      ))}
+      {Array.from({ length: TUTORIAL_CHALLENGE_MOTE_COUNT }, (_unused, index) => {
+        const angle =
+          (index / TUTORIAL_CHALLENGE_MOTE_COUNT) * Math.PI * 2 +
+          (index % 2 === 0 ? 0.18 : -0.11);
+        const scatterDistance =
+          loserFrame.width * (0.32 + (index % 4) * 0.11);
+        const moteSize = token(index % 3 === 0 ? "--space-3" : "--space-2");
+        return (
+          <motion.div
+            key={index}
+            aria-hidden="true"
+            data-tutorial-challenge-mote=""
+            initial={{
+              x: loserClashCenterX,
+              y: loserClashCenterY,
+              scale: 0,
+              opacity: 0,
+            }}
+            animate={{
+              x: [
+                loserClashCenterX,
+                loserClashCenterX,
+                loserClashCenterX + Math.cos(angle) * scatterDistance,
+                voidCenterX + Math.cos(angle) * geometry.void.width * 0.12,
+                voidCenterX,
+              ],
+              y: [
+                loserClashCenterY,
+                loserClashCenterY,
+                loserClashCenterY + Math.sin(angle) * scatterDistance,
+                voidCenterY + Math.sin(angle) * geometry.void.height * 0.12,
+                voidCenterY,
+              ],
+              scale: [0, 0, 1 + (index % 3) * 0.25, 0.72, 0],
+              opacity: [0, 0, 1, 0.82, 0],
+              rotate: [0, 0, index % 2 === 0 ? 120 : -140, 240, 320],
+            }}
+            transition={{
+              duration: TUTORIAL_CHALLENGE_TOTAL_SECONDS,
+              times: [0, 0.54, 0.7, 0.9, 1],
+              ease: [0.22, 0.61, 0.36, 1],
+            }}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: moteSize,
+              height: moteSize,
+              borderRadius: token(
+                index % 4 === 0 ? "--radius-inset" : "--radius-pill",
+              ),
+              background: token(
+                index % 3 === 0
+                  ? "--spark"
+                  : index % 3 === 1
+                    ? "--accent-bright"
+                    : "--danger",
+              ),
+              boxShadow:
+                index % 3 === 0
+                  ? token("--shadow-sm")
+                  : token("--glow-accent-soft"),
+            }}
+          />
+        );
+      })}
+      <motion.div
+        data-tutorial-challenge-rematerialized=""
+        data-tutorial-challenge-rematerialized-owner={loser.owner}
+        initial={{
+          x: voidCenterX - rematerializedWidth / 2,
+          y: voidCenterY - rematerializedHeight / 2,
+          scale: 0.25,
+          rotate: 90,
+          opacity: 0,
+        }}
+        animate={{
+          scale: [0.25, 0.25, 0.25, 0.25, 1.12, 1],
+          opacity: [0, 0, 0, 0, 1, 1],
+          rotate: [90, 90, 90, 90, 88, 90],
+        }}
+        transition={{
+          duration: TUTORIAL_CHALLENGE_TOTAL_SECONDS,
+          times: sequenceTimes,
+          ease: [0.22, 0.61, 0.36, 1],
+        }}
+        onAnimationComplete={finish}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: rematerializedWidth,
+          height: rematerializedHeight,
+          transformOrigin: "center",
+          containerType: "inline-size",
+          filter: loser.card.exhausted
+            ? BATTLEFIELD_CARD_EXHAUSTED_FILTER
+            : undefined,
+        }}
+      >
+        <GameCard
+          model={loser.card.model}
+          exhausted={loser.card.exhausted}
+          testId="tutorial-challenge-rematerialized-card"
+        />
+      </motion.div>
+    </div>
+  );
+}
+
 /** Standalone tutorial battle presentation entered from the loading scene. */
 export function TutorialScreen({
   view,
@@ -1186,8 +1600,21 @@ export function TutorialScreen({
           key: `${view.playbackRunId}:${view.currentAction.id}`,
           card,
           revealDuration: view.currentAction.revealDuration,
-        };
+      };
   }, [view.battle.enemyHand, view.currentAction, view.playbackRunId]);
+  const challengeAnimation =
+    view.playbackRunId !== null &&
+    view.currentAction?.action === "resolve-challenge" &&
+    view.challenge !== null &&
+    view.challenge !== undefined
+      ? {
+          key: `${view.playbackRunId}:${view.currentAction.id}`,
+          runId: view.playbackRunId,
+          actionId: view.currentAction.id,
+          wait: view.currentAction.wait,
+          challenge: view.challenge,
+        }
+      : null;
   const dreamcallerSettled = useCallback(
     (owner: TutorialDreamcallerOwner): boolean =>
       view.dreamcallers[owner].settled ||
@@ -2063,6 +2490,23 @@ export function TutorialScreen({
           cardId={playerReposition.cardId}
           opposingCardId={playerReposition.opposingCardId}
           onTargetSlotChange={setRepositionTargetSlotId}
+        />
+      ) : null}
+      {sceneEntered &&
+      challengeAnimation !== null &&
+      screenRef.current !== null ? (
+        <TutorialChallengeAnimation
+          key={challengeAnimation.key}
+          screen={screenRef.current}
+          challenge={challengeAnimation.challenge}
+          wait={challengeAnimation.wait}
+          reduceMotion={reduceMotion}
+          onComplete={() =>
+            onActionComplete?.(
+              challengeAnimation.runId,
+              challengeAnimation.actionId,
+            )
+          }
         />
       ) : null}
       {editorSurface !== null && !editorOpen ? (

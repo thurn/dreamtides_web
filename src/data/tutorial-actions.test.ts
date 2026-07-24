@@ -331,6 +331,50 @@ describe("parseTutorialActions", () => {
     ).toThrow(/by UUID/u);
   });
 
+  it("preserves a UUID-backed challenge pairing and rejects display names", () => {
+    expect(
+      parseTutorialActions([
+        {
+          id: "resolve-challenge",
+          action: "resolve-challenge",
+          challengerCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          defenderCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          wait: 0,
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "resolve-challenge",
+        action: "resolve-challenge",
+        challengerCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        defenderCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        wait: 0,
+      },
+    ]);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "named-challenge",
+          action: "resolve-challenge",
+          challengerCardId: "Twilight Troubadour",
+          defenderCardId: "Marked Direwolf",
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/by UUID/u);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "self-challenge",
+          action: "resolve-challenge",
+          challengerCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          defenderCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/two different/u);
+  });
+
   it("preserves a UUID-authored Dreamwell draw and rejects display names", () => {
     expect(
       parseTutorialActions([

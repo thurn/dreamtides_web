@@ -132,6 +132,27 @@ describe("buildTutorialView", () => {
     });
   });
 
+  it("logs UUID-backed challenge resolution details", () => {
+    expect(
+      tutorialActionLogDetails({
+        id: "resolve-challenge",
+        action: "resolve-challenge",
+        challengerCardId: TUTORIAL_OPPONENT_CARD_ID,
+        defenderCardId: TUTORIAL_PLAYER_CARD_ID,
+        wait: 0,
+      }),
+    ).toEqual({
+      actionId: "resolve-challenge",
+      action: "resolve-challenge",
+      waitSeconds: 0,
+      challengerCardId: TUTORIAL_OPPONENT_CARD_ID,
+      defenderCardId: TUTORIAL_PLAYER_CARD_ID,
+      sourceZone: "front-rank",
+      loserDestinationZone: "controller-void",
+      resolution: "compare-spark",
+    });
+  });
+
   it("logs the authored How to Play copy for sequence reconstruction", () => {
     expect(
       tutorialActionLogDetails({
@@ -1017,6 +1038,123 @@ describe("buildTutorialView", () => {
     expect(ended.battle.inspector).toMatchObject({
       activeSide: "Enemy",
       phase: "Dusk",
+    });
+  });
+
+  it("enters Challenge, identifies the lower-spark loser, and moves it to its void after resolution", () => {
+    const actions = [
+      {
+        id: "opponent-draw",
+        action: "draw-opponent-card" as const,
+        wait: 0,
+      },
+      {
+        id: "opponent-play",
+        action: "reveal-and-play-opponent-card" as const,
+        revealDuration: 0,
+        wait: 0,
+      },
+      {
+        id: "player-turn",
+        action: "display-how-to-play" as const,
+        trigger: "immediate" as const,
+        text: "Play.",
+        wait: 0,
+      },
+      {
+        id: "end-turn",
+        action: "end-turn" as const,
+        wait: 0,
+      },
+      {
+        id: "opponent-advance",
+        action: "reposition-opponent-character" as const,
+        cardId: TUTORIAL_OPPONENT_CARD_ID,
+        wait: 0,
+      },
+      {
+        id: "player-block",
+        action: "reposition-player-character" as const,
+        cardId: TUTORIAL_PLAYER_CARD_ID,
+        opposingCardId: TUTORIAL_OPPONENT_CARD_ID,
+        wait: 0,
+      },
+      {
+        id: "resolve-challenge",
+        action: "resolve-challenge" as const,
+        challengerCardId: TUTORIAL_OPPONENT_CARD_ID,
+        defenderCardId: TUTORIAL_PLAYER_CARD_ID,
+        wait: 0,
+      },
+    ];
+    const playerCardPlay = {
+      cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+      cardId: TUTORIAL_PLAYER_CARD_ID,
+      targetSlotId: "player-back-1",
+    };
+
+    const resolving = buildTutorialView(
+      {
+        runId: "event:challenge",
+        actions,
+        currentActionIndex: actions.length - 1,
+        playerCardPlay,
+      },
+      OPPONENT_CARD,
+      PLAYER_CARD,
+    );
+
+    expect(resolving.battle.phase).toBe("challenge");
+    expect(resolving.battle.inspector.phase).toBe("Challenge");
+    expect(resolving.challenge).toMatchObject({
+      actionId: "resolve-challenge",
+      challenger: {
+        owner: "enemy",
+        spark: 2,
+        card: { model: { cardId: TUTORIAL_OPPONENT_CARD_ID } },
+      },
+      defender: {
+        owner: "player",
+        spark: 4,
+        card: { model: { cardId: TUTORIAL_PLAYER_CARD_ID } },
+      },
+      winnerOwner: "player",
+      loserOwner: "enemy",
+    });
+    expect(resolving.battle.enemy.frontRank[0]?.card?.model.cardId).toBe(
+      TUTORIAL_OPPONENT_CARD_ID,
+    );
+    expect(resolving.battle.player.frontRank[0]?.card?.model.cardId).toBe(
+      TUTORIAL_PLAYER_CARD_ID,
+    );
+    expect(resolving.battle.enemy.voidCards).toEqual([]);
+
+    const resolved = buildTutorialView(
+      {
+        runId: "event:challenge",
+        actions,
+        currentActionIndex: null,
+        playerCardPlay,
+      },
+      OPPONENT_CARD,
+      PLAYER_CARD,
+    );
+
+    expect(resolved.challenge).toBeNull();
+    expect(resolved.battle.phase).toBe("challenge");
+    expect(resolved.battle.enemy.frontRank[0]?.card).toBeNull();
+    expect(resolved.battle.player.frontRank[0]?.card?.model.cardId).toBe(
+      TUTORIAL_PLAYER_CARD_ID,
+    );
+    expect(resolved.battle.enemy.voidCards).toMatchObject([
+      {
+        model: { cardId: TUTORIAL_OPPONENT_CARD_ID },
+        layoutMotion: "snap",
+      },
+    ]);
+    expect(resolved.battle.inspector.sides.enemy.zones).toMatchObject({
+      frontRank: 0,
+      void: 1,
     });
   });
 

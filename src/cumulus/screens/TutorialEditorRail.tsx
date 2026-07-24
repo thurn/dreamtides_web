@@ -45,7 +45,7 @@ export interface TutorialEditorRailProps {
   readonly onClose: () => void;
 }
 
-const TUTORIAL_TAIL_ACTION_COUNT = 5;
+const TUTORIAL_TAIL_ACTION_COUNT = 6;
 const DEFAULT_HOW_TO_PLAY_TEXT =
   "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle.";
 
@@ -69,6 +69,7 @@ const ACTION_OPTIONS = [
     value: "reposition-player-character",
     label: "Reposition Player Character",
   },
+  { value: "resolve-challenge", label: "Resolve Challenge" },
   { value: "draw-dreamwell-card", label: "Draw Dreamwell Card" },
   { value: "end-turn", label: "End Turn" },
 ] satisfies readonly { value: TutorialActionName; label: string }[];
@@ -183,6 +184,15 @@ function defaultAction(
       wait: 0,
     };
   }
+  if (actionName === "resolve-challenge") {
+    return {
+      id,
+      action: "resolve-challenge",
+      challengerCardId: TUTORIAL_OPPONENT_CARD_ID,
+      defenderCardId: TUTORIAL_PLAYER_CARD_ID,
+      wait: 0,
+    };
+  }
   if (actionName === "end-turn") {
     return { id, action: "end-turn", wait: 0 };
   }
@@ -257,6 +267,21 @@ function changedActionType(
         action.action === "reposition-player-character"
           ? action.opposingCardId
           : TUTORIAL_OPPONENT_CARD_ID,
+      wait: action.wait,
+    };
+  }
+  if (actionName === "resolve-challenge") {
+    return {
+      id: action.id,
+      action: actionName,
+      challengerCardId:
+        action.action === "resolve-challenge"
+          ? action.challengerCardId
+          : TUTORIAL_OPPONENT_CARD_ID,
+      defenderCardId:
+        action.action === "resolve-challenge"
+          ? action.defenderCardId
+          : TUTORIAL_PLAYER_CARD_ID,
       wait: action.wait,
     };
   }
@@ -428,6 +453,7 @@ function TutorialActionRow({
                   value !== "reveal-and-play-opponent-card" &&
                   value !== "reposition-opponent-character" &&
                   value !== "reposition-player-character" &&
+                  value !== "resolve-challenge" &&
                   value !== "draw-dreamwell-card" &&
                   value !== "end-turn"
                 ) {
@@ -769,6 +795,45 @@ function TutorialActionRow({
           </>
         ) : null}
 
+        {action.action === "resolve-challenge" ? (
+          <>
+            <TextField
+              label="Challenger UUID"
+              value={action.challengerCardId}
+              error={
+                isCardId(action.challengerCardId)
+                  ? undefined
+                  : "Enter a challenger UUID."
+              }
+              testId={`tutorial-action-challenger-card-id-${action.id}`}
+              onChange={(challengerCardId) =>
+                update(
+                  { ...action, challengerCardId },
+                  isCardId(challengerCardId) &&
+                    challengerCardId !== action.defenderCardId,
+                )
+              }
+            />
+            <TextField
+              label="Defender UUID"
+              value={action.defenderCardId}
+              error={
+                isCardId(action.defenderCardId)
+                  ? undefined
+                  : "Enter a defender UUID."
+              }
+              testId={`tutorial-action-defender-card-id-${action.id}`}
+              onChange={(defenderCardId) =>
+                update(
+                  { ...action, defenderCardId },
+                  isCardId(defenderCardId) &&
+                    defenderCardId !== action.challengerCardId,
+                )
+              }
+            />
+          </>
+        ) : null}
+
         <NumberStepper
           label="Wait"
           value={action.wait}
@@ -926,6 +991,7 @@ function TutorialEditorContent({
             value !== "reveal-and-play-opponent-card" &&
             value !== "reposition-opponent-character" &&
             value !== "reposition-player-character" &&
+            value !== "resolve-challenge" &&
             value !== "draw-dreamwell-card" &&
             value !== "end-turn"
           ) {

@@ -32,6 +32,7 @@ interface ScreenMockState {
   cardFullTransition: unknown;
   cardBattlefieldAnimate: unknown;
   cardBattlefieldTransition: unknown;
+  challengeRematerializedAnimationComplete: (() => void) | null;
 }
 
 const screenMocks = vi.hoisted<ScreenMockState>(() => ({
@@ -53,6 +54,7 @@ const screenMocks = vi.hoisted<ScreenMockState>(() => ({
   cardFullTransition: null,
   cardBattlefieldAnimate: null,
   cardBattlefieldTransition: null,
+  challengeRematerializedAnimationComplete: null as (() => void) | null,
 }));
 
 interface MotionMainStubInput {
@@ -74,6 +76,7 @@ interface MotionDivStubInput {
   readonly "data-tutorial-card-battlefield-layer"?: string;
   readonly "data-tutorial-card-full-layer"?: string;
   readonly "data-tutorial-opponent-card-play"?: string;
+  readonly "data-tutorial-challenge-rematerialized"?: string;
   readonly initial?: unknown;
   readonly onAnimationComplete?: () => void;
   readonly style?: CSSProperties;
@@ -110,6 +113,11 @@ vi.mock("framer-motion", () => ({
         screenMocks.cardAnimate = animate;
         screenMocks.cardTransition = transition;
         screenMocks.cardAnimationComplete = onAnimationComplete ?? null;
+      } else if (
+        elementProps["data-tutorial-challenge-rematerialized"] !== undefined
+      ) {
+        screenMocks.challengeRematerializedAnimationComplete =
+          onAnimationComplete ?? null;
       } else if (elementProps["data-tutorial-card-full-layer"] !== undefined) {
         screenMocks.cardFullAnimate = animate;
         screenMocks.cardFullTransition = transition;
@@ -169,7 +177,10 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
                 data-battle-slot-filled={slot.card === null ? "false" : "true"}
               >
                 {slot.card === null ? null : (
-                  <div data-card-id={slot.card.model.cardId} />
+                  <div
+                    data-battle-card-id={slot.card.id}
+                    data-card-id={slot.card.model.cardId}
+                  />
                 )}
               </div>
             ))}
@@ -182,7 +193,10 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
                 data-battle-slot-filled={slot.card === null ? "false" : "true"}
               >
                 {slot.card === null ? null : (
-                  <div data-card-id={slot.card.model.cardId} />
+                  <div
+                    data-battle-card-id={slot.card.id}
+                    data-card-id={slot.card.model.cardId}
+                  />
                 )}
               </div>
             ))}
@@ -195,7 +209,10 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
                 data-battle-slot-filled={slot.card === null ? "false" : "true"}
               >
                 {slot.card === null ? null : (
-                  <div data-card-id={slot.card.model.cardId} />
+                  <div
+                    data-battle-card-id={slot.card.id}
+                    data-card-id={slot.card.model.cardId}
+                  />
                 )}
               </div>
             ))}
@@ -208,10 +225,19 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
                 data-battle-slot-filled={slot.card === null ? "false" : "true"}
               >
                 {slot.card === null ? null : (
-                  <div data-card-id={slot.card.model.cardId} />
+                  <div
+                    data-battle-card-id={slot.card.id}
+                    data-card-id={slot.card.model.cardId}
+                  />
                 )}
               </div>
             ))}
+          </div>
+          <div data-battle-zone="enemy-void">
+            <div data-battle-pile-frame="" />
+          </div>
+          <div data-battle-zone="player-void">
+            <div data-battle-pile-frame="" />
           </div>
           <div data-testid="enemy-battle-status">
             {enemyStatus?.dreamcaller === undefined ||
@@ -307,6 +333,7 @@ const TUTORIAL_PLAYER_CARD: MobileBattleView["playerHand"][number] = {
       ...TUTORIAL_OPPONENT_CARD.model.displaySnapshot,
       id: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
       name: asCardName("Marked Direwolf"),
+      spark: 4,
     },
   },
   exhausted: false,
@@ -377,6 +404,7 @@ beforeEach(() => {
   screenMocks.cardFullTransition = null;
   screenMocks.cardBattlefieldAnimate = null;
   screenMocks.cardBattlefieldTransition = null;
+  screenMocks.challengeRematerializedAnimationComplete = null;
 });
 
 afterEach(() => {
@@ -1770,6 +1798,116 @@ describe("TutorialScreen", () => {
       TUTORIAL_PLAYER_CARD.model.cardId,
       TUTORIAL_OPPONENT_CARD.model.cardId,
       "player-front-0",
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("lifts the challenge pair, dissolves the lower-spark card, and completes after rematerialization", () => {
+    vi.useFakeTimers();
+    const onActionComplete = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: null,
+              playbackRunId: "event:challenge",
+              currentAction: {
+                id: "resolve-challenge",
+                action: "resolve-challenge",
+                challengerCardId:
+                  TUTORIAL_OPPONENT_CARD.model.cardId,
+                defenderCardId: TUTORIAL_PLAYER_CARD.model.cardId,
+                wait: 0,
+              },
+              howToPlay: null,
+              endTurn: null,
+              playerReposition: null,
+              challenge: {
+                actionId: "resolve-challenge",
+                challenger: {
+                  owner: "enemy",
+                  card: TUTORIAL_OPPONENT_CARD,
+                  spark: 2,
+                },
+                defender: {
+                  owner: "player",
+                  card: TUTORIAL_PLAYER_CARD,
+                  spark: 4,
+                },
+                winnerOwner: "player",
+                loserOwner: "enemy",
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                phase: "challenge",
+                playerHand: [],
+                enemy: {
+                  backRank: [],
+                  frontRank: [
+                    {
+                      id: "enemy-front-0",
+                      card: TUTORIAL_OPPONENT_CARD,
+                    },
+                  ],
+                  deckCardIds: [],
+                },
+                player: {
+                  backRank: [],
+                  frontRank: [
+                    {
+                      id: "player-front-0",
+                      card: TUTORIAL_PLAYER_CARD,
+                    },
+                  ],
+                },
+              } as unknown as MobileBattleView,
+            }}
+            onActionComplete={onActionComplete}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    act(() => screenMocks.sceneAnimationComplete?.());
+    act(() => {
+      vi.advanceTimersByTime(500);
+    });
+
+    const animation = container.querySelector(
+      "[data-tutorial-challenge-animation]",
+    );
+    expect(animation).not.toBeNull();
+    expect(animation?.getAttribute("data-tutorial-challenge-winner-card-id"))
+      .toBe(TUTORIAL_PLAYER_CARD.model.cardId);
+    expect(animation?.getAttribute("data-tutorial-challenge-loser-card-id"))
+      .toBe(TUTORIAL_OPPONENT_CARD.model.cardId);
+    expect(
+      container.querySelectorAll("[data-tutorial-challenge-mote]"),
+    ).toHaveLength(16);
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-battle-rank="enemy-front"] [data-battle-card-id]',
+      )?.style.visibility,
+    ).toBe("hidden");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-battle-rank="player-front"] [data-battle-card-id]',
+      )?.style.visibility,
+    ).toBe("hidden");
+    expect(screenMocks.props?.view.phase).toBe("challenge");
+
+    act(() => screenMocks.challengeRematerializedAnimationComplete?.());
+    expect(onActionComplete).toHaveBeenCalledWith(
+      "event:challenge",
+      "resolve-challenge",
     );
 
     act(() => root.unmount());
