@@ -496,8 +496,9 @@ describe("MobileBattleScreen", () => {
   it("places an opponent Dreamwell card below the opponent status display", () => {
     vi.useFakeTimers();
     const cardId = asCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
+    const initialView = makeView();
     const view: MobileBattleView = {
-      ...makeView(),
+      ...initialView,
       activeSide: "enemy",
       dreamwell: {
         side: "enemy",
@@ -513,7 +514,14 @@ describe("MobileBattleScreen", () => {
         },
       },
     };
-    const { container, root } = mount(view);
+    const { container, root } = mount(initialView);
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <MobileBattleScreen view={view} />
+        </CumulusRoot>,
+      );
+    });
 
     const enemyStatus = container.querySelector<HTMLElement>(
       '[data-battle-zone="enemy-status"]',
@@ -550,7 +558,6 @@ describe("MobileBattleScreen", () => {
   });
 
   it("places a player Dreamwell card above the player status display", () => {
-    vi.useFakeTimers();
     const cardId = asCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
     const view: MobileBattleView = {
       ...makeView(),
@@ -575,10 +582,7 @@ describe("MobileBattleScreen", () => {
     );
     expect(
       playerStatus?.querySelector("[data-battle-dreamwell-layer]"),
-    ).toBeNull();
-    act(() => {
-      vi.advanceTimersByTime(2_100);
-    });
+    ).not.toBeNull();
     const layer = playerStatus?.querySelector<HTMLElement>(
       "[data-battle-dreamwell-layer]",
     );
@@ -592,7 +596,6 @@ describe("MobileBattleScreen", () => {
     ).toBeNull();
 
     act(() => root.unmount());
-    vi.useRealTimers();
   });
 
   it("renders the mobile control row between the battlefield and player status", () => {
@@ -1418,14 +1421,15 @@ describe("MobileBattleScreen", () => {
     vi.useRealTimers();
   });
 
-  it("announces the current turn when a battle mounts after its opening turn", () => {
+  it("does not announce the current turn when a battle mounts mid-turn", () => {
     vi.useFakeTimers();
     const { container, root } = mount(makeView());
 
-    expect(
-      container.querySelector('[data-battle-turn-announcement="player"]')
-        ?.textContent,
-    ).toBe("Your Turn");
+    expect(container.querySelector("[data-battle-turn-announcement]")).toBeNull();
+    act(() => {
+      vi.advanceTimersByTime(2_100);
+    });
+    expect(container.querySelector("[data-battle-turn-announcement]")).toBeNull();
 
     act(() => root.unmount());
     vi.useRealTimers();

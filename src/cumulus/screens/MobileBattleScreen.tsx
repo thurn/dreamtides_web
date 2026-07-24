@@ -556,13 +556,11 @@ function BattleBackdrop({ isDesktop }: { readonly isDesktop: boolean }) {
 
 function BattleTurnAnnouncement({
   activeSide,
-  isOpeningTurn,
   perspective,
   isDesktop,
   onComplete,
 }: {
   readonly activeSide: MobileBattleOwner;
-  readonly isOpeningTurn: boolean;
   readonly perspective: BattlePerspectiveSide;
   readonly isDesktop: boolean;
   readonly onComplete?: (side: MobileBattleOwner) => void;
@@ -573,7 +571,7 @@ function BattleTurnAnnouncement({
   const [announcement, setAnnouncement] = useState<{
     readonly key: number;
     readonly side: MobileBattleOwner;
-  } | null>(isOpeningTurn ? null : { key: 0, side: activeSide });
+  } | null>(null);
 
   onCompleteRef.current = onComplete;
 
@@ -3032,7 +3030,11 @@ export function MobileBattleScreen({
     readonly battleId: string;
     readonly turn: string;
     readonly side: MobileBattleOwner;
-  } | null>(null);
+  }>(() => ({
+    battleId: view.battleId,
+    turn: view.inspector.turn,
+    side: view.activeSide,
+  }));
   const inspectorTriggerRef = useRef<HTMLElement | null>(null);
   const previousDockLayout = useRef(isDockLayout);
   const previousPerspective = useRef(view.perspective);
@@ -3238,7 +3240,6 @@ export function MobileBattleScreen({
         <BattleTurnAnnouncement
           key={view.battleId}
           activeSide={view.activeSide}
-          isOpeningTurn={view.isOpeningTurn}
           perspective={view.perspective}
           isDesktop={isDesktop}
           onComplete={handleTurnAnnouncementComplete}
