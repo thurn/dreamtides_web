@@ -1151,13 +1151,15 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   );
 
   const requestBattlefieldPreview = useCallback(
-    (playerInPlayCount: 9 | 20): void => {
+    (playerInPlayCount: 9 | 19, enemyInPlayCount: 9 | 19): void => {
       const playerFrontRankCount = Math.floor(playerInPlayCount / 2);
       const playerBackRankCount = playerInPlayCount - playerFrontRankCount;
+      const enemyFrontRankCount = Math.floor(enemyInPlayCount / 2);
+      const enemyBackRankCount = enemyInPlayCount - enemyFrontRankCount;
       const command = createFillBattlefieldPreviewCommand(
         battleInit,
         Date.now(),
-        { player: playerInPlayCount, enemy: 9 },
+        { player: playerInPlayCount, enemy: enemyInPlayCount },
       );
       const previewCardIds =
         command?.id === "DEBUG_EDIT" &&
@@ -1177,8 +1179,8 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         playerBackRankCount,
         playerFrontRankCount,
         playerVoidAddedCount: 5,
-        enemyBackRankCount: 5,
-        enemyFrontRankCount: 4,
+        enemyBackRankCount,
+        enemyFrontRankCount,
         enemyVoidAddedCount: 5,
       });
       if (command !== null) {
@@ -1189,11 +1191,11 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   );
 
   const handleFillBattlefieldPreview = useCallback((): void => {
-    requestBattlefieldPreview(9);
+    requestBattlefieldPreview(19, 19);
   }, [requestBattlefieldPreview]);
 
-  const handleFillTwentyCardBattlefieldPreview = useCallback((): void => {
-    requestBattlefieldPreview(20);
+  const handleFillAsymmetricBattlefieldPreview = useCallback((): void => {
+    requestBattlefieldPreview(19, 9);
   }, [requestBattlefieldPreview]);
 
   function handleCumulusInspectorAction(
@@ -1520,8 +1522,8 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           onChoicePromptChoose: handleCumulusChoicePrompt,
           onResultAction: handleCumulusResultAction,
           onFillBattlefieldPreview: handleFillBattlefieldPreview,
-          onFillTwentyCardBattlefieldPreview:
-            handleFillTwentyCardBattlefieldPreview,
+          onFillAsymmetricBattlefieldPreview:
+            handleFillAsymmetricBattlefieldPreview,
           onInspectorAction: handleCumulusInspectorAction,
         }}
       />

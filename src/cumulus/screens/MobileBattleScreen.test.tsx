@@ -1562,7 +1562,7 @@ describe("MobileBattleScreen", () => {
       ),
     ).toEqual(["player-front", "player-back"]);
     expect(enemyArea?.querySelectorAll("[data-battle-slot-id]")).toHaveLength(
-      view.enemy.backRank.length + view.enemy.frontRank.length,
+      11,
     );
     const emptySlot = enemyArea?.querySelector<HTMLElement>(
       '[data-battle-slot-filled="false"]',
@@ -1606,10 +1606,10 @@ describe("MobileBattleScreen", () => {
       );
       expect(backTrack?.style.columnGap).toBe("var(--space-2)");
       expect(frontTrack?.style.columnGap).toBe("var(--space-2)");
-      expect(backTrack?.style.gridTemplateColumns).toContain("repeat(3,");
-      expect(frontTrack?.style.gridTemplateColumns).toContain("repeat(2,");
-      expect(backTrack?.style.width).toContain("3 * min(");
-      expect(frontTrack?.style.width).toContain("2 * min(");
+      expect(backTrack?.style.gridTemplateColumns).toContain("repeat(6,");
+      expect(frontTrack?.style.gridTemplateColumns).toContain("repeat(5,");
+      expect(backTrack?.style.width).toContain("6 * min(");
+      expect(frontTrack?.style.width).toContain("5 * min(");
       expect(backSlots).toHaveLength(frontSlots.length + 1);
       backSlots.forEach((backSlot) => {
         expect(backSlot.style.aspectRatio).toBe("1 / 1");
@@ -2295,10 +2295,90 @@ describe("MobileBattleScreen", () => {
         `[data-battle-rank="${owner}-${rank}"] [data-battle-rank-track]`,
       )?.style.gridTemplateColumns;
 
-    expect(trackColumns("enemy", "back")).toContain("repeat(3,");
-    expect(trackColumns("enemy", "front")).toContain("repeat(2,");
+    expect(trackColumns("enemy", "back")).toContain("repeat(6,");
+    expect(trackColumns("enemy", "front")).toContain("repeat(5,");
     expect(trackColumns("player", "back")).toContain("repeat(6,");
     expect(trackColumns("player", "front")).toContain("repeat(5,");
+
+    act(() => root.unmount());
+  });
+
+  it("reclaims mobile insets and spacing above eight back-rank columns", () => {
+    const view = makeView();
+    const denseBackRank = Array.from({ length: 10 }, (_, index) => ({
+      id: `B${String(index)}`,
+      card:
+        index < 9
+          ? makeCard(100 + index, `dense-back-${String(index)}`)
+          : null,
+    }));
+    const denseFrontRank = Array.from({ length: 9 }, (_, index) => ({
+      id: `F${String(index)}`,
+      card:
+        index < 8
+          ? makeCard(120 + index, `dense-front-${String(index)}`)
+          : null,
+    }));
+    const { container, root } = mount({
+      ...view,
+      player: {
+        ...view.player,
+        backRank: denseBackRank,
+        frontRank: denseFrontRank,
+      },
+    });
+    const rank = container.querySelector<HTMLElement>(
+      '[data-battle-rank="player-back"]',
+    );
+    const track = rank?.querySelector<HTMLElement>("[data-battle-rank-track]");
+
+    expect(rank?.style.left).toBe("3%");
+    expect(rank?.style.right).toBe("3%");
+    expect(track?.style.columnGap).toBe("var(--space-1)");
+    expect(rank?.style.height).toContain("94cqw - 9 * var(--space-1)");
+
+    act(() => root.unmount());
+  });
+
+  it("fills the mobile viewport with ten square back-rank slots and caps both ranks", () => {
+    const view = makeView();
+    const overflowingBackRank = Array.from({ length: 12 }, (_, index) => ({
+      id: `B${String(index)}`,
+      card: makeCard(160 + index, `overflow-back-${String(index)}`),
+    }));
+    const overflowingFrontRank = Array.from({ length: 11 }, (_, index) => ({
+      id: `F${String(index)}`,
+      card: makeCard(180 + index, `overflow-front-${String(index)}`),
+    }));
+    const { container, root } = mount({
+      ...view,
+      player: {
+        ...view.player,
+        backRank: overflowingBackRank,
+        frontRank: overflowingFrontRank,
+      },
+    });
+    const backRank = container.querySelector<HTMLElement>(
+      '[data-battle-rank="player-back"]',
+    );
+    const backTrack = backRank?.querySelector<HTMLElement>(
+      "[data-battle-rank-track]",
+    );
+    const frontTrack = container.querySelector<HTMLElement>(
+      '[data-battle-rank="player-front"] [data-battle-rank-track]',
+    );
+    const backSlots = backTrack?.querySelectorAll("[data-battle-slot-id]");
+    const frontSlots = frontTrack?.querySelectorAll("[data-battle-slot-id]");
+
+    expect(backSlots).toHaveLength(10);
+    expect(frontSlots).toHaveLength(9);
+    expect(backRank?.style.left).toBe("0%");
+    expect(backRank?.style.right).toBe("0%");
+    expect(backTrack?.style.columnGap).toBe("0px");
+    expect(backRank?.style.height).toBe(
+      "min(22cqw, calc((100cqw - 0 * var(--space-1)) / 10), calc((200cqh - 0 * var(--space-1)) / 4))",
+    );
+    expect(backTrack?.style.width).toBe("100cqw");
 
     act(() => root.unmount());
   });
@@ -2614,7 +2694,7 @@ describe("MobileBattleScreen", () => {
 
   it("opens the debug menu and requests a full battlefield and void layout", () => {
     const onFillBattlefieldPreview = vi.fn();
-    const onFillTwentyCardBattlefieldPreview = vi.fn();
+    const onFillAsymmetricBattlefieldPreview = vi.fn();
     const interactions = {
       canInteract: true,
       pendingCardId: null,
@@ -2626,7 +2706,7 @@ describe("MobileBattleScreen", () => {
       onPreviousPhase: vi.fn(),
       onNextPhase: vi.fn(),
       onFillBattlefieldPreview,
-      onFillTwentyCardBattlefieldPreview,
+      onFillAsymmetricBattlefieldPreview,
     };
     const { container, root } = mount(makeView(), interactions);
     const trigger = container.querySelector<HTMLButtonElement>(
@@ -2644,14 +2724,14 @@ describe("MobileBattleScreen", () => {
     expect(fill?.textContent).toContain("Fill Battlefield + Voids");
     expect(
       container.querySelector(
-        '[data-testid="battle-debug-fill-twenty-player"]',
+        '[data-testid="battle-debug-fill-asymmetric"]',
       )?.textContent,
-    ).toContain("Fill 20 vs 9 + Voids");
+    ).toContain("Fill 19 vs 9 + Voids");
 
     act(() => fill?.click());
 
     expect(onFillBattlefieldPreview).toHaveBeenCalledTimes(1);
-    expect(onFillTwentyCardBattlefieldPreview).not.toHaveBeenCalled();
+    expect(onFillAsymmetricBattlefieldPreview).not.toHaveBeenCalled();
     expect(trigger?.getAttribute("aria-expanded")).toBe("false");
     expect(
       container.querySelector('[data-testid="battle-debug-fill-grid"]'),
@@ -2660,8 +2740,8 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("requests the twenty-player-card stress layout from the debug menu", () => {
-    const onFillTwentyCardBattlefieldPreview = vi.fn();
+  it("requests the asymmetric stress layout from the debug menu", () => {
+    const onFillAsymmetricBattlefieldPreview = vi.fn();
     const interactions = {
       canInteract: true,
       pendingCardId: null,
@@ -2673,7 +2753,7 @@ describe("MobileBattleScreen", () => {
       onPreviousPhase: vi.fn(),
       onNextPhase: vi.fn(),
       onFillBattlefieldPreview: vi.fn(),
-      onFillTwentyCardBattlefieldPreview,
+      onFillAsymmetricBattlefieldPreview,
     };
     const { container, root } = mount(makeView(), interactions);
 
@@ -2685,18 +2765,18 @@ describe("MobileBattleScreen", () => {
         ?.click();
     });
 
-    const fillTwenty = container.querySelector<HTMLButtonElement>(
-      '[data-testid="battle-debug-fill-twenty-player"]',
+    const fillAsymmetric = container.querySelector<HTMLButtonElement>(
+      '[data-testid="battle-debug-fill-asymmetric"]',
     );
-    expect(fillTwenty?.textContent).toContain("Fill 20 vs 9 + Voids");
+    expect(fillAsymmetric?.textContent).toContain("Fill 19 vs 9 + Voids");
 
-    act(() => fillTwenty?.click());
+    act(() => fillAsymmetric?.click());
 
-    expect(onFillTwentyCardBattlefieldPreview).toHaveBeenCalledTimes(1);
+    expect(onFillAsymmetricBattlefieldPreview).toHaveBeenCalledTimes(1);
     expect(interactions.onFillBattlefieldPreview).not.toHaveBeenCalled();
     expect(
       container.querySelector(
-        '[data-testid="battle-debug-fill-twenty-player"]',
+        '[data-testid="battle-debug-fill-asymmetric"]',
       ),
     ).toBeNull();
 
@@ -3051,13 +3131,9 @@ describe("MobileBattleScreen", () => {
   it("draws empty staggered battlefield slots with the battlefield card radius and gray dotted border", () => {
     const view = makeView();
     const { container, root } = mount(view);
-    const slots = [
-      ...view.enemy.backRank,
-      ...view.enemy.frontRank,
-      ...view.player.backRank,
-      ...view.player.frontRank,
-    ];
-    const emptySlotCount = slots.filter((slot) => slot.card === null).length;
+    const emptySlotCount = container.querySelectorAll(
+      '[data-battle-slot-filled="false"]',
+    ).length;
     const battlefieldCard = container.querySelector<HTMLElement>(
       '.card-view[data-card-presentation="battlefield"]',
     );

@@ -1463,6 +1463,10 @@ function battlefieldPreviewLayout(definitionCount: number): {
   if (definitionCount === 14) {
     return { frontRank: 4, backRank: 5, void: 5 };
   }
+  if (definitionCount === 24) {
+    return { frontRank: 9, backRank: 10, void: 5 };
+  }
+  // Retained so already-committed debug events continue to fold deterministically.
   if (definitionCount === 25) {
     return { frontRank: 10, backRank: 10, void: 5 };
   }

@@ -48,8 +48,13 @@ import {
   BATTLE_HUD_START_CLEARANCE_PROPERTY,
 } from "../primitives/battle-hud-layout";
 import {
+  DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS,
   MOBILE_BATTLE_INSPECTOR_RAIL_TRACK,
-  MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS,
+  MOBILE_BATTLE_COMPACT_RANK_THRESHOLD,
+  MOBILE_BATTLE_MAX_BACK_RANK_SLOTS,
+  MOBILE_BATTLE_MAX_FRONT_RANK_SLOTS,
+  MOBILE_BATTLE_MIN_BACK_RANK_SLOTS,
+  MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS,
 } from "./mobile-battle-layout";
 import { useIsDesktop } from "./use-is-desktop";
 import {
@@ -341,7 +346,7 @@ export interface MobileBattleInteractions {
   readonly onPerspectiveToggle?: () => void;
   readonly onResultAction?: (action: MobileBattleResultAction) => void;
   readonly onFillBattlefieldPreview?: () => void;
-  readonly onFillTwentyCardBattlefieldPreview?: () => void;
+  readonly onFillAsymmetricBattlefieldPreview?: () => void;
   readonly onInspectorAction?: (action: MobileBattleInspectorAction) => void;
 }
 
@@ -370,6 +375,7 @@ function pickerCandidate(
 
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
 const BATTLEFIELD_SIDE_INSET_PERCENT = 6;
+const BATTLEFIELD_COMPACT_SIDE_INSET_PERCENT = 3;
 const DESKTOP_BATTLEFIELD_SIDE_INSET_PERCENT = 14;
 const BATTLEFIELD_WIDTH_PERCENT = 100 - BATTLEFIELD_SIDE_INSET_PERCENT * 2;
 // Human-tuned box measures: a compact glyph in a padded dark disc, tucked
@@ -1607,17 +1613,68 @@ function battlefieldLayoutBackSlotCount(
   isDesktop: boolean,
 ): number {
   const sides = [view.enemy, view.player] as const;
-  return Math.max(
-    isDesktop ? MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS : 1,
+  const backSlotCount = Math.max(
+    isDesktop
+      ? DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS
+      : MOBILE_BATTLE_MIN_BACK_RANK_SLOTS,
     ...sides.map((side) => side.backRank.length),
     ...sides.map((side) => side.frontRank.length + 1),
   );
+  return isDesktop
+    ? backSlotCount
+    : Math.min(backSlotCount, MOBILE_BATTLE_MAX_BACK_RANK_SLOTS);
 }
 
-function battlefieldCardSize(layoutBackSlotCount: number): string {
+function battlefieldDensityBackSlotCount(view: MobileBattleView): number {
+  const sides = [view.enemy, view.player] as const;
+  const occupiedCount = (slots: readonly MobileBattleSlotView[]) =>
+    slots.filter((slot) => slot.card !== null).length;
+  return Math.max(
+    ...sides.map((side) => occupiedCount(side.backRank)),
+    ...sides.map((side) => occupiedCount(side.frontRank) + 1),
+  );
+}
+
+function mobileBattlefieldDensity(layoutBackSlotCount: number): {
+  readonly gap: string;
+  readonly sideInsetPercent: number;
+} {
+  if (layoutBackSlotCount >= MOBILE_BATTLE_MAX_BACK_RANK_SLOTS) {
+    return { gap: "0", sideInsetPercent: 0 };
+  }
+  if (layoutBackSlotCount > MOBILE_BATTLE_COMPACT_RANK_THRESHOLD) {
+    return {
+      gap: token("--space-1"),
+      sideInsetPercent: BATTLEFIELD_COMPACT_SIDE_INSET_PERCENT,
+    };
+  }
+  return {
+    gap: token("--space-2"),
+    sideInsetPercent: BATTLEFIELD_SIDE_INSET_PERCENT,
+  };
+}
+
+function battlefieldCardSize(
+  layoutBackSlotCount: number,
+  isDesktop: boolean,
+  densityBackSlotCount: number,
+): string {
   const slotCount = Math.max(layoutBackSlotCount, 1);
+  if (
+    !isDesktop &&
+    densityBackSlotCount >= MOBILE_BATTLE_MAX_BACK_RANK_SLOTS
+  ) {
+    return `min(22cqw, calc((100cqw - 0 * ${token("--space-1")}) / 10), calc((200cqh - 0 * ${token("--space-1")}) / 4))`;
+  }
   const horizontalGapCount = Math.max(slotCount - 1, 0);
-  return `min(22cqw, calc((${String(BATTLEFIELD_WIDTH_PERCENT)}cqw - ${String(horizontalGapCount)} * ${token("--space-2")}) / ${String(slotCount)}), calc((200cqh - 3 * ${token("--space-2")}) / 4))`;
+  const density = isDesktop
+    ? {
+        gap: token("--space-2"),
+        sideInsetPercent: BATTLEFIELD_SIDE_INSET_PERCENT,
+      }
+    : mobileBattlefieldDensity(densityBackSlotCount);
+  const battlefieldWidthPercent = 100 - density.sideInsetPercent * 2;
+  return `min(22cqw, calc((${String(battlefieldWidthPercent)}cqw - ${String(horizontalGapCount)} * ${density.gap}) / ${String(slotCount)}), calc((200cqh - 3 * ${density.gap}) / 4))`;
 }
 
 function desktopControlCardSize(layoutBackSlotCount: number): string {
@@ -1630,17 +1687,21 @@ function desktopControlCardSize(layoutBackSlotCount: number): string {
 function battlefieldTrackWidth(
   slotCount: number,
   cardSize: string,
+  gap: string,
 ): string {
+  if (gap === "0") {
+    return `${String(slotCount * 10)}cqw`;
+  }
   const gapCount = Math.max(slotCount - 1, 0);
-  return `calc(${String(slotCount)} * ${cardSize} + ${String(gapCount)} * ${token("--space-2")})`;
+  return `calc(${String(slotCount)} * ${cardSize} + ${String(gapCount)} * ${gap})`;
 }
 
-function desktopRankSlots(
+function visibleRankSlots(
   slots: readonly MobileBattleSlotView[],
   rank: MobileBattleRank,
   slotCount: number,
 ): readonly MobileBattleSlotView[] {
-  if (slots.length >= slotCount) return slots;
+  if (slots.length >= slotCount) return slots.slice(0, slotCount);
   const prefix = rank === "back" ? "B" : "F";
   return [
     ...slots,
@@ -1658,6 +1719,7 @@ function Rank({
   rank,
   slots,
   layoutBackSlotCount,
+  densityBackSlotCount,
   centerAsymmetricDesktopRanks,
   cardSize,
   order,
@@ -1676,6 +1738,7 @@ function Rank({
   readonly rank: MobileBattleRank;
   readonly slots: readonly MobileBattleSlotView[];
   readonly layoutBackSlotCount: number;
+  readonly densityBackSlotCount: number;
   readonly centerAsymmetricDesktopRanks: boolean;
   readonly cardSize: string;
   readonly order: number;
@@ -1702,9 +1765,20 @@ function Rank({
     rank === "back"
       ? layoutBackSlotCount
       : Math.max(layoutBackSlotCount - 1, 1);
-  const visibleSlots = isDesktop && !centerAsymmetricDesktopRanks
-    ? desktopRankSlots(slots, rank, desktopSlotCount)
-    : slots;
+  const mobileSlotCount = rank === "back"
+    ? Math.min(
+        Math.max(slots.length, MOBILE_BATTLE_MIN_BACK_RANK_SLOTS),
+        MOBILE_BATTLE_MAX_BACK_RANK_SLOTS,
+      )
+    : Math.min(
+        Math.max(slots.length, MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS),
+        MOBILE_BATTLE_MAX_FRONT_RANK_SLOTS,
+      );
+  const visibleSlots = isDesktop
+    ? centerAsymmetricDesktopRanks
+      ? slots
+      : visibleRankSlots(slots, rank, desktopSlotCount)
+    : visibleRankSlots(slots, rank, mobileSlotCount);
   const containsDraggingCard =
     draggingCardId !== null &&
     visibleSlots.some((slot) => slot.card?.id === draggingCardId);
@@ -1713,15 +1787,21 @@ function Rank({
     (position === "far" && order === 1) ||
     (position === "near" && order === 0);
   const centerOffset = token("--space-1");
-  const outerOffset = `calc(${cardSize} + ${token("--space-2")} + ${centerOffset})`;
+  const density = isDesktop
+    ? {
+        gap: token("--space-2"),
+        sideInsetPercent: DESKTOP_BATTLEFIELD_SIDE_INSET_PERCENT,
+      }
+    : mobileBattlefieldDensity(densityBackSlotCount);
+  const outerOffset = `calc(${cardSize} + ${density.gap} + ${centerOffset})`;
   return (
     <div
       data-battle-rank={`${owner}-${rank}`}
       data-battle-rank-order={order}
       style={{
         position: "absolute",
-        left: `${String(isDesktop ? DESKTOP_BATTLEFIELD_SIDE_INSET_PERCENT : BATTLEFIELD_SIDE_INSET_PERCENT)}%`,
-        right: `${String(isDesktop ? DESKTOP_BATTLEFIELD_SIDE_INSET_PERCENT : BATTLEFIELD_SIDE_INSET_PERCENT)}%`,
+        left: `${String(density.sideInsetPercent)}%`,
+        right: `${String(density.sideInsetPercent)}%`,
         height: cardSize,
         top:
           position === "near"
@@ -1746,13 +1826,13 @@ function Rank({
         style={{
           position: "relative",
           flex: "0 0 auto",
-          width: battlefieldTrackWidth(trackSlotCount, cardSize),
+          width: battlefieldTrackWidth(trackSlotCount, cardSize, density.gap),
           height: cardSize,
           display: "grid",
           gridTemplateColumns: `repeat(${String(trackSlotCount)}, ${cardSize})`,
           gridAutoColumns: cardSize,
           gridAutoFlow: "column",
-          columnGap: token("--space-2"),
+          columnGap: density.gap,
         }}
       >
         {visibleSlots.map((slot) => {
@@ -1906,6 +1986,7 @@ function PlayArea({
   position,
   side,
   layoutBackSlotCount,
+  densityBackSlotCount,
   centerAsymmetricDesktopRanks,
   cardSize,
   draggingCardId,
@@ -1922,6 +2003,7 @@ function PlayArea({
   readonly position: BattleBoardPosition;
   readonly side: MobileBattleSideView;
   readonly layoutBackSlotCount: number;
+  readonly densityBackSlotCount: number;
   readonly centerAsymmetricDesktopRanks: boolean;
   readonly cardSize: string;
   readonly draggingCardId: string | null;
@@ -1966,6 +2048,7 @@ function PlayArea({
           rank={rank}
           slots={slots}
           layoutBackSlotCount={layoutBackSlotCount}
+          densityBackSlotCount={densityBackSlotCount}
           centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks}
           cardSize={cardSize}
           order={order}
@@ -2475,6 +2558,7 @@ function ControlRow({
               ? battlefieldTrackWidth(
                   layoutBackSlotCount,
                   desktopControlCardSize(layoutBackSlotCount),
+                  token("--space-2"),
                 )
               : "100%",
             maxWidth: isDesktop ? "100%" : undefined,
@@ -2533,6 +2617,7 @@ function ControlRow({
               ? battlefieldTrackWidth(
                   layoutBackSlotCount,
                   desktopControlCardSize(layoutBackSlotCount),
+                  token("--space-2"),
                 )
               : undefined,
             maxWidth: isDesktop ? "100%" : undefined,
@@ -2667,10 +2752,10 @@ function BattleControlMessage({
 
 function BattleDebugMenu({
   onFillBattlefieldPreview,
-  onFillTwentyCardBattlefieldPreview,
+  onFillAsymmetricBattlefieldPreview,
 }: {
   readonly onFillBattlefieldPreview?: () => void;
-  readonly onFillTwentyCardBattlefieldPreview?: () => void;
+  readonly onFillAsymmetricBattlefieldPreview?: () => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -2719,12 +2804,12 @@ function BattleDebugMenu({
                 }}
               />
               <GlassButton
-                label="Fill 20 vs 9 + Voids"
+                label="Fill 19 vs 9 + Voids"
                 placement="onGlass"
-                disabled={onFillTwentyCardBattlefieldPreview === undefined}
-                testId="battle-debug-fill-twenty-player"
+                disabled={onFillAsymmetricBattlefieldPreview === undefined}
+                testId="battle-debug-fill-asymmetric"
                 onPress={() => {
-                  onFillTwentyCardBattlefieldPreview?.();
+                  onFillAsymmetricBattlefieldPreview?.();
                   setIsOpen(false);
                 }}
               />
@@ -3054,10 +3139,15 @@ export function MobileBattleScreen({
     ? (far.owner === "enemy" ? view.enemyHand : view.playerHand)
     : view.farHand.cards;
   const layoutBackSlotCount = battlefieldLayoutBackSlotCount(view, isDesktop);
-  const cardSize = battlefieldCardSize(layoutBackSlotCount);
+  const densityBackSlotCount = battlefieldDensityBackSlotCount(view);
+  const cardSize = battlefieldCardSize(
+    layoutBackSlotCount,
+    isDesktop,
+    densityBackSlotCount,
+  );
   const centerAsymmetricDesktopRanks = isDesktop && (
-    far.backRank.length >= MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS
-    || near.backRank.length >= MOBILE_BATTLE_STARTING_BACK_RANK_SLOTS
+    far.backRank.length >= DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS
+    || near.backRank.length >= DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS
   ) && (
     far.backRank.length !== near.backRank.length
     || far.frontRank.length !== near.frontRank.length
@@ -3257,8 +3347,8 @@ export function MobileBattleScreen({
           onPickerCardToggle={handlePickerCardToggle}
         />
         <SideZones activeSide={view.activeSide} dreamwell={visibleDreamwell} isDesktop={isDesktop} owner={far.owner} position="far" phase={view.phase} side={far} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner={far.owner} position="far" side={far} layoutBackSlotCount={layoutBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} guidedSlotHighlight={guidedSlotHighlight} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner={near.owner} position="near" side={near} layoutBackSlotCount={layoutBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} guidedSlotHighlight={guidedSlotHighlight} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner={far.owner} position="far" side={far} layoutBackSlotCount={layoutBackSlotCount} densityBackSlotCount={densityBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} guidedSlotHighlight={guidedSlotHighlight} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner={near.owner} position="near" side={near} layoutBackSlotCount={layoutBackSlotCount} densityBackSlotCount={densityBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} guidedSlotHighlight={guidedSlotHighlight} interactions={interactions} />
         <ControlRow
           aiApproval={view.aiApproval}
           cardPicker={boardCardPicker}
@@ -3335,7 +3425,7 @@ export function MobileBattleScreen({
       >
         <BattleDebugMenu
           onFillBattlefieldPreview={interactions?.onFillBattlefieldPreview}
-          onFillTwentyCardBattlefieldPreview={interactions?.onFillTwentyCardBattlefieldPreview}
+          onFillAsymmetricBattlefieldPreview={interactions?.onFillAsymmetricBattlefieldPreview}
         />
         <div ref={(node) => { inspectorTriggerRef.current = node?.querySelector("button") ?? null; }}>
           <IconButton

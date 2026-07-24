@@ -7,14 +7,14 @@ import type {
 
 const PREVIEW_VOID_CHARACTER_COUNT = 5;
 
-export type BattlefieldPreviewInPlayCount = 9 | 20;
+export type BattlefieldPreviewInPlayCount = 9 | 19;
 export type BattlefieldPreviewInPlayCounts = Readonly<
   Record<BattleSide, BattlefieldPreviewInPlayCount>
 >;
 
 const STANDARD_IN_PLAY_COUNTS: BattlefieldPreviewInPlayCounts = {
-  player: 9,
-  enemy: 9,
+  player: 19,
+  enemy: 19,
 };
 
 /**

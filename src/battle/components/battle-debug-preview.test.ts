@@ -38,7 +38,7 @@ function occupiedCount(
 }
 
 describe("createFillBattlefieldPreviewCommand", () => {
-  it("atomically fills four front, five back, and five void cards per side", () => {
+  it("atomically fills nine front, ten back, and five void cards per side", () => {
     const { init, board } = makeBattle();
     const existingPlayer = board.sides.player.hand.shift();
     const existingEnemy = board.sides.enemy.hand.shift();
@@ -66,8 +66,8 @@ describe("createFillBattlefieldPreviewCommand", () => {
       ...command.edit.definitions.player,
       ...command.edit.definitions.enemy,
     ];
-    expect(command.edit.definitions.player).toHaveLength(14);
-    expect(command.edit.definitions.enemy).toHaveLength(14);
+    expect(command.edit.definitions.player).toHaveLength(24);
+    expect(command.edit.definitions.enemy).toHaveLength(24);
     expect(
       definitions.every(
         (definition) => definition.battleCardKind === "character",
@@ -77,18 +77,18 @@ describe("createFillBattlefieldPreviewCommand", () => {
     const next = applyDebugEdit(board, command.edit, EMISSION).state;
 
     for (const side of ["player", "enemy"] as const) {
-      expect(occupiedCount(next, side, "frontRank")).toBe(4);
-      expect(occupiedCount(next, side, "backRank")).toBe(5);
+      expect(occupiedCount(next, side, "frontRank")).toBe(9);
+      expect(occupiedCount(next, side, "backRank")).toBe(10);
       expect(
         rankSlotIds(next.sides[side].frontRank)
-          .slice(0, 4)
+          .slice(0, 9)
           .map((slotId) => next.sides[side].frontRank[slotId] !== null),
-      ).toEqual([true, true, true, true]);
+      ).toEqual(Array.from({ length: 9 }, () => true));
       expect(
         rankSlotIds(next.sides[side].backRank)
-          .slice(0, 5)
+          .slice(0, 10)
           .map((slotId) => next.sides[side].backRank[slotId] !== null),
-      ).toEqual([true, true, true, true, true]);
+      ).toEqual(Array.from({ length: 10 }, () => true));
       expect(
         next.sides[side].void.filter(
           (battleCardId) => !existingCardIds.has(battleCardId),
@@ -99,12 +99,12 @@ describe("createFillBattlefieldPreviewCommand", () => {
     expect(next.sides.enemy.void).toContain(existingEnemy);
   });
 
-  it("fills twenty player battlefield slots while keeping nine enemy slots and both void previews", () => {
+  it("fills nineteen player battlefield slots while keeping nine enemy slots and both void previews", () => {
     const { init, board } = makeBattle();
     const existingCardIds = new Set(Object.keys(board.cardInstances));
 
     const command = createFillBattlefieldPreviewCommand(init, 10_000, {
-      player: 20,
+      player: 19,
       enemy: 9,
     });
     if (
@@ -115,12 +115,12 @@ describe("createFillBattlefieldPreviewCommand", () => {
       throw new Error("Expected battlefield preview command");
     }
 
-    expect(command.edit.definitions.player).toHaveLength(25);
+    expect(command.edit.definitions.player).toHaveLength(24);
     expect(command.edit.definitions.enemy).toHaveLength(14);
 
     const next = applyDebugEdit(board, command.edit, EMISSION).state;
 
-    expect(occupiedCount(next, "player", "frontRank")).toBe(10);
+    expect(occupiedCount(next, "player", "frontRank")).toBe(9);
     expect(occupiedCount(next, "player", "backRank")).toBe(10);
     expect(occupiedCount(next, "enemy", "frontRank")).toBe(4);
     expect(occupiedCount(next, "enemy", "backRank")).toBe(5);

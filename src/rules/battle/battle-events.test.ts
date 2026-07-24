@@ -702,6 +702,30 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     ]);
   });
 
+  it("accepts the nineteen-character battlefield preview payload", () => {
+    const state = { ...baseState(), battle: battleFrom(makeRichBoard()) };
+    const definition = makeInstance(
+      "preview-source",
+      "10000000-0000-0000-0000-000000000099",
+    ).definition;
+    const definitions = Array.from({ length: 24 }, () => definition);
+    const result = reduce(state, "BATTLE_COMMAND", debugEdit({
+      kind: "FILL_BATTLEFIELD_PREVIEW",
+      definitions: { player: definitions, enemy: definitions },
+      createdAtMs: 10_000,
+    }));
+
+    expect(result.outcome).toBe("applied");
+    expect(
+      Object.values(result.state.battle?.board.sides.player.backRank ?? {})
+        .filter((battleCardId) => battleCardId !== null),
+    ).toHaveLength(10);
+    expect(
+      Object.values(result.state.battle?.board.sides.player.frontRank ?? {})
+        .filter((battleCardId) => battleCardId !== null),
+    ).toHaveLength(9);
+  });
+
   it("bounces a DEBUG_EDIT whose side is not a battle side", () => {
     const state = inBattleState();
     const before = hashBattle(state.battle);

@@ -866,7 +866,12 @@ function isFiniteNumber(value: unknown): value is number {
 function isBattlefieldPreviewDefinitionList(value: unknown): boolean {
   return (
     Array.isArray(value) &&
-    (value.length === 9 || value.length === 14 || value.length === 25) &&
+    (
+      value.length === 9 ||
+      value.length === 14 ||
+      value.length === 24 ||
+      value.length === 25
+    ) &&
     value.every(isPlainRecord)
   );
 }
