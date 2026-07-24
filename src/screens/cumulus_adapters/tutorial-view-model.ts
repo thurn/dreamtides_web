@@ -400,6 +400,12 @@ export function buildTutorialView(
     }
   }
   const enemyHandCardIds = opponentHandRecords.map((record) => record.view.id);
+  const opponentCardToReveal =
+    currentAction?.action === "reveal-and-play-opponent-card"
+      ? opponentHandRecords.find(
+          (record) => record.card.id === currentAction.cardId,
+        )?.view ?? null
+      : null;
   const enemyDeck = enemyDeckCardIds.slice(completedOpponentDrawCount);
   const visibleOpponentRepositionActions = playback?.actions
     .slice(0, visibleActionCount)
@@ -672,6 +678,7 @@ export function buildTutorialView(
         settled: dreamcallerSettled("enemy"),
       },
     },
+    opponentCardToReveal,
     dialogue:
       dialogueAction === null
         ? null
@@ -835,7 +842,6 @@ export function buildTutorialView(
       const playerHandCards =
         playerTurnCard === null || playerCardPlayed ? [] : [playerTurnCard];
       const playerHandCardIds = playerHandCards.map((card) => card.id);
-      const farHandCards = opponentHandRecords.map((record) => record.view);
       const phase =
         challengeActionIndex >= 0 &&
         completedActionCount >= challengeActionIndex
@@ -868,7 +874,7 @@ export function buildTutorialView(
       isOpeningTurn: !playerTurnStarted,
       phase,
       enemyHandCardIds,
-      enemyHand: farHandCards,
+      enemyHand: [],
       enemy: {
         ...enemy,
         deckCardIds: enemyDeck,
@@ -891,7 +897,12 @@ export function buildTutorialView(
         cardIds: playerHandCardIds,
         cards: playerHandCards,
       },
-      farHand: { owner: "enemy", position: "far", cardIds: enemyHandCardIds, cards: farHandCards },
+      farHand: {
+        owner: "enemy",
+        position: "far",
+        cardIds: enemyHandCardIds,
+        cards: [],
+      },
       promptNotice: null,
       inspector: {
         opponentName: "Awaiting Dreamcaller",

@@ -30,6 +30,8 @@ interface ScreenMockState {
   cardAnimationComplete: (() => void) | null;
   cardFullAnimate: unknown;
   cardFullTransition: unknown;
+  cardFlipAnimate: unknown;
+  cardFlipTransition: unknown;
   cardBattlefieldAnimate: unknown;
   cardBattlefieldTransition: unknown;
   challengeRematerializedAnimationComplete: (() => void) | null;
@@ -52,6 +54,8 @@ const screenMocks = vi.hoisted<ScreenMockState>(() => ({
   cardAnimationComplete: null as (() => void) | null,
   cardFullAnimate: null,
   cardFullTransition: null,
+  cardFlipAnimate: null,
+  cardFlipTransition: null,
   cardBattlefieldAnimate: null,
   cardBattlefieldTransition: null,
   challengeRematerializedAnimationComplete: null as (() => void) | null,
@@ -74,6 +78,7 @@ interface MotionDivStubInput {
   readonly children?: ReactNode;
   readonly "data-tutorial-dreamcaller-arrival"?: string;
   readonly "data-tutorial-card-battlefield-layer"?: string;
+  readonly "data-tutorial-card-flip-layer"?: string;
   readonly "data-tutorial-card-full-layer"?: string;
   readonly "data-tutorial-opponent-card-play"?: string;
   readonly "data-tutorial-challenge-rematerialized"?: string;
@@ -121,6 +126,9 @@ vi.mock("framer-motion", () => ({
       } else if (elementProps["data-tutorial-card-full-layer"] !== undefined) {
         screenMocks.cardFullAnimate = animate;
         screenMocks.cardFullTransition = transition;
+      } else if (elementProps["data-tutorial-card-flip-layer"] !== undefined) {
+        screenMocks.cardFlipAnimate = animate;
+        screenMocks.cardFlipTransition = transition;
       } else if (
         elementProps["data-tutorial-card-battlefield-layer"] !== undefined
       ) {
@@ -410,6 +418,8 @@ beforeEach(() => {
   screenMocks.cardAnimationComplete = null;
   screenMocks.cardFullAnimate = null;
   screenMocks.cardFullTransition = null;
+  screenMocks.cardFlipAnimate = null;
+  screenMocks.cardFlipTransition = null;
   screenMocks.cardBattlefieldAnimate = null;
   screenMocks.cardBattlefieldTransition = null;
   screenMocks.challengeRematerializedAnimationComplete = null;
@@ -1107,15 +1117,16 @@ describe("TutorialScreen", () => {
                 revealText: "This card has a ▸Dawn ability.",
                 wait: 0,
               },
+              opponentCardToReveal: TUTORIAL_OPPONENT_CARD,
               battle: {
                 battleId: "tutorial-battle",
                 enemyHandCardIds: [TUTORIAL_OPPONENT_CARD.id],
-                enemyHand: [TUTORIAL_OPPONENT_CARD],
+                enemyHand: [],
                 farHand: {
                   owner: "enemy",
                   position: "far",
                   cardIds: [TUTORIAL_OPPONENT_CARD.id],
-                  cards: [TUTORIAL_OPPONENT_CARD],
+                  cards: [],
                 },
                 enemy: emptySide("enemy"),
                 player: emptySide("player"),
@@ -1141,20 +1152,24 @@ describe("TutorialScreen", () => {
       height: 81.2,
     });
     expect(screenMocks.cardAnimate).toEqual({
-      x: [931, 1278.18, 1278.18, 836.78],
-      y: [0, 285.6, 285.6, 205.2],
-      width: [58, 240, 240, 121.2],
-      height: [81.2, 336, 336, 121.2],
+      x: [931, 1278.18, 1278.18, 1278.18, 836.78],
+      y: [0, 285.6, 285.6, 285.6, 205.2],
+      width: [58, 240, 240, 240, 121.2],
+      height: [81.2, 336, 336, 336, 121.2],
     });
-    expect(screenMocks.cardTransition).toMatchObject({ duration: 2.84 });
+    expect(screenMocks.cardTransition).toMatchObject({ duration: 3.26 });
+    expect(screenMocks.cardFlipAnimate).toEqual({
+      rotateY: [0, 0, 180, 180, 180],
+    });
+    expect(screenMocks.cardFlipTransition).toMatchObject({ duration: 3.26 });
     expect(screenMocks.cardFullAnimate).toEqual({ opacity: 0 });
     expect(screenMocks.cardFullTransition).toMatchObject({
-      delay: 2.42,
+      delay: 2.84,
       duration: 0.42,
     });
     expect(screenMocks.cardBattlefieldAnimate).toEqual({ opacity: 1 });
     expect(screenMocks.cardBattlefieldTransition).toMatchObject({
-      delay: 2.42,
+      delay: 2.84,
       duration: 0.42,
     });
     expect(
@@ -1181,7 +1196,7 @@ describe("TutorialScreen", () => {
       visible: false,
     });
     act(() => {
-      vi.advanceTimersByTime(419);
+      vi.advanceTimersByTime(839);
     });
     expect(screenMocks.dialogueProps?.visible).toBe(false);
     act(() => {
@@ -1220,7 +1235,7 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
-  it("centers the repositioned opponent character in the closest front cell and completes after travel", () => {
+  it("repositions one opponent character without shifting an adjacent back-rank card", () => {
     vi.useFakeTimers();
     window.matchMedia = vi.fn().mockImplementation((query: string) => ({
       matches: query.includes("min-width"),
@@ -1233,9 +1248,22 @@ describe("TutorialScreen", () => {
       dispatchEvent: vi.fn(),
     }));
     const onActionComplete = vi.fn();
-    const emptyBackRank = Array.from({ length: 3 }, (_, index) => ({
+    const championCard = {
+      ...TUTORIAL_OPPONENT_CARD,
+      id: "tutorial-enemy-deck-2",
+      model: {
+        ...TUTORIAL_OPPONENT_CARD.model,
+        cardId: asCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0"),
+        displaySnapshot: {
+          ...TUTORIAL_OPPONENT_CARD.model.displaySnapshot,
+          id: asCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0"),
+          name: asCardName("Runebound Champion"),
+        },
+      },
+    };
+    const enemyBackRank = Array.from({ length: 3 }, (_, index) => ({
       id: `enemy-back-${String(index)}`,
-      card: null,
+      card: index === 1 ? championCard : null,
     }));
     const enemyFrontRank = Array.from({ length: 2 }, (_, index) => ({
       id: `enemy-front-${String(index)}`,
@@ -1267,7 +1295,7 @@ describe("TutorialScreen", () => {
               battle: {
                 battleId: "tutorial-battle",
                 enemy: {
-                  backRank: emptyBackRank,
+                  backRank: enemyBackRank,
                   frontRank: enemyFrontRank,
                   deckCardIds: [],
                 },
@@ -1286,11 +1314,11 @@ describe("TutorialScreen", () => {
 
     act(() => screenMocks.sceneAnimationComplete?.());
     expect(screenMocks.props?.view.enemy.backRank).toHaveLength(10);
-    expect(
-      screenMocks.props?.view.enemy.backRank.every(
-        (slot) => slot.card === null,
-      ),
-    ).toBe(true);
+    expect(screenMocks.props?.view.enemy.backRank[4]?.card).toBeNull();
+    expect(screenMocks.props?.view.enemy.backRank[5]?.card).toMatchObject({
+      id: "tutorial-enemy-deck-2",
+      model: { cardId: "a28ad36d-fa74-4190-a463-7efd3a6233d0" },
+    });
     expect(screenMocks.props?.view.enemy.frontRank).toHaveLength(9);
     expect(screenMocks.props?.view.enemy.frontRank[4]?.card).toMatchObject({
       id: TUTORIAL_OPPONENT_CARD.id,

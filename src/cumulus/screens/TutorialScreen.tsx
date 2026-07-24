@@ -105,6 +105,7 @@ export interface TutorialChallengeView {
 
 export interface TutorialView {
   readonly battle: MobileBattleView;
+  readonly opponentCardToReveal?: MobileBattleCardView | null;
   readonly dialogue: TutorialDialogueView | null;
   readonly dreamcallers: Record<
     TutorialDreamcallerOwner,
@@ -209,6 +210,7 @@ interface TutorialCardTrajectory {
 
 const TUTORIAL_FADE_SECONDS = motionTimeSeconds("--dur-loading-screen-fade");
 const TUTORIAL_CARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow");
+const TUTORIAL_CARD_FLIP_SECONDS = motionTimeSeconds("--dur-slow");
 const TUTORIAL_EDITOR_DOCK_MIN_WIDTH = 1280;
 const TUTORIAL_REVEAL_CARD_DESKTOP_WIDTH = 240;
 const TUTORIAL_REVEAL_CARD_MOBILE_WIDTH_RATIO = 0.45;
@@ -540,33 +542,17 @@ function expandedTutorialSide(
     ),
   ];
   const backRank = pad(side.backRank, 10, "back");
-  const existingBackCards = side.backRank.flatMap((slot) =>
-    slot.card === null ? [] : [slot.card],
-  );
-  const centeredBackRank =
-    existingBackCards.length === 0
-      ? backRank
-      : backRank.map((slot, index, slots) => ({
-          ...slot,
-          card:
-            existingBackCards[
-              index - tutorialOpponentBackRankIndex(slots.length)
-            ] ?? null,
-        }));
+  const backRankStart = tutorialOpponentBackRankIndex(backRank.length);
+  const centeredBackRank = backRank.map((slot, index) => ({
+    ...slot,
+    card: side.backRank[index - backRankStart]?.card ?? null,
+  }));
   const frontRank = pad(side.frontRank, 9, "front");
-  const existingFrontCards = side.frontRank.flatMap((slot) =>
-    slot.card === null ? [] : [slot.card],
-  );
-  const centeredFrontRank =
-    existingFrontCards.length === 0
-      ? frontRank
-      : frontRank.map((slot, index, slots) => ({
-          ...slot,
-          card:
-            existingFrontCards[
-              index - tutorialOpponentFrontRankIndex(slots.length)
-            ] ?? null,
-        }));
+  const frontRankStart = tutorialOpponentFrontRankIndex(frontRank.length);
+  const centeredFrontRank = frontRank.map((slot, index) => ({
+    ...slot,
+    card: side.frontRank[index - frontRankStart]?.card ?? null,
+  }));
   return {
     ...side,
     backRank: centeredBackRank,
@@ -993,15 +979,23 @@ function TutorialOpponentCardPlay({
   if (trajectory === null) return null;
 
   const travelDuration = reduceMotion ? 0 : TUTORIAL_CARD_TRAVEL_SECONDS;
-  const totalDuration = travelDuration * 2 + revealDuration;
+  const flipDuration = reduceMotion ? 0 : TUTORIAL_CARD_FLIP_SECONDS;
+  const totalDuration = travelDuration * 2 + flipDuration + revealDuration;
   const revealStart = totalDuration === 0 ? 0 : travelDuration / totalDuration;
+  const readingStart =
+    totalDuration === 0
+      ? 0
+      : (travelDuration + flipDuration) / totalDuration;
   const revealEnd =
-    totalDuration === 0 ? 1 : (travelDuration + revealDuration) / totalDuration;
-  const times = [0, revealStart, revealEnd, 1];
+    totalDuration === 0
+      ? 1
+      : (travelDuration + flipDuration + revealDuration) / totalDuration;
+  const times = [0, revealStart, readingStart, revealEnd, 1];
   const frames = reduceMotion
     ? [trajectory.reveal, trajectory.reveal]
     : [
         trajectory.source,
+        trajectory.reveal,
         trajectory.reveal,
         trajectory.reveal,
         trajectory.destination,
@@ -1042,7 +1036,6 @@ function TutorialOpponentCardPlay({
       {reduceMotion ? (
         <GameCard
           model={card.model}
-          exhausted={card.exhausted}
           testId="tutorial-opponent-card-reveal"
         />
       ) : (
@@ -1052,7 +1045,7 @@ function TutorialOpponentCardPlay({
             initial={{ opacity: 1 }}
             animate={{ opacity: 0 }}
             transition={{
-              delay: travelDuration + revealDuration,
+              delay: travelDuration + flipDuration + revealDuration,
               duration: travelDuration,
               ease: [0.22, 0.61, 0.36, 1],
             }}
@@ -1066,8 +1059,9 @@ function TutorialOpponentCardPlay({
             }}
           >
             <motion.div
+              data-tutorial-card-flip-layer=""
               initial={{ rotateY: 0 }}
-              animate={{ rotateY: [0, 180, 180, 180] }}
+              animate={{ rotateY: [0, 0, 180, 180, 180] }}
               transition={{ duration: totalDuration, times }}
               style={{
                 position: "relative",
@@ -1095,7 +1089,6 @@ function TutorialOpponentCardPlay({
               >
                 <GameCard
                   model={card.model}
-                  exhausted={card.exhausted}
                   testId="tutorial-opponent-card-reveal"
                 />
               </div>
@@ -1106,7 +1099,7 @@ function TutorialOpponentCardPlay({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{
-              delay: travelDuration + revealDuration,
+              delay: travelDuration + flipDuration + revealDuration,
               duration: travelDuration,
               ease: [0.22, 0.61, 0.36, 1],
             }}
@@ -1627,9 +1620,10 @@ export function TutorialScreen({
     ) {
       return null;
     }
-    const card = view.battle.enemyHand.find(
-      (candidate) => candidate.model.cardId === currentAction.cardId,
-    );
+    const card =
+      view.opponentCardToReveal?.model.cardId === currentAction.cardId
+        ? view.opponentCardToReveal
+        : undefined;
     return card === undefined
       ? null
       : {
@@ -1637,13 +1631,13 @@ export function TutorialScreen({
           card,
           revealDuration: currentAction.revealDuration,
         };
-  }, [view.battle.enemyHand, view.currentAction, view.playbackRunId]);
+  }, [view.currentAction, view.opponentCardToReveal, view.playbackRunId]);
 
   useEffect(() => {
     if (!sceneEntered || opponentCardPlay === null) return undefined;
     const revealStartDelay = reduceMotion
       ? 0
-      : TUTORIAL_CARD_TRAVEL_SECONDS * 1_000;
+      : (TUTORIAL_CARD_TRAVEL_SECONDS + TUTORIAL_CARD_FLIP_SECONDS) * 1_000;
     const revealStartTimeout = window.setTimeout(
       () => setRevealDialogueActionKey(opponentCardPlay.key),
       revealStartDelay,

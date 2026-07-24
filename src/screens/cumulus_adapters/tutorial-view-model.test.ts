@@ -663,12 +663,8 @@ describe("buildTutorialView", () => {
     expect(drawn.enemy.deckCardIds[0]).toBe("tutorial-enemy-deck-2");
     expect(drawn.enemy.deckCardIds).toHaveLength(29);
     expect(drawn.enemyHandCardIds).toEqual(["tutorial-enemy-deck-1"]);
-    expect(drawn.enemyHand).toHaveLength(1);
-    expect(drawn.enemyHand[0]).toMatchObject({
-      id: "tutorial-enemy-deck-1",
-      layoutMotion: "snap",
-      model: { cardId: TUTORIAL_OPPONENT_CARD_ID },
-    });
+    expect(drawn.enemyHand).toEqual([]);
+    expect(drawn.farHand.cards).toEqual([]);
     expect(drawn.inspector.sides.enemy.zones).toMatchObject({
       deck: 29,
       hand: 1,
@@ -1159,10 +1155,12 @@ describe("buildTutorialView", () => {
       kind: "guide",
       model: { speakerName: "Mira", text: revealText },
     });
-    expect(revealing.battle.enemyHand).toHaveLength(1);
-    expect(revealing.battle.enemyHand[0]?.model.cardId).toBe(
-      TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
-    );
+    expect(revealing.battle.enemyHand).toEqual([]);
+    expect(revealing.battle.farHand.cards).toEqual([]);
+    expect(revealing.opponentCardToReveal).toMatchObject({
+      id: "tutorial-enemy-deck-2",
+      model: { cardId: TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID },
+    });
     expect(revealing.battle.enemy.backRank[0]?.card?.model.cardId).toBe(
       TUTORIAL_OPPONENT_CARD_ID,
     );
