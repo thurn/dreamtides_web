@@ -441,8 +441,8 @@ describe("buildTutorialView", () => {
     ).toBe(100);
     expect(tutorial.dreamcallers.player.settled).toBe(true);
     expect(tutorial.dreamcallers.enemy).toMatchObject({
-      visual: { imageNumber: "0087", name: "Vrakmoth" },
-      profile: { id: "86026206-1B11-4F38-A24E-FD3C697F5353" },
+      visual: { imageNumber: "0025", name: "Threxan" },
+      profile: { id: "B99936CA-97F9-4930-AF5A-FA9EF92557EF" },
       settled: false,
     });
   });
@@ -557,7 +557,7 @@ describe("buildTutorialView", () => {
     expect(tutorial.dialogue).toEqual({
       kind: "dreamcaller",
       owner: "enemy",
-      speakerName: "Vrakmoth",
+      speakerName: "Threxan",
       text: "For the Abyss!",
     });
   });
@@ -909,7 +909,7 @@ describe("buildTutorialView", () => {
     expect(worthyChallenger.dialogue).toEqual({
       kind: "dreamcaller",
       owner: "enemy",
-      speakerName: "Vrakmoth",
+      speakerName: "Threxan",
       text: "A worthy challenger!",
     });
     expect(worthyChallenger.battle).toMatchObject({
@@ -1307,7 +1307,7 @@ describe("buildTutorialView", () => {
     });
   });
 
-  it("settles Vrakmoth only after the opponent portrait action advances", () => {
+  it("settles Threxan only after the opponent portrait action advances", () => {
     const actions = [
       {
         id: "dreamcaller-arrival",

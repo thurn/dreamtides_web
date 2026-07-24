@@ -20,7 +20,7 @@ import { tutorialInstructionPlainText } from "../../data/tutorial-instruction-ma
 const TUTORIAL_BATTLE_ID = "tutorial-battle";
 const TUTORIAL_DECK_SIZE = 30;
 const TUTORIAL_DREAMCALLER_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
-const TUTORIAL_OPPONENT_DREAMCALLER_ID = "86026206-1B11-4F38-A24E-FD3C697F5353";
+const TUTORIAL_OPPONENT_DREAMCALLER_ID = "B99936CA-97F9-4930-AF5A-FA9EF92557EF";
 const TUTORIAL_PLAYER_BACK_RANK_INDEX = 1;
 const TUTORIAL_PLAYER_FRONT_RANK_INDEX = 0;
 const TUTORIAL_STARTING_ENERGY = 4;
@@ -665,10 +665,10 @@ export function buildTutorialView(
       },
       enemy: {
         visual: {
-          imageNumber: "0087",
-          name: "Vrakmoth",
-          title: "Ashbroker",
-          portraitFocus: { x: 0.49, y: 0.18 },
+          imageNumber: "0025",
+          name: "Threxan",
+          title: "the Resounding Wrath",
+          portraitFocus: { x: 0.5, y: 0.2 },
         },
         profile: {
           id: TUTORIAL_OPPONENT_DREAMCALLER_ID,
@@ -702,7 +702,7 @@ export function buildTutorialView(
                 ? {}
                 : { bubbleWidth: dialogueAction.bubbleWidth }),
               speakerName:
-                dialogueAction.speaker === "player" ? "Tensho" : "Vrakmoth",
+                dialogueAction.speaker === "player" ? "Tensho" : "Threxan",
               text: dialogueAction.text,
             }
           : {

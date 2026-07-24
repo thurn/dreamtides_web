@@ -298,13 +298,13 @@ const TUTORIAL_DREAMCALLERS: TutorialView["dreamcallers"] = {
   },
   enemy: {
     visual: {
-      imageNumber: "0087",
-      name: "Vrakmoth",
-      title: "Ashbroker",
-      portraitFocus: { x: 0.49, y: 0.18 },
+      imageNumber: "0025",
+      name: "Threxan",
+      title: "the Resounding Wrath",
+      portraitFocus: { x: 0.5, y: 0.2 },
     },
     profile: {
-      id: "86026206-1B11-4F38-A24E-FD3C697F5353",
+      id: "B99936CA-97F9-4930-AF5A-FA9EF92557EF",
       ability: "Dreamcaller ability is not active",
       unavailable: true,
     },
@@ -916,7 +916,7 @@ describe("TutorialScreen", () => {
       dreamcaller: TUTORIAL_DREAMCALLERS.enemy.visual,
       dreamcallerProfile: TUTORIAL_DREAMCALLERS.enemy.profile,
     });
-    expect(screenMocks.props?.view.inspector.opponentName).toBe("Vrakmoth");
+    expect(screenMocks.props?.view.inspector.opponentName).toBe("Threxan");
 
     act(() => root.unmount());
     container.remove();
@@ -939,7 +939,7 @@ describe("TutorialScreen", () => {
                 kind: "dreamcaller",
                 owner: "enemy",
                 bubbleWidth: 450,
-                speakerName: "Vrakmoth",
+                speakerName: "Threxan",
                 text: "For the Abyss!",
               },
               playbackRunId: "event:draw",
@@ -2208,7 +2208,7 @@ describe("TutorialScreen", () => {
               dialogue: {
                 kind: "dreamcaller",
                 owner: "enemy",
-                speakerName: "Vrakmoth",
+                speakerName: "Threxan",
                 text: "For the Abyss!",
               },
               playbackRunId: "event:4",
