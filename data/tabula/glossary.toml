@@ -2,7 +2,7 @@
 id = "figment"
 category = "Card Types"
 term = "Figment"
-definition = "A created token character. Multiple figments can be dragged together to merge them."
+definition = "A created token character. Multiple figments of the same type can be merged into one character."
 priority = 60
 matches-rules-text = true
 variants = [ "figments" ]
