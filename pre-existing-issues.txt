@@ -2,4 +2,4 @@ Full `npm test` has two stale Exhausted-description assertions:
 `src/cumulus/components/card/GameCardReveal.test.tsx` and
 `src/cumulus/screens/MobileBattleScreen.test.tsx` expect “cannot move,” while
 the rendered glossary copy says “cannot challenge.” The failures are unrelated
-to the Tutorial Editor card-width change.
+to the tutorial opponent-card sequence change.

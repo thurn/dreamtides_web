@@ -4,6 +4,7 @@ import {
   TUTORIAL_DREAMWELL_CARD_ID,
   TUTORIAL_OPPONENT_CARD_ID,
   TUTORIAL_PLAYER_CARD_ID,
+  TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
   type TutorialCards,
 } from "../data/tutorial-opponent-card";
 import { logEvent } from "../logging";
@@ -21,6 +22,7 @@ export function useTutorialCards(): TutorialCards | null {
         logEvent("tutorial_cards_load_failed", {
           cardIds: [
             TUTORIAL_OPPONENT_CARD_ID,
+            TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
             TUTORIAL_PLAYER_CARD_ID,
             TUTORIAL_DREAMWELL_CARD_ID,
           ],

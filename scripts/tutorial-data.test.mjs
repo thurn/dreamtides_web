@@ -31,11 +31,13 @@ const FIXTURE_ACTIONS = [
   {
     id: "opponent-draw",
     action: "draw-opponent-card",
+    cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
     wait: 0.5,
   },
   {
     id: "opponent-reveal-and-play",
     action: "reveal-and-play-opponent-card",
+    cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
     revealDuration: 2,
     wait: 0,
   },

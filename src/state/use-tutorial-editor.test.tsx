@@ -47,6 +47,7 @@ describe("useTutorialEditor", () => {
       {
         id: "tail-start",
         action: "draw-opponent-card",
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         wait: 0,
       },
     ];

@@ -641,6 +641,66 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
+  it("anchors reveal dialogue below the centered reading card on mobile", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: {
+                kind: "guide",
+                verticalOffset: 0,
+                model: {
+                  portrait: {
+                    kind: "character-portrait",
+                    characterId: "mira",
+                  },
+                  portraitAlt: "Mira",
+                  speakerName: "Mira",
+                  text: "This card has a ▸Dawn ability.",
+                },
+              },
+              playbackRunId: "event:reveal-dialogue",
+              endTurn: null,
+              howToPlay: null,
+              currentAction: {
+                id: "runebound-reveal",
+                action: "reveal-and-play-opponent-card",
+                cardId: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+                revealDuration: 5,
+                revealText: "This card has a ▸Dawn ability.",
+                wait: 0,
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                enemyHand: [],
+                enemy: { backRank: [], frontRank: [] },
+                player: { backRank: [], frontRank: [] },
+              } as unknown as MobileBattleView,
+            }}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const dialogueAnchor = container.querySelector<HTMLElement>(
+      "[data-tutorial-dialogue-anchor]",
+    );
+    expect(dialogueAnchor?.style.top).toBe("");
+    expect(dialogueAnchor?.style.bottom).toBe(
+      "calc(var(--safe-area-inset-bottom) + var(--space-12))",
+    );
+    expect(dialogueAnchor?.style.visibility).toBe("visible");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("finishes the portrait animation before applying its authored wait", () => {
     vi.useFakeTimers();
     const onActionComplete = vi.fn();
@@ -878,6 +938,7 @@ describe("TutorialScreen", () => {
               currentAction: {
                 id: "vrakmoth-draw",
                 action: "draw-opponent-card",
+                cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
                 wait: 0,
               },
               battle: {
@@ -1022,14 +1083,28 @@ describe("TutorialScreen", () => {
           <TutorialScreen
             view={{
               dreamcallers: TUTORIAL_DREAMCALLERS,
-              dialogue: null,
+              dialogue: {
+                kind: "guide",
+                verticalOffset: 0,
+                model: {
+                  portrait: {
+                    kind: "character-portrait",
+                    characterId: "mira",
+                  },
+                  portraitAlt: "Mira",
+                  speakerName: "Mira",
+                  text: "This card has a ▸Dawn ability.",
+                },
+              },
               playbackRunId: "event:play",
               endTurn: null,
               howToPlay: null,
               currentAction: {
                 id: "vrakmoth-reveal-and-play",
                 action: "reveal-and-play-opponent-card",
+                cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
                 revealDuration: 2,
+                revealText: "This card has a ▸Dawn ability.",
                 wait: 0,
               },
               battle: {
@@ -1101,6 +1176,26 @@ describe("TutorialScreen", () => {
       container.querySelector<HTMLElement>('[data-battle-card-zone="far-hand"]')
         ?.style.visibility,
     ).toBe("hidden");
+    expect(screenMocks.dialogueProps).toMatchObject({
+      dialogue: { speakerName: "Mira", text: "This card has a ▸Dawn ability." },
+      visible: false,
+    });
+    act(() => {
+      vi.advanceTimersByTime(419);
+    });
+    expect(screenMocks.dialogueProps?.visible).toBe(false);
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(screenMocks.dialogueProps?.visible).toBe(true);
+    act(() => {
+      vi.advanceTimersByTime(1_999);
+    });
+    expect(screenMocks.dialogueProps?.visible).toBe(true);
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(screenMocks.dialogueProps?.visible).toBe(false);
 
     act(() => screenMocks.cardAnimationComplete?.());
     act(() => {

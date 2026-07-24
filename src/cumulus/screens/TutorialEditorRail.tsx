@@ -163,6 +163,7 @@ function defaultAction(
     return {
       id,
       action: "reveal-and-play-opponent-card",
+      cardId: TUTORIAL_OPPONENT_CARD_ID,
       revealDuration: 2,
       wait: 0,
     };
@@ -205,7 +206,12 @@ function defaultAction(
   if (actionName === "end-turn") {
     return { id, action: "end-turn", wait: 0 };
   }
-  return { id, action: "draw-opponent-card", wait: 0 };
+  return {
+    id,
+    action: "draw-opponent-card",
+    cardId: TUTORIAL_OPPONENT_CARD_ID,
+    wait: 0,
+  };
 }
 
 function changedActionType(
@@ -259,7 +265,15 @@ function changedActionType(
     };
   }
   if (actionName === "draw-opponent-card") {
-    return { id: action.id, action: actionName, wait: action.wait };
+    return {
+      id: action.id,
+      action: actionName,
+      cardId:
+        action.action === "draw-opponent-card"
+          ? action.cardId
+          : TUTORIAL_OPPONENT_CARD_ID,
+      wait: action.wait,
+    };
   }
   if (actionName === "reposition-opponent-character") {
     return {
@@ -309,10 +323,18 @@ function changedActionType(
     return {
       id: action.id,
       action: actionName,
+      cardId:
+        action.action === "reveal-and-play-opponent-card"
+          ? action.cardId
+          : TUTORIAL_OPPONENT_CARD_ID,
       revealDuration:
         action.action === "reveal-and-play-opponent-card"
           ? action.revealDuration
           : 2,
+      ...(action.action === "reveal-and-play-opponent-card" &&
+      action.revealText !== undefined
+        ? { revealText: action.revealText }
+        : {}),
       wait: action.wait,
     };
   }
@@ -790,38 +812,103 @@ function TutorialActionRow({
           </>
         ) : null}
 
-        {action.action === "reveal-and-play-opponent-card" ? (
-          <NumberStepper
-            label="Face-Up Reading Time"
-            value={action.revealDuration}
-            displayValue={`${waitLabel(action.revealDuration)}s`}
-            size="sm"
-            decrementLabel={`Decrease face-up reading time for action ${String(index + 1)}`}
-            incrementLabel={`Increase face-up reading time for action ${String(index + 1)}`}
-            decrementDisabled={action.revealDuration <= 0}
-            onDecrement={() =>
-              update(
-                {
-                  ...action,
-                  revealDuration: Math.max(
-                    0,
-                    Math.round((action.revealDuration - 0.5) * 10) / 10,
-                  ),
-                },
-                true,
-              )
+        {action.action === "draw-opponent-card" ? (
+          <TextField
+            label="Drawn Opponent Card UUID"
+            value={action.cardId}
+            error={
+              isCardId(action.cardId)
+                ? undefined
+                : "Enter an opponent card UUID."
             }
-            onIncrement={() =>
-              update(
-                {
-                  ...action,
-                  revealDuration:
-                    Math.round((action.revealDuration + 0.5) * 10) / 10,
-                },
-                true,
-              )
+            testId={`tutorial-action-card-id-${action.id}`}
+            onChange={(cardId) =>
+              update({ ...action, cardId }, isCardId(cardId))
             }
           />
+        ) : null}
+
+        {action.action === "reveal-and-play-opponent-card" ? (
+          <>
+            <TextField
+              label="Revealed Opponent Card UUID"
+              value={action.cardId}
+              error={
+                isCardId(action.cardId)
+                  ? undefined
+                  : "Enter an opponent card UUID."
+              }
+              testId={`tutorial-action-card-id-${action.id}`}
+              onChange={(cardId) =>
+                update({ ...action, cardId }, isCardId(cardId))
+              }
+            />
+            <TextArea
+              label="Mira Reveal Speech"
+              supportingText="Optional. Shown only while the face-up card remains at reading size."
+              value={action.revealText ?? ""}
+              testId={`tutorial-action-reveal-text-${action.id}`}
+              onChange={(revealText) =>
+                update(
+                  revealText.trim().length === 0
+                    ? {
+                        id: action.id,
+                        action: action.action,
+                        cardId: action.cardId,
+                        revealDuration: action.revealDuration,
+                        wait: action.wait,
+                      }
+                    : { ...action, revealText },
+                  false,
+                )
+              }
+              onCommit={(revealText) =>
+                update(
+                  revealText.trim().length === 0
+                    ? {
+                        id: action.id,
+                        action: action.action,
+                        cardId: action.cardId,
+                        revealDuration: action.revealDuration,
+                        wait: action.wait,
+                      }
+                    : { ...action, revealText },
+                  true,
+                )
+              }
+            />
+            <NumberStepper
+              label="Face-Up Reading Time"
+              value={action.revealDuration}
+              displayValue={`${waitLabel(action.revealDuration)}s`}
+              size="sm"
+              decrementLabel={`Decrease face-up reading time for action ${String(index + 1)}`}
+              incrementLabel={`Increase face-up reading time for action ${String(index + 1)}`}
+              decrementDisabled={action.revealDuration <= 0}
+              onDecrement={() =>
+                update(
+                  {
+                    ...action,
+                    revealDuration: Math.max(
+                      0,
+                      Math.round((action.revealDuration - 0.5) * 10) / 10,
+                    ),
+                  },
+                  true,
+                )
+              }
+              onIncrement={() =>
+                update(
+                  {
+                    ...action,
+                    revealDuration:
+                      Math.round((action.revealDuration + 0.5) * 10) / 10,
+                  },
+                  true,
+                )
+              }
+            />
+          </>
         ) : null}
 
         {action.action === "draw-dreamwell-card" ? (

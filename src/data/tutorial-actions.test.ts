@@ -264,6 +264,7 @@ describe("parseTutorialActions", () => {
         {
           id: "vrakmoth-draw",
           action: "draw-opponent-card",
+          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
           wait: 0.5,
         },
       ]),
@@ -271,6 +272,7 @@ describe("parseTutorialActions", () => {
       {
         id: "vrakmoth-draw",
         action: "draw-opponent-card",
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         wait: 0.5,
       },
     ]);
@@ -440,6 +442,8 @@ describe("parseTutorialActions", () => {
         {
           id: "vrakmoth-reveal-and-play",
           action: "reveal-and-play-opponent-card",
+          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          revealText: "This card has a ▸Dawn ability.",
           wait: 0,
         },
       ]),
@@ -447,7 +451,9 @@ describe("parseTutorialActions", () => {
       {
         id: "vrakmoth-reveal-and-play",
         action: "reveal-and-play-opponent-card",
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         revealDuration: 2,
+        revealText: "This card has a ▸Dawn ability.",
         wait: 0,
       },
     ]);
@@ -456,6 +462,7 @@ describe("parseTutorialActions", () => {
         {
           id: "bad-card-reveal",
           action: "reveal-and-play-opponent-card",
+          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
           revealDuration: -0.5,
           wait: 0,
         },

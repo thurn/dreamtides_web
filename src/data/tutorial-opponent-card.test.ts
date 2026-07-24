@@ -5,6 +5,7 @@ import {
   loadTutorialOpponentCard,
   TUTORIAL_OPPONENT_CARD_ID,
   TUTORIAL_PLAYER_CARD_ID,
+  TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
 } from "./tutorial-opponent-card";
 
 afterEach(() => {
@@ -20,6 +21,10 @@ describe("loadTutorialOpponentCard", () => {
     } as CardData;
     const player = {
       id: TUTORIAL_PLAYER_CARD_ID,
+      cardNumber: 512,
+    } as CardData;
+    const runeboundChampion = {
+      id: TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
       cardNumber: 512,
     } as CardData;
     const dreamwell = {
@@ -39,14 +44,14 @@ describe("loadTutorialOpponentCard", () => {
             Promise.resolve(
               path === "/dreamwell-data.json"
                 ? [dreamwell]
-                : [other, player, opponent],
+                : [other, player, opponent, runeboundChampion],
             ),
         }),
       ),
     );
 
     await expect(loadTutorialCards()).resolves.toEqual({
-      opponent,
+      opponents: [opponent, runeboundChampion],
       player,
       dreamwell: [dreamwell],
     });
@@ -62,7 +67,12 @@ describe("loadTutorialOpponentCard", () => {
             Promise.resolve(
               path === "/dreamwell-data.json"
                 ? []
-                : [{ id: TUTORIAL_OPPONENT_CARD_ID } as CardData],
+                : [
+                    { id: TUTORIAL_OPPONENT_CARD_ID } as CardData,
+                    {
+                      id: TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
+                    } as CardData,
+                  ],
             ),
         }),
       ),
@@ -87,6 +97,9 @@ describe("loadTutorialOpponentCard", () => {
   it("keeps the opponent-only loader compatible with UUID-safe callers", async () => {
     const opponent = { id: TUTORIAL_OPPONENT_CARD_ID } as CardData;
     const player = { id: TUTORIAL_PLAYER_CARD_ID } as CardData;
+    const runeboundChampion = {
+      id: TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
+    } as CardData;
     vi.stubGlobal(
       "fetch",
       vi.fn((path: string) =>
@@ -94,7 +107,9 @@ describe("loadTutorialOpponentCard", () => {
           ok: true,
           json: () =>
             Promise.resolve(
-              path === "/dreamwell-data.json" ? [] : [opponent, player],
+              path === "/dreamwell-data.json"
+                ? []
+                : [opponent, player, runeboundChampion],
             ),
         }),
       ),

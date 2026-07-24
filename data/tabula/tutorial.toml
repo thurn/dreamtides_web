@@ -39,11 +39,13 @@ wait = 3
 [[actions]]
 id = "vrakmoth-draw"
 action = "draw-opponent-card"
+cardId = "229ab3a1-3720-41a2-924c-8fe112188f8e"
 wait = 0
 
 [[actions]]
 id = "vrakmoth-reveal-and-play"
 action = "reveal-and-play-opponent-card"
+cardId = "229ab3a1-3720-41a2-924c-8fe112188f8e"
 revealDuration = 2
 wait = 0
 
@@ -75,11 +77,25 @@ text = "From turn 2, players draw [yellow]dreamwell[/yellow] cards that increase
 wait = 0
 
 [[actions]]
+id = "runebound-champion-draw"
+action = "draw-opponent-card"
+cardId = "a28ad36d-fa74-4190-a463-7efd3a6233d0"
+wait = 0
+
+[[actions]]
 id = "vrakmoth-worthy-challenger"
 action = "display-speech-bubble"
 speaker = "enemy"
 text = "A worthy challenger!"
 wait = 3
+
+[[actions]]
+id = "runebound-champion-reveal-and-play"
+action = "reveal-and-play-opponent-card"
+cardId = "a28ad36d-fa74-4190-a463-7efd3a6233d0"
+revealDuration = 5
+revealText = "This card has a ▸Dawn ability which triggers at the start of turn"
+wait = 0
 
 [[actions]]
 id = "opponent-character-advance"

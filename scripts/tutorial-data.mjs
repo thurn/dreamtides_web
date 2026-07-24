@@ -227,7 +227,15 @@ export function validateTutorialActions(value) {
       return { id, action, owner, pause, duration, wait };
     }
     if (action === "draw-opponent-card") {
-      return { id, action, wait };
+      if (
+        typeof candidate.cardId !== "string" ||
+        !CARD_UUID_PATTERN.test(candidate.cardId)
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must identify the drawn opponent card by UUID.`,
+        );
+      }
+      return { id, action, cardId: candidate.cardId, wait };
     }
     if (action === "reposition-opponent-character") {
       if (
@@ -316,6 +324,14 @@ export function validateTutorialActions(value) {
       return { id, action, wait };
     }
     if (action === "reveal-and-play-opponent-card") {
+      if (
+        typeof candidate.cardId !== "string" ||
+        !CARD_UUID_PATTERN.test(candidate.cardId)
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must identify the revealed opponent card by UUID.`,
+        );
+      }
       const revealDuration = candidate.revealDuration ?? 2;
       if (
         typeof revealDuration !== "number" ||
@@ -326,7 +342,23 @@ export function validateTutorialActions(value) {
           `Tutorial action ${JSON.stringify(id)} must have a non-negative card reveal duration.`,
         );
       }
-      return { id, action, revealDuration, wait };
+      const revealText = candidate.revealText;
+      if (
+        revealText !== undefined &&
+        (typeof revealText !== "string" || revealText.trim().length === 0)
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must have non-blank reveal speech text.`,
+        );
+      }
+      return {
+        id,
+        action,
+        cardId: candidate.cardId,
+        revealDuration,
+        ...(revealText === undefined ? {} : { revealText }),
+        wait,
+      };
     }
     throw invalid(
       `Tutorial action ${JSON.stringify(id)} has unsupported action ${JSON.stringify(action)}.`,

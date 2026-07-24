@@ -61,7 +61,7 @@ export function TutorialScreenAdapter() {
     () =>
       tutorialView.buildTutorialView(
         state.tutorial,
-        tutorialCards?.opponent ?? null,
+        tutorialCards?.opponents ?? null,
         tutorialCards?.player ?? null,
         tutorialCards?.dreamwell ?? null,
       ),

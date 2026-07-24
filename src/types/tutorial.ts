@@ -76,13 +76,19 @@ export interface AnimateDreamcallerPortraitTutorialAction extends TutorialAction
 /** Moves the top face-down card of the opponent's deck into their hand. */
 export interface DrawOpponentCardTutorialAction extends TutorialActionBase {
   readonly action: "draw-opponent-card";
+  /** UUID of the card represented by the face-down draw. */
+  readonly cardId: string;
 }
 
 /** Reveals the opponent's hand card at reading scale, then plays it. */
 export interface RevealAndPlayOpponentCardTutorialAction extends TutorialActionBase {
   readonly action: "reveal-and-play-opponent-card";
+  /** UUID of the opponent hand card to reveal and play. */
+  readonly cardId: string;
   /** Seconds the face-up card remains at reading scale before it travels. */
   readonly revealDuration: number;
+  /** Optional Mira dialogue shown only while the card remains face up. */
+  readonly revealText?: string;
 }
 
 /** Moves one UUID-authored opponent character to its closest front-rank cell. */

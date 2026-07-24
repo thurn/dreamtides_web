@@ -169,9 +169,15 @@ export function parseTutorialActions(
       } satisfies TutorialAction;
     }
     if (record.action === "draw-opponent-card") {
+      if (typeof record.cardId !== "string" || !isCardId(record.cardId)) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must identify the drawn opponent card by UUID.`,
+        );
+      }
       return {
         id,
         action: "draw-opponent-card",
+        cardId: record.cardId,
         wait,
       } satisfies TutorialAction;
     }
@@ -268,6 +274,11 @@ export function parseTutorialActions(
       } satisfies TutorialAction;
     }
     if (record.action === "reveal-and-play-opponent-card") {
+      if (typeof record.cardId !== "string" || !isCardId(record.cardId)) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must identify the revealed opponent card by UUID.`,
+        );
+      }
       const revealDuration = record.revealDuration ?? 2;
       if (
         typeof revealDuration !== "number" ||
@@ -278,10 +289,21 @@ export function parseTutorialActions(
           `Tutorial action ${JSON.stringify(id)} must have a non-negative card reveal duration.`,
         );
       }
+      const revealText = record.revealText;
+      if (
+        revealText !== undefined &&
+        (typeof revealText !== "string" || revealText.trim().length === 0)
+      ) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must have non-blank reveal speech text.`,
+        );
+      }
       return {
         id,
         action: "reveal-and-play-opponent-card",
+        cardId: record.cardId,
         revealDuration,
+        ...(revealText === undefined ? {} : { revealText }),
         wait,
       } satisfies TutorialAction;
     }

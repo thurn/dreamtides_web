@@ -540,30 +540,32 @@ function expandedTutorialSide(
     ),
   ];
   const backRank = pad(side.backRank, 10, "back");
-  const existingCard = side.backRank.find((slot) => slot.card !== null)?.card;
+  const existingBackCards = side.backRank.flatMap((slot) =>
+    slot.card === null ? [] : [slot.card],
+  );
   const centeredBackRank =
-    existingCard === undefined || existingCard === null
+    existingBackCards.length === 0
       ? backRank
       : backRank.map((slot, index, slots) => ({
           ...slot,
           card:
-            index === tutorialOpponentBackRankIndex(slots.length)
-              ? existingCard
-              : null,
+            existingBackCards[
+              index - tutorialOpponentBackRankIndex(slots.length)
+            ] ?? null,
         }));
   const frontRank = pad(side.frontRank, 9, "front");
-  const existingFrontCard = side.frontRank.find(
-    (slot) => slot.card !== null,
-  )?.card;
+  const existingFrontCards = side.frontRank.flatMap((slot) =>
+    slot.card === null ? [] : [slot.card],
+  );
   const centeredFrontRank =
-    existingFrontCard === undefined || existingFrontCard === null
+    existingFrontCards.length === 0
       ? frontRank
       : frontRank.map((slot, index, slots) => ({
           ...slot,
           card:
-            index === tutorialOpponentFrontRankIndex(slots.length)
-              ? existingFrontCard
-              : null,
+            existingFrontCards[
+              index - tutorialOpponentFrontRankIndex(slots.length)
+            ] ?? null,
         }));
   return {
     ...side,
@@ -576,10 +578,21 @@ function withOpponentCardPlayed(
   battle: MobileBattleView,
   card: MobileBattleCardView,
 ): MobileBattleView {
+  const backRankStart = tutorialOpponentBackRankIndex(
+    battle.enemy.backRank.length,
+  );
+  const destinationIndex = battle.enemy.backRank.findIndex(
+    (slot, index) => index >= backRankStart && slot.card === null,
+  );
   const backRank = battle.enemy.backRank.map((slot, index, slots) => ({
     ...slot,
     card:
-      index === tutorialOpponentBackRankIndex(slots.length) ? card : slot.card,
+      index ===
+      (destinationIndex < 0
+        ? tutorialOpponentBackRankIndex(slots.length)
+        : destinationIndex)
+        ? card
+        : slot.card,
   }));
   return {
     ...battle,
@@ -884,8 +897,14 @@ function TutorialOpponentCardPlay({
         '[data-battle-rank="enemy-back"] [data-battle-slot-id]',
       ),
     ];
+    const destinationStart = tutorialOpponentBackRankIndex(enemyBack.length);
     const destination =
-      enemyBack[tutorialOpponentBackRankIndex(enemyBack.length)];
+      enemyBack
+        .slice(destinationStart)
+        .find(
+          (slot) =>
+            slot.querySelector("[data-battle-card-id]") === null,
+        ) ?? enemyBack[destinationStart];
     if (
       source === undefined ||
       destination === undefined ||
@@ -1544,6 +1563,9 @@ export function TutorialScreen({
   const [arrivedActionKey, setArrivedActionKey] = useState<string | null>(null);
   const [drawnActionKey, setDrawnActionKey] = useState<string | null>(null);
   const [playedActionKey, setPlayedActionKey] = useState<string | null>(null);
+  const [revealDialogueActionKey, setRevealDialogueActionKey] = useState<
+    string | null
+  >(null);
   const [howToPlayPresentedActionKey, setHowToPlayPresentedActionKey] = useState<
     string | null
   >(null);
@@ -1598,21 +1620,43 @@ export function TutorialScreen({
     [opponentDeckCardIds, view.currentAction, view.playbackRunId],
   );
   const opponentCardPlay = useMemo(() => {
+    const currentAction = view.currentAction;
     if (
       view.playbackRunId === null ||
-      view.currentAction?.action !== "reveal-and-play-opponent-card"
+      currentAction?.action !== "reveal-and-play-opponent-card"
     ) {
       return null;
     }
-    const card = view.battle.enemyHand[0];
+    const card = view.battle.enemyHand.find(
+      (candidate) => candidate.model.cardId === currentAction.cardId,
+    );
     return card === undefined
       ? null
       : {
-          key: `${view.playbackRunId}:${view.currentAction.id}`,
+          key: `${view.playbackRunId}:${currentAction.id}`,
           card,
-          revealDuration: view.currentAction.revealDuration,
-      };
+          revealDuration: currentAction.revealDuration,
+        };
   }, [view.battle.enemyHand, view.currentAction, view.playbackRunId]);
+
+  useEffect(() => {
+    if (!sceneEntered || opponentCardPlay === null) return undefined;
+    const revealStartDelay = reduceMotion
+      ? 0
+      : TUTORIAL_CARD_TRAVEL_SECONDS * 1_000;
+    const revealStartTimeout = window.setTimeout(
+      () => setRevealDialogueActionKey(opponentCardPlay.key),
+      revealStartDelay,
+    );
+    const revealEndTimeout = window.setTimeout(
+      () => setRevealDialogueActionKey(null),
+      revealStartDelay + opponentCardPlay.revealDuration * 1_000,
+    );
+    return () => {
+      window.clearTimeout(revealStartTimeout);
+      window.clearTimeout(revealEndTimeout);
+    };
+  }, [opponentCardPlay, reduceMotion, sceneEntered]);
   const challengeAnimation =
     view.playbackRunId !== null &&
     view.currentAction?.action === "resolve-challenge" &&
@@ -2548,9 +2592,17 @@ export function TutorialScreen({
         style={{
           position: "absolute",
           zIndex: 30,
-          top: dialogueAnchor?.top ?? 0,
+          top:
+            !desktop &&
+            view.currentAction?.action === "reveal-and-play-opponent-card"
+              ? undefined
+              : (dialogueAnchor?.top ?? 0),
           right: desktop ? undefined : token("--gutter"),
-          bottom: undefined,
+          bottom:
+            !desktop &&
+            view.currentAction?.action === "reveal-and-play-opponent-card"
+              ? `calc(var(${SAFE_AREA_INSET_PROPERTIES.bottom}) + ${token("--space-12")})`
+              : undefined,
           left: desktop ? (dialogueAnchor?.left ?? 0) : token("--gutter"),
           display: "flex",
           justifyContent: "flex-start",
@@ -2558,7 +2610,13 @@ export function TutorialScreen({
             desktop && renderedDialogue?.kind === "guide"
               ? (renderedDialogue.bubbleWidth ?? 700)
               : undefined,
-          visibility: dialogueAnchor === null ? "hidden" : "visible",
+          visibility:
+            !desktop &&
+            view.currentAction?.action === "reveal-and-play-opponent-card"
+              ? "visible"
+              : dialogueAnchor === null
+                ? "hidden"
+                : "visible",
           pointerEvents: "none",
         }}
       >
@@ -2566,7 +2624,13 @@ export function TutorialScreen({
           <CharacterDialogue
             dialogue={renderedDialogue.model}
             size={desktop ? "prominent" : "compact"}
-            visible={sceneEntered && view.dialogue?.kind === "guide"}
+            visible={
+              sceneEntered &&
+              view.dialogue?.kind === "guide" &&
+              (view.currentAction?.action !==
+                "reveal-and-play-opponent-card" ||
+                revealDialogueActionKey === opponentCardPlay?.key)
+            }
             testId="tutorial-welcome-dialogue"
           />
         )}

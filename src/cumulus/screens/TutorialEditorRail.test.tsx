@@ -84,11 +84,13 @@ describe("TutorialEditorRail", () => {
       {
         id: "third",
         action: "draw-opponent-card",
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         wait: 0,
       },
       {
         id: "fourth",
         action: "reveal-and-play-opponent-card",
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         revealDuration: 2,
         wait: 0,
       },
@@ -502,6 +504,7 @@ describe("TutorialEditorRail", () => {
         {
           id: "draw-opponent-card",
           action: "draw-opponent-card",
+          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
           wait: 0,
         },
       ],
@@ -716,6 +719,7 @@ describe("TutorialEditorRail", () => {
         {
           id: "reveal-and-play-opponent-card",
           action: "reveal-and-play-opponent-card",
+          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
           revealDuration: 2,
           wait: 0,
         },
@@ -736,6 +740,7 @@ describe("TutorialEditorRail", () => {
         {
           id: "reveal-and-play-opponent-card",
           action: "reveal-and-play-opponent-card",
+          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
           revealDuration: 2.5,
           wait: 0,
         },

@@ -9,6 +9,7 @@ import {
   TUTORIAL_PLAYER_CARD_ID,
   tutorialActionLogDetails,
 } from "./tutorial-view-model";
+import { TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID } from "../../data/tutorial-opponent-card";
 
 const OPPONENT_CARD: CardData = {
   id: asCardId(TUTORIAL_OPPONENT_CARD_ID),
@@ -39,6 +40,22 @@ const PLAYER_CARD: CardData = {
   isFast: false,
   renderedText: "",
   imageNumber: 1011175312,
+  artOwned: false,
+};
+
+const RUNEBOUND_CHAMPION: CardData = {
+  id: asCardId(TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID),
+  name: asCardName("Runebound Champion"),
+  cardNumber: 512,
+  cardType: "Character",
+  subtype: "Warrior",
+  isStarter: true,
+  rarity: "Starter",
+  energyCost: 5,
+  spark: 3,
+  isFast: false,
+  renderedText: "▸Dawn: Gain 1⍟.",
+  imageNumber: 2654359867,
   artOwned: false,
 };
 
@@ -88,11 +105,13 @@ describe("buildTutorialView", () => {
       {
         id: "enemy-draw",
         action: "draw-opponent-card" as const,
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         wait: 0,
       },
       {
         id: "enemy-play",
         action: "reveal-and-play-opponent-card" as const,
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         revealDuration: 2,
         wait: 0,
       },
@@ -183,12 +202,14 @@ describe("buildTutorialView", () => {
       tutorialActionLogDetails({
         id: "vrakmoth-draw",
         action: "draw-opponent-card",
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         wait: 0,
       }),
     ).toEqual({
       actionId: "vrakmoth-draw",
       action: "draw-opponent-card",
       waitSeconds: 0,
+      cardId: TUTORIAL_OPPONENT_CARD_ID,
       cardFace: "down",
       sourceZone: "opponent-deck",
       destinationZone: "opponent-hand",
@@ -200,6 +221,7 @@ describe("buildTutorialView", () => {
       tutorialActionLogDetails({
         id: "vrakmoth-reveal-and-play",
         action: "reveal-and-play-opponent-card",
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         revealDuration: 2,
         wait: 0,
       }),
@@ -480,11 +502,13 @@ describe("buildTutorialView", () => {
       {
         id: "vrakmoth-draw",
         action: "draw-opponent-card" as const,
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         wait: 0,
       },
       {
         id: "vrakmoth-reveal-and-play",
         action: "reveal-and-play-opponent-card" as const,
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         revealDuration: 2,
         wait: 0,
       },
@@ -550,11 +574,13 @@ describe("buildTutorialView", () => {
       {
         id: "vrakmoth-draw",
         action: "draw-opponent-card" as const,
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         wait: 0,
       },
       {
         id: "vrakmoth-reveal-and-play",
         action: "reveal-and-play-opponent-card" as const,
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         revealDuration: 2,
         wait: 0,
       },
@@ -1049,16 +1075,133 @@ describe("buildTutorialView", () => {
     });
   });
 
+  it("draws, reveals, explains, and plays a second UUID-backed opponent card before repositioning the first", () => {
+    const revealText =
+      "This card has a ▸Dawn ability which triggers at the start of turn";
+    const actions = [
+      {
+        id: "first-draw",
+        action: "draw-opponent-card" as const,
+        cardId: TUTORIAL_OPPONENT_CARD_ID,
+        wait: 0,
+      },
+      {
+        id: "first-play",
+        action: "reveal-and-play-opponent-card" as const,
+        cardId: TUTORIAL_OPPONENT_CARD_ID,
+        revealDuration: 2,
+        wait: 0,
+      },
+      {
+        id: "player-turn",
+        action: "display-how-to-play" as const,
+        trigger: "immediate" as const,
+        text: "Play.",
+        wait: 0,
+      },
+      { id: "end-turn", action: "end-turn" as const, wait: 0 },
+      {
+        id: "autumn-glade",
+        action: "draw-dreamwell-card" as const,
+        owner: "enemy" as const,
+        cardId: AUTUMN_GLADE.id,
+        wait: 0,
+      },
+      {
+        id: "dreamwell-explanation",
+        action: "display-how-to-play" as const,
+        trigger: "immediate" as const,
+        companion: "dreamwell-card" as const,
+        text: "Dreamwell.",
+        wait: 0,
+      },
+      {
+        id: "runebound-draw",
+        action: "draw-opponent-card" as const,
+        cardId: TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
+        wait: 0,
+      },
+      {
+        id: "worthy",
+        action: "display-speech-bubble" as const,
+        speaker: "enemy" as const,
+        text: "A worthy challenger!",
+        wait: 3,
+      },
+      {
+        id: "runebound-play",
+        action: "reveal-and-play-opponent-card" as const,
+        cardId: TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
+        revealDuration: 5,
+        revealText,
+        wait: 0,
+      },
+      {
+        id: "advance-first",
+        action: "reposition-opponent-character" as const,
+        cardId: TUTORIAL_OPPONENT_CARD_ID,
+        wait: 0,
+      },
+    ];
+
+    const revealing = buildTutorialView(
+      { runId: "event:second-card", currentActionIndex: 8, actions },
+      [OPPONENT_CARD, RUNEBOUND_CHAMPION],
+      PLAYER_CARD,
+      [AUTUMN_GLADE],
+    );
+    expect(revealing.currentAction).toMatchObject({
+      cardId: TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
+      revealDuration: 5,
+      revealText,
+    });
+    expect(revealing.dialogue).toMatchObject({
+      kind: "guide",
+      model: { speakerName: "Mira", text: revealText },
+    });
+    expect(revealing.battle.enemyHand).toHaveLength(1);
+    expect(revealing.battle.enemyHand[0]?.model.cardId).toBe(
+      TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
+    );
+    expect(revealing.battle.enemy.backRank[0]?.card?.model.cardId).toBe(
+      TUTORIAL_OPPONENT_CARD_ID,
+    );
+    expect(revealing.battle.enemy.status).toMatchObject({
+      currentEnergy: 5,
+      maxEnergy: 5,
+    });
+
+    const repositioning = buildTutorialView(
+      { runId: "event:second-card", currentActionIndex: 9, actions },
+      [OPPONENT_CARD, RUNEBOUND_CHAMPION],
+      PLAYER_CARD,
+      [AUTUMN_GLADE],
+    );
+    expect(repositioning.battle.enemyHand).toEqual([]);
+    expect(repositioning.battle.enemy.frontRank[0]?.card?.model.cardId).toBe(
+      TUTORIAL_OPPONENT_CARD_ID,
+    );
+    expect(repositioning.battle.enemy.backRank[1]?.card?.model.cardId).toBe(
+      TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
+    );
+    expect(repositioning.battle.enemy.status).toMatchObject({
+      currentEnergy: 0,
+      maxEnergy: 5,
+    });
+  });
+
   it("enters Challenge, identifies the lower-spark loser, and moves it to its void after resolution", () => {
     const actions = [
       {
         id: "opponent-draw",
         action: "draw-opponent-card" as const,
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         wait: 0,
       },
       {
         id: "opponent-play",
         action: "reveal-and-play-opponent-card" as const,
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         revealDuration: 0,
         wait: 0,
       },

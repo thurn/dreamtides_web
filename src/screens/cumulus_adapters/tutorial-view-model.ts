@@ -21,7 +21,6 @@ const TUTORIAL_BATTLE_ID = "tutorial-battle";
 const TUTORIAL_DECK_SIZE = 30;
 const TUTORIAL_DREAMCALLER_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
 const TUTORIAL_OPPONENT_DREAMCALLER_ID = "86026206-1B11-4F38-A24E-FD3C697F5353";
-const TUTORIAL_OPPONENT_BACK_RANK_INDEX = 0;
 const TUTORIAL_PLAYER_BACK_RANK_INDEX = 1;
 const TUTORIAL_PLAYER_FRONT_RANK_INDEX = 0;
 const TUTORIAL_STARTING_ENERGY = 4;
@@ -90,9 +89,15 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       actionId: action.id,
       action: action.action,
       waitSeconds: action.wait,
-      cardId: TUTORIAL_OPPONENT_CARD_ID,
+      cardId: action.cardId,
       cardFace: "up",
       revealDurationSeconds: action.revealDuration,
+      ...(action.revealText === undefined
+        ? {}
+        : {
+            revealSpeechSpeaker: "mira",
+            revealSpeechText: action.revealText,
+          }),
       revealPlacement: "right-front-rank-intersection",
       sourceZone: "opponent-hand",
       destinationZone: "opponent-back-rank",
@@ -148,6 +153,7 @@ export function tutorialActionLogDetails(action: TutorialAction) {
     actionId: action.id,
     action: action.action,
     waitSeconds: action.wait,
+    cardId: action.cardId,
     cardFace: "down",
     sourceZone: "opponent-deck",
     destinationZone: "opponent-hand",
@@ -172,6 +178,21 @@ function tutorialCardView(
     storedTime: 0,
     showPlayableOutline,
   };
+}
+
+function tutorialCardById(
+  cards: readonly CardData[] | null,
+  cardId: string,
+  actionId: string,
+): CardData | null {
+  if (cards === null) return null;
+  const card = cards.find((candidate) => candidate.id === cardId);
+  if (card === undefined) {
+    throw new Error(
+      `Tutorial action ${actionId} references card ${cardId}, which is missing from the tutorial card catalog.`,
+    );
+  }
+  return card;
 }
 
 function tutorialDeckIds(owner: "enemy" | "player"): readonly string[] {
@@ -249,10 +270,22 @@ function emptyInspectorSide(
 
 function activeDialogueAction(
   playback: TutorialPlaybackState | null,
-): DisplaySpeechBubbleTutorialAction | null {
+): DisplaySpeechBubbleTutorialAction | {
+  readonly action: "reveal-and-play-opponent-card";
+  readonly text: string;
+} | null {
   if (playback?.currentActionIndex === null || playback === null) return null;
   const currentAction = playback.actions[playback.currentActionIndex];
   if (currentAction?.action === "display-speech-bubble") return currentAction;
+  if (
+    currentAction?.action === "reveal-and-play-opponent-card" &&
+    currentAction.revealText !== undefined
+  ) {
+    return {
+      action: currentAction.action,
+      text: currentAction.revealText,
+    };
+  }
   if (currentAction?.action !== "animate-dreamcaller-portrait") return null;
   for (let index = playback.currentActionIndex; index >= 0; index -= 1) {
     const action = playback.actions[index];
@@ -264,10 +297,16 @@ function activeDialogueAction(
 /** Build the quest-independent opening state for the tutorial battle. */
 export function buildTutorialView(
   playback: TutorialPlaybackState | null = null,
-  opponentCard: CardData | null = null,
+  opponentCardsInput: readonly CardData[] | CardData | null = null,
   playerCard: CardData | null = null,
   dreamwellCards: readonly DreamwellCard[] | null = null,
 ): TutorialView {
+  const opponentCards =
+    opponentCardsInput === null
+      ? null
+      : Array.isArray(opponentCardsInput)
+        ? opponentCardsInput
+        : [opponentCardsInput as CardData];
   const currentAction =
     playback?.currentActionIndex === null ||
     playback?.currentActionIndex === undefined
@@ -311,49 +350,82 @@ export function buildTutorialView(
       `Tutorial Dreamwell card ${revealedDreamwellAction.cardId} is missing from the Dreamwell catalog.`,
     );
   }
-  const completedOpponentDraws =
-    playback?.actions
-      .slice(0, completedActionCount)
-      .filter((action) => action.action === "draw-opponent-card").length ?? 0;
-  const completedOpponentPlays =
-    playback?.actions
-      .slice(0, completedActionCount)
-      .filter((action) => action.action === "reveal-and-play-opponent-card")
-      .length ?? 0;
   const enemyDeckCardIds = tutorialDeckIds("enemy");
-  const drawnEnemyCardIds = enemyDeckCardIds.slice(0, completedOpponentDraws);
-  const enemyHandCardIds = drawnEnemyCardIds.slice(completedOpponentPlays);
-  const enemyDeck = enemyDeckCardIds.slice(completedOpponentDraws);
-  const tutorialCardInstanceId = drawnEnemyCardIds[0] ?? null;
-  const opponentCardPlayed = completedOpponentPlays > 0;
-  const tutorialCard =
-    opponentCard !== null && tutorialCardInstanceId !== null
-      ? tutorialCardView(
-          opponentCard,
-          tutorialCardInstanceId,
-          opponentCardPlayed ? "travel" : "snap",
-          true,
-          false,
-        )
-      : null;
-  const visibleOpponentRepositionAction = playback?.actions
-    .slice(0, visibleActionCount)
-    .reverse()
-    .find((action) => action.action === "reposition-opponent-character");
-  if (
-    visibleOpponentRepositionAction?.action ===
-      "reposition-opponent-character" &&
-    opponentCard !== null &&
-    visibleOpponentRepositionAction.cardId !== opponentCard.id
-  ) {
-    throw new Error(
-      `Tutorial opponent character ${visibleOpponentRepositionAction.cardId} does not match the loaded tutorial card ${opponentCard.id}.`,
-    );
+  type OpponentCardRecord = {
+    readonly card: CardData;
+    readonly view: MobileBattleCardView;
+    readonly playOrder: number | null;
+    readonly playedAtActionIndex: number | null;
+  };
+  const opponentHandRecords: OpponentCardRecord[] = [];
+  const opponentPlayedRecords: OpponentCardRecord[] = [];
+  let completedOpponentDrawCount = 0;
+  const completedActions =
+    playback?.actions.slice(0, completedActionCount) ?? [];
+  for (const [actionIndex, action] of completedActions.entries()) {
+    if (action.action === "draw-opponent-card") {
+      const instanceId = enemyDeckCardIds[completedOpponentDrawCount];
+      const card = tutorialCardById(opponentCards, action.cardId, action.id);
+      completedOpponentDrawCount += 1;
+      if (instanceId !== undefined && card !== null) {
+        opponentHandRecords.push({
+          card,
+          view: tutorialCardView(card, instanceId, "snap", true, false),
+          playOrder: null,
+          playedAtActionIndex: null,
+        });
+      }
+      continue;
+    }
+    if (action.action === "reveal-and-play-opponent-card") {
+      const handIndex = opponentHandRecords.findIndex(
+        (record) => record.card.id === action.cardId,
+      );
+      if (opponentCards !== null && handIndex < 0) {
+        throw new Error(
+          `Tutorial action ${action.id} cannot reveal card ${action.cardId} because it is not in the opponent hand.`,
+        );
+      }
+      if (handIndex >= 0) {
+        const [record] = opponentHandRecords.splice(handIndex, 1);
+        if (record !== undefined) {
+          opponentPlayedRecords.push({
+            ...record,
+            view: { ...record.view, layoutMotion: "travel" },
+            playOrder: opponentPlayedRecords.length,
+            playedAtActionIndex: actionIndex,
+          });
+        }
+      }
+    }
   }
+  const enemyHandCardIds = opponentHandRecords.map((record) => record.view.id);
+  const enemyDeck = enemyDeckCardIds.slice(completedOpponentDrawCount);
+  const visibleOpponentRepositionActions = playback?.actions
+    .slice(0, visibleActionCount)
+    .filter((action) => action.action === "reposition-opponent-character") ?? [];
+  const repositionedOpponentCardIds = new Set(
+    visibleOpponentRepositionActions.map((action) => action.cardId),
+  );
+  for (const action of visibleOpponentRepositionActions) {
+    if (
+      opponentCards !== null &&
+      !opponentPlayedRecords.some((record) => record.card.id === action.cardId)
+    ) {
+      throw new Error(
+        `Tutorial opponent character ${action.cardId} is not in play for action ${action.id}.`,
+      );
+    }
+  }
+  const primaryOpponentRecord =
+    opponentPlayedRecords.find(
+      (record) => record.card.id === TUTORIAL_OPPONENT_CARD_ID,
+    ) ?? null;
+  const primaryOpponentCard = primaryOpponentRecord?.card ?? null;
+  const tutorialCard = primaryOpponentRecord?.view ?? null;
   const opponentCardRepositioned =
-    visibleOpponentRepositionAction?.action ===
-      "reposition-opponent-character" &&
-    tutorialCard?.model.cardId === visibleOpponentRepositionAction.cardId;
+    primaryOpponentCard !== null &&
+    repositionedOpponentCardIds.has(primaryOpponentCard.id);
   const howToPlayActionIndex =
     playback?.actions.findIndex(
       (action) => action.action === "display-how-to-play",
@@ -414,11 +486,13 @@ export function buildTutorialView(
   }
   if (
     playerRepositionAction !== null &&
-    opponentCard !== null &&
-    playerRepositionAction.opposingCardId !== opponentCard.id
+    opponentCards !== null &&
+    !opponentPlayedRecords.some(
+      (record) => record.card.id === playerRepositionAction.opposingCardId,
+    )
   ) {
     throw new Error(
-      `Tutorial opposing character ${playerRepositionAction.opposingCardId} does not match the loaded tutorial card ${opponentCard.id}.`,
+      `Tutorial opposing character ${playerRepositionAction.opposingCardId} is not in play.`,
     );
   }
   const challengeActionIndex =
@@ -429,15 +503,18 @@ export function buildTutorialView(
     challengeActionIndex < 0
       ? null
       : (playback?.actions[challengeActionIndex] ?? null);
-  if (
-    challengeAction?.action === "resolve-challenge" &&
-    opponentCard !== null &&
-    challengeAction.challengerCardId !== opponentCard.id
-  ) {
-    throw new Error(
-      `Tutorial challenger ${challengeAction.challengerCardId} does not match the loaded tutorial opponent card ${opponentCard.id}.`,
-    );
-  }
+  const challengeOpponentCard =
+    challengeAction?.action === "resolve-challenge"
+      ? tutorialCardById(
+          opponentCards,
+          challengeAction.challengerCardId,
+          challengeAction.id,
+        )
+      : null;
+  const challengeChallengerCardId =
+    challengeAction?.action === "resolve-challenge"
+      ? challengeAction.challengerCardId
+      : null;
   if (
     challengeAction?.action === "resolve-challenge" &&
     playerCard !== null &&
@@ -447,7 +524,7 @@ export function buildTutorialView(
       `Tutorial defender ${challengeAction.defenderCardId} does not match the loaded tutorial player card ${playerCard.id}.`,
     );
   }
-  const challengerSpark = opponentCard?.spark ?? null;
+  const challengerSpark = challengeOpponentCard?.spark ?? null;
   const defenderSpark = playerCard?.spark ?? null;
   if (
     challengeAction?.action === "resolve-challenge" &&
@@ -501,13 +578,27 @@ export function buildTutorialView(
       ? (revealedDreamwellCard?.energyAdded ?? 0)
       : 0;
   const enemyMaxEnergy = TUTORIAL_STARTING_ENERGY + enemyDreamwellEnergy;
-  const enemyCurrentEnergy = enemyDreamwellApplied
-    ? enemyMaxEnergy
-    : Math.max(
-        0,
-        TUTORIAL_STARTING_ENERGY -
-          (opponentCardPlayed ? (opponentCard?.energyCost ?? 0) : 0),
-      );
+  const dreamwellExplanationActionIndex =
+    playback?.actions.findIndex(
+      (action) =>
+        action.action === "display-how-to-play" &&
+        action.companion === "dreamwell-card",
+    ) ?? -1;
+  const spentEnemyEnergy = opponentPlayedRecords
+    .filter(
+      (record) =>
+        !enemyDreamwellApplied ||
+        (record.playedAtActionIndex ?? -1) > dreamwellExplanationActionIndex,
+    )
+    .reduce(
+      (total, record) => total + (record.card.energyCost ?? 0),
+      0,
+    );
+  const enemyCurrentEnergy = Math.max(
+    0,
+    (enemyDreamwellApplied ? enemyMaxEnergy : TUTORIAL_STARTING_ENERGY) -
+      spentEnemyEnergy,
+  );
   const enemy = {
     ...emptySide("enemy"),
     voidCards:
@@ -522,32 +613,34 @@ export function buildTutorialView(
       maxEnergy: enemyMaxEnergy,
     },
   };
-  const enemyBackRank = enemy.backRank.map((slot, index) =>
-    opponentCardPlayed &&
-    !opponentCardRepositioned &&
-    index === TUTORIAL_OPPONENT_BACK_RANK_INDEX
-      ? {
+  const enemyBackRank = enemy.backRank.map((slot, index) => {
+    const record = opponentPlayedRecords.find(
+      (candidate) =>
+        candidate.playOrder === index &&
+        !repositionedOpponentCardIds.has(candidate.card.id),
+    );
+    return record === undefined
+      ? slot
+      : {
           ...slot,
-          card:
-            tutorialCard === null
-              ? null
-              : { ...tutorialCard, exhausted: !playerTurnStarted },
-        }
-      : slot,
-  );
-  const enemyFrontRank = enemy.frontRank.map((slot, index) =>
-    opponentCardRepositioned &&
-    !(challengeResolved && challengeLoserOwner === "enemy") &&
-    index === TUTORIAL_OPPONENT_BACK_RANK_INDEX
-      ? {
+          card: { ...record.view, exhausted: !playerTurnStarted },
+        };
+  });
+  const enemyFrontRank = enemy.frontRank.map((slot, index) => {
+    const record = opponentPlayedRecords.filter((candidate) =>
+      repositionedOpponentCardIds.has(candidate.card.id),
+    )[index];
+    const dissolved =
+      record?.card.id === challengeChallengerCardId &&
+      challengeResolved &&
+      challengeLoserOwner === "enemy";
+    return record === undefined || dissolved
+      ? slot
+      : {
           ...slot,
-          card:
-            tutorialCard === null
-              ? null
-              : { ...tutorialCard, exhausted: false },
-        }
-      : slot,
-  );
+          card: { ...record.view, exhausted: false },
+        };
+  });
   return {
     dreamcallers: {
       player: {
@@ -582,6 +675,17 @@ export function buildTutorialView(
     dialogue:
       dialogueAction === null
         ? null
+        : dialogueAction.action === "reveal-and-play-opponent-card"
+          ? {
+              kind: "guide",
+              verticalOffset: 0,
+              model: {
+                portrait: { kind: "character-portrait", characterId: "mira" },
+                portraitAlt: "Mira",
+                speakerName: "Mira",
+                text: dialogueAction.text,
+              },
+            }
         : dialogueAction.speaker === "player" ||
             dialogueAction.speaker === "enemy"
           ? {
@@ -731,7 +835,7 @@ export function buildTutorialView(
       const playerHandCards =
         playerTurnCard === null || playerCardPlayed ? [] : [playerTurnCard];
       const playerHandCardIds = playerHandCards.map((card) => card.id);
-      const farHandCards = tutorialCard === null || opponentCardPlayed ? [] : [tutorialCard];
+      const farHandCards = opponentHandRecords.map((record) => record.view);
       const phase =
         challengeActionIndex >= 0 &&
         completedActionCount >= challengeActionIndex
@@ -839,18 +943,10 @@ export function buildTutorialView(
               ...enemyInspector.zones,
               hand: enemyHandCardIds.length,
               deck: enemyDeck.length,
-              backRank:
-                opponentCardPlayed &&
-                !opponentCardRepositioned &&
-                tutorialCard !== null
-                  ? 1
-                  : 0,
-              frontRank:
-                opponentCardRepositioned &&
-                tutorialCard !== null &&
-                !(challengeResolved && challengeLoserOwner === "enemy")
-                  ? 1
-                  : 0,
+              backRank: enemyBackRank.filter((slot) => slot.card !== null)
+                .length,
+              frontRank: enemyFrontRank.filter((slot) => slot.card !== null)
+                .length,
               void:
                 challengeResolved && challengeLoserOwner === "enemy" ? 1 : 0,
             },
