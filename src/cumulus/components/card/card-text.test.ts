@@ -196,11 +196,15 @@ describe("tokenizeRulesText", () => {
 
   it("identifies the lunar symbol ☪", () => {
     const result = tokenizeRulesText("☪: Draw a card.");
-    expect(collectSymbols(result)).toContainEqual({
+    const lunar = collectSymbols(result).find(
+      (segment) => segment.symbol === "lunar",
+    );
+    expect(lunar).toMatchObject({
       kind: "symbol",
       symbol: "lunar",
       char: "☪",
     });
+    expect(lunar?.entry?.id).toBe("exhaust-cost");
   });
 
   it("identifies the store symbol ⧗", () => {

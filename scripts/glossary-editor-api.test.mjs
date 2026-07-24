@@ -21,12 +21,12 @@ function fixtureEntries() {
   ];
 }
 
-async function startApi() {
+async function startApi(source = serializeGlossarySource(fixtureEntries())) {
   const root = mkdtempSync(join(tmpdir(), "glossary-api-"));
   roots.push(root);
   const dataDir = join(root, "data", "tabula");
   mkdirSync(dataDir, { recursive: true });
-  writeFileSync(join(dataDir, "glossary.toml"), serializeGlossarySource(fixtureEntries()));
+  writeFileSync(join(dataDir, "glossary.toml"), source);
   const middleware = createGlossaryEditorApiMiddleware({ rootDir: root });
   const server = createServer((req, res) => {
     void middleware(req, res, () => {
@@ -70,6 +70,44 @@ describe("glossary editor API", () => {
       priority: 10,
       variants: ["spark"],
     });
+  });
+
+  it("preserves unrelated TOML formatting when editing one entry", async () => {
+    const source = `[[entries]]
+id = "spark"
+category = "Resources"
+term = "Spark"
+definition = "Combat power."
+priority = 10
+matches-rules-text = true
+variants = []
+
+[[entries]]
+id = "site-draft"
+category = "Sites"
+term = "Draft"
+definition = "Choose cards."
+matches-rules-text = false
+variants = []
+
+[[entries.contexts]]
+pattern = '''\\bdraft\\b'''
+definition = "Contextual copy."
+`;
+    const { root, origin } = await startApi(source);
+    const response = await fetch(`${origin}/api/editor/glossary/spark`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ definition: "Updated combat power." }),
+    });
+
+    expect(response.status).toBe(200);
+    expect(
+      readFileSync(join(root, "data", "tabula", "glossary.toml"), "utf8"),
+    ).toBe(source.replace(
+      'definition = "Combat power."',
+      'definition = "Updated combat power."',
+    ));
   });
 
   it("rejects a non-integer priority without changing the TOML", async () => {

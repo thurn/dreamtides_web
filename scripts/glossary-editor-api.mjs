@@ -9,7 +9,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   parseGlossarySource,
-  serializeGlossarySource,
+  updateGlossaryEntrySource,
   validateGlossaryEntries,
 } from "./glossary-source.mjs";
 
@@ -139,7 +139,9 @@ export function createGlossaryEditorApiMiddleware({
 
     try {
       const id = decodeURIComponent(pathname.slice(BASE_PATH.length + 1));
-      const entries = readEntries(fileSystem, rootDir);
+      const glossaryPath = join(rootDir, GLOSSARY_PATH);
+      const source = fileSystem.readFileSync(glossaryPath, "utf8");
+      const entries = parseGlossarySource(source);
       const index = entries.findIndex((entry) => entry.id === id);
       if (index < 0) {
         errorResponse(res, 404, "GLOSSARY_ENTRY_NOT_FOUND", `No glossary entry has id "${id}".`);
@@ -151,10 +153,15 @@ export function createGlossaryEditorApiMiddleware({
         entryIndex === index ? nextEntry : entry,
       );
       const normalized = validateGlossaryEntries(nextEntries);
+      const changes = Object.fromEntries(
+        ["term", "definition", "priority", "variants"]
+          .filter((field) => Object.hasOwn(body, field))
+          .map((field) => [field, normalized[index][field]]),
+      );
       atomicWrite(
         fileSystem,
-        join(rootDir, GLOSSARY_PATH),
-        serializeGlossarySource(normalized),
+        glossaryPath,
+        updateGlossaryEntrySource(source, id, changes),
       );
       jsonResponse(res, 200, { entry: normalized[index] });
     } catch (error) {

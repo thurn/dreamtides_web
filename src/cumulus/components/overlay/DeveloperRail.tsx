@@ -48,7 +48,12 @@ export function DeveloperRail({
       id={id}
       data-developer-rail={side}
       data-testid={testId}
-      style={{ minWidth: 0, height: "100dvh" }}
+      style={{
+        position: "relative",
+        zIndex: 60,
+        minWidth: 0,
+        height: "100dvh",
+      }}
     >
       <GlassPanel
         frame="edgeRail"

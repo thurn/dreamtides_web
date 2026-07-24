@@ -24,4 +24,11 @@ export interface GlossarySourceEntry {
 
 export function validateGlossaryEntries(input: unknown): GlossarySourceEntry[];
 export function parseGlossarySource(source: string): GlossarySourceEntry[];
+export function updateGlossaryEntrySource(
+  source: string,
+  id: string,
+  changes: Partial<
+    Pick<GlossarySourceEntry, "term" | "definition" | "priority" | "variants">
+  >,
+): string;
 export function serializeGlossarySource(entries: readonly GlossarySourceEntry[]): string;

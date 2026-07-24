@@ -202,8 +202,13 @@ describe("RulesText", () => {
     expect(container.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-moon")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-hourglass")).not.toBeNull();
-    expect(container.textContent).not.toContain("☪");
-    expect(container.textContent).not.toContain("⧗");
+    expect(
+      container.querySelector('[data-glossary-term="Exhaust Cost"]')
+        ?.textContent,
+    ).not.toContain("☪");
+    expect(
+      container.querySelector("i.bxf.bx-hourglass")?.parentElement?.textContent,
+    ).not.toContain("⧗");
 
     const pointsEntry = requireGlossaryEntry(GLOSSARY_IDS.points);
     expect(

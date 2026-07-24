@@ -35,6 +35,8 @@ const variantNoteStyle: CSSProperties = {
 
 const paneStyle: CSSProperties = {
   position: "relative",
+  minWidth: 0,
+  maxWidth: "100%",
   background: token("--bg-sunken"),
   border: `1px solid ${token("--border-soft")}`,
   borderRadius: token("--radius-control"),
@@ -43,6 +45,8 @@ const paneStyle: CSSProperties = {
 
 const preStyle: CSSProperties = {
   margin: 0,
+  maxWidth: "100%",
+  boxSizing: "border-box",
   padding: `${token("--space-6")} ${token("--space-6")}`,
   overflowX: "auto",
 };
@@ -52,7 +56,8 @@ const codeStyle: CSSProperties = {
   fontSize: "12.5px",
   lineHeight: 1.65,
   color: token("--text-secondary"),
-  whiteSpace: "pre",
+  whiteSpace: "pre-wrap",
+  overflowWrap: "anywhere",
   tabSize: 2,
 };
 

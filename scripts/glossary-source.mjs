@@ -224,6 +224,69 @@ export function parseGlossarySource(source) {
   return validateGlossaryEntries(parsed.entries);
 }
 
+const EDITABLE_SOURCE_KEYS = {
+  term: "term",
+  definition: "definition",
+  priority: "priority",
+  variants: "variants",
+};
+
+function entrySourceRanges(source) {
+  const starts = Array.from(
+    source.matchAll(/^\[\[entries\]\][ \t]*$/gmu),
+    (match) => match.index,
+  );
+  return starts.map((start, index) => ({
+    start,
+    end: starts[index + 1] ?? source.length,
+  }));
+}
+
+function replaceSourceAssignment(source, key, value) {
+  const assignment = stringify({ [key]: value }).trimEnd();
+  const contextStart = source.search(/^\[\[entries\.contexts\]\][ \t]*$/mu);
+  const headerEnd = contextStart < 0 ? source.length : contextStart;
+  const header = source.slice(0, headerEnd);
+  const contexts = source.slice(headerEnd);
+  const pattern = new RegExp(`^${key}[ \\t]*=.*$`, "mu");
+  if (pattern.test(header)) {
+    return `${header.replace(pattern, assignment)}${contexts}`;
+  }
+  const separator = header.endsWith("\n") ? "" : "\n";
+  return `${header}${separator}${assignment}\n${contexts}`;
+}
+
+/**
+ * Replace only explicitly edited fields in one glossary entry while retaining
+ * every other authored byte in glossary.toml.
+ */
+export function updateGlossaryEntrySource(source, id, changes) {
+  const entries = parseGlossarySource(source);
+  const entryIndex = entries.findIndex((entry) => entry.id === id);
+  if (entryIndex < 0) {
+    throw invalid(`No glossary entry has id "${id}".`);
+  }
+  const range = entrySourceRanges(source)[entryIndex];
+  if (range === undefined) {
+    throw invalid(`Could not locate glossary entry "${id}" in the source.`);
+  }
+
+  let entrySource = source.slice(range.start, range.end);
+  for (const [field, sourceKey] of Object.entries(EDITABLE_SOURCE_KEYS)) {
+    if (!Object.hasOwn(changes, field)) continue;
+    entrySource = replaceSourceAssignment(
+      entrySource,
+      sourceKey,
+      changes[field],
+    );
+  }
+
+  const updated =
+    source.slice(0, range.start) + entrySource + source.slice(range.end);
+  parseGlossarySource(updated);
+  return updated;
+}
+
 /** Serialize validated glossary records back to the tracked TOML source. */
 export function serializeGlossarySource(entries) {
   const normalized = validateGlossaryEntries(entries);
