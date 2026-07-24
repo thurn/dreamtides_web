@@ -22,6 +22,8 @@ const SAMPLE_RULES_TEXT = [
   "Support – Supported allies have +2✦ and unstoppable.",
   "",
   "Reclaim – 3●, Banish 3 cards from your void.",
+  "",
+  "Gain 2⍟.",
 ].join("\n");
 
 interface RulesTextDemoArgs {
