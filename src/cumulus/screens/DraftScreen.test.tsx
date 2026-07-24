@@ -50,7 +50,7 @@ function stubMatchMedia({
   window.matchMedia = (query: string) => ({
     matches:
       (desktop && query.includes("min-width: 900px")) ||
-      (wideDraft && query.includes("min-width: 1000px")),
+      (wideDraft && query.includes("min-width: 1260px")),
     media: query,
     onchange: null,
     addEventListener: () => undefined,
@@ -118,11 +118,11 @@ describe("Cumulus DraftScreen", () => {
     const firstCard = container.querySelector<HTMLElement>(
       '[data-draft-offer-card="101"]',
     );
-    expect(firstCard?.style.width).toContain("240px");
+    expect(firstCard?.style.width).toContain("300px");
     const stage = container.querySelector<HTMLElement>("[data-draft-offer-stage]");
     expect(stage?.style.justifyContent).toBe("center");
-    expect(stage?.style.paddingLeft).toBe("var(--space-2)");
-    expect(grid?.style.gap).toBe("var(--space-2)");
+    expect(stage?.style.paddingLeft).toBe("var(--space-5)");
+    expect(grid?.style.gap).toBe("var(--space-5)");
 
     act(() => {
       root.unmount();
@@ -141,7 +141,7 @@ describe("Cumulus DraftScreen", () => {
     expect(
       container.querySelector<HTMLElement>('[data-draft-offer-card="101"]')
         ?.style.width,
-    ).toContain("240px");
+    ).toContain("300px");
 
     act(() => root.unmount());
   });

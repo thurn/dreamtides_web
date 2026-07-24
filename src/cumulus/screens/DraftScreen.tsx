@@ -68,13 +68,14 @@ const HUD_CLEARANCE_OP = `${QUEST_STATUS_BAR_CLEARANCE_OP} + ${token("--space-9"
 const TOP_GAP = `calc(${TOP_GAP_OP})`;
 const HUD_CLEARANCE = `calc(${HUD_CLEARANCE_OP})`;
 const MOBILE_OFFER_GRID_GAP = token("--space-2");
-const DESKTOP_OFFER_GRID_GAP = token("--space-2");
+const DESKTOP_OFFER_GRID_GAP = token("--space-5");
 // Desktop draft cards follow the roomy starting-deck modal card size. This is a
 // content-driven box measure: the cap keeps the four-card row readable without
 // turning each card into a full-height mobile offer.
-const DESKTOP_OFFER_CARD_WIDTH_PX = 240;
-// Four reading-width cards plus compact gutters fit without overlap from here.
-const DRAFT_ROW_MIN_WIDTH_PX = 1000;
+const DESKTOP_OFFER_CARD_WIDTH_PX = 300;
+// Four 300px cards with roomy 12px gutters fit from 1260px onward; narrower
+// desktop viewports retain the two-by-two layout rather than crowding the row.
+const DRAFT_ROW_MIN_WIDTH_PX = 1260;
 const NOOP = (): void => undefined;
 
 function topSafeOpFor(isDesktop: boolean): string {
