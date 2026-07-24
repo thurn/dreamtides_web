@@ -1729,19 +1729,12 @@ describe("TutorialScreen", () => {
     act(() => screenMocks.sceneAnimationComplete?.());
     act(() => ResizeObserverStub.flush());
 
-    const guide = container.querySelector<HTMLElement>(
-      "[data-tutorial-reposition-guide]",
-    );
-    expect(guide?.getAttribute("aria-label")).toBe(
-      "Drag Marked Direwolf to block Twilight Troubadour.",
-    );
-    expect(guide?.dataset.tutorialBlockTargetSlot).toBe("player-front-0");
-    expect(
-      container.querySelector<HTMLElement>(
-        "[data-tutorial-block-target-highlight]",
-      )?.style.outline,
-    ).toContain("var(--positive)");
-    expect(guide?.querySelector("svg")).toBeNull();
+    expect(screenMocks.props?.guidedSlotHighlight).toEqual({
+      owner: "player",
+      rank: "front",
+      slotId: "player-front-0",
+      label: "Drag Marked Direwolf to block Twilight Troubadour.",
+    });
 
     act(() => {
       screenMocks.props?.interactions?.onCardDragStart(

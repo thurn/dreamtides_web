@@ -13,6 +13,7 @@ import {
   type MobileBattleCardView,
   type MobileBattleCardPickerCandidateView,
   type MobileBattleInteractions,
+  type MobileBattleScreenProps,
   type MobileBattleSideView,
   type MobileBattleView,
 } from "./MobileBattleScreen";
@@ -190,6 +191,7 @@ function makePickerCandidate(
 function mount(
   view = makeView(),
   interactions?: MobileBattleInteractions,
+  props?: Omit<MobileBattleScreenProps, "view" | "interactions">,
 ): {
   container: HTMLDivElement;
   root: Root;
@@ -200,7 +202,11 @@ function mount(
   act(() => {
     root.render(
       <CumulusRoot>
-        <MobileBattleScreen view={view} interactions={interactions} />
+        <MobileBattleScreen
+          {...props}
+          view={view}
+          interactions={interactions}
+        />
       </CumulusRoot>,
     );
   });
@@ -2860,12 +2866,28 @@ describe("MobileBattleScreen", () => {
       onPreviousPhase: vi.fn(),
       onNextPhase: vi.fn(),
     };
-    const { container, root } = mount(makeView(), interactions);
+    const { container, root } = mount(makeView(), interactions, {
+      guidedSlotHighlight: {
+        owner: "player",
+        rank: "front",
+        slotId: "player-front-empty",
+        label: "Move this character here.",
+      },
+    });
     const playArea = container.querySelector<HTMLElement>(
       '[data-battle-play-area="player"]',
     );
     const battlefieldCard = container.querySelector<HTMLElement>(
-      '[data-battle-card-id="player-front-card"]',
+      '[data-battle-card-id="player-back-card"]',
+    );
+    const sourceRank = container.querySelector<HTMLElement>(
+      '[data-battle-rank="player-back"]',
+    );
+    const overlappingRank = container.querySelector<HTMLElement>(
+      '[data-battle-rank="player-front"]',
+    );
+    const guidedHighlight = container.querySelector<HTMLElement>(
+      "[data-battle-guided-slot-highlight]",
     );
     const revealSource = battlefieldCard?.querySelector<HTMLElement>(
       "[data-game-card-source]",
@@ -2892,6 +2914,19 @@ describe("MobileBattleScreen", () => {
       height: 100,
       toJSON: () => ({}),
     });
+    expect(sourceRank?.style.zIndex).toBe("1");
+    expect(overlappingRank?.style.zIndex).toBe("2");
+    expect(guidedHighlight?.getAttribute("aria-label")).toBe(
+      "Move this character here.",
+    );
+    expect(guidedHighlight?.dataset.battleGuidedSlotId).toBe(
+      "player-front-empty",
+    );
+    expect(guidedHighlight?.parentElement?.dataset.battleSlotId).toBe(
+      "player-front-empty",
+    );
+    expect(guidedHighlight?.style.zIndex).toBe("4");
+    expect(guidedHighlight?.style.outline).toContain("var(--positive)");
 
     act(() => {
       revealSource?.dispatchEvent(
@@ -2921,6 +2956,8 @@ describe("MobileBattleScreen", () => {
     expect(battlefieldCard?.style.transform).toContain(
       "translate3d(0px, -100px, 0)",
     );
+    expect(sourceRank?.style.zIndex).toBe("4");
+    expect(overlappingRank?.style.zIndex).toBe("2");
 
     act(() => {
       battlefieldCard?.dispatchEvent(
@@ -2931,8 +2968,11 @@ describe("MobileBattleScreen", () => {
           pointerType: "mouse",
         }),
       );
-      root.unmount();
     });
+    expect(sourceRank?.style.zIndex).toBe("1");
+    expect(overlappingRank?.style.zIndex).toBe("2");
+
+    act(() => root.unmount());
   });
 
   it("ignores a pointer drop from an in-play card onto the opponent battlefield", () => {

@@ -27,7 +27,6 @@ import {
 import { GameCard } from "../components/card/CardView";
 import {
   BATTLEFIELD_CARD_ASPECT_RATIO,
-  BATTLEFIELD_CARD_CORNER_RADIUS,
   CARD_ASPECT_RATIO_VALUE,
 } from "../components/card/card-aspect";
 import {
@@ -190,11 +189,6 @@ interface TutorialCardTrajectory {
   readonly destination: TutorialCardFrame;
 }
 
-interface TutorialRepositionGuideGeometry {
-  readonly targetFrame: TutorialCardFrame;
-  readonly targetSlotId: string;
-}
-
 const TUTORIAL_FADE_SECONDS = motionTimeSeconds("--dur-loading-screen-fade");
 const TUTORIAL_CARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow");
 const TUTORIAL_EDITOR_DOCK_MIN_WIDTH = 1280;
@@ -206,22 +200,17 @@ const TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH = 500;
 // The pointer overlaps the portrait rim so it visibly connects to the frame.
 const TUTORIAL_PORTRAIT_POINTER_OVERLAP = 2;
 
-function TutorialRepositionGuide({
+function TutorialRepositionTargetResolver({
   screen,
   cardId,
   opposingCardId,
-  accessibleLabel,
   onTargetSlotChange,
 }: {
   readonly screen: HTMLElement;
   readonly cardId: string;
   readonly opposingCardId: string;
-  readonly accessibleLabel: string;
   readonly onTargetSlotChange: (slotId: string | null) => void;
-}): ReactElement | null {
-  const [geometry, setGeometry] =
-    useState<TutorialRepositionGuideGeometry | null>(null);
-
+}): null {
   useLayoutEffect(() => {
     const sourceCard = screen.querySelector<HTMLElement>(
       `[data-battle-rank="player-back"] [data-card-id="${cardId}"]`,
@@ -247,13 +236,11 @@ function TutorialRepositionGuide({
       opposingSlot === undefined ||
       playerFrontSlots.length === 0
     ) {
-      setGeometry(null);
       onTargetSlotChange(null);
       return undefined;
     }
 
     const updateGeometry = (): void => {
-      const screenBox = screen.getBoundingClientRect();
       const opposingBox = opposingSlot.getBoundingClientRect();
       const opposingCenterX = opposingBox.left + opposingBox.width / 2;
       const targetSlot = playerFrontSlots.reduce((closest, candidate) => {
@@ -269,29 +256,9 @@ function TutorialRepositionGuide({
       });
       const targetSlotId = targetSlot.dataset.battleSlotId;
       if (targetSlotId === undefined) {
-        setGeometry(null);
         onTargetSlotChange(null);
         return;
       }
-      const targetBox = targetSlot.getBoundingClientRect();
-      const next = {
-        targetFrame: {
-          x: targetBox.left - screenBox.left,
-          y: targetBox.top - screenBox.top,
-          width: targetBox.width,
-          height: targetBox.height,
-        },
-        targetSlotId,
-      };
-      setGeometry((current) =>
-        current?.targetFrame.x === next.targetFrame.x &&
-        current.targetFrame.y === next.targetFrame.y &&
-        current.targetFrame.width === next.targetFrame.width &&
-        current.targetFrame.height === next.targetFrame.height &&
-        current.targetSlotId === next.targetSlotId
-          ? current
-          : next,
-      );
       onTargetSlotChange(targetSlotId);
     };
 
@@ -308,37 +275,7 @@ function TutorialRepositionGuide({
     };
   }, [cardId, onTargetSlotChange, opposingCardId, screen]);
 
-  if (geometry === null) return null;
-  return (
-    <div
-      role="img"
-      aria-label={accessibleLabel}
-      data-tutorial-reposition-guide=""
-      data-tutorial-block-target-slot={geometry.targetSlotId}
-      style={{
-        position: "absolute",
-        inset: 0,
-        zIndex: token("--layer-reveal"),
-        pointerEvents: "none",
-      }}
-    >
-      <div
-        data-tutorial-block-target-highlight=""
-        style={{
-          position: "absolute",
-          top: geometry.targetFrame.y,
-          left: geometry.targetFrame.x,
-          width: geometry.targetFrame.width,
-          height: geometry.targetFrame.height,
-          boxSizing: "border-box",
-          borderRadius: BATTLEFIELD_CARD_CORNER_RADIUS,
-          outline: `${token("--space-1")} solid ${token("--positive")}`,
-          outlineOffset: `calc(-1 * ${token("--space-1")})`,
-          boxShadow: `0 0 ${token("--space-7")} ${token("--positive")}`,
-        }}
-      />
-    </div>
-  );
+  return null;
 }
 
 function TutorialHowToPlayDialog({
@@ -2068,6 +2005,19 @@ export function TutorialScreen({
           <MobileBattleScreen
             view={displayedBattleView}
             interactions={tutorialInteractions}
+            guidedSlotHighlight={
+              playerReposition === null ||
+              repositionSourceCard === null ||
+              repositionOpposingCard === null ||
+              repositionTargetSlotId === null
+                ? undefined
+                : {
+                    owner: "player",
+                    rank: "front",
+                    slotId: repositionTargetSlotId,
+                    label: `Drag ${repositionSourceCard.model.displaySnapshot.name} to block ${repositionOpposingCard.model.displaySnapshot.name}.`,
+                  }
+            }
             viewport="contained"
             inspectorDefault="collapsed"
             inspectorOpen={battleInspectorOpen}
@@ -2108,11 +2058,10 @@ export function TutorialScreen({
       repositionSourceCard !== null &&
       repositionOpposingCard !== null &&
       screenRef.current !== null ? (
-        <TutorialRepositionGuide
+        <TutorialRepositionTargetResolver
           screen={screenRef.current}
           cardId={playerReposition.cardId}
           opposingCardId={playerReposition.opposingCardId}
-          accessibleLabel={`Drag ${repositionSourceCard.model.displaySnapshot.name} to block ${repositionOpposingCard.model.displaySnapshot.name}.`}
           onTargetSlotChange={setRepositionTargetSlotId}
         />
       ) : null}
