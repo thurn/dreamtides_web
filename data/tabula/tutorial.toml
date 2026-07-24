@@ -91,5 +91,5 @@ wait = 0
 id = "challenge-positioning-how-to-play"
 action = "display-how-to-play"
 trigger = "immediate"
-text = "Position characters in the front rank to [yellow]challenge[/yellow] with them during your turn, or [yellow]accept[/yellow] a challenge during the opponent's turn."
+text = "Position characters in the front rank to [yellow]challenge[/yellow] with them during your turn or [yellow]block[/yellow] a challenger during the opponent's turn."
 wait = 0
