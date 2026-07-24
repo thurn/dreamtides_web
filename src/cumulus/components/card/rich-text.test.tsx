@@ -141,9 +141,7 @@ describe("RichText", () => {
     expect(markup).not.toContain("<dt");
     expect(markup).not.toContain("Points:");
     expect(markup).not.toContain(": Characters score points");
-    expect(markup).toContain("<span>Characters </span>");
-    expect(markup).toContain("<span>score</span>");
-    expect(markup).toContain("<span> points </span>");
+    expect(markup).toContain("<span>Characters score points </span>");
     expect(markup).toContain('aria-label="points"');
   });
 });
