@@ -22,7 +22,7 @@ function invalid(message) {
   return error;
 }
 
-function validateInstructionMarkup(text, id) {
+function validateTutorialMarkup(text, id) {
   const paragraphs = text
     .split(/\n\s*\n/u)
     .map((paragraph) => paragraph.trim())
@@ -110,6 +110,7 @@ export function validateTutorialActions(value) {
           `Tutorial action ${JSON.stringify(id)} must have speech text.`,
         );
       }
+      validateTutorialMarkup(candidate.text, id);
       const speaker = candidate.speaker;
       if (
         speaker !== undefined &&
@@ -162,7 +163,7 @@ export function validateTutorialActions(value) {
           `Tutorial action ${JSON.stringify(id)} must have How to Play text.`,
         );
       }
-      validateInstructionMarkup(candidate.text, id);
+      validateTutorialMarkup(candidate.text, id);
       const trigger =
         candidate.trigger ?? "player-turn-announcement-complete";
       if (
@@ -350,6 +351,9 @@ export function validateTutorialActions(value) {
         throw invalid(
           `Tutorial action ${JSON.stringify(id)} must have non-blank reveal speech text.`,
         );
+      }
+      if (typeof revealText === "string") {
+        validateTutorialMarkup(revealText, id);
       }
       return {
         id,

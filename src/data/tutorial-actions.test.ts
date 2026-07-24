@@ -51,7 +51,7 @@ describe("parseTutorialActions", () => {
           action: "display-speech-bubble",
           speaker: "enemy",
           bubbleWidth: 450,
-          text: "For the Abyss!",
+          text: "For the [yellow]Abyss[/yellow]!",
           wait: 3,
         },
       ]),
@@ -61,7 +61,7 @@ describe("parseTutorialActions", () => {
         action: "display-speech-bubble",
         speaker: "enemy",
         bubbleWidth: 450,
-        text: "For the Abyss!",
+        text: "For the [yellow]Abyss[/yellow]!",
         wait: 3,
       },
     ]);
@@ -87,6 +87,16 @@ describe("parseTutorialActions", () => {
         },
       ]),
     ).toThrow(/speech bubble width from 300 to 700 pixels/u);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "bad-speech-markup",
+          action: "display-speech-bubble",
+          text: "A [yellow]blocked character.",
+          wait: 1,
+        },
+      ]),
+    ).toThrow(/unclosed yellow highlight/u);
   });
 
   it("preserves finite Mira vertical offsets and rejects invalid offsets", () => {

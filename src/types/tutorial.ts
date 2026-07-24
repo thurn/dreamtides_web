@@ -34,7 +34,7 @@ export interface TutorialActionBase {
   readonly wait: number;
 }
 
-/** Shows Mira's tutorial dialogue with authored plain text. */
+/** Shows authored tutorial dialogue beside the selected speaker. */
 export interface DisplaySpeechBubbleTutorialAction extends TutorialActionBase {
   readonly action: "display-speech-bubble";
   /** Defaults to Mira for tutorial snapshots authored before speaker selection. */
@@ -43,6 +43,7 @@ export interface DisplaySpeechBubbleTutorialAction extends TutorialActionBase {
   readonly verticalOffset?: number;
   /** Desktop maximum width of the speech bubble, in pixels. */
   readonly bubbleWidth?: number;
+  /** `[yellow]copy[/yellow]` highlights an exact inline run. */
   readonly text: string;
 }
 

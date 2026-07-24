@@ -48,6 +48,7 @@ export function parseTutorialActions(
           `Tutorial action ${JSON.stringify(id)} must have speech text.`,
         );
       }
+      parseTutorialInstructionMarkup(record.text);
       const speaker = record.speaker;
       if (
         speaker !== undefined &&
@@ -297,6 +298,9 @@ export function parseTutorialActions(
         throw new Error(
           `Tutorial action ${JSON.stringify(id)} must have non-blank reveal speech text.`,
         );
+      }
+      if (typeof revealText === "string") {
+        parseTutorialInstructionMarkup(revealText);
       }
       return {
         id,

@@ -1316,7 +1316,7 @@
             "name": "text",
             "tsType": "string",
             "optional": false,
-            "description": "Plain spoken line shown by the speech bubble."
+            "description": "Spoken line shown by the speech bubble, with optional yellow highlight tags."
           }
         ]
       }
@@ -4266,7 +4266,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "The spoken line. Plain text; the component supplies the bubble voice."
+      "description": "The spoken line. `[yellow]copy[/yellow]` highlights an exact inline run."
     },
     {
       "name": "size",

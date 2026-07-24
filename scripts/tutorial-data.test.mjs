@@ -17,7 +17,7 @@ const FIXTURE_ACTIONS = [
     speaker: "mira",
     verticalOffset: 100,
     bubbleWidth: 650,
-    text: "First line.\nSecond line.",
+    text: "First [yellow]line[/yellow].\nSecond line.",
     wait: 1.5,
   },
   {
@@ -121,6 +121,14 @@ describe("tutorial data", () => {
     expect(() =>
       validateTutorialActions([{ ...FIXTURE_ACTIONS[0], bubbleWidth: 150 }]),
     ).toThrow(/speech bubble width from 300 to 700 pixels/u);
+    expect(() =>
+      validateTutorialActions([
+        {
+          ...FIXTURE_ACTIONS[0],
+          text: "A [yellow]blocked character.",
+        },
+      ]),
+    ).toThrow(/unclosed yellow highlight/u);
     expect(() =>
       validateTutorialActions([{ ...FIXTURE_ACTIONS[1], pause: -1 }]),
     ).toThrow(/non-negative portrait pause/u);

@@ -560,6 +560,7 @@ function TutorialActionRow({
             <TextArea
               label="Text"
               value={action.text}
+              supportingText="[yellow]copy[/yellow] highlights an exact run."
               error={
                 action.text.trim().length === 0
                   ? "Text cannot be blank."

@@ -7,7 +7,7 @@ function SpeechBubbleDemo(args: Record<string, unknown>) {
   const text =
     typeof args.text === "string"
       ? args.text
-      : "The frost reveals what is hidden.";
+      : "The frost reveals what is [yellow]hidden[/yellow].";
   const size = args.size === "prominent" ? "prominent" : "standard";
   const pointerPlacement =
     args.pointerPlacement === "left-center" ||
@@ -29,7 +29,7 @@ export const speechBubbleDemo: CumulusComponent = {
   id: "speech-bubble",
   title: "Speech Bubble",
   blurb:
-    "A guide-dialog bubble for character-led screens: the same frosted information material as an InfoCard, with a strict left, top-left, or bottom-left pointer toward the speaker.",
+    "A guide-dialog bubble for character-led screens: the same frosted information material as an InfoCard, with a strict left, top-left, or bottom-left pointer toward the speaker and optional yellow inline highlights.",
   callout:
     "Use it beside character art or attached above/below a battle portrait, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, named display scales, and pointer geometry. Top-left and bottom-left pointer bases stay clear of the rounded corners.",
   group: "Components",
@@ -42,7 +42,7 @@ export const speechBubbleDemo: CumulusComponent = {
 
 <SpeechBubble
   speakerName="Sigrún"
-  text="The frost reveals what is hidden."
+  text="The frost reveals what is [yellow]hidden[/yellow]."
 />`,
     },
   ],
@@ -51,7 +51,7 @@ export const speechBubbleDemo: CumulusComponent = {
       pointerPlacement: "left-lower",
       size: "standard",
       speakerName: "Sigrún",
-      text: "The frost reveals what is hidden.",
+      text: "The frost reveals what is [yellow]hidden[/yellow].",
     },
   },
 };
