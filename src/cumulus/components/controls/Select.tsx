@@ -25,9 +25,11 @@
 //
 // The menu is portaled to the document body and positioned against the
 // trigger's box, so it floats above any scroll container or stacking context
-// the Select is dropped into. It closes on selection, on Escape, on an outside
-// press, and on scroll/resize (a menu detached from its moved trigger reads as
-// a bug, so it dismisses rather than chases).
+// the Select is dropped into. It opens on the side with enough viewport space
+// when possible and scrolls within the available height when neither side can
+// fit every option. It closes on selection, on Escape, on an outside press, and
+// on scroll/resize (a menu detached from its moved trigger reads as a bug, so it
+// dismisses rather than chases).
 
 import {
   type CSSProperties,
@@ -106,9 +108,14 @@ const SIZES: Record<SelectSize, SizeSpec> = {
 /** Gap (px) between the trigger and the menu it drops. */
 const MENU_GAP_PX = 6;
 
+/** Minimum height (px) of one menu option, used to choose an opening side. */
+const MENU_ITEM_MIN_HEIGHT_PX = 36;
+
 /** The fixed-position box the portaled menu is placed in, in viewport pixels. */
 interface MenuAnchor {
-  top: number;
+  side: "above" | "below";
+  verticalOffset: number;
+  maxHeight: number;
   left: number;
   right: number;
   width: number;
@@ -145,14 +152,29 @@ export function Select({
     const trigger = triggerRef.current;
     if (trigger === null) return;
     const rect = trigger.getBoundingClientRect();
+    const spaceBelow = Math.max(
+      0,
+      window.innerHeight - rect.bottom - MENU_GAP_PX,
+    );
+    const spaceAbove = Math.max(0, rect.top - MENU_GAP_PX);
+    const estimatedMenuHeight = options.length * MENU_ITEM_MIN_HEIGHT_PX;
+    const side =
+      estimatedMenuHeight > spaceBelow && spaceAbove > spaceBelow
+        ? "above"
+        : "below";
     setAnchor({
-      top: rect.bottom + MENU_GAP_PX,
+      side,
+      verticalOffset:
+        side === "above"
+          ? window.innerHeight - rect.top + MENU_GAP_PX
+          : rect.bottom + MENU_GAP_PX,
+      maxHeight: side === "above" ? spaceAbove : spaceBelow,
       left: rect.left,
       right: window.innerWidth - rect.right,
       width: rect.width,
     });
     setOpen(true);
-  }, []);
+  }, [options.length]);
 
   // While open, dismiss on Escape, on an outside press, and on scroll/resize —
   // the portaled menu is anchored to a captured box, so a moved trigger means
@@ -184,6 +206,10 @@ export function Select({
     align === "end" && anchor !== null
       ? { right: anchor.right }
       : { left: anchor?.left };
+  const menuVerticalPosition: CSSProperties =
+    anchor?.side === "above"
+      ? { bottom: anchor.verticalOffset }
+      : { top: anchor?.verticalOffset };
   const hasSelection = options.some((option) => option.value === value);
 
   return (
@@ -288,14 +314,17 @@ export function Select({
             role="listbox"
             style={{
               position: "fixed",
-              top: anchor.top,
+              ...menuVerticalPosition,
               ...menuPosition,
               minWidth: anchor.width,
+              maxHeight: anchor.maxHeight,
               zIndex: 90,
               // No inner padding: option rows run edge to edge so a selected /
-              // hovered row is a full-width rectangle. `overflow: hidden` lets
-              // the popover's rounded corners clip the top and bottom rows.
-              overflow: "hidden",
+              // hovered row is a full-width rectangle. Constraining the menu to
+              // the available viewport height keeps every option reachable.
+              overflowX: "hidden",
+              overflowY: "auto",
+              overscrollBehavior: "contain",
               // The menu wears the same liquid glass as the trigger, so the open
               // control reads as one continuous glass surface.
               ...glassTrack(),

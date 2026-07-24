@@ -10,7 +10,7 @@ Real consumers: **9** (imports outside `src/cumulus/docs/` and tests).
 
 The compact dropdown control, and Cumulus's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. Two of them share a single line where a segmented control would not fit.
 
-> **Guidance:** The trigger is single-font by construction — one leading glyph, one selection label, one dropdown caret — so a caller cannot mix two type voices in a button. It reserves the width of its widest option's label, so the button holds one size and never jitters as the selection changes. Give a menu entry a compact `triggerLabel` to show a shorter form on the collapsed button while the menu shows the full phrase. Trigger and menu wear the same liquid glass, so the open control reads as one continuous surface.
+> **Guidance:** The trigger is single-font by construction — one leading glyph, one selection label, one dropdown caret — so a caller cannot mix two type voices in a button. It reserves the width of its widest option's label, so the button holds one size and never jitters as the selection changes. Give a menu entry a compact `triggerLabel` to show a shorter form on the collapsed button while the menu shows the full phrase. The menu opens above or below according to the available viewport space and scrolls when neither side can fit every option. Trigger and menu wear the same liquid glass, so the open control reads as one continuous surface.
 
 ## Props
 
