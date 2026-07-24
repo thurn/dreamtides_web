@@ -50,6 +50,7 @@ describe("parseTutorialActions", () => {
           id: "enemy-taunt",
           action: "display-speech-bubble",
           speaker: "enemy",
+          bubbleWidth: 450,
           text: "For the Abyss!",
           wait: 3,
         },
@@ -59,6 +60,7 @@ describe("parseTutorialActions", () => {
         id: "enemy-taunt",
         action: "display-speech-bubble",
         speaker: "enemy",
+        bubbleWidth: 450,
         text: "For the Abyss!",
         wait: 3,
       },
@@ -74,6 +76,17 @@ describe("parseTutorialActions", () => {
         },
       ]),
     ).toThrow(/Mira, the player, or the enemy/u);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "bad-bubble-width",
+          action: "display-speech-bubble",
+          bubbleWidth: 750,
+          text: "Too wide.",
+          wait: 1,
+        },
+      ]),
+    ).toThrow(/speech bubble width from 300 to 700 pixels/u);
   });
 
   it("preserves finite Mira vertical offsets and rejects invalid offsets", () => {

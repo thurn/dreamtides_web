@@ -422,6 +422,72 @@ afterEach(() => {
 });
 
 describe("TutorialScreen", () => {
+  it("applies an authored desktop width to guide speech", () => {
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: query.includes("min-width"),
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: {
+                kind: "guide",
+                verticalOffset: 0,
+                bubbleWidth: 450,
+                model: {
+                  portrait: {
+                    kind: "character-portrait",
+                    characterId: "mira",
+                  },
+                  portraitAlt: "Mira",
+                  speakerName: "Mira",
+                  text: "A custom greeting.",
+                },
+              },
+              playbackRunId: "event:width",
+              endTurn: null,
+              howToPlay: null,
+              currentAction: {
+                id: "greeting",
+                action: "display-speech-bubble",
+                bubbleWidth: 450,
+                text: "A custom greeting.",
+                wait: 1,
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                enemy: { backRank: [], frontRank: [] },
+                player: { backRank: [], frontRank: [] },
+              } as unknown as MobileBattleView,
+            }}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-tutorial-dialogue-anchor]",
+      )?.style.maxWidth,
+    ).toBe("450px");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("starts an action wait only after the scene has entered", () => {
     vi.useFakeTimers();
     const onActionComplete = vi.fn();
@@ -492,6 +558,7 @@ describe("TutorialScreen", () => {
               dialogue: {
                 kind: "guide",
                 verticalOffset: 100,
+                bubbleWidth: 450,
                 model: {
                   portrait: {
                     kind: "character-portrait",
@@ -541,6 +608,7 @@ describe("TutorialScreen", () => {
     expect(dialogueAnchor?.style.top).toBe("100px");
     expect(dialogueAnchor?.style.bottom).toBe("");
     expect(dialogueAnchor?.style.justifyContent).toBe("flex-start");
+    expect(dialogueAnchor?.style.maxWidth).toBe("");
     expect(
       container.querySelector("[data-character-dialogue='Mira']"),
     ).not.toBeNull();
@@ -800,6 +868,7 @@ describe("TutorialScreen", () => {
               dialogue: {
                 kind: "dreamcaller",
                 owner: "enemy",
+                bubbleWidth: 450,
                 speakerName: "Vrakmoth",
                 text: "For the Abyss!",
               },

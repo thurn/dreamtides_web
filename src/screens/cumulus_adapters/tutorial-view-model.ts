@@ -50,6 +50,9 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       waitSeconds: action.wait,
       speaker: action.speaker ?? "mira",
       verticalOffsetPx: action.verticalOffset ?? 0,
+      ...(action.bubbleWidth === undefined
+        ? {}
+        : { bubbleWidthPx: action.bubbleWidth }),
     };
   }
   if (action.action === "display-how-to-play") {
@@ -584,6 +587,9 @@ export function buildTutorialView(
           ? {
               kind: "dreamcaller",
               owner: dialogueAction.speaker,
+              ...(dialogueAction.bubbleWidth === undefined
+                ? {}
+                : { bubbleWidth: dialogueAction.bubbleWidth }),
               speakerName:
                 dialogueAction.speaker === "player" ? "Tensho" : "Vrakmoth",
               text: dialogueAction.text,
@@ -591,6 +597,9 @@ export function buildTutorialView(
           : {
               kind: "guide",
               verticalOffset: dialogueAction.verticalOffset ?? 0,
+              ...(dialogueAction.bubbleWidth === undefined
+                ? {}
+                : { bubbleWidth: dialogueAction.bubbleWidth }),
               model: {
                 portrait: { kind: "character-portrait", characterId: "mira" },
                 portraitAlt: "Mira",

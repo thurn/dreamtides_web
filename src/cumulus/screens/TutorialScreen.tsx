@@ -78,11 +78,13 @@ export type TutorialDialogueView =
   | {
       readonly kind: "guide";
       readonly verticalOffset: number;
+      readonly bubbleWidth?: number;
       readonly model: CharacterDialogueModel;
     }
   | {
       readonly kind: "dreamcaller";
       readonly owner: TutorialDreamcallerOwner;
+      readonly bubbleWidth?: number;
       readonly speakerName: string;
       readonly text: string;
     };
@@ -720,7 +722,7 @@ function TutorialDreamcallerDialogue({
         top: anchor?.top ?? 0,
         left: anchor?.left ?? 0,
         width: "max-content",
-        maxWidth: desktop ? 300 : 220,
+        maxWidth: desktop ? (dialogue.bubbleWidth ?? 300) : 220,
         visibility: visible && anchor !== null ? "visible" : "hidden",
         pointerEvents: "none",
       }}
@@ -2552,6 +2554,10 @@ export function TutorialScreen({
           left: desktop ? (dialogueAnchor?.left ?? 0) : token("--gutter"),
           display: "flex",
           justifyContent: "flex-start",
+          maxWidth:
+            desktop && renderedDialogue?.kind === "guide"
+              ? (renderedDialogue.bubbleWidth ?? 700)
+              : undefined,
           visibility: dialogueAnchor === null ? "hidden" : "visible",
           pointerEvents: "none",
         }}

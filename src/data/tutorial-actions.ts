@@ -69,11 +69,24 @@ export function parseTutorialActions(
           `Tutorial action ${JSON.stringify(id)} must have a finite vertical offset.`,
         );
       }
+      const bubbleWidth = record.bubbleWidth;
+      if (
+        bubbleWidth !== undefined &&
+        (typeof bubbleWidth !== "number" ||
+          !Number.isFinite(bubbleWidth) ||
+          bubbleWidth < 300 ||
+          bubbleWidth > 700)
+      ) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must have a speech bubble width from 300 to 700 pixels.`,
+        );
+      }
       return {
         id,
         action: "display-speech-bubble",
         ...(speaker === undefined ? {} : { speaker }),
         ...(verticalOffset === undefined ? {} : { verticalOffset }),
+        ...(bubbleWidth === undefined ? {} : { bubbleWidth }),
         text: record.text,
         wait,
       } satisfies TutorialAction;

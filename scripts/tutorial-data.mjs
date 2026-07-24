@@ -131,11 +131,24 @@ export function validateTutorialActions(value) {
           `Tutorial action ${JSON.stringify(id)} must have a finite vertical offset.`,
         );
       }
+      const bubbleWidth = candidate.bubbleWidth;
+      if (
+        bubbleWidth !== undefined &&
+        (typeof bubbleWidth !== "number" ||
+          !Number.isFinite(bubbleWidth) ||
+          bubbleWidth < 300 ||
+          bubbleWidth > 700)
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must have a speech bubble width from 300 to 700 pixels.`,
+        );
+      }
       return {
         id,
         action,
         ...(speaker === undefined ? {} : { speaker }),
         ...(verticalOffset === undefined ? {} : { verticalOffset }),
+        ...(bubbleWidth === undefined ? {} : { bubbleWidth }),
         text: candidate.text,
         wait,
       };

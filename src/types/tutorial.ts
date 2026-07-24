@@ -41,6 +41,8 @@ export interface DisplaySpeechBubbleTutorialAction extends TutorialActionBase {
   readonly speaker?: TutorialSpeechBubbleSpeaker;
   /** Signed pixels added to Mira's computed vertical dialogue position. */
   readonly verticalOffset?: number;
+  /** Desktop maximum width of the speech bubble, in pixels. */
+  readonly bubbleWidth?: number;
   readonly text: string;
 }
 

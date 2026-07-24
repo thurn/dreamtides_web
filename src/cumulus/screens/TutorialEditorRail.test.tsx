@@ -342,6 +342,34 @@ describe("TutorialEditorRail", () => {
     container.remove();
   });
 
+  it("authors the desktop speech bubble width", () => {
+    const onChange = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<EditorHarness onChange={onChange} />));
+
+    const narrowBubble = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="Narrow speech bubble for action 1"]',
+    );
+    expect(container.textContent).toContain("700px");
+    act(() => narrowBubble?.click());
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        {
+          ...INITIAL_ACTIONS[0],
+          bubbleWidth: 650,
+        },
+      ],
+      true,
+    );
+    expect(container.textContent).toContain("650px");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("adds the fixed Dreamcaller portrait animation without speech parameters", () => {
     const onChange = vi.fn();
     const container = document.createElement("div");

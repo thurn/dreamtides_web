@@ -46,6 +46,11 @@ export interface TutorialEditorRailProps {
 }
 
 const TUTORIAL_TAIL_ACTION_COUNT = 6;
+const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
+const DEFAULT_DREAMCALLER_SPEECH_BUBBLE_WIDTH = 300;
+const MINIMUM_SPEECH_BUBBLE_WIDTH = 300;
+const MAXIMUM_SPEECH_BUBBLE_WIDTH = 700;
+const SPEECH_BUBBLE_WIDTH_STEP = 50;
 const DEFAULT_HOW_TO_PLAY_CARD_WIDTH = 500;
 const MINIMUM_HOW_TO_PLAY_CARD_WIDTH = 300;
 const HOW_TO_PLAY_CARD_WIDTH_STEP = 50;
@@ -219,6 +224,10 @@ function changedActionType(
         action.action === "display-speech-bubble"
           ? (action.verticalOffset ?? 0)
           : 0,
+      ...(action.action === "display-speech-bubble" &&
+      action.bubbleWidth !== undefined
+        ? { bubbleWidth: action.bubbleWidth }
+        : {}),
       text:
         action.action === "display-speech-bubble"
           ? action.text
@@ -356,6 +365,20 @@ function withAction(
 
 function waitLabel(wait: number): string {
   return Number.isInteger(wait) ? String(wait) : wait.toFixed(1);
+}
+
+function speechBubbleWidth(
+  action: Extract<
+    TutorialAction,
+    { readonly action: "display-speech-bubble" }
+  >,
+): number {
+  return (
+    action.bubbleWidth ??
+    ((action.speaker ?? "mira") === "mira"
+      ? DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH
+      : DEFAULT_DREAMCALLER_SPEECH_BUBBLE_WIDTH)
+  );
 }
 
 function TutorialActionRow({
@@ -523,6 +546,44 @@ function TutorialActionRow({
               testId={`tutorial-action-text-${action.id}`}
               onChange={(text) => update({ ...action, text }, false)}
               onCommit={(text) => update({ ...action, text }, true)}
+            />
+            <NumberStepper
+              label="Bubble Width"
+              value={speechBubbleWidth(action)}
+              displayValue={`${String(speechBubbleWidth(action))}px`}
+              size="sm"
+              decrementLabel={`Narrow speech bubble for action ${String(index + 1)}`}
+              incrementLabel={`Widen speech bubble for action ${String(index + 1)}`}
+              decrementDisabled={
+                speechBubbleWidth(action) <= MINIMUM_SPEECH_BUBBLE_WIDTH
+              }
+              incrementDisabled={
+                speechBubbleWidth(action) >= MAXIMUM_SPEECH_BUBBLE_WIDTH
+              }
+              onDecrement={() =>
+                update(
+                  {
+                    ...action,
+                    bubbleWidth: Math.max(
+                      MINIMUM_SPEECH_BUBBLE_WIDTH,
+                      speechBubbleWidth(action) - SPEECH_BUBBLE_WIDTH_STEP,
+                    ),
+                  },
+                  true,
+                )
+              }
+              onIncrement={() =>
+                update(
+                  {
+                    ...action,
+                    bubbleWidth: Math.min(
+                      MAXIMUM_SPEECH_BUBBLE_WIDTH,
+                      speechBubbleWidth(action) + SPEECH_BUBBLE_WIDTH_STEP,
+                    ),
+                  },
+                  true,
+                )
+              }
             />
             {(action.speaker ?? "mira") === "mira" ? (
               <NumberStepper

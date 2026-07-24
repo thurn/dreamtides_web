@@ -81,6 +81,7 @@ describe("buildTutorialView", () => {
         id: "enemy-taunt",
         action: "display-speech-bubble" as const,
         speaker: "enemy" as const,
+        bubbleWidth: 450,
         text: "For the Abyss!",
         wait: 1,
       },
@@ -110,6 +111,7 @@ describe("buildTutorialView", () => {
     expect(tail.dialogue).toMatchObject({
       kind: "dreamcaller",
       owner: "enemy",
+      bubbleWidth: 450,
       text: "For the Abyss!",
     });
   });
@@ -120,12 +122,14 @@ describe("buildTutorialView", () => {
         id: "enemy-taunt",
         action: "display-speech-bubble",
         speaker: "enemy",
+        bubbleWidth: 450,
         text: "For the Abyss!",
         wait: 3,
       }),
     ).toEqual({
       actionId: "enemy-taunt",
       action: "display-speech-bubble",
+      bubbleWidthPx: 450,
       speaker: "enemy",
       verticalOffsetPx: 0,
       waitSeconds: 3,
@@ -299,6 +303,7 @@ describe("buildTutorialView", () => {
         {
           id: "greeting",
           action: "display-speech-bubble",
+          bubbleWidth: 450,
           text: "A custom greeting.",
           wait: 1.5,
         },
@@ -323,6 +328,7 @@ describe("buildTutorialView", () => {
     expect(tutorial.dialogue).toEqual({
       kind: "guide",
       verticalOffset: 0,
+      bubbleWidth: 450,
       model: {
         portrait: { kind: "character-portrait", characterId: "mira" },
         portraitAlt: "Mira",
