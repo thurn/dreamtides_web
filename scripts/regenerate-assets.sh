@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 #
-# Regenerate all canonical committed assets in one command.
+# Regenerate canonical assets in one command.
 #
-#   ./scripts/regenerate-assets.sh        # or: npm run regenerate-assets
+#   ./scripts/regenerate-assets.sh          # full regeneration
+#   ./scripts/regenerate-assets.sh --fast   # routine TOML content changes
+#
+# Fast mode refreshes the runtime public/ bundles from the source TOMLs and
+# existing committed data. Use it for player-facing copy or balance changes
+# where stable IDs, card names, reference membership, draft records, pool data,
+# and Cumulus sources are unchanged. glossary.toml is imported directly by the
+# runtime and has no generated bundle.
 #
 # The committed, git-tracked artifacts (data/*.jsonc, data/*.json, docs/cards2/*)
 # are baked from source by the scripts below, while the gitignored public/ bundles
@@ -33,11 +40,24 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
-  # Print the header comment block (stops at the first non-comment line).
-  awk 'NR==1{next} /^[^#]/{exit} {sub(/^# ?/,""); print}' "${BASH_SOURCE[0]}"
-  exit 0
-fi
+FAST=false
+for argument in "$@"; do
+  case "$argument" in
+    --fast)
+      FAST=true
+      ;;
+    -h|--help)
+      # Print the header comment block (stops at the first non-comment line).
+      awk 'NR==1{next} /^[^#]/{exit} {sub(/^# ?/,""); print}' "${BASH_SOURCE[0]}"
+      exit 0
+      ;;
+    *)
+      printf 'Unknown argument: %s\n' "$argument" >&2
+      printf 'Usage: %s [--fast]\n' "$0" >&2
+      exit 2
+      ;;
+  esac
+done
 
 step() {
   printf '\n\033[1m========== %s ==========\033[0m\n' "$1"
@@ -46,6 +66,22 @@ step() {
 if [[ ! -d node_modules ]]; then
   step "Installing dependencies (node_modules is missing)"
   npm install
+fi
+
+if [[ "$FAST" == true ]]; then
+  step "1/1  setup-assets — refresh runtime bundles from TOML content"
+  node scripts/setup-assets.mjs
+
+  step "Done — fast content regeneration complete"
+  git status --short -- data/tabula data/buildaround_support.json || true
+
+  cat <<'EOF'
+
+public/ bundles are gitignored and were refreshed in place.
+Use full regeneration after changes to IDs, card names, reference membership,
+draft records, pool data, or Cumulus sources.
+EOF
+  exit 0
 fi
 
 step "1/12  setup-assets — build public/ inputs from source"
