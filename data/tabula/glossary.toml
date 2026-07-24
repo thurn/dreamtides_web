@@ -173,22 +173,24 @@ variants = [ "eroded", "erodes" ]
 id = "fast"
 category = "Keywords"
 term = "Fast"
-definition = "A fast (❖) ability may be used at the end of either player's turn."
+definition = "A fast (❖) card may be played at the end of either player's turn."
 priority = 95
 matches-rules-text = false
 variants = []
 rules-text-forms = [ "❖" ]
+definition-uses-rules-text = true
 term-presentation = "definition-only"
 
 [[entries]]
 id = "interrupt"
 category = "Keywords"
 term = "Interrupt"
-definition = "An interrupt (❖❖) ability may be used in response to an opponent action, or at the end of either player's turn."
+definition = "An interrupt (❖❖) card may be played in response to an opponent action, or at the end of either player's turn."
 priority = 95
 matches-rules-text = false
 variants = []
 rules-text-forms = [ "❖❖" ]
+definition-uses-rules-text = true
 term-presentation = "definition-only"
 
 [[entries]]

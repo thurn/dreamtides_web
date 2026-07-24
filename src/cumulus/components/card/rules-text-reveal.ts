@@ -15,14 +15,17 @@ import { richText } from "./rich-text";
  */
 export function glossaryDefinitionsCardModel(
   entries: readonly GlossaryCatalogEntry[],
+  excludedIds: readonly string[] = [],
 ): InfoCardTextProps | null {
-  if (entries.length === 0) {
+  const excluded = new Set(excludedIds);
+  const visibleEntries = entries.filter((entry) => !excluded.has(entry.id));
+  if (visibleEntries.length === 0) {
     return null;
   }
   return {
     variant: "text",
     body: richText.definitions(
-      entries.map((entry) => ({
+      visibleEntries.map((entry) => ({
         term: entry.term,
         definition: entry.definition,
         symbol: entry.definitionSymbol,
@@ -40,9 +43,11 @@ export function glossaryDefinitionsCardModel(
 export function rulesTextDefinitionCards(
   text: string,
   owner: RulesTextGlossaryOwner = "card",
+  excludedIds: readonly string[] = [],
 ): Readonly<InfoCardProps>[] {
   const card = glossaryDefinitionsCardModel(
     extractContextualGlossaryTerms(text, owner),
+    excludedIds,
   );
   return card === null ? [] : [card];
 }

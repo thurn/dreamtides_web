@@ -78,4 +78,26 @@ describe("glossaryDefinitionsCardModel", () => {
       ],
     });
   });
+
+  it("omits excluded entries while preserving the remaining glossary card", () => {
+    const card = glossaryDefinitionsCardModel(
+      [
+        entry("fast", "Fast", { definitionSymbol: "fast" }),
+        entry("bane", "Bane"),
+      ],
+      ["fast", "interrupt"],
+    );
+
+    expect(card?.body).toEqual({
+      kind: "definitions",
+      entries: [
+        {
+          term: "Bane",
+          definition: "Bane definition.",
+          symbol: undefined,
+          termPresentation: undefined,
+        },
+      ],
+    });
+  });
 });

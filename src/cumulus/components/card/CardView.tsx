@@ -53,6 +53,34 @@ export {
  * purple accent for events) rather than a colored border.
  */
 const SELECTION_DEFAULT_COLOR: CumulusColor = "selected";
+const CARD_TIMING_GLOSSARY_IDS = [
+  GLOSSARY_IDS.fast,
+  GLOSSARY_IDS.interrupt,
+] as const;
+
+function cardTimingInfoCards(
+  card: Pick<CardData, "isFast" | "isInterrupt">,
+) {
+  if (card.isInterrupt === true) {
+    return [glossaryInfoCard(GLOSSARY_IDS.interrupt)];
+  }
+  if (card.isFast) {
+    return [glossaryInfoCard(GLOSSARY_IDS.fast)];
+  }
+  return [];
+}
+
+function cardRulesTextDefinitionCards(
+  card: Pick<CardData, "isFast" | "isInterrupt" | "renderedText">,
+) {
+  return rulesTextDefinitionCards(
+    card.renderedText,
+    "card",
+    card.isFast || card.isInterrupt === true
+      ? CARD_TIMING_GLOSSARY_IDS
+      : [],
+  );
+}
 
 /**
  * Card-height fraction (measured from the card top) the watermark-clipped art
@@ -1524,9 +1552,8 @@ export function GameCard({
   testId,
 }: GameCardProps) {
   const lastPointerType = useRef<string | null>(null);
-  const glossaryCards = rulesTextDefinitionCards(
-    model.displaySnapshot.renderedText,
-  );
+  const timingCards = cardTimingInfoCards(model.displaySnapshot);
+  const glossaryCards = cardRulesTextDefinitionCards(model.displaySnapshot);
   const statusCards = exhausted
     ? [
         glossaryInfoCard(GLOSSARY_IDS.exhausted, {
@@ -1556,7 +1583,7 @@ export function GameCard({
           : { transfiguration: model.transfiguration }),
         ...(selected ? { selected: true, selectionColor } : {}),
       },
-      secondaries: [...statusCards, ...glossaryCards],
+      secondaries: [...statusCards, ...timingCards, ...glossaryCards],
       adjacentCards: figmentCards,
     },
     onActivate: unavailable ? undefined : onActivate,
@@ -1627,7 +1654,10 @@ function GlossaryInfoCardView(props: CardViewProps) {
         cardId: props.card.id,
         displaySnapshot: props.card,
       },
-      secondaries: rulesTextDefinitionCards(props.card.renderedText),
+      secondaries: [
+        ...cardTimingInfoCards(props.card),
+        ...cardRulesTextDefinitionCards(props.card),
+      ],
     },
     feedback: "stationary",
   });
