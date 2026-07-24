@@ -119,7 +119,7 @@ matches-rules-text = true
 variants = [ "reclaimed" ]
 
 [[entries.contexts]]
-pattern = '''\b(?:gain|gains|gained)\s+reclaim\b'''
+pattern = "\\b(?:gain|gains|gained)\\s+reclaim\\b"
 definition = "You may play that card from your void, then banish it when it leaves play."
 
 [[entries]]
@@ -132,7 +132,7 @@ matches-rules-text = true
 variants = []
 
 [[entries.contexts]]
-pattern = '''\bforesee\s+(\d+)\b'''
+pattern = "\\bforesee\\s+(\\d+)\\b"
 term = "{term} {1}"
 definition = "Look at the top {1} cards of your deck, then put any number of them into your void and the rest on top in any order."
 singular-capture = 1
@@ -142,7 +142,7 @@ singular-definition = "Look at the top card of your deck. You may put it into yo
 id = "discover"
 category = "Keywords"
 term = "Discover"
-definition = "Reveal three matching cards and choose one to draw."
+definition = "Reveal three matching cards from your deck and choose one to draw."
 priority = 95
 matches-rules-text = true
 variants = []
@@ -253,7 +253,7 @@ variants = []
 id = "support"
 category = "Keywords"
 term = "Support"
-definition = "A back-rank character supports the up-to-two front-rank allies ahead of it; non-figment characters only."
+definition = "A back-rank character supports the front-rank characters ahead of it."
 priority = 70
 matches-rules-text = true
 variants = [ "supports", "supporting" ]
@@ -470,6 +470,7 @@ id = "energy-cost"
 category = "Resources"
 term = "Energy Cost"
 definition = "Spend this much energy to play the card."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -487,6 +488,7 @@ id = "starting-essence"
 category = "Resources"
 term = "Starting Essence"
 definition = "The essence this Dreamcaller begins the quest with, spent at sites this run."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -495,6 +497,7 @@ id = "tides"
 category = "Quest Terms"
 term = "Tides"
 definition = "Pools of cards you will see during the quest. Different tides are used every time you play."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -503,6 +506,7 @@ id = "site-battle"
 category = "Sites"
 term = "Battle"
 definition = "A battle against this dream's guardian."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -511,6 +515,7 @@ id = "site-draft"
 category = "Sites"
 term = "Draft"
 definition = "Pick 5 cards to add to your deck."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -519,6 +524,7 @@ id = "site-shop"
 category = "Sites"
 term = "Card Shop"
 definition = "Spend essence to buy cards."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -527,6 +533,7 @@ id = "site-purge"
 category = "Sites"
 term = "Purge"
 definition = "Remove cards from your deck."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -535,6 +542,7 @@ id = "site-essence"
 category = "Sites"
 term = "Essence"
 definition = "Collect a trove of essence."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -543,6 +551,7 @@ id = "site-transfiguration"
 category = "Sites"
 term = "Transfiguration"
 definition = "Modify and upgrade a card in your deck."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -551,6 +560,7 @@ id = "site-duplication"
 category = "Sites"
 term = "Duplication"
 definition = "Make a copy of a card in your deck."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -559,6 +569,7 @@ id = "site-reward"
 category = "Sites"
 term = "Reward"
 definition = "Claim a reward."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -567,6 +578,7 @@ id = "site-dream-augury"
 category = "Sites"
 term = "Dream Augury"
 definition = "Choose one of two foreseen rewards."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -575,6 +587,7 @@ id = "site-dreamsign-market"
 category = "Sites"
 term = "Dreamsign Market"
 definition = "Purchase dreamsigns from a rotating selection."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -583,6 +596,7 @@ id = "site-dreamsign-revelation"
 category = "Sites"
 term = "Dreamsign Revelation"
 definition = "Receive a dreamsign."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -591,6 +605,7 @@ id = "site-tempting-offer"
 category = "Sites"
 term = "Offer"
 definition = "Pay a cost for an outsized payoff."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -599,6 +614,7 @@ id = "site-gamble"
 category = "Sites"
 term = "Gamble"
 definition = "Take a risk for an uncertain reward."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -607,6 +623,7 @@ id = "site-temporal-fork"
 category = "Sites"
 term = "Temporal Fork"
 definition = "Gain a temporary bonus or future reward."
+priority = 0
 matches-rules-text = false
 variants = []
 
@@ -615,5 +632,6 @@ id = "dreamsign-restock"
 category = "Actions"
 term = "Restock Offers"
 definition = "Replace the current offers with three new Dreamsigns. You may restock once per visit."
+priority = 0
 matches-rules-text = false
 variants = []
