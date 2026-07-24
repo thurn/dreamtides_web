@@ -6,27 +6,14 @@
 //
 // `text` is a string (a text control) and `side` a string-literal union (a
 // select control), both seeded from defaultArgs. `testId` is an optional string.
-// The seeded `text` is built from the LIVE glossary — a sentence naming its first
-// couple of terms — so the demo never hardcodes a term string a data edit could
-// invalidate. `docName` points at the real CardTermDefinitions so the props table
-// reports its actual API.
+// The seeded `text` uses the four symbol forms whose glossary records exercise
+// definition-only presentation. `docName` points at the real
+// CardTermDefinitions so the props table reports its actual API.
 
-import { GLOSSARY, TRIGGER_ARROW } from "../../../data/glossary";
 import { CardTermDefinitions } from "../../components/card/CardTermDefinitions";
 import type { CumulusComponent } from "../registry";
 
-// A term-bearing string built from live glossary data rather than hardcoded: the
-// first two terms whose bare keyword form appears in rules text (skipping the
-// trigger-arrow-only entries, which match only their `▸`-prefixed form). Naming
-// them in a sentence guarantees `extractGlossaryTerms` returns exactly these two
-// entries, so the demo shows a real, non-empty set of definitions and stays
-// valid as the glossary is edited.
-const SAMPLE_TERMS = GLOSSARY.filter(
-  (entry) => !entry.term.startsWith(TRIGGER_ARROW),
-).slice(0, 2);
-const SAMPLE_TEXT = `${SAMPLE_TERMS[0]?.term ?? ""} and ${
-  SAMPLE_TERMS[1]?.term ?? ""
-} appear in this reminder text.`;
+const SAMPLE_TEXT = "❖ ❖❖ ☪ ⍟";
 
 // CardTermDefinitions' `text` prop is required, which the registry's
 // `ComponentType<Record<string, unknown>>` signature can't satisfy directly, and
