@@ -3164,6 +3164,25 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("keeps an occupied slot shell mounted beneath a temporarily hidden occupant", () => {
+    const { container, root } = mount(makeView(), undefined, {
+      preserveOccupiedSlotOutlines: true,
+    });
+    const occupiedSlot = container.querySelector<HTMLElement>(
+      '[data-battle-slot-id="player-front-filled"]',
+    );
+    const outline = occupiedSlot?.querySelector<HTMLElement>(
+      "[data-battle-slot-outline]",
+    );
+
+    expect(occupiedSlot?.dataset.battleSlotFilled).toBe("true");
+    expect(outline).not.toBeNull();
+    expect(outline?.style.border).toBe("var(--battlefield-slot-border)");
+    expect(outline?.style.zIndex).toBe("0");
+
+    act(() => root.unmount());
+  });
+
   it("outlines a battlefield card's vacated source slot as soon as dragging starts", () => {
     const interactions = {
       canInteract: true,

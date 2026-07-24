@@ -132,6 +132,7 @@ Each --t-* bundles face + weight + size/line-height: apply a voice with one toke
 | `--t-title` | `600 30px/1.08 var(--primitive-font-serif)` | place / screen name |
 | `--t-title-sm` | `600 23px/1.12 var(--primitive-font-serif)` | card-detail name, section |
 | `--t-serif-body` | `500 17px/1.4 var(--primitive-font-serif)` | quotes, flavor |
+| `--t-tutorial-dialogue` | `500 17px/1.3 var(--primitive-font-serif)` | tutorial speech bubbles |
 | `--t-tutorial-instruction` | `600 22px/1.3 var(--primitive-font-sans)` | desktop tutorial guidance |
 | `--t-lead` | `600 19px/1.3 var(--primitive-font-sans)` | prominent UI heading |
 | `--t-body` | `500 15px/1.45 var(--primitive-font-sans)` | default body |
@@ -202,6 +203,7 @@ Durations, easings, and the two material-continuity transitions (object-travel, 
 | `--dur-loading-screen-fade` | `1200ms` |  |
 | `--dur-loading-quote` | `1400ms` |  |
 | `--dur-loading-dot-cycle` | `1200ms` |  |
+| `--dur-tutorial-dreamwell-emerge` | `1000ms` |  |
 | `--stagger-loading-dot` | `180ms` |  |
 | `--motion-object-travel` | `420ms var(--ease-out)` |  |
 | `--stagger-travel` | `55ms` |  |

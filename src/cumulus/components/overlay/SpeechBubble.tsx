@@ -96,9 +96,6 @@ export function SpeechBubble({
     pointerPlacement,
   );
   const bubbleZoom = SPEECH_BUBBLE_ZOOM[size];
-  const isTopOrBottomPointer =
-    pointerPlacement === "top-left" || pointerPlacement === "bottom-left";
-
   useLayoutEffect(() => {
     const bubble = bubbleRef.current;
     if (bubble === null) {
@@ -197,8 +194,7 @@ export function SpeechBubble({
           position: "relative",
           zIndex: 1,
           margin: 0,
-          font: token("--t-serif-body"),
-          lineHeight: isTopOrBottomPointer ? 1.1 : undefined,
+          font: token("--t-tutorial-dialogue"),
           color: token("--text-primary"),
           whiteSpace: "pre-line",
         }}

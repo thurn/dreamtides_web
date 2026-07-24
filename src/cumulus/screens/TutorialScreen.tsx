@@ -211,6 +211,12 @@ interface TutorialCardTrajectory {
 const TUTORIAL_FADE_SECONDS = motionTimeSeconds("--dur-loading-screen-fade");
 const TUTORIAL_CARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow");
 const TUTORIAL_CARD_FLIP_SECONDS = motionTimeSeconds("--dur-slow");
+const TUTORIAL_DREAMWELL_EMERGE_SECONDS = motionTimeSeconds(
+  "--dur-tutorial-dreamwell-emerge",
+);
+// The Dreamwell card begins tucked behind its status display before traveling
+// to full physical size.
+const TUTORIAL_DREAMWELL_EMERGE_START_SCALE = 0.72;
 const TUTORIAL_EDITOR_DOCK_MIN_WIDTH = 1280;
 const TUTORIAL_REVEAL_CARD_DESKTOP_WIDTH = 240;
 const TUTORIAL_REVEAL_CARD_MOBILE_WIDTH_RATIO = 0.45;
@@ -513,6 +519,68 @@ function TutorialHowToPlayDialog({
       </div>
     </GlassDialog>
   );
+}
+
+function TutorialDreamwellEmergence({
+  screen,
+  actionKey,
+  reduceMotion,
+  onComplete,
+}: {
+  readonly screen: HTMLElement;
+  readonly actionKey: string;
+  readonly reduceMotion: boolean;
+  readonly onComplete: (actionKey: string) => void;
+}): null {
+  useLayoutEffect(() => {
+    const layer = screen.querySelector<HTMLElement>(
+      "[data-battle-dreamwell-layer]",
+    );
+    if (layer === null) return undefined;
+    layer.dataset.tutorialDreamwellEmergence = "emerging";
+
+    let timeout: number | null = null;
+    let animation: Animation | null = null;
+    const finish = (): void => {
+      layer.dataset.tutorialDreamwellEmergence = "complete";
+      onComplete(actionKey);
+    };
+
+    if (reduceMotion) {
+      finish();
+    } else if (typeof layer.animate === "function") {
+      const easing = window
+        .getComputedStyle(screen)
+        .getPropertyValue("--ease-out")
+        .trim();
+      animation = layer.animate(
+        [
+          {
+            transform: `translate(-50%, -70%) scale(${String(TUTORIAL_DREAMWELL_EMERGE_START_SCALE)})`,
+          },
+          { transform: "translate(-50%, 0) scale(1)" },
+        ],
+        {
+          duration: TUTORIAL_DREAMWELL_EMERGE_SECONDS * 1_000,
+          ...(easing === "" ? {} : { easing }),
+        },
+      );
+      animation.addEventListener("finish", finish, { once: true });
+    } else {
+      timeout = window.setTimeout(
+        finish,
+        TUTORIAL_DREAMWELL_EMERGE_SECONDS * 1_000,
+      );
+    }
+
+    return () => {
+      if (timeout !== null) window.clearTimeout(timeout);
+      animation?.cancel();
+      delete layer.dataset.tutorialDreamwellEmergence;
+    };
+  }, [actionKey, onComplete, reduceMotion, screen]);
+
+  return null;
 }
 
 function tutorialOpponentBackRankIndex(slotCount: number): number {
@@ -1379,14 +1447,11 @@ function TutorialChallengeAnimation({
               height: source.height,
               containerType: "inline-size",
               transformOrigin: "center",
-              filter: participant.card.exhausted
-                ? BATTLEFIELD_CARD_EXHAUSTED_FILTER
-                : undefined,
             }}
           >
             <GameCard
               model={participant.card.model}
-              exhausted={participant.card.exhausted}
+              exhausted={false}
               presentation="battlefield"
               testId={`tutorial-challenge-card-${participant.owner}`}
             />
@@ -1516,14 +1581,11 @@ function TutorialChallengeAnimation({
           height: rematerializedHeight,
           transformOrigin: "center",
           containerType: "inline-size",
-          filter: loser.card.exhausted
-            ? BATTLEFIELD_CARD_EXHAUSTED_FILTER
-            : undefined,
         }}
       >
         <GameCard
           model={loser.card.model}
-          exhausted={loser.card.exhausted}
+          exhausted={false}
           testId="tutorial-challenge-rematerialized-card"
         />
       </motion.div>
@@ -1563,6 +1625,9 @@ export function TutorialScreen({
     string | null
   >(null);
   const [howToPlayDismissedActionKey, setHowToPlayDismissedActionKey] = useState<
+    string | null
+  >(null);
+  const [dreamwellEmergedActionKey, setDreamwellEmergedActionKey] = useState<
     string | null
   >(null);
   const [completedTurnAnnouncementSide, setCompletedTurnAnnouncementSide] =
@@ -1812,6 +1877,13 @@ export function TutorialScreen({
       if (view.howToPlay.trigger !== expectedTrigger) return;
       const actionKey = `${runId}:${view.howToPlay.actionId}`;
       if (
+        view.howToPlay.companion !== null &&
+        view.howToPlay.companion !== undefined &&
+        dreamwellEmergedActionKey !== actionKey
+      ) {
+        return;
+      }
+      if (
         howToPlayPresentedActionKey === actionKey ||
         howToPlayDismissedActionKey === actionKey
       ) {
@@ -1825,6 +1897,7 @@ export function TutorialScreen({
       );
     },
     [
+      dreamwellEmergedActionKey,
       howToPlayDismissedActionKey,
       howToPlayPresentedActionKey,
       onHowToPlayPresented,
@@ -1852,6 +1925,13 @@ export function TutorialScreen({
     }
     const actionKey = `${runId}:${howToPlay.actionId}`;
     if (
+      howToPlay.companion !== null &&
+      howToPlay.companion !== undefined &&
+      dreamwellEmergedActionKey !== actionKey
+    ) {
+      return;
+    }
+    if (
       howToPlayPresentedActionKey === actionKey ||
       howToPlayDismissedActionKey === actionKey
     ) {
@@ -1861,6 +1941,7 @@ export function TutorialScreen({
     onHowToPlayPresented?.(runId, howToPlay.actionId, howToPlay.trigger);
   }, [
     completedTurnAnnouncementSide,
+    dreamwellEmergedActionKey,
     howToPlayDismissedActionKey,
     howToPlayPresentedActionKey,
     onHowToPlayPresented,
@@ -2416,6 +2497,12 @@ export function TutorialScreen({
     view.howToPlay === null || view.playbackRunId === null
       ? null
       : `${view.playbackRunId}:${view.howToPlay.actionId}`;
+  const dreamwellEmergenceActionKey =
+    howToPlayActionKey !== null &&
+    view.howToPlay?.companion !== null &&
+    view.howToPlay?.companion !== undefined
+      ? howToPlayActionKey
+      : null;
   const howToPlayVisible =
     howToPlayActionKey !== null &&
     howToPlayPresentedActionKey === howToPlayActionKey &&
@@ -2500,6 +2587,7 @@ export function TutorialScreen({
             onInspectorOpenChange={handleBattleInspectorOpenChange}
             onTurnAnnouncementComplete={completeTurnAnnouncement}
             phaseNavigation={canEndTurn ? "end-turn" : "hidden"}
+            preserveOccupiedSlotOutlines={challengeAnimation !== null}
           />
         </div>
       </div>
@@ -2539,6 +2627,17 @@ export function TutorialScreen({
           cardId={playerReposition.cardId}
           opposingCardId={playerReposition.opposingCardId}
           onTargetSlotChange={setRepositionTargetSlotId}
+        />
+      ) : null}
+      {sceneEntered &&
+      dreamwellEmergenceActionKey !== null &&
+      dreamwellEmergedActionKey !== dreamwellEmergenceActionKey &&
+      screenRef.current !== null ? (
+        <TutorialDreamwellEmergence
+          screen={screenRef.current}
+          actionKey={dreamwellEmergenceActionKey}
+          reduceMotion={reduceMotion}
+          onComplete={setDreamwellEmergedActionKey}
         />
       ) : null}
       {sceneEntered &&

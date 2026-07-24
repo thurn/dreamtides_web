@@ -214,6 +214,8 @@ export interface MobileBattleScreenProps {
     readonly slotId: string;
     readonly label: string;
   };
+  /** Keep dotted slot shells beneath occupied cards during an occupant transition. */
+  readonly preserveOccupiedSlotOutlines?: boolean;
   /** Initial inspector state at desktop widths. */
   readonly inspectorDefault?: "responsive" | "collapsed";
   /** Phase controls exposed by this presentation. */
@@ -1739,6 +1741,7 @@ function Rank({
   onPickerCardToggle,
   onBattlefieldDragChange,
   guidedSlotHighlight,
+  preserveOccupiedSlotOutlines,
   interactions,
 }: {
   readonly isDesktop: boolean;
@@ -1761,6 +1764,7 @@ function Rank({
     cardId?: string,
   ) => void;
   readonly guidedSlotHighlight?: MobileBattleScreenProps["guidedSlotHighlight"];
+  readonly preserveOccupiedSlotOutlines?: boolean;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const canDrop =
@@ -1885,7 +1889,9 @@ function Rank({
                 boxSizing: "border-box",
               }}
             >
-              {slot.card === null || slot.card.id === draggingCardId ? (
+              {slot.card === null ||
+              slot.card.id === draggingCardId ||
+              preserveOccupiedSlotOutlines === true ? (
                 <div
                   aria-hidden="true"
                   data-battle-slot-outline=""
@@ -1896,7 +1902,12 @@ function Rank({
                     border: token("--battlefield-slot-border"),
                     boxSizing: "border-box",
                     pointerEvents: "none",
-                    zIndex: 3,
+                    zIndex:
+                      preserveOccupiedSlotOutlines === true &&
+                      slot.card !== null &&
+                      slot.card.id !== draggingCardId
+                        ? 0
+                        : 3,
                   }}
                 />
               ) : null}
@@ -2005,6 +2016,7 @@ function PlayArea({
   onPickerCardToggle,
   onBattlefieldDragChange,
   guidedSlotHighlight,
+  preserveOccupiedSlotOutlines,
   interactions,
 }: {
   readonly isDesktop: boolean;
@@ -2025,6 +2037,7 @@ function PlayArea({
     cardId?: string,
   ) => void;
   readonly guidedSlotHighlight?: MobileBattleScreenProps["guidedSlotHighlight"];
+  readonly preserveOccupiedSlotOutlines?: boolean;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const ranks =
@@ -2068,6 +2081,7 @@ function PlayArea({
           onPickerCardToggle={onPickerCardToggle}
           onBattlefieldDragChange={onBattlefieldDragChange}
           guidedSlotHighlight={guidedSlotHighlight}
+          preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines}
           interactions={interactions}
         />
       ))}
@@ -3102,6 +3116,7 @@ export function MobileBattleScreen({
   onInspectorOpenChange,
   onTurnAnnouncementComplete,
   guidedSlotHighlight,
+  preserveOccupiedSlotOutlines = false,
   viewport = "fixed",
 }: MobileBattleScreenProps) {
   const isDesktop = useIsDesktop();
@@ -3356,8 +3371,8 @@ export function MobileBattleScreen({
           onPickerCardToggle={handlePickerCardToggle}
         />
         <SideZones activeSide={view.activeSide} dreamwell={visibleDreamwell} isDesktop={isDesktop} owner={far.owner} position="far" phase={view.phase} side={far} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner={far.owner} position="far" side={far} layoutBackSlotCount={layoutBackSlotCount} densityBackSlotCount={densityBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} guidedSlotHighlight={guidedSlotHighlight} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner={near.owner} position="near" side={near} layoutBackSlotCount={layoutBackSlotCount} densityBackSlotCount={densityBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} guidedSlotHighlight={guidedSlotHighlight} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner={far.owner} position="far" side={far} layoutBackSlotCount={layoutBackSlotCount} densityBackSlotCount={densityBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} guidedSlotHighlight={guidedSlotHighlight} preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines} interactions={interactions} />
+        <PlayArea isDesktop={isDesktop} owner={near.owner} position="near" side={near} layoutBackSlotCount={layoutBackSlotCount} densityBackSlotCount={densityBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} guidedSlotHighlight={guidedSlotHighlight} preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines} interactions={interactions} />
         <ControlRow
           aiApproval={view.aiApproval}
           cardPicker={boardCardPicker}

@@ -182,6 +182,7 @@ describe("buildTutorialView", () => {
         id: "how-to-play",
         action: "display-how-to-play",
         cardWidth: 650,
+        companion: "dreamwell-card",
         text: "Configured [yellow]instructions[/yellow].",
         wait: 0,
       }),
@@ -189,6 +190,9 @@ describe("buildTutorialView", () => {
       actionId: "how-to-play",
       action: "display-how-to-play",
       cardWidthPx: 650,
+      companion: "dreamwell-card",
+      presentationSequence: ["dreamwell-emergence", "instruction"],
+      dreamwellEmergenceDurationSeconds: 1,
       trigger: "player-turn-announcement-complete",
       title: "How to Play",
       messageText: "Configured instructions.",
@@ -775,7 +779,7 @@ describe("buildTutorialView", () => {
     expect(afterPlayerCardPlay.battle.playerHand).toEqual([]);
     expect(afterPlayerCardPlay.battle.nearHand.cardIds).toEqual([]);
     expect(
-      afterPlayerCardPlay.battle.player.backRank[1]?.card,
+      afterPlayerCardPlay.battle.player.backRank[0]?.card,
     ).toMatchObject({
       id: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
       exhausted: true,
@@ -843,7 +847,7 @@ describe("buildTutorialView", () => {
         },
       },
     });
-    expect(drawingDreamwell.battle.player.backRank[1]?.card).toMatchObject({
+    expect(drawingDreamwell.battle.player.backRank[0]?.card).toMatchObject({
       id: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
       exhausted: false,
       model: { cardId: TUTORIAL_PLAYER_CARD_ID },
@@ -1043,7 +1047,7 @@ describe("buildTutorialView", () => {
       opposingCardId: TUTORIAL_OPPONENT_CARD_ID,
     });
     expect(
-      guidedBlock.battle.player.backRank[1]?.card?.model.cardId,
+      guidedBlock.battle.player.backRank[0]?.card?.model.cardId,
     ).toBe(TUTORIAL_PLAYER_CARD_ID);
     expect(
       guidedBlock.battle.player.frontRank.every(

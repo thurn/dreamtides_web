@@ -202,6 +202,9 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
                 data-battle-slot-id={slot.id}
                 data-battle-slot-filled={slot.card === null ? "false" : "true"}
               >
+                {props.preserveOccupiedSlotOutlines === true ? (
+                  <div data-battle-slot-outline="" />
+                ) : null}
                 {slot.card === null ? null : (
                   <div
                     data-battle-card-id={slot.card.id}
@@ -220,6 +223,9 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
                 data-battle-slot-id={slot.id}
                 data-battle-slot-filled={slot.card === null ? "false" : "true"}
               >
+                {props.preserveOccupiedSlotOutlines === true ? (
+                  <div data-battle-slot-outline="" />
+                ) : null}
                 {slot.card === null ? null : (
                   <div
                     data-battle-card-id={slot.card.id}
@@ -265,6 +271,17 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
               />
             )}
           </div>
+          {props.view.dreamwell === null ||
+          props.view.dreamwell === undefined ? null : (
+            <div
+              data-battle-dreamwell-layer=""
+              data-battle-dreamwell-side={props.view.dreamwell.side}
+            >
+              <div
+                data-dreamwell-card={props.view.dreamwell.model.cardId}
+              />
+            </div>
+          )}
           <div data-testid="player-battle-status">
             {playerStatus?.dreamcaller === undefined ||
             playerStatus.dreamcaller === null ? (
@@ -1616,7 +1633,8 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
-  it("pairs an immediate Dreamwell instruction beside the card and removes the board copy", () => {
+  it("emerges the Dreamwell card before pairing it with the immediate instruction", () => {
+    vi.useFakeTimers();
     window.matchMedia = vi.fn().mockImplementation((query: string) => ({
       matches: query.includes("min-width"),
       media: query,
@@ -1674,6 +1692,26 @@ describe("TutorialScreen", () => {
     });
 
     act(() => screenMocks.sceneAnimationComplete?.());
+
+    expect(container.querySelector('[role="dialog"]')).toBeNull();
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-battle-dreamwell-layer]",
+      )?.dataset.tutorialDreamwellEmergence,
+    ).toBe("emerging");
+    expect(screenMocks.props?.view.dreamwell?.model.cardId).toBe(
+      TUTORIAL_DREAMWELL_CARD.cardId,
+    );
+
+    act(() => {
+      vi.advanceTimersByTime(999);
+    });
+    expect(container.querySelector('[role="dialog"]')).toBeNull();
+    expect(onHowToPlayPresented).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
 
     const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
     expect(
@@ -1888,6 +1926,72 @@ describe("TutorialScreen", () => {
       pendingCardSource: null,
       pendingCardOwner: null,
     });
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("places the played UUID-backed tutorial card in the fifth desktop back-rank slot", () => {
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: query.includes("min-width"),
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: null,
+              playbackRunId: "event:player-card-position",
+              currentAction: {
+                id: "end-turn",
+                action: "end-turn",
+                wait: 0,
+              },
+              howToPlay: null,
+              endTurn: {
+                actionId: "end-turn",
+                triggerCardId: TUTORIAL_PLAYER_CARD.model.cardId,
+                ready: true,
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                playerHand: [],
+                enemy: { backRank: [], frontRank: [], deckCardIds: [] },
+                player: {
+                  backRank: [
+                    {
+                      id: "player-back-0",
+                      card: TUTORIAL_PLAYER_CARD,
+                    },
+                    { id: "player-back-1", card: null },
+                    { id: "player-back-2", card: null },
+                  ],
+                  frontRank: [],
+                },
+              } as unknown as MobileBattleView,
+            }}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(screenMocks.props?.view.player.backRank).toHaveLength(10);
+    expect(screenMocks.props?.view.player.backRank[4]?.card?.model.cardId).toBe(
+      TUTORIAL_PLAYER_CARD.model.cardId,
+    );
+    expect(screenMocks.props?.view.player.backRank[5]?.card).toBeNull();
 
     act(() => root.unmount());
     container.remove();
@@ -2113,6 +2217,22 @@ describe("TutorialScreen", () => {
         '[data-battle-rank="player-front"] [data-battle-card-motion]',
       )?.style.visibility,
     ).toBe("hidden");
+    expect(screenMocks.props?.preserveOccupiedSlotOutlines).toBe(true);
+    expect(
+      container.querySelector(
+        '[data-battle-rank="enemy-front"] [data-battle-slot-id="enemy-front-0"] [data-battle-slot-outline]',
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-tutorial-challenge-card="enemy"]',
+      )?.style.filter,
+    ).toBe("");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-tutorial-challenge-rematerialized]",
+      )?.style.filter,
+    ).toBe("");
     expect(
       container.querySelector<HTMLElement>(
         "[data-tutorial-challenge-mote]",
@@ -2265,7 +2385,10 @@ describe("TutorialScreen", () => {
     expect(overlay?.style.maxWidth).toBe("220px");
     expect(bubble?.style.width).toBe("max-content");
     expect(bubble?.style.maxWidth).toBe("100%");
-    expect(bubble?.querySelector("p")?.style.lineHeight).toBe("1.1");
+    expect(bubble?.querySelector("p")?.style.font).toBe(
+      "var(--t-tutorial-dialogue)",
+    );
+    expect(bubble?.querySelector("p")?.style.lineHeight).toBe("");
     expect(overlay?.style.left).toBe("162px");
     expect(overlay?.style.top).toBe("142px");
     expect(overlay?.style.zIndex).toBe("var(--layer-reveal)");
