@@ -128,6 +128,7 @@
   --primitive-ink-300: #eee3d2;     /* secondary */
   --primitive-ink-400: #d8ccba;     /* muted */
   --primitive-ink-500: #bba994;     /* faint label / disabled */
+  --primitive-neutral-300: #b8b8b8; /* light neutral portrait field */
   --primitive-neutral-500: #787878; /* neutral loading placeholder */
 
   /* ---- Color: lines & scrims ---- */
@@ -186,6 +187,7 @@
   --surface-chrome-strong: #120e1c;  /* solid, deeper chrome for windows */
   --surface-status-badge: var(--primitive-line-black); /* high-contrast in-card status mark */
   --surface-placeholder: var(--primitive-neutral-500); /* content reserved for imminent media */
+  --surface-portrait: var(--primitive-neutral-300); /* light neutral field behind framed character art */
 
   /* ---- Dream Atlas material ----
      The map owns a semantic palette because edges, node halos, badges, and the

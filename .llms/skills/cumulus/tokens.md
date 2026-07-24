@@ -25,6 +25,7 @@ App backdrops, panes, and scrims, by role.
 | `--surface-chrome-strong` | `#120e1c` | solid, deeper chrome for windows |
 | `--surface-status-badge` | `var(--primitive-line-black)` | high-contrast in-card status mark |
 | `--surface-placeholder` | `var(--primitive-neutral-500)` | content reserved for imminent media |
+| `--surface-portrait` | `var(--primitive-neutral-300)` | light neutral field behind framed character art |
 | `--scrim` | `var(--primitive-scrim-700)` | modal / sheet backdrop |
 | `--scrim-gallery` | `var(--primitive-scrim-800)` | full-screen card gallery |
 | `--scrim-strong` | `var(--primitive-scrim-900)` | full-screen focus (held zoom) |

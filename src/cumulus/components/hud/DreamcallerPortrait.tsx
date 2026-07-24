@@ -7,7 +7,7 @@
 // Dreamcaller-select column), `cutout` (the unframed art alone, for scenes that
 // must remain completely untouched), and `fullBleed` (an edge-to-edge cinematic
 // cutout over a tinted backdrop — the mobile carousel page). Framed variants
-// composite the transparent full-body cutout over an opaque tinted radial
+// composite the transparent full-body cutout over an opaque light-gray
 // backdrop so scene art cannot show through the portrait. The frame (radius,
 // border, backdrop, shadow) and the per-variant image crop ARE the design
 // system's; a caller supplies only the dreamcaller data, the variant, and an
@@ -127,15 +127,14 @@ function portraitBackdrop(): string {
   return `radial-gradient(circle at 50% 20%, color-mix(in srgb, ${token("--gold")} 24%, transparent) 0%, color-mix(in srgb, ${token("--accent")} 24%, transparent) 38%, ${token("--bg-sunken")} 100%)`;
 }
 
-/** Opaque base plus translucent tint used by every self-framing portrait. */
+/** Opaque light-gray field used by every self-framing portrait. */
 function framedPortraitBackdrop(): CSSProperties {
   return {
-    backgroundColor: token("--bg-sunken"),
-    backgroundImage: portraitBackdrop(),
+    backgroundColor: token("--surface-portrait"),
   };
 }
 
-/** Per-variant frame chrome (radius / border / tinted backing / shadow). */
+/** Per-variant frame chrome (radius / border / neutral backing / shadow). */
 function frameStyle(variant: FramedVariant): CSSProperties {
   switch (variant) {
     case "hero":
@@ -209,7 +208,7 @@ function imageStyle(
   }
 }
 
-/** The tinted-monogram fallback shown when the art asset fails to load. */
+/** The monogram fallback shown when the art asset fails to load. */
 function fallbackStyle(variant: FramedVariant): CSSProperties {
   return {
     display: "flex",

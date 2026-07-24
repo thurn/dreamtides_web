@@ -48,15 +48,15 @@ afterEach(() => {
 
 describe("DreamcallerPortrait variants", () => {
   it.each(["hero", "panel", "thumb"] as const)(
-    "%s composites the transparent cutout over an opaque base",
+    "%s composites the transparent cutout over the light-gray portrait field",
     (variant) => {
       const { container } = mountInto(
         <DreamcallerPortrait dreamcaller={DC} variant={variant} />,
       );
 
       const frame = container.firstElementChild as HTMLElement | null;
-      expect(frame?.style.backgroundColor).toBe("var(--bg-sunken)");
-      expect(frame?.style.backgroundImage).toContain("radial-gradient");
+      expect(frame?.style.backgroundColor).toBe("var(--surface-portrait)");
+      expect(frame?.style.backgroundImage).toBe("");
     },
   );
 
