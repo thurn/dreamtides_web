@@ -375,7 +375,7 @@ id = "738a5af0-f848-4d48-bceb-9a43c9b11066"
 rendered-text = '''
 Cards you reclaim are not banished when they leave play.
 
-2●, ☪: A character in your void gains reclaim.'''
+2●, ☪: Choose a character in your void to gain reclaim.'''
 energy-cost = 2
 card-type = "Character"
 subtype = "Suvivor"
@@ -1634,7 +1634,7 @@ art = { x = -0.538, y = 0.897, scale = 1.07 }
 name = "Dreadwood Emissary"
 mtg-name = "Snapcaster Mage"
 id = "bf323913-3695-49ee-8d13-8165657e3dc9"
-rendered-text = "▸Materialized: An event in your void gains reclaim."
+rendered-text = "▸Materialized: Chose an event in your void to gain reclaim."
 energy-cost = 2
 card-type = "Character"
 subtype = "Tinkerer"
@@ -1919,7 +1919,7 @@ art = { x = -0.042, y = 0.897, scale = 1.07 }
 name = "Keeper of the Lightpath"
 mtg-name = "Chandra, Acolyte of Flame"
 id = "3a4ee059-4b6a-4a85-b3b8-a472834ea843"
-rendered-text = "☪: A ≤3● cost event in your void gains reclaim."
+rendered-text = "☪: Choose a ≤3● cost event in your void to gain reclaim."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -2329,7 +2329,7 @@ art = { x = 0, y = 1, scale = 1.17 }
 name = "Cleansing Flame"
 mtg-name = "Burning Inquiry"
 id = "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188"
-rendered-text = "Choose and discard X cards from your hand or the opponent's hand. That player draws X cards."
+rendered-text = "Choose and discard X cards from your hand or from the opponent's hand. That player draws X cards."
 energy-cost = "X"
 card-type = "Event"
 subtype = ""
@@ -2935,7 +2935,7 @@ art = { x = -0.378, y = 1, scale = 1.27 }
 name = "Phantom Angler"
 mtg-name = "Lurrus of the Dream-Den"
 id = "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e"
-rendered-text = "☪: A ≤2● cost character in your void gains reclaim."
+rendered-text = "☪: Choose a ≤2● cost character in your void to gain reclaim."
 energy-cost = 2
 card-type = "Character"
 subtype = "Ancient"
@@ -5286,7 +5286,10 @@ card-number = 282
 name = "Whisper of the Past"
 mtg-name = "Darkblast"
 id = "5931e388-1856-4e5a-85f8-a5aa34f867b1"
-rendered-text = "An event in your void gains reclaim. At the start of your turn, if this card is in your void, you may erode 3 to place this card on top of your deck."
+rendered-text = '''
+Choose an event in your void to gain reclaim.
+
+At the start of your turn, if this card is in your void, you may erode 3 to place this card on top of your deck.'''
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -5583,7 +5586,7 @@ art = { x = 0.029, y = 0, scale = 1.47 }
 name = "Memory Tracer"
 mtg-name = "Six"
 id = "db4618f6-121b-4c97-98d3-c29849c5824e"
-rendered-text = "☪: A card in your void gains reclaim."
+rendered-text = "☪: Choose a card in your void to gain reclaim."
 energy-cost = 3
 card-type = "Character"
 subtype = "Child"
@@ -7203,7 +7206,7 @@ art = { x = -0.294, y = 1, scale = 1.17 }
 name = "Spirit of Smoldering Echoes"
 mtg-name = "Jace, Vryn's Prodigy // Jace, Telepath Unbound"
 id = "8951e112-92d2-4246-9859-39320620231b"
-rendered-text = "2●: An event in your void gains reclaim."
+rendered-text = "2●: Choose an event in your void to gain reclaim."
 energy-cost = 2
 card-type = "Character"
 subtype = "Elemental"
@@ -8508,7 +8511,7 @@ art = { x = 0, y = -0.412, scale = 1.37 }
 name = "Archive of the Forgotten"
 mtg-name = "Finale of Promise"
 id = "69552516-14bc-42b9-b4b6-3a0cdc29686b"
-rendered-text = "Up to two ≤X● cost events in your void gain reclaim 0●."
+rendered-text = "Choose up to two ≤X● cost events in your void to gain reclaim 0●."
 energy-cost = "2,X"
 card-type = "Event"
 subtype = ""
@@ -8784,7 +8787,7 @@ card-number = 467
 name = "Twilight Reclaimer"
 mtg-name = "Relentless Dead"
 id = "4e1c0192-2649-489f-aad3-75ff2887c0a7"
-rendered-text = "▸Dissolved: A survivor in your void gains reclaim."
+rendered-text = "▸Dissolved: Choose a survivor in your void to gain reclaim."
 energy-cost = 1
 card-type = "Character"
 subtype = "Survivor"
@@ -9412,7 +9415,7 @@ art = { x = 0, y = 0.814, scale = 1 }
 name = "Ritekeeper"
 mtg-name = "Past in Flames"
 id = "995c570b-2d86-4f6f-8f02-dd0902e32fcd"
-rendered-text = "Discard a card: An event in your void gains reclaim."
+rendered-text = "Discard a card: Choose an event in your void to gain reclaim."
 energy-cost = 1
 card-type = "Character"
 subtype = "Explorer"
