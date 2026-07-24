@@ -24,6 +24,8 @@ const TUTORIAL_OPPONENT_DREAMCALLER_ID = "B99936CA-97F9-4930-AF5A-FA9EF92557EF";
 const TUTORIAL_PLAYER_BACK_RANK_INDEX = 1;
 const TUTORIAL_PLAYER_FRONT_RANK_INDEX = 0;
 const TUTORIAL_STARTING_ENERGY = 4;
+const AUTUMN_GLADE_CARD_ID = "02e8ea92-1218-413c-9f0b-4c865a3921d3";
+const AUTUMN_GLADE_SCORE_GAIN = 2;
 export {
   TUTORIAL_OPPONENT_CARD_ID,
   TUTORIAL_PLAYER_CARD_INSTANCE_ID,
@@ -82,6 +84,16 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       owner: action.owner,
       sourceZone: "dreamwell",
       destinationPhase: "dawn",
+      ...(action.cardId === AUTUMN_GLADE_CARD_ID
+        ? {
+            effect: {
+              side: action.owner,
+              stat: "points",
+              amount: AUTUMN_GLADE_SCORE_GAIN,
+              timing: "after-dreamwell-instructions",
+            },
+          }
+        : {}),
     };
   }
   if (action.action === "reveal-and-play-opponent-card") {
@@ -575,6 +587,21 @@ export function buildTutorialView(
     revealedDreamwellAction.owner === "enemy";
   const enemyDreamwellApplied =
     enemyDreamwellDrawn && dreamwellExplanationCompleted;
+  const dreamwellScoreGain =
+    dreamwellExplanationCompleted &&
+    revealedDreamwellCard?.id === AUTUMN_GLADE_CARD_ID
+      ? AUTUMN_GLADE_SCORE_GAIN
+      : 0;
+  const enemyDreamwellScore =
+    revealedDreamwellAction?.action === "draw-dreamwell-card" &&
+    revealedDreamwellAction.owner === "enemy"
+      ? dreamwellScoreGain
+      : 0;
+  const playerDreamwellScore =
+    revealedDreamwellAction?.action === "draw-dreamwell-card" &&
+    revealedDreamwellAction.owner === "player"
+      ? dreamwellScoreGain
+      : 0;
   const enemyDreamwellEnergy = enemyDreamwellApplied
     ? (revealedDreamwellCard?.energyAdded ?? 0)
     : 0;
@@ -617,6 +644,7 @@ export function buildTutorialView(
       ...emptySide("enemy").status,
       currentEnergy: enemyCurrentEnergy,
       maxEnergy: enemyMaxEnergy,
+      points: enemyDreamwellScore,
     },
   };
   const enemyBackRank = enemy.backRank.map((slot, index) => {
@@ -837,6 +865,7 @@ export function buildTutorialView(
               (playerCardPlayed ? (playerCard?.energyCost ?? 0) : 0),
           ),
           maxEnergy: playerTurnEnergy,
+          points: playerDreamwellScore,
         },
       };
       const playerHandCards =
@@ -930,6 +959,7 @@ export function buildTutorialView(
         sides: {
           player: {
             ...emptyInspectorSide("player"),
+            points: playerDreamwellScore,
             currentEnergy: player.status.currentEnergy,
             maxEnergy: player.status.maxEnergy,
             zones: {
@@ -948,6 +978,7 @@ export function buildTutorialView(
           },
           enemy: {
             ...enemyInspector,
+            points: enemyDreamwellScore,
             currentEnergy: enemy.status.currentEnergy,
             maxEnergy: enemy.status.maxEnergy,
             zones: {

@@ -314,6 +314,12 @@ describe("buildTutorialView", () => {
       owner: "enemy",
       sourceZone: "dreamwell",
       destinationPhase: "dawn",
+      effect: {
+        side: "enemy",
+        stat: "points",
+        amount: 2,
+        timing: "after-dreamwell-instructions",
+      },
     });
   });
 
@@ -816,6 +822,7 @@ describe("buildTutorialView", () => {
         status: {
           currentEnergy: 2,
           maxEnergy: 4,
+          points: 0,
         },
       },
       inspector: {
@@ -873,6 +880,7 @@ describe("buildTutorialView", () => {
     expect(explainingDreamwell.battle.enemy.status).toMatchObject({
       currentEnergy: 2,
       maxEnergy: 4,
+      points: 0,
     });
     expect(explainingDreamwell.howToPlay).toEqual({
       actionId: "dreamwell-how-to-play",
@@ -915,9 +923,19 @@ describe("buildTutorialView", () => {
     expect(worthyChallenger.battle).toMatchObject({
       activeSide: "enemy",
       phase: "day",
+      enemy: {
+        status: {
+          points: 2,
+        },
+      },
       inspector: {
         activeSide: "Enemy",
         phase: "Day",
+        sides: {
+          enemy: {
+            points: 2,
+          },
+        },
       },
     });
     expect(
@@ -1048,6 +1066,7 @@ describe("buildTutorialView", () => {
     expect(ended.battle.enemy.status).toMatchObject({
       currentEnergy: 5,
       maxEnergy: 5,
+      points: 2,
     });
     expect(
       ended.battle.enemy.backRank.every((slot) => slot.card === null),
