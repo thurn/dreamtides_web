@@ -71,6 +71,11 @@ describe("glossary", () => {
     expect(lookupGlossaryTerm("not-a-real-term")).toBeUndefined();
   });
 
+  it("resolves supported through the canonical Support entry", () => {
+    const support = requireGlossaryEntry("support");
+    expect(lookupGlossaryTerm("supported")).toBe(support);
+  });
+
   it("gates an arrow-prefixed entry to the trigger form", () => {
     // An arrow-gated entry (term carries `▸`, no bare variant) resolves only by
     // its arrow form; the bare word does not, so prose like "you have

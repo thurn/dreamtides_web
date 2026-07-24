@@ -256,16 +256,7 @@ term = "Support"
 definition = "A back-rank character supports the front-rank characters ahead of it."
 priority = 70
 matches-rules-text = true
-variants = [ "supports", "supporting" ]
-
-[[entries]]
-id = "supported"
-category = "Keywords"
-term = "Supported"
-definition = "A front-rank character benefiting from the allies behind it."
-priority = 70
-matches-rules-text = true
-variants = []
+variants = [ "supported", "supports", "supporting" ]
 
 [[entries]]
 id = "challenger"
