@@ -1741,9 +1741,7 @@ describe("TutorialScreen", () => {
         "[data-tutorial-block-target-highlight]",
       )?.style.outline,
     ).toContain("var(--positive)");
-    expect(
-      container.querySelector("[data-tutorial-reposition-arrow]"),
-    ).not.toBeNull();
+    expect(guide?.querySelector("svg")).toBeNull();
 
     act(() => {
       screenMocks.props?.interactions?.onCardDragStart(

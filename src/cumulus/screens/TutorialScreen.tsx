@@ -191,10 +191,6 @@ interface TutorialCardTrajectory {
 }
 
 interface TutorialRepositionGuideGeometry {
-  readonly sourceX: number;
-  readonly sourceY: number;
-  readonly targetX: number;
-  readonly targetY: number;
   readonly targetFrame: TutorialCardFrame;
   readonly targetSlotId: string;
 }
@@ -258,7 +254,6 @@ function TutorialRepositionGuide({
 
     const updateGeometry = (): void => {
       const screenBox = screen.getBoundingClientRect();
-      const sourceBox = sourceSlot.getBoundingClientRect();
       const opposingBox = opposingSlot.getBoundingClientRect();
       const opposingCenterX = opposingBox.left + opposingBox.width / 2;
       const targetSlot = playerFrontSlots.reduce((closest, candidate) => {
@@ -279,26 +274,7 @@ function TutorialRepositionGuide({
         return;
       }
       const targetBox = targetSlot.getBoundingClientRect();
-      const sourceCenter = {
-        x: sourceBox.left - screenBox.left + sourceBox.width / 2,
-        y: sourceBox.top - screenBox.top + sourceBox.height / 2,
-      };
-      const targetCenter = {
-        x: targetBox.left - screenBox.left + targetBox.width / 2,
-        y: targetBox.top - screenBox.top + targetBox.height / 2,
-      };
-      const deltaX = targetCenter.x - sourceCenter.x;
-      const deltaY = targetCenter.y - sourceCenter.y;
-      const distance = Math.hypot(deltaX, deltaY);
-      const unitX = distance === 0 ? 0 : deltaX / distance;
-      const unitY = distance === 0 ? -1 : deltaY / distance;
-      const sourceInset = Math.min(sourceBox.width, sourceBox.height) * 0.28;
-      const targetInset = Math.min(targetBox.width, targetBox.height) * 0.36;
       const next = {
-        sourceX: sourceCenter.x + unitX * sourceInset,
-        sourceY: sourceCenter.y + unitY * sourceInset,
-        targetX: targetCenter.x - unitX * targetInset,
-        targetY: targetCenter.y - unitY * targetInset,
         targetFrame: {
           x: targetBox.left - screenBox.left,
           y: targetBox.top - screenBox.top,
@@ -308,11 +284,7 @@ function TutorialRepositionGuide({
         targetSlotId,
       };
       setGeometry((current) =>
-        current?.sourceX === next.sourceX &&
-        current.sourceY === next.sourceY &&
-        current.targetX === next.targetX &&
-        current.targetY === next.targetY &&
-        current.targetFrame.x === next.targetFrame.x &&
+        current?.targetFrame.x === next.targetFrame.x &&
         current.targetFrame.y === next.targetFrame.y &&
         current.targetFrame.width === next.targetFrame.width &&
         current.targetFrame.height === next.targetFrame.height &&
@@ -337,22 +309,6 @@ function TutorialRepositionGuide({
   }, [cardId, onTargetSlotChange, opposingCardId, screen]);
 
   if (geometry === null) return null;
-  const arrowDeltaX = geometry.targetX - geometry.sourceX;
-  const arrowDeltaY = geometry.targetY - geometry.sourceY;
-  const arrowLength = Math.hypot(arrowDeltaX, arrowDeltaY);
-  const arrowUnitX = arrowLength === 0 ? 0 : arrowDeltaX / arrowLength;
-  const arrowUnitY = arrowLength === 0 ? -1 : arrowDeltaY / arrowLength;
-  const arrowHeadLength = 22;
-  const arrowHeadHalfWidth = 14;
-  const arrowBaseX = geometry.targetX - arrowUnitX * arrowHeadLength;
-  const arrowBaseY = geometry.targetY - arrowUnitY * arrowHeadLength;
-  const arrowPerpendicularX = -arrowUnitY * arrowHeadHalfWidth;
-  const arrowPerpendicularY = arrowUnitX * arrowHeadHalfWidth;
-  const arrowHeadPoints = [
-    `${String(geometry.targetX)},${String(geometry.targetY)}`,
-    `${String(arrowBaseX + arrowPerpendicularX)},${String(arrowBaseY + arrowPerpendicularY)}`,
-    `${String(arrowBaseX - arrowPerpendicularX)},${String(arrowBaseY - arrowPerpendicularY)}`,
-  ].join(" ");
   return (
     <div
       role="img"
@@ -381,34 +337,6 @@ function TutorialRepositionGuide({
           boxShadow: `0 0 ${token("--space-7")} ${token("--positive")}`,
         }}
       />
-      <svg
-        aria-hidden="true"
-        width="100%"
-        height="100%"
-        style={{ position: "absolute", inset: 0, overflow: "visible" }}
-      >
-        <line
-          data-tutorial-reposition-arrow=""
-          x1={geometry.sourceX}
-          y1={geometry.sourceY}
-          x2={arrowBaseX}
-          y2={arrowBaseY}
-          stroke={token("--positive")}
-          strokeWidth="6"
-          strokeLinecap="round"
-          style={{
-            filter: `drop-shadow(0 0 ${token("--space-2")} ${token("--positive")})`,
-          }}
-        />
-        <polygon
-          data-tutorial-reposition-arrowhead=""
-          points={arrowHeadPoints}
-          fill={token("--positive")}
-          style={{
-            filter: `drop-shadow(0 0 ${token("--space-2")} ${token("--positive")})`,
-          }}
-        />
-      </svg>
     </div>
   );
 }
