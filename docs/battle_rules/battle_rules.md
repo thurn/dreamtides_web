@@ -152,43 +152,24 @@ this turn.
 
 ## The Play Area
 
-Each player has a staggered play area split into a **front rank** and a **back
-rank**. Only front-rank characters participate in the Challenge phase; back-rank
-characters are safe but can still affect the front rank through abilities such as
-Support.
+Each player has a fixed, staggered play area split into a **front rank** and a
+**back rank**. The front rank has **9 positions**, numbered `F0` through `F8`.
+The back rank has **10 positions**, numbered `B0` through `B9`. These positions
+are present for the entire battle.
 
-The play area starts with **5 positions: 2 in the front rank and 3 in the back
-rank**. It is not a fixed grid — it grows and shrinks with the characters in
-play, and the back rank always holds one more position than the front rank.
-
-**Expansion:** Whenever every position in either rank becomes occupied, one
-position is added to the front rank and one to the back rank. For example,
-starting from the 2 front / 3 back layout, dragging two characters into the front
-rank fills it, so the play area expands to 3 front / 4 back. Filling the front
-rank again expands it to 4 front / 5 back, and so on. Because a character entering
-play goes to the back rank, filling the back rank expands both ranks the same way.
-
-**Contraction:** As characters leave play and a rank is no longer full, the ranks
-shrink back down by the same step — removing one front and one back position —
-but never below the starting 2 front / 3 back minimum. In effect, the play area is
-always the smallest size that still leaves at least one open position in each
-rank.
+Only front-rank characters participate in the Challenge phase. Back-rank
+characters are safe but can still affect the front rank through abilities such
+as Support.
 
 **Staggered positions and Support:** Because the grid is staggered, each back-rank
 position sits behind one or two front-rank positions, and each front-rank position
 is backed by one or two back-rank positions. Numbering positions left to right
 from 0, back-rank position `Bi` sits behind front-rank positions `F(i-1)` and
-`Fi` wherever those exist. So in the starting layout:
-
-- `B0` supports `F0`
-- `B1` supports `F0` and `F1`
-- `B2` supports `F1`
-
-Equivalently, `F0` is supported by `B0`/`B1` and `F1` by `B1`/`B2`. The leftmost
-and rightmost back positions back a single front position; interior back positions
-back two. A back-rank character with the Support keyword benefits the up-to-two
-front-rank characters in the positions it supports (see
-[Support](#keywords-and-effects)).
+`Fi` wherever those exist. Thus `B0` supports `F0`, each of `B1` through `B8`
+supports the two adjacent front positions, and `B9` supports `F8`.
+Equivalently, `Fi` is supported by `Bi` and `B(i+1)`. A back-rank character
+with the Support keyword benefits the up-to-two front-rank characters in the
+positions it supports (see [Support](#keywords-and-effects)).
 
 **Front rank and the back rank:** Only front-rank characters participate
 directly in the Challenge phase, as challengers or defenders. Back-rank
@@ -202,11 +183,65 @@ characters. The active player repositions during their Day phase; the opposing
 player repositions during the Dusk phase. An **exhausted character cannot be
 moved to the front rank** by either player.
 
+The battlefield provides **All Forward** and **All Back** controls as
+repositioning conveniences. Characters already in the destination rank remain
+where they are. Eligible characters in the other rank are considered from left
+to right and moved into empty destination positions from left to right until
+the destination rank is full. Characters that do not fit remain where they are.
+All Forward skips exhausted characters. These controls follow the normal
+repositioning timing rules and never banish characters.
+
 **Materializing:** A character entering play is placed in the back rank, in the
-exhausted state. If the back rank is full, it expands to make room, so a character
-can always be materialized. (A figment materializing into an existing same-type
-stack joins that stack and does not require a new position; see
-[Figments](#figments).)
+leftmost open position, in the exhausted state. An awakened character enters
+without the exhausted status. If one or more characters would materialize and
+the back rank does not have enough open positions, the player follows the
+Making Room procedure before those characters enter.
+
+### Making Room
+
+Making Room is the capacity procedure used when one or more characters would
+materialize into a player's back rank without enough open positions. Gain
+control also uses this procedure when the receiving player's back rank is full.
+When Making Room begins, the pending characters and their order are fixed.
+
+The player may select any number of characters they control in either rank for
+banishment. Selected characters are visibly marked, and the player explicitly
+confirms the selection. On confirmation, all selected characters are banished
+simultaneously. This is an ordinary banishment: the characters leave play, and
+abilities that observe banishment or a character leaving play can trigger.
+Those triggers resolve before the pending materialization or control change
+continues.
+
+Making Room can also reopen repositioning when that player already has
+repositioning permission under the normal turn rules: the active player during
+Day and the opposing player during Dusk. It grants no repositioning permission
+during any other phase. While Making Room is open, the player may only
+reposition, select characters for banishment, and confirm that selection; they
+cannot play cards or activate abilities.
+
+After the player confirms:
+
+- A materialization batch resolves in the order specified by its effect. If the
+  effect does not specify an order, cards use source-zone order from top to
+  bottom and created characters use the order in which the effect creates them.
+- Each character is processed separately. If a back-rank position is open, the
+  character enters the leftmost one and its materialization triggers resolve
+  before the next character is processed.
+- If no back-rank position is open, an ordinary character is banished instead
+  of entering play and a figment ceases to exist. Triggers caused by that zone
+  change resolve before the next character is processed. Capacity is checked
+  again afterward.
+- The original batch receives one Making Room opportunity. It does not reopen
+  Making Room if the back rank is full again later in that batch. A separate
+  materialization caused by a trigger uses its own Making Room procedure.
+- A character that does not enter play has not materialized. It does not become
+  exhausted and does not fire ▸Materialized or "when you materialize" triggers.
+  Its actual zone movement still occurs; for example, a character moving from
+  the void to the Banished zone has left the void.
+
+Playing a character or activating an effect that materializes characters is
+legal without guaranteed back-rank space. Its costs are paid normally. Costs
+are not refunded when an incoming character is banished or ceases to exist.
 
 ## Turn Structure
 
@@ -270,11 +305,10 @@ Ending phase, when it is cleared from every character in play.
   enemy".
 - Paying a ☪ cost exhausts that character.
 
-Because an exhausted character cannot be moved to the front rank, exhausting a
-character keeps it from challenging or defending. As a convenience, when a front-rank character
-pays a ☪ cost it is automatically moved to a back-rank position so
-that it does not remain a potential challenger or defender; the back rank expands
-if needed to make room.
+Only a back-rank character can activate an ability with a ☪ cost. Front-rank
+characters cannot activate abilities with ☪ costs. Because an exhausted
+character cannot be moved to the front rank, exhausting a back-rank character
+keeps it from challenging or defending until it awakens.
 
 ## Challengers, Defenders, and Scoring
 
@@ -396,28 +430,26 @@ target the character abandoned to pay the cost (that character is in the void,
 not in play, by the time the effect chooses among in-play characters; and the
 abandoned character was selected as a cost, not a target).
 
-When an effect targets a [figment](#figments) stack, it affects the stack's
-**topmost** figment — the single active figment. The reserve figments beneath it
-cannot be chosen or affected. Spark-threshold targeting reads the topmost
-figment's spark, not the stack's displayed total.
+Each [figment](#figments) is an independent character and is targeted
+individually.
 
 ## Keywords and Effects
 
 **Dissolve** — Move a target character from play to the void.
 
-**Banish** — Permanently remove a card by sending it to the Banished zone.
-Variants include banish from play, banish from the void, banish until the
+**Banish** — Permanently remove a card by sending it to its owner's Banished
+zone. Variants include banish from play, banish from the void, banish until the
 banishing card leaves play, and banish until the next Day phase.
 
 **Materialize** — Put a character into play. This covers a character entering
 play from hand (played normally), from the void, from the deck, as a created
 figment, or returned "to play" by an effect. A materialized character enters the
-back rank exhausted (unless awakened); the back rank expands if needed to make
-room. Materializing fires the character's ▸Materialized trigger and any "When you
-materialize" triggers. Putting a character directly into play (for example
-"return to play" or "materialize from your void") is not "playing" it: it costs
-no energy, does not use the stack, cannot be Prevented, and does not fire "when
-you play" triggers.
+leftmost open back-rank position exhausted (unless awakened). If there is not
+enough room, use [Making Room](#making-room). A character that enters fires its
+▸Materialized trigger and any "When you materialize" triggers. Putting a
+character directly into play (for example "return to play" or "materialize from
+your void") is not "playing" it: it costs no energy, does not use the stack,
+cannot be Prevented, and does not fire "when you play" triggers.
 
 **Rematerialize** — Trigger an in-play character's materialization again, firing
 its ▸Materialized trigger and any "When you materialize" triggers.
@@ -432,9 +464,8 @@ status. See [Exhaust and Awaken](#exhaust-and-awaken).
 **Support** — A back-rank character with Support provides a benefit to the
 front-rank characters in the positions it supports (up to two). Support has no
 effect on its own; the keyword text states the benefit, such as "Support –
-Supported characters have +1✦." Support is a non-figment mechanic: a [figment](#figments)
-neither grants Support to characters you control nor benefits from another
-character's Support.
+Supported characters have +1✦." [Figments](#figments) grant and receive
+Support like other characters.
 
 **Veil** — If a character with Veil would be dissolved by an effect the
 opponent controls, instead it loses Veil.
@@ -488,8 +519,8 @@ forms such as "Prevent an event unless the opponent pays 2●."
 
 **Abandon** — Move one of your own characters from play to the void. Abandon
 cannot be prevented and targets only your own characters, and it fires the
-character's ▸Dissolved trigger. It is frequently used as a cost. When abandoning
-a figment stack, the topmost figment is abandoned.
+character's ▸Dissolved trigger. It is frequently used as a cost. A figment that
+is abandoned ceases to exist after firing its dissolved triggers.
 
 **Foresee N** — Look at the top N cards of your deck, reorder them in any order,
 and optionally send any of them to the void.
@@ -500,8 +531,16 @@ add one of them to your hand.
 **Copy** — Create a duplicate of a card or effect. Variants include copying a
 character in play and copying the next card played.
 
-**Gain control** — Take control of an opponent's character, moving it to your
-side of play.
+**Gain control** — Take control of an opponent's character. The character moves
+to the leftmost open position in the receiving player's back rank, preserves
+its state, and becomes exhausted until the current turn's Ending phase,
+regardless of Awakened. This is not materialization and fires no
+materialization triggers. If the back rank is full, the receiving player uses
+[Making Room](#making-room). When the effect resumes, its target must still be
+an enemy character in play; otherwise the control change fails. If no back-rank
+position is open after Making Room, the control change also fails. A failed
+target remains in its current state and location. Confirmed banishments and
+their triggers are not reversed when the control change fails.
 
 ## Ability Types
 
@@ -576,16 +615,19 @@ than moving to the void.
 
 **Figments** are a character-typed subset of created cards. In addition to the
 created-card rule, a figment can exist only in play: it cannot enter the deck,
-void, or hand, and ceases to exist if it would leave play.
+void, hand, or Banished zone, and ceases to exist if it would leave play.
 
 ## Figments
 
-Figments are characters created by card effects rather than played from a deck.
-Each figment is one of a fixed set of generic **types**, listed in the catalog
-below. A figment exists only in play: it cannot enter the deck, hand, or void,
-and when it leaves play it **ceases to exist** — it is not sent to the void or
-the Banished zone. Effects that copy a named card produce an ordinary character
-token (a created card), not a figment.
+Figments are independent characters created by card effects rather than played
+from a deck. Each figment is one of a fixed set of generic **types**, listed in
+the catalog below. A figment occupies one battlefield position and has its own
+spark, statuses, counters, abilities, and identity.
+
+A figment exists only in play: it cannot enter the deck, hand, void, or
+Banished zone. When it leaves play, or when it cannot enter play during
+Making Room, it **ceases to exist**. Effects that copy a named card produce an
+ordinary character token (a created card), not a figment.
 
 **Figment catalog:**
 
@@ -603,102 +645,19 @@ token (a created card), not a figment.
 | Legion | 1✦ per warrior you control | — |
 
 A **Legion** is a Warrior whose spark equals the number of warriors you control,
-counting itself. Because each figment counts individually toward subtype tallies
-(see [Spark and counting](#spark-and-counting)), three Legion figments alone are
-three warriors you control, so each is 3✦.
+counting itself. Three Legion figments alone are three Warriors, so each is
+3✦.
 
-### Stacks
+Figments follow the normal character rules:
 
-Figments of the **same type** occupy a single shared position as a **stack**.
-Different types never share a stack, so a player can have several stacks in
-different positions. A stack is a **topmost (active) figment** together with a
-set of **reserve** figments beneath it:
-
-- The **topmost figment** is the only one that can be targeted or affected. A
-  dissolve, an Abandon cost, a spark pump, or a granted keyword all apply to the
-  topmost. **Reserve figments cannot be chosen or affected by anything.**
-- A figment materializing into an existing same-type stack joins the **bottom**
-  of the stack as a reserve and does not require a new position. The topmost
-  figment stays topmost until it is removed, at which point the next figment up
-  is promoted to topmost. The topmost is identified by position, not by spark.
-- A stack **displays its total spark**, the sum of every figment's spark.
-- When a stack's last figment is removed, the stack **ceases to exist** and frees
-  its position immediately.
-- A stack occupies one position regardless of how many figments it holds, so a
-  tall stack lets a player field many figments without expanding the play area.
-- Materializing any figment fires "when you materialize" triggers, including a
-  figment that joins an existing stack.
-
-### Spark and counting
-
-- A figment counts **individually** as one member of its subtype, and as one
-  character, for every tally — "if you control 3 or more warriors", "+1✦ for each
-  warrior you control", and so on. A stack of three Warrior figments is three
-  warriors you control.
-- A targeted **spark gain** ("+2✦") applies to the **topmost** figment. It rides
-  that figment and is gone when the topmost is removed.
-- An **anthem** — a static "X you control have +N✦" — applies to **each** figment in
-  the stack, topmost and reserves alike. An anthem can therefore multiply a
-  stack's total spark, and it persists as figments are removed.
-
-### Statuses
-
-- **Exhausted and awakened are properties of the stack.** A stack that has been
-  in play since the start of its controller's turn is awakened and can challenge
-  that turn, regardless of figments added or removed during the turn. A stack
-  created this turn is exhausted until the current turn's Ending phase.
-- Every **other** status — a granted keyword such as Unstoppable or Veil — rides
-  the **topmost** figment and is gone when the topmost is removed.
-- A figment type's **inherent** keyword (the Keyword column above) is carried by
-  every figment of that type, so a promoted reserve keeps it.
-
-### Challenge resolution
-
-Whether a figment stack is a challenger or a defender, its **topmost figment
-resolves a normal challenge** against the opposing character using its own
-single-figment spark; the **reserve figments take no part in the challenge**. The spark comparison
-resolves normally: with lower or equal spark the topmost is dissolved (one figment
-removed); with higher spark the opposing character is dissolved and the topmost
-survives. The opposing character is compared only against the **topmost's** spark,
-never the stack total, so a tall stack of small figments cannot dissolve a large
-defender.
-
-Scoring follows the usual rule that **only a challenger scores**, never a
-defender. So a stack's reserves earn points only when the stack is the
-challenger:
-
-- **Stack challenging, unopposed** (no defender in the lane): every figment is
-  unopposed, so the stack scores its **total** spark.
-- **Stack challenging into a defender:** only the **reserves** are unopposed, so
-  the stack scores the reserves' spark. The contested topmost scores nothing
-  unless it has Unstoppable and wins.
-- **Stack defending:** the topmost defends and the spark comparison resolves as
-  above, but the stack scores nothing — its reserves are safe and idle.
-
-**Stack against stack:** the two topmost figments resolve a normal challenge
-against each other. Only the challenging stack can score, by the rules above; the
-defending stack's reserves score nothing.
-
-For example:
-
-- A stack of four 2✦ figments, unopposed, scores **8⍟**.
-- That stack challenges into a 3✦ defender. The topmost (2✦) is dissolved; the
-  three reserves (6✦) score **6⍟**; the defender survives. The stack is now three
-  2✦ figments.
-- A stack of three 4✦ Monstrosity figments challenges into a 3✦ defender. The
-  topmost (4✦) dissolves the defender and survives, scoring nothing; the two
-  reserves score **8⍟**.
-- A stack of two 4✦ Ancient figments (Unstoppable) challenges into a 3✦ defender.
-  The topmost dissolves the defender, survives, and scores **4⍟**; the reserve
-  scores **4⍟**, for **8⍟** total.
-- A stack of three 0✦ Wraith figments (Vengeful) challenges into a 5✦ defender.
-  The topmost is dissolved, and Vengeful dissolves the defender as well; the
-  reserves score 0. The stack is now two Wraiths and the defender is gone.
-
-### Removal and triggers
-
-A figment removed by a **dissolve**, an **Abandon**, or a lost challenge fires
-dissolved triggers, once per figment removed; the figment then ceases to exist. A
-figment removed by **banish** does not fire dissolved triggers. Support does not
-interact with figments — a figment neither grants Support to characters you
-control nor benefits from another character's Support.
+- Each figment counts as one character and one member of its subtype.
+- Targeted spark gains, static spark bonuses, counters, and granted statuses
+  apply to that individual figment.
+- A figment materializes into its own back-rank position and enters exhausted
+  unless awakened.
+- A figment challenges, defends, scores, grants Support, and receives Support
+  like any other character.
+- A figment removed by dissolve, Abandon, or a lost challenge fires its
+  dissolved triggers and then ceases to exist.
+- A figment removed by banish does not fire dissolved triggers and ceases to
+  exist.
