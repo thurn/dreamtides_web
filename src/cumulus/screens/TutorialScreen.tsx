@@ -210,7 +210,7 @@ const TUTORIAL_EDITOR_DOCK_MIN_WIDTH = 1280;
 const TUTORIAL_REVEAL_CARD_DESKTOP_WIDTH = 240;
 const TUTORIAL_REVEAL_CARD_MOBILE_WIDTH_RATIO = 0.45;
 const TUTORIAL_CHALLENGE_TOTAL_SECONDS = TUTORIAL_CARD_TRAVEL_SECONDS * 6;
-const TUTORIAL_CHALLENGE_MOTE_COUNT = 16;
+const TUTORIAL_CHALLENGE_MOTE_COUNT = 24;
 // The popup panel is a content-driven desktop box measure. GlassDialog adds
 // --space-5 body padding on each side around this intrinsic content width.
 const TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH = 500;
@@ -1222,14 +1222,22 @@ function TutorialChallengeAnimation({
       defender: frameRelativeTo(defenderElement, screen),
       void: frameRelativeTo(voidElement, screen),
     });
+    const challengerVisual =
+      challengerElement.querySelector<HTMLElement>(
+        "[data-battle-card-motion]",
+      ) ?? challengerElement;
+    const defenderVisual =
+      defenderElement.querySelector<HTMLElement>(
+        "[data-battle-card-motion]",
+      ) ?? defenderElement;
     const previousChallengerVisibility =
-      challengerElement.style.visibility;
-    const previousDefenderVisibility = defenderElement.style.visibility;
-    challengerElement.style.visibility = "hidden";
-    defenderElement.style.visibility = "hidden";
+      challengerVisual.style.visibility;
+    const previousDefenderVisibility = defenderVisual.style.visibility;
+    challengerVisual.style.visibility = "hidden";
+    defenderVisual.style.visibility = "hidden";
     return () => {
-      challengerElement.style.visibility = previousChallengerVisibility;
-      defenderElement.style.visibility = previousDefenderVisibility;
+      challengerVisual.style.visibility = previousChallengerVisibility;
+      defenderVisual.style.visibility = previousDefenderVisibility;
     };
   }, [challenge, reduceMotion, screen, started]);
 
@@ -1333,13 +1341,13 @@ function TutorialChallengeAnimation({
               ],
               scale: won
                 ? [1, 1.08, 1.12, 1.16, 1.08, 1]
-                : [1, 1.08, 1.12, 1.18, 0.58, 0.4],
+                : [1, 1.08, 1.12, 1.04, 0.58, 0.4],
               rotate: won
                 ? [0, -1, 2, -2, 1, 0]
                 : [0, 1, -2, 3, 14, 24],
               opacity: won
                 ? [1, 1, 1, 1, 1, 1]
-                : [1, 1, 1, 1, 0, 0],
+                : [1, 1, 1, 0.7, 0, 0],
             }}
             transition={{
               duration: TUTORIAL_CHALLENGE_TOTAL_SECONDS,
@@ -1403,8 +1411,8 @@ function TutorialChallengeAnimation({
           (index / TUTORIAL_CHALLENGE_MOTE_COUNT) * Math.PI * 2 +
           (index % 2 === 0 ? 0.18 : -0.11);
         const scatterDistance =
-          loserFrame.width * (0.32 + (index % 4) * 0.11);
-        const moteSize = token(index % 3 === 0 ? "--space-3" : "--space-2");
+          loserFrame.width * (0.45 + (index % 5) * 0.13);
+        const moteSize = token(index % 4 === 0 ? "--space-5" : "--space-4");
         return (
           <motion.div
             key={index}
@@ -1431,13 +1439,13 @@ function TutorialChallengeAnimation({
                 voidCenterY + Math.sin(angle) * geometry.void.height * 0.12,
                 voidCenterY,
               ],
-              scale: [0, 0, 1 + (index % 3) * 0.25, 0.72, 0],
-              opacity: [0, 0, 1, 0.82, 0],
+              scale: [0, 0, 1.1 + (index % 3) * 0.22, 0.9, 0],
+              opacity: [0, 0, 1, 1, 0],
               rotate: [0, 0, index % 2 === 0 ? 120 : -140, 240, 320],
             }}
             transition={{
               duration: TUTORIAL_CHALLENGE_TOTAL_SECONDS,
-              times: [0, 0.54, 0.7, 0.9, 1],
+              times: [0, 0.38, 0.56, 0.86, 1],
               ease: [0.22, 0.61, 0.36, 1],
             }}
             style={{
@@ -1451,15 +1459,13 @@ function TutorialChallengeAnimation({
               ),
               background: token(
                 index % 3 === 0
-                  ? "--spark"
+                  ? "--gradient-gold"
                   : index % 3 === 1
-                    ? "--accent-bright"
-                    : "--danger",
+                    ? "--gradient-accent"
+                    : "--gradient-energy",
               ),
-              boxShadow:
-                index % 3 === 0
-                  ? token("--shadow-sm")
-                  : token("--glow-accent-soft"),
+              outline: `${token("--space-1")} solid ${token("--text-on-accent")}`,
+              boxShadow: token("--shadow-md"),
             }}
           />
         );

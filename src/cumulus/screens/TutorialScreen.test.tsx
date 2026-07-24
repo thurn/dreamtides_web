@@ -180,7 +180,9 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
                   <div
                     data-battle-card-id={slot.card.id}
                     data-card-id={slot.card.model.cardId}
-                  />
+                  >
+                    <div data-battle-card-motion="" />
+                  </div>
                 )}
               </div>
             ))}
@@ -196,7 +198,9 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
                   <div
                     data-battle-card-id={slot.card.id}
                     data-card-id={slot.card.model.cardId}
-                  />
+                  >
+                    <div data-battle-card-motion="" />
+                  </div>
                 )}
               </div>
             ))}
@@ -212,7 +216,9 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
                   <div
                     data-battle-card-id={slot.card.id}
                     data-card-id={slot.card.model.cardId}
-                  />
+                  >
+                    <div data-battle-card-motion="" />
+                  </div>
                 )}
               </div>
             ))}
@@ -228,7 +234,9 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
                   <div
                     data-battle-card-id={slot.card.id}
                     data-card-id={slot.card.model.cardId}
-                  />
+                  >
+                    <div data-battle-card-motion="" />
+                  </div>
                 )}
               </div>
             ))}
@@ -1891,17 +1899,32 @@ describe("TutorialScreen", () => {
       .toBe(TUTORIAL_OPPONENT_CARD.model.cardId);
     expect(
       container.querySelectorAll("[data-tutorial-challenge-mote]"),
-    ).toHaveLength(16);
+    ).toHaveLength(24);
     expect(
       container.querySelector<HTMLElement>(
         '[data-battle-rank="enemy-front"] [data-battle-card-id]',
       )?.style.visibility,
-    ).toBe("hidden");
+    ).toBe("");
     expect(
       container.querySelector<HTMLElement>(
         '[data-battle-rank="player-front"] [data-battle-card-id]',
       )?.style.visibility,
+    ).toBe("");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-battle-rank="enemy-front"] [data-battle-card-motion]',
+      )?.style.visibility,
     ).toBe("hidden");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-battle-rank="player-front"] [data-battle-card-motion]',
+      )?.style.visibility,
+    ).toBe("hidden");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-tutorial-challenge-mote]",
+      )?.style.outline,
+    ).toContain("var(--text-on-accent)");
     expect(screenMocks.props?.view.phase).toBe("challenge");
 
     act(() => screenMocks.challengeRematerializedAnimationComplete?.());
