@@ -1,12 +1,13 @@
 # Figment catalog (rules §Figments). Each entry is one of the fixed figment
 # types a card effect can create. The figment editor (/figments) reads and
 # writes this file, and the battle UI sources a figment's name, character type,
-# spark, rules text, and art from the matching entry by subtype.
+# spark, rules text, and art from the matching entry by `id`. Card effects and
+# runtime instances carry this UUID; `subtype` is a rules-facing character type
+# and is not a unique catalog key.
 #
 # `keyword` is the type's implicit combat keyword (one of "unstoppable",
 # "vengeful", "awakened", or "" for none) and is carried by every figment of the
-# type. `spark` is the base spark of a single figment; a Legion's spark is the
-# live allied-warrior count, so its base value is the per-warrior rate.
+# type. `spark` is the base spark of a single figment.
 
 [[figments]]
 name = "Warrior"
@@ -111,9 +112,9 @@ art = { x = -0.93, y = 1, scale = 1.67 }
 name = "Legionnaire"
 id = "e757b306-5bab-4a5a-8493-28c0f3aa6440"
 subtype = "Warrior"
-spark = 0
+spark = 1
 keyword = ""
-rendered-text = "This character has +1✦ for each allied warrior."
+rendered-text = "This character has +1✦ for each other warrior you control."
 image-number = 653554603
 art-owned = false
 art = { x = 0, y = 0.399, scale = 1 }

@@ -179,6 +179,16 @@ characters. The active player repositions during their Day phase; the opposing
 player repositions during the Dusk phase. An **exhausted character cannot be
 moved to the front rank** by either player.
 
+Dragging a figment onto another figment of the same type that you control
+**combines** them instead of swapping them. The dragged figment ceases to exist,
+and its own spark is permanently added to the destination figment. Own spark
+includes base spark and persistent spark gains, but not Support, anthems, or
+spark granted by static abilities. Combining is irreversible and follows all
+normal repositioning timing and exhaustion rules. It is neither banishment nor
+dissolution and fires neither kind of trigger, though effects can observe the
+figment leaving play. Complete the combination and recalculate battlefield
+effects before resolving those leave-play triggers.
+
 The battlefield provides **All Forward** and **All Back** controls as
 repositioning conveniences. They preserve destination-rank occupants, then move
 eligible characters left to right into empty destination positions left to
@@ -188,34 +198,30 @@ These controls follow normal repositioning timing and never banish characters.
 **Materializing:** A character entering play is placed in the back rank, in the
 leftmost open position, in the exhausted state. An awakened character enters
 without the exhausted status. If one or more characters would materialize and
-the back rank does not have enough open positions, the player follows the
-Making Room procedure before those characters enter.
+the back rank lacks enough positions, use Battlefield Capacity.
 
-### Making Room
+### Battlefield Capacity
 
-Making Room is the capacity procedure used when one or more characters would
-materialize without enough back-rank positions, or when Gain Control finds the
-receiving back rank full.
+Materializations resolve in the order given by the effect, then source-zone
+order from top to bottom. An ordinary character with no open back position is
+banished instead of entering play. It has not materialized and fires no
+materialization triggers.
 
-The player marks any number of characters they control in either rank, then
-confirms. All selected characters are banished simultaneously, and resulting
-triggers resolve before the pending effect resumes.
+An effect's materializations form one ordered output. Each consecutive group of
+one or more figments with the same catalog identity first fills the open back
+positions with new figments. If every figment in that group fits, each keeps
+its own spark. Otherwise, the group's total own spark is divided as evenly as
+possible among the new figments that fit, with any remainder assigned left to
+right. Only those new figments can receive the excess spark. If there are no
+open positions, every figment in the group ceases to exist. Excess figments
+never enter play and count as neither banished nor dissolved. The player is
+shown a message explaining the result.
 
-The player may also reposition if normal timing permits it: the active player
-during Day or the opposing player during Dusk. This includes All Forward and
-All Back. Making Room grants no extra permission; the player cannot play cards
-or activate abilities before confirming.
-
-The pending batch and order are fixed, using effect order, source-zone order
-from top to bottom, then creation order. Resolve each character and its triggers
-before the next: it enters the leftmost open back position, or is banished if
-ordinary and ceases to exist if a figment. The original batch gets one Making
-Room opportunity, though a separate triggered materialization can start its
-own.
-
-Materialization can be attempted without guaranteed space. Costs are not
-refunded. A character that fails to enter completes its zone movement but has
-not materialized and fires no materialization triggers.
+Before a player commits a card, activated ability, Gain Control effect, or
+figment combination that is predicted to lose a character, combine figments,
+fail, or exclude dynamic spark, a warning shows the exact consequence and
+requires confirmation before costs are paid. Mandatory triggered effects
+resolve without confirmation and explain the result afterward.
 
 ## Turn Structure
 
@@ -419,11 +425,11 @@ banishing card leaves play, and banish until the next Day phase.
 play from hand (played normally), from the void, from the deck, as a created
 figment, or returned "to play" by an effect. A materialized character enters the
 leftmost open back-rank position exhausted (unless awakened). If there is not
-enough room, use [Making Room](#making-room). A character that enters fires its
-▸Materialized trigger and any "When you materialize" triggers. Putting a
-character directly into play (for example "return to play" or "materialize from
-your void") is not "playing" it: it costs no energy, does not use the stack,
-cannot be Prevented, and does not fire "when you play" triggers.
+enough room, use [Battlefield Capacity](#battlefield-capacity). A character that
+enters fires its ▸Materialized trigger and any "When you materialize" triggers.
+Putting a character directly into play (for example "return to play" or
+"materialize from your void") is not "playing" it: it costs no energy, does not
+use the stack, cannot be Prevented, and does not fire "when you play" triggers.
 
 **Rematerialize** — Trigger an in-play character's materialization again, firing
 its ▸Materialized trigger and any "When you materialize" triggers.
@@ -508,9 +514,10 @@ character in play and copying the next card played.
 **Gain control** — Move an opponent's character to the leftmost open back
 position on the receiving side. It preserves its state and is exhausted through
 this turn's Ending, even if Awakened; this is not materialization. If the rank
-is full, use [Making Room](#making-room). On resuming, the effect fails unless
-the target is still an enemy in play and a position is open; confirmed
-banishments remain.
+is full, the effect fails. Player-initiated Gain Control effects warn before
+costs are paid. After a successful move, recalculate Support, controller-based
+effects, subtype counts, and challenger or defender status before resolving
+resulting triggers.
 
 ## Ability Types
 
@@ -594,13 +601,12 @@ from a deck. Each occupies one position and has its own identity, spark,
 statuses, counters, and abilities.
 
 A figment exists only in play: it cannot enter the deck, hand, void, or
-Banished zone. When it leaves play, or when it cannot enter play during
-Making Room, it **ceases to exist**. Copying a named card creates an ordinary
-character token instead.
+Banished zone. When it leaves play, it **ceases to exist**. Copying a named card
+creates an ordinary character token instead.
 
 **Figment catalog:**
 
-| Figment type | Base ✦ | Keyword |
+| Figment type | Base ✦ | Keyword or ability |
 | --- | --- | --- |
 | Warrior | 1✦ | — |
 | Shadow | 2✦ | — |
@@ -611,11 +617,12 @@ character token instead.
 | Ethereal | 1✦ | — |
 | Ember | 1✦ | Awakened |
 | Outsider | 1✦ | — |
-| Legion | 1✦ per warrior you control | — |
+| Legionnaire | 1✦ | +1✦ for each other Warrior you control |
 
-A **Legion** is a Warrior whose spark equals the number of warriors you control,
-counting itself. Three Legion figments alone are three Warriors, so each is
-3✦.
+A **Legionnaire** is a Warrior with 1 base spark and +1✦ for each other Warrior
+you control. Three Legionnaires alone are therefore 3✦ each. When one combines,
+only its base spark and persistent spark gains are transferred; its
+Warrior-count bonus is not.
 
 Figments otherwise follow normal character rules. Each counts separately as a
 character and subtype member, is targeted and modified individually, and
