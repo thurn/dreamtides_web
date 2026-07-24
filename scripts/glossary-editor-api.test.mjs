@@ -72,6 +72,32 @@ describe("glossary editor API", () => {
     });
   });
 
+  it("adds and removes definition-only term presentation", async () => {
+    const { root, origin } = await startApi();
+    const path = join(root, "data", "tabula", "glossary.toml");
+
+    const markResponse = await fetch(`${origin}/api/editor/glossary/spark`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ termPresentation: "definitionOnly" }),
+    });
+    expect(markResponse.status).toBe(200);
+    expect(readFileSync(path, "utf8")).toContain(
+      'term-presentation = "definition-only"',
+    );
+
+    const clearResponse = await fetch(`${origin}/api/editor/glossary/spark`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ termPresentation: null }),
+    });
+    expect(clearResponse.status).toBe(200);
+    expect(readFileSync(path, "utf8")).not.toContain("term-presentation");
+    expect(parseGlossarySource(readFileSync(path, "utf8"))[0]).not.toHaveProperty(
+      "termPresentation",
+    );
+  });
+
   it("preserves unrelated TOML formatting when editing one entry", async () => {
     const source = `[[entries]]
 id = "spark"

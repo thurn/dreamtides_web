@@ -229,6 +229,7 @@ const EDITABLE_SOURCE_KEYS = {
   definition: "definition",
   priority: "priority",
   variants: "variants",
+  termPresentation: "term-presentation",
 };
 
 function entrySourceRanges(source) {
@@ -243,12 +244,22 @@ function entrySourceRanges(source) {
 }
 
 function replaceSourceAssignment(source, key, value) {
-  const assignment = stringify({ [key]: value }).trimEnd();
   const contextStart = source.search(/^\[\[entries\.contexts\]\][ \t]*$/mu);
   const headerEnd = contextStart < 0 ? source.length : contextStart;
   const header = source.slice(0, headerEnd);
   const contexts = source.slice(headerEnd);
   const pattern = new RegExp(`^${key}[ \\t]*=.*$`, "mu");
+  if (value === undefined) {
+    if (!pattern.test(header)) return source;
+    return `${header.replace(pattern, "").replace(/\n{3,}$/u, "\n\n")}${contexts}`;
+  }
+  const sourceValue =
+    key === "term-presentation"
+      ? value === "symbolOnly"
+        ? "symbol-only"
+        : "definition-only"
+      : value;
+  const assignment = stringify({ [key]: sourceValue }).trimEnd();
   if (pattern.test(header)) {
     return `${header.replace(pattern, assignment)}${contexts}`;
   }

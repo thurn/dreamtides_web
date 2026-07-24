@@ -5,6 +5,7 @@ import {
   type GlossaryCatalogEntry,
 } from "../data/glossary";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
+import { Select } from "../cumulus/components/controls/Select";
 import { TextField } from "../cumulus/components/controls/TextField";
 import { richText } from "../cumulus/components/card/rich-text";
 import { GlassPanel } from "../cumulus/components/overlay/GlassPanel";
@@ -16,6 +17,7 @@ import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 import {
   loadGlossaryEntries,
   saveGlossaryEntry,
+  type GlossaryEntryEdit,
 } from "./glossary-editor-api";
 import "./glossary-editor.css";
 
@@ -32,6 +34,16 @@ type SaveState =
 
 type InlineGlossaryField = "title" | "description";
 type GlossaryDraftField = InlineGlossaryField | "variants";
+type TermPresentationDraft =
+  | "titleAndDefinition"
+  | "symbolOnly"
+  | "definitionOnly";
+
+const TERM_PRESENTATION_OPTIONS = [
+  { value: "titleAndDefinition", label: "Title + Definition" },
+  { value: "definitionOnly", label: "Definition Only" },
+  { value: "symbolOnly", label: "Symbol Only" },
+];
 
 function messageFor(error: unknown): string {
   return error instanceof Error ? error.message : "The glossary request failed.";
@@ -46,6 +58,20 @@ function variantsFromDraft(value: string): string[] {
 
 function sameStrings(left: readonly string[], right: readonly string[]): boolean {
   return left.length === right.length && left.every((value, index) => value === right[index]);
+}
+
+function termPresentationDraft(
+  entry: GlossaryCatalogEntry,
+): TermPresentationDraft {
+  return entry.termPresentation ?? "titleAndDefinition";
+}
+
+function isTermPresentationDraft(value: string): value is TermPresentationDraft {
+  return (
+    value === "titleAndDefinition" ||
+    value === "definitionOnly" ||
+    value === "symbolOnly"
+  );
 }
 
 export interface GlossaryEditorAppProps {
@@ -65,6 +91,8 @@ export default function GlossaryEditorApp({
   const [termDraft, setTermDraft] = useState("");
   const [definitionDraft, setDefinitionDraft] = useState("");
   const [variantsDraft, setVariantsDraft] = useState("");
+  const [presentationDraft, setPresentationDraft] =
+    useState<TermPresentationDraft>("titleAndDefinition");
   const [saveState, setSaveState] = useState<SaveState>({ kind: "idle" });
   const [editingField, setEditingField] = useState<InlineGlossaryField | null>(null);
   const [editingError, setEditingError] = useState<string | null>(null);
@@ -104,6 +132,7 @@ export default function GlossaryEditorApp({
     setTermDraft(selectedEntry.term);
     setDefinitionDraft(selectedEntry.definition);
     setVariantsDraft(selectedEntry.variants.join(", "));
+    setPresentationDraft(termPresentationDraft(selectedEntry));
     setSaveState({ kind: "idle" });
     latestSaveRevision.current += 1;
     setEditingField(null);
@@ -138,7 +167,47 @@ export default function GlossaryEditorApp({
     selectedEntry !== null &&
     (termDraft.trim() !== selectedEntry.term ||
       definitionDraft.trim() !== selectedEntry.definition ||
-      !sameStrings(variants, selectedEntry.variants));
+      !sameStrings(variants, selectedEntry.variants) ||
+      presentationDraft !== termPresentationDraft(selectedEntry));
+
+  const queueSave = (submitted: GlossaryEntryEdit): void => {
+    const revision = latestSaveRevision.current + 1;
+    latestSaveRevision.current = revision;
+    setSaveState({ kind: "saving" });
+
+    saveQueueRef.current = saveQueueRef.current.then(async () => {
+      try {
+        const entry = await saveEntry(submitted);
+        setLoadState((current) =>
+          current.kind === "loaded"
+            ? {
+                kind: "loaded",
+                entries: current.entries.map((candidate) =>
+                  candidate.id === entry.id ? entry : candidate,
+                ),
+              }
+            : current,
+        );
+        if (latestSaveRevision.current === revision) {
+          setSaveState({ kind: "saved" });
+        }
+        logEvent("glossary_editor_entry_saved", {
+          glossaryId: entry.id,
+          matchesRulesText: entry.matchesRulesText,
+          termPresentation: entry.termPresentation ?? "titleAndDefinition",
+        });
+      } catch (error: unknown) {
+        const message = messageFor(error);
+        if (latestSaveRevision.current === revision) {
+          setSaveState({ kind: "error", message });
+        }
+        logEvent("glossary_editor_entry_save_failed", {
+          glossaryId: submitted.id,
+          message,
+        });
+      }
+    });
+  };
 
   const persistDraft = (
     changedField: GlossaryDraftField,
@@ -172,40 +241,21 @@ export default function GlossaryEditorApp({
       definition: nextDefinition,
       variants: nextVariants,
     };
-    const revision = latestSaveRevision.current + 1;
-    latestSaveRevision.current = revision;
-    setSaveState({ kind: "saving" });
+    queueSave(submitted);
+  };
 
-    saveQueueRef.current = saveQueueRef.current.then(async () => {
-      try {
-        const entry = await saveEntry(submitted);
-        setLoadState((current) =>
-          current.kind === "loaded"
-            ? {
-                kind: "loaded",
-                entries: current.entries.map((candidate) =>
-                  candidate.id === entry.id ? entry : candidate,
-                ),
-              }
-            : current,
-        );
-        if (latestSaveRevision.current === revision) {
-          setSaveState({ kind: "saved" });
-        }
-        logEvent("glossary_editor_entry_saved", {
-          glossaryId: entry.id,
-          matchesRulesText: entry.matchesRulesText,
-        });
-      } catch (error: unknown) {
-        const message = messageFor(error);
-        if (latestSaveRevision.current === revision) {
-          setSaveState({ kind: "error", message });
-        }
-        logEvent("glossary_editor_entry_save_failed", {
-          glossaryId: submitted.id,
-          message,
-        });
-      }
+  const selectTermPresentation = (value: string): void => {
+    if (
+      selectedEntry === null ||
+      !isTermPresentationDraft(value) ||
+      value === presentationDraft
+    ) {
+      return;
+    }
+    setPresentationDraft(value);
+    queueSave({
+      id: selectedEntry.id,
+      termPresentation: value === "titleAndDefinition" ? null : value,
     });
   };
 
@@ -380,10 +430,14 @@ export default function GlossaryEditorApp({
                   <InfoCard
                     variant="text"
                     title={
-                      selectedEntry.termPresentation === "definitionOnly"
+                      presentationDraft === "definitionOnly"
                         ? undefined
                         : glossaryEntryDisplayTitle({
                             ...selectedEntry,
+                            termPresentation:
+                              presentationDraft === "titleAndDefinition"
+                                ? undefined
+                                : presentationDraft,
                             term:
                               termDraft.trim() === ""
                                 ? "Untitled Term"
@@ -396,7 +450,7 @@ export default function GlossaryEditorApp({
                         : richText.plain(definitionDraft)
                     }
                     slots={{
-                      ...(selectedEntry.termPresentation === "definitionOnly"
+                      ...(presentationDraft === "definitionOnly"
                         ? {}
                         : {
                             title: (_context, defaultNode) => (
@@ -456,7 +510,21 @@ export default function GlossaryEditorApp({
                   testId="glossary-editor-details"
                 >
                   <div className="glossary-editor-details-body">
-                    {selectedEntry.termPresentation === "definitionOnly" ? (
+                    <div className="glossary-editor-presentation">
+                      <p>Term Presentation</p>
+                      <Select
+                        full
+                        options={TERM_PRESENTATION_OPTIONS}
+                        value={presentationDraft}
+                        onChange={selectTermPresentation}
+                        ariaLabel="Term Presentation"
+                      />
+                      <span>
+                        Definition Only hides the term heading while keeping its
+                        explanatory copy visible.
+                      </span>
+                    </div>
+                    {presentationDraft === "definitionOnly" ? (
                       <TextField
                         label="Catalog Term"
                         value={termDraft}

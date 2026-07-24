@@ -28,7 +28,10 @@ export function updateGlossaryEntrySource(
   source: string,
   id: string,
   changes: Partial<
-    Pick<GlossarySourceEntry, "term" | "definition" | "priority" | "variants">
+    Pick<
+      GlossarySourceEntry,
+      "term" | "definition" | "priority" | "variants" | "termPresentation"
+    >
   >,
 ): string;
 export function serializeGlossarySource(entries: readonly GlossarySourceEntry[]): string;

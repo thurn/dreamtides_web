@@ -213,4 +213,54 @@ describe("GlossaryEditorApp", () => {
 
     act(() => root.unmount());
   });
+
+  it("marks a term as definition-only and saves the presentation", async () => {
+    const saveEntry = vi.fn().mockResolvedValue({
+      ...ENTRIES[0],
+      termPresentation: "definitionOnly",
+    });
+    const { container, root } = mount();
+
+    await act(async () => {
+      root.render(
+        <GlossaryEditorApp
+          loadEntries={vi.fn().mockResolvedValue(ENTRIES)}
+          saveEntry={saveEntry}
+        />,
+      );
+      await Promise.resolve();
+    });
+
+    const presentationSelect = container.querySelector<HTMLButtonElement>(
+      '[aria-label="Term Presentation"]',
+    );
+    expect(presentationSelect).not.toBeNull();
+    act(() => presentationSelect?.click());
+    const definitionOnly = Array.from(
+      document.querySelectorAll<HTMLButtonElement>('[role="option"]'),
+    ).find((button) => button.textContent?.includes("Definition Only") === true);
+    expect(definitionOnly).not.toBeUndefined();
+    await act(async () => {
+      definitionOnly?.click();
+      await Promise.resolve();
+    });
+
+    expect(saveEntry).toHaveBeenCalledWith({
+      id: "spark",
+      termPresentation: "definitionOnly",
+    });
+    expect(
+      container.querySelector(
+        "[data-testid='glossary-preview'] [data-editor-field='title']",
+      ),
+    ).toBeNull();
+    expect(
+      container.querySelector<HTMLInputElement>(
+        "[data-testid='glossary-term-input']",
+      )?.value,
+    ).toBe("Spark");
+    expect(container.textContent).toContain("Saved to glossary.toml");
+
+    act(() => root.unmount());
+  });
 });

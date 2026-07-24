@@ -102,6 +102,12 @@ function validatedEdit(body, id, current) {
       typeof body.definition === "string" ? body.definition : current.definition,
     priority: body.priority === undefined ? current.priority : body.priority,
     variants: body.variants === undefined ? current.variants : body.variants,
+    termPresentation:
+      body.termPresentation === undefined
+        ? current.termPresentation
+        : body.termPresentation === null
+          ? undefined
+          : body.termPresentation,
   };
 }
 
@@ -154,7 +160,7 @@ export function createGlossaryEditorApiMiddleware({
       );
       const normalized = validateGlossaryEntries(nextEntries);
       const changes = Object.fromEntries(
-        ["term", "definition", "priority", "variants"]
+        ["term", "definition", "priority", "variants", "termPresentation"]
           .filter((field) => Object.hasOwn(body, field))
           .map((field) => [field, normalized[index][field]]),
       );

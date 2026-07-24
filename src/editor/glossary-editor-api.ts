@@ -1,5 +1,13 @@
 import type { GlossaryCatalogEntry } from "../data/glossary";
 
+export interface GlossaryEntryEdit {
+  readonly id: string;
+  readonly term?: string;
+  readonly definition?: string;
+  readonly variants?: readonly string[];
+  readonly termPresentation?: GlossaryCatalogEntry["termPresentation"] | null;
+}
+
 interface GlossaryApiErrorBody {
   readonly error?: { readonly message?: string };
 }
@@ -29,7 +37,7 @@ export async function loadGlossaryEntries(
 
 /** Persist one glossary entry's editable text fields. */
 export async function saveGlossaryEntry(
-  entry: Pick<GlossaryCatalogEntry, "id" | "term" | "definition" | "variants">,
+  entry: GlossaryEntryEdit,
 ): Promise<GlossaryCatalogEntry> {
   const response = await fetch(
     `/api/editor/glossary/${encodeURIComponent(entry.id)}`,
