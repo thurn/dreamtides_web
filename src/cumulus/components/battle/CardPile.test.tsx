@@ -174,6 +174,38 @@ describe("CardPile", () => {
     container.remove();
   });
 
+  it("snaps a face-up card into a pile without shared-layout travel", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CardPile
+          cards={[
+            {
+              face: "up",
+              id: "resolved-card",
+              model: MODEL,
+              layoutMotion: "snap",
+            },
+          ]}
+          orientation="landscape"
+          label="Enemy void"
+        />,
+      );
+    });
+
+    const layer = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="resolved-card"]',
+    );
+    expect(layer?.dataset.layoutId).toBeUndefined();
+    expect(layer?.dataset.battleCardLayoutMotion).toBe("snap");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("activates an inactive pile without registering its face-up card for reveal", () => {
     const container = document.createElement("div");
     document.body.append(container);

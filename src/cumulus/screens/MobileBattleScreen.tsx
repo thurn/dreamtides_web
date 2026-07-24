@@ -853,6 +853,7 @@ function toVoidPile(
     face: "up",
     id: card.id,
     model: card.model,
+    layoutMotion: card.layoutMotion,
     figment: card.figment,
     figmentTitleBar: card.figmentTitleBar,
   }));

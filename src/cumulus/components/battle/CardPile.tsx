@@ -28,6 +28,8 @@ export interface FaceUpPileCard {
   readonly id: string;
   /** Canonical UUID-backed card model rendered by GameCard. */
   readonly model: GameCardModel;
+  /** Whether this rendered location should participate in shared-layout travel. */
+  readonly layoutMotion?: "travel" | "snap";
   /** Render the topmost object with the figment frame. */
   readonly figment?: boolean;
   /** Render a title bar on a named figment. */
@@ -139,10 +141,19 @@ export function CardPile({
     return (
       <motion.div
         key={card.id}
-        layoutId={`battle-card:${card.id}`}
+        layoutId={
+          card.face === "up" && card.layoutMotion === "snap"
+            ? undefined
+            : `battle-card:${card.id}`
+        }
         data-card-pile-layer=""
         data-battle-card-id={card.id}
         data-card-face={card.face}
+        data-battle-card-layout-motion={
+          card.face === "up" && card.layoutMotion === "snap"
+            ? "snap"
+            : "travel"
+        }
         data-pile-depth={String(depth)}
         style={{
           position: "absolute",
