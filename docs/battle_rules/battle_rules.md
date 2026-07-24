@@ -195,17 +195,22 @@ the back rank lacks enough positions, use Battlefield Capacity.
 
 ### Battlefield Capacity
 
-A player can have at most **10 characters in their back rank**.
+A player can have at most **10 characters** in their back rank and **9
+characters** in their front rank. If a player's back rank is full, they may no
+longer play any card or activate any ability which would cause a character to
+enter play. If a trigger attempts to put a character into play when the back
+rank is full, it instead stays in its previous zone. If a trigger attempts to
+create a a figment or a copy of a character when the back rank is full, it is
+not created and an explanatory message is shown.
 
-Materializations resolve in the order given by the effect, then source-zone
-order from top to bottom. An ordinary character with no open back position is
-banished instead of entering play. It has not materialized and fires no
-materialization triggers.
+Some effects cause multiple characters to enter play at once. In these cases,
+characters are added until all back-rank slots are filled, and then the
+remaining characters follow the rules above for triggers and an explanatory
+message is shown. Characters are moved in source-zone order from top to bottom.
 
-Before a player commits a card or activated ability that would materialize an
-ordinary character into a full back rank, a warning shows the exact consequence
-and requires confirmation before costs are paid. Mandatory triggered effects
-resolve without confirmation and explain the result afterward.
+Figments are created characters which can be merged in the event that the back
+rank is full, see [Creating Figments at
+Capacity](#creating-figments-at-capacity) below.
 
 ## Turn Structure
 
@@ -265,14 +270,11 @@ Ending phase, when it is cleared from every character in play.
   also be applied as an effect — for example "2●: Awaken a character you
   control" clears the exhausted status, allowing that character to challenge,
   defend, and pay ☪ costs.
-- A character can be exhausted by an effect — for example "2●: Exhaust an
-  enemy".
 - Paying a ☪ cost exhausts that character.
 
-Only a back-rank character can activate an ability with a ☪ cost. Front-rank
-characters cannot activate abilities with ☪ costs. Because an exhausted
-character cannot be moved to the front rank, exhausting a back-rank character
-keeps it from challenging or defending until it awakens.
+Front-rank characters cannot activate abilities with ☪ costs. Because an
+exhausted character cannot be moved to the front rank, exhausting a back-rank
+character keeps it from challenging or defending until it awakens.
 
 ## Challengers, Defenders, and Scoring
 
@@ -428,8 +430,7 @@ status. See [Exhaust and Awaken](#exhaust-and-awaken).
 **Support** — A back-rank character with Support provides a benefit to the
 front-rank characters in the positions it supports (up to two). Support has no
 effect on its own; the keyword text states the benefit, such as "Support –
-Supported characters have +1✦." [Figments](#figments) grant and receive
-Support like other characters.
+Supported characters have +1✦."
 
 **Veil** — If a character with Veil would be dissolved by an effect the
 opponent controls, instead it loses Veil.
@@ -574,9 +575,7 @@ it would leave play: it is banished instead of going to the void, and it never
 enters a deck. A created event, for instance, is banished on resolution rather
 than moving to the void.
 
-**Figments** are a character-typed subset of created cards. In addition to the
-created-card rule, a figment can exist only in play: it cannot enter the deck,
-void, hand, or Banished zone, and ceases to exist if it would leave play.
+**Figments** are a character-typed subset of created cards.
 
 ## Figments
 
@@ -585,8 +584,7 @@ from a deck. Each occupies one position and has its own identity, spark,
 statuses, counters, and abilities.
 
 A figment exists only in play: it cannot enter the deck, hand, void, or
-Banished zone. When it leaves play, it **ceases to exist**. Copying a named card
-creates an ordinary character token instead.
+Banished zone. When it leaves play, it **ceases to exist**.
 
 **Figment catalog:**
 
@@ -604,47 +602,40 @@ creates an ordinary character token instead.
 | Legionnaire | 1✦ | +1✦ for each other Warrior you control |
 
 A **Legionnaire** is a Warrior with 1 base spark and +1✦ for each other Warrior
-you control. Three Legionnaires alone are therefore 3✦ each. When one combines,
-only its base spark and persistent spark gains are transferred; its
-Warrior-count bonus is not.
+you control. Three Legionnaires alone are therefore 3✦ each.
 
-Figments otherwise follow normal character rules. Each counts separately as a
-character and subtype member, is targeted and modified individually, and
-materializes, challenges, scores, and interacts with Support on its own. A
-figment dissolved through an effect, Abandon, or challenge fires its dissolved
-triggers before ceasing; a banished figment simply ceases.
+Figments follow normal character rules. Each counts separately as a character
+and subtype member, is targeted and modified individually, and materializes,
+challenges, scores, and interacts with Support on its own. A figment which is
+dissolved fires its '▸Dissolved' triggers before ceasing to exist.
 
-### Combining Figments
+### Merging Figments
 
 During normal repositioning, a player can drag a figment onto another figment
-of the same catalog identity that they control. The dragged figment ceases to
-exist, and its own spark is permanently added to the destination figment. Own
-spark includes base spark and persistent spark gains, but not Support, anthems,
-or spark granted by static abilities.
+they control with the same identity. The source figment ceases to exist, and its
+current spark is permanently added to the destination figment. "Current Spark"
+includes base spark and persistent spark gains, but not Support, anthems, or
+spark granted by static abilities.
 
-Combining is irreversible and follows all normal repositioning timing and
-exhaustion rules. It is neither banishment nor dissolution and fires neither
-kind of trigger, though effects can observe the figment leaving play. Complete
-the combination and recalculate battlefield effects before resolving those
-leave-play triggers.
+Merging figments is irreversible and follows all normal repositioning timing
+and exhaustion rules. The source figment is not dissolved or banished, and this
+process does not cause triggers to fire. An exhausted figment cannot be merged
+with a non-exhausted figment, and attempting to do so displays an explanatory
+message.
 
-Before the player confirms a combination that excludes dynamic spark, a warning
-shows the exact consequence.
+Combining **Legionnaire** figments causes only the base 1✦ spark value to be
+added to the destination figment. A confirmation dialog is displayed showing a
+warning about this result before combining Legionnaire figments.
 
 ### Creating Figments at Capacity
+
+When materializing multiple figments, available back-rank slots are filled and
+then the remaining figments are merged with the previously-created figments,
+distributing their spark equally.
 
 An effect's materializations form one ordered output. Each consecutive group of
 one or more figments with the same catalog identity first fills the open back
 positions with new figments. If every figment in that group fits, each keeps its
-own spark. Otherwise, the group's total own spark is divided as evenly as
+own spark. Otherwise, the group's total spark is divided as evenly as
 possible among the new figments that fit, with any remainder assigned left to
-right. Figments already in play are not destinations for this combination.
-
-If there are no open positions, every figment in the group ceases to exist.
-Excess figments never enter play and count as neither banished nor dissolved.
-The player is shown a message explaining the result.
-
-Before a player commits a card or activated ability that is predicted to
-combine or lose figments this way, a warning shows the exact consequence and
-requires confirmation before costs are paid. Mandatory triggered effects
-resolve without confirmation and explain the result afterward.
+right. Figments already in play are not destinations for this merging.
