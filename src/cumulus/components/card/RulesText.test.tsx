@@ -6,6 +6,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { CumulusRoot } from "../../CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ENERGY_PIP_COLOR } from "../controls/PipBadge";
+import { GLOSSARY_IDS, requireGlossaryEntry } from "../../../data/glossary";
 import { RulesText } from "./RulesText";
 
 function mount(element: ReactElement): {
@@ -201,9 +202,13 @@ describe("RulesText", () => {
     expect(container.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-moon")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-hourglass")).not.toBeNull();
-    expect(container.textContent).not.toContain("⍟");
     expect(container.textContent).not.toContain("☪");
     expect(container.textContent).not.toContain("⧗");
+
+    const pointsEntry = requireGlossaryEntry(GLOSSARY_IDS.points);
+    expect(
+      container.querySelector(`[data-glossary-term="${pointsEntry.term}"]`),
+    ).toContain(container.querySelector("i.bxf.bx-star-circle"));
 
     act(() => {
       root.unmount();

@@ -100,13 +100,15 @@ matches-rules-text = true
 variants = [ "abandoned", "abandons" ]
 
 [[entries]]
-id = "score"
-category = "Triggers & Timing"
-term = "Score"
-definition = "Convert a character's spark into victory points."
+id = "points"
+category = "Resources"
+term = "Points"
+definition = "The ⍟ symbol represents points, which track progress toward victory. Reach the battle's win total to win."
 priority = 60
-matches-rules-text = true
-variants = [ "scores", "scored", "scoring" ]
+matches-rules-text = false
+variants = []
+rules-text-forms = [ "⍟" ]
+definition-uses-rules-text = true
 
 [[entries]]
 id = "reclaim"

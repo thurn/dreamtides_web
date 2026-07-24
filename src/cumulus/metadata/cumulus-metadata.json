@@ -2817,6 +2817,14 @@
       "description": "Authored word form preserved in the surrounding sentence."
     },
     {
+      "name": "glyph",
+      "tsType": "Glyph",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional named glyph used in place of the authored text."
+    },
+    {
       "name": "emphasized",
       "tsType": "boolean",
       "unionMembers": [],

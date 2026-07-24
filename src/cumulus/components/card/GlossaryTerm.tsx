@@ -2,12 +2,15 @@ import type { GlossaryEntry } from "../../../data/glossary";
 import { useRevealSource } from "../../internal/reveal/context";
 import { Pressable } from "../../primitives/Pressable";
 import { revealEntityId } from "../../internal/reveal/identity";
+import type { Glyph } from "../../primitives/glyph";
 
 export interface GlossaryTermProps {
   /** Canonical glossary meaning owned by this inline source. */
   entry: GlossaryEntry;
   /** Authored word form preserved in the surrounding sentence. */
   text: string;
+  /** Optional named glyph used in place of the authored text. */
+  glyph?: Glyph;
   /** Optional emphasis inherited from the rules-text renderer. */
   emphasized?: boolean;
 }
@@ -16,6 +19,7 @@ export interface GlossaryTermProps {
 export function GlossaryTerm({
   entry,
   text,
+  glyph,
   emphasized = false,
 }: GlossaryTermProps) {
   const binding = useRevealSource({
@@ -52,7 +56,13 @@ export function GlossaryTerm({
           : undefined,
       }}
     >
-      {text}
+      {glyph === undefined ? text : (
+        <i
+          aria-label={text}
+          className={`${glyph} align-middle`}
+          style={{ transform: "translateY(-0.06em)" }}
+        />
+      )}
     </Pressable>
   );
 }

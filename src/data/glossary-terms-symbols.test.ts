@@ -14,6 +14,12 @@ const FIXTURES = vi.hoisted(() => ({
     definition: "Exhaust cost definition.",
     priority: 90,
   },
+  points: {
+    id: "points",
+    term: "Points",
+    definition: "Points definition.",
+    priority: 60,
+  },
   night: {
     id: "night-trigger",
     term: "Night",
@@ -27,6 +33,7 @@ vi.mock("./glossary", () => ({
     { ...FIXTURES.fast, rulesTextForms: ["❖"] },
     { ...FIXTURES.interrupt, rulesTextForms: ["❖❖"] },
     { ...FIXTURES.exhaustCost, rulesTextForms: ["☪"] },
+    { ...FIXTURES.points, rulesTextForms: ["⍟"] },
     { ...FIXTURES.night, rulesTextForms: ["▸Night"] },
   ],
   glossaryRulesTextForms: (entry: { rulesTextForms: string[] }) =>
@@ -36,6 +43,7 @@ vi.mock("./glossary", () => ({
       ["❖", FIXTURES.fast],
       ["❖❖", FIXTURES.interrupt],
       ["☪", FIXTURES.exhaustCost],
+      ["⍟", FIXTURES.points],
       ["▸night", FIXTURES.night],
     ].find(([key]) => key === form.toLocaleLowerCase())?.[1],
 }));
@@ -56,6 +64,10 @@ describe("extractGlossaryTerms symbol forms", () => {
       FIXTURES.exhaustCost,
       FIXTURES.fast,
     ]);
+  });
+
+  it("extracts the points symbol", () => {
+    expect(extractGlossaryTerms("Gain 2⍟.")).toEqual([FIXTURES.points]);
   });
 
   it("does not treat the prose word fast as a glossary form", () => {

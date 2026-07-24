@@ -182,11 +182,15 @@ describe("tokenizeRulesText", () => {
   // Points, lunar, and store each tokenize to their own symbol type.
   it("identifies the points symbol ⍟", () => {
     const result = tokenizeRulesText("Gain 2⍟.");
-    expect(collectSymbols(result)).toContainEqual({
+    const points = collectSymbols(result).find(
+      (segment) => segment.symbol === "points",
+    );
+    expect(points).toMatchObject({
       kind: "symbol",
       symbol: "points",
       char: "⍟",
     });
+    expect(points?.entry?.id).toBe("points");
     expect(reconstructText(result)).toBe("Gain 2⍟.");
   });
 

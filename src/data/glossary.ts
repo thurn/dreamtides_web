@@ -70,6 +70,7 @@ const ENTRY_BY_ID = new Map(
 export const GLOSSARY_IDS = {
   energyCost: "energy-cost",
   spark: "spark",
+  points: "points",
   exhausted: "exhausted",
   fast: "fast",
   interrupt: "interrupt",

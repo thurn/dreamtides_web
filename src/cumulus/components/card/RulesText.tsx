@@ -13,7 +13,7 @@ import {
   SPARK_INLINE_ICON_CLASS,
 } from "../controls/GlowIcon";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
-import { GLYPHS } from "../../primitives/glyph";
+import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { GlossaryTerm } from "./GlossaryTerm";
 import {
   contextualizeGlossaryEntry,
@@ -88,7 +88,7 @@ const SITE_NAME_COLOR = "#60a5fa";
  * rest inherit the rules-text color.
  */
 const SYMBOL_ICON_CLASSES: Readonly<
-  Record<string, { className: string; color?: string; label: string }>
+  Record<string, { className: Glyph; color?: string; label: string }>
 > = {
   trigger: {
     className: GLYPHS.caretRight,
@@ -399,6 +399,20 @@ function renderSegment(
   }
   const iconSpec = SYMBOL_ICON_CLASSES[segment.symbol];
   if (iconSpec !== undefined) {
+    if (options.interactiveTerms === true && segment.entry !== undefined) {
+      return (
+        <GlossaryTerm
+          key={key}
+          entry={contextualizeGlossaryEntry(
+            segment.entry,
+            options.glossarySourceText ?? segment.char,
+            options.glossaryOwner,
+          )}
+          text={segment.char}
+          glyph={iconSpec.className}
+        />
+      );
+    }
     // The glyph renders as a filled Boxicons mark flowing inline with the text.
     // The marks' mass sits low in their em box, so a small upward nudge centers
     // them on the line instead of riding the baseline.

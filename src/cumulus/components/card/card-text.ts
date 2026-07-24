@@ -41,7 +41,13 @@ export type SymbolType =
  */
 export type TextSegment =
   | { kind: "text"; value: string }
-  | { kind: "symbol"; symbol: SymbolType; char: string }
+  | {
+      kind: "symbol";
+      symbol: SymbolType;
+      char: string;
+      /** Optional glossary entry owned by this authored symbol. */
+      entry?: GlossaryCatalogEntry;
+    }
   | { kind: "nobreak"; segments: TextSegment[] }
   | { kind: "term"; word: string; entry: GlossaryCatalogEntry }
   | { kind: "sparkPip"; value: string }
@@ -528,7 +534,13 @@ function scanSegments(text: string): TextSegment[] {
     const symbolType = char !== undefined ? SYMBOL_MAP[char] : undefined;
     if (symbolType !== undefined && char !== undefined) {
       flushBufferAndExtractTerms();
-      segments.push({ kind: "symbol", symbol: symbolType, char });
+      const entry = lookupGlossaryTerm(char);
+      segments.push({
+        kind: "symbol",
+        symbol: symbolType,
+        char,
+        ...(entry === undefined ? {} : { entry }),
+      });
       i += 1;
       continue;
     }
