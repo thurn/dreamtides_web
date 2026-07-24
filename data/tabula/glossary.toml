@@ -28,13 +28,12 @@ variants = [ "dawn" ]
 [[entries]]
 id = "night-trigger"
 category = "Triggers & Timing"
-term = "Night"
+term = "▸Night"
 definition = "Triggers at the end of your turn."
 priority = 40
 matches-rules-text = false
 variants = []
 rules-text-forms = [ "▸Night" ]
-definition-symbol = "trigger"
 
 [[entries]]
 id = "day"

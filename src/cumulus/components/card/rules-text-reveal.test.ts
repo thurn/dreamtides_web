@@ -31,7 +31,7 @@ describe("glossaryDefinitionsCardModel", () => {
         definitionSymbol: "exhaust",
         termPresentation: "symbolOnly",
       }),
-      entry("night-trigger", "Night", { definitionSymbol: "trigger" }),
+      entry("night-trigger", "▸Night"),
       entry("void", "Void"),
     ]);
 
@@ -57,9 +57,9 @@ describe("glossaryDefinitionsCardModel", () => {
           termPresentation: "symbolOnly",
         },
         {
-          term: "Night",
-          definition: "Night definition.",
-          symbol: "trigger",
+          term: "▸Night",
+          definition: "▸Night definition.",
+          symbol: undefined,
           termPresentation: undefined,
         },
         {
