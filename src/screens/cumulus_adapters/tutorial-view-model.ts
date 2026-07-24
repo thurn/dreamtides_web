@@ -23,6 +23,7 @@ const TUTORIAL_DREAMCALLER_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
 const TUTORIAL_OPPONENT_DREAMCALLER_ID = "86026206-1B11-4F38-A24E-FD3C697F5353";
 const TUTORIAL_OPPONENT_BACK_RANK_INDEX = 0;
 const TUTORIAL_PLAYER_BACK_RANK_INDEX = 1;
+const TUTORIAL_PLAYER_FRONT_RANK_INDEX = 0;
 const TUTORIAL_STARTING_ENERGY = 4;
 export {
   TUTORIAL_OPPONENT_CARD_ID,
@@ -101,6 +102,18 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       sourceZone: "opponent-back-rank",
       destinationZone: "opponent-front-rank",
       destinationSlot: "closest",
+    };
+  }
+  if (action.action === "reposition-player-character") {
+    return {
+      actionId: action.id,
+      action: action.action,
+      waitSeconds: action.wait,
+      cardId: action.cardId,
+      opposingCardId: action.opposingCardId,
+      sourceZone: "player-back-rank",
+      destinationZone: "player-front-rank",
+      destinationSlot: "across-from-opponent",
     };
   }
   if (action.action === "end-turn") {
@@ -361,6 +374,35 @@ export function buildTutorialView(
     playerTurnCard !== null &&
     playback?.playerCardPlay?.cardInstanceId === playerTurnCard.id &&
     playback.playerCardPlay.cardId === playerTurnCard.model.cardId;
+  const playerRepositionActionIndex =
+    playback?.actions.findIndex(
+      (action) => action.action === "reposition-player-character",
+    ) ?? -1;
+  const playerCardRepositioned =
+    playerRepositionActionIndex >= 0 &&
+    completedActionCount > playerRepositionActionIndex;
+  const playerRepositionAction =
+    currentAction?.action === "reposition-player-character"
+      ? currentAction
+      : null;
+  if (
+    playerRepositionAction !== null &&
+    playerCard !== null &&
+    playerRepositionAction.cardId !== playerCard.id
+  ) {
+    throw new Error(
+      `Tutorial player character ${playerRepositionAction.cardId} does not match the loaded tutorial card ${playerCard.id}.`,
+    );
+  }
+  if (
+    playerRepositionAction !== null &&
+    opponentCard !== null &&
+    playerRepositionAction.opposingCardId !== opponentCard.id
+  ) {
+    throw new Error(
+      `Tutorial opposing character ${playerRepositionAction.opposingCardId} does not match the loaded tutorial card ${opponentCard.id}.`,
+    );
+  }
   const playerDeck = playerTurnStarted
     ? playerDeckCardIds.slice(1)
     : playerDeckCardIds;
@@ -513,6 +555,19 @@ export function buildTutorialView(
             triggerCardId: playerTurnCard.model.cardId,
             ready: playerCardPlayed,
           },
+    playerReposition:
+      playerRepositionAction === null ||
+      playerTurnCard === null ||
+      tutorialCard === null ||
+      !playerCardPlayed ||
+      !opponentCardRepositioned
+        ? null
+        : {
+            actionId: playerRepositionAction.id,
+            cardInstanceId: playerTurnCard.id,
+            cardId: playerRepositionAction.cardId,
+            opposingCardId: playerRepositionAction.opposingCardId,
+          },
     battle: (() => {
       const emptyPlayer = emptySide("player");
       const playerTurnEnergy =
@@ -522,6 +577,7 @@ export function buildTutorialView(
         deckCardIds: playerDeck,
         backRank: emptyPlayer.backRank.map((slot, index) =>
           playerCardPlayed &&
+          !playerCardRepositioned &&
           playerTurnCard !== null &&
           index === TUTORIAL_PLAYER_BACK_RANK_INDEX
             ? {
@@ -529,6 +585,21 @@ export function buildTutorialView(
                 card: {
                   ...playerTurnCard,
                   exhausted: !endTurnCompleted,
+                  showPlayableOutline: false,
+                },
+              }
+            : slot,
+        ),
+        frontRank: emptyPlayer.frontRank.map((slot, index) =>
+          playerCardPlayed &&
+          playerCardRepositioned &&
+          playerTurnCard !== null &&
+          index === TUTORIAL_PLAYER_FRONT_RANK_INDEX
+            ? {
+                ...slot,
+                card: {
+                  ...playerTurnCard,
+                  exhausted: false,
                   showPlayableOutline: false,
                 },
               }
@@ -628,7 +699,8 @@ export function buildTutorialView(
               ...emptyInspectorSide("player").zones,
               hand: playerHandCardIds.length,
               deck: playerDeck.length,
-              backRank: playerCardPlayed ? 1 : 0,
+              backRank: playerCardPlayed && !playerCardRepositioned ? 1 : 0,
+              frontRank: playerCardRepositioned ? 1 : 0,
             },
           },
           enemy: {

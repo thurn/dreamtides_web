@@ -317,6 +317,13 @@ describe("TutorialScreenAdapter", () => {
         "player-back-4",
       );
       adapterMocks.props?.onActionComplete?.("event:1", "how-to-play");
+      adapterMocks.props?.onPlayerCharacterReposition?.(
+        "event:1",
+        "block-opponent",
+        "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        "player-front-0",
+      );
     });
     expect(mocks.action).toHaveBeenCalledWith("tutorial", "play-card", {
       runId: "event:1",
@@ -351,11 +358,24 @@ describe("TutorialScreenAdapter", () => {
           destinationZone: "player-back-rank",
           targetSlotId: "player-back-4",
         }),
+        expect.objectContaining({
+          event: "tutorial_player_character_reposition_requested",
+          battleId: "tutorial-battle",
+          runId: "event:1",
+          actionId: "block-opponent",
+          cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          opposingCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          targetSlotId: "player-front-0",
+        }),
       ]),
     );
     expect(mocks.completeTutorialAction).toHaveBeenCalledWith(
       "event:1",
       "how-to-play",
+    );
+    expect(mocks.completeTutorialAction).toHaveBeenCalledWith(
+      "event:1",
+      "block-opponent",
     );
 
     act(() => root.unmount());

@@ -163,6 +163,28 @@ export function parseTutorialActions(
         wait,
       } satisfies TutorialAction;
     }
+    if (record.action === "reposition-player-character") {
+      if (typeof record.cardId !== "string" || !isCardId(record.cardId)) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must identify a player character by UUID.`,
+        );
+      }
+      if (
+        typeof record.opposingCardId !== "string" ||
+        !isCardId(record.opposingCardId)
+      ) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must identify the opposing character by UUID.`,
+        );
+      }
+      return {
+        id,
+        action: "reposition-player-character",
+        cardId: record.cardId,
+        opposingCardId: record.opposingCardId,
+        wait,
+      } satisfies TutorialAction;
+    }
     if (record.action === "draw-dreamwell-card") {
       const owner = record.owner ?? "enemy";
       if (owner !== "player" && owner !== "enemy") {

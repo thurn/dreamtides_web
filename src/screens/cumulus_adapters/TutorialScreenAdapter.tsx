@@ -3,8 +3,10 @@ import { TutorialScreen } from "../../cumulus/screens/TutorialScreen";
 import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
 import * as tutorialEditor from "../../state/use-tutorial-editor";
+import { useTutorialActionComplete } from "../../state/use-tutorial-action-complete";
 import { useTutorialCardPlay } from "../../state/use-tutorial-card-play";
 import { useTutorialEndTurn } from "../../state/use-tutorial-end-turn";
+import { useTutorialPlayerReposition } from "../../state/use-tutorial-player-reposition";
 import { useTutorialCards } from "../../state/use-tutorial-opponent-card";
 import {
   useTutorialHowToPlayLogging,
@@ -68,20 +70,8 @@ export function TutorialScreenAdapter() {
   useTutorialPresentationLogging(state.tutorial, view);
   const howToPlayLogging = useTutorialHowToPlayLogging(view.battle.battleId);
 
-  const handleActionComplete = useCallback(
-    (runId: string, actionId: string): void => {
-      logEvent("tutorial_action_completion_requested", { runId, actionId });
-      void mutations
-        .completeTutorialAction(runId, actionId)
-        .catch((error: unknown) => {
-          logEvent("tutorial_action_completion_failed", {
-            runId,
-            actionId,
-            message: error instanceof Error ? error.message : String(error),
-          });
-        });
-    },
-    [mutations],
+  const handleActionComplete = useTutorialActionComplete(
+    mutations.completeTutorialAction,
   );
 
   const handleDreamcallerArrivalComplete = useCallback(
@@ -102,6 +92,10 @@ export function TutorialScreenAdapter() {
     mutations.completeTutorialAction,
     view.battle.battleId,
   );
+  const handlePlayerCharacterReposition = useTutorialPlayerReposition(
+    mutations.completeTutorialAction,
+    view.battle.battleId,
+  );
 
   return (
     <TutorialScreen
@@ -116,6 +110,7 @@ export function TutorialScreenAdapter() {
       {...howToPlayLogging}
       onPlayerCardPlay={handlePlayerCardPlay}
       onEndTurn={handleEndTurn}
+      onPlayerCharacterReposition={handlePlayerCharacterReposition}
       onEditorActionsChange={handleEditorActionsChange}
       onReplay={handleReplay}
       onPlayFromAction={handleReplay}

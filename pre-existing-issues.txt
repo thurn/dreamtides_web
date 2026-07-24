@@ -3,3 +3,8 @@ action's "Play tutorial from action N" button is intercepted by the underlying
 tutorial-screen Cumulus layer, including after the button is scrolled into the
 center of the editor. Programmatic button activation works, so the editor rail
 appears to have a pre-existing stacking or hit-testing issue.
+
+Tutorial Editor: Replaying a tail that begins after the authored "end-turn"
+action resets `playerCardPlay` to null even though the completed authored prefix
+assumes the player's tutorial character was played. The reconstructed late
+battle therefore has no player character for subsequent positioning actions.

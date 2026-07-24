@@ -163,17 +163,54 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
           ))}
           <div data-battle-rank="enemy-back">
             {props.view.enemy?.backRank?.map((slot) => (
-              <div key={slot.id} data-battle-slot-id={slot.id} />
+              <div
+                key={slot.id}
+                data-battle-slot-id={slot.id}
+                data-battle-slot-filled={slot.card === null ? "false" : "true"}
+              >
+                {slot.card === null ? null : (
+                  <div data-card-id={slot.card.model.cardId} />
+                )}
+              </div>
             ))}
           </div>
           <div data-battle-rank="enemy-front">
             {props.view.enemy?.frontRank?.map((slot) => (
-              <div key={slot.id} data-battle-slot-id={slot.id} />
+              <div
+                key={slot.id}
+                data-battle-slot-id={slot.id}
+                data-battle-slot-filled={slot.card === null ? "false" : "true"}
+              >
+                {slot.card === null ? null : (
+                  <div data-card-id={slot.card.model.cardId} />
+                )}
+              </div>
             ))}
           </div>
           <div data-battle-rank="player-front">
             {props.view.player?.frontRank?.map((slot) => (
-              <div key={slot.id} data-battle-slot-id={slot.id} />
+              <div
+                key={slot.id}
+                data-battle-slot-id={slot.id}
+                data-battle-slot-filled={slot.card === null ? "false" : "true"}
+              >
+                {slot.card === null ? null : (
+                  <div data-card-id={slot.card.model.cardId} />
+                )}
+              </div>
+            ))}
+          </div>
+          <div data-battle-rank="player-back">
+            {props.view.player?.backRank?.map((slot) => (
+              <div
+                key={slot.id}
+                data-battle-slot-id={slot.id}
+                data-battle-slot-filled={slot.card === null ? "false" : "true"}
+              >
+                {slot.card === null ? null : (
+                  <div data-card-id={slot.card.model.cardId} />
+                )}
+              </div>
             ))}
           </div>
           <div data-testid="enemy-battle-status">
@@ -239,7 +276,7 @@ const TUTORIAL_OPPONENT_CARD: MobileBattleView["enemyHand"][number] = {
     cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
     displaySnapshot: {
       id: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
-      name: asCardName("Tutorial Opponent Card"),
+      name: asCardName("Twilight Troubadour"),
       cardNumber: 519,
       cardType: "Character",
       subtype: "Musician",
@@ -266,6 +303,11 @@ const TUTORIAL_PLAYER_CARD: MobileBattleView["playerHand"][number] = {
   model: {
     ...TUTORIAL_OPPONENT_CARD.model,
     cardId: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
+    displaySnapshot: {
+      ...TUTORIAL_OPPONENT_CARD.model.displaySnapshot,
+      id: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
+      name: asCardName("Marked Direwolf"),
+    },
   },
   exhausted: false,
   showPlayableOutline: true,
@@ -1617,6 +1659,127 @@ describe("TutorialScreen", () => {
       pendingCardSource: null,
       pendingCardOwner: null,
     });
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("highlights the opposing lane and bridges the guided player block", () => {
+    const onPlayerCharacterReposition = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: null,
+              playbackRunId: "event:block",
+              currentAction: {
+                id: "block-opponent",
+                action: "reposition-player-character",
+                cardId: TUTORIAL_PLAYER_CARD.model.cardId,
+                opposingCardId: TUTORIAL_OPPONENT_CARD.model.cardId,
+                wait: 0,
+              },
+              howToPlay: null,
+              endTurn: null,
+              playerReposition: {
+                actionId: "block-opponent",
+                cardInstanceId: TUTORIAL_PLAYER_CARD.id,
+                cardId: TUTORIAL_PLAYER_CARD.model.cardId,
+                opposingCardId: TUTORIAL_OPPONENT_CARD.model.cardId,
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                playerHand: [],
+                enemy: {
+                  backRank: [],
+                  frontRank: [
+                    {
+                      id: "enemy-front-0",
+                      card: TUTORIAL_OPPONENT_CARD,
+                    },
+                  ],
+                  deckCardIds: [],
+                },
+                player: {
+                  backRank: [
+                    {
+                      id: "player-back-0",
+                      card: TUTORIAL_PLAYER_CARD,
+                    },
+                  ],
+                  frontRank: [
+                    { id: "player-front-0", card: null },
+                    { id: "player-front-1", card: null },
+                  ],
+                },
+              } as unknown as MobileBattleView,
+            }}
+            onPlayerCharacterReposition={onPlayerCharacterReposition}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    act(() => screenMocks.sceneAnimationComplete?.());
+    act(() => ResizeObserverStub.flush());
+
+    const guide = container.querySelector<HTMLElement>(
+      "[data-tutorial-reposition-guide]",
+    );
+    expect(guide?.getAttribute("aria-label")).toBe(
+      "Drag Marked Direwolf to block Twilight Troubadour.",
+    );
+    expect(guide?.dataset.tutorialBlockTargetSlot).toBe("player-front-0");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-tutorial-block-target-highlight]",
+      )?.style.outline,
+    ).toContain("var(--positive)");
+    expect(
+      container.querySelector("[data-tutorial-reposition-arrow]"),
+    ).not.toBeNull();
+
+    act(() => {
+      screenMocks.props?.interactions?.onCardDragStart(
+        TUTORIAL_PLAYER_CARD.id,
+        "battlefield",
+      );
+    });
+    expect(screenMocks.props?.interactions).toMatchObject({
+      pendingCardId: TUTORIAL_PLAYER_CARD.id,
+      pendingCardSource: "battlefield",
+      pendingCardOwner: "player",
+    });
+
+    act(() => {
+      screenMocks.props?.interactions?.onSlotDrop({
+        owner: "player",
+        rank: "front",
+        slotId: "player-front-1",
+      });
+    });
+    expect(onPlayerCharacterReposition).not.toHaveBeenCalled();
+
+    act(() => {
+      screenMocks.props?.interactions?.onSlotDrop({
+        owner: "player",
+        rank: "front",
+        slotId: "player-front-0",
+      });
+    });
+    expect(onPlayerCharacterReposition).toHaveBeenCalledWith(
+      "event:block",
+      "block-opponent",
+      TUTORIAL_PLAYER_CARD.model.cardId,
+      TUTORIAL_OPPONENT_CARD.model.cardId,
+      "player-front-0",
+    );
 
     act(() => root.unmount());
     container.remove();

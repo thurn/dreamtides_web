@@ -93,3 +93,10 @@ action = "display-how-to-play"
 trigger = "immediate"
 text = "Position characters in the front rank to [yellow]challenge[/yellow] with them during your turn or [yellow]block[/yellow] a challenger during the opponent's turn."
 wait = 0
+
+[[actions]]
+id = "block-twilight-troubadour"
+action = "reposition-player-character"
+cardId = "e83014d3-9d35-4e80-a1b3-9b25360ad2af"
+opposingCardId = "229ab3a1-3720-41a2-924c-8fe112188f8e"
+wait = 0

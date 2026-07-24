@@ -29,6 +29,7 @@ import { isCardId } from "../../types/card-identity";
 import {
   TUTORIAL_DREAMWELL_CARD_ID,
   TUTORIAL_OPPONENT_CARD_ID,
+  TUTORIAL_PLAYER_CARD_ID,
 } from "../../data/tutorial-opponent-card";
 
 export interface TutorialEditorRailProps {
@@ -63,6 +64,10 @@ const ACTION_OPTIONS = [
   {
     value: "reposition-opponent-character",
     label: "Reposition Opponent Character",
+  },
+  {
+    value: "reposition-player-character",
+    label: "Reposition Player Character",
   },
   { value: "draw-dreamwell-card", label: "Draw Dreamwell Card" },
   { value: "end-turn", label: "End Turn" },
@@ -169,6 +174,15 @@ function defaultAction(
       wait: 0,
     };
   }
+  if (actionName === "reposition-player-character") {
+    return {
+      id,
+      action: "reposition-player-character",
+      cardId: TUTORIAL_PLAYER_CARD_ID,
+      opposingCardId: TUTORIAL_OPPONENT_CARD_ID,
+      wait: 0,
+    };
+  }
   if (actionName === "end-turn") {
     return { id, action: "end-turn", wait: 0 };
   }
@@ -227,6 +241,21 @@ function changedActionType(
       cardId:
         action.action === "reposition-opponent-character"
           ? action.cardId
+          : TUTORIAL_OPPONENT_CARD_ID,
+      wait: action.wait,
+    };
+  }
+  if (actionName === "reposition-player-character") {
+    return {
+      id: action.id,
+      action: actionName,
+      cardId:
+        action.action === "reposition-player-character"
+          ? action.cardId
+          : TUTORIAL_PLAYER_CARD_ID,
+      opposingCardId:
+        action.action === "reposition-player-character"
+          ? action.opposingCardId
           : TUTORIAL_OPPONENT_CARD_ID,
       wait: action.wait,
     };
@@ -398,6 +427,7 @@ function TutorialActionRow({
                   value !== "draw-opponent-card" &&
                   value !== "reveal-and-play-opponent-card" &&
                   value !== "reposition-opponent-character" &&
+                  value !== "reposition-player-character" &&
                   value !== "draw-dreamwell-card" &&
                   value !== "end-turn"
                 ) {
@@ -705,6 +735,40 @@ function TutorialActionRow({
           />
         ) : null}
 
+        {action.action === "reposition-player-character" ? (
+          <>
+            <TextField
+              label="Player Character UUID"
+              value={action.cardId}
+              error={
+                isCardId(action.cardId)
+                  ? undefined
+                  : "Enter a player character UUID."
+              }
+              testId={`tutorial-action-card-id-${action.id}`}
+              onChange={(cardId) =>
+                update({ ...action, cardId }, isCardId(cardId))
+              }
+            />
+            <TextField
+              label="Opposing Character UUID"
+              value={action.opposingCardId}
+              error={
+                isCardId(action.opposingCardId)
+                  ? undefined
+                  : "Enter an opposing character UUID."
+              }
+              testId={`tutorial-action-opposing-card-id-${action.id}`}
+              onChange={(opposingCardId) =>
+                update(
+                  { ...action, opposingCardId },
+                  isCardId(opposingCardId),
+                )
+              }
+            />
+          </>
+        ) : null}
+
         <NumberStepper
           label="Wait"
           value={action.wait}
@@ -861,6 +925,7 @@ function TutorialEditorContent({
             value !== "draw-opponent-card" &&
             value !== "reveal-and-play-opponent-card" &&
             value !== "reposition-opponent-character" &&
+            value !== "reposition-player-character" &&
             value !== "draw-dreamwell-card" &&
             value !== "end-turn"
           ) {

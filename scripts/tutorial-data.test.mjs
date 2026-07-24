@@ -56,6 +56,13 @@ const FIXTURE_ACTIONS = [
     action: "end-turn",
     wait: 0,
   },
+  {
+    id: "player-block",
+    action: "reposition-player-character",
+    cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+    opposingCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+    wait: 0,
+  },
 ];
 
 describe("tutorial data", () => {
@@ -114,6 +121,11 @@ describe("tutorial data", () => {
     expect(() =>
       validateTutorialActions([
         { ...FIXTURE_ACTIONS[4], cardId: "Twilight Troubadour" },
+      ]),
+    ).toThrow(/by UUID/u);
+    expect(() =>
+      validateTutorialActions([
+        { ...FIXTURE_ACTIONS[7], opposingCardId: "Twilight Troubadour" },
       ]),
     ).toThrow(/by UUID/u);
     expect(() =>

@@ -226,6 +226,27 @@ describe("buildTutorialView", () => {
     });
   });
 
+  it("logs both UUIDs for the guided player block", () => {
+    expect(
+      tutorialActionLogDetails({
+        id: "block-opponent",
+        action: "reposition-player-character",
+        cardId: TUTORIAL_PLAYER_CARD_ID,
+        opposingCardId: TUTORIAL_OPPONENT_CARD_ID,
+        wait: 0,
+      }),
+    ).toEqual({
+      actionId: "block-opponent",
+      action: "reposition-player-character",
+      waitSeconds: 0,
+      cardId: TUTORIAL_PLAYER_CARD_ID,
+      opposingCardId: TUTORIAL_OPPONENT_CARD_ID,
+      sourceZone: "player-back-rank",
+      destinationZone: "player-front-rank",
+      destinationSlot: "across-from-opponent",
+    });
+  });
+
   it("logs a UUID-authored Dreamwell reveal for sequence reconstruction", () => {
     expect(
       tutorialActionLogDetails({
@@ -552,6 +573,13 @@ describe("buildTutorialView", () => {
         action: "display-how-to-play" as const,
         trigger: "immediate" as const,
         text: "Position characters in the front rank to [yellow]challenge[/yellow] with them during your turn, or [yellow]accept[/yellow] a challenge during the opponent's turn.",
+        wait: 0,
+      },
+      {
+        id: "block-opponent",
+        action: "reposition-player-character" as const,
+        cardId: TUTORIAL_PLAYER_CARD_ID,
+        opposingCardId: TUTORIAL_OPPONENT_CARD_ID,
         wait: 0,
       },
     ];
@@ -917,6 +945,36 @@ describe("buildTutorialView", () => {
       },
     });
 
+    const guidedBlock = buildTutorialView(
+      {
+        runId: "event:draw",
+        currentActionIndex: 10,
+        actions,
+        playerCardPlay: {
+          cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+          cardId: TUTORIAL_PLAYER_CARD_ID,
+          targetSlotId: "player-back-4",
+        },
+      },
+      OPPONENT_CARD,
+      PLAYER_CARD,
+      [AUTUMN_GLADE],
+    );
+    expect(guidedBlock.playerReposition).toEqual({
+      actionId: "block-opponent",
+      cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+      cardId: TUTORIAL_PLAYER_CARD_ID,
+      opposingCardId: TUTORIAL_OPPONENT_CARD_ID,
+    });
+    expect(
+      guidedBlock.battle.player.backRank[1]?.card?.model.cardId,
+    ).toBe(TUTORIAL_PLAYER_CARD_ID);
+    expect(
+      guidedBlock.battle.player.frontRank.every(
+        (slot) => slot.card === null,
+      ),
+    ).toBe(true);
+
     const ended = buildTutorialView(
       {
         runId: "event:draw",
@@ -946,6 +1004,16 @@ describe("buildTutorialView", () => {
     expect(ended.battle.enemy.frontRank[0]?.card?.model.cardId).toBe(
       TUTORIAL_OPPONENT_CARD_ID,
     );
+    expect(
+      ended.battle.player.backRank.every((slot) => slot.card === null),
+    ).toBe(true);
+    expect(ended.battle.player.frontRank[0]?.card?.model.cardId).toBe(
+      TUTORIAL_PLAYER_CARD_ID,
+    );
+    expect(ended.battle.inspector.sides.player.zones).toMatchObject({
+      backRank: 0,
+      frontRank: 1,
+    });
     expect(ended.battle.inspector).toMatchObject({
       activeSide: "Enemy",
       phase: "Dusk",

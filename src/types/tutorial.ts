@@ -6,6 +6,7 @@ export type TutorialActionName =
   | "draw-opponent-card"
   | "reveal-and-play-opponent-card"
   | "reposition-opponent-character"
+  | "reposition-player-character"
   | "draw-dreamwell-card"
   | "end-turn";
 
@@ -86,6 +87,14 @@ export interface RepositionOpponentCharacterTutorialAction
   readonly cardId: string;
 }
 
+/** Waits for the player to move one UUID-authored character across from an opponent. */
+export interface RepositionPlayerCharacterTutorialAction
+  extends TutorialActionBase {
+  readonly action: "reposition-player-character";
+  readonly cardId: string;
+  readonly opposingCardId: string;
+}
+
 /** Draws and reveals one UUID-authored Dreamwell card for the selected side. */
 export interface DrawDreamwellCardTutorialAction extends TutorialActionBase {
   readonly action: "draw-dreamwell-card";
@@ -106,6 +115,7 @@ export type TutorialAction =
   | DrawOpponentCardTutorialAction
   | RevealAndPlayOpponentCardTutorialAction
   | RepositionOpponentCharacterTutorialAction
+  | RepositionPlayerCharacterTutorialAction
   | DrawDreamwellCardTutorialAction
   | EndTurnTutorialAction;
 

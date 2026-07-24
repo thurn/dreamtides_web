@@ -298,6 +298,39 @@ describe("parseTutorialActions", () => {
     ).toThrow(/by UUID/u);
   });
 
+  it("preserves a UUID-backed player block and rejects display names", () => {
+    expect(
+      parseTutorialActions([
+        {
+          id: "block-opponent",
+          action: "reposition-player-character",
+          cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          opposingCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          wait: 0,
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "block-opponent",
+        action: "reposition-player-character",
+        cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        opposingCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        wait: 0,
+      },
+    ]);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "named-player",
+          action: "reposition-player-character",
+          cardId: "Marked Direwolf",
+          opposingCardId: "Twilight Troubadour",
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/by UUID/u);
+  });
+
   it("preserves a UUID-authored Dreamwell draw and rejects display names", () => {
     expect(
       parseTutorialActions([
