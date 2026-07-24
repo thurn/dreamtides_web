@@ -157,10 +157,6 @@ Each player has a fixed, staggered play area split into a **front rank** and a
 The back rank has **10 positions**, numbered `B0` through `B9`. These positions
 are present for the entire battle.
 
-Only front-rank characters participate in the Challenge phase. Back-rank
-characters are safe but can still affect the front rank through abilities such
-as Support.
-
 **Staggered positions and Support:** Because the grid is staggered, each back-rank
 position sits behind one or two front-rank positions, and each front-rank position
 is backed by one or two back-rank positions. Numbering positions left to right
@@ -184,12 +180,10 @@ player repositions during the Dusk phase. An **exhausted character cannot be
 moved to the front rank** by either player.
 
 The battlefield provides **All Forward** and **All Back** controls as
-repositioning conveniences. Characters already in the destination rank remain
-where they are. Eligible characters in the other rank are considered from left
-to right and moved into empty destination positions from left to right until
-the destination rank is full. Characters that do not fit remain where they are.
-All Forward skips exhausted characters. These controls follow the normal
-repositioning timing rules and never banish characters.
+repositioning conveniences. They preserve destination-rank occupants, then move
+eligible characters left to right into empty destination positions left to
+right. Overflow remains in place, and All Forward skips exhausted characters.
+These controls follow normal repositioning timing and never banish characters.
 
 **Materializing:** A character entering play is placed in the back rank, in the
 leftmost open position, in the exhausted state. An awakened character enters
@@ -200,48 +194,28 @@ Making Room procedure before those characters enter.
 ### Making Room
 
 Making Room is the capacity procedure used when one or more characters would
-materialize into a player's back rank without enough open positions. Gain
-control also uses this procedure when the receiving player's back rank is full.
-When Making Room begins, the pending characters and their order are fixed.
+materialize without enough back-rank positions, or when Gain Control finds the
+receiving back rank full.
 
-The player may select any number of characters they control in either rank for
-banishment. Selected characters are visibly marked, and the player explicitly
-confirms the selection. On confirmation, all selected characters are banished
-simultaneously. This is an ordinary banishment: the characters leave play, and
-abilities that observe banishment or a character leaving play can trigger.
-Those triggers resolve before the pending materialization or control change
-continues.
+The player marks any number of characters they control in either rank, then
+confirms. All selected characters are banished simultaneously, and resulting
+triggers resolve before the pending effect resumes.
 
-Making Room can also reopen repositioning when that player already has
-repositioning permission under the normal turn rules: the active player during
-Day and the opposing player during Dusk. It grants no repositioning permission
-during any other phase. While Making Room is open, the player may only
-reposition, select characters for banishment, and confirm that selection; they
-cannot play cards or activate abilities.
+The player may also reposition if normal timing permits it: the active player
+during Day or the opposing player during Dusk. This includes All Forward and
+All Back. Making Room grants no extra permission; the player cannot play cards
+or activate abilities before confirming.
 
-After the player confirms:
+The pending batch and order are fixed, using effect order, source-zone order
+from top to bottom, then creation order. Resolve each character and its triggers
+before the next: it enters the leftmost open back position, or is banished if
+ordinary and ceases to exist if a figment. The original batch gets one Making
+Room opportunity, though a separate triggered materialization can start its
+own.
 
-- A materialization batch resolves in the order specified by its effect. If the
-  effect does not specify an order, cards use source-zone order from top to
-  bottom and created characters use the order in which the effect creates them.
-- Each character is processed separately. If a back-rank position is open, the
-  character enters the leftmost one and its materialization triggers resolve
-  before the next character is processed.
-- If no back-rank position is open, an ordinary character is banished instead
-  of entering play and a figment ceases to exist. Triggers caused by that zone
-  change resolve before the next character is processed. Capacity is checked
-  again afterward.
-- The original batch receives one Making Room opportunity. It does not reopen
-  Making Room if the back rank is full again later in that batch. A separate
-  materialization caused by a trigger uses its own Making Room procedure.
-- A character that does not enter play has not materialized. It does not become
-  exhausted and does not fire ▸Materialized or "when you materialize" triggers.
-  Its actual zone movement still occurs; for example, a character moving from
-  the void to the Banished zone has left the void.
-
-Playing a character or activating an effect that materializes characters is
-legal without guaranteed back-rank space. Its costs are paid normally. Costs
-are not refunded when an incoming character is banished or ceases to exist.
+Materialization can be attempted without guaranteed space. Costs are not
+refunded. A character that fails to enter completes its zone movement but has
+not materialized and fires no materialization triggers.
 
 ## Turn Structure
 
@@ -531,16 +505,12 @@ add one of them to your hand.
 **Copy** — Create a duplicate of a card or effect. Variants include copying a
 character in play and copying the next card played.
 
-**Gain control** — Take control of an opponent's character. The character moves
-to the leftmost open position in the receiving player's back rank, preserves
-its state, and becomes exhausted until the current turn's Ending phase,
-regardless of Awakened. This is not materialization and fires no
-materialization triggers. If the back rank is full, the receiving player uses
-[Making Room](#making-room). When the effect resumes, its target must still be
-an enemy character in play; otherwise the control change fails. If no back-rank
-position is open after Making Room, the control change also fails. A failed
-target remains in its current state and location. Confirmed banishments and
-their triggers are not reversed when the control change fails.
+**Gain control** — Move an opponent's character to the leftmost open back
+position on the receiving side. It preserves its state and is exhausted through
+this turn's Ending, even if Awakened; this is not materialization. If the rank
+is full, use [Making Room](#making-room). On resuming, the effect fails unless
+the target is still an enemy in play and a position is open; confirmed
+banishments remain.
 
 ## Ability Types
 
@@ -620,14 +590,13 @@ void, hand, or Banished zone, and ceases to exist if it would leave play.
 ## Figments
 
 Figments are independent characters created by card effects rather than played
-from a deck. Each figment is one of a fixed set of generic **types**, listed in
-the catalog below. A figment occupies one battlefield position and has its own
-spark, statuses, counters, abilities, and identity.
+from a deck. Each occupies one position and has its own identity, spark,
+statuses, counters, and abilities.
 
 A figment exists only in play: it cannot enter the deck, hand, void, or
 Banished zone. When it leaves play, or when it cannot enter play during
-Making Room, it **ceases to exist**. Effects that copy a named card produce an
-ordinary character token (a created card), not a figment.
+Making Room, it **ceases to exist**. Copying a named card creates an ordinary
+character token instead.
 
 **Figment catalog:**
 
@@ -648,16 +617,8 @@ A **Legion** is a Warrior whose spark equals the number of warriors you control,
 counting itself. Three Legion figments alone are three Warriors, so each is
 3✦.
 
-Figments follow the normal character rules:
-
-- Each figment counts as one character and one member of its subtype.
-- Targeted spark gains, static spark bonuses, counters, and granted statuses
-  apply to that individual figment.
-- A figment materializes into its own back-rank position and enters exhausted
-  unless awakened.
-- A figment challenges, defends, scores, grants Support, and receives Support
-  like any other character.
-- A figment removed by dissolve, Abandon, or a lost challenge fires its
-  dissolved triggers and then ceases to exist.
-- A figment removed by banish does not fire dissolved triggers and ceases to
-  exist.
+Figments otherwise follow normal character rules. Each counts separately as a
+character and subtype member, is targeted and modified individually, and
+materializes, challenges, scores, and interacts with Support on its own. A
+figment dissolved through an effect, Abandon, or challenge fires its dissolved
+triggers before ceasing; a banished figment simply ceases.
