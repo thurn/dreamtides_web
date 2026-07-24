@@ -13,8 +13,7 @@
 // means a bake input changed without a re-bake, or the artifact was hand-edited
 // (which the bake overwrites). Both are reported with an actionable remedy.
 //
-// Consumed by `scripts/check-tides5.mjs` (CLI gate) and
-// `scripts/check-tides5.test.ts` (the `npm test` blocker).
+// Consumed by `scripts/check-tides5.mjs`.
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";

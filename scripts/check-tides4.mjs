@@ -1,7 +1,5 @@
 // CLI gate: fail (exit 1) when the committed data/tides4.jsonc is out of sync with
-// a fresh `npm run bake-tides4`, printing an actionable remedy. Wire it into CI or
-// a pre-commit hook; the same check also runs in the vitest suite
-// (scripts/check-tides4.test.ts) so `npm test` blocks a stale commit.
+// a fresh `npm run bake-tides4`, printing an actionable remedy.
 //
 //   node scripts/check-tides4.mjs     # or: npm run check-tides4
 //

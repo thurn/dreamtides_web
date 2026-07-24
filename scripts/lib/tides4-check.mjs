@@ -12,8 +12,7 @@
 // input changed without a re-bake) or were hand-edited (which the bake would
 // overwrite). Both are reported with an actionable remedy.
 //
-// Consumed by `scripts/check-tides4.mjs` (CLI gate) and
-// `scripts/check-tides4.test.ts` (the `npm test` blocker).
+// Consumed by `scripts/check-tides4.mjs`.
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";

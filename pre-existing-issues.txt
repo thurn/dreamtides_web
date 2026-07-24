@@ -1,4 +1,0 @@
-`src/affiliations/affiliation-weights.test.ts` reproducibly exceeds its
-5-second timeout in “nudges transfiguration/duplication candidate selection
-toward affiliated deck cards,” including when the test file runs in isolation.
-This failure is unrelated to tutorial speech-bubble rendering.

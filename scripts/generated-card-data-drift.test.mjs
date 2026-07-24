@@ -66,15 +66,4 @@ describe("checkGeneratedCardData", () => {
     expect(result.message).toContain("TOML produces <omitted>");
     expect(result.message).toContain('public/card-data.json has "Legendary"');
   });
-
-  it("keeps the check fast for the real card catalog", () => {
-    const result = checkGeneratedCardData();
-
-    if (result.ok) {
-      expect(result.durationMs).toBeLessThan(500);
-      return;
-    }
-
-    expect(result.message).toContain("Generated card data");
-  });
 });

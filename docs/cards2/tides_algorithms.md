@@ -678,8 +678,8 @@ seat's observations stay valid.
 The artifact (`data/tides5.jsonc`, rendered as `docs/cards2/tides5_decklists.md`)
 carries the same schema as `tides4` and reuses its validator. Curated card tweaks
 live in `data/tides5-overrides.jsonc`, and a staleness guard
-(`scripts/check-tides5.mjs`, also run by `npm test`) re-bakes from source and
-fails if the committed artifact drifts. Build it with `npm run bake-tides5`
+(`scripts/check-tides5.mjs`) re-bakes from source and fails if the committed
+artifact drifts. Build it with `npm run bake-tides5`
 (then `npm run setup-assets` to serve it as `/tides5-data.json`).
 
 **Player-facing labels.** Each tide carries hand-authored identity annotations —

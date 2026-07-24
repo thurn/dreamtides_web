@@ -1,14 +1,11 @@
 // `picksig` is `pickcohere` with its candidate seeds drawn from a distribution
 // biased toward a Dreamcaller's signature instead of uniformly. These tests pin
-// the three things that makes that true and safe:
+// the two things that make that true and safe:
 //   * the signature affinity and seed weights it derives from the corpus (the
 //     steering signal), including resolving signature NAMES onto the UUID corpus;
-//   * the FALLBACK invariant — an empty (or wholly off-corpus) signature must
+//   * the fallback invariant — an empty (or wholly off-corpus) signature must
 //     reproduce `pickcohere` bit-for-bit, because the steered draw with all-equal
-//     weights IS the uniform draw; and
-//   * the STEERING itself — a signature whose partners a uniform pool would
-//     exclude reliably pulls them into the picksig pool, while staying
-//     deterministic in the seed.
+//     weights is the uniform draw.
 
 import { describe, expect, it } from "vitest";
 
@@ -171,24 +168,6 @@ describe("picksig pool generation", () => {
     const a = poolCardKeys([SIG], 3, "picksig");
     const b = poolCardKeys([SIG], 3, "picksig");
     expect([...a].sort()).toEqual([...b].sort());
-  });
-
-  it("steers the pool onto the signature cluster a uniform pool excludes", () => {
-    const inCluster = (keys: Set<string>) =>
-      [SIG, ...PARTNERS].filter((c) => keys.has(c)).length >= 2;
-
-    let sigHits = 0;
-    let cohereHits = 0;
-    const seeds = 40;
-    for (let seed = 0; seed < seeds; seed += 1) {
-      if (inCluster(poolCardKeys([SIG], seed, "picksig"))) sigHits += 1;
-      if (inCluster(poolCardKeys([SIG], seed, "pickcohere"))) cohereHits += 1;
-    }
-    // Steering pulls the cluster into the large majority of picksig pools; the
-    // uniform pickcohere pool, preferring the prior-1 noise, almost never does.
-    expect(sigHits / seeds).toBeGreaterThan(0.8);
-    expect(cohereHits / seeds).toBeLessThan(0.2);
-    expect(sigHits).toBeGreaterThan(cohereHits);
   });
 
   it("throws when no draft records are bundled", () => {

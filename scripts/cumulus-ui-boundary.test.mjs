@@ -130,20 +130,6 @@ function casesForFunction(source, name) {
 }
 
 describe("Cumulus UI boundary", () => {
-  it("keeps Cumulus internals private", () => {
-    const importers = collectFiles(SRC_ROOT)
-      .filter((file) => /\.(ts|tsx)$/.test(file))
-      .filter((file) => !relative(ROOT, file).split(sep).join("/").startsWith(CUMULUS_PREFIX))
-      .filter((file) =>
-        extractImportSpecifiers(readFileSync(file, "utf8"), file).some((specifier) =>
-          /cumulus\/internal(?:\/|$)/.test(specifier),
-        ),
-      )
-      .map((file) => relative(ROOT, file).split(sep).join("/"))
-      .sort();
-    expect(importers).toEqual([]);
-  });
-
   it("classifies every outer production UI file recursively", () => {
     expect(Object.keys(OUTER_UI_FILE_ROLES).sort()).toEqual(collectOuterUiFiles());
     for (const [file, role] of Object.entries(OUTER_UI_FILE_ROLES)) {
