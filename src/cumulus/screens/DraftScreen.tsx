@@ -27,7 +27,6 @@ import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import { GLYPHS } from "../primitives/glyph";
 import {
-  DEBUG_REROLL_TOP,
   MENU_BUTTON_PX,
   MENU_EDGE_INSET_DESKTOP_PX,
   MENU_EDGE_INSET_MOBILE_PX,
@@ -83,13 +82,26 @@ function topSafeOpFor(isDesktop: boolean): string {
     ? MENU_EDGE_INSET_DESKTOP_PX
     : MENU_EDGE_INSET_MOBILE_PX;
   // The menu disc sits at `top: max(safe-inset-top, edgeInset)` with height
-  // MENU_BUTTON_PX. The draft reroll control sits lower, at the safe-top
-  // floor plus --space-5, so this band clears the bottom of both controls.
+  // MENU_BUTTON_PX, so this band clears its bottom edge.
   return (
     `max(var(--safe-area-inset-top), ${token("--safe-top")}, ` +
-    `calc(max(var(--safe-area-inset-top), ${String(edgeInset)}px) + ${String(MENU_BUTTON_PX)}px), ` +
-    `calc(${DEBUG_REROLL_TOP} + ${String(MENU_BUTTON_PX)}px))`
+    `calc(max(var(--safe-area-inset-top), ${String(edgeInset)}px) + ${String(MENU_BUTTON_PX)}px))`
   );
+}
+
+function rerollCornerStyle(isDesktop: boolean): {
+  top: string;
+  right: string;
+} {
+  const edgeInset = isDesktop
+    ? MENU_EDGE_INSET_DESKTOP_PX
+    : MENU_EDGE_INSET_MOBILE_PX;
+  return {
+    top: `max(var(--safe-area-inset-top), ${String(edgeInset)}px)`,
+    right: isDesktop
+      ? `calc(max(var(--safe-area-inset-right), ${String(edgeInset)}px) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`
+      : `max(var(--safe-area-inset-right), ${String(edgeInset)}px)`,
+  };
 }
 
 function offerCellWidthFor(params: {
@@ -130,6 +142,7 @@ export function DraftScreen({ view, onPick, onReroll = NOOP }: DraftScreenProps)
     : MOBILE_OFFER_GRID_GAP;
   const topSafeOp = topSafeOpFor(isDesktop);
   const topSafe = `calc(${topSafeOp})`;
+  const rerollCorner = rerollCornerStyle(isDesktop);
   const offerCellWidth = offerCellWidthFor({
     columns: offerColumns,
     rows: offerRows,
@@ -191,8 +204,7 @@ export function DraftScreen({ view, onPick, onReroll = NOOP }: DraftScreenProps)
         }}
         style={{
           position: "absolute",
-          top: DEBUG_REROLL_TOP,
-          left: `max(var(--safe-area-inset-left), ${token("--gutter")})`,
+          ...rerollCorner,
           zIndex: 8,
         }}
       >

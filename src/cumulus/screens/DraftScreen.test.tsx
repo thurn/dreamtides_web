@@ -190,7 +190,7 @@ describe("Cumulus DraftScreen", () => {
     });
   });
 
-  it("renders the top-left debug reroll control and dispatches it", () => {
+  it("renders the reroll control beside the top-right quest menu and dispatches it", () => {
     const onReroll = vi.fn();
     const { container, root } = mount(
       <DraftScreen
@@ -206,8 +206,8 @@ describe("Cumulus DraftScreen", () => {
     expect(reroll).not.toBeNull();
     expect(
       container.querySelector<HTMLElement>("[data-draft-reroll-control]")?.style
-        .left,
-    ).toContain("safe-area-inset-left");
+        .right,
+    ).toContain("safe-area-inset-right");
 
     act(() => {
       reroll?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
