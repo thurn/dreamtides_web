@@ -179,15 +179,8 @@ characters. The active player repositions during their Day phase; the opposing
 player repositions during the Dusk phase. An **exhausted character cannot be
 moved to the front rank** by either player.
 
-Dragging a figment onto another figment of the same type that you control
-**combines** them instead of swapping them. The dragged figment ceases to exist,
-and its own spark is permanently added to the destination figment. Own spark
-includes base spark and persistent spark gains, but not Support, anthems, or
-spark granted by static abilities. Combining is irreversible and follows all
-normal repositioning timing and exhaustion rules. It is neither banishment nor
-dissolution and fires neither kind of trigger, though effects can observe the
-figment leaving play. Complete the combination and recalculate battlefield
-effects before resolving those leave-play triggers.
+Dragging a figment onto a matching figment is an exception to the swap rule;
+see [Combining Figments](#combining-figments).
 
 The battlefield provides **All Forward** and **All Back** controls as
 repositioning conveniences. They preserve destination-rank occupants, then move
@@ -202,25 +195,16 @@ the back rank lacks enough positions, use Battlefield Capacity.
 
 ### Battlefield Capacity
 
+A player can have at most **10 characters in their back rank**.
+
 Materializations resolve in the order given by the effect, then source-zone
 order from top to bottom. An ordinary character with no open back position is
 banished instead of entering play. It has not materialized and fires no
 materialization triggers.
 
-An effect's materializations form one ordered output. Each consecutive group of
-one or more figments with the same catalog identity first fills the open back
-positions with new figments. If every figment in that group fits, each keeps
-its own spark. Otherwise, the group's total own spark is divided as evenly as
-possible among the new figments that fit, with any remainder assigned left to
-right. Only those new figments can receive the excess spark. If there are no
-open positions, every figment in the group ceases to exist. Excess figments
-never enter play and count as neither banished nor dissolved. The player is
-shown a message explaining the result.
-
-Before a player commits a card, activated ability, Gain Control effect, or
-figment combination that is predicted to lose a character, combine figments,
-fail, or exclude dynamic spark, a warning shows the exact consequence and
-requires confirmation before costs are paid. Mandatory triggered effects
+Before a player commits a card or activated ability that would materialize an
+ordinary character into a full back rank, a warning shows the exact consequence
+and requires confirmation before costs are paid. Mandatory triggered effects
 resolve without confirmation and explain the result afterward.
 
 ## Turn Structure
@@ -629,3 +613,38 @@ character and subtype member, is targeted and modified individually, and
 materializes, challenges, scores, and interacts with Support on its own. A
 figment dissolved through an effect, Abandon, or challenge fires its dissolved
 triggers before ceasing; a banished figment simply ceases.
+
+### Combining Figments
+
+During normal repositioning, a player can drag a figment onto another figment
+of the same catalog identity that they control. The dragged figment ceases to
+exist, and its own spark is permanently added to the destination figment. Own
+spark includes base spark and persistent spark gains, but not Support, anthems,
+or spark granted by static abilities.
+
+Combining is irreversible and follows all normal repositioning timing and
+exhaustion rules. It is neither banishment nor dissolution and fires neither
+kind of trigger, though effects can observe the figment leaving play. Complete
+the combination and recalculate battlefield effects before resolving those
+leave-play triggers.
+
+Before the player confirms a combination that excludes dynamic spark, a warning
+shows the exact consequence.
+
+### Creating Figments at Capacity
+
+An effect's materializations form one ordered output. Each consecutive group of
+one or more figments with the same catalog identity first fills the open back
+positions with new figments. If every figment in that group fits, each keeps its
+own spark. Otherwise, the group's total own spark is divided as evenly as
+possible among the new figments that fit, with any remainder assigned left to
+right. Figments already in play are not destinations for this combination.
+
+If there are no open positions, every figment in the group ceases to exist.
+Excess figments never enter play and count as neither banished nor dissolved.
+The player is shown a message explaining the result.
+
+Before a player commits a card or activated ability that is predicted to
+combine or lose figments this way, a warning shows the exact consequence and
+requires confirmation before costs are paid. Mandatory triggered effects
+resolve without confirmation and explain the result afterward.
