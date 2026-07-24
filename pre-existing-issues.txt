@@ -1,0 +1,5 @@
+The Cumulus generated-docs drift and ghost-component integrity tests exceed
+Vitest's default 5-second per-test timeout on this checkout. `npm test` reported
+timeouts in `scripts/cumulus-generated-docs-drift.test.mjs` and
+`scripts/cumulus-ghost-components.test.mjs`; both files pass when rerun with
+`--testTimeout=30000`.

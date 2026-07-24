@@ -454,6 +454,8 @@ describe("parseTutorialActions", () => {
           action: "reveal-and-play-opponent-card",
           cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
           revealText: "This card has a ▸Dawn ability.",
+          verticalOffset: 20,
+          bubbleWidth: 450,
           wait: 0,
         },
       ]),
@@ -464,6 +466,8 @@ describe("parseTutorialActions", () => {
         cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         revealDuration: 2,
         revealText: "This card has a ▸Dawn ability.",
+        verticalOffset: 20,
+        bubbleWidth: 450,
         wait: 0,
       },
     ]);
@@ -478,6 +482,28 @@ describe("parseTutorialActions", () => {
         },
       ]),
     ).toThrow(/non-negative card reveal duration/u);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "bad-reveal-offset",
+          action: "reveal-and-play-opponent-card",
+          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          verticalOffset: "lower",
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/finite vertical offset/u);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "bad-reveal-width",
+          action: "reveal-and-play-opponent-card",
+          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          bubbleWidth: 750,
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/speech bubble width from 300 to 700 pixels/u);
   });
 
   it("rejects invalid portrait owners and pauses", () => {

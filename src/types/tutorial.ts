@@ -90,6 +90,10 @@ export interface RevealAndPlayOpponentCardTutorialAction extends TutorialActionB
   readonly revealDuration: number;
   /** Optional Mira dialogue shown only while the card remains face up. */
   readonly revealText?: string;
+  /** Signed pixels added to Mira's computed vertical dialogue position. */
+  readonly verticalOffset?: number;
+  /** Desktop maximum width of Mira's reveal speech bubble, in pixels. */
+  readonly bubbleWidth?: number;
 }
 
 /** Moves one UUID-authored opponent character to its closest front-rank cell. */

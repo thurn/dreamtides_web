@@ -39,6 +39,9 @@ const FIXTURE_ACTIONS = [
     action: "reveal-and-play-opponent-card",
     cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
     revealDuration: 2,
+    revealText: "This card has a ▸Dawn ability.",
+    verticalOffset: 20,
+    bubbleWidth: 450,
     wait: 0,
   },
   {
@@ -140,6 +143,16 @@ describe("tutorial data", () => {
         { ...FIXTURE_ACTIONS[3], revealDuration: -1 },
       ]),
     ).toThrow(/non-negative card reveal duration/u);
+    expect(() =>
+      validateTutorialActions([
+        { ...FIXTURE_ACTIONS[3], verticalOffset: Number.NaN },
+      ]),
+    ).toThrow(/finite vertical offset/u);
+    expect(() =>
+      validateTutorialActions([
+        { ...FIXTURE_ACTIONS[3], bubbleWidth: 750 },
+      ]),
+    ).toThrow(/speech bubble width from 300 to 700 pixels/u);
     expect(() =>
       validateTutorialActions([
         { ...FIXTURE_ACTIONS[4], cardId: "Twilight Troubadour" },

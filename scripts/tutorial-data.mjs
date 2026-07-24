@@ -355,12 +355,36 @@ export function validateTutorialActions(value) {
       if (typeof revealText === "string") {
         validateTutorialMarkup(revealText, id);
       }
+      const verticalOffset = candidate.verticalOffset;
+      if (
+        verticalOffset !== undefined &&
+        (typeof verticalOffset !== "number" ||
+          !Number.isFinite(verticalOffset))
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must have a finite vertical offset.`,
+        );
+      }
+      const bubbleWidth = candidate.bubbleWidth;
+      if (
+        bubbleWidth !== undefined &&
+        (typeof bubbleWidth !== "number" ||
+          !Number.isFinite(bubbleWidth) ||
+          bubbleWidth < 300 ||
+          bubbleWidth > 700)
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must have a speech bubble width from 300 to 700 pixels.`,
+        );
+      }
       return {
         id,
         action,
         cardId: candidate.cardId,
         revealDuration,
         ...(revealText === undefined ? {} : { revealText }),
+        ...(verticalOffset === undefined ? {} : { verticalOffset }),
+        ...(bubbleWidth === undefined ? {} : { bubbleWidth }),
         wait,
       };
     }

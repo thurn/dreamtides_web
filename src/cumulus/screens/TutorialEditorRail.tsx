@@ -335,6 +335,14 @@ function changedActionType(
       action.revealText !== undefined
         ? { revealText: action.revealText }
         : {}),
+      ...(action.action === "reveal-and-play-opponent-card" &&
+      action.verticalOffset !== undefined
+        ? { verticalOffset: action.verticalOffset }
+        : {}),
+      ...(action.action === "reveal-and-play-opponent-card" &&
+      action.bubbleWidth !== undefined
+        ? { bubbleWidth: action.bubbleWidth }
+        : {}),
       wait: action.wait,
     };
   }
@@ -392,12 +400,17 @@ function waitLabel(wait: number): string {
 function speechBubbleWidth(
   action: Extract<
     TutorialAction,
-    { readonly action: "display-speech-bubble" }
+    {
+      readonly action:
+        | "display-speech-bubble"
+        | "reveal-and-play-opponent-card";
+    }
   >,
 ): number {
   return (
     action.bubbleWidth ??
-    ((action.speaker ?? "mira") === "mira"
+    (action.action === "reveal-and-play-opponent-card" ||
+    (action.speaker ?? "mira") === "mira"
       ? DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH
       : DEFAULT_DREAMCALLER_SPEECH_BUBBLE_WIDTH)
   );
@@ -857,6 +870,12 @@ function TutorialActionRow({
                         action: action.action,
                         cardId: action.cardId,
                         revealDuration: action.revealDuration,
+                        ...(action.verticalOffset === undefined
+                          ? {}
+                          : { verticalOffset: action.verticalOffset }),
+                        ...(action.bubbleWidth === undefined
+                          ? {}
+                          : { bubbleWidth: action.bubbleWidth }),
                         wait: action.wait,
                       }
                     : { ...action, revealText },
@@ -871,9 +890,79 @@ function TutorialActionRow({
                         action: action.action,
                         cardId: action.cardId,
                         revealDuration: action.revealDuration,
+                        ...(action.verticalOffset === undefined
+                          ? {}
+                          : { verticalOffset: action.verticalOffset }),
+                        ...(action.bubbleWidth === undefined
+                          ? {}
+                          : { bubbleWidth: action.bubbleWidth }),
                         wait: action.wait,
                       }
                     : { ...action, revealText },
+                  true,
+                )
+              }
+            />
+            <NumberStepper
+              label="Bubble Width"
+              value={speechBubbleWidth(action)}
+              displayValue={`${String(speechBubbleWidth(action))}px`}
+              size="sm"
+              decrementLabel={`Narrow Mira reveal speech bubble for action ${String(index + 1)}`}
+              incrementLabel={`Widen Mira reveal speech bubble for action ${String(index + 1)}`}
+              decrementDisabled={
+                speechBubbleWidth(action) <= MINIMUM_SPEECH_BUBBLE_WIDTH
+              }
+              incrementDisabled={
+                speechBubbleWidth(action) >= MAXIMUM_SPEECH_BUBBLE_WIDTH
+              }
+              onDecrement={() =>
+                update(
+                  {
+                    ...action,
+                    bubbleWidth: Math.max(
+                      MINIMUM_SPEECH_BUBBLE_WIDTH,
+                      speechBubbleWidth(action) - SPEECH_BUBBLE_WIDTH_STEP,
+                    ),
+                  },
+                  true,
+                )
+              }
+              onIncrement={() =>
+                update(
+                  {
+                    ...action,
+                    bubbleWidth: Math.min(
+                      MAXIMUM_SPEECH_BUBBLE_WIDTH,
+                      speechBubbleWidth(action) + SPEECH_BUBBLE_WIDTH_STEP,
+                    ),
+                  },
+                  true,
+                )
+              }
+            />
+            <NumberStepper
+              label="Vertical Offset"
+              value={action.verticalOffset ?? 0}
+              displayValue={`${waitLabel(action.verticalOffset ?? 0)}px`}
+              size="sm"
+              decrementLabel={`Move Mira reveal speech up for action ${String(index + 1)}`}
+              incrementLabel={`Move Mira reveal speech down for action ${String(index + 1)}`}
+              onDecrement={() =>
+                update(
+                  {
+                    ...action,
+                    verticalOffset: (action.verticalOffset ?? 0) - 10,
+                  },
+                  true,
+                )
+              }
+              onIncrement={() =>
+                update(
+                  {
+                    ...action,
+                    verticalOffset: (action.verticalOffset ?? 0) + 10,
+                  },
                   true,
                 )
               }

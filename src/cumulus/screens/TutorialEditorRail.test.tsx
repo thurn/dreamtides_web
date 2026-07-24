@@ -693,7 +693,7 @@ describe("TutorialEditorRail", () => {
     container.remove();
   });
 
-  it("authors the face-up reading time for an opponent card play", () => {
+  it("authors Mira reveal speech layout and face-up reading time", () => {
     const onChange = vi.fn();
     const container = document.createElement("div");
     document.body.append(container);
@@ -730,6 +730,51 @@ describe("TutorialEditorRail", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
+          'button[aria-label="Narrow Mira reveal speech bubble for action 2"]',
+        )
+        ?.click(),
+    );
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "reveal-and-play-opponent-card",
+          action: "reveal-and-play-opponent-card",
+          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          revealDuration: 2,
+          bubbleWidth: 650,
+          wait: 0,
+        },
+      ],
+      true,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          'button[aria-label="Move Mira reveal speech down for action 2"]',
+        )
+        ?.click(),
+    );
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "reveal-and-play-opponent-card",
+          action: "reveal-and-play-opponent-card",
+          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          revealDuration: 2,
+          bubbleWidth: 650,
+          verticalOffset: 10,
+          wait: 0,
+        },
+      ],
+      true,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
           'button[aria-label="Increase face-up reading time for action 2"]',
         )
         ?.click(),
@@ -742,6 +787,8 @@ describe("TutorialEditorRail", () => {
           action: "reveal-and-play-opponent-card",
           cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
           revealDuration: 2.5,
+          bubbleWidth: 650,
+          verticalOffset: 10,
           wait: 0,
         },
       ],

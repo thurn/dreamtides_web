@@ -223,6 +223,9 @@ describe("buildTutorialView", () => {
         action: "reveal-and-play-opponent-card",
         cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         revealDuration: 2,
+        revealText: "This card has a ▸Dawn ability.",
+        verticalOffset: 20,
+        bubbleWidth: 450,
         wait: 0,
       }),
     ).toEqual({
@@ -232,6 +235,10 @@ describe("buildTutorialView", () => {
       cardId: TUTORIAL_OPPONENT_CARD_ID,
       cardFace: "up",
       revealDurationSeconds: 2,
+      revealSpeechSpeaker: "mira",
+      revealSpeechText: "This card has a ▸Dawn ability.",
+      revealSpeechVerticalOffsetPx: 20,
+      revealSpeechBubbleWidthPx: 450,
       revealPlacement: "right-front-rank-intersection",
       sourceZone: "opponent-hand",
       destinationZone: "opponent-back-rank",
@@ -1149,6 +1156,8 @@ describe("buildTutorialView", () => {
         cardId: TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
         revealDuration: 5,
         revealText,
+        verticalOffset: 20,
+        bubbleWidth: 450,
         wait: 0,
       },
       {
@@ -1169,9 +1178,13 @@ describe("buildTutorialView", () => {
       cardId: TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
       revealDuration: 5,
       revealText,
+      verticalOffset: 20,
+      bubbleWidth: 450,
     });
     expect(revealing.dialogue).toMatchObject({
       kind: "guide",
+      verticalOffset: 20,
+      bubbleWidth: 450,
       model: { speakerName: "Mira", text: revealText },
     });
     expect(revealing.battle.enemyHand).toEqual([]);

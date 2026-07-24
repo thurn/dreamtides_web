@@ -110,6 +110,12 @@ export function tutorialActionLogDetails(action: TutorialAction) {
             revealSpeechSpeaker: "mira",
             revealSpeechText: action.revealText,
           }),
+      ...(action.verticalOffset === undefined
+        ? {}
+        : { revealSpeechVerticalOffsetPx: action.verticalOffset }),
+      ...(action.bubbleWidth === undefined
+        ? {}
+        : { revealSpeechBubbleWidthPx: action.bubbleWidth }),
       revealPlacement: "right-front-rank-intersection",
       sourceZone: "opponent-hand",
       destinationZone: "opponent-back-rank",
@@ -285,6 +291,8 @@ function activeDialogueAction(
 ): DisplaySpeechBubbleTutorialAction | {
   readonly action: "reveal-and-play-opponent-card";
   readonly text: string;
+  readonly verticalOffset?: number;
+  readonly bubbleWidth?: number;
 } | null {
   if (playback?.currentActionIndex === null || playback === null) return null;
   const currentAction = playback.actions[playback.currentActionIndex];
@@ -296,6 +304,12 @@ function activeDialogueAction(
     return {
       action: currentAction.action,
       text: currentAction.revealText,
+      ...(currentAction.verticalOffset === undefined
+        ? {}
+        : { verticalOffset: currentAction.verticalOffset }),
+      ...(currentAction.bubbleWidth === undefined
+        ? {}
+        : { bubbleWidth: currentAction.bubbleWidth }),
     };
   }
   if (currentAction?.action !== "animate-dreamcaller-portrait") return null;
@@ -713,7 +727,10 @@ export function buildTutorialView(
         : dialogueAction.action === "reveal-and-play-opponent-card"
           ? {
               kind: "guide",
-              verticalOffset: 0,
+              verticalOffset: dialogueAction.verticalOffset ?? 0,
+              ...(dialogueAction.bubbleWidth === undefined
+                ? {}
+                : { bubbleWidth: dialogueAction.bubbleWidth }),
               model: {
                 portrait: { kind: "character-portrait", characterId: "mira" },
                 portraitAlt: "Mira",
