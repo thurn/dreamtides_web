@@ -147,7 +147,7 @@ export const gameCardDemo: CumulusComponent = {
   blurb:
     "The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name.",
   callout:
-    "GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment. The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, exhausted status, focus, press, activation, and drag dismissal are automatic. On desktop, rules that explicitly materialize an authored figment add a small UUID-backed card beyond the definition stack; touch layouts keep the compact reading pair.",
+    "GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment. The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, exhausted status, focus, press, activation, and drag dismissal are automatic. On desktop, rules that explicitly materialize an authored figment add a small UUID-backed card with a violet glowing border beyond the definition stack; touch layouts keep the compact reading pair.",
   group: "Components",
   docName: "GameCard",
   Component: GameCardDemo,

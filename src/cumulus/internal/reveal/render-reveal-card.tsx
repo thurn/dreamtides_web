@@ -21,14 +21,18 @@ export function renderRevealCard(card: RevealCard, width: number): ReactElement 
       </div>
     );
   }
+  const isFigmentPreview = card.figment === true;
   return (
     <Suspense fallback={<div data-reveal-render-pending="" style={{ width, aspectRatio: "2 / 3" }} />}>
       <div data-reveal-render="game-card" style={{ width }}>
         <RevealGameCard
           card={card.displaySnapshot}
           transfiguration={card.transfiguration}
-          selected={card.selected}
-          selectionColor={card.selectionColor}
+          selected={card.selected ?? isFigmentPreview}
+          selectionColor={
+            card.selectionColor
+              ?? (isFigmentPreview ? "accent-bright" : undefined)
+          }
           figment={card.figment}
           figmentTitleBar={card.figmentTitleBar}
           eagerRulesFit

@@ -297,7 +297,16 @@ describe("GameCard reveal contract", () => {
     );
     expect(figment?.style.width).toBe("150px");
     expect(figment?.querySelector("[data-cumulus-reveal-adjacent-label]")).toBeNull();
-    expect(figment?.querySelector('[data-card-id="bb1a5acd-1a03-4aa3-826d-f0a301843845"]')?.getAttribute("data-figment")).toBe("true");
+    const figmentCard = figment?.querySelector<HTMLElement>(
+      '[data-card-id="bb1a5acd-1a03-4aa3-826d-f0a301843845"]',
+    );
+    expect(figmentCard?.getAttribute("data-figment")).toBe("true");
+    expect(figmentCard?.style.boxShadow).toContain(
+      "0 0 0 3px var(--accent-bright)",
+    );
+    expect(figmentCard?.style.boxShadow).toContain(
+      "0 0 12px var(--accent-bright)",
+    );
     expect(Number.parseFloat(figment!.style.left)).toBe(
       Number.parseFloat(definition!.style.left)
         + Number.parseFloat(definition!.style.width)
