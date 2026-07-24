@@ -190,6 +190,36 @@ describe("Cumulus DraftScreen", () => {
     });
   });
 
+  it("renders the top-left debug reroll control and dispatches it", () => {
+    const onReroll = vi.fn();
+    const { container, root } = mount(
+      <DraftScreen
+        view={view([101, 102, 103, 104])}
+        onPick={vi.fn()}
+        onReroll={onReroll}
+      />,
+    );
+
+    const reroll = container.querySelector<HTMLElement>(
+      '[data-testid="reroll-draft-offer"]',
+    );
+    expect(reroll).not.toBeNull();
+    expect(
+      container.querySelector<HTMLElement>("[data-draft-reroll-control]")?.style
+        .left,
+    ).toContain("safe-area-inset-left");
+
+    act(() => {
+      reroll?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(onReroll).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("latches the first pick so a second card cannot be picked in the same pack", () => {
     const onPick = vi.fn();
     const { container, root } = mount(

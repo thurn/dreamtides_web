@@ -303,6 +303,37 @@ describe("PICK_DRAFT_CARD", () => {
 });
 
 // ---------------------------------------------------------------------------
+// REROLL_DRAFT_OFFER
+// ---------------------------------------------------------------------------
+
+describe("REROLL_DRAFT_OFFER", () => {
+  it("replaces the active pack without advancing the pick or changing the deck", () => {
+    registerDraftContentProvider(provider());
+    const start = stateWithDraftSites(poolDraftState());
+
+    const result = reduce(start, "REROLL_DRAFT_OFFER", { siteId: "site-a" });
+
+    expect(result.outcome).toBe("applied");
+    const draft = result.state.quest.draftState as PoolDraftState;
+    expect(draft.pickNumber).toBe(1);
+    expect(draft.sitePicksCompleted).toBe(0);
+    expect(result.state.quest.deck).toEqual(start.quest.deck);
+    expect(draft.currentOffer).toEqual([5, 6, 7, 8]);
+    expect(draft.siteShownCardNumbers).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+  });
+
+  it("bounces when the requested site is not the active draft site", () => {
+    registerDraftContentProvider(provider());
+    const start = stateWithDraftSites(poolDraftState());
+
+    const result = reduce(start, "REROLL_DRAFT_OFFER", { siteId: "site-b" });
+
+    expect(result.outcome).toBe("bounced");
+    expect(result.state).toEqual(start);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // ENTER_DRAFT_SITE
 // ---------------------------------------------------------------------------
 

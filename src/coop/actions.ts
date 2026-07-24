@@ -118,6 +118,7 @@ export interface CoopActions {
   // --- draft ---
   setDraftState: (draftState: unknown) => Promise<number>;
   pickDraftCard: (packIndex: number, cardId: string) => Promise<number>;
+  rerollDraftOffer: (siteId: string) => Promise<number>;
   enterDraftSite: (siteId: string, runId?: string) => Promise<number>;
 
   // --- sites ---
@@ -321,6 +322,7 @@ export function makeActions(append: AppendFn): CoopActions {
     setDraftState: (draftState) => emit("SET_DRAFT_STATE", { draftState }),
     pickDraftCard: (packIndex, cardId) =>
       emit("PICK_DRAFT_CARD", { packIndex, cardId }),
+    rerollDraftOffer: (siteId) => emit("REROLL_DRAFT_OFFER", { siteId }),
     enterDraftSite: (siteId, runId) =>
       emit(
         "ENTER_DRAFT_SITE",

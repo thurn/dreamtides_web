@@ -19,6 +19,7 @@ import {
   DEFAULT_DRAFT_CONFIG,
   enterDraftSite as engineEnterDraftSite,
   processPlayerPickWithoutLogging,
+  rerollDraftOffer as engineRerollDraftOffer,
   type OfferDeps,
 } from "../../draft/draft-engine";
 import { mintEntryId } from "./deck";
@@ -231,6 +232,52 @@ export function enterDraftSite(
     offerDeps,
     rngStream(ctx),
   );
+
+  return { ...quest, draftState: nextDraftState };
+}
+
+/**
+ * `REROLL_DRAFT_OFFER { siteId }` — shared debug-only replacement of the
+ * active offer. It keeps the draft's pick counter and deck unchanged, while
+ * the engine records the abandoned pack as shown so pool-mode offers remain
+ * unique within this site visit. The event context supplies the deterministic
+ * replacement roll, making the debug action converge for connected clients.
+ */
+export function rerollDraftOffer(
+  quest: QuestState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): QuestState | null {
+  const siteId = asString(payload.siteId);
+  if (siteId === null) return null;
+
+  const provider = contentProvider;
+  if (provider === null) return null;
+
+  const draftState = quest.draftState;
+  if (
+    draftState === null ||
+    draftState.activeSiteId !== siteId ||
+    draftState.currentOffer.length === 0
+  ) {
+    return null;
+  }
+
+  const site = findSite(quest, siteId);
+  if (site === null || site.type !== "Draft") return null;
+
+  const nextDraftState = structuredClone(draftState);
+  const deckCardNumbers = quest.deck.map((entry) => entry.cardNumber);
+  const offerDeps = provider.offerDepsFor(nextDraftState, deckCardNumbers);
+  const config =
+    provider.draftConfigFor(nextDraftState) ?? DEFAULT_DRAFT_CONFIG;
+  const hasOffer = engineRerollDraftOffer(
+    nextDraftState,
+    config,
+    offerDeps,
+    rngStream(ctx),
+  );
+  if (!hasOffer) return null;
 
   return { ...quest, draftState: nextDraftState };
 }

@@ -121,6 +121,8 @@ export interface QuestMutations {
     archetypeId: MerchantArchetypeId | null,
   ) => void;
   pickDraftCard: (siteId: string, cardNumber: number) => void;
+  /** Requests a shared debug reroll of the displayed offer at an active draft site. */
+  rerollDraftOffer?: (siteId: string) => void;
   /**
    * Enters a draft site, revealing its first offer. The coop event log scopes
    * this intent to the current run and site, so every observing client may

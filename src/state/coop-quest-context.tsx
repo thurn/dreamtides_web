@@ -287,6 +287,7 @@ export function CoopQuestProvider({
         if (cardId === null) return;
         dispatch(actions.pickDraftCard(packIndex, cardId));
       },
+      rerollDraftOffer: (siteId) => dispatch(actions.rerollDraftOffer(siteId)),
       enterDraftSite: (siteId) =>
         dispatch(actions.enterDraftSite(siteId, stateRef.current.runId ?? undefined)),
 

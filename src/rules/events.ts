@@ -89,6 +89,7 @@ export interface EventPayloads {
   // --- draft ---
   SET_DRAFT_STATE: { draftState: unknown };
   PICK_DRAFT_CARD: { packIndex: number; cardId: string };
+  REROLL_DRAFT_OFFER: { siteId: string };
   ENTER_DRAFT_SITE: { siteId: string };
 
   // --- sites ---
@@ -251,6 +252,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   SET_DREAMSIGN_IS_BANE: true,
   SET_DRAFT_STATE: true,
   PICK_DRAFT_CARD: true,
+  REROLL_DRAFT_OFFER: true,
   ENTER_DRAFT_SITE: true,
   OPEN_SITE: true,
   COMPLETE_DREAM_AUGURY: true,

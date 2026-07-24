@@ -104,6 +104,7 @@ function captureAllDrafts(): EventDraft[] {
   void actions.setDreamsignIsBane("ds-1", true);
   void actions.setDraftState({});
   void actions.pickDraftCard(0, "card-1");
+  void actions.rerollDraftOffer("site-1");
   void actions.enterDraftSite("site-1");
   void actions.openSite("site-1");
   void actions.completeDreamAugury("site-1");

@@ -335,6 +335,8 @@ export function routeDomain(
     // --- draft ---
     case "PICK_DRAFT_CARD":
       return questCase(state, draft.pickDraftCard(quest, payload, ctx));
+    case "REROLL_DRAFT_OFFER":
+      return questCase(state, draft.rerollDraftOffer(quest, payload, ctx));
     case "ENTER_DRAFT_SITE":
       return questCase(state, draft.enterDraftSite(quest, payload, ctx));
     case "SET_DRAFT_STATE":

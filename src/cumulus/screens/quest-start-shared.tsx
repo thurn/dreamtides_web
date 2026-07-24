@@ -12,6 +12,7 @@ import { token } from "../primitives/tokens";
 import { GLYPHS } from "../primitives/glyph";
 import type { DreamcallerPortraitFocus } from "../../types/content";
 import { GLOSSARY_IDS } from "../../data/glossary";
+import { DEBUG_REROLL_TOP } from "./chrome-geometry";
 
 /** One tide shown on a Dreamcaller, already resolved to display copy. Both the
  * desktop triptych and the mobile carousel render their tide discs (and each
@@ -199,7 +200,7 @@ export function QuestStartRerollControl({
       }}
       style={{
         position: "absolute",
-        top: `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${token("--space-5")})`,
+        top: DEBUG_REROLL_TOP,
         right: `max(var(--safe-area-inset-right), ${token("--gutter")})`,
         zIndex: 8,
       }}

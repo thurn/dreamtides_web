@@ -60,6 +60,10 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
     [mutations, siteId],
   );
 
+  const handleReroll = useCallback(() => {
+    mutations.rerollDraftOffer?.(siteId);
+  }, [mutations, siteId]);
+
   // The pack is exhausted: log the completed draft and return to the dreamscape,
   // The COMPLETE_SITE run-scoped intent key is the durable once-only owner;
   // every client observing completion may submit this effect.
@@ -76,5 +80,7 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
   if (state.draftState === null) return null;
   if (progress.isComplete) return null;
 
-  return <DraftScreen view={view} onPick={handlePick} />;
+  return (
+    <DraftScreen view={view} onPick={handlePick} onReroll={handleReroll} />
+  );
 }

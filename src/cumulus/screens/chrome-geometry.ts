@@ -4,6 +4,8 @@
 // import it without reaching into src/components (no-external-ui-imports); the
 // menu, which may import from src/cumulus, is the other consumer.
 
+import { token } from "../primitives/tokens";
+
 /**
  * The menu trigger disc's diameter. Both platforms wear the same compact
  * circular glass IconButton (`md`, a 48px disc that clears the 44px touch
@@ -23,3 +25,6 @@ export const MENU_EDGE_INSET_MOBILE_PX = 18;
  * helping the corner breathe, so the trigger sits a little farther in.
  */
 export const MENU_EDGE_INSET_DESKTOP_PX = 22;
+
+/** The shared top edge for debug reroll controls on quest scene art. */
+export const DEBUG_REROLL_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${token("--space-5")})`;

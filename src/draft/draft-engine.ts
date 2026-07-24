@@ -529,6 +529,44 @@ export function enterDraftSite(
   });
 }
 
+/**
+ * Replace the active draft site's displayed offer without advancing its pick
+ * counter. The abandoned offer remains spent and recorded as shown, so a pool
+ * draft never reoffers it during the same site visit.
+ */
+export function rerollDraftOffer(
+  state: DraftState,
+  config: DraftConfig = DEFAULT_DRAFT_CONFIG,
+  offerDeps?: OfferDeps,
+  rng: () => number = Math.random,
+): boolean {
+  const previousOffer = [...state.currentOffer];
+  const hasOffer = revealOffer(
+    state,
+    config,
+    { logEvents: true },
+    offerDeps,
+    rng,
+  );
+
+  logEvent("draft_offer_rerolled", {
+    siteId: state.activeSiteId,
+    pickNumber: state.pickNumber,
+    previousOffer,
+    offerCards: state.currentOffer,
+    ...(state.mode === "pool"
+      ? {
+          poolRemaining: countRemainingCards(state.remainingCopiesByCard),
+          uniqueCardsRemaining: countRemainingUniqueCards(
+            state.remainingCopiesByCard,
+          ),
+        }
+      : {}),
+  });
+
+  return hasOffer;
+}
+
 /** Return the current offer for display. */
 export function getCurrentOffer(state: DraftState): number[] {
   return state.currentOffer;

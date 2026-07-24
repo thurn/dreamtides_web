@@ -21,12 +21,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { CARD_ASPECT_H, CARD_ASPECT_W } from "../components/card/card-aspect";
 import { Motes } from "../components/hud/Motes";
-import {
-  QUEST_STATUS_BAR_CLEARANCE_OP,
-} from "../components/hud/QuestStatusBar";
+import { IconButton } from "../components/controls/IconButton";
+import { QUEST_STATUS_BAR_CLEARANCE_OP } from "../components/hud/QuestStatusBar";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
+import { GLYPHS } from "../primitives/glyph";
 import {
+  DEBUG_REROLL_TOP,
   MENU_BUTTON_PX,
   MENU_EDGE_INSET_DESKTOP_PX,
   MENU_EDGE_INSET_MOBILE_PX,
@@ -52,6 +53,8 @@ export interface DraftScreenProps {
   view: DraftView;
   /** Pick a card from the current pack; carries the card's draft number. */
   onPick: (cardNumber: number) => void;
+  /** Requests a shared debug reroll of the current draft offer. */
+  onReroll?: () => void;
 }
 
 // The vertical bands reserved down the screen, as raw calc operands so the
@@ -73,16 +76,19 @@ const DESKTOP_OFFER_GRID_GAP = token("--space-2");
 const DESKTOP_OFFER_CARD_WIDTH_PX = 240;
 // Four reading-width cards plus compact gutters fit without overlap from here.
 const DRAFT_ROW_MIN_WIDTH_PX = 1000;
+const NOOP = (): void => undefined;
 
 function topSafeOpFor(isDesktop: boolean): string {
   const edgeInset = isDesktop
     ? MENU_EDGE_INSET_DESKTOP_PX
     : MENU_EDGE_INSET_MOBILE_PX;
   // The menu disc sits at `top: max(safe-inset-top, edgeInset)` with height
-  // MENU_BUTTON_PX, so this band clears its bottom edge.
+  // MENU_BUTTON_PX. The draft reroll control sits lower, at the safe-top
+  // floor plus --space-5, so this band clears the bottom of both controls.
   return (
     `max(var(--safe-area-inset-top), ${token("--safe-top")}, ` +
-    `calc(max(var(--safe-area-inset-top), ${String(edgeInset)}px) + ${String(MENU_BUTTON_PX)}px))`
+    `calc(max(var(--safe-area-inset-top), ${String(edgeInset)}px) + ${String(MENU_BUTTON_PX)}px), ` +
+    `calc(${DEBUG_REROLL_TOP} + ${String(MENU_BUTTON_PX)}px))`
   );
 }
 
@@ -113,7 +119,7 @@ function offerCellWidthFor(params: {
  * of {@link GameCard}s over it, and drifting {@link Motes}. Persistent quest
  * chrome is supplied by the router.
  */
-export function DraftScreen({ view, onPick }: DraftScreenProps) {
+export function DraftScreen({ view, onPick, onReroll = NOOP }: DraftScreenProps) {
   const isDesktop = useIsDesktop();
   const wideDraftRow = useIsDesktop(DRAFT_ROW_MIN_WIDTH_PX);
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
@@ -177,6 +183,26 @@ export function DraftScreen({ view, onPick }: DraftScreenProps) {
       )}
 
       <Motes on tint="violet" />
+
+      <div
+        data-draft-reroll-control=""
+        onPointerDown={(event) => {
+          event.stopPropagation();
+        }}
+        style={{
+          position: "absolute",
+          top: DEBUG_REROLL_TOP,
+          left: `max(var(--safe-area-inset-left), ${token("--gutter")})`,
+          zIndex: 8,
+        }}
+      >
+        <IconButton
+          glyph={GLYPHS.refresh}
+          label="Reroll draft offer"
+          onPress={onReroll}
+          testId="reroll-draft-offer"
+        />
+      </div>
 
       {/* Reserve the top cutout / status-bar zone so nothing rides into the
           notch, plus a short breathing gap above the pack. */}
