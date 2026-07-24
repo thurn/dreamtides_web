@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { EventContext, GameEvent, Genesis } from "../eventlog/types";
 import {
+  TUTORIAL_OPPONENT_CARD_ID,
   TUTORIAL_PLAYER_CARD_ID,
   TUTORIAL_PLAYER_CARD_INSTANCE_ID,
 } from "../data/tutorial-opponent-card";
@@ -323,5 +324,60 @@ describe("front-door reducer", () => {
       context(2),
     );
     expect(staleId.outcome).toBe("bounced");
+  });
+
+  it("reconstructs the player card play when starting after the interactive end-turn beat", () => {
+    const start = genesisFoldState({ ...GENESIS, frontDoorEntry: "tutorial" });
+    const actions = [
+      {
+        id: "how-to-play",
+        action: "display-how-to-play",
+        text: "Play a character.",
+        wait: 0,
+      },
+      {
+        id: "end-turn",
+        action: "end-turn",
+        wait: 0,
+      },
+      {
+        id: "opponent-character-advance",
+        action: "reposition-opponent-character",
+        cardId: TUTORIAL_OPPONENT_CARD_ID,
+        wait: 0,
+      },
+      {
+        id: "challenge-positioning-how-to-play",
+        action: "display-how-to-play",
+        text: "Position characters in the front rank.",
+        wait: 0,
+      },
+    ];
+
+    const atEndTurn = reduceGameEvent(
+      start,
+      event("BEGIN_TUTORIAL", { actions, startActionId: "end-turn" }),
+      context(1),
+    );
+    expect(atEndTurn.outcome).toBe("applied");
+    expect(atEndTurn.state.frontDoor.tutorial?.playerCardPlay).toBeNull();
+
+    const afterEndTurn = reduceGameEvent(
+      start,
+      event("BEGIN_TUTORIAL", {
+        actions,
+        startActionId: "challenge-positioning-how-to-play",
+      }),
+      context(2),
+    );
+    expect(afterEndTurn.outcome).toBe("applied");
+    expect(afterEndTurn.state.frontDoor.tutorial).toMatchObject({
+      currentActionIndex: 3,
+      playerCardPlay: {
+        cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+        cardId: TUTORIAL_PLAYER_CARD_ID,
+        targetSlotId: null,
+      },
+    });
   });
 });

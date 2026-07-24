@@ -128,13 +128,24 @@ export function beginTutorial(
         : 0
       : actions.findIndex((action) => action.id === startActionId);
   if (startActionIndex === -1) return null;
+  const playerCardPlay =
+    startActionIndex !== null &&
+    actions
+      .slice(0, startActionIndex)
+      .some((action) => action.action === "end-turn")
+      ? {
+          cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+          cardId: TUTORIAL_PLAYER_CARD_ID,
+          targetSlotId: null,
+        }
+      : null;
   return {
     ...state,
     tutorial: {
       runId: `event:${String(ctx.seq)}`,
       actions,
       currentActionIndex: startActionIndex,
-      playerCardPlay: null,
+      playerCardPlay,
     },
   };
 }
