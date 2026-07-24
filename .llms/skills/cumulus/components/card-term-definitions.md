@@ -22,7 +22,7 @@ An incubating compact title-free card containing every gameplay term in a stretc
 
 ### Definitions beside a card
 
-Pass a card's rules text and the side the panel sits on; one compact, title-free card renders every referenced keyword and definition in reading order as a bold white term, colon, and white definition. Tight leading groups wrapped copy while a larger gap separates definitions; cards with no terms render nothing.
+Pass a card's rules text and the side the panel sits on; one compact, title-free card renders every referenced keyword and definition in glossary-priority order as a bold white term, colon, and white definition. Tight leading groups wrapped copy while a larger gap separates definitions; cards with no terms render nothing.
 
 ```tsx
 import { CardTermDefinitions } from "src/cumulus/components/card/CardTermDefinitions";

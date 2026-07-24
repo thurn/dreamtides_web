@@ -1,5 +1,5 @@
 // Registry demo entry for CardTermDefinitions — one compact InfoCard containing
-// reading-order, de-duped definitions for every gameplay term in a stretch of
+// priority-ordered, de-duped definitions for every gameplay term in a stretch of
 // rules text. It renders `null` when the text references no terms, so callers
 // place it unconditionally; when it does render, it re-establishes its own
 // `.cumulus` scope so it works inside a portalled hover-help popover.
@@ -56,7 +56,7 @@ export const cardTermDefinitionsDemo: CumulusComponent = {
   usage: [
     {
       label: "Definitions beside a card",
-      note: "Pass a card's rules text and the side the panel sits on; one compact, title-free card renders every referenced keyword and definition in reading order as a bold white term, colon, and white definition. Tight leading groups wrapped copy while a larger gap separates definitions; cards with no terms render nothing.",
+      note: "Pass a card's rules text and the side the panel sits on; one compact, title-free card renders every referenced keyword and definition in glossary-priority order as a bold white term, colon, and white definition. Tight leading groups wrapped copy while a larger gap separates definitions; cards with no terms render nothing.",
       code: `import { CardTermDefinitions } from "src/cumulus/components/card/CardTermDefinitions";
 
 <CardTermDefinitions text={card.rulesText} side="right" />`,

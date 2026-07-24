@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/dreamcaller-ability-text
 
 Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
-The complete Dreamcaller rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals one compact title-free card containing every defined term in reading order, using Dreamcaller-specific exhaust guidance.
+The complete Dreamcaller rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals one compact title-free card containing every defined term in glossary-priority order, using Dreamcaller-specific exhaust guidance.
 
 ## Props
 
