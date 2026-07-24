@@ -157,12 +157,11 @@ testing-library). Two required incantations, copied from
 ## 8. Final checks
 
 ```bash
-npm run lint
-npm run typecheck
-npm test
+npm run review
 ```
 
-`npm test` includes the Cumulus contract tests: strict component APIs
+Related tests selected by `npm run review` include the affected Cumulus
+contract tests: strict component APIs
 (`cumulus-strict-api.contract.test.mjs`, which also scans
 `src/cumulus/screens/`) and generated-docs freshness
 (`cumulus-generated-docs-drift.test.mjs` — if you touched a component, a demo

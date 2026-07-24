@@ -145,9 +145,7 @@ dedup/constant-sharing, then doc and demo repairs. Group into a few
 coherent commits (per category, not per finding), each passing:
 
 ```bash
-npm run lint
-npm run typecheck
-npm test
+npm run review:full
 ```
 
 - Touched a component, demo entry, or the token stylesheet → run

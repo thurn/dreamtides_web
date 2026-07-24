@@ -92,9 +92,9 @@ npm run launch          # install + start + open browser (the all-in-one command
 npm run dev             # same as npm start
 npm run dev:vite        # Vite only; requires a separately managed emulator
 npm run setup-assets    # regenerate JSON + symlinks without starting Vite
-npm run typecheck       # tsc --noEmit
-npm run lint            # eslint src/
-npm test                # vitest run
+npm run review          # diff-aware pre-commit validation
+npm test -- path        # focused Vitest file
+npm run review:full     # exhaustive CI/release validation
 npm run test:emulator   # Firebase emulator integration tests
 npm run build           # production build into dist/
 npm run preview         # serve the production build locally

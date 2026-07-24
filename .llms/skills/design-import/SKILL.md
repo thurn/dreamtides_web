@@ -125,7 +125,7 @@ this codebase builds things.
   user so they can confirm the trade-off.
 - Capture one representative state early enough to correct the overall visual
   direction before polishing. Once the implementation is stable, run the core
-  checks (`npm run lint`, `npm run typecheck`, `npm test`) once and perform the
+  diff-aware check (`npm run review`) once and perform the
   risk-tiered browser QA in the project's QA guidance. Measure objective layout
   claims, keep routine final screenshots to the representative budget, and do
   a cold review of the final evidence because an imported design is a new or

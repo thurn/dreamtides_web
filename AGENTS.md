@@ -78,21 +78,31 @@ only use `draft_records_adapted` going forward.
 # Verification
 
 Use focused tests and checks while iterating. Once the implementation is stable,
-run the complete core checks before committing:
+run the diff-aware local review before committing:
 
 ```bash
-npm run lint
-npm run typecheck
-npm test
+npm run review
 ```
 
 Run the commands from the repository root. In a fresh worktree, run
-`npm install` before these checks because `node_modules` is not committed.
+`npm install` before this check because `node_modules` is not committed.
+`npm run review` validates affected generated data, lints changed code,
+typechecks type-affecting changes, and runs tests related to the diff with one
+worker. Use focused test paths while iterating:
+
+```bash
+npm test -- src/path/to/affected.test.ts
+```
+
+The exhaustive commands are `npm run lint:full`, `npm run test:full`, and
+`npm run review:full`. Run them only for changes to test infrastructure,
+repository-wide configuration, cross-cutting architecture, release validation,
+or when the user explicitly asks. CI runs `npm run review:full`.
 
 Choose QA in proportion to the change:
 
 - Data, documentation, and internal refactors: focused checks while iterating,
-  then the core checks. Browser QA and screenshots are not required unless the
+  then the diff-aware review. Browser QA and screenshots are not required unless the
   change alters runtime behavior or presentation.
 - Stateful UI, routing, drag/drop, coop, and overlays: exercise the changed
   normal player workflow with browser QA. Assert state, interaction results,

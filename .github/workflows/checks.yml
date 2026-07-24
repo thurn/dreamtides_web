@@ -28,7 +28,9 @@ jobs:
         with:
           node-version: 24.16.0
       - run: npm ci
-      - run: npm run review
+      - run: npm run review:full
+        env:
+          QUEST_TEST_WORKERS: "4"
 
   emulator:
     runs-on: ubuntu-latest

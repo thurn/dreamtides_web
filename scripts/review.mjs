@@ -1,9 +1,11 @@
 import { spawn } from "node:child_process";
 import { execFileSync } from "node:child_process";
 import {
+  existsSync,
   mkdirSync,
 } from "node:fs";
 import { dirname, join, resolve } from "node:path";
+import { buildReviewPlan } from "./review-plan.mjs";
 import {
   readReviewLockOwner,
   removeReviewLockIfUnchanged,
@@ -20,15 +22,86 @@ const commonGitDir = resolve(
     encoding: "utf8",
   }).trim(),
 );
-const lockPath = join(commonGitDir, "quest-review.lock");
+const lockPath = join(commonGitDir, "quest-full-review.lock");
 const task = process.argv[2];
 const passthrough = process.argv.slice(3);
-const validTasks = new Set(["lint", "typecheck", "validate", "test", "all"]);
+const validTasks = new Set([
+  "lint",
+  "lint-full",
+  "typecheck",
+  "validate",
+  "test",
+  "test-full",
+  "quick",
+  "full",
+]);
 
 if (!validTasks.has(task)) {
-  console.error("Usage: node scripts/review.mjs <lint|typecheck|validate|test|all> [args...]");
+  console.error(
+    "Usage: node scripts/review.mjs " +
+    "<lint|lint-full|typecheck|validate|test|test-full|quick|full> [args...]",
+  );
   process.exit(2);
 }
+
+function gitOutput(args) {
+  return execFileSync("git", args, {
+    cwd: root,
+    encoding: "utf8",
+  }).trim();
+}
+
+function revisionExists(revision) {
+  try {
+    execFileSync("git", ["rev-parse", "--verify", "--quiet", revision], {
+      cwd: root,
+      stdio: "ignore",
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function reviewBase() {
+  const configuredBase = process.env.QUEST_REVIEW_BASE;
+  if (configuredBase !== undefined) {
+    if (!revisionExists(configuredBase)) {
+      throw new Error(`QUEST_REVIEW_BASE does not exist: ${configuredBase}`);
+    }
+    return gitOutput(["rev-parse", configuredBase]);
+  }
+
+  const branch = gitOutput(["branch", "--show-current"]);
+  if (branch !== "" && branch !== "master" && revisionExists("master")) {
+    return gitOutput(["merge-base", "HEAD", "master"]);
+  }
+  return gitOutput(["rev-parse", "HEAD"]);
+}
+
+function splitNullDelimited(value) {
+  return value.split("\0").filter((entry) => entry !== "");
+}
+
+function changedFilesSince(base) {
+  const tracked = execFileSync(
+    "git",
+    ["diff", "--name-only", "--diff-filter=ACMRTUXB", "-z", base, "--"],
+    { cwd: root, encoding: "utf8" },
+  );
+  const untracked = execFileSync(
+    "git",
+    ["ls-files", "--others", "--exclude-standard", "-z"],
+    { cwd: root, encoding: "utf8" },
+  );
+  return [...splitNullDelimited(tracked), ...splitNullDelimited(untracked)];
+}
+
+const base = reviewBase();
+const reviewPlan = buildReviewPlan(
+  changedFilesSince(base),
+  (file) => existsSync(join(root, file)),
+);
 
 function pidIsAlive(pid) {
   if (!Number.isInteger(pid) || pid <= 0) return false;
@@ -60,6 +133,7 @@ function ownerRecord(extra = {}) {
 }
 
 function writeOwner(extra = {}) {
+  if (!lockHeld) return;
   replaceReviewLockOwner(lockPath, ownerRecord(extra));
 }
 
@@ -140,6 +214,19 @@ function commandFor(step, extraArgs = []) {
   if (step === "validate") {
     return [process.execPath, [join(root, "scripts", "setup-assets.mjs"), ...extraArgs]];
   }
+  if (step === "test-related") {
+    return [
+      process.execPath,
+      [
+        nodeModulePath("vitest", "vitest.mjs"),
+        "related",
+        "--run",
+        "--passWithNoTests",
+        "--maxWorkers=1",
+        ...extraArgs,
+      ],
+    ];
+  }
   return [
     process.execPath,
     [nodeModulePath("vitest", "vitest.mjs"), "run", ...extraArgs],
@@ -166,12 +253,62 @@ async function runStep(step, extraArgs = []) {
   return exitCode;
 }
 
-await acquireLock();
-lockHeld = true;
+function executionPlan() {
+  if (task === "full") {
+    return [
+      { step: "validate", args: [] },
+      { step: "lint", args: [] },
+      { step: "typecheck", args: [] },
+      { step: "test", args: [] },
+    ];
+  }
+  if (task === "lint-full") return [{ step: "lint", args: passthrough }];
+  if (task === "test-full") return [{ step: "test", args: passthrough }];
+  if (task === "lint") {
+    return reviewPlan.lintFiles.length === 0 && passthrough.length === 0
+      ? []
+      : [{ step: "lint", args: passthrough.length > 0
+        ? passthrough
+        : reviewPlan.lintFiles }];
+  }
+  if (task === "test") {
+    if (passthrough.length > 0) return [{ step: "test", args: passthrough }];
+    return reviewPlan.testInputs.length === 0
+      ? []
+      : [{ step: "test-related", args: reviewPlan.testInputs }];
+  }
+  if (task === "quick") {
+    const steps = [];
+    if (reviewPlan.shouldValidate) steps.push({ step: "validate", args: [] });
+    if (reviewPlan.lintFiles.length > 0) {
+      steps.push({ step: "lint", args: reviewPlan.lintFiles });
+    }
+    if (reviewPlan.shouldTypecheck) steps.push({ step: "typecheck", args: [] });
+    if (reviewPlan.testInputs.length > 0) {
+      steps.push({ step: "test-related", args: reviewPlan.testInputs });
+    }
+    return steps;
+  }
+  return [{ step: task, args: passthrough }];
+}
+
+const requiresFullReviewSlot = ["full", "lint-full", "test-full"].includes(task);
+if (requiresFullReviewSlot) {
+  await acquireLock();
+  lockHeld = true;
+}
 try {
-  const steps = task === "all" ? ["validate", "lint", "typecheck", "test"] : [task];
-  for (const step of steps) {
-    const exitCode = await runStep(step, task === "all" ? [] : passthrough);
+  const steps = executionPlan();
+  if (["quick", "lint", "test"].includes(task)) {
+    console.log(
+      `[review] ${reviewPlan.changedFiles.length} changed file(s) since ${base.slice(0, 12)}`,
+    );
+  }
+  if (steps.length === 0) {
+    console.log("[review] no applicable checks");
+  }
+  for (const { step, args } of steps) {
+    const exitCode = await runStep(step, args);
     if (exitCode !== 0) {
       process.exitCode = exitCode;
       break;

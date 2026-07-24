@@ -8,8 +8,8 @@ environment.
 
 ## Select The Smallest QA That Proves The Change
 
-Use focused tests during implementation and run the repository core checks once
-the work is stable. Select runtime evidence by risk:
+Use focused tests during implementation and run the diff-aware
+`npm run review` once the work is stable. Select runtime evidence by risk:
 
 | Change | Runtime evidence |
 | --- | --- |
@@ -26,7 +26,7 @@ clipping, overflow, safe-area clearance, dimensions, and hit targets; use
 screenshots for the pixels and composition the player sees.
 
 For subjective visual direction, take the first representative screenshot
-before running the full suite or generating a large device matrix. Resolve the
+before running final automated review or generating a large device matrix. Resolve the
 direction early, then run the final verification once the design is stable.
 
 ## Browser Automation

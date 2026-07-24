@@ -33,12 +33,10 @@ skill drains that backlog: read it, fix each entry, verify, and clear the file.
      specific `npm run bake-*` command named in the entry, then committing the
      regenerated `data/` files.
 
-4. **Verify.** Run the core checks from the repository root:
+4. **Verify.** Run the diff-aware review from the repository root:
 
    ```bash
-   npm run lint
-   npm run typecheck
-   npm test
+   npm run review
    ```
 
    Re-run the specific test named in each entry to confirm it now passes. If any

@@ -32,9 +32,9 @@ The generated `public/cards/`, `public/tides/`, `public/card-data.json`, and
 Other commands:
 
 ```bash
-npm run typecheck    # tsc --noEmit
-npm run lint         # eslint src/
-npm test             # vitest run
+npm run review       # diff-aware pre-commit validation
+npm test -- path     # focused Vitest file
+npm run review:full  # exhaustive CI/release validation
 npm run build        # production build
 ```
 

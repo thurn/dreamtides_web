@@ -96,9 +96,9 @@ Useful one-offs:
 
 ```bash
 npm run setup-assets
-npm run typecheck
-npm run lint
-npm test
+npm run review
+npm test -- src/path/to/affected.test.ts
+npm run review:full  # test infrastructure, cross-cutting changes, releases
 npm run build
 npm run preview     # serves dist/ without a file watcher
 ```
@@ -161,8 +161,10 @@ For tests, prefer the public surface and assert log behavior through
 
 ## Acceptance Criteria
 
-- Use focused checks while iterating, then run `npm run typecheck`, `npm run
-  lint`, and `npm test` once the implementation is stable.
+- Use focused checks while iterating, then run the diff-aware `npm run review`
+  once the implementation is stable. Use `npm run review:full` for test
+  infrastructure, cross-cutting changes, releases, or an explicit full-suite
+  request.
 - Select browser and visual QA by the risk matrix in
   `docs/quest_prototype/qa_tooling.md`. Browser QA is required for changed
   runtime behavior; screenshot QA is required for changed visual output.

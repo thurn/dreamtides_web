@@ -89,8 +89,9 @@ on nobody for UI.
 (`import/no-restricted-paths`, or `eslint-plugin-boundaries`) declares that files
 in `src/cumulus/**` may resolve imports only to `src/cumulus/**` plus the allowlist
 above; every other path under `src/` is denied **by default**. A future UI
-directory can never silently leak in — it fails closed. This rule runs as part
-of `npm run lint`, so the architecture is a lint gate, not a convention.
+directory can never silently leak in — it fails closed. This rule runs on
+changed UI files as part of `npm run review`, so the architecture is a lint
+gate, not a convention.
 
 ### Outer UI ownership
 
@@ -175,7 +176,7 @@ deliberately skeletal, because it is the one layer hooks make hard to test.
   outside any other `.cumulus` subtree). Screens inherit every strict rule —
   semantic tokens only (they are absent from the `no-primitive-tokens` and
   `no-hardcoded-values` exemptions), no raw interactive elements, no
-  escape-hatch props — so `npm run lint` is what proves a migrated screen
+  escape-hatch props — so `npm run review` is what proves a migrated screen
   conforms.
 - A **view-model builder** (`src/screens/cumulus_adapters/*-view-model.ts`) is a module of
   pure, exported, unit-tested functions mapping domain data to the screen's
@@ -494,13 +495,15 @@ reference, not by a from-scratch subagent rewrite.
 
 ## 9. Testing & verification
 
-- `npm run lint` (including the fail-closed import-boundary rule
+- `npm run review` selects changed-file lint (including the fail-closed import-boundary rule
   `no-external-ui-imports`; the token-tier rule `no-primitive-tokens`, which
   errors on any `--primitive-*` reference outside `primitives/` + `components/`;
   and the strict-API rule `no-escape-hatch-props`, which errors when a
   `components/` `*Props` type re-opens an escape hatch — a `style`/`className`
   member, a `CSSProperties`-typed prop, a DOM-attribute `extends`/intersection,
-  or an index signature), `npm run typecheck`, and `npm test` stay green.
+  or an index signature), incremental typecheck when applicable, and related
+  tests. `npm run review:full` supplies repository-wide CI and release
+  validation.
 - The screen wiring layer (§2) is lint-enforced too: the `thin-adapters` rule keeps
   `src/screens/cumulus_adapters/*Adapter.tsx` wiring-only (one exported `*Adapter`
   component, no module-level helpers/tables/exported types, Cumulus imports

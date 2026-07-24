@@ -90,13 +90,12 @@ npm run dev -- --host 127.0.0.1
 Useful checks:
 
 ```bash
-npm run typecheck
-npm run lint
-npm test
+npm run review
+npm test -- src/path/to/affected.test.ts
 npx vitest run src/battle/components/PlayableBattleScreen.test.tsx
 ```
 
-Use focused battle tests while iterating and run the complete core checks once
+Use focused battle tests while iterating and run the diff-aware review once
 the implementation is stable. After the task, commit with a detailed message. Do not bundle unrelated dirty
 worktree changes.
 
@@ -227,7 +226,9 @@ For battle changes:
 2. Run browser QA with `agent-browser` on the changed battle flow when runtime
    behavior or presentation changed.
 3. Apply the canonical screenshot budget when visual output changed.
-4. Once stable, run `npm run typecheck`, `npm run lint`, and `npm test`.
+4. Once stable, run the diff-aware `npm run review`. Use
+   `npm run review:full` for test infrastructure, cross-cutting changes,
+   releases, or an explicit full-suite request.
 5. Commit only the intended battle files.
 
 ## Anti-Patterns
