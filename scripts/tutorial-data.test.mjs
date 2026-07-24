@@ -48,6 +48,7 @@ const FIXTURE_ACTIONS = [
     id: "how-to-play",
     action: "display-how-to-play",
     trigger: "player-turn-announcement-complete",
+    cardWidth: 650,
     text: "Play characters to [yellow]challenge[/yellow] and score points (⍟).\n\nScore 10 ⍟ to win.",
     wait: 0,
   },
@@ -161,6 +162,9 @@ describe("tutorial data", () => {
         { ...FIXTURE_ACTIONS[5], companion: "named-card" },
       ]),
     ).toThrow(/supported How to Play companion/u);
+    expect(() =>
+      validateTutorialActions([{ ...FIXTURE_ACTIONS[5], cardWidth: 0 }]),
+    ).toThrow(/How to Play card width of at least 300 pixels/u);
     expect(() =>
       validateTutorialActions([
         {

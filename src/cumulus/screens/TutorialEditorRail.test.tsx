@@ -214,6 +214,7 @@ describe("TutorialEditorRail", () => {
           id: "display-how-to-play",
           action: "display-how-to-play",
           trigger: "immediate",
+          cardWidth: 500,
           text: expectedText,
           wait: 0,
         },
@@ -245,12 +246,35 @@ describe("TutorialEditorRail", () => {
           action: "display-how-to-play",
           trigger: "immediate",
           companion: "dreamwell-card",
+          cardWidth: 500,
           text: expectedText,
           wait: 0,
         },
       ],
       true,
     );
+
+    const widenCard = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="Widen How to Play card for action 2"]',
+    );
+    expect(container.textContent).toContain("500px");
+    act(() => widenCard?.click());
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "display-how-to-play",
+          action: "display-how-to-play",
+          trigger: "immediate",
+          companion: "dreamwell-card",
+          cardWidth: 550,
+          text: expectedText,
+          wait: 0,
+        },
+      ],
+      true,
+    );
+    expect(container.textContent).toContain("550px");
 
     act(() => root.unmount());
     container.remove();

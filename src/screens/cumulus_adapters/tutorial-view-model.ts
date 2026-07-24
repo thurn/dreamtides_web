@@ -62,6 +62,9 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       ...(action.companion === undefined
         ? {}
         : { companion: action.companion }),
+      ...(action.cardWidth === undefined
+        ? {}
+        : { cardWidthPx: action.cardWidth }),
       title: "How to Play",
       messageText,
       ...(messageText === action.text ? {} : { messageMarkup: action.text }),
@@ -606,6 +609,9 @@ export function buildTutorialView(
             wait: currentAction.wait,
             trigger:
               currentAction.trigger ?? "player-turn-announcement-complete",
+            ...(currentAction.cardWidth === undefined
+              ? {}
+              : { cardWidth: currentAction.cardWidth }),
             ...(currentAction.companion === "dreamwell-card"
               ? {
                   companion:

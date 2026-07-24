@@ -179,6 +179,7 @@ describe("parseTutorialActions", () => {
           action: "display-how-to-play",
           trigger: "immediate",
           companion: "dreamwell-card",
+          cardWidth: 650,
           text,
           wait: 0,
         },
@@ -189,10 +190,22 @@ describe("parseTutorialActions", () => {
         action: "display-how-to-play",
         trigger: "immediate",
         companion: "dreamwell-card",
+        cardWidth: 650,
         text,
         wait: 0,
       },
     ]);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "bad-how-to-play-width",
+          action: "display-how-to-play",
+          cardWidth: 0,
+          text,
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/How to Play card width of at least 300 pixels/u);
   });
 
   it("normalizes legacy portrait actions and preserves opponent pauses", () => {

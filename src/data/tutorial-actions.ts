@@ -102,11 +102,23 @@ export function parseTutorialActions(
           `Tutorial action ${JSON.stringify(id)} must have a supported How to Play companion.`,
         );
       }
+      const cardWidth = record.cardWidth;
+      if (
+        cardWidth !== undefined &&
+        (typeof cardWidth !== "number" ||
+          !Number.isFinite(cardWidth) ||
+          cardWidth < 300)
+      ) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must have a How to Play card width of at least 300 pixels.`,
+        );
+      }
       return {
         id,
         action: "display-how-to-play",
         trigger,
         ...(companion === undefined ? {} : { companion }),
+        ...(cardWidth === undefined ? {} : { cardWidth }),
         text: record.text,
         wait,
       } satisfies TutorialAction;

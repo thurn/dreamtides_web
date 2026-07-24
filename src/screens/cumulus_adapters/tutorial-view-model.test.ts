@@ -158,12 +158,14 @@ describe("buildTutorialView", () => {
       tutorialActionLogDetails({
         id: "how-to-play",
         action: "display-how-to-play",
+        cardWidth: 650,
         text: "Configured [yellow]instructions[/yellow].",
         wait: 0,
       }),
     ).toEqual({
       actionId: "how-to-play",
       action: "display-how-to-play",
+      cardWidthPx: 650,
       trigger: "player-turn-announcement-complete",
       title: "How to Play",
       messageText: "Configured instructions.",

@@ -46,6 +46,9 @@ export interface TutorialEditorRailProps {
 }
 
 const TUTORIAL_TAIL_ACTION_COUNT = 6;
+const DEFAULT_HOW_TO_PLAY_CARD_WIDTH = 500;
+const MINIMUM_HOW_TO_PLAY_CARD_WIDTH = 300;
+const HOW_TO_PLAY_CARD_WIDTH_STEP = 50;
 const DEFAULT_HOW_TO_PLAY_TEXT =
   "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle.";
 
@@ -136,6 +139,7 @@ function defaultAction(
       id,
       action: "display-how-to-play",
       trigger: "immediate",
+      cardWidth: DEFAULT_HOW_TO_PLAY_CARD_WIDTH,
       text: DEFAULT_HOW_TO_PLAY_TEXT,
       wait: 0,
     };
@@ -237,6 +241,10 @@ function changedActionType(
       ...(action.action === "display-how-to-play" &&
       action.companion !== undefined
         ? { companion: action.companion }
+        : {}),
+      ...(action.action === "display-how-to-play" &&
+      action.cardWidth !== undefined
+        ? { cardWidth: action.cardWidth }
         : {}),
       wait: action.wait,
     };
@@ -583,12 +591,51 @@ function TutorialActionRow({
                     id: action.id,
                     action: action.action,
                     trigger: action.trigger,
+                    ...(action.cardWidth === undefined
+                      ? {}
+                      : { cardWidth: action.cardWidth }),
                     text: action.text,
                     wait: action.wait,
                   },
                   true,
                 );
               }}
+            />
+            <NumberStepper
+              label="Card Width"
+              value={action.cardWidth ?? DEFAULT_HOW_TO_PLAY_CARD_WIDTH}
+              displayValue={`${String(action.cardWidth ?? DEFAULT_HOW_TO_PLAY_CARD_WIDTH)}px`}
+              size="sm"
+              decrementLabel={`Narrow How to Play card for action ${String(index + 1)}`}
+              incrementLabel={`Widen How to Play card for action ${String(index + 1)}`}
+              decrementDisabled={
+                (action.cardWidth ?? DEFAULT_HOW_TO_PLAY_CARD_WIDTH) <=
+                MINIMUM_HOW_TO_PLAY_CARD_WIDTH
+              }
+              onDecrement={() =>
+                update(
+                  {
+                    ...action,
+                    cardWidth: Math.max(
+                      MINIMUM_HOW_TO_PLAY_CARD_WIDTH,
+                      (action.cardWidth ?? DEFAULT_HOW_TO_PLAY_CARD_WIDTH) -
+                        HOW_TO_PLAY_CARD_WIDTH_STEP,
+                    ),
+                  },
+                  true,
+                )
+              }
+              onIncrement={() =>
+                update(
+                  {
+                    ...action,
+                    cardWidth:
+                      (action.cardWidth ?? DEFAULT_HOW_TO_PLAY_CARD_WIDTH) +
+                      HOW_TO_PLAY_CARD_WIDTH_STEP,
+                  },
+                  true,
+                )
+              }
             />
             <TextArea
               label="Instruction Text"

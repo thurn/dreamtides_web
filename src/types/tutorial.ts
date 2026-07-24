@@ -51,6 +51,8 @@ export interface DisplayHowToPlayTutorialAction extends TutorialActionBase {
   readonly trigger?: TutorialHowToPlayTrigger;
   /** Optional game object paired with the instruction card. */
   readonly companion?: TutorialHowToPlayCompanion;
+  /** Desktop width of the complete instruction card, in pixels. */
+  readonly cardWidth?: number;
   /**
    * Authored instruction copy. Blank lines separate paragraphs,
    * `[yellow]copy[/yellow]` highlights an exact inline run, and `⍟` and `✦`

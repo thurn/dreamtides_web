@@ -167,11 +167,23 @@ export function validateTutorialActions(value) {
           `Tutorial action ${JSON.stringify(id)} must have a supported How to Play companion.`,
         );
       }
+      const cardWidth = candidate.cardWidth;
+      if (
+        cardWidth !== undefined &&
+        (typeof cardWidth !== "number" ||
+          !Number.isFinite(cardWidth) ||
+          cardWidth < 300)
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must have a How to Play card width of at least 300 pixels.`,
+        );
+      }
       return {
         id,
         action,
         trigger,
         ...(companion === undefined ? {} : { companion }),
+        ...(cardWidth === undefined ? {} : { cardWidth }),
         text: candidate.text,
         wait,
       };

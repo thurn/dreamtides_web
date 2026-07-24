@@ -116,6 +116,7 @@ export interface TutorialView {
     readonly wait: number;
     readonly trigger: TutorialHowToPlayTrigger;
     readonly companion?: DreamwellCardModel | null;
+    readonly cardWidth?: number;
   } | null;
   readonly endTurn: {
     readonly actionId: string;
@@ -298,10 +299,12 @@ function TutorialRepositionTargetResolver({
 function TutorialHowToPlayDialog({
   text,
   companion,
+  cardWidth,
   onClose,
 }: {
   readonly text: string;
   readonly companion: DreamwellCardModel | null;
+  readonly cardWidth: number;
   readonly onClose: () => void;
 }): ReactElement {
   const desktop = useIsDesktop();
@@ -481,7 +484,7 @@ function TutorialHowToPlayDialog({
         data-tutorial-how-to-play-content=""
         style={{
           width: desktop
-            ? `calc(${String(TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH)}px - ${token("--space-5")} - ${token("--space-5")})`
+            ? `calc(${String(cardWidth)}px - ${token("--space-5")} - ${token("--space-5")})`
             : "100%",
           maxWidth: "100%",
           boxSizing: "border-box",
@@ -2577,6 +2580,10 @@ export function TutorialScreen({
         <TutorialHowToPlayDialog
           text={view.howToPlay.text}
           companion={howToPlayCompanion}
+          cardWidth={
+            view.howToPlay.cardWidth ??
+            TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH
+          }
           onClose={closeHowToPlay}
         />
       ) : null}

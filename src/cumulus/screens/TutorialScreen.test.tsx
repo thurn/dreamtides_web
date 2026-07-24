@@ -1462,6 +1462,7 @@ describe("TutorialScreen", () => {
                 text: "From turn 2, players draw [yellow]dreamwell[/yellow] cards that increase their energy (●) production and have other effects.",
                 wait: 0,
                 trigger: "immediate",
+                cardWidth: 650,
                 companion: TUTORIAL_DREAMWELL_CARD,
               },
               battle: {
@@ -1497,7 +1498,7 @@ describe("TutorialScreen", () => {
       dialog?.querySelector<HTMLElement>(
         "[data-tutorial-how-to-play-content]",
       )?.style.width,
-    ).toBe("calc(500px - var(--space-5) - var(--space-5))");
+    ).toBe("calc(650px - var(--space-5) - var(--space-5))");
     expect(
       dialog?.querySelector<HTMLElement>(
         "[data-tutorial-how-to-play-content]",
