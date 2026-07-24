@@ -10,6 +10,11 @@ import { ResourceChip } from "../hud/ResourceChip";
 export type BattleStatusOwner = "player" | "enemy";
 export type BattleStatusRelationship = "near" | "far";
 
+// DreamcallerPortrait's sized framing gives WebKit an intrinsic square inside
+// the reveal-source inline flex instead of asking it to resolve a cyclic 100%
+// width from the surrounding content-sized battle status.
+const BATTLE_STATUS_DREAMCALLER_PX = 44;
+
 /** Semantic profile revealed from a populated battle Dreamcaller portrait. */
 export interface BattleStatusDreamcallerProfile {
   readonly id: string;
@@ -108,6 +113,7 @@ export function BattleStatusDisplay({
           <DreamcallerPortrait
             dreamcaller={dreamcaller}
             variant="thumb"
+            size={BATTLE_STATUS_DREAMCALLER_PX}
             profile={dreamcallerProfile}
             unavailable={dreamcallerProfile?.unavailable}
           />

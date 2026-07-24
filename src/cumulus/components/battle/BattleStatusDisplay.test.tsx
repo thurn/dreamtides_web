@@ -97,6 +97,10 @@ describe("BattleStatusDisplay", () => {
       "inherit",
     );
     expect(container.querySelector("img")?.alt).toBe("Astra, The Dawnbound");
+    expect(
+      container.querySelector<HTMLImageElement>("img")?.parentElement?.style
+        .width,
+    ).toBe("44px");
     expect(container.querySelector("button")).toBeNull();
     expect(container.querySelector('[role="button"]')).toBeNull();
 
