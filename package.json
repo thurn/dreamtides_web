@@ -20,7 +20,6 @@
     "lint:full": "node scripts/review.mjs lint-full",
     "test": "node scripts/review.mjs test",
     "test:full": "node scripts/review.mjs test-full",
-    "test:emulator": "PATH=/opt/homebrew/opt/openjdk@21/bin:/usr/local/opt/openjdk@21/bin:$PATH firebase emulators:exec --only database --project demo-quest-prototype \"vitest run --no-file-parallelism src/eventlog/emulator.integration.test.ts\"",
     "typecheck": "node scripts/review.mjs typecheck",
     "validate": "node scripts/review.mjs validate",
     "review": "node scripts/review.mjs quick",

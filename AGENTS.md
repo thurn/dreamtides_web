@@ -12,9 +12,7 @@ Do not print a summary of changes.
 
 Dreamtides battle rules are in docs/battle_rules/battle_rules.md
 
-Do not write tests which fail when I change my production TOML files
-or change things like default algorithm chocies. Assume all TOML
-game design data is subject to change at any time.
+Write deterministic tests against stable observable contracts using synthetic fixtures; never gate CI on mutable production data, copy, default algorithm choices, private implementation details, statistical or timing thresholds, load-sensitive behavior, or commands that reference deleted tests.
 
 If you encounter a pre-existing issue, please describe it in ./pre-existing-issues.txt
 and include this as part of your commit. 
