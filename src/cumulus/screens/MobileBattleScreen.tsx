@@ -376,8 +376,11 @@ function pickerCandidate(
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
 const BATTLEFIELD_SIDE_INSET_PERCENT = 6;
 const BATTLEFIELD_COMPACT_SIDE_INSET_PERCENT = 3;
+const BATTLEFIELD_FULL_SIDE_INSET_PERCENT = 1;
 const DESKTOP_BATTLEFIELD_SIDE_INSET_PERCENT = 14;
 const BATTLEFIELD_WIDTH_PERCENT = 100 - BATTLEFIELD_SIDE_INSET_PERCENT * 2;
+const BATTLEFIELD_FULL_WIDTH_PERCENT =
+  100 - BATTLEFIELD_FULL_SIDE_INSET_PERCENT * 2;
 // Human-tuned box measures: a compact glyph in a padded dark disc, tucked
 // into the status edge far enough to read as attached to the status display.
 const PHASE_LIGHT_ICON_SIZE = 15;
@@ -1640,7 +1643,10 @@ function mobileBattlefieldDensity(layoutBackSlotCount: number): {
   readonly sideInsetPercent: number;
 } {
   if (layoutBackSlotCount >= MOBILE_BATTLE_MAX_BACK_RANK_SLOTS) {
-    return { gap: "0", sideInsetPercent: 0 };
+    return {
+      gap: "0px",
+      sideInsetPercent: BATTLEFIELD_FULL_SIDE_INSET_PERCENT,
+    };
   }
   if (layoutBackSlotCount > MOBILE_BATTLE_COMPACT_RANK_THRESHOLD) {
     return {
@@ -1664,7 +1670,7 @@ function battlefieldCardSize(
     !isDesktop &&
     densityBackSlotCount >= MOBILE_BATTLE_MAX_BACK_RANK_SLOTS
   ) {
-    return `min(22cqw, calc((100cqw - 0 * ${token("--space-1")}) / 10), calc((200cqh - 0 * ${token("--space-1")}) / 4))`;
+    return `min(22cqw, calc((${String(BATTLEFIELD_FULL_WIDTH_PERCENT)}cqw - 0 * ${token("--space-1")}) / 10), calc((200cqh - 0 * ${token("--space-1")}) / 4))`;
   }
   const horizontalGapCount = Math.max(slotCount - 1, 0);
   const density = isDesktop
@@ -1689,8 +1695,11 @@ function battlefieldTrackWidth(
   cardSize: string,
   gap: string,
 ): string {
-  if (gap === "0") {
-    return `${String(slotCount * 10)}cqw`;
+  if (gap === "0px") {
+    const slotWidthPercent =
+      BATTLEFIELD_FULL_WIDTH_PERCENT /
+      MOBILE_BATTLE_MAX_BACK_RANK_SLOTS;
+    return `${String(slotCount * slotWidthPercent)}cqw`;
   }
   const gapCount = Math.max(slotCount - 1, 0);
   return `calc(${String(slotCount)} * ${cardSize} + ${String(gapCount)} * ${gap})`;

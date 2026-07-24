@@ -2361,6 +2361,9 @@ describe("MobileBattleScreen", () => {
     const backRank = container.querySelector<HTMLElement>(
       '[data-battle-rank="player-back"]',
     );
+    const enemyBackRank = container.querySelector<HTMLElement>(
+      '[data-battle-rank="enemy-back"]',
+    );
     const backTrack = backRank?.querySelector<HTMLElement>(
       "[data-battle-rank-track]",
     );
@@ -2372,13 +2375,15 @@ describe("MobileBattleScreen", () => {
 
     expect(backSlots).toHaveLength(10);
     expect(frontSlots).toHaveLength(9);
-    expect(backRank?.style.left).toBe("0%");
-    expect(backRank?.style.right).toBe("0%");
+    expect(backRank?.style.left).toBe("1%");
+    expect(backRank?.style.right).toBe("1%");
     expect(backTrack?.style.columnGap).toBe("0px");
     expect(backRank?.style.height).toBe(
-      "min(22cqw, calc((100cqw - 0 * var(--space-1)) / 10), calc((200cqh - 0 * var(--space-1)) / 4))",
+      "min(22cqw, calc((98cqw - 0 * var(--space-1)) / 10), calc((200cqh - 0 * var(--space-1)) / 4))",
     );
-    expect(backTrack?.style.width).toBe("100cqw");
+    expect(backRank?.style.top).toContain("+ 0px + var(--space-1)");
+    expect(enemyBackRank?.style.bottom).toContain("+ 0px + var(--space-1)");
+    expect(backTrack?.style.width).toBe("98cqw");
 
     act(() => root.unmount());
   });
