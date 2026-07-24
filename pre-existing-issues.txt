@@ -11,7 +11,10 @@ Glossary Editor: Saving one entry serializes the complete glossary and rewrites
 unrelated source formatting, including triple-quoted regex patterns and omitted
 zero priorities. A one-field edit therefore creates unrelated TOML churn.
 
-Rules Text: The core test suite has two existing failures around the ☪ glossary
-symbol. `card-text.test.ts` expects the lunar symbol token without its glossary
-entry, while `RulesText.test.tsx` expects rendered definition copy not to retain
-the ☪ character even though the current Exhaust Cost definition includes it.
+Glossary/Rules Text: The core test suite has three existing failures after
+production glossary copy changes. `glossary.test.ts` hard-codes an older Points
+definition, `card-text.test.ts` expects the lunar symbol token without its
+glossary entry, and `RulesText.test.tsx` expects rendered definition copy not to
+retain the ☪ character even though the current Exhaust Cost definition includes
+it. These assertions depend on mutable production TOML copy or its exact parsed
+shape.

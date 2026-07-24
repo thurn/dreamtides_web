@@ -141,23 +141,32 @@ function glossaryEditorApiPlugin(): Plugin {
  * gameplay/card surfaces reload their bundled explanatory copy while the
  * glossary editor keeps its local draft and save state.
  */
-function glossaryDataHotReloadPlugin(): Plugin {
+export const glossaryDataWatchPath = path.resolve(
+  path.join(__dirname, "data", "tabula", "glossary.toml"),
+);
+
+export function glossaryDataHotReloadPlugin(): Plugin {
   return {
     name: "glossary-data-hot-reload",
     apply: "serve",
     configureServer(server) {
-      const tomlDir = path.resolve(path.join(__dirname, "data", "tabula"));
+      const tomlDir = path.dirname(glossaryDataWatchPath);
+      const tomlBasename = path.basename(glossaryDataWatchPath);
       let pendingReload: ReturnType<typeof setTimeout> | null = null;
       const watcher = fs.watch(
         tomlDir,
         { persistent: false },
         (_eventType, filename) => {
-          if (filename !== null && filename.toString() !== "glossary.toml") {
+          if (filename !== null && filename.toString() !== tomlBasename) {
             return;
           }
           if (pendingReload !== null) clearTimeout(pendingReload);
           pendingReload = setTimeout(() => {
             pendingReload = null;
+            // data/tabula is excluded from Vite's normal watcher, so explicitly
+            // invalidate the `glossary.toml?raw` module before reloading. A
+            // reload without this step can reuse Vite's cached TOML transform.
+            server.moduleGraph.onFileChange(glossaryDataWatchPath);
             server.ws.send({ type: "custom", event: "glossary-data:changed" });
           }, 120);
         },
