@@ -4,7 +4,10 @@ import {
   formatTypeLine,
   type TextSegment,
 } from "./card-text";
-import { GLOSSARY } from "../../../data/glossary";
+import {
+  GLOSSARY,
+  glossaryRulesTextForms,
+} from "../../../data/glossary";
 import type { CardData } from "../../../types/cards";
 import { asCardId, asCardName } from "../../../types/card-identity";
 
@@ -13,7 +16,11 @@ import { asCardId, asCardName } from "../../../types/card-identity";
 // evolves. `entry` objects come straight from GLOSSARY, which is what the
 // tokenizer resolves to, so they compare equal in the expected output.
 const ARROW_TRIGGERS = GLOSSARY.filter((e) => e.term.startsWith("▸"));
-const BARE_ENTRIES = GLOSSARY.filter((e) => /^[A-Za-z]+$/.test(e.term));
+const BARE_ENTRIES = GLOSSARY.filter(
+  (entry) =>
+    /^[A-Za-z]+$/.test(entry.term) &&
+    glossaryRulesTextForms(entry).includes(entry.term),
+);
 const PLURAL_ENTRY = GLOSSARY.find((e) =>
   (e.variants ?? []).some((v) => /^[a-z]+$/.test(v)),
 );

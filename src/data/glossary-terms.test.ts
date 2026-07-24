@@ -5,13 +5,15 @@ import {
   extractGlossaryTerms,
   orderGlossaryEntriesByPriority,
 } from "./glossary-terms";
-import { GLOSSARY } from "./glossary";
+import { GLOSSARY, glossaryRulesTextForms } from "./glossary";
 import type { GlossaryCatalogEntry } from "./glossary";
 
 // Derive representative entries from the live glossary so these tests track the
 // data rather than hardcoding term names that churn as entries are added,
 // removed, or renamed.
-const bareTerms = GLOSSARY.filter((e) => !e.term.startsWith("▸"));
+const bareTerms = GLOSSARY.filter((entry) =>
+  glossaryRulesTextForms(entry).includes(entry.term),
+).filter((entry) => !entry.term.startsWith("▸"));
 const pluralEntry = GLOSSARY.find((e) =>
   (e.variants ?? []).some((v) => !v.startsWith("▸")),
 );
@@ -140,6 +142,7 @@ function fixture(
   term: string,
   definition: string,
   priority = 0,
+  contexts: GlossaryCatalogEntry["contexts"] = [],
 ): GlossaryCatalogEntry {
   return {
     id,
@@ -149,6 +152,7 @@ function fixture(
     priority,
     matchesRulesText: true,
     variants: [],
+    contexts,
   };
 }
 
@@ -168,7 +172,16 @@ describe("glossary priority", () => {
 
 describe("contextual glossary definitions", () => {
   it("explains foresee 1 with its singular card flow", () => {
-    const foresee = fixture("foresee", "Foresee", "Generic definition.");
+    const foresee = fixture("foresee", "Foresee", "Generic definition.", 0, [
+      {
+        pattern: String.raw`\bforesee\s+(\d+)\b`,
+        term: "{term} {1}",
+        definition: "Look at the top {1} cards.",
+        singularCapture: 1,
+        singularDefinition:
+          "Look at the top card of your deck. You may put it into your void.",
+      },
+    ]);
 
     expect(
       contextualizeGlossaryEntry(foresee, "When you play an event, foresee 1."),
@@ -180,7 +193,16 @@ describe("contextual glossary definitions", () => {
   });
 
   it("incorporates larger foresee counts into the term and definition", () => {
-    const foresee = fixture("foresee", "Foresee", "Generic definition.");
+    const foresee = fixture("foresee", "Foresee", "Generic definition.", 0, [
+      {
+        pattern: String.raw`\bforesee\s+(\d+)\b`,
+        term: "{term} {1}",
+        definition:
+          "Look at the top {1} cards of your deck, then put any number of them into your void and the rest on top in any order.",
+        singularCapture: 1,
+        singularDefinition: "Singular definition.",
+      },
+    ]);
 
     expect(
       contextualizeGlossaryEntry(foresee, "Foresee 3, then draw a card."),
@@ -196,6 +218,14 @@ describe("contextual glossary definitions", () => {
       "reclaim",
       "Reclaim",
       "You may play this card from your void, then banish it when it leaves play.",
+      0,
+      [
+        {
+          pattern: String.raw`\b(?:gain|gains|gained)\s+reclaim\b`,
+          definition:
+            "You may play that card from your void, then banish it when it leaves play.",
+        },
+      ],
     );
 
     expect(
@@ -225,6 +255,14 @@ describe("contextual glossary definitions", () => {
       "exhaust-cost",
       "Exhaust Cost",
       "Generic exhaust definition.",
+      0,
+      [
+        {
+          owner: "dreamcaller",
+          definition:
+            "You may exhaust (☪) this dreamcaller to activate this ability once per turn.",
+        },
+      ],
     );
 
     expect(

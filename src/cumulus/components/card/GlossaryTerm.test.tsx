@@ -90,6 +90,7 @@ const FIXTURE = vi.hoisted(() => ({
 
 vi.mock("../../../data/glossary", () => ({
   GLOSSARY: [FIXTURE],
+  glossaryRulesTextForms: () => [FIXTURE.term],
   GLOSSARY_IDS: {
     fast: "fast",
     interrupt: "interrupt",

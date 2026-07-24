@@ -16,8 +16,8 @@ afterEach(async () => {
 
 function fixtureEntries() {
   return [
-    { id: "spark", category: "Resources", term: "Spark", definition: "Combat power.", priority: 10, matchesRulesText: true, variants: [] },
-    { id: "site-draft", category: "Sites", term: "Draft", definition: "Choose cards.", priority: 0, matchesRulesText: false, variants: [] },
+    { id: "spark", category: "Resources", term: "Spark", definition: "Combat power.", priority: 10, matchesRulesText: true, variants: [], contexts: [] },
+    { id: "site-draft", category: "Sites", term: "Draft", definition: "Choose cards.", priority: 0, matchesRulesText: false, variants: [], contexts: [] },
   ];
 }
 
@@ -96,5 +96,35 @@ describe("glossary editor API", () => {
     });
     expect(response.status).toBe(400);
     expect(readFileSync(path, "utf8")).toBe(before);
+  });
+
+  it("preserves TOML-authored tokenizer forms and contextual copy when editing", async () => {
+    const entries = fixtureEntries();
+    entries[0] = {
+      ...entries[0],
+      rulesTextForms: ["❖"],
+      definitionUsesRulesText: true,
+      definitionSymbol: "fast",
+      termPresentation: "symbolOnly",
+      contexts: [
+        {
+          owner: "dreamcaller",
+          definition: "Dreamcaller-specific explanation.",
+        },
+      ],
+    };
+    const serialized = serializeGlossarySource(entries);
+    expect(parseGlossarySource(serialized)[0]).toMatchObject({
+      rulesTextForms: ["❖"],
+      definitionUsesRulesText: true,
+      definitionSymbol: "fast",
+      termPresentation: "symbolOnly",
+      contexts: [
+        {
+          owner: "dreamcaller",
+          definition: "Dreamcaller-specific explanation.",
+        },
+      ],
+    });
   });
 });

@@ -1,22 +1,10 @@
-import {
-  GLOSSARY_IDS,
-  type GlossaryCatalogEntry,
-} from "../../../data/glossary";
+import type { GlossaryCatalogEntry } from "../../../data/glossary";
 import {
   extractContextualGlossaryTerms,
   type RulesTextGlossaryOwner,
 } from "../../../data/glossary-terms";
 import type { InfoCardProps, InfoCardTextProps } from "../overlay/InfoCard";
-import { richText, type RichTextDefinitionSymbol } from "./rich-text";
-
-const DEFINITION_SYMBOL_BY_ID: Readonly<
-  Partial<Record<string, RichTextDefinitionSymbol>>
-> = {
-  [GLOSSARY_IDS.fast]: "fast",
-  [GLOSSARY_IDS.interrupt]: "interrupt",
-  [GLOSSARY_IDS.exhaustCost]: "exhaust",
-  [GLOSSARY_IDS.nightTrigger]: "trigger",
-};
+import { richText } from "./rich-text";
 
 /**
  * Build the compact glossary card shared by semantic rules-text sources. Each
@@ -37,9 +25,8 @@ export function glossaryDefinitionsCardModel(
       entries.map((entry) => ({
         term: entry.term,
         definition: entry.definition,
-        symbol: DEFINITION_SYMBOL_BY_ID[entry.id],
-        termPresentation:
-          entry.id === GLOSSARY_IDS.exhaustCost ? "symbolOnly" : undefined,
+        symbol: entry.definitionSymbol,
+        termPresentation: entry.termPresentation,
       })),
     ),
   };

@@ -6,6 +6,7 @@ import {
   GLOSSARY_IDS,
   GLOSSARY_INDEX,
   glossaryDefinitionUsesRulesText,
+  glossaryRulesTextForms,
   hasGlossaryTerm,
   lookupGlossaryTerm,
   requireGlossaryEntry,
@@ -52,7 +53,7 @@ describe("glossary", () => {
   it("indexes each term and variant exactly once", () => {
     let totalForms = 0;
     for (const entry of GLOSSARY) {
-      const forms = [entry.term, ...(entry.variants ?? [])];
+      const forms = glossaryRulesTextForms(entry);
       totalForms += forms.length;
       for (const form of forms) {
         expect(GLOSSARY_INDEX[form.toLowerCase()]).toBe(entry);
@@ -104,19 +105,17 @@ describe("glossary", () => {
   it("uses rules-aware rendering for rules terms and exhaust guidance", () => {
     expect(
       glossaryDefinitionUsesRulesText({
-        id: "fixture-rules-term",
         matchesRulesText: true,
       }),
     ).toBe(true);
     expect(
       glossaryDefinitionUsesRulesText({
-        id: GLOSSARY_IDS.exhaustCost,
         matchesRulesText: false,
+        definitionUsesRulesText: true,
       }),
     ).toBe(true);
     expect(
       glossaryDefinitionUsesRulesText({
-        id: "fixture-plain-card",
         matchesRulesText: false,
       }),
     ).toBe(false);

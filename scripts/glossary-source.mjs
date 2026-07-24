@@ -31,6 +31,96 @@ function integer(value, field, index) {
   return value;
 }
 
+function optionalString(value, field, index) {
+  if (value === undefined) return undefined;
+  return requiredString(value, field, index);
+}
+
+function optionalEnum(value, field, index, allowed) {
+  const normalized = optionalString(value, field, index);
+  if (normalized !== undefined && !allowed.includes(normalized)) {
+    throw invalid(
+      `Glossary entry ${String(index + 1)} ${field} must be one of: ${allowed.join(", ")}.`,
+    );
+  }
+  return normalized;
+}
+
+function contextArray(value, index) {
+  if (value === undefined) return [];
+  if (!Array.isArray(value)) {
+    throw invalid(`Glossary entry ${String(index + 1)} contexts must be an array of tables.`);
+  }
+  return value.map((context, contextIndex) => {
+    if (context === null || typeof context !== "object" || Array.isArray(context)) {
+      throw invalid(
+        `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} must be a table.`,
+      );
+    }
+    const owner = optionalString(context.owner, "context owner", index);
+    if (owner !== undefined && owner !== "card" && owner !== "dreamcaller") {
+      throw invalid(
+        `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} owner must be "card" or "dreamcaller".`,
+      );
+    }
+    const pattern = optionalString(context.pattern, "context pattern", index);
+    if (pattern !== undefined) {
+      try {
+        new RegExp(pattern, "iu");
+      } catch {
+        throw invalid(
+          `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} pattern must be a valid regular expression.`,
+        );
+      }
+    }
+    const term = optionalString(context.term, "context term", index);
+    const definition = optionalString(
+      context.definition,
+      "context definition",
+      index,
+    );
+    const singularCapture =
+      context["singular-capture"] ?? context.singularCapture;
+    const singularDefinition = optionalString(
+      context["singular-definition"] ?? context.singularDefinition,
+      "context singular-definition",
+      index,
+    );
+    if (
+      singularCapture !== undefined &&
+      (!Number.isInteger(singularCapture) || singularCapture < 1)
+    ) {
+      throw invalid(
+        `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} singular-capture must be a positive integer.`,
+      );
+    }
+    if (
+      (singularCapture === undefined) !== (singularDefinition === undefined)
+    ) {
+      throw invalid(
+        `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} singular-capture and singular-definition must be provided together.`,
+      );
+    }
+    if (term === undefined && definition === undefined) {
+      throw invalid(
+        `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} must configure term or definition.`,
+      );
+    }
+    return {
+      ...(owner === undefined ? {} : { owner }),
+      ...(pattern === undefined ? {} : { pattern }),
+      ...(term === undefined ? {} : { term }),
+      ...(definition === undefined ? {} : { definition }),
+      ...(singularCapture === undefined
+        ? {}
+        : {
+            singularCapture,
+            singularDefinition,
+          }),
+    };
+  });
+}
+
 /** Validate and normalize parsed glossary records. */
 export function validateGlossaryEntries(input) {
   if (!Array.isArray(input)) {
@@ -58,19 +148,68 @@ export function validateGlossaryEntries(input) {
     const priority = integer(value.priority, "priority", index);
     const variants = stringArray(value.variants, "variants", index);
     const matchesRulesText = value["matches-rules-text"] === true || value.matchesRulesText === true;
+    const rulesTextFormsValue =
+      value["rules-text-forms"] ?? value.rulesTextForms;
+    const rulesTextForms =
+      rulesTextFormsValue === undefined
+        ? undefined
+        : stringArray(rulesTextFormsValue, "rules-text-forms", index);
+    const contexts = contextArray(value.contexts, index);
+    const definitionUsesRulesTextValue =
+      value["definition-uses-rules-text"] ?? value.definitionUsesRulesText;
+    if (
+      definitionUsesRulesTextValue !== undefined &&
+      typeof definitionUsesRulesTextValue !== "boolean"
+    ) {
+      throw invalid(
+        `Glossary entry ${String(index + 1)} definition-uses-rules-text must be a boolean.`,
+      );
+    }
+    const definitionSymbol = optionalEnum(
+      value["definition-symbol"] ?? value.definitionSymbol,
+      "definition-symbol",
+      index,
+      ["fast", "interrupt", "exhaust", "trigger"],
+    );
+    const termPresentationSource =
+      value["term-presentation"] ?? value.termPresentation;
+    const termPresentation =
+      termPresentationSource === "symbol-only"
+        ? "symbolOnly"
+        : optionalEnum(
+            termPresentationSource,
+            "term-presentation",
+            index,
+            ["symbolOnly"],
+          );
 
-    if (matchesRulesText) {
-      for (const form of [term, ...variants]) {
-        const key = form.toLocaleLowerCase();
-        const owner = matchedForms.get(key);
-        if (owner !== undefined) {
-          throw invalid(`Rules-text form "${form}" is claimed by both "${owner}" and "${id}".`);
-        }
-        matchedForms.set(key, id);
+    const matchedEntryForms = rulesTextForms ??
+      (matchesRulesText ? [term, ...variants] : []);
+    for (const form of matchedEntryForms) {
+      const key = form.toLocaleLowerCase();
+      const owner = matchedForms.get(key);
+      if (owner !== undefined) {
+        throw invalid(`Rules-text form "${form}" is claimed by both "${owner}" and "${id}".`);
       }
+      matchedForms.set(key, id);
     }
 
-    return { id, category, term, definition, priority, matchesRulesText, variants };
+    return {
+      id,
+      category,
+      term,
+      definition,
+      priority,
+      matchesRulesText,
+      variants,
+      ...(rulesTextForms === undefined ? {} : { rulesTextForms }),
+      ...(definitionUsesRulesTextValue === undefined
+        ? {}
+        : { definitionUsesRulesText: definitionUsesRulesTextValue }),
+      ...(definitionSymbol === undefined ? {} : { definitionSymbol }),
+      ...(termPresentation === undefined ? {} : { termPresentation }),
+      contexts,
+    };
   });
 }
 
@@ -95,6 +234,45 @@ export function serializeGlossarySource(entries) {
       priority: entry.priority,
       "matches-rules-text": entry.matchesRulesText,
       variants: entry.variants,
+      ...(entry.rulesTextForms === undefined
+        ? {}
+        : { "rules-text-forms": entry.rulesTextForms }),
+      ...(entry.definitionUsesRulesText === undefined
+        ? {}
+        : {
+            "definition-uses-rules-text": entry.definitionUsesRulesText,
+          }),
+      ...(entry.definitionSymbol === undefined
+        ? {}
+        : { "definition-symbol": entry.definitionSymbol }),
+      ...(entry.termPresentation === undefined
+        ? {}
+        : {
+            "term-presentation":
+              entry.termPresentation === "symbolOnly"
+                ? "symbol-only"
+                : entry.termPresentation,
+          }),
+      ...(entry.contexts.length === 0
+        ? {}
+        : {
+            contexts: entry.contexts.map((context) => ({
+              ...(context.owner === undefined ? {} : { owner: context.owner }),
+              ...(context.pattern === undefined
+                ? {}
+                : { pattern: context.pattern }),
+              ...(context.term === undefined ? {} : { term: context.term }),
+              ...(context.definition === undefined
+                ? {}
+                : { definition: context.definition }),
+              ...(context.singularCapture === undefined
+                ? {}
+                : {
+                    "singular-capture": context.singularCapture,
+                    "singular-definition": context.singularDefinition,
+                  }),
+            })),
+          }),
     })),
   }).trimEnd()}\n`;
 }

@@ -23,20 +23,21 @@ const FIXTURES = vi.hoisted(() => ({
 }));
 
 vi.mock("./glossary", () => ({
-  GLOSSARY_IDS: {
-    fast: "fast",
-    interrupt: "interrupt",
-    exhaustCost: "exhaust-cost",
-    nightTrigger: "night-trigger",
-  },
-  glossaryEntry: (id: string) =>
+  GLOSSARY: [
+    { ...FIXTURES.fast, rulesTextForms: ["❖"] },
+    { ...FIXTURES.interrupt, rulesTextForms: ["❖❖"] },
+    { ...FIXTURES.exhaustCost, rulesTextForms: ["☪"] },
+    { ...FIXTURES.night, rulesTextForms: ["▸Night"] },
+  ],
+  glossaryRulesTextForms: (entry: { rulesTextForms: string[] }) =>
+    entry.rulesTextForms,
+  lookupGlossaryTerm: (form: string) =>
     [
-      FIXTURES.fast,
-      FIXTURES.interrupt,
-      FIXTURES.exhaustCost,
-      FIXTURES.night,
-    ].find((entry) => entry.id === id),
-  lookupGlossaryTerm: () => undefined,
+      ["❖", FIXTURES.fast],
+      ["❖❖", FIXTURES.interrupt],
+      ["☪", FIXTURES.exhaustCost],
+      ["▸night", FIXTURES.night],
+    ].find(([key]) => key === form.toLocaleLowerCase())?.[1],
 }));
 
 import { extractGlossaryTerms } from "./glossary-terms";

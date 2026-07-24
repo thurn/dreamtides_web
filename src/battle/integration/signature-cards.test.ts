@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { selectSignatureCards, glossaryTermsIn } from "./signature-cards";
-import { GLOSSARY } from "../../data/glossary";
+import { GLOSSARY, glossaryRulesTextForms } from "../../data/glossary";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 
@@ -13,7 +13,11 @@ function plainGlossaryTerms(): string[] {
   const seen = new Set<string>();
   const terms: string[] = [];
   for (const entry of GLOSSARY) {
-    if (/^[A-Za-z]+$/.test(entry.term) && !seen.has(entry.term)) {
+    if (
+      /^[A-Za-z]+$/.test(entry.term) &&
+      glossaryRulesTextForms(entry).includes(entry.term) &&
+      !seen.has(entry.term)
+    ) {
       seen.add(entry.term);
       terms.push(entry.term);
     }

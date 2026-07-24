@@ -33,6 +33,8 @@ definition = "Triggers at the end of your turn."
 priority = 40
 matches-rules-text = false
 variants = []
+rules-text-forms = [ "▸Night" ]
+definition-symbol = "trigger"
 
 [[entries]]
 id = "day"
@@ -115,6 +117,10 @@ priority = 100
 matches-rules-text = true
 variants = [ "reclaimed" ]
 
+[[entries.contexts]]
+pattern = '''\b(?:gain|gains|gained)\s+reclaim\b'''
+definition = "You may play that card from your void, then banish it when it leaves play."
+
 [[entries]]
 id = "foresee"
 category = "Keywords"
@@ -123,6 +129,13 @@ definition = "Look at the top N cards of your deck, put any number into your voi
 priority = 95
 matches-rules-text = true
 variants = []
+
+[[entries.contexts]]
+pattern = '''\bforesee\s+(\d+)\b'''
+term = "{term} {1}"
+definition = "Look at the top {1} cards of your deck, then put any number of them into your void and the rest on top in any order."
+singular-capture = 1
+singular-definition = "Look at the top card of your deck. You may put it into your void."
 
 [[entries]]
 id = "discover"
@@ -150,6 +163,8 @@ definition = "You may use this ability at the end of either player's turn."
 priority = 95
 matches-rules-text = false
 variants = []
+rules-text-forms = [ "❖" ]
+definition-symbol = "fast"
 
 [[entries]]
 id = "interrupt"
@@ -159,6 +174,8 @@ definition = "You may use this ability in response to an opponent card or abilit
 priority = 95
 matches-rules-text = false
 variants = []
+rules-text-forms = [ "❖❖" ]
+definition-symbol = "interrupt"
 
 [[entries]]
 id = "exhaust-cost"
@@ -168,6 +185,14 @@ definition = "You may exhaust (☪) this character to activate this ability inst
 priority = 95
 matches-rules-text = false
 variants = []
+rules-text-forms = [ "☪" ]
+definition-uses-rules-text = true
+definition-symbol = "exhaust"
+term-presentation = "symbol-only"
+
+[[entries.contexts]]
+owner = "dreamcaller"
+definition = "You may exhaust (☪) this dreamcaller to activate this ability once per turn."
 
 [[entries]]
 id = "awakened"

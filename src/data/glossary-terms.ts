@@ -1,8 +1,9 @@
 import {
-  glossaryEntry,
-  GLOSSARY_IDS,
+  GLOSSARY,
+  glossaryRulesTextForms,
   lookupGlossaryTerm,
   type GlossaryCatalogEntry,
+  type GlossaryContext,
 } from "./glossary";
 
 /** The semantic owner whose rules text is being explained. */
@@ -44,28 +45,49 @@ export type RulesTextGlossaryOwner = "card" | "dreamcaller";
  */
 
 /**
- * Rules-text forms that can own glossary definitions. The double-bolt
- * interrupt must match before the single-bolt fast marker.
+ * Non-word rules-text forms come from glossary.toml. Sorting longest-first
+ * keeps overlapping forms such as the double-bolt interrupt ahead of the
+ * single-bolt fast marker.
  */
-const GLOSSARY_FORM_RE = /❖❖|❖|☪|▸?[A-Za-z]+/g;
-
-const SYMBOL_ENTRY_IDS: Readonly<Record<string, string>> = {
-  "❖": GLOSSARY_IDS.fast,
-  "❖❖": GLOSSARY_IDS.interrupt,
-  "☪": GLOSSARY_IDS.exhaustCost,
-  "▸night": GLOSSARY_IDS.nightTrigger,
-};
-
-function entryForForm(form: string): GlossaryCatalogEntry | undefined {
-  const symbolEntryId = SYMBOL_ENTRY_IDS[form.toLocaleLowerCase()];
-  if (symbolEntryId !== undefined) {
-    return glossaryEntry(symbolEntryId);
-  }
-  return lookupGlossaryTerm(form);
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
 }
 
-const FORESEE_COUNT_RE = /\bforesee\s+(\d+)\b/i;
-const GRANTED_RECLAIM_RE = /\b(?:gain|gains|gained)\s+reclaim\b/i;
+const SPECIAL_RULES_TEXT_FORMS = GLOSSARY.flatMap((entry) =>
+  glossaryRulesTextForms(entry),
+)
+  .filter((form) => !/^▸?[A-Za-z]+$/u.test(form))
+  .sort((left, right) => right.length - left.length);
+
+const GLOSSARY_FORM_RE = new RegExp(
+  [...SPECIAL_RULES_TEXT_FORMS.map(escapeRegExp), "▸?[A-Za-z]+"].join("|"),
+  "gu",
+);
+
+function contextMatches(
+  context: GlossaryContext,
+  text: string,
+  owner: RulesTextGlossaryOwner,
+): readonly string[] | undefined {
+  if (context.owner !== undefined && context.owner !== owner) {
+    return undefined;
+  }
+  if (context.pattern === undefined) {
+    return [""];
+  }
+  return new RegExp(context.pattern, "iu").exec(text) ?? undefined;
+}
+
+function renderContextTemplate(
+  template: string,
+  entry: GlossaryCatalogEntry,
+  match: readonly string[],
+): string {
+  return template.replace(/\{(term|\d+)\}/gu, (_, key: string) => {
+    if (key === "term") return entry.term;
+    return match[Number.parseInt(key, 10)] ?? "";
+  });
+}
 
 /**
  * Orders glossary entries for a shared rules-text reveal. JavaScript's stable
@@ -90,36 +112,26 @@ export function contextualizeGlossaryEntry(
   text: string,
   owner: RulesTextGlossaryOwner = "card",
 ): GlossaryCatalogEntry {
-  if (entry.id === GLOSSARY_IDS.foresee) {
-    const countMatch = FORESEE_COUNT_RE.exec(text);
-    if (countMatch !== null) {
-      const count = Number.parseInt(countMatch[1], 10);
-      return {
-        ...entry,
-        term: `${entry.term} ${String(count)}`,
-        definition:
-          count === 1
-            ? "Look at the top card of your deck. You may put it into your void."
-            : `Look at the top ${String(count)} cards of your deck, then put any number of them into your void and the rest on top in any order.`,
-      };
-    }
-  }
-
-  if (entry.id === GLOSSARY_IDS.reclaim && GRANTED_RECLAIM_RE.test(text)) {
+  for (const context of entry.contexts ?? []) {
+    const match = contextMatches(context, text, owner);
+    if (match === undefined) continue;
+    const useSingularDefinition =
+      context.singularCapture !== undefined &&
+      Number.parseInt(match[context.singularCapture] ?? "", 10) === 1;
     return {
       ...entry,
-      definition: entry.definition.replace(/\bthis card\b/i, "that card"),
-    };
-  }
-
-  if (entry.id === GLOSSARY_IDS.exhaustCost && owner === "dreamcaller") {
-    return {
-      ...entry,
+      term:
+        context.term === undefined
+          ? entry.term
+          : renderContextTemplate(context.term, entry, match),
       definition:
-        "You may exhaust (☪) this dreamcaller to activate this ability once per turn.",
+        useSingularDefinition && context.singularDefinition !== undefined
+          ? renderContextTemplate(context.singularDefinition, entry, match)
+          : context.definition === undefined
+            ? entry.definition
+            : renderContextTemplate(context.definition, entry, match),
     };
   }
-
   return entry;
 }
 
@@ -134,7 +146,7 @@ export function extractGlossaryTerms(text: string): GlossaryCatalogEntry[] {
   const seen = new Set<GlossaryCatalogEntry>();
   const ordered: GlossaryCatalogEntry[] = [];
   for (const match of text.matchAll(GLOSSARY_FORM_RE)) {
-    const entry = entryForForm(match[0]);
+    const entry = lookupGlossaryTerm(match[0]);
     if (entry === undefined) {
       continue;
     }

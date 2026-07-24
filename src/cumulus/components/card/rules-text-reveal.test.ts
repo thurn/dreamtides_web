@@ -1,11 +1,15 @@
 import { describe, expect, it } from "vitest";
-import {
-  GLOSSARY_IDS,
-  type GlossaryCatalogEntry,
-} from "../../../data/glossary";
+import type { GlossaryCatalogEntry } from "../../../data/glossary";
 import { glossaryDefinitionsCardModel } from "./rules-text-reveal";
 
-function entry(id: string, term: string): GlossaryCatalogEntry {
+function entry(
+  id: string,
+  term: string,
+  presentation: Pick<
+    GlossaryCatalogEntry,
+    "definitionSymbol" | "termPresentation"
+  > = {},
+): GlossaryCatalogEntry {
   return {
     id,
     category: "Test",
@@ -14,16 +18,20 @@ function entry(id: string, term: string): GlossaryCatalogEntry {
     priority: 0,
     matchesRulesText: false,
     variants: [],
+    ...presentation,
   };
 }
 
 describe("glossaryDefinitionsCardModel", () => {
   it("attaches production rule symbols to their definition rows", () => {
     const card = glossaryDefinitionsCardModel([
-      entry(GLOSSARY_IDS.fast, "Fast"),
-      entry(GLOSSARY_IDS.interrupt, "Interrupt"),
-      entry(GLOSSARY_IDS.exhaustCost, "Exhaust Cost"),
-      entry(GLOSSARY_IDS.nightTrigger, "Night"),
+      entry("fast", "Fast", { definitionSymbol: "fast" }),
+      entry("interrupt", "Interrupt", { definitionSymbol: "interrupt" }),
+      entry("exhaust-cost", "Exhaust Cost", {
+        definitionSymbol: "exhaust",
+        termPresentation: "symbolOnly",
+      }),
+      entry("night-trigger", "Night", { definitionSymbol: "trigger" }),
       entry("void", "Void"),
     ]);
 

@@ -11,6 +11,22 @@ export interface GlossaryEntry {
   readonly variants?: readonly string[];
 }
 
+/** A TOML-authored contextual projection of one canonical entry. */
+export interface GlossaryContext {
+  /** Limit this projection to rules text owned by this entity type. */
+  readonly owner?: "card" | "dreamcaller";
+  /** Case-insensitive regular expression which the source sentence must match. */
+  readonly pattern?: string;
+  /** Display-term template; `{term}` and numbered captures such as `{1}` expand. */
+  readonly term?: string;
+  /** Definition template; `{term}` and numbered captures such as `{1}` expand. */
+  readonly definition?: string;
+  /** Capture whose numeric value selects singular-definition when it equals 1. */
+  readonly singularCapture?: number;
+  /** Singular definition template paired with singularCapture. */
+  readonly singularDefinition?: string;
+}
+
 /** Fully identified record loaded from glossary.toml and shown in the editor. */
 export interface GlossaryCatalogEntry extends GlossaryEntry {
   /** Stable key used by semantic Info Card callsites. */
@@ -22,6 +38,16 @@ export interface GlossaryCatalogEntry extends GlossaryEntry {
   /** Whether card rules text recognizes this entry as an inline term. */
   readonly matchesRulesText: boolean;
   readonly variants: readonly string[];
+  /** Exact tokenizer forms, overriding term plus variants when present. */
+  readonly rulesTextForms?: readonly string[];
+  /** Render the definition with rules-aware inline glyphs. */
+  readonly definitionUsesRulesText?: boolean;
+  /** Optional symbol shown beside this entry in a combined definition card. */
+  readonly definitionSymbol?: "fast" | "interrupt" | "exhaust" | "trigger";
+  /** Optional term treatment in a combined definition card. */
+  readonly termPresentation?: "symbolOnly";
+  /** Ordered sentence/owner-specific projections. */
+  readonly contexts?: readonly GlossaryContext[];
 }
 
 /** Every editable Info Card definition, in TOML source order. */
@@ -30,7 +56,11 @@ export const INFO_CARD_GLOSSARY: readonly GlossaryCatalogEntry[] =
 
 /** Rules-text entries used by the card keyword tokenizer. */
 export const GLOSSARY: readonly GlossaryCatalogEntry[] =
-  INFO_CARD_GLOSSARY.filter((entry) => entry.matchesRulesText);
+  INFO_CARD_GLOSSARY.filter(
+    (entry) =>
+      entry.matchesRulesText ||
+      (entry.rulesTextForms !== undefined && entry.rulesTextForms.length > 0),
+  );
 
 const ENTRY_BY_ID = new Map(
   INFO_CARD_GLOSSARY.map((entry) => [entry.id, entry]),
@@ -93,12 +123,20 @@ export const GLOSSARY_INDEX: Readonly<Record<string, GlossaryCatalogEntry>> =
   (() => {
     const index: Record<string, GlossaryCatalogEntry> = {};
     for (const entry of GLOSSARY) {
-      for (const form of [entry.term, ...entry.variants]) {
+      for (const form of glossaryRulesTextForms(entry)) {
         index[form.toLocaleLowerCase()] = entry;
       }
     }
     return index;
   })();
+
+/** Exact forms recognized for one entry by the rules-text tokenizer. */
+export function glossaryRulesTextForms(
+  entry: GlossaryCatalogEntry,
+): readonly string[] {
+  return entry.rulesTextForms ??
+    (entry.matchesRulesText ? [entry.term, ...entry.variants] : []);
+}
 
 /** Trigger arrow that can prefix a rules keyword. */
 export const TRIGGER_ARROW = "▸";
@@ -128,9 +166,12 @@ export function hasGlossaryTerm(word: string): boolean {
  * their explanatory prose includes a rules glyph.
  */
 export function glossaryDefinitionUsesRulesText(
-  entry: Pick<GlossaryCatalogEntry, "id" | "matchesRulesText">,
+  entry: Pick<
+    GlossaryCatalogEntry,
+    "matchesRulesText" | "definitionUsesRulesText"
+  >,
 ): boolean {
   return (
-    entry.matchesRulesText === true || entry.id === GLOSSARY_IDS.exhaustCost
+    entry.matchesRulesText === true || entry.definitionUsesRulesText === true
   );
 }
