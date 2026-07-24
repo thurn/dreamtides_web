@@ -71,8 +71,25 @@ export function readReviewLockOwner(lockPath) {
 
 export function snapshotReviewLock(lockPath) {
   try {
-    const stat = lstatSync(lockPath);
-    return { dev: stat.dev, ino: stat.ino, isDirectory: stat.isDirectory() };
+    const stat = lstatSync(lockPath, { bigint: true });
+    const isDirectory = stat.isDirectory();
+    let ownerContents = null;
+    try {
+      ownerContents = readFileSync(
+        isDirectory ? join(lockPath, "owner.json") : lockPath,
+        "utf8",
+      );
+    } catch {
+      // A corrupt legacy lock can still be identified and removed by its
+      // filesystem metadata.
+    }
+    return {
+      dev: stat.dev,
+      ino: stat.ino,
+      ctimeNs: stat.ctimeNs,
+      ownerContents,
+      isDirectory,
+    };
   } catch (error) {
     if (error?.code === "ENOENT") return null;
     throw error;
@@ -80,9 +97,9 @@ export function snapshotReviewLock(lockPath) {
 }
 
 /**
- * Removes a stale lock only if the path still names the inode that was
- * inspected. This prevents one waiter from deleting a new owner's lock after
- * another waiter already removed and replaced the stale record.
+ * Removes a stale lock only if the path still names the exact lock that was
+ * inspected. Linux can immediately reuse an unlinked inode, so the change time
+ * and serialized owner record are part of the identity as well.
  */
 export function removeReviewLockIfUnchanged(lockPath, snapshot) {
   if (snapshot === null) return false;
@@ -90,7 +107,9 @@ export function removeReviewLockIfUnchanged(lockPath, snapshot) {
   if (
     current === null ||
     current.dev !== snapshot.dev ||
-    current.ino !== snapshot.ino
+    current.ino !== snapshot.ino ||
+    current.ctimeNs !== snapshot.ctimeNs ||
+    current.ownerContents !== snapshot.ownerContents
   ) {
     return false;
   }

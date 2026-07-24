@@ -55,15 +55,23 @@ describe("review lock", () => {
     });
   });
 
-  it("does not remove a replacement lock after inspecting a stale owner", () => {
+  it("does not remove a replacement lock when its inode is reused", () => {
     const lockPath = lockFixture();
     tryCreateReviewLock(lockPath, { pid: 101, task: "lint" });
     const staleSnapshot = snapshotReviewLock(lockPath);
 
     unlinkSync(lockPath);
     tryCreateReviewLock(lockPath, { pid: 202, task: "test" });
+    const replacementSnapshot = snapshotReviewLock(lockPath);
+    const reusedInodeSnapshot = {
+      ...staleSnapshot,
+      dev: replacementSnapshot.dev,
+      ino: replacementSnapshot.ino,
+    };
 
-    expect(removeReviewLockIfUnchanged(lockPath, staleSnapshot)).toBe(false);
+    expect(removeReviewLockIfUnchanged(lockPath, reusedInodeSnapshot)).toBe(
+      false,
+    );
     expect(readReviewLockOwner(lockPath)).toEqual({ pid: 202, task: "test" });
   });
 });

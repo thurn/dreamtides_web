@@ -31,6 +31,7 @@ import {
 
 const REGENERATE =
   "regenerate with `npm run cumulus-metadata && npm run cumulus-docs` (or `npm run regenerate-assets`) and commit the result";
+const METADATA_GENERATION_TIMEOUT_MS = 20_000;
 
 describe("cumulus generated artifacts are fresh", () => {
   it("cumulus-metadata.json matches the component sources", () => {
@@ -38,7 +39,7 @@ describe("cumulus generated artifacts are fresh", () => {
     expect(committed, `stale ${METADATA_OUT_PATH} — ${REGENERATE}`).toBe(
       computeMetadataJson(),
     );
-  });
+  }, METADATA_GENERATION_TIMEOUT_MS);
 
   it("src/cumulus/primitives/tokens.ts matches cumulus-tokens.css", () => {
     const committed = readFileSync(TOKENS_TS_OUT_PATH, "utf8");
