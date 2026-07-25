@@ -294,6 +294,18 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     },
     [actions, clientId],
   );
+  const submitAiPlayCard = useCallback(
+    (battleCardId: string, targetBattleCardIds: readonly string[], trace: import("../types").BattleAiChoiceTrace | null): void => {
+      void actions.battlePlayCard(
+        battleCardId,
+        targetBattleCardIds,
+        `battle-play:${board.battleId}:${String(board.turnNumber)}:${battleCardId}`,
+        `ai:${clientId}`,
+        trace === null ? undefined : [trace],
+      );
+    },
+    [actions, board.battleId, board.turnNumber, clientId],
+  );
   const {
     proposal,
     thinking: aiThinking,
@@ -303,6 +315,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     board,
     submitCommand: submitAiCommand,
     submitGesture: submitAiGesture,
+    submitPlayCard: submitAiPlayCard,
     enabled: aiDriverEnabled,
     aiSide: "enemy",
     caps: aiCaps,

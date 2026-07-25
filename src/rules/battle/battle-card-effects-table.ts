@@ -1,5 +1,5 @@
 import type { BattleDebugEdit } from "../../battle/debug/commands";
-import { supportedDeploySlots } from "../../battle/engine/support";
+import { supportedDeploySlots, supportingReserveSlots } from "../../battle/engine/support";
 import type {
   BattleCardInstance,
   BattleMutableState,
@@ -33,6 +33,8 @@ export interface BattleCardEffectScript {
  */
 export interface BattleTriggeredEffectScript {
   id: string;
+  /** `fnv1aHex` of the exact authored text this script implements. */
+  textHash?: string;
   triggers: Partial<Record<BattleScriptTrigger, readonly EffectStep[]>>;
 }
 
@@ -51,6 +53,62 @@ const FIXTURE_TRIGGER_STEPS: readonly EffectStep[] = [{
  * the production support registry above remains the audited card catalog.
  */
 export const BATTLE_TRIGGERED_EFFECTS: Record<string, BattleTriggeredEffectScript> = {
+  // Starter tutorial/automated battle rules.  These ids are the source of
+  // truth; names are intentionally absent because card names are not unique.
+  "5a980eff-6ec7-44d8-9977-b98e66bbc2c8": {
+    id: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", textHash: "a4a7189e", triggers: {},
+  },
+  "647f5150-b2e0-424b-9480-27557642524e": {
+    id: "647f5150-b2e0-424b-9480-27557642524e", textHash: "153cdaf2",
+    triggers: { materialized: [{ kind: "prompt", prompt: { kind: "foresee", count: 1 } }] },
+  },
+  "e83014d3-9d35-4e80-a1b3-9b25360ad2af": {
+    id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af", textHash: "811c9dc5", triggers: {},
+  },
+  "a28ad36d-fa74-4190-a463-7efd3a6233d0": {
+    id: "a28ad36d-fa74-4190-a463-7efd3a6233d0", textHash: "ce8fae02",
+    triggers: { dawn: [{ kind: "edits", build: (ctx) => [{ kind: "ADJUST_SCORE", side: ctx.side, amount: 1 }] }] },
+  },
+  "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481": {
+    id: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", textHash: "9a004bcb",
+    triggers: { dissolved: [{ kind: "edits", build: (ctx) => [{ kind: "DRAW_CARD", side: ctx.side }] }], abandoned: [{ kind: "edits", build: (ctx) => [{ kind: "DRAW_CARD", side: ctx.side }] }] },
+  },
+  "5ab11bef-5dcd-49f5-be49-ae2ccde76e70": {
+    id: "5ab11bef-5dcd-49f5-be49-ae2ccde76e70", textHash: "3a0bae05", triggers: {},
+  },
+  "4408b942-09a0-4f4e-a403-10c708c6e3c5": {
+    id: "4408b942-09a0-4f4e-a403-10c708c6e3c5", textHash: "ad1c27c7",
+    triggers: { played: [{ kind: "edits", build: (ctx) => {
+      const target = ctx.bindings?.targetBattleCardIds?.[0];
+      const instance = target === undefined ? undefined : ctx.state.cardInstances[target];
+      if (target === undefined || instance === undefined) return [];
+      if (instance.status.veil) {
+        return [{ kind: "SET_CARD_STATUS", battleCardId: target, status: { veil: false } }];
+      }
+      return [{ kind: "MOVE_CARD_TO_ZONE", battleCardId: target, destination: { side: ctx.side === "player" ? "enemy" : "player", zone: "void" } }];
+    } }] },
+  },
+  "2162742c-09d0-4e62-ae49-0f8f79b45adc": {
+    id: "2162742c-09d0-4e62-ae49-0f8f79b45adc", textHash: "7776dd2f",
+    triggers: { played: [{ kind: "edits", build: (ctx) => [{ kind: "DRAW_CARD", side: ctx.side }] }, { kind: "prompt", prompt: { kind: "foresee", count: 1 } }] },
+  },
+  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba": {
+    id: "910b4cf9-dec7-4e03-af4f-7d5ae342eeba", textHash: "469120a4",
+    triggers: { played: [{ kind: "prompt", prompt: {
+      kind: "pick-cards", label: "Discover a character", count: 1, optional: false,
+      candidates: (ctx) => sampleDiscoverCharacters(ctx),
+      resolve: (chosenIds, ctx) => resolveDiscoverChoice(chosenIds, ctx),
+    } }] },
+  },
+  "944e15d2-d680-4ebe-8d18-36826f4b1535": {
+    id: "944e15d2-d680-4ebe-8d18-36826f4b1535", textHash: "03e76b70",
+    triggers: { played: [{ kind: "edits", build: (ctx) => {
+      const target = ctx.bindings?.targetBattleCardIds?.[0];
+      const instance = target === undefined ? undefined : ctx.state.cardInstances[target];
+      if (target === undefined || instance === undefined) return [];
+      return [{ kind: "SET_CARD_SPARK_DELTA", battleCardId: target, value: instance.sparkDelta + 3 }];
+    } }] },
+  },
   [BATTLE_EFFECT_FIXTURE_CARD_ID]: {
     id: BATTLE_EFFECT_FIXTURE_CARD_ID,
     triggers: {
@@ -195,6 +253,12 @@ export function collectAutomationHashDrift(
       drift.push({ id, expected: script.textHash, actual });
     }
   }
+  for (const [id, script] of Object.entries(BATTLE_TRIGGERED_EFFECTS)) {
+    if (script.textHash === undefined || BATTLE_CARD_EFFECTS[id] !== undefined) continue;
+    const text = cardsById.get(id);
+    const actual = text === undefined ? null : fnv1aHex(text);
+    if (actual !== script.textHash) drift.push({ id, expected: script.textHash, actual });
+  }
   return drift;
 }
 
@@ -257,6 +321,17 @@ export function planStaticContributionSettlement(
         }
       }
     }
+    // Rusted Colossus receives its own static contribution for every occupied
+    // geometrically supporting back-rank slot.  The supporting character need
+    // not itself have Support.
+    for (const side of sides) {
+      for (const frontSlot of rankSlotIds(state.sides[side].frontRank)) {
+        const recipientId = state.sides[side].frontRank[frontSlot];
+        if (recipientId === null || state.cardInstances[recipientId]?.definition.cardId !== "5ab11bef-5dcd-49f5-be49-ae2ccde76e70") continue;
+        const occupied = supportingReserveSlots(frontSlot).filter((slot) => state.sides[side].backRank[slot] !== null).length;
+        targets.set(recipientId, (targets.get(recipientId) ?? 0) + occupied * 2);
+      }
+    }
   }
 
   const edits: BattleDebugEdit[] = [];
@@ -271,6 +346,32 @@ export function planStaticContributionSettlement(
     }
   }
   return edits;
+}
+
+function sampleDiscoverCharacters(ctx: StepContext): string[] {
+  const candidates = ctx.state.sides[ctx.side].deck.filter((battleCardId) =>
+    ctx.state.cardInstances[battleCardId]?.definition.battleCardKind === "character",
+  );
+  const pool = [...candidates];
+  const offers: string[] = [];
+  while (pool.length > 0 && offers.length < 3) {
+    offers.push(pool.splice(Math.floor(ctx.random() * pool.length), 1)[0]);
+  }
+  return offers;
+}
+
+function resolveDiscoverChoice(chosenIds: string[], ctx: StepContext): BattleDebugEdit[] {
+  const chosen = chosenIds[0];
+  if (chosen === undefined) return [];
+  const remaining = ctx.state.sides[ctx.side].deck.filter((id) => id !== chosen);
+  for (let index = remaining.length - 1; index > 0; index -= 1) {
+    const swap = Math.floor(ctx.random() * (index + 1));
+    [remaining[index], remaining[swap]] = [remaining[swap], remaining[index]];
+  }
+  return [
+    { kind: "MOVE_CARD_TO_ZONE", battleCardId: chosen, destination: { side: ctx.side, zone: "hand" } },
+    { kind: "REORDER_DECK", side: ctx.side, order: remaining },
+  ];
 }
 
 /** Compatibility export for callers that still use the former Support name. */

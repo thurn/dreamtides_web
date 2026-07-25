@@ -38,7 +38,7 @@ import type {
   BattleResult,
   BattleSide,
 } from "../../battle/types";
-import { frontRankSlotId } from "../../battle/types";
+import { frontRankSlotId, rankSlotIds } from "../../battle/types";
 import type { BattleCommand, BattleDebugEdit } from "../../battle/debug/commands";
 import type {
   BattleModifier,
@@ -741,6 +741,93 @@ export function battleCommand(
   return { ...state, battle: driveChallengeCursor(current, ctx.seq, random, nowMs) };
 }
 
+const STARTER_CARD_IDS = new Set<string>([
+  "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", "647f5150-b2e0-424b-9480-27557642524e",
+  "e83014d3-9d35-4e80-a1b3-9b25360ad2af", "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+  "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
+  "4408b942-09a0-4f4e-a403-10c708c6e3c5", "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba", "944e15d2-d680-4ebe-8d18-36826f4b1535",
+]);
+
+interface BattlePlayCardIntent {
+  battleCardId: string;
+  targetBattleCardIds: string[];
+}
+
+/** Semantic, all-or-nothing Starter-card play for tutorial and AI clients. */
+export function battlePlayCard(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): FoldState | null {
+  const battle = state.battle;
+  const intent = coerceBattlePlayCardIntent(payload);
+  if (battle === null || intent === null || battle.pendingPrompt !== null || battle.board.result !== null) return null;
+  const before = battle.board;
+  const instance = before.cardInstances[intent.battleCardId];
+  const location = selectBattleCardLocation(before, intent.battleCardId);
+  if (
+    instance === undefined || location?.zone !== "hand" || location.side !== instance.controller ||
+    !STARTER_CARD_IDS.has(instance.definition.cardId) || before.activeSide !== instance.controller ||
+    before.phase !== "day" || instance.definition.isFast ||
+    before.sides[instance.controller].currentEnergy < instance.definition.energyCost ||
+    !starterTargetsAreLegal(before, instance.controller, instance.definition.cardId, intent.targetBattleCardIds)
+  ) return null;
+
+  const character = instance.definition.battleCardKind === "character";
+  let destination: import("../../battle/debug/commands").BattleDebugZoneDestination;
+  if (character) {
+    const slotId = rankSlotIds(before.sides[instance.controller].backRank).find(
+      (candidate) => before.sides[instance.controller].backRank[candidate] === null,
+    );
+    if (slotId === undefined) return null;
+    destination = { side: instance.controller, zone: "backRank", slotId };
+  } else if (instance.definition.battleCardKind === "event") {
+    destination = { side: instance.controller, zone: "void" };
+  } else return null;
+
+  // Work on a local board so every validation finishes before the cost becomes
+  // observable. Queue draining happens only after movement and cost coexist.
+  const move = { kind: "MOVE_CARD_TO_ZONE" as const, battleCardId: intent.battleCardId, destination };
+  let board = applyBoardEdits(before, [
+    { kind: "ADJUST_CURRENT_ENERGY", side: instance.controller, amount: -instance.definition.energyCost },
+    move,
+    ...(character ? [{ kind: "SET_CARD_STATUS" as const, battleCardId: intent.battleCardId, status: { isExhausted: true } }] : []),
+  ]);
+  const queue = [...battle.effectQueue];
+  scheduleBattleTriggerEdges(queue, before, board, { id: "DEBUG_EDIT", edit: move, sourceSurface: "auto-system" }, intent.targetBattleCardIds);
+  let drawIndex = 0;
+  const random = (): number => ctx.rng(drawIndex++);
+  const nowMs = isoTimestampToMs(ctx.timestamp) ?? 0;
+  const advanced = advanceEffectQueueWithStream({ ...battle, board, effectQueue: queue, pendingPrompt: null }, ctx.seq, random, nowMs);
+  board = applyBoardEdits(advanced.board, planStaticContributionSettlement(advanced.board, true, random, nowMs));
+  return { ...state, battle: { ...advanced, board } };
+}
+
+function coerceBattlePlayCardIntent(raw: Record<string, unknown>): BattlePlayCardIntent | null {
+  if (!isNonEmptyString(raw.battleCardId) || !isStringArray(raw.targetBattleCardIds)) return null;
+  if (new Set(raw.targetBattleCardIds).size !== raw.targetBattleCardIds.length) return null;
+  return { battleCardId: raw.battleCardId, targetBattleCardIds: [...raw.targetBattleCardIds] };
+}
+
+function starterTargetsAreLegal(board: BattleMutableState, controller: BattleSide, cardId: string, targets: readonly string[]): boolean {
+  const target = targets[0];
+  if (cardId === "4408b942-09a0-4f4e-a403-10c708c6e3c5") {
+    const instance = target === undefined ? undefined : board.cardInstances[target];
+    const location = target === undefined ? null : selectBattleCardLocation(board, target);
+    return targets.length === 1 && instance !== undefined && instance.controller !== controller &&
+      instance.definition.battleCardKind === "character" && instance.definition.energyCost <= 2 &&
+      location !== null && isBattlefieldZone(location.zone);
+  }
+  if (cardId === "944e15d2-d680-4ebe-8d18-36826f4b1535") {
+    const instance = target === undefined ? undefined : board.cardInstances[target];
+    const location = target === undefined ? null : selectBattleCardLocation(board, target);
+    return targets.length === 1 && instance !== undefined && instance.controller === controller &&
+      instance.definition.battleCardKind === "character" && location !== null && isBattlefieldZone(location.zone);
+  }
+  return targets.length === 0;
+}
+
 /**
  * `BATTLE_GESTURE { commands }`: one player gesture the automation planner
  * expanded into an ordered list of battle commands (a play that also spends
@@ -1359,6 +1446,7 @@ function scheduleBattleTriggerEdges(
   before: BattleMutableState,
   after: BattleMutableState,
   command: BattleCommand,
+  targetBattleCardIds?: readonly string[],
 ): void {
   if (command.id !== "DEBUG_EDIT") return;
   const edit = command.edit;
@@ -1366,7 +1454,7 @@ function scheduleBattleTriggerEdges(
   if (edit.kind === "REMATERIALIZE") {
     const location = selectBattleCardLocation(before, edit.battleCardId);
     if (location !== null && isBattlefieldZone(location.zone)) {
-      enqueueBattleTrigger(queue, before, edit.battleCardId, "rematerialized");
+      enqueueBattleTrigger(queue, before, edit.battleCardId, "rematerialized", targetBattleCardIds);
     }
     return;
   }
@@ -1383,13 +1471,13 @@ function scheduleBattleTriggerEdges(
   const sourceInPlay = isBattlefieldZone(source.zone);
   const destinationInPlay = isBattlefieldZone(destination.zone);
   if (source.zone === "hand" && instance.definition.battleCardKind === "event") {
-    enqueueBattleTrigger(queue, before, movedId, "played");
+    enqueueBattleTrigger(queue, before, movedId, "played", targetBattleCardIds);
   }
   if (!sourceInPlay && destinationInPlay) {
-    enqueueBattleTrigger(queue, before, movedId, "materialized");
+    enqueueBattleTrigger(queue, before, movedId, "materialized", targetBattleCardIds);
   }
   if (sourceInPlay && destination.zone === "void") {
-    enqueueBattleTrigger(queue, before, movedId, edit.kind === "ABANDON" ? "abandoned" : "dissolved");
+    enqueueBattleTrigger(queue, before, movedId, edit.kind === "ABANDON" ? "abandoned" : "dissolved", targetBattleCardIds);
   }
 }
 
@@ -1402,6 +1490,7 @@ function enqueueBattleTrigger(
   board: BattleMutableState,
   battleCardId: string,
   trigger: import("./fold").BattleScriptTrigger,
+  targetBattleCardIds?: readonly string[],
 ): void {
   const instance = board.cardInstances[battleCardId];
   if (instance === undefined) return;
@@ -1414,6 +1503,7 @@ function enqueueBattleTrigger(
       sourceCardId: instance.definition.cardId,
       sourceController: instance.controller,
       sourceZone: selectBattleCardLocation(board, battleCardId)?.zone,
+      ...(targetBattleCardIds === undefined ? {} : { targetBattleCardIds }),
     },
   ));
 }

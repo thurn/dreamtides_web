@@ -33,6 +33,8 @@ export interface AiProposal {
   trace: BattleAiChoiceTrace | null;
   /** The commands `approve()` dispatches, in order. */
   commands: BattleCommand[];
+  /** Authoritative play payload for Starter-card proposals. */
+  playCard?: { battleCardId: string; targetBattleCardIds: string[] };
 }
 
 /** Planning budget in ms past the snapshot clock. */
@@ -57,6 +59,7 @@ export interface UseBattleAiArgs {
   board: BattleMutableState;
   submitCommand: (command: BattleCommand) => void;
   submitGesture: (commands: readonly BattleCommand[]) => void;
+  submitPlayCard?: (battleCardId: string, targetBattleCardIds: readonly string[], trace: BattleAiChoiceTrace | null) => void;
   enabled: boolean;
   /** The side the AI controls (e.g. "enemy"). */
   aiSide: BattleSide;
@@ -130,6 +133,7 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
     board,
     submitCommand,
     submitGesture,
+    submitPlayCard,
     enabled,
     aiSide,
     caps,
@@ -247,8 +251,12 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
     if (proposal === null) {
       return;
     }
+    if (proposal.playCard !== undefined && submitPlayCard !== undefined) {
+      submitPlayCard(proposal.playCard.battleCardId, proposal.playCard.targetBattleCardIds, proposal.trace);
+      return;
+    }
     submitCommands(proposal.commands);
-  }, [proposal, submitCommands]);
+  }, [proposal, submitCommands, submitPlayCard]);
 
   // Excludes the proposed action and recomputes — dispatches NOTHING. Only a
   // card-play `action` can be rejected; phase/turn-ending proposals cannot.
@@ -436,6 +444,16 @@ function buildActionProposal(
     description: trace.rationale ?? describeFallback(action),
     trace,
     commands: tracedCommands,
+    ...(action.kind !== "PLAY_CARD" || action.self === undefined
+      ? {}
+      : {
+        playCard: {
+          battleCardId: action.self.battleCardId,
+          targetBattleCardIds: action.targets?.targetBattleCardId === undefined || action.targets.targetBattleCardId === null
+            ? []
+            : [action.targets.targetBattleCardId],
+        },
+      }),
   };
 }
 

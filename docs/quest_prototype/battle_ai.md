@@ -132,8 +132,8 @@ tractable.
 | Marked Direwolf | 4● | 4 | Character / Spirit Animal | (vanilla) | Efficient beater |
 | Runebound Champion | 5● | 3 | Character / Warrior | ▸Dawn: Gain 1⍟. | Durable body |
 | Final Witness | 3● | 2 | Character / Visitor | ▸Dissolved: Draw a card. | Value trader |
-| Wildflower Colossus | 6● | 6 | Character / Synth | This character has +2✦ for each supporting ally. | Finisher / payoff |
-| Flashpoint Detonation | 2● | — | Event | Dissolve an enemy with cost 3● or less. | Removal |
+| Rusted Colossus | 6● | 6 | Character / Synth | This character has +2✦ for each supporting character. | Finisher / payoff |
+| Flashpoint Detonation | 3● | — | Event | Dissolve an enemy with cost 2● or less. | Removal |
 | Glimpse of What Was | 1● | — | Event | Draw a card, then foresee 1. | Cantrip / dig |
 | Sign of Arrival | 2● | — | Event | Discover a character. | Toolbox / card advantage |
 | Worlds Await | 1● | — | Event | Give an ally +3✦. | Proactive pump |
@@ -437,7 +437,7 @@ Per-card notes that the models encode:
   abstract body when known; unknown-cost bodies are treated conservatively.
 - **Worlds Await (+3✦ to an ally)** — standard timing means it cannot be an
   instant combat trick; the AI plays it proactively to push a challenger past a
-  likely blocker, grow Wildflower Colossus toward lethal, or set up a favorable trade.
+  likely blocker, grow Rusted Colossus toward lethal, or set up a favorable trade.
 - **Marked Direwolf** — vanilla 4✦ body; pure tempo, the cleanest challenger.
 
 This registry is the only place card-specific logic lives. Adding a card to the
@@ -580,7 +580,7 @@ The loop, for the AI's turn:
    (receding-horizon; see [The Planner](#the-planner)).
 2. `BattleAiProposalBar` renders it as one proposal: a plain-language description
    ("Play Marked Direwolf to the back rank"; "Dissolve your 3✦ body with
-   Flashpoint Detonation"; "Declare Wildflower Colossus as a challenger"), the
+   Flashpoint Detonation"; "Declare Rusted Colossus as a challenger"), the
    referenced card(s), and the AI's short rationale from the
    `BattleAiChoiceTrace`.
 3. The human clicks **Approve**, **Reject**, or **End AI Turn**:
@@ -640,7 +640,7 @@ work behind a single proposal, computed when the previous one is resolved.
 To make the pieces concrete, here is a representative enemy turn. Suppose it is
 the AI's turn 4 (max energy 5 under the default ramp). The AI's hand holds
 Marked Direwolf (4●), Nocturne Strummer (2●), Flashpoint Detonation (2●), Worlds
-Await (1●). On the board it already has a Wildflower Colossus in the back rank
+Await (1●). On the board it already has a Rusted Colossus in the back rank
 (played last turn, now awakened) and the player has a lone 3✦ body in their front
 rank.
 
@@ -654,7 +654,7 @@ rank.
    AI's expected Challenge points. The proposal names the exact target. You click
    **Approve** (or **Reject** if you know it should fizzle — say the body has Veil
    you have not revealed).
-3. **Proposal: declare Wildflower Colossus as a challenger.** The awakened
+3. **Proposal: declare Rusted Colossus as a challenger.** The awakened
    Colossus is pushed to the front rank, with the Strummer placed in a supporting
    back-rank slot. The proposal shows its computed effective spark — 6 base + 2
    from the Strummer's Support. You **Approve**.
@@ -663,13 +663,13 @@ rank.
    points. You **Approve**.
 5. **Proposal: End Turn.** Approving it declares challengers and yields your Dusk
    window (position a defender, play a Fast card). The Challenge resolver then
-   proposes the outcome — "Wildflower Colossus scores N⍟, no defenders" — which
+   proposes the outcome — "Rusted Colossus scores N⍟, no defenders" — which
    you **Approve**. Only then does the score commit; the spine checks the win
    condition, ramps energy, and hands the turn back via `SET_BATTLE_FLOW`.
 
 Each approved step emits a `BattleAiChoiceTrace`, so the log reads as a legible
 sequence — "play Nocturne Strummer → dissolve your 3✦ body with Flashpoint Detonation →
-push Wildflower Colossus to challenge → pump it with Worlds Await → pass" —
+push Rusted Colossus to challenge → pump it with Worlds Await → pass" —
 and every entry in it was something you clicked to allow.
 
 ## Codebase Integration

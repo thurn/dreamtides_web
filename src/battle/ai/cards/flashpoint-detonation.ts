@@ -3,13 +3,13 @@ import type { AiTargetChoice, StarterCardModel } from "./index";
 import { playEvent } from "./helpers";
 
 /** Flashpoint Detonation only dissolves an enemy whose cost is at most this. */
-const MAX_TARGET_COST = 3;
+const MAX_TARGET_COST = 2;
 
 /**
- * #516 Flashpoint Detonation (Event, 2●) — "Dissolve an enemy with cost 3● or less."
+ * #516 Flashpoint Detonation (Event, 3●) — "Dissolve an enemy with cost 2● or less."
  * (`battle_ai.md` §"The AI Deck"). Removal.
  *
- * The "cost ≤ 3" legality is read from the body's `energyCost`: a card in play
+ * The "cost ≤ 2" legality is read from the body's `energyCost`: a card in play
  * is public, so its cost is known even though the rest of the opponent's hand
  * and deck stay abstract. Only bodies at or under {@link MAX_TARGET_COST} are
  * legal targets, so the AI never proposes dissolving a body the spell cannot

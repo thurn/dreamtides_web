@@ -68,6 +68,9 @@ export interface EffectBindings {
   sourceCardId?: string;
   sourceController?: BattleSide;
   sourceZone?: string;
+  /** Targets selected as part of the semantic play intent.  They are instance
+   * ids, captured before costs and carried through queued event resolution. */
+  targetBattleCardIds?: readonly string[];
 }
 
 /** The battle lifecycle edges that an authored card script may subscribe to. */

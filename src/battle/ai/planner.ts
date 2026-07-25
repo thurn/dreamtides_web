@@ -24,7 +24,7 @@ import {
  * Staged beam-search planner with a deadline guard (`battle_ai.md`
  * §"The Planner"). It runs a receding-horizon search: it plans the whole
  * intended turn so look-ahead captures order-sensitive synergies (e.g. play
- * Nocturne Strummer before Wildflower Colossus so the Colossus evaluates with
+ * Nocturne Strummer before Rusted Colossus so the Colossus evaluates with
  * its supporter present), but RETURNS ONLY THE SINGLE NEXT ACTION — the first
  * action of the best plan found — plus its trace. The caller applies that one
  * action and re-plans.
@@ -189,7 +189,7 @@ function firstEmptyBackRankSlot(model: ForwardModel): BackRankSlotId {
  * The staged order (`battle_ai.md` §"The Planner") is reflected by stage tags
  * and by the order actions are emitted: character plays, then repositions, then
  * non-character (event) plays. The beam ranks the resulting models by score, so
- * order-sensitive synergies (Nocturne Strummer before Wildflower Colossus)
+ * order-sensitive synergies (Nocturne Strummer before Rusted Colossus)
  * surface naturally.
  */
 function generateActions(model: ForwardModel): PlanAction[] {

@@ -30,11 +30,11 @@ function baseSpark(card: AiCard): number {
 /**
  * #519 Worlds Await (Event, 1●) — "Give an ally +3✦." (`battle_ai.md`
  * §"The AI Deck"). A proactive pump: standard timing, so the AI plays it to
- * push a challenger past a likely blocker or grow Wildflower Colossus toward
+ * push a challenger past a likely blocker or grow Rusted Colossus toward
  * lethal.
  *
  * Target choice: prefer a deployed challenger (allies are listed deployed-first
- * and chosen by highest base spark); a Wildflower Colossus is favored on a
+ * and chosen by highest base spark); a Rusted Colossus is favored on a
  * tie since its own static stacks with the pump.
  */
 export const worldsAwait: StarterCardModel = {
@@ -48,7 +48,7 @@ export const worldsAwait: StarterCardModel = {
       return null;
     }
     // Allies are deployed-first; pick the highest base spark, breaking ties
-    // toward Wildflower Colossus. The stable scan keeps the earlier
+    // toward Rusted Colossus. The stable scan keeps the earlier
     // (deployed) ally on equal base spark.
     let best = allies[0];
     for (const ally of allies) {

@@ -597,6 +597,43 @@ function hashBoard(board: BattleMutableState): string {
   return JSON.stringify(board);
 }
 
+describe("BATTLE_PLAY_CARD", () => {
+  it("commits a legal targeted event atomically and bounces stale targets without a cost", () => {
+    const flashpoint = makeInstance("flashpoint", "4408b942-09a0-4f4e-a403-10c708c6e3c5");
+    flashpoint.definition = { ...flashpoint.definition, battleCardKind: "event", energyCost: 3, printedEnergyCost: 3 };
+    const target = makeInstance("target", "fixture-target", "enemy");
+    target.definition = { ...target.definition, energyCost: 2, printedEnergyCost: 2 };
+    const board = makeRichBoard({ instances: [flashpoint, target], playerHand: ["flashpoint"] });
+    board.sides.player.currentEnergy = 3;
+    board.sides.enemy.frontRank.F0 = "target";
+    const state = inBattleState({}, battleFrom(board));
+
+    const bad = reduce(state, "BATTLE_PLAY_CARD", { battleCardId: "flashpoint", targetBattleCardIds: ["missing"] });
+    expect(bad.outcome).toBe("bounced");
+    expect(hashBoard(bad.state.battle?.board ?? board)).toBe(hashBoard(board));
+
+    const legal = reduce(state, "BATTLE_PLAY_CARD", { battleCardId: "flashpoint", targetBattleCardIds: ["target"] });
+    expect(legal.outcome).toBe("applied");
+    expect(legal.state.battle?.board.sides.player.currentEnergy).toBe(0);
+    expect(legal.state.battle?.board.sides.player.void).toContain("flashpoint");
+    expect(legal.state.battle?.board.sides.enemy.void).toContain("target");
+  });
+
+  it("parks Ringwatcher's persisted Foresee prompt after payment and materialization", () => {
+    const ringwatcher = makeInstance("ringwatcher", "647f5150-b2e0-424b-9480-27557642524e");
+    ringwatcher.definition = { ...ringwatcher.definition, energyCost: 3, printedEnergyCost: 3 };
+    const deckCard = makeInstance("deck-card", "fixture-deck-card");
+    const board = makeRichBoard({ instances: [ringwatcher, deckCard], playerHand: ["ringwatcher"], playerDeck: ["deck-card"] });
+    board.sides.player.currentEnergy = 3;
+    const result = reduce(inBattleState({}, battleFrom(board)), "BATTLE_PLAY_CARD", { battleCardId: "ringwatcher", targetBattleCardIds: [] });
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.sides.player.currentEnergy).toBe(0);
+    expect(result.state.battle?.board.sides.player.backRank.B0).toBe("ringwatcher");
+    expect(result.state.battle?.board.cardInstances.ringwatcher.status.isExhausted).toBe(true);
+    expect(result.state.battle?.pendingPrompt?.options).toMatchObject({ kind: "foresee", cardIds: ["deck-card"] });
+  });
+});
+
 /** The first unconditional back-rank support script (no `applies` subtype
  *  filter), so it grants spark to ANY supported front ally regardless of type. */
 function firstSupportScript(): { id: string } {

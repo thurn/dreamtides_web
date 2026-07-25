@@ -191,6 +191,13 @@ export interface CoopActions {
     intentKey?: string,
     actor?: string,
   ) => Promise<number>;
+  battlePlayCard: (
+    battleCardId: string,
+    targetBattleCardIds: readonly string[],
+    intentKey?: string,
+    actor?: string,
+    aiChoices?: unknown,
+  ) => Promise<number>;
   /** Submit an ordered list of battle commands as one all-or-nothing event. */
   battleGesture: (
     commands: readonly unknown[],
@@ -441,6 +448,17 @@ export function makeActions(append: AppendFn): CoopActions {
       append({
         type: "BATTLE_COMMAND",
         payload: { command },
+        ...(intentKey === undefined ? {} : { intentKey }),
+        ...(actor === undefined ? {} : { actor }),
+      }),
+    battlePlayCard: (battleCardId, targetBattleCardIds, intentKey, actor, aiChoices) =>
+      append({
+        type: "BATTLE_PLAY_CARD",
+        payload: {
+          battleCardId,
+          targetBattleCardIds: [...targetBattleCardIds],
+          ...(aiChoices === undefined ? {} : { aiChoices }),
+        },
         ...(intentKey === undefined ? {} : { intentKey }),
         ...(actor === undefined ? {} : { actor }),
       }),

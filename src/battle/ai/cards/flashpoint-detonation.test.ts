@@ -81,7 +81,7 @@ describe("Flashpoint Detonation (#516)", () => {
     expect(flashpointDetonation.chooseTargets(model, self)?.targetBattleCardId).toBe("big");
   });
 
-  it("canPlay is false when every enemy body costs more than 3", () => {
+  it("canPlay is false when every enemy body costs more than 2", () => {
     const self = makeCard({ battleCardId: "blast", cardNumber: 516, energyCost: 2 });
     const model = makeModel({
       opponentBodies: [
@@ -91,13 +91,13 @@ describe("Flashpoint Detonation (#516)", () => {
     expect(flashpointDetonation.canPlay(model, self)).toBe(false);
   });
 
-  it("chooseTargets skips a body that costs more than 3", () => {
+  it("chooseTargets skips a body that costs more than 2", () => {
     const self = makeCard({ battleCardId: "blast", cardNumber: 516, energyCost: 2 });
     const model = makeModel({
       opponentBodies: [
         // Biggest threat, but too expensive to dissolve — must be ignored.
         makeBody({ battleCardId: "colossus", rank: "front", slot: "F0", effectiveSpark: 9, energyCost: 6 }),
-        makeBody({ battleCardId: "cheap", rank: "front", slot: "F1", effectiveSpark: 2, energyCost: 3 }),
+        makeBody({ battleCardId: "cheap", rank: "front", slot: "F1", effectiveSpark: 2, energyCost: 2 }),
       ],
     });
     expect(flashpointDetonation.chooseTargets(model, self)?.targetBattleCardId).toBe("cheap");

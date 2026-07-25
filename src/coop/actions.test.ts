@@ -136,6 +136,7 @@ function captureAllDrafts(): EventDraft[] {
   void actions.beginBattle("site-1");
   void actions.setBattleAutomation(true);
   void actions.battleCommand({});
+  void actions.battlePlayCard("battle-card-1", []);
   void actions.battleGesture([{}, {}]);
   void actions.battleAiDefend("enemy", "ai:test");
   void actions.resolvePrompt(1, {});

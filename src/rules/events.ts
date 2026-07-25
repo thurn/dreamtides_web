@@ -143,6 +143,11 @@ export interface EventPayloads {
   BEGIN_BATTLE: { siteId: string; seedOverride?: number };
   SET_BATTLE_AUTOMATION: { enabled: boolean };
   BATTLE_COMMAND: { command: unknown };
+  BATTLE_PLAY_CARD: {
+    battleCardId: string;
+    targetBattleCardIds: string[];
+    aiChoices?: unknown;
+  };
   // A single player gesture that the automation planner expanded into an ordered
   // list of battle commands (e.g. a play that also spends energy, or a turn
   // handoff that resolves the Challenge, ramps energy, and draws). Each element
@@ -291,6 +296,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   BEGIN_BATTLE: true,
   SET_BATTLE_AUTOMATION: true,
   BATTLE_COMMAND: true,
+  BATTLE_PLAY_CARD: true,
   BATTLE_GESTURE: true,
   BATTLE_AI_DEFEND: true,
   RESOLVE_PROMPT: true,

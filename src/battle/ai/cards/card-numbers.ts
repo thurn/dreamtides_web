@@ -15,7 +15,7 @@ export const CHARACTER_CARD_NUMBERS: ReadonlySet<number> = new Set([
   512, // Marked Direwolf
   513, // Runebound Champion
   514, // Final Witness
-  515, // Wildflower Colossus
+  515, // Rusted Colossus
 ]);
 
 export const EVENT_CARD_NUMBERS: ReadonlySet<number> = new Set([

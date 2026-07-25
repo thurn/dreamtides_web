@@ -66,7 +66,7 @@ export interface AiOpponentBody {
   /**
    * The body's printed energy cost. A card in play is public, so its cost is
    * known to both players (unlike its hidden hand/deck contents); cost-gated
-   * removal such as Flashpoint Detonation ("cost 3● or less") reads it. Coerced
+   * removal such as Flashpoint Detonation ("cost 2● or less") reads it. Coerced
    * to `0` for a card with no printed cost.
    */
   energyCost: number;
