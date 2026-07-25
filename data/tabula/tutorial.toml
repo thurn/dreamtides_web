@@ -59,7 +59,7 @@ wait = 0
 [[actions]]
 id = "end-turn"
 action = "end-turn"
-speechText = "Good, you have now [yellow]materialized[/yellow] this character."
+speechText = "You have now [yellow]materialized[/yellow] a dream character."
 wait = 0
 
 [[actions]]

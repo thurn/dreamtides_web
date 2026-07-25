@@ -663,7 +663,7 @@
       ]
     },
     "4733876a-d6b1-48d2-b322-5f71aee9f3d6": {
-      "name": "Hope's Vanguard",
+      "name": "Returned Vanguard",
       "needs": [],
       "supports": [
         "survivors",
@@ -871,7 +871,7 @@
       ]
     },
     "f38ab9b6-bea7-4c6e-b5db-2609796ba46b": {
-      "name": "Dawnprowler Panther",
+      "name": "Dawnprowler",
       "needs": [
         {
           "theme": "spirit-animals",
@@ -2350,7 +2350,7 @@
       ]
     },
     "f860e815-3ed9-463d-ac4d-ed8d2778f8ad": {
-      "name": "Night Prowler",
+      "name": "Night Stalker",
       "needs": [],
       "supports": [
         "spirit-animals",
@@ -2695,7 +2695,7 @@
       ]
     },
     "19aeffa6-fd1b-4b8f-bb0c-c35659521976": {
-      "name": "Nocturne",
+      "name": "Night Scavenger",
       "needs": [],
       "supports": [
         "void",
@@ -3990,7 +3990,7 @@
       ]
     },
     "d30bd488-f921-49cb-a44f-353c54cb6548": {
-      "name": "Nightprowler Panther",
+      "name": "Nightprowler",
       "needs": [],
       "supports": [
         "spirit-animals",
@@ -4217,7 +4217,7 @@
       ]
     },
     "8904714c-38a9-491f-92ce-5cb5ece26ab1": {
-      "name": "Plunge into the Abyss",
+      "name": "Cast Beyond the Horizon",
       "needs": [],
       "supports": [
         "events"

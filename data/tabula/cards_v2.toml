@@ -265,7 +265,7 @@ card-number = 14
 name = "Ethereal Trailblazer"
 mtg-name = "Mox Opal"
 id = "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49"
-rendered-text = "▸Dawn: If you control 3 or more warriors, gain 1●."
+rendered-text = "▸Materialized, Dawn: If you control 3 or more warriors, gain 1●."
 energy-cost = 0
 card-type = "Character"
 subtype = "Warrior"
@@ -1141,7 +1141,7 @@ card-number = 60
 art = { x = 0.642, y = 1, scale = 1.87 }
 
 [[cards]]
-name = "Nightprowler Panther"
+name = "Nightprowler"
 mtg-name = "Devoted Druid"
 id = "d30bd488-f921-49cb-a44f-353c54cb6548"
 rendered-text = """
@@ -2689,7 +2689,7 @@ card-number = 142
 art = { x = 0.135, y = 0.351, scale = 1.57 }
 
 [[cards]]
-name = "Nocturne"
+name = "Night Scavenger"
 mtg-name = "Kitchen Finks"
 id = "19aeffa6-fd1b-4b8f-bb0c-c35659521976"
 rendered-text = """
@@ -5659,7 +5659,7 @@ card-number = 302
 art = { x = 0.084, y = 0.032, scale = 1.17 }
 
 [[cards]]
-name = "Dawnprowler Panther"
+name = "Dawnprowler"
 mtg-name = "Birchlore Rangers"
 id = "f38ab9b6-bea7-4c6e-b5db-2609796ba46b"
 rendered-text = "When you materialize a spirit animal, if it is not the first spirit animal you have materialized this turn, gain 1●."
@@ -6578,7 +6578,7 @@ card-number = 350
 art = { x = -0.105, y = -0.654, scale = 1.57 }
 
 [[cards]]
-name = "Night Prowler"
+name = "Night Stalker"
 mtg-name = "Mox Diamond"
 id = "f860e815-3ed9-463d-ac4d-ed8d2778f8ad"
 rendered-text = """
@@ -7053,7 +7053,7 @@ art-owned = true
 card-number = 375
 
 [[cards]]
-name = "Plunge into the Abyss"
+name = "Cast Beyond the Horizon"
 mtg-name = "Oust"
 id = "8904714c-38a9-491f-92ce-5cb5ece26ab1"
 rendered-text = "Put an enemy on top of the opponent's deck."
@@ -7231,7 +7231,7 @@ id = "e26e0ac8-d6c9-4b0c-8672-4f73651f2586"
 rendered-text = "☪, Discard a card: Draw a card."
 energy-cost = 1
 card-type = "Character"
-subtype = "Ancient"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -8807,7 +8807,7 @@ art-owned = false
 card-number = 468
 
 [[cards]]
-name = "Hope's Vanguard"
+name = "Returned Vanguard"
 mtg-name = "Relentless Dead"
 id = "4733876a-d6b1-48d2-b322-5f71aee9f3d6"
 rendered-text = "▸Dissolved: You may pay 1● to return this character to hand."
