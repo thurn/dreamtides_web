@@ -39,6 +39,8 @@ export function createDefaultBattleCardStatus(): BattleCardStatus {
     grantedVengeful: false,
     grantedPreeminence: false,
     grantedAwakened: false,
+    temporaryReclaimUntilEnding: null,
+    temporaryBanishUntilEnding: null,
   };
 }
 
@@ -107,7 +109,9 @@ export function cloneBattleMutableState(state: BattleMutableState): BattleMutabl
             ...instance,
             definition: cloneBattleDeckCardDefinition(instance.definition),
             ...(instance.figments === undefined ? {} : { figments: [...instance.figments] }),
-            status: { ...instance.status },
+            // Persisted pre-automation battles omit the temporary-effect
+            // fields. Normalize them while cloning the replay/load boundary.
+            status: { ...createDefaultBattleCardStatus(), ...instance.status },
             markers: { ...instance.markers },
             notes: instance.notes.map((note) => ({
               ...note,

@@ -183,6 +183,13 @@ function scheduleEffectLifecycleEdge(
   after: BattleMutableState,
   edit: BattleDebugEdit,
 ): void {
+  if (edit.kind === "REMATERIALIZE") {
+    const location = selectBattleCardLocation(before, edit.battleCardId);
+    if (location !== null && isBattlefieldZone(location.zone)) {
+      enqueueLifecycleRun(queue, before, edit.battleCardId, "rematerialized");
+    }
+    return;
+  }
   const battleCardId = edit.kind === "MOVE_CARD_TO_ZONE" ? edit.battleCardId
     : edit.kind === "ABANDON" ? edit.battleCardId
       : null;
@@ -213,7 +220,7 @@ function enqueueLifecycleRun(
   queue: EffectRun[],
   board: BattleMutableState,
   battleCardId: string,
-  trigger: "played" | "materialized" | "dissolved" | "abandoned",
+  trigger: "played" | "materialized" | "rematerialized" | "dissolved" | "abandoned",
 ): void {
   const instance = board.cardInstances[battleCardId];
   if (instance === undefined) return;
@@ -479,8 +486,8 @@ export function resolvePendingPromptWithStream(
 
   const stepCtx: StepContext =
     run.sourceInstanceId === undefined
-      ? { side: run.side, state: battle.board, random, nowMs, bindings: run.bindings }
-      : { side: run.side, state: battle.board, random, nowMs, sourceId: run.sourceInstanceId, bindings: run.bindings };
+      ? { side: run.side, state: battle.board, random, nowMs, bindings: run.bindings, promptCandidateIds: pending.options.kind === "pick-cards" ? pending.options.candidateIds : undefined }
+      : { side: run.side, state: battle.board, random, nowMs, sourceId: run.sourceInstanceId, bindings: run.bindings, promptCandidateIds: pending.options.kind === "pick-cards" ? pending.options.candidateIds : undefined };
 
   const { edits, rest: expectedRest } = applyPromptResolution(
     promptStep.prompt,

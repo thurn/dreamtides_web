@@ -80,6 +80,7 @@ import {
   type PendingPrompt,
 } from "./fold";
 import { selectBattleCardLocation } from "../../battle/state/selectors";
+import { hasTemporaryReclaimEligibility } from "./temporary-effects";
 
 // ---------------------------------------------------------------------------
 // Battle-init provider seam (BEGIN_BATTLE construction)
@@ -607,6 +608,26 @@ function applyBattleCommandStep(
     };
   }
 
+  // Ending also expires turn-bounded Dreamwell effects. Restore moves are
+  // applied through the same observed-edge scheduler as every other zone move,
+  // so materialization scripts and the subsequent static settlement run once.
+  if (handedOff && boardAfter.result === null) {
+    for (const endingEdit of settleTemporaryDreamwellEffects(
+      board,
+      boardBefore.activeSide,
+      boardBefore.turnNumber,
+    )) {
+      const beforeEndingEdit = board;
+      board = applyBoardEdits(board, [endingEdit]);
+      scheduleBattleTriggerEdges(
+        queue,
+        beforeEndingEdit,
+        board,
+        { id: "DEBUG_EDIT", edit: endingEdit, sourceSurface: "auto-system" },
+      );
+    }
+  }
+
   scheduleBattleTriggerEdges(queue, boardBefore, boardAfter, command);
 
   // Dawn is an authoritative board edge, not a component mount concern. A
@@ -695,6 +716,7 @@ export function battleCommand(
   if (command === null) {
     return null;
   }
+  if (!voidPlaySourceIsLegal(battle.board, command)) return null;
 
   let drawIndex = 0;
   const random = (): number => ctx.rng(drawIndex++);
@@ -741,6 +763,24 @@ export function battleCommand(
     current = next;
   }
   return { ...state, battle: driveChallengeCursor(current, ctx.seq, random, nowMs) };
+}
+
+/** Semantic source legality for moves that are actually plays from a void. */
+function voidPlaySourceIsLegal(board: BattleMutableState, command: BattleCommand): boolean {
+  if (command.id !== "DEBUG_EDIT" || command.edit.kind !== "MOVE_CARD_TO_ZONE") return true;
+  if (!("slotId" in command.edit.destination)) return true;
+  const location = selectBattleCardLocation(board, command.edit.battleCardId);
+  if (location?.zone !== "void") return true;
+  const instance = board.cardInstances[command.edit.battleCardId];
+  if (instance === undefined) return false;
+  if (instance.definition.reclaimCost === null && !hasTemporaryReclaimEligibility(board, instance)) return false;
+  if (board.sides[instance.controller].currentEnergy < instance.definition.energyCost) return false;
+  if (!instance.definition.isFast) {
+    return board.activeSide === instance.controller && board.phase === "day";
+  }
+  return board.activeSide === instance.controller
+    ? board.phase === "day" || board.phase === "night"
+    : board.phase === "dusk";
 }
 
 const STARTER_CARD_IDS = new Set<string>([
@@ -1011,6 +1051,42 @@ function applyBoardEdits(
     next = applyDebugEdit(next, edit, EMISSION).state;
   }
   return next;
+}
+
+/** Resolves the temporary, serialized Dreamwell state attached to cards. */
+function settleTemporaryDreamwellEffects(
+  board: BattleMutableState,
+  activeSide: BattleSide,
+  turnNumber: number,
+): BattleDebugEdit[] {
+  const edits: BattleDebugEdit[] = [];
+  for (const battleCardId of Object.keys(board.cardInstances).sort()) {
+    const instance = board.cardInstances[battleCardId];
+    if (instance === undefined) continue;
+    const reclaim = instance.status.temporaryReclaimUntilEnding;
+    if (reclaim?.activeSide === activeSide && reclaim.turnNumber === turnNumber) {
+      edits.push({ kind: "SET_CARD_STATUS", battleCardId, status: { temporaryReclaimUntilEnding: null } });
+    }
+
+    const banish = instance.status.temporaryBanishUntilEnding;
+    if (banish?.activeSide !== activeSide || banish.turnNumber !== turnNumber) continue;
+    const location = selectBattleCardLocation(board, battleCardId);
+    if (location?.zone !== "banished") continue;
+    const backRank = board.sides[banish.priorController].backRank;
+    const slotId = rankSlotIds(backRank).find((candidate) => backRank[candidate] === null);
+    // A full materialized back rank leaves the card banished. The persisted
+    // marker records the deterministic reason/source for battle inspection.
+    if (slotId === undefined) continue;
+    edits.push(
+      {
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId,
+        destination: { side: banish.priorController, zone: "backRank", slotId },
+      },
+      { kind: "SET_CARD_STATUS", battleCardId, status: { temporaryBanishUntilEnding: null } },
+    );
+  }
+  return edits;
 }
 
 /** The four fixed front-rank lanes the authoritative Challenge traverses. */

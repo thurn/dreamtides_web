@@ -15,7 +15,6 @@ import {
 } from "./effect-step";
 import {
   DREAMWELL_EFFECTS,
-  DREAMWELL_MANUAL_IDS,
   dreamwellAutomationStatus,
   selectDreamwellEffectScript,
 } from "./dreamwell-effects-table";
@@ -511,7 +510,7 @@ describe("gainScoreEdits", () => {
 // Tests: dreamwell-effects-table — partition invariant
 // ---------------------------------------------------------------------------
 
-describe("DREAMWELL_EFFECTS / DREAMWELL_MANUAL_IDS partition invariant", () => {
+describe("DREAMWELL_EFFECTS catalog coverage", () => {
   it("all DREAMWELL_EFFECTS keys are 36-char UUIDs that equal their entry id", () => {
     for (const [key, script] of Object.entries(DREAMWELL_EFFECTS)) {
       expect(key).toHaveLength(36);
@@ -519,21 +518,12 @@ describe("DREAMWELL_EFFECTS / DREAMWELL_MANUAL_IDS partition invariant", () => {
     }
   });
 
-  it("DREAMWELL_EFFECTS keys and DREAMWELL_MANUAL_IDS are disjoint", () => {
-    for (const key of Object.keys(DREAMWELL_EFFECTS)) {
-      expect(DREAMWELL_MANUAL_IDS.has(key)).toBe(false);
-    }
-    for (const id of DREAMWELL_MANUAL_IDS) {
-      expect(id in DREAMWELL_EFFECTS).toBe(false);
-    }
-  });
-
-  it("DREAMWELL_EFFECTS has exactly 27 entries", () => {
-    expect(Object.keys(DREAMWELL_EFFECTS)).toHaveLength(27);
-  });
-
-  it("DREAMWELL_MANUAL_IDS has exactly 4 entries", () => {
-    expect(DREAMWELL_MANUAL_IDS.size).toBe(4);
+  it("registers every current Dreamwell UUID", () => {
+    const catalogIds = [
+      "32d64cb6-9856-43a2-9451-fcb14007a9a6", "5e17dc4b-b654-4962-ba5a-7b042852a980", "5ec17498-9028-4a01-80a0-67c91b03d505", "f9b479cf-02cb-40e1-bb64-70b29977bf15", "02e8ea92-1218-413c-9f0b-4c865a3921d3", "de98477c-e216-4618-bff1-0e24bd982fdb", "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d", "cf0f0a05-2a94-407c-8c22-e41b925f9c03", "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5", "558a1f1b-7dc1-4d83-9f00-c6af2187a954", "14dec460-3ec6-40c1-978f-67e70cb0b227", "03e4e701-4720-4278-8198-9b7e0514d4cf", "662b7393-751c-4aa9-8150-5f20b4d176a4", "7171ff89-ebe4-42d0-8863-9b4b0531cad2", "fa8704fe-759f-408d-992d-d8f9d5ffd760", "2b23a60c-209c-4c75-b63c-b7f73b2e1a56", "9954cede-8a16-4053-b6e9-da745f4540f5", "3a4293da-55a1-4094-898a-df402ffa1c92", "d585b78a-dfe3-4e12-95ac-432c3c880540", "a3033051-8eb7-4fbf-93d6-f947ed68974d", "556057bb-b134-497e-86c2-c6f30049e9e3", "20be0fdd-d691-40a9-b4f8-15689ea7ebaa", "a57f1276-3fb6-4527-b538-953fbace35cf", "f61431f3-33bd-42ff-a229-b4013582e86e", "51caf26d-83bf-45a9-bc80-010d353277db", "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a", "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf", "2ad68489-044a-40d1-9be6-e62497a4e1fd", "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c", "91deefd2-0400-4c78-ab9f-f6db864ff7e2", "8f5f2e26-44b5-447b-90d0-eaf22ab29fed", "a0fbcbd9-96ee-4392-add7-e1d436f99553", "06e62e45-53f9-4264-9aa6-2575b445332a", "120ec4c2-aa7b-48f4-be9f-f39820e565ca", "446095b1-ec4d-40d7-8eed-a8221d339ea2",
+    ];
+    expect(Object.keys(DREAMWELL_EFFECTS).sort()).toEqual([...catalogIds].sort());
+    for (const id of catalogIds) expect(dreamwellAutomationStatus(id)).toBe("auto");
   });
 });
 
@@ -545,13 +535,6 @@ describe("dreamwellAutomationStatus", () => {
   it('returns "auto" for a known table id', () => {
     // Autumn Glade
     expect(dreamwellAutomationStatus("02e8ea92-1218-413c-9f0b-4c865a3921d3")).toBe("auto");
-  });
-
-  it('returns "manual" for each of the 4 excluded ids', () => {
-    expect(dreamwellAutomationStatus("f61431f3-33bd-42ff-a229-b4013582e86e")).toBe("manual"); // Forest Trailhead
-    expect(dreamwellAutomationStatus("8f5f2e26-44b5-447b-90d0-eaf22ab29fed")).toBe("manual"); // Sunlit Archive
-    expect(dreamwellAutomationStatus("2ad68489-044a-40d1-9be6-e62497a4e1fd")).toBe("manual"); // Echo Cascade
-    expect(dreamwellAutomationStatus("14dec460-3ec6-40c1-978f-67e70cb0b227")).toBe("manual"); // Firmament Mirror
   });
 
   it('returns "none" for an unknown id', () => {
@@ -572,6 +555,73 @@ describe("selectDreamwellEffectScript", () => {
 
   it("returns null for an unknown id", () => {
     expect(selectDreamwellEffectScript("00000000-0000-0000-0000-000000000000")).toBeNull();
+  });
+});
+
+describe("Dreamwell Discover UUIDs", () => {
+  const CARD_DISCOVER = "f61431f3-33bd-42ff-a229-b4013582e86e";
+  const CHARACTER_DISCOVER = "8f5f2e26-44b5-447b-90d0-eaf22ab29fed";
+
+  it("samples matching deck instances once, caps at three, and resolves from persisted candidates", () => {
+    const state = makeState({
+      playerDeck: ["low-a", "high", "low-b", "low-c", "low-d"],
+      cardInstances: {
+        "low-a": makeCharacter("low-a", "player", 1),
+        high: makeCharacter("high", "player", 3),
+        "low-b": makeEvent("low-b", "player", 2),
+        "low-c": makeCharacter("low-c", "player", 2),
+        "low-d": makeCharacter("low-d", "player", 1),
+      },
+    });
+    const prompt = getFirstPromptStep(CARD_DISCOVER);
+    if (prompt.kind !== "pick-cards") throw new Error("expected picker");
+    let draws = 0;
+    const candidates = prompt.candidates({ ...makeCtx(state), random: () => { draws += 1; return 0.25; } });
+    expect(draws).toBe(1);
+    expect(candidates).toHaveLength(3);
+    expect(candidates.every((id) => state.sides.player.deck.includes(id))).toBe(true);
+    expect(candidates.every((id) => state.cardInstances[id]?.definition.energyCost !== undefined && state.cardInstances[id].definition.energyCost <= 2)).toBe(true);
+
+    const chosen = candidates[0];
+    if (chosen === undefined) throw new Error("expected discover candidate");
+    const context = { ...makeCtx(state), promptCandidateIds: candidates };
+    const direct = prompt.resolve([chosen], context);
+    const reloaded = prompt.resolve([chosen], { ...context, promptCandidateIds: [...candidates] });
+    expect(reloaded).toEqual(direct);
+    expect(direct[0]).toEqual({ kind: "MOVE_CARD_TO_ZONE", battleCardId: chosen, destination: { side: "player", zone: "hand" } });
+    const reorder = direct[1];
+    expect(reorder).toMatchObject({ kind: "REORDER_DECK", side: "player" });
+    if (reorder?.kind !== "REORDER_DECK") throw new Error("expected reorder");
+    expect([...reorder.order].sort()).toEqual(state.sides.player.deck.filter((id) => id !== chosen).sort());
+  });
+
+  it("offers zero/fewer/exact character candidates without inventing cards", () => {
+    const prompt = getFirstPromptStep(CHARACTER_DISCOVER);
+    if (prompt.kind !== "pick-cards") throw new Error("expected picker");
+    const none = makeState({ playerDeck: ["event"], cardInstances: { event: makeEvent("event", "player", 1) } });
+    expect(prompt.candidates(makeCtx(none))).toEqual([]);
+    const fewer = makeState({ playerDeck: ["character"], cardInstances: { character: makeCharacter("character", "player", 5) } });
+    expect(prompt.candidates(makeCtx(fewer))).toEqual(["character"]);
+    const exact = makeState({ playerDeck: ["a", "b", "c"], cardInstances: { a: makeCharacter("a", "player", 1), b: makeCharacter("b", "player", 2), c: makeCharacter("c", "player", 3) } });
+    expect(prompt.candidates(makeCtx(exact))).toHaveLength(3);
+  });
+});
+
+describe("new prompt-driven Dreamwell UUIDs", () => {
+  it("rematerializes only an in-play ally", () => {
+    const prompt = getFirstPromptStep("2ad68489-044a-40d1-9be6-e62497a4e1fd");
+    if (prompt.kind !== "pick-cards") throw new Error("expected picker");
+    const state = makeState({ playerBackRank: { ...emptyBackRankSlots(), B0: "ally" }, cardInstances: { ally: makeCharacter("ally", "player", 2) } });
+    expect(prompt.candidates(makeCtx(state))).toEqual(["ally"]);
+    expect(prompt.resolve(["ally"], makeCtx(state))).toEqual([{ kind: "REMATERIALIZE", battleCardId: "ally" }]);
+  });
+
+  it("records the temporary Reclaim eligibility separately from reclaimed", () => {
+    const prompt = getFirstPromptStep("14dec460-3ec6-40c1-978f-67e70cb0b227");
+    if (prompt.kind !== "pick-cards") throw new Error("expected picker");
+    const state = makeState({ playerVoid: ["void-card"], cardInstances: { "void-card": makeCharacter("void-card", "player", 2) } });
+    const [edit] = prompt.resolve(["void-card"], makeCtx(state));
+    expect(edit).toMatchObject({ kind: "SET_CARD_STATUS", battleCardId: "void-card", status: { temporaryReclaimUntilEnding: { activeSide: "player", turnNumber: 1 } } });
   });
 });
 
@@ -823,7 +873,7 @@ describe("Silent Winter (9954cede) — banish enemy character", () => {
     expect(cands).not.toContain("pc1");
   });
 
-  it("resolve → MOVE_CARD_TO_ZONE to banished on OPPONENT side", () => {
+  it("persists the return metadata before banishing to the owner's zone", () => {
     const state = makeState({
       enemyBackRank: { ...emptyBackRankSlots(), B0: "ec1" },
       cardInstances: { ec1: makeCharacter("ec1", "enemy", 2) },
@@ -832,6 +882,7 @@ describe("Silent Winter (9954cede) — banish enemy character", () => {
     if (prompt.kind !== "pick-cards") throw new Error("expected pick-cards");
     const edits = prompt.resolve(["ec1"], makeCtx(state, "player"));
     expect(edits).toEqual([
+      expect.objectContaining({ kind: "SET_CARD_STATUS", battleCardId: "ec1" }),
       { kind: "MOVE_CARD_TO_ZONE", battleCardId: "ec1", destination: { side: "enemy", zone: "banished" } },
     ]);
   });

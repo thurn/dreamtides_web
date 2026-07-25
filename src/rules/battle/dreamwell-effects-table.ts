@@ -19,17 +19,62 @@ import type { DreamwellEffectScript } from "../../battle/automation/dreamwell-ef
 // Deterministic dreamwell effect table
 // ---------------------------------------------------------------------------
 
-/**
- * UUIDs of dreamwell cards whose effects require player input (prompt steps).
- * These are excluded from `DREAMWELL_EFFECTS`; `dreamwellAutomationStatus`
- * returns `"manual"` for these ids.
- */
-export const DREAMWELL_MANUAL_IDS = new Set<string>([
-  "f61431f3-33bd-42ff-a229-b4013582e86e", // Forest Trailhead
-  "8f5f2e26-44b5-447b-90d0-eaf22ab29fed", // Sunlit Archive
-  "2ad68489-044a-40d1-9be6-e62497a4e1fd", // Echo Cascade
-  "14dec460-3ec6-40c1-978f-67e70cb0b227", // Firmament Mirror
-]);
+const DISCOVER_CARD_ID = "f61431f3-33bd-42ff-a229-b4013582e86e";
+const DISCOVER_CHARACTER_ID = "8f5f2e26-44b5-447b-90d0-eaf22ab29fed";
+const ECHO_CASCADE_ID = "2ad68489-044a-40d1-9be6-e62497a4e1fd";
+const FIRMAMENT_MIRROR_ID = "14dec460-3ec6-40c1-978f-67e70cb0b227";
+const SILENT_WINTER_ID = "9954cede-8a16-4053-b6e9-da745f4540f5";
+
+/** A local seeded stream consumes exactly one event-rng draw at prompt open. */
+function seededRandom(seed: number): () => number {
+  let value = seed >>> 0;
+  return () => {
+    value = (value * 1664525 + 1013904223) >>> 0;
+    return value / 0x1_0000_0000;
+  };
+}
+
+function deterministicShuffle(ids: readonly string[], seedText: string): string[] {
+  let seed = 2166136261;
+  for (const char of seedText) seed = Math.imul(seed ^ char.charCodeAt(0), 16777619) >>> 0;
+  const result = [...ids];
+  const random = seededRandom(seed);
+  for (let index = result.length - 1; index > 0; index -= 1) {
+    const other = Math.floor(random() * (index + 1));
+    [result[index], result[other]] = [result[other], result[index]];
+  }
+  return result;
+}
+
+function sampledDiscoverCandidates(
+  ctx: import("./effect-step").StepContext,
+  matches: (battleCardId: string) => boolean,
+): string[] {
+  const matching = ctx.state.sides[ctx.side].deck.filter((battleCardId) =>
+    ctx.state.cardInstances[battleCardId] !== undefined && matches(battleCardId),
+  );
+  const random = seededRandom(Math.floor(ctx.random() * 0x1_0000_0000));
+  for (let index = matching.length - 1; index > 0; index -= 1) {
+    const other = Math.floor(random() * (index + 1));
+    [matching[index], matching[other]] = [matching[other], matching[index]];
+  }
+  return matching.slice(0, 3);
+}
+
+function discoverResolution(chosenIds: string[], ctx: import("./effect-step").StepContext): BattleDebugEdit[] {
+  const chosen = chosenIds[0];
+  if (chosen === undefined) return [];
+  const sampled = ctx.promptCandidateIds ?? [];
+  const deckAfterChoice = ctx.state.sides[ctx.side].deck.filter((id) => id !== chosen);
+  return [
+    { kind: "MOVE_CARD_TO_ZONE", battleCardId: chosen, destination: { side: ctx.side, zone: "hand" } },
+    {
+      kind: "REORDER_DECK",
+      side: ctx.side,
+      order: deterministicShuffle(deckAfterChoice, `${sampled.join("|")}:${chosen}`),
+    },
+  ];
+}
 
 /**
  * Dreamwell effect scripts keyed by the dreamwell card UUID. Each entry's
@@ -39,6 +84,89 @@ export const DREAMWELL_MANUAL_IDS = new Set<string>([
  * player resolves them.
  */
 export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
+  // Catalog entries with no effect are still registered so catalog coverage is
+  // observable and status remains authoritative by UUID.
+  "32d64cb6-9856-43a2-9451-fcb14007a9a6": { id: "32d64cb6-9856-43a2-9451-fcb14007a9a6", steps: [] },
+  "5e17dc4b-b654-4962-ba5a-7b042852a980": { id: "5e17dc4b-b654-4962-ba5a-7b042852a980", steps: [] },
+  "662b7393-751c-4aa9-8150-5f20b4d176a4": { id: "662b7393-751c-4aa9-8150-5f20b4d176a4", steps: [] },
+
+  // Lily Lake — immediately draw an additional Dreamwell card.
+  "558a1f1b-7dc1-4d83-9f00-c6af2187a954": {
+    id: "558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+    steps: [{ kind: "edits", build: (ctx) => [{ kind: "DRAW_DREAMWELL_CARD", side: ctx.side, turnNumber: ctx.state.turnNumber, additional: true }] }],
+  },
+
+  // Ringvale — Discover a ≤2● cost card. Candidate sampling consumes exactly
+  // one event RNG draw when the prompt opens; the persisted candidates drive
+  // resolution after reload without sampling again.
+  [DISCOVER_CARD_ID]: {
+    id: DISCOVER_CARD_ID,
+    steps: [{
+      kind: "prompt",
+      prompt: {
+        kind: "pick-cards",
+        label: "Discover a ≤2● cost card",
+        count: 1,
+        optional: false,
+        candidates: (ctx) => sampledDiscoverCandidates(ctx, (id) => (ctx.state.cardInstances[id]?.definition.energyCost ?? Infinity) <= 2),
+        resolve: discoverResolution,
+      },
+    }],
+  },
+
+  // Azure Cascade — Discover a character.
+  [DISCOVER_CHARACTER_ID]: {
+    id: DISCOVER_CHARACTER_ID,
+    steps: [{
+      kind: "prompt",
+      prompt: {
+        kind: "pick-cards",
+        label: "Discover a character",
+        count: 1,
+        optional: false,
+        candidates: (ctx) => sampledDiscoverCandidates(ctx, (id) => ctx.state.cardInstances[id]?.definition.battleCardKind === "character"),
+        resolve: discoverResolution,
+      },
+    }],
+  },
+
+  // Echoing Boughs — rematerialize one ally.
+  [ECHO_CASCADE_ID]: {
+    id: ECHO_CASCADE_ID,
+    steps: [{
+      kind: "prompt",
+      prompt: {
+        kind: "pick-cards",
+        label: "Rematerialize an ally",
+        count: 1,
+        optional: false,
+        candidates: (ctx) => alliesInPlay(ctx.state, ctx.side),
+        resolve: ([id]) => id === undefined ? [] : [{ kind: "REMATERIALIZE", battleCardId: id }],
+      },
+    }],
+  },
+
+  // Firmament Mirror — grant a turn-bounded Reclaim eligibility, distinct from
+  // the reclaimed leave-play replacement status.
+  [FIRMAMENT_MIRROR_ID]: {
+    id: FIRMAMENT_MIRROR_ID,
+    steps: [{
+      kind: "prompt",
+      prompt: {
+        kind: "pick-cards",
+        label: "Choose a void card to gain Reclaim",
+        count: 1,
+        optional: false,
+        candidates: (ctx) => ctx.state.sides[ctx.side].void,
+        resolve: ([id], ctx) => id === undefined ? [] : [{
+          kind: "SET_CARD_STATUS",
+          battleCardId: id,
+          status: { temporaryReclaimUntilEnding: { activeSide: ctx.state.activeSide, turnNumber: ctx.state.turnNumber, sourceId: FIRMAMENT_MIRROR_ID } },
+        }],
+      },
+    }],
+  },
+
   // Meteor Meadow — Draw a card.
   "5ec17498-9028-4a01-80a0-67c91b03d505": {
     id: "5ec17498-9028-4a01-80a0-67c91b03d505",
@@ -342,11 +470,10 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
     ],
   },
 
-  // Silent Winter — Banish an enemy until end of turn.
-  // v1 limitation: no temporary-banish primitive; the card is moved to `banished`
-  // permanently and the operator returns it manually at end of turn.
-  "9954cede-8a16-4053-b6e9-da745f4540f5": {
-    id: "9954cede-8a16-4053-b6e9-da745f4540f5",
+  // Silent Winter — Banish an enemy until Ending, preserving the exact return
+  // controller and source identity in serialized card status.
+  [SILENT_WINTER_ID]: {
+    id: SILENT_WINTER_ID,
     steps: [
       {
         kind: "prompt",
@@ -356,16 +483,31 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
           count: 1,
           optional: false,
           candidates: (ctx) => enemyCharactersInPlay(ctx.state, ctx.side),
-          resolve: ([id], ctx) =>
-            id !== undefined
-              ? [
-                  {
-                    kind: "MOVE_CARD_TO_ZONE",
-                    battleCardId: id,
-                    destination: { side: opponentOf(ctx.side), zone: "banished" },
+          resolve: ([id], ctx) => {
+            if (id === undefined) return [];
+            const target = ctx.state.cardInstances[id];
+            if (target === undefined) return [];
+            return [
+              {
+                kind: "SET_CARD_STATUS",
+                battleCardId: id,
+                status: {
+                  temporaryBanishUntilEnding: {
+                    activeSide: ctx.state.activeSide,
+                    turnNumber: ctx.state.turnNumber,
+                    priorOwner: target.owner,
+                    priorController: target.controller,
+                    sourceId: SILENT_WINTER_ID,
                   },
-                ]
-              : [],
+                },
+              },
+              {
+                kind: "MOVE_CARD_TO_ZONE",
+                battleCardId: id,
+                destination: { side: target.owner, zone: "banished" },
+              },
+            ];
+          },
         },
       },
     ],
@@ -570,11 +712,9 @@ export function selectDreamwellEffectScript(cardId: string): DreamwellEffectScri
 /**
  * Returns the automation status of a dreamwell card:
  * - `"auto"` — a fully automated script exists in `DREAMWELL_EFFECTS`.
- * - `"manual"` — the card requires player input; id is in `DREAMWELL_MANUAL_IDS`.
  * - `"none"` — the card id is unknown / unregistered.
  */
-export function dreamwellAutomationStatus(cardId: string): "auto" | "manual" | "none" {
+export function dreamwellAutomationStatus(cardId: string): "auto" | "none" {
   if (cardId in DREAMWELL_EFFECTS) return "auto";
-  if (DREAMWELL_MANUAL_IDS.has(cardId)) return "manual";
   return "none";
 }

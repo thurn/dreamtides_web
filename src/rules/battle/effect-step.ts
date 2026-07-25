@@ -22,6 +22,8 @@ export interface StepContext {
   sourceId?: string;
   /** Plain trigger-edge facts captured before a source changed zones. */
   bindings?: EffectBindings;
+  /** Candidate ids materialized when this prompt opened. */
+  promptCandidateIds?: readonly string[];
 }
 
 export type EffectPrompt =

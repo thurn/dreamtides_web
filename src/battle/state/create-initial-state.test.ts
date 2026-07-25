@@ -262,6 +262,8 @@ describe("allocateBattleCardInstance", () => {
       grantedVengeful: false,
       grantedPreeminence: false,
       grantedAwakened: false,
+      temporaryReclaimUntilEnding: null,
+      temporaryBanishUntilEnding: null,
     });
     // Each allocated instance must own a fresh status object (no shared aliasing
     // that would corrupt undo via history snapshots).
@@ -318,6 +320,8 @@ describe("createDefaultBattleCardStatus", () => {
       grantedVengeful: false,
       grantedPreeminence: false,
       grantedAwakened: false,
+      temporaryReclaimUntilEnding: null,
+      temporaryBanishUntilEnding: null,
     });
   });
 

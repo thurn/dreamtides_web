@@ -14,6 +14,7 @@ import type {
   BattleSide,
   DreamwellCardDefinition,
 } from "../../battle/types";
+import { hasTemporaryReclaimEligibility } from "./temporary-effects";
 
 /** An empty support map: the human/automation path runs over an unmodeled board. */
 const NO_SUPPORT_CONTRIBUTION: ReadonlyMap<string, number> = new Map();
@@ -155,18 +156,17 @@ function planCardPlay(
   edit: Extract<BattleDebugEdit, { kind: "MOVE_CARD_TO_ZONE" }>,
 ): BattleCommand[] {
   const location = selectBattleCardLocation(state, edit.battleCardId);
-  if (location?.zone !== "hand") {
+  const instance = state.cardInstances[edit.battleCardId];
+  if (instance === undefined) return [command];
+  const isTemporaryVoidPlay =
+    location?.zone === "void" && hasTemporaryReclaimEligibility(state, instance);
+  if (location?.zone !== "hand" && !isTemporaryVoidPlay) {
     return [command];
   }
 
   const destination = edit.destination;
   const isPlayDestination = "slotId" in destination;
   if (!isPlayDestination) {
-    return [command];
-  }
-
-  const instance = state.cardInstances[edit.battleCardId];
-  if (instance === undefined) {
     return [command];
   }
 
@@ -194,6 +194,13 @@ function planCardPlay(
       kind: "ADJUST_CURRENT_ENERGY",
       side,
       amount: -spend,
+    }));
+  }
+  if (isTemporaryVoidPlay) {
+    commands.push(autoCommand({
+      kind: "SET_CARD_STATUS",
+      battleCardId: edit.battleCardId,
+      status: { reclaimed: true },
     }));
   }
   if (!isEvent) {

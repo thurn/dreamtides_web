@@ -418,6 +418,20 @@ export interface BattleCardStatus {
   grantedVengeful: boolean;
   grantedPreeminence: boolean;
   grantedAwakened: boolean;
+  /** A one-turn permission to play this card from its controller's void. */
+  temporaryReclaimUntilEnding?: {
+    activeSide: BattleSide;
+    turnNumber: number;
+    sourceId: string;
+  } | null;
+  /** Durable return data for a card banished by a temporary Dreamwell effect. */
+  temporaryBanishUntilEnding?: {
+    activeSide: BattleSide;
+    turnNumber: number;
+    priorOwner: BattleSide;
+    priorController: BattleSide;
+    sourceId: string;
+  } | null;
 }
 
 export type BattleCardNoteExpiry =
