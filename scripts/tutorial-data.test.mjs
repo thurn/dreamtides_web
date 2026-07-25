@@ -139,9 +139,7 @@ describe("tutorial data", () => {
       validateTutorialActions([{ ...FIXTURE_ACTIONS[1], duration: -1 }]),
     ).toThrow(/non-negative portrait duration/u);
     expect(() =>
-      validateTutorialActions([
-        { ...FIXTURE_ACTIONS[3], revealDuration: -1 },
-      ]),
+      validateTutorialActions([{ ...FIXTURE_ACTIONS[3], revealDuration: -1 }]),
     ).toThrow(/non-negative card reveal duration/u);
     expect(() =>
       validateTutorialActions([
@@ -149,9 +147,7 @@ describe("tutorial data", () => {
       ]),
     ).toThrow(/finite vertical offset/u);
     expect(() =>
-      validateTutorialActions([
-        { ...FIXTURE_ACTIONS[3], bubbleWidth: 750 },
-      ]),
+      validateTutorialActions([{ ...FIXTURE_ACTIONS[3], bubbleWidth: 750 }]),
     ).toThrow(/speech bubble width from 300 to 700 pixels/u);
     expect(() =>
       validateTutorialActions([
@@ -192,6 +188,16 @@ describe("tutorial data", () => {
     expect(() =>
       validateTutorialActions([{ ...FIXTURE_ACTIONS[5], cardWidth: 0 }]),
     ).toThrow(/How to Play card width of at least 300 pixels/u);
+    expect(() =>
+      validateTutorialActions([
+        {
+          id: "blank-end-turn-speech",
+          action: "end-turn",
+          speechText: " ",
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/non-blank end-turn speech text/u);
     expect(() =>
       validateTutorialActions([
         {

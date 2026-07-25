@@ -97,15 +97,13 @@ export interface RevealAndPlayOpponentCardTutorialAction extends TutorialActionB
 }
 
 /** Moves one UUID-authored opponent character to its closest front-rank cell. */
-export interface RepositionOpponentCharacterTutorialAction
-  extends TutorialActionBase {
+export interface RepositionOpponentCharacterTutorialAction extends TutorialActionBase {
   readonly action: "reposition-opponent-character";
   readonly cardId: string;
 }
 
 /** Waits for the player to move one UUID-authored character across from an opponent. */
-export interface RepositionPlayerCharacterTutorialAction
-  extends TutorialActionBase {
+export interface RepositionPlayerCharacterTutorialAction extends TutorialActionBase {
   readonly action: "reposition-player-character";
   readonly cardId: string;
   readonly opposingCardId: string;
@@ -128,6 +126,8 @@ export interface DrawDreamwellCardTutorialAction extends TutorialActionBase {
 /** Waits for the player to play their tutorial card, then offers End Turn. */
 export interface EndTurnTutorialAction extends TutorialActionBase {
   readonly action: "end-turn";
+  /** Optional Mira dialogue shown after the tutorial card enters play. */
+  readonly speechText?: string;
 }
 
 /** Exhaustive authored tutorial action model. */

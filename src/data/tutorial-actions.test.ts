@@ -288,12 +288,14 @@ describe("parseTutorialActions", () => {
     ]);
   });
 
-  it("preserves an authored end-turn action", () => {
+  it("preserves authored Mira dialogue on an end-turn action", () => {
     expect(
       parseTutorialActions([
         {
           id: "end-turn",
           action: "end-turn",
+          speechText:
+            "Good, you have now [yellow]materialized[/yellow] this character.",
           wait: 0,
         },
       ]),
@@ -301,9 +303,21 @@ describe("parseTutorialActions", () => {
       {
         id: "end-turn",
         action: "end-turn",
+        speechText:
+          "Good, you have now [yellow]materialized[/yellow] this character.",
         wait: 0,
       },
     ]);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "blank-end-turn-speech",
+          action: "end-turn",
+          speechText: " ",
+          wait: 0,
+        },
+      ]),
+    ).toThrow(/non-blank end-turn speech text/u);
   });
 
   it("preserves a UUID-backed opponent reposition and rejects display names", () => {

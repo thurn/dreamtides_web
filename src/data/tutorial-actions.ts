@@ -63,8 +63,7 @@ export function parseTutorialActions(
       const verticalOffset = record.verticalOffset;
       if (
         verticalOffset !== undefined &&
-        (typeof verticalOffset !== "number" ||
-          !Number.isFinite(verticalOffset))
+        (typeof verticalOffset !== "number" || !Number.isFinite(verticalOffset))
       ) {
         throw new Error(
           `Tutorial action ${JSON.stringify(id)} must have a finite vertical offset.`,
@@ -99,8 +98,7 @@ export function parseTutorialActions(
         );
       }
       parseTutorialInstructionMarkup(record.text);
-      const trigger =
-        record.trigger ?? "player-turn-announcement-complete";
+      const trigger = record.trigger ?? "player-turn-announcement-complete";
       if (
         trigger !== "immediate" &&
         trigger !== "player-turn-announcement-complete" &&
@@ -268,9 +266,22 @@ export function parseTutorialActions(
       } satisfies TutorialAction;
     }
     if (record.action === "end-turn") {
+      const speechText = record.speechText;
+      if (
+        speechText !== undefined &&
+        (typeof speechText !== "string" || speechText.trim().length === 0)
+      ) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must have non-blank end-turn speech text.`,
+        );
+      }
+      if (typeof speechText === "string") {
+        parseTutorialInstructionMarkup(speechText);
+      }
       return {
         id,
         action: "end-turn",
+        ...(speechText === undefined ? {} : { speechText }),
         wait,
       } satisfies TutorialAction;
     }
@@ -305,8 +316,7 @@ export function parseTutorialActions(
       const verticalOffset = record.verticalOffset;
       if (
         verticalOffset !== undefined &&
-        (typeof verticalOffset !== "number" ||
-          !Number.isFinite(verticalOffset))
+        (typeof verticalOffset !== "number" || !Number.isFinite(verticalOffset))
       ) {
         throw new Error(
           `Tutorial action ${JSON.stringify(id)} must have a finite vertical offset.`,

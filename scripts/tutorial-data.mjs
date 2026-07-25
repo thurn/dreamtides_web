@@ -125,8 +125,7 @@ export function validateTutorialActions(value) {
       const verticalOffset = candidate.verticalOffset;
       if (
         verticalOffset !== undefined &&
-        (typeof verticalOffset !== "number" ||
-          !Number.isFinite(verticalOffset))
+        (typeof verticalOffset !== "number" || !Number.isFinite(verticalOffset))
       ) {
         throw invalid(
           `Tutorial action ${JSON.stringify(id)} must have a finite vertical offset.`,
@@ -164,8 +163,7 @@ export function validateTutorialActions(value) {
         );
       }
       validateTutorialMarkup(candidate.text, id);
-      const trigger =
-        candidate.trigger ?? "player-turn-announcement-complete";
+      const trigger = candidate.trigger ?? "player-turn-announcement-complete";
       if (
         trigger !== "immediate" &&
         trigger !== "player-turn-announcement-complete" &&
@@ -322,7 +320,24 @@ export function validateTutorialActions(value) {
       return { id, action, owner, cardId: candidate.cardId, wait };
     }
     if (action === "end-turn") {
-      return { id, action, wait };
+      const speechText = candidate.speechText;
+      if (
+        speechText !== undefined &&
+        (typeof speechText !== "string" || speechText.trim().length === 0)
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must have non-blank end-turn speech text.`,
+        );
+      }
+      if (typeof speechText === "string") {
+        validateTutorialMarkup(speechText, id);
+      }
+      return {
+        id,
+        action,
+        ...(speechText === undefined ? {} : { speechText }),
+        wait,
+      };
     }
     if (action === "reveal-and-play-opponent-card") {
       if (
@@ -358,8 +373,7 @@ export function validateTutorialActions(value) {
       const verticalOffset = candidate.verticalOffset;
       if (
         verticalOffset !== undefined &&
-        (typeof verticalOffset !== "number" ||
-          !Number.isFinite(verticalOffset))
+        (typeof verticalOffset !== "number" || !Number.isFinite(verticalOffset))
       ) {
         throw invalid(
           `Tutorial action ${JSON.stringify(id)} must have a finite vertical offset.`,

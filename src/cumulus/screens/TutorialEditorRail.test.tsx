@@ -33,6 +33,20 @@ const INITIAL_ACTIONS: readonly TutorialAction[] = [
   },
 ];
 
+function setTextareaValue(textarea: HTMLTextAreaElement, value: string): void {
+  const descriptor = Object.getOwnPropertyDescriptor(
+    HTMLTextAreaElement.prototype,
+    "value",
+  );
+  const valueSetter =
+    descriptor === undefined
+      ? undefined
+      : (Reflect.get(descriptor, "set") as
+          ((this: HTMLTextAreaElement, value: string) => void) | undefined);
+  valueSetter?.call(textarea, value);
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
 beforeEach(() => {
   (
     globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
@@ -277,6 +291,54 @@ describe("TutorialEditorRail", () => {
       true,
     );
     expect(container.textContent).toContain("550px");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("authors optional Mira dialogue on the End Turn action", () => {
+    const onChange = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<EditorHarness onChange={onChange} />));
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>('button[aria-label="Add an action"]')
+        ?.click(),
+    );
+    const endTurnOption = [
+      ...document.body.querySelectorAll<HTMLButtonElement>(
+        'button[role="option"]',
+      ),
+    ].find((option) => option.textContent?.trim() === "End Turn");
+    act(() => endTurnOption?.click());
+
+    const speech = container.querySelector<HTMLTextAreaElement>(
+      '[data-testid="tutorial-action-speech-text-end-turn"]',
+    );
+    expect(speech).not.toBeNull();
+    act(() => {
+      if (speech === null) return;
+      setTextareaValue(
+        speech,
+        "Good, you have now [yellow]materialized[/yellow] this character.",
+      );
+    });
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "end-turn",
+          action: "end-turn",
+          speechText:
+            "Good, you have now [yellow]materialized[/yellow] this character.",
+          wait: 0,
+        },
+      ],
+      false,
+    );
 
     act(() => root.unmount());
     container.remove();
@@ -659,8 +721,7 @@ describe("TutorialEditorRail", () => {
         'button[role="option"]',
       ),
     ].find(
-      (option) =>
-        option.textContent?.trim() === "Reposition Player Character",
+      (option) => option.textContent?.trim() === "Reposition Player Character",
     );
     expect(repositionOption).toBeDefined();
     act(() => repositionOption?.click());

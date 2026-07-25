@@ -317,7 +317,14 @@ function changedActionType(
     };
   }
   if (actionName === "end-turn") {
-    return { id: action.id, action: actionName, wait: action.wait };
+    return {
+      id: action.id,
+      action: actionName,
+      ...(action.action === "end-turn" && action.speechText !== undefined
+        ? { speechText: action.speechText }
+        : {}),
+      wait: action.wait,
+    };
   }
   if (actionName === "reveal-and-play-opponent-card") {
     return {
@@ -350,8 +357,7 @@ function changedActionType(
     return {
       id: action.id,
       action: actionName,
-      owner:
-        action.action === "draw-dreamwell-card" ? action.owner : "enemy",
+      owner: action.action === "draw-dreamwell-card" ? action.owner : "enemy",
       cardId:
         action.action === "draw-dreamwell-card"
           ? action.cardId
@@ -402,8 +408,7 @@ function speechBubbleWidth(
     TutorialAction,
     {
       readonly action:
-        | "display-speech-bubble"
-        | "reveal-and-play-opponent-card";
+        "display-speech-bubble" | "reveal-and-play-opponent-card";
     }
   >,
 ): number {
@@ -1071,10 +1076,7 @@ function TutorialActionRow({
               }
               testId={`tutorial-action-opposing-card-id-${action.id}`}
               onChange={(opposingCardId) =>
-                update(
-                  { ...action, opposingCardId },
-                  isCardId(opposingCardId),
-                )
+                update({ ...action, opposingCardId }, isCardId(opposingCardId))
               }
             />
           </>
@@ -1117,6 +1119,29 @@ function TutorialActionRow({
               }
             />
           </>
+        ) : null}
+
+        {action.action === "end-turn" ? (
+          <TextArea
+            label="Mira Dialogue After Card Play"
+            value={action.speechText ?? ""}
+            placeholder="Optional Mira dialogue"
+            supportingText="[yellow]copy[/yellow] highlights an exact run."
+            testId={`tutorial-action-speech-text-${action.id}`}
+            onChange={(speechText) => update({ ...action, speechText }, false)}
+            onCommit={(speechText) =>
+              update(
+                speechText.trim().length === 0
+                  ? {
+                      id: action.id,
+                      action: action.action,
+                      wait: action.wait,
+                    }
+                  : { ...action, speechText },
+                true,
+              )
+            }
+          />
         ) : null}
 
         <NumberStepper
