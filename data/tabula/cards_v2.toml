@@ -1631,7 +1631,7 @@ card-number = 86
 art = { x = -0.538, y = 0.897, scale = 1.07 }
 
 [[cards]]
-name = "Dreadwood Emissary"
+name = "Whisper Forager"
 mtg-name = "Snapcaster Mage"
 id = "bf323913-3695-49ee-8d13-8165657e3dc9"
 rendered-text = "▸Materialized: Chose an event in your void to gain reclaim."
@@ -1642,10 +1642,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July24"]
-image-number = 2025883235
+tags = ["Art Rework", "July24", "Art OK"]
+image-number = 2030910782
 art-owned = false
 card-number = 87
+art = { x = 0.084, y = -0.028, scale = 1.67 }
 
 [[cards]]
 name = "Part the Veil"
@@ -4502,13 +4503,13 @@ card-number = 240
 art = { x = -0.084, y = 0.369, scale = 1.17 }
 
 [[cards]]
-name = "Last Beacon"
+name = "Dustway Ringleader"
 mtg-name = "Kaito Shizuki"
 id = "8e003d04-e489-4c55-9c72-fc5612909d07"
 rendered-text = '''
 3●, ☪: Materialize a 1✦ outsider figment.
 
-When an outsider you control scores ⍟, draw a card and gain an additional 1⍟.'''
+When an outsider you control scores ⍟, draw a card and gain 2⍟.'''
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -4516,10 +4517,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July24", "Ally Audit"]
-image-number = 1387670426
+tags = ["Art Rework", "July24", "Ally Audit", "Art OK"]
+image-number = 678431947
 art-owned = false
 card-number = 241
+art = { x = -0.541, y = 0.18, scale = 1.37 }
 
 [[cards]]
 name = "Judgment of the Blade"
@@ -5903,21 +5905,22 @@ card-number = 315
 art = { x = 0, y = 0, scale = 1.57 }
 
 [[cards]]
-name = "Vortex Claimant"
+name = "Signal Hijacker"
 mtg-name = "Scheming Fence"
 id = "890970bd-475f-4da4-b835-2fb75882a84d"
-rendered-text = "▸Materialized: An enemy loses all activated abilities. This character gains those abilities."
-energy-cost = 3
+rendered-text = "▸Materialized: An enemy loses all abilities. This character gains those abilities."
+energy-cost = 2
 card-type = "Character"
-subtype = "Tinkerer"
+subtype = "Synth"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July24"]
-image-number = 1387670423
+tags = ["Art Rework", "July24", "Art OK"]
+image-number = 1740270995
 art-owned = false
 card-number = 316
+art = { x = 0, y = -0.321, scale = 1.87 }
 
 [[cards]]
 name = "Silent Observer"
@@ -6015,7 +6018,7 @@ art-owned = false
 card-number = 321
 
 [[cards]]
-name = "Seeker of the Radiant Wilds"
+name = "Wrathful Gearwright"
 mtg-name = "Baleful Strix"
 id = "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9"
 rendered-text = """
@@ -6029,10 +6032,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["ETB Draw", "Art Rework", "July27"]
-image-number = 2022594416
+tags = ["ETB Draw", "Art Rework", "July27", "July24", "Art OK"]
+image-number = 789291016
 art-owned = false
 card-number = 322
+art = { x = 0, y = 0.242, scale = 1.17 }
 
 [[cards]]
 name = "Genesis Burst"
@@ -6326,13 +6330,13 @@ card-number = 337
 art = { x = 0.522, y = 0.032, scale = 1.17 }
 
 [[cards]]
-name = "Sage of the Prelude"
+name = "Symphonic Muse"
 mtg-name = "Ice-Fang Coatl"
 id = "41d0aa36-f15a-487d-b97c-7fd765973921"
 rendered-text = '''
 ▸Materialized: Draw a card.
 
-1●: This character gains vengeful until end of turn.
+Support - Supported characters gain +2✦.
 '''
 energy-cost = 2
 card-type = "Character"
@@ -6341,10 +6345,11 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = 1
-tags = ["ETB Draw", "Art Rework", "July27"]
-image-number = 1084620026
+tags = ["ETB Draw", "Art Rework", "July27", "July24", "Art OK"]
+image-number = 1021646683
 art-owned = false
 card-number = 338
+art = { x = -0.084, y = -0.163, scale = 1.27 }
 
 [[cards]]
 name = "Bladefall"
@@ -7946,7 +7951,7 @@ art-owned = false
 card-number = 422
 
 [[cards]]
-name = "Keeper of the Tides"
+name = "Dune Interceptor"
 mtg-name = "Spellstutter Sprite"
 id = "99101fce-f2b4-4032-b999-317ce3e4a6dd"
 rendered-text = """
@@ -7960,10 +7965,11 @@ rarity = ""
 is-fast = true
 is-interrupt = true
 spark = 1
-tags = ["Counterspell", "Art Rework", "July24"]
-image-number = 1016596177
+tags = ["Counterspell", "Art Rework", "July24", "Art OK"]
+image-number = 2657255499
 art-owned = false
 card-number = 423
+art = { x = -0.078, y = 0.188, scale = 1.97 }
 
 [[cards]]
 name = "Dustborn Veteran"

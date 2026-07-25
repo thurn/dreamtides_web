@@ -1032,7 +1032,7 @@
       ]
     },
     "bf323913-3695-49ee-8d13-8165657e3dc9": {
-      "name": "Dreadwood Emissary",
+      "name": "Whisper Forager",
       "needs": [
         {
           "theme": "events",
@@ -2203,7 +2203,7 @@
       ]
     },
     "99101fce-f2b4-4032-b999-317ce3e4a6dd": {
-      "name": "Keeper of the Tides",
+      "name": "Dune Interceptor",
       "needs": [],
       "supports": [
         "cheap-characters"
@@ -2278,7 +2278,7 @@
       ]
     },
     "8e003d04-e489-4c55-9c72-fc5612909d07": {
-      "name": "Last Beacon",
+      "name": "Dustway Ringleader",
       "needs": [
         {
           "theme": "outsiders",
@@ -3264,7 +3264,7 @@
       ]
     },
     "41d0aa36-f15a-487d-b97c-7fd765973921": {
-      "name": "Sage of the Prelude",
+      "name": "Symphonic Muse",
       "needs": [],
       "supports": [
         "cheap-characters"
@@ -3411,7 +3411,7 @@
       ]
     },
     "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9": {
-      "name": "Seeker of the Radiant Wilds",
+      "name": "Wrathful Gearwright",
       "needs": [],
       "supports": [
         "cheap-characters"
