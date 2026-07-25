@@ -1355,6 +1355,14 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional stable test id for product-screen QA."
+    },
+    {
+      "name": "playbackSpeed",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "1",
+      "description": "Multiplier applied to this dialogue's presence transition."
     }
   ],
   "CompactGameCardRow": [

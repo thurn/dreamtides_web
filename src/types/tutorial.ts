@@ -17,6 +17,20 @@ export type TutorialDreamcallerOwner = "player" | "enemy";
 /** Character whose portrait anchors an authored tutorial speech bubble. */
 export type TutorialSpeechBubbleSpeaker = "mira" | TutorialDreamcallerOwner;
 
+/** Shared authoring model for every tutorial speech bubble. */
+export interface TutorialSpeechBubble {
+  /** Character whose portrait anchors the bubble. */
+  readonly speaker: TutorialSpeechBubbleSpeaker;
+  /** Seconds the bubble remains visible after it appears. */
+  readonly duration: number;
+  /** Signed pixels added to the computed vertical dialogue position. */
+  readonly verticalOffset: number;
+  /** Desktop maximum width of the speech bubble, in pixels. */
+  readonly bubbleWidth: number;
+  /** `[yellow]copy[/yellow]` highlights an exact inline run. */
+  readonly text: string;
+}
+
 /** Presentation event that opens an authored How to Play popup. */
 export type TutorialHowToPlayTrigger =
   | "immediate"
@@ -37,14 +51,7 @@ export interface TutorialActionBase {
 /** Shows authored tutorial dialogue beside the selected speaker. */
 export interface DisplaySpeechBubbleTutorialAction extends TutorialActionBase {
   readonly action: "display-speech-bubble";
-  /** Defaults to Mira for tutorial snapshots authored before speaker selection. */
-  readonly speaker?: TutorialSpeechBubbleSpeaker;
-  /** Signed pixels added to Mira's computed vertical dialogue position. */
-  readonly verticalOffset?: number;
-  /** Desktop maximum width of the speech bubble, in pixels. */
-  readonly bubbleWidth?: number;
-  /** `[yellow]copy[/yellow]` highlights an exact inline run. */
-  readonly text: string;
+  readonly speechBubble: TutorialSpeechBubble;
 }
 
 /** Shows the dismissible How to Play instruction popup. */
@@ -88,12 +95,8 @@ export interface RevealAndPlayOpponentCardTutorialAction extends TutorialActionB
   readonly cardId: string;
   /** Seconds the face-up card remains at reading scale before it travels. */
   readonly revealDuration: number;
-  /** Optional Mira dialogue shown only while the card remains face up. */
-  readonly revealText?: string;
-  /** Signed pixels added to Mira's computed vertical dialogue position. */
-  readonly verticalOffset?: number;
-  /** Desktop maximum width of Mira's reveal speech bubble, in pixels. */
-  readonly bubbleWidth?: number;
+  /** Optional dialogue shown only while the card remains face up. */
+  readonly speechBubble?: TutorialSpeechBubble;
 }
 
 /** Moves one UUID-authored opponent character to its closest front-rank cell. */
@@ -128,8 +131,8 @@ export interface DrawDreamwellCardTutorialAction extends TutorialActionBase {
 /** Waits for the player to play their tutorial card, then offers End Turn. */
 export interface EndTurnTutorialAction extends TutorialActionBase {
   readonly action: "end-turn";
-  /** Optional Mira dialogue shown after the tutorial card enters play. */
-  readonly speechText?: string;
+  /** Optional dialogue shown after the tutorial card enters play. */
+  readonly speechBubble?: TutorialSpeechBubble;
 }
 
 /** Exhaustive authored tutorial action model. */

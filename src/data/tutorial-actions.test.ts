@@ -6,7 +6,13 @@ const ACTIONS_RESPONSE = {
     {
       id: "welcome",
       action: "display-speech-bubble",
-      text: "Welcome, Dreamer.",
+      speechBubble: {
+        speaker: "mira",
+        duration: 3,
+        verticalOffset: 0,
+        bubbleWidth: 700,
+        text: "Welcome, Dreamer.",
+      },
       wait: 3,
     },
   ],
@@ -49,9 +55,13 @@ describe("parseTutorialActions", () => {
         {
           id: "enemy-taunt",
           action: "display-speech-bubble",
-          speaker: "enemy",
-          bubbleWidth: 450,
-          text: "For the [yellow]Abyss[/yellow]!",
+          speechBubble: {
+            speaker: "enemy",
+            duration: 3,
+            verticalOffset: 0,
+            bubbleWidth: 450,
+            text: "For the [yellow]Abyss[/yellow]!",
+          },
           wait: 3,
         },
       ]),
@@ -59,9 +69,13 @@ describe("parseTutorialActions", () => {
       {
         id: "enemy-taunt",
         action: "display-speech-bubble",
-        speaker: "enemy",
-        bubbleWidth: 450,
-        text: "For the [yellow]Abyss[/yellow]!",
+        speechBubble: {
+          speaker: "enemy",
+          duration: 3,
+          verticalOffset: 0,
+          bubbleWidth: 450,
+          text: "For the [yellow]Abyss[/yellow]!",
+        },
         wait: 3,
       },
     ]);
@@ -70,8 +84,7 @@ describe("parseTutorialActions", () => {
         {
           id: "bad-speaker",
           action: "display-speech-bubble",
-          speaker: "spectator",
-          text: "No.",
+          speechBubble: { speaker: "spectator", text: "No." },
           wait: 1,
         },
       ]),
@@ -81,8 +94,7 @@ describe("parseTutorialActions", () => {
         {
           id: "bad-bubble-width",
           action: "display-speech-bubble",
-          bubbleWidth: 750,
-          text: "Too wide.",
+          speechBubble: { bubbleWidth: 750, text: "Too wide." },
           wait: 1,
         },
       ]),
@@ -90,9 +102,19 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
+          id: "bad-duration",
+          action: "display-speech-bubble",
+          speechBubble: { duration: -1, text: "Too brief." },
+          wait: 1,
+        },
+      ]),
+    ).toThrow(/non-negative speech bubble duration/u);
+    expect(() =>
+      parseTutorialActions([
+        {
           id: "bad-speech-markup",
           action: "display-speech-bubble",
-          text: "A [yellow]blocked character.",
+          speechBubble: { text: "A [yellow]blocked character." },
           wait: 1,
         },
       ]),
@@ -105,8 +127,7 @@ describe("parseTutorialActions", () => {
         {
           id: "lower-line",
           action: "display-speech-bubble",
-          verticalOffset: 100,
-          text: "A lower line.",
+          speechBubble: { verticalOffset: 100, text: "A lower line." },
           wait: 3,
         },
       ]),
@@ -114,8 +135,13 @@ describe("parseTutorialActions", () => {
       {
         id: "lower-line",
         action: "display-speech-bubble",
-        verticalOffset: 100,
-        text: "A lower line.",
+        speechBubble: {
+          speaker: "mira",
+          duration: 3,
+          verticalOffset: 100,
+          bubbleWidth: 700,
+          text: "A lower line.",
+        },
         wait: 3,
       },
     ]);
@@ -124,12 +150,11 @@ describe("parseTutorialActions", () => {
         {
           id: "bad-offset",
           action: "display-speech-bubble",
-          verticalOffset: "lower",
-          text: "No.",
+          speechBubble: { verticalOffset: "lower", text: "No." },
           wait: 1,
         },
       ]),
-    ).toThrow(/finite vertical offset/u);
+    ).toThrow(/finite speech bubble vertical offset/u);
   });
 
   it("preserves authored How to Play copy and rejects blank messages", () => {
@@ -294,8 +319,9 @@ describe("parseTutorialActions", () => {
         {
           id: "end-turn",
           action: "end-turn",
-          speechText:
-            "Good, you have now [yellow]materialized[/yellow] this character.",
+          speechBubble: {
+            text: "Good, you have now [yellow]materialized[/yellow] this character.",
+          },
           wait: 0,
         },
       ]),
@@ -303,8 +329,13 @@ describe("parseTutorialActions", () => {
       {
         id: "end-turn",
         action: "end-turn",
-        speechText:
-          "Good, you have now [yellow]materialized[/yellow] this character.",
+        speechBubble: {
+          speaker: "mira",
+          duration: 3,
+          verticalOffset: 0,
+          bubbleWidth: 700,
+          text: "Good, you have now [yellow]materialized[/yellow] this character.",
+        },
         wait: 0,
       },
     ]);
@@ -313,11 +344,11 @@ describe("parseTutorialActions", () => {
         {
           id: "blank-end-turn-speech",
           action: "end-turn",
-          speechText: " ",
+          speechBubble: { text: " " },
           wait: 0,
         },
       ]),
-    ).toThrow(/non-blank end-turn speech text/u);
+    ).toThrow(/speech bubble text/u);
   });
 
   it("preserves a UUID-backed opponent reposition and rejects display names", () => {
@@ -467,9 +498,12 @@ describe("parseTutorialActions", () => {
           id: "vrakmoth-reveal-and-play",
           action: "reveal-and-play-opponent-card",
           cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
-          revealText: "This card has a ▸Dawn ability.",
-          verticalOffset: 20,
-          bubbleWidth: 450,
+          speechBubble: {
+            duration: 4,
+            verticalOffset: 20,
+            bubbleWidth: 450,
+            text: "This card has a ▸Dawn ability.",
+          },
           wait: 0,
         },
       ]),
@@ -479,9 +513,13 @@ describe("parseTutorialActions", () => {
         action: "reveal-and-play-opponent-card",
         cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         revealDuration: 2,
-        revealText: "This card has a ▸Dawn ability.",
-        verticalOffset: 20,
-        bubbleWidth: 450,
+        speechBubble: {
+          speaker: "mira",
+          duration: 4,
+          verticalOffset: 20,
+          bubbleWidth: 450,
+          text: "This card has a ▸Dawn ability.",
+        },
         wait: 0,
       },
     ]);
@@ -502,18 +540,18 @@ describe("parseTutorialActions", () => {
           id: "bad-reveal-offset",
           action: "reveal-and-play-opponent-card",
           cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
-          verticalOffset: "lower",
+          speechBubble: { verticalOffset: "lower", text: "No." },
           wait: 0,
         },
       ]),
-    ).toThrow(/finite vertical offset/u);
+    ).toThrow(/finite speech bubble vertical offset/u);
     expect(() =>
       parseTutorialActions([
         {
           id: "bad-reveal-width",
           action: "reveal-and-play-opponent-card",
           cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
-          bubbleWidth: 750,
+          speechBubble: { bubbleWidth: 750, text: "No." },
           wait: 0,
         },
       ]),

@@ -20,6 +20,7 @@ A character portrait in the canonical round frame, paired with SpeechBubble and 
 | `visible` | `boolean` | yes | — | Whether the paired portrait and bubble are visible; changes fade in or out. |
 | `size` | `CharacterDialogueSize` = `"compact" \| "prominent"` | no | `compact` | Authored scale for compact or prominent character-led placement. |
 | `testId` | `string` | no | — | Optional stable test id for product-screen QA. |
+| `playbackSpeed` | `number` | no | `1` | Multiplier applied to this dialogue's presence transition. |
 
 ### `dialogue`: the `CharacterDialogueModel` model
 

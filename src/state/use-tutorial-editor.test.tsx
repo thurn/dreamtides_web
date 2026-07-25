@@ -41,7 +41,13 @@ describe("useTutorialEditor", () => {
       {
         id: "welcome",
         action: "display-speech-bubble",
-        text: "Welcome.",
+        speechBubble: {
+          speaker: "mira",
+          duration: 1,
+          verticalOffset: 0,
+          bubbleWidth: 700,
+          text: "Welcome.",
+        },
         wait: 1,
       },
       {

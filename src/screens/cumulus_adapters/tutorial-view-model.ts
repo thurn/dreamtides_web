@@ -10,10 +10,10 @@ import type { DreamwellCard } from "../../data/dreamwell-database";
 import { asCardId } from "../../types/card-identity";
 import { TUTORIAL_OPPONENT_CARD_ID } from "../../data/tutorial-opponent-card";
 import type {
-  DisplaySpeechBubbleTutorialAction,
   TutorialAction,
   TutorialDreamcallerOwner,
   TutorialPlaybackState,
+  TutorialSpeechBubble,
 } from "../../types/tutorial";
 import { tutorialInstructionPlainText } from "../../data/tutorial-instruction-markup";
 
@@ -32,6 +32,20 @@ export {
   TUTORIAL_PLAYER_CARD_ID,
 } from "../../data/tutorial-opponent-card";
 
+function tutorialSpeechBubbleLogDetails(speechBubble: TutorialSpeechBubble) {
+  const messageText = tutorialInstructionPlainText(speechBubble.text);
+  return {
+    speaker: speechBubble.speaker,
+    durationSeconds: speechBubble.duration,
+    verticalOffsetPx: speechBubble.verticalOffset,
+    bubbleWidthPx: speechBubble.bubbleWidth,
+    messageText,
+    ...(messageText === speechBubble.text
+      ? {}
+      : { messageMarkup: speechBubble.text }),
+  };
+}
+
 /** Reconstruction fields logged whenever an authored tutorial action appears. */
 export function tutorialActionLogDetails(action: TutorialAction) {
   if (action.action === "animate-dreamcaller-portrait") {
@@ -49,11 +63,7 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       actionId: action.id,
       action: action.action,
       waitSeconds: action.wait,
-      speaker: action.speaker ?? "mira",
-      verticalOffsetPx: action.verticalOffset ?? 0,
-      ...(action.bubbleWidth === undefined
-        ? {}
-        : { bubbleWidthPx: action.bubbleWidth }),
+      speechBubble: tutorialSpeechBubbleLogDetails(action.speechBubble),
     };
   }
   if (action.action === "display-how-to-play") {
@@ -113,18 +123,11 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       cardId: action.cardId,
       cardFace: "up",
       revealDurationSeconds: action.revealDuration,
-      ...(action.revealText === undefined
+      ...(action.speechBubble === undefined
         ? {}
         : {
-            revealSpeechSpeaker: "mira",
-            revealSpeechText: action.revealText,
+            speechBubble: tutorialSpeechBubbleLogDetails(action.speechBubble),
           }),
-      ...(action.verticalOffset === undefined
-        ? {}
-        : { revealSpeechVerticalOffsetPx: action.verticalOffset }),
-      ...(action.bubbleWidth === undefined
-        ? {}
-        : { revealSpeechBubbleWidthPx: action.bubbleWidth }),
       revealPlacement: "right-front-rank-intersection",
       sourceZone: "opponent-hand",
       destinationZone: "opponent-back-rank",
@@ -171,9 +174,11 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       actionId: action.id,
       action: action.action,
       waitSeconds: action.wait,
-      ...(action.speechText === undefined
+      ...(action.speechBubble === undefined
         ? {}
-        : { speechText: action.speechText }),
+        : {
+            speechBubble: tutorialSpeechBubbleLogDetails(action.speechBubble),
+          }),
       sourceSide: "player",
       destinationSide: "enemy",
       destinationPhase: "dawn",
@@ -298,48 +303,42 @@ function emptyInspectorSide(
   };
 }
 
-function activeDialogueAction(
+function activeDialogue(
   playback: TutorialPlaybackState | null,
-): DisplaySpeechBubbleTutorialAction | {
-  readonly action: "reveal-and-play-opponent-card";
-  readonly text: string;
-  readonly verticalOffset?: number;
-  readonly bubbleWidth?: number;
+): {
+  readonly actionId: string;
+  readonly parentAction: TutorialAction["action"];
+  readonly speechBubble: TutorialSpeechBubble;
 } | null {
   if (playback?.currentActionIndex === null || playback === null) return null;
   const currentAction = playback.actions[playback.currentActionIndex];
-  if (currentAction?.action === "display-speech-bubble") return currentAction;
+  if (currentAction?.action === "display-speech-bubble") {
+    return {
+      actionId: currentAction.id,
+      parentAction: currentAction.action,
+      speechBubble: currentAction.speechBubble,
+    };
+  }
   if (
     currentAction?.action === "end-turn" &&
-    currentAction.speechText !== undefined &&
+    currentAction.speechBubble !== undefined &&
     playback.playerCardPlay != null
   ) {
     return {
-      id: currentAction.id,
-      action: "display-speech-bubble",
-      text: currentAction.speechText,
-      wait: currentAction.wait,
+      actionId: currentAction.id,
+      parentAction: currentAction.action,
+      speechBubble: currentAction.speechBubble,
     };
   }
   if (
     currentAction?.action === "reveal-and-play-opponent-card" &&
-    currentAction.revealText !== undefined
+    currentAction.speechBubble !== undefined
   ) {
     return {
-      action: currentAction.action,
-      text: currentAction.revealText,
-      ...(currentAction.verticalOffset === undefined
-        ? {}
-        : { verticalOffset: currentAction.verticalOffset }),
-      ...(currentAction.bubbleWidth === undefined
-        ? {}
-        : { bubbleWidth: currentAction.bubbleWidth }),
+      actionId: currentAction.id,
+      parentAction: currentAction.action,
+      speechBubble: currentAction.speechBubble,
     };
-  }
-  if (currentAction?.action !== "animate-dreamcaller-portrait") return null;
-  for (let index = playback.currentActionIndex; index >= 0; index -= 1) {
-    const action = playback.actions[index];
-    if (action?.action === "display-speech-bubble") return action;
   }
   return null;
 }
@@ -362,7 +361,7 @@ export function buildTutorialView(
     playback?.currentActionIndex === undefined
       ? null
       : (playback.actions[playback.currentActionIndex] ?? null);
-  const dialogueAction = activeDialogueAction(playback);
+  const dialogue = activeDialogue(playback);
   const completedActionCount =
     playback === null
       ? 0
@@ -746,45 +745,36 @@ export function buildTutorialView(
     },
     opponentCardToReveal,
     dialogue:
-      dialogueAction === null
+      dialogue === null
         ? null
-        : dialogueAction.action === "reveal-and-play-opponent-card"
+        : dialogue.speechBubble.speaker === "player" ||
+            dialogue.speechBubble.speaker === "enemy"
           ? {
-              kind: "guide",
-              verticalOffset: dialogueAction.verticalOffset ?? 0,
-              ...(dialogueAction.bubbleWidth === undefined
-                ? {}
-                : { bubbleWidth: dialogueAction.bubbleWidth }),
-              model: {
-                portrait: { kind: "character-portrait", characterId: "mira" },
-                portraitAlt: "Mira",
-                speakerName: "Mira",
-                text: dialogueAction.text,
-              },
-            }
-        : dialogueAction.speaker === "player" ||
-            dialogueAction.speaker === "enemy"
-          ? {
+              actionId: dialogue.actionId,
+              parentAction: dialogue.parentAction,
               kind: "dreamcaller",
-              owner: dialogueAction.speaker,
-              ...(dialogueAction.bubbleWidth === undefined
-                ? {}
-                : { bubbleWidth: dialogueAction.bubbleWidth }),
+              owner: dialogue.speechBubble.speaker,
+              duration: dialogue.speechBubble.duration,
+              verticalOffset: dialogue.speechBubble.verticalOffset,
+              bubbleWidth: dialogue.speechBubble.bubbleWidth,
               speakerName:
-                dialogueAction.speaker === "player" ? "Tensho" : "Threxan",
-              text: dialogueAction.text,
+                dialogue.speechBubble.speaker === "player"
+                  ? "Tensho"
+                  : "Threxan",
+              text: dialogue.speechBubble.text,
             }
           : {
+              actionId: dialogue.actionId,
+              parentAction: dialogue.parentAction,
               kind: "guide",
-              verticalOffset: dialogueAction.verticalOffset ?? 0,
-              ...(dialogueAction.bubbleWidth === undefined
-                ? {}
-                : { bubbleWidth: dialogueAction.bubbleWidth }),
+              duration: dialogue.speechBubble.duration,
+              verticalOffset: dialogue.speechBubble.verticalOffset,
+              bubbleWidth: dialogue.speechBubble.bubbleWidth,
               model: {
                 portrait: { kind: "character-portrait", characterId: "mira" },
                 portraitAlt: "Mira",
                 speakerName: "Mira",
-                text: dialogueAction.text,
+                text: dialogue.speechBubble.text,
               },
             },
     playbackRunId: playback?.runId ?? null,

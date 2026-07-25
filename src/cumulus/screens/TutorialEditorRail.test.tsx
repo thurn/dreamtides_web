@@ -3,7 +3,10 @@
 import { act, type ReactElement, type ReactNode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { TutorialAction } from "../../types/tutorial";
+import type {
+  TutorialAction,
+  TutorialSpeechBubble,
+} from "../../types/tutorial";
 import { CumulusRoot } from "../CumulusRoot";
 import { TutorialEditorRail } from "./TutorialEditorRail";
 
@@ -22,13 +25,19 @@ vi.mock("framer-motion", () => ({
   useDragControls: () => ({ start: vi.fn() }),
 }));
 
+const INITIAL_SPEECH_BUBBLE: TutorialSpeechBubble = {
+  speaker: "mira",
+  duration: 3,
+  verticalOffset: 0,
+  bubbleWidth: 700,
+  text: "Welcome, Dreamer.",
+};
+
 const INITIAL_ACTIONS: readonly TutorialAction[] = [
   {
     id: "welcome",
     action: "display-speech-bubble",
-    speaker: "mira",
-    verticalOffset: 0,
-    text: "Welcome, Dreamer.",
+    speechBubble: INITIAL_SPEECH_BUBBLE,
     wait: 3,
   },
 ];
@@ -92,7 +101,13 @@ describe("TutorialEditorRail", () => {
       {
         id: "second",
         action: "display-speech-bubble",
-        text: "Second.",
+        speechBubble: {
+          speaker: "mira",
+          duration: 1,
+          verticalOffset: 0,
+          bubbleWidth: 700,
+          text: "Second.",
+        },
         wait: 1,
       },
       {
@@ -186,16 +201,22 @@ describe("TutorialEditorRail", () => {
         {
           id: "display-speech-bubble",
           action: "display-speech-bubble",
-          speaker: "mira",
-          verticalOffset: 0,
-          text: "New tutorial message.",
-          wait: 3,
+          speechBubble: {
+            speaker: "mira",
+            duration: 3,
+            verticalOffset: 0,
+            bubbleWidth: 700,
+            text: "New tutorial message.",
+          },
+          wait: 0,
         },
       ],
       true,
     );
     expect(
-      container.querySelectorAll('[data-testid^="tutorial-action-text-"]'),
+      container.querySelectorAll(
+        '[data-testid^="tutorial-action-speech-bubble-text-"]',
+      ),
     ).toHaveLength(2);
 
     act(() => root.unmount());
@@ -314,9 +335,13 @@ describe("TutorialEditorRail", () => {
       ),
     ].find((option) => option.textContent?.trim() === "End Turn");
     act(() => endTurnOption?.click());
+    const addBubble = [
+      ...container.querySelectorAll<HTMLButtonElement>("button"),
+    ].find((button) => button.textContent?.trim() === "Add Speech Bubble");
+    act(() => addBubble?.click());
 
     const speech = container.querySelector<HTMLTextAreaElement>(
-      '[data-testid="tutorial-action-speech-text-end-turn"]',
+      '[data-testid="tutorial-action-speech-bubble-text-end-turn"]',
     );
     expect(speech).not.toBeNull();
     act(() => {
@@ -332,8 +357,13 @@ describe("TutorialEditorRail", () => {
         {
           id: "end-turn",
           action: "end-turn",
-          speechText:
-            "Good, you have now [yellow]materialized[/yellow] this character.",
+          speechBubble: {
+            speaker: "mira",
+            duration: 3,
+            verticalOffset: 0,
+            bubbleWidth: 700,
+            text: "Good, you have now [yellow]materialized[/yellow] this character.",
+          },
           wait: 0,
         },
       ],
@@ -367,7 +397,10 @@ describe("TutorialEditorRail", () => {
       [
         {
           ...INITIAL_ACTIONS[0],
-          speaker: "enemy",
+          speechBubble: {
+            ...INITIAL_SPEECH_BUBBLE,
+            speaker: "enemy",
+          },
         },
       ],
       true,
@@ -385,7 +418,7 @@ describe("TutorialEditorRail", () => {
     act(() => root.render(<EditorHarness onChange={onChange} />));
 
     const moveDown = container.querySelector<HTMLButtonElement>(
-      'button[aria-label="Move Mira speech down for action 1"]',
+      'button[aria-label="Move speech bubble down for action 1"]',
     );
     expect(moveDown).not.toBeNull();
     expect(container.textContent).toContain("0px");
@@ -395,7 +428,10 @@ describe("TutorialEditorRail", () => {
       [
         {
           ...INITIAL_ACTIONS[0],
-          verticalOffset: 10,
+          speechBubble: {
+            ...INITIAL_SPEECH_BUBBLE,
+            verticalOffset: 10,
+          },
         },
       ],
       true,
@@ -423,12 +459,99 @@ describe("TutorialEditorRail", () => {
       [
         {
           ...INITIAL_ACTIONS[0],
-          bubbleWidth: 650,
+          speechBubble: {
+            ...INITIAL_SPEECH_BUBBLE,
+            bubbleWidth: 650,
+          },
         },
       ],
       true,
     );
     expect(container.textContent).toContain("650px");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("authors speech bubble visibility duration", () => {
+    const onChange = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<EditorHarness onChange={onChange} />));
+
+    const increaseDuration = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="Increase speech bubble duration for action 1"]',
+    );
+    expect(container.textContent).toContain("3s");
+    act(() => increaseDuration?.click());
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        {
+          ...INITIAL_ACTIONS[0],
+          speechBubble: {
+            ...INITIAL_SPEECH_BUBBLE,
+            duration: 3.5,
+          },
+        },
+      ],
+      true,
+    );
+    expect(container.textContent).toContain("3.5s");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("shows the same speech bubble controls on every supporting action", () => {
+    const actions: readonly TutorialAction[] = [
+      INITIAL_ACTIONS[0],
+      {
+        id: "reveal",
+        action: "reveal-and-play-opponent-card",
+        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        revealDuration: 2,
+        speechBubble: INITIAL_SPEECH_BUBBLE,
+        wait: 0,
+      },
+      {
+        id: "end-turn",
+        action: "end-turn",
+        speechBubble: INITIAL_SPEECH_BUBBLE,
+        wait: 0,
+      },
+    ];
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <TutorialEditorRail
+            actions={actions}
+            saveStatus="idle"
+            saveError={null}
+            onActionsChange={vi.fn()}
+            onReplay={vi.fn()}
+            onPlayFromAction={vi.fn()}
+            onClose={vi.fn()}
+          />
+        </CumulusRoot>,
+      ),
+    );
+
+    const editors = [
+      ...container.querySelectorAll("[data-tutorial-speech-bubble-editor]"),
+    ];
+    expect(editors).toHaveLength(3);
+    for (const editor of editors) {
+      expect(editor.textContent).toContain("Speech Bubble Text");
+      expect(editor.textContent).toContain("Visible Duration");
+      expect(editor.textContent).toContain("Bubble Width");
+      expect(editor.textContent).toContain("Vertical Offset");
+    }
 
     act(() => root.unmount());
     container.remove();
@@ -470,7 +593,9 @@ describe("TutorialEditorRail", () => {
       true,
     );
     expect(
-      container.querySelectorAll('[data-testid^="tutorial-action-text-"]'),
+      container.querySelectorAll(
+        '[data-testid^="tutorial-action-speech-bubble-text-"]',
+      ),
     ).toHaveLength(1);
 
     const ownerTrigger = container.querySelector<HTMLButtonElement>(
@@ -573,7 +698,9 @@ describe("TutorialEditorRail", () => {
       true,
     );
     expect(
-      container.querySelectorAll('[data-testid^="tutorial-action-text-"]'),
+      container.querySelectorAll(
+        '[data-testid^="tutorial-action-speech-bubble-text-"]',
+      ),
     ).toHaveLength(1);
 
     act(() => root.unmount());
@@ -789,13 +916,10 @@ describe("TutorialEditorRail", () => {
       true,
     );
 
-    act(() =>
-      container
-        .querySelector<HTMLButtonElement>(
-          'button[aria-label="Narrow Mira reveal speech bubble for action 2"]',
-        )
-        ?.click(),
-    );
+    const addBubble = [
+      ...container.querySelectorAll<HTMLButtonElement>("button"),
+    ].find((button) => button.textContent?.trim() === "Add Speech Bubble");
+    act(() => addBubble?.click());
     expect(onChange).toHaveBeenLastCalledWith(
       [
         INITIAL_ACTIONS[0],
@@ -804,7 +928,13 @@ describe("TutorialEditorRail", () => {
           action: "reveal-and-play-opponent-card",
           cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
           revealDuration: 2,
-          bubbleWidth: 650,
+          speechBubble: {
+            speaker: "mira",
+            duration: 3,
+            verticalOffset: 0,
+            bubbleWidth: 700,
+            text: "New tutorial message.",
+          },
           wait: 0,
         },
       ],
@@ -814,7 +944,7 @@ describe("TutorialEditorRail", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          'button[aria-label="Move Mira reveal speech down for action 2"]',
+          'button[aria-label="Narrow speech bubble for action 2"]',
         )
         ?.click(),
     );
@@ -826,8 +956,41 @@ describe("TutorialEditorRail", () => {
           action: "reveal-and-play-opponent-card",
           cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
           revealDuration: 2,
-          bubbleWidth: 650,
-          verticalOffset: 10,
+          speechBubble: {
+            speaker: "mira",
+            duration: 3,
+            verticalOffset: 0,
+            bubbleWidth: 650,
+            text: "New tutorial message.",
+          },
+          wait: 0,
+        },
+      ],
+      true,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          'button[aria-label="Move speech bubble down for action 2"]',
+        )
+        ?.click(),
+    );
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        INITIAL_ACTIONS[0],
+        {
+          id: "reveal-and-play-opponent-card",
+          action: "reveal-and-play-opponent-card",
+          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          revealDuration: 2,
+          speechBubble: {
+            speaker: "mira",
+            duration: 3,
+            verticalOffset: 10,
+            bubbleWidth: 650,
+            text: "New tutorial message.",
+          },
           wait: 0,
         },
       ],
@@ -849,8 +1012,13 @@ describe("TutorialEditorRail", () => {
           action: "reveal-and-play-opponent-card",
           cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
           revealDuration: 2.5,
-          bubbleWidth: 650,
-          verticalOffset: 10,
+          speechBubble: {
+            speaker: "mira",
+            duration: 3,
+            verticalOffset: 10,
+            bubbleWidth: 650,
+            text: "New tutorial message.",
+          },
           wait: 0,
         },
       ],

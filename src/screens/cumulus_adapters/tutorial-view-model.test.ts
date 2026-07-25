@@ -10,6 +10,21 @@ import {
   tutorialActionLogDetails,
 } from "./tutorial-view-model";
 import { TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID } from "../../data/tutorial-opponent-card";
+import type { TutorialSpeechBubble } from "../../types/tutorial";
+
+function speechBubble(
+  text: string,
+  overrides: Partial<TutorialSpeechBubble> = {},
+): TutorialSpeechBubble {
+  return {
+    speaker: "mira",
+    duration: 3,
+    verticalOffset: 0,
+    bubbleWidth: 700,
+    text,
+    ...overrides,
+  };
+}
 
 const OPPONENT_CARD: CardData = {
   id: asCardId(TUTORIAL_OPPONENT_CARD_ID),
@@ -75,7 +90,7 @@ describe("buildTutorialView", () => {
       {
         id: "welcome",
         action: "display-speech-bubble" as const,
-        text: "Welcome.",
+        speechBubble: speechBubble("Welcome."),
         wait: 1,
       },
       {
@@ -97,9 +112,10 @@ describe("buildTutorialView", () => {
       {
         id: "enemy-taunt",
         action: "display-speech-bubble" as const,
-        speaker: "enemy" as const,
-        bubbleWidth: 450,
-        text: "For the Abyss!",
+        speechBubble: speechBubble("For the Abyss!", {
+          speaker: "enemy",
+          bubbleWidth: 450,
+        }),
         wait: 1,
       },
       {
@@ -140,17 +156,22 @@ describe("buildTutorialView", () => {
       tutorialActionLogDetails({
         id: "enemy-taunt",
         action: "display-speech-bubble",
-        speaker: "enemy",
-        bubbleWidth: 450,
-        text: "For the Abyss!",
+        speechBubble: speechBubble("For the Abyss!", {
+          speaker: "enemy",
+          bubbleWidth: 450,
+        }),
         wait: 3,
       }),
     ).toEqual({
       actionId: "enemy-taunt",
       action: "display-speech-bubble",
-      bubbleWidthPx: 450,
-      speaker: "enemy",
-      verticalOffsetPx: 0,
+      speechBubble: {
+        speaker: "enemy",
+        durationSeconds: 3,
+        verticalOffsetPx: 0,
+        bubbleWidthPx: 450,
+        messageText: "For the Abyss!",
+      },
       waitSeconds: 3,
     });
   });
@@ -227,9 +248,11 @@ describe("buildTutorialView", () => {
         action: "reveal-and-play-opponent-card",
         cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         revealDuration: 2,
-        revealText: "This card has a ▸Dawn ability.",
-        verticalOffset: 20,
-        bubbleWidth: 450,
+        speechBubble: speechBubble("This card has a ▸Dawn ability.", {
+          duration: 4,
+          verticalOffset: 20,
+          bubbleWidth: 450,
+        }),
         wait: 0,
       }),
     ).toEqual({
@@ -239,10 +262,13 @@ describe("buildTutorialView", () => {
       cardId: TUTORIAL_OPPONENT_CARD_ID,
       cardFace: "up",
       revealDurationSeconds: 2,
-      revealSpeechSpeaker: "mira",
-      revealSpeechText: "This card has a ▸Dawn ability.",
-      revealSpeechVerticalOffsetPx: 20,
-      revealSpeechBubbleWidthPx: 450,
+      speechBubble: {
+        speaker: "mira",
+        durationSeconds: 4,
+        verticalOffsetPx: 20,
+        bubbleWidthPx: 450,
+        messageText: "This card has a ▸Dawn ability.",
+      },
       revealPlacement: "right-front-rank-intersection",
       sourceZone: "opponent-hand",
       destinationZone: "opponent-back-rank",
@@ -255,16 +281,24 @@ describe("buildTutorialView", () => {
       tutorialActionLogDetails({
         id: "end-turn",
         action: "end-turn",
-        speechText:
+        speechBubble: speechBubble(
           "Good, you have now [yellow]materialized[/yellow] this character.",
+        ),
         wait: 0,
       }),
     ).toEqual({
       actionId: "end-turn",
       action: "end-turn",
       waitSeconds: 0,
-      speechText:
-        "Good, you have now [yellow]materialized[/yellow] this character.",
+      speechBubble: {
+        speaker: "mira",
+        durationSeconds: 3,
+        verticalOffsetPx: 0,
+        bubbleWidthPx: 700,
+        messageText: "Good, you have now materialized this character.",
+        messageMarkup:
+          "Good, you have now [yellow]materialized[/yellow] this character.",
+      },
       sourceSide: "player",
       destinationSide: "enemy",
       destinationPhase: "dawn",
@@ -346,8 +380,9 @@ describe("buildTutorialView", () => {
         {
           id: "greeting",
           action: "display-speech-bubble",
-          bubbleWidth: 450,
-          text: "A custom greeting.",
+          speechBubble: speechBubble("A custom greeting.", {
+            bubbleWidth: 450,
+          }),
           wait: 1.5,
         },
         {
@@ -361,7 +396,7 @@ describe("buildTutorialView", () => {
         {
           id: "nightmare-call",
           action: "display-speech-bubble",
-          text: "A second message.",
+          speechBubble: speechBubble("A second message."),
           wait: 3,
         },
       ],
@@ -369,7 +404,10 @@ describe("buildTutorialView", () => {
     const view = tutorial.battle;
 
     expect(tutorial.dialogue).toEqual({
+      actionId: "greeting",
+      parentAction: "display-speech-bubble",
       kind: "guide",
+      duration: 3,
       verticalOffset: 0,
       bubbleWidth: 450,
       model: {
@@ -430,7 +468,7 @@ describe("buildTutorialView", () => {
         {
           id: "welcome",
           action: "display-speech-bubble",
-          text: "Welcome, Dreamer.",
+          speechBubble: speechBubble("Welcome, Dreamer."),
           wait: 3,
         },
         {
@@ -444,8 +482,10 @@ describe("buildTutorialView", () => {
         {
           id: "nightmare-call",
           action: "display-speech-bubble",
-          verticalOffset: 100,
-          text: "You are called to stand against Nightmare.",
+          speechBubble: speechBubble(
+            "You are called to stand against Nightmare.",
+            { verticalOffset: 100 },
+          ),
           wait: 3,
         },
       ],
@@ -468,12 +508,12 @@ describe("buildTutorialView", () => {
     });
   });
 
-  it("keeps the latest speech visible while a portrait action plays", () => {
+  it("ends speech before a portrait action plays", () => {
     const actions = [
       {
         id: "welcome",
         action: "display-speech-bubble" as const,
-        text: "Welcome, Dreamer.",
+        speechBubble: speechBubble("Welcome, Dreamer."),
         wait: 3,
       },
       {
@@ -487,7 +527,7 @@ describe("buildTutorialView", () => {
       {
         id: "nightmare-call",
         action: "display-speech-bubble" as const,
-        text: "The next line.",
+        speechBubble: speechBubble("The next line."),
         wait: 3,
       },
     ];
@@ -503,9 +543,7 @@ describe("buildTutorialView", () => {
       actions,
     }).dialogue;
 
-    expect(overlapping?.kind === "guide" ? overlapping.model.text : null).toBe(
-      "Welcome, Dreamer.",
-    );
+    expect(overlapping).toBeNull();
     expect(next?.kind === "guide" ? next.model.text : null).toBe(
       "The next line.",
     );
@@ -516,8 +554,7 @@ describe("buildTutorialView", () => {
       {
         id: "vrakmoth-taunt",
         action: "display-speech-bubble" as const,
-        speaker: "enemy" as const,
-        text: "For the Abyss!",
+        speechBubble: speechBubble("For the Abyss!", { speaker: "enemy" }),
         wait: 3,
       },
       {
@@ -567,8 +604,7 @@ describe("buildTutorialView", () => {
         {
           id: "vrakmoth-taunt",
           action: "display-speech-bubble",
-          speaker: "enemy",
-          text: "For the Abyss!",
+          speechBubble: speechBubble("For the Abyss!", { speaker: "enemy" }),
           wait: 3,
         },
       ],
@@ -576,8 +612,13 @@ describe("buildTutorialView", () => {
 
     expect(tutorial.dreamcallers.enemy.settled).toBe(true);
     expect(tutorial.dialogue).toEqual({
+      actionId: "vrakmoth-taunt",
+      parentAction: "display-speech-bubble",
       kind: "dreamcaller",
       owner: "enemy",
+      duration: 3,
+      verticalOffset: 0,
+      bubbleWidth: 700,
       speakerName: "Threxan",
       text: "For the Abyss!",
     });
@@ -588,8 +629,7 @@ describe("buildTutorialView", () => {
       {
         id: "vrakmoth-taunt",
         action: "display-speech-bubble" as const,
-        speaker: "enemy" as const,
-        text: "For the Abyss!",
+        speechBubble: speechBubble("For the Abyss!", { speaker: "enemy" }),
         wait: 3,
       },
       {
@@ -614,8 +654,9 @@ describe("buildTutorialView", () => {
       {
         id: "end-turn",
         action: "end-turn" as const,
-        speechText:
+        speechBubble: speechBubble(
           "Good, you have now [yellow]materialized[/yellow] this character.",
+        ),
         wait: 0,
       },
       {
@@ -636,8 +677,9 @@ describe("buildTutorialView", () => {
       {
         id: "vrakmoth-worthy-challenger",
         action: "display-speech-bubble" as const,
-        speaker: "enemy" as const,
-        text: "A worthy challenger!",
+        speechBubble: speechBubble("A worthy challenger!", {
+          speaker: "enemy",
+        }),
         wait: 3,
       },
       {
@@ -781,8 +823,12 @@ describe("buildTutorialView", () => {
       ready: true,
     });
     expect(afterPlayerCardPlay.dialogue).toEqual({
+      actionId: "end-turn",
+      parentAction: "end-turn",
       kind: "guide",
+      duration: 3,
       verticalOffset: 0,
+      bubbleWidth: 700,
       model: {
         portrait: { kind: "character-portrait", characterId: "mira" },
         portraitAlt: "Mira",
@@ -942,8 +988,13 @@ describe("buildTutorialView", () => {
       [AUTUMN_GLADE],
     );
     expect(worthyChallenger.dialogue).toEqual({
+      actionId: "vrakmoth-worthy-challenger",
+      parentAction: "display-speech-bubble",
       kind: "dreamcaller",
       owner: "enemy",
+      duration: 3,
+      verticalOffset: 0,
+      bubbleWidth: 700,
       speakerName: "Threxan",
       text: "A worthy challenger!",
     });
@@ -1118,7 +1169,7 @@ describe("buildTutorialView", () => {
   });
 
   it("draws, reveals, explains, and plays a second UUID-backed opponent card before repositioning the first", () => {
-    const revealText =
+    const revealSpeechBubbleText =
       "This card has a ▸Dawn ability which triggers at the start of turn";
     const actions = [
       {
@@ -1166,8 +1217,9 @@ describe("buildTutorialView", () => {
       {
         id: "worthy",
         action: "display-speech-bubble" as const,
-        speaker: "enemy" as const,
-        text: "A worthy challenger!",
+        speechBubble: speechBubble("A worthy challenger!", {
+          speaker: "enemy",
+        }),
         wait: 3,
       },
       {
@@ -1175,9 +1227,11 @@ describe("buildTutorialView", () => {
         action: "reveal-and-play-opponent-card" as const,
         cardId: TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
         revealDuration: 5,
-        revealText,
-        verticalOffset: 20,
-        bubbleWidth: 450,
+        speechBubble: speechBubble(revealSpeechBubbleText, {
+          duration: 5,
+          verticalOffset: 20,
+          bubbleWidth: 450,
+        }),
         wait: 0,
       },
       {
@@ -1197,15 +1251,19 @@ describe("buildTutorialView", () => {
     expect(revealing.currentAction).toMatchObject({
       cardId: TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
       revealDuration: 5,
-      revealText,
-      verticalOffset: 20,
-      bubbleWidth: 450,
+      speechBubble: {
+        speaker: "mira",
+        duration: 5,
+        verticalOffset: 20,
+        bubbleWidth: 450,
+        text: revealSpeechBubbleText,
+      },
     });
     expect(revealing.dialogue).toMatchObject({
       kind: "guide",
       verticalOffset: 20,
       bubbleWidth: 450,
-      model: { speakerName: "Mira", text: revealText },
+      model: { speakerName: "Mira", text: revealSpeechBubbleText },
     });
     expect(revealing.battle.enemyHand).toEqual([]);
     expect(revealing.battle.farHand.cards).toEqual([]);
@@ -1372,7 +1430,9 @@ describe("buildTutorialView", () => {
       {
         id: "nightmare-call",
         action: "display-speech-bubble" as const,
-        text: "You are called to stand against\nthe power of Nightmare.",
+        speechBubble: speechBubble(
+          "You are called to stand against\nthe power of Nightmare.",
+        ),
         wait: 3,
       },
       {
@@ -1393,9 +1453,7 @@ describe("buildTutorialView", () => {
     expect(arriving.dreamcallers.player.settled).toBe(true);
     expect(arriving.dreamcallers.enemy.settled).toBe(false);
     expect(arriving.currentAction?.id).toBe("vrakmoth-arrival");
-    expect(
-      arriving.dialogue?.kind === "guide" ? arriving.dialogue.model.text : null,
-    ).toContain("power of Nightmare");
+    expect(arriving.dialogue).toBeNull();
 
     const complete = buildTutorialView({
       runId: "event:10",

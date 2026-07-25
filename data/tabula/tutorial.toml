@@ -3,8 +3,14 @@
 [[actions]]
 id = "welcome"
 action = "display-speech-bubble"
+wait = 0
+
+[actions.speechBubble]
+speaker = "mira"
+duration = 3
+verticalOffset = 0
+bubbleWidth = 700
 text = "Welcome, Dreamer."
-wait = 3
 
 [[actions]]
 id = "dreamcaller-arrival"
@@ -17,9 +23,14 @@ wait = 0
 [[actions]]
 id = "nightmare-call"
 action = "display-speech-bubble"
+wait = 0
+
+[actions.speechBubble]
+speaker = "mira"
+duration = 3
 verticalOffset = 100
+bubbleWidth = 700
 text = "You are called to stand against\nthe power of Nightmare."
-wait = 3
 
 [[actions]]
 id = "vrakmoth-arrival"
@@ -32,9 +43,14 @@ wait = 0
 [[actions]]
 id = "vrakmoth-taunt"
 action = "display-speech-bubble"
+wait = 0
+
+[actions.speechBubble]
 speaker = "enemy"
+duration = 3
+verticalOffset = 0
+bubbleWidth = 300
 text = "For the Abyss!"
-wait = 3
 
 [[actions]]
 id = "vrakmoth-draw"
@@ -59,15 +75,26 @@ wait = 0
 [[actions]]
 id = "end-turn"
 action = "end-turn"
-speechText = "You have now [yellow]materialized[/yellow] a dream character."
 wait = 0
+
+[actions.speechBubble]
+speaker = "mira"
+duration = 3
+verticalOffset = 0
+bubbleWidth = 700
+text = "You have now [yellow]materialized[/yellow] a dream character."
 
 [[actions]]
 id = "vrakmoth-worthy-challenger"
 action = "display-speech-bubble"
+wait = 0
+
+[actions.speechBubble]
 speaker = "enemy"
+duration = 3
+verticalOffset = 0
+bubbleWidth = 300
 text = "A worthy challenger!"
-wait = 3
 
 [[actions]]
 id = "autumn-glade"
@@ -95,9 +122,14 @@ id = "runebound-champion-reveal-and-play"
 action = "reveal-and-play-opponent-card"
 cardId = "a28ad36d-fa74-4190-a463-7efd3a6233d0"
 revealDuration = 5
-revealText = "This card has a ▸Dawn ability which triggers at the start of turn."
-bubbleWidth = 500
 wait = 2
+
+[actions.speechBubble]
+speaker = "mira"
+duration = 5
+verticalOffset = 0
+bubbleWidth = 500
+text = "This card has a ▸Dawn ability which triggers at the start of turn."
 
 [[actions]]
 id = "opponent-character-advance"
@@ -129,15 +161,23 @@ wait = 1
 [[actions]]
 id = "challenge-resolution-points"
 action = "display-speech-bubble"
+wait = 0
+
+[actions.speechBubble]
+speaker = "mira"
+duration = 3
 verticalOffset = 30
 bubbleWidth = 500
 text = "A [yellow]blocked[/yellow] character doesn't score points (⍟)."
-wait = 3
 
 [[actions]]
 id = "challenge-resolution-dissolved"
 action = "display-speech-bubble"
+wait = 0
+
+[actions.speechBubble]
+speaker = "mira"
+duration = 5
 verticalOffset = -30
 bubbleWidth = 500
 text = "Instead, the lowest spark (✦) character is [yellow]dissolved[/yellow] (sent to the void)."
-wait = 5

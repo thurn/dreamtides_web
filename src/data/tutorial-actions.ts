@@ -1,8 +1,80 @@
 import { isCardId } from "../types/card-identity";
-import type { TutorialAction } from "../types/tutorial";
+import type {
+  TutorialAction,
+  TutorialSpeechBubble,
+} from "../types/tutorial";
 import { parseTutorialInstructionMarkup } from "./tutorial-instruction-markup";
 
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
+const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
+const DEFAULT_DREAMCALLER_SPEECH_BUBBLE_WIDTH = 300;
+
+function parseTutorialSpeechBubble(
+  value: unknown,
+  actionId: string,
+  required: boolean,
+): TutorialSpeechBubble | undefined {
+  if (value === undefined && !required) return undefined;
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error(
+      `Tutorial action ${JSON.stringify(actionId)} must have a speechBubble table.`,
+    );
+  }
+  const record = value as Record<string, unknown>;
+  if (typeof record.text !== "string" || record.text.trim().length === 0) {
+    throw new Error(
+      `Tutorial action ${JSON.stringify(actionId)} must have speech bubble text.`,
+    );
+  }
+  parseTutorialInstructionMarkup(record.text);
+  const speaker = record.speaker ?? "mira";
+  if (speaker !== "mira" && speaker !== "player" && speaker !== "enemy") {
+    throw new Error(
+      `Tutorial action ${JSON.stringify(actionId)} must target Mira, the player, or the enemy.`,
+    );
+  }
+  const duration = record.duration ?? 3;
+  if (
+    typeof duration !== "number" ||
+    !Number.isFinite(duration) ||
+    duration < 0
+  ) {
+    throw new Error(
+      `Tutorial action ${JSON.stringify(actionId)} must have a non-negative speech bubble duration.`,
+    );
+  }
+  const verticalOffset = record.verticalOffset ?? 0;
+  if (
+    typeof verticalOffset !== "number" ||
+    !Number.isFinite(verticalOffset)
+  ) {
+    throw new Error(
+      `Tutorial action ${JSON.stringify(actionId)} must have a finite speech bubble vertical offset.`,
+    );
+  }
+  const bubbleWidth =
+    record.bubbleWidth ??
+    (speaker === "mira"
+      ? DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH
+      : DEFAULT_DREAMCALLER_SPEECH_BUBBLE_WIDTH);
+  if (
+    typeof bubbleWidth !== "number" ||
+    !Number.isFinite(bubbleWidth) ||
+    bubbleWidth < 300 ||
+    bubbleWidth > 700
+  ) {
+    throw new Error(
+      `Tutorial action ${JSON.stringify(actionId)} must have a speech bubble width from 300 to 700 pixels.`,
+    );
+  }
+  return {
+    speaker,
+    duration,
+    verticalOffset,
+    bubbleWidth,
+    text: record.text,
+  };
+}
 
 /** Validate untrusted generated or event-log tutorial action data. */
 export function parseTutorialActions(
@@ -43,52 +115,20 @@ export function parseTutorialActions(
     }
 
     if (record.action === "display-speech-bubble") {
-      if (typeof record.text !== "string" || record.text.trim().length === 0) {
+      const speechBubble = parseTutorialSpeechBubble(
+        record.speechBubble,
+        id,
+        true,
+      );
+      if (speechBubble === undefined) {
         throw new Error(
-          `Tutorial action ${JSON.stringify(id)} must have speech text.`,
-        );
-      }
-      parseTutorialInstructionMarkup(record.text);
-      const speaker = record.speaker;
-      if (
-        speaker !== undefined &&
-        speaker !== "mira" &&
-        speaker !== "player" &&
-        speaker !== "enemy"
-      ) {
-        throw new Error(
-          `Tutorial action ${JSON.stringify(id)} must target Mira, the player, or the enemy.`,
-        );
-      }
-      const verticalOffset = record.verticalOffset;
-      if (
-        verticalOffset !== undefined &&
-        (typeof verticalOffset !== "number" ||
-          !Number.isFinite(verticalOffset))
-      ) {
-        throw new Error(
-          `Tutorial action ${JSON.stringify(id)} must have a finite vertical offset.`,
-        );
-      }
-      const bubbleWidth = record.bubbleWidth;
-      if (
-        bubbleWidth !== undefined &&
-        (typeof bubbleWidth !== "number" ||
-          !Number.isFinite(bubbleWidth) ||
-          bubbleWidth < 300 ||
-          bubbleWidth > 700)
-      ) {
-        throw new Error(
-          `Tutorial action ${JSON.stringify(id)} must have a speech bubble width from 300 to 700 pixels.`,
+          `Tutorial action ${JSON.stringify(id)} must have a speechBubble table.`,
         );
       }
       return {
         id,
         action: "display-speech-bubble",
-        ...(speaker === undefined ? {} : { speaker }),
-        ...(verticalOffset === undefined ? {} : { verticalOffset }),
-        ...(bubbleWidth === undefined ? {} : { bubbleWidth }),
-        text: record.text,
+        speechBubble,
         wait,
       } satisfies TutorialAction;
     }
@@ -268,22 +308,15 @@ export function parseTutorialActions(
       } satisfies TutorialAction;
     }
     if (record.action === "end-turn") {
-      const speechText = record.speechText;
-      if (
-        speechText !== undefined &&
-        (typeof speechText !== "string" || speechText.trim().length === 0)
-      ) {
-        throw new Error(
-          `Tutorial action ${JSON.stringify(id)} must have non-blank end-turn speech text.`,
-        );
-      }
-      if (typeof speechText === "string") {
-        parseTutorialInstructionMarkup(speechText);
-      }
+      const speechBubble = parseTutorialSpeechBubble(
+        record.speechBubble,
+        id,
+        false,
+      );
       return {
         id,
         action: "end-turn",
-        ...(speechText === undefined ? {} : { speechText }),
+        ...(speechBubble === undefined ? {} : { speechBubble }),
         wait,
       } satisfies TutorialAction;
     }
@@ -303,48 +336,17 @@ export function parseTutorialActions(
           `Tutorial action ${JSON.stringify(id)} must have a non-negative card reveal duration.`,
         );
       }
-      const revealText = record.revealText;
-      if (
-        revealText !== undefined &&
-        (typeof revealText !== "string" || revealText.trim().length === 0)
-      ) {
-        throw new Error(
-          `Tutorial action ${JSON.stringify(id)} must have non-blank reveal speech text.`,
-        );
-      }
-      if (typeof revealText === "string") {
-        parseTutorialInstructionMarkup(revealText);
-      }
-      const verticalOffset = record.verticalOffset;
-      if (
-        verticalOffset !== undefined &&
-        (typeof verticalOffset !== "number" ||
-          !Number.isFinite(verticalOffset))
-      ) {
-        throw new Error(
-          `Tutorial action ${JSON.stringify(id)} must have a finite vertical offset.`,
-        );
-      }
-      const bubbleWidth = record.bubbleWidth;
-      if (
-        bubbleWidth !== undefined &&
-        (typeof bubbleWidth !== "number" ||
-          !Number.isFinite(bubbleWidth) ||
-          bubbleWidth < 300 ||
-          bubbleWidth > 700)
-      ) {
-        throw new Error(
-          `Tutorial action ${JSON.stringify(id)} must have a speech bubble width from 300 to 700 pixels.`,
-        );
-      }
+      const speechBubble = parseTutorialSpeechBubble(
+        record.speechBubble,
+        id,
+        false,
+      );
       return {
         id,
         action: "reveal-and-play-opponent-card",
         cardId: record.cardId,
         revealDuration,
-        ...(revealText === undefined ? {} : { revealText }),
-        ...(verticalOffset === undefined ? {} : { verticalOffset }),
-        ...(bubbleWidth === undefined ? {} : { bubbleWidth }),
+        ...(speechBubble === undefined ? {} : { speechBubble }),
         wait,
       } satisfies TutorialAction;
     }

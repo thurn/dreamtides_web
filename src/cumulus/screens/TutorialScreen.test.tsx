@@ -495,8 +495,13 @@ describe("TutorialScreen", () => {
               currentAction: {
                 id: "greeting",
                 action: "display-speech-bubble",
-                bubbleWidth: 450,
-                text: "A custom greeting.",
+                speechBubble: {
+                  speaker: "mira",
+                  duration: 3,
+                  verticalOffset: 0,
+                  bubbleWidth: 450,
+                  text: "A custom greeting.",
+                },
                 wait: 1,
               },
               battle: {
@@ -549,8 +554,14 @@ describe("TutorialScreen", () => {
               currentAction: {
                 id: "welcome",
                 action: "display-speech-bubble",
-                text: "Welcome, Dreamer.",
-                wait: 3,
+                speechBubble: {
+                  speaker: "mira",
+                  duration: 3,
+                  verticalOffset: 0,
+                  bubbleWidth: 700,
+                  text: "Welcome, Dreamer.",
+                },
+                wait: 0,
               },
               battle: { battleId: "tutorial-battle" } as MobileBattleView,
             }}
@@ -615,7 +626,13 @@ describe("TutorialScreen", () => {
               currentAction: {
                 id: "welcome",
                 action: "display-speech-bubble",
-                text: "Welcome, Dreamer.",
+                speechBubble: {
+                  speaker: "mira",
+                  duration: 3,
+                  verticalOffset: 0,
+                  bubbleWidth: 700,
+                  text: "Welcome, Dreamer.",
+                },
                 wait: 3,
               },
               battle: {
@@ -714,7 +731,13 @@ describe("TutorialScreen", () => {
                 action: "reveal-and-play-opponent-card",
                 cardId: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
                 revealDuration: 5,
-                revealText: "This card has a ▸Dawn ability.",
+                speechBubble: {
+                  speaker: "mira",
+                  duration: 5,
+                  verticalOffset: 0,
+                  bubbleWidth: 700,
+                  text: "This card has a ▸Dawn ability.",
+                },
                 wait: 0,
               },
               battle: {
@@ -1145,7 +1168,13 @@ describe("TutorialScreen", () => {
                 action: "reveal-and-play-opponent-card",
                 cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
                 revealDuration: 2,
-                revealText: "This card has a ▸Dawn ability.",
+                speechBubble: {
+                  speaker: "mira",
+                  duration: 2,
+                  verticalOffset: 0,
+                  bubbleWidth: 700,
+                  text: "This card has a ▸Dawn ability.",
+                },
                 wait: 0,
               },
               opponentCardToReveal: TUTORIAL_OPPONENT_CARD,
@@ -2362,8 +2391,13 @@ describe("TutorialScreen", () => {
               currentAction: {
                 id: "vrakmoth-taunt",
                 action: "display-speech-bubble",
-                speaker: "enemy",
-                text: "For the Abyss!",
+                speechBubble: {
+                  speaker: "enemy",
+                  duration: 3,
+                  verticalOffset: 0,
+                  bubbleWidth: 300,
+                  text: "For the Abyss!",
+                },
                 wait: 3,
               },
               battle: {
@@ -2465,7 +2499,13 @@ describe("TutorialScreen", () => {
               currentAction: {
                 id: "welcome",
                 action: "display-speech-bubble",
-                text: "Welcome, Dreamer.",
+                speechBubble: {
+                  speaker: "mira",
+                  duration: 3,
+                  verticalOffset: 0,
+                  bubbleWidth: 700,
+                  text: "Welcome, Dreamer.",
+                },
                 wait: 3,
               },
               battle: {

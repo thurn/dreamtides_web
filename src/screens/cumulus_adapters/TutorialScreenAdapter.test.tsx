@@ -27,7 +27,13 @@ const mocks = vi.hoisted(() => ({
         {
           id: "welcome",
           action: "display-speech-bubble" as const,
-          text: "Adapter fixture.",
+          speechBubble: {
+            speaker: "mira" as const,
+            duration: 3,
+            verticalOffset: 0,
+            bubbleWidth: 700,
+            text: "Adapter fixture.",
+          },
           wait: 3,
         },
         {
@@ -41,7 +47,13 @@ const mocks = vi.hoisted(() => ({
         {
           id: "nightmare-call",
           action: "display-speech-bubble" as const,
-          text: "A follow-up.",
+          speechBubble: {
+            speaker: "mira" as const,
+            duration: 3,
+            verticalOffset: 0,
+            bubbleWidth: 700,
+            text: "A follow-up.",
+          },
           wait: 3,
         },
         {
@@ -208,8 +220,8 @@ describe("TutorialScreenAdapter", () => {
           runId: "event:1",
           actionId: "dreamcaller-arrival",
           action: "animate-dreamcaller-portrait",
-          dialogueVisible: true,
-          dialogueText: "Adapter fixture.",
+          dialogueVisible: false,
+          dialogueText: null,
           owner: "player",
           portraitPauseSeconds: 1,
           portraitTravelSeconds: 0.6,

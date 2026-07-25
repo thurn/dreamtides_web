@@ -72,14 +72,21 @@ export interface TutorialDreamcallerView {
 
 export type TutorialDialogueView =
   | {
+      readonly actionId?: string;
+      readonly parentAction?: TutorialAction["action"];
       readonly kind: "guide";
+      readonly duration?: number;
       readonly verticalOffset: number;
       readonly bubbleWidth?: number;
       readonly model: CharacterDialogueModel;
     }
   | {
+      readonly actionId?: string;
+      readonly parentAction?: TutorialAction["action"];
       readonly kind: "dreamcaller";
       readonly owner: TutorialDreamcallerOwner;
+      readonly duration?: number;
+      readonly verticalOffset?: number;
       readonly bubbleWidth?: number;
       readonly speakerName: string;
       readonly text: string;
@@ -650,7 +657,7 @@ function TutorialDreamcallerDialogue({
         dialogue.owner === "enemy"
           ? targetBox.bottom - screenBox.top - TUTORIAL_PORTRAIT_POINTER_OVERLAP
           : targetBox.top - screenBox.top + TUTORIAL_PORTRAIT_POINTER_OVERLAP;
-      const top = targetEdgeY - pointer.y;
+      const top = targetEdgeY - pointer.y + (dialogue.verticalOffset ?? 0);
       const next = {
         left: Math.round(left * 10) / 10,
         top: Math.round(top * 10) / 10,
@@ -675,7 +682,7 @@ function TutorialDreamcallerDialogue({
       observer.disconnect();
       window.removeEventListener("resize", updateAnchor);
     };
-  }, [desktop, dialogue.owner, layoutKey]);
+  }, [desktop, dialogue.owner, dialogue.verticalOffset, layoutKey]);
 
   const pointerPlacement =
     anchor?.pointerPlacement ??
@@ -1556,7 +1563,10 @@ export function TutorialScreen({
   const [arrivedActionKey, setArrivedActionKey] = useState<string | null>(null);
   const [drawnActionKey, setDrawnActionKey] = useState<string | null>(null);
   const [playedActionKey, setPlayedActionKey] = useState<string | null>(null);
-  const [revealDialogueActionKey, setRevealDialogueActionKey] = useState<
+  const [visibleDialogueActionKey, setVisibleDialogueActionKey] = useState<
+    string | null
+  >(null);
+  const [completedDialogueActionKey, setCompletedDialogueActionKey] = useState<
     string | null
   >(null);
   const [howToPlayPresentedActionKey, setHowToPlayPresentedActionKey] = useState<
@@ -1646,32 +1656,76 @@ export function TutorialScreen({
           revealDuration: currentAction.revealDuration,
         };
   }, [view.currentAction, view.opponentCardToReveal, view.playbackRunId]);
+  const dialogueActionId =
+    view.dialogue?.actionId ?? view.currentAction?.id ?? null;
+  const dialogueParentAction =
+    view.dialogue?.parentAction ?? view.currentAction?.action ?? null;
+  const dialogueDuration =
+    view.dialogue?.duration ??
+    (view.currentAction?.action === "display-speech-bubble" ||
+    view.currentAction?.action === "reveal-and-play-opponent-card" ||
+    view.currentAction?.action === "end-turn"
+      ? view.currentAction.speechBubble?.duration
+      : undefined) ??
+    3;
 
   useEffect(() => {
-    if (!sceneEntered || opponentCardPlay === null) return undefined;
-    const revealStartDelay = reduceMotion
-      ? 0
-      : millisecondsAtPlaybackSpeed(
-          TUTORIAL_CARD_TRAVEL_SECONDS + TUTORIAL_CARD_FLIP_SECONDS,
-          playbackSpeed,
-        );
-    const revealStartTimeout = window.setTimeout(
-      () => setRevealDialogueActionKey(opponentCardPlay.key),
-      revealStartDelay,
+    const dialogue = view.dialogue;
+    const runId = view.playbackRunId;
+    if (
+      !sceneEntered ||
+      dialogue === null ||
+      runId === null ||
+      dialogueActionId === null
+    ) {
+      return undefined;
+    }
+    const actionKey = `${runId}:${dialogueActionId}`;
+    setCompletedDialogueActionKey((current) =>
+      current === actionKey ? null : current,
     );
-    const revealEndTimeout = window.setTimeout(
-      () => setRevealDialogueActionKey(null),
-      revealStartDelay +
-        millisecondsAtPlaybackSpeed(
-          opponentCardPlay.revealDuration,
-          playbackSpeed,
-        ),
+    const startDelay =
+      dialogueParentAction === "reveal-and-play-opponent-card" && !reduceMotion
+        ? millisecondsAtPlaybackSpeed(
+            TUTORIAL_CARD_TRAVEL_SECONDS + TUTORIAL_CARD_FLIP_SECONDS,
+            playbackSpeed,
+          )
+        : 0;
+    if (startDelay === 0) setVisibleDialogueActionKey(actionKey);
+    const showTimeout =
+      startDelay === 0
+        ? null
+        : window.setTimeout(
+            () => setVisibleDialogueActionKey(actionKey),
+            startDelay,
+          );
+    const hideTimeout = window.setTimeout(
+      () => {
+        setVisibleDialogueActionKey((current) =>
+          current === actionKey ? null : current,
+        );
+        setCompletedDialogueActionKey(actionKey);
+      },
+      startDelay +
+        millisecondsAtPlaybackSpeed(dialogueDuration, playbackSpeed),
     );
     return () => {
-      window.clearTimeout(revealStartTimeout);
-      window.clearTimeout(revealEndTimeout);
+      if (showTimeout !== null) window.clearTimeout(showTimeout);
+      window.clearTimeout(hideTimeout);
+      setVisibleDialogueActionKey((current) =>
+        current === actionKey ? null : current,
+      );
     };
-  }, [opponentCardPlay, playbackSpeed, reduceMotion, sceneEntered]);
+  }, [
+    dialogueActionId,
+    dialogueDuration,
+    dialogueParentAction,
+    playbackSpeed,
+    reduceMotion,
+    sceneEntered,
+    view.dialogue,
+    view.playbackRunId,
+  ]);
   const challengeAnimation =
     view.playbackRunId !== null &&
     view.currentAction?.action === "resolve-challenge" &&
@@ -1910,18 +1964,25 @@ export function TutorialScreen({
     if (
       !sceneEntered ||
       view.currentAction?.action !== "display-speech-bubble" ||
-      view.playbackRunId === null
+      view.playbackRunId === null ||
+      completedDialogueActionKey !==
+        `${view.playbackRunId}:${view.currentAction.id}`
     ) {
       return undefined;
     }
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
+    if (wait === 0) {
+      onActionComplete?.(runId, id);
+      return undefined;
+    }
     const timeout = window.setTimeout(
       () => onActionComplete?.(runId, id),
       millisecondsAtPlaybackSpeed(wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
   }, [
+    completedDialogueActionKey,
     onActionComplete,
     playbackSpeed,
     sceneEntered,
@@ -1976,6 +2037,10 @@ export function TutorialScreen({
     }
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
+    if (wait === 0) {
+      onActionComplete?.(runId, id);
+      return undefined;
+    }
     const timeout = window.setTimeout(
       () => onActionComplete?.(runId, id),
       millisecondsAtPlaybackSpeed(wait, playbackSpeed),
@@ -1996,18 +2061,26 @@ export function TutorialScreen({
       opponentCardPlay === null ||
       playedActionKey !== opponentCardPlay.key ||
       view.currentAction?.action !== "reveal-and-play-opponent-card" ||
-      view.playbackRunId === null
+      view.playbackRunId === null ||
+      (view.currentAction.speechBubble !== undefined &&
+        completedDialogueActionKey !==
+          `${view.playbackRunId}:${view.currentAction.id}`)
     ) {
       return undefined;
     }
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
+    if (wait === 0) {
+      onActionComplete?.(runId, id);
+      return undefined;
+    }
     const timeout = window.setTimeout(
       () => onActionComplete?.(runId, id),
       millisecondsAtPlaybackSpeed(wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
   }, [
+    completedDialogueActionKey,
     onActionComplete,
     opponentCardPlay,
     playbackSpeed,
@@ -2073,6 +2146,9 @@ export function TutorialScreen({
     view.currentAction?.action === "end-turn" &&
     view.endTurn?.ready === true &&
     view.playbackRunId !== null &&
+    (view.currentAction.speechBubble === undefined ||
+      completedDialogueActionKey ===
+        `${view.playbackRunId}:${view.currentAction.id}`) &&
     onEndTurn !== undefined;
   const playerReposition = view.playerReposition ?? null;
   const playerRepositionActionKey =
@@ -2694,6 +2770,13 @@ export function TutorialScreen({
               ? `calc(var(${SAFE_AREA_INSET_PROPERTIES.bottom}) + ${token("--space-12")})`
               : undefined,
           left: desktop ? (dialogueAnchor?.left ?? 0) : token("--gutter"),
+          transform:
+            !desktop &&
+            view.currentAction?.action ===
+              "reveal-and-play-opponent-card" &&
+            renderedDialogue?.kind === "guide"
+              ? `translateY(${String(renderedDialogue.verticalOffset ?? 0)}px)`
+              : undefined,
           display: "flex",
           justifyContent: "flex-start",
           maxWidth:
@@ -2717,9 +2800,10 @@ export function TutorialScreen({
             visible={
               sceneEntered &&
               view.dialogue?.kind === "guide" &&
-              (view.currentAction?.action !==
-                "reveal-and-play-opponent-card" ||
-                revealDialogueActionKey === opponentCardPlay?.key)
+              view.playbackRunId !== null &&
+              dialogueActionId !== null &&
+              visibleDialogueActionKey ===
+                `${view.playbackRunId}:${dialogueActionId}`
             }
             testId="tutorial-welcome-dialogue"
             playbackSpeed={playbackSpeed}
@@ -2729,7 +2813,14 @@ export function TutorialScreen({
       {renderedDialogue?.kind === "dreamcaller" ? (
         <TutorialDreamcallerDialogue
           dialogue={renderedDialogue}
-          visible={sceneEntered && view.dialogue?.kind === "dreamcaller"}
+          visible={
+            sceneEntered &&
+            view.dialogue?.kind === "dreamcaller" &&
+            view.playbackRunId !== null &&
+            dialogueActionId !== null &&
+            visibleDialogueActionKey ===
+              `${view.playbackRunId}:${dialogueActionId}`
+          }
           layoutKey={`${String(dockEditor)}:${String(editorOpen)}`}
           desktop={desktop}
         />

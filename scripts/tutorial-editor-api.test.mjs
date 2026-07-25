@@ -34,7 +34,7 @@ function fixtureRoot() {
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
   writeFileSync(
     join(rootDir, "data", "tabula", "tutorial.toml"),
-    '[[actions]]\nid = "old"\naction = "display-speech-bubble"\ntext = "Old."\nwait = 3\n',
+    '[[actions]]\nid = "old"\naction = "display-speech-bubble"\nspeechBubble = { speaker = "mira", duration = 3, verticalOffset = 0, bubbleWidth = 700, text = "Old." }\nwait = 0\n',
   );
   return rootDir;
 }
@@ -52,13 +52,25 @@ describe("tutorial editor api", () => {
       {
         id: "second",
         action: "display-speech-bubble",
-        text: "Second.",
+        speechBubble: {
+          speaker: "mira",
+          duration: 0.5,
+          verticalOffset: 0,
+          bubbleWidth: 700,
+          text: "Second.",
+        },
         wait: 0.5,
       },
       {
         id: "first",
         action: "display-speech-bubble",
-        text: "First.",
+        speechBubble: {
+          speaker: "mira",
+          duration: 2,
+          verticalOffset: 0,
+          bubbleWidth: 700,
+          text: "First.",
+        },
         wait: 2,
       },
     ];
@@ -90,7 +102,7 @@ describe("tutorial editor api", () => {
           {
             id: "bad",
             action: "display-speech-bubble",
-            text: "",
+            speechBubble: { text: "" },
             wait: 3,
           },
         ],

@@ -14,10 +14,13 @@ const FIXTURE_ACTIONS = [
   {
     id: "opening-line",
     action: "display-speech-bubble",
-    speaker: "mira",
-    verticalOffset: 100,
-    bubbleWidth: 650,
-    text: "First [yellow]line[/yellow].\nSecond line.",
+    speechBubble: {
+      speaker: "mira",
+      duration: 1.5,
+      verticalOffset: 100,
+      bubbleWidth: 650,
+      text: "First [yellow]line[/yellow].\nSecond line.",
+    },
     wait: 1.5,
   },
   {
@@ -39,9 +42,13 @@ const FIXTURE_ACTIONS = [
     action: "reveal-and-play-opponent-card",
     cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
     revealDuration: 2,
-    revealText: "This card has a ▸Dawn ability.",
-    verticalOffset: 20,
-    bubbleWidth: 450,
+    speechBubble: {
+      speaker: "mira",
+      duration: 2,
+      verticalOffset: 20,
+      bubbleWidth: 450,
+      text: "This card has a ▸Dawn ability.",
+    },
     wait: 0,
   },
   {
@@ -106,29 +113,68 @@ describe("tutorial data", () => {
       validateTutorialActions([...FIXTURE_ACTIONS, ...FIXTURE_ACTIONS]),
     ).toThrow(/duplicated/u);
     expect(() =>
-      validateTutorialActions([{ ...FIXTURE_ACTIONS[0], text: "  " }]),
-    ).toThrow(/speech text/u);
+      validateTutorialActions([
+        {
+          ...FIXTURE_ACTIONS[0],
+          speechBubble: { ...FIXTURE_ACTIONS[0].speechBubble, text: "  " },
+        },
+      ]),
+    ).toThrow(/speech bubble text/u);
     expect(() =>
       validateTutorialActions([{ ...FIXTURE_ACTIONS[0], wait: -1 }]),
     ).toThrow(/non-negative wait/u);
     expect(() =>
       validateTutorialActions([
-        { ...FIXTURE_ACTIONS[0], speaker: "spectator" },
+        {
+          ...FIXTURE_ACTIONS[0],
+          speechBubble: {
+            ...FIXTURE_ACTIONS[0].speechBubble,
+            speaker: "spectator",
+          },
+        },
       ]),
     ).toThrow(/Mira, the player, or the enemy/u);
     expect(() =>
       validateTutorialActions([
-        { ...FIXTURE_ACTIONS[0], verticalOffset: Number.NaN },
+        {
+          ...FIXTURE_ACTIONS[0],
+          speechBubble: {
+            ...FIXTURE_ACTIONS[0].speechBubble,
+            verticalOffset: Number.NaN,
+          },
+        },
       ]),
-    ).toThrow(/finite vertical offset/u);
+    ).toThrow(/finite speech bubble vertical offset/u);
     expect(() =>
-      validateTutorialActions([{ ...FIXTURE_ACTIONS[0], bubbleWidth: 150 }]),
+      validateTutorialActions([
+        {
+          ...FIXTURE_ACTIONS[0],
+          speechBubble: {
+            ...FIXTURE_ACTIONS[0].speechBubble,
+            bubbleWidth: 150,
+          },
+        },
+      ]),
     ).toThrow(/speech bubble width from 300 to 700 pixels/u);
     expect(() =>
       validateTutorialActions([
         {
           ...FIXTURE_ACTIONS[0],
-          text: "A [yellow]blocked character.",
+          speechBubble: {
+            ...FIXTURE_ACTIONS[0].speechBubble,
+            duration: -1,
+          },
+        },
+      ]),
+    ).toThrow(/non-negative speech bubble duration/u);
+    expect(() =>
+      validateTutorialActions([
+        {
+          ...FIXTURE_ACTIONS[0],
+          speechBubble: {
+            ...FIXTURE_ACTIONS[0].speechBubble,
+            text: "A [yellow]blocked character.",
+          },
         },
       ]),
     ).toThrow(/unclosed yellow highlight/u);
@@ -145,12 +191,24 @@ describe("tutorial data", () => {
     ).toThrow(/non-negative card reveal duration/u);
     expect(() =>
       validateTutorialActions([
-        { ...FIXTURE_ACTIONS[3], verticalOffset: Number.NaN },
+        {
+          ...FIXTURE_ACTIONS[3],
+          speechBubble: {
+            ...FIXTURE_ACTIONS[3].speechBubble,
+            verticalOffset: Number.NaN,
+          },
+        },
       ]),
-    ).toThrow(/finite vertical offset/u);
+    ).toThrow(/finite speech bubble vertical offset/u);
     expect(() =>
       validateTutorialActions([
-        { ...FIXTURE_ACTIONS[3], bubbleWidth: 750 },
+        {
+          ...FIXTURE_ACTIONS[3],
+          speechBubble: {
+            ...FIXTURE_ACTIONS[3].speechBubble,
+            bubbleWidth: 750,
+          },
+        },
       ]),
     ).toThrow(/speech bubble width from 300 to 700 pixels/u);
     expect(() =>
@@ -197,11 +255,11 @@ describe("tutorial data", () => {
         {
           id: "blank-end-turn-speech",
           action: "end-turn",
-          speechText: " ",
+          speechBubble: { text: " " },
           wait: 0,
         },
       ]),
-    ).toThrow(/non-blank end-turn speech text/u);
+    ).toThrow(/speech bubble text/u);
     expect(() =>
       validateTutorialActions([
         {

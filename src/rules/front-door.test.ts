@@ -172,7 +172,13 @@ describe("front-door reducer", () => {
           {
             id: "welcome",
             action: "display-speech-bubble",
-            text: "A first line.",
+            speechBubble: {
+              speaker: "mira",
+              duration: 0.5,
+              verticalOffset: 0,
+              bubbleWidth: 700,
+              text: "A first line.",
+            },
             wait: 0.5,
           },
           {
@@ -295,13 +301,25 @@ describe("front-door reducer", () => {
       {
         id: "welcome",
         action: "display-speech-bubble",
-        text: "A first line.",
+        speechBubble: {
+          speaker: "mira",
+          duration: 1,
+          verticalOffset: 0,
+          bubbleWidth: 700,
+          text: "A first line.",
+        },
         wait: 1,
       },
       {
         id: "tail-start",
         action: "display-speech-bubble",
-        text: "The testable tail.",
+        speechBubble: {
+          speaker: "mira",
+          duration: 1,
+          verticalOffset: 0,
+          bubbleWidth: 700,
+          text: "The testable tail.",
+        },
         wait: 1,
       },
     ];

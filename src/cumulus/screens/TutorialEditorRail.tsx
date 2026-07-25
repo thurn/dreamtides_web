@@ -23,6 +23,7 @@ import type {
   TutorialEditorSaveStatus,
   TutorialHowToPlayCompanion,
   TutorialHowToPlayTrigger,
+  TutorialSpeechBubble,
   TutorialSpeechBubbleSpeaker,
 } from "../../types/tutorial";
 import { isCardId } from "../../types/card-identity";
@@ -47,7 +48,6 @@ export interface TutorialEditorRailProps {
 
 const TUTORIAL_TAIL_ACTION_COUNT = 6;
 const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
-const DEFAULT_DREAMCALLER_SPEECH_BUBBLE_WIDTH = 300;
 const MINIMUM_SPEECH_BUBBLE_WIDTH = 300;
 const MAXIMUM_SPEECH_BUBBLE_WIDTH = 700;
 const SPEECH_BUBBLE_WIDTH_STEP = 50;
@@ -56,6 +56,13 @@ const MINIMUM_HOW_TO_PLAY_CARD_WIDTH = 300;
 const HOW_TO_PLAY_CARD_WIDTH_STEP = 50;
 const DEFAULT_HOW_TO_PLAY_TEXT =
   "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle.";
+const DEFAULT_SPEECH_BUBBLE: TutorialSpeechBubble = {
+  speaker: "mira",
+  duration: 3,
+  verticalOffset: 0,
+  bubbleWidth: DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH,
+  text: "New tutorial message.",
+};
 
 const ACTION_OPTIONS = [
   { value: "display-speech-bubble", label: "Display Speech Bubble" },
@@ -133,10 +140,8 @@ function defaultAction(
     return {
       id,
       action: "display-speech-bubble",
-      speaker: "mira",
-      verticalOffset: 0,
-      text: "New tutorial message.",
-      wait: 3,
+      speechBubble: DEFAULT_SPEECH_BUBBLE,
+      wait: 0,
     };
   }
   if (actionName === "display-how-to-play") {
@@ -222,22 +227,12 @@ function changedActionType(
     return {
       id: action.id,
       action: actionName,
-      speaker:
-        action.action === "display-speech-bubble"
-          ? (action.speaker ?? "mira")
-          : "mira",
-      verticalOffset:
-        action.action === "display-speech-bubble"
-          ? (action.verticalOffset ?? 0)
-          : 0,
-      ...(action.action === "display-speech-bubble" &&
-      action.bubbleWidth !== undefined
-        ? { bubbleWidth: action.bubbleWidth }
-        : {}),
-      text:
-        action.action === "display-speech-bubble"
-          ? action.text
-          : "New tutorial message.",
+      speechBubble:
+        action.action === "display-speech-bubble" ||
+        action.action === "reveal-and-play-opponent-card" ||
+        action.action === "end-turn"
+          ? (action.speechBubble ?? DEFAULT_SPEECH_BUBBLE)
+          : DEFAULT_SPEECH_BUBBLE,
       wait: action.wait,
     };
   }
@@ -320,8 +315,12 @@ function changedActionType(
     return {
       id: action.id,
       action: actionName,
-      ...(action.action === "end-turn" && action.speechText !== undefined
-        ? { speechText: action.speechText }
+      ...(action.action === "display-speech-bubble" ||
+      action.action === "reveal-and-play-opponent-card" ||
+      action.action === "end-turn"
+        ? action.speechBubble === undefined
+          ? {}
+          : { speechBubble: action.speechBubble }
         : {}),
       wait: action.wait,
     };
@@ -338,17 +337,12 @@ function changedActionType(
         action.action === "reveal-and-play-opponent-card"
           ? action.revealDuration
           : 2,
-      ...(action.action === "reveal-and-play-opponent-card" &&
-      action.revealText !== undefined
-        ? { revealText: action.revealText }
-        : {}),
-      ...(action.action === "reveal-and-play-opponent-card" &&
-      action.verticalOffset !== undefined
-        ? { verticalOffset: action.verticalOffset }
-        : {}),
-      ...(action.action === "reveal-and-play-opponent-card" &&
-      action.bubbleWidth !== undefined
-        ? { bubbleWidth: action.bubbleWidth }
+      ...(action.action === "display-speech-bubble" ||
+      action.action === "reveal-and-play-opponent-card" ||
+      action.action === "end-turn"
+        ? action.speechBubble === undefined
+          ? {}
+          : { speechBubble: action.speechBubble }
         : {}),
       wait: action.wait,
     };
@@ -404,22 +398,208 @@ function waitLabel(wait: number): string {
   return Number.isInteger(wait) ? String(wait) : wait.toFixed(1);
 }
 
-function speechBubbleWidth(
+function withSpeechBubble(
   action: Extract<
     TutorialAction,
     {
       readonly action:
         | "display-speech-bubble"
-        | "reveal-and-play-opponent-card";
+        | "reveal-and-play-opponent-card"
+        | "end-turn";
     }
   >,
-): number {
+  speechBubble: TutorialSpeechBubble | undefined,
+): TutorialAction {
+  if (action.action === "display-speech-bubble") {
+    return {
+      ...action,
+      speechBubble: speechBubble ?? action.speechBubble,
+    };
+  }
+  if (action.action === "reveal-and-play-opponent-card") {
+    return {
+      id: action.id,
+      action: action.action,
+      cardId: action.cardId,
+      revealDuration: action.revealDuration,
+      ...(speechBubble === undefined ? {} : { speechBubble }),
+      wait: action.wait,
+    };
+  }
+  return {
+    id: action.id,
+    action: action.action,
+    ...(speechBubble === undefined ? {} : { speechBubble }),
+    wait: action.wait,
+  };
+}
+
+function SpeechBubbleEditor({
+  speechBubble,
+  actionId,
+  actionNumber,
+  optional,
+  onChange,
+}: {
+  readonly speechBubble: TutorialSpeechBubble | undefined;
+  readonly actionId: string;
+  readonly actionNumber: number;
+  readonly optional: boolean;
+  readonly onChange: (
+    speechBubble: TutorialSpeechBubble | undefined,
+    persist: boolean,
+  ) => void;
+}): ReactElement {
+  if (speechBubble === undefined) {
+    return (
+      <GlassButton
+        glyph={GLYPHS.plus}
+        label="Add Speech Bubble"
+        placement="onGlass"
+        onPress={() => onChange(DEFAULT_SPEECH_BUBBLE, true)}
+      />
+    );
+  }
+
   return (
-    action.bubbleWidth ??
-    (action.action === "reveal-and-play-opponent-card" ||
-    (action.speaker ?? "mira") === "mira"
-      ? DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH
-      : DEFAULT_DREAMCALLER_SPEECH_BUBBLE_WIDTH)
+    <div
+      data-tutorial-speech-bubble-editor=""
+      style={{ display: "grid", gap: token("--space-4") }}
+    >
+      <Select
+        full
+        size="sm"
+        ariaLabel={`Speech bubble speaker for action ${String(actionNumber)}`}
+        options={[...SPEECH_BUBBLE_SPEAKER_OPTIONS]}
+        value={speechBubble.speaker}
+        onChange={(speaker) => {
+          if (
+            speaker !== "mira" &&
+            speaker !== "player" &&
+            speaker !== "enemy"
+          ) {
+            return;
+          }
+          onChange({ ...speechBubble, speaker }, true);
+        }}
+      />
+      <TextArea
+        label="Speech Bubble Text"
+        value={speechBubble.text}
+        supportingText="[yellow]copy[/yellow] highlights an exact run."
+        error={
+          speechBubble.text.trim().length === 0
+            ? "Text cannot be blank."
+            : undefined
+        }
+        testId={`tutorial-action-speech-bubble-text-${actionId}`}
+        onChange={(text) => onChange({ ...speechBubble, text }, false)}
+        onCommit={(text) => onChange({ ...speechBubble, text }, true)}
+      />
+      <NumberStepper
+        label="Visible Duration"
+        value={speechBubble.duration}
+        displayValue={`${waitLabel(speechBubble.duration)}s`}
+        size="sm"
+        decrementLabel={`Decrease speech bubble duration for action ${String(actionNumber)}`}
+        incrementLabel={`Increase speech bubble duration for action ${String(actionNumber)}`}
+        decrementDisabled={speechBubble.duration <= 0}
+        onDecrement={() =>
+          onChange(
+            {
+              ...speechBubble,
+              duration: Math.max(
+                0,
+                Math.round((speechBubble.duration - 0.5) * 10) / 10,
+              ),
+            },
+            true,
+          )
+        }
+        onIncrement={() =>
+          onChange(
+            {
+              ...speechBubble,
+              duration: Math.round((speechBubble.duration + 0.5) * 10) / 10,
+            },
+            true,
+          )
+        }
+      />
+      <NumberStepper
+        label="Bubble Width"
+        value={speechBubble.bubbleWidth}
+        displayValue={`${String(speechBubble.bubbleWidth)}px`}
+        size="sm"
+        decrementLabel={`Narrow speech bubble for action ${String(actionNumber)}`}
+        incrementLabel={`Widen speech bubble for action ${String(actionNumber)}`}
+        decrementDisabled={
+          speechBubble.bubbleWidth <= MINIMUM_SPEECH_BUBBLE_WIDTH
+        }
+        incrementDisabled={
+          speechBubble.bubbleWidth >= MAXIMUM_SPEECH_BUBBLE_WIDTH
+        }
+        onDecrement={() =>
+          onChange(
+            {
+              ...speechBubble,
+              bubbleWidth: Math.max(
+                MINIMUM_SPEECH_BUBBLE_WIDTH,
+                speechBubble.bubbleWidth - SPEECH_BUBBLE_WIDTH_STEP,
+              ),
+            },
+            true,
+          )
+        }
+        onIncrement={() =>
+          onChange(
+            {
+              ...speechBubble,
+              bubbleWidth: Math.min(
+                MAXIMUM_SPEECH_BUBBLE_WIDTH,
+                speechBubble.bubbleWidth + SPEECH_BUBBLE_WIDTH_STEP,
+              ),
+            },
+            true,
+          )
+        }
+      />
+      <NumberStepper
+        label="Vertical Offset"
+        value={speechBubble.verticalOffset}
+        displayValue={`${waitLabel(speechBubble.verticalOffset)}px`}
+        size="sm"
+        decrementLabel={`Move speech bubble up for action ${String(actionNumber)}`}
+        incrementLabel={`Move speech bubble down for action ${String(actionNumber)}`}
+        onDecrement={() =>
+          onChange(
+            {
+              ...speechBubble,
+              verticalOffset: speechBubble.verticalOffset - 10,
+            },
+            true,
+          )
+        }
+        onIncrement={() =>
+          onChange(
+            {
+              ...speechBubble,
+              verticalOffset: speechBubble.verticalOffset + 10,
+            },
+            true,
+          )
+        }
+      />
+      {optional ? (
+        <GlassButton
+          glyph={GLYPHS.trash}
+          label="Remove Speech Bubble"
+          placement="onGlass"
+          variant="danger"
+          onPress={() => onChange(undefined, true)}
+        />
+      ) : null}
+    </div>
   );
 }
 
@@ -559,104 +739,15 @@ function TutorialActionRow({
         </div>
 
         {action.action === "display-speech-bubble" ? (
-          <>
-            <Select
-              full
-              size="sm"
-              ariaLabel={`Speech bubble speaker for action ${String(index + 1)}`}
-              options={[...SPEECH_BUBBLE_SPEAKER_OPTIONS]}
-              value={action.speaker ?? "mira"}
-              onChange={(speaker) => {
-                if (
-                  speaker !== "mira" &&
-                  speaker !== "player" &&
-                  speaker !== "enemy"
-                ) {
-                  return;
-                }
-                update({ ...action, speaker }, true);
-              }}
-            />
-            <TextArea
-              label="Text"
-              value={action.text}
-              supportingText="[yellow]copy[/yellow] highlights an exact run."
-              error={
-                action.text.trim().length === 0
-                  ? "Text cannot be blank."
-                  : undefined
-              }
-              testId={`tutorial-action-text-${action.id}`}
-              onChange={(text) => update({ ...action, text }, false)}
-              onCommit={(text) => update({ ...action, text }, true)}
-            />
-            <NumberStepper
-              label="Bubble Width"
-              value={speechBubbleWidth(action)}
-              displayValue={`${String(speechBubbleWidth(action))}px`}
-              size="sm"
-              decrementLabel={`Narrow speech bubble for action ${String(index + 1)}`}
-              incrementLabel={`Widen speech bubble for action ${String(index + 1)}`}
-              decrementDisabled={
-                speechBubbleWidth(action) <= MINIMUM_SPEECH_BUBBLE_WIDTH
-              }
-              incrementDisabled={
-                speechBubbleWidth(action) >= MAXIMUM_SPEECH_BUBBLE_WIDTH
-              }
-              onDecrement={() =>
-                update(
-                  {
-                    ...action,
-                    bubbleWidth: Math.max(
-                      MINIMUM_SPEECH_BUBBLE_WIDTH,
-                      speechBubbleWidth(action) - SPEECH_BUBBLE_WIDTH_STEP,
-                    ),
-                  },
-                  true,
-                )
-              }
-              onIncrement={() =>
-                update(
-                  {
-                    ...action,
-                    bubbleWidth: Math.min(
-                      MAXIMUM_SPEECH_BUBBLE_WIDTH,
-                      speechBubbleWidth(action) + SPEECH_BUBBLE_WIDTH_STEP,
-                    ),
-                  },
-                  true,
-                )
-              }
-            />
-            {(action.speaker ?? "mira") === "mira" ? (
-              <NumberStepper
-                label="Vertical Offset"
-                value={action.verticalOffset ?? 0}
-                displayValue={`${waitLabel(action.verticalOffset ?? 0)}px`}
-                size="sm"
-                decrementLabel={`Move Mira speech up for action ${String(index + 1)}`}
-                incrementLabel={`Move Mira speech down for action ${String(index + 1)}`}
-                onDecrement={() =>
-                  update(
-                    {
-                      ...action,
-                      verticalOffset: (action.verticalOffset ?? 0) - 10,
-                    },
-                    true,
-                  )
-                }
-                onIncrement={() =>
-                  update(
-                    {
-                      ...action,
-                      verticalOffset: (action.verticalOffset ?? 0) + 10,
-                    },
-                    true,
-                  )
-                }
-              />
-            ) : null}
-          </>
+          <SpeechBubbleEditor
+            speechBubble={action.speechBubble}
+            actionId={action.id}
+            actionNumber={index + 1}
+            optional={false}
+            onChange={(speechBubble, persist) =>
+              update(withSpeechBubble(action, speechBubble), persist)
+            }
+          />
         ) : null}
 
         {action.action === "display-how-to-play" ? (
@@ -864,114 +955,13 @@ function TutorialActionRow({
                 update({ ...action, cardId }, isCardId(cardId))
               }
             />
-            <TextArea
-              label="Mira Reveal Speech"
-              supportingText="Optional. Shown only while the face-up card remains at reading size."
-              value={action.revealText ?? ""}
-              testId={`tutorial-action-reveal-text-${action.id}`}
-              onChange={(revealText) =>
-                update(
-                  revealText.trim().length === 0
-                    ? {
-                        id: action.id,
-                        action: action.action,
-                        cardId: action.cardId,
-                        revealDuration: action.revealDuration,
-                        ...(action.verticalOffset === undefined
-                          ? {}
-                          : { verticalOffset: action.verticalOffset }),
-                        ...(action.bubbleWidth === undefined
-                          ? {}
-                          : { bubbleWidth: action.bubbleWidth }),
-                        wait: action.wait,
-                      }
-                    : { ...action, revealText },
-                  false,
-                )
-              }
-              onCommit={(revealText) =>
-                update(
-                  revealText.trim().length === 0
-                    ? {
-                        id: action.id,
-                        action: action.action,
-                        cardId: action.cardId,
-                        revealDuration: action.revealDuration,
-                        ...(action.verticalOffset === undefined
-                          ? {}
-                          : { verticalOffset: action.verticalOffset }),
-                        ...(action.bubbleWidth === undefined
-                          ? {}
-                          : { bubbleWidth: action.bubbleWidth }),
-                        wait: action.wait,
-                      }
-                    : { ...action, revealText },
-                  true,
-                )
-              }
-            />
-            <NumberStepper
-              label="Bubble Width"
-              value={speechBubbleWidth(action)}
-              displayValue={`${String(speechBubbleWidth(action))}px`}
-              size="sm"
-              decrementLabel={`Narrow Mira reveal speech bubble for action ${String(index + 1)}`}
-              incrementLabel={`Widen Mira reveal speech bubble for action ${String(index + 1)}`}
-              decrementDisabled={
-                speechBubbleWidth(action) <= MINIMUM_SPEECH_BUBBLE_WIDTH
-              }
-              incrementDisabled={
-                speechBubbleWidth(action) >= MAXIMUM_SPEECH_BUBBLE_WIDTH
-              }
-              onDecrement={() =>
-                update(
-                  {
-                    ...action,
-                    bubbleWidth: Math.max(
-                      MINIMUM_SPEECH_BUBBLE_WIDTH,
-                      speechBubbleWidth(action) - SPEECH_BUBBLE_WIDTH_STEP,
-                    ),
-                  },
-                  true,
-                )
-              }
-              onIncrement={() =>
-                update(
-                  {
-                    ...action,
-                    bubbleWidth: Math.min(
-                      MAXIMUM_SPEECH_BUBBLE_WIDTH,
-                      speechBubbleWidth(action) + SPEECH_BUBBLE_WIDTH_STEP,
-                    ),
-                  },
-                  true,
-                )
-              }
-            />
-            <NumberStepper
-              label="Vertical Offset"
-              value={action.verticalOffset ?? 0}
-              displayValue={`${waitLabel(action.verticalOffset ?? 0)}px`}
-              size="sm"
-              decrementLabel={`Move Mira reveal speech up for action ${String(index + 1)}`}
-              incrementLabel={`Move Mira reveal speech down for action ${String(index + 1)}`}
-              onDecrement={() =>
-                update(
-                  {
-                    ...action,
-                    verticalOffset: (action.verticalOffset ?? 0) - 10,
-                  },
-                  true,
-                )
-              }
-              onIncrement={() =>
-                update(
-                  {
-                    ...action,
-                    verticalOffset: (action.verticalOffset ?? 0) + 10,
-                  },
-                  true,
-                )
+            <SpeechBubbleEditor
+              speechBubble={action.speechBubble}
+              actionId={action.id}
+              actionNumber={index + 1}
+              optional
+              onChange={(speechBubble, persist) =>
+                update(withSpeechBubble(action, speechBubble), persist)
               }
             />
             <NumberStepper
@@ -1127,24 +1117,13 @@ function TutorialActionRow({
         ) : null}
 
         {action.action === "end-turn" ? (
-          <TextArea
-            label="Mira Dialogue After Card Play"
-            value={action.speechText ?? ""}
-            placeholder="Optional Mira dialogue"
-            supportingText="[yellow]copy[/yellow] highlights an exact run."
-            testId={`tutorial-action-speech-text-${action.id}`}
-            onChange={(speechText) => update({ ...action, speechText }, false)}
-            onCommit={(speechText) =>
-              update(
-                speechText.trim().length === 0
-                  ? {
-                      id: action.id,
-                      action: action.action,
-                      wait: action.wait,
-                    }
-                  : { ...action, speechText },
-                true,
-              )
+          <SpeechBubbleEditor
+            speechBubble={action.speechBubble}
+            actionId={action.id}
+            actionNumber={index + 1}
+            optional
+            onChange={(speechBubble, persist) =>
+              update(withSpeechBubble(action, speechBubble), persist)
             }
           />
         ) : null}

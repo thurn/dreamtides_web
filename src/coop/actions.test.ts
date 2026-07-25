@@ -228,7 +228,13 @@ describe("coop actions facade", () => {
       {
         id: "tail-start",
         action: "display-speech-bubble" as const,
-        text: "Begin here.",
+        speechBubble: {
+          speaker: "mira" as const,
+          duration: 1,
+          verticalOffset: 0,
+          bubbleWidth: 700,
+          text: "Begin here.",
+        },
         wait: 1,
       },
     ];

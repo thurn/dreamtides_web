@@ -118,6 +118,12 @@ advances through `beginTutorial` and `completeTutorialAction` in
 `src/coop/actions.ts`; local animation completion may determine when an action
 becomes visible, while completing the action remains a shared intent.
 
+Every character-led message uses the same `speechBubble` model. A standalone
+`display-speech-bubble` action requires one, while actions such as card reveal
+and end turn may attach one. The model configures speaker, text, visible
+duration, desktop width, and vertical offset. The Tutorial Editor presents one
+shared control set for that model in every parent action.
+
 When a tutorial request adds a new kind of beat, extend the action type,
 runtime and build-time validators, Tutorial Editor controls, view-model
 mapping, and presentation tests together.

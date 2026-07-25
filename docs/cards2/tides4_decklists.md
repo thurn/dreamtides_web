@@ -101,7 +101,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Abomination of Memory
 - 1× Veil of the Wastes
 - 1× Duskreaper
-- 1× Hope's Vanguard
+- 1× Returned Vanguard
 - 1× Together Against the Tide
 - 1× Collateral Damage
 - 1× Price of Redemption
@@ -166,7 +166,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 2× Tidewreck Navigator
 - 2× Guide of Lost Souls
 - 2× Veil of the Wastes
-- 2× Hope's Vanguard
+- 2× Returned Vanguard
 - 2× Corrupted Host
 - 2× Price of Redemption
 - 2× Twilight Reclaimer
@@ -259,7 +259,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Fallen Angel
 - 1× Duneguard Captain
 - 1× Blazing Emberwing
-- 1× Nocturne
+- 1× Night Scavenger
 - 1× Searcher in the Mists
 - 1× Volcanic Channeler
 - 1× Scuttled Fortune
@@ -278,7 +278,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Soulcleft Spinner
 - 1× Duskreaper
 - 1× Emerald Guardian
-- 1× Hope's Vanguard
+- 1× Returned Vanguard
 - 1× Flamboyant Flamingo
 - 1× Corrupted Host
 - 1× Collateral Damage
@@ -336,7 +336,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
 - 1× Quiet Reflection
-- 1× Dawnprowler Panther
+- 1× Dawnprowler
 - 1× Flagbearer of Decay
 - 1× Eviscerator of Hope
 - 1× Vigil Keeper
@@ -495,7 +495,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Immolate and Rise
 - 1× Shaper of Memory
 - 1× Vizier of Portents
-- 1× Hope's Vanguard
+- 1× Returned Vanguard
 - 1× Corrupted Host
 - 1× Collateral Damage
 - 1× Twilight Reclaimer
@@ -607,7 +607,7 @@ Tide-sig-06 is a character-heavy discard engine (82 of 110 copies are characters
 - 1× Graywatch
 - 1× Unbroken
 - 1× Abyssal Plunge
-- 1× Hope's Vanguard
+- 1× Returned Vanguard
 - 1× Corrupted Host
 - 1× Twilight Reclaimer
 - 1× Immolate
@@ -701,7 +701,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Guide of Lost Souls
 - 1× Immolate and Rise
 - 1× Shaper of Memory
-- 1× Hope's Vanguard
+- 1× Returned Vanguard
 - 1× Corrupted Host
 - 1× Specter of Silent Snow
 - 1× Twilight Reclaimer
@@ -813,7 +813,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Watcher in the Ruins
 - 1× Immolate and Rise
 - 1× Shaper of Memory
-- 1× Hope's Vanguard
+- 1× Returned Vanguard
 - 1× Collateral Damage
 - 1× Twilight Reclaimer
 - 1× Immolate
@@ -1409,12 +1409,12 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 2× Sunshadow Eagle
 - 2× Blood Moon Triad
 - 2× Turquoise Aurelia
-- 2× Dawnprowler Panther
+- 2× Dawnprowler
 - 2× Lord of Hidden Paths
 - 2× Scrap Reclaimer
 - 1× Ethereal Army
 - 1× Starlight Guide
-- 1× Nocturne
+- 1× Night Scavenger
 - 1× Petal-Seer
 - 1× Ethereal Call
 - 1× Sky Voyager
@@ -1454,7 +1454,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Amythest Aurelia
 - 1× Ruin Scavenger
 - 1× Urban Desperado
-- 1× Nightprowler Panther
+- 1× Nightprowler
 - 1× Rower of Changing Seas
 - 1× Containment Specialist
 - 1× Quiet Reflection
@@ -1503,7 +1503,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 2× Blood Moon Triad
 - 2× Turquoise Aurelia
 - 2× Quiet Reflection
-- 2× Dawnprowler Panther
+- 2× Dawnprowler
 - 2× Lord of Hidden Paths
 - 2× Scrap Reclaimer
 - 2× Nexus Wayfinder
@@ -1588,7 +1588,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 2× Blood Moon Triad
 - 2× Turquoise Aurelia
 - 2× Quiet Reflection
-- 2× Dawnprowler Panther
+- 2× Dawnprowler
 - 2× Lord of Hidden Paths
 - 2× Scrap Reclaimer
 - 2× Nexus Wayfinder
@@ -1661,14 +1661,14 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 2× Blood Moon Triad
 - 2× Turquoise Aurelia
 - 2× Quiet Reflection
-- 2× Dawnprowler Panther
+- 2× Dawnprowler
 - 2× Lord of Hidden Paths
 - 2× Scrap Reclaimer
 - 2× Nexus Wayfinder
 - 1× Unleash Ruin
 - 1× Endless Projection
 - 1× Wildpath Companions
-- 1× Nocturne
+- 1× Night Scavenger
 - 1× Crescent Dancer
 - 1× Conduit of Resonance
 - 1× Petal-Seer
@@ -1698,7 +1698,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Paleclaw Panther
 - 1× Amythest Aurelia
 - 1× Ruin Scavenger
-- 1× Nightprowler Panther
+- 1× Nightprowler
 - 1× Memory Tracer
 - 1× Rower of Changing Seas
 - 1× Dragonfly Engine
@@ -1799,7 +1799,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Containment Specialist
 - 1× Melodist of the Finale
 - 1× Fury of the Clan
-- 1× Night Prowler
+- 1× Night Stalker
 - 1× Tranquil Duelist
 
 ## Tensho signature — Warrior Void Recursion
@@ -1892,7 +1892,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Melodist of the Finale
 - 1× Railgun Reinforcer
 - 1× Fury of the Clan
-- 1× Night Prowler
+- 1× Night Stalker
 
 ## Valdren signature — Sacrifice Energy Recursion
 
@@ -1979,7 +1979,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Advance Gunner
 - 1× Melodist of the Finale
 - 1× Key to the Moment
-- 1× Night Prowler
+- 1× Night Stalker
 - 1× Tranquil Duelist
 
 ## Lean: Skull Weaver — Abandon Scaling
@@ -2051,7 +2051,7 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 - 1× Iron Pharaoh
 - 1× Dustborn Veteran
 - 1× Duneguard Captain
-- 1× Nocturne
+- 1× Night Scavenger
 - 1× Searcher in the Mists
 - 1× Volcanic Channeler
 - 1× Ashborn Necromancer
@@ -2165,7 +2165,7 @@ Tide-fac-04 is built almost entirely around spirit animals, with 35 characters a
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
 - 1× Quiet Reflection
-- 1× Dawnprowler Panther
+- 1× Dawnprowler
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
 - 1× Nexus Wayfinder
@@ -2212,7 +2212,7 @@ Tide-fac-05 is a character-heavy (37 of 45 copies) spirit animal swarm built aro
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
 - 1× Quiet Reflection
-- 1× Dawnprowler Panther
+- 1× Dawnprowler
 - 1× Lord of Hidden Paths
 - 1× Nexus Wayfinder
 
@@ -2317,7 +2317,7 @@ Tide-fac-07 runs an even split of events and characters (22/23) built around two
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
 - 1× Quiet Reflection
-- 1× Dawnprowler Panther
+- 1× Dawnprowler
 - 1× Sunset Chronicler
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
@@ -2566,7 +2566,7 @@ Tide-fac-12 is built almost entirely of warriors (42 of 45 copies) and organizes
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
 - 1× Quiet Reflection
-- 1× Dawnprowler Panther
+- 1× Dawnprowler
 - 1× Lord of Hidden Paths
 - 1× Nexus Wayfinder
 
@@ -2597,7 +2597,7 @@ Tide-fac-13 is a character-heavy spirit animal tribal deck (35 of 45 copies are 
 - 1× Tidewreck Navigator
 - 1× Spirit of the Lightgrove
 - 1× Veil of the Wastes
-- 1× Hope's Vanguard
+- 1× Returned Vanguard
 - 1× Corrupted Host
 - 1× Collateral Damage
 - 1× Price of Redemption
@@ -2671,7 +2671,7 @@ This tide is almost entirely characters (43 of 45 copies), with warriors making 
 - 1× Ethereal Trailblazer
 - 1× Containment Specialist
 - 1× Chaos Crasher
-- 1× Night Prowler
+- 1× Night Stalker
 - 1× Tranquil Duelist
 
 ## Lean: Spellweaver — Figment Sacrifice Engine
@@ -2855,7 +2855,7 @@ Tide-fac-18 is built around two interlocking halves: an energy ramp package and 
 - 1× Guide of Lost Souls
 - 1× Immolate and Rise
 - 1× Veil of the Wastes
-- 1× Hope's Vanguard
+- 1× Returned Vanguard
 - 1× Corrupted Host
 - 1× Collateral Damage
 - 1× Price of Redemption
@@ -2970,7 +2970,7 @@ Tide-fac-21 is a character-heavy spirit animal swarm built around stacking ✦ o
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
 - 1× Quiet Reflection
-- 1× Dawnprowler Panther
+- 1× Dawnprowler
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
 - 1× Nexus Wayfinder
@@ -3018,7 +3018,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Dreamborne Leviathan
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
-- 1× Dawnprowler Panther
+- 1× Dawnprowler
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
 - 1× Nexus Wayfinder
@@ -3152,7 +3152,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 - 1× Graywatch
 - 1× Spirit of the Lightgrove
 - 1× Veil of the Wastes
-- 1× Hope's Vanguard
+- 1× Returned Vanguard
 - 1× Corrupted Host
 - 1× Collateral Damage
 - 1× Price of Redemption
@@ -3201,7 +3201,7 @@ Tide-fac-26 is a character-heavy survivor tide built around the abandon trigger 
 - 1× Graywatch
 - 1× Abomination of Memory
 - 1× Veil of the Wastes
-- 1× Hope's Vanguard
+- 1× Returned Vanguard
 - 1× Corrupted Host
 - 1× Price of Redemption
 - 1× Twilight Reclaimer
@@ -3255,7 +3255,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Abomination of Memory
 - 1× Spirit of the Lightgrove
 - 1× Veil of the Wastes
-- 1× Hope's Vanguard
+- 1× Returned Vanguard
 - 1× Corrupted Host
 - 1× Specter of Silent Snow
 - 1× Price of Redemption
@@ -3477,7 +3477,7 @@ Tide-fac-31 is almost entirely characters (41 of 45 cards), built around a dense
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
 - 1× Quiet Reflection
-- 1× Dawnprowler Panther
+- 1× Dawnprowler
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
 
@@ -3507,7 +3507,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Guide of Lost Souls
 - 1× Graywatch
 - 1× Veil of the Wastes
-- 1× Hope's Vanguard
+- 1× Returned Vanguard
 - 1× Corrupted Host
 - 1× Price of Redemption
 - 1× Twilight Reclaimer
@@ -3653,7 +3653,7 @@ This tide is built almost entirely from spirit animal characters (23 of 30 cards
 - 1× Sunshadow Eagle
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
-- 1× Dawnprowler Panther
+- 1× Dawnprowler
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
 
