@@ -255,8 +255,9 @@ current history entry.
 - `sort=number`, `sort=name`, `sort=cost`, `sort=type`, `sort=subtype`,
   `sort=spark`, or `sort=namesubstring` selects the sort field. The
   `namesubstring` view groups card names by maximal case-insensitive substrings
-  of 5 or more characters shared by at least two cards. A card appears in every
-  matching group it participates in. The default `name` sort is omitted.
+  with 5 or more non-space characters shared by at least two cards. Group labels
+  omit surrounding whitespace, and a card appears in every matching group it
+  participates in. The default `name` sort is omitted.
 - `dir=asc` or `dir=desc` selects the sort direction. The default `asc`
   direction is omitted.
 - `size=small`, `size=medium`, or `size=large` selects the card preview size.

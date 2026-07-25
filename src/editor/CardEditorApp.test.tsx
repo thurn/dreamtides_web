@@ -3510,9 +3510,9 @@ describe("CardEditorApp", () => {
       Array.from(
         container.querySelectorAll("[data-editor-substring-group]"),
       ).map((heading) => heading.getAttribute("data-editor-substring-group")),
-    ).toEqual(["dream", "light "]);
+    ).toEqual(["dream", "light"]);
     expect(container.textContent).toContain("“Dream”");
-    expect(container.textContent).toContain("“light ”");
+    expect(container.textContent).toContain("“light”");
     expect(editorCardIds(container)).toEqual([
       "dream-caller",
       "dreamlight",

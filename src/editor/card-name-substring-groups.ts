@@ -28,9 +28,10 @@ function compareText(left: string, right: string): number {
 }
 
 /**
- * Groups cards by every maximal 5+ character substring shared by at least two
- * card names. Matching is case-insensitive and card participation is tracked
- * by UUID. A shorter substring is suppressed only when a longer matching
+ * Groups cards by every maximal substring with 5+ non-space characters shared
+ * by at least two card names. Matching is case-insensitive, surrounding
+ * whitespace is excluded from labels, and card participation is tracked by
+ * UUID. A shorter substring is suppressed only when a longer matching
  * substring has the exact same participants; distinct overlaps remain
  * separate groups, so one UUID may intentionally appear in several groups.
  */
@@ -51,13 +52,22 @@ export function buildCardNameSubstringGroups(
         end += 1
       ) {
         const raw = foldedName.slice(start, end);
-        const key = raw;
-        if (seenForCard.has(key)) {
+        const key = raw.trim();
+        if (
+          key.replace(/\s/gu, "").length <
+            MIN_CARD_NAME_SUBSTRING_LENGTH ||
+          seenForCard.has(key)
+        ) {
           continue;
         }
 
         seenForCard.add(key);
-        const substring = card.name.slice(start, end);
+        const leadingWhitespace = raw.length - raw.trimStart().length;
+        const trailingWhitespace = raw.length - raw.trimEnd().length;
+        const substring = card.name.slice(
+          start + leadingWhitespace,
+          end - trailingWhitespace,
+        );
         const candidate = candidatesByKey.get(key) ?? {
           key,
           substring,

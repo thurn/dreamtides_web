@@ -45,7 +45,7 @@ describe("buildCardNameSubstringGroups", () => {
       card("uuid-light", "Starlight Keeper", 3),
     ]);
 
-    expect(groups.map((group) => group.key)).toEqual(["dream", "light "]);
+    expect(groups.map((group) => group.key)).toEqual(["dream", "light"]);
     expect(groups.map((group) => group.cards.map((entry) => entry.id))).toEqual([
       ["uuid-dream", "uuid-dreamlight"],
       ["uuid-dreamlight", "uuid-light"],
@@ -69,7 +69,7 @@ describe("buildCardNameSubstringGroups", () => {
       card("uuid-third", "Moonlit Scout", 3),
     ]);
 
-    expect(groups.map((group) => group.key)).toEqual(["moonli", "moonlight "]);
+    expect(groups.map((group) => group.key)).toEqual(["moonli", "moonlight"]);
     expect(groups[0]?.cards).toHaveLength(3);
     expect(groups[1]?.cards).toHaveLength(2);
   });
@@ -78,20 +78,20 @@ describe("buildCardNameSubstringGroups", () => {
     const cards = [
       card("uuid-beta", "STARLIGHT Beta", 2),
       card("uuid-alpha", "Starlight Alpha", 1),
-      card("uuid-moon-one", "Moon Guide", 3),
-      card("uuid-moon-two", "Moon Keeper", 4),
+      card("uuid-dream-one", "Dream Guide", 3),
+      card("uuid-dream-two", "Dream Keeper", 4),
     ];
 
     const ascending = buildCardNameSubstringGroups(cards, "asc");
     const descending = buildCardNameSubstringGroups(cards, "desc");
 
-    expect(ascending.map((group) => group.key)).toEqual(["moon ", "starlight "]);
-    expect(ascending[1]?.substring).toBe("STARLIGHT ");
+    expect(ascending.map((group) => group.key)).toEqual(["dream", "starlight"]);
+    expect(ascending[1]?.substring).toBe("STARLIGHT");
     expect(ascending[1]?.cards.map((entry) => entry.id)).toEqual([
       "uuid-alpha",
       "uuid-beta",
     ]);
-    expect(descending.map((group) => group.key)).toEqual(["starlight ", "moon "]);
+    expect(descending.map((group) => group.key)).toEqual(["starlight", "dream"]);
     expect(descending[0]?.cards.map((entry) => entry.id)).toEqual([
       "uuid-beta",
       "uuid-alpha",
@@ -102,5 +102,23 @@ describe("buildCardNameSubstringGroups", () => {
     expect(
       buildCardNameSubstringGroups([card("uuid-only", "Moon Moon", 1)]),
     ).toEqual([]);
+  });
+
+  it("does not count surrounding spaces toward the minimum length", () => {
+    expect(
+      buildCardNameSubstringGroups([
+        card("uuid-red", "Red Chan", 1),
+        card("uuid-blue", "Blue Chan", 2),
+      ]),
+    ).toEqual([]);
+  });
+
+  it("allows internal spaces when at least five non-space characters match", () => {
+    const groups = buildCardNameSubstringGroups([
+      card("uuid-path", "Path of the Dawn", 1),
+      card("uuid-call", "Call of the Ocean", 2),
+    ]);
+
+    expect(groups.map((group) => group.key)).toContain("of the");
   });
 });
