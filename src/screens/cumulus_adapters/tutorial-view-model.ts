@@ -1031,7 +1031,8 @@ export function buildTutorialView(
         choicePrompt: null,
         dreamwell:
           (currentAction?.action === "draw-dreamwell-card" ||
-            currentAction?.action === "display-how-to-play") &&
+            (currentAction?.action === "display-how-to-play" &&
+              currentAction.companion === "dreamwell-card")) &&
           revealedDreamwellAction?.action === "draw-dreamwell-card" &&
           revealedDreamwellCard !== null
             ? {

@@ -1272,6 +1272,7 @@ describe("buildTutorialView", () => {
       wait: 0,
       trigger: "immediate",
     });
+    expect(duskInstructions.battle.dreamwell).toBeNull();
     expect(duskInstructions.battle).toMatchObject({
       activeSide: "enemy",
       phase: "dusk",

@@ -78,6 +78,7 @@ const mocks = vi.hoisted(() => ({
           id: "dreamwell-how-to-play",
           action: "display-how-to-play" as const,
           trigger: "immediate" as const,
+          companion: "dreamwell-card" as const,
           text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
           wait: 0,
         },
@@ -514,6 +515,16 @@ describe("TutorialScreenAdapter", () => {
       text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
       wait: 0,
       trigger: "immediate",
+      companion: {
+        cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+        displaySnapshot: {
+          id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+          name: "Autumn Glade",
+          renderedText: "Gain 2⍟.",
+          energyAdded: 1,
+          imageNumber: 1789989917,
+        },
+      },
     });
     expect(getLogEntries()).toEqual(
       expect.arrayContaining([
