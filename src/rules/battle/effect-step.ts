@@ -1,6 +1,7 @@
 import type { BattleDebugEdit } from "../../battle/debug/commands";
 import type { BattleMutableState, BattleSide } from "../../battle/types";
 import { rankSlotIds } from "../../battle/types";
+import type { EffectBindings } from "./fold";
 
 // ---------------------------------------------------------------------------
 // Core types
@@ -19,6 +20,8 @@ export interface StepContext {
    *  specific in-play character (Dawn/Materialized self-effects). Absent for
    *  side-scoped effects. */
   sourceId?: string;
+  /** Plain trigger-edge facts captured before a source changed zones. */
+  bindings?: EffectBindings;
 }
 
 export type EffectPrompt =

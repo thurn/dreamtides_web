@@ -15,12 +15,11 @@
 
 import { genesisFoldState } from "../fold-state";
 import type { BattleFoldState, FoldState } from "../fold-state";
-import { battleModeOf } from "../battle/fold";
+import { battleModeOf, resolveScript } from "../battle/fold";
 import { toQuestDreamcaller } from "../../data/dreamcaller-selection";
 import type { ResolvedDreamcallerPackage } from "../../types/content";
 import type { QuestState, Screen } from "../../types/quest";
 import type { EffectStep } from "../battle/effect-step";
-import { resolveScript } from "../battle/fold";
 import type { EffectRun, ScriptRef } from "../battle/fold";
 import type { EventContext } from "../../eventlog/types";
 import { cloneBattleMutableState } from "../../battle/state/create-initial-state";
@@ -545,6 +544,9 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   if (!isRecord(value)) return null;
   if (!isRecord(value.init) || !isRecord(value.board)) return null;
   if (!isRecord(value.dawnFired)) return null;
+  if (value.triggerDawnFired !== undefined && !isDawnMarker(value.triggerDawnFired)) {
+    return null;
+  }
   if (
     value.basicAutomationEnabled !== undefined &&
     typeof value.basicAutomationEnabled !== "boolean"
@@ -642,9 +644,32 @@ function isResolvableRun(value: unknown): value is EffectRun {
   const cursor = value.cursor;
   if (!Array.isArray(cursor) || !cursor.every((n) => Number.isInteger(n)))
     return false;
+  if (value.sourceInstanceId !== undefined && typeof value.sourceInstanceId !== "string") {
+    return false;
+  }
+  if (value.bindings !== undefined && !isEffectBindings(value.bindings)) return false;
   const steps = resolveScript(ref);
   if (steps.length === 0) return false;
   return cursorInRange(steps, cursor as number[]);
+}
+
+function isDawnMarker(value: unknown): boolean {
+  return isRecord(value) &&
+    (value.player === null || (typeof value.player === "number" && Number.isInteger(value.player))) &&
+    (value.enemy === null || (typeof value.enemy === "number" && Number.isInteger(value.enemy)));
+}
+
+function isEffectBindings(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  const trigger = value.trigger;
+  if (
+    trigger !== undefined &&
+    (typeof trigger !== "string" ||
+      !["played", "materialized", "rematerialized", "dawn", "dissolved", "abandoned"].includes(trigger))
+  ) return false;
+  if (value.sourceCardId !== undefined && typeof value.sourceCardId !== "string") return false;
+  if (value.sourceController !== undefined && value.sourceController !== "player" && value.sourceController !== "enemy") return false;
+  return value.sourceZone === undefined || typeof value.sourceZone === "string";
 }
 
 function isScriptRef(value: unknown): value is ScriptRef {

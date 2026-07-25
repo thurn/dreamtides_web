@@ -7,6 +7,8 @@ import type {
 } from "../../battle/types";
 import { rankSlotIds } from "../../battle/types";
 import type { StepContext } from "./effect-step";
+import type { EffectStep } from "./effect-step";
+import type { BattleScriptTrigger } from "./fold";
 import { fnv1aHex } from "./rules-text-hash";
 
 /** Describes the static spark a supporter grants to supported front-rank allies. */
@@ -22,6 +24,76 @@ export interface BattleCardEffectScript {
   /** `fnv1aHex` of the `renderedText` this script targets. */
   textHash: string;
   support: SupportScript;
+}
+
+/**
+ * A closure-backed battle script. The registry is code, never fold state; a
+ * queued run references it by this stable UUID only. Static support remains a
+ * separate contribution source on the same card registry.
+ */
+export interface BattleTriggeredEffectScript {
+  id: string;
+  triggers: Partial<Record<BattleScriptTrigger, readonly EffectStep[]>>;
+}
+
+/** Stable synthetic ids used exclusively by reducer-level framework fixtures. */
+export const BATTLE_EFFECT_FIXTURE_CARD_ID = "00000000-0000-4000-8000-000000000101";
+export const BATTLE_EFFECT_PROMPT_FIXTURE_CARD_ID = "00000000-0000-4000-8000-000000000102";
+
+const FIXTURE_TRIGGER_STEPS: readonly EffectStep[] = [{
+  kind: "edits",
+  build: (ctx) => [{ kind: "ADJUST_SCORE", side: ctx.side, amount: 1 }],
+}];
+
+/**
+ * This resolver table intentionally contains only small framework fixtures;
+ * the production support registry above remains the audited card catalog.
+ */
+export const BATTLE_TRIGGERED_EFFECTS: Record<string, BattleTriggeredEffectScript> = {
+  [BATTLE_EFFECT_FIXTURE_CARD_ID]: {
+    id: BATTLE_EFFECT_FIXTURE_CARD_ID,
+    triggers: {
+      played: FIXTURE_TRIGGER_STEPS,
+      materialized: FIXTURE_TRIGGER_STEPS,
+      rematerialized: FIXTURE_TRIGGER_STEPS,
+      dawn: FIXTURE_TRIGGER_STEPS,
+      dissolved: FIXTURE_TRIGGER_STEPS,
+      abandoned: FIXTURE_TRIGGER_STEPS,
+    },
+  },
+  [BATTLE_EFFECT_PROMPT_FIXTURE_CARD_ID]: {
+    id: BATTLE_EFFECT_PROMPT_FIXTURE_CARD_ID,
+    triggers: {
+      materialized: [{
+        kind: "prompt",
+        prompt: {
+          kind: "confirm",
+          label: "Run fixture effect?",
+          onYes: FIXTURE_TRIGGER_STEPS as EffectStep[],
+        },
+      }],
+    },
+  },
+};
+
+const TRIGGER_ID_SEPARATOR = "#";
+
+/** A stable registry key for one card UUID and lifecycle trigger. */
+export function battleTriggerScriptId(cardId: string, trigger: BattleScriptTrigger): string {
+  return `${cardId}${TRIGGER_ID_SEPARATOR}${trigger}`;
+}
+
+/** Returns the live steps for one UUID-keyed trigger script id, or null when unmodeled. */
+export function selectBattleTriggeredEffectSteps(
+  scriptId: string,
+): EffectStep[] | null {
+  const separator = scriptId.lastIndexOf(TRIGGER_ID_SEPARATOR);
+  if (separator <= 0) return null;
+  const cardId = scriptId.slice(0, separator);
+  const trigger = scriptId.slice(separator + 1) as BattleScriptTrigger;
+  const script = BATTLE_TRIGGERED_EFFECTS[cardId];
+  if (script === undefined) return null;
+  return script.triggers[trigger] === undefined ? null : [...script.triggers[trigger]];
 }
 
 /**
@@ -113,7 +185,7 @@ export function battleCardAutomationStatus(cardId: string): "auto" | "none" {
  * idempotent. Figment stack bonuses are maintained by the figment system and
  * are not overwritten here.
  */
-export function planSupportRecompute(
+export function planStaticContributionSettlement(
   state: BattleMutableState,
   enabled: boolean,
   random: () => number,
@@ -171,6 +243,9 @@ export function planSupportRecompute(
   }
   return edits;
 }
+
+/** Compatibility export for callers that still use the former Support name. */
+export const planSupportRecompute = planStaticContributionSettlement;
 
 function pushIfChanged(
   edits: BattleDebugEdit[],

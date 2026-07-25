@@ -23,12 +23,12 @@ import type {
 } from "../../battle/types";
 import type { EventContext } from "../../eventlog/types";
 import { isoTimestampToMs } from "./timestamp";
-import { applyDebugEdit } from "./apply-debug-edit";
+import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
 import { applyPromptResolution, planNextEffectStep } from "./effect-runner-core";
 import type { PromptResolution } from "./effect-runner-core";
 import type { EffectStep, StepContext } from "./effect-step";
 import type { BattleFoldState, EffectRun } from "./fold";
-import { resolveScript } from "./fold";
+import { battleModeOf, resolveScript } from "./fold";
 
 const EMISSION: BattleEngineEmissionContext = {
   sourceSurface: "auto-system",
@@ -197,8 +197,8 @@ function runQueue(
     const remaining = remainingFromCursor(steps, run.cursor);
     const stepCtx: StepContext =
       run.sourceInstanceId === undefined
-        ? { side: run.side, state: currentBoard, random, nowMs }
-        : { side: run.side, state: currentBoard, random, nowMs, sourceId: run.sourceInstanceId };
+        ? { side: run.side, state: currentBoard, random, nowMs, bindings: run.bindings }
+        : { side: run.side, state: currentBoard, random, nowMs, sourceId: run.sourceInstanceId, bindings: run.bindings };
     const plan = planNextEffectStep(remaining, stepCtx);
 
     if (plan.type === "done") {
@@ -208,6 +208,11 @@ function runQueue(
 
     if (plan.type === "dispatch") {
       currentBoard = applyEdits(currentBoard, plan.edits);
+      const terminal = scoreTerminalResult(battle, currentBoard);
+      if (terminal !== null) {
+        currentBoard = forceBattleResult(currentBoard, terminal, EMISSION).state;
+        return { ...battle, board: currentBoard, effectQueue: [], pendingPrompt: null, dawnFired };
+      }
       const nextCursor = advanceCursor(steps, run.cursor);
       currentQueue =
         nextCursor === null
@@ -239,6 +244,11 @@ function runQueue(
         stepCtx,
       );
       currentBoard = applyEdits(currentBoard, edits);
+      const terminal = scoreTerminalResult(battle, currentBoard);
+      if (terminal !== null) {
+        currentBoard = forceBattleResult(currentBoard, terminal, EMISSION).state;
+        return { ...battle, board: currentBoard, effectQueue: [], pendingPrompt: null, dawnFired };
+      }
       const nextCursor = nextCursorAfterPrompt(
         steps,
         run.cursor,
@@ -399,8 +409,8 @@ export function resolvePendingPromptWithStream(
 
   const stepCtx: StepContext =
     run.sourceInstanceId === undefined
-      ? { side: run.side, state: battle.board, random, nowMs }
-      : { side: run.side, state: battle.board, random, nowMs, sourceId: run.sourceInstanceId };
+      ? { side: run.side, state: battle.board, random, nowMs, bindings: run.bindings }
+      : { side: run.side, state: battle.board, random, nowMs, sourceId: run.sourceInstanceId, bindings: run.bindings };
 
   const { edits, rest: expectedRest } = applyPromptResolution(
     promptStep.prompt,
@@ -409,6 +419,15 @@ export function resolvePendingPromptWithStream(
     stepCtx,
   );
   const board = applyEdits(battle.board, edits);
+  const terminal = scoreTerminalResult(battle, board);
+  if (terminal !== null) {
+    return {
+      ...battle,
+      board: forceBattleResult(board, terminal, EMISSION).state,
+      effectQueue: [],
+      pendingPrompt: null,
+    };
+  }
 
   const nextCursor = nextCursorAfterPrompt(steps, run.cursor, promptStep, resolution);
   assertCursorMatchesRest(steps, nextCursor, expectedRest);
@@ -427,4 +446,17 @@ export function resolvePendingPromptWithStream(
     nowMs,
     battle.dawnFired,
   );
+}
+
+/** Central score policy shared by every effect dispatch and prompt resolution. */
+function scoreTerminalResult(
+  battle: BattleFoldState,
+  board: BattleMutableState,
+): "victory" | "defeat" | null {
+  if (board.result !== null) return null;
+  if (board.sides.player.score >= battle.init.scoreToWin) return "victory";
+  if (battleModeOf(battle).kind === "quest" && board.sides.enemy.score >= battle.init.scoreToWin) {
+    return "defeat";
+  }
+  return null;
 }

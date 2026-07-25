@@ -19,6 +19,8 @@ import {
 import { applyDebugEdit } from "./apply-debug-edit";
 import {
   BATTLE_CARD_EFFECTS,
+  BATTLE_EFFECT_FIXTURE_CARD_ID,
+  BATTLE_EFFECT_PROMPT_FIXTURE_CARD_ID,
   planSupportRecompute,
 } from "./battle-card-effects-table";
 import { DREAMWELL_EFFECTS } from "./dreamwell-effects-table";
@@ -789,6 +791,45 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     ).toBe(true);
     expect(result.state.battle?.effectQueue).toEqual([]);
     expect(result.state.battle?.pendingPrompt).toBeNull();
+  });
+
+  it("resolves UUID-keyed materialized scripts through the persisted queue", () => {
+    const instance = makeInstance("bc-trigger", BATTLE_EFFECT_FIXTURE_CARD_ID, "player");
+    const board = makeRichBoard({ playerHand: [instance.battleCardId], instances: [instance] });
+    const result = reduce(
+      { ...baseState(), battle: battleFrom(board) },
+      "BATTLE_COMMAND",
+      debugEdit({
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: instance.battleCardId,
+        destination: { side: "player", zone: "backRank", slotId: "B0" },
+      }),
+    );
+    expect(result.state.battle?.board.sides.player.score).toBe(board.sides.player.score + 1);
+    expect(result.state.battle?.effectQueue).toEqual([]);
+  });
+
+  it("parks and resumes a battle-script prompt after JSON persistence", () => {
+    const instance = makeInstance("bc-prompt", BATTLE_EFFECT_PROMPT_FIXTURE_CARD_ID, "player");
+    const board = makeRichBoard({ playerHand: [instance.battleCardId], instances: [instance] });
+    const opened = reduce(
+      { ...baseState(), battle: battleFrom(board) },
+      "BATTLE_COMMAND",
+      debugEdit({
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: instance.battleCardId,
+        destination: { side: "player", zone: "backRank", slotId: "B0" },
+      }),
+    );
+    const restored = JSON.parse(JSON.stringify(opened.state)) as FoldState;
+    const promptId = restored.battle?.pendingPrompt?.promptId;
+    expect(promptId).toBeDefined();
+    const resolved = reduce(restored, "RESOLVE_PROMPT", {
+      promptId,
+      resolution: { kind: "choice", optionIndex: 0 },
+    });
+    expect(resolved.state.battle?.board.sides.player.score).toBe(board.sides.player.score + 1);
+    expect(resolved.state.battle?.pendingPrompt).toBeNull();
   });
 
   it("does not clear exhaustion when the active side crosses Dawn", () => {

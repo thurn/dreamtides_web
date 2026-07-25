@@ -17,6 +17,7 @@ import type {
   BattleSide,
 } from "../../battle/types";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
+import { selectBattleTriggeredEffectSteps } from "./battle-card-effects-table";
 import type { ActivePrompt } from "./effect-runner-core";
 import type { EffectStep } from "./effect-step";
 
@@ -54,7 +55,28 @@ export interface EffectRun {
   side: BattleSide;
   /** Persisted for compatibility with older queued runs. */
   sourceInstanceId?: string;
+  /** Immutable, JSON-safe facts captured at the reducer edge that created the
+   * run. In particular, leave-play scripts must not rediscover their source
+   * after it has changed zones. */
+  bindings?: EffectBindings;
 }
+
+/** Plain data carried from a trigger edge into a closure-backed registry script. */
+export interface EffectBindings {
+  trigger?: BattleScriptTrigger;
+  sourceCardId?: string;
+  sourceController?: BattleSide;
+  sourceZone?: string;
+}
+
+/** The battle lifecycle edges that an authored card script may subscribe to. */
+export type BattleScriptTrigger =
+  | "played"
+  | "materialized"
+  | "rematerialized"
+  | "dawn"
+  | "dissolved"
+  | "abandoned";
 
 /**
  * An open prompt awaiting a `RESOLVE_PROMPT`. Pure data: `options` is the
@@ -114,6 +136,8 @@ export interface BattleFoldState {
    * characters. `null` means that side has not completed a turn this battle.
    */
   dawnFired: DawnFiredMarker;
+  /** Once-per-controller-turn guard for authored Dawn scripts. */
+  triggerDawnFired?: DawnFiredMarker;
 }
 
 /** Metadata that distinguishes a normal quest battle from the tutorial handoff. */
@@ -160,7 +184,7 @@ export function emptyDawnFired(): DawnFiredMarker {
  */
 export function resolveScript(ref: ScriptRef): EffectStep[] {
   if (ref.table === "battle") {
-    return [];
+    return selectBattleTriggeredEffectSteps(ref.id) ?? [];
   }
   return selectDreamwellEffectScript(ref.id)?.steps ?? [];
 }
@@ -174,8 +198,10 @@ export function newEffectRun(
   scriptRef: ScriptRef,
   side: BattleSide,
   sourceInstanceId?: string,
+  bindings?: EffectBindings,
 ): EffectRun {
-  return sourceInstanceId === undefined
-    ? { scriptRef, cursor: [0], side }
-    : { scriptRef, cursor: [0], side, sourceInstanceId };
+  const run: EffectRun = { scriptRef, cursor: [0], side };
+  if (sourceInstanceId !== undefined) run.sourceInstanceId = sourceInstanceId;
+  if (bindings !== undefined) run.bindings = bindings;
+  return run;
 }

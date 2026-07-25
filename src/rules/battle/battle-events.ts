@@ -50,7 +50,8 @@ import type {
 import type { FoldState } from "../fold-state";
 import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
 import {
-  planSupportRecompute,
+  battleTriggerScriptId,
+  planStaticContributionSettlement,
 } from "./battle-card-effects-table";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
 import {
@@ -67,11 +68,13 @@ import { planBasicAutomationCommands } from "./basic-automation";
 import {
   newEffectRun,
   battleModeOf,
+  emptyDawnFired,
   type BattleFoldState,
   type TutorialBattleMode,
   type EffectRun,
   type PendingPrompt,
 } from "./fold";
+import { selectBattleCardLocation } from "../../battle/state/selectors";
 
 // ---------------------------------------------------------------------------
 // Battle-init provider seam (BEGIN_BATTLE construction)
@@ -562,10 +565,21 @@ function applyBattleCommandStep(
   const boardBefore = battle.board;
   const boardAfter = applyCommandToBoard(boardBefore, command);
 
+  const terminal = scoreOrTurnLimitResult(battle, boardAfter);
+  if (terminal !== null) {
+    return {
+      ...battle,
+      board: forceBattleResult(boardAfter, terminal, EMISSION).state,
+      effectQueue: [],
+      pendingPrompt: null,
+    };
+  }
+
   const queue: EffectRun[] = [...battle.effectQueue];
 
   let board = boardAfter;
   let dawnFired = battle.dawnFired;
+  let triggerDawnFired = battle.triggerDawnFired ?? emptyDawnFired();
 
   // Step 2 — structural Ending exhaustion clear, fired exactly once when the
   // active side flips.
@@ -586,6 +600,22 @@ function applyBattleCommandStep(
       ...dawnFired,
       [outgoingSide]: boardBefore.turnNumber,
     };
+  }
+
+  scheduleBattleTriggerEdges(queue, boardBefore, boardAfter, command);
+
+  // Dawn is an authoritative board edge, not a component mount concern. A
+  // marker on the fold makes the once-per-controller-turn rule replay-safe.
+  if (
+    boardBefore.phase !== "dawn" &&
+    boardAfter.phase === "dawn" &&
+    boardAfter.result === null &&
+    triggerDawnFired[boardAfter.activeSide] !== boardAfter.turnNumber
+  ) {
+    forEachInPlay(boardAfter, boardAfter.activeSide, (battleCardId) => {
+      enqueueBattleTrigger(queue, boardAfter, battleCardId, "dawn");
+    });
+    triggerDawnFired = { ...triggerDawnFired, [boardAfter.activeSide]: boardAfter.turnNumber };
   }
 
   // Step 3 — Dreamwell reveal → queue the revealed card's script. Checked
@@ -619,7 +649,7 @@ function applyBattleCommandStep(
 
   // Step 4 — advance the queue, continuing the SAME draw counter.
   const advanced = advanceEffectQueueWithStream(
-    { ...battle, board, effectQueue: queue, pendingPrompt: null, dawnFired },
+    { ...battle, board, effectQueue: queue, pendingPrompt: null, dawnFired, triggerDawnFired },
     seq,
     random,
     nowMs,
@@ -632,7 +662,7 @@ function applyBattleCommandStep(
     ...advanced,
     board: applyBoardEdits(
       advanced.board,
-      planSupportRecompute(advanced.board, true, random, nowMs),
+      planStaticContributionSettlement(advanced.board, true, random, nowMs),
     ),
   };
 }
@@ -825,6 +855,20 @@ function applyBoardEdits(
     next = applyDebugEdit(next, edit, EMISSION).state;
   }
   return next;
+}
+
+/** Applies the result policy at every authoritative score-changing seam. */
+function scoreOrTurnLimitResult(
+  battle: BattleFoldState,
+  board: BattleMutableState,
+): BattleResult | null {
+  if (board.result !== null) return null;
+  if (board.sides.player.score >= battle.init.scoreToWin) return "victory";
+  if (battleModeOf(battle).kind === "quest") {
+    if (board.sides.enemy.score >= battle.init.scoreToWin) return "defeat";
+    if (board.turnNumber > battle.init.turnLimit) return "draw";
+  }
+  return null;
 }
 
 /**
@@ -1142,9 +1186,86 @@ export function resolvePrompt(
   );
   const board = applyBoardEdits(
     resolved.board,
-    planSupportRecompute(resolved.board, true, random, nowMs),
+    planStaticContributionSettlement(resolved.board, true, random, nowMs),
   );
   return { ...state, battle: { ...resolved, board } };
+}
+
+/** Schedules lifecycle scripts from an observed reducer edge, never from UI. */
+function scheduleBattleTriggerEdges(
+  queue: EffectRun[],
+  before: BattleMutableState,
+  after: BattleMutableState,
+  command: BattleCommand,
+): void {
+  if (command.id !== "DEBUG_EDIT") return;
+  const edit = command.edit;
+
+  if (edit.kind === "REMATERIALIZE") {
+    const location = selectBattleCardLocation(before, edit.battleCardId);
+    if (location !== null && isBattlefieldZone(location.zone)) {
+      enqueueBattleTrigger(queue, before, edit.battleCardId, "rematerialized");
+    }
+    return;
+  }
+
+  const movedId = edit.kind === "MOVE_CARD_TO_ZONE" ? edit.battleCardId
+    : edit.kind === "ABANDON" ? edit.battleCardId
+      : null;
+  if (movedId === null) return;
+  const source = selectBattleCardLocation(before, movedId);
+  const destination = selectBattleCardLocation(after, movedId);
+  const instance = before.cardInstances[movedId];
+  if (source === null || destination === null || instance === undefined) return;
+
+  const sourceInPlay = isBattlefieldZone(source.zone);
+  const destinationInPlay = isBattlefieldZone(destination.zone);
+  if (source.zone === "hand" && instance.definition.battleCardKind === "event") {
+    enqueueBattleTrigger(queue, before, movedId, "played");
+  }
+  if (!sourceInPlay && destinationInPlay) {
+    enqueueBattleTrigger(queue, before, movedId, "materialized");
+  }
+  if (sourceInPlay && destination.zone === "void") {
+    enqueueBattleTrigger(queue, before, movedId, edit.kind === "ABANDON" ? "abandoned" : "dissolved");
+  }
+}
+
+function isBattlefieldZone(zone: string): boolean {
+  return zone === "backRank" || zone === "frontRank";
+}
+
+function enqueueBattleTrigger(
+  queue: EffectRun[],
+  board: BattleMutableState,
+  battleCardId: string,
+  trigger: import("./fold").BattleScriptTrigger,
+): void {
+  const instance = board.cardInstances[battleCardId];
+  if (instance === undefined) return;
+  queue.push(newEffectRun(
+    { table: "battle", id: battleTriggerScriptId(instance.definition.cardId, trigger) },
+    instance.controller,
+    battleCardId,
+    {
+      trigger,
+      sourceCardId: instance.definition.cardId,
+      sourceController: instance.controller,
+      sourceZone: selectBattleCardLocation(board, battleCardId)?.zone,
+    },
+  ));
+}
+
+function forEachInPlay(
+  board: BattleMutableState,
+  side: BattleSide,
+  visit: (battleCardId: string) => void,
+): void {
+  for (const zone of [board.sides[side].backRank, board.sides[side].frontRank]) {
+    for (const battleCardId of Object.values(zone)) {
+      if (battleCardId !== null) visit(battleCardId);
+    }
+  }
 }
 
 /**

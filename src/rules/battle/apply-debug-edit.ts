@@ -1599,6 +1599,17 @@ function moveCardToDebugZone(
 
   const sourceInstance = state.cardInstances[battleCardId];
 
+  // Reclaimed is a leave-play replacement. Resolve it at the movement seam so
+  // reducers observe a banish edge, never a transient dissolve-to-void edge.
+  if (
+    (source.zone === "backRank" || source.zone === "frontRank") &&
+    !("slotId" in destination) &&
+    destination.zone === "void" &&
+    sourceInstance.status.reclaimed
+  ) {
+    destination = { side: destination.side, zone: "banished" };
+  }
+
   // Figments exist only in play (rules §Figments). Any zone change out of the
   // battlefield destroys the topmost Figment instead of placing it in the
   // requested destination. A multi-member stack remains in play with its

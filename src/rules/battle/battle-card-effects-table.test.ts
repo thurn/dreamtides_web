@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
+  BATTLE_EFFECT_FIXTURE_CARD_ID,
   BATTLE_CARD_EFFECTS,
+  battleTriggerScriptId,
   battleCardAutomationStatus,
   selectBattleCardEffectScript,
 } from "./battle-card-effects-table";
+import { newEffectRun, resolveScript, type EffectRun } from "./fold";
 
 const UNREGISTERED_ID = "00000000-0000-0000-0000-000000000000";
 
@@ -69,5 +72,25 @@ describe("selectBattleCardEffectScript", () => {
 
   it("returns null for an unregistered id", () => {
     expect(selectBattleCardEffectScript(UNREGISTERED_ID)).toBeNull();
+  });
+});
+
+describe("battle trigger script registry", () => {
+  it("resolves UUID#trigger ids without placing closures in persisted runs", () => {
+    const scriptRef = {
+      table: "battle" as const,
+      id: battleTriggerScriptId(BATTLE_EFFECT_FIXTURE_CARD_ID, "dissolved"),
+    };
+    expect(resolveScript(scriptRef)).toHaveLength(1);
+
+    const run = newEffectRun(scriptRef, "player", "instance-1", {
+      trigger: "dissolved",
+      sourceCardId: BATTLE_EFFECT_FIXTURE_CARD_ID,
+      sourceController: "player",
+      sourceZone: "frontRank",
+    });
+    const restored = JSON.parse(JSON.stringify(run)) as EffectRun;
+    expect(restored).toEqual(run);
+    expect(resolveScript(restored.scriptRef)).toHaveLength(1);
   });
 });
