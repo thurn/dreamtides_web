@@ -3,17 +3,15 @@
 // side arrow so the bubble can sit beside a character render.
 
 import {
-  Fragment,
   useId,
   useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
   type ReactElement,
-  type ReactNode,
 } from "react";
-import { parseTutorialInstructionMarkup } from "../../../data/tutorial-instruction-markup";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
+import { renderTutorialInstructionText } from "../../internal/tutorial-instruction-text";
 import { token } from "../../primitives/tokens";
 import {
   makeSpeechBubblePath,
@@ -36,7 +34,10 @@ const SPEECH_BUBBLE_ZOOM: Record<SpeechBubbleSize, number> = {
 export interface SpeechBubbleProps {
   /** The speaking character's display name. */
   speakerName: string;
-  /** The spoken line. `[yellow]copy[/yellow]` highlights an exact inline run. */
+  /**
+   * The spoken line. Uses tutorial instruction formatting for yellow highlights
+   * and inline points, spark, and energy glyphs.
+   */
   text: string;
   /** Authored display scale for compact or prominent character dialogue. */
   size?: SpeechBubbleSize;
@@ -44,33 +45,6 @@ export interface SpeechBubbleProps {
   pointerPlacement?: SpeechBubblePointerPlacement;
   /** Optional stable test id for product-screen QA. */
   testId?: string;
-}
-
-function renderSpeechBubbleText(text: string): ReactNode {
-  if (!text.includes("[yellow]") && !text.includes("[/yellow]")) {
-    return text;
-  }
-
-  return parseTutorialInstructionMarkup(text).map(
-    (paragraph, paragraphIndex) => (
-      <Fragment key={paragraphIndex}>
-        {paragraphIndex === 0 ? null : "\n\n"}
-        {paragraph.spans.map((span, spanIndex) =>
-          span.highlight === "yellow" ? (
-            <span
-              key={spanIndex}
-              data-speech-bubble-highlight="yellow"
-              style={{ color: token("--spark") }}
-            >
-              {span.text}
-            </span>
-          ) : (
-            <Fragment key={spanIndex}>{span.text}</Fragment>
-          ),
-        )}
-      </Fragment>
-    ),
-  );
 }
 
 /**
@@ -199,7 +173,7 @@ export function SpeechBubble({
           whiteSpace: "pre-line",
         }}
       >
-        {renderSpeechBubbleText(text)}
+        {renderTutorialInstructionText(text)}
       </p>
     </aside>
   );

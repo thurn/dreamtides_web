@@ -434,7 +434,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Trance Diviner
 - 1× Arc Gate Opening
 - 1× Wasteland Arbitrator
-- 1× Dreadwood Emissary
+- 1× Whisper Forager
 - 1× Aerie Defender
 - 1× Titan of Forgotten Echoes
 - 1× Flash of Power
@@ -869,7 +869,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 2× Neural Interrogator
 - 2× Dark Lord's Champion
 - 2× Cloud Drifter
-- 2× Last Beacon
+- 2× Dustway Ringleader
 - 2× Abyssal Deputy
 - 2× Soul Channeling
 - 1× Crimson Pilgrimage
@@ -934,17 +934,17 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Starcatcher
 - 1× Paradox Corps Enforcer
 - 1× Pyrokinetic Surge
-- 1× Keeper of the Tides
+- 1× Dune Interceptor
 - 1× Ritekeeper
 - 1× Guiding Light
 - 1× Annular Recall
-- 1× Seeker of the Radiant Wilds
+- 1× Wrathful Gearwright
 - 1× Light of Emergence
 - 1× Gateweaver
 - 1× Trance Diviner
 - 1× Lurking Dread
 - 1× Arc Gate Opening
-- 1× Dreadwood Emissary
+- 1× Whisper Forager
 - 1× Flash of Power
 - 1× Knowledge Restored
 - 1× Silent Mourner
@@ -975,7 +975,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 2× Skysign
 - 2× Cloud Drifter
 - 2× Light of Emergence
-- 2× Dreadwood Emissary
+- 2× Whisper Forager
 - 2× Soul Channeling
 - 1× Crimson Pilgrimage
 - 1× Sanctum Awakened
@@ -1038,16 +1038,16 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Cost of Victory
 - 1× Exile
 - 1× Surge Evoker
-- 1× Last Beacon
+- 1× Dustway Ringleader
 - 1× Starcatcher
 - 1× Paradox Corps Enforcer
-- 1× Keeper of the Tides
+- 1× Dune Interceptor
 - 1× Ritekeeper
 - 1× Revelation Explorer
 - 1× Guiding Light
 - 1× Annular Recall
 - 1× Riftwalker
-- 1× Seeker of the Radiant Wilds
+- 1× Wrathful Gearwright
 - 1× Trance Diviner
 - 1× Lurking Dread
 - 1× Arc Gate Opening
@@ -1147,11 +1147,11 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Guiding Light
 - 1× Annular Recall
 - 1× Spiral Offering
-- 1× Seeker of the Radiant Wilds
+- 1× Wrathful Gearwright
 - 1× Renounce Reality
 - 1× Light of Emergence
 - 1× Gateweaver
-- 1× Dreadwood Emissary
+- 1× Whisper Forager
 - 1× Surge of Fury
 - 1× Knowledge Restored
 - 1× Fangbound
@@ -1250,7 +1250,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Gateweaver
 - 1× Trance Diviner
 - 1× Wasteland Arbitrator
-- 1× Dreadwood Emissary
+- 1× Whisper Forager
 - 1× Aerie Defender
 - 1× Flash of Power
 - 1× Thornwood Delver
@@ -1353,7 +1353,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Thought Merchant
 - 1× Cloudback Courier
 - 1× Gateweaver
-- 1× Dreadwood Emissary
+- 1× Whisper Forager
 - 1× Aerie Defender
 - 1× Flash of Power
 - 1× Knowledge Restored
@@ -1784,7 +1784,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Dawnblade Wanderer
 - 1× Bloodbroker
 - 1× Riftwalker
-- 1× Seeker of the Radiant Wilds
+- 1× Wrathful Gearwright
 - 1× Nightmare Shepherd
 - 1× Infernal Cavalier
 - 1× Blood Altar Monarch
@@ -2254,13 +2254,13 @@ This tide runs an even split of characters and events, with its mechanical ident
 - 1× Collapse Protocol
 - 1× Breach Artist
 - 1× Surge Evoker
-- 1× Last Beacon
+- 1× Dustway Ringleader
 - 1× Paradox Corps Enforcer
-- 1× Keeper of the Tides
+- 1× Dune Interceptor
 - 1× Annular Recall
 - 1× Light of Emergence
 - 1× Lurking Dread
-- 1× Dreadwood Emissary
+- 1× Whisper Forager
 - 1× Knowledge Restored
 - 1× Ripple of Defiance
 - 1× Abyssal Deputy
@@ -2918,7 +2918,7 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 1× Seek Answers
 - 1× Spiral Offering
 - 1× Gateweaver
-- 1× Dreadwood Emissary
+- 1× Whisper Forager
 - 1× Surge of Fury
 - 1× Key Sifter
 - 1× Illumination of Glory
@@ -3062,11 +3062,11 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Spirit of Smoldering Echoes
 - 1× Cloud Drifter
 - 1× Surge Evoker
-- 1× Last Beacon
+- 1× Dustway Ringleader
 - 1× Paradox Corps Enforcer
-- 1× Keeper of the Tides
+- 1× Dune Interceptor
 - 1× Light of Emergence
-- 1× Dreadwood Emissary
+- 1× Whisper Forager
 - 1× Ripple Through Reality
 - 1× Lantern Keeper
 - 1× Mind's Door
@@ -3085,7 +3085,7 @@ Tide-fac-24 is built almost entirely on characters (41 of 45 copies), with a sur
 - 2× Impending Fury
 - 2× Vanishing Inquisitor
 - 2× Cloud Drifter
-- 2× Last Beacon
+- 2× Dustway Ringleader
 - 1× Consumed Berserker
 - 1× Toll of Passage
 - 1× Echoing Denial
@@ -3114,10 +3114,10 @@ Tide-fac-24 is built almost entirely on characters (41 of 45 copies), with a sur
 - 1× Breach Artist
 - 1× Surge Evoker
 - 1× Paradox Corps Enforcer
-- 1× Keeper of the Tides
+- 1× Dune Interceptor
 - 1× Annular Recall
 - 1× Light of Emergence
-- 1× Dreadwood Emissary
+- 1× Whisper Forager
 - 1× Abyssal Deputy
 - 1× Return to Nowhere
 - 1× Mind's Door
@@ -3611,7 +3611,7 @@ tide-neu-01 is a broad neutral tide built almost entirely from events (23 of 30 
 - 1× Moment Rewound
 - 1× Light of Emergence
 - 1× Trance Diviner
-- 1× Dreadwood Emissary
+- 1× Whisper Forager
 - 1× Knowledge Restored
 - 1× Cosmonaut of Tides
 - 1× Ripple of Defiance

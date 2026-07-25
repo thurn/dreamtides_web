@@ -13,11 +13,6 @@ import { token } from "../primitives/tokens";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { GLYPHS } from "../primitives/glyph";
 import { IconButton } from "../components/controls/IconButton";
-import {
-  ENERGY_ICON_CLASS,
-  ENERGY_ICON_COLOR,
-  GlowIcon,
-} from "../components/controls/GlowIcon";
 import type { BattleStatusDreamcallerProfile } from "../components/battle/BattleStatusDisplay";
 import { CardBack } from "../components/battle/CardBack";
 import {
@@ -64,9 +59,9 @@ import type {
   TutorialHowToPlayTrigger,
 } from "../../types/tutorial";
 import {
-  parseTutorialInstructionMarkup,
-  type TutorialInstructionParagraph,
-} from "../../data/tutorial-instruction-markup";
+  renderTutorialInstructionParagraph,
+} from "../internal/tutorial-instruction-text";
+import { parseTutorialInstructionMarkup } from "../../data/tutorial-instruction-markup";
 
 export interface TutorialDreamcallerView {
   readonly visual: DreamcallerVisual;
@@ -329,158 +324,7 @@ function TutorialHowToPlayDialog({
       : token("--t-lead"),
     whiteSpace: "pre-line",
   } as const;
-  const inlineIconStyle = {
-    display: "inline-flex",
-    alignItems: "center",
-    columnGap: token("--space-2"),
-    whiteSpace: "nowrap",
-  } as const;
-  const parenthesizedIconStyle = {
-    display: "inline-flex",
-    alignItems: "center",
-    whiteSpace: "nowrap",
-  } as const;
-  const inlineEnergyIconStyle = {
-    display: "inline-flex",
-    width: "1em",
-    height: "1em",
-    verticalAlign: "middle",
-    transform: "translateY(-0.08em)",
-  } as const;
   const paragraphs = parseTutorialInstructionMarkup(text);
-
-  const renderInstructionText = (instruction: string): ReactElement => {
-    const tokens = instruction.split(
-      /(\b(?:points|spark)\s+\(\s*[⍟✦]\s*\)|\(\s*[⍟✦●]\s*\)|\d+\s+⍟|[⍟✦●])/giu,
-    );
-    return (
-      <>
-        {tokens.map((part, index) => {
-          const resourceTerm =
-            /^(points|spark)\s+\(\s*([⍟✦])\s*\)$/iu.exec(part);
-          if (resourceTerm !== null) {
-            const points = resourceTerm[2] === "⍟";
-            return (
-              <span
-                key={index}
-                {...(points
-                  ? { "data-tutorial-how-to-play-points-term": "" }
-                  : { "data-tutorial-how-to-play-spark-term": "" })}
-                style={parenthesizedIconStyle}
-              >
-                {resourceTerm[1]} (
-                <GlowIcon
-                  iconClass={points ? GLYPHS.points : GLYPHS.sparkInline}
-                  color={points ? "text-primary" : "spark"}
-                />
-                )
-              </span>
-            );
-          }
-          const compact = part.replace(/\s/gu, "");
-          if (
-            compact === "(⍟)" ||
-            compact === "(✦)" ||
-            compact === "(●)"
-          ) {
-            if (compact === "(●)") {
-              return (
-                <span
-                  key={index}
-                  data-tutorial-how-to-play-energy-term=""
-                  style={parenthesizedIconStyle}
-                >
-                  (
-                  <span style={inlineEnergyIconStyle}>
-                    <GlowIcon
-                      iconClass={ENERGY_ICON_CLASS}
-                      color={ENERGY_ICON_COLOR}
-                      title="energy"
-                    />
-                  </span>
-                  )
-                </span>
-              );
-            }
-            const points = compact === "(⍟)";
-            return (
-              <span
-                key={index}
-                {...(points
-                  ? { "data-tutorial-how-to-play-points-term": "" }
-                  : { "data-tutorial-how-to-play-spark-term": "" })}
-                style={parenthesizedIconStyle}
-              >
-                (
-                <GlowIcon
-                  iconClass={points ? GLYPHS.points : GLYPHS.sparkInline}
-                  color={points ? "text-primary" : "spark"}
-                />
-                )
-              </span>
-            );
-          }
-          const pointsValue = /^(\d+)\s+⍟$/u.exec(part);
-          if (pointsValue !== null) {
-            return (
-              <span key={index} style={inlineIconStyle}>
-                {pointsValue[1]}
-                <GlowIcon
-                  iconClass={GLYPHS.points}
-                  color="text-primary"
-                  title="points"
-                />
-              </span>
-            );
-          }
-          if (part === "⍟" || part === "✦") {
-            const points = part === "⍟";
-            return (
-              <span key={index} style={parenthesizedIconStyle}>
-                <GlowIcon
-                  iconClass={points ? GLYPHS.points : GLYPHS.sparkInline}
-                  color={points ? "text-primary" : "spark"}
-                  title={points ? "points" : "spark"}
-                />
-              </span>
-            );
-          }
-          if (part === "●") {
-            return (
-              <span key={index} style={inlineEnergyIconStyle}>
-                <GlowIcon
-                  iconClass={ENERGY_ICON_CLASS}
-                  color={ENERGY_ICON_COLOR}
-                  title="energy"
-                />
-              </span>
-            );
-          }
-          return part;
-        })}
-      </>
-    );
-  };
-
-  const renderInstructionParagraph = (
-    paragraph: TutorialInstructionParagraph,
-  ): ReactElement => (
-    <>
-      {paragraph.spans.map((span, index) =>
-        span.highlight === "yellow" ? (
-          <span
-            key={index}
-            data-tutorial-instruction-highlight="yellow"
-            style={{ color: token("--spark") }}
-          >
-            {renderInstructionText(span.text)}
-          </span>
-        ) : (
-          <span key={index}>{renderInstructionText(span.text)}</span>
-        ),
-      )}
-    </>
-  );
 
   return (
     <GlassDialog
@@ -516,7 +360,7 @@ function TutorialHowToPlayDialog({
               marginTop: index === 0 ? 0 : token("--space-7"),
             }}
           >
-            {renderInstructionParagraph(paragraph)}
+            {renderTutorialInstructionParagraph(paragraph)}
           </p>
         ))}
       </div>

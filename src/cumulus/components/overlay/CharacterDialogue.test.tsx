@@ -108,7 +108,8 @@ describe("CharacterDialogue", () => {
               portrait: artRef.characterPortrait("mira"),
               portraitAlt: "Mira",
               speakerName: "Mira",
-              text: "Welcome, [yellow]Dreamer[/yellow].",
+              text:
+                "Welcome, [yellow]Dreamer[/yellow]. Score ⍟ equal to your spark ✦.",
             }}
             size="prominent"
             visible
@@ -133,12 +134,23 @@ describe("CharacterDialogue", () => {
     expect(bubble?.style.zoom).toBe("1.25");
     expect(bubblePath?.getAttribute("d")).toContain("L 0 31");
     const highlight = bubble?.querySelector<HTMLElement>(
-      '[data-speech-bubble-highlight="yellow"]',
+      '[data-tutorial-instruction-highlight="yellow"]',
     );
     expect(highlight?.textContent).toBe("Dreamer");
     expect(highlight?.style.color).toBe("var(--spark)");
-    expect(bubble?.textContent).toContain("Welcome, Dreamer.");
+    expect(bubble?.textContent).toContain(
+      "Welcome, Dreamer. Score  equal to your spark .",
+    );
     expect(bubble?.textContent).not.toContain("[yellow]");
+    const pointsIcon = bubble?.querySelector<HTMLElement>(
+      '[aria-label="points"]',
+    );
+    const sparkIcon = bubble?.querySelector<HTMLElement>(
+      '[aria-label="spark"]',
+    );
+    expect(pointsIcon?.className).toContain("bxf bx-star-circle");
+    expect(sparkIcon?.className).toContain("bxf bx-sparkle");
+    expect(sparkIcon?.style.color).toBe("var(--spark)");
 
     act(() => root.unmount());
     container.remove();

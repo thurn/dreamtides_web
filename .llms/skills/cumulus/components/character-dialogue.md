@@ -28,7 +28,7 @@ A character portrait in the canonical round frame, paired with SpeechBubble and 
 | `portrait` | `CharacterDialoguePortraitArt` | no | Typed portrait art shown inside the circular frame. |
 | `portraitAlt` | `string` | no | Accessible description of the portrait art. |
 | `speakerName` | `string` | no | Character name shown by the speech bubble. |
-| `text` | `string` | no | Spoken line shown by the speech bubble, with optional yellow highlight tags. |
+| `text` | `string` | no | Spoken line shown by the speech bubble with tutorial instruction formatting. |
 
 ## Usage
 
