@@ -14,6 +14,7 @@ describe("parseRuntimeConfig", () => {
     expect(parseRuntimeConfig("")).toEqual({
       seedOverride: null,
       aiMode: true,
+      tutorialPlaybackSpeed: 1,
       gameId: null,
       databaseMode: "emulator",
       poolVariant: DEFAULT_POOL_VARIANT,
@@ -65,6 +66,36 @@ describe("parseRuntimeConfig", () => {
 
     it("returns false only when ai=0", () => {
       expect(parseRuntimeConfig("?ai=0").aiMode).toBe(false);
+    });
+  });
+
+  describe("tutorialPlaybackSpeed", () => {
+    it("parses a positive decimal multiplier", () => {
+      expect(
+        parseRuntimeConfig("?tutorialSpeed=4").tutorialPlaybackSpeed,
+      ).toBe(4);
+      expect(
+        parseRuntimeConfig("?tutorialSpeed=0.5").tutorialPlaybackSpeed,
+      ).toBe(0.5);
+      expect(
+        parseRuntimeConfig("?tutorialSpeed=.25").tutorialPlaybackSpeed,
+      ).toBe(0.25);
+    });
+
+    it("uses normal speed for absent or invalid values", () => {
+      expect(parseRuntimeConfig("").tutorialPlaybackSpeed).toBe(1);
+      expect(
+        parseRuntimeConfig("?tutorialSpeed=0").tutorialPlaybackSpeed,
+      ).toBe(1);
+      expect(
+        parseRuntimeConfig("?tutorialSpeed=-2").tutorialPlaybackSpeed,
+      ).toBe(1);
+      expect(
+        parseRuntimeConfig("?tutorialSpeed=fast").tutorialPlaybackSpeed,
+      ).toBe(1);
+      expect(
+        parseRuntimeConfig("?tutorialSpeed=Infinity").tutorialPlaybackSpeed,
+      ).toBe(1);
     });
   });
 

@@ -9,7 +9,11 @@ import { useFrontDoor } from "../../state/front-door-context";
 import { buildMainMenuView } from "./main-menu-view-model";
 
 /** Coop-backed `/main` wiring, including its cinematic New Journey transition. */
-export function MainMenuScreenAdapter() {
+export function MainMenuScreenAdapter({
+  playbackSpeed = 1,
+}: {
+  readonly playbackSpeed?: number;
+}) {
   const hasLoggedPresentation = useRef(false);
   const { state, mutations } = useFrontDoor();
   const view = useMemo(() => buildMainMenuView(), []);
@@ -20,8 +24,9 @@ export function MainMenuScreenAdapter() {
     logEvent("main_menu_presented", {
       actionIds: view.actions.map((action) => action.id),
       socialIds: view.socials.map((social) => social.id),
+      tutorialPlaybackSpeed: playbackSpeed,
     });
-  }, [view]);
+  }, [playbackSpeed, view]);
 
   const handleAction = useCallback(
     (actionId: MainMenuActionId) => {
@@ -59,6 +64,7 @@ export function MainMenuScreenAdapter() {
       onSocial={handleSocial}
       transitionPhase={state.phase === "mainExiting" ? "exiting" : "visible"}
       onExitComplete={handleExitComplete}
+      playbackSpeed={playbackSpeed}
     />
   );
 }

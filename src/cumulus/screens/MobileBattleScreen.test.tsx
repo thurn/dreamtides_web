@@ -1392,6 +1392,7 @@ describe("MobileBattleScreen", () => {
             <MobileBattleScreen
               view={nextView}
               onTurnAnnouncementComplete={onTurnAnnouncementComplete}
+              playbackSpeed={3}
             />
           </CumulusRoot>,
         );
@@ -1426,7 +1427,7 @@ describe("MobileBattleScreen", () => {
     );
 
     act(() => {
-      vi.advanceTimersByTime(2_099);
+      vi.advanceTimersByTime(699);
     });
     expect(onTurnAnnouncementComplete).not.toHaveBeenCalled();
     expect(container.querySelector("[data-battle-turn-announcement]")).not.toBeNull();

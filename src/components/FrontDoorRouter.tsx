@@ -6,7 +6,11 @@ import { TutorialScreenAdapter } from "../screens/cumulus_adapters/TutorialScree
 import { useFrontDoor } from "../state/front-door-context";
 
 /** Reflects the room's shared front-door fold and renders its current scene. */
-export function FrontDoorRouter() {
+export function FrontDoorRouter({
+  tutorialPlaybackSpeed = 1,
+}: {
+  readonly tutorialPlaybackSpeed?: number;
+}) {
   const { state } = useFrontDoor();
 
   useEffect(() => {
@@ -30,7 +34,11 @@ export function FrontDoorRouter() {
     });
   }, [state.journeyId, state.phase]);
 
-  if (state.phase === "loading") return <LoadingScreenAdapter />;
-  if (state.phase === "tutorial") return <TutorialScreenAdapter />;
-  return <MainMenuScreenAdapter />;
+  if (state.phase === "loading") {
+    return <LoadingScreenAdapter playbackSpeed={tutorialPlaybackSpeed} />;
+  }
+  if (state.phase === "tutorial") {
+    return <TutorialScreenAdapter playbackSpeed={tutorialPlaybackSpeed} />;
+  }
+  return <MainMenuScreenAdapter playbackSpeed={tutorialPlaybackSpeed} />;
 }

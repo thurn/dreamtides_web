@@ -90,6 +90,9 @@ interface MotionDivStubInput {
 
 vi.mock("framer-motion", () => ({
   useReducedMotion: () => false,
+  MotionConfig: ({ children }: { readonly children?: ReactNode }) => (
+    <>{children}</>
+  ),
   motion: {
     main: ({
       animate,
@@ -551,6 +554,7 @@ describe("TutorialScreen", () => {
               },
               battle: { battleId: "tutorial-battle" } as MobileBattleView,
             }}
+            playbackSpeed={4}
             onActionComplete={onActionComplete}
           />
         </CumulusRoot>,
@@ -558,10 +562,17 @@ describe("TutorialScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onActionComplete).not.toHaveBeenCalled();
+    expect(screenMocks.sceneTransition).toEqual({ duration: 0.3 });
+    expect(screenMocks.props?.playbackSpeed).toBe(4);
+    expect(screenMocks.dialogueProps?.playbackSpeed).toBe(4);
+    expect(
+      container.querySelector<HTMLElement>("[data-tutorial-screen]")?.style
+        .getPropertyValue("--dur-slow"),
+    ).toBe("0.105s");
 
     act(() => screenMocks.sceneAnimationComplete?.());
     act(() => {
-      vi.advanceTimersByTime(2_999);
+      vi.advanceTimersByTime(749);
     });
     expect(onActionComplete).not.toHaveBeenCalled();
     act(() => {

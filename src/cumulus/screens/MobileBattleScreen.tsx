@@ -228,6 +228,8 @@ export interface MobileBattleScreenProps {
   readonly onInspectorOpenChange?: (open: boolean) => void;
   /** Reports when a turn announcement has finished displaying. */
   readonly onTurnAnnouncementComplete?: (side: MobileBattleOwner) => void;
+  /** Multiplier applied to automated presentation timing in this battle view. */
+  readonly playbackSpeed?: number;
   /** Fill a positioned parent instead of owning the browser viewport. */
   readonly viewport?: "fixed" | "contained";
 }
@@ -572,11 +574,13 @@ function BattleTurnAnnouncement({
   perspective,
   isDesktop,
   onComplete,
+  playbackSpeed,
 }: {
   readonly activeSide: MobileBattleOwner;
   readonly perspective: BattlePerspectiveSide;
   readonly isDesktop: boolean;
   readonly onComplete?: (side: MobileBattleOwner) => void;
+  readonly playbackSpeed: number;
 }) {
   const sequence = useRef(1);
   const previousSide = useRef(activeSide);
@@ -604,9 +608,9 @@ function BattleTurnAnnouncement({
         current?.key === announcementKey ? null : current,
       );
       onCompleteRef.current?.(announcementSide);
-    }, TURN_ANNOUNCEMENT_DURATION_MS);
+    }, TURN_ANNOUNCEMENT_DURATION_MS / playbackSpeed);
     return () => window.clearTimeout(timeout);
-  }, [announcement]);
+  }, [announcement, playbackSpeed]);
 
   if (announcement === null) return null;
 
@@ -3121,6 +3125,7 @@ export function MobileBattleScreen({
   inspectorOpen: controlledInspectorOpen,
   onInspectorOpenChange,
   onTurnAnnouncementComplete,
+  playbackSpeed = 1,
   guidedSlotHighlight,
   preserveOccupiedSlotOutlines = false,
   viewport = "fixed",
@@ -3255,9 +3260,9 @@ export function MobileBattleScreen({
       setSnapLayoutCardId((current) =>
         current === snapLayoutCardId ? null : current,
       );
-    }, 1_000);
+    }, 1_000 / playbackSpeed);
     return () => window.clearTimeout(timeout);
-  }, [isCardDragActive, snapLayoutCardId, view]);
+  }, [isCardDragActive, playbackSpeed, snapLayoutCardId, view]);
 
   const handleCardDragChange = useCallback((
     dragging: boolean,
@@ -3363,6 +3368,7 @@ export function MobileBattleScreen({
           perspective={view.perspective}
           isDesktop={isDesktop}
           onComplete={handleTurnAnnouncementComplete}
+          playbackSpeed={playbackSpeed}
         />
       ) : null}
       <LayoutGroup id={`mobile-battle:${view.battleId}`}>

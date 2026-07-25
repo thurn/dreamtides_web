@@ -43,6 +43,8 @@ export interface MainMenuScreenProps {
   readonly onSocial: (socialId: MainMenuSocialId) => void;
   readonly transitionPhase?: "visible" | "exiting";
   readonly onExitComplete?: () => void;
+  /** Multiplier applied to the tutorial entry sequence's presentation timing. */
+  readonly playbackSpeed?: number;
 }
 
 const TITLE_TOP = token("--space-10");
@@ -59,6 +61,7 @@ export function MainMenuScreen({
   onSocial,
   transitionPhase = "visible",
   onExitComplete,
+  playbackSpeed = 1,
 }: MainMenuScreenProps): ReactElement {
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
@@ -72,7 +75,9 @@ export function MainMenuScreen({
       data-main-menu-phase={transitionPhase}
       initial={false}
       animate={{ opacity: transitionPhase === "exiting" ? 0 : 1 }}
-      transition={{ duration: reduceMotion ? 0 : SCREEN_FADE_SECONDS }}
+      transition={{
+        duration: reduceMotion ? 0 : SCREEN_FADE_SECONDS / playbackSpeed,
+      }}
       onAnimationComplete={() => {
         if (transitionPhase === "exiting") onExitComplete?.();
       }}

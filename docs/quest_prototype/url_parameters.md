@@ -25,6 +25,23 @@ folded phase into its own pathname while preserving the room query string and
 hash. `/loading` and `/tutorial` can also create rooms directly, with their
 initial scene stamped into room genesis.
 
+## `tutorialSpeed`
+
+Sets the local playback-speed multiplier for the standalone front-door and
+tutorial sequence. It accepts a positive finite decimal. A value of `4` makes
+the main-menu handoff, loading gate, authored waits, animations, transitions,
+and tutorial presentation effects run at four times normal speed. Values below
+`1` slow the sequence down. An absent or invalid value uses normal speed (`1`).
+
+The multiplier is presentation-only and is read once at page load. Tutorial
+progress remains shared through the room event log, so the first connected
+client to finish a timed action advances that action for the room.
+
+```
+http://localhost:5173/main?tutorialSpeed=4
+http://localhost:5173/tutorial?tutorialSpeed=0.5
+```
+
 ## `seed`
 
 Overrides the battle RNG seed. The value must be a non-negative integer literal
@@ -294,6 +311,7 @@ http://localhost:5173/?viewLogs=quest42         # read-only quest-log viewer for
 http://localhost:5173/?goto=atlas               # jump straight to a QA scene
 http://localhost:5173/?realtime=1               # use cloud Firebase RTDB
 http://localhost:5173/?identicons=1             # force identicon art for cards
+http://localhost:5173/tutorial?tutorialSpeed=4  # play the tutorial at 4× speed
 http://localhost:5173/editor?identicons=1       # same, in the card editor
 http://localhost:5173/?goto=battle&seed=7
 http://localhost:5173/?goto=battle              # Layer I battle preview vs the local AI opponent

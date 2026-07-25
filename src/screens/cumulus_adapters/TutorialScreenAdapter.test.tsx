@@ -180,13 +180,14 @@ describe("TutorialScreenAdapter", () => {
     await act(async () => {
       root.render(
         <CumulusRoot>
-          <TutorialScreenAdapter />
+          <TutorialScreenAdapter playbackSpeed={4} />
         </CumulusRoot>,
       );
       await Promise.resolve();
     });
 
     expect(container.querySelector("[data-tutorial-screen]")).not.toBeNull();
+    expect(adapterMocks.props?.playbackSpeed).toBe(4);
     expect(getLogEntries()).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -213,6 +214,7 @@ describe("TutorialScreenAdapter", () => {
           portraitPauseSeconds: 1,
           portraitTravelSeconds: 0.6,
           waitSeconds: 0,
+          tutorialPlaybackSpeed: 4,
         }),
       ]),
     );

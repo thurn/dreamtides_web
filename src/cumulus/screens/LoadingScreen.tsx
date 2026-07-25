@@ -13,6 +13,8 @@ export interface LoadingView {
 
 export interface LoadingScreenProps {
   readonly view: LoadingView;
+  /** Multiplier applied to the tutorial entry sequence's presentation timing. */
+  readonly playbackSpeed?: number;
 }
 
 const SCREEN_FADE_SECONDS = motionTimeSeconds("--dur-loading-screen-fade");
@@ -22,7 +24,10 @@ const DOT_STAGGER_SECONDS = motionTimeSeconds("--stagger-loading-dot");
 const DOT_POSITIONS = [0, 1, 2] as const;
 
 /** Cinematic standalone journey-loading presentation. */
-export function LoadingScreen({ view }: LoadingScreenProps): ReactElement {
+export function LoadingScreen({
+  view,
+  playbackSpeed = 1,
+}: LoadingScreenProps): ReactElement {
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
 
@@ -33,7 +38,9 @@ export function LoadingScreen({ view }: LoadingScreenProps): ReactElement {
       aria-busy="true"
       initial={{ opacity: reduceMotion ? 1 : 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: reduceMotion ? 0 : SCREEN_FADE_SECONDS }}
+      transition={{
+        duration: reduceMotion ? 0 : SCREEN_FADE_SECONDS / playbackSpeed,
+      }}
       style={{
         position: "fixed",
         inset: 0,
@@ -62,7 +69,7 @@ export function LoadingScreen({ view }: LoadingScreenProps): ReactElement {
           animate={{ opacity: 1 }}
           transition={{
             delay: 0,
-            duration: reduceMotion ? 0 : QUOTE_FADE_SECONDS,
+            duration: reduceMotion ? 0 : QUOTE_FADE_SECONDS / playbackSpeed,
           }}
           style={{
             margin: 0,
@@ -82,7 +89,7 @@ export function LoadingScreen({ view }: LoadingScreenProps): ReactElement {
           animate={{ opacity: 1 }}
           transition={{
             delay: 0,
-            duration: reduceMotion ? 0 : QUOTE_FADE_SECONDS,
+            duration: reduceMotion ? 0 : QUOTE_FADE_SECONDS / playbackSpeed,
           }}
           style={{
             marginTop: token("--space-8"),
@@ -121,8 +128,9 @@ export function LoadingScreen({ view }: LoadingScreenProps): ReactElement {
               reduceMotion
                 ? { duration: 0 }
                 : {
-                    delay: position * DOT_STAGGER_SECONDS,
-                    duration: DOT_CYCLE_SECONDS,
+                    delay:
+                      (position * DOT_STAGGER_SECONDS) / playbackSpeed,
+                    duration: DOT_CYCLE_SECONDS / playbackSpeed,
                     repeat: Number.POSITIVE_INFINITY,
                   }
             }

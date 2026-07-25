@@ -6,6 +6,13 @@ import type { ContentConfig } from "../eventlog/types";
 export interface RuntimeConfig {
   seedOverride: number | null;
   aiMode: boolean;
+  /**
+   * Local playback multiplier for the standalone tutorial sequence, from
+   * `?tutorialSpeed=`. A positive finite decimal; absent or invalid values use
+   * normal speed (`1`). This is presentation-only and is not pinned into room
+   * genesis.
+   */
+  tutorialPlaybackSpeed?: number;
   gameId: string | null;
   databaseMode: DatabaseMode;
   /**
@@ -153,6 +160,9 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
   return {
     seedOverride: parseSeedOverride(params.get("seed")),
     aiMode: params.get("ai") !== "0",
+    tutorialPlaybackSpeed: parseTutorialPlaybackSpeed(
+      params.get("tutorialSpeed"),
+    ),
     gameId: normalizeRoomId(params.get("game")),
     databaseMode: parseDatabaseMode(params.get("realtime")),
     poolVariant,
@@ -162,6 +172,17 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     gotoScene: parseGotoScene(params.get("goto")),
     viewLogs: normalizeRoomId(params.get("viewLogs")),
   };
+}
+
+function parseTutorialPlaybackSpeed(rawSpeed: string | null): number {
+  if (
+    rawSpeed === null ||
+    !/^(?:\d+(?:\.\d*)?|\.\d+)$/u.test(rawSpeed)
+  ) {
+    return 1;
+  }
+  const parsed = Number(rawSpeed);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
 }
 
 function parseGotoScene(rawScene: string | null): string | null {

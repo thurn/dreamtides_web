@@ -13,21 +13,35 @@ const stateMocks = vi.hoisted<{
 }>(() => ({
   frontDoor: { phase: "main", journeyId: null },
 }));
+const adapterMocks = vi.hoisted(() => ({
+  mainSpeed: null as number | null,
+  loadingSpeed: null as number | null,
+  tutorialSpeed: null as number | null,
+}));
 
 vi.mock("../state/front-door-context", () => ({
   useFrontDoor: () => ({ state: stateMocks.frontDoor }),
 }));
 
 vi.mock("../screens/cumulus_adapters/MainMenuScreenAdapter", () => ({
-  MainMenuScreenAdapter: () => <main data-main-menu />,
+  MainMenuScreenAdapter: ({ playbackSpeed }: { playbackSpeed: number }) => {
+    adapterMocks.mainSpeed = playbackSpeed;
+    return <main data-main-menu />;
+  },
 }));
 
 vi.mock("../screens/cumulus_adapters/LoadingScreenAdapter", () => ({
-  LoadingScreenAdapter: () => <main data-loading-screen />,
+  LoadingScreenAdapter: ({ playbackSpeed }: { playbackSpeed: number }) => {
+    adapterMocks.loadingSpeed = playbackSpeed;
+    return <main data-loading-screen />;
+  },
 }));
 
 vi.mock("../screens/cumulus_adapters/TutorialScreenAdapter", () => ({
-  TutorialScreenAdapter: () => <main data-tutorial-screen />,
+  TutorialScreenAdapter: ({ playbackSpeed }: { playbackSpeed: number }) => {
+    adapterMocks.tutorialSpeed = playbackSpeed;
+    return <main data-tutorial-screen />;
+  },
 }));
 
 beforeEach(() => {
@@ -37,6 +51,9 @@ beforeEach(() => {
   vi.spyOn(console, "log").mockImplementation(() => {});
   window.history.replaceState(null, "", "/main?game=room42#shared");
   stateMocks.frontDoor = { phase: "main", journeyId: null };
+  adapterMocks.mainSpeed = null;
+  adapterMocks.loadingSpeed = null;
+  adapterMocks.tutorialSpeed = null;
 });
 
 afterEach(() => {
@@ -50,19 +67,22 @@ describe("FrontDoorRouter", () => {
     document.body.append(container);
     const root = createRoot(container);
 
-    act(() => root.render(<FrontDoorRouter />));
+    act(() => root.render(<FrontDoorRouter tutorialPlaybackSpeed={4} />));
     expect(container.querySelector("[data-main-menu]")).not.toBeNull();
+    expect(adapterMocks.mainSpeed).toBe(4);
 
     stateMocks.frontDoor = { phase: "loading", journeyId: "event:1" };
-    act(() => root.render(<FrontDoorRouter />));
+    act(() => root.render(<FrontDoorRouter tutorialPlaybackSpeed={4} />));
     expect(container.querySelector("[data-loading-screen]")).not.toBeNull();
+    expect(adapterMocks.loadingSpeed).toBe(4);
     expect(window.location.pathname).toBe("/loading");
     expect(window.location.search).toBe("?game=room42");
     expect(window.location.hash).toBe("#shared");
 
     stateMocks.frontDoor = { phase: "tutorial", journeyId: "event:1" };
-    act(() => root.render(<FrontDoorRouter />));
+    act(() => root.render(<FrontDoorRouter tutorialPlaybackSpeed={4} />));
     expect(container.querySelector("[data-tutorial-screen]")).not.toBeNull();
+    expect(adapterMocks.tutorialSpeed).toBe(4);
     expect(window.location.pathname).toBe("/tutorial");
 
     act(() => root.unmount());

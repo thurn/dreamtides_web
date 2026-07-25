@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { MotionConfig, motion, useReducedMotion } from "framer-motion";
 import {
   useCallback,
   useEffect,
@@ -6,6 +6,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type ReactElement,
 } from "react";
 import { motionTimeSeconds } from "../primitives/motion-time";
@@ -139,6 +140,8 @@ export interface TutorialEditorView {
 export interface TutorialScreenProps {
   readonly view: TutorialView;
   readonly editor?: TutorialEditorView;
+  /** Multiplier applied to every timed part of the tutorial sequence. */
+  readonly playbackSpeed?: number;
   readonly onActionComplete?: (runId: string, actionId: string) => void;
   readonly onDreamcallerArrivalComplete?: (
     dreamcallerId: string,
@@ -225,6 +228,38 @@ const TUTORIAL_CHALLENGE_MOTE_COUNT = 24;
 const TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH = 500;
 // The pointer overlaps the portrait rim so it visibly connects to the frame.
 const TUTORIAL_PORTRAIT_POINTER_OVERLAP = 2;
+
+function atPlaybackSpeed(seconds: number, playbackSpeed: number): number {
+  return seconds / playbackSpeed;
+}
+
+function millisecondsAtPlaybackSpeed(
+  seconds: number,
+  playbackSpeed: number,
+): number {
+  return atPlaybackSpeed(seconds, playbackSpeed) * 1_000;
+}
+
+function tutorialTimingVariables(
+  playbackSpeed: number,
+): CSSProperties {
+  const seconds = (name: Parameters<typeof motionTimeSeconds>[0]) =>
+    `${String(atPlaybackSpeed(motionTimeSeconds(name), playbackSpeed))}s`;
+  return {
+    "--dur-fast": seconds("--dur-fast"),
+    "--dur-base": seconds("--dur-base"),
+    "--dur-slow": seconds("--dur-slow"),
+    "--dur-loading-screen-fade": seconds("--dur-loading-screen-fade"),
+    "--dur-loading-quote": seconds("--dur-loading-quote"),
+    "--dur-loading-dot-cycle": seconds("--dur-loading-dot-cycle"),
+    "--dur-tutorial-dreamwell-emerge": seconds(
+      "--dur-tutorial-dreamwell-emerge",
+    ),
+    "--stagger-loading-dot": seconds("--stagger-loading-dot"),
+    "--stagger-travel": seconds("--stagger-travel"),
+    "--motion-object-travel": `${seconds("--dur-slow")} var(--ease-out)`,
+  } as CSSProperties;
+}
 
 function TutorialRepositionTargetResolver({
   screen,
@@ -372,11 +407,13 @@ function TutorialDreamwellEmergence({
   screen,
   actionKey,
   reduceMotion,
+  playbackSpeed,
   onComplete,
 }: {
   readonly screen: HTMLElement;
   readonly actionKey: string;
   readonly reduceMotion: boolean;
+  readonly playbackSpeed: number;
   readonly onComplete: (actionKey: string) => void;
 }): null {
   useLayoutEffect(() => {
@@ -418,7 +455,10 @@ function TutorialDreamwellEmergence({
           { transform: "translate(-50%, 0) scale(1)" },
         ],
         {
-          duration: TUTORIAL_DREAMWELL_EMERGE_SECONDS * 1_000,
+          duration: millisecondsAtPlaybackSpeed(
+            TUTORIAL_DREAMWELL_EMERGE_SECONDS,
+            playbackSpeed,
+          ),
           ...(easing === "" ? {} : { easing }),
         },
       );
@@ -426,7 +466,10 @@ function TutorialDreamwellEmergence({
     } else {
       timeout = window.setTimeout(
         finish,
-        TUTORIAL_DREAMWELL_EMERGE_SECONDS * 1_000,
+        millisecondsAtPlaybackSpeed(
+          TUTORIAL_DREAMWELL_EMERGE_SECONDS,
+          playbackSpeed,
+        ),
       );
     }
 
@@ -439,7 +482,7 @@ function TutorialDreamwellEmergence({
         sideZoneRow.style.zIndex = previousSideZoneZIndex;
       }
     };
-  }, [actionKey, onComplete, reduceMotion, screen]);
+  }, [actionKey, onComplete, playbackSpeed, reduceMotion, screen]);
 
   return null;
 }
@@ -779,12 +822,14 @@ function TutorialOpponentCardPlay({
   card,
   revealDuration,
   reduceMotion,
+  playbackSpeed,
   onComplete,
 }: {
   readonly screen: HTMLElement;
   readonly card: MobileBattleCardView;
   readonly revealDuration: number;
   readonly reduceMotion: boolean;
+  readonly playbackSpeed: number;
   readonly onComplete: () => void;
 }): ReactElement | null {
   const [trajectory, setTrajectory] = useState<TutorialCardTrajectory | null>(
@@ -907,9 +952,18 @@ function TutorialOpponentCardPlay({
 
   if (trajectory === null) return null;
 
-  const travelDuration = reduceMotion ? 0 : TUTORIAL_CARD_TRAVEL_SECONDS;
-  const flipDuration = reduceMotion ? 0 : TUTORIAL_CARD_FLIP_SECONDS;
-  const totalDuration = travelDuration * 2 + flipDuration + revealDuration;
+  const travelDuration = reduceMotion
+    ? 0
+    : atPlaybackSpeed(TUTORIAL_CARD_TRAVEL_SECONDS, playbackSpeed);
+  const flipDuration = reduceMotion
+    ? 0
+    : atPlaybackSpeed(TUTORIAL_CARD_FLIP_SECONDS, playbackSpeed);
+  const scaledRevealDuration = atPlaybackSpeed(
+    revealDuration,
+    playbackSpeed,
+  );
+  const totalDuration =
+    travelDuration * 2 + flipDuration + scaledRevealDuration;
   const revealStart = totalDuration === 0 ? 0 : travelDuration / totalDuration;
   const readingStart =
     totalDuration === 0
@@ -918,7 +972,7 @@ function TutorialOpponentCardPlay({
   const revealEnd =
     totalDuration === 0
       ? 1
-      : (travelDuration + flipDuration + revealDuration) / totalDuration;
+      : (travelDuration + flipDuration + scaledRevealDuration) / totalDuration;
   const times = [0, revealStart, readingStart, revealEnd, 1];
   const frames = reduceMotion
     ? [trajectory.reveal, trajectory.reveal]
@@ -974,7 +1028,7 @@ function TutorialOpponentCardPlay({
             initial={{ opacity: 1 }}
             animate={{ opacity: 0 }}
             transition={{
-              delay: travelDuration + flipDuration + revealDuration,
+              delay: travelDuration + flipDuration + scaledRevealDuration,
               duration: travelDuration,
               ease: [0.22, 0.61, 0.36, 1],
             }}
@@ -1028,7 +1082,7 @@ function TutorialOpponentCardPlay({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{
-              delay: travelDuration + flipDuration + revealDuration,
+              delay: travelDuration + flipDuration + scaledRevealDuration,
               duration: travelDuration,
               ease: [0.22, 0.61, 0.36, 1],
             }}
@@ -1097,12 +1151,14 @@ function TutorialChallengeAnimation({
   challenge,
   wait,
   reduceMotion,
+  playbackSpeed,
   onComplete,
 }: {
   readonly screen: HTMLElement;
   readonly challenge: TutorialChallengeView;
   readonly wait: number;
   readonly reduceMotion: boolean;
+  readonly playbackSpeed: number;
   readonly onComplete: () => void;
 }): ReactElement | null {
   const [started, setStarted] = useState(false);
@@ -1118,16 +1174,24 @@ function TutorialChallengeAnimation({
       onComplete();
       return;
     }
-    completionTimeout.current = window.setTimeout(onComplete, wait * 1_000);
-  }, [onComplete, wait]);
+    completionTimeout.current = window.setTimeout(
+      onComplete,
+      millisecondsAtPlaybackSpeed(wait, playbackSpeed),
+    );
+  }, [onComplete, playbackSpeed, wait]);
 
   useEffect(() => {
     const timeout = window.setTimeout(
       () => setStarted(true),
-      reduceMotion ? 0 : TUTORIAL_CARD_TRAVEL_SECONDS * 1_000,
+      reduceMotion
+        ? 0
+        : millisecondsAtPlaybackSpeed(
+            TUTORIAL_CARD_TRAVEL_SECONDS,
+            playbackSpeed,
+          ),
     );
     return () => window.clearTimeout(timeout);
-  }, [reduceMotion]);
+  }, [playbackSpeed, reduceMotion]);
 
   useEffect(
     () => () => {
@@ -1296,7 +1360,10 @@ function TutorialChallengeAnimation({
                 : [1, 1, 1, 0.7, 0, 0],
             }}
             transition={{
-              duration: TUTORIAL_CHALLENGE_TOTAL_SECONDS,
+              duration: atPlaybackSpeed(
+                TUTORIAL_CHALLENGE_TOTAL_SECONDS,
+                playbackSpeed,
+              ),
               times: sequenceTimes,
               ease: [0.22, 0.61, 0.36, 1],
             }}
@@ -1330,7 +1397,10 @@ function TutorialChallengeAnimation({
             opacity: [0, 0, 0, 0.95, 0, 0],
           }}
           transition={{
-            duration: TUTORIAL_CHALLENGE_TOTAL_SECONDS,
+            duration: atPlaybackSpeed(
+              TUTORIAL_CHALLENGE_TOTAL_SECONDS,
+              playbackSpeed,
+            ),
             times: sequenceTimes,
             ease: [0.22, 0.61, 0.36, 1],
           }}
@@ -1387,7 +1457,10 @@ function TutorialChallengeAnimation({
               rotate: [0, 0, index % 2 === 0 ? 120 : -140, 240, 320],
             }}
             transition={{
-              duration: TUTORIAL_CHALLENGE_TOTAL_SECONDS,
+              duration: atPlaybackSpeed(
+                TUTORIAL_CHALLENGE_TOTAL_SECONDS,
+                playbackSpeed,
+              ),
               times: [0, 0.38, 0.56, 0.86, 1],
               ease: [0.22, 0.61, 0.36, 1],
             }}
@@ -1429,7 +1502,10 @@ function TutorialChallengeAnimation({
           rotate: [90, 90, 90, 90, 88, 90],
         }}
         transition={{
-          duration: TUTORIAL_CHALLENGE_TOTAL_SECONDS,
+          duration: atPlaybackSpeed(
+            TUTORIAL_CHALLENGE_TOTAL_SECONDS,
+            playbackSpeed,
+          ),
           times: sequenceTimes,
           ease: [0.22, 0.61, 0.36, 1],
         }}
@@ -1458,6 +1534,7 @@ function TutorialChallengeAnimation({
 export function TutorialScreen({
   view,
   editor,
+  playbackSpeed = 1,
   onActionComplete,
   onDreamcallerArrivalComplete,
   onHowToPlayPresented,
@@ -1519,12 +1596,23 @@ export function TutorialScreen({
         ? {
             key: `${view.playbackRunId}:${view.currentAction.id}`,
             owner: view.currentAction.owner,
-            pause: view.currentAction.pause,
-            duration: view.currentAction.duration,
+            pause: atPlaybackSpeed(
+              view.currentAction.pause,
+              playbackSpeed,
+            ),
+            duration: atPlaybackSpeed(
+              view.currentAction.duration,
+              playbackSpeed,
+            ),
             dreamcaller: view.dreamcallers[view.currentAction.owner],
           }
         : null,
-    [view.currentAction, view.dreamcallers, view.playbackRunId],
+    [
+      playbackSpeed,
+      view.currentAction,
+      view.dreamcallers,
+      view.playbackRunId,
+    ],
   );
   const opponentCardDraw = useMemo(
     () =>
@@ -1563,20 +1651,27 @@ export function TutorialScreen({
     if (!sceneEntered || opponentCardPlay === null) return undefined;
     const revealStartDelay = reduceMotion
       ? 0
-      : (TUTORIAL_CARD_TRAVEL_SECONDS + TUTORIAL_CARD_FLIP_SECONDS) * 1_000;
+      : millisecondsAtPlaybackSpeed(
+          TUTORIAL_CARD_TRAVEL_SECONDS + TUTORIAL_CARD_FLIP_SECONDS,
+          playbackSpeed,
+        );
     const revealStartTimeout = window.setTimeout(
       () => setRevealDialogueActionKey(opponentCardPlay.key),
       revealStartDelay,
     );
     const revealEndTimeout = window.setTimeout(
       () => setRevealDialogueActionKey(null),
-      revealStartDelay + opponentCardPlay.revealDuration * 1_000,
+      revealStartDelay +
+        millisecondsAtPlaybackSpeed(
+          opponentCardPlay.revealDuration,
+          playbackSpeed,
+        ),
     );
     return () => {
       window.clearTimeout(revealStartTimeout);
       window.clearTimeout(revealEndTimeout);
     };
-  }, [opponentCardPlay, reduceMotion, sceneEntered]);
+  }, [opponentCardPlay, playbackSpeed, reduceMotion, sceneEntered]);
   const challengeAnimation =
     view.playbackRunId !== null &&
     view.currentAction?.action === "resolve-challenge" &&
@@ -1823,10 +1918,16 @@ export function TutorialScreen({
     const runId = view.playbackRunId;
     const timeout = window.setTimeout(
       () => onActionComplete?.(runId, id),
-      wait * 1_000,
+      millisecondsAtPlaybackSpeed(wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
-  }, [onActionComplete, sceneEntered, view.currentAction, view.playbackRunId]);
+  }, [
+    onActionComplete,
+    playbackSpeed,
+    sceneEntered,
+    view.currentAction,
+    view.playbackRunId,
+  ]);
 
   useEffect(() => {
     if (!sceneEntered || opponentCardDraw === null) return;
@@ -1848,13 +1949,17 @@ export function TutorialScreen({
     const runId = view.playbackRunId;
     const timeout = window.setTimeout(
       () => onActionComplete?.(runId, id),
-      (TUTORIAL_CARD_TRAVEL_SECONDS + wait) * 1_000,
+      millisecondsAtPlaybackSpeed(
+        TUTORIAL_CARD_TRAVEL_SECONDS + wait,
+        playbackSpeed,
+      ),
     );
     return () => window.clearTimeout(timeout);
   }, [
     drawnActionKey,
     onActionComplete,
     opponentCardDraw,
+    playbackSpeed,
     view.currentAction,
     view.playbackRunId,
   ]);
@@ -1873,12 +1978,13 @@ export function TutorialScreen({
     const runId = view.playbackRunId;
     const timeout = window.setTimeout(
       () => onActionComplete?.(runId, id),
-      wait * 1_000,
+      millisecondsAtPlaybackSpeed(wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
   }, [
     completedTurnAnnouncementSide,
     onActionComplete,
+    playbackSpeed,
     sceneEntered,
     view.battle.dreamwell,
     view.currentAction,
@@ -1898,12 +2004,13 @@ export function TutorialScreen({
     const runId = view.playbackRunId;
     const timeout = window.setTimeout(
       () => onActionComplete?.(runId, id),
-      wait * 1_000,
+      millisecondsAtPlaybackSpeed(wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
   }, [
     onActionComplete,
     opponentCardPlay,
+    playbackSpeed,
     playedActionKey,
     view.currentAction,
     view.playbackRunId,
@@ -1921,10 +2028,19 @@ export function TutorialScreen({
     const runId = view.playbackRunId;
     const timeout = window.setTimeout(
       () => onActionComplete?.(runId, id),
-      (TUTORIAL_CARD_TRAVEL_SECONDS + wait) * 1_000,
+      millisecondsAtPlaybackSpeed(
+        TUTORIAL_CARD_TRAVEL_SECONDS + wait,
+        playbackSpeed,
+      ),
     );
     return () => window.clearTimeout(timeout);
-  }, [onActionComplete, sceneEntered, view.currentAction, view.playbackRunId]);
+  }, [
+    onActionComplete,
+    playbackSpeed,
+    sceneEntered,
+    view.currentAction,
+    view.playbackRunId,
+  ]);
 
   const closeHowToPlay = useCallback((): void => {
     const runId = view.playbackRunId;
@@ -2156,12 +2272,13 @@ export function TutorialScreen({
     }
     const timeout = window.setTimeout(
       () => onActionComplete?.(runId, howToPlay.actionId),
-      howToPlay.wait * 1_000,
+      millisecondsAtPlaybackSpeed(howToPlay.wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
   }, [
     howToPlayDismissedActionKey,
     onActionComplete,
+    playbackSpeed,
     view.howToPlay,
     view.playbackRunId,
   ]);
@@ -2197,13 +2314,14 @@ export function TutorialScreen({
     const runId = view.playbackRunId;
     const timeout = window.setTimeout(
       () => onActionComplete?.(runId, id),
-      wait * 1_000,
+      millisecondsAtPlaybackSpeed(wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
   }, [
     arrivedActionKey,
     dreamcallerArrival,
     onActionComplete,
+    playbackSpeed,
     view.currentAction,
     view.playbackRunId,
   ]);
@@ -2390,15 +2508,28 @@ export function TutorialScreen({
         )?.card ?? null);
 
   return (
-    <motion.main
+    <MotionConfig
+      transition={{
+        duration: atPlaybackSpeed(
+          TUTORIAL_CARD_TRAVEL_SECONDS,
+          playbackSpeed,
+        ),
+      }}
+    >
+      <motion.main
       ref={screenRef}
       className="cumulus"
       data-tutorial-screen=""
       initial={{ opacity: reduceMotion ? 1 : 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: reduceMotion ? 0 : TUTORIAL_FADE_SECONDS }}
+      transition={{
+        duration: reduceMotion
+          ? 0
+          : atPlaybackSpeed(TUTORIAL_FADE_SECONDS, playbackSpeed),
+      }}
       onAnimationComplete={() => setSceneEntered(true)}
       style={{
+        ...tutorialTimingVariables(playbackSpeed),
         position: "fixed",
         inset: 0,
         width: "100vw",
@@ -2447,6 +2578,7 @@ export function TutorialScreen({
             inspectorOpen={battleInspectorOpen}
             onInspectorOpenChange={handleBattleInspectorOpenChange}
             onTurnAnnouncementComplete={completeTurnAnnouncement}
+            playbackSpeed={playbackSpeed}
             phaseNavigation={canEndTurn ? "end-turn" : "hidden"}
             preserveOccupiedSlotOutlines={challengeAnimation !== null}
             zoneLabels="voids"
@@ -2476,6 +2608,7 @@ export function TutorialScreen({
           card={opponentCardPlay.card}
           revealDuration={opponentCardPlay.revealDuration}
           reduceMotion={reduceMotion}
+          playbackSpeed={playbackSpeed}
           onComplete={completeOpponentCardPlay}
         />
       ) : null}
@@ -2499,6 +2632,7 @@ export function TutorialScreen({
           screen={screenRef.current}
           actionKey={dreamwellEmergenceActionKey}
           reduceMotion={reduceMotion}
+          playbackSpeed={playbackSpeed}
           onComplete={setDreamwellEmergedActionKey}
         />
       ) : null}
@@ -2511,6 +2645,7 @@ export function TutorialScreen({
           challenge={challengeAnimation.challenge}
           wait={challengeAnimation.wait}
           reduceMotion={reduceMotion}
+          playbackSpeed={playbackSpeed}
           onComplete={() =>
             onActionComplete?.(
               challengeAnimation.runId,
@@ -2587,6 +2722,7 @@ export function TutorialScreen({
                 revealDialogueActionKey === opponentCardPlay?.key)
             }
             testId="tutorial-welcome-dialogue"
+            playbackSpeed={playbackSpeed}
           />
         )}
       </div>
@@ -2612,6 +2748,7 @@ export function TutorialScreen({
           onClose={closeHowToPlay}
         />
       ) : null}
-    </motion.main>
+      </motion.main>
+    </MotionConfig>
   );
 }

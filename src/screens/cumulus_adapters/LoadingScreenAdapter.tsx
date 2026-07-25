@@ -7,7 +7,11 @@ import { buildLoadingView } from "./loading-view-model";
 const TUTORIAL_DELAY_MS = 5_000;
 
 /** Coop-backed `/loading` wiring and presentation logging. */
-export function LoadingScreenAdapter() {
+export function LoadingScreenAdapter({
+  playbackSpeed = 1,
+}: {
+  readonly playbackSpeed?: number;
+}) {
   const hasLoggedPresentation = useRef(false);
   const { state, mutations } = useFrontDoor();
   const source = state.journeyId?.startsWith("event:") ? "main_menu" : "direct";
@@ -19,8 +23,9 @@ export function LoadingScreenAdapter() {
     logEvent("loading_screen_presented", {
       source,
       attribution: view.attribution,
+      tutorialPlaybackSpeed: playbackSpeed,
     });
-  }, [source, view]);
+  }, [playbackSpeed, source, view]);
 
   useEffect(() => {
     if (state.phase !== "loading" || state.journeyId === null) {
@@ -31,9 +36,9 @@ export function LoadingScreenAdapter() {
       void mutations.advance("loading", journeyId).catch((error: unknown) => {
         console.error("Coop loading transition failed", error);
       });
-    }, TUTORIAL_DELAY_MS);
+    }, TUTORIAL_DELAY_MS / playbackSpeed);
     return () => window.clearTimeout(timeout);
-  }, [mutations, state.journeyId, state.phase]);
+  }, [mutations, playbackSpeed, state.journeyId, state.phase]);
 
-  return <LoadingScreen view={view} />;
+  return <LoadingScreen view={view} playbackSpeed={playbackSpeed} />;
 }

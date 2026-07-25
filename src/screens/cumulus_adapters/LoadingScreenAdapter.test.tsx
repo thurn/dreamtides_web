@@ -54,7 +54,7 @@ describe("LoadingScreenAdapter", () => {
     act(() =>
       root.render(
         <CumulusRoot>
-          <LoadingScreenAdapter />
+          <LoadingScreenAdapter playbackSpeed={4} />
         </CumulusRoot>,
       ),
     );
@@ -66,12 +66,13 @@ describe("LoadingScreenAdapter", () => {
           event: "loading_screen_presented",
           source: "direct",
           attribution: "— Revelation 6:8",
+          tutorialPlaybackSpeed: 4,
         }),
       ]),
     );
 
     act(() => {
-      vi.advanceTimersByTime(4_999);
+      vi.advanceTimersByTime(1_249);
     });
     expect(container.querySelector("[data-loading-screen]")).not.toBeNull();
     expect(coopMocks.advanceFrontDoor).not.toHaveBeenCalled();

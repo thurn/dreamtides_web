@@ -60,7 +60,9 @@ export default function FrontDoorApp({
       {(context) => (
         <CoopProvider context={context}>
           <FrontDoorProvider>
-            <FrontDoorRouter />
+            <FrontDoorRouter
+              tutorialPlaybackSpeed={runtimeConfig.tutorialPlaybackSpeed ?? 1}
+            />
           </FrontDoorProvider>
         </CoopProvider>
       )}

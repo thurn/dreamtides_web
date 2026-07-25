@@ -116,4 +116,45 @@ describe("LoadingScreen", () => {
     expect(indicator?.getAttribute("aria-label")).toBe("Loading...");
     expect(container.querySelectorAll("[data-loading-dot]")).toHaveLength(3);
   });
+
+  it("scales every loading animation by the tutorial playback multiplier", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    root = createRoot(container);
+    act(() =>
+      root?.render(
+        <CumulusRoot>
+          <LoadingScreen view={VIEW} playbackSpeed={4} />
+        </CumulusRoot>,
+      ),
+    );
+
+    const screen = container.querySelector<HTMLElement>("[data-loading-screen]");
+    const quote = container.querySelector<HTMLElement>("[data-loading-quote]");
+    const dots = [
+      ...container.querySelectorAll<HTMLElement>("[data-loading-dot]"),
+    ];
+
+    expect(JSON.parse(screen?.dataset.motionTransition ?? "{}")).toMatchObject({
+      duration: 0.3,
+    });
+    expect(JSON.parse(quote?.dataset.motionTransition ?? "{}")).toMatchObject({
+      duration: 0.35,
+    });
+    expect(
+      dots.map((dot) => {
+        const transition = JSON.parse(
+          dot.dataset.motionTransition ?? "{}",
+        ) as { delay?: number; duration?: number };
+        return {
+          delay: transition.delay,
+          duration: transition.duration,
+        };
+      }),
+    ).toEqual([
+      { delay: 0, duration: 0.3 },
+      { delay: 0.045, duration: 0.3 },
+      { delay: 0.09, duration: 0.3 },
+    ]);
+  });
 });

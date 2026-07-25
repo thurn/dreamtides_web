@@ -15,7 +15,11 @@ import {
 import type { TutorialDreamcallerOwner } from "../../types/tutorial";
 import * as tutorialView from "./tutorial-view-model";
 /** Standalone `/tutorial` wiring, shared playback, and local authoring saves. */
-export function TutorialScreenAdapter() {
+export function TutorialScreenAdapter({
+  playbackSpeed = 1,
+}: {
+  readonly playbackSpeed?: number;
+}) {
   const { state, mutations } = useFrontDoor();
   const {
     actions: authoredActions,
@@ -67,7 +71,7 @@ export function TutorialScreenAdapter() {
       ),
     [state.tutorial, tutorialCards],
   );
-  useTutorialPresentationLogging(state.tutorial, view);
+  useTutorialPresentationLogging(state.tutorial, view, playbackSpeed);
   const howToPlayLogging = useTutorialHowToPlayLogging(view.battle.battleId);
 
   const handleActionComplete = useTutorialActionComplete(
@@ -100,6 +104,7 @@ export function TutorialScreenAdapter() {
   return (
     <TutorialScreen
       view={view}
+      playbackSpeed={playbackSpeed}
       editor={
         import.meta.env.DEV
           ? { actions: authoredActions, saveStatus, saveError }

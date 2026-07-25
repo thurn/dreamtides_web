@@ -62,6 +62,8 @@ export interface CharacterDialogueProps {
   readonly size?: CharacterDialogueSize;
   /** Optional stable test id for product-screen QA. */
   readonly testId?: string;
+  /** Multiplier applied to this dialogue's presence transition. */
+  readonly playbackSpeed?: number;
 }
 
 /**
@@ -73,6 +75,7 @@ export function CharacterDialogue({
   visible,
   size = "compact",
   testId,
+  playbackSpeed = 1,
 }: CharacterDialogueProps): ReactElement {
   const reduceMotion = useReducedMotion() === true;
   const targetOpacity = visible ? 1 : 0;
@@ -89,7 +92,9 @@ export function CharacterDialogue({
       data-testid={testId}
       initial={{ opacity: reduceMotion ? targetOpacity : 0 }}
       animate={{ opacity: targetOpacity }}
-      transition={{ duration: reduceMotion ? 0 : DIALOGUE_FADE_SECONDS }}
+      transition={{
+        duration: reduceMotion ? 0 : DIALOGUE_FADE_SECONDS / playbackSpeed,
+      }}
       style={{
         display: "grid",
         gridTemplateColumns: `${String(portraitSize)}px minmax(0, 1fr)`,

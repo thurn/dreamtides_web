@@ -14,6 +14,7 @@ import type {
 export function useTutorialPresentationLogging(
   playback: TutorialPlaybackState | null,
   view: TutorialView,
+  playbackSpeed = 1,
 ): void {
   const loggedActionKey = useRef<string | null>(null);
   const loggedPlayerTurnRunId = useRef<string | null>(null);
@@ -40,8 +41,9 @@ export function useTutorialPresentationLogging(
       destinationZone: "player-hand",
       playerDeckCount: view.battle.player.deckCardIds.length,
       playerHandCount: view.battle.playerHand.length,
+      tutorialPlaybackSpeed: playbackSpeed,
     });
-  }, [view]);
+  }, [playbackSpeed, view]);
 
   useEffect(() => {
     const current = view.currentAction;
@@ -85,8 +87,15 @@ export function useTutorialPresentationLogging(
             : view.dialogue.text,
       actionIndex: playback?.currentActionIndex ?? null,
       actionCount: playback?.actions.length ?? 0,
+      tutorialPlaybackSpeed: playbackSpeed,
     });
-  }, [playback, view.currentAction, view.dialogue, view.playbackRunId]);
+  }, [
+    playback,
+    playbackSpeed,
+    view.currentAction,
+    view.dialogue,
+    view.playbackRunId,
+  ]);
 }
 
 /** Log the authored How to Play action's local presentation lifecycle. */
