@@ -38,6 +38,7 @@ import type {
   BattleResult,
   BattleSide,
 } from "../../battle/types";
+import { frontRankSlotId } from "../../battle/types";
 import type { BattleCommand, BattleDebugEdit } from "../../battle/debug/commands";
 import type {
   BattleModifier,
@@ -65,11 +66,13 @@ import { planDefense } from "../../battle/ai/defense";
 import { actionToCommands } from "../../battle/ai/driver";
 import { buildTrace } from "../../battle/ai/trace";
 import { planBasicAutomationCommands } from "./basic-automation";
+import { resolveChallengeLane } from "../../battle/engine/challenge";
 import {
   newEffectRun,
   battleModeOf,
   emptyDawnFired,
   type BattleFoldState,
+  type ChallengeCursor,
   type TutorialBattleMode,
   type EffectRun,
   type PendingPrompt,
@@ -693,12 +696,34 @@ export function battleCommand(
 
   let drawIndex = 0;
   const random = (): number => ctx.rng(drawIndex++);
-  const commands = planBasicAutomationCommands(battle.board, command, {
+  const nowMs = isoTimestampToMs(ctx.timestamp) ?? 0;
+  const challengeStart = challengeStartFor(command, battle);
+  if (challengeStart !== null) {
+    const started = applyBattleCommandStep(
+      battle,
+      challengeStart.command,
+      ctx.seq,
+      random,
+      nowMs,
+    );
+    if (started === null) return null;
+    return {
+      ...state,
+      battle: driveChallengeCursor(
+        { ...started, challengeCursor: challengeStart.cursor },
+        ctx.seq,
+        random,
+        nowMs,
+      ),
+    };
+  }
+  const commands = isChallengeEntryCommand(command)
+    ? [command]
+    : planBasicAutomationCommands(battle.board, command, {
     maxEnergyCap: battle.init.maxEnergyCap,
     scoreToWin: battle.init.scoreToWin,
     dreamwellDeck: battle.init.dreamwellDeck,
   });
-  const nowMs = isoTimestampToMs(ctx.timestamp) ?? 0;
   let current = battle;
   for (const plannedCommand of commands) {
     const next = applyBattleCommandStep(
@@ -713,7 +738,7 @@ export function battleCommand(
     }
     current = next;
   }
-  return { ...state, battle: current };
+  return { ...state, battle: driveChallengeCursor(current, ctx.seq, random, nowMs) };
 }
 
 /**
@@ -855,6 +880,140 @@ function applyBoardEdits(
     next = applyDebugEdit(next, edit, EMISSION).state;
   }
   return next;
+}
+
+/** The four fixed front-rank lanes the authoritative Challenge traverses. */
+const CHALLENGE_LANE_COUNT = 4;
+
+/**
+ * Converts an intent that enters Challenge into the first cursor step. A direct
+ * handoff enters Challenge first and records its flow edit as a continuation;
+ * that continuation is evaluated only after the live board has settled every
+ * lane. This keeps a prompt or a dissolved trigger from being bypassed by a
+ * precomputed all-lane command plan.
+ */
+function challengeStartFor(
+  command: BattleCommand,
+  battle: BattleFoldState,
+): { command: BattleCommand; cursor: ChallengeCursor } | null {
+  if (battle.challengeCursor !== null && battle.challengeCursor !== undefined) return null;
+  if (command.id !== "DEBUG_EDIT") return null;
+  const { edit } = command;
+  if (edit.kind === "SET_PHASE" && edit.phase === "challenge" && battle.board.phase !== "challenge") {
+    return {
+      command,
+      cursor: { activeSide: battle.board.activeSide, nextLane: 0, handoff: null },
+    };
+  }
+  if (edit.kind !== "SET_BATTLE_FLOW") return null;
+  if (edit.activeSide === battle.board.activeSide) {
+    if (edit.phase !== "challenge" || battle.board.phase === "challenge") return null;
+    return {
+      command,
+      cursor: { activeSide: battle.board.activeSide, nextLane: 0, handoff: null },
+    };
+  }
+  if (battle.board.phase === "challenge") return null;
+  return {
+    command: {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_PHASE", phase: "challenge" },
+      sourceSurface: "auto-system",
+    },
+    cursor: {
+      activeSide: battle.board.activeSide,
+      nextLane: 0,
+      handoff: {
+        activeSide: edit.activeSide,
+        phase: edit.phase,
+        turnNumber: edit.turnNumber,
+      },
+    },
+  };
+}
+
+/** True for a repeat Challenge phase intent, which must never score it again. */
+function isChallengeEntryCommand(command: BattleCommand): boolean {
+  return command.id === "DEBUG_EDIT" && (
+    (command.edit.kind === "SET_PHASE" && command.edit.phase === "challenge") ||
+    (command.edit.kind === "SET_BATTLE_FLOW" && command.edit.phase === "challenge")
+  );
+}
+
+/**
+ * Resolves the persisted Challenge cursor from left to right. Every lane starts
+ * from the latest folded board; `applyBattleCommandStep` drains its effects and
+ * performs static settlement before this loop can read the next lane. A prompt
+ * simply returns the parked cursor, and `resolvePrompt` calls this function
+ * again after its queue resumes.
+ */
+function driveChallengeCursor(
+  battle: BattleFoldState,
+  seq: number,
+  random: () => number,
+  nowMs: number,
+): BattleFoldState {
+  let current = battle;
+  while (current.challengeCursor !== null && current.challengeCursor !== undefined) {
+    if (current.board.result !== null) {
+      return { ...current, challengeCursor: null };
+    }
+    if (current.pendingPrompt !== null || current.effectQueue.length > 0) return current;
+
+    const cursor = current.challengeCursor;
+    if (cursor.nextLane >= CHALLENGE_LANE_COUNT) {
+      current = { ...current, challengeCursor: null };
+      if (cursor.handoff === null) return current;
+      const handoff: BattleCommand = {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "SET_BATTLE_FLOW",
+          activeSide: cursor.handoff.activeSide,
+          phase: cursor.handoff.phase,
+          turnNumber: cursor.handoff.turnNumber,
+        },
+        sourceSurface: "auto-system",
+      };
+      const commands = planBasicAutomationCommands(current.board, handoff, {
+        maxEnergyCap: current.init.maxEnergyCap,
+        scoreToWin: current.init.scoreToWin,
+        dreamwellDeck: current.init.dreamwellDeck,
+      });
+      for (const command of commands) {
+        const next = applyBattleCommandStep(current, command, seq, random, nowMs);
+        if (next === null) return current;
+        current = next;
+        if (current.board.result !== null || current.pendingPrompt !== null) return current;
+      }
+      return current;
+    }
+
+    const resolution = resolveChallengeLane({
+      state: current.board,
+      activeSide: cursor.activeSide,
+      slotId: frontRankSlotId(cursor.nextLane),
+    });
+    // The score/move edits for this lane are now committed. If a dissolved
+    // trigger opens a prompt, resume at the next lane only after that prompt's
+    // run drains and static support has been recomputed.
+    current = {
+      ...current,
+      challengeCursor: { ...cursor, nextLane: cursor.nextLane + 1 },
+    };
+    for (const edit of resolution.edits) {
+      const next = applyBattleCommandStep(
+        current,
+        { id: "DEBUG_EDIT", edit, sourceSurface: "auto-system" },
+        seq,
+        random,
+        nowMs,
+      );
+      if (next === null) return current;
+      current = next;
+      if (current.board.result !== null || current.pendingPrompt !== null) break;
+    }
+  }
+  return current;
 }
 
 /** Applies the result policy at every authoritative score-changing seam. */
@@ -1188,7 +1347,10 @@ export function resolvePrompt(
     resolved.board,
     planStaticContributionSettlement(resolved.board, true, random, nowMs),
   );
-  return { ...state, battle: { ...resolved, board } };
+  return {
+    ...state,
+    battle: driveChallengeCursor({ ...resolved, board }, ctx.seq, random, nowMs),
+  };
 }
 
 /** Schedules lifecycle scripts from an observed reducer edge, never from UI. */

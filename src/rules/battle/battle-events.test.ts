@@ -19,6 +19,7 @@ import {
 import { applyDebugEdit } from "./apply-debug-edit";
 import {
   BATTLE_CARD_EFFECTS,
+  BATTLE_EFFECT_DISSOLVE_SUPPORT_FIXTURE_CARD_ID,
   BATTLE_EFFECT_FIXTURE_CARD_ID,
   BATTLE_EFFECT_PROMPT_FIXTURE_CARD_ID,
   planSupportRecompute,
@@ -959,6 +960,128 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     // Recomputing again immediately produces no further edits (idempotent).
     const again = planSupportRecompute(nextBoard, true, () => 0, 0);
     expect(again).toEqual([]);
+  });
+
+  it("resolves Challenge lanes from the settled board after an F0 dissolved trigger", () => {
+    const support = firstSupportScript();
+    const f0 = makeInstance("challenge-f0", BATTLE_EFFECT_DISSOLVE_SUPPORT_FIXTURE_CARD_ID, "player");
+    f0.definition.printedSpark = 1;
+    const f0Enemy = makeInstance("challenge-f0-enemy", "enemy-f0", "enemy");
+    f0Enemy.definition.printedSpark = 4;
+    const f1 = makeInstance("challenge-f1", "player-f1", "player");
+    f1.definition.printedSpark = 2;
+    f1.definition.renderedText = "Unstoppable";
+    const f1Enemy = makeInstance("challenge-f1-enemy", "enemy-f1", "enemy");
+    f1Enemy.definition.printedSpark = 3;
+    const supporter = makeInstance("challenge-support", support.id, "player");
+    const board = makeRichBoard({
+      instances: [f0, f0Enemy, f1, f1Enemy, supporter],
+      playerFront: { F0: f0.battleCardId, F1: f1.battleCardId },
+      playerBack: { B1: supporter.battleCardId },
+    });
+    board.sides.enemy.frontRank.F0 = f0Enemy.battleCardId;
+    board.sides.enemy.frontRank.F1 = f1Enemy.battleCardId;
+
+    const result = reduce(
+      { ...baseState(), battle: battleFrom(board) },
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "SET_PHASE", phase: "challenge" }),
+    );
+
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.sides.player.void).toEqual(
+      expect.arrayContaining([f0.battleCardId, supporter.battleCardId, f1.battleCardId]),
+    );
+    expect(result.state.battle?.board.sides.player.score).toBe(0);
+    expect(result.state.battle?.challengeCursor).toBeNull();
+  });
+
+  it("parks a dissolved-trigger prompt and resumes its next Challenge lane once after JSON replay", () => {
+    const f0 = makeInstance("prompt-f0", BATTLE_EFFECT_PROMPT_FIXTURE_CARD_ID, "player");
+    f0.definition.printedSpark = 1;
+    const f0Enemy = makeInstance("prompt-f0-enemy", "enemy-f0", "enemy");
+    f0Enemy.definition.printedSpark = 2;
+    const f1 = makeInstance("prompt-f1", "player-f1", "player");
+    f1.definition.printedSpark = 3;
+    const board = makeRichBoard({
+      instances: [f0, f0Enemy, f1],
+      playerFront: { F0: f0.battleCardId, F1: f1.battleCardId },
+    });
+    board.sides.enemy.frontRank.F0 = f0Enemy.battleCardId;
+    const opened = reduce(
+      { ...baseState(), battle: battleFrom(board) },
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "SET_PHASE", phase: "challenge" }),
+      ctx({ seq: 90 }),
+    );
+    expect(opened.state.battle?.pendingPrompt).not.toBeNull();
+    expect(opened.state.battle?.challengeCursor).toMatchObject({ nextLane: 1 });
+
+    const restored = JSON.parse(JSON.stringify(opened.state)) as FoldState;
+    const resolved = reduce(restored, "RESOLVE_PROMPT", {
+      promptId: restored.battle?.pendingPrompt?.promptId,
+      resolution: { kind: "choice", optionIndex: 0 },
+    }, ctx({ seq: 91 }));
+    expect(resolved.state.battle?.board.sides.player.score).toBe(4);
+    expect(resolved.state.battle?.challengeCursor).toBeNull();
+
+    const duplicate = reduce(
+      resolved.state,
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "SET_PHASE", phase: "challenge" }),
+      ctx({ seq: 92 }),
+    );
+    expect(duplicate.state.battle?.board.sides.player.score).toBe(4);
+  });
+
+  it("stops Challenge after an F0 victory while tutorial enemy scoring stays non-terminal", () => {
+    const f0 = makeInstance("victory-f0", "victory-player", "player");
+    f0.definition.printedSpark = 5;
+    const f1 = makeInstance("victory-f1", "victory-player-1", "player");
+    f1.definition.printedSpark = 5;
+    const victoryBoard = makeRichBoard({
+      instances: [f0, f1],
+      playerFront: { F0: f0.battleCardId, F1: f1.battleCardId },
+    });
+    victoryBoard.sides.player.score = 0;
+    const victory = reduce(
+      { ...baseState(), battle: battleFrom(victoryBoard, { init: makeInit({ scoreToWin: 5 }) }) },
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "SET_PHASE", phase: "challenge" }),
+    );
+    expect(victory.state.battle?.board.result).toBe("victory");
+    expect(victory.state.battle?.board.sides.player.score).toBe(5);
+    expect(victory.state.battle?.board.sides.player.frontRank.F1).toBe(f1.battleCardId);
+
+    const player = makeInstance("tutorial-player", "tutorial-player-card", "player");
+    player.definition.printedSpark = 1;
+    const enemy = makeInstance("tutorial-enemy", "tutorial-enemy-card", "enemy");
+    enemy.definition.printedSpark = 5;
+    enemy.definition.renderedText = "Unstoppable";
+    const tutorialBoard = makeRichBoard({
+      instances: [player, enemy],
+      playerFront: { F0: player.battleCardId },
+    });
+    tutorialBoard.sides.enemy.frontRank.F0 = enemy.battleCardId;
+    const tutorial = reduce(
+      {
+        ...baseState(),
+        battle: battleFrom(tutorialBoard, {
+          init: makeInit({ scoreToWin: 5 }),
+          mode: {
+            kind: "tutorial",
+            tutorialRunId: "tutorial-run",
+            driverClientId: "player",
+            restartNumber: 0,
+            resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
+          },
+        }),
+      },
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "SET_PHASE", phase: "challenge" }),
+    );
+    expect(tutorial.state.battle?.board.sides.enemy.score).toBe(5);
+    expect(tutorial.state.battle?.board.result).toBeNull();
   });
 
   // --- determinism: folding the same event twice yields identical state ---

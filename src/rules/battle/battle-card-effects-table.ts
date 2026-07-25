@@ -39,6 +39,7 @@ export interface BattleTriggeredEffectScript {
 /** Stable synthetic ids used exclusively by reducer-level framework fixtures. */
 export const BATTLE_EFFECT_FIXTURE_CARD_ID = "00000000-0000-4000-8000-000000000101";
 export const BATTLE_EFFECT_PROMPT_FIXTURE_CARD_ID = "00000000-0000-4000-8000-000000000102";
+export const BATTLE_EFFECT_DISSOLVE_SUPPORT_FIXTURE_CARD_ID = "00000000-0000-4000-8000-000000000103";
 
 const FIXTURE_TRIGGER_STEPS: readonly EffectStep[] = [{
   kind: "edits",
@@ -70,6 +71,34 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<string, BattleTriggeredEffectScrip
           kind: "confirm",
           label: "Run fixture effect?",
           onYes: FIXTURE_TRIGGER_STEPS as EffectStep[],
+        },
+      }],
+      dissolved: [{
+        kind: "prompt",
+        prompt: {
+          kind: "confirm",
+          label: "Run fixture effect?",
+          onYes: FIXTURE_TRIGGER_STEPS as EffectStep[],
+        },
+      }],
+    },
+  },
+  [BATTLE_EFFECT_DISSOLVE_SUPPORT_FIXTURE_CARD_ID]: {
+    id: BATTLE_EFFECT_DISSOLVE_SUPPORT_FIXTURE_CARD_ID,
+    triggers: {
+      // Framework-only fixture: proves an F0 dissolution can change F1's
+      // support before the cursor evaluates F1.
+      dissolved: [{
+        kind: "edits",
+        build: (ctx) => {
+          const battleCardId = ctx.state.sides[ctx.side].backRank.B1;
+          return battleCardId === null
+            ? []
+            : [{
+              kind: "MOVE_CARD_TO_ZONE",
+              battleCardId,
+              destination: { side: ctx.side, zone: "void" },
+            }];
         },
       }],
     },

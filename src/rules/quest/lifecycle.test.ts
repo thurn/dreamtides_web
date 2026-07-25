@@ -562,7 +562,11 @@ describe("LOAD_STATE", () => {
       snapshot,
       battle: emptyBattle,
     });
-    expect(withBattle.battle).toEqual({ ...emptyBattle, mode: { kind: "quest" } });
+    expect(withBattle.battle).toEqual({
+      ...emptyBattle,
+      mode: { kind: "quest" },
+      challengeCursor: null,
+    });
   });
 
   it("loads a legacy snapshot without a run id and mints one from the event", () => {
@@ -654,6 +658,7 @@ describe("LOAD_STATE", () => {
     expect(apply(start, "LOAD_STATE", { snapshot, battle: validBattle }).battle).toEqual({
       ...validBattle,
       mode: { kind: "quest" },
+      challengeCursor: null,
     });
 
     const malformed = reduceGameEvent(
@@ -661,6 +666,30 @@ describe("LOAD_STATE", () => {
       event("LOAD_STATE", {
         snapshot,
         battle: { ...emptyBattle, aiDefenseTurn: { activeSide: "enemy" } },
+      }),
+      ctx(),
+    );
+    expect(malformed.outcome).toBe("bounced");
+  });
+
+  it("normalizes a missing Challenge cursor and validates a persisted cursor", () => {
+    const start = genesis();
+    const snapshot: QuestState = { ...start.quest };
+    const cursor = {
+      activeSide: "player",
+      nextLane: 1,
+      handoff: { activeSide: "enemy", phase: "dreamwell", turnNumber: 3 },
+    };
+    expect(apply(start, "LOAD_STATE", {
+      snapshot,
+      battle: { ...emptyBattle, challengeCursor: cursor },
+    }).battle?.challengeCursor).toEqual(cursor);
+
+    const malformed = reduceGameEvent(
+      start,
+      event("LOAD_STATE", {
+        snapshot,
+        battle: { ...emptyBattle, challengeCursor: { ...cursor, nextLane: 5 } },
       }),
       ctx(),
     );

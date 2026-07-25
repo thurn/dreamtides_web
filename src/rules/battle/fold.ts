@@ -14,6 +14,7 @@
 import type {
   BattleInit,
   BattleMutableState,
+  BattlePhase,
   BattleSide,
 } from "../../battle/types";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
@@ -123,6 +124,12 @@ export interface BattleFoldState {
   board: BattleMutableState;
   effectQueue: EffectRun[];
   pendingPrompt: PendingPrompt | null;
+  /**
+   * The persisted Challenge state machine. Each cursor step resolves exactly
+   * one front-rank lane, then lets its leave-play scripts and static settlement
+   * finish before the next lane is evaluated from the resulting board.
+   */
+  challengeCursor?: ChallengeCursor | null;
   /** Persisted automation marker. Battle command expansion is always enabled. */
   basicAutomationEnabled?: boolean;
   /** Last opponent Dusk for which the reducer applied AI defense. */
@@ -138,6 +145,22 @@ export interface BattleFoldState {
   dawnFired: DawnFiredMarker;
   /** Once-per-controller-turn guard for authored Dawn scripts. */
   triggerDawnFired?: DawnFiredMarker;
+}
+
+/** A deferred handoff requested before its outgoing Challenge has completed. */
+export interface ChallengeHandoff {
+  activeSide: BattleSide;
+  phase: BattlePhase;
+  turnNumber: number;
+}
+
+/** Plain-data cursor for authoritative F0 → F3 Challenge resolution. */
+export interface ChallengeCursor {
+  activeSide: BattleSide;
+  /** The next front-rank lane index to resolve (0 through 4). */
+  nextLane: number;
+  /** A turn handoff to perform only after every Challenge lane settles. */
+  handoff: ChallengeHandoff | null;
 }
 
 /** Metadata that distinguishes a normal quest battle from the tutorial handoff. */

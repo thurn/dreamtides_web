@@ -68,6 +68,24 @@ export interface ChallengeResolution {
   enemyScoreDelta: number;
 }
 
+/** Resolves one authoritative Challenge lane against the supplied current board. */
+export function resolveChallengeLane(
+  input: ChallengeInput & { slotId: FrontRankSlotId },
+): ChallengeResolution {
+  const { state, activeSide, slotId, supportContribution } = input;
+  const opposingSide: BattleSide = activeSide === "player" ? "enemy" : "player";
+  const dissolved: { battleCardId: string; side: BattleSide }[] = [];
+  const lane = resolveLane({
+    state,
+    slotId,
+    activeSide,
+    opposingSide,
+    supportContribution,
+    dissolved,
+  });
+  return resolutionFromLanes(activeSide, [lane], dissolved);
+}
+
 /** A combat keyword the resolver detects. */
 export type CombatKeyword =
   | "unstoppable"
@@ -159,10 +177,8 @@ export function resolveChallenge(input: ChallengeInput): ChallengeResolution {
   const supportContribution = input.supportContribution;
   const opposingSide: BattleSide = activeSide === "player" ? "enemy" : "player";
 
-  const lanes: BattleLaneJudgment[] = [];
+  const laneResults: LaneResolution[] = [];
   const dissolved: { battleCardId: string; side: BattleSide }[] = [];
-  let activeScored = 0;
-  let opposingScored = 0;
 
   // Lanes pair the same front-rank index across both sides and span every
   // occupied lane (the front rank grows without bound). Empty-vs-empty lanes
@@ -180,11 +196,25 @@ export function resolveChallenge(input: ChallengeInput): ChallengeResolution {
       supportContribution,
       dissolved,
     });
-    lanes.push(lane.judgment);
-    activeScored += lane.activeScored;
-    opposingScored += lane.opposingScored;
+    laneResults.push(lane);
   }
 
+  return resolutionFromLanes(
+    activeSide,
+    laneResults,
+    dissolved,
+  );
+}
+
+/** Builds the public resolution shape while retaining score edits before moves. */
+function resolutionFromLanes(
+  activeSide: BattleSide,
+  lanes: readonly LaneResolution[],
+  dissolved: readonly { battleCardId: string; side: BattleSide }[],
+): ChallengeResolution {
+  const activeScored = lanes.reduce((total, lane) => total + lane.activeScored, 0);
+  const opposingScored = lanes.reduce((total, lane) => total + lane.opposingScored, 0);
+  const opposingSide: BattleSide = activeSide === "player" ? "enemy" : "player";
   const edits: BattleDebugEdit[] = [];
   if (activeScored > 0) {
     edits.push({ kind: "ADJUST_SCORE", side: activeSide, amount: activeScored });
@@ -199,11 +229,10 @@ export function resolveChallenge(input: ChallengeInput): ChallengeResolution {
       destination: { side: entry.side, zone: "void" },
     });
   }
-
   return {
-    lanes,
+    lanes: lanes.map((lane) => lane.judgment),
     edits,
-    dissolved,
+    dissolved: [...dissolved],
     playerScoreDelta: activeSide === "player" ? activeScored : opposingScored,
     enemyScoreDelta: activeSide === "enemy" ? activeScored : opposingScored,
   };

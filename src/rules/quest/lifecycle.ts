@@ -21,6 +21,7 @@ import type { ResolvedDreamcallerPackage } from "../../types/content";
 import type { QuestState, Screen } from "../../types/quest";
 import type { EffectStep } from "../battle/effect-step";
 import type { EffectRun, ScriptRef } from "../battle/fold";
+import type { ChallengeCursor } from "../battle/fold";
 import type { EventContext } from "../../eventlog/types";
 import { cloneBattleMutableState } from "../../battle/state/create-initial-state";
 
@@ -565,6 +566,9 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
     )
       return null;
   }
+  if (value.challengeCursor !== undefined && value.challengeCursor !== null && !isChallengeCursor(value.challengeCursor)) {
+    return null;
+  }
   if (!Array.isArray(value.effectQueue)) return null;
   for (const run of value.effectQueue) {
     if (!isResolvableRun(run)) return null;
@@ -579,8 +583,32 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   return {
     ...loaded,
     mode: battleModeOf(loaded),
+    challengeCursor: loaded.challengeCursor ?? null,
     board: canNormalizeCards ? cloneBattleMutableState(loaded.board) : loaded.board,
   };
+}
+
+function isChallengeCursor(value: unknown): value is ChallengeCursor {
+  if (!isRecord(value)) return false;
+  if (value.activeSide !== "player" && value.activeSide !== "enemy") return false;
+  if (typeof value.nextLane !== "number" || !Number.isInteger(value.nextLane) || value.nextLane < 0 || value.nextLane > 4) {
+    return false;
+  }
+  if (value.handoff === null) return true;
+  if (!isRecord(value.handoff)) return false;
+  return (
+    (value.handoff.activeSide === "player" || value.handoff.activeSide === "enemy") &&
+    (value.handoff.phase === "dreamwell" ||
+      value.handoff.phase === "draw" ||
+      value.handoff.phase === "dawn" ||
+      value.handoff.phase === "day" ||
+      value.handoff.phase === "dusk" ||
+      value.handoff.phase === "night" ||
+      value.handoff.phase === "challenge" ||
+      value.handoff.phase === "ending") &&
+    typeof value.handoff.turnNumber === "number" &&
+    Number.isInteger(value.handoff.turnNumber)
+  );
 }
 
 function isValidPendingPrompt(value: unknown): boolean {
