@@ -524,6 +524,11 @@ const EMISSION: BattleEngineEmissionContext = {
 
 /** Both battle sides, in the fixed order the per-side reveal check iterates. */
 const BATTLE_SIDES: readonly BattleSide[] = ["player", "enemy"];
+const DISCOVER_ANY_LOW_COST_SCRIPT_ID = "f61431f3-33bd-42ff-a229-b4013582e86e";
+const DISCOVER_CHARACTER_SCRIPT_IDS = new Set<string>([
+  "8f5f2e26-44b5-447b-90d0-eaf22ab29fed",
+  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+]);
 
 /**
  * Folds ONE battle command through the full per-command trigger pipeline against
@@ -1696,13 +1701,19 @@ function promptResolutionIsValid(
   if (new Set(chosen).size !== chosen.length) {
     return false;
   }
-  if (pending.run.bindings?.sourceCardId === "910b4cf9-dec7-4e03-af4f-7d5ae342eeba") {
+  const isCharacterDiscover =
+    pending.run.bindings?.sourceCardId === "910b4cf9-dec7-4e03-af4f-7d5ae342eeba" ||
+    DISCOVER_CHARACTER_SCRIPT_IDS.has(pending.run.scriptRef.id);
+  const isLowCostDiscover = pending.run.scriptRef.id === DISCOVER_ANY_LOW_COST_SCRIPT_ID;
+  if (isCharacterDiscover || isLowCostDiscover) {
     // Discover stores its sampled ids on the prompt, but selection still needs
     // a live deck character. This makes a stale/corrupt parked prompt bounce
     // instead of moving a card from an unrelated zone during resolution.
     if (!chosen.every((id) =>
       board.sides[pending.run.side].deck.includes(id) &&
-      board.cardInstances[id]?.definition.battleCardKind === "character",
+      (isCharacterDiscover
+        ? board.cardInstances[id]?.definition.battleCardKind === "character"
+        : (board.cardInstances[id]?.definition.energyCost ?? Infinity) <= 2),
     )) {
       return false;
     }
