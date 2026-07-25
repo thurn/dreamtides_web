@@ -16,6 +16,13 @@ const MAIN_ACTION_IDS: ReadonlySet<string> = new Set([
   "discord",
 ]);
 
+function isTutorialPlayerBackSlotId(value: unknown): value is string {
+  return (
+    typeof value === "string" &&
+    (/^player-back-\d+$/.test(value) || /^B\d+$/.test(value))
+  );
+}
+
 /** Fold one player action taken on a standalone front-door scene. */
 export function frontDoorAction(
   state: FrontDoorState,
@@ -53,8 +60,7 @@ export function frontDoorAction(
       play.cardInstanceId !== TUTORIAL_PLAYER_CARD_INSTANCE_ID ||
       play.cardId !== TUTORIAL_PLAYER_CARD_ID ||
       (targetSlotId !== null &&
-        (typeof targetSlotId !== "string" ||
-          !/^player-back-\d+$/.test(targetSlotId)))
+        !isTutorialPlayerBackSlotId(targetSlotId))
     ) {
       return null;
     }

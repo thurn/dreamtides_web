@@ -52,7 +52,12 @@ import {
   TutorialEditorRail,
   TutorialEditorTakeover,
 } from "./TutorialEditorRail";
-import { MOBILE_BATTLE_INSPECTOR_RAIL_TRACK } from "./mobile-battle-layout";
+import {
+  DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS,
+  MOBILE_BATTLE_INSPECTOR_RAIL_TRACK,
+  MOBILE_BATTLE_MIN_BACK_RANK_SLOTS,
+  MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS,
+} from "./mobile-battle-layout";
 import type {
   TutorialAction,
   TutorialDreamcallerOwner,
@@ -495,7 +500,7 @@ function TutorialDreamwellEmergence({
 }
 
 function tutorialOpponentBackRankIndex(slotCount: number): number {
-  return Math.max(0, Math.floor(slotCount / 2) - 1);
+  return Math.max(0, Math.floor((slotCount - 1) / 2));
 }
 
 function tutorialOpponentFrontRankIndex(slotCount: number): number {
@@ -505,6 +510,8 @@ function tutorialOpponentFrontRankIndex(slotCount: number): number {
 function expandedTutorialSide(
   side: MobileBattleSideView,
   owner: "enemy" | "player",
+  backRankCount: number,
+  frontRankCount: number,
 ): MobileBattleSideView {
   const pad = (
     slots: MobileBattleSideView["backRank"],
@@ -520,13 +527,13 @@ function expandedTutorialSide(
       }),
     ),
   ];
-  const backRank = pad(side.backRank, 10, "back");
+  const backRank = pad(side.backRank, backRankCount, "back");
   const backRankStart = tutorialOpponentBackRankIndex(backRank.length);
   const centeredBackRank = backRank.map((slot, index) => ({
     ...slot,
     card: side.backRank[index - backRankStart]?.card ?? null,
   }));
-  const frontRank = pad(side.frontRank, 9, "front");
+  const frontRank = pad(side.frontRank, frontRankCount, "front");
   const frontRankStart = tutorialOpponentFrontRankIndex(frontRank.length);
   const centeredFrontRank = frontRank.map((slot, index) => ({
     ...slot,
@@ -1748,11 +1755,32 @@ export function TutorialScreen({
   );
 
   const battleView = useMemo<MobileBattleView>(() => {
-    const sourceBattle = desktop
+    const backRankCount = desktop
+      ? DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS
+      : MOBILE_BATTLE_MIN_BACK_RANK_SLOTS;
+    const frontRankCount = desktop
+      ? DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS - 1
+      : MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS;
+    const hasCompleteRanks =
+      Array.isArray(view.battle.enemy?.backRank) &&
+      Array.isArray(view.battle.enemy.frontRank) &&
+      Array.isArray(view.battle.player?.backRank) &&
+      Array.isArray(view.battle.player.frontRank);
+    const sourceBattle = hasCompleteRanks
       ? {
           ...view.battle,
-          enemy: expandedTutorialSide(view.battle.enemy, "enemy"),
-          player: expandedTutorialSide(view.battle.player, "player"),
+          enemy: expandedTutorialSide(
+            view.battle.enemy,
+            "enemy",
+            backRankCount,
+            frontRankCount,
+          ),
+          player: expandedTutorialSide(
+            view.battle.player,
+            "player",
+            backRankCount,
+            frontRankCount,
+          ),
         }
       : view.battle;
     const playerSettled = dreamcallerSettled("player");

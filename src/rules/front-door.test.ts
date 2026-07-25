@@ -255,7 +255,7 @@ describe("front-door reducer", () => {
           runId: "event:1",
           cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
           cardId: TUTORIAL_PLAYER_CARD_ID,
-          targetSlotId: "player-back-4",
+          targetSlotId: "B4",
         },
       }),
       context(5),
@@ -264,7 +264,7 @@ describe("front-door reducer", () => {
     expect(played.state.frontDoor.tutorial?.playerCardPlay).toEqual({
       cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
       cardId: TUTORIAL_PLAYER_CARD_ID,
-      targetSlotId: "player-back-4",
+      targetSlotId: "B4",
     });
 
     const duplicate = reduceGameEvent(

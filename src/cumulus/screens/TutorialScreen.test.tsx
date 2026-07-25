@@ -1295,6 +1295,88 @@ describe("TutorialScreen", () => {
     container.remove();
   });
 
+  it("plays the opponent card into the center mobile back-rank slot", () => {
+    vi.useFakeTimers();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    const emptySide = (owner: "enemy" | "player") => ({
+      deckCardIds: [],
+      banishedCardCount: 0,
+      voidCards: [],
+      backRank: Array.from({ length: 3 }, (_, index) => ({
+        id: `${owner}-back-${String(index)}`,
+        card: null,
+      })),
+      frontRank: Array.from({ length: 2 }, (_, index) => ({
+        id: `${owner}-front-${String(index)}`,
+        card: null,
+      })),
+      status: {
+        dreamcaller: null,
+        currentEnergy: 0,
+        maxEnergy: 0,
+        points: 0,
+      },
+    });
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: null,
+              playbackRunId: "event:mobile-play",
+              endTurn: null,
+              howToPlay: null,
+              currentAction: {
+                id: "vrakmoth-reveal-and-play",
+                action: "reveal-and-play-opponent-card",
+                cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+                revealDuration: 0,
+                wait: 0,
+              },
+              opponentCardToReveal: TUTORIAL_OPPONENT_CARD,
+              battle: {
+                battleId: "tutorial-battle",
+                enemyHandCardIds: [TUTORIAL_OPPONENT_CARD.id],
+                enemyHand: [],
+                farHand: {
+                  owner: "enemy",
+                  position: "far",
+                  cardIds: [TUTORIAL_OPPONENT_CARD.id],
+                  cards: [],
+                },
+                enemy: emptySide("enemy"),
+                player: emptySide("player"),
+                inspector: {
+                  sides: {
+                    enemy: { zones: { hand: 1, backRank: 0 } },
+                    player: { zones: {} },
+                  },
+                },
+              } as unknown as MobileBattleView,
+            }}
+          />
+        </CumulusRoot>,
+      );
+    });
+    act(() => screenMocks.sceneAnimationComplete?.());
+    act(() => screenMocks.cardAnimationComplete?.());
+
+    expect(screenMocks.props?.view.enemy.backRank).toHaveLength(6);
+    expect(screenMocks.props?.view.enemy.backRank[0]?.card).toBeNull();
+    expect(screenMocks.props?.view.enemy.backRank[1]?.card).toBeNull();
+    expect(screenMocks.props?.view.enemy.backRank[2]?.card?.model.cardId).toBe(
+      "229ab3a1-3720-41a2-924c-8fe112188f8e",
+    );
+    expect(screenMocks.props?.view.enemy.backRank[3]?.card).toBeNull();
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("repositions one opponent character without shifting an adjacent back-rank card", () => {
     vi.useFakeTimers();
     window.matchMedia = vi.fn().mockImplementation((query: string) => ({
@@ -1966,14 +2048,14 @@ describe("TutorialScreen", () => {
       screenMocks.props?.interactions?.onSlotDrop({
         owner: "player",
         rank: "back",
-        slotId: "player-back-4",
+        slotId: "B4",
       });
     });
     expect(onPlayerCardPlay).toHaveBeenCalledWith(
       "event:player-turn",
       TUTORIAL_PLAYER_CARD.id,
       TUTORIAL_PLAYER_CARD.model.cardId,
-      "player-back-4",
+      "B4",
     );
     expect(screenMocks.props?.interactions).toMatchObject({
       pendingCardId: null,
