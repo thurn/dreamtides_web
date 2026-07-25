@@ -84,7 +84,202 @@ const AUTUMN_GLADE: DreamwellCard = {
   imageNumber: 1789989917,
 };
 
+function tutorialCard(id: string, name: string): CardData {
+  return {
+    ...PLAYER_CARD,
+    id: asCardId(id),
+    name: asCardName(name),
+  };
+}
+
+const VOLTSURGE: DreamwellCard = {
+  id: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+  name: "The Voltsurge",
+  renderedText: "Each player draws 2 cards.",
+  order: 3,
+  energyAdded: 1,
+  cardNumber: 14,
+  imageNumber: 2242029317,
+};
+
 describe("buildTutorialView", () => {
+  it("reconstructs the post-tutorial Dreamwell effect and turn draw by UUID", () => {
+    const nocturne = tutorialCard(
+      "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+      "Nocturne Strummer",
+    );
+    const flashpoint = tutorialCard(
+      "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+      "Flashpoint Detonation",
+    );
+    const finalWitness = tutorialCard(
+      "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+      "Final Witness",
+    );
+    const glimpse = tutorialCard(
+      "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+      "Glimpse of What Was",
+    );
+    const actions = [
+      {
+        id: "how-to-play",
+        action: "display-how-to-play" as const,
+        trigger: "immediate" as const,
+        text: "Play.",
+        wait: 0,
+      },
+      { id: "end-turn", action: "end-turn" as const, wait: 0 },
+      {
+        id: "enemy-draw",
+        action: "draw-opponent-card" as const,
+        cardId: OPPONENT_CARD.id,
+        wait: 0,
+      },
+      {
+        id: "enemy-play",
+        action: "reveal-and-play-opponent-card" as const,
+        cardId: OPPONENT_CARD.id,
+        revealDuration: 0,
+        wait: 0,
+      },
+      {
+        id: "enemy-forward",
+        action: "reposition-opponent-character" as const,
+        cardId: OPPONENT_CARD.id,
+        wait: 0,
+      },
+      {
+        id: "player-forward",
+        action: "reposition-player-character" as const,
+        cardId: PLAYER_CARD.id,
+        opposingCardId: OPPONENT_CARD.id,
+        wait: 0,
+      },
+      {
+        id: "resolve",
+        action: "resolve-challenge" as const,
+        challengerCardId: OPPONENT_CARD.id,
+        defenderCardId: PLAYER_CARD.id,
+        wait: 0,
+      },
+      {
+        id: "player-voltsurge",
+        action: "draw-dreamwell-card" as const,
+        owner: "player" as const,
+        cardId: VOLTSURGE.id,
+        revealDuration: 5,
+        wait: 0,
+      },
+      {
+        id: "draw-nocturne",
+        action: "draw-card" as const,
+        owner: "player" as const,
+        cardId: nocturne.id,
+        reason: "dreamwell-effect" as const,
+        wait: 0,
+      },
+      {
+        id: "draw-flashpoint",
+        action: "draw-card" as const,
+        owner: "player" as const,
+        cardId: flashpoint.id,
+        reason: "dreamwell-effect" as const,
+        wait: 0,
+      },
+      {
+        id: "draw-troubadour",
+        action: "draw-card" as const,
+        owner: "enemy" as const,
+        cardId: OPPONENT_CARD.id,
+        reason: "dreamwell-effect" as const,
+        wait: 0,
+      },
+      {
+        id: "draw-witness",
+        action: "draw-card" as const,
+        owner: "enemy" as const,
+        cardId: finalWitness.id,
+        reason: "dreamwell-effect" as const,
+        wait: 0,
+      },
+      {
+        id: "turn-draw-glimpse",
+        action: "draw-card" as const,
+        owner: "player" as const,
+        cardId: glimpse.id,
+        reason: "turn-draw" as const,
+        wait: 0,
+      },
+    ];
+    const playerCardPlay = {
+      cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+      cardId: PLAYER_CARD.id,
+      targetSlotId: "player-back-0",
+    };
+    const revealing = buildTutorialView(
+      {
+        runId: "event:post-tutorial",
+        actions,
+        currentActionIndex: 7,
+        playerCardPlay,
+      },
+      [OPPONENT_CARD, finalWitness],
+      [PLAYER_CARD, nocturne, flashpoint, glimpse],
+      [VOLTSURGE],
+    );
+    expect(revealing.battle).toMatchObject({
+      activeSide: "player",
+      phase: "dawn",
+      dreamwell: {
+        side: "player",
+        model: { cardId: VOLTSURGE.id },
+      },
+      player: { status: { currentEnergy: 4, maxEnergy: 4 } },
+    });
+
+    const drawingEffect = buildTutorialView(
+      {
+        runId: "event:post-tutorial",
+        actions,
+        currentActionIndex: 8,
+        playerCardPlay,
+      },
+      [OPPONENT_CARD, finalWitness],
+      [PLAYER_CARD, nocturne, flashpoint, glimpse],
+      [VOLTSURGE],
+    );
+    expect(drawingEffect.cardDraw).toMatchObject({
+      owner: "player",
+      card: { model: { cardId: nocturne.id } },
+    });
+    expect(drawingEffect.battle.player.status).toMatchObject({
+      currentEnergy: 5,
+      maxEnergy: 5,
+    });
+
+    const complete = buildTutorialView(
+      {
+        runId: "event:post-tutorial",
+        actions,
+        currentActionIndex: null,
+        playerCardPlay,
+      },
+      [OPPONENT_CARD, finalWitness],
+      [PLAYER_CARD, nocturne, flashpoint, glimpse],
+      [VOLTSURGE],
+    );
+    expect(complete.battle.playerHand.map((card) => card.model.cardId)).toEqual(
+      [nocturne.id, flashpoint.id, glimpse.id],
+    );
+    expect(complete.battle.enemyHandCardIds).toEqual([
+      "tutorial-enemy-deck-2",
+      "tutorial-enemy-deck-3",
+    ]);
+    expect(complete.battle.enemyHand).toEqual([]);
+    expect(complete.battle.player.deckCardIds).toHaveLength(26);
+    expect(complete.battle.enemy.deckCardIds).toHaveLength(27);
+  });
+
   it("reconstructs the completed prefix when playback starts at the last three actions", () => {
     const actions = [
       {
@@ -840,9 +1035,7 @@ describe("buildTutorialView", () => {
     expect(afterPlayerCardPlay.battle.phase).toBe("day");
     expect(afterPlayerCardPlay.battle.playerHand).toEqual([]);
     expect(afterPlayerCardPlay.battle.nearHand.cardIds).toEqual([]);
-    expect(
-      afterPlayerCardPlay.battle.player.backRank[0]?.card,
-    ).toMatchObject({
+    expect(afterPlayerCardPlay.battle.player.backRank[0]?.card).toMatchObject({
       id: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
       exhausted: true,
       showPlayableOutline: false,
@@ -875,9 +1068,7 @@ describe("buildTutorialView", () => {
       PLAYER_CARD,
       [AUTUMN_GLADE],
     );
-    expect(drawingDreamwell.currentAction?.action).toBe(
-      "draw-dreamwell-card",
-    );
+    expect(drawingDreamwell.currentAction?.action).toBe("draw-dreamwell-card");
     expect(drawingDreamwell.battle).toMatchObject({
       activeSide: "enemy",
       phase: "dawn",
@@ -1016,9 +1207,7 @@ describe("buildTutorialView", () => {
         },
       },
     });
-    expect(
-      worthyChallenger.battle.enemy.backRank[0]?.card,
-    ).toMatchObject({
+    expect(worthyChallenger.battle.enemy.backRank[0]?.card).toMatchObject({
       layoutMotion: "travel",
       exhausted: false,
       model: { cardId: TUTORIAL_OPPONENT_CARD_ID },
@@ -1113,13 +1302,11 @@ describe("buildTutorialView", () => {
       cardId: TUTORIAL_PLAYER_CARD_ID,
       opposingCardId: TUTORIAL_OPPONENT_CARD_ID,
     });
+    expect(guidedBlock.battle.player.backRank[0]?.card?.model.cardId).toBe(
+      TUTORIAL_PLAYER_CARD_ID,
+    );
     expect(
-      guidedBlock.battle.player.backRank[0]?.card?.model.cardId,
-    ).toBe(TUTORIAL_PLAYER_CARD_ID);
-    expect(
-      guidedBlock.battle.player.frontRank.every(
-        (slot) => slot.card === null,
-      ),
+      guidedBlock.battle.player.frontRank.every((slot) => slot.card === null),
     ).toBe(true);
 
     const ended = buildTutorialView(

@@ -66,18 +66,15 @@ export function TutorialScreenAdapter({
       tutorialView.buildTutorialView(
         state.tutorial,
         tutorialCards?.opponents ?? null,
-        tutorialCards?.player ?? null,
+        tutorialCards?.players ?? null,
         tutorialCards?.dreamwell ?? null,
       ),
     [state.tutorial, tutorialCards],
   );
   useTutorialPresentationLogging(state.tutorial, view, playbackSpeed);
   const howToPlayLogging = useTutorialHowToPlayLogging(view.battle.battleId);
-
-  const handleActionComplete = useTutorialActionComplete(
-    mutations.completeTutorialAction,
-  );
-
+  const completeAction = mutations.completeTutorialAction;
+  const handleActionComplete = useTutorialActionComplete(completeAction);
   const handleDreamcallerArrivalComplete = useCallback(
     (dreamcallerId: string, owner: TutorialDreamcallerOwner): void => {
       logEvent("tutorial_dreamcaller_arrived", {
@@ -90,17 +87,15 @@ export function TutorialScreenAdapter({
     },
     [view.battle.battleId, view.currentAction?.id],
   );
-
-  const handlePlayerCardPlay = useTutorialCardPlay(mutations.action, view.battle.battleId);
-  const handleEndTurn = useTutorialEndTurn(
-    mutations.completeTutorialAction,
+  const handlePlayerCardPlay = useTutorialCardPlay(
+    mutations.action,
     view.battle.battleId,
   );
+  const handleEndTurn = useTutorialEndTurn(completeAction, view.battle.battleId);
   const handlePlayerCharacterReposition = useTutorialPlayerReposition(
     mutations.completeTutorialAction,
     view.battle.battleId,
   );
-
   return (
     <TutorialScreen
       view={view}

@@ -64,9 +64,7 @@ import type {
   TutorialEditorSaveStatus,
   TutorialHowToPlayTrigger,
 } from "../../types/tutorial";
-import {
-  renderTutorialInstructionParagraph,
-} from "../internal/tutorial-instruction-text";
+import { renderTutorialInstructionParagraph } from "../internal/tutorial-instruction-text";
 import { parseTutorialInstructionMarkup } from "../../data/tutorial-instruction-markup";
 
 export interface TutorialDreamcallerView {
@@ -113,6 +111,11 @@ export interface TutorialChallengeView {
 
 export interface TutorialView {
   readonly battle: MobileBattleView;
+  readonly cardDraw?: {
+    readonly actionId: string;
+    readonly owner: TutorialDreamcallerOwner;
+    readonly card: MobileBattleCardView;
+  } | null;
   readonly opponentCardToReveal?: MobileBattleCardView | null;
   readonly dialogue: TutorialDialogueView | null;
   readonly dreamcallers: Record<
@@ -252,9 +255,7 @@ function millisecondsAtPlaybackSpeed(
   return atPlaybackSpeed(seconds, playbackSpeed) * 1_000;
 }
 
-function tutorialTimingVariables(
-  playbackSpeed: number,
-): CSSProperties {
+function tutorialTimingVariables(playbackSpeed: number): CSSProperties {
   const seconds = (name: Parameters<typeof motionTimeSeconds>[0]) =>
     `${String(atPlaybackSpeed(motionTimeSeconds(name), playbackSpeed))}s`;
   return {
@@ -366,9 +367,7 @@ function TutorialHowToPlayDialog({
   const paragraphStyle = {
     margin: 0,
     color: token("--text-on-glass"),
-    font: desktop
-      ? token("--t-tutorial-instruction")
-      : token("--t-lead"),
+    font: desktop ? token("--t-tutorial-instruction") : token("--t-lead"),
     whiteSpace: "pre-line",
   } as const;
   const paragraphs = parseTutorialInstructionMarkup(text);
@@ -433,15 +432,11 @@ function TutorialDreamwellEmergence({
       "[data-battle-dreamwell-layer]",
     );
     if (layer === null) return undefined;
-    const sideZoneRow = layer.closest<HTMLElement>(
-      "[data-battle-mobile-row]",
-    );
+    const sideZoneRow = layer.closest<HTMLElement>("[data-battle-mobile-row]");
     const previousSideZoneZIndex = sideZoneRow?.style.zIndex ?? "";
     if (sideZoneRow !== null) {
       sideZoneRow.dataset.tutorialDreamwellEmergenceLayer = "";
-      sideZoneRow.style.zIndex = String(
-        TUTORIAL_DREAMWELL_EMERGENCE_LAYER,
-      );
+      sideZoneRow.style.zIndex = String(TUTORIAL_DREAMWELL_EMERGENCE_LAYER);
     }
     layer.dataset.tutorialDreamwellEmergence = "emerging";
 
@@ -875,10 +870,8 @@ function TutorialOpponentCardPlay({
     const destination =
       enemyBack
         .slice(destinationStart)
-        .find(
-          (slot) =>
-            slot.querySelector("[data-battle-card-id]") === null,
-        ) ?? enemyBack[destinationStart];
+        .find((slot) => slot.querySelector("[data-battle-card-id]") === null) ??
+      enemyBack[destinationStart];
     if (
       source === undefined ||
       destination === undefined ||
@@ -972,17 +965,12 @@ function TutorialOpponentCardPlay({
   const flipDuration = reduceMotion
     ? 0
     : atPlaybackSpeed(TUTORIAL_CARD_FLIP_SECONDS, playbackSpeed);
-  const scaledRevealDuration = atPlaybackSpeed(
-    revealDuration,
-    playbackSpeed,
-  );
+  const scaledRevealDuration = atPlaybackSpeed(revealDuration, playbackSpeed);
   const totalDuration =
     travelDuration * 2 + flipDuration + scaledRevealDuration;
   const revealStart = totalDuration === 0 ? 0 : travelDuration / totalDuration;
   const readingStart =
-    totalDuration === 0
-      ? 0
-      : (travelDuration + flipDuration) / totalDuration;
+    totalDuration === 0 ? 0 : (travelDuration + flipDuration) / totalDuration;
   const revealEnd =
     totalDuration === 0
       ? 1
@@ -1031,10 +1019,7 @@ function TutorialOpponentCardPlay({
       }}
     >
       {reduceMotion ? (
-        <GameCard
-          model={card.model}
-          testId="tutorial-opponent-card-reveal"
-        />
+        <GameCard model={card.model} testId="tutorial-opponent-card-reveal" />
       ) : (
         <div style={{ position: "absolute", inset: 0 }}>
           <motion.div
@@ -1176,8 +1161,9 @@ function TutorialChallengeAnimation({
   readonly onComplete: () => void;
 }): ReactElement | null {
   const [started, setStarted] = useState(false);
-  const [geometry, setGeometry] =
-    useState<TutorialChallengeGeometry | null>(null);
+  const [geometry, setGeometry] = useState<TutorialChallengeGeometry | null>(
+    null,
+  );
   const completionReported = useRef(false);
   const completionTimeout = useRef<number | null>(null);
 
@@ -1251,11 +1237,9 @@ function TutorialChallengeAnimation({
         "[data-battle-card-motion]",
       ) ?? challengerElement;
     const defenderVisual =
-      defenderElement.querySelector<HTMLElement>(
-        "[data-battle-card-motion]",
-      ) ?? defenderElement;
-    const previousChallengerVisibility =
-      challengerVisual.style.visibility;
+      defenderElement.querySelector<HTMLElement>("[data-battle-card-motion]") ??
+      defenderElement;
+    const previousChallengerVisibility = challengerVisual.style.visibility;
     const previousDefenderVisibility = defenderVisual.style.visibility;
     challengerVisual.style.visibility = "hidden";
     defenderVisual.style.visibility = "hidden";
@@ -1288,8 +1272,7 @@ function TutorialChallengeAnimation({
   const defenderCenterX = geometry.defender.x + geometry.defender.width / 2;
   const challengerCenterY =
     geometry.challenger.y + geometry.challenger.height / 2;
-  const defenderCenterY =
-    geometry.defender.y + geometry.defender.height / 2;
+  const defenderCenterY = geometry.defender.y + geometry.defender.height / 2;
   const clashCenterX = (challengerCenterX + defenderCenterX) / 2;
   const clashCenterY = (challengerCenterY + defenderCenterY) / 2;
   const clashGap =
@@ -1366,12 +1349,8 @@ function TutorialChallengeAnimation({
               scale: won
                 ? [1, 1.08, 1.12, 1.16, 1.08, 1]
                 : [1, 1.08, 1.12, 1.04, 0.58, 0.4],
-              rotate: won
-                ? [0, -1, 2, -2, 1, 0]
-                : [0, 1, -2, 3, 14, 24],
-              opacity: won
-                ? [1, 1, 1, 1, 1, 1]
-                : [1, 1, 1, 0.7, 0, 0],
+              rotate: won ? [0, -1, 2, -2, 1, 0] : [0, 1, -2, 3, 14, 24],
+              opacity: won ? [1, 1, 1, 1, 1, 1] : [1, 1, 1, 0.7, 0, 0],
             }}
             transition={{
               duration: atPlaybackSpeed(
@@ -1427,72 +1406,73 @@ function TutorialChallengeAnimation({
             border: `${token("--space-1")} solid ${token(ring === 0 ? "--spark" : "--accent-bright")}`,
             borderRadius: token("--radius-pill"),
             boxShadow:
-              ring === 0
-                ? token("--shadow-card")
-                : token("--glow-accent-soft"),
+              ring === 0 ? token("--shadow-card") : token("--glow-accent-soft"),
           }}
         />
       ))}
-      {Array.from({ length: TUTORIAL_CHALLENGE_MOTE_COUNT }, (_unused, index) => {
-        const angle =
-          (index / TUTORIAL_CHALLENGE_MOTE_COUNT) * Math.PI * 2 +
-          (index % 2 === 0 ? 0.18 : -0.11);
-        const scatterDistance =
-          loserFrame.width * (0.45 + (index % 5) * 0.13);
-        const moteSize = token(index % 4 === 0 ? "--space-5" : "--space-4");
-        return (
-          <motion.div
-            key={index}
-            aria-hidden="true"
-            data-tutorial-challenge-mote=""
-            initial={{
-              x: loserClashCenterX,
-              y: loserClashCenterY,
-              scale: 0,
-              opacity: 0,
-            }}
-            animate={{
-              x: [
-                loserClashCenterX,
-                loserClashCenterX,
-                loserClashCenterX + Math.cos(angle) * scatterDistance,
-                voidCenterX + Math.cos(angle) * geometry.void.width * 0.12,
-                voidCenterX,
-              ],
-              y: [
-                loserClashCenterY,
-                loserClashCenterY,
-                loserClashCenterY + Math.sin(angle) * scatterDistance,
-                voidCenterY + Math.sin(angle) * geometry.void.height * 0.12,
-                voidCenterY,
-              ],
-              scale: [0, 0, 1.1 + (index % 3) * 0.22, 0.9, 0],
-              opacity: [0, 0, 1, 1, 0],
-              rotate: [0, 0, index % 2 === 0 ? 120 : -140, 240, 320],
-            }}
-            transition={{
-              duration: atPlaybackSpeed(
-                TUTORIAL_CHALLENGE_TOTAL_SECONDS,
-                playbackSpeed,
-              ),
-              times: [0, 0.38, 0.56, 0.86, 1],
-              ease: [0.22, 0.61, 0.36, 1],
-            }}
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: moteSize,
-              height: moteSize,
-              borderRadius: token(
-                index % 4 === 0 ? "--radius-inset" : "--radius-pill",
-              ),
-              background: token("--tutorial-dissolve-fragment"),
-              boxShadow: token("--shadow-md"),
-            }}
-          />
-        );
-      })}
+      {Array.from(
+        { length: TUTORIAL_CHALLENGE_MOTE_COUNT },
+        (_unused, index) => {
+          const angle =
+            (index / TUTORIAL_CHALLENGE_MOTE_COUNT) * Math.PI * 2 +
+            (index % 2 === 0 ? 0.18 : -0.11);
+          const scatterDistance =
+            loserFrame.width * (0.45 + (index % 5) * 0.13);
+          const moteSize = token(index % 4 === 0 ? "--space-5" : "--space-4");
+          return (
+            <motion.div
+              key={index}
+              aria-hidden="true"
+              data-tutorial-challenge-mote=""
+              initial={{
+                x: loserClashCenterX,
+                y: loserClashCenterY,
+                scale: 0,
+                opacity: 0,
+              }}
+              animate={{
+                x: [
+                  loserClashCenterX,
+                  loserClashCenterX,
+                  loserClashCenterX + Math.cos(angle) * scatterDistance,
+                  voidCenterX + Math.cos(angle) * geometry.void.width * 0.12,
+                  voidCenterX,
+                ],
+                y: [
+                  loserClashCenterY,
+                  loserClashCenterY,
+                  loserClashCenterY + Math.sin(angle) * scatterDistance,
+                  voidCenterY + Math.sin(angle) * geometry.void.height * 0.12,
+                  voidCenterY,
+                ],
+                scale: [0, 0, 1.1 + (index % 3) * 0.22, 0.9, 0],
+                opacity: [0, 0, 1, 1, 0],
+                rotate: [0, 0, index % 2 === 0 ? 120 : -140, 240, 320],
+              }}
+              transition={{
+                duration: atPlaybackSpeed(
+                  TUTORIAL_CHALLENGE_TOTAL_SECONDS,
+                  playbackSpeed,
+                ),
+                times: [0, 0.38, 0.56, 0.86, 1],
+                ease: [0.22, 0.61, 0.36, 1],
+              }}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: moteSize,
+                height: moteSize,
+                borderRadius: token(
+                  index % 4 === 0 ? "--radius-inset" : "--radius-pill",
+                ),
+                background: token("--tutorial-dissolve-fragment"),
+                boxShadow: token("--shadow-md"),
+              }}
+            />
+          );
+        },
+      )}
       <motion.div
         data-tutorial-challenge-rematerialized=""
         data-tutorial-challenge-rematerialized-owner={loser.owner}
@@ -1569,12 +1549,10 @@ export function TutorialScreen({
   const [completedDialogueActionKey, setCompletedDialogueActionKey] = useState<
     string | null
   >(null);
-  const [howToPlayPresentedActionKey, setHowToPlayPresentedActionKey] = useState<
-    string | null
-  >(null);
-  const [howToPlayDismissedActionKey, setHowToPlayDismissedActionKey] = useState<
-    string | null
-  >(null);
+  const [howToPlayPresentedActionKey, setHowToPlayPresentedActionKey] =
+    useState<string | null>(null);
+  const [howToPlayDismissedActionKey, setHowToPlayDismissedActionKey] =
+    useState<string | null>(null);
   const [dreamwellEmergedActionKey, setDreamwellEmergedActionKey] = useState<
     string | null
   >(null);
@@ -1606,10 +1584,7 @@ export function TutorialScreen({
         ? {
             key: `${view.playbackRunId}:${view.currentAction.id}`,
             owner: view.currentAction.owner,
-            pause: atPlaybackSpeed(
-              view.currentAction.pause,
-              playbackSpeed,
-            ),
+            pause: atPlaybackSpeed(view.currentAction.pause, playbackSpeed),
             duration: atPlaybackSpeed(
               view.currentAction.duration,
               playbackSpeed,
@@ -1617,12 +1592,7 @@ export function TutorialScreen({
             dreamcaller: view.dreamcallers[view.currentAction.owner],
           }
         : null,
-    [
-      playbackSpeed,
-      view.currentAction,
-      view.dreamcallers,
-      view.playbackRunId,
-    ],
+    [playbackSpeed, view.currentAction, view.dreamcallers, view.playbackRunId],
   );
   const opponentCardDraw = useMemo(
     () =>
@@ -1635,6 +1605,19 @@ export function TutorialScreen({
           }
         : null,
     [opponentDeckCardIds, view.currentAction, view.playbackRunId],
+  );
+  const scriptedCardDraw = useMemo(
+    () =>
+      view.playbackRunId !== null &&
+      view.currentAction?.action === "draw-card" &&
+      view.cardDraw?.actionId === view.currentAction.id
+        ? {
+            key: `${view.playbackRunId}:${view.currentAction.id}`,
+            owner: view.cardDraw.owner,
+            card: view.cardDraw.card,
+          }
+        : null,
+    [view.cardDraw, view.currentAction, view.playbackRunId],
   );
   const opponentCardPlay = useMemo(() => {
     const currentAction = view.currentAction;
@@ -1706,8 +1689,7 @@ export function TutorialScreen({
         );
         setCompletedDialogueActionKey(actionKey);
       },
-      startDelay +
-        millisecondsAtPlaybackSpeed(dialogueDuration, playbackSpeed),
+      startDelay + millisecondsAtPlaybackSpeed(dialogueDuration, playbackSpeed),
     );
     return () => {
       if (showTimeout !== null) window.clearTimeout(showTimeout);
@@ -1781,6 +1763,10 @@ export function TutorialScreen({
     const drawnCardId =
       opponentCardDraw !== null && drawnActionKey === opponentCardDraw.key
         ? opponentCardDraw.cardId
+        : null;
+    const drawnScriptedCard =
+      scriptedCardDraw !== null && drawnActionKey === scriptedCardDraw.key
+        ? scriptedCardDraw
         : null;
     if (
       !playerSettled &&
@@ -1862,9 +1848,82 @@ export function TutorialScreen({
             },
           }),
     };
+    const battleWithScriptedDraw =
+      drawnScriptedCard === null
+        ? updatedBattle
+        : drawnScriptedCard.owner === "enemy"
+          ? {
+              ...updatedBattle,
+              enemyHandCardIds: [
+                ...updatedBattle.enemyHandCardIds,
+                drawnScriptedCard.card.id,
+              ],
+              farHand: {
+                ...updatedBattle.farHand,
+                cardIds: [
+                  ...updatedBattle.farHand.cardIds,
+                  drawnScriptedCard.card.id,
+                ],
+              },
+              enemy: {
+                ...updatedBattle.enemy,
+                deckCardIds: updatedBattle.enemy.deckCardIds.filter(
+                  (cardId) => cardId !== drawnScriptedCard.card.id,
+                ),
+              },
+              inspector: {
+                ...updatedBattle.inspector,
+                sides: {
+                  ...updatedBattle.inspector.sides,
+                  enemy: {
+                    ...updatedBattle.inspector.sides.enemy,
+                    zones: {
+                      ...updatedBattle.inspector.sides.enemy.zones,
+                      hand: updatedBattle.inspector.sides.enemy.zones.hand + 1,
+                      deck: updatedBattle.inspector.sides.enemy.zones.deck - 1,
+                    },
+                  },
+                },
+              },
+            }
+          : {
+              ...updatedBattle,
+              playerHand: [...updatedBattle.playerHand, drawnScriptedCard.card],
+              nearHand: {
+                ...updatedBattle.nearHand,
+                cardIds: [
+                  ...updatedBattle.nearHand.cardIds,
+                  drawnScriptedCard.card.id,
+                ],
+                cards: [
+                  ...updatedBattle.nearHand.cards,
+                  drawnScriptedCard.card,
+                ],
+              },
+              player: {
+                ...updatedBattle.player,
+                deckCardIds: updatedBattle.player.deckCardIds.filter(
+                  (cardId) => cardId !== drawnScriptedCard.card.id,
+                ),
+              },
+              inspector: {
+                ...updatedBattle.inspector,
+                sides: {
+                  ...updatedBattle.inspector.sides,
+                  player: {
+                    ...updatedBattle.inspector.sides.player,
+                    zones: {
+                      ...updatedBattle.inspector.sides.player.zones,
+                      hand: updatedBattle.inspector.sides.player.zones.hand + 1,
+                      deck: updatedBattle.inspector.sides.player.zones.deck - 1,
+                    },
+                  },
+                },
+              },
+            };
     return opponentCardPlay !== null && playedActionKey === opponentCardPlay.key
-      ? withOpponentCardPlayed(updatedBattle, opponentCardPlay.card)
-      : updatedBattle;
+      ? withOpponentCardPlayed(battleWithScriptedDraw, opponentCardPlay.card)
+      : battleWithScriptedDraw;
   }, [
     desktop,
     drawnActionKey,
@@ -1872,6 +1931,7 @@ export function TutorialScreen({
     opponentCardDraw,
     opponentCardPlay,
     playedActionKey,
+    scriptedCardDraw,
     view,
   ]);
 
@@ -2019,6 +2079,13 @@ export function TutorialScreen({
   }, [opponentCardDraw, sceneEntered]);
 
   useEffect(() => {
+    if (!sceneEntered || scriptedCardDraw === null) return;
+    if (reportedDrawKeys.current.has(scriptedCardDraw.key)) return;
+    reportedDrawKeys.current.add(scriptedCardDraw.key);
+    setDrawnActionKey(scriptedCardDraw.key);
+  }, [sceneEntered, scriptedCardDraw]);
+
+  useEffect(() => {
     if (
       opponentCardDraw === null ||
       drawnActionKey !== opponentCardDraw.key ||
@@ -2048,27 +2115,59 @@ export function TutorialScreen({
 
   useEffect(() => {
     if (
-      !sceneEntered ||
-      view.currentAction?.action !== "draw-dreamwell-card" ||
-      view.playbackRunId === null ||
-      view.battle.dreamwell?.model.cardId !== view.currentAction.cardId ||
-      completedTurnAnnouncementSide !== view.currentAction.owner
+      scriptedCardDraw === null ||
+      drawnActionKey !== scriptedCardDraw.key ||
+      view.currentAction?.action !== "draw-card" ||
+      view.playbackRunId === null
     ) {
       return undefined;
     }
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
-    if (wait === 0) {
+    const timeout = window.setTimeout(
+      () => onActionComplete?.(runId, id),
+      millisecondsAtPlaybackSpeed(
+        TUTORIAL_CARD_TRAVEL_SECONDS + wait,
+        playbackSpeed,
+      ),
+    );
+    return () => window.clearTimeout(timeout);
+  }, [
+    drawnActionKey,
+    onActionComplete,
+    playbackSpeed,
+    scriptedCardDraw,
+    view.currentAction,
+    view.playbackRunId,
+  ]);
+
+  useEffect(() => {
+    if (
+      !sceneEntered ||
+      view.currentAction?.action !== "draw-dreamwell-card" ||
+      view.playbackRunId === null ||
+      view.battle.dreamwell?.model.cardId !== view.currentAction.cardId ||
+      completedTurnAnnouncementSide !== view.currentAction.owner ||
+      (view.currentAction.revealDuration !== undefined &&
+        dreamwellEmergedActionKey !==
+          `${view.playbackRunId}:${view.currentAction.id}`)
+    ) {
+      return undefined;
+    }
+    const { id, revealDuration = 0, wait } = view.currentAction;
+    const runId = view.playbackRunId;
+    if (revealDuration + wait === 0) {
       onActionComplete?.(runId, id);
       return undefined;
     }
     const timeout = window.setTimeout(
       () => onActionComplete?.(runId, id),
-      millisecondsAtPlaybackSpeed(wait, playbackSpeed),
+      millisecondsAtPlaybackSpeed(revealDuration + wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
   }, [
     completedTurnAnnouncementSide,
+    dreamwellEmergedActionKey,
     onActionComplete,
     playbackSpeed,
     sceneEntered,
@@ -2141,19 +2240,14 @@ export function TutorialScreen({
     const howToPlay = view.howToPlay;
     if (runId === null || howToPlay === null) return;
     setHowToPlayDismissedActionKey(`${runId}:${howToPlay.actionId}`);
-    onHowToPlayDismissed?.(
-      runId,
-      howToPlay.actionId,
-      howToPlay.trigger,
-    );
+    onHowToPlayDismissed?.(runId, howToPlay.actionId, howToPlay.trigger);
   }, [onHowToPlayDismissed, view.howToPlay, view.playbackRunId]);
 
   // The instructional action has completed by the time the player receives
   // control. Its view data is therefore absent, while the hand still carries
   // the authoritative playable marker from the tutorial view model.
   const tutorialPlayableCard =
-    view.currentAction?.action === "end-turn" &&
-    view.endTurn?.ready !== true
+    view.currentAction?.action === "end-turn" && view.endTurn?.ready !== true
       ? ((view.battle.playerHand ?? []).find(
           (card) => card.showPlayableOutline,
         ) ?? null)
@@ -2209,12 +2303,7 @@ export function TutorialScreen({
       tutorialCardDropHandledRef.current = true;
       pendingTutorialCardIdRef.current = null;
       setPendingTutorialCardId(null);
-      onPlayerCardPlay(
-        runId,
-        card.id,
-        card.model.cardId,
-        targetSlotId,
-      );
+      onPlayerCardPlay(runId, card.id, card.model.cardId, targetSlotId);
     },
     [onPlayerCardPlay, tutorialPlayableCard, view.playbackRunId],
   );
@@ -2235,8 +2324,7 @@ export function TutorialScreen({
                 : canRepositionTutorialCard
                   ? "battlefield"
                   : "near-hand",
-            pendingCardOwner:
-              pendingTutorialCardId === null ? null : "player",
+            pendingCardOwner: pendingTutorialCardId === null ? null : "player",
             onHandCardActivate: (battleCardId) => {
               if (!canPlayTutorialCard || tutorialPlayableCard === null) return;
               if (battleCardId !== tutorialPlayableCard.id) return;
@@ -2574,20 +2662,31 @@ export function TutorialScreen({
       ? null
       : `${view.playbackRunId}:${view.howToPlay.actionId}`;
   const dreamwellEmergenceActionKey =
-    howToPlayActionKey !== null &&
-    view.howToPlay?.companion !== null &&
-    view.howToPlay?.companion !== undefined
-      ? howToPlayActionKey
-      : null;
+    view.playbackRunId !== null &&
+    view.currentAction?.action === "draw-dreamwell-card" &&
+    view.currentAction.revealDuration !== undefined &&
+    completedTurnAnnouncementSide === view.currentAction.owner
+      ? `${view.playbackRunId}:${view.currentAction.id}`
+      : howToPlayActionKey !== null &&
+          view.howToPlay?.companion !== null &&
+          view.howToPlay?.companion !== undefined
+        ? howToPlayActionKey
+        : null;
   const howToPlayVisible =
     howToPlayActionKey !== null &&
     howToPlayPresentedActionKey === howToPlayActionKey &&
     howToPlayDismissedActionKey !== howToPlayActionKey;
-  const howToPlayCompanion =
-    howToPlayVisible ? (view.howToPlay?.companion ?? null) : null;
+  const howToPlayCompanion = howToPlayVisible
+    ? (view.howToPlay?.companion ?? null)
+    : null;
+  const showStandaloneDreamwell =
+    view.currentAction?.action === "draw-dreamwell-card" &&
+    view.currentAction.revealDuration !== undefined &&
+    completedTurnAnnouncementSide === view.currentAction.owner;
   const displayedBattleView =
     howToPlayCompanion === null &&
-    view.currentAction?.action !== "draw-dreamwell-card"
+    (view.currentAction?.action !== "draw-dreamwell-card" ||
+      showStandaloneDreamwell)
       ? battleView
       : { ...battleView, dreamwell: null };
   const repositionSourceCard =
@@ -2600,266 +2699,261 @@ export function TutorialScreen({
     playerReposition === null
       ? null
       : (battleView.enemy.frontRank.find(
-          (slot) =>
-            slot.card?.model.cardId === playerReposition.opposingCardId,
+          (slot) => slot.card?.model.cardId === playerReposition.opposingCardId,
         )?.card ?? null);
 
   return (
     <MotionConfig
       transition={{
-        duration: atPlaybackSpeed(
-          TUTORIAL_CARD_TRAVEL_SECONDS,
-          playbackSpeed,
-        ),
+        duration: atPlaybackSpeed(TUTORIAL_CARD_TRAVEL_SECONDS, playbackSpeed),
       }}
     >
       <motion.main
-      ref={screenRef}
-      className="cumulus"
-      data-tutorial-screen=""
-      initial={{ opacity: reduceMotion ? 1 : 0 }}
-      animate={{ opacity: 1 }}
-      transition={{
-        duration: reduceMotion
-          ? 0
-          : atPlaybackSpeed(TUTORIAL_FADE_SECONDS, playbackSpeed),
-      }}
-      onAnimationComplete={() => setSceneEntered(true)}
-      style={{
-        ...tutorialTimingVariables(playbackSpeed),
-        position: "fixed",
-        inset: 0,
-        width: "100vw",
-        height: "100dvh",
-        minHeight: "100vh",
-        overflow: "hidden",
-        background: token("--bg-loading"),
-      }}
-    >
-      <div
-        data-tutorial-shell=""
+        ref={screenRef}
+        className="cumulus"
+        data-tutorial-screen=""
+        initial={{ opacity: reduceMotion ? 1 : 0 }}
+        animate={{ opacity: 1 }}
+        transition={{
+          duration: reduceMotion
+            ? 0
+            : atPlaybackSpeed(TUTORIAL_FADE_SECONDS, playbackSpeed),
+        }}
+        onAnimationComplete={() => setSceneEntered(true)}
         style={{
-          position: "absolute",
+          ...tutorialTimingVariables(playbackSpeed),
+          position: "fixed",
           inset: 0,
-          display: "grid",
-          gridTemplateColumns:
-            dockEditor && editorOpen
-              ? `${MOBILE_BATTLE_INSPECTOR_RAIL_TRACK} minmax(0, 1fr)`
-              : "minmax(0, 1fr)",
-          minWidth: 0,
-          minHeight: 0,
+          width: "100vw",
+          height: "100dvh",
+          minHeight: "100vh",
+          overflow: "hidden",
+          background: token("--bg-loading"),
         }}
       >
-        {dockEditor && editorOpen && editorSurface !== null ? (
-          <TutorialEditorRail {...editorSurface} />
-        ) : null}
-        <div style={{ position: "relative", minWidth: 0, minHeight: 0 }}>
-          <MobileBattleScreen
-            view={displayedBattleView}
-            interactions={tutorialInteractions}
-            guidedSlotHighlight={
-              playerReposition === null ||
-              repositionSourceCard === null ||
-              repositionOpposingCard === null ||
-              repositionTargetSlotId === null
-                ? undefined
-                : {
-                    owner: "player",
-                    rank: "front",
-                    slotId: repositionTargetSlotId,
-                    label: `Drag ${repositionSourceCard.model.displaySnapshot.name} to block ${repositionOpposingCard.model.displaySnapshot.name}.`,
-                  }
-            }
-            viewport="contained"
-            inspectorDefault="collapsed"
-            inspectorOpen={battleInspectorOpen}
-            onInspectorOpenChange={handleBattleInspectorOpenChange}
-            onTurnAnnouncementComplete={completeTurnAnnouncement}
-            playbackSpeed={playbackSpeed}
-            phaseNavigation={canEndTurn ? "end-turn" : "hidden"}
-            preserveOccupiedSlotOutlines={challengeAnimation !== null}
-            zoneLabels="voids"
-          />
-        </div>
-      </div>
-      {sceneEntered &&
-      !reduceMotion &&
-      dreamcallerArrival !== null &&
-      arrivedActionKey !== dreamcallerArrival.key &&
-      screenRef.current !== null ? (
-        <TutorialDreamcallerArrival
-          screen={screenRef.current}
-          dreamcaller={dreamcallerArrival.dreamcaller.visual}
-          owner={dreamcallerArrival.owner}
-          pause={dreamcallerArrival.pause}
-          duration={dreamcallerArrival.duration}
-          onComplete={completeDreamcallerArrival}
-        />
-      ) : null}
-      {sceneEntered &&
-      opponentCardPlay !== null &&
-      playedActionKey !== opponentCardPlay.key &&
-      screenRef.current !== null ? (
-        <TutorialOpponentCardPlay
-          screen={screenRef.current}
-          card={opponentCardPlay.card}
-          revealDuration={opponentCardPlay.revealDuration}
-          reduceMotion={reduceMotion}
-          playbackSpeed={playbackSpeed}
-          onComplete={completeOpponentCardPlay}
-        />
-      ) : null}
-      {sceneEntered &&
-      playerReposition !== null &&
-      repositionSourceCard !== null &&
-      repositionOpposingCard !== null &&
-      screenRef.current !== null ? (
-        <TutorialRepositionTargetResolver
-          screen={screenRef.current}
-          cardId={playerReposition.cardId}
-          opposingCardId={playerReposition.opposingCardId}
-          onTargetSlotChange={setRepositionTargetSlotId}
-        />
-      ) : null}
-      {sceneEntered &&
-      dreamwellEmergenceActionKey !== null &&
-      dreamwellEmergedActionKey !== dreamwellEmergenceActionKey &&
-      screenRef.current !== null ? (
-        <TutorialDreamwellEmergence
-          screen={screenRef.current}
-          actionKey={dreamwellEmergenceActionKey}
-          reduceMotion={reduceMotion}
-          playbackSpeed={playbackSpeed}
-          onComplete={setDreamwellEmergedActionKey}
-        />
-      ) : null}
-      {sceneEntered &&
-      challengeAnimation !== null &&
-      screenRef.current !== null ? (
-        <TutorialChallengeAnimation
-          key={challengeAnimation.key}
-          screen={screenRef.current}
-          challenge={challengeAnimation.challenge}
-          wait={challengeAnimation.wait}
-          reduceMotion={reduceMotion}
-          playbackSpeed={playbackSpeed}
-          onComplete={() =>
-            onActionComplete?.(
-              challengeAnimation.runId,
-              challengeAnimation.actionId,
-            )
-          }
-        />
-      ) : null}
-      {editorSurface !== null && !editorOpen ? (
         <div
+          data-tutorial-shell=""
           style={{
             position: "absolute",
-            top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
-            left: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-4")})`,
-            zIndex: 20,
+            inset: 0,
+            display: "grid",
+            gridTemplateColumns:
+              dockEditor && editorOpen
+                ? `${MOBILE_BATTLE_INSPECTOR_RAIL_TRACK} minmax(0, 1fr)`
+                : "minmax(0, 1fr)",
+            minWidth: 0,
+            minHeight: 0,
           }}
         >
-          <IconButton
-            glyph={GLYPHS.sidebarLeft}
-            size="sm"
-            label="Open tutorial editor"
-            ariaExpanded={false}
-            ariaControls="cumulus-tutorial-editor"
-            testId="tutorial-editor-trigger"
-            onPress={() => {
-              if (!dockEditor) setBattleInspectorOpen(false);
-              setEditorOpen(true);
-            }}
-          />
+          {dockEditor && editorOpen && editorSurface !== null ? (
+            <TutorialEditorRail {...editorSurface} />
+          ) : null}
+          <div style={{ position: "relative", minWidth: 0, minHeight: 0 }}>
+            <MobileBattleScreen
+              view={displayedBattleView}
+              interactions={tutorialInteractions}
+              guidedSlotHighlight={
+                playerReposition === null ||
+                repositionSourceCard === null ||
+                repositionOpposingCard === null ||
+                repositionTargetSlotId === null
+                  ? undefined
+                  : {
+                      owner: "player",
+                      rank: "front",
+                      slotId: repositionTargetSlotId,
+                      label: `Drag ${repositionSourceCard.model.displaySnapshot.name} to block ${repositionOpposingCard.model.displaySnapshot.name}.`,
+                    }
+              }
+              viewport="contained"
+              inspectorDefault="collapsed"
+              inspectorOpen={battleInspectorOpen}
+              onInspectorOpenChange={handleBattleInspectorOpenChange}
+              onTurnAnnouncementComplete={completeTurnAnnouncement}
+              playbackSpeed={playbackSpeed}
+              phaseNavigation={canEndTurn ? "end-turn" : "hidden"}
+              preserveOccupiedSlotOutlines={challengeAnimation !== null}
+              zoneLabels="voids"
+            />
+          </div>
         </div>
-      ) : null}
-      <div
-        data-tutorial-dialogue-anchor=""
-        style={{
-          position: "absolute",
-          zIndex: 30,
-          top:
-            !desktop &&
-            view.currentAction?.action === "reveal-and-play-opponent-card"
-              ? undefined
-              : (dialogueAnchor?.top ?? 0),
-          right: desktop ? undefined : token("--gutter"),
-          bottom:
-            !desktop &&
-            view.currentAction?.action === "reveal-and-play-opponent-card"
-              ? `calc(var(${SAFE_AREA_INSET_PROPERTIES.bottom}) + ${token("--space-12")})`
-              : undefined,
-          left: desktop ? (dialogueAnchor?.left ?? 0) : token("--gutter"),
-          transform:
-            !desktop &&
-            view.currentAction?.action ===
-              "reveal-and-play-opponent-card" &&
-            renderedDialogue?.kind === "guide"
-              ? `translateY(${String(renderedDialogue.verticalOffset ?? 0)}px)`
-              : undefined,
-          display: "flex",
-          justifyContent: "flex-start",
-          maxWidth:
-            desktop && renderedDialogue?.kind === "guide"
-              ? (renderedDialogue.bubbleWidth ?? 700)
-              : undefined,
-          visibility:
-            !desktop &&
-            view.currentAction?.action === "reveal-and-play-opponent-card"
-              ? "visible"
-              : dialogueAnchor === null
-                ? "hidden"
-                : "visible",
-          pointerEvents: "none",
-        }}
-      >
-        {renderedDialogue?.kind !== "guide" ? null : (
-          <CharacterDialogue
-            dialogue={renderedDialogue.model}
-            size={desktop ? "prominent" : "compact"}
+        {sceneEntered &&
+        !reduceMotion &&
+        dreamcallerArrival !== null &&
+        arrivedActionKey !== dreamcallerArrival.key &&
+        screenRef.current !== null ? (
+          <TutorialDreamcallerArrival
+            screen={screenRef.current}
+            dreamcaller={dreamcallerArrival.dreamcaller.visual}
+            owner={dreamcallerArrival.owner}
+            pause={dreamcallerArrival.pause}
+            duration={dreamcallerArrival.duration}
+            onComplete={completeDreamcallerArrival}
+          />
+        ) : null}
+        {sceneEntered &&
+        opponentCardPlay !== null &&
+        playedActionKey !== opponentCardPlay.key &&
+        screenRef.current !== null ? (
+          <TutorialOpponentCardPlay
+            screen={screenRef.current}
+            card={opponentCardPlay.card}
+            revealDuration={opponentCardPlay.revealDuration}
+            reduceMotion={reduceMotion}
+            playbackSpeed={playbackSpeed}
+            onComplete={completeOpponentCardPlay}
+          />
+        ) : null}
+        {sceneEntered &&
+        playerReposition !== null &&
+        repositionSourceCard !== null &&
+        repositionOpposingCard !== null &&
+        screenRef.current !== null ? (
+          <TutorialRepositionTargetResolver
+            screen={screenRef.current}
+            cardId={playerReposition.cardId}
+            opposingCardId={playerReposition.opposingCardId}
+            onTargetSlotChange={setRepositionTargetSlotId}
+          />
+        ) : null}
+        {sceneEntered &&
+        dreamwellEmergenceActionKey !== null &&
+        dreamwellEmergedActionKey !== dreamwellEmergenceActionKey &&
+        screenRef.current !== null ? (
+          <TutorialDreamwellEmergence
+            screen={screenRef.current}
+            actionKey={dreamwellEmergenceActionKey}
+            reduceMotion={reduceMotion}
+            playbackSpeed={playbackSpeed}
+            onComplete={setDreamwellEmergedActionKey}
+          />
+        ) : null}
+        {sceneEntered &&
+        challengeAnimation !== null &&
+        screenRef.current !== null ? (
+          <TutorialChallengeAnimation
+            key={challengeAnimation.key}
+            screen={screenRef.current}
+            challenge={challengeAnimation.challenge}
+            wait={challengeAnimation.wait}
+            reduceMotion={reduceMotion}
+            playbackSpeed={playbackSpeed}
+            onComplete={() =>
+              onActionComplete?.(
+                challengeAnimation.runId,
+                challengeAnimation.actionId,
+              )
+            }
+          />
+        ) : null}
+        {editorSurface !== null && !editorOpen ? (
+          <div
+            style={{
+              position: "absolute",
+              top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
+              left: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-4")})`,
+              zIndex: 20,
+            }}
+          >
+            <IconButton
+              glyph={GLYPHS.sidebarLeft}
+              size="sm"
+              label="Open tutorial editor"
+              ariaExpanded={false}
+              ariaControls="cumulus-tutorial-editor"
+              testId="tutorial-editor-trigger"
+              onPress={() => {
+                if (!dockEditor) setBattleInspectorOpen(false);
+                setEditorOpen(true);
+              }}
+            />
+          </div>
+        ) : null}
+        <div
+          data-tutorial-dialogue-anchor=""
+          style={{
+            position: "absolute",
+            zIndex: 30,
+            top:
+              !desktop &&
+              view.currentAction?.action === "reveal-and-play-opponent-card"
+                ? undefined
+                : (dialogueAnchor?.top ?? 0),
+            right: desktop ? undefined : token("--gutter"),
+            bottom:
+              !desktop &&
+              view.currentAction?.action === "reveal-and-play-opponent-card"
+                ? `calc(var(${SAFE_AREA_INSET_PROPERTIES.bottom}) + ${token("--space-12")})`
+                : undefined,
+            left: desktop ? (dialogueAnchor?.left ?? 0) : token("--gutter"),
+            transform:
+              !desktop &&
+              view.currentAction?.action === "reveal-and-play-opponent-card" &&
+              renderedDialogue?.kind === "guide"
+                ? `translateY(${String(renderedDialogue.verticalOffset ?? 0)}px)`
+                : undefined,
+            display: "flex",
+            justifyContent: "flex-start",
+            maxWidth:
+              desktop && renderedDialogue?.kind === "guide"
+                ? (renderedDialogue.bubbleWidth ?? 700)
+                : undefined,
+            visibility:
+              !desktop &&
+              view.currentAction?.action === "reveal-and-play-opponent-card"
+                ? "visible"
+                : dialogueAnchor === null
+                  ? "hidden"
+                  : "visible",
+            pointerEvents: "none",
+          }}
+        >
+          {renderedDialogue?.kind !== "guide" ? null : (
+            <CharacterDialogue
+              dialogue={renderedDialogue.model}
+              size={desktop ? "prominent" : "compact"}
+              visible={
+                sceneEntered &&
+                view.dialogue?.kind === "guide" &&
+                view.playbackRunId !== null &&
+                dialogueActionId !== null &&
+                visibleDialogueActionKey ===
+                  `${view.playbackRunId}:${dialogueActionId}`
+              }
+              testId="tutorial-welcome-dialogue"
+              playbackSpeed={playbackSpeed}
+            />
+          )}
+        </div>
+        {renderedDialogue?.kind === "dreamcaller" ? (
+          <TutorialDreamcallerDialogue
+            dialogue={renderedDialogue}
             visible={
               sceneEntered &&
-              view.dialogue?.kind === "guide" &&
+              view.dialogue?.kind === "dreamcaller" &&
               view.playbackRunId !== null &&
               dialogueActionId !== null &&
               visibleDialogueActionKey ===
                 `${view.playbackRunId}:${dialogueActionId}`
             }
-            testId="tutorial-welcome-dialogue"
-            playbackSpeed={playbackSpeed}
+            layoutKey={`${String(dockEditor)}:${String(editorOpen)}`}
+            desktop={desktop}
           />
-        )}
-      </div>
-      {renderedDialogue?.kind === "dreamcaller" ? (
-        <TutorialDreamcallerDialogue
-          dialogue={renderedDialogue}
-          visible={
-            sceneEntered &&
-            view.dialogue?.kind === "dreamcaller" &&
-            view.playbackRunId !== null &&
-            dialogueActionId !== null &&
-            visibleDialogueActionKey ===
-              `${view.playbackRunId}:${dialogueActionId}`
-          }
-          layoutKey={`${String(dockEditor)}:${String(editorOpen)}`}
-          desktop={desktop}
-        />
-      ) : null}
-      {!dockEditor && editorOpen && editorSurface !== null ? (
-        <TutorialEditorTakeover {...editorSurface} />
-      ) : null}
-      {howToPlayVisible && view.howToPlay !== null ? (
-        <TutorialHowToPlayDialog
-          text={view.howToPlay.text}
-          companion={howToPlayCompanion}
-          cardWidth={
-            view.howToPlay.cardWidth ??
-            TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH
-          }
-          onClose={closeHowToPlay}
-        />
-      ) : null}
+        ) : null}
+        {!dockEditor && editorOpen && editorSurface !== null ? (
+          <TutorialEditorTakeover {...editorSurface} />
+        ) : null}
+        {howToPlayVisible && view.howToPlay !== null ? (
+          <TutorialHowToPlayDialog
+            text={view.howToPlay.text}
+            companion={howToPlayCompanion}
+            cardWidth={
+              view.howToPlay.cardWidth ??
+              TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH
+            }
+            onClose={closeHowToPlay}
+          />
+        ) : null}
       </motion.main>
     </MotionConfig>
   );

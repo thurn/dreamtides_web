@@ -491,6 +491,65 @@ describe("parseTutorialActions", () => {
     ).toThrow(/by UUID/u);
   });
 
+  it("preserves scripted player and hidden opponent draws with their phase reason", () => {
+    expect(
+      parseTutorialActions([
+        {
+          id: "player-effect-draw",
+          action: "draw-card",
+          owner: "player",
+          cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+          reason: "dreamwell-effect",
+          wait: 0,
+        },
+        {
+          id: "opponent-effect-draw",
+          action: "draw-card",
+          owner: "enemy",
+          cardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+          reason: "dreamwell-effect",
+          wait: 0,
+        },
+        {
+          id: "player-turn-draw",
+          action: "draw-card",
+          owner: "player",
+          cardId: "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+          reason: "turn-draw",
+          wait: 0,
+        },
+      ]),
+    ).toMatchObject([
+      { owner: "player", reason: "dreamwell-effect" },
+      { owner: "enemy", reason: "dreamwell-effect" },
+      { owner: "player", reason: "turn-draw" },
+    ]);
+  });
+
+  it("preserves a Dreamwell reading pause", () => {
+    expect(
+      parseTutorialActions([
+        {
+          id: "player-voltsurge",
+          action: "draw-dreamwell-card",
+          owner: "player",
+          cardId: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+          revealDuration: 5,
+          wait: 0,
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "player-voltsurge",
+        action: "draw-dreamwell-card",
+        owner: "player",
+        cardId: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+        revealDuration: 5,
+        wait: 0,
+      },
+    ]);
+  });
+
   it("normalizes and validates the opponent card reveal duration", () => {
     expect(
       parseTutorialActions([

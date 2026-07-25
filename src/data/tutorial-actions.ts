@@ -1,8 +1,5 @@
 import { isCardId } from "../types/card-identity";
-import type {
-  TutorialAction,
-  TutorialSpeechBubble,
-} from "../types/tutorial";
+import type { TutorialAction, TutorialSpeechBubble } from "../types/tutorial";
 import { parseTutorialInstructionMarkup } from "./tutorial-instruction-markup";
 
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
@@ -44,10 +41,7 @@ function parseTutorialSpeechBubble(
     );
   }
   const verticalOffset = record.verticalOffset ?? 0;
-  if (
-    typeof verticalOffset !== "number" ||
-    !Number.isFinite(verticalOffset)
-  ) {
+  if (typeof verticalOffset !== "number" || !Number.isFinite(verticalOffset)) {
     throw new Error(
       `Tutorial action ${JSON.stringify(actionId)} must have a finite speech bubble vertical offset.`,
     );
@@ -139,8 +133,7 @@ export function parseTutorialActions(
         );
       }
       parseTutorialInstructionMarkup(record.text);
-      const trigger =
-        record.trigger ?? "player-turn-announcement-complete";
+      const trigger = record.trigger ?? "player-turn-announcement-complete";
       if (
         trigger !== "immediate" &&
         trigger !== "player-turn-announcement-complete" &&
@@ -222,6 +215,33 @@ export function parseTutorialActions(
         wait,
       } satisfies TutorialAction;
     }
+    if (record.action === "draw-card") {
+      const owner = record.owner;
+      if (owner !== "player" && owner !== "enemy") {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must target the player or enemy.`,
+        );
+      }
+      if (typeof record.cardId !== "string" || !isCardId(record.cardId)) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must identify the drawn card by UUID.`,
+        );
+      }
+      const reason = record.reason;
+      if (reason !== "dreamwell-effect" && reason !== "turn-draw") {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must identify a supported draw reason.`,
+        );
+      }
+      return {
+        id,
+        action: "draw-card",
+        owner,
+        cardId: record.cardId,
+        reason,
+        wait,
+      } satisfies TutorialAction;
+    }
     if (record.action === "reposition-opponent-character") {
       if (typeof record.cardId !== "string" || !isCardId(record.cardId)) {
         throw new Error(
@@ -299,11 +319,23 @@ export function parseTutorialActions(
           `Tutorial action ${JSON.stringify(id)} must identify a Dreamwell card by UUID.`,
         );
       }
+      const revealDuration = record.revealDuration;
+      if (
+        revealDuration !== undefined &&
+        (typeof revealDuration !== "number" ||
+          !Number.isFinite(revealDuration) ||
+          revealDuration < 0)
+      ) {
+        throw new Error(
+          `Tutorial action ${JSON.stringify(id)} must have a non-negative Dreamwell reveal duration.`,
+        );
+      }
       return {
         id,
         action: "draw-dreamwell-card",
         owner,
         cardId: record.cardId,
+        ...(revealDuration === undefined ? {} : { revealDuration }),
         wait,
       } satisfies TutorialAction;
     }

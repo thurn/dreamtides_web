@@ -181,3 +181,51 @@ duration = 5
 verticalOffset = -30
 bubbleWidth = 500
 text = "Instead, the lowest spark (✦) character is [yellow]dissolved[/yellow] (sent to the void)."
+
+[[actions]]
+id = "player-voltsurge"
+action = "draw-dreamwell-card"
+owner = "player"
+cardId = "7171ff89-ebe4-42d0-8863-9b4b0531cad2"
+revealDuration = 5
+wait = 0
+
+[[actions]]
+id = "voltsurge-player-draw-nocturne"
+action = "draw-card"
+owner = "player"
+cardId = "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
+reason = "dreamwell-effect"
+wait = 0
+
+[[actions]]
+id = "voltsurge-player-draw-flashpoint"
+action = "draw-card"
+owner = "player"
+cardId = "4408b942-09a0-4f4e-a403-10c708c6e3c5"
+reason = "dreamwell-effect"
+wait = 0
+
+[[actions]]
+id = "voltsurge-enemy-draw-troubadour"
+action = "draw-card"
+owner = "enemy"
+cardId = "229ab3a1-3720-41a2-924c-8fe112188f8e"
+reason = "dreamwell-effect"
+wait = 0
+
+[[actions]]
+id = "voltsurge-enemy-draw-witness"
+action = "draw-card"
+owner = "enemy"
+cardId = "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+reason = "dreamwell-effect"
+wait = 0
+
+[[actions]]
+id = "player-turn-draw-glimpse"
+action = "draw-card"
+owner = "player"
+cardId = "2162742c-09d0-4e62-ae49-0f8f79b45adc"
+reason = "turn-draw"
+wait = 0

@@ -71,6 +71,7 @@ const ACTION_OPTIONS = [
     value: "animate-dreamcaller-portrait",
     label: "Animate Dreamcaller Portrait",
   },
+  { value: "draw-card", label: "Draw Card" },
   { value: "draw-opponent-card", label: "Draw Opponent Card" },
   {
     value: "reveal-and-play-opponent-card",
@@ -173,6 +174,16 @@ function defaultAction(
       wait: 0,
     };
   }
+  if (actionName === "draw-card") {
+    return {
+      id,
+      action: "draw-card",
+      owner: "player",
+      cardId: TUTORIAL_PLAYER_CARD_ID,
+      reason: "dreamwell-effect",
+      wait: 0,
+    };
+  }
   if (actionName === "draw-dreamwell-card") {
     return {
       id,
@@ -270,6 +281,18 @@ function changedActionType(
       wait: action.wait,
     };
   }
+  if (actionName === "draw-card") {
+    return {
+      id: action.id,
+      action: actionName,
+      owner: action.action === "draw-card" ? action.owner : "player",
+      cardId:
+        action.action === "draw-card" ? action.cardId : TUTORIAL_PLAYER_CARD_ID,
+      reason:
+        action.action === "draw-card" ? action.reason : "dreamwell-effect",
+      wait: action.wait,
+    };
+  }
   if (actionName === "reposition-opponent-character") {
     return {
       id: action.id,
@@ -351,12 +374,15 @@ function changedActionType(
     return {
       id: action.id,
       action: actionName,
-      owner:
-        action.action === "draw-dreamwell-card" ? action.owner : "enemy",
+      owner: action.action === "draw-dreamwell-card" ? action.owner : "enemy",
       cardId:
         action.action === "draw-dreamwell-card"
           ? action.cardId
           : TUTORIAL_DREAMWELL_CARD_ID,
+      ...(action.action === "draw-dreamwell-card" &&
+      action.revealDuration !== undefined
+        ? { revealDuration: action.revealDuration }
+        : {}),
       wait: action.wait,
     };
   }
@@ -403,9 +429,7 @@ function withSpeechBubble(
     TutorialAction,
     {
       readonly action:
-        | "display-speech-bubble"
-        | "reveal-and-play-opponent-card"
-        | "end-turn";
+        "display-speech-bubble" | "reveal-and-play-opponent-card" | "end-turn";
     }
   >,
   speechBubble: TutorialSpeechBubble | undefined,
@@ -702,6 +726,7 @@ function TutorialActionRow({
                   value !== "display-speech-bubble" &&
                   value !== "display-how-to-play" &&
                   value !== "animate-dreamcaller-portrait" &&
+                  value !== "draw-card" &&
                   value !== "draw-opponent-card" &&
                   value !== "reveal-and-play-opponent-card" &&
                   value !== "reposition-opponent-character" &&
@@ -940,6 +965,47 @@ function TutorialActionRow({
           />
         ) : null}
 
+        {action.action === "draw-card" ? (
+          <>
+            <Select
+              full
+              size="sm"
+              ariaLabel={`Card owner for action ${String(index + 1)}`}
+              options={[...DREAMCALLER_OWNER_OPTIONS]}
+              value={action.owner}
+              onChange={(owner) => {
+                if (owner !== "player" && owner !== "enemy") return;
+                update({ ...action, owner }, true);
+              }}
+            />
+            <Select
+              full
+              size="sm"
+              ariaLabel={`Draw reason for action ${String(index + 1)}`}
+              options={[
+                { value: "dreamwell-effect", label: "Dreamwell Effect" },
+                { value: "turn-draw", label: "Turn Draw" },
+              ]}
+              value={action.reason}
+              onChange={(reason) => {
+                if (reason !== "dreamwell-effect" && reason !== "turn-draw") {
+                  return;
+                }
+                update({ ...action, reason }, true);
+              }}
+            />
+            <TextField
+              label="Drawn Card UUID"
+              value={action.cardId}
+              error={isCardId(action.cardId) ? undefined : "Enter a card UUID."}
+              testId={`tutorial-action-card-id-${action.id}`}
+              onChange={(cardId) =>
+                update({ ...action, cardId }, isCardId(cardId))
+              }
+            />
+          </>
+        ) : null}
+
         {action.action === "reveal-and-play-opponent-card" ? (
           <>
             <TextField
@@ -1024,6 +1090,27 @@ function TutorialActionRow({
                 update({ ...action, cardId }, isCardId(cardId))
               }
             />
+            <NumberStepper
+              label="Face-Up Reading Time"
+              value={action.revealDuration ?? 0}
+              displayValue={`${waitLabel(action.revealDuration ?? 0)}s`}
+              size="sm"
+              decrementLabel={`Decrease Dreamwell reading time for action ${String(index + 1)}`}
+              incrementLabel={`Increase Dreamwell reading time for action ${String(index + 1)}`}
+              decrementDisabled={(action.revealDuration ?? 0) <= 0}
+              onDecrement={() => {
+                const revealDuration = Math.max(
+                  0,
+                  Math.round(((action.revealDuration ?? 0) - 0.5) * 10) / 10,
+                );
+                update({ ...action, revealDuration }, true);
+              }}
+              onIncrement={() => {
+                const revealDuration =
+                  Math.round(((action.revealDuration ?? 0) + 0.5) * 10) / 10;
+                update({ ...action, revealDuration }, true);
+              }}
+            />
           </>
         ) : null}
 
@@ -1068,10 +1155,7 @@ function TutorialActionRow({
               }
               testId={`tutorial-action-opposing-card-id-${action.id}`}
               onChange={(opposingCardId) =>
-                update(
-                  { ...action, opposingCardId },
-                  isCardId(opposingCardId),
-                )
+                update({ ...action, opposingCardId }, isCardId(opposingCardId))
               }
             />
           </>
@@ -1281,6 +1365,7 @@ function TutorialEditorContent({
             value !== "display-speech-bubble" &&
             value !== "display-how-to-play" &&
             value !== "animate-dreamcaller-portrait" &&
+            value !== "draw-card" &&
             value !== "draw-opponent-card" &&
             value !== "reveal-and-play-opponent-card" &&
             value !== "reposition-opponent-character" &&

@@ -281,9 +281,7 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
                 data-battle-dreamwell-layer=""
                 data-battle-dreamwell-side={props.view.dreamwell.side}
               >
-                <div
-                  data-dreamwell-card={props.view.dreamwell.model.cardId}
-                />
+                <div data-dreamwell-card={props.view.dreamwell.model.cardId} />
               </div>
             )}
           </div>
@@ -516,9 +514,8 @@ describe("TutorialScreen", () => {
     });
 
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-tutorial-dialogue-anchor]",
-      )?.style.maxWidth,
+      container.querySelector<HTMLElement>("[data-tutorial-dialogue-anchor]")
+        ?.style.maxWidth,
     ).toBe("450px");
 
     act(() => root.unmount());
@@ -577,8 +574,9 @@ describe("TutorialScreen", () => {
     expect(screenMocks.props?.playbackSpeed).toBe(4);
     expect(screenMocks.dialogueProps?.playbackSpeed).toBe(4);
     expect(
-      container.querySelector<HTMLElement>("[data-tutorial-screen]")?.style
-        .getPropertyValue("--dur-slow"),
+      container
+        .querySelector<HTMLElement>("[data-tutorial-screen]")
+        ?.style.getPropertyValue("--dur-slow"),
     ).toBe("0.105s");
 
     act(() => screenMocks.sceneAnimationComplete?.());
@@ -1575,9 +1573,7 @@ describe("TutorialScreen", () => {
     expect(content?.style.paddingRight).toBe("var(--space-9)");
     expect(content?.style.paddingBottom).toBe("var(--space-9)");
     expect(content?.style.paddingLeft).toBe("var(--space-9)");
-    expect(paragraphs[0]?.style.font).toBe(
-      "var(--t-tutorial-instruction)",
-    );
+    expect(paragraphs[0]?.style.font).toBe("var(--t-tutorial-instruction)");
     expect(paragraphs[0]?.style.marginTop).toBe("0px");
     expect(paragraphs[1]?.style.marginTop).toBe("var(--space-7)");
     expect(paragraphs[0]?.textContent).toContain(
@@ -1595,35 +1591,33 @@ describe("TutorialScreen", () => {
       "challenge",
       "accept",
     ]);
-    expect(highlights.every((highlight) => highlight.style.color === "var(--spark)")).toBe(
-      true,
-    );
-    expect(highlights.some((highlight) => highlight.textContent === "a challenge")).toBe(
-      false,
-    );
+    expect(
+      highlights.every((highlight) => highlight.style.color === "var(--spark)"),
+    ).toBe(true);
+    expect(
+      highlights.some((highlight) => highlight.textContent === "a challenge"),
+    ).toBe(false);
     expect(dialog?.querySelectorAll('[aria-label="points"]')).toHaveLength(1);
     expect(dialog?.querySelector('[aria-label="points"]')?.className).toContain(
       "bxf bx-star-circle",
     );
     expect(
-      paragraphs[0]?.querySelector(
-        "[data-tutorial-how-to-play-points-term] i",
-      )?.className,
+      paragraphs[0]?.querySelector("[data-tutorial-how-to-play-points-term] i")
+        ?.className,
     ).toContain("bxf bx-star-circle");
     expect(
-      paragraphs[0]?.querySelector(
-        "[data-tutorial-how-to-play-spark-term] i",
-      )?.className,
+      paragraphs[0]?.querySelector("[data-tutorial-how-to-play-spark-term] i")
+        ?.className,
     ).toContain("bxf bx-sparkle");
     expect(
-      paragraphs[0]?.querySelector(
-        "[data-tutorial-how-to-play-points-term] i",
-      )?.getAttribute("aria-hidden"),
+      paragraphs[0]
+        ?.querySelector("[data-tutorial-how-to-play-points-term] i")
+        ?.getAttribute("aria-hidden"),
     ).toBe("true");
     expect(
-      paragraphs[0]?.querySelector(
-        "[data-tutorial-how-to-play-spark-term] i",
-      )?.getAttribute("aria-hidden"),
+      paragraphs[0]
+        ?.querySelector("[data-tutorial-how-to-play-spark-term] i")
+        ?.getAttribute("aria-hidden"),
     ).toBe("true");
     expect(
       paragraphs[0]?.querySelector<HTMLElement>(
@@ -1642,9 +1636,7 @@ describe("TutorialScreen", () => {
     ).toBe("points ()");
     expect(
       paragraphs[1]?.querySelector('[aria-label="points"]')?.className,
-    ).toContain(
-      "bxf bx-star-circle",
-    );
+    ).toContain("bxf bx-star-circle");
     expect(
       paragraphs[1]?.querySelector('[aria-label="points"]')?.parentElement
         ?.textContent,
@@ -1743,9 +1735,7 @@ describe("TutorialScreen", () => {
     act(() => {
       screenMocks.props?.onTurnAnnouncementComplete?.("enemy");
     });
-    expect(
-      container.querySelector('[role="dialog"]')?.textContent,
-    ).toContain(
+    expect(container.querySelector('[role="dialog"]')?.textContent).toContain(
       "From turn 2, players draw dreamwell cards that increase their energy () production and have other effects.",
     );
     expect(onHowToPlayPresented).toHaveBeenCalledWith(
@@ -1820,16 +1810,13 @@ describe("TutorialScreen", () => {
 
     expect(container.querySelector('[role="dialog"]')).toBeNull();
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-battle-dreamwell-layer]",
-      )?.dataset.tutorialDreamwellEmergence,
+      container.querySelector<HTMLElement>("[data-battle-dreamwell-layer]")
+        ?.dataset.tutorialDreamwellEmergence,
     ).toBe("emerging");
     const dreamwellSideZone = container.querySelector<HTMLElement>(
       '[data-battle-mobile-row="enemy-zones"]',
     );
-    expect(
-      dreamwellSideZone?.dataset.tutorialDreamwellEmergenceLayer,
-    ).toBe("");
+    expect(dreamwellSideZone?.dataset.tutorialDreamwellEmergenceLayer).toBe("");
     expect(dreamwellSideZone?.style.zIndex).toBe("5");
     expect(screenMocks.props?.view.dreamwell?.model.cardId).toBe(
       TUTORIAL_DREAMWELL_CARD.cardId,
@@ -1847,29 +1834,24 @@ describe("TutorialScreen", () => {
 
     const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
     expect(
-      dialog?.querySelector<HTMLElement>(
-        "[data-glass-dialog-companion-layout]",
-      )?.dataset.glassDialogCompanionLayout,
+      dialog?.querySelector<HTMLElement>("[data-glass-dialog-companion-layout]")
+        ?.dataset.glassDialogCompanionLayout,
     ).toBe("horizontal");
     expect(
-      dialog?.querySelector("[data-dreamwell-card]")?.getAttribute(
-        "data-dreamwell-card",
-      ),
+      dialog
+        ?.querySelector("[data-dreamwell-card]")
+        ?.getAttribute("data-dreamwell-card"),
     ).toBe(TUTORIAL_DREAMWELL_CARD.cardId);
     expect(
-      dialog?.querySelector<HTMLElement>(
-        "[data-tutorial-how-to-play-content]",
-      )?.style.width,
+      dialog?.querySelector<HTMLElement>("[data-tutorial-how-to-play-content]")
+        ?.style.width,
     ).toBe("calc(650px - var(--space-5) - var(--space-5))");
     expect(
-      dialog?.querySelector<HTMLElement>(
-        "[data-tutorial-how-to-play-content]",
-      )?.style.paddingTop,
+      dialog?.querySelector<HTMLElement>("[data-tutorial-how-to-play-content]")
+        ?.style.paddingTop,
     ).toBe("var(--space-9)");
     expect(
-      dialog?.querySelector(
-        "[data-tutorial-how-to-play-close-clearance]",
-      ),
+      dialog?.querySelector("[data-tutorial-how-to-play-close-clearance]"),
     ).toBeNull();
     const dreamwellTerm = dialog?.querySelector<HTMLElement>(
       '[data-tutorial-instruction-highlight="yellow"]',
@@ -1981,6 +1963,83 @@ describe("TutorialScreen", () => {
     expect(onActionComplete).toHaveBeenCalledWith(
       "event:dreamwell",
       "autumn-glade",
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("holds an emerged player Dreamwell card for its full reading time", () => {
+    vi.useFakeTimers();
+    const onActionComplete = vi.fn();
+    const cardId = asCardId("7171ff89-ebe4-42d0-8863-9b4b0531cad2");
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamcallers: TUTORIAL_DREAMCALLERS,
+              dialogue: null,
+              playbackRunId: "event:voltsurge",
+              endTurn: null,
+              howToPlay: null,
+              currentAction: {
+                id: "player-voltsurge",
+                action: "draw-dreamwell-card",
+                owner: "player",
+                cardId,
+                revealDuration: 5,
+                wait: 0,
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                dreamwell: {
+                  side: "player",
+                  model: {
+                    cardId,
+                    displaySnapshot: {
+                      id: cardId,
+                      name: "The Voltsurge",
+                      renderedText: "Each player draws 2 cards.",
+                      energyAdded: 1,
+                      imageNumber: 2242029317,
+                    },
+                  },
+                },
+                enemy: { backRank: [], frontRank: [], deckCardIds: [] },
+                player: { backRank: [], frontRank: [] },
+              } as unknown as MobileBattleView,
+            }}
+            onActionComplete={onActionComplete}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    act(() => screenMocks.sceneAnimationComplete?.());
+    act(() => screenMocks.props?.onTurnAnnouncementComplete?.("player"));
+    expect(
+      container.querySelector<HTMLElement>("[data-battle-dreamwell-layer]")
+        ?.dataset.tutorialDreamwellEmergence,
+    ).toBe("emerging");
+    act(() => {
+      vi.advanceTimersByTime(1_001);
+    });
+    expect(onActionComplete).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(4_999);
+    });
+    expect(onActionComplete).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(onActionComplete).toHaveBeenCalledWith(
+      "event:voltsurge",
+      "player-voltsurge",
     );
 
     act(() => root.unmount());
@@ -2263,8 +2322,7 @@ describe("TutorialScreen", () => {
               currentAction: {
                 id: "resolve-challenge",
                 action: "resolve-challenge",
-                challengerCardId:
-                  TUTORIAL_OPPONENT_CARD.model.cardId,
+                challengerCardId: TUTORIAL_OPPONENT_CARD.model.cardId,
                 defenderCardId: TUTORIAL_PLAYER_CARD.model.cardId,
                 wait: 0,
               },
@@ -2326,10 +2384,12 @@ describe("TutorialScreen", () => {
       "[data-tutorial-challenge-animation]",
     );
     expect(animation).not.toBeNull();
-    expect(animation?.getAttribute("data-tutorial-challenge-winner-card-id"))
-      .toBe(TUTORIAL_PLAYER_CARD.model.cardId);
-    expect(animation?.getAttribute("data-tutorial-challenge-loser-card-id"))
-      .toBe(TUTORIAL_OPPONENT_CARD.model.cardId);
+    expect(
+      animation?.getAttribute("data-tutorial-challenge-winner-card-id"),
+    ).toBe(TUTORIAL_PLAYER_CARD.model.cardId);
+    expect(
+      animation?.getAttribute("data-tutorial-challenge-loser-card-id"),
+    ).toBe(TUTORIAL_OPPONENT_CARD.model.cardId);
     expect(
       container.querySelectorAll("[data-tutorial-challenge-mote]"),
     ).toHaveLength(24);
@@ -2370,14 +2430,12 @@ describe("TutorialScreen", () => {
       )?.style.filter,
     ).toBe("");
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-tutorial-challenge-mote]",
-      )?.style.background,
+      container.querySelector<HTMLElement>("[data-tutorial-challenge-mote]")
+        ?.style.background,
     ).toBe("var(--tutorial-dissolve-fragment)");
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-tutorial-challenge-mote]",
-      )?.style.outline,
+      container.querySelector<HTMLElement>("[data-tutorial-challenge-mote]")
+        ?.style.outline,
     ).toBe("");
     expect(screenMocks.props?.view.phase).toBe("challenge");
 

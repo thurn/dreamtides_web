@@ -104,10 +104,7 @@ function validateTutorialSpeechBubble(value, actionId, required) {
     );
   }
   const verticalOffset = value.verticalOffset ?? 0;
-  if (
-    typeof verticalOffset !== "number" ||
-    !Number.isFinite(verticalOffset)
-  ) {
+  if (typeof verticalOffset !== "number" || !Number.isFinite(verticalOffset)) {
     throw invalid(
       `Tutorial action ${JSON.stringify(actionId)} must have a finite speech bubble vertical offset.`,
     );
@@ -188,8 +185,7 @@ export function validateTutorialActions(value) {
         );
       }
       validateTutorialMarkup(candidate.text, id);
-      const trigger =
-        candidate.trigger ?? "player-turn-announcement-complete";
+      const trigger = candidate.trigger ?? "player-turn-announcement-complete";
       if (
         trigger !== "immediate" &&
         trigger !== "player-turn-announcement-complete" &&
@@ -261,6 +257,35 @@ export function validateTutorialActions(value) {
         );
       }
       return { id, action, cardId: candidate.cardId, wait };
+    }
+    if (action === "draw-card") {
+      const { owner, reason } = candidate;
+      if (owner !== "player" && owner !== "enemy") {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must target the player or enemy.`,
+        );
+      }
+      if (
+        typeof candidate.cardId !== "string" ||
+        !CARD_UUID_PATTERN.test(candidate.cardId)
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must identify the drawn card by UUID.`,
+        );
+      }
+      if (reason !== "dreamwell-effect" && reason !== "turn-draw") {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must identify a supported draw reason.`,
+        );
+      }
+      return {
+        id,
+        action,
+        owner,
+        cardId: candidate.cardId,
+        reason,
+        wait,
+      };
     }
     if (action === "reposition-opponent-character") {
       if (
@@ -343,7 +368,25 @@ export function validateTutorialActions(value) {
           `Tutorial action ${JSON.stringify(id)} must identify a Dreamwell card by UUID.`,
         );
       }
-      return { id, action, owner, cardId: candidate.cardId, wait };
+      const revealDuration = candidate.revealDuration;
+      if (
+        revealDuration !== undefined &&
+        (typeof revealDuration !== "number" ||
+          !Number.isFinite(revealDuration) ||
+          revealDuration < 0)
+      ) {
+        throw invalid(
+          `Tutorial action ${JSON.stringify(id)} must have a non-negative Dreamwell reveal duration.`,
+        );
+      }
+      return {
+        id,
+        action,
+        owner,
+        cardId: candidate.cardId,
+        ...(revealDuration === undefined ? {} : { revealDuration }),
+        wait,
+      };
     }
     if (action === "end-turn") {
       const speechBubble = validateTutorialSpeechBubble(

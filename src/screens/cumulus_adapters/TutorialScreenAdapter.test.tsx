@@ -98,16 +98,19 @@ vi.mock("../../state/front-door-context", () => ({
 }));
 
 vi.mock("../../data/tutorial-actions", async (importOriginal) => {
-  const original = await importOriginal<typeof import("../../data/tutorial-actions")>();
+  const original =
+    await importOriginal<typeof import("../../data/tutorial-actions")>();
   return {
     ...original,
-    loadTutorialActions: vi.fn(() => Promise.resolve(mocks.state.tutorial.actions)),
+    loadTutorialActions: vi.fn(() =>
+      Promise.resolve(mocks.state.tutorial.actions),
+    ),
   };
 });
 
 vi.mock("../../state/use-tutorial-opponent-card", () => ({
-  useTutorialCards: () => ({
-    opponent: {
+  useTutorialCards: () => {
+    const opponent = {
       id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
       name: "Tutorial Opponent Card",
       cardNumber: 519,
@@ -120,8 +123,8 @@ vi.mock("../../state/use-tutorial-opponent-card", () => ({
       renderedText: "",
       imageNumber: 1792373848,
       artOwned: false,
-    },
-    player: {
+    };
+    const player = {
       id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
       name: "Tutorial Player Card",
       cardNumber: 512,
@@ -134,19 +137,23 @@ vi.mock("../../state/use-tutorial-opponent-card", () => ({
       renderedText: "",
       imageNumber: 1011175312,
       artOwned: false,
-    },
-    dreamwell: [
-      {
-        id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
-        name: "Autumn Glade",
-        renderedText: "Gain 2⍟.",
-        order: 1,
-        energyAdded: 1,
-        cardNumber: 5,
-        imageNumber: 1789989917,
-      },
-    ],
-  }),
+    };
+    return {
+      opponents: [opponent],
+      players: [player],
+      dreamwell: [
+        {
+          id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+          name: "Autumn Glade",
+          renderedText: "Gain 2⍟.",
+          order: 1,
+          energyAdded: 1,
+          cardNumber: 5,
+          imageNumber: 1789989917,
+        },
+      ],
+    };
+  },
 }));
 
 vi.mock("../../cumulus/screens/TutorialScreen", () => ({
@@ -157,8 +164,9 @@ vi.mock("../../cumulus/screens/TutorialScreen", () => ({
 }));
 
 beforeEach(() => {
-  (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean })
-    .IS_REACT_ACT_ENVIRONMENT = true;
+  (
+    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
   vi.spyOn(console, "log").mockImplementation(() => {});
   mocks.beginTutorial.mockClear();
   mocks.completeTutorialAction.mockClear();
@@ -416,10 +424,10 @@ describe("TutorialScreenAdapter", () => {
         } | null;
       }
     ).playerCardPlay = {
-        cardInstanceId: "tutorial-player-deck-1",
-        cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-        targetSlotId: "player-back-4",
-      };
+      cardInstanceId: "tutorial-player-deck-1",
+      cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      targetSlotId: "player-back-4",
+    };
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);

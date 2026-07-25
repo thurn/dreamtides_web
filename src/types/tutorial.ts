@@ -3,6 +3,7 @@ export type TutorialActionName =
   | "display-speech-bubble"
   | "display-how-to-play"
   | "animate-dreamcaller-portrait"
+  | "draw-card"
   | "draw-opponent-card"
   | "reveal-and-play-opponent-card"
   | "reposition-opponent-character"
@@ -88,6 +89,17 @@ export interface DrawOpponentCardTutorialAction extends TutorialActionBase {
   readonly cardId: string;
 }
 
+/** Draw purpose used to reconstruct scripted Dreamwell and turn draws. */
+export type TutorialCardDrawReason = "dreamwell-effect" | "turn-draw";
+
+/** Moves one UUID-authored card from the selected deck into its owner's hand. */
+export interface DrawCardTutorialAction extends TutorialActionBase {
+  readonly action: "draw-card";
+  readonly owner: TutorialDreamcallerOwner;
+  readonly cardId: string;
+  readonly reason: TutorialCardDrawReason;
+}
+
 /** Reveals the opponent's hand card at reading scale, then plays it. */
 export interface RevealAndPlayOpponentCardTutorialAction extends TutorialActionBase {
   readonly action: "reveal-and-play-opponent-card";
@@ -100,15 +112,13 @@ export interface RevealAndPlayOpponentCardTutorialAction extends TutorialActionB
 }
 
 /** Moves one UUID-authored opponent character to its closest front-rank cell. */
-export interface RepositionOpponentCharacterTutorialAction
-  extends TutorialActionBase {
+export interface RepositionOpponentCharacterTutorialAction extends TutorialActionBase {
   readonly action: "reposition-opponent-character";
   readonly cardId: string;
 }
 
 /** Waits for the player to move one UUID-authored character across from an opponent. */
-export interface RepositionPlayerCharacterTutorialAction
-  extends TutorialActionBase {
+export interface RepositionPlayerCharacterTutorialAction extends TutorialActionBase {
   readonly action: "reposition-player-character";
   readonly cardId: string;
   readonly opposingCardId: string;
@@ -126,6 +136,8 @@ export interface DrawDreamwellCardTutorialAction extends TutorialActionBase {
   readonly action: "draw-dreamwell-card";
   readonly owner: TutorialDreamcallerOwner;
   readonly cardId: string;
+  /** Seconds the emerged card remains readable before its effect applies. */
+  readonly revealDuration?: number;
 }
 
 /** Waits for the player to play their tutorial card, then offers End Turn. */
@@ -140,6 +152,7 @@ export type TutorialAction =
   | DisplaySpeechBubbleTutorialAction
   | DisplayHowToPlayTutorialAction
   | AnimateDreamcallerPortraitTutorialAction
+  | DrawCardTutorialAction
   | DrawOpponentCardTutorialAction
   | RevealAndPlayOpponentCardTutorialAction
   | RepositionOpponentCharacterTutorialAction
