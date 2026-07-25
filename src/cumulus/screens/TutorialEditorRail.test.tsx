@@ -721,7 +721,8 @@ describe("TutorialEditorRail", () => {
         'button[role="option"]',
       ),
     ].find(
-      (option) => option.textContent?.trim() === "Reposition Player Character",
+      (option) =>
+        option.textContent?.trim() === "Reposition Player Character",
     );
     expect(repositionOption).toBeDefined();
     act(() => repositionOption?.click());

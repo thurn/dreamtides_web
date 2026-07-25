@@ -298,15 +298,14 @@ function emptyInspectorSide(
   };
 }
 
-function activeDialogueAction(playback: TutorialPlaybackState | null):
-  | DisplaySpeechBubbleTutorialAction
-  | {
-      readonly action: "reveal-and-play-opponent-card";
-      readonly text: string;
-      readonly verticalOffset?: number;
-      readonly bubbleWidth?: number;
-    }
-  | null {
+function activeDialogueAction(
+  playback: TutorialPlaybackState | null,
+): DisplaySpeechBubbleTutorialAction | {
+  readonly action: "reveal-and-play-opponent-card";
+  readonly text: string;
+  readonly verticalOffset?: number;
+  readonly bubbleWidth?: number;
+} | null {
   if (playback?.currentActionIndex === null || playback === null) return null;
   const currentAction = playback.actions[playback.currentActionIndex];
   if (currentAction?.action === "display-speech-bubble") return currentAction;
@@ -388,9 +387,9 @@ export function buildTutorialView(
     .find((action) => action.action === "draw-dreamwell-card");
   const revealedDreamwellCard =
     revealedDreamwellAction?.action === "draw-dreamwell-card"
-      ? (dreamwellCards?.find(
+      ? dreamwellCards?.find(
           (card) => card.id === revealedDreamwellAction.cardId,
-        ) ?? null)
+        ) ?? null
       : null;
   if (
     revealedDreamwellAction?.action === "draw-dreamwell-card" &&
@@ -453,16 +452,14 @@ export function buildTutorialView(
   const enemyHandCardIds = opponentHandRecords.map((record) => record.view.id);
   const opponentCardToReveal =
     currentAction?.action === "reveal-and-play-opponent-card"
-      ? (opponentHandRecords.find(
+      ? opponentHandRecords.find(
           (record) => record.card.id === currentAction.cardId,
-        )?.view ?? null)
+        )?.view ?? null
       : null;
   const enemyDeck = enemyDeckCardIds.slice(completedOpponentDrawCount);
-  const visibleOpponentRepositionActions =
-    playback?.actions
-      .slice(0, visibleActionCount)
-      .filter((action) => action.action === "reposition-opponent-character") ??
-    [];
+  const visibleOpponentRepositionActions = playback?.actions
+    .slice(0, visibleActionCount)
+    .filter((action) => action.action === "reposition-opponent-character") ?? [];
   const repositionedOpponentCardIds = new Set(
     visibleOpponentRepositionActions.map((action) => action.cardId),
   );
@@ -664,7 +661,10 @@ export function buildTutorialView(
         !enemyDreamwellApplied ||
         (record.playedAtActionIndex ?? -1) > dreamwellExplanationActionIndex,
     )
-    .reduce((total, record) => total + (record.card.energyCost ?? 0), 0);
+    .reduce(
+      (total, record) => total + (record.card.energyCost ?? 0),
+      0,
+    );
   const enemyCurrentEnergy = Math.max(
     0,
     (enemyDreamwellApplied ? enemyMaxEnergy : TUTORIAL_STARTING_ENERGY) -
@@ -762,31 +762,31 @@ export function buildTutorialView(
                 text: dialogueAction.text,
               },
             }
-          : dialogueAction.speaker === "player" ||
-              dialogueAction.speaker === "enemy"
-            ? {
-                kind: "dreamcaller",
-                owner: dialogueAction.speaker,
-                ...(dialogueAction.bubbleWidth === undefined
-                  ? {}
-                  : { bubbleWidth: dialogueAction.bubbleWidth }),
-                speakerName:
-                  dialogueAction.speaker === "player" ? "Tensho" : "Threxan",
+        : dialogueAction.speaker === "player" ||
+            dialogueAction.speaker === "enemy"
+          ? {
+              kind: "dreamcaller",
+              owner: dialogueAction.speaker,
+              ...(dialogueAction.bubbleWidth === undefined
+                ? {}
+                : { bubbleWidth: dialogueAction.bubbleWidth }),
+              speakerName:
+                dialogueAction.speaker === "player" ? "Tensho" : "Threxan",
+              text: dialogueAction.text,
+            }
+          : {
+              kind: "guide",
+              verticalOffset: dialogueAction.verticalOffset ?? 0,
+              ...(dialogueAction.bubbleWidth === undefined
+                ? {}
+                : { bubbleWidth: dialogueAction.bubbleWidth }),
+              model: {
+                portrait: { kind: "character-portrait", characterId: "mira" },
+                portraitAlt: "Mira",
+                speakerName: "Mira",
                 text: dialogueAction.text,
-              }
-            : {
-                kind: "guide",
-                verticalOffset: dialogueAction.verticalOffset ?? 0,
-                ...(dialogueAction.bubbleWidth === undefined
-                  ? {}
-                  : { bubbleWidth: dialogueAction.bubbleWidth }),
-                model: {
-                  portrait: { kind: "character-portrait", characterId: "mira" },
-                  portraitAlt: "Mira",
-                  speakerName: "Mira",
-                  text: dialogueAction.text,
-                },
               },
+            },
     playbackRunId: playback?.runId ?? null,
     currentAction,
     howToPlay:
@@ -856,7 +856,8 @@ export function buildTutorialView(
           },
     battle: (() => {
       const emptyPlayer = emptySide("player");
-      const playerTurnEnergy = TUTORIAL_STARTING_ENERGY + playerDreamwellEnergy;
+      const playerTurnEnergy =
+        TUTORIAL_STARTING_ENERGY + playerDreamwellEnergy;
       const player = {
         ...emptyPlayer,
         deckCardIds: playerDeck,
@@ -916,128 +917,128 @@ export function buildTutorialView(
         completedActionCount >= challengeActionIndex
           ? "challenge"
           : endTurnCompleted && !dreamwellExplanationCompleted
-            ? "dawn"
-            : duskStarted
-              ? "dusk"
-              : "day";
+          ? "dawn"
+          : duskStarted
+            ? "dusk"
+            : "day";
       return {
-        battleId: TUTORIAL_BATTLE_ID,
+      battleId: TUTORIAL_BATTLE_ID,
+      perspective: "player",
+      aiApproval: null,
+      cardPicker: null,
+      choicePrompt: null,
+      dreamwell:
+        !dreamwellExplanationCompleted &&
+        revealedDreamwellAction?.action === "draw-dreamwell-card" &&
+        revealedDreamwellCard !== null
+          ? {
+              side: revealedDreamwellAction.owner,
+              model: tutorialDreamwellModel(revealedDreamwellCard),
+            }
+          : null,
+      activeSide: endTurnCompleted
+        ? "enemy"
+        : playerTurnStarted
+          ? "player"
+          : "enemy",
+      isOpeningTurn: !playerTurnStarted,
+      phase,
+      enemyHandCardIds,
+      enemyHand: [],
+      enemy: {
+        ...enemy,
+        deckCardIds: enemyDeck,
+        backRank: enemyBackRank,
+        frontRank: enemyFrontRank,
+      },
+      player,
+      playerHand: playerHandCards,
+      near: player,
+      far: {
+        ...enemy,
+        position: "far",
+        deckCardIds: enemyDeck,
+        backRank: enemyBackRank,
+        frontRank: enemyFrontRank,
+      },
+      nearHand: {
+        owner: "player",
+        position: "near",
+        cardIds: playerHandCardIds,
+        cards: playerHandCards,
+      },
+      farHand: {
+        owner: "enemy",
+        position: "far",
+        cardIds: enemyHandCardIds,
+        cards: [],
+      },
+      promptNotice: null,
+      inspector: {
+        opponentName: "Awaiting Dreamcaller",
         perspective: "player",
-        aiApproval: null,
-        cardPicker: null,
-        choicePrompt: null,
-        dreamwell:
-          !dreamwellExplanationCompleted &&
-          revealedDreamwellAction?.action === "draw-dreamwell-card" &&
-          revealedDreamwellCard !== null
-            ? {
-                side: revealedDreamwellAction.owner,
-                model: tutorialDreamwellModel(revealedDreamwellCard),
-              }
-            : null,
+        turn: playerTurnStarted ? "2" : "1",
+        phase:
+          phase === "challenge"
+            ? "Challenge"
+            : phase === "dawn"
+              ? "Dawn"
+              : phase === "dusk"
+                ? "Dusk"
+                : "Day",
         activeSide: endTurnCompleted
-          ? "enemy"
+          ? "Enemy"
           : playerTurnStarted
-            ? "player"
-            : "enemy",
-        isOpeningTurn: !playerTurnStarted,
-        phase,
-        enemyHandCardIds,
-        enemyHand: [],
-        enemy: {
-          ...enemy,
-          deckCardIds: enemyDeck,
-          backRank: enemyBackRank,
-          frontRank: enemyFrontRank,
-        },
-        player,
-        playerHand: playerHandCards,
-        near: player,
-        far: {
-          ...enemy,
-          position: "far",
-          deckCardIds: enemyDeck,
-          backRank: enemyBackRank,
-          frontRank: enemyFrontRank,
-        },
-        nearHand: {
-          owner: "player",
-          position: "near",
-          cardIds: playerHandCardIds,
-          cards: playerHandCards,
-        },
-        farHand: {
-          owner: "enemy",
-          position: "far",
-          cardIds: enemyHandCardIds,
-          cards: [],
-        },
-        promptNotice: null,
-        inspector: {
-          opponentName: "Awaiting Dreamcaller",
-          perspective: "player",
-          turn: playerTurnStarted ? "2" : "1",
-          phase:
-            phase === "challenge"
-              ? "Challenge"
-              : phase === "dawn"
-                ? "Dawn"
-                : phase === "dusk"
-                  ? "Dusk"
-                  : "Day",
-          activeSide: endTurnCompleted
-            ? "Enemy"
-            : playerTurnStarted
-              ? "Player"
-              : "Enemy",
-          result: "In progress",
-          nextDreamwellOrder: "Complete",
-          isOpponentHandRevealed: false,
-          isPlayerHandHidden: false,
-          isFarHandRevealed: false,
-          isNearHandHidden: false,
-          sides: {
-            player: {
-              ...emptyInspectorSide("player"),
-              points: playerDreamwellScore,
-              currentEnergy: player.status.currentEnergy,
-              maxEnergy: player.status.maxEnergy,
-              zones: {
-                ...emptyInspectorSide("player").zones,
-                hand: playerHandCardIds.length,
-                deck: playerDeck.length,
-                backRank: playerCardPlayed && !playerCardRepositioned ? 1 : 0,
-                frontRank:
-                  playerCardRepositioned &&
-                  !(challengeResolved && challengeLoserOwner === "player")
-                    ? 1
-                    : 0,
-                void:
-                  challengeResolved && challengeLoserOwner === "player" ? 1 : 0,
-              },
-            },
-            enemy: {
-              ...enemyInspector,
-              points: enemyDreamwellScore,
-              currentEnergy: enemy.status.currentEnergy,
-              maxEnergy: enemy.status.maxEnergy,
-              zones: {
-                ...enemyInspector.zones,
-                hand: enemyHandCardIds.length,
-                deck: enemyDeck.length,
-                backRank: enemyBackRank.filter((slot) => slot.card !== null)
-                  .length,
-                frontRank: enemyFrontRank.filter((slot) => slot.card !== null)
-                  .length,
-                void:
-                  challengeResolved && challengeLoserOwner === "enemy" ? 1 : 0,
-              },
+            ? "Player"
+            : "Enemy",
+        result: "In progress",
+        nextDreamwellOrder: "Complete",
+        isOpponentHandRevealed: false,
+        isPlayerHandHidden: false,
+        isFarHandRevealed: false,
+        isNearHandHidden: false,
+        sides: {
+          player: {
+            ...emptyInspectorSide("player"),
+            points: playerDreamwellScore,
+            currentEnergy: player.status.currentEnergy,
+            maxEnergy: player.status.maxEnergy,
+            zones: {
+              ...emptyInspectorSide("player").zones,
+              hand: playerHandCardIds.length,
+              deck: playerDeck.length,
+              backRank: playerCardPlayed && !playerCardRepositioned ? 1 : 0,
+              frontRank:
+                playerCardRepositioned &&
+                !(challengeResolved && challengeLoserOwner === "player")
+                  ? 1
+                  : 0,
+              void:
+                challengeResolved && challengeLoserOwner === "player" ? 1 : 0,
             },
           },
-          ai: null,
+          enemy: {
+            ...enemyInspector,
+            points: enemyDreamwellScore,
+            currentEnergy: enemy.status.currentEnergy,
+            maxEnergy: enemy.status.maxEnergy,
+            zones: {
+              ...enemyInspector.zones,
+              hand: enemyHandCardIds.length,
+              deck: enemyDeck.length,
+              backRank: enemyBackRank.filter((slot) => slot.card !== null)
+                .length,
+              frontRank: enemyFrontRank.filter((slot) => slot.card !== null)
+                .length,
+              void:
+                challengeResolved && challengeLoserOwner === "enemy" ? 1 : 0,
+            },
+          },
         },
-        result: null,
-      };
+        ai: null,
+      },
+      result: null,
+    };
     })(),
   };
 }

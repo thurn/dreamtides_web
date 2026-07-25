@@ -125,7 +125,8 @@ export function validateTutorialActions(value) {
       const verticalOffset = candidate.verticalOffset;
       if (
         verticalOffset !== undefined &&
-        (typeof verticalOffset !== "number" || !Number.isFinite(verticalOffset))
+        (typeof verticalOffset !== "number" ||
+          !Number.isFinite(verticalOffset))
       ) {
         throw invalid(
           `Tutorial action ${JSON.stringify(id)} must have a finite vertical offset.`,
@@ -163,7 +164,8 @@ export function validateTutorialActions(value) {
         );
       }
       validateTutorialMarkup(candidate.text, id);
-      const trigger = candidate.trigger ?? "player-turn-announcement-complete";
+      const trigger =
+        candidate.trigger ?? "player-turn-announcement-complete";
       if (
         trigger !== "immediate" &&
         trigger !== "player-turn-announcement-complete" &&
@@ -373,7 +375,8 @@ export function validateTutorialActions(value) {
       const verticalOffset = candidate.verticalOffset;
       if (
         verticalOffset !== undefined &&
-        (typeof verticalOffset !== "number" || !Number.isFinite(verticalOffset))
+        (typeof verticalOffset !== "number" ||
+          !Number.isFinite(verticalOffset))
       ) {
         throw invalid(
           `Tutorial action ${JSON.stringify(id)} must have a finite vertical offset.`,

@@ -357,7 +357,8 @@ function changedActionType(
     return {
       id: action.id,
       action: actionName,
-      owner: action.action === "draw-dreamwell-card" ? action.owner : "enemy",
+      owner:
+        action.action === "draw-dreamwell-card" ? action.owner : "enemy",
       cardId:
         action.action === "draw-dreamwell-card"
           ? action.cardId
@@ -408,7 +409,8 @@ function speechBubbleWidth(
     TutorialAction,
     {
       readonly action:
-        "display-speech-bubble" | "reveal-and-play-opponent-card";
+        | "display-speech-bubble"
+        | "reveal-and-play-opponent-card";
     }
   >,
 ): number {
@@ -1076,7 +1078,10 @@ function TutorialActionRow({
               }
               testId={`tutorial-action-opposing-card-id-${action.id}`}
               onChange={(opposingCardId) =>
-                update({ ...action, opposingCardId }, isCardId(opposingCardId))
+                update(
+                  { ...action, opposingCardId },
+                  isCardId(opposingCardId),
+                )
               }
             />
           </>

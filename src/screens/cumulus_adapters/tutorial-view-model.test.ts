@@ -794,7 +794,9 @@ describe("buildTutorialView", () => {
     expect(afterPlayerCardPlay.battle.phase).toBe("day");
     expect(afterPlayerCardPlay.battle.playerHand).toEqual([]);
     expect(afterPlayerCardPlay.battle.nearHand.cardIds).toEqual([]);
-    expect(afterPlayerCardPlay.battle.player.backRank[0]?.card).toMatchObject({
+    expect(
+      afterPlayerCardPlay.battle.player.backRank[0]?.card,
+    ).toMatchObject({
       id: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
       exhausted: true,
       showPlayableOutline: false,
@@ -827,7 +829,9 @@ describe("buildTutorialView", () => {
       PLAYER_CARD,
       [AUTUMN_GLADE],
     );
-    expect(drawingDreamwell.currentAction?.action).toBe("draw-dreamwell-card");
+    expect(drawingDreamwell.currentAction?.action).toBe(
+      "draw-dreamwell-card",
+    );
     expect(drawingDreamwell.battle).toMatchObject({
       activeSide: "enemy",
       phase: "dawn",
@@ -961,7 +965,9 @@ describe("buildTutorialView", () => {
         },
       },
     });
-    expect(worthyChallenger.battle.enemy.backRank[0]?.card).toMatchObject({
+    expect(
+      worthyChallenger.battle.enemy.backRank[0]?.card,
+    ).toMatchObject({
       layoutMotion: "travel",
       exhausted: false,
       model: { cardId: TUTORIAL_OPPONENT_CARD_ID },
@@ -1056,11 +1062,13 @@ describe("buildTutorialView", () => {
       cardId: TUTORIAL_PLAYER_CARD_ID,
       opposingCardId: TUTORIAL_OPPONENT_CARD_ID,
     });
-    expect(guidedBlock.battle.player.backRank[0]?.card?.model.cardId).toBe(
-      TUTORIAL_PLAYER_CARD_ID,
-    );
     expect(
-      guidedBlock.battle.player.frontRank.every((slot) => slot.card === null),
+      guidedBlock.battle.player.backRank[0]?.card?.model.cardId,
+    ).toBe(TUTORIAL_PLAYER_CARD_ID);
+    expect(
+      guidedBlock.battle.player.frontRank.every(
+        (slot) => slot.card === null,
+      ),
     ).toBe(true);
 
     const ended = buildTutorialView(

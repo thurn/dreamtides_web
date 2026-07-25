@@ -63,7 +63,8 @@ export function parseTutorialActions(
       const verticalOffset = record.verticalOffset;
       if (
         verticalOffset !== undefined &&
-        (typeof verticalOffset !== "number" || !Number.isFinite(verticalOffset))
+        (typeof verticalOffset !== "number" ||
+          !Number.isFinite(verticalOffset))
       ) {
         throw new Error(
           `Tutorial action ${JSON.stringify(id)} must have a finite vertical offset.`,
@@ -98,7 +99,8 @@ export function parseTutorialActions(
         );
       }
       parseTutorialInstructionMarkup(record.text);
-      const trigger = record.trigger ?? "player-turn-announcement-complete";
+      const trigger =
+        record.trigger ?? "player-turn-announcement-complete";
       if (
         trigger !== "immediate" &&
         trigger !== "player-turn-announcement-complete" &&
@@ -316,7 +318,8 @@ export function parseTutorialActions(
       const verticalOffset = record.verticalOffset;
       if (
         verticalOffset !== undefined &&
-        (typeof verticalOffset !== "number" || !Number.isFinite(verticalOffset))
+        (typeof verticalOffset !== "number" ||
+          !Number.isFinite(verticalOffset))
       ) {
         throw new Error(
           `Tutorial action ${JSON.stringify(id)} must have a finite vertical offset.`,
