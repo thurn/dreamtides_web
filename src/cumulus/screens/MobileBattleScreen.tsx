@@ -220,6 +220,8 @@ export interface MobileBattleScreenProps {
   readonly inspectorDefault?: "responsive" | "collapsed";
   /** Phase controls exposed by this presentation. */
   readonly phaseNavigation?: "both" | "end-turn" | "hidden";
+  /** Visible labels exposed for otherwise unmarked battle zones. */
+  readonly zoneLabels?: "none" | "voids";
   /** Optional controlled inspector state for a parent shell with another rail. */
   readonly inspectorOpen?: boolean;
   /** Reports inspector disclosure changes in controlled compositions. */
@@ -876,6 +878,7 @@ function SideZones({
   position,
   phase,
   side,
+  zoneLabels,
   interactions,
 }: {
   readonly activeSide: MobileBattleOwner;
@@ -885,6 +888,7 @@ function SideZones({
   readonly position: BattleBoardPosition;
   readonly phase: MobileBattlePhase;
   readonly side: MobileBattleSideView;
+  readonly zoneLabels: "none" | "voids";
   readonly interactions?: MobileBattleInteractions;
 }) {
   const deck = toDeckPile(side.deckCardIds);
@@ -1073,6 +1077,7 @@ function SideZones({
             label={`${position === "near" ? "Your" : "Opponent"} void`}
             cardInteraction="inactive"
             emptyState="outlined"
+            emptyLabel={zoneLabels === "voids" ? "Void" : undefined}
             onActivate={interactions?.onZoneOpen === undefined
               ? undefined
               : () => interactions.onZoneOpen?.({ owner, zone: "void" })}
@@ -3112,6 +3117,7 @@ export function MobileBattleScreen({
   interactions,
   inspectorDefault = "responsive",
   phaseNavigation = "both",
+  zoneLabels = "none",
   inspectorOpen: controlledInspectorOpen,
   onInspectorOpenChange,
   onTurnAnnouncementComplete,
@@ -3370,7 +3376,7 @@ export function MobileBattleScreen({
           selectedPickerCardIds={selectedPickerCardIds}
           onPickerCardToggle={handlePickerCardToggle}
         />
-        <SideZones activeSide={view.activeSide} dreamwell={visibleDreamwell} isDesktop={isDesktop} owner={far.owner} position="far" phase={view.phase} side={far} interactions={interactions} />
+        <SideZones activeSide={view.activeSide} dreamwell={visibleDreamwell} isDesktop={isDesktop} owner={far.owner} position="far" phase={view.phase} side={far} zoneLabels={zoneLabels} interactions={interactions} />
         <PlayArea isDesktop={isDesktop} owner={far.owner} position="far" side={far} layoutBackSlotCount={layoutBackSlotCount} densityBackSlotCount={densityBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} guidedSlotHighlight={guidedSlotHighlight} preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines} interactions={interactions} />
         <PlayArea isDesktop={isDesktop} owner={near.owner} position="near" side={near} layoutBackSlotCount={layoutBackSlotCount} densityBackSlotCount={densityBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} guidedSlotHighlight={guidedSlotHighlight} preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines} interactions={interactions} />
         <ControlRow
@@ -3384,7 +3390,7 @@ export function MobileBattleScreen({
           phaseNavigation={phaseNavigation}
           perspective={view.perspective}
         />
-        <SideZones activeSide={view.activeSide} dreamwell={visibleDreamwell} isDesktop={isDesktop} owner={near.owner} position="near" phase={view.phase} side={near} interactions={interactions} />
+        <SideZones activeSide={view.activeSide} dreamwell={visibleDreamwell} isDesktop={isDesktop} owner={near.owner} position="near" phase={view.phase} side={near} zoneLabels={zoneLabels} interactions={interactions} />
         <NearHand
           owner={near.owner}
           cards={nearHandCards}

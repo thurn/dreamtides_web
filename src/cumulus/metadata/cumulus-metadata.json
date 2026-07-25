@@ -937,6 +937,14 @@
       "description": "Treatment shown when the pile has no cards. Defaults to `hidden`."
     },
     {
+      "name": "emptyLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Visible copy centered inside an empty outlined pile."
+    },
+    {
       "name": "onActivate",
       "tsType": "(() => void)",
       "unionMembers": [],

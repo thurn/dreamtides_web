@@ -59,6 +59,8 @@ export interface CardPileProps {
   readonly cardInteraction?: CardPileCardInteraction;
   /** Treatment shown when the pile has no cards. Defaults to `hidden`. */
   readonly emptyState?: CardPileEmptyState;
+  /** Visible copy centered inside an empty outlined pile. */
+  readonly emptyLabel?: string;
   /** Activates the pile as one zone control. */
   readonly onActivate?: () => void;
   /** Optional stable test id for the pile as a whole. */
@@ -97,7 +99,7 @@ function cardStageStyle(orientation: CardPileOrientation): CSSProperties {
   };
 }
 
-function EmptyPileOutline() {
+function EmptyPileOutline({ label }: { readonly label?: string }) {
   return (
     <div
       aria-hidden="true"
@@ -110,7 +112,24 @@ function EmptyPileOutline() {
         borderRadius: token("--radius-card"),
         pointerEvents: "none",
       }}
-    />
+    >
+      {label === undefined ? null : (
+        <span
+          data-card-pile-empty-label=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "grid",
+            placeItems: "center",
+            font: token("--t-button-sm"),
+            color: token("--text-primary"),
+            textShadow: token("--text-outline-media"),
+          }}
+        >
+          {label}
+        </span>
+      )}
+    </div>
   );
 }
 
@@ -126,6 +145,7 @@ export function CardPile({
   label,
   cardInteraction = "reveal",
   emptyState = "hidden",
+  emptyLabel,
   onActivate,
   testId,
 }: CardPileProps) {
@@ -227,7 +247,9 @@ export function CardPile({
         }}
       >
         {layers}
-        {visibleCards.length === 0 && emptyState === "outlined" ? <EmptyPileOutline /> : null}
+        {visibleCards.length === 0 && emptyState === "outlined" ? (
+          <EmptyPileOutline label={emptyLabel} />
+        ) : null}
       </Pressable>
     );
   }
@@ -239,7 +261,9 @@ export function CardPile({
       style={rootStyle}
     >
       {layers}
-      {visibleCards.length === 0 && emptyState === "outlined" ? <EmptyPileOutline /> : null}
+      {visibleCards.length === 0 && emptyState === "outlined" ? (
+        <EmptyPileOutline label={emptyLabel} />
+      ) : null}
     </div>
   );
 }

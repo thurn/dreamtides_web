@@ -630,6 +630,7 @@ describe("TutorialScreen", () => {
     ).not.toBeNull();
     expect(screenMocks.props?.inspectorDefault).toBe("collapsed");
     expect(screenMocks.props?.phaseNavigation).toBe("hidden");
+    expect(screenMocks.props?.zoneLabels).toBe("voids");
     const dialogueAnchor = container.querySelector<HTMLElement>(
       "[data-tutorial-dialogue-anchor]",
     );

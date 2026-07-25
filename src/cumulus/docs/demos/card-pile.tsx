@@ -61,6 +61,7 @@ function CardPileDemo(args: Record<string, unknown>) {
           label="Empty void"
           cardInteraction="inactive"
           emptyState="outlined"
+          emptyLabel="Void"
           onActivate={() => undefined}
         />
       </div>
@@ -107,12 +108,13 @@ export const cardPileDemo: CumulusComponent = {
     },
     {
       label: "Empty void",
-      note: "An empty void retains its physical card footprint with a dotted outline.",
+      note: "An empty void retains its physical card footprint with a dotted outline and can carry a centered teaching label.",
       code: `<CardPile
   cards={[]}
   orientation="landscape"
   label="Player void"
   emptyState="outlined"
+  emptyLabel="Void"
 />`,
     },
   ],

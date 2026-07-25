@@ -1238,6 +1238,30 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("shows void labels only when the presentation requests them", () => {
+    const baseView = makeView();
+    const view: MobileBattleView = {
+      ...baseView,
+      enemy: { ...baseView.enemy, voidCards: [] },
+      player: { ...baseView.player, voidCards: [] },
+    };
+    const defaultRender = mount(view);
+    expect(
+      defaultRender.container.querySelectorAll("[data-card-pile-empty-label]"),
+    ).toHaveLength(0);
+    act(() => defaultRender.root.unmount());
+
+    const tutorialRender = mount(view, undefined, { zoneLabels: "voids" });
+    const labels = Array.from(
+      tutorialRender.container.querySelectorAll<HTMLElement>(
+        "[data-card-pile-empty-label]",
+      ),
+    );
+    expect(labels).toHaveLength(2);
+    expect(labels.map((label) => label.textContent)).toEqual(["Void", "Void"]);
+    act(() => tutorialRender.root.unmount());
+  });
+
   it("opens deck and void browsers from the physical piles", () => {
     const onZoneOpen = vi.fn();
     const interactions: MobileBattleInteractions = {

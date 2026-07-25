@@ -2449,6 +2449,7 @@ export function TutorialScreen({
             onTurnAnnouncementComplete={completeTurnAnnouncement}
             phaseNavigation={canEndTurn ? "end-turn" : "hidden"}
             preserveOccupiedSlotOutlines={challengeAnimation !== null}
+            zoneLabels="voids"
           />
         </div>
       </div>
