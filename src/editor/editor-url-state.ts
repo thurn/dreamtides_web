@@ -49,6 +49,7 @@ const SORT_PARAM_TO_FIELD = new Map<string, EditorSortField>([
   ["rulestextlength", "rulesTextLength"],
   ["rulestextfontsize", "rulesTextFontSize"],
   ["namelength", "nameLength"],
+  ["namesubstring", "nameSubstring"],
   ["tidecount", "tideCount"],
   ["popularity", "popularity"],
 ]);
@@ -62,6 +63,7 @@ const SORT_FIELD_TO_PARAM: Record<EditorSortField, string> = {
   rulesTextLength: "rulestextlength",
   rulesTextFontSize: "rulestextfontsize",
   nameLength: "namelength",
+  nameSubstring: "namesubstring",
   tideCount: "tidecount",
   popularity: "popularity",
 };

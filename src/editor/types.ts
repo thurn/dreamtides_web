@@ -82,6 +82,7 @@ export type EditorSortField =
   | "rulesTextLength"
   | "rulesTextFontSize"
   | "nameLength"
+  | "nameSubstring"
   | "tideCount"
   | "popularity";
 export type EditorSortDirection = "asc" | "desc";

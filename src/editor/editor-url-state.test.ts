@@ -41,6 +41,20 @@ describe("editor URL display state", () => {
     expect(parseEditorDisplayState(params).searchText).toBe("Moon & tide");
   });
 
+  it("round-trips shared-name-substring grouping through sort", () => {
+    const state = {
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      sort: "nameSubstring" as const,
+    };
+
+    expect(serializeEditorDisplayState(state).toString()).toBe(
+      "sort=namesubstring",
+    );
+    expect(parseEditorDisplayState("?sort=namesubstring").sort).toBe(
+      "nameSubstring",
+    );
+  });
+
   it("serializes non-default controls into stable query params", () => {
     const state: EditorDisplayState = {
       searchText: "",

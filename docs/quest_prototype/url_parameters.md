@@ -252,8 +252,11 @@ current history entry.
   `cost=x` selects variable cost cards. The default `all` cost filter is
   omitted.
 - `subtype=<text>` filters by subtype. Empty subtype filtering is omitted.
-- `sort=number`, `sort=name`, `sort=cost`, `sort=type`, `sort=subtype`, or
-  `sort=spark` selects the sort field. The default `number` sort is omitted.
+- `sort=number`, `sort=name`, `sort=cost`, `sort=type`, `sort=subtype`,
+  `sort=spark`, or `sort=namesubstring` selects the sort field. The
+  `namesubstring` view groups card names by maximal case-insensitive substrings
+  of 5 or more characters shared by at least two cards. A card appears in every
+  matching group it participates in. The default `name` sort is omitted.
 - `dir=asc` or `dir=desc` selects the sort direction. The default `asc`
   direction is omitted.
 - `size=small`, `size=medium`, or `size=large` selects the card preview size.

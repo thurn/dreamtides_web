@@ -3461,6 +3461,81 @@ describe("CardEditorApp", () => {
     });
   });
 
+  it("groups shared name substrings and repeats cards in each matching group", async () => {
+    const cards = [
+      makeEditorCard({
+        id: "dreamlight",
+        name: "Dreamlight Guide",
+        preview: makePreview({ id: "dreamlight", name: "Dreamlight Guide" }),
+      }),
+      makeEditorCard({
+        id: "dream-caller",
+        name: "Dream Caller",
+        preview: makePreview({ id: "dream-caller", name: "Dream Caller" }),
+      }),
+      makeEditorCard({
+        id: "starlight",
+        name: "Starlight Keeper",
+        preview: makePreview({ id: "starlight", name: "Starlight Keeper" }),
+      }),
+      makeEditorCard({
+        id: "unmatched",
+        name: "Ash",
+        preview: makePreview({ id: "unmatched", name: "Ash" }),
+      }),
+    ];
+    const { container, root } = await mountLoadedApp(cards);
+    const replaceState = vi.spyOn(window.history, "replaceState");
+    const sortSelect = container.querySelector<HTMLSelectElement>(
+      '[aria-label="Sort field"]',
+    );
+    const directionButton = container.querySelector<HTMLButtonElement>(
+      '[aria-label="Sort direction"]',
+    );
+
+    if (sortSelect === null || directionButton === null) {
+      throw new Error("Missing substring sort controls");
+    }
+
+    act(() => {
+      setSelectValue(sortSelect, "nameSubstring");
+    });
+
+    expect(replaceState).toHaveBeenLastCalledWith(
+      null,
+      "",
+      "/editor?sort=namesubstring",
+    );
+    expect(
+      Array.from(
+        container.querySelectorAll("[data-editor-substring-group]"),
+      ).map((heading) => heading.getAttribute("data-editor-substring-group")),
+    ).toEqual(["dream", "light "]);
+    expect(container.textContent).toContain("“Dream”");
+    expect(container.textContent).toContain("“light ”");
+    expect(editorCardIds(container)).toEqual([
+      "dream-caller",
+      "dreamlight",
+      "dreamlight",
+      "starlight",
+    ]);
+    expect(container.textContent).toContain("3 / 4 cards");
+
+    act(() => {
+      directionButton.click();
+    });
+    expect(editorCardIds(container)).toEqual([
+      "starlight",
+      "dreamlight",
+      "dreamlight",
+      "dream-caller",
+    ]);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it.each(["number", "name", "cost", "type", "subtype", "spark"])(
     "keeps equal-key sorting stable for %s",
     async (queryValue) => {

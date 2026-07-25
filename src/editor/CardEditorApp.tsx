@@ -18,6 +18,7 @@ import {
 import CardEditorGrid from "./CardEditorGrid";
 import type { CardTagSaveState } from "./CardEditorGrid";
 import CardEditorToolbar from "./CardEditorToolbar";
+import { buildCardNameSubstringGroups } from "./card-name-substring-groups";
 import FocusedCardEditor from "./FocusedCardEditor";
 import type { FocusedSaveStatus } from "./FocusedCardEditor";
 import ManageTagsModal from "./ManageTagsModal";
@@ -194,6 +195,10 @@ function sortValue(
       return fontSizes[card.id] ?? Number.POSITIVE_INFINITY;
     case "nameLength":
       return card.name.length;
+    case "nameSubstring":
+      // The grouped renderer derives its sections after filtering. Name order
+      // keeps this flat intermediate deterministic and is not shown directly.
+      return card.name;
     case "tideCount":
       return card.tides.length;
     case "popularity":
@@ -488,6 +493,7 @@ export default function CardEditorApp({
   // measurements do not churn the sort in any other view.
   const [fontSizes, setFontSizes] = useState<Record<string, number>>({});
   const sortByFontSize = displayState.sort === "rulesTextFontSize";
+  const groupByNameSubstring = displayState.sort === "nameSubstring";
 
   useEffect(() => {
     let cancelled = false;
@@ -603,6 +609,24 @@ export default function CardEditorApp({
   const visibleCards = editing
     ? reorderToFrozenOrder(sortedVisibleCards, frozenOrderRef.current)
     : sortedVisibleCards;
+  const substringGroups = useMemo(
+    () =>
+      groupByNameSubstring
+        ? buildCardNameSubstringGroups(visibleCards, displayState.dir)
+        : undefined,
+    [displayState.dir, groupByNameSubstring, visibleCards],
+  );
+  const substringVisibleCardCount = useMemo(
+    () =>
+      substringGroups === undefined
+        ? visibleCards.length
+        : new Set(
+            substringGroups.flatMap((group) =>
+              group.cards.map((card) => card.id),
+            ),
+          ).size,
+    [substringGroups, visibleCards.length],
+  );
 
   const handleRulesFontSize = useCallback(
     (cardId: string, fontSizePx: number) => {
@@ -1142,7 +1166,7 @@ export default function CardEditorApp({
               subtypeOptions={subtypeOptions}
               availableTags={tags}
               availableTides={tides}
-              visibleCount={visibleCards.length}
+              visibleCount={substringVisibleCardCount}
               totalCount={loadStatus.cards.length}
               checkboxTagCount={
                 displayState.checkboxTag === ""
@@ -1157,9 +1181,14 @@ export default function CardEditorApp({
               <p role="status" style={{ margin: 0, color: "#c9d3cf" }}>
                 No cards match the current filters.
               </p>
+            ) : substringGroups?.length === 0 ? (
+              <p role="status" style={{ margin: 0, color: "#c9d3cf" }}>
+                No card names share a substring of 5 or more characters.
+              </p>
             ) : (
               <CardEditorGrid
                 cards={visibleCards}
+                substringGroups={substringGroups}
                 duplicateUsageByCardId={duplicateUsageByCardId}
                 size={displayState.size}
                 saveState={saveState}

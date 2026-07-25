@@ -1,3 +1,26 @@
+.card-editor-substring-heading {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  width: 100%;
+  margin: var(--space-5) 0 0;
+  padding: 0 0 var(--space-4);
+  border-bottom: 1px solid var(--border-soft);
+  color: var(--text-primary);
+}
+
+.card-editor-substring-heading__match {
+  font: var(--t-title-sm);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.card-editor-substring-heading__count {
+  color: var(--text-secondary);
+  font: var(--t-caption);
+}
+
 @media (max-width: 520px) {
   .card-editor-shell {
     height: auto !important;
