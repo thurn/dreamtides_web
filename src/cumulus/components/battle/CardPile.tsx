@@ -122,7 +122,7 @@ function EmptyPileOutline({ label }: { readonly label?: string }) {
             display: "grid",
             placeItems: "center",
             font: token("--t-button-sm"),
-            color: token("--text-primary"),
+            color: token("--text-faint"),
             textShadow: token("--text-outline-media"),
           }}
         >

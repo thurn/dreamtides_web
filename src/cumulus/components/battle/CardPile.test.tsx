@@ -267,7 +267,7 @@ describe("CardPile", () => {
     );
     expect(label?.textContent).toBe("Void");
     expect(label?.style.font).toBe("var(--t-button-sm)");
-    expect(label?.style.color).toBe("var(--text-primary)");
+    expect(label?.style.color).toBe("var(--text-faint)");
     expect(label?.style.textShadow).toBe("var(--text-outline-media)");
 
     act(() => root.unmount());
