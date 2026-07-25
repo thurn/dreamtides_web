@@ -179,6 +179,7 @@
   --bg-sunken: var(--primitive-void-900);
   --bg-band: var(--primitive-void-700);
   --bg-loading: var(--primitive-line-black); /* true-black cinematic loading stage */
+  --tutorial-dissolve-fragment: var(--primitive-line-black); /* true-black card fragments during the tutorial dissolve */
   --surface-card: var(--primitive-plum-700);
   --surface-raised: var(--primitive-plum-600);
   --surface-hover: var(--primitive-plum-500);

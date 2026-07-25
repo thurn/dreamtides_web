@@ -91,6 +91,7 @@ export const TOKENS = {
   "--bg-sunken": { var: "var(--bg-sunken)", value: "var(--primitive-void-900)" },
   "--bg-band": { var: "var(--bg-band)", value: "var(--primitive-void-700)" },
   "--bg-loading": { var: "var(--bg-loading)", value: "var(--primitive-line-black)" },
+  "--tutorial-dissolve-fragment": { var: "var(--tutorial-dissolve-fragment)", value: "var(--primitive-line-black)" },
   "--surface-card": { var: "var(--surface-card)", value: "var(--primitive-plum-700)" },
   "--surface-raised": { var: "var(--surface-raised)", value: "var(--primitive-plum-600)" },
   "--surface-hover": { var: "var(--surface-hover)", value: "var(--primitive-plum-500)" },

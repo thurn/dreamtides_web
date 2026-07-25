@@ -1487,14 +1487,7 @@ function TutorialChallengeAnimation({
               borderRadius: token(
                 index % 4 === 0 ? "--radius-inset" : "--radius-pill",
               ),
-              background: token(
-                index % 3 === 0
-                  ? "--gradient-gold"
-                  : index % 3 === 1
-                    ? "--gradient-accent"
-                    : "--gradient-energy",
-              ),
-              outline: `${token("--space-1")} solid ${token("--text-on-accent")}`,
+              background: token("--tutorial-dissolve-fragment"),
               boxShadow: token("--shadow-md"),
             }}
           />

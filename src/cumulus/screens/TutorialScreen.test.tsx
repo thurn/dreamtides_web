@@ -2372,8 +2372,13 @@ describe("TutorialScreen", () => {
     expect(
       container.querySelector<HTMLElement>(
         "[data-tutorial-challenge-mote]",
+      )?.style.background,
+    ).toBe("var(--tutorial-dissolve-fragment)");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-tutorial-challenge-mote]",
       )?.style.outline,
-    ).toContain("var(--text-on-accent)");
+    ).toBe("");
     expect(screenMocks.props?.view.phase).toBe("challenge");
 
     act(() => screenMocks.challengeRematerializedAnimationComplete?.());
