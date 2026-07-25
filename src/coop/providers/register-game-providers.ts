@@ -21,12 +21,18 @@
 // the room / folding the log.
 
 import type { QuestContent } from "../../data/quest-content";
-import { registerBattleInitProvider } from "../../rules/battle/battle-events";
+import {
+  registerBattleInitProvider,
+  registerTutorialBattleInitProvider,
+} from "../../rules/battle/battle-events";
 import { registerDeckContentProvider } from "../../rules/quest/deck";
 import { registerDraftContentProvider } from "../../rules/quest/draft";
 import { registerQuestLifecycleContentProvider } from "../../rules/quest/lifecycle";
 import { registerSiteContentProvider } from "../../rules/quest/sites";
-import { createBattleInitProvider } from "./battle-init-provider";
+import {
+  createBattleInitProvider,
+  createTutorialBattleInitProvider,
+} from "./battle-init-provider";
 import { createDeckContentProvider } from "./deck-provider";
 import { createDraftContentProvider } from "./draft-provider";
 import { createQuestLifecycleContentProvider } from "./lifecycle-provider";
@@ -45,6 +51,7 @@ export function registerGameProviders(content: QuestContent): void {
   registerDraftContentProvider(createDraftContentProvider(content));
   registerSiteContentProvider(createSiteContentProvider(content));
   registerBattleInitProvider(createBattleInitProvider(content));
+  registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content));
 }
 
 /**
@@ -58,4 +65,5 @@ export function clearGameProviders(): void {
   registerDraftContentProvider(null);
   registerSiteContentProvider(null);
   registerBattleInitProvider(null);
+  registerTutorialBattleInitProvider(null);
 }

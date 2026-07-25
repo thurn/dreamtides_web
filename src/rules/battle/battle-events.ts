@@ -66,7 +66,9 @@ import { buildTrace } from "../../battle/ai/trace";
 import { planBasicAutomationCommands } from "./basic-automation";
 import {
   newEffectRun,
+  battleModeOf,
   type BattleFoldState,
+  type TutorialBattleMode,
   type EffectRun,
   type PendingPrompt,
 } from "./fold";
@@ -116,7 +118,21 @@ export interface BattleInitProvider {
   }): BattleFoldState | null;
 }
 
+/** Deterministic construction seam for the authored tutorial handoff. */
+export interface TutorialBattleInitProvider {
+  beginTutorialBattle(input: {
+    quest: QuestState;
+    tutorialRunId: string;
+    driverClientId: string;
+    restartNumber: number;
+    seq: number;
+    rng: (drawIndex: number) => number;
+    timestamp: string;
+  }): BattleFoldState | null;
+}
+
 let battleInitProvider: BattleInitProvider | null = null;
+let tutorialBattleInitProvider: TutorialBattleInitProvider | null = null;
 
 /**
  * Register (or clear, with `null`) the deterministic battle-init provider
@@ -132,6 +148,13 @@ export function registerBattleInitProvider(
 /** The currently registered provider, or `null` when none is wired. */
 export function getBattleInitProvider(): BattleInitProvider | null {
   return battleInitProvider;
+}
+
+/** Register the deterministic provider for the tutorial's canonical battle. */
+export function registerTutorialBattleInitProvider(
+  provider: TutorialBattleInitProvider | null,
+): void {
+  tutorialBattleInitProvider = provider;
 }
 
 // ---------------------------------------------------------------------------
@@ -188,7 +211,135 @@ export function beginBattle(
   }
   return {
     ...state,
-    battle: { ...battle, basicAutomationEnabled: true },
+    battle: {
+      ...battle,
+      mode: battle.mode ?? { kind: "quest" },
+      basicAutomationEnabled: true,
+    },
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Tutorial battle lifecycle
+// ---------------------------------------------------------------------------
+
+function nonBlankString(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+/**
+ * Materialize the durable battle immediately after the final authored tutorial
+ * action. The terminal cursor and absent battle slice make repeated delivery a
+ * deterministic no-op; the event's logical key makes normal client retries
+ * idempotent at the log boundary as well.
+ */
+export function beginTutorialBattle(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): FoldState | null {
+  const tutorial = state.frontDoor.tutorial;
+  const tutorialRunId = payload.tutorialRunId;
+  const driverClientId = payload.driverClientId;
+  if (
+    state.battle !== null ||
+    state.frontDoor.phase !== "tutorial" ||
+    tutorial === null ||
+    tutorial.currentActionIndex !== null ||
+    !nonBlankString(tutorialRunId) ||
+    tutorialRunId !== tutorial.runId ||
+    !nonBlankString(driverClientId)
+  ) {
+    return null;
+  }
+  return buildTutorialBattle(state, tutorialRunId, driverClientId, 0, ctx);
+}
+
+/** Rebuild the original authored handoff with a fresh deterministic restart stream. */
+export function restartTutorialBattle(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): FoldState | null {
+  const battle = state.battle;
+  const battleId = payload.battleId;
+  const previousDriverClientId = payload.previousDriverClientId;
+  const driverClientId = payload.driverClientId;
+  if (
+    battle === null ||
+    !nonBlankString(battleId) ||
+    battleId !== battle.board.battleId ||
+    !nonBlankString(previousDriverClientId) ||
+    !nonBlankString(driverClientId)
+  ) {
+    return null;
+  }
+  const mode = battleModeOf(battle);
+  if (
+    mode.kind !== "tutorial" ||
+    mode.driverClientId !== previousDriverClientId
+  ) {
+    return null;
+  }
+  return buildTutorialBattle(
+    state,
+    mode.tutorialRunId,
+    driverClientId,
+    mode.restartNumber + 1,
+    ctx,
+  );
+}
+
+/** Return from an active tutorial battle to the front door without quest writes. */
+export function exitTutorialBattle(
+  state: FoldState,
+  payload: Record<string, unknown>,
+): FoldState | null {
+  const battleId = payload.battleId;
+  if (
+    state.battle === null ||
+    !nonBlankString(battleId) ||
+    battleId !== state.battle.board.battleId ||
+    battleModeOf(state.battle).kind !== "tutorial"
+  ) {
+    return null;
+  }
+  return {
+    ...state,
+    frontDoor: { phase: "main", journeyId: null, tutorial: null },
+    battle: null,
+  };
+}
+
+function buildTutorialBattle(
+  state: FoldState,
+  tutorialRunId: string,
+  driverClientId: string,
+  restartNumber: number,
+  ctx: EventContext,
+): FoldState | null {
+  const provider = tutorialBattleInitProvider;
+  if (provider === null) return null;
+  const battle = provider.beginTutorialBattle({
+    quest: state.quest,
+    tutorialRunId,
+    driverClientId,
+    restartNumber,
+    seq: ctx.seq,
+    rng: ctx.rng,
+    timestamp: ctx.timestamp,
+  });
+  if (battle === null) return null;
+  const mode: TutorialBattleMode = {
+    kind: "tutorial",
+    tutorialRunId,
+    driverClientId,
+    restartNumber,
+    resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
+  };
+  return {
+    ...state,
+    battle: { ...battle, mode, basicAutomationEnabled: true },
   };
 }
 

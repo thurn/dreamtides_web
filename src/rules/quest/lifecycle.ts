@@ -15,6 +15,7 @@
 
 import { genesisFoldState } from "../fold-state";
 import type { BattleFoldState, FoldState } from "../fold-state";
+import { battleModeOf } from "../battle/fold";
 import { toQuestDreamcaller } from "../../data/dreamcaller-selection";
 import type { ResolvedDreamcallerPackage } from "../../types/content";
 import type { QuestState, Screen } from "../../types/quest";
@@ -575,6 +576,7 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   const canNormalizeCards = isRecord(board.cardInstances) && isRecord(board.sides);
   return {
     ...loaded,
+    mode: battleModeOf(loaded),
     board: canNormalizeCards ? cloneBattleMutableState(loaded.board) : loaded.board,
   };
 }

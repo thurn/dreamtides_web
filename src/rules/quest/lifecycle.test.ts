@@ -562,7 +562,7 @@ describe("LOAD_STATE", () => {
       snapshot,
       battle: emptyBattle,
     });
-    expect(withBattle.battle).toEqual(emptyBattle);
+    expect(withBattle.battle).toEqual({ ...emptyBattle, mode: { kind: "quest" } });
   });
 
   it("loads a legacy snapshot without a run id and mints one from the event", () => {
@@ -651,9 +651,10 @@ describe("LOAD_STATE", () => {
       basicAutomationEnabled: true,
       aiDefenseTurn: { activeSide: "player", turnNumber: 3 },
     };
-    expect(apply(start, "LOAD_STATE", { snapshot, battle: validBattle }).battle).toEqual(
-      validBattle,
-    );
+    expect(apply(start, "LOAD_STATE", { snapshot, battle: validBattle }).battle).toEqual({
+      ...validBattle,
+      mode: { kind: "quest" },
+    });
 
     const malformed = reduceGameEvent(
       start,

@@ -216,6 +216,18 @@ export function routeDomain(
         state,
         frontDoor.completeTutorialAction(state.frontDoor, payload),
       );
+    case "BEGIN_TUTORIAL_BATTLE":
+      return foldCase(
+        state,
+        battleEvents.beginTutorialBattle(state, payload, ctx),
+      );
+    case "RESTART_TUTORIAL_BATTLE":
+      return foldCase(
+        state,
+        battleEvents.restartTutorialBattle(state, payload, ctx),
+      );
+    case "EXIT_TUTORIAL_BATTLE":
+      return foldCase(state, battleEvents.exitTutorialBattle(state, payload));
 
     // --- essence & limits ---
     case "ADJUST_ESSENCE":

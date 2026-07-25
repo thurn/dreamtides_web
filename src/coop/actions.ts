@@ -50,6 +50,16 @@ export interface CoopActions {
     options?: BeginTutorialOptions,
   ) => Promise<number>;
   completeTutorialAction: (runId: string, actionId: string) => Promise<number>;
+  beginTutorialBattle: (
+    tutorialRunId: string,
+    driverClientId: string,
+  ) => Promise<number>;
+  restartTutorialBattle: (
+    battleId: string,
+    previousDriverClientId: string,
+    driverClientId: string,
+  ) => Promise<number>;
+  exitTutorialBattle: (battleId: string) => Promise<number>;
 
   // --- essence & limits ---
   changeEssence: (delta: number) => Promise<number>;
@@ -249,6 +259,28 @@ export function makeActions(append: AppendFn): CoopActions {
         "COMPLETE_TUTORIAL_ACTION",
         { runId, actionId },
         `tutorial:${runId}:complete:${actionId}`,
+      ),
+    beginTutorialBattle: (tutorialRunId, driverClientId) =>
+      emit(
+        "BEGIN_TUTORIAL_BATTLE",
+        { tutorialRunId, driverClientId },
+        `tutorial-battle:${tutorialRunId}:begin`,
+      ),
+    restartTutorialBattle: (
+      battleId,
+      previousDriverClientId,
+      driverClientId,
+    ) =>
+      emit(
+        "RESTART_TUTORIAL_BATTLE",
+        { battleId, previousDriverClientId, driverClientId },
+        `tutorial-battle:${battleId}:restart:${previousDriverClientId}`,
+      ),
+    exitTutorialBattle: (battleId) =>
+      emit(
+        "EXIT_TUTORIAL_BATTLE",
+        { battleId },
+        `tutorial-battle:${battleId}:exit`,
       ),
 
     // --- essence & limits ---

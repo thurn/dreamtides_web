@@ -71,6 +71,9 @@ function captureAllDrafts(): EventDraft[] {
   void actions.advanceFrontDoor("loading", "journey-1");
   void actions.beginTutorial([], { intentKey: "tutorial:journey-1:begin" });
   void actions.completeTutorialAction("event:1", "welcome");
+  void actions.beginTutorialBattle("event:1", "client-a");
+  void actions.restartTutorialBattle("tutorial-battle:event:1:0:client-a", "client-a", "client-b");
+  void actions.exitTutorialBattle("tutorial-battle:event:1:1:client-b");
   void actions.changeEssence(1);
   void actions.setEssence(1);
   void actions.changeMaxEssence(1);
@@ -207,6 +210,9 @@ describe("coop actions facade", () => {
       { id: "DEBUG_EDIT" },
       "battle:b-1:dreamwell:player:2",
     );
+    void actions.beginTutorialBattle("event:9", "client-a");
+    void actions.restartTutorialBattle("tutorial-battle:event:9:0:client-a", "client-a", "client-b");
+    void actions.exitTutorialBattle("tutorial-battle:event:9:1:client-b");
 
     expect(captured.map((draft) => draft.intentKey)).toEqual([
       "front-door:event:9:loading",
@@ -215,6 +221,9 @@ describe("coop actions facade", () => {
       "accept-essence:quest:12:site-7",
       "complete-site:quest:12:site-7",
       "battle:b-1:dreamwell:player:2",
+      "tutorial-battle:event:9:begin",
+      "tutorial-battle:tutorial-battle:event:9:0:client-a:restart:client-a",
+      "tutorial-battle:tutorial-battle:event:9:1:client-b:exit",
     ]);
   });
 

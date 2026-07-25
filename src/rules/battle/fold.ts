@@ -92,6 +92,11 @@ export interface PendingPrompt {
  * All four are plain data.
  */
 export interface BattleFoldState {
+  /**
+   * The lifecycle that created this battle. Missing metadata on a persisted
+   * legacy battle is normalized to the ordinary quest mode at the load seam.
+   */
+  mode?: BattleMode;
   init: BattleInit;
   board: BattleMutableState;
   effectQueue: EffectRun[];
@@ -109,6 +114,29 @@ export interface BattleFoldState {
    * characters. `null` means that side has not completed a turn this battle.
    */
   dawnFired: DawnFiredMarker;
+}
+
+/** Metadata that distinguishes a normal quest battle from the tutorial handoff. */
+export type BattleMode = QuestBattleMode | TutorialBattleMode;
+
+export interface QuestBattleMode {
+  kind: "quest";
+}
+
+export interface TutorialBattleMode {
+  kind: "tutorial";
+  tutorialRunId: string;
+  driverClientId: string;
+  restartNumber: number;
+  resultConfig: {
+    playerOnlyVictory: true;
+    turnLimitDisabled: true;
+  };
+}
+
+/** Treat snapshots written before mode metadata as ordinary quest battles. */
+export function battleModeOf(battle: BattleFoldState): BattleMode {
+  return battle.mode ?? { kind: "quest" };
 }
 
 /** Per-side last cleared turn marker (see {@link BattleFoldState.dawnFired}). */

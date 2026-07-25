@@ -37,6 +37,13 @@ export interface EventPayloads {
   };
   BEGIN_TUTORIAL: { actions: unknown };
   COMPLETE_TUTORIAL_ACTION: { runId: string; actionId: string };
+  BEGIN_TUTORIAL_BATTLE: { tutorialRunId: string; driverClientId: string };
+  RESTART_TUTORIAL_BATTLE: {
+    battleId: string;
+    previousDriverClientId: string;
+    driverClientId: string;
+  };
+  EXIT_TUTORIAL_BATTLE: { battleId: string };
 
   // --- essence & limits ---
   ADJUST_ESSENCE: { delta: number };
@@ -219,6 +226,9 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   ADVANCE_FRONT_DOOR: true,
   BEGIN_TUTORIAL: true,
   COMPLETE_TUTORIAL_ACTION: true,
+  BEGIN_TUTORIAL_BATTLE: true,
+  RESTART_TUTORIAL_BATTLE: true,
+  EXIT_TUTORIAL_BATTLE: true,
   ADJUST_ESSENCE: true,
   SET_ESSENCE: true,
   ADJUST_ESSENCE_CAP: true,
