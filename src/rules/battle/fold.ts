@@ -16,6 +16,7 @@ import type {
   BattleMutableState,
   BattlePhase,
   BattleSide,
+  BattleTransitionData,
 } from "../../battle/types";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
 import { selectBattleTriggeredEffectSteps } from "./battle-card-effects-table";
@@ -127,6 +128,12 @@ export interface BattleFoldState {
   board: BattleMutableState;
   effectQueue: EffectRun[];
   pendingPrompt: PendingPrompt | null;
+  /**
+   * The transition summary for the most recently folded semantic battle
+   * intent. It is plain data so AI rationale supplied with BATTLE_PLAY_CARD
+   * survives replay and is available to the battle log presentation.
+   */
+  lastTransition?: BattleTransitionData | null;
   /**
    * The persisted Challenge state machine. Each cursor step resolves exactly
    * one front-rank lane, then lets its leave-play scripts and static settlement

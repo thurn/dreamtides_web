@@ -352,10 +352,20 @@ function sampleDiscoverCharacters(ctx: StepContext): string[] {
   const candidates = ctx.state.sides[ctx.side].deck.filter((battleCardId) =>
     ctx.state.cardInstances[battleCardId]?.definition.battleCardKind === "character",
   );
+  if (candidates.length === 0) return [];
+
+  // A Discover prompt owns exactly one event-rng draw. Derive its whole sample
+  // from that committed draw so re-rendering/reloading a parked prompt cannot
+  // consume or resample randomness, while the three offered ids remain random.
+  let seed = Math.floor(ctx.random() * 0x1_0000_0000) >>> 0;
+  const nextRandom = (): number => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return seed / 0x1_0000_0000;
+  };
   const pool = [...candidates];
   const offers: string[] = [];
   while (pool.length > 0 && offers.length < 3) {
-    offers.push(pool.splice(Math.floor(ctx.random() * pool.length), 1)[0]);
+    offers.push(pool.splice(Math.floor(nextRandom() * pool.length), 1)[0]);
   }
   return offers;
 }

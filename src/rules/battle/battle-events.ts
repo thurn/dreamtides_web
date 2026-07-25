@@ -30,6 +30,7 @@ import type { EventContext } from "../../eventlog/types";
 import { isoTimestampToMs } from "./timestamp";
 import type {
   BattleCardNoteExpiry,
+  BattleAiChoiceTrace,
   BattleEngineEmissionContext,
   BattleFieldSlotAddress,
   BattlePhase,
@@ -50,6 +51,7 @@ import type {
 } from "../../types/quest";
 import type { FoldState } from "../fold-state";
 import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
+import { createEmptyTransitionData } from "../../battle/engine/result";
 import {
   battleTriggerScriptId,
   planStaticContributionSettlement,
@@ -752,6 +754,7 @@ const STARTER_CARD_IDS = new Set<string>([
 interface BattlePlayCardIntent {
   battleCardId: string;
   targetBattleCardIds: string[];
+  aiChoices: BattleAiChoiceTrace[];
 }
 
 /** Semantic, all-or-nothing Starter-card play for tutorial and AI clients. */
@@ -801,13 +804,54 @@ export function battlePlayCard(
   const nowMs = isoTimestampToMs(ctx.timestamp) ?? 0;
   const advanced = advanceEffectQueueWithStream({ ...battle, board, effectQueue: queue, pendingPrompt: null }, ctx.seq, random, nowMs);
   board = applyBoardEdits(advanced.board, planStaticContributionSettlement(advanced.board, true, random, nowMs));
-  return { ...state, battle: { ...advanced, board } };
+  return {
+    ...state,
+    battle: {
+      ...advanced,
+      board,
+      lastTransition: { ...createEmptyTransitionData(), aiChoices: intent.aiChoices },
+    },
+  };
 }
 
 function coerceBattlePlayCardIntent(raw: Record<string, unknown>): BattlePlayCardIntent | null {
   if (!isNonEmptyString(raw.battleCardId) || !isStringArray(raw.targetBattleCardIds)) return null;
   if (new Set(raw.targetBattleCardIds).size !== raw.targetBattleCardIds.length) return null;
-  return { battleCardId: raw.battleCardId, targetBattleCardIds: [...raw.targetBattleCardIds] };
+  const aiChoices = raw.aiChoices === undefined ? [] : coerceAiChoices(raw.aiChoices);
+  if (aiChoices === null) return null;
+  return { battleCardId: raw.battleCardId, targetBattleCardIds: [...raw.targetBattleCardIds], aiChoices };
+}
+
+function coerceAiChoices(raw: unknown): BattleAiChoiceTrace[] | null {
+  if (!Array.isArray(raw)) return null;
+  const choices: BattleAiChoiceTrace[] = [];
+  for (const value of raw) {
+    if (!isPlainRecord(value)) return null;
+    const { stage, choice, battleCardId, cardName, sourceHandIndex, sourceSlotId, targetSlotId, heuristicScoreBefore, heuristicScoreAfter, rationale, targetBattleCardId } = value;
+    if (
+      (stage !== "character" && stage !== "reposition" && stage !== "nonCharacter" && stage !== "endTurn") ||
+      (choice !== "PLAY_CARD" && choice !== "MOVE_CARD" && choice !== "END_TURN") ||
+      !isNullableString(battleCardId) || !isNullableString(cardName) ||
+      !isNullableInteger(sourceHandIndex) || !isNullableString(sourceSlotId) ||
+      !isNullableString(targetSlotId) || !isNullableFiniteNumber(heuristicScoreBefore) ||
+      !isNullableFiniteNumber(heuristicScoreAfter) || !isNullableString(rationale) ||
+      !isNullableString(targetBattleCardId)
+    ) return null;
+    choices.push({ stage, choice, battleCardId, cardName, sourceHandIndex, sourceSlotId: sourceSlotId as BattleAiChoiceTrace["sourceSlotId"], targetSlotId: targetSlotId as BattleAiChoiceTrace["targetSlotId"], heuristicScoreBefore, heuristicScoreAfter, rationale, targetBattleCardId });
+  }
+  return choices;
+}
+
+function isNullableString(value: unknown): value is string | null {
+  return value === null || typeof value === "string";
+}
+
+function isNullableInteger(value: unknown): value is number | null {
+  return value === null || (typeof value === "number" && Number.isInteger(value));
+}
+
+function isNullableFiniteNumber(value: unknown): value is number | null {
+  return value === null || (typeof value === "number" && Number.isFinite(value));
 }
 
 function starterTargetsAreLegal(board: BattleMutableState, controller: BattleSide, cardId: string, targets: readonly string[]): boolean {
@@ -1575,6 +1619,17 @@ function promptResolutionIsValid(
   }
   if (new Set(chosen).size !== chosen.length) {
     return false;
+  }
+  if (pending.run.bindings?.sourceCardId === "910b4cf9-dec7-4e03-af4f-7d5ae342eeba") {
+    // Discover stores its sampled ids on the prompt, but selection still needs
+    // a live deck character. This makes a stale/corrupt parked prompt bounce
+    // instead of moving a card from an unrelated zone during resolution.
+    if (!chosen.every((id) =>
+      board.sides[pending.run.side].deck.includes(id) &&
+      board.cardInstances[id]?.definition.battleCardKind === "character",
+    )) {
+      return false;
+    }
   }
   const max = options.count;
   const min = options.optional

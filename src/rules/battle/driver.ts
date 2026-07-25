@@ -24,11 +24,13 @@ import type {
 import type { EventContext } from "../../eventlog/types";
 import { isoTimestampToMs } from "./timestamp";
 import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
+import { battleTriggerScriptId } from "./battle-card-effects-table";
 import { applyPromptResolution, planNextEffectStep } from "./effect-runner-core";
 import type { PromptResolution } from "./effect-runner-core";
 import type { EffectStep, StepContext } from "./effect-step";
 import type { BattleFoldState, EffectRun } from "./fold";
-import { battleModeOf, resolveScript } from "./fold";
+import { battleModeOf, newEffectRun, resolveScript } from "./fold";
+import { selectBattleCardLocation } from "../../battle/state/selectors";
 
 const EMISSION: BattleEngineEmissionContext = {
   sourceSurface: "auto-system",
@@ -152,16 +154,84 @@ function assertCursorMatchesRest(
 // Edit application
 // ---------------------------------------------------------------------------
 
-/** Applies each edit in order via `applyDebugEdit`, returning the new board. */
+/** Applies each edit in order and schedules lifecycle edges it creates.
+ *
+ * Effect scripts may dissolve or materialize cards themselves (Flashpoint is
+ * the important Starter example). Those moves have the same reducer-owned
+ * lifecycle consequences as a direct command, so they must enter the queue at
+ * the edit seam rather than being treated as inert implementation details.
+ */
 function applyEdits(
   board: BattleMutableState,
   edits: BattleDebugEdit[],
+  queue?: EffectRun[],
 ): BattleMutableState {
   let next = board;
   for (const edit of edits) {
-    next = applyDebugEdit(next, edit, EMISSION).state;
+    const before = next;
+    next = applyDebugEdit(before, edit, EMISSION).state;
+    if (queue !== undefined) {
+      scheduleEffectLifecycleEdge(queue, before, next, edit);
+    }
   }
   return next;
+}
+
+function scheduleEffectLifecycleEdge(
+  queue: EffectRun[],
+  before: BattleMutableState,
+  after: BattleMutableState,
+  edit: BattleDebugEdit,
+): void {
+  const battleCardId = edit.kind === "MOVE_CARD_TO_ZONE" ? edit.battleCardId
+    : edit.kind === "ABANDON" ? edit.battleCardId
+      : null;
+  if (battleCardId === null) return;
+
+  const source = selectBattleCardLocation(before, battleCardId);
+  const destination = selectBattleCardLocation(after, battleCardId);
+  const instance = before.cardInstances[battleCardId];
+  if (source === null || destination === null || instance === undefined) return;
+
+  const sourceInPlay = isBattlefieldZone(source.zone);
+  const destinationInPlay = isBattlefieldZone(destination.zone);
+  if (source.zone === "hand" && instance.definition.battleCardKind === "event") {
+    enqueueLifecycleRun(queue, before, battleCardId, "played");
+  }
+  if (!sourceInPlay && destinationInPlay) {
+    enqueueLifecycleRun(queue, before, battleCardId, "materialized");
+  }
+  // Reclaimed replaces void with banished in applyDebugEdit. Only an observed
+  // void edge is dissolution/abandonment, so a replacement never draws or
+  // triggers any generic leave-play automation.
+  if (sourceInPlay && destination.zone === "void") {
+    enqueueLifecycleRun(queue, before, battleCardId, edit.kind === "ABANDON" ? "abandoned" : "dissolved");
+  }
+}
+
+function enqueueLifecycleRun(
+  queue: EffectRun[],
+  board: BattleMutableState,
+  battleCardId: string,
+  trigger: "played" | "materialized" | "dissolved" | "abandoned",
+): void {
+  const instance = board.cardInstances[battleCardId];
+  if (instance === undefined) return;
+  queue.push(newEffectRun(
+    { table: "battle", id: battleTriggerScriptId(instance.definition.cardId, trigger) },
+    instance.controller,
+    battleCardId,
+    {
+      trigger,
+      sourceCardId: instance.definition.cardId,
+      sourceController: instance.controller,
+      sourceZone: selectBattleCardLocation(board, battleCardId)?.zone,
+    },
+  ));
+}
+
+function isBattlefieldZone(zone: string): boolean {
+  return zone === "backRank" || zone === "frontRank";
 }
 
 // ---------------------------------------------------------------------------
@@ -207,7 +277,7 @@ function runQueue(
     }
 
     if (plan.type === "dispatch") {
-      currentBoard = applyEdits(currentBoard, plan.edits);
+      currentBoard = applyEdits(currentBoard, plan.edits, currentQueue);
       const terminal = scoreTerminalResult(battle, currentBoard);
       if (terminal !== null) {
         currentBoard = forceBattleResult(currentBoard, terminal, EMISSION).state;
@@ -243,7 +313,7 @@ function runQueue(
         plan.rest,
         stepCtx,
       );
-      currentBoard = applyEdits(currentBoard, edits);
+      currentBoard = applyEdits(currentBoard, edits, currentQueue);
       const terminal = scoreTerminalResult(battle, currentBoard);
       if (terminal !== null) {
         currentBoard = forceBattleResult(currentBoard, terminal, EMISSION).state;
@@ -418,7 +488,13 @@ export function resolvePendingPromptWithStream(
     rest,
     stepCtx,
   );
-  const board = applyEdits(battle.board, edits);
+  const nextCursor = nextCursorAfterPrompt(steps, run.cursor, promptStep, resolution);
+  assertCursorMatchesRest(steps, nextCursor, expectedRest);
+  const advancedQueue =
+    nextCursor === null
+      ? battle.effectQueue.slice(1)
+      : [{ ...run, cursor: nextCursor }, ...battle.effectQueue.slice(1)];
+  const board = applyEdits(battle.board, edits, advancedQueue);
   const terminal = scoreTerminalResult(battle, board);
   if (terminal !== null) {
     return {
@@ -428,14 +504,6 @@ export function resolvePendingPromptWithStream(
       pendingPrompt: null,
     };
   }
-
-  const nextCursor = nextCursorAfterPrompt(steps, run.cursor, promptStep, resolution);
-  assertCursorMatchesRest(steps, nextCursor, expectedRest);
-
-  const advancedQueue =
-    nextCursor === null
-      ? battle.effectQueue.slice(1)
-      : [{ ...run, cursor: nextCursor }, ...battle.effectQueue.slice(1)];
 
   return runQueue(
     battle,

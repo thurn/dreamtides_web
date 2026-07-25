@@ -632,6 +632,89 @@ describe("BATTLE_PLAY_CARD", () => {
     expect(result.state.battle?.board.cardInstances.ringwatcher.status.isExhausted).toBe(true);
     expect(result.state.battle?.pendingPrompt?.options).toMatchObject({ kind: "foresee", cardIds: ["deck-card"] });
   });
+
+  it("retains an AI semantic-play trace in the folded transition through JSON replay", () => {
+    const eventCard = makeInstance("glimpse", "2162742c-09d0-4e62-ae49-0f8f79b45adc");
+    eventCard.definition = { ...eventCard.definition, battleCardKind: "event", energyCost: 1, printedEnergyCost: 1 };
+    const deckCard = makeInstance("deck-card", "fixture-character");
+    const board = makeRichBoard({ instances: [eventCard, deckCard], playerHand: ["glimpse"], playerDeck: ["deck-card"] });
+    board.sides.player.currentEnergy = 1;
+    const trace = {
+      stage: "nonCharacter" as const, choice: "PLAY_CARD" as const,
+      battleCardId: "glimpse", cardName: null, sourceHandIndex: 0,
+      sourceSlotId: null, targetSlotId: null, heuristicScoreBefore: 1,
+      heuristicScoreAfter: 2, rationale: "fixture rationale", targetBattleCardId: null,
+    };
+    const result = reduce(inBattleState({}, battleFrom(board)), "BATTLE_PLAY_CARD", {
+      battleCardId: "glimpse", targetBattleCardIds: [], aiChoices: [trace],
+    });
+    expect(result.outcome).toBe("applied");
+    const restored = JSON.parse(JSON.stringify(result.state)) as FoldState;
+    expect(restored.battle?.lastTransition?.aiChoices).toEqual([trace]);
+  });
+
+  it("runs a Final Witness dissolution exactly once when Flashpoint's effect moves it", () => {
+    const flashpoint = makeInstance("flashpoint", "4408b942-09a0-4f4e-a403-10c708c6e3c5");
+    flashpoint.definition = { ...flashpoint.definition, battleCardKind: "event", energyCost: 3, printedEnergyCost: 3 };
+    const witness = makeInstance("witness", "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", "enemy");
+    witness.definition = { ...witness.definition, energyCost: 2, printedEnergyCost: 2 };
+    const drawn = makeInstance("drawn", "fixture-character", "enemy");
+    const board = makeRichBoard({ instances: [flashpoint, witness, drawn], playerHand: ["flashpoint"] });
+    board.sides.player.currentEnergy = 3;
+    board.sides.enemy.deck = ["drawn"];
+    board.sides.enemy.frontRank.F0 = "witness";
+    const result = reduce(inBattleState({}, battleFrom(board)), "BATTLE_PLAY_CARD", {
+      battleCardId: "flashpoint", targetBattleCardIds: ["witness"],
+    });
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.sides.enemy.void).toContain("witness");
+    expect(result.state.battle?.board.sides.enemy.hand).toEqual(["drawn"]);
+    expect(result.state.battle?.board.sides.enemy.fatigueCount).toBe(0);
+  });
+
+  it("samples Discover once, persists candidates, and reshuffles the complete remaining deck on choice", () => {
+    const sign = makeInstance("sign", "910b4cf9-dec7-4e03-af4f-7d5ae342eeba");
+    sign.definition = { ...sign.definition, battleCardKind: "event", energyCost: 2, printedEnergyCost: 2 };
+    const characters = ["c1", "c2", "c3", "c4"].map((id) => makeInstance(id, `fixture-${id}`));
+    const board = makeRichBoard({ instances: [sign, ...characters], playerHand: ["sign"], playerDeck: characters.map((card) => card.battleCardId) });
+    board.sides.player.currentEnergy = 2;
+    let openingRngCalls = 0;
+    const opened = reduce(inBattleState({}, battleFrom(board)), "BATTLE_PLAY_CARD", {
+      battleCardId: "sign", targetBattleCardIds: [],
+    }, ctx({ rng: () => { openingRngCalls += 1; return 0.25; } }));
+    expect(opened.outcome).toBe("applied");
+    expect(openingRngCalls).toBe(1);
+    const restored = JSON.parse(JSON.stringify(opened.state)) as FoldState;
+    const prompt = restored.battle?.pendingPrompt;
+    expect(prompt?.options.kind).toBe("pick-cards");
+    if (prompt?.options.kind !== "pick-cards") throw new Error("expected Discover prompt");
+    expect(prompt.options.candidateIds).toHaveLength(3);
+    const chosen = prompt.options.candidateIds[0];
+    let resolutionRngCalls = 0;
+    const resolved = reduce(restored, "RESOLVE_PROMPT", {
+      promptId: prompt.promptId, resolution: { kind: "pick-cards", chosenIds: [chosen] },
+    }, ctx({ seq: prompt.promptId + 1, rng: () => { resolutionRngCalls += 1; return 0.5; } }));
+    expect(resolved.outcome).toBe("applied");
+    expect(resolved.state.battle?.board.sides.player.hand).toContain(chosen);
+    expect(resolved.state.battle?.board.sides.player.deck).toHaveLength(3);
+    expect(resolutionRngCalls).toBe(2);
+  });
+
+  it("auto-resolves Discover with zero legal deck characters without drawing RNG", () => {
+    const sign = makeInstance("sign", "910b4cf9-dec7-4e03-af4f-7d5ae342eeba");
+    sign.definition = { ...sign.definition, battleCardKind: "event", energyCost: 2, printedEnergyCost: 2 };
+    const nonCharacter = makeInstance("event-deck", "fixture-event");
+    nonCharacter.definition = { ...nonCharacter.definition, battleCardKind: "event" };
+    const board = makeRichBoard({ instances: [sign, nonCharacter], playerHand: ["sign"], playerDeck: ["event-deck"] });
+    board.sides.player.currentEnergy = 2;
+    let rngCalls = 0;
+    const result = reduce(inBattleState({}, battleFrom(board)), "BATTLE_PLAY_CARD", {
+      battleCardId: "sign", targetBattleCardIds: [],
+    }, ctx({ rng: () => { rngCalls += 1; return 0.5; } }));
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.pendingPrompt).toBeNull();
+    expect(rngCalls).toBe(0);
+  });
 });
 
 /** The first unconditional back-rank support script (no `applies` subtype
