@@ -62,6 +62,13 @@ action = "end-turn"
 wait = 0
 
 [[actions]]
+id = "vrakmoth-worthy-challenger"
+action = "display-speech-bubble"
+speaker = "enemy"
+text = "A worthy challenger!"
+wait = 3
+
+[[actions]]
 id = "autumn-glade"
 action = "draw-dreamwell-card"
 owner = "enemy"
@@ -81,13 +88,6 @@ id = "runebound-champion-draw"
 action = "draw-opponent-card"
 cardId = "a28ad36d-fa74-4190-a463-7efd3a6233d0"
 wait = 0
-
-[[actions]]
-id = "vrakmoth-worthy-challenger"
-action = "display-speech-bubble"
-speaker = "enemy"
-text = "A worthy challenger!"
-wait = 3
 
 [[actions]]
 id = "runebound-champion-reveal-and-play"
@@ -138,5 +138,5 @@ id = "challenge-resolution-dissolved"
 action = "display-speech-bubble"
 verticalOffset = -30
 bubbleWidth = 500
-text = "Instead, the lowest spark (✦) character is dissolved (or both, when tied)."
+text = "Instead, the lowest spark (✦) character is [yellow]dissolved[/yellow] (sent to the void)."
 wait = 5
