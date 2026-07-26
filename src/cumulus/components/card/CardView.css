@@ -180,12 +180,12 @@
   --cv-figment-spark-right: 1.6cqw;
 }
 
-/* Event frame: a dark purple accent on the name bar and text box. */
+/* Event frame: an opaque violet surface keeps the type distinguishable on black art. */
 .card-view[data-card-type="Event"] {
   --cv-textbox-bg: linear-gradient(
     180deg,
-    rgba(40, 16, 56, 0.82) 0%,
-    rgba(19, 8, 30, 0.88) 100%
+    color-mix(in srgb, var(--accent-bright) 62%, var(--surface-card)) 0%,
+    color-mix(in srgb, var(--accent-strong) 68%, var(--surface-card)) 100%
   );
-  --cv-textbox-border: rgba(178, 132, 226, 0.32);
+  --cv-textbox-border: color-mix(in srgb, var(--accent-bright) 76%, var(--text-on-card));
 }
