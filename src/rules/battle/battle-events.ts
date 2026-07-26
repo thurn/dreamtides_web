@@ -79,7 +79,7 @@ import {
   type EffectRun,
   type PendingPrompt,
 } from "./fold";
-import { selectBattleCardLocation } from "../../battle/state/selectors";
+import { selectBattleCardLocation, selectBattlefieldSlotOccupant } from "../../battle/state/selectors";
 import { hasTemporaryReclaimEligibility } from "./temporary-effects";
 
 // ---------------------------------------------------------------------------
@@ -834,13 +834,28 @@ function tutorialCommandIsAuthorized(
     return (battle.board.activeSide === "player" && battle.board.phase === "day" && edit.phase === "dusk") ||
       (battle.board.activeSide === "enemy" && battle.board.phase === "dusk" && edit.phase === "night");
   }
+  const legalPhase = (battle.board.activeSide === "player" && battle.board.phase === "day") ||
+    (battle.board.activeSide === "enemy" && battle.board.phase === "dusk");
+  if (!legalPhase) return false;
+  const destinationIsLegal = (destination: BattleFieldSlotAddress): boolean =>
+    destination.side === "player" &&
+    (battle.board.phase !== "dusk" || destination.zone === "frontRank");
+  const playerCharacterAt = (address: BattleFieldSlotAddress): boolean => {
+    const battleCardId = selectBattlefieldSlotOccupant(battle.board, address);
+    const instance = battleCardId === null ? undefined : battle.board.cardInstances[battleCardId];
+    return instance?.controller === "player" && instance.definition.battleCardKind === "character";
+  };
+  if (edit.kind === "SWAP_BATTLEFIELD_SLOTS") {
+    return destinationIsLegal(edit.source) && destinationIsLegal(edit.target) &&
+      playerCharacterAt(edit.source) && playerCharacterAt(edit.target);
+  }
   if (edit.kind !== "MOVE_CARD_TO_ZONE" || !("slotId" in edit.destination)) return false;
   const source = selectBattleCardLocation(battle.board, edit.battleCardId);
   const instance = battle.board.cardInstances[edit.battleCardId];
   if (source === null || instance === undefined || !isBattlefieldZone(source.zone) ||
-    instance.controller !== "player" || edit.destination.side !== "player") return false;
-  if (battle.board.activeSide === "player" && battle.board.phase === "day") return true;
-  return battle.board.activeSide === "enemy" && battle.board.phase === "dusk" && edit.destination.zone === "frontRank";
+    instance.controller !== "player" || instance.definition.battleCardKind !== "character" ||
+    !destinationIsLegal(edit.destination) || selectBattlefieldSlotOccupant(battle.board, edit.destination) !== null) return false;
+  return true;
 }
 
 interface BattlePlayCardIntent {
@@ -858,7 +873,9 @@ export function battlePlayCard(
 ): FoldState | null {
   const battle = state.battle;
   const intent = coerceBattlePlayCardIntent(payload);
-  if (battle === null || intent === null || battle.pendingPrompt !== null || battle.board.result !== null || !tutorialActorIsAuthorized(battle, actor, false)) return null;
+  const mode = battle === null ? null : battleModeOf(battle);
+  const automatic = mode?.kind === "tutorial" && actor === `tutorial-ai:${mode.driverClientId}`;
+  if (battle === null || intent === null || battle.pendingPrompt !== null || battle.board.result !== null || !tutorialActorIsAuthorized(battle, actor, automatic)) return null;
   const before = battle.board;
   const instance = before.cardInstances[intent.battleCardId];
   const location = selectBattleCardLocation(before, intent.battleCardId);

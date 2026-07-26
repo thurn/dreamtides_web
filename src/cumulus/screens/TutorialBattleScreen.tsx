@@ -22,6 +22,7 @@ export interface TutorialBattleView {
   readonly manualControls: boolean;
   readonly foresee: BattleForeseeView | null;
   readonly victorySummary: string | null;
+  readonly terminalRestartAvailable: boolean;
 }
 
 export interface TutorialBattleScreenProps {
@@ -44,7 +45,7 @@ export function TutorialBattleScreen({
   onRestart,
   onReturnToMainMenu,
 }: TutorialBattleScreenProps): ReactElement {
-  const paused = view.ownership === "paused-driver-absent";
+  const paused = view.ownership === "paused-driver-absent" || view.terminalRestartAvailable;
   const observing = view.ownership === "observer";
   return (
     <div
@@ -96,12 +97,12 @@ export function TutorialBattleScreen({
           </p>
         </GlassPanel>
       </div>
-      {interactions.targetSelectionPrompt !== null ? (
+      {view.manualControls && interactions.targetSelectionPrompt !== null ? (
         <div data-tutorial-target-selection="" style={{ position: "fixed", left: "50%", top: `calc(var(--safe-area-inset-top) + ${token("--space-12")})`, transform: "translateX(-50%)", zIndex: 80 }}>
           <GlassPanel eyebrow="Play card" title="Choose target" subtitle={interactions.targetSelectionPrompt} footer={<GlassButton label="Cancel" variant="default" placement="onGlass" testId="tutorial-target-cancel" onPress={() => interactions.onTargetSelectionCancel?.()} />}><span /></GlassPanel>
         </div>
       ) : null}
-      {view.foresee !== null ? (
+      {view.manualControls && view.foresee !== null ? (
         <BattleForeseeOverlay view={view.foresee} onConfirm={onForeseeConfirm} />
       ) : null}
       {view.victorySummary !== null ? (

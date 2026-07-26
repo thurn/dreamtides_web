@@ -4,7 +4,7 @@ import { useActions, useClientId, useConfirmedPromptId, useGameState } from "../
 import type { PromptResolution } from "../rules/battle/effect-runner-core";
 import type { MobileBattleInteractions } from "../cumulus/screens/MobileBattleScreen";
 import type { TutorialBattleControllerPlan } from "./tutorial-battle-controller";
-import { selectBattleCardLocation } from "./state/selectors";
+import { selectBattleCardLocation, selectBattlefieldSlotOccupant } from "./state/selectors";
 
 /** Player-only intent bridge for the automated tutorial battle. */
 export function useTutorialBattleInteractions(
@@ -110,20 +110,50 @@ export function useTutorialBattleInteractions(
     onTargetSelectionCancel: () => setTargetingCardId(null),
     onHandCardDrop: () => setPendingCard(null),
     onCardDragStart: (battleCardId, source) => {
-      if (!canAct) return;
-      if (source === "near-hand" && board?.activeSide === "player" && board.phase === "day") {
-        setPendingCard({ id: battleCardId, source });
-        return;
-      }
-      if (source === "battlefield" && board?.activeSide === "enemy" && board.phase === "dusk") {
-        setPendingCard({ id: battleCardId, source });
-      }
+      if (!canAct || board === null || source !== "battlefield") return;
+      const instance = board.cardInstances[battleCardId];
+      const location = selectBattleCardLocation(board, battleCardId);
+      const isPlayerCharacterOnBattlefield = instance?.controller === "player" &&
+        instance.definition.battleCardKind === "character" &&
+        (location?.zone === "frontRank" || location?.zone === "backRank");
+      const legalPhase = (board.activeSide === "player" && board.phase === "day") ||
+        (board.activeSide === "enemy" && board.phase === "dusk");
+      if (!isPlayerCharacterOnBattlefield || !legalPhase) return;
+      setPendingCard({ id: battleCardId, source });
     },
     onCardDragEnd: () => setPendingCard(null),
     onSlotDrop: (target) => {
       const battleCardId = pendingCard?.id ?? null;
       if (!canAct || board === null || battleCardId === null) return;
       if (target.owner !== "player") return;
+      const source = selectBattleCardLocation(board, battleCardId);
+      const sourceInstance = board.cardInstances[battleCardId];
+      const targetOccupant = selectBattlefieldSlotOccupant(board, {
+        side: "player",
+        zone: target.rank === "back" ? "backRank" : "frontRank",
+        slotId: target.slotId as `B${number}` | `F${number}`,
+      });
+      const legalPhase = (board.activeSide === "player" && board.phase === "day") ||
+        (board.activeSide === "enemy" && board.phase === "dusk" && target.rank === "front");
+      if (
+        source === null || sourceInstance?.controller !== "player" ||
+        sourceInstance.definition.battleCardKind !== "character" ||
+        (source.zone !== "backRank" && source.zone !== "frontRank") || !legalPhase
+      ) return;
+      if (targetOccupant !== null) {
+        logIntent("swap-battlefield-slots", { battleCardId, target });
+        void actions.battleCommand({
+          id: "DEBUG_EDIT",
+          edit: {
+            kind: "SWAP_BATTLEFIELD_SLOTS",
+            source: { side: "player", zone: source.zone, slotId: source.slotId },
+            target: { side: "player", zone: target.rank === "back" ? "backRank" : "frontRank", slotId: target.slotId as `B${number}` | `F${number}` },
+          },
+          sourceSurface: "tutorial-player",
+        }, `tutorial-battle:${board.battleId}:human-swap:${String(board.turnNumber)}:${battleCardId}:${target.slotId}`).catch(() => undefined);
+        setPendingCard(null);
+        return;
+      }
       logIntent("move-card", { battleCardId, target });
       void actions.battleCommand({
         id: "DEBUG_EDIT",

@@ -235,4 +235,17 @@ describe("tutorial battle controller", () => {
   it("never emits a post-terminal intent", () => {
     expect(plan(stateFor({ result: "victory" }))).toMatchObject({ status: "terminal", intent: null });
   });
+
+  it("keeps terminal authority with the present driver and exposes a departed driver", () => {
+    const terminal = stateFor({ result: "victory" });
+    expect(plan(terminal, DRIVER, [DRIVER, OBSERVER])).toMatchObject({
+      status: "terminal", isCurrentClientDriver: true, isDriverPresent: true,
+    });
+    expect(plan(terminal, OBSERVER, [DRIVER, OBSERVER])).toMatchObject({
+      status: "terminal", isCurrentClientDriver: false, isDriverPresent: true,
+    });
+    expect(plan(terminal, OBSERVER, [OBSERVER])).toMatchObject({
+      status: "terminal", isCurrentClientDriver: false, isDriverPresent: false,
+    });
+  });
 });

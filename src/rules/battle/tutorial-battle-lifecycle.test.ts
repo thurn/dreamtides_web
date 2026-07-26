@@ -178,6 +178,36 @@ describe("tutorial battle lifecycle", () => {
     expect(exited.state).toMatchObject({ battle: null, frontDoor: { phase: "main", journeyId: null, tutorial: null }, quest: beforeQuest });
   });
 
+  it("binds human and automatic tutorial intents to the persisted driver", () => {
+    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    const started = begin().state;
+    const battle = started.battle!;
+    const enemyCardId = battle.board.sides.enemy.hand[0];
+    const activeBoard = {
+      ...battle.board,
+      activeSide: "enemy" as const,
+      phase: "day" as const,
+      sides: {
+        ...battle.board.sides,
+        enemy: { ...battle.board.sides.enemy, currentEnergy: 5 },
+      },
+    };
+    const active = { ...started, battle: { ...battle, board: activeBoard } };
+    const payload = { battleCardId: enemyCardId, targetBattleCardIds: [], aiChoices: [] };
+    const spoofed = reduceGameEvent(active, {
+      type: "BATTLE_PLAY_CARD", payload, actor: "tutorial-ai:client-observer", basedOnSeq: 42, clientTimestamp: CTX.timestamp,
+    }, CTX);
+    expect(spoofed.outcome).toBe("bounced");
+    const automatic = reduceGameEvent(active, {
+      type: "BATTLE_PLAY_CARD", payload, actor: "tutorial-ai:client-a", basedOnSeq: 42, clientTimestamp: CTX.timestamp,
+    }, CTX);
+    expect(automatic.outcome).toBe("applied");
+    const observer = reduceGameEvent(active, {
+      type: "BATTLE_PLAY_CARD", payload, actor: "client-observer", basedOnSeq: 42, clientTimestamp: CTX.timestamp,
+    }, CTX);
+    expect(observer.outcome).toBe("bounced");
+  });
+
   it("normalizes a mode-less persisted battle to quest mode through LOAD_STATE", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const battle = begin().state.battle!;

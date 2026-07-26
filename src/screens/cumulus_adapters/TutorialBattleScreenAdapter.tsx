@@ -18,7 +18,8 @@ export function TutorialBattleScreenAdapter() {
     [battle, confirmedPromptId, controller],
   );
   const restart = useCallback(() => {
-    if (battle === null || controller.driverClientId === null) return;
+    if (battle === null || controller.driverClientId === null ||
+      (controller.status !== "paused-driver-absent" && !(controller.status === "terminal" && !controller.isDriverPresent))) return;
     logEvent("tutorial_battle_restart_requested", {
       battleId: battle.board.battleId,
       previousDriverClientId: controller.driverClientId,
@@ -29,9 +30,9 @@ export function TutorialBattleScreenAdapter() {
       battle.board.battleId,
       controller.driverClientId,
     ).catch(() => undefined);
-  }, [battle, controller.driverClientId, mutations.restartTutorialBattle]);
+  }, [battle, controller.driverClientId, controller.isDriverPresent, controller.status, mutations.restartTutorialBattle]);
   const exit = useCallback(() => {
-    if (battle === null || battle.board.result !== "victory") return;
+    if (battle === null || battle.board.result !== "victory" || controller.status !== "terminal" || !controller.isCurrentClientDriver || !controller.isDriverPresent) return;
     logEvent("tutorial_battle_return_to_main_menu_requested", {
       battleId: battle.board.battleId,
       playerScore: battle.board.sides.player.score,
@@ -39,7 +40,7 @@ export function TutorialBattleScreenAdapter() {
     const exitBattle = mutations.exitTutorialBattle;
     if (exitBattle === undefined) return;
     void exitBattle(battle.board.battleId).catch(() => undefined);
-  }, [battle, mutations.exitTutorialBattle]);
+  }, [battle, controller.isCurrentClientDriver, controller.isDriverPresent, controller.status, mutations.exitTutorialBattle]);
   if (view === null) return null;
   return (
     <TutorialBattleScreen

@@ -18,6 +18,7 @@ const adapterMocks = vi.hoisted(() => ({
   mainSpeed: null as number | null,
   loadingSpeed: null as number | null,
   tutorialSpeed: null as number | null,
+  tutorialDirectLive: null as boolean | null,
 }));
 
 vi.mock("../state/front-door-context", () => ({
@@ -39,8 +40,9 @@ vi.mock("../screens/cumulus_adapters/LoadingScreenAdapter", () => ({
 }));
 
 vi.mock("../screens/cumulus_adapters/TutorialScreenAdapter", () => ({
-  TutorialScreenAdapter: ({ playbackSpeed }: { playbackSpeed: number }) => {
+  TutorialScreenAdapter: ({ playbackSpeed, directLive }: { playbackSpeed: number; directLive?: boolean }) => {
     adapterMocks.tutorialSpeed = playbackSpeed;
+    adapterMocks.tutorialDirectLive = directLive ?? false;
     return <main data-tutorial-screen />;
   },
 }));
@@ -60,6 +62,7 @@ beforeEach(() => {
   adapterMocks.mainSpeed = null;
   adapterMocks.loadingSpeed = null;
   adapterMocks.tutorialSpeed = null;
+  adapterMocks.tutorialDirectLive = null;
 });
 
 afterEach(() => {
@@ -95,6 +98,17 @@ describe("FrontDoorRouter", () => {
     act(() => root.render(<FrontDoorRouter tutorialPlaybackSpeed={4} />));
     expect(container.querySelector("[data-tutorial-live-battle]")).not.toBeNull();
 
+    act(() => root.unmount());
+  });
+
+  it("passes the direct tutorial-battle route flag only to the authored tutorial adapter", () => {
+    stateMocks.frontDoor = { phase: "tutorial", journeyId: "event:direct" };
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<FrontDoorRouter directTutorialBattle />));
+    expect(container.querySelector("[data-tutorial-screen]")).not.toBeNull();
+    expect(adapterMocks.tutorialDirectLive).toBe(true);
     act(() => root.unmount());
   });
 });

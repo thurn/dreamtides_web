@@ -29,13 +29,18 @@ export function buildTutorialBattleView(
     },
   );
   const prompt = battle.pendingPrompt;
+  const confirmedHumanPrompt = controller.status === "driver" &&
+    controller.isCurrentClientDriver &&
+    controller.requiresHumanDecision &&
+    prompt !== null &&
+    confirmedPromptId === prompt.promptId;
   return {
     battle: { ...mobile, result: null },
     ownership: controller.status === "not-tutorial" ? "observer" : controller.status,
     driverClientId: controller.driverClientId,
-    manualControls: controller.status === "driver" && controller.requiresHumanDecision,
+    manualControls: controller.status === "driver" && controller.isCurrentClientDriver && controller.requiresHumanDecision,
     foresee:
-      prompt?.options.kind === "foresee"
+      confirmedHumanPrompt && prompt.options.kind === "foresee"
         ? {
             initialCount: prompt.options.count,
             cards: prompt.options.cardIds.flatMap((battleCardId) => {
@@ -47,8 +52,9 @@ export function buildTutorialBattleView(
           }
         : null,
     victorySummary:
-      battle.board.result === "victory" && controller.status === "terminal" && controller.driverClientId !== null
+      battle.board.result === "victory" && controller.status === "terminal" && controller.isCurrentClientDriver && controller.isDriverPresent
         ? `You reached ${String(battle.board.sides.player.score)} ⍟.`
         : null,
+    terminalRestartAvailable: controller.status === "terminal" && !controller.isDriverPresent,
   };
 }
