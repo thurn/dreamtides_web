@@ -57,8 +57,23 @@ function toTideView(tide: Tides4DeckJson): DreamAvatarTideView {
 }
 
 /**
+ * Resolve the exact tides selected for one DreamAvatar under a run seed to the
+ * shared player-facing tide view. The largest-four cap matches the selection
+ * screen, so later references show the same tide set the player chose.
+ */
+export function buildDreamAvatarTideViews(
+  poolContext: RunPoolContext | undefined,
+  dreamAvatar: DreamAvatarContent,
+  questSeed: string,
+): DreamAvatarTideView[] {
+  return largestTides(
+    selectedTides4Decks(poolContext, dreamAvatar, questSeed),
+  ).map(toTideView);
+}
+
+/**
  * Map one offered DreamAvatar (with the tide decks its pool would be dealt
- * from, already capped by {@link largestTides}) to the screen's view type.
+ * from) to the screen's view type, capped by {@link largestTides}.
  *
  * A `tides4` run shows its dealt tides in place of the signature cards, so the
  * signature list is suppressed whenever tides exist. Each signature name is
@@ -86,7 +101,7 @@ export function toDreamAvatarOfferView(
     renderedText: dreamAvatar.renderedText,
     startingEssence: dreamAvatar.startingEssence,
     signatureCards,
-    tides: tides.map(toTideView),
+    tides: largestTides(tides).map(toTideView),
   };
 }
 
@@ -104,7 +119,7 @@ export function buildDreamAvatarOfferViews(
   return offered.map((dreamAvatar) =>
     toDreamAvatarOfferView(
       dreamAvatar,
-      largestTides(selectedTides4Decks(poolContext, dreamAvatar, questSeed)),
+      selectedTides4Decks(poolContext, dreamAvatar, questSeed),
     ),
   );
 }

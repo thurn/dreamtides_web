@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { CardData } from "../../types/cards";
+import type { DreamAvatarContent } from "../../types/content";
 import type { DeckEntry, DreamAvatar, Dreamsign } from "../../types/quest";
+import type { RunPoolContext } from "../../data/quest-content";
+import type { PoolData } from "../../draft/pool/types";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { buildDesktopDeckView } from "./desktop-deck-view-model";
 
@@ -52,6 +55,59 @@ const dreamsign: Dreamsign = {
   isBane: false,
 };
 
+const dreamAvatarContent: DreamAvatarContent = {
+  id: dreamAvatar.id,
+  name: dreamAvatar.name,
+  title: dreamAvatar.title,
+  renderedText: dreamAvatar.renderedText,
+  imageNumber: dreamAvatar.imageNumber,
+  startingEssence: dreamAvatar.startingEssence,
+};
+
+function tidesContext(
+  poolVariant: RunPoolContext["poolVariant"],
+): RunPoolContext {
+  const tideId = "tide-sig-fixture";
+  const poolData: PoolData = {
+    core: new Set(),
+    archLists: new Map(),
+    draftLists: new Map(),
+    tides4Decks: {
+      version: 1,
+      tides: [
+        {
+          id: tideId,
+          name: "Fixture Tide",
+          displayName: "Kindled Path",
+          displayDescription:
+            "Gather strength before releasing a decisive surge.",
+          role: "signature",
+          color: "orange",
+          dreamAvatarId: dreamAvatar.id,
+          cards: Array.from({ length: 80 }, (_, index) => ({
+            id: `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
+            name: `Fixture ${String(index)}`,
+            copies: 2,
+          })),
+        },
+      ],
+      tidePoolByDreamAvatar: {
+        [dreamAvatar.id]: {
+          starter: tideId,
+          facets: [],
+          neutral: [],
+        },
+      },
+    },
+  };
+  return {
+    poolData,
+    idIndex: new Map(),
+    allDreamsignPoolIds: [],
+    poolVariant,
+  };
+}
+
 describe("buildDesktopDeckView", () => {
   it("resolves the deck in acquisition order", () => {
     const a = makeCard({ cardNumber: 1, id: asCardId("a") });
@@ -90,5 +146,40 @@ describe("buildDesktopDeckView", () => {
     expect(view.dreamsigns).toEqual(signs);
     // A copy, not the caller's array, so the view cannot alias live state.
     expect(view.dreamsigns).not.toBe(signs);
+  });
+
+  it("derives the current quest tides from the chosen avatar id and stable run seed", () => {
+    const view = buildDesktopDeckView(
+      [],
+      database(),
+      dreamAvatar,
+      [],
+      [dreamAvatarContent],
+      tidesContext("tides4"),
+      "run-seed",
+    );
+
+    expect(view.tides).toEqual([
+      {
+        id: "tide-sig-fixture",
+        label: "Kindled Path",
+        description: "Gather strength before releasing a decisive surge.",
+        tide: "ember",
+      },
+    ]);
+  });
+
+  it("omits tides when the current run does not use the tides4 pool", () => {
+    const view = buildDesktopDeckView(
+      [],
+      database(),
+      dreamAvatar,
+      [],
+      [dreamAvatarContent],
+      tidesContext("idf3"),
+      "run-seed",
+    );
+
+    expect(view.tides).toEqual([]);
   });
 });

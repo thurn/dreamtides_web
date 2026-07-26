@@ -1,9 +1,9 @@
 // Adapter bridging live quest state to the pure desktop deck viewer
 // (`src/cumulus/screens/DesktopDeckViewer`). Wiring only: it acquires `useQuest()`,
-// builds the view-model from the live deck, card database, DreamAvatar, and
-// dreamsigns, logs the open, and renders nothing while closed. All resolution
-// logic lives in the pure builder (`desktop-deck-view-model.ts`); the screen
-// itself stays pure.
+// builds the view-model from the live deck, card database, DreamAvatar,
+// dreamsigns, run seed, and pool context; logs the open; and renders nothing
+// while closed. All resolution logic lives in the pure builder
+// (`desktop-deck-view-model.ts`); the screen itself stays pure.
 
 import { useEffect, useMemo, useRef } from "react";
 import { useQuest } from "../../state/quest-context";
@@ -35,12 +35,18 @@ export function DesktopDeckViewerAdapter({
         questContent.cardDatabase,
         state.dreamAvatar,
         state.dreamsigns,
+        questContent.dreamAvatars,
+        questContent.poolContext,
+        state.seed,
       ),
     [
       state.deck,
       questContent.cardDatabase,
       state.dreamAvatar,
       state.dreamsigns,
+      questContent.dreamAvatars,
+      questContent.poolContext,
+      state.seed,
     ],
   );
   const cardCount = view.cards.length;

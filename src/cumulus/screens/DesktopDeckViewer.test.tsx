@@ -59,7 +59,7 @@ describe("DesktopDeckViewer", () => {
   it("uses the standard alpha scrim without blurring the scene", () => {
     const { container, root } = mount(
       <DesktopDeckViewer
-        view={{ cards: [], dreamAvatar: null, dreamsigns: [] }}
+        view={{ cards: [], dreamAvatar: null, dreamsigns: [], tides: [] }}
         onClose={vi.fn()}
       />,
     );
@@ -79,7 +79,7 @@ describe("DesktopDeckViewer", () => {
   it("selects sort direction from a two-arrow segmented control", () => {
     const { container, root } = mount(
       <DesktopDeckViewer
-        view={{ cards: [], dreamAvatar: null, dreamsigns: [] }}
+        view={{ cards: [], dreamAvatar: null, dreamsigns: [], tides: [] }}
         onClose={vi.fn()}
       />,
     );
@@ -115,6 +115,7 @@ describe("DesktopDeckViewer", () => {
           cards: [deckCard(1), deckCard(2), deckCard(3)],
           dreamAvatar: null,
           dreamsigns: [],
+          tides: [],
         }}
         onClose={vi.fn()}
       />,
@@ -124,6 +125,64 @@ describe("DesktopDeckViewer", () => {
     expect(grid?.dataset.deckCardGridLowCount).toBe("true");
     expect(grid?.style.gridTemplateColumns).toBe("repeat(3, 240px)");
     expect(grid?.style.justifyContent).toBe("center");
+
+    act(() => root.unmount());
+  });
+
+  it("shows current quest tides two per row with the shared tide reveal", () => {
+    const { container, root } = mount(
+      <DesktopDeckViewer
+        view={{
+          cards: [],
+          dreamAvatar: null,
+          dreamsigns: [],
+          tides: [
+            {
+              id: "tide-a",
+              label: "First Tide",
+              description: "First path.",
+              tide: "ember",
+            },
+            {
+              id: "tide-b",
+              label: "Second Tide",
+              description: "Second path.",
+              tide: "vision",
+            },
+            {
+              id: "tide-c",
+              label: "Third Tide",
+              description: "Third path.",
+              tide: "wild",
+            },
+          ],
+        }}
+        onClose={vi.fn()}
+      />,
+    );
+
+    const section = container.querySelector<HTMLElement>("[data-deck-tides]");
+    const grid = section?.querySelector<HTMLElement>("[data-deck-tides-grid]");
+    const discs = section?.querySelectorAll<HTMLElement>("[data-tide-disc]");
+
+    expect(grid?.style.gridTemplateColumns).toBe("repeat(2, max-content)");
+    expect(discs).toHaveLength(3);
+    expect(discs?.[0]?.dataset.revealPrimaryVariant).toBe("tide");
+    expect(discs?.[0]?.dataset.revealSecondaryTitles).toBe("Tides");
+    expect(discs?.[0]?.getAttribute("aria-label")).toBe("Tide: First Tide");
+
+    act(() => root.unmount());
+  });
+
+  it("omits the tide section when the run has no selected tides", () => {
+    const { container, root } = mount(
+      <DesktopDeckViewer
+        view={{ cards: [], dreamAvatar: null, dreamsigns: [], tides: [] }}
+        onClose={vi.fn()}
+      />,
+    );
+
+    expect(container.querySelector("[data-deck-tides]")).toBeNull();
 
     act(() => root.unmount());
   });

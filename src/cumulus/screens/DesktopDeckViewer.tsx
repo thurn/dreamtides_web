@@ -11,7 +11,7 @@
 //   - a LEFT SIDEBAR profiling the run — the DreamAvatar as a bare portrait
 //     that reveals its name, title, and ability on hover / press through the
 //     shared InfoCard (the same reveal the quest status bar's DreamAvatar bust
-//     uses), then the collected dreamsigns as hoverable art;
+//     uses), then the collected dreamsigns and current quest tides;
 //   - the MAIN column: a control bar, then a scrolling grid of the deck's cards.
 //
 // The desktop control bar spends the room the mobile band lacks on granular,
@@ -30,12 +30,7 @@
 // from "the whole deck + that state" to "the visible grid" lives in the pure,
 // tested `desktop-deck-filter` module.
 
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
@@ -52,6 +47,7 @@ import { IconButton } from "../components/controls/IconButton";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { DeckCardView } from "./MobileDeckViewer";
+import { TideDiscReveal, type DreamAvatarTideView } from "./quest-start-shared";
 import { DeckViewerBackdrop, GridPlaceholder } from "./deck-viewer-shared";
 import {
   type DesktopDeckFilterSort,
@@ -81,6 +77,8 @@ export interface DesktopDeckView {
   dreamAvatar: DeckDreamAvatarView | null;
   /** The dreamsigns collected so far, in collection order. */
   dreamsigns: DreamsignData[];
+  /** The exact tide set selected for this run, matching the quest-start preview. */
+  tides: DreamAvatarTideView[];
 }
 
 /** Props for {@link DesktopDeckViewer}. */
@@ -199,6 +197,7 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
           <Sidebar
             dreamAvatar={view.dreamAvatar}
             dreamsigns={view.dreamsigns}
+            tides={view.tides}
           />
           <main
             style={{
@@ -239,7 +238,9 @@ function Eyebrow({
         font: token("--t-eyebrow"),
         letterSpacing: token("--tracking-eyebrow"),
         textTransform: "uppercase",
-        color: token(tone === "primary" ? "--text-on-accent" : "--text-secondary"),
+        color: token(
+          tone === "primary" ? "--text-on-accent" : "--text-secondary",
+        ),
       }}
     >
       {children}
@@ -269,10 +270,18 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
       }}
     >
       <div
-        style={{ display: "flex", flexDirection: "column", gap: token("--space-1") }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: token("--space-1"),
+        }}
       >
         <h2
-          style={{ margin: 0, font: token("--t-title"), color: token("--text-primary") }}
+          style={{
+            margin: 0,
+            font: token("--t-title"),
+            color: token("--text-primary"),
+          }}
         >
           Your Deck
         </h2>
@@ -298,9 +307,11 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
 function Sidebar({
   dreamAvatar,
   dreamsigns,
+  tides,
 }: {
   dreamAvatar: DeckDreamAvatarView | null;
   dreamsigns: DreamsignData[];
+  tides: DreamAvatarTideView[];
 }) {
   return (
     <aside
@@ -314,10 +325,9 @@ function Sidebar({
         gap: token("--space-7"),
       }}
     >
-      {dreamAvatar !== null && (
-        <DreamAvatarBlock dreamAvatar={dreamAvatar} />
-      )}
+      {dreamAvatar !== null && <DreamAvatarBlock dreamAvatar={dreamAvatar} />}
       <DreamsignsBlock dreamsigns={dreamsigns} />
+      <TidesBlock tides={tides} />
     </aside>
   );
 }
@@ -337,7 +347,11 @@ function DreamAvatarBlock({
 }) {
   return (
     <section
-      style={{ display: "flex", flexDirection: "column", gap: token("--space-6") }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: token("--space-6"),
+      }}
     >
       <SidebarSectionHeader label="Avatar" />
       <div style={{ display: "flex", justifyContent: "flex-start" }}>
@@ -372,18 +386,20 @@ function DreamAvatarBlock({
 }
 
 /** The collected dreamsigns as hoverable art tiles. */
-function DreamsignsBlock({
-  dreamsigns,
-}: {
-  dreamsigns: DreamsignData[];
-}) {
+function DreamsignsBlock({ dreamsigns }: { dreamsigns: DreamsignData[] }) {
   return (
     <section
-      style={{ display: "flex", flexDirection: "column", gap: token("--space-6") }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: token("--space-6"),
+      }}
     >
       <SidebarSectionHeader label="Dreamsigns" />
       {dreamsigns.length === 0 ? (
-        <div style={{ font: token("--t-body-sm"), color: token("--text-muted") }}>
+        <div
+          style={{ font: token("--t-body-sm"), color: token("--text-muted") }}
+        >
           None collected yet.
         </div>
       ) : (
@@ -405,6 +421,37 @@ function DreamsignsBlock({
           ))}
         </div>
       )}
+    </section>
+  );
+}
+
+/** The run's selected tides, using the quest-start discs and reveal behavior. */
+function TidesBlock({ tides }: { tides: DreamAvatarTideView[] }) {
+  if (tides.length === 0) return null;
+  return (
+    <section
+      data-deck-tides=""
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: token("--space-6"),
+      }}
+    >
+      <SidebarSectionHeader label="Tides" />
+      <div
+        data-deck-tides-grid=""
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, max-content)",
+          gap: token("--space-4"),
+          justifyContent: "start",
+          justifyItems: "start",
+        }}
+      >
+        {tides.map((tide) => (
+          <TideDiscReveal key={tide.id} tide={tide} size="lg" />
+        ))}
+      </div>
     </section>
   );
 }
@@ -450,7 +497,10 @@ function ControlBar({
         value={filterSort.type}
         onChange={(value) => {
           const type = value as DesktopDeckFilterSort["type"];
-          onChange({ type, subtype: type === "Event" ? "all" : filterSort.subtype });
+          onChange({
+            type,
+            subtype: type === "Event" ? "all" : filterSort.subtype,
+          });
         }}
       />
       {showSubtypeFilter && (
@@ -519,10 +569,7 @@ function DeckGrid({
 }) {
   const tileWidth = DECK_CARD_SIZE_PX[size];
   const lowCount = visible.length > 0 && visible.length <= 3;
-  const lowCountTileWidth = Math.max(
-    tileWidth,
-    DECK_CARD_SIZE_PX.large,
-  );
+  const lowCountTileWidth = Math.max(tileWidth, DECK_CARD_SIZE_PX.large);
   return (
     <div
       style={{
@@ -564,11 +611,7 @@ function DeckGrid({
  * glossary definitions stacked beside it. A bane card wears a danger ring so a
  * corrupted card is legible at tile size.
  */
-function DeckTile({
-  cardView,
-}: {
-  cardView: DeckCardView;
-}) {
+function DeckTile({ cardView }: { cardView: DeckCardView }) {
   const tileStyle: CSSProperties = {
     // A fixed aspect box so the filling card resolves a height from the grid's
     // column width; the ring (if any) traces that box.
