@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import {
+  tokenizeRulesSymbols,
   tokenizeRulesText,
   formatTypeLine,
   type TextSegment,
@@ -100,6 +101,29 @@ function nobreakContaining(
     ? reconstructText(group.segments)
     : undefined;
 }
+
+describe("tokenizeRulesSymbols", () => {
+  it("isolates raw symbol tokens without decorating surrounding prose", () => {
+    const source =
+      "Essence at the draft site: Reclaim 0●, then gain 1✦ and 2⍟.";
+    const result = tokenizeRulesSymbols(source);
+
+    expect(reconstructText(result)).toBe(source);
+    expect(
+      flatten(result).filter(
+        (segment) =>
+          segment.kind === "term" ||
+          segment.kind === "essence" ||
+          segment.kind === "siteName",
+      ),
+    ).toEqual([]);
+    expect(collectSymbols(result).map((segment) => segment.symbol)).toEqual([
+      "energy",
+      "spark",
+      "points",
+    ]);
+  });
+});
 
 describe("tokenizeRulesText", () => {
   it("returns a single text segment for plain text", () => {

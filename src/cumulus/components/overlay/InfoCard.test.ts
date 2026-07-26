@@ -14,6 +14,8 @@ import {
   infoCardWidth,
 } from "./InfoCard";
 
+const RAW_RULES_SYMBOL_PATTERN = /[●✦⍏▸⍟☪⧗❖]/u;
+
 describe("infoCardWidth — the viewport-driven mobile width", () => {
   it("lays a card out at ~45% of a narrow (mobile) screen", () => {
     // On a phone the native card is wider than 45% of the screen, so it narrows.
@@ -60,6 +62,8 @@ describe("InfoCard shell treatment", () => {
     const glass = glassSurfaceStyle();
 
     expect(html).toContain(TOKENS["--glass-fill-popover"].var);
+    expect(html).toContain("Essence");
+    expect(html).not.toContain('aria-label="essence"');
     expect(html).toContain(
       `-webkit-backdrop-filter:${String(glass.WebkitBackdropFilter)}`,
     );
@@ -116,8 +120,81 @@ describe("InfoCard shell treatment", () => {
     expect(html).toContain("Currency carried through a quest.");
     expect(html).toContain(TOKENS["--glass-fill-popover"].var);
   });
-});
 
+  it("substitutes raw rules symbols across every textual field and RichText shape", () => {
+    const html = renderToStaticMarkup(
+      React.createElement(InfoCard, {
+        variant: "text",
+        title: "Costs 2● and grants 1✦",
+        meta: "Gain ⍏3 and 4⍟",
+        subtitle: "Pay ☪ and store 1⧗",
+        body: richText.stack(
+          richText.plain("▸Dawn"),
+          richText.underline("❖ Fast"),
+          richText.note("❖❖ Interrupt"),
+          richText.definitions([
+            {
+              term: "Reclaim 0●",
+              definition: "Gain 1✦, 2⍟, and ⍏3.",
+            },
+          ]),
+        ),
+      }),
+    );
+
+    expect(html).not.toMatch(RAW_RULES_SYMBOL_PATTERN);
+    for (const label of [
+      "energy",
+      "spark",
+      "points",
+      "lunar",
+      "memory",
+      "trigger",
+      "fast",
+      "interrupt",
+    ]) {
+      expect(html).toContain(`aria-label="${label}"`);
+    }
+    expect(html).toContain("bxf bx-fire-alt");
+    expect(html).toContain("bxf bx-star-circle");
+    expect(html).toContain("bxf bx-moon");
+    expect(html).toContain("fa-solid fa-brain");
+    expect(html).toContain("bxf bx-caret-right");
+    expect(html).toContain("bxf bx-bolt");
+  });
+
+  it("keeps symbol substitution at the boundary for image-backed InfoCard fields", () => {
+    const fullBleed = renderToStaticMarkup(
+      React.createElement(InfoCard, {
+        variant: "fullBleed",
+        image: artRef.dreamscapeScene("wilderveil"),
+        title: "Gain 1●",
+        meta: "Score 2⍟",
+        subtitle: "Store 1⧗",
+        body: richText.plain("Pay ☪."),
+      }),
+    );
+    const atlasReveal = renderToStaticMarkup(
+      React.createElement(InfoCard, {
+        variant: "atlasReveal",
+        image: artRef.dreamscapeScene("wilderveil"),
+        title: "▸Dawn",
+        subtitle: "❖ Fast",
+        body: richText.plain("Gain 1✦."),
+      }),
+    );
+
+    expect(fullBleed).not.toMatch(RAW_RULES_SYMBOL_PATTERN);
+    expect(atlasReveal).not.toMatch(RAW_RULES_SYMBOL_PATTERN);
+    expect(fullBleed).toContain('aria-label="energy"');
+    expect(fullBleed).toContain('aria-label="points"');
+    expect(fullBleed).toContain('aria-label="memory"');
+    expect(fullBleed).toContain('aria-label="lunar"');
+    expect(atlasReveal).toContain('aria-label="trigger"');
+    expect(atlasReveal).toContain('aria-label="fast"');
+    expect(atlasReveal).toContain('aria-label="spark"');
+  });
+});
 
 describe("InfoCard public API", () => {
   it("exposes only a renderable visual component without interaction statics", () => {

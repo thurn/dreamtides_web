@@ -432,7 +432,10 @@ function bindIconsToText(segments: TextSegment[]): TextSegment[] {
  * glossary terms. The icon-binding pass is applied by the caller across the
  * whole list so it can glue text to essence segments too.
  */
-function scanSegments(text: string): TextSegment[] {
+function scanSegments(
+  text: string,
+  glossaryTerms: boolean = true,
+): TextSegment[] {
   const segments: TextSegment[] = [];
   let buffer = "";
 
@@ -442,6 +445,10 @@ function scanSegments(text: string): TextSegment[] {
     }
     const chunk = buffer;
     buffer = "";
+    if (!glossaryTerms) {
+      segments.push({ kind: "text", value: chunk });
+      return;
+    }
     // The common authored trigger form `▸Materialized` (no space) reaches here
     // as a bare keyword after the arrow has been emitted as its own symbol
     // segment. When this chunk's first word sits directly against that arrow,
@@ -498,7 +505,14 @@ function scanSegments(text: string): TextSegment[] {
           kind: "nobreak",
           segments: [
             { kind: "symbol", symbol: "trigger", char: TRIGGER_CHAR },
-            ...maybeWrapKeyword(` ${match[1]}${tail}`, true),
+            ...(glossaryTerms
+              ? maybeWrapKeyword(` ${match[1]}${tail}`, true)
+              : [
+                  {
+                    kind: "text" as const,
+                    value: ` ${match[1]}${tail}`,
+                  },
+                ]),
           ],
         });
         i += match[0].length;
@@ -580,6 +594,18 @@ export function tokenizeRulesText(text: string): TextSegment[] {
     }
   }
   return bindIconsToText(segments);
+}
+
+/**
+ * Parses only authored rules symbols while leaving ordinary prose untouched.
+ *
+ * InfoCard uses this projection for titles, metadata, subtitles, and non-rules
+ * RichText fields: the shared symbol map, pip/bolt handling, and no-break
+ * binding stay canonical without applying glossary emphasis, site-name color,
+ * or textual essence-currency expansion to prose.
+ */
+export function tokenizeRulesSymbols(text: string): TextSegment[] {
+  return bindIconsToText(scanSegments(text, false));
 }
 
 /** Format the card type and subtype line. */

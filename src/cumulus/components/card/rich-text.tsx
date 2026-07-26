@@ -12,7 +12,11 @@ import { Fragment, type ReactElement, type ReactNode } from "react";
 import { token } from "../../primitives/tokens";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { GlowIcon } from "../controls/GlowIcon";
-import { renderRulesText, renderRulesTextInline } from "./RulesText";
+import {
+  renderRulesSymbolsInline,
+  renderRulesText,
+  renderRulesTextInline,
+} from "./RulesText";
 
 export type RichTextDefinitionSymbol =
   "fast" | "interrupt" | "exhaust" | "trigger";
@@ -74,6 +78,16 @@ export const richText = {
 const STACK_GAP = 8;
 const INLINE_RULE_SYMBOL_RE = /[●✦▸⍟☪⧗❖]/;
 
+interface RichTextRenderOptions {
+  /**
+   * Route every textual RichText field through the canonical inline rules-text
+   * tokenizer. InfoCard enables this at its shared rendering boundary so raw
+   * rules symbols cannot leak through plain, note, underline, or definition
+   * label copy.
+   */
+  readonly substituteRulesSymbols?: boolean;
+}
+
 /** One visible hairline with an even, compact rhythm between definition rows. */
 const GLOSSARY_DEFINITION_DIVIDER_STYLE = {
   display: "block",
@@ -83,10 +97,25 @@ const GLOSSARY_DEFINITION_DIVIDER_STYLE = {
   background: token("--border-glossary-definition"),
 } as const;
 
-function renderDefinitionText(definition: string): ReactNode {
-  return INLINE_RULE_SYMBOL_RE.test(definition)
-    ? renderRulesTextInline(definition)
+function renderDefinitionText(
+  definition: string,
+  options: RichTextRenderOptions,
+): ReactNode {
+  return options.substituteRulesSymbols === true ||
+    INLINE_RULE_SYMBOL_RE.test(definition)
+    ? options.substituteRulesSymbols === true
+      ? renderRulesSymbolsInline(definition)
+      : renderRulesTextInline(definition)
     : definition;
+}
+
+function renderInlineText(
+  text: string,
+  options: RichTextRenderOptions,
+): ReactNode {
+  return options.substituteRulesSymbols === true
+    ? renderRulesSymbolsInline(text)
+    : text;
 }
 
 function definitionSymbolSpec(symbol: RichTextDefinitionSymbol): {
@@ -147,22 +176,23 @@ function DefinitionSymbol({
 export function renderRichText(
   value: RichText,
   key: string | number = 0,
+  options: RichTextRenderOptions = {},
 ): ReactNode {
   switch (value.kind) {
     case "plain":
-      return <span key={key}>{value.text}</span>;
+      return <span key={key}>{renderInlineText(value.text, options)}</span>;
     case "rules":
       return <Fragment key={key}>{renderRulesText(value.text)}</Fragment>;
     case "underline":
       return (
         <span key={key} style={{ textDecoration: "underline" }}>
-          {value.text}
+          {renderInlineText(value.text, options)}
         </span>
       );
     case "inline":
       return (
         <Fragment key={key}>
-          {value.parts.map((part, i) => renderRichText(part, i))}
+          {value.parts.map((part, i) => renderRichText(part, i, options))}
         </Fragment>
       );
     case "note":
@@ -171,7 +201,7 @@ export function renderRichText(
           key={key}
           style={{ color: token("--text-muted"), fontStyle: "italic" }}
         >
-          {value.text}
+          {renderInlineText(value.text, options)}
         </div>
       );
     case "stack":
@@ -180,7 +210,7 @@ export function renderRichText(
           key={key}
           style={{ display: "flex", flexDirection: "column", gap: STACK_GAP }}
         >
-          {value.parts.map((part, i) => renderRichText(part, i))}
+          {value.parts.map((part, i) => renderRichText(part, i, options))}
         </div>
       );
     case "definitions":
@@ -209,7 +239,7 @@ export function renderRichText(
               )}
               {entry.termPresentation === "definitionOnly" ? (
                 <dd style={{ display: "inline", margin: 0 }}>
-                  {renderDefinitionText(entry.definition)}
+                  {renderDefinitionText(entry.definition, options)}
                 </dd>
               ) : (
                 <>
@@ -230,11 +260,13 @@ export function renderRichText(
                         trailingGap={entry.termPresentation !== "symbolOnly"}
                       />
                     )}
-                    {entry.termPresentation === "symbolOnly" ? null : entry.term}
+                    {entry.termPresentation === "symbolOnly"
+                      ? null
+                      : renderInlineText(entry.term, options)}
                   </dt>
                   <dd style={{ display: "inline", margin: 0 }}>
                     {": "}
-                    {renderDefinitionText(entry.definition)}
+                    {renderDefinitionText(entry.definition, options)}
                   </dd>
                 </>
               )}

@@ -1,5 +1,9 @@
 import { type CSSProperties, type ReactNode } from "react";
-import { tokenizeRulesText, type TextSegment } from "./card-text";
+import {
+  tokenizeRulesSymbols,
+  tokenizeRulesText,
+  type TextSegment,
+} from "./card-text";
 import {
   TRANSFIGURE_MARK_END,
   TRANSFIGURE_MARK_START,
@@ -542,7 +546,9 @@ function renderParagraph(
  * authored paragraphs are joined with a space because the caller owns the
  * surrounding block layout.
  */
-export function renderRulesTextInline(text: string): ReactNode[] {
+export function renderRulesTextInline(
+  text: string,
+): ReactNode[] {
   return splitRulesTextIntoParagraphs(text).flatMap((paragraph, index) => [
     ...(index === 0 ? [] : [<span key={`separator-${String(index)}`}> </span>]),
     ...renderParagraph(paragraph, index, {
@@ -550,6 +556,20 @@ export function renderRulesTextInline(text: string): ReactNode[] {
       glossarySourceText: text,
     }),
   ]);
+}
+
+/**
+ * Renders canonical rules-symbol icons inline while preserving all surrounding
+ * prose exactly as authored.
+ */
+export function renderRulesSymbolsInline(text: string): ReactNode[] {
+  return tokenizeRulesSymbols(stripMarkers(text)).map(
+    (segment, segmentIndex) =>
+      renderSegment(segment, segmentIndex, {
+        interactiveTerms: false,
+        glossarySourceText: text,
+      }),
+  );
 }
 
 /**

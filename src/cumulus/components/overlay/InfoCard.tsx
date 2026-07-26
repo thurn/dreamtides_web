@@ -29,6 +29,7 @@ import {
   resolveMediaFilter,
 } from "../../primitives/media";
 import { renderRichText, type RichText } from "../card/rich-text";
+import { renderRulesSymbolsInline } from "../card/RulesText";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { tideVisual, tideAlignmentLabel, type Tide } from "../hud/tide-spec";
 
@@ -228,9 +229,15 @@ export type InfoCardVariant =
  * (see {@link InfoCardProps}).
  */
 interface InfoCardCommonProps {
-  /** The card's headline. Plain text — resolve names before display. */
+  /**
+   * The card's headline. Resolve names before display; canonical rules symbols
+   * render as their inline icons.
+   */
   title?: string;
-  /** The reveal copy, as a {@link RichText} value (plain / rules / note / stack). */
+  /**
+   * The reveal copy, as a {@link RichText} value (plain / rules / note / stack).
+   * Canonical rules symbols render as their inline icons in every text kind.
+   */
   body?: RichText;
   /** Optional wrappers for the rendered headline and body content. */
   slots?: InfoCardSlots;
@@ -304,11 +311,12 @@ export interface InfoCardFullBleedProps extends InfoCardCommonProps {
    * scene-only hero. An {@link ArtRef}, resolved by the component.
    */
   figure?: ArtRef;
-  /** Small mono/uppercase overline above the title, on the glass card. */
+  /** Small mono/uppercase overline above the title; rules symbols render as icons. */
   meta?: string;
   /**
    * An epithet under the name — a smaller serif line in white, mirroring the
-   * Dream Avatar-select name/epithet pairing. Plain text; resolve before display.
+   * Dream Avatar-select name/epithet pairing. Resolve before display; rules
+   * symbols render as icons.
    */
   subtitle?: string;
 }
@@ -329,7 +337,7 @@ export interface InfoCardAtlasRevealProps extends InfoCardCommonProps {
   imageFilter?: MediaFilter;
   /** Optional transparent full-body figure standing on the card's right side. */
   figure?: ArtRef;
-  /** The resident guide / boss title under the place headline. */
+  /** The resident guide / boss title; rules symbols render as icons. */
   subtitle?: string;
 }
 
@@ -364,14 +372,14 @@ export interface InfoCardTideProps extends InfoCardCommonProps {
 export interface InfoCardTextProps extends InfoCardCommonProps {
   /** Which media treatment. Omit — or pass 'text' — for the text variant. */
   variant?: "text";
-  /** Small mono/uppercase overline above the title. */
+  /** Small mono/uppercase overline above the title; rules symbols render as icons. */
   meta?: string;
   /** A small leading {@link Glyph}. */
   leadGlyph?: Glyph;
   /**
    * An epithet under the name — a smaller serif subtitle in white, mirroring
-   * the Dream Avatar-select name/epithet pairing. Plain text; resolve before
-   * display.
+   * the Dream Avatar-select name/epithet pairing. Resolve before display;
+   * rules symbols render as icons.
    */
   subtitle?: string;
 }
@@ -408,13 +416,17 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
   // discriminant directly so each reads only the media its interface carries.
   const variant: InfoCardVariant = props.variant ?? "text";
   const slotContext: InfoCardSlotContext = { variant, title, body };
+  const renderedTitle =
+    title === undefined ? undefined : renderRulesSymbolsInline(title);
   const titleContent =
-    slots.title?.(slotContext, title ?? "") ?? title;
+    slots.title?.(slotContext, renderedTitle ?? "") ?? renderedTitle;
   const bodyContent =
     body == null
       ? null
-      : (slots.body?.(slotContext, renderRichText(body)) ??
-        renderRichText(body));
+      : (slots.body?.(
+          slotContext,
+          renderRichText(body, 0, { substituteRulesSymbols: true }),
+        ) ?? renderRichText(body, 0, { substituteRulesSymbols: true }));
   const Body =
     body == null ? null : (
       <div
@@ -512,7 +524,9 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
       subtitle,
     } = props;
     const Meta = meta ? (
-      <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div>
+      <div style={{ ...tMeta, marginBottom: 7 }}>
+        {renderRulesSymbolsInline(meta)}
+      </div>
     ) : null;
     return (
       <div
@@ -604,7 +618,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
           </div>
           {subtitle !== undefined && subtitle !== "" && (
             <div style={{ ...tEpithet, marginBottom: body ? 7 : 0 }}>
-              {subtitle}
+              {renderRulesSymbolsInline(subtitle)}
             </div>
           )}
           {body != null && (
@@ -719,7 +733,9 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
             >
               <div style={tAtlasHeadline}>{titleContent}</div>
               {subtitle !== undefined && subtitle !== "" && (
-                <div style={tAtlasSubtitle}>{subtitle}</div>
+                <div style={tAtlasSubtitle}>
+                  {renderRulesSymbolsInline(subtitle)}
+                </div>
               )}
             </div>
             {body != null && (
@@ -830,7 +846,9 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
   const { meta, leadGlyph, subtitle } = props;
   const hasHeadline = title !== undefined || leadGlyph !== undefined;
   const Meta = meta ? (
-    <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div>
+    <div style={{ ...tMeta, marginBottom: 7 }}>
+      {renderRulesSymbolsInline(meta)}
+    </div>
   ) : null;
   return (
     <div
@@ -861,7 +879,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
       )}
       {subtitle !== undefined && subtitle !== "" && (
         <div style={{ ...tEpithet, marginBottom: body ? 7 : 0 }}>
-          {subtitle}
+          {renderRulesSymbolsInline(subtitle)}
         </div>
       )}
       {Body}
