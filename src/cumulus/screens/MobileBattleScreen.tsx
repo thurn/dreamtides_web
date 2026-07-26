@@ -328,7 +328,13 @@ export interface MobileBattleInteractions {
   readonly pendingCardId: string | null;
   readonly pendingCardSource?: MobileBattleCardSource | null;
   readonly pendingCardOwner?: MobileBattleOwner | null;
+  /** A tutorial play awaiting a legal battlefield target. */
+  readonly targetSelectionCardId?: string | null;
+  readonly targetSelectionPrompt?: string | null;
+  readonly targetableCardIds?: readonly string[];
   readonly onHandCardActivate: (battleCardId: string) => void;
+  readonly onBattlefieldCardActivate?: (battleCardId: string) => void;
+  readonly onTargetSelectionCancel?: () => void;
   readonly onHandCardDrop?: (target?: MobileBattleSlotTarget) => void;
   readonly onCardDebugActivate?: (
     battleCardId: string,
@@ -1948,14 +1954,11 @@ function Rank({
                   card={slot.card}
                   zone={`${owner}-${rank}-rank`}
                   snapLayout={snapLayoutCardId === slot.card.id}
-                  selection={
-                    candidate === null
-                      ? undefined
-                      : {
-                          selected: isPickerSelected || isPickerHighlighted,
-                          color: isPickerSelected ? "gold-light" : "gold",
-                        }
-                  }
+                  selection={candidate === null
+                    ? interactions?.targetSelectionCardId === slot.card.id || interactions?.targetableCardIds?.includes(slot.card.id)
+                      ? { selected: true, color: "gold-light" }
+                      : undefined
+                    : { selected: isPickerSelected || isPickerHighlighted, color: isPickerSelected ? "gold-light" : "gold" }}
                   interaction={
                     candidate !== null
                       ? {
@@ -1979,6 +1982,9 @@ function Rank({
                                 "battlefield",
                               );
                             },
+                            onActivate: interactions.onBattlefieldCardActivate === undefined
+                              ? undefined
+                              : () => interactions.onBattlefieldCardActivate?.(slot.card?.id ?? ""),
                             ...(interactions.onCardDebugActivate === undefined
                               ? {}
                               : {

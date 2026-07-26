@@ -92,8 +92,9 @@ function reduce(
   type: string,
   payload: Record<string, unknown>,
   context: EventContext = ctx(),
+  actor = "alice",
 ): ReduceResult {
-  return reduceGameEvent(state, event(type, payload), context);
+  return reduceGameEvent(state, event(type, payload, actor), context);
 }
 
 // Canonical hash: JSON is byte-stable for pure-data fold state and doubles as a
@@ -1106,6 +1107,8 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
       { ...baseState(), battle: battleFrom(board) },
       "BATTLE_COMMAND",
       debugEdit({ kind: "SET_PHASE", phase: "challenge" }),
+      ctx(),
+      "player",
     );
 
     expect(result.outcome).toBe("applied");
@@ -1199,6 +1202,8 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
       },
       "BATTLE_COMMAND",
       debugEdit({ kind: "SET_PHASE", phase: "challenge" }),
+      ctx(),
+      "tutorial-ai:player",
     );
     expect(tutorial.state.battle?.board.sides.enemy.score).toBe(5);
     expect(tutorial.state.battle?.board.result).toBeNull();

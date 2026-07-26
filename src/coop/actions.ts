@@ -205,7 +205,7 @@ export interface CoopActions {
     actor?: string,
   ) => Promise<number>;
   battleAiDefend: (aiSide: string, actor: string, intentKey?: string) => Promise<number>;
-  resolvePrompt: (promptId: number, resolution: unknown, intentKey?: string) => Promise<number>;
+  resolvePrompt: (promptId: number, resolution: unknown, intentKey?: string, actor?: string) => Promise<number>;
   setCardNote: (
     instanceId: string,
     note: { noteId: string; text: string; expiry: unknown },
@@ -476,8 +476,13 @@ export function makeActions(append: AppendFn): CoopActions {
         actor,
         ...(intentKey === undefined ? {} : { intentKey }),
       }),
-    resolvePrompt: (promptId, resolution, intentKey) =>
-      emit("RESOLVE_PROMPT", { promptId, resolution }, intentKey),
+    resolvePrompt: (promptId, resolution, intentKey, actor) =>
+      append({
+        type: "RESOLVE_PROMPT",
+        payload: { promptId, resolution },
+        ...(intentKey === undefined ? {} : { intentKey }),
+        ...(actor === undefined ? {} : { actor }),
+      }),
     setCardNote: (instanceId, note) =>
       emit("SET_CARD_NOTE", { instanceId, note }),
   };

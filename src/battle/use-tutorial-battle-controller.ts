@@ -57,6 +57,7 @@ export function useTutorialBattleController(): TutorialBattleControllerPlan {
           plan.intent.promptId,
           plan.intent.resolution,
           plan.intent.intentKey,
+          actor,
         ).catch(() => undefined);
         return;
     }

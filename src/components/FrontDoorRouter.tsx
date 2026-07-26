@@ -10,8 +10,10 @@ import { useFrontDoor } from "../state/front-door-context";
 /** Reflects the room's shared front-door fold and renders its current scene. */
 export function FrontDoorRouter({
   tutorialPlaybackSpeed = 1,
+  directTutorialBattle = false,
 }: {
   readonly tutorialPlaybackSpeed?: number;
+  readonly directTutorialBattle?: boolean;
 }) {
   const { state, battle } = useFrontDoor();
 
@@ -43,7 +45,7 @@ export function FrontDoorRouter({
     if (battle !== null && battle !== undefined && battleModeOf(battle).kind === "tutorial") {
       return <TutorialBattleScreenAdapter />;
     }
-    return <TutorialScreenAdapter playbackSpeed={tutorialPlaybackSpeed} />;
+    return <TutorialScreenAdapter playbackSpeed={tutorialPlaybackSpeed} directLive={directTutorialBattle} />;
   }
   return <MainMenuScreenAdapter playbackSpeed={tutorialPlaybackSpeed} />;
 }

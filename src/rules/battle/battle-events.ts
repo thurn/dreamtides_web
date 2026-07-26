@@ -246,6 +246,7 @@ export function beginTutorialBattle(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  actor: string,
 ): FoldState | null {
   const tutorial = state.frontDoor.tutorial;
   const tutorialRunId = payload.tutorialRunId;
@@ -257,7 +258,8 @@ export function beginTutorialBattle(
     tutorial.currentActionIndex !== null ||
     !nonBlankString(tutorialRunId) ||
     tutorialRunId !== tutorial.runId ||
-    !nonBlankString(driverClientId)
+    !nonBlankString(driverClientId) ||
+    driverClientId !== actor
   ) {
     return null;
   }
@@ -269,6 +271,7 @@ export function restartTutorialBattle(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  actor: string,
 ): FoldState | null {
   const battle = state.battle;
   const battleId = payload.battleId;
@@ -279,7 +282,8 @@ export function restartTutorialBattle(
     !nonBlankString(battleId) ||
     battleId !== battle.board.battleId ||
     !nonBlankString(previousDriverClientId) ||
-    !nonBlankString(driverClientId)
+    !nonBlankString(driverClientId) ||
+    driverClientId !== actor
   ) {
     return null;
   }
@@ -303,13 +307,16 @@ export function restartTutorialBattle(
 export function exitTutorialBattle(
   state: FoldState,
   payload: Record<string, unknown>,
+  actor: string,
 ): FoldState | null {
   const battleId = payload.battleId;
+  const mode = state.battle === null ? null : battleModeOf(state.battle);
   if (
     state.battle === null ||
     !nonBlankString(battleId) ||
     battleId !== state.battle.board.battleId ||
-    battleModeOf(state.battle).kind !== "tutorial"
+    mode?.kind !== "tutorial" ||
+    mode.driverClientId !== actor
   ) {
     return null;
   }
@@ -638,7 +645,6 @@ function applyBattleCommandStep(
   // Dawn is an authoritative board edge, not a component mount concern. A
   // marker on the fold makes the once-per-controller-turn rule replay-safe.
   if (
-    boardBefore.phase !== "dawn" &&
     boardAfter.phase === "dawn" &&
     boardAfter.result === null &&
     triggerDawnFired[boardAfter.activeSide] !== boardAfter.turnNumber
@@ -712,6 +718,7 @@ export function battleCommand(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  actor?: string,
 ): FoldState | null {
   const battle = state.battle;
   if (battle === null) {
@@ -721,6 +728,7 @@ export function battleCommand(
   if (command === null) {
     return null;
   }
+  if (!tutorialCommandIsAuthorized(battle, command, actor)) return null;
   if (!voidPlaySourceIsLegal(battle.board, command)) return null;
 
   let drawIndex = 0;
@@ -796,6 +804,45 @@ const STARTER_CARD_IDS = new Set<string>([
   "910b4cf9-dec7-4e03-af4f-7d5ae342eeba", "944e15d2-d680-4ebe-8d18-36826f4b1535",
 ]);
 
+/** Tutorial events are driver-owned; automation may only use its bound actor. */
+function tutorialActorIsAuthorized(
+  battle: BattleFoldState,
+  actor: string | undefined,
+  automatic: boolean,
+): boolean {
+  const mode = battleModeOf(battle);
+  if (mode.kind !== "tutorial") return true;
+  if (actor === undefined) return true;
+  return automatic
+    ? actor === `tutorial-ai:${mode.driverClientId}`
+    : actor === mode.driverClientId;
+}
+
+/** Limits driver gestures to the tutorial's declared player controls. */
+function tutorialCommandIsAuthorized(
+  battle: BattleFoldState,
+  command: BattleCommand,
+  actor: string | undefined,
+): boolean {
+  const mode = battleModeOf(battle);
+  if (mode.kind !== "tutorial") return true;
+  if (actor === undefined) return true;
+  if (actor === `tutorial-ai:${mode.driverClientId}`) return true;
+  if (!tutorialActorIsAuthorized(battle, actor, false) || command.id !== "DEBUG_EDIT") return false;
+  const edit = command.edit;
+  if (edit.kind === "SET_PHASE") {
+    return (battle.board.activeSide === "player" && battle.board.phase === "day" && edit.phase === "dusk") ||
+      (battle.board.activeSide === "enemy" && battle.board.phase === "dusk" && edit.phase === "night");
+  }
+  if (edit.kind !== "MOVE_CARD_TO_ZONE" || !("slotId" in edit.destination)) return false;
+  const source = selectBattleCardLocation(battle.board, edit.battleCardId);
+  const instance = battle.board.cardInstances[edit.battleCardId];
+  if (source === null || instance === undefined || !isBattlefieldZone(source.zone) ||
+    instance.controller !== "player" || edit.destination.side !== "player") return false;
+  if (battle.board.activeSide === "player" && battle.board.phase === "day") return true;
+  return battle.board.activeSide === "enemy" && battle.board.phase === "dusk" && edit.destination.zone === "frontRank";
+}
+
 interface BattlePlayCardIntent {
   battleCardId: string;
   targetBattleCardIds: string[];
@@ -807,10 +854,11 @@ export function battlePlayCard(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  actor?: string,
 ): FoldState | null {
   const battle = state.battle;
   const intent = coerceBattlePlayCardIntent(payload);
-  if (battle === null || intent === null || battle.pendingPrompt !== null || battle.board.result !== null) return null;
+  if (battle === null || intent === null || battle.pendingPrompt !== null || battle.board.result !== null || !tutorialActorIsAuthorized(battle, actor, false)) return null;
   const before = battle.board;
   const instance = before.cardInstances[intent.battleCardId];
   const location = selectBattleCardLocation(before, intent.battleCardId);
@@ -935,6 +983,7 @@ export function battleGesture(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  actor?: string,
 ): FoldState | null {
   const battle = state.battle;
   if (battle === null) {
@@ -952,6 +1001,7 @@ export function battleGesture(
     }
     commands.push(command);
   }
+  if (!commands.every((command) => tutorialCommandIsAuthorized(battle, command, actor))) return null;
 
   let drawIndex = 0;
   const random = (): number => ctx.rng(drawIndex++);
@@ -977,6 +1027,7 @@ export function battleAiDefend(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  actor?: string,
 ): FoldState | null {
   const battle = state.battle;
   const aiSide = payload.aiSide;
@@ -989,6 +1040,7 @@ export function battleAiDefend(
   ) {
     return null;
   }
+  if (!tutorialActorIsAuthorized(battle, actor, true)) return null;
 
   const marker = battle.aiDefenseTurn;
   if (
@@ -1011,7 +1063,7 @@ export function battleAiDefend(
 
   let nextBattle = battle;
   if (commands.length > 0) {
-    const applied = battleGesture(state, { commands }, ctx);
+    const applied = battleGesture(state, { commands }, ctx, actor);
     if (applied === null || applied.battle === null) {
       return null;
     }
@@ -1520,11 +1572,13 @@ export function resolvePrompt(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
+  actor?: string,
 ): FoldState | null {
   const battle = state.battle;
   if (battle === null) {
     return null;
   }
+  if (!tutorialActorIsAuthorized(battle, actor, battle.pendingPrompt?.run.side === "enemy")) return null;
   const pending = battle.pendingPrompt;
   if (pending === null) {
     return null;

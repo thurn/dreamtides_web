@@ -219,15 +219,15 @@ export function routeDomain(
     case "BEGIN_TUTORIAL_BATTLE":
       return foldCase(
         state,
-        battleEvents.beginTutorialBattle(state, payload, ctx),
+        battleEvents.beginTutorialBattle(state, payload, ctx, event.actor),
       );
     case "RESTART_TUTORIAL_BATTLE":
       return foldCase(
         state,
-        battleEvents.restartTutorialBattle(state, payload, ctx),
+        battleEvents.restartTutorialBattle(state, payload, ctx, event.actor),
       );
     case "EXIT_TUTORIAL_BATTLE":
-      return foldCase(state, battleEvents.exitTutorialBattle(state, payload));
+      return foldCase(state, battleEvents.exitTutorialBattle(state, payload, event.actor));
 
     // --- essence & limits ---
     case "ADJUST_ESSENCE":
@@ -372,17 +372,17 @@ export function routeDomain(
     case "END_BATTLE":
       return foldCase(state, battleEvents.endBattle(state, payload));
     case "BATTLE_COMMAND":
-      return foldCase(state, battleEvents.battleCommand(state, payload, ctx));
+      return foldCase(state, battleEvents.battleCommand(state, payload, ctx, event.actor));
     case "BATTLE_PLAY_CARD":
-      return foldCase(state, battleEvents.battlePlayCard(state, payload, ctx));
+      return foldCase(state, battleEvents.battlePlayCard(state, payload, ctx, event.actor));
     case "BATTLE_GESTURE":
-      return foldCase(state, battleEvents.battleGesture(state, payload, ctx));
+      return foldCase(state, battleEvents.battleGesture(state, payload, ctx, event.actor));
     case "BATTLE_AI_DEFEND":
-      return foldCase(state, battleEvents.battleAiDefend(state, payload, ctx));
+      return foldCase(state, battleEvents.battleAiDefend(state, payload, ctx, event.actor));
 
     // --- in-battle prompt resolution & card notes (touch the battle slice) ---
     case "RESOLVE_PROMPT":
-      return foldCase(state, battleEvents.resolvePrompt(state, payload, ctx));
+      return foldCase(state, battleEvents.resolvePrompt(state, payload, ctx, event.actor));
     case "SET_CARD_NOTE":
       return foldCase(state, battleEvents.setCardNote(state, payload, ctx));
 

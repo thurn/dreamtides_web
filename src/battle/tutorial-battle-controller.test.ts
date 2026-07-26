@@ -147,7 +147,7 @@ describe("tutorial battle controller", () => {
     const first = plan(state).intent;
     const second = plan(JSON.parse(JSON.stringify(state)) as FoldState).intent;
     expect(first).toEqual(second);
-    expect(first?.intentKey).toBe("tutorial-battle:tutorial-battle-run-uuid:player:4:dawn:dawn:day");
+    expect(first?.intentKey).toBe("tutorial-battle:tutorial-battle-run-uuid:player:4:dawn:dawn:triggers");
   });
 
   it("treats the claimant of a rebuilt tutorial snapshot as the new driver", () => {

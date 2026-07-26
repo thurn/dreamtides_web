@@ -47,7 +47,7 @@ export function TutorialBattleScreen({
   const paused = view.ownership === "paused-driver-absent";
   const observing = view.ownership === "observer";
   return (
-    <main
+    <div
       className="cumulus"
       data-tutorial-live-battle=""
       data-tutorial-battle-ownership={view.ownership}
@@ -65,14 +65,15 @@ export function TutorialBattleScreen({
         style={{
           position: "fixed",
           left: `max(var(--safe-area-inset-left), ${token("--space-4")})`,
-          bottom: `max(var(--safe-area-inset-bottom), ${token("--space-4")})`,
+          top: `max(var(--safe-area-inset-top), ${token("--space-4")})`,
           width: "min(320px, calc(100vw - var(--space-8)))",
           zIndex: 70,
+          pointerEvents: paused ? "auto" : "none",
         }}
       >
         <GlassPanel
           eyebrow="Tutorial Battle"
-          title={paused ? "Battle Paused" : observing ? "Observing" : "Your Turn"}
+          title={paused ? "Battle Paused" : observing ? "Observing" : "Tutorial Battle"}
           subtitle={
             paused
               ? "The battle driver has left. Restart to take over from the tutorial handoff."
@@ -95,6 +96,11 @@ export function TutorialBattleScreen({
           </p>
         </GlassPanel>
       </div>
+      {interactions.targetSelectionPrompt !== null ? (
+        <div data-tutorial-target-selection="" style={{ position: "fixed", left: "50%", top: `calc(var(--safe-area-inset-top) + ${token("--space-12")})`, transform: "translateX(-50%)", zIndex: 80 }}>
+          <GlassPanel eyebrow="Play card" title="Choose target" subtitle={interactions.targetSelectionPrompt} footer={<GlassButton label="Cancel" variant="default" placement="onGlass" testId="tutorial-target-cancel" onPress={() => interactions.onTargetSelectionCancel?.()} />}><span /></GlassPanel>
+        </div>
+      ) : null}
       {view.foresee !== null ? (
         <BattleForeseeOverlay view={view.foresee} onConfirm={onForeseeConfirm} />
       ) : null}
@@ -111,6 +117,6 @@ export function TutorialBattleScreen({
           </div>
         </GlassDialog>
       ) : null}
-    </main>
+    </div>
   );
 }

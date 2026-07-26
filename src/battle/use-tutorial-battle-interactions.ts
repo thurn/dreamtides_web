@@ -4,6 +4,7 @@ import { useActions, useClientId, useConfirmedPromptId, useGameState } from "../
 import type { PromptResolution } from "../rules/battle/effect-runner-core";
 import type { MobileBattleInteractions } from "../cumulus/screens/MobileBattleScreen";
 import type { TutorialBattleControllerPlan } from "./tutorial-battle-controller";
+import { selectBattleCardLocation } from "./state/selectors";
 
 /** Player-only intent bridge for the automated tutorial battle. */
 export function useTutorialBattleInteractions(
@@ -21,10 +22,25 @@ export function useTutorialBattleInteractions(
     readonly id: string;
     readonly source: "near-hand" | "battlefield";
   } | null>(null);
+  const [targetingCardId, setTargetingCardId] = useState<string | null>(null);
   const battle = state.battle;
   const board = battle?.board ?? null;
   const canDrive = controller.status === "driver" && board !== null && board.result === null;
   const canAct = canDrive && controller.requiresHumanDecision;
+  const targetableCardIds = useMemo(() => {
+    if (board === null || targetingCardId === null) return [];
+    const cardId = board.cardInstances[targetingCardId]?.definition.cardId;
+    return Object.entries(board.cardInstances).flatMap(([battleCardId, instance]) => {
+      const location = selectBattleCardLocation(board, battleCardId);
+      const onBattlefield = location?.zone === "frontRank" || location?.zone === "backRank";
+      const legal = cardId === "4408b942-09a0-4f4e-a403-10c708c6e3c5"
+        ? instance.controller === "enemy" && instance.definition.battleCardKind === "character" && instance.definition.energyCost <= 2
+        : cardId === "944e15d2-d680-4ebe-8d18-36826f4b1535"
+          ? instance.controller === "player" && instance.definition.battleCardKind === "character"
+          : false;
+      return legal && onBattlefield ? [battleCardId] : [];
+    });
+  }, [board, targetingCardId]);
   const logIntent = useCallback((kind: string, detail: Record<string, unknown> = {}) => {
     if (board === null) return;
     logEvent("tutorial_battle_human_intent_requested", {
@@ -53,8 +69,17 @@ export function useTutorialBattleInteractions(
     pendingCardId: pendingCard?.id ?? null,
     pendingCardSource: pendingCard?.source ?? null,
     pendingCardOwner: pendingCard === null ? null : "player",
+    targetSelectionCardId: targetingCardId,
+    targetSelectionPrompt: targetingCardId === null ? null : "Select a highlighted legal target.",
+    targetableCardIds,
     onHandCardActivate: (battleCardId) => {
       if (!canAct || board === null || board.activeSide !== "player" || board.phase !== "day") return;
+      const definitionId = board.cardInstances[battleCardId]?.definition.cardId;
+      if (definitionId === "4408b942-09a0-4f4e-a403-10c708c6e3c5" || definitionId === "944e15d2-d680-4ebe-8d18-36826f4b1535") {
+        setTargetingCardId(battleCardId);
+        logIntent("target-selection-opened", { battleCardId, definitionId });
+        return;
+      }
       logIntent("play-card", { battleCardId });
       void actions.battlePlayCard(
         battleCardId,
@@ -63,6 +88,26 @@ export function useTutorialBattleInteractions(
       ).catch(() => undefined);
       setPendingCard(null);
     },
+    onBattlefieldCardActivate: (targetBattleCardId) => {
+      if (!canAct || board === null || targetingCardId === null) return;
+      const source = board.cardInstances[targetingCardId];
+      const target = board.cardInstances[targetBattleCardId];
+      const location = target === undefined ? null : selectBattleCardLocation(board, targetBattleCardId);
+      const onBattlefield = location?.zone === "frontRank" || location?.zone === "backRank";
+      const legal = source?.definition.cardId === "4408b942-09a0-4f4e-a403-10c708c6e3c5"
+        ? target !== undefined && target.controller === "enemy" && target.definition.battleCardKind === "character" && target.definition.energyCost <= 2 && onBattlefield
+        : source?.definition.cardId === "944e15d2-d680-4ebe-8d18-36826f4b1535"
+          ? target !== undefined && target.controller === "player" && target.definition.battleCardKind === "character" && onBattlefield
+          : false;
+      if (!legal) {
+        logIntent("target-selection-rejected", { battleCardId: targetingCardId, targetBattleCardId });
+        return;
+      }
+      logIntent("target-selected", { battleCardId: targetingCardId, targetBattleCardId });
+      void actions.battlePlayCard(targetingCardId, [targetBattleCardId], `tutorial-battle:${board.battleId}:human-play:${String(board.turnNumber)}:${targetingCardId}:${targetBattleCardId}`).catch(() => undefined);
+      setTargetingCardId(null);
+    },
+    onTargetSelectionCancel: () => setTargetingCardId(null),
     onHandCardDrop: () => setPendingCard(null),
     onCardDragStart: (battleCardId, source) => {
       if (!canAct) return;
@@ -110,6 +155,6 @@ export function useTutorialBattleInteractions(
     onCardPickerSubmit: (chosenIds) => resolvePrompt({ kind: "pick-cards", chosenIds: [...chosenIds] }),
     onCardPickerSkip: () => resolvePrompt({ kind: "pick-cards", chosenIds: [] }),
     onChoicePromptChoose: (optionIndex) => resolvePrompt({ kind: "choice", optionIndex }),
-  }), [actions, board, canAct, logIntent, pendingCard, resolvePrompt]);
+  }), [actions, board, canAct, logIntent, pendingCard, resolvePrompt, targetableCardIds, targetingCardId]);
   return { interactions, confirmedPromptId, resolvePrompt };
 }

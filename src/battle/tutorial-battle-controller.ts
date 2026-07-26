@@ -89,6 +89,14 @@ export function planTutorialBattleController(
   const board = battle.board;
   const key = intentKeyPrefix(board);
   if (board.phase === "dawn") {
+    if (battle.triggerDawnFired?.[board.activeSide] !== board.turnNumber) {
+      return commandPlan(
+        { id: "DEBUG_EDIT", edit: { kind: "SET_PHASE", phase: "dawn" }, sourceSurface: "auto-system" },
+        `${key}:dawn:triggers`,
+        "resolve-dawn-triggers",
+        mode.driverClientId,
+      );
+    }
     return commandPlan(
       { id: "DEBUG_EDIT", edit: { kind: "SET_PHASE", phase: "day" }, sourceSurface: "auto-system" },
       `${key}:dawn:day`,
@@ -106,8 +114,8 @@ export function planTutorialBattleController(
       );
     }
     return commandPlan(
-      { id: "DEBUG_EDIT", edit: { kind: "SET_PHASE", phase: "day" }, sourceSurface: "auto-system" },
-      `${key}:dreamwell:day`,
+      { id: "DEBUG_EDIT", edit: { kind: "SET_PHASE", phase: "dawn" }, sourceSurface: "auto-system" },
+      `${key}:dreamwell:dawn`,
       "advance-dreamwell",
       mode.driverClientId,
     );

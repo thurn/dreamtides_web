@@ -25,6 +25,8 @@ import type { EventContext } from "../../eventlog/types";
 import { isoTimestampToMs } from "./timestamp";
 import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
 import { battleTriggerScriptId } from "./battle-card-effects-table";
+import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
+import { dreamwellEnergyEdits } from "../../battle/engine/energy";
 import { applyPromptResolution, planNextEffectStep } from "./effect-runner-core";
 import type { PromptResolution } from "./effect-runner-core";
 import type { EffectStep, StepContext } from "./effect-step";
@@ -165,13 +167,28 @@ function applyEdits(
   board: BattleMutableState,
   edits: BattleDebugEdit[],
   queue?: EffectRun[],
+  battle?: BattleFoldState,
 ): BattleMutableState {
   let next = board;
   for (const edit of edits) {
+    if (edit.kind === "DRAW_DREAMWELL_CARD" && battle !== undefined) {
+      const dreamwell = battle.init.dreamwellDeck[next.dreamwellDeckIndex];
+      for (const energyEdit of dreamwellEnergyEdits(edit.side, next.sides[edit.side].maxEnergy, dreamwell?.energyAdded ?? 0)) {
+        next = applyDebugEdit(next, energyEdit, EMISSION).state;
+      }
+    }
     const before = next;
     next = applyDebugEdit(before, edit, EMISSION).state;
     if (queue !== undefined) {
       scheduleEffectLifecycleEdge(queue, before, next, edit);
+      if (edit.kind === "DRAW_DREAMWELL_CARD") {
+        const index = next.sides[edit.side].dreamwellCardIndex;
+        const dreamwell = index === null ? undefined : battle?.init.dreamwellDeck[index];
+        const script = dreamwell === undefined ? null : selectDreamwellEffectScript(dreamwell.id);
+        if (dreamwell !== undefined && script !== null && script.steps.length > 0) {
+          queue.push(newEffectRun({ table: "dreamwell", id: dreamwell.id }, edit.side));
+        }
+      }
     }
   }
   return next;
@@ -284,7 +301,7 @@ function runQueue(
     }
 
     if (plan.type === "dispatch") {
-      currentBoard = applyEdits(currentBoard, plan.edits, currentQueue);
+      currentBoard = applyEdits(currentBoard, plan.edits, currentQueue, battle);
       const terminal = scoreTerminalResult(battle, currentBoard);
       if (terminal !== null) {
         currentBoard = forceBattleResult(currentBoard, terminal, EMISSION).state;
@@ -320,7 +337,7 @@ function runQueue(
         plan.rest,
         stepCtx,
       );
-      currentBoard = applyEdits(currentBoard, edits, currentQueue);
+      currentBoard = applyEdits(currentBoard, edits, currentQueue, battle);
       const terminal = scoreTerminalResult(battle, currentBoard);
       if (terminal !== null) {
         currentBoard = forceBattleResult(currentBoard, terminal, EMISSION).state;
@@ -501,7 +518,7 @@ export function resolvePendingPromptWithStream(
     nextCursor === null
       ? battle.effectQueue.slice(1)
       : [{ ...run, cursor: nextCursor }, ...battle.effectQueue.slice(1)];
-  const board = applyEdits(battle.board, edits, advancedQueue);
+  const board = applyEdits(battle.board, edits, advancedQueue, battle);
   const terminal = scoreTerminalResult(battle, board);
   if (terminal !== null) {
     return {

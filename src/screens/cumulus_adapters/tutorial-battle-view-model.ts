@@ -47,7 +47,7 @@ export function buildTutorialBattleView(
           }
         : null,
     victorySummary:
-      battle.board.result === "victory"
+      battle.board.result === "victory" && controller.status === "terminal" && controller.driverClientId !== null
         ? `You reached ${String(battle.board.sides.player.score)} ⍟.`
         : null,
   };

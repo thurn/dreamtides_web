@@ -13,12 +13,14 @@ export type FrontDoorEntry = "main" | "loading" | "tutorial";
 interface FrontDoorAppProps {
   runtimeConfig: RuntimeConfig;
   entry: FrontDoorEntry;
+  directTutorialBattle?: boolean;
 }
 
 /** Firebase-backed runtime shared by the standalone front-door endpoints. */
 export default function FrontDoorApp({
   runtimeConfig,
   entry,
+  directTutorialBattle = false,
 }: FrontDoorAppProps): ReactNode {
   const databaseResult = useMemo<
     { database: Database; error: null } | { database: null; error: string }
@@ -62,6 +64,7 @@ export default function FrontDoorApp({
           <FrontDoorProvider>
             <FrontDoorRouter
               tutorialPlaybackSpeed={runtimeConfig.tutorialPlaybackSpeed ?? 1}
+              directTutorialBattle={directTutorialBattle}
             />
           </FrontDoorProvider>
         </CoopProvider>

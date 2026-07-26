@@ -15,10 +15,9 @@ import {
 } from "../../state/use-tutorial-presentation-logging";
 import type { TutorialDreamcallerOwner } from "../../types/tutorial";
 import * as tutorialView from "./tutorial-view-model";
-export function TutorialScreenAdapter({
-  playbackSpeed = 1,
-}: {
+export function TutorialScreenAdapter({ playbackSpeed = 1, directLive = false }: {
   readonly playbackSpeed?: number;
+  readonly directLive?: boolean;
 }) {
   const { state, mutations } = useFrontDoor();
   const {
@@ -47,7 +46,7 @@ export function TutorialScreenAdapter({
     beginRequestedKey.current = intentKey;
     void mutations
       .beginTutorial(
-        window.location.search.includes("goto=tutorial-battle") ? [] : authoredActions,
+        directLive ? [] : authoredActions,
         { intentKey },
       )
       .catch((error: unknown) => {
@@ -58,6 +57,7 @@ export function TutorialScreenAdapter({
       });
   }, [
     actionsLoaded,
+    directLive,
     authoredActions,
     mutations,
     tutorialCards,
