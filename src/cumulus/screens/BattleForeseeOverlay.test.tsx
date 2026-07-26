@@ -51,7 +51,7 @@ const DREAMWELL_SOURCE: DreamwellCardModel = {
   cardId: asCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
   displaySnapshot: {
     id: asCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
-    name: "Source Dreamwell" as never,
+    name: "Source Dreamwell",
     renderedText: "Foresee 1.",
     energyAdded: 1,
     imageNumber: 1,
