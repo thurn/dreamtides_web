@@ -350,7 +350,7 @@ export function CoopProvider({
     const base = makeActions(append);
     return {
       ...base,
-      resolvePrompt: (promptId, resolution, intentKey) => {
+      resolvePrompt: (promptId, resolution, intentKey, actor) => {
         if (promptId > confirmedSeqRef.current) {
           return Promise.reject(
             new Error(
@@ -358,7 +358,7 @@ export function CoopProvider({
             ),
           );
         }
-        return base.resolvePrompt(promptId, resolution, intentKey);
+        return base.resolvePrompt(promptId, resolution, intentKey, actor);
       },
     };
   }, [append]);

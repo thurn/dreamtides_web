@@ -1,11 +1,13 @@
-import { useMemo, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Database } from "firebase/database";
 import { FrontDoorRouter } from "../components/FrontDoorRouter";
 import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
+import { loadQuestContent } from "../data/quest-content";
 import { getFirebaseDatabase } from "../firebase/app-config";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { FrontDoorProvider } from "../state/front-door-context";
 import { CoopProvider } from "./hooks";
+import { registerGameProviders } from "./providers/register-game-providers";
 import { RoomGate } from "./RoomGate";
 
 export type FrontDoorEntry = "main" | "loading" | "tutorial";
@@ -22,6 +24,9 @@ export default function FrontDoorApp({
   entry,
   directTutorialBattle = false,
 }: FrontDoorAppProps): ReactNode {
+  const [contentState, setContentState] = useState<
+    { status: "loading" } | { status: "ready" } | { status: "error"; message: string }
+  >({ status: "loading" });
   const databaseResult = useMemo<
     { database: Database; error: null } | { database: null; error: string }
   >(() => {
@@ -41,6 +46,53 @@ export default function FrontDoorApp({
     }
   }, [runtimeConfig.databaseMode]);
 
+  useEffect(() => {
+    let cancelled = false;
+    setContentState({ status: "loading" });
+    void loadQuestContent(
+      runtimeConfig.poolVariant,
+      runtimeConfig.draftMode,
+      runtimeConfig.fresh20PackSize,
+    ).then((content) => {
+      if (cancelled) return;
+      registerGameProviders(content);
+      setContentState({ status: "ready" });
+    }).catch((error: unknown) => {
+      if (cancelled) return;
+      setContentState({
+        status: "error",
+        message: error instanceof Error ? error.message : "Failed to load quest content.",
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    runtimeConfig.draftMode,
+    runtimeConfig.fresh20PackSize,
+    runtimeConfig.poolVariant,
+  ]);
+
+  if (contentState.status === "loading") {
+    return (
+      <ApplicationStateScreen view={{
+        kind: "loading",
+        title: "Preparing Dreamtides",
+        message: "Loading the tutorial battle rules and cards.",
+        busyLabel: "Loading content",
+      }} />
+    );
+  }
+  if (contentState.status === "error") {
+    return (
+      <ApplicationStateScreen view={{
+        kind: "fatalConfiguration",
+        title: "Content Setup Issue",
+        message: "The tutorial battle content could not be loaded.",
+        detail: contentState.message,
+      }} />
+    );
+  }
   if (databaseResult.database === null) {
     return (
       <ApplicationStateScreen view={{
