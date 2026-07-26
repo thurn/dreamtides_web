@@ -2,7 +2,7 @@
 
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "./test-support";
 import type { TutorialBattleControllerPlan } from "./tutorial-battle-controller";
 import { useTutorialBattleInteractions } from "./use-tutorial-battle-interactions";
@@ -28,7 +28,6 @@ vi.mock("../coop/hooks", () => ({
 }));
 
 const PLAYER_CARD_UUID = "e83014d3-9d35-4e80-a1b3-9b25360ad2af";
-const TUTORIAL_CHARACTER_UUID = "5a980eff-6ec7-44d8-9977-b98e66bbc2c8";
 const REQUIRED_ENEMY_TARGET_EVENT_UUID =
   "4408b942-09a0-4f4e-a403-10c708c6e3c5";
 const PLAYER_INSTANCE_ID = "player-hand-instance-uuid";
@@ -140,44 +139,6 @@ function state(): FoldState {
   };
 }
 
-function battlefieldState(): FoldState {
-  const next = state();
-  if (next.battle === null) throw new Error("fixture requires a battle");
-  const playerCard = next.battle.board.cardInstances[PLAYER_INSTANCE_ID];
-  if (playerCard === undefined) throw new Error("fixture requires a card");
-  const player = next.battle.board.sides.player;
-  return {
-    ...next,
-    battle: {
-      ...next.battle,
-      board: {
-        ...next.battle.board,
-        sides: {
-          ...next.battle.board.sides,
-          player: {
-            ...player,
-            hand: [],
-            backRank: {
-              ...player.backRank,
-              B2: PLAYER_INSTANCE_ID,
-            },
-          },
-        },
-        cardInstances: {
-          ...next.battle.board.cardInstances,
-          [PLAYER_INSTANCE_ID]: {
-            ...playerCard,
-            definition: {
-              ...playerCard.definition,
-              cardId: TUTORIAL_CHARACTER_UUID,
-            },
-          },
-        },
-      },
-    },
-  };
-}
-
 function stateWithoutLegalEventTarget(): FoldState {
   const next = state();
   if (next.battle === null) throw new Error("fixture requires a battle");
@@ -204,7 +165,6 @@ function stateWithoutLegalEventTarget(): FoldState {
     },
   };
 }
-
 const controller: TutorialBattleControllerPlan = {
   status: "driver",
   driverClientId: "driver-client",
@@ -227,12 +187,6 @@ function mount() {
   act(() => root.render(<Harness />));
   return root;
 }
-
-beforeEach(() => {
-  (
-    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
-  ).IS_REACT_ACT_ENVIRONMENT = true;
-});
 
 afterEach(() => {
   latest = null;
@@ -270,36 +224,6 @@ describe("useTutorialBattleInteractions", () => {
       `tutorial-battle:tutorial-battle-uuid:human-play:3:${PLAYER_INSTANCE_ID}`,
     );
     expect(latest?.interactions.pendingCardId).toBeNull();
-
-    act(() => root.unmount());
-  });
-
-  it("offers every eligible player cell for deterministic character repositioning", () => {
-    mocks.state = battlefieldState();
-    const root = mount();
-
-    act(() => {
-      latest?.interactions.onCardDragStart(
-        PLAYER_INSTANCE_ID,
-        "battlefield",
-      );
-    });
-
-    expect(latest?.interactions.eligibleSlotTargets).toEqual(
-      expect.arrayContaining([
-      { owner: "player", rank: "back", slotId: "B0" },
-      { owner: "player", rank: "back", slotId: "B1" },
-      { owner: "player", rank: "back", slotId: "B2" },
-      { owner: "player", rank: "back", slotId: "B3" },
-      { owner: "player", rank: "back", slotId: "B4" },
-      { owner: "player", rank: "front", slotId: "F0" },
-      { owner: "player", rank: "front", slotId: "F1" },
-      { owner: "player", rank: "front", slotId: "F2" },
-      { owner: "player", rank: "front", slotId: "F3" },
-      ]),
-    );
-    expect(latest?.interactions.eligibleSlotTargets)
-      .not.toContainEqual(expect.objectContaining({ owner: "enemy" }));
 
     act(() => root.unmount());
   });

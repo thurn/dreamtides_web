@@ -31,49 +31,6 @@ export function useTutorialBattleInteractions(
   const board = battle?.board ?? null;
   const canDrive = controller.status === "driver" && board !== null && board.result === null;
   const canAct = canDrive && controller.requiresHumanDecision;
-  const eligibleSlotTargets = useMemo(() => {
-    if (
-      !canAct ||
-      board === null ||
-      pendingCard?.source !== "battlefield"
-    ) {
-      return [];
-    }
-    const instance = board.cardInstances[pendingCard.id];
-    const source = selectBattleCardLocation(board, pendingCard.id);
-    if (
-      instance?.controller !== "player" ||
-      instance.definition.battleCardKind !== "character" ||
-      source?.side !== "player" ||
-      (source.zone !== "backRank" && source.zone !== "frontRank")
-    ) {
-      return [];
-    }
-    const canUseBackRank =
-      board.activeSide === "player" && board.phase === "day";
-    const canUseFrontRank =
-      (
-        (board.activeSide === "player" && board.phase === "day") ||
-        (board.activeSide === "enemy" && board.phase === "dusk")
-      ) &&
-      !instance.status.isExhausted;
-    return [
-      ...(canUseBackRank
-        ? Object.keys(board.sides.player.backRank).map((slotId) => ({
-            owner: "player" as const,
-            rank: "back" as const,
-            slotId,
-          }))
-        : []),
-      ...(canUseFrontRank
-        ? Object.keys(board.sides.player.frontRank).map((slotId) => ({
-            owner: "player" as const,
-            rank: "front" as const,
-            slotId,
-          }))
-        : []),
-    ];
-  }, [board, canAct, pendingCard]);
   const targetableCardIds = useMemo(() => {
     if (board === null || targetingCardId === null) return [];
     return selectStarterCardLegalTargetIds(board, targetingCardId);
@@ -106,7 +63,6 @@ export function useTutorialBattleInteractions(
     pendingCardId: pendingCard?.id ?? null,
     pendingCardSource: pendingCard?.source ?? null,
     pendingCardOwner: pendingCard === null ? null : "player",
-    eligibleSlotTargets,
     targetSelectionCardId: targetingCardId,
     targetSelectionPrompt: targetingCardId === null ? null : "Select a highlighted legal target.",
     targetableCardIds,
@@ -300,6 +256,6 @@ export function useTutorialBattleInteractions(
     onCardPickerSubmit: (chosenIds) => resolvePrompt({ kind: "pick-cards", chosenIds: [...chosenIds] }),
     onCardPickerSkip: () => resolvePrompt({ kind: "pick-cards", chosenIds: [] }),
     onChoicePromptChoose: (optionIndex) => resolvePrompt({ kind: "choice", optionIndex }),
-  }), [actions, board, canAct, eligibleSlotTargets, logIntent, pendingCard, resolvePrompt, targetableCardIds, targetingCardId]);
+  }), [actions, board, canAct, logIntent, pendingCard, resolvePrompt, targetableCardIds, targetingCardId]);
   return { interactions, confirmedPromptId, resolvePrompt };
 }
