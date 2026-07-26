@@ -268,8 +268,12 @@ describe("buildMobileBattleView", () => {
     expect(view.perspective).toBe("enemy");
     expect(view.near.owner).toBe("enemy");
     expect(view.far.owner).toBe("player");
-    expect(view.near.backRank.map((slot) => slot.id)).toEqual(["B0", "B1", "B2", "B3", "B4"]);
-    expect(view.near.frontRank.map((slot) => slot.id)).toEqual(["F0", "F1", "F2", "F3"]);
+    expect(view.near.backRank.map((slot) => slot.id)).toEqual(
+      Array.from({ length: 10 }, (_unused, index) => `B${String(index)}`),
+    );
+    expect(view.near.frontRank.map((slot) => slot.id)).toEqual(
+      Array.from({ length: 9 }, (_unused, index) => `F${String(index)}`),
+    );
     expect(view.nearHand.cardIds).toEqual(board.sides.enemy.hand);
     expect(view.nearHand.cards.map((card) => card.id)).toEqual(board.sides.enemy.hand);
     expect(view.farHand.cardIds).toEqual(board.sides.player.hand);
@@ -780,13 +784,19 @@ describe("buildMobileBattleView", () => {
     );
   });
 
-  it("materializes the dynamic staggered slots in left-to-right identity order", () => {
+  it("materializes the fixed staggered slots in left-to-right identity order", () => {
     const init = makeInit();
     const board = makeBoard(init);
     const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
 
-    const expectedFrontRank = ["F0", "F1", "F2", "F3"];
-    const expectedBackRank = ["B0", "B1", "B2", "B3", "B4"];
+    const expectedFrontRank = Array.from(
+      { length: 9 },
+      (_unused, index) => `F${String(index)}`,
+    );
+    const expectedBackRank = Array.from(
+      { length: 10 },
+      (_unused, index) => `B${String(index)}`,
+    );
     expect(view.player.frontRank.map((slot) => slot.id)).toEqual(
       expectedFrontRank,
     );

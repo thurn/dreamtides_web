@@ -676,6 +676,53 @@ describe("BATTLE_PLAY_CARD", () => {
     expect(result.state.battle?.pendingPrompt?.options).toMatchObject({ kind: "foresee", cardIds: ["deck-card"] });
   });
 
+  it("materializes a character at the requested legal back-rank slot", () => {
+    const ringwatcher = makeInstance("ringwatcher", "647f5150-b2e0-424b-9480-27557642524e");
+    ringwatcher.definition = { ...ringwatcher.definition, energyCost: 3, printedEnergyCost: 3 };
+    const deckCard = makeInstance("deck-card", "fixture-deck-card");
+    const board = makeRichBoard({
+      instances: [ringwatcher, deckCard],
+      playerHand: ["ringwatcher"],
+      playerDeck: ["deck-card"],
+    });
+    board.sides.player.currentEnergy = 3;
+    delete board.sides.player.backRank.B7;
+
+    const result = reduce(inBattleState({}, battleFrom(board)), "BATTLE_PLAY_CARD", {
+      battleCardId: "ringwatcher",
+      targetBattleCardIds: [],
+      characterDestination: { side: "player", zone: "backRank", slotId: "B7" },
+    });
+
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.sides.player.backRank.B7).toBe("ringwatcher");
+    expect(result.state.battle?.board.sides.player.backRank.B0).toBeNull();
+  });
+
+  it("rejects a requested character destination that is occupied or outside the fixed board", () => {
+    const ringwatcher = makeInstance("ringwatcher", "647f5150-b2e0-424b-9480-27557642524e");
+    ringwatcher.definition = { ...ringwatcher.definition, energyCost: 3, printedEnergyCost: 3 };
+    const occupant = makeInstance("occupant", "fixture-occupant");
+    const board = makeRichBoard({
+      instances: [ringwatcher, occupant],
+      playerHand: ["ringwatcher"],
+      playerBack: { B7: "occupant" },
+    });
+    board.sides.player.currentEnergy = 3;
+    const state = inBattleState({}, battleFrom(board));
+
+    for (const slotId of ["B7", "B10"]) {
+      const result = reduce(state, "BATTLE_PLAY_CARD", {
+        battleCardId: "ringwatcher",
+        targetBattleCardIds: [],
+        characterDestination: { side: "player", zone: "backRank", slotId },
+      });
+      expect(result.outcome).toBe("bounced");
+      expect(result.state.battle?.board.sides.player.currentEnergy).toBe(3);
+      expect(result.state.battle?.board.sides.player.hand).toContain("ringwatcher");
+    }
+  });
+
   it("retains an AI semantic-play trace in the folded transition through JSON replay", () => {
     const eventCard = makeInstance("glimpse", "2162742c-09d0-4e62-ae49-0f8f79b45adc");
     eventCard.definition = { ...eventCard.definition, battleCardKind: "event", energyCost: 1, printedEnergyCost: 1 };

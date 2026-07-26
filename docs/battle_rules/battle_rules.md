@@ -188,10 +188,12 @@ eligible characters left to right into empty destination positions left to
 right. Overflow remains in place, and All Forward skips exhausted characters.
 These controls follow normal repositioning timing and never banish characters.
 
-**Materializing:** A character entering play is placed in the back rank, in the
-leftmost open position, in the exhausted state. An awakened character enters
-without the exhausted status. If one or more characters would materialize and
-the back rank lacks enough positions, use Battlefield Capacity.
+**Materializing:** A character entering play is placed in an open back-rank
+position in the exhausted state. Releasing a character card over the battlefield
+selects the nearest open back-rank position. Automatic effects select the
+leftmost open back-rank position. An awakened character enters without the
+exhausted status. If one or more characters would materialize and the back rank
+lacks enough positions, use Battlefield Capacity.
 
 ### Battlefield Capacity
 

@@ -473,12 +473,21 @@ export function useTutorialBattleInteractions(
       logIntent("play-card", {
         battleCardId,
         input: "drag",
-        preferredSlot: target ?? null,
+        characterDestination: target ?? null,
       });
       void actions.battlePlayCard(
         battleCardId,
         [],
         `tutorial-battle:${board.battleId}:human-play:${String(board.turnNumber)}:${battleCardId}`,
+        undefined,
+        undefined,
+        target === undefined
+          ? undefined
+          : {
+              side: "player",
+              zone: "backRank",
+              slotId: target.slotId,
+            },
       ).catch(() => undefined);
       setPendingCard(null);
     },

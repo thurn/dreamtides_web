@@ -15,7 +15,6 @@ import type {
 import {
   BACK_RANK_SLOTS,
   FRONT_RANK_SLOTS,
-  backRankSlotId,
   isBackRankSlotId,
   isFrontRankSlotId,
   rankSlotIds,

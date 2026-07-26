@@ -205,6 +205,11 @@ export interface CoopActions {
     intentKey?: string,
     actor?: string,
     aiChoices?: unknown,
+    characterDestination?: {
+      readonly side: "player" | "enemy";
+      readonly zone: "backRank";
+      readonly slotId: string;
+    },
   ) => Promise<number>;
   /** Submit an ordered list of battle commands as one all-or-nothing event. */
   battleGesture: (
@@ -464,13 +469,14 @@ export function makeActions(append: AppendFn): CoopActions {
         battleCardId,
         destination,
       }),
-    battlePlayCard: (battleCardId, targetBattleCardIds, intentKey, actor, aiChoices) =>
+    battlePlayCard: (battleCardId, targetBattleCardIds, intentKey, actor, aiChoices, characterDestination) =>
       append({
         type: "BATTLE_PLAY_CARD",
         payload: {
           battleCardId,
           targetBattleCardIds: [...targetBattleCardIds],
           ...(aiChoices === undefined ? {} : { aiChoices }),
+          ...(characterDestination === undefined ? {} : { characterDestination }),
         },
         ...(intentKey === undefined ? {} : { intentKey }),
         ...(actor === undefined ? {} : { actor }),

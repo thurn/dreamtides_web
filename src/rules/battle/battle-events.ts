@@ -924,6 +924,7 @@ interface BattlePlayCardIntent {
   battleCardId: string;
   targetBattleCardIds: string[];
   aiChoices: BattleAiChoiceTrace[];
+  characterDestination: import("../../battle/types").BattleFieldSlotAddress | null;
 }
 
 /** Semantic, all-or-nothing Starter-card play for tutorial and AI clients. */
@@ -952,11 +953,23 @@ export function battlePlayCard(
   const character = instance.definition.battleCardKind === "character";
   let destination: import("../../battle/debug/commands").BattleDebugZoneDestination;
   if (character) {
-    const slotId = rankSlotIds(before.sides[instance.controller].backRank).find(
-      (candidate) => before.sides[instance.controller].backRank[candidate] === null,
-    );
-    if (slotId === undefined) return null;
-    destination = { side: instance.controller, zone: "backRank", slotId };
+    const requested = intent.characterDestination;
+    if (requested !== null) {
+      if (
+        requested.side !== instance.controller ||
+        requested.zone !== "backRank" ||
+        before.sides[requested.side].backRank[
+          requested.slotId as `B${number}`
+        ] != null
+      ) return null;
+      destination = requested;
+    } else {
+      const slotId = rankSlotIds(before.sides[instance.controller].backRank).find(
+        (candidate) => before.sides[instance.controller].backRank[candidate] === null,
+      );
+      if (slotId === undefined) return null;
+      destination = { side: instance.controller, zone: "backRank", slotId };
+    }
   } else if (instance.definition.battleCardKind === "event") {
     destination = { side: instance.controller, zone: "void" };
   } else return null;
@@ -991,7 +1004,28 @@ function coerceBattlePlayCardIntent(raw: Record<string, unknown>): BattlePlayCar
   if (new Set(raw.targetBattleCardIds).size !== raw.targetBattleCardIds.length) return null;
   const aiChoices = raw.aiChoices === undefined ? [] : coerceAiChoices(raw.aiChoices);
   if (aiChoices === null) return null;
-  return { battleCardId: raw.battleCardId, targetBattleCardIds: [...raw.targetBattleCardIds], aiChoices };
+  const characterDestination = coerceCharacterDestination(raw.characterDestination);
+  if (characterDestination === undefined) return null;
+  return {
+    battleCardId: raw.battleCardId,
+    targetBattleCardIds: [...raw.targetBattleCardIds],
+    aiChoices,
+    characterDestination,
+  };
+}
+
+function coerceCharacterDestination(
+  raw: unknown,
+): import("../../battle/types").BattleFieldSlotAddress | null | undefined {
+  if (raw === undefined) return null;
+  if (!isPlainRecord(raw) || raw.side !== "player" && raw.side !== "enemy" ||
+    raw.zone !== "backRank" || typeof raw.slotId !== "string") return undefined;
+  const destination = {
+    side: raw.side,
+    zone: raw.zone,
+    slotId: raw.slotId,
+  } as import("../../battle/types").BattleFieldSlotAddress;
+  return isBattleFieldSlotAddressValid(destination) ? destination : undefined;
 }
 
 function coerceAiChoices(raw: unknown): BattleAiChoiceTrace[] | null {

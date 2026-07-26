@@ -295,6 +295,9 @@ describe("useTutorialBattleInteractions", () => {
       PLAYER_INSTANCE_ID,
       [],
       `tutorial-battle:tutorial-battle-uuid:human-play:3:${PLAYER_INSTANCE_ID}`,
+      undefined,
+      undefined,
+      { side: "player", zone: "backRank", slotId: "B2" },
     );
     expect(latest?.interactions.pendingCardId).toBeNull();
 
