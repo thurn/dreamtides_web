@@ -1,1 +1,7 @@
 npm install reports 24 dependency vulnerabilities (1 low, 3 moderate, 20 high).
+
+Direct tutorial Battle Mode can stall on a mandatory Dreamwell pick-cards
+prompt when its candidate set is empty. In browser QA, Echoing Boughs opened
+"Rematerialize an ally from your hand · 0/1" while the player hand contained
+only events; Submit remained unable to resolve the persisted prompt, so the
+normal tutorial workflow could not advance in that room.

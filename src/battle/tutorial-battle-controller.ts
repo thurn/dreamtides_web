@@ -1,4 +1,8 @@
 import { actionToCommands } from "./ai/driver";
+import {
+  planDefenseWithDecision,
+  type DefenseDecision,
+} from "./ai/defense";
 import { AI_DIFFICULTY_V1 } from "./ai/difficulty";
 import { forwardModelFromState } from "./ai/forward-model";
 import { planNextAction } from "./ai/planner";
@@ -38,7 +42,12 @@ export type TutorialAutomaticIntent =
       reason: string;
     }
   | { kind: "battle-gesture"; commands: readonly BattleCommand[]; intentKey: string; reason: string }
-  | { kind: "battle-ai-defend"; intentKey: string; reason: string }
+  | {
+      kind: "battle-ai-defend";
+      decision: DefenseDecision;
+      intentKey: string;
+      reason: string;
+    }
   | { kind: "resolve-prompt"; promptId: number; resolution: PromptResolution; intentKey: string; reason: string };
 
 export interface TutorialBattleControllerPlan {
@@ -132,11 +141,20 @@ export function planTutorialBattleController(
       return { status: "driver", driverClientId: mode.driverClientId, isCurrentClientDriver: true, isDriverPresent: true, requiresHumanDecision: true, intent: null };
     }
     if (board.phase === "dusk" && battle.aiDefenseTurn?.activeSide !== "player") {
+      const defense = planDefenseWithDecision(
+        forwardModelFromState(board, "enemy"),
+        { scoreToWin: battle.init.scoreToWin },
+      );
       return {
         status: "driver",
         driverClientId: mode.driverClientId, isCurrentClientDriver: true, isDriverPresent: true,
         requiresHumanDecision: false,
-        intent: { kind: "battle-ai-defend", intentKey: `${key}:defend`, reason: "enemy-defend-player-attack" },
+        intent: {
+          kind: "battle-ai-defend",
+          decision: defense.decision,
+          intentKey: `${key}:defend`,
+          reason: "enemy-defend-player-attack",
+        },
       };
     }
     return handoffPlan(input.state, "advance-player-no-choice-phase");

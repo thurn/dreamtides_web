@@ -64,7 +64,7 @@ import {
 import type { PromptResolution } from "./effect-runner-core";
 import { endOfTurnExhaustionClearEdits } from "../../battle/engine/handoff";
 import { forwardModelFromState } from "../../battle/ai/forward-model";
-import { planDefense } from "../../battle/ai/defense";
+import { planDefenseWithDecision } from "../../battle/ai/defense";
 import { actionToCommands } from "../../battle/ai/driver";
 import { buildTrace } from "../../battle/ai/trace";
 import { planBasicAutomationCommands } from "./basic-automation";
@@ -1071,7 +1071,10 @@ export function battleAiDefend(
 
   const commands: BattleCommand[] = [];
   const model = forwardModelFromState(battle.board, aiSide);
-  for (const move of planDefense(model, { scoreToWin: battle.init.scoreToWin })) {
+  const defense = planDefenseWithDecision(model, {
+    scoreToWin: battle.init.scoreToWin,
+  });
+  for (const move of defense.actions) {
     const moveCommands = actionToCommands(move, aiSide);
     const [firstCommand, ...restCommands] = moveCommands;
     const tracedCommands = firstCommand === undefined
@@ -1089,10 +1092,22 @@ export function battleAiDefend(
     nextBattle = applied.battle;
   }
 
+  const transition =
+    nextBattle.lastTransition ?? createEmptyTransitionData();
   return {
     ...state,
     battle: {
       ...nextBattle,
+      lastTransition: {
+        ...transition,
+        logEvents: [
+          ...transition.logEvents,
+          {
+            event: "battle_ai_defense_decision",
+            fields: { ...defense.decision },
+          },
+        ],
+      },
       aiDefenseTurn: {
         activeSide: battle.board.activeSide,
         turnNumber: battle.board.turnNumber,

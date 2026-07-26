@@ -23,6 +23,49 @@ export interface DefenseOptions {
   scoreToWin: number;
 }
 
+export type DefenseBlockReason =
+  | "favorable"
+  | "even-trade"
+  | "score-deficit"
+  | "prevent-lethal";
+
+export type DefenseDeclineReason =
+  | "already-defended"
+  | "no-available-blocker"
+  | "preserve-body-while-ahead";
+
+export interface DefenseLaneDecision {
+  challengerBattleCardId: string;
+  lane: FrontRankSlotId;
+  challengerSpark: number;
+  outcome: "blocked" | "declined" | "already-defended";
+  reason: DefenseBlockReason | DefenseDeclineReason;
+  blockerBattleCardId: string | null;
+  blockerSpark: number | null;
+}
+
+/**
+ * Plain-data explanation of one deterministic defense pass. UUIDs and lane ids
+ * make the selected and declined blocks reconstructable from production logs
+ * without relying on display names.
+ */
+export interface DefenseDecision {
+  aiScore: number;
+  opponentScore: number;
+  scoreToWin: number;
+  incomingScoreBeforeBlocks: number;
+  incomingScoreAfterBlocks: number;
+  lethalBeforeBlocks: boolean;
+  lethalPreventable: boolean;
+  availableBlockerBattleCardIds: string[];
+  lanes: DefenseLaneDecision[];
+}
+
+export interface DefensePlan {
+  actions: PlannedAction[];
+  decision: DefenseDecision;
+}
+
 interface BackRankBody {
   slot: BackRankSlotId;
   card: AiCard;
@@ -31,8 +74,14 @@ interface BackRankBody {
 }
 
 interface Challenger {
+  battleCardId: string;
   slot: FrontRankSlotId;
   spark: number;
+}
+
+interface BlockerChoice {
+  blocker: BackRankBody;
+  reason: DefenseBlockReason;
 }
 
 /**
@@ -45,13 +94,25 @@ interface Challenger {
  * is left alone — that body already defends it.
  */
 export function planDefense(model: ForwardModel, opts: DefenseOptions): PlannedAction[] {
+  return planDefenseWithDecision(model, opts).actions;
+}
+
+/**
+ * Plans the same observable moves as {@link planDefense} and returns the
+ * structured decision record used by tutorial battle logging.
+ */
+export function planDefenseWithDecision(
+  model: ForwardModel,
+  opts: DefenseOptions,
+): DefensePlan {
   const challengers: Challenger[] = model.opponentBodies
     .filter((body) => body.rank === "front" && isFrontRankSlotId(body.slot))
-    .map((body) => ({ slot: body.slot as FrontRankSlotId, spark: body.effectiveSpark }))
-    .sort((a, b) => b.spark - a.spark);
-  if (challengers.length === 0) {
-    return [];
-  }
+    .map((body) => ({
+      battleCardId: body.battleCardId,
+      slot: body.slot as FrontRankSlotId,
+      spark: body.effectiveSpark,
+    }))
+    .sort((a, b) => b.spark - a.spark || a.slot.localeCompare(b.slot));
 
   const available: BackRankBody[] = [];
   for (const slot of rankSlotIds(model.aiBackRank)) {
@@ -60,25 +121,99 @@ export function planDefense(model: ForwardModel, opts: DefenseOptions): PlannedA
       available.push({ slot, card, spark: bodySpark(card) });
     }
   }
-  if (available.length === 0) {
-    return [];
-  }
+
+  const unblockedChallengers = challengers.filter(
+    (challenger) => (model.aiFrontRank[challenger.slot] ?? null) === null,
+  );
+  const incomingScoreBeforeBlocks = unblockedChallengers.reduce(
+    (total, challenger) => total + challenger.spark,
+    0,
+  );
+  const lethalBeforeBlocks =
+    model.playerScore + incomingScoreBeforeBlocks >= opts.scoreToWin;
+  const maximumPreventableScore = unblockedChallengers
+    .slice(0, available.length)
+    .reduce((total, challenger) => total + challenger.spark, 0);
+  const lethalPreventable =
+    lethalBeforeBlocks &&
+    model.playerScore + incomingScoreBeforeBlocks - maximumPreventableScore <
+      opts.scoreToWin;
 
   const moves: PlannedAction[] = [];
+  const lanes: DefenseLaneDecision[] = [];
   const usedBackRank = new Set<BackRankSlotId>();
+  let incomingScoreAfterBlocks = incomingScoreBeforeBlocks;
   for (const challenger of challengers) {
     // A body already sitting opposite the challenger is already defending it.
-    if ((model.aiFrontRank[challenger.slot] ?? null) !== null) {
+    const deployedBlocker = model.aiFrontRank[challenger.slot] ?? null;
+    if (deployedBlocker !== null) {
+      lanes.push({
+        challengerBattleCardId: challenger.battleCardId,
+        lane: challenger.slot,
+        challengerSpark: challenger.spark,
+        outcome: "already-defended",
+        reason: "already-defended",
+        blockerBattleCardId: deployedBlocker.battleCardId,
+        blockerSpark: bodySpark(deployedBlocker),
+      });
       continue;
     }
-    const blocker = chooseBlocker(available, usedBackRank, challenger.spark, model, opts);
-    if (blocker === null) {
+    const choice = chooseBlocker(
+      available,
+      usedBackRank,
+      challenger.spark,
+      incomingScoreAfterBlocks,
+      lethalPreventable,
+      model,
+      opts,
+    );
+    if (choice === null) {
+      const hasAvailableBlocker = available.some(
+        (body) => !usedBackRank.has(body.slot),
+      );
+      lanes.push({
+        challengerBattleCardId: challenger.battleCardId,
+        lane: challenger.slot,
+        challengerSpark: challenger.spark,
+        outcome: "declined",
+        reason: hasAvailableBlocker
+          ? "preserve-body-while-ahead"
+          : "no-available-blocker",
+        blockerBattleCardId: null,
+        blockerSpark: null,
+      });
       continue;
     }
+    const blocker = choice.blocker;
     usedBackRank.add(blocker.slot);
     moves.push(makeBlockAction(blocker.card, challenger.slot));
+    incomingScoreAfterBlocks -= challenger.spark;
+    lanes.push({
+      challengerBattleCardId: challenger.battleCardId,
+      lane: challenger.slot,
+      challengerSpark: challenger.spark,
+      outcome: "blocked",
+      reason: choice.reason,
+      blockerBattleCardId: blocker.card.battleCardId,
+      blockerSpark: blocker.spark,
+    });
   }
-  return moves;
+  return {
+    actions: moves,
+    decision: {
+      aiScore: model.aiScore,
+      opponentScore: model.playerScore,
+      scoreToWin: opts.scoreToWin,
+      incomingScoreBeforeBlocks,
+      incomingScoreAfterBlocks,
+      lethalBeforeBlocks,
+      lethalPreventable,
+      availableBlockerBattleCardIds: available.map(
+        (body) => body.card.battleCardId,
+      ),
+      lanes,
+    },
+  };
 }
 
 function bodySpark(card: AiCard): number {
@@ -103,9 +238,11 @@ function chooseBlocker(
   available: BackRankBody[],
   used: ReadonlySet<BackRankSlotId>,
   challengerSpark: number,
+  incomingScoreRemaining: number,
+  lethalPreventable: boolean,
   model: ForwardModel,
   opts: DefenseOptions,
-): BackRankBody | null {
+): BlockerChoice | null {
   const candidates = available
     .filter((body) => !used.has(body.slot))
     .sort((a, b) => a.spark - b.spark);
@@ -115,31 +252,44 @@ function chooseBlocker(
 
   const favorable = candidates.find((body) => body.spark > challengerSpark);
   if (favorable !== undefined) {
-    return favorable;
+    return { blocker: favorable, reason: "favorable" };
   }
   const even = candidates.find((body) => body.spark === challengerSpark);
   if (even !== undefined) {
-    return even;
+    return { blocker: even, reason: "even-trade" };
   }
-  if (shouldChump(challengerSpark, model, opts)) {
-    return candidates[0];
+  const chumpReason = chumpBlockReason(
+    incomingScoreRemaining,
+    lethalPreventable,
+    model,
+    opts,
+  );
+  if (chumpReason !== null) {
+    return { blocker: candidates[0], reason: chumpReason };
   }
   return null;
 }
 
 /**
  * Whether to spend a body chump-blocking a challenger the AI cannot beat. Worth
- * it when the AI is not ahead (it must contest every point) or the unblocked
- * hit would reach the win threshold (a near-lethal swing to prevent).
+ * it when the AI is not ahead (it must contest every point), or when the full
+ * set of legal blocks can reduce the opponent's aggregate incoming score below
+ * the win threshold. Aggregate score is essential: two non-lethal lanes can be
+ * lethal together.
  */
-function shouldChump(
-  challengerSpark: number,
+function chumpBlockReason(
+  incomingScoreRemaining: number,
+  lethalPreventable: boolean,
   model: ForwardModel,
   opts: DefenseOptions,
-): boolean {
+): "score-deficit" | "prevent-lethal" | null {
+  const incomingRemainsLethal =
+    model.playerScore + incomingScoreRemaining >= opts.scoreToWin;
+  if (lethalPreventable && incomingRemainsLethal) {
+    return "prevent-lethal";
+  }
   const notAhead = model.aiScore <= model.playerScore;
-  const nearLethal = model.playerScore + challengerSpark >= opts.scoreToWin;
-  return notAhead || nearLethal;
+  return notAhead ? "score-deficit" : null;
 }
 
 function makeBlockAction(card: AiCard, toSlot: FrontRankSlotId): PlannedAction {

@@ -87,5 +87,8 @@ function logTutorialIntent(
     ...(intent.kind === "resolve-prompt"
       ? { promptId: intent.promptId, resolution: intent.resolution }
       : {}),
+    ...(intent.kind === "battle-ai-defend"
+      ? { defenseDecision: intent.decision }
+      : {}),
   });
 }

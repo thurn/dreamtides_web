@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { planDefense } from "./defense";
+import { planDefense, planDefenseWithDecision } from "./defense";
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 
@@ -147,6 +147,65 @@ describe("planDefense", () => {
       opponentBodies: [makeBody({ battleCardId: "atk", slot: "F0", effectiveSpark: 8 })],
     });
     expect(planDefense(model, OPTS)).toHaveLength(0);
+  });
+
+  it("chump-blocks aggregate lethal even when no single challenger is lethal", () => {
+    const blockerId = "5cfe3a4a-05d8-4be9-9ab3-0ad31e6dc24b";
+    const largerChallengerId = "7d6825de-1923-4dd5-adbb-01910c347fec";
+    const smallerChallengerId = "55f731c8-95f9-4505-868d-f93aeed9a3cf";
+    const model = makeModel({
+      aiScore: 9,
+      playerScore: 6,
+      aiBackRank: {
+        ...emptyBackRankSlots(),
+        B0: makeCard({ battleCardId: blockerId, basePrintedSpark: 1 }),
+      },
+      opponentBodies: [
+        makeBody({
+          battleCardId: largerChallengerId,
+          slot: "F0",
+          effectiveSpark: 3,
+        }),
+        makeBody({
+          battleCardId: smallerChallengerId,
+          slot: "F1",
+          effectiveSpark: 2,
+        }),
+      ],
+    });
+
+    const plan = planDefenseWithDecision(model, { scoreToWin: 10 });
+    expect(plan.actions).toHaveLength(1);
+    expect(plan.actions[0]).toMatchObject({
+      kind: "MOVE_CARD",
+      self: { battleCardId: blockerId },
+      toSlot: "F0",
+    });
+    expect(plan.decision).toMatchObject({
+      opponentScore: 6,
+      scoreToWin: 10,
+      incomingScoreBeforeBlocks: 5,
+      incomingScoreAfterBlocks: 2,
+      lethalBeforeBlocks: true,
+      lethalPreventable: true,
+      availableBlockerBattleCardIds: [blockerId],
+      lanes: [
+        {
+          challengerBattleCardId: largerChallengerId,
+          lane: "F0",
+          outcome: "blocked",
+          reason: "prevent-lethal",
+          blockerBattleCardId: blockerId,
+        },
+        {
+          challengerBattleCardId: smallerChallengerId,
+          lane: "F1",
+          outcome: "declined",
+          reason: "no-available-blocker",
+          blockerBattleCardId: null,
+        },
+      ],
+    });
   });
 
   it("assigns the strongest blockers to the biggest threats first", () => {

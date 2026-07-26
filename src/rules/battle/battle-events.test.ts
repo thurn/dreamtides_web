@@ -1789,6 +1789,82 @@ describe("BATTLE_AI_DEFEND", () => {
     expect(second.outcome).toBe("bounced");
   });
 
+  it("commits and logs a life-saving block against aggregate lethal", () => {
+    const largerChallengerId = "7d6825de-1923-4dd5-adbb-01910c347fec";
+    const smallerChallengerId = "55f731c8-95f9-4505-868d-f93aeed9a3cf";
+    const blockerId = "5cfe3a4a-05d8-4be9-9ab3-0ad31e6dc24b";
+    const largerChallenger = makeInstance(
+      largerChallengerId,
+      "16d0a384-31d4-4ed2-a2d5-e27b43fd9bf4",
+      "player",
+    );
+    largerChallenger.definition.printedSpark = 3;
+    const smallerChallenger = makeInstance(
+      smallerChallengerId,
+      "d865c4bf-a792-4af7-89cb-611670cf6620",
+      "player",
+    );
+    smallerChallenger.definition.printedSpark = 2;
+    const blocker = makeInstance(
+      blockerId,
+      "a7f597d4-2d9e-4777-aa02-72c895cb98fd",
+      "enemy",
+    );
+    blocker.definition.printedSpark = 1;
+    const board = makeRichBoard({
+      phase: "dusk",
+      turnNumber: 5,
+      instances: [largerChallenger, smallerChallenger, blocker],
+      playerFront: {
+        [frontRankSlotId(0)]: largerChallengerId,
+        [frontRankSlotId(1)]: smallerChallengerId,
+      },
+    });
+    board.sides.player.score = 6;
+    board.sides.enemy.score = 9;
+    board.sides.enemy.backRank[backRankSlotId(0)] = blockerId;
+    const state = {
+      ...baseState(),
+      battle: battleFrom(board, {
+        init: makeInit({ scoreToWin: 10 }),
+      }),
+    };
+
+    const result = reduce(state, "BATTLE_AI_DEFEND", { aiSide: "enemy" });
+
+    expect(result.outcome).toBe("applied");
+    expect(
+      result.state.battle?.board.sides.enemy.frontRank[frontRankSlotId(0)],
+    ).toBe(blockerId);
+    const decisionLog = result.state.battle?.lastTransition?.logEvents.find(
+      (entry) => entry.event === "battle_ai_defense_decision",
+    );
+    expect(decisionLog?.fields).toMatchObject({
+      opponentScore: 6,
+      scoreToWin: 10,
+      incomingScoreBeforeBlocks: 5,
+      incomingScoreAfterBlocks: 2,
+      lethalBeforeBlocks: true,
+      lethalPreventable: true,
+      lanes: [
+        {
+          challengerBattleCardId: largerChallengerId,
+          lane: "F0",
+          outcome: "blocked",
+          reason: "prevent-lethal",
+          blockerBattleCardId: blockerId,
+        },
+        {
+          challengerBattleCardId: smallerChallengerId,
+          lane: "F1",
+          outcome: "declined",
+          reason: "no-available-blocker",
+          blockerBattleCardId: null,
+        },
+      ],
+    });
+  });
+
   it("records an empty defense so reloads do not retry it forever", () => {
     const board = makeRichBoard({ phase: "dusk", turnNumber: 4 });
     const result = reduce(
