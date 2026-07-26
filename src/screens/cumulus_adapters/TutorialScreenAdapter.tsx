@@ -8,13 +8,13 @@ import { useTutorialCardPlay } from "../../state/use-tutorial-card-play";
 import { useTutorialEndTurn } from "../../state/use-tutorial-end-turn";
 import { useTutorialPlayerReposition } from "../../state/use-tutorial-player-reposition";
 import { useTutorialCards } from "../../state/use-tutorial-opponent-card";
+import { useTutorialBattleHandoff } from "../../state/use-tutorial-battle-handoff";
 import {
   useTutorialHowToPlayLogging,
   useTutorialPresentationLogging,
 } from "../../state/use-tutorial-presentation-logging";
 import type { TutorialDreamcallerOwner } from "../../types/tutorial";
 import * as tutorialView from "./tutorial-view-model";
-/** Standalone `/tutorial` wiring, shared playback, and local authoring saves. */
 export function TutorialScreenAdapter({
   playbackSpeed = 1,
 }: {
@@ -46,7 +46,10 @@ export function TutorialScreenAdapter({
     if (beginRequestedKey.current === intentKey) return;
     beginRequestedKey.current = intentKey;
     void mutations
-      .beginTutorial(authoredActions, { intentKey })
+      .beginTutorial(
+        window.location.search.includes("goto=tutorial-battle") ? [] : authoredActions,
+        { intentKey },
+      )
       .catch((error: unknown) => {
         beginRequestedKey.current = null;
         logEvent("tutorial_begin_failed", {
@@ -61,6 +64,7 @@ export function TutorialScreenAdapter({
     state.journeyId,
     state.tutorial,
   ]);
+  useTutorialBattleHandoff(state.tutorial, mutations.beginTutorialBattle);
   const view = useMemo(
     () =>
       tutorialView.buildTutorialView(
@@ -87,17 +91,13 @@ export function TutorialScreenAdapter({
     },
     [view.battle.battleId, view.currentAction?.id],
   );
-  const handlePlayerCardPlay = useTutorialCardPlay(
-    mutations.action,
-    view.battle.battleId,
-  );
+  const handlePlayerCardPlay = useTutorialCardPlay(mutations.action, view.battle.battleId);
   const handleEndTurn = useTutorialEndTurn(completeAction, view.battle.battleId);
   const handlePlayerCharacterReposition = useTutorialPlayerReposition(
     mutations.completeTutorialAction,
     view.battle.battleId,
   );
-  return (
-    <TutorialScreen
+  return <TutorialScreen
       view={view}
       playbackSpeed={playbackSpeed}
       editor={
@@ -114,6 +114,5 @@ export function TutorialScreenAdapter({
       onEditorActionsChange={handleEditorActionsChange}
       onReplay={handleReplay}
       onPlayFromAction={handleReplay}
-    />
-  );
+    />;
 }

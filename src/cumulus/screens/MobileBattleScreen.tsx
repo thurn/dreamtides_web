@@ -219,7 +219,7 @@ export interface MobileBattleScreenProps {
   /** Initial inspector state at desktop widths. */
   readonly inspectorDefault?: "responsive" | "collapsed";
   /** Phase controls exposed by this presentation. */
-  readonly phaseNavigation?: "both" | "end-turn" | "hidden";
+  readonly phaseNavigation?: "both" | "end-turn" | "tutorial" | "hidden";
   /** Visible labels exposed for otherwise unmarked battle zones. */
   readonly zoneLabels?: "none" | "voids";
   /** Optional controlled inspector state for a parent shell with another rail. */
@@ -232,6 +232,8 @@ export interface MobileBattleScreenProps {
   readonly playbackSpeed?: number;
   /** Fill a positioned parent instead of owning the browser viewport. */
   readonly viewport?: "fixed" | "contained";
+  /** Hides operator-only inspector controls on focused player battle surfaces. */
+  readonly inspectorVisibility?: "available" | "hidden";
 }
 
 export type MobileBattleOwner = "enemy" | "player";
@@ -2542,6 +2544,7 @@ function ControlRow({
   layoutBackSlotCount,
   phaseNavigation,
   perspective,
+  tutorialNextLabel,
 }: {
   readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
@@ -2550,8 +2553,9 @@ function ControlRow({
   readonly isDesktop: boolean;
   readonly interactions?: MobileBattleInteractions;
   readonly layoutBackSlotCount: number;
-  readonly phaseNavigation: "both" | "end-turn" | "hidden";
+  readonly phaseNavigation: "both" | "end-turn" | "tutorial" | "hidden";
   readonly perspective: BattlePerspectiveSide;
+  readonly tutorialNextLabel: "End Turn" | "Done Blocking";
 }) {
   const disabled = interactions?.canInteract !== true;
   const hasAlternateNextControls =
@@ -2708,12 +2712,16 @@ function ControlRow({
             ) : aiApproval === null ? (
               <GlassButton
                 label={
-                  phaseNavigation === "end-turn" ? "End Turn" : "Next Phase"
+                  phaseNavigation === "end-turn"
+                    ? "End Turn"
+                    : phaseNavigation === "tutorial"
+                    ? tutorialNextLabel
+                    : "Next Phase"
                 }
                 variant="accent"
                 disabled={disabled}
                 testId={
-                  phaseNavigation === "end-turn"
+                  phaseNavigation === "end-turn" || phaseNavigation === "tutorial"
                     ? "tutorial-end-turn"
                     : undefined
                 }
@@ -3129,6 +3137,7 @@ export function MobileBattleScreen({
   guidedSlotHighlight,
   preserveOccupiedSlotOutlines = false,
   viewport = "fixed",
+  inspectorVisibility = "available",
 }: MobileBattleScreenProps) {
   const isDesktop = useIsDesktop();
   const isDockLayout = useIsDesktop(INSPECTOR_DOCK_MIN_WIDTH);
@@ -3395,6 +3404,11 @@ export function MobileBattleScreen({
           layoutBackSlotCount={layoutBackSlotCount}
           phaseNavigation={phaseNavigation}
           perspective={view.perspective}
+          tutorialNextLabel={
+            view.activeSide === "enemy" && view.phase === "dusk"
+              ? "Done Blocking"
+              : "End Turn"
+          }
         />
         <SideZones activeSide={view.activeSide} dreamwell={visibleDreamwell} isDesktop={isDesktop} owner={near.owner} position="near" phase={view.phase} side={near} zoneLabels={zoneLabels} interactions={interactions} />
         <NearHand
@@ -3447,7 +3461,7 @@ export function MobileBattleScreen({
           promptNotice={view.promptNotice}
         />
       </div>
-      <div
+      {inspectorVisibility === "available" ? <div
         data-battle-top-right-controls=""
         style={{
           position: "absolute",
@@ -3483,7 +3497,7 @@ export function MobileBattleScreen({
             }}
           />
         </div>
-      </div>
+      </div> : null}
       {galleryCardPicker !== null ? (
         <CardPickerGallery
           cardPicker={galleryCardPicker}
@@ -3518,7 +3532,7 @@ export function MobileBattleScreen({
         }}
       >
         {board}
-        {isDockLayout && isInspectorOpen ? (
+        {inspectorVisibility === "available" && isDockLayout && isInspectorOpen ? (
           <BattleInspectorRail
             inspector={view.inspector}
             perspective={view.perspective}
@@ -3530,7 +3544,7 @@ export function MobileBattleScreen({
           />
         ) : null}
       </div>
-      {!isDockLayout && isInspectorOpen ? (
+      {inspectorVisibility === "available" && !isDockLayout && isInspectorOpen ? (
         <GlassDialog
           title="Battle Inspector"
           subtitle={`Developer Tools · Opponent: ${view.inspector.opponentName}`}

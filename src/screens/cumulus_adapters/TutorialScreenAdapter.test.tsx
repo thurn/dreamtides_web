@@ -15,6 +15,7 @@ const adapterMocks = vi.hoisted(() => ({
 const mocks = vi.hoisted(() => ({
   action: vi.fn(() => Promise.resolve(3)),
   beginTutorial: vi.fn(() => Promise.resolve(1)),
+  beginTutorialBattle: vi.fn(() => Promise.resolve(4)),
   completeTutorialAction: vi.fn(() => Promise.resolve(2)),
   state: {
     phase: "tutorial" as const,
@@ -93,6 +94,7 @@ vi.mock("../../state/front-door-context", () => ({
     mutations: {
       action: mocks.action,
       beginTutorial: mocks.beginTutorial,
+      beginTutorialBattle: mocks.beginTutorialBattle,
       completeTutorialAction: mocks.completeTutorialAction,
     },
   }),
@@ -170,6 +172,7 @@ beforeEach(() => {
   ).IS_REACT_ACT_ENVIRONMENT = true;
   vi.spyOn(console, "log").mockImplementation(() => {});
   mocks.beginTutorial.mockClear();
+  mocks.beginTutorialBattle.mockClear();
   mocks.completeTutorialAction.mockClear();
   mocks.action.mockClear();
   (
@@ -193,6 +196,29 @@ afterEach(() => {
 });
 
 describe("TutorialScreenAdapter", () => {
+  it("hands the terminal scripted cursor to the durable tutorial battle lifecycle", async () => {
+    (mocks.state.tutorial as unknown as { currentActionIndex: number | null }).currentActionIndex = null;
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    await act(async () => {
+      root.render(<CumulusRoot><TutorialScreenAdapter /></CumulusRoot>);
+      await Promise.resolve();
+    });
+
+    expect(mocks.beginTutorialBattle).toHaveBeenCalledWith("event:1");
+    expect(getLogEntries()).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        event: "tutorial_battle_handoff_requested",
+        tutorialRunId: "event:1",
+        source: "tutorial-terminal-cursor",
+      }),
+    ]));
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("loads authored actions and logs the shared action presentation", async () => {
     const container = document.createElement("div");
     document.body.append(container);

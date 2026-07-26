@@ -114,12 +114,15 @@ if (pathname === "/editor" || pathname === "/cards") {
 } else if (
   pathname === "/main" ||
   pathname === "/loading" ||
-  pathname === "/tutorial"
+  pathname === "/tutorial" ||
+  new URLSearchParams(window.location.search).get("goto") === "tutorial-battle"
 ) {
   const [{ default: FrontDoorApp }, { parseRuntimeConfig }] = await Promise.all(
     [import("./coop/FrontDoorApp"), import("./runtime/runtime-config")],
   );
-  const entry = pathname.slice(1) as "main" | "loading" | "tutorial";
+  const entry = (new URLSearchParams(window.location.search).get("goto") === "tutorial-battle"
+    ? "tutorial"
+    : pathname.slice(1)) as "main" | "loading" | "tutorial";
   renderStrict(
     <FrontDoorApp
       runtimeConfig={parseRuntimeConfig(window.location.search)}
