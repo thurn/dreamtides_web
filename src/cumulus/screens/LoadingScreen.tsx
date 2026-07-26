@@ -7,7 +7,6 @@ import { useIsDesktop } from "./use-is-desktop";
 
 export interface LoadingView {
   readonly quote: string;
-  readonly attribution: string;
   readonly loadingLabel: string;
 }
 
@@ -58,7 +57,7 @@ export function LoadingScreen({
           position: "absolute",
           top: "50%",
           left: "50%",
-          width: "min(84vw, 780px)",
+          width: "min(92vw, 780px)",
           margin: 0,
           transform: "translate(-50%, -50%)",
         }}
@@ -72,34 +71,21 @@ export function LoadingScreen({
             duration: reduceMotion ? 0 : QUOTE_FADE_SECONDS / playbackSpeed,
           }}
           style={{
-            margin: 0,
+            width: "100%",
+            maxWidth: "48ch",
+            margin: "0 auto",
             color: token("--text-loading"),
-            font: isDesktop ? token("--t-title") : token("--t-title-sm"),
+            font: isDesktop
+              ? token("--t-title")
+              : token("--t-hero-epithet"),
             textAlign: "center",
+            textWrap: "balance",
           }}
         >
           <span data-loading-quote-text style={{ fontStyle: "italic" }}>
             {view.quote}
           </span>
         </motion.blockquote>
-
-        <motion.figcaption
-          data-loading-attribution
-          initial={{ opacity: reduceMotion ? 1 : 0 }}
-          animate={{ opacity: 1 }}
-          transition={{
-            delay: 0,
-            duration: reduceMotion ? 0 : QUOTE_FADE_SECONDS / playbackSpeed,
-          }}
-          style={{
-            marginTop: token("--space-8"),
-            color: token("--text-loading"),
-            font: token("--t-body-sm"),
-            textAlign: "right",
-          }}
-        >
-          {view.attribution}
-        </motion.figcaption>
       </figure>
 
       <div

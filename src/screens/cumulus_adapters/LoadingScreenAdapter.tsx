@@ -22,7 +22,6 @@ export function LoadingScreenAdapter({
     hasLoggedPresentation.current = true;
     logEvent("loading_screen_presented", {
       source,
-      attribution: view.attribution,
       tutorialPlaybackSpeed: playbackSpeed,
     });
   }, [playbackSpeed, source, view]);

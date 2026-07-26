@@ -38,7 +38,6 @@ vi.mock("framer-motion", () => {
     motion: {
       main: element("main"),
       blockquote: element("blockquote"),
-      figcaption: element("figcaption"),
       span: element("span"),
     },
     useReducedMotion: () => false,
@@ -48,7 +47,6 @@ vi.mock("framer-motion", () => {
 const VIEW: LoadingView = {
   quote:
     "“I looked, and there before me was a pale horse, and its rider was named Death.”",
-  attribution: "— Revelation 6:8",
   loadingLabel: "Loading",
 };
 
@@ -77,7 +75,7 @@ afterEach(() => {
 });
 
 describe("LoadingScreen", () => {
-  it("renders the centered verse, delayed attribution, and repeating dots", () => {
+  it("renders the centered, balanced verse and repeating dots", () => {
     const container = document.createElement("div");
     document.body.append(container);
     root = createRoot(container);
@@ -94,9 +92,6 @@ describe("LoadingScreen", () => {
     const quoteText = container.querySelector<HTMLElement>(
       "[data-loading-quote-text]",
     );
-    const attribution = container.querySelector<HTMLElement>(
-      "[data-loading-attribution]",
-    );
     const indicator = container.querySelector<HTMLElement>(
       "[data-loading-indicator]",
     );
@@ -105,13 +100,12 @@ describe("LoadingScreen", () => {
     expect(JSON.parse(screen?.dataset.motionTransition ?? "{}"))
       .toMatchObject({ duration: 1.2 });
     expect(quote?.textContent).toBe(VIEW.quote);
+    expect(quote?.style.maxWidth).toBe("48ch");
     expect(quote?.style.textAlign).toBe("center");
+    expect(quote?.style.textWrap).toBe("balance");
     expect(quoteText?.style.fontStyle).toBe("italic");
-    expect(attribution?.textContent).toBe(VIEW.attribution);
-    expect(attribution?.style.textAlign).toBe("right");
+    expect(container.querySelector("[data-loading-attribution]")).toBeNull();
     expect(JSON.parse(quote?.dataset.motionTransition ?? "{}"))
-      .toMatchObject({ delay: 0, duration: 1.4 });
-    expect(JSON.parse(attribution?.dataset.motionTransition ?? "{}"))
       .toMatchObject({ delay: 0, duration: 1.4 });
     expect(indicator?.getAttribute("aria-label")).toBe("Loading...");
     expect(container.querySelectorAll("[data-loading-dot]")).toHaveLength(3);
@@ -156,5 +150,31 @@ describe("LoadingScreen", () => {
       { delay: 0.045, duration: 0.3 },
       { delay: 0.09, duration: 0.3 },
     ]);
+  });
+
+  it("uses the compact serif voice on narrow screens", () => {
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+    const container = document.createElement("div");
+    document.body.append(container);
+    root = createRoot(container);
+    act(() =>
+      root?.render(
+        <CumulusRoot>
+          <LoadingScreen view={VIEW} />
+        </CumulusRoot>,
+      ),
+    );
+
+    const quote = container.querySelector<HTMLElement>("[data-loading-quote]");
+    expect(quote?.style.font).toBe("var(--t-hero-epithet)");
   });
 });

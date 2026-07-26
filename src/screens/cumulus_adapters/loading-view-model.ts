@@ -5,7 +5,6 @@ export function buildLoadingView(): LoadingView {
   return {
     quote:
       "“I looked, and there before me was a pale horse, and its rider was named Death.”",
-    attribution: "— Revelation 6:8",
     loadingLabel: "Loading",
   };
 }

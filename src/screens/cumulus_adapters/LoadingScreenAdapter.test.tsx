@@ -65,7 +65,6 @@ describe("LoadingScreenAdapter", () => {
         expect.objectContaining({
           event: "loading_screen_presented",
           source: "direct",
-          attribution: "— Revelation 6:8",
           tutorialPlaybackSpeed: 4,
         }),
       ]),
