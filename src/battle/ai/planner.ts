@@ -56,6 +56,12 @@ export interface PlannerOptions {
   nowMs: number;
   /** Deterministic seed threaded to the opponent model. */
   rngSeed: number;
+  /**
+   * Optional deterministic cap on explored child states.  Tutorial automation
+   * uses this instead of a wall-clock budget so every client chooses the same
+   * action from the same confirmed fold.
+   */
+  expansionBudget?: number;
 }
 
 // --- Card classification --------------------------------------------------
@@ -320,9 +326,11 @@ function expandBeamRound(
   beam: BeamEntry[],
   best: BeamEntry,
   opts: PlannerOptions,
-): { beam: BeamEntry[]; best: BeamEntry; done: boolean } {
+  remainingExpansions: number,
+): { beam: BeamEntry[]; best: BeamEntry; done: boolean; expansions: number } {
   let nextBest = best;
   const expansions: BeamEntry[] = [];
+  let expansionCount = 0;
 
   for (const entry of beam) {
     const candidates = generateActions(entry.model);
@@ -333,6 +341,14 @@ function expandBeamRound(
     // and simply drops out of the beam. Its own score was already folded into
     // `best` when the node was created.
     for (const action of candidates) {
+      if (expansionCount >= remainingExpansions) {
+        return {
+          beam: expansions.length === 0 ? beam : keepBestBeam(expansions, opts),
+          best: nextBest,
+          done: true,
+          expansions: expansionCount,
+        };
+      }
       const nextModel = cloneForwardModel(entry.model);
       applyAction(nextModel, action);
       const score = scorePlan(nextModel, opts);
@@ -340,6 +356,7 @@ function expandBeamRound(
       // payoff in the same turn can still be discovered.
       const child: BeamEntry = { model: nextModel, actions: [...entry.actions, action], score };
       expansions.push(child);
+      expansionCount += 1;
       // Track the best complete plan across the whole search. Tie-break on the
       // plan's action path so identical inputs pick the same plan.
       if (
@@ -353,18 +370,27 @@ function expandBeamRound(
 
   // Whole beam exhausted (every branch was a dead end): nothing left to expand.
   if (expansions.length === 0) {
-    return { beam, best: nextBest, done: true };
+    return { beam, best: nextBest, done: true, expansions: expansionCount };
   }
 
   // Keep the top-K expansions, breaking ties deterministically by the plan's
   // action path so identical inputs always retain the same beam.
+  return {
+    beam: keepBestBeam(expansions, opts),
+    best: nextBest,
+    done: false,
+    expansions: expansionCount,
+  };
+}
+
+function keepBestBeam(expansions: BeamEntry[], opts: PlannerOptions): BeamEntry[] {
   expansions.sort((a, b) => {
     if (b.score !== a.score) {
       return b.score - a.score;
     }
     return planSortKey(a).localeCompare(planSortKey(b));
   });
-  return { beam: expansions.slice(0, Math.max(1, opts.beamWidth)), best: nextBest, done: false };
+  return expansions.slice(0, Math.max(1, opts.beamWidth));
 }
 
 /**
@@ -391,13 +417,15 @@ function searchBestPlan(rootModel: ForwardModel, opts: PlannerOptions): PlanActi
   }
 
   let beam: BeamEntry[] = [root];
+  let expansionsRemaining = opts.expansionBudget ?? Number.POSITIVE_INFINITY;
 
   for (let depth = 0; depth < MAX_DEPTH; depth += 1) {
-    if (deadlineApproached(opts)) {
+    if (deadlineApproached(opts) || expansionsRemaining <= 0) {
       break;
     }
-    const round = expandBeamRound(beam, best, opts);
+    const round = expandBeamRound(beam, best, opts, expansionsRemaining);
     best = round.best;
+    expansionsRemaining -= round.expansions;
     if (round.done) {
       break;
     }
@@ -429,6 +457,7 @@ async function searchBestPlanAsync(
   }
 
   let beam: BeamEntry[] = [root];
+  let expansionsRemaining = opts.expansionBudget ?? Number.POSITIVE_INFINITY;
 
   for (let depth = 0; depth < MAX_DEPTH; depth += 1) {
     // Yield before each round after the first so the main thread is released
@@ -436,11 +465,12 @@ async function searchBestPlanAsync(
     if (depth > 0) {
       await yieldFn();
     }
-    if (deadlineApproached(opts)) {
+    if (deadlineApproached(opts) || expansionsRemaining <= 0) {
       break;
     }
-    const round = expandBeamRound(beam, best, opts);
+    const round = expandBeamRound(beam, best, opts, expansionsRemaining);
     best = round.best;
+    expansionsRemaining -= round.expansions;
     if (round.done) {
       break;
     }

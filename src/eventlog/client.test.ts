@@ -110,6 +110,7 @@ interface Harness {
   appendFailures: Array<{ event: GameEvent; error: unknown }>;
   pendingDropped: GameEvent[][];
   confirmedHeads: number[];
+  confirmed: () => ToyState | undefined;
 }
 
 interface HarnessOptions {
@@ -132,6 +133,7 @@ function makeHarness(
   const appended: GameEvent[] = [];
   let seqCounter = 0;
   const displayedStates: ToyState[] = [];
+  const confirmedStates: ToyState[] = [];
   const outcomes: Harness["outcomes"] = [];
   const divergences: Harness["divergences"] = [];
   const foldErrors: Harness["foldErrors"] = [];
@@ -161,6 +163,7 @@ function makeHarness(
 
   const client = createLogClient<ToyState>(cfg, io, {
     onDisplayState: (s) => displayedStates.push(s),
+    onConfirmedState: (s) => confirmedStates.push(s),
     onConfirmedHead: (head) => confirmedHeads.push(head),
     onEventOutcome: (event, seq, outcome, detail) =>
       outcomes.push({
@@ -190,11 +193,22 @@ function makeHarness(
     appendFailures,
     pendingDropped,
     confirmedHeads,
+    confirmed: () => confirmedStates[confirmedStates.length - 1],
   };
   return { harness, client };
 }
 
 describe("LogClient confirmed head", () => {
+  it("publishes a committed fold without optimistic intent echoes", async () => {
+    const { harness, client } = makeHarness();
+    harness.deliver(makeNode({ events: {} }));
+    await client.submit({ type: "T", payload: { tag: "optimistic" } });
+    expect(harness.displayed()).toEqual({ applied: ["optimistic"] });
+    expect(harness.confirmed()).toEqual({ applied: [] });
+    harness.deliver(makeNode({ events: { 1: harness.appended[0] } }));
+    expect(harness.confirmed()).toEqual({ applied: ["optimistic"] });
+  });
+
   it("reports the initial baseline and each contiguous folded head", () => {
     const { harness } = makeHarness();
     harness.deliver(makeNode({ events: {} }));

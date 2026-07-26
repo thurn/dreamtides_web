@@ -73,12 +73,16 @@ interface CoopContextValue {
   clientId: string;
   /** The displayed fold (confirmed + optimistic); seeded from genesis pre-fold. */
   gameState: FoldState;
+  /** The room fold containing committed events only; safe for autonomous work. */
+  confirmedGameState: FoldState;
   /** Stamp + append one event; `draft.actor` overrides this client's id. */
   append: AppendFn;
   /** Named action creators bound to `append` (RESOLVE_PROMPT guard applied). */
   actions: CoopActions;
   /** Connected clients, from the room's presence node. */
   connectedCount: number | null;
+  /** Connected presence client ids, or null until presence has loaded. */
+  connectedClientIds: readonly string[] | null;
   /** Contiguous confirmed log head; null until the first node is folded. */
   confirmedHead: number | null;
   /**
@@ -122,7 +126,11 @@ export function CoopProvider({
   const [gameState, setGameState] = useState<FoldState>(() =>
     GAME_ENGINE_CONFIG.genesisState(genesis),
   );
+  const [confirmedGameState, setConfirmedGameState] = useState<FoldState>(() =>
+    GAME_ENGINE_CONFIG.genesisState(genesis),
+  );
   const [connectedCount, setConnectedCount] = useState<number | null>(null);
+  const [connectedClientIds, setConnectedClientIds] = useState<readonly string[] | null>(null);
   const [confirmedHead, setConfirmedHead] = useState<number | null>(null);
   const [corruptLog, setCorruptLog] = useState(false);
   const [bounceToken, setBounceToken] = useState(0);
@@ -210,6 +218,7 @@ export function CoopProvider({
             flushPendingAppends();
           }
         },
+        onConfirmedState: setConfirmedGameState,
         onConfirmedHead: setConfirmedHead,
         onEventOutcome: (event, seq, outcome, detail) => {
           if (seq > confirmedSeqRef.current) {
@@ -292,6 +301,9 @@ export function CoopProvider({
     return onValue(presenceRef, (snapshot) => {
       const presence = snapshot.val() as Record<string, PresenceEntry> | null;
       setConnectedCount(connectedClientCount(presence));
+      setConnectedClientIds(
+        Object.keys(presence ?? {}).filter((clientId) => presence?.[clientId]?.connected === true).sort(),
+      );
     });
   }, [db, roomId]);
 
@@ -338,7 +350,7 @@ export function CoopProvider({
     const base = makeActions(append);
     return {
       ...base,
-      resolvePrompt: (promptId, resolution) => {
+      resolvePrompt: (promptId, resolution, intentKey) => {
         if (promptId > confirmedSeqRef.current) {
           return Promise.reject(
             new Error(
@@ -346,7 +358,7 @@ export function CoopProvider({
             ),
           );
         }
-        return base.resolvePrompt(promptId, resolution);
+        return base.resolvePrompt(promptId, resolution, intentKey);
       },
     };
   }, [append]);
@@ -355,14 +367,16 @@ export function CoopProvider({
     () => ({
       clientId,
       gameState,
+      confirmedGameState,
       append,
       actions,
       connectedCount,
+      connectedClientIds,
       confirmedHead,
       confirmedSeqRef,
       registerOutcomeListener,
     }),
-    [clientId, gameState, append, actions, connectedCount, confirmedHead, registerOutcomeListener],
+    [clientId, gameState, confirmedGameState, append, actions, connectedCount, connectedClientIds, confirmedHead, registerOutcomeListener],
   );
 
   if (corruptLog) {
@@ -389,6 +403,11 @@ export function CoopProvider({
 /** The displayed fold state (confirmed + optimistic). */
 export function useGameState(): FoldState {
   return useCoop().gameState;
+}
+
+/** The committed room fold, excluding this client's optimistic intent queue. */
+export function useConfirmedGameState(): FoldState {
+  return useCoop().confirmedGameState;
 }
 
 /** The contiguous confirmed log head, or null before the initial fold. */
@@ -420,6 +439,11 @@ export function useActions(): CoopActions {
 /** The number of clients currently connected to the room. */
 export function useConnectedCount(): number | null {
   return useCoop().connectedCount;
+}
+
+/** Connected presence client ids, or null while the presence snapshot is unknown. */
+export function useConnectedClientIds(): readonly string[] | null {
+  return useCoop().connectedClientIds;
 }
 
 /** Subscribe to confirmed event outcomes for the lifetime of the caller. */

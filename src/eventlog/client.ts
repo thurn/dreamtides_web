@@ -46,6 +46,8 @@ export interface LogClientIo {
 export interface LogClientCallbacks<S> {
   /** The displayed fold (confirmed + optimistic) after every change. */
   onDisplayState: (state: S) => void;
+  /** The fold of committed events only, before pending local intents are echoed. */
+  onConfirmedState?: (state: S) => void;
   /** The contiguous confirmed log head after each subscribed node is folded. */
   onConfirmedHead?: (head: number) => void;
   /**
@@ -383,6 +385,7 @@ export function createLogClient<S>(
     }
 
     initialized = true;
+    callbacks.onConfirmedState?.(confirmedState as S);
     recomputeDisplayed();
     callbacks.onConfirmedHead?.(lastFoldedSeq);
   }
