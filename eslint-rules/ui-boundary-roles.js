@@ -82,7 +82,7 @@ for (const name of [
   "MainMenuScreenAdapter",
   "QuestCompleteScreenAdapter", "QuestFailedScreenAdapter", "QuestStartScreenAdapter",
   "StartingDeckOverlayAdapter", "TransfigurationSiteScreenAdapter",
-  "TutorialScreenAdapter",
+  "TutorialBattleScreenAdapter", "TutorialScreenAdapter",
   "WorkInProgressSiteScreenAdapter", "registry",
 ]) {
   // The registry is the production resolver; the rest are state/effect wiring.

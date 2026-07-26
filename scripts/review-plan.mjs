@@ -17,6 +17,19 @@ const TEST_INPUT_EXTENSIONS = new Set([
   ".toml",
 ]);
 
+const SOURCE_TREE_CONTRACT_TESTS = [
+  "scripts/cumulus-generated-docs-drift.test.mjs",
+  "scripts/cumulus-ui-boundary.test.mjs",
+];
+
+function isProductionSourceInput(file) {
+  return (
+    file.startsWith("src/") &&
+    [".ts", ".tsx", ".css"].includes(extname(file)) &&
+    !/\.(test|spec)\.(ts|tsx|css)$/.test(file)
+  );
+}
+
 function isTypecheckInput(file) {
   return (
     file.startsWith("src/") ||
@@ -55,6 +68,10 @@ function isTestInput(file) {
 export function buildReviewPlan(files, fileExists = () => true) {
   const changedFiles = [...new Set(files)].sort();
   const existingFiles = changedFiles.filter(fileExists);
+  const testInputs = existingFiles.filter(isTestInput);
+  if (changedFiles.some(isProductionSourceInput)) {
+    testInputs.push(...SOURCE_TREE_CONTRACT_TESTS);
+  }
 
   return {
     changedFiles,
@@ -62,6 +79,6 @@ export function buildReviewPlan(files, fileExists = () => true) {
       file.startsWith("src/") && LINTABLE_EXTENSIONS.has(extname(file))),
     shouldTypecheck: changedFiles.some(isTypecheckInput),
     shouldValidate: changedFiles.some(isValidationInput),
-    testInputs: existingFiles.filter(isTestInput),
+    testInputs: [...new Set(testInputs)].sort(),
   };
 }

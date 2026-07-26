@@ -30,6 +30,8 @@ describe("fast review plan", () => {
       shouldTypecheck: true,
       shouldValidate: false,
       testInputs: [
+        "scripts/cumulus-generated-docs-drift.test.mjs",
+        "scripts/cumulus-ui-boundary.test.mjs",
         "src/state/quest-state-actions.test.ts",
         "src/state/quest-state-actions.ts",
       ],
@@ -60,7 +62,25 @@ describe("fast review plan", () => {
       changedFiles: ["src/deleted.ts", "src/live.ts"],
       lintFiles: ["src/live.ts"],
       shouldTypecheck: true,
-      testInputs: ["src/live.ts"],
+      testInputs: [
+        "scripts/cumulus-generated-docs-drift.test.mjs",
+        "scripts/cumulus-ui-boundary.test.mjs",
+        "src/live.ts",
+      ],
+    });
+  });
+
+  it("selects source-tree contracts for deleted production files", () => {
+    expect(buildReviewPlan(
+      ["src/screens/RemovedScreen.tsx"],
+      () => false,
+    )).toMatchObject({
+      lintFiles: [],
+      shouldTypecheck: true,
+      testInputs: [
+        "scripts/cumulus-generated-docs-drift.test.mjs",
+        "scripts/cumulus-ui-boundary.test.mjs",
+      ],
     });
   });
 });
