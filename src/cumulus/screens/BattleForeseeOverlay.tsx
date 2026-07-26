@@ -228,6 +228,37 @@ export function BattleForeseeOverlay({
         <div style={{ overflowX: "auto", paddingBottom: token("--space-3") }}>
           <div
             data-foresee-row=""
+            data-foresee-drop-geometry="nearest-destination"
+            onDragOver={(event) => event.preventDefault()}
+            onDrop={(event) => {
+              event.preventDefault();
+              const dragged = droppedCardId(event);
+              if (dragged === null) return;
+              const deckIndicator =
+                event.currentTarget.querySelector<HTMLElement>(
+                  '[data-foresee-indicator="deck"]',
+                );
+              const voidIndicator =
+                event.currentTarget.querySelector<HTMLElement>(
+                  '[data-foresee-indicator="void"]',
+                );
+              if (deckIndicator === null || voidIndicator === null) return;
+              const deckDistance = distanceSquaredToRect(
+                event.clientX,
+                event.clientY,
+                deckIndicator.getBoundingClientRect(),
+              );
+              const voidDistance = distanceSquaredToRect(
+                event.clientX,
+                event.clientY,
+                voidIndicator.getBoundingClientRect(),
+              );
+              if (deckDistance <= voidDistance) {
+                moveToDeck(dragged, orderedCardIds[0]);
+              } else {
+                moveToVoid(dragged);
+              }
+            }}
             style={{
               display: "flex",
               alignItems: "center",
@@ -241,6 +272,7 @@ export function BattleForeseeOverlay({
               onDragOver={(event) => event.preventDefault()}
               onDrop={(event) => {
                 event.preventDefault();
+                event.stopPropagation();
                 const dragged = droppedCardId(event);
                 if (dragged !== null) moveToDeck(dragged, orderedCardIds[0]);
               }}
@@ -283,6 +315,7 @@ export function BattleForeseeOverlay({
               onDragOver={(event) => event.preventDefault()}
               onDrop={(event) => {
                 event.preventDefault();
+                event.stopPropagation();
                 const dragged = droppedCardId(event);
                 if (dragged !== null) moveToVoid(dragged);
               }}
@@ -309,4 +342,22 @@ export function BattleForeseeOverlay({
       </div>
     </GlassDialog>
   );
+}
+
+function distanceSquaredToRect(
+  x: number,
+  y: number,
+  bounds: DOMRect,
+): number {
+  const deltaX = x < bounds.left
+    ? bounds.left - x
+    : x > bounds.right
+      ? x - bounds.right
+      : 0;
+  const deltaY = y < bounds.top
+    ? bounds.top - y
+    : y > bounds.bottom
+      ? y - bounds.bottom
+      : 0;
+  return deltaX * deltaX + deltaY * deltaY;
 }

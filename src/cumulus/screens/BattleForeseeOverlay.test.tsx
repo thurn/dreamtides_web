@@ -81,9 +81,19 @@ function transfer(): DataTransfer {
   };
 }
 
-function dragEvent(type: string, dataTransfer: DataTransfer): Event {
+function dragEvent(
+  type: string,
+  dataTransfer: DataTransfer,
+  coordinates?: { readonly clientX: number; readonly clientY: number },
+): Event {
   const event = new Event(type, { bubbles: true, cancelable: true });
   Object.defineProperty(event, "dataTransfer", { value: dataTransfer });
+  if (coordinates !== undefined) {
+    Object.defineProperties(event, {
+      clientX: { value: coordinates.clientX },
+      clientY: { value: coordinates.clientY },
+    });
+  }
   return event;
 }
 
@@ -251,6 +261,89 @@ describe("BattleForeseeOverlay", () => {
       orderedCardIds: ["battle-card-1", "battle-card-3"],
       voidCardIds: ["battle-card-2"],
     });
+
+    act(() => root.unmount());
+  });
+
+  it("uses destination geometry to accept a release adjacent to the deck indicator", () => {
+    const cardInstanceIds = [
+      "11111111-1111-4111-8111-111111111111",
+      "22222222-2222-4222-8222-222222222222",
+    ] as const;
+    const view = {
+      initialCount: 2,
+      cards: makeView(2).cards.slice(0, 2).map((card, index) => ({
+        ...card,
+        battleCardId: cardInstanceIds[index],
+      })),
+    };
+    const { container, root } = mount(
+      <BattleForeseeOverlay view={view} onConfirm={() => {}} />,
+    );
+    const row = container.querySelector<HTMLElement>("[data-foresee-row]");
+    const deckIndicator = container.querySelector<HTMLElement>(
+      '[data-foresee-indicator="deck"]',
+    );
+    const voidIndicator = container.querySelector<HTMLElement>(
+      '[data-foresee-indicator="void"]',
+    );
+    const second = container.querySelector<HTMLElement>(
+      `[data-foresee-card-id="${cardInstanceIds[1]}"]`,
+    );
+    const voidZone = container.querySelector<HTMLElement>(
+      '[data-foresee-zone="void"]',
+    );
+    vi.spyOn(deckIndicator as HTMLElement, "getBoundingClientRect")
+      .mockReturnValue({
+        x: 100,
+        y: 100,
+        left: 100,
+        top: 100,
+        right: 280,
+        bottom: 352,
+        width: 180,
+        height: 252,
+        toJSON: () => ({}),
+      });
+    vi.spyOn(voidIndicator as HTMLElement, "getBoundingClientRect")
+      .mockReturnValue({
+        x: 700,
+        y: 100,
+        left: 700,
+        top: 100,
+        right: 880,
+        bottom: 352,
+        width: 180,
+        height: 252,
+        toJSON: () => ({}),
+      });
+    const dragData = transfer();
+    act(() => {
+      second?.dispatchEvent(dragEvent("dragstart", dragData));
+      voidZone?.dispatchEvent(dragEvent("drop", dragData));
+    });
+    expect(
+      container.querySelector('[data-foresee-card-zone="void"]')
+        ?.getAttribute("data-foresee-card-id"),
+    ).toBe(cardInstanceIds[1]);
+
+    const adjacentRelease = { clientX: 60, clientY: 226 };
+    expect(100 - adjacentRelease.clientX).toBe(40);
+    act(() => {
+      container.querySelector<HTMLElement>(
+        `[data-foresee-card-id="${cardInstanceIds[1]}"]`,
+      )?.dispatchEvent(dragEvent("dragstart", dragData));
+      row?.dispatchEvent(dragEvent("drop", dragData, adjacentRelease));
+    });
+
+    expect(deckIds(container)).toEqual([
+      cardInstanceIds[1],
+      cardInstanceIds[0],
+    ]);
+    expect(container.querySelector('[data-foresee-card-zone="void"]'))
+      .toBeNull();
+    expect(row?.dataset.foreseeDropGeometry)
+      .toBe("nearest-destination");
 
     act(() => root.unmount());
   });
