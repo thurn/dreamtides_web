@@ -620,6 +620,48 @@ describe("BATTLE_PLAY_CARD", () => {
     expect(legal.state.battle?.board.sides.enemy.void).toContain("target");
   });
 
+  it("enforces the exact battlefield targets for both target-requiring Starter UUIDs", () => {
+    const flashpoint = makeInstance("flashpoint", "4408b942-09a0-4f4e-a403-10c708c6e3c5");
+    flashpoint.definition = { ...flashpoint.definition, battleCardKind: "event", energyCost: 3, printedEnergyCost: 3 };
+    const blessing = makeInstance("blessing", "944e15d2-d680-4ebe-8d18-36826f4b1535");
+    blessing.definition = { ...blessing.definition, battleCardKind: "event", energyCost: 1, printedEnergyCost: 1 };
+    const enemyLowCost = makeInstance("enemy-low", "enemy-low", "enemy");
+    enemyLowCost.definition = { ...enemyLowCost.definition, energyCost: 2, printedEnergyCost: 2 };
+    const enemyHighCost = makeInstance("enemy-high", "enemy-high", "enemy");
+    enemyHighCost.definition = { ...enemyHighCost.definition, energyCost: 3, printedEnergyCost: 3 };
+    const ally = makeInstance("ally", "ally", "player");
+    const enemyEvent = makeInstance("enemy-event", "enemy-event", "enemy");
+    enemyEvent.definition = { ...enemyEvent.definition, battleCardKind: "event" };
+    const board = makeRichBoard({
+      instances: [flashpoint, blessing, enemyLowCost, enemyHighCost, ally, enemyEvent],
+      playerHand: ["flashpoint", "blessing"],
+      playerFront: { F0: "ally" },
+    });
+    board.sides.player.currentEnergy = 4;
+    board.sides.enemy.frontRank.F0 = "enemy-low";
+    board.sides.enemy.frontRank.F1 = "enemy-high";
+    board.sides.enemy.backRank.B0 = "enemy-event";
+    const state = inBattleState({}, battleFrom(board));
+    const play = (battleCardId: string, targetBattleCardIds: string[]) => reduce(
+      state,
+      "BATTLE_PLAY_CARD",
+      { battleCardId, targetBattleCardIds },
+    );
+
+    expect(play("flashpoint", ["enemy-low"]).outcome).toBe("applied");
+    expect(play("flashpoint", []).outcome).toBe("bounced");
+    expect(play("flashpoint", ["ally"]).outcome).toBe("bounced");
+    expect(play("flashpoint", ["enemy-high"]).outcome).toBe("bounced");
+    expect(play("flashpoint", ["enemy-event"]).outcome).toBe("bounced");
+    expect(play("flashpoint", ["enemy-low", "enemy-high"]).outcome).toBe("bounced");
+
+    expect(play("blessing", ["ally"]).outcome).toBe("applied");
+    expect(play("blessing", []).outcome).toBe("bounced");
+    expect(play("blessing", ["enemy-low"]).outcome).toBe("bounced");
+    expect(play("blessing", ["enemy-event"]).outcome).toBe("bounced");
+    expect(play("blessing", ["ally", "enemy-low"]).outcome).toBe("bounced");
+  });
+
   it("parks Ringwatcher's persisted Foresee prompt after payment and materialization", () => {
     const ringwatcher = makeInstance("ringwatcher", "647f5150-b2e0-424b-9480-27557642524e");
     ringwatcher.definition = { ...ringwatcher.definition, energyCost: 3, printedEnergyCost: 3 };
@@ -1843,6 +1885,55 @@ describe("dreamwell reveal side", () => {
     const revealOnly = applyDebugEdit(board, revealEdit as never, EMISSION).state;
     expect(hashBoard(result.state.battle!.board)).not.toBe(hashBoard(revealOnly));
     expect(result.state.battle?.board.sides.enemy.dreamwellDrawnTurn).toBe(2);
+  });
+
+  it("chains Lily Lake into the next known Dreamwell card exactly once with its refill and effect", () => {
+    const lilyLake: DreamwellCardDefinition = {
+      id: "558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+      name: "Fixture Lily Lake",
+      renderedText: "",
+      energyAdded: 2,
+      order: 0,
+      cardNumber: 0,
+      imageNumber: 0,
+    };
+    const autumnGlade: DreamwellCardDefinition = {
+      id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+      name: "Fixture Autumn Glade",
+      renderedText: "",
+      energyAdded: 3,
+      order: 1,
+      cardNumber: 1,
+      imageNumber: 1,
+    };
+    const board = makeRichBoard({
+      turnNumber: 4,
+      phase: "dreamwell",
+      dreamwellDeckIndex: 0,
+      playerDreamwellDrawnTurn: null,
+    });
+    board.sides.player.maxEnergy = 2;
+    board.sides.player.currentEnergy = 1;
+    const state = {
+      ...baseState(),
+      battle: battleFrom(board, { init: makeInit({ dreamwellDeck: [lilyLake, autumnGlade] }) }),
+    };
+    const payload = debugEdit({ kind: "DRAW_DREAMWELL_CARD", side: "player", turnNumber: 4 });
+
+    const first = reduce(state, "BATTLE_COMMAND", payload);
+    const replay = reduce(state, "BATTLE_COMMAND", payload);
+
+    expect(first.outcome).toBe("applied");
+    expect(hashBattle(first.state.battle)).toBe(hashBattle(replay.state.battle));
+    expect(first.state.battle).toMatchObject({ effectQueue: [], pendingPrompt: null });
+    expect(first.state.battle?.board).toMatchObject({ dreamwellDeckIndex: 2 });
+    expect(first.state.battle?.board.sides.player).toMatchObject({
+      dreamwellCardIndex: 1,
+      dreamwellDrawnTurn: 4,
+      maxEnergy: 7,
+      currentEnergy: 7,
+      score: 2,
+    });
   });
 });
 

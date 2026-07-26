@@ -837,8 +837,10 @@ function tutorialCommandIsAuthorized(
   const legalPhase = (battle.board.activeSide === "player" && battle.board.phase === "day") ||
     (battle.board.activeSide === "enemy" && battle.board.phase === "dusk");
   if (!legalPhase) return false;
+  const playerBattlefieldSlotIsLegal = (slot: BattleFieldSlotAddress): boolean =>
+    slot.side === "player";
   const destinationIsLegal = (destination: BattleFieldSlotAddress): boolean =>
-    destination.side === "player" &&
+    playerBattlefieldSlotIsLegal(destination) &&
     (battle.board.phase !== "dusk" || destination.zone === "frontRank");
   const playerCharacterAt = (address: BattleFieldSlotAddress): boolean => {
     const battleCardId = selectBattlefieldSlotOccupant(battle.board, address);
@@ -846,7 +848,7 @@ function tutorialCommandIsAuthorized(
     return instance?.controller === "player" && instance.definition.battleCardKind === "character";
   };
   if (edit.kind === "SWAP_BATTLEFIELD_SLOTS") {
-    return destinationIsLegal(edit.source) && destinationIsLegal(edit.target) &&
+    return playerBattlefieldSlotIsLegal(edit.source) && destinationIsLegal(edit.target) &&
       playerCharacterAt(edit.source) && playerCharacterAt(edit.target);
   }
   if (edit.kind !== "MOVE_CARD_TO_ZONE" || !("slotId" in edit.destination)) return false;
