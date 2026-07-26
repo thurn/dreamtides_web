@@ -132,6 +132,16 @@ matches-rules-text = true
 variants = [ "reclaimed" ]
 
 [[entries.contexts]]
+pattern = "\\b(?:gain|gains|gained)\\s+reclaim\\s+(\\d+)\\s*●"
+term = "{term} {1}●"
+definition = "You may play that card from your void for {1}●, then banish it when it leaves play."
+
+[[entries.contexts]]
+pattern = "\\breclaim\\s+(\\d+)\\s*●"
+term = "{term} {1}●"
+definition = "You may play this card from your void for {1}●, then banish it when it leaves play."
+
+[[entries.contexts]]
 pattern = "\\b(?:gain|gains|gained)\\s+reclaim\\b"
 definition = "You may play that card from your void, then banish it when it leaves play."
 
@@ -168,6 +178,13 @@ definition = "Put cards from the top of a player's deck into their void. If the 
 priority = 95
 matches-rules-text = true
 variants = [ "eroded", "erodes" ]
+
+[[entries.contexts]]
+pattern = "\\berode\\s+(\\d+)\\b"
+term = "{term} {1}"
+definition = "Put the top {1} cards of a player's deck into their void. If the deck is empty, their opponent scores 3⍟ instead."
+singular-capture = 1
+singular-definition = "Put the top card of a player's deck into their void. If the deck is empty, their opponent scores 3⍟ instead."
 
 [[entries]]
 id = "fast"

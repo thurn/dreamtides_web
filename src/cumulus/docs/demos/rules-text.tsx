@@ -44,7 +44,7 @@ export const rulesTextDemo: CumulusComponent = {
   Component: RulesTextDemo,
   usage: [
     {
-      note: "Renders authored rules-text markup: energy / spark glyphs become inline pips, `⧗` becomes the memory brain, `▸` / `❖` markers become caret / bolt icons, and the curated keyword set is emphasized. Numeric Foresee and granted Reclaim definitions reflect the source sentence. Pass the card's rendered-text string as `text`.",
+      note: "Renders authored rules-text markup: energy / spark glyphs become inline pips, `⧗` becomes the memory brain, `▸` / `❖` markers become caret / bolt icons, and the curated keyword set is emphasized. Numeric Foresee, Erode, and Reclaim definitions reflect the exact count or energy cost and use singular grammar where appropriate; granted Reclaim refers to its target card. Pass the card's rendered-text string as `text`.",
       code: `import { RulesText } from "src/cumulus/components/card/RulesText";
 
 <RulesText text={"Support – Supported allies have +2✦ and unstoppable."} />`,

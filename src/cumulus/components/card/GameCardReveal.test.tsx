@@ -7,6 +7,7 @@ import { CumulusRoot } from "../../CumulusRoot";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
 import * as glossary from "../../../data/glossary";
+import { extractContextualGlossaryTerms } from "../../../data/glossary-terms";
 import { extractMaterializedFigmentPreviews } from "../../../data/materialized-figments";
 import { GameCard, type GameCardModel } from "./CardView";
 
@@ -136,6 +137,40 @@ describe("GameCard reveal contract", () => {
     expect(description).toContain(
       glossary.requireGlossaryEntry("materialized-trigger").definition,
     );
+
+    act(() => root.unmount());
+  });
+
+  it("renders contextual counts and grammar for every numeric card keyword", () => {
+    const renderedText = "Erode 2. Foresee 1. Reclaim 0●.";
+    const { container, root } = mount(
+      <GameCard
+        model={model(
+          card({
+            renderedText,
+          }),
+        )}
+      />,
+    );
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    const description = document.getElementById(
+      source?.getAttribute("aria-describedby") ?? "",
+    )?.textContent ?? "";
+    const numericEntries = extractContextualGlossaryTerms(renderedText).filter(
+      (entry) => ["erode", "foresee", "reclaim"].includes(entry.id),
+    );
+
+    expect(numericEntries.map((entry) => entry.id)).toEqual([
+      "erode",
+      "foresee",
+      "reclaim",
+    ]);
+    for (const entry of numericEntries) {
+      expect(description).toContain(entry.term);
+      expect(description).toContain(entry.definition);
+    }
 
     act(() => root.unmount());
   });

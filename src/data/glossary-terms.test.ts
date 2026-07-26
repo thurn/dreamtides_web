@@ -217,18 +217,6 @@ describe("contextual glossary definitions", () => {
     );
   });
 
-  it("keeps self-referential reclaim copy for a printed reclaim ability", () => {
-    const reclaim = fixture(
-      "reclaim",
-      "Reclaim",
-      "You may play this card from your void, then banish it when it leaves play.",
-    );
-
-    expect(contextualizeGlossaryEntry(reclaim, "Reclaim 2●.").definition).toBe(
-      reclaim.definition,
-    );
-  });
-
   it("uses dream-avatar-specific exhaust instructions", () => {
     const exhaust = fixture(
       "exhaust-cost",
@@ -250,5 +238,111 @@ describe("contextual glossary definitions", () => {
     ).toBe(
       "You may exhaust (☪) this dreamAvatar to activate this ability once per turn.",
     );
+  });
+});
+
+describe("numeric keyword glossary projections", () => {
+  const foresee = fixture("foresee", "Foresee", "Generic foresee.", 0, [
+    {
+      pattern: String.raw`\bforesee\s+(\d+)\b`,
+      term: "{term} {1}",
+      definition: "Look at the top {1} cards.",
+      singularCapture: 1,
+      singularDefinition: "Look at the top card.",
+    },
+  ]);
+  const erode = fixture("erode", "Erode", "Generic erode.", 0, [
+    {
+      pattern: String.raw`\berode\s+(\d+)\b`,
+      term: "{term} {1}",
+      definition: "Put the top {1} cards into their void.",
+      singularCapture: 1,
+      singularDefinition: "Put the top card into their void.",
+    },
+  ]);
+  const reclaim = fixture("reclaim", "Reclaim", "Generic reclaim.", 0, [
+    {
+      pattern: String.raw`\b(?:gain|gains|gained)\s+reclaim\s+(\d+)\s*●`,
+      term: "{term} {1}●",
+      definition: "Play that card from your void for {1}●.",
+    },
+    {
+      pattern: String.raw`\breclaim\s+(\d+)\s*●`,
+      term: "{term} {1}●",
+      definition: "Play this card from your void for {1}●.",
+    },
+    {
+      pattern: String.raw`\b(?:gain|gains|gained)\s+reclaim\b`,
+      definition: "Play that card from your void.",
+    },
+  ]);
+
+  it.each([
+    {
+      text: "Foresee 1.",
+      entry: foresee,
+      term: "Foresee 1",
+      definition: "Look at the top card.",
+    },
+    {
+      text: "Foresee 3.",
+      entry: foresee,
+      term: "Foresee 3",
+      definition: "Look at the top 3 cards.",
+    },
+    {
+      text: "Erode 1.",
+      entry: erode,
+      term: "Erode 1",
+      definition: "Put the top card into their void.",
+    },
+    {
+      text: "Erode 2.",
+      entry: erode,
+      term: "Erode 2",
+      definition: "Put the top 2 cards into their void.",
+    },
+    {
+      text: "Reclaim 0●.",
+      entry: reclaim,
+      term: "Reclaim 0●",
+      definition: "Play this card from your void for 0●.",
+    },
+    {
+      text: "Reclaim 4●.",
+      entry: reclaim,
+      term: "Reclaim 4●",
+      definition: "Play this card from your void for 4●.",
+    },
+    {
+      text: "That card gains reclaim 0● until end of turn.",
+      entry: reclaim,
+      term: "Reclaim 0●",
+      definition: "Play that card from your void for 0●.",
+    },
+    {
+      text: "A character in your void gains reclaim 2● until end of turn.",
+      entry: reclaim,
+      term: "Reclaim 2●",
+      definition: "Play that card from your void for 2●.",
+    },
+  ])("adapts $text", ({ text, entry, term, definition }) => {
+    expect(contextualizeGlossaryEntry(entry, text)).toMatchObject({
+      id: entry.id,
+      term,
+      definition,
+    });
+  });
+
+  it("keeps granted Reclaim without a cost contextual but non-numeric", () => {
+    expect(
+      contextualizeGlossaryEntry(
+        reclaim,
+        "An event in your void gains reclaim.",
+      ),
+    ).toMatchObject({
+      term: "Reclaim",
+      definition: "Play that card from your void.",
+    });
   });
 });
