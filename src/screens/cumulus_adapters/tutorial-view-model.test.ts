@@ -468,6 +468,8 @@ describe("buildTutorialView", () => {
       sourceZone: "opponent-hand",
       destinationZone: "opponent-back-rank",
       destinationSlot: "center",
+      entersExhausted: true,
+      exhaustionClearsAt: "ending",
     });
   });
 
@@ -1356,7 +1358,7 @@ describe("buildTutorialView", () => {
     });
   });
 
-  it("draws, reveals, explains, and plays a second UUID-backed opponent card before repositioning the first", () => {
+  it("keeps each UUID-backed opponent character exhausted until the next turn", () => {
     const revealSpeechBubbleText =
       "This card has a ▸Dawn ability which triggers at the start of turn";
     const actions = [
@@ -1428,6 +1430,13 @@ describe("buildTutorialView", () => {
         cardId: TUTORIAL_OPPONENT_CARD_ID,
         wait: 0,
       },
+      {
+        id: "player-next-turn",
+        action: "draw-dreamwell-card" as const,
+        owner: "player" as const,
+        cardId: VOLTSURGE.id,
+        wait: 0,
+      },
     ];
 
     const revealing = buildTutorialView(
@@ -1477,12 +1486,25 @@ describe("buildTutorialView", () => {
     expect(repositioning.battle.enemy.frontRank[0]?.card?.model.cardId).toBe(
       TUTORIAL_OPPONENT_CARD_ID,
     );
+    expect(repositioning.battle.enemy.frontRank[0]?.card?.exhausted).toBe(false);
     expect(repositioning.battle.enemy.backRank[1]?.card?.model.cardId).toBe(
       TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
     );
+    expect(repositioning.battle.enemy.backRank[1]?.card?.exhausted).toBe(true);
     expect(repositioning.battle.enemy.status).toMatchObject({
       currentEnergy: 0,
       maxEnergy: 5,
+    });
+
+    const playerNextTurn = buildTutorialView(
+      { runId: "event:second-card", currentActionIndex: 10, actions },
+      [OPPONENT_CARD, RUNEBOUND_CHAMPION],
+      PLAYER_CARD,
+      [AUTUMN_GLADE, VOLTSURGE],
+    );
+    expect(playerNextTurn.battle.enemy.backRank[1]?.card).toMatchObject({
+      exhausted: false,
+      model: { cardId: TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID },
     });
   });
 

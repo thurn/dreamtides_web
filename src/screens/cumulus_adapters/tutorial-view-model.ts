@@ -148,6 +148,8 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       sourceZone: "opponent-hand",
       destinationZone: "opponent-back-rank",
       destinationSlot: "center",
+      entersExhausted: true,
+      exhaustionClearsAt: "ending",
     };
   }
   if (action.action === "reposition-opponent-character") {
@@ -588,6 +590,27 @@ export function buildTutorialView(
   const opponentCardRepositioned =
     primaryOpponentCard !== null &&
     repositionedOpponentCardIds.has(primaryOpponentCard.id);
+  const opponentCharacterIsExhausted = (
+    record: OpponentCardRecord,
+  ): boolean => {
+    if (record.playedAtActionIndex === null || playback === null) return false;
+
+    // The tutorial presents each new turn from its first visible beat. The
+    // opening player turn starts at the first How to Play beat; later player
+    // turns start with that side's Dreamwell draw. These are the first
+    // observable states after the preceding Ending phase clears exhaustion.
+    const openingPlayerTurnPresented =
+      howToPlayActionIndex > record.playedAtActionIndex &&
+      howToPlayActionIndex < visibleActionCount;
+    const laterPlayerTurnPresented = playback.actions
+      .slice(record.playedAtActionIndex + 1, visibleActionCount)
+      .some(
+        (action) =>
+          action.action === "draw-dreamwell-card" &&
+          action.owner === "player",
+      );
+    return !(openingPlayerTurnPresented || laterPlayerTurnPresented);
+  };
   const endTurnActionIndex =
     playback?.actions.findIndex((action) => action.action === "end-turn") ?? -1;
   const endTurnCompleted =
@@ -797,7 +820,10 @@ export function buildTutorialView(
       ? slot
       : {
           ...slot,
-          card: { ...record.view, exhausted: !playerTurnStarted },
+          card: {
+            ...record.view,
+            exhausted: opponentCharacterIsExhausted(record),
+          },
         };
   });
   const enemyFrontRank = enemy.frontRank.map((slot, index) => {
@@ -812,7 +838,10 @@ export function buildTutorialView(
       ? slot
       : {
           ...slot,
-          card: { ...record.view, exhausted: false },
+          card: {
+            ...record.view,
+            exhausted: opponentCharacterIsExhausted(record),
+          },
         };
   });
   return {
