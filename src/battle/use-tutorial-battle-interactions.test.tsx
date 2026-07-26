@@ -7,12 +7,15 @@ import { emptyBackRankSlots, emptyFrontRankSlots } from "./test-support";
 import type { TutorialBattleControllerPlan } from "./tutorial-battle-controller";
 import { useTutorialBattleInteractions } from "./use-tutorial-battle-interactions";
 import type { BattleCardInstance, BattleInit, BattleMutableState } from "./types";
+import { getLogEntries, resetLog } from "../logging";
 import type { FoldState } from "../rules/fold-state";
 
 const mocks = vi.hoisted(() => ({
-  battlePlayCard: vi.fn(() => Promise.resolve()),
-  battleCommand: vi.fn(() => Promise.resolve()),
-  resolvePrompt: vi.fn(() => Promise.resolve()),
+  battlePlayCard: vi.fn(() => Promise.resolve(1)),
+  battleCommand: vi.fn(
+    (_command: unknown, _intentKey?: string) => Promise.resolve(1),
+  ),
+  resolvePrompt: vi.fn(() => Promise.resolve(1)),
   state: null as FoldState | null,
 }));
 
@@ -31,6 +34,8 @@ const PLAYER_CARD_UUID = "e83014d3-9d35-4e80-a1b3-9b25360ad2af";
 const REQUIRED_ENEMY_TARGET_EVENT_UUID =
   "4408b942-09a0-4f4e-a403-10c708c6e3c5";
 const PLAYER_INSTANCE_ID = "player-hand-instance-uuid";
+const REVISIT_CHARACTER_UUID = "5a980eff-6ec7-44d8-9977-b98e66bbc2c8";
+const REVISIT_INSTANCE_ID = "bc_0018";
 
 function side(): BattleMutableState["sides"]["player"] {
   return {
@@ -165,6 +170,39 @@ function stateWithoutLegalEventTarget(): FoldState {
     },
   };
 }
+
+function sameTurnRevisitState(
+  slotId: `F${number}`,
+  exhausted = false,
+): FoldState {
+  const next = state();
+  if (next.battle === null) throw new Error("fixture requires a battle");
+  const fixture = instance();
+  const player = next.battle.board.sides.player;
+  player.hand = [];
+  player.frontRank = {
+    ...emptyFrontRankSlots(),
+    [slotId]: REVISIT_INSTANCE_ID,
+  };
+  next.battle.board.activeSide = "enemy";
+  next.battle.board.phase = "dusk";
+  next.battle.board.turnNumber = 4;
+  next.battle.board.cardInstances = {
+    [REVISIT_INSTANCE_ID]: {
+      ...fixture,
+      battleCardId: REVISIT_INSTANCE_ID,
+      status: {
+        ...fixture.status,
+        isExhausted: exhausted,
+      },
+      definition: {
+        ...fixture.definition,
+        cardId: REVISIT_CHARACTER_UUID,
+      },
+    },
+  };
+  return next;
+}
 const controller: TutorialBattleControllerPlan = {
   status: "driver",
   driverClientId: "driver-client",
@@ -194,6 +232,7 @@ afterEach(() => {
   mocks.battlePlayCard.mockClear();
   mocks.battleCommand.mockClear();
   mocks.resolvePrompt.mockClear();
+  resetLog();
 });
 
 describe("useTutorialBattleInteractions", () => {
@@ -239,6 +278,125 @@ describe("useTutorialBattleInteractions", () => {
     expect(latest?.interactions.targetSelectionCardId).toBeNull();
     expect(latest?.interactions.targetableCardIds).toEqual([]);
     expect(mocks.battlePlayCard).not.toHaveBeenCalled();
+
+    act(() => root.unmount());
+  });
+
+  it("submits a fresh authoritative event when a character revisits the same cell in one turn", async () => {
+    mocks.battleCommand
+      .mockResolvedValueOnce(58)
+      .mockResolvedValueOnce(59);
+    mocks.state = sameTurnRevisitState("F3");
+    const root = mount();
+
+    act(() => {
+      latest?.interactions.onCardDragStart(
+        REVISIT_INSTANCE_ID,
+        "battlefield",
+      );
+    });
+    expect(latest?.interactions.eligibleSlotTargets).toContainEqual({
+      owner: "player",
+      rank: "front",
+      slotId: "F1",
+    });
+    await act(async () => {
+      latest?.interactions.onSlotDrop({
+        owner: "player",
+        rank: "front",
+        slotId: "F1",
+      });
+      await Promise.resolve();
+    });
+
+    mocks.state = sameTurnRevisitState("F1");
+    act(() => root.render(<Harness />));
+    act(() => {
+      latest?.interactions.onCardDragStart(
+        REVISIT_INSTANCE_ID,
+        "battlefield",
+      );
+    });
+    await act(async () => {
+      latest?.interactions.onSlotDrop({
+        owner: "player",
+        rank: "front",
+        slotId: "F3",
+      });
+      await Promise.resolve();
+    });
+
+    expect(mocks.battleCommand).toHaveBeenCalledTimes(2);
+    expect(mocks.battleCommand.mock.calls[1]).toHaveLength(1);
+    expect(mocks.battleCommand.mock.calls[1]?.[0]).toEqual({
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: REVISIT_INSTANCE_ID,
+        destination: {
+          side: "player",
+          zone: "frontRank",
+          slotId: "F3",
+        },
+      },
+      sourceSurface: "tutorial-player",
+    });
+    expect(getLogEntries()).toContainEqual(
+      expect.objectContaining({
+        event: "tutorial_battle_human_move_submitted",
+        battleCardId: REVISIT_INSTANCE_ID,
+        definitionId: REVISIT_CHARACTER_UUID,
+        source: {
+          side: "player",
+          zone: "frontRank",
+          slotId: "F1",
+        },
+        target: {
+          owner: "player",
+          rank: "front",
+          slotId: "F3",
+        },
+        committedSeq: 59,
+      }),
+    );
+
+    act(() => root.unmount());
+  });
+
+  it("surfaces and logs why an exhausted character has no legal dusk cell", () => {
+    mocks.state = sameTurnRevisitState("F1", true);
+    const root = mount();
+
+    act(() => {
+      latest?.interactions.onCardDragStart(
+        REVISIT_INSTANCE_ID,
+        "battlefield",
+      );
+    });
+    expect(latest?.interactions.eligibleSlotTargets).toEqual([]);
+
+    act(() => {
+      latest?.interactions.onBattlefieldDropRejected?.({
+        reason: "no-eligible-slot",
+        clientX: 720,
+        clientY: 410,
+      });
+    });
+
+    expect(latest?.movementStatusMessage).toBe(
+      "This character is exhausted and cannot move to the front rank.",
+    );
+    expect(mocks.battleCommand).not.toHaveBeenCalled();
+    expect(getLogEntries()).toContainEqual(
+      expect.objectContaining({
+        event: "tutorial_battle_human_move_rejected",
+        battleCardId: REVISIT_INSTANCE_ID,
+        definitionId: REVISIT_CHARACTER_UUID,
+        reason: "no-eligible-slot",
+        releasePoint: { clientX: 720, clientY: 410 },
+        eligibleSlotTargets: [],
+      }),
+    );
 
     act(() => root.unmount());
   });

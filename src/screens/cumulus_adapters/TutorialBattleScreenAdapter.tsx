@@ -11,7 +11,13 @@ export function TutorialBattleScreenAdapter() {
   const { battle: contextBattle, mutations } = useFrontDoor();
   const battle = contextBattle ?? null;
   const controller = useTutorialBattleController();
-  const { interactions, confirmedPromptId, resolvePrompt } =
+  const {
+    interactions,
+    confirmedPromptId,
+    movementStatusMessage,
+    dismissMovementStatus,
+    resolvePrompt,
+  } =
     useTutorialBattleInteractions(controller);
   const view = useMemo(
     () => battle === null ? null : buildTutorialBattleView(battle, controller, confirmedPromptId),
@@ -46,6 +52,8 @@ export function TutorialBattleScreenAdapter() {
     <TutorialBattleScreen
       view={view}
       interactions={interactions}
+      movementStatusMessage={movementStatusMessage}
+      onMovementStatusDismiss={dismissMovementStatus}
       onForeseeConfirm={(resolution) => resolvePrompt({
         kind: "foresee",
         viewedCardIds: [...resolution.viewedCardIds],

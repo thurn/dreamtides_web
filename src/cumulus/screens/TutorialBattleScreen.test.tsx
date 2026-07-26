@@ -36,7 +36,11 @@ function view(
   };
 }
 
-function mount(screenView: TutorialBattleView) {
+function mount(
+  screenView: TutorialBattleView,
+  movementStatusMessage: string | null = null,
+  onMovementStatusDismiss = vi.fn(),
+) {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -45,6 +49,8 @@ function mount(screenView: TutorialBattleView) {
       <TutorialBattleScreen
         view={screenView}
         interactions={interactions}
+        movementStatusMessage={movementStatusMessage}
+        onMovementStatusDismiss={onMovementStatusDismiss}
         onForeseeConfirm={() => {}}
         onRestart={() => {}}
         onReturnToMainMenu={() => {}}
@@ -84,6 +90,26 @@ describe("TutorialBattleScreen", () => {
     expect(
       container.querySelector('[data-testid="tutorial-battle-restart"]'),
     ).not.toBeNull();
+
+    act(() => root.unmount());
+  });
+
+  it("shows a dismissible Cumulus warning when movement cannot resolve", () => {
+    const dismiss = vi.fn();
+    const { container, root } = mount(
+      view(),
+      "This character is exhausted and cannot move to the front rank.",
+      dismiss,
+    );
+    const toast = container.querySelector<HTMLButtonElement>(
+      '[data-transient-status-toast="warning"]',
+    );
+
+    expect(toast?.textContent).toContain(
+      "This character is exhausted and cannot move to the front rank.",
+    );
+    act(() => toast?.click());
+    expect(dismiss).toHaveBeenCalledOnce();
 
     act(() => root.unmount());
   });

@@ -2997,6 +2997,269 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("resolves a long tutorial character drag to the nearest eligible cell", () => {
+    const cardUuid = asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8");
+    const baseView = makeView();
+    const baseSourceCard = baseView.player.backRank[1]?.card;
+    if (baseSourceCard === null || baseSourceCard === undefined) {
+      throw new Error("fixture requires a player back-rank character");
+    }
+    const sourceCard: MobileBattleCardView = {
+      ...baseSourceCard,
+      id: "bc_0018",
+      model: {
+        ...baseSourceCard.model,
+        cardId: cardUuid,
+        displaySnapshot: {
+          ...baseSourceCard.model.displaySnapshot,
+          id: cardUuid,
+        },
+      },
+    };
+    const player = {
+      ...baseView.player,
+      backRank: baseView.player.backRank.map((slot, index) =>
+        index === 1 ? { ...slot, card: sourceCard } : slot,
+      ),
+    };
+    const view = { ...baseView, player, near: player };
+    const interactions: MobileBattleInteractions = {
+      canInteract: true,
+      pendingCardId: sourceCard.id,
+      pendingCardSource: "battlefield",
+      pendingCardOwner: "player",
+      eligibleSlotTargets: [
+        { owner: "player", rank: "back", slotId: "player-back-empty" },
+        {
+          owner: "player",
+          rank: "back",
+          slotId: "player-back-second-empty",
+        },
+      ],
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onBattlefieldDropRejected: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(view, interactions);
+    const screen = container.querySelector<HTMLElement>("[data-battle-mobile]");
+    const battlefieldCard = container.querySelector<HTMLElement>(
+      `[data-battle-card-id="${sourceCard.id}"]`,
+    );
+    const revealSource = battlefieldCard?.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    const playArea = battlefieldCard?.closest<HTMLElement>(
+      "[data-battle-play-area]",
+    );
+    const leftSlot = container.querySelector<HTMLElement>(
+      '[data-battle-slot-id="player-back-empty"]',
+    );
+    const rightSlot = container.querySelector<HTMLElement>(
+      '[data-battle-slot-id="player-back-second-empty"]',
+    );
+    vi.spyOn(playArea as HTMLElement, "getBoundingClientRect").mockReturnValue({
+      x: 0,
+      y: 0,
+      left: 0,
+      top: 0,
+      right: 800,
+      bottom: 400,
+      width: 800,
+      height: 400,
+      toJSON: () => ({}),
+    });
+    vi.spyOn(battlefieldCard as HTMLElement, "getBoundingClientRect")
+      .mockReturnValue({
+        x: 160,
+        y: 200,
+        left: 160,
+        top: 200,
+        right: 240,
+        bottom: 312,
+        width: 80,
+        height: 112,
+        toJSON: () => ({}),
+      });
+    vi.spyOn(leftSlot as HTMLElement, "getBoundingClientRect").mockReturnValue({
+      x: 40,
+      y: 200,
+      left: 40,
+      top: 200,
+      right: 120,
+      bottom: 312,
+      width: 80,
+      height: 112,
+      toJSON: () => ({}),
+    });
+    vi.spyOn(rightSlot as HTMLElement, "getBoundingClientRect").mockReturnValue({
+      x: 280,
+      y: 200,
+      left: 280,
+      top: 200,
+      right: 360,
+      bottom: 312,
+      width: 80,
+      height: 112,
+      toJSON: () => ({}),
+    });
+    Object.defineProperty(document, "elementFromPoint", {
+      configurable: true,
+      value: vi.fn(() => screen),
+    });
+
+    act(() => {
+      revealSource?.dispatchEvent(
+        new PointerEvent("pointerdown", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 200,
+          clientY: 256,
+          pointerId: 31,
+          pointerType: "mouse",
+        }),
+      );
+      battlefieldCard?.dispatchEvent(
+        new PointerEvent("pointermove", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 700,
+          clientY: 256,
+          pointerId: 31,
+          pointerType: "mouse",
+        }),
+      );
+      battlefieldCard?.dispatchEvent(
+        new PointerEvent("pointerup", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 700,
+          clientY: 256,
+          pointerId: 31,
+          pointerType: "mouse",
+        }),
+      );
+    });
+
+    expect(interactions.onSlotDrop).toHaveBeenCalledWith({
+      owner: "player",
+      rank: "back",
+      slotId: "player-back-second-empty",
+    });
+    expect(interactions.onBattlefieldDropRejected).not.toHaveBeenCalled();
+    expect(interactions.onCardDragEnd).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+  });
+
+  it("reports a completed battlefield drag when there is no legal cell", () => {
+    const interactions: MobileBattleInteractions = {
+      canInteract: true,
+      pendingCardId: "player-front-card",
+      pendingCardSource: "battlefield",
+      pendingCardOwner: "player",
+      eligibleSlotTargets: [],
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onBattlefieldDropRejected: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(makeView(), interactions);
+    const screen = container.querySelector<HTMLElement>("[data-battle-mobile]");
+    const battlefieldCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-front-card"]',
+    );
+    const revealSource = battlefieldCard?.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    const playArea = battlefieldCard?.closest<HTMLElement>(
+      "[data-battle-play-area]",
+    );
+    vi.spyOn(playArea as HTMLElement, "getBoundingClientRect").mockReturnValue({
+      x: 0,
+      y: 0,
+      left: 0,
+      top: 0,
+      right: 800,
+      bottom: 500,
+      width: 800,
+      height: 500,
+      toJSON: () => ({}),
+    });
+    vi.spyOn(battlefieldCard as HTMLElement, "getBoundingClientRect")
+      .mockReturnValue({
+        x: 160,
+        y: 200,
+        left: 160,
+        top: 200,
+        right: 240,
+        bottom: 312,
+        width: 80,
+        height: 112,
+        toJSON: () => ({}),
+      });
+    Object.defineProperty(document, "elementFromPoint", {
+      configurable: true,
+      value: vi.fn(() => screen),
+    });
+
+    act(() => {
+      revealSource?.dispatchEvent(
+        new PointerEvent("pointerdown", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 200,
+          clientY: 256,
+          pointerId: 32,
+          pointerType: "mouse",
+        }),
+      );
+      battlefieldCard?.dispatchEvent(
+        new PointerEvent("pointermove", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 720,
+          clientY: 410,
+          pointerId: 32,
+          pointerType: "mouse",
+        }),
+      );
+      battlefieldCard?.dispatchEvent(
+        new PointerEvent("pointerup", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 720,
+          clientY: 410,
+          pointerId: 32,
+          pointerType: "mouse",
+        }),
+      );
+    });
+
+    expect(interactions.onSlotDrop).not.toHaveBeenCalled();
+    expect(interactions.onBattlefieldDropRejected).toHaveBeenCalledWith({
+      reason: "no-eligible-slot",
+      clientX: 720,
+      clientY: 410,
+    });
+
+    act(() => root.unmount());
+  });
+
   it("keeps an in-play card inside its battlefield half while dragging", () => {
     const interactions = {
       canInteract: true,

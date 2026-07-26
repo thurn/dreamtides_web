@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
+import { TransientStatusToast } from "../components/status/TransientStatusToast";
 import { token } from "../primitives/tokens";
 import {
   BattleForeseeOverlay,
@@ -28,6 +29,8 @@ export interface TutorialBattleView {
 export interface TutorialBattleScreenProps {
   readonly view: TutorialBattleView;
   readonly interactions: MobileBattleInteractions;
+  readonly movementStatusMessage: string | null;
+  readonly onMovementStatusDismiss: () => void;
   readonly onForeseeConfirm: (resolution: {
     readonly viewedCardIds: readonly string[];
     readonly orderedCardIds: readonly string[];
@@ -41,6 +44,8 @@ export interface TutorialBattleScreenProps {
 export function TutorialBattleScreen({
   view,
   interactions,
+  movementStatusMessage,
+  onMovementStatusDismiss,
   onForeseeConfirm,
   onRestart,
   onReturnToMainMenu,
@@ -80,6 +85,13 @@ export function TutorialBattleScreen({
         <div data-tutorial-target-selection="" style={{ position: "fixed", left: "50%", top: `calc(var(--safe-area-inset-top) + ${token("--space-12")})`, transform: "translateX(-50%)", zIndex: 80 }}>
           <GlassPanel eyebrow="Play card" title="Choose target" subtitle={interactions.targetSelectionPrompt} footer={<GlassButton label="Cancel" variant="default" placement="onGlass" testId="tutorial-target-cancel" onPress={() => interactions.onTargetSelectionCancel?.()} />}><span /></GlassPanel>
         </div>
+      ) : null}
+      {movementStatusMessage !== null ? (
+        <TransientStatusToast
+          variant="warning"
+          copy={{ message: movementStatusMessage }}
+          onDismiss={onMovementStatusDismiss}
+        />
       ) : null}
       {view.manualControls && view.foresee !== null ? (
         <BattleForeseeOverlay view={view.foresee} onConfirm={onForeseeConfirm} />
