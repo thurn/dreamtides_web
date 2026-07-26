@@ -912,7 +912,10 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              dreamAvatars: {
+                ...TUTORIAL_DREAM_AVATARS,
+                player: { ...TUTORIAL_DREAM_AVATARS.player, settled: true },
+              },
               dialogue: null,
               playbackRunId: "event:3",
               endTurn: null,
@@ -935,6 +938,14 @@ describe("TutorialScreen", () => {
                     points: 0,
                   },
                 },
+                player: {
+                  status: {
+                    dreamAvatar: null,
+                    currentEnergy: 0,
+                    maxEnergy: 0,
+                    points: 0,
+                  },
+                },
                 inspector: { opponentName: "Awaiting Avatar" },
               } as MobileBattleView,
             }}
@@ -950,10 +961,15 @@ describe("TutorialScreen", () => {
     const enemyTarget = container.querySelector<HTMLElement>(
       '[data-testid="enemy-battle-status"] [data-battle-status-dream-avatar-placeholder]',
     );
+    const playerTarget = container.querySelector<HTMLElement>(
+      '[data-testid="player-battle-status"] [data-dream-avatar-source]',
+    );
     tutorialScreen!.getBoundingClientRect = () =>
       DOMRect.fromRect({ x: 0, y: 0, width: 390, height: 844 });
     enemyTarget!.getBoundingClientRect = () =>
       DOMRect.fromRect({ x: 173, y: 100, width: 44, height: 44 });
+    playerTarget!.getBoundingClientRect = () =>
+      DOMRect.fromRect({ x: 173, y: 700, width: 44, height: 44 });
 
     act(() => screenMocks.sceneAnimationComplete?.());
 

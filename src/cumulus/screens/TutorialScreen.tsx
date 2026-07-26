@@ -789,18 +789,27 @@ function TutorialDreamAvatarArrival({
     const dialoguePortrait = screen.querySelector<HTMLElement>(
       "[data-character-dialogue-portrait-frame]",
     );
+    const playerTarget = screen.querySelector<HTMLElement>(
+      '[data-testid="player-battle-status"] [data-battle-status-dream-avatar-placeholder], [data-testid="player-battle-status"] [data-dream-avatar-source]',
+    );
     if (target === null) return undefined;
 
     const updateTrajectory = (): void => {
       const screenBox = screen.getBoundingClientRect();
       const targetBox = target.getBoundingClientRect();
+      const playerTargetBox = playerTarget?.getBoundingClientRect();
       const dialoguePortraitBox = dialoguePortrait?.getBoundingClientRect();
       const targetY = targetBox.top - screenBox.top;
       const centeredY = (screenBox.height - targetBox.height) / 2;
-      // Both portraits approach their status slot from above. Mirroring the
-      // measured center-to-target distance keeps the two travel paths balanced
-      // even though the status displays sit at opposite screen edges.
-      const startY = targetY - Math.abs(targetY - centeredY);
+      // The player's center-to-status path defines one shared upward travel
+      // distance. Applying it to either destination keeps the arrivals balanced
+      // even when desktop chrome makes the status rows vertically asymmetric.
+      const playerTargetY =
+        playerTargetBox === undefined
+          ? targetY
+          : playerTargetBox.top - screenBox.top;
+      const travelDistance = Math.abs(playerTargetY - centeredY);
+      const startY = targetY - travelDistance;
       setTrajectory({
         startX: targetBox.left - screenBox.left,
         startY,
@@ -818,6 +827,7 @@ function TutorialDreamAvatarArrival({
     const observer = new ResizeObserver(updateTrajectory);
     observer.observe(screen);
     observer.observe(target);
+    if (playerTarget !== null) observer.observe(playerTarget);
     if (dialoguePortrait !== null) observer.observe(dialoguePortrait);
     window.addEventListener("resize", updateTrajectory);
     return () => {
