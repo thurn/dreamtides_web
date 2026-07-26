@@ -50,6 +50,36 @@ const TUTORIAL_STARTER_CARD_IDS = [
 const TUTORIAL_TWILIGHT_ID = "229ab3a1-3720-41a2-924c-8fe112188f8e";
 const TUTORIAL_AUTUMN_GLADE_ID = "02e8ea92-1218-413c-9f0b-4c865a3921d3";
 const TUTORIAL_VOLTSURGE_ID = "7171ff89-ebe4-42d0-8863-9b4b0531cad2";
+const TUTORIAL_PLAYER_DRAW_CARD_IDS = [
+  "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+  "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+  "647f5150-b2e0-424b-9480-27557642524e",
+  "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
+  "944e15d2-d680-4ebe-8d18-36826f4b1535",
+  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+] as const;
+const TUTORIAL_ENEMY_DRAW_CARD_IDS = [
+  "944e15d2-d680-4ebe-8d18-36826f4b1535",
+  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+  "647f5150-b2e0-424b-9480-27557642524e",
+  "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+  "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
+] as const;
+const TUTORIAL_ENEMY_ERODE_CARD_ID =
+  "4408b942-09a0-4f4e-a403-10c708c6e3c5";
+const TUTORIAL_DREAMWELL_CARD_IDS = [
+  TUTORIAL_AUTUMN_GLADE_ID,
+  TUTORIAL_VOLTSURGE_ID,
+  "03e4e701-4720-4278-8198-9b7e0514d4cf",
+  "5ec17498-9028-4a01-80a0-67c91b03d505",
+  "de98477c-e216-4618-bff1-0e24bd982fdb",
+  "662b7393-751c-4aa9-8150-5f20b4d176a4",
+  "51caf26d-83bf-45a9-bc80-010d353277db",
+  "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
+  "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
+  "a57f1276-3fb6-4527-b538-953fbace35cf",
+  "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
+] as const;
 const TENSHO_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
 const THREXAN_ID = "B99936CA-97F9-4930-AF5A-FA9EF92557EF";
 
@@ -264,6 +294,15 @@ function arrangeTutorialHandoff(content: QuestContent, board: BattleMutableState
     controller: "enemy",
     provenance: tutorialProvenance(),
   });
+  stackTutorialDeck(board, "player", TUTORIAL_PLAYER_DRAW_CARD_IDS);
+  // The first scheduled enemy Dreamwell effect erodes three cards before the
+  // turn draw, so reserve three copies ahead of the visible draw sequence.
+  stackTutorialDeck(board, "enemy", [
+    TUTORIAL_ENEMY_ERODE_CARD_ID,
+    TUTORIAL_ENEMY_ERODE_CARD_ID,
+    TUTORIAL_ENEMY_ERODE_CARD_ID,
+    ...TUTORIAL_ENEMY_DRAW_CARD_IDS,
+  ]);
 
   board.activeSide = "player";
   board.turnNumber = 4;
@@ -302,22 +341,34 @@ function takeCard(
   return deck.splice(index, 1)[0];
 }
 
+function stackTutorialDeck(
+  board: BattleMutableState,
+  side: BattleSide,
+  cardIds: readonly string[],
+): void {
+  const orderedCards = cardIds.map((cardId) => takeCard(board, side, cardId));
+  board.sides[side].deck = [...orderedCards, ...board.sides[side].deck];
+}
+
 function tutorialDreamwellDeck(
   content: QuestContent,
   key: string,
 ): readonly DreamwellCardDefinition[] {
   const byId = new Map(content.dreamwellCards.map((card) => [card.id, card]));
-  const autumn = byId.get(TUTORIAL_AUTUMN_GLADE_ID);
-  const voltsurge = byId.get(TUTORIAL_VOLTSURGE_ID);
-  if (autumn === undefined || voltsurge === undefined) {
-    throw new Error("Tutorial Dreamwell cards are missing from the runtime catalog.");
-  }
+  const fixed = TUTORIAL_DREAMWELL_CARD_IDS.map((cardId) => {
+    const card = byId.get(cardId);
+    if (card === undefined) {
+      throw new Error(`Tutorial Dreamwell card ${cardId} is missing from the runtime catalog.`);
+    }
+    return card;
+  });
+  const fixedIds = new Set<string>(TUTORIAL_DREAMWELL_CARD_IDS);
   const rest = [...content.dreamwellCards].filter(
-    (card) => card.id !== autumn.id && card.id !== voltsurge.id,
+    (card) => !fixedIds.has(card.id),
   );
   const shuffled = createBattleRng(deriveBattleSeed(`${key}:dreamwell`), "dreamwellDeck")
     .shuffle(rest);
-  return [autumn, voltsurge, ...shuffled].map((card) => ({
+  return [...fixed, ...shuffled].map((card) => ({
     id: card.id,
     name: card.name,
     renderedText: card.renderedText,

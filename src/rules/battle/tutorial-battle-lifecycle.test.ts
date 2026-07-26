@@ -40,6 +40,20 @@ const STARTERS = [
   [519, "944e15d2-d680-4ebe-8d18-36826f4b1535"],
 ] as const;
 
+const DREAMWELL_SEQUENCE = [
+  "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+  "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+  "03e4e701-4720-4278-8198-9b7e0514d4cf",
+  "5ec17498-9028-4a01-80a0-67c91b03d505",
+  "de98477c-e216-4618-bff1-0e24bd982fdb",
+  "662b7393-751c-4aa9-8150-5f20b4d176a4",
+  "51caf26d-83bf-45a9-bc80-010d353277db",
+  "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
+  "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
+  "a57f1276-3fb6-4527-b538-953fbace35cf",
+  "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
+] as const;
+
 function card(cardNumber: number, id: string): CardData {
   return {
     id: asCardId(id),
@@ -69,9 +83,16 @@ function content(): QuestContent {
       { id: "B99936CA-97F9-4930-AF5A-FA9EF92557EF", name: "Threxan", title: "Tutor", renderedText: "inactive", imageNumber: "0025", startingEssence: 0, signatureCards: [] },
     ],
     dreamwellCards: [
-      { id: "02e8ea92-1218-413c-9f0b-4c865a3921d3", name: "Autumn", renderedText: "", energyAdded: 1, order: 1, cardNumber: 5, imageNumber: 5 },
-      { id: "7171ff89-ebe4-42d0-8863-9b4b0531cad2", name: "Voltsurge", renderedText: "", energyAdded: 1, order: 3, cardNumber: 14, imageNumber: 14 },
-      { id: "other", name: "Other", renderedText: "", energyAdded: 1, order: 2, cardNumber: 2, imageNumber: 2 },
+      ...DREAMWELL_SEQUENCE.map((id, index) => ({
+        id,
+        name: `Dreamwell ${String(index)}`,
+        renderedText: "",
+        energyAdded: 1,
+        order: 1,
+        cardNumber: index + 1,
+        imageNumber: index + 1,
+      })),
+      { id: "other", name: "Other", renderedText: "", energyAdded: 1, order: 2, cardNumber: 99, imageNumber: 99 },
     ],
     dreamsignTemplates: [],
     dreamscapes: [],
@@ -139,9 +160,8 @@ describe("tutorial battle lifecycle", () => {
     expect(battle.init).toMatchObject({ scoreToWin: 10, turnLimit: Number.MAX_SAFE_INTEGER });
     expect(battle.board.sides.player).toMatchObject({ currentEnergy: 5, maxEnergy: 5, score: 0, dreamwellCardIndex: 1 });
     expect(battle.board.sides.enemy).toMatchObject({ currentEnergy: 0, maxEnergy: 5, score: 2, dreamwellCardIndex: 0 });
-    expect(battle.init.dreamwellDeck.slice(0, 2).map((card) => card.id)).toEqual([
-      "02e8ea92-1218-413c-9f0b-4c865a3921d3", "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
-    ]);
+    expect(battle.init.dreamwellDeck.slice(0, DREAMWELL_SEQUENCE.length).map((card) => card.id))
+      .toEqual(DREAMWELL_SEQUENCE);
     const playerF0 = battle.board.sides.player.frontRank.F0!;
     const enemyB1 = battle.board.sides.enemy.backRank.B1!;
     expect(battle.board.cardInstances[playerF0]?.definition.cardId).toBe("e83014d3-9d35-4e80-a1b3-9b25360ad2af");
@@ -155,6 +175,24 @@ describe("tutorial battle lifecycle", () => {
       "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", "229ab3a1-3720-41a2-924c-8fe112188f8e",
     ]);
     expect(ids(battle, "enemy", "void")).toEqual(["229ab3a1-3720-41a2-924c-8fe112188f8e"]);
+    expect(ids(battle, "player", "deck").slice(0, 6)).toEqual([
+      "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+      "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+      "647f5150-b2e0-424b-9480-27557642524e",
+      "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
+      "944e15d2-d680-4ebe-8d18-36826f4b1535",
+      "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+    ]);
+    expect(ids(battle, "enemy", "deck").slice(0, 8)).toEqual([
+      "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+      "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+      "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+      "944e15d2-d680-4ebe-8d18-36826f4b1535",
+      "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+      "647f5150-b2e0-424b-9480-27557642524e",
+      "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+      "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
+    ]);
     expect(ids(battle, "player", "deck")).toHaveLength(26);
     expect(ids(battle, "enemy", "deck")).toHaveLength(28);
     for (const [, cardId] of STARTERS) {
