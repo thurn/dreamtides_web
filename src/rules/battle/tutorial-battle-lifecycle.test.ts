@@ -756,14 +756,27 @@ describe("tutorial battle lifecycle", () => {
     };
     const reveal = reduceTutorial(later, "BATTLE_COMMAND", { command: commandFrom(later) }, automaticActor);
     expect(reveal.state.battle?.board).toMatchObject({ activeSide: "enemy", phase: "dreamwell", turnNumber: 5 });
-    const dawn = reduceTutorial(reveal.state, "BATTLE_COMMAND", { command: commandFrom(reveal.state) }, automaticActor);
+    const presentationPlan = planTutorialBattleController({
+      state: reveal.state,
+      clientId: "client-a",
+      connectedClientIds: ["client-a"],
+    });
+    expect(presentationPlan.intent).toMatchObject({ kind: "complete-presentation" });
+    if (presentationPlan.intent?.kind !== "complete-presentation") throw new Error("expected Dreamwell presentation completion");
+    const resumed = reduceTutorial(
+      reveal.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      { presentationId: presentationPlan.intent.presentationId },
+      automaticActor,
+    );
+    const dawn = reduceTutorial(resumed.state, "BATTLE_COMMAND", { command: commandFrom(resumed.state) }, automaticActor);
     expect(dawn.outcome).toBe("applied");
     expect(dawn.state.battle).toMatchObject({
       board: { activeSide: "enemy", phase: "day", turnNumber: 5 },
       triggerDawnFired: { player: 4, enemy: 5 },
     });
     expect(dawn.state.battle?.board.sides.enemy.score).toBe(3);
-    const duplicateDawn = reduceTutorial(dawn.state, "BATTLE_COMMAND", { command: commandFrom(reveal.state) }, automaticActor);
+    const duplicateDawn = reduceTutorial(dawn.state, "BATTLE_COMMAND", { command: commandFrom(resumed.state) }, automaticActor);
     expect(duplicateDawn.state.battle?.board.sides.enemy.score).toBe(3);
     expect(duplicateDawn.state.battle?.triggerDawnFired).toEqual({ player: 4, enemy: 5 });
   });
@@ -802,12 +815,26 @@ describe("tutorial battle lifecycle", () => {
     const revealed = reduceTutorial(handoff.state, "BATTLE_COMMAND", { command: revealPlan.intent.command }, automaticActor);
     expect(revealed.outcome).toBe("applied");
     expect(revealed.state.battle?.board.sides.enemy.dreamwellDrawnTurn).toBe(5);
+    const dreamwellPresentation = revealed.state.battle?.tutorialPresentation;
+    expect(dreamwellPresentation).toMatchObject({
+      kind: "dreamwell-reveal",
+      side: "enemy",
+      turnNumber: 5,
+    });
+    const dreamwellContinued = reduceTutorial(
+      revealed.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      { presentationId: dreamwellPresentation?.id },
+      automaticActor,
+    );
+    expect(dreamwellContinued.outcome).toBe("applied");
+    expect(dreamwellContinued.state.battle?.tutorialPresentation).toBeNull();
 
     const enemyTen = reduceTutorial({
-      ...revealed.state,
+      ...dreamwellContinued.state,
       battle: {
-        ...revealed.state.battle!,
-        board: { ...revealed.state.battle!.board, turnNumber: Number.MAX_SAFE_INTEGER - 1 },
+        ...dreamwellContinued.state.battle!,
+        board: { ...dreamwellContinued.state.battle!.board, turnNumber: Number.MAX_SAFE_INTEGER - 1 },
       },
     }, "BATTLE_COMMAND", {
       command: {

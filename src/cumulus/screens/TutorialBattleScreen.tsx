@@ -3,6 +3,7 @@ import { GlassButton } from "../components/controls/GlassButton";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
+import { DreamwellCard, type DreamwellCardModel } from "../components/battle/DreamwellCard";
 import { TransientStatusToast } from "../components/status/TransientStatusToast";
 import { token } from "../primitives/tokens";
 import {
@@ -23,6 +24,8 @@ export interface TutorialBattleView {
   readonly driverClientId: string | null;
   readonly manualControls: boolean;
   readonly foresee: BattleForeseeView | null;
+  /** The Dreamwell source stays paired with an effect modal when it fits. */
+  readonly dreamwellPromptSource: DreamwellCardModel | null;
   readonly presentation: {
     readonly kind: "opponent-play";
     /** UUID of the catalog card presented before automation continues. */
@@ -30,6 +33,12 @@ export interface TutorialBattleView {
     readonly battleCardId: string;
     readonly cardKind: "character" | "event";
     readonly model: GameCardModel;
+  } | {
+    readonly kind: "dreamwell-reveal";
+    /** UUID of the Dreamwell source card shown before its effect prompt. */
+    readonly cardId: string;
+    readonly side: "player" | "enemy";
+    readonly model: DreamwellCardModel;
   } | null;
   readonly victorySummary: string | null;
   readonly terminalRestartAvailable: boolean;
@@ -76,18 +85,33 @@ export function TutorialBattleScreen({
       />
       {view.presentation !== null ? (
         <GlassDialog
-          title={`Opponent Played a ${view.presentation.cardKind === "character" ? "Character" : "Event"}`}
-          subtitle="Watch the card before the battle continues."
+          title={view.presentation.kind === "opponent-play"
+            ? `Opponent Played a ${view.presentation.cardKind === "character" ? "Character" : "Event"}`
+            : "Dreamwell Revealed"}
+          subtitle={view.presentation.kind === "opponent-play"
+            ? "Watch the card before the battle continues."
+            : "See the Dreamwell card before resolving its effect."}
           presentation="popup"
           companion={(
-            <div
-              data-tutorial-opponent-play-reveal=""
-              data-tutorial-presentation-card-id={view.presentation.cardId}
-              data-tutorial-presentation-battle-card-id={view.presentation.battleCardId}
-              style={{ width: "min(72vw, 300px)" }}
-            >
-              <GameCard model={view.presentation.model} presentation="full" />
-            </div>
+            view.presentation.kind === "opponent-play" ? (
+              <div
+                data-tutorial-opponent-play-reveal=""
+                data-tutorial-presentation-card-id={view.presentation.cardId}
+                data-tutorial-presentation-battle-card-id={view.presentation.battleCardId}
+                style={{ width: "min(72vw, 300px)" }}
+              >
+                <GameCard model={view.presentation.model} presentation="full" />
+              </div>
+            ) : (
+              <div
+                data-tutorial-dreamwell-reveal=""
+                data-tutorial-presentation-card-id={view.presentation.cardId}
+                data-tutorial-presentation-side={view.presentation.side}
+                style={{ width: "min(80vw, 420px)" }}
+              >
+                <DreamwellCard model={view.presentation.model} />
+              </div>
+            )
           )}
         >
           <span data-tutorial-presentation-dwell="">The battle continues in a moment.</span>
@@ -122,7 +146,11 @@ export function TutorialBattleScreen({
         />
       ) : null}
       {view.manualControls && view.foresee !== null ? (
-        <BattleForeseeOverlay view={view.foresee} onConfirm={onForeseeConfirm} />
+        <BattleForeseeOverlay
+          view={view.foresee}
+          source={view.dreamwellPromptSource}
+          onConfirm={onForeseeConfirm}
+        />
       ) : null}
       {view.victorySummary !== null ? (
         <GlassDialog title="Tutorial Complete" subtitle={view.victorySummary}>

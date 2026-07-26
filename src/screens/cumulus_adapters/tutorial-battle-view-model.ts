@@ -1,4 +1,5 @@
 import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
+import { dreamwellCardModel } from "../../battle/ui/dreamwell-card-model";
 import type { TutorialBattleControllerPlan } from "../../battle/tutorial-battle-controller";
 import type { BattleFoldState } from "../../rules/battle/fold";
 import type { TutorialBattleView } from "../../cumulus/screens/TutorialBattleScreen";
@@ -30,13 +31,35 @@ export function buildTutorialBattleView(
   );
   const prompt = battle.pendingPrompt;
   const presentation = battle.tutorialPresentation ?? null;
+  const dreamwellPromptSource = prompt === null
+    ? null
+    : mobile.dreamwell?.model ?? null;
   const confirmedHumanPrompt = controller.status === "driver" &&
     controller.isCurrentClientDriver &&
     controller.requiresHumanDecision &&
     prompt !== null &&
     confirmedPromptId === prompt.promptId;
   return {
-    battle: { ...mobile, result: null },
+    battle: {
+      ...mobile,
+      result: null,
+      ...(dreamwellPromptSource === null
+        ? {}
+        : {
+            cardPicker: mobile.cardPicker === null
+              ? null
+              : {
+                  ...mobile.cardPicker,
+                  label: `${mobile.cardPicker.label} — ${dreamwellPromptSource.displaySnapshot.name}`,
+                },
+            choicePrompt: mobile.choicePrompt === null
+              ? null
+              : {
+                  ...mobile.choicePrompt,
+                  label: `${mobile.choicePrompt.label} — ${dreamwellPromptSource.displaySnapshot.name}`,
+                },
+          }),
+    },
     ownership: controller.status === "not-tutorial" ? "observer" : controller.status,
     driverClientId: controller.driverClientId,
     manualControls: controller.status === "driver" && controller.isCurrentClientDriver && controller.requiresHumanDecision,
@@ -52,6 +75,7 @@ export function buildTutorialBattleView(
             }),
           }
         : null,
+    dreamwellPromptSource,
     presentation:
       presentation?.kind === "opponent-play"
         ? (() => {
@@ -66,7 +90,21 @@ export function buildTutorialBattleView(
                   model: battleGameCardModel(card),
                 };
           })()
-        : null,
+        : presentation?.kind === "dreamwell-reveal"
+          ? (() => {
+              const definition = battle.init.dreamwellDeck.find(
+                (candidate) => candidate.id === presentation.cardId,
+              );
+              return definition === undefined
+                ? null
+                : {
+                    kind: presentation.kind,
+                    cardId: presentation.cardId,
+                    side: presentation.side,
+                    model: dreamwellCardModel(definition),
+                  };
+            })()
+          : null,
     victorySummary:
       battle.board.result === "victory" && controller.status === "terminal" && controller.isCurrentClientDriver && controller.isDriverPresent
         ? `You reached ${String(battle.board.sides.player.score)} ⍟.`

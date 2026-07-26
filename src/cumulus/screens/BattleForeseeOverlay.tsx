@@ -8,6 +8,7 @@ import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { GlassButton } from "../components/controls/GlassButton";
 import { IconButton } from "../components/controls/IconButton";
 import { GlassDialog } from "../components/overlay/GlassDialog";
+import { DreamwellCard, type DreamwellCardModel } from "../components/battle/DreamwellCard";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
@@ -50,6 +51,8 @@ export interface BattleForeseeResolution {
 export interface BattleForeseeOverlayProps {
   /** The exact cards inspected by the effect. */
   view: BattleForeseeView;
+  /** The Dreamwell source card remains visible beside this follow-up choice. */
+  source?: DreamwellCardModel | null;
   /** Commits one complete order/void resolution. */
   onConfirm: (resolution: BattleForeseeResolution) => void;
 }
@@ -60,6 +63,7 @@ export interface BattleForeseeOverlayProps {
  */
 export function BattleForeseeOverlay({
   view,
+  source = null,
   onConfirm,
 }: BattleForeseeOverlayProps): ReactElement {
   const isDesktop = useIsDesktop();
@@ -194,6 +198,15 @@ export function BattleForeseeOverlay({
     <GlassDialog
       title={`Foresee ${String(count)}`}
       desktopCenterTarget="battlefield"
+      presentation={source === null ? "responsive" : "popup"}
+      companion={source === null ? undefined : (
+        <div
+          data-battle-foresee-dreamwell-source={source.cardId}
+          style={{ width: "min(72vw, 360px)" }}
+        >
+          <DreamwellCard model={source} />
+        </div>
+      )}
     >
       <div
         data-battle-cumulus-foresee=""

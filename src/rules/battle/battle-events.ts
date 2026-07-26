@@ -689,6 +689,35 @@ function applyBattleCommandStep(
     }
   }
 
+  const tutorialMode = battleModeOf(battle);
+  if (tutorialMode.kind === "tutorial") {
+    const revealedSide = BATTLE_SIDES.find((side) =>
+      boardBefore.sides[side].dreamwellDrawnTurn !== boardAfter.turnNumber &&
+      boardAfter.sides[side].dreamwellDrawnTurn === boardAfter.turnNumber,
+    );
+    if (revealedSide !== undefined) {
+      const index = boardAfter.sides[revealedSide].dreamwellCardIndex;
+      const card = index === null ? undefined : battle.init.dreamwellDeck[index];
+      if (card !== undefined) {
+        return {
+          ...battle,
+          board,
+          effectQueue: queue,
+          pendingPrompt: null,
+          dawnFired,
+          triggerDawnFired,
+          tutorialPresentation: {
+            id: `dreamwell-reveal:${revealedSide}:${String(boardAfter.turnNumber)}:${card.id}`,
+            kind: "dreamwell-reveal",
+            cardId: card.id,
+            side: revealedSide,
+            turnNumber: boardAfter.turnNumber,
+          },
+        };
+      }
+    }
+  }
+
   // Step 4 — advance the queue, continuing the SAME draw counter.
   const advanced = advanceEffectQueueWithStream(
     { ...battle, board, effectQueue: queue, pendingPrompt: null, dawnFired, triggerDawnFired },

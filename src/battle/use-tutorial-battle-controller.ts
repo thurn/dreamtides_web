@@ -42,6 +42,7 @@ export function useTutorialBattleController(): TutorialBattleControllerPlan {
         logEvent("tutorial_battle_presentation_dwell_started", {
           battleId: battle.board.battleId,
           presentationId: intent.presentationId,
+          presentation: battle.tutorialPresentation,
           dwellMs: TUTORIAL_BATTLE_PRESENTATION_DWELL_MS,
           reason: intent.reason,
         });
@@ -49,6 +50,7 @@ export function useTutorialBattleController(): TutorialBattleControllerPlan {
           logEvent("tutorial_battle_presentation_dwell_elapsed", {
             battleId: battle.board.battleId,
             presentationId: intent.presentationId,
+            presentation: battle.tutorialPresentation,
             dwellMs: TUTORIAL_BATTLE_PRESENTATION_DWELL_MS,
             reason: intent.reason,
           });
@@ -115,6 +117,9 @@ function logTutorialIntent(
       : {}),
     ...(intent.kind === "battle-ai-defend"
       ? { defenseDecision: intent.decision }
+      : {}),
+    ...(intent.kind === "complete-presentation"
+      ? { presentationId: intent.presentationId }
       : {}),
   });
 }

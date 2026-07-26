@@ -5,6 +5,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
+import type { DreamwellCardModel } from "../components/battle/DreamwellCard";
 import {
   BattleForeseeOverlay,
   type BattleForeseeView,
@@ -45,6 +46,17 @@ function makeView(initialCount = 1): BattleForeseeView {
     }),
   };
 }
+
+const DREAMWELL_SOURCE: DreamwellCardModel = {
+  cardId: asCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
+  displaySnapshot: {
+    id: asCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
+    name: "Source Dreamwell" as never,
+    renderedText: "Foresee 1.",
+    energyAdded: 1,
+    imageNumber: 1,
+  },
+};
 
 function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
   const container = document.createElement("div");
@@ -155,6 +167,23 @@ describe("BattleForeseeOverlay", () => {
       container.querySelectorAll<HTMLElement>("[data-foresee-indicator]"),
       (indicator) => indicator.style.width,
     )).toEqual(["180px", "180px"]);
+
+    act(() => root.unmount());
+  });
+
+  it("keeps the UUID-backed Dreamwell source paired with the Foresee dialog", () => {
+    const { root } = mount(
+      <BattleForeseeOverlay
+        view={makeView()}
+        source={DREAMWELL_SOURCE}
+        onConfirm={() => {}}
+      />,
+    );
+
+    expect(
+      document.body.querySelector('[data-battle-foresee-dreamwell-source]')
+        ?.getAttribute("data-battle-foresee-dreamwell-source"),
+    ).toBe("02e8ea92-1218-413c-9f0b-4c865a3921d3");
 
     act(() => root.unmount());
   });

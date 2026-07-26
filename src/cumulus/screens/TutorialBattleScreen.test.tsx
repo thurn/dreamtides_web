@@ -31,6 +31,7 @@ function view(
     driverClientId: "driver-client",
     manualControls: false,
     foresee: null,
+    dreamwellPromptSource: null,
     presentation: null,
     victorySummary: null,
     terminalRestartAvailable: false,

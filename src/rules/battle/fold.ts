@@ -164,7 +164,9 @@ export interface BattleFoldState {
 }
 
 /** One tangible tutorial reveal whose identity survives replay and remounts. */
-export interface TutorialBattlePresentation {
+export type TutorialBattlePresentation = OpponentPlayPresentation | DreamwellRevealPresentation;
+
+export interface OpponentPlayPresentation {
   readonly id: string;
   readonly kind: "opponent-play";
   /** UUID of the catalog card shown at the presentation boundary. */
@@ -172,6 +174,16 @@ export interface TutorialBattlePresentation {
   /** Physical battle-card identity for the card that was played. */
   readonly battleCardId: string;
   readonly cardKind: "character" | "event";
+}
+
+/** A Dreamwell source card that must be seen before its effect can prompt. */
+export interface DreamwellRevealPresentation {
+  readonly id: string;
+  readonly kind: "dreamwell-reveal";
+  /** UUID of the revealed Dreamwell card. */
+  readonly cardId: string;
+  readonly side: BattleSide;
+  readonly turnNumber: number;
 }
 
 /** A deferred handoff requested before its outgoing Challenge has completed. */
