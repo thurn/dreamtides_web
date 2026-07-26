@@ -12,22 +12,20 @@ import type { BattleDebugEdit } from "./debug/commands";
 
 export type BattleSide = "player" | "enemy";
 
-// The play area is a dynamic, staggered grid that starts at 2 front / 3 back and
-// expands (one front + one back slot whenever a rank fills) and contracts back
-// toward that minimum (rules §The Play Area). The back rank always holds one more
-// slot than the front rank. Slots are addressed by id (`B<n>` / `F<n>`) and grow
-// without bound: a rank is a sparse map whose materialized slots expand on demand
-// as characters enter play. How many of these slots are *active* — shown and
-// droppable — at any moment is derived from occupancy by `selectPlayAreaSize`,
-// not stored as state.
+// The play area is the fixed staggered grid in the battle rules: 9 front-rank
+// positions and 10 back-rank positions. Slots are addressed by stable ids
+// (`B<n>` / `F<n>`) so a card's rendered lane remains stable for the battle.
 export type BackRankSlotId = `B${number}`;
 export type FrontRankSlotId = `F${number}`;
 export type BattlefieldSlotId = BackRankSlotId | FrontRankSlotId;
 
-/** Minimum front-rank width; the back rank always holds one more (rules §The
- *  Play Area). The play area never contracts below 2 front / 3 back. */
-export const MIN_FRONT_RANK_SLOTS = 2;
-export const MIN_BACK_RANK_SLOTS = MIN_FRONT_RANK_SLOTS + 1;
+/** Fixed battlefield capacity per side (rules §The Play Area). */
+export const FRONT_RANK_SLOTS = 9;
+export const BACK_RANK_SLOTS = 10;
+
+/** Compatibility aliases for consumers that require the smallest legal board. */
+export const MIN_FRONT_RANK_SLOTS = FRONT_RANK_SLOTS;
+export const MIN_BACK_RANK_SLOTS = BACK_RANK_SLOTS;
 
 /** The id of the back-rank reserve slot at `index` (0-based, left to right). */
 export function backRankSlotId(index: number): BackRankSlotId {

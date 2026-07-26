@@ -13,7 +13,8 @@ import type {
   BackRankSlotId,
 } from "../types";
 import {
-  MIN_FRONT_RANK_SLOTS,
+  BACK_RANK_SLOTS,
+  FRONT_RANK_SLOTS,
   backRankSlotId,
   isBackRankSlotId,
   isFrontRankSlotId,
@@ -314,69 +315,24 @@ export function selectIsHandCardHiddenTo(
 }
 
 /**
- * Smallest front-rank width that fits `side`'s current occupants while leaving at
- * least one open slot in each rank (rules §The Play Area, expansion/contraction).
- * Back-rank width is always `frontSize + 1`, so a back-rank occupant at index `i`
- * (or a full back rank) forces `frontSize ≥ i` (resp. `≥ backCount`). The width
- * grows without bound as characters enter play.
- */
-function selectSideFrontRankRequirement(state: BattleMutableState, side: BattleSide): number {
-  const { frontRank, backRank } = state.sides[side];
-  let frontCount = 0;
-  let maxFrontIndex = -1;
-  for (const slotId of rankSlotIds(frontRank)) {
-    if (frontRank[slotId] !== null) {
-      frontCount += 1;
-      maxFrontIndex = Math.max(maxFrontIndex, slotIndex(slotId));
-    }
-  }
-  let backCount = 0;
-  let maxBackIndex = -1;
-  for (const slotId of rankSlotIds(backRank)) {
-    if (backRank[slotId] !== null) {
-      backCount += 1;
-      maxBackIndex = Math.max(maxBackIndex, slotIndex(slotId));
-    }
-  }
-  return Math.max(
-    MIN_FRONT_RANK_SLOTS,
-    maxFrontIndex + 1,
-    maxBackIndex,
-    frontCount + 1,
-    backCount,
-  );
-}
-
-/**
- * The active play-area dimensions required by one side's formation. Presentation
- * adapters use this to center asymmetric formations while the rules-level
- * selector below keeps paired challenge lanes available across both sides.
+ * The rules-level dimensions for either side. They do not depend on occupancy,
+ * so presentation adapters retain stable slot positions across battle handoff.
  */
 export function selectSidePlayAreaSize(
-  state: BattleMutableState,
-  side: BattleSide,
+  _state: BattleMutableState,
+  _side: BattleSide,
 ): { frontSize: number; backSize: number } {
-  const frontSize = selectSideFrontRankRequirement(state, side);
-  return { frontSize, backSize: frontSize + 1 };
+  return { frontSize: FRONT_RANK_SLOTS, backSize: BACK_RANK_SLOTS };
 }
 
 /**
- * The active play-area dimensions: how many front/back slots are currently shown
- * and usable. Derived purely from occupancy (no stored state), so expansion and
- * contraction follow automatically as characters enter and leave play, with no
- * upper bound. The front width is the max across both sides so that
- * vertically-paired challenge lanes (challenge.ts resolves the same `slotId`
- * across sides) are never hidden on one side. `backSize` is always `frontSize + 1`.
+ * The fixed play-area dimensions exposed to gameplay and presentation.
  */
 export function selectPlayAreaSize(state: BattleMutableState): {
   frontSize: number;
   backSize: number;
 } {
-  const frontSize = Math.max(
-    selectSidePlayAreaSize(state, "player").frontSize,
-    selectSidePlayAreaSize(state, "enemy").frontSize,
-  );
-  return { frontSize, backSize: frontSize + 1 };
+  return selectSidePlayAreaSize(state, "player");
 }
 
 export function selectDefaultCharacterPlaySlot(
@@ -391,13 +347,7 @@ export function selectDefaultCharacterPlaySlot(
     }
   }
 
-  // Every materialized reserve slot is full: grow the back rank rather than
-  // blocking the play. Spec E-16: player card play must never be blocked.
-  return {
-    side,
-    zone: "backRank",
-    slotId: backRankSlotId(rankSlotIds(backRank).length),
-  };
+  return null;
 }
 
 export function selectBattlefieldSlotOccupant(
@@ -419,10 +369,10 @@ export function isBattleFieldSlotAddressValid(
   target: BattleFieldSlotAddress,
 ): target is BattleFieldSlotAddress {
   if (target.zone === "backRank") {
-    return isBackRankSlotId(target.slotId);
+    return isBackRankSlotId(target.slotId) && slotIndex(target.slotId) < BACK_RANK_SLOTS;
   }
 
-  return isFrontRankSlotId(target.slotId);
+  return isFrontRankSlotId(target.slotId) && slotIndex(target.slotId) < FRONT_RANK_SLOTS;
 }
 
 function selectOccupiedBattlefieldSlot(
