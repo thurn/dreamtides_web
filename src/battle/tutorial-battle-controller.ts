@@ -140,7 +140,10 @@ export function planTutorialBattleController(
     if (board.phase === "day") {
       return { status: "driver", driverClientId: mode.driverClientId, isCurrentClientDriver: true, isDriverPresent: true, requiresHumanDecision: true, intent: null };
     }
-    if (board.phase === "dusk" && battle.aiDefenseTurn?.activeSide !== "player") {
+    const aiDefenseAlreadyProcessed =
+      battle.aiDefenseTurn?.activeSide === board.activeSide &&
+      battle.aiDefenseTurn.turnNumber === board.turnNumber;
+    if (board.phase === "dusk" && !aiDefenseAlreadyProcessed) {
       const defense = planDefenseWithDecision(
         forwardModelFromState(board, "enemy"),
         { scoreToWin: battle.init.scoreToWin },

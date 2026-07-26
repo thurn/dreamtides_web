@@ -167,6 +167,107 @@ describe("tutorial battle controller", () => {
     });
   });
 
+  it("chump-blocks lethal on a later player Dusk despite an earlier defense marker", () => {
+    const markedDirewolfBattleCardId = "e83014d3-9d35-4e80-a1b3-9b25360ad2af";
+    const runeboundChampionBattleCardId =
+      "a28ad36d-fa74-4190-a463-7efd3a6233d0";
+    const player = side();
+    player.score = 8;
+    player.frontRank.F0 = markedDirewolfBattleCardId;
+    const enemy = side();
+    enemy.score = 9;
+    enemy.backRank.B0 = runeboundChampionBattleCardId;
+    const markedDirewolf = card(markedDirewolfBattleCardId, "player");
+    markedDirewolf.definition.cardId = markedDirewolfBattleCardId;
+    markedDirewolf.definition.printedSpark = 4;
+    const runeboundChampion = card(runeboundChampionBattleCardId, "enemy");
+    runeboundChampion.definition.cardId = runeboundChampionBattleCardId;
+    runeboundChampion.definition.printedSpark = 3;
+
+    const result = plan(
+      stateFor(
+        {
+          phase: "dusk",
+          turnNumber: 5,
+          sides: { player, enemy },
+          cardInstances: {
+            [markedDirewolfBattleCardId]: markedDirewolf,
+            [runeboundChampionBattleCardId]: runeboundChampion,
+          },
+        },
+        { aiDefenseTurn: { activeSide: "player", turnNumber: 4 } },
+      ),
+    );
+
+    expect(result.intent).toMatchObject({
+      kind: "battle-ai-defend",
+      decision: {
+        opponentScore: 8,
+        scoreToWin: 10,
+        incomingScoreBeforeBlocks: 4,
+        incomingScoreAfterBlocks: 0,
+        lethalBeforeBlocks: true,
+        lethalPreventable: true,
+        lanes: [
+          {
+            challengerBattleCardId: markedDirewolfBattleCardId,
+            blockerBattleCardId: runeboundChampionBattleCardId,
+            lane: "F0",
+            outcome: "blocked",
+            reason: "prevent-lethal",
+          },
+        ],
+      },
+    });
+  });
+
+  it("takes a favorable block on a later player Dusk despite an earlier defense marker", () => {
+    const challengerBattleCardId = "229ab3a1-3720-41a2-924c-8fe112188f8e";
+    const blockerBattleCardId = "a28ad36d-fa74-4190-a463-7efd3a6233d0";
+    const player = side();
+    player.frontRank.F0 = challengerBattleCardId;
+    const enemy = side();
+    enemy.score = 9;
+    enemy.backRank.B0 = blockerBattleCardId;
+    const challenger = card(challengerBattleCardId, "player");
+    challenger.definition.cardId = challengerBattleCardId;
+    challenger.definition.printedSpark = 2;
+    const blocker = card(blockerBattleCardId, "enemy");
+    blocker.definition.cardId = blockerBattleCardId;
+    blocker.definition.printedSpark = 3;
+
+    const result = plan(
+      stateFor(
+        {
+          phase: "dusk",
+          turnNumber: 5,
+          sides: { player, enemy },
+          cardInstances: {
+            [challengerBattleCardId]: challenger,
+            [blockerBattleCardId]: blocker,
+          },
+        },
+        { aiDefenseTurn: { activeSide: "player", turnNumber: 4 } },
+      ),
+    );
+
+    expect(result.intent).toMatchObject({
+      kind: "battle-ai-defend",
+      decision: {
+        lethalBeforeBlocks: false,
+        lanes: [
+          {
+            challengerBattleCardId,
+            blockerBattleCardId,
+            lane: "F0",
+            outcome: "blocked",
+            reason: "favorable",
+          },
+        ],
+      },
+    });
+  });
+
   it("pauses for player blocking on an enemy attack and advances empty enemy Dusk", () => {
     const attackingEnemy = side();
     attackingEnemy.frontRank.F0 = "enemy-card-uuid";
