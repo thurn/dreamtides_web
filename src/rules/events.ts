@@ -143,6 +143,10 @@ export interface EventPayloads {
   BEGIN_BATTLE: { siteId: string; seedOverride?: number };
   SET_BATTLE_AUTOMATION: { enabled: boolean };
   BATTLE_COMMAND: { command: unknown };
+  BATTLE_REPOSITION_CHARACTER: {
+    battleCardId: string;
+    destination: unknown;
+  };
   BATTLE_PLAY_CARD: {
     battleCardId: string;
     targetBattleCardIds: string[];
@@ -296,6 +300,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   BEGIN_BATTLE: true,
   SET_BATTLE_AUTOMATION: true,
   BATTLE_COMMAND: true,
+  BATTLE_REPOSITION_CHARACTER: true,
   BATTLE_PLAY_CARD: true,
   BATTLE_GESTURE: true,
   BATTLE_AI_DEFEND: true,

@@ -136,6 +136,11 @@ function captureAllDrafts(): EventDraft[] {
   void actions.beginBattle("site-1");
   void actions.setBattleAutomation(true);
   void actions.battleCommand({});
+  void actions.battleRepositionCharacter("battle-card-1", {
+    side: "player",
+    zone: "backRank",
+    slotId: "B0",
+  });
   void actions.battlePlayCard("battle-card-1", []);
   void actions.battleGesture([{}, {}]);
   void actions.battleAiDefend("enemy", "ai:test");

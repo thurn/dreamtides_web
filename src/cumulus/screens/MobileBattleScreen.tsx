@@ -313,6 +313,7 @@ export interface MobileBattleSlotTarget {
 
 export interface MobileBattleDropCandidate {
   readonly target: MobileBattleSlotTarget;
+  readonly eligible: boolean;
   readonly rect: {
     readonly left: number;
     readonly top: number;
@@ -325,10 +326,16 @@ export interface MobileBattleDropCandidate {
   readonly deltaY: number;
   readonly distanceSquared: number;
   readonly containsRelease: boolean;
+  readonly containsPlacement: boolean;
+  readonly edgeDistanceSquared: number;
 }
 
 export interface MobileBattleDropResolution {
   readonly releasePoint: {
+    readonly clientX: number;
+    readonly clientY: number;
+  };
+  readonly placementPoint: {
     readonly clientX: number;
     readonly clientY: number;
   };
@@ -341,7 +348,9 @@ export interface MobileBattleDropRejection {
   readonly reason:
     | "battlefield-unavailable"
     | "invalid-release-point"
-    | "no-eligible-slot";
+    | "no-eligible-slot"
+    | "ineligible-slot"
+    | "source-slot";
   readonly clientX: number;
   readonly clientY: number;
 }
@@ -367,11 +376,10 @@ export interface MobileBattleInteractions {
   readonly eligibleSlotRanks?: readonly MobileBattleRank[];
   /** The current cell, excluded from repositioning candidates. */
   readonly sourceSlotTarget?: MobileBattleSlotTarget | null;
-  /**
-   * When supplied for a battlefield drag, every pointer release resolves to
-   * the nearest listed cell instead of requiring a direct slot hit.
-   */
+  /** Exact cells accepted by a battlefield drag. */
   readonly eligibleSlotTargets?: readonly MobileBattleSlotTarget[];
+  /** Canonical rules predicate for whether the exact rendered cell is legal. */
+  readonly isSlotDropEligible?: (target: MobileBattleSlotTarget) => boolean;
   /** A tutorial play awaiting a legal battlefield target. */
   readonly targetSelectionCardId?: string | null;
   readonly targetSelectionPrompt?: string | null;
@@ -1330,7 +1338,12 @@ function FaceUpCard({
     ) => void;
     readonly onDragStart?: () => void;
     readonly onDragEnd?: () => void;
-    readonly onPointerDrop?: (clientX: number, clientY: number) => void;
+    readonly onPointerDrop?: (
+      clientX: number,
+      clientY: number,
+      placementClientX: number,
+      placementClientY: number,
+    ) => void;
   };
 }) {
   const dragSuppressedRef = useRef(false);
@@ -1345,6 +1358,8 @@ function FaceUpCard({
     inverseParentTransform: LinearTransform;
     originBounds: DOMRect;
     constraintBounds: DOMRect | null;
+    viewportX: number;
+    viewportY: number;
   } | null>(null);
   const draggable = interaction?.draggable === true;
   const activatable = interaction?.onActivate !== undefined;
@@ -1370,7 +1385,16 @@ function FaceUpCard({
         const pointerEvents = event.currentTarget.style.pointerEvents;
         event.currentTarget.style.pointerEvents = "none";
         try {
-          interaction?.onPointerDrop?.(event.clientX, event.clientY);
+          interaction?.onPointerDrop?.(
+            event.clientX,
+            event.clientY,
+            pointerDrag.originBounds.left +
+              pointerDrag.originBounds.width / 2 +
+              pointerDrag.viewportX,
+            pointerDrag.originBounds.top +
+              pointerDrag.originBounds.height / 2 +
+              pointerDrag.viewportY,
+          );
         } finally {
           event.currentTarget.style.pointerEvents = pointerEvents;
         }
@@ -1416,6 +1440,8 @@ function FaceUpCard({
             event.currentTarget
               .closest<HTMLElement>("[data-battle-play-area]")
               ?.getBoundingClientRect() ?? null,
+          viewportX: 0,
+          viewportY: 0,
         };
         try {
           event.currentTarget.setPointerCapture(event.pointerId);
@@ -1461,6 +1487,8 @@ function FaceUpCard({
               pointerDrag.constraintBounds.bottom - pointerDrag.originBounds.bottom,
             );
         const inverse = pointerDrag.inverseParentTransform;
+        pointerDrag.viewportX = viewportX;
+        pointerDrag.viewportY = viewportY;
         const x = inverse.a * viewportX + inverse.c * viewportY;
         const y = inverse.b * viewportX + inverse.d * viewportY;
         // Pointer movement must reach the compositor before React rerenders the
@@ -1810,6 +1838,9 @@ function slotTargetIsEligible(
   ) {
     return false;
   }
+  if (interactions.isSlotDropEligible !== undefined) {
+    return interactions.isSlotDropEligible(target);
+  }
   if (interactions.eligibleSlotRanks !== undefined) {
     return interactions.eligibleSlotRanks.includes(target.rank);
   }
@@ -2083,11 +2114,18 @@ function Rank({
                               onBattlefieldDragChange(false);
                               interactions.onCardDragEnd();
                             },
-                            onPointerDrop: (clientX, clientY) =>
+                            onPointerDrop: (
+                              clientX,
+                              clientY,
+                              placementClientX,
+                              placementClientY,
+                            ) =>
                               dropMobileCardAtPoint(
                                 interactions,
                                 clientX,
                                 clientY,
+                                placementClientX,
+                                placementClientY,
                               ),
                           }
                   }
@@ -2328,11 +2366,18 @@ function NearHand({
                       onCardDragChange(false);
                       interactions.onCardDragEnd();
                     },
-                    onPointerDrop: (clientX, clientY) =>
+                    onPointerDrop: (
+                      clientX,
+                      clientY,
+                      placementClientX,
+                      placementClientY,
+                    ) =>
                       dropMobileCardAtPoint(
                         interactions,
                         clientX,
                         clientY,
+                        placementClientX,
+                        placementClientY,
                       ),
                   }
             }
@@ -2421,6 +2466,8 @@ function dropMobileCardAtPoint(
   interactions: MobileBattleInteractions,
   clientX: number,
   clientY: number,
+  placementClientX: number,
+  placementClientY: number,
 ): void {
   const hitTarget = document.elementFromPoint(clientX, clientY);
   if (interactions.pendingCardSource === "near-hand") {
@@ -2441,9 +2488,15 @@ function dropMobileCardAtPoint(
   }
   if (
     interactions.eligibleSlotRanks !== undefined ||
-    interactions.eligibleSlotTargets !== undefined
+    interactions.eligibleSlotTargets !== undefined ||
+    interactions.isSlotDropEligible !== undefined
   ) {
-    if (!Number.isFinite(clientX) || !Number.isFinite(clientY)) {
+    if (
+      !Number.isFinite(clientX) ||
+      !Number.isFinite(clientY) ||
+      !Number.isFinite(placementClientX) ||
+      !Number.isFinite(placementClientY)
+    ) {
       interactions.onBattlefieldDropRejected?.({
         reason: "invalid-release-point",
         clientX,
@@ -2462,13 +2515,19 @@ function dropMobileCardAtPoint(
       });
       return;
     }
-    const resolution = resolveEligibleBattlefieldSlot(
+    const placementHitTarget = document.elementFromPoint(
+      placementClientX,
+      placementClientY,
+    );
+    const resolution = resolveBattlefieldSlot(
       battleScreen,
       interactions.pendingCardOwner ?? interactions.nearSide ?? "player",
       interactions,
-      hitTarget,
       clientX,
       clientY,
+      placementHitTarget,
+      placementClientX,
+      placementClientY,
     );
     interactions.onBattlefieldDropResolved?.(resolution);
     if (resolution.chosenTarget === null) {
@@ -2477,9 +2536,25 @@ function dropMobileCardAtPoint(
         clientX,
         clientY,
       });
-    } else {
-      interactions.onSlotDrop(resolution.chosenTarget);
+      return;
     }
+    const chosenCandidate = resolution.candidates.find((candidate) =>
+      sameSlotTarget(candidate.target, resolution.chosenTarget as MobileBattleSlotTarget)
+    );
+    if (chosenCandidate?.eligible !== true) {
+      interactions.onBattlefieldDropRejected?.({
+        reason:
+          interactions.sourceSlotTarget !== null &&
+          interactions.sourceSlotTarget !== undefined &&
+          sameSlotTarget(interactions.sourceSlotTarget, resolution.chosenTarget)
+            ? "source-slot"
+            : "ineligible-slot",
+        clientX,
+        clientY,
+      });
+      return;
+    }
+    interactions.onSlotDrop(resolution.chosenTarget);
     return;
   }
   const target = hitTarget?.closest<HTMLElement>(
@@ -2507,13 +2582,15 @@ function dropMobileCardAtPoint(
   interactions.onZoneDrop({ owner, zone });
 }
 
-function resolveEligibleBattlefieldSlot(
+function resolveBattlefieldSlot(
   battleScreen: HTMLElement,
   owner: MobileBattleOwner,
   interactions: MobileBattleInteractions,
-  hitTarget: Element | null,
   clientX: number,
   clientY: number,
+  placementHitTarget: Element | null,
+  placementClientX: number,
+  placementClientY: number,
 ): MobileBattleDropResolution {
   const candidates: MobileBattleDropCandidate[] = [];
   const slots = battleScreen.querySelectorAll<HTMLElement>(
@@ -2529,15 +2606,25 @@ function resolveEligibleBattlefieldSlot(
       return;
     }
     const target = { owner, rank, slotId } as const;
-    if (!slotTargetIsEligible(interactions, target)) return;
     const bounds = slot.getBoundingClientRect();
     const centerX = bounds.left + bounds.width / 2;
     const centerY = bounds.top + bounds.height / 2;
-    const deltaX = clientX - centerX;
-    const deltaY = clientY - centerY;
+    const deltaX = placementClientX - centerX;
+    const deltaY = placementClientY - centerY;
     const distanceSquared = deltaX * deltaX + deltaY * deltaY;
+    const edgeDeltaX = Math.max(
+      bounds.left - placementClientX,
+      0,
+      placementClientX - bounds.right,
+    );
+    const edgeDeltaY = Math.max(
+      bounds.top - placementClientY,
+      0,
+      placementClientY - bounds.bottom,
+    );
     candidates.push({
       target,
+      eligible: slotTargetIsEligible(interactions, target),
       rect: {
         left: bounds.left,
         top: bounds.top,
@@ -2554,6 +2641,13 @@ function resolveEligibleBattlefieldSlot(
         clientX <= bounds.right &&
         clientY >= bounds.top &&
         clientY <= bounds.bottom,
+      containsPlacement:
+        placementClientX >= bounds.left &&
+        placementClientX <= bounds.right &&
+        placementClientY >= bounds.top &&
+        placementClientY <= bounds.bottom,
+      edgeDistanceSquared:
+        edgeDeltaX * edgeDeltaX + edgeDeltaY * edgeDeltaY,
     });
   });
   candidates.sort((left, right) =>
@@ -2562,7 +2656,7 @@ function resolveEligibleBattlefieldSlot(
       `${right.target.rank}:${right.target.slotId}`,
     )
   );
-  const hitSlot = hitTarget?.closest<HTMLElement>(
+  const hitSlot = placementHitTarget?.closest<HTMLElement>(
     `[data-battle-mobile-drop-kind="slot"][data-battle-mobile-drop-owner="${owner}"]`,
   );
   const directHit = hitSlot === null || hitSlot === undefined
@@ -2572,13 +2666,23 @@ function resolveEligibleBattlefieldSlot(
           candidate.target.rank === hitSlot.dataset.battleMobileDropRank &&
           candidate.target.slotId === hitSlot.dataset.battleMobileDropSlotId,
       );
-  const chosen = directHit ?? candidates[0];
+  const contained = candidates.find((candidate) => candidate.containsPlacement);
+  const nearest = candidates[0];
+  const withinSnapTolerance =
+    nearest !== undefined &&
+    nearest.edgeDistanceSquared <=
+      Math.min(nearest.rect.width, nearest.rect.height) ** 2 / 4;
+  const chosen = directHit ?? contained ?? (withinSnapTolerance ? nearest : undefined);
   return {
     releasePoint: { clientX, clientY },
+    placementPoint: {
+      clientX: placementClientX,
+      clientY: placementClientY,
+    },
     candidates,
     chosenTarget: chosen?.target ?? null,
     strategy:
-      directHit !== undefined
+      directHit !== undefined || contained !== undefined
         ? "direct-hit"
         : chosen === undefined
           ? "none"

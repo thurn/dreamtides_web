@@ -79,8 +79,13 @@ import {
   type EffectRun,
   type PendingPrompt,
 } from "./fold";
-import { selectBattleCardLocation, selectBattlefieldSlotOccupant } from "../../battle/state/selectors";
+import {
+  isBattleFieldSlotAddressValid,
+  selectBattleCardLocation,
+  selectBattlefieldSlotOccupant,
+} from "../../battle/state/selectors";
 import { hasTemporaryReclaimEligibility } from "./temporary-effects";
+import { planTutorialCharacterReposition } from "./tutorial-reposition";
 
 // ---------------------------------------------------------------------------
 // Battle-init provider seam (BEGIN_BATTLE construction)
@@ -778,6 +783,66 @@ export function battleCommand(
   return { ...state, battle: driveChallengeCursor(current, ctx.seq, random, nowMs) };
 }
 
+/**
+ * Semantic tutorial intent for moving one character to one exact battlefield
+ * cell. The reducer owns legality and translates the accepted intent into the
+ * existing deterministic battle-edit pipeline.
+ */
+export function battleRepositionCharacter(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+  actor?: string,
+): FoldState | null {
+  const battle = state.battle;
+  if (battle === null || battleModeOf(battle).kind !== "tutorial") return null;
+  if (!tutorialActorIsAuthorized(battle, actor, false)) return null;
+  const battleCardId = payload.battleCardId;
+  const candidate = payload.destination;
+  if (
+    typeof battleCardId !== "string" ||
+    typeof candidate !== "object" ||
+    candidate === null
+  ) {
+    return null;
+  }
+  const raw = candidate as {
+    readonly side?: unknown;
+    readonly zone?: unknown;
+    readonly slotId?: unknown;
+  };
+  if (
+    raw.side !== "player" ||
+    (raw.zone !== "backRank" && raw.zone !== "frontRank") ||
+    typeof raw.slotId !== "string"
+  ) {
+    return null;
+  }
+  const destination = {
+    side: raw.side,
+    zone: raw.zone,
+    slotId: raw.slotId,
+  } as BattleFieldSlotAddress;
+  if (!isBattleFieldSlotAddressValid(destination)) return null;
+  const edit = planTutorialCharacterReposition(
+    battle.board,
+    battleCardId,
+    destination,
+  );
+  if (edit === null) return null;
+  return battleCommand(
+    state,
+    {
+      command: {
+        id: "DEBUG_EDIT",
+        edit,
+        sourceSurface: "tutorial-player",
+      },
+    },
+    ctx,
+  );
+}
+
 /** Semantic source legality for moves that are actually plays from a void. */
 function voidPlaySourceIsLegal(board: BattleMutableState, command: BattleCommand): boolean {
   if (command.id !== "DEBUG_EDIT" || command.edit.kind !== "MOVE_CARD_TO_ZONE") return true;
@@ -834,30 +899,25 @@ function tutorialCommandIsAuthorized(
     return (battle.board.activeSide === "player" && battle.board.phase === "day" && edit.phase === "dusk") ||
       (battle.board.activeSide === "enemy" && battle.board.phase === "dusk" && edit.phase === "night");
   }
-  const legalPhase = (battle.board.activeSide === "player" && battle.board.phase === "day") ||
-    (battle.board.activeSide === "enemy" && battle.board.phase === "dusk");
-  if (!legalPhase) return false;
-  const playerBattlefieldSlotIsLegal = (slot: BattleFieldSlotAddress): boolean =>
-    slot.side === "player";
-  const destinationIsLegal = (destination: BattleFieldSlotAddress): boolean =>
-    playerBattlefieldSlotIsLegal(destination) &&
-    (battle.board.phase !== "dusk" || destination.zone === "frontRank");
-  const playerCharacterAt = (address: BattleFieldSlotAddress): boolean => {
-    const battleCardId = selectBattlefieldSlotOccupant(battle.board, address);
-    const instance = battleCardId === null ? undefined : battle.board.cardInstances[battleCardId];
-    return instance?.controller === "player" && instance.definition.battleCardKind === "character";
-  };
   if (edit.kind === "SWAP_BATTLEFIELD_SLOTS") {
-    return playerBattlefieldSlotIsLegal(edit.source) && destinationIsLegal(edit.target) &&
-      playerCharacterAt(edit.source) && playerCharacterAt(edit.target);
+    const battleCardId = selectBattlefieldSlotOccupant(battle.board, edit.source);
+    if (battleCardId === null) return false;
+    const planned = planTutorialCharacterReposition(
+      battle.board,
+      battleCardId,
+      edit.target,
+    );
+    return planned?.kind === "SWAP_BATTLEFIELD_SLOTS" &&
+      planned.source.side === edit.source.side &&
+      planned.source.zone === edit.source.zone &&
+      planned.source.slotId === edit.source.slotId;
   }
   if (edit.kind !== "MOVE_CARD_TO_ZONE" || !("slotId" in edit.destination)) return false;
-  const source = selectBattleCardLocation(battle.board, edit.battleCardId);
-  const instance = battle.board.cardInstances[edit.battleCardId];
-  if (source === null || instance === undefined || !isBattlefieldZone(source.zone) ||
-    instance.controller !== "player" || instance.definition.battleCardKind !== "character" ||
-    !destinationIsLegal(edit.destination) || selectBattlefieldSlotOccupant(battle.board, edit.destination) !== null) return false;
-  return true;
+  return planTutorialCharacterReposition(
+    battle.board,
+    edit.battleCardId,
+    edit.destination,
+  )?.kind === "MOVE_CARD_TO_ZONE";
 }
 
 interface BattlePlayCardIntent {

@@ -16,6 +16,16 @@ const mocks = vi.hoisted(() => ({
   battleCommand: vi.fn(
     (_command: unknown, _intentKey?: string) => Promise.resolve(1),
   ),
+  battleRepositionCharacter: vi.fn(
+    (
+      _battleCardId: string,
+      _destination: {
+        readonly side: "player";
+        readonly zone: "backRank" | "frontRank";
+        readonly slotId: string;
+      },
+    ) => Promise.resolve(1),
+  ),
   resolvePrompt: vi.fn(() => Promise.resolve(1)),
   state: null as FoldState | null,
   confirmedState: null as FoldState | null,
@@ -29,6 +39,7 @@ vi.mock("../coop/hooks", () => ({
   useActions: () => ({
     battlePlayCard: mocks.battlePlayCard,
     battleCommand: mocks.battleCommand,
+    battleRepositionCharacter: mocks.battleRepositionCharacter,
     resolvePrompt: mocks.resolvePrompt,
   }),
   useClientId: () => "driver-client",
@@ -253,6 +264,7 @@ afterEach(() => {
   mocks.outcomeListener = null;
   mocks.battlePlayCard.mockClear();
   mocks.battleCommand.mockClear();
+  mocks.battleRepositionCharacter.mockClear();
   mocks.resolvePrompt.mockClear();
   resetLog();
 });
@@ -305,7 +317,7 @@ describe("useTutorialBattleInteractions", () => {
   });
 
   it("submits a fresh authoritative event when a character revisits the same cell in one turn", async () => {
-    mocks.battleCommand
+    mocks.battleRepositionCharacter
       .mockResolvedValueOnce(58)
       .mockResolvedValueOnce(59);
     mocks.state = sameTurnRevisitState("F3");
@@ -317,7 +329,16 @@ describe("useTutorialBattleInteractions", () => {
         "battlefield",
       );
     });
-    expect(latest?.interactions.eligibleSlotRanks).toEqual(["front"]);
+    expect(latest?.interactions.isSlotDropEligible?.({
+      owner: "player",
+      rank: "back",
+      slotId: "B1",
+    })).toBe(true);
+    expect(latest?.interactions.isSlotDropEligible?.({
+      owner: "player",
+      rank: "front",
+      slotId: "F3",
+    })).toBe(false);
     expect(latest?.interactions.sourceSlotTarget).toEqual({
       owner: "player",
       rank: "front",
@@ -343,9 +364,11 @@ describe("useTutorialBattleInteractions", () => {
     act(() => {
       latest?.interactions.onBattlefieldDropResolved?.({
         releasePoint: { clientX: 1077.375, clientY: 439.3125 },
+        placementPoint: { clientX: 1077.375, clientY: 439.3125 },
         candidates: [
           {
             target: { owner: "player", rank: "front", slotId: "F3" },
+            eligible: true,
             rect: {
               left: 1026.03125,
               top: 387.96875,
@@ -358,6 +381,8 @@ describe("useTutorialBattleInteractions", () => {
             deltaY: 0,
             distanceSquared: 0,
             containsRelease: true,
+            containsPlacement: true,
+            edgeDistanceSquared: 0,
           },
         ],
         chosenTarget: { owner: "player", rank: "front", slotId: "F3" },
@@ -373,21 +398,16 @@ describe("useTutorialBattleInteractions", () => {
       await Promise.resolve();
     });
 
-    expect(mocks.battleCommand).toHaveBeenCalledTimes(2);
-    expect(mocks.battleCommand.mock.calls[1]).toHaveLength(1);
-    expect(mocks.battleCommand.mock.calls[1]?.[0]).toEqual({
-      id: "DEBUG_EDIT",
-      edit: {
-        kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: REVISIT_INSTANCE_ID,
-        destination: {
-          side: "player",
-          zone: "frontRank",
-          slotId: "F3",
-        },
+    expect(mocks.battleRepositionCharacter).toHaveBeenCalledTimes(2);
+    expect(mocks.battleRepositionCharacter.mock.calls[1]).toEqual([
+      REVISIT_INSTANCE_ID,
+      {
+        side: "player",
+        zone: "frontRank",
+        slotId: "F3",
       },
-      sourceSurface: "tutorial-player",
-    });
+    ]);
+    expect(mocks.battleCommand).not.toHaveBeenCalled();
     expect(getLogEntries()).toContainEqual(
       expect.objectContaining({
         event: "tutorial_battle_human_drop_resolved",
@@ -399,8 +419,8 @@ describe("useTutorialBattleInteractions", () => {
           rank: "front",
           slotId: "F1",
         },
-        eligibleSlotRanks: ["front"],
         releasePoint: { clientX: 1077.375, clientY: 439.3125 },
+        placementPoint: { clientX: 1077.375, clientY: 439.3125 },
         chosenTarget: {
           owner: "player",
           rank: "front",
@@ -427,14 +447,18 @@ describe("useTutorialBattleInteractions", () => {
         committedSeq: 59,
       }),
     );
-    const secondCommand = mocks.battleCommand.mock.calls[1]?.[0];
+    const secondDestination =
+      mocks.battleRepositionCharacter.mock.calls[1]?.[1];
     mocks.confirmedState = sameTurnRevisitState("F3");
     mocks.confirmedHead = 59;
     act(() => {
       mocks.outcomeListener?.(
         {
-          type: "BATTLE_COMMAND",
-          payload: { command: secondCommand },
+          type: "BATTLE_REPOSITION_CHARACTER",
+          payload: {
+            battleCardId: REVISIT_INSTANCE_ID,
+            destination: secondDestination,
+          },
           actor: "driver-client",
           clientTimestamp: "2026-07-26T03:38:48.126Z",
           basedOnSeq: 58,
@@ -477,7 +501,7 @@ describe("useTutorialBattleInteractions", () => {
     act(() => root.unmount());
   });
 
-  it("surfaces and logs why an exhausted character has no legal dusk cell", () => {
+  it("allows an exhausted character to move to the bank but rejects the front at Dusk", () => {
     mocks.state = sameTurnRevisitState("F1", true);
     const root = mount();
 
@@ -487,11 +511,20 @@ describe("useTutorialBattleInteractions", () => {
         "battlefield",
       );
     });
-    expect(latest?.interactions.eligibleSlotRanks).toEqual([]);
+    expect(latest?.interactions.isSlotDropEligible?.({
+      owner: "player",
+      rank: "back",
+      slotId: "B1",
+    })).toBe(true);
+    expect(latest?.interactions.isSlotDropEligible?.({
+      owner: "player",
+      rank: "front",
+      slotId: "F2",
+    })).toBe(false);
 
     act(() => {
       latest?.interactions.onBattlefieldDropRejected?.({
-        reason: "no-eligible-slot",
+        reason: "ineligible-slot",
         clientX: 720,
         clientY: 410,
       });
@@ -506,9 +539,8 @@ describe("useTutorialBattleInteractions", () => {
         event: "tutorial_battle_human_move_rejected",
         battleCardId: REVISIT_INSTANCE_ID,
         definitionId: REVISIT_CHARACTER_UUID,
-        reason: "no-eligible-slot",
+        reason: "ineligible-slot",
         releasePoint: { clientX: 720, clientY: 410 },
-        eligibleSlotRanks: [],
       }),
     );
 

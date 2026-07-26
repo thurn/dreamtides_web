@@ -261,11 +261,88 @@ describe("tutorial battle lifecycle", () => {
     expect(reduceTutorial(state, "BATTLE_COMMAND", swap(
       { side: "player", zone: "frontRank", slotId: "F0" },
       { side: "player", zone: "backRank", slotId: "B0" },
-    )).outcome).toBe("bounced");
+    )).outcome).toBe("applied");
     expect(reduceTutorial(state, "BATTLE_COMMAND", swap(
       { side: "player", zone: "backRank", slotId: "B0" },
       { side: "player", zone: "frontRank", slotId: "F0" },
     ), "client-observer").outcome).toBe("bounced");
+  });
+
+  it("folds the exact semantic Dusk destination and applies exhaustion only to front-rank targets", () => {
+    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    const started = begin().state;
+    const battle = started.battle!;
+    const battleCardId = battle.board.sides.player.frontRank.F0!;
+    const instance = battle.board.cardInstances[battleCardId];
+    const duskState = {
+      ...started,
+      battle: {
+        ...battle,
+        board: {
+          ...battle.board,
+          activeSide: "enemy" as const,
+          phase: "dusk" as const,
+        },
+      },
+    };
+    const bankMove = reduceTutorial(
+      duskState,
+      "BATTLE_REPOSITION_CHARACTER",
+      {
+        battleCardId,
+        destination: {
+          side: "player",
+          zone: "backRank",
+          slotId: "B1",
+        },
+      },
+    );
+    expect(bankMove.outcome).toBe("applied");
+    expect(bankMove.state.battle?.board.sides.player).toMatchObject({
+      frontRank: { F0: null },
+      backRank: { B1: battleCardId },
+    });
+
+    const exhaustedState = {
+      ...duskState,
+      battle: {
+        ...duskState.battle,
+        board: {
+          ...duskState.battle.board,
+          cardInstances: {
+            ...duskState.battle.board.cardInstances,
+            [battleCardId]: {
+              ...instance,
+              status: { ...instance.status, isExhausted: true },
+            },
+          },
+        },
+      },
+    };
+    expect(reduceTutorial(
+      exhaustedState,
+      "BATTLE_REPOSITION_CHARACTER",
+      {
+        battleCardId,
+        destination: {
+          side: "player",
+          zone: "backRank",
+          slotId: "B1",
+        },
+      },
+    ).outcome).toBe("applied");
+    expect(reduceTutorial(
+      exhaustedState,
+      "BATTLE_REPOSITION_CHARACTER",
+      {
+        battleCardId,
+        destination: {
+          side: "player",
+          zone: "frontRank",
+          slotId: "F1",
+        },
+      },
+    ).outcome).toBe("bounced");
   });
 
   it("folds a long player Day move into the intended visible front-rank slot", () => {

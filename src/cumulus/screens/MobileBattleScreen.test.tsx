@@ -2998,7 +2998,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("resolves a long tutorial character drag to the nearest eligible cell", () => {
+  it("rejects the physical cell under a card instead of retargeting to an eligible cell", () => {
     const cardUuid = asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8");
     const baseView = makeView();
     const baseSourceCard = baseView.player.backRank[1]?.card;
@@ -3031,17 +3031,13 @@ describe("MobileBattleScreen", () => {
       pendingCardOwner: "player",
       eligibleSlotTargets: [
         { owner: "player", rank: "back", slotId: "player-back-empty" },
-        {
-          owner: "player",
-          rank: "back",
-          slotId: "player-back-second-empty",
-        },
       ],
       onHandCardActivate: vi.fn(),
       onCardDragStart: vi.fn(),
       onCardDragEnd: vi.fn(),
       onSlotDrop: vi.fn(),
       onBattlefieldDropRejected: vi.fn(),
+      onBattlefieldDropResolved: vi.fn(),
       onZoneDrop: vi.fn(),
       onPreviousPhase: vi.fn(),
       onNextPhase: vi.fn(),
@@ -3130,7 +3126,7 @@ describe("MobileBattleScreen", () => {
           bubbles: true,
           cancelable: true,
           button: 0,
-          clientX: 700,
+          clientX: 320,
           clientY: 256,
           pointerId: 31,
           pointerType: "mouse",
@@ -3141,7 +3137,7 @@ describe("MobileBattleScreen", () => {
           bubbles: true,
           cancelable: true,
           button: 0,
-          clientX: 700,
+          clientX: 320,
           clientY: 256,
           pointerId: 31,
           pointerType: "mouse",
@@ -3149,12 +3145,24 @@ describe("MobileBattleScreen", () => {
       );
     });
 
-    expect(interactions.onSlotDrop).toHaveBeenCalledWith({
-      owner: "player",
-      rank: "back",
-      slotId: "player-back-second-empty",
+    expect(interactions.onSlotDrop).not.toHaveBeenCalled();
+    expect(interactions.onBattlefieldDropRejected).toHaveBeenCalledWith({
+      reason: "ineligible-slot",
+      clientX: 320,
+      clientY: 256,
     });
-    expect(interactions.onBattlefieldDropRejected).not.toHaveBeenCalled();
+    expect(interactions.onBattlefieldDropResolved).toHaveBeenCalledWith(
+      expect.objectContaining({
+        releasePoint: { clientX: 320, clientY: 256 },
+        placementPoint: { clientX: 320, clientY: 256 },
+        chosenTarget: {
+          owner: "player",
+          rank: "back",
+          slotId: "player-back-second-empty",
+        },
+        strategy: "direct-hit",
+      }),
+    );
     expect(interactions.onCardDragEnd).toHaveBeenCalledOnce();
 
     act(() => root.unmount());

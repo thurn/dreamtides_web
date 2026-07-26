@@ -191,6 +191,14 @@ export interface CoopActions {
     intentKey?: string,
     actor?: string,
   ) => Promise<number>;
+  battleRepositionCharacter: (
+    battleCardId: string,
+    destination: {
+      readonly side: "player";
+      readonly zone: "backRank" | "frontRank";
+      readonly slotId: string;
+    },
+  ) => Promise<number>;
   battlePlayCard: (
     battleCardId: string,
     targetBattleCardIds: readonly string[],
@@ -450,6 +458,11 @@ export function makeActions(append: AppendFn): CoopActions {
         payload: { command },
         ...(intentKey === undefined ? {} : { intentKey }),
         ...(actor === undefined ? {} : { actor }),
+      }),
+    battleRepositionCharacter: (battleCardId, destination) =>
+      emit("BATTLE_REPOSITION_CHARACTER", {
+        battleCardId,
+        destination,
       }),
     battlePlayCard: (battleCardId, targetBattleCardIds, intentKey, actor, aiChoices) =>
       append({

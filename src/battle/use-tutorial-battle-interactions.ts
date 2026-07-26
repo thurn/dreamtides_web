@@ -21,6 +21,7 @@ import {
   selectStarterCardLegalTargetIds,
   starterCardRequiresTarget,
 } from "./starter-card-targets";
+import { planTutorialCharacterReposition } from "../rules/battle/tutorial-reposition";
 
 const MOVEMENT_STATUS_DURATION_MS = 4_000;
 
@@ -42,56 +43,25 @@ interface MovementFoldReceipt extends PendingMovementOutcome {
   readonly outcome: "applied" | "bounced";
 }
 
-function commandMatchesPendingMovement(
-  command: unknown,
+function eventMatchesPendingMovement(
+  payload: unknown,
   pending: PendingMovementOutcome,
 ): boolean {
-  if (typeof command !== "object" || command === null) return false;
-  const candidate = command as {
-    readonly id?: unknown;
-    readonly sourceSurface?: unknown;
-    readonly edit?: {
-      readonly kind?: unknown;
-      readonly battleCardId?: unknown;
-      readonly source?: {
-        readonly side?: unknown;
-        readonly zone?: unknown;
-        readonly slotId?: unknown;
-      };
-      readonly target?: {
-        readonly side?: unknown;
-        readonly zone?: unknown;
-        readonly slotId?: unknown;
-      };
-      readonly destination?: {
-        readonly side?: unknown;
-        readonly zone?: unknown;
-        readonly slotId?: unknown;
-      };
+  if (typeof payload !== "object" || payload === null) return false;
+  const candidate = payload as {
+    readonly battleCardId?: unknown;
+    readonly destination?: {
+      readonly side?: unknown;
+      readonly zone?: unknown;
+      readonly slotId?: unknown;
     };
   };
-  if (
-    candidate.id !== "DEBUG_EDIT" ||
-    candidate.sourceSurface !== "tutorial-player"
-  ) {
-    return false;
-  }
   const expectedZone =
     pending.target.rank === "back" ? "backRank" : "frontRank";
-  if (pending.kind === "move-card") {
-    return candidate.edit?.kind === "MOVE_CARD_TO_ZONE" &&
-      candidate.edit.battleCardId === pending.battleCardId &&
-      candidate.edit.destination?.side === "player" &&
-      candidate.edit.destination.zone === expectedZone &&
-      candidate.edit.destination.slotId === pending.target.slotId;
-  }
-  return candidate.edit?.kind === "SWAP_BATTLEFIELD_SLOTS" &&
-    candidate.edit.source?.side === pending.source.side &&
-    candidate.edit.source.zone === pending.source.zone &&
-    candidate.edit.source.slotId === pending.source.slotId &&
-    candidate.edit.target?.side === "player" &&
-    candidate.edit.target.zone === expectedZone &&
-    candidate.edit.target.slotId === pending.target.slotId;
+  return candidate.battleCardId === pending.battleCardId &&
+    candidate.destination?.side === "player" &&
+    candidate.destination.zone === expectedZone &&
+    candidate.destination.slotId === pending.target.slotId;
 }
 
 /** Player-only intent bridge for the automated tutorial battle. */
@@ -136,16 +106,13 @@ export function useTutorialBattleInteractions(
   const canAct = canDrive && controller.requiresHumanDecision;
   useEventOutcomes((event, seq, outcome) => {
     if (
-      event.type !== "BATTLE_COMMAND" ||
+      event.type !== "BATTLE_REPOSITION_CHARACTER" ||
       event.actor !== clientId
     ) {
       return;
     }
-    const command = (
-      event.payload as { readonly command?: unknown } | undefined
-    )?.command;
     const pendingIndex = pendingMovementOutcomes.current.findIndex(
-      (pending) => commandMatchesPendingMovement(command, pending),
+      (pending) => eventMatchesPendingMovement(event.payload, pending),
     );
     if (pendingIndex < 0) return;
     const [pending] = pendingMovementOutcomes.current.splice(pendingIndex, 1);
@@ -210,36 +177,23 @@ export function useTutorialBattleInteractions(
     );
     return () => window.clearTimeout(timeout);
   }, [dismissMovementStatus, movementStatusMessage]);
-  const eligibleSlotRanks = useMemo(() => {
+  const isSlotDropEligible = useCallback((target: MobileBattleSlotTarget) => {
     if (
       !canAct ||
       board === null ||
       pendingCard?.source !== "battlefield"
     ) {
-      return [];
+      return false;
     }
-    const instance = board.cardInstances[pendingCard.id];
-    const source = selectBattleCardLocation(board, pendingCard.id);
-    if (
-      instance?.controller !== "player" ||
-      instance.definition.battleCardKind !== "character" ||
-      source?.side !== "player" ||
-      (source.zone !== "backRank" && source.zone !== "frontRank")
-    ) {
-      return [];
-    }
-    const canUseBackRank =
-      board.activeSide === "player" && board.phase === "day";
-    const canUseFrontRank =
-      (
-        (board.activeSide === "player" && board.phase === "day") ||
-        (board.activeSide === "enemy" && board.phase === "dusk")
-      ) &&
-      !instance.status.isExhausted;
-    return [
-      ...(canUseBackRank ? ["back" as const] : []),
-      ...(canUseFrontRank ? ["front" as const] : []),
-    ];
+    return planTutorialCharacterReposition(
+      board,
+      pendingCard.id,
+      {
+        side: target.owner,
+        zone: target.rank === "back" ? "backRank" : "frontRank",
+        slotId: target.slotId as `B${number}` | `F${number}`,
+      },
+    ) !== null;
   }, [board, canAct, pendingCard]);
   const targetableCardIds = useMemo(() => {
     if (board === null || targetingCardId === null) return [];
@@ -267,7 +221,6 @@ export function useTutorialBattleInteractions(
       readonly slotId: string;
     },
     target: MobileBattleSlotTarget,
-    command: unknown,
   ): void => {
     if (board === null) return;
     const definitionId =
@@ -286,7 +239,11 @@ export function useTutorialBattleInteractions(
     pendingMovementOutcomes.current.push(pendingOutcome);
     setMovementStatusMessage(null);
     logIntent(kind, detail);
-    void actions.battleCommand(command).then((committedSeq) => {
+    void actions.battleRepositionCharacter(battleCardId, {
+      side: "player",
+      zone: target.rank === "back" ? "backRank" : "frontRank",
+      slotId: target.slotId,
+    }).then((committedSeq) => {
       logEvent("tutorial_battle_human_move_submitted", {
         battleId: board.battleId,
         clientId,
@@ -320,7 +277,9 @@ export function useTutorialBattleInteractions(
     reason:
       | "battlefield-unavailable"
       | "invalid-release-point"
-      | "no-eligible-slot",
+      | "no-eligible-slot"
+      | "ineligible-slot"
+      | "source-slot",
     clientX: number,
     clientY: number,
   ): void => {
@@ -335,7 +294,7 @@ export function useTutorialBattleInteractions(
         ? null
         : selectBattleCardLocation(board, battleCardId);
     const message =
-      reason === "no-eligible-slot" &&
+      (reason === "no-eligible-slot" || reason === "ineligible-slot") &&
       instance?.status.isExhausted === true &&
       board.activeSide === "enemy" &&
       board.phase === "dusk"
@@ -363,14 +322,13 @@ export function useTutorialBattleInteractions(
       source,
       reason,
       releasePoint: { clientX, clientY },
-      eligibleSlotRanks,
       sourceTarget:
         pendingCard?.source === "battlefield"
           ? pendingCard.sourceTarget
           : null,
       message,
     });
-  }, [board, clientId, eligibleSlotRanks, pendingCard]);
+  }, [board, clientId, pendingCard]);
   const logMovementDropResolution = useCallback((
     resolution: MobileBattleDropResolution,
   ): void => {
@@ -391,13 +349,13 @@ export function useTutorialBattleInteractions(
       definitionId:
         board.cardInstances[pendingCard.id]?.definition.cardId ?? null,
       source: pendingCard.sourceTarget,
-      eligibleSlotRanks,
       releasePoint: resolution.releasePoint,
+      placementPoint: resolution.placementPoint,
       candidates: resolution.candidates,
       chosenTarget: resolution.chosenTarget,
       strategy: resolution.strategy,
     });
-  }, [board, clientId, eligibleSlotRanks, pendingCard]);
+  }, [board, clientId, pendingCard]);
   const resolvePrompt = useCallback((resolution: PromptResolution): void => {
     const prompt = state.battle?.pendingPrompt ?? null;
     if (!canAct || prompt === null || confirmedPromptId !== prompt.promptId) return;
@@ -414,7 +372,7 @@ export function useTutorialBattleInteractions(
     pendingCardId: pendingCard?.id ?? null,
     pendingCardSource: pendingCard?.source ?? null,
     pendingCardOwner: pendingCard === null ? null : "player",
-    eligibleSlotRanks,
+    isSlotDropEligible,
     sourceSlotTarget:
       pendingCard?.source === "battlefield"
         ? pendingCard.sourceTarget
@@ -581,18 +539,15 @@ export function useTutorialBattleInteractions(
           : `${clientId}:${board.battleId}:movement:untracked`;
       if (target.owner !== "player") return;
       const source = selectBattleCardLocation(board, battleCardId);
-      const sourceInstance = board.cardInstances[battleCardId];
       const targetOccupant = selectBattlefieldSlotOccupant(board, {
         side: "player",
         zone: target.rank === "back" ? "backRank" : "frontRank",
         slotId: target.slotId as `B${number}` | `F${number}`,
       });
-      const legalPhase = (board.activeSide === "player" && board.phase === "day") ||
-        (board.activeSide === "enemy" && board.phase === "dusk" && target.rank === "front");
       if (
-        source === null || sourceInstance?.controller !== "player" ||
-        sourceInstance.definition.battleCardKind !== "character" ||
-        (source.zone !== "backRank" && source.zone !== "frontRank") || !legalPhase
+        source === null ||
+        (source.zone !== "backRank" && source.zone !== "frontRank") ||
+        !isSlotDropEligible(target)
       ) return;
       if (targetOccupant !== null) {
         submitMovement(
@@ -605,23 +560,6 @@ export function useTutorialBattleInteractions(
             slotId: source.slotId,
           },
           target,
-          {
-            id: "DEBUG_EDIT",
-            edit: {
-              kind: "SWAP_BATTLEFIELD_SLOTS",
-              source: {
-                side: "player",
-                zone: source.zone,
-                slotId: source.slotId,
-              },
-              target: {
-                side: "player",
-                zone: target.rank === "back" ? "backRank" : "frontRank",
-                slotId: target.slotId as `B${number}` | `F${number}`,
-              },
-            },
-            sourceSurface: "tutorial-player",
-          },
         );
         setPendingCard(null);
         return;
@@ -636,19 +574,6 @@ export function useTutorialBattleInteractions(
           slotId: source.slotId,
         },
         target,
-        {
-          id: "DEBUG_EDIT",
-          edit: {
-            kind: "MOVE_CARD_TO_ZONE",
-            battleCardId,
-            destination: {
-              side: "player",
-              zone: target.rank === "back" ? "backRank" : "frontRank",
-              slotId: target.slotId as `B${number}` | `F${number}`,
-            },
-          },
-          sourceSurface: "tutorial-player",
-        },
       );
       setPendingCard(null);
     },
@@ -667,7 +592,7 @@ export function useTutorialBattleInteractions(
     onCardPickerSubmit: (chosenIds) => resolvePrompt({ kind: "pick-cards", chosenIds: [...chosenIds] }),
     onCardPickerSkip: () => resolvePrompt({ kind: "pick-cards", chosenIds: [] }),
     onChoicePromptChoose: (optionIndex) => resolvePrompt({ kind: "choice", optionIndex }),
-  }), [actions, board, canAct, clientId, eligibleSlotRanks, logIntent, logMovementDropResolution, pendingCard, reportMovementRejection, resolvePrompt, submitMovement, targetableCardIds, targetingCardId]);
+  }), [actions, board, canAct, clientId, isSlotDropEligible, logIntent, logMovementDropResolution, pendingCard, reportMovementRejection, resolvePrompt, submitMovement, targetableCardIds, targetingCardId]);
   return {
     interactions,
     confirmedPromptId,

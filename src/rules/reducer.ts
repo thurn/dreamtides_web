@@ -373,6 +373,11 @@ export function routeDomain(
       return foldCase(state, battleEvents.endBattle(state, payload));
     case "BATTLE_COMMAND":
       return foldCase(state, battleEvents.battleCommand(state, payload, ctx, event.actor));
+    case "BATTLE_REPOSITION_CHARACTER":
+      return foldCase(
+        state,
+        battleEvents.battleRepositionCharacter(state, payload, ctx, event.actor),
+      );
     case "BATTLE_PLAY_CARD":
       return foldCase(state, battleEvents.battlePlayCard(state, payload, ctx, event.actor));
     case "BATTLE_GESTURE":
