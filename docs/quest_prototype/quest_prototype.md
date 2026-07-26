@@ -150,12 +150,11 @@ keywords (Unstoppable, Vengeful, Preeminence, Awakened).
 
 ### Board and ranks
 
-Each side has a staggered play area: a **front rank** of 4 positions (`F0`–`F3`,
-zone `frontRank`) and a **back rank** of 5 positions (`B0`–`B4`, zone
+Each side has a staggered play area: a **front rank** of 9 positions (`F0`–`F8`,
+zone `frontRank`) and a **back rank** of 10 positions (`B0`–`B9`, zone
 `backRank`). Only front-rank characters become challengers and defenders.
-A character entering play materializes into the back rank, exhausted. The
-back-rank-to-front-rank support map is `B0→F0`, `B1→F0,F1`, `B2→F1,F2`,
-`B3→F2,F3`, `B4→F3`.
+A character entering play materializes into the back rank, exhausted. Back-rank
+position `Bi` supports front positions `F(i-1)` and `Fi` wherever they exist.
 
 ### Per-card status
 
@@ -189,7 +188,7 @@ into the ordered edits the rules require:
 - **Ending clears exhaustion.** Every in-play character loses the exhausted
   status before control passes to the opponent.
 - **Challenge resolution.** Entering the `challenge` phase resolves each
-  front-rank lane (`F0`–`F3`) by spark: the lower-spark character dissolves to
+  front-rank lane (`F0`–`F8`) by spark: the lower-spark character dissolves to
   the void, an unpaired challenger scores ⍟ equal to its spark, and the keyword
   rules apply.
 - **Ending banish and Fatigue.** The outgoing side discards down to the ten-card
