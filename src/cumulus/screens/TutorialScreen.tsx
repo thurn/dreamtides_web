@@ -227,6 +227,9 @@ const TUTORIAL_CARD_FLIP_SECONDS = motionTimeSeconds("--dur-slow");
 const TUTORIAL_DREAMWELL_EMERGE_SECONDS = motionTimeSeconds(
   "--dur-tutorial-dreamwell-emerge",
 );
+const TUTORIAL_OPPONENT_REPOSITION_SECONDS = motionTimeSeconds(
+  "--dur-tutorial-character-reposition",
+);
 // The Dreamwell card begins tucked behind its status display before traveling
 // to full physical size.
 const TUTORIAL_DREAMWELL_EMERGE_START_SCALE = 0.72;
@@ -267,6 +270,9 @@ function tutorialTimingVariables(playbackSpeed: number): CSSProperties {
     "--dur-loading-dot-cycle": seconds("--dur-loading-dot-cycle"),
     "--dur-tutorial-dreamwell-emerge": seconds(
       "--dur-tutorial-dreamwell-emerge",
+    ),
+    "--dur-tutorial-character-reposition": seconds(
+      "--dur-tutorial-character-reposition",
     ),
     "--stagger-loading-dot": seconds("--stagger-loading-dot"),
     "--stagger-travel": seconds("--stagger-travel"),
@@ -2269,7 +2275,7 @@ export function TutorialScreen({
     const timeout = window.setTimeout(
       () => onActionComplete?.(runId, id),
       millisecondsAtPlaybackSpeed(
-        TUTORIAL_CARD_TRAVEL_SECONDS + wait,
+        TUTORIAL_OPPONENT_REPOSITION_SECONDS + wait,
         playbackSpeed,
       ),
     );
@@ -2761,7 +2767,12 @@ export function TutorialScreen({
   return (
     <MotionConfig
       transition={{
-        duration: atPlaybackSpeed(TUTORIAL_CARD_TRAVEL_SECONDS, playbackSpeed),
+        duration: atPlaybackSpeed(
+          view.currentAction?.action === "reposition-opponent-character"
+            ? TUTORIAL_OPPONENT_REPOSITION_SECONDS
+            : TUTORIAL_CARD_TRAVEL_SECONDS,
+          playbackSpeed,
+        ),
       }}
     >
       <motion.main

@@ -35,6 +35,7 @@ interface ScreenMockState {
   cardBattlefieldAnimate: unknown;
   cardBattlefieldTransition: unknown;
   challengeRematerializedAnimationComplete: (() => void) | null;
+  motionConfigTransition: unknown;
 }
 
 const screenMocks = vi.hoisted<ScreenMockState>(() => ({
@@ -59,6 +60,7 @@ const screenMocks = vi.hoisted<ScreenMockState>(() => ({
   cardBattlefieldAnimate: null,
   cardBattlefieldTransition: null,
   challengeRematerializedAnimationComplete: null as (() => void) | null,
+  motionConfigTransition: null,
 }));
 
 interface MotionMainStubInput {
@@ -90,9 +92,16 @@ interface MotionDivStubInput {
 
 vi.mock("framer-motion", () => ({
   useReducedMotion: () => false,
-  MotionConfig: ({ children }: { readonly children?: ReactNode }) => (
-    <>{children}</>
-  ),
+  MotionConfig: ({
+    children,
+    transition,
+  }: {
+    readonly children?: ReactNode;
+    readonly transition?: unknown;
+  }) => {
+    screenMocks.motionConfigTransition = transition;
+    return <>{children}</>;
+  },
   motion: {
     main: ({
       animate,
@@ -1472,10 +1481,11 @@ describe("TutorialScreen", () => {
       layoutMotion: "travel",
     });
     expect(screenMocks.props?.view.enemy.frontRank[3]?.card).toBeNull();
+    expect(screenMocks.motionConfigTransition).toMatchObject({ duration: 1 });
     expect(onActionComplete).not.toHaveBeenCalled();
 
     act(() => {
-      vi.advanceTimersByTime(419);
+      vi.advanceTimersByTime(999);
     });
     expect(onActionComplete).not.toHaveBeenCalled();
     act(() => {
