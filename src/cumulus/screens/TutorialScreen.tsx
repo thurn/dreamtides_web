@@ -748,10 +748,16 @@ function TutorialDreamAvatarArrival({
       const screenBox = screen.getBoundingClientRect();
       const targetBox = target.getBoundingClientRect();
       const dialoguePortraitBox = dialoguePortrait?.getBoundingClientRect();
+      const targetY = targetBox.top - screenBox.top;
+      const centeredY = (screenBox.height - targetBox.height) / 2;
+      // Both portraits approach their status slot from above. Mirroring the
+      // measured center-to-target distance keeps the two travel paths balanced
+      // even though the status displays sit at opposite screen edges.
+      const startY = targetY - Math.abs(targetY - centeredY);
       setTrajectory({
         startX: targetBox.left - screenBox.left,
-        startY: (screenBox.height - targetBox.height) / 2,
-        targetY: targetBox.top - screenBox.top,
+        startY,
+        targetY,
         startScale:
           targetBox.width === 0 || dialoguePortraitBox === undefined
             ? 1
