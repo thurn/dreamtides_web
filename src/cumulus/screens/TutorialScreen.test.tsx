@@ -1815,7 +1815,11 @@ describe("TutorialScreen", () => {
 
     act(() => screenMocks.sceneAnimationComplete?.());
 
-    expect(container.querySelector('[role="dialog"]')).toBeNull();
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-tutorial-how-to-play-stage="staged"]',
+      )?.style.visibility,
+    ).toBe("hidden");
     expect(
       container.querySelector<HTMLElement>("[data-battle-dreamwell-layer]")
         ?.dataset.tutorialDreamwellEmergence,
@@ -1832,7 +1836,11 @@ describe("TutorialScreen", () => {
     act(() => {
       vi.advanceTimersByTime(999);
     });
-    expect(container.querySelector('[role="dialog"]')).toBeNull();
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-tutorial-how-to-play-stage="staged"]',
+      )?.style.visibility,
+    ).toBe("hidden");
     expect(onHowToPlayPresented).not.toHaveBeenCalled();
 
     act(() => {
@@ -1891,6 +1899,136 @@ describe("TutorialScreen", () => {
     );
 
     act(() => root.unmount());
+    container.remove();
+  });
+
+  it("continuously carries the desktop Dreamwell into its paired dialog target", () => {
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: query.includes("min-width"),
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
+    const onHowToPlayPresented = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <TutorialScreen
+            view={{
+              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              dialogue: null,
+              playbackRunId: "event:dreamwell-continuity",
+              endTurn: null,
+              currentAction: {
+                id: "dreamwell-how-to-play",
+                action: "display-how-to-play",
+                trigger: "immediate",
+                companion: "dreamwell-card",
+                text: "Dreamwell guidance.",
+                wait: 0,
+              },
+              howToPlay: {
+                actionId: "dreamwell-how-to-play",
+                text: "Dreamwell guidance.",
+                wait: 0,
+                trigger: "immediate",
+                cardWidth: 500,
+                companion: TUTORIAL_DREAMWELL_CARD,
+              },
+              battle: {
+                battleId: "tutorial-battle",
+                dreamwell: {
+                  side: "enemy",
+                  model: TUTORIAL_DREAMWELL_CARD,
+                },
+                enemy: { backRank: [], frontRank: [], deckCardIds: [] },
+                player: { backRank: [], frontRank: [] },
+              } as unknown as MobileBattleView,
+            }}
+            onHowToPlayPresented={onHowToPlayPresented}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const layer = container.querySelector<HTMLElement>(
+      "[data-battle-dreamwell-layer]",
+    );
+    const destination = container.querySelector<HTMLElement>(
+      "[data-tutorial-dreamwell-destination]",
+    );
+    layer!.getBoundingClientRect = () =>
+      DOMRect.fromRect({ x: 100, y: 100, width: 360, height: 240 });
+    destination!.getBoundingClientRect = () =>
+      DOMRect.fromRect({ x: 500, y: 250, width: 360, height: 240 });
+    let finishListener: EventListener | null = null;
+    const cancel = vi.fn();
+    const animate = vi.fn(
+      (
+        _keyframes: Keyframe[] | PropertyIndexedKeyframes | null,
+        _options?: number | KeyframeAnimationOptions,
+      ) =>
+        ({
+          addEventListener: (
+            type: string,
+            listener: EventListenerOrEventListenerObject,
+          ) => {
+            if (type === "finish" && typeof listener === "function") {
+              finishListener = listener;
+            }
+          },
+          cancel,
+        }) as unknown as Animation,
+    );
+    Object.defineProperty(layer, "animate", {
+      configurable: true,
+      value: animate,
+    });
+
+    act(() => screenMocks.sceneAnimationComplete?.());
+
+    const [keyframes, options] = animate.mock.calls[0] ?? [];
+    expect(keyframes).toEqual([
+      { transform: "translate(-50%, -70%) scale(0.72)" },
+      {
+        transform:
+          "translateX(-50%) translate(400px, 150px) scale(1)",
+      },
+    ]);
+    expect(options).toMatchObject({ duration: 1_000, fill: "forwards" });
+    expect(layer?.dataset.tutorialDreamwellEmergenceTarget).toBe(
+      "paired-dialog",
+    );
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-tutorial-how-to-play-stage="staged"]',
+      )?.style.visibility,
+    ).toBe("hidden");
+
+    act(() => finishListener?.(new Event("finish")));
+
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-tutorial-how-to-play-stage="visible"]',
+      )?.style.visibility,
+    ).toBe("visible");
+    expect(screenMocks.props?.view.dreamwell).toBeNull();
+    expect(onHowToPlayPresented).toHaveBeenCalledWith(
+      "event:dreamwell-continuity",
+      "dreamwell-how-to-play",
+      "immediate",
+    );
+
+    act(() => root.unmount());
+    expect(cancel).toHaveBeenCalled();
     container.remove();
   });
 

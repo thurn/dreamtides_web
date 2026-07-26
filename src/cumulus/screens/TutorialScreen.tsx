@@ -356,11 +356,13 @@ function TutorialHowToPlayDialog({
   text,
   companion,
   cardWidth,
+  staged,
   onClose,
 }: {
   readonly text: string;
   readonly companion: DreamwellCardModel | null;
   readonly cardWidth: number;
+  readonly staged: boolean;
   readonly onClose: () => void;
 }): ReactElement {
   const desktop = useIsDesktop();
@@ -373,44 +375,57 @@ function TutorialHowToPlayDialog({
   const paragraphs = parseTutorialInstructionMarkup(text);
 
   return (
-    <GlassDialog
-      title="How to Play"
-      closeLabel="Close how to play"
-      presentation="popup"
-      chrome="flowing-close"
-      companion={
-        companion === null ? undefined : <DreamwellCard model={companion} />
-      }
-      onClose={onClose}
+    <div
+      data-tutorial-how-to-play-stage={staged ? "staged" : "visible"}
+      aria-hidden={staged ? "true" : undefined}
+      style={{ visibility: staged ? "hidden" : "visible" }}
     >
-      <div
-        data-tutorial-how-to-play-content=""
-        style={{
-          width: desktop
-            ? `calc(${String(cardWidth)}px - ${token("--space-5")} - ${token("--space-5")})`
-            : "100%",
-          maxWidth: "100%",
-          boxSizing: "border-box",
-          marginInline: "auto",
-          paddingTop: token("--space-9"),
-          paddingRight: token("--space-9"),
-          paddingBottom: token("--space-9"),
-          paddingLeft: token("--space-9"),
-        }}
+      <GlassDialog
+        title="How to Play"
+        closeLabel="Close how to play"
+        presentation="popup"
+        chrome="flowing-close"
+        companion={
+          companion === null ? undefined : (
+            <div
+              data-tutorial-dreamwell-destination=""
+              style={{ width: "100%" }}
+            >
+              <DreamwellCard model={companion} />
+            </div>
+          )
+        }
+        onClose={onClose}
       >
-        {paragraphs.map((paragraph, index) => (
-          <p
-            key={index}
-            style={{
-              ...paragraphStyle,
-              marginTop: index === 0 ? 0 : token("--space-7"),
-            }}
-          >
-            {renderTutorialInstructionParagraph(paragraph)}
-          </p>
-        ))}
-      </div>
-    </GlassDialog>
+        <div
+          data-tutorial-how-to-play-content=""
+          style={{
+            width: desktop
+              ? `calc(${String(cardWidth)}px - ${token("--space-5")} - ${token("--space-5")})`
+              : "100%",
+            maxWidth: "100%",
+            boxSizing: "border-box",
+            marginInline: "auto",
+            paddingTop: token("--space-9"),
+            paddingRight: token("--space-9"),
+            paddingBottom: token("--space-9"),
+            paddingLeft: token("--space-9"),
+          }}
+        >
+          {paragraphs.map((paragraph, index) => (
+            <p
+              key={index}
+              style={{
+                ...paragraphStyle,
+                marginTop: index === 0 ? 0 : token("--space-7"),
+              }}
+            >
+              {renderTutorialInstructionParagraph(paragraph)}
+            </p>
+          ))}
+        </div>
+      </GlassDialog>
+    </div>
   );
 }
 
@@ -432,6 +447,9 @@ function TutorialDreamwellEmergence({
       "[data-battle-dreamwell-layer]",
     );
     if (layer === null) return undefined;
+    const destination = screen.querySelector<HTMLElement>(
+      "[data-tutorial-dreamwell-destination]",
+    );
     const sideZoneRow = layer.closest<HTMLElement>("[data-battle-mobile-row]");
     const previousSideZoneZIndex = sideZoneRow?.style.zIndex ?? "";
     if (sideZoneRow !== null) {
@@ -454,18 +472,40 @@ function TutorialDreamwellEmergence({
         .getComputedStyle(screen)
         .getPropertyValue("--ease-out")
         .trim();
+      const sourceBox = layer.getBoundingClientRect();
+      const destinationBox = destination?.getBoundingClientRect();
+      const destinationTransform =
+        destinationBox === undefined ||
+        sourceBox.width === 0 ||
+        destinationBox.width === 0
+          ? "translate(-50%, 0) scale(1)"
+          : (() => {
+              const deltaX =
+                destinationBox.left +
+                destinationBox.width / 2 -
+                (sourceBox.left + sourceBox.width / 2);
+              const deltaY =
+                destinationBox.top +
+                destinationBox.height / 2 -
+                (sourceBox.top + sourceBox.height / 2);
+              const scale = destinationBox.width / sourceBox.width;
+              layer.dataset.tutorialDreamwellEmergenceTarget =
+                "paired-dialog";
+              return `translateX(-50%) translate(${String(deltaX)}px, ${String(deltaY)}px) scale(${String(scale)})`;
+            })();
       animation = layer.animate(
         [
           {
             transform: `translate(-50%, -70%) scale(${String(TUTORIAL_DREAMWELL_EMERGE_START_SCALE)})`,
           },
-          { transform: "translate(-50%, 0) scale(1)" },
+          { transform: destinationTransform },
         ],
         {
           duration: millisecondsAtPlaybackSpeed(
             TUTORIAL_DREAMWELL_EMERGE_SECONDS,
             playbackSpeed,
           ),
+          fill: "forwards",
           ...(easing === "" ? {} : { easing }),
         },
       );
@@ -484,6 +524,7 @@ function TutorialDreamwellEmergence({
       if (timeout !== null) window.clearTimeout(timeout);
       animation?.cancel();
       delete layer.dataset.tutorialDreamwellEmergence;
+      delete layer.dataset.tutorialDreamwellEmergenceTarget;
       if (sideZoneRow !== null) {
         delete sideZoneRow.dataset.tutorialDreamwellEmergenceLayer;
         sideZoneRow.style.zIndex = previousSideZoneZIndex;
@@ -2682,9 +2723,18 @@ export function TutorialScreen({
     howToPlayActionKey !== null &&
     howToPlayPresentedActionKey === howToPlayActionKey &&
     howToPlayDismissedActionKey !== howToPlayActionKey;
-  const howToPlayCompanion = howToPlayVisible
+  const howToPlayDreamwellArrived =
+    howToPlayActionKey !== null &&
+    dreamwellEmergedActionKey === howToPlayActionKey;
+  const howToPlayCompanion =
+    howToPlayVisible || howToPlayDreamwellArrived
     ? (view.howToPlay?.companion ?? null)
     : null;
+  const stageHowToPlayDreamwell =
+    howToPlayActionKey !== null &&
+    view.howToPlay?.companion !== null &&
+    view.howToPlay?.companion !== undefined &&
+    !howToPlayDreamwellArrived;
   const showStandaloneDreamwell =
     view.currentAction?.action === "draw-dreamwell-card" &&
     view.currentAction.revealDuration !== undefined &&
@@ -2949,14 +2999,19 @@ export function TutorialScreen({
         {!dockEditor && editorOpen && editorSurface !== null ? (
           <TutorialEditorTakeover {...editorSurface} />
         ) : null}
-        {howToPlayVisible && view.howToPlay !== null ? (
+        {(howToPlayVisible || stageHowToPlayDreamwell) &&
+        view.howToPlay !== null ? (
           <TutorialHowToPlayDialog
             text={view.howToPlay.text}
-            companion={howToPlayCompanion}
+            companion={
+              howToPlayCompanion ??
+              (stageHowToPlayDreamwell ? view.howToPlay.companion ?? null : null)
+            }
             cardWidth={
               view.howToPlay.cardWidth ??
               TUTORIAL_HOW_TO_PLAY_DESKTOP_PANEL_WIDTH
             }
+            staged={stageHowToPlayDreamwell}
             onClose={closeHowToPlay}
           />
         ) : null}
