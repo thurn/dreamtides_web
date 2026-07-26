@@ -328,6 +328,11 @@ export interface MobileBattleInteractions {
   readonly pendingCardId: string | null;
   readonly pendingCardSource?: MobileBattleCardSource | null;
   readonly pendingCardOwner?: MobileBattleOwner | null;
+  /**
+   * When supplied for a battlefield drag, every pointer release resolves to
+   * the nearest listed cell instead of requiring a direct slot hit.
+   */
+  readonly eligibleSlotTargets?: readonly MobileBattleSlotTarget[];
   /** A tutorial play awaiting a legal battlefield target. */
   readonly targetSelectionCardId?: string | null;
   readonly targetSelectionPrompt?: string | null;
@@ -1784,7 +1789,7 @@ function Rank({
   readonly preserveOccupiedSlotOutlines?: boolean;
   readonly interactions?: MobileBattleInteractions;
 }) {
-  const canDrop =
+  const canDropOnOwner =
     interactions?.canInteract === true
     && interactions.pendingCardId !== null
     && interactions.pendingCardSource !== "near-hand"
@@ -1866,6 +1871,16 @@ function Rank({
         }}
       >
         {visibleSlots.map((slot) => {
+          const slotTarget = { owner, rank, slotId: slot.id } as const;
+          const canDrop = canDropOnOwner && (
+            interactions?.eligibleSlotTargets === undefined ||
+            interactions.eligibleSlotTargets.some(
+              (target) =>
+                target.owner === slotTarget.owner &&
+                target.rank === slotTarget.rank &&
+                target.slotId === slotTarget.slotId,
+            )
+          );
           const candidate = slot.card === null
             ? null
             : pickerCandidate(cardPicker, slot.card.id);
@@ -1897,7 +1912,7 @@ function Rank({
               onDrop={(event) => {
                 if (!canDrop) return;
                 event.preventDefault();
-                interactions.onSlotDrop({ owner, rank, slotId: slot.id });
+                interactions.onSlotDrop(slotTarget);
               }}
               style={{
                 position: "relative",
@@ -2355,6 +2370,21 @@ function dropMobileCardAtPoint(
     );
     return;
   }
+  if (interactions.eligibleSlotTargets !== undefined) {
+    const battleScreen =
+      hitTarget?.closest<HTMLElement>("[data-battle-mobile]") ??
+      document.querySelector<HTMLElement>("[data-battle-mobile]");
+    if (battleScreen === null) return;
+    const target = closestEligibleBattlefieldSlot(
+      battleScreen,
+      interactions.pendingCardOwner ?? interactions.nearSide ?? "player",
+      interactions.eligibleSlotTargets,
+      clientX,
+      clientY,
+    );
+    if (target !== undefined) interactions.onSlotDrop(target);
+    return;
+  }
   const target = hitTarget?.closest<HTMLElement>(
     "[data-battle-mobile-drop-kind]",
   );
@@ -2378,6 +2408,58 @@ function dropMobileCardAtPoint(
   const zone = target.dataset.battleMobileDropZone;
   if (zone !== "deck" && zone !== "hand" && zone !== "void") return;
   interactions.onZoneDrop({ owner, zone });
+}
+
+function closestEligibleBattlefieldSlot(
+  battleScreen: HTMLElement,
+  owner: MobileBattleOwner,
+  eligibleTargets: readonly MobileBattleSlotTarget[],
+  clientX: number,
+  clientY: number,
+): MobileBattleSlotTarget | undefined {
+  if (!Number.isFinite(clientX) || !Number.isFinite(clientY)) return undefined;
+  const eligibleKeys = new Set(
+    eligibleTargets
+      .filter((target) => target.owner === owner)
+      .map((target) => `${target.rank}:${target.slotId}`),
+  );
+  let closest:
+    | {
+        readonly target: MobileBattleSlotTarget;
+        readonly distanceSquared: number;
+      }
+    | undefined;
+  const slots = battleScreen.querySelectorAll<HTMLElement>(
+    `[data-battle-mobile-drop-kind="slot"][data-battle-mobile-drop-owner="${owner}"]`,
+  );
+  slots.forEach((slot) => {
+    const rank = slot.dataset.battleMobileDropRank;
+    const slotId = slot.dataset.battleMobileDropSlotId;
+    if (
+      (rank !== "back" && rank !== "front") ||
+      slotId === undefined ||
+      !eligibleKeys.has(`${rank}:${slotId}`)
+    ) {
+      return;
+    }
+    const bounds = slot.getBoundingClientRect();
+    const deltaX = clientX - (bounds.left + bounds.width / 2);
+    const deltaY = clientY - (bounds.top + bounds.height / 2);
+    const distanceSquared = deltaX * deltaX + deltaY * deltaY;
+    const target = { owner, rank, slotId } as const;
+    if (
+      closest === undefined ||
+      distanceSquared < closest.distanceSquared ||
+      (
+        distanceSquared === closest.distanceSquared &&
+        `${target.rank}:${target.slotId}` <
+          `${closest.target.rank}:${closest.target.slotId}`
+      )
+    ) {
+      closest = { target, distanceSquared };
+    }
+  });
+  return closest?.target;
 }
 
 function closestOpenBackRankSlot(
