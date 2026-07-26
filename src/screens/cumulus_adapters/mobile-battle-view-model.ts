@@ -36,6 +36,7 @@ import {
 } from "../../cumulus/screens/MobileBattleScreen";
 import type { MobileBattleResultView } from "../../cumulus/screens/BattleResultSurface";
 import { cardIsRevealedTo } from "../../battle/state/card-visibility";
+import { starterCardHasRequiredTargets } from "../../battle/starter-card-targets";
 
 const FALLBACK_PLAYER_DREAMCALLER = {
   imageNumber: "001",
@@ -97,7 +98,8 @@ export function buildMobileBattleView(
     (instance) =>
       board.activeSide === perspective &&
       board.phase === "day" &&
-      instance.definition.energyCost <= board.sides[perspective].currentEnergy,
+      instance.definition.energyCost <= board.sides[perspective].currentEnergy &&
+      starterCardHasRequiredTargets(board, instance.battleCardId),
   );
   const promptCandidateIds = ownsPrompt && viewOptions.pendingPrompt?.options.kind === "pick-cards"
     ? new Set(viewOptions.pendingPrompt.options.candidateIds)
@@ -164,7 +166,8 @@ export function buildMobileBattleView(
       (instance) =>
         board.activeSide === "player" &&
         board.phase === "day" &&
-        instance.definition.energyCost <= board.sides.player.currentEnergy,
+        instance.definition.energyCost <= board.sides.player.currentEnergy &&
+        starterCardHasRequiredTargets(board, instance.battleCardId),
     ),
     inspector: buildInspectorView(init, board, aiProposal, viewOptions),
     result: buildMobileBattleResultView(

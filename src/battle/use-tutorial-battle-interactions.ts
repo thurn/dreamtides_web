@@ -5,6 +5,10 @@ import type { PromptResolution } from "../rules/battle/effect-runner-core";
 import type { MobileBattleInteractions } from "../cumulus/screens/MobileBattleScreen";
 import type { TutorialBattleControllerPlan } from "./tutorial-battle-controller";
 import { selectBattleCardLocation, selectBattlefieldSlotOccupant } from "./state/selectors";
+import {
+  selectStarterCardLegalTargetIds,
+  starterCardRequiresTarget,
+} from "./starter-card-targets";
 
 /** Player-only intent bridge for the automated tutorial battle. */
 export function useTutorialBattleInteractions(
@@ -72,17 +76,7 @@ export function useTutorialBattleInteractions(
   }, [board, canAct, pendingCard]);
   const targetableCardIds = useMemo(() => {
     if (board === null || targetingCardId === null) return [];
-    const cardId = board.cardInstances[targetingCardId]?.definition.cardId;
-    return Object.entries(board.cardInstances).flatMap(([battleCardId, instance]) => {
-      const location = selectBattleCardLocation(board, battleCardId);
-      const onBattlefield = location?.zone === "frontRank" || location?.zone === "backRank";
-      const legal = cardId === "4408b942-09a0-4f4e-a403-10c708c6e3c5"
-        ? instance.controller === "enemy" && instance.definition.battleCardKind === "character" && instance.definition.energyCost <= 2
-        : cardId === "944e15d2-d680-4ebe-8d18-36826f4b1535"
-          ? instance.controller === "player" && instance.definition.battleCardKind === "character"
-          : false;
-      return legal && onBattlefield ? [battleCardId] : [];
-    });
+    return selectStarterCardLegalTargetIds(board, targetingCardId);
   }, [board, targetingCardId]);
   const logIntent = useCallback((kind: string, detail: Record<string, unknown> = {}) => {
     if (board === null) return;
@@ -119,9 +113,23 @@ export function useTutorialBattleInteractions(
     onHandCardActivate: (battleCardId) => {
       if (!canAct || board === null || board.activeSide !== "player" || board.phase !== "day") return;
       const definitionId = board.cardInstances[battleCardId]?.definition.cardId;
-      if (definitionId === "4408b942-09a0-4f4e-a403-10c708c6e3c5" || definitionId === "944e15d2-d680-4ebe-8d18-36826f4b1535") {
+      if (definitionId !== undefined && starterCardRequiresTarget(definitionId)) {
+        const legalTargetIds =
+          selectStarterCardLegalTargetIds(board, battleCardId);
+        if (legalTargetIds.length === 0) {
+          logIntent("target-selection-unavailable", {
+            battleCardId,
+            definitionId,
+            legalTargetCount: 0,
+          });
+          return;
+        }
         setTargetingCardId(battleCardId);
-        logIntent("target-selection-opened", { battleCardId, definitionId });
+        logIntent("target-selection-opened", {
+          battleCardId,
+          definitionId,
+          legalTargetCount: legalTargetIds.length,
+        });
         return;
       }
       logIntent("play-card", { battleCardId });
@@ -138,11 +146,10 @@ export function useTutorialBattleInteractions(
       const target = board.cardInstances[targetBattleCardId];
       const location = target === undefined ? null : selectBattleCardLocation(board, targetBattleCardId);
       const onBattlefield = location?.zone === "frontRank" || location?.zone === "backRank";
-      const legal = source?.definition.cardId === "4408b942-09a0-4f4e-a403-10c708c6e3c5"
-        ? target !== undefined && target.controller === "enemy" && target.definition.battleCardKind === "character" && target.definition.energyCost <= 2 && onBattlefield
-        : source?.definition.cardId === "944e15d2-d680-4ebe-8d18-36826f4b1535"
-          ? target !== undefined && target.controller === "player" && target.definition.battleCardKind === "character" && onBattlefield
-          : false;
+      const legal = source !== undefined && target !== undefined &&
+        onBattlefield &&
+        selectStarterCardLegalTargetIds(board, targetingCardId)
+          .includes(targetBattleCardId);
       if (!legal) {
         logIntent("target-selection-rejected", { battleCardId: targetingCardId, targetBattleCardId });
         return;
@@ -169,15 +176,25 @@ export function useTutorialBattleInteractions(
         return;
       }
       const definitionId = instance.definition.cardId;
-      if (
-        definitionId === "4408b942-09a0-4f4e-a403-10c708c6e3c5" ||
-        definitionId === "944e15d2-d680-4ebe-8d18-36826f4b1535"
-      ) {
+      if (starterCardRequiresTarget(definitionId)) {
+        const legalTargetIds =
+          selectStarterCardLegalTargetIds(board, battleCardId);
+        if (legalTargetIds.length === 0) {
+          logIntent("target-selection-unavailable", {
+            battleCardId,
+            definitionId,
+            input: "drag",
+            legalTargetCount: 0,
+          });
+          setPendingCard(null);
+          return;
+        }
         setTargetingCardId(battleCardId);
         logIntent("target-selection-opened", {
           battleCardId,
           definitionId,
           input: "drag",
+          legalTargetCount: legalTargetIds.length,
           preferredSlot: target ?? null,
         });
         setPendingCard(null);

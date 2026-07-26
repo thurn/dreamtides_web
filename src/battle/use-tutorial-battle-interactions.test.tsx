@@ -29,6 +29,8 @@ vi.mock("../coop/hooks", () => ({
 
 const PLAYER_CARD_UUID = "e83014d3-9d35-4e80-a1b3-9b25360ad2af";
 const TUTORIAL_CHARACTER_UUID = "5a980eff-6ec7-44d8-9977-b98e66bbc2c8";
+const REQUIRED_ENEMY_TARGET_EVENT_UUID =
+  "4408b942-09a0-4f4e-a403-10c708c6e3c5";
 const PLAYER_INSTANCE_ID = "player-hand-instance-uuid";
 
 function side(): BattleMutableState["sides"]["player"] {
@@ -176,6 +178,33 @@ function battlefieldState(): FoldState {
   };
 }
 
+function stateWithoutLegalEventTarget(): FoldState {
+  const next = state();
+  if (next.battle === null) throw new Error("fixture requires a battle");
+  const source = next.battle.board.cardInstances[PLAYER_INSTANCE_ID];
+  if (source === undefined) throw new Error("fixture requires a card");
+  return {
+    ...next,
+    battle: {
+      ...next.battle,
+      board: {
+        ...next.battle.board,
+        cardInstances: {
+          ...next.battle.board.cardInstances,
+          [PLAYER_INSTANCE_ID]: {
+            ...source,
+            definition: {
+              ...source.definition,
+              cardId: REQUIRED_ENEMY_TARGET_EVENT_UUID,
+              battleCardKind: "event",
+            },
+          },
+        },
+      },
+    },
+  };
+}
+
 const controller: TutorialBattleControllerPlan = {
   status: "driver",
   driverClientId: "driver-client",
@@ -271,6 +300,21 @@ describe("useTutorialBattleInteractions", () => {
     );
     expect(latest?.interactions.eligibleSlotTargets)
       .not.toContainEqual(expect.objectContaining({ owner: "enemy" }));
+
+    act(() => root.unmount());
+  });
+
+  it("does not open target selection for a required-target UUID with no legal target", () => {
+    mocks.state = stateWithoutLegalEventTarget();
+    const root = mount();
+
+    act(() => {
+      latest?.interactions.onHandCardActivate(PLAYER_INSTANCE_ID);
+    });
+
+    expect(latest?.interactions.targetSelectionCardId).toBeNull();
+    expect(latest?.interactions.targetableCardIds).toEqual([]);
+    expect(mocks.battlePlayCard).not.toHaveBeenCalled();
 
     act(() => root.unmount());
   });

@@ -686,6 +686,43 @@ describe("buildMobileBattleView", () => {
     ).toEqual([false, false, false]);
   });
 
+  it("omits the playable outline when a UUID-backed required target set is empty", () => {
+    const init = makeInit();
+    const board = makeBoard(init);
+    const sourceInstanceId = board.sides.player.hand[0];
+    const enemyInstanceIds = [
+      board.sides.enemy.frontRank.F0,
+      board.sides.enemy.backRank.B4,
+    ].filter((instanceId): instanceId is string => instanceId !== null);
+    board.phase = "day";
+    board.activeSide = "player";
+    board.cardInstances[sourceInstanceId].definition.cardId =
+      "4408b942-09a0-4f4e-a403-10c708c6e3c5";
+    board.cardInstances[sourceInstanceId].definition.energyCost = 1;
+    enemyInstanceIds.forEach((instanceId) => {
+      board.cardInstances[instanceId].definition.energyCost = 3;
+    });
+
+    const withoutTarget = buildMobileBattleView(
+      init,
+      board,
+      ENEMY_DREAMCALLER,
+    ).playerHand.find((card) => card.id === sourceInstanceId);
+    expect(withoutTarget?.showPlayableOutline).toBe(false);
+
+    const eligibleTargetId = enemyInstanceIds[0];
+    if (eligibleTargetId === undefined) {
+      throw new Error("fixture requires an enemy battlefield character");
+    }
+    board.cardInstances[eligibleTargetId].definition.energyCost = 2;
+    const withTarget = buildMobileBattleView(
+      init,
+      board,
+      ENEMY_DREAMCALLER,
+    ).playerHand.find((card) => card.id === sourceInstanceId);
+    expect(withTarget?.showPlayableOutline).toBe(true);
+  });
+
   it.each([
     ["dreamwell", "dawn"],
     ["draw", "dawn"],
