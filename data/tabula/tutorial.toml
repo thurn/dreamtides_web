@@ -69,32 +69,13 @@ wait = 0
 id = "how-to-play"
 action = "display-how-to-play"
 trigger = "player-turn-announcement-complete"
-text = "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle."
+text = "You can [yellow]materialize[/yellow] characters and then [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle."
 wait = 0
 
 [[actions]]
 id = "end-turn"
 action = "end-turn"
 wait = 0
-
-[actions.speechBubble]
-speaker = "mira"
-duration = 3
-verticalOffset = 0
-bubbleWidth = 700
-text = "You have now [yellow]materialized[/yellow] a dream character."
-
-[[actions]]
-id = "vrakmoth-worthy-challenger"
-action = "display-speech-bubble"
-wait = 0
-
-[actions.speechBubble]
-speaker = "enemy"
-duration = 3
-verticalOffset = 0
-bubbleWidth = 300
-text = "A worthy challenger!"
 
 [[actions]]
 id = "autumn-glade"
@@ -108,6 +89,7 @@ id = "dreamwell-how-to-play"
 action = "display-how-to-play"
 trigger = "immediate"
 companion = "dreamwell-card"
+cardWidth = 500
 text = "From turn 2, players draw [yellow]dreamwell[/yellow] cards that increase their energy (●) production and have special effects."
 wait = 0
 
@@ -122,26 +104,38 @@ id = "runebound-champion-reveal-and-play"
 action = "reveal-and-play-opponent-card"
 cardId = "a28ad36d-fa74-4190-a463-7efd3a6233d0"
 revealDuration = 5
-wait = 2
+wait = 0
 
 [actions.speechBubble]
 speaker = "mira"
-duration = 5
+duration = 4
 verticalOffset = 0
 bubbleWidth = 500
 text = "This card has a ▸Dawn ability which triggers at the start of turn."
 
 [[actions]]
+id = "vrakmoth-challenge"
+action = "display-speech-bubble"
+wait = 0
+
+[actions.speechBubble]
+speaker = "enemy"
+duration = 3
+verticalOffset = 0
+bubbleWidth = 300
+text = "My character [yellow]challenges[/yellow] you! Prove your worth!"
+
+[[actions]]
 id = "opponent-character-advance"
 action = "reposition-opponent-character"
 cardId = "229ab3a1-3720-41a2-924c-8fe112188f8e"
-wait = 0
+wait = 1.5
 
 [[actions]]
 id = "challenge-positioning-how-to-play"
 action = "display-how-to-play"
 trigger = "immediate"
-text = "Position characters in the front rank to [yellow]challenge[/yellow] with them during your turn or [yellow]block[/yellow] a challenger during the opponent's turn."
+text = "Characters in the front rank [yellow]challenge[/yellow] during their turn and [yellow]block[/yellow] challengers during the opponent's turn."
 wait = 0
 
 [[actions]]

@@ -136,7 +136,7 @@ card-number = 7
 art = { x = 0.21, y = 0.369, scale = 1.17 }
 
 [[cards]]
-name = "Chronicle Reclaimer"
+name = "Chronicle Claimer"
 mtg-name = "Currency Converter"
 id = "68978d92-aa8b-4873-bb0b-6e52f12b0849"
 rendered-text = "❖ – ☪: Draw a card, then discard a card."
@@ -412,12 +412,12 @@ name = "Soulkindler"
 mtg-name = "Life from the Loam"
 id = "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005"
 rendered-text = '''
-Abandon this character: Return an character from your void to your hand.
+Abandon this character: Return a character from your void to your hand.
 
 ▸Dawn: If this card is in your void, erode 3.'''
-energy-cost = 3
+energy-cost = 2
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Survivor"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -506,7 +506,7 @@ card-number = 27
 art = { x = 0.546, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Architect of Memory"
+name = "Inheritor of Sorrows"
 mtg-name = "Dragon's Rage Channeler"
 id = "29c4c45d-33df-42ac-bf28-387eb00264aa"
 rendered-text = "If there are 3 or more events in your void, this character has +4✦ and gains awakened."
@@ -1144,13 +1144,11 @@ art = { x = 0.642, y = 1, scale = 1.87 }
 name = "Nightprowler"
 mtg-name = "Devoted Druid"
 id = "d30bd488-f921-49cb-a44f-353c54cb6548"
-rendered-text = """
-▸Dawn: Gain 1●.
-
+rendered-text = '''
 Abandon this character: Gain 1●.
 
-Reclaim 0●"""
-energy-cost = 2
+Reclaim 0●'''
+energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
 rarity = ""
@@ -1896,7 +1894,7 @@ card-number = 100
 art = { x = 0, y = 0.161, scale = 1.17 }
 
 [[cards]]
-name = "Pyre Caller"
+name = "Pyre Wight"
 mtg-name = "Chandra, Acolyte of Flame"
 id = "5a27e236-86d7-442f-81d2-fb29a2b7f12a"
 rendered-text = """
@@ -2345,7 +2343,7 @@ card-number = 124
 art = { x = 0.092, y = 1, scale = 1.11 }
 
 [[cards]]
-name = "Dawnblade Wanderer"
+name = "Dawnblade"
 mtg-name = "Springleaf Drum"
 id = "a42fbd1b-7629-48c9-90da-e9a4246867d7"
 rendered-text = "Once per turn, when you materialize a character, gain 1●."
@@ -2421,7 +2419,7 @@ card-number = 128
 art = { x = 0.294, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Bloomweaver"
+name = "Bloom Guard"
 mtg-name = "Ichor Wellspring"
 id = "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c"
 rendered-text = "▸Materialized, Dissolved: Draw a card."
@@ -2897,13 +2895,13 @@ card-number = 153
 art = { x = 0, y = 1, scale = 1 }
 
 [[cards]]
-name = "Cinderkeeper"
+name = "Firey Apparition"
 mtg-name = "Anax, Hardened in the Forge"
 id = "6d6ce556-60df-486f-b2d8-5df168a6f75e"
 rendered-text = "When a non-figment character you control is dissolved, materialize a 1✦ ember figment with awakened. When an ember figment is dissolved, this character gains +1✦."
 energy-cost = 3
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Elemental"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -3061,7 +3059,7 @@ art-owned = true
 card-number = 162
 
 [[cards]]
-name = "Shaper of Memory"
+name = "Emperor of Eternity"
 mtg-name = "Anger"
 id = "455ef341-8a26-44e1-b287-19e53bdc6158"
 rendered-text = "If this card is in your void, characters you control have +1✦."
@@ -3527,7 +3525,7 @@ card-number = 187
 art = { x = 0, y = 0.72, scale = 1.37 }
 
 [[cards]]
-name = "Barren Path Wanderer"
+name = "Barren Path Walker"
 mtg-name = "Wight of the Reliquary"
 id = "f46490a5-7030-4ade-93e9-bedb5813f590"
 rendered-text = "This character has +1✦ for each character in your void."
@@ -5062,7 +5060,7 @@ card-number = 270
 art = { x = 0, y = 0, scale = 1.97 }
 
 [[cards]]
-name = "Voidcaller"
+name = "Void Claimant"
 mtg-name = "Samwise Gamgee"
 id = "920ef495-5560-4fa6-9a95-b9584ef6a4cf"
 rendered-text = """
@@ -5847,10 +5845,10 @@ card-number = 312
 art = { x = 0.45, y = 1, scale = 1.11 }
 
 [[cards]]
-name = "Spellweaver"
+name = "Extractor of Souls"
 mtg-name = "Thopter Foundry"
 id = "41044897-b70a-4e2b-8eb6-baf843a14a43"
-rendered-text = "1●, Abandon a non-figment warrior: Materialize a 1✦ warrior figment."
+rendered-text = "Abandon a non-figment warrior: Materialize a 1✦ warrior figment."
 energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"
@@ -5867,12 +5865,10 @@ card-number = 313
 name = "Lanternhearted"
 mtg-name = "Fatestitcher"
 id = "1dc8f23e-58bd-47e5-9510-b48315fba1df"
-rendered-text = """
-Awakened
+rendered-text = '''
+Awakened, Reclaim 1●
 
-☪: Awaken a character you control.
-
-Reclaim 1●"""
+☪: Awaken a character you control.'''
 energy-cost = 3
 card-type = "Character"
 subtype = "Explorer"
@@ -6775,7 +6771,7 @@ card-number = 360
 art = { x = -0.006, y = 1, scale = 1.16 }
 
 [[cards]]
-name = "Shadowcaller"
+name = "Shadowsinger"
 mtg-name = "Bridge from Below"
 id = "c36e67ab-fbee-4d83-b57b-34d34f60e17c"
 rendered-text = "When a character you control is dissolved, materialize a 1✦ survivor figment. When you discard or erode this card, it gains reclaim 0●."
@@ -6998,7 +6994,7 @@ card-number = 372
 art = { x = 0, y = 0.328, scale = 1 }
 
 [[cards]]
-name = "Lightningborn"
+name = "Lightning Channeler"
 mtg-name = "Portable Hole"
 id = "c73f978e-8196-4589-a432-845265115555"
 rendered-text = "▸Materialized: Banish a ≤2● cost enemy until this character leaves play."
@@ -7243,7 +7239,7 @@ card-number = 385
 art = { x = -0.286, y = 0.032, scale = 1.77 }
 
 [[cards]]
-name = "Blood Sun Oppressor"
+name = "Bloodsun Oppressor"
 mtg-name = "Deep-Cavern Bat"
 id = "1bae969b-0bc4-4777-86f3-1e860d601c5c"
 rendered-text = "▸Materialized: Banish a chosen card from the opponent's hand until this character leaves play."
@@ -8790,7 +8786,7 @@ art-owned = true
 card-number = 467
 
 [[cards]]
-name = "Twilight Reclaimer"
+name = "Eternal Soul"
 mtg-name = "Relentless Dead"
 id = "4e1c0192-2649-489f-aad3-75ff2887c0a7"
 rendered-text = "▸Dissolved: Choose a survivor in your void to gain reclaim."
@@ -8805,6 +8801,7 @@ tags = ["Art Rework", "July14", "Art OK"]
 image-number = 1104412604
 art-owned = false
 card-number = 468
+art = { x = 0, y = 0.218, scale = 1.47 }
 
 [[cards]]
 name = "Returned Vanguard"
@@ -9016,7 +9013,7 @@ card-number = 479
 art = { x = 0.062, y = 0, scale = 1.67 }
 
 [[cards]]
-name = "Grim Reclaimer"
+name = "Grim Recruiter"
 mtg-name = "Spawning Pit"
 id = "cf173b05-7bf2-465b-91e2-41f213c536d1"
 rendered-text = """

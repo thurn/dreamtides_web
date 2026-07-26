@@ -150,7 +150,7 @@
       ]
     },
     "29c4c45d-33df-42ac-bf28-387eb00264aa": {
-      "name": "Architect of Memory",
+      "name": "Inheritor of Sorrows",
       "needs": [
         {
           "theme": "storm",
@@ -648,7 +648,7 @@
       ]
     },
     "68978d92-aa8b-4873-bb0b-6e52f12b0849": {
-      "name": "Chronicle Reclaimer",
+      "name": "Chronicle Claimer",
       "needs": [],
       "supports": [
         "discard",
@@ -851,7 +851,7 @@
       ]
     },
     "a42fbd1b-7629-48c9-90da-e9a4246867d7": {
-      "name": "Dawnblade Wanderer",
+      "name": "Dawnblade",
       "needs": [
         {
           "theme": "cheap-characters",
@@ -2316,7 +2316,7 @@
       ]
     },
     "c73f978e-8196-4589-a432-845265115555": {
-      "name": "Lightningborn",
+      "name": "Lightning Channeler",
       "needs": [],
       "supports": [
         "warriors",
@@ -2758,7 +2758,7 @@
       ]
     },
     "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c": {
-      "name": "Bloomweaver",
+      "name": "Bloom Guard",
       "needs": [],
       "supports": [
         "warriors",
@@ -2887,7 +2887,7 @@
       ]
     },
     "cf173b05-7bf2-465b-91e2-41f213c536d1": {
-      "name": "Grim Reclaimer",
+      "name": "Grim Recruiter",
       "needs": [
         {
           "theme": "abandon",
@@ -3156,7 +3156,7 @@
       ]
     },
     "1bae969b-0bc4-4777-86f3-1e860d601c5c": {
-      "name": "Blood Sun Oppressor",
+      "name": "Bloodsun Oppressor",
       "needs": [],
       "supports": [
         "cheap-characters"
@@ -3184,7 +3184,7 @@
       ]
     },
     "f46490a5-7030-4ade-93e9-bedb5813f590": {
-      "name": "Barren Path Wanderer",
+      "name": "Barren Path Walker",
       "needs": [
         {
           "theme": "void",
@@ -3319,7 +3319,7 @@
       ]
     },
     "920ef495-5560-4fa6-9a95-b9584ef6a4cf": {
-      "name": "Voidcaller",
+      "name": "Void Claimant",
       "supports": [
         "warriors"
       ]
@@ -3468,14 +3468,14 @@
       "supports": []
     },
     "5a27e236-86d7-442f-81d2-fb29a2b7f12a": {
-      "name": "Pyre Caller",
+      "name": "Pyre Wight",
       "needs": [],
       "supports": [
         "figments"
       ]
     },
     "c36e67ab-fbee-4d83-b57b-34d34f60e17c": {
-      "name": "Shadowcaller",
+      "name": "Shadowsinger",
       "needs": [
         {
           "theme": "abandon",
@@ -3753,7 +3753,7 @@
       ]
     },
     "455ef341-8a26-44e1-b287-19e53bdc6158": {
-      "name": "Shaper of Memory",
+      "name": "Emperor of Eternity",
       "needs": [
         {
           "theme": "void",
@@ -3806,7 +3806,7 @@
       ]
     },
     "41044897-b70a-4e2b-8eb6-baf843a14a43": {
-      "name": "Spellweaver",
+      "name": "Extractor of Souls",
       "needs": [
         {
           "theme": "warriors",
@@ -4412,7 +4412,7 @@
       ]
     },
     "4e1c0192-2649-489f-aad3-75ff2887c0a7": {
-      "name": "Twilight Reclaimer",
+      "name": "Eternal Soul",
       "needs": [
         {
           "theme": "survivors",
@@ -4900,7 +4900,7 @@
       ]
     },
     "6d6ce556-60df-486f-b2d8-5df168a6f75e": {
-      "name": "Cinderkeeper",
+      "name": "Firey Apparition",
       "needs": [
         {
           "theme": "abandon",
