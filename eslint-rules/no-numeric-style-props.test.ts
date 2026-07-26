@@ -61,9 +61,9 @@ ruleTester.run("no-numeric-style-props", rule, {
     },
     {
       name: "an allowlisted numeric knob is exempt",
-      filename: "src/cumulus/components/hud/DreamcallerPortrait.tsx",
-      code: `export interface DreamcallerPortraitProps { size?: number; }`,
-      options: [{ allow: ["DreamcallerPortraitProps.size"] }],
+      filename: "src/cumulus/components/hud/DreamAvatarPortrait.tsx",
+      code: `export interface DreamAvatarPortraitProps { size?: number; }`,
+      options: [{ allow: ["DreamAvatarPortraitProps.size"] }],
     },
     {
       name: "a knob-worded number on a non-*Props/*View type is out of scope",

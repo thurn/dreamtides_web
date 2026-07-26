@@ -145,7 +145,7 @@ function makeMutations(): QuestMutations {
   return {
     changeEssence: vi.fn(),
     startQuest: vi.fn(),
-    rerollDreamcallerOffer: vi.fn(),
+    rerollDreamAvatarOffer: vi.fn(),
     completeSite: vi.fn(),
     ensureRewardSiteRuntime: vi.fn(),
     acceptRewardSite: vi.fn(),
@@ -171,7 +171,7 @@ function makeMutations(): QuestMutations {
     transfigureCard: vi.fn(),
     changeDeckEntryType: vi.fn(),
     changeDeckEntryKeywords: vi.fn(),
-    setDreamcallerSelection: vi.fn(),
+    setDreamAvatarSelection: vi.fn(),
     setCardSourceDebug: vi.fn(),
     addDreamsign: vi.fn(),
     removeDreamsign: vi.fn(),
@@ -214,7 +214,7 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
     essenceCap: 500,
     maxDreamsigns: 12,
     deck: [],
-    dreamcaller: null,
+    dreamAvatar: null,
     resolvedPackage: null,
     cardSourceDebug: null,
     remainingDreamsignPool: [],
@@ -249,7 +249,7 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
 function makeQuestContent(): QuestContent {
   return {
     cardDatabase: new Map<number, CardData>(),
-    dreamcallers: [],
+    dreamAvatars: [],
 
     dreamwellCards: [],
     dreamsignTemplates: [],
@@ -267,7 +267,7 @@ function setQuestState(state: QuestState): void {
     cardDatabase: new Map<number, CardData>(),
     questContent: {
       cardDatabase: new Map(),
-      dreamcallers: [],
+      dreamAvatars: [],
 
       dreamwellCards: [],
       dreamsignTemplates: [],
@@ -472,7 +472,7 @@ describe("QuestApp", () => {
         transfiguration: null,
         isBane: false,
       })),
-      dreamcaller: {
+      dreamAvatar: {
         id: "caller-1",
         name: "Starter Caller",
         title: "Of the First Hand",
@@ -484,7 +484,7 @@ describe("QuestApp", () => {
       ...overrides,
     });
 
-  it("keeps the deck viewer and starting-deck modal closed before any dreamcaller is selected", () => {
+  it("keeps the deck viewer and starting-deck modal closed before any dreamAvatar is selected", () => {
     setQuestState(makeState());
 
     const { container, root } = mount(
@@ -514,7 +514,7 @@ describe("QuestApp", () => {
     });
   });
 
-  it("opens the starting-deck modal (not the full DeckViewer) immediately after a dreamcaller is picked", () => {
+  it("opens the starting-deck modal (not the full DeckViewer) immediately after a dreamAvatar is picked", () => {
     setQuestState(starterCallerState());
 
     const { container, root } = mount(
@@ -554,7 +554,7 @@ describe("QuestApp", () => {
       cardDatabase: new Map<number, CardData>(),
       questContent: {
         cardDatabase: new Map(),
-        dreamcallers: [],
+        dreamAvatars: [],
 
         dreamwellCards: [],
         dreamsignTemplates: [],

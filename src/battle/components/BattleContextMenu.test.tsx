@@ -6,12 +6,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { BattleCommand } from "../debug/commands";
 import { createBattleInit } from "../integration/create-battle-init";
 import { createInitialBattleState } from "../state/create-initial-state";
-import { makeBattleTestCardDatabase, makeBattleTestDreamcallers, makeBattleTestSite, makeBattleTestState } from "../test-support";
+import { makeBattleTestCardDatabase, makeBattleTestDreamAvatars, makeBattleTestSite, makeBattleTestState } from "../test-support";
 import type { BattleMutableState } from "../types";
 import { BattleContextMenu } from "./BattleContextMenu";
 
 function state(): BattleMutableState {
-  return createInitialBattleState(createBattleInit({ battleEntryKey: "test", site: makeBattleTestSite(), state: makeBattleTestState(), cardDatabase: makeBattleTestCardDatabase(), dreamcallers: makeBattleTestDreamcallers() }));
+  return createInitialBattleState(createBattleInit({ battleEntryKey: "test", site: makeBattleTestSite(), state: makeBattleTestState(), cardDatabase: makeBattleTestCardDatabase(), dreamAvatars: makeBattleTestDreamAvatars() }));
 }
 
 beforeEach(() => {

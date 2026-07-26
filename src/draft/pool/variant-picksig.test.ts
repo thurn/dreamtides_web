@@ -1,5 +1,5 @@
 // `picksig` is `pickcohere` with its candidate seeds drawn from a distribution
-// biased toward a Dreamcaller's signature instead of uniformly. These tests pin
+// biased toward a DreamAvatar's signature instead of uniformly. These tests pin
 // the two things that make that true and safe:
 //   * the signature affinity and seed weights it derives from the corpus (the
 //     steering signal), including resolving signature NAMES onto the UUID corpus;

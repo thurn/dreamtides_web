@@ -38,8 +38,8 @@ const mocks = vi.hoisted(() => ({
           wait: 3,
         },
         {
-          id: "dreamcaller-arrival",
-          action: "animate-dreamcaller-portrait" as const,
+          id: "dream-avatar-arrival",
+          action: "animate-dream-avatar-portrait" as const,
           owner: "player" as const,
           pause: 1,
           duration: 0.6,
@@ -242,7 +242,7 @@ describe("TutorialScreenAdapter", () => {
           actionCount: 7,
           actionIds: [
             "welcome",
-            "dreamcaller-arrival",
+            "dream-avatar-arrival",
             "nightmare-call",
             "how-to-play",
             "end-turn",
@@ -253,8 +253,8 @@ describe("TutorialScreenAdapter", () => {
         expect.objectContaining({
           event: "tutorial_action_presented",
           runId: "event:1",
-          actionId: "dreamcaller-arrival",
-          action: "animate-dreamcaller-portrait",
+          actionId: "dream-avatar-arrival",
+          action: "animate-dream-avatar-portrait",
           dialogueVisible: false,
           dialogueText: null,
           owner: "player",
@@ -267,7 +267,7 @@ describe("TutorialScreenAdapter", () => {
     );
 
     act(() => {
-      adapterMocks.props?.onDreamcallerArrivalComplete?.(
+      adapterMocks.props?.onDreamAvatarArrivalComplete?.(
         "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
         "player",
       );
@@ -275,11 +275,11 @@ describe("TutorialScreenAdapter", () => {
     expect(getLogEntries()).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          event: "tutorial_dreamcaller_arrived",
+          event: "tutorial_dream_avatar_arrived",
           battleId: "tutorial-battle",
-          dreamcallerId: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+          dreamAvatarId: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
           owner: "player",
-          actionId: "dreamcaller-arrival",
+          actionId: "dream-avatar-arrival",
           abilityActive: false,
         }),
       ]),

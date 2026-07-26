@@ -138,7 +138,7 @@ export function generateDiverse(
   const lo = targetSize ?? LO;
   const hi = targetSize ?? HI;
 
-  // 1. choose a color identity by seeding from one archetype. A Dreamcaller
+  // 1. choose a color identity by seeding from one archetype. A DreamAvatar
   // restricts the seed pool to its own archetypes; otherwise any color+archetype
   // list is an eligible seed, weighted toward hard-to-reach identities.
   const eligibleSeeds = (seedArchetypes ?? []).filter(

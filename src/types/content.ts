@@ -1,5 +1,5 @@
 /**
- * Default starting essence used when a Dreamcaller record omits a tuned
+ * Default starting essence used when a DreamAvatar record omits a tuned
  * value. Persistence helpers (see `normalizeQuestState`) also fall back to
  * this constant so RTDB-stripped rooms render with a sensible value.
  */
@@ -8,30 +8,30 @@ import type { SiteType } from "./quest.ts";
 
 export const DEFAULT_STARTING_ESSENCE = 200;
 
-/** Normalized point locating a Dreamcaller's head in its portrait artwork. */
-export interface DreamcallerPortraitFocus {
+/** Normalized point locating a DreamAvatar's head in its portrait artwork. */
+export interface DreamAvatarPortraitFocus {
   /** Horizontal position from the artwork's left edge, in the range 0..1. */
   x: number;
   /** Vertical position from the artwork's top edge, in the range 0..1. */
   y: number;
 }
 
-export interface DreamcallerContent {
+export interface DreamAvatarContent {
   id: string;
   name: string;
   title: string;
   renderedText: string;
   imageNumber: string;
   /** Authored head position shared by full-body and square portrait crops. */
-  portraitFocus?: DreamcallerPortraitFocus;
+  portraitFocus?: DreamAvatarPortraitFocus;
   /**
-   * Per-Dreamcaller starting essence, compensating for differences in opening
+   * Per-DreamAvatar starting essence, compensating for differences in opening
    * power and engine ramp speed. Defaults to `DEFAULT_STARTING_ESSENCE` when
    * omitted from source data.
    */
   startingEssence: number;
   /**
-   * Card names that steer the `idf3` pool generator toward this Dreamcaller's
+   * Card names that steer the `idf3` pool generator toward this avatar's
    * intended decks when building the run's draft package. Optional during the
    * V2 migration; absent for v1 records.
    */
@@ -57,9 +57,9 @@ export interface DreamsignTemplate {
  * and carries no guide or affiliation; every other dreamscape has a resident
  * `guideId` and a thematic `affiliationId`.
  *
- * `dreamcallerIds` lists the 3-4 Dreamcallers resident in this region (empty for
+ * `dreamAvatarIds` lists the 3-4 DreamAvatars resident in this region (empty for
  * the starter). Across all dreamscapes these lists partition
- * dreamcallers_v2.toml: every non-starter Dreamcaller appears under exactly one
+ * dream_avatars_v2.toml: every non-starter DreamAvatar appears under exactly one
  * dreamscape, an invariant the asset build enforces.
  */
 export interface DreamscapeContent {
@@ -72,7 +72,7 @@ export interface DreamscapeContent {
   siteIcon: string;
   isStarter: boolean;
   fixedSites?: SiteType[];
-  dreamcallerIds: string[];
+  dreamAvatarIds: string[];
 }
 
 /**
@@ -143,7 +143,7 @@ export interface Idf3Anchor {
 
 /** Per-card provenance within an `idf3` pool. */
 export interface Idf3CardProvenance {
-  /** Whether this card is one of the Dreamcaller's signature cards. */
+  /** Whether this card is one of the DreamAvatar's signature cards. */
   isSignature: boolean;
   /** Whether this card is in the drawn starter decklist. */
   inStarterDeck: boolean;
@@ -156,14 +156,14 @@ export interface Idf3CardProvenance {
 }
 
 /**
- * Full provenance for one Dreamcaller's resolved `idf3` pool, keyed by card
+ * Full provenance for one DreamAvatar's resolved `idf3` pool, keyed by card
  * number. Records the whole chain — signature -> anchors -> starter -> grown
  * neighbours — so the "Why Cards" surface can explain why each card is in the
  * pool. Recomputed on demand from the run seed and the pool corpus; never
  * persisted.
  */
 export interface Idf3ProvenanceSummary {
-  /** The Dreamcaller's raw signature card names. */
+  /** The DreamAvatar's raw signature card names. */
   signatureCardNames: string[];
   /** Signature cards that carry IDF weight in the corpus (the actual probe). */
   signatureWeightedNames: string[];
@@ -198,7 +198,7 @@ export interface SeedCardProvenance {
 }
 
 /**
- * Full provenance for one Dreamcaller's resolved affinity-grown pool, keyed by
+ * Full provenance for one DreamAvatar's resolved affinity-grown pool, keyed by
  * card number. Produced by the family of variants that draw one random seed card
  * and grow a pool around it (`seed` plus the pick-record variants `pickfit`,
  * `pickearly`, `pickpos`, `pickchoice`). Records the seed card and how the pool
@@ -255,7 +255,7 @@ export interface Tides4TideSummary {
   name: string;
   /**
    * A narrative, thematic name for the tide shown on the player-facing screens
-   * (Dreamcaller select, Pool Viewer, "Why Cards"), when the tide is annotated.
+   * (DreamAvatar select, Pool Viewer, "Why Cards"), when the tide is annotated.
    */
   displayName?: string;
   /**
@@ -293,7 +293,7 @@ export interface Tides4CardProvenance {
 }
 
 /**
- * Full provenance for one Dreamcaller's resolved `tides4` pool, keyed by card
+ * Full provenance for one DreamAvatar's resolved `tides4` pool, keyed by card
  * number. Records the tides the pool combined — the always-joined signature
  * tide, the random subset of theme tides, and the broad tail — and which tide
  * each pooled card came from, so the Pool Viewer can show every individual tide
@@ -302,16 +302,16 @@ export interface Tides4CardProvenance {
  * persisted.
  */
 export interface Tides4ProvenanceSummary {
-  /** The Dreamcaller this pool was built for. */
-  dreamcallerId: string;
+  /** The DreamAvatar this pool was built for. */
+  dreamAvatarId: string;
   /**
-   * Whether the Dreamcaller has no signature. A signatureless Dreamcaller borrows
-   * a random signatured Dreamcaller's whole pool, leaning a coherent archetype.
+   * Whether the DreamAvatar has no signature. A signatureless DreamAvatar borrows
+   * a random signatured DreamAvatar's whole pool, leaning a coherent archetype.
    */
   signatureless: boolean;
   /**
-   * For a signatureless Dreamcaller, the name of the borrowed signature tide (the
-   * archetype it leaned this run); null for a signatured Dreamcaller.
+   * For a signatureless DreamAvatar, the name of the borrowed signature tide (the
+   * archetype it leaned this run); null for a signatured DreamAvatar.
    */
   borrowedArchetypeName: string | null;
   /** Total copies dealt into the pool. */
@@ -331,8 +331,8 @@ export interface Tides4ProvenanceSummary {
   cardProvenanceByNumber: Record<string, Tides4CardProvenance>;
 }
 
-export interface ResolvedDreamcallerPackage {
-  dreamcaller: DreamcallerContent;
+export interface ResolvedDreamAvatarPackage {
+  dreamAvatar: DreamAvatarContent;
   draftPoolCopiesByCard: Record<string, number>;
   dreamsignPoolIds: string[];
   mandatoryOnlyPoolSize: number;

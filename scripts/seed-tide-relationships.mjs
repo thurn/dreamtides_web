@@ -22,11 +22,11 @@
 //      that carry that payoff's support, so a player who picks the payoff is not
 //      stuck. Every repair is logged.
 //
-//   2. TIDE POOL per Dreamcaller — the tides its lead is drawn from. Signatured
-//      Dreamcallers get the tides most similar to their signature (the same
-//      IDF-cosine probe `idf3` finds its anchors with); neutral Dreamcallers get
+//   2. TIDE POOL per DreamAvatar — the tides its lead is drawn from. Signatured
+//      DreamAvatars get the tides most similar to their signature (the same
+//      IDF-cosine probe `idf3` finds its anchors with); neutral DreamAvatars get
 //      a diverse, representative spread by farthest-point sampling over the tide
-//      similarity matrix, rotated per Dreamcaller so each has its own identity.
+//      similarity matrix, rotated per DreamAvatar so each has its own identity.
 //
 // The seeder is a pure function of its inputs (no randomness; sorted tie-breaks
 // throughout), so re-running on the same inputs yields a byte-identical body.
@@ -72,9 +72,9 @@ const TUNING = {
   // Seeds the repair objective averages realized-pool traps over (a faithful,
   // deterministic sample of the runtime's shuffled fill).
   evalSeeds: 24,
-  // Tides in a signatured Dreamcaller's tide pool, most signature-similar first.
+  // Tides in a signatured DreamAvatar's tide pool, most signature-similar first.
   poolWidthSignatured: 8,
-  // Tides in a neutral Dreamcaller's tide pool (farthest-point spread).
+  // Tides in a neutral DreamAvatar's tide pool (farthest-point spread).
   poolWidthNeutral: 10,
   // Deal size the pool simulation fills to (matches POOL_TARGET_SIZE).
   dealSize: 200,
@@ -302,7 +302,7 @@ function chooseAllies(tideById, vectors, tides, leadId, supportById, tuning) {
   };
 }
 
-// --- Dreamcaller tide pools --------------------------------------------------
+// --- DreamAvatar tide pools --------------------------------------------------
 
 // IDF-cosine of a signature probe against a tide's card multiset (copies weight
 // the tide vector) — the same probe bake-tides uses for favored. `probeIds` is
@@ -358,7 +358,7 @@ function header(tideCount) {
 // draft-pool variant reads alongside the baked tide decks (data/tides2.jsonc).
 //
 // SEEDED ONCE by \`node scripts/seed-tide-relationships.mjs\` from the current
-// tides2 decks, decklist corpus, Dreamcaller signatures, and the build-around
+// tides2 decks, decklist corpus, DreamAvatar signatures, and the build-around
 // support metadata, then HAND-CURATED. The routine \`npm run bake-tides2\` does
 // NOT touch this file. Re-seed it only on a deliberate tide re-bake (\`--force\`),
 // which changes tide ids/contents and so invalidates this curation; the runtime
@@ -367,7 +367,7 @@ function header(tideCount) {
 //
 // \`alliesByTide\`: per tide id (all ${tideCount}), its ordered allied-tide ids,
 // best first — the decks that combine well with it; a pool fills from this list.
-// \`tidePoolByDreamcaller\`: per Dreamcaller UUID, the tides its lead is drawn
+// \`tidePoolByDreamAvatar\`: per DreamAvatar UUID, the tides its lead is drawn
 // from.
 //
 // After editing data/tides2.jsonc:
@@ -380,7 +380,7 @@ function serialize(json, tideCount) {
     ([id, allies], i, arr) =>
       `    ${JSON.stringify(id)}: ${JSON.stringify(allies)}${i < arr.length - 1 ? "," : ""}`,
   );
-  const poolLines = Object.entries(json.tidePoolByDreamcaller).map(
+  const poolLines = Object.entries(json.tidePoolByDreamAvatar).map(
     ([id, pool], i, arr) =>
       `    ${JSON.stringify(id)}: ${JSON.stringify(pool)}${i < arr.length - 1 ? "," : ""}`,
   );
@@ -392,7 +392,7 @@ function serialize(json, tideCount) {
       `  "alliesByTide": {`,
       ...allyLines,
       "  },",
-      `  "tidePoolByDreamcaller": {`,
+      `  "tidePoolByDreamAvatar": {`,
       ...poolLines,
       "  }",
       "}",
@@ -407,10 +407,10 @@ function serialize(json, tideCount) {
 const RELATIONSHIPS_MARKER =
   "<!-- relationships appended by seed-tide-relationships -->";
 
-// Append the allied-tides and Dreamcaller-tide-pool tables to the rendered
+// Append the allied-tides and DreamAvatar-tide-pool tables to the rendered
 // `tides2` decklists doc, replacing anything after the marker so re-running is
 // idempotent. Leaves the doc untouched if it has no marker (e.g. not yet baked).
-function appendRelationshipsDoc(docPath, json, tideById, dreamcallers) {
+function appendRelationshipsDoc(docPath, json, tideById, dreamAvatars) {
   if (!existsSync(docPath)) return false;
   const original = readFileSync(docPath, "utf8");
   const idx = original.indexOf(RELATIONSHIPS_MARKER);
@@ -426,11 +426,11 @@ function appendRelationshipsDoc(docPath, json, tideById, dreamcallers) {
     const allyLabels = allies.map((a) => `${a} (${nameOf(a)})`).join("; ");
     lines.push(`| ${label} | ${allyLabels || "(none)"} |`);
   }
-  lines.push("", "## Tide pools by Dreamcaller", "");
-  lines.push("| Dreamcaller | Tide pool (lead drawn from) |");
+  lines.push("", "## Tide pools by DreamAvatar", "");
+  lines.push("| DreamAvatar | Tide pool (lead drawn from) |");
   lines.push("| --- | --- |");
-  for (const dc of dreamcallers) {
-    const pool = json.tidePoolByDreamcaller[dc.id] ?? [];
+  for (const dc of dreamAvatars) {
+    const pool = json.tidePoolByDreamAvatar[dc.id] ?? [];
     const labels = pool.map((id) => nameOf(id)).join("; ");
     lines.push(`| ${dc.name} | ${labels || "(none)"} |`);
   }
@@ -466,7 +466,7 @@ function run() {
   const cards = readJson("public/cards_v2-data.json");
   const decklists = readJson("public/decklists-data.json");
   const decklistIds = readJson("public/decklist-ids-data.json");
-  const dreamcallers = readJson("public/dreamcallers-v2-data.json");
+  const dreamAvatars = readJson("public/dream-avatars-v2-data.json");
   const tideData = readJsonc(tidesRel);
   const buildaround = readJson("data/buildaround_support.json");
 
@@ -506,11 +506,11 @@ function run() {
     }
   }
 
-  // 2. Tide pool per Dreamcaller.
-  const tidePoolByDreamcaller = {};
+  // 2. Tide pool per DreamAvatar.
+  const tidePoolByDreamAvatar = {};
   let signaturedCount = 0;
   let neutralCount = 0;
-  for (const dc of dreamcallers) {
+  for (const dc of dreamAvatars) {
     const signature = dc.signatureCardIds ?? [];
     // Signature cards are cards_v2 UUIDs, matched in the corpus's lowercased UUID
     // key space (matching the UUID-keyed IDF corpus). Keep only cards with IDF
@@ -527,24 +527,24 @@ function run() {
         .sort((a, b) => b.score - a.score || (a.id < b.id ? -1 : 1))
         .slice(0, tuning.poolWidthSignatured);
       if (scored.length > 0) {
-        tidePoolByDreamcaller[dc.id] = scored.map((x) => x.id);
+        tidePoolByDreamAvatar[dc.id] = scored.map((x) => x.id);
         signaturedCount += 1;
         continue;
       }
     }
     // Neutral: a diverse spread, rotating the start tide per neutral index so
-    // each neutral Dreamcaller has its own (overlapping) identity.
+    // each neutral DreamAvatar has its own (overlapping) identity.
     const startId = tides[neutralCount % tides.length].id;
-    tidePoolByDreamcaller[dc.id] = farthestPointPool(
+    tidePoolByDreamAvatar[dc.id] = farthestPointPool(
       vectors, tides, startId, tuning.poolWidthNeutral,
     );
     neutralCount += 1;
   }
 
-  const json = { version: 1, alliesByTide, tidePoolByDreamcaller };
+  const json = { version: 1, alliesByTide, tidePoolByDreamAvatar };
   writeFileSync(outPath, serialize(json, tides.length));
   const docWritten = appendRelationshipsDoc(
-    resolve(ROOT, docRel), json, tideById, dreamcallers,
+    resolve(ROOT, docRel), json, tideById, dreamAvatars,
   );
 
   // Stats.
@@ -554,7 +554,7 @@ function run() {
   if (docWritten) console.log(`Appended relationship tables to ${docRel}.`);
   console.log(`Tides: ${tides.length}, mean allies ${meanAllies.toFixed(1)}.`);
   console.log(
-    `Dreamcaller tide pools: ${signaturedCount} signatured (width ${tuning.poolWidthSignatured}), ` +
+    `DreamAvatar tide pools: ${signaturedCount} signatured (width ${tuning.poolWidthSignatured}), ` +
       `${neutralCount} neutral (width ${tuning.poolWidthNeutral}).`,
   );
   console.log(

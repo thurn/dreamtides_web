@@ -1,4 +1,4 @@
-// Adapter bridging live quest state to the pure Cumulus Dreamcaller-select screen
+// Adapter bridging live quest state to the pure Cumulus DreamAvatar-select screen
 // (`src/cumulus/screens/QuestStartScreen`). Adapters are wiring only: this one
 // owns `useQuest()`, derives the shared offer from the room seed, and wires the
 // pick→`startQuest` callback. All mapping
@@ -8,14 +8,14 @@
 
 import { useCallback, useEffect, useMemo } from "react";
 import { useQuest } from "../../state/quest-context";
-import { selectDreamcallerOfferForReroll } from "../../data/dreamcaller-selection";
+import { selectDreamAvatarOfferForReroll } from "../../data/dream-avatar-selection";
 import { logEventOnce } from "../../logging";
-import { buildDreamcallerOfferViews } from "./quest-start-view-model";
+import { buildDreamAvatarOfferViews } from "./quest-start-view-model";
 import { QuestStartScreen } from "../../cumulus/screens/QuestStartScreen";
 
 /**
- * Live Dreamcaller-select screen: derives the offer and preview from the room's
- * immutable seed, then hands the chosen Dreamcaller to `startQuest`.
+ * Live DreamAvatar-select screen: derives the offer and preview from the room's
+ * immutable seed, then hands the chosen DreamAvatar to `startQuest`.
  */
 export function QuestStartScreenAdapter() {
   const { state, mutations, questContent } = useQuest();
@@ -24,48 +24,48 @@ export function QuestStartScreenAdapter() {
     state.screen.type === "questStart" ? (state.screen.rerollCount ?? 0) : 0;
   const offered = useMemo(
     () =>
-      selectDreamcallerOfferForReroll(
-        questContent.dreamcallers,
+      selectDreamAvatarOfferForReroll(
+        questContent.dreamAvatars,
         questSeed,
         rerollCount,
       ),
-    [questContent.dreamcallers, questSeed, rerollCount],
+    [questContent.dreamAvatars, questSeed, rerollCount],
   );
 
   useEffect(() => {
-    const dreamcallerIds = offered.map((dreamcaller) => dreamcaller.id);
+    const dreamAvatarIds = offered.map((dreamAvatar) => dreamAvatar.id);
     logEventOnce(
-      `dreamcaller-offer:${questSeed}:${String(rerollCount)}:${dreamcallerIds.join(",")}`,
-      "dreamcaller_offer_shown",
-      { dreamcallerIds, questSeed, rerollCount },
+      `dream-avatar-offer:${questSeed}:${String(rerollCount)}:${dreamAvatarIds.join(",")}`,
+      "dream_avatar_offer_shown",
+      { dreamAvatarIds, questSeed, rerollCount },
     );
   }, [offered, questSeed, rerollCount]);
 
-  const dreamcallers = useMemo(
+  const dreamAvatars = useMemo(
     () =>
-      buildDreamcallerOfferViews(offered, questContent.poolContext, questSeed),
+      buildDreamAvatarOfferViews(offered, questContent.poolContext, questSeed),
     [offered, questContent.poolContext, questSeed],
   );
 
   const handlePick = useCallback(
-    (dreamcallerId: string) => {
-      const dreamcaller = offered.find(
-        (candidate) => candidate.id === dreamcallerId,
+    (dreamAvatarId: string) => {
+      const dreamAvatar = offered.find(
+        (candidate) => candidate.id === dreamAvatarId,
       );
-      if (dreamcaller === undefined) return;
-      mutations.startQuest(dreamcaller, questSeed);
+      if (dreamAvatar === undefined) return;
+      mutations.startQuest(dreamAvatar, questSeed);
     },
     [mutations, offered, questSeed],
   );
 
   const handleReroll = useCallback(() => {
-    mutations.rerollDreamcallerOffer();
+    mutations.rerollDreamAvatarOffer();
   }, [mutations]);
 
   return (
     <QuestStartScreen
       key={rerollCount}
-      dreamcallers={dreamcallers}
+      dreamAvatars={dreamAvatars}
       onPick={handlePick}
       onReroll={handleReroll}
     />

@@ -21,7 +21,7 @@ export interface PackageDebugEntryView {
 /** Plain presentation model for the package-state diagnostic. */
 export interface PackageDebugView {
   values: readonly PackageDebugValueView[];
-  dreamcaller: string | null;
+  dreamAvatar: string | null;
   validation: readonly PackageDebugValueView[];
   remainingDreamsigns: readonly PackageDebugEntryView[];
   spentDreamsigns: readonly PackageDebugEntryView[];
@@ -74,7 +74,7 @@ export function PackageDebugDialog(props: PackageDebugDialogProps): ReactElement
             <div><GlassButton label="Save Quest" onPress={props.onSave} disabled={props.busy || !props.canSave} placement="onGlass" variant="accent" testId="debug-save-quest" /></div>
             {props.saves.length === 0 ? <p style={mutedStyle}>No saved quests yet.</p> : props.saves.map((save) => <div key={save.id} style={entryStyle} data-saved-quest={save.id}><p style={{ ...mutedStyle, color: token("--text-on-glass") }}>{save.name}<br /><span style={mutedStyle}>{save.detail}</span></p><div style={{ display: "flex", flexWrap: "wrap", gap: token("--space-3") }}><GlassButton label="Load" onPress={() => props.onLoad(save.id)} disabled={props.busy || !props.canLoad} placement="onGlass" testId="debug-load-quest" /><GlassButton label="Delete" onPress={() => props.onDelete(save.id)} disabled={props.busy} placement="onGlass" variant="danger" testId="debug-delete-quest" /></div></div>)}
           </section>
-          <DiagnosticSection title="Dreamcaller" entries={props.view.dreamcaller === null ? [] : [{ id: "dreamcaller", label: props.view.dreamcaller }]} emptyLabel="No package data available yet." />
+          <DiagnosticSection title="Avatar" entries={props.view.dreamAvatar === null ? [] : [{ id: "dreamAvatar", label: props.view.dreamAvatar }]} emptyLabel="No package data available yet." />
           <DiagnosticSection title="Package Validation" entries={props.view.validation.map((value) => ({ id: value.id, label: `${value.label}: ${value.value}` }))} emptyLabel="No package data available yet." />
           <DiagnosticSection title="Dreamsign Pool" entries={props.view.remainingDreamsigns} emptyLabel="Dreamsign pool exhausted." />
           <DiagnosticSection title="Spent Dreamsigns" entries={props.view.spentDreamsigns} emptyLabel="No Dreamsigns have been spent yet." />

@@ -13,7 +13,7 @@ import {
   useTutorialHowToPlayLogging,
   useTutorialPresentationLogging,
 } from "../../state/use-tutorial-presentation-logging";
-import type { TutorialDreamcallerOwner } from "../../types/tutorial";
+import type { TutorialDreamAvatarOwner } from "../../types/tutorial";
 import * as tutorialView from "./tutorial-view-model";
 export function TutorialScreenAdapter({ playbackSpeed = 1, directLive = false }: {
   readonly playbackSpeed?: number;
@@ -79,11 +79,11 @@ export function TutorialScreenAdapter({ playbackSpeed = 1, directLive = false }:
   const howToPlayLogging = useTutorialHowToPlayLogging(view.battle.battleId);
   const completeAction = mutations.completeTutorialAction;
   const handleActionComplete = useTutorialActionComplete(completeAction);
-  const handleDreamcallerArrivalComplete = useCallback(
-    (dreamcallerId: string, owner: TutorialDreamcallerOwner): void => {
-      logEvent("tutorial_dreamcaller_arrived", {
+  const handleDreamAvatarArrivalComplete = useCallback(
+    (dreamAvatarId: string, owner: TutorialDreamAvatarOwner): void => {
+      logEvent("tutorial_dream_avatar_arrived", {
         battleId: view.battle.battleId,
-        dreamcallerId,
+        dreamAvatarId,
         owner,
         actionId: view.currentAction?.id ?? null,
         abilityActive: false,
@@ -106,7 +106,7 @@ export function TutorialScreenAdapter({ playbackSpeed = 1, directLive = false }:
           : undefined
       }
       onActionComplete={handleActionComplete}
-      onDreamcallerArrivalComplete={handleDreamcallerArrivalComplete}
+      onDreamAvatarArrivalComplete={handleDreamAvatarArrivalComplete}
       {...howToPlayLogging}
       onPlayerCardPlay={handlePlayerCardPlay}
       onEndTurn={handleEndTurn}

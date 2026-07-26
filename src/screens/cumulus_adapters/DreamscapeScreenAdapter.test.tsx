@@ -83,7 +83,7 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
     essence: 240,
     essenceCap: 500,
     deck: [],
-    dreamcaller: null,
+    dreamAvatar: null,
     dreamsigns: [],
     siteRuntime: {
       "s-essence": { kind: "essence", amount: 275, accepted: false },

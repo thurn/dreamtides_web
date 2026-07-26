@@ -302,7 +302,7 @@ contained in production, see Safety rails).
 
 Every multiplayer mutation in `src/state/multiplayer-quest-context.tsx`
 becomes an event type with a reducer case in `src/rules/quest/`, grouped by
-feature (essence, lifecycle, dreamcaller, navigation, deck, transfiguration,
+feature (essence, lifecycle, dream avatar, navigation, deck, transfiguration,
 dreamsigns, draft, sites, merchant, shop, limits, atlas, modifiers, misc).
 The implementation plan carries the authoritative 1:1 table from the
 mutation catalogue produced during exploration; representative examples:
@@ -314,14 +314,14 @@ mutation catalogue produced during exploration; representative examples:
   `START_QUEST`, `RESET_QUEST`, `LOAD_STATE { snapshot }` (debug-only, large
   payload is fine — compaction absorbs it)
 
-`SELECT_DREAMCALLER { dreamcallerId }` carries only the chosen Dreamcaller
+`SELECT_DREAM_AVATAR { dreamAvatarId }` carries only the chosen Dream Avatar
 UUID. The reducer derives `resolvedPackage` and `remainingDreamsignPool`
 deterministically from that UUID and the immutable folded `quest.seed`
-(= `genesis.seed`) — running the `startQuestFromDreamcaller` pool pipeline
+(= `genesis.seed`) — running the `startQuestFromDreamAvatar` pool pipeline
 through the `QuestLifecycleContentProvider` — rather than trusting a
 client-computed package. `quest.seed` is fixed at room genesis and identical on
 every client, so all clients compute a byte-identical package. Resolution is
-seed-keyed and independent of the event's seq, so a `SELECT_DREAMCALLER` at any
+seed-keyed and independent of the event's seq, so a `SELECT_DREAM_AVATAR` at any
 position in the log yields the same package.
 
 The `ensure*SiteRuntime` family (five mutations) simplifies structurally:
@@ -339,12 +339,12 @@ from the rng stream at their own seq.
 The `NON_NULLABLE_RUN_FIELDS` invariant guard is deleted rather than ported:
 no code path writes quest state, so there is no bad write to guard against.
 Its spirit survives as reducer unit tests asserting no event sequence can
-null `draftState`/`resolvedPackage`/`dreamcaller` mid-run.
+null `draftState`/`resolvedPackage`/`dreamAvatar` mid-run.
 
 ### Battle events
 
 - **`BEGIN_BATTLE { siteId }`** — constructs `BattleFoldState` from quest
-  state deterministically (deck, dreamcaller, opponent deck drawn via
+  state deterministically (deck, dream avatar, opponent deck drawn via
   `ctx.rng`). This replaces `ensureBattleSession`'s init race and the
   client-local `begunEntryKey`: "battle has begun" is a derivable fact of
   the log, so reload always lands on the correct screen. The pre-battle

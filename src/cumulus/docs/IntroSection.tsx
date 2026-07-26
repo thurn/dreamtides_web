@@ -99,7 +99,7 @@ function GroupPanelExample(): ReactElement {
   return (
     <div style={exampleWrapStyle}>
       <GroupPanel>
-        <p style={exampleEyebrowStyle}>Dreamcaller</p>
+        <p style={exampleEyebrowStyle}>DreamAvatar</p>
         <p style={exampleBodyStyle}>
           Essence, Spark, and the docked dreamsigns for the current run,
           grouped into one pane because they belong together — not to give a
@@ -141,7 +141,7 @@ export function IntroSection(): ReactElement {
         <Principle title="Material Continuity">
           <p style={bodyStyle}>
             Nothing in Cumulus fades into existence. The entities that carry
-            meaning — cards, dreamsigns, essence, and Dreamcallers — travel
+            meaning — cards, dreamsigns, essence, and DreamAvatars — travel
             and expand between the states they occupy
             rather than appearing or disappearing. Two canonical transitions
             cover every case: object-travel, when a value moves between two
@@ -186,7 +186,7 @@ export function IntroSection(): ReactElement {
         <Principle title="The Popup Rule">
           <p style={bodyStyle}>
             Every reveal-on-interaction popup — a tide description, the
-            Dreamcaller profile, a dreamsign&rsquo;s ability text, a site
+            DreamAvatar profile, a dreamsign&rsquo;s ability text, a site
             description, essence — renders through the single{" "}
             <strong>InfoCard</strong> engine, so the vocabulary and timing
             cannot diverge by screen or by input. The card is anchored to the

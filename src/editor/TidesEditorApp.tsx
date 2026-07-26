@@ -14,7 +14,7 @@ import {
 } from "./tides-editor-url-state";
 import type {
   EditableTideField,
-  EditorDreamcaller,
+  EditorDreamAvatar,
   TidesArtifact,
   TidesEditorApiClient,
 } from "./tides-types";
@@ -30,7 +30,7 @@ type LoadStatus =
       kind: "loaded";
       artifact: TidesArtifact;
       cardById: ReadonlyMap<string, CardData>;
-      dreamcallerById: ReadonlyMap<string, EditorDreamcaller>;
+      dreamAvatarById: ReadonlyMap<string, EditorDreamAvatar>;
     }
   | { kind: "error"; message: string };
 
@@ -53,15 +53,15 @@ function buildCardById(database: Map<number, CardData>): Map<string, CardData> {
   return byId;
 }
 
-async function loadDreamcallerById(
+async function loadDreamAvatarById(
   signal?: AbortSignal,
-): Promise<Map<string, EditorDreamcaller>> {
-  const response = await fetch("/dreamcallers-v2-data.json", { signal });
-  const byId = new Map<string, EditorDreamcaller>();
+): Promise<Map<string, EditorDreamAvatar>> {
+  const response = await fetch("/dream-avatars-v2-data.json", { signal });
+  const byId = new Map<string, EditorDreamAvatar>();
   if (!response.ok) return byId;
-  const dreamcallers = (await response.json()) as EditorDreamcaller[];
-  for (const dreamcaller of dreamcallers) {
-    byId.set(dreamcaller.id.toLowerCase(), dreamcaller);
+  const dreamAvatars = (await response.json()) as EditorDreamAvatar[];
+  for (const dreamAvatar of dreamAvatars) {
+    byId.set(dreamAvatar.id.toLowerCase(), dreamAvatar);
   }
   return byId;
 }
@@ -84,21 +84,21 @@ export default function TidesEditorApp({
     async function load() {
       setLoadStatus({ kind: "loading" });
       try {
-        const [artifact, cardDatabase, dreamcallerById] = await Promise.all([
+        const [artifact, cardDatabase, dreamAvatarById] = await Promise.all([
           apiClient.loadTidesArtifact(file, controller.signal),
           loadCardsV2Database(),
-          loadDreamcallerById(controller.signal),
+          loadDreamAvatarById(controller.signal),
         ]);
         if (cancelled) return;
         console.info(
           `[tides-editor] loaded ${file}: ${artifact.tides.length} tides, ` +
-            `${cardDatabase.size} cards, ${dreamcallerById.size} dreamcallers.`,
+            `${cardDatabase.size} cards, ${dreamAvatarById.size} avatars.`,
         );
         setLoadStatus({
           kind: "loaded",
           artifact,
           cardById: buildCardById(cardDatabase),
-          dreamcallerById,
+          dreamAvatarById,
         });
       } catch (error) {
         if (isAbortError(error) || cancelled) return;
@@ -266,7 +266,7 @@ export default function TidesEditorApp({
           <TidesDetailView
             key={selectedTide.id}
             tide={selectedTide}
-            dreamcallerById={loadStatus.dreamcallerById}
+            dreamAvatarById={loadStatus.dreamAvatarById}
             cardById={loadStatus.cardById}
             size={urlState.size}
             saveStatus={saveStatus}
@@ -279,7 +279,7 @@ export default function TidesEditorApp({
         {loadStatus.kind === "loaded" && selectedTide === null && urlState.tideId === null ? (
           <TidesListView
             tides={loadStatus.artifact.tides}
-            dreamcallerById={loadStatus.dreamcallerById}
+            dreamAvatarById={loadStatus.dreamAvatarById}
             cardById={loadStatus.cardById}
             onSelectTide={handleSelectTide}
           />

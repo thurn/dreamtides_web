@@ -1,5 +1,5 @@
 // Structural-contract tests for the `tides3` artifact validator. These pin the
-// schema invariants (every tide has an id, role, and cards; every Dreamcaller
+// schema invariants (every tide has an id, role, and cards; every DreamAvatar
 // pool is non-empty and references existing tides) against synthetic fixtures —
 // never against the committed `data/tides3.jsonc`, whose content is baked design
 // data and subject to change at any time.
@@ -31,7 +31,7 @@ function makeArtifact(): Tides3DecksJson {
         ],
       },
     ],
-    tidePoolByDreamcaller: {
+    tidePoolByDreamAvatar: {
       "dc-a": { leads: ["tide-sig-01"], fill: ["tide-neu-01"] },
       "dc-b": { leads: ["tide-sig-01"], fill: ["tide-neu-01"] },
     },
@@ -93,27 +93,27 @@ describe("validateTides3Decks", () => {
     expect(() => validateTides3Decks(clone(data))).toThrow(/invalid copies/);
   });
 
-  it("rejects a missing tidePoolByDreamcaller", () => {
+  it("rejects a missing tidePoolByDreamAvatar", () => {
     const data = clone(makeArtifact()) as Record<string, unknown>;
-    delete data.tidePoolByDreamcaller;
-    expect(() => validateTides3Decks(data)).toThrow(/tidePoolByDreamcaller/);
+    delete data.tidePoolByDreamAvatar;
+    expect(() => validateTides3Decks(data)).toThrow(/tidePoolByDreamAvatar/);
   });
 
   it("rejects an empty leads list", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamcaller["dc-a"].leads = [];
+    data.tidePoolByDreamAvatar["dc-a"].leads = [];
     expect(() => validateTides3Decks(clone(data))).toThrow(/no `leads`/);
   });
 
   it("rejects an empty fill list", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamcaller["dc-a"].fill = [];
+    data.tidePoolByDreamAvatar["dc-a"].fill = [];
     expect(() => validateTides3Decks(clone(data))).toThrow(/no `fill`/);
   });
 
   it("rejects a tide-pool id that names no tide (a stale combination)", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamcaller["dc-a"].leads = ["tide-sig-01", "tide-missing"];
+    data.tidePoolByDreamAvatar["dc-a"].leads = ["tide-sig-01", "tide-missing"];
     expect(() => validateTides3Decks(clone(data))).toThrow(/names no tide/);
   });
 });

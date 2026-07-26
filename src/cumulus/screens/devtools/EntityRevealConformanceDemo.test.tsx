@@ -64,10 +64,10 @@ describe("EntityRevealConformanceDemo", () => {
     expect(container.querySelector("[data-conformance-battle-fixture] [data-game-card-source]" )).not.toBeNull();
     expect(container.querySelector("[data-conformance-generated-battle-fixture] [data-game-card-source]" )).not.toBeNull();
     expect(container.querySelectorAll("[data-conformance-scenario]").length).toBeGreaterThanOrEqual(6);
-    const infoSource = container.querySelector<HTMLElement>("[data-conformance-info-secondaries] [data-reveal-entity-type=dreamcaller]")!;
+    const infoSource = container.querySelector<HTMLElement>("[data-conformance-info-secondaries] [data-reveal-entity-type=dreamAvatar]")!;
     expect(infoSource.dataset.revealSecondaryTitles).toBe("");
     expect(infoSource.querySelector<HTMLImageElement>("img")?.src).toContain(
-      "/dreamcallers/cutout/0071.png",
+      "/dream-avatars/cutout/0071.png",
     );
     expect(
       container.querySelector<HTMLImageElement>(

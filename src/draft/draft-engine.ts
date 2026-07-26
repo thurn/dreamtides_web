@@ -1,5 +1,5 @@
 import type { CardData } from "../types/cards";
-import type { ResolvedDreamcallerPackage } from "../types/content";
+import type { ResolvedDreamAvatarPackage } from "../types/content";
 import type {
   DraftConfig,
   DraftState,
@@ -407,7 +407,7 @@ export function countRemainingUniqueCards(
 
 export function createInitialDraftState(
   cardDatabase: Map<number, CardData>,
-  resolvedPackage: ResolvedDreamcallerPackage,
+  resolvedPackage: ResolvedDreamAvatarPackage,
 ): PoolDraftState {
   const draftPoolCopiesByCard = sanitizeDraftPoolCopies(
     cardDatabase,
@@ -428,7 +428,7 @@ export function createInitialDraftState(
 
 /**
  * Create an initial replay {@link ReplayDraftState} from a chosen record's
- * frozen pack sequence and the Dreamcaller's signature cards.
+ * frozen pack sequence and the DreamAvatar's signature cards.
  */
 export function createInitialReplayDraftState(args: {
   recordId: string;
@@ -468,17 +468,17 @@ export function createInitialFresh20DraftState(args: {
   };
 }
 
-/** Create initial DraftState from the resolved Dreamcaller package. */
+/** Create initial DraftState from the resolved DreamAvatar package. */
 export function initializeDraftState(
   cardDatabase: Map<number, CardData>,
-  resolvedPackage: ResolvedDreamcallerPackage,
+  resolvedPackage: ResolvedDreamAvatarPackage,
 ): PoolDraftState {
   const draftState = createInitialDraftState(cardDatabase, resolvedPackage);
 
   logEvent("draft_pool_initialized", {
     poolSize: countRemainingCards(draftState.remainingCopiesByCard),
     uniqueCardCount: countRemainingUniqueCards(draftState.remainingCopiesByCard),
-    dreamcallerId: resolvedPackage.dreamcaller.id,
+    dreamAvatarId: resolvedPackage.dreamAvatar.id,
   });
 
   return draftState;

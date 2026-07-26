@@ -6,33 +6,33 @@
 //
 // `tides4` is the human-legible counterpart of `sigseed`, built to reproduce the
 // run-to-run VARIETY `sigseed` gets from growing each pool from a fresh random
-// SUBSET of a Dreamcaller's signature cards. `tides3` bakes only the deterministic
-// CENTRE of that variety (one all-signatures pool per Dreamcaller) and so ships
+// SUBSET of a DreamAvatar's signature cards. `tides3` bakes only the deterministic
+// CENTRE of that variety (one all-signatures pool per DreamAvatar) and so ships
 // nearly the same pool every run; `tides4` instead bakes the AXES of the variety
 // as separate decks and recombines a random few per run, the way `sigseed`
 // recombines a random subset of signature anchors. This bake derives those decks
 // from the exact corpus and affinity grower `sigseed` uses:
 //
 //   1. Build the pick-affinity corpus `sigseed` grows from (`buildSigSeedCorpus`).
-//   2. SIGNATURE tides — one per signatured Dreamcaller: its signature cards
+//   2. SIGNATURE tides — one per signatured DreamAvatar: its signature cards
 //      themselves, at `starterCopies` copies each. This is the always-joined
 //      identity floor, standing in for the signature anchors `sigseed` always
 //      seeds with.
 //   3. FACET tides — a shared library of single-anchor `sigseed` pools, one per
 //      selected anchor card. Each facet is the coherent "lean" that one
-//      signature-region card grows into. Drawing a random few of a Dreamcaller's
+//      signature-region card grows into. Drawing a random few of a DreamAvatar's
 //      facets each run is the direct analogue of `sigseed`'s random signature
 //      subset. The facet anchors are chosen from the union of every signatured
-//      Dreamcaller's signature cards by per-Dreamcaller round-robin (most-played
-//      first), so every Dreamcaller's strongest signature cards become facets and
+//      DreamAvatar's signature cards by per-DreamAvatar round-robin (most-played
+//      first), so every DreamAvatar's strongest signature cards become facets and
 //      the library stays within `facetBudget` decks.
 //   4. NEUTRAL tides — broad, format-spanning decks grown from farthest-point seed
 //      cards, the kind of pool `sigseed` reduces to (plain `pickcohere`) for a
-//      signatureless Dreamcaller; also the generic tail that tops a pool up.
-//   5. tidePoolByDreamcaller — per Dreamcaller, its starter (its signature tide,
+//      signatureless DreamAvatar; also the generic tail that tops a pool up.
+//   5. tidePoolByDreamAvatar — per DreamAvatar, its starter (its signature tide,
 //      or null), the on-identity facets a random subset is drawn from, and the
-//      broad neutral tail. A signatured Dreamcaller draws its subset from its own
-//      on-identity facets; a signatureless Dreamcaller draws from the whole facet
+//      broad neutral tail. A signatured DreamAvatar draws its subset from its own
+//      on-identity facets; a signatureless DreamAvatar draws from the whole facet
 //      library, so each run leans toward a random coherent archetype.
 //
 // The bake is a pure function of the bundled cards + draft records + signatures
@@ -58,9 +58,9 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 // The one-stop dial block. Re-bake + `npm run pool-metrics -- --variant tides4`
 // (against `--variant sigseed`) after editing.
 const TUNING = {
-  // Copies in a Dreamcaller's signature (starter) tide — its full-signature
+  // Copies in a DreamAvatar's signature (starter) tide — its full-signature
   // `sigseed` pool, grown from all its signature cards at once. This is the dense,
-  // on-theme CORE every one of the Dreamcaller's pools is built on (it is exactly
+  // on-theme CORE every one of the DreamAvatar's pools is built on (it is exactly
   // `tides3`'s signature tide), always joined; the facets perturb the lean on top
   // of it. Sized below `sigseed`'s 150 so a few facet cards always join, which is
   // where the run-to-run variety comes from.
@@ -73,12 +73,12 @@ const TUNING = {
   // How many facet tides to bake (the shared library spanning the signature
   // anchors). Capped so the player-facing deck count stays small.
   facetBudget: 32,
-  // The most on-identity facets a signatured Dreamcaller lists (a random subset is
+  // The most on-identity facets a signatured DreamAvatar lists (a random subset is
   // drawn from these each run). Wider than the runtime subset size so the subset
   // draw has room for run-to-run variety.
-  facetsPerDreamcaller: 8,
-  // A facet is on a Dreamcaller's identity when its anchor's normalised signature
-  // affinity clears this floor. Keeps a Dreamcaller's facet list on-theme rather
+  facetsPerDreamAvatar: 8,
+  // A facet is on a DreamAvatar's identity when its anchor's normalised signature
+  // affinity clears this floor. Keeps a DreamAvatar's facet list on-theme rather
   // than pulling in distant leans.
   facetAffinityFloor: 0.15,
   // Copies in a neutral (broad) tide.
@@ -242,7 +242,7 @@ function growTideCards(corpus, seedKeys, size, nameOf, detailOf) {
 }
 
 // Cosine similarity between two tides' card multisets (copies as weights), keyed
-// by card id. Used to order a signatured Dreamcaller's broad neutral tail.
+// by card id. Used to order a signatured DreamAvatar's broad neutral tail.
 function tideCosine(a, b) {
   const va = new Map(a.cards.map((c) => [c.id, c.copies]));
   let dot = 0;
@@ -258,13 +258,13 @@ function tideCosine(a, b) {
   return dot / (Math.sqrt(na) * Math.sqrt(nb));
 }
 
-// Select up to `budget` facet-anchor cards from the per-Dreamcaller resolved
-// signature lists by round-robin: in round r, each Dreamcaller (in id order)
+// Select up to `budget` facet-anchor cards from the per-DreamAvatar resolved
+// signature lists by round-robin: in round r, each DreamAvatar (in id order)
 // contributes its r-th most-played not-yet-chosen anchor. This guarantees every
-// Dreamcaller's strongest signature cards become facets before any Dreamcaller's
+// DreamAvatar's strongest signature cards become facets before any DreamAvatar's
 // weaker ones, and shared anchors are baked once. Deterministic throughout.
 function chooseFacetAnchors(dcAnchors, priorOf, budget) {
-  // Each Dreamcaller's anchors, most-played first (tie: id ascending).
+  // Each DreamAvatar's anchors, most-played first (tie: id ascending).
   const ranked = dcAnchors.map(({ dcId, keys }) => ({
     dcId,
     keys: [...keys].sort((a, b) => priorOf(b) - priorOf(a) || (a < b ? -1 : 1)),
@@ -292,12 +292,12 @@ const HEADER = `// data/tides4.jsonc — the committed tide decks the \`tides4\`
 // combines into draft pools.
 //
 // GENERATED FILE. Regenerated by \`npm run bake-tides4\` from the bundled cards,
-// draft records (public/draft-records-data.json) and Dreamcaller signatures — do
+// draft records (public/draft-records-data.json) and DreamAvatar signatures — do
 // not hand-edit the JSON body. The human-readable rendering of the same data is
 // docs/cards2/tides4_decklists.md.
 //
 // Player-facing contract: a draft pool is built by combining a few tides — the
-// Dreamcaller's signature tide, plus a random subset of its theme (facet) tides,
+// DreamAvatar's signature tide, plus a random subset of its theme (facet) tides,
 // shuffled together and topped up with broad tides until there are enough cards,
 // then dealing the first 150 (never more than 2 copies of a card). \`tides4\` is
 // the human-legible counterpart of \`sigseed\`: each facet tide is a single-anchor
@@ -314,7 +314,7 @@ const HEADER = `// data/tides4.jsonc — the committed tide decks the \`tides4\`
 // the archetype the label is built around) — which a re-bake preserves by stable
 // tide id. The annotation consistency gate (npm run check-tide-annotations)
 // validates \`claims\` against the deck so a label that drifts off its cards fails.
-// \`tidePoolByDreamcaller\` is keyed by Dreamcaller UUID; each
+// \`tidePoolByDreamAvatar\` is keyed by DreamAvatar UUID; each
 // entry has \`starter\` (the always-joined signature tide, or null), \`facets\` (a
 // random subset is drawn each run) and \`neutral\` (the broad tail).
 //
@@ -370,11 +370,11 @@ export function serializeArtifact(json, header = HEADER) {
       anno.push(serializeClaims(tide.claims));
     }
     // Provenance UUIDs (preserved across bakes): a signature tide carries the
-    // `dreamcallerId` it belongs to, and a facet/neutral tide carries the
+    // `dreamAvatarId` it belongs to, and a facet/neutral tide carries the
     // `leanCardId` it is themed around. Emitted after `role` so the deck body
     // stays last. Cards are referenced only by stable UUID, never by name.
     const provenance = [];
-    for (const key of ["dreamcallerId", "leanCardId"]) {
+    for (const key of ["dreamAvatarId", "leanCardId"]) {
       if (typeof tide[key] === "string" && tide[key] !== "") {
         provenance.push(
           `      ${JSON.stringify(key)}: ${JSON.stringify(tide[key])},`,
@@ -394,7 +394,7 @@ export function serializeArtifact(json, header = HEADER) {
       `    }${t < json.tides.length - 1 ? "," : ""}`,
     ].join("\n");
   });
-  const pools = Object.entries(json.tidePoolByDreamcaller).map(
+  const pools = Object.entries(json.tidePoolByDreamAvatar).map(
     ([dc, entry], i, arr) =>
       `    ${JSON.stringify(dc)}: ${JSON.stringify(entry)}${i < arr.length - 1 ? "," : ""}`,
   );
@@ -406,7 +406,7 @@ export function serializeArtifact(json, header = HEADER) {
       `  "tides": [`,
       ...tideLines,
       "  ],",
-      `  "tidePoolByDreamcaller": {`,
+      `  "tidePoolByDreamAvatar": {`,
       ...pools,
       "  }",
       "}",
@@ -414,22 +414,22 @@ export function serializeArtifact(json, header = HEADER) {
   );
 }
 
-function renderMarkdown(json, dreamcallers) {
+function renderMarkdown(json, dreamAvatars) {
   const tideById = new Map(json.tides.map((t) => [t.id, t]));
-  const dcById = new Map(dreamcallers.map((d) => [d.id, d]));
+  const dcById = new Map(dreamAvatars.map((d) => [d.id, d]));
   const lines = [];
   lines.push("# Tides4 decklists");
   lines.push("");
   lines.push(
     "The preconstructed decks (\"tides\") the `?algo=tides4` draft-pool variant",
     "combines into draft pools. A pool is built by combining a few tides: the",
-    "Dreamcaller's signature tide is always joined, a random subset of its theme",
+    "DreamAvatar's signature tide is always joined, a random subset of its theme",
     "(facet) tides is drawn, and broad tides top the pool up; the combined bag is",
     "shuffled and the first 150 cards are dealt (never more than 2 copies of a",
     "card). `tides4` is the human-legible counterpart of `sigseed` — each facet tide",
     "is a single-anchor `sigseed` pool, and drawing a random subset of a",
-    "Dreamcaller's facets reproduces the variety `sigseed` gets from growing each",
-    "pool from a random subset of its signature cards. A signatureless Dreamcaller",
+    "DreamAvatar's facets reproduces the variety `sigseed` gets from growing each",
+    "pool from a random subset of its signature cards. A signatureless DreamAvatar",
     "draws its subset from the whole facet library, so each run leans toward a",
     "different coherent archetype.",
     "",
@@ -437,13 +437,13 @@ function renderMarkdown(json, dreamcallers) {
     "`data/tides4.jsonc` (the machine-readable artifact, keyed by card UUID).",
     "",
   );
-  lines.push("## Tide pools by Dreamcaller");
+  lines.push("## Tide pools by DreamAvatar");
   lines.push("");
-  lines.push("| Dreamcaller | Starter | Facets (random subset drawn) | Neutral tail |");
+  lines.push("| DreamAvatar | Starter | Facets (random subset drawn) | Neutral tail |");
   lines.push("| --- | --- | --- | --- |");
   const nameOfTide = (id) => tideById.get(id)?.name ?? id;
-  for (const dc of dreamcallers) {
-    const entry = json.tidePoolByDreamcaller[dc.id] ?? {
+  for (const dc of dreamAvatars) {
+    const entry = json.tidePoolByDreamAvatar[dc.id] ?? {
       starter: null,
       facets: [],
       neutral: [],
@@ -464,8 +464,8 @@ function renderMarkdown(json, dreamcallers) {
   lines.push("");
   for (const tide of json.tides) {
     const copies = tide.cards.reduce((s, c) => s + c.copies, 0);
-    const owner = tide.dreamcallerId
-      ? dcById.get(tide.dreamcallerId)?.name
+    const owner = tide.dreamAvatarId
+      ? dcById.get(tide.dreamAvatarId)?.name
       : undefined;
     lines.push(`## ${tide.name}${tide.shortName ? ` — ${tide.shortName}` : ""}`);
     lines.push("");
@@ -738,7 +738,7 @@ const BAKE_INPUT_FILES = {
   cards: "public/cards_v2-data.json",
   decklists: "public/decklists-data.json",
   draftRecords: "public/draft-records-data.json",
-  dreamcallers: "public/dreamcallers-v2-data.json",
+  dreamAvatars: "public/dream-avatars-v2-data.json",
 };
 
 // Load the four bundled bake inputs from `public/`. Throws (rather than exiting)
@@ -769,7 +769,7 @@ export function buildTides4({
   cards,
   decklists,
   draftRecords,
-  dreamcallers,
+  dreamAvatars,
   overrides = null,
   priorAnnotations = new Map(),
   logger = () => {},
@@ -792,14 +792,14 @@ export function buildTides4({
 
   const tides = [];
 
-  // SIGNATURE (starter) tides — one per signatured Dreamcaller: its signature
+  // SIGNATURE (starter) tides — one per signatured DreamAvatar: its signature
   // cards at `starterCopies` copies each. Records the resolved anchor keys per
-  // Dreamcaller for facet selection and per-Dreamcaller facet ranking.
-  const starterByDreamcaller = new Map();
-  const anchorsByDreamcaller = new Map(); // dcId -> resolved corpus keys (sorted)
+  // DreamAvatar for facet selection and per-DreamAvatar facet ranking.
+  const starterByDreamAvatar = new Map();
+  const anchorsByDreamAvatar = new Map(); // dcId -> resolved corpus keys (sorted)
   const noSignal = [];
   let sigIdx = 0;
-  for (const dc of dreamcallers) {
+  for (const dc of dreamAvatars) {
     const signature = dc.signatureCardIds ?? [];
     if (signature.length === 0) continue;
     const keys = [...resolveSignatureToCorpus(corpus, signature)].sort();
@@ -807,7 +807,7 @@ export function buildTides4({
       noSignal.push(dc.name);
       continue;
     }
-    anchorsByDreamcaller.set(dc.id, keys);
+    anchorsByDreamAvatar.set(dc.id, keys);
     sigIdx += 1;
     const id = `tide-sig-${String(sigIdx).padStart(2, "0")}`;
     // The starter is the full-signature `sigseed` pool — the dense on-theme core.
@@ -816,16 +816,16 @@ export function buildTides4({
       id,
       name: `${dc.name} signature`,
       role: "signature",
-      dreamcallerId: dc.id,
+      dreamAvatarId: dc.id,
       cards: cardsList,
     });
-    starterByDreamcaller.set(dc.id, id);
+    starterByDreamAvatar.set(dc.id, id);
   }
 
   // FACET tides — a shared library of single-anchor `sigseed` pools. Anchors are
-  // chosen from the union of all signatures by per-Dreamcaller round-robin so
-  // every Dreamcaller's strongest cards become facets within the budget.
-  const dcAnchors = [...anchorsByDreamcaller.entries()].map(([dcId, keys]) => ({
+  // chosen from the union of all signatures by per-DreamAvatar round-robin so
+  // every DreamAvatar's strongest cards become facets within the budget.
+  const dcAnchors = [...anchorsByDreamAvatar.entries()].map(([dcId, keys]) => ({
     dcId,
     keys,
   }));
@@ -850,7 +850,7 @@ export function buildTides4({
   const facetTides = tides.filter((t) => t.role === "facet");
 
   // NEUTRAL tides — broad, format-spanning decks (the `pickcohere`-style pools
-  // `sigseed` reduces to for signatureless Dreamcallers, and the generic tail).
+  // `sigseed` reduces to for signatureless DreamAvatars, and the generic tail).
   const neutralSeeds = chooseNeutralSeeds(
     corpus,
     TUNING.neutralTideCount,
@@ -877,23 +877,23 @@ export function buildTides4({
   const allFacetIds = facetTides.map((t) => t.id);
 
   // Manual override layer — applied after every tide is grown (so curated combos
-  // survive each affinity re-bake) and before the per-Dreamcaller pools are mapped
+  // survive each affinity re-bake) and before the per-DreamAvatar pools are mapped
   // (so the neutral-tail cosine ordering reflects the final card contents).
   applyOverrides(tides, overrides, nameOf, detailOf, logger);
 
-  // tidePoolByDreamcaller — starter + on-identity facets + broad neutral tail.
-  //   * a SIGNATURED Dreamcaller's facets are the library facets whose anchor
+  // tidePoolByDreamAvatar — starter + on-identity facets + broad neutral tail.
+  //   * a SIGNATURED DreamAvatar's facets are the library facets whose anchor
   //     clears its signature-affinity floor (always including its own anchors'
-  //     facets), most on-theme first, capped at `facetsPerDreamcaller`; its
+  //     facets), most on-theme first, capped at `facetsPerDreamAvatar`; its
   //     neutral tail is the broad tides nearest its starter by cosine.
-  //   * a SIGNATURELESS Dreamcaller draws its subset from the whole facet library
+  //   * a SIGNATURELESS DreamAvatar draws its subset from the whole facet library
   //     (so each run leans a random coherent archetype) and its tail is every
   //     broad tide — mirroring how `sigseed` reduces to `pickcohere`.
-  const tidePoolByDreamcaller = {};
+  const tidePoolByDreamAvatar = {};
   const facetById = new Map(facetTides.map((t) => [t.id, t]));
-  for (const dc of dreamcallers) {
-    const starter = starterByDreamcaller.get(dc.id) ?? null;
-    const anchors = anchorsByDreamcaller.get(dc.id);
+  for (const dc of dreamAvatars) {
+    const starter = starterByDreamAvatar.get(dc.id) ?? null;
+    const anchors = anchorsByDreamAvatar.get(dc.id);
     if (starter && anchors) {
       const sigAff = buildSignatureAffinity(corpus, dc.signatureCardIds ?? []);
       const ownAnchorSet = new Set(anchors);
@@ -909,16 +909,16 @@ export function buildTides4({
         .sort((a, b) => b.aff - a.aff || (a.id < b.id ? -1 : 1));
       // Guarantee a non-empty facet list even if the floor excludes everything.
       const facets = (ranked.length > 0 ? ranked : facetTides.map((t) => ({ id: t.id })))
-        .slice(0, TUNING.facetsPerDreamcaller)
+        .slice(0, TUNING.facetsPerDreamAvatar)
         .map((x) => x.id);
       const starterTide = tides.find((t) => t.id === starter);
       const neutral = neutralTides
         .map((t) => ({ id: t.id, s: tideCosine(starterTide, t) }))
         .sort((a, b) => b.s - a.s || (a.id < b.id ? -1 : 1))
         .map((x) => x.id);
-      tidePoolByDreamcaller[dc.id] = { starter, facets, neutral };
+      tidePoolByDreamAvatar[dc.id] = { starter, facets, neutral };
     } else {
-      tidePoolByDreamcaller[dc.id] = {
+      tidePoolByDreamAvatar[dc.id] = {
         starter: null,
         facets: [...allFacetIds],
         neutral: [...neutralIds],
@@ -945,7 +945,7 @@ export function buildTides4({
     if (anno) Object.assign(tide, anno);
   }
 
-  // Strip the bake-only `dreamcallerId`/`anchorKey` from the serialized tides (the
+  // Strip the bake-only `dreamAvatarId`/`anchorKey` from the serialized tides (the
   // runtime schema carries id/name/role/cards plus optional annotations); the doc
   // render keeps them.
   const json = {
@@ -962,7 +962,7 @@ export function buildTides4({
         color,
         claims,
         role,
-        dreamcallerId,
+        dreamAvatarId,
         leanCardId,
         cards,
       }) => {
@@ -977,19 +977,19 @@ export function buildTides4({
       if (color !== undefined) out.color = color;
       if (claims !== undefined) out.claims = claims;
       out.role = role;
-      // Provenance UUIDs: a signature tide names its Dreamcaller, a facet/neutral
+      // Provenance UUIDs: a signature tide names its DreamAvatar, a facet/neutral
       // tide names the card it is themed around. Both are stable cards_v2/
-      // Dreamcaller UUIDs (never names) so a rename never invalidates them.
-      if (dreamcallerId !== undefined) out.dreamcallerId = dreamcallerId;
+      // DreamAvatar UUIDs (never names) so a rename never invalidates them.
+      if (dreamAvatarId !== undefined) out.dreamAvatarId = dreamAvatarId;
       if (leanCardId !== undefined) out.leanCardId = leanCardId;
       out.cards = cards;
       return out;
     }),
-    tidePoolByDreamcaller,
+    tidePoolByDreamAvatar,
   };
 
-  const sigFacetCounts = [...anchorsByDreamcaller.keys()].map(
-    (dcId) => tidePoolByDreamcaller[dcId].facets.length,
+  const sigFacetCounts = [...anchorsByDreamAvatar.keys()].map(
+    (dcId) => tidePoolByDreamAvatar[dcId].facets.length,
   );
   const distinct = new Set();
   for (const t of tides) for (const c of t.cards) distinct.add(c.id);
@@ -1001,7 +1001,7 @@ export function buildTides4({
     sigFacetCounts,
     distinct: distinct.size,
     corpusCards: corpus.cards.length,
-    poolCount: Object.keys(tidePoolByDreamcaller).length,
+    poolCount: Object.keys(tidePoolByDreamAvatar).length,
     noSignal,
   };
 
@@ -1052,7 +1052,7 @@ function run() {
   writeFileSync(resolve(ROOT, outRel), serializeArtifact(json));
   writeFileSync(
     resolve(ROOT, docRel),
-    renderMarkdown({ ...json, tides }, inputs.dreamcallers) + "\n",
+    renderMarkdown({ ...json, tides }, inputs.dreamAvatars) + "\n",
   );
 
   const meanFacets = stats.sigFacetCounts.length
@@ -1062,7 +1062,7 @@ function run() {
     `Tides: ${stats.tideCount} (${stats.sigCount} signature, ${stats.facCount} facet, ${stats.neuCount} neutral).`,
   );
   console.log(
-    `Facets per signatured Dreamcaller: min ${Math.min(...stats.sigFacetCounts)}, ` +
+    `Facets per signatured DreamAvatar: min ${Math.min(...stats.sigFacetCounts)}, ` +
       `mean ${meanFacets.toFixed(1)}, max ${Math.max(...stats.sigFacetCounts)}.`,
   );
   console.log(
@@ -1070,11 +1070,11 @@ function run() {
       `(corpus has ${stats.corpusCards}).`,
   );
   console.log(
-    `Tide pools: ${stats.poolCount} of ${inputs.dreamcallers.length} Dreamcallers.`,
+    `Tide pools: ${stats.poolCount} of ${inputs.dreamAvatars.length} DreamAvatars.`,
   );
   if (stats.noSignal.length > 0) {
     console.warn(
-      `Signatured Dreamcallers with no corpus signature: ${stats.noSignal.join(", ")}.`,
+      `Signatured DreamAvatars with no corpus signature: ${stats.noSignal.join(", ")}.`,
     );
   }
   console.log(`Wrote ${outRel} and ${docRel}.`);

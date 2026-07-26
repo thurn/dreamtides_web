@@ -156,7 +156,7 @@ There are a few things that Dreamtides journeys do not do:
   single journey, such as having 15 or fewer cards or strongly controlling their
   starting hand.
 - Directly apply ongoing player benefits instead of using a Dreamsign.
-- Allow more than one Dreamcaller per battle.
+- Allow more than one Dream Avatar per battle.
 - Surface package tide identifiers to the player, or require the player to
   understand which tides are good for their deck.
 - Play mini games beyond sequential button clicks, such as a matching game.

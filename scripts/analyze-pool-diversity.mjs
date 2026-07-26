@@ -1,10 +1,10 @@
 // Analyze draft-pool diversity across the realistic draft-test flow: every pool
-// is gated through a Dreamcaller. Players are offered three random Dreamcallers
+// is gated through a DreamAvatar. Players are offered three random DreamAvatars
 // and pick one, which averages to a uniform draw over all 32, so this rotates
-// uniformly through them — seeding each pool with the chosen Dreamcaller's
-// draft archetypes (the 12 Dreamcallers without archetypes roll the
+// uniformly through them — seeding each pool with the chosen DreamAvatar's
+// draft archetypes (the 12 DreamAvatars without archetypes roll the
 // unconstrained pool). Pass `--unconstrained` to instead analyze raw
-// no-Dreamcaller pools.
+// no-DreamAvatar pools.
 //
 // It aggregates how often each card and each theme is selected, how pool size
 // and color identity are distributed, and how a card's inclusion rate tracks
@@ -15,10 +15,10 @@
 //   node scripts/analyze-pool-diversity.mjs                       # default, 3000 seeds
 //   node scripts/analyze-pool-diversity.mjs --variant diverse
 //   node scripts/analyze-pool-diversity.mjs --compare             # default vs diverse
-//   node scripts/analyze-pool-diversity.mjs --unconstrained       # ignore Dreamcallers
+//   node scripts/analyze-pool-diversity.mjs --unconstrained       # ignore DreamAvatars
 //   node scripts/analyze-pool-diversity.mjs --seeds 5000 --top 30
 import { buildPoolData, generatePoolFromData } from "../src/draft/pool/index.ts";
-import { loadCards, loadDreamcallers } from "./generate-color-pool.mjs";
+import { loadCards, loadDreamAvatars } from "./generate-color-pool.mjs";
 
 const DEFAULT_SEEDS = 3000;
 const DEFAULT_TOP = 25;
@@ -45,12 +45,12 @@ const unconstrained = argv.includes("--unconstrained");
 
 const cards = loadCards();
 const poolData = buildPoolData(cards);
-// Dreamcaller draft-archetype lists to rotate through (undefined == open pool).
-// In `--unconstrained` mode a single null entry generates no-Dreamcaller pools.
-const dreamcallers = loadDreamcallers();
+// DreamAvatar draft-archetype lists to rotate through (undefined == open pool).
+// In `--unconstrained` mode a single null entry generates no-DreamAvatar pools.
+const dreamAvatars = loadDreamAvatars();
 const seedLists = unconstrained
   ? [undefined]
-  : dreamcallers.map((d) => d.draftArchetypes);
+  : dreamAvatars.map((d) => d.draftArchetypes);
 const seedFor = (seed) => seedLists[seed % seedLists.length];
 const meta = new Map(
   cards.map((c) => [
@@ -93,7 +93,7 @@ function stats(values) {
   };
 }
 
-/** Run `seeds` Dreamcaller-gated pools of `variant` and return aggregate counters. */
+/** Run `seeds` DreamAvatar-gated pools of `variant` and return aggregate counters. */
 function simulate(variant) {
   const inclusion = new Map();
   const copies = new Map();
@@ -157,8 +157,8 @@ function printMetrics(label, m) {
 }
 
 const flow = unconstrained
-  ? "unconstrained (no Dreamcaller)"
-  : `Dreamcaller-gated (uniform over ${seedLists.length})`;
+  ? "unconstrained (no DreamAvatar)"
+  : `DreamAvatar-gated (uniform over ${seedLists.length})`;
 
 if (compare) {
   console.log(

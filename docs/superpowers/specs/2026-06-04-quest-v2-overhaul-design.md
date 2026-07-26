@@ -6,10 +6,10 @@ Switch **all real quest play** to the V2 content set and the `idf3` draft-pool
 algorithm:
 
 - Cards come from `data/tabula/cards_v2.toml` (→ `/cards_v2-data.json`).
-- Dreamcallers come from `data/tabula/dreamcallers_v2.toml`
-  (→ `/dreamcallers-v2-data.json`), all 32 offered.
+- Dream Avatars come from `data/tabula/dream_avatars_v2.toml`
+  (→ `/dream-avatars-v2-data.json`), all 32 offered.
 - Draft pools are built by `idf3` (`generateIdf3`), steered by each
-  Dreamcaller's `signature-cards` and sourced from the `docs/drafts_anon/`
+  Dream Avatar's `signature-cards` and sourced from the `docs/drafts_anon/`
   decklist corpus.
 - Dreamsigns are drawn **purely at random** (no tide steering, no pool
   construction).
@@ -23,17 +23,17 @@ it uses today. Dreamsign pool *construction* is explicitly out of scope.
 | Concern | Today (runtime quest play) | After this overhaul |
 |---|---|---|
 | Cards | `loadCardDatabase` → `/card-data.json` (v1 `rendered-cards.toml`) | `/cards_v2-data.json` (v2) |
-| Dreamcallers | `/dreamcaller-data.json` (v1, auto-tide-packaged) | `/dreamcallers-v2-data.json` (v2, signature cards) |
-| Draft pool | `resolveDreamcallerPackage` → `buildDraftPoolCopies` (tide overlap) | `generateIdf3` over `drafts_anon` corpus |
+| Dream Avatars | `/dream-avatar-data.json` (v1, auto-tide-packaged) | `/dream-avatars-v2-data.json` (v2, signature cards) |
+| Draft pool | `resolveDreamAvatarPackage` → `buildDraftPoolCopies` (tide overlap) | `generateIdf3` over `drafts_anon` corpus |
 | Decklist corpus bundled | `docs/drafts_dt/` → `/decklists-data.json` | `docs/drafts_anon/` → `/decklists-data.json` |
 | Dreamsign offer / reward / shop | tide-biased (`requiredTides` / `selectedPackageTides`) | random |
-| Specialty shop | inventory restricted to a Dreamcaller mandatory tide | drawn from the run's chosen idf3 starter decklist |
-| Battle enemy deck | tide-filtered slice of the card DB + removal-event guarantee | a `drafts_anon` decklist, idf3-steered by the enemy Dreamcaller |
+| Specialty shop | inventory restricted to a Dream Avatar mandatory tide | drawn from the run's chosen idf3 starter decklist |
+| Battle enemy deck | tide-filtered slice of the card DB + removal-event guarantee | a `drafts_anon` decklist, idf3-steered by the enemy Dream Avatar |
 
-V1 assets (`card-data.json`, `dreamcallers.toml`, `dreamcaller-data.json`) and
+V1 assets (`card-data.json`, `dreamAvatars.toml`, `dream-avatar-data.json`) and
 their generation stay in place for non-quest consumers (e.g. the card editor).
 The tide *registry*, biomes, and atlas theming are untouched — they do not
-depend on Dreamcaller tides.
+depend on Dream Avatar tides.
 
 ## Section 1 — Starter deck (data)
 
@@ -85,8 +85,8 @@ directory. Move:
 - `src/draft_test/cards-v2-database.ts` → `src/data/cards-v2-database.ts`
   (`loadCardsV2Database`, `loadDecklists`, `loadMergedArchetypeLists`,
   `buildNameIndex`, `resolvePool`, `ResolvedPool`).
-- `src/draft_test/dreamcallers-v2-database.ts` → `src/data/dreamcallers-v2-database.ts`
-  (`loadDreamcallersV2`, `DREAMCALLER_ARCHETYPES`, themes).
+- `src/draft_test/dream-avatars-v2-database.ts` → `src/data/dream-avatars-v2-database.ts`
+  (`loadDreamAvatarsV2`, `DREAM_AVATAR_ARCHETYPES`, themes).
 - `src/draft_test/cards-v2-metadata.ts` → `src/data/cards-v2-metadata.ts`
   (consumed by `setup-assets.mjs` for the non-`idf3` variants).
 
@@ -99,8 +99,8 @@ a mechanical move; no logic changes.
 `loadQuestContent` changes its inputs and drops tide-package resolution:
 
 - **Cards**: `loadCardsV2Database()` (`/cards_v2-data.json`).
-- **Dreamcallers**: `loadDreamcallersV2()` (`/dreamcallers-v2-data.json`),
-  carrying `signatureCards`. All 32 are offered by `selectDreamcallerOffer`.
+- **Dream Avatars**: `loadDreamAvatarsV2()` (`/dream-avatars-v2-data.json`),
+  carrying `signatureCards`. All 32 are offered by `selectDreamAvatarOffer`.
 - **Decklist corpus**: `loadDecklists()` (`/decklists-data.json`, now sourced
   from `docs/drafts_anon/`); build a `PoolData` (`buildPoolData`) and a
   card-name → card-number index (`buildNameIndex`). Store both on `QuestContent`
@@ -108,21 +108,21 @@ a mechanical move; no logic changes.
 - **Dreamsign pool**: the run's dreamsign pool is **all** dreamsign IDs (random),
   not a tide-filtered subset.
 
-`resolveDreamcallerPackage`, `buildDraftPoolCopies`, `countPackageOverlap`, and
-the `resolvedPackagesByDreamcallerId` map are **removed**. The
-`ResolvedDreamcallerPackage`-shaped data that downstream code consumed is
+`resolveDreamAvatarPackage`, `buildDraftPoolCopies`, `countPackageOverlap`, and
+the `resolvedPackagesByDreamAvatarId` map are **removed**. The
+`ResolvedDreamAvatarPackage`-shaped data that downstream code consumed is
 replaced by data produced at quest start (Section 4). Tide fields
 (`mandatoryTides`, `optionalTides`, `selectedTides`, `optionalSubset`) are
-removed from the runtime Dreamcaller/package types and from quest-start logging.
+removed from the runtime Dream Avatar/package types and from quest-start logging.
 
 ## Section 4 — Pool generation at quest start (`src/state/quest-context.tsx`)
 
-When the player selects a Dreamcaller, `startQuest` generates the pool instead of
+When the player selects a Dream Avatar, `startQuest` generates the pool instead of
 reading a precomputed package:
 
-1. Seed an RNG from the quest seed + Dreamcaller id (deterministic per run).
-2. `const result = generateIdf3(rng, poolData, dreamcaller.signatureCards, targetSize)`.
-   - Signatureless Dreamcallers fall through `idf3`'s built-in path to an
+1. Seed an RNG from the quest seed + Dream Avatar id (deterministic per run).
+2. `const result = generateIdf3(rng, poolData, dreamAvatar.signatureCards, targetSize)`.
+   - Signatureless Dream Avatars fall through `idf3`'s built-in path to an
      unsteered (diversity) draw — no special casing.
    - `targetSize` keeps the current pool sizing (~190–210; reuse the existing
      default).
@@ -165,12 +165,12 @@ shuffle when tides are absent, so this is mostly argument removal:
 ## Section 7 — Battle enemy decks (`src/battle/integration/create-battle-init.ts`)
 
 `createEnemyDeckDefinition` is rewritten to choose a `drafts_anon` decklist
-**steered by the enemy Dreamcaller**, mirroring the player's pool selection:
+**steered by the enemy Dream Avatar**, mirroring the player's pool selection:
 
-1. `createEnemyDescriptor` already picks a random V2 Dreamcaller for the enemy.
-   Use that Dreamcaller's `signatureCards` to run `generateIdf3` (with a
+1. `createEnemyDescriptor` already picks a random V2 Dream Avatar for the enemy.
+   Use that Dream Avatar's `signatureCards` to run `generateIdf3` (with a
    battle-seeded RNG) over the decklist corpus and take its chosen starter
-   decklist (`starterDeck`). Signatureless enemy Dreamcallers fall through to a
+   decklist (`starterDeck`). Signatureless enemy Dream Avatars fall through to a
    diversity pick — no special casing.
 2. Resolve the chosen deck's card names to V2 card numbers against the V2 card
    database; drop unresolved names.
@@ -186,22 +186,22 @@ constant (or is dropped where unused).
 
 - Bundle `docs/drafts_anon/` (not `docs/drafts_dt/`) into `/decklists-data.json`
   and the merged-archetype build.
-- Continue writing `/cards_v2-data.json` and `/dreamcallers-v2-data.json`; the
+- Continue writing `/cards_v2-data.json` and `/dream-avatars-v2-data.json`; the
   new starter cards 510–519 flow through the existing v2 card serialization.
-- Update the `DREAMCALLER_ARCHETYPES` / `cards-v2-metadata` imports to their new
+- Update the `DREAM_AVATAR_ARCHETYPES` / `cards-v2-metadata` imports to their new
   `src/data/` locations.
 
 ## Out of scope
 
 - Dreamsign pool construction / steering (dreamsigns stay random).
 - V1 assets and their generation (kept for the editor and other consumers).
-- Tide registry, biomes, atlas theming (independent of Dreamcaller tides).
+- Tide registry, biomes, atlas theming (independent of Dream Avatar tides).
 - Tuning `idf3` constants or `targetSize` beyond matching current pool sizes.
 
 ## Testing & verification
 
 - **Unit**: quest-content V2 loading; pool generation at quest start
-  (deterministic per seed; signatureless Dreamcaller → diversity pool);
+  (deterministic per seed; signatureless Dream Avatar → diversity pool);
   `resolvePool` over `drafts_anon`; specialty shop draws from the starter
   decklist; enemy deck resolves from an idf3-steered `drafts_anon` deck (and
   diversity-picks for a signatureless enemy); starter cards never appear in a
@@ -210,7 +210,7 @@ constant (or is dropped where unused).
 - **Core checks**: `npm run lint`, `npm run typecheck`, `npm test` (run
   `npm install` first in a fresh worktree).
 - **Browser QA** (per `AGENTS.md`): run setup-assets, start a scoped QA Vite
-  server on a non-5173 port, play the normal workflow — pick a Dreamcaller,
+  server on a non-5173 port, play the normal workflow — pick a Dream Avatar,
   confirm the draft pool shows V2 cards, draft, enter a shop (regular +
   specialty), hit a Dreamsign reward, enter a battle and confirm the enemy uses
   V2 cards. Inspect the error buffer; tear down only the QA server by PID/port.

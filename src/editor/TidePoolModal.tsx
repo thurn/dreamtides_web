@@ -2,10 +2,10 @@ import { useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import type { Tides4Color } from "../draft/pool/tides4-io";
 import type {
-  EditorDreamcallerRecord,
+  EditorDreamAvatarRecord,
   EditorTideOption,
   EditorTidePool,
-} from "./dreamcaller-types";
+} from "./dream-avatar-types";
 
 export const TIDE_DOT_COLOR: Record<Tides4Color, string> = {
   purple: "#c084fc",
@@ -16,7 +16,7 @@ export const TIDE_DOT_COLOR: Record<Tides4Color, string> = {
 };
 
 export interface TidePoolModalProps {
-  dreamcaller: EditorDreamcallerRecord;
+  dreamAvatar: EditorDreamAvatarRecord;
   tides: readonly EditorTideOption[];
   saving: boolean;
   saveError: string | null;
@@ -96,16 +96,16 @@ function ColorDot({ color }: { color: string }) {
 }
 
 export default function TidePoolModal({
-  dreamcaller,
+  dreamAvatar,
   tides,
   saving,
   saveError,
   onSave,
   onClose,
 }: TidePoolModalProps) {
-  const [starter, setStarter] = useState<string | null>(dreamcaller.tidePool.starter);
-  const [facets, setFacets] = useState<string[]>(dreamcaller.tidePool.facets);
-  const [neutral, setNeutral] = useState<string[]>(dreamcaller.tidePool.neutral);
+  const [starter, setStarter] = useState<string | null>(dreamAvatar.tidePool.starter);
+  const [facets, setFacets] = useState<string[]>(dreamAvatar.tidePool.facets);
+  const [neutral, setNeutral] = useState<string[]>(dreamAvatar.tidePool.neutral);
 
   const { signatureTides, facetTides, neutralTides } = useMemo(() => {
     return {
@@ -125,8 +125,8 @@ export default function TidePoolModal({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={`Edit tides for ${dreamcaller.name}`}
-      data-dreamcaller-tide-modal={dreamcaller.id}
+      aria-label={`Edit tides for ${dreamAvatar.name}`}
+      data-dream-avatar-tide-modal={dreamAvatar.id}
       style={overlayStyle}
       onMouseDown={(event) => {
         if (event.target === event.currentTarget && !saving) {
@@ -147,7 +147,7 @@ export default function TidePoolModal({
         >
           <h2 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 850 }}>Tides</h2>
           <span style={{ color: "#8edbd1", fontSize: "0.85rem", fontWeight: 700 }}>
-            {dreamcaller.name}
+            {dreamAvatar.name}
           </span>
         </header>
 

@@ -1,5 +1,5 @@
 // The `tides2` variant builds a pool by drawing a lead tide from the
-// Dreamcaller's curated tide pool and joining the lead's allied tides until the
+// DreamAvatar's curated tide pool and joining the lead's allied tides until the
 // pool is full. These tests pin the structural contract (determinism per seed,
 // the deal size and copy cap, lead-from-pool selection, ally-only fill, the
 // breadth-first fallback, and the failure modes) against synthetic artifacts —
@@ -32,14 +32,14 @@ function makeTideDecks(
       copies,
     })),
   }));
-  return { version: 1, tides, favoredTidesByDreamcaller: {} };
+  return { version: 1, tides, favoredTidesByDreamAvatar: {} };
 }
 
 // A relationships artifact whose allies are a ring (tide-i allied to the next
-// few tides) so every tide has a non-empty ally list, plus one Dreamcaller pool.
+// few tides) so every tide has a non-empty ally list, plus one DreamAvatar pool.
 function makeRelationships(
   tideCount: number,
-  tidePoolByDreamcaller: Record<string, string[]> = { "dc-a": ["tide-1"] },
+  tidePoolByDreamAvatar: Record<string, string[]> = { "dc-a": ["tide-1"] },
 ): TideRelationshipsJson {
   const ids = Array.from({ length: tideCount }, (_, t) => `tide-${String(t + 1)}`);
   const alliesByTide: Record<string, string[]> = {};
@@ -50,7 +50,7 @@ function makeRelationships(
       ids[(i + 3) % ids.length],
     ];
   }
-  return { version: 1, alliesByTide, tidePoolByDreamcaller };
+  return { version: 1, alliesByTide, tidePoolByDreamAvatar };
 }
 
 function makePoolData(
@@ -99,7 +99,7 @@ describe("generateTides2", () => {
     expect(poolSize(result.counts)).toBe(24);
   });
 
-  it("draws the lead from the Dreamcaller's tide pool", () => {
+  it("draws the lead from the DreamAvatar's tide pool", () => {
     const poolData = makePoolData(
       makeTideDecks(10, 30),
       makeRelationships(10, { "dc-a": ["tide-4", "tide-7"] }),
@@ -135,7 +135,7 @@ describe("generateTides2", () => {
     expect(result.selected.slice(1).length).toBeGreaterThan(4);
   });
 
-  it("falls back to a draw over all tides without a known Dreamcaller pool", () => {
+  it("falls back to a draw over all tides without a known DreamAvatar pool", () => {
     const poolData = makePoolData(makeTideDecks(10, 30), makeRelationships(10));
     const noId = generateTides2(makeRng(11), poolData, undefined, 150);
     const unknownId = generateTides2(makeRng(11), poolData, "dc-unknown", 150);

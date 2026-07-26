@@ -412,8 +412,8 @@ it does not accept placement, pixels, timing, portal, or controlled-open input.
 - Create: `src/cumulus/components/card/GlossaryTerm.test.tsx`
 - Modify: `src/cumulus/components/overlay/InfoCard.tsx`
 - Modify: `src/cumulus/components/overlay/InfoCard.test.ts`
-- Modify: `src/cumulus/components/hud/DreamcallerPortrait.tsx`
-- Modify: `src/cumulus/components/hud/DreamcallerPortrait.test.tsx`
+- Modify: `src/cumulus/components/hud/DreamAvatarPortrait.tsx`
+- Modify: `src/cumulus/components/hud/DreamAvatarPortrait.test.tsx`
 - Modify: `src/cumulus/components/hud/Dreamsign.tsx`
 - Modify: `src/cumulus/components/hud/Dreamsign.test.tsx`
 - Modify: `src/cumulus/components/hud/TideDisc.tsx`
@@ -440,7 +440,7 @@ it does not accept placement, pixels, timing, portal, or controlled-open input.
 **Interfaces:**
 
 - Consumes the coordinator and strict `InfoCardModel` union from Tasks 1–2.
-- Produces semantic, self-revealing Dreamcaller, Dreamsign, tide, site, resource,
+- Produces semantic, self-revealing Dream Avatar, Dreamsign, tide, site, resource,
   stat, ability, pip, and glossary components.
 - `InfoCard` remains the visual renderer for strict variants. Its public surface
   contains content variants only; interaction statics are removed in Task 6
@@ -458,7 +458,7 @@ it does not accept placement, pixels, timing, portal, or controlled-open input.
   Assert rendered rich-text marks remain semantic content inside definitions.
 
 - [ ] **Step 3: Run focused tests and confirm current wrapper failures.** Run
-  `npx vitest run src/cumulus/components/card/GlossaryTerm.test.tsx src/cumulus/components/hud/DreamcallerPortrait.test.tsx src/cumulus/components/hud/Dreamsign.test.tsx src/cumulus/components/controls/PipBadge.test.tsx`.
+  `npx vitest run src/cumulus/components/card/GlossaryTerm.test.tsx src/cumulus/components/hud/DreamAvatarPortrait.test.tsx src/cumulus/components/hud/Dreamsign.test.tsx src/cumulus/components/controls/PipBadge.test.tsx`.
   Expected: new semantic-registration assertions fail while screens still build
   `InfoCard.PressInfo` or `HoverPopover` content.
 
@@ -469,7 +469,7 @@ it does not accept placement, pixels, timing, portal, or controlled-open input.
   private source binding.
 
 - [ ] **Step 5: Replace screen-owned wrappers with named components.** Migrate
-  quest start ability/tide/essence rows, deck sidebar Dreamcaller and Dreamsigns,
+  quest start ability/tide/essence rows, deck sidebar Dream Avatar and Dreamsigns,
   QuestStatusBar, SiteNode, stat orbs, pips, resource marks, and inline terms.
   A screen supplies semantic data and `onActivate` only. If a bespoke source
   shape remains, create a narrowly named Cumulus component instead of a generic
@@ -595,7 +595,7 @@ it does not accept placement, pixels, timing, portal, or controlled-open input.
 - Modify generated: `.llms/skills/cumulus/components/atlas-map.md`
 - Modify generated: `.llms/skills/cumulus/components/atlas-node.md`
 - Modify generated: `.llms/skills/cumulus/components/card-stat-orb.md`
-- Modify generated: `.llms/skills/cumulus/components/dreamcaller-portrait.md`
+- Modify generated: `.llms/skills/cumulus/components/dream-avatar-portrait.md`
 - Modify generated: `.llms/skills/cumulus/components/dreamsign.md`
 - Modify generated: `.llms/skills/cumulus/components/pip-badge.md`
 - Modify generated: `.llms/skills/cumulus/components/quest-status-bar.md`

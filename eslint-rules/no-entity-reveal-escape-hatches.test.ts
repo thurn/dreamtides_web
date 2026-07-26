@@ -62,11 +62,11 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
         const binding = useRevealSource(registration);`,
     },
     {
-      name: "Dreamcaller ability text owns its semantic reveal and identity",
-      filename: "src/cumulus/components/hud/DreamcallerAbilityText.tsx",
+      name: "DreamAvatar ability text owns its semantic reveal and identity",
+      filename: "src/cumulus/components/hud/DreamAvatarAbilityText.tsx",
       code: `import { useRevealSource } from "../../internal/reveal/context";
         import { revealEntityId } from "../../internal/reveal/identity";
-        const binding = useRevealSource({ identity: { entityType: "dreamcaller-ability", entityId: revealEntityId("dreamcaller-ability", id) }, spec });`,
+        const binding = useRevealSource({ identity: { entityType: "dream-avatar-ability", entityId: revealEntityId("dream-avatar-ability", id) }, spec });`,
     },
     {
       name: "transfiguration form owns its semantic reveal and identity",

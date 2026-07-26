@@ -1,10 +1,10 @@
 // Full-screen mockup for QuestStatusBar — the transparent quest HUD docked over
 // a real dreamscape backdrop. QuestStatusBar positions itself against `stageRef`
-// (the screen root) and reveals its essence / Dreamcaller / dreamsign info cards
+// (the screen root) and reveals its essence / DreamAvatar / dreamsign info cards
 // through the shared reveal engine, so the mockup supplies a full-viewport
 // scene-art stage, owns the stageRef, and lets the HUD sit at the bottom over the
 // art — the `.hud-outline` legibility treatment visibly earning its keep. The
-// Dreamcaller portrait and dreamsign art resolve from real assets in `public/`.
+// DreamAvatar portrait and dreamsign art resolve from real assets in `public/`.
 
 import { useRef } from "react";
 import { QuestStatusBar } from "../../components/hud/QuestStatusBar";
@@ -40,7 +40,7 @@ export function QuestStatusBarMockup() {
           Frostforge
         </div>
         <div style={{ font: token("--t-caption"), color: token("--text-secondary"), marginTop: token("--space-2") }}>
-          Press essence, the Dreamcaller, or a dreamsign to read it.
+          Press essence, the DreamAvatar, or a dreamsign to read it.
         </div>
       </div>
 
@@ -49,11 +49,11 @@ export function QuestStatusBarMockup() {
         stageRef={stageRef}
         essence={240}
         deck={23}
-        dreamcaller={{
+        dreamAvatar={{
           id: "00000000-0000-4000-8000-000000000051",
           name: "Threxan",
           epithet: "the Resounding Wrath",
-          portrait: artRef.dreamcaller("0025"),
+          portrait: artRef.dreamAvatar("0025"),
           ability: "At the start of your first turn, draw a card.",
         }}
         dreamsigns={[

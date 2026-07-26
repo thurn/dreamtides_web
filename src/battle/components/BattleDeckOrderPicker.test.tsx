@@ -7,7 +7,7 @@ import { createBattleInit } from "../integration/create-battle-init";
 import { createInitialBattleState } from "../state/create-initial-state";
 import {
   makeBattleTestCardDatabase,
-  makeBattleTestDreamcallers,
+  makeBattleTestDreamAvatars,
   makeBattleTestSite,
   makeBattleTestState,
 } from "../test-support";
@@ -164,7 +164,7 @@ function createTestBattle() {
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),
-    dreamcallers: makeBattleTestDreamcallers(),
+    dreamAvatars: makeBattleTestDreamAvatars(),
   });
 
   return {

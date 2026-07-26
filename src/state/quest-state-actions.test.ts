@@ -9,7 +9,7 @@ import {
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
-import type { DreamcallerContent } from "../types/content";
+import type { DreamAvatarContent } from "../types/content";
 import type { QuestContent } from "../data/quest-content";
 import {
   buildTestCorpusCards,
@@ -19,7 +19,7 @@ import type { DreamAtlas, QuestState } from "../types/quest";
 import type { PoolDraftState, ReplayDraftState } from "../types/draft";
 import type { DraftRecord } from "../data/cards-v2-database";
 import { buildFitModel, type FitModel } from "../draft/replay/fit-model";
-import { toQuestDreamcaller } from "../data/dreamcaller-selection";
+import { toQuestDreamAvatar } from "../data/dream-avatar-selection";
 import { createDefaultState } from "./quest-context";
 import {
   addCardToQuestState,
@@ -30,7 +30,7 @@ import {
   pickDraftCardInQuestState,
   prepareDraftCardPickInQuestState,
   setQuestScreen,
-  startQuestFromDreamcaller,
+  startQuestFromDreamAvatar,
   updateQuestAtlas,
 } from "./quest-state-actions";
 
@@ -55,10 +55,10 @@ function makeCard(
   };
 }
 
-function makeDreamcaller(): DreamcallerContent {
+function makeDreamAvatar(): DreamAvatarContent {
   return {
-    id: "dreamcaller-1",
-    name: "Test Dreamcaller",
+    id: "dream-avatar-1",
+    name: "Test DreamAvatar",
     title: "State Witness",
     renderedText: "Test ability.",
     imageNumber: "0006",
@@ -69,7 +69,7 @@ function makeDreamcaller(): DreamcallerContent {
 }
 
 function makeQuestContent(
-  dreamcaller: DreamcallerContent = makeDreamcaller(),
+  dreamAvatar: DreamAvatarContent = makeDreamAvatar(),
 ): QuestContent {
   const starterCards = STARTER_CARD_NUMBERS.map((cardNumber) =>
     makeCard(cardNumber, { isStarter: true }),
@@ -81,7 +81,7 @@ function makeQuestContent(
 
   return {
     cardDatabase,
-    dreamcallers: [dreamcaller],
+    dreamAvatars: [dreamAvatar],
 
     dreamwellCards: [],    dreamsignTemplates: [],
     dreamscapes: loadTestDreamscapes(),
@@ -399,15 +399,15 @@ describe("quest state actions", () => {
     expect(console.log).not.toHaveBeenCalled();
   });
 
-  it("starts a quest from a Dreamcaller in one state transition", () => {
+  it("starts a quest from a DreamAvatar in one state transition", () => {
     const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-    const dreamcaller = makeDreamcaller();
-    const questContent = makeQuestContent(dreamcaller);
+    const dreamAvatar = makeDreamAvatar();
+    const questContent = makeQuestContent(dreamAvatar);
     const prev = createDefaultState();
 
-    const next = startQuestFromDreamcaller({
+    const next = startQuestFromDreamAvatar({
       prev,
-      dreamcaller,
+      dreamAvatar,
       questContent,
       seedOverride: "quest-seed-1",
     });
@@ -415,10 +415,10 @@ describe("quest state actions", () => {
       (node) => node.state === "available",
     );
 
-    expect(next.dreamcaller).toEqual(toQuestDreamcaller(dreamcaller));
-    expect(next.dreamcaller?.portraitFocus).toEqual({ x: 0.42, y: 0.18 });
-    expect(next.dreamcaller?.startingEssence).toBe(275);
-    expect(next.essence).toBe(dreamcaller.startingEssence);
+    expect(next.dreamAvatar).toEqual(toQuestDreamAvatar(dreamAvatar));
+    expect(next.dreamAvatar?.portraitFocus).toEqual({ x: 0.42, y: 0.18 });
+    expect(next.dreamAvatar?.startingEssence).toBe(275);
+    expect(next.essence).toBe(dreamAvatar.startingEssence);
     expect(prev.essence).toBe(createDefaultState().essence);
     // The package is built from the run pool context at quest start; assert a
     // non-empty draft pool was produced rather than checking exact card numbers.
@@ -466,7 +466,7 @@ describe("quest state actions", () => {
     expect(next.activeSiteId).toBeNull();
     // The starter-deck reveal popup is gated entirely by the
     // `hasSeenStartingDeckPopup` flag. A fresh quest start leaves the flag
-    // at the default `false` so the popup opens once when the dreamcaller
+    // at the default `false` so the popup opens once when the dreamAvatar
     // is first picked.
     expect(next.hasSeenStartingDeckPopup).toBe(false);
     // Quest start builds the draft pool, which emits exactly one provenance log
@@ -476,7 +476,7 @@ describe("quest state actions", () => {
       logSpy.mock.calls[0][0] as string,
     ) as Record<string, unknown>;
     expect(constructed.event).toBe("draft_pool_constructed");
-    expect(constructed.dreamcallerId).toBe(dreamcaller.id);
+    expect(constructed.dreamAvatarId).toBe(dreamAvatar.id);
     expect(typeof constructed.seed).toBe("number");
   });
 
@@ -537,18 +537,18 @@ describe("quest state actions", () => {
 
 describe("quest state actions (replay draft)", () => {
   it("starts a replay quest with a replay draft state", () => {
-    const dreamcaller = makeDreamcaller();
+    const dreamAvatar = makeDreamAvatar();
     const questContent: QuestContent = {
-      ...makeQuestContent(dreamcaller),
+      ...makeQuestContent(dreamAvatar),
       draftMode: "replay",
       draftRecords: [makeReplayRecord()],
       fitModel: makeReplayFitModel(),
     };
     const prev = createDefaultState();
 
-    const next = startQuestFromDreamcaller({
+    const next = startQuestFromDreamAvatar({
       prev,
-      dreamcaller,
+      dreamAvatar,
       questContent,
       seedOverride: "replay-seed-1",
     });
@@ -576,18 +576,18 @@ describe("quest state actions (replay draft)", () => {
   });
 
   it("falls back to a pool draft state when no records are present", () => {
-    const dreamcaller = makeDreamcaller();
+    const dreamAvatar = makeDreamAvatar();
     const questContent: QuestContent = {
-      ...makeQuestContent(dreamcaller),
+      ...makeQuestContent(dreamAvatar),
       draftMode: "replay",
       draftRecords: [],
       fitModel: undefined,
     };
     const prev = createDefaultState();
 
-    const next = startQuestFromDreamcaller({
+    const next = startQuestFromDreamAvatar({
       prev,
-      dreamcaller,
+      dreamAvatar,
       questContent,
       seedOverride: "replay-seed-2",
     });

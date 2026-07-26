@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createBattleInit } from "../../battle/integration/create-battle-init";
 import {
   makeBattleTestCardDatabase,
-  makeBattleTestDreamcallers,
+  makeBattleTestDreamAvatars,
   makeBattleTestSite,
   makeBattleTestState,
 } from "../../battle/test-support";
@@ -15,7 +15,7 @@ function makeInit() {
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
     cardDatabase,
-    dreamcallers: makeBattleTestDreamcallers(),
+    dreamAvatars: makeBattleTestDreamAvatars(),
     dreamwellCards: [],
     seedOverride: 1234,
   });
@@ -61,7 +61,7 @@ describe("buildBattleStartView", () => {
       kind: "dreamscape-scene",
       dreamscapeId: "test_dreamscape",
     });
-    expect(view.dreamcaller).toMatchObject({
+    expect(view.dreamAvatar).toMatchObject({
       id: "opponent-uuid",
       name: "The Long-Named Opponent",
       title: "Keeper of the Last Horizon",

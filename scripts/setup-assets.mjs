@@ -6,7 +6,7 @@ import { homedir } from "node:os";
 import { pathToFileURL } from "node:url";
 import { parse } from "smol-toml";
 import { CARDS_V2_POOL_METADATA } from "../src/data/cards-v2-metadata.ts";
-import { DREAMCALLER_ARCHETYPES } from "../src/data/dreamcallers-v2-database.ts";
+import { DREAM_AVATAR_ARCHETYPES } from "../src/data/dream-avatars-v2-database.ts";
 import { OFFER_TILE_BACKGROUND_IMAGE_NUMBERS } from "../src/data/offer-tile-art.ts";
 import {
   CARD_ID_RE,
@@ -24,9 +24,11 @@ export { stripJsonComments };
 const ROOT = resolve(import.meta.dirname, "..");
 const DATA_DIR = join(ROOT, "data");
 export const IMAGE_CACHE_DIR = join(homedir(), "Library", "Caches", "io.github.dreamtides.tv", "image_cache");
-const DREAMCALLER_ART_DIR_CANDIDATES = [
-  join(homedir(), "Documents", "synty", "dreamcallers"),
-  join(homedir(), "Documents", "sytny", "dreamcallers"),
+const DREAM_AVATAR_ART_DIR_CANDIDATES = [
+  join(homedir(), "Documents", "synty", "dream-avatars"),
+  join(homedir(), "Documents", "sytny", "dream-avatars"),
+  join(homedir(), "Documents", "synty", "dream" + "callers"),
+  join(homedir(), "Documents", "sytny", "dream" + "callers"),
 ];
 // Dreamsign art is sourced exclusively from the `outlined` variants — every
 // sign carries its own glyph outline for on-scene legibility. The shared
@@ -473,38 +475,38 @@ export function validateCardIds(keys, idToName, label) {
 }
 
 /**
- * Enforce the dreamscape <-> Dreamcaller mapping invariant at build time:
- * non-starter dreamscapes partition `dreamcallers_v2.toml` into resident groups.
- * `dreamscapes` are the transformed dreamscape records and `dreamcallerIds` the
- * set of every real Dreamcaller id. Fatal violations depend only on
+ * Enforce the dreamscape <-> DreamAvatar mapping invariant at build time:
+ * non-starter dreamscapes partition `dream_avatars_v2.toml` into resident groups.
+ * `dreamscapes` are the transformed dreamscape records and `dreamAvatarIds` the
+ * set of every real DreamAvatar id. Fatal violations depend only on
  * `dreamscapes.toml` itself, so a routine edit elsewhere can never trip them:
- * the same Dreamcaller listed under two dreamscapes, the starter carrying
+ * the same DreamAvatar listed under two dreamscapes, the starter carrying
  * residents, or a non-starter region outside the 3-4 band. Referential checks
- * against the Dreamcaller set are non-fatal warnings instead, because the build
- * may run against a reduced Dreamcaller fixture (the asset tests swap one in): a
- * `dreamcaller-id` that resolves to no Dreamcaller, and a Dreamcaller assigned
+ * against the DreamAvatar set are non-fatal warnings instead, because the build
+ * may run against a reduced DreamAvatar fixture (the asset tests swap one in): a
+ * `dream-avatar-id` that resolves to no DreamAvatar, and a DreamAvatar assigned
  * to no dreamscape, are each reported as a warning. In a full production build
  * both files are real, so a stray id surfaces as paired warnings (the bad id is
- * unknown and the orphaned Dreamcaller is unassigned). Ids are compared
+ * unknown and the orphaned DreamAvatar is unassigned). Ids are compared
  * case-insensitively. Returns a `{ id -> count }` summary for logging.
  */
-export function validateDreamcallerMapping(dreamscapes, dreamcallerIds) {
+export function validateDreamAvatarMapping(dreamscapes, dreamAvatarIds) {
   const known = new Map(
-    [...dreamcallerIds].map((id) => [id.toLowerCase(), id]),
+    [...dreamAvatarIds].map((id) => [id.toLowerCase(), id]),
   );
-  const assignedTo = new Map(); // lowercased dreamcaller id -> dreamscape id
+  const assignedTo = new Map(); // lowercased dreamAvatar id -> dreamscape id
   const unknown = [];
   const counts = {};
 
   for (const scape of dreamscapes) {
-    const ids = scape.dreamcallerIds ?? [];
+    const ids = scape.dreamAvatarIds ?? [];
     counts[scape.id] = ids.length;
 
     if (scape.isStarter) {
       if (ids.length > 0) {
         throw new Error(
           `dreamscapes.toml: starter dreamscape "${scape.id}" must not list ` +
-            `dreamcaller-ids (found ${String(ids.length)})`,
+            `dream-avatar-ids (found ${String(ids.length)})`,
         );
       }
       continue;
@@ -513,7 +515,7 @@ export function validateDreamcallerMapping(dreamscapes, dreamcallerIds) {
     if (ids.length < 3 || ids.length > 4) {
       throw new Error(
         `dreamscapes.toml: dreamscape "${scape.id}" has ${String(ids.length)} ` +
-          `dreamcaller-ids; each non-starter region must have 3-4`,
+          `dream-avatar-ids; each non-starter region must have 3-4`,
       );
     }
 
@@ -526,8 +528,8 @@ export function validateDreamcallerMapping(dreamscapes, dreamcallerIds) {
       const prior = assignedTo.get(key);
       if (prior !== undefined) {
         throw new Error(
-          `dreamscapes.toml: dreamcaller ${rawId} is assigned to both ` +
-            `"${prior}" and "${scape.id}"; each Dreamcaller belongs to exactly ` +
+          `dreamscapes.toml: dreamAvatar ${rawId} is assigned to both ` +
+            `"${prior}" and "${scape.id}"; each DreamAvatar belongs to exactly ` +
             `one dreamscape`,
         );
       }
@@ -538,7 +540,7 @@ export function validateDreamcallerMapping(dreamscapes, dreamcallerIds) {
   if (unknown.length > 0) {
     console.warn(
       `WARNING: dreamscapes.toml references ${String(unknown.length)} ` +
-        `dreamcaller id(s) that resolve to no Dreamcaller: ` +
+        `dreamAvatar id(s) that resolve to no DreamAvatar: ` +
         `${unknown.slice(0, 5).join(", ")}` +
         (unknown.length > 5 ? ", ..." : ""),
     );
@@ -549,7 +551,7 @@ export function validateDreamcallerMapping(dreamscapes, dreamcallerIds) {
     .map(([, id]) => id);
   if (unassigned.length > 0) {
     console.warn(
-      `WARNING: ${String(unassigned.length)} dreamcaller(s) are not assigned ` +
+      `WARNING: ${String(unassigned.length)} dreamAvatar(s) are not assigned ` +
         `to any dreamscape: ${unassigned.slice(0, 5).join(", ")}` +
         (unassigned.length > 5 ? ", ..." : ""),
     );
@@ -559,7 +561,7 @@ export function validateDreamcallerMapping(dreamscapes, dreamcallerIds) {
 }
 
 /**
- * Default starting essence used when a Dreamcaller TOML record omits a
+ * Default starting essence used when a DreamAvatar TOML record omits a
  * `starting-essence` value. Mirrors `DEFAULT_STARTING_ESSENCE` in
  * `src/types/content.ts`.
  */
@@ -612,13 +614,13 @@ export function transformDreamwell(dreamwell) {
 }
 
 /**
- * Convert a TOML Dreamcaller record to its JSON representation with camelCase keys.
+ * Convert a TOML DreamAvatar record to its JSON representation with camelCase keys.
  * Records without a `starting-essence` value are filled in with
  * `DEFAULT_STARTING_ESSENCE` so the runtime always sees a number.
  */
-export function transformDreamcaller(dreamcaller) {
+export function transformDreamAvatar(dreamAvatar) {
   const result = {};
-  for (const [key, value] of Object.entries(dreamcaller)) {
+  for (const [key, value] of Object.entries(dreamAvatar)) {
     result[kebabToCamel(key)] = value;
   }
   if (typeof result.startingEssence !== "number") {
@@ -694,14 +696,14 @@ function recreateDir(dir) {
   mkdirSync(dir, { recursive: true });
 }
 
-function defaultDreamcallerArtDir() {
-  for (const candidate of DREAMCALLER_ART_DIR_CANDIDATES) {
+function defaultDreamAvatarArtDir() {
+  for (const candidate of DREAM_AVATAR_ART_DIR_CANDIDATES) {
     if (existsSync(candidate)) {
       return candidate;
     }
   }
 
-  return DREAMCALLER_ART_DIR_CANDIDATES[0];
+  return DREAM_AVATAR_ART_DIR_CANDIDATES[0];
 }
 
 function readDreamsignAltText(dreamsignArtDir) {
@@ -749,7 +751,7 @@ export function transformDreamsignProfile(profile) {
  * renamed kebab->camel. The starter dreamscape omits `guide-id`/`affiliation-id`
  * in the TOML; those normalize to `null` so the runtime always sees an explicit
  * value, and `is-starter` defaults to `false` for the non-starter regions. A
- * dreamscape without `dreamcaller-ids` (the starter) normalizes to an empty
+ * dreamscape without `dream-avatar-ids` (the starter) normalizes to an empty
  * list so the runtime always sees an array.
  */
 export function transformDreamscape(dreamscape) {
@@ -760,7 +762,7 @@ export function transformDreamscape(dreamscape) {
   if (result.guideId == null) result.guideId = null;
   if (result.affiliationId == null) result.affiliationId = null;
   if (typeof result.isStarter !== "boolean") result.isStarter = false;
-  if (!Array.isArray(result.dreamcallerIds)) result.dreamcallerIds = [];
+  if (!Array.isArray(result.dreamAvatarIds)) result.dreamAvatarIds = [];
   return result;
 }
 
@@ -944,22 +946,22 @@ export function regenerateCardData({
 
 function setupCatalogFixture({
   cardTomlPath,
-  dreamcallerV2TomlPath,
+  dreamAvatarV2TomlPath,
   dreamsignTomlPath,
   publicDir,
   imageCacheDir,
-  dreamcallerArtDir,
+  dreamAvatarArtDir,
   dreamsignArtDir,
   mainMenuBackgroundArtPath,
   tutorialDialogueFrameArtPath,
 }) {
   const parsedCards = parse(readFileSync(cardTomlPath, "utf8"));
   const jsonCards = (parsedCards.cards ?? []).map(transformCard);
-  const parsedDreamcallers = parse(
-    readFileSync(dreamcallerV2TomlPath, "utf8"),
+  const parsedDreamAvatars = parse(
+    readFileSync(dreamAvatarV2TomlPath, "utf8"),
   );
-  const jsonDreamcallers = (parsedDreamcallers.dreamcaller ?? []).map(
-    transformDreamcaller,
+  const jsonDreamAvatars = (parsedDreamAvatars.dreamAvatar ?? []).map(
+    transformDreamAvatar,
   );
   const parsedDreamsigns = parse(readFileSync(dreamsignTomlPath, "utf8"));
   const altTextByImageName = readDreamsignAltText(dreamsignArtDir);
@@ -973,8 +975,8 @@ function setupCatalogFixture({
     `${JSON.stringify(jsonCards, null, 2)}\n`,
   );
   writeFileSync(
-    join(publicDir, "dreamcallers-v2-data.json"),
-    `${JSON.stringify(jsonDreamcallers, null, 2)}\n`,
+    join(publicDir, "dream-avatars-v2-data.json"),
+    `${JSON.stringify(jsonDreamAvatars, null, 2)}\n`,
   );
   writeFileSync(
     join(publicDir, "dreamsign-data.json"),
@@ -993,11 +995,11 @@ function setupCatalogFixture({
       join(publicDir, "cards", `${card.imageNumber}.webp`),
     );
   }
-  for (const dreamcaller of jsonDreamcallers) {
-    if (typeof dreamcaller.imageNumber !== "string") continue;
+  for (const dreamAvatar of jsonDreamAvatars) {
+    if (typeof dreamAvatar.imageNumber !== "string") continue;
     linkCatalogArt(
-      join(dreamcallerArtDir, `${dreamcaller.imageNumber}.png`),
-      join(publicDir, "dreamcallers", `${dreamcaller.imageNumber}.png`),
+      join(dreamAvatarArtDir, `${dreamAvatar.imageNumber}.png`),
+      join(publicDir, "dream-avatars", `${dreamAvatar.imageNumber}.png`),
     );
   }
   for (const dreamsign of jsonDreamsigns) {
@@ -1019,7 +1021,7 @@ function setupCatalogFixture({
 export function setupAssets({
   cardTomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
   cardV2TomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
-  dreamcallerV2TomlPath = join(DATA_DIR, "tabula", "dreamcallers_v2.toml"),
+  dreamAvatarV2TomlPath = join(DATA_DIR, "tabula", "dream_avatars_v2.toml"),
   dreamwellTomlPath = join(DATA_DIR, "tabula", "dreamwell.toml"),
   dreamsignTomlPath = join(DATA_DIR, "tabula", "dreamsigns.toml"),
   dreamsignProfilesTomlPath = join(DATA_DIR, "tabula", "dreamsign_profiles.toml"),
@@ -1038,7 +1040,7 @@ export function setupAssets({
   merchantCorpusJsonPath = join(DATA_DIR, "merchant_corpus.json"),
   publicDir = PUBLIC_DIR,
   imageCacheDir = IMAGE_CACHE_DIR,
-  dreamcallerArtDir = defaultDreamcallerArtDir(),
+  dreamAvatarArtDir = defaultDreamAvatarArtDir(),
   dreamsignArtDir = DREAMSIGN_ART_DIR,
   journeyArtDir = JOURNEY_ART_DIR,
   mainMenuBackgroundArtPath = MAIN_MENU_BACKGROUND_ART_PATH,
@@ -1052,11 +1054,11 @@ export function setupAssets({
   if (catalogFixtureOnly) {
     setupCatalogFixture({
       cardTomlPath,
-      dreamcallerV2TomlPath,
+      dreamAvatarV2TomlPath,
       dreamsignTomlPath,
       publicDir,
       imageCacheDir,
-      dreamcallerArtDir,
+      dreamAvatarArtDir,
       dreamsignArtDir,
       mainMenuBackgroundArtPath,
       tutorialDialogueFrameArtPath,
@@ -1065,7 +1067,7 @@ export function setupAssets({
   }
   const cardsDir = join(publicDir, "cards");
   const cardFrameDir = join(publicDir, "card-frame");
-  const dreamcallersDir = join(publicDir, "dreamcallers");
+  const dreamAvatarsDir = join(publicDir, "dream-avatars");
   const dreamsignsDir = join(publicDir, "dreamsigns");
   const journeysDir = join(publicDir, "journeys");
   const mainMenuDir = join(publicDir, "main-menu");
@@ -1079,7 +1081,7 @@ export function setupAssets({
   const decklistIdsJsonPath = join(publicDir, "decklist-ids-data.json");
   const draftRecordsAdaptedDir = join(ROOT, "docs", "draft_records_adapted");
   const draftRecordsJsonPath = join(publicDir, "draft-records-data.json");
-  const dreamcallerV2JsonPath = join(publicDir, "dreamcallers-v2-data.json");
+  const dreamAvatarV2JsonPath = join(publicDir, "dream-avatars-v2-data.json");
   const dreamwellJsonPath = join(publicDir, "dreamwell-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
   const dreamsignProfilesJsonPath = join(publicDir, "dreamsign-profiles-data.json");
@@ -1215,7 +1217,7 @@ export function setupAssets({
         "unavailable until `npm run bake-tides2` is run.",
     );
   }
-  // The committed `tides3` artifact (decks + per-Dreamcaller tide pools in one
+  // The committed `tides3` artifact (decks + per-DreamAvatar tide pools in one
   // file) the `tides3` pool variant combines into pools. Baked by
   // `npm run bake-tides3`, committed as JSONC with a provenance header.
   const tides3SourcePath = join(DATA_DIR, "tides3.jsonc");
@@ -1233,7 +1235,7 @@ export function setupAssets({
   }
 
   // The committed `tides4` artifact (signature/facet/neutral tides + the
-  // per-Dreamcaller tide pools in one file) the `tides4` pool variant combines
+  // per-DreamAvatar tide pools in one file) the `tides4` pool variant combines
   // into pools. Baked by `npm run bake-tides4`, committed as JSONC with a
   // provenance header.
   const tides4SourcePath = join(DATA_DIR, "tides4.jsonc");
@@ -1251,7 +1253,7 @@ export function setupAssets({
   }
 
   // The committed `tides5` artifact — the same kind of signature/facet/neutral
-  // tides + per-Dreamcaller tide pools as `tides4`, but baked only from the
+  // tides + per-DreamAvatar tide pools as `tides4`, but baked only from the
   // known-good decklists. Baked by `npm run bake-tides5`, committed as JSONC with
   // a provenance header.
   const tides5SourcePath = join(DATA_DIR, "tides5.jsonc");
@@ -1284,31 +1286,31 @@ export function setupAssets({
     );
   }
 
-  // The v2 Dreamcaller identities (`dreamcallers_v2.toml`) drive the standalone
+  // The v2 DreamAvatar identities (`dream_avatars_v2.toml`) drive the standalone
   // draft test harness. They carry a kebab->camel normalization and a
   // `signature-cards` list that steers the standard `idf3` pool variant. The
   // `draft-archetypes` the non-`idf3` variants seed from live in TypeScript
-  // ({@link DREAMCALLER_ARCHETYPES}) and are merged in below.
-  console.log("Parsing dreamcallers_v2.toml...");
-  const dreamcallerV2TomlContent = readFileSync(dreamcallerV2TomlPath, "utf8");
-  const parsedDreamcallersV2 = parse(dreamcallerV2TomlContent);
-  const allDreamcallersV2 = parsedDreamcallersV2.dreamcaller;
+  // ({@link DREAM_AVATAR_ARCHETYPES}) and are merged in below.
+  console.log("Parsing dream_avatars_v2.toml...");
+  const dreamAvatarV2TomlContent = readFileSync(dreamAvatarV2TomlPath, "utf8");
+  const parsedDreamAvatarsV2 = parse(dreamAvatarV2TomlContent);
+  const allDreamAvatarsV2 = parsedDreamAvatarsV2.dreamAvatar;
 
-  if (!Array.isArray(allDreamcallersV2)) {
-    throw new Error("Expected [[dreamcaller]] array in dreamcallers_v2.toml");
+  if (!Array.isArray(allDreamAvatarsV2)) {
+    throw new Error("Expected [[dreamAvatar]] array in dream_avatars_v2.toml");
   }
 
   // Signatures are authored as stable card-id UUIDs (`docs/cards2/
   // idf3_signature_design.md`). Resolve them to the current card names here so
   // the runtime bundle and the name-based pool engine see names, and so a
   // dangling signature UUID fails the build. Renaming a card in cards_v2.toml
-  // therefore needs no edit to dreamcallers_v2.toml. The resolved UUIDs are also
+  // therefore needs no edit to dream_avatars_v2.toml. The resolved UUIDs are also
   // emitted as `signatureCardIds` (index-aligned with `signatureCards`) so
   // consumers that must distinguish two cards sharing a name can key on the id.
-  const jsonDreamcallersV2 = allDreamcallersV2.map((dreamcaller) => {
-    const archetypes = DREAMCALLER_ARCHETYPES[dreamcaller.name];
-    if (archetypes) dreamcaller["draft-archetypes"] = archetypes;
-    const transformed = transformDreamcaller(dreamcaller);
+  const jsonDreamAvatarsV2 = allDreamAvatarsV2.map((dreamAvatar) => {
+    const archetypes = DREAM_AVATAR_ARCHETYPES[dreamAvatar.name];
+    if (archetypes) dreamAvatar["draft-archetypes"] = archetypes;
+    const transformed = transformDreamAvatar(dreamAvatar);
     if (Array.isArray(transformed.signatureCards)) {
       const resolved = transformed.signatureCards.map((ref) =>
         resolveToken(ref, cardMaps),
@@ -1319,11 +1321,11 @@ export function setupAssets({
     return transformed;
   });
   writeFileSync(
-    dreamcallerV2JsonPath,
-    JSON.stringify(jsonDreamcallersV2, null, 2) + "\n",
+    dreamAvatarV2JsonPath,
+    JSON.stringify(jsonDreamAvatarsV2, null, 2) + "\n",
   );
   console.log(
-    `Wrote ${jsonDreamcallersV2.length} dreamcallers to dreamcallers-v2-data.json`,
+    `Wrote ${jsonDreamAvatarsV2.length} dreamAvatars to dream-avatars-v2-data.json`,
   );
 
   // Dreamwell cards: the shared deck both players draw from one per turn during
@@ -1428,19 +1430,19 @@ export function setupAssets({
   }
 
   const jsonDreamscapes = allDreamscapes.map(transformDreamscape);
-  // Enforce the resident-Dreamcaller invariant: non-starter dreamscapes
-  // partition dreamcallers_v2.toml into 3-4 per region with no Dreamcaller in
-  // two regions. `jsonDreamcallersV2` was parsed above, so its ids are the
+  // Enforce the resident-DreamAvatar invariant: non-starter dreamscapes
+  // partition dream_avatars_v2.toml into 3-4 per region with no DreamAvatar in
+  // two regions. `jsonDreamAvatarsV2` was parsed above, so its ids are the
   // authoritative set checked against.
-  const dreamcallerCounts = validateDreamcallerMapping(
+  const dreamAvatarCounts = validateDreamAvatarMapping(
     jsonDreamscapes,
-    jsonDreamcallersV2.map((dreamcaller) => dreamcaller.id),
+    jsonDreamAvatarsV2.map((dreamAvatar) => dreamAvatar.id),
   );
   for (const scape of jsonDreamscapes) {
     if (scape.isStarter) continue;
     console.log(
-      `  ${scape.id}: ${String(dreamcallerCounts[scape.id])} dreamcallers` +
-        ` -> ${scape.dreamcallerIds.join(", ")}`,
+      `  ${scape.id}: ${String(dreamAvatarCounts[scape.id])} dreamAvatars` +
+        ` -> ${scape.dreamAvatarIds.join(", ")}`,
     );
   }
   writeFileSync(
@@ -1505,7 +1507,7 @@ export function setupAssets({
   );
   console.log("Wrote atlas config to atlas-config-data.json");
 
-  // Apollyon incarnations: the final Dreamcaller's ten guises. Parse the TOML
+  // Apollyon incarnations: the final DreamAvatar's ten guises. Parse the TOML
   // and write the kebab->camel JSON the runtime loader fetches at
   // /apollyon-incarnations-data.json; Atlas generation picks one to present the
   // boss node.
@@ -1726,66 +1728,66 @@ export function setupAssets({
     `Linked ${linkedDreamwell} of ${jsonDreamwell.length} dreamwell images (${missingDreamwell} missing)`,
   );
 
-  recreateDir(dreamcallersDir);
-  let linkedDreamcallerArt = 0;
-  let missingDreamcallerArt = 0;
+  recreateDir(dreamAvatarsDir);
+  let linkedDreamAvatarArt = 0;
+  let missingDreamAvatarArt = 0;
 
-  // Link portraits for the v2 draft-test Dreamcallers, keyed by image number so
-  // a portrait shared between several Dreamcallers is linked once.
-  const dreamcallerArtByImageNumber = new Map();
-  for (const dreamcaller of jsonDreamcallersV2) {
-    if (!dreamcallerArtByImageNumber.has(dreamcaller.imageNumber)) {
-      dreamcallerArtByImageNumber.set(dreamcaller.imageNumber, dreamcaller.name);
+  // Link portraits for the v2 draft-test DreamAvatars, keyed by image number so
+  // a portrait shared between several DreamAvatars is linked once.
+  const dreamAvatarArtByImageNumber = new Map();
+  for (const dreamAvatar of jsonDreamAvatarsV2) {
+    if (!dreamAvatarArtByImageNumber.has(dreamAvatar.imageNumber)) {
+      dreamAvatarArtByImageNumber.set(dreamAvatar.imageNumber, dreamAvatar.name);
     }
   }
 
-  for (const [imageNumber, name] of dreamcallerArtByImageNumber) {
+  for (const [imageNumber, name] of dreamAvatarArtByImageNumber) {
     const filename = `${imageNumber}.png`;
-    const sourcePath = join(dreamcallerArtDir, filename);
-    const symlinkPath = join(dreamcallersDir, filename);
+    const sourcePath = join(dreamAvatarArtDir, filename);
+    const symlinkPath = join(dreamAvatarsDir, filename);
 
     if (existsSync(sourcePath)) {
       symlinkSync(sourcePath, symlinkPath);
-      linkedDreamcallerArt++;
+      linkedDreamAvatarArt++;
     } else {
       console.warn(
-        `  Warning: missing dreamcaller art for ${name} (${imageNumber})`,
+        `  Warning: missing dreamAvatar art for ${name} (${imageNumber})`,
       );
-      missingDreamcallerArt++;
+      missingDreamAvatarArt++;
     }
   }
 
   console.log(
-    `Linked ${linkedDreamcallerArt} of ${dreamcallerArtByImageNumber.size} dreamcaller portraits (${missingDreamcallerArt} missing)`,
+    `Linked ${linkedDreamAvatarArt} of ${dreamAvatarArtByImageNumber.size} dreamAvatar portraits (${missingDreamAvatarArt} missing)`,
   );
 
   // Link the transparent full-body cutouts (`cutout/<imageNumber>.png` in the
-  // art source dir) to `public/dreamcallers/cutout/`. These are the character
-  // renders with the scene background removed, used wherever the Dreamcaller
-  // stands directly on UI chrome (Dreamcaller selection, portraits). Same
+  // art source dir) to `public/dream-avatars/cutout/`. These are the character
+  // renders with the scene background removed, used wherever the DreamAvatar
+  // stands directly on UI chrome (DreamAvatar selection, portraits). Same
   // warn-and-continue policy as the scene portraits above.
-  const dreamcallerCutoutSourceDir = join(dreamcallerArtDir, "cutout");
-  const dreamcallerCutoutsDir = join(dreamcallersDir, "cutout");
-  mkdirSync(dreamcallerCutoutsDir, { recursive: true });
-  let linkedDreamcallerCutouts = 0;
-  let missingDreamcallerCutouts = 0;
-  for (const [imageNumber, name] of dreamcallerArtByImageNumber) {
+  const dreamAvatarCutoutSourceDir = join(dreamAvatarArtDir, "cutout");
+  const dreamAvatarCutoutsDir = join(dreamAvatarsDir, "cutout");
+  mkdirSync(dreamAvatarCutoutsDir, { recursive: true });
+  let linkedDreamAvatarCutouts = 0;
+  let missingDreamAvatarCutouts = 0;
+  for (const [imageNumber, name] of dreamAvatarArtByImageNumber) {
     const filename = `${imageNumber}.png`;
-    const sourcePath = join(dreamcallerCutoutSourceDir, filename);
-    const symlinkPath = join(dreamcallerCutoutsDir, filename);
+    const sourcePath = join(dreamAvatarCutoutSourceDir, filename);
+    const symlinkPath = join(dreamAvatarCutoutsDir, filename);
 
     if (existsSync(sourcePath)) {
       symlinkSync(sourcePath, symlinkPath);
-      linkedDreamcallerCutouts++;
+      linkedDreamAvatarCutouts++;
     } else {
       console.warn(
-        `  Warning: missing dreamcaller cutout for ${name} (${imageNumber})`,
+        `  Warning: missing dreamAvatar cutout for ${name} (${imageNumber})`,
       );
-      missingDreamcallerCutouts++;
+      missingDreamAvatarCutouts++;
     }
   }
   console.log(
-    `Linked ${linkedDreamcallerCutouts} of ${dreamcallerArtByImageNumber.size} dreamcaller cutouts (${missingDreamcallerCutouts} missing)`,
+    `Linked ${linkedDreamAvatarCutouts} of ${dreamAvatarArtByImageNumber.size} dreamAvatar cutouts (${missingDreamAvatarCutouts} missing)`,
   );
 
   recreateDir(dreamsignsDir);
@@ -1859,7 +1861,7 @@ export function setupAssets({
     // Graceful degradation when the developer's machine has no shutterstock
     // cache: the dream-art matcher still runs (the bundled TOML ledger is
     // independent of the on-disk image files), it just produces URLs that
-    // 404. Mirrors the existing dreamcaller/dreamsign warn-and-continue
+    // 404. Mirrors the existing dream-avatar/dreamsign warn-and-continue
     // behaviour. Write an empty extension map so the runtime fetch succeeds.
     writeFileSync(journeyExtensionJsonPath, "{}\n");
     console.warn(

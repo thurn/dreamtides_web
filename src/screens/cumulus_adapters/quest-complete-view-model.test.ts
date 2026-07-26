@@ -50,8 +50,8 @@ function state(): QuestState {
     ...base,
     essence: 140,
     completionLevel: 7,
-    dreamcaller: {
-      id: "dreamcaller-uuid",
+    dreamAvatar: {
+      id: "dream-avatar-uuid",
       name: "The Wayfinder",
       title: "Bearer of the Last Light",
       renderedText: "A fixture ability.",
@@ -92,11 +92,11 @@ function state(): QuestState {
 }
 
 describe("buildQuestCompleteView", () => {
-  it("builds the interactive Dreamcaller portrait and victory statistics from run state", () => {
+  it("builds the interactive DreamAvatar portrait and victory statistics from run state", () => {
     const view = buildQuestCompleteView(state());
 
-    expect(view.dreamcaller).toEqual({
-      id: "dreamcaller-uuid",
+    expect(view.dreamAvatar).toEqual({
+      id: "dream-avatar-uuid",
       name: "The Wayfinder",
       title: "Bearer of the Last Light",
       ability: "A fixture ability.",

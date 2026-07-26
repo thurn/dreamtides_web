@@ -17,7 +17,7 @@ import { generateTides5 } from "./variant-tides5.ts";
 
 // A synthetic artifact: one starter tide, `facetCount` facet tides, and
 // `neutralCount` neutral tides, each with `cardsPerTide` disjoint cards. "dc-a" is
-// a signatured Dreamcaller; "dc-b" is signatureless (null starter). The schema is
+// a signatured DreamAvatar; "dc-b" is signatureless (null starter). The schema is
 // the `tides4` schema verbatim.
 function makeTides5(
   facetCount: number,
@@ -59,7 +59,7 @@ function makeTides5(
   return {
     version: 1,
     tides,
-    tidePoolByDreamcaller: {
+    tidePoolByDreamAvatar: {
       "dc-a": { starter: "tide-sig-1", facets: facetIds, neutral: neutralIds },
       "dc-b": { starter: null, facets: facetIds, neutral: neutralIds },
     },
@@ -115,7 +115,7 @@ describe("generateTides5", () => {
     const provenance = result.tides4Provenance;
     expect(provenance).toBeDefined();
     if (provenance === undefined) return;
-    expect(provenance.dreamcallerId).toBe("dc-a");
+    expect(provenance.dreamAvatarId).toBe("dc-a");
     expect(provenance.signatureless).toBe(false);
     expect(provenance.tides[0].selection).toBe("starter");
   });

@@ -43,7 +43,7 @@ The editor supports:
 
 - Editing tides, rarity, starter flags, image numbers, art ownership, ids,
   card type, reclaim cost, or fast status.
-- Editing dreamcallers or dreamsigns.
+- Editing dream avatars or dreamsigns.
 - A mobile or tablet editor layout. Laptop and desktop resolutions are the
   supported manual QA target.
 - A production file-writing backend. The file-writing API is a local Vite

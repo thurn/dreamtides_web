@@ -19,7 +19,7 @@ import { token } from "../primitives/tokens";
 import type {
   TutorialAction,
   TutorialActionName,
-  TutorialDreamcallerOwner,
+  TutorialDreamAvatarOwner,
   TutorialEditorSaveStatus,
   TutorialHowToPlayCompanion,
   TutorialHowToPlayTrigger,
@@ -68,8 +68,8 @@ const ACTION_OPTIONS = [
   { value: "display-speech-bubble", label: "Display Speech Bubble" },
   { value: "display-how-to-play", label: "Display How to Play" },
   {
-    value: "animate-dreamcaller-portrait",
-    label: "Animate Dreamcaller Portrait",
+    value: "animate-dream-avatar-portrait",
+    label: "Animate Avatar Portrait",
   },
   { value: "draw-card", label: "Draw Card" },
   { value: "draw-opponent-card", label: "Draw Opponent Card" },
@@ -90,15 +90,15 @@ const ACTION_OPTIONS = [
   { value: "end-turn", label: "End Turn" },
 ] satisfies readonly { value: TutorialActionName; label: string }[];
 
-const DREAMCALLER_OWNER_OPTIONS = [
+const DREAM_AVATAR_OWNER_OPTIONS = [
   { value: "player", label: "Player" },
   { value: "enemy", label: "Opponent" },
-] satisfies readonly { value: TutorialDreamcallerOwner; label: string }[];
+] satisfies readonly { value: TutorialDreamAvatarOwner; label: string }[];
 
 const SPEECH_BUBBLE_SPEAKER_OPTIONS = [
   { value: "mira", label: "Mira" },
-  { value: "player", label: "Player Dreamcaller" },
-  { value: "enemy", label: "Opposing Dreamcaller" },
+  { value: "player", label: "Player Avatar" },
+  { value: "enemy", label: "Opposing Avatar" },
 ] satisfies readonly { value: TutorialSpeechBubbleSpeaker; label: string }[];
 
 const HOW_TO_PLAY_TRIGGER_OPTIONS = [
@@ -155,10 +155,10 @@ function defaultAction(
       wait: 0,
     };
   }
-  if (actionName === "animate-dreamcaller-portrait") {
+  if (actionName === "animate-dream-avatar-portrait") {
     return {
       id,
-      action: "animate-dreamcaller-portrait",
+      action: "animate-dream-avatar-portrait",
       owner: "player",
       pause: 1,
       duration: 0.6,
@@ -390,12 +390,12 @@ function changedActionType(
     id: action.id,
     action: actionName,
     owner:
-      action.action === "animate-dreamcaller-portrait"
+      action.action === "animate-dream-avatar-portrait"
         ? action.owner
         : "player",
-    pause: action.action === "animate-dreamcaller-portrait" ? action.pause : 1,
+    pause: action.action === "animate-dream-avatar-portrait" ? action.pause : 1,
     duration:
-      action.action === "animate-dreamcaller-portrait" ? action.duration : 0.6,
+      action.action === "animate-dream-avatar-portrait" ? action.duration : 0.6,
     wait: action.wait,
   };
 }
@@ -725,7 +725,7 @@ function TutorialActionRow({
                 if (
                   value !== "display-speech-bubble" &&
                   value !== "display-how-to-play" &&
-                  value !== "animate-dreamcaller-portrait" &&
+                  value !== "animate-dream-avatar-portrait" &&
                   value !== "draw-card" &&
                   value !== "draw-opponent-card" &&
                   value !== "reveal-and-play-opponent-card" &&
@@ -873,13 +873,13 @@ function TutorialActionRow({
           </>
         ) : null}
 
-        {action.action === "animate-dreamcaller-portrait" ? (
+        {action.action === "animate-dream-avatar-portrait" ? (
           <>
             <Select
               full
               size="sm"
-              ariaLabel={`Dreamcaller owner for action ${String(index + 1)}`}
-              options={[...DREAMCALLER_OWNER_OPTIONS]}
+              ariaLabel={`DreamAvatar owner for action ${String(index + 1)}`}
+              options={[...DREAM_AVATAR_OWNER_OPTIONS]}
               value={action.owner}
               onChange={(owner) => {
                 if (owner !== "player" && owner !== "enemy") return;
@@ -971,7 +971,7 @@ function TutorialActionRow({
               full
               size="sm"
               ariaLabel={`Card owner for action ${String(index + 1)}`}
-              options={[...DREAMCALLER_OWNER_OPTIONS]}
+              options={[...DREAM_AVATAR_OWNER_OPTIONS]}
               value={action.owner}
               onChange={(owner) => {
                 if (owner !== "player" && owner !== "enemy") return;
@@ -1070,7 +1070,7 @@ function TutorialActionRow({
               full
               size="sm"
               ariaLabel={`Dreamwell owner for action ${String(index + 1)}`}
-              options={[...DREAMCALLER_OWNER_OPTIONS]}
+              options={[...DREAM_AVATAR_OWNER_OPTIONS]}
               value={action.owner}
               onChange={(owner) => {
                 if (owner !== "player" && owner !== "enemy") return;
@@ -1364,7 +1364,7 @@ function TutorialEditorContent({
           if (
             value !== "display-speech-bubble" &&
             value !== "display-how-to-play" &&
-            value !== "animate-dreamcaller-portrait" &&
+            value !== "animate-dream-avatar-portrait" &&
             value !== "draw-card" &&
             value !== "draw-opponent-card" &&
             value !== "reveal-and-play-opponent-card" &&

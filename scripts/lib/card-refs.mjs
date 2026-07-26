@@ -1,7 +1,7 @@
 // Shared helpers for resolving card references by their stable cards_v2 UUID.
 //
 // Every system that names cards in data — the signature lists in
-// `dreamcallers_v2.toml`, the pool metadata in `cards-v2-metadata.ts`, the
+// `dream_avatars_v2.toml`, the pool metadata in `cards-v2-metadata.ts`, the
 // build-around metadata in `buildaround_support.json`, and the adapted draft
 // records under `docs/draft_records_adapted` — keys cards by their `id` UUID
 // from `data/tabula/cards_v2.toml`. The UUID is stable across display renames,

@@ -282,7 +282,7 @@ Recommended direction:
   positioning, or editor sizing. They do not append game events or write
   Firebase state.
 - The `?goto=` bootstrap in `src/App.tsx:123` combines a replay-surviving ref
-  with the durable `dreamcaller` check.
+  with the durable `dreamAvatar` check.
 - The asynchronous `?loadQuest=` path has no cancellation, but the codebase has
   no same-room keyed/remount path and the log contains no duplicate
   `LOAD_STATE`, so it is not a confirmed issue in this audit.

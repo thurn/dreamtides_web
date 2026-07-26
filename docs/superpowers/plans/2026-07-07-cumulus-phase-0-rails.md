@@ -197,7 +197,7 @@ Detector contract:
 - `isBaselined(dup)`: the sorted `[a, b]` file pair equals a BASELINE `[_, fileA, fileB]` and `dup.literal` starts with that entry's `literalPrefix`.
 - Two tests: (1) every duplicate is baselined — assert `findCrossFileDuplicates().filter(d => !isBaselined(d))` equals `[]`, with a failure message listing each unexpected `DUPLICATE <literal>` and its files; (2) no stale BASELINE entry — assert every BASELINE entry still matches a live duplicate, listing any to remove.
 
-The verified current cross-file duplicates (post-Task-1 paths) are exactly nine: two between `CardStatOrb.tsx` and `PipBadge.tsx`, six between the two internal glass files, one monogram gradient between `DreamcallerPortrait.tsx` and `quest-start-desktop.tsx`. BASELINE is a data contract — reproduce it literally:
+The verified current cross-file duplicates (post-Task-1 paths) are exactly nine: two between `CardStatOrb.tsx` and `PipBadge.tsx`, six between the two internal glass files, one monogram gradient between `DreamAvatarPortrait.tsx` and `quest-start-desktop.tsx`. BASELINE is a data contract — reproduce it literally:
 
 ```js
 export const BASELINE = [
@@ -243,7 +243,7 @@ export const BASELINE = [
   ],
   [
     "radial-gradient(circle at 50% 20%, color-mix(in srgb, ${token(\"--gold\")}",
-    "src/cumulus/components/hud/DreamcallerPortrait.tsx",
+    "src/cumulus/components/hud/DreamAvatarPortrait.tsx",
     "src/cumulus/screens/quest-start-desktop.tsx",
   ],
 ];
@@ -448,8 +448,8 @@ export const COMPONENTS_TSX = [
   "CardOverlay.tsx",
   "DeckViewer.test.tsx",
   "DeckViewer.tsx",
-  "DreamcallerPopover.test.tsx",
-  "DreamcallerPopover.tsx",
+  "DreamAvatarPopover.test.tsx",
+  "DreamAvatarPopover.tsx",
   "DreamscapeQuestMenu.test.tsx",
   "DreamscapeQuestMenu.tsx",
   "DreamwellCardView.tsx",

@@ -25,7 +25,7 @@ import { formatPhaseLabel } from "../ui/format";
 import type {
   BattleCommandSourceSurface,
   BattleDeckCardDefinition,
-  BattleDreamcallerSummary,
+  BattleDreamAvatarSummary,
   BattleEnemyDescriptor,
   BattleFieldSlotAddress,
   BattlefieldSlotId,
@@ -1158,7 +1158,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     setPendingDrag(null);
   }
 
-  const enemyDreamcallerSummary = resolveEnemyDreamcallerSummary(
+  const enemyDreamAvatarSummary = resolveEnemyDreamAvatarSummary(
     battleInit.enemyDescriptor,
     questContent,
   );
@@ -1465,7 +1465,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       <MobileBattleScreenAdapter
         init={battleInit}
         board={board}
-        enemyDreamcaller={enemyDreamcallerSummary}
+        enemyDreamAvatar={enemyDreamAvatarSummary}
         aiProposal={aiDriverEnabled ? proposal : null}
         aiMode={aiMode}
         isOpponentHandRevealed={isOpponentHandRevealed}
@@ -1676,35 +1676,35 @@ function decrementBattleTurnPair(
   return { activeSide: "enemy", turnNumber: Math.max(1, turnNumber - 1) };
 }
 
-function resolveEnemyDreamcallerSummary(
+function resolveEnemyDreamAvatarSummary(
   enemyDescriptor: BattleEnemyDescriptor,
   questContent: QuestContent,
-): BattleDreamcallerSummary {
-  const sourceDreamcaller = findEnemySourceDreamcaller(
+): BattleDreamAvatarSummary {
+  const sourceDreamAvatar = findEnemySourceDreamAvatar(
     enemyDescriptor,
     questContent,
   );
   return {
-    id: sourceDreamcaller?.id ?? enemyDescriptor.id,
+    id: sourceDreamAvatar?.id ?? enemyDescriptor.id,
     imageNumber:
-      enemyDescriptor.imageNumber ?? sourceDreamcaller?.imageNumber ?? "001",
+      enemyDescriptor.imageNumber ?? sourceDreamAvatar?.imageNumber ?? "001",
     name: enemyDescriptor.name,
     renderedText: enemyDescriptor.abilityText,
     title: enemyDescriptor.subtitle,
-    ...(sourceDreamcaller?.portraitFocus === undefined
+    ...(sourceDreamAvatar?.portraitFocus === undefined
       ? {}
-      : { portraitFocus: sourceDreamcaller.portraitFocus }),
+      : { portraitFocus: sourceDreamAvatar.portraitFocus }),
   };
 }
 
-function findEnemySourceDreamcaller(
+function findEnemySourceDreamAvatar(
   enemyDescriptor: BattleEnemyDescriptor,
   questContent: QuestContent,
 ) {
-  const sourceId = parseEnemySourceDreamcallerId(enemyDescriptor.id);
+  const sourceId = parseEnemySourceDreamAvatarId(enemyDescriptor.id);
   if (sourceId !== null) {
-    const byId = questContent.dreamcallers.find(
-      (dreamcaller) => dreamcaller.id === sourceId,
+    const byId = questContent.dreamAvatars.find(
+      (dreamAvatar) => dreamAvatar.id === sourceId,
     );
     if (byId !== undefined) {
       return byId;
@@ -1712,8 +1712,8 @@ function findEnemySourceDreamcaller(
   }
 
   const descriptorName = enemyDescriptor.name.toLocaleLowerCase();
-  return questContent.dreamcallers.find((dreamcaller) => {
-    const fullName = dreamcaller.name.toLocaleLowerCase();
+  return questContent.dreamAvatars.find((dreamAvatar) => {
+    const fullName = dreamAvatar.name.toLocaleLowerCase();
     const shortName = fullName.split(",")[0] ?? fullName;
     return (
       descriptorName === fullName ||
@@ -1724,7 +1724,7 @@ function findEnemySourceDreamcaller(
   });
 }
 
-function parseEnemySourceDreamcallerId(enemyId: string): string | null {
+function parseEnemySourceDreamAvatarId(enemyId: string): string | null {
   const prefix = "enemy:";
   if (!enemyId.startsWith(prefix)) {
     return null;

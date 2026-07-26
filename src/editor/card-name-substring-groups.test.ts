@@ -41,7 +41,7 @@ describe("buildCardNameSubstringGroups", () => {
     const dreamlight = card("uuid-dreamlight", "Dreamlight Guide", 1);
     const groups = buildCardNameSubstringGroups([
       dreamlight,
-      card("uuid-dream", "Dream Caller", 2),
+      card("uuid-dream", "Dream Avatar", 2),
       card("uuid-light", "Starlight Keeper", 3),
     ]);
 

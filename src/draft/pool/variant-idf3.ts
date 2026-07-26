@@ -1,14 +1,14 @@
 // The `idf3` variant: `idf2`'s diversity-biased decklist pool, steered toward a
-// chosen Dreamcaller by a tiny piece of new data — a SIGNATURE, a short list of
-// distinctive card names standing in for "what this Dreamcaller wants to do".
+// chosen DreamAvatar by a tiny piece of new data — a SIGNATURE, a short list of
+// distinctive card names standing in for "what this avatar wants to do".
 // Like `idf`/`idf2` it reads nothing but the bundled decklists plus those card
 // names — no colors, tides, archetype labels, or other metadata.
 //
 // Building a decklist pool comes down to picking ONE starter deck and growing the
 // pool from its nearest neighbours (the growth in `idf`), so the only lever is
 // the starter draw. `idf2` draws it by inverse near-twin weight `div(i)` (broad
-// but Dreamcaller-agnostic); `idf3` multiplies one more factor onto that weight
-// so the starter lands on the Dreamcaller's region of the corpus while still
+// but DreamAvatar-agnostic); `idf3` multiplies one more factor onto that weight
+// so the starter lands on the avatar's region of the corpus while still
 // spreading across the many decks that fit it. Two refinements make it work
 // (`docs/cards2/idf3_signature_design.md`, the "A″" scheme):
 //   1. ANCHOR affinity (dense, not sparse). A handful of signature cards appear
@@ -87,7 +87,7 @@ const IDF3: Idf3Tuning = {
   sigEps: 0.05,
 };
 
-// Build a pool like `idf2`, but steer the starter draw toward the Dreamcaller's
+// Build a pool like `idf2`, but steer the starter draw toward the avatar's
 // signature. Reuses `idf2`'s cached corpus and near-twin diversity weights, the
 // IDF-cosine routine, and the whole-deck growth procedure unchanged; the only new
 // work is the signature probe, the anchors, and the capped affinity factor on the
@@ -95,7 +95,7 @@ const IDF3: Idf3Tuning = {
 // the plain `idf2` diversity draw when the signature is empty or carries no IDF
 // weight (which falls straight out of the formula).
 //
-// `signatureCards` are the Dreamcaller's signature card UUIDs in production
+// `signatureCards` are the avatar's signature card UUIDs in production
 // (matching the id-keyed corpus); a synthetic / test corpus keyed by opaque
 // strings passes those same strings. The probe, anchors, growth, and per-card
 // provenance all run in the corpus's key space (UUIDs in production); the
@@ -259,7 +259,7 @@ export function generateIdf3(
 export const idf3Strategy: PoolStrategy = {
   id: "idf3",
   description:
-    "idf2's diversity-biased decklist pool steered toward a Dreamcaller by its " +
+    "idf2's diversity-biased decklist pool steered toward an avatar by its " +
     "signature cards via anchor affinity.",
   generate: ({ rng, poolData, signatureCards, targetSize }) =>
     generateIdf3(rng, poolData, signatureCards, targetSize),

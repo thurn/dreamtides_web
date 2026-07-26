@@ -49,21 +49,21 @@ export { validateTides3Decks } from "./tides3-io.ts";
 export type {
   Tides3DeckJson,
   Tides3DecksJson,
-  Tides3DreamcallerPool,
+  Tides3DreamAvatarPool,
   Tides3Role,
 } from "./tides3-io.ts";
 export { validateTides4Decks } from "./tides4-io.ts";
 export type {
   Tides4DeckJson,
   Tides4DecksJson,
-  Tides4DreamcallerPool,
+  Tides4DreamAvatarPool,
   Tides4Role,
 } from "./tides4-io.ts";
 export { validateTides5Decks } from "./tides5-io.ts";
 export type {
   Tides5DeckJson,
   Tides5DecksJson,
-  Tides5DreamcallerPool,
+  Tides5DreamAvatarPool,
   Tides5Role,
 } from "./tides5-io.ts";
 export { DEFAULT_POOL_VARIANT } from "./types.ts";

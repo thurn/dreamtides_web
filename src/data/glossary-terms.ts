@@ -7,7 +7,7 @@ import {
 } from "./glossary";
 
 /** The semantic owner whose rules text is being explained. */
-export type RulesTextGlossaryOwner = "card" | "dreamcaller";
+export type RulesTextGlossaryOwner = "card" | "dreamAvatar";
 
 /**
  * Reusable utility that scans a string for glossary terms and returns the

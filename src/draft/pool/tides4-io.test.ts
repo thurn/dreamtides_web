@@ -1,5 +1,5 @@
 // Structural-contract tests for the `tides4` artifact validator. These pin the
-// schema invariants (every tide has an id, role, and cards; every Dreamcaller
+// schema invariants (every tide has an id, role, and cards; every DreamAvatar
 // pool has a non-empty facet list, an array neutral list, and a starter that is
 // null or an existing tide; every referenced id names an existing tide) against
 // synthetic fixtures — never against the committed `data/tides4.jsonc`, whose
@@ -44,10 +44,10 @@ function makeArtifact(): Tides4DecksJson {
         ],
       },
     ],
-    tidePoolByDreamcaller: {
-      // A signatured Dreamcaller: a starter, on-identity facets, a broad tail.
+    tidePoolByDreamAvatar: {
+      // A signatured DreamAvatar: a starter, on-identity facets, a broad tail.
       "dc-a": { starter: "tide-sig-01", facets: ["tide-fac-01"], neutral: ["tide-neu-01"] },
-      // A signatureless Dreamcaller: no starter, draws from the facet library.
+      // A signatureless DreamAvatar: no starter, draws from the facet library.
       "dc-b": { starter: null, facets: ["tide-fac-01"], neutral: ["tide-neu-01"] },
     },
   };
@@ -120,40 +120,40 @@ describe("validateTides4Decks", () => {
     expect(() => validateTides4Decks(clone(data))).toThrow(/invalid copies/);
   });
 
-  it("rejects a missing tidePoolByDreamcaller", () => {
+  it("rejects a missing tidePoolByDreamAvatar", () => {
     const data = clone(makeArtifact()) as Record<string, unknown>;
-    delete data.tidePoolByDreamcaller;
-    expect(() => validateTides4Decks(data)).toThrow(/tidePoolByDreamcaller/);
+    delete data.tidePoolByDreamAvatar;
+    expect(() => validateTides4Decks(data)).toThrow(/tidePoolByDreamAvatar/);
   });
 
-  it("accepts a null starter (a signatureless Dreamcaller)", () => {
+  it("accepts a null starter (a signatureless DreamAvatar)", () => {
     const data = makeArtifact();
-    expect(validateTides4Decks(clone(data)).tidePoolByDreamcaller["dc-b"].starter).toBe(
+    expect(validateTides4Decks(clone(data)).tidePoolByDreamAvatar["dc-b"].starter).toBe(
       null,
     );
   });
 
   it("rejects a starter that names no tide", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamcaller["dc-a"].starter = "tide-missing";
+    data.tidePoolByDreamAvatar["dc-a"].starter = "tide-missing";
     expect(() => validateTides4Decks(clone(data))).toThrow(/unknown `starter`/);
   });
 
   it("rejects an empty facet list", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamcaller["dc-a"].facets = [];
+    data.tidePoolByDreamAvatar["dc-a"].facets = [];
     expect(() => validateTides4Decks(clone(data))).toThrow(/no `facets`/);
   });
 
   it("accepts an empty neutral list", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamcaller["dc-a"].neutral = [];
+    data.tidePoolByDreamAvatar["dc-a"].neutral = [];
     expect(() => validateTides4Decks(clone(data))).not.toThrow();
   });
 
   it("rejects a tide-pool id that names no tide (a stale combination)", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamcaller["dc-a"].facets = ["tide-fac-01", "tide-missing"];
+    data.tidePoolByDreamAvatar["dc-a"].facets = ["tide-fac-01", "tide-missing"];
     expect(() => validateTides4Decks(clone(data))).toThrow(/names no tide/);
   });
 });

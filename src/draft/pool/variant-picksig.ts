@@ -1,11 +1,11 @@
-// The `picksig` variant: `pickcohere` steered toward a Dreamcaller. It shares
+// The `picksig` variant: `pickcohere` steered toward a DreamAvatar. It shares
 // `pickcohere`'s corpus (the `pickfit` pick-record affinity) and its best-of-K
 // coherence selection verbatim, changing only ONE thing — where the candidate
 // seeds come from. Where `pickcohere` draws its K seeds UNIFORMLY from the whole
 // corpus, `picksig` draws them from a distribution biased toward the cards that
-// partner the chosen Dreamcaller's SIGNATURE (its short list of distinctive card
-// UUIDs, `dreamcaller.signatureCards`). The grown pool therefore lands on the
-// Dreamcaller's region of the card space while best-of-K coherence still steers
+// partner the chosen avatar's SIGNATURE (its short list of distinctive card
+// UUIDs, `dreamAvatar.signatureCards`). The grown pool therefore lands on the
+// DreamAvatar's region of the card space while best-of-K coherence still steers
 // away from scattered, poorly-supported pools.
 //
 // The bias mirrors `idf3`'s signature scheme (`docs/cards2/idf3_signature_design.md`)
@@ -21,7 +21,7 @@
 //     the same weight, so the draw SPREADS across the whole identity instead of
 //     collapsing onto one cluster. This is the variety lever: a combo seed and an
 //     aggro seed both sit at the cap, and either can win a given run, so one
-//     Dreamcaller yields many distinct pools leaning in different directions.
+//     DreamAvatar yields many distinct pools leaning in different directions.
 //   * sigAlpha is the STRENGTH — how sharply on-theme cards out-weigh the rest.
 // With no signature (or none of its cards present in the corpus) every affinity
 // is 0, every weight is the constant `sigEps ^ sigAlpha`, and the weighted draw
@@ -52,14 +52,14 @@ interface PickSigTuning extends AffinityGrowerTuning {
   // central card.
   sigCap: number;
   // Affinity floor, so off-theme cards keep a small share of the seed draw rather
-  // than dropping out entirely — a Dreamcaller's pool stays mostly on-theme but
+  // than dropping out entirely — an avatar's pool stays mostly on-theme but
   // not pathologically narrow.
   sigEps: number;
 }
 // Shares every grower/best-of-K field with `PICKCOHERE` so the ONLY deliberate
 // difference is the steered seed draw; the three `sig*` dials govern that draw.
 // With these defaults a signature concentrates the draw onto its partners while
-// `sigCap` keeps the on-theme region wide enough that one Dreamcaller still yields
+// `sigCap` keeps the on-theme region wide enough that one DreamAvatar still yields
 // many distinct, differently-leaning pools (validated by
 // `scripts/picksig-signature-experiment.mjs`).
 export const PICKSIG: PickSigTuning = {
@@ -81,9 +81,9 @@ export function buildPickSigCorpus(poolData: PoolData): AffinityCorpus | null {
   return buildPickfitCorpus(poolData);
 }
 
-// Resolve a Dreamcaller's signature entries onto the corpus's UUID key space.
+// Resolve an avatar's signature entries onto the corpus's UUID key space.
 // `signatureCards` contains the stable cards_v2 UUIDs from
-// `dreamcaller.signatureCardIds`, so each entry is matched as a literal
+// `dreamAvatar.signatureCardIds`, so each entry is matched as a literal
 // lowercase UUID in the corpus — the collision-free path. Synthetic test corpora
 // that pass opaque string keys directly resolve through the same path.
 // Returns the set of corpus keys the signature locates.
@@ -101,7 +101,7 @@ export function resolveSignatureToCorpus(
 }
 
 // The normalised signature affinity per corpus card: how strongly each card
-// partners the chosen Dreamcaller's signature, in [0, 1]. A card's raw score is
+// partners the chosen avatar's signature, in [0, 1]. A card's raw score is
 // its strongest partnership (in EITHER direction) to any signature card —
 // affinity rows are normalised per source card, so the max captures "c is tightly
 // connected to the signature set" — and the non-anchor scores are then normalised
@@ -203,8 +203,8 @@ export const pickSigStrategy: PoolStrategy = {
   id: "picksig",
   description:
     "Like pickcohere, but draws its candidate seeds from a distribution biased " +
-    "toward the chosen Dreamcaller's signature cards, so the grown pool is " +
-    "thematically tied to the Dreamcaller while best-of-K coherence keeps it " +
+    "toward the chosen avatar's signature cards, so the grown pool is " +
+    "thematically tied to the avatar while best-of-K coherence keeps it " +
     "focused. Reduces to pickcohere when no signature is given.",
   generate: ({ rng, poolData, signatureCards }) =>
     generatePickSig(rng, poolData, signatureCards),

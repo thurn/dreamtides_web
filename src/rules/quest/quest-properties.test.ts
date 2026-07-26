@@ -6,7 +6,7 @@
 // per-case unit test can express:
 //
 //   (a) Run-field nullability — no NORMAL gameplay event ever
-//       transitions `draftState` / `resolvedPackage` / `dreamcaller` from
+//       transitions `draftState` / `resolvedPackage` / `dreamAvatar` from
 //       non-null to null. Only `RESET_QUEST` and the debug `SET_DRAFT_STATE`
 //       may null a run field, so we draw the random sequences from the
 //       NON-DEBUG quest event union (those two, plus the other debug/QA edits,
@@ -33,7 +33,7 @@
 // (`register*(null)`) in `afterAll`, so no registration leaks into other
 // suites:
 //   - Lifecycle fake — `START_QUEST` populates all three run fields
-//     (`dreamcaller`, `resolvedPackage`, a non-null `draftState`) AND seeds a
+//     (`dreamAvatar`, `resolvedPackage`, a non-null `draftState`) AND seeds a
 //     Shop atlas site with a shop `siteRuntime`, so the nullability invariant
 //     has a real precondition and `REROLL_SHOP` has a runtime to restock.
 //   - Deck fake — `ADD_CARD` / `ADD_DREAMSIGN` apply.
@@ -61,8 +61,8 @@ import type {
   Genesis,
 } from "../../eventlog/types";
 import type {
-  DreamcallerContent,
-  ResolvedDreamcallerPackage,
+  DreamAvatarContent,
+  ResolvedDreamAvatarPackage,
 } from "../../types/content";
 import type { DraftState, PoolDraftState } from "../../types/draft";
 import type { Dreamsign, DreamscapeNode } from "../../types/quest";
@@ -143,30 +143,30 @@ function hashNumber(text: string): number {
 // ---------------------------------------------------------------------------
 
 /**
- * A deterministic package derived only from `(dreamcallerId, seed)`. The
+ * A deterministic package derived only from `(dreamAvatarId, seed)`. The
  * `startQuest` result populates ALL THREE run fields, including a non-null
  * `draftState`, so the nullability invariant (a) has a live precondition.
  */
 function lifecycleProvider(): QuestLifecycleContentProvider {
   function packageFor(
-    dreamcallerId: string,
+    dreamAvatarId: string,
     seed: string,
-  ): ResolvedDreamcallerPackage {
-    const dreamcaller: DreamcallerContent = {
-      id: dreamcallerId,
-      name: `caller-${dreamcallerId}`,
+  ): ResolvedDreamAvatarPackage {
+    const dreamAvatar: DreamAvatarContent = {
+      id: dreamAvatarId,
+      name: `caller-${dreamAvatarId}`,
       title: "title",
       renderedText: "text",
       imageNumber: "1",
       startingEssence: 150,
     };
-    const rng = makePrng(hashNumber(`${dreamcallerId}:${seed}`));
+    const rng = makePrng(hashNumber(`${dreamAvatarId}:${seed}`));
     const dreamsignPoolIds = Array.from(
       { length: 8 },
       () => `ds-${String(Math.floor(rng() * 1_000_000))}`,
     );
     return {
-      dreamcaller,
+      dreamAvatar,
       draftPoolCopiesByCard: { "100": 4, "101": 4, "102": 4 },
       dreamsignPoolIds,
       mandatoryOnlyPoolSize: 3,
@@ -179,21 +179,21 @@ function lifecycleProvider(): QuestLifecycleContentProvider {
   }
 
   return {
-    resolveDreamcallerPackage: (dreamcallerId, seed) =>
-      packageFor(dreamcallerId, seed),
-    startQuest: ({ quest, dreamcallerId, seed }) => {
-      const pkg = packageFor(dreamcallerId, seed);
+    resolveDreamAvatarPackage: (dreamAvatarId, seed) =>
+      packageFor(dreamAvatarId, seed),
+    startQuest: ({ quest, dreamAvatarId, seed }) => {
+      const pkg = packageFor(dreamAvatarId, seed);
       return {
         ...quest,
         seed: quest.seed,
-        essence: pkg.dreamcaller.startingEssence,
-        dreamcaller: {
-          id: pkg.dreamcaller.id,
-          name: pkg.dreamcaller.name,
-          title: pkg.dreamcaller.title,
-          renderedText: pkg.dreamcaller.renderedText,
-          imageNumber: pkg.dreamcaller.imageNumber,
-          startingEssence: pkg.dreamcaller.startingEssence,
+        essence: pkg.dreamAvatar.startingEssence,
+        dreamAvatar: {
+          id: pkg.dreamAvatar.id,
+          name: pkg.dreamAvatar.name,
+          title: pkg.dreamAvatar.title,
+          renderedText: pkg.dreamAvatar.renderedText,
+          imageNumber: pkg.dreamAvatar.imageNumber,
+          startingEssence: pkg.dreamAvatar.startingEssence,
         },
         resolvedPackage: pkg,
         remainingDreamsignPool: [...pkg.dreamsignPoolIds],
@@ -375,13 +375,13 @@ const DEBUG_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "UPDATE_ATLAS",
   "SET_CARD_SOURCE_DEBUG",
   "REROLL_DREAM_AUGURY",
-  "REROLL_DREAMCALLER_OFFER",
+  "REROLL_DREAM_AVATAR_OFFER",
   "FORCE_DREAM_AUGURY_ARCHETYPE",
   "RESET_QUEST",
 ]);
 
 /** The three run fields the nullability invariant protects. */
-const RUN_FIELDS = ["draftState", "resolvedPackage", "dreamcaller"] as const;
+const RUN_FIELDS = ["draftState", "resolvedPackage", "dreamAvatar"] as const;
 
 /**
  * The nullability checker: returns the name of the first run field that
@@ -664,7 +664,7 @@ const START_QUEST_ENTRY: { seq: number; event: GameEvent } = {
   seq: 1,
   event: {
     type: "START_QUEST",
-    payload: { dreamcallerId: "dc-1" },
+    payload: { dreamAvatarId: "dc-1" },
     actor: ACTOR,
     clientTimestamp: TIMESTAMP,
     basedOnSeq: 0,
@@ -699,7 +699,7 @@ function allSequences(): Array<{
 // ---------------------------------------------------------------------------
 
 describe("populated start fixture", () => {
-  it("START_QUEST yields non-null dreamcaller / resolvedPackage / draftState", () => {
+  it("START_QUEST yields non-null dreamAvatar / resolvedPackage / draftState", () => {
     const result = foldEvents(
       ENGINE_CONFIG,
       GENESIS,
@@ -796,12 +796,12 @@ describe("(a) run-field nullability", () => {
     };
     expect(firstNulledRunField(populated, nulledDraft)).toBe("draftState");
 
-    // And it also catches a dreamcaller / resolvedPackage regression.
+    // And it also catches a dreamAvatar / resolvedPackage regression.
     const nulledCaller: FoldState = {
       ...populated,
-      quest: { ...populated.quest, dreamcaller: null },
+      quest: { ...populated.quest, dreamAvatar: null },
     };
-    expect(firstNulledRunField(populated, nulledCaller)).toBe("dreamcaller");
+    expect(firstNulledRunField(populated, nulledCaller)).toBe("dreamAvatar");
 
     // A step that PRESERVES the run fields must NOT be flagged (no false positive).
     expect(firstNulledRunField(populated, populated)).toBeNull();

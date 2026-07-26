@@ -11,7 +11,7 @@ import {
   backRankSlotIds,
   frontRankSlotIds,
   type BattleCardInstance,
-  type BattleDreamcallerSummary,
+  type BattleDreamAvatarSummary,
   type BattleInit,
   type BattleMutableState,
   type BattleSide,
@@ -38,15 +38,15 @@ import type { MobileBattleResultView } from "../../cumulus/screens/BattleResultS
 import { cardIsRevealedTo } from "../../battle/state/card-visibility";
 import { starterCardHasRequiredTargets } from "../../battle/starter-card-targets";
 
-const FALLBACK_PLAYER_DREAMCALLER = {
+const FALLBACK_PLAYER_DREAM_AVATAR = {
   imageNumber: "001",
-  name: "Dreamcaller",
+  name: "Avatar",
   title: "",
 } as const;
 
 export type MobileBattleInit = BattleInit;
 export type MobileBattleBoard = BattleMutableState;
-export type MobileBattleDreamcaller = BattleDreamcallerSummary;
+export type MobileBattleDreamAvatar = BattleDreamAvatarSummary;
 export type MobileBattlePendingPrompt = PendingPrompt;
 export type MobileBattleAiProposal = Pick<AiProposal, "kind" | "description"> &
   Partial<Pick<AiProposal, "trace">>;
@@ -66,7 +66,7 @@ export interface MobileBattleViewOptions {
 export function buildMobileBattleView(
   init: BattleInit,
   board: BattleMutableState,
-  enemyDreamcaller: BattleDreamcallerSummary,
+  enemyDreamAvatar: BattleDreamAvatarSummary,
   aiProposal: MobileBattleAiProposal | null = null,
   viewOptions: MobileBattleViewOptions = {
     aiMode: false,
@@ -79,13 +79,13 @@ export function buildMobileBattleView(
   const player = buildSideView(
     "player",
     "player" === perspective ? "near" : "far",
-    init.dreamcallerSummary ?? FALLBACK_PLAYER_DREAMCALLER,
+    init.dreamAvatarSummary ?? FALLBACK_PLAYER_DREAM_AVATAR,
     board,
   );
   const enemy = buildSideView(
     "enemy",
     "enemy" === perspective ? "near" : "far",
-    enemyDreamcaller,
+    enemyDreamAvatar,
     board,
   );
   const near = perspective === "player" ? player : enemy;
@@ -419,7 +419,7 @@ export function buildMobileBattleCardView(
 function buildSideView(
   side: BattleSide,
   position: BattleBoardPosition,
-  dreamcaller: BattleDreamcallerSummary | typeof FALLBACK_PLAYER_DREAMCALLER,
+  dreamAvatar: BattleDreamAvatarSummary | typeof FALLBACK_PLAYER_DREAM_AVATAR,
   board: BattleMutableState,
 ): MobileBattleSideView {
   const sideState = board.sides[side];
@@ -436,7 +436,7 @@ function buildSideView(
     frontRank: frontRankSlotIds(frontSize).map((slotId) =>
       buildSlotView(slotId, sideState.frontRank[slotId] ?? null, board),
     ),
-    status: buildStatusView(dreamcaller, sideState),
+    status: buildStatusView(dreamAvatar, sideState),
   };
 }
 
@@ -467,24 +467,24 @@ function buildSlotView(
 }
 
 function buildStatusView(
-  dreamcaller: BattleDreamcallerSummary | typeof FALLBACK_PLAYER_DREAMCALLER,
+  dreamAvatar: BattleDreamAvatarSummary | typeof FALLBACK_PLAYER_DREAM_AVATAR,
   sideState: BattleMutableState["sides"][BattleSide],
 ): MobileBattleStatusView {
   return {
-    dreamcaller: {
-      imageNumber: dreamcaller.imageNumber,
-      name: dreamcaller.name,
-      title: dreamcaller.title,
-      ...("portraitFocus" in dreamcaller &&
-      dreamcaller.portraitFocus !== undefined
-        ? { portraitFocus: dreamcaller.portraitFocus }
+    dreamAvatar: {
+      imageNumber: dreamAvatar.imageNumber,
+      name: dreamAvatar.name,
+      title: dreamAvatar.title,
+      ...("portraitFocus" in dreamAvatar &&
+      dreamAvatar.portraitFocus !== undefined
+        ? { portraitFocus: dreamAvatar.portraitFocus }
         : {}),
     },
-    ...("id" in dreamcaller && "renderedText" in dreamcaller
+    ...("id" in dreamAvatar && "renderedText" in dreamAvatar
       ? {
-          dreamcallerProfile: {
-            id: dreamcaller.id,
-            ability: dreamcaller.renderedText,
+          dreamAvatarProfile: {
+            id: dreamAvatar.id,
+            ability: dreamAvatar.renderedText,
           },
         }
       : {}),

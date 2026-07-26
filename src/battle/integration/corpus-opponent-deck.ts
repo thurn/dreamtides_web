@@ -3,7 +3,7 @@
 //
 // Stage A picks a single known-good decklist from the corpus to base an
 // opponent deck on. Selection blends two signals: how well a deck matches the
-// opponent Dreamcaller's SIGNATURE cards (the primary axis) and how well it
+// opponent DreamAvatar's SIGNATURE cards (the primary axis) and how well it
 // matches the dreamscape AFFILIATION's signature cards (a smaller secondary
 // nudge, weighted by `AFFILIATION_WEIGHT`). A seeded sample over the top-ranked
 // window keeps the same `poolSeed` deterministic while giving variety across
@@ -39,7 +39,7 @@ import type { KnownGoodDecklist, DreamsignSignature } from "../../data/quest-con
 import type { CardData } from "../../types/cards.ts";
 import type {
   AffiliationContent,
-  DreamcallerContent,
+  DreamAvatarContent,
   DreamsignTemplate,
 } from "../../types/content.ts";
 
@@ -54,7 +54,7 @@ const AFFILIATION_WEIGHT = 0.25;
 /**
  * Size of the top-ranked window the seeded sampler picks from. The selection
  * always comes from the highest-`combined` candidates, but sampling across the
- * window gives the same Dreamcaller different opponent decks across seeds.
+ * window gives the same DreamAvatar different opponent decks across seeds.
  * Tunable — do NOT pin this value in tests.
  */
 const TOP_K = 8;
@@ -67,7 +67,7 @@ const TOP_K = 8;
 // drive off the schedule shape without hardcoding individual values.
 // ---------------------------------------------------------------------------
 
-/** From this layer on, the opponent Dreamcaller's ability is active. */
+/** From this layer on, the opponent DreamAvatar's ability is active. */
 const ABILITY_ACTIVE_FROM_LAYER = 1;
 
 /** From this layer on, Legendary cards in the base deck are retained. */
@@ -185,7 +185,7 @@ interface ScoredDeck {
  * always yields a build.
  */
 export function buildCorpusOpponentDeck(args: {
-  opponentDreamcaller: DreamcallerContent | null;
+  opponentDreamAvatar: DreamAvatarContent | null;
   knownGoodDecklists: readonly KnownGoodDecklist[];
   affiliation: AffiliationContent | null;
   cardDatabase: ReadonlyMap<number, CardData>;
@@ -213,7 +213,7 @@ export function buildCorpusOpponentDeck(args: {
   deferLog?: (emit: () => void) => void;
 }): CorpusOpponentDeckBuild | null {
   const {
-    opponentDreamcaller,
+    opponentDreamAvatar,
     knownGoodDecklists,
     affiliation,
     cardDatabase,
@@ -245,10 +245,10 @@ export function buildCorpusOpponentDeck(args: {
   );
   const corpus = buildIdfStats(deckSets);
 
-  // Signature probe: the opponent Dreamcaller's signature card UUIDs. Empty
-  // for a null Dreamcaller or one with no signature cards.
+  // Signature probe: the opponent DreamAvatar's signature card UUIDs. Empty
+  // for a null DreamAvatar or one with no signature cards.
   const sigSet = new Set(
-    (opponentDreamcaller?.signatureCardIds ?? []).map(lc),
+    (opponentDreamAvatar?.signatureCardIds ?? []).map(lc),
   );
 
   // Affiliation affinity over the corpus. Absent affiliation -> 0 everywhere.

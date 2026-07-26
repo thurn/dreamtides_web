@@ -1,7 +1,7 @@
 import { asCardId, asCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
-import type { DreamcallerContent, ResolvedDreamcallerPackage } from "../types/content";
-import type { DeckEntry, Dreamcaller, Dreamsign, QuestState, SiteState } from "../types/quest";
+import type { DreamAvatarContent, ResolvedDreamAvatarPackage } from "../types/content";
+import type { DeckEntry, DreamAvatar, Dreamsign, QuestState, SiteState } from "../types/quest";
 import { LayerName } from "../types/layer-name";
 import { backRankSlotIds, createEmptySlotRecord, frontRankSlotIds } from "./types";
 import type { BackRankSlotId, FrontRankSlotId } from "./types";
@@ -36,10 +36,10 @@ export function makeBattleTestSite(): SiteState {
   };
 }
 
-export function makeBattleTestDreamcallers(): DreamcallerContent[] {
+export function makeBattleTestDreamAvatars(): DreamAvatarContent[] {
   return [
     {
-      id: "dreamcaller-arc",
+      id: "dream-avatar-arc",
       name: "Aeris, the Prism Guide",
       title: "Storm Archivist",
       renderedText: "Whenever the first event each turn resolves, gain momentum.",
@@ -47,7 +47,7 @@ export function makeBattleTestDreamcallers(): DreamcallerContent[] {
       startingEssence: 250,
     },
     {
-      id: "dreamcaller-bloom",
+      id: "dream-avatar-bloom",
       name: "Talan, Keeper of Branches",
       title: "Verdant Witness",
       renderedText: "Your field grows harder to uproot with every turn passed.",
@@ -127,7 +127,7 @@ export function makeBattleTestState(): Pick<
   | "completionLevel"
   | "currentDreamscape"
   | "deck"
-  | "dreamcaller"
+  | "dreamAvatar"
   | "dreamsigns"
   | "resolvedPackage"
   | "seed"
@@ -161,7 +161,7 @@ export function makeBattleTestState(): Pick<
     completionLevel: 2,
     currentDreamscape: "dreamscape-2",
     deck: makeBattleTestDeckEntries(),
-    dreamcaller: makeBattleTestDreamcaller(),
+    dreamAvatar: makeBattleTestDreamAvatar(),
     dreamsigns: makeBattleTestDreamsigns(),
     resolvedPackage: makeResolvedPackage(),
     seed: "test-quest-seed",
@@ -181,9 +181,9 @@ function makeBattleTestDeckEntries(): DeckEntry[] {
   ];
 }
 
-function makeBattleTestDreamcaller(): Dreamcaller {
+function makeBattleTestDreamAvatar(): DreamAvatar {
   return {
-    id: "dreamcaller-arc",
+    id: "dream-avatar-arc",
     name: "Aeris",
     title: "Storm Archivist",
     renderedText: "Gain a fleeting advantage whenever your line bends first.",
@@ -207,9 +207,9 @@ function makeBattleTestDreamsigns(): Dreamsign[] {
   ];
 }
 
-function makeResolvedPackage(): ResolvedDreamcallerPackage {
+function makeResolvedPackage(): ResolvedDreamAvatarPackage {
   return {
-    dreamcaller: makeBattleTestDreamcallers()[0],
+    dreamAvatar: makeBattleTestDreamAvatars()[0],
     draftPoolCopiesByCard: {
       "101": 2,
       "102": 2,

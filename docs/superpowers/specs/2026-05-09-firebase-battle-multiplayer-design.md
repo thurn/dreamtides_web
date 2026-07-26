@@ -28,7 +28,7 @@ authentication.
 - Replicate undo/redo as a shared operation: either client can undo, both
   rewind together; the past/future stacks are part of the shared state.
 - Race-safely commit the per-battle `BattleInit` (deck order, seed, reward
-  options, enemy descriptor, dreamcaller summary, atlas snapshot) so both
+  options, enemy descriptor, dream avatar summary, atlas snapshot) so both
   clients see the same opening conditions even if URL parameters or local
   caches differ.
 - Keep ephemeral UI state (selection, hover, drag, every overlay, judgment
@@ -275,7 +275,7 @@ commands run against the winning init. This eliminates the V1 risk of
 silent drift between two browsers' battle decks.
 
 `createBattleInit` requires the live quest state (deck, dreamsigns,
-dreamcaller, atlas, completionLevel, currentDreamscape, resolvedPackage).
+dream avatar, atlas, completionLevel, currentDreamscape, resolvedPackage).
 The `useEnsureBattleSession` hook reads these from `useQuest()` (the
 multiplayer-backed quest context). Both clients see the same quest state
 through the existing subscription, so any client could win the init race
@@ -313,7 +313,7 @@ a fresh dispatch and an undo land in the same window.
 Every overlay, hover preview, drag indicator, selection, inspector tab,
 result-overlay-dismissed state, judgment-pause animation hook, deck-order
 picker, foresee overlay, figment creator, note editor, side-summary
-popover, dreamcaller panel, reward-overlay locked flag, turn banner, and
+popover, dream avatar panel, reward-overlay locked flag, turn banner, and
 log drawer remains a `useState` inside `PlayableBattleScreen` or its
 descendants. Nothing under the `battleState` slot in RTDB describes UI
 visibility.

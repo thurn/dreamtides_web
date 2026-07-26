@@ -3,7 +3,7 @@
 // reveal engine and the variants on one shell.
 // Each trigger anchors its card to the full-viewport stageRef so the cards clamp
 // against the real screen edges. The full-bleed and object media resolve from a
-// real asset in `public/` (a Dreamcaller portrait); the icon and text variants
+// real asset in `public/` (a DreamAvatar portrait); the icon and text variants
 // use tokenized glyphs, and the epithet trigger shows the text variant's
 // name/epithet pairing.
 
@@ -121,13 +121,13 @@ export function InfoCardMockup() {
         }}
       >
         <Trigger
-          label="Dreamcaller"
+          label="Avatar"
           variant="fullBleed"
           glyph="bxf bx-user-circle"
           card={
             <InfoCard
               variant="fullBleed"
-              image={artRef.dreamcaller("0025")}
+              image={artRef.dreamAvatar("0025")}
               title="Threxan"
               subtitle="the Resounding Wrath"
               body={richText.rules("At the start of your first turn, draw a card.")}
@@ -142,7 +142,7 @@ export function InfoCardMockup() {
             <InfoCard
               variant="object"
               frame
-              image={artRef.dreamcaller("0025")}
+              image={artRef.dreamAvatar("0025")}
               title="Seld Rakor"
               body={richText.rules("Whenever you Reclaim a card, deal 1 damage.")}
             />

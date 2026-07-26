@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { CardData } from "../types/cards";
 import type {
   AffiliationContent,
-  DreamcallerContent,
+  DreamAvatarContent,
   DreamscapeContent,
   DreamsignTemplate,
 } from "../types/content";
@@ -12,13 +12,13 @@ import {
   DEFAULT_RUN_LAYER_COUNT,
   opponentCarriesDreamsign,
   runMidpointCompletionLevel,
-  selectOpponentDreamcaller,
+  selectOpponentDreamAvatar,
 } from "../battle/integration/opponent-deck";
 import { createBattleRngStreams, deriveBattleSeed } from "../battle/random";
 import { logEvent } from "../logging";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { CardView } from "../cumulus/components/card/CardView";
-import { DreamcallerPortrait } from "../cumulus/components/hud/DreamcallerPortrait";
+import { DreamAvatarPortrait } from "../cumulus/components/hud/DreamAvatarPortrait";
 import { dreamsignIconUrl } from "../cumulus/components/atlas/atlas-display";
 import {
   getAlgorithm,
@@ -34,11 +34,11 @@ import {
 /**
  * `/opponent` debugging tool. Simulates the pre-battle opponent build the
  * battle integration produces, so a designer can inspect — for any run position
- * and dreamscape — which Dreamcaller, dreamsigns, and deck the generator yields,
+ * and dreamscape — which DreamAvatar, dreamsigns, and deck the generator yields,
  * and re-roll the same parameters to study the spread.
  *
  * The opponent is built by replaying the exact primitives `createBattleInit`
- * uses ({@link selectOpponentDreamcaller}, {@link buildOpponentDreamsigns}) to
+ * uses ({@link selectOpponentDreamAvatar}, {@link buildOpponentDreamsigns}) to
  * derive the run context, then routing the deck through a selected algorithm
  * (see `opponent-algorithms.tsx`), so what the tool shows matches what a real
  * battle at the same position would generate for a given seed. "Refresh"
@@ -59,7 +59,7 @@ interface OpponentGeneration {
   /** Byte-for-byte the logged battleEntryKey (== {@link generationId}); the
    * coherent algorithm passes it to `logOpponentDeckConstructed`. */
   battleEntryKey: string;
-  dreamcaller: DreamcallerContent | null;
+  dreamAvatar: DreamAvatarContent | null;
   dreamsigns: DreamsignTemplate[];
   affiliation: AffiliationContent | null;
   dreamscape: DreamscapeContent | null;
@@ -83,7 +83,7 @@ function generateOpponent(
   // The generation id IS the logged battleEntryKey, so the id a user shares
   // (in the URL or verbally) greps the `opponent_deck_constructed` log directly.
   // The id identifies the seeded generation; the algo (also carried in the URL)
-  // determines which Dreamcaller roster the seed draws from, so reproducing a
+  // determines which DreamAvatar roster the seed draws from, so reproducing a
   // share requires both the id and the `?algo=` value.
   const battleEntryKey = opponentGenerationId({
     completionLevel,
@@ -99,22 +99,22 @@ function generateOpponent(
       ? null
       : content.dreamscapes.find((d) => d.id === dreamscapeId) ?? null;
 
-  // The corpus algorithm fields the dreamscape's RESIDENT Dreamcallers (and the
+  // The corpus algorithm fields the dreamscape's RESIDENT DreamAvatars (and the
   // known-good decks associated with them); other algorithms draw from the full
   // roster. The starter / neutral dreamscape has no residents, so the list is
   // empty and no restriction applies. `nextInt` consumes exactly one RNG draw
   // regardless of the pool size, so narrowing the pool leaves the subsequent
   // dreamsign draw stable.
-  const eligibleDreamcallerIds =
-    algo === "corpus" ? dreamscape?.dreamcallerIds ?? null : null;
+  const eligibleDreamAvatarIds =
+    algo === "corpus" ? dreamscape?.dreamAvatarIds ?? null : null;
 
   // Mirror createBattleInit's order of RNG consumption on the enemyDescriptor
-  // stream: select the opponent Dreamcaller first, then its dreamsigns.
-  const dreamcaller = selectOpponentDreamcaller(
-    content.dreamcallers,
+  // stream: select the opponent DreamAvatar first, then its dreamsigns.
+  const dreamAvatar = selectOpponentDreamAvatar(
+    content.dreamAvatars,
     null,
     streams.enemyDescriptor,
-    eligibleDreamcallerIds,
+    eligibleDreamAvatarIds,
   );
   const dreamsigns = buildOpponentDreamsigns(
     completionLevel,
@@ -124,18 +124,18 @@ function generateOpponent(
   );
 
   if (algo === "corpus") {
-    // Reconstruction record for the dreamscape-restricted Dreamcaller pick: the
-    // resident pool the seed drew from and the Dreamcaller it landed on, so a
+    // Reconstruction record for the dreamscape-restricted DreamAvatar pick: the
+    // resident pool the seed drew from and the DreamAvatar it landed on, so a
     // corpus generation can be replayed from `logs/quest-log.jsonl`.
-    logEvent("corpus_opponent_dreamcaller_selected", {
+    logEvent("corpus_opponent_dream_avatar_selected", {
       battleEntryKey,
       dreamscapeId,
       completionLevel,
       restrictedToDreamscapeResidents:
-        eligibleDreamcallerIds != null && eligibleDreamcallerIds.length > 0,
-      eligibleDreamcallerIds: eligibleDreamcallerIds ?? [],
-      selectedDreamcallerId: dreamcaller?.id ?? null,
-      selectedDreamcallerName: dreamcaller?.name ?? null,
+        eligibleDreamAvatarIds != null && eligibleDreamAvatarIds.length > 0,
+      eligibleDreamAvatarIds: eligibleDreamAvatarIds ?? [],
+      selectedDreamAvatarId: dreamAvatar?.id ?? null,
+      selectedDreamAvatarName: dreamAvatar?.name ?? null,
     });
   }
 
@@ -153,7 +153,7 @@ function generateOpponent(
   return {
     generationId: battleEntryKey,
     battleEntryKey,
-    dreamcaller,
+    dreamAvatar,
     dreamsigns,
     affiliation,
     dreamscape,
@@ -276,7 +276,7 @@ export default function OpponentDebugApp() {
   const view = useMemo(() => {
     if (content === null || generation === null) return null;
     return getAlgorithm(algoId).build(content, {
-      opponentDreamcaller: generation.dreamcaller,
+      opponentDreamAvatar: generation.dreamAvatar,
       affiliation: generation.affiliation,
       completionLevel: generation.completionLevel,
       layerCount: generation.layerCount,
@@ -357,7 +357,7 @@ export default function OpponentDebugApp() {
 
         {content === null && loadError === null && (
           <div style={{ color: MUTED, fontSize: 14, padding: 24 }}>
-            Loading card database, dreamcallers, and draft corpus…
+            Loading card database, avatars, and draft corpus…
           </div>
         )}
 
@@ -539,18 +539,18 @@ export default function OpponentDebugApp() {
                   padding: 14,
                 }}
               >
-                {generation.dreamcaller === null ? (
+                {generation.dreamAvatar === null ? (
                   <div style={{ color: MUTED, fontSize: 13 }}>
-                    No dreamcaller catalog available.
+                    No avatar catalog available.
                   </div>
                 ) : (
                   <>
                     <div style={{ marginBottom: 10 }}>
-                      <DreamcallerPortrait
-                        dreamcaller={{
-                          imageNumber: generation.dreamcaller.imageNumber,
-                          name: generation.dreamcaller.name,
-                          title: generation.dreamcaller.title,
+                      <DreamAvatarPortrait
+                        dreamAvatar={{
+                          imageNumber: generation.dreamAvatar.imageNumber,
+                          name: generation.dreamAvatar.name,
+                          title: generation.dreamAvatar.title,
                         }}
                         variant="panel"
                       />
@@ -562,12 +562,12 @@ export default function OpponentDebugApp() {
                         color: "#f8fafc",
                       }}
                     >
-                      {generation.dreamcaller.name}
+                      {generation.dreamAvatar.name}
                     </div>
                     <div
                       style={{ fontSize: 12, color: "#a78bfa", marginBottom: 8 }}
                     >
-                      {generation.dreamcaller.title}
+                      {generation.dreamAvatar.title}
                     </div>
                     <div
                       style={{
@@ -580,7 +580,7 @@ export default function OpponentDebugApp() {
                         padding: 8,
                       }}
                     >
-                      {generation.dreamcaller.renderedText}
+                      {generation.dreamAvatar.renderedText}
                     </div>
                   </>
                 )}

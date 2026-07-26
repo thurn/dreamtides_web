@@ -9,7 +9,7 @@ almost none of the cards those payoffs need. This document specifies a
 clean-room replacement for opponent deck construction.
 
 The replacement keeps the core idea of simulating a series of draft picks for an
-opponent Dreamcaller, but replaces random selection with coherence-driven
+opponent Dream Avatar, but replaces random selection with coherence-driven
 selection: at each simulated pick the opponent takes the card that best FITS the
 deck it has drafted so far, where "fit" is learned entirely from the corpus of
 real human draft records in `docs/draft_records_adapted/`. Difficulty scales by
@@ -82,8 +82,8 @@ For a reader new to this system:
   is one Battle. The layer index is the completion level, numbered zero through
   six. Completion level zero is the opening Battle, six is the final boss. The
   run midpoint is the middle layer, after which opponents grow more dangerous.
-- Dreamcaller. A playable identity, like a hero or commander, that both the
-  player and each opponent have. Each Dreamcaller has a small set of signature
+- Dream Avatar. A playable identity, like a hero or commander, that both the
+  player and each opponent have. Each Dream Avatar has a small set of signature
   cards that define its archetype and seed its deck.
 - Dreamsign. A modifier card an opponent carries into Battle from the run
   midpoint onward; it makes later opponents harder.
@@ -122,9 +122,9 @@ For a reader new to this system:
 ## Problem and Context
 
 A run is a seven-layer journey; each layer hosts one Battle against an opponent
-Dreamcaller. The opponent's deck is meant to grow stronger as the run advances.
+Dream Avatar. The opponent's deck is meant to grow stronger as the run advances.
 Today the opponent deck is built like this: a themed card pool is generated for
-the opponent Dreamcaller, then a progress-scaled number of distinct cards
+the opponent Dream Avatar, then a progress-scaled number of distinct cards
 (currently 14 early, up to 30 late) is drawn uniformly at random from that pool,
 each card given one or two copies.
 
@@ -154,7 +154,7 @@ external judgment about what archetypes exist or which cards are "good."
 
 - Replace random opponent card selection with coherence-driven selection learned
   from the `docs/draft_records_adapted/` corpus.
-- Preserve the "simulate a series of draft picks for the opponent Dreamcaller"
+- Preserve the "simulate a series of draft picks for the opponent Dream Avatar"
   model as the construction frame.
 - Make opponent decks visibly coherent: payoff cards arrive with a meaningful
   number of their enablers, and the deck reads as a real archetype rather than a
@@ -165,11 +165,11 @@ external judgment about what archetypes exist or which cards are "good."
   corpus similarity alone, with no external labeling, and that demonstrates the
   new decks are far more coherent than the old random decks and close to real
   corpus decks.
-- Keep construction fully deterministic in its seed, Dreamcaller, and completion
+- Keep construction fully deterministic in its seed, Dream Avatar, and completion
   level, and log enough to reconstruct both the pick sequence and the resulting
   coherence from `logs/quest-log.jsonl`.
-- Keep opponent Dreamcaller identity meaningful: an opponent's deck should reflect
-  that Dreamcaller's signature cards.
+- Keep opponent Dream Avatar identity meaningful: an opponent's deck should reflect
+  that Dream Avatar's signature cards.
 - In an affiliated dreamscape, the opponent deck must visibly belong to that
   affiliation: it must score high affiliation fit against the dreamscape's
   affiliation probe while remaining internally coherent. Affiliation fit is a
@@ -189,7 +189,7 @@ external judgment about what archetypes exist or which cards are "good."
   must not hardcode specific card identities, specific archetype names, or
   assume a fixed corpus size. Derive fixtures and bounds from the live corpus and
   card database at run time.
-- Construction must be deterministic: identical seed, opponent Dreamcaller, and
+- Construction must be deterministic: identical seed, opponent Dream Avatar, and
   completion level must always produce the identical deck.
 - Construction must be reasonably cheap per battle. The fit model is expensive to
   build but pure; it must be built once and reused across battles rather than
@@ -208,16 +208,16 @@ external judgment about what archetypes exist or which cards are "good."
 
 ### Construction frame: a simulated coherent draft
 
-The opponent's deck is built by simulating a draft for the opponent Dreamcaller.
+The opponent's deck is built by simulating a draft for the opponent Dream Avatar.
 The simulation runs a fixed number of picks. At each pick it is shown a pack of
 candidate cards and selects one. The selection is driven by deck fit, not chance:
 the chosen card is the one that best fits the cards already drafted, as scored by
 the corpus-trained fit model, with a small, seeded amount of exploration so that
 different seeds yield different but still coherent decks.
 
-The deck is seeded before the first pick with the opponent Dreamcaller's
+The deck is seeded before the first pick with the opponent Dream Avatar's
 signature cards. The fit model folds these into the deck representation exactly
-like drafted cards, so they steer the very first picks toward that Dreamcaller's
+like drafted cards, so they steer the very first picks toward that Dream Avatar's
 archetype before the deck has otherwise defined itself. This is what ties
 opponent identity to the resulting deck without reintroducing a separate themed
 pool.
@@ -225,7 +225,7 @@ pool.
 The card universe the simulation draws from is the set of cards that appear in
 the corpus — the cards real decks are actually made of. Drawing from this
 universe keeps construction inside the space of cards the fit model understands
-and naturally excludes cards that never see real play. A Dreamcaller's signature
+and naturally excludes cards that never see real play. A Dream Avatar's signature
 cards are always allowed to seed and to be picked even if a signature card does
 not itself appear in the corpus; such a card simply carries no learned fit
 signal of its own and steers the deck only through the corpus cards that
@@ -245,7 +245,7 @@ real decks the model learned from.
 At each pick, every candidate in the pack is scored against the current deck
 (picked cards plus signature seeds) using the existing fit scoring. Pure
 greedy selection — always take the single highest-fit card — would make every
-deck for a given Dreamcaller nearly identical and would overfit to the most
+deck for a given Dream Avatar nearly identical and would overfit to the most
 popular staples. Instead, selection samples among the top-fitting candidates
 using a seeded, temperature-controlled weighting: higher-fit cards are much more
 likely to be taken, but the pick is not deterministic given the pack. The
@@ -301,7 +301,7 @@ construction objective there, pursued by two cooperating mechanisms: steering th
 draft's starting point toward the affiliation, and selecting among several
 candidate drafts the one that best matches the target.
 
-Steering the starting point. The deck's seed is widened beyond the Dreamcaller's
+Steering the starting point. The deck's seed is widened beyond the Dream Avatar's
 signature cards to include the dreamscape affiliation's signature probe cards, so
 the very first picks are pulled toward the affiliation before the deck has
 otherwise defined itself. Pack composition for the simulated draft may
@@ -323,21 +323,21 @@ a pile of high-affinity but unsynergistic cards. The whole best-of-N process is
 seeded from the battle seed, so it stays deterministic.
 
 Neutral dreamscapes. When the dreamscape has no affiliation, the seed is the
-Dreamcaller signatures alone, pack composition is unbiased, and best-of-N
+Dream Avatar signatures alone, pack composition is unbiased, and best-of-N
 optimizes coherence only. The deck is still coherent because fit selection never
 depended on affiliation. This is the case that produces the worst decks today,
 and it is fixed by fit selection independently of any affiliation work.
 
 ### Determinism and reconstruction logging
 
-Construction is a pure function of the battle seed, the opponent Dreamcaller, and
+Construction is a pure function of the battle seed, the opponent Dream Avatar, and
 the completion level. The same inputs always produce the same pick sequence,
 removals, and final deck.
 
 The `opponent_deck_constructed` log event is retained and enriched so a deck's
 construction and its measured coherence can be reconstructed from
 `logs/quest-log.jsonl` filtered by game. In addition to the existing fields
-(opponent Dreamcaller, completion level, layer count, deck size, top
+(opponent Dream Avatar, completion level, layer count, deck size, top
 card numbers), the event records: the target affiliation, if any; the number of
 candidate drafts run and the index of the winning draft; the winning deck's
 coherence score and affiliation fit, and the same two scores for the runners-up
@@ -356,17 +356,17 @@ affiliation-only bias path as the sole coherence mechanism, and the associated
 copy/distinct-count scaling that fed the random sampler. The new module is
 written from scratch around the simulated coherent draft.
 
-Opponent Dreamcaller selection and opponent dreamsign selection are conceptually
+Opponent Dream Avatar selection and opponent dreamsign selection are conceptually
 adjacent and may be re-implemented cleanly, but their externally observed
 behavior is preserved: an opponent is still chosen deterministically per battle,
-the player's own Dreamcaller is still excluded when an alternative exists, and a
+the player's own Dream Avatar is still excluded when an alternative exists, and a
 single dreamsign is still carried from the run midpoint onward. The fallback deck
 used for AI self-play mode and for missing-corpus situations is preserved.
 
 ## Critical Interfaces or API Surfaces
 
 - Opponent construction entry point. A single function builds the opponent deck
-  given the opponent Dreamcaller, the completion level, the run layer count, the
+  given the opponent Dream Avatar, the completion level, the run layer count, the
   battle seed, the resolved fit model, the card universe, and the target
   affiliation context (null in a neutral dreamscape). It runs best-of-N drafts
   internally and returns the winning deck's chosen distinct cards (the singleton
@@ -474,7 +474,7 @@ draft-replay experiment.
 - Keep the themed pool but sample by fit instead of uniformly. Rejected as the
   primary design because it preserves two coherence systems (pool theming and
   fit) that can disagree, and the pool theming is not corpus-grounded. Folding
-  Dreamcaller identity into signature seeds on top of corpus-fit selection is
+  Dream Avatar identity into signature seeds on top of corpus-fit selection is
   simpler and keeps a single coherence source.
 - Hit affiliation fit with steering alone (seed and pack bias) and no best-of-N
   selection. Rejected as insufficient: steering shifts the distribution but a

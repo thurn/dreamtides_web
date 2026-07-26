@@ -5,7 +5,7 @@
 // {@link FitModel}) rather than chance. A small, seeded exploration temperature
 // keeps different seeds yielding different but still coherent decks.
 //
-// The deck is seeded before the first pick with the opponent Dreamcaller's
+// The deck is seeded before the first pick with the opponent DreamAvatar's
 // signature cards (and, in an affiliated dreamscape, the affiliation's probe
 // cards). The fit model folds these into the deck representation exactly like
 // drafted cards, steering the first picks toward that archetype.
@@ -61,7 +61,7 @@ export interface CoherentDraftArgs {
   /** Candidate packs (card numbers) the simulation draws picks from, assembled
    * by the caller from the real corpus pack structures. */
   packs: readonly (readonly number[])[];
-  /** Seed cards folded into the deck before the first pick (Dreamcaller
+  /** Seed cards folded into the deck before the first pick (DreamAvatar
    * signatures, plus affiliation probe cards in an affiliated dreamscape). */
   signatureCardNumbers: readonly number[];
   /** How many picks to make. The final deck is this minus post-draft removals. */

@@ -19,7 +19,7 @@ The persistent, transparent bottom HUD for quest screens. Its quest variant show
 | `dreamsigns` | `Dreamsign[]` | no | `[]` | The Dreamsigns to dock. Quest overflow opens a viewer; battle Dreamsigns flow bottom-up and right-to-left in two-high columns. |
 | `deck` | `string \| number` | no | `0` | Deck size (used in the deck button's aria-label). |
 | `onViewDeck` | `(() => void)` | no | — | Open the deck viewer — fired on a tap / click of the deck sprite. |
-| `dreamcaller` | `QsbDreamcaller` | no | — |  |
+| `dreamAvatar` | `QsbDreamAvatar` | no | — |  |
 | `size` | `"compact" \| "grand"` | no | `compact` | HUD size. `compact` (default) is the mobile / touch size; `grand` is the larger desktop size the dreamscape screen picks above the wide-viewport breakpoint. |
 | `variant` | `"quest" \| "battle"` | no | `quest` | Content arrangement. `quest` shows the complete run inventory; `battle` keeps only essence at the lower start edge and bottom-up, right-to-left Dreamsign columns at the lower end edge of the playable battle board. |
 
@@ -34,20 +34,20 @@ The persistent, transparent bottom HUD for quest screens. Its quest variant show
 | `imageAlt` | `string` | yes |  |
 | `isBane` | `boolean` | no |  |
 
-### `dreamcaller`: the `QsbDreamcaller` model
+### `dreamAvatar`: the `QsbDreamAvatar` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `id` | `string` | no | Stable Dreamcaller UUID. |
+| `id` | `string` | no | Stable DreamAvatar UUID. |
 | `name` | `string` | no |  |
 | `epithet` | `string` | yes |  |
-| `portrait` | `ArtRef` | no | The portrait art as an {@link ArtRef}. Required — a docked Dreamcaller always has art. |
-| `portraitFocus` | `DreamcallerPortraitFocus` | yes | Normalized head position used to center the square HUD crop. |
+| `portrait` | `ArtRef` | no | The portrait art as an {@link ArtRef}. Required — a docked DreamAvatar always has art. |
+| `portraitFocus` | `DreamAvatarPortraitFocus` | yes | Normalized head position used to center the square HUD crop. |
 | `ability` | `string` | yes |  |
 
 ## Usage
 
-A transparent HUD that positions itself against the screen root and reveals the Dreamcaller / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root. Its shared bottom anchor adds one small visible gap after the real device safe area; screens should not reposition it. Mobile screen-level floating glass panels use `QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE` for their bottom edge so every screen preserves the same separation from the HUD.
+A transparent HUD that positions itself against the screen root and reveals the DreamAvatar / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root. Its shared bottom anchor adds one small visible gap after the real device safe area; screens should not reposition it. Mobile screen-level floating glass panels use `QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE` for their bottom edge so every screen preserves the same separation from the HUD.
 
 ```tsx
 import { useRef } from "react";
@@ -61,7 +61,7 @@ const stageRef = useRef<HTMLDivElement>(null);
     stageRef={stageRef}
     essence={200}
     deck={22}
-    dreamcaller={dreamcaller}
+    dreamAvatar={dreamAvatar}
     dreamsigns={dreamsigns}
   />
 </div>

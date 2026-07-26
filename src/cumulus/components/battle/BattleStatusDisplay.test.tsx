@@ -23,7 +23,7 @@ describe("BattleStatusDisplay", () => {
         <BattleStatusDisplay
           owner="enemy"
           relationship="near"
-          dreamcaller={null}
+          dreamAvatar={null}
           currentEnergy={1}
           maxEnergy={2}
           points={3}
@@ -43,7 +43,7 @@ describe("BattleStatusDisplay", () => {
       root.render(
         <BattleStatusDisplay
           owner="enemy"
-          dreamcaller={{
+          dreamAvatar={{
             imageNumber: "0042",
             name: "Astra",
             title: "The Dawnbound",
@@ -117,7 +117,7 @@ describe("BattleStatusDisplay", () => {
       root.render(
         <BattleStatusDisplay
           owner="player"
-          dreamcaller={null}
+          dreamAvatar={null}
           currentEnergy={0}
           maxEnergy={0}
           points={0}
@@ -126,10 +126,10 @@ describe("BattleStatusDisplay", () => {
     });
 
     const placeholder = container.querySelector<HTMLElement>(
-      "[data-battle-status-dreamcaller-placeholder]",
+      "[data-battle-status-dream-avatar-placeholder]",
     );
     expect(placeholder?.getAttribute("aria-label")).toBe(
-      "Dreamcaller portrait loading",
+      "Avatar portrait loading",
     );
     expect(placeholder?.style.width).toBe("100%");
     expect(placeholder?.style.height).toBe("var(--touch-min)");
@@ -151,14 +151,14 @@ describe("BattleStatusDisplay", () => {
         <CumulusRoot>
           <BattleStatusDisplay
             owner="player"
-            dreamcaller={{
+            dreamAvatar={{
               imageNumber: "0029",
               name: "Tensho",
               title: "Daimyo of Lacquered Fury",
             }}
-            dreamcallerProfile={{
+            dreamAvatarProfile={{
               id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
-              ability: "Dreamcaller ability is not active",
+              ability: "Avatar ability is not active",
               unavailable: true,
             }}
             currentEnergy={0}
@@ -170,7 +170,7 @@ describe("BattleStatusDisplay", () => {
     });
 
     const source = container.querySelector<HTMLElement>(
-      "[data-dreamcaller-source]",
+      "[data-dream-avatar-source]",
     );
     expect(source?.dataset.revealEntityId).toBe(
       "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
@@ -180,7 +180,7 @@ describe("BattleStatusDisplay", () => {
       source?.getAttribute("aria-describedby") ?? "",
     );
     expect(description?.textContent).toContain(
-      "Dreamcaller ability is not active",
+      "Avatar ability is not active",
     );
 
     act(() => root.unmount());

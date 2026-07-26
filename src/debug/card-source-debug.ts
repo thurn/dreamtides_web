@@ -1,5 +1,5 @@
 import type { CardData, FrozenCardData } from "../types/cards";
-import type { ResolvedDreamcallerPackage } from "../types/content";
+import type { ResolvedDreamAvatarPackage } from "../types/content";
 import type {
   CardSourceDebugEntry,
   CardSourceDebugState,
@@ -8,7 +8,7 @@ import type {
 
 function buildCardSourceDebugEntry(
   card: CardData | FrozenCardData,
-  resolvedPackage: ResolvedDreamcallerPackage | null,
+  resolvedPackage: ResolvedDreamAvatarPackage | null,
 ): CardSourceDebugEntry {
   const starterDecklist = new Set(
     resolvedPackage?.starterDecklistCardNumbers ?? [],
@@ -28,7 +28,7 @@ export function buildCardSourceDebugState(
   screenLabel: string,
   surface: CardSourceDebugSurface,
   cards: readonly (CardData | FrozenCardData)[],
-  resolvedPackage: ResolvedDreamcallerPackage | null,
+  resolvedPackage: ResolvedDreamAvatarPackage | null,
 ): CardSourceDebugState | null {
   if (cards.length === 0) {
     return null;

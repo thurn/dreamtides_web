@@ -2,12 +2,12 @@
 
 ## 1. Purpose and summary
 
-In the draft test mode a player chooses a **Dreamcaller** and is handed a **card
-pool** to draft from. The pool must *match* the Dreamcaller: a disruption/tempo
-Dreamcaller should be handed a disruption/tempo pool, every run.
+In the draft test mode a player chooses a **Dream Avatar** and is handed a **card
+pool** to draft from. The pool must *match* the Dream Avatar: a disruption/tempo
+Dream Avatar should be handed a disruption/tempo pool, every run.
 
 `sigseed` is a pool-construction algorithm that guarantees that match by making a
-Dreamcaller's **signature cards the only possible starting points** for the pool.
+Dream Avatar's **signature cards the only possible starting points** for the pool.
 Each run seeds the pool with a random *subset* of the signature and grows outward
 from there with the shared pick-affinity grower. Because the pool always starts on
 actual signature cards, it can never drift onto an unrelated identity — the
@@ -39,7 +39,7 @@ in `picksig_signature_design.md` §2, and refers there rather than repeating the
   recomputing `affinityToPool` against the cards already chosen so the pool stays
   internally coherent, copies capped at two.
 
-It also reuses `picksig`'s **signature resolution**: a Dreamcaller's signature,
+It also reuses `picksig`'s **signature resolution**: a Dream Avatar's signature,
 stored as rename-proof UUIDs and surfaced at load time as current card names, is
 matched back onto the UUID-keyed corpus via the pool's name→UUID map
 (`resolveSignatureToCorpus`). The result is a set `S` of corpus UUIDs — the
@@ -52,9 +52,9 @@ matched back onto the UUID-keyed corpus via the pool's name→UUID map
 `picksig` lets the signature merely **bias** a seed draw that still ranges over the
 whole corpus, then runs `pickcohere`'s best-of-K step, which keeps the candidate
 pool with the highest *internal coherence* — a criterion that reads no signature at
-all. For a Dreamcaller whose identity is internally **clumpy** in pick-space (ramp,
+all. For a Dream Avatar whose identity is internally **clumpy** in pick-space (ramp,
 lands, aristocrats — cards reliably drafted together) this works well. For a
-Dreamcaller whose identity is **spread** (tempo, disruption, control — cards that
+Dream Avatar whose identity is **spread** (tempo, disruption, control — cards that
 interact with the opponent and with diverse pieces, not tightly with each other),
 the coherence step systematically discards the on-theme candidate for a tighter
 *off-theme* cluster, and the pool drifts onto an unrelated synergy. The drift is
@@ -102,7 +102,7 @@ subset, so the whole pool is a pure function of the subset draw — which is wha
 makes the subset the variety source.
 
 `maxSeedCards = 4` maximises the count of distinct pools: with the ~6 signature
-cards a Dreamcaller has and deterministic growth, the number of distinct
+cards a Dream Avatar has and deterministic growth, the number of distinct
 subset-seeded pools saturates there; raising it only converges pools toward the
 all-anchors start without adding on-theme strength.
 
@@ -120,27 +120,27 @@ deliberate difference from the other pick-corpus variants.
 ## 5. Validation
 
 `scripts/sigseed-experiment.mjs` runs the real `generatePoolFromData` against the
-bundled pick corpus and the real Dreamcaller signatures — no re-implementation —
-and measures, per Dreamcaller over many seeds, the same metrics as the `picksig`
+bundled pick corpus and the real Dream Avatar signatures — no re-implementation —
+and measures, per Dream Avatar over many seeds, the same metrics as the `picksig`
 experiment (distinct-pool **variety**, mean-signature-affinity **on-theme**, and
 **lean spread**), reporting `sigseed`, `picksig`, and the `pickcohere` baseline on
 the same seeds.
 
-Over the 20 Dreamcallers with an in-corpus signature, 120 seeds each:
+Over the 20 Dream Avatars with an in-corpus signature, 120 seeds each:
 
 - **On-theme**: mean signature affinity **0.52 for `sigseed`** vs 0.33 for
   `picksig` vs 0.21 for `pickcohere`. The lift is largest for exactly the spread
   archetypes `picksig` drifts on — e.g. Edran 0.39 vs 0.16, Kasane 0.45 vs 0.15,
   Rael 0.56 vs 0.19 — while the clumpy ramp callers (Grath, Radulf, Demetrios)
-  hold at ~0.57 with no regression. Every Dreamcaller lands at 0.42–0.60.
-- **Variety**: 13–48 distinct pools per Dreamcaller across 120 seeds. This is
+  hold at ~0.57 with no regression. Every Dream Avatar lands at 0.42–0.60.
+- **Variety**: 13–48 distinct pools per Dream Avatar across 120 seeds. This is
   below `picksig`'s 50+, the deliberate cost of deterministic signature-only
   seeding: with ~6 anchors and deterministic growth the distinct-pool count
   saturates in the tens. Pools still differ substantially (lean spread up to ~0.44).
 - **Fallback**: with an empty signature, `sigseed` reproduces `pickcohere`
   bit-for-bit on every checked seed.
 
-Run it with `node scripts/sigseed-experiment.mjs`; `--dreamcaller "<name>"` narrows
+Run it with `node scripts/sigseed-experiment.mjs`; `--dream-avatar "<name>"` narrows
 to one, `--seeds N` sets the sample, `--json` emits raw rows. Select the algorithm
 in the app with `?algo=sigseed`.
 
@@ -153,7 +153,7 @@ in the app with `?algo=sigseed`.
   its signature-blind best-of-K coherence step can discard the on-theme seed.
   `sigseed` trades some variety for a guaranteed on-theme anchor.
 - **Seed with the whole signature every run.** Rejected: deterministic growth from
-  a fixed seed set yields one pool per Dreamcaller — no variety. The random subset
+  a fixed seed set yields one pool per Dream Avatar — no variety. The random subset
   is what restores it.
 - **Single signature card as the seed (no subsets).** Rejected: it caps variety at
   the number of signature cards (~6 pools) and offers only pure leans, no blends.

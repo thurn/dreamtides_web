@@ -1,46 +1,46 @@
 // Pure view-model builder for the desktop deck viewer. Resolves the deck to the
 // cards the player actually holds (reusing the shared mobile resolution so both
 // viewers show a card identically), and pairs them with the run profile the
-// desktop sidebar shows: the Dreamcaller and the collected dreamsigns. No React,
+// desktop sidebar shows: the DreamAvatar and the collected dreamsigns. No React,
 // no state hooks — the adapter acquires live state and calls this; this module
 // maps domain data to the screen's view types and nothing else.
 
 import type { CardData } from "../../types/cards";
-import type { DeckEntry, Dreamcaller, Dreamsign } from "../../types/quest";
+import type { DeckEntry, DreamAvatar, Dreamsign } from "../../types/quest";
 import type {
-  DeckDreamcallerView,
+  DeckDreamAvatarView,
   DesktopDeckView,
 } from "../../cumulus/screens/DesktopDeckViewer";
 import { buildMobileDeckView } from "./mobile-deck-view-model";
 
-/** Map the run's Dreamcaller to the sidebar view (portrait visual + rules text). */
-function toDreamcallerView(
-  dreamcaller: Dreamcaller | null,
-): DeckDreamcallerView | null {
-  if (dreamcaller === null) return null;
+/** Map the run's DreamAvatar to the sidebar view (portrait visual + rules text). */
+function toDreamAvatarView(
+  dreamAvatar: DreamAvatar | null,
+): DeckDreamAvatarView | null {
+  if (dreamAvatar === null) return null;
   return {
-    id: dreamcaller.id,
-    imageNumber: dreamcaller.imageNumber,
-    name: dreamcaller.name,
-    title: dreamcaller.title,
-    renderedText: dreamcaller.renderedText,
+    id: dreamAvatar.id,
+    imageNumber: dreamAvatar.imageNumber,
+    name: dreamAvatar.name,
+    title: dreamAvatar.title,
+    renderedText: dreamAvatar.renderedText,
   };
 }
 
 /**
  * The full desktop deck view: every resolvable deck entry in acquisition order,
- * plus the run's Dreamcaller and collected dreamsigns for the sidebar.
+ * plus the run's DreamAvatar and collected dreamsigns for the sidebar.
  * Deterministic in its arguments.
  */
 export function buildDesktopDeckView(
   deck: readonly DeckEntry[],
   cardDatabase: Map<number, CardData>,
-  dreamcaller: Dreamcaller | null,
+  dreamAvatar: DreamAvatar | null,
   dreamsigns: readonly Dreamsign[],
 ): DesktopDeckView {
   return {
     cards: buildMobileDeckView(deck, cardDatabase).cards,
-    dreamcaller: toDreamcallerView(dreamcaller),
+    dreamAvatar: toDreamAvatarView(dreamAvatar),
     dreamsigns: [...dreamsigns],
   };
 }

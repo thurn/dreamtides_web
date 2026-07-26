@@ -21,7 +21,7 @@
 // data source.
 //
 // Like the rest of the pool family this reads nothing but the bundled decklists —
-// no colors, tides, archetype labels, dreamcallers, or signatures. The only
+// no colors, tides, archetype labels, dreamAvatars, or signatures. The only
 // randomness is which card seeds the pool.
 //
 // Cards are identified by their stable cards_v2 UUID, not by display name, so a

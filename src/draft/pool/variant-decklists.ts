@@ -2,7 +2,7 @@
 // other variants walk and instead grows a pool out of real, human-shaped
 // decklists (each seat's mainboard in `docs/draft_records_adapted`, bundled to
 // `decklists-data.json`): pick a
-// Dreamcaller strategy, grab a real decklist rich in that strategy's cards as
+// DreamAvatar strategy, grab a real decklist rich in that strategy's cards as
 // the "starter", then repeatedly add the decklists most *similar* to the starter
 // until the pool reaches the target size. Similarity is cosine over IDF-weighted
 // card vectors, so the distinctive cards two decks share count for much more than
@@ -68,14 +68,14 @@ const DECKLISTS: DecklistsTuning = {
   // similar deck (tight, archetype-pure pools); higher = flatter sampling
   // (looser, more varied pools).
   growTemperature: 0.35,
-  // Theme bias (only when the Dreamcaller has theme archetypes). The strategy
+  // Theme bias (only when the DreamAvatar has theme archetypes). The strategy
   // roll weights each eligible strategy by (1 + theme cards in it)^this, so an
-  // abandon Dreamcaller rolls aristocrats far more than off-theme green ramp.
+  // abandon DreamAvatar rolls aristocrats far more than off-theme green ramp.
   // 0 = roll uniformly regardless of theme.
   themeStrategyExp: 1.5,
   // Theme bias on starter choice: a candidate decklist's fit score is scaled by
   // (1 + this * theme-cosine), pulling the starter toward decks dense in the
-  // Dreamcaller's theme cards. 0 = ignore theme when picking the starter.
+  // DreamAvatar's theme cards. 0 = ignore theme when picking the starter.
   themeStarterBoost: 2,
   // Theme bias on each growth step: similarity to the starter is scaled by
   // (1 + this * theme-cosine), so the snowball keeps pulling in theme-dense
@@ -143,11 +143,11 @@ function deckCorpus(poolData: PoolData): DeckCorpus | null {
 }
 
 
-// Build a pool by snowballing real decklists. Roll one of the Dreamcaller's
+// Build a pool by snowballing real decklists. Roll one of the avatar's
 // strategies (biased toward its theme), take a real decklist rich in that
 // strategy's and the theme's cards as the starter, then keep adding the
 // decklists most similar to the starter and dense in the theme until the target
-// size. `themeArchetypes` are the Dreamcaller's mechanic-archetype tide slugs
+// size. `themeArchetypes` are the avatar's mechanic-archetype tide slugs
 // (e.g. `abandon`); when empty the pool is unbiased. Falls back to the `default`
 // algorithm when no usable decklists are bundled.
 export function generateDecklists(
@@ -169,9 +169,9 @@ export function generateDecklists(
   // by UUID in the same way, so both sets use the same key space and no
   // conversion is needed.
 
-  // 0. The Dreamcaller's theme: the union of cards in its mechanic-archetype
+  // 0. The DreamAvatar's theme: the union of cards in its mechanic-archetype
   //    tide lists. `themeCosine` measures how dense a deck is in those cards
-  //    (IDF-weighted, 0..1); it is 0 throughout when the Dreamcaller has no
+  //    (IDF-weighted, 0..1); it is 0 throughout when the DreamAvatar has no
   //    theme, so every theme term below collapses to 1 and the pool is unbiased.
   const themeCards = new Set<string>();
   for (const slug of themeArchetypes ?? []) {
@@ -187,10 +187,10 @@ export function generateDecklists(
     return dot / (themeNorm * deck.norm);
   };
 
-  // 1. Roll one strategy off the Dreamcaller's list (the archetype role),
+  // 1. Roll one strategy off the avatar's list (the archetype role),
   //    weighted toward strategies that overlap the theme so an abandon
-  //    Dreamcaller rolls aristocrats far more than off-theme green ramp. An
-  //    open-pool Dreamcaller (no list) leaves it unset, so the starter is then
+  //    DreamAvatar rolls aristocrats far more than off-theme green ramp. An
+  //    open-pool DreamAvatar (no list) leaves it unset, so the starter is then
   //    any real decklist.
   const eligible = (seedArchetypes ?? []).filter(
     (a) => draftLists.has(a) && colorPrefix(a) !== "",
@@ -245,7 +245,7 @@ export function generateDecklists(
 
   // 3. Anchor similarity to the starter (not the drifting pool) so the whole
   //    pool stays orbiting one archetype, and boost candidates dense in the
-  //    theme so the snowball keeps the Dreamcaller's strategy instead of
+  //    theme so the snowball keeps the avatar's strategy instead of
   //    drifting to whatever else co-occurs in the colors.
   let anchorSq = 0;
   for (const c of starter) anchorSq += idfOf(c) ** 2;
@@ -259,7 +259,7 @@ export function generateDecklists(
 
   // 3b. The pool's spine: the archetypes growth is allowed to absorb, so the
   //     pool's card list stays one strategy instead of dragging in each
-  //     neighbor deck's off-archetype half. It always includes the Dreamcaller's
+  //     neighbor deck's off-archetype half. It always includes the avatar's
   //     theme (so a themed pool can never gate its own theme out — important for
   //     splashy themes like outsiders that are rarely a deck's *dominant* tide),
   //     then fills with the starter's other dominant archetypes up to
@@ -366,7 +366,7 @@ export const decklistsStrategy: PoolStrategy = {
   id: "decklists",
   description:
     "Grows the pool from real human-built decklists by IDF-weighted cosine " +
-    "similarity to a starter deck, biased toward the Dreamcaller's theme.",
+    "similarity to a starter deck, biased toward the avatar's theme.",
   generate: ({ rng, poolData, seedArchetypes, themeArchetypes, targetSize }) =>
     generateDecklists(rng, poolData, seedArchetypes, themeArchetypes, targetSize),
 };

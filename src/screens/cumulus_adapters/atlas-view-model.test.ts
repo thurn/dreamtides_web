@@ -21,7 +21,7 @@ import {
 /** A structurally valid but content-free QuestContent for builder tests. */
 const EMPTY_CONTENT: QuestContent = {
   cardDatabase: new Map(),
-  dreamcallers: [],
+  dreamAvatars: [],
   dreamwellCards: [],
   dreamsignTemplates: [],
   dreamscapes: [],
@@ -329,7 +329,7 @@ describe("buildAtlasMapNodes", () => {
           affiliationId: "figments",
           siteIcon: "dream-augury",
           isStarter: false,
-          dreamcallerIds: [],
+          dreamAvatarIds: [],
         },
       ],
       guides: [

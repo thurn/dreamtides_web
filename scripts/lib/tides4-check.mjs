@@ -148,7 +148,7 @@ export function formatStaleMessage(result) {
   lines.push("────────────────────────────────────────────────────────────────────────");
   lines.push("  FIX 1 — you changed a bake INPUT and just need to regenerate:");
   lines.push("────────────────────────────────────────────────────────────────────────");
-  lines.push("Inputs are data/tabula/cards_v2.toml, data/tabula/dreamcallers_v2.toml,");
+  lines.push("Inputs are data/tabula/cards_v2.toml, data/tabula/dream_avatars_v2.toml,");
   lines.push("docs/draft_records_adapted/, and data/tides4-overrides.jsonc. After editing");
   lines.push("any of them, regenerate and re-stage:");
   lines.push("");

@@ -33,19 +33,19 @@ when possible.
 Quests revolve primarily around drafting and refining a deck to bring into
 future battles. Quests use a single currency, **essence**, which is spent at
 shops and in various other ways. Players begin each quest with 200 essence by
-default, then choose a Dreamcaller and review their fixed starter deck and
+default, then choose a Dream Avatar and review their fixed starter deck and
 starting dreamscape. By
 default, quests have a maximum essence cap of 500; any essence gained beyond
 this cap is lost unless the cap has been increased by an effect such as a Dream
 Augury reward. Dreamtides does not use an explicit rarity system for cards,
 except for certain powerful cards that are designated as legendary cards.
 
-In addition to deck cards, users during a quest will select 1 of 3 Dreamcallers
+In addition to deck cards, users during a quest will select 1 of 3 Dream Avatars
 to lead their deck and may have some number of Dreamsigns:
 
-- **Dreamcaller:** An animated 3D character who is already in play when each
-  battle begins. The player and their opponent each bring their own Dreamcaller,
-  which starts in play on its owner's side. Each Dreamcaller has powerful
+- **Dream Avatar:** An animated 3D character who is already in play when each
+  battle begins. The player and their opponent each bring their own Dream Avatar,
+  which starts in play on its owner's side. Each Dream Avatar has powerful
   ongoing, triggered, or activated abilities and seeds the run's draft pool,
   Dreamsign pool, and default reward bias as described in
   [Draft Pool Construction](#draft-pool-construction).
@@ -194,7 +194,7 @@ The final dreamscape of every dream quest, always occupying Layer 7. Limbo has
 no Dream Guide and no affiliation. Instead it is home to **Apollyon, the Doom of
 Humanity**, the final boss of Dreamtides. Apollyon appears in many different
 forms — each form plays a different deck and takes on its own unique abilities
-(see [Boss Dreamcallers](bosses.md)) — but it is always the same named
+(see [Boss Dream Avatars](bosses.md)) — but it is always the same named
 character. Otherwise Limbo functions like a normal dreamscape: it generates a
 random collection of [sites](#dreamscape-generation) drawn from the fill pool,
 culminating in the final [Battle](#battle) against Apollyon, which is visited
@@ -225,7 +225,7 @@ An affiliation nudges random card selection throughout its dreamscape:
   appear can still appear, and affiliated cards simply appear more often.
 
 An affiliation also influences the opponent encountered at the dreamscape's
-[Battle](#battle) site: the assigned opponent Dreamcaller is more likely to bring
+[Battle](#battle) site: the assigned opponent Dream Avatar is more likely to bring
 a deck matching the affiliation. A battle in Tumbleleaf Village, for example, is
 more likely to be against a Spirit Animals deck.
 
@@ -239,7 +239,7 @@ Quest content uses the layered tide system described in
 [Tides](../../tides/tides.md) and implemented by the **tides4** draft pool
 algorithm. Each tide is a preconstructed deck of cards with one of three roles:
 
-- **Signature tides** define a Dreamcaller's identity floor and are always
+- **Signature tides** define a Dream Avatar's identity floor and are always
   joined when present.
 - **Facet tides** are single-anchor variety engines; a random subset is drawn
   for each run to vary the pool.
@@ -251,10 +251,10 @@ terminology. A single card may belong to multiple tides.
 
 For quests, the important consequences are:
 
-- Each Dreamcaller maps to a signature tide (or none), a set of facet tides, and
+- Each Dream Avatar maps to a signature tide (or none), a set of facet tides, and
   a set of neutral tides.
-- At the start of a quest, the player picks 1 of 3 Dreamcallers, and that
-  Dreamcaller's tides determine the draft pool for the quest as described in
+- At the start of a quest, the player picks 1 of 3 Dream Avatars, and that
+  Dream Avatar's tides determine the draft pool for the quest as described in
   [Draft Pool Construction](#draft-pool-construction).
 - Draft pools, Dreamsign pools, shops, and reward generators all key off these
   tides.
@@ -265,27 +265,27 @@ For quests, the important consequences are:
 
 Cards and Dreamsigns are tagged with tides.
 
-## Quest Start & Dreamcaller Selection
+## Quest Start & Dream Avatar Selection
 
-Dreamcaller selection is the quest-start screen shown before the player enters
-the Dream Atlas. The player is presented with 3 Dreamcallers and chooses one to
+Dream Avatar selection is the quest-start screen shown before the player enters
+the Dream Atlas. The player is presented with 3 Dream Avatars and chooses one to
 define the run.
 
-Selecting a Dreamcaller performs all run bootstrap work immediately:
+Selecting a Dream Avatar performs all run bootstrap work immediately:
 
 - Add the fixed starter deck.
 - Grant the starting essence (200 by default).
-- Build the draft pool and Dreamsign pool from the Dreamcaller's tides.
+- Build the draft pool and Dreamsign pool from the Dream Avatar's tides.
 - Generate the initial atlas.
 - Make the starting deck available through the deck UI.
 - Set Firstlight Meadow as the current destination and enter it directly.
 
-**UI:** Dreamcallers are shown in their full-body "card" representation, with
+**UI:** Dream Avatars are shown in their full-body "card" representation, with
 ability text displayed alongside their 3D models and highlighted tides. The
-Dreamcaller cards animate in from a small size in the center of the screen. Each
-Dreamcaller does a different humanoid animation within its card frame. A primary
-action button appears below each Dreamcaller allowing it to be selected. The
-selected Dreamcaller animates to the bottom left of the screen to appear in a
+Dream Avatar cards animate in from a small size in the center of the screen. Each
+Dream Avatar does a different humanoid animation within its card frame. A primary
+action button appears below each Dream Avatar allowing it to be selected. The
+selected Dream Avatar animates to the bottom left of the screen to appear in a
 square frame (head only). The other cards animate back to a small size.
 
 ## Rarity
@@ -297,26 +297,26 @@ such as Dream Augury offers; it carries no other rarity mechanics.
 
 ## Draft Pool Construction
 
-The draft pool is a fixed multiset built from the selected Dreamcaller's tides
+The draft pool is a fixed multiset built from the selected Dream Avatar's tides
 using the tides4 algorithm. The same algorithm runs deterministically from a
-per-run seed so a given Dreamcaller and seed always produce the same pool.
+per-run seed so a given Dream Avatar and seed always produce the same pool.
 
 ### Pool Generation Algorithm
 
-At quest start, choosing a Dreamcaller resolves the run's draft pool as follows:
+At quest start, choosing a Dream Avatar resolves the run's draft pool as follows:
 
-1. Join the Dreamcaller's signature tide, if it has one.
-2. Draw a uniformly-random subset of 1 to 3 of the Dreamcaller's facet tides and
+1. Join the Dream Avatar's signature tide, if it has one.
+2. Draw a uniformly-random subset of 1 to 3 of the Dream Avatar's facet tides and
    join them. This is the main source of run-to-run variety.
-3. Top the bag up with the Dreamcaller's neutral tides until a full pool can be
+3. Top the bag up with the Dream Avatar's neutral tides until a full pool can be
    dealt.
 4. Shuffle the combined bag and deal it into the draft multiset, capped at 2
    copies of any single card (1 copy for [legendary](#rarity) cards). The default
    deal size is 150 cards.
-5. Exclude the Dreamcaller's starter cards from the pool.
+5. Exclude the Dream Avatar's starter cards from the pool.
 
 The resulting multiset is stored as `draftPoolCopiesByCard`. Because facet
-selection is random per run, two players with the same Dreamcaller still draft
+selection is random per run, two players with the same Dream Avatar still draft
 from different pools.
 
 The same resolution step also builds the run's initial Dreamsign pool from the
@@ -385,14 +385,14 @@ never enhanced.
 
 The Battle site is the core gameplay element of Dreamtides, and it allows users
 to play a match against an AI opponent. Each battle has an assigned opponent
-dreamcaller with their own deck. The deck is built programmatically by emulating
-the player's own journey — running a simulated quest with that dreamcaller's tides
+dream avatar with their own deck. The deck is built programmatically by emulating
+the player's own journey — running a simulated quest with that dream avatar's tides
 up to the equivalent point in the run, biased toward the dreamscape's
 [affiliation](#affiliations) — so the decks the player faces grow stronger as the
 quest progresses. Opponents carry no dreamsigns in the early battles of a quest;
 from the midpoint onward each opponent brings a single dreamsign, up until the
 final boss.
-Before the battle begins, the opposing dreamcaller is displayed so the user can
+Before the battle begins, the opposing dream avatar is displayed so the user can
 understand any special abilities they have. Opposing dreamsigns are also shown.
 When the battle completes, the [Victory or Defeat](#victory--defeat) screen is
 shown along with any associated battle rewards. Battles use the rules from
@@ -400,13 +400,13 @@ shown along with any associated battle rewards. Battles use the rules from
 by default, so losing this battle ends the run.
 
 **UI:** The camera pans in to the battle scene. The "full body" card
-representation of the enemy dreamcaller animates in from a small size at the
+representation of the enemy dream avatar animates in from a small size at the
 center of the battle area. The enemy's deck is present in the center of the
-scene. The dreamcaller character within the card performs an animation. The
-rules text on the enemy dreamcaller is displayed, along with any enemy
+scene. The dream avatar character within the card performs an animation. The
+rules text on the enemy dream avatar is displayed, along with any enemy
 dreamsigns. A "start battle" button is shown. Clicking the start battle button
-causes the enemy dreamcaller to animate to their battle position in the small
-dreamcaller card format (head only, no text). The user dreamcaller and user
+causes the enemy dream avatar to animate to their battle position in the small
+dream avatar card format (head only, no text). The user dream avatar and user
 quest deck animate to their starting positions. The enemy quest deck animates to
 its starting position. An opening hand of cards is dealt to both players.
 
@@ -462,7 +462,7 @@ can be displayed as being on sale, for between 30% and 90% cost reduction. Effec
 or augury effects can also modify shop prices.
 
 **Home Specialty.** In Tumbleleaf Village, Tobias sells powerful cards at a
-discount, drawn directly from the player's Dreamcaller signature tide.
+discount, drawn directly from the player's Dream Avatar signature tide.
 
 **UI:** Tobias performs an animation and displays a speech bubble with some
 dialog when the camera arrives at this site. The items are displayed in a row,
@@ -486,7 +486,7 @@ median price is around 100 essence, and the restock option always costs 50 essen
 A Dreamsign Market always shows 3 dreamsigns to purchase plus a restock option.
 
 Dreamsigns are drawn from the run's shared Dreamsign pool, which was seeded from
-the selected Dreamcaller's tides, and are removed from that pool when shown.
+the selected Dream Avatar's tides, and are removed from that pool when shown.
 
 **Home Specialty.** In Pharaoh's Gate, Amunet allows the player to restock the
 dreamsign choices once for free.
@@ -744,7 +744,7 @@ enhancements are:
 
 | Guide | Home Dreamscape | Site | Enhancement |
 | ----- | --------------- | ---- | ----------- |
-| Tobias Tanglefur | Tumbleleaf Village | Card Shop | Discounted cards drawn from the player's Dreamcaller signature tide |
+| Tobias Tanglefur | Tumbleleaf Village | Card Shop | Discounted cards drawn from the player's Dream Avatar signature tide |
 | Amunet, the Tomb-Keeper | Pharaoh's Gate | Dreamsign Market | Restock the choices once for free |
 | Sigrún | Winterwake Fjords | Dreamsign Revelation | Always a choice (never a single random dreamsign), more choices, tailored to the deck |
 | Durgan Forgehammer | Frostforge | Transfiguration | Pick any card and any applicable transfiguration |
@@ -777,7 +777,7 @@ the quest (on defeat).
 A Quest ends in victory if the user wins 7 battles. The 7th battle takes place in
 Limbo against **Apollyon, the Doom of Humanity**, the final boss of Dreamtides.
 Apollyon appears in one of many forms, each with its own unique abilities,
-dreamsigns, or custom cards in its deck. See [Boss Dreamcallers](bosses.md) for
+dreamsigns, or custom cards in its deck. See [Boss Dream Avatars](bosses.md) for
 details.
 
 ### Battle Rewards
@@ -807,7 +807,7 @@ Users can have a maximum of 12 dreamsigns at any time. If they would receive
 another dreamsign, an overlay is shown and they must immediately purge a
 dreamsign.
 
-Users may have only 1 dreamcaller.
+Users may have only 1 dream avatar.
 
 ## Banes
 
@@ -819,7 +819,7 @@ or for free alongside ordinary cards. See [Banes](banes.md) for more information
 
 ## Dream Atlas
 
-The Dream Atlas is the world map players navigate after Dreamcaller selection. It
+The Dream Atlas is the world map players navigate after Dream Avatar selection. It
 is a layered, branching path that flows from **Firstlight Meadow** to the **final
 boss**, rendered as a 3D web of circular miniature "worlds" joined by glowing
 lines. The player carves a single route through it, one dreamscape at a time.

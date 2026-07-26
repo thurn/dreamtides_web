@@ -79,8 +79,8 @@ function readArtifact(rootDir, jsoncPath) {
 
 /**
  * The committed tides artifact, parsed (comments stripped). Returns the full
- * `{ version, tides, tidePoolByDreamcaller }` shape so the editor has each tide's
- * id, role, color, annotations, provenance UUIDs (dreamcallerId / leanCardId),
+ * `{ version, tides, tidePoolByDreamAvatar }` shape so the editor has each tide's
+ * id, role, color, annotations, provenance UUIDs (dreamAvatarId / leanCardId),
  * and decklist.
  */
 export function readTidesArtifact({ rootDir = ROOT, jsoncPath } = {}) {

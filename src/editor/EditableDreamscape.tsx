@@ -13,8 +13,8 @@ import DreamscapeResidents, {
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 import type {
   AffiliationOption,
-  DreamcallerAssignmentAction,
-  DreamcallerOption,
+  DreamAvatarAssignmentAction,
+  DreamAvatarOption,
   DreamscapeCardSize,
   EditableDreamscapeField,
   EditorDreamscapeRecord,
@@ -27,12 +27,12 @@ export interface EditableDreamscapeProps {
   guides: GuideOption[];
   affiliations: AffiliationOption[];
   siteTypes: string[];
-  dreamcallers: DreamcallerOption[];
-  regionNameByDreamcaller: Map<string, string>;
+  dreamAvatars: DreamAvatarOption[];
+  regionNameByDreamAvatar: Map<string, string>;
   residentStatus: ResidentAssignmentStatus;
-  onAssignDreamcaller: (
+  onAssignDreamAvatar: (
     record: EditorDreamscapeRecord,
-    action: DreamcallerAssignmentAction,
+    action: DreamAvatarAssignmentAction,
     params: { inId?: string; outId?: string },
   ) => void;
   saveEntryFor: (field: EditableDreamscapeField) => EditableFieldSaveEntry | null;
@@ -191,10 +191,10 @@ export default function EditableDreamscape({
   guides,
   affiliations,
   siteTypes,
-  dreamcallers,
-  regionNameByDreamcaller,
+  dreamAvatars,
+  regionNameByDreamAvatar,
   residentStatus,
-  onAssignDreamcaller,
+  onAssignDreamAvatar,
   saveEntryFor,
   onFieldBeginEdit,
   onFieldDraftChange,
@@ -516,10 +516,10 @@ export default function EditableDreamscape({
           <DreamscapeResidents
             record={record}
             size={size}
-            dreamcallers={dreamcallers}
-            regionNameByDreamcaller={regionNameByDreamcaller}
+            dreamAvatars={dreamAvatars}
+            regionNameByDreamAvatar={regionNameByDreamAvatar}
             status={residentStatus}
-            onAssign={(action, params) => onAssignDreamcaller(record, action, params)}
+            onAssign={(action, params) => onAssignDreamAvatar(record, action, params)}
           />
         ) : null}
       </div>

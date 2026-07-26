@@ -8,8 +8,8 @@ function state(overrides: Partial<QuestState> = {}): QuestState {
   return {
     ...base,
     completionLevel: 2,
-    dreamcaller: {
-      id: "dreamcaller-uuid",
+    dreamAvatar: {
+      id: "dream-avatar-uuid",
       name: "The Wayfinder",
       title: "Bearer of the Last Light",
       renderedText: "A fixture ability.",
@@ -32,7 +32,7 @@ function state(overrides: Partial<QuestState> = {}): QuestState {
 }
 
 describe("buildQuestFailedView", () => {
-  it("builds the interactive Dreamcaller portrait and terminal battle summary", () => {
+  it("builds the interactive DreamAvatar portrait and terminal battle summary", () => {
     const view = buildQuestFailedView(state());
 
     expect(view).toMatchObject({
@@ -41,8 +41,8 @@ describe("buildQuestFailedView", () => {
       title: "Quest Ended",
       message: "Your journey ends here.",
       reasonLabel: "Score Threshold Reached",
-      dreamcaller: {
-        id: "dreamcaller-uuid",
+      dreamAvatar: {
+        id: "dream-avatar-uuid",
         name: "The Wayfinder",
         title: "Bearer of the Last Light",
         ability: "A fixture ability.",
@@ -73,10 +73,10 @@ describe("buildQuestFailedView", () => {
     expect(view?.reasonLabel).toBe(label);
   });
 
-  it("uses the draw copy and tolerates a missing Dreamcaller", () => {
+  it("uses the draw copy and tolerates a missing DreamAvatar", () => {
     const view = buildQuestFailedView(
       state({
-        dreamcaller: null,
+        dreamAvatar: null,
         failureSummary: {
           ...state().failureSummary!,
           result: "draw",
@@ -88,7 +88,7 @@ describe("buildQuestFailedView", () => {
       result: "draw",
       title: "Stalemate",
       message: "Neither side could claim the dream.",
-      dreamcaller: null,
+      dreamAvatar: null,
     });
   });
 

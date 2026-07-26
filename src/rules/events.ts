@@ -58,9 +58,9 @@ export interface EventPayloads {
   RESET_QUEST: Record<string, never>;
   LOAD_STATE: { snapshot: unknown; battle?: unknown };
 
-  // --- dreamcaller ---
-  SELECT_DREAMCALLER: { dreamcallerId: string };
-  REROLL_DREAMCALLER_OFFER: Record<string, never>;
+  // --- dreamAvatar ---
+  SELECT_DREAM_AVATAR: { dreamAvatarId: string };
+  REROLL_DREAM_AVATAR_OFFER: Record<string, never>;
 
   // --- navigation ---
   SET_SCREEN: { screen: unknown; activeSiteId?: string | null };
@@ -248,8 +248,8 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   START_QUEST: true,
   RESET_QUEST: true,
   LOAD_STATE: true,
-  SELECT_DREAMCALLER: true,
-  REROLL_DREAMCALLER_OFFER: true,
+  SELECT_DREAM_AVATAR: true,
+  REROLL_DREAM_AVATAR_OFFER: true,
   SET_SCREEN: true,
   TRAVEL_TO_DREAMSCAPE: true,
   MARK_SITE_VISITED: true,

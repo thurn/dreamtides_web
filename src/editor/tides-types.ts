@@ -1,6 +1,6 @@
 import type {
   Tides4DeckJson,
-  Tides4DreamcallerPool,
+  Tides4DreamAvatarPool,
 } from "../draft/pool/tides4-io";
 
 /** The annotation fields the tides editor can change on a tide. */
@@ -9,13 +9,13 @@ export type EditableTideField = "displayName" | "displayDescription" | "color";
 /**
  * The full committed tides artifact as returned by the tides editor API
  * (`GET /api/editor/tides`). Carries the editable tide list and the per
- * Dreamcaller pools, plus which `file` (e.g. `tides4`) it was read from.
+ * DreamAvatar pools, plus which `file` (e.g. `tides4`) it was read from.
  */
 export interface TidesArtifact {
   file: string;
   version: number;
   tides: Tides4DeckJson[];
-  tidePoolByDreamcaller: Record<string, Tides4DreamcallerPool>;
+  tidePoolByDreamAvatar: Record<string, Tides4DreamAvatarPool>;
 }
 
 /** A request to change one tide's annotation field. */
@@ -33,10 +33,10 @@ export interface SaveTideFieldResponse {
 }
 
 /**
- * A Dreamcaller as served by `/dreamcallers-v2-data.json` — the identity behind a
- * signature tide. Used to render the Dreamcaller portrait and ability text.
+ * A DreamAvatar as served by `/dream-avatars-v2-data.json` — the identity behind a
+ * signature tide. Used to render the DreamAvatar portrait and ability text.
  */
-export interface EditorDreamcaller {
+export interface EditorDreamAvatar {
   id: string;
   name: string;
   title: string;

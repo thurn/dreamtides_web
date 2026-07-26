@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { getLogEntries, resetLog } from "../logging";
 import type { CardData } from "../types/cards";
-import type { DreamsignTemplate, ResolvedDreamcallerPackage } from "../types/content";
+import type { DreamsignTemplate, ResolvedDreamAvatarPackage } from "../types/content";
 import type { PoolDraftState, ReplayDraftState } from "../types/draft";
 import {
   generateShopInventory,
@@ -487,10 +487,10 @@ function makeReplayState(): ReplayDraftState {
 
 function makePackage(
   draftPoolCopiesByCard: Record<string, number>,
-): ResolvedDreamcallerPackage {
+): ResolvedDreamAvatarPackage {
   return {
-    dreamcaller: {
-      id: "dreamcaller-0",
+    dreamAvatar: {
+      id: "dream-avatar-0",
       name: "Test",
       title: "Test",
       renderedText: "",

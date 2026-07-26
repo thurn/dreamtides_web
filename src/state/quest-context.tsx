@@ -1,10 +1,10 @@
 import { createContext, useContext, type ReactNode } from "react";
 import type { QuestContent } from "../data/quest-content";
-import { toQuestDreamcaller } from "../data/dreamcaller-selection";
+import { toQuestDreamAvatar } from "../data/dream-avatar-selection";
 import type { CardData } from "../types/cards";
 import type {
-  DreamcallerContent,
-  ResolvedDreamcallerPackage,
+  DreamAvatarContent,
+  ResolvedDreamAvatarPackage,
 } from "../types/content";
 import type {
   CardKeywordModification,
@@ -34,9 +34,9 @@ export { deriveEntryIdCounter };
 /** Mutation functions exposed by the quest context. */
 export interface QuestMutations {
   changeEssence: (delta: number, source: string) => void;
-  startQuest: (dreamcaller: DreamcallerContent, seedOverride?: string) => void;
-  /** Request a shared debug reroll of the quest-start Dreamcaller offer. */
-  rerollDreamcallerOffer: () => void;
+  startQuest: (dreamAvatar: DreamAvatarContent, seedOverride?: string) => void;
+  /** Request a shared debug reroll of the quest-start DreamAvatar offer. */
+  rerollDreamAvatarOffer: () => void;
   completeSite: (siteId: string, source: string) => void;
   ensureRewardSiteRuntime: (siteId: string) => void;
   /**
@@ -145,7 +145,7 @@ export interface QuestMutations {
     effectDescription: string,
     effectDetails: Record<string, unknown>,
   ) => void;
-  setDreamcallerSelection: (resolvedPackage: ResolvedDreamcallerPackage) => void;
+  setDreamAvatarSelection: (resolvedPackage: ResolvedDreamAvatarPackage) => void;
   setCardSourceDebug: (
     cardSourceDebug: CardSourceDebugState | null,
     source: string,
@@ -188,10 +188,10 @@ export interface QuestMutations {
   dismissStartingDeckPopup: () => void;
   /**
    * Debug-only: replaces an uninitialized quest state with one parked on a
-   * developer QA scene (see `src/runtime/qa-scenes.ts`), skipping Dreamcaller
+   * developer QA scene (see `src/runtime/qa-scenes.ts`), skipping DreamAvatar
    * selection so screens reachable only by playing battles forward — such as
    * the Dream Atlas boss preview — can be opened directly for browser QA.
-   * Drives the `?goto=<scene>` runtime flag. No-op once a Dreamcaller is
+   * Drives the `?goto=<scene>` runtime flag. No-op once a DreamAvatar is
    * selected. Optional because only the live multiplayer provider implements
    * it; lightweight test/demo mutation stubs omit it.
    */
@@ -392,7 +392,7 @@ export function createDefaultState(): QuestState {
     essenceCap: 500,
     maxDreamsigns: 12,
     deck: [],
-    dreamcaller: null,
+    dreamAvatar: null,
     resolvedPackage: null,
     cardSourceDebug: null,
     remainingDreamsignPool: [],
@@ -424,13 +424,13 @@ export function createDefaultState(): QuestState {
   };
 }
 
-export function applyDreamcallerSelection(
+export function applyDreamAvatarSelection(
   prev: QuestState,
-  resolvedPackage: ResolvedDreamcallerPackage,
+  resolvedPackage: ResolvedDreamAvatarPackage,
 ): QuestState {
   return {
     ...prev,
-    dreamcaller: toQuestDreamcaller(resolvedPackage.dreamcaller),
+    dreamAvatar: toQuestDreamAvatar(resolvedPackage.dreamAvatar),
     resolvedPackage,
     remainingDreamsignPool: [...resolvedPackage.dreamsignPoolIds],
   };

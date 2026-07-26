@@ -1,6 +1,6 @@
 // The single entry point that wires the REAL content generators behind the five
 // reducer content seams. Until this runs, every provider-backed event
-// (`START_QUEST`, `SELECT_DREAMCALLER`, `ADD_CARD`, `ADD_DREAMSIGN`,
+// (`START_QUEST`, `SELECT_DREAM_AVATAR`, `ADD_CARD`, `ADD_DREAMSIGN`,
 // content-coupled `OPEN_SITE`, `REROLL_SHOP`, `BEGIN_BATTLE`) BOUNCES.
 //
 // The five adapters live OUTSIDE `src/rules/**` because they import impure

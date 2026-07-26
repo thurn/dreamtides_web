@@ -26,10 +26,10 @@ export interface QaScene {
   /** What the scene shows and why it is otherwise hard to reach. */
   description: string;
   /**
-   * When true, this scene's destination is the Dreamcaller-selection
+   * When true, this scene's destination is the DreamAvatar-selection
    * (`questStart`) screen the fresh room already opens on — i.e. its built
-   * state keeps `dreamcaller: null`. App must not hold the "Opening QA scene…"
-   * loading gate for such a scene: that gate waits for a Dreamcaller to be
+   * state keeps `dreamAvatar: null`. App must not hold the "Opening QA scene…"
+   * loading gate for such a scene: that gate waits for a DreamAvatar to be
    * selected and would otherwise spin forever.
    */
   landsOnQuestStart?: boolean;
@@ -43,17 +43,17 @@ export interface QaScene {
 }
 
 /**
- * The Dreamcaller selection screen a run opens on. This is the fresh-room
- * `questStart` state ({@link createDefaultState}, `dreamcaller: null`), which
+ * The DreamAvatar selection screen a run opens on. This is the fresh-room
+ * `questStart` state ({@link createDefaultState}, `dreamAvatar: null`), which
  * the "Create Game" lobby button also lands on — parking a room directly on it
- * lets the choose-your-Dreamcaller UI be QA'd from a `?goto=` URL without
+ * lets the choose-your-avatar UI be QA'd from a `?goto=` URL without
  * clicking through the lobby first.
  */
-const DREAMCALLER_SELECT_SCENE: QaScene = {
-  id: "dreamcaller-select",
-  label: "Dreamcaller Select",
+const DREAM_AVATAR_SELECT_SCENE: QaScene = {
+  id: "dream-avatar-select",
+  label: "Avatar Select",
   description:
-    "The choose-your-Dreamcaller screen a run opens on, parked directly on " +
+    "The choose-your-avatar screen a run opens on, parked directly on " +
     "questStart for UI QA without creating a game from the lobby.",
   landsOnQuestStart: true,
   build: () => createDefaultState(),
@@ -155,7 +155,7 @@ function atlasLayerScene(displayLayer: number): QaScene {
  * the same mapping as `atlasN`. Replaying N - 1 real completions produces the
  * reachable frontier for that layer; the scene enters its topmost available
  * dreamscape, marks every non-Battle site visited, and parks on the keeper
- * battle exactly before the opposing-Dreamcaller preview.
+ * battle exactly before the opposing-Avatar preview.
  */
 function battleLayerSceneState(displayLayer: number): QaScene["build"] {
   return (questContent) => {
@@ -223,7 +223,7 @@ function battleLayerScene(displayLayer: number): QaScene {
     label: `Battle (Layer ${String(displayLayer)})`,
     description:
       `The Layer ${String(displayLayer)} keeper battle, parked on the opposing ` +
-      `Dreamcaller preview with opponent strength tuned for that run depth.`,
+      `Avatar preview with opponent strength tuned for that run depth.`,
     build: battleLayerSceneState(displayLayer),
   };
 }
@@ -233,7 +233,7 @@ const BATTLE_SCENE: QaScene = {
   id: "battle",
   label: "Battle (Layer 1)",
   description:
-    "The Layer 1 keeper battle, parked on the opposing Dreamcaller preview.",
+    "The Layer 1 keeper battle, parked on the opposing Avatar preview.",
   build: battleLayerSceneState(1),
 };
 
@@ -463,7 +463,7 @@ const POOL_VIEWER_SCENE: QaScene = {
 
 /**
  * The starting-deck reveal popup over the starter dreamscape. The popup is
- * driven by persisted state — it shows the first time a run has a Dreamcaller
+ * driven by persisted state — it shows the first time a run has a DreamAvatar
  * and has not yet seen it — so this scene builds the starter dreamscape and
  * clears `hasSeenStartingDeckPopup`, and `QuestApp` reveals the popup on its
  * own. Otherwise reached only on the very first entry into a fresh dreamscape;
@@ -633,7 +633,7 @@ function siteScene(
 
 /** All registered QA scenes, keyed by `id`. */
 export const QA_SCENES: readonly QaScene[] = [
-  DREAMCALLER_SELECT_SCENE,
+  DREAM_AVATAR_SELECT_SCENE,
   ATLAS_SCENE,
   // Atlas resting screen at each reachable frontier, numbered by the UI's
   // "Layer N" column label (columns I–VII). Column I is the starter you begin

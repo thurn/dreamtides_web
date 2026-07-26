@@ -1,22 +1,22 @@
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { token } from "../../primitives/tokens";
 import {
-  DreamcallerPortrait,
-  type DreamcallerVisual,
-} from "../hud/DreamcallerPortrait";
+  DreamAvatarPortrait,
+  type DreamAvatarVisual,
+} from "../hud/DreamAvatarPortrait";
 import { ResourceChip } from "../hud/ResourceChip";
 
 /** Which combatant this status card describes. */
 export type BattleStatusOwner = "player" | "enemy";
 export type BattleStatusRelationship = "near" | "far";
 
-// DreamcallerPortrait's sized framing gives WebKit an intrinsic square inside
+// DreamAvatarPortrait's sized framing gives WebKit an intrinsic square inside
 // the reveal-source inline flex instead of asking it to resolve a cyclic 100%
 // width from the surrounding content-sized battle status.
-const BATTLE_STATUS_DREAMCALLER_PX = 44;
+const BATTLE_STATUS_DREAM_AVATAR_PX = 44;
 
-/** Semantic profile revealed from a populated battle Dreamcaller portrait. */
-export interface BattleStatusDreamcallerProfile {
+/** Semantic profile revealed from a populated battle DreamAvatar portrait. */
+export interface BattleStatusDreamAvatarProfile {
   readonly id: string;
   readonly ability: string;
   readonly unavailable?: boolean;
@@ -27,10 +27,10 @@ export interface BattleStatusDisplayProps {
   readonly owner: BattleStatusOwner;
   /** Relationship of this canonical combatant to the current local perspective. */
   readonly relationship?: BattleStatusRelationship;
-  /** Dreamcaller whose head portrait anchors the card, or null while it loads. */
-  readonly dreamcaller: DreamcallerVisual | null;
+  /** DreamAvatar whose head portrait anchors the card, or null while it loads. */
+  readonly dreamAvatar: DreamAvatarVisual | null;
   /** Optional identity and ability copy revealed from the portrait. */
-  readonly dreamcallerProfile?: BattleStatusDreamcallerProfile;
+  readonly dreamAvatarProfile?: BattleStatusDreamAvatarProfile;
   /** Energy currently available to this combatant. */
   readonly currentEnergy: number;
   /** Maximum energy available to this combatant. */
@@ -43,14 +43,14 @@ export interface BattleStatusDisplayProps {
 
 /**
  * The glass status object on a battle board: energy at left, a cropped
- * Dreamcaller portrait at center, and points at right. It has no interaction or
+ * DreamAvatar portrait at center, and points at right. It has no interaction or
  * phase state; callers only place the complete card.
  */
 export function BattleStatusDisplay({
   owner,
   relationship,
-  dreamcaller,
-  dreamcallerProfile,
+  dreamAvatar,
+  dreamAvatarProfile,
   currentEnergy,
   maxEnergy,
   points,
@@ -97,11 +97,11 @@ export function BattleStatusDisplay({
         />
       </div>
       <div style={{ width: token("--touch-min") }}>
-        {dreamcaller === null ? (
+        {dreamAvatar === null ? (
           <div
             role="img"
-            aria-label="Dreamcaller portrait loading"
-            data-battle-status-dreamcaller-placeholder=""
+            aria-label="Avatar portrait loading"
+            data-battle-status-dream-avatar-placeholder=""
             style={{
               width: "100%",
               height: token("--touch-min"),
@@ -110,12 +110,12 @@ export function BattleStatusDisplay({
             }}
           />
         ) : (
-          <DreamcallerPortrait
-            dreamcaller={dreamcaller}
+          <DreamAvatarPortrait
+            dreamAvatar={dreamAvatar}
             variant="thumb"
-            size={BATTLE_STATUS_DREAMCALLER_PX}
-            profile={dreamcallerProfile}
-            unavailable={dreamcallerProfile?.unavailable}
+            size={BATTLE_STATUS_DREAM_AVATAR_PX}
+            profile={dreamAvatarProfile}
+            unavailable={dreamAvatarProfile?.unavailable}
           />
         )}
       </div>

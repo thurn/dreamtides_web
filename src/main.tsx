@@ -69,10 +69,10 @@ if (pathname === "/editor" || pathname === "/cards") {
   const { default: GlossaryEditorApp } =
     await import("./editor/GlossaryEditorApp");
   renderStrict(<GlossaryEditorApp />);
-} else if (pathname === "/dreamcallers") {
-  const { default: DreamcallerEditorApp } =
-    await import("./editor/DreamcallerEditorApp");
-  renderStrict(<DreamcallerEditorApp />);
+} else if (pathname === "/dream-avatars") {
+  const { default: DreamAvatarEditorApp } =
+    await import("./editor/DreamAvatarEditorApp");
+  renderStrict(<DreamAvatarEditorApp />);
 } else if (pathname === "/tides") {
   const { default: TidesEditorApp } = await import("./editor/TidesEditorApp");
   renderStrict(<TidesEditorApp />);
@@ -94,14 +94,14 @@ if (pathname === "/editor" || pathname === "/cards") {
   renderStrict(<ImageViewerApp />);
 } else if (pathname === "/opponent") {
   // Standalone opponent-generation debugging tool: simulate the pre-battle
-  // opponent build (Dreamcaller, dreamsigns, deck) for any run position and
+  // opponent build (DreamAvatar, dreamsigns, deck) for any run position and
   // dreamscape, and re-roll the same parameters. See `src/debug/OpponentDebugApp`.
   const { default: OpponentDebugApp } =
     await import("./debug/OpponentDebugApp");
   renderStrict(<OpponentDebugApp />);
 } else if (pathname === "/sigdecks") {
   // Temporary visualization: the real draft deck most strongly correlated with
-  // each signature-carrying Dreamcaller. See `src/debug/SignatureDecksApp`.
+  // each signature-carrying avatar. See `src/debug/SignatureDecksApp`.
   const { default: SignatureDecksApp } =
     await import("./debug/SignatureDecksApp");
   renderStrict(<SignatureDecksApp />);

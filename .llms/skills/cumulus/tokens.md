@@ -127,7 +127,7 @@ Each --t-* bundles face + weight + size/line-height: apply a voice with one toke
 | `--font-rules-canon` | `var(--primitive-font-rules)` | Fira Sans Condensed — rules text |
 | `--t-wordmark` | `600 clamp(72px, 10vw, 150px)/0.9 var(--primitive-font-serif)` | Dreamtides main-menu wordmark |
 | `--t-display` | `600 40px/1.04 var(--primitive-font-serif)` | screen hero title |
-| `--t-hero` | `600 46px/1.05 var(--primitive-font-serif)` | dreamcaller-select hero name |
+| `--t-hero` | `600 46px/1.05 var(--primitive-font-serif)` | dream-avatar-select hero name |
 | `--t-hero-epithet` | `500 21px/1.15 var(--primitive-font-serif)` | the epithet under the hero name |
 | `--t-title` | `600 30px/1.08 var(--primitive-font-serif)` | place / screen name |
 | `--t-title-sm` | `600 23px/1.12 var(--primitive-font-serif)` | card-detail name, section |

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { makeBattleTestCardDatabase, makeBattleTestDreamcallers, makeBattleTestSite, makeBattleTestState } from "../test-support";
+import { makeBattleTestCardDatabase, makeBattleTestDreamAvatars, makeBattleTestSite, makeBattleTestState } from "../test-support";
 import { createBattleInit, type CreateBattleInitInput } from "./create-battle-init";
 import { deriveBattleSeed } from "../random";
 import type { DraftRecord } from "../../data/cards-v2-database";
@@ -8,7 +8,7 @@ import { buildPoolData } from "../../draft/pool/pool-data";
 import type { RunPoolContext } from "../../data/quest-content";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
-import type { DreamcallerContent } from "../../types/content";
+import type { DreamAvatarContent } from "../../types/content";
 import type { PoolCard } from "../../draft/pool/types";
 import type { CardKeywordModification, CardTypeChange } from "../../types/quest";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
@@ -24,7 +24,7 @@ function makeBaseInput(): CreateBattleInitInput {
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),
-    dreamcallers: makeBattleTestDreamcallers(),
+    dreamAvatars: makeBattleTestDreamAvatars(),
   };
 }
 
@@ -145,13 +145,13 @@ function makeSteeredPoolContext(): {
 }
 
 /**
- * Returns a single-Dreamcaller set whose Dreamcaller carries the given signature
+ * Returns a single-DreamAvatar set whose DreamAvatar carries the given signature
  * cards, so the enemy descriptor is deterministic and its signature steers the
  * enemy deck.
  */
-function makeSignatureDreamcallers(
+function makeSignatureDreamAvatars(
   signatureCards: readonly string[],
-): DreamcallerContent[] {
+): DreamAvatarContent[] {
   return [
     {
       id: "signature-dc",
@@ -712,27 +712,27 @@ describe("createBattleInit", () => {
       expect(Object.isFrozen(init.enemyDescriptor)).toBe(true);
     });
 
-    it("uses the selected Dreamcaller's exact identity for real enemies", () => {
+    it("uses the selected DreamAvatar's exact identity for real enemies", () => {
       const input = makeBaseInput();
       const init = createBattleInit(input);
-      const selectedDreamcaller = input.dreamcallers.find((dreamcaller) =>
-        init.enemyDescriptor.id.startsWith(`enemy:${dreamcaller.id}:`),
+      const selectedDreamAvatar = input.dreamAvatars.find((dreamAvatar) =>
+        init.enemyDescriptor.id.startsWith(`enemy:${dreamAvatar.id}:`),
       );
 
-      expect(selectedDreamcaller).toBeDefined();
-      expect(init.enemyDescriptor.name).toBe(selectedDreamcaller?.name);
-      // The descriptor carries the Dreamcaller's title as its subtitle so the
+      expect(selectedDreamAvatar).toBeDefined();
+      expect(init.enemyDescriptor.name).toBe(selectedDreamAvatar?.name);
+      // The descriptor carries the DreamAvatar's title as its subtitle so the
       // Battle Start name plate and the in-battle side summary can show it.
-      expect(init.enemyDescriptor.subtitle).toBe(selectedDreamcaller?.title);
+      expect(init.enemyDescriptor.subtitle).toBe(selectedDreamAvatar?.title);
       for (const prefix of ["Shadow", "Nightmare", "Phantom", "Dark"]) {
         expect(init.enemyDescriptor.name.startsWith(`${prefix} `)).toBe(false);
       }
     });
 
-    it("falls back to a synthetic descriptor when no dreamcallers are available", () => {
+    it("falls back to a synthetic descriptor when no dreamAvatars are available", () => {
       const init = createBattleInit({
         ...makeBaseInput(),
-        dreamcallers: [],
+        dreamAvatars: [],
       });
 
       expect(init.enemyDescriptor.id).toBe("enemy:fallback");
@@ -847,12 +847,12 @@ describe("createBattleInit", () => {
     it("builds a steered deck from a poolContext decklist that resolves and pads", () => {
       const { poolContext, decklistA } = makeSteeredPoolContext();
       const cardDatabase = makeBattleTestCardDatabase();
-      // Steer toward decklist A: its cards as the Dreamcaller signature.
+      // Steer toward decklist A: its cards as the DreamAvatar signature.
       const init = createBattleInit({
         ...makeBaseInput(),
         cardDatabase,
         poolContext,
-        dreamcallers: makeSignatureDreamcallers(decklistA),
+        dreamAvatars: makeSignatureDreamAvatars(decklistA),
       });
 
       expect(init.enemyDeckDefinition.length).toBeGreaterThanOrEqual(
@@ -883,7 +883,7 @@ describe("createBattleInit", () => {
           poolContext,
           fitModel,
           draftRecords,
-          dreamcallers: makeSignatureDreamcallers(decklistA),
+          dreamAvatars: makeSignatureDreamAvatars(decklistA),
           seedOverride,
         });
 
@@ -910,7 +910,7 @@ describe("createBattleInit", () => {
       const input: CreateBattleInitInput = {
         ...makeBaseInput(),
         poolContext,
-        dreamcallers: makeSignatureDreamcallers(decklistA),
+        dreamAvatars: makeSignatureDreamAvatars(decklistA),
         seedOverride: 777,
       };
       const first = createBattleInit(input);
@@ -1000,8 +1000,8 @@ describe("createBattleInit", () => {
       for (const summary of init.dreamsignSummaries) {
         expect(Object.isFrozen(summary)).toBe(true);
       }
-      if (init.dreamcallerSummary !== null) {
-        expect(Object.isFrozen(init.dreamcallerSummary)).toBe(true);
+      if (init.dreamAvatarSummary !== null) {
+        expect(Object.isFrozen(init.dreamAvatarSummary)).toBe(true);
       }
       expect(Object.isFrozen(init.atlasSnapshot)).toBe(true);
     });

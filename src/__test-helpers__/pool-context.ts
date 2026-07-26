@@ -6,7 +6,7 @@ import type { RunPoolContext } from "../data/quest-content";
 
 /**
  * A small hand-authored corpus for tests that drive the quest-start build path
- * (`buildDreamcallerPackage`). It provides three real-ish decklists of twenty
+ * (`buildDreamAvatarPackage`). It provides three real-ish decklists of twenty
  * card names each and a name index covering every name, so the idf3 generator
  * has a usable corpus and `resolvePool` can map the generated names back onto
  * card numbers. Assertions over the resulting pool should be property-based
@@ -79,7 +79,7 @@ function idForName(name: string): string {
 }
 
 /**
- * Builds a {@link RunPoolContext} usable by `buildDreamcallerPackage`. The
+ * Builds a {@link RunPoolContext} usable by `buildDreamAvatarPackage`. The
  * generated pool is keyed by the corpus card ids (`corpus-<cardNumber>`), all of
  * which resolve through the id index built from the same card records, so
  * `resolvePool` maps the pool onto card numbers through the collision-free id

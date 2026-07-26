@@ -9,7 +9,7 @@ import { makeRng } from "../draft/pool/rng.ts";
 import type { Tides4DecksJson } from "../draft/pool/tides4-io.ts";
 import { generateTides4 } from "../draft/pool/variant-tides4.ts";
 import type { PoolData } from "../draft/pool/types.ts";
-import type { DreamcallerContent } from "../types/content.ts";
+import type { DreamAvatarContent } from "../types/content.ts";
 import { hashStringToSeed, type RunPoolContext } from "./quest-content.ts";
 import { selectedTides4Decks } from "./tides4-preview.ts";
 
@@ -48,7 +48,7 @@ function makeTides4(): Tides4DecksJson {
   return {
     version: 1,
     tides,
-    tidePoolByDreamcaller: {
+    tidePoolByDreamAvatar: {
       "dc-a": { starter: "tide-sig-1", facets: facetIds, neutral: neutralIds },
     },
   };
@@ -72,7 +72,7 @@ function makeContext(
   };
 }
 
-const DREAMCALLER = { id: "dc-a" } as unknown as DreamcallerContent;
+const DREAM_AVATAR = { id: "dc-a" } as unknown as DreamAvatarContent;
 
 describe("selectedTides4Decks", () => {
   it("returns the tides the draft deals from, in join order, matching generateTides4", () => {
@@ -80,11 +80,11 @@ describe("selectedTides4Decks", () => {
     const ctx = makeContext(decks, "tides4");
     const seed = "quest-seed-1";
 
-    const preview = selectedTides4Decks(ctx, DREAMCALLER, seed);
+    const preview = selectedTides4Decks(ctx, DREAM_AVATAR, seed);
     const direct = generateTides4(
-      makeRng(hashStringToSeed(`${seed}:${DREAMCALLER.id}`)),
+      makeRng(hashStringToSeed(`${seed}:${DREAM_AVATAR.id}`)),
       ctx.poolData,
-      DREAMCALLER.id,
+      DREAM_AVATAR.id,
     );
 
     expect(preview.map((t) => t.id)).toEqual(direct.selected.slice(1));
@@ -94,22 +94,22 @@ describe("selectedTides4Decks", () => {
 
   it("is deterministic for a given seed", () => {
     const ctx = makeContext(makeTides4(), "tides4");
-    const a = selectedTides4Decks(ctx, DREAMCALLER, "seed-x");
-    const b = selectedTides4Decks(ctx, DREAMCALLER, "seed-x");
+    const a = selectedTides4Decks(ctx, DREAM_AVATAR, "seed-x");
+    const b = selectedTides4Decks(ctx, DREAM_AVATAR, "seed-x");
     expect(a.map((t) => t.id)).toEqual(b.map((t) => t.id));
   });
 
   it("returns nothing for a non-tides4 run", () => {
     const ctx = makeContext(makeTides4(), "idf3");
-    expect(selectedTides4Decks(ctx, DREAMCALLER, "seed-x")).toEqual([]);
+    expect(selectedTides4Decks(ctx, DREAM_AVATAR, "seed-x")).toEqual([]);
   });
 
   it("returns nothing when no tide artifact is loaded", () => {
     const ctx = makeContext(undefined, "tides4");
-    expect(selectedTides4Decks(ctx, DREAMCALLER, "seed-x")).toEqual([]);
+    expect(selectedTides4Decks(ctx, DREAM_AVATAR, "seed-x")).toEqual([]);
   });
 
   it("returns nothing when there is no pool context", () => {
-    expect(selectedTides4Decks(undefined, DREAMCALLER, "seed-x")).toEqual([]);
+    expect(selectedTides4Decks(undefined, DREAM_AVATAR, "seed-x")).toEqual([]);
   });
 });

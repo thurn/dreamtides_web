@@ -2,7 +2,7 @@ import type { DraftRecord } from "../../data/cards-v2-database";
 import { seedProvenanceVariantCopy } from "../../draft/pool/seed-provenance-copy";
 import type { PoolVariant } from "../../draft/pool/types";
 import type { CardData } from "../../types/cards";
-import type { ResolvedDreamcallerPackage, SeedProvenanceSummary, Tides4ProvenanceSummary } from "../../types/content";
+import type { ResolvedDreamAvatarPackage, SeedProvenanceSummary, Tides4ProvenanceSummary } from "../../types/content";
 import type { DraftState } from "../../types/draft";
 import type { CardGalleryCardView } from "../../cumulus/components/card/CardGalleryPanel";
 import type { PoolViewerCostFilter, PoolViewerDisclosureView, PoolViewerFilterView, PoolViewerReplayRowView, PoolViewerSourceId, PoolViewerView } from "../../cumulus/screens/PoolViewerScreen";
@@ -26,7 +26,7 @@ interface PoolEntry {
 export interface BuildPoolViewerViewInput {
   cardDatabase: ReadonlyMap<number, CardData>;
   draftState: DraftState | null;
-  resolvedPackage: ResolvedDreamcallerPackage | null;
+  resolvedPackage: ResolvedDreamAvatarPackage | null;
   replayRecord: DraftRecord | null;
   poolVariant: PoolVariant | null;
   seedProvenance: SeedProvenanceSummary | null;
@@ -47,7 +47,7 @@ export interface PoolViewerAdapterInput {
   onPoolCardDragStart?: (card: CardData) => void;
   poolVariant?: PoolVariant | null;
   replayRecord?: DraftRecord | null;
-  resolvedPackage?: ResolvedDreamcallerPackage | null;
+  resolvedPackage?: ResolvedDreamAvatarPackage | null;
   seedProvenance?: SeedProvenanceSummary | null;
   tides4Provenance?: Tides4ProvenanceSummary | null;
   title?: string;
@@ -59,7 +59,7 @@ const SOURCE_LABELS: Record<PoolViewerSourceId, string> = {
 };
 
 const EMPTY_LABELS: Record<PoolViewerSourceId, string> = {
-  run: "No run pool cards are available.", tides: "This run was not built from tide decks.", catalog: "No cards match the current filters.", idf3: "No IDF3 starting decklist is available for this run.", signature: "This Dreamcaller has no signature cards.", deck: "The replay record has no resolvable deck cards.", history: "The replay record has no pick history.",
+  run: "No run pool cards are available.", tides: "This run was not built from tide decks.", catalog: "No cards match the current filters.", idf3: "No IDF3 starting decklist is available for this run.", signature: "This avatar has no signature cards.", deck: "The replay record has no resolvable deck cards.", history: "The replay record has no pick history.",
 };
 
 /** Maps complete domain inputs into deterministic screen data with UUID-based identity. */
@@ -97,10 +97,10 @@ function cardsById(database: ReadonlyMap<number, CardData>): ReadonlyMap<string,
   return new Map([...database.values()].map((card) => [card.id.toLowerCase(), card]));
 }
 
-function sourceOptions(isReplay: boolean, pkg: ResolvedDreamcallerPackage | null, tides: Tides4ProvenanceSummary | null) {
+function sourceOptions(isReplay: boolean, pkg: ResolvedDreamAvatarPackage | null, tides: Tides4ProvenanceSummary | null) {
   const ids: PoolViewerSourceId[] = isReplay ? ["deck", "history", "catalog"] : ["run", ...(tides?.tides.length ? ["tides" as const] : []), "catalog"];
   if (!isReplay && (pkg?.starterDecklistCardNumbers?.length ?? 0) > 0) ids.push("idf3");
-  if ((pkg?.dreamcaller.signatureCardIds?.length ?? 0) > 0) ids.push("signature");
+  if ((pkg?.dreamAvatar.signatureCardIds?.length ?? 0) > 0) ids.push("signature");
   return ids.map((id) => ({ id, label: SOURCE_LABELS[id] }));
 }
 
@@ -113,7 +113,7 @@ function entriesFor(source: PoolViewerSourceId, input: BuildPoolViewerViewInput,
   if (source === "idf3") return (input.resolvedPackage?.starterDecklistCardNumbers ?? []).flatMap((number, index) => {
     const card = input.cardDatabase.get(number); return card === undefined ? [] : [{ ...entry("idf3", card, null), entryId: `idf3:${String(index)}:${card.id}` }];
   });
-  if (source === "signature") return (input.resolvedPackage?.dreamcaller.signatureCardIds ?? []).flatMap((id, index) => {
+  if (source === "signature") return (input.resolvedPackage?.dreamAvatar.signatureCardIds ?? []).flatMap((id, index) => {
     const card = byId.get(id.toLowerCase()); return card === undefined ? [] : [{ ...entry("signature", card, null), entryId: `signature:${String(index)}:${card.id}` }];
   });
   if (source === "deck") return deckEntries(input.replayRecord?.mainboardIds ?? [], byId);

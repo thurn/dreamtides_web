@@ -69,7 +69,7 @@ Named components derive their internal registration from their semantic model:
   adapter.
 - `AtlasNode` owns the source face, activation, Atlas primary, and ordered
   Dreamsign, site, and affiliation secondaries.
-- Dreamcaller, Dreamsign, tide, site, ability, resource, stat, and similar
+- Dream Avatar, Dreamsign, tide, site, ability, resource, stat, and similar
   components derive strict InfoCard variants internally.
 - An inline rules term uses a named stationary component such as `GlossaryTerm`.
 - A compact or bespoke source shape becomes a named semantic component or strict
@@ -208,7 +208,7 @@ worktree buildable and tested.
    reading, mobile popup and press-in-place decisions, glossary secondaries,
    activation, drag arbitration, and ambient-motion pausing. Migrate draft,
    deck, shop, battle, docs, mockups, debug, and transitional Cumulus consumers.
-4. **Converge named InfoCard entities.** Move Dreamcaller, Dreamsign, tide,
+4. **Converge named InfoCard entities.** Move Dream Avatar, Dreamsign, tide,
    site, ability, resource, stat, HUD, and inline glossary interactions onto
    strict semantic components and migrate all of their Cumulus consumers.
 5. **Absorb Atlas into the entity system.** Fold the reveal role into

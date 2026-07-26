@@ -150,7 +150,7 @@ fill/sheen/blur/rim/shadow.
       duplicate-literal detector green with the baseline trimmed).
 - [ ] **Browser QA** (glass tint unchanged): `npm run dev -- --port 5174`, then
       `agent-browser --session cumulus-p1-glass` at
-      `http://localhost:5174/?goto=atlas` (or the Dreamcaller-select flow) —
+      `http://localhost:5174/?goto=atlas` (or the Dream Avatar-select flow) —
       press a tide disc, assert the reveal popover shows the warm violet-black
       glass and the deck-viewer backdrop reads neutral; assert
       `window.innerWidth`/`location.href` first. Tear down your server.

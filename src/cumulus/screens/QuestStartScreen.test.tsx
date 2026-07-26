@@ -6,18 +6,18 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   QuestStartScreen,
-  type DreamcallerOfferView,
+  type DreamAvatarOfferView,
 } from "./QuestStartScreen";
 import { CumulusRoot } from "../CumulusRoot";
 import { lookupGlossaryTerm } from "../../data/glossary";
 
-const OFFERED: DreamcallerOfferView[] = [
+const OFFERED: DreamAvatarOfferView[] = [
   {
     id: "caller-1",
     name: "Mira of Lanterns",
     title: "Keeper of the Threshold Flame",
     imageNumber: "0009",
-    renderedText: "First dreamcaller.",
+    renderedText: "First dreamAvatar.",
     startingEssence: 230,
     signatureCards: [{ id: "sig-1-0", name: "Lantern Seer" }],
     tides: [],
@@ -27,7 +27,7 @@ const OFFERED: DreamcallerOfferView[] = [
     name: "Vey of Embers",
     title: "The Ashen Cartographer",
     imageNumber: "0010",
-    renderedText: "Second dreamcaller.",
+    renderedText: "Second dreamAvatar.",
     startingEssence: 250,
     signatureCards: [],
     tides: [
@@ -75,26 +75,29 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
 }
 
 describe("Cumulus QuestStartScreen (carousel)", () => {
-  it("renders a page with identity, essence, and a Choose action per Dreamcaller", () => {
+  it("renders a page with identity, essence, and a Choose action per DreamAvatar", () => {
     const { container, root } = mount(
       <QuestStartScreen
-        dreamcallers={OFFERED}
+        dreamAvatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}
       />,
     );
 
-    expect(container.textContent).toContain("Choose Your Dreamcaller");
+    expect(container.textContent).toContain("Choose Your Avatar");
+    expect(container.innerHTML).not.toMatch(
+      new RegExp(["dream", "caller"].join(""), "i"),
+    );
     for (const dc of OFFERED) {
       expect(
-        container.querySelector(`[data-dreamcaller-page="${dc.id}"]`),
+        container.querySelector(`[data-dream-avatar-page="${dc.id}"]`),
       ).not.toBeNull();
       expect(
-        container.querySelector(`[data-choose-dreamcaller="${dc.id}"]`),
+        container.querySelector(`[data-choose-dream-avatar="${dc.id}"]`),
       ).not.toBeNull();
       expect(
         container.querySelector(
-          `[data-choose-dreamcaller="${dc.id}"] [data-glass-variant="accent"]`,
+          `[data-choose-dream-avatar="${dc.id}"] [data-glass-variant="accent"]`,
         ),
       ).not.toBeNull();
       const essence = container.querySelector(
@@ -108,10 +111,10 @@ describe("Cumulus QuestStartScreen (carousel)", () => {
     });
   });
 
-  it("shows the tides cluster only for Dreamcallers that have tides", () => {
+  it("shows the tides cluster only for DreamAvatars that have tides", () => {
     const { container, root } = mount(
       <QuestStartScreen
-        dreamcallers={OFFERED}
+        dreamAvatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}
       />,
@@ -119,12 +122,12 @@ describe("Cumulus QuestStartScreen (carousel)", () => {
 
     // caller-1 has no tides → no cluster.
     expect(
-      container.querySelector(`[data-dreamcaller-tides="caller-1"]`),
+      container.querySelector(`[data-dream-avatar-tides="caller-1"]`),
     ).toBeNull();
 
     // caller-2 has two tides → cluster with two collapsed discs.
     const cluster = container.querySelector(
-      `[data-dreamcaller-tides="caller-2"]`,
+      `[data-dream-avatar-tides="caller-2"]`,
     );
     expect(cluster).not.toBeNull();
     expect(cluster?.querySelectorAll("[data-tide-disc]")).toHaveLength(2);
@@ -134,18 +137,18 @@ describe("Cumulus QuestStartScreen (carousel)", () => {
     });
   });
 
-  it("calls onPick with the Dreamcaller's id when its Choose action is pressed", () => {
+  it("calls onPick with the DreamAvatar's id when its Choose action is pressed", () => {
     const onPick = vi.fn();
     const { container, root } = mount(
       <QuestStartScreen
-        dreamcallers={OFFERED}
+        dreamAvatars={OFFERED}
         onPick={onPick}
         onReroll={vi.fn()}
       />,
     );
 
     const button = container.querySelector<HTMLButtonElement>(
-      `[data-choose-dreamcaller="caller-2"] button`,
+      `[data-choose-dream-avatar="caller-2"] button`,
     );
     if (button === null) {
       throw new Error("Missing Choose button");
@@ -165,21 +168,21 @@ describe("Cumulus QuestStartScreen (carousel)", () => {
     const onReroll = vi.fn();
     const { container, root } = mount(
       <QuestStartScreen
-        dreamcallers={OFFERED}
+        dreamAvatars={OFFERED}
         onPick={vi.fn()}
         onReroll={onReroll}
       />,
     );
 
     const control = container.querySelector<HTMLElement>(
-      "[data-dreamcaller-reroll-control]",
+      "[data-dream-avatar-reroll-control]",
     );
     const button = container.querySelector<HTMLButtonElement>(
-      '[data-testid="reroll-dreamcallers"]',
+      '[data-testid="reroll-dream-avatars"]',
     );
     expect(control?.style.position).toBe("absolute");
     expect(control?.style.right).not.toBe("");
-    expect(button?.getAttribute("aria-label")).toBe("Reroll Dreamcallers");
+    expect(button?.getAttribute("aria-label")).toBe("Reroll Avatars");
     act(() => {
       button?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
@@ -190,24 +193,27 @@ describe("Cumulus QuestStartScreen (carousel)", () => {
     });
   });
 
-  it("reveals every defined term from the whole Dreamcaller ability box", () => {
+  it("reveals every defined term from the whole DreamAvatar ability box", () => {
     const reclaim = lookupGlossaryTerm("reclaim");
     const bane = lookupGlossaryTerm("bane");
     if (reclaim === undefined || bane === undefined) {
       throw new Error("Expected representative glossary fixtures");
     }
     const ability = `Reclaim a bane, then ${reclaim.variants?.[0] ?? "reclaim"} it.`;
-    const dreamcaller = { ...OFFERED[0], renderedText: ability };
+    const dreamAvatar = { ...OFFERED[0], renderedText: ability };
     const { container, root } = mount(
       <QuestStartScreen
-        dreamcallers={[dreamcaller]}
+        dreamAvatars={[dreamAvatar]}
         onPick={vi.fn()}
         onReroll={vi.fn()}
       />,
     );
 
     const source = container.querySelector<HTMLElement>(
-      `[data-dreamcaller-ability="${dreamcaller.id}"]`,
+      `[data-dream-avatar-ability="${dreamAvatar.id}"]`,
+    );
+    expect(source?.getAttribute("aria-label")).toBe(
+      `Avatar ability: ${ability}`,
     );
     expect(source?.dataset.revealPrimaryVariant).toBe("source");
     expect(source?.dataset.revealSecondaryTitles).toBe("");
@@ -241,28 +247,28 @@ describe("Cumulus QuestStartScreen (desktop)", () => {
     stubViewport(true);
   });
 
-  it("renders every Dreamcaller as a standalone column, not a carousel", () => {
+  it("renders every DreamAvatar as a standalone column, not a carousel", () => {
     const { container, root } = mount(
       <QuestStartScreen
-        dreamcallers={OFFERED}
+        dreamAvatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}
       />,
     );
 
-    expect(container.textContent).toContain("Choose Your Dreamcaller");
+    expect(container.textContent).toContain("Choose Your Avatar");
     // No carousel pages on desktop.
-    expect(container.querySelector("[data-dreamcaller-page]")).toBeNull();
+    expect(container.querySelector("[data-dream-avatar-page]")).toBeNull();
     for (const dc of OFFERED) {
       expect(
-        container.querySelector(`[data-dreamcaller-column="${dc.id}"]`),
+        container.querySelector(`[data-dream-avatar-column="${dc.id}"]`),
       ).not.toBeNull();
       expect(
-        container.querySelector(`[data-choose-dreamcaller="${dc.id}"]`),
+        container.querySelector(`[data-choose-dream-avatar="${dc.id}"]`),
       ).not.toBeNull();
       expect(
         container.querySelector(
-          `[data-choose-dreamcaller="${dc.id}"] [data-glass-variant="accent"]`,
+          `[data-choose-dream-avatar="${dc.id}"] [data-glass-variant="accent"]`,
         ),
       ).not.toBeNull();
       const essence = container.querySelector(
@@ -276,10 +282,10 @@ describe("Cumulus QuestStartScreen (desktop)", () => {
     });
   });
 
-  it("shows a hover-only tide disc per tide for tided Dreamcallers", () => {
+  it("shows a hover-only tide disc per tide for tided DreamAvatars", () => {
     const { container, root } = mount(
       <QuestStartScreen
-        dreamcallers={OFFERED}
+        dreamAvatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}
       />,
@@ -287,12 +293,12 @@ describe("Cumulus QuestStartScreen (desktop)", () => {
 
     // caller-1 has no tides → no tides node.
     expect(
-      container.querySelector(`[data-dreamcaller-tides="caller-1"]`),
+      container.querySelector(`[data-dream-avatar-tides="caller-1"]`),
     ).toBeNull();
 
     // caller-2 has two tides → one hover-only disc per tide (no expand/collapse).
     const tides = container.querySelector(
-      `[data-dreamcaller-tides="caller-2"]`,
+      `[data-dream-avatar-tides="caller-2"]`,
     );
     expect(tides).not.toBeNull();
     expect(tides?.querySelectorAll("[data-tide-disc]")).toHaveLength(2);

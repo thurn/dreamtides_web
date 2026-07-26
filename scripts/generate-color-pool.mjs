@@ -3,7 +3,7 @@
 //
 // The pool-construction algorithm itself lives in `src/draft/pool/index.ts`
 // and is the single source of truth shared with the in-app draft test harness:
-// this script only loads the source data (cards_v2.toml, dreamcallers_v2.toml)
+// this script only loads the source data (cards_v2.toml, dream_avatars_v2.toml)
 // and formats the result. Node strips the TypeScript types on import, so the
 // same code runs here and in the browser — pools generated here match the app
 // byte-for-byte for a given seed.
@@ -16,10 +16,10 @@
 //   - draftArchetypes  the color+archetype slices that supply color-tied themes
 // cards_v2.toml supplies the card list (names); the metadata is merged in here.
 //
-// A Dreamcaller's `draftArchetypes` (from {@link DREAMCALLER_ARCHETYPES} in
-// `src/data/dreamcallers-v2-database.ts`) seed construction; passing
-// `--dreamcaller <name|id>` seeds from that list, the same way picking the
-// Dreamcaller does in the app.
+// A DreamAvatar's `draftArchetypes` (from {@link DREAM_AVATAR_ARCHETYPES} in
+// `src/data/dream-avatars-v2-database.ts`) seed construction; passing
+// `--dream-avatar <name|id>` seeds from that list, the same way picking the
+// DreamAvatar does in the app.
 //
 // Card names are written newline-delimited to stdout; a 2-of is printed twice,
 // so the line count equals the pool size. A one-line summary (color identity,
@@ -28,7 +28,7 @@
 // Usage:
 //   node scripts/generate-color-pool.mjs                         # random pool
 //   node scripts/generate-color-pool.mjs --seed 42               # reproducible
-//   node scripts/generate-color-pool.mjs --dreamcaller "Kell Tarn"
+//   node scripts/generate-color-pool.mjs --dream-avatar "Kell Tarn"
 import { readFileSync } from "node:fs";
 import { parse } from "smol-toml";
 import {
@@ -37,14 +37,14 @@ import {
   poolToLines,
 } from "../src/draft/pool/index.ts";
 import { CARDS_V2_POOL_METADATA } from "../src/data/cards-v2-metadata.ts";
-import { DREAMCALLER_ARCHETYPES } from "../src/data/dreamcallers-v2-database.ts";
+import { DREAM_AVATAR_ARCHETYPES } from "../src/data/dream-avatars-v2-database.ts";
 
 export { buildPoolData };
 
 const CARD_TOML = new URL("../data/tabula/cards_v2.toml", import.meta.url)
   .pathname;
-const DREAMCALLER_TOML = new URL(
-  "../data/tabula/dreamcallers_v2.toml",
+const DREAM_AVATAR_TOML = new URL(
+  "../data/tabula/dream_avatars_v2.toml",
   import.meta.url,
 ).pathname;
 
@@ -72,27 +72,27 @@ export function loadCards(tomlPath = CARD_TOML) {
 }
 
 /**
- * Load the v2 Dreamcaller identities. The id, name, and title come from
- * dreamcallers_v2.toml; the optional `draftArchetypes` list that seeds pool
- * construction is merged in by name from {@link DREAMCALLER_ARCHETYPES}. A
- * Dreamcaller without that list rolls the unconstrained random pool.
+ * Load the v2 DreamAvatar identities. The id, name, and title come from
+ * dream_avatars_v2.toml; the optional `draftArchetypes` list that seeds pool
+ * construction is merged in by name from {@link DREAM_AVATAR_ARCHETYPES}. A
+ * DreamAvatar without that list rolls the unconstrained random pool.
  */
-export function loadDreamcallers(tomlPath = DREAMCALLER_TOML) {
+export function loadDreamAvatars(tomlPath = DREAM_AVATAR_TOML) {
   const parsed = parse(readFileSync(tomlPath, "utf8"));
-  return (parsed.dreamcaller ?? []).map((dreamcaller) => ({
-    id: dreamcaller.id,
-    name: dreamcaller.name,
-    title: dreamcaller.title ?? "",
-    draftArchetypes: DREAMCALLER_ARCHETYPES[dreamcaller.name],
+  return (parsed.dreamAvatar ?? []).map((dreamAvatar) => ({
+    id: dreamAvatar.id,
+    name: dreamAvatar.name,
+    title: dreamAvatar.title ?? "",
+    draftArchetypes: DREAM_AVATAR_ARCHETYPES[dreamAvatar.name],
   }));
 }
 
-/** Find a Dreamcaller by exact id or case-insensitive name. */
-export function findDreamcaller(dreamcallers, query) {
+/** Find a DreamAvatar by exact id or case-insensitive name. */
+export function findDreamAvatar(dreamAvatars, query) {
   const lowered = query.toLowerCase();
   return (
-    dreamcallers.find((d) => d.id === query) ??
-    dreamcallers.find((d) => d.name.toLowerCase() === lowered) ??
+    dreamAvatars.find((d) => d.id === query) ??
+    dreamAvatars.find((d) => d.name.toLowerCase() === lowered) ??
     null
   );
 }
@@ -101,7 +101,7 @@ export function findDreamcaller(dreamcallers, query) {
  * Run one generation for `seed` against prebuilt `poolData`, returning the
  * newline-delimited card lines (2-ofs duplicated, sorted by name), the color
  * identity, the selected theme labels, and the pool size. Pass `seedArchetypes`
- * (a Dreamcaller's `draftArchetypes`) to seed construction from that list.
+ * (a DreamAvatar's `draftArchetypes`) to seed construction from that list.
  */
 export function runSeed(seed, poolData, seedArchetypes, variant) {
   const pool = generatePoolFromData(poolData, seed >>> 0, seedArchetypes, variant);
@@ -122,11 +122,11 @@ function parseSeed(argv) {
   return (Math.random() * 2 ** 32) >>> 0;
 }
 
-function parseDreamcaller(argv) {
-  const i = argv.indexOf("--dreamcaller");
+function parseDreamAvatar(argv) {
+  const i = argv.indexOf("--dream-avatar");
   if (i !== -1 && argv[i + 1] != null) return argv[i + 1];
-  const eq = argv.find((a) => a.startsWith("--dreamcaller="));
-  if (eq) return eq.slice("--dreamcaller=".length);
+  const eq = argv.find((a) => a.startsWith("--dream-avatar="));
+  if (eq) return eq.slice("--dream-avatar=".length);
   return null;
 }
 
@@ -145,17 +145,17 @@ function main() {
   const variant = parseVariant(argv);
   const poolData = buildPoolData(loadCards());
 
-  const dreamcallerQuery = parseDreamcaller(argv);
+  const dreamAvatarQuery = parseDreamAvatar(argv);
   let seedArchetypes;
-  let dreamcallerLabel = "none";
-  if (dreamcallerQuery !== null) {
-    const dreamcaller = findDreamcaller(loadDreamcallers(), dreamcallerQuery);
-    if (!dreamcaller) {
-      process.stderr.write(`# unknown dreamcaller: ${dreamcallerQuery}\n`);
+  let dreamAvatarLabel = "none";
+  if (dreamAvatarQuery !== null) {
+    const dreamAvatar = findDreamAvatar(loadDreamAvatars(), dreamAvatarQuery);
+    if (!dreamAvatar) {
+      process.stderr.write(`# unknown dreamAvatar: ${dreamAvatarQuery}\n`);
       process.exit(1);
     }
-    seedArchetypes = dreamcaller.draftArchetypes;
-    dreamcallerLabel = `${dreamcaller.name}${
+    seedArchetypes = dreamAvatar.draftArchetypes;
+    dreamAvatarLabel = `${dreamAvatar.name}${
       seedArchetypes ? "" : " (open pool)"
     }`;
   }
@@ -168,7 +168,7 @@ function main() {
   );
   process.stdout.write(`${lines.join("\n")}\n`);
   process.stderr.write(
-    `# variant=${variant} dreamcaller=${dreamcallerLabel} identity=${identity} seed=${seed} size=${lines.length} themes=${themes.join(", ")}\n`,
+    `# variant=${variant} dreamAvatar=${dreamAvatarLabel} identity=${identity} seed=${seed} size=${lines.length} themes=${themes.join(", ")}\n`,
   );
 }
 

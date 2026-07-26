@@ -1,8 +1,8 @@
-// Full-screen mockup for GroupPanel — a Dreamcaller-select screen: two liquid-
-// glass panes over real scene art, each collecting one Dreamcaller's related
+// Full-screen mockup for GroupPanel — a DreamAvatar-select screen: two liquid-
+// glass panes over real scene art, each collecting one DreamAvatar's related
 // info (portrait, name + title, ability) into a single unit — the canonical
-// "console" use this component's own doc comment calls out. Both Dreamcallers
-// are real records from `data/tabula/dreamcallers_v2.toml` (Threxan, Drusus
+// "console" use this component's own doc comment calls out. Both DreamAvatars
+// are real records from `data/tabula/dream_avatars_v2.toml` (Threxan, Drusus
 // Calvus), identified by id, with their real portraits and real ability text
 // (`rendered-text`) — never invented copy.
 
@@ -12,15 +12,15 @@ import { assetUrl } from "../../../runtime/asset-url";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 
-/** A Dreamcaller's character render, resolved the same way `assetUrl` resolves
- * every other binary art asset (see `src/components/DreamcallerPortrait.tsx`
+/** A DreamAvatar's character render, resolved the same way `assetUrl` resolves
+ * every other binary art asset (see `src/components/DreamAvatarPortrait.tsx`
  * for the production equivalent — reimplemented locally here so this
  * cumulus-isolated mockup never imports from `src/components/`). */
-function dreamcallerPortraitUrl(imageNumber: string): string {
-  return assetUrl(`/dreamcallers/${imageNumber}.png`);
+function dreamAvatarPortraitUrl(imageNumber: string): string {
+  return assetUrl(`/dream-avatars/${imageNumber}.png`);
 }
 
-interface DreamcallerCard {
+interface DreamAvatarCard {
   id: string;
   name: string;
   title: string;
@@ -28,8 +28,8 @@ interface DreamcallerCard {
   ability: string;
 }
 
-// Real dreamcaller records, from data/tabula/dreamcallers_v2.toml.
-const CANDIDATES: DreamcallerCard[] = [
+// Real dreamAvatar records, from data/tabula/dream_avatars_v2.toml.
+const CANDIDATES: DreamAvatarCard[] = [
   {
     id: "B99936CA-97F9-4930-AF5A-FA9EF92557EF",
     name: "Threxan",
@@ -46,7 +46,7 @@ const CANDIDATES: DreamcallerCard[] = [
   },
 ];
 
-function Candidate({ dreamcaller }: { dreamcaller: DreamcallerCard }) {
+function Candidate({ dreamAvatar }: { dreamAvatar: DreamAvatarCard }) {
   // GroupPanel is a fixed glass pane: the consumer sizes it (the wrapper) and
   // lays out its content (the inner flex column), so the pane itself exposes no
   // width / layout / radius knobs.
@@ -63,8 +63,8 @@ function Candidate({ dreamcaller }: { dreamcaller: DreamcallerCard }) {
           }}
         >
           <img
-            src={dreamcallerPortraitUrl(dreamcaller.imageNumber)}
-            alt={`${dreamcaller.name}, ${dreamcaller.title}`}
+            src={dreamAvatarPortraitUrl(dreamAvatar.imageNumber)}
+            alt={`${dreamAvatar.name}, ${dreamAvatar.title}`}
             style={{
               width: 92,
               height: 92,
@@ -74,9 +74,9 @@ function Candidate({ dreamcaller }: { dreamcaller: DreamcallerCard }) {
             }}
           />
           <div>
-            <div style={{ font: token("--t-lead"), color: token("--text-primary") }}>{dreamcaller.name}</div>
+            <div style={{ font: token("--t-lead"), color: token("--text-primary") }}>{dreamAvatar.name}</div>
             <div style={{ font: token("--t-caption"), color: token("--text-secondary"), marginTop: 2 }}>
-              {dreamcaller.title}
+              {dreamAvatar.title}
             </div>
           </div>
           <div
@@ -88,7 +88,7 @@ function Candidate({ dreamcaller }: { dreamcaller: DreamcallerCard }) {
             }}
           />
           <p style={{ font: token("--t-rules"), fontSize: 15, lineHeight: 1.4, color: token("--text-primary"), margin: 0 }}>
-            {dreamcaller.ability}
+            {dreamAvatar.ability}
           </p>
         </div>
       </GroupPanel>
@@ -126,7 +126,7 @@ export function GroupPanelMockup() {
           New Dream
         </p>
         <h1 style={{ font: token("--t-display"), margin: `${token("--space-3")} 0 0`, color: token("--text-primary") }}>
-          Choose Your Dreamcaller
+          Choose Your Avatar
         </h1>
       </div>
 
@@ -138,8 +138,8 @@ export function GroupPanelMockup() {
           justifyContent: "center",
         }}
       >
-        {CANDIDATES.map((dreamcaller) => (
-          <Candidate key={dreamcaller.id} dreamcaller={dreamcaller} />
+        {CANDIDATES.map((dreamAvatar) => (
+          <Candidate key={dreamAvatar.id} dreamAvatar={dreamAvatar} />
         ))}
       </div>
 

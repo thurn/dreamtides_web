@@ -44,8 +44,8 @@ tune the economy.
   (single currency per the doc). Dreamsign Market and shop restocks cost essence.
 - **Banes:** retire the separate "Cleanse" site; Purge selects and removes banes
   (cheaply / free) alongside ordinary cards.
-- **Dreamcaller selection:** only change is **starting essence default → 200**
-  (keep the per-Dreamcaller `startingEssence` override). **Do not modify pool
+- **Dream Avatar selection:** only change is **starting essence default → 200**
+  (keep the per-Dream Avatar `startingEssence` override). **Do not modify pool
   construction in any other way.** Signature cards remain defined in data but are
   not shown in the selection UI (current behavior).
 - **Placeholder assets:** game-icons.net glyphs (already referenced in the doc) +
@@ -58,7 +58,7 @@ tune the economy.
 
 ## 3. Current-state gap summary
 
-Already implemented and reused as-is: Dreamcaller selection (3 offered, tides4
+Already implemented and reused as-is: Dream Avatar selection (3 offered, tides4
 preview, seed mint), essence economy + cap, draft pool (`draftPoolCopiesByCard`
 / `remainingCopiesByCard`), Purge + pricing, Essence site, Card Shop,
 Transfiguration, Duplication, Dreamsign offering/draft/reward, battle
@@ -90,7 +90,7 @@ Major gaps this spec closes:
 - Dreamsigns: `src/dreamsign/dreamsign-pool.ts`
 - Sites screens: `src/screens/*Screen.tsx`, `src/journey_v2/`
 - Selection: `src/screens/QuestStartScreen.tsx`,
-  `src/data/dreamcaller-selection.ts`
+  `src/data/dream-avatar-selection.ts`
 - Asset pipeline: `scripts/setup-assets.mjs`
 - Data: `data/tabula/*.toml`
 
@@ -141,7 +141,7 @@ acceptance criteria.
   dreamscape/guide/affiliation content types, known-dreamsign carrier fields,
   new `SiteType` members (`DreamAugury`, `DreamsignMarket`, `TemptingOffer`,
   `Gamble`, `TemporalFork`), retire `Cleanse`/Omens from the type surface.
-- **Manual QA:** load the app, confirm it still boots to the Dreamcaller select
+- **Manual QA:** load the app, confirm it still boots to the Dream Avatar select
   screen with no console errors after the type/data changes (compile-only QA;
   behavior arrives in later tasks). Landscape + portrait.
 - **Acceptance:** TOML compiles to JSON; loaders return typed data; `npm run
@@ -226,10 +226,10 @@ acceptance criteria.
 
 **T1.5 — Economy/selection tweak: starting essence 200.**
 - Set the default starting essence to 200 in the appropriate default
-  (`createDefaultState` / dreamcaller default), keeping per-Dreamcaller override.
+  (`createDefaultState` / dream avatar default), keeping per-Dream Avatar override.
 - **Do not touch pool construction.**
 - **Manual QA:** start a quest; confirm the selection screen shows 200 (or the
-  Dreamcaller's override) and the run begins with that essence. Landscape +
+  Dream Avatar's override) and the run begins with that essence. Landscape +
   portrait.
 - **Acceptance:** essence value correct on screen and in state. *(May be merged
   into T1.4 if the same agent owns economy; kept separate here for clarity.)*
@@ -252,13 +252,13 @@ acceptance criteria.
   screenshots attached.
 
 **T2.2 — Battle opponent decks.**
-- Build the opponent deck by simulating a quest with the opponent Dreamcaller's
+- Build the opponent deck by simulating a quest with the opponent Dream Avatar's
   tides + the dreamscape affiliation bias to the equivalent progress point;
   opponents carry one dreamsign from the run midpoint onward.
-- Logging of opponent-deck construction (dreamcaller, sim depth, affiliation,
+- Logging of opponent-deck construction (dream avatar, sim depth, affiliation,
   resulting decklist summary).
 - **Manual QA:** start battles at an early and a late dreamscape; confirm the
-  pre-battle opponent display shows the dreamcaller + (late only) a dreamsign,
+  pre-battle opponent display shows the dream avatar + (late only) a dreamsign,
   and the deck looks affiliation-leaning. Landscape + portrait.
 - **Acceptance:** opponent strength scales with progress; midpoint+ opponents
   show a dreamsign; QA confirms pre-battle display.

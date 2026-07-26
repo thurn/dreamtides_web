@@ -336,7 +336,7 @@ Dispatch a separate QA subagent using the QA Gate Protocol. The subagent must ve
 - `/editor` opens without creating or joining a quest room.
 - The loading state is visible before data resolves when network delay is simulated.
 - The loaded shell shows the editor title and source-card count.
-- The route does not show Firebase setup, Create Game, Dreamcaller selection, HUD, or room presence UI.
+- The route does not show Firebase setup, Create Game, Dream Avatar selection, HUD, or room presence UI.
 - At 1280x800 and 1440x900, the header text is visible and not clipped.
 - `window.__caps` has empty `errors`, `rejections`, and `consoleErrors`.
 

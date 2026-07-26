@@ -24,8 +24,8 @@ const FIXTURE_ACTIONS = [
     wait: 1.5,
   },
   {
-    id: "dreamcaller-arrival",
-    action: "animate-dreamcaller-portrait",
+    id: "dream-avatar-arrival",
+    action: "animate-dream-avatar-portrait",
     owner: "player",
     pause: 1,
     duration: 0.6,
@@ -324,14 +324,14 @@ describe("tutorial data", () => {
       validateTutorialActions([
         {
           id: "legacy-arrival",
-          action: "animate-dreamcaller-portrait",
+          action: "animate-dream-avatar-portrait",
           wait: 0,
         },
       ]),
     ).toEqual([
       {
         id: "legacy-arrival",
-        action: "animate-dreamcaller-portrait",
+        action: "animate-dream-avatar-portrait",
         owner: "player",
         pause: 0,
         duration: 1.2,

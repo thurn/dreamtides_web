@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type {
-  Dreamcaller,
+  DreamAvatar,
   Dreamsign,
   DreamscapeNode,
   QuestState,
@@ -14,7 +14,7 @@ import {
   buildSiteModels,
   dreamscapeSceneRef,
   dreamscapeTitle,
-  toQsbDreamcaller,
+  toQsbDreamAvatar,
   toQsbDreamsigns,
 } from "./dreamscape-view-model";
 
@@ -95,13 +95,13 @@ describe("buildSiteModels", () => {
   });
 });
 
-describe("toQsbDreamcaller", () => {
-  it("returns undefined before a Dreamcaller is chosen", () => {
-    expect(toQsbDreamcaller(null)).toBeUndefined();
+describe("toQsbDreamAvatar", () => {
+  it("returns undefined before a DreamAvatar is chosen", () => {
+    expect(toQsbDreamAvatar(null)).toBeUndefined();
   });
 
-  it("maps the Dreamcaller's title to the epithet and its imageNumber to a portrait ref", () => {
-    const dreamcaller: Dreamcaller = {
+  it("maps the DreamAvatar's title to the epithet and its imageNumber to a portrait ref", () => {
+    const dreamAvatar: DreamAvatar = {
       id: "dc-1",
       name: "Drusus Calvus",
       title: "Triumphator",
@@ -110,7 +110,7 @@ describe("toQsbDreamcaller", () => {
       portraitFocus: { x: 0.42, y: 0.18 },
       startingEssence: 200,
     };
-    const qsb = toQsbDreamcaller(dreamcaller);
+    const qsb = toQsbDreamAvatar(dreamAvatar);
     expect(qsb?.name).toBe("Drusus Calvus");
     expect(qsb?.epithet).toBe("Triumphator");
     expect(qsb?.ability).toBe("Gain 1 essence.");
@@ -158,7 +158,7 @@ describe("buildDreamscapeView", () => {
     const state = {
       essence: 240,
       deck: [{}, {}, {}],
-      dreamcaller: null,
+      dreamAvatar: null,
       dreamsigns: [],
       completionLevel: 2,
     } as unknown as QuestState;
@@ -175,7 +175,7 @@ describe("buildDreamscapeView", () => {
     const state = {
       essence: 240,
       deck: [],
-      dreamcaller: null,
+      dreamAvatar: null,
       dreamsigns: [],
       completionLevel: 2,
       siteRuntime: {
@@ -202,7 +202,7 @@ describe("buildDreamscapeView", () => {
     const state = {
       essence: 240,
       deck: [],
-      dreamcaller: null,
+      dreamAvatar: null,
       dreamsigns: [],
       completionLevel: 2,
       siteRuntime: {
@@ -267,11 +267,11 @@ describe("buildDreamscapeView", () => {
 });
 
 describe("buildDreamscapeHudView", () => {
-  it("reads essence, deck size, dreamcaller, and dreamsigns from live state", () => {
+  it("reads essence, deck size, dreamAvatar, and dreamsigns from live state", () => {
     const state = {
       essence: 10,
       deck: [{}, {}],
-      dreamcaller: null,
+      dreamAvatar: null,
       dreamsigns: [],
       completionLevel: 0,
     } as unknown as QuestState;

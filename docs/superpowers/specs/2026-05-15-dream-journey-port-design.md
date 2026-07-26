@@ -145,7 +145,7 @@ interface QuestStateProjection {
   readonly banes: readonly BaneEntry[];
   readonly draftPool: readonly Card[];
   readonly dreamsignPoolIds: readonly string[];
-  readonly dreamcaller: Dreamcaller;
+  readonly dreamAvatar: DreamAvatar;
   readonly resolvedPackage: ResolvedPackage;
 }
 ```
@@ -158,7 +158,7 @@ matches the CLI's `JourneyContext`, with `pacingLedger` and `history` dropped
 
 `buildContext(questState, content, site)` performs four translations:
 
-1. Reads card / dreamcaller / dreamsign catalogs from the quest prototype's
+1. Reads card / dream avatar / dreamsign catalogs from the quest prototype's
    content layer (already loaded at app startup; no extra I/O).
 2. Maps quest prototype types into journey-internal types via
    `content-bridge.ts`:
@@ -166,7 +166,7 @@ matches the CLI's `JourneyContext`, with `pacingLedger` and `history` dropped
      through. Rarity normalizes: `"Legendary"` → `"Rare"`, `"Starter"` →
      `"Starter"`, otherwise → `"Uncommon"` (the CLI's default bucket).
      `cardNumber` is retained for image lookups.
-   - `DreamcallerContent` → journey `Dreamcaller`. Fields map 1:1; `awakening`
+   - `DreamAvatarContent` → journey `DreamAvatar`. Fields map 1:1; `awakening`
      defaults to 0 if absent.
    - `DreamsignTemplate` → journey `Dreamsign`. `kind` derives from
      `packageTides`: non-empty → `tidal`; empty → `neutral`. `orientation` is
@@ -191,7 +191,7 @@ sha256(questState.seed + ":" + questState.atlas.startingNodeId + ":" + site.id).
 
 `questState.seed` is the per-quest random seed (a UUID string from
 `crypto.randomUUID()`) generated once at quest start by
-`startQuestFromDreamcaller` and persisted on `QuestState`. It supplies the
+`startQuestFromDreamAvatar` and persisted on `QuestState`. It supplies the
 per-game entropy axis: two fresh quests on the same atlas site land on
 different shapes and dream art. The `startingNodeId` and `siteId` axes keep
 seeds distinct across sites and across runs that share a seed in tests.
@@ -531,7 +531,7 @@ preferred. Timing test execution is part of test authoring.
 ### Hard rules
 
 - No test loads the full quest prototype `card-data.json`,
-  `dreamsign-data.json`, or `dreamcaller-data.json`. Fixture contexts are
+  `dreamsign-data.json`, or `dream-avatar-data.json`. Fixture contexts are
   hand-built.
 - No test uses fake timers or waits on time.
 - No test waits on network or filesystem, with the single exception of

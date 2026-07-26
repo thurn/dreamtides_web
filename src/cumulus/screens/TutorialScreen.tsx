@@ -14,7 +14,7 @@ import { token } from "../primitives/tokens";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { GLYPHS } from "../primitives/glyph";
 import { IconButton } from "../components/controls/IconButton";
-import type { BattleStatusDreamcallerProfile } from "../components/battle/BattleStatusDisplay";
+import type { BattleStatusDreamAvatarProfile } from "../components/battle/BattleStatusDisplay";
 import { CardBack } from "../components/battle/CardBack";
 import {
   DreamwellCard,
@@ -26,9 +26,9 @@ import {
   CARD_ASPECT_RATIO_VALUE,
 } from "../components/card/card-aspect";
 import {
-  DreamcallerPortrait,
-  type DreamcallerVisual,
-} from "../components/hud/DreamcallerPortrait";
+  DreamAvatarPortrait,
+  type DreamAvatarVisual,
+} from "../components/hud/DreamAvatarPortrait";
 import {
   CharacterDialogue,
   type CharacterDialogueModel,
@@ -60,16 +60,16 @@ import {
 } from "./mobile-battle-layout";
 import type {
   TutorialAction,
-  TutorialDreamcallerOwner,
+  TutorialDreamAvatarOwner,
   TutorialEditorSaveStatus,
   TutorialHowToPlayTrigger,
 } from "../../types/tutorial";
 import { renderTutorialInstructionParagraph } from "../internal/tutorial-instruction-text";
 import { parseTutorialInstructionMarkup } from "../../data/tutorial-instruction-markup";
 
-export interface TutorialDreamcallerView {
-  readonly visual: DreamcallerVisual;
-  readonly profile: BattleStatusDreamcallerProfile;
+export interface TutorialDreamAvatarView {
+  readonly visual: DreamAvatarVisual;
+  readonly profile: BattleStatusDreamAvatarProfile;
   readonly settled: boolean;
 }
 
@@ -86,8 +86,8 @@ export type TutorialDialogueView =
   | {
       readonly actionId?: string;
       readonly parentAction?: TutorialAction["action"];
-      readonly kind: "dreamcaller";
-      readonly owner: TutorialDreamcallerOwner;
+      readonly kind: "dreamAvatar";
+      readonly owner: TutorialDreamAvatarOwner;
       readonly duration?: number;
       readonly verticalOffset?: number;
       readonly bubbleWidth?: number;
@@ -96,7 +96,7 @@ export type TutorialDialogueView =
     };
 
 export interface TutorialChallengeParticipantView {
-  readonly owner: TutorialDreamcallerOwner;
+  readonly owner: TutorialDreamAvatarOwner;
   readonly card: MobileBattleCardView;
   readonly spark: number;
 }
@@ -105,22 +105,22 @@ export interface TutorialChallengeView {
   readonly actionId: string;
   readonly challenger: TutorialChallengeParticipantView;
   readonly defender: TutorialChallengeParticipantView;
-  readonly winnerOwner: TutorialDreamcallerOwner;
-  readonly loserOwner: TutorialDreamcallerOwner;
+  readonly winnerOwner: TutorialDreamAvatarOwner;
+  readonly loserOwner: TutorialDreamAvatarOwner;
 }
 
 export interface TutorialView {
   readonly battle: MobileBattleView;
   readonly cardDraw?: {
     readonly actionId: string;
-    readonly owner: TutorialDreamcallerOwner;
+    readonly owner: TutorialDreamAvatarOwner;
     readonly card: MobileBattleCardView;
   } | null;
   readonly opponentCardToReveal?: MobileBattleCardView | null;
   readonly dialogue: TutorialDialogueView | null;
-  readonly dreamcallers: Record<
-    TutorialDreamcallerOwner,
-    TutorialDreamcallerView
+  readonly dreamAvatars: Record<
+    TutorialDreamAvatarOwner,
+    TutorialDreamAvatarView
   >;
   readonly playbackRunId: string | null;
   readonly currentAction: TutorialAction | null;
@@ -158,9 +158,9 @@ export interface TutorialScreenProps {
   /** Multiplier applied to every timed part of the tutorial sequence. */
   readonly playbackSpeed?: number;
   readonly onActionComplete?: (runId: string, actionId: string) => void;
-  readonly onDreamcallerArrivalComplete?: (
-    dreamcallerId: string,
-    owner: TutorialDreamcallerOwner,
+  readonly onDreamAvatarArrivalComplete?: (
+    dreamAvatarId: string,
+    owner: TutorialDreamAvatarOwner,
   ) => void;
   readonly onHowToPlayPresented?: (
     runId: string,
@@ -199,7 +199,7 @@ interface TutorialDialogueAnchor {
   readonly top: number;
 }
 
-interface TutorialDreamcallerTrajectory {
+interface TutorialDreamAvatarTrajectory {
   readonly startX: number;
   readonly startY: number;
   readonly targetY: number;
@@ -590,7 +590,7 @@ function withOpponentCardPlayed(
   };
 }
 
-interface TutorialDreamcallerDialogueAnchor {
+interface TutorialDreamAvatarDialogueAnchor {
   readonly left: number;
   readonly top: number;
   readonly pointerPlacement: Extract<
@@ -599,7 +599,7 @@ interface TutorialDreamcallerDialogueAnchor {
   >;
 }
 
-function TutorialDreamcallerDialogue({
+function TutorialDreamAvatarDialogue({
   dialogue,
   visible,
   layoutKey,
@@ -607,7 +607,7 @@ function TutorialDreamcallerDialogue({
 }: {
   readonly dialogue: Extract<
     TutorialDialogueView,
-    { readonly kind: "dreamcaller" }
+    { readonly kind: "dreamAvatar" }
   >;
   readonly visible: boolean;
   readonly layoutKey: string;
@@ -615,7 +615,7 @@ function TutorialDreamcallerDialogue({
 }): ReactElement {
   const bubbleFrameRef = useRef<HTMLDivElement | null>(null);
   const [anchor, setAnchor] =
-    useState<TutorialDreamcallerDialogueAnchor | null>(null);
+    useState<TutorialDreamAvatarDialogueAnchor | null>(null);
 
   useLayoutEffect(() => {
     const screen = bubbleFrameRef.current?.closest<HTMLElement>(
@@ -623,7 +623,7 @@ function TutorialDreamcallerDialogue({
     );
     if (screen === null || screen === undefined) return undefined;
     const target = screen.querySelector<HTMLElement>(
-      `[data-testid="${dialogue.owner}-battle-status"] [data-dreamcaller-source]`,
+      `[data-testid="${dialogue.owner}-battle-status"] [data-dream-avatar-source]`,
     );
     const bubble = bubbleFrameRef.current?.querySelector<HTMLElement>("aside");
     if (target === null || bubble === null || bubble === undefined) {
@@ -631,7 +631,7 @@ function TutorialDreamcallerDialogue({
       return undefined;
     }
 
-    const pointerPlacement: TutorialDreamcallerDialogueAnchor["pointerPlacement"] =
+    const pointerPlacement: TutorialDreamAvatarDialogueAnchor["pointerPlacement"] =
       dialogue.owner === "enemy" ? "top-left" : "bottom-left";
     const updateAnchor = (): void => {
       const screenBox = screen.getBoundingClientRect();
@@ -694,8 +694,8 @@ function TutorialDreamcallerDialogue({
     <div
       ref={bubbleFrameRef}
       aria-hidden={!visible}
-      data-tutorial-dreamcaller-dialogue=""
-      data-tutorial-dreamcaller-dialogue-owner={dialogue.owner}
+      data-tutorial-dream-avatar-dialogue=""
+      data-tutorial-dream-avatar-dialogue-owner={dialogue.owner}
       style={{
         position: "absolute",
         zIndex: token("--layer-reveal"),
@@ -711,33 +711,33 @@ function TutorialDreamcallerDialogue({
         speakerName={dialogue.speakerName}
         text={dialogue.text}
         pointerPlacement={pointerPlacement}
-        testId={`tutorial-${dialogue.owner}-dreamcaller-speech-bubble`}
+        testId={`tutorial-${dialogue.owner}-dream-avatar-speech-bubble`}
       />
     </div>
   );
 }
 
-function TutorialDreamcallerArrival({
+function TutorialDreamAvatarArrival({
   screen,
-  dreamcaller,
+  dreamAvatar,
   owner,
   pause,
   duration,
   onComplete,
 }: {
   readonly screen: HTMLElement;
-  readonly dreamcaller: DreamcallerVisual;
-  readonly owner: TutorialDreamcallerOwner;
+  readonly dreamAvatar: DreamAvatarVisual;
+  readonly owner: TutorialDreamAvatarOwner;
   readonly pause: number;
   readonly duration: number;
   readonly onComplete: () => void;
 }): ReactElement | null {
   const [trajectory, setTrajectory] =
-    useState<TutorialDreamcallerTrajectory | null>(null);
+    useState<TutorialDreamAvatarTrajectory | null>(null);
 
   useLayoutEffect(() => {
     const target = screen.querySelector<HTMLElement>(
-      `[data-testid="${owner}-battle-status"] [data-battle-status-dreamcaller-placeholder]`,
+      `[data-testid="${owner}-battle-status"] [data-battle-status-dream-avatar-placeholder]`,
     );
     const dialoguePortrait = screen.querySelector<HTMLElement>(
       "[data-character-dialogue-portrait-frame]",
@@ -791,8 +791,8 @@ function TutorialDreamcallerArrival({
 
   return (
     <motion.div
-      data-tutorial-dreamcaller-arrival=""
-      data-tutorial-dreamcaller-owner={owner}
+      data-tutorial-dream-avatar-arrival=""
+      data-tutorial-dream-avatar-owner={owner}
       initial={{
         x: trajectory.startX,
         y: trajectory.startY,
@@ -821,7 +821,7 @@ function TutorialDreamcallerArrival({
         transformOrigin: "center",
       }}
     >
-      <DreamcallerPortrait dreamcaller={dreamcaller} variant="thumb" />
+      <DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="thumb" />
     </motion.div>
   );
 }
@@ -1523,7 +1523,7 @@ export function TutorialScreen({
   editor,
   playbackSpeed = 1,
   onActionComplete,
-  onDreamcallerArrivalComplete,
+  onDreamAvatarArrivalComplete,
   onHowToPlayPresented,
   onHowToPlayDismissed,
   onPlayerCardPlay,
@@ -1577,10 +1577,10 @@ export function TutorialScreen({
   if (view.dialogue !== null) lastDialogue.current = view.dialogue;
   const renderedDialogue = view.dialogue ?? lastDialogue.current;
   const opponentDeckCardIds = view.battle.enemy?.deckCardIds ?? [];
-  const dreamcallerArrival = useMemo(
+  const dreamAvatarArrival = useMemo(
     () =>
       view.playbackRunId !== null &&
-      view.currentAction?.action === "animate-dreamcaller-portrait"
+      view.currentAction?.action === "animate-dream-avatar-portrait"
         ? {
             key: `${view.playbackRunId}:${view.currentAction.id}`,
             owner: view.currentAction.owner,
@@ -1589,10 +1589,10 @@ export function TutorialScreen({
               view.currentAction.duration,
               playbackSpeed,
             ),
-            dreamcaller: view.dreamcallers[view.currentAction.owner],
+            dreamAvatar: view.dreamAvatars[view.currentAction.owner],
           }
         : null,
-    [playbackSpeed, view.currentAction, view.dreamcallers, view.playbackRunId],
+    [playbackSpeed, view.currentAction, view.dreamAvatars, view.playbackRunId],
   );
   const opponentCardDraw = useMemo(
     () =>
@@ -1721,12 +1721,12 @@ export function TutorialScreen({
           challenge: view.challenge,
         }
       : null;
-  const dreamcallerSettled = useCallback(
-    (owner: TutorialDreamcallerOwner): boolean =>
-      view.dreamcallers[owner].settled ||
-      (dreamcallerArrival?.owner === owner &&
-        arrivedActionKey === dreamcallerArrival.key),
-    [arrivedActionKey, dreamcallerArrival, view.dreamcallers],
+  const dreamAvatarSettled = useCallback(
+    (owner: TutorialDreamAvatarOwner): boolean =>
+      view.dreamAvatars[owner].settled ||
+      (dreamAvatarArrival?.owner === owner &&
+        arrivedActionKey === dreamAvatarArrival.key),
+    [arrivedActionKey, dreamAvatarArrival, view.dreamAvatars],
   );
 
   const battleView = useMemo<MobileBattleView>(() => {
@@ -1758,8 +1758,8 @@ export function TutorialScreen({
           ),
         }
       : view.battle;
-    const playerSettled = dreamcallerSettled("player");
-    const enemySettled = dreamcallerSettled("enemy");
+    const playerSettled = dreamAvatarSettled("player");
+    const enemySettled = dreamAvatarSettled("enemy");
     const drawnCardId =
       opponentCardDraw !== null && drawnActionKey === opponentCardDraw.key
         ? opponentCardDraw.cardId
@@ -1784,8 +1784,8 @@ export function TutorialScreen({
               ...sourceBattle.player,
               status: {
                 ...sourceBattle.player.status,
-                dreamcaller: view.dreamcallers.player.visual,
-                dreamcallerProfile: view.dreamcallers.player.profile,
+                dreamAvatar: view.dreamAvatars.player.visual,
+                dreamAvatarProfile: view.dreamAvatars.player.profile,
               },
             },
           }
@@ -1796,13 +1796,13 @@ export function TutorialScreen({
               ...sourceBattle.enemy,
               status: {
                 ...sourceBattle.enemy.status,
-                dreamcaller: view.dreamcallers.enemy.visual,
-                dreamcallerProfile: view.dreamcallers.enemy.profile,
+                dreamAvatar: view.dreamAvatars.enemy.visual,
+                dreamAvatarProfile: view.dreamAvatars.enemy.profile,
               },
             },
             inspector: {
               ...sourceBattle.inspector,
-              opponentName: view.dreamcallers.enemy.visual.name,
+              opponentName: view.dreamAvatars.enemy.visual.name,
             },
           }
         : {}),
@@ -1820,8 +1820,8 @@ export function TutorialScreen({
                 ? {
                     status: {
                       ...sourceBattle.enemy.status,
-                      dreamcaller: view.dreamcallers.enemy.visual,
-                      dreamcallerProfile: view.dreamcallers.enemy.profile,
+                      dreamAvatar: view.dreamAvatars.enemy.visual,
+                      dreamAvatarProfile: view.dreamAvatars.enemy.profile,
                     },
                   }
                 : {}),
@@ -1832,7 +1832,7 @@ export function TutorialScreen({
             inspector: {
               ...sourceBattle.inspector,
               ...(enemySettled
-                ? { opponentName: view.dreamcallers.enemy.visual.name }
+                ? { opponentName: view.dreamAvatars.enemy.visual.name }
                 : {}),
               sides: {
                 ...sourceBattle.inspector.sides,
@@ -1927,7 +1927,7 @@ export function TutorialScreen({
   }, [
     desktop,
     drawnActionKey,
-    dreamcallerSettled,
+    dreamAvatarSettled,
     opponentCardDraw,
     opponentCardPlay,
     playedActionKey,
@@ -1935,16 +1935,16 @@ export function TutorialScreen({
     view,
   ]);
 
-  const completeDreamcallerArrival = useCallback((): void => {
-    if (dreamcallerArrival === null) return;
-    if (reportedArrivalKeys.current.has(dreamcallerArrival.key)) return;
-    reportedArrivalKeys.current.add(dreamcallerArrival.key);
-    setArrivedActionKey(dreamcallerArrival.key);
-    onDreamcallerArrivalComplete?.(
-      dreamcallerArrival.dreamcaller.profile.id,
-      dreamcallerArrival.owner,
+  const completeDreamAvatarArrival = useCallback((): void => {
+    if (dreamAvatarArrival === null) return;
+    if (reportedArrivalKeys.current.has(dreamAvatarArrival.key)) return;
+    reportedArrivalKeys.current.add(dreamAvatarArrival.key);
+    setArrivedActionKey(dreamAvatarArrival.key);
+    onDreamAvatarArrivalComplete?.(
+      dreamAvatarArrival.dreamAvatar.profile.id,
+      dreamAvatarArrival.owner,
     );
-  }, [dreamcallerArrival, onDreamcallerArrivalComplete]);
+  }, [dreamAvatarArrival, onDreamAvatarArrivalComplete]);
 
   const completeOpponentCardPlay = useCallback((): void => {
     if (opponentCardPlay === null) return;
@@ -2472,25 +2472,25 @@ export function TutorialScreen({
     if (
       !sceneEntered ||
       !reduceMotion ||
-      dreamcallerArrival === null ||
-      arrivedActionKey === dreamcallerArrival.key
+      dreamAvatarArrival === null ||
+      arrivedActionKey === dreamAvatarArrival.key
     ) {
       return;
     }
-    completeDreamcallerArrival();
+    completeDreamAvatarArrival();
   }, [
     arrivedActionKey,
-    completeDreamcallerArrival,
-    dreamcallerArrival,
+    completeDreamAvatarArrival,
+    dreamAvatarArrival,
     reduceMotion,
     sceneEntered,
   ]);
 
   useEffect(() => {
     if (
-      dreamcallerArrival === null ||
-      arrivedActionKey !== dreamcallerArrival.key ||
-      view.currentAction?.action !== "animate-dreamcaller-portrait" ||
+      dreamAvatarArrival === null ||
+      arrivedActionKey !== dreamAvatarArrival.key ||
+      view.currentAction?.action !== "animate-dream-avatar-portrait" ||
       view.playbackRunId === null
     ) {
       return undefined;
@@ -2504,7 +2504,7 @@ export function TutorialScreen({
     return () => window.clearTimeout(timeout);
   }, [
     arrivedActionKey,
-    dreamcallerArrival,
+    dreamAvatarArrival,
     onActionComplete,
     playbackSpeed,
     view.currentAction,
@@ -2779,16 +2779,16 @@ export function TutorialScreen({
         </div>
         {sceneEntered &&
         !reduceMotion &&
-        dreamcallerArrival !== null &&
-        arrivedActionKey !== dreamcallerArrival.key &&
+        dreamAvatarArrival !== null &&
+        arrivedActionKey !== dreamAvatarArrival.key &&
         screenRef.current !== null ? (
-          <TutorialDreamcallerArrival
+          <TutorialDreamAvatarArrival
             screen={screenRef.current}
-            dreamcaller={dreamcallerArrival.dreamcaller.visual}
-            owner={dreamcallerArrival.owner}
-            pause={dreamcallerArrival.pause}
-            duration={dreamcallerArrival.duration}
-            onComplete={completeDreamcallerArrival}
+            dreamAvatar={dreamAvatarArrival.dreamAvatar.visual}
+            owner={dreamAvatarArrival.owner}
+            pause={dreamAvatarArrival.pause}
+            duration={dreamAvatarArrival.duration}
+            onComplete={completeDreamAvatarArrival}
           />
         ) : null}
         {sceneEntered &&
@@ -2925,12 +2925,12 @@ export function TutorialScreen({
             />
           )}
         </div>
-        {renderedDialogue?.kind === "dreamcaller" ? (
-          <TutorialDreamcallerDialogue
+        {renderedDialogue?.kind === "dreamAvatar" ? (
+          <TutorialDreamAvatarDialogue
             dialogue={renderedDialogue}
             visible={
               sceneEntered &&
-              view.dialogue?.kind === "dreamcaller" &&
+              view.dialogue?.kind === "dreamAvatar" &&
               view.playbackRunId !== null &&
               dialogueActionId !== null &&
               visibleDialogueActionKey ===

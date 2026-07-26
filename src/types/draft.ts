@@ -80,7 +80,7 @@ export interface ReplayDraftState extends DraftStateCommon {
   recordId: string;
   /** 30 frozen, resolved, deduped packs; indexed by `pickNumber - 1`. */
   packSequence: number[][];
-  /** Dreamcaller signatures; seed the fit model when the deck is small. */
+  /** DreamAvatar signatures; seed the fit model when the deck is small. */
   signatureCardNumbers: number[];
 }
 

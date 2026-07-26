@@ -10,17 +10,17 @@ export const DEFAULT_DREAMSCAPE_TOML_PATH = join("data", "tabula", "dreamscapes.
 const DREAMSCAPE_JSON_PATH = join("public", "dreamscapes-data.json");
 const DREAM_GUIDES_TOML_PATH = join("data", "tabula", "dream_guides.toml");
 const AFFILIATIONS_TOML_PATH = join("data", "tabula", "affiliations.toml");
-const DREAMCALLERS_TOML_PATH = join("data", "tabula", "dreamcallers_v2.toml");
+const DREAM_AVATARS_TOML_PATH = join("data", "tabula", "dream_avatars_v2.toml");
 
 /**
- * Each non-starter dreamscape must list 3-4 resident Dreamcallers and every
- * Dreamcaller belongs to at most one region (see `validateDreamcallerMapping` in
+ * Each non-starter dreamscape must list 3-4 resident DreamAvatars and every
+ * DreamAvatar belongs to at most one region (see `validateDreamAvatarMapping` in
  * setup-assets, which is fatal on a duplicate assignment or an out-of-range
  * count). The editor enforces these same bounds on every reassignment so a save
  * can never write a build-breaking dreamscapes.toml.
  */
-export const MIN_DREAMCALLERS_PER_REGION = 3;
-export const MAX_DREAMCALLERS_PER_REGION = 4;
+export const MIN_DREAM_AVATARS_PER_REGION = 3;
+export const MAX_DREAM_AVATARS_PER_REGION = 4;
 
 /**
  * The SiteType enum (see `src/types/quest.ts`). A dreamscape's `signature-site`
@@ -105,8 +105,8 @@ function editorRecordFromDreamscape(dreamscape, index) {
     fixedSites: Array.isArray(dreamscape["fixed-sites"])
       ? dreamscape["fixed-sites"].filter((entry) => typeof entry === "string")
       : [],
-    dreamcallerIds: Array.isArray(dreamscape["dreamcaller-ids"])
-      ? dreamscape["dreamcaller-ids"].filter((entry) => typeof entry === "string")
+    dreamAvatarIds: Array.isArray(dreamscape["dream-avatar-ids"])
+      ? dreamscape["dream-avatar-ids"].filter((entry) => typeof entry === "string")
       : [],
     sourceIndex: index,
     source: dreamscape,
@@ -258,24 +258,24 @@ export function refreshDreamscapesDataJson({
 }
 
 /**
- * Read the Dreamcaller catalog as `{ id, name, title, imageNumber, renderedText }`
- * options for the editor's resident-Dreamcaller picker, portraits, and ability
+ * Read the DreamAvatar catalog as `{ id, name, title, imageNumber, renderedText }`
+ * options for the editor's resident-DreamAvatar picker, portraits, and ability
  * hover popovers. Ids are the canonical UUID key written into a dreamscape's
- * `dreamcaller-ids`.
+ * `dream-avatar-ids`.
  */
-export function readDreamcallerOptions({ rootDir = ROOT } = {}) {
-  const parsed = parse(readFileSync(join(rootDir, DREAMCALLERS_TOML_PATH), "utf8"));
-  const dreamcallers = Array.isArray(parsed.dreamcaller) ? parsed.dreamcaller : [];
-  return dreamcallers
-    .filter((dreamcaller) => typeof dreamcaller.id === "string")
-    .map((dreamcaller) => ({
-      id: dreamcaller.id,
-      name: typeof dreamcaller.name === "string" ? dreamcaller.name : dreamcaller.id,
-      title: typeof dreamcaller.title === "string" ? dreamcaller.title : "",
+export function readDreamAvatarOptions({ rootDir = ROOT } = {}) {
+  const parsed = parse(readFileSync(join(rootDir, DREAM_AVATARS_TOML_PATH), "utf8"));
+  const dreamAvatars = Array.isArray(parsed.dreamAvatar) ? parsed.dreamAvatar : [];
+  return dreamAvatars
+    .filter((dreamAvatar) => typeof dreamAvatar.id === "string")
+    .map((dreamAvatar) => ({
+      id: dreamAvatar.id,
+      name: typeof dreamAvatar.name === "string" ? dreamAvatar.name : dreamAvatar.id,
+      title: typeof dreamAvatar.title === "string" ? dreamAvatar.title : "",
       imageNumber:
-        typeof dreamcaller["image-number"] === "string" ? dreamcaller["image-number"] : "",
+        typeof dreamAvatar["image-number"] === "string" ? dreamAvatar["image-number"] : "",
       renderedText:
-        typeof dreamcaller["rendered-text"] === "string" ? dreamcaller["rendered-text"] : "",
+        typeof dreamAvatar["rendered-text"] === "string" ? dreamAvatar["rendered-text"] : "",
     }));
 }
 
@@ -312,36 +312,36 @@ function dreamscapeBlockRange(source, dreamscapeId) {
 }
 
 /**
- * Serialize a `dreamcaller-ids` array in the authored multiline style — one
+ * Serialize a `dream-avatar-ids` array in the authored multiline style — one
  * UUID per line with a trailing `# Display Name` comment for human readers — so
  * a save preserves the format of `dreamscapes.toml`. An empty list collapses to
- * the inline `dreamcaller-ids = []`.
+ * the inline `dream-avatar-ids = []`.
  */
-function serializeDreamcallerIdsField(ids, nameById) {
+function serializeDreamAvatarIdsField(ids, nameById) {
   if (ids.length === 0) {
-    return "dreamcaller-ids = []";
+    return "dream-avatar-ids = []";
   }
   const lines = ids.map((id) => {
     const name = nameById.get(id.toLowerCase());
     return `  "${id}",${name !== undefined && name !== "" ? ` # ${name}` : ""}`;
   });
-  return `dreamcaller-ids = [\n${lines.join("\n")}\n]`;
+  return `dream-avatar-ids = [\n${lines.join("\n")}\n]`;
 }
 
 /**
- * Replace (or, when absent, append) the `dreamcaller-ids` array of a single
+ * Replace (or, when absent, append) the `dream-avatar-ids` array of a single
  * dreamscape block in `source`. The rest of the file — comments, field order,
  * and every other record — is left byte-for-byte unchanged.
  */
-export function rewriteDreamcallerIds(source, { dreamscapeId, ids, nameById }) {
+export function rewriteDreamAvatarIds(source, { dreamscapeId, ids, nameById }) {
   const block = dreamscapeBlockRange(source, dreamscapeId);
   if (block === null) {
     throw new Error(`Dreamscape ${dreamscapeId} was not found`);
   }
 
   const blockText = source.slice(block.start, block.end);
-  const fieldMatch = /(^|\n)([ \t]*)dreamcaller-ids[ \t]*=[ \t]*\[/u.exec(blockText);
-  const serialized = serializeDreamcallerIdsField(ids, nameById);
+  const fieldMatch = /(^|\n)([ \t]*)dream-avatar-ids[ \t]*=[ \t]*\[/u.exec(blockText);
+  const serialized = serializeDreamAvatarIdsField(ids, nameById);
 
   let patched;
   if (fieldMatch === null) {
@@ -356,7 +356,7 @@ export function rewriteDreamcallerIds(source, { dreamscapeId, ids, nameById }) {
     const openBracketInBlock = fieldMatch.index + fieldMatch[0].length - 1;
     const closeBracketInBlock = blockText.indexOf("]", openBracketInBlock);
     if (closeBracketInBlock === -1) {
-      throw new Error(`Dreamscape ${dreamscapeId} has an unterminated dreamcaller-ids array`);
+      throw new Error(`Dreamscape ${dreamscapeId} has an unterminated dream-avatar-ids array`);
     }
     const absStart = block.start + fieldStartInBlock;
     const absEnd = block.start + closeBracketInBlock + 1;
@@ -367,17 +367,17 @@ export function rewriteDreamcallerIds(source, { dreamscapeId, ids, nameById }) {
   return patched;
 }
 
-function regionForDreamcaller(dreamscapes, dreamcallerId) {
-  const key = dreamcallerId.toLowerCase();
+function regionForDreamAvatar(dreamscapes, dreamAvatarId) {
+  const key = dreamAvatarId.toLowerCase();
   return (
     dreamscapes.find((scape) =>
-      scape.dreamcallerIds.some((id) => id.toLowerCase() === key),
+      scape.dreamAvatarIds.some((id) => id.toLowerCase() === key),
     ) ?? null
   );
 }
 
-function withoutId(ids, dreamcallerId) {
-  const key = dreamcallerId.toLowerCase();
+function withoutId(ids, dreamAvatarId) {
+  const key = dreamAvatarId.toLowerCase();
   return ids.filter((id) => id.toLowerCase() !== key);
 }
 
@@ -391,7 +391,7 @@ function planFailure(message) {
 }
 
 /**
- * Compute the set of `dreamcaller-ids` array changes for one reassignment,
+ * Compute the set of `dream-avatar-ids` array changes for one reassignment,
  * enforcing every build invariant so the result is always a valid mapping:
  *
  *   - `replace`: swap resident `outId` out of `dreamscapeId` and `inId` in. When
@@ -406,7 +406,7 @@ function planFailure(message) {
  * Returns `{ ok: true, changes: [{ id, ids }] }` listing only the regions whose
  * arrays change, or `{ ok: false, message }` describing why the move is illegal.
  */
-export function planDreamcallerAssignment(dreamscapes, catalogIds, request) {
+export function planDreamAvatarAssignment(dreamscapes, catalogIds, request) {
   const knownById = new Map(catalogIds.map((id) => [id.toLowerCase(), id]));
   const { action, dreamscapeId } = request;
 
@@ -415,7 +415,7 @@ export function planDreamcallerAssignment(dreamscapes, catalogIds, request) {
     return planFailure(`Dreamscape ${String(dreamscapeId)} was not found.`);
   }
   if (target.isStarter) {
-    return planFailure("The starter dreamscape cannot host Dreamcallers.");
+    return planFailure("The starter dreamscape cannot host DreamAvatars.");
   }
 
   const canonicalIn =
@@ -423,37 +423,37 @@ export function planDreamcallerAssignment(dreamscapes, catalogIds, request) {
   const canonicalOut =
     request.outId === undefined
       ? null
-      : target.dreamcallerIds.find(
+      : target.dreamAvatarIds.find(
           (id) => id.toLowerCase() === String(request.outId).toLowerCase(),
         ) ?? null;
 
   const targetHas = (id) =>
-    target.dreamcallerIds.some((existing) => existing.toLowerCase() === id.toLowerCase());
+    target.dreamAvatarIds.some((existing) => existing.toLowerCase() === id.toLowerCase());
 
   if (action === "replace") {
     if (canonicalOut === null) {
-      return planFailure("The Dreamcaller to replace is not a resident of this region.");
+      return planFailure("The DreamAvatar to replace is not a resident of this region.");
     }
     if (request.inId !== undefined && canonicalIn === null) {
-      return planFailure("The replacement is not a known Dreamcaller.");
+      return planFailure("The replacement is not a known DreamAvatar.");
     }
     if (canonicalIn === null) {
-      return planFailure("Choose a replacement Dreamcaller.");
+      return planFailure("Choose a replacement DreamAvatar.");
     }
     if (targetHas(canonicalIn)) {
-      return planFailure("That Dreamcaller already lives in this region.");
+      return planFailure("That DreamAvatar already lives in this region.");
     }
 
-    const source = regionForDreamcaller(dreamscapes, canonicalIn);
+    const source = regionForDreamAvatar(dreamscapes, canonicalIn);
     const changes = [
-      { id: target.id, ids: replaceId(target.dreamcallerIds, canonicalOut, canonicalIn) },
+      { id: target.id, ids: replaceId(target.dreamAvatarIds, canonicalOut, canonicalIn) },
     ];
     if (source !== null) {
       // Swap: the displaced resident takes the incoming caller's old slot, so
       // the source region keeps its count.
       changes.push({
         id: source.id,
-        ids: replaceId(source.dreamcallerIds, canonicalIn, canonicalOut),
+        ids: replaceId(source.dreamAvatarIds, canonicalIn, canonicalOut),
       });
     }
     return { ok: true, changes };
@@ -461,47 +461,47 @@ export function planDreamcallerAssignment(dreamscapes, catalogIds, request) {
 
   if (action === "add") {
     if (canonicalIn === null) {
-      return planFailure("Choose a Dreamcaller to add.");
+      return planFailure("Choose a DreamAvatar to add.");
     }
     if (targetHas(canonicalIn)) {
-      return planFailure("That Dreamcaller already lives in this region.");
+      return planFailure("That DreamAvatar already lives in this region.");
     }
-    if (target.dreamcallerIds.length >= MAX_DREAMCALLERS_PER_REGION) {
+    if (target.dreamAvatarIds.length >= MAX_DREAM_AVATARS_PER_REGION) {
       return planFailure(
-        `A region can host at most ${String(MAX_DREAMCALLERS_PER_REGION)} Dreamcallers.`,
+        `A region can host at most ${String(MAX_DREAM_AVATARS_PER_REGION)} DreamAvatars.`,
       );
     }
 
-    const source = regionForDreamcaller(dreamscapes, canonicalIn);
-    if (source !== null && source.dreamcallerIds.length <= MIN_DREAMCALLERS_PER_REGION) {
+    const source = regionForDreamAvatar(dreamscapes, canonicalIn);
+    if (source !== null && source.dreamAvatarIds.length <= MIN_DREAM_AVATARS_PER_REGION) {
       return planFailure(
-        `${source.name} would drop below ${String(MIN_DREAMCALLERS_PER_REGION)} Dreamcallers. ` +
+        `${source.name} would drop below ${String(MIN_DREAM_AVATARS_PER_REGION)} DreamAvatars. ` +
           "Swap with one of its residents instead.",
       );
     }
 
     const changes = [
-      { id: target.id, ids: [...target.dreamcallerIds, canonicalIn] },
+      { id: target.id, ids: [...target.dreamAvatarIds, canonicalIn] },
     ];
     if (source !== null) {
-      changes.push({ id: source.id, ids: withoutId(source.dreamcallerIds, canonicalIn) });
+      changes.push({ id: source.id, ids: withoutId(source.dreamAvatarIds, canonicalIn) });
     }
     return { ok: true, changes };
   }
 
   if (action === "remove") {
     if (canonicalOut === null) {
-      return planFailure("The Dreamcaller to remove is not a resident of this region.");
+      return planFailure("The DreamAvatar to remove is not a resident of this region.");
     }
-    if (target.dreamcallerIds.length <= MIN_DREAMCALLERS_PER_REGION) {
+    if (target.dreamAvatarIds.length <= MIN_DREAM_AVATARS_PER_REGION) {
       return planFailure(
-        `A region must keep at least ${String(MIN_DREAMCALLERS_PER_REGION)} Dreamcallers. ` +
+        `A region must keep at least ${String(MIN_DREAM_AVATARS_PER_REGION)} DreamAvatars. ` +
           "Replace this one instead of removing it.",
       );
     }
     return {
       ok: true,
-      changes: [{ id: target.id, ids: withoutId(target.dreamcallerIds, canonicalOut) }],
+      changes: [{ id: target.id, ids: withoutId(target.dreamAvatarIds, canonicalOut) }],
     };
   }
 
@@ -510,12 +510,12 @@ export function planDreamcallerAssignment(dreamscapes, catalogIds, request) {
 
 /**
  * Apply a list of `{ id, ids }` region changes to the raw dreamscapes.toml
- * source, rewriting each affected `dreamcaller-ids` array in place.
+ * source, rewriting each affected `dream-avatar-ids` array in place.
  */
-export function applyDreamcallerChanges(source, changes, nameById) {
+export function applyDreamAvatarChanges(source, changes, nameById) {
   let next = source;
   for (const change of changes) {
-    next = rewriteDreamcallerIds(next, {
+    next = rewriteDreamAvatarIds(next, {
       dreamscapeId: change.id,
       ids: change.ids,
       nameById,

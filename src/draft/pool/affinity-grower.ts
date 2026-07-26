@@ -278,7 +278,7 @@ export function poolCoherence(
 
 // A categorical draw over the corpus's cards, returning one card key per call.
 // The default is uniform; variants that steer the seed (e.g. `picksig`, whose
-// seeds are biased toward a Dreamcaller's signature) supply their own draw. Each
+// seeds are biased toward a DreamAvatar's signature) supply their own draw. Each
 // call consumes exactly one `rng()` value, so the best-of-K loop's determinism
 // and rng-consumption are independent of which draw is used.
 export type SeedDraw = (rng: () => number, corpus: AffinityCorpus) => string;

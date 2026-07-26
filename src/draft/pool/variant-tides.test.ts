@@ -14,7 +14,7 @@ import type { PoolData } from "./types.ts";
 import { TIDES, generateTides } from "./variant-tides.ts";
 
 // A synthetic artifact of `tideCount` disjoint tides plus one favored tide for
-// one Dreamcaller. Card UUIDs are `<tide>-card-<i>`; copies default to 2 so a
+// one DreamAvatar. Card UUIDs are `<tide>-card-<i>`; copies default to 2 so a
 // full deal is available from few tides.
 function makeTideDecks(
   tideCount: number,
@@ -33,7 +33,7 @@ function makeTideDecks(
   return {
     version: 1,
     tides,
-    favoredTidesByDreamcaller: { "dc-favored": ["tide-1"] },
+    favoredTidesByDreamAvatar: { "dc-favored": ["tide-1"] },
   };
 }
 
@@ -78,7 +78,7 @@ describe("generateTides", () => {
     expect(poolSize(result.counts)).toBe(12);
   });
 
-  it("always includes a baked favored tide for a Dreamcaller that has one", () => {
+  it("always includes a baked favored tide for a DreamAvatar that has one", () => {
     const poolData = makePoolData(makeTideDecks(10, 30));
     for (let seed = 0; seed < 20; seed += 1) {
       const result = generateTides(makeRng(seed), poolData, "dc-favored", 60);
@@ -98,7 +98,7 @@ describe("generateTides", () => {
     for (const id of chosen) expect(tideIds.has(id)).toBe(true);
   });
 
-  it("draws all tides at random without a dreamcaller id or favored entry", () => {
+  it("draws all tides at random without a dreamAvatar id or favored entry", () => {
     const poolData = makePoolData(makeTideDecks(10, 30));
     const noId = generateTides(makeRng(11), poolData, undefined, 150);
     const unknownId = generateTides(makeRng(11), poolData, "dc-unknown", 150);
@@ -149,7 +149,7 @@ describe("validateTideDecks", () => {
 
   it("rejects favored entries that name no tide", () => {
     const data = makeTideDecks(3, 2);
-    data.favoredTidesByDreamcaller["dc-favored"] = ["tide-nope"];
+    data.favoredTidesByDreamAvatar["dc-favored"] = ["tide-nope"];
     expect(() => validateTideDecks(data)).toThrow(/names no tide/);
   });
 

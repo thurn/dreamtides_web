@@ -15,16 +15,16 @@
 #   site-icon       Icon reference for the dreamscape marker on the Atlas.
 #   is-starter      Present and true only on the run's opening dreamscape.
 #   fixed-sites     Ordered SiteType list the starter always presents.
-#   dreamcaller-ids The 3-4 resident Dreamcallers of this region, by id (omitted
-#                   for the starter). Every non-starter Dreamcaller belongs to
+#   dream-avatar-ids The 3-4 resident DreamAvatars of this region, by id (omitted
+#                   for the starter). Every non-starter DreamAvatar belongs to
 #                   exactly one dreamscape, so these lists partition
-#                   dreamcallers_v2.toml: each id appears under exactly one
+#                   dream_avatars_v2.toml: each id appears under exactly one
 #                   dreamscape, and the build fails if that invariant breaks.
-#                   Assignments are affiliation-driven where a Dreamcaller's
+#                   Assignments are affiliation-driven where a DreamAvatar's
 #                   ability names the region's theme (the warriors live in
-#                   Tsukiren, the event-payoff callers in Frostforge, and so on);
+#                   Tsukiren, the event-payoff avatars in Frostforge, and so on);
 #                   the remainder are placed by closest thematic fit. The trailing
-#                   comment on each id is the Dreamcaller display name, kept only
+#                   comment on each id is the DreamAvatar display name, kept only
 #                   for human readers — the id is the source of truth.
 
 [[dreamscapes]]
@@ -47,7 +47,7 @@ site-icon = "game-icons.net/sbed/shop"
 # Spirit-animal payoffs: Grath rewards allied spirit animals directly; Radulf
 # and Demetrios are the go-wide character builders whose signature decks lean on
 # spirit-animal bodies (Starrunner, Sunshadow Eagle, Moonbound Wolf).
-dreamcaller-ids = [
+dream-avatar-ids = [
   "94E7C651-25E9-4A62-9DE4-EAF5BA20542C", # Grath
   "3EBABA62-9000-429D-B203-2A5A9724389A", # Radulf
   "2C53B1B9-9291-4BBA-8D3A-F40B545C8F3C", # Demetrios
@@ -63,8 +63,8 @@ affiliation-id = "erode_void"
 site-icon = "game-icons.net/sbed/great-pyramid"
 # The Void: the deepest reclaim/void-matters pool. Seld Rakor, Seraveth, and
 # Vaela all key off cards in the void; Vethran's cost-X Discover rounds out the
-# region's grindy value plan. One of two four-caller regions.
-dreamcaller-ids = [
+# region's grindy value plan. One of two four-avatar regions.
+dream-avatar-ids = [
   "C72CFD7B-408B-47F6-ADF1-1E486A7E20D3", # Seld Rakor
   "6488452D-4E9E-466C-96DF-716D4EC646B1", # Seraveth
   "60BD584B-5BC8-4EE7-8A98-CBB304EB71AB", # Vaela
@@ -83,7 +83,7 @@ site-icon = "game-icons.net/sbed/fire"
 # undercut; Drusus Calvus spends his opening turn pulling ahead on energy. Edran
 # is a deliberate, slightly unintuitive placement here — his outsider-figment
 # bodies give the Fjords a recurring tempo engine rather than a figment payoff.
-dreamcaller-ids = [
+dream-avatar-ids = [
   "FE2510D9-BFEE-4C35-97F9-30E0CD2E2851", # Yveth Coravel
   "BDD3A3A7-242C-4D2B-8071-EBE56891A340", # Drusus Calvus
   "5E28154D-770A-4B84-8AAC-9DE44F5D7D02", # Edran
@@ -99,7 +99,7 @@ affiliation-id = "storm_events"
 site-icon = "game-icons.net/sbed/anvil-impact"
 # Events: every resident is an event-cast payoff. Kasane copies events, Rael
 # foresees off a second event, and Ovanel refills events after playing one.
-dreamcaller-ids = [
+dream-avatar-ids = [
   "2B7E921D-0CD7-4C20-A415-9E7EEDE7B477", # Kasane
   "84E7020C-7384-4CC3-A20F-AB05F03CC375", # Rael
   "F6208407-C4E9-42AC-B533-346704F5E39E", # Ovanel
@@ -116,7 +116,7 @@ site-icon = "stack.svg"
 # Characters: flood the board and reward each body. Korrax buffs an ally every
 # night, Kaleth awakens allies, and Senemhet turns a wide board's energy into
 # more characters.
-dreamcaller-ids = [
+dream-avatar-ids = [
   "6029BE40-75B9-4C07-912F-9718B6C5C747", # Korrax
   "3C4773E4-F8E1-4686-86CB-B407A42489D4", # Kaleth
   "1CC5A88A-134F-42F7-A0AE-95ACE44B3745", # Senemhet
@@ -133,7 +133,7 @@ site-icon = "game-icons.net/sbed/small-fire"
 # Warriors: the whole warrior tribe lives here. Gunnar Deepforge copies the last
 # warrior played, Tensho discounts the first warrior drawn, and Valdren reclaims
 # warriors from the void.
-dreamcaller-ids = [
+dream-avatar-ids = [
   "BF72ADFF-7D74-4BE8-9B93-1DB7BA13A1DB", # Gunnar Deepforge
   "BFC40414-5264-41BF-86E1-A0F41EE4F5B5", # Tensho
   "91D4C3B5-FD63-480B-9ED5-979109A227BB", # Valdren
@@ -150,7 +150,7 @@ site-icon = "game-icons.net/sbed/crystal-ball"
 # Abandon: sacrifice your own allies for value. Ossian abandons to draw, Caedryn
 # abandons to materialize a bigger body, and Kragg discounts the next character
 # after abandoning.
-dreamcaller-ids = [
+dream-avatar-ids = [
   "B9BF6D4B-907C-4750-B51C-811AFF29DE59", # Ossian
   "9D64A4A2-3DC7-456E-9EB2-5FE3A48883C4", # Caedryn
   "16B579FE-C15B-4DF6-8262-D45CE44732AE", # Kragg
@@ -167,7 +167,7 @@ site-icon = "game-icons.net/sbed/scales"
 # Survivors: grind-it-out attrition in the wasteland. Kell Tarn's signature deck
 # is built on survivor bodies (Wreckland Maverick); Karev Soltis punishes the
 # opponent's scoring, and Calloway Flint is the scavenging raider admiral.
-dreamcaller-ids = [
+dream-avatar-ids = [
   "133E22DD-F81B-406D-B4E3-98C346D7FD4E", # Kell Tarn
   "9E4862FD-E18C-463E-9D5F-E5D73C29A66F", # Karev Soltis
   "81954CA0-DA36-49DD-915C-1CCB1B2D7B05", # Kael Voss
@@ -185,7 +185,7 @@ site-icon = "game-icons.net/sbed/two-coins"
 # materializing a figment and Kael Voss discards to materialize a survivor
 # figment; Threxan fills the third slot, his turn-one card draw a clean fit for
 # the station's gamble-for-tempo identity.
-dreamcaller-ids = [
+dream-avatar-ids = [
   "9E19B3D1-12F2-43C1-9CB1-08DE7CD32E32", # Serenath Veyl
   "8A2FCD65-BBA7-459C-A6B0-F0391B9293FD", # Calloway Flint
   "B99936CA-97F9-4930-AF5A-FA9EF92557EF", # Threxan
@@ -201,8 +201,8 @@ affiliation-id = "discard"
 site-icon = "game-icons.net/sbed/sands-of-time"
 # Discard: turn discarding into advantage. Vrakmoth and Corvath both convert a
 # discard into a card or reclaim, Tessa loots (draw-then-discard), and Zeva
-# discards to reclaim an event. The second four-caller region.
-dreamcaller-ids = [
+# discards to reclaim an event. The second four-avatar region.
+dream-avatar-ids = [
   "86026206-1B11-4F38-A24E-FD3C697F5353", # Vrakmoth
   "B8C1B0AB-0FE6-47D6-B576-0C2231AEB81E", # Corvath
   "BA973428-6D90-4847-B779-CB7E25A5AC84", # Tessa

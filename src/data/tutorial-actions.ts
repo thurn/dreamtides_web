@@ -4,7 +4,7 @@ import { parseTutorialInstructionMarkup } from "./tutorial-instruction-markup";
 
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
 const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
-const DEFAULT_DREAMCALLER_SPEECH_BUBBLE_WIDTH = 300;
+const DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
 
 function parseTutorialSpeechBubble(
   value: unknown,
@@ -50,7 +50,7 @@ function parseTutorialSpeechBubble(
     record.bubbleWidth ??
     (speaker === "mira"
       ? DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH
-      : DEFAULT_DREAMCALLER_SPEECH_BUBBLE_WIDTH);
+      : DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH);
   if (
     typeof bubbleWidth !== "number" ||
     !Number.isFinite(bubbleWidth) ||
@@ -170,7 +170,7 @@ export function parseTutorialActions(
         wait,
       } satisfies TutorialAction;
     }
-    if (record.action === "animate-dreamcaller-portrait") {
+    if (record.action === "animate-dream-avatar-portrait") {
       const owner = record.owner ?? "player";
       const pause = record.pause ?? 0;
       const duration = record.duration ?? 1.2;
@@ -195,7 +195,7 @@ export function parseTutorialActions(
       }
       return {
         id,
-        action: "animate-dreamcaller-portrait",
+        action: "animate-dream-avatar-portrait",
         owner,
         pause,
         duration,

@@ -144,7 +144,7 @@
         "keywordModification": null
       }
     ],
-    "dreamcaller": {
+    "dreamAvatar": {
       "id": "6029BE40-75B9-4C07-912F-9718B6C5C747",
       "imageNumber": "0003",
       "name": "Korrax",
@@ -292,7 +292,7 @@
         "504": 1
       },
       "draftPoolSize": 150,
-      "dreamcaller": {
+      "dreamAvatar": {
         "id": "6029BE40-75B9-4C07-912F-9718B6C5C747",
         "imageNumber": "0003",
         "name": "Korrax",

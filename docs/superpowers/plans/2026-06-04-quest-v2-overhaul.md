@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use super-subagent-driven-development (recommended) or super-executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Switch all real quest play to V2 cards, V2 Dreamcallers, and idf3 draft-pool construction (sourced from `docs/drafts_anon/`), with dreamsigns drawn purely at random.
+**Goal:** Switch all real quest play to V2 cards, V2 Dream Avatars, and idf3 draft-pool construction (sourced from `docs/drafts_anon/`), with dreamsigns drawn purely at random.
 
-**Architecture:** The pool library currently under `src/draft_test/` is relocated to runtime homes and reused. `loadQuestContent` loads the V2 card and Dreamcaller data plus the `drafts_anon` decklist corpus, and exposes a `RunPoolContext` (poolData + name index + dreamsign ids). The existing `ResolvedDreamcallerPackage` object is **kept** (its tide fields preserved but always empty) and is now *produced from idf3 at quest start* instead of from tide overlap at content-load. Specialty shops draw from the run's chosen idf3 starter decklist; battle enemy decks draw an idf3-steered `drafts_anon` decklist; dreamsign draws drop all tide steering.
+**Architecture:** The pool library currently under `src/draft_test/` is relocated to runtime homes and reused. `loadQuestContent` loads the V2 card and Dream Avatar data plus the `drafts_anon` decklist corpus, and exposes a `RunPoolContext` (poolData + name index + dreamsign ids). The existing `ResolvedDreamAvatarPackage` object is **kept** (its tide fields preserved but always empty) and is now *produced from idf3 at quest start* instead of from tide overlap at content-load. Specialty shops draw from the run's chosen idf3 starter decklist; battle enemy decks draw an idf3-steered `drafts_anon` decklist; dreamsign draws drop all tide steering.
 
 **Tech Stack:** TypeScript, React, Vite, Vitest, TOML data (`@iarna/toml` via `scripts/setup-assets.mjs`).
 
@@ -54,25 +54,25 @@ git push
 
 **Files:**
 - Move: `src/draft_test/cards-v2-database.ts` → `src/data/cards-v2-database.ts`
-- Move: `src/draft_test/dreamcallers-v2-database.ts` → `src/data/dreamcallers-v2-database.ts`
+- Move: `src/draft_test/dream-avatars-v2-database.ts` → `src/data/dream-avatars-v2-database.ts`
 - Move: `src/draft_test/cards-v2-metadata.ts` → `src/data/cards-v2-metadata.ts`
 
 - [ ] **Step 1: Move with git**
 
 ```bash
 git mv src/draft_test/cards-v2-database.ts src/data/cards-v2-database.ts
-git mv src/draft_test/dreamcallers-v2-database.ts src/data/dreamcallers-v2-database.ts
+git mv src/draft_test/dream-avatars-v2-database.ts src/data/dream-avatars-v2-database.ts
 git mv src/draft_test/cards-v2-metadata.ts src/data/cards-v2-metadata.ts
 ```
 
 - [ ] **Step 2: Find importers**
 
-Run: `grep -rln "draft_test/cards-v2-database\|draft_test/dreamcallers-v2-database\|draft_test/cards-v2-metadata" src/ scripts/`
+Run: `grep -rln "draft_test/cards-v2-database\|draft_test/dream-avatars-v2-database\|draft_test/cards-v2-metadata" src/ scripts/`
 Expected: `src/draft_test/DraftTestApp.tsx`, `scripts/setup-assets.mjs`, and possibly `scripts/generate-color-pool.mjs` and test files.
 
 - [ ] **Step 3: Rewrite imports**
 
-Update each importer to the new `src/data/...` path. Note `scripts/setup-assets.mjs` imports `DREAMCALLER_ARCHETYPES` and `CARDS_V2_POOL_METADATA` — repoint those to `../src/data/...`.
+Update each importer to the new `src/data/...` path. Note `scripts/setup-assets.mjs` imports `DREAM_AVATAR_ARCHETYPES` and `CARDS_V2_POOL_METADATA` — repoint those to `../src/data/...`.
 
 - [ ] **Step 4: Verify the relocated modules' own imports still resolve**
 
@@ -220,7 +220,7 @@ git push
 
 ## Phase 4 — Content load + idf3 package build (the cutover)
 
-After this phase the runtime quest boots on V2 cards, V2 Dreamcallers, and idf3 pools. Tasks 4.1–4.4 must all land before the app is runnable again; keep them in one working session.
+After this phase the runtime quest boots on V2 cards, V2 Dream Avatars, and idf3 pools. Tasks 4.1–4.4 must all land before the app is runnable again; keep them in one working session.
 
 ### Task 4.1: Add the new type fields
 
@@ -229,12 +229,12 @@ After this phase the runtime quest boots on V2 cards, V2 Dreamcallers, and idf3 
 
 - [ ] **Step 1: Extend the contracts**
 
-In `DreamcallerContent`, add `signatureCards: string[];` (keep `mandatoryTides` / `optionalTides` — they stay, always empty). In `ResolvedDreamcallerPackage`, add `starterDecklistCardNumbers: number[];` (keep all existing fields).
+In `DreamAvatarContent`, add `signatureCards: string[];` (keep `mandatoryTides` / `optionalTides` — they stay, always empty). In `ResolvedDreamAvatarPackage`, add `starterDecklistCardNumbers: number[];` (keep all existing fields).
 
 - [ ] **Step 2: Typecheck**
 
 Run: `npm run typecheck`
-Expected: FAIL — every constructor of these objects (loaders, `resolveDreamcallerPackage`, demos, `test-support`, debug-helpers) now lacks the new required fields. This failure list is your task map for 4.2–4.4; do not fix unrelated sites yet.
+Expected: FAIL — every constructor of these objects (loaders, `resolveDreamAvatarPackage`, demos, `test-support`, debug-helpers) now lacks the new required fields. This failure list is your task map for 4.2–4.4; do not fix unrelated sites yet.
 
 - [ ] **Step 3: Commit the type change**
 
@@ -244,30 +244,30 @@ git commit -m "feat: add signatureCards and starterDecklistCardNumbers to conten
 git push
 ```
 
-### Task 4.2: `RunPoolContext` + `buildDreamcallerPackage`
+### Task 4.2: `RunPoolContext` + `buildDreamAvatarPackage`
 
 **Files:**
 - Modify: `src/data/quest-content.ts`
-- Test: `src/data/build-dreamcaller-package.test.ts` (create)
+- Test: `src/data/build-dream-avatar-package.test.ts` (create)
 
-This is the heart of the overhaul. `buildDreamcallerPackage` runs idf3 for one Dreamcaller and returns a `ResolvedDreamcallerPackage` (same shape, tide fields empty).
+This is the heart of the overhaul. `buildDreamAvatarPackage` runs idf3 for one Dream Avatar and returns a `ResolvedDreamAvatarPackage` (same shape, tide fields empty).
 
 - [ ] **Step 1: Write the failing tests**
 
 Build a `RunPoolContext` from a hand-authored set of V2-shaped cards (including two cards numbered 510/511 flagged `isStarter`) and a small `drafts_anon`-style decklist corpus, plus a `nameIndex` mapping those card names to numbers. Cover these bug classes:
   - **Starters never enter the draft pool** — `draftPoolCopiesByCard` contains no starter card number, even if a starter's *name* appears in a decklist.
   - **Copies capped at 2** — no value in `draftPoolCopiesByCard` exceeds 2.
-  - **Determinism** — two calls with the same `(dreamcaller, ctx, seed)` produce identical `draftPoolCopiesByCard` and `starterDecklistCardNumbers`.
-  - **Signatureless Dreamcaller still yields a pool** — a Dreamcaller with `signatureCards: []` returns a non-empty `draftPoolCopiesByCard` (idf3's diversity fallback).
+  - **Determinism** — two calls with the same `(dreamAvatar, ctx, seed)` produce identical `draftPoolCopiesByCard` and `starterDecklistCardNumbers`.
+  - **Signatureless Dream Avatar still yields a pool** — a Dream Avatar with `signatureCards: []` returns a non-empty `draftPoolCopiesByCard` (idf3's diversity fallback).
   - **Starter decklist is resolvable and non-empty** — `starterDecklistCardNumbers` is non-empty, contains only numbers present in `cardDatabase`, and excludes starter numbers.
   - **Tide fields empty** — `mandatoryTides`, `optionalTides` (via `optionalSubset`), and `selectedTides` are all `[]`.
 
 - [ ] **Step 2: Run, expect failure**
 
-Run: `npx vitest run src/data/build-dreamcaller-package.test.ts`
-Expected: FAIL (`buildDreamcallerPackage` not exported).
+Run: `npx vitest run src/data/build-dream-avatar-package.test.ts`
+Expected: FAIL (`buildDreamAvatarPackage` not exported).
 
-- [ ] **Step 3: Implement `RunPoolContext`, the seed hash, and `buildDreamcallerPackage`**
+- [ ] **Step 3: Implement `RunPoolContext`, the seed hash, and `buildDreamAvatarPackage`**
 
 In `quest-content.ts`, add the interface and a deterministic string→seed hash (a contract — the same string must always map to the same numeric seed so runs reproduce):
 
@@ -290,8 +290,8 @@ function hashStringToSeed(input: string): number {
 }
 ```
 
-Then implement `buildDreamcallerPackage(dreamcaller, ctx, questSeed: string): ResolvedDreamcallerPackage`:
-  1. `const pool = generatePoolFromData(ctx.poolData, hashStringToSeed(questSeed + dreamcaller.id), undefined, "idf3", undefined, POOL_TARGET_SIZE, dreamcaller.signatureCards);`
+Then implement `buildDreamAvatarPackage(dreamAvatar, ctx, questSeed: string): ResolvedDreamAvatarPackage`:
+  1. `const pool = generatePoolFromData(ctx.poolData, hashStringToSeed(questSeed + dreamAvatar.id), undefined, "idf3", undefined, POOL_TARGET_SIZE, dreamAvatar.signatureCards);`
   2. Resolve `pool.counts` to card numbers with `resolvePool` (relocated to `src/data/cards-v2-database.ts`), then delete any starter card number from the result (use `STARTER_CARD_NUMBERS`). This is `draftPoolCopiesByCard`.
   3. Resolve `pool.starterDeck ?? []` names to numbers via `ctx.nameIndex`, dropping unresolved names and starter numbers → `starterDecklistCardNumbers`.
   4. `dreamsignPoolIds = [...ctx.allDreamsignPoolIds]`.
@@ -301,14 +301,14 @@ Determinism note: `generatePoolFromData` derives its own RNG from the numeric se
 
 - [ ] **Step 4: Run, expect pass**
 
-Run: `npx vitest run src/data/build-dreamcaller-package.test.ts`
+Run: `npx vitest run src/data/build-dream-avatar-package.test.ts`
 Expected: PASS.
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add src/data/quest-content.ts src/data/build-dreamcaller-package.test.ts
-git commit -m "feat: build Dreamcaller draft packages from idf3"
+git add src/data/quest-content.ts src/data/build-dream-avatar-package.test.ts
+git commit -m "feat: build DreamAvatar draft packages from idf3"
 git push
 ```
 
@@ -322,16 +322,16 @@ git push
 
 In `loadQuestContent`:
   - Load cards via `loadCardsV2Database()` (`/cards_v2-data.json`).
-  - Load Dreamcallers from `/dreamcallers-v2-data.json` via `loadDreamcallersV2()` (relocated), mapped to `DreamcallerContent`: copy `id/name/title/renderedText/imageNumber`, `startingEssence: dc.startingEssence || DEFAULT_STARTING_ESSENCE`, `signatureCards: dc.signatureCards ?? []`, `mandatoryTides: []`, `optionalTides: []`. Offer **all** of them (no validation/skip loop).
+  - Load Dream Avatars from `/dream-avatars-v2-data.json` via `loadDreamAvatarsV2()` (relocated), mapped to `DreamAvatarContent`: copy `id/name/title/renderedText/imageNumber`, `startingEssence: dc.startingEssence || DEFAULT_STARTING_ESSENCE`, `signatureCards: dc.signatureCards ?? []`, `mandatoryTides: []`, `optionalTides: []`. Offer **all** of them (no validation/skip loop).
   - Load decklists via `loadDecklists()` (relocated).
   - Build `poolContext: RunPoolContext` = `{ poolData: buildPoolData(Array.from(cardDatabase.values()), decklists), nameIndex: buildNameIndex(cardDatabase), allDreamsignPoolIds: dreamsignTemplates.map((t) => t.id) }`.
   - Keep `cardsByPackageTide` (still built from draftable V2 cards' tides; harmless).
 
-Change `QuestContent`: remove `resolvedPackagesByDreamcallerId`; add `poolContext: RunPoolContext`. Delete the now-dead functions `resolveDreamcallerPackage`, `buildDraftPoolCopies`, `countDraftPoolSize`, `countDoubledCards`, `enumeratePackageCandidates`, `buildCombinations`, `chooseBestCandidate`, `compareSubsetKeys`, and the pool-size constants — unless a remaining caller needs them (the type checker decides). Keep the package-adjacency helpers (`countPackageOverlap` etc.) only if still imported elsewhere; otherwise remove.
+Change `QuestContent`: remove `resolvedPackagesByDreamAvatarId`; add `poolContext: RunPoolContext`. Delete the now-dead functions `resolveDreamAvatarPackage`, `buildDraftPoolCopies`, `countDraftPoolSize`, `countDoubledCards`, `enumeratePackageCandidates`, `buildCombinations`, `chooseBestCandidate`, `compareSubsetKeys`, and the pool-size constants — unless a remaining caller needs them (the type checker decides). Keep the package-adjacency helpers (`countPackageOverlap` etc.) only if still imported elsewhere; otherwise remove.
 
 - [ ] **Step 2: Adapt the existing quest-content test**
 
-`src/data/quest-content.test.ts` currently asserts tide-package resolution. Replace those cases with: `loadQuestContent` (mock `fetch` for the three JSON endpoints + decklists) returns a `poolContext` whose `nameIndex` covers the loaded cards and whose `poolData.decklists` is non-empty, and `dreamcallers` carries `signatureCards`. Bug caught: a loader wired to the wrong endpoint or a Dreamcaller mapping that drops `signatureCards`.
+`src/data/quest-content.test.ts` currently asserts tide-package resolution. Replace those cases with: `loadQuestContent` (mock `fetch` for the three JSON endpoints + decklists) returns a `poolContext` whose `nameIndex` covers the loaded cards and whose `poolData.decklists` is non-empty, and `dreamAvatars` carries `signatureCards`. Bug caught: a loader wired to the wrong endpoint or a Dream Avatar mapping that drops `signatureCards`.
 
 - [ ] **Step 3: Run + typecheck**
 
@@ -342,40 +342,40 @@ Expected: the test passes; typecheck now fails only at the *consumer* sites fixe
 
 ```bash
 git add src/data/quest-content.ts src/data/quest-content.test.ts
-git commit -m "feat: load V2 cards, Dreamcallers, and decklists in quest content"
+git commit -m "feat: load V2 cards, DreamAvatars, and decklists in quest content"
 git push
 ```
 
 ### Task 4.4: Repoint the package build sites
 
-Every site that did `questContent.resolvedPackagesByDreamcallerId.get(id)` now calls `buildDreamcallerPackage(dreamcaller, questContent.poolContext, seed)`. The seed must be computed **before** the package so idf3 uses it.
+Every site that did `questContent.resolvedPackagesByDreamAvatarId.get(id)` now calls `buildDreamAvatarPackage(dreamAvatar, questContent.poolContext, seed)`. The seed must be computed **before** the package so idf3 uses it.
 
 **Files:**
 - Modify: `src/state/quest-state-actions.ts` (~315–378)
 - Modify: `src/runtime/start-in-battle-state.ts`
 - Modify: `src/state/quest-context.tsx` (~721–790 logging)
-- Modify: `src/state/multiplayer-quest-context.tsx` (the `setDreamcallerSelection` origin)
+- Modify: `src/state/multiplayer-quest-context.tsx` (the `setDreamAvatarSelection` origin)
 - Modify: `src/components/HudDreamsignLayoutDemo.tsx` (mock content object)
 
 - [ ] **Step 1: Single-player quest start**
 
-In `startQuestFromDreamcaller` (`quest-state-actions.ts`): compute `const seed = seedOverride ?? generateQuestSeed();` first, then `const resolvedPackage = buildDreamcallerPackage(dreamcaller, questContent.poolContext, seed);`. Use that `seed` in the returned state (replace the inline `seedOverride ?? generateQuestSeed()` at the `seed:` field). The rest (starter deck append, `createInitialDraftState`, `remainingDreamsignPool`) is unchanged — it already reads from `resolvedPackage`.
+In `startQuestFromDreamAvatar` (`quest-state-actions.ts`): compute `const seed = seedOverride ?? generateQuestSeed();` first, then `const resolvedPackage = buildDreamAvatarPackage(dreamAvatar, questContent.poolContext, seed);`. Use that `seed` in the returned state (replace the inline `seedOverride ?? generateQuestSeed()` at the `seed:` field). The rest (starter deck append, `createInitialDraftState`, `remainingDreamsignPool`) is unchanged — it already reads from `resolvedPackage`.
 
 - [ ] **Step 2: Debug start-in-battle**
 
-In `createStartInBattleState`: pick the first Dreamcaller (`questContent.dreamcallers[0]`; drop the `resolvedPackagesByDreamcallerId.has` filter), compute `const seed = generateQuestSeed();`, build the package with it, and use `seed` for the state's `seed` field.
+In `createStartInBattleState`: pick the first Dream Avatar (`questContent.dreamAvatars[0]`; drop the `resolvedPackagesByDreamAvatarId.has` filter), compute `const seed = generateQuestSeed();`, build the package with it, and use `seed` for the state's `seed` field.
 
 - [ ] **Step 3: Quest-context logging**
 
-In `quest-context.tsx` `startQuest` (~721): the `resolvedPackagesByDreamcallerId.get` lookup at line 724 fed only logging. Remove it; log from `next.resolvedPackage` (the state returned by `startQuestFromDreamcaller`) instead, and drop the removed tide fields from the `quest_started` log payload (`mandatoryTides`, `optionalSubset`, `selectedTides`, `selectedPackageTides`). Keep `draftPoolSize` and `dreamsignPoolSize`. The `initializeDraftState(cardDatabase, resolvedPackage)` call at line 760 should read `next.resolvedPackage`.
+In `quest-context.tsx` `startQuest` (~721): the `resolvedPackagesByDreamAvatarId.get` lookup at line 724 fed only logging. Remove it; log from `next.resolvedPackage` (the state returned by `startQuestFromDreamAvatar`) instead, and drop the removed tide fields from the `quest_started` log payload (`mandatoryTides`, `optionalSubset`, `selectedTides`, `selectedPackageTides`). Keep `draftPoolSize` and `dreamsignPoolSize`. The `initializeDraftState(cardDatabase, resolvedPackage)` call at line 760 should read `next.resolvedPackage`.
 
 - [ ] **Step 4: Multiplayer quest start**
 
-In `multiplayer-quest-context.tsx`, find where the `resolvedPackage` passed to `setDreamcallerSelection` / `applyDreamcallerSelection` originates (it currently comes from the content map). Replace with `buildDreamcallerPackage(dreamcaller, current.questContent.poolContext, seed)`, where `seed` is the per-room quest seed already generated for the transaction (the same value passed as `seedOverride` to `startQuestFromDreamcaller`). Reuse one seed for both so the pool and the quest seed agree.
+In `multiplayer-quest-context.tsx`, find where the `resolvedPackage` passed to `setDreamAvatarSelection` / `applyDreamAvatarSelection` originates (it currently comes from the content map). Replace with `buildDreamAvatarPackage(dreamAvatar, current.questContent.poolContext, seed)`, where `seed` is the per-room quest seed already generated for the transaction (the same value passed as `seedOverride` to `startQuestFromDreamAvatar`). Reuse one seed for both so the pool and the quest seed agree.
 
 - [ ] **Step 5: Demo mock**
 
-In `HudDreamsignLayoutDemo.tsx`, remove the `resolvedPackagesByDreamcallerId: new Map()` field from the mock `QuestContent` and add `poolContext` with empty stubs (`{ poolData: buildPoolData([], []), nameIndex: new Map(), allDreamsignPoolIds: [] }`) — or whatever minimal shape satisfies the type; this demo never builds a real pool.
+In `HudDreamsignLayoutDemo.tsx`, remove the `resolvedPackagesByDreamAvatarId: new Map()` field from the mock `QuestContent` and add `poolContext` with empty stubs (`{ poolData: buildPoolData([], []), nameIndex: new Map(), allDreamsignPoolIds: [] }`) — or whatever minimal shape satisfies the type; this demo never builds a real pool.
 
 - [ ] **Step 6: Typecheck + full test run**
 
@@ -481,7 +481,7 @@ git push
 
 - [ ] **Step 1: Adapt/extend the battle-init test**
 
-Catches: an empty enemy deck (the removed removal-event guarantee used to throw, now nothing enforces non-emptiness), enemy decks containing card numbers absent from the database, and the enemy deck *not* being steered (ignoring the enemy Dreamcaller's signature). Provide a `poolContext` (decklist corpus + name index over the test card DB) and an enemy Dreamcaller with `signatureCards`. Assert the produced enemy deck is non-empty, every entry's card number resolves in `cardDatabase`, and its size is at least `MIN_BATTLE_DECK_SIZE`. For steering: with a signature pointing at a specific decklist, the resolved enemy deck's card set matches that decklist (modulo unresolved names and padding) across a couple of fixed seeds.
+Catches: an empty enemy deck (the removed removal-event guarantee used to throw, now nothing enforces non-emptiness), enemy decks containing card numbers absent from the database, and the enemy deck *not* being steered (ignoring the enemy Dream Avatar's signature). Provide a `poolContext` (decklist corpus + name index over the test card DB) and an enemy Dream Avatar with `signatureCards`. Assert the produced enemy deck is non-empty, every entry's card number resolves in `cardDatabase`, and its size is at least `MIN_BATTLE_DECK_SIZE`. For steering: with a signature pointing at a specific decklist, the resolved enemy deck's card set matches that decklist (modulo unresolved names and padding) across a couple of fixed seeds.
 
 - [ ] **Step 2: Run, expect failure**
 
@@ -490,7 +490,7 @@ Expected: FAIL.
 
 - [ ] **Step 3: Implement the new enemy deck builder**
 
-Add `poolContext: RunPoolContext` to `CreateBattleInitInput`. In `createBattleInit`, select the enemy Dreamcaller once (reuse the random pick currently inside `createEnemyDescriptor`, or pick in `createBattleInit` and pass it in) so its `signatureCards` are available. Rewrite `createEnemyDeckDefinition` to:
+Add `poolContext: RunPoolContext` to `CreateBattleInitInput`. In `createBattleInit`, select the enemy Dream Avatar once (reuse the random pick currently inside `createEnemyDescriptor`, or pick in `createBattleInit` and pass it in) so its `signatureCards` are available. Rewrite `createEnemyDeckDefinition` to:
   1. `const pool = generatePoolFromData(poolContext.poolData, <numeric battle seed>, undefined, "idf3", undefined, undefined, enemySignatureCards);`
   2. Resolve `pool.starterDeck ?? []` names to card numbers via `poolContext.nameIndex`, dropping unresolved names.
   3. If shorter than `MIN_BATTLE_DECK_SIZE`, pad by repeating the resolved list (same approach as `padBattleDeck`).
@@ -529,7 +529,7 @@ Expected: all PASS. If any residual test still asserts tide-based pool/shop/drea
 - [ ] **Step 2: Rebuild assets**
 
 Run: `node scripts/setup-assets.mjs`
-Expected: completes; V2 card/Dreamcaller JSON and the `drafts_anon` decklist bundle are current.
+Expected: completes; V2 card/Dream Avatar JSON and the `drafts_anon` decklist bundle are current.
 
 - [ ] **Step 3: Commit any test fixups**
 
@@ -549,7 +549,7 @@ Run: `npm run dev -- --port 5174` (capture the PID). Do **not** use 5173.
 
 - [ ] **Step 2: Walk the player workflow**
 
-Verify: the Dreamcaller select offers V2 Dreamcallers; starting a quest shows a draft pool of V2 cards (check the draft site renders 4-card offers); a regular shop shows V2 cards; a **specialty** shop shows V2 cards (priced higher); a Dreamsign reward/offer yields dreamsigns; entering a Battle renders an enemy whose deck is V2 cards (no crash, no empty enemy deck). Inspect the captured error buffer for render errors, unhandled rejections, and console errors. Confirm controls are usable, text/controls fully visible, layout free of clipping/overlap.
+Verify: the Dream Avatar select offers V2 Dream Avatars; starting a quest shows a draft pool of V2 cards (check the draft site renders 4-card offers); a regular shop shows V2 cards; a **specialty** shop shows V2 cards (priced higher); a Dreamsign reward/offer yields dreamsigns; entering a Battle renders an enemy whose deck is V2 cards (no crash, no empty enemy deck). Inspect the captured error buffer for render errors, unhandled rejections, and console errors. Confirm controls are usable, text/controls fully visible, layout free of clipping/overlap.
 
 - [ ] **Step 3: Tear down only the QA server**
 
@@ -577,7 +577,7 @@ Before starting, build the consumer map: `grep -rn "tide\|Tide\|PackageTideId" s
 
 **Files:** `src/types/content.ts`, `src/data/quest-content.ts`, plus every reader the type checker flags.
 
-- [ ] Remove `mandatoryTides`/`optionalTides` from `DreamcallerContent`; remove `mandatoryTides`/`optionalSubset`/`selectedTides` from `ResolvedDreamcallerPackage`. Remove `cardsByPackageTide` from `QuestContent` and `buildCardsByPackageTideIndex`. Remove the package-adjacency helpers (`countPackageOverlap`, `isPackageAdjacent`, `packageOverlapWeight`, `selectPackageAdjacentOrFallback`, `packageAdjacentCandidatesOrFallback`, `selectPackageAdjacentWithOverlap`) if no longer imported. Update `buildDreamcallerPackage` to stop emitting the removed fields, and `start-in-battle-state` / `quest-state-actions` / the demos / `debug-helpers` / `room-service` accordingly.
+- [ ] Remove `mandatoryTides`/`optionalTides` from `DreamAvatarContent`; remove `mandatoryTides`/`optionalSubset`/`selectedTides` from `ResolvedDreamAvatarPackage`. Remove `cardsByPackageTide` from `QuestContent` and `buildCardsByPackageTideIndex`. Remove the package-adjacency helpers (`countPackageOverlap`, `isPackageAdjacent`, `packageOverlapWeight`, `selectPackageAdjacentOrFallback`, `packageAdjacentCandidatesOrFallback`, `selectPackageAdjacentWithOverlap`) if no longer imported. Update `buildDreamAvatarPackage` to stop emitting the removed fields, and `start-in-battle-state` / `quest-state-actions` / the demos / `debug-helpers` / `room-service` accordingly.
 - [ ] `npm run typecheck && npm test`; then `git add -A && git commit -m "refactor: remove tide fields from quest content and package types" && git push`.
 
 ### Task 9.2: Remove `tides` from the card model
@@ -625,6 +625,6 @@ Before starting, build the consumer map: `grep -rn "tide\|Tide\|PackageTideId" s
 
 ## Self-review notes
 
-- **Spec coverage:** starter cards (2.1), drafts_anon corpus (2.2), library relocation (1.1–1.2), idf3 at quest start (4.2–4.4), all-32 Dreamcallers (4.3), specialty shop from chosen decklist (5.1), random dreamsigns incl. reward site (6.1), idf3-steered enemy decks (7.1), verification incl. browser QA (8), full tide removal (9). Covered.
+- **Spec coverage:** starter cards (2.1), drafts_anon corpus (2.2), library relocation (1.1–1.2), idf3 at quest start (4.2–4.4), all-32 Dream Avatars (4.3), specialty shop from chosen decklist (5.1), random dreamsigns incl. reward site (6.1), idf3-steered enemy decks (7.1), verification incl. browser QA (8), full tide removal (9). Covered.
 - **Staging:** tide fields are kept-but-empty through Phases 4–7 and verified in Phase 8, then fully removed in Phase 9 — so a Phase 8 regression is attributable to the cutover and a Phase 9 regression to the teardown.
 - **Risks:** `drafts_anon` card-name resolution against the V2 name index — `resolvePool` drops unresolved names, but a high drop rate would thin pools; watch pool sizes during QA. Numeric pool sizing (`POOL_TARGET_SIZE = 200`) approximates the old 190–210 band; adjust if QA pools feel off.

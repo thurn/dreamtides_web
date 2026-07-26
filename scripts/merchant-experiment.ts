@@ -207,7 +207,7 @@ function buildQuestContent(): {
 
   const questContent: QuestContent = {
     cardDatabase,
-    dreamcallers: [],
+    dreamAvatars: [],
     dreamsignTemplates,
     fitModel,
     merchantCorpus,
@@ -282,7 +282,7 @@ function questStateFor(deck: DeckEntry[], seed: string): QuestState {
     omens: 0,
     maxDreamsigns: 12,
     deck,
-    dreamcaller: null,
+    dreamAvatar: null,
     resolvedPackage: null,
     cardSourceDebug: null,
     remainingDreamsignPool: [],

@@ -13,7 +13,7 @@ import { buildIdfStats, signatureFit } from "../draft/idf-fit.ts";
 import { idfCosine } from "../draft/pool/variant-idf.ts";
 import type { QuestContent } from "../data/quest-content.ts";
 import type { CardData } from "../types/cards.ts";
-import type { DreamcallerContent } from "../types/content.ts";
+import type { DreamAvatarContent } from "../types/content.ts";
 import type { DraftRecord } from "../data/cards-v2-database.ts";
 
 // ---------------------------------------------------------------------------
@@ -51,11 +51,11 @@ function makeRecord(id: string, mainboardIds: string[]): DraftRecord {
   };
 }
 
-/** Minimal DreamcallerContent shape — only id, name, signatureCardIds needed. */
-function makeDreamcaller(
+/** Minimal DreamAvatarContent shape — only id, name, signatureCardIds needed. */
+function makeDreamAvatar(
   id: string,
   signatureCardIds: string[],
-): DreamcallerContent {
+): DreamAvatarContent {
   return {
     id,
     name: id,
@@ -71,11 +71,11 @@ function makeDreamcaller(
  * Build a minimal QuestContent fixture. computeSignatureDecks reads:
  *   - content.cardDatabase (Map<number, CardData>) — for UUID → name lookup
  *   - content.draftRecords (DraftRecord[]) — the corpus
- *   - content.dreamcallers (DreamcallerContent[]) — the Dreamcallers
+ *   - content.dreamAvatars (DreamAvatarContent[]) — the DreamAvatars
  */
 function makeContent(
   cards: CardData[],
-  dreamcallers: DreamcallerContent[],
+  dreamAvatars: DreamAvatarContent[],
   draftRecords: DraftRecord[],
 ): QuestContent {
   const cardDatabase = new Map<number, CardData>(
@@ -83,7 +83,7 @@ function makeContent(
   );
   return {
     cardDatabase,
-    dreamcallers,
+    dreamAvatars,
     draftRecords,
     // Other QuestContent fields are not touched by computeSignatureDecks.
   } as unknown as QuestContent;
@@ -105,15 +105,15 @@ const DECK_1_IDS = [SIG_A, SIG_B, COMMON];
 const DECK_2_IDS = [SIG_A, COMMON, OTHER];
 const DECK_3_IDS = [COMMON, OTHER];
 
-// A Dreamcaller whose signatures are SIG_A and SIG_B.
-const DC_WITH_SIGS = makeDreamcaller("dc-test", [SIG_A, SIG_B]);
+// A DreamAvatar whose signatures are SIG_A and SIG_B.
+const DC_WITH_SIGS = makeDreamAvatar("dc-test", [SIG_A, SIG_B]);
 
-// A Dreamcaller with signatures that appear in NO deck.
+// A DreamAvatar with signatures that appear in NO deck.
 const ABSENT_UUID = "eeee0000-0000-0000-0000-000000000005";
-const DC_ABSENT = makeDreamcaller("dc-absent", [ABSENT_UUID]);
+const DC_ABSENT = makeDreamAvatar("dc-absent", [ABSENT_UUID]);
 
-// A Dreamcaller with empty signature list — should produce no row.
-const DC_NO_SIGS = makeDreamcaller("dc-no-sigs", []);
+// A DreamAvatar with empty signature list — should produce no row.
+const DC_NO_SIGS = makeDreamAvatar("dc-no-sigs", []);
 
 const RECORDS = [
   makeRecord("rec1", DECK_1_IDS),
@@ -140,7 +140,7 @@ describe("computeSignatureDecks — structural invariants", () => {
 
     expect(result).toHaveLength(1);
     const row = result[0];
-    expect(row.dreamcaller.id).toBe("dc-test");
+    expect(row.dreamAvatar.id).toBe("dc-test");
 
     // Derive which deck the shared module predicts should win.
     const sets = RECORDS.map(
@@ -179,13 +179,13 @@ describe("computeSignatureDecks — structural invariants", () => {
     expect(result[0].matchedIds.size).toBeGreaterThan(0);
   });
 
-  it("produces no row for a Dreamcaller whose signatures appear in no deck", () => {
+  it("produces no row for a DreamAvatar whose signatures appear in no deck", () => {
     const content = makeContent(CARDS, [DC_ABSENT], RECORDS);
     const result = computeSignatureDecks(content, "match");
     expect(result).toHaveLength(0);
   });
 
-  it("produces no row for a Dreamcaller with an empty signature list", () => {
+  it("produces no row for a DreamAvatar with an empty signature list", () => {
     const content = makeContent(CARDS, [DC_NO_SIGS], RECORDS);
     const result = computeSignatureDecks(content, "match");
     expect(result).toHaveLength(0);
@@ -300,7 +300,7 @@ describe("computeSignatureDecks — structural invariants", () => {
     const result = computeSignatureDecks(content, "match");
     expect(result).toHaveLength(1);
     const { matchedIds } = result[0];
-    // Every entry in matchedIds must be one of the Dreamcaller's signature ids.
+    // Every entry in matchedIds must be one of the DreamAvatar's signature ids.
     for (const id of matchedIds) {
       expect([SIG_A, SIG_B]).toContain(id);
     }

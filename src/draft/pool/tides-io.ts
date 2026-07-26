@@ -44,12 +44,12 @@ export interface TideDecksJson {
   /** All 32 tide decks. */
   tides: TideDeckJson[];
   /**
-   * Each Dreamcaller's favored tide ids (by Dreamcaller UUID), most similar to
+   * Each DreamAvatar's favored tide ids (by DreamAvatar UUID), most similar to
    * its signature first, baked offline the way `idf3` finds its anchors. The
-   * runtime draws a subset of these; Dreamcallers without a signature have no
+   * runtime draws a subset of these; DreamAvatars without a signature have no
    * entry (or an empty list) and get all-random tides.
    */
-  favoredTidesByDreamcaller: Record<string, string[]>;
+  favoredTidesByDreamAvatar: Record<string, string[]>;
 }
 
 function fail(detail: string): never {
@@ -100,22 +100,22 @@ export function validateTideDecks(json: unknown): TideDecksJson {
   if (data.coreTideId !== undefined && !ids.has(data.coreTideId)) {
     fail(`coreTideId "${data.coreTideId}" names no tide`);
   }
-  const favored = data.favoredTidesByDreamcaller;
+  const favored = data.favoredTidesByDreamAvatar;
   if (typeof favored !== "object" || favored === null || Array.isArray(favored)) {
-    fail("missing `favoredTidesByDreamcaller` object");
+    fail("missing `favoredTidesByDreamAvatar` object");
   }
-  for (const [dreamcallerId, tideIds] of Object.entries(favored)) {
+  for (const [dreamAvatarId, tideIds] of Object.entries(favored)) {
     if (!Array.isArray(tideIds)) {
-      fail(`favored tides for "${dreamcallerId}" is not an array`);
+      fail(`favored tides for "${dreamAvatarId}" is not an array`);
     }
     for (const tideId of tideIds) {
       if (typeof tideId !== "string" || !ids.has(tideId)) {
         fail(
-          `favored tide "${String(tideId)}" for "${dreamcallerId}" names no tide`,
+          `favored tide "${String(tideId)}" for "${dreamAvatarId}" names no tide`,
         );
       }
       if (tideId === data.coreTideId) {
-        fail(`favored tides for "${dreamcallerId}" include the core tide`);
+        fail(`favored tides for "${dreamAvatarId}" include the core tide`);
       }
     }
   }

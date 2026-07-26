@@ -505,7 +505,7 @@ Browser QA:
 
 - start a QA Vite server on a non-5173 port
 - open normal player flow with `?journey=v2`
-- create game, choose Dreamcaller, enter first Dream Journey site
+- create game, choose Dream Avatar, enter first Dream Journey site
 - inspect console/error buffers
 - verify center-stage layout at desktop and mobile viewport sizes
 - verify both offers render concrete game objects and prices

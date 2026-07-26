@@ -186,7 +186,7 @@ state without starting Firebase.
 2. Confirm room creation adds `?game=<roomId>`.
 3. Open that URL in a second window and confirm both windows show two connected
    clients.
-4. Choose a Dreamcaller and confirm both clients render the same dreamscape.
+4. Choose a Dream Avatar and confirm both clients render the same dreamscape.
 5. Open a draft site, pick a card in one client, and confirm the other client
    advances to the same next offer and deck.
 6. Trigger two valid actions from separate clients and confirm both appear in

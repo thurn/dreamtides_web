@@ -6,7 +6,7 @@ support, derived from a survey of the card pool.
 **Sources surveyed**
 - Rules vocabulary/definitions: `/Users/dthurn/quest_prototype/docs/battle_rules/battle_rules.md`
 - Card pool: `/Users/dthurn/quest_prototype/data/tabula/cards_v2.toml` (519 cards; 375 Character, 144 Event)
-- Identity cards: `/Users/dthurn/quest_prototype/data/tabula/dreamcallers_v2.toml` (32 dreamcallers)
+- Identity cards: `/Users/dthurn/quest_prototype/data/tabula/dream_avatars_v2.toml` (32 dream avatars)
 
 **Counting method:** frequencies are occurrence counts of the symbol/phrase across all
 `rendered-text` fields, computed with UTF-8-correct regex (Python `re`). Multi-byte symbols
@@ -42,7 +42,7 @@ Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☪ 65
 
 - [ ] **Character** — permanent; enters play (exhausted unless Awakened); has ✦ + subtype. 375 cards. **[DET]** (placement is structural; back rank, exhausted)
 - [ ] **Event** — one-shot; resolves then goes to void. 144 cards. **[DET]** structurally; effect may be [CHOICE]
-- [ ] **Dreamcaller** — identity card in play at start; ongoing ability. 32 records. **[DET]** presence; abilities vary
+- [ ] **Dream Avatar** — identity card in play at start; ongoing ability. 32 records. **[DET]** presence; abilities vary
 - [ ] **Fast (❖)** — playable in any Fast window. `is-fast=true`: 69 cards; ❖ in text 19. **[DET]** (timing flag)
   - Example: *Starlight Guide*, *Miraculous Arrival*
 - [ ] **Interrupt (❖❖)** — Fast subtype, also playable in response on the stack. `is-interrupt=true`: 36 cards; ❖❖ in text 5. **[DET]** (timing flag); playing in response is **[CHOICE]**
@@ -58,7 +58,7 @@ Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☪ 65
 - [ ] **Offering** — play for 0● by banishing a hand card; banished end of turn. 11. **[CHOICE]** (player picks card to banish + chooses Offering mode)
   - Example: *Miraculous Arrival*
 - [ ] **Ephemeral** — drawn-with-ephemeral cards banish at end of turn if still in hand. Rendered lowercase: "draw a card with ephemeral", 9 occurrences. **[DET]** (end-of-turn banish is automatic)
-  - Examples: *Vrakmoth* (dreamcaller), several "draw a card with ephemeral" cards
+  - Examples: *Vrakmoth* (dream avatar), several "draw a card with ephemeral" cards
 - [ ] **Unstoppable** — scores ⍟ = its spark on winning a challenge. 5 occurrences (plus innate on Ancient/Synth-anthem figments). **[DET]** (resolves from challenge outcome)
   - Example: *"…allied characters gain unstoppable and +X✦…"*
 - [ ] **Vengeful** — on losing a challenge, dissolves the opposing enemy. 5 occurrences (plus innate on Wraith figment). **[DET]**
@@ -68,16 +68,16 @@ Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☪ 65
 - [ ] **Support – <benefit>** — back-rank character benefits the ≤2 front-rank positions it supports. Keyword form "Support –": 8; "Supported" refs: 8. **[DET]** (positional, board-derived)
   - Examples: *"Support – Supported allies have +1✦ for each stored ⧗."*, *"Support – Supported allies have +2✦ and have unstoppable."*
 - [ ] **Awakened (keyword) / Awaken (effect)** — enters/becomes un-exhausted. Awakened keyword 15; Awaken verb 7 (30 total "awaken*"). **[DET]** keyword; **[CHOICE]** when "Awaken an ally" picks a target
-  - Example: *Kaleth* (dreamcaller): "2●, ☪: Awaken an ally."
+  - Example: *Kaleth* (dream avatar): "2●, ☪: Awaken an ally."
 - [ ] **Phasing** — keyword on 6 cards. **NOT DEFINED in battle_rules.md — flag for designer.** Appears as a standalone keyword line like Awakened. **[?]** (needs a rule before classification)
   - Examples: *Headtaker Wurm*, *Thronebound Arbiter*, *Driftrider*, *Northlight Maestro*, *Vanishing Inquisitor*, *Breach Artist*
 - [ ] **Prevent** — counter a card on the stack (always Interrupt); conditional forms ("unless the opponent pays N●"). 14. **[CHOICE]** (choose to respond + which card)
   - Example: *"Prevent a played ≤2● cost card."*, *"Prevent a played ≤2✦ character."*
 - [ ] **Discover** — look at 3 deck cards matching a criterion, add one to hand. 31. **[CHOICE]** (pick 1 of 3)
-  - Examples: *"Discover a ≤2✦ character."*, *Vethran* (dreamcaller): "Discover a card with cost X●."
+  - Examples: *"Discover a ≤2✦ character."*, *Vethran* (dream avatar): "Discover a card with cost X●."
 - [ ] **Foresee N** — look at top N, reorder, optionally bin some to void. 12. **[CHOICE]** (ordering + bin decisions)
 - [ ] **Copy** — duplicate a card/effect; "figment copy of '<card>'" and "copy the next event". 4 copy-phrasings. **[CHOICE]/[MIXED]** (which card to copy; figment-copy uses the copied card's identity)
-  - Examples: *"Materialize a figment copy of 'Blade of Unity'."*, *Kasane* (dreamcaller): "Copy the next event you play this turn."
+  - Examples: *"Materialize a figment copy of 'Blade of Unity'."*, *Kasane* (dream avatar): "Copy the next event you play this turn."
 - [ ] **Gain control** — take an opponent's character to your side. 1 card. **[CHOICE]** (target)
   - Example: *"▸Materialized: Gain control of a ≤X● cost enemy."*
 - [ ] **Abandon** — move your own character play→void (can't be prevented; fires ▸Dissolved; frequent cost). 87 total; "Abandon this character" 20; "Abandon another" 11. **[CHOICE]** (which ally) — except "Abandon this character" is **[DET]** (self-target)
@@ -97,7 +97,7 @@ Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☪ 65
   - Example: *Driftcaller Sovereign*: "▸Dawn: Gain 1●."
 - [ ] **▸Dusk** — fires in controller's Dusk phase. **0 on cards** (Dusk effects arrive via phase/Dreamwell; the trigger slot still must exist). **[DET]** trigger
 - [ ] **▸Night** — fires at start of controller's Night phase. **5**. **[DET]** trigger
-  - Example: *Korrax* (dreamcaller): "▸Night: Give an ally +1✦."
+  - Example: *Korrax* (dream avatar): "▸Night: Give an ally +1✦."
 - [ ] **▸Challenge** — fires at Night start if this character is a challenger. **10**. **[DET]** trigger (board-derived); effect may target
   - Example: *Gatebound Warden*: "▸Challenge: Banish an enemy until end of turn."
 - [ ] **▸Dissolved** — fires when this character is dissolved. **20**. **[DET]** trigger
@@ -113,7 +113,7 @@ Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☪ 65
   - Example: *"When you play an event, materialize a 1✦ ethereal figment."*
 - [ ] **When you play a character / a warrior / a spirit animal** — "play a character" 9 (+ tribal forms). **[DET]** trigger
   - Example: *"When you play a warrior, materialize a 1✦ warrior figment."*
-- [ ] **When you play your second card / second event / second character in a turn** — ~2 on cards; also dreamcallers *Tessa*, *Seraveth*, *Rael*. **[DET]** trigger (count-based)
+- [ ] **When you play your second card / second event / second character in a turn** — ~2 on cards; also dream avatars *Tessa*, *Seraveth*, *Rael*. **[DET]** trigger (count-based)
 - [ ] **When you discard a card** — 18. **[DET]** trigger
   - Example: *"When you discard a card, draw a card with ephemeral."*
 - [ ] **When you draw** — 1. **[DET]** trigger
@@ -121,10 +121,10 @@ Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☪ 65
   - Example: *"When you materialize a figment, store 1⧗."*
 - [ ] **When an ally / allied <type> is dissolved (or "leaves play")** — "ally is dissolved"-style 15; "leaves play" 5. **[DET]** trigger
   - Example: *"When a non-figment ally is dissolved, materialize a 1✦ ember figment."*
-- [ ] **When a card leaves your void** — present (dreamcaller *Vaela*; *"When a character card leaves your void, materialize a 2✦ shadow figment."*). **[DET]** trigger
-- [ ] **When you abandon (an ally)** — 6 (+ dreamcaller *Kragg*). **[DET]** trigger
+- [ ] **When a card leaves your void** — present (dream avatar *Vaela*; *"When a character card leaves your void, materialize a 2✦ shadow figment."*). **[DET]** trigger
+- [ ] **When you abandon (an ally)** — 6 (+ dream avatar *Kragg*). **[DET]** trigger
 - [ ] **When an allied character scores ⍟** — "scores ⍟" 7. **[DET]** trigger (distinct from flat "gain ⍟"; only true scoring fires it)
-- [ ] **When the opponent scores ⍟** — dreamcaller *Karev Soltis*. **[DET]** trigger; "unless opponent pays 1●" branch is **[CHOICE]** for opponent
+- [ ] **When the opponent scores ⍟** — dream avatar *Karev Soltis*. **[DET]** trigger; "unless opponent pays 1●" branch is **[CHOICE]** for opponent
 - [ ] **When you reclaim / when you store ⧗** — "you reclaim a" 4; store-counter triggers fold into §7. **[DET]** trigger
 - [ ] **At the start / end of turn (conditional)** — "At the start of your turn, if …" (e.g. *Seld Rakor*, *Senemhet*). **[DET]** trigger (state-conditioned)
 
@@ -132,16 +132,16 @@ Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☪ 65
 
 ## 5. Activated-Ability Cost Types
 
-- [ ] **● energy cost** ("N●:") — 54 (+ 16 on dreamcallers). **[DET]** to pay (resource check)
+- [ ] **● energy cost** ("N●:") — 54 (+ 16 on dream avatars). **[DET]** to pay (resource check)
 - [ ] **X● cost** ("X●:") — 7. **[CHOICE]** (player picks X)
-- [ ] **☪ exhaust cost** ("☪:") — 65 (+ 15 on dreamcallers). **[DET]** to pay; auto back-rank move on front-rank source is **[DET]**
+- [ ] **☪ exhaust cost** ("☪:") — 65 (+ 15 on dream avatars). **[DET]** to pay; auto back-rank move on front-rank source is **[DET]**
 - [ ] **⧗ counter spend** ("N⧗:") — 9. **[DET]** to pay (uses stored counters)
 - [ ] **Abandon-a/-another-character cost** — "Abandon …:" 63; "Abandon another" 11. **[CHOICE]** (pick which ally) — "Abandon this character:" 20 is **[DET]** (self)
 - [ ] **Discard-as-cost** ("Discard …:") — 19. **[CHOICE]** (pick card from hand)
-  - Example: *Kael Voss* (dreamcaller): "2●, ☪, Discard a card: Materialize a 1✦ survivor figment."
+  - Example: *Kael Voss* (dream avatar): "2●, ☪, Discard a card: Materialize a 1✦ survivor figment."
 - [ ] **Banish-from-void cost** — 4. **[CHOICE]** (pick void card)
-- [ ] **"Once per turn" limiter** — 12 (+ 6 dreamcallers). **[DET]** (usage gate)
-- [ ] **Composite costs** (e.g. "2●, ☪, Abandon an ally", "3●, X●, ☪") — common across dreamcallers and cards. **[MIXED]** (resource parts [DET]; target/X parts [CHOICE])
+- [ ] **"Once per turn" limiter** — 12 (+ 6 dream avatars). **[DET]** (usage gate)
+- [ ] **Composite costs** (e.g. "2●, ☪, Abandon an ally", "3●, X●, ☪") — common across dream avatars and cards. **[MIXED]** (resource parts [DET]; target/X parts [CHOICE])
   - Examples: *Caedryn*: "2●, ☪, Abandon an ally: …"; *Vethran*: "3●, X●, ☪: Discover a card with cost X●."
 
 ---
@@ -152,7 +152,7 @@ Raw symbol occurrence counts (cards_v2): ● 285 · ✦ 142 · ▸ 157 · ☪ 65
   - Examples: *"Allied spirit animals have +1✦."*, *"Other allied warriors have +1✦."*
 - [ ] **Self-scaling spark** ("This character has +1✦ for each allied warrior") — present. **[DET]**
 - [ ] **Void-anchored static** ("If this card is in your void, allied characters have +1✦.") — present. **[DET]** (zone-conditioned static)
-- [ ] **Cost reductions** ("costs ● less", "the next character you play costs 2● less") — "● less" 6 (+ dreamcaller *Kragg*; *Yveth Coravel* "cost reduced by 1●"). **[DET]** (continuous cost mod)
+- [ ] **Cost reductions** ("costs ● less", "the next character you play costs 2● less") — "● less" 6 (+ dream avatar *Kragg*; *Yveth Coravel* "cost reduced by 1●"). **[DET]** (continuous cost mod)
 - [ ] **Rule-change statics** (granting keywords to a group, e.g. "Supported allies … have unstoppable") — folded into anthems above. **[DET]**
 
 ---
@@ -319,11 +319,11 @@ Mechanically referenced in card text (drive triggers/anthems/targets/figment-cre
 
 ---
 
-## 18. Dreamcaller Ongoing Abilities (identity cards)
+## 18. Dream Avatar Ongoing Abilities (identity cards)
 
-32 dreamcallers. Ability shapes (occurrences within dreamcallers_v2): ● activated 16, ☪
+32 dream avatars. Ability shapes (occurrences within dream_avatars_v2): ● activated 16, ☪
 activated 15, Once-per-turn 6, ▸Dawn 1, ▸Night 1, Abandon-cost 3, figment-creation 4. No
-"Choose one" and no static "+✦" anthems among dreamcallers; their power is mostly activated and
+"Choose one" and no static "+✦" anthems among dream avatars; their power is mostly activated and
 "when you …" triggered abilities.
 
 - [ ] **At-start-of-turn passive** (gain ●/draw/foresee, conditional) — *Drusus Calvus*, *Threxan*, *Seld Rakor*, *Senemhet*. **[DET]**

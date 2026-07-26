@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { buildCardSourceDebugState } from "./card-source-debug";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
-import type { ResolvedDreamcallerPackage } from "../types/content";
+import type { ResolvedDreamAvatarPackage } from "../types/content";
 
 function makeCard(cardNumber: number, name: string): CardData {
   return {
@@ -21,9 +21,9 @@ function makeCard(cardNumber: number, name: string): CardData {
   };
 }
 
-function makeResolvedPackage(): ResolvedDreamcallerPackage {
+function makeResolvedPackage(): ResolvedDreamAvatarPackage {
   return {
-    dreamcaller: {
+    dreamAvatar: {
       id: "caller-1",
       name: "Caller",
       title: "Debug Witness",
@@ -44,7 +44,7 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
 }
 
 describe("buildCardSourceDebugState", () => {
-  it("flags cards that belong to the dreamcaller's starter decklist", () => {
+  it("flags cards that belong to the dreamAvatar's starter decklist", () => {
     const result = buildCardSourceDebugState(
       "Draft Picks",
       "Draft",

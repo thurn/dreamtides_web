@@ -91,11 +91,11 @@ for (const name of [
 
 for (const name of [
   "CardEditorApp", "CardEditorGrid", "CardEditorToolbar", "CardTagEditor",
-  "DreamcallerDetailView", "DreamcallerEditorApp", "DreamcallerEditorGrid",
-  "DreamcallerEditorToolbar", "DreamscapeEditorApp", "DreamscapeEditorToolbar",
+  "DreamAvatarDetailView", "DreamAvatarEditorApp", "DreamAvatarEditorGrid",
+  "DreamAvatarEditorToolbar", "DreamscapeEditorApp", "DreamscapeEditorToolbar",
   "DreamscapeResidents", "DreamsignEditorApp", "DreamsignEditorGrid",
   "DreamsignEditorToolbar", "DreamwellEditorApp", "DreamwellEditorPreview", "DreamwellEditorToolbar",
-  "EditableCard", "EditableDreamcaller", "EditableDreamscape", "EditableDreamsign",
+  "EditableCard", "EditableDreamAvatar", "EditableDreamscape", "EditableDreamsign",
   "EditableDreamwell", "EditableField", "EditableFigment", "FigmentEditorApp",
   "FocusedCardEditor", "ManageTagsModal", "TagChip", "TagFilterControl",
   "GlossaryEditorApp",

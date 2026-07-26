@@ -129,7 +129,7 @@ ruleTester.run("no-adhoc-press-scale", rule, {
     },
     {
       name: "a bare integer scale literal (an image crop) is flagged",
-      filename: "src/cumulus/components/hud/DreamcallerPortrait.tsx",
+      filename: "src/cumulus/components/hud/DreamAvatarPortrait.tsx",
       code: 'const t = "scale(2)";',
       errors: [{ messageId: "adhocScale" }],
     },

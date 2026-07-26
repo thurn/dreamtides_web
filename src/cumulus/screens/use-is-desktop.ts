@@ -2,7 +2,7 @@
 //
 // A screen renders its desktop idiom (denser, larger controls; side-by-side
 // layouts) at or above DESKTOP_MIN_WIDTH, and its mobile idiom below it. Both
-// the Dreamcaller-select screen (carousel vs triptych) and the dreamscape
+// the DreamAvatar-select screen (carousel vs triptych) and the dreamscape
 // screen (wayside vs grand site nodes + HUD) key their layout off this single
 // breakpoint so the two screens flip to desktop at the same width.
 

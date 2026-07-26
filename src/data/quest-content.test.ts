@@ -6,7 +6,7 @@ import {
 } from "./quest-content";
 import type { CardData } from "../types/cards";
 import type { DraftRecord, KnownGoodDecklist } from "./cards-v2-database";
-import type { DreamcallerContent } from "../types/content";
+import type { DreamAvatarContent } from "../types/content";
 import { DEFAULT_STARTING_ESSENCE } from "../types/content";
 import type { FitModel } from "../draft/replay/fit-model";
 import {
@@ -67,7 +67,7 @@ describe("loadQuestContent", () => {
 
   function stubFetch({
     cards,
-    dreamcallers,
+    dreamAvatars,
     dreamsigns,
     decklists,
     decklistIds,
@@ -83,7 +83,7 @@ describe("loadQuestContent", () => {
     failingPaths = [],
   }: {
     cards: CardData[];
-    dreamcallers: unknown[];
+    dreamAvatars: unknown[];
     dreamsigns: unknown[];
     decklists: string[][];
     decklistIds?: string[][];
@@ -115,10 +115,10 @@ describe("loadQuestContent", () => {
         if (path === "/cards_v2-data.json") {
           return Promise.resolve({ ok: true, json: () => Promise.resolve(cards) });
         }
-        if (path === "/dreamcallers-v2-data.json") {
+        if (path === "/dream-avatars-v2-data.json") {
           return Promise.resolve({
             ok: true,
-            json: () => Promise.resolve(dreamcallers),
+            json: () => Promise.resolve(dreamAvatars),
           });
         }
         if (path === "/dreamsign-data.json") {
@@ -211,11 +211,11 @@ describe("loadQuestContent", () => {
     );
   }
 
-  it("loads V2 cards, Dreamcallers, decklists and builds the run pool context", async () => {
+  it("loads V2 cards, DreamAvatars, decklists and builds the run pool context", async () => {
     const cards = [makeCard(1), makeCard(2), makeCard(3)];
-    const v2Dreamcaller = {
-      id: "dreamcaller-1",
-      name: "Test Dreamcaller",
+    const v2DreamAvatar = {
+      id: "dream-avatar-1",
+      name: "Test DreamAvatar",
       title: "Speaker of Tests",
       renderedText: "Test rules text.",
       imageNumber: "0001",
@@ -225,7 +225,7 @@ describe("loadQuestContent", () => {
 
     stubFetch({
       cards,
-      dreamcallers: [v2Dreamcaller],
+      dreamAvatars: [v2DreamAvatar],
       dreamsigns: [],
       decklists: [["Card 1", "Card 2", "Card 3"]],
     });
@@ -233,10 +233,10 @@ describe("loadQuestContent", () => {
     const content = await loadQuestContent();
 
     expect(content.cardDatabase.size).toBe(cards.length);
-    expect(content.dreamcallers).toHaveLength(1);
-    // The Dreamcaller mapping must carry the V2 signature cards through.
-    expect(content.dreamcallers[0].signatureCards).toEqual(["Card 1", "Card 2"]);
-    expect(content.dreamcallers[0].startingEssence).toBe(235);
+    expect(content.dreamAvatars).toHaveLength(1);
+    // The DreamAvatar mapping must carry the V2 signature cards through.
+    expect(content.dreamAvatars[0].signatureCards).toEqual(["Card 1", "Card 2"]);
+    expect(content.dreamAvatars[0].startingEssence).toBe(235);
 
     // The pool context indexes every loaded card by id and carries the decklists.
     expect(content.poolContext).toBeDefined();
@@ -256,7 +256,7 @@ describe("loadQuestContent", () => {
     ["/merchant-corpus-data.json", "Failed to load merchant corpus"],
   ])("rejects when fold-relevant content fetch %s fails", async (path, message) => {
     const cards = [makeCard(1), makeCard(2), makeCard(3)];
-    const dreamcallers = [
+    const dreamAvatars = [
       {
         id: "dc-a",
         name: "Alpha",
@@ -269,7 +269,7 @@ describe("loadQuestContent", () => {
     ];
     stubFetch({
       cards,
-      dreamcallers,
+      dreamAvatars,
       dreamsigns: [],
       decklists: [["Card 1", "Card 2"]],
       failingPaths: [path],
@@ -283,7 +283,7 @@ describe("loadQuestContent", () => {
     // records; without them it would silently fall back to the random color
     // pool. The records must therefore be fetched even in pool mode.
     const cards = [makeCard(1), makeCard(2), makeCard(3)];
-    const dreamcallers = [
+    const dreamAvatars = [
       {
         id: "dc-a",
         name: "Alpha",
@@ -296,7 +296,7 @@ describe("loadQuestContent", () => {
     ];
     stubFetch({
       cards,
-      dreamcallers,
+      dreamAvatars,
       dreamsigns: [],
       decklists: [["Card 1", "Card 2"]],
       draftRecords: [],
@@ -313,7 +313,7 @@ describe("loadQuestContent", () => {
     // shared fit model and supplies the pack structures coherent opponent decks
     // draft from. The no-argument load path (DEFAULT_POOL_VARIANT) fetches it.
     const cards = [makeCard(1), makeCard(2), makeCard(3)];
-    const dreamcallers = [
+    const dreamAvatars = [
       {
         id: "dc-a",
         name: "Alpha",
@@ -326,7 +326,7 @@ describe("loadQuestContent", () => {
     ];
     stubFetch({
       cards,
-      dreamcallers,
+      dreamAvatars,
       dreamsigns: [],
       decklists: [["Card 1", "Card 2"]],
       draftRecords: [],
@@ -342,7 +342,7 @@ describe("loadQuestContent", () => {
     // idf3 builds its pool from decklist similarity, not the draft records, but
     // the records are still fetched so opponent decks have a fit model and packs.
     const cards = [makeCard(1), makeCard(2), makeCard(3)];
-    const dreamcallers = [
+    const dreamAvatars = [
       {
         id: "dc-a",
         name: "Alpha",
@@ -355,7 +355,7 @@ describe("loadQuestContent", () => {
     ];
     stubFetch({
       cards,
-      dreamcallers,
+      dreamAvatars,
       dreamsigns: [],
       decklists: [["Card 1", "Card 2"]],
     });
@@ -368,7 +368,7 @@ describe("loadQuestContent", () => {
 
   it("loads draft records and builds a fit model for v2 pool mode", async () => {
     const cards = makeCards(20);
-    const dreamcallers = [
+    const dreamAvatars = [
       {
         id: "dc-a",
         name: "Alpha",
@@ -386,7 +386,7 @@ describe("loadQuestContent", () => {
 
     stubFetch({
       cards,
-      dreamcallers,
+      dreamAvatars,
       dreamsigns: [],
       decklists: [cards.slice(0, 4).map((card) => card.name)],
       draftRecords: [fixtureRecord],
@@ -404,7 +404,7 @@ describe("loadQuestContent", () => {
     // The `embedded` variant grows its pool from `/affinity-corpus-data.json`.
     // The corpus is reconstructed and threaded onto poolData.affinityCorpus.
     const cards = [makeCard(1), makeCard(2)];
-    const dreamcallers = [
+    const dreamAvatars = [
       {
         id: "dc-a",
         name: "Alpha",
@@ -417,7 +417,7 @@ describe("loadQuestContent", () => {
     ];
     stubFetch({
       cards,
-      dreamcallers,
+      dreamAvatars,
       dreamsigns: [],
       decklists: [["Card 1", "Card 2"]],
     });
@@ -433,9 +433,9 @@ describe("loadQuestContent", () => {
     ]);
   });
 
-  it("offers every Dreamcaller without a validation skip loop", async () => {
+  it("offers every DreamAvatar without a validation skip loop", async () => {
     const cards = [makeCard(1), makeCard(2)];
-    const dreamcallers = [
+    const dreamAvatars = [
       {
         id: "dc-a",
         name: "Alpha",
@@ -456,18 +456,18 @@ describe("loadQuestContent", () => {
       },
     ];
 
-    stubFetch({ cards, dreamcallers, dreamsigns: [], decklists: [["Card 1"]] });
+    stubFetch({ cards, dreamAvatars, dreamsigns: [], decklists: [["Card 1"]] });
 
     const content = await loadQuestContent();
 
-    expect(content.dreamcallers.map((dc) => dc.id)).toEqual(["dc-a", "dc-b"]);
+    expect(content.dreamAvatars.map((dc) => dc.id)).toEqual(["dc-a", "dc-b"]);
     // A zero startingEssence falls back to the default rather than being dropped.
-    expect(content.dreamcallers[0].startingEssence).toBe(DEFAULT_STARTING_ESSENCE);
+    expect(content.dreamAvatars[0].startingEssence).toBe(DEFAULT_STARTING_ESSENCE);
   });
 
   it("populates draftMode, draftRecords, and fitModel in replay mode", async () => {
     const cards = makeCards(20);
-    const dreamcallers = [
+    const dreamAvatars = [
       {
         id: "dc-a",
         name: "Alpha",
@@ -485,7 +485,7 @@ describe("loadQuestContent", () => {
 
     stubFetch({
       cards,
-      dreamcallers,
+      dreamAvatars,
       dreamsigns: [],
       decklists: [cards.slice(0, 4).map((card) => card.name)],
       draftRecords: [fixtureRecord],
@@ -521,11 +521,11 @@ function makeRecord(id: string, packCardIds: string[][]): DraftRecord {
   };
 }
 
-/** Minimal DreamcallerContent fixture; signatures are keyed by card id. */
-function makeDreamcaller(signatureCardIds: string[]): DreamcallerContent {
+/** Minimal DreamAvatarContent fixture; signatures are keyed by card id. */
+function makeDreamAvatar(signatureCardIds: string[]): DreamAvatarContent {
   return {
     id: "dc-test",
-    name: "Test Dreamcaller",
+    name: "Test DreamAvatar",
     title: "Speaker of Tests",
     renderedText: "",
     imageNumber: "0001",
@@ -554,21 +554,21 @@ describe("buildReplayDraftState", () => {
   const records: DraftRecord[] = [recordA, recordB];
 
   it("throws when draftRecords is empty", () => {
-    const dc = makeDreamcaller([]);
+    const dc = makeDreamAvatar([]);
     expect(() => buildReplayDraftState(dc, idIndex, "seed-1", [])).toThrow(
       "buildReplayDraftState requires at least one draft record",
     );
   });
 
   it("selects a record deterministically for a fixed seed", () => {
-    const dc = makeDreamcaller([]);
+    const dc = makeDreamAvatar([]);
     const state1 = buildReplayDraftState(dc, idIndex, "seed-abc", records);
     const state2 = buildReplayDraftState(dc, idIndex, "seed-abc", records);
     expect(state1.recordId).toBe(state2.recordId);
   });
 
   it("returns a mode:replay state with packSequence resolved from the chosen record", () => {
-    const dc = makeDreamcaller([]);
+    const dc = makeDreamAvatar([]);
     const state = buildReplayDraftState(dc, idIndex, "quest-seed-1", records);
     expect(state.mode).toBe("replay");
     // recordId must be one of the fixture ids.
@@ -584,16 +584,16 @@ describe("buildReplayDraftState", () => {
     }
   });
 
-  it("resolves the dreamcaller's signature cards to signatureCardNumbers", () => {
+  it("resolves the dreamAvatar's signature cards to signatureCardNumbers", () => {
     // dc has card 101 and card 103 as signatures.
-    const dc = makeDreamcaller([card1.id, card3.id]);
+    const dc = makeDreamAvatar([card1.id, card3.id]);
     const state = buildReplayDraftState(dc, idIndex, "quest-seed-2", records);
     expect(state.signatureCardNumbers).toContain(card1.cardNumber);
     expect(state.signatureCardNumbers).toContain(card3.cardNumber);
   });
 
   it("drops signature ids not present in the id index", () => {
-    const dc = makeDreamcaller(["unknown-card", card2.id]);
+    const dc = makeDreamAvatar(["unknown-card", card2.id]);
     const state = buildReplayDraftState(dc, idIndex, "quest-seed-3", records);
     // Only card2's number survives; the unknown id is silently dropped.
     expect(state.signatureCardNumbers).toEqual([card2.cardNumber]);
@@ -601,7 +601,7 @@ describe("buildReplayDraftState", () => {
 
   it("produces different records for different seeds", () => {
     // With two records, different seeds should sometimes select different records.
-    const dc = makeDreamcaller([]);
+    const dc = makeDreamAvatar([]);
     const ids = new Set<string>();
     for (let i = 0; i < 20; i += 1) {
       const state = buildReplayDraftState(dc, idIndex, `seed-${String(i)}`, records);
@@ -643,7 +643,7 @@ describe("buildReplayDraftState", () => {
   }
 
   it("without a fitModel the selection equals the uniform fallback", () => {
-    const dc = makeDreamcaller([card1.id]);
+    const dc = makeDreamAvatar([card1.id]);
     // No fitModel → uniform seeded draw.
     const state = buildReplayDraftState(dc, idIndex, "quest-fm-0", records);
     const expectedSeed = hashStringToSeed("quest-fm-0:replay");
@@ -658,7 +658,7 @@ describe("buildReplayDraftState", () => {
     // for every seed, so the choice provably depends on the fitModel. The ranking
     // math itself is covered exhaustively in draft-records.test.ts.
     const fitModel = makeFitModelStub([[card1.id, 3.0]]);
-    const dc = makeDreamcaller([card1.id]);
+    const dc = makeDreamAvatar([card1.id]);
     const ordered = [recordB, recordA];
     const seed = "quest-fm-1";
 
@@ -679,7 +679,7 @@ describe("buildReplayDraftState", () => {
   it("with a fitModel whose idf has no weight for any signature, falls back to uniform", () => {
     // All idf weights are 0 for the signature cards.
     const fitModel = makeFitModelStub([[card1.id, 0], [card2.id, 0]]);
-    const dc = makeDreamcaller([card1.id, card2.id]);
+    const dc = makeDreamAvatar([card1.id, card2.id]);
     const state1 = buildReplayDraftState(dc, idIndex, "quest-fm-2", records, fitModel);
     const state2 = buildReplayDraftState(dc, idIndex, "quest-fm-2", records);
     // Both should pick the same record (uniform fallback in both cases).

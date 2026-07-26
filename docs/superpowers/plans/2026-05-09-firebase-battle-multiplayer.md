@@ -357,7 +357,7 @@ function makeRawSnapshot(overrides: Record<string, unknown>) {
         dreamsignCount: 0,
       },
       enemyDeckDefinition: [],
-      dreamcallerSummary: null,
+      dreamAvatarSummary: null,
       dreamsignSummaries: [],
       atlasSnapshot: { nodes: {}, edges: {}, nexusId: "" },
     },
@@ -820,7 +820,7 @@ Append to `src/multiplayer/battle-service.test.ts`:
 import { applyBattleCommandToRoom } from "./battle-service";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
 import { createBattleInit } from "../battle/integration/create-battle-init";
-import { createTestQuestState, createTestSite, createTestCardDatabase, createTestDreamcallers } from "../battle/test-support";
+import { createTestQuestState, createTestSite, createTestCardDatabase, createTestDreamAvatars } from "../battle/test-support";
 
 describe("applyBattleCommandToRoom", () => {
   it("runs battleControllerReducer inside the room transaction and bumps commandSerial", () => {
@@ -829,7 +829,7 @@ describe("applyBattleCommandToRoom", () => {
       site: createTestSite(),
       state: createTestQuestState(),
       cardDatabase: createTestCardDatabase(),
-      dreamcallers: createTestDreamcallers(),
+      dreamAvatars: createTestDreamAvatars(),
       seedOverride: 1,
       enableAi: false,
     });
@@ -1791,7 +1791,7 @@ import { createBattleInit } from "../battle/integration/create-battle-init";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
 import { prepareInitialBattleState } from "../battle/engine/turn-flow";
 import type { CardData } from "../types/cards";
-import type { DreamcallerContent } from "../types/content";
+import type { DreamAvatarContent } from "../types/content";
 import type { QuestState, SiteState } from "../types/quest";
 
 export function useEnsureBattleSession(input: {
@@ -1803,10 +1803,10 @@ export function useEnsureBattleSession(input: {
   questState: Pick<
     QuestState,
     "atlas" | "completionLevel" | "currentDreamscape" | "deck" |
-    "dreamcaller" | "dreamsigns" | "resolvedPackage"
+    "dreamAvatar" | "dreamsigns" | "resolvedPackage"
   >;
   cardDatabase: ReadonlyMap<number, CardData>;
-  dreamcallers: readonly DreamcallerContent[];
+  dreamAvatars: readonly DreamAvatarContent[];
   seedOverride: number | null;
   enableAi: boolean;
 }): void {
@@ -1827,7 +1827,7 @@ export function useEnsureBattleSession(input: {
       site: input.site,
       state: input.questState,
       cardDatabase: input.cardDatabase,
-      dreamcallers: input.dreamcallers,
+      dreamAvatars: input.dreamAvatars,
       seedOverride: input.seedOverride,
       enableAi: input.enableAi,
     });
@@ -1850,7 +1850,7 @@ export function useEnsureBattleSession(input: {
     input.battleState,
     input.cardDatabase,
     input.database,
-    input.dreamcallers,
+    input.dreamAvatars,
     input.enableAi,
     input.questState,
     input.roomId,
@@ -1909,7 +1909,7 @@ export function BattleSiteRoute({
     site,
     questState: state,
     cardDatabase,
-    dreamcallers: questContent.dreamcallers,
+    dreamAvatars: questContent.dreamAvatars,
     seedOverride: runtimeConfig.seedOverride,
     enableAi: runtimeConfig.enableAi,
   });
@@ -2057,7 +2057,7 @@ function handleResetBattle(): void {
   setOpenFigmentCreator(null);
   setOpenNoteEditor(null);
   setOpenSideSummary(null);
-  setIsDreamcallerPanelOpen(false);
+  setIsDreamAvatarPanelOpen(false);
   setRewardOverlay(null);
   setIsResultOverlayDismissed(false);
   setJudgmentPause(null);

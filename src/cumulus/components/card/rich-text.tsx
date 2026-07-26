@@ -34,7 +34,7 @@ export interface RichTextDefinition {
  *  - `plain` — a run of plain prose; no markup parsing.
  *  - `rules` — Dreamtides rules text (see `RulesText`): glossary keywords gain
  *    the spark-amber emphasis and resource symbols (`◆`, `●`, `⍏N`) render as
- *    their inline glyphs. Use for card / dreamcaller / dreamsign ability text.
+ *    their inline glyphs. Use for card / dreamAvatar / dreamsign ability text.
  *  - `underline` — a semantically underlined run inside inline prose.
  *  - `inline` — several parts rendered as one continuous line of prose.
  *  - `note`  — a de-emphasized secondary line (muted + italic), e.g. a

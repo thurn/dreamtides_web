@@ -3,7 +3,7 @@ import { getLogEntries, resetLog } from "../logging";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
 import type { PoolDraftState } from "../types/draft";
-import type { ResolvedDreamcallerPackage } from "../types/content";
+import type { ResolvedDreamAvatarPackage } from "../types/content";
 import type { FitModel } from "./replay/fit-model";
 import {
   completeDraftSite,
@@ -49,11 +49,11 @@ function buildDB(cards: CardData[]): Map<number, CardData> {
 
 function buildResolvedPackage(
   copiesByCard: Record<number, number>,
-): ResolvedDreamcallerPackage {
+): ResolvedDreamAvatarPackage {
   return {
-    dreamcaller: {
-      id: "test-dreamcaller",
-      name: "Test Dreamcaller",
+    dreamAvatar: {
+      id: "test-dream-avatar",
+      name: "Test DreamAvatar",
       title: "Draft Architect",
       renderedText: "Test rules text.",
       imageNumber: "0003",

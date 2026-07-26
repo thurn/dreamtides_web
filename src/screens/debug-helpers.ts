@@ -1,7 +1,7 @@
 import type { CardData } from "../types/cards";
 import type {
   DreamsignTemplate,
-  ResolvedDreamcallerPackage,
+  ResolvedDreamAvatarPackage,
 } from "../types/content";
 import type { DraftState } from "../types/draft";
 import {
@@ -30,7 +30,7 @@ export interface DreamsignPoolDebugEntry {
 }
 
 export interface PackageDebugInfo {
-  dreamcallerName: string;
+  dreamAvatarName: string;
   startingEssence: number;
   mandatoryOnlyPoolSize: number;
   draftPoolSize: number;
@@ -103,7 +103,7 @@ export function extractDraftDebugInfo(
 
 /** Extracts a debug summary of the resolved run package and Dreamsign pool. */
 export function extractPackageDebugInfo(
-  resolvedPackage: ResolvedDreamcallerPackage | null,
+  resolvedPackage: ResolvedDreamAvatarPackage | null,
   remainingDreamsignPool: readonly string[],
   dreamsignTemplates: readonly DreamsignTemplate[],
 ): PackageDebugInfo | null {
@@ -122,8 +122,8 @@ export function extractPackageDebugInfo(
   });
 
   return {
-    dreamcallerName: resolvedPackage.dreamcaller.name,
-    startingEssence: resolvedPackage.dreamcaller.startingEssence,
+    dreamAvatarName: resolvedPackage.dreamAvatar.name,
+    startingEssence: resolvedPackage.dreamAvatar.startingEssence,
     mandatoryOnlyPoolSize: resolvedPackage.mandatoryOnlyPoolSize,
     draftPoolSize: resolvedPackage.draftPoolSize,
     doubledCardCount: resolvedPackage.doubledCardCount,

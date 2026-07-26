@@ -1,4 +1,4 @@
-// The `sigseed` variant: a Dreamcaller's pool is grown ONLY from its signature
+// The `sigseed` variant: an avatar's pool is grown ONLY from its signature
 // cards. Where `picksig` lets the signature merely BIAS a seed draw that still
 // ranges over the whole corpus — and then lets a signature-blind best-of-K
 // coherence step discard on-theme seeds for tighter off-theme clusters — `sigseed`
@@ -51,9 +51,9 @@ export const SIGSEED: SigSeedTuning = {
   priorWeight: PICKFIT.priorWeight,
   secondCopyFactor: PICKFIT.secondCopyFactor,
   topPartnerCount: PICKFIT.topPartnerCount,
-  // 4 maximises distinct pools: with the ~6 signature cards a Dreamcaller has and
+  // 4 maximises distinct pools: with the ~6 signature cards a DreamAvatar has and
   // deterministic growth, the count of distinct subset-seeded pools saturates here
-  // (~28-30 per Dreamcaller), and raising it further only converges pools toward
+  // (~28-30 per DreamAvatar), and raising it further only converges pools toward
   // the all-signatures start without adding on-theme strength.
   maxSeedCards: 4,
 };
@@ -129,9 +129,9 @@ export function generateSigSeed(
 export const sigSeedStrategy: PoolStrategy = {
   id: "sigseed",
   description:
-    "Grows the pool exclusively from a Dreamcaller's signature cards: each run " +
+    "Grows the pool exclusively from an avatar's signature cards: each run " +
     "starts from a random subset of the signature and expands by pick-affinity, " +
-    "so every pool is anchored on the Dreamcaller's identity and never drifts " +
+    "so every pool is anchored on the avatar's identity and never drifts " +
     "onto an unrelated theme. Reduces to pickcohere when no signature is given.",
   generate: ({ rng, poolData, signatureCards }) =>
     generateSigSeed(rng, poolData, signatureCards),

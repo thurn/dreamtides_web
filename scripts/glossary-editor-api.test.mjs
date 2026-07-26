@@ -172,8 +172,8 @@ definition = "Contextual copy."
       termPresentation: "symbolOnly",
       contexts: [
         {
-          owner: "dreamcaller",
-          definition: "Dreamcaller-specific explanation.",
+          owner: "dreamAvatar",
+          definition: "DreamAvatar-specific explanation.",
         },
       ],
     };
@@ -189,8 +189,8 @@ definition = "Contextual copy."
       termPresentation: "symbolOnly",
       contexts: [
         {
-          owner: "dreamcaller",
-          definition: "Dreamcaller-specific explanation.",
+          owner: "dreamAvatar",
+          definition: "DreamAvatar-specific explanation.",
         },
       ],
     });

@@ -26,9 +26,9 @@ Read these first:
   derives `state` from `session.room.questState` (defaulting via
   `createDefaultState()` when the room has no quest yet) and exposes
   `useQuest()` so screens see the same shape as the single-player path.
-- Quest start is a **Dreamcaller selection** screen with 3 choices. Picking a
-  Dreamcaller resolves a fixed package, builds the starter deck, draft state,
-  and atlas via `startQuestFromDreamcaller`, and transitions
+- Quest start is a **Dream Avatar selection** screen with 3 choices. Picking a
+  Dream Avatar resolves a fixed package, builds the starter deck, draft state,
+  and atlas via `startQuestFromDreamAvatar`, and transitions
   `state.screen` straight to the first dreamscape.
 - Top-level state is `QuestState` in `src/types/quest.ts`. Routing is driven
   by `state.screen` and dispatched in
@@ -89,7 +89,7 @@ npm run dev
 script is idempotent and refreshes:
 
 - `public/card-data.json`
-- `public/dreamcallers-v2-data.json`
+- `public/dream-avatars-v2-data.json`
 - `public/cards/` symlinks into the local image cache
 
 Useful one-offs:
@@ -118,9 +118,9 @@ typecheck, lint, tests, or browser QA in a fresh worktree.
 | `src/state/quest-context.tsx` | `useQuest()` consumer hook, `createDefaultState()`, single-player provider for tests |
 | `src/types/quest.ts` | `QuestState`, `Screen`, `SiteType`, atlas/site types |
 | `src/components/ScreenRouter.tsx` | Dispatches `state.screen` and site screens |
-| `src/screens/QuestStartScreen.tsx` | Dreamcaller offer UI |
-| `src/state/quest-state-actions.ts` | `startQuestFromDreamcaller`, screen/site/atlas transitions |
-| `src/data/quest-content.ts` | Loads normalized quest content and validates Dreamcaller packages |
+| `src/screens/QuestStartScreen.tsx` | Dream Avatar offer UI |
+| `src/state/quest-state-actions.ts` | `startQuestFromDreamAvatar`, screen/site/atlas transitions |
+| `src/data/quest-content.ts` | Loads normalized quest content and validates Dream Avatar packages |
 | `src/atlas/atlas-generator.ts` | Atlas generation, site pools, site metadata, dreamscape creation |
 | `src/draft/draft-engine.ts` | Fixed-pool draft logic with 4-card offers and persisted draft state |
 | `src/firebase/app-config.ts` | Reads `VITE_FIREBASE_*` env vars and initializes the Firebase app + database |
@@ -205,8 +205,8 @@ agent-browser --session <unique-name> snapshot -i -c
 ```
 
 The landing screen exposes a single `Create Game` button. Click it; the URL
-becomes `?game=<roomId>` and the snapshot reveals the 3-Dreamcaller selection.
-Picking a Dreamcaller transitions straight to the first dreamscape.
+becomes `?game=<roomId>` and the snapshot reveals the 3-Dream Avatar selection.
+Picking a Dream Avatar transitions straight to the first dreamscape.
 
 ### Capturing Render-Time Errors
 
@@ -268,8 +268,8 @@ change can affect quest-wide progression or persistence:
 1. Open the app and confirm the landing screen renders a single
    **Create Game** button.
 2. Click **Create Game**. Confirm the URL gains `?game=<6-char-id>` and the
-   snapshot shows exactly 3 Dreamcaller buttons.
-3. Pick a Dreamcaller. Confirm the snapshot transitions to the dreamscape
+   snapshot shows exactly 3 Dream Avatar buttons.
+3. Pick a Dream Avatar. Confirm the snapshot transitions to the dreamscape
    view (biome heading, list of sites, HUD with Essence/Cards/Signs counts,
    `1 connected` presence indicator).
 4. Enter a non-battle site. Battle should stay locked until the other sites
@@ -300,7 +300,7 @@ agent-browser --session <unique-name> screenshot /tmp/qs-interaction.png
 
 Inspect screenshots visually after capture. Verify:
 
-- card art and Dreamcaller portraits load
+- card art and Dream Avatar portraits load
 - layout spacing is stable
 - battle/site buttons are not clipped or overlapped
 - HUD values make sense for the current state

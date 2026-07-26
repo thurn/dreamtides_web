@@ -136,12 +136,12 @@ export function CoopQuestProvider({
       setCompletionLevel: (value) => dispatch(actions.setCompletionLevel(value)),
 
       // ---- lifecycle ----
-      startQuest: (dreamcaller) =>
-        dispatch(actions.startQuest({ dreamcallerId: dreamcaller.id })),
-      rerollDreamcallerOffer: () =>
-        dispatch(actions.rerollDreamcallerOffer()),
-      setDreamcallerSelection: (resolvedPackage) =>
-        dispatch(actions.selectDreamcaller(resolvedPackage.dreamcaller.id)),
+      startQuest: (dreamAvatar) =>
+        dispatch(actions.startQuest({ dreamAvatarId: dreamAvatar.id })),
+      rerollDreamAvatarOffer: () =>
+        dispatch(actions.rerollDreamAvatarOffer()),
+      setDreamAvatarSelection: (resolvedPackage) =>
+        dispatch(actions.selectDreamAvatar(resolvedPackage.dreamAvatar.id)),
       resetQuest: () => dispatch(actions.resetQuest()),
       // The room seed is fixed at genesis, so a loaded snapshot must adopt it —
       // the reducer's LOAD_STATE validator bounces a foreign seed. These debug /

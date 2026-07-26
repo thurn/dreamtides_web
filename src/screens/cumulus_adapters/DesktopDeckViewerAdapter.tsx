@@ -1,6 +1,6 @@
 // Adapter bridging live quest state to the pure desktop deck viewer
 // (`src/cumulus/screens/DesktopDeckViewer`). Wiring only: it acquires `useQuest()`,
-// builds the view-model from the live deck, card database, Dreamcaller, and
+// builds the view-model from the live deck, card database, DreamAvatar, and
 // dreamsigns, logs the open, and renders nothing while closed. All resolution
 // logic lives in the pure builder (`desktop-deck-view-model.ts`); the screen
 // itself stays pure.
@@ -33,19 +33,19 @@ export function DesktopDeckViewerAdapter({
       buildDesktopDeckView(
         state.deck,
         questContent.cardDatabase,
-        state.dreamcaller,
+        state.dreamAvatar,
         state.dreamsigns,
       ),
     [
       state.deck,
       questContent.cardDatabase,
-      state.dreamcaller,
+      state.dreamAvatar,
       state.dreamsigns,
     ],
   );
   const cardCount = view.cards.length;
   const dreamsignCount = view.dreamsigns.length;
-  const hasDreamcaller = view.dreamcaller !== null;
+  const hasDreamAvatar = view.dreamAvatar !== null;
 
   useEffect(() => {
     const wasOpen = wasOpenRef.current;
@@ -54,9 +54,9 @@ export function DesktopDeckViewerAdapter({
     logEvent("desktop_deck_viewer_opened", {
       cardCount,
       dreamsignCount,
-      hasDreamcaller,
+      hasDreamAvatar,
     });
-  }, [cardCount, dreamsignCount, hasDreamcaller, isOpen]);
+  }, [cardCount, dreamsignCount, hasDreamAvatar, isOpen]);
 
   if (!isOpen) return null;
   return <DesktopDeckViewer view={view} onClose={onClose} />;

@@ -13,7 +13,7 @@ import {
   opponentPickBudget,
   opponentRemovalCount,
   runMidpointCompletionLevel,
-  selectOpponentDreamcaller,
+  selectOpponentDreamAvatar,
 } from "./opponent-deck";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import { buildIdIndex } from "../../data/cards-v2-database";
@@ -24,7 +24,7 @@ import { getLogEntries, resetLog } from "../../logging";
 import type { RunPoolContext } from "../../data/quest-content";
 import type {
   AffiliationContent,
-  DreamcallerContent,
+  DreamAvatarContent,
   DreamscapeContent,
   DreamsignTemplate,
 } from "../../types/content";
@@ -160,17 +160,17 @@ function makePoolContext(db: Map<number, CardData>): RunPoolContext {
 }
 
 /**
- * A single-Dreamcaller set steered by the given signature cards, so the opponent
+ * A single-DreamAvatar set steered by the given signature cards, so the opponent
  * descriptor and deck are deterministic. Mirrors the runtime bundle: the steering
  * cards are kept as display names in `signatureCards`, and the id-aligned
  * `signatureCardIds` (resolved from `db` when supplied) is what the opponent
  * builder actually seeds on. When `db` is omitted the ids are empty, so the
  * draft is steered only by corpus coherence (and any affiliation).
  */
-function makeDreamcallers(
+function makeDreamAvatars(
   signatureCards: readonly string[],
   db?: ReadonlyMap<number, CardData>,
-): DreamcallerContent[] {
+): DreamAvatarContent[] {
   const idByName = new Map(
     db === undefined ? [] : [...db.values()].map((card) => [card.name, card.id]),
   );
@@ -232,7 +232,7 @@ function makeAffiliationContent(db: ReadonlyMap<number, CardData>): {
       affiliationId: "alpha_affiliation",
       siteIcon: "",
       isStarter: false,
-      dreamcallerIds: [],
+      dreamAvatarIds: [],
     },
   ];
   const baseState = makeBattleTestState();
@@ -267,7 +267,7 @@ function makeInput(
     site: baseState.atlas.nodes["dreamscape-2"].sites[0],
     state,
     cardDatabase: db,
-    dreamcallers: makeDreamcallers(alpha, db),
+    dreamAvatars: makeDreamAvatars(alpha, db),
     poolContext: makePoolContext(db),
     fitModel,
     draftRecords,
@@ -341,13 +341,13 @@ describe("buildOpponentDreamsigns", () => {
   });
 });
 
-describe("selectOpponentDreamcaller dreamscape restriction", () => {
+describe("selectOpponentDreamAvatar dreamscape restriction", () => {
   // Synthetic roster: ids deliberately mixed-case so the eligibility match is
-  // exercised case-insensitively (Dreamcaller ids are UUIDs in production).
-  const roster: DreamcallerContent[] = ["Aaa", "Bbb", "Ccc", "Ddd"].map(
+  // exercised case-insensitively (DreamAvatar ids are UUIDs in production).
+  const roster: DreamAvatarContent[] = ["Aaa", "Bbb", "Ccc", "Ddd"].map(
     (id) => ({
       id,
-      name: `Dreamcaller ${id}`,
+      name: `DreamAvatar ${id}`,
       title: "",
       renderedText: "",
       imageNumber: "001",
@@ -363,13 +363,13 @@ describe("selectOpponentDreamcaller dreamscape restriction", () => {
     const picked = new Set<string>();
     for (let seed = 0; seed < 200; seed += 1) {
       const rng = createBattleRngStreams(seed).enemyDescriptor;
-      const choice = selectOpponentDreamcaller(roster, null, rng, eligible);
+      const choice = selectOpponentDreamAvatar(roster, null, rng, eligible);
       if (choice !== null) picked.add(choice.id);
     }
     return picked;
   }
 
-  it("only ever returns Dreamcallers in the eligibility list (matched case-insensitively)", () => {
+  it("only ever returns DreamAvatars in the eligibility list (matched case-insensitively)", () => {
     const picked = pickedIdsAcrossSeeds(["aaa", "ccc"]);
     expect([...picked].sort()).toEqual(["Aaa", "Ccc"]);
   });
@@ -380,7 +380,7 @@ describe("selectOpponentDreamcaller dreamscape restriction", () => {
     expect(pickedIdsAcrossSeeds(undefined).size).toBe(roster.length);
   });
 
-  it("falls back to the full roster when no eligible Dreamcaller is resident", () => {
+  it("falls back to the full roster when no eligible DreamAvatar is resident", () => {
     expect(pickedIdsAcrossSeeds(["not-a-resident"]).size).toBe(roster.length);
   });
 });
@@ -488,9 +488,9 @@ describe("createBattleInit opponent invariants", () => {
 
     const alphaNumbers = new Set(ALPHA_CARDS);
 
-    // The Dreamcaller carries no signature, so only the affiliation pulls the
+    // The DreamAvatar carries no signature, so only the affiliation pulls the
     // deck toward alpha.
-    const neutralDreamcallers = makeDreamcallers([]);
+    const neutralDreamAvatars = makeDreamAvatars([]);
 
     // Aggregate over several battle seeds so the comparison is statistical, not
     // a single-draw coincidence.
@@ -517,7 +517,7 @@ describe("createBattleInit opponent invariants", () => {
         battleEntryKey: "site-1::0::affiliated-node",
         site: baseState.atlas.nodes["dreamscape-2"].sites[0],
         cardDatabase: db,
-        dreamcallers: neutralDreamcallers,
+        dreamAvatars: neutralDreamAvatars,
         poolContext,
         fitModel,
         draftRecords,

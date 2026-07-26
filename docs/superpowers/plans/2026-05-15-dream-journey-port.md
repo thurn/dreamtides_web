@@ -18,7 +18,7 @@ The directory layout is fixed by the spec's Architecture section. The plan adds 
 
 - `src/journeys/index.ts` — public surface (re-exports `JourneyScreen` and `journeySeedForSite`).
 - `src/journeys/adapter/seed.ts`, `content-bridge.ts`, `buildContext.ts` — quest state → journey context translation.
-- `src/journeys/content/types.ts`, `keywords.ts` — internal Card/Dreamsign/Dreamcaller types.
+- `src/journeys/content/types.ts`, `keywords.ts` — internal Card/Dreamsign/Dream Avatar types.
 - `src/journeys/util/rng.ts`, `stableJson.ts`, `tree.ts` — labeled-hash RNG, stable JSON, decision-tree traversal.
 - `src/journeys/journey/manifest.ts`, `symbols.ts`, `rewardArtTypes.ts`, `effects.ts`, `value.ts`, `operationBuilders.ts`, `assembly.ts`, `generate.ts` — the pipeline.
 - `src/journeys/journey/shared/types.ts`, `cec.ts`, `text.ts`, `content.ts`, `predicates.ts`, `viability.ts`, `costs.ts`, `rewards.ts`, `dreamwell.ts` — cross-shape helpers. `viability.ts` and `dreamwell.ts` are new in the port.
@@ -379,12 +379,12 @@ The per-shape contract test described below is the standard test pattern reused 
 - Modify: `scripts/setup-assets.mjs` — add a step that copies (or symlinks, matching the script's existing pattern) `/Users/dthurn/Documents/shutterstock/images_journeys/*` into `public/journeys/`, preserving the trailing-numeric-id naming convention (`*-<imageId>.<ext>`).
 - Test: `src/journeys/ui/dreamArt.test.ts`.
 
-The asset pipeline question from the spec is settled here: the existing setup-assets.mjs already pulls assets from `~/Documents/` for other categories (dreamcallers, dreamsigns); journey art uses the same convention.
+The asset pipeline question from the spec is settled here: the existing setup-assets.mjs already pulls assets from `~/Documents/` for other categories (dream avatars, dreamsigns); journey art uses the same convention.
 
 - [ ] **Step 1: Copy the ledger TOML** into `src/journeys/data/`.
 - [ ] **Step 2: Port the matcher's allocation algorithm** (the deterministic per-manifest-seed walk that prefers an unused dream of the matching reward type, falls back to cross-type, falls back to repeat). Strip out everything related to terminal rendering (`supportsInlineImages`, `sharp` PNG resizing, OSC 1337 escapes).
 - [ ] **Step 3: Wire `imageUrlFor(imageId)`** to return `/journeys/<imageId>.<ext>`. The `<ext>` is captured from the on-disk filename during ledger load (the CLI's `imagePathIndex` logic ports as a function that scans `public/journeys/` at module load and caches the imageId→extension map; in the browser, this map is populated at build time by setup-assets.mjs writing a small manifest JSON the matcher can fetch). Decision point for the implementer: simplest browser-friendly form is a static `imageId-to-extension.json` written by setup-assets.mjs and imported synchronously.
-- [ ] **Step 4: Extend setup-assets.mjs.** Add a journeys block that mirrors the existing dreamcaller/dreamsign blocks: source path `~/Documents/shutterstock/images_journeys`, destination `public/journeys/`. If the source path is absent (developer who lacks the asset cache), the script logs a warning and continues — matching the existing graceful-degradation pattern.
+- [ ] **Step 4: Extend setup-assets.mjs.** Add a journeys block that mirrors the existing dream-avatar/dreamsign blocks: source path `~/Documents/shutterstock/images_journeys`, destination `public/journeys/`. If the source path is absent (developer who lacks the asset cache), the script logs a warning and continues — matching the existing graceful-degradation pattern.
 - [ ] **Step 5: Write the matcher determinism test.** Build a small manifest with three reward-bearing options; assign dreams twice; assert the assignments are identical. **Bug class:** allocator non-determinism — would cause UI flicker on re-render.
 - [ ] **Step 6: Write the fallback-chain test.** Build a manifest whose options all have the same reward type that has only one entry in a tiny fixture ledger; assert at least one option borrows a cross-type dream and the matcher returns a `repeatFallbacks` entry. **Bug class:** the fallback chain regressing to either crash or silent omission.
 - [ ] **Step 7: Commit.** "Port dream-art ledger and matcher; extend setup-assets for journey images."

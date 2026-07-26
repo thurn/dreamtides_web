@@ -11,7 +11,7 @@ import { asCardId } from "../../types/card-identity";
 import { TUTORIAL_OPPONENT_CARD_ID } from "../../data/tutorial-opponent-card";
 import type {
   TutorialAction,
-  TutorialDreamcallerOwner,
+  TutorialDreamAvatarOwner,
   TutorialPlaybackState,
   TutorialSpeechBubble,
 } from "../../types/tutorial";
@@ -19,8 +19,8 @@ import { tutorialInstructionPlainText } from "../../data/tutorial-instruction-ma
 
 const TUTORIAL_BATTLE_ID = "tutorial-battle";
 const TUTORIAL_DECK_SIZE = 30;
-const TUTORIAL_DREAMCALLER_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
-const TUTORIAL_OPPONENT_DREAMCALLER_ID = "B99936CA-97F9-4930-AF5A-FA9EF92557EF";
+const TUTORIAL_DREAM_AVATAR_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
+const TUTORIAL_OPPONENT_DREAM_AVATAR_ID = "B99936CA-97F9-4930-AF5A-FA9EF92557EF";
 const TUTORIAL_PLAYER_BACK_RANK_INDEX = 0;
 const TUTORIAL_PLAYER_FRONT_RANK_INDEX = 0;
 const TUTORIAL_STARTING_ENERGY = 4;
@@ -48,7 +48,7 @@ function tutorialSpeechBubbleLogDetails(speechBubble: TutorialSpeechBubble) {
 
 /** Reconstruction fields logged whenever an authored tutorial action appears. */
 export function tutorialActionLogDetails(action: TutorialAction) {
-  if (action.action === "animate-dreamcaller-portrait") {
+  if (action.action === "animate-dream-avatar-portrait") {
     return {
       actionId: action.id,
       action: action.action,
@@ -298,7 +298,7 @@ function emptySide(owner: "enemy" | "player"): MobileBattleSideView {
     backRank: emptySlots(owner, "back", 3),
     frontRank: emptySlots(owner, "front", 2),
     status: {
-      dreamcaller: null,
+      dreamAvatar: null,
       currentEnergy: 0,
       maxEnergy: 0,
       points: 0,
@@ -706,11 +706,11 @@ export function buildTutorialView(
     (playerTurnStarted ? 1 : 0) + completedPlayerDrawCount,
   );
   const enemyInspector = emptyInspectorSide("enemy");
-  const dreamcallerSettled = (owner: TutorialDreamcallerOwner): boolean => {
+  const dreamAvatarSettled = (owner: TutorialDreamAvatarOwner): boolean => {
     const actionIndex =
       playback?.actions.findIndex(
         (action) =>
-          action.action === "animate-dreamcaller-portrait" &&
+          action.action === "animate-dream-avatar-portrait" &&
           action.owner === owner,
       ) ?? -1;
     return (
@@ -816,7 +816,7 @@ export function buildTutorialView(
         };
   });
   return {
-    dreamcallers: {
+    dreamAvatars: {
       player: {
         visual: {
           imageNumber: "0029",
@@ -825,11 +825,11 @@ export function buildTutorialView(
           portraitFocus: { x: 0.5, y: 0.22 },
         },
         profile: {
-          id: TUTORIAL_DREAMCALLER_ID,
-          ability: "Dreamcaller ability is not active",
+          id: TUTORIAL_DREAM_AVATAR_ID,
+          ability: "Avatar ability is not active",
           unavailable: true,
         },
-        settled: dreamcallerSettled("player"),
+        settled: dreamAvatarSettled("player"),
       },
       enemy: {
         visual: {
@@ -839,11 +839,11 @@ export function buildTutorialView(
           portraitFocus: { x: 0.5, y: 0.2 },
         },
         profile: {
-          id: TUTORIAL_OPPONENT_DREAMCALLER_ID,
-          ability: "Dreamcaller ability is not active",
+          id: TUTORIAL_OPPONENT_DREAM_AVATAR_ID,
+          ability: "Avatar ability is not active",
           unavailable: true,
         },
-        settled: dreamcallerSettled("enemy"),
+        settled: dreamAvatarSettled("enemy"),
       },
     },
     opponentCardToReveal,
@@ -856,7 +856,7 @@ export function buildTutorialView(
           ? {
               actionId: dialogue.actionId,
               parentAction: dialogue.parentAction,
-              kind: "dreamcaller",
+              kind: "dreamAvatar",
               owner: dialogue.speechBubble.speaker,
               duration: dialogue.speechBubble.duration,
               verticalOffset: dialogue.speechBubble.verticalOffset,
@@ -1082,7 +1082,7 @@ export function buildTutorialView(
         },
         promptNotice: null,
         inspector: {
-          opponentName: "Awaiting Dreamcaller",
+          opponentName: "Awaiting Avatar",
           perspective: "player",
           turn: postChallengePlayerTurnStarted
             ? "4"

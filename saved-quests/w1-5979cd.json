@@ -111,7 +111,7 @@
         "isBane": false
       }
     ],
-    "dreamcaller": {
+    "dreamAvatar": {
       "id": "1CC5A88A-134F-42F7-A0AE-95ACE44B3745",
       "name": "Senemhet",
       "title": "Lord of the Radiant Court",
@@ -124,7 +124,7 @@
       "startingEssence": 200
     },
     "resolvedPackage": {
-      "dreamcaller": {
+      "dreamAvatar": {
         "id": "1CC5A88A-134F-42F7-A0AE-95ACE44B3745",
         "name": "Senemhet",
         "title": "Lord of the Radiant Court",

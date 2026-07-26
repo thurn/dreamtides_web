@@ -3,9 +3,9 @@
 // `docs/cards2/opponent_deck_coherent_draft_design.md`).
 //
 // Every battle uses this module's descriptor primitives —
-// `selectOpponentDreamcaller`, `buildOpponentDreamsigns`,
+// `selectOpponentDreamAvatar`, `buildOpponentDreamsigns`,
 // `resolveBattleAffiliation`, and the run-scaling helpers — to assemble the
-// enemy Dreamcaller, its dreamsigns (none in early battles; one from the run
+// enemy DreamAvatar, its dreamsigns (none in early battles; one from the run
 // midpoint onward), and the affiliation the deck leans toward.
 //
 // `buildOpponentDeck` is the coherent-draft deck algorithm: at each pick the
@@ -28,7 +28,7 @@
 import type { CardData } from "../../types/cards";
 import type {
   AffiliationContent,
-  DreamcallerContent,
+  DreamAvatarContent,
   DreamscapeContent,
   DreamsignTemplate,
 } from "../../types/content";
@@ -227,41 +227,41 @@ export function opponentDraftTemperature(
 }
 
 /**
- * Deterministically selects the opponent Dreamcaller for a battle from the run's
- * `dreamcallers`. The choice is pinned to the battle seed so it is reproducible
- * per battle entry, and the player's own Dreamcaller is excluded when another
+ * Deterministically selects the opponent DreamAvatar for a battle from the run's
+ * `dreamAvatars`. The choice is pinned to the battle seed so it is reproducible
+ * per battle entry, and the player's own DreamAvatar is excluded when another
  * candidate exists (the player should face a different rival each battle). Returns
- * `null` only when there are no Dreamcallers at all.
+ * `null` only when there are no DreamAvatars at all.
  *
- * When `eligibleDreamcallerIds` is supplied and non-empty the candidate pool is
- * first narrowed to that set — the resident Dreamcallers of a dreamscape, so the
+ * When `eligibleDreamAvatarIds` is supplied and non-empty the candidate pool is
+ * first narrowed to that set — the resident DreamAvatars of a dreamscape, so the
  * opponent faced in a dreamscape is one of its own residents. The ids are matched
  * case-insensitively. An empty or absent list (e.g. the starter dreamscape, which
  * has no residents) imposes no restriction and the full roster is used. If the
  * restriction would empty the pool it is ignored, so a non-empty roster always
- * yields a Dreamcaller.
+ * yields a DreamAvatar.
  */
-export function selectOpponentDreamcaller(
-  dreamcallers: readonly DreamcallerContent[],
-  playerDreamcallerId: string | null,
+export function selectOpponentDreamAvatar(
+  dreamAvatars: readonly DreamAvatarContent[],
+  playerDreamAvatarId: string | null,
   rng: BattleRng,
-  eligibleDreamcallerIds?: readonly string[] | null,
-): DreamcallerContent | null {
-  if (dreamcallers.length === 0) {
+  eligibleDreamAvatarIds?: readonly string[] | null,
+): DreamAvatarContent | null {
+  if (dreamAvatars.length === 0) {
     return null;
   }
-  let roster = dreamcallers;
-  if (eligibleDreamcallerIds != null && eligibleDreamcallerIds.length > 0) {
+  let roster = dreamAvatars;
+  if (eligibleDreamAvatarIds != null && eligibleDreamAvatarIds.length > 0) {
     const eligible = new Set(
-      eligibleDreamcallerIds.map((id) => id.toLowerCase()),
+      eligibleDreamAvatarIds.map((id) => id.toLowerCase()),
     );
-    const resident = dreamcallers.filter((dreamcaller) =>
-      eligible.has(dreamcaller.id.toLowerCase()),
+    const resident = dreamAvatars.filter((dreamAvatar) =>
+      eligible.has(dreamAvatar.id.toLowerCase()),
     );
     if (resident.length > 0) roster = resident;
   }
   const candidates = roster.filter(
-    (dreamcaller) => dreamcaller.id !== playerDreamcallerId,
+    (dreamAvatar) => dreamAvatar.id !== playerDreamAvatarId,
   );
   const pool = candidates.length > 0 ? candidates : roster;
   return pool[rng.nextInt(pool.length)];
@@ -304,16 +304,16 @@ export function resolveBattleAffiliation(
  * independent streams while staying a pure function of `poolSeed`. */
 const DRAFT_SEED_SALT = 0x9e3779b1;
 
-/** Translate a Dreamcaller's signature card UUIDs to card numbers via the
+/** Translate a DreamAvatar's signature card UUIDs to card numbers via the
  * database, dropping any that do not resolve. Reads the id-aligned
  * `signatureCardIds` (the name-valued `signatureCards` cannot distinguish two
  * cards that share a display name); ids are lowercased to match `idToNumber`. */
 function signatureCardNumbers(
-  opponentDreamcaller: DreamcallerContent | null,
+  opponentDreamAvatar: DreamAvatarContent | null,
   idToNumber: ReadonlyMap<string, number>,
 ): number[] {
   const out: number[] = [];
-  for (const uuid of opponentDreamcaller?.signatureCardIds ?? []) {
+  for (const uuid of opponentDreamAvatar?.signatureCardIds ?? []) {
     const num = idToNumber.get(uuid.toLowerCase());
     if (num !== undefined) out.push(num);
   }
@@ -466,14 +466,14 @@ export interface OpponentDeckBuild {
 
 /**
  * Builds the opponent battle deck by simulating a coherent draft for the opponent
- * Dreamcaller. Best-of-N seeded drafts are run; each over-drafts to a pick budget,
+ * DreamAvatar. Best-of-N seeded drafts are run; each over-drafts to a pick budget,
  * prunes its least-coherent cards back to the target distinct count, and is scored
  * for coherence (resemblance to real corpus decks) and — in an affiliated
  * dreamscape — affiliation fit against the dreamscape's probe. The draft with the
  * best combined objective wins, and its distinct cards are expanded to a
  * progress-scaled copy count.
  *
- * The deck is steered toward the opponent Dreamcaller's signature cards (folded
+ * The deck is steered toward the opponent DreamAvatar's signature cards (folded
  * into the draft seed) and, in an affiliated dreamscape, toward the affiliation
  * (probe cards added to the seed and pack composition biased toward affiliated
  * cards). Pure and deterministic in `poolSeed`.
@@ -482,7 +482,7 @@ export interface OpponentDeckBuild {
  * draft records, or no usable packs), so the caller can apply its fallback deck.
  */
 export function buildOpponentDeck(args: {
-  opponentDreamcaller: DreamcallerContent | null;
+  opponentDreamAvatar: DreamAvatarContent | null;
   fitModel: FitModel | undefined;
   draftRecords: readonly DraftRecord[];
   poolContext: RunPoolContext | undefined;
@@ -493,7 +493,7 @@ export function buildOpponentDeck(args: {
   poolSeed: number;
 }): OpponentDeckBuild | null {
   const {
-    opponentDreamcaller,
+    opponentDreamAvatar,
     fitModel,
     draftRecords,
     poolContext,
@@ -513,7 +513,7 @@ export function buildOpponentDeck(args: {
     return null;
   }
 
-  // Card UUID (lowercased) -> card number, for translating Dreamcaller
+  // Card UUID (lowercased) -> card number, for translating DreamAvatar
   // signature card ids.
   const idToNumber = new Map<string, number>();
   for (const card of cardDatabase.values())
@@ -536,9 +536,9 @@ export function buildOpponentDeck(args: {
         )
       : null;
 
-  // Seed cards: Dreamcaller signatures, plus the affiliation probe in an
+  // Seed cards: DreamAvatar signatures, plus the affiliation probe in an
   // affiliated dreamscape, so the first picks are pulled toward both.
-  const seeds = signatureCardNumbers(opponentDreamcaller, idToNumber);
+  const seeds = signatureCardNumbers(opponentDreamAvatar, idToNumber);
   if (affiliationCtx !== null) {
     for (const id of affiliationCtx.signatureWeightedIds) {
       const num = affiliationCtx.numberById.get(id);
@@ -643,7 +643,7 @@ export function buildOpponentDeck(args: {
 
 /**
  * Reconstruction logging for one opponent deck. Captures the opponent
- * Dreamcaller, the draft seed + run depth, the resolved affiliation, the dreamsign
+ * DreamAvatar, the draft seed + run depth, the resolved affiliation, the dreamsign
  * carried (if any), and the full coherent-draft trace — best-of-N candidate
  * scores and the winning index, the winning deck's coherence and affiliation fit,
  * the pick budget and removal count, the winning per-pick trace (pack candidates,
@@ -653,7 +653,7 @@ export function buildOpponentDeck(args: {
  */
 export interface OpponentDeckLogArgs {
   battleEntryKey: string;
-  opponentDreamcaller: DreamcallerContent | null;
+  opponentDreamAvatar: DreamAvatarContent | null;
   poolVariant: string;
   poolSeed: number;
   completionLevel: number;
@@ -672,7 +672,7 @@ function round4(value: number): number {
 export function logOpponentDeckConstructed(args: OpponentDeckLogArgs): void {
   const {
     battleEntryKey,
-    opponentDreamcaller,
+    opponentDreamAvatar,
     poolVariant,
     poolSeed,
     completionLevel,
@@ -705,8 +705,8 @@ export function logOpponentDeckConstructed(args: OpponentDeckLogArgs): void {
 
   logEvent("opponent_deck_constructed", {
     battleEntryKey,
-    opponentDreamcallerId: opponentDreamcaller?.id ?? null,
-    opponentDreamcallerName: opponentDreamcaller?.name ?? null,
+    opponentDreamAvatarId: opponentDreamAvatar?.id ?? null,
+    opponentDreamAvatarName: opponentDreamAvatar?.name ?? null,
     poolVariant,
     poolSeed,
     completionLevel,

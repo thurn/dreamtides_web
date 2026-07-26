@@ -10,9 +10,9 @@ import type { DreamsignProfile } from "../../data/dreamsign-profiles";
 import type { QuestContent } from "../../data/quest-content";
 import type { CardData } from "../../types/cards";
 import type {
-  DreamcallerContent,
+  DreamAvatarContent,
   DreamsignTemplate,
-  ResolvedDreamcallerPackage,
+  ResolvedDreamAvatarPackage,
 } from "../../types/content";
 import type { DeckEntry, Dreamsign, QuestState, SiteState } from "../../types/quest";
 import { createDefaultState } from "../../state/quest-context";
@@ -106,10 +106,10 @@ export function makeMerchantTestQuestState(
   };
 }
 
-function makeMerchantTestDreamcallerContent(): DreamcallerContent {
+function makeMerchantTestDreamAvatarContent(): DreamAvatarContent {
   return {
-    id: "dreamcaller-fixture",
-    name: "Fixture Dreamcaller",
+    id: "dream-avatar-fixture",
+    name: "Fixture DreamAvatar",
     title: "Fixture",
     renderedText: "",
     imageNumber: "0000",
@@ -118,10 +118,10 @@ function makeMerchantTestDreamcallerContent(): DreamcallerContent {
 }
 
 export function makeMerchantTestResolvedPackage(
-  overrides: Partial<ResolvedDreamcallerPackage> = {},
-): ResolvedDreamcallerPackage {
+  overrides: Partial<ResolvedDreamAvatarPackage> = {},
+): ResolvedDreamAvatarPackage {
   return {
-    dreamcaller: makeMerchantTestDreamcallerContent(),
+    dreamAvatar: makeMerchantTestDreamAvatarContent(),
     draftPoolCopiesByCard: {},
     dreamsignPoolIds: [],
     mandatoryOnlyPoolSize: 0,
@@ -148,7 +148,7 @@ export function makeMerchantTestContent({
 }): QuestContent {
   return {
     cardDatabase: new Map(cards.map((card) => [card.cardNumber, card])),
-    dreamcallers: [],
+    dreamAvatars: [],
     dreamwellCards: [],
     dreamsignTemplates,
     dreamscapes: MINIMAL_DREAMSCAPES,

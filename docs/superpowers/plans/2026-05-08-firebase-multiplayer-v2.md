@@ -1560,13 +1560,13 @@ import { describe, expect, it } from "vitest";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import type { CardData } from "../types/cards";
 import type { QuestContent } from "../data/quest-content";
-import type { ResolvedDreamcallerPackage } from "../types/content";
+import type { ResolvedDreamAvatarPackage } from "../types/content";
 import { createDefaultState } from "./quest-context";
 import {
   addCardToQuestState,
   changeQuestEssence,
   completeQuestSite,
-  startQuestFromDreamcaller,
+  startQuestFromDreamAvatar,
 } from "./quest-state-actions";
 
 function card(cardNumber: number): CardData {
@@ -1584,11 +1584,11 @@ function card(cardNumber: number): CardData {
   };
 }
 
-function resolvedPackage(): ResolvedDreamcallerPackage {
+function resolvedPackage(): ResolvedDreamAvatarPackage {
   return {
-    dreamcaller: {
-      id: "dreamcaller-1",
-      name: "Dreamcaller",
+    dreamAvatar: {
+      id: "dream-avatar-1",
+      name: "DreamAvatar",
       title: "Title",
       awakening: 3,
       renderedText: "Text",
@@ -1616,9 +1616,9 @@ function content(pkg = resolvedPackage()): QuestContent {
   return {
     cardDatabase,
     cardsByPackageTide: new Map(),
-    dreamcallers: [pkg.dreamcaller],
+    dreamAvatars: [pkg.dreamAvatar],
     dreamsignTemplates: [],
-    resolvedPackagesByDreamcallerId: new Map([[pkg.dreamcaller.id, pkg]]),
+    resolvedPackagesByDreamAvatarId: new Map([[pkg.dreamAvatar.id, pkg]]),
   };
 }
 
@@ -1647,15 +1647,15 @@ describe("quest-state-actions", () => {
     });
   });
 
-  it("starts a quest from a dreamcaller in one complete state transition", () => {
+  it("starts a quest from a dreamAvatar in one complete state transition", () => {
     const pkg = resolvedPackage();
-    const next = startQuestFromDreamcaller({
+    const next = startQuestFromDreamAvatar({
       prev: createDefaultState(),
-      dreamcaller: pkg.dreamcaller,
+      dreamAvatar: pkg.dreamAvatar,
       questContent: content(pkg),
     });
 
-    expect(next.dreamcaller?.id).toBe("dreamcaller-1");
+    expect(next.dreamAvatar?.id).toBe("dream-avatar-1");
     expect(next.resolvedPackage).toEqual(pkg);
     expect(next.remainingDreamsignPool).toEqual(["sign-1"]);
     expect(next.draftState?.remainingCopiesByCard).toEqual(pkg.draftPoolCopiesByCard);
@@ -1715,8 +1715,8 @@ import { generateInitialAtlas } from "../atlas/atlas-generator";
 import { initializeDraftState } from "../draft/draft-engine";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import type { QuestContent } from "../data/quest-content";
-import { toQuestDreamcaller } from "../data/dreamcaller-selection";
-import type { DreamcallerContent } from "../types/content";
+import { toQuestDreamAvatar } from "../data/dream-avatar-selection";
+import type { DreamAvatarContent } from "../types/content";
 import type { DeckEntry, DreamAtlas, QuestState, Screen } from "../types/quest";
 import { deriveEntryIdCounter } from "./quest-context";
 
@@ -1791,18 +1791,18 @@ export function completeQuestSite(prev: QuestState, siteId: string): QuestState 
   };
 }
 
-export function startQuestFromDreamcaller({
+export function startQuestFromDreamAvatar({
   prev,
-  dreamcaller,
+  dreamAvatar,
   questContent,
 }: {
   prev: QuestState;
-  dreamcaller: DreamcallerContent;
+  dreamAvatar: DreamAvatarContent;
   questContent: QuestContent;
 }): QuestState {
-  const resolvedPackage = questContent.resolvedPackagesByDreamcallerId.get(dreamcaller.id);
+  const resolvedPackage = questContent.resolvedPackagesByDreamAvatarId.get(dreamAvatar.id);
   if (resolvedPackage === undefined) {
-    throw new Error(`Missing resolved package for ${dreamcaller.id}`);
+    throw new Error(`Missing resolved package for ${dreamAvatar.id}`);
   }
 
   const starterCardNumbers = STARTER_CARD_NUMBERS.filter(
@@ -1829,7 +1829,7 @@ export function startQuestFromDreamcaller({
   return {
     ...prev,
     deck,
-    dreamcaller: toQuestDreamcaller(resolvedPackage.dreamcaller),
+    dreamAvatar: toQuestDreamAvatar(resolvedPackage.dreamAvatar),
     resolvedPackage,
     remainingDreamsignPool: [...resolvedPackage.dreamsignPoolIds],
     draftState: initializeDraftState(questContent.cardDatabase, resolvedPackage),
@@ -1908,20 +1908,20 @@ Replace the existing `<QuestContext.Provider value={value}>` in `QuestProvider` 
 Extend `QuestMutations` in `src/state/quest-context.tsx`:
 
 ```ts
-startQuest: (dreamcaller: DreamcallerContent) => void;
+startQuest: (dreamAvatar: DreamAvatarContent) => void;
 completeSite: (siteId: string, source: string) => void;
 pickDraftCard: (siteId: string, cardNumber: number) => void;
 ```
 
-Import `DreamcallerContent` from `../types/content`. In the local `QuestProvider`, implement these as wrappers around existing logic:
+Import `DreamAvatarContent` from `../types/content`. In the local `QuestProvider`, implement these as wrappers around existing logic:
 
 ```ts
 const startQuest = useCallback(
-  (dreamcaller: DreamcallerContent) => {
+  (dreamAvatar: DreamAvatarContent) => {
     setState((prev) =>
-      startQuestFromDreamcaller({
+      startQuestFromDreamAvatar({
         prev,
-        dreamcaller,
+        dreamAvatar,
         questContent,
       }),
     );
@@ -1965,9 +1965,9 @@ function content(): QuestContent {
   return {
     cardDatabase: new Map(),
     cardsByPackageTide: new Map(),
-    dreamcallers: [],
+    dreamAvatars: [],
     dreamsignTemplates: [],
-    resolvedPackagesByDreamcallerId: new Map(),
+    resolvedPackagesByDreamAvatarId: new Map(),
   };
 }
 
@@ -2079,7 +2079,7 @@ import type { QuestContent } from "../data/quest-content";
 import { buildQuestFieldUpdate } from "../multiplayer/room-paths";
 import { writeRoomUpdate } from "../multiplayer/room-service";
 import type { RoomSession } from "../multiplayer/room-types";
-import type { DreamcallerContent } from "../types/content";
+import type { DreamAvatarContent } from "../types/content";
 import type { CardData } from "../types/cards";
 import type { DraftState } from "../types/draft";
 import type {
@@ -2091,7 +2091,7 @@ import type {
   Screen,
   TransfigurationType,
 } from "../types/quest";
-import { changeQuestEssence, startQuestFromDreamcaller } from "./quest-state-actions";
+import { changeQuestEssence, startQuestFromDreamAvatar } from "./quest-state-actions";
 import {
   QuestContextProvider,
   createDefaultState,
@@ -2130,8 +2130,8 @@ export function MultiplayerQuestProvider({
       void writeField("essence", next.essence);
     };
 
-    const startQuest = (dreamcaller: DreamcallerContent) => {
-      const next = startQuestFromDreamcaller({ prev: state, dreamcaller, questContent });
+    const startQuest = (dreamAvatar: DreamAvatarContent) => {
+      const next = startQuestFromDreamAvatar({ prev: state, dreamAvatar, questContent });
       void writeRoomUpdate(database, {
         [`rooms/${session.roomId}/questState`]: next,
         [`rooms/${session.roomId}/metadata/updatedAt`]: new Date().toISOString(),
@@ -2163,7 +2163,7 @@ export function MultiplayerQuestProvider({
         void effectDescription;
         void effectDetails;
       },
-      setDreamcallerSelection: () => {},
+      setDreamAvatarSelection: () => {},
       setCardSourceDebug: (cardSourceDebug: CardSourceDebugState | null, _source: string) => {
         void writeField("cardSourceDebug", cardSourceDebug);
       },
@@ -2416,7 +2416,7 @@ const nextRoom = updater(session().room);
 expect(nextRoom).toEqual(
   expect.objectContaining({
     questState: expect.objectContaining({
-      dreamcaller: expect.objectContaining({ id: "dreamcaller-1" }),
+      dreamAvatar: expect.objectContaining({ id: "dream-avatar-1" }),
       draftState: expect.any(Object),
       atlas: expect.any(Object),
     }),
@@ -2476,7 +2476,7 @@ Expected: FAIL because `completeSite` and `startQuest` are incomplete for room-s
 In `src/screens/QuestStartScreen.tsx`, replace the `bootstrapQuestStart(...)` call with:
 
 ```ts
-mutations.startQuest(dreamcaller);
+mutations.startQuest(dreamAvatar);
 ```
 
 Remove imports that become unused: `bootstrapQuestStart`, `STARTER_CARD_NUMBERS` only if unused in this file, and state fields used only for the bootstrap argument.
@@ -2486,14 +2486,14 @@ Remove imports that become unused: `bootstrapQuestStart`, `STARTER_CARD_NUMBERS`
 In `src/state/multiplayer-quest-context.tsx`, import `runRoomTransaction` and update `startQuest`:
 
 ```ts
-const startQuest = (dreamcaller: DreamcallerContent) => {
+const startQuest = (dreamAvatar: DreamAvatarContent) => {
   void runRoomTransaction(database, session.roomId, (room) => {
-    if (room === null || room.questState?.dreamcaller !== null) {
+    if (room === null || room.questState?.dreamAvatar !== null) {
       return room ?? undefined;
     }
 
     const current = room.questState ?? createDefaultState();
-    const next = startQuestFromDreamcaller({ prev: current, dreamcaller, questContent });
+    const next = startQuestFromDreamAvatar({ prev: current, dreamAvatar, questContent });
     const now = new Date().toISOString();
     return {
       ...room,
@@ -2510,8 +2510,8 @@ const startQuest = (dreamcaller: DreamcallerContent) => {
           action: "startQuest",
           source: "quest_start",
           summary: {
-            dreamcallerId: dreamcaller.id,
-            dreamcallerName: dreamcaller.name,
+            dreamAvatarId: dreamAvatar.id,
+            dreamAvatarName: dreamAvatar.name,
           },
         },
       },
@@ -2594,7 +2594,7 @@ Run:
 
 ```bash
 git add src/screens/QuestStartScreen.tsx src/state/multiplayer-quest-context.tsx src/state/multiplayer-quest-context.test.tsx src/state/quest-context.tsx
-git commit -m "Compose shared quest start writes" -m "Route Dreamcaller selection and site completion through domain-level quest mutations that write coherent Firebase room updates with action log entries."
+git commit -m "Compose shared quest start writes" -m "Route DreamAvatar selection and site completion through domain-level quest mutations that write coherent Firebase room updates with action log entries."
 git push
 ```
 
@@ -3616,7 +3616,7 @@ Open `http://localhost:5173/`, create a game, then open the generated
 
 1. Create a room in the first window.
 2. Open the share URL in a second window.
-3. Pick a Dreamcaller in either window and verify both windows enter the same
+3. Pick a DreamAvatar in either window and verify both windows enter the same
    dreamscape.
 4. Open a draft site, pick a card in one window, and verify the other window
    shows the updated deck and next offer.
@@ -3700,9 +3700,9 @@ Expected: both windows show the same room and compact presence count.
 
 - [ ] **Step 3: Verify shared quest start**
 
-Pick a Dreamcaller in one window.
+Pick a Dream Avatar in one window.
 
-Expected: both windows enter the same dreamscape with the same deck, Dreamcaller, atlas, and draft state.
+Expected: both windows enter the same dreamscape with the same deck, Dream Avatar, atlas, and draft state.
 
 - [ ] **Step 4: Verify shared draft**
 

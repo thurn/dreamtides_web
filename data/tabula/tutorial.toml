@@ -13,8 +13,8 @@ bubbleWidth = 700
 text = "Welcome, Dreamer."
 
 [[actions]]
-id = "dreamcaller-arrival"
-action = "animate-dreamcaller-portrait"
+id = "dream-avatar-arrival"
+action = "animate-dream-avatar-portrait"
 owner = "player"
 pause = 1
 duration = 0.6
@@ -34,7 +34,7 @@ text = "You are called to stand against\nthe power of Nightmare."
 
 [[actions]]
 id = "vrakmoth-arrival"
-action = "animate-dreamcaller-portrait"
+action = "animate-dream-avatar-portrait"
 owner = "enemy"
 pause = 1
 duration = 0.6

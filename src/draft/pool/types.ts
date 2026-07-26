@@ -190,31 +190,31 @@ export interface PoolData {
    * The committed tide-relationship artifact the `tides2` variant steers
    * selection by (`data/tides2_relationships.jsonc`, served as
    * `/tides2-relationships-data.json`): each tide's allied tides and each
-   * Dreamcaller's tide pool, keyed by tide id and Dreamcaller UUID. Set
+   * DreamAvatar's tide pool, keyed by tide id and DreamAvatar UUID. Set
    * alongside {@link tides2Decks} only when the run's variant is `tides2`.
    */
   tides2Relationships?: TideRelationshipsJson;
   /**
    * The committed `tides3` artifact the `tides3` variant combines into pools
    * (`data/tides3.jsonc`, served as `/tides3-data.json`): 32 preconstructed
-   * decks — each signatured Dreamcaller's full-signature `sigseed` pool plus
-   * broad neutral tides — and the per-Dreamcaller tide pools that say which
-   * tides combine for each Dreamcaller. Set only when the run's variant is
+   * decks — each signatured DreamAvatar's full-signature `sigseed` pool plus
+   * broad neutral tides — and the per-DreamAvatar tide pools that say which
+   * tides combine for each DreamAvatar. Set only when the run's variant is
    * `tides3`; every other variant ignores it.
    */
   tides3Decks?: Tides3DecksJson;
   /**
    * The committed `tides4` artifact the `tides4` variant combines into pools
    * (`data/tides4.jsonc`, served as `/tides4-data.json`): preconstructed
-   * signature, facet, and neutral tides plus the per-Dreamcaller tide pools that
-   * say which tides combine for each Dreamcaller. Set only when the run's variant
+   * signature, facet, and neutral tides plus the per-DreamAvatar tide pools that
+   * say which tides combine for each DreamAvatar. Set only when the run's variant
    * is `tides4`; every other variant ignores it.
    */
   tides4Decks?: Tides4DecksJson;
   /**
    * The committed `tides5` artifact the `tides5` variant combines into pools
    * (`data/tides5.jsonc`, served as `/tides5-data.json`): the same kind of
-   * signature, facet, and neutral tides plus per-Dreamcaller tide pools as
+   * signature, facet, and neutral tides plus per-DreamAvatar tide pools as
    * `tides4`, but baked only from the known-good decklists. Set only when the
    * run's variant is `tides5`; every other variant ignores it.
    */
@@ -257,7 +257,7 @@ export interface Idf3PoolAnchor {
 
 /** Per-card provenance within an `idf3` pool, keyed by {@link CardId}. */
 export interface Idf3PoolCardProvenance {
-  /** Whether this card is one of the Dreamcaller's signature cards. */
+  /** Whether this card is one of the DreamAvatar's signature cards. */
   isSignature: boolean;
   /** Whether this card is in the drawn starter decklist. */
   inStarterDeck: boolean;
@@ -277,7 +277,7 @@ export interface Idf3PoolCardProvenance {
  * produces this; the field is absent on every other variant's result.
  */
 export interface Idf3PoolProvenance {
-  /** The Dreamcaller's raw signature card names. */
+  /** The DreamAvatar's raw signature card names. */
   signatureCardNames: string[];
   /** Signature cards that carry IDF weight in the corpus (the actual probe). */
   signatureWeightedNames: string[];
@@ -295,7 +295,7 @@ export interface Idf3PoolProvenance {
    * Per-card provenance, keyed by {@link CardId} (a card's stable UUID in
    * production, an opaque synthetic id in test corpora). Distinct UUIDs that
    * share a display name keep separate entries here so no same-name card is
-   * silently dropped. The downstream resolver (`buildDreamcallerProvenance`)
+   * silently dropped. The downstream resolver (`buildDreamAvatarProvenance`)
    * converts these ids to card numbers via the id index, resolving display
    * names only at the final render boundary.
    */
@@ -351,8 +351,8 @@ export interface SeedPoolProvenance {
 
 /**
  * Why a tide was joined into a `tides4` pool this run:
- *   * `starter` — the Dreamcaller's signature tide, the always-joined identity
- *     floor (for a signatureless Dreamcaller, the borrowed archetype's signature);
+ *   * `starter` — the DreamAvatar's signature tide, the always-joined identity
+ *     floor (for a signatureless DreamAvatar, the borrowed archetype's signature);
  *   * `facet-drawn` — a theme tide drawn in the random variety subset, the
  *     variety engine that leans the identity a different way each run;
  *   * `facet-fill` — an on-identity theme tide NOT in the drawn subset, joined
@@ -414,16 +414,16 @@ export interface Tides4PoolCardProvenance {
  * produces this; the field is absent on every other variant's result.
  */
 export interface Tides4PoolProvenance {
-  /** The Dreamcaller this pool was built for. */
-  dreamcallerId: string;
+  /** The DreamAvatar this pool was built for. */
+  dreamAvatarId: string;
   /**
-   * Whether the Dreamcaller has no signature. A signatureless Dreamcaller borrows
-   * a random signatured Dreamcaller's whole pool, leaning a coherent archetype.
+   * Whether the DreamAvatar has no signature. A signatureless DreamAvatar borrows
+   * a random signatured DreamAvatar's whole pool, leaning a coherent archetype.
    */
   signatureless: boolean;
   /**
-   * For a signatureless Dreamcaller, the name of the borrowed signature tide
-   * (the archetype it leaned this run); null for a signatured Dreamcaller.
+   * For a signatureless DreamAvatar, the name of the borrowed signature tide
+   * (the archetype it leaned this run); null for a signatured DreamAvatar.
    */
   borrowedArchetypeName: string | null;
   /** Total copies dealt into the pool (`TIDES4.dealSize`). */
@@ -466,7 +466,7 @@ export interface GeneratedPool {
   /**
    * Full per-card provenance for the run, set only by the `idf3` variant. The
    * provenance debug surface ("Why Cards") reads it to explain how each card
-   * descends from the Dreamcaller's signature. Undefined for other variants.
+   * descends from the DreamAvatar's signature. Undefined for other variants.
    */
   idf3Provenance?: Idf3PoolProvenance;
   /**

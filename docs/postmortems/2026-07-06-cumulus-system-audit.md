@@ -4,7 +4,7 @@
 **Scope:** the four screen efforts shipped over the past week, in priority
 order: deck viewer (`DesktopDeckViewer` / `MobileDeckViewer`), Dream Atlas
 (`AtlasScreen` + `components/atlas/`), Dreamscape (`DreamscapeScreen` +
-`SiteNode` + `QuestStatusBar`), and Dreamcaller select (`quest-start-*`).
+`SiteNode` + `QuestStatusBar`), and Dream Avatar select (`quest-start-*`).
 **Question:** the screens moved fast; the system did not step back with them.
 What new patterns does the system need, what existing patterns should go, and
 what should change in the core token and component offerings?
@@ -21,7 +21,7 @@ The catalog describes the system as it was mocked up; the four screens
 describe the game as it is. Of the 18 documented components, **10 are
 healthy, 6 have exactly one consumer, and 2 (StatTile, TidePill) render
 nowhere in production** — while roughly ten undocumented modules
-(`DreamcallerPortrait` ~19 consumers, `HoverPopover` 13, `GlowIcon` 8,
+(`DreamAvatarPortrait` ~19 consumers, `HoverPopover` 13, `GlowIcon` 8,
 `rich-text` 8, the glass recipes, `tide-spec`) are the actual load-bearing
 system. The drift concentrates in three places:
 
@@ -103,7 +103,7 @@ catalog presence** and no token backing. Current state:
 - `InfoCard.tsx:84-85` overrides the fill with a third value
   (`rgba(18,14,28,0.5)` violet-black vs the shared `rgba(14,14,16,0.54)`)
   — so the desktop deck viewer renders **two different glass tints on the
-  same screen** (backdrop + close button vs the Dreamcaller reveal popover).
+  same screen** (backdrop + close button vs the Dream Avatar reveal popover).
 - The tokens literally named `--surface-glass` / `--surface-glass-strong`
   (`cumulus-tokens.css:151-152`) are **opaque hex chrome with no blur** — and
   the name collision already misled a call site (`EdgeChevron` above).
@@ -199,13 +199,13 @@ say what is true today and
 name the plan: legacy screens migrate from `EssenceValue` onto it as they
 Cumulus-ify, then `EssenceValue` is deleted. What it is *for* is the answer
 to the user-facing question: the HUD/quest-economy number-with-mark —
-Dreamcaller starting essence today, shop prices and reward values as those
+Dream Avatar starting essence today, shop prices and reward values as those
 screens migrate.
 
 ### Document the workhorses
 
 The undocumented de-facto system (consumer counts from the inventory pass):
-`DreamcallerPortrait` (~19), `HoverPopover` (13), `HoverZoomCard` (8),
+`DreamAvatarPortrait` (~19), `HoverPopover` (13), `HoverZoomCard` (8),
 `GlowIcon` (8), `rich-text` (8), `GlossaryDefinitionCard` (6),
 `CardTermDefinitions` (5), `tide-spec` (4), `PipBadge` (3), plus the glass
 modules from §2. This overlaps pre-existing-issue "Cumulus readiness gaps"
@@ -253,13 +253,13 @@ mechanical and belongs in `npm run cumulus-docs`.
 
 Forks that stabilized without the promote-or-file decision:
 
-- **Dreamcaller portrait, three renderings**: `DreamcallerPortrait` offers
+- **Dream Avatar portrait, three renderings**: `DreamAvatarPortrait` offers
   `hero`/`panel`/`thumb`, none full-bleed, so quest-start built
   `StandingFigure` (`quest-start-desktop.tsx:65-146`) and
   `FullBleedPortrait` (`quest-start-mobile.tsx:33-103`) — re-deriving the
   component's fallback treatment verbatim: the identical backdrop gradient
   string appears character-for-character three times
-  (`DreamcallerPortrait.tsx:48/124`, `quest-start-desktop.tsx:97`) and the
+  (`DreamAvatarPortrait.tsx:48/124`, `quest-start-desktop.tsx:97`) and the
   monogram fallback three times. Add a `standing`/`fullBleed` variant (or at
   minimum share the fallback logic), and note that InfoCard's new
   `fullBleed` variant and quest-start's figure-plus-riding-card composition
@@ -386,7 +386,7 @@ ESLint sees one file at a time; these run as unit tests or inside
   This is the general form of the audit's worst finding and of the tide-disc
   postmortem's triplicated diameter: it would have caught `glassTrack()`'s
   copied recipe, the four dark-disc gradients, and the thrice-pasted
-  Dreamcaller monogram gradient (§2, §4, §5). Cheap to implement as a test
+  Dream Avatar monogram gradient (§2, §4, §5). Cheap to implement as a test
   over source text; a minimum-length threshold keeps `#fff`-class noise out.
 
 Suggested landing order: the integrity trio first (duplicate-literal
@@ -426,10 +426,10 @@ Priority 2 — honesty and convergence:
       press-reveal mounted); fix the site-node locked fixture. (§3)
 - [ ] ResourceChip: shared economy glyph spec (Button imports it),
       enumerated sizes, honest blurb, named `EssenceValue` migration plan. (§3)
-- [ ] Fold `QsbSignObject` → `Dreamsign`; add the `DreamcallerPortrait`
+- [ ] Fold `QsbSignObject` → `Dreamsign`; add the `DreamAvatarPortrait`
       full-bleed/standing variant (or file the divergence); consolidate
       `DreamscapeMotes` → `Motes`. (§5)
-- [ ] Document the workhorses in adoption order (`DreamcallerPortrait`,
+- [ ] Document the workhorses in adoption order (`DreamAvatarPortrait`,
       `HoverPopover`, `HoverZoomCard`, `GlowIcon`, `rich-text`, …). (§3)
 - [ ] Land the integrity-check trio: duplicate-literal detector,
       `no-orphan-tokens`, `no-ghost-components`; then the new ESLint rules

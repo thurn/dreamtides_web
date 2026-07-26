@@ -16,7 +16,7 @@
       "event": {
         "type": "START_QUEST",
         "payload": {
-          "dreamcallerId": "dc-fixture"
+          "dreamAvatarId": "dc-fixture"
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
@@ -105,5 +105,5 @@
       }
     }
   ],
-  "finalHash": "44065849de83e63874ca0d7ad09734b052f510dff36ed89ac57bc13b91fe7a63"
+  "finalHash": "cb3d046be588e22dab3f8a889dbe7c4cd604f47cc2ff2ec42ec4b4535871d0c4"
 }

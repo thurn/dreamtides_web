@@ -286,7 +286,7 @@ export interface InfoCardObjectProps extends InfoCardCommonProps {
  * it: the image fills the whole card (rounded corners), and the shared
  * liquid-glass text card floats over its lower portion carrying the meta / name
  * / epithet / body. It is literally "an image, with a text info card placed on
- * top of it". Built for the Dreamcaller profile reveal and the atlas node
+ * top of it". Built for the Dream Avatar profile reveal and the atlas node
  * reveals. The image IS its media, so `image` is required.
  */
 export interface InfoCardFullBleedProps extends InfoCardCommonProps {
@@ -308,7 +308,7 @@ export interface InfoCardFullBleedProps extends InfoCardCommonProps {
   meta?: string;
   /**
    * An epithet under the name — a smaller serif line in white, mirroring the
-   * Dreamcaller-select name/epithet pairing. Plain text; resolve before display.
+   * Dream Avatar-select name/epithet pairing. Plain text; resolve before display.
    */
   subtitle?: string;
 }
@@ -370,7 +370,7 @@ export interface InfoCardTextProps extends InfoCardCommonProps {
   leadGlyph?: Glyph;
   /**
    * An epithet under the name — a smaller serif subtitle in white, mirroring
-   * the Dreamcaller-select name/epithet pairing. Plain text; resolve before
+   * the Dream Avatar-select name/epithet pairing. Plain text; resolve before
    * display.
    */
   subtitle?: string;

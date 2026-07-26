@@ -2,34 +2,34 @@
 // served as `/tides4-data.json`), the single input the `tides4` pool variant
 // combines into draft pools. `tides4` is the human-legible counterpart of
 // `sigseed`, built to reproduce the run-to-run VARIETY `sigseed` gets from
-// growing each pool from a fresh random SUBSET of a Dreamcaller's signature
+// growing each pool from a fresh random SUBSET of a DreamAvatar's signature
 // cards. Where `tides3` bakes only the deterministic centre of that variety (one
-// all-signatures pool per Dreamcaller) and so produces nearly the same pool every
+// all-signatures pool per DreamAvatar) and so produces nearly the same pool every
 // run, `tides4` bakes the AXES of the variety as separate decks and recombines a
 // random few of them per run, the way `sigseed` recombines a random subset of
 // signature anchors.
 //
 // The artifact carries both halves of the algorithm so it is self-contained:
 //   * `tides` — the preconstructed decklists. Each tide has a `role`:
-//       - a `signature` tide is one signatured Dreamcaller's signature cards
+//       - a `signature` tide is one signatured DreamAvatar's signature cards
 //         themselves (the always-included identity floor for its pool);
 //       - a `facet` tide is a single-anchor `sigseed` pool — the coherent "lean"
 //         one signature-region card grows into — and is the variety engine: a
-//         pool draws a random few of a Dreamcaller's facets, so different runs
+//         pool draws a random few of a DreamAvatar's facets, so different runs
 //         lean its identity different ways, exactly as `sigseed`'s subset draw
 //         does;
 //       - a `neutral` tide is a broad, format-spanning deck used as the generic
-//         tail of a pool and as the body of a signatureless Dreamcaller's pool.
-//   * `tidePoolByDreamcaller` — per Dreamcaller UUID, the tides a pool combines:
-//     a `starter` (its signature tide, or null for a signatureless Dreamcaller,
+//         tail of a pool and as the body of a signatureless DreamAvatar's pool.
+//   * `tidePoolByDreamAvatar` — per DreamAvatar UUID, the tides a pool combines:
+//     a `starter` (its signature tide, or null for a signatureless DreamAvatar,
 //     always joined when present), `facets` (the on-identity facet tides a random
 //     subset is drawn from each run), and `neutral` (the broad tail tides joined
-//     to top the pool up to full size). Every Dreamcaller has an entry.
+//     to top the pool up to full size). Every DreamAvatar has an entry.
 //
 // Cards are keyed by their stable cards_v2 UUID; the `name` fields are
 // informational, refreshed at bake time, so a card rename never invalidates the
 // artifact. The whole file is baked by `scripts/bake-tides4.mjs`; because the
-// per-Dreamcaller pools reference tide ids, a dangling id is a hard error so a
+// per-DreamAvatar pools reference tide ids, a dangling id is a hard error so a
 // stale combination cannot ship silently. Pure and dependency-free so the bake
 // script, the metric harnesses, the unit tests, and the browser loader all share
 // one implementation.
@@ -55,7 +55,7 @@ export const TIDES4_COLORS: readonly Tides4Color[] = [
 export interface Tides4DeckJson {
   /** Stable tide id, e.g. "tide-sig-01" / "tide-fac-01" / "tide-neu-01". */
   id: string;
-  /** Human-readable tide name (its Dreamcaller, its lean card, or its breadth). */
+  /** Human-readable tide name (its DreamAvatar, its lean card, or its breadth). */
   name: string;
   /**
    * A short hand-authored label (1-3 words) for the mechanical identity the tide
@@ -65,13 +65,13 @@ export interface Tides4DeckJson {
   shortName?: string;
   /**
    * A narrative, thematic name (not literal game terms) shown for the tide on the
-   * player-facing Dreamcaller select, pool viewer, and "why this card" screens.
+   * player-facing DreamAvatar select, pool viewer, and "why this card" screens.
    * Present once annotated; preserved across bakes by stable id.
    */
   displayName?: string;
   /**
    * A 10-20 word player-facing description of what makes the tide distinctive,
-   * free of card, Dreamcaller, and tide names. Shown in the hover popovers on the
+   * free of card, DreamAvatar, and tide names. Shown in the hover popovers on the
    * player-facing tide screens; preserved across bakes by stable id.
    */
   displayDescription?: string;
@@ -99,11 +99,11 @@ export interface Tides4DeckJson {
   /** Whether this is a signature floor, a directional facet, or a broad tide. */
   role: Tides4Role;
   /**
-   * For a `signature` tide, the stable UUID of the Dreamcaller whose signature
+   * For a `signature` tide, the stable UUID of the DreamAvatar whose signature
    * cards it holds. Absent on facet and neutral tides. Lets the player-facing and
-   * editor screens resolve the source Dreamcaller without matching on names.
+   * editor screens resolve the source DreamAvatar without matching on names.
    */
-  dreamcallerId?: string;
+  dreamAvatarId?: string;
   /**
    * For a `facet` or `neutral` tide, the stable cards_v2 UUID of the single card
    * the pool is themed around (a facet's lean anchor, a neutral's farthest-point
@@ -116,15 +116,15 @@ export interface Tides4DeckJson {
 }
 
 /**
- * The tides one Dreamcaller's pool combines. The `starter` (when present) is
+ * The tides one DreamAvatar's pool combines. The `starter` (when present) is
  * always joined; a random SUBSET of `facets` is drawn each run (the variety
  * engine); `neutral` tides are joined as needed to top the pool up to full size.
- * A signatured Dreamcaller has a `starter` (its signature tide) and on-identity
- * `facets`; a signatureless Dreamcaller has a null `starter` and draws its subset
+ * A signatured DreamAvatar has a `starter` (its signature tide) and on-identity
+ * `facets`; a signatureless DreamAvatar has a null `starter` and draws its subset
  * from the broad set of `facets`.
  */
-export interface Tides4DreamcallerPool {
-  /** The always-joined signature tide id, or null for a signatureless Dreamcaller. */
+export interface Tides4DreamAvatarPool {
+  /** The always-joined signature tide id, or null for a signatureless DreamAvatar. */
   starter: string | null;
   /** Facet tide ids a random subset is drawn from each run (at least one). */
   facets: string[];
@@ -138,11 +138,11 @@ export interface Tides4DecksJson {
   /** All tide decks (signature floors, directional facets, broad neutrals). */
   tides: Tides4DeckJson[];
   /**
-   * Per Dreamcaller UUID: the starter, facets, and neutral tides its pool
-   * combines. Every Dreamcaller has an entry; every id in it names a tide in
+   * Per DreamAvatar UUID: the starter, facets, and neutral tides its pool
+   * combines. Every DreamAvatar has an entry; every id in it names a tide in
    * {@link tides}.
    */
-  tidePoolByDreamcaller: Record<string, Tides4DreamcallerPool>;
+  tidePoolByDreamAvatar: Record<string, Tides4DreamAvatarPool>;
 }
 
 function fail(detail: string): never {
@@ -197,33 +197,33 @@ export function validateTides4Decks(json: unknown): Tides4DecksJson {
       }
     }
   }
-  const pools = data.tidePoolByDreamcaller;
+  const pools = data.tidePoolByDreamAvatar;
   if (typeof pools !== "object" || pools === null || Array.isArray(pools)) {
-    fail("missing `tidePoolByDreamcaller` object");
+    fail("missing `tidePoolByDreamAvatar` object");
   }
-  for (const [dreamcallerId, entry] of Object.entries(pools)) {
+  for (const [dreamAvatarId, entry] of Object.entries(pools)) {
     if (typeof entry !== "object" || entry === null || Array.isArray(entry)) {
-      fail(`tide pool for "${dreamcallerId}" is not an object`);
+      fail(`tide pool for "${dreamAvatarId}" is not an object`);
     }
     const known = (tideId: unknown): boolean =>
       typeof tideId === "string" && ids.has(tideId);
-    // `starter` is the only optional/nullable id: a signatureless Dreamcaller has
+    // `starter` is the only optional/nullable id: a signatureless DreamAvatar has
     // none. A non-null starter must name a tide.
     if (entry.starter !== null && !known(entry.starter)) {
-      fail(`tide pool for "${dreamcallerId}" has an unknown \`starter\``);
+      fail(`tide pool for "${dreamAvatarId}" has an unknown \`starter\``);
     }
     // `facets` is the variety engine and must be non-empty; `neutral` may be empty
-    // when a Dreamcaller's facets alone can already fill a pool.
+    // when a DreamAvatar's facets alone can already fill a pool.
     if (!Array.isArray(entry.facets) || entry.facets.length === 0) {
-      fail(`tide pool for "${dreamcallerId}" has no \`facets\``);
+      fail(`tide pool for "${dreamAvatarId}" has no \`facets\``);
     }
     if (!Array.isArray(entry.neutral)) {
-      fail(`tide pool for "${dreamcallerId}" has a non-array \`neutral\``);
+      fail(`tide pool for "${dreamAvatarId}" has a non-array \`neutral\``);
     }
     for (const key of ["facets", "neutral"] as const) {
       for (const tideId of entry[key]) {
         if (!known(tideId)) {
-          fail(`tide "${String(tideId)}" in "${dreamcallerId}".${key} names no tide`);
+          fail(`tide "${String(tideId)}" in "${dreamAvatarId}".${key} names no tide`);
         }
       }
     }

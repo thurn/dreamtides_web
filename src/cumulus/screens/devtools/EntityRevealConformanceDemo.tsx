@@ -6,7 +6,7 @@ import { AtlasNode, type AtlasNodeModel } from "../../components/atlas/AtlasNode
 import { GameCard } from "../../components/card/CardView";
 import { GlossaryTerm } from "../../components/card/GlossaryTerm";
 import { richText } from "../../components/card/rich-text";
-import { DreamcallerPortrait } from "../../components/hud/DreamcallerPortrait";
+import { DreamAvatarPortrait } from "../../components/hud/DreamAvatarPortrait";
 import { InfoCard } from "../../components/overlay/InfoCard";
 import { artRef } from "../../primitives/art";
 import { GLYPHS } from "../../primitives/glyph";
@@ -61,7 +61,7 @@ const TRUNCATION_CARD: CardData = {
   cardNumber: 8,
   renderedText: "Figment. Materialize. Rematerialize. Dissolve. Banish. Abandon. Score. Reclaim. Foresee. Discover. Erode. Fast. Awakened. Unstoppable. Preeminence. Veil. Vengeful. Support. Challenger. Prevent. Offering. Phasing. Ephemeral. Transfigure. Purge. Duplicate. Bane. Essence. Enhanced.",
 };
-const DREAMCALLER = { id: "99999999-9999-4999-8999-999999999999", name: "Conformance Guide", title: "Keeper of Context", imageNumber: "0071" };
+const DREAM_AVATAR = { id: "99999999-9999-4999-8999-999999999999", name: "Conformance Guide", title: "Keeper of Context", imageNumber: "0071" };
 
 const SCENARIOS = ["above", "side-fallback", "top-edge", "truncation", "best-effort", "safe-area", "reduced-motion"] as const;
 type Scenario = (typeof SCENARIOS)[number];
@@ -119,7 +119,7 @@ export function EntityRevealConformanceDemo() {
           }}
         >
           {scenario === "above" ? (
-            <DreamcallerPortrait dreamcaller={DREAMCALLER} variant="thumb" size={120} profile={{ id: DREAMCALLER.id, ability: "Bane. Discover. Ephemeral." }} />
+            <DreamAvatarPortrait dreamAvatar={DREAM_AVATAR} variant="thumb" size={120} profile={{ id: DREAM_AVATAR.id, ability: "Bane. Discover. Ephemeral." }} />
           ) : (
             <GameCard model={{ cardId: TRUNCATION_CARD.id, displaySnapshot: TRUNCATION_CARD }} onActivate={() => setActivationCount((count) => count + 1)} />
           )}
@@ -130,7 +130,7 @@ export function EntityRevealConformanceDemo() {
         <article data-conformance-press-in-place="" style={{ width: 360 }}><h2>GameCard press in place</h2><GameCard model={{ cardId: CARD_ID, displaySnapshot: CARD }} /></article>
         <article data-conformance-unavailable="" style={{ width: 160 }}><h2>Unavailable</h2><GameCard model={{ cardId: CARD_ID, displaySnapshot: CARD }} unavailable /></article>
         <article><h2>InfoCard</h2><InfoCard variant="text" title="Primary only" body={richText.plain("Strict visual content.")} /></article>
-        <article data-conformance-info-secondaries=""><h2>InfoCard group source</h2><DreamcallerPortrait dreamcaller={DREAMCALLER} variant="thumb" size={120} profile={{ id: DREAMCALLER.id, ability: "Bane. Discover. Ephemeral." }} /></article>
+        <article data-conformance-info-secondaries=""><h2>InfoCard group source</h2><DreamAvatarPortrait dreamAvatar={DREAM_AVATAR} variant="thumb" size={120} profile={{ id: DREAM_AVATAR.id, ability: "Bane. Discover. Ephemeral." }} /></article>
         <article><h2>Inline</h2><p>Resolve <GlossaryTerm entry={{ term: "Bane", definition: "A penalty card forced into your deck." }} text="Bane" /> here.</p></article>
         <article style={{ position: "relative", width: 184, height: 184 }}><h2>Atlas</h2><AtlasNode model={ATLAS_MODEL} onActivate={() => undefined} /></article>
         <article data-conformance-battle-fixture="" style={{ width: 160 }}><h2>Battle</h2><GameCard model={{ cardId: BATTLE_CARD.id, displaySnapshot: BATTLE_CARD }} /></article>

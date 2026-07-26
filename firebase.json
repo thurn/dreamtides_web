@@ -26,7 +26,7 @@
       "**/.*",
       "**/node_modules/**",
       "cards/**",
-      "dreamcallers/**",
+      "dream-avatars/**",
       "dreamsigns/**",
       "journeys/**",
       "dreamscapes/**",

@@ -1,6 +1,6 @@
 // The `embedded` variant: `sigseed`'s pool, grown from the COMMITTED affinity
 // corpus instead of the records rebuilt in-browser. It seeds and grows
-// identically to `sigseed` — a random subset of the Dreamcaller's signature
+// identically to `sigseed` — a random subset of the avatar's signature
 // cards expanded by the shared deterministic affinity grower
 // ({@link growAffinityPoolFromSeeds}), reducing to `pickcohere` when no signature
 // resolves — and differs only in the SOURCE of its {@link AffinityCorpus}.
@@ -81,7 +81,7 @@ export const embeddedStrategy: PoolStrategy = {
   id: "embedded",
   description:
     "Grows the pool exactly like sigseed — from a random subset of a " +
-    "Dreamcaller's signature cards expanded by pick-affinity — but reads its " +
+    "DreamAvatar's signature cards expanded by pick-affinity — but reads its " +
     "synergy from the committed affinity corpus (data/affinity_corpus.jsonc) " +
     "instead of rebuilding it from the draft records, so new and changed cards " +
     "can be authored in the affinity overlay. Reduces to pickcohere with no signature.",

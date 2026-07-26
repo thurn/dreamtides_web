@@ -4,7 +4,7 @@
 
 **Goal:** Make the folded battle slice the sole authority for whether the playable battle or the pre-battle reveal renders, including after reload.
 
-**Architecture:** Build the opposing-Dreamcaller preview deterministically from quest state and loaded content without creating fold battle state. The reveal appends `BEGIN_BATTLE`; once that event folds, every client renders the playable surface from `FoldState.battle`. QA preview scenes load only quest state, while the dedicated playable scene may load a battle slice.
+**Architecture:** Build the opposing-Dream Avatar preview deterministically from quest state and loaded content without creating fold battle state. The reveal appends `BEGIN_BATTLE`; once that event folds, every client renders the playable surface from `FoldState.battle`. QA preview scenes load only quest state, while the dedicated playable scene may load a battle slice.
 
 **Tech Stack:** React 19, TypeScript, Vitest, Firebase RTDB event log, `agent-browser`.
 

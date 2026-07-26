@@ -1,6 +1,6 @@
 // Evaluate the draft pools an algorithm generates against three target metrics,
-// all measured on the SAME real-draft simulation: every Dreamcaller (all 32,
-// each with its FULL signature) over many seeds. Neutral Dreamcallers (no
+// all measured on the SAME real-draft simulation: every DreamAvatar (all 32,
+// each with its FULL signature) over many seeds. Neutral DreamAvatars (no
 // signature) contribute their unsteered pools at their natural roster rate, so
 // the aggregate reflects what players actually draft -- nothing is omitted or
 // re-weighted. Each generated pool is one sample.
@@ -8,7 +8,7 @@
 //   --metric adequacy    (default)  build-around support adequacy
 //   --metric traps                  trap-card frequency
 //   --metric diversity              card-utilization + theme spread
-//   --metric dreamcaller            does the pool match its Dreamcaller's theme?
+//   --metric dreamAvatar            does the pool match its DreamAvatar's theme?
 //   --compare                       run the chosen metric across every algorithm
 //
 // The four metrics answer four different questions about a pool generator:
@@ -52,18 +52,18 @@
 //    The diversity headline blends the card-utilization and theme-spread evenness
 //    scores.
 //
-// 4) DREAMCALLER -- does each pool actually deliver the theme its Dreamcaller was
+// 4) DREAM_AVATAR -- does each pool actually deliver the theme its DreamAvatar was
 //    built to play? Adequacy is theme-agnostic: a flawless abandon pool scores a
-//    perfect adequacy even for a warrior Dreamcaller, because it only asks whether
+//    perfect adequacy even for a warrior DreamAvatar, because it only asks whether
 //    the build-arounds that happened to land are supported. This metric instead
-//    scores every pool against ITS OWN Dreamcaller's archetype, learned from the
+//    scores every pool against ITS OWN DreamAvatar's archetype, learned from the
 //    decklist corpus: a card belongs to the archetype when it shows high lift and
-//    presence in the real decks built around the Dreamcaller's signature (see the
+//    presence in the real decks built around the DreamAvatar's signature (see the
 //    metric configuration below). A theme whose learned support set is large
 //    enough to fill the target share of a pool is "big5" and scored on density
 //    toward that target; a smaller one rides a tempo/removal shell and is scored
 //    on full-playset completeness instead. The headline is the mean per-pool
-//    score over every learnable Dreamcaller. Dreamcallers with no signature, or
+//    score over every learnable DreamAvatar. DreamAvatars with no signature, or
 //    with too few signature decks to trust, are reported cold-start and skipped.
 //
 // The support classification lives in data/buildaround_support.json: per card,
@@ -83,20 +83,20 @@
 //   node scripts/pool-metrics.mjs                    # adequacy
 //   node scripts/pool-metrics.mjs --metric traps
 //   node scripts/pool-metrics.mjs --metric diversity
-//   node scripts/pool-metrics.mjs --metric dreamcaller
-//   node scripts/pool-metrics.mjs --metric dreamcaller --compare
+//   node scripts/pool-metrics.mjs --metric dreamAvatar
+//   node scripts/pool-metrics.mjs --metric dreamAvatar --compare
 //   node scripts/pool-metrics.mjs --compare          # all algos
 //   node scripts/pool-metrics.mjs --metric diversity --compare
 //   node scripts/pool-metrics.mjs --themes all       # adequacy only
 //   node scripts/pool-metrics.mjs --seeds 500
 //   node scripts/pool-metrics.mjs --variant idf4
-//   node scripts/pool-metrics.mjs --dreamcaller "Kell Tarn"
+//   node scripts/pool-metrics.mjs --dream-avatar "Kell Tarn"
 //   node scripts/pool-metrics.mjs --json > result.json
-// Shared flags: --seeds, --variant, --pool-size, --dreamcaller, --top, --json.
+// Shared flags: --seeds, --variant, --pool-size, --dream-avatar, --top, --json.
 // Metric flags: --themes short|all (adequacy), --trap-tau N (traps),
 //   --standalone-themes a,b,c / --buildable-share N / --present-share N /
 //   --ubiquity N (diversity), --dc-lift N / --dc-presence N / --dc-target N
-//   (dreamcaller).
+//   (dreamAvatar).
 // `--traps` is a back-compat alias for `--metric traps`.
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -162,21 +162,21 @@ export const STANDALONE_THEMES = new Set([
   "abandon",
 ]);
 
-// --- Dreamcaller-support metric configuration (label-free) ------------------
+// --- DreamAvatar-support metric configuration (label-free) ------------------
 //
-// The dreamcaller metric asks a different question from adequacy: not "are the
+// The dreamAvatar metric asks a different question from adequacy: not "are the
 // build-arounds that happened to land in the pool supported?" but "does the pool
-// actually carry the theme this Dreamcaller was built to play?" Adequacy is
+// actually carry the theme this avatar was built to play?" Adequacy is
 // theme-agnostic (a flawless abandon pool scores perfectly for a warrior
-// Dreamcaller); this metric scores each pool against its own Dreamcaller's
+// DreamAvatar); this metric scores each pool against its own DreamAvatar's
 // archetype, so an off-theme pool fails no matter how internally coherent.
 //
 // The archetype is learned from the decklist corpus, calibrated entirely around
-// each Dreamcaller's signature cards -- no hand labels:
+// each DreamAvatar's signature cards -- no hand labels:
 //
 //   1. A "signature deck" is a real decklist that runs at least DC_SIGNATURE_K
-//      of the Dreamcaller's signature cards: a deck a player actually built
-//      around this Dreamcaller's identity.
+//      of the DreamAvatar's signature cards: a deck a player actually built
+//      around this avatar's identity.
 //   2. A card's LIFT is how much more often it appears in the signature decks
 //      than in the corpus at large: P(card | signature deck) / P(card). Lift > 1
 //      means the card belongs to what players actually play alongside the
@@ -190,7 +190,7 @@ export const STANDALONE_THEMES = new Set([
 //      rides a tempo/removal shell and is scored on full-playset completeness:
 //      the fraction of its support set present as a 2-of.
 //
-// Defaults below were verified across every canonical big-5 Dreamcaller, not
+// Defaults below were verified across every canonical big-5 DreamAvatar, not
 // just the tightest one. At presence 0.15, 14/15 big-5 signatures surface a
 // support set large enough that a 50% pool share is reachable (median ceiling
 // ~70%), so the size-derived big5/small classification agrees the canonical big
@@ -204,7 +204,7 @@ export const DC_SIGNATURE_K = 2; // min signature cards for a deck to count
 export const DC_LIFT = 1.3; // min lift to count as archetype support
 export const DC_PRESENCE = 0.15; // min P(card | signature deck) to count
 export const DC_TARGET = 0.5; // desired on-theme share of the pool
-// A Dreamcaller with fewer signature decks than this has too little corpus
+// A DreamAvatar with fewer signature decks than this has too little corpus
 // evidence for a trustworthy support set; it is reported as cold-start and left
 // out of the headline rather than scored against a noisy membership.
 export const DC_MIN_DECKS = 30;
@@ -214,14 +214,14 @@ export const DC_MIN_DECKS = 30;
 export const SMALL_THEME_COPIES = 2;
 
 /**
- * The dominant theme a Dreamcaller's signature steers toward: the theme cited
+ * The dominant theme a DreamAvatar's signature steers toward: the theme cited
  * most often across the signature cards' own `supports`/`needs`. This is the
- * Dreamcaller's intended build-around identity, read straight off the signature
+ * DreamAvatar's intended build-around identity, read straight off the signature
  * (not from whatever incidental support share the grown pool ends up with).
- * Returns null for a neutral Dreamcaller (no signature, or none of its signature
+ * Returns null for a neutral DreamAvatar (no signature, or none of its signature
  * cards carry a theme tag).
  *
- * @param signatureCardIds  The Dreamcaller's `signatureCardIds` array (stable
+ * @param signatureCardIds  The DreamAvatar's `signatureCardIds` array (stable
  *   cards_v2 UUIDs). Keyed on UUID so two distinct cards with the same display
  *   name are never merged in the tally.
  */
@@ -492,15 +492,15 @@ export function draftableUniverse(poolData) {
   return universe;
 }
 
-// --- Dreamcaller-support helpers (label-free, pure, unit-tested) ------------
+// --- DreamAvatar-support helpers (label-free, pure, unit-tested) ------------
 
 /**
  * The decks in a corpus that are built around a signature: those running at
  * least `k` of the signature cards. These are the revealed-preference evidence
- * for what the Dreamcaller's archetype actually contains.
+ * for what the DreamAvatar's archetype actually contains.
  *
  * @param decklists array of decks, each a string[] of card names.
- * @param signature the Dreamcaller's signature card names.
+ * @param signature the DreamAvatar's signature card names.
  * @returns the matching decks (each a Set<cardName> for O(1) membership).
  */
 export function signatureDecks(decklists, signature, k = DC_SIGNATURE_K) {
@@ -554,7 +554,7 @@ export function cardLifts(decklists, sigDecks) {
 /**
  * The binary archetype-support set for a signature: the cards whose lift and
  * presence both clear the thresholds. This is the data-driven replacement for a
- * hand-tagged theme -- the cards a pool needs to carry for this Dreamcaller.
+ * hand-tagged theme -- the cards a pool needs to carry for this avatar.
  *
  * @returns { cards: Set<cardName>, sigDeckCount, lifts } -- the support set, how
  *   many signature decks backed it, and the full per-card lift map (for report).
@@ -645,7 +645,7 @@ const VALUE_FLAGS = new Set([
   "--seeds",
   "--variant",
   "--pool-size",
-  "--dreamcaller",
+  "--dream-avatar",
   "--top",
   "--themes",
   "--trap-tau",
@@ -664,22 +664,22 @@ const BOOLEAN_FLAGS = new Set(["--compare", "--traps", "--json", "--help", "-h"]
 const HELP = `Usage: node scripts/pool-metrics.mjs [options]
 
 Evaluate the draft pools an algorithm generates against one of four metrics,
-measured on the real-draft simulation (every Dreamcaller, full signature, many
+measured on the real-draft simulation (every DreamAvatar, full signature, many
 seeds). See the header comment in this file for what each metric measures.
 
 Mode:
   --metric <name>        Which metric to run: adequacy (default) | traps |
-                         diversity | dreamcaller.
+                         diversity | dreamAvatar.
   --traps                Back-compat alias for --metric traps.
   --compare              Run the chosen metric across every algorithm (defaults
                          to ${DEFAULT_COMPARE_SEEDS} seeds; override with --seeds).
   -h, --help             Show this help and exit.
 
 Shared options (every metric):
-  --seeds <n>            Seeds per Dreamcaller (default ${DEFAULT_SEEDS}; --compare default ${DEFAULT_COMPARE_SEEDS}).
+  --seeds <n>            Seeds per DreamAvatar (default ${DEFAULT_SEEDS}; --compare default ${DEFAULT_COMPARE_SEEDS}).
   --variant <id>         Pool algorithm to evaluate (default idf3).
   --pool-size <n>        Target pool size in copies (default ${POOL_TARGET_SIZE}).
-  --dreamcaller <name|id>  Restrict the simulation to a single Dreamcaller.
+  --dream-avatar <name|id>  Restrict the simulation to a single DreamAvatar.
   --top <n>              How many rows to show in "top N" listings (default ${DEFAULT_TOP}).
   --json                 Emit the full result as JSON instead of a text report.
 
@@ -700,14 +700,14 @@ Diversity options (--metric diversity):
   --ubiquity <n>         A card is "ubiquitous" once it appears in this fraction
                          of pools (default ${DEFAULT_UBIQUITY}).
 
-Dreamcaller options (--metric dreamcaller; archetype support learned from decklists):
+DreamAvatar options (--metric dreamAvatar; archetype support learned from decklists):
   --dc-sig-k <n>         Min signature cards a deck needs to count as a signature
                          deck (default ${DC_SIGNATURE_K}).
   --dc-lift <n>          Min lift for a card to count as archetype support (default ${DC_LIFT}).
   --dc-presence <n>      Min P(card | signature deck) for support (default ${DC_PRESENCE}).
   --dc-target <n>        Desired on-theme share of the pool; score = min(1, share/target)
                          (default ${DC_TARGET}).
-  --dc-min-decks <n>     Below this many signature decks a Dreamcaller is cold-start
+  --dc-min-decks <n>     Below this many signature decks a DreamAvatar is cold-start
                          and left out of the headline (default ${DC_MIN_DECKS}).
 `;
 
@@ -773,16 +773,16 @@ function group() {
 function resolveMetric(argv) {
   if (argv.includes("--traps")) return "traps";
   const m = str(argv, "--metric", "adequacy");
-  if (!["adequacy", "traps", "diversity", "dreamcaller"].includes(m)) {
+  if (!["adequacy", "traps", "diversity", "dreamAvatar"].includes(m)) {
     console.error(
-      `--metric must be adequacy|traps|diversity|dreamcaller (got "${m}").`,
+      `--metric must be adequacy|traps|diversity|dreamAvatar (got "${m}").`,
     );
     process.exit(1);
   }
   return m;
 }
 
-/** Load the shared inputs every metric reads, applying any `--dreamcaller` filter. */
+/** Load the shared inputs every metric reads, applying any `--dream-avatar` filter. */
 function loadContext(argv) {
   const cards = readJson("public/cards_v2-data.json");
   // Build an id->name lookup so callers can resolve a UUID to its display name
@@ -795,17 +795,17 @@ function loadContext(argv) {
   // display name, so the name-keyed metric here reads them directly.
   const decklistIds = readJson("public/decklist-ids-data.json");
   const draftRecords = readJson("public/draft-records-data.json");
-  let dreamcallers = readJson("public/dreamcallers-v2-data.json");
+  let dreamAvatars = readJson("public/dream-avatars-v2-data.json");
   const meta = readJson("data/buildaround_support.json");
 
-  const dcFilter = str(argv, "--dreamcaller", null);
+  const dcFilter = str(argv, "--dream-avatar", null);
   if (dcFilter) {
     const q = dcFilter.toLowerCase();
-    dreamcallers = dreamcallers.filter(
+    dreamAvatars = dreamAvatars.filter(
       (d) => d.id === dcFilter || d.name.toLowerCase() === q,
     );
-    if (!dreamcallers.length) {
-      console.error(`No Dreamcaller matches "${dcFilter}".`);
+    if (!dreamAvatars.length) {
+      console.error(`No DreamAvatar matches "${dcFilter}".`);
       process.exit(1);
     }
   }
@@ -845,14 +845,14 @@ function loadContext(argv) {
     }
   }
   // The `tides3` variant combines its own committed tide decks (with the
-  // per-Dreamcaller tide pools baked into the same file); load them (when
+  // per-DreamAvatar tide pools baked into the same file); load them (when
   // present) so it runs under `--compare`/`--variant tides3`.
   const tides3Path = resolve(ROOT, "data/tides3.jsonc");
   if (existsSync(tides3Path)) {
     poolData.tides3Decks = validateTides3Decks(readJsonc("data/tides3.jsonc"));
   }
   // The `tides4` variant combines its own committed tide decks (with the
-  // per-Dreamcaller tide pools baked into the same file); load them (when
+  // per-DreamAvatar tide pools baked into the same file); load them (when
   // present) so it runs under `--compare`/`--variant tides4`.
   const tides4Path = resolve(ROOT, "data/tides4.jsonc");
   if (existsSync(tides4Path)) {
@@ -865,17 +865,17 @@ function loadContext(argv) {
   if (existsSync(tides5Path)) {
     poolData.tides5Decks = validateTides5Decks(readJsonc("data/tides5.jsonc"));
   }
-  return { dreamcallers, meta, poolData, decklists, decklistIds, idToName };
+  return { dreamAvatars, meta, poolData, decklists, decklistIds, idToName };
 }
 
 /**
- * The real-draft simulation shared by every metric: every Dreamcaller, each with
+ * The real-draft simulation shared by every metric: every DreamAvatar, each with
  * its FULL signature, over `seeds` seeds. Yields one generated pool per
- * (Dreamcaller, seed). Neutral Dreamcallers (no signature) yield their unsteered
+ * (DreamAvatar, seed). Neutral DreamAvatars (no signature) yield their unsteered
  * pools, so the stream is the natural roster-weighted draft distribution.
  */
 function* simulateRealDrafts(ctx, { seeds, variant, poolSize }) {
-  for (const dc of ctx.dreamcallers) {
+  for (const dc of ctx.dreamAvatars) {
     // The IDF-cosine and pick-affinity variants steer on stable card UUIDs (the
     // same id space production passes), lowercased to match the corpus keys.
     const signature = (dc.signatureCardIds ?? []).map((s) => s.toLowerCase());
@@ -898,18 +898,18 @@ function* simulateRealDrafts(ctx, { seeds, variant, poolSize }) {
 // --- Metric: adequacy -------------------------------------------------------
 
 function computeAdequacy(ctx, { seeds, poolSize, variant, allowedThemes }) {
-  const all = []; // every payoff instance, tagged with its Dreamcaller
+  const all = []; // every payoff instance, tagged with its DreamAvatar
   const byTheme = group();
-  const byDreamcaller = group();
+  const byDreamAvatar = group();
   const byPayoff = group();
   const poolSizes = [];
   let poolsWithPayoffs = 0;
 
-  // A pool is "steered" when its Dreamcaller has a build-around signature
-  // identity; neutral Dreamcallers produce the unsteered floor. Computed from the
+  // A pool is "steered" when its DreamAvatar has a build-around signature
+  // identity; neutral DreamAvatars produce the unsteered floor. Computed from the
   // real signature -- no signature is omitted or rewritten.
   const steeredByDc = new Map();
-  for (const dc of ctx.dreamcallers) {
+  for (const dc of ctx.dreamAvatars) {
     steeredByDc.set(
       dc.name,
       dominantSignatureTheme(dc.signatureCardIds, ctx.meta) !== null,
@@ -926,15 +926,15 @@ function computeAdequacy(ctx, { seeds, poolSize, variant, allowedThemes }) {
     if (instances.length) poolsWithPayoffs++;
     const steered = steeredByDc.get(dc.name) === true;
     for (const inst of instances) {
-      all.push({ dreamcaller: dc.name, steered, ...inst });
+      all.push({ dreamAvatar: dc.name, steered, ...inst });
       byTheme.add(inst.theme, inst.adequacy, inst.share);
-      byDreamcaller.add(dc.name, inst.adequacy, inst.share);
+      byDreamAvatar.add(dc.name, inst.adequacy, inst.share);
       byPayoff.add(inst.payoff, inst.adequacy, inst.share);
     }
   }
 
   const headline = mean(all.map((i) => i.adequacy)) * 100;
-  const totalPools = ctx.dreamcallers.length * seeds;
+  const totalPools = ctx.dreamAvatars.length * seeds;
   return {
     variant,
     headline,
@@ -944,7 +944,7 @@ function computeAdequacy(ctx, { seeds, poolSize, variant, allowedThemes }) {
     totalInstances: all.length,
     all,
     byTheme,
-    byDreamcaller,
+    byDreamAvatar,
     byPayoff,
   };
 }
@@ -970,7 +970,7 @@ function reportAdequacy(
             variant,
             poolSize,
             seeds,
-            dreamcallers: ctx.dreamcallers.length,
+            dreamAvatars: ctx.dreamAvatars.length,
             themes: themeMode,
             scoredThemes: allowedThemes
               ? [...allowedThemes]
@@ -983,7 +983,7 @@ function reportAdequacy(
           meanPoolSize: res.meanPoolSize,
           totalInstances: res.totalInstances,
           byTheme: res.byTheme.entries().sort((a, b) => a.meanAdequacy - b.meanAdequacy),
-          byDreamcaller: res.byDreamcaller
+          byDreamAvatar: res.byDreamAvatar
             .entries()
             .sort((a, b) => a.meanAdequacy - b.meanAdequacy),
           worstPayoffs,
@@ -1003,7 +1003,7 @@ function reportAdequacy(
       ? `standalone themes (${[...allowedThemes].length})`
       : `all themes (${Object.keys(ctx.meta.themes).length})`;
   console.log(
-    `Adequacy metric (${variant}, pool size ${poolSize}, ${themeLabel}, ${seeds} seeds x ${ctx.dreamcallers.length} Dreamcallers = ${totalPools} pools)`,
+    `Adequacy metric (${variant}, pool size ${poolSize}, ${themeLabel}, ${seeds} seeds x ${ctx.dreamAvatars.length} DreamAvatars = ${totalPools} pools)`,
   );
   console.log(
     `Tier targets: 1=${pct(TIER_TARGET[1])}  2=${pct(TIER_TARGET[2])}  3=${pct(TIER_TARGET[3])}   mean pool size ${res.meanPoolSize.toFixed(0)} copies`,
@@ -1016,9 +1016,9 @@ function reportAdequacy(
   if (allowedThemes) {
     const steeredInst = res.all.filter((i) => i.steered);
     const neutralInst = res.all.filter((i) => !i.steered);
-    const steeredDc = new Set(steeredInst.map((i) => i.dreamcaller)).size;
+    const steeredDc = new Set(steeredInst.map((i) => i.dreamAvatar)).size;
     console.log(
-      `  steered (${steeredDc} Dreamcallers with a signature identity): ${(mean(steeredInst.map((i) => i.adequacy)) * 100).toFixed(1)}` +
+      `  steered (${steeredDc} DreamAvatars with a signature identity): ${(mean(steeredInst.map((i) => i.adequacy)) * 100).toFixed(1)}` +
         `   neutral pools: ${(mean(neutralInst.map((i) => i.adequacy)) * 100).toFixed(1)}`,
     );
   }
@@ -1031,8 +1031,8 @@ function reportAdequacy(
     );
   }
 
-  console.log(`\nBy Dreamcaller (mean adequacy, worst first):`);
-  for (const e of res.byDreamcaller.entries().sort((a, b) => a.meanAdequacy - b.meanAdequacy)) {
+  console.log(`\nBy DreamAvatar (mean adequacy, worst first):`);
+  for (const e of res.byDreamAvatar.entries().sort((a, b) => a.meanAdequacy - b.meanAdequacy)) {
     console.log(
       `  ${e.key.padEnd(20)} ${(e.meanAdequacy * 100).toFixed(0).padStart(5)}%   (${e.count} instances)`,
     );
@@ -1082,7 +1082,7 @@ function computeTraps(ctx, { seeds, poolSize, variant, tau }) {
   const dcTraps = new Map();
   const trapCardPools = new Map();
 
-  for (const dc of ctx.dreamcallers) {
+  for (const dc of ctx.dreamAvatars) {
     dcTraps.set(dc.name, { traps: 0, poolsWithTrap: 0, pools: 0 });
   }
 
@@ -1106,7 +1106,7 @@ function computeTraps(ctx, { seeds, poolSize, variant, tau }) {
     }
   }
 
-  const totalPools = ctx.dreamcallers.length * seeds;
+  const totalPools = ctx.dreamAvatars.length * seeds;
   return {
     variant,
     totalPools,
@@ -1120,9 +1120,9 @@ function computeTraps(ctx, { seeds, poolSize, variant, tau }) {
 
 function reportTraps(res, ctx, { seeds, poolSize, variant, tau, top, asJson }) {
   const totalPools = res.totalPools;
-  const byDreamcaller = [...res.dcTraps.entries()]
+  const byDreamAvatar = [...res.dcTraps.entries()]
     .map(([name, s]) => ({
-      dreamcaller: name,
+      dreamAvatar: name,
       trapsPerPool: s.pools ? s.traps / s.pools : 0,
       poolsWithTrapPct: s.pools ? s.poolsWithTrap / s.pools : 0,
       pools: s.pools,
@@ -1138,11 +1138,11 @@ function reportTraps(res, ctx, { seeds, poolSize, variant, tau, top, asJson }) {
       JSON.stringify(
         {
           metric: "traps",
-          config: { variant, poolSize, tau, seeds, dreamcallers: ctx.dreamcallers.length, totalPools },
+          config: { variant, poolSize, tau, seeds, dreamAvatars: ctx.dreamAvatars.length, totalPools },
           expectedTrapsPerPool: res.expectedTrapsPerPool,
           poolsWithTrapPct: res.poolsWithTrapPct,
           meanPoolSize: res.meanPoolSize,
-          byDreamcaller,
+          byDreamAvatar,
           worstTrapCards,
         },
         null,
@@ -1154,7 +1154,7 @@ function reportTraps(res, ctx, { seeds, poolSize, variant, tau, top, asJson }) {
 
   const tauPct = Math.round(tau * 100);
   console.log(
-    `Trap metric (${variant}, pool size ${poolSize}, tau=${tau}, real-draft pools, ${seeds} seeds x ${ctx.dreamcallers.length} Dreamcallers = ${totalPools} pools)`,
+    `Trap metric (${variant}, pool size ${poolSize}, tau=${tau}, real-draft pools, ${seeds} seeds x ${ctx.dreamAvatars.length} DreamAvatars = ${totalPools} pools)`,
   );
   console.log(
     `  (a trap = a build-around whose best-supported theme is under ${tauPct}% of its demand target)`,
@@ -1167,10 +1167,10 @@ function reportTraps(res, ctx, { seeds, poolSize, variant, tau, top, asJson }) {
     `  pools carrying >=1 trap card: ${(res.poolsWithTrapPct * 100).toFixed(0)}%   (mean pool size ${res.meanPoolSize.toFixed(0)} copies)`,
   );
 
-  console.log(`\nBy Dreamcaller (most traps per pool first):`);
-  for (const e of byDreamcaller) {
+  console.log(`\nBy DreamAvatar (most traps per pool first):`);
+  for (const e of byDreamAvatar) {
     console.log(
-      `  ${e.dreamcaller.padEnd(20)} ${e.trapsPerPool.toFixed(2).padStart(5)}   (${(e.poolsWithTrapPct * 100).toFixed(0)}%)`,
+      `  ${e.dreamAvatar.padEnd(20)} ${e.trapsPerPool.toFixed(2).padStart(5)}   (${(e.poolsWithTrapPct * 100).toFixed(0)}%)`,
     );
   }
 
@@ -1330,7 +1330,7 @@ function reportDiversity(
             variant,
             poolSize,
             seeds,
-            dreamcallers: ctx.dreamcallers.length,
+            dreamAvatars: ctx.dreamAvatars.length,
             standaloneThemes: [...standalone],
             buildableShare,
             presentShare,
@@ -1372,7 +1372,7 @@ function reportDiversity(
   const pctd = (x) => `${(x * 100).toFixed(0)}%`;
   const themeName = (k) => ctx.meta.themes[k]?.name ?? k;
   console.log(
-    `Diversity metric (${variant}, pool size ${poolSize}, ${seeds} seeds x ${ctx.dreamcallers.length} Dreamcallers = ${res.totalPools} pools)`,
+    `Diversity metric (${variant}, pool size ${poolSize}, ${seeds} seeds x ${ctx.dreamAvatars.length} DreamAvatars = ${res.totalPools} pools)`,
   );
   console.log(`Standalone themes (${standalone.size}): ${[...standalone].join(", ")}`);
   console.log("");
@@ -1477,18 +1477,18 @@ function runDiversity(argv) {
   });
 }
 
-// --- Metric: dreamcaller (label-free, learned from decklists) ---------------
+// --- Metric: dreamAvatar (label-free, learned from decklists) ---------------
 
-function computeDreamcaller(
+function computeDreamAvatar(
   ctx,
   { seeds, poolSize, variant, k, lift, presence, target, minDecks },
 ) {
-  // Build each Dreamcaller's archetype-support set ONCE from the decklist corpus
-  // (it does not depend on the generated pools). A Dreamcaller with no signature,
+  // Build each DreamAvatar's archetype-support set ONCE from the decklist corpus
+  // (it does not depend on the generated pools). A DreamAvatar with no signature,
   // or with too few signature decks to trust, is set cold-start and skipped.
   const supportByDc = new Map();
   const coldStart = [];
-  for (const dc of ctx.dreamcallers) {
+  for (const dc of ctx.dreamAvatars) {
     // Use the UUID id array (lowercased to match the corpus keys) so two cards
     // with the same display name are never conflated in the lift computation.
     const sig = (dc.signatureCardIds ?? []).map((id) => id.toLowerCase());
@@ -1514,9 +1514,9 @@ function computeDreamcaller(
     supportByDc.set(dc.name, set);
   }
 
-  const byDreamcaller = group();
+  const byDreamAvatar = group();
   const poolScores = [];
-  // Per-Dreamcaller running tallies: the scored measure (share for big5,
+  // Per-DreamAvatar running tallies: the scored measure (share for big5,
   // completeness for small) and how often the pool fully delivered the theme
   // (big5 hit `target` density; small shipped a complete playset).
   const dcStat = new Map(); // name -> { kind, measures:[], hits, pools }
@@ -1537,7 +1537,7 @@ function computeDreamcaller(
       hit = measure >= 1;
     }
     poolScores.push(score);
-    byDreamcaller.add(dc.name, score, measure);
+    byDreamAvatar.add(dc.name, score, measure);
     let s = dcStat.get(dc.name);
     if (!s) {
       s = { kind: set.kind, measures: [], hits: 0, pools: 0 };
@@ -1553,28 +1553,28 @@ function computeDreamcaller(
     variant,
     headline,
     target,
-    scoredDreamcallers: supportByDc.size,
-    totalDreamcallers: ctx.dreamcallers.length,
+    scoredDreamAvatars: supportByDc.size,
+    totalDreamAvatars: ctx.dreamAvatars.length,
     scoredPools: poolScores.length,
     supportByDc,
     coldStart,
-    byDreamcaller,
+    byDreamAvatar,
     dcStat,
   };
 }
 
-function reportDreamcaller(
+function reportDreamAvatar(
   res,
   ctx,
   { seeds, poolSize, variant, k, lift, presence, target, minDecks, top, asJson },
 ) {
-  const dcRows = res.byDreamcaller
+  const dcRows = res.byDreamAvatar
     .entries()
     .map((e) => {
       const set = res.supportByDc.get(e.key);
       const s = res.dcStat.get(e.key) ?? { kind: set?.kind, hits: 0, pools: 0 };
       return {
-        dreamcaller: e.key,
+        dreamAvatar: e.key,
         kind: s.kind ?? set?.kind ?? "?",
         meanScore: e.meanAdequacy,
         meanMeasure: e.meanShare, // share (big5) or completeness (small)
@@ -1590,13 +1590,13 @@ function reportDreamcaller(
     console.log(
       JSON.stringify(
         {
-          metric: "dreamcaller",
+          metric: "dreamAvatar",
           config: {
             variant,
             poolSize,
             seeds,
-            dreamcallers: ctx.dreamcallers.length,
-            scoredDreamcallers: res.scoredDreamcallers,
+            dreamAvatars: ctx.dreamAvatars.length,
+            scoredDreamAvatars: res.scoredDreamAvatars,
             signatureK: k,
             lift,
             presence,
@@ -1605,7 +1605,7 @@ function reportDreamcaller(
           },
           headline: res.headline,
           scoredPools: res.scoredPools,
-          byDreamcaller: dcRows,
+          byDreamAvatar: dcRows,
           coldStart: res.coldStart,
         },
         null,
@@ -1617,7 +1617,7 @@ function reportDreamcaller(
 
   const pct = (x) => `${(x * 100).toFixed(0)}%`;
   console.log(
-    `Dreamcaller metric (${variant}, pool size ${poolSize}, ${seeds} seeds x ${res.scoredDreamcallers}/${res.totalDreamcallers} learnable Dreamcallers = ${res.scoredPools} pools)`,
+    `DreamAvatar metric (${variant}, pool size ${poolSize}, ${seeds} seeds x ${res.scoredDreamAvatars}/${res.totalDreamAvatars} learnable DreamAvatars = ${res.scoredPools} pools)`,
   );
   console.log(
     `  archetype support is learned from the decklist corpus: a card counts when it appears in`,
@@ -1632,17 +1632,17 @@ function reportDreamcaller(
     `  one is a small theme (scored on full-2-of-playset completeness).`,
   );
   console.log("");
-  console.log(`  ===  DREAMCALLER HEADLINE: ${res.headline.toFixed(1)} / 100  ===`);
+  console.log(`  ===  DREAM_AVATAR HEADLINE: ${res.headline.toFixed(1)} / 100  ===`);
   console.log(
-    `  (mean per-pool on-theme score; on-theme = the Dreamcaller's signature-learned support set)`,
+    `  (mean per-pool on-theme score; on-theme = the DreamAvatar's signature-learned support set)`,
   );
 
   console.log(
-    `\nBy Dreamcaller (mean score, worst first). big5 = density toward ${pct(target)};` +
+    `\nBy DreamAvatar (mean score, worst first). big5 = density toward ${pct(target)};` +
       ` small = full-2-of-playset completeness:`,
   );
   console.log(
-    `  ${"dreamcaller".padEnd(20)} ${"kind".padEnd(6)} ${"score".padStart(6)} ${"measure".padStart(8)} ${"deliver".padStart(8)} ${"support".padStart(8)} ${"sigDecks".padStart(9)}`,
+    `  ${"dreamAvatar".padEnd(20)} ${"kind".padEnd(6)} ${"score".padStart(6)} ${"measure".padStart(8)} ${"deliver".padStart(8)} ${"support".padStart(8)} ${"sigDecks".padStart(9)}`,
   );
   for (const r of dcRows) {
     // measure column: support share for big5, playset completeness for small.
@@ -1650,7 +1650,7 @@ function reportDreamcaller(
     // deliver column: how often a pool fully delivered (big5 hit target density;
     // small shipped a complete playset).
     console.log(
-      `  ${r.dreamcaller.padEnd(20)} ${r.kind.padEnd(6)} ${(r.meanScore * 100).toFixed(0).padStart(5)}% ${measure.padStart(8)} ${pct(r.hitRate).padStart(8)} ${String(r.supportCards).padStart(8)} ${String(r.sigDecks).padStart(9)}`,
+      `  ${r.dreamAvatar.padEnd(20)} ${r.kind.padEnd(6)} ${(r.meanScore * 100).toFixed(0).padStart(5)}% ${measure.padStart(8)} ${pct(r.hitRate).padStart(8)} ${String(r.supportCards).padStart(8)} ${String(r.sigDecks).padStart(9)}`,
     );
   }
 
@@ -1666,7 +1666,7 @@ function reportDreamcaller(
   }
 }
 
-function runDreamcaller(argv) {
+function runDreamAvatar(argv) {
   const ctx = loadContext(argv);
   const seeds = num(argv, "--seeds", DEFAULT_SEEDS);
   const poolSize = num(argv, "--pool-size", POOL_TARGET_SIZE);
@@ -1678,7 +1678,7 @@ function runDreamcaller(argv) {
   const presence = num(argv, "--dc-presence", DC_PRESENCE);
   const target = num(argv, "--dc-target", DC_TARGET);
   const minDecks = num(argv, "--dc-min-decks", DC_MIN_DECKS);
-  const res = computeDreamcaller(ctx, {
+  const res = computeDreamAvatar(ctx, {
     seeds,
     poolSize,
     variant,
@@ -1688,7 +1688,7 @@ function runDreamcaller(argv) {
     target,
     minDecks,
   });
-  reportDreamcaller(res, ctx, {
+  reportDreamAvatar(res, ctx, {
     seeds,
     poolSize,
     variant,
@@ -1736,8 +1736,8 @@ function runCompare(argv, metric) {
         poolsWithPayoffsPct: r.totalPools ? r.poolsWithPayoffs / r.totalPools : 0,
         meanPoolSize: r.meanPoolSize,
       });
-    } else if (metric === "dreamcaller") {
-      const r = computeDreamcaller(ctx, {
+    } else if (metric === "dreamAvatar") {
+      const r = computeDreamAvatar(ctx, {
         seeds,
         poolSize,
         variant,
@@ -1750,7 +1750,7 @@ function runCompare(argv, metric) {
       rows.push({
         variant,
         headline: r.headline,
-        scoredDreamcallers: r.scoredDreamcallers,
+        scoredDreamAvatars: r.scoredDreamAvatars,
         coldStart: r.coldStart.length,
       });
     } else if (metric === "traps") {
@@ -1785,7 +1785,7 @@ function runCompare(argv, metric) {
   if (asJson) {
     console.log(
       JSON.stringify(
-        { metric, config: { seeds, poolSize, dreamcallers: ctx.dreamcallers.length }, rows },
+        { metric, config: { seeds, poolSize, dreamAvatars: ctx.dreamAvatars.length }, rows },
         null,
         2,
       ),
@@ -1793,9 +1793,9 @@ function runCompare(argv, metric) {
     return;
   }
 
-  const totalPools = ctx.dreamcallers.length * seeds;
+  const totalPools = ctx.dreamAvatars.length * seeds;
   console.log(
-    `Compare: ${metric} across ${variants.length} algorithms (${seeds} seeds x ${ctx.dreamcallers.length} Dreamcallers = ${totalPools} pools each)`,
+    `Compare: ${metric} across ${variants.length} algorithms (${seeds} seeds x ${ctx.dreamAvatars.length} DreamAvatars = ${totalPools} pools each)`,
   );
   console.log("");
   const pctd = (x) => `${(x * 100).toFixed(0)}%`;
@@ -1807,14 +1807,14 @@ function runCompare(argv, metric) {
         `  ${r.variant.padEnd(12)} ${r.headline.toFixed(1).padStart(9)} ${pctd(r.poolsWithPayoffsPct).padStart(9)} ${r.meanPoolSize.toFixed(0).padStart(9)}`,
       );
     }
-  } else if (metric === "dreamcaller") {
+  } else if (metric === "dreamAvatar") {
     rows.sort((a, b) => b.headline - a.headline);
     console.log(
       `  ${"algorithm".padEnd(12)} ${"dc".padStart(8)} ${"scored".padStart(7)} ${"cold".padStart(5)}`,
     );
     for (const r of rows) {
       console.log(
-        `  ${r.variant.padEnd(12)} ${r.headline.toFixed(1).padStart(8)} ${String(r.scoredDreamcallers).padStart(7)} ${String(r.coldStart).padStart(5)}`,
+        `  ${r.variant.padEnd(12)} ${r.headline.toFixed(1).padStart(8)} ${String(r.scoredDreamAvatars).padStart(7)} ${String(r.coldStart).padStart(5)}`,
       );
     }
   } else if (metric === "traps") {
@@ -1848,7 +1848,7 @@ function run() {
   }
   if (metric === "traps") return runTraps(argv);
   if (metric === "diversity") return runDiversity(argv);
-  if (metric === "dreamcaller") return runDreamcaller(argv);
+  if (metric === "dreamAvatar") return runDreamAvatar(argv);
   return runAdequacy(argv);
 }
 

@@ -26,7 +26,7 @@ A fixed-shape flat card that collects genuinely dense, related content (a headin
 import { GroupPanel } from "src/cumulus/components/controls/GroupPanel";
 
 <GroupPanel>
-  <p className="eyebrow">Dreamcaller</p>
+  <p className="eyebrow">DreamAvatar</p>
   <p>Essence, Spark, and the run's docked dreamsigns.</p>
 </GroupPanel>
 ```

@@ -1,7 +1,7 @@
 // StartingDeckOverlay — the Cumulus presentational overlay for the starting-deck
 // reveal.
 //
-// The first time a run has a Dreamcaller and has not yet seen its deck, the app
+// The first time a run has a DreamAvatar and has not yet seen its deck, the app
 // shows the player the cards they begin the quest with. This is that popup: a
 // CardGalleryPanel with the same left-aligned title/subtitle, trailing close
 // accessory, and internal card-grid scroll used by card-selection sites.

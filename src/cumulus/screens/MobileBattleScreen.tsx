@@ -12,7 +12,7 @@ import {
   CARD_ASPECT_RATIO_VALUE,
 } from "../components/card/card-aspect";
 import { BattleStatusDisplay } from "../components/battle/BattleStatusDisplay";
-import type { BattleStatusDreamcallerProfile } from "../components/battle/BattleStatusDisplay";
+import type { BattleStatusDreamAvatarProfile } from "../components/battle/BattleStatusDisplay";
 import {
   DreamwellCard,
   type DreamwellCardModel,
@@ -33,7 +33,7 @@ import { ResourceChip } from "../components/hud/ResourceChip";
 import { GlassBackdrop, GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { DeveloperRail } from "../components/overlay/DeveloperRail";
-import type { DreamcallerVisual } from "../components/hud/DreamcallerPortrait";
+import type { DreamAvatarVisual } from "../components/hud/DreamAvatarPortrait";
 import { GLYPHS } from "../primitives/glyph";
 import {
   DOUBLE_TAP_WINDOW_MS,
@@ -91,10 +91,10 @@ export interface MobileBattleSlotView {
   readonly card: MobileBattleCardView | null;
 }
 
-/** The compact resources and Dreamcaller identity shown for one side. */
+/** The compact resources and DreamAvatar identity shown for one side. */
 export interface MobileBattleStatusView {
-  readonly dreamcaller: DreamcallerVisual | null;
-  readonly dreamcallerProfile?: BattleStatusDreamcallerProfile;
+  readonly dreamAvatar: DreamAvatarVisual | null;
+  readonly dreamAvatarProfile?: BattleStatusDreamAvatarProfile;
   readonly currentEnergy: number;
   readonly maxEnergy: number;
   readonly points: number;
@@ -1077,8 +1077,8 @@ function SideZones({
           <BattleStatusDisplay
             owner={owner}
             relationship={position}
-            dreamcaller={side.status.dreamcaller}
-            dreamcallerProfile={side.status.dreamcallerProfile}
+            dreamAvatar={side.status.dreamAvatar}
+            dreamAvatarProfile={side.status.dreamAvatarProfile}
             currentEnergy={side.status.currentEnergy}
             maxEnergy={side.status.maxEnergy}
             points={side.status.points}

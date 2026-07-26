@@ -47,9 +47,9 @@ beforeEach(() => {
     transfiguration: null,
     isBane: false,
   }));
-  state.dreamcaller = {
+  state.dreamAvatar = {
     id: "00000000-0000-4000-8000-000000000001",
-    name: "Test Dreamcaller",
+    name: "Test DreamAvatar",
     title: "Keeper of Chrome",
     renderedText: "Draw a card.",
     imageNumber: "0001",
@@ -203,7 +203,7 @@ describe("CumulusQuestChrome", () => {
       ["1", "2"],
     ]);
     expect(container.querySelector('[aria-label^="View deck"]')).toBeNull();
-    expect(container.querySelector('[aria-label="Dreamcaller"]')).toBeNull();
+    expect(container.querySelector('[aria-label="DreamAvatar"]')).toBeNull();
     expect(
       container.querySelector('[data-testid="dreamscape-menu-button"]'),
     ).toBeNull();

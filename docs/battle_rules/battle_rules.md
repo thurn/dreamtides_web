@@ -82,8 +82,8 @@ outside the Day phase.
 **Event** — One-shot cards that produce an effect when they resolve, then move
 to the void. Events can also be marked Fast (❖) or Interrupt (❖❖).
 
-**Dreamcaller** — A player's identity card, an animated 3D character that starts
-each battle already in play. Dreamcallers provide powerful ongoing abilities
+**Dream Avatar** — A player's identity card, an animated 3D character that starts
+each battle already in play. Dream Avatars provide powerful ongoing abilities
 (static, triggered, or activated) that define a player's playstyle.
 
 **Dreamsign** — A card representing a 2D illustrated object that provides

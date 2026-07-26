@@ -10,7 +10,7 @@ import {
 } from "./QuestCompleteScreen";
 
 const VIEW: QuestCompleteView = {
-  dreamcaller: {
+  dreamAvatar: {
     id: "00000000-0000-4000-8000-000000000061",
     name: "The Wayfinder",
     title: "Bearer of the Last Light",
@@ -66,7 +66,7 @@ describe("Cumulus QuestCompleteScreen", () => {
     expect(container.textContent).toContain("Quest Complete");
     const hierarchy = container.querySelector("[data-quest-complete-hierarchy]");
     const portrait = hierarchy?.querySelector<HTMLElement>(
-      "[data-quest-complete-dreamcaller]",
+      "[data-quest-complete-dream-avatar]",
     );
     expect(
       Array.from(hierarchy?.children ?? []).map((element) =>
@@ -79,7 +79,7 @@ describe("Cumulus QuestCompleteScreen", () => {
     expect(statsSection?.style.flex).toBe("1 1 0%");
     expect(statsSection?.style.justifyContent).toBe("center");
     expect(portrait?.textContent).toBe("");
-    expect(portrait?.querySelector("[data-dreamcaller-source]")).not.toBeNull();
+    expect(portrait?.querySelector("[data-dream-avatar-source]")).not.toBeNull();
     expect(portrait?.querySelector("img")?.getAttribute("alt")).toContain(
       "The Wayfinder",
     );

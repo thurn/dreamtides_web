@@ -5,7 +5,7 @@
 //
 // The names, colors, and glyphs mirror production's tide-identity vocabulary,
 // `src/editor/tide-visuals.ts` (TIDE_COLOR_CHIP / TIDE_ACCENT_COLOR, keyed
-// by the deck color), as shown on the Dreamcaller-select screen and the tides
+// by the deck color), as shown on the DreamAvatar-select screen and the tides
 // editor — the Cumulus isolation boundary forbids importing it directly, so the
 // values are mirrored here with that file as the authority. Controls that
 // color by selection provenance use their own role palette rather than this

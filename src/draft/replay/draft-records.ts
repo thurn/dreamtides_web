@@ -44,7 +44,7 @@ export const REPLAY_RECORD_SHORTLIST = 25;
 
 /**
  * Choose which historical draft to replay, biased toward records whose served
- * packs offer the Dreamcaller's signature (archetype) cards, then seed-pick among
+ * packs offer the DreamAvatar's signature (archetype) cards, then seed-pick among
  * the best `shortlistSize` so each run still varies. Falls back to a uniform
  * seeded draw when there is no usable signal (no signatures, or none carry IDF
  * weight, or no idf map).

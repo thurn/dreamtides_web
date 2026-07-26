@@ -132,7 +132,7 @@ function buildBattleInit(
     site,
     state: quest,
     cardDatabase: content.cardDatabase,
-    dreamcallers: content.dreamcallers,
+    dreamAvatars: content.dreamAvatars,
     dreamscapes: content.dreamscapes,
     affiliations: content.affiliations,
     dreamwellCards: content.dreamwellCards,
@@ -237,8 +237,8 @@ function createTutorialBattleInit(
     return createBattleRng(deriveBattleSeed(`${key}:${side}`), "playerDeckOrder")
       .shuffle(definitions);
   };
-  const tensho = dreamcallerById(content, TENSHO_ID);
-  const threxan = dreamcallerById(content, THREXAN_ID);
+  const tensho = dreamAvatarById(content, TENSHO_ID);
+  const threxan = dreamAvatarById(content, THREXAN_ID);
   return {
     battleId,
     battleEntryKey: key,
@@ -261,7 +261,7 @@ function createTutorialBattleInit(
     dreamwellDeck: tutorialDreamwellDeck(content, key),
     enemyDescriptor: tutorialEnemyDescriptor(threxan),
     enemyDeckDefinition: makeDeck("enemy"),
-    dreamcallerSummary: {
+    dreamAvatarSummary: {
       id: tensho.id,
       name: tensho.name,
       title: tensho.title,
@@ -390,20 +390,20 @@ function cardById(content: QuestContent, cardId: string) {
   return card;
 }
 
-function dreamcallerById(content: QuestContent, id: string) {
-  const dreamcaller = content.dreamcallers.find((candidate) => candidate.id === id);
-  if (dreamcaller === undefined) throw new Error(`Tutorial Dreamcaller ${id} is missing from the runtime catalog.`);
-  return dreamcaller;
+function dreamAvatarById(content: QuestContent, id: string) {
+  const dreamAvatar = content.dreamAvatars.find((candidate) => candidate.id === id);
+  if (dreamAvatar === undefined) throw new Error(`Tutorial DreamAvatar ${id} is missing from the runtime catalog.`);
+  return dreamAvatar;
 }
 
-function tutorialEnemyDescriptor(threxan: QuestContent["dreamcallers"][number]): BattleEnemyDescriptor {
+function tutorialEnemyDescriptor(threxan: QuestContent["dreamAvatars"][number]): BattleEnemyDescriptor {
   return {
     id: threxan.id,
     name: threxan.name,
     subtitle: threxan.title,
     imageNumber: threxan.imageNumber,
     portraitSeed: 0,
-    // The tutorial presents both Dreamcallers; no Dreamcaller ability is
+    // The tutorial presents both DreamAvatars; no DreamAvatar ability is
     // scheduled into the tutorial battle's automation.
     abilityText: threxan.renderedText,
     dreamsigns: [],

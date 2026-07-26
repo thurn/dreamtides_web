@@ -2,7 +2,7 @@
 //
 // It re-runs the REAL bake (`buildTides4` via `bakeTides5ArtifactText`, imported
 // from scripts/bake-tides5.mjs — not a reimplementation) over the current inputs:
-// the public/ card + Dreamcaller bundles, the known-good decklists, the adapted
+// the public/ card + DreamAvatar bundles, the known-good decklists, the adapted
 // draft records, the tides5 override layer, and the tides4 artifact it inherits
 // its tide annotations from, then compares that to the committed file
 // byte-for-byte.
@@ -149,7 +149,7 @@ export function formatStaleMessage(result) {
   lines.push("────────────────────────────────────────────────────────────────────────");
   lines.push("  FIX 1 — you changed a bake INPUT and just need to regenerate:");
   lines.push("────────────────────────────────────────────────────────────────────────");
-  lines.push("Inputs are data/tabula/cards_v2.toml, data/tabula/dreamcallers_v2.toml,");
+  lines.push("Inputs are data/tabula/cards_v2.toml, data/tabula/dream_avatars_v2.toml,");
   lines.push("docs/draft_records_adapted/, docs/known_good_decklists.json,");
   lines.push("data/tides5-overrides.jsonc, and data/tides4.jsonc (the tide labels are");
   lines.push("inherited from it by name). After editing any of them, regenerate and");
@@ -179,7 +179,7 @@ export function formatStaleMessage(result) {
   lines.push("NOTE: the per-tide annotation fields — shortName, displayName,");
   lines.push("displayDescription, summary, description, color — are NOT hand-edited in");
   lines.push("data/tides5.jsonc; they are inherited from data/tides4.jsonc by tide name");
-  lines.push("(a signature tide by its Dreamcaller, a facet tide by its lean's anchor).");
+  lines.push("(a signature tide by its DreamAvatar, a facet tide by its lean's anchor).");
   lines.push("To relabel a tides5 tide, edit the matching tides4 tide and re-bake both.");
   lines.push("════════════════════════════════════════════════════════════════════════");
   lines.push("");

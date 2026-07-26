@@ -2,7 +2,7 @@
 // (dreamscape, atlas, site views).
 //
 // It is a TRANSPARENT HUD — no background, no border, no top rule (Principle
-// two): the essence total, deck sprite, Dreamcaller bust, and docked dreamsign
+// two): the essence total, deck sprite, DreamAvatar bust, and docked dreamsign
 // strip sit DIRECTLY on the scene art, made legible by the `.hud-outline` glyph
 // dilation (ported into quest-status-bar.css), not by a bar behind them.
 // There is no menu-dots button — the menu lives in a top-left menu button on
@@ -10,7 +10,7 @@
 //
 // Every semantic HUD entity reveals through the shared coordinator:
 //   - the essence value           → InfoCard 'text'
-//   - the Dreamcaller bust (pops ABOVE the bar) → InfoCard 'hero'
+//   - the DreamAvatar bust (pops ABOVE the bar) → InfoCard 'hero'
 //   - each docked dreamsign        → InfoCard 'object'
 //   - quest Dreamsigns beyond a fixed count collapse into an overflow stack →
 //     a centered viewer window (not a bottom sheet); battle Dreamsigns flow in
@@ -23,7 +23,7 @@
 // Cumulus:
 //   - The design source resolves the shared engine + RulesText from a global
 //     DS bundle at render time; here it imports Cumulus's InfoCard engine
-//     directly. Dreamsign / Dreamcaller ability text renders as `richText.rules`
+//     directly. Dreamsign / DreamAvatar ability text renders as `richText.rules`
 //     so glossary keywords highlight in place; UI copy (the essence blurb) uses
 //     `richText.plain`.
 //   - Each bespoke press target wires `onPointerEnter`/`onPointerLeave` to
@@ -48,8 +48,8 @@ import { GLYPHS } from "../../primitives/glyph";
 import { Dreamsign, dreamsignArtUrl, DS_SHADOW } from "./Dreamsign";
 import type { Dreamsign as DreamsignData } from "../../../types/quest";
 import { requireDreamsignId } from "../../../data/dreamsigns";
-import type { DreamcallerPortraitFocus } from "../../../types/content";
-import { DEFAULT_DREAMCALLER_PORTRAIT_FOCUS, dreamcallerRevealSpec } from "./DreamcallerPortrait";
+import type { DreamAvatarPortraitFocus } from "../../../types/content";
+import { DEFAULT_DREAM_AVATAR_PORTRAIT_FOCUS, dreamAvatarRevealSpec } from "./DreamAvatarPortrait";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
@@ -59,10 +59,10 @@ import {
 } from "../../primitives/battle-hud-layout";
 import "./quest-status-bar.css";
 
-/** Zooms the dreamcaller bust render so the face fills the circular frame. A
+/** Zooms the dreamAvatar bust render so the face fills the circular frame. A
  * bespoke crop factor, named so it reads as an intentional framing crop rather
  * than a magic number in a transform. */
-const DREAMCALLER_BUST_CROP_SCALE = 2.9;
+const DREAM_AVATAR_BUST_CROP_SCALE = 2.9;
 
 /** The docked deck sprite, embedded so there is no separate asset to load. */
 const DECK_SPRITE =
@@ -70,7 +70,7 @@ const DECK_SPRITE =
 
 /** How much the `grand` (desktop) HUD scales up from the `compact` (mobile)
  * one. Every HUD measure — the essence type, deck sprite, dreamsign discs, the
- * Dreamcaller bust, and the bar's own height — multiplies by this, so the bar
+ * DreamAvatar bust, and the bar's own height — multiplies by this, so the bar
  * reads identically at desktop widths, just larger. The one factor keeps the
  * whole HUD in proportion. */
 const GRAND_SCALE = 1.6;
@@ -111,16 +111,16 @@ export const QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE =
  * name). The HUD renders each through `<Dreamsign variant="hud">`. */
 export type QsbDreamsign = DreamsignData;
 
-/** The active Dreamcaller shown as a bust in the HUD. */
-export interface QsbDreamcaller {
-  /** Stable Dreamcaller UUID. */
+/** The active DreamAvatar shown as a bust in the HUD. */
+export interface QsbDreamAvatar {
+  /** Stable DreamAvatar UUID. */
   id: string;
   name: string;
   epithet?: string;
-  /** The portrait art as an {@link ArtRef}. Required — a docked Dreamcaller always has art. */
+  /** The portrait art as an {@link ArtRef}. Required — a docked DreamAvatar always has art. */
   portrait: ArtRef;
   /** Normalized head position used to center the square HUD crop. */
-  portraitFocus?: DreamcallerPortraitFocus;
+  portraitFocus?: DreamAvatarPortraitFocus;
   ability?: string;
 }
 
@@ -136,7 +136,7 @@ export interface QuestStatusBarProps {
   deck?: number | string;
   /** Open the deck viewer — fired on a tap / click of the deck sprite. */
   onViewDeck?: () => void;
-  dreamcaller?: QsbDreamcaller;
+  dreamAvatar?: QsbDreamAvatar;
   /** HUD size. `compact` (default) is the mobile / touch size; `grand` is the
    * larger desktop size the dreamscape screen picks above the wide-viewport
    * breakpoint. */
@@ -381,33 +381,33 @@ function QsbDreamsignWindow({
   );
 }
 
-/* QsbDreamcallerBust — the Dreamcaller portrait button and semantic source. */
-function QsbDreamcallerBust({
-  dreamcaller,
+/* QsbDreamAvatarBust — the DreamAvatar portrait button and semantic source. */
+function QsbDreamAvatarBust({
+  dreamAvatar,
 }: {
-  /** The docked Dreamcaller, or undefined for the empty placeholder frame. */
-  dreamcaller?: QsbDreamcaller;
+  /** The docked DreamAvatar, or undefined for the empty placeholder frame. */
+  dreamAvatar?: QsbDreamAvatar;
 }): ReactElement {
   const binding = useRevealSource({
-    identity: { entityType: "dreamcaller", entityId: revealEntityId("dreamcaller", dreamcaller?.id ?? "empty") },
-    spec: dreamcaller === undefined
-      ? { primary: { kind: "infoCard", card: { variant: "text", title: "Dreamcaller", body: richText.plain("No Dreamcaller is active.") } }, secondaries: [] }
-      : dreamcallerRevealSpec({ imageNumber: "", name: dreamcaller.name, title: dreamcaller.epithet ?? "" }, dreamcaller.ability ?? "", dreamcaller.portrait),
+    identity: { entityType: "dreamAvatar", entityId: revealEntityId("dreamAvatar", dreamAvatar?.id ?? "empty") },
+    spec: dreamAvatar === undefined
+      ? { primary: { kind: "infoCard", card: { variant: "text", title: "Avatar", body: richText.plain("No avatar is active.") } }, secondaries: [] }
+      : dreamAvatarRevealSpec({ imageNumber: "", name: dreamAvatar.name, title: dreamAvatar.epithet ?? "" }, dreamAvatar.ability ?? "", dreamAvatar.portrait),
   });
   const focus =
-    dreamcaller?.portraitFocus ?? DEFAULT_DREAMCALLER_PORTRAIT_FOCUS;
+    dreamAvatar?.portraitFocus ?? DEFAULT_DREAM_AVATAR_PORTRAIT_FOCUS;
   const focusX = Math.max(0, Math.min(1, focus.x));
   const focusY = Math.max(0, Math.min(1, focus.y));
   const objectPositionY = Math.max(
     0,
-    Math.min(1, 3 * focusY - 1 / DREAMCALLER_BUST_CROP_SCALE),
+    Math.min(1, 3 * focusY - 1 / DREAM_AVATAR_BUST_CROP_SCALE),
   );
   return (
     <Pressable
       as="button"
       ref={binding.ref}
       {...binding.sourceProps}
-      aria-label="Dreamcaller"
+      aria-label="Avatar"
       tabIndex={0}
       style={{
         // width/height are fixed by quest-status-bar.css (var(--qsb-dc-size),
@@ -431,10 +431,10 @@ function QsbDreamcallerBust({
         ...binding.sourceProps.style,
       }}
     >
-      {dreamcaller && (
+      {dreamAvatar && (
         <img
-          src={resolveArtRef(dreamcaller.portrait)}
-          alt={dreamcaller.name}
+          src={resolveArtRef(dreamAvatar.portrait)}
+          alt={dreamAvatar.name}
           style={{
             position: "relative",
             left: `${String((0.5 - focusX) * 100)}%`,
@@ -442,7 +442,7 @@ function QsbDreamcallerBust({
             height: "100%",
             objectFit: "cover",
             objectPosition: `50% ${String(objectPositionY * 100)}%`,
-            transform: `scale(${String(DREAMCALLER_BUST_CROP_SCALE)})`,
+            transform: `scale(${String(DREAM_AVATAR_BUST_CROP_SCALE)})`,
             transformOrigin: "50% 0%",
           }}
         />
@@ -499,20 +499,20 @@ function QsbEssence({
   );
 }
 
-/* QsbHudBar — the bottom HUD row (Dreamcaller bust · essence total · deck
+/* QsbHudBar — the bottom HUD row (DreamAvatar bust · essence total · deck
    sprite). The aria-labels + DOM shape match what quest-status-bar.css and the
    press-reveal logic target. */
 function QsbHudBar({
   essence = 0,
   deck = 0,
   onViewDeck,
-  dreamcaller,
+  dreamAvatar,
   scale = 1,
 }: {
   essence?: number;
   deck?: number | string;
   onViewDeck?: () => void;
-  dreamcaller?: QsbDreamcaller;
+  dreamAvatar?: QsbDreamAvatar;
   scale?: number;
 }): ReactElement {
   return (
@@ -529,7 +529,7 @@ function QsbHudBar({
         paddingLeft: Math.round(12 * scale),
       }}
     >
-      <QsbDreamcallerBust dreamcaller={dreamcaller} />
+      <QsbDreamAvatarBust dreamAvatar={dreamAvatar} />
       <div
         style={{
           display: "flex",
@@ -726,7 +726,7 @@ function QsbBattleHudBar({
 
 /**
  * QuestStatusBar — the persistent, TRANSPARENT bottom HUD for quest screens.
- * Essence total, deck sprite, Dreamcaller bust, and a
+ * Essence total, deck sprite, DreamAvatar bust, and a
  * docked dreamsign strip sit directly on scene art (legible via `.hud-outline`),
  * all revealing through the shared coordinator. No menu-dots button.
  */
@@ -736,13 +736,13 @@ export function QuestStatusBar({
   dreamsigns = [],
   deck = 0,
   onViewDeck,
-  dreamcaller,
+  dreamAvatar,
   size = "compact",
   variant = "quest",
 }: QuestStatusBarProps): ReactElement {
   const [signWindow, setSignWindow] = React.useState(false);
   const scale = size === "grand" ? GRAND_SCALE : 1;
-  // The Dreamcaller bust, HUD height, and essence-cluster elevation are sized
+  // The DreamAvatar bust, HUD height, and essence-cluster elevation are sized
   // in quest-status-bar.css from these component vars; scaling them here grows
   // that CSS-driven half of the bar in lockstep with the inline-sized half
   // (essence type, deck sprite, dreamsigns) threaded through as `scale`.
@@ -768,8 +768,8 @@ export function QuestStatusBar({
     );
   }
 
-  // The essence value and Dreamcaller bust each own their press-reveal
-  // (QsbEssence / QsbDreamcallerBust) with per-element onPointerEnter/Leave, so
+  // The essence value and DreamAvatar bust each own their press-reveal
+  // (QsbEssence / QsbDreamAvatarBust) with per-element onPointerEnter/Leave, so
   // hover reveals on a fine pointer and press reveals on touch. A container-
   // level pointerenter can't drive this — native pointerenter does not refire
   // when the pointer moves between children of the same ancestor.
@@ -791,7 +791,7 @@ export function QuestStatusBar({
           essence={essence}
           deck={deck}
           onViewDeck={onViewDeck}
-          dreamcaller={dreamcaller}
+          dreamAvatar={dreamAvatar}
           scale={scale}
         />
       </div>

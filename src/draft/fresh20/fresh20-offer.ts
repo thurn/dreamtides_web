@@ -13,7 +13,7 @@
 // purely from shows recorded at earlier picks, so re-revealing the same pick is
 // safe (see `recordFresh20Shown`).
 //
-// The fit ranking deliberately ignores Dreamcaller signatures here: the deck the
+// The fit ranking deliberately ignores DreamAvatar signatures here: the deck the
 // player has actually drafted is the only seed.
 
 import type { Fresh20DraftState } from "../../types/draft.ts";
@@ -131,7 +131,7 @@ export function generateFresh20Pack(
 /**
  * Roll a fresh random pack of eligible cards for the current pick and return the
  * deck-fit best `offerSize` of them. The same ranking the replay draft uses,
- * with an empty signature set (fresh20 ignores Dreamcaller signatures).
+ * with an empty signature set (fresh20 ignores DreamAvatar signatures).
  */
 export function computeFresh20Offer(
   state: Fresh20DraftState,

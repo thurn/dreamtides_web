@@ -180,7 +180,7 @@ export async function loadTides2Decks(): Promise<TideDecksJson | null> {
 /**
  * Fetch the committed `tides3` artifact (`data/tides3.jsonc`, copied to
  * `/tides3-data.json` by `scripts/setup-assets.mjs`) the `tides3` pool variant
- * combines into pools — the 32 tide decks and the per-Dreamcaller tide pools in
+ * combines into pools — the 32 tide decks and the per-DreamAvatar tide pools in
  * one file. Returns `null` if the asset is missing so the caller can surface a
  * clear configuration error when the variant runs.
  */
@@ -194,7 +194,7 @@ export async function loadTides3Decks(): Promise<Tides3DecksJson | null> {
  * Fetch the committed `tides4` artifact (`data/tides4.jsonc`, copied to
  * `/tides4-data.json` by `scripts/setup-assets.mjs`) the `tides4` pool variant
  * combines into pools — the signature, facet, and neutral tide decks and the
- * per-Dreamcaller tide pools in one file. Returns `null` if the asset is missing
+ * per-DreamAvatar tide pools in one file. Returns `null` if the asset is missing
  * so the caller can surface a clear configuration error when the variant runs.
  */
 export async function loadTides4Decks(): Promise<Tides4DecksJson | null> {
@@ -207,7 +207,7 @@ export async function loadTides4Decks(): Promise<Tides4DecksJson | null> {
  * Fetch the committed `tides5` artifact (`data/tides5.jsonc`, copied to
  * `/tides5-data.json` by `scripts/setup-assets.mjs`) the `tides5` pool variant
  * combines into pools — the signature, facet, and neutral tide decks and the
- * per-Dreamcaller tide pools in one file, baked only from the known-good
+ * per-DreamAvatar tide pools in one file, baked only from the known-good
  * decklists. Returns `null` if the asset is missing so the caller can surface a
  * clear configuration error when the variant runs.
  */

@@ -27,7 +27,7 @@ const decklists = readJson("public/decklists-data.json");
 // reimplemented corpus matches production. The grown pool comes out id-keyed and
 // is resolved to names (the metric, `scorePool`, looks payoffs up by name).
 const decklistIds = readJson("public/decklist-ids-data.json");
-const dreamcallers = readJson("public/dreamcallers-v2-data.json");
+const dreamAvatars = readJson("public/dream-avatars-v2-data.json");
 const meta = readJson("data/buildaround_support.json");
 const poolData = buildPoolData(cards, decklists, undefined, decklistIds);
 const toNames = (counts) => resolveCountsToNames(counts, poolData.cardNameById);
@@ -92,7 +92,7 @@ function scoreAll(grow, draw) {
   const all = [];
   const byDc = new Map();
   const byTheme = new Map();
-  for (const dc of dreamcallers) {
+  for (const dc of dreamAvatars) {
     const ad = [];
     for (let s = 0; s < SEEDS; s++) {
       const start = (draw ?? starterIdx)(mulberry(s), dc.signatureCardIds ?? []);
@@ -127,7 +127,7 @@ function starterIdxConc(rng, sig) {
   return start;
 }
 
-console.log(`coherent-growth test (${SEEDS} seeds x ${dreamcallers.length} DCs)\n`);
+console.log(`coherent-growth test (${SEEDS} seeds x ${dreamAvatars.length} DCs)\n`);
 const print = (label, r) => console.log(`${r.headline.toFixed(1)}  ${label}\n      themes: ${r.themes}\n      worst DCs: ${r.worst}`);
 print("baseline: starter-sim growth + shipping draw", scoreAll((s) => growIdfPool(decks, idfOf, s, 200).counts));
 print("coherent growth + shipping draw            ", scoreAll((s) => coherentGrow(s, 200)));

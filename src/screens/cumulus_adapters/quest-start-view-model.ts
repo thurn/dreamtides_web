@@ -1,20 +1,20 @@
-// The pure view-model builder for the Cumulus Dreamcaller-select screen. Every
+// The pure view-model builder for the Cumulus DreamAvatar-select screen. Every
 // mapping rule between quest domain data and `QuestStartScreen`'s view types
 // lives here as plain, unit-testable functions — no React, no state hooks, no
 // effects. `QuestStartScreenAdapter` acquires live state and calls
-// `buildDreamcallerOfferViews`; this module never acquires anything itself.
+// `buildDreamAvatarOfferViews`; this module never acquires anything itself.
 
 import { selectedTides4Decks } from "../../data/tides4-preview";
 import type { RunPoolContext } from "../../data/quest-content";
-import type { DreamcallerContent } from "../../types/content";
+import type { DreamAvatarContent } from "../../types/content";
 import type { Tides4Color, Tides4DeckJson } from "../../draft/pool/tides4-io";
 import type { Tide } from "../../cumulus/components/hud/tide-spec";
 import type {
-  DreamcallerOfferView,
-  DreamcallerTideView,
+  DreamAvatarOfferView,
+  DreamAvatarTideView,
 } from "../../cumulus/screens/QuestStartScreen";
 
-/** The select screen shows at most this many tides per Dreamcaller. */
+/** The select screen shows at most this many tides per DreamAvatar. */
 const MAX_TIDES_SHOWN = 4;
 
 /** Map a tides4 deck color to the Cumulus {@link Tide} whose icon + palette it uses. */
@@ -32,7 +32,7 @@ function tideCardCount(tide: Tides4DeckJson): number {
 }
 
 /**
- * Cap the tides shown for a Dreamcaller at {@link MAX_TIDES_SHOWN}, keeping the
+ * Cap the tides shown for a DreamAvatar at {@link MAX_TIDES_SHOWN}, keeping the
  * largest by card count while preserving their original (join) order.
  */
 export function largestTides(tides: Tides4DeckJson[]): Tides4DeckJson[] {
@@ -46,7 +46,7 @@ export function largestTides(tides: Tides4DeckJson[]): Tides4DeckJson[] {
 }
 
 /** Resolve a tide deck to the display copy shown on its pill. */
-function toTideView(tide: Tides4DeckJson): DreamcallerTideView {
+function toTideView(tide: Tides4DeckJson): DreamAvatarTideView {
   return {
     id: tide.id,
     label: tide.displayName ?? tide.shortName ?? tide.name,
@@ -57,7 +57,7 @@ function toTideView(tide: Tides4DeckJson): DreamcallerTideView {
 }
 
 /**
- * Map one offered Dreamcaller (with the tide decks its pool would be dealt
+ * Map one offered DreamAvatar (with the tide decks its pool would be dealt
  * from, already capped by {@link largestTides}) to the screen's view type.
  *
  * A `tides4` run shows its dealt tides in place of the signature cards, so the
@@ -65,46 +65,46 @@ function toTideView(tide: Tides4DeckJson): DreamcallerTideView {
  * paired with its index-aligned stable UUID so keys stay unique when two
  * signature cards share a display name.
  */
-export function toDreamcallerOfferView(
-  dreamcaller: DreamcallerContent,
+export function toDreamAvatarOfferView(
+  dreamAvatar: DreamAvatarContent,
   tides: Tides4DeckJson[],
-): DreamcallerOfferView {
-  const signatureCardIds = dreamcaller.signatureCardIds ?? [];
+): DreamAvatarOfferView {
+  const signatureCardIds = dreamAvatar.signatureCardIds ?? [];
   const signatureCards =
     tides.length > 0
       ? []
-      : (dreamcaller.signatureCards ?? []).map((name, index) => ({
+      : (dreamAvatar.signatureCards ?? []).map((name, index) => ({
           id: signatureCardIds[index] ?? `${name}-${String(index)}`,
           name,
         }));
   return {
-    id: dreamcaller.id,
-    name: dreamcaller.name,
-    title: dreamcaller.title,
-    imageNumber: dreamcaller.imageNumber,
-    portraitFocus: dreamcaller.portraitFocus,
-    renderedText: dreamcaller.renderedText,
-    startingEssence: dreamcaller.startingEssence,
+    id: dreamAvatar.id,
+    name: dreamAvatar.name,
+    title: dreamAvatar.title,
+    imageNumber: dreamAvatar.imageNumber,
+    portraitFocus: dreamAvatar.portraitFocus,
+    renderedText: dreamAvatar.renderedText,
+    startingEssence: dreamAvatar.startingEssence,
     signatureCards,
     tides: tides.map(toTideView),
   };
 }
 
 /**
- * The full view-model for the Dreamcaller-select screen: each offered
- * Dreamcaller with the (capped) tide preview its pool would be dealt from
+ * The full view-model for the DreamAvatar-select screen: each offered
+ * DreamAvatar with the (capped) tide preview its pool would be dealt from
  * under `questSeed`. Deterministic in its arguments — the caller owns minting
  * the offer and the seed.
  */
-export function buildDreamcallerOfferViews(
-  offered: DreamcallerContent[],
+export function buildDreamAvatarOfferViews(
+  offered: DreamAvatarContent[],
   poolContext: RunPoolContext | undefined,
   questSeed: string,
-): DreamcallerOfferView[] {
-  return offered.map((dreamcaller) =>
-    toDreamcallerOfferView(
-      dreamcaller,
-      largestTides(selectedTides4Decks(poolContext, dreamcaller, questSeed)),
+): DreamAvatarOfferView[] {
+  return offered.map((dreamAvatar) =>
+    toDreamAvatarOfferView(
+      dreamAvatar,
+      largestTides(selectedTides4Decks(poolContext, dreamAvatar, questSeed)),
     ),
   );
 }

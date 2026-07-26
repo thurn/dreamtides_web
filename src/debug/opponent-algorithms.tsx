@@ -1,5 +1,5 @@
 // The `/opponent` debug tool's opponent-deck ALGORITHM REGISTRY. Each registered
-// algorithm takes the shared run context the tool derives (Dreamcaller,
+// algorithm takes the shared run context the tool derives (DreamAvatar,
 // affiliation, run position, pool seed) and produces an `AlgorithmView`: the
 // deck cards to show, the stat tiles, the dreamsign labels, the ability flag,
 // and an optional provenance panel. The component renders purely off the view,
@@ -15,7 +15,7 @@ import type { CardData } from "../types/cards";
 import type { QuestContent } from "../data/quest-content";
 import type {
   AffiliationContent,
-  DreamcallerContent,
+  DreamAvatarContent,
   DreamsignTemplate,
 } from "../types/content";
 import {
@@ -51,7 +51,7 @@ export interface AlgorithmView {
   /** Dreamsign display names this algorithm assigned (populated for parity;
    * the dreamsign icon section is driven by run context, not this field). */
   dreamsignLabels: string[];
-  /** Whether the opponent Dreamcaller's ability is active at this layer. */
+  /** Whether the opponent DreamAvatar's ability is active at this layer. */
   abilityActive: boolean;
   /**
    * When `true`, the algorithm produced no deck for these parameters; the
@@ -66,12 +66,12 @@ export interface AlgorithmView {
 
 /**
  * The shared run context one algorithm needs to build its view. The five core
- * fields (Dreamcaller, affiliation, completion level, layer count, pool seed)
+ * fields (DreamAvatar, affiliation, completion level, layer count, pool seed)
  * drive both algorithms; `dreamsigns` and `battleEntryKey` are the run context
  * the coherent algorithm needs to reproduce the existing display + log.
  */
 export interface AlgorithmParams {
-  opponentDreamcaller: DreamcallerContent | null;
+  opponentDreamAvatar: DreamAvatarContent | null;
   affiliation: AffiliationContent | null;
   completionLevel: number;
   layerCount: number;
@@ -101,7 +101,7 @@ const coherentAlgorithm: DebugAlgorithm = {
   label: "Coherent",
   build(content, params) {
     const build = buildOpponentDeck({
-      opponentDreamcaller: params.opponentDreamcaller,
+      opponentDreamAvatar: params.opponentDreamAvatar,
       fitModel: content.fitModel,
       draftRecords: content.draftRecords ?? [],
       poolContext: content.poolContext,
@@ -116,7 +116,7 @@ const coherentAlgorithm: DebugAlgorithm = {
     // log just like a production battle's opponent build.
     logOpponentDeckConstructed({
       battleEntryKey: params.battleEntryKey,
-      opponentDreamcaller: params.opponentDreamcaller,
+      opponentDreamAvatar: params.opponentDreamAvatar,
       poolVariant: content.poolContext?.poolVariant ?? DEFAULT_POOL_VARIANT,
       poolSeed: params.poolSeed,
       completionLevel: params.completionLevel,
@@ -167,7 +167,7 @@ const coherentAlgorithm: DebugAlgorithm = {
 
 // ---------------------------------------------------------------------------
 // Corpus algorithm: Stage A selects a known-good decklist for the opponent
-// Dreamcaller, Stage B tunes it to the run position. The builder logs
+// DreamAvatar, Stage B tunes it to the run position. The builder logs
 // `corpus_opponent_deck_constructed` internally.
 // ---------------------------------------------------------------------------
 
@@ -176,7 +176,7 @@ const corpusAlgorithm: DebugAlgorithm = {
   label: "Corpus",
   build(content, params) {
     const build = buildCorpusOpponentDeck({
-      opponentDreamcaller: params.opponentDreamcaller,
+      opponentDreamAvatar: params.opponentDreamAvatar,
       knownGoodDecklists: content.knownGoodDecklists ?? [],
       affiliation: params.affiliation,
       cardDatabase: content.cardDatabase,

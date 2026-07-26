@@ -290,7 +290,7 @@ describe("buildTutorialView", () => {
       },
       {
         id: "player-arrival",
-        action: "animate-dreamcaller-portrait" as const,
+        action: "animate-dream-avatar-portrait" as const,
         owner: "player" as const,
         pause: 1,
         duration: 0.6,
@@ -298,7 +298,7 @@ describe("buildTutorialView", () => {
       },
       {
         id: "enemy-arrival",
-        action: "animate-dreamcaller-portrait" as const,
+        action: "animate-dream-avatar-portrait" as const,
         owner: "enemy" as const,
         pause: 1,
         duration: 0.6,
@@ -334,12 +334,12 @@ describe("buildTutorialView", () => {
     );
 
     expect(tail.currentAction?.id).toBe("enemy-taunt");
-    expect(tail.dreamcallers.player.settled).toBe(true);
-    expect(tail.dreamcallers.enemy.settled).toBe(true);
+    expect(tail.dreamAvatars.player.settled).toBe(true);
+    expect(tail.dreamAvatars.enemy.settled).toBe(true);
     expect(tail.battle.enemy.deckCardIds).toHaveLength(30);
     expect(tail.battle.enemyHandCardIds).toEqual([]);
     expect(tail.dialogue).toMatchObject({
-      kind: "dreamcaller",
+      kind: "dreamAvatar",
       owner: "enemy",
       bubbleWidth: 450,
       text: "For the Abyss!",
@@ -581,8 +581,8 @@ describe("buildTutorialView", () => {
           wait: 1.5,
         },
         {
-          id: "dreamcaller-arrival",
-          action: "animate-dreamcaller-portrait",
+          id: "dream-avatar-arrival",
+          action: "animate-dream-avatar-portrait",
           owner: "player",
           pause: 1,
           duration: 0.6,
@@ -614,7 +614,7 @@ describe("buildTutorialView", () => {
     });
     expect(tutorial.playbackRunId).toBe("event:7");
     expect(tutorial.currentAction?.id).toBe("greeting");
-    expect(tutorial.dreamcallers.player).toMatchObject({
+    expect(tutorial.dreamAvatars.player).toMatchObject({
       visual: { imageNumber: "0029", name: "Tensho" },
       profile: {
         id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
@@ -639,13 +639,13 @@ describe("buildTutorialView", () => {
       expect(side.frontRank.every((slot) => slot.card === null)).toBe(true);
     }
     expect(view.player.status).toEqual({
-      dreamcaller: null,
+      dreamAvatar: null,
       currentEnergy: 4,
       maxEnergy: 4,
       points: 0,
     });
     expect(view.enemy.status).toEqual({
-      dreamcaller: null,
+      dreamAvatar: null,
       currentEnergy: 4,
       maxEnergy: 4,
       points: 0,
@@ -667,8 +667,8 @@ describe("buildTutorialView", () => {
           wait: 3,
         },
         {
-          id: "dreamcaller-arrival",
-          action: "animate-dreamcaller-portrait",
+          id: "dream-avatar-arrival",
+          action: "animate-dream-avatar-portrait",
           owner: "player",
           pause: 1,
           duration: 0.6,
@@ -695,8 +695,8 @@ describe("buildTutorialView", () => {
         ? tutorial.dialogue.verticalOffset
         : null,
     ).toBe(100);
-    expect(tutorial.dreamcallers.player.settled).toBe(true);
-    expect(tutorial.dreamcallers.enemy).toMatchObject({
+    expect(tutorial.dreamAvatars.player.settled).toBe(true);
+    expect(tutorial.dreamAvatars.enemy).toMatchObject({
       visual: { imageNumber: "0025", name: "Threxan" },
       profile: { id: "B99936CA-97F9-4930-AF5A-FA9EF92557EF" },
       settled: false,
@@ -712,8 +712,8 @@ describe("buildTutorialView", () => {
         wait: 3,
       },
       {
-        id: "dreamcaller-arrival",
-        action: "animate-dreamcaller-portrait" as const,
+        id: "dream-avatar-arrival",
+        action: "animate-dream-avatar-portrait" as const,
         owner: "player" as const,
         pause: 1,
         duration: 0.6,
@@ -783,14 +783,14 @@ describe("buildTutorialView", () => {
     ).toBeNull();
   });
 
-  it("attaches authored Dreamcaller speech to that side's battle portrait", () => {
+  it("attaches authored DreamAvatar speech to that side's battle portrait", () => {
     const tutorial = buildTutorialView({
       runId: "event:11",
       currentActionIndex: 1,
       actions: [
         {
           id: "vrakmoth-arrival",
-          action: "animate-dreamcaller-portrait",
+          action: "animate-dream-avatar-portrait",
           owner: "enemy",
           pause: 1,
           duration: 0.6,
@@ -805,11 +805,11 @@ describe("buildTutorialView", () => {
       ],
     });
 
-    expect(tutorial.dreamcallers.enemy.settled).toBe(true);
+    expect(tutorial.dreamAvatars.enemy.settled).toBe(true);
     expect(tutorial.dialogue).toEqual({
       actionId: "vrakmoth-taunt",
       parentAction: "display-speech-bubble",
-      kind: "dreamcaller",
+      kind: "dreamAvatar",
       owner: "enemy",
       duration: 3,
       verticalOffset: 0,
@@ -1181,7 +1181,7 @@ describe("buildTutorialView", () => {
     expect(worthyChallenger.dialogue).toEqual({
       actionId: "vrakmoth-worthy-challenger",
       parentAction: "display-speech-bubble",
-      kind: "dreamcaller",
+      kind: "dreamAvatar",
       owner: "enemy",
       duration: 3,
       verticalOffset: 0,
@@ -1608,8 +1608,8 @@ describe("buildTutorialView", () => {
   it("settles Threxan only after the opponent portrait action advances", () => {
     const actions = [
       {
-        id: "dreamcaller-arrival",
-        action: "animate-dreamcaller-portrait" as const,
+        id: "dream-avatar-arrival",
+        action: "animate-dream-avatar-portrait" as const,
         owner: "player" as const,
         pause: 1,
         duration: 0.6,
@@ -1625,7 +1625,7 @@ describe("buildTutorialView", () => {
       },
       {
         id: "vrakmoth-arrival",
-        action: "animate-dreamcaller-portrait" as const,
+        action: "animate-dream-avatar-portrait" as const,
         owner: "enemy" as const,
         pause: 1,
         duration: 0.6,
@@ -1638,8 +1638,8 @@ describe("buildTutorialView", () => {
       currentActionIndex: 2,
       actions,
     });
-    expect(arriving.dreamcallers.player.settled).toBe(true);
-    expect(arriving.dreamcallers.enemy.settled).toBe(false);
+    expect(arriving.dreamAvatars.player.settled).toBe(true);
+    expect(arriving.dreamAvatars.enemy.settled).toBe(false);
     expect(arriving.currentAction?.id).toBe("vrakmoth-arrival");
     expect(arriving.dialogue).toBeNull();
 
@@ -1648,8 +1648,8 @@ describe("buildTutorialView", () => {
       currentActionIndex: null,
       actions,
     });
-    expect(complete.dreamcallers.player.settled).toBe(true);
-    expect(complete.dreamcallers.enemy.settled).toBe(true);
+    expect(complete.dreamAvatars.player.settled).toBe(true);
+    expect(complete.dreamAvatars.enemy.settled).toBe(true);
     expect(complete.dialogue).toBeNull();
   });
 });

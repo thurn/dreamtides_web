@@ -7,11 +7,11 @@ import type { BattleDebugEdit } from "../debug/commands";
 import { createBattleInit } from "../integration/create-battle-init";
 import { createInitialBattleState } from "../state/create-initial-state";
 import { FIGMENT_CATALOG_ENTRIES } from "../state/figment-catalog";
-import { makeBattleTestCardDatabase, makeBattleTestDreamcallers, makeBattleTestSite, makeBattleTestState } from "../test-support";
+import { makeBattleTestCardDatabase, makeBattleTestDreamAvatars, makeBattleTestSite, makeBattleTestState } from "../test-support";
 import { BattleFigmentCreator } from "./BattleFigmentCreator";
 
 function state() {
-  return createInitialBattleState(createBattleInit({ battleEntryKey: "test", site: makeBattleTestSite(), state: makeBattleTestState(), cardDatabase: makeBattleTestCardDatabase(), dreamcallers: makeBattleTestDreamcallers() }));
+  return createInitialBattleState(createBattleInit({ battleEntryKey: "test", site: makeBattleTestSite(), state: makeBattleTestState(), cardDatabase: makeBattleTestCardDatabase(), dreamAvatars: makeBattleTestDreamAvatars() }));
 }
 function chooseType(label: string): void {
   const trigger = document.querySelector<HTMLButtonElement>('button[aria-label="Figment type"]');

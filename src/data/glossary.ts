@@ -16,7 +16,7 @@ export interface GlossaryEntry {
 /** A TOML-authored contextual projection of one canonical entry. */
 export interface GlossaryContext {
   /** Limit this projection to rules text owned by this entity type. */
-  readonly owner?: "card" | "dreamcaller";
+  readonly owner?: "card" | "dreamAvatar";
   /** Case-insensitive regular expression which the source sentence must match. */
   readonly pattern?: string;
   /** Display-term template; `{term}` and numbered captures such as `{1}` expand. */

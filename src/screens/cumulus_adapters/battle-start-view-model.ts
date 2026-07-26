@@ -24,7 +24,7 @@ export function buildBattleStartView(
       node?.dreamscapeId !== null && node?.dreamscapeId !== undefined
         ? artRef.dreamscapeScene(node.dreamscapeId)
         : null,
-    dreamcaller: {
+    dreamAvatar: {
       id: enemy.id,
       name: enemy.name,
       title: enemy.subtitle,

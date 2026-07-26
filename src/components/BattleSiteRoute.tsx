@@ -15,7 +15,7 @@ import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScree
 
 /**
  * Drives the coop event-sourced battle fold. A null folded battle renders the
- * deterministic opposing-Dreamcaller preview; its Begin action appends
+ * deterministic opposing-DreamAvatar preview; its Begin action appends
  * `BEGIN_BATTLE`. A non-null folded battle renders the playable surface on
  * every client, including after reload.
  */

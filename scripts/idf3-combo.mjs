@@ -31,7 +31,7 @@ const decklists = readJson("public/decklists-data.json");
 // `decklists`. Self-adequacy pruning stays scored on the name corpus (scorePool is
 // name-keyed) but indexes both, and the corpus handed to the engine is id-keyed.
 const decklistIds = readJson("public/decklist-ids-data.json");
-const dreamcallers = readJson("public/dreamcallers-v2-data.json");
+const dreamAvatars = readJson("public/dream-avatars-v2-data.json");
 const meta = readJson("data/buildaround_support.json");
 
 function mulberry(seed) {
@@ -111,7 +111,7 @@ function evaluate({ pruneFrac, size, coherent }) {
   const all = [];
   const byTheme = new Map();
   const byDc = new Map();
-  for (const dc of dreamcallers) {
+  for (const dc of dreamAvatars) {
     const ad = [];
     for (let s = 0; s < SEEDS; s++) {
       const start = starterIdx(mulberry(s), dc.signatureCardIds ?? []);
@@ -144,7 +144,7 @@ const configs = [
   { label: "coh+sz80+drop25      ", pruneFrac: 0.25, size: 80, coherent: true },
 ];
 
-console.log(`combo sweep (${SEEDS} seeds x ${dreamcallers.length} DCs); target headline 95\n`);
+console.log(`combo sweep (${SEEDS} seeds x ${dreamAvatars.length} DCs); target headline 95\n`);
 for (const cfg of configs) {
   const r = evaluate(cfg);
   const star = r.headline >= 95 ? " <= 95!" : "";

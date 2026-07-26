@@ -4,12 +4,12 @@
 // irreducibly-arbitrary string that no type can meaningfully constrain, and
 // resolving it at the call site scatters the id → URL mapping across screens.
 // Instead a component takes an `ArtRef` — a small discriminated union naming
-// WHAT art to show (a dreamsign by its image name, a dreamcaller by its number,
+// WHAT art to show (a dreamsign by its image name, a dreamAvatar by its number,
 // a dreamscape by its id) — and resolves the URL itself via `resolveArtRef`.
 // The id → URL mapping lives here, once.
 
 import { assetUrl } from "../../runtime/asset-url";
-import miraHeadCircleUrl from "../assets/dreamcallers/0020-head-circle.png";
+import miraHeadCircleUrl from "../assets/dream-avatars/0020-head-circle.png";
 
 /** Character portraits authored as local Cumulus assets. */
 export type CharacterPortraitId = "mira";
@@ -36,15 +36,15 @@ export type ArtRef =
       readonly imageName: string;
     }
   | {
-      /** A dreamcaller portrait, keyed by its zero-padded image number. */
-      readonly kind: "dreamcaller";
+      /** A dreamAvatar portrait, keyed by its zero-padded image number. */
+      readonly kind: "dreamAvatar";
       readonly imageNumber: string;
     }
   | {
-      /** A dreamcaller's transparent full-body cutout (the character render
+      /** A dreamAvatar's transparent full-body cutout (the character render
        * with the scene background removed), keyed by its zero-padded image
        * number. */
-      readonly kind: "dreamcaller-cutout";
+      readonly kind: "dream-avatar-cutout";
       readonly imageNumber: string;
     }
   | {
@@ -72,10 +72,10 @@ export function resolveArtRef(ref: ArtRef): string {
       return assetUrl("/main-menu/background.jpg");
     case "dreamsign":
       return assetUrl(`/dreamsigns/${ref.imageName}`);
-    case "dreamcaller":
-      return assetUrl(`/dreamcallers/${ref.imageNumber}.png`);
-    case "dreamcaller-cutout":
-      return assetUrl(`/dreamcallers/cutout/${ref.imageNumber}.png`);
+    case "dreamAvatar":
+      return assetUrl(`/dream-avatars/${ref.imageNumber}.png`);
+    case "dream-avatar-cutout":
+      return assetUrl(`/dream-avatars/cutout/${ref.imageNumber}.png`);
     case "dreamscape-icon":
       return assetUrl(`/dreamscape-icons/${ref.dreamscapeId}.png`);
     case "dreamscape-scene":
@@ -94,12 +94,12 @@ export function resolveArtRef(ref: ArtRef): string {
 export const artRef = {
   mainMenuBackground: (): ArtRef => ({ kind: "main-menu-background" }),
   dreamsign: (imageName: string): ArtRef => ({ kind: "dreamsign", imageName }),
-  dreamcaller: (imageNumber: string): ArtRef => ({
-    kind: "dreamcaller",
+  dreamAvatar: (imageNumber: string): ArtRef => ({
+    kind: "dreamAvatar",
     imageNumber,
   }),
-  dreamcallerCutout: (imageNumber: string): ArtRef => ({
-    kind: "dreamcaller-cutout",
+  dreamAvatarCutout: (imageNumber: string): ArtRef => ({
+    kind: "dream-avatar-cutout",
     imageNumber,
   }),
   dreamscapeIcon: (dreamscapeId: string): ArtRef => ({

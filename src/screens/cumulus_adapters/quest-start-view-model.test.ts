@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import type { DreamcallerContent } from "../../types/content";
+import type { DreamAvatarContent } from "../../types/content";
 import type { Tides4DeckJson } from "../../draft/pool/tides4-io";
-import { largestTides, toDreamcallerOfferView } from "./quest-start-view-model";
+import { largestTides, toDreamAvatarOfferView } from "./quest-start-view-model";
 
 function tide(id: string, cardCount: number): Tides4DeckJson {
   return {
@@ -17,9 +17,9 @@ function tide(id: string, cardCount: number): Tides4DeckJson {
   };
 }
 
-function dreamcaller(
-  overrides: Partial<DreamcallerContent> = {},
-): DreamcallerContent {
+function dreamAvatar(
+  overrides: Partial<DreamAvatarContent> = {},
+): DreamAvatarContent {
   return {
     id: "dc-1",
     name: "The Cartographer",
@@ -64,10 +64,10 @@ describe("largestTides", () => {
   });
 });
 
-describe("toDreamcallerOfferView", () => {
+describe("toDreamAvatarOfferView", () => {
   it("suppresses signature cards whenever tides exist (tides4 runs show tides instead)", () => {
-    const view = toDreamcallerOfferView(
-      dreamcaller({
+    const view = toDreamAvatarOfferView(
+      dreamAvatar({
         signatureCards: ["Alpha", "Beta"],
         signatureCardIds: ["uuid-a", "uuid-b"],
       }),
@@ -78,8 +78,8 @@ describe("toDreamcallerOfferView", () => {
   });
 
   it("shows signature cards keyed by their stable UUIDs when there are no tides", () => {
-    const view = toDreamcallerOfferView(
-      dreamcaller({
+    const view = toDreamAvatarOfferView(
+      dreamAvatar({
         signatureCards: ["Alpha", "Alpha"],
         signatureCardIds: ["uuid-a1", "uuid-a2"],
       }),
@@ -94,15 +94,15 @@ describe("toDreamcallerOfferView", () => {
   });
 
   it("falls back to a name+index key only when a UUID is missing", () => {
-    const view = toDreamcallerOfferView(
-      dreamcaller({ signatureCards: ["Alpha"], signatureCardIds: [] }),
+    const view = toDreamAvatarOfferView(
+      dreamAvatar({ signatureCards: ["Alpha"], signatureCardIds: [] }),
       [],
     );
     expect(view.signatureCards).toEqual([{ id: "Alpha-0", name: "Alpha" }]);
   });
 
-  it("copies the Dreamcaller's display fields through unchanged", () => {
-    const view = toDreamcallerOfferView(dreamcaller(), []);
+  it("copies the DreamAvatar's display fields through unchanged", () => {
+    const view = toDreamAvatarOfferView(dreamAvatar(), []);
     expect(view).toMatchObject({
       id: "dc-1",
       name: "The Cartographer",

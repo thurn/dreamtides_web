@@ -8,14 +8,14 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import type { CardData } from "../types/cards";
-import type { DreamcallerContent } from "../types/content";
+import type { DreamAvatarContent } from "../types/content";
 import { loadQuestContent, type QuestContent } from "../data/quest-content";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { GameCard } from "../cumulus/components/card/CardView";
 import {
-  DreamcallerPortrait,
-  dreamcallerImageSrc,
-} from "../cumulus/components/hud/DreamcallerPortrait";
+  DreamAvatarPortrait,
+  dreamAvatarImageSrc,
+} from "../cumulus/components/hud/DreamAvatarPortrait";
 import { extractGlossaryTerms } from "../data/glossary-terms";
 import { GlossaryDefinitionCard } from "../cumulus/components/card/GlossaryDefinitionCard";
 import { INFO_CARD_WIDTH } from "../cumulus/components/overlay/InfoCard";
@@ -24,11 +24,11 @@ import { buildIdfStats, signatureFit } from "../draft/idf-fit.ts";
 import { idfCosine } from "../draft/pool/variant-idf.ts";
 
 /**
- * `/sigdecks` — a temporary visualization tool. For each Dreamcaller that
- * carries `signature-cards` (see `data/tabula/dreamcallers_v2.toml`), it finds
+ * `/sigdecks` — a temporary visualization tool. For each DreamAvatar that
+ * carries `signature-cards` (see `data/tabula/dream_avatars_v2.toml`), it finds
  * the single real draft deck in the adapted draft corpus
  * (`docs/draft_records_adapted`, bundled as `/draft-records-data.json`) most
- * strongly correlated with that Dreamcaller and renders the whole mainboard.
+ * strongly correlated with that DreamAvatar and renders the whole mainboard.
  *
  * Correlation metric: IDF cosine similarity. Each card is weighted by its
  * inverse document frequency `ln(N / df)` (`df` = number of corpus mainboards
@@ -41,7 +41,7 @@ import { idfCosine } from "../draft/pool/variant-idf.ts";
  * The deck with the highest cosine wins; ties break toward more distinct
  * signature cards matched. Mainboards larger than 28 cards are excluded
  * entirely — those are sprawling draft piles rather than focused decks, and
- * they correlate with a Dreamcaller only by holding more of everything.
+ * they correlate with a DreamAvatar only by holding more of everything.
  *
  * Two selection modes, toggled in the header and mirrored to `?mode=`:
  * `match` (default) picks the single closest deck to the signature, while
@@ -146,7 +146,7 @@ interface SignatureCard {
 }
 
 export interface SignatureDeck {
-  dreamcaller: DreamcallerContent;
+  dreamAvatar: DreamAvatarContent;
   signatureCards: SignatureCard[];
   /** The winning deck's mainboard, resolved to renderable cards. */
   cards: CardData[];
@@ -161,12 +161,12 @@ export interface SignatureDeck {
 }
 
 /**
- * Build the per-Dreamcaller signature deck assignment from quest content.
+ * Build the per-DreamAvatar signature deck assignment from quest content.
  *
  * Everything keys on stable cards_v2 UUIDs, never display names: 24 cards share
  * a name with another distinct card, so name matching would conflate them (and
  * render the wrong card). The draft records carry `mainboardIds` and the
- * Dreamcallers carry `signatureCardIds` for exactly this reason.
+ * DreamAvatars carry `signatureCardIds` for exactly this reason.
  */
 export function computeSignatureDecks(
   content: QuestContent,
@@ -180,7 +180,7 @@ export function computeSignatureDecks(
 
   // Oversized mainboards (large draft piles rather than focused decks) are
   // excluded from consideration: a deck with many cards correlates with a
-  // Dreamcaller only by virtue of holding more of everything, which makes it a
+  // DreamAvatar only by virtue of holding more of everything, which makes it a
   // weird outlier as a "signature deck". Keep only decks at or below this size.
   const MAX_DECK_SIZE = 28;
   const records = (content.draftRecords ?? []).filter(
@@ -188,7 +188,7 @@ export function computeSignatureDecks(
   );
 
   // Per-record deduped mainboard UUID sets, computed once and reused across
-  // every Dreamcaller.
+  // every DreamAvatar.
   const recordSets = records.map((r) => ({
     record: r,
     idSet: new Set(r.mainboardIds.map((id) => id.toLowerCase())),
@@ -211,7 +211,7 @@ export function computeSignatureDecks(
 
   const result: SignatureDeck[] = [];
 
-  for (const dc of content.dreamcallers) {
+  for (const dc of content.dreamAvatars) {
     const sigIds = (dc.signatureCardIds ?? []).map((id) => id.toLowerCase());
     if (sigIds.length === 0) continue;
 
@@ -284,7 +284,7 @@ export function computeSignatureDecks(
       .filter((c): c is CardData => c != null);
 
     result.push({
-      dreamcaller: dc,
+      dreamAvatar: dc,
       signatureCards,
       cards,
       matchedIds: best.matchedIds,
@@ -452,7 +452,7 @@ function DeckSection({
   viewport: Viewport;
   onPreview: (card: CardData) => void;
 }) {
-  const dc = deck.dreamcaller;
+  const dc = deck.dreamAvatar;
   const matched = deck.matchedIds;
   const { isMobile } = viewport;
   return (
@@ -485,8 +485,8 @@ function DeckSection({
             }}
           >
           <div style={{ width: 64, height: 64, flexShrink: 0 }}>
-            <DreamcallerPortrait
-              dreamcaller={{
+            <DreamAvatarPortrait
+              dreamAvatar={{
                 imageNumber: dc.imageNumber,
                 name: dc.name,
                 title: dc.title,
@@ -527,7 +527,7 @@ function DeckSection({
         </div>
       </div>
 
-      {/* Signature card chips: which of this Dreamcaller's signature cards the
+      {/* Signature card chips: which of this avatar's signature cards the
           chosen deck actually contains (filled) versus missed (faint). */}
       <div
         style={{
@@ -671,11 +671,11 @@ export default function SignatureDecksApp() {
             </div>
             <div style={{ fontSize: 12, color: MUTED }}>
               {mode === "match"
-                ? "The single draft deck most strongly correlated with each signature-carrying Dreamcaller (IDF cosine similarity; decks over 28 cards excluded)."
-                : "The most typical / representative draft deck for each signature-carrying Dreamcaller — the deck most central to the cluster of signature-fitting decks, rather than the single closest match."}{" "}
+                ? "The single draft deck most strongly correlated with each signature-carrying avatar (IDF cosine similarity; decks over 28 cards excluded)."
+                : "The most typical / representative draft deck for each signature-carrying avatar — the deck most central to the cluster of signature-fitting decks, rather than the single closest match."}{" "}
               {viewport.isTouch
                 ? "Long-press a card to enlarge it."
-                : "Hover a card to enlarge it, or a Dreamcaller for its ability."}
+                : "Hover a card to enlarge it, or an avatar for its ability."}
             </div>
           </div>
 
@@ -739,20 +739,20 @@ export default function SignatureDecksApp() {
 
         {content === null && loadError === null && (
           <div style={{ color: MUTED, fontSize: 14, padding: 24 }}>
-            Loading card database, dreamcallers, and draft corpus…
+            Loading card database, avatars, and draft corpus…
           </div>
         )}
 
         {content !== null && decks.length === 0 && loadError === null && (
           <div style={{ color: MUTED, fontSize: 14, padding: 24 }}>
-            No signature-carrying Dreamcallers found, or the draft corpus is
+            No signature-carrying avatars found, or the draft corpus is
             unavailable.
           </div>
         )}
 
         {decks.map((deck) => (
           <DeckSection
-            key={deck.dreamcaller.id}
+            key={deck.dreamAvatar.id}
             deck={deck}
             viewport={viewport}
             onPreview={openPreview}
@@ -763,8 +763,8 @@ export default function SignatureDecksApp() {
         <div style={{ display: "none" }}>
           {decks.map((d) => (
             <img
-              key={d.dreamcaller.id}
-              src={dreamcallerImageSrc(d.dreamcaller.imageNumber)}
+              key={d.dreamAvatar.id}
+              src={dreamAvatarImageSrc(d.dreamAvatar.imageNumber)}
               alt=""
             />
           ))}

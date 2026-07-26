@@ -10,7 +10,7 @@ import {
 import type { CardData } from "../../types/cards";
 import type {
   DreamGuideContent,
-  ResolvedDreamcallerPackage,
+  ResolvedDreamAvatarPackage,
 } from "../../types/content";
 import type {
   CardSourceDebugState,
@@ -102,7 +102,7 @@ export function buildCardShopRestock(
 /** Build the debug provenance state for the cards currently on the shelf. */
 export function buildCardShopDebugState(
   offers: readonly CardShopOfferView[],
-  resolvedPackage: ResolvedDreamcallerPackage | null,
+  resolvedPackage: ResolvedDreamAvatarPackage | null,
 ): CardSourceDebugState | null {
   return buildCardSourceDebugState(
     "Shop Offers",

@@ -1,14 +1,14 @@
-// QuestStartScreen — the Cumulus rendering of Dreamcaller selection (the quest's
+// QuestStartScreen — the Cumulus rendering of DreamAvatar selection (the quest's
 // opening screen). Two layouts share one view-model and switch on viewport:
-//   - Mobile (narrow): a full-bleed swipe carousel, one Dreamcaller per page
+//   - Mobile (narrow): a full-bleed swipe carousel, one DreamAvatar per page
 //     (`quest-start-mobile`).
-//   - Desktop (wide): the offered Dreamcallers side by side as standing figures
+//   - Desktop (wide): the offered DreamAvatars side by side as standing figures
 //     over locked-size console cards (`quest-start-desktop`).
 // Shared view types and console primitives live in `quest-start-shared`; both
-// layouts compose the named Dreamcaller ability source. This module is the
+// layouts compose the named DreamAvatar ability source. This module is the
 // public entry: it re-exports the view types the adapter and view-model builder
 // import, and switches layouts by viewport.
-// PURE: it renders from a view-model and reports the chosen Dreamcaller through
+// PURE: it renders from a view-model and reports the chosen DreamAvatar through
 // `onPick`; the adapter owns state, the offer, the seed, and startQuest.
 
 import { DesktopSelect } from "./quest-start-desktop";
@@ -16,16 +16,16 @@ import { CarouselSelect } from "./quest-start-mobile";
 import { useIsDesktop, type QuestStartScreenProps } from "./quest-start-shared";
 
 export type {
-  DreamcallerOfferView,
-  DreamcallerSignatureCardView,
-  DreamcallerTideView,
+  DreamAvatarOfferView,
+  DreamAvatarSignatureCardView,
+  DreamAvatarTideView,
   QuestStartScreenProps,
 } from "./quest-start-shared";
 
 /**
- * The Cumulus Dreamcaller-selection screen. Pure and props-driven — it renders
- * {@link QuestStartScreenProps.dreamcallers} and calls {@link
- * QuestStartScreenProps.onPick} with the chosen Dreamcaller's id. The layout
+ * The Cumulus DreamAvatar-selection screen. Pure and props-driven — it renders
+ * {@link QuestStartScreenProps.dreamAvatars} and calls {@link
+ * QuestStartScreenProps.onPick} with the chosen DreamAvatar's id. The layout
  * follows the viewport: a swipe carousel on mobile, a side-by-side triptych of
  * standalone portraits on desktop.
  */

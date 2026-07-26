@@ -2,20 +2,20 @@
 
 ## 1. Purpose and summary
 
-In the draft test mode a player first chooses a **Dreamcaller** (a character
+In the draft test mode a player first chooses a **Dream Avatar** (a character
 that defines how their deck wants to play) and is then handed a **card pool** — a
 multiset of card copies — to draft a deck from. The experience depends on the
-pool *matching* the Dreamcaller: an aggressive warrior Dreamcaller should be
+pool *matching* the Dream Avatar: an aggressive warrior Dream Avatar should be
 handed a pool full of warriors and combat tricks, and the pool should still feel
-*different* each time, so one Dreamcaller offers many distinct decks to build —
+*different* each time, so one Dream Avatar offers many distinct decks to build —
 warrior aggro one run, warrior combo the next — rather than a single fixed list.
 
 `picksig` is a pool-construction algorithm that meets both goals. It is the
 `pickcohere` algorithm with exactly one change: where `pickcohere` draws its
 candidate seed cards **uniformly** at random, `picksig` draws them from a
-distribution **biased toward the chosen Dreamcaller's signature** — a short list
-of distinctive card UUIDs (`dreamcaller.signatureCards`) that captures what the
-Dreamcaller is about. Everything downstream — the affinity-grown pool, the
+distribution **biased toward the chosen Dream Avatar's signature** — a short list
+of distinctive card UUIDs (`dreamAvatar.signatureCards`) that captures what the
+Dream Avatar is about. Everything downstream — the affinity-grown pool, the
 best-of-K coherence selection — is `pickcohere`'s, unchanged.
 
 The signature is the only new input the algorithm reads; it consults no colors,
@@ -86,26 +86,26 @@ the card space the pool grows in. That is the lever `picksig` reaches for.
 ## 3. The idea: bias the seed toward the signature
 
 `pickcohere` draws its K seeds uniformly from the whole corpus, so its pools land
-anywhere — they are not about any particular Dreamcaller. `picksig` keeps
+anywhere — they are not about any particular Dream Avatar. `picksig` keeps
 everything else and changes only the seed distribution: it draws the K candidate
 seeds from a distribution weighted toward the cards that **partner the
-signature**, so the grown pool lands on the Dreamcaller's region of the card
+signature**, so the grown pool lands on the Dream Avatar's region of the card
 space.
 
 This mirrors `idf3`'s signature scheme (the "A″" design in
 `idf3_signature_design.md`), but in pick-affinity space rather than
 decklist-cosine space, and the match is *direct*: signature UUIDs and the pick
 corpus share the same key space, so a signature card is located in the corpus by
-identity. (At load time a Dreamcaller's signature is resolved to current card
+identity. (At load time a Dream Avatar's signature is resolved to current card
 names; `picksig` resolves those names back to UUIDs via the pool's name→UUID map
 before steering.)
 
 The two design pressures pull against each other, and the scheme resolves them
 the way `idf3` does:
 
-- **On-theme.** The pool must be unmistakably the Dreamcaller's. A signature card
+- **On-theme.** The pool must be unmistakably the Dream Avatar's. A signature card
   and its strong partners should dominate the seed draw.
-- **Variety.** One Dreamcaller must offer *many* distinct pools leaning in
+- **Variety.** One Dream Avatar must offer *many* distinct pools leaning in
   different directions (warrior aggro vs warrior combo), not one fixed list. If
   the draw collapsed onto the single most central card, every run would grow the
   same pool.
@@ -166,11 +166,11 @@ deliberate difference between the two algorithms.
 ## 5. Validation
 
 `scripts/picksig-signature-experiment.mjs` runs the real `generatePoolFromData`
-against the bundled pick corpus and the real Dreamcaller signatures — no
-re-implementation — and measures, per Dreamcaller, over many seeds:
+against the bundled pick corpus and the real Dream Avatar signatures — no
+re-implementation — and measures, per Dream Avatar, over many seeds:
 
 - **Variety** — the number of distinct pools (a pool is its sorted multiset of
-  card UUIDs). The design target is ≥ 50 distinct pools per Dreamcaller.
+  card UUIDs). The design target is ≥ 50 distinct pools per Dream Avatar.
 - **On-theme** — the mean signature affinity of the pooled cards (the same
   affinity the algorithm steers on), against the `pickcohere` baseline on the
   same seeds.
@@ -178,18 +178,18 @@ re-implementation — and measures, per Dreamcaller, over many seeds:
   above zero means the pools genuinely differ (a combo lean vs an aggro lean);
   not near one means they still share a common on-theme core.
 
-Over the 20 Dreamcallers with an in-corpus signature, 200 seeds each:
+Over the 20 Dream Avatars with an in-corpus signature, 200 seeds each:
 
-- **Variety**: every Dreamcaller produces ≥ 50 distinct pools (55–126 across just
+- **Variety**: every Dream Avatar produces ≥ 50 distinct pools (55–126 across just
   200 seeds — more seeds yield more pools).
 - **On-theme**: mean signature affinity 0.33 for `picksig` vs 0.21 for
-  `pickcohere` — a 1.6× mean lift, positive for every Dreamcaller (1.1×–2.2×).
+  `pickcohere` — a 1.6× mean lift, positive for every Dream Avatar (1.1×–2.2×).
 - **Lean spread**: mean pairwise Jaccard distance 0.54 — the pools of one
-  Dreamcaller differ substantially while sharing an on-theme core.
+  Dream Avatar differ substantially while sharing an on-theme core.
 - **Fallback**: with an empty signature, `picksig` reproduces `pickcohere`
   bit-for-bit on every checked seed.
 
-Run it with `node scripts/picksig-signature-experiment.mjs`; `--dreamcaller
+Run it with `node scripts/picksig-signature-experiment.mjs`; `--dream-avatar
 "<name>"` narrows to one, `--seeds N` sets the sample, `--json` emits raw rows.
 
 ---
@@ -197,7 +197,7 @@ Run it with `node scripts/picksig-signature-experiment.mjs`; `--dreamcaller
 ## Appendix A. Alternatives weighed
 
 - **Pre-seed the pool with the signature cards directly, then grow.** Rejected:
-  it makes the same handful of cards appear in *every* pool of a Dreamcaller,
+  it makes the same handful of cards appear in *every* pool of a Dream Avatar,
   flattening variety — the opposite of the goal.
 - **No cap (multiply weight by `affinity^alpha`).** Rejected: the single most
   central on-theme card dominates the draw, so best-of-K converges on one cluster

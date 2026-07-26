@@ -149,9 +149,9 @@ Use the relevant subset of this hidden-tides migration smoke path. Run the full
 path only when the change can affect the complete quest flow:
 
 1. Open your QA server (e.g. `http://localhost:5174`) and confirm the app starts
-   on the Dreamcaller selection screen.
-2. Verify the quest start shows exactly 3 Dreamcaller choices.
-3. Pick one Dreamcaller and confirm the run enters quest play immediately.
+   on the Dream Avatar selection screen.
+2. Verify the quest start shows exactly 3 Dream Avatar choices.
+3. Pick one Dream Avatar and confirm the run enters quest play immediately.
 4. Reach a draft site and confirm the offer shows 4 unique card names.
 5. Continue far enough to see another draft offer and confirm duplicates can
    recur across the run but never inside the same offer.

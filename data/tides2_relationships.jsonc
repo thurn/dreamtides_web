@@ -2,7 +2,7 @@
 // draft-pool variant reads alongside the baked tide decks (data/tides2.jsonc).
 //
 // SEEDED ONCE by `node scripts/seed-tide-relationships.mjs` from the current
-// tides2 decks, decklist corpus, Dreamcaller signatures, and the build-around
+// tides2 decks, decklist corpus, DreamAvatar signatures, and the build-around
 // support metadata, then HAND-CURATED. The routine `npm run bake-tides2` does
 // NOT touch this file. Re-seed it only on a deliberate tide re-bake (`--force`),
 // which changes tide ids/contents and so invalidates this curation; the runtime
@@ -11,7 +11,7 @@
 //
 // `alliesByTide`: per tide id (all 32), its ordered allied-tide ids,
 // best first — the decks that combine well with it; a pool fills from this list.
-// `tidePoolByDreamcaller`: per Dreamcaller UUID, the tides its lead is drawn
+// `tidePoolByDreamAvatar`: per DreamAvatar UUID, the tides its lead is drawn
 // from.
 //
 // After editing data/tides2.jsonc:
@@ -53,7 +53,7 @@
     "tide-31": ["tide-16","tide-07","tide-24","tide-17","tide-11","tide-03"],
     "tide-32": ["tide-15","tide-01","tide-26","tide-27","tide-30","tide-18"]
   },
-  "tidePoolByDreamcaller": {
+  "tidePoolByDreamAvatar": {
     "BDD3A3A7-242C-4D2B-8071-EBE56891A340": ["tide-01","tide-04","tide-23","tide-07","tide-17","tide-24","tide-13","tide-20","tide-18","tide-08"],
     "B99936CA-97F9-4930-AF5A-FA9EF92557EF": ["tide-02","tide-13","tide-28","tide-15","tide-06","tide-22","tide-31","tide-30","tide-17","tide-11"],
     "F0F5449E-01C2-4635-BCE1-76B179FC2108": ["tide-03","tide-10","tide-15","tide-16","tide-13","tide-20","tide-12","tide-31","tide-08","tide-17"],

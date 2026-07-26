@@ -74,9 +74,9 @@ export interface CoopActions {
   resetQuest: () => Promise<number>;
   loadState: (snapshot: unknown, battle?: unknown) => Promise<number>;
 
-  // --- dreamcaller ---
-  selectDreamcaller: (dreamcallerId: string) => Promise<number>;
-  rerollDreamcallerOffer: () => Promise<number>;
+  // --- dreamAvatar ---
+  selectDreamAvatar: (dreamAvatarId: string) => Promise<number>;
+  rerollDreamAvatarOffer: () => Promise<number>;
 
   // --- navigation ---
   setScreen: (screen: unknown, activeSiteId?: string | null) => Promise<number>;
@@ -325,10 +325,10 @@ export function makeActions(append: AppendFn): CoopActions {
         battle === undefined ? { snapshot } : { snapshot, battle },
       ),
 
-    // --- dreamcaller ---
-    selectDreamcaller: (dreamcallerId) =>
-      emit("SELECT_DREAMCALLER", { dreamcallerId }),
-    rerollDreamcallerOffer: () => emit("REROLL_DREAMCALLER_OFFER", {}),
+    // --- dreamAvatar ---
+    selectDreamAvatar: (dreamAvatarId) =>
+      emit("SELECT_DREAM_AVATAR", { dreamAvatarId }),
+    rerollDreamAvatarOffer: () => emit("REROLL_DREAM_AVATAR_OFFER", {}),
 
     // --- navigation ---
     setScreen: (screen, activeSiteId) =>

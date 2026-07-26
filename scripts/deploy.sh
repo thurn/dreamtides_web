@@ -8,7 +8,7 @@
 #
 #   1. Firebase Hosting — the code, HTML, and the small version-coupled
 #      `*-data.json` catalogs, built into `dist/` by `npm run build`.
-#   2. Firebase Storage bucket — the large binary art (card / dreamcaller /
+#   2. Firebase Storage bucket — the large binary art (card / dreamAvatar /
 #      dreamsign / atlas images), which `firebase.json` intentionally excludes
 #      from the Hosting deploy. The app loads it from the bucket via `assetUrl()`
 #      (see src/runtime/asset-url.ts). `npm run upload-assets` syncs it there.

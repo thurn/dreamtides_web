@@ -1,7 +1,7 @@
 import type { CardData } from "../../types/cards";
 import type {
   AffiliationContent,
-  DreamcallerContent,
+  DreamAvatarContent,
   DreamscapeContent,
   DreamsignTemplate,
 } from "../../types/content";
@@ -31,7 +31,7 @@ import {
   logOpponentDeckConstructed,
   resolveBattleAffiliation,
   resolveRunLayerCount,
-  selectOpponentDreamcaller,
+  selectOpponentDreamAvatar,
   type OpponentDeckLogArgs,
 } from "./opponent-deck";
 import { buildCorpusOpponentDeck } from "./corpus-opponent-deck";
@@ -43,7 +43,7 @@ import type {
 import { logEvent } from "../../logging";
 import type {
   BattleDeckCardDefinition,
-  BattleDreamcallerSummary,
+  BattleDreamAvatarSummary,
   BattleDreamsignSummary,
   BattleEnemyDescriptor,
   BattleInit,
@@ -92,13 +92,13 @@ export interface CreateBattleInitInput {
     | "completionLevel"
     | "currentDreamscape"
     | "deck"
-    | "dreamcaller"
+    | "dreamAvatar"
     | "dreamsigns"
     | "resolvedPackage"
     | "seed"
   >;
   cardDatabase: ReadonlyMap<number, CardData>;
-  dreamcallers: readonly DreamcallerContent[];
+  dreamAvatars: readonly DreamAvatarContent[];
   /**
    * Dreamscape definitions, used to resolve the affiliation backing the
    * dreamscape this battle takes place in so the opponent deck can lean toward
@@ -135,7 +135,7 @@ export interface CreateBattleInitInput {
   /**
    * The corpus of known-good human decklists the opponent deck is selected from
    * (corpus algorithm). When present, the opponent deck is a known-good decklist
-   * chosen for the opponent Dreamcaller's signature cards and the dreamscape
+   * chosen for the opponent DreamAvatar's signature cards and the dreamscape
    * affiliation, then tuned to the run position. Optional: when absent the
    * opponent deck falls back to the coherent draft simulation.
    */
@@ -168,7 +168,7 @@ export interface CreateBattleInitInput {
   aiMode?: boolean;
   /**
    * Logging hand-off for the opponent build's reconstruction events
-   * (`corpus_opponent_dreamcaller_selected` + `corpus_opponent_deck_constructed`,
+   * (`corpus_opponent_dream_avatar_selected` + `corpus_opponent_deck_constructed`,
    * or the coherent / fallback `opponent_deck_constructed`). When omitted,
    * {@link createBattleInit} emits the events inline at construction time. The
    * battle-fold provider passes a callback that captures the emit thunk and
@@ -213,7 +213,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     site,
     state,
     cardDatabase,
-    dreamcallers,
+    dreamAvatars,
     dreamsignTemplates = [],
     seedOverride,
   } = input;
@@ -244,11 +244,11 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       }
       return freezeBattleDeckCardDefinition(normalizePlayerDeckCard(entry, card));
     });
-  // The opponent is built by emulating its Dreamcaller's journey to the
+  // The opponent is built by emulating its DreamAvatar's journey to the
   // equivalent run depth (quests doc "Battle"): a deterministic opponent
-  // Dreamcaller drawn from the dreamscape's residents, a single dreamsign from
+  // DreamAvatar drawn from the dreamscape's residents, a single dreamsign from
   // the run midpoint onward, and a deck selected by the corpus algorithm — a
-  // known-good human decklist matching the Dreamcaller's signature cards and the
+  // known-good human decklist matching the DreamAvatar's signature cards and the
   // dreamscape affiliation, tuned to the run position. When no known-good corpus
   // is supplied the deck falls back to the coherent-draft simulation.
   const completionLevelAtStart = state.completionLevel;
@@ -257,19 +257,19 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     state.currentDreamscape === null
       ? null
       : state.atlas.nodes[state.currentDreamscape] ?? null;
-  // The opponent Dreamcaller is one of the dreamscape's RESIDENTS (the corpus
+  // The opponent DreamAvatar is one of the dreamscape's RESIDENTS (the corpus
   // algorithm fields native rivals); a neutral / starter dreamscape, or a
   // battle whose dreamscape content is absent, has no residents and the full
   // roster is used. Resolved before selection so it narrows the pick pool.
-  const residentDreamcallerIds = resolveDreamscapeResidentIds(
+  const residentDreamAvatarIds = resolveDreamscapeResidentIds(
     currentNode,
     input.dreamscapes ?? [],
   );
-  const opponentDreamcaller = selectOpponentDreamcaller(
-    dreamcallers,
-    state.dreamcaller?.id ?? null,
+  const opponentDreamAvatar = selectOpponentDreamAvatar(
+    dreamAvatars,
+    state.dreamAvatar?.id ?? null,
     streams.enemyDescriptor,
-    residentDreamcallerIds,
+    residentDreamAvatarIds,
   );
   const opponentDreamsigns = buildOpponentDreamsigns(
     completionLevelAtStart,
@@ -283,7 +283,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     input.affiliations ?? [],
   );
   const enemyDescriptorBase = buildEnemyDescriptor(
-    opponentDreamcaller,
+    opponentDreamAvatar,
     opponentDreamsigns,
     streams.enemyDescriptor.nextFloat,
   );
@@ -299,7 +299,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     aiMode || input.knownGoodDecklists === undefined
       ? null
       : buildCorpusOpponentDeck({
-          opponentDreamcaller,
+          opponentDreamAvatar,
           knownGoodDecklists: input.knownGoodDecklists,
           affiliation: battleAffiliation,
           cardDatabase,
@@ -321,7 +321,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     aiMode || corpusBuild !== null
       ? null
       : buildOpponentDeck({
-          opponentDreamcaller,
+          opponentDreamAvatar,
           fitModel: input.fitModel,
           draftRecords: input.draftRecords ?? [],
           poolContext: input.poolContext,
@@ -341,7 +341,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   ).map(freezeBattleDeckCardDefinition);
 
   // The opponent's signature cards: the three deck cards most representative of
-  // its Dreamcaller's ability, shown on the Battle Start screen. Resolved from
+  // its DreamAvatar's ability, shown on the Battle Start screen. Resolved from
   // the finalized enemy deck back to the catalog `CardData` so the selection can
   // weigh rules text, rarity, and cost. `selectSignatureCards` excludes
   // Legendary cards and prefers non-starter ones, falling back to starters only
@@ -351,7 +351,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     .map((definition) => cardDatabase.get(definition.cardNumber))
     .filter((card): card is CardData => card !== undefined);
   const signatureSelections = selectSignatureCards({
-    abilityText: opponentDreamcaller?.renderedText ?? "",
+    abilityText: opponentDreamAvatar?.renderedText ?? "",
     candidates: signatureCandidates,
     count: 3,
   });
@@ -367,20 +367,20 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   });
 
   // Assemble the deferred opponent reconstruction logs. The corpus path records
-  // the dreamscape-restricted Dreamcaller pick plus the corpus deck build; the
+  // the dreamscape-restricted DreamAvatar pick plus the corpus deck build; the
   // fallback / aiMode path records the coherent `opponent_deck_constructed`.
   const emitOpponentLogs = (): void => {
     // The signature-card pick is independent of which opponent-deck algorithm
     // ran, so it is recorded for every battle. `matchedTerms` / `score` make the
     // pick reconstructable: each card is chosen for the glossary keywords it
-    // shares with the Dreamcaller's ability (idf-weighted across the deck).
+    // shares with the DreamAvatar's ability (idf-weighted across the deck).
     logEvent("opponent_signature_cards_selected", {
       battleEntryKey,
       dreamscapeId: state.currentDreamscape,
       completionLevel: completionLevelAtStart,
-      dreamcallerId: opponentDreamcaller?.id ?? null,
-      dreamcallerName: opponentDreamcaller?.name ?? null,
-      abilityText: opponentDreamcaller?.renderedText ?? null,
+      dreamAvatarId: opponentDreamAvatar?.id ?? null,
+      dreamAvatarName: opponentDreamAvatar?.name ?? null,
+      abilityText: opponentDreamAvatar?.renderedText ?? null,
       signatureCards: signatureSelections.map((selection) => ({
         cardId: selection.cardId,
         cardNumber: selection.cardNumber,
@@ -390,23 +390,23 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       })),
     });
     if (corpusBuild !== null) {
-      logEvent("corpus_opponent_dreamcaller_selected", {
+      logEvent("corpus_opponent_dream_avatar_selected", {
         battleEntryKey,
         dreamscapeId: state.currentDreamscape,
         completionLevel: completionLevelAtStart,
         restrictedToDreamscapeResidents:
-          residentDreamcallerIds != null &&
-          residentDreamcallerIds.length > 0,
-        eligibleDreamcallerIds: residentDreamcallerIds ?? [],
-        selectedDreamcallerId: opponentDreamcaller?.id ?? null,
-        selectedDreamcallerName: opponentDreamcaller?.name ?? null,
+          residentDreamAvatarIds != null &&
+          residentDreamAvatarIds.length > 0,
+        eligibleDreamAvatarIds: residentDreamAvatarIds ?? [],
+        selectedDreamAvatarId: opponentDreamAvatar?.id ?? null,
+        selectedDreamAvatarName: opponentDreamAvatar?.name ?? null,
       });
       emitCorpusDeckLog?.();
       return;
     }
     const opponentDeckLogArgs: OpponentDeckLogArgs = {
       battleEntryKey,
-      opponentDreamcaller,
+      opponentDreamAvatar,
       poolVariant: aiMode
         ? "ai_starter"
         : input.poolContext?.poolVariant ?? DEFAULT_POOL_VARIANT,
@@ -432,7 +432,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     input.dreamwellCards ?? [],
     streams.dreamwellDeck,
   ).map((definition) => Object.freeze(definition));
-  const dreamcallerSummary = freezeBattleDreamcallerSummary(state.dreamcaller);
+  const dreamAvatarSummary = freezeBattleDreamAvatarSummary(state.dreamAvatar);
   const dreamsignSummaries = state.dreamsigns.map(freezeBattleDreamsignSummary);
   const essenceReward = applyBattleRewardModifiers(
     100 + completionLevelAtStart * 50,
@@ -474,7 +474,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     dreamwellDeck: Object.freeze(dreamwellDeck),
     enemyDescriptor,
     enemyDeckDefinition: Object.freeze(enemyDeckDefinition),
-    dreamcallerSummary,
+    dreamAvatarSummary,
     dreamsignSummaries: Object.freeze(dreamsignSummaries),
     atlasSnapshot: freezeAtlasSnapshot(state.atlas),
   });
@@ -595,15 +595,15 @@ function resolveSeed(
 
 /**
  * Assembles the enemy descriptor shown before the battle (quests doc "Battle"):
- * the chosen opponent Dreamcaller's identity and ability text, plus the concrete
+ * the chosen opponent DreamAvatar's identity and ability text, plus the concrete
  * dreamsigns it carries (none before the run midpoint, one from the midpoint on).
  * The dreamsigns are resolved by the caller via
  * {@link buildOpponentDreamsigns} so the midpoint gating lives in one place;
  * this only renders them for display. Falls back to a synthetic descriptor when
- * no opponent Dreamcaller is available.
+ * no opponent DreamAvatar is available.
  */
 export function buildEnemyDescriptor(
-  opponentDreamcaller: DreamcallerContent | null,
+  opponentDreamAvatar: DreamAvatarContent | null,
   dreamsignTemplates: readonly DreamsignTemplate[],
   random: () => number,
 ): BattleEnemyDescriptor {
@@ -618,7 +618,7 @@ export function buildEnemyDescriptor(
     }),
   );
 
-  if (opponentDreamcaller === null) {
+  if (opponentDreamAvatar === null) {
     return {
       id: "enemy:fallback",
       name: "Spectral Rival",
@@ -633,15 +633,15 @@ export function buildEnemyDescriptor(
 
   const portraitSeed = Math.floor(random() * 1_000_000);
   return {
-    id: `enemy:${opponentDreamcaller.id}:${String(portraitSeed)}`,
-    name: opponentDreamcaller.name,
-    // The Dreamcaller's title (e.g. "Wreckoner") rides the descriptor as its
+    id: `enemy:${opponentDreamAvatar.id}:${String(portraitSeed)}`,
+    name: opponentDreamAvatar.name,
+    // The DreamAvatar's title (e.g. "Wreckoner") rides the descriptor as its
     // subtitle so the Battle Start name plate and the in-battle side summary can
     // show it under the name.
-    subtitle: opponentDreamcaller.title,
-    imageNumber: opponentDreamcaller.imageNumber,
+    subtitle: opponentDreamAvatar.title,
+    imageNumber: opponentDreamAvatar.imageNumber,
     portraitSeed,
-    abilityText: opponentDreamcaller.renderedText,
+    abilityText: opponentDreamAvatar.renderedText,
     dreamsigns,
     // Filled in by the caller once the enemy deck is built.
     signatureCards: [],
@@ -649,7 +649,7 @@ export function buildEnemyDescriptor(
 }
 
 /**
- * The resident Dreamcaller ids of the dreamscape this battle takes place in, so
+ * The resident DreamAvatar ids of the dreamscape this battle takes place in, so
  * the opponent is one of the region's own rivals (corpus algorithm). Returns
  * `null` when the battle has no dreamscape node, the node's dreamscape content
  * is absent (e.g. battle-engine tests omit `dreamscapes`), or the dreamscape is
@@ -662,7 +662,7 @@ function resolveDreamscapeResidentIds(
   const dreamscapeId = node?.dreamscapeId;
   if (dreamscapeId == null) return null;
   const dreamscape = dreamscapes.find((d) => d.id === dreamscapeId);
-  const residents = dreamscape?.dreamcallerIds ?? null;
+  const residents = dreamscape?.dreamAvatarIds ?? null;
   return residents !== null && residents.length > 0 ? residents : null;
 }
 
@@ -850,23 +850,23 @@ function freezeBattleEnemyDescriptor(
   });
 }
 
-function freezeBattleDreamcallerSummary(
-  dreamcaller: QuestState["dreamcaller"],
-): BattleDreamcallerSummary | null {
-  if (dreamcaller === null) {
+function freezeBattleDreamAvatarSummary(
+  dreamAvatar: QuestState["dreamAvatar"],
+): BattleDreamAvatarSummary | null {
+  if (dreamAvatar === null) {
     return null;
   }
 
   return Object.freeze({
-    id: dreamcaller.id,
-    name: dreamcaller.name,
-    title: dreamcaller.title,
-    renderedText: dreamcaller.renderedText,
-    imageNumber: dreamcaller.imageNumber,
-    ...(dreamcaller.portraitFocus === undefined
+    id: dreamAvatar.id,
+    name: dreamAvatar.name,
+    title: dreamAvatar.title,
+    renderedText: dreamAvatar.renderedText,
+    imageNumber: dreamAvatar.imageNumber,
+    ...(dreamAvatar.portraitFocus === undefined
       ? {}
       : {
-          portraitFocus: Object.freeze({ ...dreamcaller.portraitFocus }),
+          portraitFocus: Object.freeze({ ...dreamAvatar.portraitFocus }),
         }),
   });
 }

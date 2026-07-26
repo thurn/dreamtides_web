@@ -16,8 +16,8 @@
 import { genesisFoldState } from "../fold-state";
 import type { BattleFoldState, FoldState } from "../fold-state";
 import { battleModeOf, resolveScript } from "../battle/fold";
-import { toQuestDreamcaller } from "../../data/dreamcaller-selection";
-import type { ResolvedDreamcallerPackage } from "../../types/content";
+import { toQuestDreamAvatar } from "../../data/dream-avatar-selection";
+import type { ResolvedDreamAvatarPackage } from "../../types/content";
 import type { QuestState, Screen } from "../../types/quest";
 import type { EffectStep } from "../battle/effect-step";
 import type { EffectRun, ScriptRef } from "../battle/fold";
@@ -26,45 +26,45 @@ import type { EventContext } from "../../eventlog/types";
 import { cloneBattleMutableState } from "../../battle/state/create-initial-state";
 
 // ---------------------------------------------------------------------------
-// Content-provider seam (SELECT_DREAMCALLER / START_QUEST)
+// Content-provider seam (SELECT_DREAM_AVATAR / START_QUEST)
 // ---------------------------------------------------------------------------
 
 /**
  * The deterministic content the two run-assembly cases need but cannot compute
- * inside a pure reducer: the real Dreamcaller pool, atlas, and draft state are
- * generated from TOML-sourced card/dreamcaller data that only loads
+ * inside a pure reducer: the real DreamAvatar pool, atlas, and draft state are
+ * generated from TOML-sourced card/dreamAvatar data that only loads
  * asynchronously (`loadQuestContent` in src/data/), while the reducer must fold
  * synchronously from `(state, event, ctx)` alone.
  *
  * The impure side (app/coop bootstrap, which has already loaded the content)
  * registers a provider whose functions are PURE and DETERMINISTIC in
- * `(dreamcallerId, seed)`: the run `seed` is always `quest.seed` (fixed per
+ * `(dreamAvatarId, seed)`: the run `seed` is always `quest.seed` (fixed per
  * room at genesis), never a freshly-minted one, so two clients folding the same
- * log resolve byte-identical packages. Legacy `startQuestFromDreamcaller` minted
+ * log resolve byte-identical packages. Legacy `startQuestFromDreamAvatar` minted
  * a fresh `generateQuestSeed()` (a `crypto`/`Math.random` source); pinning the
  * generation seed to `quest.seed` is the determinism fix.
  *
  * SEAM: real content registration is deferred to the integration task that
  * wires the reducer into src/coop/. Until a provider is registered,
- * SELECT_DREAMCALLER and START_QUEST bounce (a recorded no-op, never a throw).
+ * SELECT_DREAM_AVATAR and START_QUEST bounce (a recorded no-op, never a throw).
  */
 export interface QuestLifecycleContentProvider {
   /**
-   * Resolve one Dreamcaller's package deterministically from its id and the
+   * Resolve one DreamAvatar's package deterministically from its id and the
    * run seed. Returns `null` when the id is unknown (the case bounces).
    */
-  resolveDreamcallerPackage(
-    dreamcallerId: string,
+  resolveDreamAvatarPackage(
+    dreamAvatarId: string,
     seed: string,
-  ): ResolvedDreamcallerPackage | null;
+  ): ResolvedDreamAvatarPackage | null;
   /**
    * Assemble the full started-run quest state (starter deck, atlas, draft
    * state, essence, opening screen) deterministically. Must preserve
-   * `input.quest.seed`. Returns `null` to bounce (e.g. unknown dreamcaller).
+   * `input.quest.seed`. Returns `null` to bounce (e.g. unknown dreamAvatar).
    */
   startQuest(input: {
     quest: QuestState;
-    dreamcallerId: string;
+    dreamAvatarId: string;
     seed: string;
   }): QuestState | null;
 }
@@ -295,14 +295,14 @@ export function dismissStartingDeckPopup(quest: QuestState): QuestState | null {
 }
 
 /**
- * `REROLL_DREAMCALLER_OFFER { }` — increment the shared quest-start reroll
+ * `REROLL_DREAM_AVATAR_OFFER { }` — increment the shared quest-start reroll
  * count. The screen adapter combines this count with the immutable room seed,
  * so the event log reproduces the same offer on every client and reload.
  */
-export function rerollDreamcallerOffer(
+export function rerollDreamAvatarOffer(
   quest: QuestState,
 ): QuestState | null {
-  if (quest.dreamcaller !== null || quest.screen.type !== "questStart") {
+  if (quest.dreamAvatar !== null || quest.screen.type !== "questStart") {
     return null;
   }
   return {
@@ -315,47 +315,47 @@ export function rerollDreamcallerOffer(
 }
 
 // ---------------------------------------------------------------------------
-// Dreamcaller selection & run assembly
+// DreamAvatar selection & run assembly
 // ---------------------------------------------------------------------------
 
 /**
- * `SELECT_DREAMCALLER { dreamcallerId }` — legacy `setDreamcallerSelection`,
+ * `SELECT_DREAM_AVATAR { dreamAvatarId }` — legacy `setDreamAvatarSelection`,
  * with the package resolution the legacy mutation trusted from the client
  * moved in-reducer: the package is derived deterministically from
- * `(dreamcallerId, quest.seed)` via the registered content provider (see
+ * `(dreamAvatarId, quest.seed)` via the registered content provider (see
  * {@link QuestLifecycleContentProvider}). Bounces with no provider or an
- * unknown dreamcaller. The state merge mirrors legacy `applyDreamcallerSelection`.
+ * unknown dreamAvatar. The state merge mirrors legacy `applyDreamAvatarSelection`.
  */
-export function selectDreamcaller(
+export function selectDreamAvatar(
   quest: QuestState,
   payload: Record<string, unknown>,
 ): QuestState | null {
-  const dreamcallerId = payload.dreamcallerId;
-  if (typeof dreamcallerId !== "string") return null;
+  const dreamAvatarId = payload.dreamAvatarId;
+  if (typeof dreamAvatarId !== "string") return null;
   const provider = contentProvider;
   if (provider === null) return null;
-  const resolvedPackage = provider.resolveDreamcallerPackage(
-    dreamcallerId,
+  const resolvedPackage = provider.resolveDreamAvatarPackage(
+    dreamAvatarId,
     quest.seed,
   );
   if (resolvedPackage === null) return null;
   return {
     ...quest,
-    dreamcaller: toQuestDreamcaller(resolvedPackage.dreamcaller),
+    dreamAvatar: toQuestDreamAvatar(resolvedPackage.dreamAvatar),
     resolvedPackage,
     remainingDreamsignPool: [...resolvedPackage.dreamsignPoolIds],
   };
 }
 
 /**
- * `START_QUEST { dreamcallerId }` — legacy `startQuest` / `startQuestFromDreamcaller`.
+ * `START_QUEST { dreamAvatarId }` — legacy `startQuest` / `startQuestFromDreamAvatar`.
  *
  * The full run assembly (pool package, starter deck, atlas generation, draft
  * state) is content- and generator-heavy, so it is delegated to the registered
- * content provider, which is deterministic in `(dreamcallerId, quest.seed)`.
+ * content provider, which is deterministic in `(dreamAvatarId, quest.seed)`.
  * The reducer owns the guards the legacy transaction owned: it is a no-op once a
- * dreamcaller is already selected (legacy checked `questState.dreamcaller !==
- * null`), and it bounces when no provider is wired or the dreamcaller is unknown.
+ * dreamAvatar is already selected (legacy checked `questState.dreamAvatar !==
+ * null`), and it bounces when no provider is wired or the dreamAvatar is unknown.
  *
  * The provider MUST preserve `quest.seed` (the room seed pinned at genesis) so
  * RESET_QUEST can always reconstruct the genesis fold.
@@ -365,14 +365,14 @@ export function startQuest(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): QuestState | null {
-  if (quest.dreamcaller !== null) return null;
-  const dreamcallerId = payload.dreamcallerId;
-  if (typeof dreamcallerId !== "string") return null;
+  if (quest.dreamAvatar !== null) return null;
+  const dreamAvatarId = payload.dreamAvatarId;
+  if (typeof dreamAvatarId !== "string") return null;
   const provider = contentProvider;
   if (provider === null) return null;
   const started = provider.startQuest({
     quest,
-    dreamcallerId,
+    dreamAvatarId,
     seed: quest.seed,
   });
   return started === null
@@ -442,7 +442,7 @@ export function loadState(
  *   - `snapshot.seed === state.quest.seed` (the room seed, pinned equal to
  *     `genesis.seed` at creation) — a foreign seed would desync every derived
  *     generator;
- *   - no run field (`dreamcaller` / `resolvedPackage` / `draftState`) that is
+ *   - no run field (`dreamAvatar` / `resolvedPackage` / `draftState`) that is
  *     currently non-null is nulled by the snapshot (the run-field nullability
  *     invariant the property sweep protects);
  *   - if a battle slice is supplied, it is a well-formed {@link BattleFoldState}
@@ -461,7 +461,7 @@ export function validateLoadedState(
   if (snapshot.seed !== state.quest.seed) return null;
 
   const before = state.quest;
-  if (before.dreamcaller != null && snapshot.dreamcaller == null) return null;
+  if (before.dreamAvatar != null && snapshot.dreamAvatar == null) return null;
   if (before.resolvedPackage != null && snapshot.resolvedPackage == null)
     return null;
   if (before.draftState != null && snapshot.draftState == null) return null;
@@ -518,7 +518,7 @@ function isQuestStateShape(value: unknown): value is QuestState {
   if (!isRecord(value.siteRuntime)) return false;
   if (!Array.isArray(value.battleModifiers)) return false;
   // Nullable structural fields: null or an object.
-  for (const key of ["dreamcaller", "resolvedPackage", "draftState"]) {
+  for (const key of ["dreamAvatar", "resolvedPackage", "draftState"]) {
     const field = value[key];
     if (field !== null && !isRecord(field)) return false;
   }

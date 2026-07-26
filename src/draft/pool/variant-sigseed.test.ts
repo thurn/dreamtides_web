@@ -1,4 +1,4 @@
-// `sigseed` grows a Dreamcaller's pool ONLY from its signature cards: each run
+// `sigseed` grows a DreamAvatar's pool ONLY from its signature cards: each run
 // seeds the pool with a random subset of the signature and expands by the shared
 // affinity grower. These tests pin the properties that make that true and safe:
 //   * the multi-seed grower is a faithful generalisation — a one-card seed set

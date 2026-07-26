@@ -8,7 +8,7 @@ import { layerOrdinal } from "../types/layer-name";
 import type { QuestContent } from "../data/quest-content";
 import type {
   ApollyonIncarnationContent,
-  DreamcallerContent,
+  DreamAvatarContent,
 } from "../types/content";
 import {
   buildTestCorpusCards,
@@ -21,10 +21,10 @@ import {
   qaSceneLoadsBattle,
 } from "./qa-scenes";
 
-function makeDreamcaller(): DreamcallerContent {
+function makeDreamAvatar(): DreamAvatarContent {
   return {
-    id: "dreamcaller-1",
-    name: "Test Dreamcaller",
+    id: "dream-avatar-1",
+    name: "Test DreamAvatar",
     title: "Caller of Tests",
     renderedText: "Test ability.",
     imageNumber: "0001",
@@ -58,7 +58,7 @@ function makeQuestContent(
   );
   return {
     cardDatabase,
-    dreamcallers: [makeDreamcaller()],
+    dreamAvatars: [makeDreamAvatar()],
     dreamwellCards: [],
     dreamsignTemplates: [],
     dreamscapes: MINIMAL_DREAMSCAPES,
@@ -92,15 +92,15 @@ describe("QA scenes", () => {
   });
 });
 
-describe('the "dreamcaller-select" QA scene', () => {
-  it("parks the run on the questStart Dreamcaller selection screen", () => {
-    const state = buildQaScene("dreamcaller-select", makeQuestContent());
+describe('the "dream-avatar-select" QA scene', () => {
+  it("parks the run on the questStart DreamAvatar selection screen", () => {
+    const state = buildQaScene("dream-avatar-select", makeQuestContent());
 
     expect(state).not.toBeNull();
     expect(state?.screen.type).toBe("questStart");
-    // The selection screen is shown before a Dreamcaller is chosen, so no
-    // Dreamcaller, package, or draft state has been resolved yet.
-    expect(state?.dreamcaller).toBeNull();
+    // The selection screen is shown before a DreamAvatar is chosen, so no
+    // DreamAvatar, package, or draft state has been resolved yet.
+    expect(state?.dreamAvatar).toBeNull();
     expect(state?.resolvedPackage).toBeNull();
     expect(state?.draftState).toBeNull();
   });
@@ -115,7 +115,7 @@ describe('the "atlas" QA scene', () => {
     // Between dreamscapes: no dreamscape entered and no active site.
     expect(state?.currentDreamscape).toBeNull();
     expect(state?.activeSiteId).toBeNull();
-    expect(state?.dreamcaller?.id).toBe("dreamcaller-1");
+    expect(state?.dreamAvatar?.id).toBe("dream-avatar-1");
 
     const bossNodeId = state?.atlas.bossNodeId;
     expect(bossNodeId).toBeTruthy();

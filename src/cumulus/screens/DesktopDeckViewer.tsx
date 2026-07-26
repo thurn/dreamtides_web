@@ -8,9 +8,9 @@
 //
 // The viewer is three regions:
 //   - a header naming the screen and carrying the corner close disc;
-//   - a LEFT SIDEBAR profiling the run — the Dreamcaller as a bare portrait
+//   - a LEFT SIDEBAR profiling the run — the DreamAvatar as a bare portrait
 //     that reveals its name, title, and ability on hover / press through the
-//     shared InfoCard (the same reveal the quest status bar's Dreamcaller bust
+//     shared InfoCard (the same reveal the quest status bar's DreamAvatar bust
 //     uses), then the collected dreamsigns as hoverable art;
 //   - the MAIN column: a control bar, then a scrolling grid of the deck's cards.
 //
@@ -42,9 +42,9 @@ import type { Dreamsign as DreamsignData } from "../../types/quest";
 import { GameCard } from "../components/card/CardView";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import {
-  DreamcallerPortrait,
-  type DreamcallerVisual,
-} from "../components/hud/DreamcallerPortrait";
+  DreamAvatarPortrait,
+  type DreamAvatarVisual,
+} from "../components/hud/DreamAvatarPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { Select } from "../components/controls/Select";
 import { SegmentedControl } from "../components/controls/SegmentedControl";
@@ -65,11 +65,11 @@ import {
   filterAndSortDesktopDeckCards,
 } from "./desktop-deck-filter";
 
-/** The Dreamcaller shown in the sidebar: the portrait's visual plus rules text. */
-export interface DeckDreamcallerView extends DreamcallerVisual {
-  /** Stable Dreamcaller UUID. */
+/** The DreamAvatar shown in the sidebar: the portrait's visual plus rules text. */
+export interface DeckDreamAvatarView extends DreamAvatarVisual {
+  /** Stable DreamAvatar UUID. */
   id: string;
-  /** The Dreamcaller's ability text, revealed through the shared InfoCard. */
+  /** The DreamAvatar's ability text, revealed through the shared InfoCard. */
   renderedText: string;
 }
 
@@ -77,8 +77,8 @@ export interface DeckDreamcallerView extends DreamcallerVisual {
 export interface DesktopDeckView {
   /** The deck's cards in acquisition order. */
   cards: DeckCardView[];
-  /** The run's Dreamcaller, or null before one is chosen. */
-  dreamcaller: DeckDreamcallerView | null;
+  /** The run's DreamAvatar, or null before one is chosen. */
+  dreamAvatar: DeckDreamAvatarView | null;
   /** The dreamsigns collected so far, in collection order. */
   dreamsigns: DreamsignData[];
 }
@@ -109,11 +109,11 @@ const SIDEBAR_WIDTH_PX = 268;
 const DREAMSIGN_TILE_PX = 92;
 
 /**
- * Edge length of the Dreamcaller portrait in the sidebar. Matched to a
- * dreamsign tile so the run's collectibles — the Dreamcaller and its
+ * Edge length of the DreamAvatar portrait in the sidebar. Matched to a
+ * dreamsign tile so the run's collectibles — the DreamAvatar and its
  * dreamsigns — read at one consistent scale down the column.
  */
-const DREAMCALLER_PORTRAIT_PX = DREAMSIGN_TILE_PX;
+const DREAM_AVATAR_PORTRAIT_PX = DREAMSIGN_TILE_PX;
 
 /**
  * The desktop deck viewer: a full-screen alpha scrim over the unblurred scene,
@@ -197,7 +197,7 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
         <Header count={view.cards.length} onClose={onClose} />
         <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
           <Sidebar
-            dreamcaller={view.dreamcaller}
+            dreamAvatar={view.dreamAvatar}
             dreamsigns={view.dreamsigns}
           />
           <main
@@ -292,14 +292,14 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
 }
 
 /**
- * The left profile sidebar: the run's Dreamcaller (portrait, name, title, rules
+ * The left profile sidebar: the run's DreamAvatar (portrait, name, title, rules
  * text) above the collected dreamsigns as hoverable art tiles.
  */
 function Sidebar({
-  dreamcaller,
+  dreamAvatar,
   dreamsigns,
 }: {
-  dreamcaller: DeckDreamcallerView | null;
+  dreamAvatar: DeckDreamAvatarView | null;
   dreamsigns: DreamsignData[];
 }) {
   return (
@@ -314,8 +314,8 @@ function Sidebar({
         gap: token("--space-7"),
       }}
     >
-      {dreamcaller !== null && (
-        <DreamcallerBlock dreamcaller={dreamcaller} />
+      {dreamAvatar !== null && (
+        <DreamAvatarBlock dreamAvatar={dreamAvatar} />
       )}
       <DreamsignsBlock dreamsigns={dreamsigns} />
     </aside>
@@ -323,29 +323,29 @@ function Sidebar({
 }
 
 /**
- * The Dreamcaller profile: a bare portrait alone, with its name, title, and
+ * The DreamAvatar profile: a bare portrait alone, with its name, title, and
  * ability tucked into a hover / press reveal instead of laid out beneath it.
  * The reveal is the shared InfoCard `fullBleed` variant driven by the one
  * press-reveal engine (hover on a fine pointer, press-hold on touch) and
  * portalled into the screen stage — the same reveal the quest status bar's
- * Dreamcaller bust uses, so the two read identically.
+ * DreamAvatar bust uses, so the two read identically.
  */
-function DreamcallerBlock({
-  dreamcaller,
+function DreamAvatarBlock({
+  dreamAvatar,
 }: {
-  dreamcaller: DeckDreamcallerView;
+  dreamAvatar: DeckDreamAvatarView;
 }) {
   return (
     <section
       style={{ display: "flex", flexDirection: "column", gap: token("--space-6") }}
     >
-      <SidebarSectionHeader label="Dreamcaller" />
+      <SidebarSectionHeader label="Avatar" />
       <div style={{ display: "flex", justifyContent: "flex-start" }}>
         {/* The portrait itself is the reveal trigger: Pressable owns the one
             shared press/hover scale, while the reveal coordinator (its pointer handlers
             chained through) owns the show/hide of the portalled InfoCard. The
             button carries the accent frame — the same 2px violet border, glow,
-            and control radius the quest status bar's Dreamcaller bust wears — so
+            and control radius the quest status bar's DreamAvatar bust wears — so
             the two portraits read as the same object; `overflow: hidden` clips
             the art to that rounded frame. */}
         <div
@@ -359,11 +359,11 @@ function DreamcallerBlock({
             lineHeight: 0,
           }}
         >
-          <DreamcallerPortrait
-            dreamcaller={dreamcaller}
+          <DreamAvatarPortrait
+            dreamAvatar={dreamAvatar}
             variant="panel"
-            size={DREAMCALLER_PORTRAIT_PX}
-            profile={{ id: dreamcaller.id, ability: dreamcaller.renderedText }}
+            size={DREAM_AVATAR_PORTRAIT_PX}
+            profile={{ id: dreamAvatar.id, ability: dreamAvatar.renderedText }}
           />
         </div>
       </div>

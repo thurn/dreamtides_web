@@ -21,7 +21,7 @@ export function QuestCompleteScreenAdapter() {
     hasLoggedRef.current = true;
     logEvent("quest_completed", {
       runId: state.runId,
-      dreamcallerId: state.dreamcaller?.id ?? null,
+      dreamAvatarId: state.dreamAvatar?.id ?? null,
       battlesWon: state.completionLevel,
       completedDreamscapeIds: Object.values(state.atlas.nodes)
         .filter((node) => node.state === "completed")

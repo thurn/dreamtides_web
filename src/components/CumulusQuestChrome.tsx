@@ -71,14 +71,14 @@ export function CumulusQuestChrome({
             essence={hud.essence}
             deck={hud.deck}
             onViewDeck={handlers.onViewDeck}
-            dreamcaller={hud.dreamcaller}
+            dreamAvatar={hud.dreamAvatar}
             dreamsigns={hud.dreamsigns}
             size={isDesktop ? "grand" : "compact"}
             variant={variant}
           />
         </ErrorBoundary>
       )}
-      {variant === "quest" && state.dreamcaller !== null && (
+      {variant === "quest" && state.dreamAvatar !== null && (
         <ErrorBoundary scope="overlay:cumulus-quest-menu">
           <DreamscapeQuestMenu
             onOpenDeckViewer={handlers.onViewDeck ?? NOOP}

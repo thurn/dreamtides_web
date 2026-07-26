@@ -106,9 +106,9 @@ function makeSide(
       { id: `${owner}-front-empty`, card: null },
     ],
     status: {
-      dreamcaller: {
+      dreamAvatar: {
         imageNumber: owner === "enemy" ? "0042" : "0007",
-        name: owner === "enemy" ? "Enemy Dreamcaller" : "Player Dreamcaller",
+        name: owner === "enemy" ? "Enemy Avatar" : "Player Avatar",
         title: "Fixture",
       },
       currentEnergy: owner === "enemy" ? 2 : 3,
@@ -153,7 +153,7 @@ function makeView(): MobileBattleView {
     playerHand,
     result: null,
     inspector: {
-      opponentName: "Enemy Dreamcaller",
+      opponentName: "Enemy Avatar",
       perspective: "player",
       turn: "3",
       phase: "Day",

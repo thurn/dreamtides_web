@@ -1,20 +1,20 @@
-// Experiment: does `picksig` give each Dreamcaller a pool that is THEMATICALLY
+// Experiment: does `picksig` give each DreamAvatar a pool that is THEMATICALLY
 // TIED to its signature while still offering a wide VARIETY of distinct,
 // differently-leaning pools?
 //
 // `picksig` is `pickcohere` with one change: its best-of-K candidate seeds are
 // drawn from a distribution biased toward the cards that partner the chosen
-// Dreamcaller's signature (its `signatureCards` UUIDs), instead of uniformly.
-// This script measures, per Dreamcaller with a signature, over many seeds:
+// DreamAvatar's signature (its `signatureCards` UUIDs), instead of uniformly.
+// This script measures, per DreamAvatar with a signature, over many seeds:
 //
 //   * VARIETY  -- the number of DISTINCT pools produced across the seeds (a pool
 //     is its sorted multiset of card UUIDs). The design target is >= 50 distinct
-//     pools per Dreamcaller, so one Dreamcaller never collapses to a handful of
+//     pools per DreamAvatar, so one DreamAvatar never collapses to a handful of
 //     fixed lists.
 //   * ON-THEME -- the mean signature affinity of the pooled cards (the same
 //     normalised affinity `picksig` steers on, via `buildSignatureAffinity`),
 //     compared against the `pickcohere` baseline on the SAME seeds. picksig
-//     should land markedly higher: its pools are about the Dreamcaller.
+//     should land markedly higher: its pools are about the DreamAvatar.
 //   * LEAN SPREAD -- the mean pairwise Jaccard DISTANCE between distinct pools.
 //     Above zero means the pools genuinely differ (e.g. a combo lean vs an
 //     aggro lean of the same identity); not near one means they still share a
@@ -30,7 +30,7 @@
 // reads `buildSignatureAffinity` / `buildPickSigCorpus` for the on-theme metric,
 // so what it measures is what ships.
 //
-// Run: node scripts/picksig-signature-experiment.mjs [--seeds 200] [--dreamcaller "Kell Tarn"] [--json]
+// Run: node scripts/picksig-signature-experiment.mjs [--seeds 200] [--dream-avatar "Kell Tarn"] [--json]
 
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -59,16 +59,16 @@ function has(argv, name) {
 function loadContext(argv) {
   const cards = readJson("public/cards_v2-data.json");
   const draftRecords = readJson("public/draft-records-data.json");
-  let dreamcallers = readJson("public/dreamcallers-v2-data.json");
+  let dreamAvatars = readJson("public/dream-avatars-v2-data.json");
 
-  const dcFilter = flag(argv, "--dreamcaller", null);
+  const dcFilter = flag(argv, "--dream-avatar", null);
   if (dcFilter) {
     const q = dcFilter.toLowerCase();
-    dreamcallers = dreamcallers.filter(
+    dreamAvatars = dreamAvatars.filter(
       (d) => d.id === dcFilter || d.name.toLowerCase() === q,
     );
-    if (!dreamcallers.length) {
-      console.error(`No Dreamcaller matches "${dcFilter}".`);
+    if (!dreamAvatars.length) {
+      console.error(`No DreamAvatar matches "${dcFilter}".`);
       process.exit(1);
     }
   }
@@ -78,7 +78,7 @@ function loadContext(argv) {
       ? draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds }))
       : undefined;
   const poolData = buildPoolData(cards, undefined, pickRecords);
-  return { dreamcallers, poolData };
+  return { dreamAvatars, poolData };
 }
 
 // A pool's canonical identity: its card UUIDs with copy counts, sorted. Two pools
@@ -126,14 +126,14 @@ function main() {
   const argv = process.argv.slice(2);
   const seeds = Number(flag(argv, "--seeds", "200"));
   const asJson = has(argv, "--json");
-  const { dreamcallers, poolData } = loadContext(argv);
+  const { dreamAvatars, poolData } = loadContext(argv);
   const corpus = buildPickSigCorpus(poolData);
   if (!corpus) {
     console.error("No pick-record corpus is available (run scripts/setup-assets.mjs).");
     process.exit(1);
   }
 
-  const withSig = dreamcallers.filter((d) => (d.signatureCards ?? []).length > 0);
+  const withSig = dreamAvatars.filter((d) => (d.signatureCards ?? []).length > 0);
   const rows = [];
   let fallbackChecked = 0;
   let fallbackMatched = 0;
@@ -206,7 +206,7 @@ function main() {
     }
 
     rows.push({
-      dreamcaller: dc.name,
+      dreamAvatar: dc.name,
       signatureInCorpus: [...sigAffinity.keys()].filter((k) => sigAffinity.get(k) === 1).length,
       distinctPools: distinct.size,
       onThemeSig: mean(sigScores),
@@ -224,13 +224,13 @@ function main() {
 
   const belowTarget = rows.filter((r) => r.distinctPools < 50);
   console.log(
-    `picksig signature experiment -- ${rows.length} Dreamcallers with an in-corpus signature, ${seeds} seeds each\n`,
+    `picksig signature experiment -- ${rows.length} DreamAvatars with an in-corpus signature, ${seeds} seeds each\n`,
   );
   console.log(
     `Fallback invariant (empty signature == pickcohere): ${fallbackMatched}/${fallbackChecked} ${fallbackMatched === fallbackChecked ? "OK" : "MISMATCH"}\n`,
   );
   console.log(
-    "Dreamcaller".padEnd(26) +
+    "DreamAvatar".padEnd(26) +
       "distinct".padStart(9) +
       "onTheme".padStart(9) +
       "base".padStart(8) +
@@ -240,7 +240,7 @@ function main() {
   for (const r of rows) {
     const lift = r.onThemeBase > 0 ? r.onThemeSig / r.onThemeBase : Infinity;
     console.log(
-      r.dreamcaller.padEnd(26) +
+      r.dreamAvatar.padEnd(26) +
         String(r.distinctPools).padStart(9) +
         r.onThemeSig.toFixed(3).padStart(9) +
         r.onThemeBase.toFixed(3).padStart(8) +
@@ -249,11 +249,11 @@ function main() {
     );
   }
   console.log(
-    `\nVariety target (>= 50 distinct pools): ${rows.length - belowTarget.length}/${rows.length} Dreamcallers pass.`,
+    `\nVariety target (>= 50 distinct pools): ${rows.length - belowTarget.length}/${rows.length} DreamAvatars pass.`,
   );
   if (belowTarget.length) {
     console.log(
-      `  below target: ${belowTarget.map((r) => `${r.dreamcaller} (${r.distinctPools})`).join(", ")}`,
+      `  below target: ${belowTarget.map((r) => `${r.dreamAvatar} (${r.distinctPools})`).join(", ")}`,
     );
   }
   console.log(

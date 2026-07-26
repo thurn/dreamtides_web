@@ -72,14 +72,14 @@ function loadContext() {
   const cards = readJson("public/cards_v2-data.json");
   const decklists = readJson("public/decklists-data.json");
   const draftRecords = readJson("public/draft-records-data.json");
-  const dreamcallers = readJson("public/dreamcallers-v2-data.json");
+  const dreamAvatars = readJson("public/dream-avatars-v2-data.json");
   const meta = readJson("data/buildaround_support.json");
   const pickRecords =
     Array.isArray(draftRecords) && draftRecords.length
       ? draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds }))
       : undefined;
   const poolData = buildPoolData(cards, decklists, pickRecords);
-  return { dreamcallers, meta, poolData };
+  return { dreamAvatars, meta, poolData };
 }
 
 // Stable JSON of a pool's capped copy counts, for byte-identity comparison.
@@ -90,13 +90,13 @@ function canonicalPool(pool) {
 }
 
 // 1. Corpus fidelity: `embedded` on the COMMITTED corpus == official sigseed, over
-//    every (Dreamcaller, seed) in the simulation. Requires
+//    every (DreamAvatar, seed) in the simulation. Requires
 //    ctx.poolData.affinityCorpus to be the committed corpus before calling.
 function checkFidelity(ctx, seeds) {
   let checked = 0;
   let identical = 0;
   const mismatches = [];
-  for (const dc of ctx.dreamcallers) {
+  for (const dc of ctx.dreamAvatars) {
     const sig = dc.signatureCards ?? [];
     for (let seed = 0; seed < seeds; seed++) {
       const sigPool = generatePoolFromData(ctx.poolData, seed >>> 0, undefined, "sigseed", undefined, POOL_TARGET_SIZE, sig);
@@ -109,7 +109,7 @@ function checkFidelity(ctx, seeds) {
   return { checked, identical, mismatches, pass: identical === checked };
 }
 
-// Compute the headline metrics for a variant over `seeds × dreamcallers` pools.
+// Compute the headline metrics for a variant over `seeds × dreamAvatars` pools.
 function computeMetrics(ctx, variant, seeds) {
   const allAdequacies = [];
   const steeredAdequacies = [];
@@ -120,11 +120,11 @@ function computeMetrics(ctx, variant, seeds) {
   const distinctCards = new Set();
 
   const steeredByDc = new Map();
-  for (const dc of ctx.dreamcallers) {
+  for (const dc of ctx.dreamAvatars) {
     steeredByDc.set(dc.name, dominantSignatureTheme(dc.signatureCards, ctx.meta) !== null);
   }
 
-  for (const dc of ctx.dreamcallers) {
+  for (const dc of ctx.dreamAvatars) {
     const sig = dc.signatureCards ?? [];
     const steered = steeredByDc.get(dc.name) === true;
     for (let seed = 0; seed < seeds; seed++) {
@@ -245,7 +245,7 @@ function run() {
 
   const f3 = (x) => x.toFixed(3);
   const f1 = (x) => x.toFixed(1);
-  console.log(`Affinity-corpus parity (${seeds} seeds x ${ctx.dreamcallers.length} Dreamcallers)\n`);
+  console.log(`Affinity-corpus parity (${seeds} seeds x ${ctx.dreamAvatars.length} DreamAvatars)\n`);
   console.log(`1. Corpus fidelity (embedded on the committed corpus == official sigseed):`);
   console.log(`   ${fidelity.identical}/${fidelity.checked} pools byte-identical   ${fidelity.pass ? "PASS" : "FAIL"}`);
   if (fidelity.mismatches.length) {

@@ -16,7 +16,7 @@ const CARD_UUID_PATTERN =
 const TUTORIAL_HIGHLIGHT_TAG_PATTERN = /\[\/?yellow\]/gu;
 const MARKUP_LIKE_TAG_PATTERN = /\[\/?[A-Za-z][A-Za-z0-9-]*\]/gu;
 const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
-const DEFAULT_DREAMCALLER_SPEECH_BUBBLE_WIDTH = 300;
+const DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
 
 function invalid(message) {
   const error = new Error(message);
@@ -113,7 +113,7 @@ function validateTutorialSpeechBubble(value, actionId, required) {
     value.bubbleWidth ??
     (speaker === "mira"
       ? DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH
-      : DEFAULT_DREAMCALLER_SPEECH_BUBBLE_WIDTH);
+      : DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH);
   if (
     typeof bubbleWidth !== "number" ||
     !Number.isFinite(bubbleWidth) ||
@@ -222,7 +222,7 @@ export function validateTutorialActions(value) {
         wait,
       };
     }
-    if (action === "animate-dreamcaller-portrait") {
+    if (action === "animate-dream-avatar-portrait") {
       const owner = candidate.owner ?? "player";
       const pause = candidate.pause ?? 0;
       const duration = candidate.duration ?? 1.2;

@@ -1,25 +1,25 @@
-// The desktop (wide-viewport) Dreamcaller-select layout: a small purple eyebrow
-// title near the top of a shared background, then the offered Dreamcallers side
+// The desktop (wide-viewport) DreamAvatar-select layout: a small purple eyebrow
+// title near the top of a shared background, then the offered DreamAvatars side
 // by side — each the standing full-body cutout over a soft glow, the name
 // floating above the head, and a locked-size console card riding up over the
 // legs (ability text, a row of hover-only tide discs + starting-essence chip,
 // and a full-width purple accent GlassButton). All columns render at exactly
 // the same size. It shares the view types and console primitives with the mobile
 // carousel via `quest-start-shared`, and both layouts use the same named
-// Dreamcaller ability source; `QuestStartScreen` picks by viewport.
-// PURE: renders from a view-model and reports the chosen Dreamcaller via `onPick`.
+// DreamAvatar ability source; `QuestStartScreen` picks by viewport.
+// PURE: renders from a view-model and reports the chosen DreamAvatar via `onPick`.
 
 import { Motes } from "../components/hud/Motes";
 import { GroupPanel } from "../components/controls/GroupPanel";
 import { GlassButton } from "../components/controls/GlassButton";
 import { token } from "../primitives/tokens";
-import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
-import { DreamcallerAbilityText } from "../components/hud/DreamcallerAbilityText";
+import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
+import { DreamAvatarAbilityText } from "../components/hud/DreamAvatarAbilityText";
 import {
   ConsoleDivider,
   QuestStartRerollControl,
   TidesEssenceBlock,
-  type DreamcallerOfferView,
+  type DreamAvatarOfferView,
   type QuestStartScreenProps,
 } from "./quest-start-shared";
 
@@ -47,14 +47,14 @@ function DesktopTitle() {
         textAlign: "center",
       }}
     >
-      Choose Your Dreamcaller
+      Choose Your Avatar
     </div>
   );
 }
 
-/** The Dreamcaller's name + epithet, floating on the portrait above the head.
+/** The DreamAvatar's name + epithet, floating on the portrait above the head.
  * On-media, so it earns legibility from the outline dilation, not a plate. */
-function PortraitName({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
+function PortraitName({ dreamAvatar }: { dreamAvatar: DreamAvatarOfferView }) {
   return (
     <div
       style={{
@@ -75,7 +75,7 @@ function PortraitName({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
           lineHeight: 1.05,
         }}
       >
-        {dreamcaller.name}
+        {dreamAvatar.name}
       </div>
       <div
         style={{
@@ -85,13 +85,13 @@ function PortraitName({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
           textShadow: token("--text-outline-media"),
         }}
       >
-        {dreamcaller.title}
+        {dreamAvatar.title}
       </div>
     </div>
   );
 }
 
-/** The console card for one Dreamcaller. It is narrower than its column and
+/** The console card for one DreamAvatar. It is narrower than its column and
  * center-aligned under the figure, riding up over the legs; its interior is an
  * even --space-6 rhythm stack — padding, then the ability text, divider, tides
  * row, and Choose button each separated by one step. The ability region takes
@@ -99,16 +99,16 @@ function PortraitName({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
  * (`translateY(-50%)`) so cards of different heights share one vertical center
  * line, positioned by {@link CARD_OVERLAP}. Spreading GroupPanel's card surface
  * onto our own node is the sanctioned rung-2 way to size the pane. */
-function DreamcallerCard({
-  dreamcaller,
+function DreamAvatarCard({
+  dreamAvatar,
   onChoose,
 }: {
-  dreamcaller: DreamcallerOfferView;
+  dreamAvatar: DreamAvatarOfferView;
   onChoose: () => void;
 }) {
   return (
     <div
-      data-dreamcaller-column={dreamcaller.id}
+      data-dream-avatar-column={dreamAvatar.id}
       style={{
         ...GroupPanel.style(),
         position: "relative",
@@ -130,9 +130,9 @@ function DreamcallerCard({
         flexDirection: "column",
       }}
     >
-      <DreamcallerAbilityText
-        dreamcallerId={dreamcaller.id}
-        text={dreamcaller.renderedText}
+      <DreamAvatarAbilityText
+        dreamAvatarId={dreamAvatar.id}
+        text={dreamAvatar.renderedText}
         presentation="selectionCard"
       />
 
@@ -144,11 +144,11 @@ function DreamcallerCard({
           tide discs stacked below the caption at the larger 'lg' size — the same
           shared arrangement the mobile carousel renders. */}
       <div style={{ marginTop: token("--space-6") }}>
-        <TidesEssenceBlock dreamcaller={dreamcaller} />
+        <TidesEssenceBlock dreamAvatar={dreamAvatar} />
       </div>
 
       <div
-        data-choose-dreamcaller={dreamcaller.id}
+        data-choose-dream-avatar={dreamAvatar.id}
         style={{ marginTop: token("--space-6"), display: "grid" }}
       >
         <GlassButton label="Choose" variant="accent" onPress={onChoose} />
@@ -157,14 +157,14 @@ function DreamcallerCard({
   );
 }
 
-/** One desktop Dreamcaller column: a fixed-width stack of the portrait stage
+/** One desktop DreamAvatar column: a fixed-width stack of the portrait stage
  * (the standing cutout with the name floating above the head) and the console
  * card, which rides up over the legs and takes its natural height. */
-function DreamcallerColumn({
-  dreamcaller,
+function DreamAvatarColumn({
+  dreamAvatar,
   onChoose,
 }: {
-  dreamcaller: DreamcallerOfferView;
+  dreamAvatar: DreamAvatarOfferView;
   onChoose: () => void;
 }) {
   return (
@@ -183,22 +183,22 @@ function DreamcallerColumn({
           flex: "none",
         }}
       >
-        <DreamcallerPortrait dreamcaller={dreamcaller} variant="standing" />
-        <PortraitName dreamcaller={dreamcaller} />
+        <DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="standing" />
+        <PortraitName dreamAvatar={dreamAvatar} />
       </div>
-      <DreamcallerCard
-        dreamcaller={dreamcaller}
+      <DreamAvatarCard
+        dreamAvatar={dreamAvatar}
         onChoose={onChoose}
       />
     </div>
   );
 }
 
-/** The desktop Dreamcaller-selection layout: a small purple eyebrow title near
- * the top of a shared background, then the offered Dreamcallers side by side as
+/** The desktop DreamAvatar-selection layout: a small purple eyebrow title near
+ * the top of a shared background, then the offered DreamAvatars side by side as
  * fixed-width portrait columns. */
 export function DesktopSelect({
-  dreamcallers,
+  dreamAvatars,
   onPick,
   onReroll,
 }: QuestStartScreenProps) {
@@ -242,7 +242,7 @@ export function DesktopSelect({
         <DesktopTitle />
       </div>
 
-      {/* The offered Dreamcallers, centered in the remaining space. The inner
+      {/* The offered DreamAvatars, centered in the remaining space. The inner
           triptych aligns the columns at the top (`alignItems: flex-start`) so
           the fixed-height figure stages keep their feet on one line; each card
           then center-aligns itself within its own footprint. */}
@@ -266,12 +266,12 @@ export function DesktopSelect({
             gap: token("--space-8"),
           }}
         >
-          {dreamcallers.map((dreamcaller) => (
-            <DreamcallerColumn
-              key={dreamcaller.id}
-              dreamcaller={dreamcaller}
+          {dreamAvatars.map((dreamAvatar) => (
+            <DreamAvatarColumn
+              key={dreamAvatar.id}
+              dreamAvatar={dreamAvatar}
               onChoose={() => {
-                onPick(dreamcaller.id);
+                onPick(dreamAvatar.id);
               }}
             />
           ))}

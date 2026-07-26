@@ -11,7 +11,7 @@ import {
 import type { BattleMutableState } from "../types";
 import {
   makeBattleTestCardDatabase,
-  makeBattleTestDreamcallers,
+  makeBattleTestDreamAvatars,
   makeBattleTestSite,
   makeBattleTestState,
 } from "../test-support";
@@ -24,7 +24,7 @@ describe("selectEffectiveSpark", () => {
         site: makeBattleTestSite(),
         state: makeBattleTestState(),
         cardDatabase: makeBattleTestCardDatabase(),
-        dreamcallers: makeBattleTestDreamcallers(),
+        dreamAvatars: makeBattleTestDreamAvatars(),
       }),
     );
     const battleCardId = state.sides.player.hand[0];
@@ -50,7 +50,7 @@ describe("selectEffectiveSpark", () => {
         site: makeBattleTestSite(),
         state: makeBattleTestState(),
         cardDatabase: makeBattleTestCardDatabase(),
-        dreamcallers: makeBattleTestDreamcallers(),
+        dreamAvatars: makeBattleTestDreamAvatars(),
       }),
     );
     expect(selectEffectiveSpark(state, null)).toBeNull();
@@ -66,7 +66,7 @@ describe("selectEffectiveSparkOrZero", () => {
         site: makeBattleTestSite(),
         state: makeBattleTestState(),
         cardDatabase: makeBattleTestCardDatabase(),
-        dreamcallers: makeBattleTestDreamcallers(),
+        dreamAvatars: makeBattleTestDreamAvatars(),
       }),
     );
     expect(selectEffectiveSparkOrZero(state, null)).toBe(0);
@@ -97,7 +97,7 @@ describe("selectPlayAreaSize", () => {
         site: makeBattleTestSite(),
         state: makeBattleTestState(),
         cardDatabase: makeBattleTestCardDatabase(),
-        dreamcallers: makeBattleTestDreamcallers(),
+        dreamAvatars: makeBattleTestDreamAvatars(),
       }),
     );
   }

@@ -9,7 +9,7 @@ import { glossaryDefinitionsCardModel } from "./rules-text-reveal";
  * title, and padding space when several terms appear together.
  *
  * The catalog marks this stack as incubating. Named card, Dreamsign, and
- * Dreamcaller surfaces currently carry glossary definitions in their shared
+ * DreamAvatar surfaces currently carry glossary definitions in their shared
  * reveal specifications; this component is the equivalent normal-flow surface
  * for definitions placed beside or beneath rules text.
  *

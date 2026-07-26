@@ -1,7 +1,7 @@
 # Authoring the `embedded` pool variant
 
 The `?algo=embedded` draft-pool variant grows pools exactly like `sigseed` — a
-random subset of a Dreamcaller's signature cards expanded by pick-affinity — but
+random subset of a Dream Avatar's signature cards expanded by pick-affinity — but
 reads its synergy from a **committed affinity corpus** instead of rebuilding it
 from the draft records in the browser. The committed corpus IS the same
 record-derived affinity matrix `sigseed` builds (rounded to the precision at which
@@ -64,7 +64,7 @@ credit, also add its theme entry (`needs`/`supports`) to
 ## Validating a change
 
 ```bash
-npm run affinity-corpus-parity            # 25 seeds × 32 Dreamcallers
+npm run affinity-corpus-parity            # 25 seeds × 32 DreamAvatars
 ```
 
 This asserts three things and exits non-zero on any failure:

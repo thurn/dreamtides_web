@@ -17,8 +17,8 @@ export interface EditorDreamscapeRecord {
   "site-icon": string;
   isStarter: boolean;
   fixedSites: string[];
-  /** UUIDs of the Dreamcallers resident in this region (3-4 for non-starters). */
-  dreamcallerIds: string[];
+  /** UUIDs of the DreamAvatars resident in this region (3-4 for non-starters). */
+  dreamAvatarIds: string[];
   sourceIndex: number;
 }
 
@@ -36,13 +36,13 @@ export interface AffiliationOption {
   name: string;
 }
 
-/** A Dreamcaller assignable as a resident of a dreamscape. */
-export interface DreamcallerOption {
+/** A DreamAvatar assignable as a resident of a dreamscape. */
+export interface DreamAvatarOption {
   id: string;
   name: string;
   title: string;
   imageNumber: string;
-  /** The Dreamcaller's ability text, shown in the resident hover popover. */
+  /** The DreamAvatar's ability text, shown in the resident hover popover. */
   renderedText: string;
 }
 
@@ -50,7 +50,7 @@ export interface LoadEditorDreamscapesResponse {
   dreamscapes: EditorDreamscapeRecord[];
   guides: GuideOption[];
   affiliations: AffiliationOption[];
-  dreamcallers: DreamcallerOption[];
+  dreamAvatars: DreamAvatarOption[];
   siteTypes: SiteType[];
 }
 
@@ -59,22 +59,22 @@ export interface DreamscapeCatalog {
   dreamscapes: EditorDreamscapeRecord[];
   guides: GuideOption[];
   affiliations: AffiliationOption[];
-  dreamcallers: DreamcallerOption[];
+  dreamAvatars: DreamAvatarOption[];
   siteTypes: string[];
 }
 
-export type DreamcallerAssignmentAction = "replace" | "add" | "remove";
+export type DreamAvatarAssignmentAction = "replace" | "add" | "remove";
 
-export interface DreamcallerAssignmentRequest {
+export interface DreamAvatarAssignmentRequest {
   dreamscapeId: string;
-  action: DreamcallerAssignmentAction;
-  /** The incoming Dreamcaller (for "replace" / "add"). */
+  action: DreamAvatarAssignmentAction;
+  /** The incoming DreamAvatar (for "replace" / "add"). */
   inId?: string;
   /** The resident being displaced (for "replace" / "remove"). */
   outId?: string;
 }
 
-export interface DreamcallerAssignmentResponse {
+export interface DreamAvatarAssignmentResponse {
   dreamscapes: EditorDreamscapeRecord[];
   changed: string[];
 }
@@ -104,9 +104,9 @@ export interface DreamscapeEditorApiClient {
   saveEditorDreamscapeField: (
     request: SaveEditorDreamscapeFieldRequest,
   ) => Promise<SaveEditorDreamscapeFieldResponse>;
-  assignDreamscapeDreamcaller: (
-    request: DreamcallerAssignmentRequest,
-  ) => Promise<DreamcallerAssignmentResponse>;
+  assignDreamscapeDreamAvatar: (
+    request: DreamAvatarAssignmentRequest,
+  ) => Promise<DreamAvatarAssignmentResponse>;
 }
 
 export type DreamscapeCardSize = "small" | "medium" | "large";

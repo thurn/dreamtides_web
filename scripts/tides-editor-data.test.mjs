@@ -21,7 +21,7 @@ function fixtureArtifact() {
         displayDescription: "An old blurb.",
         color: "purple",
         role: "signature",
-        dreamcallerId: "11111111-1111-1111-1111-111111111111",
+        dreamAvatarId: "11111111-1111-1111-1111-111111111111",
         cards: [{ id: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", name: "A", copies: 2 }],
       },
       {
@@ -33,7 +33,7 @@ function fixtureArtifact() {
         cards: [{ id: "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb", name: "B", copies: 1 }],
       },
     ],
-    tidePoolByDreamcaller: {
+    tidePoolByDreamAvatar: {
       "11111111-1111-1111-1111-111111111111": {
         starter: "tide-sig-01",
         facets: ["tide-fac-01"],
@@ -107,7 +107,7 @@ describe("patchTideAnnotation", () => {
       value: "yellow",
     });
     expect(patched).toContain("\"leanCardId\": \"bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb\"");
-    expect(patched).toContain("\"dreamcallerId\": \"11111111-1111-1111-1111-111111111111\"");
+    expect(patched).toContain("\"dreamAvatarId\": \"11111111-1111-1111-1111-111111111111\"");
   });
 
   it("throws for an unknown tide id", () => {

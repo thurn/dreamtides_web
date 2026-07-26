@@ -151,7 +151,7 @@ export interface AtlasConfig {
 
 - [ ] **Step 8: Standard verification.** `npm run lint && npm run typecheck && npm test`. Expected: PASS (additive change breaks nothing).
 
-- [ ] **Step 9: Manual QA.** QA targets: with no behavior change yet, confirm the app still boots to the Dreamcaller select screen and a quest loads from a saved quest with zero console errors after the type/data/pipeline changes. Run the Manual QA Procedure at both viewports.
+- [ ] **Step 9: Manual QA.** QA targets: with no behavior change yet, confirm the app still boots to the Dream Avatar select screen and a quest loads from a saved quest with zero console errors after the type/data/pipeline changes. Run the Manual QA Procedure at both viewports.
 
 - [ ] **Step 10: Commit.**
 
@@ -173,7 +173,7 @@ This task owns the `DreamAtlas`/`DreamscapeNode` reshape. It updates the generat
 **Files:**
 - Modify: `src/types/quest.ts` (reshape `DreamscapeNode` + `DreamAtlas`)
 - Rewrite: `src/atlas/atlas-generator.ts` (generation)
-- Modify: `src/state/quest-state-actions.ts` (`startQuestFromDreamcaller`, `updateQuestAtlas`, `completeQuestSite`, `canVisitSite` — atlas advance/reveal logic)
+- Modify: `src/state/quest-state-actions.ts` (`startQuestFromDreamAvatar`, `updateQuestAtlas`, `completeQuestSite`, `canVisitSite` — atlas advance/reveal logic)
 - Modify: `src/screens/AtlasScreen.tsx`, `src/components/AtlasNode.tsx` (compile-fix only)
 - Modify: `src/data/biomes.ts` (demote to aesthetic flavor or remove usage)
 - Test: `src/atlas/atlas-generator.test.ts` (rewrite invariants)
@@ -238,7 +238,7 @@ Rewrite `src/atlas/atlas-generator.ts`:
 
 - [ ] **Step 5: Update non-UI consumers.**
 
-In `src/state/quest-state-actions.ts`, update `startQuestFromDreamcaller` (build the atlas via the new generator), `updateQuestAtlas`, `completeQuestSite` (advance `currentNodeId`, mark completed node, set its forward targets `available`, mark sibling layer nodes `forgone`, trigger reveal of layer N+2), and `canVisitSite` to the new node shape.
+In `src/state/quest-state-actions.ts`, update `startQuestFromDreamAvatar` (build the atlas via the new generator), `updateQuestAtlas`, `completeQuestSite` (advance `currentNodeId`, mark completed node, set its forward targets `available`, mark sibling layer nodes `forgone`, trigger reveal of layer N+2), and `canVisitSite` to the new node shape.
 
 - [ ] **Step 6: Minimal compile-fix to atlas UI.**
 
@@ -353,7 +353,7 @@ Update/author the purge pricing test to pin the doc's economy anchors as a small
 
 - [ ] **Step 3: Currency consolidation (omens → essence).** Remove `omens` from `QuestState`, `createDefaultState`, and any mutation; convert shop dreamsign purchases and rerolls to spend **essence** (restock 50 essence). Remove `upcomingOmenDiscounts` omen-specific handling or repoint it to essence per existing `ShopModifiers` semantics. Remove omen UI. `npm run typecheck` drives out every reference.
 
-- [ ] **Step 4: Default essence → 200.** In `createDefaultState` set the default `essence` to 200; keep the per-Dreamcaller `startingEssence` override path intact. **Do not touch pool construction.**
+- [ ] **Step 4: Default essence → 200.** In `createDefaultState` set the default `essence` to 200; keep the per-Dream Avatar `startingEssence` override path intact. **Do not touch pool construction.**
 
 - [ ] **Step 5: Banes into Purge; retire Cleanse.** Remove the `Cleanse` `SiteType` member and its `ScreenRouter` case and screen. Extend the Purge screen to also list bane deck entries (`DeckEntry.isBane`) as selectable for removal, priced cheaply/free per the doc. Anything that previously generated a Cleanse site now relies on Purge.
 
@@ -435,14 +435,14 @@ git commit -m "feat(quests): atlas/dreamscape UI for 5 node states, reveal, know
 
 **Files:**
 - Modify/Create: opponent deck builder used by the Battle site (locate via the battle entry that selects the enemy deck; likely `src/battle/ai/deck.ts` or a quest-side opponent builder) 
-- Modify: pre-battle opponent display to show dreamcaller + dreamsign (from midpoint)
+- Modify: pre-battle opponent display to show dream avatar + dreamsign (from midpoint)
 - Test: opponent-deck integration test
 
 - [ ] **Step 1: Failing opponent-deck invariant test.** Assert (data-derived): an opponent deck built at a later layer is at least as large / advanced as one built at an early layer (scaling with progress); opponents at/after the run midpoint carry exactly one dreamsign and earlier ones carry none; the deck leans toward the dreamscape affiliation when one is present (statistical — affiliated cards over-represented vs. an unbiased build, reusing `opponentAffiliationBias` from Task 4). *(Catches flat difficulty, missing midpoint dreamsign, and missing affiliation bias.)*
 
 - [ ] **Step 2: Run; verify failure.** Expected: FAIL.
 
-- [ ] **Step 3: Implement.** Build the opponent deck by simulating a quest with the opponent dreamcaller's tides + dreamscape affiliation bias to the equivalent progress depth; attach one dreamsign from the midpoint onward. Log construction (dreamcaller, sim depth, affiliation, decklist summary) per spec §8. Surface the dreamcaller + dreamsign in the pre-battle display.
+- [ ] **Step 3: Implement.** Build the opponent deck by simulating a quest with the opponent dream avatar's tides + dreamscape affiliation bias to the equivalent progress depth; attach one dreamsign from the midpoint onward. Log construction (dream avatar, sim depth, affiliation, decklist summary) per spec §8. Surface the dream avatar + dreamsign in the pre-battle display.
 
 - [ ] **Step 4: Run tests + standard verification.** Expected: PASS.
 

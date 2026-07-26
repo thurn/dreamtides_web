@@ -253,11 +253,11 @@ export function routeDomain(
     case "DISMISS_STARTING_DECK_POPUP":
       return questCase(state, lifecycle.dismissStartingDeckPopup(quest));
 
-    // --- dreamcaller & run assembly ---
-    case "SELECT_DREAMCALLER":
-      return questCase(state, lifecycle.selectDreamcaller(quest, payload));
-    case "REROLL_DREAMCALLER_OFFER":
-      return questCase(state, lifecycle.rerollDreamcallerOffer(quest));
+    // --- dreamAvatar & run assembly ---
+    case "SELECT_DREAM_AVATAR":
+      return questCase(state, lifecycle.selectDreamAvatar(quest, payload));
+    case "REROLL_DREAM_AVATAR_OFFER":
+      return questCase(state, lifecycle.rerollDreamAvatarOffer(quest));
     case "START_QUEST":
       return questCase(state, lifecycle.startQuest(quest, payload, ctx));
 

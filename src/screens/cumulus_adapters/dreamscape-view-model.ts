@@ -17,7 +17,7 @@ import {
 } from "../../cumulus/components/dreamscape/dreamscape-scatter";
 import type { DreamscapeSiteModel } from "../../cumulus/components/dreamscape/SiteNode";
 import type {
-  QsbDreamcaller,
+  QsbDreamAvatar,
   QsbDreamsign,
 } from "../../cumulus/components/hud/QuestStatusBar";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
@@ -28,7 +28,7 @@ import type {
 } from "../../cumulus/screens/DreamscapeScreen";
 import type { DreamsignReplacementView } from "../../cumulus/screens/DreamsignReplacementDialog";
 import type {
-  Dreamcaller,
+  DreamAvatar,
   Dreamsign,
   DreamscapeNode,
   QuestState,
@@ -44,7 +44,7 @@ const FALLBACK_POS = { x: 50, y: 58 } as const;
 export interface QuestChromeHudView {
   essence: number;
   deck: number;
-  dreamcaller?: QsbDreamcaller;
+  dreamAvatar?: QsbDreamAvatar;
   dreamsigns: QsbDreamsign[];
 }
 
@@ -140,20 +140,20 @@ export function buildSiteModels(
   });
 }
 
-/** Map the active Dreamcaller to the bust the QuestStatusBar docks. */
-export function toQsbDreamcaller(
-  dreamcaller: Dreamcaller | null,
-): QsbDreamcaller | undefined {
-  if (dreamcaller === null) {
+/** Map the active DreamAvatar to the bust the QuestStatusBar docks. */
+export function toQsbDreamAvatar(
+  dreamAvatar: DreamAvatar | null,
+): QsbDreamAvatar | undefined {
+  if (dreamAvatar === null) {
     return undefined;
   }
   return {
-    id: dreamcaller.id,
-    name: dreamcaller.name,
-    epithet: dreamcaller.title,
-    portrait: artRef.dreamcaller(dreamcaller.imageNumber),
-    portraitFocus: dreamcaller.portraitFocus,
-    ability: dreamcaller.renderedText,
+    id: dreamAvatar.id,
+    name: dreamAvatar.name,
+    epithet: dreamAvatar.title,
+    portrait: artRef.dreamAvatar(dreamAvatar.imageNumber),
+    portraitFocus: dreamAvatar.portraitFocus,
+    ability: dreamAvatar.renderedText,
   };
 }
 
@@ -187,7 +187,7 @@ export function buildDreamscapeHudView(state: QuestState): QuestChromeHudView {
   return {
     essence: state.essence,
     deck: state.deck.length,
-    dreamcaller: toQsbDreamcaller(state.dreamcaller),
+    dreamAvatar: toQsbDreamAvatar(state.dreamAvatar),
     dreamsigns: toQsbDreamsigns(state.dreamsigns),
   };
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createBattleInit } from "../integration/create-battle-init";
-import { makeBattleTestCardDatabase, makeBattleTestDreamcallers, makeBattleTestSite, makeBattleTestState } from "../test-support";
+import { makeBattleTestCardDatabase, makeBattleTestDreamAvatars, makeBattleTestSite, makeBattleTestState } from "../test-support";
 import type { BattleDeckCardDefinition } from "../types";
 import {
   allocateBattleCardInstance,
@@ -16,7 +16,7 @@ describe("createInitialBattleState", () => {
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
-      dreamcallers: makeBattleTestDreamcallers(),
+      dreamAvatars: makeBattleTestDreamAvatars(),
     });
 
     const state = createInitialBattleState(battleInit);
@@ -60,7 +60,7 @@ describe("createInitialBattleState", () => {
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
-      dreamcallers: makeBattleTestDreamcallers(),
+      dreamAvatars: makeBattleTestDreamAvatars(),
     });
 
     const state = createInitialBattleState(battleInit);
@@ -92,7 +92,7 @@ describe("createInitialBattleState", () => {
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
-      dreamcallers: makeBattleTestDreamcallers(),
+      dreamAvatars: makeBattleTestDreamAvatars(),
     });
     const state = createInitialBattleState(battleInit);
 
@@ -108,7 +108,7 @@ describe("cloneBattleMutableState", () => {
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
-      dreamcallers: makeBattleTestDreamcallers(),
+      dreamAvatars: makeBattleTestDreamAvatars(),
     });
     return createInitialBattleState(battleInit);
   }
@@ -200,7 +200,7 @@ describe("allocateBattleCardInstance", () => {
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
-      dreamcallers: makeBattleTestDreamcallers(),
+      dreamAvatars: makeBattleTestDreamAvatars(),
     });
     const state = createInitialBattleState(battleInit);
     const baseline = state.nextBattleCardOrdinal;
@@ -280,7 +280,7 @@ describe("allocateBattleCardInstance", () => {
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
-      dreamcallers: makeBattleTestDreamcallers(),
+      dreamAvatars: makeBattleTestDreamAvatars(),
     });
     const state = createInitialBattleState(battleInit);
     const definition = makeDefinition(903);

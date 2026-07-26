@@ -1,6 +1,6 @@
 # Asset hosting (binary game art)
 
-The game's binary art — card images, dreamcaller portraits, dreamsign icons,
+The game's binary art — card images, dream avatar portraits, dreamsign icons,
 journey scenes, and the Dream Atlas scenery — is large (~400 MB) and lives
 outside git. The source files sit on the developer's machine under `~/Documents`
 (plus the Shutterstock image cache); `scripts/setup-assets.mjs` symlinks them
@@ -21,7 +21,7 @@ small and version-coupled to the build.
 
 ## Folders served from the bucket
 
-`cards`, `dreamcallers`, `dreamsigns`, `journeys`, `dreamscapes`,
+`cards`, `dreamAvatars`, `dreamsigns`, `journeys`, `dreamscapes`,
 `dreamscape-icons`, `dream-guides`, `atlas`. Each mirrors its `public/` path, so
 a served URL `/<dir>/<file>` maps 1:1 to a bucket object. These folders are
 excluded from the Hosting deploy by the `ignore` list in `firebase.json`, so the

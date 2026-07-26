@@ -6,7 +6,7 @@
 //
 // The media props are seeded so that EVERY variant renders real content the
 // moment the reader switches the `variant` control: `image` is a real
-// Dreamcaller `ArtRef` (drives the object / fullBleed media) and `glyph` is a
+// Dream Avatar `ArtRef` (drives the object / fullBleed media) and `glyph` is a
 // named `Glyph` (drives the icon-disc variant), the same production art the
 // full-screen mockup uses — the text default still leads with `leadGlyph`.
 //
@@ -54,7 +54,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
     },
     {
       label: "Text variant with epithet",
-      note: "Pass a `subtitle` to render an epithet under the name — a smaller serif line in white, mirroring the Dreamcaller-select name/epithet pairing. Used for the Dreamcaller profile reveal.",
+      note: "Pass a `subtitle` to render an epithet under the name — a smaller serif line in white, mirroring the Dream Avatar-select name/epithet pairing. Used for the Dream Avatar profile reveal.",
       code: `<InfoCard
   variant="text"
   title="Kragg"
@@ -83,7 +83,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
       note: "A media object with `image` (an `ArtRef`); set `frame` for a framed portrait, omit it for a contained transparent object.",
       code: `<InfoCard
   variant="object"
-  image={artRef.dreamcaller("0025")}
+  image={artRef.dreamAvatar("0025")}
   frame
   title="Seld Rakor"
   body={richText.rules("Whenever you Reclaim a card, deal 1 damage.")}
@@ -91,7 +91,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
     },
     {
       label: "Full-bleed variant",
-      note: "A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the meta / name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card. Used for the Dreamcaller profile reveal and the compact atlas node reveals.",
+      note: "A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the meta / name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card. Used for the Dream Avatar profile reveal and the compact atlas node reveals.",
       code: `<InfoCard
   variant="fullBleed"
   image={artRef.dreamscapeScene("firstlight_meadow")}
@@ -147,11 +147,11 @@ const scale = infoCardTextScale(window.innerWidth); // 1 on desktop, 0.86 on mob
       title: "Singular Storm",
       leadGlyph: GLYPHS.water,
       // Real media so switching `variant` to object / fullBleed / icon renders
-      // genuine art rather than an empty frame. `image` is a real Dreamcaller
+      // genuine art rather than an empty frame. `image` is a real Dream Avatar
       // portrait, `figure` gives image-led variants a real foreground subject,
       // `frame` gives the object variant its framed treatment, and `glyph`
       // fills the icon-disc variant.
-      image: artRef.dreamcaller("0025"),
+      image: artRef.dreamAvatar("0025"),
       figure: artRef.dreamGuide("tobias_tanglefur"),
       frame: true,
       glyph: glyph("bxf bx-store-alt-2"),

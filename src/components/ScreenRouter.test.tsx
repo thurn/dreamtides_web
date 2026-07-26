@@ -162,7 +162,7 @@ function makeMutations(): QuestMutations {
   return {
     changeEssence: vi.fn(),
     startQuest: vi.fn(),
-    rerollDreamcallerOffer: vi.fn(),
+    rerollDreamAvatarOffer: vi.fn(),
     completeSite: vi.fn(),
     ensureRewardSiteRuntime: vi.fn(),
     acceptRewardSite: vi.fn(),
@@ -188,7 +188,7 @@ function makeMutations(): QuestMutations {
     addBaneCard: vi.fn(),
     removeCard: vi.fn(),
     transfigureCard: vi.fn(),
-    setDreamcallerSelection: vi.fn(),
+    setDreamAvatarSelection: vi.fn(),
     setCardSourceDebug: vi.fn(),
     addDreamsign: vi.fn(),
     removeDreamsign: vi.fn(),
@@ -418,7 +418,7 @@ describe("ScreenRouter DreamAugury routing", () => {
     const site = makeSite("DreamAugury");
     const mutations = makeMutations();
     const state = makeStateFor(site);
-    state.dreamcaller = {
+    state.dreamAvatar = {
       id: "72000000-0000-4000-8000-000000000001",
       name: "Menu Fixture",
       title: "Keeper of Tests",
@@ -714,7 +714,7 @@ describe("ScreenRouter terminal Cumulus routing", () => {
     const state = createDefaultState();
     state.screen = { type: "questFailed" };
     state.completionLevel = 2;
-    state.dreamcaller = {
+    state.dreamAvatar = {
       id: "73000000-0000-4000-8000-000000000001",
       name: "Failure Fixture",
       title: "Keeper of the Last Test",

@@ -26,7 +26,7 @@ The strict information-card presentation. Its media treatment varies by content 
 | `slots` | `InfoCardSlots` | no | — | Optional wrappers for the rendered headline and body content. |
 | `figure` | `ArtRef` | no | — | An optional foreground character render (a transparent full-body cutout — a Dream Guide, the boss) laid centered and prominent OVER the hero image, standing above the glass text card. Its own subject of the card; omit for a scene-only hero. An {@link ArtRef}, resolved by the component. Optional transparent full-body figure standing on the card's right side. |
 | `meta` | `string` | no | — | Small mono/uppercase overline above the title, on the glass card. Small mono/uppercase overline above the title. |
-| `subtitle` | `string` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. The resident guide / boss title under the place headline. An epithet under the name — a smaller serif subtitle in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. |
+| `subtitle` | `string` | no | — | An epithet under the name — a smaller serif line in white, mirroring the DreamAvatar-select name/epithet pairing. Plain text; resolve before display. The resident guide / boss title under the place headline. An epithet under the name — a smaller serif subtitle in white, mirroring the DreamAvatar-select name/epithet pairing. Plain text; resolve before display. |
 | `glyph` | `Glyph` | yes | — | The {@link Glyph} the disc renders. Required. |
 | `tide` | `Tide` = `"shadow" \| "ember" \| "valor" \| "vision" \| "wild"` | yes | — | Which of the five tides. Fixes the disc color/mark and the alignment label. |
 | `leadGlyph` | `Glyph` | no | — | A small leading {@link Glyph}. |
@@ -66,7 +66,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 ### Text variant with epithet
 
-Pass a `subtitle` to render an epithet under the name — a smaller serif line in white, mirroring the Dreamcaller-select name/epithet pairing. Used for the Dreamcaller profile reveal.
+Pass a `subtitle` to render an epithet under the name — a smaller serif line in white, mirroring the Dream Avatar-select name/epithet pairing. Used for the Dream Avatar profile reveal.
 
 ```tsx
 <InfoCard
@@ -103,7 +103,7 @@ A media object with `image` (an `ArtRef`); set `frame` for a framed portrait, om
 ```tsx
 <InfoCard
   variant="object"
-  image={artRef.dreamcaller("0025")}
+  image={artRef.dreamAvatar("0025")}
   frame
   title="Seld Rakor"
   body={richText.rules("Whenever you Reclaim a card, deal 1 damage.")}
@@ -112,7 +112,7 @@ A media object with `image` (an `ArtRef`); set `frame` for a framed portrait, om
 
 ### Full-bleed variant
 
-A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the meta / name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card. Used for the Dreamcaller profile reveal and the compact atlas node reveals.
+A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the meta / name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card. Used for the Dream Avatar profile reveal and the compact atlas node reveals.
 
 ```tsx
 <InfoCard

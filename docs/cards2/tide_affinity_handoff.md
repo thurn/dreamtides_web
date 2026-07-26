@@ -9,15 +9,15 @@ verification gates.
 ## 1. Problem domain in three paragraphs
 
 Dreamtides is a card game prototype. At the start of a quest run, each
-Dreamcaller (a hero the player picks; 32 exist, defined in
-`data/tabula/dreamcallers_v2.toml`) gets a 200-copy **draft pool** the player
+Dream Avatar (a hero the player picks; 32 exist, defined in
+`data/tabula/dream_avatars_v2.toml`) gets a 200-copy **draft pool** the player
 drafts cards from. Pool construction algorithms are selected by the `?algo=`
 URL parameter; each is a `PoolStrategy` registered in
 `src/draft/pool/registry.ts`. The best-performing algorithm is `idf3`
 (`src/draft/pool/variant-idf3.ts`): it grows each pool from a corpus of ~534
 real player decklists (bundled from `docs/draft_records_adapted/` into
 `public/decklists-data.json`) by picking one starter deck — steered toward the
-Dreamcaller's `signature-cards` via IDF-cosine "anchor" decks — and folding in
+Dream Avatar's `signature-cards` via IDF-cosine "anchor" decks — and folding in
 that starter's nearest-neighbour decks until ~200 copies (2-copy cap per
 card).
 
@@ -31,12 +31,12 @@ by stable cards_v2 UUID) and rendered for players in
 `scripts/bake-tides.mjs`) is a deterministic pure function of the corpus:
 k-medoids clustering under `1 − IDF-cosine` distance, density-balanced so an
 archetype's share of tides tracks its share of real decks, plus a baked
-per-Dreamcaller "favored tides" list computed with the same signature probe
+per-Dream Avatar "favored tides" list computed with the same signature probe
 `idf3` uses for anchors.
 
 Quality is measured two ways. (a) **Similarity to idf3**:
 `npm run tides-similarity` (`scripts/tides-similarity-experiment.mjs`)
-compares two algorithms across 32 Dreamcallers × N seeds — per-card
+compares two algorithms across 32 Dream Avatars × N seeds — per-card
 inclusion-frequency cosine read against idf3's own seed-split self-similarity
 ceiling, best-match pool Jaccard, and pool shape. (b) **Pool quality**:
 `npm run pool-metrics` (`scripts/pool-metrics.mjs`)
@@ -48,13 +48,13 @@ in `data/buildaround_support.json`.
 ## 2. Current state and measured numbers
 
 The `tides` variant currently works like this (`generateTides` in
-`src/draft/pool/variant-tides.ts`): shuffle the Dreamcaller's baked favored
+`src/draft/pool/variant-tides.ts`): shuffle the Dream Avatar's baked favored
 list and take `TIDES.favoredDraw = 1` favored tide as the lead (none for the
-12 signatureless "neutral" Dreamcallers); then join further tides **drawn
+12 signatureless "neutral" Dream Avatars); then join further tides **drawn
 uniformly at random** until ≥200 copies are dealable under the 2-copy cap;
 shuffle the combined bag; deal 200.
 
-Measured against `idf3` (100–200 seeds × 32 Dreamcallers):
+Measured against `idf3` (100–200 seeds × 32 Dream Avatars):
 
 | Measure | tides | idf3 |
 | --- | --- | --- |
@@ -102,8 +102,8 @@ Target player story:
 
 > "There are 32 preconstructed decks called tides — each has a known decklist
 > you can go read. Each tide lists its **allied tides** (decks that work well
-> together), and each Dreamcaller has a **tide pool** it draws from. We draw
-> a lead tide from your Dreamcaller's pool, shuffle it together with its
+> together), and each Dream Avatar has a **tide pool** it draws from. We draw
+> a lead tide from your Dream Avatar's pool, shuffle it together with its
 > allies until there are enough cards, and deal the first 200 — never more
 > than 2 copies of a card."
 
@@ -111,7 +111,7 @@ Target player story:
 
 1. **No uniformly-random tide selection in the shipped path.** Every tide
    that joins a pool must be justified by a published relationship: the
-   Dreamcaller's tide pool (for the lead) or the lead's allied-tides list
+   Dream Avatar's tide pool (for the lead) or the lead's allied-tides list
    (for the fill). Randomness may only choose *among* those published lists.
 2. **`data/buildaround_support.json` may be used exactly once, as a seed
    input** to the initial generation of tide relationships (e.g. to verify or
@@ -138,7 +138,7 @@ clean boundaries:
   `npm run bake-tides`; regenerating it is a deliberate, infrequent act (e.g.
   when a large batch of new draft records lands). Schema:
   `src/draft/pool/tides-io.ts` (`TideDecksJson`). Keep the
-  `favoredTidesByDreamcaller` field it currently carries for backward
+  `favoredTidesByDreamAvatar` field it currently carries for backward
   compatibility during the transition, or remove it once relationships move
   to the new file (preferred — one source of truth).
 - **`data/tide_relationships.jsonc`** (new) — the curated relationship data:
@@ -149,9 +149,9 @@ clean boundaries:
     // Per tide: ordered allied-tide ids, best ally first. The runtime fills
     // pools from this list. 4-6 allies each is enough (a pool uses 1-3).
     "alliesByTide": { "tide-01": ["tide-07", "tide-27", ...], ... },
-    // Per Dreamcaller UUID: the tide pool its lead tide is drawn from
-    // (~8-10 ids). EVERY Dreamcaller gets an entry, including neutral ones.
-    "tidePoolByDreamcaller": { "<dreamcaller-uuid>": ["tide-11", ...], ... }
+    // Per DreamAvatar UUID: the tide pool its lead tide is drawn from
+    // (~8-10 ids). EVERY DreamAvatar gets an entry, including neutral ones.
+    "tidePoolByDreamAvatar": { "<dream-avatar-uuid>": ["tide-11", ...], ... }
   }
   ```
 
@@ -187,15 +187,15 @@ curation anyway — see 6.3).
    the top-6, or substitute the best supporting tide from rank 7-12). Log
    every repair with a human-readable reason — this log is the starting point
    for manual curation.
-3. **Dreamcaller tide pools**: for the 20 signatured Dreamcallers, seed with
+3. **Dream Avatar tide pools**: for the 20 signatured Dream Avatars, seed with
    the top ~8 tides by signature-probe IDF-cosine (this code exists in
    `scripts/bake-tides.mjs`, `probeTideCosine`; signatures are card *names*
-   from `public/dreamcallers-v2-data.json`, ~20 of 32 have them). For the 12
-   neutral Dreamcallers, seed a ~10-tide pool by farthest-point sampling over
+   from `public/dream-avatars-v2-data.json`, ~20 of 32 have them). For the 12
+   neutral Dream Avatars, seed a ~10-tide pool by farthest-point sampling over
    the tide similarity matrix (a diverse, representative spread), so neutral
    pools draw from a published list rather than "all 32". Different neutral
-   Dreamcallers should get different (overlapping is fine) pools so they have
-   personality — e.g. rotate the sampling start point per Dreamcaller index.
+   Dream Avatars should get different (overlapping is fine) pools so they have
+   personality — e.g. rotate the sampling start point per Dream Avatar index.
 4. Write `data/tide_relationships.jsonc` with a provenance comment header
    stating it was seeded by this script on the current corpus and is
    thereafter manually curated. Print summary stats (ally overlap, repair
@@ -207,15 +207,15 @@ Current flow (keep): validate data presence → choose lead → join tides until
 `dealable ≥ dealSize` (counting copies under the 2-copy cap) → one
 Fisher-Yates shuffle of the bag → deal. Change only the selection:
 
-- **Lead**: shuffle a copy of the Dreamcaller's `tidePoolByDreamcaller` entry
+- **Lead**: shuffle a copy of the Dream Avatar's `tidePoolByDreamAvatar` entry
   and take the first id. A missing entry (unknown id, stale data) falls back
   to a shuffled draw over all tides — keep this fallback for robustness but
   it should never fire in production (validation should flag missing
-  Dreamcaller entries at load time as a warning).
+  Dream Avatar entries at load time as a warning).
 - **Fill**: walk the lead's `alliesByTide` list. For run-to-run variety,
   shuffle the ally list *lightly* (e.g. shuffle the top 6 and join in that
   order) rather than always joining in baked order — measure both; if
-  always-in-order scores fine on per-Dreamcaller pool variety (the
+  always-in-order scores fine on per-Dream Avatar pool variety (the
   within-algorithm Jaccard baseline in the similarity script shows this),
   prefer it for simplicity. If allies are exhausted before the pool is full
   (possible with small tides), continue with the *allies' allies* (breadth-
@@ -238,14 +238,14 @@ Fisher-Yates shuffle of the bag → deal. Change only the selection:
   that (it is the debug surface).
 
 The RNG contract: `generatePoolFromData` seeds mulberry32 from
-`hash(questSeed:dreamcallerId)`; all draws must come from the passed `rng` in
-a fixed call order so pools stay reproducible per (seed, Dreamcaller).
+`hash(questSeed:dreamAvatarId)`; all draws must come from the passed `rng` in
+a fixed call order so pools stay reproducible per (seed, Dream Avatar).
 
 ### 4.4 Tuning dials (expect to iterate)
 
 In the variant: number of allies shuffled into the join order. In the seeder:
-ally count, repair aggressiveness, Dreamcaller pool width (wider = more
-per-Dreamcaller variety, narrower = stronger identity; the current baked
+ally count, repair aggressiveness, Dream Avatar pool width (wider = more
+per-Dream Avatar variety, narrower = stronger identity; the current baked
 favored list is 4 wide with 1 drawn). In the existing bake (only if needed —
 prefer not to re-bake decklists): `tideSize` 160, `doubleShare` 0.35,
 `minClusterMembers` 6, all in the `TUNING` block of `scripts/bake-tides.mjs`.
@@ -265,7 +265,7 @@ prefer not to re-bake decklists): `tideSize` 160, `doubleShare` 0.35,
    ally-only fill, breadth-first fallback).
 4. Update the rendered doc: `bake-tides.mjs`'s `renderMarkdown` (or a small
    separate renderer reading both files) should add each tide's allied tides
-   and each Dreamcaller's tide pool to `docs/cards2/tide_decklists.md` — the
+   and each Dream Avatar's tide pool to `docs/cards2/tide_decklists.md` — the
    player-facing "you can go read it" artifact must show the relationships,
    since they are now part of the algorithm's story. Also update the
    one-sentence story in `variant-tides.ts`'s header comment, the `HEADER`
@@ -305,9 +305,9 @@ Targets (idf3 reference values at these seed counts: adequacy 92.9, traps
   (survivors, spirit-animals, discard, warriors, abandon) under 8%.
 - Shape: mean pool copies 200; distinct cards trending toward idf3's ~135
   (ally overlap should pull the current 162 down naturally).
-- Per-Dreamcaller variety: the similarity script's within-algorithm
+- Per-Dream Avatar variety: the similarity script's within-algorithm
   best-match Jaccard for tides should stay below ~0.85 (pools must not
-  become near-identical run to run for a given Dreamcaller).
+  become near-identical run to run for a given Dream Avatar).
 
 If a gate fails, iterate the dials in 4.4; the diagnostic in Appendix A
 (adapted to the new selection) is the fast way to see *why* a theme misses
@@ -333,12 +333,12 @@ record the PID, kill only that PID afterward — never a broad `pkill -f
 vite`). Copy `.env` from the main checkout into the worktree first. Then with
 `agent-browser` (`/opt/homebrew/bin/agent-browser`): open
 `http://localhost:<port>/?algo=tides` → Create Game → pick a *signatured*
-Dreamcaller (e.g. Rael or Kell Tarn) → close the starting-deck modal → enter
+Dream Avatar (e.g. Rael or Kell Tarn) → close the starting-deck modal → enter
 a Draft site → pick a card. Verify: 4-card offers render and advance; the
 console log line `draft_pool_constructed` shows `"algo":"tides"` and
 `poolSize` 200 (the console buffer may hold lines from other sessions —
 match on the newest); zero console errors; screenshot the draft screen for
-layout coherence. Repeat once with a neutral Dreamcaller (e.g. Threxan) to
+layout coherence. Repeat once with a neutral Dream Avatar (e.g. Threxan) to
 exercise the neutral tide-pool path.
 
 ## 7. Domain gotchas (each of these cost time once)
@@ -346,8 +346,8 @@ exercise the neutral tide-pool path.
 - **Names vs UUIDs**: the pool pipeline is name-keyed in memory (decklists,
   `counts` maps, `resolvePool`); committed artifacts are UUID-keyed. The
   variant maps UUIDs → current names via `poolData.cardNameById` and skips
-  unknown UUIDs. Dreamcaller `signatureCards` are NAMES; Dreamcaller `id` is
-  a UUID and is threaded to strategies as `PoolGenerationRequest.dreamcallerId`.
+  unknown UUIDs. Dream Avatar `signatureCards` are NAMES; Dream Avatar `id` is
+  a UUID and is threaded to strategies as `PoolGenerationRequest.dreamAvatarId`.
 - **"Tides" is an overloaded word**: legacy card metadata (`card.tides`,
   `cards_v2.tides.toml`, `TIDE_TO_ARCHETYPE`) is mechanic-archetype tagging
   and per `AGENTS.md` must be ignored entirely. Only "tide decks" /

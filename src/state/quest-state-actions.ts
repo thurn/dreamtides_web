@@ -1,7 +1,7 @@
 import { generateInitialAtlas } from "../atlas/atlas-generator";
-import { toQuestDreamcaller } from "../data/dreamcaller-selection";
+import { toQuestDreamAvatar } from "../data/dream-avatar-selection";
 import {
-  buildDreamcallerPackage,
+  buildDreamAvatarPackage,
   buildReplayDraftState,
 } from "../data/quest-content";
 import type { QuestContent } from "../data/quest-content";
@@ -18,7 +18,7 @@ import { fresh20DepsFor } from "../draft/fresh20/fresh20-deps";
 import { FRESH20_DEFAULT_PACK_SIZE } from "../draft/fresh20/fresh20-offer";
 import type { FitModel } from "../draft/replay/fit-model";
 import type { CardData } from "../types/cards";
-import type { DreamcallerContent } from "../types/content";
+import type { DreamAvatarContent } from "../types/content";
 import type {
   DeckEntry,
   DreamAtlas,
@@ -419,15 +419,15 @@ export function generateQuestSeed(): string {
   return `${part()}${part()}${part()}${part()}`;
 }
 
-export function startQuestFromDreamcaller({
+export function startQuestFromDreamAvatar({
   prev,
-  dreamcaller,
+  dreamAvatar,
   questContent,
   seedOverride,
   atlasRng,
 }: {
   prev: QuestState;
-  dreamcaller: DreamcallerContent;
+  dreamAvatar: DreamAvatarContent;
   questContent: QuestContent;
   /**
    * Optional caller-supplied per-quest seed. The multiplayer provider passes
@@ -449,11 +449,11 @@ export function startQuestFromDreamcaller({
   const poolContext = questContent.poolContext;
   if (poolContext === undefined) {
     throw new Error(
-      "startQuestFromDreamcaller: questContent.poolContext is required",
+      "startQuestFromDreamAvatar: questContent.poolContext is required",
     );
   }
-  const resolvedPackage = buildDreamcallerPackage(
-    dreamcaller,
+  const resolvedPackage = buildDreamAvatarPackage(
+    dreamAvatar,
     poolContext,
     seed,
   );
@@ -511,8 +511,8 @@ export function startQuestFromDreamcaller({
     questContent.draftMode === "fresh20" && questContent.fitModel !== undefined;
   const draftState = useReplayDraft
     ? buildReplayDraftState(
-        dreamcaller,
-        // The replay state resolves record pack ids and the Dreamcaller's
+        dreamAvatar,
+        // The replay state resolves record pack ids and the DreamAvatar's
         // signature card ids against a lowercased-id index, matching the
         // id-keyed fit model.
         buildIdIndex(questContent.cardDatabase),
@@ -529,9 +529,9 @@ export function startQuestFromDreamcaller({
   return {
     ...prev,
     seed,
-    essence: dreamcaller.startingEssence,
+    essence: dreamAvatar.startingEssence,
     deck,
-    dreamcaller: toQuestDreamcaller(dreamcaller),
+    dreamAvatar: toQuestDreamAvatar(dreamAvatar),
     resolvedPackage,
     remainingDreamsignPool,
     draftState,

@@ -4,14 +4,14 @@
 // process a player can be told in one sentence:
 //
 //   "There are 32 preconstructed decks called tides — each has a known
-//    decklist you can go read. We shuffle together one of your Dreamcaller's
+//    decklist you can go read. We shuffle together one of your DreamAvatar's
 //    favored tides with tides drawn at random until there are enough cards,
 //    then deal the first 200, never more than 2 copies of a card."
 //
 // The tide decks themselves are baked offline by `scripts/bake-tides.mjs`
 // from the same decklist corpus `idf3` reads (committed as `data/tides.jsonc`,
 // rendered for players as `docs/cards2/tide_decklists.md`), and each
-// Dreamcaller's favored tides are baked there too, by the same signature
+// DreamAvatar's favored tides are baked there too, by the same signature
 // IDF-cosine probe `idf3` finds its anchors with. So all of `idf3`'s "magic"
 // happens at bake time, where it is inspectable; at runtime the entire
 // algorithm is the tide selection, one shuffle, and one deal below.
@@ -33,9 +33,9 @@ import {
 import type { TideDecksJson } from "./tides-io.ts";
 
 interface TidesTuning {
-  // How many tides come from the Dreamcaller's baked favored list; the rest
+  // How many tides come from the avatar's baked favored list; the rest
   // are drawn at random from the remaining tides. The favored list is wider
-  // than this (see `favoredPerDreamcaller` in scripts/bake-tides.mjs), so
+  // than this (see `favoredPerDreamAvatar` in scripts/bake-tides.mjs), so
   // which favored tide appears varies run to run.
   favoredDraw: number;
   // Copies dealt into the pool, matching the quest's pool size. Tides keep
@@ -53,19 +53,19 @@ export const TIDES: TidesTuning = {
 
 /**
  * Build a pool by combining tide decks: draw `favoredDraw` of the
- * Dreamcaller's baked favored tides, keep adding random tides until the
+ * DreamAvatar's baked favored tides, keep adding random tides until the
  * combined cards can deal a full pool, shuffle everything (with the core
  * tide's cards, when the artifact carries one) into one bag, and deal
  * `targetSize` copies with at most `cap` copies of any card. Tide-deck cards
  * are keyed by cards_v2 UUID; the catalog index (`poolData.cardNameById`) gates
  * membership, so a UUID absent from it (a card dropped from the catalog) is
- * skipped. Without a `dreamcallerId` or a baked favored entry,
+ * skipped. Without a `dreamAvatarId` or a baked favored entry,
  * every tide is drawn at random.
  */
 export function generateTides(
   rng: () => number,
   poolData: PoolData,
-  dreamcallerId?: string,
+  dreamAvatarId?: string,
   targetSize?: number,
 ): VariantResult {
   const data: TideDecksJson | undefined = poolData.tideDecks;
@@ -79,11 +79,11 @@ export function generateTides(
 
   // Tide selection. Both draws shuffle a copy of their candidate list (the
   // favored shuffle, then the random shuffle, then the bag shuffle below), so
-  // the pool is deterministic per (seed, Dreamcaller).
+  // the pool is deterministic per (seed, DreamAvatar).
   const favoredPool =
-    dreamcallerId === undefined
+    dreamAvatarId === undefined
       ? []
-      : (data.favoredTidesByDreamcaller[dreamcallerId] ?? []);
+      : (data.favoredTidesByDreamAvatar[dreamAvatarId] ?? []);
   const favored = shuffle(rng, [...favoredPool]).slice(0, TIDES.favoredDraw);
   const chosenSet = new Set(favored);
   const others = shuffle(
@@ -152,8 +152,8 @@ export function generateTides(
 export const tidesStrategy: PoolStrategy = {
   id: "tides",
   description:
-    "Shuffle together a Dreamcaller-favored tide deck with random tide decks " +
+    "Shuffle together an avatar-favored tide deck with random tide decks " +
     "until a full pool can be dealt from the 32 preconstructed tides.",
-  generate: ({ rng, poolData, dreamcallerId, targetSize }) =>
-    generateTides(rng, poolData, dreamcallerId, targetSize),
+  generate: ({ rng, poolData, dreamAvatarId, targetSize }) =>
+    generateTides(rng, poolData, dreamAvatarId, targetSize),
 };

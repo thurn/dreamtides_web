@@ -55,7 +55,7 @@ function makeView(): BattleStartView {
   return {
     battleId: "battle-test",
     scene: artRef.dreamscapeScene("test_dreamscape"),
-    dreamcaller: {
+    dreamAvatar: {
       id: "opponent-uuid",
       name: "Aeris, the Prism Guide",
       title: "Storm Archivist",
@@ -111,8 +111,8 @@ describe("Cumulus BattleStartScreen", () => {
       container
         .querySelector("[data-battle-start-opponent]")
         ?.getAttribute("data-battle-start-opponent"),
-    ).toBe(view.dreamcaller.id);
-    expect(container.textContent).toContain(view.dreamcaller.name);
+    ).toBe(view.dreamAvatar.id);
+    expect(container.textContent).toContain(view.dreamAvatar.name);
     expect(container.textContent).toContain("Ability");
     const desktopSectionTitles = Array.from(
       container.querySelectorAll("h2"),
@@ -133,7 +133,7 @@ describe("Cumulus BattleStartScreen", () => {
       ),
     ).toHaveLength(3);
     expect(container.textContent).toContain("To Win");
-    expect(container.textContent).not.toContain("Opposing Dreamcaller");
+    expect(container.textContent).not.toContain("Opposing Avatar");
     expect(container.textContent).toContain("Reward");
     expect(container.textContent).toContain("12");
     expect(container.textContent).toContain("80");
@@ -327,11 +327,11 @@ describe("Cumulus BattleStartScreen", () => {
     const view = makeView();
     const { container, root } = mount({
       ...view,
-      dreamcaller: { ...view.dreamcaller, abilityActive: false },
+      dreamAvatar: { ...view.dreamAvatar, abilityActive: false },
     });
 
     expect(container.textContent).toContain(
-      "Opponent dreamcaller ability is not active.",
+      "Opponent avatar ability is not active.",
     );
 
     act(() => root.unmount());
@@ -341,10 +341,10 @@ describe("Cumulus BattleStartScreen", () => {
     const view = makeView();
     const { container, root } = mount({
       ...view,
-      dreamcaller: { ...view.dreamcaller, abilityActive: false },
+      dreamAvatar: { ...view.dreamAvatar, abilityActive: false },
     });
     expect(container.textContent).toContain(
-      "Opponent dreamcaller ability is not active.",
+      "Opponent avatar ability is not active.",
     );
     act(() => root.unmount());
   });

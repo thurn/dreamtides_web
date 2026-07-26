@@ -1,6 +1,6 @@
 import type {
-  DreamcallerPortraitFocus,
-  ResolvedDreamcallerPackage,
+  DreamAvatarPortraitFocus,
+  ResolvedDreamAvatarPackage,
 } from "./content";
 import type { CardData, CardType } from "./cards";
 import type { DraftState } from "./draft";
@@ -110,18 +110,18 @@ export interface DeckEntry {
   isBane: boolean;
 }
 
-/** The selected Dreamcaller package shown in player-facing UI. */
-export interface Dreamcaller {
+/** The selected DreamAvatar package shown in player-facing UI. */
+export interface DreamAvatar {
   id: string;
   name: string;
   title: string;
   renderedText: string;
   imageNumber: string;
   /** Authored head position shared by full-body and square portrait crops. */
-  portraitFocus?: DreamcallerPortraitFocus;
+  portraitFocus?: DreamAvatarPortraitFocus;
   /**
    * Starting essence the player begins the quest with. Captured on the
-   * Dreamcaller record so the HUD inspector and persisted state always know
+   * DreamAvatar record so the HUD inspector and persisted state always know
    * the chosen value, even after Firebase round-trips.
    */
   startingEssence: number;
@@ -139,7 +139,7 @@ export interface Dreamsign {
 
 /**
  * One card currently being explained by the provenance debug overlay. idf3
- * builds each Dreamcaller's pool from its signature cards, so provenance is
+ * builds each DreamAvatar's pool from its signature cards, so provenance is
  * reported as starter-decklist membership and the card's draft-pool copy count.
  */
 export interface CardSourceDebugEntry {
@@ -402,7 +402,7 @@ export type SiteRuntimeState =
 export type Screen =
   | {
       type: "questStart";
-      /** Shared debug-reroll count used to derive the shown Dreamcaller offer. */
+      /** Shared debug-reroll count used to derive the shown DreamAvatar offer. */
       rerollCount?: number;
     }
   | { type: "atlas" }
@@ -499,8 +499,8 @@ export interface QuestState {
    */
   maxDreamsigns: number;
   deck: DeckEntry[];
-  dreamcaller: Dreamcaller | null;
-  resolvedPackage: ResolvedDreamcallerPackage | null;
+  dreamAvatar: DreamAvatar | null;
+  resolvedPackage: ResolvedDreamAvatarPackage | null;
   cardSourceDebug: CardSourceDebugState | null;
   remainingDreamsignPool: string[];
   dreamsigns: Dreamsign[];
@@ -515,7 +515,7 @@ export interface QuestState {
   failureSummary: QuestFailureSummary | null;
   /**
    * Whether the player has dismissed the one-time starter-deck reveal popup
-   * shown immediately after picking a Dreamcaller. Persisted on the quest
+   * shown immediately after picking a DreamAvatar. Persisted on the quest
    * state so reloads of the same room (or other clients) do not see the
    * popup again. Defaults to `false`; flipped to `true` when the player
    * clicks the popup's "Continue" action.

@@ -1,7 +1,7 @@
-// Shared core for the Cumulus Dreamcaller-select screen. Both the mobile carousel
+// Shared core for the Cumulus DreamAvatar-select screen. Both the mobile carousel
 // (`quest-start-mobile`) and the desktop triptych (`quest-start-desktop`) render
 // from these view types and reuse the essence/tide interaction primitives and
-// console hairline, while both compose the named DreamcallerAbilityText source.
+// console hairline, while both compose the named DreamAvatarAbilityText source.
 // PURE: no state ownership; the adapter owns the offer, the seed, and startQuest.
 
 import { ResourceChip } from "../components/hud/ResourceChip";
@@ -10,14 +10,14 @@ import { TideDisc, type TideDiscSize } from "../components/hud/TideDisc";
 import { type Tide } from "../components/hud/tide-spec";
 import { token } from "../primitives/tokens";
 import { GLYPHS } from "../primitives/glyph";
-import type { DreamcallerPortraitFocus } from "../../types/content";
+import type { DreamAvatarPortraitFocus } from "../../types/content";
 import { GLOSSARY_IDS } from "../../data/glossary";
 import { DEBUG_REROLL_TOP } from "./chrome-geometry";
 
-/** One tide shown on a Dreamcaller, already resolved to display copy. Both the
+/** One tide shown on a DreamAvatar, already resolved to display copy. Both the
  * desktop triptych and the mobile carousel render their tide discs (and each
  * disc's InfoCard reveal) from this view. */
-export interface DreamcallerTideView {
+export interface DreamAvatarTideView {
   /** Stable id (a tide deck id) for the React key / QA hook. */
   id: string;
   /** Display name shown on the tide's reveal card. */
@@ -28,7 +28,7 @@ export interface DreamcallerTideView {
   tide: Tide;
 }
 
-/** How many tide discs render at most; a Dreamcaller with more shows the first
+/** How many tide discs render at most; a DreamAvatar with more shows the first
  * few (the rest are the same pools, just less prominent). Shared by both
  * layouts so the cap reads identically on desktop and mobile. */
 export const MAX_TIDE_DISCS = 4;
@@ -40,7 +40,7 @@ export const MAX_TIDE_DISCS = 4;
  * general definition beside it as a secondary text card. Informational: the
  * disc brightens on hover, and — like every
  * Cumulus pressable — scales up on hover and down on press, so a touch press is
- * acknowledged. Both Dreamcaller-select layouts render their tide rows from
+ * acknowledged. Both DreamAvatar-select layouts render their tide rows from
  * this, so the reveal reads identically on each.
  *
  * `hitSlop` pads the pressable around the disc (mobile touch targets) without
@@ -51,7 +51,7 @@ export function TideDiscReveal({
   size = "sm",
   hitSlop,
 }: {
-  tide: DreamcallerTideView;
+  tide: DreamAvatarTideView;
   size?: TideDiscSize;
   hitSlop?: string;
 }) {
@@ -90,7 +90,7 @@ export function TidesLabel() {
   );
 }
 
-/** The tides cluster shared by BOTH Dreamcaller-select layouts: a top row with
+/** The tides cluster shared by BOTH DreamAvatar-select layouts: a top row with
  * the "Tides:" caption on the left and the starting-essence on the right, and —
  * below it, left-aligned under the caption — the tide discs at the larger 'lg'
  * size (capped at {@link MAX_TIDE_DISCS}). The desktop triptych and the mobile
@@ -103,13 +103,13 @@ export function TidesLabel() {
  * Without it (the desktop triptych, a fine pointer) the row spaces its discs
  * with an explicit gap that matches the mobile inter-disc distance. */
 export function TidesEssenceBlock({
-  dreamcaller,
+  dreamAvatar,
   hitSlop,
 }: {
-  dreamcaller: DreamcallerOfferView;
+  dreamAvatar: DreamAvatarOfferView;
   hitSlop?: string;
 }) {
-  const hasTides = dreamcaller.tides.length > 0;
+  const hasTides = dreamAvatar.tides.length > 0;
   return (
     <div>
       {/* Top row: the "Tides:" caption on the left and the starting essence on
@@ -124,12 +124,12 @@ export function TidesEssenceBlock({
         }}
       >
         {hasTides ? <TidesLabel /> : <span />}
-        <EssenceReveal dreamcaller={dreamcaller} />
+        <EssenceReveal dreamAvatar={dreamAvatar} />
       </div>
 
       {hasTides && (
         <div
-          data-dreamcaller-tides={dreamcaller.id}
+          data-dream-avatar-tides={dreamAvatar.id}
           style={{
             display: "flex",
             flexWrap: "wrap",
@@ -144,7 +144,7 @@ export function TidesEssenceBlock({
             marginBottom: hitSlop != null ? `calc(-1 * ${hitSlop})` : undefined,
           }}
         >
-          {dreamcaller.tides.slice(0, MAX_TIDE_DISCS).map((tide) => (
+          {dreamAvatar.tides.slice(0, MAX_TIDE_DISCS).map((tide) => (
             <TideDiscReveal
               key={tide.id}
               tide={tide}
@@ -159,30 +159,30 @@ export function TidesEssenceBlock({
 }
 
 /** One signature card (kept for the shared view type; unused by the carousel). */
-export interface DreamcallerSignatureCardView {
+export interface DreamAvatarSignatureCardView {
   id: string;
   name: string;
 }
 
-/** A single Dreamcaller offered on the select screen, as display data. */
-export interface DreamcallerOfferView {
+/** A single DreamAvatar offered on the select screen, as display data. */
+export interface DreamAvatarOfferView {
   id: string;
   name: string;
   title: string;
   imageNumber: string;
-  portraitFocus?: DreamcallerPortraitFocus;
+  portraitFocus?: DreamAvatarPortraitFocus;
   renderedText: string;
   startingEssence: number;
-  signatureCards: DreamcallerSignatureCardView[];
-  tides: DreamcallerTideView[];
+  signatureCards: DreamAvatarSignatureCardView[];
+  tides: DreamAvatarTideView[];
 }
 
 export interface QuestStartScreenProps {
-  /** The Dreamcallers offered this run (typically three). */
-  dreamcallers: DreamcallerOfferView[];
-  /** Called with a Dreamcaller's id when the player commits to it. */
-  onPick: (dreamcallerId: string) => void;
-  /** Requests a shared debug reroll of the shown Dreamcallers. */
+  /** The DreamAvatars offered this run (typically three). */
+  dreamAvatars: DreamAvatarOfferView[];
+  /** Called with a DreamAvatar's id when the player commits to it. */
+  onPick: (dreamAvatarId: string) => void;
+  /** Requests a shared debug reroll of the shown DreamAvatars. */
   onReroll: () => void;
 }
 
@@ -194,7 +194,7 @@ export function QuestStartRerollControl({
 }) {
   return (
     <div
-      data-dreamcaller-reroll-control
+      data-dream-avatar-reroll-control
       onPointerDown={(event) => {
         event.stopPropagation();
       }}
@@ -207,9 +207,9 @@ export function QuestStartRerollControl({
     >
       <IconButton
         glyph={GLYPHS.refresh}
-        label="Reroll Dreamcallers"
+        label="Reroll Avatars"
         onPress={onReroll}
-        testId="reroll-dreamcallers"
+        testId="reroll-dream-avatars"
       />
     </div>
   );
@@ -233,7 +233,7 @@ export function OnMediaEyebrow({ label }: { readonly label: string }) {
   );
 }
 
-/** The side-by-side Dreamcaller triptych is this screen's desktop idiom, so it
+/** The side-by-side DreamAvatar triptych is this screen's desktop idiom, so it
  * flips to the desktop layout at the shared {@link useIsDesktop} breakpoint:
  * below it a one-per-page swipe carousel, at or above it a desktop triptych. */
 export { useIsDesktop } from "./use-is-desktop";
@@ -257,13 +257,13 @@ export function ConsoleDivider({ flush = false }: { flush?: boolean }) {
  * hovering brightens it subtly and, like every Cumulus pressable, it scales up on
  * hover and down on press, so a touch press is acknowledged. */
 export function EssenceReveal({
-  dreamcaller,
+  dreamAvatar,
 }: {
-  dreamcaller: DreamcallerOfferView;
+  dreamAvatar: DreamAvatarOfferView;
 }) {
   return (
     <span
-      data-starting-essence-value={dreamcaller.id}
+      data-starting-essence-value={dreamAvatar.id}
       style={{
         display: "inline-flex",
         alignItems: "center",
@@ -273,9 +273,9 @@ export function EssenceReveal({
     >
       <ResourceChip
         kind="essence"
-        value={dreamcaller.startingEssence}
+        value={dreamAvatar.startingEssence}
         entity={{
-          id: dreamcaller.id,
+          id: dreamAvatar.id,
           glossaryId: GLOSSARY_IDS.startingEssence,
         }}
       />

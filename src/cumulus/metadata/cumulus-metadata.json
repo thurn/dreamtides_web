@@ -424,22 +424,22 @@
       "description": "Relationship of this canonical combatant to the current local perspective."
     },
     {
-      "name": "dreamcaller",
-      "tsType": "DreamcallerVisual | null",
+      "name": "dreamAvatar",
+      "tsType": "DreamAvatarVisual | null",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Dreamcaller whose head portrait anchors the card, or null while it loads."
+      "description": "DreamAvatar whose head portrait anchors the card, or null while it loads."
     },
     {
-      "name": "dreamcallerProfile",
-      "tsType": "BattleStatusDreamcallerProfile",
+      "name": "dreamAvatarProfile",
+      "tsType": "BattleStatusDreamAvatarProfile",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Optional identity and ability copy revealed from the portrait.",
       "nested": {
-        "name": "BattleStatusDreamcallerProfile",
+        "name": "BattleStatusDreamAvatarProfile",
         "fields": [
           {
             "name": "id",
@@ -1832,14 +1832,14 @@
       "description": "Stable test id for the section."
     }
   ],
-  "DreamcallerAbilityText": [
+  "DreamAvatarAbilityText": [
     {
-      "name": "dreamcallerId",
+      "name": "dreamAvatarId",
       "tsType": "string",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Stable Dreamcaller UUID that owns this ability."
+      "description": "Stable DreamAvatar UUID that owns this ability."
     },
     {
       "name": "text",
@@ -1847,7 +1847,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Complete rendered rules text for the Dreamcaller ability."
+      "description": "Complete rendered rules text for the DreamAvatar ability."
     },
     {
       "name": "presentation",
@@ -1858,19 +1858,19 @@
       ],
       "required": false,
       "defaultValue": "natural",
-      "description": "Natural copy for flowing layouts, or the two-line aligned selection-card\ntreatment used by the desktop Dreamcaller offer triptych."
+      "description": "Natural copy for flowing layouts, or the two-line aligned selection-card\ntreatment used by the desktop DreamAvatar offer triptych."
     }
   ],
-  "DreamcallerPortrait": [
+  "DreamAvatarPortrait": [
     {
-      "name": "dreamcaller",
-      "tsType": "DreamcallerVisual",
+      "name": "dreamAvatar",
+      "tsType": "DreamAvatarVisual",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "The dreamcaller whose art and identity the portrait shows.",
+      "description": "The dreamAvatar whose art and identity the portrait shows.",
       "nested": {
-        "name": "DreamcallerVisual",
+        "name": "DreamAvatarVisual",
         "fields": [
           {
             "name": "imageNumber",
@@ -1892,7 +1892,7 @@
           },
           {
             "name": "portraitFocus",
-            "tsType": "DreamcallerPortraitFocus",
+            "tsType": "DreamAvatarPortraitFocus",
             "optional": true,
             "description": "Normalized head position used to center subject-aware crops."
           }
@@ -1901,7 +1901,7 @@
     },
     {
       "name": "variant",
-      "tsType": "DreamcallerPortraitVariant",
+      "tsType": "DreamAvatarPortraitVariant",
       "unionMembers": [
         "fullBleed",
         "hero",
@@ -1928,7 +1928,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Semantic Dreamcaller profile represented by this portrait. Omit for decorative art."
+      "description": "Semantic DreamAvatar profile represented by this portrait. Omit for decorative art."
     },
     {
       "name": "onActivate",
@@ -3168,7 +3168,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "An epithet under the name — a smaller serif line in white, mirroring the\nDreamcaller-select name/epithet pairing. Plain text; resolve before display.\nThe resident guide / boss title under the place headline.\nAn epithet under the name — a smaller serif subtitle in white, mirroring\nthe Dreamcaller-select name/epithet pairing. Plain text; resolve before\ndisplay."
+      "description": "An epithet under the name — a smaller serif line in white, mirroring the\nDreamAvatar-select name/epithet pairing. Plain text; resolve before display.\nThe resident guide / boss title under the place headline.\nAn epithet under the name — a smaller serif subtitle in white, mirroring\nthe DreamAvatar-select name/epithet pairing. Plain text; resolve before\ndisplay."
     },
     {
       "name": "glyph",
@@ -3830,20 +3830,20 @@
       "description": "Open the deck viewer — fired on a tap / click of the deck sprite."
     },
     {
-      "name": "dreamcaller",
-      "tsType": "QsbDreamcaller",
+      "name": "dreamAvatar",
+      "tsType": "QsbDreamAvatar",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "",
       "nested": {
-        "name": "QsbDreamcaller",
+        "name": "QsbDreamAvatar",
         "fields": [
           {
             "name": "id",
             "tsType": "string",
             "optional": false,
-            "description": "Stable Dreamcaller UUID."
+            "description": "Stable DreamAvatar UUID."
           },
           {
             "name": "name",
@@ -3861,11 +3861,11 @@
             "name": "portrait",
             "tsType": "ArtRef",
             "optional": false,
-            "description": "The portrait art as an {@link ArtRef}. Required — a docked Dreamcaller always has art."
+            "description": "The portrait art as an {@link ArtRef}. Required — a docked DreamAvatar always has art."
           },
           {
             "name": "portraitFocus",
-            "tsType": "DreamcallerPortraitFocus",
+            "tsType": "DreamAvatarPortraitFocus",
             "optional": true,
             "description": "Normalized head position used to center the square HUD crop."
           },

@@ -617,8 +617,8 @@ describe("reducer containment at the foldEvents layer", () => {
     // A lifecycle provider whose START_QUEST assembly THROWS — a stand-in for a
     // programmer error deep inside a domain case (the reducer never swallows it).
     registerQuestLifecycleContentProvider({
-      resolveDreamcallerPackage: () => {
-        throw new Error("resolveDreamcallerPackage exploded");
+      resolveDreamAvatarPackage: () => {
+        throw new Error("resolveDreamAvatarPackage exploded");
       },
       startQuest: () => {
         throw new Error("startQuest exploded");
@@ -627,7 +627,7 @@ describe("reducer containment at the foldEvents layer", () => {
     try {
       const state = genesisFoldState(GENESIS);
       const batch = [
-        { seq: 1, event: event("START_QUEST", { dreamcallerId: "dc-x" }) },
+        { seq: 1, event: event("START_QUEST", { dreamAvatarId: "dc-x" }) },
       ];
       const base = { seq: 0, state };
 

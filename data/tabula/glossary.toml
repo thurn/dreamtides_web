@@ -206,8 +206,8 @@ definition-uses-rules-text = true
 term-presentation = "definition-only"
 
 [[entries.contexts]]
-owner = "dreamcaller"
-definition = "You may exhaust (☪) this dreamcaller to activate this ability once per turn."
+owner = "dreamAvatar"
+definition = "You may exhaust (☪) this avatar to activate this ability once per turn."
 
 [[entries]]
 id = "awakened"
@@ -492,7 +492,7 @@ variants = []
 id = "starting-essence"
 category = "Resources"
 term = "Starting Essence"
-definition = "The essence this Dreamcaller begins the quest with, spent at sites this run."
+definition = "The essence this avatar begins the quest with, spent at sites this run."
 priority = 0
 matches-rules-text = false
 variants = []

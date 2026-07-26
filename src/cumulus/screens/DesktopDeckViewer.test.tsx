@@ -59,7 +59,7 @@ describe("DesktopDeckViewer", () => {
   it("uses the standard alpha scrim without blurring the scene", () => {
     const { container, root } = mount(
       <DesktopDeckViewer
-        view={{ cards: [], dreamcaller: null, dreamsigns: [] }}
+        view={{ cards: [], dreamAvatar: null, dreamsigns: [] }}
         onClose={vi.fn()}
       />,
     );
@@ -79,7 +79,7 @@ describe("DesktopDeckViewer", () => {
   it("selects sort direction from a two-arrow segmented control", () => {
     const { container, root } = mount(
       <DesktopDeckViewer
-        view={{ cards: [], dreamcaller: null, dreamsigns: [] }}
+        view={{ cards: [], dreamAvatar: null, dreamsigns: [] }}
         onClose={vi.fn()}
       />,
     );
@@ -113,7 +113,7 @@ describe("DesktopDeckViewer", () => {
       <DesktopDeckViewer
         view={{
           cards: [deckCard(1), deckCard(2), deckCard(3)],
-          dreamcaller: null,
+          dreamAvatar: null,
           dreamsigns: [],
         }}
         onClose={vi.fn()}

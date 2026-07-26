@@ -78,7 +78,7 @@ function content(): QuestContent {
   ];
   return {
     cardDatabase: new Map(cards.map((item) => [item.cardNumber, item])),
-    dreamcallers: [
+    dreamAvatars: [
       { id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5", name: "Tensho", title: "Tutor", renderedText: "inactive", imageNumber: "0029", startingEssence: 0, signatureCards: [] },
       { id: "B99936CA-97F9-4930-AF5A-FA9EF92557EF", name: "Threxan", title: "Tutor", renderedText: "inactive", imageNumber: "0025", startingEssence: 0, signatureCards: [] },
     ],

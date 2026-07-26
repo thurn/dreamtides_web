@@ -523,32 +523,32 @@ the real component's props before writing so the prose is accurate.
 
 ---
 
-### Task 8 — Document DreamcallerPortrait (~19 consumers)
+### Task 8 — Document Dream AvatarPortrait (~19 consumers)
 
-**Files:** `src/cumulus/docs/demos/dreamcaller-portrait.tsx` (new); `registry.ts` (import + append, Components group).
+**Files:** `src/cumulus/docs/demos/dream-avatar-portrait.tsx` (new); `registry.ts` (import + append, Components group).
 
-**Interfaces:** `DreamcallerPortrait({ dreamcaller: DreamcallerVisual, variant?:
-"hero" | "panel" | "thumb", size?: number })`. `docName: "DreamcallerPortrait"`,
-`id: "dreamcaller-portrait"`, `title: "Dreamcaller Portrait"`, `group: "Components"`.
+**Interfaces:** `Dream AvatarPortrait({ dream avatar: Dream AvatarVisual, variant?:
+"hero" | "panel" | "thumb", size?: number })`. `docName: "Dream AvatarPortrait"`,
+`id: "dream-avatar-portrait"`, `title: "DreamAvatar Portrait"`, `group: "Components"`.
 Highest-adoption undocumented module — document first.
 
-**One-line scope the prose must convey:** the ONE way to render a dreamcaller's
+**One-line scope the prose must convey:** the ONE way to render a dream avatar's
 character art — the transparent full-body cutout on a tinted radial backdrop, in
 one of three fixed framings (`hero` showcase / `panel` square for profile cards +
 popovers / `thumb` square for HUD rows + resident lists); a 404 art asset falls
 back to a tinted monogram disc.
 
 **Demo must:** live `Component` renders the three variants side by side against a
-real `DreamcallerVisual` (curated `imageNumber` + name/title; art from `public/`).
+real `DreamAvatarVisual` (curated `imageNumber` + name/title; art from `public/`).
 `callout`: no style/className escape hatch — pass a fixed pixel `size` (the portrait
 then refuses to shrink in a flex row) or omit it to fill the container; for any
 other layout, wrap the portrait. `usage[]`: one entry each for hero / panel-in-a-
 profile-card / thumb-in-a-HUD-row with real prop shapes. `demo.defaultArgs: {
-variant: "panel", size: 160 }`; `sampleContent` = the `dreamcaller` object.
+variant: "panel", size: 160 }`; `sampleContent` = the `dream avatar` object.
 
-**Verify:** regenerate; lint/typecheck/test green; Browser QA `/cumulus#/dreamcaller-portrait`
+**Verify:** regenerate; lint/typecheck/test green; Browser QA `/cumulus#/dream-avatar-portrait`
 (three framings + monogram fallback if pointed at a missing `imageNumber`;
-adoption count > 0; no console errors). Commit: `docs(cumulus): document DreamcallerPortrait` + push.
+adoption count > 0; no console errors). Commit: `docs(cumulus): document DreamAvatarPortrait` + push.
 
 ---
 
@@ -574,7 +574,7 @@ deck rows.
 readiness-gap item 2). Grep both consumer sets before asserting it as fact and
 adjust wording if a consumer contradicts it:**
 - **`InfoCard` / `InfoCard.PressInfo`** — the canonical reveal for **object / entity
-  cards** (a card, dreamcaller, dreamsign, tide, site): the input-adaptive press
+  cards** (a card, dream avatar, dreamsign, tide, site): the input-adaptive press
   engine (fine-pointer hover OR touch press-down), pointer-anchored, clamped
   above/beside, no close button. This is the "Popup rule" in SKILL.md and covers
   every game-object reveal.
@@ -979,7 +979,7 @@ complete at this commit.
 - **"Cumulus readiness gaps" item 2** (popup-rule conflict: bless HoverPopover or
   migrate) — resolved by Task 9's documented decision rule → **delete item 2**.
 - **"Cumulus readiness gaps" item 1** (~9 undocumented components) — this phase
-  documented DreamcallerPortrait, HoverPopover, HoverZoomCard, GlowIcon, rich-text,
+  documented Dream AvatarPortrait, HoverPopover, HoverZoomCard, GlowIcon, rich-text,
   GlossaryDefinitionCard, CardTermDefinitions, PipBadge (and AtlasMap). It did NOT
   document EssenceValue (deferred to its `ResourceChip` migration — out of scope),
   LeaveSiteButton, or CardStatOrb. So **rewrite item 1** to name only the residual
@@ -1016,7 +1016,7 @@ complete at this commit.
 - [ ] `npm run regenerate-assets` — confirm no uncommitted drift remains (`git status`
       clean after commit); metadata no longer lists StatTile / TidePill (and `Tide`),
       the `components/` dir has no `stat-tile.md` / `tide-pill.md`, and the new
-      workhorse `.md` files (`dreamcaller-portrait.md`, `hover-popover.md`,
+      workhorse `.md` files (`dream-avatar-portrait.md`, `hover-popover.md`,
       `hover-zoom-card.md`, `glow-icon.md`, `rich-text.md`,
       `glossary-definition-card.md`, `card-term-definitions.md`, `pip-badge.md`,
       `atlas-map.md`) exist. Commit any drift.

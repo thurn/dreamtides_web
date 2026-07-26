@@ -70,7 +70,7 @@ absent) keeps the AI opponent on.
 
 The AI is a local actor that runs on a single client, so it stays off in a
 shared multiplayer room (when two or more clients are connected). `goto=battle`
-opens the first opposing-Dreamcaller preview; pair it with `ai=0` for a manual
+opens the first opposing-Dream Avatar preview; pair it with `ai=0` for a manual
 battle (`?goto=battle&ai=0`).
 
 ## `realtime`
@@ -99,7 +99,7 @@ provides:
 - `algo=merged` — draws from pre-merged per-archetype lists.
 - `algo=idf` — grows a pool from one random decklist by IDF-cosine similarity.
 - `algo=idf2` — `idf` with a diversity-biased starter draw.
-- `algo=idf3` — `idf2` steered toward a Dreamcaller by its signature cards
+- `algo=idf3` — `idf2` steered toward a Dream Avatar by its signature cards
   (the default).
 - `algo=seed` — draws one card uniformly at random and grows a 150-card pool
   around it by IDF-weighted co-occurrence affinity, both to the seed card and to
@@ -107,35 +107,35 @@ provides:
   reads). Copies cap at 2; the most central cards earn the second copy.
 - `algo=tides` — combines the 32 preconstructed tide decks
   (`data/tides.jsonc`, rendered as `docs/cards2/tide_decklists.md`): one of the
-  Dreamcaller's baked favored tides is shuffled together with tides drawn at
+  Dream Avatar's baked favored tides is shuffled together with tides drawn at
   random until a full pool is dealable, then 200 cards are dealt with at most
   2 copies of any card. The human-legible counterpart of `idf3`; requires the
   baked artifact (`npm run bake-tides`).
 - `algo=tides2` — an affinity-selected counterpart to `tides`, built for direct
-  comparison. It draws a lead tide from the Dreamcaller's curated tide pool, then
+  comparison. It draws a lead tide from the Dream Avatar's curated tide pool, then
   shuffles in the lead's allied tides until a full pool is dealable, dealing 200
   cards with at most 2 copies of any card. Tides are smaller and purer than
-  `tides`, and which tides ally and which a Dreamcaller draws from are curated in
+  `tides`, and which tides ally and which a Dream Avatar draws from are curated in
   `data/tides2_relationships.jsonc` (decks in `data/tides2.jsonc`, both rendered
   as `docs/cards2/tides2_decklists.md`). Requires the baked decks
   (`npm run bake-tides2`) and the seeded relationships
   (`npm run seed-tide-relationships`).
 - `algo=tides3` — the human-legible counterpart of `sigseed`. Combines the 32
   preconstructed tides in `data/tides3.jsonc` (rendered as
-  `docs/cards2/tides3_decklists.md`): a signatured Dreamcaller's own signature
+  `docs/cards2/tides3_decklists.md`): a signatured Dream Avatar's own signature
   tide leads, shuffled together with broad tides until a 150-card pool can be
-  dealt (at most 2 copies of any card). Each signature tide is a Dreamcaller's
+  dealt (at most 2 copies of any card). Each signature tide is a Dream Avatar's
   full-signature `sigseed` pool baked as a deck, so a pool delivers the
-  Dreamcaller's identity the way `sigseed` does. Requires the baked artifact
+  Dream Avatar's identity the way `sigseed` does. Requires the baked artifact
   (`npm run bake-tides3`); see `docs/cards2/tides3_algorithm.md`.
 - `algo=tides4` — the human-legible counterpart of `sigseed`'s run-to-run
   _variety_. Combines the preconstructed tides in `data/tides4.jsonc` (rendered as
-  `docs/cards2/tides4_decklists.md`): the Dreamcaller's signature tide is always
+  `docs/cards2/tides4_decklists.md`): the Dream Avatar's signature tide is always
   joined as a dense on-theme core, a random subset of its small _facet_ tides
   (each a single-anchor `sigseed` pool) is mixed in to lean the pool a different
   way each run, and broad tides top it up to a 150-card pool (at most 2 copies of
   any card). Drawing a random facet subset reproduces the variety `sigseed` gets
-  from a random signature subset, so a Dreamcaller yields a cloud of distinct,
+  from a random signature subset, so a Dream Avatar yields a cloud of distinct,
   on-identity pools rather than one fixed pool. Requires the baked artifact
   (`npm run bake-tides4`); see section 5 of `docs/cards2/tides_algorithms.md`.
 - `algo=tides5` — the exact `tides4` algorithm (same signature / facet / neutral
@@ -148,7 +148,7 @@ provides:
 
 Most of these are described in `docs/cards2/draft_pool_algorithms.md`. Any value
 not registered (including empty or absent) falls back to `DEFAULT_POOL_VARIANT`,
-currently `idf3`. `idf3` consumes the Dreamcaller's signature cards; `seed`
+currently `idf3`. `idf3` consumes the Dream Avatar's signature cards; `seed`
 ignores it and draws its own random seed card. Both `idf3` and `seed` produce the
 "Why Cards" provenance surface — `idf3` describing the signature → starter →
 growth chain, `seed` describing the random seed card and its affinity growth. The
@@ -171,7 +171,7 @@ pick, rank candidate cards by how well they fit the deck drafted so far:
   twice. Every pack is drawn only from cards still eligible under those rules.
 
 When `algo` is `replay` or `fresh20`, `poolVariant` still resolves to the default
-(`idf3`) and supplies the resolved Dreamcaller package: signatures, Dreamsign
+(`idf3`) and supplies the resolved Dream Avatar package: signatures, Dreamsign
 pool, starter decklist, and the transient shop pool used by the deck-fit modes.
 The `algo` selection governs draft pack construction.
 

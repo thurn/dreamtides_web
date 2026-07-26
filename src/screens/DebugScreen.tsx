@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CardData } from "../types/cards";
-import type { DreamsignTemplate, ResolvedDreamcallerPackage } from "../types/content";
+import type { DreamsignTemplate, ResolvedDreamAvatarPackage } from "../types/content";
 import type { DraftState } from "../types/draft";
 import type { QuestState } from "../types/quest";
 import { logEvent } from "../logging";
@@ -10,7 +10,7 @@ import { buildPackageDebugView } from "./cumulus_adapters/package-debug-view-mod
 
 /** Outer diagnostic controller: owns save I/O, mutation dispatch, and logging. */
 export function DebugScreen({ isOpen, onClose, draftState, cardDatabase, resolvedPackage, remainingDreamsignPool, dreamsignTemplates, onForceLegendaryOffer, questState, onLoadQuestState }: {
-  isOpen: boolean; onClose: () => void; draftState: DraftState | null; cardDatabase: ReadonlyMap<number, CardData>; resolvedPackage: ResolvedDreamcallerPackage | null; remainingDreamsignPool: readonly string[]; dreamsignTemplates: readonly DreamsignTemplate[]; onForceLegendaryOffer?: (draftState: DraftState, source: string) => void; questState: QuestState | null; onLoadQuestState?: (state: QuestState, source: string) => void;
+  isOpen: boolean; onClose: () => void; draftState: DraftState | null; cardDatabase: ReadonlyMap<number, CardData>; resolvedPackage: ResolvedDreamAvatarPackage | null; remainingDreamsignPool: readonly string[]; dreamsignTemplates: readonly DreamsignTemplate[]; onForceLegendaryOffer?: (draftState: DraftState, source: string) => void; questState: QuestState | null; onLoadQuestState?: (state: QuestState, source: string) => void;
 }) {
   const [saves, setSaves] = useState<readonly SavedQuestSummary[]>([]);
   const [saveName, setSaveName] = useState("");

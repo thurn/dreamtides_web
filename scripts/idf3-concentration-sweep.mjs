@@ -27,7 +27,7 @@ const decklists = readJson("public/decklists-data.json");
 // idf scores on the id-keyed corpus; the grown pool is resolved to names for the
 // name-keyed metric (`scorePool`).
 const decklistIds = readJson("public/decklist-ids-data.json");
-const dreamcallers = readJson("public/dreamcallers-v2-data.json");
+const dreamAvatars = readJson("public/dream-avatars-v2-data.json");
 const meta = readJson("data/buildaround_support.json");
 const poolData = buildPoolData(cards, decklists, undefined, decklistIds);
 const toNames = (counts) => resolveCountsToNames(counts, poolData.cardNameById);
@@ -87,7 +87,7 @@ function poolCounts(rng, sig, t) {
 function score(t) {
   const all = [];
   const byTheme = new Map();
-  for (const dc of dreamcallers) {
+  for (const dc of dreamAvatars) {
     for (let s = 0; s < SEEDS; s++) {
       const counts = poolCounts(mulberry(s), dc.signatureCardIds ?? [], t);
       for (const inst of scorePool(toNames(counts), meta, TIER_TARGET, SHORT)) {
@@ -116,7 +116,7 @@ const configs = [
   ["anchorCount=1", { ...BASE, anchorCount: 1 }],
 ];
 
-console.log(`idf3 concentration sweep (${SEEDS} seeds x ${dreamcallers.length} DCs, short themes)\n`);
+console.log(`idf3 concentration sweep (${SEEDS} seeds x ${dreamAvatars.length} DCs, short themes)\n`);
 for (const [name, t] of configs) {
   const r = score(t);
   console.log(`${r.headline.toFixed(1)}  ${name}`);

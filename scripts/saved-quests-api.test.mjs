@@ -47,7 +47,7 @@ async function requestJson(origin, path, init) {
 }
 
 function questStateFixture(screenType = "dreamscape") {
-  return { screen: { type: screenType }, dreamcaller: { id: "dc-1" }, essence: 5 };
+  return { screen: { type: screenType }, dreamAvatar: { id: "dc-1" }, essence: 5 };
 }
 
 describe("saved-quests api middleware", () => {

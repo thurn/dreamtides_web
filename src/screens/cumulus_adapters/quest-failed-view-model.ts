@@ -17,18 +17,18 @@ export function buildQuestFailedView(
         ? "Your journey ends here."
         : "Neither side could claim the dream.",
     reasonLabel: formatQuestFailureReason(summary.reason),
-    dreamcaller:
-      state.dreamcaller === null
+    dreamAvatar:
+      state.dreamAvatar === null
         ? null
         : {
-            id: state.dreamcaller.id,
-            name: state.dreamcaller.name,
-            title: state.dreamcaller.title,
-            ability: state.dreamcaller.renderedText,
-            imageNumber: state.dreamcaller.imageNumber,
-            ...(state.dreamcaller.portraitFocus === undefined
+            id: state.dreamAvatar.id,
+            name: state.dreamAvatar.name,
+            title: state.dreamAvatar.title,
+            ability: state.dreamAvatar.renderedText,
+            imageNumber: state.dreamAvatar.imageNumber,
+            ...(state.dreamAvatar.portraitFocus === undefined
               ? {}
-              : { portraitFocus: state.dreamcaller.portraitFocus }),
+              : { portraitFocus: state.dreamAvatar.portraitFocus }),
           },
     stats: [
       {

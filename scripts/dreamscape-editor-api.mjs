@@ -13,12 +13,12 @@ import { fileURLToPath } from "node:url";
 import {
   DEFAULT_DREAMSCAPE_TOML_PATH,
   SITE_TYPES,
-  applyDreamcallerChanges,
+  applyDreamAvatarChanges,
   makeValidateDreamscapeEdit,
   patchDreamscapesToml,
-  planDreamcallerAssignment,
+  planDreamAvatarAssignment,
   readAffiliationOptions,
-  readDreamcallerOptions,
+  readDreamAvatarOptions,
   readDreamGuideOptions,
   readEditorDreamscapes,
   refreshDreamscapesDataJson,
@@ -79,12 +79,12 @@ function routeForRawPath(rawPath) {
   }
 
   const remainder = rawPath.slice(BASE_PATH.length + 1);
-  // A dreamcaller-assignment route is `${BASE_PATH}/:id/dreamcallers`; the bare
+  // A dream-avatar-assignment route is `${BASE_PATH}/:id/dream-avatars`; the bare
   // record route is `${BASE_PATH}/:id`.
   const segments = remainder.split("/");
-  const isDreamcallerRoute = segments.length === 2 && segments[1] === "dreamcallers";
+  const isDreamAvatarRoute = segments.length === 2 && segments[1] === "dream-avatars";
 
-  if (remainder.length === 0 || (segments.length > 1 && !isDreamcallerRoute)) {
+  if (remainder.length === 0 || (segments.length > 1 && !isDreamAvatarRoute)) {
     return {
       ok: false,
       statusCode: 404,
@@ -115,8 +115,8 @@ function routeForRawPath(rawPath) {
     };
   }
 
-  if (isDreamcallerRoute) {
-    return { ok: true, resource: "dreamcallers", dreamscapeId };
+  if (isDreamAvatarRoute) {
+    return { ok: true, resource: "dream-avatars", dreamscapeId };
   }
 
   return { ok: true, resource: "dreamscape", dreamscapeId };
@@ -261,7 +261,7 @@ function collectionPayload(rootDir, dreamscapeTomlPath) {
     dreamscapes: readEditorDreamscapes({ rootDir, dreamscapeTomlPath }),
     guides: readDreamGuideOptions({ rootDir }),
     affiliations: readAffiliationOptions({ rootDir }),
-    dreamcallers: readDreamcallerOptions({ rootDir }),
+    dreamAvatars: readDreamAvatarOptions({ rootDir }),
     siteTypes: SITE_TYPES,
   };
 }
@@ -274,15 +274,15 @@ function assertAssignmentBody(body) {
     return { ok: false, message: 'action must be "replace", "add", or "remove".' };
   }
   if (body.inId !== undefined && typeof body.inId !== "string") {
-    return { ok: false, message: "inId must be a Dreamcaller id string." };
+    return { ok: false, message: "inId must be a DreamAvatar id string." };
   }
   if (body.outId !== undefined && typeof body.outId !== "string") {
-    return { ok: false, message: "outId must be a Dreamcaller id string." };
+    return { ok: false, message: "outId must be a DreamAvatar id string." };
   }
   return { ok: true };
 }
 
-async function handleDreamcallerAssignment(
+async function handleDreamAvatarAssignment(
   req,
   res,
   rootDir,
@@ -316,13 +316,13 @@ async function handleDreamcallerAssignment(
     return;
   }
 
-  const dreamcallers = readDreamcallerOptions({ rootDir });
-  const catalogIds = dreamcallers.map((dreamcaller) => dreamcaller.id);
+  const dreamAvatars = readDreamAvatarOptions({ rootDir });
+  const catalogIds = dreamAvatars.map((dreamAvatar) => dreamAvatar.id);
   const nameById = new Map(
-    dreamcallers.map((dreamcaller) => [dreamcaller.id.toLowerCase(), dreamcaller.name]),
+    dreamAvatars.map((dreamAvatar) => [dreamAvatar.id.toLowerCase(), dreamAvatar.name]),
   );
 
-  const plan = planDreamcallerAssignment(dreamscapes, catalogIds, {
+  const plan = planDreamAvatarAssignment(dreamscapes, catalogIds, {
     action: body.action,
     dreamscapeId,
     inId: body.inId,
@@ -335,7 +335,7 @@ async function handleDreamcallerAssignment(
 
   const tomlPath = join(rootDir, dreamscapeTomlPath);
   const source = fileSystem.readFileSync(tomlPath, "utf8");
-  const patchedSource = applyDreamcallerChanges(source, plan.changes, nameById);
+  const patchedSource = applyDreamAvatarChanges(source, plan.changes, nameById);
 
   const refreshesJson = dreamscapeTomlPath === DEFAULT_DREAMSCAPE_TOML_PATH;
   const writes = [preparedWrite(tomlPath, patchedSource)];
@@ -345,7 +345,7 @@ async function handleDreamcallerAssignment(
   }
   commitFiles(writes, fileSystem);
 
-  // Logged so a Dreamcaller reassignment can be reconstructed: the action, the
+  // Logged so a DreamAvatar reassignment can be reconstructed: the action, the
   // callers moved, and every region whose roster changed.
   console.log(
     `[dreamscape-editor] ${body.action} on ${dreamscapeId}` +
@@ -516,8 +516,8 @@ export function createDreamscapeEditorApiMiddleware({
         return;
       }
 
-      if (req.method === "POST" && route.resource === "dreamcallers") {
-        await handleDreamcallerAssignment(
+      if (req.method === "POST" && route.resource === "dream-avatars") {
+        await handleDreamAvatarAssignment(
           req,
           res,
           rootDir,
@@ -531,7 +531,7 @@ export function createDreamscapeEditorApiMiddleware({
       const allowed =
         route.resource === "collection"
           ? ["GET"]
-          : route.resource === "dreamcallers"
+          : route.resource === "dream-avatars"
             ? ["POST"]
             : ["PATCH"];
       methodNotAllowed(res, allowed);

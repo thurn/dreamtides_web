@@ -68,11 +68,11 @@ function makeState(): QuestState {
         isBane: false,
       },
     ],
-    dreamcaller: {
+    dreamAvatar: {
       id: "caller-1",
       name: "Mira of Lanterns",
       title: "Keeper of Lantern Glass",
-      renderedText: "Dreamcaller rules.",
+      renderedText: "DreamAvatar rules.",
       imageNumber: "0005",
       startingEssence: 250,
     },
@@ -170,7 +170,7 @@ describe("DesktopDeckViewerAdapter", () => {
     expect(logEvent).toHaveBeenLastCalledWith("desktop_deck_viewer_opened", {
       cardCount: 1,
       dreamsignCount: 1,
-      hasDreamcaller: true,
+      hasDreamAvatar: true,
     });
 
     setQuestContext(makeState());

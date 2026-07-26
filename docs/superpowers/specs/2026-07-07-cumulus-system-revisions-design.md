@@ -122,7 +122,7 @@ toward zero.
   `ResourceChip` replaces numeric `size`/`gap` props with enumerated
   variants and gets an honest blurb naming the `EssenceValue` migration
   path.
-- **`DreamcallerPortrait`** gains `standing` / `fullBleed` variants,
+- **`DreamAvatarPortrait`** gains `standing` / `fullBleed` variants,
   folding `StandingFigure` and `FullBleedPortrait` onto it (deletes the
   thrice-pasted monogram gradient and fallback).
 - **`useScaleToFit`** extracted from `AtlasMap`; the atlas mockup imports
@@ -178,7 +178,7 @@ commit.
   site-node demo as the standard; the site-node locked fixture stops
   duplicating the lock note into `blurb`; the atlas mockup is rebuilt
   from the real `AtlasMap` or labeled archived.
-- **Document the workhorses,** in adoption order: `DreamcallerPortrait`,
+- **Document the workhorses,** in adoption order: `DreamAvatarPortrait`,
   `HoverPopover` (with the HoverPopover-vs-InfoCard decision rule),
   `HoverZoomCard`, `GlowIcon`, `rich-text`, `GlossaryDefinitionCard`,
   `CardTermDefinitions`, `tide-spec`, `PipBadge`, plus `AtlasMap` as the

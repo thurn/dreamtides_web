@@ -249,7 +249,7 @@ A single pure function:
 ```ts
 function readDeck(input: {
   deck: DeckEntry[];
-  dreamcaller: Dreamcaller | null;
+  dreamAvatar: DreamAvatar | null;
   cardDb: Map<number, CardData>;
   fitModel: FitModel;                       // built from loadDraftRecords()
   supportMeta: SupportMeta;                 // buildaround_support.json
@@ -314,7 +314,7 @@ observations and the safest to voice explicitly.
 
 ### 5.3 `weak_card` — "remove a particularly bad card"
 
-For each deck entry (excluding banes and the Dreamcaller's signature cards),
+For each deck entry (excluding banes and the Dream Avatar's signature cards),
 compute a corpus-fit contribution and flag the worst.
 
 ```

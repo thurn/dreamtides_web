@@ -32,7 +32,7 @@ import { combineTidesPool } from "./variant-tides4.ts";
 export function generateTides5(
   rng: () => number,
   poolData: PoolData,
-  dreamcallerId?: string,
+  dreamAvatarId?: string,
 ): VariantResult {
   const data: Tides5DecksJson | undefined = poolData.tides5Decks;
   if (!data) {
@@ -41,7 +41,7 @@ export function generateTides5(
       "no tide decks are bundled (data/tides5.jsonc, served as /tides5-data.json)",
     );
   }
-  return combineTidesPool(rng, poolData, data, dreamcallerId, "tides5");
+  return combineTidesPool(rng, poolData, data, dreamAvatarId, "tides5");
 }
 
 /** Strategy adapter for the `tides5` algorithm. */
@@ -49,9 +49,9 @@ export const tides5Strategy: PoolStrategy = {
   id: "tides5",
   description:
     "Combine preconstructed tides into a pool exactly as tides4 does — the " +
-    "Dreamcaller's signature tide plus a random subset of its theme (facet) tides, " +
+    "DreamAvatar's signature tide plus a random subset of its theme (facet) tides, " +
     "topped up with broad tides — but grown only from the known-good decklists, " +
     "discarding every other draft seat.",
-  generate: ({ rng, poolData, dreamcallerId }) =>
-    generateTides5(rng, poolData, dreamcallerId),
+  generate: ({ rng, poolData, dreamAvatarId }) =>
+    generateTides5(rng, poolData, dreamAvatarId),
 };

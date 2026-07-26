@@ -58,9 +58,9 @@ function contextArray(value, index) {
       );
     }
     const owner = optionalString(context.owner, "context owner", index);
-    if (owner !== undefined && owner !== "card" && owner !== "dreamcaller") {
+    if (owner !== undefined && owner !== "card" && owner !== "dreamAvatar") {
       throw invalid(
-        `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} owner must be "card" or "dreamcaller".`,
+        `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} owner must be "card" or "dreamAvatar".`,
       );
     }
     const pattern = optionalString(context.pattern, "context pattern", index);

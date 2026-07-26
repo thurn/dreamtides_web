@@ -15,7 +15,7 @@ const VIEW: QuestFailedView = {
   title: "Quest Ended",
   message: "Your journey ends here.",
   reasonLabel: "Score Threshold Reached",
-  dreamcaller: {
+  dreamAvatar: {
     id: "00000000-0000-4000-8000-000000000061",
     name: "The Wayfinder",
     title: "Bearer of the Last Light",
@@ -72,7 +72,7 @@ describe("Cumulus QuestFailedScreen", () => {
     );
     const hierarchy = container.querySelector("[data-quest-failed-hierarchy]");
     const portrait = hierarchy?.querySelector<HTMLElement>(
-      "[data-quest-failed-dreamcaller]",
+      "[data-quest-failed-dream-avatar]",
     );
 
     expect(screen?.dataset.questFailedScreen).toBe("defeat");
@@ -94,7 +94,7 @@ describe("Cumulus QuestFailedScreen", () => {
       ),
     ).toEqual(["title", "portrait", "stats"]);
     expect(portrait?.textContent).toBe("");
-    expect(portrait?.querySelector("[data-dreamcaller-source]")).not.toBeNull();
+    expect(portrait?.querySelector("[data-dream-avatar-source]")).not.toBeNull();
     expect(container.querySelectorAll("[data-quest-failed-stat]")).toHaveLength(4);
     expect(
       container.querySelector('[data-quest-failed-stat="enemyScore"]')

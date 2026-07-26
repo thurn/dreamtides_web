@@ -1,8 +1,8 @@
 import { generateInitialAtlas } from "../atlas/atlas-generator";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
-import { toQuestDreamcaller } from "../data/dreamcaller-selection";
+import { toQuestDreamAvatar } from "../data/dream-avatar-selection";
 import { initializeDraftState } from "../draft/draft-engine";
-import { buildDreamcallerPackage } from "../data/quest-content";
+import { buildDreamAvatarPackage } from "../data/quest-content";
 import type { QuestContent } from "../data/quest-content";
 import type { DreamAtlas, DreamscapeNode, QuestState } from "../types/quest";
 import { generateQuestSeed } from "../state/quest-state-actions";
@@ -23,7 +23,7 @@ export interface QaQuestFoundation {
 
 /**
  * Builds the common foundation for `?goto=<scene>` developer flows: the first
- * Dreamcaller, its resolved draft package, the starter deck, and a freshly
+ * DreamAvatar, its resolved draft package, the starter deck, and a freshly
  * generated atlas with its boss node and Apollyon incarnation. Returns null
  * when required quest content is missing. The returned `state` is the resting
  * atlas state; nothing here is specific to any one target screen.
@@ -31,9 +31,9 @@ export interface QaQuestFoundation {
 export function createQaQuestFoundation(
   questContent: QuestContent,
 ): QaQuestFoundation | null {
-  const dreamcaller = questContent.dreamcallers[0];
+  const dreamAvatar = questContent.dreamAvatars[0];
 
-  if (dreamcaller === undefined) {
+  if (dreamAvatar === undefined) {
     return null;
   }
 
@@ -43,8 +43,8 @@ export function createQaQuestFoundation(
   }
 
   const seed = generateQuestSeed();
-  const resolvedPackage = buildDreamcallerPackage(
-    dreamcaller,
+  const resolvedPackage = buildDreamAvatarPackage(
+    dreamAvatar,
     poolContext,
     seed,
   );
@@ -77,7 +77,7 @@ export function createQaQuestFoundation(
       transfiguration: null,
       isBane: false,
     })),
-    dreamcaller: toQuestDreamcaller(dreamcaller),
+    dreamAvatar: toQuestDreamAvatar(dreamAvatar),
     resolvedPackage,
     cardSourceDebug: null,
     remainingDreamsignPool: [...resolvedPackage.dreamsignPoolIds],

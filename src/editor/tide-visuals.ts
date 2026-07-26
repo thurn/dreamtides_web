@@ -5,7 +5,7 @@ import type { Tides4Color } from "../draft/pool/tides4-io";
  * white-outline Boxicons glyph that marks the color. The background is a deep
  * shade of the color and the border a brighter tint of it, so the chip reads as
  * its color while staying legible with white text and icon. This is the single
- * source of the per-color tide icon and palette shown on the Dreamcaller select
+ * source of the per-color tide icon and palette shown on the DreamAvatar select
  * screen and the tides editor.
  */
 export const TIDE_COLOR_CHIP: Record<

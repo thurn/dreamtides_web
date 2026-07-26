@@ -2,7 +2,7 @@
 //
 // Rung 2 of the legibility ladder (Principle two). It is the ONE card used to
 // collect dense, RELATED information into a single unit — several values, a
-// heading + body + an action (the console at the bottom of the Dreamcaller
+// heading + body + an action (the console at the bottom of the DreamAvatar
 // screen). It earns its place by organizing information, NOT by being a
 // readable backdrop for a lone label (that's on-media outlining via
 // .hud-outline / R-15).

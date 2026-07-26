@@ -23,7 +23,7 @@ export function generate(
   const lo = targetSize ?? LO;
   const hi = targetSize ?? HI;
 
-  // A Dreamcaller can seed pool construction with a list of draft archetypes.
+  // A DreamAvatar can seed pool construction with a list of draft archetypes.
   // We pick one of those archetypes at random, adopt its colors as the identity,
   // and restrict the walk's color+archetype themes to the listed ones (on-color
   // mechanic-tide archetypes still join the walk). Only archetypes that exist in

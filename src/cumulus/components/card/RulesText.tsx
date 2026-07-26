@@ -36,7 +36,7 @@ import {
  *     plain-language definitions travel with named entity reveal specifications
  *     through the shared reveal coordinator.
  *
- * Shared rules-text renderer for card, Dreamcaller, Dreamsign, battle, editor,
+ * Shared rules-text renderer for card, DreamAvatar, Dreamsign, battle, editor,
  * and reward surfaces. New surfaces call this rather than duplicate the JSX.
  */
 
@@ -44,7 +44,7 @@ import {
  * Color used for each symbol type when rendering rules text.
  *
  * The trigger arrow `▸` uses the muted slate (`#94a3b8`, slate-400) shared
- * with secondary text elsewhere (Dreamcaller subtitle, room-gate hints). It
+ * with secondary text elsewhere (DreamAvatar subtitle, room-gate hints). It
  * marks the start of a triggered ability without competing for attention
  * with the actual rules text or the glossary keyword that follows. Using
  * the same accent orange as the draft selection ring or HUD warnings made
@@ -556,7 +556,7 @@ export function renderRulesTextInline(text: string): ReactNode[] {
  * Renders rules text in authored ability paragraphs.
  *
  * Use as a drop-in for any place that prints `card.renderedText`,
- * `dreamcaller.renderedText`, or `dreamsign.effectDescription` raw — the
+ * `dreamAvatar.renderedText`, or `dreamsign.effectDescription` raw — the
  * tokenizer handles the symbol substitution and glossary-term emphasis.
  */
 export function RulesText({ text }: RulesTextProps) {

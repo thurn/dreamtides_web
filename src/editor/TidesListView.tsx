@@ -4,11 +4,11 @@ import { TIDE_COLOR_CHIP } from "./tide-visuals";
 import { TideSourcePreview } from "./TideSourcePreview";
 import { GlowIcon } from "../cumulus/components/controls/GlowIcon";
 import { glyph } from "../cumulus/primitives/glyph";
-import type { EditorDreamcaller } from "./tides-types";
+import type { EditorDreamAvatar } from "./tides-types";
 
 interface TidesListViewProps {
   tides: readonly Tides4DeckJson[];
-  dreamcallerById: ReadonlyMap<string, EditorDreamcaller>;
+  dreamAvatarById: ReadonlyMap<string, EditorDreamAvatar>;
   cardById: ReadonlyMap<string, CardData>;
   onSelectTide: (tideId: string) => void;
 }
@@ -18,7 +18,7 @@ const ROLE_GROUPS: { role: Tides4Role; label: string; blurb: string }[] = [
   {
     role: "signature",
     label: "Signature",
-    blurb: "One per signatured Dreamcaller — its always-joined identity floor.",
+    blurb: "One per signatured avatar — its always-joined identity floor.",
   },
   {
     role: "facet",
@@ -43,12 +43,12 @@ function tideCardCount(tide: Tides4DeckJson): number {
 
 function TideTile({
   tide,
-  dreamcallerById,
+  dreamAvatarById,
   cardById,
   onSelectTide,
 }: {
   tide: Tides4DeckJson;
-  dreamcallerById: ReadonlyMap<string, EditorDreamcaller>;
+  dreamAvatarById: ReadonlyMap<string, EditorDreamAvatar>;
   cardById: ReadonlyMap<string, CardData>;
   onSelectTide: (tideId: string) => void;
 }) {
@@ -86,7 +86,7 @@ function TideTile({
       >
         <TideSourcePreview
           tide={tide}
-          dreamcallerById={dreamcallerById}
+          dreamAvatarById={dreamAvatarById}
           cardById={cardById}
           size={thumbSize}
         />
@@ -121,7 +121,7 @@ function TideTile({
 
 export default function TidesListView({
   tides,
-  dreamcallerById,
+  dreamAvatarById,
   cardById,
   onSelectTide,
 }: TidesListViewProps) {
@@ -160,7 +160,7 @@ export default function TidesListView({
                 <TideTile
                   key={tide.id}
                   tide={tide}
-                  dreamcallerById={dreamcallerById}
+                  dreamAvatarById={dreamAvatarById}
                   cardById={cardById}
                   onSelectTide={onSelectTide}
                 />

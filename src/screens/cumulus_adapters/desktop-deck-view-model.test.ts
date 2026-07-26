@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CardData } from "../../types/cards";
-import type { DeckEntry, Dreamcaller, Dreamsign } from "../../types/quest";
+import type { DeckEntry, DreamAvatar, Dreamsign } from "../../types/quest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { buildDesktopDeckView } from "./desktop-deck-view-model";
 
@@ -36,7 +36,7 @@ function database(...cards: CardData[]): Map<number, CardData> {
   return new Map(cards.map((card) => [card.cardNumber, card]));
 }
 
-const dreamcaller: Dreamcaller = {
+const dreamAvatar: DreamAvatar = {
   id: "dc-1",
   name: "Sable",
   title: "The Unmaker",
@@ -66,10 +66,10 @@ describe("buildDesktopDeckView", () => {
     expect(view.cards.map((c) => c.entryId)).toEqual(["e2", "e1"]);
   });
 
-  it("maps the Dreamcaller to the sidebar view (portrait visual + rules text)", () => {
-    const view = buildDesktopDeckView([], database(), dreamcaller, []);
+  it("maps the DreamAvatar to the sidebar view (portrait visual + rules text)", () => {
+    const view = buildDesktopDeckView([], database(), dreamAvatar, []);
 
-    expect(view.dreamcaller).toEqual({
+    expect(view.dreamAvatar).toEqual({
       id: "dc-1",
       imageNumber: "12",
       name: "Sable",
@@ -78,9 +78,9 @@ describe("buildDesktopDeckView", () => {
     });
   });
 
-  it("carries a null Dreamcaller through as null", () => {
+  it("carries a null DreamAvatar through as null", () => {
     const view = buildDesktopDeckView([], database(), null, []);
-    expect(view.dreamcaller).toBeNull();
+    expect(view.dreamAvatar).toBeNull();
   });
 
   it("copies the dreamsigns into the view", () => {

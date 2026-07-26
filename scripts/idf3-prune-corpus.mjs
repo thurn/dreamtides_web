@@ -23,7 +23,7 @@ const decklists = readJson("public/decklists-data.json");
 // both. Self-adequacy stays scored on the name corpus (scorePool is name-keyed),
 // but the engine is fed the id corpus so this mirror matches production.
 const decklistIds = readJson("public/decklist-ids-data.json");
-const dreamcallers = readJson("public/dreamcallers-v2-data.json");
+const dreamAvatars = readJson("public/dream-avatars-v2-data.json");
 const meta = readJson("data/buildaround_support.json");
 
 // Self-adequacy of one raw decklist over the SHORT themes (null if it carries no
@@ -45,7 +45,7 @@ function runMetric(keptDecklists, keptDecklistIds) {
   const poolData = buildPoolData(cards, keptDecklists, undefined, keptDecklistIds);
   const all = [];
   const byTheme = new Map();
-  for (const dc of dreamcallers)
+  for (const dc of dreamAvatars)
     for (let s = 0; s < SEEDS; s++) {
       const pool = generatePoolFromData(poolData, s >>> 0, undefined, "idf3", undefined, SIZE, dc.signatureCardIds ?? []);
       for (const i of scorePool(pool.counts, meta, TIER_TARGET, SHORT)) {

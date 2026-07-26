@@ -8,7 +8,7 @@ import { GameCard } from "../components/card/CardView";
 import { RulesText } from "../components/card/RulesText";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlowIcon } from "../components/controls/GlowIcon";
-import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
+import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/QuestStatusBar";
@@ -26,7 +26,7 @@ import {
 } from "./guide-gallery-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 
-export interface BattleStartDreamcallerView {
+export interface BattleStartDreamAvatarView {
   id: string;
   name: string;
   title: string;
@@ -43,7 +43,7 @@ export interface BattleStartSignatureCardView {
 export interface BattleStartView {
   battleId: string;
   scene: ArtRef | null;
-  dreamcaller: BattleStartDreamcallerView;
+  dreamAvatar: BattleStartDreamAvatarView;
   dreamsigns: readonly DreamsignData[];
   signatureCards: readonly BattleStartSignatureCardView[];
   pointsToWin: number;
@@ -130,7 +130,7 @@ function DesktopBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
       }}
     >
       <section
-        data-battle-start-opponent={view.dreamcaller.id}
+        data-battle-start-opponent={view.dreamAvatar.id}
         style={{
           position: "relative",
           width: "100%",
@@ -140,7 +140,7 @@ function DesktopBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
           alignSelf: "stretch",
         }}
       >
-        <OpponentPortrait dreamcaller={view.dreamcaller} />
+        <OpponentPortrait dreamAvatar={view.dreamAvatar} />
       </section>
 
       <BattleStartPanel view={view} onBegin={onBegin} density="standard" />
@@ -155,7 +155,7 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
       style={{ position: "absolute", inset: 0 }}
     >
       <section
-        data-battle-start-opponent={view.dreamcaller.id}
+        data-battle-start-opponent={view.dreamAvatar.id}
         data-battle-start-opponent-framing="cutout"
         style={{
           position: "absolute",
@@ -168,7 +168,7 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
           zIndex: 1,
         }}
       >
-        <OpponentPortrait dreamcaller={view.dreamcaller} />
+        <OpponentPortrait dreamAvatar={view.dreamAvatar} />
       </section>
 
       <BattleStartPanel view={view} onBegin={onBegin} density="compact" />
@@ -177,16 +177,16 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
 }
 
 function OpponentPortrait({
-  dreamcaller,
+  dreamAvatar,
 }: {
-  readonly dreamcaller: BattleStartDreamcallerView;
+  readonly dreamAvatar: BattleStartDreamAvatarView;
 }) {
   return (
-    <DreamcallerPortrait
-      dreamcaller={{
-        imageNumber: dreamcaller.imageNumber,
-        name: dreamcaller.name,
-        title: dreamcaller.title,
+    <DreamAvatarPortrait
+      dreamAvatar={{
+        imageNumber: dreamAvatar.imageNumber,
+        name: dreamAvatar.name,
+        title: dreamAvatar.title,
       }}
       variant="cutout"
     />
@@ -268,9 +268,9 @@ function BattleStartPanel({
                 font: compact ? token("--t-title-sm") : token("--t-hero"),
               }}
             >
-              {view.dreamcaller.name}
+              {view.dreamAvatar.name}
             </h1>
-            {view.dreamcaller.title !== "" && (
+            {view.dreamAvatar.title !== "" && (
               <p
                 style={{
                   margin: 0,
@@ -279,19 +279,19 @@ function BattleStartPanel({
                   color: token("--text-on-glass-muted"),
                 }}
               >
-                {view.dreamcaller.title}
+                {view.dreamAvatar.title}
               </p>
             )}
           </header>
 
-          {view.dreamcaller.ability !== "" && (
+          {view.dreamAvatar.ability !== "" && (
             <PanelSection label="Ability" density={density}>
               <div style={{ font: token("--t-rules") }}>
-                {view.dreamcaller.abilityActive ? (
-                  <RulesText text={view.dreamcaller.ability} />
+                {view.dreamAvatar.abilityActive ? (
+                  <RulesText text={view.dreamAvatar.ability} />
                 ) : (
                   <span style={{ color: token("--text-on-glass-muted") }}>
-                    Opponent dreamcaller ability is not active.
+                    Opponent avatar ability is not active.
                   </span>
                 )}
               </div>

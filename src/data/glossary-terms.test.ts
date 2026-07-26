@@ -250,7 +250,7 @@ describe("contextual glossary definitions", () => {
     );
   });
 
-  it("uses dreamcaller-specific exhaust instructions", () => {
+  it("uses dream-avatar-specific exhaust instructions", () => {
     const exhaust = fixture(
       "exhaust-cost",
       "Exhaust Cost",
@@ -258,18 +258,18 @@ describe("contextual glossary definitions", () => {
       0,
       [
         {
-          owner: "dreamcaller",
+          owner: "dreamAvatar",
           definition:
-            "You may exhaust (☪) this dreamcaller to activate this ability once per turn.",
+            "You may exhaust (☪) this dreamAvatar to activate this ability once per turn.",
         },
       ],
     );
 
     expect(
-      contextualizeGlossaryEntry(exhaust, "2●, ☪: Draw a card.", "dreamcaller")
+      contextualizeGlossaryEntry(exhaust, "2●, ☪: Draw a card.", "dreamAvatar")
         .definition,
     ).toBe(
-      "You may exhaust (☪) this dreamcaller to activate this ability once per turn.",
+      "You may exhaust (☪) this dreamAvatar to activate this ability once per turn.",
     );
   });
 });

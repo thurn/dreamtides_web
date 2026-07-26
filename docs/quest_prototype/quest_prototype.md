@@ -2,7 +2,7 @@
 
 A standalone web prototype of Dreamtides Quest Mode living in this repository
 (`~/quest_prototype/`). It reflects the hidden-tides package-based quest flow:
-the player chooses from 3 Dreamcallers, the selected Dreamcaller resolves a
+the player chooses from 3 Dream Avatars, the selected Dream Avatar resolves a
 fixed package once at quest start, and the run proceeds through draft sites,
 Dreamsign surfaces, playable battles, and atlas progression. All state is
 derived from a Firebase room event log, so connected clients share the same
@@ -21,13 +21,13 @@ npm run dev          # runs setup-assets.mjs then starts Vite
 Vite. The setup script is idempotent and:
 
 1. Parses `cards_v2.toml` into `public/card-data.json`.
-2. Parses `dreamcallers_v2.toml` into `public/dreamcallers-v2-data.json`.
+2. Parses `dream_avatars_v2.toml` into `public/dream-avatars-v2-data.json`.
 3. Symlinks `public/cards/{cardNumber}.webp` into the local image cache at
    `~/Library/Caches/io.github.dreamtides.tv/image_cache/`.
 4. Copies the tide PNGs into `public/tides/`.
 
 The generated `public/cards/`, `public/tides/`, `public/card-data.json`, and
-`public/dreamcallers-v2-data.json` paths are gitignored.
+`public/dream-avatars-v2-data.json` paths are gitignored.
 
 Other commands:
 
@@ -130,7 +130,7 @@ mapping, and presentation tests together.
 
 ## Hidden-Tides Behavior
 
-- Dreamcaller selection is a quest-start choice, not a mid-run site.
+- Dream Avatar selection is a quest-start choice, not a mid-run site.
 - Draft sites reveal 4 unique cards when possible and consume the revealed cards
   from the fixed pool.
 - Dreamsign-bearing surfaces spend from a shared pool as soon as a sign is

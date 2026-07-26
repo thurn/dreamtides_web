@@ -24,7 +24,7 @@ At minimum it must support:
 ## Background — relevant existing code
 
 - **Quest state type:** `QuestState` in `src/types/quest.ts` (essence, essenceCap,
-  maxDreamsigns, deck, dreamsigns, completionLevel, dreamcaller, resolvedPackage,
+  maxDreamsigns, deck, dreamsigns, completionLevel, dream avatar, resolvedPackage,
   remainingDreamsignPool, ...).
 - **Deck entries:** `DeckEntry` in `src/types/quest.ts` holds
   `{ entryId, cardNumber, transfiguration, typeChange?, keywordModification?, isBane }`.
@@ -36,7 +36,7 @@ At minimum it must support:
   through `writeRoomTransaction` / `writeQuestField` in
   `src/state/multiplayer-quest-context.tsx`. Invariants in
   `src/state/quest-state-invariants.ts` forbid nulling
-  `dreamcaller` / `resolvedPackage` / `draftState` once set
+  `dreamAvatar` / `resolvedPackage` / `draftState` once set
   (`NON_NULLABLE_RUN_FIELDS`).
 - **Deck-entry resolution (the chokepoint):** a `DeckEntry` is turned into an
   effective `CardData` by applying transfiguration
@@ -96,7 +96,7 @@ deterministic regardless of which transfiguration/keywords are present.
 ### 3. Quest-context actions
 
 All mutations go through `writeRoomTransaction` to preserve quest-state
-invariants. The editor never exposes nulling `dreamcaller` / `resolvedPackage` /
+invariants. The editor never exposes nulling `dreamAvatar` / `resolvedPackage` /
 `draftState`. Actions (reusing existing ones where present):
 
 - **Resources:** reuse `setEssence`, `changeMaxEssence`; add `setEssenceCap`,
@@ -152,7 +152,7 @@ derive fixtures from live data). Coverage:
 
 ## Out of scope
 
-- Editing `dreamcaller` / `resolvedPackage` / `draftState` structure (invariant
+- Editing `dreamAvatar` / `resolvedPackage` / `draftState` structure (invariant
   risk; not requested).
 - Editing the underlying card database TOML (edits are per-run, per-entry only).
 - Atlas / node-graph topology editing.

@@ -51,7 +51,7 @@ export const GLYPHS = {
 
   // Tide marks (Boxicons v3 filled) — the closed set of five tide icons. These
   // mirror the editor per-color tide glyphs in `src/editor/tide-visuals`
-  // (TIDE_COLOR_CHIP), the source of truth used by the Dreamcaller-select screen
+  // (TIDE_COLOR_CHIP), the source of truth used by the DreamAvatar-select screen
   // and the tides editor.
   tideEmber: g("bxf bx-hot"),
   tideValor: g("bxf bx-shield"),

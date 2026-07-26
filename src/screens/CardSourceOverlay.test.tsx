@@ -159,7 +159,7 @@ function makeSeedProvenance(): SeedProvenanceSummary {
 
 function makeTides4Provenance(): Tides4ProvenanceSummary {
   return {
-    dreamcallerId: "dc-x",
+    dreamAvatarId: "dc-x",
     signatureless: false,
     borrowedArchetypeName: null,
     dealSize: 150,
@@ -217,7 +217,7 @@ describe("CardSourceOverlay", () => {
 
     const text = container.textContent ?? "";
     // Tide provenance takes precedence over both seed and idf3.
-    expect(text).toContain("dealt from your Dreamcaller's tides");
+    expect(text).toContain("dealt from your DreamAvatar's tides");
     expect(text).toContain("How this pool was built");
     expect(text).toContain("Signature tide");
     expect(text).toContain("Theme tides");

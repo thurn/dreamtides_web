@@ -24,7 +24,7 @@ export const groupPanelDemo: CumulusComponent = {
       code: `import { GroupPanel } from "src/cumulus/components/controls/GroupPanel";
 
 <GroupPanel>
-  <p className="eyebrow">Dreamcaller</p>
+  <p className="eyebrow">DreamAvatar</p>
   <p>Essence, Spark, and the run's docked dreamsigns.</p>
 </GroupPanel>`,
     },

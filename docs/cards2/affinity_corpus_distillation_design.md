@@ -40,12 +40,12 @@ against the existing `pool-metrics.mjs` quality metric.
 **Dreamtides** is a digital card game. The **quest prototype** (this repo) is its
 single-player roguelike shell. During a run the player drafts a deck from a
 **draft pool**: a fixed multiset of ~150–200 card copies (each distinct card
-appears 1 or 2 times — the "2-copy cap"). The pool is generated per **Dreamcaller**
+appears 1 or 2 times — the "2-copy cap"). The pool is generated per **Dream Avatar**
 (the run's hero, 32 of them) and is meant to feel coherent — built around a
 recognizable strategy ("warriors", "discard", "survivors", …) rather than a random
 pile.
 
-Each Dreamcaller has a **signature**: a short list (~3–6) of distinctive card
+Each Dream Avatar has a **signature**: a short list (~3–6) of distinctive card
 UUIDs that define its identity (e.g. Kell Tarn's signature includes "Duskreaper").
 A pool generator can **steer** toward a signature so the pool supports that hero's
 strategy.
@@ -77,7 +77,7 @@ sources in `data/` and `docs/`):
 | `data/tabula/cards_v2.toml` | `cards_v2-data.json` (516 KB) | card catalog (519 cards: id, name, …) |
 | `docs/draft_records_adapted/*.jsonc` (1061 files) | `draft-records-data.json` (**19 MB**) | 993 real draft "seats", each 30 picks with the full pack offered at each pick |
 | `docs/draft_records_adapted/*` (mainboards) | `decklists-data.json` (709 KB) | finished decklists (used by other variants) |
-| `data/tabula/dreamcallers_v2.toml` | `dreamcallers-v2-data.json` (23 KB) | the 32 Dreamcallers + their signatures |
+| `data/tabula/dream_avatars_v2.toml` | `dream-avatars-v2-data.json` (23 KB) | the 32 Dream Avatars + their signatures |
 | `data/buildaround_support.json` (checked in) | (read directly) | per-card theme metadata for the **quality metric** (Section 4) |
 
 `buildDraftRecords` (`scripts/setup-assets.mjs:228`) bundles the adapted records
@@ -92,7 +92,7 @@ pick `i`) and `pickIds[i]` (UUIDs taken), aligned index-for-index — the
 2. `quest-content.ts:~421` calls
    `buildPoolData(cards, decklists, draftRecords.map(r => ({packs: r.packIds, picks: r.pickIds})))`
    (`src/draft/pool/pool-data.ts:46`) → a `PoolData` carrying `draftRecords`.
-3. Per Dreamcaller, `generateDreamcallerPool` (`quest-content.ts:136`) calls
+3. Per Dream Avatar, `generateDreamAvatarPool` (`quest-content.ts:136`) calls
    `generatePoolFromData(poolData, seed, …, "sigseed", …, signatureCards)`
    (`src/draft/pool/generate.ts:60`), which builds a seeded RNG
    (`makeRng`, mulberry32, `rng.ts:4`) and dispatches to the `sigseed` strategy.
@@ -174,19 +174,19 @@ served over the internet, so the records' byte size is not itself a concern.)
 
 A throwaway harness rebuilt `sigseed` against swappable corpora and scored each
 with the **existing** quality metric (`scripts/pool-metrics.mjs`,
-see Section 11). The metric simulates every Dreamcaller × N seeds and reports, per
+see Section 11). The metric simulates every Dream Avatar × N seeds and reports, per
 generator:
 
 - **adequacy** (0–100): when a build-around payoff is in a pool, is its supporting
   theme present densely enough? Higher better.
-- **adequacy (steered)**: same, restricted to Dreamcallers with a real signature.
+- **adequacy (steered)**: same, restricted to Dream Avatars with a real signature.
 - **traps/pool**: expected count of payoff cards the pool *cannot* support (lower
   better).
 - **themeEvenness** (0–100): are the standalone archetypes draftable at even rates,
   or does the generator collapse onto one (higher = more even)?
 - **#cards**: distinct cards appearing across all pools (coverage proxy).
 
-Result (25 seeds × 32 Dreamcallers = 800 pools per corpus):
+Result (25 seeds × 32 Dream Avatars = 800 pools per corpus):
 
 | corpus | adeq | adeq(steer) | traps | themeEven | #cards | size (gz) |
 |---|---|---|---|---|---|---|
@@ -204,7 +204,7 @@ Result (25 seeds × 32 Dreamcallers = 800 pools per corpus):
 1. **The record→matrix step is exactly lossless.** A rounded in-memory matrix
    equals the live numbers on every metric, and a per-pool byte-identity check
    matched the official `generatePoolFromData(..., "sigseed", ...)` output **5/5**
-   for a sample of `(Dreamcaller, seed)`. This is the reference the embedding is
+   for a sample of `(DreamAvatar, seed)`. This is the reference the embedding is
    measured against.
 2. **The metric genuinely discriminates** (so ~97 is preserved signal, not a
    saturated ceiling): shuffling synergy tanks adequacy to 84.7 and traps to 4.57;
@@ -458,11 +458,11 @@ The metric is `scripts/pool-metrics.mjs`
 1. **Bake-pipeline fidelity (the matrix step must be exact).** Build the matrix
    in-memory from records (no embedding) and confirm pools generated from it are
    **byte-identical** to `generatePoolFromData(..., "sigseed", ..., signature)` on
-   the live records path, for ≥10 `(Dreamcaller, seed)` pairs (harness achieved
+   the live records path, for ≥10 `(DreamAvatar, seed)` pairs (harness achieved
    5/5; require 100 %). This isolates the SVD as the only approximation.
 2. **Embedding metric parity (the shipping bar).** Run adequacy + traps + diversity
    for the committed embedding and for the live corpus over ≥25 seeds × 32
-   Dreamcallers. Acceptance for rank ≥ 16: **adequacy ≥ 97.5, traps ≤ 1.0,
+   Dream Avatars. Acceptance for rank ≥ 16: **adequacy ≥ 97.5, traps ≤ 1.0,
    themeEvenness ≥ 95.0, #cards ≥ 460** (Section 4 rank-16/32 rows).
 3. **Negative controls retained.** Keep the `shuffled` and `prior-only` controls as
    guards that the metric still discriminates (adequacy must drop to ~85 / ~93). If
@@ -557,8 +557,8 @@ controls, and (c) scores each with the metric's **exported** pure functions
 
 ## Appendix B. Glossary
 
-- **Dreamcaller** — the run's hero; 32 exist; each may have a signature.
-- **Signature** — a Dreamcaller's defining card UUIDs; steers the pool.
+- **Dream Avatar** — the run's hero; 32 exist; each may have a signature.
+- **Signature** — a Dream Avatar's defining card UUIDs; steers the pool.
 - **Pool** — the drafted-from multiset (~150–200 copies, ≤2 each).
 - **Affinity corpus** — `{cards, affinity, prior}`; the in-memory object the grower
   reads.

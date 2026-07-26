@@ -103,5 +103,5 @@ export const BOSS_DISPLAY = {
   iconUrl: assetUrl("/dreamscape-icons/limbo.png"),
   figureUrl: assetUrl("/dream-guides/apollyon.png"),
   intro:
-    "A Dreamcaller of annihilating power — his own deck, dreamsigns, and abilities bend the dream toward ruin.",
+    "An avatar of annihilating power — his own deck, dreamsigns, and abilities bend the dream toward ruin.",
 } as const;

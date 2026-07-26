@@ -23,7 +23,7 @@ import { poolSize } from "./util.ts";
  * describes. For repeated generation, build `PoolData` once with
  * {@link buildPoolData} and call {@link generatePoolFromData}. Pass `targetSize`
  * to pin the pool to a specific number of copies; omit it for each variant's own
- * default size. Pass `signatureCards` (a Dreamcaller's signature) to steer the
+ * default size. Pass `signatureCards` (a DreamAvatar's signature) to steer the
  * `idf3` variant; the other variants ignore it.
  */
 export function generatePool(
@@ -34,7 +34,7 @@ export function generatePool(
   themeArchetypes?: readonly string[],
   targetSize?: number,
   signatureCards?: readonly string[],
-  dreamcallerId?: string,
+  dreamAvatarId?: string,
 ): GeneratedPool {
   return generatePoolFromData(
     buildPoolData(cards),
@@ -44,22 +44,22 @@ export function generatePool(
     themeArchetypes,
     targetSize,
     signatureCards,
-    dreamcallerId,
+    dreamAvatarId,
   );
 }
 
 /**
  * Generate a pool from prebuilt {@link PoolData}. Pass `seedArchetypes` (a
- * Dreamcaller's `draftArchetypes`) to seed construction from one of those
+ * DreamAvatar's `draftArchetypes`) to seed construction from one of those
  * archetypes; omit it for the unconstrained random pool. Pass `variant` to
  * select the generation algorithm (see {@link PoolVariant}). Pass
- * `themeArchetypes` (a Dreamcaller's mechanic-archetype tide slugs) to bias the
+ * `themeArchetypes` (a DreamAvatar's mechanic-archetype tide slugs) to bias the
  * `decklists` variant toward that theme; the other variants ignore it. Pass
  * `targetSize` to pin the pool to that many copies; omit it for each variant's
- * own default size band. Pass `signatureCards` (a Dreamcaller's signature) to
- * steer the `idf3` variant toward the Dreamcaller's decks; the other variants
- * ignore it. Pass `dreamcallerId` (the Dreamcaller's UUID) so the `tides`
- * variant can look up the Dreamcaller's baked favored tide decks; the other
+ * own default size band. Pass `signatureCards` (a DreamAvatar's signature) to
+ * steer the `idf3` variant toward the DreamAvatar's decks; the other variants
+ * ignore it. Pass `dreamAvatarId` (the DreamAvatar's UUID) so the `tides`
+ * variant can look up the DreamAvatar's baked favored tide decks; the other
  * variants ignore it.
  */
 export function generatePoolFromData(
@@ -70,7 +70,7 @@ export function generatePoolFromData(
   themeArchetypes?: readonly string[],
   targetSize?: number,
   signatureCards?: readonly string[],
-  dreamcallerId?: string,
+  dreamAvatarId?: string,
 ): GeneratedPool {
   const resolvedSeed =
     seed === undefined ? (Math.random() * 2 ** 32) >>> 0 : seed >>> 0;
@@ -90,7 +90,7 @@ export function generatePoolFromData(
       themeArchetypes,
       signatureCards,
       targetSize,
-      dreamcallerId,
+      dreamAvatarId,
     });
 
   const capped = new Map<CardId, number>();

@@ -1,8 +1,8 @@
 import type { CSSProperties } from "react";
-import { DreamcallerPortrait } from "../cumulus/components/hud/DreamcallerPortrait";
+import { DreamAvatarPortrait } from "../cumulus/components/hud/DreamAvatarPortrait";
 import type {
-  DreamcallerAssignmentAction,
-  DreamcallerOption,
+  DreamAvatarAssignmentAction,
+  DreamAvatarOption,
   DreamscapeCardSize,
   EditorDreamscapeRecord,
 } from "./dreamscape-types";
@@ -15,12 +15,12 @@ export interface ResidentAssignmentStatus {
 export interface DreamscapeResidentsProps {
   record: EditorDreamscapeRecord;
   size: DreamscapeCardSize;
-  dreamcallers: DreamcallerOption[];
-  /** Lowercased Dreamcaller id -> the name of the region that currently hosts it. */
-  regionNameByDreamcaller: Map<string, string>;
+  dreamAvatars: DreamAvatarOption[];
+  /** Lowercased DreamAvatar id -> the name of the region that currently hosts it. */
+  regionNameByDreamAvatar: Map<string, string>;
   status: ResidentAssignmentStatus;
   onAssign: (
-    action: DreamcallerAssignmentAction,
+    action: DreamAvatarAssignmentAction,
     params: { inId?: string; outId?: string },
   ) => void;
 }
@@ -58,22 +58,22 @@ const THUMB_SIZE: Record<DreamscapeCardSize, number> = {
 };
 
 /**
- * Build the `<option>` list of Dreamcallers a region can take on — every caller
+ * Build the `<option>` list of DreamAvatars a region can take on — every avatar
  * not already resident here — each labelled with where it currently lives so the
  * editor makes the move (and any resulting swap) obvious before it happens.
  */
 function candidateOptions(
-  dreamcallers: DreamcallerOption[],
+  dreamAvatars: DreamAvatarOption[],
   residentIds: Set<string>,
-  regionNameByDreamcaller: Map<string, string>,
+  regionNameByDreamAvatar: Map<string, string>,
   selfName: string,
 ) {
-  return dreamcallers
-    .filter((dreamcaller) => !residentIds.has(dreamcaller.id.toLowerCase()))
-    .map((dreamcaller) => {
-      const region = regionNameByDreamcaller.get(dreamcaller.id.toLowerCase());
+  return dreamAvatars
+    .filter((dreamAvatar) => !residentIds.has(dreamAvatar.id.toLowerCase()))
+    .map((dreamAvatar) => {
+      const region = regionNameByDreamAvatar.get(dreamAvatar.id.toLowerCase());
       const where = region === undefined ? "unassigned" : region === selfName ? "here" : region;
-      return { id: dreamcaller.id, label: `${dreamcaller.name} — ${where}` };
+      return { id: dreamAvatar.id, label: `${dreamAvatar.name} — ${where}` };
     })
     .sort((left, right) => left.label.localeCompare(right.label));
 }
@@ -81,25 +81,25 @@ function candidateOptions(
 export default function DreamscapeResidents({
   record,
   size,
-  dreamcallers,
-  regionNameByDreamcaller,
+  dreamAvatars,
+  regionNameByDreamAvatar,
   status,
   onAssign,
 }: DreamscapeResidentsProps) {
-  const byId = new Map(dreamcallers.map((dreamcaller) => [dreamcaller.id.toLowerCase(), dreamcaller]));
-  const residentIds = new Set(record.dreamcallerIds.map((id) => id.toLowerCase()));
-  const residents = record.dreamcallerIds.map((id) => ({
+  const byId = new Map(dreamAvatars.map((dreamAvatar) => [dreamAvatar.id.toLowerCase(), dreamAvatar]));
+  const residentIds = new Set(record.dreamAvatarIds.map((id) => id.toLowerCase()));
+  const residents = record.dreamAvatarIds.map((id) => ({
     id,
     option: byId.get(id.toLowerCase()) ?? null,
   }));
   const candidates = candidateOptions(
-    dreamcallers,
+    dreamAvatars,
     residentIds,
-    regionNameByDreamcaller,
+    regionNameByDreamAvatar,
     record.name,
   );
 
-  const count = record.dreamcallerIds.length;
+  const count = record.dreamAvatarIds.length;
   const canRemove = count > MIN_RESIDENTS;
   const canAdd = count < MAX_RESIDENTS;
   const thumb = THUMB_SIZE[size];
@@ -107,7 +107,7 @@ export default function DreamscapeResidents({
   return (
     <div data-dreamscape-residents={record.id}>
       <span style={labelStyle}>
-        Resident Dreamcallers ({count}/{MAX_RESIDENTS})
+        Resident Avatars ({count}/{MAX_RESIDENTS})
       </span>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -127,8 +127,8 @@ export default function DreamscapeResidents({
           >
             {resident.option !== null ? (
               <div style={{ flex: "0 0 auto", cursor: "help" }}>
-                <DreamcallerPortrait
-                  dreamcaller={resident.option}
+                <DreamAvatarPortrait
+                  dreamAvatar={resident.option}
                   variant="thumb"
                   size={thumb}
                   profile={{
@@ -160,7 +160,7 @@ export default function DreamscapeResidents({
                   textOverflow: "ellipsis",
                 }}
               >
-                {resident.option?.name ?? "Unknown Dreamcaller"}
+                {resident.option?.name ?? "Unknown DreamAvatar"}
               </div>
               {resident.option !== null && resident.option.title !== "" ? (
                 <div
@@ -205,8 +205,8 @@ export default function DreamscapeResidents({
                   aria-label={`Remove ${resident.option?.name ?? resident.id}`}
                   title={
                     canRemove
-                      ? "Send this Dreamcaller to the unassigned pool"
-                      : `A region must keep at least ${String(MIN_RESIDENTS)} Dreamcallers`
+                      ? "Send this avatar to the unassigned pool"
+                      : `A region must keep at least ${String(MIN_RESIDENTS)} DreamAvatars`
                   }
                   disabled={!canRemove || status.pending}
                   onClick={() => onAssign("remove", { outId: resident.id })}

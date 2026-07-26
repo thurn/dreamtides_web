@@ -1,10 +1,10 @@
-// The mobile (narrow-viewport) Dreamcaller-select layout: a full-bleed swipe
-// carousel, one Dreamcaller per page, with the full-body character cutout
+// The mobile (narrow-viewport) DreamAvatar-select layout: a full-bleed swipe
+// carousel, one DreamAvatar per page, with the full-body character cutout
 // standing on an ambient backdrop behind a flat GroupPanel console. It shares
 // the view types and console primitives with the desktop triptych via
-// `quest-start-shared`, and both layouts use the same named Dreamcaller ability
+// `quest-start-shared`, and both layouts use the same named DreamAvatar ability
 // source; `QuestStartScreen` picks between the two by viewport.
-// PURE: renders from a view-model and reports the chosen Dreamcaller via `onPick`.
+// PURE: renders from a view-model and reports the chosen DreamAvatar via `onPick`.
 
 import { useRef, useState } from "react";
 import { Motes } from "../components/hud/Motes";
@@ -13,16 +13,16 @@ import { GlassButton } from "../components/controls/GlassButton";
 import { IconButton } from "../components/controls/IconButton";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import { DreamcallerPortrait } from "../components/hud/DreamcallerPortrait";
+import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
 import {
   ConsoleDivider,
   OnMediaEyebrow,
   QuestStartRerollControl,
   TidesEssenceBlock,
-  type DreamcallerOfferView,
+  type DreamAvatarOfferView,
   type QuestStartScreenProps,
 } from "./quest-start-shared";
-import { DreamcallerAbilityText } from "../components/hud/DreamcallerAbilityText";
+import { DreamAvatarAbilityText } from "../components/hud/DreamAvatarAbilityText";
 
 /** Invisible touch slop padded around each mobile tide disc so it is easier to
  * press; the disc row reabsorbs it with negative margins so the visual layout
@@ -31,18 +31,18 @@ const TIDE_HIT_SLOP = token("--space-2");
 
 /** The mobile carousel's flat console beneath a portrait: ability text, a
  * hairline, the tides cluster + starting essence, and the Choose action. */
-function DreamcallerConsole({
-  dreamcaller,
+function DreamAvatarConsole({
+  dreamAvatar,
   onChoose,
 }: {
-  dreamcaller: DreamcallerOfferView;
+  dreamAvatar: DreamAvatarOfferView;
   onChoose: () => void;
 }) {
   return (
     <GroupPanel>
-      <DreamcallerAbilityText
-        dreamcallerId={dreamcaller.id}
-        text={dreamcaller.renderedText}
+      <DreamAvatarAbilityText
+        dreamAvatarId={dreamAvatar.id}
+        text={dreamAvatar.renderedText}
       />
 
       {/* An even --space-6 rhythm around the divider, matching the desktop card:
@@ -57,11 +57,11 @@ function DreamcallerConsole({
       </div>
 
       <div style={{ marginTop: token("--space-6") }}>
-        <TidesEssenceBlock dreamcaller={dreamcaller} hitSlop={TIDE_HIT_SLOP} />
+        <TidesEssenceBlock dreamAvatar={dreamAvatar} hitSlop={TIDE_HIT_SLOP} />
       </div>
 
       <div
-        data-choose-dreamcaller={dreamcaller.id}
+        data-choose-dream-avatar={dreamAvatar.id}
         style={{ marginTop: token("--space-6"), display: "grid" }}
       >
         <GlassButton label="Choose" variant="accent" onPress={onChoose} />
@@ -70,12 +70,12 @@ function DreamcallerConsole({
   );
 }
 
-/** The Dreamcaller's name and epithet, sitting directly on the portrait so it
+/** The DreamAvatar's name and epithet, sitting directly on the portrait so it
  * earns legibility from the on-media outline dilation rather than a plate. */
-function DreamcallerTitle({
-  dreamcaller,
+function DreamAvatarTitle({
+  dreamAvatar,
 }: {
-  dreamcaller: DreamcallerOfferView;
+  dreamAvatar: DreamAvatarOfferView;
 }) {
   return (
     <div
@@ -98,7 +98,7 @@ function DreamcallerTitle({
             textShadow: token("--text-outline-media"),
           }}
         >
-          {dreamcaller.name}
+          {dreamAvatar.name}
         </span>
         <span
           style={{
@@ -109,7 +109,7 @@ function DreamcallerTitle({
             textShadow: token("--text-outline-media"),
           }}
         >
-          {dreamcaller.title}
+          {dreamAvatar.title}
         </span>
       </h1>
     </div>
@@ -132,7 +132,7 @@ function ScreenHeader() {
         pointerEvents: "none",
       }}
     >
-      <OnMediaEyebrow label="Choose Your Dreamcaller" />
+      <OnMediaEyebrow label="Choose Your Avatar" />
     </div>
   );
 }
@@ -169,20 +169,20 @@ function EdgeChevron({
 
 /** One mobile carousel page: portrait + title + console, sized to a fraction of
  * the swipe track and animated in as it becomes active. */
-function DreamcallerPage({
-  dreamcaller,
+function DreamAvatarPage({
+  dreamAvatar,
   active,
   count,
   onChoose,
 }: {
-  dreamcaller: DreamcallerOfferView;
+  dreamAvatar: DreamAvatarOfferView;
   active: boolean;
   count: number;
   onChoose: () => void;
 }) {
   return (
     <div
-      data-dreamcaller-page={dreamcaller.id}
+      data-dream-avatar-page={dreamAvatar.id}
       style={{
         width: `${100 / count}%`,
         height: "100%",
@@ -190,10 +190,10 @@ function DreamcallerPage({
         overflow: "hidden",
       }}
     >
-      <DreamcallerPortrait dreamcaller={dreamcaller} variant="fullBleed" />
+      <DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="fullBleed" />
       <Motes on={active} tint="warm" zIndex={1} />
 
-      <DreamcallerTitle dreamcaller={dreamcaller} />
+      <DreamAvatarTitle dreamAvatar={dreamAvatar} />
 
       {/* Console */}
       <div
@@ -211,16 +211,16 @@ function DreamcallerPage({
           transition: `transform ${token("--dur-base")} ${token("--ease-out")}`,
         }}
       >
-        <DreamcallerConsole dreamcaller={dreamcaller} onChoose={onChoose} />
+        <DreamAvatarConsole dreamAvatar={dreamAvatar} onChoose={onChoose} />
       </div>
     </div>
   );
 }
 
-/** The mobile Dreamcaller-selection carousel: a full-bleed swipe carousel of
- * the offered Dreamcallers, one per page. */
+/** The mobile DreamAvatar-selection carousel: a full-bleed swipe carousel of
+ * the offered DreamAvatars, one per page. */
 export function CarouselSelect({
-  dreamcallers,
+  dreamAvatars,
   onPick,
   onReroll,
 }: QuestStartScreenProps) {
@@ -230,7 +230,7 @@ export function CarouselSelect({
     active: false,
     x0: 0,
   });
-  const count = dreamcallers.length;
+  const count = dreamAvatars.length;
 
   const clamp = (next: number): number =>
     Math.max(0, Math.min(count - 1, next));
@@ -285,14 +285,14 @@ export function CarouselSelect({
             : `transform ${token("--dur-slow")} ${token("--ease-out")}`,
         }}
       >
-        {dreamcallers.map((dreamcaller, i) => (
-          <DreamcallerPage
-            key={dreamcaller.id}
-            dreamcaller={dreamcaller}
+        {dreamAvatars.map((dreamAvatar, i) => (
+          <DreamAvatarPage
+            key={dreamAvatar.id}
+            dreamAvatar={dreamAvatar}
             active={i === index}
             count={count}
             onChoose={() => {
-              onPick(dreamcaller.id);
+              onPick(dreamAvatar.id);
             }}
           />
         ))}

@@ -8,7 +8,7 @@ import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
 import type {
   DreamsignTemplate,
-  ResolvedDreamcallerPackage,
+  ResolvedDreamAvatarPackage,
 } from "../types/content";
 import type { DraftState } from "../types/draft";
 import { DebugScreen } from "./DebugScreen";
@@ -66,9 +66,9 @@ function makeCard(cardNumber: number, name: string): CardData {
   };
 }
 
-function makeResolvedPackage(): ResolvedDreamcallerPackage {
+function makeResolvedPackage(): ResolvedDreamAvatarPackage {
   return {
-    dreamcaller: {
+    dreamAvatar: {
       id: "caller-1",
       name: "Caller of Lanterns",
       title: "Auditor of Debug Panels",

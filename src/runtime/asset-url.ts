@@ -1,5 +1,5 @@
 /**
- * Resolves a runtime URL for a binary game-art asset (card / dreamcaller /
+ * Resolves a runtime URL for a binary game-art asset (card / dreamAvatar /
  * dreamsign / atlas images) so the same code serves art from two origins:
  *
  *   - Local dev: `VITE_ASSET_BASE_URL` is empty, so `assetUrl("/cards/1.webp")`

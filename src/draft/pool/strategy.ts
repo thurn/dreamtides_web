@@ -20,20 +20,20 @@ export interface PoolGenerationRequest {
   /** The reconstructed generator inputs (core cards, archetype/draft lists, …). */
   poolData: PoolData;
   /**
-   * A Dreamcaller's `draftArchetypes`: color+archetype slices that seed the
+   * A DreamAvatar's `draftArchetypes`: color+archetype slices that seed the
    * color-walk strategies (`default`, `diverse`) and bias the decklist strategies.
    * Omitted for the unconstrained random pool.
    */
   seedArchetypes?: readonly string[];
   /**
-   * A Dreamcaller's mechanic-archetype tide slugs, used by the `decklists`
+   * A DreamAvatar's mechanic-archetype tide slugs, used by the `decklists`
    * strategy to bias toward that theme. Other strategies ignore it.
    */
   themeArchetypes?: readonly string[];
   /**
-   * A Dreamcaller's signature card UUIDs, used by the `idf3` strategy to steer
+   * A DreamAvatar's signature card UUIDs, used by the `idf3` strategy to steer
    * its decklist starter draw and by `picksig` to bias its pick-affinity seed
-   * draw toward the Dreamcaller's region of the card space. Other strategies
+   * draw toward the DreamAvatar's region of the card space. Other strategies
    * ignore it.
    */
   signatureCards?: readonly string[];
@@ -43,11 +43,11 @@ export interface PoolGenerationRequest {
    */
   targetSize?: number;
   /**
-   * The Dreamcaller's stable UUID, used by the `tides` strategy to look up the
-   * Dreamcaller's baked favored tide decks. Other strategies ignore it; when
+   * The DreamAvatar's stable UUID, used by the `tides` strategy to look up the
+   * DreamAvatar's baked favored tide decks. Other strategies ignore it; when
    * omitted the `tides` strategy draws all its tide decks at random.
    */
-  dreamcallerId?: string;
+  dreamAvatarId?: string;
 }
 
 /**

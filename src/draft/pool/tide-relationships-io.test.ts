@@ -1,6 +1,6 @@
 // Structural-contract tests for the curated tide-relationship artifact's
 // validator. These pin the schema invariants (every tide has allies, no
-// dangling or self references, every Dreamcaller pool is non-empty) against
+// dangling or self references, every DreamAvatar pool is non-empty) against
 // synthetic fixtures — never against the committed
 // `data/tide_relationships.jsonc`, whose content is curated design data and
 // subject to change at any time.
@@ -20,7 +20,7 @@ function makeRelationships(): TideRelationshipsJson {
       "tide-2": ["tide-1"],
       "tide-3": [],
     },
-    tidePoolByDreamcaller: {
+    tidePoolByDreamAvatar: {
       "dc-a": ["tide-1", "tide-2"],
       "dc-b": ["tide-3"],
     },
@@ -81,15 +81,15 @@ describe("validateTideRelationships", () => {
 
   it("rejects a tide-pool id that names no tide", () => {
     const data = makeRelationships();
-    data.tidePoolByDreamcaller["dc-a"] = ["tide-nope"];
+    data.tidePoolByDreamAvatar["dc-a"] = ["tide-nope"];
     expect(() => validateTideRelationships(data, TIDE_IDS)).toThrow(
       /names no tide/,
     );
   });
 
-  it("rejects an empty Dreamcaller tide pool", () => {
+  it("rejects an empty DreamAvatar tide pool", () => {
     const data = makeRelationships();
-    data.tidePoolByDreamcaller["dc-a"] = [];
+    data.tidePoolByDreamAvatar["dc-a"] = [];
     expect(() => validateTideRelationships(data, TIDE_IDS)).toThrow(/is empty/);
   });
 

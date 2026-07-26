@@ -301,7 +301,7 @@ describe("draftableUniverse", () => {
   });
 });
 
-// --- Dreamcaller-support metric (label-free, learned from decklists) --------
+// --- DreamAvatar-support metric (label-free, learned from decklists) --------
 
 // A toy corpus: "Spirit" decks pair the signature with Wolf/Eagle; an off-theme
 // deck and a goodstuff card (in every deck) exercise the lift math.

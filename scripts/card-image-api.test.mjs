@@ -36,7 +36,7 @@ describe("parseCardImageRequest", () => {
   it("returns null for non-card paths", () => {
     expect(parseCardImageRequest("/cards/653554603.png")).toBeNull();
     expect(parseCardImageRequest("/cards/not-a-number.webp")).toBeNull();
-    expect(parseCardImageRequest("/dreamcallers/123.png")).toBeNull();
+    expect(parseCardImageRequest("/dream-avatars/123.png")).toBeNull();
     expect(parseCardImageRequest("/api/log")).toBeNull();
   });
 });

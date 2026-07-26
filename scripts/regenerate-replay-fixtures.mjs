@@ -32,7 +32,7 @@ import {
   BATTLE_CARD_FORESEE,
   BATTLE_SITE_ID,
   DETERMINISTIC_SLOT,
-  DREAMCALLER_ID,
+  DREAM_AVATAR_ID,
   ESSENCE_SITE_ID,
   FIXTURE_PROVIDER_SET,
   FORESEE_SLOT,
@@ -114,14 +114,14 @@ function expectOutcomes(label, events, gen, expected) {
 }
 
 // ---------------------------------------------------------------------------
-// (a) quest-only: start -> dreamcaller -> travel -> open/accept -> shop buy
+// (a) quest-only: start -> dreamAvatar -> travel -> open/accept -> shop buy
 // ---------------------------------------------------------------------------
 
 function questOnlyFixture() {
   const gen = genesis("fixture-quest-only");
   const events = chain("p1", [
-    ["START_QUEST", { dreamcallerId: DREAMCALLER_ID }],
-    ["SELECT_DREAMCALLER", { dreamcallerId: DREAMCALLER_ID }],
+    ["START_QUEST", { dreamAvatarId: DREAM_AVATAR_ID }],
+    ["SELECT_DREAM_AVATAR", { dreamAvatarId: DREAM_AVATAR_ID }],
     ["TRAVEL_TO_DREAMSCAPE", { nodeId: NODE_ID }],
     ["OPEN_SITE", { siteId: ESSENCE_SITE_ID }],
     ["ACCEPT_ESSENCE", { siteId: ESSENCE_SITE_ID }],
@@ -148,7 +148,7 @@ function battleFixture() {
   const gen = genesis("fixture-battle");
   // Events up to the prompt-parking command; discover the promptId by folding.
   const prefix = chain("p1", [
-    ["START_QUEST", { dreamcallerId: DREAMCALLER_ID }],
+    ["START_QUEST", { dreamAvatarId: DREAM_AVATAR_ID }],
     ["BEGIN_BATTLE", { siteId: BATTLE_SITE_ID }],
     ["BATTLE_COMMAND", moveToFront(BATTLE_CARD_DETERMINISTIC, DETERMINISTIC_SLOT)],
     ["BATTLE_COMMAND", drawDreamwell()],
@@ -186,7 +186,7 @@ function battleFixture() {
 function adversarialFixture() {
   const gen = genesis("fixture-adversarial");
   const prefix = [
-    ev(1, "START_QUEST", { dreamcallerId: DREAMCALLER_ID }, "alice", 0),
+    ev(1, "START_QUEST", { dreamAvatarId: DREAM_AVATAR_ID }, "alice", 0),
     // bob's essence adjust applies; alice's, based on the pre-bob state, sees
     // bob's applied non-neutral event in its window and BOUNCES (CAS rule 3).
     ev(2, "ADJUST_ESSENCE", { delta: 10 }, "bob", 1),

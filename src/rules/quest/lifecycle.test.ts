@@ -3,8 +3,8 @@ import { afterEach, describe, expect, it } from "vitest";
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import { hashState } from "../../eventlog/hash";
 import type {
-  DreamcallerContent,
-  ResolvedDreamcallerPackage,
+  DreamAvatarContent,
+  ResolvedDreamAvatarPackage,
 } from "../../types/content";
 import type { DreamscapeModifier, QuestState } from "../../types/quest";
 import { LayerName } from "../../types/layer-name";
@@ -80,17 +80,17 @@ function makePrng(seed: number): () => number {
 
 /**
  * A deterministic content provider whose package depends ONLY on
- * `(dreamcallerId, seed)` — never on wall-clock or live randomness — so any
+ * `(dreamAvatarId, seed)` — never on wall-clock or live randomness — so any
  * nondeterminism the reducer introduced would surface as a hash mismatch.
  */
 function deterministicProvider(): QuestLifecycleContentProvider {
   function packageFor(
-    dreamcallerId: string,
+    dreamAvatarId: string,
     seed: string,
-  ): ResolvedDreamcallerPackage {
-    const dreamcaller: DreamcallerContent = {
-      id: dreamcallerId,
-      name: `caller-${dreamcallerId}`,
+  ): ResolvedDreamAvatarPackage {
+    const dreamAvatar: DreamAvatarContent = {
+      id: dreamAvatarId,
+      name: `caller-${dreamAvatarId}`,
       title: "title",
       renderedText: "text",
       imageNumber: "1",
@@ -98,12 +98,12 @@ function deterministicProvider(): QuestLifecycleContentProvider {
     };
     // Derive a stable dreamsign pool from (id, seed) so the package varies with
     // its inputs but is byte-identical across re-applications.
-    const rng = makePrng(hashNumber(`${dreamcallerId}:${seed}`));
+    const rng = makePrng(hashNumber(`${dreamAvatarId}:${seed}`));
     const dreamsignPoolIds = Array.from({ length: 8 }, () =>
       `ds-${String(Math.floor(rng() * 1_000_000))}`,
     );
     return {
-      dreamcaller,
+      dreamAvatar,
       draftPoolCopiesByCard: { "1": 2, "2": 1 },
       dreamsignPoolIds,
       mandatoryOnlyPoolSize: 3,
@@ -115,21 +115,21 @@ function deterministicProvider(): QuestLifecycleContentProvider {
     };
   }
   return {
-    resolveDreamcallerPackage: (dreamcallerId, seed) =>
-      packageFor(dreamcallerId, seed),
-    startQuest: ({ quest, dreamcallerId, seed }) => {
-      const pkg = packageFor(dreamcallerId, seed);
+    resolveDreamAvatarPackage: (dreamAvatarId, seed) =>
+      packageFor(dreamAvatarId, seed),
+    startQuest: ({ quest, dreamAvatarId, seed }) => {
+      const pkg = packageFor(dreamAvatarId, seed);
       return {
         ...quest,
         seed: quest.seed,
-        essence: pkg.dreamcaller.startingEssence,
-        dreamcaller: {
-          id: pkg.dreamcaller.id,
-          name: pkg.dreamcaller.name,
-          title: pkg.dreamcaller.title,
-          renderedText: pkg.dreamcaller.renderedText,
-          imageNumber: pkg.dreamcaller.imageNumber,
-          startingEssence: pkg.dreamcaller.startingEssence,
+        essence: pkg.dreamAvatar.startingEssence,
+        dreamAvatar: {
+          id: pkg.dreamAvatar.id,
+          name: pkg.dreamAvatar.name,
+          title: pkg.dreamAvatar.title,
+          renderedText: pkg.dreamAvatar.renderedText,
+          imageNumber: pkg.dreamAvatar.imageNumber,
+          startingEssence: pkg.dreamAvatar.startingEssence,
         },
         resolvedPackage: pkg,
         remainingDreamsignPool: [...pkg.dreamsignPoolIds],
@@ -388,14 +388,14 @@ describe("TRAVEL_TO_DREAMSCAPE", () => {
 });
 
 // ---------------------------------------------------------------------------
-// REROLL_DREAMCALLER_OFFER — shared quest-start debug state
+// REROLL_DREAM_AVATAR_OFFER — shared quest-start debug state
 // ---------------------------------------------------------------------------
 
-describe("REROLL_DREAMCALLER_OFFER", () => {
-  it("increments the persisted reroll count while choosing a Dreamcaller", () => {
+describe("REROLL_DREAM_AVATAR_OFFER", () => {
+  it("increments the persisted reroll count while choosing a DreamAvatar", () => {
     const start = genesis();
-    const once = apply(start, "REROLL_DREAMCALLER_OFFER", {});
-    const twice = apply(once, "REROLL_DREAMCALLER_OFFER", {});
+    const once = apply(start, "REROLL_DREAM_AVATAR_OFFER", {});
+    const twice = apply(once, "REROLL_DREAM_AVATAR_OFFER", {});
 
     expect(once.quest.screen).toEqual({ type: "questStart", rerollCount: 1 });
     expect(twice.quest.screen).toEqual({ type: "questStart", rerollCount: 2 });
@@ -403,10 +403,10 @@ describe("REROLL_DREAMCALLER_OFFER", () => {
 
   it("bounces after the quest has started", () => {
     registerQuestLifecycleContentProvider(deterministicProvider());
-    const started = apply(genesis(), "START_QUEST", { dreamcallerId: "dc-1" });
+    const started = apply(genesis(), "START_QUEST", { dreamAvatarId: "dc-1" });
     const out = reduceGameEvent(
       started,
-      event("REROLL_DREAMCALLER_OFFER", {}),
+      event("REROLL_DREAM_AVATAR_OFFER", {}),
       ctx(),
     );
 
@@ -416,15 +416,15 @@ describe("REROLL_DREAMCALLER_OFFER", () => {
 });
 
 // ---------------------------------------------------------------------------
-// SELECT_DREAMCALLER — determinism
+// SELECT_DREAM_AVATAR — determinism
 // ---------------------------------------------------------------------------
 
-describe("SELECT_DREAMCALLER", () => {
+describe("SELECT_DREAM_AVATAR", () => {
   it("bounces when no content provider is registered", () => {
     const start = genesis();
     const out = reduceGameEvent(
       start,
-      event("SELECT_DREAMCALLER", { dreamcallerId: "dc-1" }),
+      event("SELECT_DREAM_AVATAR", { dreamAvatarId: "dc-1" }),
       ctx(),
     );
     expect(out.outcome).toBe("bounced");
@@ -434,12 +434,12 @@ describe("SELECT_DREAMCALLER", () => {
   it("derives a byte-identical resolvedPackage for the same seed regardless of ctx", () => {
     registerQuestLifecycleContentProvider(deterministicProvider());
     const start = genesis();
-    const a = apply(start, "SELECT_DREAMCALLER", { dreamcallerId: "dc-42" }, ctx({
+    const a = apply(start, "SELECT_DREAM_AVATAR", { dreamAvatarId: "dc-42" }, ctx({
       seq: 3,
       timestamp: "2020-01-01T00:00:00.000Z",
       rng: () => 0.1,
     }));
-    const b = apply(start, "SELECT_DREAMCALLER", { dreamcallerId: "dc-42" }, ctx({
+    const b = apply(start, "SELECT_DREAM_AVATAR", { dreamAvatarId: "dc-42" }, ctx({
       seq: 3,
       timestamp: "2099-12-31T23:59:59.000Z",
       rng: () => 0.9,
@@ -447,17 +447,17 @@ describe("SELECT_DREAMCALLER", () => {
     expect(hashState(a.quest.resolvedPackage)).toBe(
       hashState(b.quest.resolvedPackage),
     );
-    expect(a.quest.dreamcaller?.id).toBe("dc-42");
+    expect(a.quest.dreamAvatar?.id).toBe("dc-42");
     expect(a.quest.remainingDreamsignPool).toEqual(
       a.quest.resolvedPackage?.dreamsignPoolIds,
     );
   });
 
-  it("produces a different package for a different dreamcaller", () => {
+  it("produces a different package for a different dreamAvatar", () => {
     registerQuestLifecycleContentProvider(deterministicProvider());
     const start = genesis();
-    const a = apply(start, "SELECT_DREAMCALLER", { dreamcallerId: "dc-1" });
-    const b = apply(start, "SELECT_DREAMCALLER", { dreamcallerId: "dc-2" });
+    const a = apply(start, "SELECT_DREAM_AVATAR", { dreamAvatarId: "dc-1" });
+    const b = apply(start, "SELECT_DREAM_AVATAR", { dreamAvatarId: "dc-2" });
     expect(hashState(a.quest.resolvedPackage)).not.toBe(
       hashState(b.quest.resolvedPackage),
     );
@@ -473,7 +473,7 @@ describe("START_QUEST", () => {
     const start = genesis();
     const out = reduceGameEvent(
       start,
-      event("START_QUEST", { dreamcallerId: "dc-1" }),
+      event("START_QUEST", { dreamAvatarId: "dc-1" }),
       ctx(),
     );
     expect(out.outcome).toBe("bounced");
@@ -485,21 +485,21 @@ describe("START_QUEST", () => {
     const started = apply(
       start,
       "START_QUEST",
-      { dreamcallerId: "dc-7" },
+      { dreamAvatarId: "dc-7" },
       ctx({ seq: 17 }),
     );
     expect(started.quest.seed).toBe(GENESIS.seed);
     expect(started.quest.runId).toBe("quest:17");
-    expect(started.quest.dreamcaller?.id).toBe("dc-7");
+    expect(started.quest.dreamAvatar?.id).toBe("dc-7");
     expect(started.quest.screen).toEqual({ type: "dreamscape" });
   });
 
-  it("bounces START_QUEST once a dreamcaller is already selected", () => {
+  it("bounces START_QUEST once a dreamAvatar is already selected", () => {
     registerQuestLifecycleContentProvider(deterministicProvider());
-    const started = apply(genesis(), "START_QUEST", { dreamcallerId: "dc-7" });
+    const started = apply(genesis(), "START_QUEST", { dreamAvatarId: "dc-7" });
     const out = reduceGameEvent(
       started,
-      event("START_QUEST", { dreamcallerId: "dc-9" }),
+      event("START_QUEST", { dreamAvatarId: "dc-9" }),
       ctx(),
     );
     expect(out.outcome).toBe("bounced");
@@ -509,7 +509,7 @@ describe("START_QUEST", () => {
 describe("RESET_QUEST", () => {
   it("resets quest state to the genesis fold and clears battle", () => {
     registerQuestLifecycleContentProvider(deterministicProvider());
-    let state = apply(genesis(), "START_QUEST", { dreamcallerId: "dc-7" });
+    let state = apply(genesis(), "START_QUEST", { dreamAvatarId: "dc-7" });
     state = apply(state, "SET_COMPLETION_LEVEL", { value: 5 });
     state = apply(state, "ADJUST_ESSENCE", { delta: 50 });
     // A battle in progress with no open prompt (an open prompt would be gated
@@ -610,9 +610,9 @@ describe("LOAD_STATE", () => {
 
   it("bounces a snapshot that nulls a currently non-null run field", () => {
     registerQuestLifecycleContentProvider(deterministicProvider());
-    const started = apply(genesis(), "START_QUEST", { dreamcallerId: "dc-7" });
-    expect(started.quest.dreamcaller).not.toBeNull();
-    const snapshot: QuestState = { ...started.quest, dreamcaller: null };
+    const started = apply(genesis(), "START_QUEST", { dreamAvatarId: "dc-7" });
+    expect(started.quest.dreamAvatar).not.toBeNull();
+    const snapshot: QuestState = { ...started.quest, dreamAvatar: null };
     const out = reduceGameEvent(started, event("LOAD_STATE", { snapshot }), ctx());
     expect(out.outcome).toBe("bounced");
   });

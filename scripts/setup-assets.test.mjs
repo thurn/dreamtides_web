@@ -19,25 +19,25 @@ import {
   setupAssets,
   stripJsonComments,
   transformCard,
-  validateDreamcallerMapping,
+  validateDreamAvatarMapping,
 } from "./setup-assets.mjs";
 
 afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe("validateDreamcallerMapping", () => {
+describe("validateDreamAvatarMapping", () => {
   // Synthetic fixtures only — this exercises the invariant logic, never the
   // production TOML, so editing the real mapping cannot break these tests.
-  const scape = (id, dreamcallerIds, isStarter = false) => ({
+  const scape = (id, dreamAvatarIds, isStarter = false) => ({
     id,
     isStarter,
-    dreamcallerIds,
+    dreamAvatarIds,
   });
 
   it("accepts a starter plus 3-4 caller regions and returns per-region counts", () => {
     vi.spyOn(console, "warn").mockImplementation(() => {});
-    const counts = validateDreamcallerMapping(
+    const counts = validateDreamAvatarMapping(
       [
         scape("starter", [], true),
         scape("a", ["dc-1", "dc-2", "dc-3"]),
@@ -51,16 +51,16 @@ describe("validateDreamcallerMapping", () => {
 
   it("matches ids case-insensitively", () => {
     vi.spyOn(console, "warn").mockImplementation(() => {});
-    validateDreamcallerMapping(
+    validateDreamAvatarMapping(
       [scape("a", ["DC-1", "dc-2", "Dc-3"])],
       ["dc-1", "DC-2", "dc-3"],
     );
     expect(console.warn).not.toHaveBeenCalled();
   });
 
-  it("throws when one Dreamcaller is assigned to two dreamscapes", () => {
+  it("throws when one DreamAvatar is assigned to two dreamscapes", () => {
     expect(() =>
-      validateDreamcallerMapping(
+      validateDreamAvatarMapping(
         [
           scape("a", ["dc-1", "dc-2", "dc-3"]),
           scape("b", ["dc-3", "dc-4", "dc-5"]),
@@ -72,13 +72,13 @@ describe("validateDreamcallerMapping", () => {
 
   it("throws when a non-starter region has fewer than 3 or more than 4", () => {
     expect(() =>
-      validateDreamcallerMapping([scape("a", ["dc-1", "dc-2"])], [
+      validateDreamAvatarMapping([scape("a", ["dc-1", "dc-2"])], [
         "dc-1",
         "dc-2",
       ]),
     ).toThrow(/must have 3-4/);
     expect(() =>
-      validateDreamcallerMapping(
+      validateDreamAvatarMapping(
         [scape("a", ["dc-1", "dc-2", "dc-3", "dc-4", "dc-5"])],
         ["dc-1", "dc-2", "dc-3", "dc-4", "dc-5"],
       ),
@@ -87,28 +87,28 @@ describe("validateDreamcallerMapping", () => {
 
   it("throws when the starter dreamscape lists residents", () => {
     expect(() =>
-      validateDreamcallerMapping([scape("starter", ["dc-1"], true)], ["dc-1"]),
+      validateDreamAvatarMapping([scape("starter", ["dc-1"], true)], ["dc-1"]),
     ).toThrow(/starter dreamscape/);
   });
 
   it("warns (does not throw) on unknown and unassigned ids", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    validateDreamcallerMapping(
+    validateDreamAvatarMapping(
       [scape("a", ["dc-1", "dc-2", "ghost"])],
       ["dc-1", "dc-2", "dc-orphan"],
     );
     const messages = warn.mock.calls.map((call) => call[0]).join("\n");
-    expect(messages).toMatch(/resolve to no Dreamcaller/);
+    expect(messages).toMatch(/resolve to no DreamAvatar/);
     expect(messages).toMatch(/not assigned to any dreamscape/);
   });
 });
 
 describe("setupAssets", () => {
-  it("normalizes TOML cards and dreamcallers into runtime JSON artifacts", () => {
+  it("normalizes TOML cards and dreamAvatars into runtime JSON artifacts", () => {
     const tempRoot = mkdtempSync(join(tmpdir(), "quest-setup-assets-"));
     const publicDir = join(tempRoot, "public");
     const imageCacheDir = join(tempRoot, "image-cache");
-    const dreamcallerArtDir = join(tempRoot, "dreamcaller-art");
+    const dreamAvatarArtDir = join(tempRoot, "dream-avatar-art");
     const dreamsignArtDir = join(tempRoot, "dreamsign-art");
     const mainMenuBackgroundArtPath = join(
       tempRoot,
@@ -121,17 +121,17 @@ describe("setupAssets", () => {
       "tutorial-round-frame.png",
     );
     const cardTomlPath = join(tempRoot, "cards_v2.toml");
-    const dreamcallerV2TomlPath = join(tempRoot, "dreamcallers_v2.toml");
+    const dreamAvatarV2TomlPath = join(tempRoot, "dream_avatars_v2.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
     const cachedImagePath = join(imageCacheDir, imageHash(101));
 
     mkdirSync(imageCacheDir, { recursive: true });
-    mkdirSync(dreamcallerArtDir, { recursive: true });
+    mkdirSync(dreamAvatarArtDir, { recursive: true });
     mkdirSync(dreamsignArtDir, { recursive: true });
     mkdirSync(dirname(mainMenuBackgroundArtPath), { recursive: true });
     mkdirSync(dirname(cachedImagePath), { recursive: true });
     writeFileSync(cachedImagePath, "fake-webp");
-    writeFileSync(join(dreamcallerArtDir, "0007.png"), "fake-png");
+    writeFileSync(join(dreamAvatarArtDir, "0007.png"), "fake-png");
     writeFileSync(join(dreamsignArtDir, "test-sign.png"), "fake-png");
     writeFileSync(mainMenuBackgroundArtPath, "fake-jpg");
     writeFileSync(tutorialDialogueFrameArtPath, "fake-png");
@@ -183,10 +183,10 @@ art-owned = true
 `,
     );
     writeFileSync(
-      dreamcallerV2TomlPath,
-      `[[dreamcaller]]
+      dreamAvatarV2TomlPath,
+      `[[dreamAvatar]]
 id = "dc-1"
-name = "Dreamcaller One"
+name = "DreamAvatar One"
 title = "Keeper of Test Cases"
 rendered-text = "Trigger an ability."
 image-number = "0007"
@@ -207,11 +207,11 @@ rendered-text = "Use the canonical Dreamsign text."
     setupAssets({
       catalogFixtureOnly: true,
       cardTomlPath,
-      dreamcallerV2TomlPath,
+      dreamAvatarV2TomlPath,
       dreamsignTomlPath,
       publicDir,
       imageCacheDir,
-      dreamcallerArtDir,
+      dreamAvatarArtDir,
       dreamsignArtDir,
       mainMenuBackgroundArtPath,
       tutorialDialogueFrameArtPath,
@@ -220,8 +220,8 @@ rendered-text = "Use the canonical Dreamsign text."
     const cards = JSON.parse(
       readFileSync(join(publicDir, "card-data.json"), "utf8"),
     );
-    const dreamcallers = JSON.parse(
-      readFileSync(join(publicDir, "dreamcallers-v2-data.json"), "utf8"),
+    const dreamAvatars = JSON.parse(
+      readFileSync(join(publicDir, "dream-avatars-v2-data.json"), "utf8"),
     );
     const dreamsigns = JSON.parse(
       readFileSync(join(publicDir, "dreamsign-data.json"), "utf8"),
@@ -278,10 +278,10 @@ rendered-text = "Use the canonical Dreamsign text."
         artOwned: true,
       },
     ]);
-    expect(dreamcallers).toEqual([
+    expect(dreamAvatars).toEqual([
       {
         id: "dc-1",
-        name: "Dreamcaller One",
+        name: "DreamAvatar One",
         title: "Keeper of Test Cases",
         renderedText: "Trigger an ability.",
         imageNumber: "0007",
@@ -298,7 +298,7 @@ rendered-text = "Use the canonical Dreamsign text."
       },
     ]);
     expect(existsSync(join(publicDir, "cards", "101.webp"))).toBe(true);
-    expect(existsSync(join(publicDir, "dreamcallers", "0007.png"))).toBe(true);
+    expect(existsSync(join(publicDir, "dream-avatars", "0007.png"))).toBe(true);
     expect(existsSync(join(publicDir, "dreamsigns", "test-sign.png"))).toBe(true);
   });
 
@@ -306,17 +306,17 @@ rendered-text = "Use the canonical Dreamsign text."
     const tempRoot = mkdtempSync(join(tmpdir(), "quest-setup-assets-"));
     const publicDir = join(tempRoot, "public");
     const imageCacheDir = join(tempRoot, "image-cache");
-    const dreamcallerArtDir = join(tempRoot, "dreamcaller-art");
+    const dreamAvatarArtDir = join(tempRoot, "dream-avatar-art");
     const dreamsignArtDir = join(tempRoot, "dreamsign-art");
     const cardTomlPath = join(tempRoot, "cards_v2.toml");
-    const dreamcallerV2TomlPath = join(tempRoot, "dreamcallers_v2.toml");
+    const dreamAvatarV2TomlPath = join(tempRoot, "dream_avatars_v2.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
 
     mkdirSync(imageCacheDir, { recursive: true });
-    mkdirSync(dreamcallerArtDir, { recursive: true });
+    mkdirSync(dreamAvatarArtDir, { recursive: true });
     mkdirSync(dreamsignArtDir, { recursive: true });
-    writeFileSync(join(dreamcallerArtDir, "0007.png"), "fake-png");
-    writeFileSync(join(dreamcallerArtDir, "0008.png"), "fake-png");
+    writeFileSync(join(dreamAvatarArtDir, "0007.png"), "fake-png");
+    writeFileSync(join(dreamAvatarArtDir, "0008.png"), "fake-png");
     writeFileSync(cardTomlPath, "");
     writeFileSync(
       cardTomlPath,
@@ -336,8 +336,8 @@ art-owned = true
 `,
     );
     writeFileSync(
-      dreamcallerV2TomlPath,
-      `[[dreamcaller]]
+      dreamAvatarV2TomlPath,
+      `[[dreamAvatar]]
 id = "dc-low"
 name = "Discount Caller"
 title = "Cheap Engine"
@@ -345,7 +345,7 @@ rendered-text = "Strong opener."
 image-number = "0007"
 starting-essence = 220
 
-[[dreamcaller]]
+[[dreamAvatar]]
 id = "dc-default"
 name = "Steady Caller"
 title = "Average Engine"
@@ -370,35 +370,35 @@ rendered-text = ""
     setupAssets({
       catalogFixtureOnly: true,
       cardTomlPath,
-      dreamcallerV2TomlPath,
+      dreamAvatarV2TomlPath,
       dreamsignTomlPath,
       publicDir,
       imageCacheDir,
-      dreamcallerArtDir,
+      dreamAvatarArtDir,
       dreamsignArtDir,
     });
 
-    const dreamcallers = JSON.parse(
-      readFileSync(join(publicDir, "dreamcallers-v2-data.json"), "utf8"),
+    const dreamAvatars = JSON.parse(
+      readFileSync(join(publicDir, "dream-avatars-v2-data.json"), "utf8"),
     );
-    expect(dreamcallers[0].startingEssence).toBe(220);
-    expect(dreamcallers[1].startingEssence).toBe(DEFAULT_STARTING_ESSENCE);
+    expect(dreamAvatars[0].startingEssence).toBe(220);
+    expect(dreamAvatars[1].startingEssence).toBe(DEFAULT_STARTING_ESSENCE);
   });
 
   it("retains the rarity field on Legendary cards and omits it otherwise", () => {
     const tempRoot = mkdtempSync(join(tmpdir(), "quest-setup-assets-"));
     const publicDir = join(tempRoot, "public");
     const imageCacheDir = join(tempRoot, "image-cache");
-    const dreamcallerArtDir = join(tempRoot, "dreamcaller-art");
+    const dreamAvatarArtDir = join(tempRoot, "dream-avatar-art");
     const dreamsignArtDir = join(tempRoot, "dreamsign-art");
     const cardTomlPath = join(tempRoot, "cards_v2.toml");
-    const dreamcallerV2TomlPath = join(tempRoot, "dreamcallers_v2.toml");
+    const dreamAvatarV2TomlPath = join(tempRoot, "dream_avatars_v2.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
 
     mkdirSync(imageCacheDir, { recursive: true });
-    mkdirSync(dreamcallerArtDir, { recursive: true });
+    mkdirSync(dreamAvatarArtDir, { recursive: true });
     mkdirSync(dreamsignArtDir, { recursive: true });
-    writeFileSync(join(dreamcallerArtDir, "0007.png"), "fake-png");
+    writeFileSync(join(dreamAvatarArtDir, "0007.png"), "fake-png");
     writeFileSync(
       cardTomlPath,
       `[[cards]]
@@ -431,8 +431,8 @@ art-owned = true
 `,
     );
     writeFileSync(
-      dreamcallerV2TomlPath,
-      `[[dreamcaller]]
+      dreamAvatarV2TomlPath,
+      `[[dreamAvatar]]
 id = "dc-1"
 name = "Caller"
 title = "Title"
@@ -457,11 +457,11 @@ rendered-text = ""
     setupAssets({
       catalogFixtureOnly: true,
       cardTomlPath,
-      dreamcallerV2TomlPath,
+      dreamAvatarV2TomlPath,
       dreamsignTomlPath,
       publicDir,
       imageCacheDir,
-      dreamcallerArtDir,
+      dreamAvatarArtDir,
       dreamsignArtDir,
     });
 

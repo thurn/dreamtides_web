@@ -2,7 +2,7 @@ node_modules/
 dist/
 public/cards/
 public/card-frame/
-public/dreamcallers/
+public/dream-avatars/
 public/dreamsigns/
 public/journeys/
 public/main-menu/
@@ -25,8 +25,8 @@ public/tides2-relationships-data.json
 public/tides3-data.json
 public/tides4-data.json
 public/tides5-data.json
-public/dreamcaller-data.json
-public/dreamcallers-v2-data.json
+public/dream-avatar-data.json
+public/dream-avatars-v2-data.json
 public/dreamsign-data.json
 public/dreamsign-profiles-data.json
 public/dreamwell-data.json

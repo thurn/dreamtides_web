@@ -3,7 +3,7 @@
 // A `sigseed` pool is a pure, deterministic function of the signature SUBSET it is
 // grown from (the only run-to-run randomness is which subset is drawn). So the
 // COMPLETE set of cards `sigseed` can ever surface is found by enumerating EVERY
-// subset of size 1..maxSeedCards of every Dreamcaller's resolved signature and
+// subset of size 1..maxSeedCards of every DreamAvatar's resolved signature and
 // growing a pool from each — no sampling, an exact answer. The union of all those
 // pools is everything `sigseed` shows; the non-starter cards outside it are the
 // answer.
@@ -21,7 +21,7 @@ const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
 
 const cards = readJson("public/cards_v2-data.json");
 const draftRecords = readJson("public/draft-records-data.json");
-const dreamcallers = readJson("public/dreamcallers-v2-data.json");
+const dreamAvatars = readJson("public/dream-avatars-v2-data.json");
 
 const pickRecords =
   Array.isArray(draftRecords) && draftRecords.length
@@ -52,7 +52,7 @@ function subsets(arr, maxK) {
 
 const shown = new Set(); // corpus keys (lowercase UUIDs) ever in a sigseed pool
 let poolsGrown = 0;
-const withSig = dreamcallers.filter((d) => (d.signatureCards ?? []).length > 0);
+const withSig = dreamAvatars.filter((d) => (d.signatureCards ?? []).length > 0);
 
 for (const dc of withSig) {
   const resolved = resolveSignatureToCorpus(corpus, dc.signatureCardIds ?? []);
@@ -82,7 +82,7 @@ const neverShown = universe
   .sort((a, b) => a.name.localeCompare(b.name));
 
 console.log(
-  `Signature Dreamcallers: ${withSig.length} | pools grown (all subsets): ${poolsGrown}`,
+  `Signature DreamAvatars: ${withSig.length} | pools grown (all subsets): ${poolsGrown}`,
 );
 console.log(`Non-starter card universe: ${universe.length}`);
 console.log(`Distinct non-starter cards ever shown by sigseed: ${universe.length - neverShown.length}`);

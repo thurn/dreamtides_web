@@ -42,14 +42,14 @@ describe("buildPoolViewerView", () => {
   });
 
   it("keeps source-specific empty states and provenance visible", () => {
-    const view = build({ source: "tides", tides4Provenance: { dreamcallerId: "dc", signatureless: false, borrowedArchetypeName: null, dealSize: 10, cap: 2, facetDrawnCount: 1, facetAvailableCount: 2, tides: [{ id: "missing", name: "Missing", role: "facet", selection: "facet-drawn", joined: true, cardNumbers: [99], contributedCardCount: 0 }], cardProvenanceByNumber: {} } });
+    const view = build({ source: "tides", tides4Provenance: { dreamAvatarId: "dc", signatureless: false, borrowedArchetypeName: null, dealSize: 10, cap: 2, facetDrawnCount: 1, facetAvailableCount: 2, tides: [{ id: "missing", name: "Missing", role: "facet", selection: "facet-drawn", joined: true, cardNumbers: [99], contributedCardCount: 0 }], cardProvenanceByNumber: {} } });
     expect(view.emptyLabel).toContain("tide");
     expect(view.disclosures.some((item) => item.id === "tides")).toBe(true);
   });
 
   it("maps catalog, IDF3, and signature sources without display-name identity", () => {
     const resolvedPackage = {
-      dreamcaller: { id: "dc", name: "Fixture", title: "", renderedText: "", imageNumber: "1", startingEssence: 0, signatureCards: ["display-only"], signatureCardIds: [beta.id] },
+      dreamAvatar: { id: "dc", name: "Fixture", title: "", renderedText: "", imageNumber: "1", startingEssence: 0, signatureCards: ["display-only"], signatureCardIds: [beta.id] },
       draftPoolCopiesByCard: {}, dreamsignPoolIds: [], mandatoryOnlyPoolSize: 0, draftPoolSize: 0, doubledCardCount: 0, legalSubsetCount: 0, preferredSubsetCount: 0, starterDecklistCardNumbers: [1],
     };
     expect(build({ source: "catalog" }).cards.map((item) => item.model.cardId)).toEqual([alpha.id, beta.id]);

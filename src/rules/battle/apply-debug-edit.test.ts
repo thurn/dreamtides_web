@@ -4,7 +4,7 @@ import { createBattleInit } from "../../battle/integration/create-battle-init";
 import { createInitialBattleState } from "../../battle/state/create-initial-state";
 import {
   makeBattleTestCardDatabase,
-  makeBattleTestDreamcallers,
+  makeBattleTestDreamAvatars,
   makeBattleTestSite,
   makeBattleTestState,
 } from "../../battle/test-support";
@@ -21,7 +21,7 @@ function createTestState(): BattleMutableState {
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),
-    dreamcallers: makeBattleTestDreamcallers(),
+    dreamAvatars: makeBattleTestDreamAvatars(),
   }));
 }
 

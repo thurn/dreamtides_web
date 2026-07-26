@@ -5,7 +5,7 @@
 // REAL generators register through `src/coop/providers/registerGameProviders`,
 // but the permanent replay regression net deliberately uses these minimal
 // DETERMINISTIC fakes instead: baking real-content hashes would couple the
-// fixtures to the TOML card/dreamcaller/atlas data, which AGENTS.md forbids
+// fixtures to the TOML card/dream-avatar/atlas data, which AGENTS.md forbids
 // (tests must not break on a data edit). The real providers' determinism is
 // covered separately by `src/coop/providers/register-game-providers.test.ts`.
 // These fakes let the fixture event logs fold to a stable, reproducible state.
@@ -24,7 +24,7 @@
 // fixtures stay resilient to TOML card-data edits while still covering the
 // active automation runner.
 
-import type { ResolvedDreamcallerPackage } from "../../types/content";
+import type { ResolvedDreamAvatarPackage } from "../../types/content";
 import type { PoolDraftState } from "../../types/draft";
 import type {
   BattleCardInstance,
@@ -74,7 +74,7 @@ import {
 /** A synthetic provider-set identifier stamped into every fixture. */
 export const FIXTURE_PROVIDER_SET = "synthetic-deterministic-v1";
 
-export const DREAMCALLER_ID = "dc-fixture";
+export const DREAM_AVATAR_ID = "dc-fixture";
 export const NODE_ID = "node-start";
 export const ESSENCE_SITE_ID = "site-essence";
 export const SHOP_SITE_ID = "site-shop";
@@ -128,18 +128,18 @@ function makePrng(seed: number): () => number {
 // ---------------------------------------------------------------------------
 
 function fixturePackage(
-  dreamcallerId: string,
+  dreamAvatarId: string,
   seed: string,
-): ResolvedDreamcallerPackage {
-  const rng = makePrng(hashNumber(`${dreamcallerId}:${seed}`));
+): ResolvedDreamAvatarPackage {
+  const rng = makePrng(hashNumber(`${dreamAvatarId}:${seed}`));
   const dreamsignPoolIds = Array.from(
     { length: 6 },
     () => `ds-${String(Math.floor(rng() * 1_000_000))}`,
   );
   return {
-    dreamcaller: {
-      id: dreamcallerId,
-      name: `caller-${dreamcallerId}`,
+    dreamAvatar: {
+      id: dreamAvatarId,
+      name: `caller-${dreamAvatarId}`,
       title: "title",
       renderedText: "text",
       imageNumber: "1",
@@ -204,21 +204,21 @@ function fixtureDraftState(): PoolDraftState {
 
 function lifecycleProvider(): QuestLifecycleContentProvider {
   return {
-    resolveDreamcallerPackage: (dreamcallerId, seed) =>
-      fixturePackage(dreamcallerId, seed),
-    startQuest: ({ quest, dreamcallerId, seed }) => {
-      const pkg = fixturePackage(dreamcallerId, seed);
+    resolveDreamAvatarPackage: (dreamAvatarId, seed) =>
+      fixturePackage(dreamAvatarId, seed),
+    startQuest: ({ quest, dreamAvatarId, seed }) => {
+      const pkg = fixturePackage(dreamAvatarId, seed);
       return {
         ...quest,
         seed: quest.seed,
-        essence: pkg.dreamcaller.startingEssence,
-        dreamcaller: {
-          id: pkg.dreamcaller.id,
-          name: pkg.dreamcaller.name,
-          title: pkg.dreamcaller.title,
-          renderedText: pkg.dreamcaller.renderedText,
-          imageNumber: pkg.dreamcaller.imageNumber,
-          startingEssence: pkg.dreamcaller.startingEssence,
+        essence: pkg.dreamAvatar.startingEssence,
+        dreamAvatar: {
+          id: pkg.dreamAvatar.id,
+          name: pkg.dreamAvatar.name,
+          title: pkg.dreamAvatar.title,
+          renderedText: pkg.dreamAvatar.renderedText,
+          imageNumber: pkg.dreamAvatar.imageNumber,
+          startingEssence: pkg.dreamAvatar.startingEssence,
         },
         resolvedPackage: pkg,
         remainingDreamsignPool: [...pkg.dreamsignPoolIds],

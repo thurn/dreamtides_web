@@ -2,9 +2,9 @@ import type { ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GroupPanel } from "../components/controls/GroupPanel";
 import {
-  DreamcallerPortrait,
-  type DreamcallerVisual,
-} from "../components/hud/DreamcallerPortrait";
+  DreamAvatarPortrait,
+  type DreamAvatarVisual,
+} from "../components/hud/DreamAvatarPortrait";
 import { Motes } from "../components/hud/Motes";
 import { token } from "../primitives/tokens";
 import type {
@@ -24,7 +24,7 @@ export interface QuestFailedStatView {
   value: number;
 }
 
-export interface QuestFailedDreamcallerView extends DreamcallerVisual {
+export interface QuestFailedDreamAvatarView extends DreamAvatarVisual {
   id: string;
   ability: string;
 }
@@ -35,7 +35,7 @@ export interface QuestFailedView {
   title: string;
   message: string;
   reasonLabel: string;
-  dreamcaller: QuestFailedDreamcallerView | null;
+  dreamAvatar: QuestFailedDreamAvatarView | null;
   stats: readonly QuestFailedStatView[];
 }
 
@@ -151,10 +151,10 @@ export function QuestFailedScreen({
                 </p>
               </header>
 
-              {view.dreamcaller !== null && (
+              {view.dreamAvatar !== null && (
                 <div
                   data-quest-failed-section="portrait"
-                  data-quest-failed-dreamcaller={view.dreamcaller.id}
+                  data-quest-failed-dream-avatar={view.dreamAvatar.id}
                   style={{
                     alignSelf: "center",
                     display: "flex",
@@ -162,13 +162,13 @@ export function QuestFailedScreen({
                     marginTop: token("--space-6"),
                   }}
                 >
-                  <DreamcallerPortrait
-                    dreamcaller={view.dreamcaller}
+                  <DreamAvatarPortrait
+                    dreamAvatar={view.dreamAvatar}
                     variant="panel"
                     size={112}
                     profile={{
-                      id: view.dreamcaller.id,
-                      ability: view.dreamcaller.ability,
+                      id: view.dreamAvatar.id,
+                      ability: view.dreamAvatar.ability,
                     }}
                   />
                 </div>

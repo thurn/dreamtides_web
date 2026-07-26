@@ -1,5 +1,5 @@
 import type { CardData } from "../types/cards";
-import type { DreamsignTemplate, ResolvedDreamcallerPackage } from "../types/content";
+import type { DreamsignTemplate, ResolvedDreamAvatarPackage } from "../types/content";
 import type { DraftState, PoolDraftState } from "../types/draft";
 import type { Dreamsign, RuntimeShopSlot } from "../types/quest";
 
@@ -238,7 +238,7 @@ export function runtimeSlotsToShopSlots(
  * since the draft pool is not shared with the replay draft.
  */
 export function replayShopDraftState(
-  resolvedPackage: ResolvedDreamcallerPackage | null | undefined,
+  resolvedPackage: ResolvedDreamAvatarPackage | null | undefined,
 ): PoolDraftState | null {
   const copies = resolvedPackage?.draftPoolCopiesByCard;
   if (copies === undefined || Object.keys(copies).length === 0) {

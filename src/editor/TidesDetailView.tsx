@@ -4,7 +4,7 @@ import type { CardSizePreset } from "./card-size";
 import { SIZE_PRESETS } from "./card-size";
 import { CardView } from "../cumulus/components/card/CardView";
 import CardBrowserGrid from "./card-browser/CardBrowserGrid";
-import { DreamcallerPortrait } from "../cumulus/components/hud/DreamcallerPortrait";
+import { DreamAvatarPortrait } from "../cumulus/components/hud/DreamAvatarPortrait";
 import { RulesText } from "../cumulus/components/card/RulesText";
 import { GlowIcon } from "../cumulus/components/controls/GlowIcon";
 import { GLYPHS, glyph } from "../cumulus/primitives/glyph";
@@ -14,7 +14,7 @@ import {
   type Tides4Color,
   type Tides4DeckJson,
 } from "../draft/pool/tides4-io";
-import type { EditableTideField, EditorDreamcaller } from "./tides-types";
+import type { EditableTideField, EditorDreamAvatar } from "./tides-types";
 
 export type TideSaveStatus =
   | { status: "idle" }
@@ -24,7 +24,7 @@ export type TideSaveStatus =
 
 interface TidesDetailViewProps {
   tide: Tides4DeckJson;
-  dreamcallerById: ReadonlyMap<string, EditorDreamcaller>;
+  dreamAvatarById: ReadonlyMap<string, EditorDreamAvatar>;
   cardById: ReadonlyMap<string, CardData>;
   size: CardSizePreset;
   saveStatus: TideSaveStatus;
@@ -73,30 +73,30 @@ function SaveStatusBadge({ saveStatus }: { saveStatus: TideSaveStatus }) {
 /** The large featured token at the top of the detail view. */
 function FeaturedSource({
   tide,
-  dreamcallerById,
+  dreamAvatarById,
   cardById,
 }: {
   tide: Tides4DeckJson;
-  dreamcallerById: ReadonlyMap<string, EditorDreamcaller>;
+  dreamAvatarById: ReadonlyMap<string, EditorDreamAvatar>;
   cardById: ReadonlyMap<string, CardData>;
 }) {
-  if (tide.role === "signature" && tide.dreamcallerId !== undefined) {
-    const dreamcaller = dreamcallerById.get(tide.dreamcallerId.toLowerCase());
-    if (dreamcaller === undefined) return null;
+  if (tide.role === "signature" && tide.dreamAvatarId !== undefined) {
+    const dreamAvatar = dreamAvatarById.get(tide.dreamAvatarId.toLowerCase());
+    if (dreamAvatar === undefined) return null;
     return (
       <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
-        <DreamcallerPortrait
-          dreamcaller={dreamcaller}
+        <DreamAvatarPortrait
+          dreamAvatar={dreamAvatar}
           variant="panel"
           size={160}
         />
         <div style={{ minWidth: 0 }}>
-          <div style={{ fontWeight: 800, fontSize: "1.1rem" }}>{dreamcaller.name}</div>
+          <div style={{ fontWeight: 800, fontSize: "1.1rem" }}>{dreamAvatar.name}</div>
           <div style={{ color: "#8edbd1", fontSize: "0.85rem", marginBottom: 8 }}>
-            {dreamcaller.title}
+            {dreamAvatar.title}
           </div>
           <div style={{ fontSize: "0.9rem", lineHeight: 1.4, maxWidth: 460 }}>
-            <RulesText text={dreamcaller.renderedText} />
+            <RulesText text={dreamAvatar.renderedText} />
           </div>
         </div>
       </div>
@@ -193,7 +193,7 @@ const TEXT_INPUT_STYLE = {
 
 export default function TidesDetailView({
   tide,
-  dreamcallerById,
+  dreamAvatarById,
   cardById,
   size,
   saveStatus,
@@ -280,7 +280,7 @@ export default function TidesDetailView({
         >
           <FeaturedSource
             tide={tide}
-            dreamcallerById={dreamcallerById}
+            dreamAvatarById={dreamAvatarById}
             cardById={cardById}
           />
           <div style={{ flex: "1 1 320px", minWidth: 280, display: "flex", flexDirection: "column", gap: 14 }}>

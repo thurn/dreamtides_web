@@ -2,29 +2,29 @@
 
 ## 1. Purpose and summary
 
-In the draft test mode a player first chooses a **Dreamcaller** (a character
+In the draft test mode a player first chooses a **Dream Avatar** (a character
 that defines how their deck wants to play) and is then handed a **card pool** —
 a multiset of roughly a hundred card copies — to draft a deck from. The quality
-of that experience depends on the pool *matching* the Dreamcaller: an aggressive
-warrior Dreamcaller should be handed a pool full of warriors and combat tricks,
+of that experience depends on the pool *matching* the Dream Avatar: an aggressive
+warrior Dream Avatar should be handed a pool full of warriors and combat tricks,
 not a random assortment.
 
 `idf3` is a pool-construction algorithm that builds the pool out of **real,
-human-built decklists** and steers it toward the chosen Dreamcaller using a tiny
+human-built decklists** and steers it toward the chosen Dream Avatar using a tiny
 piece of new data: a **signature**, a short list of card names that captures
-what the Dreamcaller is about. The signature is the only new input the algorithm
+what the Dream Avatar is about. The signature is the only new input the algorithm
 needs; it reads no colors, mechanic tags, archetype labels, or other metadata.
 
 The core move is this. Building a pool from real decks comes down to picking one
 **starter** decklist and then growing the pool out of the decks most similar to
 it. `idf3` biases *which starter is picked* toward the decks that resemble the
-Dreamcaller's signature — while still spreading the choice broadly across the
+Dream Avatar's signature — while still spreading the choice broadly across the
 many decks that fit, so the player gets a pool that is unmistakably the
-Dreamcaller's, but a different one each time they play.
+Dream Avatar's, but a different one each time they play.
 
 This document is self-contained: Section 2 explains the foundations the
 algorithm rests on, Section 3 explains the idea, Section 4 explains how to write
-a signature for each Dreamcaller, Section 5 specifies the algorithm precisely
+a signature for each Dream Avatar, Section 5 specifies the algorithm precisely
 enough to implement, Section 6 walks a full example, and Section 7 describes how
 the design was validated. Appendix A records the alternatives that were weighed
 and why this one was chosen.
@@ -133,27 +133,27 @@ algorithm plus one more factor on the starter weight.)
 ### 2.6 The gap idf3 fills
 
 The diversity weight makes pools *varied*, but it reads nothing about the
-Dreamcaller — it draws the same broad distribution of starters no matter who the
+Dream Avatar — it draws the same broad distribution of starters no matter who the
 player picked. So the pools are coherent and varied but **not matched** to the
-Dreamcaller. Closing that gap is the entire job of `idf3`.
+Dream Avatar. Closing that gap is the entire job of `idf3`.
 
 ---
 
-## 3. The idf3 idea: the Dreamcaller as a signature
+## 3. The idf3 idea: the Dream Avatar as a signature
 
 The algorithm speaks exactly one language: a deck is a bag of cards, and decks
-are compared by IDF-cosine. To steer toward a Dreamcaller, `idf3` expresses the
-Dreamcaller in that same language — as a **signature**, a tiny bag of cards
-standing in for "what this Dreamcaller wants to do." The signature is not a deck
+are compared by IDF-cosine. To steer toward a Dream Avatar, `idf3` expresses the
+Dream Avatar in that same language — as a **signature**, a tiny bag of cards
+standing in for "what this avatar wants to do." The signature is not a deck
 and never becomes the pool; it is a *query* used to score how well each real deck
-fits the Dreamcaller. That fit is folded into the starter draw as one more factor
+fits the Dream Avatar. That fit is folded into the starter draw as one more factor
 on top of the diversity weight.
 
 Two refinements make this work well, and they are the substance of the design:
 
 1. **Affinity is measured against a full anchor deck, not against the signature
    directly.** A signature is only a handful of cards, so most of the decks that
-   genuinely fit the Dreamcaller contain *none* of those exact cards — measuring
+   genuinely fit the Dream Avatar contain *none* of those exact cards — measuring
    fit by literal overlap with the signature would see only a thin, biased slice
    of the good decks. Instead, the signature is used to find the **anchor(s)**:
    the real deck (or few decks) most similar to it. Fit is then measured as
@@ -170,7 +170,7 @@ Two refinements make this work well, and they are the substance of the design:
    rewarded for being *even more* on-identity. Past the cap, on-identity decks
    compete with one another purely on the diversity weight, which spreads the
    choice across the whole identity. The cap behaves as a **soft gate**: strongly
-   prefer the Dreamcaller's region, then pick broadly within it.
+   prefer the Dream Avatar's region, then pick broadly within it.
 
 The result, named after its place in the design space (see Appendix A), is the
 **A″** scheme: **anchor-based affinity, saturated by a cap, multiplied into the
@@ -185,18 +185,18 @@ machinery precise.
 
 ---
 
-## 4. Assigning a signature to each Dreamcaller
+## 4. Assigning a signature to each Dream Avatar
 
 ### 4.1 The signature table
 
-The new data is a per-Dreamcaller `signature-cards` field, a card list:
+The new data is a per-Dream Avatar `signature-cards` field, a card list:
 
 ```
-signature-cards : cardName[]   # one per [[dreamcaller]] in dreamcallers_v2.toml
+signature-cards : cardName[]   # one per [[dreamAvatar]] in dream_avatars_v2.toml
 ```
 
-It lives in `data/tabula/dreamcallers_v2.toml` alongside each Dreamcaller's name,
-title, and ability, and flows into the loaded Dreamcaller records as
+It lives in `data/tabula/dream_avatars_v2.toml` alongside each Dream Avatar's name,
+title, and ability, and flows into the loaded Dream Avatar records as
 `signatureCards`. Its values are **card names only** — the algorithm's native
 vocabulary. A typical entry is a handful of names:
 
@@ -209,22 +209,22 @@ Kragg:  [ "<a distinctive sacrifice payoff>",
 ### 4.2 What makes a good signature card
 
 The test for a signature card is simple: **if you saw this card in a deck, would
-it make you confident the deck is trying to do what this Dreamcaller does?** Good
+it make you confident the deck is trying to do what this avatar does?** Good
 signature cards are the distinctive build-arounds, payoffs, and key enablers of
-the Dreamcaller's strategy. Poor choices are:
+the Dream Avatar's strategy. Poor choices are:
 
 - **Universal staples and mana/fixing.** A card in almost every deck carries a
   near-zero IDF weight, so it contributes nothing to the fit score regardless of
   how central it feels. Including one does no harm, but it does no work either.
 - **Generically good cards** that show up across many unrelated archetypes. They
-  pull the anchor toward whatever is most common, not toward the Dreamcaller.
+  pull the anchor toward whatever is most common, not toward the Dream Avatar.
 
 Because fit is IDF-weighted, the signature is **self-cleaning**: only the
 genuinely distinctive cards in it actually steer the draw, so a list does not
 have to be perfectly curated to work. Note one interaction with the IDF rules of
 Section 2.2: a card that is too common or too rare is zeroed and contributes
 nothing. Choose cards that are **distinctive but not vanishingly rare** — the
-cards that recur across the Dreamcaller's decks without being everywhere.
+cards that recur across the Dream Avatar's decks without being everywhere.
 
 ### 4.3 How many cards
 
@@ -245,11 +245,11 @@ different strategies can pull the anchor toward an incoherent middle.
 
 ### 4.4 A practical recipe for authoring a signature
 
-Signatures are written from design intent — you know what a Dreamcaller is for.
+Signatures are written from design intent — you know what a Dream Avatar is for.
 When you want a reproducible starting point, this mechanical recipe produces a
 solid first draft that you then trim by hand:
 
-1. Gather a set of decks that embody the Dreamcaller (decks you would point to and
+1. Gather a set of decks that embody the Dream Avatar (decks you would point to and
    say "that's a Kragg deck").
 2. For each card appearing in those decks, score it by **(fraction of those decks
    that contain it) × (the card's IDF weight)** — i.e. cards that are both
@@ -263,7 +263,7 @@ clean-room property is about what it consumes at run time, the final card list.
 
 ### 4.5 Multi-modal identities
 
-Some Dreamcallers span more than one sub-strategy (for example a black-red
+Some Dream Avatars span more than one sub-strategy (for example a black-red
 sacrifice build and a black-green sacrifice build that share a core but diverge in
 color). Handle this not by lengthening the signature but by including a couple of
 distinctive cards from *each* mode and letting the algorithm take **several
@@ -271,13 +271,13 @@ anchors** (Section 5.4): the anchors then center on each mode, and fit — measu
 as similarity to the *nearest* anchor — covers both regions. The number of
 anchors, `anchorCount`, should be at least the number of modes you expect.
 
-### 4.6 Dreamcallers without a signature
+### 4.6 Dream Avatars without a signature
 
-A Dreamcaller that has no entry in the table needs no special handling. With an
+A Dream Avatar that has no entry in the table needs no special handling. With an
 empty signature there are no anchors, every deck's affinity is zero, and the
 starter weight reduces to the plain diversity weight of Section 2.5 — the broad,
 identity-agnostic behavior. This falls directly out of the formula (Section 5.6),
-with no separate code path. So you write signatures only for the Dreamcallers you
+with no separate code path. So you write signatures only for the Dream Avatars you
 want steered; the rest get the well-understood general-pool behavior for free.
 
 ---
@@ -312,7 +312,7 @@ recomputing it.
 
 ### 5.3 Step 1 — the signature probe
 
-From the Dreamcaller's signature card list, form the **probe**: the set of
+From the Dream Avatar's signature card list, form the **probe**: the set of
 signature cards that exist in the corpus with a positive IDF weight (cards that
 are absent, or zeroed for being too rare/common, are dropped). Treat the probe as
 a synthetic deck so the standard IDF-cosine of Section 2.3 applies to it: its norm
@@ -343,7 +343,7 @@ anchorAffinity(i) = max over anchors a of  cosine(deck i, anchor a)
 
 with a deck's similarity to itself taken as 1 (so an anchor's own affinity is 1).
 If the anchor set is empty, `anchorAffinity(i) = 0` for every deck. Because an
-anchor is a full deck, this score is **dense**: every deck in the Dreamcaller's
+anchor is a full deck, this score is **dense**: every deck in the Dream Avatar's
 archetype scores high, not only the few that contain literal signature cards.
 
 ### 5.6 Step 4 — the starter weight (the A″ formula)
@@ -364,13 +364,13 @@ Reading the formula:
 - **The exponent** (`sigAlpha`) sets how strongly affinity matters. With the
   recommended values, an on-identity deck (affinity ≥ cap) carries an affinity
   factor of `(0.05 + 0.4)² ≈ 0.20`, while an off-identity deck (affinity ≈ 0)
-  carries `0.05² ≈ 0.0025` — about an 80× preference for the Dreamcaller's region,
+  carries `0.05² ≈ 0.0025` — about an 80× preference for the Dream Avatar's region,
   before the diversity weight is applied. Off-identity decks keep a small share
   (the `sigEps` floor) rather than being excluded, so the pool retains a broad
   base.
 - **The product with `div(i)`** gives the diversity weight a focused role:
   affinity has already committed the draw to one identity, so the diversity weight
-  spreads it across the decks *within* the Dreamcaller's identity — the player gets
+  spreads it across the decks *within* the Dream Avatar's identity — the player gets
   a different deck of the right kind each run.
 - **Setting `sigAlpha = 0`**, or supplying no signature, collapses the affinity
   factor to a constant that cancels under normalization, leaving exactly the
@@ -399,7 +399,7 @@ on-identity as well — steering the starter alone is sufficient, which is why
 - **Color identity.** `idf3` reports no color identity. Deriving one would mean
   reading color metadata, which this algorithm does not consume; the identity
   string is left empty.
-- **Labels.** The pool records that it was produced by `idf3`, which Dreamcaller
+- **Labels.** The pool records that it was produced by `idf3`, which Dream Avatar
   drove it, and which corpus deck was the starter — enough to reproduce and
   inspect a pool.
 - **Fallback to the diversity-only draw** happens automatically whenever the probe
@@ -413,13 +413,13 @@ on-identity as well — steering the starter alone is sufficient, which is why
 
 The pieces fit into the existing pool-construction flow as follows:
 
-1. **The data.** Add a `signature-cards` card list to each `[[dreamcaller]]` in
-   `dreamcallers_v2.toml`.
+1. **The data.** Add a `signature-cards` card list to each `[[dreamAvatar]]` in
+   `dream_avatars_v2.toml`.
 2. **Load it.** The asset build carries `signature-cards` into the generated
-   Dreamcaller JSON as `signatureCards` (an empty list when absent), and the
-   records expose it like other per-Dreamcaller guidance.
+   Dream Avatar JSON as `signatureCards` (an empty list when absent), and the
+   records expose it like other per-Dream Avatar guidance.
 3. **Thread it through.** Pass `signatureCards` into pool generation alongside the
-   other per-Dreamcaller arguments, and register a new `idf3` variant that the
+   other per-Dream Avatar arguments, and register a new `idf3` variant that the
    dispatcher routes to. Expose it for manual testing via the pool-variant
    selector (e.g. an `?algo=idf3` URL parameter).
 4. **Reuse, do not duplicate.** The `idf3` variant reuses the existing IDF corpus,
@@ -431,18 +431,18 @@ The pieces fit into the existing pool-construction flow as follows:
 The near-twin diversity weights cost one O(*n*²) similarity pass, which is shared
 with the predecessor algorithm and computed once. Per pool, `idf3` adds only the
 probe-cosine scan and the anchor-affinity scan — O(*n* × *m*) plus O(*n*) — both
-negligible. The grown pool for a starter is independent of the Dreamcaller, so
+negligible. The grown pool for a starter is independent of the Dream Avatar, so
 nothing about steering changes growth's cost.
 
 ---
 
 ## 6. Worked example: Kragg
 
-Suppose Kragg is a black-red sacrifice Dreamcaller whose decks lean on Abandon
+Suppose Kragg is a black-red sacrifice Dream Avatar whose decks lean on Abandon
 payoffs. An author writes a three-to-six card signature of Kragg's distinctive
 sacrifice payoffs and Abandon enablers — not the format's staples or mana, which
 would be zeroed anyway — and records it as `signature-cards` on the `Kragg`
-entry in `dreamcallers_v2.toml`.
+entry in `dream_avatars_v2.toml`.
 
 At run time, the player picks Kragg. The probe is formed from those signature
 cards (Step 1). The algorithm scores every real deck by similarity to the probe
@@ -461,7 +461,7 @@ among them. Off-identity decks keep only the small `sigEps` share. The draw (Ste
 one each run. Growth (Step 6) folds in that starter's most similar neighbors —
 more sacrifice decks — yielding a roughly hundred-copy black-red sacrifice pool
 that is unmistakably Kragg, grown from real sacrifice decks, and different each
-time. A Dreamcaller with no signature would instead get the broad,
+time. A Dream Avatar with no signature would instead get the broad,
 identity-agnostic draw.
 
 ---
@@ -476,14 +476,14 @@ starter, every metric is computed *exactly* as a weighted sum over the starter
 distribution, with no sampling noise.
 
 To test steering without circular reasoning, the validation uses each
-Dreamcaller's real archetype as ground truth (information the algorithm under test
+Dream Avatar's real archetype as ground truth (information the algorithm under test
 never sees): it derives a realistic signature from the distinctive recurring cards
-of that Dreamcaller's decks, and it splits the signature in half — steering with
+of that Dream Avatar's decks, and it splits the signature in half — steering with
 one half and measuring whether the *other* half, never steered on, shows up in the
-pool. It reports, per scheme, averaged over twenty themed Dreamcallers (each with
+pool. It reports, per scheme, averaged over twenty themed Dream Avatars (each with
 ~200 fitting decks in the corpus):
 
-- **onIdentity** — probability the drawn starter is one of the Dreamcaller's decks
+- **onIdentity** — probability the drawn starter is one of the Dream Avatar's decks
   (match).
 - **heldout** — recall of the held-out signature half (match, without the
   circularity).
@@ -499,7 +499,7 @@ At the recommended operating point (`sigAlpha = 2`, `sigCap = 0.4`,
 baseline of ~0.16 to ~0.54 (a pool that genuinely captures the identity) while
 still spreading the starter across ~100 distinct fitting decks and keeping the
 single-deck share to ~0.02 — the lowest dominance of any scheme that matched the
-Dreamcaller. Cohesion did not fall; steering toward identity slightly raised it.
+Dream Avatar. Cohesion did not fall; steering toward identity slightly raised it.
 The accompanying signature-length sweep is the evidence behind Section 4.3.
 
 ---
@@ -546,7 +546,7 @@ The four combinations were compared on the metrics of Section 7:
 - **A″ = anchor + capped.** The chosen scheme. It keeps A′'s dense, complete
   identity signal and adds the cap, which holds the single-deck share to the
   lowest of any matching scheme while preserving a broad spread across the
-  Dreamcaller's decks. It delivers strong match at high spread, never erodes
+  Dream Avatar's decks. It delivers strong match at high spread, never erodes
   cohesion, and stays the simplest in spirit — a single extra factor on the
   starter weight, with no slice, threshold, or fallback machinery beyond what
   falls out of the formula.

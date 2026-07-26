@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use super-subagent-driven-development (recommended) or super-executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add a second, switchable opponent-generation algorithm to the `/opponent` debug view that selects a real known-good corpus deck fitting the opponent's Dreamcaller (and, secondarily, the dreamscape affiliation), then tunes that deck by run layer.
+**Goal:** Add a second, switchable opponent-generation algorithm to the `/opponent` debug view that selects a real known-good corpus deck fitting the opponent's Dream Avatar (and, secondarily, the dreamscape affiliation), then tunes that deck by run layer.
 
 **Architecture:** A UUID-keyed IDF/affinity fit module (extracted from the duplicated `/sigdecks` logic and the name-keyed affiliation affinity), plus a co-occurrence synergy module, feed a new `buildCorpusOpponentDeck` (Stage A selection + Stage B layer tuning). Two new generated artifacts (`known-good-decklists-data.json`, `dreamsign-signatures-data.json`) supply the corpus and the dreamsign-synergy data. `OpponentDebugApp` gains a small algorithm registry so both the existing coherent-draft and the new corpus algorithm render through one interface, selected via `?algo=`. Scope is debug-view-only: live battles keep using `buildOpponentDeck`.
 
@@ -22,7 +22,7 @@ Hard rules for all code written in this plan:
 - Card **names and card numbers may appear only as human-readable decoration** in the UI and in log fields — never as a lookup key, a comparison, or a dedup key. If a name or a number is used to *find* or *equate* a card anywhere in new code, that is a bug to fix, not ship.
 - `src/draft/idf-fit.ts` and `src/draft/deck-cooccurrence.ts` are generic over `string` so the *pre-existing* name-keyed affiliation caller can keep compiling — but **at every new call site in this feature the `string` is a lowercased UUID.** Never pass names into them from any new code.
 - The legacy **name-keyed systems are not used for identity by this feature**: `src/draft/replay/fit-model.ts`, `src/battle/integration/coherence.ts`, `src/affiliations/affiliation-weights.ts`, and the `idfCorpus(poolData)` (name) path of `variant-idf.ts`. The new algorithm builds its **own UUID-keyed** corpus, IDF, affinity, and co-occurrence over the known-good decklists' `mainboardIds`. Do not reach into the name-keyed `FitModel` for the corpus algorithm.
-- UUID sources to key on: deck `mainboardIds`, dreamcaller `signatureCardIds`, affiliation `signatureCards`, dreamsign `signatureCardIds`, and `CardData.id`. Resolve a UUID to its `CardData` through a `Map<lowercaseUuid, CardData>` built from `cardDatabase.values()` — never via name.
+- UUID sources to key on: deck `mainboardIds`, dream avatar `signatureCardIds`, affiliation `signatureCards`, dreamsign `signatureCardIds`, and `CardData.id`. Resolve a UUID to its `CardData` through a `Map<lowercaseUuid, CardData>` built from `cardDatabase.values()` — never via name.
 
 **Guardrail:** Task 1 includes a **name-collision test** — a fixture with two distinct UUIDs sharing one display name must be treated as two separate cards by the corpus, fit, affinity, and co-occurrence. Tasks 7–8 re-assert this at the selection/tuning level. If any of these tests would pass under a name-keyed implementation, the test is too weak — strengthen it.
 
@@ -197,7 +197,7 @@ Behavior-preserving: `/sigdecks` must render identically. This is the cleanup th
 
 - [ ] **Step 1: Capture current behavior**
 
-`/sigdecks` has no unit test today and its output is data-derived. Rather than snapshot live data (forbidden — it changes with TOML), assert structural invariants in a new `src/debug/SignatureDecksApp.test.ts`: extract `computeSignatureDecks` so it is importable, then for a synthetic `QuestContent` fixture assert that the chosen deck for a Dreamcaller is the one with the highest `signatureFit` among candidates, and that a Dreamcaller whose signatures appear in no fixture deck yields no row (**catches the refactor changing selection or candidate gating**). Run: `npx vitest run src/debug/SignatureDecksApp.test.ts` → PASS against the pre-refactor code.
+`/sigdecks` has no unit test today and its output is data-derived. Rather than snapshot live data (forbidden — it changes with TOML), assert structural invariants in a new `src/debug/SignatureDecksApp.test.ts`: extract `computeSignatureDecks` so it is importable, then for a synthetic `QuestContent` fixture assert that the chosen deck for a Dream Avatar is the one with the highest `signatureFit` among candidates, and that a Dream Avatar whose signatures appear in no fixture deck yields no row (**catches the refactor changing selection or candidate gating**). Run: `npx vitest run src/debug/SignatureDecksApp.test.ts` → PASS against the pre-refactor code.
 
 - [ ] **Step 2: Replace the local implementation**
 
@@ -413,7 +413,7 @@ export interface CorpusOpponentDeckBuild {
 }
 
 export function buildCorpusOpponentDeck(args: {
-  opponentDreamcaller: DreamcallerContent | null;
+  opponentDreamAvatar: DreamAvatarContent | null;
   knownGoodDecklists: readonly KnownGoodDecklist[];
   affiliation: AffiliationContent | null;
   cardDatabase: ReadonlyMap<number, CardData>;
@@ -431,19 +431,19 @@ Constants at the top of the module (tunable; do not pin them in tests): `AFFILIA
 
 (bug class in parentheses)
 - **Determinism:** same args (incl. `poolSeed`) → identical `source.id`; the build is pure (**catches accidental nondeterminism in sampling**).
-- **Seed variety:** across many `poolSeed` values the selected `source.id` takes more than one value for a Dreamcaller with ≥2 candidates (**catches collapsing to argmax / ignoring the seed**).
-- **Candidate gating:** for a Dreamcaller whose signatures appear in some fixture decks, every member of `topK` shares ≥1 signature card; a deck sharing none is never selected (**catches dropping the candidate rule**).
+- **Seed variety:** across many `poolSeed` values the selected `source.id` takes more than one value for a Dream Avatar with ≥2 candidates (**catches collapsing to argmax / ignoring the seed**).
+- **Candidate gating:** for a Dream Avatar whose signatures appear in some fixture decks, every member of `topK` shares ≥1 signature card; a deck sharing none is never selected (**catches dropping the candidate rule**).
 - **Signature-primary:** with affiliation absent, the selected deck is the highest-`signatureFit` candidate within sampling; raising one deck's `affiliationFit` alone never overtakes a much higher `signatureFit` deck given λ=0.25 (**catches mis-weighting the blend / swapping the primary axis**).
-- **Signature-less fallback:** a Dreamcaller with empty `signatureCardIds` selects from decks ranked by `affiliationFit` (candidate set = all decks) (**catches an empty-candidate crash and the wrong fallback axis**).
+- **Signature-less fallback:** a Dream Avatar with empty `signatureCardIds` selects from decks ranked by `affiliationFit` (candidate set = all decks) (**catches an empty-candidate crash and the wrong fallback axis**).
 - **Neutral dreamscape:** with `affiliation = null`, `affiliationFit` is 0 and selection uses `signatureFit` only (**catches a divide-by-zero / NaN from an absent probe**).
-- **UUID identity (reuse the Task 1 name-collision fixture):** include in the corpus two distinct cards that share a display name, one of them a Dreamcaller signature card. Assert the candidate set, `signatureFit`, and selection key on the UUID — only the deck holding the *signature* UUID is treated as a candidate; the same-named non-signature card never inflates a deck's fit (**catches Stage A collapsing colliding names — the bug the whole UUID mandate guards against**).
+- **UUID identity (reuse the Task 1 name-collision fixture):** include in the corpus two distinct cards that share a display name, one of them a Dream Avatar signature card. Assert the candidate set, `signatureFit`, and selection key on the UUID — only the deck holding the *signature* UUID is treated as a candidate; the same-named non-signature card never inflates a deck's fit (**catches Stage A collapsing colliding names — the bug the whole UUID mandate guards against**).
 
 Run: `npx vitest run src/battle/integration/corpus-opponent-deck.test.ts`
 Expected: FAIL.
 
 - [ ] **Step 3: Implement Stage A**
 
-Compute `signatureFit` per candidate via `signatureFit(dreamcallerSignatureSet, deck, corpus)`. When affiliation present, build the affinity map once via `computeAffinity(corpus, affiliationProbeSet)` and set `affiliationFit = meanAffinity(deckSet, affinity)`. `combined = signatureFit + AFFILIATION_WEIGHT * affiliationFit`. Candidate set, ranking, top-K, and seeded sample per the spec; seed the sample from `poolSeed` using the existing battle RNG (`src/battle/random.ts`). Edge cases per the spec. Return with `finalCards = baseCards`, empty `modifications`, `dreamsign = null`, `abilityActive = true` (Stage B overrides these).
+Compute `signatureFit` per candidate via `signatureFit(dreamAvatarSignatureSet, deck, corpus)`. When affiliation present, build the affinity map once via `computeAffinity(corpus, affiliationProbeSet)` and set `affiliationFit = meanAffinity(deckSet, affinity)`. `combined = signatureFit + AFFILIATION_WEIGHT * affiliationFit`. Candidate set, ranking, top-K, and seeded sample per the spec; seed the sample from `poolSeed` using the existing battle RNG (`src/battle/random.ts`). Edge cases per the spec. Return with `finalCards = baseCards`, empty `modifications`, `dreamsign = null`, `abilityActive = true` (Stage B overrides these).
 
 - [ ] **Step 4: Run to verify pass**
 
@@ -540,7 +540,7 @@ export interface DebugAlgorithm {
   id: string;       // "coherent" | "corpus"
   label: string;
   build(content: QuestContent, params: {
-    opponentDreamcaller: DreamcallerContent | null;
+    opponentDreamAvatar: DreamAvatarContent | null;
     affiliation: AffiliationContent | null;
     completionLevel: number;
     layerCount: number;

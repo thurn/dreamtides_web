@@ -27,8 +27,8 @@ export function BattleStartScreenAdapter({
       "battle_start_screen_opened",
       {
         battleId: init.battleId,
-        enemyId: view.dreamcaller.id,
-        enemyName: view.dreamcaller.name,
+        enemyId: view.dreamAvatar.id,
+        enemyName: view.dreamAvatar.name,
         scoreToWin: view.pointsToWin,
         essenceReward: view.essenceReward,
         dreamsignCount: view.dreamsigns.length,
@@ -40,10 +40,10 @@ export function BattleStartScreenAdapter({
   const handleBegin = useCallback(() => {
     logEvent("battle_start_screen_begin_clicked", {
       battleId: init.battleId,
-      enemyId: view.dreamcaller.id,
+      enemyId: view.dreamAvatar.id,
     });
     onBegin();
-  }, [init.battleId, onBegin, view.dreamcaller.id]);
+  }, [init.battleId, onBegin, view.dreamAvatar.id]);
 
   return <BattleStartScreen view={view} onBegin={handleBegin} />;
 }

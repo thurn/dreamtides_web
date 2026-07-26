@@ -117,7 +117,7 @@ function makeState(): QuestState {
     remainingDreamsignPool: ["dreamsign-2"],
     essence: 0,
     deck: [],
-    dreamcaller: null,
+    dreamAvatar: null,
     dreamsigns: [],
     maxDreamsigns: 12,
   } as unknown as QuestState;

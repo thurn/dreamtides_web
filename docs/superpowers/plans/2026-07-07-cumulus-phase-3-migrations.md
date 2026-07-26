@@ -269,7 +269,7 @@ makes the chevrons real glass. **This is a visible change; QA it.**
 - Checks green.
 - Browser QA (this is the material bug fix — confirm the chevrons now blur):
   ```bash
-  agent-browser --session t4 goto "http://localhost:5174/?goto=dreamcallerselect&deviceFrame=iphone16"
+  agent-browser --session t4 goto "http://localhost:5174/?goto=dream-avatar-select&deviceFrame=iphone16"
   agent-browser --session t4 eval "({href:location.href,w:innerWidth})"
   agent-browser --session t4 screenshot edgechevron-glass.png
   ```

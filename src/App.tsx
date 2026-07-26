@@ -10,9 +10,9 @@ import type { CardData } from "./types/cards";
 import type { QuestContent } from "./data/quest-content";
 import {
   AFFINITY_GROWN_POOL_VARIANTS,
-  buildDreamcallerProvenance,
-  buildDreamcallerSeedProvenance,
-  buildDreamcallerTides4Provenance,
+  buildDreamAvatarProvenance,
+  buildDreamAvatarSeedProvenance,
+  buildDreamAvatarTides4Provenance,
   loadQuestContent,
   poolVariantNeedsTides4,
 } from "./data/quest-content";
@@ -58,15 +58,15 @@ export function QuestApp({
   // query param remains the resume key. See `useQuestUrlSync`.
   useQuestUrlSync();
   // The starter-deck reveal popup is shown the first time a player picks a
-  // Dreamcaller. Visibility is driven entirely by persisted quest state
-  // (`dreamcaller` set + `hasSeenStartingDeckPopup` false) so a reload of the
+  // DreamAvatar. Visibility is driven entirely by persisted quest state
+  // (`dreamAvatar` set + `hasSeenStartingDeckPopup` false) so a reload of the
   // same `?game=` URL does not re-open the popup. The flag round-trips
   // through `normalizeQuestState` so a fresh client joining the same room
   // also sees the correct state. The popup uses a full-bleed alpha scrim on
   // mobile and a centered bounded glass panel on desktop, layered on top of the
   // live dreamscape; the HUD and screen return once it is dismissed.
   const showStarterDeckIntro =
-    state.dreamcaller !== null && !state.hasSeenStartingDeckPopup;
+    state.dreamAvatar !== null && !state.hasSeenStartingDeckPopup;
   const isDesktopViewport = useIsDesktop();
   const activeSite = resolveActiveSite(state);
   const activeSiteType = activeSite?.type ?? null;
@@ -97,14 +97,14 @@ export function QuestApp({
   // one parked on a developer QA scene (e.g. `?goto=atlas`), letting browser QA
   // open screens that are otherwise reachable only by playing battles forward.
   // Fires once per mount, and the multiplayer mutation guards on
-  // `dreamcaller === null` so a reload is a no-op.
+  // `dreamAvatar === null` so a reload is a no-op.
   useEffect(() => {
     const gotoScene = runtimeConfig.gotoScene ?? null;
     if (
       gotoScene === null ||
       gotoSceneFiredRef.current ||
       confirmedHead !== 0 ||
-      state.dreamcaller !== null
+      state.dreamAvatar !== null
     ) {
       return;
     }
@@ -114,35 +114,35 @@ export function QuestApp({
 
     gotoSceneFiredRef.current = true;
     mutations.bootstrapQaScene(gotoScene);
-  }, [confirmedHead, runtimeConfig.gotoScene, state.dreamcaller, mutations]);
+  }, [confirmedHead, runtimeConfig.gotoScene, state.dreamAvatar, mutations]);
 
   // `?goto=deckviewer`: the deck-viewer overlay is App-local state, not a
   // `Screen`, so its QA scene parks on the dreamscape (via `bootstrapQaScene`
   // above, giving the run a deck) and this effect opens the overlay once the
-  // dreamcaller exists. Fires once per mount.
+  // dreamAvatar exists. Fires once per mount.
   useEffect(() => {
     if (
       runtimeConfig.gotoScene !== DECK_VIEWER_SCENE_ID ||
       openDeckFiredRef.current ||
-      state.dreamcaller === null
+      state.dreamAvatar === null
     ) {
       return;
     }
     openDeckFiredRef.current = true;
     setDeckViewerOpen(true);
-  }, [runtimeConfig.gotoScene, state.dreamcaller]);
+  }, [runtimeConfig.gotoScene, state.dreamAvatar]);
 
   useEffect(() => {
     if (
       runtimeConfig.gotoScene !== POOL_VIEWER_SCENE_ID ||
       openPoolViewerFiredRef.current ||
-      state.dreamcaller === null
+      state.dreamAvatar === null
     ) {
       return;
     }
     openPoolViewerFiredRef.current = true;
     setPoolViewerOpen(true);
-  }, [runtimeConfig.gotoScene, state.dreamcaller]);
+  }, [runtimeConfig.gotoScene, state.dreamAvatar]);
 
   // `?loadQuest=<name>`: fetch the named snapshot from the dev server and
   // replace the room's quest state with it, then render the loaded run. Once
@@ -209,25 +209,25 @@ export function QuestApp({
 
   // Recompute the full idf3 provenance for the "Why Cards" overlay on demand
   // from the run seed and the pool corpus. It is deterministic per
-  // `(state.seed, dreamcaller.id)`, so it reproduces the exact pool the player
+  // `(state.seed, dreamAvatar.id)`, so it reproduces the exact pool the player
   // is drafting from without ever being persisted. The signature is read from
   // the freshly loaded content (matched by id) rather than the RTDB-round-tripped
   // package, so an empty-array strip cannot silently lose the steer.
-  const resolvedDreamcallerId = state.resolvedPackage?.dreamcaller.id ?? null;
+  const resolvedDreamAvatarId = state.resolvedPackage?.dreamAvatar.id ?? null;
   const cardSourceProvenance = useMemo(() => {
     const poolContext = questContent.poolContext;
     if (!cardSourceOverlayOpen || poolContext === undefined) return null;
-    if (resolvedDreamcallerId === null) return null;
-    const dreamcaller = questContent.dreamcallers.find(
-      (dc) => dc.id === resolvedDreamcallerId,
+    if (resolvedDreamAvatarId === null) return null;
+    const dreamAvatar = questContent.dreamAvatars.find(
+      (dc) => dc.id === resolvedDreamAvatarId,
     );
-    if (dreamcaller === undefined) return null;
-    return buildDreamcallerProvenance(dreamcaller, poolContext, state.seed);
+    if (dreamAvatar === undefined) return null;
+    return buildDreamAvatarProvenance(dreamAvatar, poolContext, state.seed);
   }, [
     cardSourceOverlayOpen,
     questContent.poolContext,
-    questContent.dreamcallers,
-    resolvedDreamcallerId,
+    questContent.dreamAvatars,
+    resolvedDreamAvatarId,
     state.seed,
   ]);
 
@@ -245,17 +245,17 @@ export function QuestApp({
   const seedProvenance = useMemo(() => {
     const poolContext = questContent.poolContext;
     if (!seedProvenanceNeeded || poolContext === undefined) return null;
-    if (resolvedDreamcallerId === null) return null;
-    const dreamcaller = questContent.dreamcallers.find(
-      (dc) => dc.id === resolvedDreamcallerId,
+    if (resolvedDreamAvatarId === null) return null;
+    const dreamAvatar = questContent.dreamAvatars.find(
+      (dc) => dc.id === resolvedDreamAvatarId,
     );
-    if (dreamcaller === undefined) return null;
-    return buildDreamcallerSeedProvenance(dreamcaller, poolContext, state.seed);
+    if (dreamAvatar === undefined) return null;
+    return buildDreamAvatarSeedProvenance(dreamAvatar, poolContext, state.seed);
   }, [
     seedProvenanceNeeded,
     questContent.poolContext,
-    questContent.dreamcallers,
-    resolvedDreamcallerId,
+    questContent.dreamAvatars,
+    resolvedDreamAvatarId,
     state.seed,
   ]);
 
@@ -273,21 +273,21 @@ export function QuestApp({
   const tides4Provenance = useMemo(() => {
     const poolContext = questContent.poolContext;
     if (!tides4ProvenanceNeeded || poolContext === undefined) return null;
-    if (resolvedDreamcallerId === null) return null;
-    const dreamcaller = questContent.dreamcallers.find(
-      (dc) => dc.id === resolvedDreamcallerId,
+    if (resolvedDreamAvatarId === null) return null;
+    const dreamAvatar = questContent.dreamAvatars.find(
+      (dc) => dc.id === resolvedDreamAvatarId,
     );
-    if (dreamcaller === undefined) return null;
-    return buildDreamcallerTides4Provenance(
-      dreamcaller,
+    if (dreamAvatar === undefined) return null;
+    return buildDreamAvatarTides4Provenance(
+      dreamAvatar,
       poolContext,
       state.seed,
     );
   }, [
     tides4ProvenanceNeeded,
     questContent.poolContext,
-    questContent.dreamcallers,
-    resolvedDreamcallerId,
+    questContent.dreamAvatars,
+    resolvedDreamAvatarId,
     state.seed,
   ]);
 
@@ -300,11 +300,11 @@ export function QuestApp({
     // up-to-date in case future logic needs it.
     //
     // `STARTER_CARD_NUMBERS` import retained for future starter-deck flows
-    // (e.g. per-dreamcaller tutorials); underscore prefix silences unused
+    // (e.g. per-dream-avatar tutorials); underscore prefix silences unused
     // warnings without deleting the import, which other tests still rely on.
     void STARTER_CARD_NUMBERS;
     previousScreenTypeRef.current = state.screen.type;
-  }, [state.deck, state.dreamcaller, state.screen.type]);
+  }, [state.deck, state.dreamAvatar, state.screen.type]);
 
   useEffect(() => {
     if (!hasCardSourceDebug) {
@@ -365,18 +365,18 @@ export function QuestApp({
     });
   }, [state, questContent, mutations]);
 
-  // `?goto=<scene>`: hold a loading screen — rather than the Dreamcaller
+  // `?goto=<scene>`: hold a loading screen — rather than the DreamAvatar
   // selection screen — until `bootstrapQaScene` round-trips through Firebase,
   // so QA lands directly on the requested scene (e.g. the Dream Atlas). Scenes
-  // whose destination *is* the Dreamcaller selection screen (`landsOnQuestStart`)
-  // are exempt: their state keeps `dreamcaller` null, so this gate — which waits
-  // for a Dreamcaller to be selected — would otherwise spin forever.
+  // whose destination *is* the DreamAvatar selection screen (`landsOnQuestStart`)
+  // are exempt: their state keeps `dreamAvatar` null, so this gate — which waits
+  // for a DreamAvatar to be selected — would otherwise spin forever.
   const gotoSceneName = runtimeConfig.gotoScene ?? null;
   const gotoScene = gotoSceneName === null ? null : findQaScene(gotoSceneName);
   if (
     gotoScene !== null &&
     gotoScene.landsOnQuestStart !== true &&
-    state.dreamcaller === null
+    state.dreamAvatar === null
   ) {
     return (
       <ApplicationStateScreen
@@ -392,7 +392,7 @@ export function QuestApp({
 
   // Hold a loading screen while the `?loadQuest=` snapshot is being fetched and
   // applied, so the player lands directly on the loaded run rather than the
-  // Dreamcaller selection screen.
+  // DreamAvatar selection screen.
   if (loadQuestStatus === "pending") {
     return (
       <ApplicationStateScreen
@@ -604,7 +604,7 @@ export default function App({
       .then((content) => {
         // Register the five real reducer content providers from the loaded
         // content BEFORE any room folds an event. Until this runs, every
-        // provider-backed event (START_QUEST, SELECT_DREAMCALLER, ADD_CARD,
+        // provider-backed event (START_QUEST, SELECT_DREAM_AVATAR, ADD_CARD,
         // ADD_DREAMSIGN, content-coupled OPEN_SITE / REROLL_SHOP / BEGIN_BATTLE)
         // bounces. Registering here — before `setQuestContent` unblocks the
         // render that mounts RoomGate / CoopProvider — guarantees the ordering,

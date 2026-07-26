@@ -20,7 +20,7 @@ export interface OnColorCandidates {
  * when its color prefix is non-empty and contained in `C`. Themes are the
  * on-color mechanic archetypes whose legal fraction clears {@link T_ON}, plus
  * the on-color color+archetype slices; when `allowedDraft` is set those slices
- * are restricted to a Dreamcaller's list. If no theme qualifies, every on-color
+ * are restricted to a DreamAvatar's list. If no theme qualifies, every on-color
  * slice becomes a theme so the walk always has somewhere to go.
  */
 export function onColorCandidates(

@@ -5,7 +5,7 @@ import {
 } from "../../__test-helpers__/atlas-fixtures";
 import {
   makeBattleTestCardDatabase,
-  makeBattleTestDreamcallers,
+  makeBattleTestDreamAvatars,
   makeBattleTestState,
 } from "../../battle/test-support";
 import type { QuestContent } from "../../data/quest-content";
@@ -21,7 +21,7 @@ import {
 function makeContent(): QuestContent {
   return {
     cardDatabase: makeBattleTestCardDatabase(),
-    dreamcallers: makeBattleTestDreamcallers(),
+    dreamAvatars: makeBattleTestDreamAvatars(),
     dreamwellCards: [],
     dreamsignTemplates: [],
     dreamscapes: MINIMAL_DREAMSCAPES,

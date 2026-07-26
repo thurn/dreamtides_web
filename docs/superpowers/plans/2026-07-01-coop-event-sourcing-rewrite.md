@@ -38,7 +38,7 @@ src/rules/                       # Stage B/C — pure reducer (lint-banned: fire
   fold-state.ts                      # FoldState + genesisFoldState(genesis)
   reducer.ts      reducer.test.ts    # root fold: CAS policy → domain routing
   quest/
-    lifecycle.ts   lifecycle.test.ts # START_QUEST, RESET_QUEST, LOAD_STATE, SELECT_DREAMCALLER, screens/travel
+    lifecycle.ts   lifecycle.test.ts # START_QUEST, RESET_QUEST, LOAD_STATE, SELECT_DREAM_AVATAR, screens/travel
     deck.ts        deck.test.ts      # deck, transfiguration, dreamsign events
     draft.ts       draft.test.ts     # PICK_DRAFT_CARD, SET_DRAFT_STATE
     sites.ts       sites.test.ts     # OPEN_SITE generation + site interaction events
@@ -88,7 +88,7 @@ Every multiplayer mutation in `src/state/multiplayer-quest-context.tsx` maps to 
 | resetQuest | `RESET_QUEST` | `{}`; resets to genesis quest state, clears battle |
 | loadQuestState / bootstrapQaScene *(debug)* | `LOAD_STATE` | `{ snapshot: FoldState["quest"], battle?: BattleFoldState }`; large payload is fine, compaction absorbs it |
 | bootstrapStartInBattle *(debug)* | `LOAD_STATE` then `BEGIN_BATTLE` | client appends both |
-| setDreamcallerSelection | `SELECT_DREAMCALLER` | `{ dreamcallerId }`; reducer derives `resolvedPackage` and `remainingDreamsignPool` deterministically from the UUID and the folded `quest.seed` (= `genesis.seed`, identical on every client) via the `QuestLifecycleContentProvider`, instead of trusting a client-computed package |
+| setDream AvatarSelection | `SELECT_DREAM_AVATAR` | `{ dreamAvatarId }`; reducer derives `resolvedPackage` and `remainingDreamsignPool` deterministically from the UUID and the folded `quest.seed` (= `genesis.seed`, identical on every client) via the `QuestLifecycleContentProvider`, instead of trusting a client-computed package |
 | setScreen | `SET_SCREEN` | `{ screen, activeSiteId }` |
 | setCurrentDreamscape | `TRAVEL_TO_DREAMSCAPE` | `{ nodeId }`; visitedSites + dreamscapeModifiers decrement in-case |
 | markSiteVisited | `MARK_SITE_VISITED` | `{ siteId }` |
@@ -271,9 +271,9 @@ Follow the harness pattern of the existing `src/multiplayer/firebase-emulator.in
 
 **Files:** Create: `src/rules/quest/lifecycle.ts`, `src/rules/quest/lifecycle.test.ts`; Modify: `src/rules/reducer.ts` (routing)
 
-Implement the reducer cases for: `START_QUEST`, `RESET_QUEST`, `LOAD_STATE`, `SELECT_DREAMCALLER`, `SET_SCREEN`, `TRAVEL_TO_DREAMSCAPE`, `MARK_SITE_VISITED`, `DISMISS_STARTING_DECK_POPUP`, `SET_ESSENCE`, `ADJUST_ESSENCE`, `SET_ESSENCE_CAP`, `ADJUST_ESSENCE_CAP`, `SET_MAX_DREAMSIGNS`, `SET_COMPLETION_LEVEL`. **Method:** for each, locate the legacy mutation body in `src/state/multiplayer-quest-context.tsx` (grep by mutation name), move its domain math into a pure function taking `(quest, payload, ctx)`, and drop the transaction/normalization/actionLog wrapper. `SELECT_DREAMCALLER` additionally absorbs the package-resolution logic the legacy mutation received pre-computed from the client — find where callers compute `resolvedPackage` today and move that computation in-reducer, replacing any `Math.random` with `ctx.rng`.
+Implement the reducer cases for: `START_QUEST`, `RESET_QUEST`, `LOAD_STATE`, `SELECT_DREAM_AVATAR`, `SET_SCREEN`, `TRAVEL_TO_DREAMSCAPE`, `MARK_SITE_VISITED`, `DISMISS_STARTING_DECK_POPUP`, `SET_ESSENCE`, `ADJUST_ESSENCE`, `SET_ESSENCE_CAP`, `ADJUST_ESSENCE_CAP`, `SET_MAX_DREAMSIGNS`, `SET_COMPLETION_LEVEL`. **Method:** for each, locate the legacy mutation body in `src/state/multiplayer-quest-context.tsx` (grep by mutation name), move its domain math into a pure function taking `(quest, payload, ctx)`, and drop the transaction/normalization/actionLog wrapper. `SELECT_DREAM_AVATAR` additionally absorbs the package-resolution logic the legacy mutation received pre-computed from the client — find where callers compute `resolvedPackage` today and move that computation in-reducer, replacing any `Math.random` with `ctx.rng`.
 
-- [ ] **Step 1: Failing tests.** Bug classes: **cap clamp** (essence never exits `[0, essenceCap]` across a property sweep of random deltas); **travel modifier decrement** (`TRAVEL_TO_DREAMSCAPE` decrements dreamscapeModifiers and drops zeroed entries — the documented contract on `QuestState.dreamscapeModifiers`); **dreamcaller determinism** (same seed + same seq → `SELECT_DREAMCALLER` yields byte-identical resolvedPackage via `hashState`); **reset completeness** (`RESET_QUEST` output equals `genesisFoldState` output by hash — catches fields forgotten on reset).
+- [ ] **Step 1: Failing tests.** Bug classes: **cap clamp** (essence never exits `[0, essenceCap]` across a property sweep of random deltas); **travel modifier decrement** (`TRAVEL_TO_DREAMSCAPE` decrements dreamscapeModifiers and drops zeroed entries — the documented contract on `QuestState.dreamscapeModifiers`); **dream avatar determinism** (same seed + same seq → `SELECT_DREAM_AVATAR` yields byte-identical resolvedPackage via `hashState`); **reset completeness** (`RESET_QUEST` output equals `genesisFoldState` output by hash — catches fields forgotten on reset).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**
 
 ### Task 12: Deck, transfiguration, dreamsign events
@@ -318,7 +318,7 @@ Cases: `BUY_SHOP_SLOT`, `REROLL_SHOP`, `GRANT_FREE_REROLLS`, `APPLY_SHOP_DISCOUN
 
 Cross-cutting suites that only make sense once all quest cases exist:
 
-- [ ] **Step 1: Write the tests.** (a) **Run-field nullability** — the successor to the deleted `NON_NULLABLE_RUN_FIELDS` guard: for 100 random event sequences (seeded generator drawing from the full quest event union with arbitrary payloads) applied after a `START_QUEST`+`SELECT_DREAMCALLER` prefix, no reachable state has `draftState`/`resolvedPackage`/`dreamcaller` transition non-null → null except via `RESET_QUEST`/`LOAD_STATE`. (b) **Total fold safety** — the same 100 sequences never throw and every outcome is applied|bounced. (c) **Determinism** — each sequence folded twice yields identical final hash. (d) **JSON purity** — final states survive `config.encode`/`decode` round-trip with hash equality (catches functions/undefined smuggled into state).
+- [ ] **Step 1: Write the tests.** (a) **Run-field nullability** — the successor to the deleted `NON_NULLABLE_RUN_FIELDS` guard: for 100 random event sequences (seeded generator drawing from the full quest event union with arbitrary payloads) applied after a `START_QUEST`+`SELECT_DREAM_AVATAR` prefix, no reachable state has `draftState`/`resolvedPackage`/`dreamAvatar` transition non-null → null except via `RESET_QUEST`/`LOAD_STATE`. (b) **Total fold safety** — the same 100 sequences never throw and every outcome is applied|bounced. (c) **Determinism** — each sequence folded twice yields identical final hash. (d) **JSON purity** — final states survive `config.encode`/`decode` round-trip with hash equality (catches functions/undefined smuggled into state).
 - [ ] **Step 2: Run — expect PASS (these validate Stage B; failures are real bugs in Tasks 10–15, fix them now).**
 - [ ] **Step 3: Commit and push.**
 
@@ -354,7 +354,7 @@ Logic is preserved (spec decision 2). Two mechanical changes only: (1) `collectD
 
 **Files:** Create: `src/rules/battle/battle-events.ts`, `src/rules/battle/battle-events.test.ts`; Modify: `src/rules/reducer.ts`
 
-`BEGIN_BATTLE { siteId }`: constructs `BattleFoldState` from quest state deterministically. Relocate the init logic from `src/multiplayer/battle-service.ts::ensureBattleSession`'s init construction and its callers in `src/state/use-ensure-battle-session.ts` (deck → battle board, dreamcaller, opponent-deck construction), replacing every random draw with `ctx.rng` and every timestamp with `ctx.timestamp`. Bounces if a battle is already in progress. `END_BATTLE { result }`: relocate `incrementCompletionLevel` (victory) and the defeat/failure-summary path from `multiplayer-quest-context.tsx`; clears `state.battle`; bounces if no battle exists.
+`BEGIN_BATTLE { siteId }`: constructs `BattleFoldState` from quest state deterministically. Relocate the init logic from `src/multiplayer/battle-service.ts::ensureBattleSession`'s init construction and its callers in `src/state/use-ensure-battle-session.ts` (deck → battle board, dream avatar, opponent-deck construction), replacing every random draw with `ctx.rng` and every timestamp with `ctx.timestamp`. Bounces if a battle is already in progress. `END_BATTLE { result }`: relocate `incrementCompletionLevel` (victory) and the defeat/failure-summary path from `multiplayer-quest-context.tsx`; clears `state.battle`; bounces if no battle exists.
 
 - [ ] **Step 1: Failing tests.** Bug classes: **init nondeterminism** (same quest state, same seq → hash-identical BattleFoldState twice — the ensureBattleSession race, eliminated); **double-begin bounce** (second BEGIN_BATTLE bounces — the `begunEntryKey` class); **victory bookkeeping** (END_BATTLE victory: completionLevel +1, battleModifiers each decremented and zero-entries dropped, battle null — pins the documented `battleModifiers` contract); **defeat summary** (END_BATTLE defeat: failureSummary populated from the battle state, battle null).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**
@@ -389,7 +389,7 @@ The reducer case replacing both effect-runner hooks' orchestration:
 
 `replay.ts`: `replayLog({ genesis, events }): { finalState, finalHash, outcomes }` — the full `EngineConfig` for the real game (reducer + genesisFoldState + JSON encode/decode + hashState), exported as `GAME_ENGINE_CONFIG` (this config object is also what `src/coop/` consumes in Stage D — single definition).
 
-- [ ] **Step 1: Build 3 synthetic fixtures** via a generator script: (a) a quest-only session (start → dreamcaller → travel → open/accept sites → shop buy), (b) a battle session (begin → commands materializing scripted cards → prompt → resolve → end victory), (c) an adversarial session (interleaved two-actor events producing bounces, a prompt race, an OPEN_SITE race). Each fixture stores `{ genesis, events, finalHash }`. `scripts/regenerate-replay-fixtures.mjs` re-runs the generator and re-stamps hashes — the one-command regeneration for intentional reducer changes. Per AGENTS.md, fixtures assert hashes/structure only, never TOML-derived content; the generator resolves card UUIDs from live data at generation time.
+- [ ] **Step 1: Build 3 synthetic fixtures** via a generator script: (a) a quest-only session (start → dream avatar → travel → open/accept sites → shop buy), (b) a battle session (begin → commands materializing scripted cards → prompt → resolve → end victory), (c) an adversarial session (interleaved two-actor events producing bounces, a prompt race, an OPEN_SITE race). Each fixture stores `{ genesis, events, finalHash }`. `scripts/regenerate-replay-fixtures.mjs` re-runs the generator and re-stamps hashes — the one-command regeneration for intentional reducer changes. Per AGENTS.md, fixtures assert hashes/structure only, never TOML-derived content; the generator resolves card UUIDs from live data at generation time.
 - [ ] **Step 2: Failing test → implement → green.** The test replays each fixture and asserts `finalHash` matches. Bug class: any nondeterminism or unintended rules change — this is the permanent regression net for the whole reducer.
 - [ ] **Step 3: Commit and push** (fixtures included).
 
@@ -470,7 +470,7 @@ Swap the provider tree: `RoomGate` (new) replaces `MultiplayerRoomGate`; `CoopPr
 
 - [ ] **Step 1: Full checks:** `npm run lint && npm run typecheck && npm test`.
 - [ ] **Step 2: Browser QA** per AGENTS.md: start `npm run dev -- --port 5174` (capture the PID; kill only that PID at teardown), drive with `/opt/homebrew/bin/agent-browser`. Scenarios, each checking the error buffer for render errors/unhandled rejections/console errors and visual coherence:
-  1. Fresh room → start quest → pick dreamcaller → travel → open a site → accept — single-player happy path.
+  1. Fresh room → start quest → pick dream avatar → travel → open a site → accept — single-player happy path.
   2. **Two tabs, same room:** both click the same shop slot near-simultaneously → exactly one purchase, the loser sees the bounce toast, boards converge.
   3. Two tabs: enter a battle site, one clicks Begin → both see the battle; **reload one tab mid-battle** → it re-folds to the battle screen (the `begunEntryKey` regression test).
   4. Battle: materialize a scripted interactive card → prompt renders in both tabs → both answer → one resolution applies, boards converge.

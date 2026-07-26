@@ -3,7 +3,7 @@
 A Dream Journey in Dreamtides is a random effect that modifies a quest in some
 way. It is the home of the most dramatic effects that can change a player's
 experience within a single run, and the main place where neutral or negative
-effects belong (Dreamsigns and Dreamcallers are usually only positive). Journeys
+effects belong (Dreamsigns and Dream Avatars are usually only positive). Journeys
 are also the primary vehicle for adding Bane cards to the player's deck and for
 adding battlefield slot modifications.
 
@@ -134,7 +134,7 @@ There are a few things that Dreamtides journeys do NOT do:
   single journey, e.g. having 15 or fewer cards or strongly controlling their
   starting hand
 - Directly apply ongoing player benefits instead of using a dreamsign
-- Allow more than 1 dreamcaller per battle
+- Allow more than 1 dream avatar per battle
 - Surface package tide identifiers to the player, or require the player to
   understand what tides are good for their deck
 - Play mini games beyond sequential button clicks, such as a matching game
@@ -208,7 +208,7 @@ optionally be combined with a cost.
 - Shuffle X {positive_dreamwell_cards} into your dreamwell for {duration}
 - Shop rerolls are free for {duration}
 - The next X items you purchase from sohps are free
-- Add an ability to your dreamcaller
+- Add an ability to your dream avatar
 - Once you play {cardname} X times, gain some reward
 - Gain a card, once you play it X times, gain some reward
 - Gain a dreamsign, once you trigger it X times, gain some reward
@@ -216,16 +216,16 @@ optionally be combined with a cost.
 - Split a card with multiple abilities into multiple cards with each of the
   abilities
 - Make one of your events become the materialized ability of a character
-- Gain the ability of a second dreamcaller as a special dreamsign
+- Gain the ability of a second dream avatar as a special dreamsign
 - Gain {simple effect} for {duration}, e.g. gain a dreamsign after each of the
   next 3 battles
-- Change your dreamcaller
+- Change your dream avatar
 - Gain a copy of a dreamsign
-- Duplicate your dreamcaller’s effect
+- Duplicate your dream avatar’s effect
 - Remove {tide} from the draft pool
 - Remove {predicate} dreamsigns from the pool, e.g. all neutral dreamsigns
 - X% higher chance to see {site} in future dreamscapes
-- Pick one of the 4 the best cards for your dreamcaller in the card pool
+- Pick one of the 4 the best cards for your dream avatar in the card pool
 - Transfigure {dreamwell_card} in your dreamwell to have a better effect
 
 # Costs
@@ -273,7 +273,7 @@ Costs provide some downside associated with a reward.
 - Shuffle X {negative_dreamwell_cards} into your dreamwell for {duration}
 - Remove all shop sites from the dream atlas
 - Remove all dreamsign sites from the dream atlas
-- Remove your dreamcaller's ability
+- Remove your dream avatar's ability
 - Purge all duplicate cards
 - X% chance to pay {cost}
 - You can no longer gain essence
@@ -385,7 +385,7 @@ These can have extreme effects, potentially even dramatically changing the game
 rules. They serve cases where dreamsigns are not appropriate (see “overlap with
 dreamsigns” above).
 
-- Both players begin battles with a random second Dreamcaller’s effect.
+- Both players begin battles with a random second Dream Avatar’s effect.
 - Both players begin each battle with 5 energy production and 5 current energy.
 - Both players begin with 7 cards in hand.
 - Both players draw 1 additional card during each Draw phase.
@@ -410,7 +410,7 @@ dreamsigns” above).
   The active player does not attack during Judgment; both players’ deployed
   characters attack simultaneously
 - For the rest of the quest, you draft only from a refilling pool of 50 cards
-  that match your dreamcaller
+  that match your dream avatar
 - Both player’s characters can directly fight each other
 - Multiple characters can block on a given space
 - Combat switches to magic the gathering style, you block on your opponent’s

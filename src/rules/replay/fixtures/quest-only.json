@@ -16,7 +16,7 @@
       "event": {
         "type": "START_QUEST",
         "payload": {
-          "dreamcallerId": "dc-fixture"
+          "dreamAvatarId": "dc-fixture"
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
@@ -26,9 +26,9 @@
     {
       "seq": 2,
       "event": {
-        "type": "SELECT_DREAMCALLER",
+        "type": "SELECT_DREAM_AVATAR",
         "payload": {
-          "dreamcallerId": "dc-fixture"
+          "dreamAvatarId": "dc-fixture"
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
@@ -97,5 +97,5 @@
       }
     }
   ],
-  "finalHash": "becb8f18e96e78a9c5e49009fde456c311176fb66febbf1bde6dcb9931497fa5"
+  "finalHash": "ff0a28b03ef87c19f1fbe8bab9a29ed8720df6f357102ac023849a4690fca7ec"
 }

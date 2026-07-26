@@ -2,7 +2,7 @@
 // decklist at random, rank every other decklist by IDF-weighted cosine
 // similarity to it, then union whole decklists best-first (capping copies) until
 // the pool size lands closest to the target. It reads nothing but the bundled
-// decklists — no tides, archetypes, colors, dreamcallers, or core staples bias
+// decklists — no tides, archetypes, colors, dreamAvatars, or core staples bias
 // the cards chosen. IDF (log of inverse document frequency) is what makes
 // "similar" mean "shares distinctive cards" rather than "shares popular cards":
 // a card in nearly every deck gets ~0 weight. The corpus, cosine, and growth

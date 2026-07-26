@@ -108,7 +108,7 @@ rooms/<roomId>
       summary
 ```
 
-`questState` starts as `null`. When either player picks a Dreamcaller, that
+`questState` starts as `null`. When either player picks a Dream Avatar, that
 browser builds the initial run and commits the first shared `QuestState`.
 
 The action log stores the last N shared actions for diagnostics. `questState`
@@ -148,7 +148,7 @@ Room creation writes an empty room with `questState: null`, metadata, and schema
 version.
 
 Quest start is a race-safe composed action. Either player can choose a
-Dreamcaller. The initiating browser resolves the Dreamcaller package, adds the
+Dream Avatar. The initiating browser resolves the Dream Avatar package, adds the
 starter cards, initializes draft state, generates the atlas, sets the first
 screen, and commits the initialized `QuestState`.
 
@@ -283,7 +283,7 @@ Testing should focus on the synchronization boundary and shared state helpers.
 
 - Opening the app without `?game=` creates a share-link path through the UI.
 - Two browser windows on the same `?game=` render the same quest start state.
-- Either player can choose the Dreamcaller for an empty room.
+- Either player can choose the Dream Avatar for an empty room.
 - A draft pick in one browser updates the other browser's offer, deck, and draft
   progress.
 - Independent writes to different shared fields compose, such as one player

@@ -1165,7 +1165,7 @@ Install the JS error/rejection/console-error buffer before interacting.
 
 - [ ] **Step 3: Exercise normal player flow**
 
-Create a game, choose a Dreamcaller, enter the first Dream Journey site, and verify the merchant screen renders. Confirm:
+Create a game, choose a Dream Avatar, enter the first Dream Journey site, and verify the merchant screen renders. Confirm:
 - large center merchant image slot is visible
 - both offers render concrete game objects and prices
 - dialogue is visible and specific

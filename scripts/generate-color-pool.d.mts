@@ -19,8 +19,8 @@ export interface PoolCard {
   draftArchetypes: string[];
 }
 
-/** A v2 Dreamcaller record, with the optional seeding archetype list. */
-export interface DreamcallerRecord {
+/** A v2 DreamAvatar record, with the optional seeding archetype list. */
+export interface DreamAvatarRecord {
   id: string;
   name: string;
   title: string;
@@ -44,11 +44,11 @@ export interface SeedResult {
 
 export function buildPoolData(cards: readonly PoolCard[]): PoolData;
 export function loadCards(tomlPath?: string): PoolCard[];
-export function loadDreamcallers(tomlPath?: string): DreamcallerRecord[];
-export function findDreamcaller(
-  dreamcallers: readonly DreamcallerRecord[],
+export function loadDreamAvatars(tomlPath?: string): DreamAvatarRecord[];
+export function findDreamAvatar(
+  dreamAvatars: readonly DreamAvatarRecord[],
   query: string,
-): DreamcallerRecord | null;
+): DreamAvatarRecord | null;
 export function runSeed(
   seed: number,
   poolData: PoolData,

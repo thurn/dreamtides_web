@@ -8,10 +8,10 @@
 // `docName` still points at the real QuestStatusBar so the props table reports
 // its actual API.
 //
-// Each dreamsign's `imageName` and the Dreamcaller `portrait` resolve from real
+// Each dreamsign's `imageName` and the DreamAvatar `portrait` resolve from real
 // production art in `public/` — the same assets the full-screen mockup uses — so the demo
-// shows genuine dreamsign icons and a real Dreamcaller bust rather than
-// stand-in glyphs. `dreamsigns` / `dreamcaller` are ReactNode-free object props
+// shows genuine dreamsign icons and a real DreamAvatar bust rather than
+// stand-in glyphs. `dreamsigns` / `dreamAvatar` are ReactNode-free object props
 // seeded via defaultArgs.
 
 import { useRef } from "react";
@@ -55,7 +55,7 @@ export const questStatusBarDemo: CumulusComponent = {
   Component: QuestStatusBarDemo,
   usage: [
     {
-      note: "A transparent HUD that positions itself against the screen root and reveals the Dreamcaller / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root. Its shared bottom anchor adds one small visible gap after the real device safe area; screens should not reposition it. Mobile screen-level floating glass panels use `QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE` for their bottom edge so every screen preserves the same separation from the HUD.",
+      note: "A transparent HUD that positions itself against the screen root and reveals the DreamAvatar / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root. Its shared bottom anchor adds one small visible gap after the real device safe area; screens should not reposition it. Mobile screen-level floating glass panels use `QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE` for their bottom edge so every screen preserves the same separation from the HUD.",
       code: `import { useRef } from "react";
 import { QuestStatusBar } from "src/cumulus/components/hud/QuestStatusBar";
 
@@ -67,7 +67,7 @@ const stageRef = useRef<HTMLDivElement>(null);
     stageRef={stageRef}
     essence={200}
     deck={22}
-    dreamcaller={dreamcaller}
+    dreamAvatar={dreamAvatar}
     dreamsigns={dreamsigns}
   />
 </div>`,
@@ -79,10 +79,10 @@ const stageRef = useRef<HTMLDivElement>(null);
       size: "compact",
       essence: 200,
       deck: 22,
-      dreamcaller: {
+      dreamAvatar: {
         name: "Threxan",
         epithet: "the Resounding Wrath",
-        portrait: artRef.dreamcaller("0025"),
+        portrait: artRef.dreamAvatar("0025"),
         ability: "At the start of your first turn, draw a card.",
       },
       dreamsigns: [

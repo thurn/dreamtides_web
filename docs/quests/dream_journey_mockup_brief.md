@@ -32,7 +32,7 @@ location, makes their choice, and returns to continue the run.
   (e.g. "gain a powerful new card" vs. "make a card I already have stronger").
 - **A way to decline** and leave with neither.
 - **The player's running totals** for context — **Essence** (the currency),
-  **Omens**, and **Cards** (how big the deck is) — plus the **Dreamcaller**
+  **Omens**, and **Cards** (how big the deck is) — plus the **Dream Avatar**
   (the hero leading this run).
 
 **One thing to design around: legibility.** Each offer needs to read instantly:
@@ -125,8 +125,8 @@ shape directly.
 **Deck viewer** — how the full deck is presented:
 ![Deck viewer](dream_journey_mockup/assets/screen-deck-viewer.png)
 
-**Dreamcaller selection** — the framed-portrait, choose-one treatment at run start:
-![Dreamcaller selection](dream_journey_mockup/assets/screen-dreamcaller-select.png)
+**Dream Avatar selection** — the framed-portrait, choose-one treatment at run start:
+![Dream Avatar selection](dream_journey_mockup/assets/screen-dream-avatar-select.png)
 
 ### The shared visual language
 
@@ -148,7 +148,7 @@ Pull these conventions through to the new design:
   ghost/outline pills (Skip, Walk away, Glossary). Keep that hierarchy.
 - **A persistent bottom HUD.** A fixed bar runs along the bottom of every in-run
   screen: on the left, the run totals with color-coded values — **Essence** in
-  lavender, **Omens** in gold, **Cards** with a card glyph — then the Dreamcaller
+  lavender, **Omens** in gold, **Cards** with a card glyph — then the Dream Avatar
   portrait and name; on the right, utility buttons (View Deck, Glossary, ⋯). The
   Dream Journey should keep this bar exactly as-is.
 - **Cards look the same everywhere.** Cards use one consistent treatment —

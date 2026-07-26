@@ -3,7 +3,7 @@ import { createInitialBattleState } from "../../battle/state/create-initial-stat
 import { makeBattleTestState } from "../../battle/test-support";
 import type {
   BattleDeckCardDefinition,
-  BattleDreamcallerSummary,
+  BattleDreamAvatarSummary,
   BattleInit,
   BattleMutableState,
 } from "../../battle/types";
@@ -20,8 +20,8 @@ import {
 } from "../../rules/battle/driver";
 import type { EventContext } from "../../eventlog/types";
 
-const ENEMY_DREAMCALLER: BattleDreamcallerSummary = {
-  id: "enemy-dreamcaller-uuid",
+const ENEMY_DREAM_AVATAR: BattleDreamAvatarSummary = {
+  id: "enemy-dream-avatar-uuid",
   name: "Enemy Caller",
   title: "Keeper of Tests",
   renderedText: "A synthetic test ability.",
@@ -71,20 +71,20 @@ function makeInit(): BattleInit {
     ),
     dreamwellDeck: [],
     enemyDescriptor: {
-      id: ENEMY_DREAMCALLER.id,
-      name: ENEMY_DREAMCALLER.name,
-      subtitle: ENEMY_DREAMCALLER.title,
-      imageNumber: ENEMY_DREAMCALLER.imageNumber,
+      id: ENEMY_DREAM_AVATAR.id,
+      name: ENEMY_DREAM_AVATAR.name,
+      subtitle: ENEMY_DREAM_AVATAR.title,
+      imageNumber: ENEMY_DREAM_AVATAR.imageNumber,
       portraitSeed: 7,
-      abilityText: ENEMY_DREAMCALLER.renderedText,
+      abilityText: ENEMY_DREAM_AVATAR.renderedText,
       dreamsigns: [],
       signatureCards: [],
     },
     enemyDeckDefinition: Array.from({ length: 8 }, (_unused, index) =>
       definition(index + 9),
     ),
-    dreamcallerSummary: {
-      id: "player-dreamcaller-uuid",
+    dreamAvatarSummary: {
+      id: "player-dream-avatar-uuid",
       name: "Player Caller",
       title: "Builder of Fixtures",
       renderedText: "Another synthetic test ability.",
@@ -179,7 +179,7 @@ describe("buildMobileBattleView", () => {
     board.sides.enemy.dreamwellDrawnTurn = 2;
 
     expect(
-      buildMobileBattleView(init, board, ENEMY_DREAMCALLER).dreamwell,
+      buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR).dreamwell,
     ).toEqual({
       side: "enemy",
       model: {
@@ -197,20 +197,20 @@ describe("buildMobileBattleView", () => {
 
     board.sides.enemy.dreamwellDrawnTurn = 1;
     expect(
-      buildMobileBattleView(init, board, ENEMY_DREAMCALLER).dreamwell,
+      buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR).dreamwell,
     ).toBeNull();
 
     board.sides.enemy.dreamwellDrawnTurn = 2;
     board.result = "victory";
     expect(
-      buildMobileBattleView(init, board, ENEMY_DREAMCALLER).dreamwell,
+      buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR).dreamwell,
     ).toBeNull();
   });
 
   it("maps stable battle ids to canonical UUID card models", () => {
     const init = makeInit();
     const board = makeBoard(init);
-    const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
+    const view = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR);
 
     expect(view.battleId).toBe(board.battleId);
     expect(view.activeSide).toBe(board.activeSide);
@@ -250,7 +250,7 @@ describe("buildMobileBattleView", () => {
 
     board.activeSide = "enemy";
     expect(
-      buildMobileBattleView(init, board, ENEMY_DREAMCALLER).isOpeningTurn,
+      buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR).isOpeningTurn,
     ).toBe(false);
   });
 
@@ -258,7 +258,7 @@ describe("buildMobileBattleView", () => {
     const init = makeInit();
     const board = makeBoard(init);
     board.result = "victory";
-    const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER, null, {
+    const view = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR, null, {
       aiMode: false,
       isOpponentHandRevealed: false,
       isPlayerHandHidden: false,
@@ -290,7 +290,7 @@ describe("buildMobileBattleView", () => {
       throw new Error("fixture battlefield cards missing");
     }
 
-    const before = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
+    const before = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR);
     expect(before.player.frontRank[3].card).toMatchObject({
       exhausted: true,
       storedTime: 0,
@@ -301,7 +301,7 @@ describe("buildMobileBattleView", () => {
     board.cardInstances[playerCardId].status.counters = 4;
     board.cardInstances[figmentCardId].figments = [2, 3, 4];
 
-    const after = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
+    const after = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR);
     expect(after.player.frontRank[3].card).toMatchObject({
       exhausted: false,
       storedTime: 4,
@@ -317,7 +317,7 @@ describe("buildMobileBattleView", () => {
     const board = makeBoard(init);
 
     expect(
-      buildMobileBattleView(init, board, ENEMY_DREAMCALLER, {
+      buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR, {
         kind: "action",
         description: "Play a fixture card to B2.",
       }).aiApproval,
@@ -326,7 +326,7 @@ describe("buildMobileBattleView", () => {
       canReject: true,
     });
     expect(
-      buildMobileBattleView(init, board, ENEMY_DREAMCALLER, {
+      buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR, {
         kind: "endPhase",
         description: "Pass from Day to Dusk.",
       }).aiApproval,
@@ -360,7 +360,7 @@ describe("buildMobileBattleView", () => {
     const optimistic = buildMobileBattleView(
       init,
       board,
-      ENEMY_DREAMCALLER,
+      ENEMY_DREAM_AVATAR,
       null,
       {
         aiMode: false,
@@ -400,7 +400,7 @@ describe("buildMobileBattleView", () => {
     const confirmed = buildMobileBattleView(
       init,
       board,
-      ENEMY_DREAMCALLER,
+      ENEMY_DREAM_AVATAR,
       null,
       {
         aiMode: false,
@@ -415,7 +415,7 @@ describe("buildMobileBattleView", () => {
     const mismatched = buildMobileBattleView(
       init,
       board,
-      ENEMY_DREAMCALLER,
+      ENEMY_DREAM_AVATAR,
       null,
       {
         aiMode: false,
@@ -454,7 +454,7 @@ describe("buildMobileBattleView", () => {
     const optimistic = buildMobileBattleView(
       init,
       board,
-      ENEMY_DREAMCALLER,
+      ENEMY_DREAM_AVATAR,
       null,
       {
         aiMode: false,
@@ -474,7 +474,7 @@ describe("buildMobileBattleView", () => {
     const confirmed = buildMobileBattleView(
       init,
       board,
-      ENEMY_DREAMCALLER,
+      ENEMY_DREAM_AVATAR,
       null,
       {
         aiMode: false,
@@ -525,7 +525,7 @@ describe("buildMobileBattleView", () => {
       },
     } satisfies PendingPrompt;
 
-    const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER, null, {
+    const view = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR, null, {
       aiMode: false,
       isOpponentHandRevealed: false,
       isPlayerHandHidden: false,
@@ -571,7 +571,7 @@ describe("buildMobileBattleView", () => {
       },
     } satisfies PendingPrompt;
 
-    const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER, null, {
+    const view = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR, null, {
       aiMode: false,
       isOpponentHandRevealed: false,
       isPlayerHandHidden: false,
@@ -597,7 +597,7 @@ describe("buildMobileBattleView", () => {
     const view = buildMobileBattleView(
       init,
       board,
-      ENEMY_DREAMCALLER,
+      ENEMY_DREAM_AVATAR,
       {
         kind: "action",
         description: "Play the selected instance.",
@@ -657,7 +657,7 @@ describe("buildMobileBattleView", () => {
       heuristicChange: "2.00 → 4.50",
     });
 
-    const noAi = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
+    const noAi = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR);
     expect(noAi.inspector.ai).toBeNull();
   });
 
@@ -667,7 +667,7 @@ describe("buildMobileBattleView", () => {
     board.phase = "day";
 
     expect(
-      buildMobileBattleView(init, board, ENEMY_DREAMCALLER).playerHand.map(
+      buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR).playerHand.map(
         (card) => card.showPlayableOutline,
       ),
     ).toEqual([true, true, false]);
@@ -675,7 +675,7 @@ describe("buildMobileBattleView", () => {
     board.phase = "dusk";
 
     expect(
-      buildMobileBattleView(init, board, ENEMY_DREAMCALLER).playerHand.map(
+      buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR).playerHand.map(
         (card) => card.showPlayableOutline,
       ),
     ).toEqual([false, false, false]);
@@ -684,7 +684,7 @@ describe("buildMobileBattleView", () => {
     board.activeSide = "enemy";
 
     expect(
-      buildMobileBattleView(init, board, ENEMY_DREAMCALLER).playerHand.map(
+      buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR).playerHand.map(
         (card) => card.showPlayableOutline,
       ),
     ).toEqual([false, false, false]);
@@ -710,7 +710,7 @@ describe("buildMobileBattleView", () => {
     const withoutTarget = buildMobileBattleView(
       init,
       board,
-      ENEMY_DREAMCALLER,
+      ENEMY_DREAM_AVATAR,
     ).playerHand.find((card) => card.id === sourceInstanceId);
     expect(withoutTarget?.showPlayableOutline).toBe(false);
 
@@ -722,7 +722,7 @@ describe("buildMobileBattleView", () => {
     const withTarget = buildMobileBattleView(
       init,
       board,
-      ENEMY_DREAMCALLER,
+      ENEMY_DREAM_AVATAR,
     ).playerHand.find((card) => card.id === sourceInstanceId);
     expect(withTarget?.showPlayableOutline).toBe(true);
   });
@@ -741,7 +741,7 @@ describe("buildMobileBattleView", () => {
     const board = makeBoard(init);
     board.phase = phase;
 
-    expect(buildMobileBattleView(init, board, ENEMY_DREAMCALLER).phase).toBe(
+    expect(buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR).phase).toBe(
       visiblePhase,
     );
   });
@@ -749,7 +749,7 @@ describe("buildMobileBattleView", () => {
   it("preserves hand and deck order while exposing hidden zones as ids only", () => {
     const init = makeInit();
     const board = makeBoard(init);
-    const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
+    const view = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR);
 
     expect(view.enemyHandCardIds).toEqual(board.sides.enemy.hand);
     expect(view.enemyHandCardIds).toHaveLength(2);
@@ -771,7 +771,7 @@ describe("buildMobileBattleView", () => {
   it("puts the last void entry first so the visible card is the top of the pile", () => {
     const init = makeInit();
     const board = makeBoard(init);
-    const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
+    const view = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR);
 
     expect(view.player.voidCards.map((card) => card.id)).toEqual(
       [...board.sides.player.void].reverse(),
@@ -787,7 +787,7 @@ describe("buildMobileBattleView", () => {
   it("materializes the fixed staggered slots in left-to-right identity order", () => {
     const init = makeInit();
     const board = makeBoard(init);
-    const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
+    const view = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR);
 
     const expectedFrontRank = Array.from(
       { length: 9 },
@@ -818,17 +818,17 @@ describe("buildMobileBattleView", () => {
   it("maps both status displays and supplies a safe player visual fallback", () => {
     const init = makeInit();
     const board = makeBoard(init);
-    const view = buildMobileBattleView(init, board, ENEMY_DREAMCALLER);
+    const view = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR);
 
     expect(view.player.status).toEqual({
-      dreamcaller: {
+      dreamAvatar: {
         imageNumber: "007",
         name: "Player Caller",
         title: "Builder of Fixtures",
         portraitFocus: { x: 0.48, y: 0.19 },
       },
-      dreamcallerProfile: {
-        id: "player-dreamcaller-uuid",
+      dreamAvatarProfile: {
+        id: "player-dream-avatar-uuid",
         ability: "Another synthetic test ability.",
       },
       currentEnergy: 2,
@@ -836,14 +836,14 @@ describe("buildMobileBattleView", () => {
       points: 5,
     });
     expect(view.enemy.status).toEqual({
-      dreamcaller: {
+      dreamAvatar: {
         imageNumber: "008",
         name: "Enemy Caller",
         title: "Keeper of Tests",
         portraitFocus: { x: 0.58, y: 0.23 },
       },
-      dreamcallerProfile: {
-        id: "enemy-dreamcaller-uuid",
+      dreamAvatarProfile: {
+        id: "enemy-dream-avatar-uuid",
         ability: "A synthetic test ability.",
       },
       currentEnergy: 1,
@@ -852,13 +852,13 @@ describe("buildMobileBattleView", () => {
     });
 
     const fallback = buildMobileBattleView(
-      { ...init, dreamcallerSummary: null },
+      { ...init, dreamAvatarSummary: null },
       board,
-      ENEMY_DREAMCALLER,
+      ENEMY_DREAM_AVATAR,
     );
-    expect(fallback.player.status.dreamcaller).toEqual({
+    expect(fallback.player.status.dreamAvatar).toEqual({
       imageNumber: "001",
-      name: "Dreamcaller",
+      name: "Avatar",
       title: "",
     });
   });
@@ -916,7 +916,7 @@ describe("Cumulus Dreamwell prompt battle flow", () => {
         const confirmationView = buildMobileBattleView(
           init,
           parked.board,
-          ENEMY_DREAMCALLER,
+          ENEMY_DREAM_AVATAR,
           null,
           {
             aiMode: false,
@@ -940,7 +940,7 @@ describe("Cumulus Dreamwell prompt battle flow", () => {
       const pickerView = buildMobileBattleView(
         init,
         parked.board,
-        ENEMY_DREAMCALLER,
+        ENEMY_DREAM_AVATAR,
         null,
         {
           aiMode: false,
@@ -985,7 +985,7 @@ describe("Cumulus Dreamwell prompt battle flow", () => {
       const finalView = buildMobileBattleView(
         init,
         resolved.board,
-        ENEMY_DREAMCALLER,
+        ENEMY_DREAM_AVATAR,
         null,
         {
           aiMode: false,

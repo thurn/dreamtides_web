@@ -1,4 +1,4 @@
-// The `tides4` variant builds a pool by joining a Dreamcaller's starter tide,
+// The `tides4` variant builds a pool by joining a DreamAvatar's starter tide,
 // drawing a random subset of its facet tides, topping up with the remaining
 // facets and broad tides, and dealing to `TIDES4.dealSize`. These tests pin the
 // structural contract (determinism per seed, the deal size and copy cap, the
@@ -17,8 +17,8 @@ import { TIDES4, generateTides4 } from "./variant-tides4.ts";
 
 // A synthetic artifact: one starter tide, `facetCount` facet tides, and
 // `neutralCount` neutral tides, each with `cardsPerTide` disjoint cards (so
-// dealable copies sum across tides). "dc-a" is a signatured Dreamcaller (its
-// starter plus all facets and neutrals); "dc-b" is a signatureless Dreamcaller
+// dealable copies sum across tides). "dc-a" is a signatured DreamAvatar (its
+// starter plus all facets and neutrals); "dc-b" is a signatureless DreamAvatar
 // (null starter, drawing its subset from every facet). Card UUIDs are
 // `<tide>-card-<i>`; copies default to 2.
 function makeTides4(
@@ -61,7 +61,7 @@ function makeTides4(
   return {
     version: 1,
     tides,
-    tidePoolByDreamcaller: {
+    tidePoolByDreamAvatar: {
       "dc-a": { starter: "tide-sig-1", facets: facetIds, neutral: neutralIds },
       "dc-b": { starter: null, facets: facetIds, neutral: neutralIds },
     },
@@ -129,7 +129,7 @@ describe("generateTides4", () => {
     }
   });
 
-  it("always joins a signatured Dreamcaller's starter first", () => {
+  it("always joins a signatured DreamAvatar's starter first", () => {
     const poolData = makePoolData(makeTides4(6, 30));
     for (let seed = 0; seed < 20; seed += 1) {
       const result = generateTides4(makeRng(seed), poolData, "dc-a");
@@ -153,9 +153,9 @@ describe("generateTides4", () => {
     expect(firstFacetSeen.size).toBeGreaterThan(1);
   });
 
-  it("leans a signatureless Dreamcaller on a varying coherent archetype core", () => {
+  it("leans a signatureless DreamAvatar on a varying coherent archetype core", () => {
     // Two signatured archetypes (each its own signature core) plus a signatureless
-    // Dreamcaller "dc-b" with a null starter. The neutral pool borrows a signatured
+    // DreamAvatar "dc-b" with a null starter. The neutral pool borrows a signatured
     // archetype each run, leading with a signature tide (a coherent archetype, not a
     // bare facet), and across runs draws more than one archetype.
     const data = makeTides4(4, 30);
@@ -171,7 +171,7 @@ describe("generateTides4", () => {
       })),
     });
     const facetIds = data.tides.filter((t) => t.role === "facet").map((t) => t.id);
-    data.tidePoolByDreamcaller["dc-c"] = {
+    data.tidePoolByDreamAvatar["dc-c"] = {
       starter: "tide-sig-2",
       facets: facetIds,
       neutral: data.tides.filter((t) => t.role === "neutral").map((t) => t.id),
@@ -189,7 +189,7 @@ describe("generateTides4", () => {
     expect(leadsSeen.size).toBe(2);
   });
 
-  it("shuffles all tides together without a dreamcaller id or pool entry", () => {
+  it("shuffles all tides together without a dreamAvatar id or pool entry", () => {
     const poolData = makePoolData(makeTides4(6, 30));
     const noId = generateTides4(makeRng(11), poolData, undefined);
     const unknownId = generateTides4(makeRng(11), poolData, "dc-unknown");
@@ -228,7 +228,7 @@ describe("generateTides4 provenance", () => {
     expect(provenance).toBeDefined();
     if (provenance === undefined) return;
 
-    expect(provenance.dreamcallerId).toBe("dc-a");
+    expect(provenance.dreamAvatarId).toBe("dc-a");
     expect(provenance.signatureless).toBe(false);
     expect(provenance.borrowedArchetypeName).toBeNull();
     expect(provenance.cap).toBe(TIDES4.cap);
@@ -281,7 +281,7 @@ describe("generateTides4 provenance", () => {
     expect(totalContribution).toBe(result.counts.size);
   });
 
-  it("marks a signatureless Dreamcaller and names the borrowed archetype", () => {
+  it("marks a signatureless DreamAvatar and names the borrowed archetype", () => {
     const poolData = makePoolData(makeTides4(6, 30));
     const provenance = generateTides4(makeRng(5), poolData, "dc-b")
       .tides4Provenance;

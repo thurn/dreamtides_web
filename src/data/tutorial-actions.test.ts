@@ -49,7 +49,7 @@ describe("loadTutorialActions", () => {
 });
 
 describe("parseTutorialActions", () => {
-  it("preserves a Dreamcaller speech target and rejects unknown speakers", () => {
+  it("preserves a DreamAvatar speech target and rejects unknown speakers", () => {
     expect(
       parseTutorialActions([
         {
@@ -261,12 +261,12 @@ describe("parseTutorialActions", () => {
       parseTutorialActions([
         {
           id: "legacy-arrival",
-          action: "animate-dreamcaller-portrait",
+          action: "animate-dream-avatar-portrait",
           wait: 0,
         },
         {
           id: "opponent-arrival",
-          action: "animate-dreamcaller-portrait",
+          action: "animate-dream-avatar-portrait",
           owner: "enemy",
           pause: 2.5,
           duration: 0.7,
@@ -276,7 +276,7 @@ describe("parseTutorialActions", () => {
     ).toEqual([
       {
         id: "legacy-arrival",
-        action: "animate-dreamcaller-portrait",
+        action: "animate-dream-avatar-portrait",
         owner: "player",
         pause: 0,
         duration: 1.2,
@@ -284,7 +284,7 @@ describe("parseTutorialActions", () => {
       },
       {
         id: "opponent-arrival",
-        action: "animate-dreamcaller-portrait",
+        action: "animate-dream-avatar-portrait",
         owner: "enemy",
         pause: 2.5,
         duration: 0.7,
@@ -622,7 +622,7 @@ describe("parseTutorialActions", () => {
       parseTutorialActions([
         {
           id: "bad-owner",
-          action: "animate-dreamcaller-portrait",
+          action: "animate-dream-avatar-portrait",
           owner: "spectator",
           pause: 1,
           duration: 0.6,
@@ -634,7 +634,7 @@ describe("parseTutorialActions", () => {
       parseTutorialActions([
         {
           id: "bad-pause",
-          action: "animate-dreamcaller-portrait",
+          action: "animate-dream-avatar-portrait",
           owner: "player",
           pause: -1,
           duration: 0.6,
@@ -646,7 +646,7 @@ describe("parseTutorialActions", () => {
       parseTutorialActions([
         {
           id: "bad-duration",
-          action: "animate-dreamcaller-portrait",
+          action: "animate-dream-avatar-portrait",
           owner: "player",
           pause: 1,
           duration: -1,

@@ -4,7 +4,7 @@
 // from the current card name.
 //
 // The `idf3` pool variant (the standard algorithm) reads none of this — it works
-// from the bundled real decklists plus each Dreamcaller's signature alone. These
+// from the bundled real decklists plus each DreamAvatar's signature alone. These
 // fields exist only for the other `?algo=` variants (`default`, `diverse`,
 // `decklists`): `core` flags an always-included staple, `tides` supply
 // the mechanic-archetype themes, and `colors` / `draftArchetypes` supply the

@@ -144,7 +144,7 @@
         "keywordModification": null
       }
     ],
-    "dreamcaller": {
+    "dreamAvatar": {
       "id": "2C53B1B9-9291-4BBA-8D3A-F40B545C8F3C",
       "imageNumber": "0100",
       "name": "Demetrios",
@@ -255,7 +255,7 @@
         "503": 1
       },
       "draftPoolSize": 150,
-      "dreamcaller": {
+      "dreamAvatar": {
         "id": "2C53B1B9-9291-4BBA-8D3A-F40B545C8F3C",
         "imageNumber": "0100",
         "name": "Demetrios",

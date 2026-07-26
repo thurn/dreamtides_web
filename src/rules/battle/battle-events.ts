@@ -14,7 +14,7 @@
 //     battle-completion bookkeeping. It bounces when no battle exists.
 //
 // The src/rules/ lint rails forbid Firebase, React, and any live clock/rng.
-// Battle init reads TOML-sourced card / deck / dreamcaller data that only loads
+// Battle init reads TOML-sourced card / deck / dreamAvatar data that only loads
 // asynchronously, which the pure reducer cannot statically reach, so its
 // construction is delegated to the injectable {@link BattleInitProvider} seam
 // (mirroring `SiteContentProvider`): the reducer forwards the provider
@@ -23,7 +23,7 @@
 // build a byte-identical battle. `END_BATTLE` needs no async content — its
 // bookkeeping is pure quest-state math and lives entirely here.
 //
-// Cards / dreamcallers are keyed by UUID and deck entries by entry-id — never
+// Cards / dreamAvatars are keyed by UUID and deck entries by entry-id — never
 // by name (AGENTS.md).
 
 import type { EventContext } from "../../eventlog/types";
@@ -94,8 +94,8 @@ import { planTutorialCharacterReposition } from "./tutorial-reposition";
 /**
  * The deterministic construction `BEGIN_BATTLE` needs to turn quest state into
  * a fresh {@link BattleFoldState}. The reducer resolves double-begin itself,
- * then delegates the immutable `init` (`BattleInit`) plus board / dreamcaller /
- * opponent-deck construction — which reads async-loaded card, dreamcaller, and
+ * then delegates the immutable `init` (`BattleInit`) plus board / dreamAvatar /
+ * opponent-deck construction — which reads async-loaded card, dreamAvatar, and
  * dreamwell data — to this provider.
  *
  * The registered provider (`createBattleInitProvider`) constructs the battle

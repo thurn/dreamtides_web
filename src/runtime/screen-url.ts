@@ -17,7 +17,7 @@ import { layerOrdinal } from "../types/layer-name";
  *
  * Path grammar:
  * ```
- * /                                  Dreamcaller selection (questStart)
+ * /                                  DreamAvatar selection (questStart)
  * /atlas                             Dream Atlas
  * /dreamscape/<layer>-<biome>        a dreamscape's site-selection screen
  * /dreamscape/<layer>-<biome>/<site> a specific site within a dreamscape

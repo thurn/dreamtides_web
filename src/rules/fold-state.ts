@@ -70,7 +70,7 @@ function genesisQuestState(genesis: Genesis): QuestState {
     essenceCap: 500,
     maxDreamsigns: 12,
     deck: [],
-    dreamcaller: null,
+    dreamAvatar: null,
     resolvedPackage: null,
     cardSourceDebug: null,
     remainingDreamsignPool: [],

@@ -167,7 +167,7 @@ deliberately skeletal, because it is the one layer hooks make hard to test.
 - A **Cumulus screen** (`src/cumulus/screens/*.tsx`) is pure: it renders from a
   view-model and reports events through callbacks, importing only Cumulus and the
   allowlisted infra. It holds no `useQuest()`, no mutations, no navigation. It
-  **owns and exports its view-model types** (`DreamcallerOfferView`, …) — the
+  **owns and exports its view-model types** (`DreamAvatarOfferView`, …) — the
   consumer defines the contract, and the builder maps into it. Purity does not
   mean logic-free: layout, conditional rendering, formatting, and _local UI
   state_ (hover, selection-in-progress, pan/zoom, animation phase) are all
@@ -180,7 +180,7 @@ deliberately skeletal, because it is the one layer hooks make hard to test.
   conforms.
 - A **view-model builder** (`src/screens/cumulus_adapters/*-view-model.ts`) is a module of
   pure, exported, unit-tested functions mapping domain data to the screen's
-  view types (e.g. `buildDreamcallerOfferViews` in
+  view types (e.g. `buildDreamAvatarOfferViews` in
   `quest-start-view-model.ts`). Every non-trivial mapping rule — capping,
   suppression, display-copy resolution, color→variant tables — lives here, in
   functions tested with plain fixtures. Builders are deterministic in their
@@ -406,7 +406,7 @@ Table of contents, then:
 
 1. **Introduction / Design Philosophy** — condensed from the design's governing
    principles: _material continuity_ (objects persist and travel, never fade in;
-   the four entities — cards, dreamsigns, essence, Dreamcallers — always obey
+   the four entities — cards, dreamsigns, essence, Dream Avatars — always obey
    it), _the legibility ladder_ (render on the media with `.hud-outline`; group
    related info in a `GroupPanel`; never a scrim/wash/vignette), _always in
    motion_ (tangible entities float; readout chrome may rest), the _popup rule_

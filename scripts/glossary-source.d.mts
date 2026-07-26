@@ -1,5 +1,5 @@
 export interface GlossaryContext {
-  readonly owner?: "card" | "dreamcaller";
+  readonly owner?: "card" | "dreamAvatar";
   readonly pattern?: string;
   readonly term?: string;
   readonly definition?: string;

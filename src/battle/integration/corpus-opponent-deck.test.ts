@@ -6,7 +6,7 @@ import type {
 } from "../../data/quest-content";
 import type {
   AffiliationContent,
-  DreamcallerContent,
+  DreamAvatarContent,
   DreamsignTemplate,
 } from "../../types/content";
 import type { CardData } from "../../types/cards";
@@ -60,13 +60,13 @@ function makeDecklist(
   };
 }
 
-function makeDreamcaller(
+function makeDreamAvatar(
   id: string,
   signatureCardIds: string[],
-): DreamcallerContent {
+): DreamAvatarContent {
   return {
     id,
-    name: `dreamcaller ${id}`,
+    name: `dreamAvatar ${id}`,
     title: "t",
     renderedText: "",
     imageNumber: "1",
@@ -117,7 +117,7 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
   it("returns null when there are no known-good decklists", () => {
     const result = buildCorpusOpponentDeck({
       ...baseArgs,
-      opponentDreamcaller: makeDreamcaller("dc", [C.a.id]),
+      opponentDreamAvatar: makeDreamAvatar("dc", [C.a.id]),
       knownGoodDecklists: [],
       affiliation: null,
       cardDatabase: cardDb(ALL_CARDS),
@@ -134,7 +134,7 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
     ];
     const args = {
       ...baseArgs,
-      opponentDreamcaller: makeDreamcaller("dc", [C.a.id]),
+      opponentDreamAvatar: makeDreamAvatar("dc", [C.a.id]),
       knownGoodDecklists: decks,
       affiliation: null,
       cardDatabase: cardDb(ALL_CARDS),
@@ -161,7 +161,7 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
     for (let seed = 0; seed < 200; seed++) {
       const result = buildCorpusOpponentDeck({
         ...baseArgs,
-        opponentDreamcaller: makeDreamcaller("dc", [C.a.id]),
+        opponentDreamAvatar: makeDreamAvatar("dc", [C.a.id]),
         knownGoodDecklists: decks,
         affiliation: null,
         cardDatabase: cardDb(ALL_CARDS),
@@ -179,12 +179,12 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
       makeDecklist("d2", [C.a.id, C.d.id, C.e.id]),
       makeDecklist("d3", [C.f.id, C.g.id, C.h.id]),
     ];
-    const dreamcaller = makeDreamcaller("dc", [C.a.id]);
+    const dreamAvatar = makeDreamAvatar("dc", [C.a.id]);
     const everSelected = new Set<string>();
     for (let seed = 0; seed < 200; seed++) {
       const result = buildCorpusOpponentDeck({
         ...baseArgs,
-        opponentDreamcaller: dreamcaller,
+        opponentDreamAvatar: dreamAvatar,
         knownGoodDecklists: decks,
         affiliation: null,
         cardDatabase: cardDb(ALL_CARDS),
@@ -224,7 +224,7 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
     for (let seed = 0; seed < 200; seed++) {
       const result = buildCorpusOpponentDeck({
         ...baseArgs,
-        opponentDreamcaller: makeDreamcaller("dc", sigHigh),
+        opponentDreamAvatar: makeDreamAvatar("dc", sigHigh),
         knownGoodDecklists: decks,
         affiliation,
         cardDatabase: cardDb(ALL_CARDS),
@@ -239,7 +239,7 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
     // must not strictly dominate — verify dHigh's combined beats dLow's.
     const probe = buildCorpusOpponentDeck({
       ...baseArgs,
-      opponentDreamcaller: makeDreamcaller("dc", sigHigh),
+      opponentDreamAvatar: makeDreamAvatar("dc", sigHigh),
       knownGoodDecklists: decks,
       affiliation,
       cardDatabase: cardDb(ALL_CARDS),
@@ -254,7 +254,7 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
     expect(everSelected.has("dHigh")).toBe(true);
   });
 
-  it("falls back to all decks ranked by affiliationFit when the Dreamcaller has no signature cards", () => {
+  it("falls back to all decks ranked by affiliationFit when the DreamAvatar has no signature cards", () => {
     const decks = [
       makeDecklist("d1", [C.a.id, C.b.id]),
       makeDecklist("d2", [C.c.id, C.d.id]),
@@ -264,7 +264,7 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
     const affiliation = makeAffiliation("aff", [C.a.id, C.b.id]);
     const result = buildCorpusOpponentDeck({
       ...baseArgs,
-      opponentDreamcaller: makeDreamcaller("dc", []),
+      opponentDreamAvatar: makeDreamAvatar("dc", []),
       knownGoodDecklists: decks,
       affiliation,
       cardDatabase: cardDb(ALL_CARDS),
@@ -279,14 +279,14 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
     expect(result!.topK[0]?.id).toBe("d1");
   });
 
-  it("handles a null Dreamcaller as a signature-less build", () => {
+  it("handles a null DreamAvatar as a signature-less build", () => {
     const decks = [
       makeDecklist("d1", [C.a.id, C.b.id]),
       makeDecklist("d2", [C.c.id, C.d.id]),
     ];
     const result = buildCorpusOpponentDeck({
       ...baseArgs,
-      opponentDreamcaller: null,
+      opponentDreamAvatar: null,
       knownGoodDecklists: decks,
       affiliation: null,
       cardDatabase: cardDb(ALL_CARDS),
@@ -306,7 +306,7 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
     ];
     const result = buildCorpusOpponentDeck({
       ...baseArgs,
-      opponentDreamcaller: null,
+      opponentDreamAvatar: null,
       knownGoodDecklists: decks,
       affiliation: null,
       cardDatabase: cardDb(ALL_CARDS),
@@ -325,7 +325,7 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
     for (let seed = 0; seed < 20; seed++) {
       const result = buildCorpusOpponentDeck({
         ...baseArgs,
-        opponentDreamcaller: makeDreamcaller("dc", [C.a.id]),
+        opponentDreamAvatar: makeDreamAvatar("dc", [C.a.id]),
         knownGoodDecklists: decks,
         affiliation: null,
         cardDatabase: cardDb(ALL_CARDS),
@@ -345,7 +345,7 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
     const decks = [makeDecklist("d1", [C.a.id, C.b.id, C.c.id])];
     const result = buildCorpusOpponentDeck({
       ...baseArgs,
-      opponentDreamcaller: makeDreamcaller("dc", [C.a.id]),
+      opponentDreamAvatar: makeDreamAvatar("dc", [C.a.id]),
       knownGoodDecklists: decks,
       affiliation: null,
       cardDatabase: cardDb(ALL_CARDS),
@@ -365,7 +365,7 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
     const decks = [makeDecklist("d1", [C.a.id, C.a.id, C.b.id])];
     const result = buildCorpusOpponentDeck({
       ...baseArgs,
-      opponentDreamcaller: makeDreamcaller("dc", [C.a.id]),
+      opponentDreamAvatar: makeDreamAvatar("dc", [C.a.id]),
       knownGoodDecklists: decks,
       affiliation: null,
       cardDatabase: cardDb(ALL_CARDS),
@@ -403,14 +403,14 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
       makeDecklist("sigDeck", [sigTwin.id, filler1.id, filler2.id]),
       makeDecklist("decoyDeck", [decoyTwin.id, filler1.id, filler3.id]),
     ];
-    const dreamcaller = makeDreamcaller("dc", [sigTwin.id]);
+    const dreamAvatar = makeDreamAvatar("dc", [sigTwin.id]);
 
     const everSelected = new Set<string>();
     let observedTopK: { id: string; name: string; combined: number }[] = [];
     for (let seed = 0; seed < 200; seed++) {
       const result = buildCorpusOpponentDeck({
         ...baseArgs,
-        opponentDreamcaller: dreamcaller,
+        opponentDreamAvatar: dreamAvatar,
         knownGoodDecklists: decks,
         affiliation: null,
         cardDatabase: db,
@@ -430,7 +430,7 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
     // The selected deck has positive signatureFit (the signature UUID overlapped).
     const selected = buildCorpusOpponentDeck({
       ...baseArgs,
-      opponentDreamcaller: dreamcaller,
+      opponentDreamAvatar: dreamAvatar,
       knownGoodDecklists: decks,
       affiliation: null,
       cardDatabase: db,
@@ -479,7 +479,7 @@ const N: CardData[] = Array.from({ length: 12 }, (_, i) =>
 );
 
 /**
- * A signature card. The Dreamcaller keys on this UUID; both candidate decks
+ * A signature card. The DreamAvatar keys on this UUID; both candidate decks
  * carry it, so the candidate window is exactly those two decks — this gives
  * Stage B's legendary-replacement step a pool of non-deck cards to draw from
  * (the other window deck's cards). Both candidate decks share the same
@@ -540,8 +540,8 @@ const STAGE_B_DECKS: KnownGoodDecklist[] = [
   makeDecklist("fringe6", [N[11].id]),
 ];
 
-// Dreamcaller signature is the SIG card carried by the two candidate decks.
-const STAGE_B_DC = makeDreamcaller("dcB", [SIG.id]);
+// DreamAvatar signature is the SIG card carried by the two candidate decks.
+const STAGE_B_DC = makeDreamAvatar("dcB", [SIG.id]);
 
 // Synthetic dreamsigns: two tailored (one overlapping the deck strongly, one
 // weakly) and one neutral.
@@ -607,7 +607,7 @@ function buildAtLayer(
       ? overrides.dreamsignSignatures
       : STAGE_B_SIGNATURES;
   return buildCorpusOpponentDeck({
-    opponentDreamcaller: STAGE_B_DC,
+    opponentDreamAvatar: STAGE_B_DC,
     knownGoodDecklists: STAGE_B_DECKS,
     affiliation: null,
     cardDatabase: STAGE_B_DB,
@@ -824,7 +824,7 @@ describe("buildCorpusOpponentDeck Stage B starter-dilution size preservation (bo
     const fillerDeck = makeDecklist("filler", [tinyCard1.id, tinyCard2.id]);
 
     const result = buildCorpusOpponentDeck({
-      opponentDreamcaller: makeDreamcaller("dc-tiny", [tinySig.id]),
+      opponentDreamAvatar: makeDreamAvatar("dc-tiny", [tinySig.id]),
       knownGoodDecklists: [tinyDeck, fillerDeck],
       affiliation: null,
       cardDatabase: tinyDb,
@@ -868,7 +868,7 @@ describe("buildCorpusOpponentDeck Stage B starter-dilution size preservation (bo
     const fillerDeck2 = makeDecklist("filler2", [preseedOrd.id, preseedSig.id]);
 
     const result = buildCorpusOpponentDeck({
-      opponentDreamcaller: makeDreamcaller("dc-ps", [preseedSig.id]),
+      opponentDreamAvatar: makeDreamAvatar("dc-ps", [preseedSig.id]),
       knownGoodDecklists: [preseedDeck, fillerDeck2],
       affiliation: null,
       cardDatabase: preseedDb,

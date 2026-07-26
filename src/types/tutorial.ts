@@ -2,7 +2,7 @@
 export type TutorialActionName =
   | "display-speech-bubble"
   | "display-how-to-play"
-  | "animate-dreamcaller-portrait"
+  | "animate-dream-avatar-portrait"
   | "draw-card"
   | "draw-opponent-card"
   | "reveal-and-play-opponent-card"
@@ -12,11 +12,11 @@ export type TutorialActionName =
   | "draw-dreamwell-card"
   | "end-turn";
 
-/** Battle-status destination for an arriving tutorial Dreamcaller. */
-export type TutorialDreamcallerOwner = "player" | "enemy";
+/** Battle-status destination for an arriving tutorial DreamAvatar. */
+export type TutorialDreamAvatarOwner = "player" | "enemy";
 
 /** Character whose portrait anchors an authored tutorial speech bubble. */
-export type TutorialSpeechBubbleSpeaker = "mira" | TutorialDreamcallerOwner;
+export type TutorialSpeechBubbleSpeaker = "mira" | TutorialDreamAvatarOwner;
 
 /** Shared authoring model for every tutorial speech bubble. */
 export interface TutorialSpeechBubble {
@@ -72,10 +72,10 @@ export interface DisplayHowToPlayTutorialAction extends TutorialActionBase {
   readonly text: string;
 }
 
-/** Presents a Dreamcaller at large scale, then moves it into battle status. */
-export interface AnimateDreamcallerPortraitTutorialAction extends TutorialActionBase {
-  readonly action: "animate-dreamcaller-portrait";
-  readonly owner: TutorialDreamcallerOwner;
+/** Presents a DreamAvatar at large scale, then moves it into battle status. */
+export interface AnimateDreamAvatarPortraitTutorialAction extends TutorialActionBase {
+  readonly action: "animate-dream-avatar-portrait";
+  readonly owner: TutorialDreamAvatarOwner;
   /** Seconds the fully revealed portrait remains large before it travels. */
   readonly pause: number;
   /** Seconds the portrait takes to scale down and travel into battle status. */
@@ -95,7 +95,7 @@ export type TutorialCardDrawReason = "dreamwell-effect" | "turn-draw";
 /** Moves one UUID-authored card from the selected deck into its owner's hand. */
 export interface DrawCardTutorialAction extends TutorialActionBase {
   readonly action: "draw-card";
-  readonly owner: TutorialDreamcallerOwner;
+  readonly owner: TutorialDreamAvatarOwner;
   readonly cardId: string;
   readonly reason: TutorialCardDrawReason;
 }
@@ -134,7 +134,7 @@ export interface ResolveChallengeTutorialAction extends TutorialActionBase {
 /** Draws and reveals one UUID-authored Dreamwell card for the selected side. */
 export interface DrawDreamwellCardTutorialAction extends TutorialActionBase {
   readonly action: "draw-dreamwell-card";
-  readonly owner: TutorialDreamcallerOwner;
+  readonly owner: TutorialDreamAvatarOwner;
   readonly cardId: string;
   /** Seconds the emerged card remains readable before its effect applies. */
   readonly revealDuration?: number;
@@ -151,7 +151,7 @@ export interface EndTurnTutorialAction extends TutorialActionBase {
 export type TutorialAction =
   | DisplaySpeechBubbleTutorialAction
   | DisplayHowToPlayTutorialAction
-  | AnimateDreamcallerPortraitTutorialAction
+  | AnimateDreamAvatarPortraitTutorialAction
   | DrawCardTutorialAction
   | DrawOpponentCardTutorialAction
   | RevealAndPlayOpponentCardTutorialAction

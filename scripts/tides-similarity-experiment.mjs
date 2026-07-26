@@ -1,21 +1,21 @@
 // Measure how similar one pool algorithm's output is to another's — built to
 // answer "how close do `tides` pools come to `idf3` pools?" across the real
-// draft distribution (every Dreamcaller with its full signature, many seeds).
+// draft distribution (every DreamAvatar with its full signature, many seeds).
 //
 //   node scripts/tides-similarity-experiment.mjs                # tides vs idf3
 //   node scripts/tides-similarity-experiment.mjs --a tides --b idf3
 //   node scripts/tides-similarity-experiment.mjs --seeds 100
-//   node scripts/tides-similarity-experiment.mjs --dreamcaller "Kell Tarn"
+//   node scripts/tides-similarity-experiment.mjs --dream-avatar "Kell Tarn"
 //   node scripts/tides-similarity-experiment.mjs --json > result.json
 //
 // Per-seed pools can never match card-for-card (both algorithms are
-// stochastic), so similarity is DISTRIBUTIONAL, per Dreamcaller:
+// stochastic), so similarity is DISTRIBUTIONAL, per DreamAvatar:
 //
 // 1) FREQUENCY SIMILARITY (the headline). For each algorithm, the per-card
 //    expected copies per pool f(c) = mean over seeds of that card's capped
 //    copies. The cosine between the two algorithms' f-vectors says whether
 //    they put the same cards in the same proportions in front of the same
-//    Dreamcaller.
+//    DreamAvatar.
 // 2) SELF-SIMILARITY CEILING. Algorithm B (idf3) is itself random across
 //    seeds: split B's seeds into two halves and take the cosine between the
 //    halves' f-vectors. That is the score a perfect mimic of B would get, so
@@ -68,16 +68,16 @@ function loadContext(argv) {
   // The IDF-cosine variants (idf/idf2/idf3/idf4) score on the id-keyed corpus.
   const decklistIds = readJson("public/decklist-ids-data.json");
   const draftRecords = readJson("public/draft-records-data.json");
-  let dreamcallers = readJson("public/dreamcallers-v2-data.json");
+  let dreamAvatars = readJson("public/dream-avatars-v2-data.json");
 
-  const dcFilter = str(argv, "--dreamcaller", null);
+  const dcFilter = str(argv, "--dream-avatar", null);
   if (dcFilter) {
     const q = dcFilter.toLowerCase();
-    dreamcallers = dreamcallers.filter(
+    dreamAvatars = dreamAvatars.filter(
       (d) => d.id === dcFilter || d.name.toLowerCase() === q,
     );
-    if (!dreamcallers.length) {
-      console.error(`No Dreamcaller matches "${dcFilter}".`);
+    if (!dreamAvatars.length) {
+      console.error(`No DreamAvatar matches "${dcFilter}".`);
       process.exit(1);
     }
   }
@@ -105,7 +105,7 @@ function loadContext(argv) {
   if (existsSync(resolve(ROOT, "data/tides4.jsonc"))) {
     poolData.tides4Decks = validateTides4Decks(readJsonc("data/tides4.jsonc"));
   }
-  return { dreamcallers, poolData };
+  return { dreamAvatars, poolData };
 }
 
 // One pool's capped per-card copies, as a Map card -> copies (1 or 2).
@@ -223,7 +223,7 @@ function shapeStats(pools) {
   };
 }
 
-function evaluateDreamcaller(ctx, dc, { variantA, variantB, seeds, poolSize }) {
+function evaluateDreamAvatar(ctx, dc, { variantA, variantB, seeds, poolSize }) {
   const poolsA = [];
   const poolsB = [];
   for (let seed = 0; seed < seeds; seed++) {
@@ -285,8 +285,8 @@ function run() {
   const asJson = argv.includes("--json");
 
   const ctx = loadContext(argv);
-  const rows = ctx.dreamcallers.map((dc) =>
-    evaluateDreamcaller(ctx, dc, { variantA, variantB, seeds, poolSize }),
+  const rows = ctx.dreamAvatars.map((dc) =>
+    evaluateDreamAvatar(ctx, dc, { variantA, variantB, seeds, poolSize }),
   );
 
   const mean = (xs) => (xs.length ? xs.reduce((s, x) => s + x, 0) / xs.length : 0);
@@ -295,7 +295,7 @@ function run() {
     variantB,
     seeds,
     poolSize,
-    dreamcallers: rows.length,
+    dreamAvatars: rows.length,
     meanRawCosine: mean(rows.map((r) => r.rawCosine)),
     meanCeiling: mean(rows.map((r) => r.ceiling)),
     headlineNormalized: mean(rows.map((r) => r.normalized)),
@@ -323,11 +323,11 @@ function run() {
 
   console.log(
     `Similarity: ${variantA} vs ${variantB} ` +
-      `(${rows.length} Dreamcallers x ${seeds} seeds, pool ${poolSize})`,
+      `(${rows.length} DreamAvatars x ${seeds} seeds, pool ${poolSize})`,
   );
   console.log("");
   console.log(
-    "  dreamcaller          cosine  ceiling  norm   pearson  bestJac  jacBase",
+    "  dreamAvatar          cosine  ceiling  norm   pearson  bestJac  jacBase",
   );
   for (const row of [...rows].sort((a, b) => a.normalized - b.normalized)) {
     console.log(

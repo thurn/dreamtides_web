@@ -1,9 +1,9 @@
-# Boss Dreamcallers
+# Boss Dream Avatars
 
 The final boss of every dream quest is **Apollyon, the Doom of Humanity**,
 encountered in [Limbo](quests.md) at the 7th battle. Apollyon is always the same
 named character, but it manifests in many different **forms** — each form plays a
-different deck and takes on its own unique dreamcaller ability that defines its
+different deck and takes on its own unique dream avatar ability that defines its
 archetype. The forms Apollyon can take are listed below.
 
 ### 1. Pyrra, Ember Dancer

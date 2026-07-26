@@ -44,7 +44,7 @@ grep '"gameId":"7koodm"' logs/quest-log.jsonl | python3 -m json.tool --json-line
 ```
 
 If a question references a game with no `gameId` on its events, fall back to the
-nearest timestamp window and the relevant `dreamcallerId` / `siteId`.
+nearest timestamp window and the relevant `dreamAvatarId` / `siteId`.
 
 Always pretty-print with `python3 -c` reading the file — avoid `cat`/`sed`/`head`
 on raw JSONL when you actually need a field.
@@ -95,8 +95,8 @@ game). Non-CLI alternative: open `https://redacted-firebase-project.web.app/?vie
 
 | Event | What it records |
 |---|---|
-| `dreamcaller_package_validation_summary` / `dreamcaller_package_skipped` | Which dreamcallers were eligible to seed a pool and which were rejected, **with the `reason`** (e.g. `mandatory-only pool size 109 is outside 110-150`). This is the first gate — a card's dreamcaller may never have qualified. |
-| `draft_pool_constructed` | The authoritative provenance record: `algo`, `seed`, `dreamcallerId`, `poolSize`, `distinctCardCount`, and **algo-specific provenance** (see below). |
+| `dream_avatar_package_validation_summary` / `dream_avatar_package_skipped` | Which dream avatars were eligible to seed a pool and which were rejected, **with the `reason`** (e.g. `mandatory-only pool size 109 is outside 110-150`). This is the first gate — a card's dream avatar may never have qualified. |
+| `draft_pool_constructed` | The authoritative provenance record: `algo`, `seed`, `dreamAvatarId`, `poolSize`, `distinctCardCount`, and **algo-specific provenance** (see below). |
 | `draft_pool_initialized` | Tide/color breakdown of the finished pool (`cardCountByTide`, `selectedPackageTides`). |
 | `draft_offer_revealed` / `draft_site_entered` | The actual 4-card offers (`offerCards` = card numbers) shown at each `pickNumber`. |
 | `draft_pick_player` | What the player picked from each offer. |
@@ -136,7 +136,7 @@ rather than inventing a rationale.
 
 ### Determinism
 
-`algo` + `seed` + `dreamcallerId` fully determine the pool. To reproduce or dig
+`algo` + `seed` + `dreamAvatarId` fully determine the pool. To reproduce or dig
 deeper than the log captures, re-run construction with that seed.
 
 ## Phase 2: Dream journey & merchant offer questions
@@ -210,7 +210,7 @@ the whole decision process.
 
 Filter to the game and battle (`battleEntryKey`). Key fields:
 
-- `opponentDreamcallerId`, `completionLevel`, `layerCount`,
+- `opponentDreamAvatarId`, `completionLevel`, `layerCount`,
   `midpointCompletionLevel`, `carriesDreamsign`, `dreamsignIds` — who the
   opponent is and the run depth that scaled it.
 - `poolSeed` — the seed the whole construction is a pure function of; re-running
@@ -246,7 +246,7 @@ predates this construction — reconstruct only what those fields allow.
 
 Structure the answer as a reconstruction, not an assertion:
 
-1. **Identify the game** (`gameId`, `dreamcallerId`, `seed`).
+1. **Identify the game** (`gameId`, `dreamAvatarId`, `seed`).
 2. **Cite the deciding event(s)** by `event` name and the specific fields that
    drove the outcome (quote the `blendedScore`, `targetKey`, `needId`,
    `reason`, etc.).

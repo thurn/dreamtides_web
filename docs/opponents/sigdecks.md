@@ -1,8 +1,8 @@
 # Signature decks (`/sigdecks`)
 
-`/sigdecks` is a debug visualization that, for each Dreamcaller carrying a
+`/sigdecks` is a debug visualization that, for each Dream Avatar carrying a
 signature, finds the single real draft deck in the adapted draft corpus most
-strongly correlated with that Dreamcaller and renders its whole mainboard. This
+strongly correlated with that Dream Avatar and renders its whole mainboard. This
 document describes, in detail, how those decklists are selected.
 
 Source: [`src/debug/SignatureDecksApp.tsx`](../../src/debug/SignatureDecksApp.tsx)
@@ -31,19 +31,19 @@ Each bundled record carries both names and stable UUIDs, index-aligned:
 
 `/sigdecks` reads `mainboardIds`.
 
-### Dreamcaller signatures
+### Dream Avatar signatures
 
 Signatures come from the `signature-cards` lists in
-[`data/tabula/dreamcallers_v2.toml`](../../data/tabula/dreamcallers_v2.toml),
+[`data/tabula/dream_avatars_v2.toml`](../../data/tabula/dream_avatars_v2.toml),
 authored as stable cards_v2 UUIDs. `setup-assets.mjs` resolves each to its current
-display name and emits both, index-aligned, on every Dreamcaller in
-`public/dreamcallers-v2-data.json`:
+display name and emits both, index-aligned, on every Dream Avatar in
+`public/dream-avatars-v2-data.json`:
 
 - `signatureCards: string[]` — display names (consumed by the name-based idf3
   pool engine).
 - `signatureCardIds: string[]` — the matching UUIDs.
 
-`/sigdecks` reads `signatureCardIds`. Of the 32 Dreamcallers, 20 carry a
+`/sigdecks` reads `signatureCardIds`. Of the 32 Dream Avatars, 20 carry a
 signature; the other 12 are skipped.
 
 ## Identify by UUID, never by name
@@ -60,9 +60,9 @@ are lowercased before use so casing differences never split a card in two.
 
 Mainboards larger than **`MAX_DECK_SIZE = 28`** cards are excluded from
 consideration entirely. The corpus contains sprawling draft piles (up to ~68
-cards); such a deck correlates with a Dreamcaller mostly by holding more of
+cards); such a deck correlates with a Dream Avatar mostly by holding more of
 everything, which makes it a misleading "signature deck". Filtering to ≤ 28 cards
-leaves **206 of the 993** seats. Every signature-carrying Dreamcaller still has a
+leaves **206 of the 993** seats. Every signature-carrying avatar still has a
 qualifying deck. All statistics below (document frequency, IDF, deck norms,
 neighbour counts) are computed over this filtered corpus, so `N` denotes the
 number of decks at or below the size cap.
@@ -89,7 +89,7 @@ more when that card is distinctive.
 
 - **Deck vector**: each deck's distinct card UUIDs, each component weighted by its
   IDF. Its L2 norm is `‖D‖ = sqrt(Σ idf(c)² over the deck's cards)`.
-- **Signature vector**: the Dreamcaller's signature UUIDs, each weighted by its
+- **Signature vector**: the Dream Avatar's signature UUIDs, each weighted by its
   IDF. Its norm is `‖S‖ = sqrt(Σ idf(s)² over the signature cards)`.
 
 ### Cosine fit
@@ -104,9 +104,9 @@ fit(S, D) = ( Σ idf(c) over signature cards present in D ) / ( ‖D‖ · ‖S�
 Normalizing by the **deck norm** is what makes the metric scale-invariant: a raw
 overlap sum favours large decks (more slots to contain any given signature card),
 whereas the cosine measures correlation independent of deck size. Including the
-signature norm (constant across decks for one Dreamcaller, so it does not affect
+signature norm (constant across decks for one Dream Avatar, so it does not affect
 ranking) keeps the reported value a true cosine in `[0, 1]`, comparable across
-Dreamcallers.
+Dream Avatars.
 
 ### Deck–deck cosine
 
@@ -120,9 +120,9 @@ This drives both the `typical` selection mode and the neighbour count.
 
 ## Candidate set
 
-For a given Dreamcaller, the candidates are every filtered-corpus deck that
+For a given Dream Avatar, the candidates are every filtered-corpus deck that
 contains **at least one** of its signature cards, each tagged with its `fit` to
-the signature and the set of signature UUIDs it matched. A Dreamcaller with no
+the signature and the set of signature UUIDs it matched. A Dream Avatar with no
 candidate (no deck contains any of its signatures) produces no row.
 
 ## Selection modes
@@ -149,7 +149,7 @@ centrality(X) = Σ over all candidates Y of [ fit(Y) · cos(X, Y) ]
 
 Ties break toward the candidate with the higher raw `fit`. This rewards "the
 common way this signature gets built" and is robust to one-off outliers, at the
-cost of some literal fit. Where a Dreamcaller's best literal match is a quirky
+cost of some literal fit. Where a Dream Avatar's best literal match is a quirky
 deck, the two modes diverge; where the best match also sits in a dense region,
 they agree.
 
@@ -163,13 +163,13 @@ two modes legible — a `match`-mode winner is sometimes a near-isolated outlier
 around it. The corpus is fairly sparse at this threshold, so neighbour counts are
 small.
 
-## Per-Dreamcaller independence
+## Per-Dream Avatar independence
 
-Each Dreamcaller's deck is chosen **independently**: the algorithm takes the
-argmax over the corpus for that Dreamcaller alone, with no cross-Dreamcaller
+Each Dream Avatar's deck is chosen **independently**: the algorithm takes the
+argmax over the corpus for that Dream Avatar alone, with no cross-Dream Avatar
 deduplication or repulsion. The IDF weighting measures card rarity across the deck
-corpus, not how distinctive one Dreamcaller is from another. A consequence is that
-two Dreamcallers with overlapping signatures can be assigned the same deck — the
+corpus, not how distinctive one Dream Avatar is from another. A consequence is that
+two Dream Avatars with overlapping signatures can be assigned the same deck — the
 presence of one never affects the other's result.
 
 ## Rendering
@@ -177,8 +177,8 @@ presence of one never affects the other's result.
 The winning deck's `mainboardIds` are resolved to card records through a
 UUID-keyed lookup built from the runtime card catalog and rendered with the shared
 `CardView`. Hovering a card enlarges it in place through GameCard/CardView's
-built-in hover-zoom, and hovering a Dreamcaller's portrait or name shows
-a card with its ability (`DreamcallerPopover`). Signature-card chips above each
+built-in hover-zoom, and hovering a Dream Avatar's portrait or name shows
+a card with its ability (`DreamAvatarPopover`). Signature-card chips above each
 deck mark which signatures the chosen deck contains (filled) versus missed
 (faint), and key on UUID.
 

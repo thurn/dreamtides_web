@@ -102,7 +102,7 @@ describe("generateFresh20Pack", () => {
 describe("computeFresh20Offer", () => {
   function makeEchoOffer(): NonNullable<Fresh20Deps["computeOffer"]> {
     // Returns the first `offerSize` of the pack, asserting it received an empty
-    // signature list (fresh20 ignores Dreamcaller signatures).
+    // signature list (fresh20 ignores DreamAvatar signatures).
     return vi.fn(
       (
         pack: readonly number[],

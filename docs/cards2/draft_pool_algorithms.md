@@ -32,18 +32,18 @@ once, because the rest of this document refers to these stores by name.
   `cards-v2-database.ts`) fetches that JSON into a `Map<number, CardData>` keyed
   by card number.
 
-- **The Dreamcaller records** start as `[[dreamcaller]]` entries in
-  `data/tabula/dreamcallers_v2.toml`, which supplies each Dreamcaller's name,
+- **The Dream Avatar records** start as `[[dreamAvatar]]` entries in
+  `data/tabula/dream_avatars_v2.toml`, which supplies each Dream Avatar's name,
   ability, and `signature-cards` (the standard `idf3` steering data). The
   `draft-archetypes` the non-`idf3` variants seed from live in TypeScript, in the
-  `DREAMCALLER_ARCHETYPES` map in `dreamcallers-v2-database.ts`. The same build
-  step merges them into `public/dreamcallers-v2-data.json`, and
-  `loadDreamcallersV2` (in `dreamcallers-v2-database.ts`) fetches it into
-  `DraftDreamcaller[]`. A Dreamcaller's **theme** is also defined in TypeScript:
-  `loadDreamcallersV2` attaches it after fetching, by looking the Dreamcaller's
-  name up in the hardcoded `DREAMCALLER_THEMES` map in
-  `dreamcallers-v2-database.ts` (so `Kragg` resolves to `["abandon"]`). That map
-  is the single source of truth for which mechanic a Dreamcaller pulls toward.
+  `DREAM_AVATAR_ARCHETYPES` map in `dream-avatars-v2-database.ts`. The same build
+  step merges them into `public/dream-avatars-v2-data.json`, and
+  `loadDreamAvatarsV2` (in `dream-avatars-v2-database.ts`) fetches it into
+  `DraftDreamAvatar[]`. A Dream Avatar's **theme** is also defined in TypeScript:
+  `loadDreamAvatarsV2` attaches it after fetching, by looking the Dream Avatar's
+  name up in the hardcoded `DREAM_AVATAR_THEMES` map in
+  `dream-avatars-v2-database.ts` (so `Kragg` resolves to `["abandon"]`). That map
+  is the single source of truth for which mechanic a Dream Avatar pulls toward.
 
 - **The real decklists** are each seat's mainboard in the adapted draft records
   under `docs/draft_records_adapted/` — one JSONC file per draft event, with one
@@ -56,9 +56,9 @@ once, because the rest of this document refers to these stores by name.
 
 Quest content loading (`src/data/quest-content.ts`) loads all three, then calls
 `buildPoolData` once to fold the card records (and the decklists) into the single
-`PoolData` structure described next. When the player picks a Dreamcaller,
+`PoolData` structure described next. When the player picks a Dream Avatar,
 `generatePoolFromData` runs with that `PoolData`, the chosen variant, and
-the Dreamcaller's `draftArchetypes` and `themeArchetypes`. The pool the
+the Dream Avatar's `draftArchetypes` and `themeArchetypes`. The pool the
 algorithm returns is a multiset of card *names*; `resolvePool` then maps those
 names back to card numbers (via a name-to-number index) for the draft engine to
 consume.
@@ -76,7 +76,7 @@ into the structure all three algorithms consume — the `PoolData`:
   every tide base name is mapped through the fixed `TIDE_TO_ARCHETYPE` table in
   `color-pool.ts` to a stable slug (`"Abandon"` to `abandon`, `"Storm"` to
   `storm`), and the card is added to that slug's set. These slugs are exactly the
-  keys the `DREAMCALLER_THEMES` map uses, which is what lets a Dreamcaller's
+  keys the `DREAM_AVATAR_THEMES` map uses, which is what lets a Dream Avatar's
   theme name a key in `archLists`.
 - **Draft lists** (`PoolData.draftLists`). A map keyed by both *bare color
   combinations* (from each card's `colors` field, e.g. `ub`) and
@@ -126,26 +126,26 @@ three algorithms, a card is capped at two copies in the final pool — every cou
 is clamped to at most two before the pool is returned, and the pool's reported
 size counts copies with that cap applied.
 
-### Dreamcaller seeding
+### Dream Avatar seeding
 
-In the normal draft-test flow the player first chooses a Dreamcaller, and that
+In the normal draft-test flow the player first chooses a Dream Avatar, and that
 choice feeds two optional pieces of guidance into pool construction. The two
 come from *different* sources, which matters:
 
-- **Seed archetypes** — the Dreamcaller's `draftArchetypes`, from its entry in
-  the `DREAMCALLER_ARCHETYPES` map in `dreamcallers-v2-database.ts`. These are
+- **Seed archetypes** — the Dream Avatar's `draftArchetypes`, from its entry in
+  the `DREAM_AVATAR_ARCHETYPES` map in `dream-avatars-v2-database.ts`. These are
   color-plus-archetype list names (e.g. `br-aristocrats`), the same names that
   key `PoolData.draftLists`. Only those that exist in `draftLists` and carry a
   color prefix are eligible. They constrain the pool's color identity and (in the
   theme-based algorithms) which color-plus-archetype themes are allowed.
-- **Theme archetypes** — the Dreamcaller's mechanic-archetype tide slugs (e.g.
+- **Theme archetypes** — the Dream Avatar's mechanic-archetype tide slugs (e.g.
   `abandon`), *not* read from the TOML but attached at load from the
-  `DREAMCALLER_THEMES` map keyed by Dreamcaller name. These are the same slugs
+  `DREAM_AVATAR_THEMES` map keyed by Avatar name. These are the same slugs
   that key `PoolData.archLists`. They bias the `decklists` algorithm toward the
-  Dreamcaller's mechanical theme; the `color_pool` and `diverse` algorithms ignore
+  Dream Avatar's mechanical theme; the `color_pool` and `diverse` algorithms ignore
   them.
 
-A Dreamcaller with no archetypes produces an unconstrained pool.
+A Dream Avatar with no archetypes produces an unconstrained pool.
 
 ---
 
@@ -158,10 +158,10 @@ strategy-focused pools.
 
 ### Choosing the color identity
 
-If the Dreamcaller supplied eligible seed archetypes, the algorithm picks one of
+If the Dream Avatar supplied eligible seed archetypes, the algorithm picks one of
 them at random and adopts its color prefix as the identity. It remembers that
 seed archetype as the opening theme, and it restricts the pool's allowed
-color-plus-archetype themes to the Dreamcaller's list (on-color mechanic themes
+color-plus-archetype themes to the Dream Avatar's list (on-color mechanic themes
 still join freely).
 
 Without seeding, the algorithm first chooses *how many* colors the identity
@@ -228,7 +228,7 @@ and filling. Each is governed by a tuning knob.
 ### Inverse-reach seeding
 
 The `diverse` algorithm seeds its identity from a single archetype just as
-`color_pool` does (and respects Dreamcaller seed archetypes the same way), but the
+`color_pool` does (and respects Dream Avatar seed archetypes the same way), but the
 choice is no longer uniform. It computes each archetype theme's **reach** — the
 expected number of pools in which that theme would be an on-color candidate,
 weighted by how often each color identity comes up. Themes eligible in many
@@ -297,17 +297,17 @@ but are distinct things. They are introduced here in the order they depend on
 each other; the rest of the section is just these four spelled out.
 
 - **Theme** — a *persistent bias*, fixed for the whole run, that pulls every
-  later decision toward the Dreamcaller's mechanic. It is never a single choice;
-  it is a gravity well. It comes from the Dreamcaller's *theme archetypes* — its
+  later decision toward the Dream Avatar's mechanic. It is never a single choice;
+  it is a gravity well. It comes from the Dream Avatar's *theme archetypes* — its
   mechanic-archetype slugs like `abandon` or `storm` (see Shared foundations) —
   and is expressed as a set of cards plus a 0-to-1 "how theme-dense is this deck"
-  score. A Dreamcaller with no theme archetypes has no theme, and every bias
+  score. A Dream Avatar with no theme archetypes has no theme, and every bias
   below switches off.
 
 - **Strategy** — a *single choice made once per run*: exactly one of the
-  Dreamcaller's *seed archetypes*. A seed archetype is a color-plus-archetype
+  Dream Avatar's *seed archetypes*. A seed archetype is a color-plus-archetype
   draft list like `br-aristocrats` — a broad "these colors, this drafted
-  archetype" grouping. The algorithm rolls one of the Dreamcaller's seed
+  archetype" grouping. The algorithm rolls one of the Dream Avatar's seed
   archetypes to be this pool's strategy; that single pick sets the pool's color
   identity and decides which real deck becomes the starter.
 
@@ -354,38 +354,38 @@ precomputed so these cosines are cheap.
 
 ### The theme: a card set and a density score
 
-If the Dreamcaller has theme archetypes, the algorithm turns them into two
+If the Dream Avatar has theme archetypes, the algorithm turns them into two
 things it will reuse at every later step:
 
-- The **theme card set** — the union, across the Dreamcaller's theme slugs, of
+- The **theme card set** — the union, across the Dream Avatar's theme slugs, of
   the card sets stored at those slugs in `PoolData.archLists` (which were built
-  from each card's `tides`). For an `abandon` Dreamcaller this is every Abandon
-  card; for a `["storm", "events"]` Dreamcaller it is every Storm card plus every
+  from each card's `tides`). For an `abandon` Dream Avatar this is every Abandon
+  card; for a `["storm", "events"]` Dream Avatar it is every Storm card plus every
   Events card.
 - The **theme density** of a deck (the "theme cosine") — a 0-to-1 measure of how
   heavily that deck draws on the theme card set, IDF-weighted so distinctive
   theme cards count for more than ubiquitous ones.
 
-When the Dreamcaller has no theme archetypes, the theme card set is empty, every
+When the Dream Avatar has no theme archetypes, the theme card set is empty, every
 deck's theme density is zero, and every theme-bias multiplier below becomes one
 — i.e. the pool is built with no theme bias at all.
 
 ### Step 1 — Roll the strategy
 
-The algorithm now picks the pool's strategy: exactly one of the Dreamcaller's
+The algorithm now picks the pool's strategy: exactly one of the Dream Avatar's
 seed archetypes (its `draftArchetypes`, which name keys in `PoolData.draftLists`)
 that exist in `draftLists` and carry a color prefix. It does not pick uniformly —
 it weights each candidate by how much that draft list (its card set in
 `draftLists`) overlaps the theme card set, so a candidate full of theme cards is
 rolled far more often than an off-theme one. Concretely, an
-Abandon Dreamcaller whose seed archetypes include an aristocrats list and a
+Abandon Dream Avatar whose seed archetypes include an aristocrats list and a
 green-ramp list will roll aristocrats most of the time, because aristocrats
 shares many cards with the Abandon theme and ramp shares few. (The strength of
 that pull is a tuning exponent.)
 
 The rolled strategy carries two things forward: its **color prefix becomes the
 pool's color identity** (e.g. `br`), and its **card list becomes the yardstick
-for choosing the starter** in the next step. A Dreamcaller with no seed
+for choosing the starter** in the next step. A Dream Avatar with no seed
 archetypes has no strategy — the identity is left open and the starter is simply
 a random real deck.
 
@@ -414,7 +414,7 @@ every card of every similar deck, the pool would smear across many archetypes.
 The **spine** prevents that: it is the set of mechanic archetypes that growth is
 allowed to draw cards from, so the pool's card list stays one coherent strategy.
 
-The spine is assembled from two sources. First, the Dreamcaller's theme
+The spine is assembled from two sources. First, the Dream Avatar's theme
 archetypes always go in, so a themed pool can never gate out its own theme —
 this matters for splashy themes (like outsiders) that are rarely any single
 deck's *dominant* mechanic. Then the algorithm looks at the starter, counts how
@@ -463,18 +463,18 @@ mechanic archetype most represented in the finished pool.
 
 ### Worked example: building Kragg's pool
 
-To make the chain concrete, here is one full run for the Dreamcaller **Kragg**,
+To make the chain concrete, here is one full run for the Dream Avatar **Kragg**,
 with every value traced to where it is stored. (The exact decks and scores below
 depend on the random seed; the data sources and the order of operations do not.)
 
 **Setup — what Kragg brings.** The player picks Kragg. From
-`dreamcallers_v2.toml`, Kragg's `draft-archetypes` are loaded as his
+`dream_avatars_v2.toml`, Kragg's `draft-archetypes` are loaded as his
 `draftArchetypes`: `b-aristocrats`, `bg-midrange`, `bg-midrange-reanimator`,
 `br-aristocrats`, `brg-lands-monsters`, `brg-midrange`, `ug-cheaty-ramp`,
 `ug-sneak`, `wb-aristocrats`, `wbg-midrange`, `wbg-value-midrange`,
 `wbr-aristocrats`, `wbrg-aristocrats`, `wubg-value`, and `wubrg-value` — these
-are his **strategy candidates**. Separately, `loadDreamcallersV2` looks up
-`"Kragg"` in the `DREAMCALLER_THEMES` map and attaches `themeArchetypes =
+are his **strategy candidates**. Separately, `loadDreamAvatarsV2` looks up
+`"Kragg"` in the `DREAM_AVATAR_THEMES` map and attaches `themeArchetypes =
 ["abandon"]` — his **theme**. The draft page calls `generatePoolFromData` with
 the prebuilt `PoolData`, the `decklists` variant, those `draftArchetypes` as the
 seed archetypes, and `["abandon"]` as the theme archetypes.
@@ -543,7 +543,7 @@ single source of truth for which algorithms exist; the `?algo=` URL parameter
 and the draft-test variant chip both read their option set from it.
 
 When a pool is requested, `generate.ts` builds one uniform `PoolGenerationRequest`
-— the seeded RNG, the pool data, and the Dreamcaller's seed archetypes, theme
+— the seeded RNG, the pool data, and the Dream Avatar's seed archetypes, theme
 archetypes, and signature cards — looks the chosen id up in the registry, and
 calls that strategy's `generate`. The request carries every input any algorithm
 might read; each strategy destructures only the fields it uses (`color_pool` and
@@ -563,7 +563,7 @@ produced it.
 The `idf` algorithm is the simplest decklist-based pool, and the only one that
 reads nothing but the real decklists. The `color_pool`, `diverse`, and `decklists`
 algorithms all consult the synthesized inputs — core staples, mechanic
-tides, color lists, draft archetypes, and the Dreamcaller's seed and theme
+tides, color lists, draft archetypes, and the Dream Avatar's seed and theme
 archetypes. `idf` ignores all of them. It picks one real decklist at random and
 grows a pool around it by IDF-weighted similarity. The premise is the most
 literal reading of "give the player a coherent pool": hand them a real deck and
@@ -633,7 +633,7 @@ bias** instead of uniformly at random. Every other step — the corpus, the
 IDF-weighted cosine ranking, the best-first whole-deck union, the size window —
 is shared with `idf` (the two literally call the same growth helper). Like `idf`
 it reads nothing but the real decklists; no archetypes, tides, colors,
-Dreamcallers, or core staples enter into it. Its knobs live in the `IDF2`
+Dream Avatars, or core staples enter into it. Its knobs live in the `IDF2`
 constant in `color-pool.ts`, alongside the `IDF` block it builds on.
 
 ### The problem it fixes

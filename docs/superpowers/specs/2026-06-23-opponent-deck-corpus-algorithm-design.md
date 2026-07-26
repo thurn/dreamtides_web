@@ -3,7 +3,7 @@
 A second, **switchable** opponent-generation algorithm, surfaced in the
 `/opponent` debug view alongside today's "coherent draft." Instead of
 simulating a fresh draft, it **selects a real known-good decklist that fits the
-opponent's Dreamcaller (and, secondarily, the dreamscape affiliation), then
+opponent's Dream Avatar (and, secondarily, the dreamscape affiliation), then
 tunes that deck by run layer** to control difficulty and progression.
 
 Scope for this iteration is **the debug view only**. Live battles keep using the
@@ -19,7 +19,7 @@ so it *can* later become the live path, but no battle wiring is in scope here.
   (`buildOpponentDeck`). There is no algorithm switcher.
 - `/sigdecks` ([src/debug/SignatureDecksApp.tsx](../../src/debug/SignatureDecksApp.tsx))
   already does the *selection* half we want: it picks the real corpus deck that
-  best fits a Dreamcaller's signature using an **IDF-cosine `fit`** metric, with
+  best fits a Dream Avatar's signature using an **IDF-cosine `fit`** metric, with
   `match` and `typical` modes. Its IDF-cosine logic is implemented locally in that
   file (a near-duplicate of `idfCosine` in
   [src/draft/pool/variant-idf.ts](../../src/draft/pool/variant-idf.ts)).
@@ -29,7 +29,7 @@ so it *can* later become the live path, but no battle wiring is in scope here.
 - Dreamscapes carry an `affiliation-id`; affiliations
   ([data/tabula/affiliations.toml](../../data/tabula/affiliations.toml)) carry a
   curated `signatureCards` UUID list.
-- 32 Dreamcallers; **20 carry `signature-card-ids`**, 12 do not.
+- 32 Dream Avatars; **20 carry `signature-card-ids`**, 12 do not.
 - Cards have `rarity` of `""`, `"Starter"` (10 cards), or `"Legendary"` (8 cards);
   `isStarter` is the runtime flag.
 - 154 dreamsigns; opponents currently receive a **random** dreamsign from the
@@ -42,8 +42,8 @@ All of these are available at runtime (some require a new generated artifact, no
 - **Known-good decklist corpus** (new artifact) — see "Deck corpus" below.
 - **IDF statistics** computed over the known-good corpus (document frequency,
   per-card IDF, per-deck L2 norms).
-- **Dreamcaller signatures** — `signatureCardIds` from
-  [data/tabula/dreamcallers_v2.toml](../../data/tabula/dreamcallers_v2.toml).
+- **Dream Avatar signatures** — `signatureCardIds` from
+  [data/tabula/dream_avatars_v2.toml](../../data/tabula/dream_avatars_v2.toml).
 - **Affiliation signatures** — `signatureCards` from
   [data/tabula/affiliations.toml](../../data/tabula/affiliations.toml); the
   dreamscape's affiliation is resolved the same way `buildOpponentDeck` does today.
@@ -105,7 +105,7 @@ each weighted by its IDF over the known-good corpus) and a deck `D`:
 fit(Q, D) = ( Σ idf(c) over c in Q present in D ) / ( ‖D‖ · ‖Q‖ )
 ```
 
-`signatureFit(D) = fit(dreamcaller.signatureCardIds, D)`. A Dreamcaller's
+`signatureFit(D) = fit(dreamAvatar.signatureCardIds, D)`. A Dream Avatar's
 signature is a literal set of its defining cards, so "contains those cards" is the
 right question.
 
@@ -132,7 +132,7 @@ computed **UUID-keyed over the known-good corpus**:
 Keeping both fits on a comparable `[0, 1]`-ish scale makes the `combined` blend
 below well-behaved. Affiliation no longer gates candidacy (it only adjusts
 ranking), and because affinity covers the whole pool it gives a usable signal for
-every deck — including for signature-less Dreamcallers, who rank on affiliation
+every deck — including for signature-less Dream Avatars, who rank on affiliation
 fit alone.
 
 ### Targeted cleanup
@@ -156,7 +156,7 @@ otherwise grow.
    (tunable constant; keeps the signature primary and the affiliation a secondary
    nudge).
 3. **Candidate set** = decks that share at least one signature card with the
-   Dreamcaller (the same candidate rule sigdecks uses).
+   Dream Avatar (the same candidate rule sigdecks uses).
 4. Rank candidates by `combined`, descending; take the **top K = 8** (tunable).
 5. **Seeded top-K sample**: pick one of the top-K using the battle seed. Same seed
    ⇒ same base deck (reproducible); a different seed / the `/opponent` "Refresh"
@@ -164,7 +164,7 @@ otherwise grow.
 
 ### Edge cases
 
-- **Dreamcaller without signatures** (12 of 32): rank by `affiliationFit` alone,
+- **Dream Avatar without signatures** (12 of 32): rank by `affiliationFit` alone,
   take top-K, seeded-sample.
 - **Neutral starter dreamscape** (layer 0, no affiliation): use `signatureFit`
   alone.
@@ -178,7 +178,7 @@ Applied as a deterministic, seeded pipeline to the selected base deck. Layers ar
 
 | Modification | Layer 0 | Layer 1 | Layer 2 | Layer 3 | Layer 4 | Layer 5 | Layer 6 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Dreamcaller ability active | no | yes | yes | yes | yes | yes | yes |
+| Dream Avatar ability active | no | yes | yes | yes | yes | yes | yes |
 | Legendary cards allowed | no | no | no | no | no | yes | yes |
 | Least-synergistic cards → Starters | 10 | 5 | 0 | 0 | 0 | 0 | 0 |
 | Dreamsign assigned | 0 | 0 | 0 | 1 | 1 | 1 | 1 |
@@ -198,7 +198,7 @@ Pipeline order (deterministic):
    Starters that best fit the diluted deck (seeded tie-break).
 3. **Dreamsign assignment** (layers 3+): assign exactly **1** dreamsign that best
    fits the tuned deck (see below). None on layers 0–2.
-4. **Dreamcaller ability flag**: active on layers 1+, inactive at layer 0
+4. **Dream Avatar ability flag**: active on layers 1+, inactive at layer 0
    (surfaced as a flag in the debug view; battle enforcement is out of scope).
 
 ### "Least synergistic" metric
@@ -216,7 +216,7 @@ removal during dilution.
 Dreamsigns are either **neutral** (broadly useful in any deck) or **tailored**
 (meaningfully stronger in a specific build). Each tailored dreamsign gets a
 `signature-card-ids` UUID list — the cards most indicative that a deck wants it —
-mirroring how Dreamcallers carry signature cards.
+mirroring how Dream Avatars carry signature cards.
 
 ### New artifact
 
@@ -268,7 +268,7 @@ selections during implementation.
   - a **diff** of the layer modifications (Legendaries pulled, cards cut, Starters
     added);
   - the assigned dreamsign (or "none — layer < 3");
-  - whether the Dreamcaller ability is active.
+  - whether the Dream Avatar ability is active.
 - Keep the existing layer, dreamscape, and Refresh controls. Refresh re-rolls the
   seed → a new top-K sample and new seeded modifications.
 - Structure the debug view around a small **algorithm registry** so future
@@ -304,7 +304,7 @@ to?" — yes.
 | `TOP_K` | 8 | Size of the strong-fit window the seed samples from. |
 | `STARTER_DILUTION` | `[10, 5, 0, 0, 0, 0, 0]` | Cards swapped for Starters, indexed by layer. |
 | `LEGENDARY_ALLOWED_FROM_LAYER` | 5 | First layer at which Legendaries are kept. |
-| `ABILITY_ACTIVE_FROM_LAYER` | 1 | First layer at which the Dreamcaller ability is active. |
+| `ABILITY_ACTIVE_FROM_LAYER` | 1 | First layer at which the Dream Avatar ability is active. |
 | `DREAMSIGN_FROM_LAYER` | 3 | First layer at which a dreamsign is assigned. |
 | `DREAMSIGN_FIT_THRESHOLD` | `> 0` (≥1 shared card) | Minimum tailored-dreamsign fit before falling back to a neutral dreamsign; calibrated against logs. |
 

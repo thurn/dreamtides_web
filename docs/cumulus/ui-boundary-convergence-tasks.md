@@ -224,8 +224,8 @@ whose selectors have no source consumer.
 2. Delete `src/components/DeckViewer.test.tsx`. Preserve any still-useful
    behavior assertions only when the equivalent Cumulus deck-viewer tests do
    not already cover them.
-3. Delete `src/components/DreamcallerPopover.tsx` and its test. A future
-   Dreamcaller reveal uses the canonical `DreamcallerPortrait` plus the shared
+3. Delete `src/components/DreamAvatarPopover.tsx` and its test. A future
+   Dream Avatar reveal uses the canonical `DreamAvatarPortrait` plus the shared
    entity-reveal system; it does not restore this custom popover shell.
 4. Delete `src/components/deck-summary.ts` and its test after confirming the
    dead viewer remains its only production consumer.
@@ -248,7 +248,7 @@ whose selectors have no source consumer.
 - No non-test import references any deleted module.
 - The boundary manifest contains no deleted file.
 - The generated bundle contains no deleted module or obsolete selector family.
-- Cumulus deck-viewer, Dreamcaller reveal, and Atlas coverage stays green.
+- Cumulus deck-viewer, Dream Avatar reveal, and Atlas coverage stays green.
 
 ### Verification
 
@@ -726,7 +726,7 @@ presentation and tool-specific UI have their designated owners.
 5. Move `EntityRevealConformanceDemo` into the existing Cumulus devtools area
    and express its fixtures through canonical semantic components. Eliminate
    battle-specific fixture adapters that have no gameplay consumer.
-6. Keep standalone `/cards`, `/dreamsigns`, `/dreamcallers`, `/tides`,
+6. Keep standalone `/cards`, `/dreamsigns`, `/dream-avatars`, `/tides`,
    `/dreamscapes`, `/figments`, `/dreamwell`, `/images`, `/opponent`,
    `/sigdecks`, and `/offers` routes outside Cumulus. They may consume public
    Cumulus components but never Cumulus internals.

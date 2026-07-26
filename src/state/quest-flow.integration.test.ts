@@ -22,12 +22,12 @@ import { createDefaultState } from "./quest-context";
 import {
   canVisitSite,
   completeQuestSite,
-  startQuestFromDreamcaller,
+  startQuestFromDreamAvatar,
 } from "./quest-state-actions";
 import type { CardData } from "../types/cards";
 import { layerOrdinal } from "../types/layer-name";
 import { asCardId, asCardName } from "../types/card-identity";
-import type { DreamcallerContent } from "../types/content";
+import type { DreamAvatarContent } from "../types/content";
 import type {
   DreamscapeNode,
   QuestState,
@@ -38,7 +38,7 @@ import type {
  * End-to-end quest-flow integration coverage.
  *
  * This is the battle-mode-style backbone for the quest run: it drives the REAL
- * quest state actions (`startQuestFromDreamcaller`, `completeQuestSite`,
+ * quest state actions (`startQuestFromDreamAvatar`, `completeQuestSite`,
  * `canVisitSite`) and the REAL atlas advance (`advanceAtlas`, called exactly as
  * the battle-completion bridge calls it on a Battle victory) through a full
  * 7-layer run start -> dreamscape -> non-battle sites -> battle -> advance ->
@@ -83,10 +83,10 @@ function makeCard(
   };
 }
 
-function makeDreamcaller(id: string): DreamcallerContent {
+function makeDreamAvatar(id: string): DreamAvatarContent {
   return {
     id,
-    name: `Dreamcaller ${id}`,
+    name: `DreamAvatar ${id}`,
     title: "Flow Witness",
     renderedText: "Test ability.",
     imageNumber: "0006",
@@ -111,7 +111,7 @@ function makeQuestContent(): QuestContent {
 
   return {
     cardDatabase,
-    dreamcallers: [makeDreamcaller("dreamcaller-flow")],
+    dreamAvatars: [makeDreamAvatar("dream-avatar-flow")],
     dreamwellCards: [],
     dreamsignTemplates: [],
     dreamscapes: TEST_DREAMSCAPES,
@@ -205,7 +205,7 @@ function winBattleAndAdvance(
     site: battle,
     state,
     cardDatabase: content.cardDatabase,
-    dreamcallers: content.dreamcallers,
+    dreamAvatars: content.dreamAvatars,
     dreamscapes: content.dreamscapes,
     affiliations: content.affiliations,
     dreamsignTemplates: content.dreamsignTemplates,
@@ -259,11 +259,11 @@ beforeEach(() => {
 describe("quest flow (end to end)", () => {
   it("plays a full 7-layer run start -> sites -> battle -> advance -> boss victory", () => {
     const content = makeQuestContent();
-    const dreamcaller = content.dreamcallers[0];
+    const dreamAvatar = content.dreamAvatars[0];
 
-    let state = startQuestFromDreamcaller({
+    let state = startQuestFromDreamAvatar({
       prev: createDefaultState(),
-      dreamcaller,
+      dreamAvatar,
       questContent: content,
       seedOverride: "flow-victory-seed",
     });
@@ -332,9 +332,9 @@ describe("quest flow (end to end)", () => {
 
   it("pads a small starter deck up to the battle minimum at the first battle", () => {
     const content = makeQuestContent();
-    const state = startQuestFromDreamcaller({
+    const state = startQuestFromDreamAvatar({
       prev: createDefaultState(),
-      dreamcaller: content.dreamcallers[0],
+      dreamAvatar: content.dreamAvatars[0],
       questContent: content,
       seedOverride: "flow-padding-seed",
     });
@@ -349,7 +349,7 @@ describe("quest flow (end to end)", () => {
       site: battle,
       state,
       cardDatabase: content.cardDatabase,
-      dreamcallers: content.dreamcallers,
+      dreamAvatars: content.dreamAvatars,
       dreamscapes: content.dreamscapes,
       affiliations: content.affiliations,
       dreamsignTemplates: content.dreamsignTemplates,
@@ -362,9 +362,9 @@ describe("quest flow (end to end)", () => {
 
   it("ends the run on a defeat without advancing the atlas", () => {
     const content = makeQuestContent();
-    let state = startQuestFromDreamcaller({
+    let state = startQuestFromDreamAvatar({
       prev: createDefaultState(),
-      dreamcaller: content.dreamcallers[0],
+      dreamAvatar: content.dreamAvatars[0],
       questContent: content,
       seedOverride: "flow-defeat-seed",
     });

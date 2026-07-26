@@ -43,7 +43,7 @@ Their centered summaries carry the final run or battle readout, and their
 bottom actions start the next quest.
 
 The quest-start choice is the explicit exception because a run has no selected
-Dreamcaller or persistent quest inventory yet. The battle route applies the
+Dream Avatar or persistent quest inventory yet. The battle route applies the
 same wrapper to its Cumulus opponent preview and leaves the playable battle shell
 in its battle-specific chrome.
 
@@ -66,7 +66,7 @@ placement. Parent screen stacking contexts do not participate in reveal layout.
 ## Reveal Surfaces
 
 Screens render named semantic sources such as `GameCard`, `AtlasNode`,
-`Dreamsign`, `DreamcallerPortrait`, `TideDisc`, `ResourceChip`, `SiteNode`, and
+`Dreamsign`, `DreamAvatarPortrait`, `TideDisc`, `ResourceChip`, `SiteNode`, and
 `GlossaryTerm`. Each component derives one strict primary plus ordered
 `InfoCard` secondaries from UUID-backed domain data. `InfoCard` itself is a
 visual content component with strict variants.

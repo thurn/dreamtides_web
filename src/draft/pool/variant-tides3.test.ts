@@ -1,4 +1,4 @@
-// The `tides3` variant builds a pool by combining a Dreamcaller's lead tide with
+// The `tides3` variant builds a pool by combining a DreamAvatar's lead tide with
 // shuffled fill tides and dealing to `TIDES3.dealSize`. These tests pin the
 // structural contract (determinism per seed, the deal size and copy cap, the
 // always-present lead, the forced fill tide, and the failure modes) against
@@ -15,8 +15,8 @@ import { TIDES3, generateTides3 } from "./variant-tides3.ts";
 
 // A synthetic artifact of disjoint tides. Tide 1 is the signature lead for
 // The first third of the tides are `signature`, the rest `neutral`. "dc-a" is a
-// signatured Dreamcaller (a single lead — tide 1 — plus the neutral tides as
-// fill); "dc-b" is a neutral Dreamcaller (every signature tide as a lead
+// signatured DreamAvatar (a single lead — tide 1 — plus the neutral tides as
+// fill); "dc-b" is a neutral DreamAvatar (every signature tide as a lead
 // candidate, neutral tides as fill). Card UUIDs are `<tide>-card-<i>`; copies
 // default to 2.
 function makeTides3(
@@ -45,7 +45,7 @@ function makeTides3(
   return {
     version: 1,
     tides,
-    tidePoolByDreamcaller: {
+    tidePoolByDreamAvatar: {
       "dc-a": { leads: [tides[0].id], fill },
       "dc-b": { leads: signatureIds, fill },
     },
@@ -93,7 +93,7 @@ describe("generateTides3", () => {
     expect(poolSize(result.counts)).toBe(12);
   });
 
-  it("always leads a single-lead (signatured) Dreamcaller with its one lead tide", () => {
+  it("always leads a single-lead (signatured) DreamAvatar with its one lead tide", () => {
     const poolData = makePoolData(makeTides3(10, 30));
     for (let seed = 0; seed < 20; seed += 1) {
       const result = generateTides3(makeRng(seed), poolData, "dc-a");
@@ -103,7 +103,7 @@ describe("generateTides3", () => {
     }
   });
 
-  it("leans a multi-lead (neutral) Dreamcaller on a varying signature lead", () => {
+  it("leans a multi-lead (neutral) DreamAvatar on a varying signature lead", () => {
     const data = makeTides3(12, 30);
     const poolData = makePoolData(data);
     const signatureIds = new Set(
@@ -117,7 +117,7 @@ describe("generateTides3", () => {
       expect(signatureIds.has(lead)).toBe(true);
       leadsSeen.add(lead);
     }
-    // Across runs a neutral Dreamcaller draws more than one archetype lead.
+    // Across runs a neutral DreamAvatar draws more than one archetype lead.
     expect(leadsSeen.size).toBeGreaterThan(1);
   });
 
@@ -135,7 +135,7 @@ describe("generateTides3", () => {
     expect(multi.selected.slice(1).length).toBe(1);
   });
 
-  it("shuffles all tides together without a dreamcaller id or pool entry", () => {
+  it("shuffles all tides together without a dreamAvatar id or pool entry", () => {
     const poolData = makePoolData(makeTides3(10, 30));
     const noId = generateTides3(makeRng(11), poolData, undefined);
     const unknownId = generateTides3(makeRng(11), poolData, "dc-unknown");

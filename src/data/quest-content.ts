@@ -5,11 +5,11 @@ import { loadDreamsignSignatures, type DreamsignSignature } from "./dreamsign-si
 import { logEvent } from "../logging";
 import {
   DEFAULT_STARTING_ESSENCE,
-  type DreamcallerContent,
+  type DreamAvatarContent,
   type DreamsignTemplate,
   type Idf3CardProvenance,
   type Idf3ProvenanceSummary,
-  type ResolvedDreamcallerPackage,
+  type ResolvedDreamAvatarPackage,
   type SeedCardProvenance,
   type SeedProvenanceSummary,
   type Tides4CardProvenance,
@@ -44,7 +44,7 @@ import {
 } from "./cards-v2-database";
 export type { KnownGoodDecklist } from "./cards-v2-database";
 export type { DreamsignSignature } from "./dreamsign-signatures";
-import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
+import { loadDreamAvatarsV2 } from "./dream-avatars-v2-database";
 import { loadDreamwellCards, type DreamwellCard } from "./dreamwell-database";
 import {
   loadAffiliations,
@@ -72,7 +72,7 @@ import type { ReplayDraftState } from "../types/draft";
 
 export interface QuestContent {
   cardDatabase: Map<number, CardData>;
-  dreamcallers: DreamcallerContent[];
+  dreamAvatars: DreamAvatarContent[];
   /** The shared Dreamwell deck source, drawn from during battle. */
   dreamwellCards: readonly DreamwellCard[];
   dreamsignTemplates: readonly DreamsignTemplate[];
@@ -150,7 +150,7 @@ export interface QuestContent {
 }
 
 /**
- * Inputs shared across every Dreamcaller package build for a single quest run:
+ * Inputs shared across every DreamAvatar package build for a single quest run:
  * the prebuilt pool data, the card-name -> card-number index, and the run's
  * dreamsign pool ids.
  */
@@ -249,7 +249,7 @@ export function poolVariantNeedsTides2(variant: PoolVariant): boolean {
 
 /**
  * Pool variants that combine the committed `tides3` artifact (`data/tides3.jsonc`,
- * served as `/tides3-data.json`): the tide decks and the per-Dreamcaller tide
+ * served as `/tides3-data.json`): the tide decks and the per-DreamAvatar tide
  * pools in one file. In pool mode the artifact is fetched only for these variants
  * and set on `poolData.tides3Decks`.
  */
@@ -263,7 +263,7 @@ export function poolVariantNeedsTides3(variant: PoolVariant): boolean {
 
 /**
  * Pool variants that combine the committed `tides4` artifact (`data/tides4.jsonc`,
- * served as `/tides4-data.json`): the tide decks and the per-Dreamcaller tide
+ * served as `/tides4-data.json`): the tide decks and the per-DreamAvatar tide
  * pools in one file. In pool mode the artifact is fetched only for these variants
  * and set on `poolData.tides4Decks`.
  */
@@ -277,7 +277,7 @@ export function poolVariantNeedsTides4(variant: PoolVariant): boolean {
 
 /**
  * Pool variants that combine the committed `tides5` artifact (`data/tides5.jsonc`,
- * served as `/tides5-data.json`): the same kind of tide decks and per-Dreamcaller
+ * served as `/tides5-data.json`): the same kind of tide decks and per-DreamAvatar
  * tide pools as `tides4`, baked only from the known-good decklists. In pool mode
  * the artifact is fetched only for these variants and set on `poolData.tides5Decks`.
  */
@@ -306,7 +306,7 @@ export const AFFINITY_GROWN_POOL_VARIANTS: ReadonlySet<PoolVariant> =
 
 /**
  * FNV-1a hash of a string into a 32-bit unsigned integer, used to derive the
- * idf3 generator's numeric seed from the quest seed and Dreamcaller id so each
+ * idf3 generator's numeric seed from the quest seed and DreamAvatar id so each
  * run's pool is reproducible. Exported so replay record selection derives its
  * record index from the same quest seed (with a `:replay` salt), keeping draft
  * selection reproducible per run.
@@ -321,7 +321,7 @@ export function hashStringToSeed(input: string): number {
 }
 
 /**
- * Generate the draft pool for one Dreamcaller, using the run's selected pool
+ * Generate the draft pool for one DreamAvatar, using the run's selected pool
  * strategy (`ctx.poolVariant`, from `?algo=`, defaulting to
  * {@link DEFAULT_POOL_VARIANT}), steered by its signature cards and pinned to the
  * run's deterministic seed. The single source of pool generation for both the
@@ -336,20 +336,20 @@ export function hashStringToSeed(input: string): number {
  * onto their UUID corpus directly — so the steering never goes through the lossy
  * name→id lookup that would conflate two distinct cards sharing a display name.
  */
-function generateDreamcallerPool(
-  dreamcaller: DreamcallerContent,
+function generateDreamAvatarPool(
+  dreamAvatar: DreamAvatarContent,
   ctx: RunPoolContext,
   questSeed: string,
 ): GeneratedPool {
   return generatePoolFromData(
     ctx.poolData,
-    hashStringToSeed(`${questSeed}:${dreamcaller.id}`),
+    hashStringToSeed(`${questSeed}:${dreamAvatar.id}`),
     undefined,
     ctx.poolVariant ?? DEFAULT_POOL_VARIANT,
     undefined,
     POOL_TARGET_SIZE,
-    (dreamcaller.signatureCardIds ?? []).map((id) => id.toLowerCase()),
-    dreamcaller.id,
+    (dreamAvatar.signatureCardIds ?? []).map((id) => id.toLowerCase()),
+    dreamAvatar.id,
   );
 }
 
@@ -376,7 +376,7 @@ function roundTo3(value: number): number {
  * with no seed-growth story (e.g. `idf3`, `color_pool`) log the base fields only.
  */
 function logPoolConstructed(
-  dreamcaller: DreamcallerContent,
+  dreamAvatar: DreamAvatarContent,
   ctx: RunPoolContext,
   pool: GeneratedPool,
 ): void {
@@ -386,7 +386,7 @@ function logPoolConstructed(
   const nameOf = (id: CardId): string =>
     ctx.poolData.cardNameById?.get(id) ?? id;
   const base = {
-    dreamcallerId: dreamcaller.id,
+    dreamAvatarId: dreamAvatar.id,
     algo: pool.variant,
     seed: pool.seed,
     poolSize: pool.size,
@@ -400,7 +400,7 @@ function logPoolConstructed(
     // `pool.themes` as `["<algo>", ...tideDeckIds]`. Logging those ids is the
     // "which tides made up my pool" record — cross-reference them against
     // `data/<algo>.jsonc` to see each tide's theme and cards, which is how you
-    // answer "why does my warrior Dreamcaller have so few warrior cards" without
+    // answer "why does my warrior DreamAvatar have so few warrior cards" without
     // re-running the build.
     const tideDeckIds =
       pool.variant === "tides" ||
@@ -451,18 +451,18 @@ function logPoolConstructed(
 }
 
 /**
- * Build the draft package for one Dreamcaller by generating its pool with the
- * run's selected strategy (see {@link generateDreamcallerPool}), resolving it
+ * Build the draft package for one DreamAvatar by generating its pool with the
+ * run's selected strategy (see {@link generateDreamAvatarPool}), resolving it
  * against the run's name index, and excluding starter cards from both the draft
- * pool and the starter decklist. Deterministic per `(questSeed, dreamcaller.id)`.
+ * pool and the starter decklist. Deterministic per `(questSeed, dreamAvatar.id)`.
  */
-export function buildDreamcallerPackage(
-  dreamcaller: DreamcallerContent,
+export function buildDreamAvatarPackage(
+  dreamAvatar: DreamAvatarContent,
   ctx: RunPoolContext,
   questSeed: string,
-): ResolvedDreamcallerPackage {
-  const pool = generateDreamcallerPool(dreamcaller, ctx, questSeed);
-  logPoolConstructed(dreamcaller, ctx, pool);
+): ResolvedDreamAvatarPackage {
+  const pool = generateDreamAvatarPool(dreamAvatar, ctx, questSeed);
+  logPoolConstructed(dreamAvatar, ctx, pool);
 
   const {
     draftPoolCopiesByCard,
@@ -474,8 +474,8 @@ export function buildDreamcallerPackage(
     // A pool card whose UUID is not in the catalog id index (a card dropped from
     // the catalog). Logged so a production pool stays reconstructable: the
     // variant emitted these ids and the resolver left them out.
-    logEvent("build_dreamcaller_package_unresolved_ids", {
-      dreamcallerId: dreamcaller.id,
+    logEvent("build_dream_avatar_package_unresolved_ids", {
+      dreamAvatarId: dreamAvatar.id,
       algo: pool.variant,
       unresolvedCount: unresolvedIds.length,
       unresolvedIds,
@@ -485,8 +485,8 @@ export function buildDreamcallerPackage(
     // Two distinct pool ids resolved to one card number — impossible under the
     // collision-free id index, so this records a data anomaly (a stale or
     // duplicate id) rather than the same-name merge the id-keyed pool prevents.
-    logEvent("build_dreamcaller_package_id_collision", {
-      dreamcallerId: dreamcaller.id,
+    logEvent("build_dream_avatar_package_id_collision", {
+      dreamAvatarId: dreamAvatar.id,
       algo: pool.variant,
       collidedCardNumbers,
     });
@@ -495,8 +495,8 @@ export function buildDreamcallerPackage(
     // Record which legendaries the pool asked to duplicate so a production
     // pool can be reconstructed: the generator wanted >1 copy, the one-copy
     // legendary cap reduced each to a single copy.
-    logEvent("build_dreamcaller_package_legendary_capped", {
-      dreamcallerId: dreamcaller.id,
+    logEvent("build_dream_avatar_package_legendary_capped", {
+      dreamAvatarId: dreamAvatar.id,
       cappedCount: cappedLegendaryCardNumbers.length,
       cappedLegendaryCardNumbers,
     });
@@ -521,7 +521,7 @@ export function buildDreamcallerPackage(
   const doubledCardCount = countDoubledCards(draftPoolCopiesByCard);
 
   return {
-    dreamcaller,
+    dreamAvatar,
     draftPoolCopiesByCard,
     dreamsignPoolIds: [...ctx.allDreamsignPoolIds],
     mandatoryOnlyPoolSize: draftPoolSize,
@@ -534,20 +534,20 @@ export function buildDreamcallerPackage(
 }
 
 /**
- * Recompute the full `idf3` provenance for one Dreamcaller's pool, resolved
+ * Recompute the full `idf3` provenance for one DreamAvatar's pool, resolved
  * against the run's name index so per-card entries are keyed by card number.
- * Reproduces the exact pool {@link buildDreamcallerPackage} built (same seed and
+ * Reproduces the exact pool {@link buildDreamAvatarPackage} built (same seed and
  * inputs), so the "Why Cards" surface can explain every offered card without the
  * provenance ever being persisted. Returns `null` for non-`idf3` pools (no
  * provenance is produced). Per-card entries for starter cards are dropped, since
  * those never appear as draftable pool cards.
  */
-export function buildDreamcallerProvenance(
-  dreamcaller: DreamcallerContent,
+export function buildDreamAvatarProvenance(
+  dreamAvatar: DreamAvatarContent,
   ctx: RunPoolContext,
   questSeed: string,
 ): Idf3ProvenanceSummary | null {
-  const pool = generateDreamcallerPool(dreamcaller, ctx, questSeed);
+  const pool = generateDreamAvatarPool(dreamAvatar, ctx, questSeed);
   const provenance = pool.idf3Provenance;
   if (provenance === undefined) return null;
 
@@ -587,9 +587,9 @@ export function buildDreamcallerProvenance(
 }
 
 /**
- * Recompute the full seed-growth provenance for one Dreamcaller's pool, resolved
+ * Recompute the full seed-growth provenance for one DreamAvatar's pool, resolved
  * against the run's name index so per-card entries are keyed by card number.
- * Reproduces the exact pool {@link buildDreamcallerPackage} built (same seed and
+ * Reproduces the exact pool {@link buildDreamAvatarPackage} built (same seed and
  * inputs), so the "Why Cards" surface can explain the random seed card and how
  * the pool grew without the provenance ever being persisted. Returns a summary
  * for every affinity-grown variant (`seed`, `pickfit`, `pickearly`, `pickpos`,
@@ -597,12 +597,12 @@ export function buildDreamcallerProvenance(
  * Per-card entries for starter cards are dropped, since those never appear as
  * draftable pool cards.
  */
-export function buildDreamcallerSeedProvenance(
-  dreamcaller: DreamcallerContent,
+export function buildDreamAvatarSeedProvenance(
+  dreamAvatar: DreamAvatarContent,
   ctx: RunPoolContext,
   questSeed: string,
 ): SeedProvenanceSummary | null {
-  const pool = generateDreamcallerPool(dreamcaller, ctx, questSeed);
+  const pool = generateDreamAvatarPool(dreamAvatar, ctx, questSeed);
   const provenance = pool.seedProvenance;
   if (provenance === undefined) return null;
 
@@ -633,10 +633,10 @@ export function buildDreamcallerSeedProvenance(
 }
 
 /**
- * Recompute the full `tides4` tide provenance for one Dreamcaller's pool,
+ * Recompute the full `tides4` tide provenance for one DreamAvatar's pool,
  * resolved against the run's name index so per-card entries and per-tide
  * decklists are keyed by card number. Reproduces the exact pool
- * {@link buildDreamcallerPackage} built (same seed and inputs), so the Pool
+ * {@link buildDreamAvatarPackage} built (same seed and inputs), so the Pool
  * Viewer can show each individual tide deck and the "Why Cards" surface can
  * attribute every offered card to its source tide without the provenance ever
  * being persisted. Returns `null` for non-`tides4` pools. Starter cards (never
@@ -644,12 +644,12 @@ export function buildDreamcallerSeedProvenance(
  * and each tide's `contributedCardCount` is recounted over the dropped-starter
  * pool so it matches what a player actually sees.
  */
-export function buildDreamcallerTides4Provenance(
-  dreamcaller: DreamcallerContent,
+export function buildDreamAvatarTides4Provenance(
+  dreamAvatar: DreamAvatarContent,
   ctx: RunPoolContext,
   questSeed: string,
 ): Tides4ProvenanceSummary | null {
-  const pool = generateDreamcallerPool(dreamcaller, ctx, questSeed);
+  const pool = generateDreamAvatarPool(dreamAvatar, ctx, questSeed);
   const provenance = pool.tides4Provenance;
   if (provenance === undefined) return null;
 
@@ -703,7 +703,7 @@ export function buildDreamcallerTides4Provenance(
   }));
 
   return {
-    dreamcallerId: provenance.dreamcallerId,
+    dreamAvatarId: provenance.dreamAvatarId,
     signatureless: provenance.signatureless,
     borrowedArchetypeName: provenance.borrowedArchetypeName,
     dealSize: provenance.dealSize,
@@ -716,7 +716,7 @@ export function buildDreamcallerTides4Provenance(
 }
 
 /**
- * Loads V2 quest content (cards, Dreamcallers, decklists) and the run pool
+ * Loads V2 quest content (cards, DreamAvatars, decklists) and the run pool
  * context. `poolVariant` (from `?algo=`) selects the pool-construction strategy
  * for the run; it defaults to {@link DEFAULT_POOL_VARIANT}. `draftMode` (from
  * `?algo=`) switches to a deck-fit draft: `"replay"` replays a real record's
@@ -750,7 +750,7 @@ export async function loadQuestContent(
   const poolNeedsTides5 = POOL_VARIANTS_NEEDING_TIDES5.has(poolVariant);
   const [
     cardDatabase,
-    draftDreamcallers,
+    draftDreamAvatars,
     dreamwellCards,
     dreamsignTemplates,
     decklists,
@@ -774,7 +774,7 @@ export async function loadQuestContent(
     _figmentCatalog,
   ] = await Promise.all([
     loadCardsV2Database(),
-    loadDreamcallersV2(),
+    loadDreamAvatarsV2(),
     loadDreamwellCards(),
     loadDreamsignTemplates(),
     loadDecklists(),
@@ -836,7 +836,7 @@ export async function loadQuestContent(
     loadFigmentDatabase().catch(() => undefined),
   ]);
 
-  const dreamcallers: DreamcallerContent[] = draftDreamcallers.map((dc) => ({
+  const dreamAvatars: DreamAvatarContent[] = draftDreamAvatars.map((dc) => ({
     id: dc.id,
     name: dc.name,
     title: dc.title,
@@ -877,14 +877,14 @@ export async function loadQuestContent(
     const tides2Relationships = await loadTides2Relationships(tides2Decks);
     if (tides2Relationships) poolData.tides2Relationships = tides2Relationships;
   }
-  // The `tides3` variant reads its committed artifact (decks + per-Dreamcaller
+  // The `tides3` variant reads its committed artifact (decks + per-DreamAvatar
   // tide pools) from here; every other variant ignores it.
   if (tides3Decks) poolData.tides3Decks = tides3Decks;
-  // The `tides4` variant reads its committed artifact (decks + per-Dreamcaller
+  // The `tides4` variant reads its committed artifact (decks + per-DreamAvatar
   // tide pools) from here; every other variant ignores it.
   if (tides4Decks) poolData.tides4Decks = tides4Decks;
   // The `tides5` variant reads its committed artifact (the known-good-only decks +
-  // per-Dreamcaller tide pools) from here; every other variant ignores it.
+  // per-DreamAvatar tide pools) from here; every other variant ignores it.
   if (tides5Decks) poolData.tides5Decks = tides5Decks;
 
   const poolContext: RunPoolContext = {
@@ -911,7 +911,7 @@ export async function loadQuestContent(
 
   return {
     cardDatabase,
-    dreamcallers,
+    dreamAvatars,
     dreamwellCards,
     dreamsignTemplates,
     dreamscapes,
@@ -934,10 +934,10 @@ export async function loadQuestContent(
 /**
  * Build a {@link ReplayDraftState} for a new quest run in replay mode. Selects
  * a draft record deterministically from the corpus, biased toward records whose
- * served packs contain the Dreamcaller's signature (archetype) cards so the
+ * served packs contain the DreamAvatar's signature (archetype) cards so the
  * player can draft toward that archetype. The salted hash of `questSeed` (the
- * `:replay` salt keeps the selection independent from the per-Dreamcaller
- * pool-gen draw, which uses `${questSeed}:${dreamcaller.id}`) seeds the final
+ * `:replay` salt keeps the selection independent from the per-DreamAvatar
+ * pool-gen draw, which uses `${questSeed}:${dreamAvatar.id}`) seeds the final
  * pick within the matched shortlist, keeping the selection reproducible per
  * seed. When no usable IDF signal is available (no fitModel, no weighted
  * signatures) the selection falls back to a uniform seeded draw.
@@ -945,7 +945,7 @@ export async function loadQuestContent(
  * @throws If `draftRecords` is empty.
  */
 export function buildReplayDraftState(
-  dreamcaller: DreamcallerContent,
+  dreamAvatar: DreamAvatarContent,
   idIndex: Map<string, number>,
   questSeed: string,
   draftRecords: readonly DraftRecord[],
@@ -955,7 +955,7 @@ export function buildReplayDraftState(
     throw new Error("buildReplayDraftState requires at least one draft record");
   }
   const index = selectReplayRecordIndex(
-    dreamcaller.signatureCardIds ?? [],
+    dreamAvatar.signatureCardIds ?? [],
     draftRecords,
     fitModel?.idf,
     hashStringToSeed(`${questSeed}:replay`),
@@ -963,7 +963,7 @@ export function buildReplayDraftState(
   const record = draftRecords[index];
   const packSequence = buildPackSequence(record, idIndex);
   const signatureCardNumbers = resolveCardIds(
-    dreamcaller.signatureCardIds ?? [],
+    dreamAvatar.signatureCardIds ?? [],
     idIndex,
   );
   return createInitialReplayDraftState({

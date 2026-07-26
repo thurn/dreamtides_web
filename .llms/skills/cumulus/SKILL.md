@@ -97,10 +97,10 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 | Pip Badge | Components | 2 | [components/pip-badge.md](components/pip-badge.md) | The compact circled number used in dense card rows and inline rules text for spark or energy values. |
 | Quest Status Bar | Components | 5 | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |
 | Coop Presence Status | Components | 1 | [components/coop-presence-status.md](components/coop-presence-status.md) | The compact, non-interactive app chrome that reports connected room participants from an explicit view-model count. |
-| Battle Status Display | Components | 1 | [components/battle-status-display.md](components/battle-status-display.md) | The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Dreamcaller portrait or loading placeholder at center, and centered current points at right. |
+| Battle Status Display | Components | 1 | [components/battle-status-display.md](components/battle-status-display.md) | The glass status card for one battle participant: centered current and maximum energy at left, a head-focused DreamAvatar portrait or loading placeholder at center, and centered current points at right. |
 | Dreamwell Card | Components | 3 | [components/dreamwell-card.md](components/dreamwell-card.md) | The static landscape card drawn from the Dreamwell: UUID-keyed art, energy grant, name, and complete rules text in one readable object. |
-| Dreamcaller Ability Text | Components | 2 | [components/dreamcaller-ability-text.md](components/dreamcaller-ability-text.md) | The complete Dreamcaller rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals one compact title-free card containing every defined term in glossary-priority order, using Dreamcaller-specific exhaust guidance. |
-| Dreamcaller Portrait | Components | 17 | [components/dreamcaller-portrait.md](components/dreamcaller-portrait.md) | The shared framed and stage-filling Dreamcaller art surface: the transparent full-body cutout in one of six fixed framings. |
+| DreamAvatar Ability Text | Components | 2 | [components/dream-avatar-ability-text.md](components/dream-avatar-ability-text.md) | The complete DreamAvatar rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals one compact title-free card containing every defined term in glossary-priority order, using DreamAvatar-specific exhaust guidance. |
+| DreamAvatar Portrait | Components | 17 | [components/dream-avatar-portrait.md](components/dream-avatar-portrait.md) | The shared framed and stage-filling DreamAvatar art surface: the transparent full-body cutout in one of six fixed framings. |
 | Rich Text | Components | 15 | [components/rich-text.md](components/rich-text.md) | The design system's model for a run of formatted copy. |
 | Rules Text | Components | 10 | [components/rules-text.md](components/rules-text.md) | Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — with definition cards adapted to the exact rules sentence. |
 | Game Card | Components | 26 | [components/game-card.md](components/game-card.md) | The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name. |
@@ -177,7 +177,7 @@ parking lot for a fork created by the current change. A component fork that is
 already present in the tree must be treated as debt to drain: promote it into
 the component family or replace it with an existing component before clearing
 the issue. The case study is the collapsed tide disc in
-[docs/postmortems/2026-07-05-desktop-dreamcaller-select.md](../../../docs/postmortems/2026-07-05-desktop-dreamcaller-select.md),
+[docs/postmortems/2026-07-05-desktop-dream-avatar-select.md](../../../docs/postmortems/2026-07-05-desktop-dream-avatar-select.md),
 which reached three independent declarations of the same diameter across
 three files.
 
@@ -403,7 +403,7 @@ when it clears all five bars below.
    it, or put an early side-by-side in front of the user before the full suite.
 
 Case study for why these five exist:
-[docs/postmortems/2026-07-05-desktop-dreamcaller-select.md](../../../docs/postmortems/2026-07-05-desktop-dreamcaller-select.md).
+[docs/postmortems/2026-07-05-desktop-dream-avatar-select.md](../../../docs/postmortems/2026-07-05-desktop-dream-avatar-select.md).
 
 ## Tuning taste values: the tweaks-panel loop
 
