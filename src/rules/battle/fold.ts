@@ -193,10 +193,10 @@ export interface ChallengeHandoff {
   turnNumber: number;
 }
 
-/** Plain-data cursor for authoritative F0 → F3 Challenge resolution. */
+/** Plain-data cursor for authoritative F0 → F8 Challenge resolution. */
 export interface ChallengeCursor {
   activeSide: BattleSide;
-  /** The next front-rank lane index to resolve (0 through 4). */
+  /** The next front-rank lane index to resolve (0 through 8). */
   nextLane: number;
   /** A turn handoff to perform only after every Challenge lane settles. */
   handoff: ChallengeHandoff | null;

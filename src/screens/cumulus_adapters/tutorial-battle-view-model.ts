@@ -1,5 +1,4 @@
 import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
-import { dreamwellCardModel } from "../../battle/ui/dreamwell-card-model";
 import type { TutorialBattleControllerPlan } from "../../battle/tutorial-battle-controller";
 import type { BattleFoldState } from "../../rules/battle/fold";
 import type { TutorialBattleView } from "../../cumulus/screens/TutorialBattleScreen";
@@ -31,9 +30,6 @@ export function buildTutorialBattleView(
   );
   const prompt = battle.pendingPrompt;
   const presentation = battle.tutorialPresentation ?? null;
-  const dreamwellPromptSource = prompt === null
-    ? null
-    : mobile.dreamwell?.model ?? null;
   const confirmedHumanPrompt = controller.status === "driver" &&
     controller.isCurrentClientDriver &&
     controller.requiresHumanDecision &&
@@ -43,22 +39,6 @@ export function buildTutorialBattleView(
     battle: {
       ...mobile,
       result: null,
-      ...(dreamwellPromptSource === null
-        ? {}
-        : {
-            cardPicker: mobile.cardPicker === null
-              ? null
-              : {
-                  ...mobile.cardPicker,
-                  label: `${mobile.cardPicker.label} — ${dreamwellPromptSource.displaySnapshot.name}`,
-                },
-            choicePrompt: mobile.choicePrompt === null
-              ? null
-              : {
-                  ...mobile.choicePrompt,
-                  label: `${mobile.choicePrompt.label} — ${dreamwellPromptSource.displaySnapshot.name}`,
-                },
-          }),
     },
     ownership: controller.status === "not-tutorial" ? "observer" : controller.status,
     driverClientId: controller.driverClientId,
@@ -75,7 +55,6 @@ export function buildTutorialBattleView(
             }),
           }
         : null,
-    dreamwellPromptSource,
     presentation:
       presentation?.kind === "opponent-play"
         ? (() => {
@@ -83,12 +62,11 @@ export function buildTutorialBattleView(
             return card === undefined || card.definition.cardId !== presentation.cardId
               ? null
               : {
-                  kind: presentation.kind,
-                  cardId: presentation.cardId,
-                  battleCardId: presentation.battleCardId,
-                  cardKind: presentation.cardKind,
-                  model: battleGameCardModel(card),
-                };
+              kind: presentation.kind,
+              cardId: presentation.cardId,
+              battleCardId: presentation.battleCardId,
+              cardKind: presentation.cardKind,
+            };
           })()
         : presentation?.kind === "dreamwell-reveal"
           ? (() => {
@@ -98,11 +76,10 @@ export function buildTutorialBattleView(
               return definition === undefined
                 ? null
                 : {
-                    kind: presentation.kind,
-                    cardId: presentation.cardId,
-                    side: presentation.side,
-                    model: dreamwellCardModel(definition),
-                  };
+              kind: presentation.kind,
+              cardId: presentation.cardId,
+              side: presentation.side,
+            };
             })()
           : null,
     victorySummary:

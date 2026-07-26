@@ -5,3 +5,8 @@ prompt when its candidate set is empty. In browser QA, Echoing Boughs opened
 "Rematerialize an ally from your hand · 0/1" while the player hand contained
 only events; Submit remained unable to resolve the persisted prompt, so the
 normal tutorial workflow could not advance in that room.
+
+The Challenge cursor still traversed four lanes after the battlefield contract
+expanded to nine front-rank slots. A character in F4–F8 could not score or
+resolve a challenge until the cursor's fixed bound was aligned with the shared
+front-rank capacity.

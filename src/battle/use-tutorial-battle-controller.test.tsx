@@ -1,0 +1,98 @@
+// @vitest-environment jsdom
+
+import { act } from "react";
+import { createRoot } from "react-dom/client";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { useTutorialBattleController } from "./use-tutorial-battle-controller";
+import type { FoldState } from "../rules/fold-state";
+
+const mocks = vi.hoisted(() => ({
+  completePresentation: vi.fn(() => Promise.resolve(1)),
+  state: null as FoldState | null,
+}));
+
+vi.mock("../coop/hooks", () => ({
+  useActions: () => ({
+    completeTutorialBattlePresentation: mocks.completePresentation,
+  }),
+  useClientId: () => "tutorial-driver",
+  useConfirmedGameState: () => mocks.state,
+  useConnectedClientIds: () => ["tutorial-driver"],
+}));
+
+function presentationState(): FoldState {
+  return {
+    frontDoor: { phase: "tutorial", journeyId: "journey", tutorial: null },
+    quest: {} as FoldState["quest"],
+    battle: {
+      mode: {
+        kind: "tutorial",
+        tutorialRunId: "tutorial-run",
+        driverClientId: "tutorial-driver",
+        restartNumber: 0,
+        resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
+      },
+      init: {} as never,
+      board: { battleId: "tutorial-battle", result: null } as never,
+      effectQueue: [],
+      pendingPrompt: null,
+      tutorialPresentation: {
+        id: "opponent-play:bc_0042",
+        kind: "opponent-play",
+        cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+        battleCardId: "bc_0042",
+        cardKind: "character",
+      },
+      dawnFired: { player: null, enemy: null },
+    },
+  };
+}
+
+function Harness() {
+  useTutorialBattleController();
+  return null;
+}
+
+beforeEach(() => {
+  (
+    globalThis as typeof globalThis & {
+      IS_REACT_ACT_ENVIRONMENT?: boolean;
+    }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
+  vi.useFakeTimers();
+  mocks.completePresentation.mockClear();
+  mocks.state = presentationState();
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+  document.body.innerHTML = "";
+});
+
+describe("useTutorialBattleController", () => {
+  it("submits the persisted presentation completion only after its three-second dwell", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(<Harness />);
+    });
+    act(() => {
+      vi.advanceTimersByTime(2_999);
+    });
+    expect(mocks.completePresentation).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(mocks.completePresentation).toHaveBeenCalledOnce();
+    expect(mocks.completePresentation).toHaveBeenCalledWith(
+      "opponent-play:bc_0042",
+      "tutorial-battle:tutorial-battle:presentation:opponent-play:bc_0042",
+      "tutorial-ai:tutorial-driver",
+    );
+
+    act(() => root.unmount());
+  });
+});

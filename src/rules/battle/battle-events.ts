@@ -39,7 +39,7 @@ import type {
   BattleResult,
   BattleSide,
 } from "../../battle/types";
-import { frontRankSlotId, rankSlotIds } from "../../battle/types";
+import { FRONT_RANK_SLOTS, frontRankSlotId, rankSlotIds } from "../../battle/types";
 import type { BattleCommand, BattleDebugEdit } from "../../battle/debug/commands";
 import type {
   BattleModifier,
@@ -1365,8 +1365,8 @@ function settleTemporaryDreamwellEffects(
   return edits;
 }
 
-/** The four fixed front-rank lanes the authoritative Challenge traverses. */
-const CHALLENGE_LANE_COUNT = 4;
+/** Every fixed front-rank lane the authoritative Challenge traverses. */
+const CHALLENGE_LANE_COUNT = FRONT_RANK_SLOTS;
 
 /**
  * Converts an intent that enters Challenge into the first cursor step. A direct

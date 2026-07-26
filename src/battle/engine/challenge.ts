@@ -58,7 +58,7 @@ export interface ChallengeInput {
 }
 
 export interface ChallengeResolution {
-  /** Per-lane outcome, `F0`→`F3` in order. */
+  /** Per-lane outcome, `F0`→`F8` in order. */
   lanes: readonly BattleLaneJudgment[];
   /** ADJUST_SCORE + MOVE_CARD_TO_ZONE(void) edits that commit the outcome. */
   edits: BattleDebugEdit[];
@@ -158,7 +158,7 @@ export function hasCombatKeyword(
 
 /**
  * Resolves the Challenge phase for one active side (rules §Challenge phase
- * resolution). Lanes `F0`→`F3` are resolved in order. Pure: it never mutates
+ * resolution). Lanes `F0`→`F8` are resolved in order. Pure: it never mutates
  * `state`.
  */
 /** One past the highest occupied front-rank index, or 0 when the rank is empty. */

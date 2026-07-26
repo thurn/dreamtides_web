@@ -6,8 +6,12 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../CumulusRoot";
 import { TutorialBattleScreen, type TutorialBattleView } from "./TutorialBattleScreen";
 
+const mobileBattleProps = vi.fn();
 vi.mock("./MobileBattleScreen", () => ({
-  MobileBattleScreen: () => <main data-test-mobile-battle="" />,
+  MobileBattleScreen: (props: unknown) => {
+    mobileBattleProps(props);
+    return <main data-test-mobile-battle="" />;
+  },
 }));
 
 const interactions = {
@@ -31,7 +35,6 @@ function view(
     driverClientId: "driver-client",
     manualControls: false,
     foresee: null,
-    dreamwellPromptSource: null,
     presentation: null,
     victorySummary: null,
     terminalRestartAvailable: false,
@@ -67,6 +70,7 @@ function mount(
 
 afterEach(() => {
   document.body.innerHTML = "";
+  mobileBattleProps.mockClear();
 });
 
 describe("TutorialBattleScreen", () => {
@@ -119,38 +123,23 @@ describe("TutorialBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("presents an opponent card by UUID while its authoritative dwell is active", () => {
+  it("keeps an opponent card in the battlefield while its authoritative dwell is active", () => {
     const { container, root } = mount(view({
       presentation: {
         kind: "opponent-play",
         cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
         battleCardId: "enemy-card-1",
         cardKind: "character",
-        model: {
-          cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8" as never,
-          displaySnapshot: {
-            id: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8" as never,
-            name: "Fixture" as never,
-            cardType: "Character",
-            subtype: "",
-            cardNumber: 1,
-            isStarter: true,
-            energyCost: 1,
-            spark: 1,
-            isFast: false,
-            renderedText: "",
-            imageNumber: 1,
-            artOwned: false,
-          },
-        },
       },
     }));
 
-    expect(container.querySelector('[data-tutorial-opponent-play-reveal]'))
-      .not.toBeNull();
-    expect(container.querySelector('[data-tutorial-presentation-card-id]')
-      ?.getAttribute("data-tutorial-presentation-card-id"))
-      .toBe("5a980eff-6ec7-44d8-9977-b98e66bbc2c8");
+    expect(container.querySelector('[role="dialog"]')).toBeNull();
+    expect(container.querySelector('[data-tutorial-opponent-play-reveal]')).toBeNull();
+    expect(mobileBattleProps).toHaveBeenLastCalledWith(expect.objectContaining({
+      viewport: "contained",
+    }));
+    expect(container.querySelector<HTMLElement>("[data-tutorial-live-battle]")?.style)
+      .toMatchObject({ position: "fixed", width: "100vw", height: "100dvh" });
 
     act(() => root.unmount());
   });

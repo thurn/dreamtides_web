@@ -312,7 +312,11 @@ function arrangeTutorialHandoff(content: QuestContent, board: BattleMutableState
   board.sides.player.maxEnergy = 5;
   board.sides.player.score = 0;
   board.sides.player.hand = [player510, player516, player517];
-  board.sides.player.frontRank = { F0: playerStarter, F1: null, F2: null, F3: null };
+  // The authored tutorial's compact 2/3 formation is centered in the visual
+  // 9/10 formation. Preserve those rendered lanes when its cards enter the
+  // rules-engine board: F0 is the authored center front cell and B1 is the
+  // authored right-center back cell.
+  board.sides.player.frontRank = { F0: null, F1: null, F2: null, F3: null, F4: playerStarter, F5: null, F6: null, F7: null, F8: null };
   board.sides.player.backRank = { B0: null, B1: null, B2: null, B3: null, B4: null };
   board.sides.player.dreamwellCardIndex = 1;
   board.sides.player.dreamwellDrawnTurn = 3;
@@ -322,8 +326,8 @@ function arrangeTutorialHandoff(content: QuestContent, board: BattleMutableState
   board.sides.enemy.score = 2;
   board.sides.enemy.hand = [enemy514, enemyTwilightHand];
   board.sides.enemy.void = [enemyTwilightVoid];
-  board.sides.enemy.frontRank = { F0: null, F1: null, F2: null, F3: null };
-  board.sides.enemy.backRank = { B0: null, B1: enemyStarter, B2: null, B3: null, B4: null };
+  board.sides.enemy.frontRank = { F0: null, F1: null, F2: null, F3: null, F4: null, F5: null, F6: null, F7: null, F8: null };
+  board.sides.enemy.backRank = { B0: null, B1: null, B2: null, B3: null, B4: null, B5: enemyStarter, B6: null, B7: null, B8: null, B9: null };
   board.sides.enemy.dreamwellCardIndex = 0;
   board.sides.enemy.dreamwellDrawnTurn = 2;
 }

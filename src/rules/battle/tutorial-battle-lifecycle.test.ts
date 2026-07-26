@@ -162,12 +162,16 @@ describe("tutorial battle lifecycle", () => {
     expect(battle.board.sides.enemy).toMatchObject({ currentEnergy: 0, maxEnergy: 5, score: 2, dreamwellCardIndex: 0 });
     expect(battle.init.dreamwellDeck.slice(0, DREAMWELL_SEQUENCE.length).map((card) => card.id))
       .toEqual(DREAMWELL_SEQUENCE);
-    const playerF0 = battle.board.sides.player.frontRank.F0!;
-    const enemyB1 = battle.board.sides.enemy.backRank.B1!;
-    expect(battle.board.cardInstances[playerF0]?.definition.cardId).toBe("e83014d3-9d35-4e80-a1b3-9b25360ad2af");
-    expect(battle.board.cardInstances[enemyB1]?.definition.cardId).toBe("a28ad36d-fa74-4190-a463-7efd3a6233d0");
-    expect(battle.board.cardInstances[playerF0]?.status.isExhausted).toBe(false);
-    expect(battle.board.cardInstances[enemyB1]?.status.isExhausted).toBe(false);
+    const playerF4 = battle.board.sides.player.frontRank.F4!;
+    const enemyB5 = battle.board.sides.enemy.backRank.B5!;
+    // These are the authored tutorial's rendered center cells after its 2/3
+    // formation expands to the persistent 9/10 battlefield.
+    expect(battle.board.cardInstances[playerF4]?.definition.cardId).toBe("e83014d3-9d35-4e80-a1b3-9b25360ad2af");
+    expect(battle.board.cardInstances[enemyB5]?.definition.cardId).toBe("a28ad36d-fa74-4190-a463-7efd3a6233d0");
+    expect(battle.board.cardInstances[playerF4]?.status.isExhausted).toBe(false);
+    expect(battle.board.cardInstances[enemyB5]?.status.isExhausted).toBe(false);
+    expect(Object.keys(battle.board.sides.player.frontRank)).toHaveLength(9);
+    expect(Object.keys(battle.board.sides.enemy.backRank)).toHaveLength(10);
     expect(ids(battle, "player", "hand")).toEqual([
       "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", "4408b942-09a0-4f4e-a403-10c708c6e3c5", "2162742c-09d0-4e62-ae49-0f8f79b45adc",
     ]);
@@ -210,7 +214,7 @@ describe("tutorial battle lifecycle", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const started = begin().state;
     const battle = started.battle!;
-    const frontCardId = battle.board.sides.player.frontRank.F0!;
+    const frontCardId = battle.board.sides.player.frontRank.F4!;
     const backCardId = Object.values(battle.board.cardInstances).find((instance) =>
       instance.controller === "player" &&
       instance.definition.battleCardKind === "character" &&
@@ -247,11 +251,11 @@ describe("tutorial battle lifecycle", () => {
       "BATTLE_COMMAND",
       swap(
         { side: "player", zone: "backRank", slotId: "B0" },
-        { side: "player", zone: "frontRank", slotId: "F0" },
+        { side: "player", zone: "frontRank", slotId: "F4" },
       ),
     );
     expect(legalDusk.outcome).toBe("applied");
-    expect(legalDusk.state.battle?.board.sides.player.frontRank.F0).toBe(backCardId);
+    expect(legalDusk.state.battle?.board.sides.player.frontRank.F4).toBe(backCardId);
     expect(legalDusk.state.battle?.board.sides.player.backRank.B0).toBe(frontCardId);
 
     const playerDay = reduceTutorial(
@@ -259,14 +263,14 @@ describe("tutorial battle lifecycle", () => {
       "BATTLE_COMMAND",
       swap(
         { side: "player", zone: "backRank", slotId: "B0" },
-        { side: "player", zone: "frontRank", slotId: "F0" },
+        { side: "player", zone: "frontRank", slotId: "F4" },
       ),
     );
     expect(playerDay.outcome).toBe("applied");
 
     expect(reduceTutorial(state, "BATTLE_COMMAND", swap(
       { side: "enemy", zone: "backRank", slotId: "B1" },
-      { side: "player", zone: "frontRank", slotId: "F0" },
+      { side: "player", zone: "frontRank", slotId: "F4" },
     )).outcome).toBe("bounced");
     const eventCardId = player.hand.find((id) =>
       battle.board.cardInstances[id]?.definition.battleCardKind === "event",
@@ -290,14 +294,14 @@ describe("tutorial battle lifecycle", () => {
     };
     expect(reduceTutorial(nonCharacterState, "BATTLE_COMMAND", swap(
       { side: "player", zone: "backRank", slotId: "B2" },
-      { side: "player", zone: "frontRank", slotId: "F0" },
+      { side: "player", zone: "frontRank", slotId: "F4" },
     )).outcome).toBe("bounced");
     expect(reduceTutorial(state, "BATTLE_COMMAND", swap(
       { side: "player", zone: "backRank", slotId: "B0" },
       { side: "enemy", zone: "backRank", slotId: "B1" },
     )).outcome).toBe("bounced");
     expect(reduceTutorial(state, "BATTLE_COMMAND", swap(
-      { side: "player", zone: "frontRank", slotId: "F0" },
+      { side: "player", zone: "frontRank", slotId: "F4" },
       { side: "player", zone: "backRank", slotId: "B0" },
     )).outcome).toBe("applied");
     expect(reduceTutorial(state, "BATTLE_COMMAND", swap(
@@ -310,7 +314,7 @@ describe("tutorial battle lifecycle", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const started = begin().state;
     const battle = started.battle!;
-    const battleCardId = battle.board.sides.player.frontRank.F0!;
+    const battleCardId = battle.board.sides.player.frontRank.F4!;
     const instance = battle.board.cardInstances[battleCardId];
     const duskState = {
       ...started,
@@ -337,7 +341,7 @@ describe("tutorial battle lifecycle", () => {
     );
     expect(bankMove.outcome).toBe("applied");
     expect(bankMove.state.battle?.board.sides.player).toMatchObject({
-      frontRank: { F0: null },
+      frontRank: { F4: null },
       backRank: { B1: battleCardId },
     });
 
@@ -387,7 +391,7 @@ describe("tutorial battle lifecycle", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const started = begin().state;
     const battle = started.battle!;
-    const battleCardId = battle.board.sides.player.frontRank.F0!;
+    const battleCardId = battle.board.sides.player.frontRank.F4!;
     expect(battle.board.cardInstances[battleCardId]?.definition.cardId).toBe(
       "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
     );
@@ -405,7 +409,7 @@ describe("tutorial battle lifecycle", () => {
               ...player,
               frontRank: {
                 ...player.frontRank,
-                F0: null,
+                F4: null,
                 F2: battleCardId,
               },
             },
@@ -846,7 +850,7 @@ describe("tutorial battle lifecycle", () => {
     expect(enemyTen.state.battle?.board).toMatchObject({ result: null, forcedResult: null });
     expect(enemyTen.state.battle?.board.sides.enemy.score).toBe(10);
 
-    const playerCardId = initial.board.sides.player.frontRank.F0!;
+    const playerCardId = initial.board.sides.player.frontRank.F4!;
     const playerVictoryState = {
       ...started,
       battle: {
