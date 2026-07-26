@@ -298,6 +298,38 @@ describe("MobileBattleScreen", () => {
     container.remove();
   });
 
+  it("labels the tutorial blocking completion action Continue", () => {
+    const baseView = makeView();
+    const view: MobileBattleView = {
+      ...baseView,
+      activeSide: "enemy",
+      phase: "dusk",
+    };
+    const interactions: MobileBattleInteractions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(view, interactions, {
+      phaseNavigation: "tutorial",
+    });
+
+    expect(
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="tutorial-end-turn"]',
+      )?.textContent,
+    ).toBe("Continue");
+    expect(container.textContent).not.toContain("Done Blocking");
+
+    act(() => root.unmount());
+  });
+
   it("keeps battle-instance status readable on battlefield and hand cards", () => {
     const view = makeView();
     const battlefieldCard = view.player.frontRank[0]?.card;

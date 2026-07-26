@@ -2643,7 +2643,7 @@ function ControlRow({
   readonly layoutBackSlotCount: number;
   readonly phaseNavigation: "both" | "end-turn" | "tutorial" | "hidden";
   readonly perspective: BattlePerspectiveSide;
-  readonly tutorialNextLabel: "End Turn" | "Done Blocking";
+  readonly tutorialNextLabel: "End Turn" | "Continue";
 }) {
   const disabled = interactions?.canInteract !== true;
   const hasAlternateNextControls =
@@ -3494,7 +3494,7 @@ export function MobileBattleScreen({
           perspective={view.perspective}
           tutorialNextLabel={
             view.activeSide === "enemy" && view.phase === "dusk"
-              ? "Done Blocking"
+              ? "Continue"
               : "End Turn"
           }
         />
