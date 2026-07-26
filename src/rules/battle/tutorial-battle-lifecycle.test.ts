@@ -268,6 +268,60 @@ describe("tutorial battle lifecycle", () => {
     ), "client-observer").outcome).toBe("bounced");
   });
 
+  it("folds a long player Day move into the intended visible front-rank slot", () => {
+    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    const started = begin().state;
+    const battle = started.battle!;
+    const battleCardId = battle.board.sides.player.frontRank.F0!;
+    expect(battle.board.cardInstances[battleCardId]?.definition.cardId).toBe(
+      "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+    );
+    const player = battle.board.sides.player;
+    const positioned = {
+      ...started,
+      battle: {
+        ...battle,
+        board: {
+          ...battle.board,
+          phase: "day" as const,
+          sides: {
+            ...battle.board.sides,
+            player: {
+              ...player,
+              frontRank: {
+                ...player.frontRank,
+                F0: null,
+                F2: battleCardId,
+              },
+            },
+          },
+        },
+      },
+    };
+
+    const moved = reduceTutorial(positioned, "BATTLE_COMMAND", {
+      command: {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId,
+          destination: {
+            side: "player",
+            zone: "frontRank",
+            slotId: "F6",
+          },
+        },
+        sourceSurface: "tutorial-player",
+      },
+    });
+
+    expect(moved.outcome).toBe("applied");
+    expect(moved.state.battle?.board.sides.player.frontRank).toMatchObject({
+      F2: null,
+      F6: battleCardId,
+    });
+  });
+
   it("restarts with a new driver and deterministic new restart stream, then exits without quest mutation", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const first = begin();

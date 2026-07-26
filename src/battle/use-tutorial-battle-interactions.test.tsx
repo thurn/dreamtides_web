@@ -9,6 +9,7 @@ import { useTutorialBattleInteractions } from "./use-tutorial-battle-interaction
 import type { BattleCardInstance, BattleInit, BattleMutableState } from "./types";
 import { getLogEntries, resetLog } from "../logging";
 import type { FoldState } from "../rules/fold-state";
+import type { EventOutcome, GameEvent } from "../eventlog/types";
 
 const mocks = vi.hoisted(() => ({
   battlePlayCard: vi.fn(() => Promise.resolve(1)),
@@ -17,6 +18,11 @@ const mocks = vi.hoisted(() => ({
   ),
   resolvePrompt: vi.fn(() => Promise.resolve(1)),
   state: null as FoldState | null,
+  confirmedState: null as FoldState | null,
+  confirmedHead: null as number | null,
+  outcomeListener: null as
+    | ((event: GameEvent, seq: number, outcome: EventOutcome) => void)
+    | null,
 }));
 
 vi.mock("../coop/hooks", () => ({
@@ -26,7 +32,14 @@ vi.mock("../coop/hooks", () => ({
     resolvePrompt: mocks.resolvePrompt,
   }),
   useClientId: () => "driver-client",
+  useConfirmedGameState: () => mocks.confirmedState ?? mocks.state,
+  useConfirmedHead: () => mocks.confirmedHead,
   useConfirmedPromptId: () => null,
+  useEventOutcomes: (
+    listener: (event: GameEvent, seq: number, outcome: EventOutcome) => void,
+  ) => {
+    mocks.outcomeListener = listener;
+  },
   useGameState: () => mocks.state,
 }));
 
@@ -229,6 +242,9 @@ function mount() {
 afterEach(() => {
   latest = null;
   mocks.state = null;
+  mocks.confirmedState = null;
+  mocks.confirmedHead = null;
+  mocks.outcomeListener = null;
   mocks.battlePlayCard.mockClear();
   mocks.battleCommand.mockClear();
   mocks.resolvePrompt.mockClear();
@@ -295,10 +311,11 @@ describe("useTutorialBattleInteractions", () => {
         "battlefield",
       );
     });
-    expect(latest?.interactions.eligibleSlotTargets).toContainEqual({
+    expect(latest?.interactions.eligibleSlotRanks).toEqual(["front"]);
+    expect(latest?.interactions.sourceSlotTarget).toEqual({
       owner: "player",
       rank: "front",
-      slotId: "F1",
+      slotId: "F3",
     });
     await act(async () => {
       latest?.interactions.onSlotDrop({
@@ -316,6 +333,30 @@ describe("useTutorialBattleInteractions", () => {
         REVISIT_INSTANCE_ID,
         "battlefield",
       );
+    });
+    act(() => {
+      latest?.interactions.onBattlefieldDropResolved?.({
+        releasePoint: { clientX: 1077.375, clientY: 439.3125 },
+        candidates: [
+          {
+            target: { owner: "player", rank: "front", slotId: "F3" },
+            rect: {
+              left: 1026.03125,
+              top: 387.96875,
+              width: 102.6875,
+              height: 102.6875,
+              centerX: 1077.375,
+              centerY: 439.3125,
+            },
+            deltaX: 0,
+            deltaY: 0,
+            distanceSquared: 0,
+            containsRelease: true,
+          },
+        ],
+        chosenTarget: { owner: "player", rank: "front", slotId: "F3" },
+        strategy: "direct-hit",
+      });
     });
     await act(async () => {
       latest?.interactions.onSlotDrop({
@@ -343,6 +384,27 @@ describe("useTutorialBattleInteractions", () => {
     });
     expect(getLogEntries()).toContainEqual(
       expect.objectContaining({
+        event: "tutorial_battle_human_drop_resolved",
+        attemptId: expect.stringContaining(":movement:2"),
+        battleCardId: REVISIT_INSTANCE_ID,
+        definitionId: REVISIT_CHARACTER_UUID,
+        source: {
+          owner: "player",
+          rank: "front",
+          slotId: "F1",
+        },
+        eligibleSlotRanks: ["front"],
+        releasePoint: { clientX: 1077.375, clientY: 439.3125 },
+        chosenTarget: {
+          owner: "player",
+          rank: "front",
+          slotId: "F3",
+        },
+        strategy: "direct-hit",
+      }),
+    );
+    expect(getLogEntries()).toContainEqual(
+      expect.objectContaining({
         event: "tutorial_battle_human_move_submitted",
         battleCardId: REVISIT_INSTANCE_ID,
         definitionId: REVISIT_CHARACTER_UUID,
@@ -359,6 +421,52 @@ describe("useTutorialBattleInteractions", () => {
         committedSeq: 59,
       }),
     );
+    const secondCommand = mocks.battleCommand.mock.calls[1]?.[0];
+    mocks.confirmedState = sameTurnRevisitState("F3");
+    mocks.confirmedHead = 59;
+    act(() => {
+      mocks.outcomeListener?.(
+        {
+          type: "BATTLE_COMMAND",
+          payload: { command: secondCommand },
+          actor: "driver-client",
+          clientTimestamp: "2026-07-26T03:38:48.126Z",
+          basedOnSeq: 58,
+          nonce: "driver-client:movement:2",
+        },
+        59,
+        "applied",
+      );
+      root.render(<Harness />);
+    });
+    expect(getLogEntries()).toContainEqual(
+      expect.objectContaining({
+        event: "tutorial_battle_human_move_event_outcome",
+        attemptId: expect.stringContaining(":movement:2"),
+        battleCardId: REVISIT_INSTANCE_ID,
+        definitionId: REVISIT_CHARACTER_UUID,
+        committedSeq: 59,
+        outcome: "applied",
+      }),
+    );
+    expect(getLogEntries()).toContainEqual(
+      expect.objectContaining({
+        event: "tutorial_battle_human_move_folded",
+        attemptId: expect.stringContaining(":movement:2"),
+        battleCardId: REVISIT_INSTANCE_ID,
+        definitionId: REVISIT_CHARACTER_UUID,
+        committedSeq: 59,
+        outcome: "applied",
+        confirmedHead: 59,
+        foldedLocation: {
+          side: "player",
+          zone: "frontRank",
+          slotId: "F3",
+        },
+        foldedAtTarget: true,
+        rejectionReason: null,
+      }),
+    );
 
     act(() => root.unmount());
   });
@@ -373,7 +481,7 @@ describe("useTutorialBattleInteractions", () => {
         "battlefield",
       );
     });
-    expect(latest?.interactions.eligibleSlotTargets).toEqual([]);
+    expect(latest?.interactions.eligibleSlotRanks).toEqual([]);
 
     act(() => {
       latest?.interactions.onBattlefieldDropRejected?.({
@@ -394,7 +502,7 @@ describe("useTutorialBattleInteractions", () => {
         definitionId: REVISIT_CHARACTER_UUID,
         reason: "no-eligible-slot",
         releasePoint: { clientX: 720, clientY: 410 },
-        eligibleSlotTargets: [],
+        eligibleSlotRanks: [],
       }),
     );
 

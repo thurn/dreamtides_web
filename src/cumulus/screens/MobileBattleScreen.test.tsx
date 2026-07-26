@@ -3159,6 +3159,212 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("keeps a long horizontal tutorial drag on the visible destination cell", () => {
+    mockDesktopViewport(true);
+    const definitionUuid = asCardId(
+      "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+    );
+    const baseView = makeView();
+    const baseSourceCard = baseView.player.frontRank[0]?.card;
+    if (baseSourceCard === null || baseSourceCard === undefined) {
+      throw new Error("fixture requires a player front-rank character");
+    }
+    const sourceCard: MobileBattleCardView = {
+      ...baseSourceCard,
+      id: "bc_0007",
+      exhausted: false,
+      model: {
+        ...baseSourceCard.model,
+        cardId: definitionUuid,
+        displaySnapshot: {
+          ...baseSourceCard.model.displaySnapshot,
+          id: definitionUuid,
+        },
+      },
+    };
+    const player: MobileBattleSideView = {
+      ...baseView.player,
+      frontRank: [
+        { id: "F0", card: null },
+        { id: "F1", card: null },
+        { id: "F2", card: sourceCard },
+        { id: "F3", card: null },
+      ],
+      backRank: Array.from({ length: 5 }, (_unused, index) => ({
+        id: `B${String(index)}`,
+        card: null,
+      })),
+    };
+    const view: MobileBattleView = {
+      ...baseView,
+      player,
+      near: player,
+    };
+    const interactions: MobileBattleInteractions = {
+      canInteract: true,
+      nearSide: "player",
+      pendingCardId: sourceCard.id,
+      pendingCardSource: "battlefield",
+      pendingCardOwner: "player",
+      eligibleSlotRanks: ["back", "front"],
+      sourceSlotTarget: {
+        owner: "player",
+        rank: "front",
+        slotId: "F2",
+      },
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onBattlefieldDropRejected: vi.fn(),
+      onBattlefieldDropResolved: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(view, interactions);
+    const battlefieldCard = container.querySelector<HTMLElement>(
+      `[data-battle-card-id="${sourceCard.id}"]`,
+    );
+    const revealSource = battlefieldCard?.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    const playArea = battlefieldCard?.closest<HTMLElement>(
+      "[data-battle-play-area]",
+    );
+    const intendedSlot = container.querySelector<HTMLElement>(
+      '[data-battle-rank="player-front"] [data-battle-slot-id="F6"]',
+    );
+    vi.spyOn(playArea as HTMLElement, "getBoundingClientRect").mockReturnValue({
+      x: 0,
+      y: 300,
+      left: 0,
+      top: 300,
+      right: 1728,
+      bottom: 700,
+      width: 1728,
+      height: 400,
+      toJSON: () => ({}),
+    });
+    vi.spyOn(battlefieldCard as HTMLElement, "getBoundingClientRect")
+      .mockReturnValue({
+        x: 599.28125,
+        y: 387.96875,
+        left: 599.28125,
+        top: 387.96875,
+        right: 701.96875,
+        bottom: 490.65625,
+        width: 102.6875,
+        height: 102.6875,
+        toJSON: () => ({}),
+      });
+    container
+      .querySelectorAll<HTMLElement>(
+        '[data-battle-mobile-drop-kind="slot"][data-battle-mobile-drop-owner="player"]',
+      )
+      .forEach((slot) => {
+        const rank = slot.dataset.battleMobileDropRank;
+        const slotId = slot.dataset.battleMobileDropSlotId;
+        const index = Number.parseInt(slotId?.slice(1) ?? "", 10);
+        const centerX =
+          rank === "front"
+            ? 437.25 + index * 106.6875
+            : 383.90625 + index * 106.6875;
+        const centerY = rank === "front" ? 439.3125 : 546;
+        vi.spyOn(slot, "getBoundingClientRect").mockReturnValue({
+          x: centerX - 51.34375,
+          y: centerY - 51.34375,
+          left: centerX - 51.34375,
+          top: centerY - 51.34375,
+          right: centerX + 51.34375,
+          bottom: centerY + 51.34375,
+          width: 102.6875,
+          height: 102.6875,
+          toJSON: () => ({}),
+        });
+      });
+    Object.defineProperty(document, "elementFromPoint", {
+      configurable: true,
+      value: vi.fn(() => intendedSlot),
+    });
+
+    act(() => {
+      revealSource?.dispatchEvent(
+        new PointerEvent("pointerdown", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 650.625,
+          clientY: 439.3125,
+          pointerId: 43,
+          pointerType: "mouse",
+        }),
+      );
+      battlefieldCard?.dispatchEvent(
+        new PointerEvent("pointermove", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 1077.375,
+          clientY: 439.3125,
+          pointerId: 43,
+          pointerType: "mouse",
+        }),
+      );
+      battlefieldCard?.dispatchEvent(
+        new PointerEvent("pointerup", {
+          bubbles: true,
+          cancelable: true,
+          button: 0,
+          clientX: 1077.375,
+          clientY: 439.3125,
+          pointerId: 43,
+          pointerType: "mouse",
+        }),
+      );
+    });
+
+    expect(interactions.onSlotDrop).toHaveBeenCalledWith({
+      owner: "player",
+      rank: "front",
+      slotId: "F6",
+    });
+    expect(interactions.onBattlefieldDropRejected).not.toHaveBeenCalled();
+    expect(interactions.onBattlefieldDropResolved).toHaveBeenCalledWith(
+      expect.objectContaining({
+        releasePoint: { clientX: 1077.375, clientY: 439.3125 },
+        chosenTarget: {
+          owner: "player",
+          rank: "front",
+          slotId: "F6",
+        },
+        strategy: "direct-hit",
+        candidates: expect.arrayContaining([
+          expect.objectContaining({
+            target: {
+              owner: "player",
+              rank: "front",
+              slotId: "F6",
+            },
+            distanceSquared: 0,
+            containsRelease: true,
+          }),
+          expect.objectContaining({
+            target: {
+              owner: "player",
+              rank: "back",
+              slotId: "B4",
+            },
+            containsRelease: false,
+          }),
+        ]),
+      }),
+    );
+    expect(interactions.onCardDragEnd).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+  });
+
   it("reports a completed battlefield drag when there is no legal cell", () => {
     const interactions: MobileBattleInteractions = {
       canInteract: true,
