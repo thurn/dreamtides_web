@@ -108,6 +108,38 @@ describe("GameCard reveal contract", () => {
     act(() => root.unmount());
   });
 
+  it("omits ordinary Materialize and Void definitions while preserving the Materialized trigger", () => {
+    const { container, root } = mount(
+      <GameCard
+        model={model(
+          card({
+            renderedText:
+              "Materialize a figment from your void. ▸Materialized: Banish a bane.",
+          }),
+        )}
+      />,
+    );
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    const description = document.getElementById(
+      source?.getAttribute("aria-describedby") ?? "",
+    )?.textContent ?? "";
+
+    expect(description).not.toContain(
+      glossary.requireGlossaryEntry(glossary.GLOSSARY_IDS.materialize)
+        .definition,
+    );
+    expect(description).not.toContain(
+      glossary.requireGlossaryEntry(glossary.GLOSSARY_IDS.void).definition,
+    );
+    expect(description).toContain(
+      glossary.requireGlossaryEntry("materialized-trigger").definition,
+    );
+
+    act(() => root.unmount());
+  });
+
   it("stacks the glossary-backed exhausted status before rules-text definitions", async () => {
     const { container, root } = mount(
       <GameCard

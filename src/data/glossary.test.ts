@@ -43,6 +43,8 @@ describe("glossary", () => {
       GLOSSARY_IDS.exhaustCost,
       GLOSSARY_IDS.foresee,
       GLOSSARY_IDS.reclaim,
+      GLOSSARY_IDS.materialize,
+      GLOSSARY_IDS.void,
       GLOSSARY_IDS.nightTrigger,
       GLOSSARY_IDS.essence,
       GLOSSARY_IDS.startingEssence,
