@@ -12,7 +12,6 @@ import {
   type MobileBattleInteractions,
   type MobileBattleView,
 } from "./MobileBattleScreen";
-import { useIsDesktop } from "./use-is-desktop";
 
 export type TutorialBattleOwnership = "driver" | "observer" | "paused-driver-absent" | "terminal";
 
@@ -46,10 +45,7 @@ export function TutorialBattleScreen({
   onRestart,
   onReturnToMainMenu,
 }: TutorialBattleScreenProps): ReactElement {
-  const isDesktop = useIsDesktop();
   const paused = view.ownership === "paused-driver-absent" || view.terminalRestartAvailable;
-  const observing = view.ownership === "observer";
-  const compactOwnership = !isDesktop && !paused;
   return (
     <div
       className="cumulus"
@@ -64,35 +60,12 @@ export function TutorialBattleScreen({
         inspectorVisibility="hidden"
         phaseNavigation={view.manualControls ? "tutorial" : "hidden"}
       />
-      <div
-        data-tutorial-battle-ownership-panel=""
-        style={{
-          position: "fixed",
-          left: `max(var(--safe-area-inset-left), ${token("--space-4")})`,
-          top: `max(var(--safe-area-inset-top), ${token("--space-4")})`,
-          width: compactOwnership
-            ? "min(176px, calc(100vw - var(--space-8)))"
-            : "min(320px, calc(100vw - var(--space-8)))",
-          zIndex: 70,
-          pointerEvents: paused ? "auto" : "none",
-        }}
-      >
-        <GlassPanel
-          eyebrow={compactOwnership ? "Tutorial" : "Tutorial Battle"}
-          title={paused ? "Battle Paused" : observing ? "Observing" : compactOwnership ? "You drive" : "Tutorial Battle"}
-          subtitle={
-            paused
-              ? "The battle driver has left. Restart to take over from the tutorial handoff."
-              : observing
-              ? compactOwnership
-                ? undefined
-                : "Another connected player is driving this tutorial battle."
-              : compactOwnership
-                ? undefined
-                : "You are driving the shared tutorial battle."
-          }
-          headerSpacing={compactOwnership ? "compact" : "regular"}
-          footer={paused ? (
+      {paused ? (
+        <GlassDialog
+          title="Battle Paused"
+          subtitle="The battle driver has left. Restart to take over from the tutorial handoff."
+        >
+          <div style={{ display: "flex", justifyContent: "center" }}>
             <GlassButton
               label="Restart"
               variant="accent"
@@ -100,15 +73,9 @@ export function TutorialBattleScreen({
               testId="tutorial-battle-restart"
               onPress={onRestart}
             />
-          ) : undefined}
-        >
-          {compactOwnership ? null : (
-            <p style={{ margin: 0, color: token("--text-on-glass-muted"), font: token("--t-caption") }}>
-              Driver: {view.driverClientId ?? "Unavailable"}
-            </p>
-          )}
-        </GlassPanel>
-      </div>
+          </div>
+        </GlassDialog>
+      ) : null}
       {view.manualControls && interactions.targetSelectionPrompt !== null ? (
         <div data-tutorial-target-selection="" style={{ position: "fixed", left: "50%", top: `calc(var(--safe-area-inset-top) + ${token("--space-12")})`, transform: "translateX(-50%)", zIndex: 80 }}>
           <GlassPanel eyebrow="Play card" title="Choose target" subtitle={interactions.targetSelectionPrompt} footer={<GlassButton label="Cancel" variant="default" placement="onGlass" testId="tutorial-target-cancel" onPress={() => interactions.onTargetSelectionCancel?.()} />}><span /></GlassPanel>
