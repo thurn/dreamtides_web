@@ -843,7 +843,7 @@ describe("buildTutorialView", () => {
       {
         id: "how-to-play",
         action: "display-how-to-play" as const,
-        text: "Configured instructions.\n\nScore 10 ⍟ to win.",
+        text: "Configured instructions.\n\nScore 10⍟ to win.",
         wait: 0,
       },
       {
@@ -946,7 +946,7 @@ describe("buildTutorialView", () => {
     const played = playedTutorial.battle;
     expect(playedTutorial.howToPlay).toEqual({
       actionId: "how-to-play",
-      text: "Configured instructions.\n\nScore 10 ⍟ to win.",
+      text: "Configured instructions.\n\nScore 10⍟ to win.",
       wait: 0,
       trigger: "player-turn-announcement-complete",
     });

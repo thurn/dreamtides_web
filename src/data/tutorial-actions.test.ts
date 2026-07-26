@@ -159,7 +159,7 @@ describe("parseTutorialActions", () => {
 
   it("preserves authored How to Play copy and rejects blank messages", () => {
     const text =
-      "Play characters to [yellow]challenge[/yellow] and score points (⍟).\n\nScore 10 ⍟ to win.";
+      "Play characters to [yellow]challenge[/yellow] and score points (⍟).\n\nScore 10⍟ to win.";
     expect(
       parseTutorialActions([
         {

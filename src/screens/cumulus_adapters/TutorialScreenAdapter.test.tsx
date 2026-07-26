@@ -60,7 +60,7 @@ const mocks = vi.hoisted(() => ({
         {
           id: "how-to-play",
           action: "display-how-to-play" as const,
-          text: "Configured adapter instructions.\n\nScore 10 ⍟ to win.",
+          text: "Configured adapter instructions.\n\nScore 10⍟ to win.",
           wait: 0,
         },
         {
@@ -325,7 +325,7 @@ describe("TutorialScreenAdapter", () => {
     });
     expect(adapterMocks.props?.view.howToPlay).toEqual({
       actionId: "how-to-play",
-      text: "Configured adapter instructions.\n\nScore 10 ⍟ to win.",
+      text: "Configured adapter instructions.\n\nScore 10⍟ to win.",
       wait: 0,
       trigger: "player-turn-announcement-complete",
     });

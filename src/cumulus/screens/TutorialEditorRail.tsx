@@ -55,7 +55,7 @@ const DEFAULT_HOW_TO_PLAY_CARD_WIDTH = 500;
 const MINIMUM_HOW_TO_PLAY_CARD_WIDTH = 300;
 const HOW_TO_PLAY_CARD_WIDTH_STEP = 50;
 const DEFAULT_HOW_TO_PLAY_TEXT =
-  "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle.";
+  "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10⍟ to win this dream battle.";
 const DEFAULT_SPEECH_BUBBLE: TutorialSpeechBubble = {
   speaker: "mira",
   duration: 3,

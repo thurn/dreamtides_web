@@ -243,7 +243,7 @@ describe("TutorialEditorRail", () => {
     act(() => messageOption?.click());
 
     const expectedText =
-      "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle.";
+      "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10⍟ to win this dream battle.";
     expect(onChange).toHaveBeenLastCalledWith(
       [
         INITIAL_ACTIONS[0],

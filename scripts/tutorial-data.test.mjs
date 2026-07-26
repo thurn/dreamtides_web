@@ -62,7 +62,7 @@ const FIXTURE_ACTIONS = [
     action: "display-how-to-play",
     trigger: "player-turn-announcement-complete",
     cardWidth: 650,
-    text: "Play characters to [yellow]challenge[/yellow] and score points (⍟).\n\nScore 10 ⍟ to win.",
+    text: "Play characters to [yellow]challenge[/yellow] and score points (⍟).\n\nScore 10⍟ to win.",
     wait: 0,
   },
   {

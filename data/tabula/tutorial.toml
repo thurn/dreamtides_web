@@ -69,7 +69,7 @@ wait = 0
 id = "how-to-play"
 action = "display-how-to-play"
 trigger = "player-turn-announcement-complete"
-text = "You can [yellow]materialize[/yellow] characters and then [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10 ⍟ to win this dream battle."
+text = "You can [yellow]materialize[/yellow] characters and then [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10⍟ to win this dream battle."
 wait = 0
 
 [[actions]]
