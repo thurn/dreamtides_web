@@ -24,6 +24,7 @@ const VIEW: MainMenuView = {
   socials: [
     { id: "github", label: "GitHub", glyph: GLYPHS.github },
     { id: "discord", label: "Discord", glyph: GLYPHS.discord },
+    { id: "reddit", label: "Reddit", glyph: GLYPHS.reddit },
   ],
 };
 
@@ -80,6 +81,14 @@ describe("Cumulus MainMenuScreen", () => {
       container.querySelector('[data-testid="main-menu-social-discord"] i')
         ?.className,
     ).toContain("bxl-discord-alt");
+    expect(
+      container.querySelector('[data-testid="main-menu-social-reddit"] i')
+        ?.className,
+    ).toContain("bxl-reddit");
+    expect(
+      container.querySelector<HTMLElement>("[data-main-menu-socials]")?.style
+        .flexDirection,
+    ).toBe("column");
 
     act(() => root.unmount());
   });
@@ -101,13 +110,13 @@ describe("Cumulus MainMenuScreen", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="main-menu-social-discord"]',
+          '[data-testid="main-menu-social-reddit"]',
         )
         ?.click(),
     );
 
     expect(onAction).toHaveBeenCalledWith("dream-codex");
-    expect(onSocial).toHaveBeenCalledWith("discord");
+    expect(onSocial).toHaveBeenCalledWith("reddit");
     act(() => root.unmount());
   });
 
@@ -141,6 +150,10 @@ describe("Cumulus MainMenuScreen", () => {
     expect(actions?.style.width).toBe("280px");
     expect(stack?.style.gap).toBe("0px");
     expect(
+      container.querySelector<HTMLElement>("[data-main-menu-socials]")?.style
+        .flexDirection,
+    ).toBe("row");
+    expect(
       container
         .querySelector("[data-testid='main-menu-action-new-journey']")
         ?.getAttribute("data-main-menu-button-size"),
@@ -153,7 +166,7 @@ describe("Cumulus MainMenuScreen", () => {
       Array.from(container.querySelectorAll("[data-main-menu-socials] button")).map(
         (button) => button.getAttribute("data-glass-variant"),
       ),
-    ).toEqual(["default", "default"]);
+    ).toEqual(["default", "default", "default"]);
 
     act(() => root.unmount());
   });

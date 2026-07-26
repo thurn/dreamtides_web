@@ -14,6 +14,7 @@ const MAIN_ACTION_IDS: ReadonlySet<string> = new Set([
   "quit",
   "github",
   "discord",
+  "reddit",
 ]);
 
 function isTutorialPlayerBackSlotId(value: unknown): value is string {

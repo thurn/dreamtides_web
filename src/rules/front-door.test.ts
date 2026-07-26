@@ -155,7 +155,7 @@ describe("front-door reducer", () => {
     const start = genesisFoldState(GENESIS);
     const result = reduceGameEvent(
       start,
-      event("FRONT_DOOR_ACTION", { surface: "main", actionId: "github" }),
+      event("FRONT_DOOR_ACTION", { surface: "main", actionId: "reddit" }),
       context(1),
     );
 

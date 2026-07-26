@@ -155,6 +155,8 @@ export const GLYPHS = {
   github: g("bxl bxl-github"),
   /** Discord brand mark from the locally vendored Boxicons logos font. */
   discord: g("bxl bxl-discord-alt"),
+  /** Reddit brand mark from the locally vendored Boxicons logos font. */
+  reddit: g("bxl bxl-reddit"),
 
   // Named Transfiguration marks. These mirror the card renderer's per-form
   // emblems and keep forge UI callers out of raw icon-font class strings.

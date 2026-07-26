@@ -17,6 +17,7 @@ export function buildMainMenuView(): MainMenuView {
     socials: [
       { id: "github", label: "GitHub", glyph: GLYPHS.github },
       { id: "discord", label: "Discord", glyph: GLYPHS.discord },
+      { id: "reddit", label: "Reddit", glyph: GLYPHS.reddit },
     ],
   };
 }

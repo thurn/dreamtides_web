@@ -17,7 +17,7 @@ export type MainMenuActionId =
   | "about"
   | "quit";
 
-export type MainMenuSocialId = "github" | "discord";
+export type MainMenuSocialId = "github" | "discord" | "reddit";
 
 export interface MainMenuActionView {
   readonly id: MainMenuActionId;
@@ -161,6 +161,7 @@ export function MainMenuScreen({
           right: isDesktop ? EDGE_INLINE : mobileEdgeInline,
           bottom: isDesktop ? EDGE_BOTTOM : mobileEdgeBottom,
           display: "flex",
+          flexDirection: isDesktop ? "row" : "column",
           gap: token("--space-4"),
         }}
       >

@@ -3100,7 +3100,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "The card's headline. Plain text — resolve names before display."
+      "description": "The card's headline. Resolve names before display; canonical rules symbols\nrender as their inline icons."
     },
     {
       "name": "body",
@@ -3108,7 +3108,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "The reveal copy, as a {@link RichText} value (plain / rules / note / stack).",
+      "description": "The reveal copy, as a {@link RichText} value (plain / rules / note / stack).\nCanonical rules symbols render as their inline icons in every text kind.",
       "nested": {
         "name": "RichText",
         "fields": [
@@ -3160,7 +3160,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Small mono/uppercase overline above the title, on the glass card.\nSmall mono/uppercase overline above the title."
+      "description": "Small mono/uppercase overline above the title; rules symbols render as icons."
     },
     {
       "name": "subtitle",
@@ -3168,7 +3168,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "An epithet under the name — a smaller serif line in white, mirroring the\nDream Avatar-select name/epithet pairing. Plain text; resolve before display.\nThe resident guide / boss title under the place headline.\nAn epithet under the name — a smaller serif subtitle in white, mirroring\nthe Dream Avatar-select name/epithet pairing. Plain text; resolve before\ndisplay."
+      "description": "An epithet under the name — a smaller serif line in white, mirroring the\nDream Avatar-select name/epithet pairing. Resolve before display; rules\nsymbols render as icons.\nThe resident guide / boss title; rules symbols render as icons.\nAn epithet under the name — a smaller serif subtitle in white, mirroring\nthe Dream Avatar-select name/epithet pairing. Resolve before display;\nrules symbols render as icons."
     },
     {
       "name": "glyph",

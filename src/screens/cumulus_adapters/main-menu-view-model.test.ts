@@ -18,8 +18,10 @@ describe("buildMainMenuView", () => {
     expect(view.socials.map(({ id, label }) => [id, label])).toEqual([
       ["github", "GitHub"],
       ["discord", "Discord"],
+      ["reddit", "Reddit"],
     ]);
     expect(view.socials[0]?.glyph).toContain("bxl-github");
     expect(view.socials[1]?.glyph).toContain("bxl-discord-alt");
+    expect(view.socials[2]?.glyph).toContain("bxl-reddit");
   });
 });

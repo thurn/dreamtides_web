@@ -112,9 +112,9 @@ describe("MainMenuScreenAdapter", () => {
     expect(
       container.querySelector("[data-main-menu-phase='exiting']"),
     ).not.toBeNull();
-    act(() => screenMocks.onSocial?.("github"));
+    act(() => screenMocks.onSocial?.("reddit"));
     act(() => screenMocks.onExitComplete?.());
-    expect(coopMocks.frontDoorAction).toHaveBeenCalledWith("main", "github");
+    expect(coopMocks.frontDoorAction).toHaveBeenCalledWith("main", "reddit");
     expect(coopMocks.advanceFrontDoor).toHaveBeenCalledWith(
       "mainExiting",
       "event:1",
@@ -129,7 +129,7 @@ describe("MainMenuScreenAdapter", () => {
         }),
         expect.objectContaining({
           event: "main_menu_social_pressed",
-          socialId: "github",
+          socialId: "reddit",
         }),
       ]),
     );

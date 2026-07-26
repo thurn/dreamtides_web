@@ -30,3 +30,7 @@
 .bxl-discord-alt::before {
   content: "\e925";
 }
+
+.bxl-reddit::before {
+  content: "\e96a";
+}
