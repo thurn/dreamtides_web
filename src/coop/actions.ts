@@ -218,6 +218,11 @@ export interface CoopActions {
     actor?: string,
   ) => Promise<number>;
   battleAiDefend: (aiSide: string, actor: string, intentKey?: string) => Promise<number>;
+  completeTutorialBattlePresentation: (
+    presentationId: string,
+    intentKey: string,
+    actor: string,
+  ) => Promise<number>;
   resolvePrompt: (promptId: number, resolution: unknown, intentKey?: string, actor?: string) => Promise<number>;
   setCardNote: (
     instanceId: string,
@@ -494,6 +499,13 @@ export function makeActions(append: AppendFn): CoopActions {
         payload: { aiSide },
         actor,
         ...(intentKey === undefined ? {} : { intentKey }),
+      }),
+    completeTutorialBattlePresentation: (presentationId, intentKey, actor) =>
+      append({
+        type: "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+        payload: { presentationId },
+        intentKey,
+        actor,
       }),
     resolvePrompt: (promptId, resolution, intentKey, actor) =>
       append({

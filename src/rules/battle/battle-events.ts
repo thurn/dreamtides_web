@@ -984,6 +984,28 @@ export function battlePlayCard(
   ]);
   const queue = [...battle.effectQueue];
   scheduleBattleTriggerEdges(queue, before, board, { id: "DEBUG_EDIT", edit: move, sourceSurface: "auto-system" }, intent.targetBattleCardIds);
+  // The tutorial opponent's card remains the authoritative presentation focus
+  // before any of its triggered work is drained. The follow-up event resumes
+  // this exact queued state, so a remount cannot skip or duplicate effects.
+  if (automatic && instance.controller === "enemy") {
+    return {
+      ...state,
+      battle: {
+        ...battle,
+        board,
+        effectQueue: queue,
+        pendingPrompt: null,
+        tutorialPresentation: {
+          id: `opponent-play:${intent.battleCardId}`,
+          kind: "opponent-play",
+          cardId: instance.definition.cardId,
+          battleCardId: intent.battleCardId,
+          cardKind: instance.definition.battleCardKind,
+        },
+        lastTransition: { ...createEmptyTransitionData(), aiChoices: intent.aiChoices },
+      },
+    };
+  }
   let drawIndex = 0;
   const random = (): number => ctx.rng(drawIndex++);
   const nowMs = isoTimestampToMs(ctx.timestamp) ?? 0;
@@ -997,6 +1019,46 @@ export function battlePlayCard(
       lastTransition: { ...createEmptyTransitionData(), aiChoices: intent.aiChoices },
     },
   };
+}
+
+/**
+ * Clears one persisted tutorial reveal and resumes its queued rule effects.
+ * The UI timer only submits this intent; the matching presentation id in the
+ * fold remains the sole gate on shared automatic progression.
+ */
+export function completeTutorialBattlePresentation(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+  actor?: string,
+): FoldState | null {
+  const battle = state.battle;
+  const presentation = battle?.tutorialPresentation ?? null;
+  const mode = battle === null ? null : battleModeOf(battle);
+  if (
+    battle === null ||
+    mode?.kind !== "tutorial" ||
+    actor !== `tutorial-ai:${mode.driverClientId}` ||
+    typeof payload.presentationId !== "string" ||
+    presentation === null ||
+    payload.presentationId !== presentation.id
+  ) {
+    return null;
+  }
+  let drawIndex = 0;
+  const random = (): number => ctx.rng(drawIndex++);
+  const nowMs = isoTimestampToMs(ctx.timestamp) ?? 0;
+  const advanced = advanceEffectQueueWithStream(
+    { ...battle, tutorialPresentation: null },
+    ctx.seq,
+    random,
+    nowMs,
+  );
+  const board = applyBoardEdits(
+    advanced.board,
+    planStaticContributionSettlement(advanced.board, true, random, nowMs),
+  );
+  return { ...state, battle: { ...advanced, board } };
 }
 
 function coerceBattlePlayCardIntent(raw: Record<string, unknown>): BattlePlayCardIntent | null {

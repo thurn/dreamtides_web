@@ -12,6 +12,9 @@ import {
   type TutorialBattleControllerPlan,
 } from "./tutorial-battle-controller";
 
+/** Fixed readable dwell for each persisted tutorial reveal. */
+export const TUTORIAL_BATTLE_PRESENTATION_DWELL_MS = 3_000;
+
 /**
  * React bridge for the pure tutorial controller. It reads only the committed
  * fold and submits normal coop intents; the room log remains the sole flow
@@ -29,34 +32,57 @@ export function useTutorialBattleController(): TutorialBattleControllerPlan {
 
   useEffect(() => {
     if (plan.status !== "driver" || plan.intent === null) return;
+    const intent = plan.intent;
     const battle = state.battle;
     if (battle === null) return;
-    logTutorialIntent(battle.board.battleId, clientId, plan.intent);
+    logTutorialIntent(battle.board.battleId, clientId, intent);
     const actor = `tutorial-ai:${clientId}`;
-    switch (plan.intent.kind) {
+    switch (intent.kind) {
+      case "complete-presentation": {
+        logEvent("tutorial_battle_presentation_dwell_started", {
+          battleId: battle.board.battleId,
+          presentationId: intent.presentationId,
+          dwellMs: TUTORIAL_BATTLE_PRESENTATION_DWELL_MS,
+          reason: intent.reason,
+        });
+        const timeout = window.setTimeout(() => {
+          logEvent("tutorial_battle_presentation_dwell_elapsed", {
+            battleId: battle.board.battleId,
+            presentationId: intent.presentationId,
+            dwellMs: TUTORIAL_BATTLE_PRESENTATION_DWELL_MS,
+            reason: intent.reason,
+          });
+          void actions.completeTutorialBattlePresentation(
+            intent.presentationId,
+            intent.intentKey,
+            actor,
+          ).catch(() => undefined);
+        }, TUTORIAL_BATTLE_PRESENTATION_DWELL_MS);
+        return () => window.clearTimeout(timeout);
+      }
       case "battle-command":
-        void actions.battleCommand(plan.intent.command, plan.intent.intentKey, actor).catch(() => undefined);
+        void actions.battleCommand(intent.command, intent.intentKey, actor).catch(() => undefined);
         return;
       case "battle-play-card":
         void actions.battlePlayCard(
-          plan.intent.battleCardId,
-          plan.intent.targetBattleCardIds,
-          plan.intent.intentKey,
+          intent.battleCardId,
+          intent.targetBattleCardIds,
+          intent.intentKey,
           actor,
-          plan.intent.aiChoices,
+          intent.aiChoices,
         ).catch(() => undefined);
         return;
       case "battle-gesture":
-        void actions.battleGesture(plan.intent.commands, plan.intent.intentKey, actor).catch(() => undefined);
+        void actions.battleGesture(intent.commands, intent.intentKey, actor).catch(() => undefined);
         return;
       case "battle-ai-defend":
-        void actions.battleAiDefend("enemy", actor, plan.intent.intentKey).catch(() => undefined);
+        void actions.battleAiDefend("enemy", actor, intent.intentKey).catch(() => undefined);
         return;
       case "resolve-prompt":
         void actions.resolvePrompt(
-          plan.intent.promptId,
-          plan.intent.resolution,
-          plan.intent.intentKey,
+          intent.promptId,
+          intent.resolution,
+          intent.intentKey,
           actor,
         ).catch(() => undefined);
         return;

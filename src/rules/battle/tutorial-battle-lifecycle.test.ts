@@ -664,10 +664,23 @@ describe("tutorial battle lifecycle", () => {
       battleCardId: ringwatcherId, targetBattleCardIds: [], aiChoices: [],
     }, automaticActor);
     expect(opened.outcome).toBe("applied");
-    const pending = opened.state.battle!.pendingPrompt!;
+    const presentation = opened.state.battle!.tutorialPresentation;
+    expect(presentation).toMatchObject({
+      kind: "opponent-play",
+      battleCardId: ringwatcherId,
+      cardId: "647f5150-b2e0-424b-9480-27557642524e",
+    });
+    const resumed = reduceTutorial(
+      opened.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      { presentationId: presentation?.id },
+      automaticActor,
+    );
+    expect(resumed.outcome).toBe("applied");
+    const pending = resumed.state.battle!.pendingPrompt!;
     const resolution = { promptId: pending.promptId, resolution: { kind: "foresee" } };
-    expect(reduceTutorial(opened.state, "RESOLVE_PROMPT", resolution, spoofedActor).outcome).toBe("bounced");
-    expect(reduceTutorial(opened.state, "RESOLVE_PROMPT", resolution, automaticActor).outcome).toBe("applied");
+    expect(reduceTutorial(resumed.state, "RESOLVE_PROMPT", resolution, spoofedActor).outcome).toBe("bounced");
+    expect(reduceTutorial(resumed.state, "RESOLVE_PROMPT", resolution, automaticActor).outcome).toBe("applied");
   });
 
   it("leaves quest-mode command, play, gesture, and defense actor behavior unchanged", () => {

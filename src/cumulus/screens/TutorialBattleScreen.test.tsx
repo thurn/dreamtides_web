@@ -3,6 +3,7 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { CumulusRoot } from "../CumulusRoot";
 import { TutorialBattleScreen, type TutorialBattleView } from "./TutorialBattleScreen";
 
 vi.mock("./MobileBattleScreen", () => ({
@@ -30,6 +31,7 @@ function view(
     driverClientId: "driver-client",
     manualControls: false,
     foresee: null,
+    presentation: null,
     victorySummary: null,
     terminalRestartAvailable: false,
     ...overrides,
@@ -46,15 +48,17 @@ function mount(
   const root = createRoot(container);
   act(() => {
     root.render(
-      <TutorialBattleScreen
-        view={screenView}
-        interactions={interactions}
-        movementStatusMessage={movementStatusMessage}
-        onMovementStatusDismiss={onMovementStatusDismiss}
-        onForeseeConfirm={() => {}}
-        onRestart={() => {}}
-        onReturnToMainMenu={() => {}}
-      />,
+      <CumulusRoot>
+        <TutorialBattleScreen
+          view={screenView}
+          interactions={interactions}
+          movementStatusMessage={movementStatusMessage}
+          onMovementStatusDismiss={onMovementStatusDismiss}
+          onForeseeConfirm={() => {}}
+          onRestart={() => {}}
+          onReturnToMainMenu={() => {}}
+        />
+      </CumulusRoot>,
     );
   });
   return { container, root };
@@ -110,6 +114,42 @@ describe("TutorialBattleScreen", () => {
     );
     act(() => toast?.click());
     expect(dismiss).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+  });
+
+  it("presents an opponent card by UUID while its authoritative dwell is active", () => {
+    const { container, root } = mount(view({
+      presentation: {
+        kind: "opponent-play",
+        cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+        battleCardId: "enemy-card-1",
+        cardKind: "character",
+        model: {
+          cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8" as never,
+          displaySnapshot: {
+            id: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8" as never,
+            name: "Fixture" as never,
+            cardType: "Character",
+            subtype: "",
+            cardNumber: 1,
+            isStarter: true,
+            energyCost: 1,
+            spark: 1,
+            isFast: false,
+            renderedText: "",
+            imageNumber: 1,
+            artOwned: false,
+          },
+        },
+      },
+    }));
+
+    expect(container.querySelector('[data-tutorial-opponent-play-reveal]'))
+      .not.toBeNull();
+    expect(container.querySelector('[data-tutorial-presentation-card-id]')
+      ?.getAttribute("data-tutorial-presentation-card-id"))
+      .toBe("5a980eff-6ec7-44d8-9977-b98e66bbc2c8");
 
     act(() => root.unmount());
   });

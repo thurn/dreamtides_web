@@ -144,6 +144,7 @@ function captureAllDrafts(): EventDraft[] {
   void actions.battlePlayCard("battle-card-1", []);
   void actions.battleGesture([{}, {}]);
   void actions.battleAiDefend("enemy", "ai:test");
+  void actions.completeTutorialBattlePresentation("opponent-play:card-1", "battle:presentation:opponent-play:card-1", "tutorial-ai:client-a");
   void actions.resolvePrompt(1, {});
   void actions.setCardNote("instance-1", {
     noteId: "n1",

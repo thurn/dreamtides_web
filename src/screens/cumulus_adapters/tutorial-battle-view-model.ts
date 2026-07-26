@@ -29,6 +29,7 @@ export function buildTutorialBattleView(
     },
   );
   const prompt = battle.pendingPrompt;
+  const presentation = battle.tutorialPresentation ?? null;
   const confirmedHumanPrompt = controller.status === "driver" &&
     controller.isCurrentClientDriver &&
     controller.requiresHumanDecision &&
@@ -50,6 +51,21 @@ export function buildTutorialBattleView(
                 : [{ battleCardId, model: battleGameCardModel(card) }];
             }),
           }
+        : null,
+    presentation:
+      presentation?.kind === "opponent-play"
+        ? (() => {
+            const card = battle.board.cardInstances[presentation.battleCardId];
+            return card === undefined || card.definition.cardId !== presentation.cardId
+              ? null
+              : {
+                  kind: presentation.kind,
+                  cardId: presentation.cardId,
+                  battleCardId: presentation.battleCardId,
+                  cardKind: presentation.cardKind,
+                  model: battleGameCardModel(card),
+                };
+          })()
         : null,
     victorySummary:
       battle.board.result === "victory" && controller.status === "terminal" && controller.isCurrentClientDriver && controller.isDriverPresent

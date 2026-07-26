@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
+import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { TransientStatusToast } from "../components/status/TransientStatusToast";
 import { token } from "../primitives/tokens";
 import {
@@ -22,6 +23,14 @@ export interface TutorialBattleView {
   readonly driverClientId: string | null;
   readonly manualControls: boolean;
   readonly foresee: BattleForeseeView | null;
+  readonly presentation: {
+    readonly kind: "opponent-play";
+    /** UUID of the catalog card presented before automation continues. */
+    readonly cardId: string;
+    readonly battleCardId: string;
+    readonly cardKind: "character" | "event";
+    readonly model: GameCardModel;
+  } | null;
   readonly victorySummary: string | null;
   readonly terminalRestartAvailable: boolean;
 }
@@ -65,6 +74,25 @@ export function TutorialBattleScreen({
         inspectorVisibility="hidden"
         phaseNavigation={view.manualControls ? "tutorial" : "hidden"}
       />
+      {view.presentation !== null ? (
+        <GlassDialog
+          title={`Opponent Played a ${view.presentation.cardKind === "character" ? "Character" : "Event"}`}
+          subtitle="Watch the card before the battle continues."
+          presentation="popup"
+          companion={(
+            <div
+              data-tutorial-opponent-play-reveal=""
+              data-tutorial-presentation-card-id={view.presentation.cardId}
+              data-tutorial-presentation-battle-card-id={view.presentation.battleCardId}
+              style={{ width: "min(72vw, 300px)" }}
+            >
+              <GameCard model={view.presentation.model} presentation="full" />
+            </div>
+          )}
+        >
+          <span data-tutorial-presentation-dwell="">The battle continues in a moment.</span>
+        </GlassDialog>
+      ) : null}
       {paused ? (
         <GlassDialog
           title="Battle Paused"

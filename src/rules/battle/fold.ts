@@ -129,6 +129,12 @@ export interface BattleFoldState {
   effectQueue: EffectRun[];
   pendingPrompt: PendingPrompt | null;
   /**
+   * A tutorial-only, event-log-owned presentation checkpoint. The driver may
+   * schedule its completion locally, but no later automatic battle intent can
+   * run until the matching completion event folds.
+   */
+  tutorialPresentation?: TutorialBattlePresentation | null;
+  /**
    * The transition summary for the most recently folded semantic battle
    * intent. It is plain data so AI rationale supplied with BATTLE_PLAY_CARD
    * survives replay and is available to the battle log presentation.
@@ -155,6 +161,17 @@ export interface BattleFoldState {
   dawnFired: DawnFiredMarker;
   /** Once-per-controller-turn guard for authored Dawn scripts. */
   triggerDawnFired?: DawnFiredMarker;
+}
+
+/** One tangible tutorial reveal whose identity survives replay and remounts. */
+export interface TutorialBattlePresentation {
+  readonly id: string;
+  readonly kind: "opponent-play";
+  /** UUID of the catalog card shown at the presentation boundary. */
+  readonly cardId: string;
+  /** Physical battle-card identity for the card that was played. */
+  readonly battleCardId: string;
+  readonly cardKind: "character" | "event";
 }
 
 /** A deferred handoff requested before its outgoing Challenge has completed. */

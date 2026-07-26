@@ -384,6 +384,11 @@ export function routeDomain(
       return foldCase(state, battleEvents.battleGesture(state, payload, ctx, event.actor));
     case "BATTLE_AI_DEFEND":
       return foldCase(state, battleEvents.battleAiDefend(state, payload, ctx, event.actor));
+    case "COMPLETE_TUTORIAL_BATTLE_PRESENTATION":
+      return foldCase(
+        state,
+        battleEvents.completeTutorialBattlePresentation(state, payload, ctx, event.actor),
+      );
 
     // --- in-battle prompt resolution & card notes (touch the battle slice) ---
     case "RESOLVE_PROMPT":

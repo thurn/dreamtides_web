@@ -48,6 +48,12 @@ export type TutorialAutomaticIntent =
       intentKey: string;
       reason: string;
     }
+  | {
+      kind: "complete-presentation";
+      presentationId: string;
+      intentKey: string;
+      reason: string;
+    }
   | { kind: "resolve-prompt"; promptId: number; resolution: PromptResolution; intentKey: string; reason: string };
 
 export interface TutorialBattleControllerPlan {
@@ -86,6 +92,23 @@ export function planTutorialBattleController(
   }
   if (!isCurrentClientDriver) {
     return { status: "observer", driverClientId: mode.driverClientId, isCurrentClientDriver, isDriverPresent, requiresHumanDecision: false, intent: null };
+  }
+
+  const presentation = battle.tutorialPresentation ?? null;
+  if (presentation !== null) {
+    return {
+      status: "driver",
+      driverClientId: mode.driverClientId,
+      isCurrentClientDriver: true,
+      isDriverPresent: true,
+      requiresHumanDecision: false,
+      intent: {
+        kind: "complete-presentation",
+        presentationId: presentation.id,
+        intentKey: `tutorial-battle:${battle.board.battleId}:presentation:${presentation.id}`,
+        reason: presentation.kind,
+      },
+    };
   }
 
   const prompt = battle.pendingPrompt;
