@@ -575,6 +575,10 @@ export function useTutorialBattleInteractions(
     onSlotDrop: (target) => {
       const battleCardId = pendingCard?.id ?? null;
       if (!canAct || board === null || battleCardId === null) return;
+      const movementAttemptId =
+        pendingCard?.source === "battlefield"
+          ? pendingCard.attemptId
+          : `${clientId}:${board.battleId}:movement:untracked`;
       if (target.owner !== "player") return;
       const source = selectBattleCardLocation(board, battleCardId);
       const sourceInstance = board.cardInstances[battleCardId];
@@ -593,9 +597,7 @@ export function useTutorialBattleInteractions(
       if (targetOccupant !== null) {
         submitMovement(
           "swap-battlefield-slots",
-          pendingCard.source === "battlefield"
-            ? pendingCard.attemptId
-            : `${clientId}:${board.battleId}:movement:untracked`,
+          movementAttemptId,
           battleCardId,
           {
             side: "player",
@@ -626,9 +628,7 @@ export function useTutorialBattleInteractions(
       }
       submitMovement(
         "move-card",
-        pendingCard.source === "battlefield"
-          ? pendingCard.attemptId
-          : `${clientId}:${board.battleId}:movement:untracked`,
+        movementAttemptId,
         battleCardId,
         {
           side: "player",

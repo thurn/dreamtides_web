@@ -12,6 +12,7 @@ import {
   MobileBattleScreen,
   type MobileBattleCardView,
   type MobileBattleCardPickerCandidateView,
+  type MobileBattleDropResolution,
   type MobileBattleInteractions,
   type MobileBattleScreenProps,
   type MobileBattleSideView,
@@ -3200,6 +3201,8 @@ describe("MobileBattleScreen", () => {
       player,
       near: player,
     };
+    const onBattlefieldDropResolved =
+      vi.fn<(resolution: MobileBattleDropResolution) => void>();
     const interactions: MobileBattleInteractions = {
       canInteract: true,
       nearSide: "player",
@@ -3217,7 +3220,7 @@ describe("MobileBattleScreen", () => {
       onCardDragEnd: vi.fn(),
       onSlotDrop: vi.fn(),
       onBattlefieldDropRejected: vi.fn(),
-      onBattlefieldDropResolved: vi.fn(),
+      onBattlefieldDropResolved,
       onZoneDrop: vi.fn(),
       onPreviousPhase: vi.fn(),
       onNextPhase: vi.fn(),
@@ -3330,36 +3333,32 @@ describe("MobileBattleScreen", () => {
       slotId: "F6",
     });
     expect(interactions.onBattlefieldDropRejected).not.toHaveBeenCalled();
-    expect(interactions.onBattlefieldDropResolved).toHaveBeenCalledWith(
-      expect.objectContaining({
-        releasePoint: { clientX: 1077.375, clientY: 439.3125 },
-        chosenTarget: {
-          owner: "player",
-          rank: "front",
-          slotId: "F6",
-        },
-        strategy: "direct-hit",
-        candidates: expect.arrayContaining([
-          expect.objectContaining({
-            target: {
-              owner: "player",
-              rank: "front",
-              slotId: "F6",
-            },
-            distanceSquared: 0,
-            containsRelease: true,
-          }),
-          expect.objectContaining({
-            target: {
-              owner: "player",
-              rank: "back",
-              slotId: "B4",
-            },
-            containsRelease: false,
-          }),
-        ]),
-      }),
-    );
+    expect(onBattlefieldDropResolved).toHaveBeenCalledOnce();
+    const resolution = onBattlefieldDropResolved.mock.calls[0]?.[0];
+    expect(resolution).toMatchObject({
+      releasePoint: { clientX: 1077.375, clientY: 439.3125 },
+      chosenTarget: {
+        owner: "player",
+        rank: "front",
+        slotId: "F6",
+      },
+      strategy: "direct-hit",
+    });
+    expect(
+      resolution?.candidates.find(
+        (candidate) => candidate.target.slotId === "F6",
+      ),
+    ).toMatchObject({
+      distanceSquared: 0,
+      containsRelease: true,
+    });
+    expect(
+      resolution?.candidates.find(
+        (candidate) => candidate.target.slotId === "B4",
+      ),
+    ).toMatchObject({
+      containsRelease: false,
+    });
     expect(interactions.onCardDragEnd).toHaveBeenCalledOnce();
 
     act(() => root.unmount());

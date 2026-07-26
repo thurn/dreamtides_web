@@ -2,7 +2,7 @@
 
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "./test-support";
 import type { TutorialBattleControllerPlan } from "./tutorial-battle-controller";
 import { useTutorialBattleInteractions } from "./use-tutorial-battle-interactions";
@@ -239,6 +239,12 @@ function mount() {
   return root;
 }
 
+beforeEach(() => {
+  (
+    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
+});
+
 afterEach(() => {
   latest = null;
   mocks.state = null;
@@ -385,7 +391,7 @@ describe("useTutorialBattleInteractions", () => {
     expect(getLogEntries()).toContainEqual(
       expect.objectContaining({
         event: "tutorial_battle_human_drop_resolved",
-        attemptId: expect.stringContaining(":movement:2"),
+        attemptId: "driver-client:tutorial-battle-uuid:movement:2",
         battleCardId: REVISIT_INSTANCE_ID,
         definitionId: REVISIT_CHARACTER_UUID,
         source: {
@@ -442,7 +448,7 @@ describe("useTutorialBattleInteractions", () => {
     expect(getLogEntries()).toContainEqual(
       expect.objectContaining({
         event: "tutorial_battle_human_move_event_outcome",
-        attemptId: expect.stringContaining(":movement:2"),
+        attemptId: "driver-client:tutorial-battle-uuid:movement:2",
         battleCardId: REVISIT_INSTANCE_ID,
         definitionId: REVISIT_CHARACTER_UUID,
         committedSeq: 59,
@@ -452,7 +458,7 @@ describe("useTutorialBattleInteractions", () => {
     expect(getLogEntries()).toContainEqual(
       expect.objectContaining({
         event: "tutorial_battle_human_move_folded",
-        attemptId: expect.stringContaining(":movement:2"),
+        attemptId: "driver-client:tutorial-battle-uuid:movement:2",
         battleCardId: REVISIT_INSTANCE_ID,
         definitionId: REVISIT_CHARACTER_UUID,
         committedSeq: 59,
