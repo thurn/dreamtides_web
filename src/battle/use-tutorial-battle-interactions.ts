@@ -108,11 +108,65 @@ export function useTutorialBattleInteractions(
       setTargetingCardId(null);
     },
     onTargetSelectionCancel: () => setTargetingCardId(null),
-    onHandCardDrop: () => setPendingCard(null),
-    onCardDragStart: (battleCardId, source) => {
-      if (!canAct || board === null || source !== "battlefield") return;
+    onHandCardDrop: (target) => {
+      const battleCardId =
+        pendingCard?.source === "near-hand" ? pendingCard.id : null;
+      if (!canAct || board === null || battleCardId === null) return;
       const instance = board.cardInstances[battleCardId];
       const location = selectBattleCardLocation(board, battleCardId);
+      if (
+        instance?.controller !== "player" ||
+        location?.side !== "player" ||
+        location.zone !== "hand" ||
+        board.activeSide !== "player" ||
+        board.phase !== "day"
+      ) {
+        setPendingCard(null);
+        return;
+      }
+      const definitionId = instance.definition.cardId;
+      if (
+        definitionId === "4408b942-09a0-4f4e-a403-10c708c6e3c5" ||
+        definitionId === "944e15d2-d680-4ebe-8d18-36826f4b1535"
+      ) {
+        setTargetingCardId(battleCardId);
+        logIntent("target-selection-opened", {
+          battleCardId,
+          definitionId,
+          input: "drag",
+          preferredSlot: target ?? null,
+        });
+        setPendingCard(null);
+        return;
+      }
+      logIntent("play-card", {
+        battleCardId,
+        input: "drag",
+        preferredSlot: target ?? null,
+      });
+      void actions.battlePlayCard(
+        battleCardId,
+        [],
+        `tutorial-battle:${board.battleId}:human-play:${String(board.turnNumber)}:${battleCardId}`,
+      ).catch(() => undefined);
+      setPendingCard(null);
+    },
+    onCardDragStart: (battleCardId, source) => {
+      if (!canAct || board === null) return;
+      const instance = board.cardInstances[battleCardId];
+      const location = selectBattleCardLocation(board, battleCardId);
+      if (
+        source === "near-hand" &&
+        instance?.controller === "player" &&
+        location?.side === "player" &&
+        location.zone === "hand" &&
+        board.activeSide === "player" &&
+        board.phase === "day"
+      ) {
+        setPendingCard({ id: battleCardId, source });
+        return;
+      }
+      if (source !== "battlefield") return;
       const isPlayerCharacterOnBattlefield = instance?.controller === "player" &&
         instance.definition.battleCardKind === "character" &&
         (location?.zone === "frontRank" || location?.zone === "backRank");
