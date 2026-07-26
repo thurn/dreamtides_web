@@ -3,7 +3,6 @@ import { describe, it, expect } from "vitest";
 import {
   contextualizeGlossaryEntry,
   extractGlossaryTerms,
-  orderGlossaryEntriesByPriority,
 } from "./glossary-terms";
 import { GLOSSARY, glossaryRulesTextForms } from "./glossary";
 import type { GlossaryCatalogEntry } from "./glossary";
@@ -56,15 +55,13 @@ describe("extractGlossaryTerms", () => {
     expect(terms.map((entry) => entry.term)).toEqual([pluralEntry.term]);
   });
 
-  it("matches multiple distinct terms in priority order", () => {
+  it("matches multiple distinct terms in first-occurrence order", () => {
     const [t0, t1, t2] = bareTerms;
     const terms = extractGlossaryTerms(
       `${t0.term} a ${t1.term}, then ${t2.term} two cards.`,
     );
     expect(terms.map((entry) => entry.term)).toEqual(
-      [t0, t1, t2]
-        .sort((left, right) => right.priority - left.priority)
-        .map((entry) => entry.term),
+      [t0, t1, t2].map((entry) => entry.term),
     );
   });
 
@@ -92,9 +89,7 @@ describe("extractGlossaryTerms", () => {
       `(${t0.term}) — ${t1.term}: ${t2.term}.`,
     );
     expect(terms.map((entry) => entry.term)).toEqual(
-      [t0, t1, t2]
-        .sort((left, right) => right.priority - left.priority)
-        .map((entry) => entry.term),
+      [t0, t1, t2].map((entry) => entry.term),
     );
   });
 
@@ -124,15 +119,13 @@ describe("extractGlossaryTerms", () => {
     expect(terms.map((entry) => entry.term)).toEqual([arrowTermEntry.term]);
   });
 
-  it("orders heterogeneous mentions by priority", () => {
+  it("orders heterogeneous mentions by their rules-text occurrence", () => {
     const [t0, t1, t2, t3] = bareTerms;
     const terms = extractGlossaryTerms(
       `After ${t0.term}, ${t1.term} a ${t2.term}, then ${t3.term}.`,
     );
     expect(terms.map((entry) => entry.term)).toEqual(
-      [t0, t1, t2, t3]
-        .sort((left, right) => right.priority - left.priority)
-        .map((entry) => entry.term),
+      [t0, t1, t2, t3].map((entry) => entry.term),
     );
   });
 });
@@ -155,20 +148,6 @@ function fixture(
     contexts,
   };
 }
-
-describe("glossary priority", () => {
-  it("orders higher-priority entries first and preserves input order for ties", () => {
-    const firstLow = fixture("first-low", "First Low", "Low.", 10);
-    const high = fixture("high", "High", "High.", 100);
-    const secondLow = fixture("second-low", "Second Low", "Low.", 10);
-
-    expect(
-      orderGlossaryEntriesByPriority([firstLow, high, secondLow]).map(
-        (entry) => entry.id,
-      ),
-    ).toEqual(["high", "first-low", "second-low"]);
-  });
-});
 
 describe("contextual glossary definitions", () => {
   it("explains foresee 1 with its singular card flow", () => {

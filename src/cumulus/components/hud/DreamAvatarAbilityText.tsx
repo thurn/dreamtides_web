@@ -145,7 +145,7 @@ function AbilityDefinitionSource({
  * Complete DreamAvatar ability copy. If the rules text references glossary
  * terms, the whole ability box becomes one semantic reveal source: hovering,
  * focusing, or touch-holding it shows one compact card containing every
- * definition in glossary-priority order.
+ * definition in rules-text occurrence order.
  */
 export function DreamAvatarAbilityText({
   dreamAvatarId,

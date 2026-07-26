@@ -51,18 +51,18 @@ vi.mock("./glossary", () => ({
 import { extractGlossaryTerms } from "./glossary-terms";
 
 describe("extractGlossaryTerms symbol forms", () => {
-  it("extracts one-bolt fast, two-bolt interrupt, and exhaust cost in priority order", () => {
+  it("extracts one-bolt fast, two-bolt interrupt, and exhaust cost in occurrence order", () => {
     expect(extractGlossaryTerms("❖ – Draw. ❖❖ – 2●, ☪: Draw again.")).toEqual([
+      FIXTURES.fast,
       FIXTURES.interrupt,
       FIXTURES.exhaustCost,
-      FIXTURES.fast,
     ]);
   });
 
   it("treats a single bolt as fast rather than interrupt", () => {
     expect(extractGlossaryTerms("❖ – ☪: Draw a card.")).toEqual([
-      FIXTURES.exhaustCost,
       FIXTURES.fast,
+      FIXTURES.exhaustCost,
     ]);
   });
 

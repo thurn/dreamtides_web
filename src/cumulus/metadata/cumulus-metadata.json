@@ -3168,7 +3168,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "An epithet under the name — a smaller serif line in white, mirroring the\nDreamAvatar-select name/epithet pairing. Plain text; resolve before display.\nThe resident guide / boss title under the place headline.\nAn epithet under the name — a smaller serif subtitle in white, mirroring\nthe DreamAvatar-select name/epithet pairing. Plain text; resolve before\ndisplay."
+      "description": "An epithet under the name — a smaller serif line in white, mirroring the\nDream Avatar-select name/epithet pairing. Plain text; resolve before display.\nThe resident guide / boss title under the place headline.\nAn epithet under the name — a smaller serif subtitle in white, mirroring\nthe Dream Avatar-select name/epithet pairing. Plain text; resolve before\ndisplay."
     },
     {
       "name": "glyph",

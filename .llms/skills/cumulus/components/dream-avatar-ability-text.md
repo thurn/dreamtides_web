@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/dream-avatar-ability-tex
 
 Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
-The complete DreamAvatar rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals one compact title-free card containing every defined term in glossary-priority order, using DreamAvatar-specific exhaust guidance.
+The complete DreamAvatar rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals one compact title-free card containing every defined term in rules-text occurrence order, using DreamAvatar-specific exhaust guidance.
 
 ## Props
 

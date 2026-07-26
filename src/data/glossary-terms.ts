@@ -33,8 +33,7 @@ export type RulesTextGlossaryOwner = "card" | "dreamAvatar";
  *   * Each entry appears at most once in the returned array — duplicates are
  *     deduplicated by glossary entry identity so two mentions of `bane` and
  *     `banes` collapse to one panel.
- *   * Entries are ordered by descending TOML priority. Equal-priority entries
- *     retain their first-occurrence order in `text`.
+ *   * Entries retain their first-occurrence order in `text`.
  *   * Empty input or input with no recognized terms returns an empty array.
  *
  * Consumers: the journey hover stack auto-renders one
@@ -87,17 +86,6 @@ function renderContextTemplate(
     if (key === "term") return entry.term;
     return match[Number.parseInt(key, 10)] ?? "";
   });
-}
-
-/**
- * Orders glossary entries for a shared rules-text reveal. JavaScript's stable
- * sort preserves source order for ties, which is the extractor's
- * first-occurrence order.
- */
-export function orderGlossaryEntriesByPriority(
-  entries: readonly GlossaryCatalogEntry[],
-): GlossaryCatalogEntry[] {
-  return [...entries].sort((left, right) => right.priority - left.priority);
 }
 
 /**
@@ -156,7 +144,7 @@ export function extractGlossaryTerms(text: string): GlossaryCatalogEntry[] {
     seen.add(entry);
     ordered.push(entry);
   }
-  return orderGlossaryEntriesByPriority(ordered);
+  return ordered;
 }
 
 /**

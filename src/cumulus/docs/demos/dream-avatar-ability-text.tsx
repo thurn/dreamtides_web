@@ -35,7 +35,7 @@ export const dreamAvatarAbilityTextDemo: CumulusComponent = {
   id: "dream-avatar-ability-text",
   title: "DreamAvatar Ability Text",
   blurb:
-    "The complete DreamAvatar rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals one compact title-free card containing every defined term in glossary-priority order, using DreamAvatar-specific exhaust guidance.",
+    "The complete DreamAvatar rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals one compact title-free card containing every defined term in rules-text occurrence order, using DreamAvatar-specific exhaust guidance.",
   group: "Components",
   docName: "DreamAvatarAbilityText",
   Component: DreamAvatarAbilityTextDemo,
