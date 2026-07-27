@@ -310,7 +310,7 @@ text = "When you [yellow]discover[/yellow] a character, reveal 3 matching from y
 id = "erode"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
-duration = 6
+duration = 10
 bubbleWidth = 300
 match = { kind = "glossary", id = "erode" }
 text = "[yellow]Erode[/yellow] means to put cards from a deck into the void. If the deck is empty, the opposing player scores 3⍟ per card instead."
