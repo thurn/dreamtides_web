@@ -22,6 +22,9 @@ const GENESIS = {
 };
 const RUN_ID = "event:41";
 const FIGMENT_DREAMWELL_CARD_ID = "51caf26d-83bf-45a9-bc80-010d353277db";
+const TUTORIAL_TWILIGHT_CARD_ID =
+  "229ab3a1-3720-41a2-924c-8fe112188f8e";
+const TWILIGHT_OVERRIDE_ID = "play-twilight-after-nomads-verge";
 const CTX: EventContext = {
   seq: 42,
   rng: () => 0.25,
@@ -45,11 +48,11 @@ const STARTERS = [
 const DREAMWELL_SEQUENCE = [
   "02e8ea92-1218-413c-9f0b-4c865a3921d3",
   "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+  FIGMENT_DREAMWELL_CARD_ID,
   "03e4e701-4720-4278-8198-9b7e0514d4cf",
   "5ec17498-9028-4a01-80a0-67c91b03d505",
   "de98477c-e216-4618-bff1-0e24bd982fdb",
   "662b7393-751c-4aa9-8150-5f20b4d176a4",
-  FIGMENT_DREAMWELL_CARD_ID,
   "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
   "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
   "a57f1276-3fb6-4527-b538-953fbace35cf",
@@ -88,7 +91,13 @@ function card(cardNumber: number, id: string): CardData {
     id: asCardId(id),
     name: asCardName(`Synthetic ${String(cardNumber)}`),
     cardNumber,
-    cardType: cardNumber === 516 || cardNumber === 517 || cardNumber >= 518 ? "Event" : "Character",
+    cardType:
+      cardNumber === 516 ||
+      cardNumber === 517 ||
+      cardNumber === 518 ||
+      cardNumber === 519
+        ? "Event"
+        : "Character",
     subtype: "",
     isStarter: true,
     energyCost: 1,
@@ -127,6 +136,20 @@ function content(): QuestContent {
       playerDraws: PLAYER_DRAW_SEQUENCE,
       enemyDraws: ENEMY_DRAW_SEQUENCE,
       dreamwellDraws: DREAMWELL_SEQUENCE,
+      aiActionOverrides: [
+        {
+          id: TWILIGHT_OVERRIDE_ID,
+          trigger: {
+            kind: "after-dreamwell",
+            side: "enemy",
+            cardId: FIGMENT_DREAMWELL_CARD_ID,
+          },
+          action: {
+            kind: "play-card",
+            cardId: TUTORIAL_TWILIGHT_CARD_ID,
+          },
+        },
+      ],
     },
     dreamsignTemplates: [],
     dreamscapes: [],
@@ -433,6 +456,7 @@ describe("tutorial battle lifecycle", () => {
         DREAMWELL_SEQUENCE[2],
         ...DREAMWELL_SEQUENCE.slice(4),
       ],
+      aiActionOverrides: [],
     };
     registerTutorialBattleInitProvider(
       createTutorialBattleInitProvider(tutorialContent),
@@ -485,6 +509,251 @@ describe("tutorial battle lifecycle", () => {
     expect(ids(battle, "player", "hand")).not.toContain(
       "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
     );
+  });
+
+  it("plays and consumes the authored Twilight Troubadour override before heuristic planning", () => {
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
+    const automaticActor = "tutorial-ai:client-a";
+    const plan = (state: FoldState) =>
+      planTutorialBattleController({
+        state,
+        clientId: "client-a",
+        connectedClientIds: ["client-a"],
+      });
+    const applyCommand = (state: FoldState) => {
+      const planned = plan(state);
+      expect(planned.intent?.kind).toBe("battle-command");
+      if (planned.intent?.kind !== "battle-command") {
+        throw new Error("expected an automatic battle command");
+      }
+      const reduced = reduceTutorial(
+        state,
+        "BATTLE_COMMAND",
+        { command: planned.intent.command },
+        automaticActor,
+      );
+      expect(reduced.outcome).toBe("applied");
+      return reduced.state;
+    };
+    const completePresentations = (startingState: FoldState) => {
+      let current = startingState;
+      for (
+        let step = 0;
+        step < 6 && current.battle?.tutorialPresentation !== null;
+        step += 1
+      ) {
+        const presentation = current.battle?.tutorialPresentation;
+        if (presentation === null || presentation === undefined) break;
+        const reduced = reduceTutorial(
+          current,
+          "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+          {
+            presentationId: presentation.id,
+            ...(presentation.kind === "tutorial-guidance"
+              ? { messageIndex: presentation.messageIndex }
+              : {}),
+          },
+          automaticActor,
+        );
+        expect(reduced.outcome).toBe("applied");
+        current = reduced.state;
+      }
+      expect(current.battle?.tutorialPresentation).toBeNull();
+      return current;
+    };
+
+    let state = applyCommand(begin().state);
+    expect(state.battle?.board).toMatchObject({
+      activeSide: "player",
+      phase: "day",
+      turnNumber: 4,
+    });
+    state = reduceTutorial(
+      state,
+      "BATTLE_COMMAND",
+      {
+        command: {
+          id: "DEBUG_EDIT",
+          edit: { kind: "SET_PHASE", phase: "dusk" },
+          sourceSurface: "tutorial-player",
+        },
+      },
+      "client-a",
+    ).state;
+
+    const defensePlan = plan(state);
+    expect(defensePlan.intent?.kind).toBe("battle-ai-defend");
+    if (defensePlan.intent?.kind !== "battle-ai-defend") {
+      throw new Error("expected automatic enemy defense");
+    }
+    state = reduceTutorial(
+      state,
+      "BATTLE_AI_DEFEND",
+      { aiSide: "enemy" },
+      automaticActor,
+    ).state;
+    for (
+      let step = 0;
+      step < 8 &&
+      !(
+        state.battle?.board.activeSide === "enemy" &&
+        state.battle.board.phase === "dreamwell"
+      );
+      step += 1
+    ) {
+      state = completePresentations(state);
+      state = applyCommand(state);
+    }
+    expect(state.battle?.board).toMatchObject({
+      activeSide: "enemy",
+      phase: "dreamwell",
+      turnNumber: 4,
+    });
+    expect(plan(state).intent?.kind).toBe("complete-presentation");
+    state = completePresentations(state);
+    for (let step = 0; step < 3 && state.battle?.board.phase !== "day"; step += 1) {
+      state = applyCommand(state);
+    }
+    expect(state.battle?.board).toMatchObject({
+      activeSide: "enemy",
+      phase: "day",
+      turnNumber: 4,
+      sides: {
+        enemy: {
+          dreamwellDrawnTurn: 4,
+        },
+      },
+    });
+    const dreamwellIndex = state.battle!.board.sides.enemy.dreamwellCardIndex;
+    expect(dreamwellIndex).not.toBeNull();
+    expect(state.battle!.init.dreamwellDeck[dreamwellIndex!]?.id).toBe(
+      FIGMENT_DREAMWELL_CARD_ID,
+    );
+    const twilightBattleCardId = handInstanceId(
+      state.battle!,
+      "enemy",
+      TUTORIAL_TWILIGHT_CARD_ID,
+    );
+
+    const blockedState: FoldState = {
+      ...state,
+      battle: {
+        ...state.battle!,
+        board: {
+          ...state.battle!.board,
+          sides: {
+            ...state.battle!.board.sides,
+            enemy: {
+              ...state.battle!.board.sides.enemy,
+              currentEnergy: 0,
+            },
+          },
+        },
+      },
+    };
+    expect(plan(blockedState).intent).toMatchObject({
+      aiActionOverrideMiss: {
+        overrideId: TWILIGHT_OVERRIDE_ID,
+        triggerCardId: FIGMENT_DREAMWELL_CARD_ID,
+        actionCardId: TUTORIAL_TWILIGHT_CARD_ID,
+        reason: "insufficient-energy",
+      },
+    });
+
+    const unregisteredCardId = "00000000-0000-4000-8000-000000000201";
+    const unregisteredState: FoldState = {
+      ...state,
+      battle: {
+        ...state.battle!,
+        tutorialAiActionOverrides: [
+          {
+            ...state.battle!.tutorialAiActionOverrides![0],
+            action: { kind: "play-card", cardId: unregisteredCardId },
+          },
+        ],
+        board: {
+          ...state.battle!.board,
+          cardInstances: {
+            ...state.battle!.board.cardInstances,
+            [twilightBattleCardId]: {
+              ...state.battle!.board.cardInstances[twilightBattleCardId],
+              definition: {
+                ...state.battle!.board.cardInstances[twilightBattleCardId]
+                  .definition,
+                cardId: unregisteredCardId,
+              },
+            },
+          },
+        },
+      },
+    };
+    expect(
+      reduceTutorial(
+        unregisteredState,
+        "BATTLE_PLAY_CARD",
+        {
+          battleCardId: twilightBattleCardId,
+          targetBattleCardIds: [],
+          aiChoices: [],
+          tutorialAiActionOverrideId: TWILIGHT_OVERRIDE_ID,
+        },
+        automaticActor,
+      ).outcome,
+    ).toBe("bounced");
+
+    const planned = plan(state);
+
+    expect(planned.intent).toMatchObject({
+      kind: "battle-play-card",
+      battleCardId: twilightBattleCardId,
+      tutorialAiActionOverrideId: TWILIGHT_OVERRIDE_ID,
+      reason: "enemy-scripted-day-play",
+      aiChoices: [
+        {
+          choice: "PLAY_CARD",
+          battleCardId: twilightBattleCardId,
+        },
+      ],
+    });
+    if (planned.intent?.kind !== "battle-play-card") {
+      throw new Error("expected a scripted tutorial play");
+    }
+    expect(planned.intent.aiChoices[0]?.rationale).toContain(
+      TWILIGHT_OVERRIDE_ID,
+    );
+    const played = reduceTutorial(
+      state,
+      "BATTLE_PLAY_CARD",
+      {
+        battleCardId: planned.intent.battleCardId,
+        targetBattleCardIds: planned.intent.targetBattleCardIds,
+        aiChoices: planned.intent.aiChoices,
+        characterDestination: planned.intent.characterDestination,
+        tutorialAiActionOverrideId:
+          planned.intent.tutorialAiActionOverrideId,
+      },
+      "tutorial-ai:client-a",
+    );
+
+    expect(played.outcome).toBe("applied");
+    expect(
+      Object.values(played.state.battle!.board.sides.enemy.backRank),
+    ).toContain(twilightBattleCardId);
+    expect(
+      played.state.battle?.consumedTutorialAiActionOverrideIds,
+    ).toEqual([TWILIGHT_OVERRIDE_ID]);
+    expect(played.state.battle?.lastTransition?.logEvents).toHaveLength(1);
+    expect(played.state.battle?.lastTransition?.logEvents[0]).toMatchObject({
+      event: "battle_ai_action_override_applied",
+      fields: {
+        overrideId: TWILIGHT_OVERRIDE_ID,
+        triggerCardId: FIGMENT_DREAMWELL_CARD_ID,
+        actionCardId: TUTORIAL_TWILIGHT_CARD_ID,
+        battleCardId: twilightBattleCardId,
+      },
+    });
   });
 
   it("allows player battlefield swaps during Day and a back-to-front swap during enemy Dusk", () => {

@@ -19,6 +19,7 @@ import type {
   BattleTransitionData,
   FrontRankSlotId,
 } from "../../battle/types";
+import type { TutorialBattleAiActionOverride } from "../../types/tutorial";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
 import { selectBattleTriggeredEffectSteps } from "./battle-card-effects-table";
 import type { ActivePrompt } from "./effect-runner-core";
@@ -156,6 +157,10 @@ export interface BattleFoldState {
     activeSide: BattleSide;
     turnNumber: number;
   };
+  /** Authored one-shot actions which may preempt tutorial heuristic planning. */
+  tutorialAiActionOverrides?: readonly TutorialBattleAiActionOverride[];
+  /** Override ids committed by their matching semantic battle action. */
+  consumedTutorialAiActionOverrideIds?: readonly string[];
   /**
    * Per-side once-per-turn exhaustion-clear guard. The reducer stamps the
    * outgoing side's turn number when a committed handoff clears all in-play

@@ -50,6 +50,72 @@ function validateCardDrawList(value, field) {
   return [...value];
 }
 
+function validateTutorialBattleAiActionOverrides(value) {
+  if (!Array.isArray(value)) {
+    throw invalid("Tutorial battle aiActionOverrides must be an array.");
+  }
+  const overrides = [];
+  const ids = new Set();
+  for (const candidate of value) {
+    if (
+      candidate === null ||
+      typeof candidate !== "object" ||
+      Array.isArray(candidate)
+    ) {
+      throw invalid(
+        "Tutorial battle aiActionOverrides entries must be tables.",
+      );
+    }
+    const { id, trigger, action } = candidate;
+    if (typeof id !== "string" || !ACTION_ID_PATTERN.test(id)) {
+      throw invalid(
+        "Tutorial battle AI action override ids must use lowercase kebab-case.",
+      );
+    }
+    if (ids.has(id)) {
+      throw invalid(
+        `Tutorial battle AI action override id ${JSON.stringify(id)} is duplicated.`,
+      );
+    }
+    if (
+      trigger === null ||
+      typeof trigger !== "object" ||
+      Array.isArray(trigger) ||
+      trigger.kind !== "after-dreamwell" ||
+      trigger.side !== "enemy" ||
+      typeof trigger.cardId !== "string" ||
+      !CARD_UUID_PATTERN.test(trigger.cardId)
+    ) {
+      throw invalid(
+        `Tutorial battle AI action override ${JSON.stringify(id)} must have an enemy after-dreamwell trigger with a card UUID.`,
+      );
+    }
+    if (
+      action === null ||
+      typeof action !== "object" ||
+      Array.isArray(action) ||
+      action.kind !== "play-card" ||
+      typeof action.cardId !== "string" ||
+      !CARD_UUID_PATTERN.test(action.cardId)
+    ) {
+      throw invalid(
+        `Tutorial battle AI action override ${JSON.stringify(id)} must have a play-card action with a card UUID.`,
+      );
+    }
+    ids.add(id);
+    overrides.push({
+      id,
+      trigger: {
+        kind: "after-dreamwell",
+        side: "enemy",
+        cardId: trigger.cardId,
+      },
+      action: { kind: "play-card", cardId: action.cardId },
+    });
+  }
+  return overrides;
+}
+
 /** Validate and normalize the playable tutorial-battle draw configuration. */
 export function validateTutorialBattleConfiguration(value) {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
@@ -61,6 +127,9 @@ export function validateTutorialBattleConfiguration(value) {
     dreamwellDraws: validateCardDrawList(
       value.dreamwellDraws,
       "dreamwellDraws",
+    ),
+    aiActionOverrides: validateTutorialBattleAiActionOverrides(
+      value.aiActionOverrides ?? [],
     ),
   };
   if (new Set(battle.dreamwellDraws).size !== battle.dreamwellDraws.length) {

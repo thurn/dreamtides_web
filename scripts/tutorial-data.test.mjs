@@ -16,6 +16,20 @@ const FIXTURE_BATTLE = {
   playerDraws: ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"],
   enemyDraws: ["a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"],
   dreamwellDraws: ["7171ff89-ebe4-42d0-8863-9b4b0531cad2"],
+  aiActionOverrides: [
+    {
+      id: "play-card-after-dreamwell",
+      trigger: {
+        kind: "after-dreamwell",
+        side: "enemy",
+        cardId: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+      },
+      action: {
+        kind: "play-card",
+        cardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+      },
+    },
+  ],
 };
 
 const FIXTURE_ACTIONS = [
@@ -144,6 +158,15 @@ describe("tutorial data", () => {
         ],
       }),
     ).toThrow(/must not repeat/u);
+    expect(() =>
+      validateTutorialBattleConfiguration({
+        ...FIXTURE_BATTLE,
+        aiActionOverrides: [
+          FIXTURE_BATTLE.aiActionOverrides[0],
+          FIXTURE_BATTLE.aiActionOverrides[0],
+        ],
+      }),
+    ).toThrow(/duplicated/u);
   });
 
   it("rejects duplicate ids, blank speech, and negative timings", () => {

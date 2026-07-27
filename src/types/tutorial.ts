@@ -73,6 +73,33 @@ export interface TutorialBattleConfiguration {
   readonly enemyDraws: readonly string[];
   /** Complete shared deck prefix, including authored pre-handoff draws. */
   readonly dreamwellDraws: readonly string[];
+  /** One-shot, state-matched actions which take priority over heuristic AI. */
+  readonly aiActionOverrides: readonly TutorialBattleAiActionOverride[];
+}
+
+/** A stable battle-state edge that can select one authored AI action. */
+export interface TutorialBattleAfterDreamwellTrigger {
+  readonly kind: "after-dreamwell";
+  readonly side: "enemy";
+  /** UUID of the Dreamwell card resolved on the current turn. */
+  readonly cardId: string;
+}
+
+/** A semantic play submitted through the ordinary battle play-card event. */
+export interface TutorialBattlePlayCardOverrideAction {
+  readonly kind: "play-card";
+  /** UUID of the card the AI should play from its hand. */
+  readonly cardId: string;
+}
+
+/**
+ * An authored, one-shot AI decision. The first state-matching override in
+ * source order is planned before the heuristic AI.
+ */
+export interface TutorialBattleAiActionOverride {
+  readonly id: string;
+  readonly trigger: TutorialBattleAfterDreamwellTrigger;
+  readonly action: TutorialBattlePlayCardOverrideAction;
 }
 
 /** Presentation event that opens an authored How to Play popup. */

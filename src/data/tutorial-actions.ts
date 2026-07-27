@@ -7,6 +7,7 @@ import type {
   TutorialTriggerDefinition,
   TutorialTriggerEvent,
 } from "../types/tutorial";
+import { parseTutorialBattleAiActionOverrides } from "../types/tutorial-ai-action-overrides";
 import { glossaryEntry } from "./glossary";
 import { parseTutorialInstructionMarkup } from "./tutorial-instruction-markup";
 
@@ -16,7 +17,7 @@ const DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
 
 function parseCardDrawList(
   value: unknown,
-  field: keyof TutorialBattleConfiguration,
+  field: "playerDraws" | "enemyDraws" | "dreamwellDraws",
 ): readonly string[] {
   if (!Array.isArray(value)) {
     throw new Error(
@@ -49,6 +50,9 @@ export function parseTutorialBattleConfiguration(
     dreamwellDraws: parseCardDrawList(
       record.dreamwellDraws,
       "dreamwellDraws",
+    ),
+    aiActionOverrides: parseTutorialBattleAiActionOverrides(
+      record.aiActionOverrides ?? [],
     ),
   };
   if (new Set(battle.dreamwellDraws).size !== battle.dreamwellDraws.length) {

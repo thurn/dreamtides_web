@@ -54,6 +54,7 @@ import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
 import { createEmptyTransitionData } from "../../battle/engine/result";
 import {
   battleTriggerScriptId,
+  isBattleCardSemanticPlayAutomated,
   planStaticContributionSettlement,
 } from "./battle-card-effects-table";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
@@ -94,6 +95,11 @@ import {
 import { hasTemporaryReclaimEligibility } from "./temporary-effects";
 import { planTutorialCharacterReposition } from "./tutorial-reposition";
 import type { TutorialAction } from "../../types/tutorial";
+import {
+  consumeTutorialAiActionOverride,
+  resolveTutorialAiPlayCardOverride,
+} from "../../battle/tutorial-ai-action-overrides";
+import { semanticPlayTargetsAreLegal } from "../../battle/semantic-play";
 
 // ---------------------------------------------------------------------------
 // Battle-init provider seam (BEGIN_BATTLE construction)
@@ -1063,14 +1069,6 @@ function voidPlaySourceIsLegal(board: BattleMutableState, command: BattleCommand
     : board.phase === "dusk";
 }
 
-const STARTER_CARD_IDS = new Set<string>([
-  "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", "647f5150-b2e0-424b-9480-27557642524e",
-  "e83014d3-9d35-4e80-a1b3-9b25360ad2af", "a28ad36d-fa74-4190-a463-7efd3a6233d0",
-  "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
-  "4408b942-09a0-4f4e-a403-10c708c6e3c5", "2162742c-09d0-4e62-ae49-0f8f79b45adc",
-  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba", "944e15d2-d680-4ebe-8d18-36826f4b1535",
-]);
-
 /** Tutorial events are driver-owned; automation may only use its bound actor. */
 function tutorialActorIsAuthorized(
   battle: BattleFoldState,
@@ -1127,6 +1125,7 @@ interface BattlePlayCardIntent {
   targetBattleCardIds: string[];
   aiChoices: BattleAiChoiceTrace[];
   characterDestination: import("../../battle/types").BattleFieldSlotAddress | null;
+  tutorialAiActionOverrideId: string | null;
 }
 
 /** Semantic, all-or-nothing Starter-card play for tutorial and AI clients. */
@@ -1154,12 +1153,24 @@ function battlePlayCardInternal(
   const before = battle.board;
   const instance = before.cardInstances[intent.battleCardId];
   const location = selectBattleCardLocation(before, intent.battleCardId);
+  const scriptedOverride =
+    intent.tutorialAiActionOverrideId === null
+      ? null
+      : automatic || suppressGuidance
+        ? resolveTutorialAiPlayCardOverride(
+          battle,
+          intent.tutorialAiActionOverrideId,
+          intent.battleCardId,
+        )
+        : null;
   if (
     instance === undefined || location?.zone !== "hand" || location.side !== instance.controller ||
-    !STARTER_CARD_IDS.has(instance.definition.cardId) || before.activeSide !== instance.controller ||
+    !isBattleCardSemanticPlayAutomated(instance.definition.cardId) ||
+    (intent.tutorialAiActionOverrideId !== null && scriptedOverride === null) ||
+    before.activeSide !== instance.controller ||
     before.phase !== "day" || instance.definition.isFast ||
     before.sides[instance.controller].currentEnergy < instance.definition.energyCost ||
-    !starterTargetsAreLegal(before, instance.controller, instance.definition.cardId, intent.targetBattleCardIds)
+    !semanticPlayTargetsAreLegal(before, instance.controller, instance.definition.cardId, intent.targetBattleCardIds)
   ) return null;
 
   const character = instance.definition.battleCardKind === "character";
@@ -1223,9 +1234,15 @@ function battlePlayCardInternal(
   // before any of its triggered work is drained. The follow-up event resumes
   // this exact queued state, so a remount cannot skip or duplicate effects.
   if (!suppressGuidance && automatic && instance.controller === "enemy") {
+    const transition = battlePlayCardTransition(
+      battle,
+      intent,
+      instance,
+      scriptedOverride,
+    );
     return {
       ...state,
-      battle: {
+      battle: consumeTutorialAiActionOverride({
         ...battle,
         board,
         effectQueue: queue,
@@ -1237,8 +1254,8 @@ function battlePlayCardInternal(
           battleCardId: intent.battleCardId,
           cardKind: instance.definition.battleCardKind,
         },
-        lastTransition: { ...createEmptyTransitionData(), aiChoices: intent.aiChoices },
-      },
+        lastTransition: transition,
+      }, scriptedOverride?.id ?? null),
     };
   }
   let drawIndex = 0;
@@ -1248,11 +1265,47 @@ function battlePlayCardInternal(
   board = applyBoardEdits(advanced.board, planStaticContributionSettlement(advanced.board, true, random, nowMs));
   return {
     ...state,
-    battle: {
+    battle: consumeTutorialAiActionOverride({
       ...advanced,
       board,
-      lastTransition: { ...createEmptyTransitionData(), aiChoices: intent.aiChoices },
-    },
+      lastTransition: battlePlayCardTransition(
+        battle,
+        intent,
+        instance,
+        scriptedOverride,
+      ),
+    }, scriptedOverride?.id ?? null),
+  };
+}
+
+function battlePlayCardTransition(
+  battle: BattleFoldState,
+  intent: BattlePlayCardIntent,
+  instance: BattleMutableState["cardInstances"][string],
+  scriptedOverride: ReturnType<typeof resolveTutorialAiPlayCardOverride>,
+) {
+  return {
+    ...createEmptyTransitionData(),
+    aiChoices: intent.aiChoices,
+    logEvents:
+      scriptedOverride === null
+        ? []
+        : [
+          {
+            event: "battle_ai_action_override_applied",
+            fields: {
+              battleId: battle.board.battleId,
+              overrideId: scriptedOverride.id,
+              triggerKind: scriptedOverride.trigger.kind,
+              triggerCardId: scriptedOverride.trigger.cardId,
+              actionKind: scriptedOverride.action.kind,
+              actionCardId: scriptedOverride.action.cardId,
+              battleCardId: instance.battleCardId,
+              side: instance.controller,
+              turnNumber: battle.board.turnNumber,
+            },
+          },
+        ],
   };
 }
 
@@ -1392,11 +1445,19 @@ function coerceBattlePlayCardIntent(raw: Record<string, unknown>): BattlePlayCar
   if (aiChoices === null) return null;
   const characterDestination = coerceCharacterDestination(raw.characterDestination);
   if (characterDestination === undefined) return null;
+  const tutorialAiActionOverrideId =
+    raw.tutorialAiActionOverrideId === undefined
+      ? null
+      : isNonEmptyString(raw.tutorialAiActionOverrideId)
+        ? raw.tutorialAiActionOverrideId
+        : undefined;
+  if (tutorialAiActionOverrideId === undefined) return null;
   return {
     battleCardId: raw.battleCardId,
     targetBattleCardIds: [...raw.targetBattleCardIds],
     aiChoices,
     characterDestination,
+    tutorialAiActionOverrideId,
   };
 }
 
@@ -1444,24 +1505,6 @@ function isNullableInteger(value: unknown): value is number | null {
 
 function isNullableFiniteNumber(value: unknown): value is number | null {
   return value === null || (typeof value === "number" && Number.isFinite(value));
-}
-
-function starterTargetsAreLegal(board: BattleMutableState, controller: BattleSide, cardId: string, targets: readonly string[]): boolean {
-  const target = targets[0];
-  if (cardId === "4408b942-09a0-4f4e-a403-10c708c6e3c5") {
-    const instance = target === undefined ? undefined : board.cardInstances[target];
-    const location = target === undefined ? null : selectBattleCardLocation(board, target);
-    return targets.length === 1 && instance !== undefined && instance.controller !== controller &&
-      instance.definition.battleCardKind === "character" && instance.definition.energyCost <= 2 &&
-      location !== null && isBattlefieldZone(location.zone);
-  }
-  if (cardId === "944e15d2-d680-4ebe-8d18-36826f4b1535") {
-    const instance = target === undefined ? undefined : board.cardInstances[target];
-    const location = target === undefined ? null : selectBattleCardLocation(board, target);
-    return targets.length === 1 && instance !== undefined && instance.controller === controller &&
-      instance.definition.battleCardKind === "character" && location !== null && isBattlefieldZone(location.zone);
-  }
-  return targets.length === 0;
 }
 
 /**

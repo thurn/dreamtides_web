@@ -655,6 +655,21 @@ describe("LOAD_STATE", () => {
       ...emptyBattle,
       basicAutomationEnabled: true,
       aiDefenseTurn: { activeSide: "player", turnNumber: 3 },
+      tutorialAiActionOverrides: [
+        {
+          id: "scripted-play",
+          trigger: {
+            kind: "after-dreamwell",
+            side: "enemy",
+            cardId: "51caf26d-83bf-45a9-bc80-010d353277db",
+          },
+          action: {
+            kind: "play-card",
+            cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          },
+        },
+      ],
+      consumedTutorialAiActionOverrideIds: ["scripted-play"],
     };
     expect(apply(start, "LOAD_STATE", { snapshot, battle: validBattle }).battle).toEqual({
       ...validBattle,
@@ -671,6 +686,22 @@ describe("LOAD_STATE", () => {
       ctx(),
     );
     expect(malformed.outcome).toBe("bounced");
+
+    const duplicateConsumption = reduceGameEvent(
+      start,
+      event("LOAD_STATE", {
+        snapshot,
+        battle: {
+          ...validBattle,
+          consumedTutorialAiActionOverrideIds: [
+            "scripted-play",
+            "scripted-play",
+          ],
+        },
+      }),
+      ctx(),
+    );
+    expect(duplicateConsumption.outcome).toBe("bounced");
   });
 
   it("normalizes a missing Challenge cursor and validates a persisted cursor", () => {

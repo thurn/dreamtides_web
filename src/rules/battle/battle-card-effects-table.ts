@@ -109,6 +109,11 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<string, BattleTriggeredEffectScrip
       return [{ kind: "SET_CARD_SPARK_DELTA", battleCardId: target, value: instance.sparkDelta + 3 }];
     } }] },
   },
+  "229ab3a1-3720-41a2-924c-8fe112188f8e": {
+    id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+    textHash: "811c9dc5",
+    triggers: {},
+  },
   [BATTLE_EFFECT_FIXTURE_CARD_ID]: {
     id: BATTLE_EFFECT_FIXTURE_CARD_ID,
     triggers: {
@@ -181,6 +186,11 @@ export function selectBattleTriggeredEffectSteps(
   const script = BATTLE_TRIGGERED_EFFECTS[cardId];
   if (script === undefined) return null;
   return script.triggers[trigger] === undefined ? null : [...script.triggers[trigger]];
+}
+
+/** Whether semantic play may resolve every authored rule on this card. */
+export function isBattleCardSemanticPlayAutomated(cardId: string): boolean {
+  return BATTLE_TRIGGERED_EFFECTS[cardId] !== undefined;
 }
 
 /**

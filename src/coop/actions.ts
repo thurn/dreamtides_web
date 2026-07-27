@@ -210,6 +210,7 @@ export interface CoopActions {
       readonly zone: "backRank";
       readonly slotId: string;
     },
+    tutorialAiActionOverrideId?: string,
   ) => Promise<number>;
   /** Submit an ordered list of battle commands as one all-or-nothing event. */
   battleGesture: (
@@ -476,7 +477,7 @@ export function makeActions(append: AppendFn): CoopActions {
         battleCardId,
         destination,
       }),
-    battlePlayCard: (battleCardId, targetBattleCardIds, intentKey, actor, aiChoices, characterDestination) =>
+    battlePlayCard: (battleCardId, targetBattleCardIds, intentKey, actor, aiChoices, characterDestination, tutorialAiActionOverrideId) =>
       append({
         type: "BATTLE_PLAY_CARD",
         payload: {
@@ -484,6 +485,9 @@ export function makeActions(append: AppendFn): CoopActions {
           targetBattleCardIds: [...targetBattleCardIds],
           ...(aiChoices === undefined ? {} : { aiChoices }),
           ...(characterDestination === undefined ? {} : { characterDestination }),
+          ...(tutorialAiActionOverrideId === undefined
+            ? {}
+            : { tutorialAiActionOverrideId }),
         },
         ...(intentKey === undefined ? {} : { intentKey }),
         ...(actor === undefined ? {} : { actor }),

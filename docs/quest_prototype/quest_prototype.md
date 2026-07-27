@@ -128,6 +128,20 @@ When a tutorial request adds a new kind of beat, extend the action type,
 runtime and build-time validators, Tutorial Editor controls, view-model
 mapping, and presentation tests together.
 
+The playable tutorial battle can author one-shot AI decisions in
+`battle.aiActionOverrides`. Each override has a stable id, a UUID-based state
+trigger, and a semantic action. The first matching override takes priority in
+source order. A playable override is consumed in the same room-log event that
+commits the action. A blocked override yields to heuristic planning and records
+its stable reason with the override id and both card UUIDs. Override cards must
+have registered semantic battle automation, so authored rules resolve through
+the ordinary play-card path. The initial trigger is `after-dreamwell`, and the
+initial action is `play-card`; the tutorial uses these to make the enemy play
+card `229ab3a1-3720-41a2-924c-8fe112188f8e` after resolving Dreamwell card
+`51caf26d-83bf-45a9-bc80-010d353277db`. The committed battle transition records
+the override id, trigger card UUID, action card UUID, and concrete battle-card
+instance id.
+
 ## Hidden-Tides Behavior
 
 - Dream Avatar selection is a quest-start choice, not a mid-run site.

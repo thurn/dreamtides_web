@@ -10,6 +10,12 @@ import { buildTrace } from "./ai/trace";
 import type { BattleCommand } from "./debug/commands";
 import { planHandoff } from "./engine/handoff";
 import { isBackRankSlotId } from "./types";
+import type { BattleAiChoiceTrace } from "./types";
+import {
+  planTutorialAiActionOverride,
+  type TutorialAiActionOverrideBlockReason,
+} from "./tutorial-ai-action-overrides";
+import type { TutorialBattleAiActionOverride } from "../types/tutorial";
 import type { PromptResolution } from "../rules/battle/effect-runner-core";
 import { battleModeOf, type PendingPrompt } from "../rules/battle/fold";
 import type { FoldState } from "../rules/fold-state";
@@ -32,7 +38,16 @@ export interface TutorialBattleControllerInput {
   connectedClientIds: readonly string[] | null;
 }
 
-export type TutorialAutomaticIntent =
+export interface TutorialAiActionOverrideMiss {
+  overrideId: string;
+  triggerKind: TutorialBattleAiActionOverride["trigger"]["kind"];
+  triggerCardId: string;
+  actionKind: TutorialBattleAiActionOverride["action"]["kind"];
+  actionCardId: string;
+  reason: TutorialAiActionOverrideBlockReason;
+}
+
+export type TutorialAutomaticIntent = (
   | { kind: "battle-command"; command: BattleCommand; intentKey: string; reason: string }
   | {
       kind: "battle-play-card";
@@ -44,6 +59,7 @@ export type TutorialAutomaticIntent =
         zone: "backRank";
         slotId: `B${number}`;
       };
+      tutorialAiActionOverrideId?: string;
       intentKey: string;
       reason: string;
     }
@@ -60,7 +76,8 @@ export type TutorialAutomaticIntent =
       intentKey: string;
       reason: string;
     }
-  | { kind: "resolve-prompt"; promptId: number; resolution: PromptResolution; intentKey: string; reason: string };
+  | { kind: "resolve-prompt"; promptId: number; resolution: PromptResolution; intentKey: string; reason: string }
+) & { aiActionOverrideMiss?: TutorialAiActionOverrideMiss };
 
 export interface TutorialBattleControllerPlan {
   status: TutorialDriverStatus;
@@ -193,6 +210,81 @@ export function planTutorialBattleController(
   }
 
   if (board.phase === "day") {
+    const scriptedPlan = planTutorialAiActionOverride(battle);
+    if (scriptedPlan.kind === "play-card") {
+      const scripted = scriptedPlan.selection;
+      const instance = board.cardInstances[scripted.battleCardId];
+      if (instance === undefined) {
+        throw new Error(
+          `Tutorial AI override ${scripted.override.id} selected a missing battle card.`,
+        );
+      }
+      const destination = scripted.characterDestination;
+      const destinationSlotId = destination?.slotId ?? null;
+      if (
+        destination !== null &&
+        (destination.side !== "enemy" ||
+          destination.zone !== "backRank" ||
+          destinationSlotId === null ||
+          !isBackRankSlotId(destinationSlotId))
+      ) {
+        throw new Error(
+          `Tutorial AI override ${scripted.override.id} selected an invalid enemy destination.`,
+        );
+      }
+      const trace: BattleAiChoiceTrace = {
+        stage:
+          instance.definition.battleCardKind === "character"
+            ? "character"
+            : "nonCharacter",
+        choice: "PLAY_CARD",
+        battleCardId: scripted.battleCardId,
+        cardName: instance.definition.name,
+        sourceHandIndex: scripted.sourceHandIndex,
+        sourceSlotId: null,
+        targetSlotId: destinationSlotId,
+        heuristicScoreBefore: null,
+        heuristicScoreAfter: null,
+        rationale: `Authored tutorial AI override ${scripted.override.id} matched Dreamwell card ${scripted.override.trigger.cardId}.`,
+        targetBattleCardId: null,
+      };
+      return {
+        status: "driver",
+        driverClientId: mode.driverClientId,
+        isCurrentClientDriver: true,
+        isDriverPresent: true,
+        requiresHumanDecision: false,
+        intent: {
+          kind: "battle-play-card",
+          battleCardId: scripted.battleCardId,
+          targetBattleCardIds: [],
+          aiChoices: [trace],
+          ...(destination === null
+            ? {}
+            : {
+              characterDestination: {
+                side: "enemy",
+                zone: "backRank",
+                slotId: destinationSlotId as `B${number}`,
+              },
+            }),
+          tutorialAiActionOverrideId: scripted.override.id,
+          intentKey: `${key}:enemy-scripted-play:${scripted.override.id}`,
+          reason: "enemy-scripted-day-play",
+        },
+      };
+    }
+    const aiActionOverrideMiss =
+      scriptedPlan.kind === "blocked"
+        ? {
+            overrideId: scriptedPlan.override.id,
+            triggerKind: scriptedPlan.override.trigger.kind,
+            triggerCardId: scriptedPlan.override.trigger.cardId,
+            actionKind: scriptedPlan.override.action.kind,
+            actionCardId: scriptedPlan.override.action.cardId,
+            reason: scriptedPlan.reason,
+          }
+        : undefined;
     const action = planNextAction(forwardModelFromState(board, "enemy"), {
       deadlineMs: Number.POSITIVE_INFINITY,
       nowMs: 0,
@@ -221,6 +313,9 @@ export function planTutorialBattleController(
           targetBattleCardIds: targets,
           aiChoices: [trace],
           ...(characterDestination === undefined ? {} : { characterDestination }),
+          ...(aiActionOverrideMiss === undefined
+            ? {}
+            : { aiActionOverrideMiss }),
           intentKey: `${key}:enemy-play:${action.self.battleCardId}`,
           reason: "enemy-day-play",
         },
@@ -235,6 +330,9 @@ export function planTutorialBattleController(
         intent: {
           kind: "battle-gesture",
           commands: commands.map((command, index) => index === 0 ? { ...command, aiChoices: [trace] } : command),
+          ...(aiActionOverrideMiss === undefined
+            ? {}
+            : { aiActionOverrideMiss }),
           intentKey: `${key}:enemy-move:${action.self?.battleCardId ?? "none"}:${action.toSlot ?? "none"}`,
           reason: "enemy-day-reposition",
         },
@@ -245,6 +343,7 @@ export function planTutorialBattleController(
       `${key}:enemy-day-complete`,
       "enemy-day-complete",
       mode.driverClientId,
+      aiActionOverrideMiss,
     );
   }
 
@@ -258,8 +357,29 @@ function idlePlan(status: "not-tutorial"): TutorialBattleControllerPlan {
   return { status, driverClientId: null, isCurrentClientDriver: false, isDriverPresent: false, requiresHumanDecision: false, intent: null };
 }
 
-function commandPlan(command: BattleCommand, intentKey: string, reason: string, driverClientId: string | null): TutorialBattleControllerPlan {
-  return { status: "driver", driverClientId, isCurrentClientDriver: true, isDriverPresent: true, requiresHumanDecision: false, intent: { kind: "battle-command", command, intentKey, reason } };
+function commandPlan(
+  command: BattleCommand,
+  intentKey: string,
+  reason: string,
+  driverClientId: string | null,
+  aiActionOverrideMiss?: TutorialAiActionOverrideMiss,
+): TutorialBattleControllerPlan {
+  return {
+    status: "driver",
+    driverClientId,
+    isCurrentClientDriver: true,
+    isDriverPresent: true,
+    requiresHumanDecision: false,
+    intent: {
+      kind: "battle-command",
+      command,
+      intentKey,
+      reason,
+      ...(aiActionOverrideMiss === undefined
+        ? {}
+        : { aiActionOverrideMiss }),
+    },
+  };
 }
 
 function handoffPlan(state: FoldState, reason: string): TutorialBattleControllerPlan {

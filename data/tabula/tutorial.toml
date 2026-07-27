@@ -33,6 +33,11 @@ dreamwellDraws = [
   "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
 ]
 
+[[battle.aiActionOverrides]]
+id = "play-twilight-after-nomads-verge"
+trigger = { kind = "after-dreamwell", side = "enemy", cardId = "51caf26d-83bf-45a9-bc80-010d353277db" }
+action = { kind = "play-card", cardId = "229ab3a1-3720-41a2-924c-8fe112188f8e" }
+
 [[actions]]
 id = "welcome"
 action = "display-speech-bubble"

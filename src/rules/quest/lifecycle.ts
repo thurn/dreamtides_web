@@ -25,6 +25,7 @@ import type { ChallengeCursor } from "../battle/fold";
 import type { EventContext } from "../../eventlog/types";
 import { cloneBattleMutableState } from "../../battle/state/create-initial-state";
 import { FRONT_RANK_SLOTS } from "../../battle/types";
+import { isTutorialBattleAiActionOverrides } from "../../types/tutorial-ai-action-overrides";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (SELECT_DREAM_AVATAR / START_QUEST)
@@ -575,6 +576,23 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
       !Number.isInteger(value.aiDefenseTurn.turnNumber)
     )
       return null;
+  }
+  if (
+    value.tutorialAiActionOverrides !== undefined &&
+    !isTutorialBattleAiActionOverrides(value.tutorialAiActionOverrides)
+  ) {
+    return null;
+  }
+  if (
+    value.consumedTutorialAiActionOverrideIds !== undefined &&
+    (!Array.isArray(value.consumedTutorialAiActionOverrideIds) ||
+      !value.consumedTutorialAiActionOverrideIds.every(
+        (id) => typeof id === "string",
+      ) ||
+      new Set(value.consumedTutorialAiActionOverrideIds).size !==
+        value.consumedTutorialAiActionOverrideIds.length)
+  ) {
+    return null;
   }
   if (value.challengeCursor !== undefined && value.challengeCursor !== null && !isChallengeCursor(value.challengeCursor)) {
     return null;

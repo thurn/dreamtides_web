@@ -199,6 +199,8 @@ export function createTutorialBattleInitProvider(
         effectQueue: [],
         pendingPrompt: null,
         dawnFired: emptyDawnFired(),
+        tutorialAiActionOverrides: battleConfiguration.aiActionOverrides,
+        consumedTutorialAiActionOverrideIds: [],
       };
     },
   };
