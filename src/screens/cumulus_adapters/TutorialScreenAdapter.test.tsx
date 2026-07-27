@@ -111,7 +111,7 @@ vi.mock("../../data/tutorial-actions", async (importOriginal) => {
   };
 });
 
-vi.mock("../../state/use-tutorial-opponent-card", () => ({
+vi.mock("../../state/use-tutorial-cards", () => ({
   useTutorialCards: () => {
     const opponent = {
       id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
@@ -142,8 +142,7 @@ vi.mock("../../state/use-tutorial-opponent-card", () => ({
       artOwned: false,
     };
     return {
-      opponents: [opponent],
-      players: [player],
+      cards: [opponent, player],
       dreamwell: [
         {
           id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",

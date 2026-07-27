@@ -8,7 +8,10 @@ import type { TutorialView } from "../../cumulus/screens/TutorialScreen";
 import type { CardData } from "../../types/cards";
 import type { DreamwellCard } from "../../data/dreamwell-database";
 import { asCardId } from "../../types/card-identity";
-import { TUTORIAL_OPPONENT_CARD_ID } from "../../data/tutorial-opponent-card";
+import {
+  TUTORIAL_OPPONENT_CARD_ID,
+  TUTORIAL_PLAYER_CARD_ID,
+} from "../../data/tutorial-cards";
 import type {
   TutorialAction,
   TutorialDreamAvatarOwner,
@@ -30,7 +33,7 @@ export {
   TUTORIAL_OPPONENT_CARD_ID,
   TUTORIAL_PLAYER_CARD_INSTANCE_ID,
   TUTORIAL_PLAYER_CARD_ID,
-} from "../../data/tutorial-opponent-card";
+} from "../../data/tutorial-cards";
 
 function tutorialSpeechBubbleLogDetails(speechBubble: TutorialSpeechBubble) {
   const messageText = tutorialInstructionPlainText(speechBubble.text);
@@ -242,19 +245,10 @@ function tutorialCardById(
   const card = cards.find((candidate) => candidate.id === cardId);
   if (card === undefined) {
     throw new Error(
-      `Tutorial action ${actionId} references card ${cardId}, which is missing from the tutorial card catalog.`,
+      `Tutorial action ${actionId} references card ${cardId}, which is missing from the runtime card catalog.`,
     );
   }
   return card;
-}
-
-function tutorialCardCatalog(
-  input: readonly CardData[] | CardData | null,
-): readonly CardData[] | null {
-  if (input === null) return null;
-  return Array.isArray(input)
-    ? (input as readonly CardData[])
-    : [input as CardData];
 }
 
 function tutorialDeckIds(owner: "enemy" | "player"): readonly string[] {
@@ -371,13 +365,11 @@ function activeDialogue(playback: TutorialPlaybackState | null): {
 /** Build the quest-independent opening state for the tutorial battle. */
 export function buildTutorialView(
   playback: TutorialPlaybackState | null = null,
-  opponentCardsInput: readonly CardData[] | CardData | null = null,
-  playerCardsInput: readonly CardData[] | CardData | null = null,
+  cards: readonly CardData[] | null = null,
   dreamwellCards: readonly DreamwellCard[] | null = null,
 ): TutorialView {
-  const opponentCards = tutorialCardCatalog(opponentCardsInput);
-  const playerCards = tutorialCardCatalog(playerCardsInput);
-  const playerCard = playerCards?.[0] ?? null;
+  const playerCard =
+    cards?.find((card) => card.id === TUTORIAL_PLAYER_CARD_ID) ?? null;
   const currentAction =
     playback?.currentActionIndex === null ||
     playback?.currentActionIndex === undefined
@@ -455,7 +447,7 @@ export function buildTutorialView(
   for (const [actionIndex, action] of completedActions.entries()) {
     if (action.action === "draw-opponent-card") {
       const instanceId = enemyDeckCardIds[completedOpponentDrawCount];
-      const card = tutorialCardById(opponentCards, action.cardId, action.id);
+      const card = tutorialCardById(cards, action.cardId, action.id);
       completedOpponentDrawCount += 1;
       if (instanceId !== undefined && card !== null) {
         opponentHandRecords.push({
@@ -468,8 +460,6 @@ export function buildTutorialView(
       continue;
     }
     if (action.action === "draw-card") {
-      const ownerCards =
-        action.owner === "player" ? playerCards : opponentCards;
       const completedDrawCount =
         action.owner === "player"
           ? completedPlayerDrawCount
@@ -478,7 +468,7 @@ export function buildTutorialView(
       const implicitPlayerDrawCount =
         action.owner === "player" && playerTurnStarted ? 1 : 0;
       const instanceId = deckIds[completedDrawCount + implicitPlayerDrawCount];
-      const card = tutorialCardById(ownerCards, action.cardId, action.id);
+      const card = tutorialCardById(cards, action.cardId, action.id);
       if (action.owner === "player") {
         completedPlayerDrawCount += 1;
       } else {
@@ -503,7 +493,7 @@ export function buildTutorialView(
       const handIndex = opponentHandRecords.findIndex(
         (record) => record.card.id === action.cardId,
       );
-      if (opponentCards !== null && handIndex < 0) {
+      if (cards !== null && handIndex < 0) {
         throw new Error(
           `Tutorial action ${action.id} cannot reveal card ${action.cardId} because it is not in the opponent hand.`,
         );
@@ -525,8 +515,6 @@ export function buildTutorialView(
   const currentCardDraw =
     currentAction?.action === "draw-card"
       ? (() => {
-          const ownerCards =
-            currentAction.owner === "player" ? playerCards : opponentCards;
           const completedDrawCount =
             currentAction.owner === "player"
               ? completedPlayerDrawCount
@@ -537,7 +525,7 @@ export function buildTutorialView(
             completedDrawCount + implicitPlayerDrawCount
           ];
           const card = tutorialCardById(
-            ownerCards,
+            cards,
             currentAction.cardId,
             currentAction.id,
           );
@@ -573,7 +561,7 @@ export function buildTutorialView(
   );
   for (const action of visibleOpponentRepositionActions) {
     if (
-      opponentCards !== null &&
+      cards !== null &&
       !opponentPlayedRecords.some((record) => record.card.id === action.cardId)
     ) {
       throw new Error(
@@ -662,7 +650,7 @@ export function buildTutorialView(
   }
   if (
     playerRepositionAction !== null &&
-    opponentCards !== null &&
+    cards !== null &&
     !opponentPlayedRecords.some(
       (record) => record.card.id === playerRepositionAction.opposingCardId,
     )
@@ -682,7 +670,7 @@ export function buildTutorialView(
   const challengeOpponentCard =
     challengeAction?.action === "resolve-challenge"
       ? tutorialCardById(
-          opponentCards,
+          cards,
           challengeAction.challengerCardId,
           challengeAction.id,
         )

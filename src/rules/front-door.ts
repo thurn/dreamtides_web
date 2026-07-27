@@ -3,7 +3,7 @@ import { parseTutorialActions } from "../data/tutorial-actions";
 import {
   TUTORIAL_PLAYER_CARD_ID,
   TUTORIAL_PLAYER_CARD_INSTANCE_ID,
-} from "../data/tutorial-opponent-card";
+} from "../data/tutorial-cards";
 import type { FrontDoorState } from "./fold-state";
 
 const MAIN_ACTION_IDS: ReadonlySet<string> = new Set([

@@ -7,7 +7,7 @@ import { useTutorialActionComplete } from "../../state/use-tutorial-action-compl
 import { useTutorialCardPlay } from "../../state/use-tutorial-card-play";
 import { useTutorialEndTurn } from "../../state/use-tutorial-end-turn";
 import { useTutorialPlayerReposition } from "../../state/use-tutorial-player-reposition";
-import { useTutorialCards } from "../../state/use-tutorial-opponent-card";
+import { useTutorialCards } from "../../state/use-tutorial-cards";
 import { useTutorialBattleHandoff } from "../../state/use-tutorial-battle-handoff";
 import {
   useTutorialHowToPlayLogging,
@@ -69,8 +69,7 @@ export function TutorialScreenAdapter({ playbackSpeed = 1, directLive = false }:
     () =>
       tutorialView.buildTutorialView(
         state.tutorial,
-        tutorialCards?.opponents ?? null,
-        tutorialCards?.players ?? null,
+        tutorialCards?.cards ?? null,
         tutorialCards?.dreamwell ?? null,
       ),
     [state.tutorial, tutorialCards],

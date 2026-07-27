@@ -31,7 +31,7 @@ import {
   TUTORIAL_DREAMWELL_CARD_ID,
   TUTORIAL_OPPONENT_CARD_ID,
   TUTORIAL_PLAYER_CARD_ID,
-} from "../../data/tutorial-opponent-card";
+} from "../../data/tutorial-cards";
 
 export interface TutorialEditorRailProps {
   readonly actions: readonly TutorialAction[];

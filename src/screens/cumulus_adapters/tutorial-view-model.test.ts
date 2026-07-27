@@ -9,7 +9,7 @@ import {
   TUTORIAL_PLAYER_CARD_ID,
   tutorialActionLogDetails,
 } from "./tutorial-view-model";
-import { TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID } from "../../data/tutorial-opponent-card";
+import { TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID } from "../../data/tutorial-cards";
 import type { TutorialSpeechBubble } from "../../types/tutorial";
 
 function speechBubble(
@@ -179,10 +179,10 @@ describe("buildTutorialView", () => {
         wait: 0,
       },
       {
-        id: "draw-flashpoint",
+        id: "draw-final-witness",
         action: "draw-card" as const,
         owner: "player" as const,
-        cardId: flashpoint.id,
+        cardId: finalWitness.id,
         reason: "dreamwell-effect" as const,
         wait: 0,
       },
@@ -195,10 +195,10 @@ describe("buildTutorialView", () => {
         wait: 0,
       },
       {
-        id: "draw-witness",
+        id: "draw-flashpoint",
         action: "draw-card" as const,
         owner: "enemy" as const,
-        cardId: finalWitness.id,
+        cardId: flashpoint.id,
         reason: "dreamwell-effect" as const,
         wait: 0,
       },
@@ -223,8 +223,7 @@ describe("buildTutorialView", () => {
         currentActionIndex: 7,
         playerCardPlay,
       },
-      [OPPONENT_CARD, finalWitness],
-      [PLAYER_CARD, nocturne, flashpoint, glimpse],
+      [OPPONENT_CARD, finalWitness, PLAYER_CARD, nocturne, flashpoint, glimpse],
       [VOLTSURGE],
     );
     expect(revealing.battle).toMatchObject({
@@ -244,8 +243,7 @@ describe("buildTutorialView", () => {
         currentActionIndex: 8,
         playerCardPlay,
       },
-      [OPPONENT_CARD, finalWitness],
-      [PLAYER_CARD, nocturne, flashpoint, glimpse],
+      [OPPONENT_CARD, finalWitness, PLAYER_CARD, nocturne, flashpoint, glimpse],
       [VOLTSURGE],
     );
     expect(drawingEffect.cardDraw).toMatchObject({
@@ -257,6 +255,21 @@ describe("buildTutorialView", () => {
       maxEnergy: 5,
     });
 
+    const drawingCardAcrossOwners = buildTutorialView(
+      {
+        runId: "event:post-tutorial",
+        actions,
+        currentActionIndex: 9,
+        playerCardPlay,
+      },
+      [OPPONENT_CARD, finalWitness, PLAYER_CARD, nocturne, flashpoint, glimpse],
+      [VOLTSURGE],
+    );
+    expect(drawingCardAcrossOwners.cardDraw).toMatchObject({
+      owner: "player",
+      card: { model: { cardId: finalWitness.id } },
+    });
+
     const complete = buildTutorialView(
       {
         runId: "event:post-tutorial",
@@ -264,12 +277,11 @@ describe("buildTutorialView", () => {
         currentActionIndex: null,
         playerCardPlay,
       },
-      [OPPONENT_CARD, finalWitness],
-      [PLAYER_CARD, nocturne, flashpoint, glimpse],
+      [OPPONENT_CARD, finalWitness, PLAYER_CARD, nocturne, flashpoint, glimpse],
       [VOLTSURGE],
     );
     expect(complete.battle.playerHand.map((card) => card.model.cardId)).toEqual(
-      [nocturne.id, flashpoint.id, glimpse.id],
+      [nocturne.id, finalWitness.id, glimpse.id],
     );
     expect(complete.battle.enemyHandCardIds).toEqual([
       "tutorial-enemy-deck-2",
@@ -330,7 +342,7 @@ describe("buildTutorialView", () => {
 
     const tail = buildTutorialView(
       { runId: "event:tail", actions, currentActionIndex: actions.length - 3 },
-      OPPONENT_CARD,
+      [OPPONENT_CARD],
     );
 
     expect(tail.currentAction?.id).toBe("enemy-taunt");
@@ -920,7 +932,7 @@ describe("buildTutorialView", () => {
         currentActionIndex: 2,
         actions,
       },
-      OPPONENT_CARD,
+      [OPPONENT_CARD],
     ).battle;
     expect(drawn.enemy.deckCardIds[0]).toBe("tutorial-enemy-deck-2");
     expect(drawn.enemy.deckCardIds).toHaveLength(29);
@@ -942,8 +954,7 @@ describe("buildTutorialView", () => {
         currentActionIndex: 3,
         actions,
       },
-      OPPONENT_CARD,
-      PLAYER_CARD,
+      [OPPONENT_CARD, PLAYER_CARD],
     );
     const played = playedTutorial.battle;
     expect(playedTutorial.howToPlay).toEqual({
@@ -1010,8 +1021,7 @@ describe("buildTutorialView", () => {
           targetSlotId: "player-back-4",
         },
       },
-      OPPONENT_CARD,
-      PLAYER_CARD,
+      [OPPONENT_CARD, PLAYER_CARD],
     );
     expect(afterPlayerCardPlay.howToPlay).toBeNull();
     expect(afterPlayerCardPlay.endTurn).toEqual({
@@ -1066,8 +1076,7 @@ describe("buildTutorialView", () => {
           targetSlotId: "player-back-4",
         },
       },
-      OPPONENT_CARD,
-      PLAYER_CARD,
+      [OPPONENT_CARD, PLAYER_CARD],
       [AUTUMN_GLADE],
     );
     expect(drawingDreamwell.currentAction?.action).toBe("draw-dreamwell-card");
@@ -1119,8 +1128,7 @@ describe("buildTutorialView", () => {
           targetSlotId: "player-back-4",
         },
       },
-      OPPONENT_CARD,
-      PLAYER_CARD,
+      [OPPONENT_CARD, PLAYER_CARD],
       null,
     );
     expect(loadingDreamwellCatalog.battle.dreamwell).toBeNull();
@@ -1136,8 +1144,7 @@ describe("buildTutorialView", () => {
           targetSlotId: "player-back-4",
         },
       },
-      OPPONENT_CARD,
-      PLAYER_CARD,
+      [OPPONENT_CARD, PLAYER_CARD],
       [AUTUMN_GLADE],
     );
     expect(explainingDreamwell.battle.dreamwell?.model.cardId).toBe(
@@ -1176,8 +1183,7 @@ describe("buildTutorialView", () => {
           targetSlotId: "player-back-4",
         },
       },
-      OPPONENT_CARD,
-      PLAYER_CARD,
+      [OPPONENT_CARD, PLAYER_CARD],
       [AUTUMN_GLADE],
     );
     expect(worthyChallenger.dialogue).toEqual({
@@ -1231,8 +1237,7 @@ describe("buildTutorialView", () => {
           targetSlotId: "player-back-4",
         },
       },
-      OPPONENT_CARD,
-      PLAYER_CARD,
+      [OPPONENT_CARD, PLAYER_CARD],
       [AUTUMN_GLADE],
     );
     expect(advancing.dialogue).toBeNull();
@@ -1261,8 +1266,7 @@ describe("buildTutorialView", () => {
           targetSlotId: "player-back-4",
         },
       },
-      OPPONENT_CARD,
-      PLAYER_CARD,
+      [OPPONENT_CARD, PLAYER_CARD],
       [AUTUMN_GLADE],
     );
     expect(duskInstructions.currentAction?.id).toBe(
@@ -1295,8 +1299,7 @@ describe("buildTutorialView", () => {
           targetSlotId: "player-back-4",
         },
       },
-      OPPONENT_CARD,
-      PLAYER_CARD,
+      [OPPONENT_CARD, PLAYER_CARD],
       [AUTUMN_GLADE],
     );
     expect(guidedBlock.playerReposition).toEqual({
@@ -1323,8 +1326,7 @@ describe("buildTutorialView", () => {
           targetSlotId: "player-back-4",
         },
       },
-      OPPONENT_CARD,
-      PLAYER_CARD,
+      [OPPONENT_CARD, PLAYER_CARD],
       [AUTUMN_GLADE],
     );
     expect(ended.endTurn).toBeNull();
@@ -1441,8 +1443,7 @@ describe("buildTutorialView", () => {
 
     const revealing = buildTutorialView(
       { runId: "event:second-card", currentActionIndex: 8, actions },
-      [OPPONENT_CARD, RUNEBOUND_CHAMPION],
-      PLAYER_CARD,
+      [OPPONENT_CARD, RUNEBOUND_CHAMPION, PLAYER_CARD],
       [AUTUMN_GLADE],
     );
     expect(revealing.currentAction).toMatchObject({
@@ -1478,8 +1479,7 @@ describe("buildTutorialView", () => {
 
     const repositioning = buildTutorialView(
       { runId: "event:second-card", currentActionIndex: 9, actions },
-      [OPPONENT_CARD, RUNEBOUND_CHAMPION],
-      PLAYER_CARD,
+      [OPPONENT_CARD, RUNEBOUND_CHAMPION, PLAYER_CARD],
       [AUTUMN_GLADE],
     );
     expect(repositioning.battle.enemyHand).toEqual([]);
@@ -1498,8 +1498,7 @@ describe("buildTutorialView", () => {
 
     const playerNextTurn = buildTutorialView(
       { runId: "event:second-card", currentActionIndex: 10, actions },
-      [OPPONENT_CARD, RUNEBOUND_CHAMPION],
-      PLAYER_CARD,
+      [OPPONENT_CARD, RUNEBOUND_CHAMPION, PLAYER_CARD],
       [AUTUMN_GLADE, VOLTSURGE],
     );
     expect(playerNextTurn.battle.enemy.backRank[1]?.card).toMatchObject({
@@ -1569,8 +1568,7 @@ describe("buildTutorialView", () => {
         currentActionIndex: actions.length - 1,
         playerCardPlay,
       },
-      OPPONENT_CARD,
-      PLAYER_CARD,
+      [OPPONENT_CARD, PLAYER_CARD],
     );
 
     expect(resolving.battle.phase).toBe("challenge");
@@ -1605,8 +1603,7 @@ describe("buildTutorialView", () => {
         currentActionIndex: null,
         playerCardPlay,
       },
-      OPPONENT_CARD,
-      PLAYER_CARD,
+      [OPPONENT_CARD, PLAYER_CARD],
     );
 
     expect(resolved.challenge).toBeNull();

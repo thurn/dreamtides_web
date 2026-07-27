@@ -4,7 +4,7 @@ import {
   TUTORIAL_OPPONENT_CARD_ID,
   TUTORIAL_PLAYER_CARD_ID,
   TUTORIAL_PLAYER_CARD_INSTANCE_ID,
-} from "../data/tutorial-opponent-card";
+} from "../data/tutorial-cards";
 import { genesisFoldState } from "./fold-state";
 import { reduceGameEvent } from "./reducer";
 
