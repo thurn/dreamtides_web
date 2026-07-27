@@ -4,7 +4,6 @@
 # Cards are drawn from each list in order after the authored tutorial actions
 # hand control to the playable battle.
 playerDraws = [
-  "a28ad36d-fa74-4190-a463-7efd3a6233d0",
   "4408b942-09a0-4f4e-a403-10c708c6e3c5",
   "647f5150-b2e0-424b-9480-27557642524e",
   "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
@@ -276,15 +275,15 @@ on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 5
 match = { kind = "glossary", id = "support" }
-bubbleWidth = 300
+bubbleWidth = 500
 text = "A character with [yellow]support[/yellow] gives a bonus to the characters in front of it."
 
 [[triggers]]
 id = "foresee"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
-duration = 3
-bubbleWidth = 300
+duration = 5
+bubbleWidth = 500
 match = { kind = "glossary", id = "foresee" }
 text = "To [yellow]foresee[/yellow] 1, look at the top card of your deck. You may put it into your void."
 
@@ -293,7 +292,7 @@ id = "dissolved-trigger"
 on = [ "card-play" ]
 priority = 100
 duration = 3
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "glossary", id = "dissolved-trigger" }
 text = "A ▸Dissolved ability triggers when the character is sent to the void."
 
@@ -302,7 +301,7 @@ id = "discover"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "glossary", id = "discover" }
 text = "When you [yellow]discover[/yellow] a character, reveal 3 matching from your deck and pick one to draw."
 
@@ -311,7 +310,7 @@ id = "erode"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 10
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "glossary", id = "erode" }
 text = "[yellow]Erode[/yellow] means to put cards from a deck into the void. If the deck is empty, the opposing player scores 3⍟ per card instead."
 
@@ -320,7 +319,7 @@ id = "figment-created"
 on = [ "figment-created" ]
 priority = 100
 duration = 3
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "any" }
 text = "Figments are token representations of characters. Multiple figments of the same type can be combined to form one character."
 
@@ -329,7 +328,7 @@ id = "banish"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "glossary", id = "banish" }
 text = "To [yellow]banish[/yellow] a card, remove it from the battle. It does not go to the void."
 
@@ -338,7 +337,7 @@ id = "dissolve"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "glossary", id = "dissolve" }
 text = "To [yellow]dissolve[/yellow] a character, send it to its controller’s void."
 
@@ -347,7 +346,7 @@ id = "prevent"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "glossary", id = "prevent" }
 text = "[yellow]Prevent[/yellow] stops a card on the stack before it resolves, then sends it to the void."
 
@@ -356,7 +355,7 @@ id = "rematerialize"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "glossary", id = "rematerialize" }
 text = "To [yellow]rematerialize[/yellow] a character, trigger its ▸Materialized ability again while it stays in play."
 
@@ -365,7 +364,7 @@ id = "ephemeral"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "glossary", id = "ephemeral" }
 text = "An [yellow]ephemeral[/yellow] card left in your hand at end of turn is banished."
 
@@ -374,7 +373,7 @@ id = "awakened"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "glossary", id = "awakened" }
 text = "An [yellow]awakened[/yellow] character can challenge and use ☪ abilities on the turn it enters play."
 
@@ -383,7 +382,7 @@ id = "phasing"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "glossary", id = "phasing" }
 text = "When a [yellow]phasing[/yellow] character is played, you may return one of your characters to your hand and put this one in its position."
 
@@ -392,7 +391,7 @@ id = "veil"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "glossary", id = "veil" }
 text = "If an opposing effect would dissolve a character with [yellow]veil[/yellow], remove its veil instead."
 
@@ -401,7 +400,7 @@ id = "reclaim"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "glossary", id = "reclaim" }
 text = "[yellow]Reclaim[/yellow] lets you play this card from your void for its Reclaim cost, and then banish it when it leaves play."
 
@@ -410,7 +409,7 @@ id = "offering"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "glossary", id = "offering" }
 text = "[yellow]Offering[/yellow] lets you play this card for 0● by banishing a card from your hand. If you do, banish it at end of turn."
 
@@ -419,7 +418,7 @@ id = "unstoppable"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "glossary", id = "unstoppable" }
 text = "An [yellow]unstoppable[/yellow] challenger scores points equal to its ✦ when it dissolves a defender."
 
@@ -428,6 +427,6 @@ id = "vengeful"
 on = [ "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
-bubbleWidth = 300
+bubbleWidth = 500
 match = { kind = "glossary", id = "vengeful" }
 text = "When a [yellow]vengeful[/yellow] character loses a challenge, it dissolves the opposing character too."
