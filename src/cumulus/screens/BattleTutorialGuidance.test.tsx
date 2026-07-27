@@ -3,9 +3,13 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { asCardId } from "../../types/card-identity";
+import { asCardId, asCardName } from "../../types/card-identity";
+import type { CardData } from "../../types/cards";
 import { CumulusRoot } from "../CumulusRoot";
-import { BattleTutorialGuidance } from "./BattleTutorialGuidance";
+import {
+  BattleTutorialGuidance,
+  type BattleTutorialGuidanceView,
+} from "./BattleTutorialGuidance";
 
 class ResizeObserverStub {
   observe(_target: Element) {}
@@ -46,6 +50,7 @@ describe("BattleTutorialGuidance", () => {
               text: "[yellow]Erode[/yellow] sends cards to the void. Score 3⍟ for each missing card.",
               source: {
                 kind: "dreamwell",
+                side: "player",
                 model: {
                   cardId: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
                   displaySnapshot: {
@@ -141,5 +146,168 @@ describe("BattleTutorialGuidance", () => {
 
     act(() => root.unmount());
     vi.useRealTimers();
+  });
+
+  it("carries one battle-card identity from its source into guidance and on to its destination", () => {
+    const battleCardId = "battle-card-1";
+    const cardId = asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af");
+    const displaySnapshot: CardData = {
+      id: cardId,
+      name: asCardName("Fixture Traveler"),
+      cardNumber: 7,
+      cardType: "Character",
+      subtype: "Fixture",
+      isStarter: true,
+      energyCost: 1,
+      spark: 2,
+      isFast: false,
+      renderedText: "Support.",
+      imageNumber: 7,
+      artOwned: true,
+    };
+    const view: BattleTutorialGuidanceView = {
+      presentationId: "guidance:support",
+      triggerId: "support",
+      messageIndex: 0,
+      messageCount: 1,
+      text: "Support helps the character in front.",
+      source: {
+        kind: "card",
+        battleCardId,
+        model: { cardId, displaySnapshot },
+        figment: false,
+      },
+    };
+    const source = document.createElement("div");
+    source.dataset.battleCardId = battleCardId;
+    document.body.append(source);
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    let sourceRect = DOMRect.fromRect({
+      x: 40,
+      y: 600,
+      width: 120,
+      height: 168,
+    });
+    const boxSpy = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.dataset.battleCardId === battleCardId) return sourceRect;
+        if (this.dataset.battleTutorialSource !== undefined) {
+          return DOMRect.fromRect({
+            x: 400,
+            y: 180,
+            width: 240,
+            height: 336,
+          });
+        }
+        return DOMRect.fromRect();
+      });
+    const finishListeners: Array<() => void> = [];
+    const animations: Keyframe[][] = [];
+    const animateDescriptor = Object.getOwnPropertyDescriptor(
+      HTMLElement.prototype,
+      "animate",
+    );
+    HTMLElement.prototype.animate = vi.fn(
+      (keyframes: Keyframe[] | PropertyIndexedKeyframes | null) => {
+        animations.push(keyframes as Keyframe[]);
+        return {
+          addEventListener: (
+            type: string,
+            listener: EventListenerOrEventListenerObject,
+          ) => {
+            if (type !== "finish") return;
+            finishListeners.push(() => {
+              if (typeof listener === "function") {
+                listener(new Event("finish"));
+              } else {
+                listener.handleEvent(new Event("finish"));
+              }
+            });
+          },
+          cancel: vi.fn(),
+        } as unknown as Animation;
+      },
+    );
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <BattleTutorialGuidance view={view} onDismiss={() => undefined} />
+        </CumulusRoot>,
+      );
+    });
+
+    const journey = container.querySelector<HTMLElement>(
+      "[data-battle-tutorial-guidance]",
+    );
+    expect(source.style.visibility).toBe("hidden");
+    expect(source.dataset.tutorialGuidanceJourneyHidden).toBe("source");
+    expect(journey?.dataset.tutorialGuidanceJourney).toBe("entering");
+    expect(animations[0]?.[0]?.transform).toContain("translate(");
+    act(() => finishListeners.shift()?.());
+    expect(journey?.dataset.tutorialGuidanceJourney).toBe("dwelling");
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <BattleTutorialGuidance
+            view={{
+              ...view,
+              triggerId: "event-card",
+              messageIndex: 1,
+              messageCount: 2,
+              text: "The same card stays here for the next explanation.",
+            }}
+            onDismiss={() => undefined}
+          />
+        </CumulusRoot>,
+      );
+    });
+    expect(animations).toHaveLength(1);
+    expect(container.textContent).toContain(
+      "The same card stays here for the next explanation.",
+    );
+
+    sourceRect = DOMRect.fromRect({
+      x: 700,
+      y: 420,
+      width: 90,
+      height: 126,
+    });
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <BattleTutorialGuidance view={null} onDismiss={() => undefined} />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(source.dataset.tutorialGuidanceJourneyHidden).toBe("destination");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-battle-tutorial-guidance]",
+      )?.dataset.tutorialGuidanceJourney,
+    ).toBe("settling");
+    expect(animations[1]?.[1]?.transform).toContain("translate(");
+    act(() => finishListeners.shift()?.());
+    expect(source.style.visibility).toBe("");
+    expect(
+      container.querySelector("[data-battle-tutorial-guidance]"),
+    ).toBeNull();
+
+    act(() => root.unmount());
+    if (animateDescriptor === undefined) {
+      Reflect.deleteProperty(HTMLElement.prototype, "animate");
+    } else {
+      Object.defineProperty(
+        HTMLElement.prototype,
+        "animate",
+        animateDescriptor,
+      );
+    }
+    boxSpy.mockRestore();
   });
 });

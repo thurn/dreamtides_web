@@ -1,10 +1,18 @@
-import { useEffect, type ReactElement } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactElement,
+} from "react";
+import { useReducedMotion } from "framer-motion";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
 import type { DreamwellCardModel } from "../components/battle/DreamwellCard";
 import { DreamwellCard } from "../components/battle/DreamwellCard";
 import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
 import { artRef } from "../primitives/art";
+import { motionTimeSeconds } from "../primitives/motion-time";
 import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
@@ -14,10 +22,12 @@ export type BattleTutorialGuidanceSourceView =
       readonly kind: "card";
       readonly model: GameCardModel;
       readonly figment: boolean;
+      readonly battleCardId: string;
     }
   | {
       readonly kind: "dreamwell";
       readonly model: DreamwellCardModel;
+      readonly side: "player" | "enemy";
     };
 
 export interface BattleTutorialGuidanceView {
@@ -31,39 +41,268 @@ export interface BattleTutorialGuidanceView {
 }
 
 export interface BattleTutorialGuidanceProps {
-  readonly view: BattleTutorialGuidanceView;
+  readonly view: BattleTutorialGuidanceView | null;
   readonly onDismiss: () => void;
   readonly onDurationComplete: () => void;
 }
 
-/** Timed battle teaching moment using the tutorial's card-and-dialogue style. */
+const GUIDANCE_OBJECT_TRAVEL_MS =
+  motionTimeSeconds("--dur-slow") * 1_000;
+
+function battleCardSurface(
+  battleCardId: string,
+  journey: HTMLElement,
+): HTMLElement | null {
+  return [
+    ...document.querySelectorAll<HTMLElement>("[data-battle-card-id]"),
+  ].find(
+    (candidate) =>
+      candidate.dataset.battleCardId === battleCardId &&
+      !journey.contains(candidate),
+  ) ?? null;
+}
+
+function dreamwellSurface(
+  side: "player" | "enemy",
+  journey: HTMLElement,
+  destination: boolean,
+): HTMLElement | null {
+  const selector = destination
+    ? "[data-battle-dreamwell-layer]"
+    : "[data-battle-zone]";
+  return [...document.querySelectorAll<HTMLElement>(selector)].find(
+    (candidate) =>
+      !journey.contains(candidate) &&
+      (destination
+        ? candidate.dataset.battleDreamwellSide === side
+        : candidate.dataset.battleZone === `${side}-status`),
+  ) ?? null;
+}
+
+function sourceSurface(
+  view: BattleTutorialGuidanceView,
+  journey: HTMLElement,
+): HTMLElement | null {
+  return view.source.kind === "card"
+    ? battleCardSurface(view.source.battleCardId, journey)
+    : dreamwellSurface(view.source.side, journey, false);
+}
+
+function destinationSurface(
+  view: BattleTutorialGuidanceView,
+  journey: HTMLElement,
+): HTMLElement | null {
+  return view.source.kind === "card"
+    ? battleCardSurface(view.source.battleCardId, journey)
+    : dreamwellSurface(view.source.side, journey, true);
+}
+
+function transformBetween(
+  from: DOMRect,
+  to: DOMRect,
+): string | null {
+  if (
+    from.width === 0 ||
+    from.height === 0 ||
+    to.width === 0 ||
+    to.height === 0
+  ) {
+    return null;
+  }
+  const x = from.left + from.width / 2 - (to.left + to.width / 2);
+  const y = from.top + from.height / 2 - (to.top + to.height / 2);
+  const scale = Math.min(from.width / to.width, from.height / to.height);
+  return `translate(${String(x)}px, ${String(y)}px) scale(${String(scale)})`;
+}
+
+/**
+ * Timed battle teaching moment which carries one visible game object from its
+ * source, through Mira's explanation, and into the folded destination.
+ */
 export function BattleTutorialGuidance({
   view,
   onDismiss,
   onDurationComplete,
 }: BattleTutorialGuidanceProps): ReactElement {
   const desktop = useIsDesktop();
+  const reduceMotion = useReducedMotion() ?? false;
+  const [retainedView, setRetainedView] =
+    useState<BattleTutorialGuidanceView | null>(view);
+  const journeyViewRef = useRef<BattleTutorialGuidanceView | null>(view);
+  const journeyRef = useRef<HTMLElement | null>(null);
+  const objectRef = useRef<HTMLDivElement | null>(null);
+  const hiddenSurfaceRef = useRef<{
+    readonly element: HTMLElement;
+    readonly visibility: string;
+  } | null>(null);
+  const animationRef = useRef<Animation | null>(null);
+  const renderedView = view ?? retainedView;
+  const active = view !== null;
+  const presentationId = view?.presentationId ?? null;
+  const messageIndex = view?.messageIndex ?? null;
+  const duration = view?.duration ?? null;
+
   useEffect(() => {
+    if (duration === null) return undefined;
     const timeout = window.setTimeout(
       onDurationComplete,
-      view.duration * 1_000,
+      duration * 1_000,
     );
     return () => window.clearTimeout(timeout);
   }, [
+    duration,
+    messageIndex,
     onDurationComplete,
-    view.duration,
-    view.messageIndex,
-    view.presentationId,
+    presentationId,
   ]);
 
+  useLayoutEffect(() => {
+    if (
+      view !== null &&
+      view.presentationId !== journeyViewRef.current?.presentationId
+    ) {
+      journeyViewRef.current = view;
+    }
+    if (
+      view !== null &&
+      (view.presentationId !== retainedView?.presentationId ||
+        view.messageIndex !== retainedView.messageIndex)
+    ) {
+      setRetainedView(view);
+    }
+  }, [
+    messageIndex,
+    retainedView?.messageIndex,
+    retainedView?.presentationId,
+    view,
+  ]);
+
+  useLayoutEffect(() => {
+    const journey = journeyRef.current;
+    const object = objectRef.current;
+    const journeyView = journeyViewRef.current;
+    if (journey === null || object === null || journeyView === null) {
+      return undefined;
+    }
+
+    animationRef.current?.cancel();
+    animationRef.current = null;
+    if (hiddenSurfaceRef.current !== null) {
+      hiddenSurfaceRef.current.element.style.visibility =
+        hiddenSurfaceRef.current.visibility;
+      delete hiddenSurfaceRef.current.element.dataset
+        .tutorialGuidanceJourneyHidden;
+      hiddenSurfaceRef.current = null;
+    }
+
+    const surface = active
+      ? sourceSurface(journeyView, journey)
+      : destinationSurface(journeyView, journey);
+    const hideSurface =
+      surface !== null &&
+      (journeyView.source.kind === "card" || !active);
+    if (hideSurface) {
+      hiddenSurfaceRef.current = {
+        element: surface,
+        visibility: surface.style.visibility,
+      };
+      surface.style.visibility = "hidden";
+      surface.dataset.tutorialGuidanceJourneyHidden = active
+        ? "source"
+        : "destination";
+    }
+
+    object.style.visibility = "visible";
+    journey.dataset.tutorialGuidanceJourney = active ? "entering" : "settling";
+    const objectBox = object.getBoundingClientRect();
+    const surfaceBox = surface?.getBoundingClientRect();
+    const transform =
+      surfaceBox === undefined
+        ? null
+        : active
+          ? transformBetween(surfaceBox, objectBox)
+          : transformBetween(objectBox, surfaceBox);
+    const finish = (): void => {
+      if (active) {
+        journey.dataset.tutorialGuidanceJourney = "dwelling";
+        return;
+      }
+      if (hiddenSurfaceRef.current !== null) {
+        hiddenSurfaceRef.current.element.style.visibility =
+          hiddenSurfaceRef.current.visibility;
+        delete hiddenSurfaceRef.current.element.dataset
+          .tutorialGuidanceJourneyHidden;
+        hiddenSurfaceRef.current = null;
+      }
+      setRetainedView(null);
+    };
+
+    if (
+      reduceMotion ||
+      transform === null ||
+      typeof object.animate !== "function"
+    ) {
+      finish();
+      return undefined;
+    }
+
+    const easing = window
+      .getComputedStyle(journey)
+      .getPropertyValue("--ease-out")
+      .trim();
+    const animation = object.animate(
+      active
+        ? [
+            { transform, opacity: 1 },
+            { transform: "none", opacity: 1 },
+          ]
+        : [
+            { transform: "none", opacity: 1 },
+            { transform, opacity: 1 },
+          ],
+      {
+        duration: GUIDANCE_OBJECT_TRAVEL_MS,
+        fill: active ? "backwards" : "forwards",
+        ...(easing === "" ? {} : { easing }),
+      },
+    );
+    animationRef.current = animation;
+    animation.addEventListener("finish", finish, { once: true });
+
+    return () => {
+      animation.cancel();
+      if (animationRef.current === animation) animationRef.current = null;
+    };
+  }, [
+    active,
+    presentationId,
+    reduceMotion,
+  ]);
+
+  useLayoutEffect(
+    () => () => {
+      animationRef.current?.cancel();
+      if (hiddenSurfaceRef.current !== null) {
+        hiddenSurfaceRef.current.element.style.visibility =
+          hiddenSurfaceRef.current.visibility;
+        delete hiddenSurfaceRef.current.element.dataset
+          .tutorialGuidanceJourneyHidden;
+      }
+    },
+    [],
+  );
+
+  if (renderedView === null) return <></>;
   return (
     <section
+      ref={journeyRef}
       aria-label="Battle tutorial"
-      aria-live="polite"
+      aria-live={active ? "polite" : "off"}
+      aria-hidden={active ? undefined : "true"}
       data-battle-tutorial-guidance=""
-      data-presentation-id={view.presentationId}
-      data-trigger-id={view.triggerId}
-      data-message-index={view.messageIndex}
+      data-presentation-id={renderedView.presentationId}
+      data-trigger-id={renderedView.triggerId}
+      data-message-index={renderedView.messageIndex}
       style={{
         position: "fixed",
         inset: 0,
@@ -82,10 +321,12 @@ export function BattleTutorialGuidance({
       }}
     >
       <div
+        ref={objectRef}
         data-battle-tutorial-source=""
         style={{
+          visibility: "hidden",
           width:
-            view.source.kind === "dreamwell"
+            renderedView.source.kind === "dreamwell"
               ? desktop
                 ? "min(520px, 45vw)"
                 : "min(92vw, 64dvh, 430px)"
@@ -95,22 +336,23 @@ export function BattleTutorialGuidance({
           maxHeight:
             desktop
               ? undefined
-              : view.source.kind === "dreamwell"
+              : renderedView.source.kind === "dreamwell"
                 ? "40dvh"
                 : "48dvh",
           flex: "0 1 auto",
+          transformOrigin: "50% 50%",
         }}
       >
-        {view.source.kind === "dreamwell" ? (
+        {renderedView.source.kind === "dreamwell" ? (
           <DreamwellCard
-            model={view.source.model}
+            model={renderedView.source.model}
             testId="battle-tutorial-dreamwell"
           />
         ) : (
           <GameCard
-            model={view.source.model}
-            figment={view.source.figment}
-            figmentTitleBar={view.source.figment}
+            model={renderedView.source.model}
+            figment={renderedView.source.figment}
+            figmentTitleBar={renderedView.source.figment}
             testId="battle-tutorial-card"
           />
         )}
@@ -128,13 +370,17 @@ export function BattleTutorialGuidance({
         <Pressable
           as="div"
           role="button"
-          tabIndex={0}
+          tabIndex={active ? 0 : -1}
+          disabled={!active}
           aria-label="Dismiss Mira tutorial"
           data-testid="battle-tutorial-dismiss"
           hoverFeedback="stationary"
           pressFeedback="stationary"
-          onClick={onDismiss}
+          onClick={() => {
+            if (active) onDismiss();
+          }}
           onKeyDown={(event) => {
+            if (!active) return;
             if (event.key !== "Enter" && event.key !== " ") return;
             event.preventDefault();
             onDismiss();
@@ -149,9 +395,9 @@ export function BattleTutorialGuidance({
               portrait: artRef.characterPortrait("mira"),
               portraitAlt: "Mira",
               speakerName: "Mira",
-              text: view.text,
+              text: renderedView.text,
             }}
-            visible
+            visible={active}
             size={desktop ? "prominent" : "compact"}
             testId="battle-tutorial-dialogue"
           />

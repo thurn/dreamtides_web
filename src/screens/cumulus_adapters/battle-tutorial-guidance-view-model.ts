@@ -26,6 +26,7 @@ export function buildBattleTutorialGuidanceView(
       source: {
         kind: "dreamwell",
         model: dreamwellCardModel(definition),
+        side: presentation.source.side,
       },
     };
   }
@@ -43,6 +44,7 @@ export function buildBattleTutorialGuidanceView(
       kind: "card",
       model: battleGameCardModel(instance),
       figment: presentation.source.kind === "figment",
+      battleCardId: presentation.source.battleCardId,
     },
   };
 }

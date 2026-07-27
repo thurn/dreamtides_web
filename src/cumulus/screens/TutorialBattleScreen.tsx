@@ -165,13 +165,11 @@ export function TutorialBattleScreen({
           </div>
         </GlassDialog>
       ) : null}
-      {visibleGuidance === null ? null : (
-        <BattleTutorialGuidance
-          view={visibleGuidance}
-          onDismiss={onGuidanceContinue}
-          onDurationComplete={onGuidanceDurationComplete}
-        />
-      )}
+      <BattleTutorialGuidance
+        view={visibleGuidance}
+        onDismiss={onGuidanceContinue}
+        onDurationComplete={onGuidanceDurationComplete}
+      />
     </div>
   );
 }

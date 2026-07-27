@@ -1592,13 +1592,11 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         isOpen={isDreamwellHistoryOpen}
         onClose={() => setIsDreamwellHistoryOpen(false)}
       />
-      {guidanceView === null ? null : (
-        <BattleTutorialGuidance
-          view={guidanceView}
-          onDismiss={guidanceController.advance}
-          onDurationComplete={guidanceController.completeDuration}
-        />
-      )}
+      <BattleTutorialGuidance
+        view={guidanceView}
+        onDismiss={guidanceController.advance}
+        onDurationComplete={guidanceController.completeDuration}
+      />
     </>
   );
 }
