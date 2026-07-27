@@ -592,6 +592,7 @@ describe("MobileBattleScreen", () => {
 
   it("places an opponent Dreamwell card below the opponent status display", () => {
     vi.useFakeTimers();
+    mockDesktopViewport(true);
     const cardId = asCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
     const initialView = makeView();
     const view: MobileBattleView = {
@@ -624,6 +625,10 @@ describe("MobileBattleScreen", () => {
       '[data-battle-zone="enemy-status"]',
     );
     expect(
+      container.querySelector<HTMLElement>("[data-battle-mobile]")?.dataset
+        .battleLayout,
+    ).toBe("desktop");
+    expect(
       enemyStatus?.querySelector("[data-battle-dreamwell-layer]"),
     ).toBeNull();
     expect(
@@ -635,7 +640,11 @@ describe("MobileBattleScreen", () => {
     const layer = enemyStatus?.querySelector<HTMLElement>(
       "[data-battle-dreamwell-layer]",
     );
+    const sideZoneRow = layer?.closest<HTMLElement>(
+      '[data-battle-mobile-row="enemy-zones"]',
+    );
     expect(layer?.dataset.battleDreamwellSide).toBe("enemy");
+    expect(sideZoneRow?.style.zIndex).toBe("5");
     expect(layer?.style.position).toBe("absolute");
     expect(layer?.style.top).toBe("calc(100% + var(--space-3))");
     expect(layer?.style.bottom).toBe("");
@@ -685,7 +694,11 @@ describe("MobileBattleScreen", () => {
     const layer = playerStatus?.querySelector<HTMLElement>(
       "[data-battle-dreamwell-layer]",
     );
+    const sideZoneRow = layer?.closest<HTMLElement>(
+      '[data-battle-mobile-row="player-zones"]',
+    );
     expect(layer?.dataset.battleDreamwellSide).toBe("player");
+    expect(sideZoneRow?.style.zIndex).toBe("5");
     expect(layer?.style.top).toBe("");
     expect(layer?.style.bottom).toBe(
       "calc(100% + var(--space-3) + var(--space-12) + var(--space-4))",

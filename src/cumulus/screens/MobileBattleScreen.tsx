@@ -625,6 +625,17 @@ const DESKTOP_SIDE_ZONE_MIN_CLEARANCE = token("--space-5");
 const DESKTOP_SIDE_ZONE_SHIFT = `max(0px, calc(${DESKTOP_SIDE_ZONE_MIN_CLEARANCE} - 5.5vh + ${String(DESKTOP_SIDE_PILE_HEIGHT / 2)}px))`;
 const NEXT_PHASE_CONTROL_WIDTH = 120;
 const PLAYER_HAND_Z_INDEX = 15;
+const BATTLEFIELD_RANK_Z_INDEX = {
+  back: 1,
+  front: 2,
+  dragging: 4,
+} as const;
+// The Dreamwell extends outside its transformed side-zone row, so that row
+// must clear both battlefield-rank stacking contexts while the card is visible.
+const DREAMWELL_SIDE_ZONE_Z_INDEX = BATTLEFIELD_RANK_Z_INDEX.dragging + 1;
+// This layer orders the Dreamwell above its status/phase siblings inside the
+// side-zone row. DREAMWELL_SIDE_ZONE_Z_INDEX owns board-wide ordering.
+const DREAMWELL_WITHIN_SIDE_ZONE_Z_INDEX = 12;
 // Mobile player zones share the hand track and lift one spacing step above it.
 // Desktop gives both sides matching rows immediately outside the play areas.
 const PLAYER_HAND_TOP = `calc(${token("--space-12")} - ${token("--space-7")} + ${token("--space-2")})`;
@@ -1014,6 +1025,7 @@ function SideZones({
 }) {
   const deck = toDeckPile(side.deckCardIds);
   const voidPile = toVoidPile(side.voidCards);
+  const ownsVisibleDreamwell = dreamwell?.side === owner;
   const canDrop =
     interactions?.canInteract === true &&
     interactions.pendingCardId !== null &&
@@ -1044,19 +1056,22 @@ function SideZones({
             ? {
                 alignSelf: "stretch",
                 transform: `translateY(${DESKTOP_SIDE_ZONE_SHIFT})`,
-                zIndex: 3,
               }
             : {
                 alignSelf: "start",
                 height: token("--space-12"),
                 transform: `translateY(calc(-1 * ${token("--space-7")}))`,
-                zIndex: 3,
               }
           : isDesktop
             ? {
                 transform: `translateY(calc(-1 * ${DESKTOP_SIDE_ZONE_SHIFT}))`,
               }
             : null),
+        zIndex: ownsVisibleDreamwell
+          ? DREAMWELL_SIDE_ZONE_Z_INDEX
+          : position === "near"
+            ? 3
+            : undefined,
         display: "grid",
         gridTemplateColumns: SIDE_ZONES_GRID_TEMPLATE,
         alignItems: "center",
@@ -1158,7 +1173,7 @@ function SideZones({
                 maxWidth: "calc(100vw - 2 * var(--gutter))",
                 transform: "translateX(-50%)",
                 pointerEvents: "none",
-                zIndex: 12,
+                zIndex: DREAMWELL_WITHIN_SIDE_ZONE_Z_INDEX,
                 animation: "none",
                 transition: "none",
               }}
@@ -2051,7 +2066,9 @@ function Rank({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        zIndex: containsDraggingCard ? 4 : rank === "front" ? 2 : 1,
+        zIndex: containsDraggingCard
+          ? BATTLEFIELD_RANK_Z_INDEX.dragging
+          : BATTLEFIELD_RANK_Z_INDEX[rank],
       }}
     >
       <div
