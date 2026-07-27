@@ -21,6 +21,7 @@ export function buildBattleTutorialGuidanceView(
       triggerId: message.triggerId,
       messageIndex: presentation.messageIndex,
       messageCount: presentation.messages.length,
+      duration: message.duration,
       text: message.text,
       source: {
         kind: "dreamwell",
@@ -36,6 +37,7 @@ export function buildBattleTutorialGuidanceView(
     triggerId: message.triggerId,
     messageIndex: presentation.messageIndex,
     messageCount: presentation.messages.length,
+    duration: message.duration,
     text: message.text,
     source: {
       kind: "card",

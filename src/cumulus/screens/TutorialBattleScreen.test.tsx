@@ -2,7 +2,8 @@
 
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { asCardId } from "../../types/card-identity";
 import { CumulusRoot } from "../CumulusRoot";
 import { TutorialBattleScreen, type TutorialBattleView } from "./TutorialBattleScreen";
 
@@ -26,11 +27,21 @@ const interactions = {
   onNextPhase: vi.fn(),
 };
 
+class ResizeObserverStub {
+  observe(_target: Element) {}
+  unobserve(_target: Element) {}
+  disconnect() {}
+}
+
 function view(
   overrides: Partial<TutorialBattleView> = {},
 ): TutorialBattleView {
   return {
-    battle: {} as TutorialBattleView["battle"],
+    battle: {
+      battleId: "tutorial-battle",
+      inspector: { turn: "2" },
+      activeSide: "player",
+    } as TutorialBattleView["battle"],
     ownership: "driver",
     driverClientId: "driver-client",
     manualControls: false,
@@ -63,12 +74,22 @@ function mount(
           onReturnToMainMenu={() => {}}
           guidance={null}
           onGuidanceContinue={() => {}}
+          onGuidanceDurationComplete={() => {}}
         />
       </CumulusRoot>,
     );
   });
   return { container, root };
 }
+
+beforeEach(() => {
+  (
+    globalThis as typeof globalThis & {
+      IS_REACT_ACT_ENVIRONMENT?: boolean;
+    }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
+  globalThis.ResizeObserver = ResizeObserverStub;
+});
 
 afterEach(() => {
   document.body.innerHTML = "";
@@ -142,6 +163,88 @@ describe("TutorialBattleScreen", () => {
     }));
     expect(container.querySelector<HTMLElement>("[data-tutorial-live-battle]")?.style)
       .toMatchObject({ position: "fixed", width: "100vw", height: "100dvh" });
+
+    act(() => root.unmount());
+  });
+
+  it("waits for the opponent-turn announcement before mounting Dreamwell guidance", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    const playerTurn = view({
+      battle: {
+        battleId: "tutorial-battle",
+        inspector: { turn: "2" },
+        activeSide: "player",
+      } as TutorialBattleView["battle"],
+    });
+    const enemyTurn = view({
+      battle: {
+        battleId: "tutorial-battle",
+        inspector: { turn: "3" },
+        activeSide: "enemy",
+      } as TutorialBattleView["battle"],
+    });
+    const guidance = {
+      presentationId: "guidance:erode",
+      triggerId: "erode",
+      messageIndex: 0,
+      messageCount: 1,
+      duration: 3,
+      text: "Erode sends cards to the void.",
+      source: {
+        kind: "dreamwell" as const,
+        model: {
+          cardId: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
+          displaySnapshot: {
+            id: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
+            name: "Shadow Passage",
+            renderedText: "Erode 3.",
+            energyAdded: 1,
+            imageNumber: 3,
+          },
+        },
+      },
+    };
+    const render = (
+      screenView: TutorialBattleView,
+      currentGuidance: typeof guidance | null,
+    ): void => {
+      act(() => {
+        root.render(
+          <CumulusRoot>
+            <TutorialBattleScreen
+              view={screenView}
+              interactions={interactions}
+              movementStatusMessage={null}
+              onMovementStatusDismiss={() => {}}
+              onForeseeConfirm={() => {}}
+              onRestart={() => {}}
+              onReturnToMainMenu={() => {}}
+              guidance={currentGuidance}
+              onGuidanceContinue={() => {}}
+              onGuidanceDurationComplete={() => {}}
+            />
+          </CumulusRoot>,
+        );
+      });
+    };
+
+    render(playerTurn, null);
+    render(enemyTurn, guidance);
+    expect(
+      container.querySelector('[data-testid="battle-tutorial-dreamwell"]'),
+    ).toBeNull();
+
+    act(() => {
+      const props = mobileBattleProps.mock.lastCall?.[0] as {
+        onTurnAnnouncementComplete?: (side: "player" | "enemy") => void;
+      };
+      props.onTurnAnnouncementComplete?.("enemy");
+    });
+    expect(
+      container.querySelector('[data-testid="battle-tutorial-dreamwell"]'),
+    ).not.toBeNull();
 
     act(() => root.unmount());
   });

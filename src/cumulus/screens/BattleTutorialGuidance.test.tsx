@@ -28,6 +28,7 @@ describe("BattleTutorialGuidance", () => {
   });
 
   it("floats the source and dismissible Mira dialogue without modal chrome", () => {
+    vi.useFakeTimers();
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -41,6 +42,7 @@ describe("BattleTutorialGuidance", () => {
               triggerId: "erode",
               messageIndex: 0,
               messageCount: 1,
+              duration: 3,
               text: "[yellow]Erode[/yellow] sends cards to the void. Score 3⍟ for each missing card.",
               source: {
                 kind: "dreamwell",
@@ -57,6 +59,7 @@ describe("BattleTutorialGuidance", () => {
               },
             }}
             onDismiss={onContinue}
+            onDurationComplete={onContinue}
           />
         </CumulusRoot>,
       );
@@ -86,5 +89,57 @@ describe("BattleTutorialGuidance", () => {
     expect(onContinue).toHaveBeenCalledOnce();
 
     act(() => root.unmount());
+    vi.useRealTimers();
+  });
+
+  it("starts the authored dwell timer when the guidance is mounted", () => {
+    vi.useFakeTimers();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    const onDurationComplete = vi.fn();
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <BattleTutorialGuidance
+            view={{
+              presentationId: "guidance:erode",
+              triggerId: "erode",
+              messageIndex: 0,
+              messageCount: 1,
+              duration: 3,
+              text: "Erode sends cards to the void.",
+              source: {
+                kind: "dreamwell",
+                model: {
+                  cardId: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
+                  displaySnapshot: {
+                    id: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
+                    name: "Shadow Passage",
+                    renderedText: "Erode 3.",
+                    energyAdded: 1,
+                    imageNumber: 3,
+                  },
+                },
+              },
+            }}
+            onDismiss={() => {}}
+            onDurationComplete={onDurationComplete}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(2_999);
+    });
+    expect(onDurationComplete).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(onDurationComplete).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+    vi.useRealTimers();
   });
 });

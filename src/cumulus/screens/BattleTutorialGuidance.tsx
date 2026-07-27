@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import { useEffect, type ReactElement } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
 import type { DreamwellCardModel } from "../components/battle/DreamwellCard";
@@ -25,6 +25,7 @@ export interface BattleTutorialGuidanceView {
   readonly triggerId: string;
   readonly messageIndex: number;
   readonly messageCount: number;
+  readonly duration: number;
   readonly text: string;
   readonly source: BattleTutorialGuidanceSourceView;
 }
@@ -32,14 +33,29 @@ export interface BattleTutorialGuidanceView {
 export interface BattleTutorialGuidanceProps {
   readonly view: BattleTutorialGuidanceView;
   readonly onDismiss: () => void;
+  readonly onDurationComplete: () => void;
 }
 
 /** Timed battle teaching moment using the tutorial's card-and-dialogue style. */
 export function BattleTutorialGuidance({
   view,
   onDismiss,
+  onDurationComplete,
 }: BattleTutorialGuidanceProps): ReactElement {
   const desktop = useIsDesktop();
+  useEffect(() => {
+    const timeout = window.setTimeout(
+      onDurationComplete,
+      view.duration * 1_000,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [
+    onDurationComplete,
+    view.duration,
+    view.messageIndex,
+    view.presentationId,
+  ]);
+
   return (
     <section
       aria-label="Battle tutorial"

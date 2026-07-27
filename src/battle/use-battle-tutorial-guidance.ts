@@ -4,6 +4,7 @@ import { logEvent } from "../logging";
 
 export interface BattleTutorialGuidanceController {
   readonly advance: () => void;
+  readonly completeDuration: () => void;
 }
 
 /** Shared timer/manual bridge for one event-log-owned Mira battle tutorial. */
@@ -51,18 +52,8 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
     });
   }, [guidance, state.battle]);
 
-  useEffect(() => {
-    if (guidance === null) return;
-    const message = guidance.messages[guidance.messageIndex];
-    if (message === undefined) return;
-    const timeout = window.setTimeout(
-      () => submitAdvance("timer"),
-      message.duration * 1_000,
-    );
-    return () => window.clearTimeout(timeout);
-  }, [guidance, submitAdvance]);
-
   return {
     advance: () => submitAdvance("manual"),
+    completeDuration: () => submitAdvance("timer"),
   };
 }

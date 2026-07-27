@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import { useCallback, useState, type ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
@@ -60,6 +60,7 @@ export interface TutorialBattleScreenProps {
   readonly onReturnToMainMenu: () => void;
   readonly guidance: BattleTutorialGuidanceView | null;
   readonly onGuidanceContinue: () => void;
+  readonly onGuidanceDurationComplete: () => void;
 }
 
 /** Focused live tutorial battle presentation without operator tools or rewards. */
@@ -73,8 +74,27 @@ export function TutorialBattleScreen({
   onReturnToMainMenu,
   guidance,
   onGuidanceContinue,
+  onGuidanceDurationComplete,
 }: TutorialBattleScreenProps): ReactElement {
   const paused = view.ownership === "paused-driver-absent" || view.terminalRestartAvailable;
+  const turnAnnouncementKey =
+    `${view.battle.battleId}:${view.battle.inspector.turn}:${view.battle.activeSide}`;
+  const [completedTurnAnnouncementKey, setCompletedTurnAnnouncementKey] =
+    useState(turnAnnouncementKey);
+  const completeTurnAnnouncement = useCallback(
+    (side: "player" | "enemy"): void => {
+      setCompletedTurnAnnouncementKey(
+        `${view.battle.battleId}:${view.battle.inspector.turn}:${side}`,
+      );
+    },
+    [view.battle.battleId, view.battle.inspector.turn],
+  );
+  const visibleGuidance =
+    guidance?.source.kind !== "dreamwell" ||
+    completedTurnAnnouncementKey === turnAnnouncementKey
+      ? guidance
+      : null;
+
   return (
     <div
       className="cumulus"
@@ -96,6 +116,7 @@ export function TutorialBattleScreen({
         inspectorVisibility="hidden"
         phaseNavigation={view.manualControls ? "tutorial" : "hidden"}
         viewport="contained"
+        onTurnAnnouncementComplete={completeTurnAnnouncement}
       />
       {paused ? (
         <GlassDialog
@@ -144,10 +165,11 @@ export function TutorialBattleScreen({
           </div>
         </GlassDialog>
       ) : null}
-      {guidance === null ? null : (
+      {visibleGuidance === null ? null : (
         <BattleTutorialGuidance
-          view={guidance}
+          view={visibleGuidance}
           onDismiss={onGuidanceContinue}
+          onDurationComplete={onGuidanceDurationComplete}
         />
       )}
     </div>

@@ -1596,6 +1596,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         <BattleTutorialGuidance
           view={guidanceView}
           onDismiss={guidanceController.advance}
+          onDurationComplete={guidanceController.completeDuration}
         />
       )}
     </>
