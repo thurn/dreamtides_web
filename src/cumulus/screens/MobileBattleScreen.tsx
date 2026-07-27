@@ -1,9 +1,12 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
-import { LayoutGroup, motion } from "framer-motion";
 import {
-  GameCard,
-  type GameCardModel,
-} from "../components/card/CardView";
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
+import { LayoutGroup, motion } from "framer-motion";
+import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import {
   BATTLEFIELD_CARD_ASPECT_RATIO,
@@ -18,10 +21,7 @@ import {
   type DreamwellCardModel,
 } from "../components/battle/DreamwellCard";
 import { CardBack } from "../components/battle/CardBack";
-import {
-  CardPile,
-  type BattlePileCard,
-} from "../components/battle/CardPile";
+import { CardPile, type BattlePileCard } from "../components/battle/CardPile";
 import { GlassButton } from "../components/controls/GlassButton";
 import { DisclosureSection } from "../components/controls/DisclosureSection";
 import { GlowIcon } from "../components/controls/GlowIcon";
@@ -68,8 +68,7 @@ import battleBackgroundUrl from "../assets/battle-background.png";
 /** Canonical visual treatment for an exhausted battlefield card body. */
 export const BATTLEFIELD_CARD_EXHAUSTED_FILTER =
   "grayscale(0.5) brightness(0.62)";
-const POINTER_DROP_COMMIT_HOLD_MS =
-  motionTimeSeconds("--dur-slow") * 1_000;
+const POINTER_DROP_COMMIT_HOLD_MS = motionTimeSeconds("--dur-slow") * 1_000;
 
 /** One physical face-up card instance rendered by the battle board. */
 export interface MobileBattleCardView {
@@ -132,12 +131,7 @@ export interface MobileBattlePromptNoticeView {
 }
 
 /** The complete, presentation-ready mobile battle board. */
-export type MobileBattlePhase =
-  | "dawn"
-  | "day"
-  | "dusk"
-  | "night"
-  | "challenge";
+export type MobileBattlePhase = "dawn" | "day" | "dusk" | "night" | "challenge";
 
 /** Presentation-only state for the AI action waiting on human approval. */
 export interface MobileBattleAiApprovalView {
@@ -194,7 +188,13 @@ export interface MobileBattleCardPickerCandidateView {
   readonly instanceId: string;
   readonly cardUuid: string;
   readonly owner: MobileBattleOwner;
-  readonly zone: "hand" | "deck" | "void" | "banished" | "backRank" | "frontRank";
+  readonly zone:
+    | "hand"
+    | "deck"
+    | "void"
+    | "banished"
+    | "backRank"
+    | "frontRank";
   readonly card: MobileBattleCardView;
   readonly highlighted: boolean;
 }
@@ -285,19 +285,61 @@ export interface MobileBattleInspectorView {
   readonly isPlayerHandHidden: boolean;
   readonly isFarHandRevealed: boolean;
   readonly isNearHandHidden: boolean;
-  readonly sides: Readonly<Record<MobileBattleOwner, MobileBattleInspectorSideView>>;
+  readonly sides: Readonly<
+    Record<MobileBattleOwner, MobileBattleInspectorSideView>
+  >;
   readonly ai: MobileBattleInspectorAiView | null;
 }
 
 export type MobileBattleInspectorAction =
-  | { readonly kind: "opened"; readonly layout: "docked" | "takeover"; readonly side: MobileBattleOwner }
+  | {
+      readonly kind: "opened";
+      readonly layout: "docked" | "takeover";
+      readonly side: MobileBattleOwner;
+    }
   | { readonly kind: "side-selected"; readonly side: MobileBattleOwner }
-  | { readonly kind: "adjust-stat"; readonly side: MobileBattleOwner; readonly stat: "points" | "currentEnergy" | "maxEnergy"; readonly amount: MobileBattleDebugAdjustment }
-  | { readonly kind: "adjust-energy-pair"; readonly side: MobileBattleOwner; readonly amount: MobileBattleDebugAdjustment }
-  | { readonly kind: "draw" | "discard" | "foresee" | "shuffle" | "reorder-deck" | "dreamwell-draw" | "create-figment"; readonly side: MobileBattleOwner }
-  | { readonly kind: "open-zone"; readonly side: MobileBattleOwner; readonly zone: MobileBattleBrowseZone }
-  | { readonly kind: "erode"; readonly side: MobileBattleOwner; readonly count: number }
-  | { readonly kind: "open-battle-log" | "open-dreamwell-history" | "open-pool-viewer" | "toggle-opponent-hand" | "toggle-player-hand" | "skip-to-rewards" | "reset-battle" }
+  | {
+      readonly kind: "adjust-stat";
+      readonly side: MobileBattleOwner;
+      readonly stat: "points" | "currentEnergy" | "maxEnergy";
+      readonly amount: MobileBattleDebugAdjustment;
+    }
+  | {
+      readonly kind: "adjust-energy-pair";
+      readonly side: MobileBattleOwner;
+      readonly amount: MobileBattleDebugAdjustment;
+    }
+  | {
+      readonly kind:
+        | "draw"
+        | "discard"
+        | "foresee"
+        | "shuffle"
+        | "reorder-deck"
+        | "dreamwell-draw"
+        | "create-figment";
+      readonly side: MobileBattleOwner;
+    }
+  | {
+      readonly kind: "open-zone";
+      readonly side: MobileBattleOwner;
+      readonly zone: MobileBattleBrowseZone;
+    }
+  | {
+      readonly kind: "erode";
+      readonly side: MobileBattleOwner;
+      readonly count: number;
+    }
+  | {
+      readonly kind:
+        | "open-battle-log"
+        | "open-dreamwell-history"
+        | "open-pool-viewer"
+        | "toggle-opponent-hand"
+        | "toggle-player-hand"
+        | "skip-to-rewards"
+        | "reset-battle";
+    }
   | { readonly kind: "force-result"; readonly result: "defeat" | "draw" };
 
 export type MobileBattleDebugInvocation =
@@ -443,9 +485,11 @@ function pickerCandidate(
   cardPicker: MobileBattleCardPickerView | null,
   instanceId: string,
 ): MobileBattleCardPickerCandidateView | null {
-  return cardPicker?.candidates.find(
-    (candidate) => candidate.instanceId === instanceId,
-  ) ?? null;
+  return (
+    cardPicker?.candidates.find(
+      (candidate) => candidate.instanceId === instanceId,
+    ) ?? null
+  );
 }
 
 const ENEMY_HAND_VISIBLE_CARD_CAP = 6;
@@ -568,8 +612,7 @@ const BATTLE_PHASE_LIGHT_CSS = `
 // The status keeps its content-driven width while the two physical piles share
 // the remaining room. This leaves a stable gap between all three objects and
 // lets the phase controls size independently below the battlefield.
-const SIDE_ZONES_GRID_TEMPLATE =
-  "minmax(0, 1fr) max-content minmax(0, 1fr)";
+const SIDE_ZONES_GRID_TEMPLATE = "minmax(0, 1fr) max-content minmax(0, 1fr)";
 const SIDE_PILE_MAX_WIDTH = 90;
 // Desktop keeps the three status objects in one centered landscape dock so
 // the wide viewport creates deliberate outer whitespace instead of stretching
@@ -589,8 +632,7 @@ const PLAYER_HAND_TOP = `calc(${token("--space-12")} - ${token("--space-7")} + $
 const MOBILE_GRID_ROWS =
   "minmax(0, 9fr) minmax(0, 12fr) minmax(0, 20fr) minmax(0, 20fr) minmax(0, 12fr) minmax(0, 27fr)";
 const DESKTOP_PLAY_AREA_HEIGHT_PERCENT = 23;
-const DESKTOP_GRID_ROWS =
-  `minmax(0, 8fr) minmax(0, 11fr) minmax(0, ${String(DESKTOP_PLAY_AREA_HEIGHT_PERCENT)}fr) minmax(0, ${String(DESKTOP_PLAY_AREA_HEIGHT_PERCENT)}fr) minmax(0, 11fr) minmax(0, 24fr)`;
+const DESKTOP_GRID_ROWS = `minmax(0, 8fr) minmax(0, 11fr) minmax(0, ${String(DESKTOP_PLAY_AREA_HEIGHT_PERCENT)}fr) minmax(0, ${String(DESKTOP_PLAY_AREA_HEIGHT_PERCENT)}fr) minmax(0, 11fr) minmax(0, 24fr)`;
 
 const ROOT_STYLE: CSSProperties = {
   position: "fixed",
@@ -687,7 +729,8 @@ function BattleTurnAnnouncement({
 
   if (announcement === null) return null;
 
-  const label = announcement.side === perspective ? "Your Turn" : "Opponent Turn";
+  const label =
+    announcement.side === perspective ? "Your Turn" : "Opponent Turn";
   const size = isDesktop
     ? TURN_ANNOUNCEMENT_DESKTOP_SIZE
     : TURN_ANNOUNCEMENT_MOBILE_SIZE;
@@ -719,8 +762,7 @@ function BattleTurnAnnouncement({
           width: size,
           height: size,
           borderRadius: token("--radius-pill"),
-          background:
-            `radial-gradient(circle at 38% 28%, ${token("--surface-raised")} 0%, ${token("--surface-card")} 56%, ${token("--bg-sunken")} 100%)`,
+          background: `radial-gradient(circle at 38% 28%, ${token("--surface-raised")} 0%, ${token("--surface-card")} 56%, ${token("--bg-sunken")} 100%)`,
           boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
           animation: `battle-turn-announcement-disc ${animationDuration} ${token("--ease-in-out")} both`,
         }}
@@ -815,9 +857,10 @@ function FarHand({
   readonly selectedPickerCardIds: readonly string[];
   readonly onPickerCardToggle: (cardId: string) => void;
 }) {
-  const farHandCandidates = cardPicker?.candidates.filter(
-    (candidate) => candidate.owner === owner && candidate.zone === "hand",
-  ) ?? [];
+  const farHandCandidates =
+    cardPicker?.candidates.filter(
+      (candidate) => candidate.owner === owner && candidate.zone === "hand",
+    ) ?? [];
   const pickerCandidateIds = new Set(
     farHandCandidates.map((candidate) => candidate.instanceId),
   );
@@ -826,7 +869,8 @@ function FarHand({
     ...farHandCandidates.map((candidate) => candidate.instanceId),
   ]);
   const visibleCardIds = cardIds.filter(
-    (cardId, index) => index < ENEMY_HAND_VISIBLE_CARD_CAP || importantCardIds.has(cardId),
+    (cardId, index) =>
+      index < ENEMY_HAND_VISIBLE_CARD_CAP || importantCardIds.has(cardId),
   );
   return (
     <div
@@ -846,7 +890,9 @@ function FarHand({
     >
       {visibleCardIds.map((cardId, index) => {
         const candidate = pickerCandidate(cardPicker, cardId);
-        const card = cards.find((visibleCard) => visibleCard.id === cardId) ?? candidate?.card;
+        const card =
+          cards.find((visibleCard) => visibleCard.id === cardId) ??
+          candidate?.card;
         const showFaceUp = revealed || card !== undefined || candidate !== null;
         const highlighted = candidate?.highlighted === true;
         const { left, normalized } = centeredFanPosition({
@@ -906,9 +952,7 @@ function FarHand({
                   pickerCandidateIds.has(cardId)
                     ? {
                         draggable: false,
-                        debugGesture: isDesktop
-                          ? "context-menu"
-                          : "double-tap",
+                        debugGesture: isDesktop ? "context-menu" : "double-tap",
                         onActivate: () => onPickerCardToggle(cardId),
                       }
                     : undefined
@@ -971,9 +1015,9 @@ function SideZones({
   const deck = toDeckPile(side.deckCardIds);
   const voidPile = toVoidPile(side.voidCards);
   const canDrop =
-    interactions?.canInteract === true
-    && interactions.pendingCardId !== null
-    && interactions.pendingCardSource !== "near-hand";
+    interactions?.canInteract === true &&
+    interactions.pendingCardId !== null &&
+    interactions.pendingCardSource !== "near-hand";
   const zoneDropProps = (zone: "deck" | "void") => ({
     "data-battle-mobile-drop-kind": "zone",
     "data-battle-mobile-drop-owner": owner,
@@ -1055,9 +1099,11 @@ function SideZones({
             orientation="landscape"
             label={`${position === "near" ? "Your" : "Opponent"} deck`}
             cardInteraction="inactive"
-            onActivate={interactions?.onZoneOpen === undefined
-              ? undefined
-              : () => interactions.onZoneOpen?.({ owner, zone: "deck" })}
+            onActivate={
+              interactions?.onZoneOpen === undefined
+                ? undefined
+                : () => interactions.onZoneOpen?.({ owner, zone: "deck" })
+            }
             testId={`${owner}-battle-deck`}
           />
         </div>
@@ -1155,9 +1201,11 @@ function SideZones({
             cardInteraction="inactive"
             emptyState="outlined"
             emptyLabel={zoneLabels === "voids" ? "Void" : undefined}
-            onActivate={interactions?.onZoneOpen === undefined
-              ? undefined
-              : () => interactions.onZoneOpen?.({ owner, zone: "void" })}
+            onActivate={
+              interactions?.onZoneOpen === undefined
+                ? undefined
+                : () => interactions.onZoneOpen?.({ owner, zone: "void" })
+            }
             testId={`${owner}-battle-void`}
           />
         </div>
@@ -1196,17 +1244,19 @@ function PhaseIndicator({
         data-battle-phase-light=""
         style={{
           position: "absolute",
-          top: position === "near"
-            ? -PHASE_LIGHT_VERTICAL_OFFSET
-            : PHASE_LIGHT_VERTICAL_OFFSET,
+          top:
+            position === "near"
+              ? -PHASE_LIGHT_VERTICAL_OFFSET
+              : PHASE_LIGHT_VERTICAL_OFFSET,
           left: PHASE_LIGHT_LEFT[phase],
           width: PHASE_LIGHT_SIZE,
           height: PHASE_LIGHT_SIZE,
           // Follow the phase track along the status edge; the tuned signed
           // offset determines how much of the disc seats into the bar.
-          transform: position === "near"
-            ? "translate(-50%, -100%)"
-            : "translate(-50%, 0%)",
+          transform:
+            position === "near"
+              ? "translate(-50%, -100%)"
+              : "translate(-50%, 0%)",
           transition: `left ${token("--motion-object-travel")}`,
         }}
       >
@@ -1510,20 +1560,25 @@ function FaceUpCard({
           event.currentTarget.dataset.battlePointerDragging = "true";
           event.currentTarget.style.zIndex = "100";
         }
-        const viewportX = pointerDrag.constraintBounds === null
-          ? requestedViewportX
-          : clamp(
-              requestedViewportX,
-              pointerDrag.constraintBounds.left - pointerDrag.originBounds.left,
-              pointerDrag.constraintBounds.right - pointerDrag.originBounds.right,
-            );
-        const viewportY = pointerDrag.constraintBounds === null
-          ? requestedViewportY
-          : clamp(
-              requestedViewportY,
-              pointerDrag.constraintBounds.top - pointerDrag.originBounds.top,
-              pointerDrag.constraintBounds.bottom - pointerDrag.originBounds.bottom,
-            );
+        const viewportX =
+          pointerDrag.constraintBounds === null
+            ? requestedViewportX
+            : clamp(
+                requestedViewportX,
+                pointerDrag.constraintBounds.left -
+                  pointerDrag.originBounds.left,
+                pointerDrag.constraintBounds.right -
+                  pointerDrag.originBounds.right,
+              );
+        const viewportY =
+          pointerDrag.constraintBounds === null
+            ? requestedViewportY
+            : clamp(
+                requestedViewportY,
+                pointerDrag.constraintBounds.top - pointerDrag.originBounds.top,
+                pointerDrag.constraintBounds.bottom -
+                  pointerDrag.originBounds.bottom,
+              );
         const inverse = pointerDrag.inverseParentTransform;
         pointerDrag.viewportX = viewportX;
         pointerDrag.viewportY = viewportY;
@@ -1801,10 +1856,7 @@ function battlefieldCardSize(
   densityBackSlotCount: number,
 ): string {
   const slotCount = Math.max(layoutBackSlotCount, 1);
-  if (
-    !isDesktop &&
-    densityBackSlotCount >= MOBILE_BATTLE_MAX_BACK_RANK_SLOTS
-  ) {
+  if (!isDesktop && densityBackSlotCount >= MOBILE_BATTLE_MAX_BACK_RANK_SLOTS) {
     return `min(22cqw, calc((${String(BATTLEFIELD_FULL_WIDTH_PERCENT)}cqw - 0 * ${token("--space-1")}) / 10), calc((200cqh - 0 * ${token("--space-1")}) / 4))`;
   }
   const horizontalGapCount = Math.max(slotCount - 1, 0);
@@ -1832,8 +1884,7 @@ function battlefieldTrackWidth(
 ): string {
   if (gap === "0px") {
     const slotWidthPercent =
-      BATTLEFIELD_FULL_WIDTH_PERCENT /
-      MOBILE_BATTLE_MAX_BACK_RANK_SLOTS;
+      BATTLEFIELD_FULL_WIDTH_PERCENT / MOBILE_BATTLE_MAX_BACK_RANK_SLOTS;
     return `${String(slotCount * slotWidthPercent)}cqw`;
   }
   const gapCount = Math.max(slotCount - 1, 0);
@@ -1860,9 +1911,11 @@ function sameSlotTarget(
   left: MobileBattleSlotTarget,
   right: MobileBattleSlotTarget,
 ): boolean {
-  return left.owner === right.owner &&
+  return (
+    left.owner === right.owner &&
     left.rank === right.rank &&
-    left.slotId === right.slotId;
+    left.slotId === right.slotId
+  );
 }
 
 function slotTargetIsEligible(
@@ -1882,10 +1935,12 @@ function slotTargetIsEligible(
   if (interactions.eligibleSlotRanks !== undefined) {
     return interactions.eligibleSlotRanks.includes(target.rank);
   }
-  return interactions.eligibleSlotTargets === undefined ||
+  return (
+    interactions.eligibleSlotTargets === undefined ||
     interactions.eligibleSlotTargets.some((eligibleTarget) =>
-      sameSlotTarget(eligibleTarget, target)
-    );
+      sameSlotTarget(eligibleTarget, target),
+    )
+  );
 }
 
 function Rank({
@@ -1933,25 +1988,26 @@ function Rank({
   readonly interactions?: MobileBattleInteractions;
 }) {
   const canDropOnOwner =
-    interactions?.canInteract === true
-    && interactions.pendingCardId !== null
-    && interactions.pendingCardSource !== "near-hand"
-    && (interactions.pendingCardOwner === null
-      || interactions.pendingCardOwner === undefined
-      || interactions.pendingCardOwner === owner);
+    interactions?.canInteract === true &&
+    interactions.pendingCardId !== null &&
+    interactions.pendingCardSource !== "near-hand" &&
+    (interactions.pendingCardOwner === null ||
+      interactions.pendingCardOwner === undefined ||
+      interactions.pendingCardOwner === owner);
   const desktopSlotCount =
     rank === "back"
       ? layoutBackSlotCount
       : Math.max(layoutBackSlotCount - 1, 1);
-  const mobileSlotCount = rank === "back"
-    ? Math.min(
-        Math.max(slots.length, MOBILE_BATTLE_MIN_BACK_RANK_SLOTS),
-        MOBILE_BATTLE_MAX_BACK_RANK_SLOTS,
-      )
-    : Math.min(
-        Math.max(slots.length, MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS),
-        MOBILE_BATTLE_MAX_FRONT_RANK_SLOTS,
-      );
+  const mobileSlotCount =
+    rank === "back"
+      ? Math.min(
+          Math.max(slots.length, MOBILE_BATTLE_MIN_BACK_RANK_SLOTS),
+          MOBILE_BATTLE_MAX_BACK_RANK_SLOTS,
+        )
+      : Math.min(
+          Math.max(slots.length, MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS),
+          MOBILE_BATTLE_MAX_FRONT_RANK_SLOTS,
+        );
   const visibleSlots = isDesktop
     ? centerAsymmetricDesktopRanks
       ? slots
@@ -1962,8 +2018,7 @@ function Rank({
     visibleSlots.some((slot) => slot.card?.id === draggingCardId);
   const trackSlotCount = Math.max(visibleSlots.length, 1);
   const isCenterFacingRank =
-    (position === "far" && order === 1) ||
-    (position === "near" && order === 0);
+    (position === "far" && order === 1) || (position === "near" && order === 0);
   const centerOffset = token("--space-1");
   const density = isDesktop
     ? {
@@ -2019,11 +2074,12 @@ function Rank({
             canDropOnOwner &&
             interactions !== undefined &&
             slotTargetIsEligible(interactions, slotTarget);
-          const candidate = slot.card === null
-            ? null
-            : pickerCandidate(cardPicker, slot.card.id);
-          const isPickerSelected = slot.card !== null &&
-            selectedPickerCardIds.includes(slot.card.id);
+          const candidate =
+            slot.card === null
+              ? null
+              : pickerCandidate(cardPicker, slot.card.id);
+          const isPickerSelected =
+            slot.card !== null && selectedPickerCardIds.includes(slot.card.id);
           const isPickerHighlighted = candidate?.highlighted === true;
           return (
             <div
@@ -2107,11 +2163,17 @@ function Rank({
                   card={slot.card}
                   zone={`${owner}-${rank}-rank`}
                   snapLayout={snapLayoutCardId === slot.card.id}
-                  selection={candidate === null
-                    ? interactions?.targetSelectionCardId === slot.card.id || interactions?.targetableCardIds?.includes(slot.card.id)
-                      ? { selected: true, color: "gold-light" }
-                      : undefined
-                    : { selected: isPickerSelected || isPickerHighlighted, color: isPickerSelected ? "gold-light" : "gold" }}
+                  selection={
+                    candidate === null
+                      ? interactions?.targetSelectionCardId === slot.card.id ||
+                        interactions?.targetableCardIds?.includes(slot.card.id)
+                        ? { selected: true, color: "gold-light" }
+                        : undefined
+                      : {
+                          selected: isPickerSelected || isPickerHighlighted,
+                          color: isPickerSelected ? "gold-light" : "gold",
+                        }
+                  }
                   interaction={
                     candidate !== null
                       ? {
@@ -2119,7 +2181,8 @@ function Rank({
                           debugGesture: isDesktop
                             ? "context-menu"
                             : "double-tap",
-                          onActivate: () => onPickerCardToggle(candidate.instanceId),
+                          onActivate: () =>
+                            onPickerCardToggle(candidate.instanceId),
                         }
                       : interactions === undefined
                         ? undefined
@@ -2135,9 +2198,14 @@ function Rank({
                                 "battlefield",
                               );
                             },
-                            onActivate: interactions.onBattlefieldCardActivate === undefined
-                              ? undefined
-                              : () => interactions.onBattlefieldCardActivate?.(slot.card?.id ?? ""),
+                            onActivate:
+                              interactions.onBattlefieldCardActivate ===
+                              undefined
+                                ? undefined
+                                : () =>
+                                    interactions.onBattlefieldCardActivate?.(
+                                      slot.card?.id ?? "",
+                                    ),
                             ...(interactions.onCardDebugActivate === undefined
                               ? {}
                               : {
@@ -2290,9 +2358,9 @@ function NearHand({
   const pickerCandidateIds = new Set(cardPicker?.candidateIds ?? []);
   const canDrop =
     cardPicker === null &&
-    interactions?.canInteract === true
-    && interactions.pendingCardId !== null
-    && interactions.pendingCardSource !== "near-hand";
+    interactions?.canInteract === true &&
+    interactions.pendingCardId !== null &&
+    interactions.pendingCardSource !== "near-hand";
   return (
     <div
       data-battle-mobile-row="near-hand"
@@ -2318,8 +2386,8 @@ function NearHand({
         zIndex: PLAYER_HAND_Z_INDEX,
         pointerEvents: "none",
         overflow:
-          interactions?.pendingCardId !== undefined
-          && interactions.pendingCardId !== null
+          interactions?.pendingCardId !== undefined &&
+          interactions.pendingCardId !== null
             ? "visible"
             : "hidden",
         display: isDesktop ? "flex" : undefined,
@@ -2333,9 +2401,7 @@ function NearHand({
         paddingLeft: isDesktop
           ? `calc(var(${BATTLE_HUD_START_CLEARANCE_PROPERTY}, 0px) + ${token("--space-8")})`
           : undefined,
-        transform: isDesktop
-          ? `translateY(${token("--space-8")})`
-          : undefined,
+        transform: isDesktop ? `translateY(${token("--space-8")})` : undefined,
         boxSizing: isDesktop ? "border-box" : undefined,
       }}
     >
@@ -2371,53 +2437,49 @@ function NearHand({
                 ? isPickerCandidate
                   ? {
                       draggable: false,
-                      debugGesture: isDesktop
-                        ? "context-menu"
-                        : "double-tap",
+                      debugGesture: isDesktop ? "context-menu" : "double-tap",
                       onActivate: () => onPickerCardToggle(card.id),
                     }
                   : undefined
                 : interactions === undefined || !interactions.canInteract
-                ? undefined
-                : {
-                    draggable: interactions.canInteract,
-                    debugGesture: isDesktop
-                      ? "context-menu"
-                      : "double-tap",
-                    onActivate: () =>
-                      interactions.onHandCardActivate(card.id),
-                    ...(interactions.onCardDebugActivate === undefined
-                      ? {}
-                      : {
-                          onDebugActivate: (invocation) =>
-                            interactions.onCardDebugActivate?.(
-                              card.id,
-                              "near-hand",
-                              invocation,
-                            ),
-                        }),
-                    onDragStart: () => {
-                      onCardDragChange(true, card.id);
-                      interactions.onCardDragStart(card.id, "near-hand");
-                    },
-                    onDragEnd: () => {
-                      onCardDragChange(false);
-                      interactions.onCardDragEnd();
-                    },
-                    onPointerDrop: (
-                      clientX,
-                      clientY,
-                      placementClientX,
-                      placementClientY,
-                    ) =>
-                      dropMobileCardAtPoint(
-                        interactions,
+                  ? undefined
+                  : {
+                      draggable: interactions.canInteract,
+                      debugGesture: isDesktop ? "context-menu" : "double-tap",
+                      onActivate: () =>
+                        interactions.onHandCardActivate(card.id),
+                      ...(interactions.onCardDebugActivate === undefined
+                        ? {}
+                        : {
+                            onDebugActivate: (invocation) =>
+                              interactions.onCardDebugActivate?.(
+                                card.id,
+                                "near-hand",
+                                invocation,
+                              ),
+                          }),
+                      onDragStart: () => {
+                        onCardDragChange(true, card.id);
+                        interactions.onCardDragStart(card.id, "near-hand");
+                      },
+                      onDragEnd: () => {
+                        onCardDragChange(false);
+                        interactions.onCardDragEnd();
+                      },
+                      onPointerDrop: (
                         clientX,
                         clientY,
                         placementClientX,
                         placementClientY,
-                      ),
-                  }
+                      ) =>
+                        dropMobileCardAtPoint(
+                          interactions,
+                          clientX,
+                          clientY,
+                          placementClientX,
+                          placementClientY,
+                        ),
+                    }
             }
           />
         );
@@ -2425,8 +2487,7 @@ function NearHand({
           const isOnlyCard = cards.length === 1;
           const isFirstCard = index === 0;
           const isLastCard = index === cards.length - 1;
-          const isCenteredCard =
-            isOnlyCard || (!isFirstCard && !isLastCard);
+          const isCenteredCard = isOnlyCard || (!isFirstCard && !isLastCard);
           return (
             <div
               key={card.id}
@@ -2449,11 +2510,18 @@ function NearHand({
                   cardPicker !== null && isPickerSelected ? "true" : undefined
                 }
                 data-battle-card-picker-highlighted={
-                  cardPicker !== null && isPickerHighlighted ? "true" : undefined
+                  cardPicker !== null && isPickerHighlighted
+                    ? "true"
+                    : undefined
                 }
                 style={{
                   position: "absolute",
-                  left: isCenteredCard || isFirstCard ? (isCenteredCard ? "50%" : 0) : undefined,
+                  left:
+                    isCenteredCard || isFirstCard
+                      ? isCenteredCard
+                        ? "50%"
+                        : 0
+                      : undefined,
                   right: isLastCard && !isOnlyCard ? 0 : undefined,
                   top: 0,
                   height: "100%",
@@ -2577,7 +2645,10 @@ function dropMobileCardAtPoint(
       return;
     }
     const chosenCandidate = resolution.candidates.find((candidate) =>
-      sameSlotTarget(candidate.target, resolution.chosenTarget as MobileBattleSlotTarget)
+      sameSlotTarget(
+        candidate.target,
+        resolution.chosenTarget as MobileBattleSlotTarget,
+      ),
     );
     if (chosenCandidate?.eligible !== true) {
       interactions.onBattlefieldDropRejected?.({
@@ -2637,10 +2708,7 @@ function resolveBattlefieldSlot(
   slots.forEach((slot) => {
     const rank = slot.dataset.battleMobileDropRank;
     const slotId = slot.dataset.battleMobileDropSlotId;
-    if (
-      (rank !== "back" && rank !== "front") ||
-      slotId === undefined
-    ) {
+    if ((rank !== "back" && rank !== "front") || slotId === undefined) {
       return;
     }
     const target = { owner, rank, slotId } as const;
@@ -2684,33 +2752,35 @@ function resolveBattlefieldSlot(
         placementClientX <= bounds.right &&
         placementClientY >= bounds.top &&
         placementClientY <= bounds.bottom,
-      edgeDistanceSquared:
-        edgeDeltaX * edgeDeltaX + edgeDeltaY * edgeDeltaY,
+      edgeDistanceSquared: edgeDeltaX * edgeDeltaX + edgeDeltaY * edgeDeltaY,
     });
   });
-  candidates.sort((left, right) =>
-    left.distanceSquared - right.distanceSquared ||
-    `${left.target.rank}:${left.target.slotId}`.localeCompare(
-      `${right.target.rank}:${right.target.slotId}`,
-    )
+  candidates.sort(
+    (left, right) =>
+      left.distanceSquared - right.distanceSquared ||
+      `${left.target.rank}:${left.target.slotId}`.localeCompare(
+        `${right.target.rank}:${right.target.slotId}`,
+      ),
   );
   const hitSlot = placementHitTarget?.closest<HTMLElement>(
     `[data-battle-mobile-drop-kind="slot"][data-battle-mobile-drop-owner="${owner}"]`,
   );
-  const directHit = hitSlot === null || hitSlot === undefined
-    ? undefined
-    : candidates.find(
-        (candidate) =>
-          candidate.target.rank === hitSlot.dataset.battleMobileDropRank &&
-          candidate.target.slotId === hitSlot.dataset.battleMobileDropSlotId,
-      );
+  const directHit =
+    hitSlot === null || hitSlot === undefined
+      ? undefined
+      : candidates.find(
+          (candidate) =>
+            candidate.target.rank === hitSlot.dataset.battleMobileDropRank &&
+            candidate.target.slotId === hitSlot.dataset.battleMobileDropSlotId,
+        );
   const contained = candidates.find((candidate) => candidate.containsPlacement);
   const nearest = candidates[0];
   const withinSnapTolerance =
     nearest !== undefined &&
     nearest.edgeDistanceSquared <=
       Math.min(nearest.rect.width, nearest.rect.height) ** 2 / 4;
-  const chosen = directHit ?? contained ?? (withinSnapTolerance ? nearest : undefined);
+  const chosen =
+    directHit ?? contained ?? (withinSnapTolerance ? nearest : undefined);
   return {
     releasePoint: { clientX, clientY },
     placementPoint: {
@@ -2764,11 +2834,12 @@ function pickerZoneCaption(
   perspective: BattlePerspectiveSide,
 ): string {
   const owner = candidate.owner === perspective ? "Your" : "Opponent";
-  const zone = candidate.zone === "backRank"
-    ? "Back Rank"
-    : candidate.zone === "frontRank"
-      ? "Front Rank"
-      : candidate.zone[0].toUpperCase() + candidate.zone.slice(1);
+  const zone =
+    candidate.zone === "backRank"
+      ? "Back Rank"
+      : candidate.zone === "frontRank"
+        ? "Front Rank"
+        : candidate.zone[0].toUpperCase() + candidate.zone.slice(1);
   return candidate.highlighted ? "Just Drawn" : `${owner} ${zone}`;
 }
 
@@ -2800,7 +2871,8 @@ function CardPickerGallery({
     cardPicker.count,
     cardPicker.candidates.length,
   );
-  const canSubmit = cardPicker.canResolve &&
+  const canSubmit =
+    cardPicker.canResolve &&
     selectedPickerCardIds.length === requiredCount &&
     interactions?.onCardPickerSubmit !== undefined;
   const submitAction = {
@@ -2850,7 +2922,9 @@ function CardPickerGallery({
           title={cardPicker.label}
           subtitle={`${String(selectedPickerCardIds.length)}/${String(requiredCount)} selected`}
           cards={cardPicker.candidates.map((candidate) => {
-            const selected = selectedPickerCardIds.includes(candidate.instanceId);
+            const selected = selectedPickerCardIds.includes(
+              candidate.instanceId,
+            );
             return {
               entryId: candidate.instanceId,
               model: candidate.card.model,
@@ -2864,7 +2938,9 @@ function CardPickerGallery({
             };
           })}
           emptyLabel="No valid targets."
-          columns={isDesktop ? cardPickerColumns(cardPicker.candidates.length) : "two"}
+          columns={
+            isDesktop ? cardPickerColumns(cardPicker.candidates.length) : "two"
+          }
           cardSize="compact"
           frame={isDesktop ? "floating" : "fullBleed"}
           spacing="compact"
@@ -2909,17 +2985,18 @@ function ControlRow({
   readonly layoutBackSlotCount: number;
   readonly phaseNavigation: "both" | "end-turn" | "tutorial" | "hidden";
   readonly perspective: BattlePerspectiveSide;
-  readonly tutorialNextLabel: "End Turn" | "Done repositioning";
+  readonly tutorialNextLabel: "End Turn" | "Done Repositioning";
 }) {
   const disabled = interactions?.canInteract !== true;
-  const hasAlternateNextControls =
-    aiApproval !== null || choicePrompt !== null;
-  const requiredPickerCount = cardPicker === null
-    ? 0
-    : Math.min(cardPicker.count, cardPicker.candidateIds.length);
-  const canSubmitPicker = cardPicker !== null
-    && cardPicker.canResolve
-    && selectedPickerCardIds.length === requiredPickerCount;
+  const hasAlternateNextControls = aiApproval !== null || choicePrompt !== null;
+  const requiredPickerCount =
+    cardPicker === null
+      ? 0
+      : Math.min(cardPicker.count, cardPicker.candidateIds.length);
+  const canSubmitPicker =
+    cardPicker !== null &&
+    cardPicker.canResolve &&
+    selectedPickerCardIds.length === requiredPickerCount;
   return (
     <div
       data-battle-mobile-row="control-row"
@@ -2976,9 +3053,12 @@ function ControlRow({
               whiteSpace: "nowrap",
             }}
           >
-            {cardPicker.label} from {(cardPicker.candidateOwner ?? cardPicker.side) === perspective
+            {cardPicker.label} from{" "}
+            {(cardPicker.candidateOwner ?? cardPicker.side) === perspective
               ? "your hand"
-              : "the opponent hand"} · {String(selectedPickerCardIds.length)}/{String(requiredPickerCount)}
+              : "the opponent hand"}{" "}
+            · {String(selectedPickerCardIds.length)}/
+            {String(requiredPickerCount)}
           </span>
           {cardPicker.optional ? (
             <GlassButton
@@ -2991,9 +3071,13 @@ function ControlRow({
           <GlassButton
             label={requiredPickerCount === 0 ? "Continue" : "Submit"}
             variant="accent"
-            disabled={!canSubmitPicker || interactions?.onCardPickerSubmit === undefined}
+            disabled={
+              !canSubmitPicker || interactions?.onCardPickerSubmit === undefined
+            }
             testId="battle-card-picker-submit"
-            onPress={() => interactions?.onCardPickerSubmit?.(selectedPickerCardIds)}
+            onPress={() =>
+              interactions?.onCardPickerSubmit?.(selectedPickerCardIds)
+            }
           />
         </div>
       ) : phaseNavigation !== "hidden" ? (
@@ -3038,17 +3122,13 @@ function ControlRow({
             }
             aria-label={choicePrompt?.label}
             style={{
-              width: hasAlternateNextControls
-                ? undefined
-                : "max-content",
+              width: hasAlternateNextControls ? undefined : "max-content",
               minWidth: hasAlternateNextControls
                 ? undefined
                 : NEXT_PHASE_CONTROL_WIDTH,
               display: hasAlternateNextControls ? "flex" : "grid",
               alignItems: hasAlternateNextControls ? "center" : undefined,
-              justifyContent: hasAlternateNextControls
-                ? "flex-end"
-                : undefined,
+              justifyContent: hasAlternateNextControls ? "flex-end" : undefined,
               gap: hasAlternateNextControls ? token("--space-4") : undefined,
             }}
           >
@@ -3072,13 +3152,14 @@ function ControlRow({
                   phaseNavigation === "end-turn"
                     ? "End Turn"
                     : phaseNavigation === "tutorial"
-                    ? tutorialNextLabel
-                    : "Next Phase"
+                      ? tutorialNextLabel
+                      : "Next Phase"
                 }
                 variant="accent"
                 disabled={disabled}
                 testId={
-                  phaseNavigation === "end-turn" || phaseNavigation === "tutorial"
+                  phaseNavigation === "end-turn" ||
+                  phaseNavigation === "tutorial"
                     ? "tutorial-end-turn"
                     : undefined
                 }
@@ -3119,18 +3200,17 @@ function BattleControlMessage({
   readonly choicePrompt: MobileBattleChoicePromptView | null;
   readonly promptNotice: MobileBattlePromptNoticeView | null;
 }) {
-  const message = promptNotice?.message ?? choicePrompt?.label ?? aiApproval?.description;
+  const message =
+    promptNotice?.message ?? choicePrompt?.label ?? aiApproval?.description;
   if (message === undefined) return null;
   return (
     <div
       aria-live="polite"
-      data-battle-ai-approval-message={
-        aiApproval === null ? undefined : ""
+      data-battle-ai-approval-message={aiApproval === null ? undefined : ""}
+      data-battle-choice-prompt-message={choicePrompt === null ? undefined : ""}
+      data-battle-prompt-waiting={
+        promptNotice === null ? undefined : promptNotice.promptSide
       }
-      data-battle-choice-prompt-message={
-        choicePrompt === null ? undefined : ""
-      }
-      data-battle-prompt-waiting={promptNotice === null ? undefined : promptNotice.promptSide}
       style={{
         maxWidth: 320,
         overflow: "hidden",
@@ -3178,7 +3258,12 @@ function BattleDebugMenu({
         <div
           role="menu"
           aria-label="Battle debug actions"
-          style={{ position: "absolute", top: `calc(100% + ${token("--space-3")})`, right: 0, width: 300 }}
+          style={{
+            position: "absolute",
+            top: `calc(100% + ${token("--space-3")})`,
+            right: 0,
+            width: 300,
+          }}
         >
           <GlassPanel radius="popover" tint="popover">
             <div
@@ -3221,11 +3306,39 @@ function BattleDebugMenu({
 const INSPECTOR_ID = "cumulus-battle-inspector";
 const INSPECTOR_DOCK_MIN_WIDTH = 1280;
 
-function InspectorValue({ label, value }: { readonly label: string; readonly value: string }) {
+function InspectorValue({
+  label,
+  value,
+}: {
+  readonly label: string;
+  readonly value: string;
+}) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("--space-1"), minWidth: 0 }}>
-      <span style={{ color: token("--text-on-glass-muted"), font: token("--t-caption") }}>{label}</span>
-      <span style={{ color: token("--text-on-glass"), font: token("--t-body-sm"), overflowWrap: "anywhere" }}>{value}</span>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: token("--space-1"),
+        minWidth: 0,
+      }}
+    >
+      <span
+        style={{
+          color: token("--text-on-glass-muted"),
+          font: token("--t-caption"),
+        }}
+      >
+        {label}
+      </span>
+      <span
+        style={{
+          color: token("--text-on-glass"),
+          font: token("--t-body-sm"),
+          overflowWrap: "anywhere",
+        }}
+      >
+        {value}
+      </span>
     </div>
   );
 }
@@ -3289,10 +3402,20 @@ function BattleInspectorContent({
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: token("--space-4") }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: token("--space-4"),
+      }}
+    >
       <div data-battle-inspector-perspective-control="" style={{ minWidth: 0 }}>
         <GlassButton
-          label={perspective === "player" ? "Control Opponent" : "Return to Your Side"}
+          label={
+            perspective === "player"
+              ? "Control Opponent"
+              : "Return to Your Side"
+          }
           widthReservations={[
             { label: "Control Opponent" },
             { label: "Return to Your Side" },
@@ -3308,20 +3431,45 @@ function BattleInspectorContent({
 
       <GroupPanel>
         <div style={{ ...groupLayout, gap: token("--space-3") }}>
-          <h3 style={{ margin: 0, color: token("--text-on-glass"), font: token("--t-title-sm") }}>Battle Snapshot</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: token("--space-4") }}>
+          <h3
+            style={{
+              margin: 0,
+              color: token("--text-on-glass"),
+              font: token("--t-title-sm"),
+            }}
+          >
+            Battle Snapshot
+          </h3>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+              gap: token("--space-4"),
+            }}
+          >
             <InspectorValue label="Turn" value={inspector.turn} />
             <InspectorValue label="Phase" value={inspector.phase} />
             <InspectorValue label="Active side" value={inspector.activeSide} />
             <InspectorValue label="Result" value={inspector.result} />
-            <InspectorValue label="Next Dreamwell order" value={inspector.nextDreamwellOrder} />
+            <InspectorValue
+              label="Next Dreamwell order"
+              value={inspector.nextDreamwellOrder}
+            />
           </div>
         </div>
       </GroupPanel>
 
       <GroupPanel>
         <div style={groupLayout}>
-          <h3 style={{ margin: 0, color: token("--text-on-glass"), font: token("--t-title-sm") }}>History</h3>
+          <h3
+            style={{
+              margin: 0,
+              color: token("--text-on-glass"),
+              font: token("--t-title-sm"),
+            }}
+          >
+            History
+          </h3>
           <div
             style={{
               display: "flex",
@@ -3351,7 +3499,10 @@ function BattleInspectorContent({
           <div style={groupLayout}>
             <SegmentedControl
               full
-              options={[{ value: "player", label: "You" }, { value: "enemy", label: "Enemy" }]}
+              options={[
+                { value: "player", label: "You" },
+                { value: "enemy", label: "Enemy" },
+              ]}
               value={selectedSide}
               onChange={(value) => onSelectSide(value as MobileBattleOwner)}
             />
@@ -3361,80 +3512,383 @@ function BattleInspectorContent({
 
       <GroupPanel>
         <div style={groupLayout}>
-          <h3 style={{ margin: 0, color: token("--text-on-glass"), font: token("--t-title-sm") }}>{side.heading} Resources</h3>
-          <NumberStepper label="Points" value={side.points} resource="points" decrementLabel={`Decrease ${side.heading.toLowerCase()} points`} incrementLabel={`Increase ${side.heading.toLowerCase()} points`} decrementDisabled={side.points <= 0 || onAction === undefined} incrementDisabled={onAction === undefined} onDecrement={() => onAction?.({ kind: "adjust-stat", side: selectedSide, stat: "points", amount: -1 })} onIncrement={() => onAction?.({ kind: "adjust-stat", side: selectedSide, stat: "points", amount: 1 })} />
-          <NumberStepper label="Current energy" value={side.currentEnergy} resource="energy" decrementLabel={`Decrease ${side.heading.toLowerCase()} current energy`} incrementLabel={`Increase ${side.heading.toLowerCase()} current energy`} decrementDisabled={side.currentEnergy <= 0 || onAction === undefined} incrementDisabled={onAction === undefined} onDecrement={() => onAction?.({ kind: "adjust-stat", side: selectedSide, stat: "currentEnergy", amount: -1 })} onIncrement={() => onAction?.({ kind: "adjust-stat", side: selectedSide, stat: "currentEnergy", amount: 1 })} />
-          <NumberStepper label="Maximum energy" value={side.maxEnergy} resource="energy" decrementLabel={`Decrease ${side.heading.toLowerCase()} maximum energy`} incrementLabel={`Increase ${side.heading.toLowerCase()} maximum energy`} decrementDisabled={side.maxEnergy <= 0 || onAction === undefined} incrementDisabled={onAction === undefined} onDecrement={() => onAction?.({ kind: "adjust-stat", side: selectedSide, stat: "maxEnergy", amount: -1 })} onIncrement={() => onAction?.({ kind: "adjust-stat", side: selectedSide, stat: "maxEnergy", amount: 1 })} />
-          <NumberStepper label="Current + maximum" value={side.currentEnergy} displayValue={`${String(side.currentEnergy)}/${String(side.maxEnergy)}`} resource="energy" decrementLabel={`Decrease ${side.heading.toLowerCase()} current and maximum energy`} incrementLabel={`Increase ${side.heading.toLowerCase()} current and maximum energy`} decrementDisabled={side.currentEnergy <= 0 || side.maxEnergy <= 0 || onAction === undefined} incrementDisabled={onAction === undefined} onDecrement={() => onAction?.({ kind: "adjust-energy-pair", side: selectedSide, amount: -1 })} onIncrement={() => onAction?.({ kind: "adjust-energy-pair", side: selectedSide, amount: 1 })} />
+          <h3
+            style={{
+              margin: 0,
+              color: token("--text-on-glass"),
+              font: token("--t-title-sm"),
+            }}
+          >
+            {side.heading} Resources
+          </h3>
+          <NumberStepper
+            label="Points"
+            value={side.points}
+            resource="points"
+            decrementLabel={`Decrease ${side.heading.toLowerCase()} points`}
+            incrementLabel={`Increase ${side.heading.toLowerCase()} points`}
+            decrementDisabled={side.points <= 0 || onAction === undefined}
+            incrementDisabled={onAction === undefined}
+            onDecrement={() =>
+              onAction?.({
+                kind: "adjust-stat",
+                side: selectedSide,
+                stat: "points",
+                amount: -1,
+              })
+            }
+            onIncrement={() =>
+              onAction?.({
+                kind: "adjust-stat",
+                side: selectedSide,
+                stat: "points",
+                amount: 1,
+              })
+            }
+          />
+          <NumberStepper
+            label="Current energy"
+            value={side.currentEnergy}
+            resource="energy"
+            decrementLabel={`Decrease ${side.heading.toLowerCase()} current energy`}
+            incrementLabel={`Increase ${side.heading.toLowerCase()} current energy`}
+            decrementDisabled={
+              side.currentEnergy <= 0 || onAction === undefined
+            }
+            incrementDisabled={onAction === undefined}
+            onDecrement={() =>
+              onAction?.({
+                kind: "adjust-stat",
+                side: selectedSide,
+                stat: "currentEnergy",
+                amount: -1,
+              })
+            }
+            onIncrement={() =>
+              onAction?.({
+                kind: "adjust-stat",
+                side: selectedSide,
+                stat: "currentEnergy",
+                amount: 1,
+              })
+            }
+          />
+          <NumberStepper
+            label="Maximum energy"
+            value={side.maxEnergy}
+            resource="energy"
+            decrementLabel={`Decrease ${side.heading.toLowerCase()} maximum energy`}
+            incrementLabel={`Increase ${side.heading.toLowerCase()} maximum energy`}
+            decrementDisabled={side.maxEnergy <= 0 || onAction === undefined}
+            incrementDisabled={onAction === undefined}
+            onDecrement={() =>
+              onAction?.({
+                kind: "adjust-stat",
+                side: selectedSide,
+                stat: "maxEnergy",
+                amount: -1,
+              })
+            }
+            onIncrement={() =>
+              onAction?.({
+                kind: "adjust-stat",
+                side: selectedSide,
+                stat: "maxEnergy",
+                amount: 1,
+              })
+            }
+          />
+          <NumberStepper
+            label="Current + maximum"
+            value={side.currentEnergy}
+            displayValue={`${String(side.currentEnergy)}/${String(side.maxEnergy)}`}
+            resource="energy"
+            decrementLabel={`Decrease ${side.heading.toLowerCase()} current and maximum energy`}
+            incrementLabel={`Increase ${side.heading.toLowerCase()} current and maximum energy`}
+            decrementDisabled={
+              side.currentEnergy <= 0 ||
+              side.maxEnergy <= 0 ||
+              onAction === undefined
+            }
+            incrementDisabled={onAction === undefined}
+            onDecrement={() =>
+              onAction?.({
+                kind: "adjust-energy-pair",
+                side: selectedSide,
+                amount: -1,
+              })
+            }
+            onIncrement={() =>
+              onAction?.({
+                kind: "adjust-energy-pair",
+                side: selectedSide,
+                amount: 1,
+              })
+            }
+          />
         </div>
       </GroupPanel>
 
       <GroupPanel>
         <div style={groupLayout}>
-          <h3 style={{ margin: 0, color: token("--text-on-glass"), font: token("--t-title-sm") }}>{side.heading} Zones</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: token("--space-4") }}>
+          <h3
+            style={{
+              margin: 0,
+              color: token("--text-on-glass"),
+              font: token("--t-title-sm"),
+            }}
+          >
+            {side.heading} Zones
+          </h3>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+              gap: token("--space-4"),
+            }}
+          >
             <InspectorValue label="Hand" value={String(side.zones.hand)} />
             <InspectorValue label="Deck" value={String(side.zones.deck)} />
             <InspectorValue label="Void" value={String(side.zones.void)} />
-            <InspectorValue label="Banished" value={String(side.zones.banished)} />
-            <InspectorValue label="Back Rank" value={String(side.zones.backRank)} />
-            <InspectorValue label="Front Rank" value={String(side.zones.frontRank)} />
+            <InspectorValue
+              label="Banished"
+              value={String(side.zones.banished)}
+            />
+            <InspectorValue
+              label="Back Rank"
+              value={String(side.zones.backRank)}
+            />
+            <InspectorValue
+              label="Front Rank"
+              value={String(side.zones.frontRank)}
+            />
           </div>
         </div>
       </GroupPanel>
 
       <GroupPanel>
         <div style={groupLayout}>
-          <h3 style={{ margin: 0, color: token("--text-on-glass"), font: token("--t-title-sm") }}>{side.heading} Actions</h3>
+          <h3
+            style={{
+              margin: 0,
+              color: token("--text-on-glass"),
+              font: token("--t-title-sm"),
+            }}
+          >
+            {side.heading} Actions
+          </h3>
           <div style={actionGrid}>
-            <InspectorButton label="Draw" variant="accent" onPress={() => onAction?.({ kind: "draw", side: selectedSide })} disabled={onAction === undefined} testId={`battle-inspector-draw-${selectedSide}`} />
-            <InspectorButton label="Discard" onPress={() => onAction?.({ kind: "discard", side: selectedSide })} disabled={!side.canDiscard || onAction === undefined} testId={`battle-inspector-discard-${selectedSide}`} />
+            <InspectorButton
+              label="Draw"
+              variant="accent"
+              onPress={() => onAction?.({ kind: "draw", side: selectedSide })}
+              disabled={onAction === undefined}
+              testId={`battle-inspector-draw-${selectedSide}`}
+            />
+            <InspectorButton
+              label="Discard"
+              onPress={() =>
+                onAction?.({ kind: "discard", side: selectedSide })
+              }
+              disabled={!side.canDiscard || onAction === undefined}
+              testId={`battle-inspector-discard-${selectedSide}`}
+            />
           </div>
-          <h4 style={{ margin: 0, color: token("--text-on-glass-muted"), font: token("--t-button-sm") }}>Deck & Effects</h4>
+          <h4
+            style={{
+              margin: 0,
+              color: token("--text-on-glass-muted"),
+              font: token("--t-button-sm"),
+            }}
+          >
+            Deck & Effects
+          </h4>
           <div style={actionGrid}>
-            <InspectorButton label="Foresee" onPress={() => onAction?.({ kind: "foresee", side: selectedSide })} disabled={onAction === undefined} />
-            <InspectorButton label="Shuffle" onPress={() => onAction?.({ kind: "shuffle", side: selectedSide })} disabled={!side.canShuffle || onAction === undefined} />
-            <InspectorButton label="Reorder Deck" onPress={() => onAction?.({ kind: "reorder-deck", side: selectedSide })} disabled={side.zones.deck === 0 || onAction === undefined} />
-            <InspectorButton label="Open Deck" onPress={() => onAction?.({ kind: "open-zone", side: selectedSide, zone: "deck" })} disabled={onAction === undefined} />
-            <InspectorButton label="Open Void" onPress={() => onAction?.({ kind: "open-zone", side: selectedSide, zone: "void" })} disabled={onAction === undefined} />
-            <InspectorButton label="Open Banished" onPress={() => onAction?.({ kind: "open-zone", side: selectedSide, zone: "banished" })} disabled={onAction === undefined} />
-            <InspectorButton label="Dreamwell + Draw" onPress={() => onAction?.({ kind: "dreamwell-draw", side: selectedSide })} disabled={onAction === undefined} />
+            <InspectorButton
+              label="Foresee"
+              onPress={() =>
+                onAction?.({ kind: "foresee", side: selectedSide })
+              }
+              disabled={onAction === undefined}
+            />
+            <InspectorButton
+              label="Shuffle"
+              onPress={() =>
+                onAction?.({ kind: "shuffle", side: selectedSide })
+              }
+              disabled={!side.canShuffle || onAction === undefined}
+            />
+            <InspectorButton
+              label="Reorder Deck"
+              onPress={() =>
+                onAction?.({ kind: "reorder-deck", side: selectedSide })
+              }
+              disabled={side.zones.deck === 0 || onAction === undefined}
+            />
+            <InspectorButton
+              label="Open Deck"
+              onPress={() =>
+                onAction?.({
+                  kind: "open-zone",
+                  side: selectedSide,
+                  zone: "deck",
+                })
+              }
+              disabled={onAction === undefined}
+            />
+            <InspectorButton
+              label="Open Void"
+              onPress={() =>
+                onAction?.({
+                  kind: "open-zone",
+                  side: selectedSide,
+                  zone: "void",
+                })
+              }
+              disabled={onAction === undefined}
+            />
+            <InspectorButton
+              label="Open Banished"
+              onPress={() =>
+                onAction?.({
+                  kind: "open-zone",
+                  side: selectedSide,
+                  zone: "banished",
+                })
+              }
+              disabled={onAction === undefined}
+            />
+            <InspectorButton
+              label="Dreamwell + Draw"
+              onPress={() =>
+                onAction?.({ kind: "dreamwell-draw", side: selectedSide })
+              }
+              disabled={onAction === undefined}
+            />
           </div>
-          <NumberStepper label="Erode count" value={erodeCount} decrementLabel={`Decrease erode count for ${side.heading.toLowerCase()}`} incrementLabel={`Increase erode count for ${side.heading.toLowerCase()}`} decrementDisabled={erodeCount <= 1} onDecrement={() => setErodeCount((current) => Math.max(1, current - 1))} onIncrement={() => setErodeCount((current) => current + 1)} />
+          <NumberStepper
+            label="Erode count"
+            value={erodeCount}
+            decrementLabel={`Decrease erode count for ${side.heading.toLowerCase()}`}
+            incrementLabel={`Increase erode count for ${side.heading.toLowerCase()}`}
+            decrementDisabled={erodeCount <= 1}
+            onDecrement={() =>
+              setErodeCount((current) => Math.max(1, current - 1))
+            }
+            onIncrement={() => setErodeCount((current) => current + 1)}
+          />
           <div style={actionGrid}>
-            <InspectorButton label={`Erode ${String(erodeCount)}`} onPress={() => onAction?.({ kind: "erode", side: selectedSide, count: erodeCount })} disabled={onAction === undefined} />
-            <InspectorButton label="Create Figment" onPress={() => onAction?.({ kind: "create-figment", side: selectedSide })} disabled={onAction === undefined} />
+            <InspectorButton
+              label={`Erode ${String(erodeCount)}`}
+              onPress={() =>
+                onAction?.({
+                  kind: "erode",
+                  side: selectedSide,
+                  count: erodeCount,
+                })
+              }
+              disabled={onAction === undefined}
+            />
+            <InspectorButton
+              label="Create Figment"
+              onPress={() =>
+                onAction?.({ kind: "create-figment", side: selectedSide })
+              }
+              disabled={onAction === undefined}
+            />
           </div>
         </div>
       </GroupPanel>
 
-      <DisclosureSection title="View & Visibility" summary="Pool and hidden hands" expanded={visibilityOpen} onExpandedChange={setVisibilityOpen}>
+      <DisclosureSection
+        title="View & Visibility"
+        summary="Pool and hidden hands"
+        expanded={visibilityOpen}
+        onExpandedChange={setVisibilityOpen}
+      >
         <div style={{ ...actionGrid, marginTop: token("--space-4") }}>
-          <InspectorButton label="Pool Viewer" onPress={() => onAction?.({ kind: "open-pool-viewer" })} disabled={onAction === undefined} />
-          <InspectorButton label={inspector.isFarHandRevealed ? "Hide Far Hand" : "Reveal Far Hand"} onPress={() => onAction?.({ kind: "toggle-opponent-hand" })} disabled={onAction === undefined} />
-          <InspectorButton label={inspector.isNearHandHidden ? "Show Near Hand" : "Hide Near Hand"} onPress={() => onAction?.({ kind: "toggle-player-hand" })} disabled={onAction === undefined} />
+          <InspectorButton
+            label="Pool Viewer"
+            onPress={() => onAction?.({ kind: "open-pool-viewer" })}
+            disabled={onAction === undefined}
+          />
+          <InspectorButton
+            label={
+              inspector.isFarHandRevealed ? "Hide Far Hand" : "Reveal Far Hand"
+            }
+            onPress={() => onAction?.({ kind: "toggle-opponent-hand" })}
+            disabled={onAction === undefined}
+          />
+          <InspectorButton
+            label={
+              inspector.isNearHandHidden ? "Show Near Hand" : "Hide Near Hand"
+            }
+            onPress={() => onAction?.({ kind: "toggle-player-hand" })}
+            disabled={onAction === undefined}
+          />
         </div>
       </DisclosureSection>
 
       {inspector.ai !== null ? (
-        <DisclosureSection title="AI Analysis" summary={inspector.ai.kind} expanded={aiOpen} onExpandedChange={setAiOpen}>
-          <div style={{ display: "grid", gap: token("--space-4"), marginTop: token("--space-4") }}>
+        <DisclosureSection
+          title="AI Analysis"
+          summary={inspector.ai.kind}
+          expanded={aiOpen}
+          onExpandedChange={setAiOpen}
+        >
+          <div
+            style={{
+              display: "grid",
+              gap: token("--space-4"),
+              marginTop: token("--space-4"),
+            }}
+          >
             <InspectorValue label="Proposal" value={inspector.ai.proposal} />
             <InspectorValue label="Kind" value={inspector.ai.kind} />
             <InspectorValue label="Card" value={inspector.ai.card} />
             <InspectorValue label="Target" value={inspector.ai.target} />
-            <InspectorValue label="Heuristic change" value={inspector.ai.heuristicChange} />
-            <InspectorValue label="Live evaluation" value={inspector.ai.liveEvaluation} />
+            <InspectorValue
+              label="Heuristic change"
+              value={inspector.ai.heuristicChange}
+            />
+            <InspectorValue
+              label="Live evaluation"
+              value={inspector.ai.liveEvaluation}
+            />
           </div>
         </DisclosureSection>
       ) : null}
 
-      <DisclosureSection title="End Battle" summary="Outcomes and local reset" expanded={endBattleOpen} onExpandedChange={setEndBattleOpen}>
+      <DisclosureSection
+        title="End Battle"
+        summary="Outcomes and local reset"
+        expanded={endBattleOpen}
+        onExpandedChange={setEndBattleOpen}
+      >
         <div style={{ ...actionGrid, marginTop: token("--space-4") }}>
-          <InspectorButton label="Skip to Rewards" onPress={() => onAction?.({ kind: "skip-to-rewards" })} disabled={onAction === undefined} />
-          <InspectorButton label="Force Defeat" onPress={() => onAction?.({ kind: "force-result", result: "defeat" })} disabled={onAction === undefined} />
-          <InspectorButton label="Force Draw" onPress={() => onAction?.({ kind: "force-result", result: "draw" })} disabled={onAction === undefined} />
-          <InspectorButton label="Reset Battle" variant="danger" onPress={() => onAction?.({ kind: "reset-battle" })} disabled={onAction === undefined} />
+          <InspectorButton
+            label="Skip to Rewards"
+            onPress={() => onAction?.({ kind: "skip-to-rewards" })}
+            disabled={onAction === undefined}
+          />
+          <InspectorButton
+            label="Force Defeat"
+            onPress={() =>
+              onAction?.({ kind: "force-result", result: "defeat" })
+            }
+            disabled={onAction === undefined}
+          />
+          <InspectorButton
+            label="Force Draw"
+            onPress={() => onAction?.({ kind: "force-result", result: "draw" })}
+            disabled={onAction === undefined}
+          />
+          <InspectorButton
+            label="Reset Battle"
+            variant="danger"
+            onPress={() => onAction?.({ kind: "reset-battle" })}
+            disabled={onAction === undefined}
+          />
         </div>
       </DisclosureSection>
     </div>
@@ -3459,7 +3913,10 @@ function BattleInspectorRail({
   readonly onAction?: (action: MobileBattleInspectorAction) => void;
 }) {
   return (
-    <div data-battle-inspector="docked" style={{ minWidth: 0, height: "100dvh" }}>
+    <div
+      data-battle-inspector="docked"
+      style={{ minWidth: 0, height: "100dvh" }}
+    >
       <DeveloperRail
         id={INSPECTOR_ID}
         side="right"
@@ -3499,12 +3956,16 @@ export function MobileBattleScreen({
   const isDesktop = useIsDesktop();
   const isDockLayout = useIsDesktop(INSPECTOR_DOCK_MIN_WIDTH);
   const inspectorStartsOpen = inspectorDefault === "responsive" && isDockLayout;
-  const [internalInspectorOpen, setInternalInspectorOpen] = useState(inspectorStartsOpen);
+  const [internalInspectorOpen, setInternalInspectorOpen] =
+    useState(inspectorStartsOpen);
   const isInspectorOpen = controlledInspectorOpen ?? internalInspectorOpen;
-  const setInspectorOpen = useCallback((open: boolean): void => {
-    setInternalInspectorOpen(open);
-    onInspectorOpenChange?.(open);
-  }, [onInspectorOpenChange]);
+  const setInspectorOpen = useCallback(
+    (open: boolean): void => {
+      setInternalInspectorOpen(open);
+      onInspectorOpenChange?.(open);
+    },
+    [onInspectorOpenChange],
+  );
   const [isCardDragActive, setIsCardDragActive] = useState(false);
   const [snapLayoutCardId, setSnapLayoutCardId] = useState<string | null>(null);
   const [cardPickerSelection, setCardPickerSelection] = useState<{
@@ -3528,16 +3989,21 @@ export function MobileBattleScreen({
   const snapLayoutOriginView = useRef<MobileBattleView | null>(null);
   const near = view.perspective === "player" ? view.player : view.enemy;
   const far = view.perspective === "player" ? view.enemy : view.player;
-  const nearHandNeededByPrompt = view.cardPicker?.candidates.some(
-    (candidate) => candidate.owner === near.owner && candidate.zone === "hand",
-  ) === true;
-  const nearHandCards = view.inspector.isNearHandHidden && !nearHandNeededByPrompt
-    ? []
-    : view.perspective === "player"
-      ? view.playerHand
-      : view.nearHand.cards;
+  const nearHandNeededByPrompt =
+    view.cardPicker?.candidates.some(
+      (candidate) =>
+        candidate.owner === near.owner && candidate.zone === "hand",
+    ) === true;
+  const nearHandCards =
+    view.inspector.isNearHandHidden && !nearHandNeededByPrompt
+      ? []
+      : view.perspective === "player"
+        ? view.playerHand
+        : view.nearHand.cards;
   const farHandCards = view.inspector.isFarHandRevealed
-    ? (far.owner === "enemy" ? view.enemyHand : view.playerHand)
+    ? far.owner === "enemy"
+      ? view.enemyHand
+      : view.playerHand
     : view.farHand.cards;
   const layoutBackSlotCount = battlefieldLayoutBackSlotCount(view, isDesktop);
   const densityBackSlotCount = battlefieldDensityBackSlotCount(view);
@@ -3546,23 +4012,21 @@ export function MobileBattleScreen({
     isDesktop,
     densityBackSlotCount,
   );
-  const centerAsymmetricDesktopRanks = isDesktop && (
-    far.backRank.length >= DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS
-    || near.backRank.length >= DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS
-  ) && (
-    far.backRank.length !== near.backRank.length
-    || far.frontRank.length !== near.frontRank.length
-  );
+  const centerAsymmetricDesktopRanks =
+    isDesktop &&
+    (far.backRank.length >= DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS ||
+      near.backRank.length >= DESKTOP_BATTLE_STARTING_BACK_RANK_SLOTS) &&
+    (far.backRank.length !== near.backRank.length ||
+      far.frontRank.length !== near.frontRank.length);
   const cardPickerKey = view.cardPicker?.key ?? null;
-  const boardCardPicker = view.cardPicker?.presentation === "board"
-    ? view.cardPicker
-    : null;
-  const galleryCardPicker = view.cardPicker?.presentation === "gallery"
-    ? view.cardPicker
-    : null;
-  const selectedPickerCardIds = cardPickerSelection.pickerKey === cardPickerKey
-    ? cardPickerSelection.ids
-    : [];
+  const boardCardPicker =
+    view.cardPicker?.presentation === "board" ? view.cardPicker : null;
+  const galleryCardPicker =
+    view.cardPicker?.presentation === "gallery" ? view.cardPicker : null;
+  const selectedPickerCardIds =
+    cardPickerSelection.pickerKey === cardPickerKey
+      ? cardPickerSelection.ids
+      : [];
   const turnAnnouncementComplete =
     view.isOpeningTurn ||
     (completedTurnAnnouncement?.battleId === view.battleId &&
@@ -3601,16 +4065,19 @@ export function MobileBattleScreen({
     setCardPickerSelection({ pickerKey: null, ids: [] });
   }, [setInspectorOpen, view.perspective]);
 
-  const handlePickerCardToggle = useCallback((cardId: string): void => {
-    if (view.cardPicker === null) return;
-    const nextIds = toggleCardPickerSelection(
-      selectedPickerCardIds,
-      cardId,
-      view.cardPicker.count,
-    );
-    setCardPickerSelection({ pickerKey: view.cardPicker.key, ids: nextIds });
-    interactions?.onCardPickerSelectionChange?.(nextIds);
-  }, [interactions, selectedPickerCardIds, view.cardPicker]);
+  const handlePickerCardToggle = useCallback(
+    (cardId: string): void => {
+      if (view.cardPicker === null) return;
+      const nextIds = toggleCardPickerSelection(
+        selectedPickerCardIds,
+        cardId,
+        view.cardPicker.count,
+      );
+      setCardPickerSelection({ pickerKey: view.cardPicker.key, ids: nextIds });
+      interactions?.onCardPickerSelectionChange?.(nextIds);
+    },
+    [interactions, selectedPickerCardIds, view.cardPicker],
+  );
 
   useEffect(() => {
     if (snapLayoutCardId === null || isCardDragActive) return;
@@ -3630,16 +4097,16 @@ export function MobileBattleScreen({
     return () => window.clearTimeout(timeout);
   }, [isCardDragActive, playbackSpeed, snapLayoutCardId, view]);
 
-  const handleCardDragChange = useCallback((
-    dragging: boolean,
-    cardId?: string,
-  ): void => {
-    setIsCardDragActive(dragging);
-    if (dragging && cardId !== undefined) {
-      snapLayoutOriginView.current = view;
-      setSnapLayoutCardId(cardId);
-    }
-  }, [view]);
+  const handleCardDragChange = useCallback(
+    (dragging: boolean, cardId?: string): void => {
+      setIsCardDragActive(dragging);
+      if (dragging && cardId !== undefined) {
+        snapLayoutOriginView.current = view;
+        setSnapLayoutCardId(cardId);
+      }
+    },
+    [view],
+  );
 
   useEffect(() => {
     if (previousDockLayout.current === isDockLayout) return;
@@ -3656,8 +4123,18 @@ export function MobileBattleScreen({
     const key = `${view.battleId}:${layout}`;
     if (openedLogKey.current === key) return;
     openedLogKey.current = key;
-    interactions?.onInspectorAction?.({ kind: "opened", layout, side: selectedSide });
-  }, [interactions, isDockLayout, isInspectorOpen, selectedSide, view.battleId]);
+    interactions?.onInspectorAction?.({
+      kind: "opened",
+      layout,
+      side: selectedSide,
+    });
+  }, [
+    interactions,
+    isDockLayout,
+    isInspectorOpen,
+    selectedSide,
+    view.battleId,
+  ]);
 
   const closeInspector = useCallback(() => {
     setInspectorOpen(false);
@@ -3678,21 +4155,28 @@ export function MobileBattleScreen({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [closeInspector, isDockLayout, isInspectorOpen]);
 
-  const selectSide = useCallback((side: MobileBattleOwner) => {
-    setSelectedSide(side);
-    interactions?.onInspectorAction?.({ kind: "side-selected", side });
-  }, [interactions]);
+  const selectSide = useCallback(
+    (side: MobileBattleOwner) => {
+      setSelectedSide(side);
+      interactions?.onInspectorAction?.({ kind: "side-selected", side });
+    },
+    [interactions],
+  );
 
-  const handleInspectorAction = useCallback((action: MobileBattleInspectorAction) => {
-    if (
-      (!isDockLayout && (action.kind === "foresee" || action.kind === "reorder-deck"))
-      || action.kind === "open-battle-log"
-      || action.kind === "open-dreamwell-history"
-    ) {
-      closeInspector();
-    }
-    interactions?.onInspectorAction?.(action);
-  }, [closeInspector, interactions, isDockLayout]);
+  const handleInspectorAction = useCallback(
+    (action: MobileBattleInspectorAction) => {
+      if (
+        (!isDockLayout &&
+          (action.kind === "foresee" || action.kind === "reorder-deck")) ||
+        action.kind === "open-battle-log" ||
+        action.kind === "open-dreamwell-history"
+      ) {
+        closeInspector();
+      }
+      interactions?.onInspectorAction?.(action);
+    },
+    [closeInspector, interactions, isDockLayout],
+  );
 
   const board = (
     <main
@@ -3726,7 +4210,11 @@ export function MobileBattleScreen({
       }}
     >
       <BattleBackdrop isDesktop={isDesktop} />
-      <div aria-hidden="true" data-battle-mobile-safe-area-backdrop="" style={SAFE_AREA_BACKDROP_STYLE} />
+      <div
+        aria-hidden="true"
+        data-battle-mobile-safe-area-backdrop=""
+        style={SAFE_AREA_BACKDROP_STYLE}
+      />
       {view.result === null ? (
         <BattleTurnAnnouncement
           key={view.battleId}
@@ -3748,9 +4236,55 @@ export function MobileBattleScreen({
           selectedPickerCardIds={selectedPickerCardIds}
           onPickerCardToggle={handlePickerCardToggle}
         />
-        <SideZones activeSide={view.activeSide} dreamwell={visibleDreamwell} isDesktop={isDesktop} owner={far.owner} position="far" phase={view.phase} side={far} zoneLabels={zoneLabels} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner={far.owner} position="far" side={far} layoutBackSlotCount={layoutBackSlotCount} densityBackSlotCount={densityBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} guidedSlotHighlight={guidedSlotHighlight} preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines} interactions={interactions} />
-        <PlayArea isDesktop={isDesktop} owner={near.owner} position="near" side={near} layoutBackSlotCount={layoutBackSlotCount} densityBackSlotCount={densityBackSlotCount} centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks} cardSize={cardSize} draggingCardId={isCardDragActive ? snapLayoutCardId : null} snapLayoutCardId={snapLayoutCardId} cardPicker={boardCardPicker} selectedPickerCardIds={selectedPickerCardIds} onPickerCardToggle={handlePickerCardToggle} onBattlefieldDragChange={handleCardDragChange} guidedSlotHighlight={guidedSlotHighlight} preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines} interactions={interactions} />
+        <SideZones
+          activeSide={view.activeSide}
+          dreamwell={visibleDreamwell}
+          isDesktop={isDesktop}
+          owner={far.owner}
+          position="far"
+          phase={view.phase}
+          side={far}
+          zoneLabels={zoneLabels}
+          interactions={interactions}
+        />
+        <PlayArea
+          isDesktop={isDesktop}
+          owner={far.owner}
+          position="far"
+          side={far}
+          layoutBackSlotCount={layoutBackSlotCount}
+          densityBackSlotCount={densityBackSlotCount}
+          centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks}
+          cardSize={cardSize}
+          draggingCardId={isCardDragActive ? snapLayoutCardId : null}
+          snapLayoutCardId={snapLayoutCardId}
+          cardPicker={boardCardPicker}
+          selectedPickerCardIds={selectedPickerCardIds}
+          onPickerCardToggle={handlePickerCardToggle}
+          onBattlefieldDragChange={handleCardDragChange}
+          guidedSlotHighlight={guidedSlotHighlight}
+          preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines}
+          interactions={interactions}
+        />
+        <PlayArea
+          isDesktop={isDesktop}
+          owner={near.owner}
+          position="near"
+          side={near}
+          layoutBackSlotCount={layoutBackSlotCount}
+          densityBackSlotCount={densityBackSlotCount}
+          centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks}
+          cardSize={cardSize}
+          draggingCardId={isCardDragActive ? snapLayoutCardId : null}
+          snapLayoutCardId={snapLayoutCardId}
+          cardPicker={boardCardPicker}
+          selectedPickerCardIds={selectedPickerCardIds}
+          onPickerCardToggle={handlePickerCardToggle}
+          onBattlefieldDragChange={handleCardDragChange}
+          guidedSlotHighlight={guidedSlotHighlight}
+          preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines}
+          interactions={interactions}
+        />
         <ControlRow
           aiApproval={view.aiApproval}
           cardPicker={boardCardPicker}
@@ -3763,11 +4297,21 @@ export function MobileBattleScreen({
           perspective={view.perspective}
           tutorialNextLabel={
             view.activeSide === "enemy" && view.phase === "dusk"
-              ? "Done repositioning"
+              ? "Done Repositioning"
               : "End Turn"
           }
         />
-        <SideZones activeSide={view.activeSide} dreamwell={visibleDreamwell} isDesktop={isDesktop} owner={near.owner} position="near" phase={view.phase} side={near} zoneLabels={zoneLabels} interactions={interactions} />
+        <SideZones
+          activeSide={view.activeSide}
+          dreamwell={visibleDreamwell}
+          isDesktop={isDesktop}
+          owner={near.owner}
+          position="near"
+          phase={view.phase}
+          side={near}
+          zoneLabels={zoneLabels}
+          interactions={interactions}
+        />
         <NearHand
           owner={near.owner}
           cards={nearHandCards}
@@ -3793,9 +4337,9 @@ export function MobileBattleScreen({
           gap: token("--space-3"),
         }}
       >
-        {isDesktop
-        && near.banishedCardCount > 0
-        && interactions?.onZoneOpen !== undefined ? (
+        {isDesktop &&
+        near.banishedCardCount > 0 &&
+        interactions?.onZoneOpen !== undefined ? (
           <div
             data-battle-zone={`${near.owner}-banished`}
             data-battle-zone-count={String(near.banishedCardCount)}
@@ -3805,10 +4349,12 @@ export function MobileBattleScreen({
               size="sm"
               label={`Open your banished cards, ${String(near.banishedCardCount)} ${near.banishedCardCount === 1 ? "card" : "cards"}`}
               testId="near-battle-banished"
-              onPress={() => interactions.onZoneOpen?.({
-                owner: near.owner,
-                zone: "banished",
-              })}
+              onPress={() =>
+                interactions.onZoneOpen?.({
+                  owner: near.owner,
+                  zone: "banished",
+                })
+              }
             />
           </div>
         ) : null}
@@ -3818,43 +4364,57 @@ export function MobileBattleScreen({
           promptNotice={view.promptNotice}
         />
       </div>
-      {inspectorVisibility === "available" ? <div
-        data-battle-top-right-controls=""
-        style={{
-          position: "absolute",
-          top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
-          right: `calc(var(${SAFE_AREA_INSET_PROPERTIES.right}) + ${token("--space-4")})`,
-          zIndex: 20,
-          display: "flex",
-          alignItems: "flex-start",
-          gap: token("--space-3"),
-        }}
-      >
-        <BattleDebugMenu
-          onFillBattlefieldPreview={interactions?.onFillBattlefieldPreview}
-          onFillAsymmetricBattlefieldPreview={interactions?.onFillAsymmetricBattlefieldPreview}
-        />
-        <div ref={(node) => { inspectorTriggerRef.current = node?.querySelector("button") ?? null; }}>
-          <IconButton
-            glyph={GLYPHS.sidebarRight}
-            size="sm"
-            label={isInspectorOpen ? "Close battle inspector" : "Open battle inspector"}
-            ariaExpanded={isInspectorOpen}
-            ariaControls={INSPECTOR_ID}
-            testId="battle-inspector-trigger"
-            onPress={() => {
-              if (isInspectorOpen) {
-                closeInspector();
-              } else {
-                inspectorTriggerRef.current = document.activeElement instanceof HTMLElement
-                  ? document.activeElement
-                  : inspectorTriggerRef.current;
-                setInspectorOpen(true);
-              }
-            }}
+      {inspectorVisibility === "available" ? (
+        <div
+          data-battle-top-right-controls=""
+          style={{
+            position: "absolute",
+            top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
+            right: `calc(var(${SAFE_AREA_INSET_PROPERTIES.right}) + ${token("--space-4")})`,
+            zIndex: 20,
+            display: "flex",
+            alignItems: "flex-start",
+            gap: token("--space-3"),
+          }}
+        >
+          <BattleDebugMenu
+            onFillBattlefieldPreview={interactions?.onFillBattlefieldPreview}
+            onFillAsymmetricBattlefieldPreview={
+              interactions?.onFillAsymmetricBattlefieldPreview
+            }
           />
+          <div
+            ref={(node) => {
+              inspectorTriggerRef.current =
+                node?.querySelector("button") ?? null;
+            }}
+          >
+            <IconButton
+              glyph={GLYPHS.sidebarRight}
+              size="sm"
+              label={
+                isInspectorOpen
+                  ? "Close battle inspector"
+                  : "Open battle inspector"
+              }
+              ariaExpanded={isInspectorOpen}
+              ariaControls={INSPECTOR_ID}
+              testId="battle-inspector-trigger"
+              onPress={() => {
+                if (isInspectorOpen) {
+                  closeInspector();
+                } else {
+                  inspectorTriggerRef.current =
+                    document.activeElement instanceof HTMLElement
+                      ? document.activeElement
+                      : inspectorTriggerRef.current;
+                  setInspectorOpen(true);
+                }
+              }}
+            />
+          </div>
         </div>
-      </div> : null}
+      ) : null}
       {galleryCardPicker !== null ? (
         <CardPickerGallery
           cardPicker={galleryCardPicker}
@@ -3879,9 +4439,10 @@ export function MobileBattleScreen({
           position: viewport === "contained" ? "absolute" : "fixed",
           inset: 0,
           display: "grid",
-          gridTemplateColumns: isDockLayout && isInspectorOpen
-            ? `minmax(0, 1fr) ${MOBILE_BATTLE_INSPECTOR_RAIL_TRACK}`
-            : "minmax(0, 1fr)",
+          gridTemplateColumns:
+            isDockLayout && isInspectorOpen
+              ? `minmax(0, 1fr) ${MOBILE_BATTLE_INSPECTOR_RAIL_TRACK}`
+              : "minmax(0, 1fr)",
           width: "100%",
           height: "100dvh",
           overflow: "hidden",
@@ -3889,7 +4450,9 @@ export function MobileBattleScreen({
         }}
       >
         {board}
-        {inspectorVisibility === "available" && isDockLayout && isInspectorOpen ? (
+        {inspectorVisibility === "available" &&
+        isDockLayout &&
+        isInspectorOpen ? (
           <BattleInspectorRail
             inspector={view.inspector}
             perspective={view.perspective}
@@ -3901,7 +4464,9 @@ export function MobileBattleScreen({
           />
         ) : null}
       </div>
-      {inspectorVisibility === "available" && !isDockLayout && isInspectorOpen ? (
+      {inspectorVisibility === "available" &&
+      !isDockLayout &&
+      isInspectorOpen ? (
         <GlassDialog
           title="Battle Inspector"
           subtitle={`Developer Tools · Opponent: ${view.inspector.opponentName}`}

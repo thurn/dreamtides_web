@@ -136,8 +136,18 @@ function makeView(): MobileBattleView {
     perspective: "player",
     near: player,
     far: enemy,
-    nearHand: { owner: "player", position: "near", cardIds: playerHand.map((card) => card.id), cards: playerHand },
-    farHand: { owner: "enemy", position: "far", cardIds: enemyHandCardIds, cards: [] },
+    nearHand: {
+      owner: "player",
+      position: "near",
+      cardIds: playerHand.map((card) => card.id),
+      cards: playerHand,
+    },
+    farHand: {
+      owner: "enemy",
+      position: "far",
+      cardIds: enemyHandCardIds,
+      cards: [],
+    },
     promptNotice: null,
     aiApproval: null,
     cardPicker: null,
@@ -165,8 +175,40 @@ function makeView(): MobileBattleView {
       isFarHandRevealed: false,
       isNearHandHidden: false,
       sides: {
-        player: { side: "player", heading: "Player", points: 6, currentEnergy: 3, maxEnergy: 3, zones: { hand: 4, deck: 4, void: 2, banished: 0, backRank: 1, frontRank: 1 }, canDiscard: true, canShuffle: true },
-        enemy: { side: "enemy", heading: "Enemy", points: 5, currentEnergy: 2, maxEnergy: 4, zones: { hand: 8, deck: 4, void: 2, banished: 0, backRank: 1, frontRank: 1 }, canDiscard: true, canShuffle: true },
+        player: {
+          side: "player",
+          heading: "Player",
+          points: 6,
+          currentEnergy: 3,
+          maxEnergy: 3,
+          zones: {
+            hand: 4,
+            deck: 4,
+            void: 2,
+            banished: 0,
+            backRank: 1,
+            frontRank: 1,
+          },
+          canDiscard: true,
+          canShuffle: true,
+        },
+        enemy: {
+          side: "enemy",
+          heading: "Enemy",
+          points: 5,
+          currentEnergy: 2,
+          maxEnergy: 4,
+          zones: {
+            hand: 8,
+            deck: 4,
+            void: 2,
+            banished: 0,
+            backRank: 1,
+            frontRank: 1,
+          },
+          canDiscard: true,
+          canShuffle: true,
+        },
       },
       ai: null,
     },
@@ -234,16 +276,21 @@ describe("MobileBattleScreen", () => {
     });
 
     expect(
-      container.querySelector("[data-battle-inspector-open]")?.getAttribute(
-        "data-battle-inspector-open",
-      ),
+      container
+        .querySelector("[data-battle-inspector-open]")
+        ?.getAttribute("data-battle-inspector-open"),
     ).toBe("false");
-    expect(container.querySelector('[data-battle-inspector="docked"]')).toBeNull();
+    expect(
+      container.querySelector('[data-battle-inspector="docked"]'),
+    ).toBeNull();
     expect(container.querySelector("[data-battle-phase-controls]")).toBeNull();
     expect(
       Array.from(container.querySelectorAll("button")).some((button) => {
         const label = button.getAttribute("aria-label") ?? button.textContent;
-        return label?.includes("Back") === true || label?.includes("Next Phase") === true;
+        return (
+          label?.includes("Back") === true ||
+          label?.includes("Next Phase") === true
+        );
       }),
     ).toBe(false);
 
@@ -289,9 +336,7 @@ describe("MobileBattleScreen", () => {
     );
     expect(endTurn?.textContent).toBe("End Turn");
     expect(endTurn?.dataset.glassVariant).toBe("accent");
-    expect(
-      container.querySelector('button[aria-label="Back"]'),
-    ).toBeNull();
+    expect(container.querySelector('button[aria-label="Back"]')).toBeNull();
     act(() => endTurn?.click());
     expect(onNextPhase).toHaveBeenCalledOnce();
 
@@ -299,7 +344,7 @@ describe("MobileBattleScreen", () => {
     container.remove();
   });
 
-  it("labels the opponent's tutorial dusk action Done repositioning", () => {
+  it("labels the opponent's tutorial dusk action Done Repositioning", () => {
     const baseView = makeView();
     const view: MobileBattleView = {
       ...baseView,
@@ -325,11 +370,10 @@ describe("MobileBattleScreen", () => {
       container.querySelector<HTMLButtonElement>(
         '[data-testid="tutorial-end-turn"]',
       )?.textContent,
-    ).toBe("Done repositioning");
+    ).toBe("Done Repositioning");
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-battle-phase-next]",
-      )?.style.width,
+      container.querySelector<HTMLElement>("[data-battle-phase-next]")?.style
+        .width,
     ).toBe("max-content");
 
     act(() => root.unmount());
@@ -339,7 +383,11 @@ describe("MobileBattleScreen", () => {
     const view = makeView();
     const battlefieldCard = view.player.frontRank[0]?.card;
     const handCard = view.playerHand[0];
-    if (battlefieldCard === null || battlefieldCard === undefined || handCard === undefined) {
+    if (
+      battlefieldCard === null ||
+      battlefieldCard === undefined ||
+      handCard === undefined
+    ) {
       throw new Error("fixture cards missing");
     }
     const statusBattlefieldCard: MobileBattleCardView = {
@@ -377,8 +425,12 @@ describe("MobileBattleScreen", () => {
     expect(battlefield?.dataset.battleCardExhausted).toBe("true");
     expect(battlefield?.dataset.battleCardStoredTime).toBe("4");
     expect(battlefield?.dataset.battleCardFigmentCount).toBe("3");
-    expect(battlefield?.querySelector('[aria-label="Exhausted"]')).not.toBeNull();
-    expect(battlefield?.querySelector('[aria-label="3 Figments"]')).not.toBeNull();
+    expect(
+      battlefield?.querySelector('[aria-label="Exhausted"]'),
+    ).not.toBeNull();
+    expect(
+      battlefield?.querySelector('[aria-label="3 Figments"]'),
+    ).not.toBeNull();
     expect(
       battlefield?.querySelector('[aria-label="4 stored-time counters"]'),
     ).not.toBeNull();
@@ -417,9 +469,13 @@ describe("MobileBattleScreen", () => {
       (storedTimeChip?.lastElementChild as HTMLElement | null)?.style.color,
     ).toBe("inherit");
     expect(storedTimeChip?.style.gap).toBe("0px");
-    expect(storedTimeBadge?.style.background).toBe("var(--surface-status-badge)");
+    expect(storedTimeBadge?.style.background).toBe(
+      "var(--surface-status-badge)",
+    );
     expect(storedTimeBadge?.style.border).toContain("var(--text-on-accent)");
-    expect(storedTimeBadge?.style.borderRadius).toBe("var(--radius-status-badge)");
+    expect(storedTimeBadge?.style.borderRadius).toBe(
+      "var(--radius-status-badge)",
+    );
     expect(
       battlefield?.querySelector('[data-battle-card-status="automated"]'),
     ).toBeNull();
@@ -427,11 +483,12 @@ describe("MobileBattleScreen", () => {
       battlefield?.querySelector<HTMLElement>("[data-battle-card-motion]")
         ?.style.filter,
     ).toContain("grayscale");
-    const battlefieldDescription = document.getElementById(
-      battlefield
-        ?.querySelector<HTMLElement>("[data-game-card-source]")
-        ?.getAttribute("aria-describedby") ?? "",
-    )?.textContent ?? "";
+    const battlefieldDescription =
+      document.getElementById(
+        battlefield
+          ?.querySelector<HTMLElement>("[data-game-card-source]")
+          ?.getAttribute("aria-describedby") ?? "",
+      )?.textContent ?? "";
     expect(battlefieldDescription).toContain("Exhausted");
 
     expect(hand?.querySelector('[aria-label="Exhausted"]')).not.toBeNull();
@@ -443,11 +500,12 @@ describe("MobileBattleScreen", () => {
       hand?.querySelector('[data-battle-card-status="figment-count"]')
         ?.textContent,
     ).toBe("x2");
-    const handDescription = document.getElementById(
-      hand
-        ?.querySelector<HTMLElement>("[data-game-card-source]")
-        ?.getAttribute("aria-describedby") ?? "",
-    )?.textContent ?? "";
+    const handDescription =
+      document.getElementById(
+        hand
+          ?.querySelector<HTMLElement>("[data-game-card-source]")
+          ?.getAttribute("aria-describedby") ?? "",
+      )?.textContent ?? "";
     expect(handDescription).toContain("Exhausted");
 
     const committedView: MobileBattleView = {
@@ -481,12 +539,15 @@ describe("MobileBattleScreen", () => {
     expect(updatedBattlefield?.dataset.battleCardExhausted).toBe("false");
     expect(updatedBattlefield?.dataset.battleCardStoredTime).toBe("0");
     expect(updatedBattlefield?.dataset.battleCardFigmentCount).toBe("1");
-    expect(updatedBattlefield?.querySelector("[data-battle-card-status]")).toBeNull();
-    const updatedDescription = document.getElementById(
-      updatedBattlefield
-        ?.querySelector<HTMLElement>("[data-game-card-source]")
-        ?.getAttribute("aria-describedby") ?? "",
-    )?.textContent ?? "";
+    expect(
+      updatedBattlefield?.querySelector("[data-battle-card-status]"),
+    ).toBeNull();
+    const updatedDescription =
+      document.getElementById(
+        updatedBattlefield
+          ?.querySelector<HTMLElement>("[data-game-card-source]")
+          ?.getAttribute("aria-describedby") ?? "",
+      )?.textContent ?? "";
     expect(updatedDescription).not.toContain("Exhausted");
 
     act(() => root.unmount());
@@ -519,7 +580,9 @@ describe("MobileBattleScreen", () => {
     ).not.toBeNull();
     act(() => {
       container
-        .querySelector<HTMLButtonElement>('[data-testid="battle-result-inspect"]')
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-result-inspect"]',
+        )
         ?.click();
     });
     expect(onResultAction).toHaveBeenCalledWith("dismiss");
@@ -584,7 +647,9 @@ describe("MobileBattleScreen", () => {
         .dreamwellCard,
     ).toBe(cardId);
     expect(
-      container.querySelector('[data-battle-zone="player-status"] [data-battle-dreamwell-layer]'),
+      container.querySelector(
+        '[data-battle-zone="player-status"] [data-battle-dreamwell-layer]',
+      ),
     ).toBeNull();
 
     act(() => root.unmount());
@@ -626,7 +691,9 @@ describe("MobileBattleScreen", () => {
       "calc(100% + var(--space-3) + var(--space-12) + var(--space-4))",
     );
     expect(
-      container.querySelector('[data-battle-zone="enemy-status"] [data-battle-dreamwell-layer]'),
+      container.querySelector(
+        '[data-battle-zone="enemy-status"] [data-battle-dreamwell-layer]',
+      ),
     ).toBeNull();
 
     act(() => root.unmount());
@@ -664,9 +731,7 @@ describe("MobileBattleScreen", () => {
     );
     expect(safeAreaBackdrop?.style.position).toBe("absolute");
     expect(safeAreaBackdrop?.style.inset).toBe("0 0 auto");
-    expect(safeAreaBackdrop?.style.height).toBe(
-      "var(--safe-area-inset-top)",
-    );
+    expect(safeAreaBackdrop?.style.height).toBe("var(--safe-area-inset-top)");
     expect(safeAreaBackdrop?.style.background).toBe("var(--bg-app)");
     expect(rowNames).toEqual([
       "far-hand",
@@ -719,19 +784,53 @@ describe("MobileBattleScreen", () => {
       onPerspectiveToggle,
     });
 
-    expect(container.querySelector("[data-battle-mobile]")?.getAttribute("data-battle-perspective")).toBe("enemy");
-    expect(container.querySelector('[data-battle-mobile-row="enemy-zones"]')?.getAttribute("style")).toContain("grid-row: 6");
-    expect(container.querySelector('[data-battle-mobile-row="player-zones"]')?.getAttribute("style")).toContain("grid-row: 2");
-    expect(container.querySelector('[data-battle-play-area="enemy"]')?.getAttribute("style")).toContain("grid-row: 4");
-    expect(container.querySelector('[data-battle-play-area="player"]')?.getAttribute("style")).toContain("grid-row: 3");
-    expect(container.querySelector('[data-battle-mobile-row="near-hand"]')?.getAttribute("data-battle-hand-owner")).toBe("enemy");
-    expect(container.querySelector('[data-testid="battle-perspective-toggle"]')).toBeNull();
+    expect(
+      container
+        .querySelector("[data-battle-mobile]")
+        ?.getAttribute("data-battle-perspective"),
+    ).toBe("enemy");
+    expect(
+      container
+        .querySelector('[data-battle-mobile-row="enemy-zones"]')
+        ?.getAttribute("style"),
+    ).toContain("grid-row: 6");
+    expect(
+      container
+        .querySelector('[data-battle-mobile-row="player-zones"]')
+        ?.getAttribute("style"),
+    ).toContain("grid-row: 2");
+    expect(
+      container
+        .querySelector('[data-battle-play-area="enemy"]')
+        ?.getAttribute("style"),
+    ).toContain("grid-row: 4");
+    expect(
+      container
+        .querySelector('[data-battle-play-area="player"]')
+        ?.getAttribute("style"),
+    ).toContain("grid-row: 3");
+    expect(
+      container
+        .querySelector('[data-battle-mobile-row="near-hand"]')
+        ?.getAttribute("data-battle-hand-owner"),
+    ).toBe("enemy");
+    expect(
+      container.querySelector('[data-testid="battle-perspective-toggle"]'),
+    ).toBeNull();
     act(() => {
-      container.querySelector<HTMLButtonElement>('[data-testid="battle-inspector-trigger"]')?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-inspector-trigger"]',
+        )
+        ?.click();
     });
-    const inspector = container.querySelector('[data-battle-inspector="takeover"]');
+    const inspector = container.querySelector(
+      '[data-battle-inspector="takeover"]',
+    );
     expect(inspector).not.toBeNull();
-    const toggle = inspector?.querySelector<HTMLButtonElement>('[data-testid="battle-perspective-toggle"]');
+    const toggle = inspector?.querySelector<HTMLButtonElement>(
+      '[data-testid="battle-perspective-toggle"]',
+    );
     expect(toggle?.textContent).toContain("Return to Your Side");
     expect(toggle?.getAttribute("aria-pressed")).toBe("true");
     act(() => toggle?.click());
@@ -744,7 +843,9 @@ describe("MobileBattleScreen", () => {
     mockDesktopViewport(true);
     const view = makeView();
     const { container, root } = mount(view);
-    expect(container.querySelector('[data-battle-inspector="docked"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-battle-inspector="docked"]'),
+    ).not.toBeNull();
 
     const reversed: MobileBattleView = {
       ...view,
@@ -773,7 +874,9 @@ describe("MobileBattleScreen", () => {
       );
     });
 
-    expect(container.querySelector('[data-battle-inspector="docked"]')).toBeNull();
+    expect(
+      container.querySelector('[data-battle-inspector="docked"]'),
+    ).toBeNull();
     act(() => root.unmount());
   });
 
@@ -801,14 +904,18 @@ describe("MobileBattleScreen", () => {
       onPerspectiveToggle: vi.fn(),
     });
 
-    expect(container.querySelector('[data-battle-prompt-waiting="enemy"]')?.textContent)
-      .toContain("Switch to the Opponent side");
+    expect(
+      container.querySelector('[data-battle-prompt-waiting="enemy"]')
+        ?.textContent,
+    ).toContain("Switch to the Opponent side");
     expect(
       Array.from(container.querySelectorAll("button"))
         .find((button) => button.textContent?.trim() === "Next Phase")
         ?.getAttribute("aria-disabled"),
     ).toBe("true");
-    expect(container.querySelectorAll("[data-battle-card-picker-candidate]")).toHaveLength(0);
+    expect(
+      container.querySelectorAll("[data-battle-card-picker-candidate]"),
+    ).toHaveLength(0);
 
     act(() => root.unmount());
   });
@@ -909,9 +1016,7 @@ describe("MobileBattleScreen", () => {
     expect(playerSlots?.[0]?.style.minWidth).toBe("0px");
     expect(playerCards?.[0]?.parentElement?.style.left).toBe("0px");
     expect(playerCards?.[1]?.parentElement?.style.left).toBe("50%");
-    expect(playerHand?.style.transform).toBe(
-      "translateY(var(--space-8))",
-    );
+    expect(playerHand?.style.transform).toBe("translateY(var(--space-8))");
     expect(playerHand?.style.pointerEvents).toBe("none");
     expect(controls?.style.justifyContent).toBe("center");
     expect(controls?.style.gridColumn).toBe("1");
@@ -958,40 +1063,59 @@ describe("MobileBattleScreen", () => {
     };
     const { container, root } = mount(makeView(), interactions);
 
-    expect(container.querySelector('[data-battle-inspector="docked"]')).not.toBeNull();
-    expect(container.querySelector('[data-battle-debug="player-state-panel"]')).toBeNull();
+    expect(
+      container.querySelector('[data-battle-inspector="docked"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-battle-debug="player-state-panel"]'),
+    ).toBeNull();
     expect(container.textContent).toContain("Battle Snapshot");
     expect(container.textContent).toContain("Player Resources");
     expect(container.textContent).toContain("Back Rank");
     expect(container.textContent).not.toContain("Stack cards");
-    const inspector = container.querySelector('[data-battle-inspector="docked"]');
+    const inspector = container.querySelector(
+      '[data-battle-inspector="docked"]',
+    );
     const perspectiveToggle = inspector?.querySelector<HTMLButtonElement>(
       '[data-testid="battle-perspective-toggle"]',
     );
     expect(perspectiveToggle?.textContent).toContain("Control Opponent");
     expect(perspectiveToggle?.getAttribute("aria-pressed")).toBe("false");
     expect(
-      container.querySelector('[data-battle-top-right-controls] [data-testid="battle-perspective-toggle"]'),
+      container.querySelector(
+        '[data-battle-top-right-controls] [data-testid="battle-perspective-toggle"]',
+      ),
     ).toBeNull();
 
     act(() => {
       perspectiveToggle?.click();
-      container.querySelector<HTMLButtonElement>('[data-testid="battle-inspector-draw-player"]')?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-inspector-draw-player"]',
+        )
+        ?.click();
       Array.from(container.querySelectorAll<HTMLButtonElement>("button"))
         .find((button) => button.textContent === "Open Banished")
         ?.click();
-      const enemyTab = Array.from(container.querySelectorAll<HTMLButtonElement>('[role="tab"]'))
-        .find((button) => button.textContent === "Enemy");
+      const enemyTab = Array.from(
+        container.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
+      ).find((button) => button.textContent === "Enemy");
       enemyTab?.click();
     });
 
-    expect(onInspectorAction).toHaveBeenCalledWith({ kind: "draw", side: "player" });
+    expect(onInspectorAction).toHaveBeenCalledWith({
+      kind: "draw",
+      side: "player",
+    });
     expect(onInspectorAction).toHaveBeenCalledWith({
       kind: "open-zone",
       side: "player",
       zone: "banished",
     });
-    expect(onInspectorAction).toHaveBeenCalledWith({ kind: "side-selected", side: "enemy" });
+    expect(onInspectorAction).toHaveBeenCalledWith({
+      kind: "side-selected",
+      side: "enemy",
+    });
     expect(onPerspectiveToggle).toHaveBeenCalledOnce();
     expect(container.textContent).toContain("Enemy Resources");
 
@@ -1021,27 +1145,37 @@ describe("MobileBattleScreen", () => {
 
     expect(container.textContent).toContain("History");
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="battle-inspector-open-battle-log"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-inspector-open-battle-log"]',
+        )
+        ?.click();
     });
     expect(onInspectorAction).toHaveBeenCalledWith({ kind: "open-battle-log" });
-    expect(container.querySelector('[data-battle-inspector="docked"]')).toBeNull();
+    expect(
+      container.querySelector('[data-battle-inspector="docked"]'),
+    ).toBeNull();
 
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="battle-inspector-trigger"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-inspector-trigger"]',
+        )
+        ?.click();
     });
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="battle-inspector-open-dreamwell-history"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-inspector-open-dreamwell-history"]',
+        )
+        ?.click();
     });
     expect(onInspectorAction).toHaveBeenCalledWith({
       kind: "open-dreamwell-history",
     });
-    expect(container.querySelector('[data-battle-inspector="docked"]')).toBeNull();
+    expect(
+      container.querySelector('[data-battle-inspector="docked"]'),
+    ).toBeNull();
 
     act(() => root.unmount());
   });
@@ -1050,23 +1184,34 @@ describe("MobileBattleScreen", () => {
     mockDesktopViewport(false);
     const { container, root } = mount();
 
-    expect(container.querySelector('[data-battle-inspector]')).toBeNull();
-    expect(container.querySelector('[data-testid="battle-inspector-trigger"]')).not.toBeNull();
+    expect(container.querySelector("[data-battle-inspector]")).toBeNull();
+    expect(
+      container.querySelector('[data-testid="battle-inspector-trigger"]'),
+    ).not.toBeNull();
 
     act(() => root.unmount());
   });
 
   it("opens a full-screen takeover with collapsed secondary sections and restores trigger focus on Escape", () => {
     mockDesktopViewport(false);
-    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => { callback(0); return 1; });
+    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
+      callback(0);
+      return 1;
+    });
     const { container, root } = mount();
-    const trigger = container.querySelector<HTMLButtonElement>('[data-testid="battle-inspector-trigger"]');
+    const trigger = container.querySelector<HTMLButtonElement>(
+      '[data-testid="battle-inspector-trigger"]',
+    );
     trigger?.focus();
     act(() => trigger?.click());
 
     expect(container.querySelector('[role="dialog"]')).not.toBeNull();
-    expect(container.querySelector('[data-battle-inspector="takeover"]')).not.toBeNull();
-    expect(container.querySelector('[data-disclosure-expanded="true"]')).toBeNull();
+    expect(
+      container.querySelector('[data-battle-inspector="takeover"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-disclosure-expanded="true"]'),
+    ).toBeNull();
 
     act(() => {
       window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
@@ -1093,18 +1238,28 @@ describe("MobileBattleScreen", () => {
     });
 
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="battle-inspector-trigger"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-inspector-trigger"]',
+        )
+        ?.click();
     });
-    expect(container.querySelector('[data-battle-inspector="takeover"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-battle-inspector="takeover"]'),
+    ).not.toBeNull();
 
-    const foresee = Array.from(container.querySelectorAll<HTMLButtonElement>("button"))
-      .find((button) => button.textContent === "Foresee");
+    const foresee = Array.from(
+      container.querySelectorAll<HTMLButtonElement>("button"),
+    ).find((button) => button.textContent === "Foresee");
     act(() => foresee?.click());
 
-    expect(onInspectorAction).toHaveBeenCalledWith({ kind: "foresee", side: "player" });
-    expect(container.querySelector('[data-battle-inspector="takeover"]')).toBeNull();
+    expect(onInspectorAction).toHaveBeenCalledWith({
+      kind: "foresee",
+      side: "player",
+    });
+    expect(
+      container.querySelector('[data-battle-inspector="takeover"]'),
+    ).toBeNull();
     act(() => root.unmount());
   });
 
@@ -1125,18 +1280,28 @@ describe("MobileBattleScreen", () => {
     });
 
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="battle-inspector-trigger"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-inspector-trigger"]',
+        )
+        ?.click();
     });
-    expect(container.querySelector('[data-battle-inspector="takeover"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-battle-inspector="takeover"]'),
+    ).not.toBeNull();
 
-    const reorderDeck = Array.from(container.querySelectorAll<HTMLButtonElement>("button"))
-      .find((button) => button.textContent === "Reorder Deck");
+    const reorderDeck = Array.from(
+      container.querySelectorAll<HTMLButtonElement>("button"),
+    ).find((button) => button.textContent === "Reorder Deck");
     act(() => reorderDeck?.click());
 
-    expect(onInspectorAction).toHaveBeenCalledWith({ kind: "reorder-deck", side: "player" });
-    expect(container.querySelector('[data-battle-inspector="takeover"]')).toBeNull();
+    expect(onInspectorAction).toHaveBeenCalledWith({
+      kind: "reorder-deck",
+      side: "player",
+    });
+    expect(
+      container.querySelector('[data-battle-inspector="takeover"]'),
+    ).toBeNull();
     act(() => root.unmount());
   });
 
@@ -1149,7 +1314,11 @@ describe("MobileBattleScreen", () => {
         ...view.inspector,
         sides: {
           ...view.inspector.sides,
-          player: { ...view.inspector.sides.player, canDiscard: false, canShuffle: false },
+          player: {
+            ...view.inspector.sides.player,
+            canDiscard: false,
+            canShuffle: false,
+          },
         },
       },
     };
@@ -1165,8 +1334,12 @@ describe("MobileBattleScreen", () => {
       onNextPhase: vi.fn(),
       onInspectorAction: vi.fn(),
     });
-    const discard = container.querySelector<HTMLButtonElement>('[data-testid="battle-inspector-discard-player"]');
-    const shuffle = Array.from(container.querySelectorAll<HTMLButtonElement>("button")).find((button) => button.textContent === "Shuffle");
+    const discard = container.querySelector<HTMLButtonElement>(
+      '[data-testid="battle-inspector-discard-player"]',
+    );
+    const shuffle = Array.from(
+      container.querySelectorAll<HTMLButtonElement>("button"),
+    ).find((button) => button.textContent === "Shuffle");
     expect(discard?.getAttribute("aria-disabled")).toBe("true");
     expect(shuffle?.getAttribute("aria-disabled")).toBe("true");
     act(() => root.unmount());
@@ -1225,9 +1398,7 @@ describe("MobileBattleScreen", () => {
         voidZone?.querySelector<HTMLElement>("[data-card-pile-layer]")?.dataset
           .battleCardId,
       ).toBe(view[owner].voidCards[0]?.id);
-      expect(
-        voidZone?.querySelector("[data-game-card-source]"),
-      ).toBeNull();
+      expect(voidZone?.querySelector("[data-game-card-source]")).toBeNull();
     }
 
     const playerZones = container.querySelector<HTMLElement>(
@@ -1266,7 +1437,9 @@ describe("MobileBattleScreen", () => {
       '[data-battle-zone="player-void"]',
     );
     const voidPile = voidZone?.querySelector<HTMLElement>("[data-card-pile]");
-    const outline = voidZone?.querySelector<HTMLElement>("[data-card-pile-empty]");
+    const outline = voidZone?.querySelector<HTMLElement>(
+      "[data-card-pile-empty]",
+    );
     expect(voidPile?.dataset.pileCount).toBe("0");
     expect(voidPile?.dataset.pileEmptyState).toBe("outlined");
     expect(voidPile?.style.aspectRatio).toBe("7 / 5");
@@ -1316,12 +1489,12 @@ describe("MobileBattleScreen", () => {
     const { container, root } = mount(makeView(), interactions);
 
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="player-battle-deck"]',
-      )?.click();
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="player-battle-void"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>('[data-testid="player-battle-deck"]')
+        ?.click();
+      container
+        .querySelector<HTMLButtonElement>('[data-testid="player-battle-void"]')
+        ?.click();
     });
 
     expect(onZoneOpen).toHaveBeenNthCalledWith(1, {
@@ -1355,11 +1528,14 @@ describe("MobileBattleScreen", () => {
       onPreviousPhase: vi.fn(),
       onNextPhase: vi.fn(),
     };
-    const { container, root } = mount({
-      ...view,
-      player: { ...view.player, banishedCardCount: 2 },
-      enemy: { ...view.enemy, banishedCardCount: 0 },
-    }, interactions);
+    const { container, root } = mount(
+      {
+        ...view,
+        player: { ...view.player, banishedCardCount: 2 },
+        enemy: { ...view.enemy, banishedCardCount: 0 },
+      },
+      interactions,
+    );
 
     const controlFrame = container.querySelector<HTMLElement>(
       '[data-battle-zone="player-banished"]',
@@ -1392,21 +1568,24 @@ describe("MobileBattleScreen", () => {
 
   it("keeps the banished icon button off the mobile battle layout", () => {
     const view = makeView();
-    const { container, root } = mount({
-      ...view,
-      player: { ...view.player, banishedCardCount: 2 },
-    }, {
-      canInteract: true,
-      pendingCardId: null,
-      onHandCardActivate: vi.fn(),
-      onCardDragStart: vi.fn(),
-      onCardDragEnd: vi.fn(),
-      onSlotDrop: vi.fn(),
-      onZoneDrop: vi.fn(),
-      onZoneOpen: vi.fn(),
-      onPreviousPhase: vi.fn(),
-      onNextPhase: vi.fn(),
-    });
+    const { container, root } = mount(
+      {
+        ...view,
+        player: { ...view.player, banishedCardCount: 2 },
+      },
+      {
+        canInteract: true,
+        pendingCardId: null,
+        onHandCardActivate: vi.fn(),
+        onCardDragStart: vi.fn(),
+        onCardDragEnd: vi.fn(),
+        onSlotDrop: vi.fn(),
+        onZoneDrop: vi.fn(),
+        onZoneOpen: vi.fn(),
+        onPreviousPhase: vi.fn(),
+        onNextPhase: vi.fn(),
+      },
+    );
 
     expect(
       container.querySelector('[data-battle-zone="player-banished"]'),
@@ -1437,7 +1616,9 @@ describe("MobileBattleScreen", () => {
     };
     render(view);
 
-    expect(container.querySelector("[data-battle-turn-announcement]")).toBeNull();
+    expect(
+      container.querySelector("[data-battle-turn-announcement]"),
+    ).toBeNull();
 
     render({ ...view, activeSide: "enemy" });
     const opponentAnnouncement = container.querySelector<HTMLElement>(
@@ -1467,14 +1648,18 @@ describe("MobileBattleScreen", () => {
       vi.advanceTimersByTime(699);
     });
     expect(onTurnAnnouncementComplete).not.toHaveBeenCalled();
-    expect(container.querySelector("[data-battle-turn-announcement]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-battle-turn-announcement]"),
+    ).not.toBeNull();
 
     act(() => {
       vi.advanceTimersByTime(1);
     });
     expect(onTurnAnnouncementComplete).toHaveBeenCalledOnce();
     expect(onTurnAnnouncementComplete).toHaveBeenCalledWith("player");
-    expect(container.querySelector("[data-battle-turn-announcement]")).toBeNull();
+    expect(
+      container.querySelector("[data-battle-turn-announcement]"),
+    ).toBeNull();
 
     act(() => root.unmount());
     vi.useRealTimers();
@@ -1484,11 +1669,15 @@ describe("MobileBattleScreen", () => {
     vi.useFakeTimers();
     const { container, root } = mount(makeView());
 
-    expect(container.querySelector("[data-battle-turn-announcement]")).toBeNull();
+    expect(
+      container.querySelector("[data-battle-turn-announcement]"),
+    ).toBeNull();
     act(() => {
       vi.advanceTimersByTime(2_100);
     });
-    expect(container.querySelector("[data-battle-turn-announcement]")).toBeNull();
+    expect(
+      container.querySelector("[data-battle-turn-announcement]"),
+    ).toBeNull();
 
     act(() => root.unmount());
     vi.useRealTimers();
@@ -1517,9 +1706,7 @@ describe("MobileBattleScreen", () => {
       container.querySelector('[data-battle-phase-indicator="enemy"]'),
     ).toBeNull();
     expect(indicator?.dataset.battleMobilePhase).toBe("day");
-    expect(indicator?.getAttribute("aria-label")).toBe(
-      "Your turn, Day phase",
-    );
+    expect(indicator?.getAttribute("aria-label")).toBe("Your turn, Day phase");
     expect(indicator?.parentElement?.dataset.battleStatusPhaseAnchor).toBe("");
     expect(indicator?.style.top).toBe("0px");
     expect(indicator?.style.bottom).toBe("");
@@ -1706,7 +1893,7 @@ describe("MobileBattleScreen", () => {
       expect(
         card.querySelector<HTMLElement>(".card-view")?.dataset.cardPresentation,
       ).toBe("battlefield");
-      expect(card.querySelector('[data-card-energy-anchor]')).toBeNull();
+      expect(card.querySelector("[data-card-energy-anchor]")).toBeNull();
       expect(card.querySelector('[data-testid="card-type-line"]')).toBeNull();
       expect(card.textContent).not.toContain("Fixture Card");
       expect(card.textContent).not.toContain("Fixture");
@@ -1725,8 +1912,10 @@ describe("MobileBattleScreen", () => {
       expect(
         card.querySelector<HTMLElement>(".card-view")?.dataset.cardPresentation,
       ).toBe("full");
-      expect(card.querySelector('[data-card-energy-anchor]')).not.toBeNull();
-      expect(card.querySelector('[data-testid="card-type-line"]')).not.toBeNull();
+      expect(card.querySelector("[data-card-energy-anchor]")).not.toBeNull();
+      expect(
+        card.querySelector('[data-testid="card-type-line"]'),
+      ).not.toBeNull();
     });
 
     act(() => root.unmount());
@@ -1751,12 +1940,15 @@ describe("MobileBattleScreen", () => {
     );
 
     expect(handCards).toHaveLength(view.playerHand.length);
-    expect(handCards[0]?.querySelector<HTMLElement>(".card-view")?.style.boxShadow)
-      .not.toContain("var(--positive)");
-    expect(handCards[1]?.querySelector<HTMLElement>(".card-view")?.style.boxShadow)
-      .toContain("var(--positive)");
-    expect(handCards[2]?.querySelector<HTMLElement>(".card-view")?.style.boxShadow)
-      .not.toContain("var(--positive)");
+    expect(
+      handCards[0]?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
+    ).not.toContain("var(--positive)");
+    expect(
+      handCards[1]?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
+    ).toContain("var(--positive)");
+    expect(
+      handCards[2]?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
+    ).not.toContain("var(--positive)");
 
     act(() => root.unmount());
   });
@@ -1770,9 +1962,9 @@ describe("MobileBattleScreen", () => {
         key: "prompt-42",
         label: "Discard 2 cards",
         side: "player",
-        candidates: view.playerHand.slice(0, 2).map((card) =>
-          makePickerCandidate(card, "player", "hand")
-        ),
+        candidates: view.playerHand
+          .slice(0, 2)
+          .map((card) => makePickerCandidate(card, "player", "hand")),
         candidateIds,
         count: 2,
         optional: false,
@@ -1801,23 +1993,28 @@ describe("MobileBattleScreen", () => {
       onCardPickerSubmit,
     });
 
-    const handCards = () => Array.from(
-      container.querySelectorAll<HTMLElement>(
-        '[data-battle-card-zone="near-hand"]',
-      ),
-    );
+    const handCards = () =>
+      Array.from(
+        container.querySelectorAll<HTMLElement>(
+          '[data-battle-card-zone="near-hand"]',
+        ),
+      );
     const cardShadow = (index: number): string =>
-      handCards()[index]
-        ?.querySelector<HTMLElement>(".card-view")
-        ?.style.boxShadow ?? "";
-    const submit = () => container.querySelector<HTMLButtonElement>(
-      '[data-testid="battle-card-picker-submit"]',
-    );
+      handCards()[index]?.querySelector<HTMLElement>(".card-view")?.style
+        .boxShadow ?? "";
+    const submit = () =>
+      container.querySelector<HTMLButtonElement>(
+        '[data-testid="battle-card-picker-submit"]',
+      );
 
     expect(container.querySelector("[data-battle-phase-controls]")).toBeNull();
-    expect(container.querySelector("[data-battle-card-picker-controls]")).not.toBeNull();
-    expect(container.querySelector("[data-battle-card-picker-progress]")?.textContent)
-      .toBe("Discard 2 cards from your hand · 0/2");
+    expect(
+      container.querySelector("[data-battle-card-picker-controls]"),
+    ).not.toBeNull();
+    expect(
+      container.querySelector("[data-battle-card-picker-progress]")
+        ?.textContent,
+    ).toBe("Discard 2 cards from your hand · 0/2");
     expect(submit()?.getAttribute("aria-disabled")).toBe("true");
     handCards().forEach((_card, index) => {
       expect(cardShadow(index)).not.toContain("var(--positive)");
@@ -1842,8 +2039,10 @@ describe("MobileBattleScreen", () => {
     expect(cardShadow(0)).toContain("var(--color-gold-light)");
     expect(cardShadow(1)).toContain("var(--color-gold-light)");
     expect(submit()?.getAttribute("aria-disabled")).toBeNull();
-    expect(container.querySelector("[data-battle-card-picker-progress]")?.textContent)
-      .toBe("Discard 2 cards from your hand · 2/2");
+    expect(
+      container.querySelector("[data-battle-card-picker-progress]")
+        ?.textContent,
+    ).toBe("Discard 2 cards from your hand · 2/2");
 
     act(() => submit()?.click());
     expect(onCardPickerSubmit).toHaveBeenCalledWith(candidateIds);
@@ -1855,36 +2054,43 @@ describe("MobileBattleScreen", () => {
   it("keeps an optional inline card-picker skippable", () => {
     const view = makeView();
     const onCardPickerSkip = vi.fn();
-    const { container, root } = mount({
-      ...view,
-      cardPicker: {
-        key: "prompt-optional",
-        label: "Choose a card",
-        side: "player",
-        candidates: [makePickerCandidate(view.playerHand[0], "player", "hand")],
-        candidateIds: [view.playerHand[0]?.id ?? "missing"],
-        count: 1,
-        optional: true,
-        canResolve: true,
-        presentation: "board",
+    const { container, root } = mount(
+      {
+        ...view,
+        cardPicker: {
+          key: "prompt-optional",
+          label: "Choose a card",
+          side: "player",
+          candidates: [
+            makePickerCandidate(view.playerHand[0], "player", "hand"),
+          ],
+          candidateIds: [view.playerHand[0]?.id ?? "missing"],
+          count: 1,
+          optional: true,
+          canResolve: true,
+          presentation: "board",
+        },
       },
-    }, {
-      canInteract: false,
-      pendingCardId: null,
-      onHandCardActivate: vi.fn(),
-      onCardDragStart: vi.fn(),
-      onCardDragEnd: vi.fn(),
-      onSlotDrop: vi.fn(),
-      onZoneDrop: vi.fn(),
-      onPreviousPhase: vi.fn(),
-      onNextPhase: vi.fn(),
-      onCardPickerSkip,
-    });
+      {
+        canInteract: false,
+        pendingCardId: null,
+        onHandCardActivate: vi.fn(),
+        onCardDragStart: vi.fn(),
+        onCardDragEnd: vi.fn(),
+        onSlotDrop: vi.fn(),
+        onZoneDrop: vi.fn(),
+        onPreviousPhase: vi.fn(),
+        onNextPhase: vi.fn(),
+        onCardPickerSkip,
+      },
+    );
 
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="battle-card-picker-skip"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-card-picker-skip"]',
+        )
+        ?.click();
     });
     expect(onCardPickerSkip).toHaveBeenCalledOnce();
 
@@ -1893,26 +2099,29 @@ describe("MobileBattleScreen", () => {
 
   it("replaces Next Phase with inline choice-prompt buttons", () => {
     const onChoicePromptChoose = vi.fn();
-    const { container, root } = mount({
-      ...makeView(),
-      choicePrompt: {
-        key: "prompt-choice-42",
-        label: "Discard your hand and redraw?",
-        options: [{ label: "Yes" }, { label: "Skip" }],
-        canResolve: true,
+    const { container, root } = mount(
+      {
+        ...makeView(),
+        choicePrompt: {
+          key: "prompt-choice-42",
+          label: "Discard your hand and redraw?",
+          options: [{ label: "Yes" }, { label: "Skip" }],
+          canResolve: true,
+        },
       },
-    }, {
-      canInteract: false,
-      pendingCardId: null,
-      onHandCardActivate: vi.fn(),
-      onCardDragStart: vi.fn(),
-      onCardDragEnd: vi.fn(),
-      onSlotDrop: vi.fn(),
-      onZoneDrop: vi.fn(),
-      onPreviousPhase: vi.fn(),
-      onNextPhase: vi.fn(),
-      onChoicePromptChoose,
-    });
+      {
+        canInteract: false,
+        pendingCardId: null,
+        onHandCardActivate: vi.fn(),
+        onCardDragStart: vi.fn(),
+        onCardDragEnd: vi.fn(),
+        onSlotDrop: vi.fn(),
+        onZoneDrop: vi.fn(),
+        onPreviousPhase: vi.fn(),
+        onNextPhase: vi.fn(),
+        onChoicePromptChoose,
+      },
+    );
     const nextSlot = container.querySelector<HTMLElement>(
       "[data-battle-phase-next]",
     );
@@ -1951,36 +2160,40 @@ describe("MobileBattleScreen", () => {
   it("reveals the full enemy hand when that side owns the inline picker", () => {
     const view = makeView();
     const candidateId = view.enemyHandCardIds[7];
-    if (candidateId === undefined) throw new Error("expected an enemy hand card");
+    if (candidateId === undefined)
+      throw new Error("expected an enemy hand card");
     const onCardPickerSubmit = vi.fn();
     const onHandCardActivate = vi.fn();
-    const { container, root } = mount({
-      ...view,
-      cardPicker: {
-        key: "prompt-enemy",
-        label: "Choose a card to discard",
-        side: "enemy",
-        candidates: view.enemyHand.map((card) =>
-          makePickerCandidate(card, "enemy", "hand")
-        ),
-        candidateIds: view.enemyHandCardIds,
-        count: 1,
-        optional: false,
-        canResolve: true,
-        presentation: "board",
+    const { container, root } = mount(
+      {
+        ...view,
+        cardPicker: {
+          key: "prompt-enemy",
+          label: "Choose a card to discard",
+          side: "enemy",
+          candidates: view.enemyHand.map((card) =>
+            makePickerCandidate(card, "enemy", "hand"),
+          ),
+          candidateIds: view.enemyHandCardIds,
+          count: 1,
+          optional: false,
+          canResolve: true,
+          presentation: "board",
+        },
       },
-    }, {
-      canInteract: false,
-      pendingCardId: null,
-      onHandCardActivate,
-      onCardDragStart: vi.fn(),
-      onCardDragEnd: vi.fn(),
-      onSlotDrop: vi.fn(),
-      onZoneDrop: vi.fn(),
-      onPreviousPhase: vi.fn(),
-      onNextPhase: vi.fn(),
-      onCardPickerSubmit,
-    });
+      {
+        canInteract: false,
+        pendingCardId: null,
+        onHandCardActivate,
+        onCardDragStart: vi.fn(),
+        onCardDragEnd: vi.fn(),
+        onSlotDrop: vi.fn(),
+        onZoneDrop: vi.fn(),
+        onPreviousPhase: vi.fn(),
+        onNextPhase: vi.fn(),
+        onCardPickerSubmit,
+      },
+    );
     const enemyHand = container.querySelector<HTMLElement>(
       '[data-battle-mobile-row="far-hand"]',
     );
@@ -1994,29 +2207,33 @@ describe("MobileBattleScreen", () => {
     expect(enemyHand?.dataset.battleHandVisibleCount).toBe("8");
     expect(enemyCards).toHaveLength(8);
     expect(candidate?.dataset.battleCardFace).toBe("up");
-    expect(container.querySelector("[data-battle-card-picker-progress]")?.textContent)
-      .toBe("Choose a card to discard from the opponent hand · 0/1");
+    expect(
+      container.querySelector("[data-battle-card-picker-progress]")
+        ?.textContent,
+    ).toBe("Choose a card to discard from the opponent hand · 0/1");
 
     act(() => {
-      container.querySelector<HTMLElement>(
-        '[data-battle-card-zone="near-hand"]',
-      )?.click();
+      container
+        .querySelector<HTMLElement>('[data-battle-card-zone="near-hand"]')
+        ?.click();
     });
     expect(onHandCardActivate).not.toHaveBeenCalled();
 
     act(() => {
-      candidate?.querySelector<HTMLElement>(
-        '[data-battle-card-zone="far-hand"]',
-      )?.click();
+      candidate
+        ?.querySelector<HTMLElement>('[data-battle-card-zone="far-hand"]')
+        ?.click();
     });
 
     expect(
       candidate?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
     ).toContain("var(--color-gold-light)");
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="battle-card-picker-submit"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-card-picker-submit"]',
+        )
+        ?.click();
     });
     expect(onCardPickerSubmit).toHaveBeenCalledWith([candidateId]);
 
@@ -2027,52 +2244,75 @@ describe("MobileBattleScreen", () => {
     const view = makeView();
     const playerCard = view.player.frontRank[0]?.card;
     const enemyCard = view.enemy.frontRank[0]?.card;
-    if (playerCard === null || playerCard === undefined || enemyCard === null || enemyCard === undefined) {
+    if (
+      playerCard === null ||
+      playerCard === undefined ||
+      enemyCard === null ||
+      enemyCard === undefined
+    ) {
       throw new Error("expected battlefield fixture cards");
     }
     const candidateIds = [enemyCard.id, playerCard.id];
     const onCardPickerSubmit = vi.fn();
-    const { container, root } = mount({
-      ...view,
-      cardPicker: {
-        key: "prompt-battlefield",
-        label: "Choose battlefield characters",
-        side: "player",
-        candidates: [
-          makePickerCandidate(enemyCard, "enemy", "frontRank"),
-          makePickerCandidate(playerCard, "player", "frontRank"),
-        ],
-        candidateIds,
-        count: 2,
-        optional: false,
-        canResolve: true,
-        presentation: "board",
+    const { container, root } = mount(
+      {
+        ...view,
+        cardPicker: {
+          key: "prompt-battlefield",
+          label: "Choose battlefield characters",
+          side: "player",
+          candidates: [
+            makePickerCandidate(enemyCard, "enemy", "frontRank"),
+            makePickerCandidate(playerCard, "player", "frontRank"),
+          ],
+          candidateIds,
+          count: 2,
+          optional: false,
+          canResolve: true,
+          presentation: "board",
+        },
       },
-    }, {
-      canInteract: false,
-      pendingCardId: null,
-      onHandCardActivate: vi.fn(),
-      onCardDragStart: vi.fn(),
-      onCardDragEnd: vi.fn(),
-      onSlotDrop: vi.fn(),
-      onZoneDrop: vi.fn(),
-      onPreviousPhase: vi.fn(),
-      onNextPhase: vi.fn(),
-      onCardPickerSubmit,
-    });
+      {
+        canInteract: false,
+        pendingCardId: null,
+        onHandCardActivate: vi.fn(),
+        onCardDragStart: vi.fn(),
+        onCardDragEnd: vi.fn(),
+        onSlotDrop: vi.fn(),
+        onZoneDrop: vi.fn(),
+        onPreviousPhase: vi.fn(),
+        onNextPhase: vi.fn(),
+        onCardPickerSubmit,
+      },
+    );
 
-    const candidates = Array.from(container.querySelectorAll<HTMLElement>(
-      '[data-battle-card-picker-candidate="true"]',
-    ));
+    const candidates = Array.from(
+      container.querySelectorAll<HTMLElement>(
+        '[data-battle-card-picker-candidate="true"]',
+      ),
+    );
     expect(candidates).toHaveLength(2);
-    act(() => candidates[0]?.querySelector<HTMLElement>("[data-game-card-source]")?.click());
-    act(() => candidates[1]?.querySelector<HTMLElement>("[data-game-card-source]")?.click());
-    expect(candidates.map((candidate) => candidate.dataset.battleCardPickerSelected))
-      .toEqual(["true", "true"]);
+    act(() =>
+      candidates[0]
+        ?.querySelector<HTMLElement>("[data-game-card-source]")
+        ?.click(),
+    );
+    act(() =>
+      candidates[1]
+        ?.querySelector<HTMLElement>("[data-game-card-source]")
+        ?.click(),
+    );
+    expect(
+      candidates.map((candidate) => candidate.dataset.battleCardPickerSelected),
+    ).toEqual(["true", "true"]);
 
-    act(() => container.querySelector<HTMLButtonElement>(
-      '[data-testid="battle-card-picker-submit"]',
-    )?.click());
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-card-picker-submit"]',
+        )
+        ?.click(),
+    );
     expect(onCardPickerSubmit).toHaveBeenCalledWith(candidateIds);
 
     act(() => root.unmount());
@@ -2087,49 +2327,67 @@ describe("MobileBattleScreen", () => {
       makePickerCandidate(makeCard(91, "enemy-deck-top"), "enemy", "deck"),
     ];
     const onCardPickerSubmit = vi.fn();
-    const { container, root } = mount({
-      ...view,
-      cardPicker: {
-        key: "prompt-gallery",
-        label: "Choose cards from hidden zones",
-        side: "player",
-        candidates,
-        candidateIds: candidates.map((candidate) => candidate.instanceId),
-        count: 2,
-        optional: false,
-        canResolve: true,
-        presentation: "gallery",
+    const { container, root } = mount(
+      {
+        ...view,
+        cardPicker: {
+          key: "prompt-gallery",
+          label: "Choose cards from hidden zones",
+          side: "player",
+          candidates,
+          candidateIds: candidates.map((candidate) => candidate.instanceId),
+          count: 2,
+          optional: false,
+          canResolve: true,
+          presentation: "gallery",
+        },
       },
-    }, {
-      canInteract: false,
-      pendingCardId: null,
-      onHandCardActivate: vi.fn(),
-      onCardDragStart: vi.fn(),
-      onCardDragEnd: vi.fn(),
-      onSlotDrop: vi.fn(),
-      onZoneDrop: vi.fn(),
-      onPreviousPhase: vi.fn(),
-      onNextPhase: vi.fn(),
-      onCardPickerSubmit,
-    });
+      {
+        canInteract: false,
+        pendingCardId: null,
+        onHandCardActivate: vi.fn(),
+        onCardDragStart: vi.fn(),
+        onCardDragEnd: vi.fn(),
+        onSlotDrop: vi.fn(),
+        onZoneDrop: vi.fn(),
+        onPreviousPhase: vi.fn(),
+        onNextPhase: vi.fn(),
+        onCardPickerSubmit,
+      },
+    );
 
-    expect(container.querySelector('[role="dialog"]')?.getAttribute("aria-label"))
-      .toBe("Choose cards from hidden zones");
-    expect(container.querySelectorAll("[data-gallery-entry-id]")).toHaveLength(4);
+    expect(
+      container.querySelector('[role="dialog"]')?.getAttribute("aria-label"),
+    ).toBe("Choose cards from hidden zones");
+    expect(container.querySelectorAll("[data-gallery-entry-id]")).toHaveLength(
+      4,
+    );
     expect(container.textContent).toContain("Your Void");
     expect(container.textContent).toContain("Opponent Void");
     expect(container.textContent).toContain("Your Deck");
     expect(container.textContent).toContain("Opponent Deck");
 
-    act(() => container.querySelector<HTMLElement>(
-      `[data-testid="battle-card-picker-candidate-${candidates[0].instanceId}"]`,
-    )?.click());
-    act(() => container.querySelector<HTMLElement>(
-      `[data-testid="battle-card-picker-candidate-${candidates[2].instanceId}"]`,
-    )?.click());
-    act(() => container.querySelector<HTMLButtonElement>(
-      '[data-testid="battle-card-picker-submit"]',
-    )?.click());
+    act(() =>
+      container
+        .querySelector<HTMLElement>(
+          `[data-testid="battle-card-picker-candidate-${candidates[0].instanceId}"]`,
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLElement>(
+          `[data-testid="battle-card-picker-candidate-${candidates[2].instanceId}"]`,
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-card-picker-submit"]',
+        )
+        ?.click(),
+    );
     expect(onCardPickerSubmit).toHaveBeenCalledWith([
       candidates[0].instanceId,
       candidates[2].instanceId,
@@ -2166,13 +2424,19 @@ describe("MobileBattleScreen", () => {
     });
 
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="battle-inspector-trigger"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-inspector-trigger"]',
+        )
+        ?.click();
     });
 
-    expect(container.querySelector('[data-battle-card-picker-gallery]')).not.toBeNull();
-    expect(container.querySelector('[data-battle-inspector="takeover"]')).toBeNull();
+    expect(
+      container.querySelector("[data-battle-card-picker-gallery]"),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-battle-inspector="takeover"]'),
+    ).toBeNull();
 
     act(() => root.unmount());
   });
@@ -2199,8 +2463,9 @@ describe("MobileBattleScreen", () => {
       '[data-battle-card-picker-highlighted="true"]',
     );
     expect(candidate).not.toBeNull();
-    expect(candidate?.querySelector<HTMLElement>(".card-view")?.style.boxShadow)
-      .toContain("var(--gold)");
+    expect(
+      candidate?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
+    ).toContain("var(--gold)");
 
     act(() => root.unmount());
   });
@@ -2208,31 +2473,34 @@ describe("MobileBattleScreen", () => {
   it("offers Continue when an authoritative required picker has no candidates", () => {
     const view = makeView();
     const onCardPickerSubmit = vi.fn();
-    const { container, root } = mount({
-      ...view,
-      cardPicker: {
-        key: "prompt-empty",
-        label: "Choose a valid target",
-        side: "player",
-        candidates: [],
-        candidateIds: [],
-        count: 1,
-        optional: false,
-        canResolve: true,
-        presentation: "board",
+    const { container, root } = mount(
+      {
+        ...view,
+        cardPicker: {
+          key: "prompt-empty",
+          label: "Choose a valid target",
+          side: "player",
+          candidates: [],
+          candidateIds: [],
+          count: 1,
+          optional: false,
+          canResolve: true,
+          presentation: "board",
+        },
       },
-    }, {
-      canInteract: false,
-      pendingCardId: null,
-      onHandCardActivate: vi.fn(),
-      onCardDragStart: vi.fn(),
-      onCardDragEnd: vi.fn(),
-      onSlotDrop: vi.fn(),
-      onZoneDrop: vi.fn(),
-      onPreviousPhase: vi.fn(),
-      onNextPhase: vi.fn(),
-      onCardPickerSubmit,
-    });
+      {
+        canInteract: false,
+        pendingCardId: null,
+        onHandCardActivate: vi.fn(),
+        onCardDragStart: vi.fn(),
+        onCardDragEnd: vi.fn(),
+        onSlotDrop: vi.fn(),
+        onZoneDrop: vi.fn(),
+        onPreviousPhase: vi.fn(),
+        onNextPhase: vi.fn(),
+        onCardPickerSubmit,
+      },
+    );
 
     const submit = container.querySelector<HTMLButtonElement>(
       '[data-testid="battle-card-picker-submit"]',
@@ -2333,15 +2601,17 @@ describe("MobileBattleScreen", () => {
     const view = makeView();
     const playerBackRank = Array.from({ length: 6 }, (_, index) => ({
       id: `player-expanded-back-${String(index)}`,
-      card: index < 5
-        ? makeCard(80 + index, `player-expanded-back-card-${String(index)}`)
-        : null,
+      card:
+        index < 5
+          ? makeCard(80 + index, `player-expanded-back-card-${String(index)}`)
+          : null,
     }));
     const playerFrontRank = Array.from({ length: 5 }, (_, index) => ({
       id: `player-expanded-front-${String(index)}`,
-      card: index < 4
-        ? makeCard(90 + index, `player-expanded-front-card-${String(index)}`)
-        : null,
+      card:
+        index < 4
+          ? makeCard(90 + index, `player-expanded-front-card-${String(index)}`)
+          : null,
     }));
     const { container, root } = mount({
       ...view,
@@ -2370,9 +2640,7 @@ describe("MobileBattleScreen", () => {
     const denseBackRank = Array.from({ length: 10 }, (_, index) => ({
       id: `B${String(index)}`,
       card:
-        index < 9
-          ? makeCard(100 + index, `dense-back-${String(index)}`)
-          : null,
+        index < 9 ? makeCard(100 + index, `dense-back-${String(index)}`) : null,
     }));
     const denseFrontRank = Array.from({ length: 9 }, (_, index) => ({
       id: `F${String(index)}`,
@@ -2487,10 +2755,18 @@ describe("MobileBattleScreen", () => {
       container.querySelector<HTMLElement>(
         `[data-battle-rank="${owner}-${rank}"] [data-battle-rank-track]`,
       );
-    expect(track("player", "back")?.style.gridTemplateColumns).toContain("repeat(10,");
-    expect(track("player", "front")?.style.gridTemplateColumns).toContain("repeat(9,");
-    expect(track("enemy", "back")?.style.gridTemplateColumns).toContain("repeat(5,");
-    expect(track("enemy", "front")?.style.gridTemplateColumns).toContain("repeat(4,");
+    expect(track("player", "back")?.style.gridTemplateColumns).toContain(
+      "repeat(10,",
+    );
+    expect(track("player", "front")?.style.gridTemplateColumns).toContain(
+      "repeat(9,",
+    );
+    expect(track("enemy", "back")?.style.gridTemplateColumns).toContain(
+      "repeat(5,",
+    );
+    expect(track("enemy", "front")?.style.gridTemplateColumns).toContain(
+      "repeat(4,",
+    );
     expect(
       container.querySelectorAll(
         '[data-battle-rank="enemy-back"] [data-battle-slot-id]',
@@ -2541,7 +2817,8 @@ describe("MobileBattleScreen", () => {
     expect(playerCards?.[0]?.parentElement?.style.bottom).toBe("");
 
     const rulesRevealedCard = view.enemyHand[7];
-    if (rulesRevealedCard === undefined) throw new Error("fixture missing revealed far-hand card");
+    if (rulesRevealedCard === undefined)
+      throw new Error("fixture missing revealed far-hand card");
     const revealedView: MobileBattleView = {
       ...view,
       farHand: { ...view.farHand, cards: [rulesRevealedCard] },
@@ -2549,13 +2826,16 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
     const revealed = mount(revealedView);
     expect(
-      revealed.container.querySelector('[data-battle-mobile-row="far-hand"]')
+      revealed.container
+        .querySelector('[data-battle-mobile-row="far-hand"]')
         ?.querySelectorAll(':scope > [data-battle-card-zone="far-hand"]'),
     ).toHaveLength(7);
     expect(
-      revealed.container.querySelector(
-        `[data-battle-mobile-row="far-hand"] [data-battle-card-id="${rulesRevealedCard.id}"]`,
-      )?.getAttribute("data-battle-card-face"),
+      revealed.container
+        .querySelector(
+          `[data-battle-mobile-row="far-hand"] [data-battle-card-id="${rulesRevealedCard.id}"]`,
+        )
+        ?.getAttribute("data-battle-card-face"),
     ).toBe("up");
 
     act(() => revealed.root.unmount());
@@ -2586,7 +2866,8 @@ describe("MobileBattleScreen", () => {
     const nextSlot = phaseControls?.querySelector<HTMLElement>(
       "[data-battle-phase-next]",
     );
-    const buttons = phaseControls?.querySelectorAll<HTMLButtonElement>("button");
+    const buttons =
+      phaseControls?.querySelectorAll<HTMLButtonElement>("button");
     const previous = buttons?.[0];
     const next = buttons?.[1];
 
@@ -2791,9 +3072,8 @@ describe("MobileBattleScreen", () => {
     );
     expect(fill?.textContent).toContain("Fill Battlefield + Voids");
     expect(
-      container.querySelector(
-        '[data-testid="battle-debug-fill-asymmetric"]',
-      )?.textContent,
+      container.querySelector('[data-testid="battle-debug-fill-asymmetric"]')
+        ?.textContent,
     ).toContain("Fill 19 vs 9 + Voids");
 
     act(() => fill?.click());
@@ -2843,9 +3123,7 @@ describe("MobileBattleScreen", () => {
     expect(onFillAsymmetricBattlefieldPreview).toHaveBeenCalledTimes(1);
     expect(interactions.onFillBattlefieldPreview).not.toHaveBeenCalled();
     expect(
-      container.querySelector(
-        '[data-testid="battle-debug-fill-asymmetric"]',
-      ),
+      container.querySelector('[data-testid="battle-debug-fill-asymmetric"]'),
     ).toBeNull();
 
     act(() => root.unmount());
@@ -2933,17 +3211,19 @@ describe("MobileBattleScreen", () => {
       height: 140,
       toJSON: () => ({}),
     });
-    vi.spyOn(rightSlot as HTMLElement, "getBoundingClientRect").mockReturnValue({
-      x: 250,
-      y: 200,
-      left: 250,
-      top: 200,
-      right: 350,
-      bottom: 340,
-      width: 100,
-      height: 140,
-      toJSON: () => ({}),
-    });
+    vi.spyOn(rightSlot as HTMLElement, "getBoundingClientRect").mockReturnValue(
+      {
+        x: 250,
+        y: 200,
+        left: 250,
+        top: 200,
+        right: 350,
+        bottom: 340,
+        width: 100,
+        height: 140,
+        toJSON: () => ({}),
+      },
+    );
 
     act(() => {
       screen?.dispatchEvent(
@@ -2990,8 +3270,12 @@ describe("MobileBattleScreen", () => {
     expect(playerSlot?.dataset.battleDropTarget).toBe("true");
     expect(enemySlot?.dataset.battleDropTarget).toBeUndefined();
     act(() => {
-      enemySlot?.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
-      playerSlot?.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+      enemySlot?.dispatchEvent(
+        new Event("drop", { bubbles: true, cancelable: true }),
+      );
+      playerSlot?.dispatchEvent(
+        new Event("drop", { bubbles: true, cancelable: true }),
+      );
     });
     expect(interactions.onSlotDrop).toHaveBeenCalledTimes(1);
     expect(interactions.onSlotDrop).toHaveBeenCalledWith({
@@ -3075,18 +3359,20 @@ describe("MobileBattleScreen", () => {
       height: 400,
       toJSON: () => ({}),
     });
-    vi.spyOn(battlefieldCard as HTMLElement, "getBoundingClientRect")
-      .mockReturnValue({
-        x: 160,
-        y: 200,
-        left: 160,
-        top: 200,
-        right: 240,
-        bottom: 312,
-        width: 80,
-        height: 112,
-        toJSON: () => ({}),
-      });
+    vi.spyOn(
+      battlefieldCard as HTMLElement,
+      "getBoundingClientRect",
+    ).mockReturnValue({
+      x: 160,
+      y: 200,
+      left: 160,
+      top: 200,
+      right: 240,
+      bottom: 312,
+      width: 80,
+      height: 112,
+      toJSON: () => ({}),
+    });
     vi.spyOn(leftSlot as HTMLElement, "getBoundingClientRect").mockReturnValue({
       x: 40,
       y: 200,
@@ -3098,17 +3384,19 @@ describe("MobileBattleScreen", () => {
       height: 112,
       toJSON: () => ({}),
     });
-    vi.spyOn(rightSlot as HTMLElement, "getBoundingClientRect").mockReturnValue({
-      x: 280,
-      y: 200,
-      left: 280,
-      top: 200,
-      right: 360,
-      bottom: 312,
-      width: 80,
-      height: 112,
-      toJSON: () => ({}),
-    });
+    vi.spyOn(rightSlot as HTMLElement, "getBoundingClientRect").mockReturnValue(
+      {
+        x: 280,
+        y: 200,
+        left: 280,
+        top: 200,
+        right: 360,
+        bottom: 312,
+        width: 80,
+        height: 112,
+        toJSON: () => ({}),
+      },
+    );
     Object.defineProperty(document, "elementFromPoint", {
       configurable: true,
       value: vi.fn(() => screen),
@@ -3175,9 +3463,7 @@ describe("MobileBattleScreen", () => {
 
   it("keeps a long horizontal tutorial drag on the visible destination cell", () => {
     mockDesktopViewport(true);
-    const definitionUuid = asCardId(
-      "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-    );
+    const definitionUuid = asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af");
     const baseView = makeView();
     const baseSourceCard = baseView.player.frontRank[0]?.card;
     if (baseSourceCard === null || baseSourceCard === undefined) {
@@ -3262,18 +3548,20 @@ describe("MobileBattleScreen", () => {
       height: 400,
       toJSON: () => ({}),
     });
-    vi.spyOn(battlefieldCard as HTMLElement, "getBoundingClientRect")
-      .mockReturnValue({
-        x: 599.28125,
-        y: 387.96875,
-        left: 599.28125,
-        top: 387.96875,
-        right: 701.96875,
-        bottom: 490.65625,
-        width: 102.6875,
-        height: 102.6875,
-        toJSON: () => ({}),
-      });
+    vi.spyOn(
+      battlefieldCard as HTMLElement,
+      "getBoundingClientRect",
+    ).mockReturnValue({
+      x: 599.28125,
+      y: 387.96875,
+      left: 599.28125,
+      top: 387.96875,
+      right: 701.96875,
+      bottom: 490.65625,
+      width: 102.6875,
+      height: 102.6875,
+      toJSON: () => ({}),
+    });
     container
       .querySelectorAll<HTMLElement>(
         '[data-battle-mobile-drop-kind="slot"][data-battle-mobile-drop-owner="player"]',
@@ -3415,18 +3703,20 @@ describe("MobileBattleScreen", () => {
       height: 500,
       toJSON: () => ({}),
     });
-    vi.spyOn(battlefieldCard as HTMLElement, "getBoundingClientRect")
-      .mockReturnValue({
-        x: 160,
-        y: 200,
-        left: 160,
-        top: 200,
-        right: 240,
-        bottom: 312,
-        width: 80,
-        height: 112,
-        toJSON: () => ({}),
-      });
+    vi.spyOn(
+      battlefieldCard as HTMLElement,
+      "getBoundingClientRect",
+    ).mockReturnValue({
+      x: 160,
+      y: 200,
+      left: 160,
+      top: 200,
+      right: 240,
+      bottom: 312,
+      width: 80,
+      height: 112,
+      toJSON: () => ({}),
+    });
     Object.defineProperty(document, "elementFromPoint", {
       configurable: true,
       value: vi.fn(() => screen),
@@ -3527,7 +3817,10 @@ describe("MobileBattleScreen", () => {
       height: 200,
       toJSON: () => ({}),
     });
-    vi.spyOn(battlefieldCard as HTMLElement, "getBoundingClientRect").mockReturnValue({
+    vi.spyOn(
+      battlefieldCard as HTMLElement,
+      "getBoundingClientRect",
+    ).mockReturnValue({
       x: 100,
       y: 200,
       left: 100,
@@ -3680,9 +3973,8 @@ describe("MobileBattleScreen", () => {
     const battlefieldCard = container.querySelector<HTMLElement>(
       '.card-view[data-card-presentation="battlefield"]',
     );
-    const battlefieldCardRadius = battlefieldCard?.style.getPropertyValue(
-      "--cv-radius",
-    );
+    const battlefieldCardRadius =
+      battlefieldCard?.style.getPropertyValue("--cv-radius");
 
     const outlines = Array.from(
       container.querySelectorAll<HTMLElement>("[data-battle-slot-outline]"),
@@ -3941,9 +4233,8 @@ describe("MobileBattleScreen", () => {
     });
 
     expect(
-      handCard?.querySelector<HTMLElement>(
-        ":scope > [data-battle-card-motion]",
-      )?.dataset.battleCardLayoutMotion,
+      handCard?.querySelector<HTMLElement>(":scope > [data-battle-card-motion]")
+        ?.dataset.battleCardLayoutMotion,
     ).toBe("travel");
 
     act(() => {
@@ -3972,9 +4263,8 @@ describe("MobileBattleScreen", () => {
     });
 
     expect(
-      handCard?.querySelector<HTMLElement>(
-        ":scope > [data-battle-card-motion]",
-      )?.dataset.battleCardLayoutMotion,
+      handCard?.querySelector<HTMLElement>(":scope > [data-battle-card-motion]")
+        ?.dataset.battleCardLayoutMotion,
     ).toBe("snap");
 
     act(() => {
@@ -4044,8 +4334,14 @@ describe("MobileBattleScreen", () => {
     const handCard = container.querySelector<HTMLElement>(
       '[data-battle-card-id="player-hand-0"]',
     );
-    const dataTransfer = { setDragImage: vi.fn(), effectAllowed: "uninitialized" };
-    const dragStart = new Event("dragstart", { bubbles: true, cancelable: true });
+    const dataTransfer = {
+      setDragImage: vi.fn(),
+      effectAllowed: "uninitialized",
+    };
+    const dragStart = new Event("dragstart", {
+      bubbles: true,
+      cancelable: true,
+    });
     Object.defineProperty(dragStart, "dataTransfer", {
       value: dataTransfer,
     });
@@ -4083,7 +4379,10 @@ describe("MobileBattleScreen", () => {
     const playerVoid = container.querySelector<HTMLElement>(
       '[data-battle-zone="player-void"]',
     );
-    if (handCard?.parentElement !== null && handCard?.parentElement !== undefined) {
+    if (
+      handCard?.parentElement !== null &&
+      handCard?.parentElement !== undefined
+    ) {
       handCard.parentElement.style.transform = "none";
     }
     Object.defineProperty(document, "elementFromPoint", {
@@ -4200,8 +4499,12 @@ describe("MobileBattleScreen", () => {
 
     interactions.onCardDebugActivate.mockClear();
     act(() => {
-      battlefieldCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-      battlefieldCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      battlefieldCard?.dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+      battlefieldCard?.dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
     });
     expect(interactions.onCardDebugActivate).toHaveBeenCalledWith(
       "player-front-card",
@@ -4297,7 +4600,10 @@ describe("MobileBattleScreen", () => {
     const revealSource = handCard?.querySelector<HTMLElement>(
       "[data-game-card-source]",
     );
-    const dispatchTouch = (type: "pointerdown" | "pointerout" | "pointerup", pointerId: number) => {
+    const dispatchTouch = (
+      type: "pointerdown" | "pointerout" | "pointerup",
+      pointerId: number,
+    ) => {
       revealSource?.dispatchEvent(
         new PointerEvent(type, {
           bubbles: true,
@@ -4324,12 +4630,16 @@ describe("MobileBattleScreen", () => {
       dispatchTouch("pointerdown", 42);
       vi.advanceTimersByTime(30);
     });
-    expect(document.querySelector("[data-cumulus-reveal-portal]")).not.toBeNull();
+    expect(
+      document.querySelector("[data-cumulus-reveal-portal]"),
+    ).not.toBeNull();
     act(() => {
       dispatchTouch("pointerout", 42);
       vi.advanceTimersByTime(270);
     });
-    expect(document.querySelector("[data-cumulus-reveal-portal]")).not.toBeNull();
+    expect(
+      document.querySelector("[data-cumulus-reveal-portal]"),
+    ).not.toBeNull();
     act(() => {
       dispatchTouch("pointerup", 42);
       handCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -4377,7 +4687,10 @@ describe("MobileBattleScreen", () => {
     expect(
       handCard?.querySelector(":scope > [data-battle-card-motion]"),
     ).not.toBeNull();
-    if (handCard?.parentElement !== null && handCard?.parentElement !== undefined) {
+    if (
+      handCard?.parentElement !== null &&
+      handCard?.parentElement !== undefined
+    ) {
       handCard.parentElement.style.transform = "matrix(0, 1, -1, 0, 0, 0)";
     }
 
@@ -4411,9 +4724,7 @@ describe("MobileBattleScreen", () => {
     });
 
     expect(dragMove.defaultPrevented).toBe(true);
-    expect(transformDuringPointerMove).toContain(
-      "translate3d(40px, -24px, 0)",
-    );
+    expect(transformDuringPointerMove).toContain("translate3d(40px, -24px, 0)");
     expect(interactions.onCardDragStart).toHaveBeenCalledWith(
       "player-hand-0",
       "near-hand",
@@ -4445,9 +4756,7 @@ describe("MobileBattleScreen", () => {
     expect(pointerEventsDuringHitTest).toBe("none");
     expect(handCard?.dataset.battlePointerDragging).toBe("false");
     expect(handCard?.dataset.battlePointerDrop).toBe("committing");
-    expect(handCard?.style.transform).toContain(
-      "translate3d(40px, -24px, 0)",
-    );
+    expect(handCard?.style.transform).toContain("translate3d(40px, -24px, 0)");
     act(() => {
       vi.runOnlyPendingTimers();
     });
