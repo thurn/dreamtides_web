@@ -1,5 +1,7 @@
 Use the `wt` skill for all work unless explicitly asked to work "on master".
 
+~/.llms/skills/wt/SKILL.md
+
 Never edit files in the main repo directly unless explicitly asked to work "on master".
 
 Perform follow up work on the same worktree as the intial work until promotion.
