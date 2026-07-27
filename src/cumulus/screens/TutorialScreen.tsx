@@ -801,15 +801,18 @@ function TutorialDreamAvatarArrival({
       const dialoguePortraitBox = dialoguePortrait?.getBoundingClientRect();
       const targetY = targetBox.top - screenBox.top;
       const centeredY = (screenBox.height - targetBox.height) / 2;
-      // The player's center-to-status path defines one shared upward travel
-      // distance. Applying it to either destination keeps the arrivals balanced
-      // even when desktop chrome makes the status rows vertically asymmetric.
+      // The player's center-to-status path defines one shared travel distance.
+      // Each portrait approaches from the battlefield side of its status row:
+      // the player from above and the opponent from below.
       const playerTargetY =
         playerTargetBox === undefined
           ? targetY
           : playerTargetBox.top - screenBox.top;
       const travelDistance = Math.abs(playerTargetY - centeredY);
-      const startY = targetY - travelDistance;
+      const startY =
+        owner === "enemy"
+          ? targetY + travelDistance
+          : targetY - travelDistance;
       setTrajectory({
         startX: targetBox.left - screenBox.left,
         startY,

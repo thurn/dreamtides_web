@@ -980,15 +980,15 @@ describe("TutorialScreen", () => {
     ).not.toBeNull();
     expect(screenMocks.arrivalInitial).toMatchObject({
       x: 173,
-      y: -200,
+      y: 400,
       scale: 1,
       opacity: 1,
     });
     expect(screenMocks.arrivalAnimate).toMatchObject({
-      y: [-200, -200, 100],
+      y: [400, 400, 100],
       scale: [1, 1, 1],
     });
-    expect(100 - (-200)).toBe(700 - 400);
+    expect(400 - 100).toBe(700 - 400);
 
     act(() => screenMocks.arrivalAnimationComplete?.());
 
