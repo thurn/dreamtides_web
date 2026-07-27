@@ -47,7 +47,12 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
       presentationId: guidance.id,
       source: guidance.source,
       triggerIds: guidance.messages.map((message) => message.triggerId),
+      speakers: guidance.messages.map((message) => message.speaker),
       durations: guidance.messages.map((message) => message.duration),
+      verticalOffsets: guidance.messages.map(
+        (message) => message.verticalOffset,
+      ),
+      bubbleWidths: guidance.messages.map((message) => message.bubbleWidth),
       messageIndex: guidance.messageIndex,
     });
   }, [guidance, state.battle]);

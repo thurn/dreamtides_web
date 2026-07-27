@@ -11,7 +11,7 @@ import { GameCard } from "../components/card/CardView";
 import type { DreamwellCardModel } from "../components/battle/DreamwellCard";
 import { DreamwellCard } from "../components/battle/DreamwellCard";
 import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
-import { artRef } from "../primitives/art";
+import type { CharacterDialogueModel } from "../components/overlay/CharacterDialogue";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
@@ -36,7 +36,9 @@ export interface BattleTutorialGuidanceView {
   readonly messageIndex: number;
   readonly messageCount: number;
   readonly duration: number;
-  readonly text: string;
+  readonly dialogue: CharacterDialogueModel;
+  readonly verticalOffset: number;
+  readonly bubbleWidth: number;
   readonly source: BattleTutorialGuidanceSourceView;
 }
 
@@ -388,10 +390,11 @@ export function BattleTutorialGuidance({
         style={{
           display: "flex",
           width: desktop ? undefined : "min(100%, 560px)",
-          maxWidth: desktop ? 760 : "none",
+          maxWidth: desktop ? renderedView.bubbleWidth : "none",
           flex: desktop ? "1 1 480px" : "0 1 auto",
           flexDirection: "column",
           alignItems: "center",
+          transform: `translateY(${String(renderedView.verticalOffset)}px)`,
         }}
       >
         <Pressable
@@ -399,7 +402,7 @@ export function BattleTutorialGuidance({
           role="button"
           tabIndex={active ? 0 : -1}
           disabled={!active}
-          aria-label="Dismiss Mira tutorial"
+          aria-label={`Dismiss ${renderedView.dialogue.speakerName} tutorial`}
           data-testid="battle-tutorial-dismiss"
           hoverFeedback="stationary"
           pressFeedback="stationary"
@@ -418,12 +421,7 @@ export function BattleTutorialGuidance({
           }}
         >
           <CharacterDialogue
-            dialogue={{
-              portrait: artRef.characterPortrait("mira"),
-              portraitAlt: "Mira",
-              speakerName: "Mira",
-              text: renderedView.text,
-            }}
+            dialogue={renderedView.dialogue}
             visible={active}
             size={desktop ? "prominent" : "compact"}
             testId="battle-tutorial-dialogue"

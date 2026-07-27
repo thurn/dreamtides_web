@@ -531,14 +531,10 @@ export function validateTutorialTriggers(value) {
     if (typeof priority !== "number" || !Number.isFinite(priority)) {
       throw invalid(`Tutorial trigger ${JSON.stringify(id)} must have a finite priority.`);
     }
-    const duration = candidate.duration ?? 3;
-    if (typeof duration !== "number" || !Number.isFinite(duration) || duration <= 0) {
+    const speechBubble = validateTutorialSpeechBubble(candidate, id, true);
+    if (speechBubble.duration <= 0) {
       throw invalid(`Tutorial trigger ${JSON.stringify(id)} must have a positive duration.`);
     }
-    if (typeof candidate.text !== "string" || candidate.text.trim().length === 0) {
-      throw invalid(`Tutorial trigger ${JSON.stringify(id)} must have tutorial text.`);
-    }
-    validateTutorialMarkup(candidate.text, id);
     const match = candidate.match;
     if (match === null || typeof match !== "object" || Array.isArray(match)) {
       throw invalid(`Tutorial trigger ${JSON.stringify(id)} must have a match table.`);
@@ -570,9 +566,8 @@ export function validateTutorialTriggers(value) {
       id,
       on: [...candidate.on],
       priority,
-      duration,
       match: normalizedMatch,
-      text: candidate.text,
+      ...speechBubble,
     };
   });
 }

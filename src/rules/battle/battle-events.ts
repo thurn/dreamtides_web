@@ -587,8 +587,11 @@ function openTutorialGuidance(
         source,
         messages: matches.map((match) => ({
           triggerId: match.id,
+          speaker: match.speaker,
           text: match.text,
           duration: match.duration,
+          verticalOffset: match.verticalOffset,
+          bubbleWidth: match.bubbleWidth,
         })),
         messageIndex: 0,
         continuation,

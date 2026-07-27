@@ -212,7 +212,10 @@ describe("tutorial battle lifecycle", () => {
       id: "support",
       on: ["card-play"],
       priority: 100,
-      duration: 3,
+      speaker: "player",
+      duration: 5,
+      verticalOffset: -20,
+      bubbleWidth: 300,
       match: { kind: "glossary", id: "support" },
       text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
     }];
@@ -247,7 +250,13 @@ describe("tutorial battle lifecycle", () => {
     expect(opened.state.battle?.tutorialPresentation).toMatchObject({
       kind: "tutorial-guidance",
       source: { kind: "card", battleCardId, side: "player" },
-      messages: [{ triggerId: "support", duration: 3 }],
+      messages: [{
+        triggerId: "support",
+        speaker: "player",
+        duration: 5,
+        verticalOffset: -20,
+        bubbleWidth: 300,
+      }],
       messageIndex: 0,
     });
     expect(opened.state.battle?.board.sides.player.hand).toContain(battleCardId);
@@ -282,7 +291,10 @@ describe("tutorial battle lifecycle", () => {
       id: "support",
       on: ["card-play"],
       priority: 100,
+      speaker: "mira",
       duration: 3,
+      verticalOffset: 0,
+      bubbleWidth: 700,
       match: { kind: "glossary", id: "support" },
       text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
     }];

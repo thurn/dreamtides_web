@@ -17,6 +17,26 @@ class ResizeObserverStub {
   disconnect() {}
 }
 
+function guidanceFields(
+  text: string,
+  options: { readonly verticalOffset?: number; readonly bubbleWidth?: number } = {},
+) {
+  return {
+    duration: 3,
+    dialogue: {
+      portrait: {
+        kind: "character-portrait" as const,
+        characterId: "mira" as const,
+      },
+      portraitAlt: "Mira",
+      speakerName: "Mira",
+      text,
+    },
+    verticalOffset: options.verticalOffset ?? 0,
+    bubbleWidth: options.bubbleWidth ?? 700,
+  };
+}
+
 describe("BattleTutorialGuidance", () => {
   beforeEach(() => {
     (
@@ -25,6 +45,16 @@ describe("BattleTutorialGuidance", () => {
       }
     ).IS_REACT_ACT_ENVIRONMENT = true;
     globalThis.ResizeObserver = ResizeObserverStub;
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: query.includes("min-width"),
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }));
   });
 
   afterEach(() => {
@@ -46,8 +76,10 @@ describe("BattleTutorialGuidance", () => {
               triggerId: "erode",
               messageIndex: 0,
               messageCount: 1,
-              duration: 3,
-              text: "[yellow]Erode[/yellow] sends cards to the void. Score 3⍟ for each missing card.",
+              ...guidanceFields(
+                "[yellow]Erode[/yellow] sends cards to the void. Score 3⍟ for each missing card.",
+                { verticalOffset: 20, bubbleWidth: 300 },
+              ),
               source: {
                 kind: "dreamwell",
                 side: "player",
@@ -84,6 +116,11 @@ describe("BattleTutorialGuidance", () => {
     expect(guidance?.getAttribute("aria-modal")).toBeNull();
     expect(guidance?.getAttribute("role")).toBeNull();
     expect(guidance?.style.background).toBe("");
+    const dialogueLayout = container.querySelector<HTMLElement>(
+      '[data-testid="battle-tutorial-dismiss"]',
+    )?.parentElement;
+    expect(dialogueLayout?.style.maxWidth).toBe("300px");
+    expect(dialogueLayout?.style.transform).toBe("translateY(20px)");
     expect(
       container.querySelector('[data-testid="battle-tutorial-continue"]'),
     ).toBeNull();
@@ -112,8 +149,7 @@ describe("BattleTutorialGuidance", () => {
               triggerId: "erode",
               messageIndex: 0,
               messageCount: 1,
-              duration: 3,
-              text: "Erode sends cards to the void.",
+              ...guidanceFields("Erode sends cards to the void."),
               source: {
                 kind: "dreamwell",
                 side: "player",
@@ -171,8 +207,7 @@ describe("BattleTutorialGuidance", () => {
       triggerId: "support",
       messageIndex: 0,
       messageCount: 1,
-      duration: 3,
-      text: "Support helps the character in front.",
+      ...guidanceFields("Support helps the character in front."),
       source: {
         kind: "card",
         battleCardId,
@@ -265,7 +300,10 @@ describe("BattleTutorialGuidance", () => {
               triggerId: "event-card",
               messageIndex: 1,
               messageCount: 2,
-              text: "The same card stays here for the next explanation.",
+              dialogue: {
+                ...view.dialogue,
+                text: "The same card stays here for the next explanation.",
+              },
             }}
             onDismiss={() => undefined}
             onDurationComplete={() => undefined}

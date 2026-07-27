@@ -9,6 +9,7 @@ import {
   serializeTutorialToml,
   validateTutorialActions,
   validateTutorialBattleConfiguration,
+  validateTutorialTriggers,
 } from "./tutorial-data.mjs";
 
 const FIXTURE_BATTLE = {
@@ -375,5 +376,32 @@ describe("tutorial data", () => {
         wait: 0,
       },
     ]);
+  });
+
+  it("normalizes and serializes every trigger speech bubble option", () => {
+    const triggers = validateTutorialTriggers([
+      {
+        id: "support",
+        on: ["card-play", "dreamwell-resolve"],
+        priority: 100,
+        speaker: "enemy",
+        duration: 5,
+        verticalOffset: 30,
+        bubbleWidth: 300,
+        match: { kind: "glossary", id: "support" },
+        text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
+      },
+    ]);
+    expect(triggers[0]).toMatchObject({
+      speaker: "enemy",
+      duration: 5,
+      verticalOffset: 30,
+      bubbleWidth: 300,
+    });
+    expect(
+      parse(serializeTutorialToml(FIXTURE_ACTIONS, triggers, FIXTURE_BATTLE))
+        .triggers,
+    )
+      .toEqual(triggers);
   });
 });

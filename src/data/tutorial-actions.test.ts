@@ -3,6 +3,7 @@ import {
   loadTutorialActions,
   parseTutorialActions,
   parseTutorialBattleConfiguration,
+  parseTutorialTriggers,
 } from "./tutorial-actions";
 
 const ACTIONS_RESPONSE = {
@@ -666,6 +667,36 @@ describe("parseTutorialActions", () => {
         },
       ]),
     ).toThrow(/non-negative portrait duration/u);
+  });
+
+  it("normalizes every speech bubble option on supplemental triggers", () => {
+    expect(
+      parseTutorialTriggers([
+        {
+          id: "support",
+          on: ["card-play", "dreamwell-resolve"],
+          priority: 100,
+          speaker: "player",
+          duration: 5,
+          verticalOffset: -20,
+          bubbleWidth: 300,
+          match: { kind: "glossary", id: "support" },
+          text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
+        },
+      ]),
+    ).toEqual([
+      {
+        id: "support",
+        on: ["card-play", "dreamwell-resolve"],
+        priority: 100,
+        speaker: "player",
+        duration: 5,
+        verticalOffset: -20,
+        bubbleWidth: 300,
+        match: { kind: "glossary", id: "support" },
+        text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
+      },
+    ]);
   });
 });
 

@@ -53,14 +53,11 @@ export type TutorialTriggerMatcher =
     };
 
 /** One TOML-authored, first-occurrence battle tutorial. */
-export interface TutorialTriggerDefinition {
+export interface TutorialTriggerDefinition extends TutorialSpeechBubble {
   readonly id: string;
   readonly on: readonly TutorialTriggerEvent[];
   readonly priority: number;
-  /** Seconds before the active message advances automatically. */
-  readonly duration: number;
   readonly match: TutorialTriggerMatcher;
-  readonly text: string;
 }
 
 /** Complete generated tutorial configuration. */

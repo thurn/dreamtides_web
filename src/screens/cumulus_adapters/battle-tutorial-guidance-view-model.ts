@@ -2,6 +2,43 @@ import type { BattleTutorialGuidanceView } from "../../cumulus/screens/BattleTut
 import type { BattleFoldState } from "../../rules/battle/fold";
 import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
 import { dreamwellCardModel } from "../../battle/ui/dreamwell-card-model";
+import type { TutorialGuidanceMessage } from "../../rules/battle/fold";
+
+function guidanceDialogue(
+  battle: BattleFoldState,
+  message: TutorialGuidanceMessage,
+): BattleTutorialGuidanceView["dialogue"] {
+  if (message.speaker === "player") {
+    const dreamAvatar = battle.init.dreamAvatarSummary;
+    return {
+      portrait: {
+        kind: "dreamAvatar",
+        imageNumber: dreamAvatar?.imageNumber ?? "001",
+      },
+      portraitAlt: dreamAvatar?.name ?? "Player DreamAvatar",
+      speakerName: dreamAvatar?.name ?? "Dreamer",
+      text: message.text,
+    };
+  }
+  if (message.speaker === "enemy") {
+    const enemy = battle.init.enemyDescriptor;
+    return {
+      portrait: {
+        kind: "dreamAvatar",
+        imageNumber: enemy.imageNumber ?? "001",
+      },
+      portraitAlt: enemy.name,
+      speakerName: enemy.name,
+      text: message.text,
+    };
+  }
+  return {
+    portrait: { kind: "character-portrait", characterId: "mira" },
+    portraitAlt: "Mira",
+    speakerName: "Mira",
+    text: message.text,
+  };
+}
 
 /** Resolve one persisted guidance checkpoint into UUID-backed Cumulus models. */
 export function buildBattleTutorialGuidanceView(
@@ -22,7 +59,9 @@ export function buildBattleTutorialGuidanceView(
       messageIndex: presentation.messageIndex,
       messageCount: presentation.messages.length,
       duration: message.duration,
-      text: message.text,
+      dialogue: guidanceDialogue(battle, message),
+      verticalOffset: message.verticalOffset ?? 0,
+      bubbleWidth: message.bubbleWidth ?? 700,
       source: {
         kind: "dreamwell",
         model: dreamwellCardModel(definition),
@@ -39,7 +78,9 @@ export function buildBattleTutorialGuidanceView(
     messageIndex: presentation.messageIndex,
     messageCount: presentation.messages.length,
     duration: message.duration,
-    text: message.text,
+    dialogue: guidanceDialogue(battle, message),
+    verticalOffset: message.verticalOffset ?? 0,
+    bubbleWidth: message.bubbleWidth ?? 700,
     source: {
       kind: "card",
       model: battleGameCardModel(instance),

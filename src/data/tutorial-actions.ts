@@ -492,22 +492,17 @@ export function parseTutorialTriggers(
         `Tutorial trigger ${JSON.stringify(record.id)} must have a finite priority.`,
       );
     }
-    const duration = record.duration ?? 3;
-    if (
-      typeof duration !== "number" ||
-      !Number.isFinite(duration) ||
-      duration <= 0
-    ) {
+    const speechBubble = parseTutorialSpeechBubble(record, record.id, true);
+    if (speechBubble === undefined) {
+      throw new Error(
+        `Tutorial trigger ${JSON.stringify(record.id)} must define a speech bubble.`,
+      );
+    }
+    if (speechBubble.duration <= 0) {
       throw new Error(
         `Tutorial trigger ${JSON.stringify(record.id)} must have a positive duration.`,
       );
     }
-    if (typeof record.text !== "string" || record.text.trim().length === 0) {
-      throw new Error(
-        `Tutorial trigger ${JSON.stringify(record.id)} must have tutorial text.`,
-      );
-    }
-    parseTutorialInstructionMarkup(record.text);
     if (
       record.match === null ||
       typeof record.match !== "object" ||
@@ -552,9 +547,8 @@ export function parseTutorialTriggers(
       id: record.id,
       on: [...record.on],
       priority,
-      duration,
       match: parsedMatch,
-      text: record.text,
+      ...speechBubble,
     };
   });
 }

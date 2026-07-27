@@ -24,6 +24,7 @@ import { selectBattleTriggeredEffectSteps } from "./battle-card-effects-table";
 import type { ActivePrompt } from "./effect-runner-core";
 import type { EffectStep } from "./effect-step";
 import type { BattleCommand } from "../../battle/debug/commands";
+import type { TutorialTriggerDefinition } from "../../types/tutorial";
 
 // ---------------------------------------------------------------------------
 // Cursor + run model
@@ -175,8 +176,11 @@ export type TutorialBattlePresentation =
 
 export interface TutorialGuidanceMessage {
   readonly triggerId: string;
+  readonly speaker: TutorialTriggerDefinition["speaker"];
   readonly text: string;
   readonly duration: number;
+  readonly verticalOffset: number;
+  readonly bubbleWidth: number;
 }
 
 export type TutorialGuidanceSource =

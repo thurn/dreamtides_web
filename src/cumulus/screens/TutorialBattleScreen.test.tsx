@@ -241,7 +241,17 @@ describe("TutorialBattleScreen", () => {
       messageIndex: 0,
       messageCount: 1,
       duration: 3,
-      text: "Erode sends cards to the void.",
+      dialogue: {
+        portrait: {
+          kind: "character-portrait" as const,
+          characterId: "mira" as const,
+        },
+        portraitAlt: "Mira",
+        speakerName: "Mira",
+        text: "Erode sends cards to the void.",
+      },
+      verticalOffset: 0,
+      bubbleWidth: 700,
       source: {
         kind: "dreamwell" as const,
         side: "enemy" as const,
