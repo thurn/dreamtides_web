@@ -4056,6 +4056,7 @@ describe("MobileBattleScreen", () => {
   });
 
   it("moves the physical card with a captured mouse pointer and drops by hit test", () => {
+    vi.useFakeTimers();
     const interactions = {
       canInteract: true,
       pendingCardId: null,
@@ -4136,10 +4137,17 @@ describe("MobileBattleScreen", () => {
       zone: "void",
     });
     expect(interactions.onCardDragEnd).toHaveBeenCalledTimes(1);
-    expect(handCard?.style.transform).toBe("");
     expect(handCard?.dataset.battlePointerDragging).toBe("false");
+    expect(handCard?.dataset.battlePointerDrop).toBe("committing");
+    expect(handCard?.style.transform).toContain("translate3d(24px, 40px, 0)");
+    act(() => {
+      vi.runOnlyPendingTimers();
+    });
+    expect(handCard?.style.transform).toBe("");
+    expect(handCard?.dataset.battlePointerDrop).toBeUndefined();
 
     act(() => root.unmount());
+    vi.useRealTimers();
   });
 
   it("distinguishes a single hand-card tap from double-tap debug gestures on every face-up card", () => {
@@ -4330,6 +4338,7 @@ describe("MobileBattleScreen", () => {
   });
 
   it("drags a hand card by touch into the void without panning or leaving its reveal open", () => {
+    vi.useFakeTimers();
     const interactions = {
       canInteract: true,
       pendingCardId: null,
@@ -4430,8 +4439,17 @@ describe("MobileBattleScreen", () => {
     expect(interactions.onCardDragEnd).toHaveBeenCalledTimes(1);
     expect(pointerEventsDuringHitTest).toBe("none");
     expect(handCard?.dataset.battlePointerDragging).toBe("false");
+    expect(handCard?.dataset.battlePointerDrop).toBe("committing");
+    expect(handCard?.style.transform).toContain(
+      "translate3d(40px, -24px, 0)",
+    );
+    act(() => {
+      vi.runOnlyPendingTimers();
+    });
     expect(handCard?.style.transform).toBe("");
+    expect(handCard?.dataset.battlePointerDrop).toBeUndefined();
 
     act(() => root.unmount());
+    vi.useRealTimers();
   });
 });

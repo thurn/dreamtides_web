@@ -94,7 +94,8 @@ function destinationSurface(
 ): HTMLElement | null {
   return view.source.kind === "card"
     ? battleCardSurface(view.source.battleCardId, journey)
-    : dreamwellSurface(view.source.side, journey, true);
+    : (dreamwellSurface(view.source.side, journey, true) ??
+        dreamwellSurface(view.source.side, journey, false));
 }
 
 function transformBetween(
@@ -134,8 +135,10 @@ export function BattleTutorialGuidance({
   const hiddenSurfaceRef = useRef<{
     readonly element: HTMLElement;
     readonly visibility: string;
+    readonly opacity: string;
   } | null>(null);
   const animationRef = useRef<Animation | null>(null);
+  const destinationAnimationRef = useRef<Animation | null>(null);
   const renderedView = view ?? retainedView;
   const active = view !== null;
   const presentationId = view?.presentationId ?? null;
@@ -187,9 +190,13 @@ export function BattleTutorialGuidance({
 
     animationRef.current?.cancel();
     animationRef.current = null;
+    destinationAnimationRef.current?.cancel();
+    destinationAnimationRef.current = null;
     if (hiddenSurfaceRef.current !== null) {
       hiddenSurfaceRef.current.element.style.visibility =
         hiddenSurfaceRef.current.visibility;
+      hiddenSurfaceRef.current.element.style.opacity =
+        hiddenSurfaceRef.current.opacity;
       delete hiddenSurfaceRef.current.element.dataset
         .tutorialGuidanceJourneyHidden;
       hiddenSurfaceRef.current = null;
@@ -205,8 +212,13 @@ export function BattleTutorialGuidance({
       hiddenSurfaceRef.current = {
         element: surface,
         visibility: surface.style.visibility,
+        opacity: surface.style.opacity,
       };
-      surface.style.visibility = "hidden";
+      if (active) {
+        surface.style.visibility = "hidden";
+      } else {
+        surface.style.opacity = "0";
+      }
       surface.dataset.tutorialGuidanceJourneyHidden = active
         ? "source"
         : "destination";
@@ -219,9 +231,7 @@ export function BattleTutorialGuidance({
     const transform =
       surfaceBox === undefined
         ? null
-        : active
-          ? transformBetween(surfaceBox, objectBox)
-          : transformBetween(objectBox, surfaceBox);
+        : transformBetween(surfaceBox, objectBox);
     const finish = (): void => {
       if (active) {
         journey.dataset.tutorialGuidanceJourney = "dwelling";
@@ -230,6 +240,8 @@ export function BattleTutorialGuidance({
       if (hiddenSurfaceRef.current !== null) {
         hiddenSurfaceRef.current.element.style.visibility =
           hiddenSurfaceRef.current.visibility;
+        hiddenSurfaceRef.current.element.style.opacity =
+          hiddenSurfaceRef.current.opacity;
         delete hiddenSurfaceRef.current.element.dataset
           .tutorialGuidanceJourneyHidden;
         hiddenSurfaceRef.current = null;
@@ -258,7 +270,7 @@ export function BattleTutorialGuidance({
           ]
         : [
             { transform: "none", opacity: 1 },
-            { transform, opacity: 1 },
+            { transform, opacity: 0 },
           ],
       {
         duration: GUIDANCE_OBJECT_TRAVEL_MS,
@@ -268,9 +280,21 @@ export function BattleTutorialGuidance({
     );
     animationRef.current = animation;
     animation.addEventListener("finish", finish, { once: true });
+    if (!active && surface !== null) {
+      destinationAnimationRef.current = surface.animate(
+        [{ opacity: 0 }, { opacity: 1 }],
+        {
+          duration: GUIDANCE_OBJECT_TRAVEL_MS,
+          fill: "forwards",
+          ...(easing === "" ? {} : { easing }),
+        },
+      );
+    }
 
     return () => {
       animation.cancel();
+      destinationAnimationRef.current?.cancel();
+      destinationAnimationRef.current = null;
       if (animationRef.current === animation) animationRef.current = null;
     };
   }, [
@@ -282,9 +306,12 @@ export function BattleTutorialGuidance({
   useLayoutEffect(
     () => () => {
       animationRef.current?.cancel();
+      destinationAnimationRef.current?.cancel();
       if (hiddenSurfaceRef.current !== null) {
         hiddenSurfaceRef.current.element.style.visibility =
           hiddenSurfaceRef.current.visibility;
+        hiddenSurfaceRef.current.element.style.opacity =
+          hiddenSurfaceRef.current.opacity;
         delete hiddenSurfaceRef.current.element.dataset
           .tutorialGuidanceJourneyHidden;
       }

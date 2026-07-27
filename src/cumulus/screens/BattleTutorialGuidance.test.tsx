@@ -286,14 +286,18 @@ describe("BattleTutorialGuidance", () => {
     });
 
     expect(source.dataset.tutorialGuidanceJourneyHidden).toBe("destination");
+    expect(source.style.opacity).toBe("0");
     expect(
       container.querySelector<HTMLElement>(
         "[data-battle-tutorial-guidance]",
       )?.dataset.tutorialGuidanceJourney,
     ).toBe("settling");
-    expect(animations[1]?.[1]?.transform).toContain("translate(");
+    expect(animations[1]?.[1]?.transform).toContain("scale(0.375)");
+    expect(animations[1]?.[1]?.opacity).toBe(0);
+    expect(animations[2]).toEqual([{ opacity: 0 }, { opacity: 1 }]);
     act(() => finishListeners.shift()?.());
     expect(source.style.visibility).toBe("");
+    expect(source.style.opacity).toBe("");
     expect(
       container.querySelector("[data-battle-tutorial-guidance]"),
     ).toBeNull();

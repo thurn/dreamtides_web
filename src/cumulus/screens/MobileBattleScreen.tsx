@@ -42,6 +42,7 @@ import {
 } from "../primitives/pointer-gesture";
 import type { CumulusColor } from "../primitives/color";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
+import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
 import {
   BATTLE_HUD_END_CLEARANCE_PROPERTY,
@@ -67,6 +68,8 @@ import battleBackgroundUrl from "../assets/battle-background.png";
 /** Canonical visual treatment for an exhausted battlefield card body. */
 export const BATTLEFIELD_CARD_EXHAUSTED_FILTER =
   "grayscale(0.5) brightness(0.62)";
+const POINTER_DROP_COMMIT_HOLD_MS =
+  motionTimeSeconds("--dur-slow") * 1_000;
 
 /** One physical face-up card instance rendered by the battle board. */
 export interface MobileBattleCardView {
@@ -1354,6 +1357,7 @@ function FaceUpCard({
   const longPressSuppressedRef = useRef(false);
   const touchPressStartedAtRef = useRef<number | null>(null);
   const pendingTapRef = useRef<number | null>(null);
+  const pointerDropHoldRef = useRef<number | null>(null);
   const pointerDragRef = useRef<{
     pointerId: number;
     startX: number;
@@ -1374,7 +1378,18 @@ function FaceUpCard({
     window.clearTimeout(pendingTapRef.current);
     pendingTapRef.current = null;
   };
-  useEffect(() => cancelPendingTap, []);
+  const cancelPointerDropHold = (): void => {
+    if (pointerDropHoldRef.current === null) return;
+    window.clearTimeout(pointerDropHoldRef.current);
+    pointerDropHoldRef.current = null;
+  };
+  useEffect(
+    () => () => {
+      cancelPendingTap();
+      cancelPointerDropHold();
+    },
+    [],
+  );
   const finishPointerDrag = (
     event: React.PointerEvent<HTMLDivElement>,
     drop: boolean,
@@ -1412,6 +1427,25 @@ function FaceUpCard({
     }
     pointerDragRef.current = null;
     event.currentTarget.dataset.battlePointerDragging = "false";
+    cancelPointerDropHold();
+    if (
+      drop &&
+      pointerDrag.dragging &&
+      interaction?.onPointerDrop !== undefined
+    ) {
+      const releasedCard = event.currentTarget;
+      const releasedTransform = releasedCard.style.transform;
+      releasedCard.dataset.battlePointerDrop = "committing";
+      pointerDropHoldRef.current = window.setTimeout(() => {
+        pointerDropHoldRef.current = null;
+        if (releasedCard.style.transform === releasedTransform) {
+          releasedCard.style.zIndex = "";
+          releasedCard.style.transform = restingTransform;
+        }
+        delete releasedCard.dataset.battlePointerDrop;
+      }, POINTER_DROP_COMMIT_HOLD_MS);
+      return;
+    }
     event.currentTarget.style.zIndex = "";
     event.currentTarget.style.transform = restingTransform;
   };
