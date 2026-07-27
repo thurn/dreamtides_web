@@ -13,8 +13,14 @@ export const DEFAULT_TUTORIAL_JSON_PATH = join("public", "tutorial-data.json");
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
 const CARD_UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
-const TUTORIAL_HIGHLIGHT_TAG_PATTERN = /\[\/?yellow\]/gu;
+const TUTORIAL_HIGHLIGHT_TAG_PATTERN = /\[\/?(?:purple|yellow)\]/gu;
 const MARKUP_LIKE_TAG_PATTERN = /\[\/?[A-Za-z][A-Za-z0-9-]*\]/gu;
+const SUPPORTED_TUTORIAL_HIGHLIGHT_TAGS = new Set([
+  "[purple]",
+  "[/purple]",
+  "[yellow]",
+  "[/yellow]",
+]);
 const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
 const DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
 
@@ -32,43 +38,47 @@ function validateTutorialMarkup(text, id) {
   for (const [paragraphIndex, paragraph] of paragraphs.entries()) {
     const unsupportedTag = paragraph
       .match(MARKUP_LIKE_TAG_PATTERN)
-      ?.find((tag) => tag !== "[yellow]" && tag !== "[/yellow]");
+      ?.find((tag) => !SUPPORTED_TUTORIAL_HIGHLIGHT_TAGS.has(tag));
     if (unsupportedTag !== undefined) {
       throw invalid(
         `Tutorial action ${JSON.stringify(id)} paragraph ${paragraphIndex + 1} uses unsupported highlight tag ${JSON.stringify(unsupportedTag)}.`,
       );
     }
-    let highlighted = false;
+    let highlight = null;
     let highlightedTextStart = -1;
     for (const match of paragraph.matchAll(TUTORIAL_HIGHLIGHT_TAG_PATTERN)) {
       const tag = match[0];
       const index = match.index;
-      if (tag === "[yellow]") {
-        if (highlighted) {
+      const tagColor = tag.includes("purple") ? "purple" : "yellow";
+      const isClosingTag =
+        tag.startsWith("[/") ||
+        (tagColor === "purple" && highlight === "purple");
+      if (!isClosingTag) {
+        if (highlight !== null) {
           throw invalid(
-            `Tutorial action ${JSON.stringify(id)} paragraph ${paragraphIndex + 1} cannot nest yellow highlights.`,
+            `Tutorial action ${JSON.stringify(id)} paragraph ${paragraphIndex + 1} cannot nest ${tagColor} highlights inside ${highlight} highlights.`,
           );
         }
-        highlighted = true;
+        highlight = tagColor;
         highlightedTextStart = index + tag.length;
         continue;
       }
-      if (!highlighted) {
+      if (highlight !== tagColor) {
         throw invalid(
-          `Tutorial action ${JSON.stringify(id)} paragraph ${paragraphIndex + 1} has a closing yellow tag without an opening tag.`,
+          `Tutorial action ${JSON.stringify(id)} paragraph ${paragraphIndex + 1} has a closing ${tagColor} tag without an opening tag.`,
         );
       }
       if (index === highlightedTextStart) {
         throw invalid(
-          `Tutorial action ${JSON.stringify(id)} paragraph ${paragraphIndex + 1} has an empty yellow highlight.`,
+          `Tutorial action ${JSON.stringify(id)} paragraph ${paragraphIndex + 1} has an empty ${tagColor} highlight.`,
         );
       }
-      highlighted = false;
+      highlight = null;
       highlightedTextStart = -1;
     }
-    if (highlighted) {
+    if (highlight !== null) {
       throw invalid(
-        `Tutorial action ${JSON.stringify(id)} paragraph ${paragraphIndex + 1} has an unclosed yellow highlight.`,
+        `Tutorial action ${JSON.stringify(id)} paragraph ${paragraphIndex + 1} has an unclosed ${highlight} highlight.`,
       );
     }
   }

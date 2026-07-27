@@ -7,7 +7,7 @@ function SpeechBubbleDemo(args: Record<string, unknown>) {
   const text =
     typeof args.text === "string"
       ? args.text
-      : "Gain ⍟ equal to your [yellow]spark ✦[/yellow].";
+      : "An [purple]event[purple] resolves once. Gain ⍟ equal to your [yellow]spark ✦[/yellow].";
   const size = args.size === "prominent" ? "prominent" : "standard";
   const pointerPlacement =
     args.pointerPlacement === "left-center" ||
@@ -31,7 +31,7 @@ export const speechBubbleDemo: CumulusComponent = {
   blurb:
     "A guide-dialog bubble for character-led screens: the same frosted information material as an InfoCard, with a strict left, top-left, or bottom-left pointer toward the speaker and shared tutorial instruction formatting.",
   callout:
-    "Use it beside character art or attached above/below a battle portrait, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, named display scales, pointer geometry, yellow highlights, and inline points, spark, and energy glyphs. Top-left and bottom-left pointer bases stay clear of the rounded corners.",
+    "Use it beside character art or attached above/below a battle portrait, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, named display scales, pointer geometry, yellow and event-frame purple highlights, and inline points, spark, and energy glyphs. Top-left and bottom-left pointer bases stay clear of the rounded corners.",
   group: "Components",
   docName: "SpeechBubble",
   Component: SpeechBubbleDemo,
@@ -42,7 +42,7 @@ export const speechBubbleDemo: CumulusComponent = {
 
 <SpeechBubble
   speakerName="Sigrún"
-  text="Gain ⍟ equal to your [yellow]spark ✦[/yellow]."
+  text="An [purple]event[purple] resolves once. Gain ⍟ equal to your [yellow]spark ✦[/yellow]."
 />`,
     },
   ],
@@ -51,7 +51,8 @@ export const speechBubbleDemo: CumulusComponent = {
       pointerPlacement: "left-lower",
       size: "standard",
       speakerName: "Sigrún",
-      text: "Gain ⍟ equal to your [yellow]spark ✦[/yellow].",
+      text:
+        "An [purple]event[purple] resolves once. Gain ⍟ equal to your [yellow]spark ✦[/yellow].",
     },
   },
 };

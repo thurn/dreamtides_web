@@ -1532,7 +1532,7 @@ describe("TutorialScreen", () => {
     const onHowToPlayDismissed = vi.fn();
     const onActionComplete = vi.fn();
     const howToPlayText =
-      "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦), or [yellow]accept[/yellow] a challenge.\n\nScore 12 ⍟ to win this configured battle.";
+      "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦), or [yellow]accept[/yellow] a challenge. An [purple]event[purple] resolves once.\n\nScore 12 ⍟ to win this configured battle.";
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -1630,6 +1630,11 @@ describe("TutorialScreen", () => {
     expect(
       highlights.some((highlight) => highlight.textContent === "a challenge"),
     ).toBe(false);
+    const purpleHighlight = paragraphs[0]?.querySelector<HTMLElement>(
+      '[data-tutorial-instruction-highlight="purple"]',
+    );
+    expect(purpleHighlight?.textContent).toBe("event");
+    expect(purpleHighlight?.style.color).toBe("var(--accent-bright)");
     expect(dialog?.querySelectorAll('[aria-label="points"]')).toHaveLength(1);
     expect(dialog?.querySelector('[aria-label="points"]')?.className).toContain(
       "bxf bx-star-circle",

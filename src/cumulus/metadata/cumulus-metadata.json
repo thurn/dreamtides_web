@@ -4282,7 +4282,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "The spoken line. Uses tutorial instruction formatting for yellow highlights\nand inline points, spark, and energy glyphs."
+      "description": "The spoken line. Uses tutorial instruction formatting for yellow and\nevent-frame purple highlights plus inline points, spark, and energy glyphs."
     },
     {
       "name": "size",

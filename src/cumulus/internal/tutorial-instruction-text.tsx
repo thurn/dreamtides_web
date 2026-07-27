@@ -153,11 +153,15 @@ export function renderTutorialInstructionParagraph(
   return (
     <>
       {paragraph.spans.map((span, index) =>
-        span.highlight === "yellow" ? (
+        span.highlight !== undefined ? (
           <span
             key={index}
-            data-tutorial-instruction-highlight="yellow"
-            style={{ color: token("--spark") }}
+            data-tutorial-instruction-highlight={span.highlight}
+            style={{
+              color: token(
+                span.highlight === "purple" ? "--accent-bright" : "--spark",
+              ),
+            }}
           >
             {renderInstructionText(span.text)}
           </span>

@@ -109,7 +109,7 @@ describe("CharacterDialogue", () => {
               portraitAlt: "Mira",
               speakerName: "Mira",
               text:
-                "Welcome, [yellow]Dreamer[/yellow]. Score ⍟ equal to your spark ✦.",
+                "Welcome, [yellow]Dreamer[/yellow]. An [purple]event[purple] resolves once. Score ⍟ equal to your spark ✦.",
             }}
             size="prominent"
             visible
@@ -138,10 +138,16 @@ describe("CharacterDialogue", () => {
     );
     expect(highlight?.textContent).toBe("Dreamer");
     expect(highlight?.style.color).toBe("var(--spark)");
+    const purpleHighlight = bubble?.querySelector<HTMLElement>(
+      '[data-tutorial-instruction-highlight="purple"]',
+    );
+    expect(purpleHighlight?.textContent).toBe("event");
+    expect(purpleHighlight?.style.color).toBe("var(--accent-bright)");
     expect(bubble?.textContent).toContain(
-      "Welcome, Dreamer. Score  equal to your spark .",
+      "Welcome, Dreamer. An event resolves once. Score  equal to your spark .",
     );
     expect(bubble?.textContent).not.toContain("[yellow]");
+    expect(bubble?.textContent).not.toContain("[purple]");
     const pointsIcon = bubble?.querySelector<HTMLElement>(
       '[aria-label="points"]',
     );

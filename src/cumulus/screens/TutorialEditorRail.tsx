@@ -510,7 +510,7 @@ function SpeechBubbleEditor({
       <TextArea
         label="Speech Bubble Text"
         value={speechBubble.text}
-        supportingText="[yellow]copy[/yellow] highlights an exact run."
+        supportingText="[yellow]copy[/yellow] uses yellow; [purple]copy[purple] uses event purple."
         error={
           speechBubble.text.trim().length === 0
             ? "Text cannot be blank."
@@ -860,7 +860,7 @@ function TutorialActionRow({
             <TextArea
               label="Instruction Text"
               value={action.text}
-              supportingText="Use a blank line between paragraphs. [yellow]copy[/yellow] highlights an exact run; ⍟ renders points; ✦ renders spark."
+              supportingText="Use blank lines between paragraphs. [yellow]copy[/yellow] uses yellow; [purple]copy[purple] uses event purple; ⍟ renders points; ✦ renders spark."
               error={
                 action.text.trim().length === 0
                   ? "Text cannot be blank."

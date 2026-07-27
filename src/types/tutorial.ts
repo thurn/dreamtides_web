@@ -28,7 +28,7 @@ export interface TutorialSpeechBubble {
   readonly verticalOffset: number;
   /** Desktop maximum width of the speech bubble, in pixels. */
   readonly bubbleWidth: number;
-  /** `[yellow]copy[/yellow]` highlights an exact inline run. */
+  /** Yellow and event-frame purple markup highlight exact inline runs. */
   readonly text: string;
 }
 
@@ -66,8 +66,9 @@ export interface DisplayHowToPlayTutorialAction extends TutorialActionBase {
   readonly cardWidth?: number;
   /**
    * Authored instruction copy. Blank lines separate paragraphs,
-   * `[yellow]copy[/yellow]` highlights an exact inline run, and `⍟` and `✦`
-   * render as the points and spark glyphs.
+   * `[yellow]copy[/yellow]` applies yellow emphasis,
+   * `[purple]copy[purple]` applies event-frame purple, and `⍟` and `✦` render
+   * as the points and spark glyphs.
    */
   readonly text: string;
 }

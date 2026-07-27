@@ -60,7 +60,8 @@ describe("parseTutorialActions", () => {
             duration: 3,
             verticalOffset: 0,
             bubbleWidth: 450,
-            text: "For the [yellow]Abyss[/yellow]!",
+            text:
+              "For the [yellow]Abyss[/yellow] and its [purple]events[purple]!",
           },
           wait: 3,
         },
@@ -74,7 +75,8 @@ describe("parseTutorialActions", () => {
           duration: 3,
           verticalOffset: 0,
           bubbleWidth: 450,
-          text: "For the [yellow]Abyss[/yellow]!",
+          text:
+            "For the [yellow]Abyss[/yellow] and its [purple]events[purple]!",
         },
         wait: 3,
       },

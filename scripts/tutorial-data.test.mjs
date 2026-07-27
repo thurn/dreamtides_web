@@ -19,7 +19,8 @@ const FIXTURE_ACTIONS = [
       duration: 1.5,
       verticalOffset: 100,
       bubbleWidth: 650,
-      text: "First [yellow]line[/yellow].\nSecond line.",
+      text:
+        "First [yellow]line[/yellow].\nAn [purple]event[purple] resolves once.",
     },
     wait: 1.5,
   },
