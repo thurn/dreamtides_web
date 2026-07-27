@@ -63,6 +63,7 @@ export function buildTutorialBattleView(
               ? null
               : {
               kind: presentation.kind,
+              presentationId: presentation.id,
               cardId: presentation.cardId,
               battleCardId: presentation.battleCardId,
               cardKind: presentation.cardKind,
@@ -77,6 +78,7 @@ export function buildTutorialBattleView(
                 ? null
                 : {
               kind: presentation.kind,
+              presentationId: presentation.id,
               cardId: presentation.cardId,
               side: presentation.side,
             };

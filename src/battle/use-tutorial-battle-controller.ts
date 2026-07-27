@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { logEvent } from "../logging";
 import {
   useActions,
@@ -15,16 +15,26 @@ import {
 /** Fixed readable dwell for each persisted tutorial reveal. */
 export const TUTORIAL_BATTLE_PRESENTATION_DWELL_MS = 3_000;
 
+export interface TutorialBattleControllerRuntime
+  extends TutorialBattleControllerPlan {
+  readonly onPresentationVisible: (presentationId: string) => void;
+}
+
 /**
  * React bridge for the pure tutorial controller. It reads only the committed
  * fold and submits normal coop intents; the room log remains the sole flow
  * authority and intent keys absorb StrictMode/remount/reload duplicates.
  */
-export function useTutorialBattleController(): TutorialBattleControllerPlan {
+export function useTutorialBattleController(): TutorialBattleControllerRuntime {
   const state = useConfirmedGameState();
   const clientId = useClientId();
   const connectedClientIds = useConnectedClientIds();
   const actions = useActions();
+  const [visiblePresentationId, setVisiblePresentationId] =
+    useState<string | null>(null);
+  const onPresentationVisible = useCallback((presentationId: string) => {
+    setVisiblePresentationId(presentationId);
+  }, []);
   const plan = useMemo(
     () => planTutorialBattleController({ state, clientId, connectedClientIds }),
     [state, clientId, connectedClientIds],
@@ -40,6 +50,7 @@ export function useTutorialBattleController(): TutorialBattleControllerPlan {
     switch (intent.kind) {
       case "complete-presentation": {
         if (battle.tutorialPresentation?.kind === "tutorial-guidance") return;
+        if (intent.presentationId !== visiblePresentationId) return;
         logEvent("tutorial_battle_presentation_dwell_started", {
           battleId: battle.board.battleId,
           presentationId: intent.presentationId,
@@ -91,9 +102,12 @@ export function useTutorialBattleController(): TutorialBattleControllerPlan {
         ).catch(() => undefined);
         return;
     }
-  }, [actions, clientId, plan, state.battle]);
+  }, [actions, clientId, plan, state.battle, visiblePresentationId]);
 
-  return plan;
+  return useMemo(
+    () => ({ ...plan, onPresentationVisible }),
+    [onPresentationVisible, plan],
+  );
 }
 
 function logTutorialIntent(

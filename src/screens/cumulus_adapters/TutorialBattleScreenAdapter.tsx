@@ -72,6 +72,7 @@ export function TutorialBattleScreenAdapter() {
       guidance={guidance}
       onGuidanceContinue={guidanceController.advance}
       onGuidanceDurationComplete={guidanceController.completeDuration}
+      onPresentationVisible={controller.onPresentationVisible}
     />
   );
 }

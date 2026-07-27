@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
+import { act, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useTutorialBattleController } from "./use-tutorial-battle-controller";
@@ -48,8 +48,18 @@ function presentationState(): FoldState {
   };
 }
 
-function Harness() {
-  useTutorialBattleController();
+function Harness({ visiblePresentationId }: {
+  readonly visiblePresentationId: string | null;
+}) {
+  const controller = useTutorialBattleController();
+  useEffect(() => {
+    if (visiblePresentationId !== null) {
+      controller.onPresentationVisible(visiblePresentationId);
+    }
+  }, [
+    controller.onPresentationVisible,
+    visiblePresentationId,
+  ]);
   return null;
 }
 
@@ -70,13 +80,23 @@ afterEach(() => {
 });
 
 describe("useTutorialBattleController", () => {
-  it("submits the persisted presentation completion only after its three-second dwell", () => {
+  it("starts the three-second dwell only after the presentation is visible", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
 
     act(() => {
-      root.render(<Harness />);
+      root.render(<Harness visiblePresentationId={null} />);
+    });
+    act(() => {
+      vi.advanceTimersByTime(3_000);
+    });
+    expect(mocks.completePresentation).not.toHaveBeenCalled();
+
+    act(() => {
+      root.render(
+        <Harness visiblePresentationId="opponent-play:bc_0042" />,
+      );
     });
     act(() => {
       vi.advanceTimersByTime(2_999);

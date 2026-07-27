@@ -1,4 +1,4 @@
-import { useCallback, useState, type ReactElement } from "react";
+import { useCallback, useEffect, useState, type ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
@@ -32,12 +32,14 @@ export interface TutorialBattleView {
    */
   readonly presentation: {
     readonly kind: "opponent-play";
+    readonly presentationId: string;
     /** UUID of the catalog card presented before automation continues. */
     readonly cardId: string;
     readonly battleCardId: string;
     readonly cardKind: "character" | "event";
   } | {
     readonly kind: "dreamwell-reveal";
+    readonly presentationId: string;
     /** UUID of the Dreamwell source card shown before its effect prompt. */
     readonly cardId: string;
     readonly side: "player" | "enemy";
@@ -61,6 +63,7 @@ export interface TutorialBattleScreenProps {
   readonly guidance: BattleTutorialGuidanceView | null;
   readonly onGuidanceContinue: () => void;
   readonly onGuidanceDurationComplete: () => void;
+  readonly onPresentationVisible: (presentationId: string) => void;
 }
 
 /** Focused live tutorial battle presentation without operator tools or rewards. */
@@ -75,12 +78,13 @@ export function TutorialBattleScreen({
   guidance,
   onGuidanceContinue,
   onGuidanceDurationComplete,
+  onPresentationVisible,
 }: TutorialBattleScreenProps): ReactElement {
   const paused = view.ownership === "paused-driver-absent" || view.terminalRestartAvailable;
   const turnAnnouncementKey =
     `${view.battle.battleId}:${view.battle.inspector.turn}:${view.battle.activeSide}`;
   const [completedTurnAnnouncementKey, setCompletedTurnAnnouncementKey] =
-    useState(turnAnnouncementKey);
+    useState<string | null>(null);
   const completeTurnAnnouncement = useCallback(
     (side: "player" | "enemy"): void => {
       setCompletedTurnAnnouncementKey(
@@ -94,6 +98,15 @@ export function TutorialBattleScreen({
     completedTurnAnnouncementKey === turnAnnouncementKey
       ? guidance
       : null;
+  const presentationVisible =
+    view.presentation !== null &&
+    (view.presentation.kind !== "dreamwell-reveal" ||
+      completedTurnAnnouncementKey === turnAnnouncementKey);
+
+  useEffect(() => {
+    if (view.presentation === null || !presentationVisible) return;
+    onPresentationVisible(view.presentation.presentationId);
+  }, [onPresentationVisible, presentationVisible, view.presentation]);
 
   return (
     <div

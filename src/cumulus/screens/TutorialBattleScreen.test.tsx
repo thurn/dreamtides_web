@@ -57,6 +57,7 @@ function mount(
   screenView: TutorialBattleView,
   movementStatusMessage: string | null = null,
   onMovementStatusDismiss = vi.fn(),
+  onPresentationVisible = vi.fn(),
 ) {
   const container = document.createElement("div");
   document.body.append(container);
@@ -75,6 +76,7 @@ function mount(
           guidance={null}
           onGuidanceContinue={() => {}}
           onGuidanceDurationComplete={() => {}}
+          onPresentationVisible={onPresentationVisible}
         />
       </CumulusRoot>,
     );
@@ -147,14 +149,21 @@ describe("TutorialBattleScreen", () => {
   });
 
   it("keeps an opponent card in the battlefield while its authoritative dwell is active", () => {
-    const { container, root } = mount(view({
-      presentation: {
-        kind: "opponent-play",
-        cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
-        battleCardId: "enemy-card-1",
-        cardKind: "character",
-      },
-    }));
+    const onPresentationVisible = vi.fn();
+    const { container, root } = mount(
+      view({
+        presentation: {
+          kind: "opponent-play",
+          presentationId: "opponent-play:enemy-card-1",
+          cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+          battleCardId: "enemy-card-1",
+          cardKind: "character",
+        },
+      }),
+      null,
+      vi.fn(),
+      onPresentationVisible,
+    );
 
     expect(container.querySelector('[role="dialog"]')).toBeNull();
     expect(container.querySelector('[data-tutorial-opponent-play-reveal]')).toBeNull();
@@ -163,6 +172,47 @@ describe("TutorialBattleScreen", () => {
     }));
     expect(container.querySelector<HTMLElement>("[data-tutorial-live-battle]")?.style)
       .toMatchObject({ position: "fixed", width: "100vw", height: "100dvh" });
+    expect(onPresentationVisible).toHaveBeenCalledWith(
+      "opponent-play:enemy-card-1",
+    );
+
+    act(() => root.unmount());
+  });
+
+  it("reports a Dreamwell reveal as visible only after the turn announcement", () => {
+    const onPresentationVisible = vi.fn();
+    const { root } = mount(
+      view({
+        battle: {
+          battleId: "tutorial-battle",
+          inspector: { turn: "3" },
+          activeSide: "enemy",
+        } as TutorialBattleView["battle"],
+        presentation: {
+          kind: "dreamwell-reveal",
+          presentationId:
+            "dreamwell-reveal:enemy:3:5ec17498-9028-4a01-80a0-67c91b03d505",
+          cardId: "5ec17498-9028-4a01-80a0-67c91b03d505",
+          side: "enemy",
+        },
+      }),
+      null,
+      vi.fn(),
+      onPresentationVisible,
+    );
+
+    expect(onPresentationVisible).not.toHaveBeenCalled();
+
+    act(() => {
+      const props = mobileBattleProps.mock.lastCall?.[0] as {
+        onTurnAnnouncementComplete?: (side: "player" | "enemy") => void;
+      };
+      props.onTurnAnnouncementComplete?.("enemy");
+    });
+    expect(onPresentationVisible).toHaveBeenCalledOnce();
+    expect(onPresentationVisible).toHaveBeenCalledWith(
+      "dreamwell-reveal:enemy:3:5ec17498-9028-4a01-80a0-67c91b03d505",
+    );
 
     act(() => root.unmount());
   });
@@ -225,6 +275,7 @@ describe("TutorialBattleScreen", () => {
               guidance={currentGuidance}
               onGuidanceContinue={() => {}}
               onGuidanceDurationComplete={() => {}}
+              onPresentationVisible={() => {}}
             />
           </CumulusRoot>,
         );
