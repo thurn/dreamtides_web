@@ -194,6 +194,7 @@ describe("TutorialBattleScreen", () => {
       text: "Erode sends cards to the void.",
       source: {
         kind: "dreamwell" as const,
+        side: "enemy" as const,
         model: {
           cardId: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
           displaySnapshot: {

@@ -116,6 +116,7 @@ describe("BattleTutorialGuidance", () => {
               text: "Erode sends cards to the void.",
               source: {
                 kind: "dreamwell",
+                side: "player",
                 model: {
                   cardId: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
                   displaySnapshot: {
@@ -170,6 +171,7 @@ describe("BattleTutorialGuidance", () => {
       triggerId: "support",
       messageIndex: 0,
       messageCount: 1,
+      duration: 3,
       text: "Support helps the character in front.",
       source: {
         kind: "card",
@@ -235,7 +237,11 @@ describe("BattleTutorialGuidance", () => {
     act(() => {
       root.render(
         <CumulusRoot>
-          <BattleTutorialGuidance view={view} onDismiss={() => undefined} />
+          <BattleTutorialGuidance
+            view={view}
+            onDismiss={() => undefined}
+            onDurationComplete={() => undefined}
+          />
         </CumulusRoot>,
       );
     });
@@ -262,6 +268,7 @@ describe("BattleTutorialGuidance", () => {
               text: "The same card stays here for the next explanation.",
             }}
             onDismiss={() => undefined}
+            onDurationComplete={() => undefined}
           />
         </CumulusRoot>,
       );
@@ -280,7 +287,11 @@ describe("BattleTutorialGuidance", () => {
     act(() => {
       root.render(
         <CumulusRoot>
-          <BattleTutorialGuidance view={null} onDismiss={() => undefined} />
+          <BattleTutorialGuidance
+            view={null}
+            onDismiss={() => undefined}
+            onDurationComplete={() => undefined}
+          />
         </CumulusRoot>,
       );
     });
