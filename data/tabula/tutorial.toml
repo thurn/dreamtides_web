@@ -369,7 +369,7 @@ priority = 100
 duration = 3
 bubbleWidth = 300
 match = { kind = "glossary", id = "reclaim" }
-text = "[yellow]Reclaim[/yellow] lets you play this card from your void for its Reclaim cost. Banish it when it leaves play."
+text = "[yellow]Reclaim[/yellow] lets you play this card from your void for its Reclaim cost, and then banish it when it leaves play."
 
 [[triggers]]
 id = "offering"
