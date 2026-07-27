@@ -1484,6 +1484,31 @@ describe("TutorialScreen", () => {
       );
     });
 
+    const repositionSource = container.querySelector<HTMLElement>(
+      '[data-battle-rank="enemy-back"] [data-battle-slot-id="enemy-back-4"]',
+    );
+    const repositionDestination = container.querySelector<HTMLElement>(
+      `[data-battle-rank="enemy-front"] [data-battle-card-id="${TUTORIAL_OPPONENT_CARD.id}"]`,
+    );
+    repositionSource!.getBoundingClientRect = () =>
+      DOMRect.fromRect({ x: 100, y: 120, width: 80, height: 120 });
+    repositionDestination!.getBoundingClientRect = () =>
+      DOMRect.fromRect({ x: 260, y: 300, width: 80, height: 120 });
+    const cancelReposition = vi.fn();
+    const animateReposition = vi.fn(
+      (
+        _keyframes: Keyframe[] | PropertyIndexedKeyframes | null,
+        _options?: number | KeyframeAnimationOptions,
+      ) =>
+        ({
+          cancel: cancelReposition,
+        }) as unknown as Animation,
+    );
+    Object.defineProperty(repositionDestination, "animate", {
+      configurable: true,
+      value: animateReposition,
+    });
+
     act(() => screenMocks.sceneAnimationComplete?.());
     expect(screenMocks.props?.view.enemy.backRank).toHaveLength(10);
     expect(screenMocks.props?.view.enemy.backRank[4]?.card).toBeNull();
@@ -1494,9 +1519,22 @@ describe("TutorialScreen", () => {
     expect(screenMocks.props?.view.enemy.frontRank).toHaveLength(9);
     expect(screenMocks.props?.view.enemy.frontRank[4]?.card).toMatchObject({
       id: TUTORIAL_OPPONENT_CARD.id,
-      layoutMotion: "travel",
+      layoutMotion: "snap",
     });
     expect(screenMocks.props?.view.enemy.frontRank[3]?.card).toBeNull();
+    expect(animateReposition).toHaveBeenCalledWith(
+      [
+        { transform: "translate3d(-160px, -180px, 0)" },
+        { transform: "translate3d(0, 0, 0)" },
+      ],
+      {
+        duration: 1_000,
+        easing: "cubic-bezier(0.22, 0.61, 0.36, 1)",
+      },
+    );
+    expect(
+      repositionDestination?.dataset.tutorialOpponentCharacterReposition,
+    ).toBe("");
     expect(screenMocks.motionConfigTransition).toMatchObject({ duration: 1 });
     expect(onActionComplete).not.toHaveBeenCalled();
 

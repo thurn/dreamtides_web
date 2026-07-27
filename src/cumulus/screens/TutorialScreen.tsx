@@ -1176,6 +1176,57 @@ function TutorialOpponentCardPlay({
   );
 }
 
+function TutorialOpponentCharacterReposition({
+  screen,
+  card,
+  playbackSpeed,
+}: {
+  readonly screen: HTMLElement;
+  readonly card: MobileBattleCardView;
+  readonly playbackSpeed: number;
+}): null {
+  useLayoutEffect(() => {
+    const sourceSlots = [
+      ...screen.querySelectorAll<HTMLElement>(
+        '[data-battle-rank="enemy-back"] [data-battle-slot-id]',
+      ),
+    ];
+    const source =
+      sourceSlots[tutorialOpponentBackRankIndex(sourceSlots.length)];
+    const destination = [
+      ...screen.querySelectorAll<HTMLElement>(
+        '[data-battle-rank="enemy-front"] [data-battle-card-id]',
+      ),
+    ].find((element) => element.dataset.battleCardId === card.id);
+    if (source === undefined || destination === undefined) return undefined;
+
+    const sourceBox = source.getBoundingClientRect();
+    const destinationBox = destination.getBoundingClientRect();
+    const x = sourceBox.left - destinationBox.left;
+    const y = sourceBox.top - destinationBox.top;
+    destination.dataset.tutorialOpponentCharacterReposition = "";
+    const animation = destination.animate(
+      [
+        { transform: `translate3d(${String(x)}px, ${String(y)}px, 0)` },
+        { transform: "translate3d(0, 0, 0)" },
+      ],
+      {
+        duration: millisecondsAtPlaybackSpeed(
+          TUTORIAL_OPPONENT_REPOSITION_SECONDS,
+          playbackSpeed,
+        ),
+        easing: "cubic-bezier(0.22, 0.61, 0.36, 1)",
+      },
+    );
+    return () => {
+      animation.cancel();
+      delete destination.dataset.tutorialOpponentCharacterReposition;
+    };
+  }, [card.id, playbackSpeed, screen]);
+
+  return null;
+}
+
 interface TutorialChallengeGeometry {
   readonly challenger: TutorialCardFrame;
   readonly defender: TutorialCardFrame;
@@ -2758,12 +2809,39 @@ export function TutorialScreen({
     view.currentAction?.action === "draw-dreamwell-card" &&
     view.currentAction.revealDuration !== undefined &&
     completedTurnAnnouncementSide === view.currentAction.owner;
-  const displayedBattleView =
+  const baseDisplayedBattleView =
     howToPlayCompanion === null &&
     (view.currentAction?.action !== "draw-dreamwell-card" ||
       showStandaloneDreamwell)
       ? battleView
       : { ...battleView, dreamwell: null };
+  const opponentRepositionCardId =
+    view.currentAction?.action === "reposition-opponent-character"
+      ? view.currentAction.cardId
+      : null;
+  const opponentRepositionCard =
+    opponentRepositionCardId === null
+      ? null
+      : (battleView.enemy.frontRank.find(
+          (slot) => slot.card?.model.cardId === opponentRepositionCardId,
+        )?.card ?? null);
+  const displayedBattleView =
+    opponentRepositionCard === null
+      ? baseDisplayedBattleView
+      : {
+          ...baseDisplayedBattleView,
+          enemy: {
+            ...baseDisplayedBattleView.enemy,
+            frontRank: baseDisplayedBattleView.enemy.frontRank.map((slot) =>
+              slot.card?.id === opponentRepositionCard.id
+                ? {
+                    ...slot,
+                    card: { ...slot.card, layoutMotion: "snap" as const },
+                  }
+                : slot,
+            ),
+          },
+        };
   const repositionSourceCard =
     playerReposition === null
       ? null
@@ -2882,6 +2960,16 @@ export function TutorialScreen({
             reduceMotion={reduceMotion}
             playbackSpeed={playbackSpeed}
             onComplete={completeOpponentCardPlay}
+          />
+        ) : null}
+        {sceneEntered &&
+        !reduceMotion &&
+        opponentRepositionCard !== null &&
+        screenRef.current !== null ? (
+          <TutorialOpponentCharacterReposition
+            screen={screenRef.current}
+            card={opponentRepositionCard}
+            playbackSpeed={playbackSpeed}
           />
         ) : null}
         {sceneEntered &&
