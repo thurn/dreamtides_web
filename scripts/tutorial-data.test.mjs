@@ -8,7 +8,14 @@ import {
   refreshTutorialDataJson,
   serializeTutorialToml,
   validateTutorialActions,
+  validateTutorialBattleConfiguration,
 } from "./tutorial-data.mjs";
+
+const FIXTURE_BATTLE = {
+  playerDraws: ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"],
+  enemyDraws: ["a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"],
+  dreamwellDraws: ["7171ff89-ebe4-42d0-8863-9b4b0531cad2"],
+};
 
 const FIXTURE_ACTIONS = [
   {
@@ -93,20 +100,49 @@ describe("tutorial data", () => {
     mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
     writeFileSync(
       join(rootDir, "data", "tabula", "tutorial.toml"),
-      serializeTutorialToml(FIXTURE_ACTIONS),
+      serializeTutorialToml(FIXTURE_ACTIONS, [], FIXTURE_BATTLE),
     );
 
     expect(readTutorialActions({ rootDir })).toEqual(FIXTURE_ACTIONS);
     const result = refreshTutorialDataJson({ rootDir });
     expect(result.actions).toEqual(FIXTURE_ACTIONS);
+    expect(result.battle).toEqual(FIXTURE_BATTLE);
     expect(
       JSON.parse(
         readFileSync(join(rootDir, "public", "tutorial-data.json"), "utf8"),
       ),
-    ).toEqual({ actions: FIXTURE_ACTIONS, triggers: [] });
-    expect(parse(serializeTutorialToml(FIXTURE_ACTIONS)).actions).toEqual(
-      FIXTURE_ACTIONS,
+    ).toEqual({
+      actions: FIXTURE_ACTIONS,
+      triggers: [],
+      battle: FIXTURE_BATTLE,
+    });
+    expect(
+      parse(serializeTutorialToml(FIXTURE_ACTIONS, [], FIXTURE_BATTLE)),
+    ).toMatchObject({
+      actions: FIXTURE_ACTIONS,
+      battle: FIXTURE_BATTLE,
+    });
+  });
+
+  it("validates UUID-authored battle draw lists", () => {
+    expect(validateTutorialBattleConfiguration(FIXTURE_BATTLE)).toEqual(
+      FIXTURE_BATTLE,
     );
+    expect(() =>
+      validateTutorialBattleConfiguration({
+        ...FIXTURE_BATTLE,
+        playerDraws: ["Card Name"],
+      }),
+    ).toThrow(/array of card UUIDs/u);
+    expect(() =>
+      validateTutorialBattleConfiguration({
+        ...FIXTURE_BATTLE,
+        dreamwellDraws: [
+          FIXTURE_BATTLE.dreamwellDraws[0],
+          FIXTURE_BATTLE.dreamwellDraws[0],
+        ],
+      }),
+    ).toThrow(/must not repeat/u);
   });
 
   it("rejects duplicate ids, blank speech, and negative timings", () => {

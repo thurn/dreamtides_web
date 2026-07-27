@@ -609,6 +609,7 @@ export default function App({
         const content = {
           ...loadedContent,
           tutorialTriggers: tutorial.triggers,
+          tutorialBattle: tutorial.battle,
         };
         // Register the five real reducer content providers from the loaded
         // content BEFORE any room folds an event. Until this runs, every

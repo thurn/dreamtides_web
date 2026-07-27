@@ -54,6 +54,21 @@ const DREAMWELL_SEQUENCE = [
   "a57f1276-3fb6-4527-b538-953fbace35cf",
   "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
 ] as const;
+const PLAYER_DRAW_SEQUENCE = [
+  "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+  "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+  "647f5150-b2e0-424b-9480-27557642524e",
+  "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
+  "944e15d2-d680-4ebe-8d18-36826f4b1535",
+  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+] as const;
+const ENEMY_DRAW_SEQUENCE = [
+  "944e15d2-d680-4ebe-8d18-36826f4b1535",
+  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+  "647f5150-b2e0-424b-9480-27557642524e",
+  "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+  "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
+] as const;
 
 const TUTORIAL_ACTIONS = [
   { id: "draw-first-opponent", action: "draw-opponent-card", cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e", wait: 0 },
@@ -107,6 +122,11 @@ function content(): QuestContent {
       })),
       { id: "other", name: "Other", renderedText: "", energyAdded: 1, order: 2, cardNumber: 99, imageNumber: 99 },
     ],
+    tutorialBattle: {
+      playerDraws: PLAYER_DRAW_SEQUENCE,
+      enemyDraws: ENEMY_DRAW_SEQUENCE,
+      dreamwellDraws: DREAMWELL_SEQUENCE,
+    },
     dreamsignTemplates: [],
     dreamscapes: [],
     affiliations: [],
@@ -361,21 +381,12 @@ describe("tutorial battle lifecycle", () => {
       "229ab3a1-3720-41a2-924c-8fe112188f8e", "4408b942-09a0-4f4e-a403-10c708c6e3c5",
     ]);
     expect(ids(battle, "enemy", "void")).toEqual(["229ab3a1-3720-41a2-924c-8fe112188f8e"]);
-    expect(ids(battle, "player", "deck").slice(0, 6)).toEqual([
-      "a28ad36d-fa74-4190-a463-7efd3a6233d0",
-      "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
-      "647f5150-b2e0-424b-9480-27557642524e",
-      "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
-      "944e15d2-d680-4ebe-8d18-36826f4b1535",
-      "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
-    ]);
-    expect(ids(battle, "enemy", "deck").slice(3, 8)).toEqual([
-      "944e15d2-d680-4ebe-8d18-36826f4b1535",
-      "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
-      "647f5150-b2e0-424b-9480-27557642524e",
-      "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
-      "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
-    ]);
+    expect(ids(battle, "player", "deck").slice(0, 6)).toEqual(
+      PLAYER_DRAW_SEQUENCE,
+    );
+    expect(ids(battle, "enemy", "deck").slice(3, 8)).toEqual(
+      ENEMY_DRAW_SEQUENCE,
+    );
     expect(ids(battle, "player", "deck")).toHaveLength(26);
     expect(ids(battle, "enemy", "deck")).toHaveLength(28);
     for (const [, cardId] of STARTERS) {
@@ -387,6 +398,49 @@ describe("tutorial battle lifecycle", () => {
     const inProgress = terminalTutorialState();
     const tutorial = inProgress.frontDoor.tutorial!;
     expect(begin({ ...inProgress, frontDoor: { ...inProgress.frontDoor, tutorial: { ...tutorial, currentActionIndex: 0 } } }).outcome).toBe("bounced");
+  });
+
+  it("stacks card and Dreamwell draws from the authored battle configuration", () => {
+    const tutorialContent = content();
+    tutorialContent.tutorialBattle = {
+      playerDraws: [
+        PLAYER_DRAW_SEQUENCE[1],
+        PLAYER_DRAW_SEQUENCE[0],
+        ...PLAYER_DRAW_SEQUENCE.slice(2),
+      ],
+      enemyDraws: [
+        ENEMY_DRAW_SEQUENCE[1],
+        ENEMY_DRAW_SEQUENCE[0],
+        ...ENEMY_DRAW_SEQUENCE.slice(2),
+      ],
+      dreamwellDraws: [
+        DREAMWELL_SEQUENCE[0],
+        DREAMWELL_SEQUENCE[1],
+        DREAMWELL_SEQUENCE[3],
+        DREAMWELL_SEQUENCE[2],
+        ...DREAMWELL_SEQUENCE.slice(4),
+      ],
+    };
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(tutorialContent),
+    );
+
+    const battle = begin().state.battle!;
+
+    expect(ids(battle, "player", "deck").slice(0, 2)).toEqual([
+      PLAYER_DRAW_SEQUENCE[1],
+      PLAYER_DRAW_SEQUENCE[0],
+    ]);
+    expect(ids(battle, "enemy", "deck").slice(3, 5)).toEqual([
+      ENEMY_DRAW_SEQUENCE[1],
+      ENEMY_DRAW_SEQUENCE[0],
+    ]);
+    expect(battle.init.dreamwellDeck.slice(0, 4).map((card) => card.id)).toEqual([
+      DREAMWELL_SEQUENCE[0],
+      DREAMWELL_SEQUENCE[1],
+      DREAMWELL_SEQUENCE[3],
+      DREAMWELL_SEQUENCE[2],
+    ]);
   });
 
   it("derives the durable handoff hands from the authored action snapshot", () => {

@@ -62,6 +62,7 @@ export default function FrontDoorApp({
       const content = {
         ...loadedContent,
         tutorialTriggers: tutorial.triggers,
+        tutorialBattle: tutorial.battle,
       };
       registerGameProviders(content);
       setContentState({ status: "ready" });

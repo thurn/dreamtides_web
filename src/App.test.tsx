@@ -26,6 +26,7 @@ vi.mock("./data/tutorial-actions", () => ({
   loadTutorialConfiguration: vi.fn(() => Promise.resolve({
     actions: [],
     triggers: [],
+    battle: { playerDraws: [], enemyDraws: [], dreamwellDraws: [] },
   })),
 }));
 

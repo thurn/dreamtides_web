@@ -69,7 +69,10 @@ import {
 } from "../draft/replay/draft-records";
 import { createInitialReplayDraftState } from "../draft/draft-engine";
 import type { ReplayDraftState } from "../types/draft";
-import type { TutorialTriggerDefinition } from "../types/tutorial";
+import type {
+  TutorialBattleConfiguration,
+  TutorialTriggerDefinition,
+} from "../types/tutorial";
 
 export interface QuestContent {
   cardDatabase: Map<number, CardData>;
@@ -79,6 +82,8 @@ export interface QuestContent {
   dreamsignTemplates: readonly DreamsignTemplate[];
   /** Supplemental battle tutorials pinned into each created battle. */
   tutorialTriggers?: readonly TutorialTriggerDefinition[];
+  /** Authored draw order for the standalone playable tutorial battle. */
+  tutorialBattle?: TutorialBattleConfiguration;
   /**
    * Dreamscape definitions the Atlas generator assigns to nodes, loaded from
    * `public/dreamscapes-data.json`.

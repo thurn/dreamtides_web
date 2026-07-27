@@ -35,6 +35,42 @@ const GLOSSARY_IDS = new Set(
   ).map((entry) => entry.id),
 );
 
+function validateCardDrawList(value, field) {
+  if (
+    !Array.isArray(value) ||
+    !value.every(
+      (cardId) =>
+        typeof cardId === "string" && CARD_UUID_PATTERN.test(cardId),
+    )
+  ) {
+    throw invalid(
+      `Tutorial battle ${field} must be an array of card UUIDs.`,
+    );
+  }
+  return [...value];
+}
+
+/** Validate and normalize the playable tutorial-battle draw configuration. */
+export function validateTutorialBattleConfiguration(value) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw invalid("Tutorial data must contain a battle table.");
+  }
+  const battle = {
+    playerDraws: validateCardDrawList(value.playerDraws, "playerDraws"),
+    enemyDraws: validateCardDrawList(value.enemyDraws, "enemyDraws"),
+    dreamwellDraws: validateCardDrawList(
+      value.dreamwellDraws,
+      "dreamwellDraws",
+    ),
+  };
+  if (new Set(battle.dreamwellDraws).size !== battle.dreamwellDraws.length) {
+    throw invalid(
+      "Tutorial battle dreamwellDraws must not repeat a card UUID.",
+    );
+  }
+  return battle;
+}
+
 function invalid(message) {
   const error = new Error(message);
   error.code = "INVALID_TUTORIAL_ACTIONS";
@@ -551,6 +587,7 @@ export function readTutorialConfiguration({
   return {
     actions: validateTutorialActions(parsed.actions),
     triggers: validateTutorialTriggers(parsed.triggers ?? []),
+    battle: validateTutorialBattleConfiguration(parsed.battle),
   };
 }
 
@@ -560,10 +597,12 @@ export function readTutorialActions(options = {}) {
 }
 
 /** Stable whole-file serialization used by the editor's atomic save. */
-export function serializeTutorialToml(actions, triggers = []) {
+export function serializeTutorialToml(actions, triggers, battle) {
   const normalized = validateTutorialActions(actions);
   const normalizedTriggers = validateTutorialTriggers(triggers);
+  const normalizedBattle = validateTutorialBattleConfiguration(battle);
   return `# Ordered actions and first-occurrence battle tutorials.\n\n${stringify({
+    battle: normalizedBattle,
     actions: normalized,
     triggers: normalizedTriggers,
   })}`;
@@ -575,7 +614,7 @@ export function refreshTutorialDataJson({
   tutorialTomlPath = DEFAULT_TUTORIAL_TOML_PATH,
   tutorialJsonPath = DEFAULT_TUTORIAL_JSON_PATH,
 } = {}) {
-  const { actions, triggers } = readTutorialConfiguration({
+  const { actions, triggers, battle } = readTutorialConfiguration({
     rootDir,
     tutorialTomlPath,
   });
@@ -583,7 +622,7 @@ export function refreshTutorialDataJson({
   mkdirSync(dirname(absoluteJsonPath), { recursive: true });
   writeFileSync(
     absoluteJsonPath,
-    `${JSON.stringify({ actions, triggers }, null, 2)}\n`,
+    `${JSON.stringify({ actions, triggers, battle }, null, 2)}\n`,
   );
-  return { actions, triggers, path: absoluteJsonPath };
+  return { actions, triggers, battle, path: absoluteJsonPath };
 }

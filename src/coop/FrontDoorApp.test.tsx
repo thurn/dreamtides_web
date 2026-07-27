@@ -11,6 +11,7 @@ const mocks = vi.hoisted(() => ({
   loadTutorialConfiguration: vi.fn(() => Promise.resolve({
     actions: [],
     triggers: [],
+    battle: { playerDraws: [], enemyDraws: [], dreamwellDraws: [] },
   })),
   registerGameProviders: vi.fn(),
 }));

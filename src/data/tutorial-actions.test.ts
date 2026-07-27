@@ -1,5 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import { loadTutorialActions, parseTutorialActions } from "./tutorial-actions";
+import {
+  loadTutorialActions,
+  parseTutorialActions,
+  parseTutorialBattleConfiguration,
+} from "./tutorial-actions";
 
 const ACTIONS_RESPONSE = {
   actions: [
@@ -16,6 +20,12 @@ const ACTIONS_RESPONSE = {
       wait: 3,
     },
   ],
+  triggers: [],
+  battle: {
+    playerDraws: [],
+    enemyDraws: [],
+    dreamwellDraws: [],
+  },
 };
 
 function successfulFetcher() {
@@ -656,5 +666,31 @@ describe("parseTutorialActions", () => {
         },
       ]),
     ).toThrow(/non-negative portrait duration/u);
+  });
+});
+
+describe("parseTutorialBattleConfiguration", () => {
+  it("preserves UUID-authored draw order and rejects invalid entries", () => {
+    const battle = {
+      playerDraws: ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"],
+      enemyDraws: ["a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"],
+      dreamwellDraws: ["7171ff89-ebe4-42d0-8863-9b4b0531cad2"],
+    };
+    expect(parseTutorialBattleConfiguration(battle)).toEqual(battle);
+    expect(() =>
+      parseTutorialBattleConfiguration({
+        ...battle,
+        enemyDraws: ["not-a-uuid"],
+      }),
+    ).toThrow(/array of card UUIDs/u);
+    expect(() =>
+      parseTutorialBattleConfiguration({
+        ...battle,
+        dreamwellDraws: [
+          battle.dreamwellDraws[0],
+          battle.dreamwellDraws[0],
+        ],
+      }),
+    ).toThrow(/must not repeat/u);
   });
 });

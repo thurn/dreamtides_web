@@ -31,7 +31,10 @@ import type {
   TutorialBattleInitProvider,
 } from "../../rules/battle/battle-events";
 import type { QuestState } from "../../types/quest";
-import type { TutorialAction } from "../../types/tutorial";
+import type {
+  TutorialAction,
+  TutorialBattleConfiguration,
+} from "../../types/tutorial";
 
 const deferredOpponentLogs = new Map<number, () => void>();
 
@@ -49,36 +52,6 @@ const TUTORIAL_STARTER_CARD_IDS = [
 ] as const;
 
 const TUTORIAL_TWILIGHT_ID = "229ab3a1-3720-41a2-924c-8fe112188f8e";
-const TUTORIAL_AUTUMN_GLADE_ID = "02e8ea92-1218-413c-9f0b-4c865a3921d3";
-const TUTORIAL_VOLTSURGE_ID = "7171ff89-ebe4-42d0-8863-9b4b0531cad2";
-const TUTORIAL_PLAYER_DRAW_CARD_IDS = [
-  "a28ad36d-fa74-4190-a463-7efd3a6233d0",
-  "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
-  "647f5150-b2e0-424b-9480-27557642524e",
-  "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
-  "944e15d2-d680-4ebe-8d18-36826f4b1535",
-  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
-] as const;
-const TUTORIAL_ENEMY_DRAW_CARD_IDS = [
-  "944e15d2-d680-4ebe-8d18-36826f4b1535",
-  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
-  "647f5150-b2e0-424b-9480-27557642524e",
-  "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
-  "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
-] as const;
-const TUTORIAL_DREAMWELL_CARD_IDS = [
-  TUTORIAL_AUTUMN_GLADE_ID,
-  TUTORIAL_VOLTSURGE_ID,
-  "03e4e701-4720-4278-8198-9b7e0514d4cf",
-  "5ec17498-9028-4a01-80a0-67c91b03d505",
-  "de98477c-e216-4618-bff1-0e24bd982fdb",
-  "662b7393-751c-4aa9-8150-5f20b4d176a4",
-  "51caf26d-83bf-45a9-bc80-010d353277db",
-  "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
-  "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
-  "a57f1276-3fb6-4527-b538-953fbace35cf",
-  "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
-] as const;
 const TENSHO_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
 const THREXAN_ID = "B99936CA-97F9-4930-AF5A-FA9EF92557EF";
 
@@ -205,9 +178,21 @@ export function createTutorialBattleInitProvider(
     }) => {
       const key = `tutorial:${quest.seed}:${tutorialRunId}:${String(restartNumber)}`;
       const battleId = `tutorial-battle:${tutorialRunId}:${String(restartNumber)}:${driverClientId}`;
-      const init = createTutorialBattleInit(content, quest, key, battleId);
+      const battleConfiguration = requireTutorialBattleConfiguration(content);
+      const init = createTutorialBattleInit(
+        content,
+        quest,
+        key,
+        battleId,
+        battleConfiguration,
+      );
       const board = createInitialBattleState(init);
-      arrangeTutorialHandoff(content, board, actions);
+      arrangeTutorialHandoff(
+        content,
+        board,
+        actions,
+        battleConfiguration,
+      );
       return {
         init,
         board,
@@ -224,6 +209,7 @@ function createTutorialBattleInit(
   quest: QuestState,
   key: string,
   battleId: string,
+  battleConfiguration: TutorialBattleConfiguration,
 ): BattleInit {
   const makeDeck = (side: BattleSide): BattleDeckCardDefinition[] => {
     const definitions = TUTORIAL_STARTER_CARD_IDS.flatMap((cardId) =>
@@ -260,7 +246,11 @@ function createTutorialBattleInit(
     tutorialTriggers: content.tutorialTriggers ?? [],
     questDeckEntries: [],
     playerDeckOrder: makeDeck("player"),
-    dreamwellDeck: tutorialDreamwellDeck(content, key),
+    dreamwellDeck: tutorialDreamwellDeck(
+      content,
+      key,
+      battleConfiguration.dreamwellDraws,
+    ),
     enemyDescriptor: tutorialEnemyDescriptor(threxan),
     enemyDeckDefinition: makeDeck("enemy"),
     dreamAvatarSummary: {
@@ -280,6 +270,7 @@ function arrangeTutorialHandoff(
   content: QuestContent,
   board: BattleMutableState,
   actions: readonly TutorialAction[],
+  battleConfiguration: TutorialBattleConfiguration,
 ): void {
   const playerStarter = takeCard(board, "player", "e83014d3-9d35-4e80-a1b3-9b25360ad2af");
   const enemyStarter = takeCard(board, "enemy", "a28ad36d-fa74-4190-a463-7efd3a6233d0");
@@ -303,8 +294,8 @@ function arrangeTutorialHandoff(
     controller: "enemy",
     provenance: tutorialProvenance(),
   });
-  stackTutorialDeck(board, "player", TUTORIAL_PLAYER_DRAW_CARD_IDS);
-  stackTutorialEnemyDeck(board);
+  stackTutorialDeck(board, "player", battleConfiguration.playerDraws);
+  stackTutorialEnemyDeck(board, battleConfiguration.enemyDraws);
 
   board.activeSide = "player";
   board.turnNumber = 4;
@@ -419,8 +410,11 @@ function stackTutorialDeck(
   board.sides[side].deck = [...orderedCards, ...board.sides[side].deck];
 }
 
-function stackTutorialEnemyDeck(board: BattleMutableState): void {
-  const visibleDraws = TUTORIAL_ENEMY_DRAW_CARD_IDS.map((cardId) =>
+function stackTutorialEnemyDeck(
+  board: BattleMutableState,
+  cardIds: readonly string[],
+): void {
+  const visibleDraws = cardIds.map((cardId) =>
     takeCard(board, "enemy", cardId),
   );
   const erodedCards = board.sides.enemy.deck.splice(0, 3);
@@ -437,16 +431,17 @@ function stackTutorialEnemyDeck(board: BattleMutableState): void {
 function tutorialDreamwellDeck(
   content: QuestContent,
   key: string,
+  cardIds: readonly string[],
 ): readonly DreamwellCardDefinition[] {
   const byId = new Map(content.dreamwellCards.map((card) => [card.id, card]));
-  const fixed = TUTORIAL_DREAMWELL_CARD_IDS.map((cardId) => {
+  const fixed = cardIds.map((cardId) => {
     const card = byId.get(cardId);
     if (card === undefined) {
       throw new Error(`Tutorial Dreamwell card ${cardId} is missing from the runtime catalog.`);
     }
     return card;
   });
-  const fixedIds = new Set<string>(TUTORIAL_DREAMWELL_CARD_IDS);
+  const fixedIds = new Set<string>(cardIds);
   const rest = [...content.dreamwellCards].filter(
     (card) => !fixedIds.has(card.id),
   );
@@ -462,6 +457,17 @@ function tutorialDreamwellDeck(
     imageNumber: card.imageNumber ?? card.cardNumber,
     ...(card.art ? { art: card.art } : {}),
   }));
+}
+
+function requireTutorialBattleConfiguration(
+  content: QuestContent,
+): TutorialBattleConfiguration {
+  if (content.tutorialBattle === undefined) {
+    throw new Error(
+      "Tutorial battle draw configuration is missing from tutorial data.",
+    );
+  }
+  return content.tutorialBattle;
 }
 
 function cardById(content: QuestContent, cardId: string) {

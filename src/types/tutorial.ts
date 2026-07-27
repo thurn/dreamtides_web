@@ -67,6 +67,15 @@ export interface TutorialTriggerDefinition {
 export interface TutorialConfiguration {
   readonly actions: readonly TutorialAction[];
   readonly triggers: readonly TutorialTriggerDefinition[];
+  readonly battle: TutorialBattleConfiguration;
+}
+
+/** UUID-authored draw order used after the tutorial enters playable battle. */
+export interface TutorialBattleConfiguration {
+  readonly playerDraws: readonly string[];
+  readonly enemyDraws: readonly string[];
+  /** Complete shared deck prefix, including authored pre-handoff draws. */
+  readonly dreamwellDraws: readonly string[];
 }
 
 /** Presentation event that opens an authored How to Play popup. */

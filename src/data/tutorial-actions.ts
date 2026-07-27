@@ -1,6 +1,7 @@
 import { isCardId } from "../types/card-identity";
 import type {
   TutorialAction,
+  TutorialBattleConfiguration,
   TutorialConfiguration,
   TutorialSpeechBubble,
   TutorialTriggerDefinition,
@@ -12,6 +13,49 @@ import { parseTutorialInstructionMarkup } from "./tutorial-instruction-markup";
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
 const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
 const DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
+
+function parseCardDrawList(
+  value: unknown,
+  field: keyof TutorialBattleConfiguration,
+): readonly string[] {
+  if (!Array.isArray(value)) {
+    throw new Error(
+      `Tutorial battle ${field} must be an array of card UUIDs.`,
+    );
+  }
+  const cardIds: string[] = [];
+  for (const cardId of value as unknown[]) {
+    if (typeof cardId !== "string" || !isCardId(cardId)) {
+      throw new Error(
+        `Tutorial battle ${field} must be an array of card UUIDs.`,
+      );
+    }
+    cardIds.push(cardId);
+  }
+  return cardIds;
+}
+
+/** Validate untrusted playable tutorial-battle draw configuration. */
+export function parseTutorialBattleConfiguration(
+  value: unknown,
+): TutorialBattleConfiguration {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Tutorial data must contain a battle table.");
+  }
+  const record = value as Record<string, unknown>;
+  const battle = {
+    playerDraws: parseCardDrawList(record.playerDraws, "playerDraws"),
+    enemyDraws: parseCardDrawList(record.enemyDraws, "enemyDraws"),
+    dreamwellDraws: parseCardDrawList(
+      record.dreamwellDraws,
+      "dreamwellDraws",
+    ),
+  };
+  if (new Set(battle.dreamwellDraws).size !== battle.dreamwellDraws.length) {
+    throw new Error("Tutorial battle dreamwellDraws must not repeat a card UUID.");
+  }
+  return battle;
+}
 
 function parseTutorialSpeechBubble(
   value: unknown,
@@ -550,5 +594,6 @@ export async function loadTutorialConfiguration(
   return {
     actions: parseTutorialActions(record.actions),
     triggers: parseTutorialTriggers(record.triggers ?? []),
+    battle: parseTutorialBattleConfiguration(record.battle),
   };
 }
