@@ -12,6 +12,11 @@ Do not create new branches unless explicitly requested.
 
 Do not print a summary of changes.
 
+Once you finish a work item, please request review via the independent-review skill and
+fix flagged issues:
+
+ ~/.llms/skills/independent-review
+
 Dreamtides battle rules are in docs/battle_rules/battle_rules.md
 
 Write deterministic tests against stable observable contracts using synthetic fixtures; never gate CI on mutable production data, copy, default algorithm choices, private implementation details, statistical or timing thresholds, load-sensitive behavior, or commands that reference deleted tests.
