@@ -5,12 +5,15 @@ import { TutorialBattleScreen } from "../../cumulus/screens/TutorialBattleScreen
 import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
 import { buildTutorialBattleView } from "./tutorial-battle-view-model";
+import { useBattleTutorialGuidance } from "../../state/use-battle-tutorial-guidance";
+import { buildBattleTutorialGuidanceView } from "./battle-tutorial-guidance-view-model";
 
 /** Live, controller-owned continuation of the standalone tutorial handoff. */
 export function TutorialBattleScreenAdapter() {
   const { battle: contextBattle, mutations } = useFrontDoor();
   const battle = contextBattle ?? null;
   const controller = useTutorialBattleController();
+  const guidanceController = useBattleTutorialGuidance();
   const {
     interactions,
     confirmedPromptId,
@@ -22,6 +25,10 @@ export function TutorialBattleScreenAdapter() {
   const view = useMemo(
     () => battle === null ? null : buildTutorialBattleView(battle, controller, confirmedPromptId),
     [battle, confirmedPromptId, controller],
+  );
+  const guidance = useMemo(
+    () => battle === null ? null : buildBattleTutorialGuidanceView(battle),
+    [battle],
   );
   const restart = useCallback(() => {
     if (battle === null || controller.driverClientId === null ||
@@ -62,6 +69,8 @@ export function TutorialBattleScreenAdapter() {
       })}
       onRestart={restart}
       onReturnToMainMenu={exit}
+      guidance={guidance}
+      onGuidanceContinue={guidanceController.advance}
     />
   );
 }

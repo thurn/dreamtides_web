@@ -76,9 +76,12 @@ import {
   type BattleFoldState,
   type ChallengeCursor,
   type TutorialBattleMode,
+  type TutorialGuidanceContinuation,
+  type TutorialGuidanceSource,
   type EffectRun,
   type PendingPrompt,
 } from "./fold";
+import { matchTutorialGuidance } from "./tutorial-guidance";
 import {
   isBattleFieldSlotAddressValid,
   selectBattleCardLocation,
@@ -542,6 +545,51 @@ const DISCOVER_CHARACTER_SCRIPT_IDS = new Set<string>([
   "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
 ]);
 
+function openTutorialGuidance(
+  state: FoldState,
+  battle: BattleFoldState,
+  event: "card-play" | "dreamwell-resolve" | "figment-created",
+  source: TutorialGuidanceSource,
+  renderedText: string,
+  cardKind: "character" | "event" | undefined,
+  continuation: TutorialGuidanceContinuation,
+): FoldState | null {
+  const seen = new Set(state.tutorialTriggerIdsSeen ?? []);
+  const matches = matchTutorialGuidance(battle.init.tutorialTriggers ?? [], {
+    event,
+    renderedText,
+    cardKind,
+    seenTriggerIds: seen,
+  });
+  if (matches.length === 0) return null;
+  for (const match of matches) seen.add(match.id);
+  const sourceIdentity =
+    source.kind === "dreamwell"
+      ? `${source.side}:${source.cardId}`
+      : `${source.side}:${source.battleCardId}`;
+  return {
+    ...state,
+    tutorialTriggerIdsSeen: [...seen],
+    battle: {
+      ...battle,
+      tutorialPresentation: {
+        id: `tutorial-guidance:${event}:${sourceIdentity}:${matches
+          .map((match) => match.id)
+          .join("+")}`,
+        kind: "tutorial-guidance",
+        source,
+        messages: matches.map((match) => ({
+          triggerId: match.id,
+          text: match.text,
+          duration: match.duration,
+        })),
+        messageIndex: 0,
+        continuation,
+      },
+    },
+  };
+}
+
 /**
  * Folds ONE battle command through the full per-command trigger pipeline against
  * `battle`, returning the next {@link BattleFoldState} or `null` to bounce when a
@@ -754,6 +802,16 @@ export function battleCommand(
   ctx: EventContext,
   actor?: string,
 ): FoldState | null {
+  return battleCommandInternal(state, payload, ctx, actor, false);
+}
+
+function battleCommandInternal(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+  actor: string | undefined,
+  suppressGuidance: boolean,
+): FoldState | null {
   const battle = state.battle;
   if (battle === null) {
     return null;
@@ -795,6 +853,72 @@ export function battleCommand(
     scoreToWin: battle.init.scoreToWin,
     dreamwellDeck: battle.init.dreamwellDeck,
   });
+  if (
+    !suppressGuidance &&
+    command.id === "DEBUG_EDIT" &&
+    command.edit.kind === "MOVE_CARD_TO_ZONE" &&
+    "slotId" in command.edit.destination
+  ) {
+    const location = selectBattleCardLocation(
+      battle.board,
+      command.edit.battleCardId,
+    );
+    const instance = battle.board.cardInstances[command.edit.battleCardId];
+    if (location?.zone === "hand" && instance !== undefined) {
+      const guidance = openTutorialGuidance(
+        state,
+        battle,
+        "card-play",
+        {
+          kind: "card",
+          cardId: instance.definition.cardId,
+          battleCardId: command.edit.battleCardId,
+          cardKind: instance.definition.battleCardKind,
+          side: instance.controller,
+        },
+        instance.definition.renderedText,
+        instance.definition.battleCardKind,
+        { kind: "commands", commands },
+      );
+      if (guidance !== null) return guidance;
+    }
+  }
+  const dreamwellRevealCommand = commands.find(
+    (
+      candidate,
+    ): candidate is BattleCommand & {
+      id: "DEBUG_EDIT";
+      edit: Extract<BattleDebugEdit, { kind: "DRAW_DREAMWELL_CARD" }>;
+    } =>
+      candidate.id === "DEBUG_EDIT" &&
+      candidate.edit.kind === "DRAW_DREAMWELL_CARD",
+  );
+  if (
+    !suppressGuidance &&
+    dreamwellRevealCommand !== undefined &&
+    battle.init.dreamwellDeck.length > 0
+  ) {
+    const definition =
+      battle.init.dreamwellDeck[
+        battle.board.dreamwellDeckIndex % battle.init.dreamwellDeck.length
+      ];
+    if (definition !== undefined) {
+      const guidance = openTutorialGuidance(
+        state,
+        battle,
+        "dreamwell-resolve",
+        {
+          kind: "dreamwell",
+          cardId: definition.id,
+          side: dreamwellRevealCommand.edit.side,
+        },
+        definition.renderedText,
+        undefined,
+        { kind: "commands", commands },
+      );
+      if (guidance !== null) return guidance;
+    }
+  }
   let current = battle;
   for (const plannedCommand of commands) {
     const next = applyBattleCommandStep(
@@ -809,7 +933,38 @@ export function battleCommand(
     }
     current = next;
   }
-  return { ...state, battle: driveChallengeCursor(current, ctx.seq, random, nowMs) };
+  const completed = driveChallengeCursor(current, ctx.seq, random, nowMs);
+  if (!suppressGuidance) {
+    const createdFigment = Object.values(completed.board.cardInstances).find(
+      (instance) => {
+        if (instance.provenance.kind !== "generated-figment") return false;
+        const before = battle.board.cardInstances[instance.battleCardId];
+        const beforeCount =
+          before?.provenance.kind === "generated-figment"
+            ? before.figments?.length ?? 1
+            : 0;
+        return (instance.figments?.length ?? 1) > beforeCount;
+      },
+    );
+    if (createdFigment !== undefined) {
+      const guidance = openTutorialGuidance(
+        { ...state, battle: completed },
+        completed,
+        "figment-created",
+        {
+          kind: "figment",
+          cardId: createdFigment.definition.cardId,
+          battleCardId: createdFigment.battleCardId,
+          side: createdFigment.controller,
+        },
+        createdFigment.definition.renderedText,
+        undefined,
+        { kind: "commands", commands: [] },
+      );
+      if (guidance !== null) return guidance;
+    }
+  }
+  return { ...state, battle: completed };
 }
 
 /**
@@ -963,6 +1118,16 @@ export function battlePlayCard(
   ctx: EventContext,
   actor?: string,
 ): FoldState | null {
+  return battlePlayCardInternal(state, payload, ctx, actor, false);
+}
+
+function battlePlayCardInternal(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+  actor: string | undefined,
+  suppressGuidance: boolean,
+): FoldState | null {
   const battle = state.battle;
   const intent = coerceBattlePlayCardIntent(payload);
   const mode = battle === null ? null : battleModeOf(battle);
@@ -1003,6 +1168,29 @@ export function battlePlayCard(
     destination = { side: instance.controller, zone: "void" };
   } else return null;
 
+  if (!suppressGuidance) {
+    const guidance = openTutorialGuidance(
+      state,
+      battle,
+      "card-play",
+      {
+        kind: "card",
+        cardId: instance.definition.cardId,
+        battleCardId: intent.battleCardId,
+        cardKind: instance.definition.battleCardKind,
+        side: instance.controller,
+      },
+      instance.definition.renderedText,
+      instance.definition.battleCardKind,
+      {
+        kind: "play-card",
+        payload: { ...payload },
+        automatic,
+      },
+    );
+    if (guidance !== null) return guidance;
+  }
+
   // Work on a local board so every validation finishes before the cost becomes
   // observable. Queue draining happens only after movement and cost coexist.
   const move = { kind: "MOVE_CARD_TO_ZONE" as const, battleCardId: intent.battleCardId, destination };
@@ -1016,7 +1204,7 @@ export function battlePlayCard(
   // The tutorial opponent's card remains the authoritative presentation focus
   // before any of its triggered work is drained. The follow-up event resumes
   // this exact queued state, so a remount cannot skip or duplicate effects.
-  if (automatic && instance.controller === "enemy") {
+  if (!suppressGuidance && automatic && instance.controller === "enemy") {
     return {
       ...state,
       battle: {
@@ -1064,6 +1252,107 @@ export function completeTutorialBattlePresentation(
   const battle = state.battle;
   const presentation = battle?.tutorialPresentation ?? null;
   const mode = battle === null ? null : battleModeOf(battle);
+  if (
+    battle !== null &&
+    presentation?.kind === "tutorial-guidance" &&
+    typeof payload.presentationId === "string" &&
+    payload.presentationId === presentation.id &&
+    payload.messageIndex === presentation.messageIndex
+  ) {
+    const nextMessageIndex = presentation.messageIndex + 1;
+    if (nextMessageIndex < presentation.messages.length) {
+      return {
+        ...state,
+        battle: {
+          ...battle,
+          tutorialPresentation: {
+            ...presentation,
+            messageIndex: nextMessageIndex,
+          },
+        },
+      };
+    }
+    const cleared: BattleFoldState = {
+      ...battle,
+      tutorialPresentation: null,
+    };
+    if (presentation.continuation.kind === "play-card") {
+      return battlePlayCardInternal(
+        { ...state, battle: cleared },
+        { ...presentation.continuation.payload },
+        ctx,
+        undefined,
+        true,
+      );
+    }
+    let drawIndex = 0;
+    const random = (): number => ctx.rng(drawIndex++);
+    const nowMs = isoTimestampToMs(ctx.timestamp) ?? 0;
+    let current = cleared;
+    for (const command of presentation.continuation.commands) {
+      const next = applyBattleCommandStep(
+        current,
+        command,
+        ctx.seq,
+        random,
+        nowMs,
+      );
+      if (next === null) return null;
+      current = next;
+    }
+    if (current.tutorialPresentation?.kind === "dreamwell-reveal") {
+      const advanced = advanceEffectQueueWithStream(
+        { ...current, tutorialPresentation: null },
+        ctx.seq,
+        random,
+        nowMs,
+      );
+      current = {
+        ...advanced,
+        board: applyBoardEdits(
+          advanced.board,
+          planStaticContributionSettlement(
+            advanced.board,
+            true,
+            random,
+            nowMs,
+          ),
+        ),
+      };
+    }
+    const createdFigment = Object.values(current.board.cardInstances).find(
+      (instance) => {
+        if (instance.provenance.kind !== "generated-figment") return false;
+        const before = battle.board.cardInstances[instance.battleCardId];
+        const beforeCount =
+          before?.provenance.kind === "generated-figment"
+            ? before.figments?.length ?? 1
+            : 0;
+        return (instance.figments?.length ?? 1) > beforeCount;
+      },
+    );
+    if (createdFigment !== undefined) {
+      const figmentGuidance = openTutorialGuidance(
+        { ...state, battle: current },
+        current,
+        "figment-created",
+        {
+          kind: "figment",
+          cardId: createdFigment.definition.cardId,
+          battleCardId: createdFigment.battleCardId,
+          side: createdFigment.controller,
+        },
+        createdFigment.definition.renderedText,
+        undefined,
+        { kind: "commands", commands: [] },
+      );
+      if (figmentGuidance !== null) return figmentGuidance;
+    }
+    return {
+      ...state,
+      battle: driveChallengeCursor(current, ctx.seq, random, nowMs),
+    };
+  }
   if (
     battle === null ||
     mode?.kind !== "tutorial" ||
@@ -1206,6 +1495,76 @@ export function battleGesture(
     commands.push(command);
   }
   if (!commands.every((command) => tutorialCommandIsAuthorized(battle, command, actor))) return null;
+  const playedCardCommand = commands.find(
+    (candidate) =>
+      candidate.id === "DEBUG_EDIT" &&
+      candidate.edit.kind === "MOVE_CARD_TO_ZONE" &&
+      "slotId" in candidate.edit.destination &&
+      selectBattleCardLocation(
+        battle.board,
+        candidate.edit.battleCardId,
+      )?.zone === "hand",
+  );
+  if (
+    playedCardCommand?.id === "DEBUG_EDIT" &&
+    playedCardCommand.edit.kind === "MOVE_CARD_TO_ZONE"
+  ) {
+    const instance =
+      battle.board.cardInstances[playedCardCommand.edit.battleCardId];
+    if (instance !== undefined) {
+      const guidance = openTutorialGuidance(
+        state,
+        battle,
+        "card-play",
+        {
+          kind: "card",
+          cardId: instance.definition.cardId,
+          battleCardId: instance.battleCardId,
+          cardKind: instance.definition.battleCardKind,
+          side: instance.controller,
+        },
+        instance.definition.renderedText,
+        instance.definition.battleCardKind,
+        { kind: "commands", commands },
+      );
+      if (guidance !== null) return guidance;
+    }
+  }
+  const dreamwellCommand = commands.find(
+    (
+      candidate,
+    ): candidate is BattleCommand & {
+      id: "DEBUG_EDIT";
+      edit: Extract<BattleDebugEdit, { kind: "DRAW_DREAMWELL_CARD" }>;
+    } =>
+      candidate.id === "DEBUG_EDIT" &&
+      candidate.edit.kind === "DRAW_DREAMWELL_CARD",
+  );
+  if (
+    dreamwellCommand !== undefined &&
+    battle.init.dreamwellDeck.length > 0
+  ) {
+    const definition =
+      battle.init.dreamwellDeck[
+        battle.board.dreamwellDeckIndex % battle.init.dreamwellDeck.length
+      ];
+    if (definition !== undefined) {
+      const guidance = openTutorialGuidance(
+        state,
+        battle,
+        "dreamwell-resolve",
+        {
+          kind: "dreamwell",
+          cardId: definition.id,
+          side: dreamwellCommand.edit.side,
+        },
+        definition.renderedText,
+        undefined,
+        { kind: "commands", commands },
+      );
+      if (guidance !== null) return guidance;
+    }
+  }
 
   let drawIndex = 0;
   const random = (): number => ctx.rng(drawIndex++);
@@ -1218,6 +1577,34 @@ export function battleGesture(
       return null;
     }
     current = next;
+  }
+  const createdFigment = Object.values(current.board.cardInstances).find(
+    (instance) => {
+      if (instance.provenance.kind !== "generated-figment") return false;
+      const before = battle.board.cardInstances[instance.battleCardId];
+      const beforeCount =
+        before?.provenance.kind === "generated-figment"
+          ? before.figments?.length ?? 1
+          : 0;
+      return (instance.figments?.length ?? 1) > beforeCount;
+    },
+  );
+  if (createdFigment !== undefined) {
+    const guidance = openTutorialGuidance(
+      { ...state, battle: current },
+      current,
+      "figment-created",
+      {
+        kind: "figment",
+        cardId: createdFigment.definition.cardId,
+        battleCardId: createdFigment.battleCardId,
+        side: createdFigment.controller,
+      },
+      createdFigment.definition.renderedText,
+      undefined,
+      { kind: "commands", commands: [] },
+    );
+    if (guidance !== null) return guidance;
   }
   return { ...state, battle: current };
 }

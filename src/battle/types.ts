@@ -9,6 +9,7 @@ import type {
 import type { ArtCrop } from "../types/cards";
 import type { CardTransfigurationDisplay } from "../runtime/transfiguration-display";
 import type { BattleDebugEdit } from "./debug/commands";
+import type { TutorialTriggerDefinition } from "../types/tutorial";
 
 export type BattleSide = "player" | "enemy";
 
@@ -364,6 +365,8 @@ export interface BattleInit {
   // invariants (B-6, C-10) are still enforced in `create-battle-init.ts`.
   startingSide: BattleSide;
   playerDrawSkipsTurnOne: boolean;
+  /** TOML-authored first-occurrence tutorials available in this battle. */
+  tutorialTriggers?: readonly TutorialTriggerDefinition[];
   questDeckEntries: readonly BattleQuestDeckEntry[];
   playerDeckOrder: readonly BattleDeckCardDefinition[];
   /**

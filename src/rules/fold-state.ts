@@ -37,6 +37,8 @@ export interface FoldState {
   readonly frontDoor: FrontDoorState;
   readonly quest: QuestState;
   readonly battle: BattleFoldState | null;
+  /** First-occurrence tutorials already presented in this shared room. */
+  readonly tutorialTriggerIdsSeen?: readonly string[];
 }
 
 /**

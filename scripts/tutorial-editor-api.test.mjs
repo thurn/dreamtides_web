@@ -34,7 +34,7 @@ function fixtureRoot() {
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
   writeFileSync(
     join(rootDir, "data", "tabula", "tutorial.toml"),
-    '[[actions]]\nid = "old"\naction = "display-speech-bubble"\nspeechBubble = { speaker = "mira", duration = 3, verticalOffset = 0, bubbleWidth = 700, text = "Old." }\nwait = 0\n',
+    '[[actions]]\nid = "old"\naction = "display-speech-bubble"\nspeechBubble = { speaker = "mira", duration = 3, verticalOffset = 0, bubbleWidth = 700, text = "Old." }\nwait = 0\n\n[[triggers]]\nid = "support"\non = ["card-play"]\npriority = 100\nduration = 3\nmatch = { kind = "glossary", id = "support" }\ntext = "Support."\n',
   );
   return rootDir;
 }
@@ -47,6 +47,7 @@ describe("tutorial editor api", () => {
       response.json(),
     );
     expect(loaded.actions[0].id).toBe("old");
+    expect(loaded.triggers.map((trigger) => trigger.id)).toEqual(["support"]);
 
     const actions = [
       {
@@ -82,12 +83,17 @@ describe("tutorial editor api", () => {
     expect(savedResponse.status).toBe(200);
     expect((await savedResponse.json()).actions).toEqual(actions);
     expect(
-      parse(readFileSync(join(rootDir, "data", "tabula", "tutorial.toml"), "utf8"))
-        .actions,
-    ).toEqual(actions);
+      parse(readFileSync(join(rootDir, "data", "tabula", "tutorial.toml"), "utf8")),
+    ).toMatchObject({
+      actions,
+      triggers: [{ id: "support" }],
+    });
     expect(
       JSON.parse(readFileSync(join(rootDir, "public", "tutorial-data.json"), "utf8")),
-    ).toEqual({ actions });
+    ).toMatchObject({
+      actions,
+      triggers: [{ id: "support" }],
+    });
   });
 
   it("rejects invalid actions without changing tutorial.toml", async () => {

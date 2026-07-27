@@ -8,11 +8,18 @@ import FrontDoorApp from "./FrontDoorApp";
 
 const mocks = vi.hoisted(() => ({
   loadQuestContent: vi.fn<() => Promise<QuestContent>>(),
+  loadTutorialConfiguration: vi.fn(() => Promise.resolve({
+    actions: [],
+    triggers: [],
+  })),
   registerGameProviders: vi.fn(),
 }));
 
 vi.mock("../data/quest-content", () => ({
   loadQuestContent: mocks.loadQuestContent,
+}));
+vi.mock("../data/tutorial-actions", () => ({
+  loadTutorialConfiguration: mocks.loadTutorialConfiguration,
 }));
 vi.mock("./providers/register-game-providers", () => ({
   registerGameProviders: mocks.registerGameProviders,
@@ -46,6 +53,7 @@ describe("FrontDoorApp provider bootstrap", () => {
     document.body.append(container);
     root = createRoot(container);
     mocks.loadQuestContent.mockReset();
+    mocks.loadTutorialConfiguration.mockClear();
     mocks.registerGameProviders.mockReset();
   });
 

@@ -1147,6 +1147,72 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     expect(result.state.battle?.pendingPrompt).toBeNull();
   });
 
+  it("parks a matching Dreamwell card before reveal and resumes its effect after Mira advances", () => {
+    const dreamwellCard: DreamwellCardDefinition = {
+      id: "03e4e701-4720-4278-8198-9b7e0514d4cf",
+      name: "Fixture Shadow Passage",
+      renderedText: "Erode 3.",
+      energyAdded: 1,
+      order: 1,
+      cardNumber: 12,
+      imageNumber: 1068256757,
+    };
+    const init = makeInit({
+      dreamwellDeck: [dreamwellCard],
+      tutorialTriggers: [{
+        id: "erode",
+        on: ["dreamwell-resolve"],
+        priority: 100,
+        duration: 3,
+        match: { kind: "glossary", id: "erode" },
+        text: "[yellow]Erode[/yellow] sends cards from a deck to the void.",
+      }],
+    });
+    const board = makeRichBoard({
+      turnNumber: 2,
+      phase: "dreamwell",
+      dreamwellDeckIndex: 0,
+      playerDreamwellDrawnTurn: null,
+    });
+    const state = { ...baseState(), battle: battleFrom(board, { init }) };
+    const opened = reduce(
+      state,
+      "BATTLE_COMMAND",
+      debugEdit({
+        kind: "DRAW_DREAMWELL_CARD",
+        side: "player",
+        turnNumber: 2,
+      }),
+    );
+
+    expect(opened.outcome).toBe("applied");
+    expect(opened.state.battle?.tutorialPresentation).toMatchObject({
+      kind: "tutorial-guidance",
+      source: {
+        kind: "dreamwell",
+        cardId: "03e4e701-4720-4278-8198-9b7e0514d4cf",
+        side: "player",
+      },
+      messages: [{ triggerId: "erode", duration: 3 }],
+      messageIndex: 0,
+    });
+    expect(opened.state.battle?.board.dreamwellDeckIndex).toBe(0);
+    expect(opened.state.tutorialTriggerIdsSeen).toEqual(["erode"]);
+
+    const continued = reduce(
+      opened.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      {
+        presentationId: opened.state.battle?.tutorialPresentation?.id,
+        messageIndex: 0,
+      },
+    );
+    expect(continued.outcome).toBe("applied");
+    expect(continued.state.battle?.tutorialPresentation).toBeNull();
+    expect(continued.state.battle?.board.dreamwellDeckIndex).toBe(1);
+    expect(continued.state.battle?.board.sides.enemy.score).toBeGreaterThan(0);
+  });
+
   // --- support convergence: recompute at the fold boundary is idempotent ---
   it("recomputes Support so an immediate re-recompute yields zero edits", () => {
     const support = firstSupportScript();

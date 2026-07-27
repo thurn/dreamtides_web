@@ -13,6 +13,10 @@ import {
   type MobileBattleInteractions,
   type MobileBattleView,
 } from "./MobileBattleScreen";
+import {
+  BattleTutorialGuidance,
+  type BattleTutorialGuidanceView,
+} from "./BattleTutorialGuidance";
 
 export type TutorialBattleOwnership = "driver" | "observer" | "paused-driver-absent" | "terminal";
 
@@ -54,6 +58,8 @@ export interface TutorialBattleScreenProps {
   }) => void;
   readonly onRestart: () => void;
   readonly onReturnToMainMenu: () => void;
+  readonly guidance: BattleTutorialGuidanceView | null;
+  readonly onGuidanceContinue: () => void;
 }
 
 /** Focused live tutorial battle presentation without operator tools or rewards. */
@@ -65,6 +71,8 @@ export function TutorialBattleScreen({
   onForeseeConfirm,
   onRestart,
   onReturnToMainMenu,
+  guidance,
+  onGuidanceContinue,
 }: TutorialBattleScreenProps): ReactElement {
   const paused = view.ownership === "paused-driver-absent" || view.terminalRestartAvailable;
   return (
@@ -136,6 +144,12 @@ export function TutorialBattleScreen({
           </div>
         </GlassDialog>
       ) : null}
+      {guidance === null ? null : (
+        <BattleTutorialGuidance
+          view={guidance}
+          onContinue={onGuidanceContinue}
+        />
+      )}
     </div>
   );
 }

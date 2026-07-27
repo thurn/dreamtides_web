@@ -15,7 +15,10 @@ import {
   resolveToken,
   stripJsonComments,
 } from "./lib/card-refs.mjs";
-import { validateTutorialActions } from "./tutorial-data.mjs";
+import {
+  validateTutorialActions,
+  validateTutorialTriggers,
+} from "./tutorial-data.mjs";
 
 // Re-exported for `setup-assets.test.mjs`, which exercises the JSONC comment
 // stripper alongside the asset-build helpers defined here.
@@ -1109,11 +1112,17 @@ export function setupAssets({
 
   const tutorialSource = parse(readFileSync(tutorialTomlPath, "utf8"));
   const tutorialActions = validateTutorialActions(tutorialSource.actions);
+  const tutorialTriggers = validateTutorialTriggers(tutorialSource.triggers ?? []);
   writeFileSync(
     tutorialJsonPath,
-    `${JSON.stringify({ actions: tutorialActions }, null, 2)}\n`,
+    `${JSON.stringify({
+      actions: tutorialActions,
+      triggers: tutorialTriggers,
+    }, null, 2)}\n`,
   );
-  console.log(`Wrote ${tutorialActions.length} tutorial actions to tutorial-data.json`);
+  console.log(
+    `Wrote ${tutorialActions.length} tutorial actions and ${tutorialTriggers.length} triggers to tutorial-data.json`,
+  );
 
   // Real per-deck card lists bundled for the draft test's `decklists` pool
   // variant (and the `idf`/`idf2`/`idf3` variants), which build a pool by

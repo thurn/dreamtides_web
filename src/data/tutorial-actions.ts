@@ -1,5 +1,12 @@
 import { isCardId } from "../types/card-identity";
-import type { TutorialAction, TutorialSpeechBubble } from "../types/tutorial";
+import type {
+  TutorialAction,
+  TutorialConfiguration,
+  TutorialSpeechBubble,
+  TutorialTriggerDefinition,
+  TutorialTriggerEvent,
+} from "../types/tutorial";
+import { glossaryEntry } from "./glossary";
 import { parseTutorialInstructionMarkup } from "./tutorial-instruction-markup";
 
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
@@ -389,6 +396,125 @@ export function parseTutorialActions(
   });
 }
 
+const TUTORIAL_TRIGGER_EVENTS: ReadonlySet<TutorialTriggerEvent> = new Set([
+  "card-play",
+  "dreamwell-resolve",
+  "figment-created",
+]);
+
+/** Validate untrusted generated supplemental tutorial trigger data. */
+export function parseTutorialTriggers(
+  value: unknown,
+): readonly TutorialTriggerDefinition[] {
+  if (!Array.isArray(value)) {
+    throw new Error("Tutorial data must contain a triggers array.");
+  }
+  const ids = new Set<string>();
+  return value.map((candidate, index) => {
+    if (
+      candidate === null ||
+      typeof candidate !== "object" ||
+      Array.isArray(candidate)
+    ) {
+      throw new Error(`Tutorial trigger ${String(index + 1)} must be a table.`);
+    }
+    const record = candidate as Record<string, unknown>;
+    if (typeof record.id !== "string" || !ACTION_ID_PATTERN.test(record.id)) {
+      throw new Error(
+        `Tutorial trigger ${String(index + 1)} has an invalid id. Use lowercase letters, numbers, and hyphens.`,
+      );
+    }
+    if (ids.has(record.id)) {
+      throw new Error(`Tutorial trigger id ${JSON.stringify(record.id)} is duplicated.`);
+    }
+    ids.add(record.id);
+    if (
+      !Array.isArray(record.on) ||
+      record.on.length === 0 ||
+      !record.on.every(
+        (event): event is TutorialTriggerEvent =>
+          typeof event === "string" &&
+          TUTORIAL_TRIGGER_EVENTS.has(event as TutorialTriggerEvent),
+      ) ||
+      new Set(record.on).size !== record.on.length
+    ) {
+      throw new Error(
+        `Tutorial trigger ${JSON.stringify(record.id)} must list unique supported events.`,
+      );
+    }
+    const priority = record.priority ?? 100;
+    if (typeof priority !== "number" || !Number.isFinite(priority)) {
+      throw new Error(
+        `Tutorial trigger ${JSON.stringify(record.id)} must have a finite priority.`,
+      );
+    }
+    const duration = record.duration ?? 3;
+    if (
+      typeof duration !== "number" ||
+      !Number.isFinite(duration) ||
+      duration <= 0
+    ) {
+      throw new Error(
+        `Tutorial trigger ${JSON.stringify(record.id)} must have a positive duration.`,
+      );
+    }
+    if (typeof record.text !== "string" || record.text.trim().length === 0) {
+      throw new Error(
+        `Tutorial trigger ${JSON.stringify(record.id)} must have tutorial text.`,
+      );
+    }
+    parseTutorialInstructionMarkup(record.text);
+    if (
+      record.match === null ||
+      typeof record.match !== "object" ||
+      Array.isArray(record.match)
+    ) {
+      throw new Error(
+        `Tutorial trigger ${JSON.stringify(record.id)} must have a match table.`,
+      );
+    }
+    const match = record.match as Record<string, unknown>;
+    let parsedMatch: TutorialTriggerDefinition["match"];
+    if (match.kind === "glossary") {
+      if (typeof match.id !== "string" || glossaryEntry(match.id) === undefined) {
+        throw new Error(
+          `Tutorial trigger ${JSON.stringify(record.id)} must reference an existing glossary id.`,
+        );
+      }
+      parsedMatch = { kind: "glossary", id: match.id };
+    } else if (match.kind === "card-type") {
+      if (match.cardType !== "event") {
+        throw new Error(
+          `Tutorial trigger ${JSON.stringify(record.id)} must use the supported event card type.`,
+        );
+      }
+      parsedMatch = { kind: "card-type", cardType: "event" };
+    } else if (match.kind === "any") {
+      parsedMatch = { kind: "any" };
+    } else {
+      throw new Error(
+        `Tutorial trigger ${JSON.stringify(record.id)} has an unsupported matcher.`,
+      );
+    }
+    if (
+      parsedMatch.kind === "any" &&
+      (record.on.length !== 1 || record.on[0] !== "figment-created")
+    ) {
+      throw new Error(
+        `Tutorial trigger ${JSON.stringify(record.id)} may use the any matcher only for figment creation.`,
+      );
+    }
+    return {
+      id: record.id,
+      on: [...record.on],
+      priority,
+      duration,
+      match: parsedMatch,
+      text: record.text,
+    };
+  });
+}
+
 export type TutorialActionLoadSource = "editor" | "runtime";
 
 function defaultTutorialActionLoadSource(): TutorialActionLoadSource {
@@ -400,6 +526,14 @@ export async function loadTutorialActions(
   fetcher: typeof fetch = fetch,
   source: TutorialActionLoadSource = defaultTutorialActionLoadSource(),
 ): Promise<readonly TutorialAction[]> {
+  return (await loadTutorialConfiguration(fetcher, source)).actions;
+}
+
+/** Load both the scripted sequence and supplemental battle triggers. */
+export async function loadTutorialConfiguration(
+  fetcher: typeof fetch = fetch,
+  source: TutorialActionLoadSource = defaultTutorialActionLoadSource(),
+): Promise<TutorialConfiguration> {
   const path =
     source === "editor" ? "/api/editor/tutorial" : "/tutorial-data.json";
   const response = await fetcher(path);
@@ -412,5 +546,9 @@ export async function loadTutorialActions(
   if (body === null || typeof body !== "object" || Array.isArray(body)) {
     throw new Error("Tutorial data response must be an object.");
   }
-  return parseTutorialActions((body as Record<string, unknown>).actions);
+  const record = body as Record<string, unknown>;
+  return {
+    actions: parseTutorialActions(record.actions),
+    triggers: parseTutorialTriggers(record.triggers ?? []),
+  };
 }

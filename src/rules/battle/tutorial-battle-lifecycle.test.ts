@@ -147,6 +147,146 @@ function ids(battle: NonNullable<ReturnType<typeof begin>["state"]["battle"]>, s
 afterEach(() => registerTutorialBattleInitProvider(null));
 
 describe("tutorial battle lifecycle", () => {
+  it("parks a legal card play before movement and resumes it after Mira advances", () => {
+    const tutorialContent = content();
+    const supportCard = tutorialContent.cardDatabase.get(510);
+    if (supportCard === undefined) throw new Error("missing tutorial support card");
+    tutorialContent.cardDatabase.set(510, {
+      ...supportCard,
+      renderedText: "Support – Supported characters have +2✦.",
+    });
+    tutorialContent.tutorialTriggers = [{
+      id: "support",
+      on: ["card-play"],
+      priority: 100,
+      duration: 3,
+      match: { kind: "glossary", id: "support" },
+      text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
+    }];
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(tutorialContent),
+    );
+    const started = begin().state;
+    const battleCardId = started.battle!.board.sides.player.hand[0];
+    const ready = {
+      ...started,
+      battle: {
+        ...started.battle!,
+        board: {
+          ...started.battle!.board,
+          phase: "day" as const,
+          sides: {
+            ...started.battle!.board.sides,
+            player: {
+              ...started.battle!.board.sides.player,
+              currentEnergy: 5,
+            },
+          },
+        },
+      },
+    };
+    const opened = reduceTutorial(ready, "BATTLE_PLAY_CARD", {
+      battleCardId,
+      targetBattleCardIds: [],
+      aiChoices: [],
+    });
+    expect(opened.outcome).toBe("applied");
+    expect(opened.state.battle?.tutorialPresentation).toMatchObject({
+      kind: "tutorial-guidance",
+      source: { kind: "card", battleCardId, side: "player" },
+      messages: [{ triggerId: "support", duration: 3 }],
+      messageIndex: 0,
+    });
+    expect(opened.state.battle?.board.sides.player.hand).toContain(battleCardId);
+    expect(opened.state.tutorialTriggerIdsSeen).toEqual(["support"]);
+
+    const continued = reduceTutorial(
+      opened.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      {
+        presentationId: opened.state.battle?.tutorialPresentation?.id,
+        messageIndex: 0,
+      },
+    );
+    expect(continued.outcome).toBe("applied");
+    expect(continued.state.battle?.tutorialPresentation).toBeNull();
+    expect(continued.state.battle?.board.sides.player.hand).not.toContain(
+      battleCardId,
+    );
+  });
+
+  it("parks an opponent card before movement with the triggering card as Mira's source", () => {
+    const tutorialContent = content();
+    const enemySupportCard = tutorialContent.cardDatabase.get(514);
+    if (enemySupportCard === undefined) {
+      throw new Error("missing tutorial enemy support card");
+    }
+    tutorialContent.cardDatabase.set(514, {
+      ...enemySupportCard,
+      renderedText: "Support – Supported characters have +2✦.",
+    });
+    tutorialContent.tutorialTriggers = [{
+      id: "support",
+      on: ["card-play"],
+      priority: 100,
+      duration: 3,
+      match: { kind: "glossary", id: "support" },
+      text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
+    }];
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(tutorialContent),
+    );
+    const started = begin().state;
+    const enemyCardId = started.battle!.board.sides.enemy.hand[0];
+    const ready = {
+      ...started,
+      battle: {
+        ...started.battle!,
+        board: {
+          ...started.battle!.board,
+          activeSide: "enemy" as const,
+          phase: "day" as const,
+          sides: {
+            ...started.battle!.board.sides,
+            enemy: {
+              ...started.battle!.board.sides.enemy,
+              currentEnergy: 5,
+            },
+          },
+        },
+      },
+    };
+    const opened = reduceTutorial(
+      ready,
+      "BATTLE_PLAY_CARD",
+      { battleCardId: enemyCardId, targetBattleCardIds: [], aiChoices: [] },
+      "tutorial-ai:client-a",
+    );
+
+    expect(opened.outcome).toBe("applied");
+    expect(opened.state.battle?.tutorialPresentation).toMatchObject({
+      kind: "tutorial-guidance",
+      source: { kind: "card", battleCardId: enemyCardId, side: "enemy" },
+      messages: [{ triggerId: "support" }],
+    });
+    expect(opened.state.battle?.board.sides.enemy.hand).toContain(enemyCardId);
+
+    const continued = reduceTutorial(
+      opened.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      {
+        presentationId: opened.state.battle?.tutorialPresentation?.id,
+        messageIndex: 0,
+      },
+      "tutorial-ai:client-a",
+    );
+    expect(continued.outcome).toBe("applied");
+    expect(continued.state.battle?.tutorialPresentation).toBeNull();
+    expect(continued.state.battle?.board.sides.enemy.hand).not.toContain(
+      enemyCardId,
+    );
+  });
+
   it("accepts only the terminal tutorial cursor once and builds the canonical handoff", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const result = begin();

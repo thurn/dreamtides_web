@@ -22,6 +22,12 @@ import { registerGameProviders } from "./coop/providers/register-game-providers"
 vi.mock("./data/quest-content", () => ({
   loadQuestContent: vi.fn(),
 }));
+vi.mock("./data/tutorial-actions", () => ({
+  loadTutorialConfiguration: vi.fn(() => Promise.resolve({
+    actions: [],
+    triggers: [],
+  })),
+}));
 
 vi.mock("./firebase/app-config", () => ({
   getFirebaseDatabase: vi.fn(),

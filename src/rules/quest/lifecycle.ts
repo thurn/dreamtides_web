@@ -405,7 +405,13 @@ export function resetQuest(state: FoldState): FoldState {
       fresh20PackSize: null,
     },
   });
-  return { ...reset, frontDoor: state.frontDoor };
+  return {
+    ...reset,
+    frontDoor: state.frontDoor,
+    ...(state.tutorialTriggerIdsSeen === undefined
+      ? {}
+      : { tutorialTriggerIdsSeen: state.tutorialTriggerIdsSeen }),
+  };
 }
 
 /**
@@ -431,6 +437,9 @@ export function loadState(
     : {
         ...loaded,
         quest: { ...loaded.quest, runId: `quest:${String(ctx.seq)}` },
+        ...(state.tutorialTriggerIdsSeen === undefined
+          ? {}
+          : { tutorialTriggerIdsSeen: state.tutorialTriggerIdsSeen }),
       };
 }
 

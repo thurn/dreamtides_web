@@ -67,6 +67,9 @@ import type {
 import type { MobileBattleResultAction } from "../../cumulus/screens/BattleResultSurface";
 import { useIsDesktop } from "../../cumulus/screens/use-is-desktop";
 import { createBattlePromptResolutionLogFields } from "./battle-prompt-logging";
+import { BattleTutorialGuidance } from "../../cumulus/screens/BattleTutorialGuidance";
+import { buildBattleTutorialGuidanceView } from "../../screens/cumulus_adapters/battle-tutorial-guidance-view-model";
+import { useBattleTutorialGuidance } from "../use-battle-tutorial-guidance";
 
 // `BattleLogDrawer` renders from the append-only coop fold, so its
 // `history` prop is supplied an empty undo/redo envelope.
@@ -189,6 +192,11 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   const connectedCount = useConnectedCount();
   const clientId = useClientId();
   const confirmedPromptId = useConfirmedPromptId();
+  const guidanceController = useBattleTutorialGuidance();
+  const guidanceView = useMemo(
+    () => buildBattleTutorialGuidanceView(battle),
+    [battle],
+  );
 
   const { state: questState, cardDatabase, questContent } = useQuest();
   const isCumulusDesktopLayout = useIsDesktop();
@@ -357,7 +365,9 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   // still deciding. Normal controls (phase arrows, hand, battlefield) return once
   // no proposal is held and the AI is idle — on the human's own turn, and during
   // the AI's Dusk/Night/Challenge after its plays are done.
-  const canPlayerAct = !(aiDriverEnabled && (proposal !== null || aiThinking));
+  const canPlayerAct =
+    battle.tutorialPresentation == null &&
+    !(aiDriverEnabled && (proposal !== null || aiThinking));
   const failureResult = selectFailureOverlayResult(board.result);
   const pendingDragCardId =
     pendingDrag === null
@@ -1582,6 +1592,12 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         isOpen={isDreamwellHistoryOpen}
         onClose={() => setIsDreamwellHistoryOpen(false)}
       />
+      {guidanceView === null ? null : (
+        <BattleTutorialGuidance
+          view={guidanceView}
+          onContinue={guidanceController.advance}
+        />
+      )}
     </>
   );
 }

@@ -61,6 +61,8 @@ function mount(
           onForeseeConfirm={() => {}}
           onRestart={() => {}}
           onReturnToMainMenu={() => {}}
+          guidance={null}
+          onGuidanceContinue={() => {}}
         />
       </CumulusRoot>,
     );

@@ -32,6 +32,43 @@ export interface TutorialSpeechBubble {
   readonly text: string;
 }
 
+/** Authoritative battle edge that may open a supplemental tutorial. */
+export type TutorialTriggerEvent =
+  | "card-play"
+  | "dreamwell-resolve"
+  | "figment-created";
+
+/** Stable semantic condition authored for a supplemental tutorial. */
+export type TutorialTriggerMatcher =
+  | {
+      readonly kind: "glossary";
+      readonly id: string;
+    }
+  | {
+      readonly kind: "card-type";
+      readonly cardType: "event";
+    }
+  | {
+      readonly kind: "any";
+    };
+
+/** One TOML-authored, first-occurrence battle tutorial. */
+export interface TutorialTriggerDefinition {
+  readonly id: string;
+  readonly on: readonly TutorialTriggerEvent[];
+  readonly priority: number;
+  /** Seconds before the active message advances automatically. */
+  readonly duration: number;
+  readonly match: TutorialTriggerMatcher;
+  readonly text: string;
+}
+
+/** Complete generated tutorial configuration. */
+export interface TutorialConfiguration {
+  readonly actions: readonly TutorialAction[];
+  readonly triggers: readonly TutorialTriggerDefinition[];
+}
+
 /** Presentation event that opens an authored How to Play popup. */
 export type TutorialHowToPlayTrigger =
   | "immediate"

@@ -103,7 +103,7 @@ describe("tutorial data", () => {
       JSON.parse(
         readFileSync(join(rootDir, "public", "tutorial-data.json"), "utf8"),
       ),
-    ).toEqual({ actions: FIXTURE_ACTIONS });
+    ).toEqual({ actions: FIXTURE_ACTIONS, triggers: [] });
     expect(parse(serializeTutorialToml(FIXTURE_ACTIONS)).actions).toEqual(
       FIXTURE_ACTIONS,
     );

@@ -194,6 +194,22 @@ export function routeDomain(
   const payload = event.payload ?? {};
   const quest = state.quest;
   const type: GameEventType = event.type;
+  if (
+    state.battle?.tutorialPresentation != null &&
+    type !== "COMPLETE_TUTORIAL_BATTLE_PRESENTATION" &&
+    (
+      type === "END_BATTLE" ||
+      type === "BATTLE_COMMAND" ||
+      type === "BATTLE_REPOSITION_CHARACTER" ||
+      type === "BATTLE_PLAY_CARD" ||
+      type === "BATTLE_GESTURE" ||
+      type === "BATTLE_AI_DEFEND" ||
+      type === "RESOLVE_PROMPT" ||
+      type === "SET_CARD_NOTE"
+    )
+  ) {
+    return bounce(state);
+  }
   switch (type) {
     // --- standalone front door ---
     case "FRONT_DOOR_ACTION":

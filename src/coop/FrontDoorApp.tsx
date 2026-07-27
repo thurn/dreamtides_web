@@ -3,6 +3,7 @@ import type { Database } from "firebase/database";
 import { FrontDoorRouter } from "../components/FrontDoorRouter";
 import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
 import { loadQuestContent } from "../data/quest-content";
+import { loadTutorialConfiguration } from "../data/tutorial-actions";
 import { getFirebaseDatabase } from "../firebase/app-config";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { FrontDoorProvider } from "../state/front-door-context";
@@ -49,12 +50,19 @@ export default function FrontDoorApp({
   useEffect(() => {
     let cancelled = false;
     setContentState({ status: "loading" });
-    void loadQuestContent(
-      runtimeConfig.poolVariant,
-      runtimeConfig.draftMode,
-      runtimeConfig.fresh20PackSize,
-    ).then((content) => {
+    void Promise.all([
+      loadQuestContent(
+        runtimeConfig.poolVariant,
+        runtimeConfig.draftMode,
+        runtimeConfig.fresh20PackSize,
+      ),
+      loadTutorialConfiguration(),
+    ]).then(([loadedContent, tutorial]) => {
       if (cancelled) return;
+      const content = {
+        ...loadedContent,
+        tutorialTriggers: tutorial.triggers,
+      };
       registerGameProviders(content);
       setContentState({ status: "ready" });
     }).catch((error: unknown) => {

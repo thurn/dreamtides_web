@@ -2,6 +2,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse, stringify } from "smol-toml";
+import { parseGlossarySource } from "./glossary-source.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 export const DEFAULT_TUTORIAL_TOML_PATH = join(
@@ -23,6 +24,16 @@ const SUPPORTED_TUTORIAL_HIGHLIGHT_TAGS = new Set([
 ]);
 const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
 const DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
+const TUTORIAL_TRIGGER_EVENTS = new Set([
+  "card-play",
+  "dreamwell-resolve",
+  "figment-created",
+]);
+const GLOSSARY_IDS = new Set(
+  parseGlossarySource(
+    readFileSync(join(ROOT, "data", "tabula", "glossary.toml"), "utf8"),
+  ).map((entry) => entry.id),
+);
 
 function invalid(message) {
   const error = new Error(message);
@@ -450,20 +461,112 @@ export function validateTutorialActions(value) {
   });
 }
 
-/** Read and validate the authored tutorial sequence. */
-export function readTutorialActions({
+/** Validate and normalize supplemental first-occurrence battle tutorials. */
+export function validateTutorialTriggers(value) {
+  if (!Array.isArray(value)) {
+    throw invalid("Tutorial data must contain a triggers array.");
+  }
+  const ids = new Set();
+  return value.map((candidate, index) => {
+    if (candidate === null || typeof candidate !== "object" || Array.isArray(candidate)) {
+      throw invalid(`Tutorial trigger ${index + 1} must be a table.`);
+    }
+    const { id } = candidate;
+    if (typeof id !== "string" || !ACTION_ID_PATTERN.test(id)) {
+      throw invalid(
+        `Tutorial trigger ${index + 1} has an invalid id. Use lowercase letters, numbers, and hyphens.`,
+      );
+    }
+    if (ids.has(id)) {
+      throw invalid(`Tutorial trigger id ${JSON.stringify(id)} is duplicated.`);
+    }
+    ids.add(id);
+    if (
+      !Array.isArray(candidate.on) ||
+      candidate.on.length === 0 ||
+      candidate.on.some((event) => !TUTORIAL_TRIGGER_EVENTS.has(event)) ||
+      new Set(candidate.on).size !== candidate.on.length
+    ) {
+      throw invalid(
+        `Tutorial trigger ${JSON.stringify(id)} must list unique supported events.`,
+      );
+    }
+    const priority = candidate.priority ?? 100;
+    if (typeof priority !== "number" || !Number.isFinite(priority)) {
+      throw invalid(`Tutorial trigger ${JSON.stringify(id)} must have a finite priority.`);
+    }
+    const duration = candidate.duration ?? 3;
+    if (typeof duration !== "number" || !Number.isFinite(duration) || duration <= 0) {
+      throw invalid(`Tutorial trigger ${JSON.stringify(id)} must have a positive duration.`);
+    }
+    if (typeof candidate.text !== "string" || candidate.text.trim().length === 0) {
+      throw invalid(`Tutorial trigger ${JSON.stringify(id)} must have tutorial text.`);
+    }
+    validateTutorialMarkup(candidate.text, id);
+    const match = candidate.match;
+    if (match === null || typeof match !== "object" || Array.isArray(match)) {
+      throw invalid(`Tutorial trigger ${JSON.stringify(id)} must have a match table.`);
+    }
+    let normalizedMatch;
+    if (match.kind === "glossary") {
+      if (typeof match.id !== "string" || !GLOSSARY_IDS.has(match.id)) {
+        throw invalid(
+          `Tutorial trigger ${JSON.stringify(id)} must reference an existing glossary id.`,
+        );
+      }
+      normalizedMatch = { kind: "glossary", id: match.id };
+    } else if (match.kind === "card-type" && match.cardType === "event") {
+      normalizedMatch = { kind: "card-type", cardType: "event" };
+    } else if (match.kind === "any") {
+      normalizedMatch = { kind: "any" };
+    } else {
+      throw invalid(`Tutorial trigger ${JSON.stringify(id)} has an unsupported matcher.`);
+    }
+    if (
+      normalizedMatch.kind === "any" &&
+      (candidate.on.length !== 1 || candidate.on[0] !== "figment-created")
+    ) {
+      throw invalid(
+        `Tutorial trigger ${JSON.stringify(id)} may use the any matcher only for figment creation.`,
+      );
+    }
+    return {
+      id,
+      on: [...candidate.on],
+      priority,
+      duration,
+      match: normalizedMatch,
+      text: candidate.text,
+    };
+  });
+}
+
+/** Read and validate the complete authored tutorial configuration. */
+export function readTutorialConfiguration({
   rootDir = ROOT,
   tutorialTomlPath = DEFAULT_TUTORIAL_TOML_PATH,
 } = {}) {
   const source = readFileSync(join(rootDir, tutorialTomlPath), "utf8");
   const parsed = parse(source);
-  return validateTutorialActions(parsed.actions);
+  return {
+    actions: validateTutorialActions(parsed.actions),
+    triggers: validateTutorialTriggers(parsed.triggers ?? []),
+  };
+}
+
+/** Read only the ordered action sequence for existing editor consumers. */
+export function readTutorialActions(options = {}) {
+  return readTutorialConfiguration(options).actions;
 }
 
 /** Stable whole-file serialization used by the editor's atomic save. */
-export function serializeTutorialToml(actions) {
+export function serializeTutorialToml(actions, triggers = []) {
   const normalized = validateTutorialActions(actions);
-  return `# Ordered actions played by the standalone tutorial scene.\n\n${stringify({ actions: normalized })}`;
+  const normalizedTriggers = validateTutorialTriggers(triggers);
+  return `# Ordered actions and first-occurrence battle tutorials.\n\n${stringify({
+    actions: normalized,
+    triggers: normalizedTriggers,
+  })}`;
 }
 
 /** Refresh the browser-readable generated artifact from tutorial.toml. */
@@ -472,9 +575,15 @@ export function refreshTutorialDataJson({
   tutorialTomlPath = DEFAULT_TUTORIAL_TOML_PATH,
   tutorialJsonPath = DEFAULT_TUTORIAL_JSON_PATH,
 } = {}) {
-  const actions = readTutorialActions({ rootDir, tutorialTomlPath });
+  const { actions, triggers } = readTutorialConfiguration({
+    rootDir,
+    tutorialTomlPath,
+  });
   const absoluteJsonPath = join(rootDir, tutorialJsonPath);
   mkdirSync(dirname(absoluteJsonPath), { recursive: true });
-  writeFileSync(absoluteJsonPath, `${JSON.stringify({ actions }, null, 2)}\n`);
-  return { actions, path: absoluteJsonPath };
+  writeFileSync(
+    absoluteJsonPath,
+    `${JSON.stringify({ actions, triggers }, null, 2)}\n`,
+  );
+  return { actions, triggers, path: absoluteJsonPath };
 }

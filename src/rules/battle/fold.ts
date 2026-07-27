@@ -22,6 +22,7 @@ import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
 import { selectBattleTriggeredEffectSteps } from "./battle-card-effects-table";
 import type { ActivePrompt } from "./effect-runner-core";
 import type { EffectStep } from "./effect-step";
+import type { BattleCommand } from "../../battle/debug/commands";
 
 // ---------------------------------------------------------------------------
 // Cursor + run model
@@ -164,7 +165,61 @@ export interface BattleFoldState {
 }
 
 /** One tangible tutorial reveal whose identity survives replay and remounts. */
-export type TutorialBattlePresentation = OpponentPlayPresentation | DreamwellRevealPresentation;
+export type TutorialBattlePresentation =
+  | OpponentPlayPresentation
+  | DreamwellRevealPresentation
+  | TutorialGuidancePresentation;
+
+export interface TutorialGuidanceMessage {
+  readonly triggerId: string;
+  readonly text: string;
+  readonly duration: number;
+}
+
+export type TutorialGuidanceSource =
+  | {
+      readonly kind: "card";
+      readonly cardId: string;
+      readonly battleCardId: string;
+      readonly cardKind: "character" | "event";
+      readonly side: BattleSide;
+    }
+  | {
+      readonly kind: "dreamwell";
+      readonly cardId: string;
+      readonly side: BattleSide;
+    }
+  | {
+      readonly kind: "figment";
+      readonly cardId: string;
+      readonly battleCardId: string;
+      readonly side: BattleSide;
+    };
+
+export type TutorialGuidanceContinuation =
+  | {
+      readonly kind: "commands";
+      readonly commands: readonly BattleCommand[];
+    }
+  | {
+      readonly kind: "resume-effects";
+      readonly commands: readonly BattleCommand[];
+    }
+  | {
+      readonly kind: "play-card";
+      readonly payload: Readonly<Record<string, unknown>>;
+      readonly automatic: boolean;
+    };
+
+/** A queued Mira explanation and the exact battle work parked behind it. */
+export interface TutorialGuidancePresentation {
+  readonly id: string;
+  readonly kind: "tutorial-guidance";
+  readonly source: TutorialGuidanceSource;
+  readonly messages: readonly TutorialGuidanceMessage[];
+  readonly messageIndex: number;
+  readonly continuation: TutorialGuidanceContinuation;
+}
 
 export interface OpponentPlayPresentation {
   readonly id: string;

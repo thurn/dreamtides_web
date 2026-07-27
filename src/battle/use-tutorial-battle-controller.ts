@@ -39,6 +39,7 @@ export function useTutorialBattleController(): TutorialBattleControllerPlan {
     const actor = `tutorial-ai:${clientId}`;
     switch (intent.kind) {
       case "complete-presentation": {
+        if (battle.tutorialPresentation?.kind === "tutorial-guidance") return;
         logEvent("tutorial_battle_presentation_dwell_started", {
           battleId: battle.board.battleId,
           presentationId: intent.presentationId,

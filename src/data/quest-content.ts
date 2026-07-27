@@ -69,6 +69,7 @@ import {
 } from "../draft/replay/draft-records";
 import { createInitialReplayDraftState } from "../draft/draft-engine";
 import type { ReplayDraftState } from "../types/draft";
+import type { TutorialTriggerDefinition } from "../types/tutorial";
 
 export interface QuestContent {
   cardDatabase: Map<number, CardData>;
@@ -76,6 +77,8 @@ export interface QuestContent {
   /** The shared Dreamwell deck source, drawn from during battle. */
   dreamwellCards: readonly DreamwellCard[];
   dreamsignTemplates: readonly DreamsignTemplate[];
+  /** Supplemental battle tutorials pinned into each created battle. */
+  tutorialTriggers?: readonly TutorialTriggerDefinition[];
   /**
    * Dreamscape definitions the Atlas generator assigns to nodes, loaded from
    * `public/dreamscapes-data.json`.

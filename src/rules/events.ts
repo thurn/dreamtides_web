@@ -159,7 +159,10 @@ export interface EventPayloads {
   // all-or-nothing so no half-applied gesture can exist in the log.
   BATTLE_GESTURE: { commands: unknown[] };
   BATTLE_AI_DEFEND: { aiSide: string };
-  COMPLETE_TUTORIAL_BATTLE_PRESENTATION: { presentationId: string };
+  COMPLETE_TUTORIAL_BATTLE_PRESENTATION: {
+    presentationId: string;
+    messageIndex?: number;
+  };
   RESOLVE_PROMPT: { promptId: number; resolution: unknown };
   // `note` is the `{ noteId, text, expiry }` shape the battle note editor
   // writes; `expiry` is a `BattleCardNoteExpiry`, kept as `unknown` here so this

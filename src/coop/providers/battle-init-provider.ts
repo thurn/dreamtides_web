@@ -143,6 +143,7 @@ function buildBattleInit(
     fitModel: content.fitModel,
     draftRecords: content.draftRecords,
     deferOpponentLog,
+    tutorialTriggers: content.tutorialTriggers,
   });
 }
 
@@ -256,6 +257,7 @@ function createTutorialBattleInit(
     maxEnergyCap: 10,
     startingSide: "player",
     playerDrawSkipsTurnOne: false,
+    tutorialTriggers: content.tutorialTriggers ?? [],
     questDeckEntries: [],
     playerDeckOrder: makeDeck("player"),
     dreamwellDeck: tutorialDreamwellDeck(content, key),

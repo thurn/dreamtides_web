@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 import {
   DEFAULT_TUTORIAL_JSON_PATH,
   DEFAULT_TUTORIAL_TOML_PATH,
-  readTutorialActions,
+  readTutorialConfiguration,
   serializeTutorialToml,
   validateTutorialActions,
 } from "./tutorial-data.mjs";
@@ -97,8 +97,8 @@ export function createTutorialEditorApiMiddleware({
 
     if (req.method === "GET") {
       try {
-        const actions = readTutorialActions({ rootDir });
-        jsonResponse(res, 200, { actions });
+        const configuration = readTutorialConfiguration({ rootDir });
+        jsonResponse(res, 200, configuration);
       } catch (error) {
         errorResponse(
           res,
@@ -124,13 +124,14 @@ export function createTutorialEditorApiMiddleware({
         });
       }
       const actions = validateTutorialActions(body.actions);
+      const { triggers } = readTutorialConfiguration({ rootDir });
       const tomlPath = join(rootDir, DEFAULT_TUTORIAL_TOML_PATH);
       const jsonPath = join(rootDir, DEFAULT_TUTORIAL_JSON_PATH);
-      atomicWrite(fileSystem, tomlPath, serializeTutorialToml(actions));
+      atomicWrite(fileSystem, tomlPath, serializeTutorialToml(actions, triggers));
       atomicWrite(
         fileSystem,
         jsonPath,
-        `${JSON.stringify({ actions }, null, 2)}\n`,
+        `${JSON.stringify({ actions, triggers }, null, 2)}\n`,
       );
       jsonResponse(res, 200, { actions });
     } catch (error) {

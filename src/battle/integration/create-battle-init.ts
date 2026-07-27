@@ -52,6 +52,7 @@ import type {
   DreamwellCardDefinition,
 } from "../types";
 import type { DreamwellCard } from "../../data/dreamwell-database";
+import type { TutorialTriggerDefinition } from "../../types/tutorial";
 
 /**
  * Minimum quest deck size for a battle. A deck below this is padded with
@@ -177,6 +178,7 @@ export interface CreateBattleInitInput {
    * that speculatively computed an init.
    */
   deferOpponentLog?: (emit: () => void) => void;
+  tutorialTriggers?: readonly TutorialTriggerDefinition[];
 }
 
 function applyBattleRewardModifiers(
@@ -469,6 +471,11 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     maxEnergyCap: 10,
     startingSide,
     playerDrawSkipsTurnOne,
+    ...(input.tutorialTriggers === undefined
+      ? {}
+      : {
+          tutorialTriggers: Object.freeze([...input.tutorialTriggers]),
+        }),
     questDeckEntries,
     playerDeckOrder: Object.freeze(playerDeckOrder),
     dreamwellDeck: Object.freeze(dreamwellDeck),

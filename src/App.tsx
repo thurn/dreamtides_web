@@ -16,6 +16,7 @@ import {
   loadQuestContent,
   poolVariantNeedsTides4,
 } from "./data/quest-content";
+import { loadTutorialConfiguration } from "./data/tutorial-actions";
 import { getFirebaseDatabase } from "./firebase/app-config";
 import { RoomGate } from "./coop/RoomGate";
 import { CoopProvider, useConfirmedHead, useConnectedCount } from "./coop/hooks";
@@ -596,12 +597,19 @@ export default function App({
   }, []);
 
   useEffect(() => {
-    loadQuestContent(
-      runtimeConfig.poolVariant,
-      runtimeConfig.draftMode,
-      runtimeConfig.fresh20PackSize,
-    )
-      .then((content) => {
+    Promise.all([
+      loadQuestContent(
+        runtimeConfig.poolVariant,
+        runtimeConfig.draftMode,
+        runtimeConfig.fresh20PackSize,
+      ),
+      loadTutorialConfiguration(),
+    ])
+      .then(([loadedContent, tutorial]) => {
+        const content = {
+          ...loadedContent,
+          tutorialTriggers: tutorial.triggers,
+        };
         // Register the five real reducer content providers from the loaded
         // content BEFORE any room folds an event. Until this runs, every
         // provider-backed event (START_QUEST, SELECT_DREAM_AVATAR, ADD_CARD,
