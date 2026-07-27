@@ -89,6 +89,23 @@ describe("Cumulus MainMenuScreen", () => {
       container.querySelector<HTMLElement>("[data-main-menu-socials]")?.style
         .flexDirection,
     ).toBe("column");
+    expect(
+      container.querySelector<HTMLElement>("[data-main-menu-actions]")?.style
+        .bottom,
+    ).toBe(
+      "max(var(--safe-area-inset-bottom), var(--space-12))",
+    );
+    expect(
+      Array.from(
+        container.querySelectorAll<HTMLElement>("[data-main-menu-action]"),
+      ).map((action) => action.style.marginTop),
+    ).toEqual([
+      "0px",
+      "calc(-1 * var(--space-6))",
+      "calc(-1 * var(--space-6))",
+      "calc(-1 * var(--space-6))",
+      "calc(-1 * var(--space-6))",
+    ]);
 
     act(() => root.unmount());
   });
@@ -149,6 +166,11 @@ describe("Cumulus MainMenuScreen", () => {
     expect(actions?.style.bottom).toBe("var(--space-11)");
     expect(actions?.style.width).toBe("280px");
     expect(stack?.style.gap).toBe("0px");
+    expect(
+      Array.from(
+        container.querySelectorAll<HTMLElement>("[data-main-menu-action]"),
+      ).map((action) => action.style.marginTop),
+    ).toEqual(["0px", "0px", "0px", "0px", "0px"]);
     expect(
       container.querySelector<HTMLElement>("[data-main-menu-socials]")?.style
         .flexDirection,

@@ -50,6 +50,8 @@ export interface MainMenuScreenProps {
 const TITLE_TOP = token("--space-10");
 const EDGE_INLINE = token("--space-12");
 const EDGE_BOTTOM = token("--space-11");
+const MOBILE_EDGE_BOTTOM = token("--space-12");
+const MOBILE_ACTION_OVERLAP = token("--space-6");
 const BACKGROUND_POSITION = { desktop: "54% 49%", mobile: "58% 51%" } as const;
 const BUTTON_BACKGROUND_WIDTH = 280;
 const SCREEN_FADE_SECONDS = motionTimeSeconds("--dur-slow");
@@ -66,7 +68,7 @@ export function MainMenuScreen({
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
   const mobileEdgeInline = `max(${token(SAFE_AREA_INSET_PROPERTIES.left)}, ${token("--space-6")})`;
-  const mobileEdgeBottom = `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-6")})`;
+  const mobileEdgeBottom = `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${MOBILE_EDGE_BOTTOM})`;
 
   return (
     <motion.main
@@ -140,14 +142,24 @@ export function MainMenuScreen({
             gap: 0,
           }}
         >
-          {view.actions.map((action) => (
-            <MainMenuButton
+          {view.actions.map((action, index) => (
+            <div
               key={action.id}
-              label={action.label}
-              size="hero"
-              testId={`main-menu-action-${action.id}`}
-              onPress={() => onAction(action.id)}
-            />
+              data-main-menu-action
+              style={{
+                marginTop:
+                  isDesktop || index === 0
+                    ? 0
+                    : `calc(-1 * ${MOBILE_ACTION_OVERLAP})`,
+              }}
+            >
+              <MainMenuButton
+                label={action.label}
+                size="hero"
+                testId={`main-menu-action-${action.id}`}
+                onPress={() => onAction(action.id)}
+              />
+            </div>
           ))}
         </div>
       </nav>
