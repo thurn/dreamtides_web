@@ -6,17 +6,22 @@ script_dir=$(CDPATH= cd -- "$(dirname "$0")" && pwd)
 fixture_root=$(mktemp -d "${TMPDIR:-/tmp}/cumulus-licensed-assets-test.XXXXXX")
 trap 'rm -rf "$fixture_root"' EXIT HUP INT TERM
 
-licensed_repo="$fixture_root/licensed"
+licensed_source="$fixture_root/licensed-source"
+licensed_repo="$fixture_root/licensed.git"
+licensed_seed="$fixture_root/licensed-seed"
 public_repo="$fixture_root/public"
 
-git init -q -b main "$licensed_repo"
-git -C "$licensed_repo" config user.name "Cumulus Test"
-git -C "$licensed_repo" config user.email "cumulus-test@example.invalid"
+git init -q -b main "$licensed_source"
+git -C "$licensed_source" config user.name "Cumulus Test"
+git -C "$licensed_source" config user.email "cumulus-test@example.invalid"
+mkdir -p "$licensed_source/Synty/Example"
+printf '%s\n' "fixture-guid" >"$licensed_source/Synty/Example/Asset.prefab.meta"
+git -C "$licensed_source" add --all
+git -C "$licensed_source" commit -q -m "Licensed fixture"
+git clone -q --bare "$licensed_source" "$licensed_repo"
 git -C "$licensed_repo" config quest.localOnly true
-mkdir -p "$licensed_repo/Synty/Example"
-printf '%s\n' "fixture-guid" >"$licensed_repo/Synty/Example/Asset.prefab.meta"
-git -C "$licensed_repo" add --all
-git -C "$licensed_repo" commit -q -m "Licensed fixture"
+git -C "$licensed_repo" remote remove origin 2>/dev/null || true
+git -C "$licensed_repo" worktree add -q "$licensed_seed" main
 
 git init -q -b main "$public_repo"
 git -C "$public_repo" config user.name "Cumulus Test"
@@ -31,6 +36,7 @@ git -C "$licensed_repo" remote add forbidden "$fixture_root/nowhere"
 if (
     cd "$public_repo"
     CUMULUS_LICENSED_REPO="$licensed_repo" \
+    CUMULUS_LICENSED_SEED="$licensed_seed" \
         "$script_dir/provision-licensed-assets.sh"
 ); then
     echo "expected a configured remote to be rejected" >&2
@@ -41,8 +47,10 @@ git -C "$licensed_repo" remote remove forbidden
 (
     cd "$public_repo"
     CUMULUS_LICENSED_REPO="$licensed_repo" \
+    CUMULUS_LICENSED_SEED="$licensed_seed" \
         "$script_dir/provision-licensed-assets.sh"
     CUMULUS_LICENSED_REPO="$licensed_repo" \
+    CUMULUS_LICENSED_SEED="$licensed_seed" \
         "$script_dir/provision-licensed-assets.sh"
 )
 
@@ -52,12 +60,17 @@ test "$(git -C "$target" branch --show-current)" = "wt/licensed-fixture"
 test -z "$(git -C "$target" status --short)"
 test "$(git -C "$target" rev-parse --path-format=absolute --git-common-dir)" = \
     "$(git -C "$licensed_repo" rev-parse --path-format=absolute --git-common-dir)"
+printf '%s\n' "task edit" >"$target/Synty/Example/Asset.prefab.meta"
+test "$(cat "$licensed_seed/Synty/Example/Asset.prefab.meta")" = "fixture-guid"
+git -C "$target" restore Synty/Example/Asset.prefab.meta
 
 (
     cd "$public_repo"
     CUMULUS_LICENSED_REPO="$licensed_repo" \
+    CUMULUS_LICENSED_SEED="$licensed_seed" \
         "$script_dir/release-licensed-assets.sh"
     CUMULUS_LICENSED_REPO="$licensed_repo" \
+    CUMULUS_LICENSED_SEED="$licensed_seed" \
         "$script_dir/release-licensed-assets.sh"
 )
 test ! -e "$target"

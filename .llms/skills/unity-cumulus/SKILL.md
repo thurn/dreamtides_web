@@ -9,9 +9,10 @@ Licensed Unity assets and proprietary scenes live in a separate local-only Git
 repository. Before inspecting or editing `cumulus/Assets/ThirdParty/`, run
 `cumulus/scripts/provision-licensed-assets.sh` from the task's public
 repository worktree. This creates a paired licensed-assets worktree on the same
-branch name. Stop if provisioning fails; never copy from the primary checkout,
-symlink shared assets, add a remote to the licensed repository, or force-add
-ThirdParty content to the public repository.
+branch name using APFS copy-on-write files from the configured clean seed.
+Stop if provisioning fails; never copy from the primary checkout, symlink
+shared assets, add a remote to the licensed repository, or force-add ThirdParty
+content to the public repository.
 
 Treat the two branches as one task. Commit distributable Cumulus code, builders,
 tests, and documentation to the public branch. Commit proprietary scene changes

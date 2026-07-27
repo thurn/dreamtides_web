@@ -53,15 +53,23 @@ cumulus/scripts/provision-licensed-assets.sh
 
 The helper reads the licensed repository path from
 `quest.cumulusLicensedRepo` in the public repository's local Git config.
-`CUMULUS_LICENSED_REPO` is an explicit per-command override. It verifies that
-ThirdParty is ignored, the licensed repository declares
-`quest.localOnly=true`, and the repository has no remotes.
+It reads the canonical clean worktree from `quest.cumulusLicensedSeed`.
+`CUMULUS_LICENSED_REPO` and `CUMULUS_LICENSED_SEED` are explicit per-command
+overrides. It verifies that ThirdParty is ignored, the licensed repository is
+bare, declares `quest.localOnly=true`, has no remotes, and shares a filesystem
+with the seed and destination.
 
 - Never add a remote to the licensed repository.
 - Never copy assets from the primary checkout, another worktree, a package
   cache, cloud storage, or the internet.
-- Never symlink a shared asset directory. A physical Git worktree gives every
-  agent isolated writable files while sharing immutable objects.
+- Never symlink a shared asset directory. The helper uses APFS copy-on-write
+  clones so every agent gets isolated writable files while unchanged file
+  extents and Git objects remain shared.
+- Keep the canonical seed clean on `main`. Never use it for Unity editing; it
+  exists only as the clone source for task worktrees.
+- `du` reports each clone's full logical size even while APFS shares its
+  unchanged extents. Judge aggregate physical growth from filesystem free
+  space or changed-file volume, not by summing worktree `du` output.
 - Keep each public worktree's Unity `Library/`, `Temp/`, `Logs/`, and
   `UserSettings/` isolated. Never share or symlink them.
 - If provisioning fails or the desired licensed branch is already checked out,

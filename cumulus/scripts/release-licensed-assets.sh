@@ -23,21 +23,23 @@ if [ -z "$licensed_repo" ]; then
 fi
 [ -n "$licensed_repo" ] ||
     fail "set CUMULUS_LICENSED_REPO or git config quest.cumulusLicensedRepo"
+[ -d "$licensed_repo" ] ||
+    fail "licensed repository does not exist: $licensed_repo"
+licensed_repo=$(CDPATH= cd -- "$licensed_repo" && pwd -P)
 
-licensed_root=$(git -C "$licensed_repo" rev-parse --show-toplevel 2>/dev/null) ||
+licensed_git_dir=$(git -C "$licensed_repo" rev-parse --path-format=absolute --git-common-dir 2>/dev/null) ||
     fail "configured path is not a Git repository: $licensed_repo"
-licensed_common=$(git -C "$licensed_root" rev-parse --path-format=absolute --git-common-dir)
 target_root=$(git -C "$target" rev-parse --show-toplevel 2>/dev/null || true)
 [ "$target_root" = "$target" ] ||
     fail "target is not a licensed repository worktree: $target"
-[ "$(git -C "$target" rev-parse --path-format=absolute --git-common-dir)" = "$licensed_common" ] ||
+[ "$(git -C "$target" rev-parse --path-format=absolute --git-common-dir)" = "$licensed_git_dir" ] ||
     fail "target belongs to a different Git repository: $target"
 [ -z "$(git -C "$target" status --short)" ] ||
     fail "licensed worktree has uncommitted changes: $target"
 
 branch=$(git -C "$target" branch --show-current)
 commit=$(git -C "$target" rev-parse HEAD)
-git -C "$licensed_root" worktree remove "$target"
+git -C "$licensed_repo" worktree remove "$target"
 
 echo "Released licensed-assets worktree: $target"
 echo "Retained licensed branch: $branch"
