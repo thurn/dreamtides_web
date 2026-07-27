@@ -22,11 +22,11 @@ enemyDraws = [
 dreamwellDraws = [
   "02e8ea92-1218-413c-9f0b-4c865a3921d3",
   "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
-  "03e4e701-4720-4278-8198-9b7e0514d4cf",
+  "51caf26d-83bf-45a9-bc80-010d353277db",
   "5ec17498-9028-4a01-80a0-67c91b03d505",
+  "03e4e701-4720-4278-8198-9b7e0514d4cf",
   "de98477c-e216-4618-bff1-0e24bd982fdb",
   "662b7393-751c-4aa9-8150-5f20b4d176a4",
-  "51caf26d-83bf-45a9-bc80-010d353277db",
   "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
   "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
   "a57f1276-3fb6-4527-b538-953fbace35cf",
@@ -318,7 +318,7 @@ text = "[yellow]Erode[/yellow] means to put cards from a deck into the void. If 
 id = "figment-created"
 on = [ "figment-created" ]
 priority = 100
-duration = 3
+duration = 6
 bubbleWidth = 500
 match = { kind = "any" }
 text = "Figments are token representations of characters. Multiple figments of the same type can be combined to form one character."
