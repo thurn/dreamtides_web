@@ -147,7 +147,7 @@ export function TutorialBattleScreen({
       {guidance === null ? null : (
         <BattleTutorialGuidance
           view={guidance}
-          onContinue={onGuidanceContinue}
+          onDismiss={onGuidanceContinue}
         />
       )}
     </div>

@@ -507,6 +507,10 @@ const BATTLE_PHASE_LIGHT_CSS = `
     visibility: hidden;
   }
 
+  body:has([data-battle-tutorial-guidance]) [data-cumulus-reveal-portal] {
+    display: none;
+  }
+
   @keyframes battle-turn-announcement-disc {
     0% { opacity: 0; transform: scale(${String(TURN_DISC_ARRIVAL_SCALE)}) rotate(-12deg); }
     18% { opacity: 1; transform: scale(${String(TURN_DISC_OVERSHOOT_SCALE)}) rotate(3deg); }

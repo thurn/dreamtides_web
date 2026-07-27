@@ -1595,7 +1595,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       {guidanceView === null ? null : (
         <BattleTutorialGuidance
           view={guidanceView}
-          onContinue={guidanceController.advance}
+          onDismiss={guidanceController.advance}
         />
       )}
     </>

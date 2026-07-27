@@ -27,7 +27,7 @@ describe("BattleTutorialGuidance", () => {
     document.body.innerHTML = "";
   });
 
-  it("keeps the source, Mira copy, symbols, and advance action together", () => {
+  it("floats the source and dismissible Mira dialogue without modal chrome", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -56,7 +56,7 @@ describe("BattleTutorialGuidance", () => {
                 },
               },
             }}
-            onContinue={onContinue}
+            onDismiss={onContinue}
           />
         </CumulusRoot>,
       );
@@ -70,10 +70,19 @@ describe("BattleTutorialGuidance", () => {
     expect(
       container.querySelector('[aria-label="points"]'),
     ).not.toBeNull();
-    const button = container.querySelector<HTMLButtonElement>(
-      '[data-testid="battle-tutorial-continue"]',
+    const guidance = container.querySelector<HTMLElement>(
+      "[data-battle-tutorial-guidance]",
     );
-    act(() => button?.click());
+    expect(guidance?.getAttribute("aria-modal")).toBeNull();
+    expect(guidance?.getAttribute("role")).toBeNull();
+    expect(guidance?.style.background).toBe("");
+    expect(
+      container.querySelector('[data-testid="battle-tutorial-continue"]'),
+    ).toBeNull();
+    const dialogue = container.querySelector<HTMLElement>(
+      '[data-testid="battle-tutorial-dismiss"]',
+    );
+    act(() => dialogue?.click());
     expect(onContinue).toHaveBeenCalledOnce();
 
     act(() => root.unmount());

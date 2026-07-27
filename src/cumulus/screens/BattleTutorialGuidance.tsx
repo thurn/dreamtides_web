@@ -3,9 +3,9 @@ import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
 import type { DreamwellCardModel } from "../components/battle/DreamwellCard";
 import { DreamwellCard } from "../components/battle/DreamwellCard";
-import { GlassButton } from "../components/controls/GlassButton";
 import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
 import { artRef } from "../primitives/art";
+import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
 
@@ -31,20 +31,19 @@ export interface BattleTutorialGuidanceView {
 
 export interface BattleTutorialGuidanceProps {
   readonly view: BattleTutorialGuidanceView;
-  readonly onContinue: () => void;
+  readonly onDismiss: () => void;
 }
 
-/** Modal battle teaching moment with its tangible source kept fully readable. */
+/** Timed battle teaching moment using the tutorial's card-and-dialogue style. */
 export function BattleTutorialGuidance({
   view,
-  onContinue,
+  onDismiss,
 }: BattleTutorialGuidanceProps): ReactElement {
   const desktop = useIsDesktop();
   return (
     <section
       aria-label="Battle tutorial"
-      aria-modal="true"
-      role="dialog"
+      aria-live="polite"
       data-battle-tutorial-guidance=""
       data-presentation-id={view.presentationId}
       data-trigger-id={view.triggerId}
@@ -52,7 +51,7 @@ export function BattleTutorialGuidance({
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: 100,
+        zIndex: token("--layer-reveal"),
         display: "flex",
         flexDirection: desktop ? "row" : "column",
         alignItems: "center",
@@ -63,7 +62,7 @@ export function BattleTutorialGuidance({
           ? `max(${token("--space-8")}, var(--safe-area-inset-top)) max(${token("--space-8")}, var(--safe-area-inset-right)) max(${token("--space-8")}, var(--safe-area-inset-bottom)) max(${token("--space-8")}, var(--safe-area-inset-left))`
           : `max(${token("--space-4")}, var(--safe-area-inset-top)) max(${token("--space-4")}, var(--safe-area-inset-right)) max(${token("--space-4")}, var(--safe-area-inset-bottom)) max(${token("--space-4")}, var(--safe-area-inset-left))`,
         overflow: "hidden",
-        background: token("--scrim-strong"),
+        pointerEvents: "none",
       }}
     >
       <div
@@ -75,8 +74,8 @@ export function BattleTutorialGuidance({
                 ? "min(520px, 45vw)"
                 : "min(92vw, 64dvh, 430px)"
               : desktop
-                ? "min(320px, 34vw)"
-                : "min(50vw, 34dvh, 220px)",
+                ? "min(240px, 45vw)"
+                : "min(45vw, 34dvh)",
           maxHeight:
             desktop
               ? undefined
@@ -108,31 +107,39 @@ export function BattleTutorialGuidance({
           flex: desktop ? "1 1 480px" : "0 1 auto",
           flexDirection: "column",
           alignItems: "center",
-          gap: desktop ? token("--space-6") : token("--space-3"),
         }}
       >
-        <CharacterDialogue
-          dialogue={{
-            portrait: artRef.characterPortrait("mira"),
-            portraitAlt: "Mira",
-            speakerName: "Mira",
-            text: view.text,
+        <Pressable
+          as="div"
+          role="button"
+          tabIndex={0}
+          aria-label="Dismiss Mira tutorial"
+          data-testid="battle-tutorial-dismiss"
+          hoverFeedback="stationary"
+          pressFeedback="stationary"
+          onClick={onDismiss}
+          onKeyDown={(event) => {
+            if (event.key !== "Enter" && event.key !== " ") return;
+            event.preventDefault();
+            onDismiss();
           }}
-          visible
-          size={desktop ? "prominent" : "compact"}
-          testId="battle-tutorial-dialogue"
-        />
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <GlassButton
-            label={
-              view.messageIndex + 1 < view.messageCount ? "Next" : "Continue"
-            }
-            variant="accent"
-            placement="onMedia"
-            testId="battle-tutorial-continue"
-            onPress={onContinue}
+          style={{
+            width: "100%",
+            pointerEvents: "auto",
+          }}
+        >
+          <CharacterDialogue
+            dialogue={{
+              portrait: artRef.characterPortrait("mira"),
+              portraitAlt: "Mira",
+              speakerName: "Mira",
+              text: view.text,
+            }}
+            visible
+            size={desktop ? "prominent" : "compact"}
+            testId="battle-tutorial-dialogue"
           />
-        </div>
+        </Pressable>
       </div>
     </section>
   );
