@@ -222,6 +222,76 @@ describe("GameCard reveal contract", () => {
     act(() => root.unmount());
   });
 
+  it("stacks the glossary-backed figment status before rules-text definitions", async () => {
+    const { container, root } = mount(
+      <GameCard
+        model={model(card({ renderedText: "Discard a bane." }))}
+        figment
+      />,
+    );
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    const description = document.getElementById(
+      source?.getAttribute("aria-describedby") ?? "",
+    )?.textContent ?? "";
+    expect(description).toContain("Figment");
+    expect(description).toContain(
+      glossary.requireGlossaryEntry(glossary.GLOSSARY_IDS.figment).definition,
+    );
+    expect(description.indexOf("Figment")).toBeLessThan(
+      description.indexOf("Bane"),
+    );
+
+    act(() => {
+      source?.dispatchEvent(
+        pointer("pointerover", { pointerType: "mouse", pointerId: 1 }),
+      );
+    });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    remeasure();
+    await vi.waitFor(() =>
+      expect(
+        document.querySelectorAll('[data-cumulus-reveal-card="secondary"]'),
+      ).toHaveLength(2),
+    );
+    const secondaries = [
+      ...document.querySelectorAll<HTMLElement>(
+        '[data-cumulus-reveal-card="secondary"]',
+      ),
+    ];
+    expect(secondaries[0]?.textContent).toContain("Figment");
+    expect(secondaries[1]?.textContent).toContain("Bane");
+
+    act(() => root.unmount());
+  });
+
+  it("shows the Figment definition once when a figment's own rules text mentions figments", () => {
+    const { container, root } = mount(
+      <GameCard
+        model={model(
+          card({ renderedText: "Merge with another figment." }),
+        )}
+        figment
+      />,
+    );
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    const description = document.getElementById(
+      source?.getAttribute("aria-describedby") ?? "",
+    )?.textContent ?? "";
+    const figmentDefinition = glossary.requireGlossaryEntry(
+      glossary.GLOSSARY_IDS.figment,
+    ).definition;
+
+    expect(description.split(figmentDefinition).length - 1).toBe(1);
+
+    act(() => root.unmount());
+  });
+
   it.each([
     {
       label: "fast",

@@ -74,6 +74,7 @@ export const GLOSSARY_IDS = {
   points: "points",
   memory: "memory",
   exhausted: "exhausted",
+  figment: "figment",
   fast: "fast",
   interrupt: "interrupt",
   exhaustCost: "exhaust-cost",

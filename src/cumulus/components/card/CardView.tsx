@@ -76,6 +76,7 @@ function cardTimingInfoCards(
 
 function cardRulesTextDefinitionCards(
   card: Pick<CardData, "isFast" | "isInterrupt" | "renderedText">,
+  extraExcludedIds: readonly string[] = [],
 ) {
   return rulesTextDefinitionCards(
     card.renderedText,
@@ -85,6 +86,7 @@ function cardRulesTextDefinitionCards(
       ...(card.isFast || card.isInterrupt === true
         ? CARD_TIMING_GLOSSARY_IDS
         : []),
+      ...extraExcludedIds,
     ],
   );
 }
@@ -1560,7 +1562,10 @@ export function GameCard({
 }: GameCardProps) {
   const lastPointerType = useRef<string | null>(null);
   const timingCards = cardTimingInfoCards(model.displaySnapshot);
-  const glossaryCards = cardRulesTextDefinitionCards(model.displaySnapshot);
+  const glossaryCards = cardRulesTextDefinitionCards(
+    model.displaySnapshot,
+    figment ? [GLOSSARY_IDS.figment] : [],
+  );
   const statusCards = exhausted
     ? [
         glossaryInfoCard(GLOSSARY_IDS.exhausted, {
@@ -1568,6 +1573,9 @@ export function GameCard({
           leadGlyph: GLYPHS.exhaust,
         }),
       ]
+    : [];
+  const figmentStatusCards = figment
+    ? [glossaryInfoCard(GLOSSARY_IDS.figment)]
     : [];
   const figmentCards = extractMaterializedFigmentPreviews(
     model.displaySnapshot.renderedText,
@@ -1590,7 +1598,12 @@ export function GameCard({
           : { transfiguration: model.transfiguration }),
         ...(selected ? { selected: true, selectionColor } : {}),
       },
-      secondaries: [...statusCards, ...timingCards, ...glossaryCards],
+      secondaries: [
+        ...statusCards,
+        ...figmentStatusCards,
+        ...timingCards,
+        ...glossaryCards,
+      ],
       adjacentCards: figmentCards,
     },
     onActivate: unavailable ? undefined : onActivate,
