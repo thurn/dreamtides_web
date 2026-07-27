@@ -8,6 +8,7 @@ import type {
 } from "../../types/content";
 import type { DreamscapeModifier, QuestState } from "../../types/quest";
 import { LayerName } from "../../types/layer-name";
+import { FRONT_RANK_SLOTS } from "../../battle/types";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
 import {
@@ -677,7 +678,7 @@ describe("LOAD_STATE", () => {
     const snapshot: QuestState = { ...start.quest };
     const cursor = {
       activeSide: "player",
-      nextLane: 1,
+      nextLane: FRONT_RANK_SLOTS,
       handoff: { activeSide: "enemy", phase: "dreamwell", turnNumber: 3 },
     };
     expect(apply(start, "LOAD_STATE", {
@@ -689,7 +690,10 @@ describe("LOAD_STATE", () => {
       start,
       event("LOAD_STATE", {
         snapshot,
-        battle: { ...emptyBattle, challengeCursor: { ...cursor, nextLane: 5 } },
+        battle: {
+          ...emptyBattle,
+          challengeCursor: { ...cursor, nextLane: FRONT_RANK_SLOTS + 1 },
+        },
       }),
       ctx(),
     );

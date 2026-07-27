@@ -10,7 +10,11 @@ import type {
   BattleSide,
   DreamwellCardDefinition,
 } from "../../battle/types";
-import { backRankSlotId, frontRankSlotId } from "../../battle/types";
+import {
+  backRankSlotId,
+  FRONT_RANK_SLOTS,
+  frontRankSlotId,
+} from "../../battle/types";
 import { isoTimestampToMs } from "./timestamp";
 import {
   emptyBackRankSlots,
@@ -1236,6 +1240,28 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     // Recomputing again immediately produces no further edits (idempotent).
     const again = planSupportRecompute(nextBoard, true, () => 0, 0);
     expect(again).toEqual([]);
+  });
+
+  it("resolves the final front-rank lane during Challenge", () => {
+    const challenger = makeInstance("challenge-final-lane", "final-lane-card", "player");
+    challenger.definition.printedSpark = 2;
+    const finalSlot = frontRankSlotId(FRONT_RANK_SLOTS - 1);
+    const board = makeRichBoard({
+      instances: [challenger],
+      playerFront: { [finalSlot]: challenger.battleCardId },
+    });
+
+    const result = reduce(
+      { ...baseState(), battle: battleFrom(board) },
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "SET_PHASE", phase: "challenge" }),
+      ctx(),
+      "player",
+    );
+
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.sides.player.score).toBe(2);
+    expect(result.state.battle?.challengeCursor).toBeNull();
   });
 
   it("resolves Challenge lanes from the settled board after an F0 dissolved trigger", () => {

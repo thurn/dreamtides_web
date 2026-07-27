@@ -24,6 +24,7 @@ import type { EffectRun, ScriptRef } from "../battle/fold";
 import type { ChallengeCursor } from "../battle/fold";
 import type { EventContext } from "../../eventlog/types";
 import { cloneBattleMutableState } from "../../battle/state/create-initial-state";
+import { FRONT_RANK_SLOTS } from "../../battle/types";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (SELECT_DREAM_AVATAR / START_QUEST)
@@ -600,7 +601,12 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
 function isChallengeCursor(value: unknown): value is ChallengeCursor {
   if (!isRecord(value)) return false;
   if (value.activeSide !== "player" && value.activeSide !== "enemy") return false;
-  if (typeof value.nextLane !== "number" || !Number.isInteger(value.nextLane) || value.nextLane < 0 || value.nextLane > 4) {
+  if (
+    typeof value.nextLane !== "number" ||
+    !Number.isInteger(value.nextLane) ||
+    value.nextLane < 0 ||
+    value.nextLane > FRONT_RANK_SLOTS
+  ) {
     return false;
   }
   if (value.handoff === null) return true;
