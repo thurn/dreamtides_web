@@ -32,6 +32,6 @@ describe("starter character #513", () => {
     runeboundChampion.play(model, self, null);
     expect(model.aiEnergy).toBe(1);
     expect(model.aiScore).toBe(4);
-    expect(model.aiBackRank.B0?.battleCardId).toBe("champ");
+    expect(model.aiBackRank.B4?.battleCardId).toBe("champ");
   });
 });

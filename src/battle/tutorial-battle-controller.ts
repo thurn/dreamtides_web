@@ -9,6 +9,7 @@ import { planNextAction } from "./ai/planner";
 import { buildTrace } from "./ai/trace";
 import type { BattleCommand } from "./debug/commands";
 import { planHandoff } from "./engine/handoff";
+import { isBackRankSlotId } from "./types";
 import type { PromptResolution } from "../rules/battle/effect-runner-core";
 import { battleModeOf, type PendingPrompt } from "../rules/battle/fold";
 import type { FoldState } from "../rules/fold-state";
@@ -38,6 +39,11 @@ export type TutorialAutomaticIntent =
       battleCardId: string;
       targetBattleCardIds: readonly string[];
       aiChoices: readonly ReturnType<typeof buildTrace>[];
+      characterDestination?: {
+        side: "enemy";
+        zone: "backRank";
+        slotId: `B${number}`;
+      };
       intentKey: string;
       reason: string;
     }
@@ -201,6 +207,10 @@ export function planTutorialBattleController(
       const targets = action.targets?.targetBattleCardId === null || action.targets?.targetBattleCardId === undefined
         ? []
         : [action.targets.targetBattleCardId];
+      const plannedSlot = action.toSlot;
+      const characterDestination = plannedSlot !== undefined && isBackRankSlotId(plannedSlot)
+        ? { side: "enemy" as const, zone: "backRank" as const, slotId: plannedSlot }
+        : undefined;
       return {
         status: "driver",
       driverClientId: mode.driverClientId, isCurrentClientDriver: true, isDriverPresent: true,
@@ -210,6 +220,7 @@ export function planTutorialBattleController(
           battleCardId: action.self.battleCardId,
           targetBattleCardIds: targets,
           aiChoices: [trace],
+          ...(characterDestination === undefined ? {} : { characterDestination }),
           intentKey: `${key}:enemy-play:${action.self.battleCardId}`,
           reason: "enemy-day-play",
         },

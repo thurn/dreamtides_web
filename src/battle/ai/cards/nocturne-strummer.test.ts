@@ -70,7 +70,7 @@ describe("Nocturne Strummer (#510)", () => {
     nocturneStrummer.play(model, self, null);
     expect(model.aiEnergy).toBe(3);
     expect(model.aiHand).toHaveLength(0);
-    expect(model.aiBackRank.B0?.battleCardId).toBe("strummer");
-    expect(model.aiBackRank.B0?.canChallengeThisTurn).toBe(false);
+    expect(model.aiBackRank.B4?.battleCardId).toBe("strummer");
+    expect(model.aiBackRank.B4?.canChallengeThisTurn).toBe(false);
   });
 });

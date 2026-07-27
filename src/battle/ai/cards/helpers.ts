@@ -1,5 +1,9 @@
-import { backRankSlotId } from "../../types";
-import { firstEmptyModelSlot, type ForwardModel, type AiCard } from "../forward-model";
+import { BACK_RANK_SLOTS, backRankSlotId } from "../../types";
+import {
+  centerPreferredEmptyModelSlot,
+  type ForwardModel,
+  type AiCard,
+} from "../forward-model";
 
 /**
  * Removes `self` (matched by `battleCardId`) from `model.aiHand`. Returns the
@@ -24,7 +28,7 @@ export function characterCanPlay(model: ForwardModel, self: AiCard): boolean {
 
 /**
  * Resolves a character `play`: pays `self.energyCost`, removes `self` from
- * hand, and places it into the first empty back-rank slot with
+ * hand, and places it into the empty back-rank slot nearest the center with
  * `canChallengeThisTurn = false` (a character cannot challenge the turn it is
  * played — see `battle_ai.md` §"The Planner"). The placed card is the instance
  * pulled from hand when present, falling back to `self`. The back rank grows on
@@ -34,7 +38,11 @@ export function playCharacterToBackRank(model: ForwardModel, self: AiCard): void
   model.aiEnergy -= self.energyCost;
   const card = removeFromHand(model, self) ?? self;
   card.canChallengeThisTurn = false;
-  const slot = firstEmptyModelSlot(model.aiBackRank, backRankSlotId);
+  const slot = centerPreferredEmptyModelSlot(
+    model.aiBackRank,
+    backRankSlotId,
+    (BACK_RANK_SLOTS - 1) / 2,
+  );
   model.aiBackRank[slot] = card;
 }
 

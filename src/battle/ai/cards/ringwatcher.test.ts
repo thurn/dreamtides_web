@@ -39,7 +39,7 @@ describe("starter character #511", () => {
     const model = makeModel(self);
     ringwatcher.play(model, self, null);
     expect(model.aiEnergy).toBe(2);
-    expect(model.aiBackRank.B0?.battleCardId).toBe("seer");
-    expect(model.aiBackRank.B0?.canChallengeThisTurn).toBe(false);
+    expect(model.aiBackRank.B4?.battleCardId).toBe("seer");
+    expect(model.aiBackRank.B4?.canChallengeThisTurn).toBe(false);
   });
 });

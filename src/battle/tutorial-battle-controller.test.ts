@@ -290,6 +290,11 @@ describe("tutorial battle controller", () => {
     expect(result.intent).toMatchObject({
       kind: "battle-play-card",
       battleCardId: enemyCardId,
+      characterDestination: {
+        side: "enemy",
+        zone: "backRank",
+        slotId: "B4",
+      },
     });
     expect(result.intent?.intentKey).toContain("enemy-play");
   });

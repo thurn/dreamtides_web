@@ -167,15 +167,15 @@ describe("planNextAction", () => {
       const model = baseModel({
         aiEnergy: 3,
         aiHand: [strummer()],
-        aiFrontRank: { ...emptyFrontRank(), F0: challenger },
+        aiFrontRank: { ...emptyFrontRank(), F4: challenger },
       });
       const action = planNextAction(model, defaultOptions());
       expect(action.kind).toBe("PLAY_CARD");
       expect(action.self?.cardNumber).toBe(510);
-      expect(action.toSlot).toBeDefined();
+      expect(action.toSlot).toBe("B4");
       expect(isBackRankSlotId(action.toSlot ?? "")).toBe(true);
       // The named slot is empty in the source model.
-      expect(model.aiBackRank[action.toSlot as "B0"]).toBeNull();
+      expect(model.aiBackRank[action.toSlot as "B4"]).toBeNull();
     });
 
     it("a returned MOVE_CARD targets an empty, legal deploy slot from a ready reserve card", () => {
@@ -192,10 +192,10 @@ describe("planNextAction", () => {
       });
       const action = planNextAction(model, defaultOptions());
       expect(action.kind).toBe("MOVE_CARD");
-      expect(action.toSlot).toBeDefined();
+      expect(action.toSlot).toBe("F4");
       expect(isFrontRankSlotId(action.toSlot ?? "")).toBe(true);
       // Destination is empty in the source model.
-      expect(model.aiFrontRank[action.toSlot as "F0"]).toBeNull();
+      expect(model.aiFrontRank[action.toSlot as "F4"]).toBeNull();
       expect(action.self?.battleCardId).toBe(ready.battleCardId);
     });
 
@@ -224,7 +224,7 @@ describe("planNextAction", () => {
           cardModel?.play(model, self, action.targets ?? targets);
         } else if (action.kind === "MOVE_CARD") {
           const self = action.self as AiCard;
-          const toSlot = action.toSlot as "F0";
+          const toSlot = action.toSlot as FrontRankSlotId;
           expect(model.aiFrontRank[toSlot]).toBeNull();
           // Apply the move on the live model.
           for (const slot of rankSlotIds(model.aiBackRank)) {
@@ -287,7 +287,7 @@ describe("planNextAction", () => {
   describe("synergy ordering", () => {
     it("plays Nocturne Strummer before Wildflower Colossus when only one is affordable", () => {
       // Energy for exactly ONE of the two: 2 (Strummer) but not 6 (Colossus).
-      // A deployed challenger in F0 makes the Strummer's Support immediately
+      // A deployed challenger in F4 makes the Strummer's Support immediately
       // valuable (it lifts that front body, and would lift a future Colossus),
       // so the character stage should lead with the Strummer even though it is
       // listed AFTER the Colossus in hand.
@@ -300,7 +300,7 @@ describe("planNextAction", () => {
       const model = baseModel({
         aiEnergy: 3,
         aiHand: [colossus(), strummer()],
-        aiFrontRank: { ...emptyFrontRank(), F0: challenger },
+        aiFrontRank: { ...emptyFrontRank(), F4: challenger },
       });
       const action = planNextAction(model, defaultOptions());
       expect(action.kind).toBe("PLAY_CARD");
@@ -316,10 +316,10 @@ describe("planNextAction", () => {
       // play it. The board is otherwise empty and there are no opponent bodies.
       //
       // The winning completed line is:
-      //   1. play Strummer  -> lands in B0 (first empty reserve slot)
-      //   2. reposition Colossus from B2 -> F0 (first empty deploy slot)
-      // In the final board the Colossus stands in F0 with 1 supporting ally
-      // (Strummer in B0, which supports F0), so its effective spark is
+      //   1. play Strummer  -> lands in B4 (center-left reserve slot)
+      //   2. reposition Colossus from B2 -> F4 (center deploy slot)
+      // In the final board the Colossus stands in F4 with 1 supporting ally
+      // (Strummer in B4, which supports F3 and F4), so its effective spark is
       //   6 (base) + 2 (Strummer Support, B0 supports F0)
       //             + 2 (own +2-per-supporter self-static, 1 supporter) = 10,
       // scored unblocked against an empty opponent board. That completed plan

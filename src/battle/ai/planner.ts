@@ -4,12 +4,14 @@ import { CHARACTER_CARD_NUMBERS } from "./cards/card-numbers";
 import { evaluate } from "./evaluate";
 import { scoreAgainstOpponent, type OpponentMode } from "./opponent-model";
 import {
+  centerPreferredEmptyModelSlot,
   cloneForwardModel,
-  firstEmptyModelSlot,
   type AiCard,
   type ForwardModel,
 } from "./forward-model";
 import {
+  BACK_RANK_SLOTS,
+  FRONT_RANK_SLOTS,
   backRankSlotId,
   frontRankSlotId,
   rankSlotIds,
@@ -171,20 +173,28 @@ function applyAction(model: ForwardModel, action: PlanAction): void {
   model.aiBackRank[fromSlot] = null;
 }
 
-/** The first empty front-rank slot, or a fresh slot when every one is occupied
- *  (the front rank grows without bound). */
-function firstEmptyFrontRankSlot(model: ForwardModel): FrontRankSlotId {
-  return firstEmptyModelSlot(model.aiFrontRank, frontRankSlotId);
+/** The empty front-rank slot nearest the center, or a fresh slot when every
+ * materialized position is occupied. */
+function centerPreferredFrontRankSlot(model: ForwardModel): FrontRankSlotId {
+  return centerPreferredEmptyModelSlot(
+    model.aiFrontRank,
+    frontRankSlotId,
+    (FRONT_RANK_SLOTS - 1) / 2,
+  );
 }
 
 /**
- * The back-rank slot a character play lands in: the first empty slot (or a fresh
- * one when the rank is full), matching {@link playCharacterToBackRank}. Recording
- * it on the action lets the driver emit the body's `MOVE_CARD_TO_ZONE` to a
- * concrete back-rank destination.
+ * The back-rank slot a character play lands in: the empty position nearest the
+ * center (or a fresh one when the rank is full), matching
+ * {@link playCharacterToBackRank}. Recording it on the action lets the driver
+ * emit the body's `MOVE_CARD_TO_ZONE` to a concrete back-rank destination.
  */
-function firstEmptyBackRankSlot(model: ForwardModel): BackRankSlotId {
-  return firstEmptyModelSlot(model.aiBackRank, backRankSlotId);
+function centerPreferredBackRankSlot(model: ForwardModel): BackRankSlotId {
+  return centerPreferredEmptyModelSlot(
+    model.aiBackRank,
+    backRankSlotId,
+    (BACK_RANK_SLOTS - 1) / 2,
+  );
 }
 
 /**
@@ -215,21 +225,21 @@ function generateActions(model: ForwardModel): PlanAction[] {
       kind: "PLAY_CARD",
       card,
       targets: cardModel.chooseTargets(model, card),
-      // The character body materializes into the first empty back-rank slot
+      // The character body materializes near the center of the back rank
       // (see `playCharacterToBackRank`). Record it so the driver moves the
       // card out of hand rather than only paying its energy.
-      toSlot: firstEmptyBackRankSlot(model),
+      toSlot: centerPreferredBackRankSlot(model),
       sourceHandIndex: handIndex,
       sourceSlotId: null,
     });
   });
 
   // Stage 2: reposition — push a ready back-rank character into an empty
-  // front-rank slot so it becomes a challenger. Only the FIRST empty front-rank
-  // slot is offered per ready card; front-rank slots are interchangeable for
-  // scoring, so enumerating all of them only multiplies the branching factor
-  // without changing value.
-  const targetFrontRankSlot = firstEmptyFrontRankSlot(model);
+  // front-rank slot so it becomes a challenger. Only the center-preferred empty
+  // front-rank slot is offered per ready card; front-rank slots are
+  // interchangeable for scoring, so enumerating all of them only multiplies the
+  // branching factor without changing value.
+  const targetFrontRankSlot = centerPreferredFrontRankSlot(model);
   for (const backRankSlot of rankSlotIds(model.aiBackRank)) {
     const card = model.aiBackRank[backRankSlot];
     if (card === null || !card.canChallengeThisTurn) {

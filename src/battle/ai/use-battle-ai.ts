@@ -10,8 +10,10 @@ import { planHandoff } from "../engine/handoff";
 import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
 import {
   type BattleAiChoiceTrace,
+  type BattleFieldSlotAddress,
   type BattleMutableState,
   type BattleSide,
+  isBackRankSlotId,
 } from "../types";
 
 /**
@@ -34,7 +36,11 @@ export interface AiProposal {
   /** The commands `approve()` dispatches, in order. */
   commands: BattleCommand[];
   /** Authoritative play payload for Starter-card proposals. */
-  playCard?: { battleCardId: string; targetBattleCardIds: string[] };
+  playCard?: {
+    battleCardId: string;
+    targetBattleCardIds: string[];
+    characterDestination?: BattleFieldSlotAddress;
+  };
 }
 
 /** Planning budget in ms past the snapshot clock. */
@@ -59,7 +65,12 @@ export interface UseBattleAiArgs {
   board: BattleMutableState;
   submitCommand: (command: BattleCommand) => void;
   submitGesture: (commands: readonly BattleCommand[]) => void;
-  submitPlayCard?: (battleCardId: string, targetBattleCardIds: readonly string[], trace: BattleAiChoiceTrace | null) => void;
+  submitPlayCard?: (
+    battleCardId: string,
+    targetBattleCardIds: readonly string[],
+    trace: BattleAiChoiceTrace | null,
+    characterDestination?: BattleFieldSlotAddress,
+  ) => void;
   enabled: boolean;
   /** The side the AI controls (e.g. "enemy"). */
   aiSide: BattleSide;
@@ -252,7 +263,12 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
       return;
     }
     if (proposal.playCard !== undefined && submitPlayCard !== undefined) {
-      submitPlayCard(proposal.playCard.battleCardId, proposal.playCard.targetBattleCardIds, proposal.trace);
+      submitPlayCard(
+        proposal.playCard.battleCardId,
+        proposal.playCard.targetBattleCardIds,
+        proposal.trace,
+        proposal.playCard.characterDestination,
+      );
       return;
     }
     submitCommands(proposal.commands);
@@ -439,6 +455,10 @@ function buildActionProposal(
   const tracedCommands = firstCommand === undefined
     ? commands
     : [{ ...firstCommand, aiChoices: [trace] }, ...restCommands];
+  const plannedSlot = action.toSlot;
+  const characterDestination = plannedSlot !== undefined && isBackRankSlotId(plannedSlot)
+    ? { side: aiSide, zone: "backRank" as const, slotId: plannedSlot }
+    : undefined;
   return {
     kind: "action",
     description: trace.rationale ?? describeFallback(action),
@@ -452,6 +472,7 @@ function buildActionProposal(
           targetBattleCardIds: action.targets?.targetBattleCardId === undefined || action.targets.targetBattleCardId === null
             ? []
             : [action.targets.targetBattleCardId],
+          ...(characterDestination === undefined ? {} : { characterDestination }),
         },
       }),
   };

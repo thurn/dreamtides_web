@@ -153,19 +153,25 @@ function modelRankWindow(rank: Record<string, string | null>, min: number): numb
 }
 
 /**
- * The first empty slot in an AI model rank, growing the rank with a fresh slot
- * when every materialized slot is occupied. The rank therefore never caps the
- * number of bodies the planner can deploy.
+ * The empty slot nearest the battlefield's visual center, growing the rank with
+ * a fresh slot when every materialized slot is occupied. Equidistant slots
+ * prefer the lower index so placement remains deterministic.
  */
-export function firstEmptyModelSlot<K extends string>(
+export function centerPreferredEmptyModelSlot<K extends string>(
   rank: Record<K, AiCard | null>,
   makeId: (index: number) => K,
+  centerIndex: number,
 ): K {
   const slotIds = rankSlotIds(rank);
-  for (const slotId of slotIds) {
-    if (rank[slotId] === null) {
-      return slotId;
-    }
+  const emptySlot = slotIds
+    .filter((slotId) => rank[slotId] === null)
+    .sort(
+      (left, right) =>
+        Math.abs(slotIndex(left) - centerIndex) - Math.abs(slotIndex(right) - centerIndex) ||
+        slotIndex(left) - slotIndex(right),
+    )[0];
+  if (emptySlot !== undefined) {
+    return emptySlot;
   }
   const fresh = makeId(slotIds.length);
   rank[fresh] = null;

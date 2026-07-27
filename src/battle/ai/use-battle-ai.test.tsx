@@ -10,6 +10,7 @@ import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
 import type {
   BattleCardProvenance,
   BattleDeckCardDefinition,
+  BattleFieldSlotAddress,
   BattleMutableState,
   BattleReducerState,
   BattleSide,
@@ -90,6 +91,20 @@ function direwolfDefinition(): BattleDeckCardDefinition {
     imageNumber: 0,
     transfiguration: null,
     isBane: false,
+  };
+}
+
+/** A real Starter support character: Nocturne Strummer (#510), 2●, 1✦. */
+function strummerDefinition(): BattleDeckCardDefinition {
+  return {
+    ...direwolfDefinition(),
+    cardNumber: 510,
+    name: "Nocturne Strummer",
+    subtype: "Musician",
+    energyCost: 2,
+    printedEnergyCost: 2,
+    printedSpark: 1,
+    renderedText: "Support – Supported characters have +2✦.",
   };
 }
 
@@ -263,6 +278,7 @@ function HookHarness({
   initialState,
   submit,
   submitGesture = () => {},
+  submitPlayCard,
   enabled = true,
   aiSide = "enemy",
   basicAutomation = true,
@@ -270,6 +286,12 @@ function HookHarness({
   initialState: BattleReducerState;
   submit: (command: BattleCommand) => void;
   submitGesture?: (commands: readonly BattleCommand[]) => void;
+  submitPlayCard?: (
+    battleCardId: string,
+    targetBattleCardIds: readonly string[],
+    trace: import("../types").BattleAiChoiceTrace | null,
+    characterDestination?: BattleFieldSlotAddress,
+  ) => void;
   enabled?: boolean;
   aiSide?: BattleSide;
   basicAutomation?: boolean;
@@ -291,6 +313,7 @@ function HookHarness({
     board,
     submitCommand: wrappedSubmit,
     submitGesture: wrappedSubmitGesture,
+    submitPlayCard,
     enabled,
     aiSide,
     basicAutomation,
@@ -354,6 +377,51 @@ describe("useBattleAi", () => {
     commands.forEach((command, index) => {
       expect(dispatch).toHaveBeenNthCalledWith(index + 1, command);
     });
+  });
+
+  it("submits a character play with the planner's center-preferred destination", async () => {
+    const state = makeEnemyTurnState((mutable) => {
+      const deployedId = mutable.sides.enemy.backRank.B0;
+      mutable.sides.enemy.backRank.B0 = null;
+      mutable.sides.enemy.frontRank.F4 = deployedId;
+      mutable.sides.enemy.currentEnergy = 2;
+      const supportId = allocateBattleCardInstance(mutable, {
+        definition: strummerDefinition(),
+        owner: "enemy",
+        controller: "enemy",
+        isRevealedToPlayer: false,
+        provenance: questDeckProvenance(),
+      });
+      mutable.sides.enemy.hand = [supportId];
+    });
+    const commandDispatch = vi.fn();
+    const playCardDispatch = vi.fn();
+    mount(
+      <HookHarness
+        initialState={state}
+        submit={commandDispatch}
+        submitPlayCard={playCardDispatch}
+      />,
+    );
+    await settleProposal();
+
+    expect(latest?.proposal?.playCard?.characterDestination).toEqual({
+      side: "enemy",
+      zone: "backRank",
+      slotId: "B4",
+    });
+
+    act(() => {
+      latest?.approve();
+    });
+
+    expect(commandDispatch).not.toHaveBeenCalled();
+    expect(playCardDispatch).toHaveBeenCalledWith(
+      expect.any(String),
+      [],
+      latest?.proposal?.trace,
+      { side: "enemy", zone: "backRank", slotId: "B4" },
+    );
   });
 
   it("attaches the action proposal's trace to the first dispatched command's aiChoices", async () => {

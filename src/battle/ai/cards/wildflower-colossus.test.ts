@@ -31,6 +31,6 @@ describe("starter character #515", () => {
     };
     wildflowerColossus.play(model, self, null);
     expect(model.aiEnergy).toBe(0);
-    expect(model.aiBackRank.B0?.battleCardId).toBe("colossus");
+    expect(model.aiBackRank.B4?.battleCardId).toBe("colossus");
   });
 });

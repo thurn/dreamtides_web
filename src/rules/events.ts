@@ -151,6 +151,7 @@ export interface EventPayloads {
     battleCardId: string;
     targetBattleCardIds: string[];
     aiChoices?: unknown;
+    characterDestination?: unknown;
   };
   // A single player gesture that the automation planner expanded into an ordered
   // list of battle commands (e.g. a play that also spends energy, or a turn

@@ -73,6 +73,7 @@ export function useTutorialBattleController(): TutorialBattleControllerPlan {
           intent.intentKey,
           actor,
           intent.aiChoices,
+          intent.characterDestination,
         ).catch(() => undefined);
         return;
       case "battle-gesture":
@@ -111,6 +112,7 @@ function logTutorialIntent(
         battleCardId: intent.battleCardId,
         targetBattleCardIds: intent.targetBattleCardIds,
         aiChoices: intent.aiChoices,
+        characterDestination: intent.characterDestination ?? null,
       }
       : {}),
     ...(intent.kind === "resolve-prompt"

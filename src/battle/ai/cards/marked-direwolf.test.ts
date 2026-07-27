@@ -44,8 +44,8 @@ describe("Marked Direwolf (#512)", () => {
     markedDirewolf.play(model, self, null);
     expect(model.aiEnergy).toBe(2);
     expect(model.aiHand).toHaveLength(0);
-    expect(model.aiBackRank.B0?.battleCardId).toBe("wolf");
-    expect(model.aiBackRank.B0?.canChallengeThisTurn).toBe(false);
+    expect(model.aiBackRank.B4?.battleCardId).toBe("wolf");
+    expect(model.aiBackRank.B4?.canChallengeThisTurn).toBe(false);
   });
 
   it("canPlay is false without enough energy", () => {

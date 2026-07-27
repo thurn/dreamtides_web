@@ -303,13 +303,25 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     [actions, clientId],
   );
   const submitAiPlayCard = useCallback(
-    (battleCardId: string, targetBattleCardIds: readonly string[], trace: import("../types").BattleAiChoiceTrace | null): void => {
+    (
+      battleCardId: string,
+      targetBattleCardIds: readonly string[],
+      trace: import("../types").BattleAiChoiceTrace | null,
+      characterDestination?: import("../types").BattleFieldSlotAddress,
+    ): void => {
       void actions.battlePlayCard(
         battleCardId,
         targetBattleCardIds,
         `battle-play:${board.battleId}:${String(board.turnNumber)}:${battleCardId}`,
         `ai:${clientId}`,
         trace === null ? undefined : [trace],
+        characterDestination === undefined
+          ? undefined
+          : {
+            side: characterDestination.side,
+            zone: "backRank",
+            slotId: characterDestination.slotId,
+          },
       );
     },
     [actions, board.battleId, board.turnNumber, clientId],

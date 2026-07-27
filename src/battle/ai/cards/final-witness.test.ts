@@ -33,6 +33,6 @@ describe("starter character #514", () => {
     finalWitness.play(model, self, null);
     expect(model.aiEnergy).toBe(2);
     expect(model.aiDeck).toEqual([deckCard]);
-    expect(model.aiBackRank.B0?.battleCardId).toBe("witness");
+    expect(model.aiBackRank.B4?.battleCardId).toBe("witness");
   });
 });
