@@ -193,7 +193,7 @@ reason = "dreamwell-effect"
 wait = 0
 
 [[actions]]
-id = "voltsurge-player-draw-flashpoint"
+id = "voltsurge-player-draw-witness"
 action = "draw-card"
 owner = "player"
 cardId = "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
@@ -209,7 +209,7 @@ reason = "dreamwell-effect"
 wait = 0
 
 [[actions]]
-id = "voltsurge-enemy-draw-witness"
+id = "voltsurge-enemy-draw-flashpoint"
 action = "draw-card"
 owner = "enemy"
 cardId = "4408b942-09a0-4f4e-a403-10c708c6e3c5"
