@@ -6,6 +6,7 @@ import {
   useConfirmedGameState,
   useConnectedClientIds,
 } from "../coop/hooks";
+import type { BattleFoldState } from "../rules/battle/fold";
 import {
   planTutorialBattleController,
   type TutorialAutomaticIntent,
@@ -18,6 +19,32 @@ export const TUTORIAL_BATTLE_PRESENTATION_DWELL_MS = 3_000;
 export interface TutorialBattleControllerRuntime
   extends TutorialBattleControllerPlan {
   readonly onPresentationVisible: (presentationId: string) => void;
+}
+
+/**
+ * Dwells for the paced Challenge beats. Each one holds a board the player is
+ * already looking at rather than introducing a card to read, so they are
+ * shorter than the reveal dwell: long enough for the shared-layout travel to
+ * finish and register, short enough not to stall the turn.
+ */
+const PRESENTATION_DWELL_MS: Readonly<
+  Partial<Record<NonNullable<BattleFoldState["tutorialPresentation"]>["kind"], number>>
+> = {
+  "opponent-block": 2_000,
+  "challenge-resolved": 1_500,
+};
+
+/** The dwell this presentation is held for before automation resumes. */
+export function tutorialBattlePresentationDwellMs(
+  presentation: BattleFoldState["tutorialPresentation"],
+): number {
+  if (presentation === null || presentation === undefined) {
+    return TUTORIAL_BATTLE_PRESENTATION_DWELL_MS;
+  }
+  return (
+    PRESENTATION_DWELL_MS[presentation.kind] ??
+      TUTORIAL_BATTLE_PRESENTATION_DWELL_MS
+  );
 }
 
 /**
@@ -51,11 +78,14 @@ export function useTutorialBattleController(): TutorialBattleControllerRuntime {
       case "complete-presentation": {
         if (battle.tutorialPresentation?.kind === "tutorial-guidance") return;
         if (intent.presentationId !== visiblePresentationId) return;
+        const dwellMs = tutorialBattlePresentationDwellMs(
+          battle.tutorialPresentation,
+        );
         logEvent("tutorial_battle_presentation_dwell_started", {
           battleId: battle.board.battleId,
           presentationId: intent.presentationId,
           presentation: battle.tutorialPresentation,
-          dwellMs: TUTORIAL_BATTLE_PRESENTATION_DWELL_MS,
+          dwellMs,
           reason: intent.reason,
         });
         const timeout = window.setTimeout(() => {
@@ -63,7 +93,7 @@ export function useTutorialBattleController(): TutorialBattleControllerRuntime {
             battleId: battle.board.battleId,
             presentationId: intent.presentationId,
             presentation: battle.tutorialPresentation,
-            dwellMs: TUTORIAL_BATTLE_PRESENTATION_DWELL_MS,
+            dwellMs,
             reason: intent.reason,
           });
           void actions.completeTutorialBattlePresentation(
@@ -71,7 +101,7 @@ export function useTutorialBattleController(): TutorialBattleControllerRuntime {
             intent.intentKey,
             actor,
           ).catch(() => undefined);
-        }, TUTORIAL_BATTLE_PRESENTATION_DWELL_MS);
+        }, dwellMs);
         return () => window.clearTimeout(timeout);
       }
       case "battle-command":

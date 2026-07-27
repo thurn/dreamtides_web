@@ -75,6 +75,10 @@ import {
   emptyDawnFired,
   type BattleFoldState,
   type ChallengeCursor,
+  type ChallengeDissolvedEntry,
+  type ChallengeResolvedPresentation,
+  type OpponentBlockEntry,
+  type OpponentBlockPresentation,
   type TutorialBattleMode,
   type TutorialGuidanceContinuation,
   type TutorialGuidanceSource,
@@ -1379,7 +1383,18 @@ export function completeTutorialBattlePresentation(
     advanced.board,
     planStaticContributionSettlement(advanced.board, true, random, nowMs),
   );
-  return { ...state, battle: { ...advanced, board } };
+  // A paced Challenge beat parks its cursor rather than clearing it, so the
+  // cursor is driven again here: the settled-Challenge beat resumes into its
+  // deferred turn handoff. A presentation folded with no cursor is unaffected.
+  return {
+    ...state,
+    battle: driveChallengeCursor(
+      { ...advanced, board },
+      ctx.seq,
+      random,
+      nowMs,
+    ),
+  };
 }
 
 function coerceBattlePlayCardIntent(raw: Record<string, unknown>): BattlePlayCardIntent | null {
@@ -1667,12 +1682,31 @@ export function battleAiDefend(
     nextBattle = applied.battle;
   }
 
+  const blockers = declaredBlockers(battle.board, nextBattle.board, aiSide);
   const transition =
     nextBattle.lastTransition ?? createEmptyTransitionData();
+  // The defender's move into a contested lane and that lane's resolution are one
+  // fold step apart, so the tutorial parks here. Without the beat the blocker
+  // enters and dissolves inside a single frame and the player only ever sees the
+  // void. Other battle modes keep resolving without a pause.
+  const pacedBlock =
+    battleModeOf(battle).kind === "tutorial" &&
+    blockers.length > 0 &&
+    (nextBattle.tutorialPresentation ?? null) === null;
   return {
     ...state,
     battle: {
       ...nextBattle,
+      ...(pacedBlock
+        ? {
+          tutorialPresentation: {
+            id: `opponent-block:${battle.board.activeSide}:${String(battle.board.turnNumber)}`,
+            kind: "opponent-block",
+            activeSide: battle.board.activeSide,
+            blockers,
+          } satisfies OpponentBlockPresentation,
+        }
+        : {}),
       lastTransition: {
         ...transition,
         logEvents: [
@@ -1681,6 +1715,18 @@ export function battleAiDefend(
             event: "battle_ai_defense_decision",
             fields: { ...defense.decision },
           },
+          ...(blockers.length === 0
+            ? []
+            : [{
+              event: "battle_ai_blockers_declared",
+              fields: {
+                aiSide,
+                activeSide: battle.board.activeSide,
+                turnNumber: battle.board.turnNumber,
+                paced: pacedBlock,
+                blockers: blockers.map((blocker) => ({ ...blocker })),
+              },
+            }]),
         ],
       },
       aiDefenseTurn: {
@@ -1689,6 +1735,32 @@ export function battleAiDefend(
       },
     },
   };
+}
+
+/**
+ * Every defender that entered a front-rank lane already holding an opposing
+ * challenger. A defender moving into an unopposed lane is repositioning, not
+ * blocking, so only contested lanes are reported.
+ */
+function declaredBlockers(
+  before: BattleMutableState,
+  after: BattleMutableState,
+  aiSide: BattleSide,
+): readonly OpponentBlockEntry[] {
+  const activeSide: BattleSide = aiSide === "player" ? "enemy" : "player";
+  const blockers: OpponentBlockEntry[] = [];
+  for (const slotId of rankSlotIds(after.sides[aiSide].frontRank)) {
+    const defenderId = after.sides[aiSide].frontRank[slotId];
+    const challengerId = after.sides[activeSide].frontRank[slotId];
+    if (defenderId === null || challengerId === null) continue;
+    if (before.sides[aiSide].frontRank[slotId] === defenderId) continue;
+    blockers.push({
+      battleCardId: defenderId,
+      slotId,
+      challengerBattleCardId: challengerId,
+    });
+  }
+  return blockers;
 }
 
 /** Applies the command's board mutation, routing the three command ids
@@ -1835,6 +1907,27 @@ function driveChallengeCursor(
 
     const cursor = current.challengeCursor;
     if (cursor.nextLane >= CHALLENGE_LANE_COUNT) {
+      // Every lane has settled and the void moves are committed. The tutorial
+      // holds the board here for one beat so the dissolved characters' travel
+      // into the void plays out before the handoff starts the next turn.
+      const dissolved = cursor.dissolved ?? [];
+      if (
+        battleModeOf(current).kind === "tutorial" &&
+        cursor.settlePresented !== true &&
+        dissolved.length > 0 &&
+        (current.tutorialPresentation ?? null) === null
+      ) {
+        return {
+          ...current,
+          challengeCursor: { ...cursor, settlePresented: true },
+          tutorialPresentation: {
+            id: `challenge-resolved:${cursor.activeSide}:${String(current.board.turnNumber)}`,
+            kind: "challenge-resolved",
+            activeSide: cursor.activeSide,
+            dissolved,
+          } satisfies ChallengeResolvedPresentation,
+        };
+      }
       current = { ...current, challengeCursor: null };
       if (cursor.handoff === null) return current;
       const handoff: BattleCommand = {
@@ -1871,7 +1964,19 @@ function driveChallengeCursor(
     // run drains and static support has been recomputed.
     current = {
       ...current,
-      challengeCursor: { ...cursor, nextLane: cursor.nextLane + 1 },
+      challengeCursor: {
+        ...cursor,
+        nextLane: cursor.nextLane + 1,
+        dissolved: [
+          ...(cursor.dissolved ?? []),
+          ...resolution.dissolved.map(
+            (entry): ChallengeDissolvedEntry => ({
+              battleCardId: entry.battleCardId,
+              side: entry.side,
+            }),
+          ),
+        ],
+      },
     };
     for (const edit of resolution.edits) {
       const next = applyBattleCommandStep(

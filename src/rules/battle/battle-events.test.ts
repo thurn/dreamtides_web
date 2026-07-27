@@ -2018,6 +2018,231 @@ describe("BATTLE_AI_DEFEND", () => {
       turnNumber: 4,
     });
   });
+
+  it("leaves a quest-mode block unpaced", () => {
+    const defended = reduce(
+      contestedDefenseState({ tutorial: false }),
+      "BATTLE_AI_DEFEND",
+      { aiSide: "enemy" },
+    );
+
+    expect(defended.outcome).toBe("applied");
+    expect(
+      defended.state.battle?.board.sides.enemy.frontRank[frontRankSlotId(0)],
+    ).toBe("blocker");
+    expect(defended.state.battle?.tutorialPresentation ?? null).toBeNull();
+  });
+
+  it("paces a tutorial block into a contested lane and names its challenger", () => {
+    const defended = reduce(
+      contestedDefenseState({ tutorial: true }),
+      "BATTLE_AI_DEFEND",
+      { aiSide: "enemy" },
+      ctx(),
+      TUTORIAL_ACTOR,
+    );
+
+    expect(defended.outcome).toBe("applied");
+    // The defender has already moved; the beat holds that committed board so the
+    // move is seen before the lane resolves.
+    expect(
+      defended.state.battle?.board.sides.enemy.frontRank[frontRankSlotId(0)],
+    ).toBe("blocker");
+    expect(defended.state.battle?.tutorialPresentation).toMatchObject({
+      kind: "opponent-block",
+      activeSide: "player",
+      blockers: [
+        {
+          battleCardId: "blocker",
+          slotId: frontRankSlotId(0),
+          challengerBattleCardId: "challenger",
+        },
+      ],
+    });
+    expect(
+      defended.state.battle?.lastTransition?.logEvents.find(
+        (entry) => entry.event === "battle_ai_blockers_declared",
+      )?.fields,
+    ).toMatchObject({ aiSide: "enemy", paced: true, turnNumber: 3 });
+  });
+
+  it("does not pace a tutorial defender that enters an uncontested lane", () => {
+    // No challenger anywhere, so the deterministic defense has nothing to block:
+    // any repositioning it performs is not a block and gets no beat.
+    const blocker = makeInstance("blocker", "blocker-card", "enemy");
+    blocker.definition.printedSpark = 4;
+    const board = makeRichBoard({
+      phase: "dusk",
+      turnNumber: 3,
+      instances: [blocker],
+    });
+    board.sides.enemy.backRank[backRankSlotId(0)] = "blocker";
+
+    const defended = reduce(
+      { ...baseState(), battle: battleFrom(board, { mode: TUTORIAL_MODE }) },
+      "BATTLE_AI_DEFEND",
+      { aiSide: "enemy" },
+      ctx(),
+      TUTORIAL_ACTOR,
+    );
+
+    expect(defended.outcome).toBe("applied");
+    expect(defended.state.battle?.tutorialPresentation ?? null).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Paced Challenge beats — the tutorial holds the board between blocking, lane
+// resolution, and the turn handoff so each movement is visible.
+// ---------------------------------------------------------------------------
+
+const TUTORIAL_ACTOR = "tutorial-ai:player";
+const TUTORIAL_MODE = {
+  kind: "tutorial" as const,
+  tutorialRunId: "tutorial-run",
+  driverClientId: "player",
+  restartNumber: 0,
+  resultConfig: { playerOnlyVictory: true as const, turnLimitDisabled: true as const },
+};
+
+/** Dusk with one player challenger in `F0` and one enemy blocker in reserve. */
+function contestedDefenseState({ tutorial }: { tutorial: boolean }): FoldState {
+  const challenger = makeInstance("challenger", "challenger-card", "player");
+  challenger.definition.printedSpark = 2;
+  const blocker = makeInstance("blocker", "blocker-card", "enemy");
+  blocker.definition.printedSpark = 4;
+  const board = makeRichBoard({
+    phase: "dusk",
+    turnNumber: 3,
+    instances: [challenger, blocker],
+    playerFront: { [frontRankSlotId(0)]: "challenger" },
+  });
+  board.sides.enemy.backRank[backRankSlotId(0)] = "blocker";
+  return {
+    ...baseState(),
+    battle: battleFrom(board, tutorial ? { mode: TUTORIAL_MODE } : {}),
+  };
+}
+
+/** A lane whose challenger loses outright, so exactly one character dissolves. */
+function resolvedChallengeState({ tutorial }: { tutorial: boolean }): FoldState {
+  const challenger = makeInstance("challenger", "challenger-card", "player");
+  challenger.definition.printedSpark = 2;
+  const blocker = makeInstance("blocker", "blocker-card", "enemy");
+  blocker.definition.printedSpark = 4;
+  const board = makeRichBoard({
+    phase: "dusk",
+    turnNumber: 3,
+    instances: [challenger, blocker],
+    playerFront: { [frontRankSlotId(0)]: "challenger" },
+  });
+  board.sides.enemy.frontRank[frontRankSlotId(0)] = "blocker";
+  return {
+    ...baseState(),
+    battle: battleFrom(board, tutorial ? { mode: TUTORIAL_MODE } : {}),
+  };
+}
+
+/** The handoff a completed Challenge is expected to defer until its beat ends. */
+const HANDOFF_TO_ENEMY = debugEdit({
+  kind: "SET_BATTLE_FLOW",
+  activeSide: "enemy",
+  phase: "dawn",
+  turnNumber: 4,
+});
+
+describe("paced Challenge beats", () => {
+  it("holds a tutorial Challenge before its handoff and names the dissolved", () => {
+    const resolved = reduce(
+      resolvedChallengeState({ tutorial: true }),
+      "BATTLE_COMMAND",
+      HANDOFF_TO_ENEMY,
+      ctx(),
+      TUTORIAL_ACTOR,
+    );
+
+    expect(resolved.outcome).toBe("applied");
+    const battle = resolved.state.battle;
+    // The lane is fully committed — the loser is already in the void — but the
+    // turn has not advanced, so the travel into the void has the board to itself.
+    expect(battle?.board.sides.player.void).toContain("challenger");
+    expect(battle?.board.sides.player.frontRank[frontRankSlotId(0)]).toBeNull();
+    expect(battle?.board.activeSide).toBe("player");
+    expect(battle?.board.phase).toBe("challenge");
+    expect(battle?.tutorialPresentation).toMatchObject({
+      kind: "challenge-resolved",
+      activeSide: "player",
+      dissolved: [{ battleCardId: "challenger", side: "player" }],
+    });
+  });
+
+  it("performs the deferred handoff when the settled-Challenge beat completes", () => {
+    const resolved = reduce(
+      resolvedChallengeState({ tutorial: true }),
+      "BATTLE_COMMAND",
+      HANDOFF_TO_ENEMY,
+      ctx(),
+      TUTORIAL_ACTOR,
+    );
+    const presentationId = resolved.state.battle?.tutorialPresentation?.id;
+
+    const resumed = reduce(
+      resolved.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      { presentationId },
+      ctx(),
+      TUTORIAL_ACTOR,
+    );
+
+    expect(resumed.outcome).toBe("applied");
+    expect(resumed.state.battle?.tutorialPresentation ?? null).toBeNull();
+    expect(resumed.state.battle?.challengeCursor ?? null).toBeNull();
+    expect(resumed.state.battle?.board.activeSide).toBe("enemy");
+    expect(resumed.state.battle?.board.turnNumber).toBe(4);
+  });
+
+  it("resolves a quest Challenge straight through to its handoff", () => {
+    const resolved = reduce(
+      resolvedChallengeState({ tutorial: false }),
+      "BATTLE_COMMAND",
+      HANDOFF_TO_ENEMY,
+    );
+
+    expect(resolved.outcome).toBe("applied");
+    expect(resolved.state.battle?.tutorialPresentation ?? null).toBeNull();
+    expect(resolved.state.battle?.challengeCursor ?? null).toBeNull();
+    expect(resolved.state.battle?.board.sides.player.void).toContain("challenger");
+    expect(resolved.state.battle?.board.activeSide).toBe("enemy");
+  });
+
+  it("does not hold a tutorial Challenge in which nothing dissolves", () => {
+    // An unopposed challenger scores and survives, so there is no dissolve
+    // travel to wait for and the turn advances without a beat.
+    const challenger = makeInstance("challenger", "challenger-card", "player");
+    challenger.definition.printedSpark = 2;
+    const board = makeRichBoard({
+      phase: "dusk",
+      turnNumber: 3,
+      instances: [challenger],
+      playerFront: { [frontRankSlotId(0)]: "challenger" },
+    });
+
+    const resolved = reduce(
+      {
+        ...baseState(),
+        battle: battleFrom(board, { mode: TUTORIAL_MODE }),
+      },
+      "BATTLE_COMMAND",
+      HANDOFF_TO_ENEMY,
+      ctx(),
+      TUTORIAL_ACTOR,
+    );
+
+    expect(resolved.outcome).toBe("applied");
+    expect(resolved.state.battle?.tutorialPresentation ?? null).toBeNull();
+    expect(resolved.state.battle?.board.sides.player.void).toEqual([]);
+    expect(resolved.state.battle?.board.activeSide).toBe("enemy");
+  });
 });
 
 // ---------------------------------------------------------------------------

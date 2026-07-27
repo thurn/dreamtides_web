@@ -17,6 +17,7 @@ import type {
   BattlePhase,
   BattleSide,
   BattleTransitionData,
+  FrontRankSlotId,
 } from "../../battle/types";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
 import { selectBattleTriggeredEffectSteps } from "./battle-card-effects-table";
@@ -168,6 +169,8 @@ export interface BattleFoldState {
 export type TutorialBattlePresentation =
   | OpponentPlayPresentation
   | DreamwellRevealPresentation
+  | OpponentBlockPresentation
+  | ChallengeResolvedPresentation
   | TutorialGuidancePresentation;
 
 export interface TutorialGuidanceMessage {
@@ -241,6 +244,44 @@ export interface DreamwellRevealPresentation {
   readonly turnNumber: number;
 }
 
+/**
+ * The two paced beats that make an opposed Challenge readable in the tutorial.
+ *
+ * Blocking and its resolution are a single fold step apart, so without a beat
+ * between them a defender enters its lane and dissolves inside one frame. Each
+ * beat parks tutorial automation exactly as the other presentations do, holding
+ * the board still long enough for the shared-layout travel to play and be read.
+ */
+export interface OpponentBlockPresentation {
+  readonly id: string;
+  readonly kind: "opponent-block";
+  /** The side whose Challenge is being defended against. */
+  readonly activeSide: BattleSide;
+  /** Every defender that moved into a lane already holding a challenger. */
+  readonly blockers: readonly OpponentBlockEntry[];
+}
+
+export interface OpponentBlockEntry {
+  readonly battleCardId: string;
+  readonly slotId: FrontRankSlotId;
+  /** The challenger this defender moved to oppose. */
+  readonly challengerBattleCardId: string;
+}
+
+/** The settled Challenge, held before its turn handoff so voiding reads. */
+export interface ChallengeResolvedPresentation {
+  readonly id: string;
+  readonly kind: "challenge-resolved";
+  readonly activeSide: BattleSide;
+  /** Every character the Challenge dissolved, in resolution order. */
+  readonly dissolved: readonly ChallengeDissolvedEntry[];
+}
+
+export interface ChallengeDissolvedEntry {
+  readonly battleCardId: string;
+  readonly side: BattleSide;
+}
+
 /** A deferred handoff requested before its outgoing Challenge has completed. */
 export interface ChallengeHandoff {
   activeSide: BattleSide;
@@ -255,6 +296,14 @@ export interface ChallengeCursor {
   nextLane: number;
   /** A turn handoff to perform only after every Challenge lane settles. */
   handoff: ChallengeHandoff | null;
+  /** Characters dissolved so far, accumulated lane by lane. */
+  dissolved?: readonly ChallengeDissolvedEntry[];
+  /**
+   * Whether the settled-Challenge beat has already been presented for this
+   * cursor. The cursor outlives its own presentation, so this marker is what
+   * stops the completed beat from parking the handoff a second time.
+   */
+  settlePresented?: boolean;
 }
 
 /** Metadata that distinguishes a normal quest battle from the tutorial handoff. */
