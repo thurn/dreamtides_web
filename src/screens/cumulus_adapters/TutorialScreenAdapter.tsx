@@ -46,8 +46,8 @@ export function TutorialScreenAdapter({ playbackSpeed = 1, directLive = false }:
     beginRequestedKey.current = intentKey;
     void mutations
       .beginTutorial(
-        directLive ? [] : authoredActions,
-        { intentKey },
+        authoredActions,
+        { intentKey, ...(directLive ? { startAtEnd: true } : {}) },
       )
       .catch((error: unknown) => {
         beginRequestedKey.current = null;

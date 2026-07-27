@@ -277,6 +277,7 @@ export function makeActions(append: AppendFn): CoopActions {
           ...(options?.startActionId === undefined
             ? {}
             : { startActionId: options.startActionId }),
+          ...(options?.startAtEnd === true ? { startAtEnd: true } : {}),
         },
         options?.intentKey,
       ),

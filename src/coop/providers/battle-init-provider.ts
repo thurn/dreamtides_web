@@ -31,6 +31,7 @@ import type {
   TutorialBattleInitProvider,
 } from "../../rules/battle/battle-events";
 import type { QuestState } from "../../types/quest";
+import type { TutorialAction } from "../../types/tutorial";
 
 const deferredOpponentLogs = new Map<number, () => void>();
 
@@ -65,8 +66,6 @@ const TUTORIAL_ENEMY_DRAW_CARD_IDS = [
   "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
   "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
 ] as const;
-const TUTORIAL_ENEMY_ERODE_CARD_ID =
-  "4408b942-09a0-4f4e-a403-10c708c6e3c5";
 const TUTORIAL_DREAMWELL_CARD_IDS = [
   TUTORIAL_AUTUMN_GLADE_ID,
   TUTORIAL_VOLTSURGE_ID,
@@ -199,6 +198,7 @@ export function createTutorialBattleInitProvider(
   return {
     beginTutorialBattle: ({
       quest,
+      actions,
       tutorialRunId,
       driverClientId,
       restartNumber,
@@ -207,7 +207,7 @@ export function createTutorialBattleInitProvider(
       const battleId = `tutorial-battle:${tutorialRunId}:${String(restartNumber)}:${driverClientId}`;
       const init = createTutorialBattleInit(content, quest, key, battleId);
       const board = createInitialBattleState(init);
-      arrangeTutorialHandoff(content, board);
+      arrangeTutorialHandoff(content, board, actions);
       return {
         init,
         board,
@@ -276,20 +276,27 @@ function createTutorialBattleInit(
   };
 }
 
-function arrangeTutorialHandoff(content: QuestContent, board: BattleMutableState): void {
+function arrangeTutorialHandoff(
+  content: QuestContent,
+  board: BattleMutableState,
+  actions: readonly TutorialAction[],
+): void {
   const playerStarter = takeCard(board, "player", "e83014d3-9d35-4e80-a1b3-9b25360ad2af");
-  const player510 = takeCard(board, "player", "5a980eff-6ec7-44d8-9977-b98e66bbc2c8");
-  const player516 = takeCard(board, "player", "4408b942-09a0-4f4e-a403-10c708c6e3c5");
-  const player517 = takeCard(board, "player", "2162742c-09d0-4e62-ae49-0f8f79b45adc");
   const enemyStarter = takeCard(board, "enemy", "a28ad36d-fa74-4190-a463-7efd3a6233d0");
-  const enemy514 = takeCard(board, "enemy", "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481");
+  const authoredHands = deriveTutorialHandCardIds(actions);
+  const playerHand = materializeAuthoredHand(
+    content,
+    board,
+    "player",
+    authoredHands.player,
+  );
+  const enemyHand = materializeAuthoredHand(
+    content,
+    board,
+    "enemy",
+    authoredHands.enemy,
+  );
   const twilight = createBaseBattleDeckCardDefinition(cardById(content, TUTORIAL_TWILIGHT_ID));
-  const enemyTwilightHand = allocateBattleCardInstance(board, {
-    definition: { ...twilight, sourceDeckEntryId: "tutorial:enemy:twilight:hand" },
-    owner: "enemy",
-    controller: "enemy",
-    provenance: tutorialProvenance(),
-  });
   const enemyTwilightVoid = allocateBattleCardInstance(board, {
     definition: { ...twilight, sourceDeckEntryId: "tutorial:enemy:twilight:void" },
     owner: "enemy",
@@ -297,14 +304,7 @@ function arrangeTutorialHandoff(content: QuestContent, board: BattleMutableState
     provenance: tutorialProvenance(),
   });
   stackTutorialDeck(board, "player", TUTORIAL_PLAYER_DRAW_CARD_IDS);
-  // The first scheduled enemy Dreamwell effect erodes three cards before the
-  // turn draw, so reserve three copies ahead of the visible draw sequence.
-  stackTutorialDeck(board, "enemy", [
-    TUTORIAL_ENEMY_ERODE_CARD_ID,
-    TUTORIAL_ENEMY_ERODE_CARD_ID,
-    TUTORIAL_ENEMY_ERODE_CARD_ID,
-    ...TUTORIAL_ENEMY_DRAW_CARD_IDS,
-  ]);
+  stackTutorialEnemyDeck(board);
 
   board.activeSide = "player";
   board.turnNumber = 4;
@@ -313,7 +313,7 @@ function arrangeTutorialHandoff(content: QuestContent, board: BattleMutableState
   board.sides.player.currentEnergy = 5;
   board.sides.player.maxEnergy = 5;
   board.sides.player.score = 0;
-  board.sides.player.hand = [player510, player516, player517];
+  board.sides.player.hand = playerHand;
   // The authored tutorial's compact 2/3 formation is centered in the visual
   // 9/10 formation. Preserve those rendered lanes when its cards enter the
   // rules-engine board: F0 is the authored center front cell and B1 is the
@@ -326,7 +326,7 @@ function arrangeTutorialHandoff(content: QuestContent, board: BattleMutableState
   board.sides.enemy.currentEnergy = 0;
   board.sides.enemy.maxEnergy = 5;
   board.sides.enemy.score = 2;
-  board.sides.enemy.hand = [enemy514, enemyTwilightHand];
+  board.sides.enemy.hand = enemyHand;
   board.sides.enemy.void = [enemyTwilightVoid];
   board.sides.enemy.frontRank = { F0: null, F1: null, F2: null, F3: null, F4: null, F5: null, F6: null, F7: null, F8: null };
   board.sides.enemy.backRank = { B0: null, B1: null, B2: null, B3: null, B4: null, B5: enemyStarter, B6: null, B7: null, B8: null, B9: null };
@@ -334,17 +334,80 @@ function arrangeTutorialHandoff(content: QuestContent, board: BattleMutableState
   board.sides.enemy.dreamwellDrawnTurn = 2;
 }
 
+function deriveTutorialHandCardIds(
+  actions: readonly TutorialAction[],
+): Readonly<Record<BattleSide, readonly string[]>> {
+  const hands: Record<BattleSide, string[]> = { player: [], enemy: [] };
+  for (const action of actions) {
+    if (action.action === "draw-opponent-card") {
+      hands.enemy.push(action.cardId);
+      continue;
+    }
+    if (action.action === "draw-card") {
+      hands[action.owner].push(action.cardId);
+      continue;
+    }
+    if (action.action === "reveal-and-play-opponent-card") {
+      const handIndex = hands.enemy.indexOf(action.cardId);
+      if (handIndex < 0) {
+        throw new Error(
+          `Tutorial action ${action.id} plays ${action.cardId} before it is drawn.`,
+        );
+      }
+      hands.enemy.splice(handIndex, 1);
+    }
+  }
+  return hands;
+}
+
+function materializeAuthoredHand(
+  content: QuestContent,
+  board: BattleMutableState,
+  side: BattleSide,
+  cardIds: readonly string[],
+): string[] {
+  return cardIds.map((cardId, index) => {
+    const fromDeck = takeCardIfPresent(board, side, cardId);
+    if (fromDeck !== null) return fromDeck;
+    const definition = createBaseBattleDeckCardDefinition(
+      cardById(content, cardId),
+    );
+    return allocateBattleCardInstance(board, {
+      definition: {
+        ...definition,
+        sourceDeckEntryId:
+          `tutorial:${side}:authored-hand:${String(index)}:${cardId}`,
+      },
+      owner: side,
+      controller: side,
+      provenance: tutorialProvenance(),
+    });
+  });
+}
+
 function takeCard(
   board: BattleMutableState,
   side: BattleSide,
   cardId: string,
 ): string {
+  const card = takeCardIfPresent(board, side, cardId);
+  if (card === null) {
+    throw new Error(`Tutorial handoff card ${cardId} is absent.`);
+  }
+  return card;
+}
+
+function takeCardIfPresent(
+  board: BattleMutableState,
+  side: BattleSide,
+  cardId: string,
+): string | null {
   const deck = board.sides[side].deck;
   const index = deck.findIndex(
     (battleCardId) => board.cardInstances[battleCardId]?.definition.cardId === cardId,
   );
-  if (index < 0) throw new Error(`Tutorial handoff card ${cardId} is absent.`);
-  return deck.splice(index, 1)[0];
+  if (index < 0) return null;
+  return deck.splice(index, 1)[0] ?? null;
 }
 
 function stackTutorialDeck(
@@ -354,6 +417,21 @@ function stackTutorialDeck(
 ): void {
   const orderedCards = cardIds.map((cardId) => takeCard(board, side, cardId));
   board.sides[side].deck = [...orderedCards, ...board.sides[side].deck];
+}
+
+function stackTutorialEnemyDeck(board: BattleMutableState): void {
+  const visibleDraws = TUTORIAL_ENEMY_DRAW_CARD_IDS.map((cardId) =>
+    takeCard(board, "enemy", cardId),
+  );
+  const erodedCards = board.sides.enemy.deck.splice(0, 3);
+  if (erodedCards.length !== 3) {
+    throw new Error("Tutorial enemy deck cannot reserve three eroded cards.");
+  }
+  board.sides.enemy.deck = [
+    ...erodedCards,
+    ...visibleDraws,
+    ...board.sides.enemy.deck,
+  ];
 }
 
 function tutorialDreamwellDeck(

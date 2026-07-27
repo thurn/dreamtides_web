@@ -128,17 +128,27 @@ export function beginTutorial(
   if (startActionId !== undefined && typeof startActionId !== "string") {
     return null;
   }
+  const startAtEnd = payload.startAtEnd;
+  if (
+    (startAtEnd !== undefined && typeof startAtEnd !== "boolean") ||
+    (startAtEnd === true && startActionId !== undefined)
+  ) {
+    return null;
+  }
   const startActionIndex =
-    startActionId === undefined
+    startAtEnd === true
+      ? null
+      : startActionId === undefined
       ? actions.length === 0
         ? null
         : 0
       : actions.findIndex((action) => action.id === startActionId);
   if (startActionIndex === -1) return null;
+  const completedActionCount =
+    startAtEnd === true ? actions.length : (startActionIndex ?? 0);
   const playerCardPlay =
-    startActionIndex !== null &&
     actions
-      .slice(0, startActionIndex)
+      .slice(0, completedActionCount)
       .some((action) => action.action === "end-turn")
       ? {
           cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,

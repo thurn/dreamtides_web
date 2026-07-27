@@ -206,6 +206,8 @@ export type TutorialEditorSaveStatus = "idle" | "saving" | "saved" | "error";
 export interface BeginTutorialOptions {
   /** Stable authored action id that should animate first. */
   readonly startActionId?: string;
+  /** Preserve the authored snapshot while placing its shared cursor at the end. */
+  readonly startAtEnd?: boolean;
   /** Durable deduplication key for automatic tutorial starts. */
   readonly intentKey?: string;
 }

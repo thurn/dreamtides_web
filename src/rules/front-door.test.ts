@@ -344,6 +344,33 @@ describe("front-door reducer", () => {
     expect(staleId.outcome).toBe("bounced");
   });
 
+  it("starts at the terminal cursor without discarding the authored snapshot", () => {
+    const start = genesisFoldState({ ...GENESIS, frontDoorEntry: "tutorial" });
+    const actions = [
+      {
+        id: "end-turn",
+        action: "end-turn",
+        wait: 0,
+      },
+    ];
+
+    const begun = reduceGameEvent(
+      start,
+      event("BEGIN_TUTORIAL", { actions, startAtEnd: true }),
+      context(1),
+    );
+
+    expect(begun.outcome).toBe("applied");
+    expect(begun.state.frontDoor.tutorial).toMatchObject({
+      actions,
+      currentActionIndex: null,
+      playerCardPlay: {
+        cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
+        cardId: TUTORIAL_PLAYER_CARD_ID,
+      },
+    });
+  });
+
   it("reconstructs the player card play when starting after the interactive end-turn beat", () => {
     const start = genesisFoldState({ ...GENESIS, frontDoorEntry: "tutorial" });
     const actions = [

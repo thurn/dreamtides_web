@@ -89,6 +89,7 @@ import {
 } from "../../battle/state/selectors";
 import { hasTemporaryReclaimEligibility } from "./temporary-effects";
 import { planTutorialCharacterReposition } from "./tutorial-reposition";
+import type { TutorialAction } from "../../types/tutorial";
 
 // ---------------------------------------------------------------------------
 // Battle-init provider seam (BEGIN_BATTLE construction)
@@ -139,6 +140,7 @@ export interface BattleInitProvider {
 export interface TutorialBattleInitProvider {
   beginTutorialBattle(input: {
     quest: QuestState;
+    actions: readonly TutorialAction[];
     tutorialRunId: string;
     driverClientId: string;
     restartNumber: number;
@@ -346,6 +348,7 @@ function buildTutorialBattle(
   if (provider === null) return null;
   const battle = provider.beginTutorialBattle({
     quest: state.quest,
+    actions: state.frontDoor.tutorial?.actions ?? [],
     tutorialRunId,
     driverClientId,
     restartNumber,

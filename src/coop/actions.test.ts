@@ -269,6 +269,37 @@ describe("coop actions facade", () => {
     ]);
   });
 
+  it("carries the terminal tutorial cursor while preserving authored actions", () => {
+    const captured: EventDraft[] = [];
+    const actions = makeActions((draft) => {
+      captured.push(draft);
+      return Promise.resolve(captured.length);
+    });
+    const tutorialActions = [
+      {
+        id: "draw",
+        action: "draw-card" as const,
+        owner: "player" as const,
+        cardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+        reason: "dreamwell-effect" as const,
+        wait: 0,
+      },
+    ];
+
+    void actions.beginTutorial(tutorialActions, {
+      startAtEnd: true,
+      intentKey: "tutorial:test:terminal",
+    });
+
+    expect(captured).toEqual([
+      {
+        type: "BEGIN_TUTORIAL",
+        payload: { actions: tutorialActions, startAtEnd: true },
+        intentKey: "tutorial:test:terminal",
+      },
+    ]);
+  });
+
   it("carries an explicit battle seed in the authoritative intent", () => {
     const captured: EventDraft[] = [];
     const actions = makeActions((draft) => {
