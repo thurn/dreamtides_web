@@ -677,6 +677,56 @@ describe("The Voltsurge builder", () => {
   });
 });
 
+describe("Nomad's Verge builder", () => {
+  it("places the figment at the leftmost open back-rank slot outside the tutorial", () => {
+    const state = makeState();
+    const build = getFirstEditsBuild("51caf26d-83bf-45a9-bc80-010d353277db");
+    const edits = build(makeCtx(state, "enemy"));
+    expect(edits).toEqual([expect.objectContaining({
+      kind: "CREATE_FIGMENT",
+      destination: { side: "enemy", zone: "backRank", slotId: "B0" },
+    })]);
+  });
+
+  it("places the figment at the center of the rendered back rank during the tutorial", () => {
+    const state = makeState();
+    const build = getFirstEditsBuild("51caf26d-83bf-45a9-bc80-010d353277db");
+    const edits = build({ ...makeCtx(state, "enemy"), isTutorial: true });
+    expect(edits).toEqual([expect.objectContaining({
+      kind: "CREATE_FIGMENT",
+      destination: { side: "enemy", zone: "backRank", slotId: "B4" },
+    })]);
+  });
+
+  it("during the tutorial, falls back to the nearest open slot when the center is occupied", () => {
+    const state = makeState({
+      enemyBackRank: { ...emptyBackRankSlots(), B4: "existing-enemy" },
+    });
+    const build = getFirstEditsBuild("51caf26d-83bf-45a9-bc80-010d353277db");
+    const edits = build({ ...makeCtx(state, "enemy"), isTutorial: true });
+    expect(edits).toEqual([expect.objectContaining({
+      kind: "CREATE_FIGMENT",
+      destination: { side: "enemy", zone: "backRank", slotId: "B5" },
+    })]);
+  });
+
+  it("during the tutorial, ignores slots beyond BACK_RANK_SLOTS when picking the center", () => {
+    // ensureContiguousRankSlots (apply-debug-edit.ts) can widen the backing
+    // record past the rendered width, e.g. after an off-battlefield-width
+    // debug placement; the center choice must stay pinned to what the
+    // battlefield actually renders (B0..B9), never spilling into B10+.
+    const state = makeState({
+      enemyBackRank: { ...emptyBackRankSlots(), B10: "stray-character" },
+    });
+    const build = getFirstEditsBuild("51caf26d-83bf-45a9-bc80-010d353277db");
+    const edits = build({ ...makeCtx(state, "enemy"), isTutorial: true });
+    expect(edits).toEqual([expect.objectContaining({
+      kind: "CREATE_FIGMENT",
+      destination: { side: "enemy", zone: "backRank", slotId: "B4" },
+    })]);
+  });
+});
+
 describe("Wellspring Commons builder", () => {
   it("produces zero draws for a side already holding 3 cards", () => {
     const state = makeState({

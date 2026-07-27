@@ -1265,6 +1265,11 @@ describe("tutorial battle lifecycle", () => {
           instance.provenance.kind === "generated-figment",
       ),
     ).toBe(true);
+    // The tutorial's guided figment lands centered on the rendered back rank
+    // (not the documented leftmost-open default real games use), so the
+    // teaching moment doesn't read as materializing off in a board corner.
+    expect(continued.state.battle!.board.sides.enemy.backRank.B4).not.toBeNull();
+    expect(continued.state.battle!.board.sides.enemy.backRank.B0).toBeNull();
   });
 
   it("normalizes a mode-less persisted battle to quest mode through LOAD_STATE", () => {

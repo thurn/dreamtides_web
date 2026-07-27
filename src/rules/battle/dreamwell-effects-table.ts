@@ -1,6 +1,8 @@
 import { selectBattleCardInstance } from "../../battle/state/selectors";
 import { selectDefaultCharacterPlaySlot } from "../../battle/state/selectors";
 import type { BattleDebugEdit } from "../../battle/debug/commands";
+import type { BattleFieldSlotAddress, BattleMutableState, BattleSide } from "../../battle/types";
+import { BACK_RANK_SLOTS, rankSlotIds, slotIndex } from "../../battle/types";
 import {
   alliesInPlay,
   charactersInVoid,
@@ -74,6 +76,33 @@ function discoverResolution(chosenIds: string[], ctx: import("./effect-step").St
       order: deterministicShuffle(deckAfterChoice, `${sampled.join("|")}:${chosen}`),
     },
   ];
+}
+
+/**
+ * The open back-rank slot nearest the middle of the rendered play area. The
+ * tutorial's first figment otherwise lands via
+ * {@link selectDefaultCharacterPlaySlot}'s documented leftmost-open rule,
+ * which reads as the far edge of an empty board during this guided moment;
+ * real (non-tutorial) games keep the documented leftmost placement. Centers
+ * on the fixed `BACK_RANK_SLOTS` width (what the battlefield actually
+ * renders) rather than the backing record's current key count, which can
+ * grow past that width (e.g. `ensureContiguousRankSlots` widening it for an
+ * off-battlefield-width debug placement).
+ */
+function selectTutorialCenterBackRankSlot(
+  state: BattleMutableState,
+  side: BattleSide,
+): BattleFieldSlotAddress | null {
+  const { backRank } = state.sides[side];
+  const openSlotIds = rankSlotIds(backRank).filter(
+    (slotId) => backRank[slotId] === null && slotIndex(slotId) < BACK_RANK_SLOTS,
+  );
+  if (openSlotIds.length === 0) return null;
+  const center = (BACK_RANK_SLOTS - 1) / 2;
+  const closest = openSlotIds.reduce((best, slotId) =>
+    Math.abs(slotIndex(slotId) - center) < Math.abs(slotIndex(best) - center) ? slotId : best,
+  );
+  return { side, zone: "backRank", slotId: closest };
 }
 
 /**
@@ -274,7 +303,9 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
       {
         kind: "edits",
         build: (ctx) => {
-          const destination = selectDefaultCharacterPlaySlot(ctx.state, ctx.side);
+          const destination = ctx.isTutorial === true
+            ? selectTutorialCenterBackRankSlot(ctx.state, ctx.side)
+            : selectDefaultCharacterPlaySlot(ctx.state, ctx.side);
           if (destination === null) return [];
           return [
             {

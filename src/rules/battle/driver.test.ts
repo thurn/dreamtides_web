@@ -339,6 +339,43 @@ describe("advanceEffectQueue — edit-only run", () => {
 });
 
 // ---------------------------------------------------------------------------
+// Nomad's Verge — end-to-end proof that the driver's `isTutorial` derivation
+// (not just the builder in isolation) actually centers the tutorial figment.
+// ---------------------------------------------------------------------------
+
+describe("advanceEffectQueue — Nomad's Verge dreamwell placement", () => {
+  const NOMADS_VERGE_REF: ScriptRef = {
+    table: "dreamwell",
+    id: "51caf26d-83bf-45a9-bc80-010d353277db",
+  };
+
+  it("places the figment at the leftmost open back-rank slot in a quest battle", () => {
+    const result = advanceEffectQueue(
+      foldState([newEffectRun(NOMADS_VERGE_REF, "enemy")]),
+      ctx({ seq: 1 }),
+    );
+    expect(result.board.sides.enemy.backRank.B0).not.toBeNull();
+    expect(result.board.sides.enemy.backRank.B4).toBeNull();
+  });
+
+  it("places the figment at the center back-rank slot in a tutorial battle", () => {
+    const tutorialFold: BattleFoldState = {
+      ...foldState([newEffectRun(NOMADS_VERGE_REF, "enemy")]),
+      mode: {
+        kind: "tutorial",
+        tutorialRunId: "test-run",
+        driverClientId: "client-a",
+        restartNumber: 0,
+        resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
+      },
+    };
+    const result = advanceEffectQueue(tutorialFold, ctx({ seq: 1 }));
+    expect(result.board.sides.enemy.backRank.B4).not.toBeNull();
+    expect(result.board.sides.enemy.backRank.B0).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
 // prompt parking — interactive run stops with pendingPrompt set
 // ---------------------------------------------------------------------------
 

@@ -24,6 +24,14 @@ export interface StepContext {
   bindings?: EffectBindings;
   /** Candidate ids materialized when this prompt opened. */
   promptCandidateIds?: readonly string[];
+  /** True while this step runs inside the scripted tutorial battle. Use only
+   *  for a board-position preference in a specific guided teaching moment
+   *  (e.g. centering a demonstrated figment instead of the documented
+   *  leftmost-open default) — back-rank index is rules-bearing (it fixes
+   *  which front-rank lanes a character supports, see battle_rules.md
+   *  "Staggered positions and Support"), so a divergence here still changes
+   *  what the tutorial teaches about board geometry, not just how it looks. */
+  isTutorial?: boolean;
 }
 
 export type EffectPrompt =

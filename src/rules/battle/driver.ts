@@ -289,10 +289,11 @@ function runQueue(
     const run = currentQueue[0];
     const steps = resolveScript(run.scriptRef);
     const remaining = remainingFromCursor(steps, run.cursor);
+    const isTutorial = battleModeOf(battle).kind === "tutorial";
     const stepCtx: StepContext =
       run.sourceInstanceId === undefined
-        ? { side: run.side, state: currentBoard, random, nowMs, bindings: run.bindings }
-        : { side: run.side, state: currentBoard, random, nowMs, sourceId: run.sourceInstanceId, bindings: run.bindings };
+        ? { side: run.side, state: currentBoard, random, nowMs, bindings: run.bindings, isTutorial }
+        : { side: run.side, state: currentBoard, random, nowMs, sourceId: run.sourceInstanceId, bindings: run.bindings, isTutorial };
     const plan = planNextEffectStep(remaining, stepCtx);
 
     if (plan.type === "done") {
@@ -501,10 +502,11 @@ export function resolvePendingPromptWithStream(
     );
   }
 
+  const isTutorial = battleModeOf(battle).kind === "tutorial";
   const stepCtx: StepContext =
     run.sourceInstanceId === undefined
-      ? { side: run.side, state: battle.board, random, nowMs, bindings: run.bindings, promptCandidateIds: pending.options.kind === "pick-cards" ? pending.options.candidateIds : undefined }
-      : { side: run.side, state: battle.board, random, nowMs, sourceId: run.sourceInstanceId, bindings: run.bindings, promptCandidateIds: pending.options.kind === "pick-cards" ? pending.options.candidateIds : undefined };
+      ? { side: run.side, state: battle.board, random, nowMs, bindings: run.bindings, promptCandidateIds: pending.options.kind === "pick-cards" ? pending.options.candidateIds : undefined, isTutorial }
+      : { side: run.side, state: battle.board, random, nowMs, sourceId: run.sourceInstanceId, bindings: run.bindings, promptCandidateIds: pending.options.kind === "pick-cards" ? pending.options.candidateIds : undefined, isTutorial };
 
   const { edits, rest: expectedRest } = applyPromptResolution(
     promptStep.prompt,
