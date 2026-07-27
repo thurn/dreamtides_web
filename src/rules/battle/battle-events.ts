@@ -600,6 +600,40 @@ function openTutorialGuidance(
   };
 }
 
+function openFigmentCreatedGuidance(
+  state: FoldState,
+  before: BattleFoldState,
+  after: BattleFoldState,
+): FoldState | null {
+  if ((after.tutorialPresentation ?? null) !== null) return null;
+  const createdFigment = Object.values(after.board.cardInstances).find(
+    (instance) => {
+      if (instance.provenance.kind !== "generated-figment") return false;
+      const previous = before.board.cardInstances[instance.battleCardId];
+      const previousCount =
+        previous?.provenance.kind === "generated-figment"
+          ? previous.figments?.length ?? 1
+          : 0;
+      return (instance.figments?.length ?? 1) > previousCount;
+    },
+  );
+  if (createdFigment === undefined) return null;
+  return openTutorialGuidance(
+    { ...state, battle: after },
+    after,
+    "figment-created",
+    {
+      kind: "figment",
+      cardId: createdFigment.definition.cardId,
+      battleCardId: createdFigment.battleCardId,
+      side: createdFigment.controller,
+    },
+    createdFigment.definition.renderedText,
+    undefined,
+    { kind: "commands", commands: [] },
+  );
+}
+
 /**
  * Folds ONE battle command through the full per-command trigger pipeline against
  * `battle`, returning the next {@link BattleFoldState} or `null` to bounce when a
@@ -945,34 +979,8 @@ function battleCommandInternal(
   }
   const completed = driveChallengeCursor(current, ctx.seq, random, nowMs);
   if (!suppressGuidance) {
-    const createdFigment = Object.values(completed.board.cardInstances).find(
-      (instance) => {
-        if (instance.provenance.kind !== "generated-figment") return false;
-        const before = battle.board.cardInstances[instance.battleCardId];
-        const beforeCount =
-          before?.provenance.kind === "generated-figment"
-            ? before.figments?.length ?? 1
-            : 0;
-        return (instance.figments?.length ?? 1) > beforeCount;
-      },
-    );
-    if (createdFigment !== undefined) {
-      const guidance = openTutorialGuidance(
-        { ...state, battle: completed },
-        completed,
-        "figment-created",
-        {
-          kind: "figment",
-          cardId: createdFigment.definition.cardId,
-          battleCardId: createdFigment.battleCardId,
-          side: createdFigment.controller,
-        },
-        createdFigment.definition.renderedText,
-        undefined,
-        { kind: "commands", commands: [] },
-      );
-      if (guidance !== null) return guidance;
-    }
+    const guidance = openFigmentCreatedGuidance(state, battle, completed);
+    if (guidance !== null) return guidance;
   }
   return { ...state, battle: completed };
 }
@@ -1330,34 +1338,8 @@ export function completeTutorialBattlePresentation(
         ),
       };
     }
-    const createdFigment = Object.values(current.board.cardInstances).find(
-      (instance) => {
-        if (instance.provenance.kind !== "generated-figment") return false;
-        const before = battle.board.cardInstances[instance.battleCardId];
-        const beforeCount =
-          before?.provenance.kind === "generated-figment"
-            ? before.figments?.length ?? 1
-            : 0;
-        return (instance.figments?.length ?? 1) > beforeCount;
-      },
-    );
-    if (createdFigment !== undefined) {
-      const figmentGuidance = openTutorialGuidance(
-        { ...state, battle: current },
-        current,
-        "figment-created",
-        {
-          kind: "figment",
-          cardId: createdFigment.definition.cardId,
-          battleCardId: createdFigment.battleCardId,
-          side: createdFigment.controller,
-        },
-        createdFigment.definition.renderedText,
-        undefined,
-        { kind: "commands", commands: [] },
-      );
-      if (figmentGuidance !== null) return figmentGuidance;
-    }
+    const figmentGuidance = openFigmentCreatedGuidance(state, battle, current);
+    if (figmentGuidance !== null) return figmentGuidance;
     return {
       ...state,
       battle: driveChallengeCursor(current, ctx.seq, random, nowMs),
@@ -1386,13 +1368,16 @@ export function completeTutorialBattlePresentation(
     advanced.board,
     planStaticContributionSettlement(advanced.board, true, random, nowMs),
   );
+  const settled = { ...advanced, board };
+  const figmentGuidance = openFigmentCreatedGuidance(state, battle, settled);
+  if (figmentGuidance !== null) return figmentGuidance;
   // A paced Challenge beat parks its cursor rather than clearing it, so the
   // cursor is driven again here: the settled-Challenge beat resumes into its
   // deferred turn handoff. A presentation folded with no cursor is unaffected.
   return {
     ...state,
     battle: driveChallengeCursor(
-      { ...advanced, board },
+      settled,
       ctx.seq,
       random,
       nowMs,
@@ -1599,34 +1584,8 @@ export function battleGesture(
     }
     current = next;
   }
-  const createdFigment = Object.values(current.board.cardInstances).find(
-    (instance) => {
-      if (instance.provenance.kind !== "generated-figment") return false;
-      const before = battle.board.cardInstances[instance.battleCardId];
-      const beforeCount =
-        before?.provenance.kind === "generated-figment"
-          ? before.figments?.length ?? 1
-          : 0;
-      return (instance.figments?.length ?? 1) > beforeCount;
-    },
-  );
-  if (createdFigment !== undefined) {
-    const guidance = openTutorialGuidance(
-      { ...state, battle: current },
-      current,
-      "figment-created",
-      {
-        kind: "figment",
-        cardId: createdFigment.definition.cardId,
-        battleCardId: createdFigment.battleCardId,
-        side: createdFigment.controller,
-      },
-      createdFigment.definition.renderedText,
-      undefined,
-      { kind: "commands", commands: [] },
-    );
-    if (guidance !== null) return guidance;
-  }
+  const guidance = openFigmentCreatedGuidance(state, battle, current);
+  if (guidance !== null) return guidance;
   return { ...state, battle: current };
 }
 

@@ -21,6 +21,7 @@ const GENESIS = {
   contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
 };
 const RUN_ID = "event:41";
+const FIGMENT_DREAMWELL_CARD_ID = "51caf26d-83bf-45a9-bc80-010d353277db";
 const CTX: EventContext = {
   seq: 42,
   rng: () => 0.25,
@@ -48,7 +49,7 @@ const DREAMWELL_SEQUENCE = [
   "5ec17498-9028-4a01-80a0-67c91b03d505",
   "de98477c-e216-4618-bff1-0e24bd982fdb",
   "662b7393-751c-4aa9-8150-5f20b4d176a4",
-  "51caf26d-83bf-45a9-bc80-010d353277db",
+  FIGMENT_DREAMWELL_CARD_ID,
   "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
   "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
   "a57f1276-3fb6-4527-b538-953fbace35cf",
@@ -1173,6 +1174,97 @@ describe("tutorial battle lifecycle", () => {
     }, automaticActor);
     expect(victory.outcome).toBe("applied");
     expect(victory.state.battle?.board).toMatchObject({ result: "victory", forcedResult: "victory" });
+  });
+
+  it("opens figment guidance after an opponent Dreamwell reveal creates a figment", () => {
+    const tutorialContent = content();
+    tutorialContent.tutorialTriggers = [{
+      id: "figment-created",
+      on: ["figment-created"],
+      priority: 100,
+      speaker: "mira",
+      duration: 6,
+      verticalOffset: 0,
+      bubbleWidth: 500,
+      match: { kind: "any" },
+      text: "Figments are token representations of characters.",
+    }];
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(tutorialContent),
+    );
+    const started = begin().state;
+    const battle = started.battle!;
+    const figmentDreamwellIndex = battle.init.dreamwellDeck.findIndex(
+      (card) => card.id === FIGMENT_DREAMWELL_CARD_ID,
+    );
+    expect(figmentDreamwellIndex).toBeGreaterThanOrEqual(0);
+    const ready = {
+      ...started,
+      battle: {
+        ...battle,
+        board: {
+          ...battle.board,
+          activeSide: "enemy" as const,
+          turnNumber: 5,
+          phase: "dreamwell" as const,
+          dreamwellDeckIndex: figmentDreamwellIndex,
+          sides: {
+            ...battle.board.sides,
+            enemy: {
+              ...battle.board.sides.enemy,
+              dreamwellDrawnTurn: null,
+            },
+          },
+        },
+      },
+    };
+    const revealed = reduceTutorial(
+      ready,
+      "BATTLE_COMMAND",
+      {
+        command: {
+          id: "DEBUG_EDIT",
+          edit: {
+            kind: "DRAW_DREAMWELL_CARD",
+            side: "enemy",
+            turnNumber: 5,
+          },
+          sourceSurface: "auto-system",
+        },
+      },
+      "tutorial-ai:client-a",
+    );
+    expect(revealed.outcome).toBe("applied");
+    expect(revealed.state.battle?.tutorialPresentation).toMatchObject({
+      kind: "dreamwell-reveal",
+      cardId: FIGMENT_DREAMWELL_CARD_ID,
+      side: "enemy",
+    });
+
+    const continued = reduceTutorial(
+      revealed.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      {
+        presentationId: revealed.state.battle?.tutorialPresentation?.id,
+      },
+      "tutorial-ai:client-a",
+    );
+
+    expect(continued.outcome).toBe("applied");
+    expect(continued.state.battle?.tutorialPresentation).toMatchObject({
+      kind: "tutorial-guidance",
+      source: { kind: "figment", side: "enemy" },
+      messages: [{ triggerId: "figment-created" }],
+      messageIndex: 0,
+    });
+    expect(continued.state.tutorialTriggerIdsSeen).toEqual(["figment-created"]);
+    expect(
+      Object.values(continued.state.battle!.board.cardInstances).some(
+        (instance) =>
+          instance.controller === "enemy" &&
+          instance.provenance.kind === "generated-figment",
+      ),
+    ).toBe(true);
   });
 
   it("normalizes a mode-less persisted battle to quest mode through LOAD_STATE", () => {
