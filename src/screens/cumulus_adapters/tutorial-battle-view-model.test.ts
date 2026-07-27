@@ -40,6 +40,59 @@ const enemy = {
 } as MobileBattleView["enemy"];
 
 describe("buildTutorialBattleView", () => {
+  it.each(["opponent-block", "challenge-resolved"] as const)(
+    "preserves the %s dwell checkpoint so the screen can release automation",
+    (kind) => {
+      vi.mocked(buildMobileBattleView).mockReturnValue({
+        perspective: "player",
+        player,
+        enemy,
+        near: player,
+        far: enemy,
+      } as MobileBattleView);
+
+      const presentationId = `${kind}:enemy:4`;
+      const view = buildTutorialBattleView(
+        {
+          init: {
+            enemyDescriptor: {
+              id: "enemy-avatar-uuid",
+              imageNumber: "0025",
+              name: "Enemy",
+              subtitle: "Opponent",
+              abilityText: "Enemy printed ability.",
+            },
+            dreamwellDeck: [],
+          },
+          board: { result: null },
+          effectQueue: [],
+          dawnFired: { player: null, enemy: null },
+          pendingPrompt: null,
+          tutorialPresentation: {
+            id: presentationId,
+            kind,
+            activeSide: "enemy",
+            ...(kind === "opponent-block"
+              ? { blockers: [] }
+              : { dissolved: [] }),
+          },
+        } as unknown as BattleFoldState,
+        {
+          status: "driver",
+          isCurrentClientDriver: true,
+          requiresHumanDecision: false,
+          driverClientId: "driver-client",
+        } as TutorialBattleControllerPlan,
+        null,
+      );
+
+      expect(view.presentation).toEqual({
+        kind,
+        presentationId,
+      });
+    },
+  );
+
   it("keeps both DreamAvatar abilities unavailable after the scripted handoff", () => {
     vi.mocked(buildMobileBattleView).mockReturnValue({
       perspective: "player",

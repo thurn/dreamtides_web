@@ -43,6 +43,9 @@ export interface TutorialBattleView {
     /** UUID of the Dreamwell source card shown before its effect prompt. */
     readonly cardId: string;
     readonly side: "player" | "enemy";
+  } | {
+    readonly kind: "opponent-block" | "challenge-resolved";
+    readonly presentationId: string;
   } | null;
   readonly victorySummary: string | null;
   readonly terminalRestartAvailable: boolean;

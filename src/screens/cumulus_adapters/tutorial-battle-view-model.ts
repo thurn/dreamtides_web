@@ -110,6 +110,12 @@ export function buildTutorialBattleView(
               side: presentation.side,
             };
             })()
+          : presentation?.kind === "opponent-block" ||
+              presentation?.kind === "challenge-resolved"
+            ? {
+                kind: presentation.kind,
+                presentationId: presentation.id,
+              }
           : null,
     victorySummary:
       battle.board.result === "victory" && controller.status === "terminal" && controller.isCurrentClientDriver && controller.isDriverPresent

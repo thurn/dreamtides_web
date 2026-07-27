@@ -179,6 +179,30 @@ describe("TutorialBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it.each(["opponent-block", "challenge-resolved"] as const)(
+    "reports the visible %s board checkpoint so the deferred turn can resume",
+    (kind) => {
+      const onPresentationVisible = vi.fn();
+      const presentationId = `${kind}:enemy:4`;
+      const { root } = mount(
+        view({
+          presentation: {
+            kind,
+            presentationId,
+          },
+        }),
+        null,
+        vi.fn(),
+        onPresentationVisible,
+      );
+
+      expect(onPresentationVisible).toHaveBeenCalledOnce();
+      expect(onPresentationVisible).toHaveBeenCalledWith(presentationId);
+
+      act(() => root.unmount());
+    },
+  );
+
   it("reports a Dreamwell reveal as visible only after the turn announcement", () => {
     const onPresentationVisible = vi.fn();
     const { root } = mount(

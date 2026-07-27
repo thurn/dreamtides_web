@@ -1,0 +1,4 @@
+The coop reducer version gate does not distinguish uncommitted or generated-content
+drift from the checked-in commit. A room created by a dirty-tree development build
+can therefore pass the version gate in a clean worktree at the same commit and
+then report fold divergences for otherwise valid persisted events.
