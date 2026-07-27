@@ -174,14 +174,14 @@ speaker = "mira"
 duration = 5
 verticalOffset = -30
 bubbleWidth = 500
-text = "Instead, the lowest spark (✦) character is [yellow]dissolved[/yellow] (sent to the void)."
+text = "The lowest spark (✦) character in the challenge is [yellow]dissolved[/yellow] and sent to the void."
 
 [[actions]]
 id = "player-voltsurge"
 action = "draw-dreamwell-card"
 owner = "player"
 cardId = "7171ff89-ebe4-42d0-8863-9b4b0531cad2"
-revealDuration = 5
+revealDuration = 3
 wait = 0
 
 [[actions]]
@@ -196,7 +196,7 @@ wait = 0
 id = "voltsurge-player-draw-flashpoint"
 action = "draw-card"
 owner = "player"
-cardId = "4408b942-09a0-4f4e-a403-10c708c6e3c5"
+cardId = "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
 reason = "dreamwell-effect"
 wait = 0
 
@@ -212,7 +212,7 @@ wait = 0
 id = "voltsurge-enemy-draw-witness"
 action = "draw-card"
 owner = "enemy"
-cardId = "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+cardId = "4408b942-09a0-4f4e-a403-10c708c6e3c5"
 reason = "dreamwell-effect"
 wait = 0
 
@@ -223,3 +223,15 @@ owner = "player"
 cardId = "2162742c-09d0-4e62-ae49-0f8f79b45adc"
 reason = "turn-draw"
 wait = 0
+
+[[actions]]
+id = "event-cards-explained"
+action = "display-speech-bubble"
+wait = 0
+
+[actions.speechBubble]
+speaker = "mira"
+duration = 3
+verticalOffset = 0
+bubbleWidth = 300
+text = "An [purple]event[purple] card has a one-time effect, and then is sent the void."
