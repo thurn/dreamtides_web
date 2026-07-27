@@ -26,20 +26,26 @@ function glossaryTrigger(
 }
 
 describe("matchTutorialGuidance", () => {
-  it("matches glossary variants and orders all unseen explanations", () => {
-    const matches = matchTutorialGuidance(
-      [
-        glossaryTrigger("support", 100),
-        glossaryTrigger("foresee", 50),
-      ],
-      {
-        event: "card-play",
-        renderedText: "Foresee 1. Supports adjacent characters.",
-        cardKind: "character",
-        seenTriggerIds: new Set(),
-      },
-    );
-    expect(matches.map((match) => match.id)).toEqual(["foresee", "support"]);
+  it("selects only the highest-priority unseen explanation per event", () => {
+    const triggers = [
+      glossaryTrigger("support", 100),
+      glossaryTrigger("foresee", 50),
+    ];
+    const input = {
+      event: "card-play" as const,
+      renderedText: "Foresee 1. Supports adjacent characters.",
+      cardKind: "character" as const,
+      seenTriggerIds: new Set<string>(),
+    };
+
+    const firstMatches = matchTutorialGuidance(triggers, input);
+    expect(firstMatches.map((match) => match.id)).toEqual(["foresee"]);
+
+    const secondMatches = matchTutorialGuidance(triggers, {
+      ...input,
+      seenTriggerIds: new Set(firstMatches.map((match) => match.id)),
+    });
+    expect(secondMatches.map((match) => match.id)).toEqual(["support"]);
   });
 
   it("suppresses room-seen ids and keeps source-order ties stable", () => {
@@ -55,30 +61,33 @@ describe("matchTutorialGuidance", () => {
     expect(matches.map((match) => match.id)).toEqual(["foresee"]);
   });
 
-  it("matches the general Event explanation before its keyword", () => {
-    const matches = matchTutorialGuidance(
-      [
-        {
-          id: "event-card",
-          on: ["card-play"],
-          priority: 10,
-          duration: 3,
-          match: { kind: "card-type", cardType: "event" },
-          text: "event",
-        },
-        glossaryTrigger("erode", 100),
-      ],
+  it("defers a matching keyword until after the general Event explanation", () => {
+    const triggers: readonly TutorialTriggerDefinition[] = [
       {
+        id: "event-card",
+        on: ["card-play"],
+        priority: 10,
+        duration: 3,
+        match: { kind: "card-type", cardType: "event" },
+        text: "event",
+      },
+      glossaryTrigger("erode", 100),
+    ];
+    const input = {
         event: "card-play",
         renderedText: "Erode 3.",
         cardKind: "event",
-        seenTriggerIds: new Set(),
-      },
-    );
-    expect(matches.map((match) => match.id)).toEqual([
-      "event-card",
-      "erode",
-    ]);
+        seenTriggerIds: new Set<string>(),
+      } as const;
+
+    const firstMatches = matchTutorialGuidance(triggers, input);
+    expect(firstMatches.map((match) => match.id)).toEqual(["event-card"]);
+
+    const secondMatches = matchTutorialGuidance(triggers, {
+      ...input,
+      seenTriggerIds: new Set(["event-card"]),
+    });
+    expect(secondMatches.map((match) => match.id)).toEqual(["erode"]);
   });
 });
 

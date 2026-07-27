@@ -12,7 +12,10 @@ export interface TutorialGuidanceMatchInput {
   readonly seenTriggerIds: ReadonlySet<string>;
 }
 
-/** Resolve every unseen TOML tutorial matching one authoritative battle edge. */
+/**
+ * Select the highest-priority unseen TOML tutorial matching one authoritative
+ * battle edge. Source order breaks priority ties deterministically.
+ */
 export function matchTutorialGuidance(
   triggers: readonly TutorialTriggerDefinition[],
   input: TutorialGuidanceMatchInput,
@@ -43,5 +46,6 @@ export function matchTutorialGuidance(
         left.trigger.priority - right.trigger.priority ||
         left.sourceIndex - right.sourceIndex,
     )
+    .slice(0, 1)
     .map(({ trigger }) => trigger);
 }
