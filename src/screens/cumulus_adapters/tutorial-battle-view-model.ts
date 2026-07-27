@@ -2,7 +2,28 @@ import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
 import type { TutorialBattleControllerPlan } from "../../battle/tutorial-battle-controller";
 import type { BattleFoldState } from "../../rules/battle/fold";
 import type { TutorialBattleView } from "../../cumulus/screens/TutorialBattleScreen";
+import type { MobileBattleSideView } from "../../cumulus/screens/MobileBattleScreen";
 import { buildMobileBattleView } from "./mobile-battle-view-model";
+
+const INACTIVE_TUTORIAL_AVATAR_ABILITY = "Avatar ability is not active";
+
+function withInactiveTutorialAvatarAbility(
+  side: MobileBattleSideView,
+): MobileBattleSideView {
+  const profile = side.status.dreamAvatarProfile;
+  if (profile === undefined) return side;
+  return {
+    ...side,
+    status: {
+      ...side.status,
+      dreamAvatarProfile: {
+        ...profile,
+        ability: INACTIVE_TUTORIAL_AVATAR_ABILITY,
+        unavailable: true,
+      },
+    },
+  };
+}
 
 export function buildTutorialBattleView(
   battle: BattleFoldState,
@@ -28,6 +49,8 @@ export function buildTutorialBattleView(
       confirmedPromptId,
     },
   );
+  const player = withInactiveTutorialAvatarAbility(mobile.player);
+  const enemy = withInactiveTutorialAvatarAbility(mobile.enemy);
   const prompt = battle.pendingPrompt;
   const presentation = battle.tutorialPresentation ?? null;
   const confirmedHumanPrompt = controller.status === "driver" &&
@@ -38,6 +61,10 @@ export function buildTutorialBattleView(
   return {
     battle: {
       ...mobile,
+      player,
+      enemy,
+      near: mobile.perspective === "player" ? player : enemy,
+      far: mobile.perspective === "player" ? enemy : player,
       result: null,
     },
     ownership: controller.status === "not-tutorial" ? "observer" : controller.status,
