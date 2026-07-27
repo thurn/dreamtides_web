@@ -51,7 +51,10 @@ vi.mock("../debug/OffersDebugApp", () => ({
 
 vi.mock("../coop/FrontDoorApp", () => {
   return {
-    default: function MockFrontDoorApp() {
+    default: function MockFrontDoorApp(_props: {
+      entry?: string;
+      directTutorialBattle?: boolean;
+    }) {
       return null;
     },
   };
@@ -86,13 +89,19 @@ afterEach(() => {
 });
 
 describe("main editor route", () => {
-  function renderedFrontDoorEntry(): string | undefined {
+  function renderedFrontDoorProps(): {
+    entry?: string;
+    directTutorialBattle?: boolean;
+  } {
     const strictMode = mocks.render.mock.calls[0]?.[0] as ReactElement<{
       children: ReactElement<{
-        children: ReactElement<{ entry?: string }>;
+        children: ReactElement<{
+          entry?: string;
+          directTutorialBattle?: boolean;
+        }>;
       }>;
     }>;
-    return strictMode.props.children.props.children.props.entry;
+    return strictMode.props.children.props.children.props;
   }
 
   it("mounts the isolated editor for the Vite-served /editor/ path", async () => {
@@ -173,7 +182,7 @@ describe("main editor route", () => {
     await import("../main.tsx");
 
     expect(mocks.appImport).not.toHaveBeenCalled();
-    expect(renderedFrontDoorEntry()).toBe("loading");
+    expect(renderedFrontDoorProps().entry).toBe("loading");
     expect(mocks.createRoot).toHaveBeenCalledWith(
       document.getElementById("root"),
     );
@@ -186,7 +195,7 @@ describe("main editor route", () => {
     await import("../main.tsx");
 
     expect(mocks.appImport).not.toHaveBeenCalled();
-    expect(renderedFrontDoorEntry()).toBe("tutorial");
+    expect(renderedFrontDoorProps().entry).toBe("tutorial");
     expect(mocks.createRoot).toHaveBeenCalledWith(
       document.getElementById("root"),
     );
@@ -199,7 +208,23 @@ describe("main editor route", () => {
     await import("../main.tsx");
 
     expect(mocks.appImport).not.toHaveBeenCalled();
-    expect(renderedFrontDoorEntry()).toBe("main");
+    expect(renderedFrontDoorProps().entry).toBe("main");
+    expect(mocks.createRoot).toHaveBeenCalledWith(
+      document.getElementById("root"),
+    );
+    expect(mocks.render).toHaveBeenCalledTimes(1);
+  });
+
+  it("starts the automated tutorial battle from the goto parameter", async () => {
+    window.history.pushState(null, "", "/?goto=tutorial-battle");
+
+    await import("../main.tsx");
+
+    expect(mocks.appImport).not.toHaveBeenCalled();
+    expect(renderedFrontDoorProps()).toMatchObject({
+      entry: "tutorial",
+      directTutorialBattle: true,
+    });
     expect(mocks.createRoot).toHaveBeenCalledWith(
       document.getElementById("root"),
     );

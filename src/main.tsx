@@ -120,13 +120,14 @@ if (pathname === "/editor" || pathname === "/cards") {
   const [{ default: FrontDoorApp }, { parseRuntimeConfig }] = await Promise.all(
     [import("./coop/FrontDoorApp"), import("./runtime/runtime-config")],
   );
-  const directTutorialBattle = new URLSearchParams(window.location.search).get("goto") === "tutorial-battle";
+  const runtimeConfig = parseRuntimeConfig(window.location.search);
+  const directTutorialBattle = runtimeConfig.gotoScene === "tutorial-battle";
   const entry = (directTutorialBattle
     ? "tutorial"
     : pathname.slice(1)) as "main" | "loading" | "tutorial";
   renderStrict(
     <FrontDoorApp
-      runtimeConfig={parseRuntimeConfig(window.location.search)}
+      runtimeConfig={runtimeConfig}
       entry={entry}
       directTutorialBattle={directTutorialBattle}
     />,

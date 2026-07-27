@@ -238,9 +238,14 @@ The registered scene ids and full mechanics are documented in
 `docs/quest_prototype/qa_scenes.md`; the source of truth is `QA_SCENES` in
 `src/runtime/qa-scenes.ts`.
 
+`goto=tutorial-battle` opens the standalone tutorial directly at the automated
+battle handoff. The fresh battle starts on the player's turn with three cards
+in the player's hand and two cards in the opponent's hand.
+
 ```
 http://localhost:5173/?goto=atlas
 http://localhost:5173/?goto=duplication-enhanced
+http://localhost:5173/?goto=tutorial-battle
 ```
 
 ## `identicons`
@@ -316,6 +321,7 @@ http://localhost:5173/editor?identicons=1       # same, in the card editor
 http://localhost:5173/?goto=battle&seed=7
 http://localhost:5173/?goto=battle              # Layer I battle preview vs the local AI opponent
 http://localhost:5173/?goto=battle5             # Layer V battle preview with a stronger opponent
+http://localhost:5173/?goto=tutorial-battle     # automated battle after the scripted tutorial
 http://localhost:5173/?goto=battle&ai=0         # manual battle, no AI opponent
 http://localhost:5173/editor?q=moon&type=event
 http://localhost:5173/glossary                    # edit explanatory Info Card copy
