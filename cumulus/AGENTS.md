@@ -34,49 +34,54 @@ git diff --cached --name-only
 Stop if either review shows staged content under `cumulus/Assets/ThirdParty/`
 or another licensed-asset source.
 
-## Provisioning an isolated worktree
+## Paired worktrees
 
-Each task still uses its own repository worktree. Provision licensed assets
-into that worktree from a user-controlled local asset library outside every
-Git checkout.
-
-Use a physical copy per worktree. Do not symlink a worktree to the primary
-checkout or to a shared mutable asset directory: Unity writes metadata during
-imports, and concurrent agents must not mutate or lock the same files.
-
-The recommended local layout is:
+Licensed assets live in a separate local-only Git repository. Every Unity task
+uses two worktrees with the same branch name:
 
 ```text
-<licensed-library>/Synty/PolygonVikings2/
-<worktree>/cumulus/Assets/ThirdParty/Synty/PolygonVikings2/
+quest_prototype worktree
+└── cumulus/Assets/ThirdParty/  licensed-repository worktree
 ```
 
-Set a task-specific environment variable to the licensed library root, then
-copy the dependency while preserving metadata:
+From the public task worktree, provision the paired licensed worktree before
+reading or editing anything under `Assets/ThirdParty/`:
 
 ```bash
-CUMULUS_LICENSED_SOURCE="/absolute/path/to/licensed-library"
-test -d "$CUMULUS_LICENSED_SOURCE/Synty/PolygonVikings2"
-mkdir -p cumulus/Assets/ThirdParty/Synty
-rsync -a \
-  "$CUMULUS_LICENSED_SOURCE/Synty/PolygonVikings2/" \
-  cumulus/Assets/ThirdParty/Synty/PolygonVikings2/
-git check-ignore -q cumulus/Assets/ThirdParty/Synty/PolygonVikings2
+cumulus/scripts/provision-licensed-assets.sh
 ```
 
-If the licensed library has not been configured, stop and ask the user for its
-path. Do not read or copy assets from the user's primary Git checkout, Unity
-package cache, cloud storage, or another worktree without explicit permission.
-Do not download licensed assets.
+The helper reads the licensed repository path from
+`quest.cumulusLicensedRepo` in the public repository's local Git config.
+`CUMULUS_LICENSED_REPO` is an explicit per-command override. It verifies that
+ThirdParty is ignored, the licensed repository declares
+`quest.localOnly=true`, and the repository has no remotes.
 
-Keep each worktree's Unity `Library/`, `Temp/`, `Logs/`, and `UserSettings/`
-isolated. Never share or symlink these generated directories between worktrees.
+- Never add a remote to the licensed repository.
+- Never copy assets from the primary checkout, another worktree, a package
+  cache, cloud storage, or the internet.
+- Never symlink a shared asset directory. A physical Git worktree gives every
+  agent isolated writable files while sharing immutable objects.
+- Keep each public worktree's Unity `Library/`, `Temp/`, `Logs/`, and
+  `UserSettings/` isolated. Never share or symlink them.
+- If provisioning fails or the desired licensed branch is already checked out,
+  stop and resolve the worktree mapping. Do not fall back to the primary scene.
+
+Before removing a public task worktree, close Unity and release its nested
+licensed worktree first:
+
+```bash
+cumulus/scripts/release-licensed-assets.sh
+```
+
+The release helper refuses a dirty licensed worktree and retains its branch and
+commits in the local repository.
 
 ## Durable scene changes
 
-An ignored proprietary scene is a local output, not the durable implementation.
-Represent intentional changes with tracked, deterministic editor tooling under
-`Assets/CumulusMvp/Editor/`.
+Proprietary scenes are durable only in the local licensed repository. Cumulus
+behavior that can be expressed independently remains durable as tracked,
+deterministic editor tooling under `Assets/CumulusMvp/Editor/`.
 
 - Author an idempotent builder or reconciler that opens the licensed scene,
   creates or updates Cumulus-owned objects, and saves the local scene.
@@ -93,12 +98,11 @@ Represent intentional changes with tracked, deterministic editor tooling under
   entry point suitable for repeatable capture and validation.
 - Fail with a clear message when the licensed scene, a required vendor GUID, or
   a required Cumulus asset is absent.
-- Keep generated proprietary scenes ignored. Commit the builder, Cumulus-owned
-  assets, tests, and documentation that reproduce the result.
-
-After promoting the tracked commit, run the builder once in the user's
-provisioned primary checkout to materialize the local scene there. This is the
-only promotion step that changes an ignored scene.
+- Commit proprietary scene edits only in the paired licensed-assets branch.
+  Commit builders, Cumulus-owned assets, tests, and documentation only in the
+  public branch.
+- Keep the two commits logically paired in the handoff. Push only the public
+  branch; the licensed branch remains on this machine.
 
 ## Verification and review artifacts
 
@@ -148,12 +152,15 @@ worktree project, batch execution, and tests.
 
 Before asking to promote a Unity scene task:
 
-1. Confirm `Assets/ThirdParty/` remains ignored and unstaged.
-2. Re-run the tracked builder against a freshly provisioned worktree copy.
-3. Reopen the generated local scene and confirm Unity reports no import,
+1. Confirm the public repository ignores and has not staged ThirdParty content.
+2. Confirm the licensed worktree belongs to the configured local-only
+   repository and that repository has no remotes.
+3. Reopen the changed local scene and confirm Unity reports no import,
    compile, serialization, or rendering errors.
 4. Run focused tests and the repository review.
-5. Provide private local screenshots and the reproducible builder entry point.
-6. Commit and push only tracked, distributable Cumulus-owned work.
-7. After promotion, materialize the ignored scene in the provisioned primary
-   checkout and report that local-only step explicitly.
+5. Provide private local screenshots and any reproducible builder entry point.
+6. Commit both worktrees and report both commit IDs.
+7. Push only tracked, distributable Cumulus-owned work from the public branch.
+8. Promote the public and licensed commits deliberately; never imply that
+   promoting one repository also promoted the other.
+9. Release the nested licensed worktree before cleaning up the public worktree.
