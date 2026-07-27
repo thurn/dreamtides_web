@@ -299,7 +299,7 @@ describe("MobileBattleScreen", () => {
     container.remove();
   });
 
-  it("labels the tutorial blocking completion action Continue", () => {
+  it("labels the opponent's tutorial dusk action Done repositioning", () => {
     const baseView = makeView();
     const view: MobileBattleView = {
       ...baseView,
@@ -325,8 +325,12 @@ describe("MobileBattleScreen", () => {
       container.querySelector<HTMLButtonElement>(
         '[data-testid="tutorial-end-turn"]',
       )?.textContent,
-    ).toBe("Continue");
-    expect(container.textContent).not.toContain("Done Blocking");
+    ).toBe("Done repositioning");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-battle-phase-next]",
+      )?.style.width,
+    ).toBe("max-content");
 
     act(() => root.unmount());
   });
@@ -2596,7 +2600,8 @@ describe("MobileBattleScreen", () => {
     expect(phaseControls?.style.display).toBe("flex");
     expect(phaseControls?.style.gap).toBe("var(--space-4)");
     expect(backSlot?.style.position).toBe("");
-    expect(nextSlot?.style.width).toBe("120px");
+    expect(nextSlot?.style.width).toBe("max-content");
+    expect(nextSlot?.style.minWidth).toBe("120px");
     expect(buttons).toHaveLength(2);
     expect(previous?.getAttribute("aria-label")).toBe("Back");
     expect(previous?.querySelector(".bx-arrow-left")).not.toBeNull();

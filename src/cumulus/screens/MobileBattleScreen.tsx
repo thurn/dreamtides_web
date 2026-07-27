@@ -2909,7 +2909,7 @@ function ControlRow({
   readonly layoutBackSlotCount: number;
   readonly phaseNavigation: "both" | "end-turn" | "tutorial" | "hidden";
   readonly perspective: BattlePerspectiveSide;
-  readonly tutorialNextLabel: "End Turn" | "Continue";
+  readonly tutorialNextLabel: "End Turn" | "Done repositioning";
 }) {
   const disabled = interactions?.canInteract !== true;
   const hasAlternateNextControls =
@@ -3039,6 +3039,9 @@ function ControlRow({
             aria-label={choicePrompt?.label}
             style={{
               width: hasAlternateNextControls
+                ? undefined
+                : "max-content",
+              minWidth: hasAlternateNextControls
                 ? undefined
                 : NEXT_PHASE_CONTROL_WIDTH,
               display: hasAlternateNextControls ? "flex" : "grid",
@@ -3760,7 +3763,7 @@ export function MobileBattleScreen({
           perspective={view.perspective}
           tutorialNextLabel={
             view.activeSide === "enemy" && view.phase === "dusk"
-              ? "Continue"
+              ? "Done repositioning"
               : "End Turn"
           }
         />
