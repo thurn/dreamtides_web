@@ -1710,7 +1710,7 @@ describe("TutorialScreen", () => {
     ).toHaveLength(2);
     expect(
       paragraphs[0]?.querySelector<HTMLElement>(
-        "[data-tutorial-how-to-play-spark-term] [data-inline-glyph]",
+        "[data-tutorial-how-to-play-spark-term] [data-inline-glyph-metric]",
       )?.style.verticalAlign,
     ).toBe("middle");
     expect(
@@ -1972,8 +1972,11 @@ describe("TutorialScreen", () => {
     expectedEnergyColor.style.color = ENERGY_ICON_COLOR;
     expect(energyIcon?.style.color).toBe(expectedEnergyColor.style.color);
     expect(energyIcon?.dataset.inlineGlyph).toBe("");
-    expect(energyIcon?.style.verticalAlign).toBe("middle");
-    expect(energyIcon?.style.transform).toBe(
+    const energyMetric = energyIcon?.querySelector<HTMLElement>(
+      "[data-inline-glyph-metric]",
+    );
+    expect(energyMetric?.style.verticalAlign).toBe("middle");
+    expect(energyMetric?.style.transform).toBe(
       "translateY(calc(0.5ex - 0.5cap))",
     );
     expect(screenMocks.props?.view.dreamwell).toBeNull();

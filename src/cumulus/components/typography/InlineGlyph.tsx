@@ -20,7 +20,9 @@ export interface InlineGlyphProps {
  * The glyph occupies one square em and uses CSS's typographic `middle`
  * alignment as its baseline. The font-relative translation then moves that
  * center from half the x-height to half the cap height, matching a capital
- * `X` without baking in a font- or size-specific pixel offset.
+ * `X` without baking in a font- or size-specific pixel offset. A plain outer
+ * inline shell preserves that internal formatting context if an ancestor
+ * blockifies the component as a flex or grid item.
  */
 export function InlineGlyph({
   glyph,
@@ -34,25 +36,32 @@ export function InlineGlyph({
       aria-label={label}
       aria-hidden={label === undefined ? true : undefined}
       style={{
-        display: "inline-grid",
-        placeItems: "center",
-        width: "1em",
-        height: "1em",
-        fontSize: "1em",
-        lineHeight: 1,
-        verticalAlign: "middle",
-        transform: "translateY(calc(0.5ex - 0.5cap))",
         color: color === undefined ? undefined : resolveColor(color),
       }}
     >
-      <i
-        className={glyph}
+      <span
+        data-inline-glyph-metric=""
         aria-hidden="true"
         style={{
+          display: "inline-grid",
+          placeItems: "center",
+          width: "1em",
+          height: "1em",
           fontSize: "1em",
           lineHeight: 1,
+          verticalAlign: "middle",
+          transform: "translateY(calc(0.5ex - 0.5cap))",
         }}
-      />
+      >
+        <i
+          className={glyph}
+          aria-hidden="true"
+          style={{
+            fontSize: "1em",
+            lineHeight: 1,
+          }}
+        />
+      </span>
     </span>
   );
 }

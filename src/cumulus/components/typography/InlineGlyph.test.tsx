@@ -12,6 +12,7 @@ describe("InlineGlyph", () => {
     expect(markup).toMatch(/^<span /);
     expect(markup).toContain('data-inline-glyph=""');
     expect(markup).toContain('role="img" aria-label="points"');
+    expect(markup).toContain('data-inline-glyph-metric="" aria-hidden="true"');
     expect(markup).toContain(
       "display:inline-grid;place-items:center;width:1em;height:1em;font-size:1em;line-height:1;vertical-align:middle;transform:translateY(calc(0.5ex - 0.5cap))",
     );

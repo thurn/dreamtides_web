@@ -98,8 +98,11 @@ describe("GlassButton", () => {
     );
     expect(essenceIcon?.querySelector("i")?.className).toContain("bx-crypto");
     expect(essenceIcon?.dataset.inlineGlyph).toBe("");
-    expect(essenceIcon?.style.verticalAlign).toBe("middle");
-    expect(essenceIcon?.style.transform).toBe(
+    const essenceMetric = essenceIcon?.querySelector<HTMLElement>(
+      "[data-inline-glyph-metric]",
+    );
+    expect(essenceMetric?.style.verticalAlign).toBe("middle");
+    expect(essenceMetric?.style.transform).toBe(
       "translateY(calc(0.5ex - 0.5cap))",
     );
     const content = container.querySelector<HTMLElement>(
