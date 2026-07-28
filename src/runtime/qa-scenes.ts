@@ -59,6 +59,35 @@ const DREAM_AVATAR_SELECT_SCENE: QaScene = {
   build: () => createDefaultState(),
 };
 
+/** The only DreamAvatar offered by the tutorial selection QA scene. */
+export const TUTORIAL_DREAM_AVATAR_ID =
+  "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
+
+/**
+ * Tutorial DreamAvatar selection: the normal quest-start presentation and
+ * start-quest action with one fixed, centered offer and no reroll control.
+ */
+const TUTORIAL_DREAM_AVATAR_SELECT_SCENE: QaScene = {
+  id: "tutorial-dream-avatar-select",
+  label: "Tutorial Avatar Select",
+  description:
+    "The tutorial DreamAvatar selection screen with its one fixed avatar.",
+  landsOnQuestStart: true,
+  build: (questContent) => {
+    const tutorialDreamAvatar = questContent.dreamAvatars.find(
+      (dreamAvatar) => dreamAvatar.id === TUTORIAL_DREAM_AVATAR_ID,
+    );
+    if (tutorialDreamAvatar === undefined) return null;
+    return {
+      ...createDefaultState(),
+      screen: {
+        type: "questStart",
+        tutorialDreamAvatarId: tutorialDreamAvatar.id,
+      },
+    };
+  },
+};
+
 /**
  * Builds the between-dreamscapes atlas resting screen at a given progress depth.
  *
@@ -634,6 +663,7 @@ function siteScene(
 /** All registered QA scenes, keyed by `id`. */
 export const QA_SCENES: readonly QaScene[] = [
   DREAM_AVATAR_SELECT_SCENE,
+  TUTORIAL_DREAM_AVATAR_SELECT_SCENE,
   ATLAS_SCENE,
   // Atlas resting screen at each reachable frontier, numbered by the UI's
   // "Layer N" column label (columns I–VII). Column I is the starter you begin

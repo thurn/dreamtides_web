@@ -21,3 +21,10 @@ card.figment / card.figmentTitleBar). The small on-board GameCardSurface still
 renders the figment frame correctly, but the enlarged primary reading copy
 shown on hover/press draws a hovered battlefield figment with the ordinary
 card frame instead of the figment frame.
+
+The tutorial battle lifecycle test "plays and consumes the authored Twilight
+Troubadour override before heuristic planning" deterministically expects the
+enemy character destination `B4`, while the current planner selects `B5`.
+Running that test alone reproduces the mismatch. The Dream Avatar tutorial
+selection change does not touch battle planning, battle fixtures, or tutorial
+battle data.

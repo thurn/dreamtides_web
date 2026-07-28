@@ -178,12 +178,12 @@ export interface DreamAvatarOfferView {
 }
 
 export interface QuestStartScreenProps {
-  /** The DreamAvatars offered this run (typically three). */
+  /** The DreamAvatars offered this run (three normally; one in the tutorial). */
   dreamAvatars: DreamAvatarOfferView[];
   /** Called with a DreamAvatar's id when the player commits to it. */
   onPick: (dreamAvatarId: string) => void;
-  /** Requests a shared debug reroll of the shown DreamAvatars. */
-  onReroll: () => void;
+  /** Requests a shared debug reroll. Omitted for a fixed tutorial offer. */
+  onReroll?: () => void;
 }
 
 /** Shared top-right debug action used by both quest-start layouts. */

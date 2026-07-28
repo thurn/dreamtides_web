@@ -304,7 +304,11 @@ export function dismissStartingDeckPopup(quest: QuestState): QuestState | null {
 export function rerollDreamAvatarOffer(
   quest: QuestState,
 ): QuestState | null {
-  if (quest.dreamAvatar !== null || quest.screen.type !== "questStart") {
+  if (
+    quest.dreamAvatar !== null ||
+    quest.screen.type !== "questStart" ||
+    quest.screen.tutorialDreamAvatarId !== undefined
+  ) {
     return null;
   }
   return {

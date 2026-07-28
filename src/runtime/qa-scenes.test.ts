@@ -16,14 +16,15 @@ import {
 } from "../__test-helpers__/pool-context";
 import {
   QA_SCENES,
+  TUTORIAL_DREAM_AVATAR_ID,
   buildQaScene,
   findQaScene,
   qaSceneLoadsBattle,
 } from "./qa-scenes";
 
-function makeDreamAvatar(): DreamAvatarContent {
+function makeDreamAvatar(id = "dream-avatar-1"): DreamAvatarContent {
   return {
-    id: "dream-avatar-1",
+    id,
     name: "Test DreamAvatar",
     title: "Caller of Tests",
     renderedText: "Test ability.",
@@ -103,6 +104,30 @@ describe('the "dream-avatar-select" QA scene', () => {
     expect(state?.dreamAvatar).toBeNull();
     expect(state?.resolvedPackage).toBeNull();
     expect(state?.draftState).toBeNull();
+  });
+});
+
+describe('the "tutorial-dream-avatar-select" QA scene', () => {
+  it("parks questStart on the one fixed tutorial DreamAvatar UUID", () => {
+    const content = makeQuestContent();
+    content.dreamAvatars = [makeDreamAvatar(TUTORIAL_DREAM_AVATAR_ID)];
+
+    const state = buildQaScene("tutorial-dream-avatar-select", content);
+
+    expect(state).not.toBeNull();
+    expect(state?.screen).toEqual({
+      type: "questStart",
+      tutorialDreamAvatarId: TUTORIAL_DREAM_AVATAR_ID,
+    });
+    expect(state?.dreamAvatar).toBeNull();
+    expect(state?.resolvedPackage).toBeNull();
+    expect(state?.draftState).toBeNull();
+  });
+
+  it("fails to build when the required tutorial DreamAvatar is unavailable", () => {
+    expect(
+      buildQaScene("tutorial-dream-avatar-select", makeQuestContent()),
+    ).toBeNull();
   });
 });
 

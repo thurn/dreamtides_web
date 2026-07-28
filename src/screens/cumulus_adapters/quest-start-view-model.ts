@@ -5,6 +5,7 @@
 // `buildDreamAvatarOfferViews`; this module never acquires anything itself.
 
 import { selectedTides4Decks } from "../../data/tides4-preview";
+import { selectDreamAvatarOfferForReroll } from "../../data/dream-avatar-selection";
 import type { RunPoolContext } from "../../data/quest-content";
 import type { DreamAvatarContent } from "../../types/content";
 import type { Tides4Color, Tides4DeckJson } from "../../draft/pool/tides4-io";
@@ -25,6 +26,30 @@ const TIDE_BY_COLOR: Record<Tides4Color, Tide> = {
   blue: "vision",
   orange: "ember",
 };
+
+/**
+ * Resolve the shared quest-start offer. Tutorial selection persists one exact
+ * UUID in quest state; ordinary runs derive their three choices from the room
+ * seed and shared reroll count.
+ */
+export function resolveDreamAvatarOffer(
+  dreamAvatars: readonly DreamAvatarContent[],
+  questSeed: string,
+  rerollCount: number,
+  tutorialDreamAvatarId?: string,
+): DreamAvatarContent[] {
+  if (tutorialDreamAvatarId !== undefined) {
+    const tutorialDreamAvatar = dreamAvatars.find(
+      (candidate) => candidate.id === tutorialDreamAvatarId,
+    );
+    return tutorialDreamAvatar === undefined ? [] : [tutorialDreamAvatar];
+  }
+  return selectDreamAvatarOfferForReroll(
+    dreamAvatars,
+    questSeed,
+    rerollCount,
+  );
+}
 
 /** The total number of cards (counting copies) in a tide's decklist. */
 function tideCardCount(tide: Tides4DeckJson): number {

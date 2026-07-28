@@ -8,9 +8,11 @@
 
 import { useCallback, useEffect, useMemo } from "react";
 import { useQuest } from "../../state/quest-context";
-import { selectDreamAvatarOfferForReroll } from "../../data/dream-avatar-selection";
 import { logEventOnce } from "../../logging";
-import { buildDreamAvatarOfferViews } from "./quest-start-view-model";
+import {
+  buildDreamAvatarOfferViews,
+  resolveDreamAvatarOffer,
+} from "./quest-start-view-model";
 import { QuestStartScreen } from "../../cumulus/screens/QuestStartScreen";
 
 /**
@@ -22,14 +24,24 @@ export function QuestStartScreenAdapter() {
   const questSeed = state.seed;
   const rerollCount =
     state.screen.type === "questStart" ? (state.screen.rerollCount ?? 0) : 0;
+  const tutorialDreamAvatarId =
+    state.screen.type === "questStart"
+      ? state.screen.tutorialDreamAvatarId
+      : undefined;
   const offered = useMemo(
     () =>
-      selectDreamAvatarOfferForReroll(
+      resolveDreamAvatarOffer(
         questContent.dreamAvatars,
         questSeed,
         rerollCount,
+        tutorialDreamAvatarId,
       ),
-    [questContent.dreamAvatars, questSeed, rerollCount],
+    [
+      questContent.dreamAvatars,
+      questSeed,
+      rerollCount,
+      tutorialDreamAvatarId,
+    ],
   );
 
   useEffect(() => {
@@ -67,7 +79,9 @@ export function QuestStartScreenAdapter() {
       key={rerollCount}
       dreamAvatars={dreamAvatars}
       onPick={handlePick}
-      onReroll={handleReroll}
+      onReroll={
+        tutorialDreamAvatarId === undefined ? handleReroll : undefined
+      }
     />
   );
 }

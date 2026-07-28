@@ -229,7 +229,9 @@ export function DesktopSelect({
         }}
       />
       <Motes on tint="violet" zIndex={0} />
-      <QuestStartRerollControl onReroll={onReroll} />
+      {onReroll !== undefined && (
+        <QuestStartRerollControl onReroll={onReroll} />
+      )}
 
       {/* Small purple eyebrow title, near the top. */}
       <div

@@ -414,6 +414,29 @@ describe("REROLL_DREAM_AVATAR_OFFER", () => {
     expect(out.outcome).toBe("bounced");
     expect(out.state).toBe(started);
   });
+
+  it("bounces while the tutorial pins the shared offer to one DreamAvatar", () => {
+    const start = genesis();
+    const tutorial = {
+      ...start,
+      quest: {
+        ...start.quest,
+        screen: {
+          type: "questStart" as const,
+          tutorialDreamAvatarId: "tutorial-avatar-id",
+        },
+      },
+    };
+
+    const out = reduceGameEvent(
+      tutorial,
+      event("REROLL_DREAM_AVATAR_OFFER", {}),
+      ctx(),
+    );
+
+    expect(out.outcome).toBe("bounced");
+    expect(out.state).toBe(tutorial);
+  });
 });
 
 // ---------------------------------------------------------------------------

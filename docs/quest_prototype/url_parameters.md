@@ -244,6 +244,7 @@ in the player's hand and two cards in the opponent's hand.
 
 ```
 http://localhost:5173/?goto=atlas
+http://localhost:5173/?goto=tutorial-dream-avatar-select
 http://localhost:5173/?goto=duplication-enhanced
 http://localhost:5173/?goto=tutorial-battle
 ```

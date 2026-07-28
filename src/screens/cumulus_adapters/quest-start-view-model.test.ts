@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { DreamAvatarContent } from "../../types/content";
 import type { Tides4DeckJson } from "../../draft/pool/tides4-io";
-import { largestTides, toDreamAvatarOfferView } from "./quest-start-view-model";
+import {
+  largestTides,
+  resolveDreamAvatarOffer,
+  toDreamAvatarOfferView,
+} from "./quest-start-view-model";
 
 function tide(id: string, cardCount: number): Tides4DeckJson {
   return {
@@ -61,6 +65,48 @@ describe("largestTides", () => {
     const tides = [tide("a", 5), tide("b", 5), tide("c", 5), tide("d", 5), big];
     expect(largestTides(tides)).toHaveLength(4);
     expect(largestTides(tides).map((t) => t.id)).toContain("big");
+  });
+});
+
+describe("resolveDreamAvatarOffer", () => {
+  it("returns only the UUID-pinned tutorial DreamAvatar", () => {
+    const dreamAvatars = [
+      dreamAvatar({ id: "avatar-a" }),
+      dreamAvatar({ id: "avatar-b" }),
+      dreamAvatar({ id: "avatar-c" }),
+      dreamAvatar({ id: "avatar-d" }),
+    ];
+
+    const offer = resolveDreamAvatarOffer(
+      dreamAvatars,
+      "room-seed",
+      12,
+      "avatar-c",
+    );
+
+    expect(offer.map((candidate) => candidate.id)).toEqual(["avatar-c"]);
+  });
+
+  it("returns an empty tutorial offer when the persisted UUID is unavailable", () => {
+    const offer = resolveDreamAvatarOffer(
+      [dreamAvatar({ id: "avatar-a" })],
+      "room-seed",
+      0,
+      "missing-avatar",
+    );
+
+    expect(offer).toEqual([]);
+  });
+
+  it("derives the normal three-avatar offer when no tutorial UUID is set", () => {
+    const dreamAvatars = ["a", "b", "c", "d"].map((id) =>
+      dreamAvatar({ id }),
+    );
+
+    const offer = resolveDreamAvatarOffer(dreamAvatars, "room-seed", 0);
+
+    expect(offer).toHaveLength(3);
+    expect(new Set(offer.map((candidate) => candidate.id)).size).toBe(3);
   });
 });
 

@@ -404,6 +404,11 @@ export type Screen =
       type: "questStart";
       /** Shared debug-reroll count used to derive the shown DreamAvatar offer. */
       rerollCount?: number;
+      /**
+       * Shared tutorial override that presents exactly this DreamAvatar UUID.
+       * Absent for the normal seeded three-avatar offer.
+       */
+      tutorialDreamAvatarId?: string;
     }
   | { type: "atlas" }
   | { type: "dreamscape" }

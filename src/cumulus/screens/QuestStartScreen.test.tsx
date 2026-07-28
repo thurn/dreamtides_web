@@ -193,6 +193,34 @@ describe("Cumulus QuestStartScreen (carousel)", () => {
     });
   });
 
+  it("shows one tutorial page without the reroll or carousel navigation controls", () => {
+    const tutorialDreamAvatar = OFFERED[0];
+    const { container, root } = mount(
+      <QuestStartScreen
+        dreamAvatars={[tutorialDreamAvatar]}
+        onPick={vi.fn()}
+      />,
+    );
+
+    expect(
+      container.querySelectorAll("[data-dream-avatar-page]"),
+    ).toHaveLength(1);
+    expect(
+      container.querySelector(
+        `[data-dream-avatar-page="${tutorialDreamAvatar.id}"]`,
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelector("[data-dream-avatar-reroll-control]"),
+    ).toBeNull();
+    expect(container.querySelector('[aria-label="Previous"]')).toBeNull();
+    expect(container.querySelector('[aria-label="Next"]')).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("reveals every defined term from the whole DreamAvatar ability box", () => {
     const reclaim = lookupGlossaryTerm("reclaim");
     const bane = lookupGlossaryTerm("bane");
@@ -276,6 +304,32 @@ describe("Cumulus QuestStartScreen (desktop)", () => {
       );
       expect(essence?.textContent).toContain(String(dc.startingEssence));
     }
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders the tutorial DreamAvatar as the only desktop column", () => {
+    const tutorialDreamAvatar = OFFERED[0];
+    const { container, root } = mount(
+      <QuestStartScreen
+        dreamAvatars={[tutorialDreamAvatar]}
+        onPick={vi.fn()}
+      />,
+    );
+
+    expect(
+      container.querySelectorAll("[data-dream-avatar-column]"),
+    ).toHaveLength(1);
+    expect(
+      container.querySelector(
+        `[data-dream-avatar-column="${tutorialDreamAvatar.id}"]`,
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelector("[data-dream-avatar-reroll-control]"),
+    ).toBeNull();
 
     act(() => {
       root.unmount();

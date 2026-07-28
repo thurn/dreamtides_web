@@ -270,7 +270,9 @@ export function CarouselSelect({
       onPointerCancel={onPointerUp}
     >
       <ScreenHeader />
-      <QuestStartRerollControl onReroll={onReroll} />
+      {onReroll !== undefined && (
+        <QuestStartRerollControl onReroll={onReroll} />
+      )}
 
       {/* Track */}
       <div
