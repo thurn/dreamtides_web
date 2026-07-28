@@ -3,6 +3,7 @@ import type {
   TutorialAction,
   TutorialBattleConfiguration,
   TutorialConfiguration,
+  TutorialJourneyStartConfiguration,
   TutorialSpeechBubble,
   TutorialTriggerDefinition,
   TutorialTriggerEvent,
@@ -117,6 +118,15 @@ function parseTutorialSpeechBubble(
       `Tutorial action ${JSON.stringify(actionId)} must have a finite speech bubble vertical offset.`,
     );
   }
+  const horizontalOffset = record.horizontalOffset ?? 0;
+  if (
+    typeof horizontalOffset !== "number" ||
+    !Number.isFinite(horizontalOffset)
+  ) {
+    throw new Error(
+      `Tutorial action ${JSON.stringify(actionId)} must have a finite speech bubble horizontal offset.`,
+    );
+  }
   const bubbleWidth =
     record.bubbleWidth ??
     (speaker === "mira"
@@ -135,9 +145,39 @@ function parseTutorialSpeechBubble(
   return {
     speaker,
     duration,
+    horizontalOffset,
     verticalOffset,
     bubbleWidth,
     text: record.text,
+  };
+}
+
+/** Validate the persistent Mira guidance authored for journey start. */
+export function parseTutorialJourneyStartConfiguration(
+  value: unknown,
+): TutorialJourneyStartConfiguration {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Tutorial data must contain a journeyStart table.");
+  }
+  const record = value as Record<string, unknown>;
+  const parsed = parseTutorialSpeechBubble(
+    record.speechBubble,
+    "journey-start",
+    true,
+  );
+  if (parsed === undefined || parsed.speaker !== "mira") {
+    throw new Error(
+      "Tutorial journeyStart speech bubble must target Mira.",
+    );
+  }
+  return {
+    speechBubble: {
+      speaker: parsed.speaker,
+      horizontalOffset: parsed.horizontalOffset,
+      verticalOffset: parsed.verticalOffset,
+      bubbleWidth: parsed.bubbleWidth,
+      text: parsed.text,
+    },
   };
 }
 
@@ -606,6 +646,7 @@ export async function loadTutorialConfiguration(
   }
   const record = body as Record<string, unknown>;
   return {
+    journeyStart: parseTutorialJourneyStartConfiguration(record.journeyStart),
     actions: parseTutorialActions(record.actions),
     triggers: parseTutorialTriggers(record.triggers ?? []),
     battle: parseTutorialBattleConfiguration(record.battle),

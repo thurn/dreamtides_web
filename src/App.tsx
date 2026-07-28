@@ -608,6 +608,7 @@ export default function App({
       .then(([loadedContent, tutorial]) => {
         const content = {
           ...loadedContent,
+          tutorialJourneyStart: tutorial.journeyStart,
           tutorialTriggers: tutorial.triggers,
           tutorialBattle: tutorial.battle,
         };

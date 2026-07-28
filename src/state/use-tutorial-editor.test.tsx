@@ -44,6 +44,7 @@ describe("useTutorialEditor", () => {
         speechBubble: {
           speaker: "mira",
           duration: 1,
+          horizontalOffset: 0,
           verticalOffset: 0,
           bubbleWidth: 700,
           text: "Welcome.",

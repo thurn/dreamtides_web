@@ -114,17 +114,40 @@ describe("resolveDreamAvatarOffer", () => {
 });
 
 describe("buildJourneyStartGuideDialogue", () => {
-  it("builds Mira's exact tutorial guidance for a UUID-pinned offer", () => {
-    expect(buildJourneyStartGuideDialogue("tutorial-avatar-uuid")).toEqual({
-      portrait: { kind: "character-portrait", characterId: "mira" },
-      portraitAlt: "Mira",
-      speakerName: "Mira",
-      text: "For each journey, you must choose a [purple]Dream Avatar[/purple] who provides a permanent ability.",
+  it("maps authored Mira guidance for a UUID-pinned offer", () => {
+    expect(
+      buildJourneyStartGuideDialogue("tutorial-avatar-uuid", {
+        speaker: "mira",
+        horizontalOffset: 40,
+        verticalOffset: -10,
+        bubbleWidth: 550,
+        text: "Authored [purple]Dream Avatar[/purple] guidance.",
+      }),
+    ).toEqual({
+      model: {
+        portrait: { kind: "character-portrait", characterId: "mira" },
+        portraitAlt: "Mira",
+        speakerName: "Mira",
+        text: "Authored [purple]Dream Avatar[/purple] guidance.",
+      },
+      horizontalOffset: 40,
+      verticalOffset: -10,
+      bubbleWidth: 550,
     });
   });
 
-  it("omits guidance from ordinary journey-start offers", () => {
-    expect(buildJourneyStartGuideDialogue()).toBeUndefined();
+  it("omits guidance from ordinary offers and missing authored data", () => {
+    const authored = {
+      speaker: "mira" as const,
+      horizontalOffset: 0,
+      verticalOffset: 0,
+      bubbleWidth: 550,
+      text: "Authored guidance.",
+    };
+    expect(buildJourneyStartGuideDialogue(undefined, authored)).toBeUndefined();
+    expect(
+      buildJourneyStartGuideDialogue("tutorial-avatar-uuid"),
+    ).toBeUndefined();
   });
 });
 

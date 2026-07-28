@@ -482,6 +482,7 @@ describe("TutorialScreen", () => {
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: {
                 kind: "guide",
+                horizontalOffset: 20,
                 verticalOffset: 0,
                 bubbleWidth: 450,
                 model: {
@@ -503,6 +504,7 @@ describe("TutorialScreen", () => {
                 speechBubble: {
                   speaker: "mira",
                   duration: 3,
+                  horizontalOffset: 20,
                   verticalOffset: 0,
                   bubbleWidth: 450,
                   text: "A custom greeting.",
@@ -520,10 +522,11 @@ describe("TutorialScreen", () => {
       );
     });
 
-    expect(
-      container.querySelector<HTMLElement>("[data-tutorial-dialogue-anchor]")
-        ?.style.maxWidth,
-    ).toBe("450px");
+    const dialogueAnchor = container.querySelector<HTMLElement>(
+      "[data-tutorial-dialogue-anchor]",
+    );
+    expect(dialogueAnchor?.style.maxWidth).toBe("450px");
+    expect(dialogueAnchor?.style.left).toBe("20px");
 
     act(() => root.unmount());
     container.remove();
@@ -544,6 +547,7 @@ describe("TutorialScreen", () => {
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: {
                 kind: "guide",
+                horizontalOffset: 0,
                 verticalOffset: 0,
                 model: {
                   portrait: { kind: "character-portrait", characterId: "mira" },
@@ -561,6 +565,7 @@ describe("TutorialScreen", () => {
                 speechBubble: {
                   speaker: "mira",
                   duration: 3,
+                  horizontalOffset: 0,
                   verticalOffset: 0,
                   bubbleWidth: 700,
                   text: "Welcome, Dreamer.",
@@ -613,6 +618,7 @@ describe("TutorialScreen", () => {
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: {
                 kind: "guide",
+                horizontalOffset: 40,
                 verticalOffset: 100,
                 bubbleWidth: 450,
                 model: {
@@ -634,6 +640,7 @@ describe("TutorialScreen", () => {
                 speechBubble: {
                   speaker: "mira",
                   duration: 3,
+                  horizontalOffset: 40,
                   verticalOffset: 0,
                   bubbleWidth: 700,
                   text: "Welcome, Dreamer.",
@@ -717,6 +724,7 @@ describe("TutorialScreen", () => {
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: {
                 kind: "guide",
+                horizontalOffset: 0,
                 verticalOffset: 0,
                 model: {
                   portrait: {
@@ -739,6 +747,7 @@ describe("TutorialScreen", () => {
                 speechBubble: {
                   speaker: "mira",
                   duration: 5,
+                  horizontalOffset: 0,
                   verticalOffset: 0,
                   bubbleWidth: 700,
                   text: "This card has a ▸Dawn ability.",
@@ -786,6 +795,7 @@ describe("TutorialScreen", () => {
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: {
                 kind: "guide",
+                horizontalOffset: 0,
                 verticalOffset: 0,
                 model: {
                   portrait: {
@@ -1177,6 +1187,7 @@ describe("TutorialScreen", () => {
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: {
                 kind: "guide",
+                horizontalOffset: 0,
                 verticalOffset: 0,
                 model: {
                   portrait: {
@@ -1199,6 +1210,7 @@ describe("TutorialScreen", () => {
                 speechBubble: {
                   speaker: "mira",
                   duration: 2,
+                  horizontalOffset: 0,
                   verticalOffset: 0,
                   bubbleWidth: 700,
                   text: "This card has a ▸Dawn ability.",
@@ -2774,6 +2786,7 @@ describe("TutorialScreen", () => {
                 speechBubble: {
                   speaker: "enemy",
                   duration: 3,
+                  horizontalOffset: 0,
                   verticalOffset: 0,
                   bubbleWidth: 300,
                   text: "For the Abyss!",
@@ -2862,6 +2875,7 @@ describe("TutorialScreen", () => {
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: {
                 kind: "guide",
+                horizontalOffset: 0,
                 verticalOffset: 0,
                 model: {
                   portrait: {
@@ -2882,6 +2896,7 @@ describe("TutorialScreen", () => {
                 speechBubble: {
                   speaker: "mira",
                   duration: 3,
+                  horizontalOffset: 0,
                   verticalOffset: 0,
                   bubbleWidth: 700,
                   text: "Welcome, Dreamer.",

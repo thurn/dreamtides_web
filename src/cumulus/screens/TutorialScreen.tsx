@@ -79,6 +79,7 @@ export type TutorialDialogueView =
       readonly parentAction?: TutorialAction["action"];
       readonly kind: "guide";
       readonly duration?: number;
+      readonly horizontalOffset: number;
       readonly verticalOffset: number;
       readonly bubbleWidth?: number;
       readonly model: CharacterDialogueModel;
@@ -89,6 +90,7 @@ export type TutorialDialogueView =
       readonly kind: "dreamAvatar";
       readonly owner: TutorialDreamAvatarOwner;
       readonly duration?: number;
+      readonly horizontalOffset?: number;
       readonly verticalOffset?: number;
       readonly bubbleWidth?: number;
       readonly speakerName: string;
@@ -697,7 +699,8 @@ function TutorialDreamAvatarDialogue({
       const horizontalGutter = Number.isFinite(gutter) ? gutter : 0;
       const targetCenterX =
         targetBox.left - screenBox.left + targetBox.width / 2;
-      const unclampedLeft = targetCenterX - pointer.x;
+      const unclampedLeft =
+        targetCenterX - pointer.x + (dialogue.horizontalOffset ?? 0);
       const left = Math.min(
         Math.max(unclampedLeft, horizontalGutter),
         screenBox.width - bubbleBox.width - horizontalGutter,
@@ -731,7 +734,13 @@ function TutorialDreamAvatarDialogue({
       observer.disconnect();
       window.removeEventListener("resize", updateAnchor);
     };
-  }, [desktop, dialogue.owner, dialogue.verticalOffset, layoutKey]);
+  }, [
+    desktop,
+    dialogue.horizontalOffset,
+    dialogue.owner,
+    dialogue.verticalOffset,
+    layoutKey,
+  ]);
 
   const pointerPlacement =
     anchor?.pointerPlacement ??
@@ -2704,7 +2713,10 @@ export function TutorialScreen({
             Math.round(
               (frontIntersectionX -
                 screenBox.left -
-                (bubbleBox.left - dialogueBox.left)) *
+                (bubbleBox.left - dialogueBox.left) +
+                (renderedDialogue?.kind === "guide"
+                  ? renderedDialogue.horizontalOffset
+                  : 0)) *
                 10,
             ) / 10,
           top:
@@ -2723,7 +2735,10 @@ export function TutorialScreen({
           window.getComputedStyle(screen).getPropertyValue("--space-6"),
         );
         next = {
-          left: 0,
+          left:
+            renderedDialogue?.kind === "guide"
+              ? renderedDialogue.horizontalOffset
+              : 0,
           top:
             Math.round(
               ((screenBox.height - dialogueBox.height) / 2 -
@@ -3055,10 +3070,13 @@ export function TutorialScreen({
                 : undefined,
             left: desktop ? (dialogueAnchor?.left ?? 0) : token("--gutter"),
             transform:
-              !desktop &&
-              view.currentAction?.action === "reveal-and-play-opponent-card" &&
-              renderedDialogue?.kind === "guide"
-                ? `translateY(${String(renderedDialogue.verticalOffset ?? 0)}px)`
+              !desktop && renderedDialogue?.kind === "guide"
+                ? `translate(${String(renderedDialogue.horizontalOffset)}px, ${
+                    view.currentAction?.action ===
+                    "reveal-and-play-opponent-card"
+                      ? `${String(renderedDialogue.verticalOffset ?? 0)}px`
+                      : "0"
+                  })`
                 : undefined,
             display: "flex",
             justifyContent: "flex-start",

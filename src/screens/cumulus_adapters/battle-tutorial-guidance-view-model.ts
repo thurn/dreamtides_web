@@ -61,6 +61,7 @@ export function buildBattleTutorialGuidanceView(
       messageCount: presentation.messages.length,
       duration: tutorialGuidanceMessageDurationSeconds(presentation),
       dialogue: guidanceDialogue(battle, message),
+      horizontalOffset: message.horizontalOffset ?? 0,
       verticalOffset: message.verticalOffset ?? 0,
       bubbleWidth: message.bubbleWidth ?? 700,
       source: {
@@ -80,6 +81,7 @@ export function buildBattleTutorialGuidanceView(
     messageCount: presentation.messages.length,
     duration: tutorialGuidanceMessageDurationSeconds(presentation),
     dialogue: guidanceDialogue(battle, message),
+    horizontalOffset: message.horizontalOffset ?? 0,
     verticalOffset: message.verticalOffset ?? 0,
     bubbleWidth: message.bubbleWidth ?? 700,
     source: {

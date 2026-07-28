@@ -182,7 +182,12 @@ export interface DreamAvatarOfferView {
 }
 
 /** Character-led guidance shown only for the fixed tutorial offer. */
-export type JourneyStartGuideDialogueView = CharacterDialogueModel;
+export interface JourneyStartGuideDialogueView {
+  readonly model: CharacterDialogueModel;
+  readonly horizontalOffset: number;
+  readonly verticalOffset: number;
+  readonly bubbleWidth: number;
+}
 
 export interface JourneyStartScreenProps {
   /** The DreamAvatars offered this run (three normally; one in the tutorial). */
@@ -204,6 +209,11 @@ export function JourneyStartGuideDialogue({
   readonly layout: "desktop" | "mobile";
 }) {
   const desktop = layout === "desktop";
+  const mobileLeftReserve = Math.max(0, -dialogue.horizontalOffset);
+  const mobileRightReserve = Math.max(0, dialogue.horizontalOffset);
+  const transform = desktop
+    ? `translate(${String(dialogue.horizontalOffset)}px, calc(-50% + ${String(dialogue.verticalOffset)}px))`
+    : `translate(${String(dialogue.horizontalOffset)}px, ${String(dialogue.verticalOffset)}px)`;
   return (
     <div
       data-journey-start-guide-dialogue=""
@@ -211,17 +221,22 @@ export function JourneyStartGuideDialogue({
         position: "absolute",
         zIndex: 7,
         top: desktop ? "50%" : "36%",
-        left: `max(var(--safe-area-inset-left), ${token("--gutter")})`,
+        left: desktop
+          ? `max(var(--safe-area-inset-left), ${token("--gutter")})`
+          : `calc(max(var(--safe-area-inset-left), ${token("--gutter")}) + ${String(mobileLeftReserve)}px)`,
         right: desktop
           ? undefined
-          : `max(var(--safe-area-inset-right), ${token("--gutter")})`,
-        width: desktop ? "min(700px, calc(50vw - 250px))" : undefined,
-        transform: desktop ? "translateY(-50%)" : undefined,
+          : `calc(max(var(--safe-area-inset-right), ${token("--gutter")}) + ${String(mobileRightReserve)}px)`,
+        width: desktop ? `${String(dialogue.bubbleWidth)}px` : undefined,
+        maxWidth: desktop
+          ? "calc(50vw - 250px)"
+          : `${String(dialogue.bubbleWidth)}px`,
+        transform,
         pointerEvents: "none",
       }}
     >
       <CharacterDialogue
-        dialogue={dialogue}
+        dialogue={dialogue.model}
         visible
         size={desktop ? "prominent" : "compact"}
         testId="journey-start-tutorial-dialogue"

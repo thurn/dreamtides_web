@@ -78,6 +78,7 @@ describe("buildBattleTutorialGuidanceView", () => {
         triggerId: "support",
         speaker,
         duration: 5,
+        horizontalOffset: 24,
         verticalOffset: -20,
         bubbleWidth: 300,
         text: "Support helps the characters in front of it.",
@@ -91,6 +92,7 @@ describe("buildBattleTutorialGuidanceView", () => {
         speakerName,
         text: "Support helps the characters in front of it.",
       },
+      horizontalOffset: 24,
       verticalOffset: -20,
       bubbleWidth: 300,
     });
@@ -150,6 +152,7 @@ describe("buildBattleTutorialGuidanceView", () => {
       triggerId: "support",
       speaker: "mira",
       duration: 1,
+      horizontalOffset: 0,
       verticalOffset: 0,
       bubbleWidth: 500,
       text: "Support helps the characters in front of it.",

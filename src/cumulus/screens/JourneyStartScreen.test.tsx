@@ -234,10 +234,15 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
       <JourneyStartScreen
         dreamAvatars={[OFFERED[0]]}
         guideDialogue={{
-          portrait: { kind: "character-portrait", characterId: "mira" },
-          portraitAlt: "Mira",
-          speakerName: "Mira",
-          text: "Choose a [purple]Dream Avatar[/purple].",
+          model: {
+            portrait: { kind: "character-portrait", characterId: "mira" },
+            portraitAlt: "Mira",
+            speakerName: "Mira",
+            text: "Choose a [purple]Dream Avatar[/purple].",
+          },
+          horizontalOffset: 30,
+          verticalOffset: 10,
+          bubbleWidth: 500,
         }}
         onPick={vi.fn()}
       />,
@@ -252,6 +257,16 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     );
     expect(dialogue?.getAttribute("data-character-dialogue-size")).toBe(
       "compact",
+    );
+    const anchor = container.querySelector<HTMLElement>(
+      "[data-journey-start-guide-dialogue]",
+    );
+    expect(anchor?.style.transform).toBe("translate(30px, 10px)");
+    expect(anchor?.style.left).toBe(
+      "calc(max(var(--safe-area-inset-left), var(--gutter)) + 0px)",
+    );
+    expect(anchor?.style.right).toBe(
+      "calc(max(var(--safe-area-inset-right), var(--gutter)) + 30px)",
     );
     const highlighted = dialogue?.querySelector<HTMLElement>(
       '[data-tutorial-instruction-highlight="purple"]',
@@ -383,10 +398,15 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
       <JourneyStartScreen
         dreamAvatars={[OFFERED[0]]}
         guideDialogue={{
-          portrait: { kind: "character-portrait", characterId: "mira" },
-          portraitAlt: "Mira",
-          speakerName: "Mira",
-          text: "Choose a [purple]Dream Avatar[/purple].",
+          model: {
+            portrait: { kind: "character-portrait", characterId: "mira" },
+            portraitAlt: "Mira",
+            speakerName: "Mira",
+            text: "Choose a [purple]Dream Avatar[/purple].",
+          },
+          horizontalOffset: 30,
+          verticalOffset: 10,
+          bubbleWidth: 500,
         }}
         onPick={vi.fn()}
       />,
@@ -397,6 +417,14 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
     );
     expect(dialogue?.getAttribute("data-character-dialogue-size")).toBe(
       "prominent",
+    );
+    const anchor = container.querySelector<HTMLElement>(
+      "[data-journey-start-guide-dialogue]",
+    );
+    expect(anchor?.style.width).toBe("500px");
+    expect(anchor?.style.maxWidth).toBe("calc(50vw - 250px)");
+    expect(anchor?.style.transform).toBe(
+      "translate(30px, calc(-50% + 10px))",
     );
 
     act(() => {

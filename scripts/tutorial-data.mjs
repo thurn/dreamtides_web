@@ -255,6 +255,15 @@ function validateTutorialSpeechBubble(value, actionId, required) {
       `Tutorial action ${JSON.stringify(actionId)} must have a finite speech bubble vertical offset.`,
     );
   }
+  const horizontalOffset = value.horizontalOffset ?? 0;
+  if (
+    typeof horizontalOffset !== "number" ||
+    !Number.isFinite(horizontalOffset)
+  ) {
+    throw invalid(
+      `Tutorial action ${JSON.stringify(actionId)} must have a finite speech bubble horizontal offset.`,
+    );
+  }
   const bubbleWidth =
     value.bubbleWidth ??
     (speaker === "mira"
@@ -273,9 +282,34 @@ function validateTutorialSpeechBubble(value, actionId, required) {
   return {
     speaker,
     duration,
+    horizontalOffset,
     verticalOffset,
     bubbleWidth,
     text: value.text,
+  };
+}
+
+/** Validate the persistent Mira guidance authored for journey start. */
+export function validateTutorialJourneyStartConfiguration(value) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw invalid("Tutorial data must contain a journeyStart table.");
+  }
+  const parsed = validateTutorialSpeechBubble(
+    value.speechBubble,
+    "journey-start",
+    true,
+  );
+  if (parsed.speaker !== "mira") {
+    throw invalid("Tutorial journeyStart speech bubble must target Mira.");
+  }
+  return {
+    speechBubble: {
+      speaker: parsed.speaker,
+      horizontalOffset: parsed.horizontalOffset,
+      verticalOffset: parsed.verticalOffset,
+      bubbleWidth: parsed.bubbleWidth,
+      text: parsed.text,
+    },
   };
 }
 
@@ -669,6 +703,9 @@ export function readTutorialConfiguration({
   const source = readFileSync(join(rootDir, tutorialTomlPath), "utf8");
   const parsed = parse(source);
   return {
+    journeyStart: validateTutorialJourneyStartConfiguration(
+      parsed.journeyStart,
+    ),
     actions: validateTutorialActions(parsed.actions),
     triggers: validateTutorialTriggers(parsed.triggers ?? []),
     battle: validateTutorialBattleConfiguration(parsed.battle),
@@ -681,11 +718,19 @@ export function readTutorialActions(options = {}) {
 }
 
 /** Stable whole-file serialization used by the editor's atomic save. */
-export function serializeTutorialToml(actions, triggers, battle) {
+export function serializeTutorialToml(
+  actions,
+  triggers,
+  battle,
+  journeyStart,
+) {
   const normalized = validateTutorialActions(actions);
   const normalizedTriggers = validateTutorialTriggers(triggers);
   const normalizedBattle = validateTutorialBattleConfiguration(battle);
+  const normalizedJourneyStart =
+    validateTutorialJourneyStartConfiguration(journeyStart);
   return `# Ordered actions and first-occurrence battle tutorials.\n\n${stringify({
+    journeyStart: normalizedJourneyStart,
     battle: normalizedBattle,
     actions: normalized,
     triggers: normalizedTriggers,
@@ -698,15 +743,16 @@ export function refreshTutorialDataJson({
   tutorialTomlPath = DEFAULT_TUTORIAL_TOML_PATH,
   tutorialJsonPath = DEFAULT_TUTORIAL_JSON_PATH,
 } = {}) {
-  const { actions, triggers, battle } = readTutorialConfiguration({
-    rootDir,
-    tutorialTomlPath,
-  });
+  const { journeyStart, actions, triggers, battle } =
+    readTutorialConfiguration({
+      rootDir,
+      tutorialTomlPath,
+    });
   const absoluteJsonPath = join(rootDir, tutorialJsonPath);
   mkdirSync(dirname(absoluteJsonPath), { recursive: true });
   writeFileSync(
     absoluteJsonPath,
-    `${JSON.stringify({ actions, triggers, battle }, null, 2)}\n`,
+    `${JSON.stringify({ journeyStart, actions, triggers, battle }, null, 2)}\n`,
   );
-  return { actions, triggers, battle, path: absoluteJsonPath };
+  return { journeyStart, actions, triggers, battle, path: absoluteJsonPath };
 }

@@ -9,6 +9,15 @@ import FrontDoorApp from "./FrontDoorApp";
 const mocks = vi.hoisted(() => ({
   loadJourneyContent: vi.fn<() => Promise<JourneyContent>>(),
   loadTutorialConfiguration: vi.fn(() => Promise.resolve({
+    journeyStart: {
+      speechBubble: {
+        speaker: "mira",
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 550,
+        text: "Choose an avatar.",
+      },
+    },
     actions: [],
     triggers: [],
     battle: { playerDraws: [], enemyDraws: [], dreamwellDraws: [] },

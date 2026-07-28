@@ -651,6 +651,7 @@ function openTutorialGuidance(
           speaker: match.speaker,
           text: match.text,
           duration: match.duration,
+          horizontalOffset: match.horizontalOffset,
           verticalOffset: match.verticalOffset,
           bubbleWidth: match.bubbleWidth,
         })),

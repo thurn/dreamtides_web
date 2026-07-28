@@ -71,6 +71,7 @@ import { createInitialReplayDraftState } from "../draft/draft-engine";
 import type { ReplayDraftState } from "../types/draft";
 import type {
   TutorialBattleConfiguration,
+  TutorialJourneyStartConfiguration,
   TutorialTriggerDefinition,
 } from "../types/tutorial";
 import {
@@ -88,6 +89,8 @@ export interface JourneyContent {
   tutorialTriggers?: readonly TutorialTriggerDefinition[];
   /** Authored draw order for the standalone playable tutorial battle. */
   tutorialBattle?: TutorialBattleConfiguration;
+  /** Authored guidance shown beside the fixed tutorial journey-start offer. */
+  tutorialJourneyStart?: TutorialJourneyStartConfiguration;
   /** Fixed three-tide draft pool used by the tutorial journey handoff. */
   tutorialJourneyPool?: TutorialJourneyPool;
   /**

@@ -19,7 +19,11 @@ class ResizeObserverStub {
 
 function guidanceFields(
   text: string,
-  options: { readonly verticalOffset?: number; readonly bubbleWidth?: number } = {},
+  options: {
+    readonly horizontalOffset?: number;
+    readonly verticalOffset?: number;
+    readonly bubbleWidth?: number;
+  } = {},
 ) {
   return {
     duration: 3,
@@ -32,6 +36,7 @@ function guidanceFields(
       speakerName: "Mira",
       text,
     },
+    horizontalOffset: options.horizontalOffset ?? 0,
     verticalOffset: options.verticalOffset ?? 0,
     bubbleWidth: options.bubbleWidth ?? 700,
   };
@@ -78,7 +83,11 @@ describe("BattleTutorialGuidance", () => {
               messageCount: 1,
               ...guidanceFields(
                 "[yellow]Erode[/yellow] sends cards to the void. Score 3⍟ for each missing card.",
-                { verticalOffset: 20, bubbleWidth: 300 },
+                {
+                  horizontalOffset: 30,
+                  verticalOffset: 20,
+                  bubbleWidth: 300,
+                },
               ),
               source: {
                 kind: "dreamwell",
@@ -120,7 +129,7 @@ describe("BattleTutorialGuidance", () => {
       '[data-testid="battle-tutorial-dismiss"]',
     )?.parentElement;
     expect(dialogueLayout?.style.maxWidth).toBe("300px");
-    expect(dialogueLayout?.style.transform).toBe("translateY(20px)");
+    expect(dialogueLayout?.style.transform).toBe("translate(30px, 20px)");
     expect(
       container.querySelector('[data-testid="battle-tutorial-continue"]'),
     ).toBeNull();

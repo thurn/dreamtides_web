@@ -59,6 +59,7 @@ const DEFAULT_HOW_TO_PLAY_TEXT =
 const DEFAULT_SPEECH_BUBBLE: TutorialSpeechBubble = {
   speaker: "mira",
   duration: 3,
+  horizontalOffset: 0,
   verticalOffset: 0,
   bubbleWidth: DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH,
   text: "New tutorial message.",
@@ -583,6 +584,32 @@ function SpeechBubbleEditor({
                 MAXIMUM_SPEECH_BUBBLE_WIDTH,
                 speechBubble.bubbleWidth + SPEECH_BUBBLE_WIDTH_STEP,
               ),
+            },
+            true,
+          )
+        }
+      />
+      <NumberStepper
+        label="Horizontal Offset"
+        value={speechBubble.horizontalOffset}
+        displayValue={`${waitLabel(speechBubble.horizontalOffset)}px`}
+        size="sm"
+        decrementLabel={`Move speech bubble left for action ${String(actionNumber)}`}
+        incrementLabel={`Move speech bubble right for action ${String(actionNumber)}`}
+        onDecrement={() =>
+          onChange(
+            {
+              ...speechBubble,
+              horizontalOffset: speechBubble.horizontalOffset - 10,
+            },
+            true,
+          )
+        }
+        onIncrement={() =>
+          onChange(
+            {
+              ...speechBubble,
+              horizontalOffset: speechBubble.horizontalOffset + 10,
             },
             true,
           )

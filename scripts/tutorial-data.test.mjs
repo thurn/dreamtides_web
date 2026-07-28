@@ -32,6 +32,16 @@ const FIXTURE_BATTLE = {
   ],
 };
 
+const FIXTURE_JOURNEY_START = {
+  speechBubble: {
+    speaker: "mira",
+    horizontalOffset: 40,
+    verticalOffset: 0,
+    bubbleWidth: 550,
+    text: "Choose a [purple]Dream Avatar[/purple].",
+  },
+};
+
 const FIXTURE_ACTIONS = [
   {
     id: "opening-line",
@@ -39,6 +49,7 @@ const FIXTURE_ACTIONS = [
     speechBubble: {
       speaker: "mira",
       duration: 1.5,
+      horizontalOffset: 0,
       verticalOffset: 100,
       bubbleWidth: 650,
       text:
@@ -68,6 +79,7 @@ const FIXTURE_ACTIONS = [
     speechBubble: {
       speaker: "mira",
       duration: 2,
+      horizontalOffset: 30,
       verticalOffset: 20,
       bubbleWidth: 450,
       text: "This card has a ▸Dawn ability.",
@@ -115,25 +127,40 @@ describe("tutorial data", () => {
     mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
     writeFileSync(
       join(rootDir, "data", "tabula", "tutorial.toml"),
-      serializeTutorialToml(FIXTURE_ACTIONS, [], FIXTURE_BATTLE),
+      serializeTutorialToml(
+        FIXTURE_ACTIONS,
+        [],
+        FIXTURE_BATTLE,
+        FIXTURE_JOURNEY_START,
+      ),
     );
 
     expect(readTutorialActions({ rootDir })).toEqual(FIXTURE_ACTIONS);
     const result = refreshTutorialDataJson({ rootDir });
     expect(result.actions).toEqual(FIXTURE_ACTIONS);
     expect(result.battle).toEqual(FIXTURE_BATTLE);
+    expect(result.journeyStart).toEqual(FIXTURE_JOURNEY_START);
     expect(
       JSON.parse(
         readFileSync(join(rootDir, "public", "tutorial-data.json"), "utf8"),
       ),
     ).toEqual({
+      journeyStart: FIXTURE_JOURNEY_START,
       actions: FIXTURE_ACTIONS,
       triggers: [],
       battle: FIXTURE_BATTLE,
     });
     expect(
-      parse(serializeTutorialToml(FIXTURE_ACTIONS, [], FIXTURE_BATTLE)),
+      parse(
+        serializeTutorialToml(
+          FIXTURE_ACTIONS,
+          [],
+          FIXTURE_BATTLE,
+          FIXTURE_JOURNEY_START,
+        ),
+      ),
     ).toMatchObject({
+      journeyStart: FIXTURE_JOURNEY_START,
       actions: FIXTURE_ACTIONS,
       battle: FIXTURE_BATTLE,
     });
@@ -446,7 +473,14 @@ describe("tutorial data", () => {
       bubbleWidth: 300,
     });
     expect(
-      parse(serializeTutorialToml(FIXTURE_ACTIONS, triggers, FIXTURE_BATTLE))
+      parse(
+        serializeTutorialToml(
+          FIXTURE_ACTIONS,
+          triggers,
+          FIXTURE_BATTLE,
+          FIXTURE_JOURNEY_START,
+        ),
+      )
         .triggers,
     )
       .toEqual(triggers);

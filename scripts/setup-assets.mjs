@@ -16,6 +16,7 @@ import {
   stripJsonComments,
 } from "./lib/card-refs.mjs";
 import {
+  validateTutorialJourneyStartConfiguration,
   validateTutorialActions,
   validateTutorialBattleConfiguration,
   validateTutorialTriggers,
@@ -1112,12 +1113,16 @@ export function setupAssets({
   });
 
   const tutorialSource = parse(readFileSync(tutorialTomlPath, "utf8"));
+  const tutorialJourneyStart = validateTutorialJourneyStartConfiguration(
+    tutorialSource.journeyStart,
+  );
   const tutorialActions = validateTutorialActions(tutorialSource.actions);
   const tutorialTriggers = validateTutorialTriggers(tutorialSource.triggers ?? []);
   const tutorialBattle = validateTutorialBattleConfiguration(tutorialSource.battle);
   writeFileSync(
     tutorialJsonPath,
     `${JSON.stringify({
+      journeyStart: tutorialJourneyStart,
       actions: tutorialActions,
       triggers: tutorialTriggers,
       battle: tutorialBattle,

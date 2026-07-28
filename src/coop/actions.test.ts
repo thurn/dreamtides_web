@@ -250,6 +250,7 @@ describe("coop actions facade", () => {
         speechBubble: {
           speaker: "mira" as const,
           duration: 1,
+          horizontalOffset: 0,
           verticalOffset: 0,
           bubbleWidth: 700,
           text: "Begin here.",

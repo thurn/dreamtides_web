@@ -54,6 +54,7 @@ function speechBubble(
   return {
     speaker: "mira",
     duration: 3,
+    horizontalOffset: 0,
     verticalOffset: 0,
     bubbleWidth: 700,
     text,
@@ -436,6 +437,7 @@ describe("buildTutorialView", () => {
       speechBubble: {
         speaker: "enemy",
         durationSeconds: 3,
+        horizontalOffsetPx: 0,
         verticalOffsetPx: 0,
         bubbleWidthPx: 450,
         messageText: "For the Abyss!",
@@ -533,6 +535,7 @@ describe("buildTutorialView", () => {
       speechBubble: {
         speaker: "mira",
         durationSeconds: 4,
+        horizontalOffsetPx: 0,
         verticalOffsetPx: 20,
         bubbleWidthPx: 450,
         messageText: "This card has a ▸Dawn ability.",
@@ -563,6 +566,7 @@ describe("buildTutorialView", () => {
       speechBubble: {
         speaker: "mira",
         durationSeconds: 3,
+        horizontalOffsetPx: 0,
         verticalOffsetPx: 0,
         bubbleWidthPx: 700,
         messageText: "Good, you have now materialized this character.",
@@ -678,6 +682,7 @@ describe("buildTutorialView", () => {
       parentAction: "display-speech-bubble",
       kind: "guide",
       duration: 3,
+      horizontalOffset: 0,
       verticalOffset: 0,
       bubbleWidth: 450,
       model: {
@@ -887,6 +892,7 @@ describe("buildTutorialView", () => {
       kind: "dreamAvatar",
       owner: "enemy",
       duration: 3,
+      horizontalOffset: 0,
       verticalOffset: 0,
       bubbleWidth: 700,
       speakerName: "Threxan",
@@ -1095,6 +1101,7 @@ describe("buildTutorialView", () => {
       parentAction: "end-turn",
       kind: "guide",
       duration: 3,
+      horizontalOffset: 0,
       verticalOffset: 0,
       bubbleWidth: 700,
       model: {
@@ -1253,6 +1260,7 @@ describe("buildTutorialView", () => {
       kind: "dreamAvatar",
       owner: "enemy",
       duration: 3,
+      horizontalOffset: 0,
       verticalOffset: 0,
       bubbleWidth: 700,
       speakerName: "Threxan",

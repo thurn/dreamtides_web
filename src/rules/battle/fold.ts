@@ -184,6 +184,7 @@ export interface TutorialGuidanceMessage {
   readonly speaker: TutorialTriggerDefinition["speaker"];
   readonly text: string;
   readonly duration: number;
+  readonly horizontalOffset: number;
   readonly verticalOffset: number;
   readonly bubbleWidth: number;
 }

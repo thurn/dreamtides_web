@@ -37,6 +37,7 @@ export interface BattleTutorialGuidanceView {
   readonly messageCount: number;
   readonly duration: number;
   readonly dialogue: CharacterDialogueModel;
+  readonly horizontalOffset: number;
   readonly verticalOffset: number;
   readonly bubbleWidth: number;
   readonly source: BattleTutorialGuidanceSourceView;
@@ -393,7 +394,7 @@ export function BattleTutorialGuidance({
           flex: desktop ? "1 1 480px" : "0 1 auto",
           flexDirection: "column",
           alignItems: "center",
-          transform: `translateY(${String(renderedView.verticalOffset)}px)`,
+          transform: `translate(${String(renderedView.horizontalOffset)}px, ${String(renderedView.verticalOffset)}px)`,
         }}
       >
         <Pressable

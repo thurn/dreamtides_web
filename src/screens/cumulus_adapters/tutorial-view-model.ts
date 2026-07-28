@@ -42,6 +42,7 @@ function tutorialSpeechBubbleLogDetails(speechBubble: TutorialSpeechBubble) {
   return {
     speaker: speechBubble.speaker,
     durationSeconds: speechBubble.duration,
+    horizontalOffsetPx: speechBubble.horizontalOffset,
     verticalOffsetPx: speechBubble.verticalOffset,
     bubbleWidthPx: speechBubble.bubbleWidth,
     messageText,
@@ -888,6 +889,7 @@ export function buildTutorialView(
               kind: "dreamAvatar",
               owner: dialogue.speechBubble.speaker,
               duration: dialogue.speechBubble.duration,
+              horizontalOffset: dialogue.speechBubble.horizontalOffset,
               verticalOffset: dialogue.speechBubble.verticalOffset,
               bubbleWidth: dialogue.speechBubble.bubbleWidth,
               speakerName:
@@ -901,6 +903,7 @@ export function buildTutorialView(
               parentAction: dialogue.parentAction,
               kind: "guide",
               duration: dialogue.speechBubble.duration,
+              horizontalOffset: dialogue.speechBubble.horizontalOffset,
               verticalOffset: dialogue.speechBubble.verticalOffset,
               bubbleWidth: dialogue.speechBubble.bubbleWidth,
               model: {

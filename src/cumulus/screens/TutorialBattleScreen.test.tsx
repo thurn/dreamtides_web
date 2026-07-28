@@ -703,6 +703,7 @@ describe("TutorialBattleScreen", () => {
         speakerName: "Mira",
         text: "Erode sends cards to the void.",
       },
+      horizontalOffset: 0,
       verticalOffset: 0,
       bubbleWidth: 700,
       source: {

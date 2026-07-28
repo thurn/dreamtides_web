@@ -65,6 +65,7 @@ export default function FrontDoorApp({
       if (cancelled) return;
       const content = {
         ...loadedContent,
+        tutorialJourneyStart: tutorial.journeyStart,
         tutorialTriggers: tutorial.triggers,
         tutorialBattle: tutorial.battle,
       };

@@ -14,6 +14,7 @@ function message(duration: number): TutorialGuidanceMessage {
     speaker: "mira",
     text: "Fixture guidance.",
     duration,
+    horizontalOffset: 0,
     verticalOffset: 0,
     bubbleWidth: 500,
   };

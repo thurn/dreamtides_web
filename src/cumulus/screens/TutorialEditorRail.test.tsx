@@ -28,6 +28,7 @@ vi.mock("framer-motion", () => ({
 const INITIAL_SPEECH_BUBBLE: TutorialSpeechBubble = {
   speaker: "mira",
   duration: 3,
+  horizontalOffset: 0,
   verticalOffset: 0,
   bubbleWidth: 700,
   text: "Welcome, Dreamer.",
@@ -104,6 +105,7 @@ describe("TutorialEditorRail", () => {
         speechBubble: {
           speaker: "mira",
           duration: 1,
+          horizontalOffset: 0,
           verticalOffset: 0,
           bubbleWidth: 700,
           text: "Second.",
@@ -204,6 +206,7 @@ describe("TutorialEditorRail", () => {
           speechBubble: {
             speaker: "mira",
             duration: 3,
+            horizontalOffset: 0,
             verticalOffset: 0,
             bubbleWidth: 700,
             text: "New tutorial message.",
@@ -360,6 +363,7 @@ describe("TutorialEditorRail", () => {
           speechBubble: {
             speaker: "mira",
             duration: 3,
+            horizontalOffset: 0,
             verticalOffset: 0,
             bubbleWidth: 700,
             text: "Good, you have now [yellow]materialized[/yellow] this character.",
@@ -437,6 +441,36 @@ describe("TutorialEditorRail", () => {
       true,
     );
     expect(container.textContent).toContain("10px");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("authors a signed horizontal offset for every speech bubble", () => {
+    const onChange = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<EditorHarness onChange={onChange} />));
+
+    const moveRight = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="Move speech bubble right for action 1"]',
+    );
+    expect(moveRight).not.toBeNull();
+    act(() => moveRight?.click());
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        {
+          ...INITIAL_ACTIONS[0],
+          speechBubble: {
+            ...INITIAL_SPEECH_BUBBLE,
+            horizontalOffset: 10,
+          },
+        },
+      ],
+      true,
+    );
 
     act(() => root.unmount());
     container.remove();
@@ -931,6 +965,7 @@ describe("TutorialEditorRail", () => {
           speechBubble: {
             speaker: "mira",
             duration: 3,
+            horizontalOffset: 0,
             verticalOffset: 0,
             bubbleWidth: 700,
             text: "New tutorial message.",
@@ -959,6 +994,7 @@ describe("TutorialEditorRail", () => {
           speechBubble: {
             speaker: "mira",
             duration: 3,
+            horizontalOffset: 0,
             verticalOffset: 0,
             bubbleWidth: 650,
             text: "New tutorial message.",
@@ -987,6 +1023,7 @@ describe("TutorialEditorRail", () => {
           speechBubble: {
             speaker: "mira",
             duration: 3,
+            horizontalOffset: 0,
             verticalOffset: 10,
             bubbleWidth: 650,
             text: "New tutorial message.",
@@ -1015,6 +1052,7 @@ describe("TutorialEditorRail", () => {
           speechBubble: {
             speaker: "mira",
             duration: 3,
+            horizontalOffset: 0,
             verticalOffset: 10,
             bubbleWidth: 650,
             text: "New tutorial message.",

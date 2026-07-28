@@ -1169,6 +1169,7 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
         priority: 100,
         speaker: "mira",
         duration: 3,
+        horizontalOffset: 0,
         verticalOffset: 0,
         bubbleWidth: 700,
         match: { kind: "glossary", id: "erode" },

@@ -18,18 +18,31 @@ export type TutorialDreamAvatarOwner = "player" | "enemy";
 /** Character whose portrait anchors an authored tutorial speech bubble. */
 export type TutorialSpeechBubbleSpeaker = "mira" | TutorialDreamAvatarOwner;
 
-/** Shared authoring model for every tutorial speech bubble. */
-export interface TutorialSpeechBubble {
+/** Shared placement and copy authored for every tutorial speech bubble. */
+export interface TutorialSpeechBubblePresentation {
   /** Character whose portrait anchors the bubble. */
   readonly speaker: TutorialSpeechBubbleSpeaker;
-  /** Seconds the bubble remains visible after it appears. */
-  readonly duration: number;
+  /** Signed pixels added to the computed horizontal dialogue position. */
+  readonly horizontalOffset: number;
   /** Signed pixels added to the computed vertical dialogue position. */
   readonly verticalOffset: number;
   /** Desktop maximum width of the speech bubble, in pixels. */
   readonly bubbleWidth: number;
   /** Yellow and event-frame purple markup highlight exact inline runs. */
   readonly text: string;
+}
+
+/** Shared authoring model for timed tutorial speech bubbles. */
+export interface TutorialSpeechBubble extends TutorialSpeechBubblePresentation {
+  /** Seconds the bubble remains visible after it appears. */
+  readonly duration: number;
+}
+
+/** Persistent guidance shown beside the tutorial journey-start offer. */
+export interface TutorialJourneyStartConfiguration {
+  readonly speechBubble: TutorialSpeechBubblePresentation & {
+    readonly speaker: "mira";
+  };
 }
 
 /** Authoritative battle edge that may open a supplemental tutorial. */
@@ -62,6 +75,7 @@ export interface TutorialTriggerDefinition extends TutorialSpeechBubble {
 
 /** Complete generated tutorial configuration. */
 export interface TutorialConfiguration {
+  readonly journeyStart: TutorialJourneyStartConfiguration;
   readonly actions: readonly TutorialAction[];
   readonly triggers: readonly TutorialTriggerDefinition[];
   readonly battle: TutorialBattleConfiguration;

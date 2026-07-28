@@ -72,8 +72,15 @@ export function JourneyStartScreenAdapter() {
     ],
   );
   const guideDialogue = useMemo(
-    () => buildJourneyStartGuideDialogue(tutorialDreamAvatarId),
-    [tutorialDreamAvatarId],
+    () =>
+      buildJourneyStartGuideDialogue(
+        tutorialDreamAvatarId,
+        journeyContent.tutorialJourneyStart?.speechBubble,
+      ),
+    [
+      journeyContent.tutorialJourneyStart?.speechBubble,
+      tutorialDreamAvatarId,
+    ],
   );
 
   useEffect(() => {
@@ -85,8 +92,11 @@ export function JourneyStartScreenAdapter() {
       "tutorial_dream_avatar_guidance_shown",
       {
         dreamAvatarId: tutorialDreamAvatarId,
-        speakerName: guideDialogue.speakerName,
-        text: guideDialogue.text,
+        speakerName: guideDialogue.model.speakerName,
+        horizontalOffsetPx: guideDialogue.horizontalOffset,
+        verticalOffsetPx: guideDialogue.verticalOffset,
+        bubbleWidthPx: guideDialogue.bubbleWidth,
+        text: guideDialogue.model.text,
       },
     );
   }, [

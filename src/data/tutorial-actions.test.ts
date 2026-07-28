@@ -3,10 +3,20 @@ import {
   loadTutorialActions,
   parseTutorialActions,
   parseTutorialBattleConfiguration,
+  parseTutorialJourneyStartConfiguration,
   parseTutorialTriggers,
 } from "./tutorial-actions";
 
 const ACTIONS_RESPONSE = {
+  journeyStart: {
+    speechBubble: {
+      speaker: "mira",
+      horizontalOffset: 40,
+      verticalOffset: 0,
+      bubbleWidth: 550,
+      text: "Choose a [purple]Dream Avatar[/purple].",
+    },
+  },
   actions: [
     {
       id: "welcome",
@@ -14,6 +24,7 @@ const ACTIONS_RESPONSE = {
       speechBubble: {
         speaker: "mira",
         duration: 3,
+        horizontalOffset: 0,
         verticalOffset: 0,
         bubbleWidth: 700,
         text: "Welcome, Dreamer.",
@@ -69,6 +80,7 @@ describe("parseTutorialActions", () => {
           speechBubble: {
             speaker: "enemy",
             duration: 3,
+            horizontalOffset: 20,
             verticalOffset: 0,
             bubbleWidth: 450,
             text:
@@ -84,6 +96,7 @@ describe("parseTutorialActions", () => {
         speechBubble: {
           speaker: "enemy",
           duration: 3,
+          horizontalOffset: 20,
           verticalOffset: 0,
           bubbleWidth: 450,
           text:
@@ -134,13 +147,17 @@ describe("parseTutorialActions", () => {
     ).toThrow(/unclosed yellow highlight/u);
   });
 
-  it("preserves finite Mira vertical offsets and rejects invalid offsets", () => {
+  it("preserves finite Mira offsets and rejects invalid offsets", () => {
     expect(
       parseTutorialActions([
         {
           id: "lower-line",
           action: "display-speech-bubble",
-          speechBubble: { verticalOffset: 100, text: "A lower line." },
+          speechBubble: {
+            horizontalOffset: 30,
+            verticalOffset: 100,
+            text: "A lower line.",
+          },
           wait: 3,
         },
       ]),
@@ -151,6 +168,7 @@ describe("parseTutorialActions", () => {
         speechBubble: {
           speaker: "mira",
           duration: 3,
+          horizontalOffset: 30,
           verticalOffset: 100,
           bubbleWidth: 700,
           text: "A lower line.",
@@ -168,6 +186,29 @@ describe("parseTutorialActions", () => {
         },
       ]),
     ).toThrow(/finite speech bubble vertical offset/u);
+    expect(() =>
+      parseTutorialActions([
+        {
+          id: "bad-horizontal-offset",
+          action: "display-speech-bubble",
+          speechBubble: { horizontalOffset: "right", text: "No." },
+          wait: 1,
+        },
+      ]),
+    ).toThrow(/finite speech bubble horizontal offset/u);
+  });
+
+  it("parses persistent journey-start guidance from authored data", () => {
+    expect(
+      parseTutorialJourneyStartConfiguration(
+        ACTIONS_RESPONSE.journeyStart,
+      ),
+    ).toEqual(ACTIONS_RESPONSE.journeyStart);
+    expect(() =>
+      parseTutorialJourneyStartConfiguration({
+        speechBubble: { speaker: "enemy", text: "No." },
+      }),
+    ).toThrow(/must target Mira/u);
   });
 
   it("preserves authored How to Play copy and rejects blank messages", () => {
@@ -345,6 +386,7 @@ describe("parseTutorialActions", () => {
         speechBubble: {
           speaker: "mira",
           duration: 3,
+          horizontalOffset: 0,
           verticalOffset: 0,
           bubbleWidth: 700,
           text: "Good, you have now [yellow]materialized[/yellow] this character.",
@@ -572,6 +614,7 @@ describe("parseTutorialActions", () => {
           cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
           speechBubble: {
             duration: 4,
+            horizontalOffset: 30,
             verticalOffset: 20,
             bubbleWidth: 450,
             text: "This card has a ▸Dawn ability.",
@@ -588,6 +631,7 @@ describe("parseTutorialActions", () => {
         speechBubble: {
           speaker: "mira",
           duration: 4,
+          horizontalOffset: 30,
           verticalOffset: 20,
           bubbleWidth: 450,
           text: "This card has a ▸Dawn ability.",
@@ -678,6 +722,7 @@ describe("parseTutorialActions", () => {
           priority: 100,
           speaker: "player",
           duration: 5,
+          horizontalOffset: 40,
           verticalOffset: -20,
           bubbleWidth: 300,
           match: { kind: "glossary", id: "support" },
@@ -691,6 +736,7 @@ describe("parseTutorialActions", () => {
         priority: 100,
         speaker: "player",
         duration: 5,
+        horizontalOffset: 40,
         verticalOffset: -20,
         bubbleWidth: 300,
         match: { kind: "glossary", id: "support" },

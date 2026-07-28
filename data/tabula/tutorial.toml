@@ -1,5 +1,12 @@
 # Ordered actions and playable-battle draw sequences for the standalone tutorial.
 
+[journeyStart.speechBubble]
+speaker = "mira"
+horizontalOffset = 40
+verticalOffset = 0
+bubbleWidth = 550
+text = "For each journey, you must choose a [purple]Dream Avatar[/purple] who provides a permanent ability."
+
 [battle]
 # Cards are drawn from each list in order after the authored tutorial actions
 # hand control to the playable battle.

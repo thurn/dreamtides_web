@@ -14,6 +14,7 @@ import type {
   TutorialJourneyPool,
   TutorialJourneyTide,
 } from "../../data/tutorial-journey-pool";
+import type { TutorialJourneyStartConfiguration } from "../../types/tutorial";
 import type {
   DreamAvatarOfferView,
   DreamAvatarTideView,
@@ -22,9 +23,6 @@ import type {
 
 /** The select screen shows at most this many tides per DreamAvatar. */
 const MAX_TIDES_SHOWN = 4;
-
-const TUTORIAL_GUIDANCE_TEXT =
-  "For each journey, you must choose a [purple]Dream Avatar[/purple] who provides a permanent ability.";
 
 /** Map a tides4 deck color to the Cumulus {@link Tide} whose icon + palette it uses. */
 const TIDE_BY_COLOR: Record<Tides4Color, Tide> = {
@@ -62,13 +60,21 @@ export function resolveDreamAvatarOffer(
 /** Build Mira's fixed guidance for the tutorial-only DreamAvatar offer. */
 export function buildJourneyStartGuideDialogue(
   tutorialDreamAvatarId?: string,
+  speechBubble?: TutorialJourneyStartConfiguration["speechBubble"],
 ): JourneyStartGuideDialogueView | undefined {
-  if (tutorialDreamAvatarId === undefined) return undefined;
+  if (tutorialDreamAvatarId === undefined || speechBubble === undefined) {
+    return undefined;
+  }
   return {
-    portrait: { kind: "character-portrait", characterId: "mira" },
-    portraitAlt: "Mira",
-    speakerName: "Mira",
-    text: TUTORIAL_GUIDANCE_TEXT,
+    model: {
+      portrait: { kind: "character-portrait", characterId: "mira" },
+      portraitAlt: "Mira",
+      speakerName: "Mira",
+      text: speechBubble.text,
+    },
+    horizontalOffset: speechBubble.horizontalOffset,
+    verticalOffset: speechBubble.verticalOffset,
+    bubbleWidth: speechBubble.bubbleWidth,
   };
 }
 
