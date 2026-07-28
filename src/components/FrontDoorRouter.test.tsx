@@ -20,9 +20,13 @@ const adapterMocks = vi.hoisted(() => ({
   tutorialSpeed: null as number | null,
   tutorialDirectLive: null as boolean | null,
 }));
+const DREAM_AVATARS = [] as const;
 
 vi.mock("../state/front-door-context", () => ({
-  useFrontDoor: () => ({ state: stateMocks.frontDoor, battle: stateMocks.battle }),
+  useFrontDoor: () => ({
+    state: stateMocks.frontDoor,
+    battle: stateMocks.battle,
+  }),
 }));
 
 vi.mock("../screens/cumulus_adapters/MainMenuScreenAdapter", () => ({
@@ -40,7 +44,13 @@ vi.mock("../screens/cumulus_adapters/LoadingScreenAdapter", () => ({
 }));
 
 vi.mock("../screens/cumulus_adapters/TutorialScreenAdapter", () => ({
-  TutorialScreenAdapter: ({ playbackSpeed, directLive }: { playbackSpeed: number; directLive?: boolean }) => {
+  TutorialScreenAdapter: ({
+    playbackSpeed,
+    directLive,
+  }: {
+    playbackSpeed: number;
+    directLive?: boolean;
+  }) => {
     adapterMocks.tutorialSpeed = playbackSpeed;
     adapterMocks.tutorialDirectLive = directLive ?? false;
     return <main data-tutorial-screen />;
@@ -76,12 +86,26 @@ describe("FrontDoorRouter", () => {
     document.body.append(container);
     const root = createRoot(container);
 
-    act(() => root.render(<FrontDoorRouter tutorialPlaybackSpeed={4} />));
+    act(() =>
+      root.render(
+        <FrontDoorRouter
+          dreamAvatars={DREAM_AVATARS}
+          tutorialPlaybackSpeed={4}
+        />,
+      ),
+    );
     expect(container.querySelector("[data-main-menu]")).not.toBeNull();
     expect(adapterMocks.mainSpeed).toBe(4);
 
     stateMocks.frontDoor = { phase: "loading", journeyId: "event:1" };
-    act(() => root.render(<FrontDoorRouter tutorialPlaybackSpeed={4} />));
+    act(() =>
+      root.render(
+        <FrontDoorRouter
+          dreamAvatars={DREAM_AVATARS}
+          tutorialPlaybackSpeed={4}
+        />,
+      ),
+    );
     expect(container.querySelector("[data-loading-screen]")).not.toBeNull();
     expect(adapterMocks.loadingSpeed).toBe(4);
     expect(window.location.pathname).toBe("/loading");
@@ -89,14 +113,30 @@ describe("FrontDoorRouter", () => {
     expect(window.location.hash).toBe("#shared");
 
     stateMocks.frontDoor = { phase: "tutorial", journeyId: "event:1" };
-    act(() => root.render(<FrontDoorRouter tutorialPlaybackSpeed={4} />));
+    act(() =>
+      root.render(
+        <FrontDoorRouter
+          dreamAvatars={DREAM_AVATARS}
+          tutorialPlaybackSpeed={4}
+        />,
+      ),
+    );
     expect(container.querySelector("[data-tutorial-screen]")).not.toBeNull();
     expect(adapterMocks.tutorialSpeed).toBe(4);
     expect(window.location.pathname).toBe("/tutorial");
 
     stateMocks.battle = { mode: { kind: "tutorial" } };
-    act(() => root.render(<FrontDoorRouter tutorialPlaybackSpeed={4} />));
-    expect(container.querySelector("[data-tutorial-live-battle]")).not.toBeNull();
+    act(() =>
+      root.render(
+        <FrontDoorRouter
+          dreamAvatars={DREAM_AVATARS}
+          tutorialPlaybackSpeed={4}
+        />,
+      ),
+    );
+    expect(
+      container.querySelector("[data-tutorial-live-battle]"),
+    ).not.toBeNull();
 
     act(() => root.unmount());
   });
@@ -106,7 +146,11 @@ describe("FrontDoorRouter", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<FrontDoorRouter directTutorialBattle />));
+    act(() =>
+      root.render(
+        <FrontDoorRouter dreamAvatars={DREAM_AVATARS} directTutorialBattle />,
+      ),
+    );
     expect(container.querySelector("[data-tutorial-screen]")).not.toBeNull();
     expect(adapterMocks.tutorialDirectLive).toBe(true);
     act(() => root.unmount());

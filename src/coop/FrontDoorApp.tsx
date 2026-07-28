@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Database } from "firebase/database";
 import { FrontDoorRouter } from "../components/FrontDoorRouter";
 import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
-import { loadQuestContent } from "../data/quest-content";
+import { loadQuestContent, type QuestContent } from "../data/quest-content";
 import { loadTutorialConfiguration } from "../data/tutorial-actions";
 import { getFirebaseDatabase } from "../firebase/app-config";
 import type { RuntimeConfig } from "../runtime/runtime-config";
@@ -26,7 +26,9 @@ export default function FrontDoorApp({
   directTutorialBattle = false,
 }: FrontDoorAppProps): ReactNode {
   const [contentState, setContentState] = useState<
-    { status: "loading" } | { status: "ready" } | { status: "error"; message: string }
+    | { status: "loading" }
+    | { status: "ready"; content: QuestContent }
+    | { status: "error"; message: string }
   >({ status: "loading" });
   const databaseResult = useMemo<
     { database: Database; error: null } | { database: null; error: string }
@@ -65,7 +67,7 @@ export default function FrontDoorApp({
         tutorialBattle: tutorial.battle,
       };
       registerGameProviders(content);
-      setContentState({ status: "ready" });
+      setContentState({ status: "ready", content });
     }).catch((error: unknown) => {
       if (cancelled) return;
       setContentState({
@@ -124,6 +126,7 @@ export default function FrontDoorApp({
         <CoopProvider context={context}>
           <FrontDoorProvider>
             <FrontDoorRouter
+              dreamAvatars={contentState.content.dreamAvatars}
               tutorialPlaybackSpeed={runtimeConfig.tutorialPlaybackSpeed ?? 1}
               directTutorialBattle={directTutorialBattle}
             />

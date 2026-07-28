@@ -6,7 +6,7 @@ import { homedir } from "node:os";
 import { pathToFileURL } from "node:url";
 import { parse } from "smol-toml";
 import { CARDS_V2_POOL_METADATA } from "../src/data/cards-v2-metadata.ts";
-import { DREAM_AVATAR_ARCHETYPES } from "../src/data/dream-avatars-v2-database.ts";
+import { DREAM_AVATAR_ARCHETYPES_BY_ID } from "../src/data/dream-avatars-v2-database.ts";
 import { OFFER_TILE_BACKGROUND_IMAGE_NUMBERS } from "../src/data/offer-tile-art.ts";
 import {
   CARD_ID_RE,
@@ -1302,7 +1302,7 @@ export function setupAssets({
   // draft test harness. They carry a kebab->camel normalization and a
   // `signature-cards` list that steers the standard `idf3` pool variant. The
   // `draft-archetypes` the non-`idf3` variants seed from live in TypeScript
-  // ({@link DREAM_AVATAR_ARCHETYPES}) and are merged in below.
+  // ({@link DREAM_AVATAR_ARCHETYPES_BY_ID}) and are merged in below.
   console.log("Parsing dream_avatars_v2.toml...");
   const dreamAvatarV2TomlContent = readFileSync(dreamAvatarV2TomlPath, "utf8");
   const parsedDreamAvatarsV2 = parse(dreamAvatarV2TomlContent);
@@ -1320,7 +1320,7 @@ export function setupAssets({
   // emitted as `signatureCardIds` (index-aligned with `signatureCards`) so
   // consumers that must distinguish two cards sharing a name can key on the id.
   const jsonDreamAvatarsV2 = allDreamAvatarsV2.map((dreamAvatar) => {
-    const archetypes = DREAM_AVATAR_ARCHETYPES[dreamAvatar.name];
+    const archetypes = DREAM_AVATAR_ARCHETYPES_BY_ID[dreamAvatar.id];
     if (archetypes) dreamAvatar["draft-archetypes"] = archetypes;
     const transformed = transformDreamAvatar(dreamAvatar);
     if (Array.isArray(transformed.signatureCards)) {

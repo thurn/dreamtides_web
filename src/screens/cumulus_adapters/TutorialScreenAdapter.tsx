@@ -13,9 +13,11 @@ import {
   useTutorialHowToPlayLogging,
   useTutorialPresentationLogging,
 } from "../../state/use-tutorial-presentation-logging";
+import type { DreamAvatarContent } from "../../types/content";
 import type { TutorialDreamAvatarOwner } from "../../types/tutorial";
 import * as tutorialView from "./tutorial-view-model";
-export function TutorialScreenAdapter({ playbackSpeed = 1, directLive = false }: {
+export function TutorialScreenAdapter({ dreamAvatars, playbackSpeed = 1, directLive = false }: {
+  readonly dreamAvatars: readonly DreamAvatarContent[];
   readonly playbackSpeed?: number;
   readonly directLive?: boolean;
 }) {
@@ -68,11 +70,12 @@ export function TutorialScreenAdapter({ playbackSpeed = 1, directLive = false }:
   const view = useMemo(
     () =>
       tutorialView.buildTutorialView(
+        dreamAvatars,
         state.tutorial,
         tutorialCards?.cards ?? null,
         tutorialCards?.dreamwell ?? null,
       ),
-    [state.tutorial, tutorialCards],
+    [dreamAvatars, state.tutorial, tutorialCards],
   );
   useTutorialPresentationLogging(state.tutorial, view, playbackSpeed);
   const howToPlayLogging = useTutorialHowToPlayLogging(view.battle.battleId);

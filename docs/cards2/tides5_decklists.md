@@ -2821,9 +2821,58 @@ This tide is almost entirely characters (43 of 45 copies), with warriors making 
 - 1× Immortal Reaper
 - 1× Skull Weaver
 
+## Lean: Burning Revenant — Figment Sacrifice Engine
+
+`tide-fac-17` — facet tide, 40 distinct cards, 45 copies
+
+*A warrior tide that mass-produces 1✦ figments through on-play triggers and then sacrifices or buffs them for energy, cards, and upgraded warriors — distinguished from its nearest sibling (tide-fac-17) by centering on figment generation and consumption rather than void recursion through dissolution.*
+
+This tide is almost entirely warriors (43 of 45 cards) built around a tight loop of token production and expenditure. Multiple pieces generate 1✦ warrior figments whenever you play characters — Standard Bearer and Voidsire both trigger on character plays, Spellweaver converts a non-figment warrior into a figment for 1●, and Crescendo Channeler creates one each dawn — building a steady supply of small bodies. Those figments feed sacrifice payoffs: Blood Reaver (the only 2x-doubled payoff alongside Skyflame Commander and Battlefield Medic) converts any warrior into 2● of energy, Dreadcall Warden spends 2● and a 1✦ ally to draw 2 cards, and both Mirror Protocol and Aftermath Bloom let you abandon a warrior to upgrade into a higher-cost one, turning expendable figments into premium threats. The Support suite — Skyflame Commander granting +1✦ per allied warrior, Battlefield Medic providing +2✦ to supported characters, and Dreadmount Sovereign giving supported warriors +3✦ — ensures that even small figments contribute meaningfully to spark totals before they are spent. Where the nearest sibling tide (tide-fac-17) leverages warrior dissolution to chain void-recursion triggers (multiple warriors returning others from the void when dissolved), this tide treats its warriors as renewable fuel, consuming them deliberately for resources and escalating the board through the abandon-to-upgrade arc rather than through death-trigger rebuilding.
+
+- 2× Sun Clan Lieutenant
+- 2× Cinderblade Legionnaire
+- 2× Skyflame Commander
+- 2× Silent Observer
+- 2× Starbound Striker
+- 1× Inferno's Herald
+- 1× Harbor Warden
+- 1× The Deathsworn
+- 1× Sky Legion Captain
+- 1× Extractor of Souls
+- 1× Burning Revenant
+- 1× Glimmerwood Scout
+- 1× Pathfinder
+- 1× Barrage Specialist
+- 1× Inspiring Templar
+- 1× Dragonward
+- 1× Blood Reaver
+- 1× Assault Leader
+- 1× Forsworn Champion
+- 1× Eclipse Herald
+- 1× He Who Lies Dreaming
+- 1× Speaker for the Forgotten
+- 1× Company Commander
+- 1× Dreadmount Sovereign
+- 1× Crescendo Channeler
+- 1× Aurora Rider
+- 1× Vault Infiltrator
+- 1× Winterbough Guide
+- 1× Shapeshifter Spirit
+- 1× Infernal Cavalier
+- 1× Revered Prince
+- 1× Wolfbond Chieftain
+- 1× Battlefield Medic
+- 1× Assault Trooper
+- 1× Warrior's Path
+- 1× Echo Technician
+- 1× Tethered Hollow
+- 1× Ethereal Trailblazer
+- 1× Containment Specialist
+- 1× Tranquil Duelist
+
 ## Lean: Battle Herald
 
-`tide-fac-17` — facet tide, 44 distinct cards, 45 copies
+`tide-fac-18` — facet tide, 44 distinct cards, 45 copies
 
 - 2× Sun Clan Lieutenant
 - 1× Inferno's Herald
@@ -2868,55 +2917,6 @@ This tide is almost entirely characters (43 of 45 copies), with warriors making 
 - 1× Warrior's Path
 - 1× Echo Technician
 - 1× Ethereal Trailblazer
-- 1× Tranquil Duelist
-
-## Lean: Burning Revenant — Warrior Figment Swarm
-
-`tide-fac-18` — facet tide, 40 distinct cards, 45 copies
-
-*A warrior-tribal flood deck that generates a stream of figment tokens and rewards each new warrior materialization with card draw and spark growth, distinguishing itself from its siblings by fueling payoffs through board expansion rather than energy-from-sacrifice or void-return resilience.*
-
-Tide-fac-16 is almost entirely characters (43 of 45 copies), nearly all warriors, built around producing an ever-wider board of warriors and converting that width into resources and spark. The central token-generation engine involves multiple pieces that each create 1✦ warrior figments: Worldbreacher taps to produce one, Voidsire creates one every time you play a warrior, Spellweaver pays one energy to sacrifice a non-figment warrior and replace it with a figment, and Crescendo Channeler produces one each Dawn while also converting board width into energy. Those figments feed materialization-trigger payoffs — Reforged Automaton draws a warrior and permanently gains +1✦ for each non-figment warrior that materializes, while Invoker of Myths draws a card once per turn whenever any warrior materializes — so the engine rewards both the act of flooding and the individual warrior arrivals. Separate from these triggers, the tide carries a deep package of spark-scaling commanders (Inspiring Templar, Skyflame Commander, Assault Leader, Dreadmount Sovereign, Shadow Reflection) that all scale ✦ off allied warrior count, turning the wide board into a burst combat threat. Compared to the nearest sibling (fac-29), which centers on Blood Reaver at two copies to recoup energy by sacrificing warriors, this tide treats sacrifice as an incidental tool and instead wins through compounding board presence; compared to fac-17, whose identity rests on multiple copies of Dissolved-return warriors creating a resilient void loop, this tide generates fresh figment warriors rather than recovering lost ones, leaning into momentum and critical mass over attrition and recursion.
-
-- 2× Sun Clan Lieutenant
-- 2× Cinderblade Legionnaire
-- 2× Skyflame Commander
-- 2× Silent Observer
-- 2× Starbound Striker
-- 1× Inferno's Herald
-- 1× Harbor Warden
-- 1× The Deathsworn
-- 1× Sky Legion Captain
-- 1× Extractor of Souls
-- 1× Burning Revenant
-- 1× Glimmerwood Scout
-- 1× Pathfinder
-- 1× Barrage Specialist
-- 1× Inspiring Templar
-- 1× Dragonward
-- 1× Blood Reaver
-- 1× Assault Leader
-- 1× Forsworn Champion
-- 1× Eclipse Herald
-- 1× He Who Lies Dreaming
-- 1× Speaker for the Forgotten
-- 1× Company Commander
-- 1× Dreadmount Sovereign
-- 1× Crescendo Channeler
-- 1× Aurora Rider
-- 1× Vault Infiltrator
-- 1× Winterbough Guide
-- 1× Shapeshifter Spirit
-- 1× Infernal Cavalier
-- 1× Revered Prince
-- 1× Wolfbond Chieftain
-- 1× Battlefield Medic
-- 1× Assault Trooper
-- 1× Warrior's Path
-- 1× Echo Technician
-- 1× Tethered Hollow
-- 1× Ethereal Trailblazer
-- 1× Containment Specialist
 - 1× Tranquil Duelist
 
 ## Lean: Unleashed Destruction — Ephemeral Copy Engine

@@ -16,7 +16,7 @@
 //   - draftArchetypes  the color+archetype slices that supply color-tied themes
 // cards_v2.toml supplies the card list (names); the metadata is merged in here.
 //
-// A DreamAvatar's `draftArchetypes` (from {@link DREAM_AVATAR_ARCHETYPES} in
+// A DreamAvatar's `draftArchetypes` (from {@link DREAM_AVATAR_ARCHETYPES_BY_ID} in
 // `src/data/dream-avatars-v2-database.ts`) seed construction; passing
 // `--dream-avatar <name|id>` seeds from that list, the same way picking the
 // DreamAvatar does in the app.
@@ -37,7 +37,7 @@ import {
   poolToLines,
 } from "../src/draft/pool/index.ts";
 import { CARDS_V2_POOL_METADATA } from "../src/data/cards-v2-metadata.ts";
-import { DREAM_AVATAR_ARCHETYPES } from "../src/data/dream-avatars-v2-database.ts";
+import { DREAM_AVATAR_ARCHETYPES_BY_ID } from "../src/data/dream-avatars-v2-database.ts";
 
 export { buildPoolData };
 
@@ -74,7 +74,7 @@ export function loadCards(tomlPath = CARD_TOML) {
 /**
  * Load the v2 DreamAvatar identities. The id, name, and title come from
  * dream_avatars_v2.toml; the optional `draftArchetypes` list that seeds pool
- * construction is merged in by name from {@link DREAM_AVATAR_ARCHETYPES}. A
+ * construction is merged in by UUID from {@link DREAM_AVATAR_ARCHETYPES_BY_ID}. A
  * DreamAvatar without that list rolls the unconstrained random pool.
  */
 export function loadDreamAvatars(tomlPath = DREAM_AVATAR_TOML) {
@@ -83,7 +83,7 @@ export function loadDreamAvatars(tomlPath = DREAM_AVATAR_TOML) {
     id: dreamAvatar.id,
     name: dreamAvatar.name,
     title: dreamAvatar.title ?? "",
-    draftArchetypes: DREAM_AVATAR_ARCHETYPES[dreamAvatar.name],
+    draftArchetypes: DREAM_AVATAR_ARCHETYPES_BY_ID[dreamAvatar.id],
   }));
 }
 

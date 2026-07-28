@@ -18,7 +18,7 @@ import {
   generatePoolFromData,
 } from "../src/draft/pool/index.ts";
 import { CARDS_V2_POOL_METADATA } from "../src/data/cards-v2-metadata.ts";
-import { DREAM_AVATAR_THEMES } from "../src/data/dream-avatars-v2-database.ts";
+import { DREAM_AVATAR_THEMES_BY_ID } from "../src/data/dream-avatars-v2-database.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
@@ -307,7 +307,7 @@ const jaccard = (a, b) => {
   return inter / (a.size + b.size - inter);
 };
 
-const themed = dreamAvatars.filter((d) => DREAM_AVATAR_THEMES[d.name]);
+const themed = dreamAvatars.filter((d) => DREAM_AVATAR_THEMES_BY_ID[d.id]);
 const seeds = [1, 7, 13, 42, 99, 256, 1000, 31337, 555, 8675309];
 
 // ===========================================================================
@@ -317,7 +317,7 @@ let checked = 0;
 let mismatches = 0;
 for (const dc of themed) {
   const seedArch = dc.draftArchetypes ?? [];
-  const themeArch = DREAM_AVATAR_THEMES[dc.name];
+  const themeArch = DREAM_AVATAR_THEMES_BY_ID[dc.id];
   for (const seed of seeds) {
     const oracle = generatePoolFromData(poolData, seed, seedArch, "decklists", themeArch);
     const port = generateDecklistsInstrumented(makeRng(seed >>> 0), poolData, seedArch, themeArch, {});
@@ -360,7 +360,7 @@ function legalForIdentity(identity) {
 let aRecall = 0, aCoverage = 0, aJaccard = 0, aN = 0;
 let aPoolSize = 0, aTideOnly = 0;
 for (const dc of themed) {
-  const themeArch = DREAM_AVATAR_THEMES[dc.name];
+  const themeArch = DREAM_AVATAR_THEMES_BY_ID[dc.id];
   const themeTide = new Set();
   for (const slug of themeArch) for (const c of poolData.archLists.get(slug) ?? []) themeTide.add(c);
   for (const seed of seeds) {
@@ -401,7 +401,7 @@ let bJaccard = 0, bRemovedFrac = 0, bN = 0;
 let pickedOnSpineFrac = 0, pickedFolds = 0;
 for (const dc of themed) {
   const seedArch = dc.draftArchetypes ?? [];
-  const themeArch = DREAM_AVATAR_THEMES[dc.name];
+  const themeArch = DREAM_AVATAR_THEMES_BY_ID[dc.id];
   for (const seed of seeds) {
     const on = generateDecklistsInstrumented(makeRng(seed >>> 0), poolData, seedArch, themeArch, { disableSpine: false });
     const off = generateDecklistsInstrumented(makeRng(seed >>> 0), poolData, seedArch, themeArch, { disableSpine: true });
@@ -423,7 +423,7 @@ for (const dc of themed) {
 let controlOnSpineFrac = 0, controlN = 0;
 for (const dc of themed) {
   const seedArch = dc.draftArchetypes ?? [];
-  const themeArch = DREAM_AVATAR_THEMES[dc.name];
+  const themeArch = DREAM_AVATAR_THEMES_BY_ID[dc.id];
   const on = generateDecklistsInstrumented(makeRng(7), poolData, seedArch, themeArch, {});
   const spine = on.spine;
   // archLists are UUID-keyed, the same key space as the corpus cards.

@@ -36,14 +36,15 @@ once, because the rest of this document refers to these stores by name.
   `data/tabula/dream_avatars_v2.toml`, which supplies each Dream Avatar's name,
   ability, and `signature-cards` (the standard `idf3` steering data). The
   `draft-archetypes` the non-`idf3` variants seed from live in TypeScript, in the
-  `DREAM_AVATAR_ARCHETYPES` map in `dream-avatars-v2-database.ts`. The same build
-  step merges them into `public/dream-avatars-v2-data.json`, and
+  `DREAM_AVATAR_ARCHETYPES_BY_ID` map in `dream-avatars-v2-database.ts`. The
+  same build step merges them by UUID into
+  `public/dream-avatars-v2-data.json`, and
   `loadDreamAvatarsV2` (in `dream-avatars-v2-database.ts`) fetches it into
   `DraftDreamAvatar[]`. A Dream Avatar's **theme** is also defined in TypeScript:
   `loadDreamAvatarsV2` attaches it after fetching, by looking the Dream Avatar's
-  name up in the hardcoded `DREAM_AVATAR_THEMES` map in
-  `dream-avatars-v2-database.ts` (so `Kragg` resolves to `["abandon"]`). That map
-  is the single source of truth for which mechanic a Dream Avatar pulls toward.
+  UUID up in the `DREAM_AVATAR_THEMES_BY_ID` map in
+  `dream-avatars-v2-database.ts`. That map is the single source of truth for
+  which mechanic a Dream Avatar pulls toward.
 
 - **The real decklists** are each seat's mainboard in the adapted draft records
   under `docs/draft_records_adapted/` — one JSONC file per draft event, with one
@@ -76,8 +77,8 @@ into the structure all three algorithms consume — the `PoolData`:
   every tide base name is mapped through the fixed `TIDE_TO_ARCHETYPE` table in
   `color-pool.ts` to a stable slug (`"Abandon"` to `abandon`, `"Storm"` to
   `storm`), and the card is added to that slug's set. These slugs are exactly the
-  keys the `DREAM_AVATAR_THEMES` map uses, which is what lets a Dream Avatar's
-  theme name a key in `archLists`.
+  values stored in the `DREAM_AVATAR_THEMES_BY_ID` map, which is what lets a
+  Dream Avatar's theme name a key in `archLists`.
 - **Draft lists** (`PoolData.draftLists`). A map keyed by both *bare color
   combinations* (from each card's `colors` field, e.g. `ub`) and
   *color-plus-archetype slices* (from each card's `draftArchetypes` field, e.g.
@@ -133,14 +134,15 @@ choice feeds two optional pieces of guidance into pool construction. The two
 come from *different* sources, which matters:
 
 - **Seed archetypes** — the Dream Avatar's `draftArchetypes`, from its entry in
-  the `DREAM_AVATAR_ARCHETYPES` map in `dream-avatars-v2-database.ts`. These are
-  color-plus-archetype list names (e.g. `br-aristocrats`), the same names that
-  key `PoolData.draftLists`. Only those that exist in `draftLists` and carry a
-  color prefix are eligible. They constrain the pool's color identity and (in the
-  theme-based algorithms) which color-plus-archetype themes are allowed.
+  the `DREAM_AVATAR_ARCHETYPES_BY_ID` map in
+  `dream-avatars-v2-database.ts`. These are color-plus-archetype list names
+  (e.g. `br-aristocrats`), the same names that key `PoolData.draftLists`. Only
+  those that exist in `draftLists` and carry a color prefix are eligible. They
+  constrain the pool's color identity and (in the theme-based algorithms)
+  which color-plus-archetype themes are allowed.
 - **Theme archetypes** — the Dream Avatar's mechanic-archetype tide slugs (e.g.
   `abandon`), *not* read from the TOML but attached at load from the
-  `DREAM_AVATAR_THEMES` map keyed by Avatar name. These are the same slugs
+  `DREAM_AVATAR_THEMES_BY_ID` map keyed by Avatar UUID. These are the same slugs
   that key `PoolData.archLists`. They bias the `decklists` algorithm toward the
   Dream Avatar's mechanical theme; the `color_pool` and `diverse` algorithms ignore
   them.
@@ -474,10 +476,11 @@ depend on the random seed; the data sources and the order of operations do not.)
 `ug-sneak`, `wb-aristocrats`, `wbg-midrange`, `wbg-value-midrange`,
 `wbr-aristocrats`, `wbrg-aristocrats`, `wubg-value`, and `wubrg-value` — these
 are his **strategy candidates**. Separately, `loadDreamAvatarsV2` looks up
-`"Kragg"` in the `DREAM_AVATAR_THEMES` map and attaches `themeArchetypes =
-["abandon"]` — his **theme**. The draft page calls `generatePoolFromData` with
-the prebuilt `PoolData`, the `decklists` variant, those `draftArchetypes` as the
-seed archetypes, and `["abandon"]` as the theme archetypes.
+Kragg's UUID in the `DREAM_AVATAR_THEMES_BY_ID` map and attaches
+`themeArchetypes = ["abandon"]` — his **theme**. The draft page calls
+`generatePoolFromData` with the prebuilt `PoolData`, the `decklists` variant,
+those `draftArchetypes` as the seed archetypes, and `["abandon"]` as the theme
+archetypes.
 
 **The theme card set.** The algorithm looks up `abandon` in `PoolData.archLists`
 — the set of every card whose `cards_v2.toml` record carried `"Abandon"` in its

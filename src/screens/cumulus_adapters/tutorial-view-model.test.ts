@@ -2,8 +2,9 @@ import { describe, expect, it } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DreamwellCard } from "../../data/dreamwell-database";
+import type { DreamAvatarContent } from "../../types/content";
 import {
-  buildTutorialView,
+  buildTutorialView as buildTutorialViewFromCatalog,
   TUTORIAL_OPPONENT_CARD_ID,
   TUTORIAL_PLAYER_CARD_INSTANCE_ID,
   TUTORIAL_PLAYER_CARD_ID,
@@ -11,6 +12,40 @@ import {
 } from "./tutorial-view-model";
 import { TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID } from "../../data/tutorial-cards";
 import type { TutorialSpeechBubble } from "../../types/tutorial";
+
+const TUTORIAL_DREAM_AVATARS: readonly DreamAvatarContent[] = [
+  {
+    id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+    name: "Tensho",
+    title: "Daimyo of Lacquered Fury",
+    renderedText: "Player ability.",
+    imageNumber: "0029",
+    portraitFocus: { x: 0.5, y: 0.22 },
+    startingEssence: 0,
+  },
+  {
+    id: "B99936CA-97F9-4930-AF5A-FA9EF92557EF",
+    name: "Threxan",
+    title: "the Resounding Wrath",
+    renderedText: "Opponent ability.",
+    imageNumber: "0025",
+    portraitFocus: { x: 0.5, y: 0.2 },
+    startingEssence: 0,
+  },
+];
+
+function buildTutorialView(
+  playback: Parameters<typeof buildTutorialViewFromCatalog>[1] = null,
+  cards: Parameters<typeof buildTutorialViewFromCatalog>[2] = null,
+  dreamwellCards: Parameters<typeof buildTutorialViewFromCatalog>[3] = null,
+) {
+  return buildTutorialViewFromCatalog(
+    TUTORIAL_DREAM_AVATARS,
+    playback,
+    cards,
+    dreamwellCards,
+  );
+}
 
 function speechBubble(
   text: string,
@@ -103,6 +138,32 @@ const VOLTSURGE: DreamwellCard = {
 };
 
 describe("buildTutorialView", () => {
+  it("resolves tutorial Dream Avatar display identity from the catalog by UUID", () => {
+    const dreamAvatars = TUTORIAL_DREAM_AVATARS.map((dreamAvatar) =>
+      dreamAvatar.id === "BFC40414-5264-41BF-86E1-A0F41EE4F5B5"
+        ? {
+            ...dreamAvatar,
+            name: "Gunnar Deepforge",
+            title: "The Hammer's Echo",
+            imageNumber: "0108",
+            portraitFocus: { x: 0.58, y: 0.233 },
+          }
+        : dreamAvatar,
+    );
+
+    const tutorial = buildTutorialViewFromCatalog(dreamAvatars);
+
+    expect(tutorial.dreamAvatars.player.visual).toEqual({
+      name: "Gunnar Deepforge",
+      title: "The Hammer's Echo",
+      imageNumber: "0108",
+      portraitFocus: { x: 0.58, y: 0.233 },
+    });
+    expect(tutorial.dreamAvatars.player.profile.id).toBe(
+      "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+    );
+  });
+
   it("reconstructs the post-tutorial Dreamwell effect and turn draw by UUID", () => {
     const nocturne = tutorialCard(
       "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
@@ -1486,7 +1547,9 @@ describe("buildTutorialView", () => {
     expect(repositioning.battle.enemy.frontRank[0]?.card?.model.cardId).toBe(
       TUTORIAL_OPPONENT_CARD_ID,
     );
-    expect(repositioning.battle.enemy.frontRank[0]?.card?.exhausted).toBe(false);
+    expect(repositioning.battle.enemy.frontRank[0]?.card?.exhausted).toBe(
+      false,
+    );
     expect(repositioning.battle.enemy.backRank[1]?.card?.model.cardId).toBe(
       TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
     );

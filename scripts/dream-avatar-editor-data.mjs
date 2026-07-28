@@ -8,7 +8,7 @@ import {
   stripJsonComments,
   transformDreamAvatar,
 } from "./setup-assets.mjs";
-import { DREAM_AVATAR_ARCHETYPES } from "../src/data/dream-avatars-v2-database.ts";
+import { DREAM_AVATAR_ARCHETYPES_BY_ID } from "../src/data/dream-avatars-v2-database.ts";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 export const DEFAULT_DREAM_AVATAR_TOML_PATH = join(
@@ -302,7 +302,7 @@ export function refreshDreamAvatarDataJson({
   dreamAvatarTomlPath = DEFAULT_DREAM_AVATAR_TOML_PATH,
 } = {}) {
   const dreamAvatars = readSourceDreamAvatars(rootDir, dreamAvatarTomlPath).map((dreamAvatar) => {
-    const archetypes = DREAM_AVATAR_ARCHETYPES[dreamAvatar.name];
+    const archetypes = DREAM_AVATAR_ARCHETYPES_BY_ID[dreamAvatar.id];
     if (archetypes) {
       dreamAvatar["draft-archetypes"] = archetypes;
     }

@@ -7,6 +7,28 @@ import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import { getLogEntries, resetLog } from "../../logging";
 import { TutorialScreenAdapter } from "./TutorialScreenAdapter";
 import type { TutorialScreenProps } from "../../cumulus/screens/TutorialScreen";
+import type { DreamAvatarContent } from "../../types/content";
+
+const DREAM_AVATARS: readonly DreamAvatarContent[] = [
+  {
+    id: "BFC40414-5264-41BF-86E1-A0F41EE4F5B5",
+    name: "Gunnar Deepforge",
+    title: "The Hammer's Echo",
+    renderedText: "Player ability.",
+    imageNumber: "0108",
+    portraitFocus: { x: 0.58, y: 0.233 },
+    startingEssence: 0,
+  },
+  {
+    id: "B99936CA-97F9-4930-AF5A-FA9EF92557EF",
+    name: "Threxan",
+    title: "the Resounding Wrath",
+    renderedText: "Opponent ability.",
+    imageNumber: "0025",
+    portraitFocus: { x: 0.5, y: 0.2 },
+    startingEssence: 0,
+  },
+];
 
 const adapterMocks = vi.hoisted(() => ({
   props: null as TutorialScreenProps | null,
@@ -196,24 +218,32 @@ afterEach(() => {
 
 describe("TutorialScreenAdapter", () => {
   it("hands the terminal scripted cursor to the durable tutorial battle lifecycle", async () => {
-    (mocks.state.tutorial as unknown as { currentActionIndex: number | null }).currentActionIndex = null;
+    (
+      mocks.state.tutorial as unknown as { currentActionIndex: number | null }
+    ).currentActionIndex = null;
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
 
     await act(async () => {
-      root.render(<CumulusRoot><TutorialScreenAdapter /></CumulusRoot>);
+      root.render(
+        <CumulusRoot>
+          <TutorialScreenAdapter dreamAvatars={DREAM_AVATARS} />
+        </CumulusRoot>,
+      );
       await Promise.resolve();
     });
 
     expect(mocks.beginTutorialBattle).toHaveBeenCalledWith("event:1");
-    expect(getLogEntries()).toEqual(expect.arrayContaining([
-      expect.objectContaining({
-        event: "tutorial_battle_handoff_requested",
-        tutorialRunId: "event:1",
-        source: "tutorial-terminal-cursor",
-      }),
-    ]));
+    expect(getLogEntries()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          event: "tutorial_battle_handoff_requested",
+          tutorialRunId: "event:1",
+          source: "tutorial-terminal-cursor",
+        }),
+      ]),
+    );
     act(() => root.unmount());
     container.remove();
   });
@@ -226,7 +256,10 @@ describe("TutorialScreenAdapter", () => {
     await act(async () => {
       root.render(
         <CumulusRoot>
-          <TutorialScreenAdapter playbackSpeed={4} />
+          <TutorialScreenAdapter
+            dreamAvatars={DREAM_AVATARS}
+            playbackSpeed={4}
+          />
         </CumulusRoot>,
       );
       await Promise.resolve();
@@ -234,6 +267,11 @@ describe("TutorialScreenAdapter", () => {
 
     expect(container.querySelector("[data-tutorial-screen]")).not.toBeNull();
     expect(adapterMocks.props?.playbackSpeed).toBe(4);
+    expect(adapterMocks.props?.view.dreamAvatars.player.visual).toMatchObject({
+      imageNumber: "0108",
+      name: "Gunnar Deepforge",
+      title: "The Hammer's Echo",
+    });
     expect(getLogEntries()).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -301,7 +339,7 @@ describe("TutorialScreenAdapter", () => {
     await act(async () => {
       root.render(
         <CumulusRoot>
-          <TutorialScreenAdapter />
+          <TutorialScreenAdapter dreamAvatars={DREAM_AVATARS} />
         </CumulusRoot>,
       );
       await Promise.resolve();
@@ -461,7 +499,7 @@ describe("TutorialScreenAdapter", () => {
     await act(async () => {
       root.render(
         <CumulusRoot>
-          <TutorialScreenAdapter />
+          <TutorialScreenAdapter dreamAvatars={DREAM_AVATARS} />
         </CumulusRoot>,
       );
       await Promise.resolve();
@@ -509,7 +547,7 @@ describe("TutorialScreenAdapter", () => {
     await act(async () => {
       root.render(
         <CumulusRoot>
-          <TutorialScreenAdapter />
+          <TutorialScreenAdapter dreamAvatars={DREAM_AVATARS} />
         </CumulusRoot>,
       );
       await Promise.resolve();

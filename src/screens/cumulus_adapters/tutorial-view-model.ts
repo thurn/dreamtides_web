@@ -7,6 +7,7 @@ import type {
 import type { TutorialView } from "../../cumulus/screens/TutorialScreen";
 import type { CardData } from "../../types/cards";
 import type { DreamwellCard } from "../../data/dreamwell-database";
+import type { DreamAvatarContent } from "../../types/content";
 import { asCardId } from "../../types/card-identity";
 import {
   TUTORIAL_OPPONENT_CARD_ID,
@@ -23,7 +24,8 @@ import { tutorialInstructionPlainText } from "../../data/tutorial-instruction-ma
 const TUTORIAL_BATTLE_ID = "tutorial-battle";
 const TUTORIAL_DECK_SIZE = 30;
 const TUTORIAL_DREAM_AVATAR_ID = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
-const TUTORIAL_OPPONENT_DREAM_AVATAR_ID = "B99936CA-97F9-4930-AF5A-FA9EF92557EF";
+const TUTORIAL_OPPONENT_DREAM_AVATAR_ID =
+  "B99936CA-97F9-4930-AF5A-FA9EF92557EF";
 const TUTORIAL_PLAYER_BACK_RANK_INDEX = 0;
 const TUTORIAL_PLAYER_FRONT_RANK_INDEX = 0;
 const TUTORIAL_STARTING_ENERGY = 4;
@@ -364,10 +366,19 @@ function activeDialogue(playback: TutorialPlaybackState | null): {
 
 /** Build the quest-independent opening state for the tutorial battle. */
 export function buildTutorialView(
+  dreamAvatars: readonly DreamAvatarContent[],
   playback: TutorialPlaybackState | null = null,
   cards: readonly CardData[] | null = null,
   dreamwellCards: readonly DreamwellCard[] | null = null,
 ): TutorialView {
+  const playerDreamAvatar = dreamAvatarById(
+    dreamAvatars,
+    TUTORIAL_DREAM_AVATAR_ID,
+  );
+  const opponentDreamAvatar = dreamAvatarById(
+    dreamAvatars,
+    TUTORIAL_OPPONENT_DREAM_AVATAR_ID,
+  );
   const playerCard =
     cards?.find((card) => card.id === TUTORIAL_PLAYER_CARD_ID) ?? null;
   const currentAction =
@@ -594,8 +605,7 @@ export function buildTutorialView(
       .slice(record.playedAtActionIndex + 1, visibleActionCount)
       .some(
         (action) =>
-          action.action === "draw-dreamwell-card" &&
-          action.owner === "player",
+          action.action === "draw-dreamwell-card" && action.owner === "player",
       );
     return !(openingPlayerTurnPresented || laterPlayerTurnPresented);
   };
@@ -836,10 +846,12 @@ export function buildTutorialView(
     dreamAvatars: {
       player: {
         visual: {
-          imageNumber: "0029",
-          name: "Tensho",
-          title: "Daimyo of Lacquered Fury",
-          portraitFocus: { x: 0.5, y: 0.22 },
+          imageNumber: playerDreamAvatar.imageNumber,
+          name: playerDreamAvatar.name,
+          title: playerDreamAvatar.title,
+          ...(playerDreamAvatar.portraitFocus === undefined
+            ? {}
+            : { portraitFocus: playerDreamAvatar.portraitFocus }),
         },
         profile: {
           id: TUTORIAL_DREAM_AVATAR_ID,
@@ -850,10 +862,12 @@ export function buildTutorialView(
       },
       enemy: {
         visual: {
-          imageNumber: "0025",
-          name: "Threxan",
-          title: "the Resounding Wrath",
-          portraitFocus: { x: 0.5, y: 0.2 },
+          imageNumber: opponentDreamAvatar.imageNumber,
+          name: opponentDreamAvatar.name,
+          title: opponentDreamAvatar.title,
+          ...(opponentDreamAvatar.portraitFocus === undefined
+            ? {}
+            : { portraitFocus: opponentDreamAvatar.portraitFocus }),
         },
         profile: {
           id: TUTORIAL_OPPONENT_DREAM_AVATAR_ID,
@@ -880,8 +894,8 @@ export function buildTutorialView(
               bubbleWidth: dialogue.speechBubble.bubbleWidth,
               speakerName:
                 dialogue.speechBubble.speaker === "player"
-                  ? "Tensho"
-                  : "Threxan",
+                  ? playerDreamAvatar.name
+                  : opponentDreamAvatar.name,
               text: dialogue.speechBubble.text,
             }
           : {
@@ -1176,4 +1190,19 @@ export function buildTutorialView(
       };
     })(),
   };
+}
+
+function dreamAvatarById(
+  dreamAvatars: readonly DreamAvatarContent[],
+  dreamAvatarId: string,
+): DreamAvatarContent {
+  const dreamAvatar = dreamAvatars.find(
+    (candidate) => candidate.id === dreamAvatarId,
+  );
+  if (dreamAvatar === undefined) {
+    throw new Error(
+      `Tutorial Dream Avatar ${dreamAvatarId} is missing from the Dream Avatar catalog.`,
+    );
+  }
+  return dreamAvatar;
 }
