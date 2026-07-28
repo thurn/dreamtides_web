@@ -12,8 +12,8 @@ Do not create new branches unless explicitly requested.
 
 Do not print a summary of changes.
 
-Once you finish a work item, please request review via the independent-review skill and
-fix flagged issues:
+For major work items (e.g. hundreds of non-test lines changed), please request review via the
+independent-review skill and fix flagged issues:
 
  ~/.llms/skills/independent-review
 
