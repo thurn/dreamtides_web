@@ -381,7 +381,6 @@ export function BattleTutorialGuidance({
           <GameCard
             model={renderedView.source.model}
             figment={renderedView.source.figment}
-            figmentTitleBar={renderedView.source.figment}
             testId="battle-tutorial-card"
           />
         )}

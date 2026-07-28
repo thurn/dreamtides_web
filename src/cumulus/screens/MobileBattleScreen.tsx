@@ -78,7 +78,6 @@ export interface MobileBattleCardView {
   readonly model: GameCardModel;
   readonly exhausted: boolean;
   readonly figment: boolean;
-  readonly figmentTitleBar: boolean;
   /** Whether this rendered location should participate in shared-layout travel. */
   readonly layoutMotion?: "travel" | "snap";
   /** Number of physical Figments represented by this battle instance. */
@@ -1034,7 +1033,6 @@ function toVoidPile(
     model: card.model,
     layoutMotion: card.layoutMotion,
     figment: card.figment,
-    figmentTitleBar: card.figmentTitleBar,
   }));
 }
 
@@ -1818,7 +1816,6 @@ function FaceUpCard({
           exhausted={card.exhausted}
           presentation={showRulesText ? "full" : "battlefield"}
           figment={card.figment}
-          figmentTitleBar={card.figmentTitleBar}
           testId={`battle-card-face:${card.id}`}
         />
         {challengerChevron !== undefined ? (

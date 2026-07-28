@@ -262,9 +262,8 @@ export interface BattleDeckCardDefinition {
   reclaimCost: number | null;
   renderedText: string;
   imageNumber: number;
-  /** Curated art crop (pan/zoom) for the source image, sourced from the catalog
-   *  card's `art` table. Absent on synthetic definitions (figments, generated
-   *  copies); those fall back to the default crop. */
+  /** Curated art crop (pan/zoom) for the source image, sourced from the card or
+   *  figment catalog's `art` table when that object has authored art. */
   art?: ArtCrop;
   transfiguration: TransfigurationType | null;
   /** Exact shared-builder presentation for the applied transfiguration. */

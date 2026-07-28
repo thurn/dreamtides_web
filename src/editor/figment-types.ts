@@ -1,5 +1,6 @@
-import { asCardId, asCardName } from "../types/card-identity";
+import { asCardId } from "../types/card-identity";
 import type { ArtCrop, CardData } from "../types/cards";
+import { figmentCardDisplayName } from "../data/figment-card-display";
 
 /** Figment fields edited inline through the card frame. */
 export type EditableFigmentField =
@@ -92,26 +93,13 @@ export interface FigmentEditorApiClient {
 }
 
 /**
- * Whether a figment shows the optional top title bar. A figment whose identity
- * (its name with a trailing " Figment" removed) differs from its character
- * subtype — e.g. a "Legionnaire Figment" that is a Warrior — needs a title bar
- * so it reads distinctly from a plain figment of that subtype (which shows none,
- * since its identity matches the subtype shown at the foot).
- */
-export function figmentHasTitleBar(name: string, subtype: string): boolean {
-  const identity = name.replace(/\s*Figment$/iu, "").trim().toLowerCase();
-  const sub = subtype.trim().toLowerCase();
-  return identity !== "" && identity !== sub;
-}
-
-/**
  * Build the `CardData` the character card frame renders for a figment. Figments
  * are 0-cost characters with no energy orb (the figment frame drops it); art is
  * keyed by image number with the saved crop.
  */
 export function figmentPreviewCard(record: EditorFigmentRecord): CardData {
   return {
-    name: asCardName(record.name),
+    name: figmentCardDisplayName(record.name, record.subtype),
     id: asCardId(`figment-${record.id}`),
     cardNumber: record.sourceIndex,
     cardType: "Character",

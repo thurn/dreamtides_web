@@ -362,7 +362,6 @@ const TUTORIAL_OPPONENT_CARD: MobileBattleView["enemyHand"][number] = {
   },
   exhausted: true,
   figment: false,
-  figmentTitleBar: false,
   figmentCount: 0,
   storedTime: 0,
   showPlayableOutline: false,

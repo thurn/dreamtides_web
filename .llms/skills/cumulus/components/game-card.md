@@ -10,7 +10,7 @@ Real consumers: **28** (imports outside `src/cumulus/docs/` and tests).
 
 The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name.
 
-> **Guidance:** GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment. The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, exhausted status, focus, press, activation, and drag dismissal are automatic. On desktop, rules that explicitly materialize an authored figment add a small UUID-backed card with a violet glowing border beyond the definition stack; touch layouts keep the compact reading pair.
+> **Guidance:** GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment; every figment uses the same "<Identity> Figment" title bar and authored art crop. The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, exhausted status, focus, press, activation, and drag dismissal are automatic. On desktop, rules that explicitly materialize an authored figment add a small UUID-backed card with a violet glowing border beyond the definition stack; a figment's own reading copy stays unoutlined. Touch layouts keep the compact reading pair.
 
 ## Props
 
@@ -24,8 +24,7 @@ The playable card object — art, cost, stats, and rules text — rendered at an
 | `hideRulesText` | `boolean` | no | `false` | Hide source rules on dense surfaces; the reveal stays complete. |
 | `exhausted` | `boolean` | no | `false` | Whether this card is currently exhausted in battle. |
 | `presentation` | `GameCardPresentation` = `"full" \| "battlefield"` | no | `full` | Visual treatment for the source card. `"battlefield"` uses a rounded square frame that widens the art viewport at its existing vertical scale, showing only art and an enlarged top-right spark value while preserving the complete reveal. |
-| `figment` | `boolean` | no | `false` | Render the figment frame. |
-| `figmentTitleBar` | `boolean` | no | `false` | Render a title bar on a named figment. |
+| `figment` | `boolean` | no | `false` | Render the figment frame with its canonical `"<Identity> Figment"` title bar. |
 | `testId` | `string` | no | — | Optional stable test id for the semantic source. |
 
 ### `model`: the `GameCardModel` model

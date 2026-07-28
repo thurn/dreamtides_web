@@ -134,7 +134,7 @@ export function EntityRevealConformanceDemo() {
         <article><h2>Inline</h2><p>Resolve <GlossaryTerm entry={{ term: "Bane", definition: "A penalty card forced into your deck." }} text="Bane" /> here.</p></article>
         <article style={{ position: "relative", width: 184, height: 184 }}><h2>Atlas</h2><AtlasNode model={ATLAS_MODEL} onActivate={() => undefined} /></article>
         <article data-conformance-battle-fixture="" style={{ width: 160 }}><h2>Battle</h2><GameCard model={{ cardId: BATTLE_CARD.id, displaySnapshot: BATTLE_CARD }} /></article>
-        <article data-conformance-generated-battle-fixture="" style={{ width: 160 }}><h2>Generated battle figment</h2><GameCard model={{ cardId: GENERATED_BATTLE_CARD.id, displaySnapshot: GENERATED_BATTLE_CARD }} figment figmentTitleBar /></article>
+        <article data-conformance-generated-battle-fixture="" style={{ width: 160 }}><h2>Generated battle figment</h2><GameCard model={{ cardId: GENERATED_BATTLE_CARD.id, displaySnapshot: GENERATED_BATTLE_CARD }} figment /></article>
       </section>
     </main>
   );

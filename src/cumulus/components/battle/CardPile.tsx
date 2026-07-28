@@ -33,8 +33,6 @@ export interface FaceUpPileCard {
   readonly layoutMotion?: "travel" | "snap";
   /** Render the topmost object with the figment frame. */
   readonly figment?: boolean;
-  /** Render a title bar on a named figment. */
-  readonly figmentTitleBar?: boolean;
 }
 
 /** A physical card instance in a pile, ordered topmost-first by callers. */
@@ -202,14 +200,12 @@ export function CardPile({
               <GameCard
                 model={card.model}
                 figment={card.figment}
-                figmentTitleBar={card.figmentTitleBar}
               />
             ) : (
               <CardView
                 card={card.model.displaySnapshot}
                 transfiguration={card.model.transfiguration}
                 figment={card.figment}
-                figmentTitleBar={card.figmentTitleBar}
               />
             )}
           </div>

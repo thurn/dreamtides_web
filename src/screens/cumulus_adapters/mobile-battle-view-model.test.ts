@@ -236,14 +236,12 @@ describe("buildMobileBattleView", () => {
       id: board.sides.player.frontRank.F3,
       exhausted: true,
       figment: false,
-      figmentTitleBar: false,
       figmentCount: 1,
       storedTime: 0,
     });
     expect(view.enemy.backRank[4].card).toMatchObject({
       id: board.sides.enemy.backRank.B4,
       figment: true,
-      figmentTitleBar: true,
       figmentCount: 1,
       storedTime: 0,
     });

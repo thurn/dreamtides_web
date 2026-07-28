@@ -40,7 +40,6 @@ describe("extractMaterializedFigmentPreviews", () => {
       "Abandon a character: Materialize a 1✦ warrior figment.",
     );
     expect(preview).toMatchObject({
-      titleBar: false,
       card: {
         id: WARRIOR_ID,
         name: "Warrior",
@@ -58,7 +57,6 @@ describe("extractMaterializedFigmentPreviews", () => {
       "Materialize a Legionnaire figment.",
     );
     expect(preview?.card.id).toBe(LEGIONNAIRE_ID);
-    expect(preview?.titleBar).toBe(true);
   });
 
   it("deduplicates plural references in reading order", () => {

@@ -9,8 +9,6 @@ import type { FrozenCardData } from "../types/cards";
 export interface MaterializedFigmentPreview {
   /** Stable authored figment UUID and complete display snapshot. */
   readonly card: FrozenCardData;
-  /** Whether this named figment needs the optional title bar. */
-  readonly titleBar: boolean;
 }
 
 const MATERIALIZED_FIGMENT_PATTERN =
@@ -67,11 +65,6 @@ function referencedEntry(
   return matches[0]?.entry;
 }
 
-function needsTitleBar(entry: FigmentCatalogEntry): boolean {
-  const name = entry.name?.replace(/\s*Figment$/iu, "").trim().toLowerCase() ?? "";
-  return name !== "" && name !== entry.subtype.trim().toLowerCase();
-}
-
 function previewFor(
   entry: FigmentCatalogEntry,
   cardNumber: number,
@@ -93,7 +86,6 @@ function previewFor(
       artOwned: entry.artOwned ?? false,
       ...(entry.art === undefined ? {} : { art: entry.art }),
     }),
-    titleBar: needsTitleBar(entry),
   });
 }
 

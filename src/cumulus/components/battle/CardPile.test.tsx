@@ -31,16 +31,13 @@ vi.mock("../card/CardView", () => ({
   GameCard: ({
     model,
     figment,
-    figmentTitleBar,
   }: {
     readonly model: GameCardModel;
     readonly figment?: boolean;
-    readonly figmentTitleBar?: boolean;
   }) => (
     <div
       data-mock-game-card={model.cardId}
       data-figment={String(figment ?? false)}
-      data-figment-title-bar={String(figmentTitleBar ?? false)}
     />
   ),
 }));
@@ -73,7 +70,7 @@ const MODEL: GameCardModel = {
 const CARDS: readonly BattlePileCard[] = [
   { face: "up", id: "instance-top", model: MODEL, figment: true },
   { face: "down", id: "instance-second" },
-  { face: "up", id: "instance-third", model: MODEL, figmentTitleBar: true },
+  { face: "up", id: "instance-third", model: MODEL, figment: true },
   { face: "down", id: "instance-hidden" },
 ];
 

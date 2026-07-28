@@ -1221,6 +1221,7 @@ function createFigment(
     // description and image; an un-hydrated catalog falls back to no text/art.
     renderedText: catalogEntry?.renderedText ?? "",
     imageNumber: catalogEntry?.imageNumber ?? 0,
+    ...(catalogEntry?.art === undefined ? {} : { art: catalogEntry.art }),
     transfiguration: null,
     isBane: false,
   };

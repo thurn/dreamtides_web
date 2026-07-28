@@ -389,7 +389,6 @@ describe("GameCard reveal contract", () => {
 
   it("shows an authored figment card beyond glossary definitions on desktop", async () => {
     vi.mocked(extractMaterializedFigmentPreviews).mockReturnValue([{
-      titleBar: false,
       card: Object.freeze({
         id: asCardId("bb1a5acd-1a03-4aa3-826d-f0a301843845"),
         name: asCardName("Warrior"),
@@ -444,6 +443,9 @@ describe("GameCard reveal contract", () => {
     expect(figmentCard?.style.boxShadow).toContain(
       "0 0 12px var(--accent-bright)",
     );
+    expect(
+      figment?.querySelector("[data-testid=figment-title-bar]")?.textContent,
+    ).toContain("Warrior Figment");
     expect(Number.parseFloat(figment!.style.left)).toBe(
       Number.parseFloat(definition!.style.left)
         + Number.parseFloat(definition!.style.width)
@@ -728,7 +730,7 @@ describe("GameCard reveal contract", () => {
 
   it("carries the figment frame and title bar onto the reading copy", async () => {
     const { container, root } = mount(
-      <GameCard model={model()} figment figmentTitleBar />,
+      <GameCard model={model()} figment />,
     );
     const source = container.querySelector<HTMLElement>(
       "[data-game-card-source]",
@@ -757,6 +759,16 @@ describe("GameCard reveal contract", () => {
         '[data-cumulus-reveal-card="primary"] [data-testid="figment-title-bar"]',
       ),
     ).not.toBeNull();
+    expect(
+      document.querySelector<HTMLElement>(
+        '[data-cumulus-reveal-card="primary"] .card-view',
+      )?.style.boxShadow,
+    ).not.toContain("var(--accent-bright)");
+    expect(
+      document.querySelector(
+        '[data-cumulus-reveal-card="primary"] [data-testid="figment-title-bar"]',
+      )?.textContent,
+    ).toContain("Archive Sentry Figment");
     act(() => root.unmount());
   });
 

@@ -10,6 +10,7 @@ import {
 } from "../../../data/card-database";
 import { GLOSSARY_IDS } from "../../../data/glossary";
 import { extractMaterializedFigmentPreviews } from "../../../data/materialized-figments";
+import { figmentCardDisplayName } from "../../../data/figment-card-display";
 import { identiconsForced } from "../../../runtime/identicon-mode";
 import {
   ART_EXTENSION_FRACTION,
@@ -631,18 +632,10 @@ export interface CardViewProps {
   /** Use larger text sizes for rules text, name, type line, and stats. */
   large?: boolean;
   /**
-   * Render the figment frame (rules §Figments): no energy orb, the spark floats
-   * as a large mark in the top-right corner instead of inside a name bar, and
-   * the rules box takes a black-on-light frosted treatment. A figment has no
-   * name bar by default; pass `figmentTitleBar` to show one (for a named figment
-   * like a Legionnaire, or while its name is being edited).
+   * Render the figment frame (rules §Figments): no energy orb, a canonical
+   * `"<Identity> Figment"` title bar, and a black-on-light frosted rules box.
    */
   figment?: boolean;
-  /**
-   * In figment mode, render the top title bar holding the card name (left
-   * aligned, dark character-card treatment). Ignored when `figment` is false.
-   */
-  figmentTitleBar?: boolean;
   /** Hide rules text for dense card surfaces that show identity and stats. */
   hideRulesText?: boolean;
   /**
@@ -700,14 +693,13 @@ export interface CardViewProps {
  */
 function GameCardSurface(props: CardViewProps) {
   const {
-    card,
+    card: sourceCard,
     onClick,
     selected = false,
     selectionColor = SELECTION_DEFAULT_COLOR,
     transfiguration,
     large = false,
     figment = false,
-    figmentTitleBar = false,
     hideRulesText = false,
     presentation = "full",
     slots = {},
@@ -716,6 +708,12 @@ function GameCardSurface(props: CardViewProps) {
     eagerRulesFit = false,
     rulesTextboxExpanded = false,
   } = props;
+  const card = figment
+    ? {
+        ...sourceCard,
+        name: figmentCardDisplayName(sourceCard.name, sourceCard.subtype),
+      }
+    : sourceCard;
   const [imageError, setImageError] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
   // Top of the rules text box as a fraction of card height, measured live so the
@@ -1035,26 +1033,17 @@ function GameCardSurface(props: CardViewProps) {
     </div>
   ) : null;
 
-  // A title-less figment floats the spark as a large standalone top-right corner
-  // mark (sized up so it carries the top of the card on its own). A titled
-  // figment instead seats the regular-size spark at the title bar's right edge,
-  // exactly like a normal card's name bar.
-  const figmentCornerSpark = figment && !figmentTitleBar;
+  // Battlefield cards enlarge the spark; full figments seat the ordinary spark
+  // at the canonical title bar's right edge.
   const sparkSizeVar = battlefieldPresentation
     ? "calc(var(--cv-spark-orb-size) * 2.5)"
-    : figmentCornerSpark
-      ? "var(--cv-figment-spark-size)"
-      : "var(--cv-spark-orb-size)";
+    : "var(--cv-spark-orb-size)";
   const sparkFontVar = battlefieldPresentation
     ? "calc(var(--cv-spark-orb-font-size) * 2.5)"
-    : figmentCornerSpark
-      ? "var(--cv-figment-spark-font-size)"
-      : "var(--cv-spark-orb-font-size)";
+    : "var(--cv-spark-orb-font-size)";
   const sparkCapPx = battlefieldPresentation
     ? sparkOrbCapPx * 2.5
-    : figmentCornerSpark
-      ? widthPx * 0.14
-      : sparkOrbCapPx;
+    : sparkOrbCapPx;
   const sparkOrbNode =
     card.spark !== null || card.sparkVariable === true ? (
       <CardStatOrb
@@ -1369,62 +1358,45 @@ function GameCardSurface(props: CardViewProps) {
       ) : figment ? (
         <>
           {/*
-            Figment top chrome. A title-less figment is art-forward: the spark
-            floats as a large mark in the top-right corner directly on the art. A
-            named figment (e.g. a Legionnaire) opts into a title bar that is
-            structured exactly like a regular card's name bar — same corner
-            radius, the spark stat seated at its right edge — but uses the
-            figment's own black-on-light frosted material (the same as the rules
-            box) with the card name in the card serif, dark and unshadowed.
+            Figment top chrome. Every figment uses the canonical title bar so
+            its identity and object kind remain legible at every call site. The
+            spark stat sits at the right edge on the figment's black-on-light
+            frosted material.
           */}
-          {figmentTitleBar ? (
-            <div
-              data-testid="figment-title-bar"
-              style={
-                {
-                  position: "absolute",
-                  top: "var(--cv-namebar-top)",
-                  // No energy orb on a figment, so the bar runs symmetrically
-                  // inset from both sides rather than offset to clear an orb.
-                  left: "var(--cv-header-inset)",
-                  right: "var(--cv-header-inset)",
-                  height: "var(--cv-namebar-height)",
-                  zIndex: 5,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--cv-namebar-gap)",
-                  paddingLeft: "var(--cv-figment-titlebar-pad)",
-                  paddingRight: "var(--cv-namebar-pad-right)",
-                  // Visible so the spark orb, taller than the bar, protrudes
-                  // above and below it exactly as on a regular card.
-                  overflow: "visible",
-                  borderRadius: "var(--cv-namebar-radius)",
-                  background: "var(--cv-textbox-bg)",
-                  backdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
-                  WebkitBackdropFilter:
-                    "blur(var(--cv-textbox-blur)) saturate(1)",
-                  border: "1px solid var(--cv-textbox-border)",
-                  boxShadow:
-                    "0 1px 0 rgba(255,255,255,0.5) inset, 0 4px 12px rgba(18,28,58,0.22)",
-                } satisfies CSSProperties
-              }
-            >
-              {renderedNameNode}
-              {hasSparkContent ? renderedSparkContent : null}
-            </div>
-          ) : hasSparkContent ? (
-            <div
-              className="absolute"
-              style={{
-                top: "var(--cv-figment-spark-top)",
-                right: "var(--cv-figment-spark-right)",
+          <div
+            data-testid="figment-title-bar"
+            style={
+              {
+                position: "absolute",
+                top: "var(--cv-namebar-top)",
+                // No energy orb on a figment, so the bar runs symmetrically
+                // inset from both sides rather than offset to clear an orb.
+                left: "var(--cv-header-inset)",
+                right: "var(--cv-header-inset)",
+                height: "var(--cv-namebar-height)",
+                zIndex: 5,
                 display: "flex",
-                zIndex: 6,
-              }}
-            >
-              {renderedSparkContent}
-            </div>
-          ) : null}
+                alignItems: "center",
+                gap: "var(--cv-namebar-gap)",
+                paddingLeft: "var(--cv-figment-titlebar-pad)",
+                paddingRight: "var(--cv-namebar-pad-right)",
+                // Visible so the spark orb, taller than the bar, protrudes
+                // above and below it exactly as on a regular card.
+                overflow: "visible",
+                borderRadius: "var(--cv-namebar-radius)",
+                background: "var(--cv-textbox-bg)",
+                backdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
+                WebkitBackdropFilter:
+                  "blur(var(--cv-textbox-blur)) saturate(1)",
+                border: "1px solid var(--cv-textbox-border)",
+                boxShadow:
+                  "0 1px 0 rgba(255,255,255,0.5) inset, 0 4px 12px rgba(18,28,58,0.22)",
+              } satisfies CSSProperties
+            }
+          >
+            {renderedNameNode}
+            {hasSparkContent ? renderedSparkContent : null}
+          </div>
         </>
       ) : (
         <>
@@ -1530,10 +1502,8 @@ export interface GameCardProps {
    * reveal.
    */
   readonly presentation?: GameCardPresentation;
-  /** Render the figment frame. */
+  /** Render the figment frame with its canonical `"<Identity> Figment"` title bar. */
   readonly figment?: boolean;
-  /** Render a title bar on a named figment. */
-  readonly figmentTitleBar?: boolean;
   /** Optional stable test id for the semantic source. */
   readonly testId?: string;
 }
@@ -1556,13 +1526,21 @@ export function GameCard({
   exhausted = false,
   presentation = "full",
   figment = false,
-  figmentTitleBar = false,
   testId,
 }: GameCardProps) {
   const lastPointerType = useRef<string | null>(null);
-  const timingCards = cardTimingInfoCards(model.displaySnapshot);
+  const displaySnapshot = figment
+    ? {
+        ...model.displaySnapshot,
+        name: figmentCardDisplayName(
+          model.displaySnapshot.name,
+          model.displaySnapshot.subtype,
+        ),
+      }
+    : model.displaySnapshot;
+  const timingCards = cardTimingInfoCards(displaySnapshot);
   const glossaryCards = cardRulesTextDefinitionCards(
-    model.displaySnapshot,
+    displaySnapshot,
     figment ? [GLOSSARY_IDS.figment] : [],
   );
   const statusCards = exhausted
@@ -1577,13 +1555,14 @@ export function GameCard({
     ? [glossaryInfoCard(GLOSSARY_IDS.figment)]
     : [];
   const figmentCards = extractMaterializedFigmentPreviews(
-    model.displaySnapshot.renderedText,
+    displaySnapshot.renderedText,
   ).map((preview) => ({
     kind: "gameCard" as const,
     cardId: preview.card.id,
     displaySnapshot: preview.card,
     figment: true,
-    figmentTitleBar: preview.titleBar,
+    selected: true,
+    selectionColor: "accent-bright" as const,
   }));
   const binding = useRevealSource({
     identity: { entityType: "game-card", entityId: model.cardId },
@@ -1591,12 +1570,12 @@ export function GameCard({
       primary: {
         kind: "gameCard",
         cardId: model.cardId,
-        displaySnapshot: model.displaySnapshot,
+        displaySnapshot,
         ...(model.transfiguration === undefined
           ? {}
           : { transfiguration: model.transfiguration }),
         ...(selected ? { selected: true, selectionColor } : {}),
-        ...(figment ? { figment: true, figmentTitleBar } : {}),
+        ...(figment ? { figment: true } : {}),
       },
       secondaries: [
         ...statusCards,
@@ -1620,7 +1599,7 @@ export function GameCard({
       role={interactive ? "button" : undefined}
       tabIndex={0}
       aria-disabled={unavailable || undefined}
-      aria-label={model.displaySnapshot.name}
+      aria-label={displaySnapshot.name}
       data-testid={testId}
       data-game-card-source=""
       data-game-card-presentation={presentation}
@@ -1652,14 +1631,13 @@ export function GameCard({
       }}
     >
       <GameCardSurface
-        card={model.displaySnapshot}
+        card={displaySnapshot}
         transfiguration={model.transfiguration}
         selected={selected}
         selectionColor={selectionColor}
         hideRulesText={hideRulesText}
         presentation={presentation}
         figment={figment}
-        figmentTitleBar={figmentTitleBar}
       />
     </Pressable>
   );

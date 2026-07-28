@@ -174,10 +174,6 @@
   --cv-name-color: #16181c;
   --cv-name-text-shadow: none;
   --cv-figment-titlebar-pad: 3.6cqw;
-  --cv-figment-spark-size: 17.5cqw;
-  --cv-figment-spark-font-size: 8.4cqw;
-  --cv-figment-spark-top: 2.8cqw;
-  --cv-figment-spark-right: 1.6cqw;
 }
 
 /* Event frame: an opaque violet surface keeps the type distinguishable on black art. */

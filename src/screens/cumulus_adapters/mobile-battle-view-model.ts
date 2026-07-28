@@ -409,7 +409,6 @@ export function buildMobileBattleCardView(
     model: battleGameCardModel(instance),
     exhausted: instance.status.isExhausted,
     figment,
-    figmentTitleBar: figment && instance.definition.name.trim() !== "",
     figmentCount: selectFigmentCount(instance),
     storedTime: instance.status.counters,
     showPlayableOutline,

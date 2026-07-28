@@ -230,7 +230,6 @@ function tutorialCardView(
     model: { cardId: card.id, displaySnapshot: card },
     exhausted,
     figment: false,
-    figmentTitleBar: false,
     layoutMotion,
     figmentCount: 0,
     storedTime: 0,

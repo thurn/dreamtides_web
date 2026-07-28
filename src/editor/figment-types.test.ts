@@ -1,30 +1,24 @@
 import { describe, expect, it } from "vitest";
-import { figmentHasTitleBar } from "./figment-types";
+import { figmentPreviewCard, type EditorFigmentRecord } from "./figment-types";
 
-describe("figmentHasTitleBar", () => {
-  it("hides the title bar when the figment's identity matches its subtype", () => {
-    // A plain figment whose name is just "<Subtype> Figment" reads its identity
-    // off the foot type line, so it needs no title bar.
-    expect(figmentHasTitleBar("Warrior Figment", "Warrior")).toBe(false);
-    expect(figmentHasTitleBar("Ancient Figment", "Ancient")).toBe(false);
-    expect(figmentHasTitleBar("Spirit Animal Figment", "Spirit Animal")).toBe(
-      false,
-    );
-  });
+describe("figmentPreviewCard", () => {
+  it("supplies the canonical Figment suffix exactly once", () => {
+    const record = {
+      id: "86125402-a7ca-4bf2-ab36-f8a91ddd27bf",
+      name: "Shadow",
+      subtype: "Shadow",
+      spark: 2,
+      keyword: "",
+      "rendered-text": "",
+      "image-number": 277174382,
+      art: { x: 0.289, y: -0.296, scale: 2.47 },
+      sourceIndex: 1,
+      source: {},
+    } satisfies EditorFigmentRecord;
 
-  it("shows the title bar when the identity differs from the subtype", () => {
-    // A named figment that shares a card type with a plain figment (a
-    // Legionnaire that is a Warrior) needs a title bar to disambiguate.
-    expect(figmentHasTitleBar("Legionnaire Figment", "Warrior")).toBe(true);
-  });
-
-  it("ignores case and the trailing Figment suffix", () => {
-    expect(figmentHasTitleBar("warrior figment", "Warrior")).toBe(false);
-    expect(figmentHasTitleBar("Warrior", "warrior")).toBe(false);
-  });
-
-  it("shows no title bar for a nameless figment", () => {
-    expect(figmentHasTitleBar("", "Warrior")).toBe(false);
-    expect(figmentHasTitleBar("Figment", "Warrior")).toBe(false);
+    expect(figmentPreviewCard(record).name).toBe("Shadow Figment");
+    expect(
+      figmentPreviewCard({ ...record, name: "Shadow Figment" }).name,
+    ).toBe("Shadow Figment");
   });
 });

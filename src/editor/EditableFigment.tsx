@@ -1,9 +1,9 @@
-import { asCardName } from "../types/card-identity";
 import { useRef, type ReactNode } from "react";
 import { CardView } from "../cumulus/components/card/CardView";
 import type { CardViewSlots } from "../cumulus/components/card/CardView";
+import { figmentCardDisplayName } from "../data/figment-card-display";
 import EditableField from "./EditableField";
-import { figmentHasTitleBar, figmentPreviewCard } from "./figment-types";
+import { figmentPreviewCard } from "./figment-types";
 import type {
   EditableFigmentField,
   EditorFigmentRecord,
@@ -80,24 +80,15 @@ export default function EditableFigment({
 
   const visibleCard = {
     ...figmentPreviewCard(figment),
-    name: asCardName(visibleName),
+    name: figmentCardDisplayName(visibleName, visibleSubtype),
     subtype: visibleSubtype,
     renderedText: visibleRulesText,
     spark: visibleSpark,
   };
 
-  // Figments show no name bar at rest. The bar appears for a named figment (one
-  // whose identity differs from its subtype, e.g. a Legionnaire that is a
-  // Warrior) and while the name is being edited, so the name stays editable in
-  // place without changing the art-forward at-rest look.
-  const nameActive =
-    nameSaveEntry !== null && nameSaveEntry.status !== "idle";
-  const showTitleBar = figmentHasTitleBar(visibleName, visibleSubtype) || nameActive;
-
-  // The rules box follows the same reveal-on-edit pattern as the title bar: a
-  // figment with no rules text shows no box at rest (matching the in-game
-  // figment frame), and the box appears once there is rules text or the field
-  // is being edited. A bottom affordance starts the edit for an empty figment.
+  // A figment with no rules text shows no box at rest, and the box appears once
+  // there is rules text or the field is being edited. A bottom affordance
+  // starts the edit for an empty figment.
   const rulesActive =
     rulesTextSaveEntry !== null && rulesTextSaveEntry.status !== "idle";
   const showRulesBox = visibleRulesText.trim() !== "" || rulesActive;
@@ -183,7 +174,7 @@ export default function EditableFigment({
     return (
       <article
         ref={cardRef}
-        aria-label={visibleName}
+        aria-label={visibleCard.name}
         data-editor-figment-id={figment.id}
         style={{ display: "block", position: "relative" }}
       >
@@ -191,7 +182,6 @@ export default function EditableFigment({
           card={visibleCard}
           large={size === "large"}
           figment
-          figmentTitleBar={showTitleBar}
           onClick={() => onOpenArtEditor(figment)}
         />
       </article>
@@ -201,7 +191,7 @@ export default function EditableFigment({
   return (
     <article
       ref={cardRef}
-      aria-label={visibleName}
+      aria-label={visibleCard.name}
       data-editor-figment-id={figment.id}
       style={{ display: "block", position: "relative" }}
     >
@@ -209,38 +199,9 @@ export default function EditableFigment({
         card={visibleCard}
         large={size === "large"}
         figment
-        figmentTitleBar={showTitleBar}
         slots={slots}
         rulesTextboxExpanded={rulesTextEditing}
       />
-      {/* With no name bar at rest, this transparent strip over the top-left of
-          the art is the affordance to start naming an unnamed figment: a
-          double-click begins the name edit, which reveals the title bar with the
-          editable field. It clears the corner spark on the right. */}
-      {!showTitleBar ? (
-        <div
-          className="figment-edit-affordance"
-          role="button"
-          tabIndex={0}
-          aria-label={`Edit name for ${visibleName}`}
-          title="Double-click to name this figment"
-          onDoubleClick={() => onFieldBeginEdit(figment, "name", figment.name)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              onFieldBeginEdit(figment, "name", figment.name);
-            }
-          }}
-          style={{
-            position: "absolute",
-            top: "3.4%",
-            left: "5%",
-            right: "26%",
-            height: "7%",
-            cursor: "text",
-            zIndex: 6,
-          }}
-        />
-      ) : null}
       {/* With no rules box at rest, this transparent strip over the bottom-left
           of the art (clear of the bottom-right type line) starts a rules edit on
           a double-click, revealing the editable frosted box. */}

@@ -67,7 +67,6 @@ function makeCard(index: number, instanceId: string): MobileBattleCardView {
     model: { cardId, displaySnapshot: card },
     exhausted: index % 3 === 0,
     figment: false,
-    figmentTitleBar: false,
     figmentCount: 1,
     storedTime: 0,
     showPlayableOutline: false,

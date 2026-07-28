@@ -3,10 +3,16 @@ import type { BattleCardInstance } from "../types";
 import type { GameCardModel } from "../../cumulus/components/card/CardView";
 import { asCardId, asCardName, isCardId } from "../../types/card-identity";
 import { semanticEntityId } from "../../types/semantic-identity";
+import { lookupFigmentCatalogEntry } from "../state/figment-catalog";
 
 /** Resolve canonical battle display state without changing battle-instance identity. */
 export function battleGameCardModel(instance: BattleCardInstance): GameCardModel {
   const definition = instance.definition;
+  const catalogEntry = instance.provenance.kind === "generated-figment"
+    ? lookupFigmentCatalogEntry(definition.subtype)
+    : undefined;
+  const imageNumber = definition.imageNumber || catalogEntry?.imageNumber || 0;
+  const art = definition.art ?? catalogEntry?.art;
   const cardId = asCardId(
     isCardId(definition.cardId)
       ? definition.cardId
@@ -31,10 +37,10 @@ export function battleGameCardModel(instance: BattleCardInstance): GameCardModel
       isFast: definition.isFast,
       isInterrupt: definition.timing === "interrupt",
       reclaimCost: definition.reclaimCost,
-      renderedText: definition.renderedText,
-      imageNumber: definition.imageNumber,
-      artOwned: definition.imageNumber > 0,
-      ...(definition.art === undefined ? {} : { art: definition.art }),
+      renderedText: definition.renderedText || catalogEntry?.renderedText || "",
+      imageNumber,
+      artOwned: catalogEntry?.artOwned ?? imageNumber > 0,
+      ...(art === undefined ? {} : { art }),
     },
   };
 }

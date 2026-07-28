@@ -1172,15 +1172,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Render the figment frame (rules §Figments): no energy orb, the spark floats\nas a large mark in the top-right corner instead of inside a name bar, and\nthe rules box takes a black-on-light frosted treatment. A figment has no\nname bar by default; pass `figmentTitleBar` to show one (for a named figment\nlike a Legionnaire, or while its name is being edited)."
-    },
-    {
-      "name": "figmentTitleBar",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "In figment mode, render the top title bar holding the card name (left\naligned, dark character-card treatment). Ignored when `figment` is false."
+      "description": "Render the figment frame (rules §Figments): no energy orb, a canonical\n`\"<Identity> Figment\"` title bar, and a black-on-light frosted rules box."
     },
     {
       "name": "hideRulesText",
@@ -2359,15 +2351,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "false",
-      "description": "Render the figment frame."
-    },
-    {
-      "name": "figmentTitleBar",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "Render a title bar on a named figment."
+      "description": "Render the figment frame with its canonical `\"<Identity> Figment\"` title bar."
     },
     {
       "name": "testId",
