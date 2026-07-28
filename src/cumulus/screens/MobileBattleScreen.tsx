@@ -1,6 +1,7 @@
 import {
   useCallback,
   useEffect,
+  useId,
   useRef,
   useState,
   type CSSProperties,
@@ -516,6 +517,8 @@ const PHASE_LIGHT_STREAK_HEIGHT = 2;
 const PHASE_COMET_TAIL_START_SCALE = 0.35;
 const PHASE_COMET_TAIL_PEAK_SCALE = 1.55;
 const PHASE_CHALLENGE_PULSE_PEAK_SCALE = 1.65;
+const CHALLENGER_MARKER_ARRIVAL_SCALE = 0.72;
+const CHALLENGER_MARKER_OVERSHOOT_SCALE = 1.08;
 // Five slow motion beats: arrive, settle, hold, and dissolve. The timer only
 // removes the inert presentation layer after its token-driven motion finishes.
 const TURN_ANNOUNCEMENT_DURATION_MS = 2_100;
@@ -601,6 +604,23 @@ const BATTLE_PHASE_LIGHT_CSS = `
     45% { transform: translate(-50%, -50%) scale(${String(PHASE_CHALLENGE_PULSE_PEAK_SCALE)}); opacity: 0.48; }
   }
 
+  @keyframes battle-challenger-marker-arrival {
+    0% { opacity: 0; transform: scale(${String(CHALLENGER_MARKER_ARRIVAL_SCALE)}); }
+    68% { opacity: 1; transform: scale(${String(CHALLENGER_MARKER_OVERSHOOT_SCALE)}); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes battle-challenger-marker-shimmer {
+    from { stroke-dashoffset: 124; opacity: 0; }
+    18% { opacity: 0.9; }
+    42%, 100% { stroke-dashoffset: 0; opacity: 0; }
+  }
+
+  @keyframes battle-challenger-marker-breathe {
+    0%, 100% { opacity: 0.24; }
+    50% { opacity: 0.62; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     [data-battle-turn-announcement-disc],
     [data-battle-turn-announcement-orbit],
@@ -608,7 +628,10 @@ const BATTLE_PHASE_LIGHT_CSS = `
     [data-battle-turn-announcement-copy],
     [data-battle-phase-light],
     [data-battle-phase-light-halo],
-    [data-battle-phase-light-streak] {
+    [data-battle-phase-light-streak],
+    [data-battle-challenger-marker-animated],
+    [data-battle-challenger-marker-shimmer],
+    [data-battle-challenger-marker-breathe] {
       animation: none !important;
       transition: none !important;
     }
@@ -1397,7 +1420,10 @@ function ChallengerChevron({
   readonly owner: MobileBattleOwner;
   readonly settings: ChallengerChevronSettings;
 }) {
+  const crestGradientId = useId();
   const outerStrokeWidth = settings.strokeWidth + settings.outlineWidth * 2;
+  const framePath = "M4 44 C24 27 38 25 50 6 C62 25 76 27 96 44";
+  const crestPath = "M6 46 L50 3 L94 46 L72 46 L50 24 L28 46 Z";
   return (
     <div
       role="img"
@@ -1406,6 +1432,7 @@ function ChallengerChevron({
       data-battle-challenger-chevron-direction={
         owner === "enemy" ? "down" : "up"
       }
+      data-battle-challenger-chevron-style={settings.style}
       style={{
         position: "absolute",
         zIndex: 7,
@@ -1436,24 +1463,146 @@ function ChallengerChevron({
           overflow: "visible",
           transform: owner === "enemy" ? "rotate(180deg)" : undefined,
           transformOrigin: "50% 50%",
+          filter:
+            settings.style === "classic"
+              ? undefined
+              : token("--battle-challenger-marker-glow"),
         }}
       >
-        <polyline
-          points="6,44 50,6 94,44"
-          fill="none"
-          stroke={token("--surface-status-badge")}
-          strokeWidth={outerStrokeWidth}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <polyline
-          points="6,44 50,6 94,44"
-          fill="none"
-          stroke={settings.color}
-          strokeWidth={settings.strokeWidth}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+        {settings.style === "classic" ? (
+          <>
+            <polyline
+              points="6,44 50,6 94,44"
+              fill="none"
+              stroke={token("--surface-status-badge")}
+              strokeWidth={outerStrokeWidth}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <polyline
+              points="6,44 50,6 94,44"
+              fill="none"
+              stroke={settings.color}
+              strokeWidth={settings.strokeWidth}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </>
+        ) : null}
+        {settings.style === "ember-crest" ? (
+          <g
+            data-battle-challenger-marker-animated=""
+            style={{
+              transformBox: "fill-box",
+              transformOrigin: "center",
+              animation: `battle-challenger-marker-arrival ${token("--dur-slow")} ${token("--ease-out")} both`,
+            }}
+          >
+            <defs>
+              <linearGradient
+                id={crestGradientId}
+                x1="0"
+                y1="1"
+                x2="0"
+                y2="0"
+              >
+                <stop
+                  offset="0%"
+                  stopColor={token("--battle-challenger-crest-shadow")}
+                />
+                <stop offset="58%" stopColor={settings.color} />
+                <stop
+                  offset="100%"
+                  stopColor={token("--battle-challenger-crest-highlight")}
+                />
+              </linearGradient>
+            </defs>
+            <path
+              d={crestPath}
+              fill={token("--surface-status-badge")}
+              stroke={token("--surface-status-badge")}
+              strokeWidth={settings.outlineWidth * 2}
+              strokeLinejoin="round"
+            />
+            <path
+              d={crestPath}
+              fill={`url(#${crestGradientId})`}
+              stroke={settings.color}
+              strokeWidth={Math.max(1, settings.strokeWidth / 6)}
+              strokeLinejoin="round"
+            />
+            <path
+              d="M50 10 L56 18 L50 26 L44 18 Z"
+              fill={token("--text-on-accent")}
+              opacity={0.72}
+            />
+            <path
+              d="M18 43 L50 10 L82 43"
+              data-battle-challenger-marker-shimmer=""
+              fill="none"
+              stroke={token("--text-on-accent")}
+              strokeWidth={Math.max(1, settings.strokeWidth / 5)}
+              strokeDasharray="14 110"
+              strokeLinecap="round"
+              opacity={0}
+              style={{
+                animation: `battle-challenger-marker-shimmer ${token("--dur-battle-challenger-shimmer")} linear infinite`,
+              }}
+            />
+          </g>
+        ) : null}
+        {settings.style === "frame-infusion" ? (
+          <g
+            data-battle-challenger-marker-animated=""
+            style={{
+              transformBox: "fill-box",
+              transformOrigin: "center",
+              animation: `battle-challenger-marker-arrival ${token("--dur-slow")} ${token("--ease-out")} both`,
+            }}
+          >
+            <path
+              d={framePath}
+              fill="none"
+              stroke={token("--surface-status-badge")}
+              strokeWidth={outerStrokeWidth}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d={framePath}
+              data-battle-challenger-marker-breathe=""
+              fill="none"
+              stroke={settings.color}
+              strokeWidth={settings.strokeWidth * 1.8}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{
+                animation: `battle-challenger-marker-breathe ${token("--dur-battle-challenger-breathe")} ${token("--ease-in-out")} infinite`,
+              }}
+            />
+            <path
+              d={framePath}
+              fill="none"
+              stroke={settings.color}
+              strokeWidth={settings.strokeWidth}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d={framePath}
+              data-battle-challenger-marker-shimmer=""
+              fill="none"
+              stroke={token("--battle-challenger-crest-highlight")}
+              strokeWidth={Math.max(1, settings.strokeWidth / 3)}
+              strokeDasharray="18 106"
+              strokeLinecap="round"
+              opacity={0}
+              style={{
+                animation: `battle-challenger-marker-shimmer ${token("--dur-battle-challenger-shimmer")} linear infinite`,
+              }}
+            />
+          </g>
+        ) : null}
       </svg>
     </div>
   );

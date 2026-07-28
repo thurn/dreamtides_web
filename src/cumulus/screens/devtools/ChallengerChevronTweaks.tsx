@@ -1,14 +1,16 @@
 import type { ReactElement } from "react";
 import {
-  DEFAULT_CHALLENGER_CHEVRON_SETTINGS,
+  CHALLENGER_CHEVRON_PRESETS,
+  CHALLENGER_CHEVRON_STYLE_OPTIONS,
   type ChallengerChevronSettings,
+  type ChallengerChevronStyle,
 } from "../challenger-chevron";
 
 const DEFAULT_COLOR_PICKER_VALUE = "#f09837";
 
 type NumericSetting = Exclude<
   keyof ChallengerChevronSettings,
-  "enabled" | "color"
+  "enabled" | "style" | "color"
 >;
 
 const NUMERIC_TWEAKS: readonly {
@@ -53,7 +55,7 @@ const NUMERIC_TWEAKS: readonly {
   },
   {
     key: "strokeWidth",
-    label: "Chevron thickness",
+    label: "Marker thickness",
     min: 2,
     max: 24,
     step: 1,
@@ -61,7 +63,7 @@ const NUMERIC_TWEAKS: readonly {
   },
   {
     key: "outlineWidth",
-    label: "Outline thickness",
+    label: "Separation thickness",
     min: 0,
     max: 16,
     step: 1,
@@ -116,7 +118,7 @@ export function ChallengerChevronTweaksPanel({
           marginBottom: 14,
         }}
       >
-        <strong style={{ fontSize: 15 }}>Challenger Chevron Tweaks</strong>
+        <strong style={{ fontSize: 15 }}>Challenger Marker Tweaks</strong>
         <button
           type="button"
           aria-label="Close challenger chevron tweaks"
@@ -152,6 +154,44 @@ export function ChallengerChevronTweaksPanel({
             onChange({ ...settings, enabled: event.currentTarget.checked })
           }
         />
+      </label>
+
+      <label
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr auto",
+          alignItems: "center",
+          gap: 12,
+          marginBottom: 14,
+        }}
+      >
+        <span>Marker style</span>
+        <select
+          aria-label="Challenger marker style"
+          data-challenger-chevron-style=""
+          value={settings.style}
+          onChange={(event) => {
+            const style = event.currentTarget.value as ChallengerChevronStyle;
+            onChange({
+              ...CHALLENGER_CHEVRON_PRESETS[style],
+              enabled: settings.enabled,
+            });
+          }}
+          style={{
+            border: "1px solid rgba(255, 255, 255, 0.18)",
+            borderRadius: 8,
+            padding: "6px 8px",
+            background: "rgba(255, 255, 255, 0.08)",
+            color: "inherit",
+            font: "inherit",
+          }}
+        >
+          {CHALLENGER_CHEVRON_STYLE_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
       </label>
 
       {NUMERIC_TWEAKS.map((tweak) => (
@@ -197,10 +237,10 @@ export function ChallengerChevronTweaksPanel({
           marginBottom: 14,
         }}
       >
-        <span>Chevron color</span>
+        <span>Marker color</span>
         <input
           type="color"
-          aria-label="Chevron color"
+          aria-label="Marker color"
           value={
             settings.color.startsWith("#")
               ? settings.color
@@ -218,7 +258,12 @@ export function ChallengerChevronTweaksPanel({
       <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
         <button
           type="button"
-          onClick={() => onChange(DEFAULT_CHALLENGER_CHEVRON_SETTINGS)}
+          onClick={() =>
+            onChange({
+              ...CHALLENGER_CHEVRON_PRESETS[settings.style],
+              enabled: settings.enabled,
+            })
+          }
           style={{
             border: "1px solid rgba(255, 255, 255, 0.18)",
             borderRadius: 8,

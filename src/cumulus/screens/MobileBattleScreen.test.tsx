@@ -18,7 +18,10 @@ import {
   type MobileBattleSideView,
   type MobileBattleView,
 } from "./MobileBattleScreen";
-import { DEFAULT_CHALLENGER_CHEVRON_SETTINGS } from "./challenger-chevron";
+import {
+  CHALLENGER_CHEVRON_PRESETS,
+  DEFAULT_CHALLENGER_CHEVRON_SETTINGS,
+} from "./challenger-chevron";
 
 function mockDesktopViewport(matches: boolean): void {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
@@ -448,6 +451,7 @@ describe("MobileBattleScreen", () => {
       '[data-battle-challenger-chevron="player"]',
     );
     expect(playerChevron?.dataset.battleChallengerChevronDirection).toBe("up");
+    expect(playerChevron?.dataset.battleChallengerChevronStyle).toBe("classic");
     expect(playerChevron?.style.width).toBe(
       `${String(DEFAULT_CHALLENGER_CHEVRON_SETTINGS.widthPercent)}%`,
     );
@@ -3227,7 +3231,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("tunes challenger chevron geometry, color, and visibility live", () => {
+  it("tunes challenger marker geometry, color, and visibility live", () => {
     const baseView = makeView();
     const player = {
       ...baseView.player,
@@ -3280,7 +3284,7 @@ describe("MobileBattleScreen", () => {
     });
     act(() => {
       const color = panel?.querySelector<HTMLInputElement>(
-        'input[aria-label="Chevron color"]',
+        'input[aria-label="Marker color"]',
       );
       if (color !== null && color !== undefined) {
         Object.getOwnPropertyDescriptor(
@@ -3318,6 +3322,111 @@ describe("MobileBattleScreen", () => {
     expect(
       container.querySelector("[data-battle-challenger-chevron-tweaks]"),
     ).not.toBeNull();
+
+    act(() => root.unmount());
+  });
+
+  it("switches between tuned challenger marker treatments", () => {
+    const baseView = makeView();
+    const player = {
+      ...baseView.player,
+      frontRank: [
+        {
+          id: "player-front-filled",
+          card: makeCard(24, "player-front-challenger"),
+        },
+      ],
+    };
+    const { container, root } = mount({
+      ...baseView,
+      near: player,
+      player,
+      phase: "dusk",
+    });
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-debug-menu-trigger"]',
+        )
+        ?.click();
+    });
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-debug-challenger-chevron-tweaks"]',
+        )
+        ?.click();
+    });
+
+    const select = container.querySelector<HTMLSelectElement>(
+      '[data-challenger-chevron-style]',
+    );
+    expect(
+      Array.from(select?.options ?? []).map((option) => option.textContent),
+    ).toEqual(["Classic", "Ember Crest", "Frame Infusion"]);
+
+    act(() => {
+      if (select !== null) {
+        Object.getOwnPropertyDescriptor(
+          HTMLSelectElement.prototype,
+          "value",
+        )?.set?.call(select, "ember-crest");
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    });
+
+    const emberCrest = container.querySelector<HTMLElement>(
+      '[data-battle-challenger-chevron="player"]',
+    );
+    expect(emberCrest?.dataset.battleChallengerChevronStyle).toBe(
+      "ember-crest",
+    );
+    expect(emberCrest?.style.width).toBe(
+      `${String(CHALLENGER_CHEVRON_PRESETS["ember-crest"].widthPercent)}%`,
+    );
+    expect(emberCrest?.querySelectorAll("polyline")).toHaveLength(0);
+    expect(emberCrest?.querySelector("linearGradient")).not.toBeNull();
+    expect(
+      emberCrest?.querySelector<SVGGElement>(
+        "[data-battle-challenger-marker-animated]",
+      )?.style.animation,
+    ).toContain("battle-challenger-marker-arrival");
+    expect(
+      emberCrest?.querySelector<SVGPathElement>(
+        "[data-battle-challenger-marker-shimmer]",
+      )?.style.animation,
+    ).toContain("battle-challenger-marker-shimmer");
+
+    act(() => {
+      if (select !== null) {
+        Object.getOwnPropertyDescriptor(
+          HTMLSelectElement.prototype,
+          "value",
+        )?.set?.call(select, "frame-infusion");
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    });
+
+    const frameInfusion = container.querySelector<HTMLElement>(
+      '[data-battle-challenger-chevron="player"]',
+    );
+    expect(frameInfusion?.dataset.battleChallengerChevronStyle).toBe(
+      "frame-infusion",
+    );
+    expect(frameInfusion?.style.width).toBe(
+      `${String(CHALLENGER_CHEVRON_PRESETS["frame-infusion"].widthPercent)}%`,
+    );
+    expect(
+      frameInfusion?.querySelectorAll(
+        'path[d="M4 44 C24 27 38 25 50 6 C62 25 76 27 96 44"]',
+      ),
+    ).toHaveLength(4);
+    expect(
+      frameInfusion?.querySelector<SVGPathElement>(
+        "[data-battle-challenger-marker-breathe]",
+      )?.style.animation,
+    ).toContain("battle-challenger-marker-breathe");
 
     act(() => root.unmount());
   });
