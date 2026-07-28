@@ -280,9 +280,29 @@ const TUTORIAL_VICTORY_CSS = `
     50% { transform: scale(${String(TUTORIAL_VICTORY_BREATHE_HIGH_SCALE)}); }
   }
 
-  @keyframes tutorial-victory-star {
+  @keyframes tutorial-victory-title {
+    0% { opacity: 0; top: 50%; transform: translate(-50%, -50%); }
+    14%, 42% { opacity: 1; top: 50%; transform: translate(-50%, -50%); }
+    72%, 100% { opacity: 1; top: 0; transform: translate(-50%, calc(-100% - ${token("--space-5")})); }
+  }
+
+  @keyframes tutorial-victory-star-reveal {
+    0%, 42% { opacity: 0; }
+    72%, 100% { opacity: 1; }
+  }
+
+  @keyframes tutorial-victory-star-spin {
     0%, 100% { transform: rotate(0deg) scale(${String(TUTORIAL_VICTORY_STAR_LOW_SCALE)}); }
     50% { transform: rotate(45deg) scale(${String(TUTORIAL_VICTORY_STAR_HIGH_SCALE)}); }
+  }
+
+  @keyframes tutorial-victory-action {
+    0%, 72% { opacity: 0; transform: translateY(${token("--space-4")}); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  [data-tutorial-victory-action][data-tutorial-victory-action-entering] {
+    pointer-events: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -291,8 +311,14 @@ const TUTORIAL_VICTORY_CSS = `
     [data-tutorial-victory-counter-orbit],
     [data-tutorial-victory-ripple],
     [data-tutorial-victory-core],
-    [data-tutorial-victory-star] {
+    [data-tutorial-victory-title],
+    [data-tutorial-victory-star],
+    [data-tutorial-victory-action] {
       animation: none !important;
+    }
+
+    [data-tutorial-victory-action][data-tutorial-victory-action-entering] {
+      pointer-events: auto;
     }
   }
 `;
@@ -303,6 +329,8 @@ function TutorialVictorySurface({
 }: {
   readonly onNewJourney: () => void;
 }): ReactElement {
+  const [titleSettled, setTitleSettled] = useState(false);
+  const [actionSettled, setActionSettled] = useState(false);
   const introDuration = `calc(${token("--dur-slow")} * 5)`;
   return (
     <section
@@ -335,7 +363,6 @@ function TutorialVictorySurface({
       <Motes on tint="violet" count={24} seed={121} zIndex={1} />
       <Motes on tint="warm" count={12} seed={243} zIndex={1} />
       <div
-        aria-hidden="true"
         data-tutorial-victory-arrival=""
         style={{
           position: "relative",
@@ -347,7 +374,30 @@ function TutorialVictorySurface({
           animation: `tutorial-victory-arrival ${introDuration} ${token("--ease-dream")} both`,
         }}
       >
+        <h1
+          data-tutorial-victory-title=""
+          onAnimationEnd={() => setTitleSettled(true)}
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: 0,
+            zIndex: 4,
+            margin: 0,
+            color: token("--text-primary"),
+            font: token("--t-display"),
+            textAlign: "center",
+            textShadow: token("--text-outline-media"),
+            whiteSpace: "nowrap",
+            transform: `translate(-50%, calc(-100% - ${token("--space-5")}))`,
+            animation: titleSettled
+              ? undefined
+              : `tutorial-victory-title ${introDuration} ${token("--ease-dream")} both`,
+          }}
+        >
+          Victory
+        </h1>
         <span
+          aria-hidden="true"
           data-tutorial-victory-ripple=""
           style={{
             position: "absolute",
@@ -358,6 +408,7 @@ function TutorialVictorySurface({
           }}
         />
         <span
+          aria-hidden="true"
           data-tutorial-victory-ripple=""
           style={{
             position: "absolute",
@@ -368,6 +419,7 @@ function TutorialVictorySurface({
           }}
         />
         <span
+          aria-hidden="true"
           data-tutorial-victory-orbit=""
           style={{
             position: "absolute",
@@ -405,6 +457,7 @@ function TutorialVictorySurface({
           }}
         />
         <span
+          aria-hidden="true"
           data-tutorial-victory-core=""
           style={{
             position: "relative",
@@ -428,13 +481,24 @@ function TutorialVictorySurface({
               clipPath:
                 "polygon(50% 0%, 56% 44%, 100% 50%, 56% 56%, 50% 100%, 44% 56%, 0% 50%, 44% 44%)",
               boxShadow: token("--glow-accent-soft"),
-              animation: `tutorial-victory-star calc(${token("--dur-slow")} * 8) ${token("--ease-in-out")} infinite`,
+              animation:
+                `tutorial-victory-star-reveal ${introDuration} ${token("--ease-out")} both, ` +
+                `tutorial-victory-star-spin calc(${token("--dur-slow")} * 8) ${token("--ease-in-out")} ${introDuration} infinite`,
             }}
           />
         </span>
       </div>
       <div
         data-tutorial-victory-action=""
+        data-tutorial-victory-action-entering={
+          actionSettled ? undefined : ""
+        }
+        data-tutorial-victory-action-settled={actionSettled ? "" : undefined}
+        onAnimationEnd={(event) => {
+          if (event.currentTarget === event.target) {
+            setActionSettled(true);
+          }
+        }}
         style={{
           position: "relative",
           zIndex: 3,
@@ -442,6 +506,9 @@ function TutorialVictorySurface({
           maxWidth: TUTORIAL_VICTORY_BUTTON_MAX_WIDTH,
           display: "flex",
           justifyContent: "center",
+          animation: actionSettled
+            ? undefined
+            : `tutorial-victory-action ${introDuration} ${token("--ease-out")} both`,
         }}
       >
         <GlassButton

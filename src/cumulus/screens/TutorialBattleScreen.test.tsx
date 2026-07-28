@@ -160,7 +160,7 @@ afterEach(() => {
 });
 
 describe("TutorialBattleScreen", () => {
-  it("presents the animated victory payoff with only its New Journey copy", () => {
+  it("moves Victory above the payoff before revealing New Journey", () => {
     const onNewJourney = vi.fn();
     const { container, root } = mount(
       view({ victoryVisible: true }),
@@ -175,6 +175,12 @@ describe("TutorialBattleScreen", () => {
     const button = container.querySelector<HTMLButtonElement>(
       '[data-testid="tutorial-battle-new-journey"]',
     );
+    const title = victory?.querySelector<HTMLElement>(
+      "[data-tutorial-victory-title]",
+    );
+    const action = victory?.querySelector<HTMLElement>(
+      "[data-tutorial-victory-action]",
+    );
 
     expect(victory).not.toBeNull();
     expect(
@@ -188,7 +194,14 @@ describe("TutorialBattleScreen", () => {
         (candidate) => candidate.textContent,
       ),
     ).toEqual(["New Journey"]);
-    expect(victory?.querySelector("h1, h2, p")).toBeNull();
+    expect(title?.tagName).toBe("H1");
+    expect(title?.textContent).toBe("Victory");
+    expect(title?.style.animation).toContain("tutorial-victory-title");
+    expect(action?.style.animation).toContain("tutorial-victory-action");
+    expect(
+      action?.hasAttribute("data-tutorial-victory-action-entering"),
+    ).toBe(true);
+    expect(victory?.querySelectorAll("h1, h2, p")).toHaveLength(1);
     act(() => button?.click());
     expect(onNewJourney).toHaveBeenCalledOnce();
 
