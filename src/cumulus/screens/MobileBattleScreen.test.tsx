@@ -370,7 +370,7 @@ describe("MobileBattleScreen", () => {
     container.remove();
   });
 
-  it("labels the opponent's tutorial dusk action Done Repositioning", () => {
+  it("labels the opponent's tutorial dusk action Start Challenge", () => {
     const baseView = makeView();
     const view: MobileBattleView = {
       ...baseView,
@@ -396,7 +396,7 @@ describe("MobileBattleScreen", () => {
       container.querySelector<HTMLButtonElement>(
         '[data-testid="tutorial-end-turn"]',
       )?.textContent,
-    ).toBe("Done Repositioning");
+    ).toBe("Start Challenge");
     expect(
       container.querySelector<HTMLElement>("[data-battle-phase-next]")?.style
         .width,
@@ -460,9 +460,7 @@ describe("MobileBattleScreen", () => {
       )}%`,
     );
     expect(playerChevron?.style.top).toBe(
-      `${String(
-        DEFAULT_CHALLENGER_CHEVRON_SETTINGS.verticalPositionPercent,
-      )}%`,
+      `${String(DEFAULT_CHALLENGER_CHEVRON_SETTINGS.verticalPositionPercent)}%`,
     );
     expect(
       playerChevron?.querySelectorAll("polyline")[0]?.getAttribute("stroke"),
@@ -498,9 +496,7 @@ describe("MobileBattleScreen", () => {
     expect(enemyChevron?.dataset.battleChallengerChevronDirection).toBe("down");
     expect(enemyChevron?.style.top).toBe("");
     expect(enemyChevron?.style.bottom).toBe(
-      `${String(
-        DEFAULT_CHALLENGER_CHEVRON_SETTINGS.verticalPositionPercent,
-      )}%`,
+      `${String(DEFAULT_CHALLENGER_CHEVRON_SETTINGS.verticalPositionPercent)}%`,
     );
     expect(enemyChevron?.querySelector("svg")?.style.transform).toBe(
       "rotate(180deg)",

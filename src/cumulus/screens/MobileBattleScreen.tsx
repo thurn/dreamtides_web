@@ -63,9 +63,7 @@ import {
   type MobileBattleResultAction,
   type MobileBattleResultView,
 } from "./BattleResultSurface";
-import {
-  ChallengerChevronTweaksPanel,
-} from "./devtools/ChallengerChevronTweaks";
+import { ChallengerChevronTweaksPanel } from "./devtools/ChallengerChevronTweaks";
 import {
   DEFAULT_CHALLENGER_CHEVRON_SETTINGS,
   type ChallengerChevronSettings,
@@ -3106,7 +3104,7 @@ function ControlRow({
   readonly layoutBackSlotCount: number;
   readonly phaseNavigation: "both" | "end-turn" | "tutorial" | "hidden";
   readonly perspective: BattlePerspectiveSide;
-  readonly tutorialNextLabel: "End Turn" | "Done Repositioning";
+  readonly tutorialNextLabel: "End Turn" | "Start Challenge";
 }) {
   const disabled = interactions?.canInteract !== true;
   const hasAlternateNextControls = aiApproval !== null || choicePrompt !== null;
@@ -4447,7 +4445,7 @@ export function MobileBattleScreen({
           perspective={view.perspective}
           tutorialNextLabel={
             view.activeSide === "enemy" && view.phase === "dusk"
-              ? "Done Repositioning"
+              ? "Start Challenge"
               : "End Turn"
           }
         />
