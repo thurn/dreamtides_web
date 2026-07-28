@@ -10,7 +10,10 @@ import {
   TutorialBattleScreen,
   type TutorialBattleView,
 } from "./TutorialBattleScreen";
-import type { MobileBattleCardView } from "./MobileBattleScreen";
+import type {
+  MobileBattleCardView,
+  MobileBattleInteractions,
+} from "./MobileBattleScreen";
 
 const reducedMotionPreference = vi.hoisted(() => ({ value: false }));
 vi.mock("framer-motion", async (importOriginal) => {
@@ -36,9 +39,10 @@ vi.mock("./MobileBattleScreen", () => ({
   },
 }));
 
-const interactions = {
+const interactions: MobileBattleInteractions = {
   canInteract: false,
   pendingCardId: null,
+  targetSelectionPrompt: null,
   onHandCardActivate: vi.fn(),
   onCardDragStart: vi.fn(),
   onCardDragEnd: vi.fn(),
@@ -117,6 +121,7 @@ function mount(
   onMovementStatusDismiss = vi.fn(),
   onPresentationVisible = vi.fn(),
   onNewJourney = vi.fn(),
+  screenInteractions = interactions,
 ) {
   const container = document.createElement("div");
   document.body.append(container);
@@ -126,7 +131,7 @@ function mount(
       <CumulusRoot>
         <TutorialBattleScreen
           view={screenView}
-          interactions={interactions}
+          interactions={screenInteractions}
           movementStatusMessage={movementStatusMessage}
           onMovementStatusDismiss={onMovementStatusDismiss}
           onForeseeConfirm={() => {}}
@@ -267,6 +272,42 @@ describe("TutorialBattleScreen", () => {
     );
     act(() => toast?.click());
     expect(dismiss).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+  });
+
+  it("keeps target selection in a compact top-edge banner", () => {
+    const cancel = vi.fn();
+    const { container, root } = mount(
+      view({ manualControls: true }),
+      null,
+      vi.fn(),
+      vi.fn(),
+      vi.fn(),
+      {
+        ...interactions,
+        targetSelectionPrompt: "Select a highlighted legal target.",
+        onTargetSelectionCancel: cancel,
+      },
+    );
+    const prompt = container.querySelector<HTMLElement>(
+      "[data-tutorial-target-selection]",
+    );
+    const header = prompt?.querySelector("[data-glass-panel-header]");
+    const cancelButton = prompt?.querySelector<HTMLButtonElement>(
+      '[data-testid="tutorial-target-cancel"]',
+    );
+
+    expect(prompt?.style.width).toBe("90vw");
+    expect(prompt?.style.maxWidth).toBe("416px");
+    expect(prompt?.querySelector("h2")?.textContent).toBe("Choose a Target");
+    expect(prompt?.textContent).toContain(
+      "Select a highlighted legal target.",
+    );
+    expect(header?.contains(cancelButton ?? null)).toBe(true);
+    expect(prompt?.querySelector("[data-glass-panel-footer]")).toBeNull();
+    act(() => cancelButton?.click());
+    expect(cancel).toHaveBeenCalledOnce();
 
     act(() => root.unmount());
   });

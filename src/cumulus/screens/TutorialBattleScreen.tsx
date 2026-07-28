@@ -211,8 +211,35 @@ export function TutorialBattleScreen({
         </GlassDialog>
       ) : null}
       {view.manualControls && interactions.targetSelectionPrompt !== null ? (
-        <div data-tutorial-target-selection="" style={{ position: "fixed", left: "50%", top: `calc(var(--safe-area-inset-top) + ${token("--space-12")})`, transform: "translateX(-50%)", zIndex: 80 }}>
-          <GlassPanel eyebrow="Play card" title="Choose target" subtitle={interactions.targetSelectionPrompt} footer={<GlassButton label="Cancel" variant="default" placement="onGlass" testId="tutorial-target-cancel" onPress={() => interactions.onTargetSelectionCancel?.()} />}><span /></GlassPanel>
+        <div
+          data-tutorial-target-selection=""
+          role="status"
+          aria-live="polite"
+          style={{
+            position: "fixed",
+            left: "50%",
+            top: `calc(var(--safe-area-inset-top) + ${token("--space-12")})`,
+            width: "90vw",
+            maxWidth: 416,
+            transform: "translateX(-50%)",
+            zIndex: 80,
+          }}
+        >
+          <GlassPanel
+            title="Choose a Target"
+            subtitle={interactions.targetSelectionPrompt}
+            headerSpacing="compact"
+            headerDivider={false}
+            radius="control"
+            rightAccessory={{
+              kind: "glassButton",
+              label: "Cancel",
+              testId: "tutorial-target-cancel",
+              onPress: () => interactions.onTargetSelectionCancel?.(),
+            }}
+          >
+            <span />
+          </GlassPanel>
         </div>
       ) : null}
       {movementStatusMessage !== null ? (
