@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, type ReactElement } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { GameCard } from "../components/card/CardView";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlassDialog } from "../components/overlay/GlassDialog";
@@ -13,6 +13,7 @@ import {
 } from "./BattleForeseeOverlay";
 import {
   MobileBattleScreen,
+  battleCardLayoutId,
   type MobileBattleCardView,
   type MobileBattleInteractions,
   type MobileBattleView,
@@ -131,22 +132,25 @@ export function TutorialBattleScreen({
         overflow: "hidden",
       }}
     >
-      <MobileBattleScreen
-        view={view.battle}
-        interactions={interactions}
-        inspectorDefault="collapsed"
-        inspectorVisibility="hidden"
-        phaseNavigation={view.manualControls ? "tutorial" : "hidden"}
-        viewport="contained"
-        onTurnAnnouncementComplete={completeTurnAnnouncement}
-      />
-      {view.presentation?.kind === "opponent-play" &&
-      presentationVisible ? (
-        <TutorialOpponentPlayReveal
-          presentation={view.presentation}
-          onVisible={onPresentationVisible}
+      <LayoutGroup id={`tutorial-battle:${view.battle.battleId}`}>
+        <MobileBattleScreen
+          view={view.battle}
+          interactions={interactions}
+          cardLayoutGroup="inherited"
+          inspectorDefault="collapsed"
+          inspectorVisibility="hidden"
+          phaseNavigation={view.manualControls ? "tutorial" : "hidden"}
+          viewport="contained"
+          onTurnAnnouncementComplete={completeTurnAnnouncement}
         />
-      ) : null}
+        {view.presentation?.kind === "opponent-play" &&
+        presentationVisible ? (
+          <TutorialOpponentPlayReveal
+            presentation={view.presentation}
+            onVisible={onPresentationVisible}
+          />
+        ) : null}
+      </LayoutGroup>
       {paused ? (
         <GlassDialog
           title="Battle Paused"
@@ -232,6 +236,10 @@ function TutorialOpponentPlayReveal({
     <motion.div
       data-tutorial-opponent-play-reveal=""
       data-battle-card-id={presentation.battleCardId}
+      data-battle-card-layout-id={battleCardLayoutId(
+        presentation.battleCardId,
+      )}
+      layoutId={battleCardLayoutId(presentation.battleCardId)}
       initial={{
         x: "-50%",
         y: "-50%",

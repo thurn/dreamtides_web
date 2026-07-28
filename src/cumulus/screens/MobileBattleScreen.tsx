@@ -4,6 +4,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type ReactNode,
 } from "react";
 import { LayoutGroup, motion } from "framer-motion";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
@@ -210,6 +211,11 @@ export interface MobileBattleChoicePromptView {
 export interface MobileBattleScreenProps {
   readonly view: MobileBattleView;
   readonly interactions?: MobileBattleInteractions;
+  /**
+   * Whether this screen owns the shared-layout scope for physical cards or
+   * participates in a scope supplied by a composing parent.
+   */
+  readonly cardLayoutGroup?: "owned" | "inherited";
   /** One battlefield destination emphasized for a guided interaction. */
   readonly guidedSlotHighlight?: {
     readonly owner: MobileBattleOwner;
@@ -245,6 +251,27 @@ export type MobileBattleCardSource = "near-hand" | "battlefield";
 export type MobileBattleDropZone = "deck" | "hand" | "void";
 export type MobileBattleBrowseZone = "deck" | "void" | "banished";
 export type MobileBattleDebugAdjustment = -1 | 1;
+
+/** Stable shared-layout identity for one physical battle-card instance. */
+export function battleCardLayoutId(battleCardId: string): string {
+  return `battle-card:${battleCardId}`;
+}
+
+function BattleCardLayoutGroup({
+  battleId,
+  ownership,
+  children,
+}: {
+  readonly battleId: string;
+  readonly ownership: "owned" | "inherited";
+  readonly children: ReactNode;
+}) {
+  return ownership === "owned" ? (
+    <LayoutGroup id={`mobile-battle:${battleId}`}>{children}</LayoutGroup>
+  ) : (
+    <>{children}</>
+  );
+}
 
 export interface MobileBattleInspectorSideView {
   readonly side: MobileBattleOwner;
@@ -973,7 +1000,8 @@ function FarHand({
               />
             ) : (
               <motion.div
-                layoutId={`battle-card:${cardId}`}
+                layoutId={battleCardLayoutId(cardId)}
+                data-battle-card-layout-id={battleCardLayoutId(cardId)}
                 data-battle-card-motion=""
                 style={{ width: "100%", height: "100%" }}
               >
@@ -1758,8 +1786,13 @@ function FaceUpCard({
       }}
     >
       <motion.div
-        layoutId={snapLayoutMotion ? undefined : `battle-card:${card.id}`}
+        layoutId={
+          snapLayoutMotion ? undefined : battleCardLayoutId(card.id)
+        }
         data-battle-card-motion=""
+        data-battle-card-layout-id={
+          snapLayoutMotion ? undefined : battleCardLayoutId(card.id)
+        }
         data-battle-card-layout-motion={snapLayoutMotion ? "snap" : "travel"}
         style={{
           width: "100%",
@@ -4059,6 +4092,7 @@ export function MobileBattleScreen({
   preserveOccupiedSlotOutlines = false,
   viewport = "fixed",
   inspectorVisibility = "available",
+  cardLayoutGroup = "owned",
 }: MobileBattleScreenProps) {
   const isDesktop = useIsDesktop();
   const isDockLayout = useIsDesktop(INSPECTOR_DOCK_MIN_WIDTH);
@@ -4294,6 +4328,7 @@ export function MobileBattleScreen({
       className="cumulus"
       data-battle-mobile={view.battleId}
       data-battle-layout={isDesktop ? "desktop" : "mobile"}
+      data-battle-card-layout-group={cardLayoutGroup}
       data-battle-perspective={view.perspective}
       onDragOver={(event) => {
         if (interactions?.pendingCardSource === "near-hand") {
@@ -4336,7 +4371,10 @@ export function MobileBattleScreen({
           playbackSpeed={playbackSpeed}
         />
       ) : null}
-      <LayoutGroup id={`mobile-battle:${view.battleId}`}>
+      <BattleCardLayoutGroup
+        battleId={view.battleId}
+        ownership={cardLayoutGroup}
+      >
         <FarHand
           owner={far.owner}
           cardIds={view.farHand.cardIds}
@@ -4440,7 +4478,7 @@ export function MobileBattleScreen({
           onCardDragChange={handleCardDragChange}
           interactions={interactions}
         />
-      </LayoutGroup>
+      </BattleCardLayoutGroup>
       <div
         data-battle-top-left-controls=""
         style={{

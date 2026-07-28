@@ -10,6 +10,7 @@ import { resolveColor } from "../primitives/color";
 import { DOUBLE_TAP_WINDOW_MS } from "../primitives/pointer-gesture";
 import {
   MobileBattleScreen,
+  battleCardLayoutId,
   type MobileBattleCardView,
   type MobileBattleCardPickerCandidateView,
   type MobileBattleDropResolution,
@@ -296,6 +297,27 @@ describe("MobileBattleScreen", () => {
 
     act(() => root.unmount());
     container.remove();
+  });
+
+  it("shares stable physical-card identities with a composing layout group", () => {
+    const { container, root } = mount(makeView(), undefined, {
+      cardLayoutGroup: "inherited",
+    });
+    const board = container.querySelector<HTMLElement>(
+      "[data-battle-mobile]",
+    );
+    const cardMotion = container
+      .querySelector<HTMLElement>(
+        '[data-battle-card-id="enemy-back-card"]',
+      )
+      ?.querySelector<HTMLElement>(":scope > [data-battle-card-motion]");
+
+    expect(board?.dataset.battleCardLayoutGroup).toBe("inherited");
+    expect(cardMotion?.dataset.battleCardLayoutId).toBe(
+      battleCardLayoutId("enemy-back-card"),
+    );
+
+    act(() => root.unmount());
   });
 
   it("renders the tutorial End Turn action as the sole purple primary control", () => {

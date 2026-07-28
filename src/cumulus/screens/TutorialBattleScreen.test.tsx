@@ -14,6 +14,8 @@ import type { MobileBattleCardView } from "./MobileBattleScreen";
 
 const mobileBattleProps = vi.fn();
 vi.mock("./MobileBattleScreen", () => ({
+  battleCardLayoutId: (battleCardId: string) =>
+    `battle-card:${battleCardId}`,
   MobileBattleScreen: (props: unknown) => {
     mobileBattleProps(props);
     return <main data-test-mobile-battle="" />;
@@ -213,8 +215,14 @@ describe("TutorialBattleScreen", () => {
       ),
     ).not.toBeNull();
     expect(mobileBattleProps).toHaveBeenLastCalledWith(expect.objectContaining({
+      cardLayoutGroup: "inherited",
       viewport: "contained",
     }));
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-tutorial-opponent-play-reveal]",
+      )?.dataset.battleCardLayoutId,
+    ).toBe("battle-card:enemy-card-1");
     expect(container.querySelector<HTMLElement>("[data-tutorial-live-battle]")?.style)
       .toMatchObject({ position: "fixed", width: "100vw", height: "100dvh" });
     expect(onPresentationVisible).not.toHaveBeenCalled();
