@@ -12,6 +12,7 @@ import {
   type TutorialAutomaticIntent,
   type TutorialBattleControllerPlan,
 } from "./tutorial-battle-controller";
+import { TUTORIAL_OPPONENT_PLAY_REVEAL_DWELL_MS } from "./tutorial-presentation-timing";
 
 /** Fixed readable dwell for each persisted tutorial reveal. */
 export const TUTORIAL_BATTLE_PRESENTATION_DWELL_MS = 3_000;
@@ -30,7 +31,7 @@ export interface TutorialBattleControllerRuntime
 const PRESENTATION_DWELL_MS: Readonly<
   Partial<Record<NonNullable<BattleFoldState["tutorialPresentation"]>["kind"], number>>
 > = {
-  "opponent-play": 2_000,
+  "opponent-play": TUTORIAL_OPPONENT_PLAY_REVEAL_DWELL_MS,
   "opponent-block": 2_000,
   "challenge-resolved": 1_500,
 };

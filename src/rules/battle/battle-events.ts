@@ -1235,7 +1235,7 @@ function battlePlayCardInternal(
   // The tutorial opponent's card remains the authoritative presentation focus
   // before any of its triggered work is drained. The follow-up event resumes
   // this exact queued state, so a remount cannot skip or duplicate effects.
-  if (automatic && instance.controller === "enemy") {
+  if (!suppressGuidance && automatic && instance.controller === "enemy") {
     const transition = battlePlayCardTransition(
       battle,
       intent,

@@ -143,11 +143,13 @@ the override id, trigger card UUID, action card UUID, and concrete battle-card
 instance id.
 
 Every card played by the automated tutorial opponent first animates to the
-canonical full-card reading size. Its two-second dwell begins when that reveal
-animation is visible, and the card's committed destination is projected onto
-the board when the persisted presentation checkpoint clears. AI character
-plays choose the empty back-rank slot nearest the battlefield center, with a
-stable lower-index tie break.
+canonical full-card reading size. A card-play guidance journey uses that same
+full-card reveal and its authored guidance duration supplies the two-second
+minimum reading window. Cards without guidance use a dedicated two-second
+dwell after the reveal animation becomes visible. The card's committed
+destination is projected onto the board when its presentation clears. AI
+character plays choose the empty back-rank slot nearest the battlefield
+center, with a stable lower-index tie break.
 
 ## Hidden-Tides Behavior
 

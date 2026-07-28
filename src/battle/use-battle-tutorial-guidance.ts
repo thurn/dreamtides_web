@@ -1,6 +1,10 @@
 import { useCallback, useEffect } from "react";
 import { useActions, useClientId, useConfirmedGameState } from "../coop/hooks";
 import { logEvent } from "../logging";
+import {
+  isAutomaticOpponentPlayGuidance,
+  tutorialGuidanceMessageDurationSeconds,
+} from "./tutorial-presentation-timing";
 
 export interface BattleTutorialGuidanceController {
   readonly advance: () => void;
@@ -49,6 +53,14 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
       triggerIds: guidance.messages.map((message) => message.triggerId),
       speakers: guidance.messages.map((message) => message.speaker),
       durations: guidance.messages.map((message) => message.duration),
+      effectiveDurations: guidance.messages.map((_, messageIndex) =>
+        tutorialGuidanceMessageDurationSeconds({
+          ...guidance,
+          messageIndex,
+        }),
+      ),
+      satisfiesOpponentPlayReveal:
+        isAutomaticOpponentPlayGuidance(guidance),
       verticalOffsets: guidance.messages.map(
         (message) => message.verticalOffset,
       ),

@@ -3,6 +3,7 @@ import type { BattleFoldState } from "../../rules/battle/fold";
 import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
 import { dreamwellCardModel } from "../../battle/ui/dreamwell-card-model";
 import type { TutorialGuidanceMessage } from "../../rules/battle/fold";
+import { tutorialGuidanceMessageDurationSeconds } from "../../battle/tutorial-presentation-timing";
 
 function guidanceDialogue(
   battle: BattleFoldState,
@@ -58,7 +59,7 @@ export function buildBattleTutorialGuidanceView(
       triggerId: message.triggerId,
       messageIndex: presentation.messageIndex,
       messageCount: presentation.messages.length,
-      duration: message.duration,
+      duration: tutorialGuidanceMessageDurationSeconds(presentation),
       dialogue: guidanceDialogue(battle, message),
       verticalOffset: message.verticalOffset ?? 0,
       bubbleWidth: message.bubbleWidth ?? 700,
@@ -77,7 +78,7 @@ export function buildBattleTutorialGuidanceView(
     triggerId: message.triggerId,
     messageIndex: presentation.messageIndex,
     messageCount: presentation.messages.length,
-    duration: message.duration,
+    duration: tutorialGuidanceMessageDurationSeconds(presentation),
     dialogue: guidanceDialogue(battle, message),
     verticalOffset: message.verticalOffset ?? 0,
     bubbleWidth: message.bubbleWidth ?? 700,
