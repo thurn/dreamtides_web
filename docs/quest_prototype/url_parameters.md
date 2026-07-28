@@ -244,7 +244,9 @@ in the player's hand and two cards in the opponent's hand.
 
 `goto=tutorial-victory` opens the tutorial battle victory payoff directly. Its
 New Journey action enters the fixed tutorial Dream Avatar selection in the same
-room.
+room. That selection presents the three authored Valor tides from
+`data/tabula/tutorial_quest_pool.toml`; choosing the avatar starts a quest with
+their 150-card pool.
 
 ```
 http://localhost:5173/?goto=atlas

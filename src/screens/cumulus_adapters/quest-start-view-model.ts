@@ -11,6 +11,10 @@ import type { DreamAvatarContent } from "../../types/content";
 import type { Tides4Color, Tides4DeckJson } from "../../draft/pool/tides4-io";
 import type { Tide } from "../../cumulus/components/hud/tide-spec";
 import type {
+  TutorialQuestPool,
+  TutorialQuestTide,
+} from "../../data/tutorial-quest-pool";
+import type {
   DreamAvatarOfferView,
   DreamAvatarTideView,
 } from "../../cumulus/screens/QuestStartScreen";
@@ -81,6 +85,15 @@ function toTideView(tide: Tides4DeckJson): DreamAvatarTideView {
   };
 }
 
+function toTutorialTideView(tide: TutorialQuestTide): DreamAvatarTideView {
+  return {
+    id: tide.id,
+    label: tide.name,
+    description: tide.description,
+    tide: tide.type,
+  };
+}
+
 /**
  * Resolve the exact tides selected for one DreamAvatar under a run seed to the
  * shared player-facing tide view. The largest-four cap matches the selection
@@ -140,11 +153,25 @@ export function buildDreamAvatarOfferViews(
   offered: DreamAvatarContent[],
   poolContext: RunPoolContext | undefined,
   questSeed: string,
+  tutorialQuestPool?: TutorialQuestPool,
+  tutorialDreamAvatarId?: string,
 ): DreamAvatarOfferView[] {
-  return offered.map((dreamAvatar) =>
-    toDreamAvatarOfferView(
+  return offered.map((dreamAvatar) => {
+    const tutorialTides =
+      tutorialDreamAvatarId === dreamAvatar.id &&
+      tutorialQuestPool?.dreamAvatarId === dreamAvatar.id
+        ? tutorialQuestPool.tides
+        : undefined;
+    if (tutorialTides !== undefined) {
+      return {
+        ...toDreamAvatarOfferView(dreamAvatar, []),
+        signatureCards: [],
+        tides: tutorialTides.map(toTutorialTideView),
+      };
+    }
+    return toDreamAvatarOfferView(
       dreamAvatar,
       selectedTides4Decks(poolContext, dreamAvatar, questSeed),
-    ),
-  );
+    );
+  });
 }

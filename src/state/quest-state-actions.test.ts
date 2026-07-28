@@ -9,7 +9,10 @@ import {
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
-import type { DreamAvatarContent } from "../types/content";
+import type {
+  DreamAvatarContent,
+  ResolvedDreamAvatarPackage,
+} from "../types/content";
 import type { QuestContent } from "../data/quest-content";
 import {
   buildTestCorpusCards,
@@ -478,6 +481,43 @@ describe("quest state actions", () => {
     expect(constructed.event).toBe("draft_pool_constructed");
     expect(constructed.dreamAvatarId).toBe(dreamAvatar.id);
     expect(typeof constructed.seed).toBe("number");
+  });
+
+  it("uses an authored package override for a tutorial quest start", () => {
+    const dreamAvatar = makeDreamAvatar();
+    const questContent = makeQuestContent(dreamAvatar);
+    const authoredCardNumbers = [...questContent.cardDatabase.keys()]
+      .filter((cardNumber) => !STARTER_CARD_NUMBERS.includes(cardNumber))
+      .slice(0, 2);
+    const authoredCopies = {
+      [String(authoredCardNumbers[0])]: 2,
+      [String(authoredCardNumbers[1])]: 1,
+    };
+    const authoredPackage: ResolvedDreamAvatarPackage = {
+      dreamAvatar,
+      draftPoolCopiesByCard: authoredCopies,
+      dreamsignPoolIds: ["dreamsign-a"],
+      mandatoryOnlyPoolSize: 3,
+      draftPoolSize: 3,
+      doubledCardCount: 1,
+      legalSubsetCount: 1,
+      preferredSubsetCount: 1,
+      starterDecklistCardNumbers: [],
+    };
+
+    const next = startQuestFromDreamAvatar({
+      prev: createDefaultState(),
+      dreamAvatar,
+      questContent,
+      seedOverride: "tutorial-seed",
+      resolvedPackageOverride: authoredPackage,
+    });
+
+    expect(next.resolvedPackage).toBe(authoredPackage);
+    expect(next.draftState?.mode).toBe("pool");
+    expect(
+      (next.draftState as PoolDraftState).draftPoolCopiesByCard,
+    ).toEqual(authoredCopies);
   });
 
   it("sets the quest screen and active site together", () => {

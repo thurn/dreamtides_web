@@ -55,8 +55,20 @@ export function QuestStartScreenAdapter() {
 
   const dreamAvatars = useMemo(
     () =>
-      buildDreamAvatarOfferViews(offered, questContent.poolContext, questSeed),
-    [offered, questContent.poolContext, questSeed],
+      buildDreamAvatarOfferViews(
+        offered,
+        questContent.poolContext,
+        questSeed,
+        questContent.tutorialQuestPool,
+        tutorialDreamAvatarId,
+      ),
+    [
+      offered,
+      questContent.poolContext,
+      questContent.tutorialQuestPool,
+      questSeed,
+      tutorialDreamAvatarId,
+    ],
   );
 
   const handlePick = useCallback(

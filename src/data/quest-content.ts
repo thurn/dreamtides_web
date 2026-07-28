@@ -73,6 +73,10 @@ import type {
   TutorialBattleConfiguration,
   TutorialTriggerDefinition,
 } from "../types/tutorial";
+import {
+  TUTORIAL_QUEST_POOL,
+  type TutorialQuestPool,
+} from "./tutorial-quest-pool";
 
 export interface QuestContent {
   cardDatabase: Map<number, CardData>;
@@ -84,6 +88,8 @@ export interface QuestContent {
   tutorialTriggers?: readonly TutorialTriggerDefinition[];
   /** Authored draw order for the standalone playable tutorial battle. */
   tutorialBattle?: TutorialBattleConfiguration;
+  /** Fixed three-tide draft pool used by the tutorial quest handoff. */
+  tutorialQuestPool?: TutorialQuestPool;
   /**
    * Dreamscape definitions the Atlas generator assigns to nodes, loaded from
    * `public/dreamscapes-data.json`.
@@ -922,6 +928,7 @@ export async function loadQuestContent(
     dreamAvatars,
     dreamwellCards,
     dreamsignTemplates,
+    tutorialQuestPool: TUTORIAL_QUEST_POOL,
     dreamscapes,
     affiliations,
     guides,

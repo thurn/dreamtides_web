@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { DreamAvatarContent } from "../../types/content";
 import type { Tides4DeckJson } from "../../draft/pool/tides4-io";
+import type { TutorialQuestPool } from "../../data/tutorial-quest-pool";
 import {
+  buildDreamAvatarOfferViews,
   largestTides,
   resolveDreamAvatarOffer,
   toDreamAvatarOfferView,
@@ -158,5 +160,61 @@ describe("toDreamAvatarOfferView", () => {
       portraitFocus: { x: 0.42, y: 0.18 },
       startingEssence: 3,
     });
+  });
+});
+
+describe("buildDreamAvatarOfferViews", () => {
+  it("shows the authored valor tides for the UUID-pinned tutorial offer", () => {
+    const pool: TutorialQuestPool = {
+      dreamAvatarId: "dc-1",
+      poolSize: 6,
+      tides: ["Bannerwake", "Sunwall", "Unfallen"].map((name, index) => ({
+        id: `tide-${String(index)}`,
+        name,
+        description: `${name} description`,
+        type: "valor" as const,
+        cards: [
+          {
+            id: `00000000-0000-4000-8000-00000000000${String(index)}`,
+            copies: 2,
+          },
+        ],
+      })),
+    };
+
+    const [view] = buildDreamAvatarOfferViews(
+      [
+        dreamAvatar({
+          signatureCards: ["Hidden signature"],
+          signatureCardIds: ["signature-id"],
+        }),
+      ],
+      undefined,
+      "room-seed",
+      pool,
+      "dc-1",
+    );
+
+    expect(view.signatureCards).toEqual([]);
+    expect(view.tides).toEqual([
+      {
+        id: "tide-0",
+        label: "Bannerwake",
+        description: "Bannerwake description",
+        tide: "valor",
+      },
+      {
+        id: "tide-1",
+        label: "Sunwall",
+        description: "Sunwall description",
+        tide: "valor",
+      },
+      {
+        id: "tide-2",
+        label: "Unfallen",
+        description: "Unfallen description",
+        tide: "valor",
+      },
+    ]);
   });
 });

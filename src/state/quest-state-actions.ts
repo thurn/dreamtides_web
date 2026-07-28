@@ -18,7 +18,10 @@ import { fresh20DepsFor } from "../draft/fresh20/fresh20-deps";
 import { FRESH20_DEFAULT_PACK_SIZE } from "../draft/fresh20/fresh20-offer";
 import type { FitModel } from "../draft/replay/fit-model";
 import type { CardData } from "../types/cards";
-import type { DreamAvatarContent } from "../types/content";
+import type {
+  DreamAvatarContent,
+  ResolvedDreamAvatarPackage,
+} from "../types/content";
 import type {
   DeckEntry,
   DreamAtlas,
@@ -425,6 +428,7 @@ export function startQuestFromDreamAvatar({
   questContent,
   seedOverride,
   atlasRng,
+  resolvedPackageOverride,
 }: {
   prev: QuestState;
   dreamAvatar: DreamAvatarContent;
@@ -444,6 +448,8 @@ export function startQuestFromDreamAvatar({
    * from `Math.random` (the sanctioned interim).
    */
   atlasRng?: () => number;
+  /** Authored package for flows such as the tutorial quest handoff. */
+  resolvedPackageOverride?: ResolvedDreamAvatarPackage;
 }): QuestState {
   const seed = seedOverride ?? generateQuestSeed();
   const poolContext = questContent.poolContext;
@@ -452,11 +458,9 @@ export function startQuestFromDreamAvatar({
       "startQuestFromDreamAvatar: questContent.poolContext is required",
     );
   }
-  const resolvedPackage = buildDreamAvatarPackage(
-    dreamAvatar,
-    poolContext,
-    seed,
-  );
+  const resolvedPackage =
+    resolvedPackageOverride ??
+    buildDreamAvatarPackage(dreamAvatar, poolContext, seed);
 
   const deck = [...prev.deck];
   for (const cardNumber of STARTER_CARD_NUMBERS) {
