@@ -885,7 +885,6 @@ function GameCardSurface(props: CardViewProps) {
         <span
           key={index}
           style={{
-            display: "inline-flex",
             // The bolt glyph carries a wide left side-bearing; trim it on the
             // first bolt so the mark starts at the name's text edge rather than
             // floating in from it. Pull each later bolt (an interrupt's second

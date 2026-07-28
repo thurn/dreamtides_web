@@ -339,7 +339,6 @@ function renderSegment(
           <span
             key={index}
             style={{
-              display: "inline-flex",
               // Pull each bolt after the first inward so an interrupt's two
               // bolts almost touch.
               marginLeft: index === 0 ? undefined : "-0.35em",

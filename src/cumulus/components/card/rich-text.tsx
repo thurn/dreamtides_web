@@ -161,9 +161,7 @@ function DefinitionSymbol({
     <span
       data-definition-symbol={symbol}
       style={{
-        display: "inline-flex",
-        alignItems: "center",
-        verticalAlign: "middle",
+        display: "inline",
         marginRight: trailingGap ? token("--space-1") : undefined,
       }}
     >
@@ -171,7 +169,6 @@ function DefinitionSymbol({
         <span
           key={index}
           style={{
-            display: "inline-flex",
             marginLeft: index === 0 ? undefined : "-0.35em",
           }}
         >

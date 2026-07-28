@@ -12,21 +12,16 @@ import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 
 const inlineIconStyle = {
-  display: "inline-flex",
-  alignItems: "center",
-  columnGap: token("--space-2"),
   whiteSpace: "nowrap",
 } as const;
 
 const parenthesizedIconStyle = {
-  display: "inline-flex",
-  alignItems: "center",
   whiteSpace: "nowrap",
 } as const;
 
 function renderInstructionText(instruction: string): ReactElement {
   const parts = instruction.split(
-    /(\b(?:points|spark)\s+\(\s*[⍟✦]\s*\)|\(\s*[⍟✦●]\s*\)|\d+\s+⍟|[⍟✦●])/giu,
+    /(\b(?:points|spark)\s+\(\s*[⍟✦]\s*\)|\(\s*[⍟✦●]\s*\)|\d+\s*⍟|[⍟✦●])/giu,
   );
 
   return (
@@ -92,11 +87,12 @@ function renderInstructionText(instruction: string): ReactElement {
           );
         }
 
-        const pointsValue = /^(\d+)\s+⍟$/u.exec(part);
+        const pointsValue = /^(\d+)(\s*)⍟$/u.exec(part);
         if (pointsValue !== null) {
           return (
             <span key={index} style={inlineIconStyle}>
               {pointsValue[1]}
+              {pointsValue[2] === "" ? null : " "}
               <InlineGlyph
                 glyph={GLYPHS.points}
                 color="text-primary"
@@ -109,13 +105,12 @@ function renderInstructionText(instruction: string): ReactElement {
         if (part === "⍟" || part === "✦") {
           const points = part === "⍟";
           return (
-            <span key={index} style={parenthesizedIconStyle}>
-              <InlineGlyph
-                glyph={points ? GLYPHS.points : GLYPHS.sparkInline}
-                color={points ? "text-primary" : "spark"}
-                label={points ? "points" : "spark"}
-              />
-            </span>
+            <InlineGlyph
+              key={index}
+              glyph={points ? GLYPHS.points : GLYPHS.sparkInline}
+              color={points ? "text-primary" : "spark"}
+              label={points ? "points" : "spark"}
+            />
           );
         }
 

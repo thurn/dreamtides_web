@@ -30,7 +30,7 @@ export const inlineGlyphDemo: CumulusComponent = {
   blurb:
     "The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's x-height at every type size.",
   callout:
-    "Use InlineGlyph inside prose, labels, and RichText. It owns vertical alignment and the square text footprint; surrounding copy owns punctuation and any authored spaces.",
+    "Place InlineGlyph directly in inline flow inside prose, labels, and RichText. It owns vertical alignment and the square text footprint; an inline white-space wrapper may keep a value and glyph together, while a flex wrapper opts into flex alignment instead.",
   group: "Primitives",
   docName: "InlineGlyph",
   Component: InlineGlyphDemo,

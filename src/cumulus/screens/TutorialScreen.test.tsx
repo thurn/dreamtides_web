@@ -1570,7 +1570,7 @@ describe("TutorialScreen", () => {
     const onHowToPlayDismissed = vi.fn();
     const onActionComplete = vi.fn();
     const howToPlayText =
-      "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦), or [yellow]accept[/yellow] a challenge. An [purple]event[purple] resolves once.\n\nScore 12 ⍟ to win this configured battle.";
+      "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦), or [yellow]accept[/yellow] a challenge. An [purple]event[purple] resolves once.\n\nScore 12⍟ to win this configured battle.";
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -1698,8 +1698,13 @@ describe("TutorialScreen", () => {
     expect(
       paragraphs[0]?.querySelector<HTMLElement>(
         "[data-tutorial-how-to-play-spark-term]",
-      )?.style.alignItems,
-    ).toBe("center");
+      )?.style.whiteSpace,
+    ).toBe("nowrap");
+    expect(
+      paragraphs[0]?.querySelector<HTMLElement>(
+        "[data-tutorial-how-to-play-spark-term]",
+      )?.style.display,
+    ).toBe("");
     expect(
       paragraphs[0]?.querySelectorAll("[data-inline-glyph]"),
     ).toHaveLength(2);
@@ -1727,8 +1732,12 @@ describe("TutorialScreen", () => {
     ).toBe("12");
     expect(
       paragraphs[1]?.querySelector<HTMLElement>('[aria-label="points"]')
-        ?.parentElement?.style.columnGap,
-    ).toBe("var(--space-2)");
+        ?.parentElement?.style.whiteSpace,
+    ).toBe("nowrap");
+    expect(
+      paragraphs[1]?.querySelector<HTMLElement>('[aria-label="points"]')
+        ?.parentElement?.style.display,
+    ).toBe("");
     expect(
       document.querySelector("[data-tutorial-how-to-play-tweaks]"),
     ).toBeNull();
