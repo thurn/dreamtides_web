@@ -1183,8 +1183,8 @@ art = { x = 0, y = 1, scale = 1.67 }
 name = "Scuttled Fortune"
 mtg-name = "Liliana's Standard Bearer"
 id = "2a230602-a39b-4ec2-a467-97b92b389aff"
-rendered-text = "Draw a card for each character you control that dissolved this turn."
-energy-cost = 2
+rendered-text = "Draw a card for each character you controlled that dissolved this turn."
+energy-cost = 1
 card-type = "Event"
 subtype = ""
 rarity = ""
@@ -4022,7 +4022,7 @@ art = { x = 0, y = -0.104, scale = 1 }
 name = "Stratospheric Voyage"
 mtg-name = "Snap"
 id = "25173cac-333f-4efc-9a03-b532d5783419"
-rendered-text = "Return a character to hand. Gain 2●."
+rendered-text = "Return a character to its controller's hand. Gain 2●."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
