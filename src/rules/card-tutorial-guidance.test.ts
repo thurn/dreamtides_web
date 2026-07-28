@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { asCardId, asCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
+import type { PoolDraftState } from "../types/draft";
 import type { TutorialTriggerDefinition } from "../types/tutorial";
 import { LayerName } from "../types/layer-name";
 import { genesisFoldState, type FoldState } from "./fold-state";
@@ -13,11 +14,15 @@ import {
   type CardTutorialGuidanceContentProvider,
 } from "./card-tutorial-guidance";
 
-function card(id: string, renderedText: string): CardData {
+function card(
+  id: string,
+  cardNumber: number,
+  renderedText: string,
+): CardData {
   return {
     id: asCardId(id),
     name: asCardName(`Fixture ${id}`),
-    cardNumber: id === "card-a" ? 1 : 2,
+    cardNumber,
     cardType: "Character",
     subtype: "Fixture",
     isStarter: false,
@@ -25,7 +30,7 @@ function card(id: string, renderedText: string): CardData {
     spark: 1,
     isFast: false,
     renderedText,
-    imageNumber: id === "card-a" ? 1 : 2,
+    imageNumber: cardNumber,
     artOwned: true,
   };
 }
@@ -49,8 +54,14 @@ function trigger(
 
 function provider(): CardTutorialGuidanceContentProvider {
   const cards = new Map([
-    ["card-a", card("card-a", "Support. Foresee 1.")],
-    ["card-b", card("card-b", "Erode 2.")],
+    ["card-a", card("card-a", 1, "Support. Foresee 1.")],
+    ["card-b", card("card-b", 2, "Erode 2.")],
+    ["card-c", card("card-c", 3, "")],
+    ["card-d", card("card-d", 4, "")],
+    ["card-e", card("card-e", 5, "Erode 2.")],
+    ["card-f", card("card-f", 6, "")],
+    ["card-g", card("card-g", 7, "")],
+    ["card-h", card("card-h", 8, "")],
   ]);
   return {
     triggers: [
@@ -62,7 +73,10 @@ function provider(): CardTutorialGuidanceContentProvider {
   };
 }
 
-function siteState(siteId = "site-a"): FoldState {
+function siteState(
+  siteId = "site-a",
+  siteType: "Draft" | "Purge" = "Purge",
+): FoldState {
   const base = genesisFoldState({
     seed: "card-tutorial-test",
     reducerVersion: "test",
@@ -93,7 +107,7 @@ function siteState(siteId = "site-a"): FoldState {
             sites: [
               {
                 id: siteId,
-                type: "Draft",
+                type: siteType,
                 isEnhanced: false,
                 isVisited: false,
               },
@@ -107,6 +121,31 @@ function siteState(siteId = "site-a"): FoldState {
           },
         },
       },
+    },
+  };
+}
+
+function draftOfferState(
+  pickNumber: number,
+  currentOffer: number[],
+): FoldState {
+  const siteId = "site-a";
+  const base = siteState(siteId, "Draft");
+  const draftState: PoolDraftState = {
+    mode: "pool",
+    currentOffer,
+    activeSiteId: siteId,
+    pickNumber,
+    sitePicksCompleted: pickNumber - 1,
+    siteShownCardNumbers: [...currentOffer],
+    draftPoolCopiesByCard: {},
+    remainingCopiesByCard: {},
+  };
+  return {
+    ...base,
+    journey: {
+      ...base.journey,
+      draftState,
     },
   };
 }
@@ -193,5 +232,59 @@ describe("card tutorial guidance fold", () => {
         cardIds: ["card-b"],
       }),
     ).toBeNull();
+  });
+
+  it("allows one tutorial for each subsequent four-card Draft offer", () => {
+    registerCardTutorialGuidanceContentProvider(provider());
+    const firstOffer = draftOfferState(1, [1, 2, 3, 4]);
+    const firstScreenKey = currentCardTutorialScreenKey(firstOffer);
+    const firstOpened = openCardTutorialGuidance(firstOffer, {
+      screenKey: firstScreenKey,
+      cardIds: ["card-a", "card-b", "card-c", "card-d"],
+    });
+    const firstSettled = completeCardTutorialGuidance(firstOpened!, {
+      presentationId: firstOpened!.cardTutorialPresentation?.id,
+    });
+    expect(
+      openCardTutorialGuidance(firstSettled!, {
+        screenKey: firstScreenKey,
+        cardIds: ["card-a", "card-b", "card-c", "card-d"],
+      }),
+    ).toBeNull();
+
+    const secondOffer = {
+      ...firstSettled!,
+      journey: {
+        ...firstSettled!.journey,
+        draftState: {
+          ...firstSettled!.journey.draftState!,
+          currentOffer: [5, 6, 7, 8],
+          pickNumber: 2,
+          sitePicksCompleted: 1,
+        },
+      },
+    };
+    const secondScreenKey = currentCardTutorialScreenKey(secondOffer);
+    expect(secondScreenKey).not.toBe(firstScreenKey);
+    expect(
+      openCardTutorialGuidance(secondOffer, {
+        screenKey: secondScreenKey,
+        cardIds: ["card-a", "card-b", "card-c", "card-d"],
+      }),
+    ).toBeNull();
+
+    const secondOpened = openCardTutorialGuidance(secondOffer, {
+      screenKey: secondScreenKey,
+      cardIds: ["card-e", "card-f", "card-g", "card-h"],
+    });
+    expect(secondOpened?.cardTutorialPresentation).toMatchObject({
+      screenKey: secondScreenKey,
+      cardId: "card-e",
+      triggerId: "erode",
+    });
+    expect(secondOpened?.cardTutorialScreenKeysSeen).toEqual([
+      firstScreenKey,
+      secondScreenKey,
+    ]);
   });
 });

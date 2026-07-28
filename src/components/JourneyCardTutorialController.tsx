@@ -12,6 +12,7 @@ import {
 } from "../coop/hooks";
 import { logEvent } from "../logging";
 import {
+  cardIdsMatchCurrentDraftOffer,
   currentCardTutorialScreenKey,
   selectCardTutorialGuidance,
 } from "../rules/card-tutorial-guidance";
@@ -79,12 +80,13 @@ export function JourneyCardTutorialController({
       if (cardIds.length === 0) return;
       const signature = `${screenKey}:${cardIds.join(",")}`;
       if (attemptedSignatureRef.current === signature) return;
+      attemptedSignatureRef.current = signature;
+      if (!cardIdsMatchCurrentDraftOffer(state, cardIds, provider)) return;
       const match = selectCardTutorialGuidance(
         provider,
         cardIds,
         new Set(state.tutorialTriggerIdsSeen ?? []),
       );
-      attemptedSignatureRef.current = signature;
       if (match === null) return;
       logEvent("card_tutorial_guidance_open_requested", {
         screenKey,

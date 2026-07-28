@@ -482,10 +482,10 @@ describe("BattleTutorialGuidance", () => {
       '[data-testid="card-tutorial-scrim"]',
     );
     expect(scrim?.style.background).toBe("var(--scrim)");
-    expect(scrim?.style.opacity).toBe("0.48");
+    expect(scrim?.style.opacity).toBe("0.58");
     expect(animations[1]).toEqual([
       { opacity: 0 },
-      { opacity: 0.48 },
+      { opacity: 0.58 },
     ]);
     act(() => finishListeners.shift()?.());
 
@@ -501,7 +501,7 @@ describe("BattleTutorialGuidance", () => {
       );
     });
     expect(animations[3]).toEqual([
-      { opacity: 0.48 },
+      { opacity: 0.58 },
       { opacity: 0 },
     ]);
     expect(source.style.opacity).toBe("0");

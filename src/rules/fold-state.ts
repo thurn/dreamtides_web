@@ -40,7 +40,7 @@ export interface FoldState {
   readonly battle: BattleFoldState | null;
   /** First-occurrence tutorials already presented in this shared room. */
   readonly tutorialTriggerIdsSeen?: readonly string[];
-  /** Site-screen identities which have already presented their one card tutorial. */
+  /** Site-surface or draft-offer identities that presented one card tutorial. */
   readonly cardTutorialScreenKeysSeen?: readonly string[];
   /** Shared card-and-speech journey currently presented over a site screen. */
   readonly cardTutorialPresentation?: CardTutorialGuidancePresentation | null;

@@ -44,6 +44,7 @@ vi.mock("../coop/providers/card-tutorial-guidance-provider", () => ({
 }));
 
 vi.mock("../rules/card-tutorial-guidance", () => ({
+  cardIdsMatchCurrentDraftOffer: () => true,
   currentCardTutorialScreenKey: () => "journey:1:site:site-1",
   selectCardTutorialGuidance: (...args: unknown[]) => {
     const result: unknown = mocks.select(...args);

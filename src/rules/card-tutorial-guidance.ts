@@ -1,4 +1,5 @@
 import type { CardData } from "../types/cards";
+import type { SiteState } from "../types/journey";
 import type { TutorialTriggerDefinition } from "../types/tutorial";
 import type { FoldState } from "./fold-state";
 import { matchTutorialGuidance } from "./battle/tutorial-guidance";
@@ -34,11 +35,9 @@ export function registerCardTutorialGuidanceContentProvider(
   contentProvider = provider;
 }
 
-/** Stable identity for the one card tutorial allowed during a site visit. */
-export function currentCardTutorialScreenKey(state: FoldState): string | null {
+function currentCardTutorialSite(state: FoldState): SiteState | null {
   if (
     state.battle !== null ||
-    state.journey.runId === null ||
     !state.journey.hasSeenStartingDeckPopup ||
     state.journey.screen.type !== "site"
   ) {
@@ -61,7 +60,59 @@ export function currentCardTutorialScreenKey(state: FoldState): string | null {
   ) {
     return null;
   }
-  return `${state.journey.runId}:site:${siteId}`;
+  return site;
+}
+
+/** Stable identity for one card tutorial on a site surface or draft offer. */
+export function currentCardTutorialScreenKey(state: FoldState): string | null {
+  const runId = state.journey.runId;
+  const site = currentCardTutorialSite(state);
+  if (runId === null || site === null) return null;
+  const siteId = site.id;
+  const siteScreenKey = `${state.journey.runId}:site:${siteId}`;
+  if (site.type !== "Draft") return siteScreenKey;
+
+  const draft = state.journey.draftState;
+  if (
+    draft === null ||
+    draft.activeSiteId !== siteId ||
+    draft.currentOffer.length === 0
+  ) {
+    return null;
+  }
+  return (
+    `${siteScreenKey}:draft-offer:${String(draft.pickNumber)}:` +
+    draft.currentOffer.join(",")
+  );
+}
+
+/** Whether visible UUIDs resolve to the authoritative persisted Draft offer. */
+export function cardIdsMatchCurrentDraftOffer(
+  state: FoldState,
+  cardIds: readonly string[],
+  provider: CardTutorialGuidanceContentProvider,
+): boolean {
+  const site = currentCardTutorialSite(state);
+  if (site?.type !== "Draft") return true;
+  const draft = state.journey.draftState;
+  if (
+    draft === null ||
+    draft.activeSiteId !== site.id ||
+    cardIds.length !== draft.currentOffer.length
+  ) {
+    return false;
+  }
+  const offeredNumbers = new Set(draft.currentOffer);
+  const visibleNumbers = cardIds.map(
+    (cardId) => provider.cardById(cardId)?.cardNumber,
+  );
+  return (
+    visibleNumbers.every(
+      (cardNumber): cardNumber is number =>
+        cardNumber !== undefined && offeredNumbers.has(cardNumber),
+    ) &&
+    new Set(visibleNumbers).size === cardIds.length
+  );
 }
 
 /**
@@ -108,7 +159,8 @@ export function openCardTutorialGuidance(
     new Set(payload.cardIds).size !== payload.cardIds.length ||
     (state.cardTutorialPresentation ?? null) !== null ||
     (state.cardTutorialScreenKeysSeen ?? []).includes(screenKey) ||
-    contentProvider === null
+    contentProvider === null ||
+    !cardIdsMatchCurrentDraftOffer(state, payload.cardIds, contentProvider)
   ) {
     return null;
   }

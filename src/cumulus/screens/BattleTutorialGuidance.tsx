@@ -56,7 +56,7 @@ export interface BattleTutorialGuidanceProps {
 
 const GUIDANCE_OBJECT_TRAVEL_MS =
   motionTimeSeconds("--dur-slow") * 1_000;
-const CARD_TUTORIAL_SCRIM_OPACITY = 0.48;
+const CARD_TUTORIAL_SCRIM_OPACITY = 0.58;
 
 function battleCardSurface(
   battleCardId: string,
