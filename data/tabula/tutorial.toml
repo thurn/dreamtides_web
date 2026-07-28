@@ -209,7 +209,7 @@ wait = 0
 
 [actions.speechBubble]
 speaker = "mira"
-duration = 5
+duration = 7
 verticalOffset = -30
 bubbleWidth = 500
 text = "Instead, the lowest spark (✦) character in the challenge is [yellow]dissolved[/yellow] and sent to the void."
@@ -271,7 +271,7 @@ wait = 0
 speaker = "mira"
 duration = 5
 verticalOffset = 0
-bubbleWidth = 300
+bubbleWidth = 500
 text = "An [purple]event[purple] card has a one-time effect, and then is sent the void."
 
 [[triggers]]
