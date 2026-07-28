@@ -1,8 +1,7 @@
 // Regenerate the synthetic replay fixtures — the permanent reducer regression
 // net (src/rules/replay/fixtures/*.json).
 //
-//   npx tsx scripts/regenerate-replay-fixtures.mjs
-//   (or `npm run regenerate-replay-fixtures`)
+//   npm run regenerate-replay-fixtures
 //
 // The rules modules use TS enums and extensionless imports node's
 // --experimental-strip-types resolver cannot follow, so this script runs under

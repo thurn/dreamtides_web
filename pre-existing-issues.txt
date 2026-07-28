@@ -1,8 +1,0 @@
-docs/journey_prototype/battle_ai.md describes the battlefield as four front-rank
-slots (F0-F3) and five back-rank slots (B0-B4), while the authoritative battle
-rules and runtime use nine front-rank slots (F0-F8) and ten back-rank slots
-(B0-B9).
-
-`npm run regenerate-replay-fixtures` fails under Node/tsx with
-`ERR_UNKNOWN_FILE_EXTENSION` when the import graph reaches
-`data/tabula/glossary.toml`.

@@ -104,8 +104,8 @@ their own cards through the debug rail. Four facts shape this design:
    parallel structure.
 
 The board model is two ranks per side: the **front rank** (zone `frontRank`,
-slots `F0`–`F3`, 4 positions) whose characters become challengers and blockers,
-and the **back rank** (zone `backRank`, slots `B0`–`B4`, 5 positions).
+slots `F0`–`F8`, 9 positions) whose characters become challengers and blockers,
+and the **back rank** (zone `backRank`, slots `B0`–`B9`, 10 positions).
 Characters materialize into the back rank, exhausted. Effective spark comes from
 `selectEffectiveSparkForInstance`: a regular character scores `printedSpark +
 sparkDelta`, and a figment stack scores the sum of its discrete figment sparks.
@@ -253,7 +253,7 @@ real game is actually played. This spine is deliberately minimal and is shared
 by both sides (the human benefits from it too).
 
 - **Challenge resolver (`engine/challenge.ts`).** At the Challenge phase, for each
-  front-rank lane `F0`–`F3`, compare the controller's challenger spark against
+  front-rank lane `F0`–`F8`, compare the controller's challenger spark against
   the opposing blocker directly opposite. Apply the rules in
   `battle_rules.md` §Challengers, Blockers, and Scoring: lower spark dissolves,
   ties dissolve both (respecting Preeminence — absent from the Starter pool but
@@ -304,7 +304,7 @@ can change a turn's outcome:
    challengers; play Fast cards) and a Night Fast window. These are not triggers;
    they are the human's turn to react, and they must be preserved.
 2. **Triggers that fire inside resolution.** ▸Night and ▸Challenge fire at the
-   start of Night; ▸Dissolved fires after each lane. Lanes resolve `F0`→`F3` in
+   start of Night; ▸Dissolved fires after each lane. Lanes resolve `F0`→`F8` in
    order, so a ▸Dissolved — or a Support source dissolving — in an early lane can
    change the spark of later lanes: a supporter dying in `F0` silently drops +✦
    from a challenger in `F2`.
@@ -381,9 +381,9 @@ times per turn. `forward-model.ts` provides a cheap, mutable projection of
   isFigment }`), the opponent's hand as a count, and the opponent's void as a
   count.
 - Derived, recomputed-on-read **effective spark including Support**. The model implements the
-  support-adjacency map from `battle_rules.md` (B0→F0; B1→F0,F1; B2→F1,F2;
-  B3→F2,F3; B4→F3, i.e. a back-rank slot → up-to-two front-rank slots) so that
-  registered Support bonuses produce correct numbers.
+  support-adjacency map from `battle_rules.md` (B0→F0; B1→F0,F1; continuing
+  through B8→F7,F8; B9→F8, i.e. a back-rank slot → up-to-two front-rank slots)
+  so that registered Support bonuses produce correct numbers.
 
 The forward model is a plain data structure with pure mutators, deliberately
 *not* the real reducer: it is allowed to be approximate about anything outside
@@ -838,8 +838,8 @@ entirely through the headless harness.
 - **Multiplayer coexistence.** Confirm the AI should be disabled in shared
   multiplayer rooms (or owner-gated), so two clients never both drive the enemy.
 - **Term alignment.** The code, the rules doc, and the AI modules share the
-  front/back rank terminology (zones `frontRank`/`backRank`, slots `F0`–`F3` and
-  `B0`–`B4`).
+  front/back rank terminology (zones `frontRank`/`backRank`, slots `F0`–`F8` and
+  `B0`–`B9`).
 
 ## Appendix: File-by-File Change Summary
 
