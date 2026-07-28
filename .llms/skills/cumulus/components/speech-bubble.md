@@ -31,6 +31,6 @@ import { SpeechBubble } from "src/cumulus/components/overlay/SpeechBubble";
 
 <SpeechBubble
   speakerName="Sigrún"
-  text="An [purple]event[purple] resolves once. Gain ⍟ equal to your [yellow]spark ✦[/yellow]."
+  text="A ▸Dissolved ability triggers when the character is sent to the void."
 />
 ```

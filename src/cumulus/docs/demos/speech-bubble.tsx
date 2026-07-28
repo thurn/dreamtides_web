@@ -7,7 +7,7 @@ function SpeechBubbleDemo(args: Record<string, unknown>) {
   const text =
     typeof args.text === "string"
       ? args.text
-      : "An [purple]event[purple] resolves once. Gain ⍟ equal to your [yellow]spark ✦[/yellow].";
+      : "A ▸Dissolved ability triggers when the character is sent to the void.";
   const size = args.size === "prominent" ? "prominent" : "standard";
   const pointerPlacement =
     args.pointerPlacement === "left-center" ||
@@ -42,7 +42,7 @@ export const speechBubbleDemo: CumulusComponent = {
 
 <SpeechBubble
   speakerName="Sigrún"
-  text="An [purple]event[purple] resolves once. Gain ⍟ equal to your [yellow]spark ✦[/yellow]."
+  text="A ▸Dissolved ability triggers when the character is sent to the void."
 />`,
     },
   ],
@@ -52,7 +52,7 @@ export const speechBubbleDemo: CumulusComponent = {
       size: "standard",
       speakerName: "Sigrún",
       text:
-        "An [purple]event[purple] resolves once. Gain ⍟ equal to your [yellow]spark ✦[/yellow].",
+        "A ▸Dissolved ability triggers when the character is sent to the void.",
     },
   },
 };
