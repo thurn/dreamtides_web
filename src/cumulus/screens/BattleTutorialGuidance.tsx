@@ -56,6 +56,7 @@ export interface BattleTutorialGuidanceProps {
 
 const GUIDANCE_OBJECT_TRAVEL_MS =
   motionTimeSeconds("--dur-slow") * 1_000;
+const CARD_TUTORIAL_SCRIM_OPACITY = 0.48;
 
 function battleCardSurface(
   battleCardId: string,
@@ -166,12 +167,14 @@ export function BattleTutorialGuidance({
   const journeyViewRef = useRef<BattleTutorialGuidanceView | null>(view);
   const journeyRef = useRef<HTMLElement | null>(null);
   const objectRef = useRef<HTMLDivElement | null>(null);
+  const scrimRef = useRef<HTMLDivElement | null>(null);
   const hiddenSurfaceRef = useRef<{
     readonly element: HTMLElement;
     readonly visibility: string;
     readonly opacity: string;
   } | null>(null);
   const animationRef = useRef<Animation | null>(null);
+  const scrimAnimationRef = useRef<Animation | null>(null);
   const destinationAnimationRef = useRef<Animation | null>(null);
   const renderedView = view ?? retainedView;
   const active = view !== null;
@@ -224,6 +227,8 @@ export function BattleTutorialGuidance({
 
     animationRef.current?.cancel();
     animationRef.current = null;
+    scrimAnimationRef.current?.cancel();
+    scrimAnimationRef.current = null;
     destinationAnimationRef.current?.cancel();
     destinationAnimationRef.current = null;
     if (hiddenSurfaceRef.current !== null) {
@@ -314,6 +319,25 @@ export function BattleTutorialGuidance({
     );
     animationRef.current = animation;
     animation.addEventListener("finish", finish, { once: true });
+    const scrim = scrimRef.current;
+    if (scrim !== null) {
+      scrimAnimationRef.current = scrim.animate(
+        active
+          ? [
+              { opacity: 0 },
+              { opacity: CARD_TUTORIAL_SCRIM_OPACITY },
+            ]
+          : [
+              { opacity: CARD_TUTORIAL_SCRIM_OPACITY },
+              { opacity: 0 },
+            ],
+        {
+          duration: GUIDANCE_OBJECT_TRAVEL_MS,
+          fill: "forwards",
+          ...(easing === "" ? {} : { easing }),
+        },
+      );
+    }
     if (!active && surface !== null) {
       destinationAnimationRef.current = surface.animate(
         [{ opacity: 0 }, { opacity: 1 }],
@@ -327,6 +351,8 @@ export function BattleTutorialGuidance({
 
     return () => {
       animation.cancel();
+      scrimAnimationRef.current?.cancel();
+      scrimAnimationRef.current = null;
       destinationAnimationRef.current?.cancel();
       destinationAnimationRef.current = null;
       if (animationRef.current === animation) animationRef.current = null;
@@ -340,6 +366,7 @@ export function BattleTutorialGuidance({
   useLayoutEffect(
     () => () => {
       animationRef.current?.cancel();
+      scrimAnimationRef.current?.cancel();
       destinationAnimationRef.current?.cancel();
       if (hiddenSurfaceRef.current !== null) {
         hiddenSurfaceRef.current.element.style.visibility =
@@ -388,10 +415,26 @@ export function BattleTutorialGuidance({
         pointerEvents: "none",
       }}
     >
+      {renderedView.source.kind === "journey-card" && (
+        <div
+          ref={scrimRef}
+          aria-hidden="true"
+          data-testid="card-tutorial-scrim"
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 0,
+            background: token("--scrim"),
+            opacity: active ? CARD_TUTORIAL_SCRIM_OPACITY : 0,
+          }}
+        />
+      )}
       <div
         ref={objectRef}
         data-battle-tutorial-source=""
         style={{
+          position: "relative",
+          zIndex: 1,
           visibility: "hidden",
           width:
             renderedView.source.kind === "dreamwell"
@@ -438,6 +481,8 @@ export function BattleTutorialGuidance({
       </div>
       <div
         style={{
+          position: "relative",
+          zIndex: 1,
           display: "flex",
           width: desktop ? undefined : "min(100%, 560px)",
           maxWidth: desktop ? renderedView.bubbleWidth : "none",

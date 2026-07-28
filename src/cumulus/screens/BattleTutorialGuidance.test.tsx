@@ -125,6 +125,9 @@ describe("BattleTutorialGuidance", () => {
     expect(guidance?.getAttribute("aria-modal")).toBeNull();
     expect(guidance?.getAttribute("role")).toBeNull();
     expect(guidance?.style.background).toBe("");
+    expect(
+      container.querySelector('[data-testid="card-tutorial-scrim"]'),
+    ).toBeNull();
     const dialogueLayout = container.querySelector<HTMLElement>(
       '[data-testid="battle-tutorial-dismiss"]',
     )?.parentElement;
@@ -396,6 +399,54 @@ describe("BattleTutorialGuidance", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
+    const boxSpy = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.dataset.cardId === cardId) {
+          return DOMRect.fromRect({
+            x: 40,
+            y: 500,
+            width: 180,
+            height: 252,
+          });
+        }
+        if (this.dataset.battleTutorialSource !== undefined) {
+          return DOMRect.fromRect({
+            x: 270,
+            y: 198,
+            width: 360,
+            height: 504,
+          });
+        }
+        return DOMRect.fromRect();
+      });
+    const finishListeners: Array<() => void> = [];
+    const animations: Keyframe[][] = [];
+    const animateDescriptor = Object.getOwnPropertyDescriptor(
+      HTMLElement.prototype,
+      "animate",
+    );
+    HTMLElement.prototype.animate = vi.fn(
+      (keyframes: Keyframe[] | PropertyIndexedKeyframes | null) => {
+        animations.push(keyframes as Keyframe[]);
+        return {
+          addEventListener: (
+            type: string,
+            listener: EventListenerOrEventListenerObject,
+          ) => {
+            if (type !== "finish") return;
+            finishListeners.push(() => {
+              if (typeof listener === "function") {
+                listener(new Event("finish"));
+              } else {
+                listener.handleEvent(new Event("finish"));
+              }
+            });
+          },
+          cancel: vi.fn(),
+        } as unknown as Animation;
+      },
+    );
     const view: BattleTutorialGuidanceView = {
       presentationId: "card-tutorial:fixture",
       triggerId: "support",
@@ -427,6 +478,16 @@ describe("BattleTutorialGuidance", () => {
     expect(
       container.querySelector('[data-testid="card-tutorial-card"]'),
     ).not.toBeNull();
+    const scrim = container.querySelector<HTMLElement>(
+      '[data-testid="card-tutorial-scrim"]',
+    );
+    expect(scrim?.style.background).toBe("var(--scrim)");
+    expect(scrim?.style.opacity).toBe("0.48");
+    expect(animations[1]).toEqual([
+      { opacity: 0 },
+      { opacity: 0.48 },
+    ]);
+    act(() => finishListeners.shift()?.());
 
     act(() => {
       root.render(
@@ -439,9 +500,28 @@ describe("BattleTutorialGuidance", () => {
         </CumulusRoot>,
       );
     });
+    expect(animations[3]).toEqual([
+      { opacity: 0.48 },
+      { opacity: 0 },
+    ]);
+    expect(source.style.opacity).toBe("0");
+    act(() => finishListeners.shift()?.());
     expect(source.style.visibility).toBe("");
-    expect(container.querySelector("[data-card-tutorial-guidance]")).toBeNull();
+    expect(source.style.opacity).toBe("");
+    expect(
+      container.querySelector("[data-card-tutorial-guidance]"),
+    ).toBeNull();
 
     act(() => root.unmount());
+    if (animateDescriptor === undefined) {
+      Reflect.deleteProperty(HTMLElement.prototype, "animate");
+    } else {
+      Object.defineProperty(
+        HTMLElement.prototype,
+        "animate",
+        animateDescriptor,
+      );
+    }
+    boxSpy.mockRestore();
   });
 });
