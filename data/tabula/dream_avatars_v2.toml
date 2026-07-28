@@ -412,10 +412,10 @@ signature-cards = [
 [[dreamAvatar]]
 name = "Gunnar Deepforge"
 title = "The Hammer's Echo"
-id = "BF72ADFF-7D74-4BE8-9B93-1DB7BA13A1DB"
+id = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5"
 image-number = "0108"
 portrait-focus = { x = 0.580, y = 0.233 }
-rendered-text = "2●, ☪: Materialize a 0✦ figment copy of the last warrior you played this turn."
+rendered-text = "The first warrior you play each turn costs 1● less."
 mtg-name = "Urza, Lord High Artificer"
 signature-cards = [
   "41044897-b70a-4e2b-8eb6-baf843a14a43", # Spellweaver
@@ -429,10 +429,10 @@ signature-cards = [
 [[dreamAvatar]]
 name = "Tensho"
 title = "Daimyo of Lacquered Fury"
-id = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5"
+id = "BF72ADFF-7D74-4BE8-9B93-1DB7BA13A1DB"
 image-number = "0029"
 portrait-focus = { x = 0.500, y = 0.220 }
-rendered-text = "The first warrior you play each turn costs 1● less."
+rendered-text = "2●, ☪: Materialize a 0✦ figment copy of the last warrior you played this turn."
 mtg-name = "Mishra's Workshop"
 signature-cards = [
   "426825c7-7259-41af-ac1c-c042b878d69b", # Burning Revenant
