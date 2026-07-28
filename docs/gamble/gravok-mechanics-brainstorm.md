@@ -1,22 +1,28 @@
 # Gravok Gamble Mechanics Brainstorm
 
-Status: exploratory design notes, not an implementation specification.
+Status: unified exploratory design proposal, not an implementation
+specification.
 
 Gravok runs the **Gamble** site from Farpoint Station. His site should feel like
 a collection of wagers rather than a shop with uncertain prices: the player
 knows what is at stake, understands the outcome envelope, and chooses how much
 variance or commitment to accept.
 
-This brainstorm draws primarily from the supplied Monster Train and Slay the
-Spire event catalog, with additional patterns from Roguebook, Wildfrost, and
-Banners of Ruin. It expands the prior
-[Gamble site designs](../journey2/gamble-site-designs.md) and the broader
-[push-your-luck survey](../journey2/gambling-push-your-luck-mechanics.md).
+This is the authoritative design catalog for Gravok's Gamble mechanics. It
+contains both the foundational wagers and the more experimental directions;
+the catalog is a content pool, not a recommendation to ship every proposal at
+once.
+
+The proposals draw primarily from the supplied Monster Train and Slay the Spire
+event catalog, with additional patterns from Roguebook, Wildfrost, and Banners
+of Ruin. The broader
+[push-your-luck survey](../journey2/gambling-push-your-luck-mechanics.md)
+provides supporting genre context.
 
 ## Executive recommendation
 
 Gravok should not have one universal dice game. Build a small family of wager
-topologies which can wrap state-aware rewards:
+topologies that can wrap state-aware rewards:
 
 1. **A one-shot odds choice** for a fast, legible baseline.
 2. **A bank-or-press sequence** for the site's signature emotional peak.
@@ -25,10 +31,17 @@ topologies which can wrap state-aware rewards:
 4. **A lightweight information minigame** with no dexterity requirement.
 5. **A deferred contract** whose result depends on later player behavior.
 
-The best first set is **The Orbit Book**, **Salvage Lock**, **Contraband
-Array**, **Deck Cut**, and **Escrow Orbit**. Together they cover immediate
-variance, push-your-luck, hidden information, player-shaped odds, and
-run-spanning commitment without making every visit an essence coin flip.
+The recommended launch set is **Crystal Roll**, **Pressure Vault**, **Figment
+Reactor**, **Contraband Array**, and **Deck Cut**. Together they establish a
+fast one-shot wager, the site's signature bank-or-press scene, chosen
+collateral, purchasable information, and player-shaped odds. **Escrow Orbit**
+is the recommended first expansion after the game supports deferred contracts.
+
+The other proposals are alternate content and later design space. In
+particular, **The Orbit Book** is a richer prize-driven successor to Crystal
+Roll, while **Salvage Lock** is a gentler content variant of Pressure Vault.
+They should coexist as distinct encounters only if testing confirms that their
+different stakes and loss envelopes create meaningfully different decisions.
 
 ## What Dream Augury already provides
 
@@ -155,24 +168,30 @@ average return should be positive before considering player preference for
 reliability. “The house always wins” is good characterization and poor route
 balance if declining every Gravok visit is optimal.
 
-## Existing baseline concepts
-
-The prior Gamble document already covers five useful foundations:
-
-| Concept         | Core shape                                           |
-| --------------- | ---------------------------------------------------- |
-| Crystal Roll    | Pay an entry fee, then choose safe or long-shot odds |
-| The Conveyor    | Buy guaranteed rewards at escalating prices          |
-| Pressure Vault  | Grow and bank a pot against escalating bust odds     |
-| Figment Reactor | Stake a deck card for duplication or loss            |
-| Overclock Wager | Double an essence payout while accumulating Banes    |
-
-Those are a sound baseline. The concepts below broaden the stake types,
-decision structures, information games, and run horizons available to Gravok.
-
 ## Immediate and push-your-luck wagers
 
-### 1. The Orbit Book
+### 1. Crystal Roll
+
+The simplest Gravok encounter asks for a 50 essence ante, then offers two
+published bets:
+
+- **Safe crystal:** 65% chance to receive 120 essence; otherwise the ante is
+  lost.
+- **Long crystal:** 25% chance to receive 320 essence; otherwise the ante is
+  lost.
+
+The values are illustrative tuning targets. What matters is that the player can
+compare a reliable modest return with a volatile jackpot in seconds. Because
+both branches use the same stake and reward type, Crystal Roll is the cleanest
+way to teach Gravok's vocabulary, verify odds presentation, and establish the
+site's deterministic resolution and logging contracts.
+
+Crystal Roll should remain a fast encounter rather than grow prize families or
+side rules. At Farpoint, Gravok waives the ante and raises both payouts while
+preserving their odds. The Orbit Book is the appropriate evolution when this
+one-dimensional wager becomes too repetitive.
+
+### 2. The Orbit Book
 
 Gravok shows three face-up prize contracts generated from different reward
 families. Each has a published chance and payout scale:
@@ -192,7 +211,7 @@ published chance. Chips on successful contracts pay their listed multiplier;
 chips on failed contracts are lost. Diversifying chips lowers variance while
 concentrating on the long shot creates the jackpot.
 
-### 2. Loaded Blessing
+### 3. Loaded Blessing
 
 A valuable prize is guaranteed, but its rider is not. Before accepting, the
 player chooses one of three liability envelopes:
@@ -206,7 +225,29 @@ risk the run can absorb. This borrows the guaranteed-relic/random-curse shape
 of **The Mausoleum** and the “take the treasure, then choose the consequence”
 shape of **Golden Idol**.
 
-### 3. Salvage Lock
+### 4. Pressure Vault
+
+Gravok seals essence behind a series of pressure locks. After each successful
+crack, the player may bank the entire pot or attempt the next lock:
+
+| Lock | Pot if opened | Collapse chance |
+| ---- | ------------: | --------------: |
+| 1    |    60 essence |              0% |
+| 2    |   140 essence |             15% |
+| 3    |   240 essence |             35% |
+| 4    |   380 essence |             60% |
+
+On collapse, the unbanked pot is lost and the player gains one disclosed Bane.
+The first lock guarantees a small floor, while each later lock increases both
+the return and the severity of walking away empty. These figures are starting
+points for testing, not final balance.
+
+Pressure Vault is Gravok's canonical high-drama bank-or-press encounter. Its
+identity is a single fungible pot and a sharp collapse penalty. At Farpoint,
+collapse chances drop by one tuning band and the final lock gains a larger pot;
+the possibility of losing the unbanked pot remains intact.
+
+### 5. Salvage Lock
 
 Gravok opens a derelict station one compartment at a time. Each successful
 search adds a visible reward to the unbanked haul. Before every new compartment
@@ -218,9 +259,11 @@ assets remain safe. Later variants may add a small Bane or essence cleanup fee
 on the deepest compartments.
 
 This combines **Scrap Ooze**, **Dead Adventurer**, and Monster Train's
-**Clipped Wings**. It should be Gravok's canonical bank-or-press scene.
+**Clipped Wings**. It is the lower-severity, content-rich counterpart to
+Pressure Vault: the appeal is seeing a heterogeneous haul grow, while collapse
+threatens only that compartment's unbanked rewards.
 
-### 4. Guaranteed Burn
+### 6. Guaranteed Burn
 
 The player pays for repeated attempts at one premium prize. Each miss increases
 the next attempt's cost and success chance; maximum commitment guarantees the
@@ -241,7 +284,7 @@ odds and the three-attempt cap of Banners of Ruin's **Gambler**. The guarantee
 makes maximum commitment a budget decision instead of an unbounded streak of
 bad luck.
 
-### 5. The Sixfold Wheel
+### 7. The Sixfold Wheel
 
 The wheel contains six fully disclosed wedges built for the current run:
 
@@ -260,9 +303,70 @@ physical spinner.
 This keeps the spectacle of **Wheel of Change** and Roguebook's **Wheel of
 Chaos**, while adding one strategic action before the random resolution.
 
+### 8. The Conveyor
+
+Gravok presents a deterministic reward line whose prices accelerate faster
+than its rewards. After every purchase, the player may stop or unlock the next
+offer:
+
+| Pull |        Cost | Guaranteed reward             |
+| ---- | ----------: | ----------------------------- |
+| 1    |  30 essence | one card chosen from four     |
+| 2    |  50 essence | one card from a stronger pool |
+| 3    |  70 essence | one card plus 60 essence      |
+| 4    | 100 essence | one Dreamsign                 |
+
+The exact rewards are frozen before the first purchase. The tension is
+attrition rather than collapse: each pull is individually acceptable, but
+buying the entire line may consume the resources needed for later sites. The
+UI should keep total spend visible beside the next marginal cost so the wager
+is about budget discipline, not arithmetic.
+
+The Conveyor belongs at Gamble because the player repeatedly decides whether
+to escalate exposure after seeing what they have already won. If tuning makes
+the whole sequence an obvious purchase, it has become a Tempting Offer and
+should be redesigned. At Farpoint, the first pull is free and the later reward
+tiers improve, while their escalating costs remain.
+
+### 9. Overclock Wager
+
+Gravok places 80 essence in a capacitor. The player may cash out or overclock
+it through a visible sequence—80, 160, 320, then the 500 essence cap—gaining
+one Bane with every overclock.
+
+There is no random roll. The risk is converting immediate wealth into
+cumulative deck pollution whose future cost depends on the run. Before each
+decision, the UI shows the next payout, every Bane that will be added, and the
+total Banes already accepted. This is a wager on whether the deck can absorb
+the liability, not a disguised purchase with an obscured price.
+
+Overclock Wager is the deterministic extreme of Gravok's escalation identity.
+It should be tuned so at least two stopping points are defensible for common
+deck states. At Farpoint, the first overclock adds no Bane and the last tier
+may pay a non-essence premium when the essence cap would flatten the decision.
+
 ## Asset-collateral wagers
 
-### 6. Collateral Auction
+### 10. Figment Reactor
+
+Gravok displays four eligible deck entries and asks the player to stake one.
+The selected entry is frozen by id before the reactor resolves:
+
+- 50%: return the original and add one duplicate.
+- 50%: remove the selected deck entry.
+
+After a successful duplication, the player may stop or overcharge the reactor.
+Overcharge has a 35% chance to add a second duplicate and apply one disclosed
+transfiguration to all resulting copies; on failure, one added copy is removed
+and the original remains intact.
+
+This is the launch set's clearest chosen-collateral wager. The first roll has a
+severe but legible downside, while the second decision risks only newly created
+value. Eligibility must protect deck floors and exclude entries the rules do
+not permit removing or duplicating. At Farpoint, the first duplication chance
+rises to 70% and a failed first roll returns the original unchanged.
+
+### 11. Collateral Auction
 
 The player offers one deck card or Dreamsign as collateral. Gravok evaluates
 the asset's quality band and reveals a correspondingly scaled prize. The roll
@@ -277,7 +381,7 @@ staking a disposable starter for a premium jackpot. This draws from **Bonfire
 Spirits**, **N'loth**, and Monster Train's relic traders, where the identity and
 value of the sacrificed object matter.
 
-### 7. Fivefold Mirror
+### 12. Fivefold Mirror
 
 Gravok offers a chosen card two reflections:
 
@@ -291,7 +395,7 @@ power and a chance at lasting value without turning one failed click into the
 loss of the player's build-around card. This riffs on Monster Train's
 **Mysterious Mirror** and **Fissure**.
 
-### 8. The House Chooses the Category
+### 13. The House Chooses the Category
 
 The player chooses a sacrifice class—starter, Event, Character, transfigured
 card, or Dreamsign—and sees the prize before committing. Gravok then selects a
@@ -304,7 +408,7 @@ before the player commits.
 
 ## Information and tabletop minigames
 
-### 9. Contraband Array
+### 14. Contraband Array
 
 Three face-down cargo crates contain desirable card or Dreamsign rewards. Two
 also contain a Junk/Bane rider; one is clean. The player may:
@@ -318,7 +422,7 @@ The distribution is public and frozen before interaction. This directly adapts
 Wildfrost's **Gnome Traveller**, but lets the player purchase information
 instead of making the hidden penalty a pure guess.
 
-### 10. Match and Keep
+### 15. Match and Keep
 
 Lay out twelve face-down tokens: several reward pairs, one Bane pair, and one
 mixed “wild” pair. The player gets five attempts to reveal two tokens. Matching
@@ -330,7 +434,7 @@ objects. It is a deliberately more game-like Gamble scene, but remains
 turn-based, touch-friendly, deterministic, and easy to replay from the room
 log.
 
-### 11. Signal Auction
+### 16. Signal Auction
 
 Two face-down, state-aware Augury prizes are generated and frozen. Gravok gives
 one poetic clue about each prize's family or target. The player can spend
@@ -348,7 +452,7 @@ This turns the existing reward algorithm's explainability data into a player
 facing information game. It is especially on-theme for a dream guide who knows
 the odds but enjoys selling certainty.
 
-### 12. Quantum Hand
+### 17. Quantum Hand
 
 Deal five face-up symbols derived from real card attributes: card type,
 subtype, energy band, Fast, Reclaim, and transfiguration color. The player may
@@ -367,7 +471,7 @@ in deckbuilding, without reaction timing or opaque probability.
 
 ## Deferred and performance wagers
 
-### 13. Escrow Orbit
+### 18. Escrow Orbit
 
 The player gives Gravok a chosen card for two battles. It is absent from the
 deck while escrowed. The exact maturity table is visible before acceptance:
@@ -382,7 +486,7 @@ Finest** and **Lifemother's Remnant**. The risk is playing short-handed now
 plus a published maturity roll. If the outcome becomes fixed and the only
 decision is how long to wait, the concept belongs to Temporal Fork.
 
-### 14. The Bane Bond
+### 19. The Bane Bond
 
 Gravok adds one visible temporary Bane to the deck and opens a bond:
 
@@ -398,7 +502,7 @@ Battlefield** while giving Purge a meaningful early-exit interaction. Gravok's
 version should add a published chance of bond default at each maturity step;
 without that uncertainty, this is Temporal Fork content.
 
-### 15. Borrowed Victory
+### 20. Borrowed Victory
 
 Take a premium reward immediately. In exchange, Gravok receives a percentage
 of the next two battle payouts. The exact future payment depends on how rich
@@ -411,7 +515,7 @@ represent, but frames it as a wager on the unknown size of those future
 payouts. A fixed future payment for a fixed reward belongs to Tempting Offer or
 Temporal Fork.
 
-### 16. Next-Battle Contract
+### 21. Next-Battle Contract
 
 Choose one visible contract for the next battle:
 
@@ -427,7 +531,7 @@ captures the self-selected difficulty of **Battleworn Dummy** and the
 double-or-nothing escalation of **The Colosseum** without starting a battle
 inside the site.
 
-### 17. Open-Deck Parlay
+### 22. Open-Deck Parlay
 
 Gravok proposes three measurable feats based on the current deck, such as
 playing three distinct Events, scoring with a chosen card, materializing a
@@ -442,7 +546,7 @@ achievable from the current deck.
 
 ## Ambitious and unexpected directions
 
-### 18. House Rules
+### 23. House Rules
 
 Gravok reveals three temporary rules changes and the premium reward attached to
 each. Examples:
@@ -462,7 +566,7 @@ rule granted for a deterministic price belongs to Temporal Fork. This is
 high-leverage, memorable design space and should be built from a small authored
 rule library, not arbitrary effect composition.
 
-### 19. Gravity Sling
+### 24. Gravity Sling
 
 Gravok enhances one known future Dreamscape node with a premium site or reward,
 then locks the player's next Atlas choice to that node. The wager trades route
@@ -473,7 +577,7 @@ one receives a guaranteed ordinary reward, while the other receives a random
 premium site drawn from a disclosed pool. This treats navigation freedom as a
 real asset rather than another essence denomination.
 
-### 20. Pilot and Navigator
+### 25. Pilot and Navigator
 
 In a two-player room, one player controls the stake or risk tier while the
 other controls whether to bank or press after each result. Roles swap after
@@ -485,7 +589,7 @@ fits the shared room event log. In solo play, the player chooses both roles.
 This is less about probability depth than making co-op negotiation part of the
 wager.
 
-### 21. Gravok's Running Jackpot
+### 26. Gravok's Running Jackpot
 
 A portion of every lost essence stake enters a run-local jackpot. Future Gamble
 visits show the pot, and rare wager outcomes can claim it. If the route contains
@@ -497,7 +601,7 @@ Gravok. It also acts as a soft pity system without changing the published odds.
 This needs careful caps so deliberately losing small bets cannot manufacture a
 dominant future reward.
 
-### 22. The Algorithm's Tell
+### 27. The Algorithm's Tell
 
 Gravok displays three proposed rewards and three short explanations of why the
 Augury algorithm values them for the current deck. Two explanations are
@@ -512,7 +616,7 @@ coverage signals. It would need plain-language clues and strong accessibility
 testing, but it is a distinctive way to turn internal recommendation logic into
 play.
 
-### 23. Deck Cut
+### 28. Deck Cut
 
 Gravok calculates exact odds from the player's current deck, then cuts the
 shuffled deck once. The top card's visible property resolves the wager:
@@ -531,7 +635,7 @@ The reducer should select by deck entry id from a deterministic shuffle. Card
 UUIDs and entry ids remain the authoritative identity even when several copies
 share a displayed name.
 
-### 24. Sealed Reserve
+### 29. Sealed Reserve
 
 Gravok shows the family and quality band of a hidden prize. The player names an
 essence bid. A hidden reserve price is drawn from a fully published
@@ -545,7 +649,7 @@ This is a valuation game rather than an odds-selection game. The player weighs
 how much the partially described reward is worth to this run and how
 aggressively to avoid missing it.
 
-### 25. Bad-Omen Hedge
+### 30. Bad-Omen Hedge
 
 Before the next battle, bet on an outcome the player does not want: the opponent
 reaching a score threshold, the battle lasting past a turn limit, or a
@@ -557,7 +661,7 @@ This is genuine insurance rather than another success bonus. It diversifies the
 site's emotional texture because the payout softens a bad battle instead of
 compounding a winning run.
 
-### 26. Buyback
+### 31. Buyback
 
 Offer a reward already claimed earlier in the run as collateral. Gravok rolls
 for a strictly better version from the same family:
@@ -598,35 +702,36 @@ Farpoint should improve each topology in a way that preserves its decision:
 The specialty should make Gravok feel generous at home without turning the site
 into a second Dream Augury.
 
-## Suggested first prototype set
+## Recommended delivery portfolio
 
-### The Orbit Book
+The launch set should prove five distinct contracts without requiring deferred
+effects:
 
-This is the control case: one screen, one commitment, one deterministic roll,
-and state-aware prizes. It establishes odds display, stake payment, logging,
-and result animation.
+| Encounter        | What it proves                                                  |
+| ---------------- | --------------------------------------------------------------- |
+| Crystal Roll     | odds display, stake payment, deterministic resolution, and logs |
+| Pressure Vault   | persisted press-or-bank state, pot growth, and collapse         |
+| Figment Reactor  | chosen card collateral, target validation, and atomic mutation  |
+| Contraband Array | frozen hidden information, paid reveals, and touch interaction  |
+| Deck Cut         | exact state-derived odds and deck-entry-based resolution        |
 
-### Salvage Lock
+This set is deliberately small enough that each encounter can have a distinct
+presentation and result cadence. Crystal Roll is the implementation control
+case; Pressure Vault is the emotional centerpiece; the other three prevent the
+site from reading as an essence casino.
 
-This proves the multi-step state machine and the site's signature
-bank-or-press tension. Its pot contains generated rewards rather than only
-essence, making continued play visually exciting.
+The first expansion should add **Escrow Orbit** to prove card custody and
+battle-count callbacks, then **The Orbit Book** to connect wagers to the full
+Augury prize generator. **Salvage Lock** is valuable after Pressure Vault has
+established whether heterogeneous reward pots feel different enough to justify
+a second collapse encounter.
 
-### Contraband Array
-
-This proves a small information economy and a touch-friendly minigame. The
-complete distribution is public, which keeps hidden information fair.
-
-### Escrow Orbit
-
-This proves deferred state, card custody, and battle-count callbacks. It also
-adds the strongest Monster Train-derived texture to the run.
-
-### Deck Cut
-
-This proves state-derived odds and makes the current deck part of the wager
-surface. Its resolution is compact, but it establishes the more distinctive
-idea that the player can build toward favorable Gravok probabilities.
+The remaining catalog can be selected according to the system it exercises:
+information scenes (**Match and Keep**, **Signal Auction**, **Quantum Hand**),
+future battle contracts (**Bane Bond**, **Borrowed Victory**, **Next-Battle
+Contract**, **Open-Deck Parlay**, **Bad-Omen Hedge**), and high-cost bespoke
+content (**House Rules**, **Gravity Sling**, **Pilot and Navigator**,
+**Gravok's Running Jackpot**, **The Algorithm's Tell**).
 
 ## Generation and persistence implications
 
