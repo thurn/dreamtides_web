@@ -43,6 +43,7 @@ vi.mock("framer-motion", async () => {
   return {
     motion: {
       div: MotionElement,
+      img: MotionElement,
       main: MotionElement,
     },
     useReducedMotion: () => reducedMotionPreference.value,
@@ -82,6 +83,7 @@ function view(): TemporalForkSiteView {
       cardId: selected.id,
       displaySnapshot: selected,
     },
+    fullArt: artRef.temporalForkCard(selected.imageNumber),
   };
 }
 
@@ -135,7 +137,18 @@ afterEach(() => {
 });
 
 describe("TemporalForkSiteScreen", () => {
-  it("shows the selected UUID-backed card centered above a purple Channel action", () => {
+  it("breaks the selected card's licensed art into a dismissible fullscreen layer", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function getBoundingClientRect(this: HTMLElement) {
+        if (this.hasAttribute("data-temporal-fork-card-slot")) {
+          return new DOMRect(900, 180, 240, 336);
+        }
+        if (this instanceof HTMLImageElement && this.alt !== "") {
+          return new DOMRect(780, 150, 480, 291);
+        }
+        return new DOMRect(0, 0, 100, 100);
+      },
+    );
     const onChannel = vi.fn();
     const { container, root } = mount(
       <TemporalForkSiteScreen view={view()} onChannel={onChannel} />,
@@ -162,6 +175,33 @@ describe("TemporalForkSiteScreen", () => {
 
     act(() => channel?.click());
     expect(onChannel).toHaveBeenCalledOnce();
+    const frameBreak = container.querySelector<HTMLElement>(
+      "[data-temporal-fork-frame-break]",
+    );
+    expect(frameBreak?.dataset.temporalForkFrameBreakPhase).toBe("open");
+    expect(frameBreak?.dataset.temporalForkFullArtImageNumber).toBe("17");
+    expect(
+      frameBreak
+        ?.querySelector("[data-temporal-fork-full-art]")
+        ?.getAttribute("src"),
+    ).toContain("/temporal-fork/17.jpg");
+    expect(
+      container.querySelector('[data-testid="cumulus-temporal-fork-channel"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector("[data-journey-status-bar-anchor]"),
+    ).toBeNull();
+
+    const returnButton = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="Return to Temporal Fork"]',
+    );
+    act(() => returnButton?.click());
+    expect(
+      container.querySelector("[data-temporal-fork-frame-break]"),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-testid="cumulus-temporal-fork-channel"]'),
+    ).not.toBeNull();
     act(() => root.unmount());
   });
 
@@ -184,9 +224,7 @@ describe("TemporalForkSiteScreen", () => {
       <TemporalForkSiteScreen view={view()} onChannel={vi.fn()} />,
     );
 
-    const travel = container.querySelector(
-      "[data-temporal-fork-card-travel]",
-    );
+    const travel = container.querySelector("[data-temporal-fork-card-travel]");
     expect(travel?.getAttribute("data-temporal-fork-source")).toBe(
       "journey-deck",
     );

@@ -54,6 +54,13 @@ const MAIN_MENU_BACKGROUND_ART_PATH = join(
   "quest_prototype_assets",
   "main-menu-background.jpg",
 );
+const TEMPORAL_FORK_HIGH_RES_ART_DIR = join(
+  homedir(),
+  "Documents",
+  "shutterstock",
+  "quest_prototype_assets",
+  "temporal-fork",
+);
 const TUTORIAL_DIALOGUE_FRAME_ART_PATH = join(
   homedir(),
   "Documents",
@@ -1049,6 +1056,7 @@ export function setupAssets({
   dreamsignArtDir = DREAMSIGN_ART_DIR,
   journeyArtDir = JOURNEY_ART_DIR,
   mainMenuBackgroundArtPath = MAIN_MENU_BACKGROUND_ART_PATH,
+  temporalForkHighResArtDir = TEMPORAL_FORK_HIGH_RES_ART_DIR,
   cardFrameArtDir = CARD_FRAME_ART_DIR,
   dreamscapeSceneArtDir = DREAMSCAPE_SCENE_ART_DIR,
   dreamscapeIconArtDir = DREAMSCAPE_ICON_ART_DIR,
@@ -1076,6 +1084,7 @@ export function setupAssets({
   const dreamsignsDir = join(publicDir, "dreamsigns");
   const journeysDir = join(publicDir, "journeys");
   const mainMenuDir = join(publicDir, "main-menu");
+  const temporalForkDir = join(publicDir, "temporal-fork");
   const dreamscapesArtDir = join(publicDir, "dreamscapes");
   const dreamscapeIconsDir = join(publicDir, "dreamscape-icons");
   const dreamGuidesDir = join(publicDir, "dream-guides");
@@ -1898,6 +1907,29 @@ export function setupAssets({
   } else {
     console.warn(
       `  Warning: missing main-menu background at ${mainMenuBackgroundArtPath}`,
+    );
+  }
+
+  // Temporal Fork's frame-break prototype expands licensed card artwork to the
+  // viewport. The full-resolution originals stay in the developer's local art
+  // library; only generated public symlinks enter the Vite asset tree.
+  recreateDir(temporalForkDir);
+  let linkedTemporalForkArt = 0;
+  if (existsSync(temporalForkHighResArtDir)) {
+    for (const filename of readdirSync(temporalForkHighResArtDir)) {
+      if (!/^\d+\.jpg$/u.test(filename)) continue;
+      symlinkSync(
+        join(temporalForkHighResArtDir, filename),
+        join(temporalForkDir, filename),
+      );
+      linkedTemporalForkArt++;
+    }
+    console.log(
+      `Linked ${linkedTemporalForkArt} Temporal Fork high-resolution images`,
+    );
+  } else {
+    console.warn(
+      `  Warning: Temporal Fork high-resolution art directory not found at ${temporalForkHighResArtDir}`,
     );
   }
 

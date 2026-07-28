@@ -83,6 +83,7 @@ export function buildTemporalForkSiteView(params: {
     siteId: params.site.id,
     scene,
     isEnhanced: params.site.isEnhanced,
+    fullArt: artRef.temporalForkCard(params.card.imageNumber),
     guide: {
       id: guideId,
       name: params.guide?.name ?? FALLBACK_GUIDE_NAME,

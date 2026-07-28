@@ -1,6 +1,12 @@
 // @vitest-environment jsdom
 
-import { StrictMode, act, type ReactElement, type ReactNode } from "react";
+import {
+  StrictMode,
+  act,
+  type ImgHTMLAttributes,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ScreenRouter } from "./ScreenRouter";
@@ -44,6 +50,16 @@ vi.mock("framer-motion", () => ({
     div: ({ children, ...props }: { children: ReactNode }) => (
       <div {...props}>{children}</div>
     ),
+    img: ({
+      initial: _initial,
+      animate: _animate,
+      transition: _transition,
+      ...props
+    }: ImgHTMLAttributes<HTMLImageElement> & {
+      initial?: unknown;
+      animate?: unknown;
+      transition?: unknown;
+    }) => <img {...props} />,
     main: ({ children, ...props }: { children: ReactNode }) => (
       <main {...props}>{children}</main>
     ),
@@ -842,8 +858,19 @@ describe("ScreenRouter site-dispatch completeness", () => {
     },
   );
 
-  it("routes TemporalFork to the card-channeling screen and completes it", () => {
+  it("routes TemporalFork to its fullscreen frame-break prototype", () => {
     reducedMotionPreference.value = true;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function getBoundingClientRect(this: HTMLElement) {
+        if (this.hasAttribute("data-temporal-fork-card-slot")) {
+          return new DOMRect(900, 180, 240, 336);
+        }
+        if (this instanceof HTMLImageElement && this.alt !== "") {
+          return new DOMRect(780, 150, 480, 291);
+        }
+        return new DOMRect(0, 0, 100, 100);
+      },
+    );
     const site = makeSite("TemporalFork");
     const mutations = makeMutations();
     const journeyContent = merchantContent();
@@ -876,9 +903,22 @@ describe("ScreenRouter site-dispatch completeness", () => {
     act(() => {
       channelButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
-    expect(mutations.completeSite).toHaveBeenCalledWith(
-      site.id,
-      "temporal_fork_channel",
+    const frameBreak = container.querySelector<HTMLElement>(
+      "[data-temporal-fork-frame-break]",
     );
+    expect(frameBreak?.dataset.temporalForkFullArtImageNumber).toBe(
+      String(selectedCard.imageNumber),
+    );
+    expect(frameBreak?.dataset.temporalForkFrameBreakPhase).toBe("open");
+    expect(mutations.completeSite).not.toHaveBeenCalled();
+    expect(
+      getLogEntries().find(
+        (entry) => entry.event === "temporal_fork_frame_break_started",
+      ),
+    ).toMatchObject({
+      siteId: site.id,
+      cardId: selectedCard.id,
+      highResolutionImageNumber: selectedCard.imageNumber,
+    });
   });
 });

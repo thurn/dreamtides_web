@@ -63,6 +63,11 @@ export type ArtRef =
       readonly kind: "dream-guide";
       readonly guideId: string;
     }
+  | {
+      /** Licensed full-resolution art used by the Temporal Fork prototype. */
+      readonly kind: "temporal-fork-card";
+      readonly imageNumber: number;
+    }
   | CharacterPortraitArtRef;
 
 /** Resolve an {@link ArtRef} to a hosted art URL through the asset pipeline. */
@@ -82,6 +87,8 @@ export function resolveArtRef(ref: ArtRef): string {
       return assetUrl(`/dreamscapes/${ref.dreamscapeId}.png`);
     case "dream-guide":
       return assetUrl(`/dream-guides/${ref.guideId}.png`);
+    case "temporal-fork-card":
+      return assetUrl(`/temporal-fork/${String(ref.imageNumber)}.jpg`);
     case "character-portrait":
       switch (ref.characterId) {
         case "mira":
@@ -113,6 +120,10 @@ export const artRef = {
   dreamGuide: (guideId: string): ArtRef => ({
     kind: "dream-guide",
     guideId,
+  }),
+  temporalForkCard: (imageNumber: number): ArtRef => ({
+    kind: "temporal-fork-card",
+    imageNumber,
   }),
   characterPortrait: (
     characterId: CharacterPortraitId,

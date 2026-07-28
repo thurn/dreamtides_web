@@ -11,12 +11,8 @@ import {
   selectTemporalForkCard,
 } from "./temporal-fork-view-model";
 
-export function TemporalForkSiteScreenAdapter({
-  siteId,
-}: {
-  siteId: string;
-}) {
-  const { state, mutations, journeyContent } = useJourney();
+export function TemporalForkSiteScreenAdapter({ siteId }: { siteId: string }) {
+  const { state, journeyContent } = useJourney();
   const node =
     state.currentDreamscape === null
       ? null
@@ -53,18 +49,14 @@ export function TemporalForkSiteScreenAdapter({
 
   useEffect(() => {
     if (site === null || card === null) return;
-    logEventOnce(
-      `temporal-fork:${site.id}:site-entered`,
-      "site_entered",
-      {
-        siteType: site.type,
-        isEnhanced: site.isEnhanced,
-        presentedCardId: card.id,
-        prototypePoolSize: resolveTemporalForkCardPool(
-          journeyContent.cardDatabase,
-        ).length,
-      },
-    );
+    logEventOnce(`temporal-fork:${site.id}:site-entered`, "site_entered", {
+      siteType: site.type,
+      isEnhanced: site.isEnhanced,
+      presentedCardId: card.id,
+      prototypePoolSize: resolveTemporalForkCardPool(
+        journeyContent.cardDatabase,
+      ).length,
+    });
     if (guide !== null) {
       logEventOnce(
         `temporal-fork:${site.id}:guide:${guide.id}`,
@@ -80,13 +72,13 @@ export function TemporalForkSiteScreenAdapter({
 
   const handleChannel = useCallback(() => {
     if (site === null || card === null) return;
-    logEvent("temporal_fork_channeled", {
+    logEvent("temporal_fork_frame_break_started", {
       siteId: site.id,
       cardId: card.id,
+      highResolutionImageNumber: card.imageNumber,
       isEnhanced: site.isEnhanced,
     });
-    mutations.completeSite(site.id, "temporal_fork_channel");
-  }, [card, mutations, site]);
+  }, [card, site]);
 
   if (site === null || view === null) return null;
   return <TemporalForkSiteScreen view={view} onChannel={handleChannel} />;

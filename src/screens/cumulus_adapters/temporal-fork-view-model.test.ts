@@ -65,9 +65,7 @@ describe("temporal-fork-view-model", () => {
     const cards = TEMPORAL_FORK_CARD_IDS.slice(0, 3).map((id, index) =>
       card(id, index + 1),
     );
-    const database = new Map(
-      cards.map((entry) => [entry.cardNumber, entry]),
-    );
+    const database = new Map(cards.map((entry) => [entry.cardNumber, entry]));
 
     const first = selectTemporalForkCard({
       cardDatabase: database,
@@ -98,6 +96,10 @@ describe("temporal-fork-view-model", () => {
       siteId: temporalForkSite.id,
       scene: null,
       isEnhanced: true,
+      fullArt: {
+        kind: "temporal-fork-card",
+        imageNumber: selected.imageNumber,
+      },
       guide: {
         id: guide.id,
         name: guide.name,
