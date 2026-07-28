@@ -79,7 +79,7 @@ describe("RulesText", () => {
 
     const flame = container.querySelector<HTMLElement>("i.bxf.bx-fire-alt");
     expect(flame).not.toBeNull();
-    const style = flame?.getAttribute("style") ?? "";
+    const style = flame?.parentElement?.getAttribute("style") ?? "";
     // The color is a var whose fallback is ENERGY_PIP_COLOR, so a card outside a
     // figment renders the flame in the energy teal.
     expect(style.toLowerCase()).toContain("var(--cv-rules-energy-color");
@@ -181,7 +181,7 @@ describe("RulesText", () => {
     const caret = container.querySelector<HTMLElement>("i.bxf.bx-caret-right");
     expect(caret).not.toBeNull();
     expect(container.textContent).not.toContain("▸");
-    const style = caret?.getAttribute("style") ?? "";
+    const style = caret?.parentElement?.getAttribute("style") ?? "";
     // jsdom normalizes the hex to lowercase; match either form.
     expect(style.toLowerCase()).toContain("color: rgb(148, 163, 184)");
     expect(style.toLowerCase()).not.toContain("rgb(249, 115, 22)");

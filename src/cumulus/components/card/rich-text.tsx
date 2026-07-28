@@ -11,7 +11,8 @@
 import { Fragment, type ReactElement, type ReactNode } from "react";
 import { token } from "../../primitives/tokens";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
-import { GlowIcon } from "../controls/GlowIcon";
+import type { CumulusColor } from "../../primitives/color";
+import { InlineGlyph } from "../typography/InlineGlyph";
 import {
   renderRulesSymbolsInline,
   renderRulesText,
@@ -40,6 +41,7 @@ export interface RichTextDefinition {
  *    the spark-amber emphasis and resource symbols (`◆`, `●`, `⍏N`) render as
  *    their inline glyphs. Use for card / dreamAvatar / dreamsign ability text.
  *  - `underline` — a semantically underlined run inside inline prose.
+ *  - `glyph` — a named Boxicons glyph aligned to the current font's x-height.
  *  - `inline` — several parts rendered as one continuous line of prose.
  *  - `note`  — a de-emphasized secondary line (muted + italic), e.g. a
  *    "Locked" / "Visited" status shown under a site blurb.
@@ -52,6 +54,12 @@ export type RichText =
   | { readonly kind: "plain"; readonly text: string }
   | { readonly kind: "rules"; readonly text: string }
   | { readonly kind: "underline"; readonly text: string }
+  | {
+      readonly kind: "glyph";
+      readonly glyph: Glyph;
+      readonly label: string;
+      readonly color?: CumulusColor;
+    }
   | { readonly kind: "inline"; readonly parts: readonly RichText[] }
   | { readonly kind: "note"; readonly text: string }
   | { readonly kind: "stack"; readonly parts: readonly RichText[] }
@@ -65,6 +73,11 @@ export const richText = {
   plain: (text: string): RichText => ({ kind: "plain", text }),
   rules: (text: string): RichText => ({ kind: "rules", text }),
   underline: (text: string): RichText => ({ kind: "underline", text }),
+  glyph: (
+    glyph: Glyph,
+    label: string,
+    color?: CumulusColor,
+  ): RichText => ({ kind: "glyph", glyph, label, color }),
   inline: (...parts: RichText[]): RichText => ({ kind: "inline", parts }),
   note: (text: string): RichText => ({ kind: "note", text }),
   stack: (...parts: RichText[]): RichText => ({ kind: "stack", parts }),
@@ -162,7 +175,7 @@ function DefinitionSymbol({
             marginLeft: index === 0 ? undefined : "-0.35em",
           }}
         >
-          <GlowIcon iconClass={glyph} color="text-primary" title={title} />
+          <InlineGlyph glyph={glyph} color="text-primary" label={title} />
         </span>
       ))}
     </span>
@@ -188,6 +201,15 @@ export function renderRichText(
         <span key={key} style={{ textDecoration: "underline" }}>
           {renderInlineText(value.text, options)}
         </span>
+      );
+    case "glyph":
+      return (
+        <InlineGlyph
+          key={key}
+          glyph={value.glyph}
+          color={value.color}
+          label={value.label}
+        />
       );
     case "inline":
       return (

@@ -1701,6 +1701,14 @@ describe("TutorialScreen", () => {
       )?.style.alignItems,
     ).toBe("center");
     expect(
+      paragraphs[0]?.querySelectorAll("[data-inline-glyph]"),
+    ).toHaveLength(2);
+    expect(
+      paragraphs[0]?.querySelector<HTMLElement>(
+        "[data-tutorial-how-to-play-spark-term] [data-inline-glyph]",
+      )?.style.verticalAlign,
+    ).toBe("middle");
+    expect(
       paragraphs[0]?.querySelector<HTMLElement>(
         "[data-tutorial-how-to-play-spark-term]",
       )?.textContent,
@@ -1952,10 +1960,9 @@ describe("TutorialScreen", () => {
     const expectedEnergyColor = document.createElement("span");
     expectedEnergyColor.style.color = ENERGY_ICON_COLOR;
     expect(energyIcon?.style.color).toBe(expectedEnergyColor.style.color);
-    expect(energyIcon?.parentElement?.style.verticalAlign).toBe("middle");
-    expect(energyIcon?.parentElement?.style.transform).toBe(
-      "translateY(-0.08em)",
-    );
+    expect(energyIcon?.dataset.inlineGlyph).toBe("");
+    expect(energyIcon?.style.verticalAlign).toBe("middle");
+    expect(energyIcon?.style.transform).toBe("");
     expect(screenMocks.props?.view.dreamwell).toBeNull();
     expect(
       dreamwellSideZone?.dataset.tutorialDreamwellEmergenceLayer,

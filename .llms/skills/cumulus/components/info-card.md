@@ -22,7 +22,7 @@ The strict information-card presentation. Its media treatment varies by content 
 | `imageFilter` | `MediaFilter` = `"dreamsign-portrait" \| "dreamsign-portrait-bane" \| "spark-glow" \| "energy-glow"` | no | — | A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). A named media {@link MediaFilter} (e.g. a spark glow). A named media {@link MediaFilter} for the scene image. |
 | `frame` | `boolean` | no | — | true = framed portrait, false = contained transparent object. Default false. |
 | `title` | `string` | no | — | The card's headline. Resolve names before display; canonical rules symbols render as their inline icons. |
-| `body` | `RichText` | no | — | The reveal copy, as a {@link RichText} value (plain / rules / note / stack). Canonical rules symbols render as their inline icons in every text kind. |
+| `body` | `RichText` | no | — | The reveal copy, as a structured {@link RichText} value. Canonical rules symbols and explicit glyph parts render as x-height-aligned inline icons. |
 | `slots` | `InfoCardSlots` | no | — | Optional wrappers for the rendered headline and body content. |
 | `figure` | `ArtRef` | no | — | An optional foreground character render (a transparent full-body cutout — a Dream Guide, the boss) laid centered and prominent OVER the hero image, standing above the glass text card. Its own subject of the card; omit for a scene-only hero. An {@link ArtRef}, resolved by the component. Optional transparent full-body figure standing on the card's right side. |
 | `meta` | `string` | no | — | Small mono/uppercase overline above the title; rules symbols render as icons. |
@@ -35,7 +35,7 @@ The strict information-card presentation. Its media treatment varies by content 
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `kind` | `"plain" \| "rules" \| "underline" \| "inline" \| "note" \| "stack" \| "definitions"` | no |  |
+| `kind` | `"glyph" \| "plain" \| "rules" \| "underline" \| "inline" \| "note" \| "stack" \| "definitions"` | no |  |
 
 ### `slots`: the `InfoCardSlots` model
 

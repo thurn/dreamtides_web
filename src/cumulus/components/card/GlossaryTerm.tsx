@@ -6,6 +6,7 @@ import { useRevealSource } from "../../internal/reveal/context";
 import { Pressable } from "../../primitives/Pressable";
 import { revealEntityId } from "../../internal/reveal/identity";
 import type { Glyph } from "../../primitives/glyph";
+import { InlineGlyph } from "../typography/InlineGlyph";
 
 export interface GlossaryTermProps {
   /** Canonical glossary meaning owned by this inline source. */
@@ -59,13 +60,7 @@ export function GlossaryTerm({
           : undefined,
       }}
     >
-      {glyph === undefined ? text : (
-        <i
-          aria-label={text}
-          className={`${glyph} align-middle`}
-          style={{ transform: "translateY(-0.06em)" }}
-        />
-      )}
+      {glyph === undefined ? text : <InlineGlyph glyph={glyph} label={text} />}
     </Pressable>
   );
 }

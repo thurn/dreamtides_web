@@ -15,23 +15,17 @@
 
 import { token } from "../../primitives/tokens";
 import { GLYPHS } from "../../primitives/glyph";
+import { InlineGlyph } from "../typography/InlineGlyph";
 
 /** The filled Boxicons crypto glyph — the essence currency mark everywhere. */
 const ESSENCE_ICON_CLASS = GLYPHS.essence;
 
 /**
  * The essence currency glyph on its own, inheriting the surrounding text color
- * (so it tints with the value it follows) and size. The icon's mass sits low in
- * its em box, so a small upward nudge centers it on the digits it is glued to.
+ * (so it tints with the value it follows) and size.
  */
 export function EssenceGlyph() {
-  return (
-    <i
-      aria-hidden="true"
-      className={`${ESSENCE_ICON_CLASS} align-middle`}
-      style={{ transform: "translateY(-0.12em)" }}
-    />
-  );
+  return <InlineGlyph glyph={ESSENCE_ICON_CLASS} />;
 }
 
 /** How the value is colored. */

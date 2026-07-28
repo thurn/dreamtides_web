@@ -23,6 +23,7 @@ import {
 import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
 import { BOLT_ICON_CLASS } from "../controls/GlowIcon";
+import { InlineGlyph } from "../typography/InlineGlyph";
 import { glyph, GLYPHS } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { CardStatOrb } from "./CardStatOrb";
@@ -867,8 +868,7 @@ function GameCardSurface(props: CardViewProps) {
     );
 
   // Fast/interrupt bolts ride inline immediately before the card name (one bolt
-  // for a fast card, two for an interrupt). The bolt's mass sits low in its em
-  // box, so a small upward nudge centers it on the name text.
+  // for a fast card, two for an interrupt).
   const attributeChipNodes = attributeChips.map((chip) => (
     <span
       key={chip.key}
@@ -882,19 +882,19 @@ function GameCardSurface(props: CardViewProps) {
       }}
     >
       {Array.from({ length: chip.boltCount }, (_, index) => (
-        <i
+        <span
           key={index}
-          className={`${BOLT_ICON_CLASS} align-middle`}
           style={{
-            transform: "translateY(-0.05em)",
+            display: "inline-flex",
             // The bolt glyph carries a wide left side-bearing; trim it on the
             // first bolt so the mark starts at the name's text edge rather than
             // floating in from it. Pull each later bolt (an interrupt's second
             // mark) further in so the two bolts almost touch.
             marginLeft: index === 0 ? "-0.4em" : "-0.35em",
           }}
-          aria-hidden="true"
-        />
+        >
+          <InlineGlyph glyph={BOLT_ICON_CLASS} />
+        </span>
       ))}
     </span>
   ));

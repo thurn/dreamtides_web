@@ -8,9 +8,9 @@ Components · Live demo & interactive props: `/cumulus#/rich-text`
 
 Real consumers: **15** (imports outside `src/cumulus/docs/` and tests).
 
-The design system's model for a run of formatted copy. The caller describes what the text is — plain prose, Dreamtides rules text with glossary-keyword emphasis and inline resource glyphs, an underlined named subject inside continuous prose, a compact definition list, a muted note, or a stack of parts — and the renderer owns how it looks. Copy slots take a RichText, never an arbitrary node.
+The design system's model for a run of formatted copy. The caller describes what the text is — plain prose, Dreamtides rules text with glossary-keyword emphasis and inline resource glyphs, a named Boxicons glyph, an underlined subject, a compact definition list, a muted note, or a stack of parts — and the renderer owns how it looks. Copy slots take a RichText, never an arbitrary node.
 
-> **Guidance:** Build values with the `richText` constructors — `richText.plain`, `richText.rules`, `richText.inline`, `richText.underline`, `richText.definitions`, `richText.note`, and `richText.stack` — and hand them to a copy slot (like `InfoCard.body`); reach for `RichTextView` only to render a standalone value inline. Definition rows use their term and colon by default; set `termPresentation: "definitionOnly"` when the authored sentence carries its own symbol and context. Use underline only for a semantically named subject, not general emphasis.
+> **Guidance:** Build values with the `richText` constructors — `richText.plain`, `richText.rules`, `richText.glyph`, `richText.inline`, `richText.underline`, `richText.definitions`, `richText.note`, and `richText.stack` — and hand them to a copy slot (like `InfoCard.body`); reach for `RichTextView` only to render a standalone value inline. Definition rows use their term and colon by default; set `termPresentation: "definitionOnly"` when the authored sentence carries its own symbol and context. Use underline only for a semantically named subject, not general emphasis.
 
 ## Props
 
@@ -22,7 +22,7 @@ The design system's model for a run of formatted copy. The caller describes what
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `kind` | `"plain" \| "rules" \| "underline" \| "inline" \| "note" \| "stack" \| "definitions"` | no |  |
+| `kind` | `"glyph" \| "plain" \| "rules" \| "underline" \| "inline" \| "note" \| "stack" \| "definitions"` | no |  |
 
 ## Usage
 
@@ -53,6 +53,21 @@ const pointsDefinition = richText.definitions([{
   definition: "Characters score points (⍟) when they challenge and are not blocked.",
   termPresentation: "definitionOnly",
 }]);
+```
+
+### Compose an explicit inline glyph
+
+Use the glyph constructor when structured copy needs a named icon beyond the canonical rules-symbol parser; it renders through InlineGlyph and follows the current font's x-height.
+
+```tsx
+import { richText } from "src/cumulus/components/card/rich-text";
+import { GLYPHS } from "src/cumulus/primitives/glyph";
+
+const score = richText.inline(
+  richText.plain("Score 10"),
+  richText.glyph(GLYPHS.points, "points", "points"),
+  richText.plain("."),
+);
 ```
 
 ### Underline a named subject

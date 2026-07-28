@@ -39,6 +39,7 @@ import { glowIconDemo } from "./demos/glow-icon";
 import { groupPanelDemo } from "./demos/group-panel";
 import { iconButtonDemo } from "./demos/icon-button";
 import { infoCardDemo } from "./demos/info-card";
+import { inlineGlyphDemo } from "./demos/inline-glyph";
 import { mainMenuButtonDemo } from "./demos/main-menu-button";
 import { motesDemo } from "./demos/motes";
 import { numberStepperDemo } from "./demos/number-stepper";
@@ -178,6 +179,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   motesDemo,
   infoCardDemo,
   groupPanelDemo,
+  inlineGlyphDemo,
   glowIconDemo,
   pipBadgeDemo,
   questStatusBarDemo,

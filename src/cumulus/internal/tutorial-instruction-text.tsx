@@ -6,8 +6,8 @@ import {
 import {
   ENERGY_ICON_CLASS,
   ENERGY_ICON_COLOR,
-  GlowIcon,
 } from "../components/controls/GlowIcon";
+import { InlineGlyph } from "../components/typography/InlineGlyph";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 
@@ -22,14 +22,6 @@ const parenthesizedIconStyle = {
   display: "inline-flex",
   alignItems: "center",
   whiteSpace: "nowrap",
-} as const;
-
-const inlineEnergyIconStyle = {
-  display: "inline-flex",
-  width: "1em",
-  height: "1em",
-  verticalAlign: "middle",
-  transform: "translateY(-0.08em)",
 } as const;
 
 function renderInstructionText(instruction: string): ReactElement {
@@ -53,8 +45,8 @@ function renderInstructionText(instruction: string): ReactElement {
               style={parenthesizedIconStyle}
             >
               {resourceTerm[1]} (
-              <GlowIcon
-                iconClass={points ? GLYPHS.points : GLYPHS.sparkInline}
+              <InlineGlyph
+                glyph={points ? GLYPHS.points : GLYPHS.sparkInline}
                 color={points ? "text-primary" : "spark"}
               />
               )
@@ -72,13 +64,11 @@ function renderInstructionText(instruction: string): ReactElement {
                 style={parenthesizedIconStyle}
               >
                 (
-                <span style={inlineEnergyIconStyle}>
-                  <GlowIcon
-                    iconClass={ENERGY_ICON_CLASS}
-                    color={ENERGY_ICON_COLOR}
-                    title="energy"
-                  />
-                </span>
+                <InlineGlyph
+                  glyph={ENERGY_ICON_CLASS}
+                  color={ENERGY_ICON_COLOR}
+                  label="energy"
+                />
                 )
               </span>
             );
@@ -93,8 +83,8 @@ function renderInstructionText(instruction: string): ReactElement {
               style={parenthesizedIconStyle}
             >
               (
-              <GlowIcon
-                iconClass={points ? GLYPHS.points : GLYPHS.sparkInline}
+              <InlineGlyph
+                glyph={points ? GLYPHS.points : GLYPHS.sparkInline}
                 color={points ? "text-primary" : "spark"}
               />
               )
@@ -107,10 +97,10 @@ function renderInstructionText(instruction: string): ReactElement {
           return (
             <span key={index} style={inlineIconStyle}>
               {pointsValue[1]}
-              <GlowIcon
-                iconClass={GLYPHS.points}
+              <InlineGlyph
+                glyph={GLYPHS.points}
                 color="text-primary"
-                title="points"
+                label="points"
               />
             </span>
           );
@@ -120,10 +110,10 @@ function renderInstructionText(instruction: string): ReactElement {
           const points = part === "⍟";
           return (
             <span key={index} style={parenthesizedIconStyle}>
-              <GlowIcon
-                iconClass={points ? GLYPHS.points : GLYPHS.sparkInline}
+              <InlineGlyph
+                glyph={points ? GLYPHS.points : GLYPHS.sparkInline}
                 color={points ? "text-primary" : "spark"}
-                title={points ? "points" : "spark"}
+                label={points ? "points" : "spark"}
               />
             </span>
           );
@@ -131,13 +121,12 @@ function renderInstructionText(instruction: string): ReactElement {
 
         if (part === "●") {
           return (
-            <span key={index} style={inlineEnergyIconStyle}>
-              <GlowIcon
-                iconClass={ENERGY_ICON_CLASS}
-                color={ENERGY_ICON_COLOR}
-                title="energy"
-              />
-            </span>
+            <InlineGlyph
+              key={index}
+              glyph={ENERGY_ICON_CLASS}
+              color={ENERGY_ICON_COLOR}
+              label="energy"
+            />
           );
         }
 

@@ -140,7 +140,7 @@ export const glowIconDemo: CumulusComponent = {
   blurb:
     "The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark.",
   callout:
-    "The glyph vocabulary lives in primitives/glyph.ts. GlowIcon exports the card-stat spark and energy hues plus the content-protection shadow used by CardStatOrb and inline RulesText marks; compact PipBadge fills live in pip-colors.ts. This keeps each rendering role named without claiming one component owns every resource mark.",
+    "The glyph vocabulary lives in primitives/glyph.ts. GlowIcon owns standalone, control, and card-stat marks with optional depth or bloom; InlineGlyph owns Boxicons inside flowing text. The shared resource-color exports keep those rendering roles visually related.",
   group: "Primitives",
   docName: "GlowIcon",
   Component: GlowIconDemo,
@@ -153,8 +153,8 @@ export const glowIconDemo: CumulusComponent = {
 <GlowIcon iconClass={SPARK_ICON_CLASS} color={SPARK_ICON_COLOR} size="44px" shadow title="Spark" />`,
     },
     {
-      label: "Inline energy mark",
-      note: "An inline glyph that tracks the surrounding text: the default 1em size lets the energy mark sit at the rules-text cap height, painted in the shared energy hue.",
+      label: "Compact energy mark",
+      note: "A one-em standalone mark for a compact control whose layout owns centering.",
       code: `import { GlowIcon, ENERGY_ICON_CLASS, ENERGY_ICON_COLOR } from "src/cumulus/components/controls/GlowIcon";
 
 <GlowIcon iconClass={ENERGY_ICON_CLASS} color={ENERGY_ICON_COLOR} />`,

@@ -16,6 +16,7 @@ import {
   SPARK_ICON_COLOR,
   SPARK_INLINE_ICON_CLASS,
 } from "../controls/GlowIcon";
+import { InlineGlyph } from "../typography/InlineGlyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { GlossaryTerm } from "./GlossaryTerm";
@@ -261,19 +262,14 @@ function renderSegment(
     // Essence renders as a currency value: the amount in violet glued directly
     // to the filled crypto glyph with no space (`50◆`), the way `2●` reads as an
     // energy value. A bare reference (no amount) shows just the glyph. The unit
-    // stays on one line; the icon's mass sits low in its em box, so a small
-    // upward nudge centers it on the text.
+    // stays on one line.
     return (
       <span
         key={key}
         style={{ color: ESSENCE_TEXT_COLOR, whiteSpace: "nowrap" }}
       >
         {segment.amount !== null ? segment.amount : null}
-        <i
-          aria-label="essence"
-          className={`${ESSENCE_ICON_CLASS} align-middle`}
-          style={{ transform: "translateY(-0.06em)" }}
-        />
+        <InlineGlyph glyph={ESSENCE_ICON_CLASS} label="essence" />
       </span>
     );
   }
@@ -331,9 +327,8 @@ function renderSegment(
     // The fast/interrupt marker renders as the filled lightning bolt — the same
     // white mark the title bar shows before the card name. A fast ability draws
     // one bolt; an interrupt draws two bolts pulled together so they almost
-    // touch (matching the title-bar treatment). The bolt's mass sits low in its
-    // em box, so a small upward nudge centers it on the text. The whole group
-    // stays on one line.
+    // touch (matching the title-bar treatment). The whole group stays on one
+    // line.
     return (
       <span
         key={key}
@@ -341,64 +336,57 @@ function renderSegment(
         style={{ color: BOLT_ICON_COLOR, whiteSpace: "nowrap" }}
       >
         {Array.from({ length: segment.count }, (_, index) => (
-          <i
+          <span
             key={index}
-            className={`${BOLT_ICON_CLASS} align-middle`}
             style={{
-              transform: "translateY(-0.05em)",
+              display: "inline-flex",
               // Pull each bolt after the first inward so an interrupt's two
               // bolts almost touch.
               marginLeft: index === 0 ? undefined : "-0.35em",
             }}
-            aria-hidden="true"
-          />
+          >
+            <InlineGlyph glyph={BOLT_ICON_CLASS} />
+          </span>
         ))}
       </span>
     );
   }
   if (segment.symbol === "energy") {
     // The inline energy glyph renders as the blue flame mark, so a `●3` reads as
-    // the same resource as the corner energy stat. Rendered as a plain inline
-    // `<i>` (sized to the surrounding text) so it flows like a character rather
-    // than reserving a square box. The flame's mass sits low in its em box, so a
-    // small upward nudge centers it on the text instead of sitting below the
-    // line.
+    // the same resource as the corner energy stat. Its one-em inline box flows
+    // like a character and follows the current font's x-height.
     return (
-      <i
+      <span
         key={key}
-        aria-label="energy"
-        className={`${ENERGY_ICON_CLASS} align-middle`}
         style={{
           // A var so a light-box surface (the figment frame) can render the
           // resource glyph in its own text color instead of the bright resource
           // hue, which is hard to read on a pale fill. Defaults to the resource
           // color everywhere else.
           color: `var(--cv-rules-energy-color, ${ENERGY_ICON_COLOR})`,
-          transform: "translateY(-0.08em)",
         }}
-      />
+      >
+        <InlineGlyph glyph={ENERGY_ICON_CLASS} label="energy" />
+      </span>
     );
   }
   if (segment.symbol === "spark") {
     // The inline spark glyph renders as the amber-gold single-sparkle mark, so a
     // `1✦` reads as the same resource as the corner spark stat (which uses the
-    // busier multi-star glyph at its larger size). Like the energy flame it is a
-    // plain inline `<i>` so it flows with the text instead of sitting in an
-    // oversized box. The sparkle's mass sits a touch low in its em box, so a
-    // small upward nudge centers it on the adjacent number and text.
+    // busier multi-star glyph at its larger size). Its one-em inline box follows
+    // the current font's x-height.
     return (
-      <i
+      <span
         key={key}
-        aria-label="spark"
-        className={`${SPARK_INLINE_ICON_CLASS} align-middle`}
         style={{
           // See the energy glyph above: a var so the figment's light box can
           // render the spark in its black text color rather than the gold
           // resource hue, which is hard to read on the pale fill.
           color: `var(--cv-rules-spark-color, ${SPARK_ICON_COLOR})`,
-          transform: "translateY(-0.09em)",
         }}
-      />
+      >
+        <InlineGlyph glyph={SPARK_INLINE_ICON_CLASS} label="spark" />
+      </span>
     );
   }
   const iconSpec = SYMBOL_ICON_CLASSES[segment.symbol];
@@ -417,16 +405,10 @@ function renderSegment(
         />
       );
     }
-    // The glyph renders as a filled icon-font mark flowing inline with the text.
-    // The marks' mass sits low in their em box, so a small upward nudge centers
-    // them on the line instead of riding the baseline.
     return (
-      <i
-        key={key}
-        aria-label={iconSpec.label}
-        className={`${iconSpec.className} align-middle`}
-        style={{ color: iconSpec.color, transform: "translateY(-0.06em)" }}
-      />
+      <span key={key} style={{ color: iconSpec.color }}>
+        <InlineGlyph glyph={iconSpec.className} label={iconSpec.label} />
+      </span>
     );
   }
   return (

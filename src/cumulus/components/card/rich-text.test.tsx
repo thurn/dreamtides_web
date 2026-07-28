@@ -1,5 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
+import { GLYPHS } from "../../primitives/glyph";
 import { RichTextView, richText } from "./rich-text";
 
 describe("RichText", () => {
@@ -17,6 +18,23 @@ describe("RichText", () => {
     expect(markup).toBe(
       '<span>Gain </span><span style="text-decoration:underline">Rainbow Horn</span><span>.</span>',
     );
+  });
+
+  it("composes an x-height-centered glyph inside continuous prose", () => {
+    const markup = renderToStaticMarkup(
+      <RichTextView
+        value={richText.inline(
+          richText.plain("Score 10"),
+          richText.glyph(GLYPHS.points, "points", "points"),
+          richText.plain("."),
+        )}
+      />,
+    );
+
+    expect(markup).toContain('data-inline-glyph=""');
+    expect(markup).toContain('role="img" aria-label="points"');
+    expect(markup).toContain("vertical-align:middle");
+    expect(markup).not.toContain("translateY");
   });
 
   it("keeps glossary labels and definitions in compact monochrome rows", () => {

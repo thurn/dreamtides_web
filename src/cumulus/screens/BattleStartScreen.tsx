@@ -7,7 +7,7 @@ import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
 import { RulesText } from "../components/card/RulesText";
 import { GlassButton } from "../components/controls/GlassButton";
-import { GlowIcon } from "../components/controls/GlowIcon";
+import { InlineGlyph } from "../components/typography/InlineGlyph";
 import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
@@ -370,7 +370,7 @@ function BattleStartPanel({
             >
               <Stake label="To Win" density={density}>
                 <span>{view.pointsToWin}</span>
-                <GlowIcon iconClass={GLYPHS.points} color="white" size="1em" />
+                <InlineGlyph glyph={GLYPHS.points} color="white" />
               </Stake>
               <Stake label="Reward" density={density}>
                 <EssenceValue amount={view.essenceReward} tone="inherit" />

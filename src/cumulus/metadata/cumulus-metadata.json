@@ -2905,7 +2905,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "1em",
-      "description": "Rendered width/height as any CSS length. Defaults to `1em` so an inline\nglyph tracks the surrounding text size. The icon's own `font-size` is\npinned to this value so the `em`-based glow and outline scale with it."
+      "description": "Rendered width/height as any CSS length. Defaults to `1em` for compact\ncontrols. The icon's own `font-size` is pinned to this value so the\n`em`-based glow and outline scale with it."
     },
     {
       "name": "glowFilter",
@@ -3108,13 +3108,13 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "The reveal copy, as a {@link RichText} value (plain / rules / note / stack).\nCanonical rules symbols render as their inline icons in every text kind.",
+      "description": "The reveal copy, as a structured {@link RichText} value. Canonical rules\nsymbols and explicit glyph parts render as x-height-aligned inline icons.",
       "nested": {
         "name": "RichText",
         "fields": [
           {
             "name": "kind",
-            "tsType": "\"plain\" | \"rules\" | \"underline\" | \"inline\" | \"note\" | \"stack\" | \"definitions\"",
+            "tsType": "\"glyph\" | \"plain\" | \"rules\" | \"underline\" | \"inline\" | \"note\" | \"stack\" | \"definitions\"",
             "optional": false,
             "description": ""
           }
@@ -3199,6 +3199,53 @@
       "required": false,
       "defaultValue": null,
       "description": "A small leading {@link Glyph}."
+    }
+  ],
+  "InlineGlyph": [
+    {
+      "name": "glyph",
+      "tsType": "Glyph",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Named Boxicons glyph from the shared Cumulus glyph vocabulary."
+    },
+    {
+      "name": "color",
+      "tsType": "CumulusColor",
+      "unionMembers": [
+        "danger",
+        "accent",
+        "accent-bright",
+        "accent-strong",
+        "essence",
+        "energy",
+        "energy-bright",
+        "spark",
+        "points",
+        "positive",
+        "selected",
+        "sale",
+        "gold",
+        "gold-light",
+        "text-primary",
+        "text-secondary",
+        "text-muted",
+        "text-faint",
+        "text-on-accent",
+        "white"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional semantic fill color. Omit to inherit the surrounding text color."
+    },
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Accessible meaning. Omit only when surrounding copy already names the glyph."
     }
   ],
   "MainMenuButton": [
@@ -4005,7 +4052,7 @@
         "fields": [
           {
             "name": "kind",
-            "tsType": "\"plain\" | \"rules\" | \"underline\" | \"inline\" | \"note\" | \"stack\" | \"definitions\"",
+            "tsType": "\"glyph\" | \"plain\" | \"rules\" | \"underline\" | \"inline\" | \"note\" | \"stack\" | \"definitions\"",
             "optional": false,
             "description": ""
           }

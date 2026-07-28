@@ -95,7 +95,9 @@ describe("GlassButton", () => {
     expect(button?.textContent).toBe("Transfigure (20)");
     const essenceIcon = button?.querySelector<HTMLElement>("i");
     expect(essenceIcon?.className).toContain("bx-crypto");
-    expect(essenceIcon?.style.transform).toBe("translateY(-0.12em)");
+    expect(essenceIcon?.dataset.inlineGlyph).toBe("");
+    expect(essenceIcon?.style.verticalAlign).toBe("middle");
+    expect(essenceIcon?.style.transform).toBe("");
     const content = container.querySelector<HTMLElement>(
       "[data-glass-button-content]",
     );

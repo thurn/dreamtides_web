@@ -14,7 +14,7 @@ import { type MediaFilter, resolveMediaFilter } from "../../primitives/media";
  * (`CardStatOrb`) and the inline references in rules text (`RulesText`) pull the
  * same colors so a `●3` / `1✦` reads as the same resource in both places. The
  * corner stats use the larger sparkle/flame glyphs through this component; the
- * inline references draw their own plain `<i>` in the matching hue.
+ * inline references use `InlineGlyph` in the matching hue.
  */
 
 /** Solid amber-gold fill for the spark mark. */
@@ -60,9 +60,9 @@ export interface GlowIconProps {
   /** Fill {@link CumulusColor} — Boxicons paints via the element's text color. */
   color: CumulusColor;
   /**
-   * Rendered width/height as any CSS length. Defaults to `1em` so an inline
-   * glyph tracks the surrounding text size. The icon's own `font-size` is
-   * pinned to this value so the `em`-based glow and outline scale with it.
+   * Rendered width/height as any CSS length. Defaults to `1em` for compact
+   * controls. The icon's own `font-size` is pinned to this value so the
+   * `em`-based glow and outline scale with it.
    */
   size?: string;
   /** Emitted-light bloom {@link MediaFilter}. Omit for no glow. */

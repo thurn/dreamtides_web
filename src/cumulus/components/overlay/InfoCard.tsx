@@ -235,8 +235,8 @@ interface InfoCardCommonProps {
    */
   title?: string;
   /**
-   * The reveal copy, as a {@link RichText} value (plain / rules / note / stack).
-   * Canonical rules symbols render as their inline icons in every text kind.
+   * The reveal copy, as a structured {@link RichText} value. Canonical rules
+   * symbols and explicit glyph parts render as x-height-aligned inline icons.
    */
   body?: RichText;
   /** Optional wrappers for the rendered headline and body content. */
