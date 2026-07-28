@@ -14,12 +14,12 @@ export interface ChallengerChevronSettings {
 
 export const DEFAULT_CHALLENGER_CHEVRON_SETTINGS: ChallengerChevronSettings = {
   enabled: true,
-  widthPercent: 60,
-  heightPercent: 28,
+  widthPercent: 20,
+  heightPercent: 12,
   horizontalPositionPercent: 50,
-  verticalPositionPercent: 3,
-  strokeWidth: 12,
-  outlineWidth: 4,
+  verticalPositionPercent: 4,
+  strokeWidth: 18,
+  outlineWidth: 8,
   opacity: 1,
   color: token("--battle-challenger-chevron"),
 };

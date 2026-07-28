@@ -234,6 +234,7 @@ export function ChallengerChevronTweaksPanel({
 
       <pre
         data-battle-challenger-chevron-tweaks-json=""
+        data-cumulus-selectable=""
         style={{
           margin: 0,
           padding: 10,

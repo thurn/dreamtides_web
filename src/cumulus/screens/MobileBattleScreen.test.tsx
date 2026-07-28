@@ -3302,10 +3302,11 @@ describe("MobileBattleScreen", () => {
     expect(
       chevron?.querySelectorAll("polyline")[1]?.getAttribute("stroke"),
     ).toBe(customizedColor);
-    expect(
-      panel?.querySelector("[data-battle-challenger-chevron-tweaks-json]")
-        ?.textContent,
-    ).toContain('"widthPercent": 82');
+    const jsonReadout = panel?.querySelector(
+      "[data-battle-challenger-chevron-tweaks-json]",
+    );
+    expect(jsonReadout?.textContent).toContain('"widthPercent": 82');
+    expect(jsonReadout?.hasAttribute("data-cumulus-selectable")).toBe(true);
 
     act(() => {
       panel
