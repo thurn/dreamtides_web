@@ -7,13 +7,18 @@ import {
   type ReactNode,
 } from "react";
 import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
-import { GameCard, type GameCardModel } from "../components/card/CardView";
+import {
+  GameCard,
+  cardSelectionShadowLayers,
+  type GameCardModel,
+} from "../components/card/CardView";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import {
   BATTLEFIELD_CARD_ASPECT_RATIO,
   BATTLEFIELD_CARD_CORNER_RADIUS,
   CARD_ASPECT_RATIO,
   CARD_ASPECT_RATIO_VALUE,
+  CARD_CORNER_RADIUS,
 } from "../components/card/card-aspect";
 import { BattleStatusDisplay } from "../components/battle/BattleStatusDisplay";
 import type { BattleStatusDreamAvatarProfile } from "../components/battle/BattleStatusDisplay";
@@ -1543,6 +1548,8 @@ function FaceUpCard({
   const draggable = interaction?.draggable === true;
   const activatable = interaction?.onActivate !== undefined;
   const snapLayoutMotion = snapLayout || card.layoutMotion === "snap";
+  const selectionAboveExhaustion =
+    card.exhausted && selection?.selected === true ? selection : null;
   const restingTransform = "";
   const cancelPendingTap = (): void => {
     if (pendingTapRef.current === null) return;
@@ -1810,7 +1817,10 @@ function FaceUpCard({
       >
         <GameCard
           model={card.model}
-          selected={selection?.selected ?? card.showPlayableOutline}
+          selected={
+            selectionAboveExhaustion === null &&
+            (selection?.selected ?? card.showPlayableOutline)
+          }
           selectionColor={selection?.color ?? "positive"}
           hideRulesText={!showRulesText}
           exhausted={card.exhausted}
@@ -1822,6 +1832,24 @@ function FaceUpCard({
           <ChallengerChevron owner={challengerChevron} />
         ) : null}
       </motion.div>
+      {selectionAboveExhaustion !== null ? (
+        <div
+          aria-hidden="true"
+          data-battle-card-selection-ring="unfiltered"
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 5,
+            borderRadius: showRulesText
+              ? CARD_CORNER_RADIUS
+              : BATTLEFIELD_CARD_CORNER_RADIUS,
+            boxShadow: cardSelectionShadowLayers(
+              selectionAboveExhaustion.color,
+            ).join(", "),
+            pointerEvents: "none",
+          }}
+        />
+      ) : null}
       {cardOverlay?.battleCardId === card.id ? (
         <BattleCardPointsOverlay overlay={cardOverlay} />
       ) : null}

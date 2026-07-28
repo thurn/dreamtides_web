@@ -691,6 +691,53 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("keeps an exhausted target's selection ring outside the grayscale filter", () => {
+    const view = makeView();
+    const exhaustedTarget = view.enemy.backRank[1]?.card;
+    if (exhaustedTarget === null || exhaustedTarget === undefined) {
+      throw new Error("exhausted target fixture missing");
+    }
+    expect(exhaustedTarget.exhausted).toBe(true);
+
+    const { container, root } = mount(view, {
+      canInteract: true,
+      pendingCardId: null,
+      targetSelectionCardId: "targeting-card",
+      targetSelectionPrompt: "Select a highlighted legal target.",
+      targetableCardIds: [exhaustedTarget.id],
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    });
+
+    const target = container.querySelector<HTMLElement>(
+      `[data-battle-card-id="${exhaustedTarget.id}"]`,
+    );
+    const filteredBody = target?.querySelector<HTMLElement>(
+      "[data-battle-card-motion]",
+    );
+    const selectionRing = target?.querySelector<HTMLElement>(
+      '[data-battle-card-selection-ring="unfiltered"]',
+    );
+
+    expect(filteredBody?.style.filter).toContain("grayscale");
+    expect(filteredBody?.contains(selectionRing ?? null)).toBe(false);
+    expect(selectionRing?.style.boxShadow).toContain(
+      resolveColor("gold-light"),
+    );
+    expect(selectionRing?.style.boxShadow).toContain("3px");
+    expect(selectionRing?.style.boxShadow).toContain("12px");
+    expect(
+      target?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
+    ).not.toContain(resolveColor("gold-light"));
+
+    act(() => root.unmount());
+  });
+
   it("renders a points result only over its scoring battlefield character", () => {
     const { container, root } = mount(makeView(), undefined, {
       cardOverlay: {

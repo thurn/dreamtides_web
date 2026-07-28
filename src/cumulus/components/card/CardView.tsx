@@ -55,6 +55,17 @@ export {
  * purple accent for events) rather than a colored border.
  */
 const SELECTION_DEFAULT_COLOR: CumulusColor = "selected";
+
+/** Canonical selection-ring shadows shared by card surfaces and unfiltered overlays. */
+export function cardSelectionShadowLayers(
+  color: CumulusColor,
+): readonly [string, string] {
+  const selectionCss = resolveColor(color);
+  return [
+    `0 0 0 3px ${selectionCss}`,
+    `0 0 12px ${selectionCss}`,
+  ];
+}
 const CARD_TIMING_GLOSSARY_IDS = [
   GLOSSARY_IDS.fast,
   GLOSSARY_IDS.interrupt,
@@ -778,11 +789,7 @@ function GameCardSurface(props: CardViewProps) {
   // corners.
   const shadowLayers: string[] = ["0 4px 14px rgba(0, 0, 0, 0.55)"];
   if (selected) {
-    const selectionCss = resolveColor(selectionColor);
-    shadowLayers.unshift(
-      `0 0 0 3px ${selectionCss}`,
-      `0 0 12px ${selectionCss}`,
-    );
+    shadowLayers.unshift(...cardSelectionShadowLayers(selectionColor));
   }
 
   const isInteractive = onClick !== undefined;
