@@ -318,7 +318,7 @@ text = "[yellow]Erode[/yellow] means to put cards from a deck into the void. If 
 id = "figment-created"
 on = [ "figment-created" ]
 priority = 100
-duration = 6
+duration = 8
 bubbleWidth = 500
 match = { kind = "any" }
 text = "Figments are token representations of characters. Multiple figments of the same type can be combined to form one character."
