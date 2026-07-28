@@ -2,6 +2,7 @@ import { token } from "../primitives/tokens";
 
 export type ChallengerChevronStyle =
   | "classic"
+  | "circle-badge"
   | "ember-crest"
   | "frame-infusion";
 
@@ -23,6 +24,7 @@ export const CHALLENGER_CHEVRON_STYLE_OPTIONS: readonly {
   readonly label: string;
 }[] = [
   { value: "classic", label: "Classic" },
+  { value: "circle-badge", label: "Circle Badge" },
   { value: "ember-crest", label: "Ember Crest" },
   { value: "frame-infusion", label: "Frame Infusion" },
 ];
@@ -39,6 +41,18 @@ export const CHALLENGER_CHEVRON_PRESETS: Readonly<
     verticalPositionPercent: 4,
     strokeWidth: 18,
     outlineWidth: 8,
+    opacity: 1,
+    color: token("--battle-challenger-chevron"),
+  },
+  "circle-badge": {
+    enabled: true,
+    style: "circle-badge",
+    widthPercent: 22,
+    heightPercent: 16,
+    horizontalPositionPercent: 50,
+    verticalPositionPercent: -4,
+    strokeWidth: 7,
+    outlineWidth: 2,
     opacity: 1,
     color: token("--battle-challenger-chevron"),
   },

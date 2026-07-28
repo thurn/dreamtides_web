@@ -1453,7 +1453,9 @@ function ChallengerChevron({
       }}
     >
       <svg
-        viewBox="0 0 100 50"
+        viewBox={
+          settings.style === "circle-badge" ? "0 0 50 50" : "0 0 100 50"
+        }
         preserveAspectRatio="none"
         aria-hidden="true"
         style={{
@@ -1465,9 +1467,10 @@ function ChallengerChevron({
           transformOrigin: "50% 50%",
           color: settings.color,
           filter:
-            settings.style === "classic"
-              ? undefined
-              : token("--battle-challenger-marker-glow"),
+            settings.style === "ember-crest" ||
+            settings.style === "frame-infusion"
+              ? token("--battle-challenger-marker-glow")
+              : undefined,
         }}
       >
         {settings.style === "classic" ? (
@@ -1489,6 +1492,32 @@ function ChallengerChevron({
               strokeLinejoin="round"
             />
           </>
+        ) : null}
+        {settings.style === "circle-badge" ? (
+          <g data-battle-challenger-marker-circle="">
+            <circle
+              cx="25"
+              cy="25"
+              r="23"
+              fill={token("--surface-status-badge")}
+            />
+            <polyline
+              points="10,34 25,16 40,34"
+              fill="none"
+              stroke={token("--surface-status-badge")}
+              strokeWidth={outerStrokeWidth}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <polyline
+              points="10,34 25,16 40,34"
+              fill="none"
+              stroke={settings.color}
+              strokeWidth={settings.strokeWidth}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </g>
         ) : null}
         {settings.style === "ember-crest" ? (
           <g

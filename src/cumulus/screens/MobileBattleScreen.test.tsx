@@ -3437,6 +3437,38 @@ describe("MobileBattleScreen", () => {
       )?.style.animation,
     ).toContain("battle-challenger-marker-breathe");
 
+    act(() => {
+      if (select !== null) {
+        Object.getOwnPropertyDescriptor(
+          HTMLSelectElement.prototype,
+          "value",
+        )?.set?.call(select, "circle-badge");
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    });
+
+    const circleBadge = container.querySelector<HTMLElement>(
+      '[data-battle-challenger-chevron="player"]',
+    );
+    expect(circleBadge?.dataset.battleChallengerChevronStyle).toBe(
+      "circle-badge",
+    );
+    expect(circleBadge?.style.width).toBe(
+      `${String(CHALLENGER_CHEVRON_PRESETS["circle-badge"].widthPercent)}%`,
+    );
+    expect(
+      circleBadge?.querySelector("[data-battle-challenger-marker-circle]"),
+    ).not.toBeNull();
+    expect(circleBadge?.querySelector("circle")?.getAttribute("fill")).toBe(
+      "var(--surface-status-badge)",
+    );
+    expect(circleBadge?.querySelector("svg")?.getAttribute("viewBox")).toBe(
+      "0 0 50 50",
+    );
+    expect(
+      circleBadge?.querySelector("[data-battle-challenger-marker-animated]"),
+    ).toBeNull();
+
     act(() => root.unmount());
   });
 
