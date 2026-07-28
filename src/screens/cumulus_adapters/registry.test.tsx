@@ -1,6 +1,8 @@
+import { isValidElement } from "react";
 import { describe, expect, it } from "vitest";
 import type { SiteState, SiteType } from "../../types/journey";
 import { screenFor, siteDispositionFor, type NonSiteScreen } from "./registry";
+import { TemporalForkSiteScreenAdapter } from "./TemporalForkSiteScreenAdapter";
 
 describe("screenFor", () => {
   it.each<NonSiteScreen>([
@@ -31,6 +33,20 @@ describe("siteDispositionFor", () => {
 
   it.each(screenTypes)("routes %s to a Cumulus screen adapter", (type) => {
     expect(siteDispositionFor(site(type)).kind).toBe("screen");
+  });
+
+  it("routes Temporal Fork to its dedicated card-channeling adapter", () => {
+    const disposition = siteDispositionFor(site("TemporalFork"));
+    expect(disposition.kind).toBe("screen");
+    expect(
+      disposition.kind === "screen" && isValidElement(disposition.screen),
+    ).toBe(true);
+    if (
+      disposition.kind === "screen" &&
+      isValidElement(disposition.screen)
+    ) {
+      expect(disposition.screen.type).toBe(TemporalForkSiteScreenAdapter);
+    }
   });
 
   it("routes Battle through the battle route", () => {

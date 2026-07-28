@@ -19,21 +19,21 @@ const guides: readonly DreamGuideContent[] = [
 ];
 
 function site(
-  type: "TemptingOffer" | "Gamble" | "TemporalFork",
-): SiteState & { type: "TemptingOffer" | "Gamble" | "TemporalFork" } {
+  type: "TemptingOffer" | "Gamble",
+): SiteState & { type: "TemptingOffer" | "Gamble" } {
   return {
     id: `${type}-site`,
     type,
-    isEnhanced: type === "TemporalFork",
+    isEnhanced: false,
     isVisited: false,
   };
 }
 
 describe("work-in-progress-site-view-model", () => {
-  it("recognizes all three Cumulus work-in-progress site types", () => {
+  it("recognizes the two Cumulus work-in-progress site types", () => {
     expect(isWorkInProgressSiteType("TemptingOffer")).toBe(true);
     expect(isWorkInProgressSiteType("Gamble")).toBe(true);
-    expect(isWorkInProgressSiteType("TemporalFork")).toBe(true);
+    expect(isWorkInProgressSiteType("TemporalFork")).toBe(false);
   });
 
   it("builds the Tempting Offer fallback without depending on production TOML", () => {
@@ -77,25 +77,5 @@ describe("work-in-progress-site-view-model", () => {
       },
     });
     expect(view.message).toContain("wager");
-  });
-
-  it("builds the Temporal Fork fallback without depending on production TOML", () => {
-    const view = buildWorkInProgressSiteView({
-      sceneNode: null,
-      site: site("TemporalFork"),
-      guide: null,
-      guideLine: null,
-    });
-
-    expect(view).toMatchObject({
-      siteType: "TemporalFork",
-      title: "Temporal Fork",
-      isEnhanced: true,
-      guide: {
-        id: "layaway",
-        name: '"Layaway"',
-      },
-    });
-    expect(view.message).toContain("fork in time");
   });
 });

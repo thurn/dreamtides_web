@@ -35,14 +35,6 @@ const SITE_COPY: Record<WorkInProgressSiteType, WorkInProgressCopy> = {
     fallbackGuideName: "Gravok",
     fallbackGuideLine: "Fortune favors the bold, traveler.",
   },
-  TemporalFork: {
-    title: "Temporal Fork",
-    message:
-      "This fork in time is still being shaped. Continue your journey while its paths settle into place.",
-    fallbackGuideId: "layaway",
-    fallbackGuideName: '"Layaway"',
-    fallbackGuideLine: "Time is just another currency.",
-  },
 };
 
 /** Whether a site type uses the shared Cumulus work-in-progress screen. */
@@ -51,8 +43,7 @@ export function isWorkInProgressSiteType(
 ): siteType is WorkInProgressSiteType {
   return (
     siteType === "TemptingOffer" ||
-    siteType === "Gamble" ||
-    siteType === "TemporalFork"
+    siteType === "Gamble"
   );
 }
 

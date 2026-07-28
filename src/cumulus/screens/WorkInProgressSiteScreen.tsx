@@ -12,8 +12,7 @@ import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 
 export type WorkInProgressSiteType =
   | "TemptingOffer"
-  | "Gamble"
-  | "TemporalFork";
+  | "Gamble";
 
 export interface WorkInProgressSiteView {
   /** Stable site id used by the shared character-gallery layout. */

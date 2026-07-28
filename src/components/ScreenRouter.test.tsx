@@ -33,10 +33,13 @@ import {
   MERCHANT_ARCHETYPE_LABELS,
   type MerchantArchetypeId,
 } from "../journey_v2";
+import { TEMPORAL_FORK_CARD_IDS } from "../screens/cumulus_adapters/temporal-fork-view-model";
+
+const reducedMotionPreference = vi.hoisted(() => ({ value: false }));
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
-  useReducedMotion: () => false,
+  useReducedMotion: () => reducedMotionPreference.value,
   motion: {
     div: ({ children, ...props }: { children: ReactNode }) => (
       <div {...props}>{children}</div>
@@ -61,6 +64,7 @@ beforeEach(() => {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
     }
   ).IS_REACT_ACT_ENVIRONMENT = true;
+  reducedMotionPreference.value = false;
   globalThis.ResizeObserver = class ResizeObserverStub {
     observe(): void {}
     unobserve(): void {}
@@ -800,7 +804,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
     ).toBe(site.id);
   });
 
-  it.each(["TemptingOffer", "Gamble", "TemporalFork"] as const)(
+  it.each(["TemptingOffer", "Gamble"] as const)(
     "routes %s to the Cumulus work-in-progress site and completes it",
     (type) => {
       const site = makeSite(type);
@@ -837,4 +841,44 @@ describe("ScreenRouter site-dispatch completeness", () => {
       );
     },
   );
+
+  it("routes TemporalFork to the card-channeling screen and completes it", () => {
+    reducedMotionPreference.value = true;
+    const site = makeSite("TemporalFork");
+    const mutations = makeMutations();
+    const journeyContent = merchantContent();
+    const selectedCard = card(TEMPORAL_FORK_CARD_IDS[0], 901);
+    journeyContent.cardDatabase.set(selectedCard.cardNumber, selectedCard);
+    const container = renderWithJourney({
+      state: makeStateFor(site),
+      journeyContent,
+      mutations,
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
+    });
+
+    expect(
+      container.querySelector(
+        '[data-testid="cumulus-temporal-fork-site-screen"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      container
+        .querySelector("[data-temporal-fork-card-slot]")
+        ?.getAttribute("data-card-id"),
+    ).toBe(selectedCard.id);
+
+    const channelButton = container.querySelector(
+      '[data-testid="cumulus-temporal-fork-channel"]',
+    );
+    if (!(channelButton instanceof HTMLButtonElement)) {
+      throw new Error("expected a Channel button for TemporalFork");
+    }
+    act(() => {
+      channelButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(mutations.completeSite).toHaveBeenCalledWith(
+      site.id,
+      "temporal_fork_channel",
+    );
+  });
 });

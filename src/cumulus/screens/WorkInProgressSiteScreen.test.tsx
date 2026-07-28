@@ -97,23 +97,23 @@ describe("WorkInProgressSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("continues from either placeholder and identifies enhanced sites", () => {
+  it("continues from either remaining placeholder and identifies enhanced sites", () => {
     const onContinue = vi.fn();
     const { container, root } = mount(
       <WorkInProgressSiteScreen
         view={view({
-          siteId: "temporal-fork-site",
-          siteType: "TemporalFork",
-          title: "Temporal Fork",
+          siteId: "tempting-offer-site",
+          siteType: "TemptingOffer",
+          title: "Tempting Offer",
           isEnhanced: true,
           message:
-            "This fork in time is still being shaped. Continue your journey while its paths settle into place.",
+            "This offer is still being shaped. Continue your journey while its terms settle into place.",
         })}
         onContinue={onContinue}
       />,
     );
 
-    expect(container.querySelector("h1")?.textContent).toBe("Temporal Fork");
+    expect(container.querySelector("h1")?.textContent).toBe("Tempting Offer");
     expect(container.textContent).toContain("Enhanced Site");
     act(() => {
       container
