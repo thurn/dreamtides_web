@@ -291,6 +291,12 @@ Example:
 http://localhost:5173/editor?q=moon&type=event&sort=name&dir=desc&size=large
 ```
 
+## Dream Avatar Editor
+
+The standalone Dream Avatar editor is available at `/dream-avatars`.
+`/avatars` and `/dreamavatars` are aliases that preserve the query string and
+hash while opening the canonical editor URL.
+
 ## Image Viewer
 
 The standalone `/images` route browses candidate card art. Favorite and manual

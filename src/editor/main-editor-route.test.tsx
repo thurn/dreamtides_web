@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   appImport: vi.fn(),
   createRoot: vi.fn(),
+  dreamAvatarEditorComponent: vi.fn(() => null),
   render: vi.fn(),
 }));
 
@@ -35,6 +36,10 @@ vi.mock("./DreamscapeEditorApp", () => ({
   default: function MockDreamscapeEditorApp() {
     return null;
   },
+}));
+
+vi.mock("./DreamAvatarEditorApp", () => ({
+  default: mocks.dreamAvatarEditorComponent,
 }));
 
 vi.mock("./GlossaryEditorApp", () => ({
@@ -79,6 +84,7 @@ beforeEach(() => {
   document.body.innerHTML = '<div id="root"></div>';
   mocks.appImport.mockClear();
   mocks.createRoot.mockClear();
+  mocks.dreamAvatarEditorComponent.mockClear();
   mocks.render.mockClear();
   mocks.createRoot.mockReturnValue({ render: mocks.render });
   vi.resetModules();
@@ -89,19 +95,21 @@ afterEach(() => {
 });
 
 describe("main editor route", () => {
+  function renderedRouteComponent(): ReactElement {
+    const strictMode = mocks.render.mock.calls[0]?.[0] as ReactElement<{
+      children: ReactElement<{ children: ReactElement }>;
+    }>;
+    return strictMode.props.children.props.children;
+  }
+
   function renderedFrontDoorProps(): {
     entry?: string;
     directTutorialBattle?: boolean;
   } {
-    const strictMode = mocks.render.mock.calls[0]?.[0] as ReactElement<{
-      children: ReactElement<{
-        children: ReactElement<{
-          entry?: string;
-          directTutorialBattle?: boolean;
-        }>;
-      }>;
-    }>;
-    return strictMode.props.children.props.children.props;
+    return renderedRouteComponent().props as {
+      entry?: string;
+      directTutorialBattle?: boolean;
+    };
   }
 
   it("mounts the isolated editor for the Vite-served /editor/ path", async () => {
@@ -151,6 +159,27 @@ describe("main editor route", () => {
     );
     expect(mocks.render).toHaveBeenCalledTimes(1);
   });
+
+  it.each(["/avatars/", "/dreamavatars/"])(
+    "mounts the Dream Avatar editor and canonicalizes the %s alias",
+    async (alias) => {
+      window.history.pushState(null, "", `${alias}?q=Aurora#results`);
+
+      await import("../main.tsx");
+
+      expect(mocks.appImport).not.toHaveBeenCalled();
+      expect(renderedRouteComponent().type).toBe(
+        mocks.dreamAvatarEditorComponent,
+      );
+      expect(window.location.pathname).toBe("/dream-avatars");
+      expect(window.location.search).toBe("?q=Aurora");
+      expect(window.location.hash).toBe("#results");
+      expect(mocks.createRoot).toHaveBeenCalledWith(
+        document.getElementById("root"),
+      );
+      expect(mocks.render).toHaveBeenCalledTimes(1);
+    },
+  );
 
   it("mounts the isolated glossary editor for the Vite-served /glossary/ path", async () => {
     window.history.pushState(null, "", "/glossary/");

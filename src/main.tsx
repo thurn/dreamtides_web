@@ -69,7 +69,18 @@ if (pathname === "/editor" || pathname === "/cards") {
   const { default: GlossaryEditorApp } =
     await import("./editor/GlossaryEditorApp");
   renderStrict(<GlossaryEditorApp />);
-} else if (pathname === "/dream-avatars") {
+} else if (
+  pathname === "/dream-avatars" ||
+  pathname === "/avatars" ||
+  pathname === "/dreamavatars"
+) {
+  if (pathname !== "/dream-avatars") {
+    window.history.replaceState(
+      null,
+      "",
+      "/dream-avatars" + window.location.search + window.location.hash,
+    );
+  }
   const { default: DreamAvatarEditorApp } =
     await import("./editor/DreamAvatarEditorApp");
   renderStrict(<DreamAvatarEditorApp />);
