@@ -1377,17 +1377,34 @@ describe("tutorial battle lifecycle", () => {
       },
     }, automaticActor);
     expect(handoff.outcome).toBe("applied");
-    expect(handoff.state.battle?.board).toMatchObject({ activeSide: "enemy", phase: "dreamwell", turnNumber: 5 });
-    expect(handoff.state.battle?.board.sides.enemy.hand).toHaveLength(enemyHandBefore + 1);
+    let handedOffState = handoff.state;
+    for (
+      let step = 0;
+      step < 9 && handedOffState.battle?.tutorialPresentation !== null;
+      step += 1
+    ) {
+      const presentation = handedOffState.battle?.tutorialPresentation;
+      if (presentation === null || presentation === undefined) break;
+      const completed = reduceTutorial(
+        handedOffState,
+        "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+        { presentationId: presentation.id },
+        automaticActor,
+      );
+      expect(completed.outcome).toBe("applied");
+      handedOffState = completed.state;
+    }
+    expect(handedOffState.battle?.board).toMatchObject({ activeSide: "enemy", phase: "dreamwell", turnNumber: 5 });
+    expect(handedOffState.battle?.board.sides.enemy.hand).toHaveLength(enemyHandBefore + 1);
 
     const revealPlan = planTutorialBattleController({
-      state: handoff.state,
+      state: handedOffState,
       clientId: "client-a",
       connectedClientIds: ["client-a"],
     });
     expect(revealPlan.intent).toMatchObject({ kind: "battle-command", command: { edit: { kind: "DRAW_DREAMWELL_CARD", side: "enemy", turnNumber: 5 } } });
     if (revealPlan.intent?.kind !== "battle-command") throw new Error("expected Dreamwell reveal");
-    const revealed = reduceTutorial(handoff.state, "BATTLE_COMMAND", { command: revealPlan.intent.command }, automaticActor);
+    const revealed = reduceTutorial(handedOffState, "BATTLE_COMMAND", { command: revealPlan.intent.command }, automaticActor);
     expect(revealed.outcome).toBe("applied");
     expect(revealed.state.battle?.board.sides.enemy.dreamwellDrawnTurn).toBe(5);
     const dreamwellPresentation = revealed.state.battle?.tutorialPresentation;

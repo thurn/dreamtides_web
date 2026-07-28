@@ -75,10 +75,16 @@ function tutorialPresentationView(
           };
     }
     case "opponent-block":
+      return {
+        kind: presentation.kind,
+        presentationId: presentation.id,
+      };
     case "challenge-resolved":
       return {
         kind: presentation.kind,
         presentationId: presentation.id,
+        paired: presentation.defenderBattleCardId !== null,
+        scored: presentation.scored,
       };
     case "tutorial-guidance":
       // Guidance dwell is released by useBattleTutorialGuidance, and the

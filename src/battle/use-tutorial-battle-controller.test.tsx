@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useTutorialBattleController } from "./use-tutorial-battle-controller";
 import type { FoldState } from "../rules/fold-state";
+import { TUTORIAL_CHALLENGE_PRESENTATION_DWELL_MS } from "./tutorial-presentation-timing";
 
 const mocks = vi.hoisted(() => ({
   completePresentation: vi.fn(() => Promise.resolve(1)),
@@ -112,6 +113,51 @@ describe("useTutorialBattleController", () => {
       "tutorial-battle:tutorial-battle:presentation:opponent-play:bc_0042",
       "tutorial-ai:tutorial-driver",
     );
+
+    act(() => root.unmount());
+  });
+
+  it("does not resume Challenge resolution until the result animation completes", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    mocks.state = {
+      ...presentationState(),
+      battle: {
+        ...presentationState().battle!,
+        tutorialPresentation: {
+          id: "challenge-resolved:player:4:F0",
+          kind: "challenge-resolved",
+          activeSide: "player",
+          slotId: "F0",
+          challengerBattleCardId: "player-character-uuid",
+          defenderBattleCardId: null,
+          scored: {
+            battleCardId: "player-character-uuid",
+            side: "player",
+            points: 2,
+          },
+          dissolved: [],
+        },
+      },
+    };
+
+    act(() => {
+      root.render(
+        <Harness visiblePresentationId="challenge-resolved:player:4:F0" />,
+      );
+    });
+    act(() => {
+      vi.advanceTimersByTime(
+        TUTORIAL_CHALLENGE_PRESENTATION_DWELL_MS - 1,
+      );
+    });
+    expect(mocks.completePresentation).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(mocks.completePresentation).toHaveBeenCalledOnce();
 
     act(() => root.unmount());
   });

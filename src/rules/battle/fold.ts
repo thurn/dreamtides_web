@@ -277,13 +277,26 @@ export interface OpponentBlockEntry {
   readonly challengerBattleCardId: string;
 }
 
-/** The settled Challenge, held before its turn handoff so voiding reads. */
+/** One resolved Challenge lane, held while its result animation plays. */
 export interface ChallengeResolvedPresentation {
   readonly id: string;
   readonly kind: "challenge-resolved";
   readonly activeSide: BattleSide;
-  /** Every character the Challenge dissolved, in resolution order. */
+  readonly slotId: FrontRankSlotId;
+  /** The active-side character whose Challenge produced this result. */
+  readonly challengerBattleCardId: string;
+  /** The opposing character in the lane, or null for an unpaired Challenge. */
+  readonly defenderBattleCardId: string | null;
+  /** Points scored by a character in this lane, or null when no character scored. */
+  readonly scored: ChallengeScoredEntry | null;
+  /** Every character this lane dissolved, in resolution order. */
   readonly dissolved: readonly ChallengeDissolvedEntry[];
+}
+
+export interface ChallengeScoredEntry {
+  readonly battleCardId: string;
+  readonly side: BattleSide;
+  readonly points: number;
 }
 
 export interface ChallengeDissolvedEntry {
@@ -305,14 +318,12 @@ export interface ChallengeCursor {
   nextLane: number;
   /** A turn handoff to perform only after every Challenge lane settles. */
   handoff: ChallengeHandoff | null;
-  /** Characters dissolved so far, accumulated lane by lane. */
-  dissolved?: readonly ChallengeDissolvedEntry[];
   /**
-   * Whether the settled-Challenge beat has already been presented for this
-   * cursor. The cursor outlives its own presentation, so this marker is what
-   * stops the completed beat from parking the handoff a second time.
+   * The result of the lane that just settled. A prompt or trigger may finish
+   * before this checkpoint opens, after which presentation completion resumes
+   * the cursor at the next lane.
    */
-  settlePresented?: boolean;
+  pendingPresentation?: ChallengeResolvedPresentation | null;
 }
 
 /** Metadata that distinguishes a normal quest battle from the tutorial handoff. */

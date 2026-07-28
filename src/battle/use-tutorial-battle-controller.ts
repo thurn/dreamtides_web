@@ -12,7 +12,10 @@ import {
   type TutorialAutomaticIntent,
   type TutorialBattleControllerPlan,
 } from "./tutorial-battle-controller";
-import { TUTORIAL_OPPONENT_PLAY_REVEAL_DWELL_MS } from "./tutorial-presentation-timing";
+import {
+  TUTORIAL_CHALLENGE_PRESENTATION_DWELL_MS,
+  TUTORIAL_OPPONENT_PLAY_REVEAL_DWELL_MS,
+} from "./tutorial-presentation-timing";
 
 /** Fixed readable dwell for each persisted tutorial reveal. */
 export const TUTORIAL_BATTLE_PRESENTATION_DWELL_MS = 3_000;
@@ -33,7 +36,7 @@ const PRESENTATION_DWELL_MS: Readonly<
 > = {
   "opponent-play": TUTORIAL_OPPONENT_PLAY_REVEAL_DWELL_MS,
   "opponent-block": 2_000,
-  "challenge-resolved": 1_500,
+  "challenge-resolved": TUTORIAL_CHALLENGE_PRESENTATION_DWELL_MS,
 };
 
 /** The dwell this presentation is held for before automation resumes. */

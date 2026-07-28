@@ -107,7 +107,11 @@ export function planTutorialBattleController(
   if (mode.kind !== "tutorial") return idlePlan("not-tutorial");
   const isDriverPresent = input.connectedClientIds?.includes(mode.driverClientId) ?? false;
   const isCurrentClientDriver = input.clientId === mode.driverClientId;
-  if (battle.board.result !== null) {
+  const presentation = battle.tutorialPresentation ?? null;
+  if (
+    battle.board.result !== null &&
+    (presentation === null || !isCurrentClientDriver || !isDriverPresent)
+  ) {
     return { status: "terminal", driverClientId: mode.driverClientId, isCurrentClientDriver, isDriverPresent, requiresHumanDecision: false, intent: null };
   }
   if (!isDriverPresent) {
@@ -117,7 +121,6 @@ export function planTutorialBattleController(
     return { status: "observer", driverClientId: mode.driverClientId, isCurrentClientDriver, isDriverPresent, requiresHumanDecision: false, intent: null };
   }
 
-  const presentation = battle.tutorialPresentation ?? null;
   if (presentation !== null) {
     return {
       status: "driver",
@@ -132,6 +135,9 @@ export function planTutorialBattleController(
         reason: presentation.kind,
       },
     };
+  }
+  if (battle.board.result !== null) {
+    return { status: "terminal", driverClientId: mode.driverClientId, isCurrentClientDriver, isDriverPresent, requiresHumanDecision: false, intent: null };
   }
 
   const prompt = battle.pendingPrompt;

@@ -344,7 +344,13 @@ describe("buildTutorialBattleView", () => {
             activeSide: "enemy",
             ...(kind === "opponent-block"
               ? { blockers: [] }
-              : { dissolved: [] }),
+              : {
+                  slotId: "F0",
+                  challengerBattleCardId: "enemy-challenger-uuid",
+                  defenderBattleCardId: "player-defender-uuid",
+                  scored: null,
+                  dissolved: [],
+                }),
           },
         } as unknown as BattleFoldState,
         {
@@ -359,6 +365,9 @@ describe("buildTutorialBattleView", () => {
       expect(view.presentation).toEqual({
         kind,
         presentationId,
+        ...(kind === "challenge-resolved"
+          ? { paired: true, scored: null }
+          : {}),
       });
     },
   );

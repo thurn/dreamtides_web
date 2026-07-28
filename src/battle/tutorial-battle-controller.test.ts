@@ -371,6 +371,36 @@ describe("tutorial battle controller", () => {
     expect(plan(stateFor({ result: "victory" }))).toMatchObject({ status: "terminal", intent: null });
   });
 
+  it("finishes a winning Challenge presentation before exposing terminal state", () => {
+    const terminal = stateFor({ result: "victory" });
+    terminal.battle!.tutorialPresentation = {
+      id: "challenge-resolved:player:4:F0",
+      kind: "challenge-resolved",
+      activeSide: "player",
+      slotId: "F0",
+      challengerBattleCardId: "player-character-uuid",
+      defenderBattleCardId: null,
+      scored: {
+        battleCardId: "player-character-uuid",
+        side: "player",
+        points: 2,
+      },
+      dissolved: [],
+    };
+
+    expect(plan(terminal, DRIVER, [DRIVER, OBSERVER])).toMatchObject({
+      status: "driver",
+      intent: {
+        kind: "complete-presentation",
+        presentationId: "challenge-resolved:player:4:F0",
+      },
+    });
+    expect(plan(terminal, OBSERVER, [DRIVER, OBSERVER])).toMatchObject({
+      status: "terminal",
+      intent: null,
+    });
+  });
+
   it("keeps terminal authority with the present driver and exposes a departed driver", () => {
     const terminal = stateFor({ result: "victory" });
     expect(plan(terminal, DRIVER, [DRIVER, OBSERVER])).toMatchObject({

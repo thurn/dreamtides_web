@@ -75,8 +75,8 @@ import {
   emptyDawnFired,
   type BattleFoldState,
   type ChallengeCursor,
-  type ChallengeDissolvedEntry,
   type ChallengeResolvedPresentation,
+  type ChallengeScoredEntry,
   type OpponentBlockEntry,
   type OpponentBlockPresentation,
   type TutorialBattleMode,
@@ -1909,34 +1909,31 @@ function driveChallengeCursor(
 ): BattleFoldState {
   let current = battle;
   while (current.challengeCursor !== null && current.challengeCursor !== undefined) {
+    const cursor = current.challengeCursor;
+    const pendingPresentation = cursor.pendingPresentation ?? null;
+    if (pendingPresentation !== null) {
+      if (
+        battleModeOf(current).kind === "tutorial" &&
+        (current.tutorialPresentation ?? null) === null
+      ) {
+        return {
+          ...current,
+          challengeCursor: { ...cursor, pendingPresentation: null },
+          tutorialPresentation: pendingPresentation,
+        };
+      }
+      current = {
+        ...current,
+        challengeCursor: { ...cursor, pendingPresentation: null },
+      };
+      continue;
+    }
     if (current.board.result !== null) {
       return { ...current, challengeCursor: null };
     }
     if (current.pendingPrompt !== null || current.effectQueue.length > 0) return current;
 
-    const cursor = current.challengeCursor;
     if (cursor.nextLane >= CHALLENGE_LANE_COUNT) {
-      // Every lane has settled and the void moves are committed. The tutorial
-      // holds the board here for one beat so the dissolved characters' travel
-      // into the void plays out before the handoff starts the next turn.
-      const dissolved = cursor.dissolved ?? [];
-      if (
-        battleModeOf(current).kind === "tutorial" &&
-        cursor.settlePresented !== true &&
-        dissolved.length > 0 &&
-        (current.tutorialPresentation ?? null) === null
-      ) {
-        return {
-          ...current,
-          challengeCursor: { ...cursor, settlePresented: true },
-          tutorialPresentation: {
-            id: `challenge-resolved:${cursor.activeSide}:${String(current.board.turnNumber)}`,
-            kind: "challenge-resolved",
-            activeSide: cursor.activeSide,
-            dissolved,
-          } satisfies ChallengeResolvedPresentation,
-        };
-      }
       current = { ...current, challengeCursor: null };
       if (cursor.handoff === null) return current;
       const handoff: BattleCommand = {
@@ -1963,28 +1960,41 @@ function driveChallengeCursor(
       return current;
     }
 
+    const slotId = frontRankSlotId(cursor.nextLane);
+    const opposingSide: BattleSide =
+      cursor.activeSide === "player" ? "enemy" : "player";
+    const challengerBattleCardId =
+      current.board.sides[cursor.activeSide].frontRank[slotId] ?? null;
+    const defenderBattleCardId =
+      current.board.sides[opposingSide].frontRank[slotId] ?? null;
     const resolution = resolveChallengeLane({
       state: current.board,
       activeSide: cursor.activeSide,
-      slotId: frontRankSlotId(cursor.nextLane),
+      slotId,
     });
+    const presentation =
+      challengerBattleCardId === null
+        ? null
+        : challengeResolvedPresentation({
+            activeSide: cursor.activeSide,
+            turnNumber: current.board.turnNumber,
+            slotId,
+            challengerBattleCardId,
+            defenderBattleCardId,
+            playerScoreDelta: resolution.playerScoreDelta,
+            enemyScoreDelta: resolution.enemyScoreDelta,
+            dissolved: resolution.dissolved,
+          });
     // The score/move edits for this lane are now committed. If a dissolved
     // trigger opens a prompt, resume at the next lane only after that prompt's
-    // run drains and static support has been recomputed.
+    // run drains and static support has been recomputed, then present this
+    // lane's settled result before continuing.
     current = {
       ...current,
       challengeCursor: {
         ...cursor,
         nextLane: cursor.nextLane + 1,
-        dissolved: [
-          ...(cursor.dissolved ?? []),
-          ...resolution.dissolved.map(
-            (entry): ChallengeDissolvedEntry => ({
-              battleCardId: entry.battleCardId,
-              side: entry.side,
-            }),
-          ),
-        ],
+        pendingPresentation: presentation,
       },
     };
     for (const edit of resolution.edits) {
@@ -2001,6 +2011,50 @@ function driveChallengeCursor(
     }
   }
   return current;
+}
+
+function challengeResolvedPresentation(input: {
+  activeSide: BattleSide;
+  turnNumber: number;
+  slotId: ReturnType<typeof frontRankSlotId>;
+  challengerBattleCardId: string;
+  defenderBattleCardId: string | null;
+  playerScoreDelta: number;
+  enemyScoreDelta: number;
+  dissolved: readonly { battleCardId: string; side: BattleSide }[];
+}): ChallengeResolvedPresentation | null {
+  const scored: ChallengeScoredEntry | null =
+    input.playerScoreDelta > 0
+      ? {
+          battleCardId:
+            input.activeSide === "player"
+              ? input.challengerBattleCardId
+              : (input.defenderBattleCardId ?? input.challengerBattleCardId),
+          side: "player",
+          points: input.playerScoreDelta,
+        }
+      : input.enemyScoreDelta > 0
+        ? {
+            battleCardId:
+              input.activeSide === "enemy"
+                ? input.challengerBattleCardId
+                : (input.defenderBattleCardId ??
+                  input.challengerBattleCardId),
+            side: "enemy",
+            points: input.enemyScoreDelta,
+          }
+        : null;
+  if (input.defenderBattleCardId === null && scored === null) return null;
+  return {
+    id: `challenge-resolved:${input.activeSide}:${String(input.turnNumber)}:${input.slotId}`,
+    kind: "challenge-resolved",
+    activeSide: input.activeSide,
+    slotId: input.slotId,
+    challengerBattleCardId: input.challengerBattleCardId,
+    defenderBattleCardId: input.defenderBattleCardId,
+    scored,
+    dissolved: input.dissolved.map((entry) => ({ ...entry })),
+  };
 }
 
 /** Applies the result policy at every authoritative score-changing seam. */

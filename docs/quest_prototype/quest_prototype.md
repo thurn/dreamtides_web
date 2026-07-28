@@ -151,6 +151,14 @@ travels and scales into its committed board destination as the presentation
 clears. AI character plays choose the empty back-rank slot nearest the
 battlefield center, with a stable lower-index tie break.
 
+The automated tutorial resolves Challenge lanes left to right through persisted
+presentation checkpoints. A paired Challenge holds while each dissolved
+character travels from its front-rank position to the void. An unpaired
+character that scores holds on an animated points bubble whose value is paired
+with the canonical filled points Boxicon. The driver completes each checkpoint
+after its full animation window, then the reducer resolves the next lane or
+performs the turn handoff.
+
 ## Hidden-Tides Behavior
 
 - Dream Avatar selection is a quest-start choice, not a mid-run site.

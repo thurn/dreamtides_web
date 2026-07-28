@@ -2175,6 +2175,10 @@ describe("paced Challenge beats", () => {
     expect(battle?.tutorialPresentation).toMatchObject({
       kind: "challenge-resolved",
       activeSide: "player",
+      slotId: "F0",
+      challengerBattleCardId: "challenger",
+      defenderBattleCardId: "blocker",
+      scored: null,
       dissolved: [{ battleCardId: "challenger", side: "player" }],
     });
   });
@@ -2204,6 +2208,79 @@ describe("paced Challenge beats", () => {
     expect(resumed.state.battle?.board.turnNumber).toBe(4);
   });
 
+  it("waits for each Challenge lane animation before resolving the next lane", () => {
+    const scorer = makeInstance("scorer", "scorer-card", "player");
+    scorer.definition.printedSpark = 2;
+    const loser = makeInstance("loser", "loser-card", "player");
+    loser.definition.printedSpark = 1;
+    const defender = makeInstance("defender", "defender-card", "enemy");
+    defender.definition.printedSpark = 3;
+    const board = makeRichBoard({
+      phase: "dusk",
+      turnNumber: 3,
+      instances: [scorer, loser, defender],
+      playerFront: {
+        [frontRankSlotId(0)]: "scorer",
+        [frontRankSlotId(1)]: "loser",
+      },
+    });
+    board.sides.enemy.frontRank[frontRankSlotId(1)] = "defender";
+
+    const first = reduce(
+      {
+        ...baseState(),
+        battle: battleFrom(board, { mode: TUTORIAL_MODE }),
+      },
+      "BATTLE_COMMAND",
+      HANDOFF_TO_ENEMY,
+      ctx(),
+      TUTORIAL_ACTOR,
+    );
+
+    expect(first.state.battle?.tutorialPresentation).toMatchObject({
+      kind: "challenge-resolved",
+      slotId: "F0",
+      challengerBattleCardId: "scorer",
+      defenderBattleCardId: null,
+      scored: { battleCardId: "scorer", side: "player", points: 2 },
+      dissolved: [],
+    });
+    expect(
+      first.state.battle?.board.sides.player.frontRank[frontRankSlotId(1)],
+    ).toBe("loser");
+
+    const second = reduce(
+      first.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      { presentationId: first.state.battle?.tutorialPresentation?.id },
+      ctx(),
+      TUTORIAL_ACTOR,
+    );
+
+    expect(second.state.battle?.tutorialPresentation).toMatchObject({
+      kind: "challenge-resolved",
+      slotId: "F1",
+      challengerBattleCardId: "loser",
+      defenderBattleCardId: "defender",
+      scored: null,
+      dissolved: [{ battleCardId: "loser", side: "player" }],
+    });
+    expect(second.state.battle?.board.sides.player.void).toContain("loser");
+    expect(second.state.battle?.board.activeSide).toBe("player");
+
+    const handedOff = reduce(
+      second.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      { presentationId: second.state.battle?.tutorialPresentation?.id },
+      ctx(),
+      TUTORIAL_ACTOR,
+    );
+
+    expect(handedOff.state.battle?.tutorialPresentation ?? null).toBeNull();
+    expect(handedOff.state.battle?.board.activeSide).toBe("enemy");
+    expect(handedOff.state.battle?.board.turnNumber).toBe(4);
+  });
+
   it("resolves a quest Challenge straight through to its handoff", () => {
     const resolved = reduce(
       resolvedChallengeState({ tutorial: false }),
@@ -2218,9 +2295,7 @@ describe("paced Challenge beats", () => {
     expect(resolved.state.battle?.board.activeSide).toBe("enemy");
   });
 
-  it("does not hold a tutorial Challenge in which nothing dissolves", () => {
-    // An unopposed challenger scores and survives, so there is no dissolve
-    // travel to wait for and the turn advances without a beat.
+  it("holds an unopposed scorer for its points animation before handoff", () => {
     const challenger = makeInstance("challenger", "challenger-card", "player");
     challenger.definition.printedSpark = 2;
     const board = makeRichBoard({
@@ -2242,9 +2317,31 @@ describe("paced Challenge beats", () => {
     );
 
     expect(resolved.outcome).toBe("applied");
-    expect(resolved.state.battle?.tutorialPresentation ?? null).toBeNull();
+    expect(resolved.state.battle?.tutorialPresentation).toMatchObject({
+      kind: "challenge-resolved",
+      slotId: "F0",
+      challengerBattleCardId: "challenger",
+      defenderBattleCardId: null,
+      scored: {
+        battleCardId: "challenger",
+        side: "player",
+        points: 2,
+      },
+      dissolved: [],
+    });
     expect(resolved.state.battle?.board.sides.player.void).toEqual([]);
-    expect(resolved.state.battle?.board.activeSide).toBe("enemy");
+    expect(resolved.state.battle?.board.activeSide).toBe("player");
+
+    const resumed = reduce(
+      resolved.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      { presentationId: resolved.state.battle?.tutorialPresentation?.id },
+      ctx(),
+      TUTORIAL_ACTOR,
+    );
+
+    expect(resumed.state.battle?.tutorialPresentation ?? null).toBeNull();
+    expect(resumed.state.battle?.board.activeSide).toBe("enemy");
   });
 });
 

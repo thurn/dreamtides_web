@@ -310,29 +310,87 @@ describe("TutorialBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it.each(["opponent-block", "challenge-resolved"] as const)(
-    "reports the visible %s board checkpoint so the deferred turn can resume",
-    (kind) => {
-      const onPresentationVisible = vi.fn();
-      const presentationId = `${kind}:enemy:4`;
-      const { root } = mount(
-        view({
-          presentation: {
-            kind,
-            presentationId,
+  it("reports a visible opponent-block checkpoint so the deferred turn can resume", () => {
+    const onPresentationVisible = vi.fn();
+    const presentationId = "opponent-block:enemy:4";
+    const { root } = mount(
+      view({
+        presentation: {
+          kind: "opponent-block",
+          presentationId,
+        },
+      }),
+      null,
+      vi.fn(),
+      onPresentationVisible,
+    );
+
+    expect(onPresentationVisible).toHaveBeenCalledOnce();
+    expect(onPresentationVisible).toHaveBeenCalledWith(presentationId);
+
+    act(() => root.unmount());
+  });
+
+  it("holds a paired Challenge while shared-layout travel carries its loser to the void", () => {
+    const onPresentationVisible = vi.fn();
+    const presentationId = "challenge-resolved:enemy:4:F2";
+    const { container, root } = mount(
+      view({
+        presentation: {
+          kind: "challenge-resolved",
+          presentationId,
+          paired: true,
+          scored: null,
+        },
+      }),
+      null,
+      vi.fn(),
+      onPresentationVisible,
+    );
+
+    expect(
+      container.querySelector('[data-tutorial-challenge-animation="paired"]'),
+    ).not.toBeNull();
+    expect(onPresentationVisible).toHaveBeenCalledWith(presentationId);
+
+    act(() => root.unmount());
+  });
+
+  it("animates unpaired Challenge points with the canonical Boxicon mark", () => {
+    const onPresentationVisible = vi.fn();
+    const presentationId = "challenge-resolved:player:5:F3";
+    const { container, root } = mount(
+      view({
+        presentation: {
+          kind: "challenge-resolved",
+          presentationId,
+          paired: false,
+          scored: {
+            battleCardId: "player-character-uuid",
+            side: "player",
+            points: 2,
           },
-        }),
-        null,
-        vi.fn(),
-        onPresentationVisible,
-      );
+        },
+      }),
+      null,
+      vi.fn(),
+      onPresentationVisible,
+    );
+    const bubble = container.querySelector<HTMLElement>(
+      '[data-tutorial-challenge-animation="points"]',
+    );
 
-      expect(onPresentationVisible).toHaveBeenCalledOnce();
-      expect(onPresentationVisible).toHaveBeenCalledWith(presentationId);
+    expect(bubble?.getAttribute("aria-label")).toBe("2 points");
+    expect(
+      bubble?.querySelector("[data-tutorial-challenge-points-value]")
+        ?.textContent,
+    ).toBe("2");
+    expect(bubble?.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
+    expect(bubble?.textContent).not.toContain("⍟");
+    expect(onPresentationVisible).toHaveBeenCalledWith(presentationId);
 
-      act(() => root.unmount());
-    },
-  );
+    act(() => root.unmount());
+  });
 
   it("releases a presentation whose optional render payload is unavailable", () => {
     const onPresentationVisible = vi.fn();
