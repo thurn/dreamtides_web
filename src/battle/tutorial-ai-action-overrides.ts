@@ -1,9 +1,11 @@
 import type { BattleFoldState } from "../rules/battle/fold";
 import type { TutorialBattleAiActionOverride } from "../types/tutorial";
 import { battleModeOf } from "../rules/battle/fold";
-import { isBattleCardSemanticPlayAutomated } from "../rules/battle/battle-card-effects-table";
-import { semanticPlayTargetsAreLegal } from "./semantic-play";
-import { selectDefaultCharacterPlaySlot } from "./state/selectors";
+import {
+  isBattleCardSemanticPlayAutomated,
+  semanticPlayTargetsAreLegal,
+} from "./semantic-play";
+import { selectCenterPreferredCharacterPlaySlot } from "./state/selectors";
 import type { BattleFieldSlotAddress } from "./types";
 
 export interface TutorialAiPlayCardOverrideSelection {
@@ -162,7 +164,7 @@ function selectPlayCard(
   }
   const characterDestination =
     instance.definition.battleCardKind === "character"
-      ? selectDefaultCharacterPlaySlot(board, side)
+      ? selectCenterPreferredCharacterPlaySlot(board, side)
       : null;
   if (
     instance.definition.battleCardKind === "character" &&

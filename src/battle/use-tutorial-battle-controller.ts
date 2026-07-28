@@ -30,6 +30,7 @@ export interface TutorialBattleControllerRuntime
 const PRESENTATION_DWELL_MS: Readonly<
   Partial<Record<NonNullable<BattleFoldState["tutorialPresentation"]>["kind"], number>>
 > = {
+  "opponent-play": 2_000,
   "opponent-block": 2_000,
   "challenge-resolved": 1_500,
 };

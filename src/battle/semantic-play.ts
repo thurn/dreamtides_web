@@ -1,5 +1,15 @@
 import type { BattleMutableState, BattleSide } from "./types";
 import { selectBattleCardLocation } from "./state/selectors";
+import semanticPlayCardIds from "./semantic-play-card-ids.json";
+
+const SEMANTIC_PLAY_CARD_IDS: ReadonlySet<string> = new Set(
+  semanticPlayCardIds,
+);
+
+/** Whether the semantic play event has a complete, explicitly audited rule. */
+export function isBattleCardSemanticPlayAutomated(cardId: string): boolean {
+  return SEMANTIC_PLAY_CARD_IDS.has(cardId);
+}
 
 /** Target legality shared by semantic AI/tutorial play planning and folding. */
 export function semanticPlayTargetsAreLegal(

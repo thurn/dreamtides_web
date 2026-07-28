@@ -5,6 +5,7 @@ import {
   selectEffectiveSpark,
   selectEffectiveSparkOrZero,
   selectFailureOverlayResult,
+  selectCenterPreferredCharacterPlaySlot,
   selectPlayAreaSize,
   selectSidePlayAreaSize,
 } from "./selectors";
@@ -116,5 +117,43 @@ describe("selectPlayAreaSize", () => {
       frontSize: 9,
       backSize: 10,
     });
+  });
+});
+
+describe("selectCenterPreferredCharacterPlaySlot", () => {
+  it("chooses the nearest open center slot with a deterministic lower-index tie break", () => {
+    const state = createInitialBattleState(
+      createBattleInit({
+        battleEntryKey: "site-7::2::dreamscape-2",
+        site: makeBattleTestSite(),
+        state: makeBattleTestState(),
+        cardDatabase: makeBattleTestCardDatabase(),
+        dreamAvatars: makeBattleTestDreamAvatars(),
+      }),
+    );
+
+    expect(selectCenterPreferredCharacterPlaySlot(state, "enemy")).toEqual({
+      side: "enemy",
+      zone: "backRank",
+      slotId: "B4",
+    });
+    state.sides.enemy.backRank.B4 = "occupied-center-left";
+    expect(selectCenterPreferredCharacterPlaySlot(state, "enemy")).toEqual({
+      side: "enemy",
+      zone: "backRank",
+      slotId: "B5",
+    });
+    state.sides.enemy.backRank.B5 = "occupied-center-right";
+    expect(selectCenterPreferredCharacterPlaySlot(state, "enemy")).toEqual({
+      side: "enemy",
+      zone: "backRank",
+      slotId: "B3",
+    });
+    for (const slotId of Object.keys(state.sides.enemy.backRank)) {
+      state.sides.enemy.backRank[slotId as `B${number}`] = "occupied";
+    }
+    expect(
+      selectCenterPreferredCharacterPlaySlot(state, "enemy"),
+    ).toBeNull();
   });
 });

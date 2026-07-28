@@ -6,7 +6,11 @@ import type {
 } from "../../rules/battle/fold";
 import type { TutorialBattleView } from "../../cumulus/screens/TutorialBattleScreen";
 import type { MobileBattleSideView } from "../../cumulus/screens/MobileBattleScreen";
-import { buildMobileBattleView } from "./mobile-battle-view-model";
+import {
+  buildMobileBattleCardView,
+  buildMobileBattleView,
+} from "./mobile-battle-view-model";
+import { rankSlotIds } from "../../battle/types";
 
 const INACTIVE_TUTORIAL_AVATAR_ABILITY = "Avatar ability is not active";
 
@@ -54,6 +58,7 @@ function tutorialPresentationView(
             cardId: presentation.cardId,
             battleCardId: presentation.battleCardId,
             cardKind: presentation.cardKind,
+            card: buildMobileBattleCardView(card),
           };
     }
     case "dreamwell-reveal": {
@@ -92,9 +97,10 @@ export function buildTutorialBattleView(
   controller: TutorialBattleControllerPlan,
   confirmedPromptId: number | null,
 ): TutorialBattleView {
+  const presentation = battle.tutorialPresentation ?? null;
   const mobile = buildMobileBattleView(
     battle.init,
-    battle.board,
+    boardBeforeOpponentPlayPresentation(battle, presentation),
     {
       id: battle.init.enemyDescriptor.id,
       imageNumber: battle.init.enemyDescriptor.imageNumber ?? "001",
@@ -114,7 +120,6 @@ export function buildTutorialBattleView(
   const player = withInactiveTutorialAvatarAbility(mobile.player);
   const enemy = withInactiveTutorialAvatarAbility(mobile.enemy);
   const prompt = battle.pendingPrompt;
-  const presentation = battle.tutorialPresentation ?? null;
   const confirmedHumanPrompt = controller.status === "driver" &&
     controller.isCurrentClientDriver &&
     controller.requiresHumanDecision &&
@@ -150,5 +155,40 @@ export function buildTutorialBattleView(
         ? `You reached ${String(battle.board.sides.player.score)} ⍟.`
         : null,
     terminalRestartAvailable: controller.status === "terminal" && !controller.isDriverPresent,
+  };
+}
+
+/**
+ * The play is already committed in the room fold, but the tutorial presents
+ * the physical card before revealing its destination. This projection removes
+ * only that card from visible enemy zones until the persisted checkpoint
+ * clears; card identity and rule state remain authoritative in the fold.
+ */
+function boardBeforeOpponentPlayPresentation(
+  battle: BattleFoldState,
+  presentation: TutorialBattlePresentation | null,
+): BattleFoldState["board"] {
+  if (presentation?.kind !== "opponent-play") return battle.board;
+  const battleCardId = presentation.battleCardId;
+  const enemy = battle.board.sides.enemy;
+  const backRank = { ...enemy.backRank };
+  const frontRank = { ...enemy.frontRank };
+  for (const slotId of rankSlotIds(backRank)) {
+    if (backRank[slotId] === battleCardId) backRank[slotId] = null;
+  }
+  for (const slotId of rankSlotIds(frontRank)) {
+    if (frontRank[slotId] === battleCardId) frontRank[slotId] = null;
+  }
+  return {
+    ...battle.board,
+    sides: {
+      ...battle.board.sides,
+      enemy: {
+        ...enemy,
+        backRank,
+        frontRank,
+        void: enemy.void.filter((candidate) => candidate !== battleCardId),
+      },
+    },
   };
 }

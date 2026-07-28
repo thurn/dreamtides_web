@@ -21,6 +21,7 @@ import type {
   FrontRankSlotId,
   BackRankSlotId,
 } from "../types";
+import { centerPreferredEmptySlot } from "../center-preferred-slot";
 
 /**
  * Lightweight, mutable projection of a single battle card that the AI planner
@@ -163,14 +164,8 @@ export function centerPreferredEmptyModelSlot<K extends string>(
   centerIndex: number,
 ): K {
   const slotIds = rankSlotIds(rank);
-  const emptySlot = slotIds
-    .filter((slotId) => rank[slotId] === null)
-    .sort(
-      (left, right) =>
-        Math.abs(slotIndex(left) - centerIndex) - Math.abs(slotIndex(right) - centerIndex) ||
-        slotIndex(left) - slotIndex(right),
-    )[0];
-  if (emptySlot !== undefined) {
+  const emptySlot = centerPreferredEmptySlot(rank, centerIndex);
+  if (emptySlot !== null) {
     return emptySlot;
   }
   const fresh = makeId(slotIds.length);

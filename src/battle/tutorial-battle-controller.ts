@@ -300,9 +300,14 @@ export function planTutorialBattleController(
         ? []
         : [action.targets.targetBattleCardId];
       const plannedSlot = action.toSlot;
-      const characterDestination = plannedSlot !== undefined && isBackRankSlotId(plannedSlot)
-        ? { side: "enemy" as const, zone: "backRank" as const, slotId: plannedSlot }
-        : undefined;
+      const characterDestination =
+        plannedSlot !== undefined && isBackRankSlotId(plannedSlot)
+          ? {
+              side: "enemy" as const,
+              zone: "backRank" as const,
+              slotId: plannedSlot,
+            }
+          : undefined;
       return {
         status: "driver",
       driverClientId: mode.driverClientId, isCurrentClientDriver: true, isDriverPresent: true,

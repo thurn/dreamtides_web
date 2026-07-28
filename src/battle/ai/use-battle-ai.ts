@@ -456,9 +456,10 @@ function buildActionProposal(
     ? commands
     : [{ ...firstCommand, aiChoices: [trace] }, ...restCommands];
   const plannedSlot = action.toSlot;
-  const characterDestination = plannedSlot !== undefined && isBackRankSlotId(plannedSlot)
-    ? { side: aiSide, zone: "backRank" as const, slotId: plannedSlot }
-    : undefined;
+  const characterDestination =
+    plannedSlot !== undefined && isBackRankSlotId(plannedSlot)
+      ? { side: aiSide, zone: "backRank" as const, slotId: plannedSlot }
+      : undefined;
   return {
     kind: "action",
     description: trace.rationale ?? describeFallback(action),

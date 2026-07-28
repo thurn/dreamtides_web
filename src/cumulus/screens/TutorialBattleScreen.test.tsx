@@ -3,9 +3,14 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { asCardId } from "../../types/card-identity";
+import { asCardId, asCardName } from "../../types/card-identity";
 import { CumulusRoot } from "../CumulusRoot";
-import { TutorialBattleScreen, type TutorialBattleView } from "./TutorialBattleScreen";
+import {
+  TUTORIAL_BATTLE_REVEAL_TRAVEL_SECONDS,
+  TutorialBattleScreen,
+  type TutorialBattleView,
+} from "./TutorialBattleScreen";
+import type { MobileBattleCardView } from "./MobileBattleScreen";
 
 const mobileBattleProps = vi.fn();
 vi.mock("./MobileBattleScreen", () => ({
@@ -53,6 +58,36 @@ function view(
   };
 }
 
+function opponentPlayCard(): MobileBattleCardView {
+  const cardId = asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8");
+  return {
+    id: "enemy-card-1",
+    model: {
+      cardId,
+      displaySnapshot: {
+        id: cardId,
+        name: asCardName("Synthetic Troubadour"),
+        cardNumber: 510,
+        cardType: "Character",
+        subtype: "Musician",
+        isStarter: true,
+        energyCost: 2,
+        spark: 2,
+        isFast: false,
+        renderedText: "",
+        imageNumber: 510,
+        artOwned: true,
+      },
+    },
+    exhausted: true,
+    figment: false,
+    figmentTitleBar: false,
+    figmentCount: 0,
+    storedTime: 0,
+    showPlayableOutline: false,
+  };
+}
+
 function mount(
   screenView: TutorialBattleView,
   movementStatusMessage: string | null = null,
@@ -94,6 +129,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   document.body.innerHTML = "";
   mobileBattleProps.mockClear();
 });
@@ -148,7 +184,8 @@ describe("TutorialBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("keeps an opponent card in the battlefield while its authoritative dwell is active", () => {
+  it("animates an opponent card at full reveal size before starting its dwell", () => {
+    vi.useFakeTimers();
     const onPresentationVisible = vi.fn();
     const { container, root } = mount(
       view({
@@ -158,6 +195,7 @@ describe("TutorialBattleScreen", () => {
           cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
           battleCardId: "enemy-card-1",
           cardKind: "character",
+          card: opponentPlayCard(),
         },
       }),
       null,
@@ -166,12 +204,28 @@ describe("TutorialBattleScreen", () => {
     );
 
     expect(container.querySelector('[role="dialog"]')).toBeNull();
-    expect(container.querySelector('[data-tutorial-opponent-play-reveal]')).toBeNull();
+    expect(
+      container.querySelector('[data-tutorial-opponent-play-reveal]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector(
+        '[data-testid="tutorial-opponent-play-card"]',
+      ),
+    ).not.toBeNull();
     expect(mobileBattleProps).toHaveBeenLastCalledWith(expect.objectContaining({
       viewport: "contained",
     }));
     expect(container.querySelector<HTMLElement>("[data-tutorial-live-battle]")?.style)
       .toMatchObject({ position: "fixed", width: "100vw", height: "100dvh" });
+    expect(onPresentationVisible).not.toHaveBeenCalled();
+    const revealTravelMs = TUTORIAL_BATTLE_REVEAL_TRAVEL_SECONDS * 1_000;
+    act(() => {
+      vi.advanceTimersByTime(revealTravelMs - 1);
+    });
+    expect(onPresentationVisible).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
     expect(onPresentationVisible).toHaveBeenCalledWith(
       "opponent-play:enemy-card-1",
     );

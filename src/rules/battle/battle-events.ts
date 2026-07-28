@@ -54,7 +54,6 @@ import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
 import { createEmptyTransitionData } from "../../battle/engine/result";
 import {
   battleTriggerScriptId,
-  isBattleCardSemanticPlayAutomated,
   planStaticContributionSettlement,
 } from "./battle-card-effects-table";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
@@ -99,7 +98,10 @@ import {
   consumeTutorialAiActionOverride,
   resolveTutorialAiPlayCardOverride,
 } from "../../battle/tutorial-ai-action-overrides";
-import { semanticPlayTargetsAreLegal } from "../../battle/semantic-play";
+import {
+  isBattleCardSemanticPlayAutomated,
+  semanticPlayTargetsAreLegal,
+} from "../../battle/semantic-play";
 
 // ---------------------------------------------------------------------------
 // Battle-init provider seam (BEGIN_BATTLE construction)
@@ -1233,7 +1235,7 @@ function battlePlayCardInternal(
   // The tutorial opponent's card remains the authoritative presentation focus
   // before any of its triggered work is drained. The follow-up event resumes
   // this exact queued state, so a remount cannot skip or duplicate effects.
-  if (!suppressGuidance && automatic && instance.controller === "enemy") {
+  if (automatic && instance.controller === "enemy") {
     const transition = battlePlayCardTransition(
       battle,
       intent,
@@ -1352,7 +1354,9 @@ export function completeTutorialBattlePresentation(
         { ...state, battle: cleared },
         { ...presentation.continuation.payload },
         ctx,
-        undefined,
+        presentation.continuation.automatic && mode?.kind === "tutorial"
+          ? `tutorial-ai:${mode.driverClientId}`
+          : undefined,
         true,
       );
     }

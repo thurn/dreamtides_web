@@ -1,15 +1,19 @@
 import { useCallback, useEffect, useState, type ReactElement } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { GameCard } from "../components/card/CardView";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { TransientStatusToast } from "../components/status/TransientStatusToast";
 import { token } from "../primitives/tokens";
+import { motionTimeSeconds } from "../primitives/motion-time";
 import {
   BattleForeseeOverlay,
   type BattleForeseeView,
 } from "./BattleForeseeOverlay";
 import {
   MobileBattleScreen,
+  type MobileBattleCardView,
   type MobileBattleInteractions,
   type MobileBattleView,
 } from "./MobileBattleScreen";
@@ -37,6 +41,7 @@ export interface TutorialBattleView {
     readonly cardId: string;
     readonly battleCardId: string;
     readonly cardKind: "character" | "event";
+    readonly card: MobileBattleCardView;
   } | {
     readonly kind: "dreamwell-reveal";
     readonly presentationId: string;
@@ -108,6 +113,7 @@ export function TutorialBattleScreen({
 
   useEffect(() => {
     if (view.presentation === null || !presentationVisible) return;
+    if (view.presentation.kind === "opponent-play") return;
     onPresentationVisible(view.presentation.presentationId);
   }, [onPresentationVisible, presentationVisible, view.presentation]);
 
@@ -134,6 +140,13 @@ export function TutorialBattleScreen({
         viewport="contained"
         onTurnAnnouncementComplete={completeTurnAnnouncement}
       />
+      {view.presentation?.kind === "opponent-play" &&
+      presentationVisible ? (
+        <TutorialOpponentPlayReveal
+          presentation={view.presentation}
+          onVisible={onPresentationVisible}
+        />
+      ) : null}
       {paused ? (
         <GlassDialog
           title="Battle Paused"
@@ -187,5 +200,69 @@ export function TutorialBattleScreen({
         onDurationComplete={onGuidanceDurationComplete}
       />
     </div>
+  );
+}
+
+// Full-card reading width: the canonical 240px desktop size, constrained to
+// 45vw on narrow screens so the reveal remains entirely visible.
+const TUTORIAL_BATTLE_REVEAL_CARD_WIDTH = "min(240px, 45vw)";
+export const TUTORIAL_BATTLE_REVEAL_TRAVEL_SECONDS =
+  motionTimeSeconds("--dur-slow");
+
+function TutorialOpponentPlayReveal({
+  presentation,
+  onVisible,
+}: {
+  readonly presentation: Extract<
+    NonNullable<TutorialBattleView["presentation"]>,
+    { readonly kind: "opponent-play" }
+  >;
+  readonly onVisible: (presentationId: string) => void;
+}): ReactElement {
+  const reduceMotion = useReducedMotion();
+  useEffect(() => {
+    const timeout = window.setTimeout(
+      () => onVisible(presentation.presentationId),
+      reduceMotion ? 0 : TUTORIAL_BATTLE_REVEAL_TRAVEL_SECONDS * 1_000,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [onVisible, presentation.presentationId, reduceMotion]);
+
+  return (
+    <motion.div
+      data-tutorial-opponent-play-reveal=""
+      data-battle-card-id={presentation.battleCardId}
+      initial={{
+        x: "-50%",
+        y: "-50%",
+        opacity: reduceMotion ? 1 : 0,
+        scale: reduceMotion ? 1 : 0.55,
+      }}
+      animate={{
+        x: "-50%",
+        y: "-50%",
+        opacity: 1,
+        scale: 1,
+      }}
+      transition={{
+        duration: reduceMotion
+          ? 0
+          : TUTORIAL_BATTLE_REVEAL_TRAVEL_SECONDS,
+        ease: [0.22, 0.61, 0.36, 1],
+      }}
+      style={{
+        position: "fixed",
+        left: "50%",
+        top: "50%",
+        width: TUTORIAL_BATTLE_REVEAL_CARD_WIDTH,
+        zIndex: token("--layer-reveal"),
+        pointerEvents: "none",
+      }}
+    >
+      <GameCard
+        model={presentation.card.model}
+        testId="tutorial-opponent-play-card"
+      />
+    </motion.div>
   );
 }

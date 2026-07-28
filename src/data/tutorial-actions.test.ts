@@ -761,5 +761,29 @@ describe("parseTutorialBattleConfiguration", () => {
         ],
       }),
     ).toThrow(/enemy after-dreamwell/u);
+    expect(() =>
+      parseTutorialBattleConfiguration({
+        ...battle,
+        aiActionOverrides: [{
+          ...battle.aiActionOverrides[0],
+          trigger: {
+            ...battle.aiActionOverrides[0].trigger,
+            cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+          },
+        }],
+      }),
+    ).toThrow(/must appear in dreamwellDraws/u);
+    expect(() =>
+      parseTutorialBattleConfiguration({
+        ...battle,
+        aiActionOverrides: [{
+          ...battle.aiActionOverrides[0],
+          action: {
+            kind: "play-card",
+            cardId: "00000000-0000-4000-8000-000000000101",
+          },
+        }],
+      }),
+    ).toThrow(/registered semantic play automation/u);
   });
 });

@@ -167,6 +167,30 @@ describe("tutorial data", () => {
         ],
       }),
     ).toThrow(/duplicated/u);
+    expect(() =>
+      validateTutorialBattleConfiguration({
+        ...FIXTURE_BATTLE,
+        aiActionOverrides: [{
+          ...FIXTURE_BATTLE.aiActionOverrides[0],
+          trigger: {
+            ...FIXTURE_BATTLE.aiActionOverrides[0].trigger,
+            cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+          },
+        }],
+      }),
+    ).toThrow(/must appear in dreamwellDraws/u);
+    expect(() =>
+      validateTutorialBattleConfiguration({
+        ...FIXTURE_BATTLE,
+        aiActionOverrides: [{
+          ...FIXTURE_BATTLE.aiActionOverrides[0],
+          action: {
+            kind: "play-card",
+            cardId: "00000000-0000-4000-8000-000000000101",
+          },
+        }],
+      }),
+    ).toThrow(/registered semantic play automation/u);
   });
 
   it("rejects duplicate ids, blank speech, and negative timings", () => {

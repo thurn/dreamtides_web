@@ -8,12 +8,16 @@ import type {
   TutorialTriggerEvent,
 } from "../types/tutorial";
 import { parseTutorialBattleAiActionOverrides } from "../types/tutorial-ai-action-overrides";
+import semanticPlayCardIds from "../battle/semantic-play-card-ids.json";
 import { glossaryEntry } from "./glossary";
 import { parseTutorialInstructionMarkup } from "./tutorial-instruction-markup";
 
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
 const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
 const DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
+const SEMANTIC_PLAY_CARD_IDS: ReadonlySet<string> = new Set(
+  semanticPlayCardIds,
+);
 
 function parseCardDrawList(
   value: unknown,
@@ -57,6 +61,18 @@ export function parseTutorialBattleConfiguration(
   };
   if (new Set(battle.dreamwellDraws).size !== battle.dreamwellDraws.length) {
     throw new Error("Tutorial battle dreamwellDraws must not repeat a card UUID.");
+  }
+  for (const override of battle.aiActionOverrides) {
+    if (!battle.dreamwellDraws.includes(override.trigger.cardId)) {
+      throw new Error(
+        `Tutorial battle AI action override ${JSON.stringify(override.id)} trigger cardId must appear in dreamwellDraws.`,
+      );
+    }
+    if (!SEMANTIC_PLAY_CARD_IDS.has(override.action.cardId)) {
+      throw new Error(
+        `Tutorial battle AI action override ${JSON.stringify(override.id)} action cardId must have registered semantic play automation.`,
+      );
+    }
   }
   return battle;
 }

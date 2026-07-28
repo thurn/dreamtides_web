@@ -379,10 +379,25 @@ describe("tutorial battle lifecycle", () => {
       "tutorial-ai:client-a",
     );
     expect(continued.outcome).toBe("applied");
-    expect(continued.state.battle?.tutorialPresentation).toBeNull();
+    expect(continued.state.battle?.tutorialPresentation).toMatchObject({
+      kind: "opponent-play",
+      battleCardId: enemyCardId,
+    });
     expect(continued.state.battle?.board.sides.enemy.hand).not.toContain(
       enemyCardId,
     );
+
+    const revealed = reduceTutorial(
+      continued.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      {
+        presentationId:
+          continued.state.battle?.tutorialPresentation?.id,
+      },
+      "tutorial-ai:client-a",
+    );
+    expect(revealed.outcome).toBe("applied");
+    expect(revealed.state.battle?.tutorialPresentation).toBeNull();
   });
 
   it("accepts only the terminal tutorial cursor once and builds the canonical handoff", () => {
@@ -710,6 +725,11 @@ describe("tutorial battle lifecycle", () => {
       battleCardId: twilightBattleCardId,
       tutorialAiActionOverrideId: TWILIGHT_OVERRIDE_ID,
       reason: "enemy-scripted-day-play",
+      characterDestination: {
+        side: "enemy",
+        zone: "backRank",
+        slotId: "B4",
+      },
       aiChoices: [
         {
           choice: "PLAY_CARD",

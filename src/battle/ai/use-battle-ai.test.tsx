@@ -379,11 +379,20 @@ describe("useBattleAi", () => {
     });
   });
 
-  it("submits a character play with the planner's center-preferred destination", async () => {
+  it("submits a character play into the nearest open center destination", async () => {
     const state = makeEnemyTurnState((mutable) => {
       const deployedId = mutable.sides.enemy.backRank.B0;
       mutable.sides.enemy.backRank.B0 = null;
       mutable.sides.enemy.frontRank.F4 = deployedId;
+      const centerOccupantId = allocateBattleCardInstance(mutable, {
+        definition: direwolfDefinition(),
+        owner: "enemy",
+        controller: "enemy",
+        isRevealedToPlayer: false,
+        provenance: questDeckProvenance(),
+      });
+      mutable.cardInstances[centerOccupantId].status.isExhausted = true;
+      mutable.sides.enemy.backRank.B4 = centerOccupantId;
       mutable.sides.enemy.currentEnergy = 2;
       const supportId = allocateBattleCardInstance(mutable, {
         definition: strummerDefinition(),
@@ -408,7 +417,7 @@ describe("useBattleAi", () => {
     expect(latest?.proposal?.playCard?.characterDestination).toEqual({
       side: "enemy",
       zone: "backRank",
-      slotId: "B4",
+      slotId: "B5",
     });
 
     act(() => {
@@ -420,7 +429,7 @@ describe("useBattleAi", () => {
       expect.any(String),
       [],
       latest?.proposal?.trace,
-      { side: "enemy", zone: "backRank", slotId: "B4" },
+      { side: "enemy", zone: "backRank", slotId: "B5" },
     );
   });
 

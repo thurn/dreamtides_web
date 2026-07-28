@@ -188,11 +188,6 @@ export function selectBattleTriggeredEffectSteps(
   return script.triggers[trigger] === undefined ? null : [...script.triggers[trigger]];
 }
 
-/** Whether semantic play may resolve every authored rule on this card. */
-export function isBattleCardSemanticPlayAutomated(cardId: string): boolean {
-  return BATTLE_TRIGGERED_EFFECTS[cardId] !== undefined;
-}
-
 /**
  * Static Support scripts keyed by card UUID. Character-triggered effects are
  * resolved manually; this registry contains only Support spark grants.

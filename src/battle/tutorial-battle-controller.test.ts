@@ -299,6 +299,35 @@ describe("tutorial battle controller", () => {
     expect(result.intent?.intentKey).toContain("enemy-play");
   });
 
+  it("places heuristic tutorial AI characters in the nearest open center slot", () => {
+    const enemyCardId = "enemy-card-uuid";
+    const centerOccupantId = "center-occupant-uuid";
+    const enemy = side();
+    enemy.hand = [enemyCardId];
+    enemy.backRank.B4 = centerOccupantId;
+    const result = plan(
+      stateFor({
+        activeSide: "enemy",
+        phase: "day",
+        sides: { player: side(), enemy },
+        cardInstances: {
+          [enemyCardId]: card(enemyCardId, "enemy"),
+          [centerOccupantId]: card(centerOccupantId, "enemy"),
+        },
+      }),
+    );
+
+    expect(result.intent).toMatchObject({
+      kind: "battle-play-card",
+      battleCardId: enemyCardId,
+      characterDestination: {
+        side: "enemy",
+        zone: "backRank",
+        slotId: "B5",
+      },
+    });
+  });
+
   it("resolves enemy prompts deterministically but leaves player prompts interactive", () => {
     const enemyPrompt = {
       promptId: 41,

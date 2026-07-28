@@ -142,6 +142,13 @@ card `229ab3a1-3720-41a2-924c-8fe112188f8e` after resolving Dreamwell card
 the override id, trigger card UUID, action card UUID, and concrete battle-card
 instance id.
 
+Every card played by the automated tutorial opponent first animates to the
+canonical full-card reading size. Its two-second dwell begins when that reveal
+animation is visible, and the card's committed destination is projected onto
+the board when the persisted presentation checkpoint clears. AI character
+plays choose the empty back-rank slot nearest the battlefield center, with a
+stable lower-index tie break.
+
 ## Hidden-Tides Behavior
 
 - Dream Avatar selection is a quest-start choice, not a mid-run site.

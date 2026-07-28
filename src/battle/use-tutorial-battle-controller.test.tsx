@@ -80,7 +80,7 @@ afterEach(() => {
 });
 
 describe("useTutorialBattleController", () => {
-  it("starts the three-second dwell only after the presentation is visible", () => {
+  it("starts the two-second opponent-play dwell only after the reveal is visible", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -89,7 +89,7 @@ describe("useTutorialBattleController", () => {
       root.render(<Harness visiblePresentationId={null} />);
     });
     act(() => {
-      vi.advanceTimersByTime(3_000);
+      vi.advanceTimersByTime(2_000);
     });
     expect(mocks.completePresentation).not.toHaveBeenCalled();
 
@@ -99,7 +99,7 @@ describe("useTutorialBattleController", () => {
       );
     });
     act(() => {
-      vi.advanceTimersByTime(2_999);
+      vi.advanceTimersByTime(1_999);
     });
     expect(mocks.completePresentation).not.toHaveBeenCalled();
 

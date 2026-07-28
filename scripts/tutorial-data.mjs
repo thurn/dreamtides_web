@@ -5,6 +5,14 @@ import { parse, stringify } from "smol-toml";
 import { parseGlossarySource } from "./glossary-source.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
+const SEMANTIC_PLAY_CARD_IDS = new Set(
+  JSON.parse(
+    readFileSync(
+      join(ROOT, "src", "battle", "semantic-play-card-ids.json"),
+      "utf8",
+    ),
+  ),
+);
 export const DEFAULT_TUTORIAL_TOML_PATH = join(
   "data",
   "tabula",
@@ -136,6 +144,18 @@ export function validateTutorialBattleConfiguration(value) {
     throw invalid(
       "Tutorial battle dreamwellDraws must not repeat a card UUID.",
     );
+  }
+  for (const override of battle.aiActionOverrides) {
+    if (!battle.dreamwellDraws.includes(override.trigger.cardId)) {
+      throw invalid(
+        `Tutorial battle AI action override ${JSON.stringify(override.id)} trigger cardId must appear in dreamwellDraws.`,
+      );
+    }
+    if (!SEMANTIC_PLAY_CARD_IDS.has(override.action.cardId)) {
+      throw invalid(
+        `Tutorial battle AI action override ${JSON.stringify(override.id)} action cardId must have registered semantic play automation.`,
+      );
+    }
   }
   return battle;
 }

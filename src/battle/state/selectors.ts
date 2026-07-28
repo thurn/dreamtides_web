@@ -25,6 +25,7 @@ import {
   selectFigmentSparkContext,
 } from "./figments";
 import { cardIsRevealedTo } from "./card-visibility";
+import { centerPreferredEmptySlot } from "../center-preferred-slot";
 
 /**
  * Summary of B-5 quest deck metadata captured at battle-init time. The
@@ -347,6 +348,23 @@ export function selectDefaultCharacterPlaySlot(
   }
 
   return null;
+}
+
+/**
+ * The empty back-rank slot nearest the visual center. AI character plays use
+ * this selector so scripted and heuristic decisions share one placement rule.
+ * Equidistant slots prefer the lower index for deterministic folding.
+ */
+export function selectCenterPreferredCharacterPlaySlot(
+  state: BattleMutableState,
+  side: BattleSide,
+): BattleFieldSlotAddress | null {
+  const { backRank } = state.sides[side];
+  const centerIndex = (BACK_RANK_SLOTS - 1) / 2;
+  const slotId = centerPreferredEmptySlot(backRank, centerIndex);
+  return slotId === null
+    ? null
+    : { side, zone: "backRank", slotId };
 }
 
 export function selectBattlefieldSlotOccupant(
