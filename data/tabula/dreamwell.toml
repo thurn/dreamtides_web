@@ -255,7 +255,7 @@ card-number = 22
 [[dreamwell]]
 name = "Eternal Horizon"
 id = "a57f1276-3fb6-4527-b538-953fbace35cf"
-rendered-text = "Each allied characters gains +1✦."
+rendered-text = "Each character you control gains +1✦."
 order = 4
 energy-added = 0
 card-type = "Dreamwell"
@@ -312,7 +312,7 @@ art = { x = 0, y = 1, scale = 1 }
 [[dreamwell]]
 name = "Echoing Boughs"
 id = "2ad68489-044a-40d1-9be6-e62497a4e1fd"
-rendered-text = "Rematerialize an ally."
+rendered-text = "Rematerialize a character you control."
 order = 3
 energy-added = 1
 card-type = "Dreamwell"
