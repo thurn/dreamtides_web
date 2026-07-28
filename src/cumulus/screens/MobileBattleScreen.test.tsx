@@ -18,6 +18,7 @@ import {
   type MobileBattleSideView,
   type MobileBattleView,
 } from "./MobileBattleScreen";
+import { DEFAULT_CHALLENGER_CHEVRON_SETTINGS } from "./challenger-chevron";
 
 function mockDesktopViewport(matches: boolean): void {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
@@ -298,6 +299,31 @@ describe("MobileBattleScreen", () => {
     container.remove();
   });
 
+  it("keeps the dev-only chevron tweaks reachable when the inspector is hidden", () => {
+    const { container, root } = mount(makeView(), undefined, {
+      inspectorVisibility: "hidden",
+    });
+
+    expect(
+      container.querySelector('[data-testid="battle-debug-menu-trigger"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-testid="battle-inspector-trigger"]'),
+    ).toBeNull();
+    const trigger = container.querySelector<HTMLButtonElement>(
+      '[data-testid="battle-challenger-chevron-tweaks-trigger"]',
+    );
+    expect(trigger).not.toBeNull();
+
+    act(() => trigger?.click());
+
+    expect(
+      container.querySelector("[data-battle-challenger-chevron-tweaks]"),
+    ).not.toBeNull();
+
+    act(() => root.unmount());
+  });
+
   it("renders the tutorial End Turn action as the sole purple primary control", () => {
     mockDesktopViewport(true);
     const onNextPhase = vi.fn();
@@ -375,6 +401,104 @@ describe("MobileBattleScreen", () => {
       container.querySelector<HTMLElement>("[data-battle-phase-next]")?.style
         .width,
     ).toBe("max-content");
+
+    act(() => root.unmount());
+  });
+
+  it("marks only the active side's front-rank characters after Day", () => {
+    const baseView = makeView();
+    const player = {
+      ...baseView.player,
+      frontRank: [
+        {
+          id: "player-front-filled",
+          card: makeCard(24, "player-front-challenger"),
+        },
+        { id: "player-front-empty", card: null },
+      ],
+    };
+    const dayView: MobileBattleView = {
+      ...baseView,
+      near: player,
+      player,
+      phase: "day",
+    };
+    const { container, root } = mount(dayView, undefined, {
+      phaseNavigation: "tutorial",
+      viewport: "contained",
+    });
+
+    expect(
+      container.querySelector("[data-battle-challenger-chevron]"),
+    ).toBeNull();
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <MobileBattleScreen
+            view={{ ...dayView, phase: "dusk" }}
+            phaseNavigation="tutorial"
+            viewport="contained"
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const playerChevron = container.querySelector<HTMLElement>(
+      '[data-battle-challenger-chevron="player"]',
+    );
+    expect(playerChevron?.dataset.battleChallengerChevronDirection).toBe("up");
+    expect(playerChevron?.style.width).toBe(
+      `${String(DEFAULT_CHALLENGER_CHEVRON_SETTINGS.widthPercent)}%`,
+    );
+    expect(playerChevron?.style.height).toBe(
+      `${String(DEFAULT_CHALLENGER_CHEVRON_SETTINGS.heightPercent)}%`,
+    );
+    expect(playerChevron?.style.left).toBe(
+      `${String(
+        DEFAULT_CHALLENGER_CHEVRON_SETTINGS.horizontalPositionPercent,
+      )}%`,
+    );
+    expect(playerChevron?.style.top).toBe(
+      `${String(
+        DEFAULT_CHALLENGER_CHEVRON_SETTINGS.verticalPositionPercent,
+      )}%`,
+    );
+    expect(
+      playerChevron?.querySelectorAll("polyline")[0]?.getAttribute("stroke"),
+    ).toBe("var(--surface-status-badge)");
+    expect(
+      playerChevron?.querySelectorAll("polyline")[1]?.getAttribute("stroke"),
+    ).toBe(DEFAULT_CHALLENGER_CHEVRON_SETTINGS.color);
+    expect(
+      container.querySelector('[data-battle-challenger-chevron="enemy"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector(
+        '[data-battle-rank="player-back"] [data-battle-challenger-chevron]',
+      ),
+    ).toBeNull();
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <MobileBattleScreen
+            view={{ ...baseView, activeSide: "enemy", phase: "night" }}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(
+      container.querySelector('[data-battle-challenger-chevron="player"]'),
+    ).toBeNull();
+    const enemyChevron = container.querySelector<HTMLElement>(
+      '[data-battle-challenger-chevron="enemy"]',
+    );
+    expect(enemyChevron?.dataset.battleChallengerChevronDirection).toBe("down");
+    expect(enemyChevron?.querySelector("svg")?.style.transform).toBe(
+      "rotate(180deg)",
+    );
 
     act(() => root.unmount());
   });
@@ -3097,6 +3221,100 @@ describe("MobileBattleScreen", () => {
     expect(
       container.querySelector('[data-testid="battle-debug-fill-grid"]'),
     ).toBeNull();
+
+    act(() => root.unmount());
+  });
+
+  it("tunes challenger chevron geometry, color, and visibility live", () => {
+    const baseView = makeView();
+    const player = {
+      ...baseView.player,
+      frontRank: [
+        {
+          id: "player-front-filled",
+          card: makeCard(24, "player-front-challenger"),
+        },
+      ],
+    };
+    const { container, root } = mount({
+      ...baseView,
+      near: player,
+      player,
+      phase: "dusk",
+    });
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-debug-menu-trigger"]',
+        )
+        ?.click();
+    });
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-debug-challenger-chevron-tweaks"]',
+        )
+        ?.click();
+    });
+
+    const panel = container.querySelector(
+      "[data-battle-challenger-chevron-tweaks]",
+    );
+    const customizedColor = ["#", "123456"].join("");
+    const width = panel?.querySelector<HTMLInputElement>(
+      '[data-challenger-chevron-tweak="widthPercent"]',
+    );
+    expect(panel).not.toBeNull();
+
+    act(() => {
+      if (width !== null && width !== undefined) {
+        Object.getOwnPropertyDescriptor(
+          HTMLInputElement.prototype,
+          "value",
+        )?.set?.call(width, "82");
+        width.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    });
+    act(() => {
+      const color = panel?.querySelector<HTMLInputElement>(
+        'input[aria-label="Chevron color"]',
+      );
+      if (color !== null && color !== undefined) {
+        Object.getOwnPropertyDescriptor(
+          HTMLInputElement.prototype,
+          "value",
+        )?.set?.call(color, customizedColor);
+        color.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    });
+
+    const chevron = container.querySelector<HTMLElement>(
+      '[data-battle-challenger-chevron="player"]',
+    );
+    expect(chevron?.style.width).toBe("82%");
+    expect(
+      chevron?.querySelectorAll("polyline")[1]?.getAttribute("stroke"),
+    ).toBe(customizedColor);
+    expect(
+      panel?.querySelector("[data-battle-challenger-chevron-tweaks-json]")
+        ?.textContent,
+    ).toContain('"widthPercent": 82');
+
+    act(() => {
+      panel
+        ?.querySelector<HTMLInputElement>(
+          'input[aria-label="Display challenger chevrons"]',
+        )
+        ?.click();
+    });
+
+    expect(
+      container.querySelector("[data-battle-challenger-chevron]"),
+    ).toBeNull();
+    expect(
+      container.querySelector("[data-battle-challenger-chevron-tweaks]"),
+    ).not.toBeNull();
 
     act(() => root.unmount());
   });

@@ -63,6 +63,13 @@ import {
   type MobileBattleResultAction,
   type MobileBattleResultView,
 } from "./BattleResultSurface";
+import {
+  ChallengerChevronTweaksPanel,
+} from "./devtools/ChallengerChevronTweaks";
+import {
+  DEFAULT_CHALLENGER_CHEVRON_SETTINGS,
+  type ChallengerChevronSettings,
+} from "./challenger-chevron";
 import battleBackgroundUrl from "../assets/battle-background.png";
 
 /** Canonical visual treatment for an exhausted battlefield card body. */
@@ -1385,11 +1392,74 @@ function inverseLinearTransform(element: HTMLElement | null): LinearTransform {
   };
 }
 
+function ChallengerChevron({
+  owner,
+  settings,
+}: {
+  readonly owner: MobileBattleOwner;
+  readonly settings: ChallengerChevronSettings;
+}) {
+  const outerStrokeWidth = settings.strokeWidth + settings.outlineWidth * 2;
+  return (
+    <div
+      role="img"
+      aria-label={`${owner === "enemy" ? "Opponent" : "Player"} challenger`}
+      data-battle-challenger-chevron={owner}
+      data-battle-challenger-chevron-direction={
+        owner === "enemy" ? "down" : "up"
+      }
+      style={{
+        position: "absolute",
+        zIndex: 7,
+        top: `${String(settings.verticalPositionPercent)}%`,
+        left: `${String(settings.horizontalPositionPercent)}%`,
+        width: `${String(settings.widthPercent)}%`,
+        height: `${String(settings.heightPercent)}%`,
+        opacity: settings.opacity,
+        pointerEvents: "none",
+        transform: "translateX(-50%)",
+      }}
+    >
+      <svg
+        viewBox="0 0 100 50"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        style={{
+          display: "block",
+          width: "100%",
+          height: "100%",
+          overflow: "visible",
+          transform: owner === "enemy" ? "rotate(180deg)" : undefined,
+          transformOrigin: "50% 50%",
+        }}
+      >
+        <polyline
+          points="6,44 50,6 94,44"
+          fill="none"
+          stroke={token("--surface-status-badge")}
+          strokeWidth={outerStrokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <polyline
+          points="6,44 50,6 94,44"
+          fill="none"
+          stroke={settings.color}
+          strokeWidth={settings.strokeWidth}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
 function FaceUpCard({
   card,
   zone,
   showRulesText = false,
   snapLayout = false,
+  challengerChevron,
   selection,
   interaction,
 }: {
@@ -1397,6 +1467,10 @@ function FaceUpCard({
   readonly zone: string;
   readonly showRulesText?: boolean;
   readonly snapLayout?: boolean;
+  readonly challengerChevron?: {
+    readonly owner: MobileBattleOwner;
+    readonly settings: ChallengerChevronSettings;
+  };
   readonly selection?: {
     readonly selected: boolean;
     readonly color: CumulusColor;
@@ -1708,6 +1782,12 @@ function FaceUpCard({
           figmentTitleBar={card.figmentTitleBar}
           testId={`battle-card-face:${card.id}`}
         />
+        {challengerChevron?.settings.enabled === true ? (
+          <ChallengerChevron
+            owner={challengerChevron.owner}
+            settings={challengerChevron.settings}
+          />
+        ) : null}
       </motion.div>
       <BattleCardStatusIndicators card={card} />
     </motion.div>
@@ -1977,6 +2057,8 @@ function Rank({
   onBattlefieldDragChange,
   guidedSlotHighlight,
   preserveOccupiedSlotOutlines,
+  showChallengerChevrons,
+  challengerChevronSettings,
   interactions,
 }: {
   readonly isDesktop: boolean;
@@ -2000,6 +2082,8 @@ function Rank({
   ) => void;
   readonly guidedSlotHighlight?: MobileBattleScreenProps["guidedSlotHighlight"];
   readonly preserveOccupiedSlotOutlines?: boolean;
+  readonly showChallengerChevrons: boolean;
+  readonly challengerChevronSettings: ChallengerChevronSettings;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const canDropOnOwner =
@@ -2180,6 +2264,13 @@ function Rank({
                   card={slot.card}
                   zone={`${owner}-${rank}-rank`}
                   snapLayout={snapLayoutCardId === slot.card.id}
+                  challengerChevron={
+                    showChallengerChevrons &&
+                    rank === "front" &&
+                    slot.card.model.displaySnapshot.cardType === "Character"
+                      ? { owner, settings: challengerChevronSettings }
+                      : undefined
+                  }
                   selection={
                     candidate === null
                       ? interactions?.targetSelectionCardId === slot.card.id ||
@@ -2279,6 +2370,8 @@ function PlayArea({
   onBattlefieldDragChange,
   guidedSlotHighlight,
   preserveOccupiedSlotOutlines,
+  showChallengerChevrons,
+  challengerChevronSettings,
   interactions,
 }: {
   readonly isDesktop: boolean;
@@ -2300,6 +2393,8 @@ function PlayArea({
   ) => void;
   readonly guidedSlotHighlight?: MobileBattleScreenProps["guidedSlotHighlight"];
   readonly preserveOccupiedSlotOutlines?: boolean;
+  readonly showChallengerChevrons: boolean;
+  readonly challengerChevronSettings: ChallengerChevronSettings;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const ranks =
@@ -2344,6 +2439,8 @@ function PlayArea({
           onBattlefieldDragChange={onBattlefieldDragChange}
           guidedSlotHighlight={guidedSlotHighlight}
           preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines}
+          showChallengerChevrons={showChallengerChevrons}
+          challengerChevronSettings={challengerChevronSettings}
           interactions={interactions}
         />
       ))}
@@ -3247,9 +3344,11 @@ function BattleControlMessage({
 function BattleDebugMenu({
   onFillBattlefieldPreview,
   onFillAsymmetricBattlefieldPreview,
+  onOpenChallengerChevronTweaks,
 }: {
   readonly onFillBattlefieldPreview?: () => void;
   readonly onFillAsymmetricBattlefieldPreview?: () => void;
+  readonly onOpenChallengerChevronTweaks?: () => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -3312,6 +3411,17 @@ function BattleDebugMenu({
                   setIsOpen(false);
                 }}
               />
+              {onOpenChallengerChevronTweaks !== undefined ? (
+                <GlassButton
+                  label="Challenger Chevron Tweaks"
+                  placement="onGlass"
+                  testId="battle-debug-challenger-chevron-tweaks"
+                  onPress={() => {
+                    onOpenChallengerChevronTweaks();
+                    setIsOpen(false);
+                  }}
+                />
+              ) : null}
             </div>
           </GlassPanel>
         </div>
@@ -3989,6 +4099,10 @@ export function MobileBattleScreen({
     readonly pickerKey: string | null;
     readonly ids: readonly string[];
   }>({ pickerKey: null, ids: [] });
+  const [challengerChevronSettings, setChallengerChevronSettings] =
+    useState<ChallengerChevronSettings>(DEFAULT_CHALLENGER_CHEVRON_SETTINGS);
+  const [isChallengerChevronTweaksOpen, setIsChallengerChevronTweaksOpen] =
+    useState(false);
   const [selectedSide, setSelectedSide] = useState<MobileBattleOwner>("player");
   const [completedTurnAnnouncement, setCompletedTurnAnnouncement] = useState<{
     readonly battleId: string;
@@ -4050,6 +4164,10 @@ export function MobileBattleScreen({
       completedTurnAnnouncement.turn === view.inspector.turn &&
       completedTurnAnnouncement.side === view.activeSide);
   const visibleDreamwell = turnAnnouncementComplete ? view.dreamwell : null;
+  const activeSideHasChallengers =
+    view.phase === "dusk" ||
+    view.phase === "night" ||
+    view.phase === "challenge";
   const handleTurnAnnouncementComplete = useCallback(
     (side: MobileBattleOwner): void => {
       setCompletedTurnAnnouncement({
@@ -4281,6 +4399,10 @@ export function MobileBattleScreen({
           onBattlefieldDragChange={handleCardDragChange}
           guidedSlotHighlight={guidedSlotHighlight}
           preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines}
+          showChallengerChevrons={
+            activeSideHasChallengers && far.owner === view.activeSide
+          }
+          challengerChevronSettings={challengerChevronSettings}
           interactions={interactions}
         />
         <PlayArea
@@ -4300,6 +4422,10 @@ export function MobileBattleScreen({
           onBattlefieldDragChange={handleCardDragChange}
           guidedSlotHighlight={guidedSlotHighlight}
           preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines}
+          showChallengerChevrons={
+            activeSideHasChallengers && near.owner === view.activeSide
+          }
+          challengerChevronSettings={challengerChevronSettings}
           interactions={interactions}
         />
         <ControlRow
@@ -4399,6 +4525,11 @@ export function MobileBattleScreen({
             onFillAsymmetricBattlefieldPreview={
               interactions?.onFillAsymmetricBattlefieldPreview
             }
+            onOpenChallengerChevronTweaks={
+              import.meta.env.DEV
+                ? () => setIsChallengerChevronTweaksOpen(true)
+                : undefined
+            }
           />
           <div
             ref={(node) => {
@@ -4432,6 +4563,25 @@ export function MobileBattleScreen({
           </div>
         </div>
       ) : null}
+      {import.meta.env.DEV && inspectorVisibility === "hidden" ? (
+        <div
+          data-battle-challenger-chevron-tweaks-trigger=""
+          style={{
+            position: "absolute",
+            top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
+            right: `calc(var(${SAFE_AREA_INSET_PROPERTIES.right}) + ${token("--space-4")})`,
+            zIndex: 20,
+          }}
+        >
+          <IconButton
+            glyph={GLYPHS.gear}
+            size="sm"
+            label="Open challenger chevron tweaks"
+            testId="battle-challenger-chevron-tweaks-trigger"
+            onPress={() => setIsChallengerChevronTweaksOpen(true)}
+          />
+        </div>
+      ) : null}
       {galleryCardPicker !== null ? (
         <CardPickerGallery
           cardPicker={galleryCardPicker}
@@ -4440,6 +4590,13 @@ export function MobileBattleScreen({
           onPickerCardToggle={handlePickerCardToggle}
           interactions={interactions}
           perspective={view.perspective}
+        />
+      ) : null}
+      {import.meta.env.DEV && isChallengerChevronTweaksOpen ? (
+        <ChallengerChevronTweaksPanel
+          settings={challengerChevronSettings}
+          onChange={setChallengerChevronSettings}
+          onClose={() => setIsChallengerChevronTweaksOpen(false)}
         />
       ) : null}
     </main>

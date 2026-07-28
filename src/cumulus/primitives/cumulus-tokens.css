@@ -121,6 +121,7 @@
   --primitive-sap-400: #22c55e;     /* grant / player green (parent --dt-player) */
   --primitive-coral-400: #fb7185;   /* sale tag */
   --primitive-rust-500: #b9622f;    /* tide / earthy affiliation */
+  --primitive-orange-400: #f09837;  /* challenger chevron */
   --primitive-orange-500: #f97316;  /* default selection ring — production SELECTION_DEFAULT_COLOR */
 
   /* ---- Color: text on dark ---- */
@@ -187,6 +188,7 @@
   --surface-chrome: #191423;   /* solid raised chrome (HUD/popovers/windows) */
   --surface-chrome-strong: #120e1c;  /* solid, deeper chrome for windows */
   --surface-status-badge: var(--primitive-line-black); /* high-contrast in-card status mark */
+  --battle-challenger-chevron: var(--primitive-orange-400);
   --surface-placeholder: var(--primitive-neutral-500); /* content reserved for imminent media */
   --surface-portrait: var(--primitive-neutral-300); /* light neutral field behind framed character art */
 

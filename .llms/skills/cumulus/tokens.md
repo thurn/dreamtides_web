@@ -257,6 +257,7 @@ Re-exports under the production codebase's --dt-* and --color-* token names. Gam
 | Token | Value | Notes |
 | --- | --- | --- |
 | `--tutorial-dissolve-fragment` | `var(--primitive-line-black)` | true-black card fragments during the tutorial dissolve |
+| `--battle-challenger-chevron` | `var(--primitive-orange-400)` |  |
 | `--atlas-map-background` | `radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612)` |  |
 | `--atlas-edge-dim` | `rgba(206, 192, 236, 0.92)` |  |
 | `--atlas-edge-locked` | `rgba(182, 154, 248, 0.9)` |  |
