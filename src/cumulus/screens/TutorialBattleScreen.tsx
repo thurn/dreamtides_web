@@ -32,6 +32,11 @@ export interface TutorialBattleView {
   readonly manualControls: boolean;
   readonly foresee: BattleForeseeView | null;
   /**
+   * Event-log presentation checkpoint released by this screen. It remains
+   * available when optional display data cannot be projected.
+   */
+  readonly presentationId: string | null;
+  /**
    * A persisted, event-log-owned dwell checkpoint. The materialized source
    * stays in its battlefield or Dreamwell position while it is active.
    */
@@ -108,15 +113,20 @@ export function TutorialBattleScreen({
       ? guidance
       : null;
   const presentationVisible =
-    view.presentation !== null &&
-    (view.presentation.kind !== "dreamwell-reveal" ||
+    view.presentationId !== null &&
+    (view.presentation?.kind !== "dreamwell-reveal" ||
       completedTurnAnnouncementKey === turnAnnouncementKey);
 
   useEffect(() => {
-    if (view.presentation === null || !presentationVisible) return;
-    if (view.presentation.kind === "opponent-play") return;
-    onPresentationVisible(view.presentation.presentationId);
-  }, [onPresentationVisible, presentationVisible, view.presentation]);
+    if (view.presentationId === null || !presentationVisible) return;
+    if (view.presentation?.kind === "opponent-play") return;
+    onPresentationVisible(view.presentationId);
+  }, [
+    onPresentationVisible,
+    presentationVisible,
+    view.presentation,
+    view.presentationId,
+  ]);
 
   return (
     <div

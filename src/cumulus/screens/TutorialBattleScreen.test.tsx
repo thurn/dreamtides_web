@@ -57,7 +57,7 @@ class ResizeObserverStub {
 function view(
   overrides: Partial<TutorialBattleView> = {},
 ): TutorialBattleView {
-  return {
+  const result: TutorialBattleView = {
     battle: {
       battleId: "tutorial-battle",
       inspector: { turn: "2" },
@@ -67,10 +67,18 @@ function view(
     driverClientId: "driver-client",
     manualControls: false,
     foresee: null,
+    presentationId: null,
     presentation: null,
     victorySummary: null,
     terminalRestartAvailable: false,
     ...overrides,
+  };
+  return {
+    ...result,
+    presentationId:
+      overrides.presentationId ??
+      overrides.presentation?.presentationId ??
+      result.presentationId,
   };
 }
 
@@ -325,6 +333,25 @@ describe("TutorialBattleScreen", () => {
       act(() => root.unmount());
     },
   );
+
+  it("releases a presentation whose optional render payload is unavailable", () => {
+    const onPresentationVisible = vi.fn();
+    const { root } = mount(
+      view({
+        presentationId: "opponent-play:missing-card",
+        presentation: null,
+      }),
+      null,
+      vi.fn(),
+      onPresentationVisible,
+    );
+
+    expect(onPresentationVisible).toHaveBeenCalledWith(
+      "opponent-play:missing-card",
+    );
+
+    act(() => root.unmount());
+  });
 
   it("reports a Dreamwell reveal as visible only after the turn announcement", () => {
     const onPresentationVisible = vi.fn();

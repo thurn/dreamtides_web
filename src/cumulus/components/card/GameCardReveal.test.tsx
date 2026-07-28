@@ -726,6 +726,40 @@ describe("GameCard reveal contract", () => {
     act(() => root.unmount());
   });
 
+  it("carries the figment frame and title bar onto the reading copy", async () => {
+    const { container, root } = mount(
+      <GameCard model={model()} figment figmentTitleBar />,
+    );
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    act(() => {
+      source?.dispatchEvent(
+        pointer("pointerover", { pointerType: "mouse", pointerId: 1 }),
+      );
+    });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+    remeasure();
+    await vi.waitFor(() =>
+      expect(
+        document.querySelector('[data-cumulus-reveal-card="primary"]'),
+      ).not.toBeNull(),
+    );
+    expect(
+      document.querySelector(
+        '[data-cumulus-reveal-card="primary"] .card-view[data-figment="true"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      document.querySelector(
+        '[data-cumulus-reveal-card="primary"] [data-testid="figment-title-bar"]',
+      ),
+    ).not.toBeNull();
+    act(() => root.unmount());
+  });
+
   it("keeps informative unavailable cards focusable while suppressing activation", async () => {
     const activate = vi.fn();
     const { container, root } = mount(<GameCard model={model()} unavailable onActivate={activate} />);

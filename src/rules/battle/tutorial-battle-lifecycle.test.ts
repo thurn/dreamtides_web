@@ -716,7 +716,6 @@ describe("tutorial battle lifecycle", () => {
       characterDestination: {
         side: "enemy",
         zone: "backRank",
-        slotId: "B4",
       },
       aiChoices: [
         {

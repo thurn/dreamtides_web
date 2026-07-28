@@ -90,6 +90,7 @@ describe("buildTutorialBattleView", () => {
     );
 
     expect(view.presentation).toBeNull();
+    expect(view.presentationId).toBeNull();
   });
 
   it("presents the committed opponent card before exposing its battlefield slot", () => {
@@ -253,6 +254,60 @@ describe("buildTutorialBattleView", () => {
       cardKind: "event",
       card: { id: battleCardId },
     });
+  });
+
+  it("preserves the automation checkpoint when opponent card display data is missing", () => {
+    vi.mocked(buildMobileBattleView).mockReturnValue({
+      perspective: "player",
+      player,
+      enemy,
+      near: player,
+      far: enemy,
+    } as MobileBattleView);
+    const presentationId = "opponent-play:missing-instance";
+
+    const view = buildTutorialBattleView(
+      {
+        init: {
+          enemyDescriptor: {
+            id: "enemy-avatar-uuid",
+            imageNumber: "0025",
+            name: "Enemy",
+            subtitle: "Opponent",
+            abilityText: "Enemy printed ability.",
+          },
+          dreamwellDeck: [],
+        },
+        board: {
+          result: null,
+          sides: {
+            player: { backRank: {}, frontRank: {}, void: [] },
+            enemy: { backRank: {}, frontRank: {}, void: [] },
+          },
+          cardInstances: {},
+        },
+        effectQueue: [],
+        dawnFired: { player: null, enemy: null },
+        pendingPrompt: null,
+        tutorialPresentation: {
+          id: presentationId,
+          kind: "opponent-play",
+          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          battleCardId: "missing-instance",
+          cardKind: "character",
+        },
+      } as unknown as BattleFoldState,
+      {
+        status: "driver",
+        isCurrentClientDriver: true,
+        requiresHumanDecision: false,
+        driverClientId: "driver-client",
+      } as TutorialBattleControllerPlan,
+      null,
+    );
+
+    expect(view.presentation).toBeNull();
+    expect(view.presentationId).toBe(presentationId);
   });
 
   it.each(["opponent-block", "challenge-resolved"] as const)(

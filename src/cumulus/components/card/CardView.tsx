@@ -1597,6 +1597,7 @@ export function GameCard({
           ? {}
           : { transfiguration: model.transfiguration }),
         ...(selected ? { selected: true, selectionColor } : {}),
+        ...(figment ? { figment: true, figmentTitleBar } : {}),
       },
       secondaries: [
         ...statusCards,

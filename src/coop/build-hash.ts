@@ -1,5 +1,5 @@
 /**
- * The git HEAD short hash of the build, injected at build time by the
+ * The source-and-runtime-content identity injected at build time by the
  * `__BUILD_HASH__` Vite `define` (see vite.config.ts). Declared here so
  * TypeScript knows the global exists in application code.
  */

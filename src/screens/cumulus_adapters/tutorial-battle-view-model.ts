@@ -149,6 +149,10 @@ export function buildTutorialBattleView(
             }),
           }
         : null,
+    presentationId:
+      presentation === null || presentation.kind === "tutorial-guidance"
+        ? null
+        : presentation.id,
     presentation: tutorialPresentationView(presentation, battle),
     victorySummary:
       battle.board.result === "victory" && controller.status === "terminal" && controller.isCurrentClientDriver && controller.isDriverPresent

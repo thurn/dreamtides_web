@@ -1,7 +1,7 @@
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-import { execFileSync, execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -27,10 +27,11 @@ import { createTutorialEditorApiMiddleware } from "./scripts/tutorial-editor-api
 import { createGlossaryEditorApiMiddleware } from "./scripts/glossary-editor-api.mjs";
 import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs";
 import { regenerateCardData } from "./scripts/setup-assets.mjs";
+import { resolveBuildHash } from "./scripts/build-hash.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const buildGitSha = resolveBuildGitSha();
-const buildHash = resolveBuildHash();
+const buildHash = resolveBuildHash(__dirname);
 const imageViewerStatePath = path.join(
   __dirname,
   "data",
@@ -51,25 +52,6 @@ function resolveBuildGitSha(): string {
     }).trim();
   } catch {
     return "unknown";
-  }
-}
-
-/**
- * Resolves the git HEAD short hash used as the coop reducer version. Injected
- * as the `__BUILD_HASH__` global so `getBuildHash()` (src/coop/build-hash.ts)
- * can pin a room to the build that created it. Falls back to `"dev"` when git
- * is unavailable at config-load time.
- */
-function resolveBuildHash(): string {
-  try {
-    return execSync("git rev-parse --short HEAD", {
-      cwd: __dirname,
-      stdio: ["ignore", "pipe", "ignore"],
-    })
-      .toString()
-      .trim();
-  } catch {
-    return "dev";
   }
 }
 
