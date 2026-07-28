@@ -1,6 +1,6 @@
 # Boss Dream Avatars
 
-The final boss of every dream quest is **Apollyon, the Doom of Humanity**,
+The final boss of every dream journey is **Apollyon, the Doom of Humanity**,
 encountered in [Limbo](quests.md) at the 7th battle. Apollyon is always the same
 named character, but it manifests in many different **forms** — each form plays a
 different deck and takes on its own unique dream avatar ability that defines its

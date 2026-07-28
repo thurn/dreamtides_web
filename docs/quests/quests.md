@@ -98,7 +98,7 @@ non-enhanced, in the random fill of other dreamscapes.
 
 ### Firstlight Meadow
 
-The starting dreamscape of every dream quest. Firstlight Meadow has no Dream
+The starting dreamscape of every dream journey. Firstlight Meadow has no Dream
 Guide and no affiliation, and its sites are fixed, giving every run an identical,
 uniform on-ramp. Its sites are two [Draft](#draft) sites, a [Dreamsign
 Revelation](#dreamsign-revelation) offering a choice of 3 dreamsigns, a
@@ -190,7 +190,7 @@ sites appear and no site is enhanced.
 
 ### Limbo
 
-The final dreamscape of every dream quest, always occupying Layer 7. Limbo has
+The final dreamscape of every dream journey, always occupying Layer 7. Limbo has
 no Dream Guide and no affiliation. Instead it is home to **Apollyon, the Doom of
 Humanity**, the final boss of Dreamtides. Apollyon appears in many different
 forms — each form plays a different deck and takes on its own unique abilities

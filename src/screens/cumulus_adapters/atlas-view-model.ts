@@ -327,7 +327,7 @@ export function buildAtlasMapEdges(
 const UNSEEN_DREAM_BODY =
   "This dreamscape is revealed only as you draw near. Travel onward to learn what waits here.";
 /** The body shown for the starting dreamscape (a revealed dreamscape with no guide). */
-const STARTER_BODY = "A quiet place where every dream quest begins.";
+const STARTER_BODY = "A quiet place where every dream journey begins.";
 
 /** Resolves a node's pre-revealed known-dreamsign card, or null when it has none. */
 function buildDreamsignCard(
