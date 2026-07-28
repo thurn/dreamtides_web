@@ -12,7 +12,7 @@ import {
 } from "./temporal-fork-view-model";
 
 export function TemporalForkSiteScreenAdapter({ siteId }: { siteId: string }) {
-  const { state, journeyContent } = useJourney();
+  const { state, journeyContent, mutations } = useJourney();
   const node =
     state.currentDreamscape === null
       ? null
@@ -80,6 +80,23 @@ export function TemporalForkSiteScreenAdapter({ siteId }: { siteId: string }) {
     });
   }, [card, site]);
 
+  const handleExit = useCallback(() => {
+    if (site === null || card === null) return;
+    logEvent("temporal_fork_left", {
+      siteId: site.id,
+      cardId: card.id,
+      highResolutionImageNumber: card.imageNumber,
+      isEnhanced: site.isEnhanced,
+    });
+    mutations.completeSite(site.id, "temporal_fork_left");
+  }, [card, mutations, site]);
+
   if (site === null || view === null) return null;
-  return <TemporalForkSiteScreen view={view} onChannel={handleChannel} />;
+  return (
+    <TemporalForkSiteScreen
+      view={view}
+      onChannel={handleChannel}
+      onExit={handleExit}
+    />
+  );
 }

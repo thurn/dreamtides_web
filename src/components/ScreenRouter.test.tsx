@@ -920,5 +920,26 @@ describe("ScreenRouter site-dispatch completeness", () => {
       cardId: selectedCard.id,
       highResolutionImageNumber: selectedCard.imageNumber,
     });
+
+    const exitButton = container.querySelector(
+      '[data-testid="cumulus-temporal-fork-exit"]',
+    );
+    if (!(exitButton instanceof HTMLButtonElement)) {
+      throw new Error("expected a Leave Temporal Fork button");
+    }
+    act(() => {
+      exitButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(mutations.completeSite).toHaveBeenCalledWith(
+      site.id,
+      "temporal_fork_left",
+    );
+    expect(
+      getLogEntries().find((entry) => entry.event === "temporal_fork_left"),
+    ).toMatchObject({
+      siteId: site.id,
+      cardId: selectedCard.id,
+      highResolutionImageNumber: selectedCard.imageNumber,
+    });
   });
 });

@@ -17,16 +17,24 @@ import {
 } from "../components/card/card-aspect";
 import { CardBack } from "../components/battle/CardBack";
 import { GlassButton } from "../components/controls/GlassButton";
+import { IconButton } from "../components/controls/IconButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
+import { GLYPHS } from "../primitives/glyph";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
+import {
+  MENU_BUTTON_PX,
+  MENU_EDGE_INSET_DESKTOP_PX,
+  MENU_EDGE_INSET_MOBILE_PX,
+} from "./chrome-geometry";
 import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
+import { useIsDesktop } from "./use-is-desktop";
 
 export interface TemporalForkSiteView {
   /** Stable site id exposed to QA and logging. */
@@ -48,6 +56,8 @@ export interface TemporalForkSiteScreenProps {
   view: TemporalForkSiteView;
   /** Record the start of this client's frame-break presentation. */
   onChannel: () => void;
+  /** Complete the site after the card has returned to the journey deck. */
+  onExit: () => void;
 }
 
 interface RectSnapshot {
@@ -69,7 +79,13 @@ interface FrameBreakGeometry {
   readonly viewport: RectSnapshot;
 }
 
-type FrameBreakPhase = "idle" | "fracturing" | "open" | "collapsing";
+type FrameBreakPhase =
+  | "idle"
+  | "fracturing"
+  | "open"
+  | "collapsing"
+  | "returning";
+type CollapseIntent = "preview" | "exit";
 
 const DESKTOP_PANEL_HEIGHT = 580;
 const DESKTOP_PANEL_MAX_WIDTH = 620;
@@ -90,6 +106,7 @@ const CARD_PREVIEW_CONTENT_FRACTION = 259 / 280;
 // Sits above all screen-owned content (≤20) and below the journey status bar
 // (40/41) and utility menu (60).
 const FRAME_BREAK_LAYER = 39;
+const FRAME_BREAK_EXIT_LAYER = 61;
 const DREAM_EASE = [0.22, 0.61, 0.36, 1] as const;
 
 function snapshotRect(rect: DOMRect): RectSnapshot {
@@ -222,15 +239,22 @@ function useCardTrajectory(
 export function TemporalForkSiteScreen({
   view,
   onChannel,
+  onExit,
 }: TemporalForkSiteScreenProps) {
   const reduceMotion = useReducedMotion() === true;
+  const isDesktop = useIsDesktop();
   const cardTargetRef = useRef<HTMLDivElement>(null);
+  const exitCompletedRef = useRef(false);
   const [revealed, setRevealed] = useState(reduceMotion);
   const [frameBreakGeometry, setFrameBreakGeometry] =
     useState<FrameBreakGeometry | null>(null);
   const [frameBreakActive, setFrameBreakActive] = useState(false);
   const [frameBreakPhase, setFrameBreakPhase] =
     useState<FrameBreakPhase>("idle");
+  const [collapseIntent, setCollapseIntent] =
+    useState<CollapseIntent>("preview");
+  const [returnTrajectory, setReturnTrajectory] =
+    useState<CardTrajectory | null>(null);
   const fullArtUrl = resolveArtRef(view.fullArt);
   const trajectory = useCardTrajectory(
     cardTargetRef,
@@ -256,9 +280,10 @@ export function TemporalForkSiteScreen({
   }, [frameBreakGeometry]);
 
   useEffect(() => {
-    if (frameBreakGeometry === null) return;
+    if (frameBreakGeometry === null || frameBreakPhase !== "open") return;
     const onKeyDown = (event: KeyboardEvent): void => {
       if (event.key !== "Escape") return;
+      setCollapseIntent("preview");
       setFrameBreakActive(false);
       if (reduceMotion) {
         setFrameBreakGeometry(null);
@@ -269,22 +294,43 @@ export function TemporalForkSiteScreen({
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [frameBreakGeometry, reduceMotion]);
+  }, [frameBreakGeometry, frameBreakPhase, reduceMotion]);
 
   const startFrameBreak = (): void => {
     const geometry = measureFrameBreak(cardTargetRef.current);
     if (geometry === null) return;
     setFrameBreakGeometry(geometry);
+    setCollapseIntent("preview");
     setFrameBreakActive(true);
     setFrameBreakPhase(reduceMotion ? "open" : "fracturing");
     onChannel();
   };
 
   const collapseFrameBreak = (): void => {
+    setCollapseIntent("preview");
     setFrameBreakActive(false);
     if (reduceMotion) {
       setFrameBreakGeometry(null);
       setFrameBreakPhase("idle");
+    } else {
+      setFrameBreakPhase("collapsing");
+    }
+  };
+
+  const completeExit = (): void => {
+    if (exitCompletedRef.current) return;
+    exitCompletedRef.current = true;
+    onExit();
+  };
+
+  const exitTemporalFork = (): void => {
+    setCollapseIntent("exit");
+    setFrameBreakActive(false);
+    if (reduceMotion) {
+      setRevealed(false);
+      setFrameBreakGeometry(null);
+      setFrameBreakPhase("returning");
+      completeExit();
     } else {
       setFrameBreakPhase("collapsing");
     }
@@ -295,9 +341,25 @@ export function TemporalForkSiteScreen({
       setFrameBreakPhase("open");
       return;
     }
+    if (collapseIntent === "exit" && frameBreakGeometry !== null) {
+      const destination = sourceRectFor(frameBreakGeometry.frame);
+      setReturnTrajectory({
+        source: destination.rect,
+        target: frameBreakGeometry.frame,
+        sourceKind: destination.kind,
+      });
+      setRevealed(false);
+      setFrameBreakGeometry(null);
+      setFrameBreakPhase("returning");
+      return;
+    }
     setFrameBreakGeometry(null);
     setFrameBreakPhase("idle");
   };
+
+  const exitEdgeInset = isDesktop
+    ? MENU_EDGE_INSET_DESKTOP_PX
+    : MENU_EDGE_INSET_MOBILE_PX;
 
   return (
     <GuideGallerySiteLayout
@@ -433,7 +495,10 @@ export function TemporalForkSiteScreen({
         </section>
       )}
     >
-      {!reduceMotion && !revealed && trajectory !== null && (
+      {!reduceMotion &&
+        !revealed &&
+        returnTrajectory === null &&
+        trajectory !== null && (
         <motion.div
           data-temporal-fork-card-travel=""
           data-card-id={view.card.cardId}
@@ -488,6 +553,75 @@ export function TemporalForkSiteScreen({
               }}
             >
               <CardBack label="Temporal Fork card, face down" />
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                transform: "rotateY(180deg)",
+                backfaceVisibility: "hidden",
+              }}
+            >
+              <GameCard model={view.card} />
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+      {!reduceMotion && returnTrajectory !== null && (
+        <motion.div
+          data-temporal-fork-card-return=""
+          data-card-id={view.card.cardId}
+          data-temporal-fork-destination={returnTrajectory.sourceKind}
+          initial={{
+            x: returnTrajectory.target.left,
+            y: returnTrajectory.target.top,
+            width: returnTrajectory.target.width,
+            height: returnTrajectory.target.height,
+          }}
+          animate={{
+            x: returnTrajectory.source.left,
+            y: returnTrajectory.source.top,
+            width: returnTrajectory.source.width,
+            height: returnTrajectory.source.height,
+          }}
+          transition={{
+            duration: TRAVEL_SECONDS,
+            ease: DREAM_EASE,
+          }}
+          onAnimationComplete={completeExit}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            zIndex: token("--layer-reveal"),
+            pointerEvents: "none",
+            perspective: 1200,
+          }}
+        >
+          <motion.div
+            data-temporal-fork-card-return-flip=""
+            initial={{ rotateY: 180 }}
+            animate={{ rotateY: 360 }}
+            transition={{
+              delay: FLIP_DELAY_SECONDS,
+              duration: FLIP_SECONDS,
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "relative",
+              width: "100%",
+              height: "100%",
+              transformStyle: "preserve-3d",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                backfaceVisibility: "hidden",
+              }}
+            >
+              <CardBack label="Temporal Fork card returning face down" />
             </div>
             <div
               style={{
@@ -591,7 +725,9 @@ export function TemporalForkSiteScreen({
             aria-label="Return to Temporal Fork"
             pressFeedback="stationary"
             hoverFeedback="stationary"
-            onClick={collapseFrameBreak}
+            onClick={
+              frameBreakPhase === "open" ? collapseFrameBreak : undefined
+            }
             style={{
               position: "absolute",
               inset: 0,
@@ -650,6 +786,32 @@ export function TemporalForkSiteScreen({
               }}
             />
           </Pressable>
+        </motion.div>
+      )}
+      {frameBreakGeometry !== null && frameBreakPhase === "open" && (
+        <motion.div
+          data-temporal-fork-exit-control=""
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+            ease: DREAM_EASE,
+          }}
+          style={{
+            position: "fixed",
+            top: `max(var(--safe-area-inset-top), ${String(exitEdgeInset)}px)`,
+            right: isDesktop
+              ? `calc(max(var(--safe-area-inset-right), ${String(exitEdgeInset)}px) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`
+              : `max(var(--safe-area-inset-right), ${String(exitEdgeInset)}px)`,
+            zIndex: FRAME_BREAK_EXIT_LAYER,
+          }}
+        >
+          <IconButton
+            glyph={GLYPHS.close}
+            label="Leave Temporal Fork"
+            onPress={exitTemporalFork}
+            testId="cumulus-temporal-fork-exit"
+          />
         </motion.div>
       )}
     </GuideGallerySiteLayout>

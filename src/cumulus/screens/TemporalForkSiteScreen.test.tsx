@@ -33,12 +33,16 @@ vi.mock("framer-motion", async () => {
       exit: _exit,
       transition: _transition,
       layout: _layout,
-      onAnimationComplete: _onAnimationComplete,
+      onAnimationComplete,
       ...props
     },
     ref,
   ) {
-    return React.createElement("div", { ...props, ref });
+    return React.createElement("div", {
+      ...props,
+      ref,
+      onContextMenu: onAnimationComplete,
+    });
   });
   return {
     motion: {
@@ -150,8 +154,13 @@ describe("TemporalForkSiteScreen", () => {
       },
     );
     const onChannel = vi.fn();
+    const onExit = vi.fn();
     const { container, root } = mount(
-      <TemporalForkSiteScreen view={view()} onChannel={onChannel} />,
+      <TemporalForkSiteScreen
+        view={view()}
+        onChannel={onChannel}
+        onExit={onExit}
+      />,
     );
 
     const cardSlot = container.querySelector<HTMLElement>(
@@ -189,6 +198,9 @@ describe("TemporalForkSiteScreen", () => {
       container.querySelector('[data-testid="cumulus-temporal-fork-channel"]'),
     ).toBeNull();
     expect(
+      container.querySelector('[data-testid="cumulus-temporal-fork-exit"]'),
+    ).not.toBeNull();
+    expect(
       container.querySelector("[data-journey-status-bar-anchor]"),
     ).toBeNull();
 
@@ -196,12 +208,100 @@ describe("TemporalForkSiteScreen", () => {
       'button[aria-label="Return to Temporal Fork"]',
     );
     act(() => returnButton?.click());
+    expect(onExit).not.toHaveBeenCalled();
     expect(
       container.querySelector("[data-temporal-fork-frame-break]"),
     ).toBeNull();
     expect(
       container.querySelector('[data-testid="cumulus-temporal-fork-channel"]'),
     ).not.toBeNull();
+    act(() => root.unmount());
+  });
+
+  it("collapses the art and returns the card to the deck before leaving", () => {
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function getBoundingClientRect(this: HTMLElement) {
+        if (this.hasAttribute("data-temporal-fork-card-slot")) {
+          return new DOMRect(900, 180, 240, 336);
+        }
+        if (this instanceof HTMLImageElement && this.alt !== "") {
+          return new DOMRect(780, 150, 480, 291);
+        }
+        return new DOMRect(0, 0, 100, 100);
+      },
+    );
+    const deckTarget = document.createElement("button");
+    deckTarget.dataset.journeyDeckTarget = "";
+    deckTarget.getBoundingClientRect = () => new DOMRect(1210, 720, 50, 70);
+    document.body.append(deckTarget);
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <TemporalForkSiteScreen
+        view={view()}
+        onChannel={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    act(() => {
+      container
+        .querySelector("[data-temporal-fork-card-travel]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-temporal-fork-channel"]',
+        )
+        ?.click(),
+    );
+    act(() => {
+      container
+        .querySelector("[data-temporal-fork-frame-break]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+    const exitButton = container.querySelector<HTMLButtonElement>(
+      '[data-testid="cumulus-temporal-fork-exit"]',
+    );
+    expect(exitButton?.getAttribute("aria-label")).toBe("Leave Temporal Fork");
+
+    act(() => exitButton?.click());
+    expect(onExit).not.toHaveBeenCalled();
+    expect(
+      container
+        .querySelector("[data-temporal-fork-frame-break]")
+        ?.getAttribute("data-temporal-fork-frame-break-phase"),
+    ).toBe("collapsing");
+
+    act(() => {
+      container
+        .querySelector("[data-temporal-fork-frame-break]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+    expect(
+      container.querySelector("[data-temporal-fork-frame-break]"),
+    ).toBeNull();
+    const cardReturn = container.querySelector(
+      "[data-temporal-fork-card-return]",
+    );
+    expect(cardReturn?.getAttribute("data-temporal-fork-destination")).toBe(
+      "journey-deck",
+    );
+    expect(
+      cardReturn?.querySelector('[data-card-back=""]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="cumulus-temporal-fork-channel"]'),
+    ).toBeNull();
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      cardReturn?.dispatchEvent(
+        new MouseEvent("contextmenu", { bubbles: true }),
+      );
+    });
+    expect(onExit).toHaveBeenCalledOnce();
     act(() => root.unmount());
   });
 
@@ -221,7 +321,11 @@ describe("TemporalForkSiteScreen", () => {
     document.body.append(deckTarget);
 
     const { container, root } = mount(
-      <TemporalForkSiteScreen view={view()} onChannel={vi.fn()} />,
+      <TemporalForkSiteScreen
+        view={view()}
+        onChannel={vi.fn()}
+        onExit={vi.fn()}
+      />,
     );
 
     const travel = container.querySelector("[data-temporal-fork-card-travel]");
