@@ -6,8 +6,6 @@ import { GlassButton } from "../components/controls/GlassButton";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { TransientStatusToast } from "../components/status/TransientStatusToast";
-import { GlowIcon } from "../components/controls/GlowIcon";
-import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import {
@@ -127,6 +125,17 @@ export function TutorialBattleScreen({
     view.presentationId !== null &&
     (view.presentation?.kind !== "dreamwell-reveal" ||
       completedTurnAnnouncementKey === turnAnnouncementKey);
+  const challengeCardOverlay =
+    view.presentation?.kind === "challenge-resolved" &&
+    !view.presentation.paired &&
+    view.presentation.scored !== null
+      ? {
+          kind: "points-scored" as const,
+          presentationId: view.presentation.presentationId,
+          battleCardId: view.presentation.scored.battleCardId,
+          points: view.presentation.scored.points,
+        }
+      : null;
 
   useEffect(() => {
     if (view.presentationId === null || !presentationVisible) return;
@@ -157,6 +166,7 @@ export function TutorialBattleScreen({
         <MobileBattleScreen
           view={view.battle}
           interactions={interactions}
+          cardOverlay={challengeCardOverlay}
           cardLayoutGroup="inherited"
           inspectorDefault="collapsed"
           inspectorVisibility="hidden"
@@ -173,9 +183,14 @@ export function TutorialBattleScreen({
         ) : null}
       </LayoutGroup>
       {view.presentation?.kind === "challenge-resolved" &&
+      view.presentation.paired &&
       presentationVisible ? (
-        <TutorialChallengeResolutionAnimation
-          presentation={view.presentation}
+        <div
+          aria-hidden="true"
+          data-tutorial-challenge-animation="paired"
+          data-tutorial-challenge-presentation-id={
+            view.presentation.presentationId
+          }
         />
       ) : null}
       {paused ? (
@@ -230,125 +245,6 @@ export function TutorialBattleScreen({
         onDismiss={onGuidanceContinue}
         onDurationComplete={onGuidanceDurationComplete}
       />
-    </div>
-  );
-}
-
-const TUTORIAL_CHALLENGE_BUBBLE_SIZE = "min(42vw, 184px)";
-const TUTORIAL_CHALLENGE_ANIMATION_SECONDS =
-  motionTimeSeconds("--dur-slow") * 4;
-
-function TutorialChallengeResolutionAnimation({
-  presentation,
-}: {
-  readonly presentation: Extract<
-    NonNullable<TutorialBattleView["presentation"]>,
-    { readonly kind: "challenge-resolved" }
-  >;
-}): ReactElement {
-  const reduceMotion = useReducedMotion();
-  if (presentation.paired || presentation.scored === null) {
-    return (
-      <div
-        aria-hidden="true"
-        data-tutorial-challenge-animation="paired"
-        data-tutorial-challenge-presentation-id={presentation.presentationId}
-      />
-    );
-  }
-
-  const { scored } = presentation;
-  const duration = reduceMotion ? 0 : TUTORIAL_CHALLENGE_ANIMATION_SECONDS;
-  return (
-    <div
-      role="status"
-      aria-live="polite"
-      aria-label={`${String(scored.points)} points`}
-      data-tutorial-challenge-animation="points"
-      data-tutorial-challenge-presentation-id={presentation.presentationId}
-      data-tutorial-challenge-scoring-side={scored.side}
-      data-tutorial-challenge-scoring-card-id={scored.battleCardId}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: token("--layer-reveal"),
-        display: "grid",
-        placeItems: "center",
-        pointerEvents: "none",
-      }}
-    >
-      <motion.div
-        data-tutorial-challenge-points-bubble=""
-        initial={
-          reduceMotion
-            ? false
-            : { opacity: 0, scale: 0.48, rotate: -12 }
-        }
-        animate={
-          reduceMotion
-            ? { opacity: 1, scale: 1, rotate: 0 }
-            : {
-                opacity: [0, 1, 1, 0],
-                scale: [0.48, 1.08, 1, 0.86],
-                rotate: [-12, 3, 0, 0],
-              }
-        }
-        transition={{
-          duration,
-          times: reduceMotion ? undefined : [0, 0.18, 0.72, 1],
-          ease: "easeInOut",
-        }}
-        style={{
-          position: "relative",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: token("--space-2"),
-          width: TUTORIAL_CHALLENGE_BUBBLE_SIZE,
-          height: TUTORIAL_CHALLENGE_BUBBLE_SIZE,
-          borderRadius: token("--radius-pill"),
-          background: `radial-gradient(circle at 38% 28%, ${token("--surface-raised")} 0%, ${token("--surface-card")} 56%, ${token("--bg-sunken")} 100%)`,
-          boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
-          color: token("--text-primary"),
-          font: token("--t-display"),
-          textShadow: token("--text-outline-media"),
-        }}
-      >
-        <motion.span
-          aria-hidden="true"
-          data-tutorial-challenge-points-orbit=""
-          animate={
-            reduceMotion
-              ? { opacity: 0.42, scale: 1, rotate: 0 }
-              : {
-                  opacity: [0, 0.88, 0.42, 0],
-                  scale: [0.64, 1, 1, 1.24],
-                  rotate: [-70, 0, 140, 250],
-                }
-          }
-          transition={{
-            duration,
-            times: reduceMotion ? undefined : [0, 0.24, 0.74, 1],
-            ease: "easeInOut",
-          }}
-          style={{
-            position: "absolute",
-            inset: token("--space-4"),
-            border: `${token("--space-1")} solid ${token("--border-accent")}`,
-            borderTopColor: token("--accent-bright"),
-            borderRadius: token("--radius-pill"),
-          }}
-        />
-        <span data-tutorial-challenge-points-value="">
-          {scored.points}
-        </span>
-        <GlowIcon
-          iconClass={GLYPHS.points}
-          color="points"
-          size="1em"
-          shadow
-        />
-      </motion.div>
     </div>
   );
 }

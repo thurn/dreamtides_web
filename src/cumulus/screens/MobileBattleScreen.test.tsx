@@ -692,6 +692,50 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("renders a points result only over its scoring battlefield character", () => {
+    const { container, root } = mount(makeView(), undefined, {
+      cardOverlay: {
+        kind: "points-scored",
+        presentationId: "challenge-resolved:player:5:F0",
+        battleCardId: "player-front-card",
+        points: 2,
+      },
+    });
+    const scoringCard = container.querySelector<HTMLElement>(
+      '[data-battle-card-id="player-front-card"][data-battle-card-zone="player-front-rank"]',
+    );
+    const overlay = scoringCard?.querySelector<HTMLElement>(
+      '[data-battle-card-overlay="points-scored"]',
+    );
+
+    expect(overlay?.getAttribute("aria-label")).toBe("2 points");
+    expect(overlay?.dataset.battleCardOverlayCardId).toBe("player-front-card");
+    expect(overlay?.dataset.battleCardOverlayPresentationId).toBe(
+      "challenge-resolved:player:5:F0",
+    );
+    expect(
+      overlay?.querySelector("[data-battle-card-points-value]")?.textContent,
+    ).toBe("2");
+    expect(overlay?.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
+    expect(overlay?.textContent).not.toContain("⍟");
+    expect(
+      container
+        .querySelector(
+          '[data-battle-card-id="enemy-front-card"][data-battle-card-zone="enemy-front-rank"]',
+        )
+        ?.querySelector("[data-battle-card-overlay]"),
+    ).toBeNull();
+    expect(
+      container
+        .querySelector(
+          '[data-battle-card-id="player-hand-0"][data-battle-card-zone="near-hand"]',
+        )
+        ?.querySelector("[data-battle-card-overlay]"),
+    ).toBeNull();
+
+    act(() => root.unmount());
+  });
+
   it("places the result surface above the battle shell and forwards its actions", () => {
     const onResultAction = vi.fn();
     const { container, root } = mount(

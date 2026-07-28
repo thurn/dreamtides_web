@@ -6,7 +6,7 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
-import { LayoutGroup, motion } from "framer-motion";
+import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import {
@@ -212,6 +212,8 @@ export interface MobileBattleChoicePromptView {
 export interface MobileBattleScreenProps {
   readonly view: MobileBattleView;
   readonly interactions?: MobileBattleInteractions;
+  /** One short-lived resource result attached to its physical battlefield card. */
+  readonly cardOverlay?: MobileBattleCardOverlayView | null;
   /**
    * Whether this screen owns the shared-layout scope for physical cards or
    * participates in a scope supplied by a composing parent.
@@ -244,6 +246,14 @@ export interface MobileBattleScreenProps {
   readonly viewport?: "fixed" | "contained";
   /** Hides operator-only inspector controls on focused player battle surfaces. */
   readonly inspectorVisibility?: "available" | "hidden";
+}
+
+/** A presentation that must remain spatially attached to one battlefield card. */
+export interface MobileBattleCardOverlayView {
+  readonly kind: "points-scored";
+  readonly presentationId: string;
+  readonly battleCardId: string;
+  readonly points: number;
 }
 
 export type MobileBattleOwner = "enemy" | "player";
@@ -1485,6 +1495,7 @@ function FaceUpCard({
   showRulesText = false,
   snapLayout = false,
   challengerChevron,
+  cardOverlay,
   selection,
   interaction,
 }: {
@@ -1493,6 +1504,7 @@ function FaceUpCard({
   readonly showRulesText?: boolean;
   readonly snapLayout?: boolean;
   readonly challengerChevron?: MobileBattleOwner;
+  readonly cardOverlay?: MobileBattleCardOverlayView | null;
   readonly selection?: {
     readonly selected: boolean;
     readonly color: CumulusColor;
@@ -1813,8 +1825,116 @@ function FaceUpCard({
           <ChallengerChevron owner={challengerChevron} />
         ) : null}
       </motion.div>
+      {cardOverlay?.battleCardId === card.id ? (
+        <BattleCardPointsOverlay overlay={cardOverlay} />
+      ) : null}
       <BattleCardStatusIndicators card={card} />
     </motion.div>
+  );
+}
+
+// The bubble occupies most of the card art while retaining enough edge to
+// preserve the scoring character as its spatial anchor.
+const BATTLE_CARD_POINTS_BUBBLE_WIDTH = "78%";
+const BATTLE_CARD_POINTS_ANIMATION_SECONDS =
+  motionTimeSeconds("--dur-slow") * 4;
+
+function BattleCardPointsOverlay({
+  overlay,
+}: {
+  readonly overlay: MobileBattleCardOverlayView;
+}) {
+  const reduceMotion = useReducedMotion();
+  const duration = reduceMotion ? 0 : BATTLE_CARD_POINTS_ANIMATION_SECONDS;
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      aria-label={`${String(overlay.points)} points`}
+      data-battle-card-overlay="points-scored"
+      data-battle-card-overlay-presentation-id={overlay.presentationId}
+      data-battle-card-overlay-card-id={overlay.battleCardId}
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 8,
+        display: "grid",
+        placeItems: "center",
+        pointerEvents: "none",
+      }}
+    >
+      <motion.div
+        data-battle-card-points-bubble=""
+        initial={
+          reduceMotion
+            ? false
+            : { opacity: 0, scale: 0.48, y: "24%", rotate: -12 }
+        }
+        animate={
+          reduceMotion
+            ? { opacity: 1, scale: 1, y: 0, rotate: 0 }
+            : {
+                opacity: [0, 1, 1, 0],
+                scale: [0.48, 1.08, 1, 0.86],
+                y: ["24%", "0%", "-8%", "-18%"],
+                rotate: [-12, 3, 0, 0],
+              }
+        }
+        transition={{
+          duration,
+          times: reduceMotion ? undefined : [0, 0.18, 0.72, 1],
+          ease: "easeInOut",
+        }}
+        style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: token("--space-1"),
+          width: BATTLE_CARD_POINTS_BUBBLE_WIDTH,
+          aspectRatio: "1",
+          borderRadius: token("--radius-pill"),
+          background: `radial-gradient(circle at 38% 28%, ${token("--surface-raised")} 0%, ${token("--surface-card")} 56%, ${token("--bg-sunken")} 100%)`,
+          boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
+          color: token("--text-primary"),
+          font: token("--t-popover-headline"),
+          textShadow: token("--text-outline-media"),
+        }}
+      >
+        <motion.span
+          aria-hidden="true"
+          data-battle-card-points-orbit=""
+          animate={
+            reduceMotion
+              ? { opacity: 0.42, scale: 1, rotate: 0 }
+              : {
+                  opacity: [0, 0.88, 0.42, 0],
+                  scale: [0.64, 1, 1, 1.24],
+                  rotate: [-70, 0, 140, 250],
+                }
+          }
+          transition={{
+            duration,
+            times: reduceMotion ? undefined : [0, 0.24, 0.74, 1],
+            ease: "easeInOut",
+          }}
+          style={{
+            position: "absolute",
+            inset: token("--space-2"),
+            border: `${token("--space-1")} solid ${token("--border-accent")}`,
+            borderTopColor: token("--accent-bright"),
+            borderRadius: token("--radius-pill"),
+          }}
+        />
+        <span data-battle-card-points-value="">{overlay.points}</span>
+        <GlowIcon
+          iconClass={GLYPHS.points}
+          color="points"
+          size="1em"
+          shadow
+        />
+      </motion.div>
+    </div>
   );
 }
 
@@ -2082,6 +2202,7 @@ function Rank({
   guidedSlotHighlight,
   preserveOccupiedSlotOutlines,
   showChallengerChevrons,
+  cardOverlay,
   interactions,
 }: {
   readonly isDesktop: boolean;
@@ -2106,6 +2227,7 @@ function Rank({
   readonly guidedSlotHighlight?: MobileBattleScreenProps["guidedSlotHighlight"];
   readonly preserveOccupiedSlotOutlines?: boolean;
   readonly showChallengerChevrons: boolean;
+  readonly cardOverlay?: MobileBattleCardOverlayView | null;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const canDropOnOwner =
@@ -2293,6 +2415,7 @@ function Rank({
                       ? owner
                       : undefined
                   }
+                  cardOverlay={cardOverlay}
                   selection={
                     candidate === null
                       ? interactions?.targetSelectionCardId === slot.card.id ||
@@ -2394,6 +2517,7 @@ function PlayArea({
   preserveOccupiedSlotOutlines,
   allowSharedLayoutOverflow,
   showChallengerChevrons,
+  cardOverlay,
   interactions,
 }: {
   readonly isDesktop: boolean;
@@ -2417,6 +2541,7 @@ function PlayArea({
   readonly preserveOccupiedSlotOutlines?: boolean;
   readonly allowSharedLayoutOverflow: boolean;
   readonly showChallengerChevrons: boolean;
+  readonly cardOverlay?: MobileBattleCardOverlayView | null;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const ranks =
@@ -2468,6 +2593,7 @@ function PlayArea({
           guidedSlotHighlight={guidedSlotHighlight}
           preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines}
           showChallengerChevrons={showChallengerChevrons}
+          cardOverlay={cardOverlay}
           interactions={interactions}
         />
       ))}
@@ -4082,6 +4208,7 @@ function BattleInspectorRail({
 export function MobileBattleScreen({
   view,
   interactions,
+  cardOverlay = null,
   inspectorDefault = "responsive",
   phaseNavigation = "both",
   zoneLabels = "none",
@@ -4418,6 +4545,7 @@ export function MobileBattleScreen({
           showChallengerChevrons={
             activeSideHasChallengers && far.owner === view.activeSide
           }
+          cardOverlay={cardOverlay}
           interactions={interactions}
         />
         <PlayArea
@@ -4441,6 +4569,7 @@ export function MobileBattleScreen({
           showChallengerChevrons={
             activeSideHasChallengers && near.owner === view.activeSide
           }
+          cardOverlay={cardOverlay}
           interactions={interactions}
         />
         <ControlRow

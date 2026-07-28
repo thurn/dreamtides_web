@@ -356,7 +356,7 @@ describe("TutorialBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("animates unpaired Challenge points with the canonical Boxicon mark", () => {
+  it("attaches unpaired Challenge points to the scoring battlefield card", () => {
     const onPresentationVisible = vi.fn();
     const presentationId = "challenge-resolved:player:5:F3";
     const { container, root } = mount(
@@ -376,17 +376,19 @@ describe("TutorialBattleScreen", () => {
       vi.fn(),
       onPresentationVisible,
     );
-    const bubble = container.querySelector<HTMLElement>(
-      '[data-tutorial-challenge-animation="points"]',
-    );
+    const props = mobileBattleProps.mock.lastCall?.[0] as {
+      readonly cardOverlay?: unknown;
+    };
 
-    expect(bubble?.getAttribute("aria-label")).toBe("2 points");
+    expect(props.cardOverlay).toEqual({
+      kind: "points-scored",
+      presentationId,
+      battleCardId: "player-character-uuid",
+      points: 2,
+    });
     expect(
-      bubble?.querySelector("[data-tutorial-challenge-points-value]")
-        ?.textContent,
-    ).toBe("2");
-    expect(bubble?.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
-    expect(bubble?.textContent).not.toContain("⍟");
+      container.querySelector('[data-tutorial-challenge-animation="points"]'),
+    ).toBeNull();
     expect(onPresentationVisible).toHaveBeenCalledWith(presentationId);
 
     act(() => root.unmount());
