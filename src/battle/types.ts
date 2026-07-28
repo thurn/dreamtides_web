@@ -5,7 +5,7 @@ import type {
   DreamAvatar,
   Dreamsign,
   TransfigurationType,
-} from "../types/quest";
+} from "../types/journey";
 import type { ArtCrop } from "../types/cards";
 import type { CardTransfigurationDisplay } from "../runtime/transfiguration-display";
 import type { BattleDebugEdit } from "./debug/commands";
@@ -223,12 +223,12 @@ export interface BattleSideVisibilityFlags {
 }
 
 /**
- * Frozen mirror of a quest deck entry at battle-init time. Stored on
- * `BattleInit` so code that needs the original quest identity of a card (e.g.
+ * Frozen mirror of a journey deck entry at battle-init time. Stored on
+ * `BattleInit` so code that needs the original journey identity of a card (e.g.
  * ability-lookup helpers, debug labels) does not have to re-walk the mutable
- * battle state back out to the quest deck.
+ * battle state back out to the journey deck.
  */
-export interface BattleQuestDeckEntry {
+export interface BattleJourneyDeckEntry {
   entryId: string;
   cardNumber: number;
   transfiguration: TransfigurationType | null;
@@ -366,7 +366,7 @@ export interface BattleInit {
   playerDrawSkipsTurnOne: boolean;
   /** TOML-authored first-occurrence tutorials available in this battle. */
   tutorialTriggers?: readonly TutorialTriggerDefinition[];
-  questDeckEntries: readonly BattleQuestDeckEntry[];
+  journeyDeckEntries: readonly BattleJourneyDeckEntry[];
   playerDeckOrder: readonly BattleDeckCardDefinition[];
   /**
    * The shared Dreamwell deck both players draw from, pre-shuffled within
@@ -448,7 +448,7 @@ export interface BattleCardNote {
 }
 
 export type BattleCardProvenanceKind =
-  | "quest-deck"
+  | "journey-deck"
   | "generated-copy"
   | "generated-figment"
   | "generated-pool";

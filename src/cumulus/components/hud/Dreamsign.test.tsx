@@ -4,7 +4,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { Dreamsign } from "./Dreamsign";
-import type { Dreamsign as DreamsignData } from "../../../types/quest";
+import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { GLOSSARY, type GlossaryEntry } from "../../../data/glossary";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
 import { CumulusRoot } from "../../CumulusRoot";

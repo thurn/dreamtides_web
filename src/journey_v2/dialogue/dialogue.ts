@@ -174,7 +174,7 @@ export function renderMerchantDialogue(
   input: RenderMerchantDialogueInput,
 ): RenderedMerchantDialogue {
   const { context, offers } = input;
-  const seedParts = [context.questSeed, context.site.id];
+  const seedParts = [context.journeySeed, context.site.id];
 
   const reactionRng = merchantRng(...seedParts, "dialogue", "reaction");
   const acceptReaction =

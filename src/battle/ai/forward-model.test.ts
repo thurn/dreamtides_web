@@ -74,9 +74,9 @@ function makeCharacterDefinition(
   };
 }
 
-function questDeckProvenance(): BattleCardProvenance {
+function journeyDeckProvenance(): BattleCardProvenance {
   return {
-    kind: "quest-deck",
+    kind: "journey-deck",
     sourceBattleCardId: null,
     chosenSpark: null,
     chosenSubtype: null,
@@ -109,7 +109,7 @@ function addInstance(
     owner: side,
     controller: side,
     isRevealedToPlayer: true,
-    provenance: options.figment ? figmentProvenance() : questDeckProvenance(),
+    provenance: options.figment ? figmentProvenance() : journeyDeckProvenance(),
   });
   if (options.sparkDelta !== undefined) {
     state.cardInstances[id].sparkDelta = options.sparkDelta;

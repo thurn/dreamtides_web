@@ -7,8 +7,8 @@ describe("toRepoRelativePosix (no-primitive-tokens)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/cumulus/docs/mockups/scene.tsx",
-        "/Users/x/quest_prototype",
+        "/Users/x/journey_prototype/src/cumulus/docs/mockups/scene.tsx",
+        "/Users/x/journey_prototype",
       ),
     ).toBe("src/cumulus/docs/mockups/scene.tsx");
   });

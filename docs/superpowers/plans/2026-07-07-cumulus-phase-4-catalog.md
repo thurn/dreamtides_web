@@ -156,7 +156,7 @@ entirely alone. The only `StatTile` being deleted is
 ## Task 2 — Delete TidePill (redirect the `Tide` type first) and empty the ghost baseline
 
 **Files**
-- `src/screens/cumulus_adapters/quest-start-view-model.ts:11` (redirect the `Tide` type import)
+- `src/screens/cumulus_adapters/journey-start-view-model.ts:11` (redirect the `Tide` type import)
 - `src/cumulus/components/hud/TidePill.tsx` (delete)
 - `src/cumulus/docs/demos/tide-pill.tsx` (delete)
 - `src/cumulus/docs/mockups/tide-pill.tsx` (delete)
@@ -174,15 +174,15 @@ merely re-exports it (`export { tideVisual, type Tide } from "./tide-spec";`).
 So "move the `Tide` type into `tide-spec.ts`" is already done — the real work is
 **repointing importers off `TidePill` onto `tide-spec`, then deleting TidePill.**
 Enumerated importers of the `Tide` type from the `TidePill` module (grep-verified):
-- `src/screens/cumulus_adapters/quest-start-view-model.ts:11` — production. **Redirect this one** to `../../cumulus/components/hud/tide-spec`.
+- `src/screens/cumulus_adapters/journey-start-view-model.ts:11` — production. **Redirect this one** to `../../cumulus/components/hud/tide-spec`.
 - `src/cumulus/docs/demos/tide-pill.tsx`, `src/cumulus/docs/mockups/tide-pill.tsx` — both deleted here.
 
-`InfoCard.tsx` and `quest-start-shared.tsx` already import `Tide` from
+`InfoCard.tsx` and `journey-start-shared.tsx` already import `Tide` from
 `tide-spec` — leave them. Dropping the `"Tide": []` metadata key is safe: no demo
 uses `docName: "Tide"` (the tide-disc demo keys on `TideDisc`).
 
 **Steps**
-- [ ] Redirect `quest-start-view-model.ts:11` to import `Tide` from `tide-spec`
+- [ ] Redirect `journey-start-view-model.ts:11` to import `Tide` from `tide-spec`
       (leave the `TIDE_BY_COLOR` map and the JSDoc `{@link Tide}` reference as-is).
 - [ ] Delete the TidePill component, demo, and mockup files; remove the
       `tidePillDemo` import + entry from `registry.ts` and the `TidePillMockup`
@@ -286,9 +286,9 @@ node's *path into* `meta` is dead. `AtlasNode.tsx` itself has no eyebrow prop.
 `isReachable`.** Rationale:
 - `forgone` is a real generator node *state* (`atlas-generator.ts` sets passed-by
   siblings to `state: "forgone"`), part of the `DreamscapeNode["state"]` union in
-  `src/types/quest.ts`, and asserted by generator + reachability tests
+  `src/types/journey.ts`, and asserted by generator + reachability tests
   (`atlas-generator.test.ts`, `atlas-reachability.test.ts`,
-  `quest-flow.integration.test.ts`). It carries meaning distinct from generic
+  `journey-flow.integration.test.ts`). It carries meaning distinct from generic
   unreachability ("a sibling the player chose to pass by"). Removing it from the
   data model would ripple into the generator and four test files — fragile and wrong.
 - The DISPLAY, however, expresses "faded / can't reach" twice: the `node-forgone`
@@ -318,7 +318,7 @@ beyond the shared fade; the atlas-node demo's forgone fixture is repaired in Tas
       `view.isReachable === false` contribution. Update the CSS rule's comment to say
       the fade marks every node the player can no longer reach (`isReachable ===
       false`), without mentioning `forgone`.
-- [ ] Add a one-line comment at the `forgone` state site (in `src/types/quest.ts`
+- [ ] Add a one-line comment at the `forgone` state site (in `src/types/journey.ts`
       or the generator) documenting it as a **data-only** generator state (a
       passed-by sibling) whose display fade is delivered by the view-model's
       `isReachable` computation, so a future reader does not re-add a `node-forgone`
@@ -416,7 +416,7 @@ export const ATLAS_BADGE_SCALE_MOBILE = 1.5;         // desktop keeps badges at 
 - `src/cumulus/docs/demos/tide-disc.tsx` (add the canonical `InfoCard.PressInfo` usage; document the `tide-spec` palette as TideDisc's source)
 
 **Interfaces / decision:** production never renders a bare `TideDisc` — it always
-renders one inside an `InfoCard.PressInfo` reveal (`quest-start-shared.tsx`: a
+renders one inside an `InfoCard.PressInfo` reveal (`journey-start-shared.tsx`: a
 `TideDisc` is the trigger, its description reveals through `InfoCard.PressInfo`).
 The demo should show the disc-with-reveal as canonical. `tide-spec.ts` is a
 type-only palette module with no renderable component; its palette is exactly what
@@ -430,7 +430,7 @@ canonical renderer).
 - [ ] `demos/tide-disc.tsx` gains a `usage[]` entry (`label` + `note` + `code`)
       showing the canonical composition: a `TideDisc` as the trigger of an
       `InfoCard.PressInfo` reveal anchored to a `stageRef`, mirroring
-      `quest-start-shared.tsx`. The `note` states that in production a tide disc
+      `journey-start-shared.tsx`. The `note` states that in production a tide disc
       always carries its tide's description through the shared reveal, never a bare
       disc. Representative snippet (shape to pin down):
       ```tsx
@@ -845,7 +845,7 @@ contracts; keep them literal:**
 
 **Files**
 - `.llms/skills/cumulus-migrate/SKILL.md` (add the floating pick-counter idiom + draft-screen note in the idioms section)
-- `docs/quest_prototype/qa_scenes.md` (document `?demo=device-frame` and `DeviceFrameDemo`)
+- `docs/journey_prototype/qa_scenes.md` (document `?demo=device-frame` and `DeviceFrameDemo`)
 
 **Interfaces / facts:**
 - The draft screen (`DraftScreen.tsx`) is the first post-audit screen: clean token
@@ -870,17 +870,17 @@ contracts; keep them literal:**
       the safe-area floor — as the pattern to copy for a "progress-through-a-sequence"
       screen. Cross-reference the draft `?goto=` scene from Phase 3. Current-state
       phrasing only.
-- [ ] `docs/quest_prototype/qa_scenes.md` gains a section documenting the `?demo=<name>`
+- [ ] `docs/journey_prototype/qa_scenes.md` gains a section documenting the `?demo=<name>`
       devtool hook alongside `?goto=`: `?demo=device-frame` mounts `DeviceFrameDemo`,
       what it proves (safe-area inset padding + cutout-box placement, with dashed
       guides), the capture command `node scripts/device-screenshots.mjs -d iphone-16
-      --query 'demo=device-frame'`, and that `?demo=` bypasses the quest workflow
+      --query 'demo=device-frame'`, and that `?demo=` bypasses the journey workflow
       (wired in `src/main.tsx`).
 
 **Verify**
 - [ ] `npm run lint && npm run typecheck && npm test` — green (docs-only, but run the
       drift tests in case `qa_scenes.md` is checked).
-- [ ] Commit: `docs(quest): document the draft pick-counter idiom and the device-frame QA hook` + push.
+- [ ] Commit: `docs(journey): document the draft pick-counter idiom and the device-frame QA hook` + push.
 
 ---
 
@@ -991,7 +991,7 @@ complete at this commit.
 - [ ] Read `pre-existing-issues.txt` at execution time and reconcile with the above
       (Phases 0–3 may have added/removed entries). Delete the "Cumulus design-system
       audit follow-ups (2026-07-06)" section and readiness-gap item 2; rewrite item 1
-      to the residual list. Do not touch unrelated sections (bx-refresh, QuestStart
+      to the residual list. Do not touch unrelated sections (bx-refresh, JourneyStart
       overflow, npm audit, deck-viewer logging, dev-with-emulator, setup-assets
       flakiness, spine-redundancy, tides4 annotations, dreamscape-redesign items).
 - [ ] Final program-wide grep sweep — deleted components leave **zero** references

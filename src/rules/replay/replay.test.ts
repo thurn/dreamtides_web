@@ -25,7 +25,7 @@ import {
 } from "./fixture-providers";
 import adversarial from "./fixtures/adversarial.json";
 import battle from "./fixtures/battle.json";
-import questOnly from "./fixtures/quest-only.json";
+import journeyOnly from "./fixtures/journey-only.json";
 
 interface ReplayFixture {
   providerSet: string;
@@ -35,7 +35,7 @@ interface ReplayFixture {
 }
 
 const FIXTURES: Array<{ name: string; fixture: ReplayFixture }> = [
-  { name: "quest-only", fixture: questOnly },
+  { name: "journey-only", fixture: journeyOnly },
   { name: "battle", fixture: battle },
   { name: "adversarial", fixture: adversarial },
 ];

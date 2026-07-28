@@ -17,7 +17,7 @@ function git(rootDir, args) {
 }
 
 function fixture() {
-  const rootDir = mkdtempSync(path.join(tmpdir(), "quest-build-hash-"));
+  const rootDir = mkdtempSync(path.join(tmpdir(), "journey-build-hash-"));
   fixtures.push(rootDir);
   mkdirSync(path.join(rootDir, "public"));
   writeFileSync(path.join(rootDir, ".gitignore"), "public/\n");

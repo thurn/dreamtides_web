@@ -2,10 +2,10 @@ import { asCardId, asCardName } from "../types/card-identity";
 import { buildPoolData } from "../draft/pool/pool-data";
 import { buildIdIndex } from "../data/cards-v2-database";
 import type { CardData } from "../types/cards";
-import type { RunPoolContext } from "../data/quest-content";
+import type { RunPoolContext } from "../data/journey-content";
 
 /**
- * A small hand-authored corpus for tests that drive the quest-start build path
+ * A small hand-authored corpus for tests that drive the journey-start build path
  * (`buildDreamAvatarPackage`). It provides three real-ish decklists of twenty
  * card names each and a name index covering every name, so the idf3 generator
  * has a usable corpus and `resolvePool` can map the generated names back onto

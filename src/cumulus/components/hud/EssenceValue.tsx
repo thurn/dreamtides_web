@@ -50,7 +50,7 @@ export interface EssenceValueProps {
 export function EssenceValue({ amount, tone = "value" }: EssenceValueProps) {
   return (
     // `cumulus` carries the design-token scope so `--essence` resolves when the
-    // value is mounted outside a `.cumulus` subtree (e.g. a quest screen).
+    // value is mounted outside a `.cumulus` subtree (e.g. a journey screen).
     <span
       className="cumulus"
       style={{

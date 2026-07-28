@@ -82,7 +82,7 @@ card-number = 3
 }
 
 function writeFixtureRoot({ withRegistry = false } = {}) {
-  const rootDir = mkdtempSync(join(tmpdir(), "quest-card-editor-tides-"));
+  const rootDir = mkdtempSync(join(tmpdir(), "journey-card-editor-tides-"));
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
   // cards_v2.toml is the canonical card file, so editing it through the API
   // regenerates public/card-data.json; the directory must exist for the write.

@@ -22,6 +22,16 @@ function board() {
   );
 }
 
+function putEventInPlayerHand(state: ReturnType<typeof board>): string {
+  const eventId = state.sides.player.deck.find(
+    (id) => state.cardInstances[id]?.definition.battleCardKind === "event",
+  );
+  if (eventId === undefined) throw new Error("expected an event in the synthetic deck");
+  state.sides.player.deck = state.sides.player.deck.filter((id) => id !== eventId);
+  state.sides.player.hand.push(eventId);
+  return eventId;
+}
+
 describe("createPlayCardFromHandCommand", () => {
   it("chooses the first open back-rank slot for a character without a preferred target", () => {
     const state = board();
@@ -74,10 +84,7 @@ describe("createPlayCardFromHandCommand", () => {
 
   it("routes an event straight to its own void when automation is disabled", () => {
     const state = board();
-    const eventId = state.sides.player.hand.find(
-      (id) => state.cardInstances[id]?.definition.battleCardKind === "event",
-    );
-    if (eventId === undefined) throw new Error("expected an event in hand");
+    const eventId = putEventInPlayerHand(state);
 
     const command = createPlayCardFromHandCommand(
       state,
@@ -98,10 +105,7 @@ describe("createPlayCardFromHandCommand", () => {
 
   it("targets the back rank for an automated event so the planner charges energy before voiding it", () => {
     const state = board();
-    const eventId = state.sides.player.hand.find(
-      (id) => state.cardInstances[id]?.definition.battleCardKind === "event",
-    );
-    if (eventId === undefined) throw new Error("expected an event in hand");
+    const eventId = putEventInPlayerHand(state);
 
     const command = createPlayCardFromHandCommand(
       state,

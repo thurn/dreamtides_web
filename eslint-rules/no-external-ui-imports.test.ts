@@ -7,20 +7,20 @@ describe("toRepoRelativePosix", () => {
   it("returns a clean repo-relative path for a normal checkout", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/cumulus/components/Foo.tsx",
-        "/Users/x/quest_prototype",
+        "/Users/x/journey_prototype/src/cumulus/components/Foo.tsx",
+        "/Users/x/journey_prototype",
       ),
     ).toBe("src/cumulus/components/Foo.tsx");
   });
 
   it("is not fooled by a checkout prefix that itself contains /src/", () => {
     // Regression: a substring `indexOf("/src/")` heuristic would return
-    // "src/quest_prototype/src/cumulus/components/Foo.tsx" here, which no longer
+    // "src/journey_prototype/src/cumulus/components/Foo.tsx" here, which no longer
     // looks like it is under src/cumulus/ and would silently disable the rule.
     expect(
       toRepoRelativePosix(
-        "/Users/x/src/quest_prototype/src/cumulus/components/Foo.tsx",
-        "/Users/x/src/quest_prototype",
+        "/Users/x/src/journey_prototype/src/cumulus/components/Foo.tsx",
+        "/Users/x/src/journey_prototype",
       ),
     ).toBe("src/cumulus/components/Foo.tsx");
   });
@@ -64,7 +64,7 @@ ruleTester.run("no-external-ui-imports", rule, {
     {
       name: "allowlisted data import",
       filename: "src/cumulus/components/Foo.tsx",
-      code: `import { loadQuestContent } from "../../data/quest-content";`,
+      code: `import { loadJourneyContent } from "../../data/journey-content";`,
     },
     {
       name: "bare module import",

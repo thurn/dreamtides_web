@@ -3097,7 +3097,7 @@ describe("MobileBattleScreen", () => {
     expect(interactions.onNextPhase).toHaveBeenCalledTimes(1);
     expect(
       container.querySelector(
-        "[data-quest-status-bar], [data-quest-menu], [data-battle-phase], [data-debug-rail]",
+        "[data-journey-status-bar], [data-journey-menu], [data-battle-phase], [data-debug-rail]",
       ),
     ).toBeNull();
     expect(container.querySelector("[data-connected-count]")).toBeNull();

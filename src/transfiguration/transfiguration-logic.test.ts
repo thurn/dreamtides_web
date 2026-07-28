@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import type { CardData } from "../types/cards";
-import type { TransfigurationType } from "../types/quest";
+import type { TransfigurationType } from "../types/journey";
 import { asCardId, asCardName } from "../types/card-identity";
 import {
   isEmpoweredEligible,

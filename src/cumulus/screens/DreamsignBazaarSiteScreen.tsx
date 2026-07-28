@@ -3,7 +3,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import type { Dreamsign as DreamsignData } from "../../types/quest";
+import type { Dreamsign as DreamsignData } from "../../types/journey";
 import { DreamsignGalleryPanel } from "../components/card/DreamsignGalleryPanel";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import type { ArtRef } from "../primitives/art";
@@ -167,7 +167,7 @@ function DreamsignBazaarGallery({
         `[data-dreamsign-gallery-entry-id="${entryId}"]`,
       );
       const hudTarget = document.querySelector<HTMLElement>(
-        "[data-quest-status-bar-anchor]",
+        "[data-journey-status-bar-anchor]",
       );
       if (source !== null && hudTarget !== null) {
         const sourceRect = snapshotRect(source.getBoundingClientRect());

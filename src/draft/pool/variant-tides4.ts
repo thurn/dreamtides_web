@@ -55,7 +55,7 @@ import type { Tides4DecksJson } from "./tides4-io.ts";
 
 interface Tides4Tuning {
   // Copies dealt into the pool. Pinned to `sigseed`'s pool size (150) rather than
-  // the quest's 200 so `tides4` reproduces the same pools `sigseed` ships; the
+  // the journey's 200 so `tides4` reproduces the same pools `sigseed` ships; the
   // passed `targetSize` is ignored, exactly as `sigseed`/`pickfit` ignore it.
   dealSize: number;
   // Max copies of any single card dealt (the pool-wide 2-copy rule).

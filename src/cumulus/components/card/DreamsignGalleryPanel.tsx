@@ -3,7 +3,7 @@
 // both the collectible art and the restock glyph without object backgrounds.
 
 import { useRef, type ReactElement } from "react";
-import type { Dreamsign as DreamsignData } from "../../../types/quest";
+import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";

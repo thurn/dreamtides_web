@@ -5,7 +5,7 @@
 // opacity and the app chrome's outline dilation), and the pack sits as a 2x2
 // mobile grid, a narrow-desktop 2x2 grid, or a wide-desktop four-card row of
 // GameCards centered over it. The
-// router-owned quest chrome provides the status bar and responsive utility
+// router-owned journey chrome provides the status bar and responsive utility
 // menu — the screen's only text is a
 // subtle pick counter riding under the pack; it renders no title, progress bar,
 // or drafted-card rail of its own.
@@ -22,7 +22,7 @@ import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { CARD_ASPECT_H, CARD_ASPECT_W } from "../components/card/card-aspect";
 import { Motes } from "../components/hud/Motes";
 import { IconButton } from "../components/controls/IconButton";
-import { QUEST_STATUS_BAR_CLEARANCE_OP } from "../components/hud/QuestStatusBar";
+import { JOURNEY_STATUS_BAR_CLEARANCE_OP } from "../components/hud/JourneyStatusBar";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import { GLYPHS } from "../primitives/glyph";
@@ -33,7 +33,7 @@ import {
 } from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 
-/** Everything the draft screen renders, mapped from live quest state. */
+/** Everything the draft screen renders, mapped from live journey state. */
 export interface DraftView {
   /** The dreamscape's scene art, or null while the dreamscape is unrevealed. */
   scene: ArtRef | null;
@@ -63,8 +63,8 @@ const TOP_GAP_OP = token("--space-6");
 // The band under the pack that holds the small pick counter (its gap above the
 // label plus the label's own line).
 const COUNTER_BAND_OP = token("--space-9");
-// Bottom: clearance for the router-owned quest chrome and home-indicator inset.
-const HUD_CLEARANCE_OP = `${QUEST_STATUS_BAR_CLEARANCE_OP} + ${token("--space-9")}`;
+// Bottom: clearance for the router-owned journey chrome and home-indicator inset.
+const HUD_CLEARANCE_OP = `${JOURNEY_STATUS_BAR_CLEARANCE_OP} + ${token("--space-9")}`;
 const TOP_GAP = `calc(${TOP_GAP_OP})`;
 const HUD_CLEARANCE = `calc(${HUD_CLEARANCE_OP})`;
 const MOBILE_OFFER_GRID_GAP = token("--space-2");
@@ -129,7 +129,7 @@ function offerCellWidthFor(params: {
 
 /**
  * The Cumulus draft screen. Pure and props-driven: full-bleed scene art, the pack
- * of {@link GameCard}s over it, and drifting {@link Motes}. Persistent quest
+ * of {@link GameCard}s over it, and drifting {@link Motes}. Persistent journey
  * chrome is supplied by the router.
  */
 export function DraftScreen({ view, onPick, onReroll = NOOP }: DraftScreenProps) {

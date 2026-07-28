@@ -40,7 +40,7 @@ import { GlassDialog } from "src/cumulus/components/overlay/GlassDialog";
 
 <GlassDialog
   title="Starting Deck"
-  subtitle="These are the cards you begin the quest with."
+  subtitle="These are the cards you begin the journey with."
   onClose={closeModal}
 >
   <DeckGrid entries={entries} />

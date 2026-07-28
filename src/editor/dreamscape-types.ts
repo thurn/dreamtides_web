@@ -1,4 +1,4 @@
-import type { SiteType } from "../types/quest";
+import type { SiteType } from "../types/journey";
 
 /**
  * One dreamscape as the editor sees it. The kebab-case keys mirror the

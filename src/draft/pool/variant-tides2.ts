@@ -52,7 +52,7 @@ interface Tides2Tuning {
   // typically uses the lead plus the first one or two shuffled allies — the
   // shuffle is what gives a DreamAvatar pool-to-pool variety for a fixed lead.
   allyShuffleWindow: number;
-  // Copies dealt into the pool, matching the quest's pool size. Tides keep
+  // Copies dealt into the pool, matching the journey's pool size. Tides keep
   // joining the shuffle until this many copies are dealable, so the pool reaches
   // full size whether the joined tides are large or small.
   dealSize: number;

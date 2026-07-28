@@ -8,7 +8,7 @@
 
 import { useRef } from "react";
 import { Dreamsign } from "../../components/hud/Dreamsign";
-import type { Dreamsign as DreamsignData } from "../../../types/quest";
+import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 

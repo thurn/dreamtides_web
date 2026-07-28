@@ -26,7 +26,7 @@
 // weighted draw with all-equal weights is the uniform draw.
 //
 // The corpus, growth, and seed draw are the real ones from `src/draft/pool` (no
-// re-port): the script calls `generatePoolFromData` exactly as the quest does and
+// re-port): the script calls `generatePoolFromData` exactly as the journey does and
 // reads `buildSignatureAffinity` / `buildPickSigCorpus` for the on-theme metric,
 // so what it measures is what ships.
 //
@@ -55,7 +55,7 @@ function has(argv, name) {
   return argv.includes(name);
 }
 
-// --- Load the same inputs the quest builds its pools from. ----------------
+// --- Load the same inputs the journey builds its pools from. ----------------
 function loadContext(argv) {
   const cards = readJson("public/cards_v2-data.json");
   const draftRecords = readJson("public/draft-records-data.json");

@@ -112,7 +112,7 @@ export interface PendingPrompt {
  *   and the site/dreamscape identity are unreachable without it. Keeping it on
  *   the fold slice is what lets the driver key a dreamwell-reveal script by the
  *   card UUID at `dreamwellDeck[dreamwellDeckIndex]` (Task 20) and lets a
- *   defeat classify its `QuestFailureReason`. `BattleInit` is pure JSON
+ *   defeat classify its `JourneyFailureReason`. `BattleInit` is pure JSON
  *   (numbers, strings, frozen definition arrays, a `DreamAtlas`) with no
  *   closures, so it round-trips through the sync hash byte-for-byte like the
  *   rest of the slice. It never changes after `BEGIN_BATTLE`.
@@ -125,7 +125,7 @@ export interface PendingPrompt {
 export interface BattleFoldState {
   /**
    * The lifecycle that created this battle. Missing metadata on a persisted
-   * legacy battle is normalized to the ordinary quest mode at the load seam.
+   * legacy battle is normalized to the ordinary journey mode at the load seam.
    */
   mode?: BattleMode;
   init: BattleInit;
@@ -326,11 +326,11 @@ export interface ChallengeCursor {
   pendingPresentation?: ChallengeResolvedPresentation | null;
 }
 
-/** Metadata that distinguishes a normal quest battle from the tutorial handoff. */
-export type BattleMode = QuestBattleMode | TutorialBattleMode;
+/** Metadata that distinguishes a normal journey battle from the tutorial handoff. */
+export type BattleMode = JourneyBattleMode | TutorialBattleMode;
 
-export interface QuestBattleMode {
-  kind: "quest";
+export interface JourneyBattleMode {
+  kind: "journey";
 }
 
 export interface TutorialBattleMode {
@@ -344,9 +344,9 @@ export interface TutorialBattleMode {
   };
 }
 
-/** Treat snapshots written before mode metadata as ordinary quest battles. */
+/** Treat snapshots written before mode metadata as ordinary journey battles. */
 export function battleModeOf(battle: BattleFoldState): BattleMode {
-  return battle.mode ?? { kind: "quest" };
+  return battle.mode ?? { kind: "journey" };
 }
 
 /** Per-side last cleared turn marker (see {@link BattleFoldState.dawnFired}). */

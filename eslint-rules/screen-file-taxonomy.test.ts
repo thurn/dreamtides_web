@@ -10,8 +10,8 @@ describe("toRepoRelativePosix (screen-file-taxonomy)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/screens/cumulus_adapters/registry.tsx",
-        "/Users/x/quest_prototype",
+        "/Users/x/journey_prototype/src/screens/cumulus_adapters/registry.tsx",
+        "/Users/x/journey_prototype",
       ),
     ).toBe("src/screens/cumulus_adapters/registry.tsx");
   });

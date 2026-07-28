@@ -121,6 +121,6 @@ export const pickfitStrategy: PoolStrategy = {
     "affinity — an availability-corrected play-rate prior and a behavioural " +
     "synergy estimate from what real drafters took over what they passed.",
   // Deliberately ignores `request.targetSize`: the variant pins its own size via
-  // `PICKFIT.targetSize`, so the quest's global pool target does not override it.
+  // `PICKFIT.targetSize`, so the journey's global pool target does not override it.
   generate: ({ rng, poolData }) => generatePickfit(rng, poolData),
 };

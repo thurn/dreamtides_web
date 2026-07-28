@@ -8,7 +8,7 @@
  *
  * Every battle in this app lives inside a Firebase room with an always-present
  * `roomId` and a per-client `clientId`; there is no null/local sentinel for the
- * single-player quest flow and no host/owner concept in the room model. The only
+ * single-player journey flow and no host/owner concept in the room model. The only
  * signal that distinguishes "this client is alone" from "two clients are sharing
  * the room" is presence: the number of clients currently connected to the room.
  *

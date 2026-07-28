@@ -39,7 +39,7 @@ Clients write intent events only, via `src/coop/actions.ts`.
 
 # Logging
 
-Quest logs live in logs/quest-log.jsonl
+Journey logs live in logs/journey-log.jsonl
 
 All new features should have logging. We should focus on how to answer
 questions about algorithm behavior. "If someone asked me to reconstruct
@@ -122,7 +122,7 @@ Choose QA in proportion to the change:
   one final cold visual review; renderer work also needs same-scene on/off and
   deliberately broken negative controls.
 
-For applicable quest prototype UI work, run browser QA with `/opt/homebrew/bin/agent-browser`
+For applicable journey prototype UI work, run browser QA with `/opt/homebrew/bin/agent-browser`
 against a local Vite server. `npx agent-browser` is an acceptable fallback when
 the Homebrew-installed binary is unavailable. Start the QA Vite server on a port
 other than `http://localhost:5173` (for example `npm run dev -- --port 5174`) so
@@ -131,7 +131,7 @@ To QA screens that are otherwise reachable only by playing battles forward (for
 example the Dream Atlas boss preview), append `?goto=<scene>` to the dev URL (e.g.
 `http://localhost:5174/?goto=atlas`) to boot straight onto that screen. The
 registered scenes and the full `?goto=` mechanics are documented in
-`docs/quest_prototype/qa_scenes.md` (source of truth: `src/runtime/qa-scenes.ts`).
+`docs/journey_prototype/qa_scenes.md` (source of truth: `src/runtime/qa-scenes.ts`).
 
 Isolate every `agent-browser` call with a unique `--session <name>` (the shared
 `default` session is one persistent Chrome that keeps stale tabs and viewport
@@ -140,7 +140,7 @@ screenshot, and tear down only your own server — `npm run dev` spawns a
 `dev-with-emulator.mjs`/`vite --strictPort` tree, so `pkill -f "vite --port N"`
 misses it and a broad `pkill -f vite` kills the developer's 5173 server. Full
 session, assert-before-acting, and teardown detail is in
-[docs/quest_prototype/qa_tooling.md](docs/quest_prototype/qa_tooling.md).
+[docs/journey_prototype/qa_tooling.md](docs/journey_prototype/qa_tooling.md).
 
 Validate the relevant feature through the normal player workflow, inspect the
 captured `window.__caps` buffer for render errors,
@@ -154,13 +154,13 @@ focused checks pass, the relevant workflow and responsive branches pass, the
 error buffer is empty, and the final visual review has no unresolved material
 finding. Do not repeat the full suite or full screenshot matrix after every
 small visual adjustment. Full `agent-browser` session, teardown, and
-assert-before-acting details are in `docs/quest_prototype/qa_tooling.md`.
+assert-before-acting details are in `docs/journey_prototype/qa_tooling.md`.
 
 # Deploy
 
 Deploy the prototype to production with `npm run deploy` (`scripts/deploy.sh`). It runs every step needed to make production match local: builds `dist/`, deploys it to Firebase Hosting, and uploads the binary art to the Storage bucket. Art is served from the bucket — not Hosting — so a Hosting-only deploy leaves newly-keyed art 404ing; `npm run deploy` covers both origins.
 
-The build needs a populated `.env` + `.env.production` (gitignored) with the `VITE_FIREBASE_*` config and `VITE_ASSET_BASE_URL`, and fails fast if those vars are missing. The art upload needs an authenticated `gcloud` with write access to the bucket (`gcloud auth login`; see docs/quest_prototype/asset-hosting.md).
+The build needs a populated `.env` + `.env.production` (gitignored) with the `VITE_FIREBASE_*` config and `VITE_ASSET_BASE_URL`, and fails fast if those vars are missing. The art upload needs an authenticated `gcloud` with write access to the bucket (`gcloud auth login`; see docs/journey_prototype/asset-hosting.md).
 
 # Documentation style
 

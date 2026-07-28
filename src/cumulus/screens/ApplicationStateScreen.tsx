@@ -59,7 +59,7 @@ export interface ApplicationStateScreenProps {
 const EYEBROW_FOR_KIND: Record<ApplicationStateView["kind"], string> = {
   loading: "Dreamtides",
   roomCreation: "Dreamtides",
-  recoverableError: "Quest Status",
+  recoverableError: "Journey Status",
   fatalConfiguration: "Configuration",
   versionGate: "Game Version",
   contentConfigGate: "Game Settings",

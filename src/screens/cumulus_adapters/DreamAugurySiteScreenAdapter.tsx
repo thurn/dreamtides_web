@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { logEvent, logEventOnce } from "../../logging";
-import { useQuest } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
 import { DreamAugurySiteScreen } from "../../cumulus/screens/DreamAugurySiteScreen";
 import {
   buildDreamAuguryAcceptRequest,
@@ -12,12 +12,12 @@ import {
 } from "./dream-augury-view-model";
 
 export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
-  const { state, mutations, questContent } = useQuest();
+  const { state, mutations, journeyContent } = useJourney();
   const node = state.currentDreamscape === null
     ? null
     : (state.atlas.nodes[state.currentDreamscape] ?? null);
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
-  const guide = resolveDreamAuguryGuide(questContent.guides);
+  const guide = resolveDreamAuguryGuide(journeyContent.guides);
   const guideLineRef = useRef<string | null | undefined>(undefined);
   if (guideLineRef.current === undefined) {
     const lines = guide?.dialog ?? [];
@@ -28,9 +28,9 @@ export function DreamAugurySiteScreenAdapter({ siteId }: { siteId: string }) {
   const guideLine = guideLineRef.current;
   const result = useMemo(
     () => site === null ? null : buildDreamAugurySiteModel({
-      state, sceneNode: node, site, questContent, guide, guideLine,
+      state, sceneNode: node, site, journeyContent, guide, guideLine,
     }),
-    [state, node, site, questContent, guide, guideLine],
+    [state, node, site, journeyContent, guide, guideLine],
   );
 
   const logEntries = useMemo(

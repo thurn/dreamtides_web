@@ -40,7 +40,7 @@ Licensed assets live in a separate local-only Git repository. Every Unity task
 uses two worktrees with the same branch name:
 
 ```text
-quest_prototype worktree
+journey_prototype worktree
 └── cumulus/Assets/ThirdParty/  licensed-repository worktree
 ```
 
@@ -52,11 +52,11 @@ cumulus/scripts/provision-licensed-assets.sh
 ```
 
 The helper reads the licensed repository path from
-`quest.cumulusLicensedRepo` in the public repository's local Git config.
-It reads the canonical clean worktree from `quest.cumulusLicensedSeed`.
+`journey.cumulusLicensedRepo` in the public repository's local Git config.
+It reads the canonical clean worktree from `journey.cumulusLicensedSeed`.
 `CUMULUS_LICENSED_REPO` and `CUMULUS_LICENSED_SEED` are explicit per-command
 overrides. It verifies that ThirdParty is ignored, the licensed repository is
-bare, declares `quest.localOnly=true`, has no remotes, and shares a filesystem
+bare, declares `journey.localOnly=true`, has no remotes, and shares a filesystem
 with the seed and destination.
 
 - Never add a remote to the licensed repository.

@@ -19,7 +19,7 @@ export interface RuntimeConfig {
    * Draft-pool construction strategy from `?algo=`, resolved to a registered
    * `PoolVariant`. An absent `?algo=` uses `DEFAULT_POOL_VARIANT`; a draft-mode
    * value (`replay`/`fresh20`) also uses the default; any other value must name
-   * a registered strategy or `parseRuntimeConfig` throws. Drives the quest
+   * a registered strategy or `parseRuntimeConfig` throws. Drives the journey
    * prototype's draft and enemy pools. `parseRuntimeConfig` always sets it; it is
    * optional only so test config literals can omit it and inherit the default.
    */
@@ -42,19 +42,19 @@ export interface RuntimeConfig {
    */
   fresh20PackSize?: number;
   /**
-   * Name of a saved quest to load on boot, from `?loadQuest=`. When set, the
-   * app fetches the matching snapshot from the dev server's `/api/saved-quests`
-   * endpoint and replaces the room's quest state with it before showing the
-   * game (see `scripts/saved-quests-api.mjs`). Null when absent.
+   * Name of a saved journey to load on boot, from `?loadJourney=`. When set, the
+   * app fetches the matching snapshot from the dev server's `/api/saved-journeys`
+   * endpoint and replaces the room's journey state with it before showing the
+   * game (see `scripts/saved-journeys-api.mjs`). Null when absent.
    * `parseRuntimeConfig` always sets it; it is optional only so test config
    * literals can omit it. Only works while the Vite dev server is running,
    * since that serves the endpoint.
    */
-  loadQuestName?: string | null;
+  loadJourneyName?: string | null;
   /**
    * Id of a developer QA scene to jump straight to on boot, from `?goto=`. When
-   * set, the app replaces the freshly created room's empty quest state with one
-   * parked on that screen (built from live quest content; see
+   * set, the app replaces the freshly created room's empty journey state with one
+   * parked on that screen (built from live journey content; see
    * `src/runtime/qa-scenes.ts`), so screens otherwise reachable only by playing
    * battles forward — such as the Dream Atlas boss preview — can be opened
    * directly for browser QA. Null when absent. `parseRuntimeConfig` always sets
@@ -62,7 +62,7 @@ export interface RuntimeConfig {
    */
   gotoScene?: string | null;
   /**
-   * Room id whose persisted quest log should be displayed, from
+   * Room id whose persisted journey log should be displayed, from
    * `?viewLogs=<roomId>`. When set, the app renders the read-only log viewer
    * (reading `rooms/<roomId>/logs` from Realtime Database) instead of joining a
    * game, so a production run's log can be inspected after the playing tab has
@@ -168,7 +168,7 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     poolVariant,
     draftMode,
     fresh20PackSize: parsePackSize(params.get("packsize")),
-    loadQuestName: parseLoadQuestName(params.get("loadQuest")),
+    loadJourneyName: parseLoadJourneyName(params.get("loadJourney")),
     gotoScene: parseGotoScene(params.get("goto")),
     viewLogs: normalizeRoomId(params.get("viewLogs")),
   };
@@ -227,7 +227,7 @@ function parseDatabaseMode(rawRealtime: string | null): DatabaseMode {
   return import.meta.env.PROD ? "realtime" : "emulator";
 }
 
-function parseLoadQuestName(rawName: string | null): string | null {
+function parseLoadJourneyName(rawName: string | null): string | null {
   if (rawName === null) {
     return null;
   }

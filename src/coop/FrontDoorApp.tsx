@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Database } from "firebase/database";
 import { FrontDoorRouter } from "../components/FrontDoorRouter";
 import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
-import { loadQuestContent, type QuestContent } from "../data/quest-content";
+import { loadJourneyContent, type JourneyContent } from "../data/journey-content";
 import { loadTutorialConfiguration } from "../data/tutorial-actions";
 import { getFirebaseDatabase } from "../firebase/app-config";
 import type { RuntimeConfig } from "../runtime/runtime-config";
@@ -29,7 +29,7 @@ export default function FrontDoorApp({
 }: FrontDoorAppProps): ReactNode {
   const [contentState, setContentState] = useState<
     | { status: "loading" }
-    | { status: "ready"; content: QuestContent }
+    | { status: "ready"; content: JourneyContent }
     | { status: "error"; message: string }
   >({ status: "loading" });
   const databaseResult = useMemo<
@@ -55,7 +55,7 @@ export default function FrontDoorApp({
     let cancelled = false;
     setContentState({ status: "loading" });
     void Promise.all([
-      loadQuestContent(
+      loadJourneyContent(
         runtimeConfig.poolVariant,
         runtimeConfig.draftMode,
         runtimeConfig.fresh20PackSize,
@@ -74,7 +74,7 @@ export default function FrontDoorApp({
       if (cancelled) return;
       setContentState({
         status: "error",
-        message: error instanceof Error ? error.message : "Failed to load quest content.",
+        message: error instanceof Error ? error.message : "Failed to load journey content.",
       });
     });
     return () => {
@@ -111,7 +111,7 @@ export default function FrontDoorApp({
       <ApplicationStateScreen view={{
         kind: "fatalConfiguration",
         title: "Firebase Setup Issue",
-        message: "This browser could not connect to the quest service.",
+        message: "This browser could not connect to the journey service.",
         detail: databaseResult.error,
       }} />
     );

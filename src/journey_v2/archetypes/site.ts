@@ -1,6 +1,6 @@
 import { weightedSample, type MerchantRng } from "../signals/rng";
 import { assembleOfferTrace } from "../trace/buildTrace";
-import type { SiteType } from "../../types/quest";
+import type { SiteType } from "../../types/journey";
 import type { MerchantContext } from "../types";
 import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
 

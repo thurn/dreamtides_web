@@ -184,7 +184,7 @@ describe("applyAppend nonce dedup", () => {
     const first = {
       ...makeEvent(1),
       nonce: "client-a:1",
-      intentKey: "complete-site:quest:9:site-7",
+      intentKey: "complete-site:journey:9:site-7",
     };
     let log = applyAppend(config, emptyLog(), first);
     for (let index = 2; index <= COMPACT_THRESHOLD + 1; index += 1) {

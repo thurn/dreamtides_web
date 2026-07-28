@@ -15,7 +15,7 @@ import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { ArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import { TRANSFIGURATION_COLORS } from "../../runtime/transfiguration-display";
-import type { TransfigurationType } from "../../types/quest";
+import type { TransfigurationType } from "../../types/journey";
 import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,

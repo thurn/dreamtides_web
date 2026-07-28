@@ -5,7 +5,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
-import { QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/QuestStatusBar";
+import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/JourneyStatusBar";
 import { artRef } from "../primitives/art";
 import { CumulusRoot } from "../CumulusRoot";
 import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
@@ -205,11 +205,11 @@ describe("Cumulus BattleStartScreen", () => {
     expect(glassPanel?.style.backdropFilter).toContain("--glass-blur");
     expect(panel?.style.position).toBe("absolute");
     expect(panel?.style.top).toBe("");
-    expect(panel?.style.bottom).toBe(QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE);
+    expect(panel?.style.bottom).toBe(JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE);
     expect(panel?.style.left).toBe("var(--space-4)");
     expect(panel?.style.width).toBe("calc(100vw - (var(--space-4) * 2))");
     expect(panel?.style.maxHeight).toBe(
-      `calc(100dvh - ${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE} - var(--space-4))`,
+      `calc(100dvh - ${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE} - var(--space-4))`,
     );
     expect(panel?.style.alignSelf).toBe("");
     expect(panel?.style.justifySelf).toBe("");
@@ -234,7 +234,7 @@ describe("Cumulus BattleStartScreen", () => {
       `max(var(--safe-area-inset-left), ${String(MENU_EDGE_INSET_MOBILE_PX)}px)`,
     );
     expect(opponent?.style.bottom).toBe(
-      QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+      JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
     );
     expect(opponent?.style.width).toBe("58vw");
     expect(opponent?.style.transform).toBe("scale(3)");

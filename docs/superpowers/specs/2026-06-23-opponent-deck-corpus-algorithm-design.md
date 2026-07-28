@@ -287,7 +287,7 @@ selections during implementation.
 
 ## Logging
 
-Per the project logging requirement, log to `logs/quest-log.jsonl` so any
+Per the project logging requirement, log to `logs/journey-log.jsonl` so any
 generated opponent is reconstructable: the chosen source deck (`draftId#seat`,
 fits, combined score, candidate count, top-K window, seed), every Stage B
 modification (Legendaries removed, cards cut with their synergy scores, Starters

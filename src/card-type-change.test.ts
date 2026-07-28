@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { CardData } from "./types/cards";
-import type { DeckEntry } from "./types/quest";
+import type { DeckEntry } from "./types/journey";
 import { asCardId, asCardName } from "./types/card-identity";
 import {
   applyCardKeywordModification,

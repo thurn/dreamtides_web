@@ -363,7 +363,7 @@ function activeDialogue(playback: TutorialPlaybackState | null): {
   return null;
 }
 
-/** Build the quest-independent opening state for the tutorial battle. */
+/** Build the journey-independent opening state for the tutorial battle. */
 export function buildTutorialView(
   dreamAvatars: readonly DreamAvatarContent[],
   playback: TutorialPlaybackState | null = null,

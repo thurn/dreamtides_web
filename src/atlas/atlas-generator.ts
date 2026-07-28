@@ -5,7 +5,7 @@ import type {
   DreamscapeNode,
   SiteState,
   SiteType,
-} from "../types/quest";
+} from "../types/journey";
 import type {
   ApollyonIncarnationContent,
   DreamscapeContent,
@@ -35,7 +35,7 @@ export interface SiteGenerationContext {
  * External data the 7-layer Atlas generator needs: the dreamscape definitions it
  * assigns to nodes, the generation tuning, and the run's dreamsign pool the
  * known-dreamsign placement draws from. Sourced from the compiled TOML bundles
- * (`public/{dreamscapes,atlas-config}-data.json`) and threaded through the quest
+ * (`public/{dreamscapes,atlas-config}-data.json`) and threaded through the journey
  * content so generation stays synchronous inside reducers.
  */
 export interface AtlasBuildContext {
@@ -57,7 +57,7 @@ export interface AtlasGenerationOptions {
    * Deterministic `[0, 1)` random source for the whole generation. When omitted
    * the generator draws from `Math.random` (the legacy/UI path). The coop
    * event-sourcing lifecycle provider passes a rng seeded from the run seed so
-   * every client folding `START_QUEST` builds a byte-identical atlas (the
+   * every client folding `START_JOURNEY` builds a byte-identical atlas (the
    * determinism rail). Set for the duration of a `generateInitialAtlas` call and
    * restored afterward, so other atlas mutators keep their own default.
    */
@@ -140,7 +140,7 @@ export function syncAtlasGeneratorCounters(atlas: DreamAtlas): void {
   siteIdCounter = Math.max(siteIdCounter, maxSiteIdSuffix(atlas));
 }
 
-/** Resets internal counters. Call when starting a new quest. */
+/** Resets internal counters. Call when starting a new journey. */
 export function resetAtlasGenerator(): void {
   nodeIdCounter = 0;
   siteIdCounter = 0;
@@ -1413,7 +1413,7 @@ export const STARTING_DREAMSCAPE_ICON_CLASS = "bx bx-flag";
 
 /**
  * Metadata for each site type. `icon` is a Boxicons (v3) class name following
- * the suggestions in `docs/quests/quests.md`; icons are rendered with the
+ * the suggestions in `docs/journeys/journeys.md`; icons are rendered with the
  * vendored Boxicons webfont rather than emoji so they stay visually consistent
  * with the rest of the UI.
  */

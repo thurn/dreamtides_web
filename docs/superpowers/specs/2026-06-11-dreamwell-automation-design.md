@@ -2,7 +2,7 @@
 
 **Date:** 2026-06-11
 **Status:** Approved
-**Area:** Quest prototype battle UI — basic automation
+**Area:** Journey prototype battle UI — basic automation
 
 ## Summary
 
@@ -214,7 +214,7 @@ Dawning Horizon, Sunrise Cavern, Summer Blossom.
 ## Logging
 
 Per `AGENTS.md`, each automated Dreamwell resolution appends a structured entry to
-`logs/quest-log.jsonl`:
+`logs/journey-log.jsonl`:
 
 - `event: "dreamwell_effect_resolved"`
 - card UUID, revealing side, turn number

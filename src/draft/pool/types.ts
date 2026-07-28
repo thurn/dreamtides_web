@@ -13,7 +13,7 @@ import type { Tides5DecksJson } from "./tides5-io.ts";
 // pools (see `docs/cards2/draft_pool_algorithms.md`). Each id names a
 // {@link PoolStrategy} registered in `registry.ts`; the variants are selectable
 // side by side via the `variant` argument and the `?algo=` URL parameter (which
-// drives both the quest prototype and the draft test harness). To make a variant
+// drives both the journey prototype and the draft test harness). To make a variant
 // the primary one, change `DEFAULT_POOL_VARIANT`; to retire one, remove its id
 // here and its `registry.ts` entry, then delete its module.
 export type PoolVariant =
@@ -38,7 +38,7 @@ export type PoolVariant =
   | "tides3"
   | "tides4"
   | "tides5";
-// The quest prototype and the draft test harness use this when `?algo=` is
+// The journey prototype and the draft test harness use this when `?algo=` is
 // absent. An unrecognised `?algo=` value is a hard error, not a fall-through to
 // this default.
 export const DEFAULT_POOL_VARIANT: PoolVariant = "tides4";

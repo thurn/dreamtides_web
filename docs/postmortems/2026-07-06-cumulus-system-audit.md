@@ -4,7 +4,7 @@
 **Scope:** the four screen efforts shipped over the past week, in priority
 order: deck viewer (`DesktopDeckViewer` / `MobileDeckViewer`), Dream Atlas
 (`AtlasScreen` + `components/atlas/`), Dreamscape (`DreamscapeScreen` +
-`SiteNode` + `QuestStatusBar`), and Dream Avatar select (`quest-start-*`).
+`SiteNode` + `JourneyStatusBar`), and Dream Avatar select (`journey-start-*`).
 **Question:** the screens moved fast; the system did not step back with them.
 What new patterns does the system need, what existing patterns should go, and
 what should change in the core token and component offerings?
@@ -60,9 +60,9 @@ use **IconButton**:
 |---|---|---|---|
 | Desktop deck close | `DesktopDeckViewer.tsx:343-359` | 40px / 22px | `glassIconButtonChrome()` (real blur glass) |
 | Mobile deck close | `MobileDeckViewer.tsx:370-390` | 48px / 26px | `glassIconButtonChrome()` |
-| Dreamscape/Atlas gear | `DreamscapeQuestMenu.tsx:121-122, 286-297` | 48px / 26px | `glassIconButtonChrome()` |
-| Carousel chevrons | `quest-start-mobile.tsx:220-259` (`EdgeChevron`) | 40px / 22px | **opaque** `--surface-glass` + `--border-soft` — a different material for the same idea |
-| Dreamsigns-panel close | `QuestStatusBar.tsx:398-417` | 34px / raw `<i>` | a third recipe: `--radius-control`, `rgba(255,255,255,0.05)`, no blur, no `GlowIcon` |
+| Dreamscape/Atlas gear | `DreamscapeJourneyMenu.tsx:121-122, 286-297` | 48px / 26px | `glassIconButtonChrome()` |
+| Carousel chevrons | `journey-start-mobile.tsx:220-259` (`EdgeChevron`) | 40px / 22px | **opaque** `--surface-glass` + `--border-soft` — a different material for the same idea |
+| Dreamsigns-panel close | `JourneyStatusBar.tsx:398-417` | 34px / raw `<i>` | a third recipe: `--radius-control`, `rgba(255,255,255,0.05)`, no blur, no `GlowIcon` |
 
 The chrome function exists (`control-treatment.ts:122-124`) but it is a style
 recipe, not a component: each call site re-declares width/height/fontSize by
@@ -81,7 +81,7 @@ controls in the deck viewer should just be buttons.
 - **`IconButton`** — the glass disc: `glassIconButtonChrome()` promoted to a
   component with a `Glyph` prop and an enumerated size (`sm` = 40/22,
   `md` = 48/26 — exactly the two observed tuples), press feedback via
-  `usePress`. Fold all five call sites onto it; the QuestStatusBar close and
+  `usePress`. Fold all five call sites onto it; the JourneyStatusBar close and
   `EdgeChevron` are bug-fixes as much as migrations.
 - Document the decision tree in the demos: accent glass label = commit / primary;
   neutral glass label = secondary chrome action; glass icon = compact chrome
@@ -141,7 +141,7 @@ catalog presence** and no token backing. Current state:
 - **`StatTile`** — zero consumers anywhere (its motivating use case, "deck
   stats," shipped without it). Delete component, demo, and registry entry.
 - **`TidePill`** — zero production renders; only its re-exported `Tide`
-  *type* is imported (`quest-start-view-model.ts:11`). Move the type into
+  *type* is imported (`journey-start-view-model.ts:11`). Move the type into
   `tide-spec.ts` and delete the component and demo.
 - **`SiteNode`'s visited state** — production filters visited sites out
   before `SiteNode` ever mounts (`DreamscapeScreen.tsx:112-113`; asserted
@@ -172,7 +172,7 @@ catalog presence** and no token backing. Current state:
   catalog entry. The `site-node` demo already does this right (live
   press-reveal wired) — make that the standard. Same for `TideDisc`: its
   demo shows a bare disc, production only ever renders it inside an
-  `InfoCard.PressInfo` reveal (`quest-start-shared.tsx:65-73`) — the demo
+  `InfoCard.PressInfo` reveal (`journey-start-shared.tsx:65-73`) — the demo
   should show the disc-with-reveal as the canonical usage.
 - The atlas mockup (`docs/mockups/atlas-map.tsx`) is stale in orientation
   (horizontal; production is vertical bottom-up), chrome (title block the
@@ -186,7 +186,7 @@ catalog presence** and no token backing. Current state:
 
 `ResourceChip`'s blurb claims "every essence, energy, spark, points, or
 counter number routes through it." Reality: **one** consumer
-(`quest-start-shared.tsx:398`); the role it claims is actually held by the
+(`journey-start-shared.tsx:398`); the role it claims is actually held by the
 legacy `EssenceValue` (10 consumers, all outside Cumulus), whose own comment
 defers to ResourceChip. ResourceChip carries open numeric `size` and `gap`
 props — exactly the knobs the customization ladder bans, grandfathered from
@@ -198,7 +198,7 @@ numeric `size`/`gap` knobs with enumerated variants, (c) rewrite the blurb to
 say what is true today and
 name the plan: legacy screens migrate from `EssenceValue` onto it as they
 Cumulus-ify, then `EssenceValue` is deleted. What it is *for* is the answer
-to the user-facing question: the HUD/quest-economy number-with-mark —
+to the user-facing question: the HUD/journey-economy number-with-mark —
 Dream Avatar starting essence today, shop prices and reward values as those
 screens migrate.
 
@@ -254,17 +254,17 @@ mechanical and belongs in `npm run cumulus-docs`.
 Forks that stabilized without the promote-or-file decision:
 
 - **Dream Avatar portrait, three renderings**: `DreamAvatarPortrait` offers
-  `hero`/`panel`/`thumb`, none full-bleed, so quest-start built
-  `StandingFigure` (`quest-start-desktop.tsx:65-146`) and
-  `FullBleedPortrait` (`quest-start-mobile.tsx:33-103`) — re-deriving the
+  `hero`/`panel`/`thumb`, none full-bleed, so journey-start built
+  `StandingFigure` (`journey-start-desktop.tsx:65-146`) and
+  `FullBleedPortrait` (`journey-start-mobile.tsx:33-103`) — re-deriving the
   component's fallback treatment verbatim: the identical backdrop gradient
   string appears character-for-character three times
-  (`DreamAvatarPortrait.tsx:48/124`, `quest-start-desktop.tsx:97`) and the
+  (`DreamAvatarPortrait.tsx:48/124`, `journey-start-desktop.tsx:97`) and the
   monogram fallback three times. Add a `standing`/`fullBleed` variant (or at
   minimum share the fallback logic), and note that InfoCard's new
-  `fullBleed` variant and quest-start's figure-plus-riding-card composition
+  `fullBleed` variant and journey-start's figure-plus-riding-card composition
   are the same idiom built twice in the same week.
-- **`QsbSignObject`** (`QuestStatusBar.tsx:112-198`) re-implements the
+- **`QsbSignObject`** (`JourneyStatusBar.tsx:112-198`) re-implements the
   shared `Dreamsign` object for the status-bar strip. Fold onto `Dreamsign`.
 - **`DreamscapeMotes`** (`SiteNode.tsx:258-292`) is a second, bespoke
   particle field alongside the canonical `Motes`. Consolidate (a tint/mode)
@@ -336,7 +336,7 @@ it would have caught.
   token moves into Cumulus.
 - **`no-raw-icon-classes`** — Boxicons class strings (`bxf`, `bx-*`) may
   appear only in `glyph.ts`; everything else renders a `Glyph` through
-  `GlowIcon`/`PipBadge`. Would have caught: QuestStatusBar's raw
+  `GlowIcon`/`PipBadge`. Would have caught: JourneyStatusBar's raw
   `<i className="bxf bx-x">` close button (§1) and the duplicated
   `Button`/`ResourceChip` icon tables (§3, by forcing the shared economy
   spec into the registry). A generation-time companion check that every
@@ -486,7 +486,7 @@ and two findings gained new instances:
   tokens (now at `cumulus-tokens.css:183-184`), both `GlassBackdrop` copies,
   `StatTile`/`TidePill` at zero consumers, the dead-token set (with a
   correction: `--glow-danger` is live via `leave-site-button.css:27` and
-  `--glow-accent-soft` via `DesktopDeckViewer.tsx`/`QuestStatusBar.tsx`;
+  `--glow-accent-soft` via `DesktopDeckViewer.tsx`/`JourneyStatusBar.tsx`;
   the other four `--glow-*` are orphaned), the four dark-disc gradients, the
   1.07/1.08 hand-rolled hover scales, and all §5 convergence debt.
 - One nuance to the §3 catalog claim: the generic `InfoCard.PressInfo`
@@ -507,14 +507,14 @@ set of commits:
 
 - **Three competing mechanisms for "clear the notch" coexist.** (1) The
   sanctioned injectable channel (`MobileDeckViewer.tsx:343`,
-  `StartingDeckModal.tsx:168`, `DreamscapeQuestMenu.tsx:265-270`,
-  `QuestStatusBar.tsx:634`, `battle.css:2435`). (2) Raw
+  `StartingDeckModal.tsx:168`, `DreamscapeJourneyMenu.tsx:265-270`,
+  `JourneyStatusBar.tsx:634`, `battle.css:2435`). (2) Raw
   `env(safe-area-inset-top)` — `DraftScreen.tsx:74`, a day-one violation of
   the subsystem's own doctrine: `env()` resolves to 0 inside the screenshot
   iframe, so the draft screen silently ignores the injected inset and
   device-frame simulation has no effect on the newest screen. (3) The
   static design floors `--safe-top`/`--safe-bottom` (59/34px), used
-  exclusively by both quest-start screens and mixed with mechanism (1)
+  exclusively by both journey-start screens and mixed with mechanism (1)
   inside `MobileDeckViewer.tsx` (`:187` vs `:343`). `--safe-top`'s 59px
   numerically coincides with the derived iPhone-16 top inset
   (`screenshot-devices.mjs` 11+37+11); nothing ties them together.
@@ -528,7 +528,7 @@ set of commits:
 - **The docs split brains**: the device-screenshots SKILL is accurate; the
   cumulus `tokens.md` has bare generated rows for the new tokens and no
   narrative chapter stating the one sanctioned mechanism — which is
-  plausibly *why* DraftScreen and quest-start each picked a different one.
+  plausibly *why* DraftScreen and journey-start each picked a different one.
   `DeviceFrameDemo` is reachable only via `?demo=device-frame`, registered
   in neither `qa-scenes.ts` nor `qa_scenes.md`.
 
@@ -570,7 +570,7 @@ resolved only at the display edge. The residue is at the seams:
 
 - **Hamburger clearance went through three hand-guessed formulas in three
   commits**, none reading the menu's real geometry
-  (`DreamscapeQuestMenu.tsx` `menuBtnSize = 48`, `menuEdgeInset = 18`).
+  (`DreamscapeJourneyMenu.tsx` `menuBtnSize = 48`, `menuEdgeInset = 18`).
   The `117d2d7e` fix briefly resurrected the dead `--control-h` token as a
   wrong proxy (52px for a 48px button); `70bb0bcd` deleted that and now
   over-reserves via the `--safe-top` floor, clearing the menu by

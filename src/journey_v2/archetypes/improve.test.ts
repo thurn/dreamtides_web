@@ -8,11 +8,11 @@ import {
   makeMerchantTestContent,
   makeMerchantTestCorpus,
   makeMerchantTestDeckEntry,
-  makeMerchantTestQuestState,
+  makeMerchantTestJourneyState,
   makeMerchantTestSite,
 } from "../testing/fixtures";
 import type { CardData } from "../../types/cards";
-import type { DeckEntry } from "../../types/quest";
+import type { DeckEntry } from "../../types/journey";
 import type { MerchantContext } from "../types";
 import {
   keywordModBuilder,
@@ -44,15 +44,15 @@ function makeContext(input: {
   corpusCards?: Record<string, { quality: number; multiplicity?: number }>;
   fitModel?: FitModel;
 }): MerchantContext {
-  const questContent = makeMerchantTestContent({
+  const journeyContent = makeMerchantTestContent({
     cards: input.cards,
     fitModel: input.fitModel,
     merchantCorpus: makeMerchantTestCorpus({ cards: input.corpusCards ?? {} }),
   });
-  const questState = makeMerchantTestQuestState({ deck: [...input.deckEntries] });
+  const journeyState = makeMerchantTestJourneyState({ deck: [...input.deckEntries] });
   return buildMerchantContext({
-    questState,
-    questContent,
+    journeyState,
+    journeyContent,
     site: makeMerchantTestSite(),
   });
 }
@@ -253,7 +253,7 @@ describe("improve family — transfigure pair enumeration", () => {
     for (let seed = 0; seed < SEEDS; seed += 1) {
       const draft = transfigureBuilder.build(
         context,
-        merchantRng("quest", "site", "A", "target", String(seed)),
+        merchantRng("journey", "site", "A", "target", String(seed)),
       );
       expect(draft).not.toBeNull();
       if (draft === null) continue;
@@ -286,11 +286,11 @@ describe("improve family — transfigure pair enumeration", () => {
     expect(draft?.targetKey).toMatch(/^e1:/);
     expect(draft?.applyPayload?.kind).toBe("transfigure_deck_entry");
 
-    const questState = makeMerchantTestQuestState({ deck: deckEntries });
-    const questContent = makeMerchantTestContent({ cards: [card] });
+    const journeyState = makeMerchantTestJourneyState({ deck: deckEntries });
+    const journeyContent = makeMerchantTestContent({ cards: [card] });
     const next = applyMerchantPayloadToState({
-      state: questState,
-      questContent,
+      state: journeyState,
+      journeyContent,
       payload: draft!.applyPayload!,
     });
     expect(next).not.toBeNull();
@@ -502,11 +502,11 @@ describe("improve family — keyword_mod", () => {
       expect(draft.applyPayload.keywords.setReclaim).toBe(2);
     }
 
-    const questState = makeMerchantTestQuestState({ deck: deckEntries });
-    const questContent = makeMerchantTestContent({ cards: [ev] });
+    const journeyState = makeMerchantTestJourneyState({ deck: deckEntries });
+    const journeyContent = makeMerchantTestContent({ cards: [ev] });
     const next = applyMerchantPayloadToState({
-      state: questState,
-      questContent,
+      state: journeyState,
+      journeyContent,
       payload: draft!.applyPayload!,
     });
     expect(next).not.toBeNull();
@@ -628,11 +628,11 @@ describe("improve family — tribal_change", () => {
       `merchant:tribal:${payload.typeChange.subtype}`,
     );
 
-    const questState = makeMerchantTestQuestState({ deck: deckEntries });
-    const questContent = makeMerchantTestContent({ cards });
+    const journeyState = makeMerchantTestJourneyState({ deck: deckEntries });
+    const journeyContent = makeMerchantTestContent({ cards });
     const next = applyMerchantPayloadToState({
-      state: questState,
-      questContent,
+      state: journeyState,
+      journeyContent,
       payload,
     });
     expect(next).not.toBeNull();

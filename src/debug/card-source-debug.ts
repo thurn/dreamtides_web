@@ -4,7 +4,7 @@ import type {
   CardSourceDebugEntry,
   CardSourceDebugState,
   CardSourceDebugSurface,
-} from "../types/quest";
+} from "../types/journey";
 
 function buildCardSourceDebugEntry(
   card: CardData | FrozenCardData,

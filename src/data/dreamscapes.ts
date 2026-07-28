@@ -4,7 +4,7 @@ import type {
   DreamGuideContent,
   DreamscapeContent,
 } from "../types/content";
-import type { SiteType } from "../types/quest";
+import type { SiteType } from "../types/journey";
 
 // Re-export the content types so callers can import dreamscape/guide/affiliation
 // shapes alongside their loaders from one module.

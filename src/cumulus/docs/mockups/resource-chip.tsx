@@ -4,7 +4,7 @@
 // second inline row showing the same marks in their tight "value+mark" text
 // form (200◆, no chip background) the way they read inside rules text or a
 // reward line. Values are illustrative numbers, matching the pattern the
-// QuestStatusBar mockup already uses for its own essence figure.
+// JourneyStatusBar mockup already uses for its own essence figure.
 
 import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
 import { ResourceChip } from "../../components/hud/ResourceChip";

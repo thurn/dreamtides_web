@@ -22,7 +22,7 @@ export interface DraftConfig {
 export interface PackContext {
   /** Remaining copies for each card number in the fixed run pool. */
   remainingCopiesByCard: Record<string, number>;
-  /** 1-indexed pick counter across the entire quest. */
+  /** 1-indexed pick counter across the entire journey. */
   pickNumber: number;
   /** Number of cards to include in the pack. */
   packSize: number;
@@ -40,7 +40,7 @@ interface DraftStateCommon {
   currentOffer: number[];
   /** Site currently owning the in-progress or completed visit state. */
   activeSiteId: string | null;
-  /** 1-indexed pick counter across the entire quest (1..30). */
+  /** 1-indexed pick counter across the entire journey (1..30). */
   pickNumber: number;
   /** Number of player picks completed in the current draft site visit. */
   sitePicksCompleted: number;

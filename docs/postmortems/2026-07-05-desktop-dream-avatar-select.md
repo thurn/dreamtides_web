@@ -3,8 +3,8 @@
 **Date range:** 2026-07-04 16:13 → 2026-07-05 07:46 (local), plus a follow-up
 file split later that morning.
 **Surface:** the desktop (wide-viewport) layout of the Dream Avatar select
-screen (`src/cumulus/screens/quest-start-desktop.tsx`, formerly the desktop half
-of `QuestStartScreen.tsx`).
+screen (`src/cumulus/screens/journey-start-desktop.tsx`, formerly the desktop half
+of `JourneyStartScreen.tsx`).
 **Sources:** four Claude session transcripts
 (`ba1dac74`, `3da28f94`, `44eca388`, `21947819`), `git log`
 `20792680..b00a2aa7`, and a current-tree audit of the screen, the tide
@@ -16,7 +16,7 @@ components, and the lint rules.
 
 Getting the desktop Dream Avatar select to a good state took **~15 hours of
 wall-clock design work, 24 commits, and roughly 2× the screen's final line
-count rewritten in place** (`QuestStartScreen.tsx`: 21 commits, +2093/−1376
+count rewritten in place** (`JourneyStartScreen.tsx`: 21 commits, +2093/−1376
 against a ~1170-line result). Along the way: six wholesale redesign commits,
 three parallel redesigns forked from the same parent within nine minutes (two
 abandoned), a dev-tweaks panel built and fully deleted (+382/−382 net zero),
@@ -55,7 +55,7 @@ this design push fork a component visual, and when does it fold back in?"
 | 4 | (not in sampled sessions) | Jul 4 evening | `8d2b…`, `bd64d18d`, `8dbf…` interleaved | Cutout-figure art direction landed between sessions. |
 | 5 | `44eca388` | Jul 4 22:13 – Jul 5 06:44 | `2aac22f4`, `26038424`, `fb31f05c`, `adc4d29b`, `51aca436`, `370583fa`, `56c8f250`, `e8307c97`, `aea34715` | Polish pass, then the user requested a live tweaks panel. Six knob/bake rounds converged the proportions; panel then deleted and values normalized into the design. Two mechanism misses (column-vs-card width conflation; a portrait-height knob that added empty space instead of growing the art). |
 | 6 | `21947819` | Jul 5, 06:45–07:46 | `7e90a920`, `b00a2aa7` | Tide info-card variant + ability box. Two aesthetic iterations implemented then reverted to the first version. The shipped auto-shrink was rejected as "way too aggressive" — the 3-line worst case had never been rendered during QA. |
-| 7 | follow-up | Jul 5, 08:59 | `f443c41d` | Screen split into `quest-start-desktop.tsx` / `quest-start-mobile.tsx` / `quest-start-shared.tsx`. |
+| 7 | follow-up | Jul 5, 08:59 | `f443c41d` | Screen split into `journey-start-desktop.tsx` / `journey-start-mobile.tsx` / `journey-start-shared.tsx`. |
 
 ---
 
@@ -225,7 +225,7 @@ The tide indicator is the canonical example. Current state
    (`TideCluster.tsx:43`) and hand-mirrored copies of TidePill's pill metrics
    (`PILL_FONT_PX = 12`, `PILL_PAD_X = 9`, `PILL_GAP = 6`), with a comment
    naming TidePill as the source of truth it mirrors.
-3. **`quest-start-desktop.tsx`** — a third, screen-local disc: its own
+3. **`journey-start-desktop.tsx`** — a third, screen-local disc: its own
    `TIDE_DISC_PX = 24` (line 36), its own hover state, its own
    `borderRadius: "50%"` span, its own brightness-on-hover treatment, feeding
    `InfoCard.PressInfo` directly.

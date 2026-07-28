@@ -60,7 +60,7 @@ wager generator.
 - Rewards include individual cards, card drafts, card bundles, transfigured
   cards, card modifications, purges, purge-and-replace offers, duplication,
   Dreamsigns, and new sites.
-- Generation is deterministic from the quest seed, site id, deck, held
+- Generation is deterministic from the journey seed, site id, deck, held
   Dreamsigns, and debug nonce. Accepting regenerates the encounter and checks
   its signature, offer id, archetype, and selected candidate before applying
   the payload.
@@ -69,7 +69,7 @@ wager generator.
   reconstructable from a production log.
 - The persisted Augury runtime is intentionally small: completion plus debug
   reroll and forced-archetype fields. The encounter itself is derived from
-  current quest state.
+  current journey state.
 - Gamble currently routes to the shared work-in-progress site screen and has
   no wager runtime.
 
@@ -93,7 +93,7 @@ child resolves, and different reward families scale in different ways.
 The current Augury context carries essence but its generator does not use it.
 Gamble will need explicit stake eligibility and affordability. It also needs a
 broader effect vocabulary than the Augury payload currently exposes, even
-though the quest reducer already represents some useful future-facing effects
+though the journey reducer already represents some useful future-facing effects
 such as temporary Banes, future battle-reward reductions, shop modifiers, and
 Dreamscape site modifiers.
 
@@ -114,7 +114,7 @@ belongs to Layaway. A Gravok event earns its place by asking the player to price
 variance, decide when to stop, risk chosen collateral, act under partial
 information, or make a falsifiable bet about future play.
 
-The canonical site definitions in [Quests](../quests/quests.md) assign
+The canonical site definitions in [Journeys](../journeys/journeys.md) assign
 temporary deck or game-rule changes and future rewards to Temporal Fork.
 Gravok may use the same state primitives only when uncertainty or a performance
 condition is the heart of the scene. Remove that wager and the content should
@@ -510,7 +510,7 @@ those battles would have been, and the UI shows a pessimistic and optimistic
 range.
 
 The player is effectively short-selling future rewards to stabilize the deck
-now. This uses a future battle-reward modifier the quest state can already
+now. This uses a future battle-reward modifier the journey state can already
 represent, but frames it as a wager on the unknown size of those future
 payouts. A fixed future payment for a fixed reward belongs to Tempting Offer or
 Temporal Fork.
@@ -593,7 +593,7 @@ wager.
 
 A portion of every lost essence stake enters a run-local jackpot. Future Gamble
 visits show the pot, and rare wager outcomes can claim it. If the route contains
-no later Gamble, a bounded fraction converts into a final-boss or quest-end
+no later Gamble, a bounded fraction converts into a final-boss or journey-end
 payout.
 
 The jackpot gives bad luck memory and creates a run-spanning relationship with

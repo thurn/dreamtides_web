@@ -1,10 +1,10 @@
 /**
  * Default starting essence used when a DreamAvatar record omits a tuned
- * value. Persistence helpers (see `normalizeQuestState`) also fall back to
+ * value. Persistence helpers (see `normalizeJourneyState`) also fall back to
  * this constant so RTDB-stripped rooms render with a sensible value.
  */
 import type { PoolVariant } from "../draft/pool/types.ts";
-import type { SiteType } from "./quest.ts";
+import type { SiteType } from "./journey.ts";
 
 export const DEFAULT_STARTING_ESSENCE = 200;
 

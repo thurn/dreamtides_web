@@ -60,7 +60,7 @@ export const CARD_CORNER_RADIUS = `${CARD_CORNER_RADIUS_PCT}% / ${(
 export const BATTLEFIELD_CARD_CORNER_RADIUS = `${CARD_CORNER_RADIUS_PCT}%`;
 
 /**
- * Width of a single card in the quest draft offer: the smaller of half the
+ * Width of a single card in the journey draft offer: the smaller of half the
  * container width (two cards across) and the width that keeps two rows tall
  * within the available viewport height. Each row is `width * H / W` tall, so
  * two rows fit when `width = available-height * W / (2 * H)`. The card

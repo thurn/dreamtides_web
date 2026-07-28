@@ -11,7 +11,7 @@
 import * as React from "react";
 import type { CSSProperties } from "react";
 import { richText } from "../card/rich-text";
-import type { Dreamsign as DreamsignData } from "../../../types/quest";
+import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { assetUrl } from "../../../runtime/asset-url";
 import { artRef } from "../../primitives/art";
 import { requireDreamsignId } from "../../../data/dreamsigns";
@@ -61,7 +61,7 @@ export interface DreamsignProps {
    * The tile's material. `"flat"` (default) is the chrome-free collectible tile
    * used in lists over a solid surface; `"hud"` composes {@link DS_SHADOW} — a
    * drop-shadow + violet glow — into the tile filter so the object lifts off busy
-   * scene art in the transparent quest HUD. `"revelation"` uses a stronger
+   * scene art in the transparent journey HUD. `"revelation"` uses a stronger
    * path-following shadow for large choices over bright Revelation site art.
    */
   variant?: "flat" | "hud" | "revelation";

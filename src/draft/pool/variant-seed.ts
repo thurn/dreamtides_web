@@ -178,6 +178,6 @@ export const seedStrategy: PoolStrategy = {
     "Draw one card at random and grow a 150-card pool around it by IDF-weighted " +
     "co-occurrence affinity — to the seed and to the cards already chosen.",
   // Deliberately ignores `request.targetSize`: the variant pins its own size via
-  // `SEED.targetSize`, so the quest's global pool target does not override it.
+  // `SEED.targetSize`, so the journey's global pool target does not override it.
   generate: ({ rng, poolData }) => generateSeed(rng, poolData),
 };

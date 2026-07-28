@@ -172,7 +172,7 @@ const CONTROL_BUTTON_PX = 48;
  * The top band: a centered "Your Deck" title with a card-count eyebrow beneath
  * it, the corner close control, and the filter/sort `controls` row. The top-left
  * corner is left clear for the dreamscape utility menu, which lifts above this
- * overlay while it is open (see `DreamscapeQuestMenu`'s `elevated`) and wears the
+ * overlay while it is open (see `DreamscapeJourneyMenu`'s `elevated`) and wears the
  * same glass surface; the close control on the right is a matching glass disc.
  * The title sits centered between them, dropping in just below the device's
  * screen cutout (notch / Dynamic Island / punch-hole) — the band's top padding

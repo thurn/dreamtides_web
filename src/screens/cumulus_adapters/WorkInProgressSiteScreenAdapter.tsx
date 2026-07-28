@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { WorkInProgressSiteScreen } from "../../cumulus/screens/WorkInProgressSiteScreen";
 import { logEvent, logEventOnce } from "../../logging";
-import { useQuest } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
 import {
   buildWorkInProgressSiteView,
   isWorkInProgressSiteType,
@@ -15,7 +15,7 @@ export function WorkInProgressSiteScreenAdapter({
 }: {
   siteId: string;
 }) {
-  const { state, mutations, questContent } = useQuest();
+  const { state, mutations, journeyContent } = useJourney();
   const node =
     state.currentDreamscape === null
       ? null
@@ -28,7 +28,7 @@ export function WorkInProgressSiteScreenAdapter({
   const guide =
     site === null
       ? null
-      : resolveWorkInProgressGuide(questContent.guides, site.type);
+      : resolveWorkInProgressGuide(journeyContent.guides, site.type);
   const guideLineRef = useRef<string | null | undefined>(undefined);
   if (guideLineRef.current === undefined) {
     guideLineRef.current =

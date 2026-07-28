@@ -92,7 +92,7 @@ describe("ErrorBoundary", () => {
       .not.toBeNull();
   });
 
-  it("logs the caught error through logEvent so it lands in quest-log.jsonl", () => {
+  it("logs the caught error through logEvent so it lands in journey-log.jsonl", () => {
     mount(
       <ErrorBoundary scope="screen">
         <Bomb message="boom-in-screen" />

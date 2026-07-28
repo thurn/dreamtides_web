@@ -2,7 +2,7 @@
 // reveal.
 //
 // The first time a run has a DreamAvatar and has not yet seen its deck, the app
-// shows the player the cards they begin the quest with. This is that popup: a
+// shows the player the cards they begin the journey with. This is that popup: a
 // CardGalleryPanel with the same left-aligned title/subtitle, trailing close
 // accessory, and internal card-grid scroll used by card-selection sites.
 //
@@ -17,7 +17,7 @@
 // or Escape.
 //
 // PURE: renders from a view-model (`starting-deck-view-model.ts` builds it from
-// live quest state in the adapter) and reports dismissal through `onClose`.
+// live journey state in the adapter) and reports dismissal through `onClose`.
 
 import type { ReactElement } from "react";
 import type { GameCardModel } from "../components/card/CardView";
@@ -66,7 +66,7 @@ export function StartingDeckOverlay({
     <DeckGalleryOverlay
       isOpen={isOpen}
       title="Starting Deck"
-      subtitle="These are the cards you begin the quest with."
+      subtitle="These are the cards you begin the journey with."
       cards={view.cards}
       emptyLabel="No cards in starting deck."
       closeLabel="Close starting deck"

@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef } from "react";
-import type { CardSourceDebugState } from "../types/quest";
-import type { QuestMutations } from "./quest-context";
+import type { CardSourceDebugState } from "../types/journey";
+import type { JourneyMutations } from "./journey-context";
 
 /**
  * Publishes client-local card provenance once per logical mounted surface.
@@ -8,7 +8,7 @@ import type { QuestMutations } from "./quest-context";
  * the publication id prevents a departed surface from clearing its successor.
  */
 export function useCardSourceDebugPublication(
-  publish: QuestMutations["setCardSourceDebug"],
+  publish: JourneyMutations["setCardSourceDebug"],
   state: CardSourceDebugState | null,
   shownSource: string,
   hiddenSource: string,

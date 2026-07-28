@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { getLogEntries, resetLog } from "../../logging";
 import {
-  beginQuestFailureRoute,
-  freezeQuestFailureSummary,
+  beginJourneyFailureRoute,
+  freezeJourneyFailureSummary,
 } from "./failure-route";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "../test-support";
 import type { BattleMutableState } from "../types";
@@ -65,9 +65,9 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe("freezeQuestFailureSummary", () => {
+describe("freezeJourneyFailureSummary", () => {
   it("captures every required field from the battle state", () => {
-    const summary = freezeQuestFailureSummary({
+    const summary = freezeJourneyFailureSummary({
       battleInit: {
         battleId: "battle-1",
         siteId: "site-7",
@@ -93,7 +93,7 @@ describe("freezeQuestFailureSummary", () => {
   });
 
   it("preserves the null dreamscape id when no dreamscape is active", () => {
-    const summary = freezeQuestFailureSummary({
+    const summary = freezeJourneyFailureSummary({
       battleInit: {
         battleId: "battle-2",
         siteId: "site-1",
@@ -111,11 +111,11 @@ describe("freezeQuestFailureSummary", () => {
   });
 });
 
-describe("beginQuestFailureRoute", () => {
-  it("freezes the summary, pushes it onto quest state, and routes to questFailed without resetting the quest", () => {
+describe("beginJourneyFailureRoute", () => {
+  it("freezes the summary, pushes it onto journey state, and routes to journeyFailed without resetting the journey", () => {
     const mutations = makeMutations();
 
-    const summary = beginQuestFailureRoute({
+    const summary = beginJourneyFailureRoute({
       battleInit: {
         battleId: "battle-3",
         siteId: "site-9",
@@ -139,7 +139,7 @@ describe("beginQuestFailureRoute", () => {
       "battle_failure_confirmed",
     );
     expect(mutations.setScreen).toHaveBeenCalledTimes(1);
-    expect(mutations.setScreen).toHaveBeenCalledWith({ type: "questFailed" });
+    expect(mutations.setScreen).toHaveBeenCalledWith({ type: "journeyFailed" });
     expect(getLogEntries()).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -166,7 +166,7 @@ describe("beginQuestFailureRoute", () => {
       callOrder.push("clearBattleStateForRoom");
     });
 
-    beginQuestFailureRoute({
+    beginJourneyFailureRoute({
       battleInit: {
         battleId: "battle-4",
         siteId: "site-10",

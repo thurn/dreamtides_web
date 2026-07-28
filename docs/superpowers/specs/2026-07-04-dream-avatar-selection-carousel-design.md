@@ -12,8 +12,8 @@ cards) with the imported mobile design: a **full-bleed swipe carousel**, one
 Dream Avatar per page. Focus on getting the mobile presentation right; a
 desktop/wide layout is out of scope for this change.
 
-The screen remains the quest's opening screen and keeps today's flow: choosing a
-Dream Avatar starts the quest immediately.
+The screen remains the journey's opening screen and keeps today's flow: choosing a
+Dream Avatar starts the journey immediately.
 
 ## What the screen is
 
@@ -37,7 +37,7 @@ A horizontally swipeable carousel of the three offered Dream Avatars. Each page:
   neighbor exists.
 
 "Choose {Name}" calls `onPick(dreamAvatarId)`. The adapter's `onPick` runs
-`startQuest` exactly as today — no intermediate confirmation.
+`startJourney` exactly as today — no intermediate confirmation.
 
 ## Scope
 
@@ -58,14 +58,14 @@ A horizontally swipeable carousel of the three offered Dream Avatars. Each page:
 
 - The design's `ConfirmScreen` (detail view) and `BegunScreen` (essence
   count-up bootstrap). The design's live `App` renders neither; its "Choose"
-  button is a no-op stub. We wire "Choose" straight to `startQuest`.
+  button is a no-op stub. We wire "Choose" straight to `startJourney`.
 - A dedicated desktop/wide layout.
 - Signature-card display. Per the decision below, non-tides4 runs hide the tides
   row rather than falling back to a signature-card list.
 
 ## Decisions
 
-1. **Carousel only.** "Choose" → `onPick` → `startQuest`, matching today's flow.
+1. **Carousel only.** "Choose" → `onPick` → `startJourney`, matching today's flow.
 2. **Full container-transform**, promoted to a Cumulus component (`TideCluster`).
 3. **Hide the tides row when a run has no tides.** The screen assumes the
    documented `tides4` default (per `AGENTS.md`), under which tides always
@@ -75,10 +75,10 @@ A horizontally swipeable carousel of the three offered Dream Avatars. Each page:
 
 ## Architecture — three files (per the cumulus-migrate checklist)
 
-### 1. `src/cumulus/screens/QuestStartScreen.tsx` (rewritten, pure)
+### 1. `src/cumulus/screens/JourneyStartScreen.tsx` (rewritten, pure)
 
 Pure presentation. Renders from the existing `DreamAvatarOfferView[]`; reports
-the chosen Dream Avatar through `onPick(dreamAvatarId: string)`. No `useQuest()`,
+the chosen Dream Avatar through `onPick(dreamAvatarId: string)`. No `useJourney()`,
 no mutations, no navigation, no logging.
 
 Local UI state lives here:
@@ -89,7 +89,7 @@ Local UI state lives here:
   `TidePill` / `TideCluster` reveal so popups anchor and clamp on-screen.
 
 The exported view types are unchanged in shape from today
-(`DreamAvatarOfferView`, `DreamAvatarTideView`, `QuestStartScreenProps`), except
+(`DreamAvatarOfferView`, `DreamAvatarTideView`, `JourneyStartScreenProps`), except
 that `signatureCards` is no longer read by the screen. Keep the field on the
 type for now (the builder still populates it deterministically); the screen
 ignores it. `onPick` still carries the Dream Avatar **id**, never a domain
@@ -127,7 +127,7 @@ scrim/wash/vignette is painted over the portrait to fake legibility.
 - Tides cluster: `data-dream-avatar-tides={dreamAvatarId}`.
 - Each resting tide pill: `data-dream-avatar-tide={`${dream avatarId}:${tideId}`}`.
 
-### 2. `src/screens/cumulus_adapters/quest-start-view-model.ts` (nearly unchanged)
+### 2. `src/screens/cumulus_adapters/journey-start-view-model.ts` (nearly unchanged)
 
 Already maps domain data to the screen's view types: `name`, `title` (the
 epithet shown after the name), `renderedText` (ability), `startingEssence`, and
@@ -139,10 +139,10 @@ produces the field deterministically and its existing unit tests still hold. (If
 review prefers, a follow-up can drop the field, but that is not required for this
 change and would ripple into the shared screen view types.)
 
-### 3. `src/screens/cumulus_adapters/QuestStartScreenAdapter.tsx` (unchanged)
+### 3. `src/screens/cumulus_adapters/JourneyStartScreenAdapter.tsx` (unchanged)
 
 Still mints the offer + run seed once per mount (`useRef` lazy-init), builds the
-view-model in `useMemo`, and wires `onPick` → `startQuest(dreamAvatar, seed)`.
+view-model in `useMemo`, and wires `onPick` → `startJourney(dreamAvatar, seed)`.
 No change needed unless a mount-log (`site_entered`-style) is added; if so it
 follows the StrictMode-guarded-ref idiom.
 
@@ -152,7 +152,7 @@ follows the StrictMode-guarded-ref idiom.
 
 `DreamAvatarPortrait` is **not modified**. The carousel needs a frameless,
 full-bleed cinematic portrait, which is screen-specific presentation, so it is a
-**screen-local component** defined with the screen (in `QuestStartScreen.tsx`, or
+**screen-local component** defined with the screen (in `JourneyStartScreen.tsx`, or
 a sibling module under `src/cumulus/screens/`), not a new shared variant on the
 shared portrait.
 
@@ -228,7 +228,7 @@ adoption is automatic — no per-consumer rewrite:**
    preferred, flipping right near the edge) and the `pointer-events: none`
    informational-only contract are unchanged — only the tile look updates.
 3. **The two shared legacy consumers** — `BattleCardHoverPreview` and the
-   `?ui=legacy` `QuestStartScreen` — **inherit** the new InfoCard tiles too (a
+   `?ui=legacy` `JourneyStartScreen` — **inherit** the new InfoCard tiles too (a
    deliberate, confirmed side effect of the in-place swap). No edits to those
    files.
 
@@ -255,9 +255,9 @@ isolation-boundary lint.
 
 ## Tests
 
-- **Builder tests** (`quest-start-view-model.test.ts`): existing tests continue
+- **Builder tests** (`journey-start-view-model.test.ts`): existing tests continue
   to hold; no production TOML values asserted (per `AGENTS.md`).
-- **Screen tests** (`src/cumulus/screens/QuestStartScreen.test.tsx`): rewritten for
+- **Screen tests** (`src/cumulus/screens/JourneyStartScreen.test.tsx`): rewritten for
   the carousel with the two required incantations
   (`IS_REACT_ACT_ENVIRONMENT = true`; a `window.matchMedia` stub). Assert via the
   `data-*` id hooks: the active page renders, "Choose" fires `onPick` with the
@@ -281,9 +281,9 @@ isolation-boundary lint.
 ## Registration, QA, and rollback
 
 - `?ui=cumulus` is already the default variant and the screen is already
-  registered via `QuestStartScreenAdapter`; this change rewrites that screen in
+  registered via `JourneyStartScreenAdapter`; this change rewrites that screen in
   place, so no new registry entry is needed. `?ui=legacy` remains the rollback.
-- QA scene: the screen is the quest opening screen; confirm it has (or add) a
+- QA scene: the screen is the journey opening screen; confirm it has (or add) a
   `?goto=` entry so the carousel can be reached directly. Run the standard
   agent-browser pass on a non-default port: drive swipe + chevrons, expand the
   tides cluster, press-reveal ability keywords and essence, press "Choose", and

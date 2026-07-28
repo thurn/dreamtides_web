@@ -35,7 +35,7 @@ import type { IdfCorpus, IdfDeck } from "../../draft/idf-fit.ts";
 import { logEvent } from "../../logging.ts";
 import { createBattleRng } from "../random.ts";
 
-import type { KnownGoodDecklist, DreamsignSignature } from "../../data/quest-content.ts";
+import type { KnownGoodDecklist, DreamsignSignature } from "../../data/journey-content.ts";
 import type { CardData } from "../../types/cards.ts";
 import type {
   AffiliationContent,
@@ -197,7 +197,7 @@ export function buildCorpusOpponentDeck(args: {
   /**
    * The battle entry key the deck is built for, recorded in
    * `corpus_opponent_deck_constructed` so a production battle's opponent deck
-   * greps out of `logs/quest-log.jsonl` by entry key (matching the coherent
+   * greps out of `logs/journey-log.jsonl` by entry key (matching the coherent
    * algorithm's `opponent_deck_constructed`). Omitted by callers without an
    * entry key (e.g. unit tests).
    */
@@ -557,7 +557,7 @@ export function buildCorpusOpponentDeck(args: {
   const finalCards = deck;
 
   // Provenance logging (UUID-keyed) so a battle's opponent deck and the layer
-  // tuning that built it can be reconstructed from `logs/quest-log.jsonl`.
+  // tuning that built it can be reconstructed from `logs/journey-log.jsonl`.
   const cardSummary = (card: CardData): { id: string; name: string } => ({
     id: lc(card.id),
     name: card.name,

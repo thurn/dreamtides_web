@@ -178,7 +178,7 @@ function createBattleCardInstance(
     owner,
     controller: owner,
     provenance: {
-      kind: "quest-deck",
+      kind: "journey-deck",
       sourceBattleCardId: null,
       chosenSpark: null,
       chosenSubtype: null,

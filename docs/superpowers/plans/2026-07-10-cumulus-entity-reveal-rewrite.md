@@ -22,8 +22,8 @@ rules, `/opt/homebrew/bin/agent-browser`.
 
 - [Approved design](../specs/2026-07-10-cumulus-entity-reveal-rewrite-design.md)
 - [Normative interaction contract](../../cumulus/entity-reveal-interactions.md)
-- [Browser QA tooling](../../quest_prototype/qa_tooling.md)
-- [Registered QA scenes](../../quest_prototype/qa_scenes.md)
+- [Browser QA tooling](../../journey_prototype/qa_tooling.md)
+- [Registered QA scenes](../../journey_prototype/qa_scenes.md)
 
 ## Global constraints
 
@@ -41,7 +41,7 @@ rules, `/opt/homebrew/bin/agent-browser`.
   their root, and rendered above every other application layer.
 - Secondary cards render as the longest complete leading priority prefix that
   fits. Accessible descriptions retain every secondary.
-- Existing Cumulus consumers include production quest screens, battle, Atlas,
+- Existing Cumulus consumers include production journey screens, battle, Atlas,
   HUD, draft, deck and shop surfaces, docs, mockups, debug tools, and
   transitional screens that directly render Cumulus components.
 - New tests use fixed UUID-backed fixtures and cannot depend on mutable
@@ -173,7 +173,7 @@ it does not accept placement, pixels, timing, portal, or controlled-open input.
 
 - [ ] **Step 9: Install the root once for every application entry.** Wrap the
   `renderStrict` contents in `src/main.tsx` with `CumulusRoot`, which covers the
-  quest app, battle, docs, mockups, editors, and debug entries that render Cumulus
+  journey app, battle, docs, mockups, editors, and debug entries that render Cumulus
   entities. Keep `CumulusApp`'s `.cumulus` styling root inside that shell. Update
   component tests through `test-utils.tsx` rather than adding providers ad hoc.
 
@@ -361,7 +361,7 @@ it does not accept placement, pixels, timing, portal, or controlled-open input.
   rules text. Remove `termDefinitions`, `enableHoverZoom`,
   `enableTermPopover`, caller-owned handlers, and arbitrary reveal composition.
 
-- [ ] **Step 4: Migrate gallery and quest-screen consumers.** Replace
+- [ ] **Step 4: Migrate gallery and journey-screen consumers.** Replace
   `useMobileCardPeek`, grid-owned pointer tracking, and rendered peek portals
   with ordinary `GameCard` instances. Preserve selection, purchase, purge,
   drafting, sorting, scrolling, and close behavior. Ensure every view model
@@ -419,12 +419,12 @@ it does not accept placement, pixels, timing, portal, or controlled-open input.
 - Modify: `src/cumulus/components/hud/TideDisc.tsx`
 - Modify: `src/cumulus/components/hud/ResourceChip.tsx`
 - Modify: `src/cumulus/components/hud/EssenceValue.tsx`
-- Modify: `src/cumulus/components/hud/QuestStatusBar.tsx`
+- Modify: `src/cumulus/components/hud/JourneyStatusBar.tsx`
 - Modify: `src/cumulus/components/card/CardStatOrb.tsx`
 - Modify: `src/cumulus/components/controls/PipBadge.tsx`
 - Modify: `src/cumulus/components/controls/PipBadge.test.tsx`
 - Modify: `src/cumulus/components/dreamscape/SiteNode.tsx`
-- Modify: `src/cumulus/screens/quest-start-shared.tsx`
+- Modify: `src/cumulus/screens/journey-start-shared.tsx`
 - Modify: `src/cumulus/screens/DesktopDeckViewer.tsx`
 - Modify: `src/cumulus/docs/demos/info-card.tsx`
 - Modify: `src/cumulus/docs/demos/tide-disc.tsx`
@@ -433,7 +433,7 @@ it does not accept placement, pixels, timing, portal, or controlled-open input.
 - Modify as found by inventory: `src/components/HudDreamsignRow.tsx`
 - Modify as found by inventory: `src/editor/TideSourcePreview.tsx`
 - Modify as found by inventory: `src/journey_v2/ui/JourneyDreamsignIcon.tsx`
-- Modify as found by inventory: `src/screens/QuestStartScreen.tsx`
+- Modify as found by inventory: `src/screens/JourneyStartScreen.tsx`
 - Modify as found by inventory: `src/screens/DreamsignRevelationScreen.tsx`
 - Modify as found by inventory: `src/screens/ShopScreen.tsx`
 
@@ -469,8 +469,8 @@ it does not accept placement, pixels, timing, portal, or controlled-open input.
   private source binding.
 
 - [ ] **Step 5: Replace screen-owned wrappers with named components.** Migrate
-  quest start ability/tide/essence rows, deck sidebar Dream Avatar and Dreamsigns,
-  QuestStatusBar, SiteNode, stat orbs, pips, resource marks, and inline terms.
+  journey start ability/tide/essence rows, deck sidebar Dream Avatar and Dreamsigns,
+  JourneyStatusBar, SiteNode, stat orbs, pips, resource marks, and inline terms.
   A screen supplies semantic data and `onActivate` only. If a bespoke source
   shape remains, create a narrowly named Cumulus component instead of a generic
   reveal wrapper.
@@ -586,7 +586,7 @@ it does not accept placement, pixels, timing, portal, or controlled-open input.
 - Create: `src/cumulus/screens/devtools/EntityRevealConformanceDemo.tsx`
 - Create: `src/cumulus/screens/devtools/EntityRevealConformanceDemo.test.tsx`
 - Modify: `src/main.tsx`
-- Modify: `docs/quest_prototype/qa_scenes.md`
+- Modify: `docs/journey_prototype/qa_scenes.md`
 - Modify: `docs/cumulus/entity-reveal-interactions.md`
 - Modify generated: `src/cumulus/metadata/cumulus-metadata.json`
 - Modify generated: `.llms/skills/cumulus/SKILL.md`
@@ -598,7 +598,7 @@ it does not accept placement, pixels, timing, portal, or controlled-open input.
 - Modify generated: `.llms/skills/cumulus/components/dream-avatar-portrait.md`
 - Modify generated: `.llms/skills/cumulus/components/dreamsign.md`
 - Modify generated: `.llms/skills/cumulus/components/pip-badge.md`
-- Modify generated: `.llms/skills/cumulus/components/quest-status-bar.md`
+- Modify generated: `.llms/skills/cumulus/components/journey-status-bar.md`
 - Modify generated: `.llms/skills/cumulus/components/resource-chip.md`
 - Modify generated: `.llms/skills/cumulus/components/site-node.md`
 - Modify generated: `.llms/skills/cumulus/components/tide-disc.md`

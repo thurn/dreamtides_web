@@ -12,9 +12,9 @@ import type { DreamGuideContent } from "../../types/content";
 import type {
   CardChoiceSiteRuntime,
   DreamscapeNode,
-  QuestState,
+  JourneyState,
   SiteState,
-} from "../../types/quest";
+} from "../../types/journey";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { toDeckCardView } from "./mobile-deck-view-model";
 
@@ -45,7 +45,7 @@ export function buildDuplicationGuideView(
 
 /** Resolve the persisted concrete entry ids into their current card displays. */
 export function buildDuplicationCards(
-  state: QuestState,
+  state: JourneyState,
   runtime: CardChoiceSiteRuntime | null,
   cardDatabase: Map<number, CardData>,
 ): DuplicationCardView[] {
@@ -67,7 +67,7 @@ export function buildDuplicationCards(
 
 /** UUID-addressed offer identities recorded when the persisted offer is ready. */
 export function buildDuplicationOfferLog(
-  state: QuestState,
+  state: JourneyState,
   runtime: CardChoiceSiteRuntime,
   cardDatabase: Map<number, CardData>,
 ): Array<{ entryId: string; cardId: string }> {
@@ -84,7 +84,7 @@ export function buildDuplicationOfferLog(
 
 /** Build the complete Cumulus Duplication site view. */
 export function buildDuplicationSiteView(params: {
-  state: QuestState;
+  state: JourneyState;
   sceneNode: DreamscapeNode | null;
   site: SiteState;
   runtime: CardChoiceSiteRuntime | null;

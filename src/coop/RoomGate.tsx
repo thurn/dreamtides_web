@@ -23,7 +23,7 @@ import {
 } from "../runtime/runtime-config";
 import { getBuildHash } from "./build-hash";
 import type { FrontDoorPhase } from "../rules/fold-state";
-import { installQuestLogSink, type QuestLogSinkHandle } from "./quest-log-sink";
+import { installJourneyLogSink, type JourneyLogSinkHandle } from "./journey-log-sink";
 import { ConfigGateScreen } from "./ConfigGateScreen";
 import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
 import { VersionGateScreen } from "./VersionGateScreen";
@@ -47,7 +47,7 @@ export interface RoomReadyContext {
   roomId: string;
   clientId: string;
   genesis: Genesis;
-  logSink: QuestLogSinkHandle;
+  logSink: JourneyLogSinkHandle;
 }
 
 interface RoomGateProps {
@@ -180,7 +180,7 @@ function navigateToRoom(roomId: string): void {
 
 /**
  * Coop room gate: parse `?game=`, create/join, subscribe to the room log,
- * write presence, install the quest-log sink, and gate on
+ * write presence, install the journey-log sink, and gate on
  * `genesis.reducerVersion === getBuildHash()`. On a match it renders
  * `children` with the ready room context; on a mismatch it renders the
  * read-only `VersionGateScreen`.
@@ -204,7 +204,7 @@ export function RoomGate({
       ? { status: "creating" }
       : { status: "loading", roomId: gameId },
   );
-  const [logSink, setLogSinkHandle] = useState<QuestLogSinkHandle | null>(null);
+  const [logSink, setLogSinkHandle] = useState<JourneyLogSinkHandle | null>(null);
 
   const readyRoomId = gateState.status === "ready" ? gateState.roomId : null;
 
@@ -326,7 +326,7 @@ export function RoomGate({
     }
   }, [db, readyRoomId, clientId]);
 
-  // Install the quest-log sink for the ready room: stamps `gameId` onto every
+  // Install the journey-log sink for the ready room: stamps `gameId` onto every
   // log event, mirrors the log into `rooms/{id}/logs`, and exposes the coop
   // record helpers the CoopProvider wires to the LogClient callbacks. A
   // `visibilitychange` flush captures the tail when the tab is backgrounded.
@@ -336,7 +336,7 @@ export function RoomGate({
       return undefined;
     }
 
-    const handle = installQuestLogSink(db, { gameId: readyRoomId, clientId });
+    const handle = installJourneyLogSink(db, { gameId: readyRoomId, clientId });
     setLogSinkHandle(handle);
 
     const handleVisibilityChange = (): void => {

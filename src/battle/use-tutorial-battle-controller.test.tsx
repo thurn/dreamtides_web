@@ -24,7 +24,7 @@ vi.mock("../coop/hooks", () => ({
 function presentationState(): FoldState {
   return {
     frontDoor: { phase: "tutorial", journeyId: "journey", tutorial: null },
-    quest: {} as FoldState["quest"],
+    journey: {} as FoldState["journey"],
     battle: {
       mode: {
         kind: "tutorial",

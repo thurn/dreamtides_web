@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use super-subagent-driven-development (recommended) or super-executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a Firebase Realtime Database and Firebase Hosting multiplayer V2 where two browsers co-pilot one shared quest run through share-link rooms.
+**Goal:** Build a Firebase Realtime Database and Firebase Hosting multiplayer V2 where two browsers co-pilot one shared journey run through share-link rooms.
 
-**Architecture:** Firebase room state becomes the canonical quest-mode store while React screens continue consuming `useQuest()`. A room gate handles create/join/loading/error states, a Firebase-backed quest provider exposes centralized shared mutations, and browser-local overlays/animations remain in component state. Shared random reveals are stored in `questState.siteRuntime` with first-successful-reveal-wins transactions.
+**Architecture:** Firebase room state becomes the canonical journey-mode store while React screens continue consuming `useJourney()`. A room gate handles create/join/loading/error states, a Firebase-backed journey provider exposes centralized shared mutations, and browser-local overlays/animations remain in component state. Shared random reveals are stored in `journeyState.siteRuntime` with first-successful-reveal-wins transactions.
 
 **Tech Stack:** React 19, TypeScript 5.8 strict mode, Vite 7, Vitest, Firebase Realtime Database, Firebase Hosting.
 
@@ -23,23 +23,23 @@
 - Create `src/multiplayer/room-id.ts`: short room id generation.
 - Create `src/multiplayer/room-id.test.ts`: deterministic room id tests.
 - Create `src/multiplayer/room-paths.ts`: room path builders and focused update-map builders.
-- Create `src/multiplayer/room-paths.test.ts`: proves update builders do not overwrite unrelated quest state.
+- Create `src/multiplayer/room-paths.test.ts`: proves update builders do not overwrite unrelated journey state.
 - Create `src/multiplayer/room-service.ts`: Firebase create, subscribe, presence, transaction, update helpers.
 - Create `src/multiplayer/room-service.test.ts`: mocked Firebase service tests.
 - Create `src/multiplayer/MultiplayerRoomGate.tsx`: create/join/loading/missing/error shell.
 - Create `src/multiplayer/MultiplayerRoomGate.test.tsx`: room-gate component states.
 - Modify `src/runtime/runtime-config.ts`: parse `game` room id.
 - Modify `src/runtime/runtime-config.test.ts`: cover `game`.
-- Modify `docs/quest_prototype/url_parameters.md`: document `game`.
-- Modify `src/types/quest.ts`: add typed `siteRuntime`.
-- Modify `src/state/quest-context.tsx`: export a reusable quest context provider boundary and add composed mutations to the interface.
-- Create `src/state/quest-state-actions.ts`: pure state transition helpers shared by local and Firebase providers.
-- Create `src/state/quest-state-actions.test.ts`: pure transition tests.
-- Create `src/state/multiplayer-quest-context.tsx`: Firebase-backed provider implementing the quest context API.
-- Create `src/state/multiplayer-quest-context.test.tsx`: mocked provider write/subscription tests.
-- Modify `src/App.tsx`: wrap quest app with room gate and multiplayer provider.
+- Modify `docs/journey_prototype/url_parameters.md`: document `game`.
+- Modify `src/types/journey.ts`: add typed `siteRuntime`.
+- Modify `src/state/journey-context.tsx`: export a reusable journey context provider boundary and add composed mutations to the interface.
+- Create `src/state/journey-state-actions.ts`: pure state transition helpers shared by local and Firebase providers.
+- Create `src/state/journey-state-actions.test.ts`: pure transition tests.
+- Create `src/state/multiplayer-journey-context.tsx`: Firebase-backed provider implementing the journey context API.
+- Create `src/state/multiplayer-journey-context.test.tsx`: mocked provider write/subscription tests.
+- Modify `src/App.tsx`: wrap journey app with room gate and multiplayer provider.
 - Modify `src/App.test.tsx`: update runtime config shape and add shell coverage as needed.
-- Modify quest screens that generate shared random data:
+- Modify journey screens that generate shared random data:
   - `src/screens/DraftSiteScreen.tsx`
   - `src/screens/ShopScreen.tsx`
   - `src/screens/SpecialtyShopScreen.tsx`
@@ -52,7 +52,7 @@
   - `src/screens/DreamJourneyScreen.tsx`
   - `src/screens/TemptingOfferScreen.tsx`
 - Add or adjust tests beside each converted screen.
-- Create `docs/quest_prototype/firebase_multiplayer.md`: setup, rules, Hosting, and manual two-window QA.
+- Create `docs/journey_prototype/firebase_multiplayer.md`: setup, rules, Hosting, and manual two-window QA.
 
 ---
 
@@ -183,11 +183,11 @@ import { FirebaseConfigError, readFirebaseConfig } from "./app-config";
 
 const completeEnv = {
   VITE_FIREBASE_API_KEY: "api-key",
-  VITE_FIREBASE_AUTH_DOMAIN: "quest.example.firebaseapp.com",
-  VITE_FIREBASE_DATABASE_URL: "https://quest.example.firebaseio.com",
-  VITE_FIREBASE_PROJECT_ID: "quest-example",
+  VITE_FIREBASE_AUTH_DOMAIN: "journey.example.firebaseapp.com",
+  VITE_FIREBASE_DATABASE_URL: "https://journey.example.firebaseio.com",
+  VITE_FIREBASE_PROJECT_ID: "journey-example",
   VITE_FIREBASE_APP_ID: "1:123:web:abc",
-  VITE_FIREBASE_STORAGE_BUCKET: "quest.example.appspot.com",
+  VITE_FIREBASE_STORAGE_BUCKET: "journey.example.appspot.com",
   VITE_FIREBASE_MESSAGING_SENDER_ID: "123",
 };
 
@@ -195,11 +195,11 @@ describe("readFirebaseConfig", () => {
   it("maps Vite Firebase env values to Firebase config", () => {
     expect(readFirebaseConfig(completeEnv)).toEqual({
       apiKey: "api-key",
-      authDomain: "quest.example.firebaseapp.com",
-      databaseURL: "https://quest.example.firebaseio.com",
-      projectId: "quest-example",
+      authDomain: "journey.example.firebaseapp.com",
+      databaseURL: "https://journey.example.firebaseio.com",
+      projectId: "journey-example",
       appId: "1:123:web:abc",
-      storageBucket: "quest.example.appspot.com",
+      storageBucket: "journey.example.appspot.com",
       messagingSenderId: "123",
     });
   });
@@ -213,9 +213,9 @@ describe("readFirebaseConfig", () => {
       }),
     ).toEqual({
       apiKey: "api-key",
-      authDomain: "quest.example.firebaseapp.com",
-      databaseURL: "https://quest.example.firebaseio.com",
-      projectId: "quest-example",
+      authDomain: "journey.example.firebaseapp.com",
+      databaseURL: "https://journey.example.firebaseio.com",
+      projectId: "journey-example",
       appId: "1:123:web:abc",
     });
   });
@@ -224,9 +224,9 @@ describe("readFirebaseConfig", () => {
     expect(() =>
       readFirebaseConfig({
         VITE_FIREBASE_API_KEY: "",
-        VITE_FIREBASE_AUTH_DOMAIN: "quest.example.firebaseapp.com",
+        VITE_FIREBASE_AUTH_DOMAIN: "journey.example.firebaseapp.com",
         VITE_FIREBASE_DATABASE_URL: "",
-        VITE_FIREBASE_PROJECT_ID: "quest-example",
+        VITE_FIREBASE_PROJECT_ID: "journey-example",
         VITE_FIREBASE_APP_ID: "1:123:web:abc",
       }),
     ).toThrow(FirebaseConfigError);
@@ -234,9 +234,9 @@ describe("readFirebaseConfig", () => {
     try {
       readFirebaseConfig({
         VITE_FIREBASE_API_KEY: "",
-        VITE_FIREBASE_AUTH_DOMAIN: "quest.example.firebaseapp.com",
+        VITE_FIREBASE_AUTH_DOMAIN: "journey.example.firebaseapp.com",
         VITE_FIREBASE_DATABASE_URL: "",
-        VITE_FIREBASE_PROJECT_ID: "quest-example",
+        VITE_FIREBASE_PROJECT_ID: "journey-example",
         VITE_FIREBASE_APP_ID: "1:123:web:abc",
       });
     } catch (error) {
@@ -397,14 +397,14 @@ describe("room ids", () => {
 
   it("accepts only 4 to 24 lowercase letters and digits", () => {
     expect(isValidRoomId("ab12")).toBe(true);
-    expect(isValidRoomId("questroom123")).toBe(true);
+    expect(isValidRoomId("journeyroom123")).toBe(true);
     expect(isValidRoomId("ABC")).toBe(false);
     expect(isValidRoomId("abc")).toBe(false);
     expect(isValidRoomId("abc_def")).toBe(false);
   });
 
   it("normalizes user supplied ids", () => {
-    expect(normalizeRoomId(" QuestRoom123 ")).toBe("questroom123");
+    expect(normalizeRoomId(" JourneyRoom123 ")).toBe("journeyroom123");
     expect(normalizeRoomId("bad id")).toBeNull();
   });
 });
@@ -416,39 +416,39 @@ Create `src/multiplayer/room-paths.test.ts`:
 
 ```ts
 import { describe, expect, it } from "vitest";
-import type { QuestState } from "../types/quest";
+import type { JourneyState } from "../types/journey";
 import {
   actionLogPath,
   buildMetadataUpdate,
-  buildQuestFieldUpdate,
+  buildJourneyFieldUpdate,
   presencePath,
-  questStatePath,
+  journeyStatePath,
   roomPath,
 } from "./room-paths";
 
 describe("room path helpers", () => {
   it("builds stable Firebase paths", () => {
     expect(roomPath("ab12")).toBe("rooms/ab12");
-    expect(questStatePath("ab12")).toBe("rooms/ab12/questState");
+    expect(journeyStatePath("ab12")).toBe("rooms/ab12/journeyState");
     expect(presencePath("ab12", "client-1")).toBe("rooms/ab12/presence/client-1");
     expect(actionLogPath("ab12", "action-1")).toBe("rooms/ab12/actionLog/action-1");
   });
 
-  it("builds focused quest field updates", () => {
-    const update = buildQuestFieldUpdate("ab12", "essence", 375, "2026-05-08T12:00:00.000Z");
+  it("builds focused journey field updates", () => {
+    const update = buildJourneyFieldUpdate("ab12", "essence", 375, "2026-05-08T12:00:00.000Z");
 
     expect(update).toEqual({
-      "rooms/ab12/questState/essence": 375,
+      "rooms/ab12/journeyState/essence": 375,
       "rooms/ab12/metadata/updatedAt": "2026-05-08T12:00:00.000Z",
     });
-    expect(Object.keys(update)).not.toContain("rooms/ab12/questState");
+    expect(Object.keys(update)).not.toContain("rooms/ab12/journeyState");
   });
 
-  it("accepts any top-level quest state field", () => {
-    const screen: QuestState["screen"] = { type: "atlas" };
+  it("accepts any top-level journey state field", () => {
+    const screen: JourneyState["screen"] = { type: "atlas" };
 
-    expect(buildQuestFieldUpdate("ab12", "screen", screen, "2026-05-08T12:00:00.000Z")).toEqual({
-      "rooms/ab12/questState/screen": { type: "atlas" },
+    expect(buildJourneyFieldUpdate("ab12", "screen", screen, "2026-05-08T12:00:00.000Z")).toEqual({
+      "rooms/ab12/journeyState/screen": { type: "atlas" },
       "rooms/ab12/metadata/updatedAt": "2026-05-08T12:00:00.000Z",
     });
   });
@@ -476,7 +476,7 @@ Expected: FAIL because the implementation files do not exist.
 Create `src/multiplayer/room-types.ts`:
 
 ```ts
-import type { QuestState } from "../types/quest";
+import type { JourneyState } from "../types/journey";
 
 export const ROOM_SCHEMA_VERSION = 1;
 export const ACTION_LOG_LIMIT = 50;
@@ -502,7 +502,7 @@ export interface ActionLogEntry {
 
 export interface MultiplayerRoom {
   metadata: RoomMetadata;
-  questState: QuestState | null;
+  journeyState: JourneyState | null;
   presence?: Record<string, PresenceEntry>;
   actionLog?: Record<string, ActionLogEntry>;
 }
@@ -565,7 +565,7 @@ export function normalizeRoomId(roomId: string | null): string | null {
 Create `src/multiplayer/room-paths.ts`:
 
 ```ts
-import type { QuestState } from "../types/quest";
+import type { JourneyState } from "../types/journey";
 
 export type FirebaseUpdateMap = Record<string, unknown>;
 
@@ -573,15 +573,15 @@ export function roomPath(roomId: string): string {
   return `rooms/${roomId}`;
 }
 
-export function questStatePath(roomId: string): string {
-  return `${roomPath(roomId)}/questState`;
+export function journeyStatePath(roomId: string): string {
+  return `${roomPath(roomId)}/journeyState`;
 }
 
-export function questStateFieldPath<K extends keyof QuestState>(
+export function journeyStateFieldPath<K extends keyof JourneyState>(
   roomId: string,
   field: K,
 ): string {
-  return `${questStatePath(roomId)}/${String(field)}`;
+  return `${journeyStatePath(roomId)}/${String(field)}`;
 }
 
 export function metadataUpdatedAtPath(roomId: string): string {
@@ -596,14 +596,14 @@ export function actionLogPath(roomId: string, actionId: string): string {
   return `${roomPath(roomId)}/actionLog/${actionId}`;
 }
 
-export function buildQuestFieldUpdate<K extends keyof QuestState>(
+export function buildJourneyFieldUpdate<K extends keyof JourneyState>(
   roomId: string,
   field: K,
-  value: QuestState[K],
+  value: JourneyState[K],
   updatedAt: string,
 ): FirebaseUpdateMap {
   return {
-    [questStateFieldPath(roomId, field)]: value,
+    [journeyStateFieldPath(roomId, field)]: value,
     [metadataUpdatedAtPath(roomId)]: updatedAt,
   };
 }
@@ -644,7 +644,7 @@ Run:
 
 ```bash
 git add src/multiplayer/room-types.ts src/multiplayer/room-id.ts src/multiplayer/room-id.test.ts src/multiplayer/room-paths.ts src/multiplayer/room-paths.test.ts
-git commit -m "Add multiplayer room primitives" -m "Define Firebase room metadata, presence, action log types, share-safe room id generation, and focused update path helpers for field-scoped quest writes."
+git commit -m "Add multiplayer room primitives" -m "Define Firebase room metadata, presence, action log types, share-safe room id generation, and focused update path helpers for field-scoped journey writes."
 git push
 ```
 
@@ -657,7 +657,7 @@ Expected: commit succeeds and pushes.
 **Files:**
 - Modify: `src/runtime/runtime-config.ts`
 - Modify: `src/runtime/runtime-config.test.ts`
-- Modify: `docs/quest_prototype/url_parameters.md`
+- Modify: `docs/journey_prototype/url_parameters.md`
 - Test: `npm test -- src/runtime/runtime-config.test.ts`
 
 - [ ] **Step 1: Add failing runtime config tests**
@@ -678,7 +678,7 @@ Add this describe block:
 ```ts
 describe("gameId", () => {
   it("returns a normalized game id from game", () => {
-    expect(parseRuntimeConfig("?game=QuestRoom123").gameId).toBe("questroom123");
+    expect(parseRuntimeConfig("?game=JourneyRoom123").gameId).toBe("journeyroom123");
   });
 
   it("returns null for invalid game ids", () => {
@@ -730,7 +730,7 @@ Keep the existing `parseSeedOverride` function unchanged.
 
 - [ ] **Step 4: Document `game`**
 
-Add this section to `docs/quest_prototype/url_parameters.md`:
+Add this section to `docs/journey_prototype/url_parameters.md`:
 
 ```markdown
 ## `game`
@@ -744,7 +744,7 @@ When `game` is absent, the multiplayer shell shows the create-game screen.
 Example:
 
 ```
-http://localhost:5173/?game=quest42
+http://localhost:5173/?game=journey42
 ```
 ```
 
@@ -764,7 +764,7 @@ Expected: both commands PASS.
 Run:
 
 ```bash
-git add src/runtime/runtime-config.ts src/runtime/runtime-config.test.ts src/App.test.tsx docs/quest_prototype/url_parameters.md
+git add src/runtime/runtime-config.ts src/runtime/runtime-config.test.ts src/App.test.tsx docs/journey_prototype/url_parameters.md
 git commit -m "Parse multiplayer game room parameter" -m "Add normalized game room ids to runtime configuration and document the share-link query parameter used by the Firebase multiplayer shell."
 git push
 ```
@@ -823,7 +823,7 @@ describe("room-service", () => {
         createdAt: "2026-05-08T12:00:00.000Z",
         updatedAt: "2026-05-08T12:00:00.000Z",
       },
-      questState: null,
+      journeyState: null,
       presence: {},
       actionLog: {},
     });
@@ -851,7 +851,7 @@ describe("room-service", () => {
               createdAt: "2026-05-08T12:00:00.000Z",
               updatedAt: "2026-05-08T12:00:00.000Z",
             },
-            questState: null,
+            journeyState: null,
           }) satisfies MultiplayerRoom,
       });
       return unsubscribe;
@@ -869,7 +869,7 @@ describe("room-service", () => {
           createdAt: "2026-05-08T12:00:00.000Z",
           updatedAt: "2026-05-08T12:00:00.000Z",
         },
-        questState: null,
+        journeyState: null,
       },
     });
     expect(returned).toBe(unsubscribe);
@@ -968,7 +968,7 @@ export function createRoomRecord(nowIso: string): MultiplayerRoom {
 
   return {
     metadata,
-    questState: null,
+    journeyState: null,
     presence: {},
     actionLog: {},
   };
@@ -1114,7 +1114,7 @@ function room(): MultiplayerRoom {
       createdAt: "2026-05-08T12:00:00.000Z",
       updatedAt: "2026-05-08T12:00:00.000Z",
     },
-    questState: null,
+    journeyState: null,
     presence: {},
     actionLog: {},
   };
@@ -1131,7 +1131,7 @@ describe("MultiplayerRoomGate", () => {
   it("shows create game when no game id is present", () => {
     const { container } = mount(
       <MultiplayerRoomGate database={{}} gameId={null}>
-        {() => <div>Quest App</div>}
+        {() => <div>Journey App</div>}
       </MultiplayerRoomGate>,
     );
 
@@ -1142,7 +1142,7 @@ describe("MultiplayerRoomGate", () => {
     createRoomMock.mockResolvedValue(undefined);
     const { container } = mount(
       <MultiplayerRoomGate database={{}} gameId={null}>
-        {() => <div>Quest App</div>}
+        {() => <div>Journey App</div>}
       </MultiplayerRoomGate>,
     );
 
@@ -1178,7 +1178,7 @@ describe("MultiplayerRoomGate", () => {
 
     const { container } = mount(
       <MultiplayerRoomGate database={{}} gameId="ab12cd">
-        {() => <div>Quest App</div>}
+        {() => <div>Journey App</div>}
       </MultiplayerRoomGate>,
     );
 
@@ -1193,7 +1193,7 @@ describe("MultiplayerRoomGate", () => {
 
     const { container } = mount(
       <MultiplayerRoomGate database={{}} gameId="ab12cd">
-        {() => <div>Quest App</div>}
+        {() => <div>Journey App</div>}
       </MultiplayerRoomGate>,
     );
 
@@ -1308,7 +1308,7 @@ export function MultiplayerRoomGate({
 
   if (gateState.status === "create") {
     return (
-      <RoomShell title="Quest Multiplayer">
+      <RoomShell title="Journey Multiplayer">
         <button data-create-game type="button" onClick={() => void handleCreateGame()}>
           Create Game
         </button>
@@ -1389,21 +1389,21 @@ Expected: commit succeeds and pushes.
 ### Task 7: Shared Site Runtime Types
 
 **Files:**
-- Modify: `src/types/quest.ts`
-- Modify: `src/state/quest-context.tsx`
-- Modify: `src/state/quest-state-machine.test.ts`
-- Modify: tests with `QuestState` literals as needed
-- Test: `npm test -- src/state/quest-state-machine.test.ts`
+- Modify: `src/types/journey.ts`
+- Modify: `src/state/journey-context.tsx`
+- Modify: `src/state/journey-state-machine.test.ts`
+- Modify: tests with `JourneyState` literals as needed
+- Test: `npm test -- src/state/journey-state-machine.test.ts`
 
 - [ ] **Step 1: Add failing default-state expectation**
 
-In `src/state/quest-state-machine.test.ts`, update the default state contract test:
+In `src/state/journey-state-machine.test.ts`, update the default state contract test:
 
 ```ts
 expect(state.siteRuntime).toEqual({});
 ```
 
-Update every local `QuestState` test factory in `src/App.test.tsx`, `src/components/BattleSiteRoute.test.tsx`, and screen tests that construct a full `QuestState` to include:
+Update every local `JourneyState` test factory in `src/App.test.tsx`, `src/components/BattleSiteRoute.test.tsx`, and screen tests that construct a full `JourneyState` to include:
 
 ```ts
 siteRuntime: {},
@@ -1414,14 +1414,14 @@ siteRuntime: {},
 Run:
 
 ```bash
-npm test -- src/state/quest-state-machine.test.ts
+npm test -- src/state/journey-state-machine.test.ts
 ```
 
-Expected: FAIL because `siteRuntime` is not in `QuestState`.
+Expected: FAIL because `siteRuntime` is not in `JourneyState`.
 
 - [ ] **Step 3: Add serializable site-runtime types**
 
-In `src/types/quest.ts`, add these types before `QuestState`:
+In `src/types/journey.ts`, add these types before `JourneyState`:
 
 ```ts
 export type RuntimeShopSlot =
@@ -1504,7 +1504,7 @@ export type SiteRuntimeState =
   | TemptingOfferSiteRuntime;
 ```
 
-Add to `QuestState`:
+Add to `JourneyState`:
 
 ```ts
 siteRuntime: Record<string, SiteRuntimeState>;
@@ -1512,7 +1512,7 @@ siteRuntime: Record<string, SiteRuntimeState>;
 
 - [ ] **Step 4: Initialize site runtime**
 
-In `createDefaultState()` in `src/state/quest-context.tsx`, add:
+In `createDefaultState()` in `src/state/journey-context.tsx`, add:
 
 ```ts
 siteRuntime: {},
@@ -1523,19 +1523,19 @@ siteRuntime: {},
 Run:
 
 ```bash
-npm test -- src/state/quest-state-machine.test.ts
+npm test -- src/state/journey-state-machine.test.ts
 npm run typecheck
 ```
 
-Expected: both commands PASS after updating all `QuestState` literals.
+Expected: both commands PASS after updating all `JourneyState` literals.
 
 - [ ] **Step 6: Commit and push**
 
 Run:
 
 ```bash
-git add src/types/quest.ts src/state/quest-context.tsx src/state/quest-state-machine.test.ts src/App.test.tsx src/components/BattleSiteRoute.test.tsx src/screens/*.test.tsx src/runtime/*.test.ts
-git commit -m "Add shared site runtime state" -m "Extend QuestState with typed site runtime data for multiplayer-safe random reveals and initialize the field in default quest state and tests."
+git add src/types/journey.ts src/state/journey-context.tsx src/state/journey-state-machine.test.ts src/App.test.tsx src/components/BattleSiteRoute.test.tsx src/screens/*.test.tsx src/runtime/*.test.ts
+git commit -m "Add shared site runtime state" -m "Extend JourneyState with typed site runtime data for multiplayer-safe random reveals and initialize the field in default journey state and tests."
 git push
 ```
 
@@ -1543,31 +1543,31 @@ Expected: commit succeeds and pushes.
 
 ---
 
-### Task 8: Pure Quest State Actions
+### Task 8: Pure Journey State Actions
 
 **Files:**
-- Create: `src/state/quest-state-actions.test.ts`
-- Create: `src/state/quest-state-actions.ts`
-- Modify: `src/state/quest-context.tsx`
-- Test: `npm test -- src/state/quest-state-actions.test.ts`
+- Create: `src/state/journey-state-actions.test.ts`
+- Create: `src/state/journey-state-actions.ts`
+- Modify: `src/state/journey-context.tsx`
+- Test: `npm test -- src/state/journey-state-actions.test.ts`
 
 - [ ] **Step 1: Write pure action tests**
 
-Create `src/state/quest-state-actions.test.ts`:
+Create `src/state/journey-state-actions.test.ts`:
 
 ```ts
 import { describe, expect, it } from "vitest";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import type { CardData } from "../types/cards";
-import type { QuestContent } from "../data/quest-content";
+import type { JourneyContent } from "../data/journey-content";
 import type { ResolvedDreamAvatarPackage } from "../types/content";
-import { createDefaultState } from "./quest-context";
+import { createDefaultState } from "./journey-context";
 import {
-  addCardToQuestState,
-  changeQuestEssence,
-  completeQuestSite,
-  startQuestFromDreamAvatar,
-} from "./quest-state-actions";
+  addCardToJourneyState,
+  changeJourneyEssence,
+  completeJourneySite,
+  startJourneyFromDreamAvatar,
+} from "./journey-state-actions";
 
 function card(cardNumber: number): CardData {
   return {
@@ -1609,7 +1609,7 @@ function resolvedPackage(): ResolvedDreamAvatarPackage {
   };
 }
 
-function content(pkg = resolvedPackage()): QuestContent {
+function content(pkg = resolvedPackage()): JourneyContent {
   const cardDatabase = new Map<number, CardData>(
     [...STARTER_CARD_NUMBERS, 101, 102, 103, 104].map((cardNumber) => [cardNumber, card(cardNumber)]),
   );
@@ -1622,10 +1622,10 @@ function content(pkg = resolvedPackage()): QuestContent {
   };
 }
 
-describe("quest-state-actions", () => {
+describe("journey-state-actions", () => {
   it("changes essence without touching deck", () => {
     const state = createDefaultState();
-    const next = changeQuestEssence(state, 25);
+    const next = changeJourneyEssence(state, 25);
 
     expect(next.essence).toBe(275);
     expect(next.deck).toBe(state.deck);
@@ -1637,7 +1637,7 @@ describe("quest-state-actions", () => {
       deck: [{ entryId: "deck-7", cardNumber: 1, transfiguration: null, isBane: false }],
     };
 
-    const next = addCardToQuestState(state, 99, false);
+    const next = addCardToJourneyState(state, 99, false);
 
     expect(next.deck.at(-1)).toEqual({
       entryId: "deck-8",
@@ -1647,12 +1647,12 @@ describe("quest-state-actions", () => {
     });
   });
 
-  it("starts a quest from a dreamAvatar in one complete state transition", () => {
+  it("starts a journey from a dreamAvatar in one complete state transition", () => {
     const pkg = resolvedPackage();
-    const next = startQuestFromDreamAvatar({
+    const next = startJourneyFromDreamAvatar({
       prev: createDefaultState(),
       dreamAvatar: pkg.dreamAvatar,
-      questContent: content(pkg),
+      journeyContent: content(pkg),
     });
 
     expect(next.dreamAvatar?.id).toBe("dream-avatar-1");
@@ -1687,7 +1687,7 @@ describe("quest-state-actions", () => {
       },
     };
 
-    const next = completeQuestSite(state, "site-1");
+    const next = completeJourneySite(state, "site-1");
 
     expect(next.visitedSites).toEqual(["site-1"]);
     expect(next.siteRuntime["site-1"]).toEqual({ kind: "essence", amount: 250, accepted: false });
@@ -1701,41 +1701,41 @@ describe("quest-state-actions", () => {
 Run:
 
 ```bash
-npm test -- src/state/quest-state-actions.test.ts
+npm test -- src/state/journey-state-actions.test.ts
 ```
 
-Expected: FAIL because `quest-state-actions.ts` does not exist.
+Expected: FAIL because `journey-state-actions.ts` does not exist.
 
 - [ ] **Step 3: Implement pure state actions**
 
-Create `src/state/quest-state-actions.ts`:
+Create `src/state/journey-state-actions.ts`:
 
 ```ts
 import { generateInitialAtlas } from "../atlas/atlas-generator";
 import { initializeDraftState } from "../draft/draft-engine";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
-import type { QuestContent } from "../data/quest-content";
-import { toQuestDreamAvatar } from "../data/dream-avatar-selection";
+import type { JourneyContent } from "../data/journey-content";
+import { toJourneyDreamAvatar } from "../data/dream-avatar-selection";
 import type { DreamAvatarContent } from "../types/content";
-import type { DeckEntry, DreamAtlas, QuestState, Screen } from "../types/quest";
-import { deriveEntryIdCounter } from "./quest-context";
+import type { DeckEntry, DreamAtlas, JourneyState, Screen } from "../types/journey";
+import { deriveEntryIdCounter } from "./journey-context";
 
 export function nextDeckEntryId(deck: readonly DeckEntry[]): string {
   return `deck-${String(deriveEntryIdCounter(deck) + 1)}`;
 }
 
-export function changeQuestEssence(prev: QuestState, delta: number): QuestState {
+export function changeJourneyEssence(prev: JourneyState, delta: number): JourneyState {
   return {
     ...prev,
     essence: prev.essence + delta,
   };
 }
 
-export function addCardToQuestState(
-  prev: QuestState,
+export function addCardToJourneyState(
+  prev: JourneyState,
   cardNumber: number,
   isBane: boolean,
-): QuestState {
+): JourneyState {
   return {
     ...prev,
     deck: [
@@ -1750,7 +1750,7 @@ export function addCardToQuestState(
   };
 }
 
-export function setQuestScreen(prev: QuestState, screen: Screen): QuestState {
+export function setJourneyScreen(prev: JourneyState, screen: Screen): JourneyState {
   return {
     ...prev,
     screen,
@@ -1758,14 +1758,14 @@ export function setQuestScreen(prev: QuestState, screen: Screen): QuestState {
   };
 }
 
-export function updateQuestAtlas(prev: QuestState, atlas: DreamAtlas): QuestState {
+export function updateJourneyAtlas(prev: JourneyState, atlas: DreamAtlas): JourneyState {
   return {
     ...prev,
     atlas,
   };
 }
 
-export function completeQuestSite(prev: QuestState, siteId: string): QuestState {
+export function completeJourneySite(prev: JourneyState, siteId: string): JourneyState {
   if (prev.visitedSites.includes(siteId)) {
     return prev;
   }
@@ -1791,16 +1791,16 @@ export function completeQuestSite(prev: QuestState, siteId: string): QuestState 
   };
 }
 
-export function startQuestFromDreamAvatar({
+export function startJourneyFromDreamAvatar({
   prev,
   dreamAvatar,
-  questContent,
+  journeyContent,
 }: {
-  prev: QuestState;
+  prev: JourneyState;
   dreamAvatar: DreamAvatarContent;
-  questContent: QuestContent;
-}): QuestState {
-  const resolvedPackage = questContent.resolvedPackagesByDreamAvatarId.get(dreamAvatar.id);
+  journeyContent: JourneyContent;
+}): JourneyState {
+  const resolvedPackage = journeyContent.resolvedPackagesByDreamAvatarId.get(dreamAvatar.id);
   if (resolvedPackage === undefined) {
     throw new Error(`Missing resolved package for ${dreamAvatar.id}`);
   }
@@ -1829,10 +1829,10 @@ export function startQuestFromDreamAvatar({
   return {
     ...prev,
     deck,
-    dreamAvatar: toQuestDreamAvatar(resolvedPackage.dreamAvatar),
+    dreamAvatar: toJourneyDreamAvatar(resolvedPackage.dreamAvatar),
     resolvedPackage,
     remainingDreamsignPool: [...resolvedPackage.dreamsignPoolIds],
-    draftState: initializeDraftState(questContent.cardDatabase, resolvedPackage),
+    draftState: initializeDraftState(journeyContent.cardDatabase, resolvedPackage),
     atlas,
     currentDreamscape: firstNode?.id ?? null,
     visitedSites: firstNode === undefined ? prev.visitedSites : [],
@@ -1847,7 +1847,7 @@ export function startQuestFromDreamAvatar({
 Run:
 
 ```bash
-npm test -- src/state/quest-state-actions.test.ts
+npm test -- src/state/journey-state-actions.test.ts
 npm run typecheck
 ```
 
@@ -1858,8 +1858,8 @@ Expected: both commands PASS.
 Run:
 
 ```bash
-git add src/state/quest-state-actions.ts src/state/quest-state-actions.test.ts
-git commit -m "Add pure quest state actions" -m "Introduce reusable state transition helpers for Firebase composed writes while keeping existing quest screens behind the quest context API."
+git add src/state/journey-state-actions.ts src/state/journey-state-actions.test.ts
+git commit -m "Add pure journey state actions" -m "Introduce reusable state transition helpers for Firebase composed writes while keeping existing journey screens behind the journey context API."
 git push
 ```
 
@@ -1867,70 +1867,70 @@ Expected: commit succeeds and pushes.
 
 ---
 
-### Task 9: Firebase-Backed Quest Provider Skeleton
+### Task 9: Firebase-Backed Journey Provider Skeleton
 
 **Files:**
-- Modify: `src/state/quest-context.tsx`
-- Create: `src/state/multiplayer-quest-context.test.tsx`
-- Create: `src/state/multiplayer-quest-context.tsx`
-- Test: `npm test -- src/state/multiplayer-quest-context.test.tsx`
+- Modify: `src/state/journey-context.tsx`
+- Create: `src/state/multiplayer-journey-context.test.tsx`
+- Create: `src/state/multiplayer-journey-context.tsx`
+- Test: `npm test -- src/state/multiplayer-journey-context.test.tsx`
 
 - [ ] **Step 1: Export a reusable context provider**
 
-Modify `src/state/quest-context.tsx` so the context can be provided by the Firebase provider:
+Modify `src/state/journey-context.tsx` so the context can be provided by the Firebase provider:
 
 ```tsx
-export const QuestContext = createContext<QuestContextValue | null>(null);
+export const JourneyContext = createContext<JourneyContextValue | null>(null);
 
-export function QuestContextProvider({
+export function JourneyContextProvider({
   children,
   value,
 }: {
   children: ReactNode;
-  value: QuestContextValue;
+  value: JourneyContextValue;
 }) {
-  return <QuestContext.Provider value={value}>{children}</QuestContext.Provider>;
+  return <JourneyContext.Provider value={value}>{children}</JourneyContext.Provider>;
 }
 ```
 
-Replace the existing `<QuestContext.Provider value={value}>` in `QuestProvider` with:
+Replace the existing `<JourneyContext.Provider value={value}>` in `JourneyProvider` with:
 
 ```tsx
-<QuestContextProvider value={value}>
+<JourneyContextProvider value={value}>
   <PlayableBattleCacheProvider cache={playableBattleCache}>
     {children}
   </PlayableBattleCacheProvider>
-</QuestContextProvider>
+</JourneyContextProvider>
 ```
 
 - [ ] **Step 2: Add composed mutation names to the interface**
 
-Extend `QuestMutations` in `src/state/quest-context.tsx`:
+Extend `JourneyMutations` in `src/state/journey-context.tsx`:
 
 ```ts
-startQuest: (dreamAvatar: DreamAvatarContent) => void;
+startJourney: (dreamAvatar: DreamAvatarContent) => void;
 completeSite: (siteId: string, source: string) => void;
 pickDraftCard: (siteId: string, cardNumber: number) => void;
 ```
 
-Import `DreamAvatarContent` from `../types/content`. In the local `QuestProvider`, implement these as wrappers around existing logic:
+Import `DreamAvatarContent` from `../types/content`. In the local `JourneyProvider`, implement these as wrappers around existing logic:
 
 ```ts
-const startQuest = useCallback(
+const startJourney = useCallback(
   (dreamAvatar: DreamAvatarContent) => {
     setState((prev) =>
-      startQuestFromDreamAvatar({
+      startJourneyFromDreamAvatar({
         prev,
         dreamAvatar,
-        questContent,
+        journeyContent,
       }),
     );
   },
-  [questContent],
+  [journeyContent],
 );
 
 const completeSite = useCallback((siteId: string, _source: string) => {
-  setState((prev) => setQuestScreen(completeQuestSite(prev, siteId), { type: "dreamscape" }));
+  setState((prev) => setJourneyScreen(completeJourneySite(prev, siteId), { type: "dreamscape" }));
 }, []);
 
 const pickDraftCard = useCallback((_siteId: string, _cardNumber: number) => {
@@ -1942,7 +1942,7 @@ Add the new functions to the `mutations` object. Keep existing mutation methods 
 
 - [ ] **Step 3: Write provider skeleton test**
 
-Create `src/state/multiplayer-quest-context.test.tsx`:
+Create `src/state/multiplayer-journey-context.test.tsx`:
 
 ```tsx
 // @vitest-environment jsdom
@@ -1950,10 +1950,10 @@ Create `src/state/multiplayer-quest-context.test.tsx`:
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { QuestContent } from "../data/quest-content";
+import type { JourneyContent } from "../data/journey-content";
 import type { RoomSession } from "../multiplayer/room-types";
-import { createDefaultState, useQuest } from "./quest-context";
-import { MultiplayerQuestProvider } from "./multiplayer-quest-context";
+import { createDefaultState, useJourney } from "./journey-context";
+import { MultiplayerJourneyProvider } from "./multiplayer-journey-context";
 
 const writeRoomUpdateMock = vi.fn();
 
@@ -1961,7 +1961,7 @@ vi.mock("../multiplayer/room-service", () => ({
   writeRoomUpdate: (...args: unknown[]) => writeRoomUpdateMock(...args),
 }));
 
-function content(): QuestContent {
+function content(): JourneyContent {
   return {
     cardDatabase: new Map(),
     cardsByPackageTide: new Map(),
@@ -1981,7 +1981,7 @@ function session(): RoomSession {
         createdAt: "2026-05-08T12:00:00.000Z",
         updatedAt: "2026-05-08T12:00:00.000Z",
       },
-      questState: {
+      journeyState: {
         ...createDefaultState(),
         essence: 300,
       },
@@ -1992,7 +1992,7 @@ function session(): RoomSession {
 }
 
 function Capture() {
-  const { state, mutations } = useQuest();
+  const { state, mutations } = useJourney();
   return (
     <button
       type="button"
@@ -2011,16 +2011,16 @@ beforeEach(() => {
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 });
 
-describe("MultiplayerQuestProvider", () => {
-  it("provides subscribed quest state", () => {
+describe("MultiplayerJourneyProvider", () => {
+  it("provides subscribed journey state", () => {
     const container = document.createElement("div");
     const root = createRoot(container);
 
     act(() => {
       root.render(
-        <MultiplayerQuestProvider database={{}} session={session()} questContent={content()}>
+        <MultiplayerJourneyProvider database={{}} session={session()} journeyContent={content()}>
           <Capture />
-        </MultiplayerQuestProvider>,
+        </MultiplayerJourneyProvider>,
       );
     });
 
@@ -2034,9 +2034,9 @@ describe("MultiplayerQuestProvider", () => {
 
     act(() => {
       root.render(
-        <MultiplayerQuestProvider database={{}} session={session()} questContent={content()}>
+        <MultiplayerJourneyProvider database={{}} session={session()} journeyContent={content()}>
           <Capture />
-        </MultiplayerQuestProvider>,
+        </MultiplayerJourneyProvider>,
       );
     });
 
@@ -2047,7 +2047,7 @@ describe("MultiplayerQuestProvider", () => {
     expect(writeRoomUpdateMock).toHaveBeenCalledWith(
       {},
       expect.objectContaining({
-        "rooms/ab12cd/questState/essence": 325,
+        "rooms/ab12cd/journeyState/essence": 325,
       }),
     );
   });
@@ -2059,14 +2059,14 @@ describe("MultiplayerQuestProvider", () => {
 Run:
 
 ```bash
-npm test -- src/state/multiplayer-quest-context.test.tsx
+npm test -- src/state/multiplayer-journey-context.test.tsx
 ```
 
 Expected: FAIL because the provider does not exist.
 
 - [ ] **Step 5: Implement provider skeleton**
 
-Create `src/state/multiplayer-quest-context.tsx`:
+Create `src/state/multiplayer-journey-context.tsx`:
 
 ```tsx
 import { useCallback, useMemo, type ReactNode } from "react";
@@ -2075,8 +2075,8 @@ import {
   createPlayableBattleCache,
   PlayableBattleCacheProvider,
 } from "../components/playable-battle-cache";
-import type { QuestContent } from "../data/quest-content";
-import { buildQuestFieldUpdate } from "../multiplayer/room-paths";
+import type { JourneyContent } from "../data/journey-content";
+import { buildJourneyFieldUpdate } from "../multiplayer/room-paths";
 import { writeRoomUpdate } from "../multiplayer/room-service";
 import type { RoomSession } from "../multiplayer/room-types";
 import type { DreamAvatarContent } from "../types/content";
@@ -2086,61 +2086,61 @@ import type {
   CardSourceDebugState,
   DreamAtlas,
   Dreamsign,
-  QuestFailureSummary,
-  QuestState,
+  JourneyFailureSummary,
+  JourneyState,
   Screen,
   TransfigurationType,
-} from "../types/quest";
-import { changeQuestEssence, startQuestFromDreamAvatar } from "./quest-state-actions";
+} from "../types/journey";
+import { changeJourneyEssence, startJourneyFromDreamAvatar } from "./journey-state-actions";
 import {
-  QuestContextProvider,
+  JourneyContextProvider,
   createDefaultState,
-  type QuestContextValue,
-  type QuestMutations,
-} from "./quest-context";
+  type JourneyContextValue,
+  type JourneyMutations,
+} from "./journey-context";
 
-export function MultiplayerQuestProvider({
+export function MultiplayerJourneyProvider({
   children,
   database,
   session,
-  questContent,
+  journeyContent,
 }: {
   children: ReactNode;
   database: Database;
   session: RoomSession;
-  questContent: QuestContent;
+  journeyContent: JourneyContent;
 }) {
-  const state = session.room.questState ?? createDefaultState();
-  const cardDatabase = questContent.cardDatabase;
+  const state = session.room.journeyState ?? createDefaultState();
+  const cardDatabase = journeyContent.cardDatabase;
   const playableBattleCache = useMemo(createPlayableBattleCache, []);
 
   const writeField = useCallback(
-    async <K extends keyof QuestState>(field: K, value: QuestState[K]) => {
+    async <K extends keyof JourneyState>(field: K, value: JourneyState[K]) => {
       await writeRoomUpdate(
         database,
-        buildQuestFieldUpdate(session.roomId, field, value, new Date().toISOString()),
+        buildJourneyFieldUpdate(session.roomId, field, value, new Date().toISOString()),
       );
     },
     [database, session.roomId],
   );
 
-  const mutations = useMemo<QuestMutations>(() => {
+  const mutations = useMemo<JourneyMutations>(() => {
     const changeEssence = (delta: number, _source: string) => {
-      const next = changeQuestEssence(state, delta);
+      const next = changeJourneyEssence(state, delta);
       void writeField("essence", next.essence);
     };
 
-    const startQuest = (dreamAvatar: DreamAvatarContent) => {
-      const next = startQuestFromDreamAvatar({ prev: state, dreamAvatar, questContent });
+    const startJourney = (dreamAvatar: DreamAvatarContent) => {
+      const next = startJourneyFromDreamAvatar({ prev: state, dreamAvatar, journeyContent });
       void writeRoomUpdate(database, {
-        [`rooms/${session.roomId}/questState`]: next,
+        [`rooms/${session.roomId}/journeyState`]: next,
         [`rooms/${session.roomId}/metadata/updatedAt`]: new Date().toISOString(),
       });
     };
 
     return {
       changeEssence,
-      startQuest,
+      startJourney,
       completeSite: (_siteId: string, _source: string) => {},
       pickDraftCard: (_siteId: string, _cardNumber: number) => {},
       addCard: (cardNumber: number, _source: string) => {
@@ -2179,8 +2179,8 @@ export function MultiplayerQuestProvider({
       incrementCompletionLevel: () => {},
       setScreen: (screen: Screen) => {
         void writeRoomUpdate(database, {
-          [`rooms/${session.roomId}/questState/screen`]: screen,
-          [`rooms/${session.roomId}/questState/activeSiteId`]: screen.type === "site" ? screen.siteId : null,
+          [`rooms/${session.roomId}/journeyState/screen`]: screen,
+          [`rooms/${session.roomId}/journeyState/activeSiteId`]: screen.type === "site" ? screen.siteId : null,
           [`rooms/${session.roomId}/metadata/updatedAt`]: new Date().toISOString(),
         });
       },
@@ -2194,34 +2194,34 @@ export function MultiplayerQuestProvider({
       setDraftState: (draftState: DraftState, _source: string) => {
         void writeField("draftState", draftState);
       },
-      setFailureSummary: (failureSummary: QuestFailureSummary | null, _source: string) => {
+      setFailureSummary: (failureSummary: JourneyFailureSummary | null, _source: string) => {
         void writeField("failureSummary", failureSummary);
       },
-      resetQuest: () => {
+      resetJourney: () => {
         void writeRoomUpdate(database, {
-          [`rooms/${session.roomId}/questState`]: createDefaultState(),
+          [`rooms/${session.roomId}/journeyState`]: createDefaultState(),
           [`rooms/${session.roomId}/metadata/updatedAt`]: new Date().toISOString(),
         });
       },
     };
-  }, [database, questContent, session.roomId, state, writeField]);
+  }, [database, journeyContent, session.roomId, state, writeField]);
 
-  const value = useMemo<QuestContextValue>(
+  const value = useMemo<JourneyContextValue>(
     () => ({
       state,
       mutations,
       cardDatabase: cardDatabase as Map<number, CardData>,
-      questContent,
+      journeyContent,
     }),
-    [cardDatabase, mutations, questContent, state],
+    [cardDatabase, mutations, journeyContent, state],
   );
 
   return (
-    <QuestContextProvider value={value}>
+    <JourneyContextProvider value={value}>
       <PlayableBattleCacheProvider cache={playableBattleCache}>
         {children}
       </PlayableBattleCacheProvider>
-    </QuestContextProvider>
+    </JourneyContextProvider>
   );
 }
 ```
@@ -2233,7 +2233,7 @@ This skeleton intentionally leaves several old single-field mutations as compati
 Run:
 
 ```bash
-npm test -- src/state/multiplayer-quest-context.test.tsx
+npm test -- src/state/multiplayer-journey-context.test.tsx
 npm run typecheck
 ```
 
@@ -2244,8 +2244,8 @@ Expected: both commands PASS.
 Run:
 
 ```bash
-git add src/state/quest-context.tsx src/state/multiplayer-quest-context.tsx src/state/multiplayer-quest-context.test.tsx
-git commit -m "Add Firebase-backed quest provider skeleton" -m "Expose the existing quest context from a multiplayer provider and route initial shared mutations through focused Firebase room updates."
+git add src/state/journey-context.tsx src/state/multiplayer-journey-context.tsx src/state/multiplayer-journey-context.test.tsx
+git commit -m "Add Firebase-backed journey provider skeleton" -m "Expose the existing journey context from a multiplayer provider and route initial shared mutations through focused Firebase room updates."
 git push
 ```
 
@@ -2279,7 +2279,7 @@ vi.mock("./multiplayer/MultiplayerRoomGate", () => ({
       clientId: string;
       room: {
         metadata: { schemaVersion: number; createdAt: string; updatedAt: string };
-        questState: null;
+        journeyState: null;
       };
     }) => ReactNode;
     gameId: string | null;
@@ -2294,21 +2294,21 @@ vi.mock("./multiplayer/MultiplayerRoomGate", () => ({
             createdAt: "2026-05-08T12:00:00.000Z",
             updatedAt: "2026-05-08T12:00:00.000Z",
           },
-          questState: null,
+          journeyState: null,
         },
       })}
     </div>
   ),
 }));
 
-vi.mock("./state/multiplayer-quest-context", () => ({
-  MultiplayerQuestProvider: ({ children }: { children: ReactNode }) => (
+vi.mock("./state/multiplayer-journey-context", () => ({
+  MultiplayerJourneyProvider: ({ children }: { children: ReactNode }) => (
     <div data-multiplayer-provider>{children}</div>
   ),
 }));
 ```
 
-Add a test that mounts `App` after mocking `loadQuestContent` if the test file already has content-loading helpers. The assertion should verify:
+Add a test that mounts `App` after mocking `loadJourneyContent` if the test file already has content-loading helpers. The assertion should verify:
 
 ```ts
 expect(container.querySelector("[data-room-gate='ab12cd']")).not.toBeNull();
@@ -2334,7 +2334,7 @@ Run:
 npm test -- src/App.test.tsx
 ```
 
-Expected: FAIL because `App` still renders the local `QuestProvider`.
+Expected: FAIL because `App` still renders the local `JourneyProvider`.
 
 - [ ] **Step 3: Wire App to Firebase room gate**
 
@@ -2343,7 +2343,7 @@ Modify imports in `src/App.tsx`:
 ```ts
 import { getFirebaseDatabase } from "./firebase/app-config";
 import { MultiplayerRoomGate } from "./multiplayer/MultiplayerRoomGate";
-import { MultiplayerQuestProvider } from "./state/multiplayer-quest-context";
+import { MultiplayerJourneyProvider } from "./state/multiplayer-journey-context";
 ```
 
 Replace the final `return` in `App` with:
@@ -2354,22 +2354,22 @@ const database = getFirebaseDatabase();
 return (
   <MultiplayerRoomGate database={database} gameId={runtimeConfig.gameId}>
     {(session) => (
-      <MultiplayerQuestProvider
+      <MultiplayerJourneyProvider
         database={database}
         session={session}
-        questContent={questContent}
+        journeyContent={journeyContent}
       >
-        <QuestApp
-          cardDatabase={questContent.cardDatabase}
+        <JourneyApp
+          cardDatabase={journeyContent.cardDatabase}
           runtimeConfig={runtimeConfig}
         />
-      </MultiplayerQuestProvider>
+      </MultiplayerJourneyProvider>
     )}
   </MultiplayerRoomGate>
 );
 ```
 
-Keep the exported `QuestApp` component unchanged.
+Keep the exported `JourneyApp` component unchanged.
 
 - [ ] **Step 4: Run tests and typecheck**
 
@@ -2388,7 +2388,7 @@ Run:
 
 ```bash
 git add src/App.tsx src/App.test.tsx
-git commit -m "Route app through multiplayer room gate" -m "Connect the loaded quest app to Firebase room sessions with the multiplayer quest provider while preserving the existing QuestApp surface."
+git commit -m "Route app through multiplayer room gate" -m "Connect the loaded journey app to Firebase room sessions with the multiplayer journey provider while preserving the existing JourneyApp surface."
 git push
 ```
 
@@ -2396,18 +2396,18 @@ Expected: commit succeeds and pushes.
 
 ---
 
-### Task 11: Composed Quest Start And Simple Shared Mutations
+### Task 11: Composed Journey Start And Simple Shared Mutations
 
 **Files:**
-- Modify: `src/screens/QuestStartScreen.tsx`
-- Modify: `src/state/multiplayer-quest-context.tsx`
-- Modify: `src/state/multiplayer-quest-context.test.tsx`
-- Modify: `src/state/quest-context.tsx`
-- Test: `npm test -- src/state/multiplayer-quest-context.test.tsx src/screens/QuestStartScreen.test.tsx`
+- Modify: `src/screens/JourneyStartScreen.tsx`
+- Modify: `src/state/multiplayer-journey-context.tsx`
+- Modify: `src/state/multiplayer-journey-context.test.tsx`
+- Modify: `src/state/journey-context.tsx`
+- Test: `npm test -- src/state/multiplayer-journey-context.test.tsx src/screens/JourneyStartScreen.test.tsx`
 
 - [ ] **Step 1: Add provider tests for start and complete site**
 
-Extend `src/state/multiplayer-quest-context.test.tsx` with tests that call `mutations.startQuest` and `mutations.completeSite`. Mock `runRoomTransaction` from `../multiplayer/room-service` beside `writeRoomUpdate`. The start test should assert the transaction updater commits a room whose quest state contains:
+Extend `src/state/multiplayer-journey-context.test.tsx` with tests that call `mutations.startJourney` and `mutations.completeSite`. Mock `runRoomTransaction` from `../multiplayer/room-service` beside `writeRoomUpdate`. The start test should assert the transaction updater commits a room whose journey state contains:
 
 ```ts
 const updater = runRoomTransactionMock.mock.calls[0][2] as (room: MultiplayerRoom | null) => MultiplayerRoom | undefined;
@@ -2415,7 +2415,7 @@ const nextRoom = updater(session().room);
 
 expect(nextRoom).toEqual(
   expect.objectContaining({
-    questState: expect.objectContaining({
+    journeyState: expect.objectContaining({
       dreamAvatar: expect.objectContaining({ id: "dream-avatar-1" }),
       draftState: expect.any(Object),
       atlas: expect.any(Object),
@@ -2429,7 +2429,7 @@ The complete-site test should call the second transaction updater and assert it 
 ```ts
 const roomWithSite: MultiplayerRoom = {
   ...session().room,
-  questState: {
+  journeyState: {
     ...createDefaultState(),
     currentDreamscape: "dreamscape-1",
     atlas: {
@@ -2452,7 +2452,7 @@ const roomWithSite: MultiplayerRoom = {
 const completeUpdater = runRoomTransactionMock.mock.calls[1][2] as (room: MultiplayerRoom | null) => MultiplayerRoom | undefined;
 const completedRoom = completeUpdater(roomWithSite);
 
-expect(completedRoom?.questState).toEqual(
+expect(completedRoom?.journeyState).toEqual(
   expect.objectContaining({
     visitedSites: ["site-1"],
     atlas: expect.any(Object),
@@ -2466,38 +2466,38 @@ expect(completedRoom?.questState).toEqual(
 Run:
 
 ```bash
-npm test -- src/state/multiplayer-quest-context.test.tsx
+npm test -- src/state/multiplayer-journey-context.test.tsx
 ```
 
-Expected: FAIL because `completeSite` and `startQuest` are incomplete for room-safe writes.
+Expected: FAIL because `completeSite` and `startJourney` are incomplete for room-safe writes.
 
-- [ ] **Step 3: Update QuestStartScreen to use composed mutation**
+- [ ] **Step 3: Update JourneyStartScreen to use composed mutation**
 
-In `src/screens/QuestStartScreen.tsx`, replace the `bootstrapQuestStart(...)` call with:
+In `src/screens/JourneyStartScreen.tsx`, replace the `bootstrapJourneyStart(...)` call with:
 
 ```ts
-mutations.startQuest(dreamAvatar);
+mutations.startJourney(dreamAvatar);
 ```
 
-Remove imports that become unused: `bootstrapQuestStart`, `STARTER_CARD_NUMBERS` only if unused in this file, and state fields used only for the bootstrap argument.
+Remove imports that become unused: `bootstrapJourneyStart`, `STARTER_CARD_NUMBERS` only if unused in this file, and state fields used only for the bootstrap argument.
 
 - [ ] **Step 4: Implement composed writes**
 
-In `src/state/multiplayer-quest-context.tsx`, import `runRoomTransaction` and update `startQuest`:
+In `src/state/multiplayer-journey-context.tsx`, import `runRoomTransaction` and update `startJourney`:
 
 ```ts
-const startQuest = (dreamAvatar: DreamAvatarContent) => {
+const startJourney = (dreamAvatar: DreamAvatarContent) => {
   void runRoomTransaction(database, session.roomId, (room) => {
-    if (room === null || room.questState?.dreamAvatar !== null) {
+    if (room === null || room.journeyState?.dreamAvatar !== null) {
       return room ?? undefined;
     }
 
-    const current = room.questState ?? createDefaultState();
-    const next = startQuestFromDreamAvatar({ prev: current, dreamAvatar, questContent });
+    const current = room.journeyState ?? createDefaultState();
+    const next = startJourneyFromDreamAvatar({ prev: current, dreamAvatar, journeyContent });
     const now = new Date().toISOString();
     return {
       ...room,
-      questState: next,
+      journeyState: next,
       metadata: {
         ...room.metadata,
         updatedAt: now,
@@ -2507,8 +2507,8 @@ const startQuest = (dreamAvatar: DreamAvatarContent) => {
         [crypto.randomUUID()]: {
           timestamp: now,
           actorId: session.clientId,
-          action: "startQuest",
-          source: "quest_start",
+          action: "startJourney",
+          source: "journey_start",
           summary: {
             dreamAvatarId: dreamAvatar.id,
             dreamAvatarName: dreamAvatar.name,
@@ -2525,16 +2525,16 @@ Update `completeSite`:
 ```ts
 const completeSite = (siteId: string, source: string) => {
   void runRoomTransaction(database, session.roomId, (room) => {
-    if (room === null || room.questState === null) {
+    if (room === null || room.journeyState === null) {
       return room ?? undefined;
     }
 
-    const next = setQuestScreen(completeQuestSite(room.questState, siteId), { type: "dreamscape" });
+    const next = setJourneyScreen(completeJourneySite(room.journeyState, siteId), { type: "dreamscape" });
     const now = new Date().toISOString();
     return {
       ...room,
-      questState: {
-        ...room.questState,
+      journeyState: {
+        ...room.journeyState,
         visitedSites: next.visitedSites,
         atlas: next.atlas,
         screen: next.screen,
@@ -2559,11 +2559,11 @@ const completeSite = (siteId: string, source: string) => {
 };
 ```
 
-Import `completeQuestSite` and `setQuestScreen` from `quest-state-actions`.
+Import `completeJourneySite` and `setJourneyScreen` from `journey-state-actions`.
 
 - [ ] **Step 5: Route old local complete calls through composed mutation**
 
-In local `QuestProvider`, implement `completeSite` with the same pure helper:
+In local `JourneyProvider`, implement `completeSite` with the same pure helper:
 
 ```ts
 const completeSite = useCallback((siteId: string, source: string) => {
@@ -2571,7 +2571,7 @@ const completeSite = useCallback((siteId: string, source: string) => {
     siteId,
     source,
   });
-  setState((prev) => setQuestScreen(completeQuestSite(prev, siteId), { type: "dreamscape" }));
+  setState((prev) => setJourneyScreen(completeJourneySite(prev, siteId), { type: "dreamscape" }));
 }, []);
 ```
 
@@ -2582,7 +2582,7 @@ Keep `markSiteVisited` and `setScreen` for compatibility until screens are conve
 Run:
 
 ```bash
-npm test -- src/state/multiplayer-quest-context.test.tsx src/screens/QuestStartScreen.test.tsx
+npm test -- src/state/multiplayer-journey-context.test.tsx src/screens/JourneyStartScreen.test.tsx
 npm run typecheck
 ```
 
@@ -2593,8 +2593,8 @@ Expected: all commands PASS.
 Run:
 
 ```bash
-git add src/screens/QuestStartScreen.tsx src/state/multiplayer-quest-context.tsx src/state/multiplayer-quest-context.test.tsx src/state/quest-context.tsx
-git commit -m "Compose shared quest start writes" -m "Route DreamAvatar selection and site completion through domain-level quest mutations that write coherent Firebase room updates with action log entries."
+git add src/screens/JourneyStartScreen.tsx src/state/multiplayer-journey-context.tsx src/state/multiplayer-journey-context.test.tsx src/state/journey-context.tsx
+git commit -m "Compose shared journey start writes" -m "Route DreamAvatar selection and site completion through domain-level journey mutations that write coherent Firebase room updates with action log entries."
 git push
 ```
 
@@ -2605,16 +2605,16 @@ Expected: commit succeeds and pushes.
 ### Task 12: Draft Pick Composed Writes
 
 **Files:**
-- Modify: `src/state/quest-state-actions.ts`
-- Modify: `src/state/quest-state-actions.test.ts`
-- Modify: `src/state/multiplayer-quest-context.tsx`
+- Modify: `src/state/journey-state-actions.ts`
+- Modify: `src/state/journey-state-actions.test.ts`
+- Modify: `src/state/multiplayer-journey-context.tsx`
 - Modify: `src/screens/DraftSiteScreen.tsx`
 - Modify: `src/screens/DraftSiteScreen.test.tsx`
-- Test: `npm test -- src/state/quest-state-actions.test.ts src/screens/DraftSiteScreen.test.tsx`
+- Test: `npm test -- src/state/journey-state-actions.test.ts src/screens/DraftSiteScreen.test.tsx`
 
 - [ ] **Step 1: Add pure draft-pick tests**
 
-Add to `src/state/quest-state-actions.test.ts`:
+Add to `src/state/journey-state-actions.test.ts`:
 
 ```ts
 it("picks a draft card in one state transition", () => {
@@ -2636,7 +2636,7 @@ it("picks a draft card in one state transition", () => {
     },
   };
 
-  const next = pickDraftCardInQuestState({
+  const next = pickDraftCardInJourneyState({
     prev: state,
     siteId: "site-1",
     cardNumber: 101,
@@ -2655,21 +2655,21 @@ it("picks a draft card in one state transition", () => {
 });
 ```
 
-Import `pickDraftCardInQuestState`.
+Import `pickDraftCardInJourneyState`.
 
 - [ ] **Step 2: Run test to verify it fails**
 
 Run:
 
 ```bash
-npm test -- src/state/quest-state-actions.test.ts
+npm test -- src/state/journey-state-actions.test.ts
 ```
 
-Expected: FAIL because `pickDraftCardInQuestState` does not exist.
+Expected: FAIL because `pickDraftCardInJourneyState` does not exist.
 
 - [ ] **Step 3: Implement pure draft pick action**
 
-In `src/state/quest-state-actions.ts`, import:
+In `src/state/journey-state-actions.ts`, import:
 
 ```ts
 import { processPlayerPick } from "../draft/draft-engine";
@@ -2679,17 +2679,17 @@ import type { CardData } from "../types/cards";
 Add:
 
 ```ts
-export function pickDraftCardInQuestState({
+export function pickDraftCardInJourneyState({
   prev,
   siteId,
   cardNumber,
   cardDatabase,
 }: {
-  prev: QuestState;
+  prev: JourneyState;
   siteId: string;
   cardNumber: number;
   cardDatabase: Map<number, CardData>;
-}): QuestState {
+}): JourneyState {
   if (prev.draftState === null) {
     throw new Error("Draft state is unavailable.");
   }
@@ -2700,7 +2700,7 @@ export function pickDraftCardInQuestState({
   const draftState = structuredClone(prev.draftState);
   processPlayerPick(cardNumber, draftState, cardDatabase);
 
-  return addCardToQuestState(
+  return addCardToJourneyState(
     {
       ...prev,
       draftState,
@@ -2713,19 +2713,19 @@ export function pickDraftCardInQuestState({
 
 - [ ] **Step 4: Update multiplayer provider pick mutation**
 
-In `src/state/multiplayer-quest-context.tsx`, implement `pickDraftCard` through `runRoomTransaction` so the picked card is validated against the latest shared offer:
+In `src/state/multiplayer-journey-context.tsx`, implement `pickDraftCard` through `runRoomTransaction` so the picked card is validated against the latest shared offer:
 
 ```ts
 const pickDraftCard = (siteId: string, cardNumber: number) => {
   void runRoomTransaction(database, session.roomId, (room) => {
-    if (room === null || room.questState === null) {
+    if (room === null || room.journeyState === null) {
       return room ?? undefined;
     }
 
-    let next: QuestState;
+    let next: JourneyState;
     try {
-      next = pickDraftCardInQuestState({
-        prev: room.questState,
+      next = pickDraftCardInJourneyState({
+        prev: room.journeyState,
         siteId,
         cardNumber,
         cardDatabase,
@@ -2737,8 +2737,8 @@ const pickDraftCard = (siteId: string, cardNumber: number) => {
     const now = new Date().toISOString();
     return {
       ...room,
-      questState: {
-        ...room.questState,
+      journeyState: {
+        ...room.journeyState,
         deck: next.deck,
         draftState: next.draftState,
       },
@@ -2761,7 +2761,7 @@ const pickDraftCard = (siteId: string, cardNumber: number) => {
 };
 ```
 
-Replace the placeholder in the returned mutations object. Import `pickDraftCardInQuestState`.
+Replace the placeholder in the returned mutations object. Import `pickDraftCardInJourneyState`.
 
 - [ ] **Step 5: Update DraftSiteScreen**
 
@@ -2805,7 +2805,7 @@ expect(mutations.pickDraftCard).toHaveBeenCalledWith("site-1", 101);
 Run:
 
 ```bash
-npm test -- src/state/quest-state-actions.test.ts src/screens/DraftSiteScreen.test.tsx src/state/multiplayer-quest-context.test.tsx
+npm test -- src/state/journey-state-actions.test.ts src/screens/DraftSiteScreen.test.tsx src/state/multiplayer-journey-context.test.tsx
 npm run typecheck
 ```
 
@@ -2816,8 +2816,8 @@ Expected: all commands PASS.
 Run:
 
 ```bash
-git add src/state/quest-state-actions.ts src/state/quest-state-actions.test.ts src/state/multiplayer-quest-context.tsx src/screens/DraftSiteScreen.tsx src/screens/DraftSiteScreen.test.tsx
-git commit -m "Compose shared draft pick writes" -m "Move draft card selection into a single quest mutation that updates deck and draft state together for Firebase multiplayer rooms."
+git add src/state/journey-state-actions.ts src/state/journey-state-actions.test.ts src/state/multiplayer-journey-context.tsx src/screens/DraftSiteScreen.tsx src/screens/DraftSiteScreen.test.tsx
+git commit -m "Compose shared draft pick writes" -m "Move draft card selection into a single journey mutation that updates deck and draft state together for Firebase multiplayer rooms."
 git push
 ```
 
@@ -2828,8 +2828,8 @@ Expected: commit succeeds and pushes.
 ### Task 13: Shared Reward, Dreamsign, And Essence Reveals
 
 **Files:**
-- Modify: `src/state/quest-context.tsx`
-- Modify: `src/state/multiplayer-quest-context.tsx`
+- Modify: `src/state/journey-context.tsx`
+- Modify: `src/state/multiplayer-journey-context.tsx`
 - Modify: `src/screens/RewardSiteScreen.tsx`
 - Modify: `src/screens/DreamsignOfferingScreen.tsx`
 - Modify: `src/screens/DreamsignDraftScreen.tsx`
@@ -2839,7 +2839,7 @@ Expected: commit succeeds and pushes.
 
 - [ ] **Step 1: Extend mutation interface**
 
-Add these methods to `QuestMutations`:
+Add these methods to `JourneyMutations`:
 
 ```ts
 ensureRewardSiteRuntime: (siteId: string) => void;
@@ -2850,7 +2850,7 @@ ensureEssenceSiteRuntime: (siteId: string, isEnhanced: boolean) => void;
 acceptEssenceSite: (siteId: string) => void;
 ```
 
-In local `QuestProvider`, implement each method with the same generator logic currently living in the screens, updating local state through `setState`.
+In local `JourneyProvider`, implement each method with the same generator logic currently living in the screens, updating local state through `setState`.
 
 - [ ] **Step 2: Convert RewardSiteScreen reveal**
 
@@ -2930,20 +2930,20 @@ mutations.acceptEssenceSite(site.id);
 
 - [ ] **Step 5: Implement multiplayer runtime writes**
 
-In `src/state/multiplayer-quest-context.tsx`, each ensure method should use `runRoomTransaction`:
+In `src/state/multiplayer-journey-context.tsx`, each ensure method should use `runRoomTransaction`:
 
-1. Read the current `room.questState` inside the transaction updater.
-2. Return the existing room when `room.questState.siteRuntime[siteId]` exists.
+1. Read the current `room.journeyState` inside the transaction updater.
+2. Return the existing room when `room.journeyState.siteRuntime[siteId]` exists.
 3. Generate the runtime data with existing generator functions.
 4. Return a room with only the relevant runtime and pool fields changed:
 
 ```ts
 return {
   ...room,
-  questState: {
-    ...room.questState,
+  journeyState: {
+    ...room.journeyState,
     siteRuntime: {
-      ...room.questState.siteRuntime,
+      ...room.journeyState.siteRuntime,
       [siteId]: runtime,
     },
     remainingDreamsignPool: nextRemainingPool,
@@ -2966,7 +2966,7 @@ Use action names matching the method name. Accept methods should use `runRoomTra
 
 - [ ] **Step 6: Update screen tests**
 
-Update affected screen tests to create `QuestState` with `siteRuntime` entries. For reward card acceptance, the runtime fixture should look like:
+Update affected screen tests to create `JourneyState` with `siteRuntime` entries. For reward card acceptance, the runtime fixture should look like:
 
 ```ts
 siteRuntime: {
@@ -3001,7 +3001,7 @@ Expected: all commands PASS.
 Run:
 
 ```bash
-git add src/state/quest-context.tsx src/state/multiplayer-quest-context.tsx src/screens/RewardSiteScreen.tsx src/screens/DreamsignOfferingScreen.tsx src/screens/DreamsignDraftScreen.tsx src/screens/EssenceSiteScreen.tsx src/screens/reward-screen.test.tsx src/screens/dreamsign-screen.test.tsx
+git add src/state/journey-context.tsx src/state/multiplayer-journey-context.tsx src/screens/RewardSiteScreen.tsx src/screens/DreamsignOfferingScreen.tsx src/screens/DreamsignDraftScreen.tsx src/screens/EssenceSiteScreen.tsx src/screens/reward-screen.test.tsx src/screens/dreamsign-screen.test.tsx
 git commit -m "Share reward dreamsign and essence reveals" -m "Move one-time reward, Dreamsign, and essence site generation into shared site runtime state with composed accept mutations for multiplayer rooms."
 git push
 ```
@@ -3017,8 +3017,8 @@ Expected: commit succeeds and pushes.
 - Modify: `src/shop/shop-generator.test.ts`
 - Modify: `src/screens/ShopScreen.tsx`
 - Modify: `src/screens/SpecialtyShopScreen.tsx`
-- Modify: `src/state/quest-context.tsx`
-- Modify: `src/state/multiplayer-quest-context.tsx`
+- Modify: `src/state/journey-context.tsx`
+- Modify: `src/state/multiplayer-journey-context.tsx`
 - Test: `npm test -- src/shop/shop-generator.test.ts`
 
 - [ ] **Step 1: Add runtime conversion tests**
@@ -3071,7 +3071,7 @@ Expected: FAIL because conversion helpers do not exist.
 In `src/shop/shop-generator.ts`, import `RuntimeShopSlot` and add:
 
 ```ts
-import type { RuntimeShopSlot } from "../types/quest";
+import type { RuntimeShopSlot } from "../types/journey";
 
 export function shopSlotsToRuntime(slots: readonly ShopSlot[]): RuntimeShopSlot[] {
   return slots.map((slot) => {
@@ -3145,7 +3145,7 @@ export function runtimeSlotsToShopSlots(
 
 - [ ] **Step 4: Add shop mutations**
 
-Extend `QuestMutations`:
+Extend `JourneyMutations`:
 
 ```ts
 ensureShopRuntime: (site: SiteState, specialtyOnly: boolean) => void;
@@ -3153,7 +3153,7 @@ buyShopSlot: (siteId: string, slotIndex: number) => void;
 rerollShop: (site: SiteState, slotIndex: number) => void;
 ```
 
-Import `SiteState` from `../types/quest` where needed.
+Import `SiteState` from `../types/journey` where needed.
 
 - [ ] **Step 5: Convert ShopScreen and SpecialtyShopScreen**
 
@@ -3194,16 +3194,16 @@ mutations.rerollShop(site, index);
 `ensureShopRuntime`, `buyShopSlot`, and `rerollShop` should use `runRoomTransaction`. `ensureShopRuntime` returns the existing room when runtime already exists. When runtime is absent, it generates inventory, converts slots with `shopSlotsToRuntime`, and returns:
 
 ```ts
-if (room === null || room.questState === null) {
+if (room === null || room.journeyState === null) {
   return room ?? undefined;
 }
 
 return {
   ...room,
-  questState: {
-    ...room.questState,
+  journeyState: {
+    ...room.journeyState,
     siteRuntime: {
-      ...room.questState.siteRuntime,
+      ...room.journeyState.siteRuntime,
       [site.id]: {
         kind: "shop",
         slots: shopSlotsToRuntime(inventory.slots),
@@ -3245,7 +3245,7 @@ Expected: both commands PASS after updating affected component tests.
 Run:
 
 ```bash
-git add src/shop/shop-generator.ts src/shop/shop-generator.test.ts src/screens/ShopScreen.tsx src/screens/SpecialtyShopScreen.tsx src/state/quest-context.tsx src/state/multiplayer-quest-context.tsx
+git add src/shop/shop-generator.ts src/shop/shop-generator.test.ts src/screens/ShopScreen.tsx src/screens/SpecialtyShopScreen.tsx src/state/journey-context.tsx src/state/multiplayer-journey-context.tsx
 git commit -m "Share shop runtime state" -m "Store shop inventory, purchases, rerolls, and Dreamsign pool changes in shared site runtime for Firebase multiplayer rooms."
 git push
 ```
@@ -3261,14 +3261,14 @@ Expected: commit succeeds and pushes.
 - Modify: `src/screens/DuplicationSiteScreen.tsx`
 - Modify: `src/screens/DreamJourneyScreen.tsx`
 - Modify: `src/screens/TemptingOfferScreen.tsx`
-- Modify: `src/state/quest-context.tsx`
-- Modify: `src/state/multiplayer-quest-context.tsx`
+- Modify: `src/state/journey-context.tsx`
+- Modify: `src/state/multiplayer-journey-context.tsx`
 - Modify: related tests
 - Test: targeted tests for the four converted screens
 
 - [ ] **Step 1: Add mutations**
 
-Extend `QuestMutations`:
+Extend `JourneyMutations`:
 
 ```ts
 ensureCardChoiceRuntime: (siteId: string, kind: "transfiguration" | "duplication") => void;
@@ -3328,23 +3328,23 @@ Use the equivalent `ensureTemptingOfferRuntime` and `kind !== "temptingOffer"` i
 
 Provider ensure methods should use `runRoomTransaction`:
 
-1. Read `room.questState` inside the transaction updater.
-2. Return the existing room when `room.questState.siteRuntime[siteId]` exists.
+1. Read `room.journeyState` inside the transaction updater.
+2. Return the existing room when `room.journeyState.siteRuntime[siteId]` exists.
 3. Generate option ids or entry ids with existing selection logic.
-4. Return an updated room containing `questState.siteRuntime[siteId]` plus metadata/action log.
+4. Return an updated room containing `journeyState.siteRuntime[siteId]` plus metadata/action log.
 
 Accept/complete methods should read the latest room inside `runRoomTransaction` and return a room with only the changed shared fields updated:
 
 ```ts
 return {
   ...room,
-  questState: {
-    ...room.questState,
+  journeyState: {
+    ...room.journeyState,
     deck: next.deck,
     dreamsigns: next.dreamsigns,
     essence: next.essence,
     siteRuntime: {
-      ...room.questState.siteRuntime,
+      ...room.journeyState.siteRuntime,
       [siteId]: nextRuntime,
     },
     visitedSites: completed.visitedSites,
@@ -3392,7 +3392,7 @@ Expected: all available targeted tests PASS, and typecheck PASS.
 Run:
 
 ```bash
-git add src/screens/TransfigurationSiteScreen.tsx src/screens/DuplicationSiteScreen.tsx src/screens/DreamJourneyScreen.tsx src/screens/TemptingOfferScreen.tsx src/state/quest-context.tsx src/state/multiplayer-quest-context.tsx src/screens/*.test.tsx
+git add src/screens/TransfigurationSiteScreen.tsx src/screens/DuplicationSiteScreen.tsx src/screens/DreamJourneyScreen.tsx src/screens/TemptingOfferScreen.tsx src/state/journey-context.tsx src/state/multiplayer-journey-context.tsx src/screens/*.test.tsx
 git commit -m "Share generated site choice runtime" -m "Move transfiguration, duplication, Dream Journey, and Tempting Offer generated choices into shared site runtime with composed completion writes."
 git push
 ```
@@ -3407,7 +3407,7 @@ Expected: commit succeeds and pushes.
 - Modify: `src/multiplayer/room-types.ts`
 - Create: `src/multiplayer/action-log.test.ts`
 - Create: `src/multiplayer/action-log.ts`
-- Modify: `src/state/multiplayer-quest-context.tsx`
+- Modify: `src/state/multiplayer-journey-context.tsx`
 - Test: `npm test -- src/multiplayer/action-log.test.ts`
 
 - [ ] **Step 1: Write action log tests**
@@ -3512,7 +3512,7 @@ export function pruneActionLog(
 
 - [ ] **Step 4: Use helper in provider**
 
-In `src/state/multiplayer-quest-context.tsx`, replace inline action log entries with:
+In `src/state/multiplayer-journey-context.tsx`, replace inline action log entries with:
 
 ```ts
 import { buildActionLogEntry } from "../multiplayer/action-log";
@@ -3537,7 +3537,7 @@ For bounded maintenance, after each room snapshot arrives in `MultiplayerRoomGat
 Run:
 
 ```bash
-npm test -- src/multiplayer/action-log.test.ts src/state/multiplayer-quest-context.test.tsx
+npm test -- src/multiplayer/action-log.test.ts src/state/multiplayer-journey-context.test.tsx
 npm run typecheck
 ```
 
@@ -3548,8 +3548,8 @@ Expected: all commands PASS.
 Run:
 
 ```bash
-git add src/multiplayer/action-log.ts src/multiplayer/action-log.test.ts src/multiplayer/room-types.ts src/state/multiplayer-quest-context.tsx src/multiplayer/MultiplayerRoomGate.tsx
-git commit -m "Add bounded action log helpers" -m "Centralize multiplayer action log entry creation and keep room diagnostics bounded while questState remains the rendering source of truth."
+git add src/multiplayer/action-log.ts src/multiplayer/action-log.test.ts src/multiplayer/room-types.ts src/state/multiplayer-journey-context.tsx src/multiplayer/MultiplayerRoomGate.tsx
+git commit -m "Add bounded action log helpers" -m "Centralize multiplayer action log entry creation and keep room diagnostics bounded while journeyState remains the rendering source of truth."
 git push
 ```
 
@@ -3560,18 +3560,18 @@ Expected: commit succeeds and pushes.
 ### Task 17: Firebase Setup Docs And Manual QA Checklist
 
 **Files:**
-- Create: `docs/quest_prototype/firebase_multiplayer.md`
+- Create: `docs/journey_prototype/firebase_multiplayer.md`
 - Modify: `README.md`
 - Test: `npm run build`
 
 - [ ] **Step 1: Add Firebase multiplayer docs**
 
-Create `docs/quest_prototype/firebase_multiplayer.md`:
+Create `docs/journey_prototype/firebase_multiplayer.md`:
 
 ```markdown
 # Firebase Multiplayer
 
-The V2 quest prototype uses Firebase Realtime Database for shared quest rooms
+The V2 journey prototype uses Firebase Realtime Database for shared journey rooms
 and Firebase Hosting for deployed share links.
 
 ## Environment
@@ -3625,7 +3625,7 @@ Open `http://localhost:5173/`, create a game, then open the generated
 6. Open a reward, shop, Dreamsign, or essence site and verify both windows show
    the same revealed result.
 7. Refresh both windows and verify they reload the room state.
-8. Reset the quest and verify both windows return to the shared start state.
+8. Reset the journey and verify both windows return to the shared start state.
 
 ## Deploy
 
@@ -3646,7 +3646,7 @@ Add to `README.md` under Other Commands or Layout:
 
 ```markdown
 Firebase multiplayer setup and two-window QA live in
-`docs/quest_prototype/firebase_multiplayer.md`.
+`docs/journey_prototype/firebase_multiplayer.md`.
 ```
 
 - [ ] **Step 3: Run final checks**
@@ -3667,8 +3667,8 @@ Expected: all commands PASS.
 Run:
 
 ```bash
-git add docs/quest_prototype/firebase_multiplayer.md README.md
-git commit -m "Document Firebase multiplayer setup" -m "Add Firebase environment, database rules, Hosting deploy, and two-window QA guidance for the multiplayer quest prototype."
+git add docs/journey_prototype/firebase_multiplayer.md README.md
+git commit -m "Document Firebase multiplayer setup" -m "Add Firebase environment, database rules, Hosting deploy, and two-window QA guidance for the multiplayer journey prototype."
 git push
 ```
 
@@ -3698,7 +3698,7 @@ Open `http://localhost:5173/`, click Create Game, copy the resulting URL, and op
 
 Expected: both windows show the same room and compact presence count.
 
-- [ ] **Step 3: Verify shared quest start**
+- [ ] **Step 3: Verify shared journey start**
 
 Pick a Dream Avatar in one window.
 
@@ -3730,7 +3730,7 @@ Expected: both windows reload the latest room state.
 
 - [ ] **Step 8: Verify reset**
 
-Reset the quest in one window.
+Reset the journey in one window.
 
 Expected: both windows return to the shared start state for the same room.
 

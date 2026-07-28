@@ -1,4 +1,4 @@
-import type { SiteState } from "../types/quest";
+import type { SiteState } from "../types/journey";
 
 /** Default number of player picks represented by a Draft site. */
 export const DEFAULT_DRAFT_SITE_PICK_COUNT = 5;

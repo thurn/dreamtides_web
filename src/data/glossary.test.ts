@@ -166,16 +166,16 @@ describe("glossary", () => {
     ).toMatch(/from\s+"\.\.\/\.\.\/\.\.\/data\/glossary"/);
   });
 
-  // Every transfiguration named in docs/quests/quests.md must have its own
+  // Every transfiguration named in docs/journeys/journeys.md must have its own
   // glossary entry so card-text tooltips and the glossary popup both teach
   // the player what each transfiguration does.
   //
-  // The list is parsed directly out of quests.md to avoid drifting from
-  // the design doc. If quests.md adds, removes, or renames a transfiguration,
+  // The list is parsed directly out of journeys.md to avoid drifting from
+  // the design doc. If journeys.md adds, removes, or renames a transfiguration,
   // this test fails until the glossary catches up.
-  it("includes every transfiguration named in docs/quests/quests.md", () => {
-    const quests = readFileSync(
-      join(SRC_DIR, "..", "docs", "quests", "quests.md"),
+  it("includes every transfiguration named in docs/journeys/journeys.md", () => {
+    const journeys = readFileSync(
+      join(SRC_DIR, "..", "docs", "journeys", "journeys.md"),
       "utf8",
     );
     // Lines like:
@@ -184,12 +184,12 @@ describe("glossary", () => {
     const transfigurationLine = /^- ([A-Z][a-z]+) Transfiguration:/gm;
     const transfigurationsFromDoc: string[] = [];
     let match: RegExpExecArray | null;
-    while ((match = transfigurationLine.exec(quests)) !== null) {
+    while ((match = transfigurationLine.exec(journeys)) !== null) {
       transfigurationsFromDoc.push(match[1]);
     }
     expect(
       transfigurationsFromDoc.length,
-      "Failed to parse any transfigurations out of docs/quests/quests.md",
+      "Failed to parse any transfigurations out of docs/journeys/journeys.md",
     ).toBeGreaterThan(0);
 
     const missing: string[] = [];
@@ -200,7 +200,7 @@ describe("glossary", () => {
     }
     expect(
       missing,
-      `Transfigurations from docs/quests/quests.md missing a glossary entry: ${missing.join(", ")}`,
+      `Transfigurations from docs/journeys/journeys.md missing a glossary entry: ${missing.join(", ")}`,
     ).toEqual([]);
   });
 

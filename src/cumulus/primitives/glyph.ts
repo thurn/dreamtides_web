@@ -111,23 +111,23 @@ export const GLYPHS = {
   plus: g("bxf bx-plus"),
   /** A plain minus mark, used by compact decrement controls. */
   minus: g("bxf bx-minus"),
-  /** The settings gear — the desktop quest-menu disclosure trigger. */
+  /** The settings gear — the desktop journey-menu disclosure trigger. */
   gear: g("bxf bx-cog"),
-  /** Save the current quest snapshot. */
+  /** Save the current journey snapshot. */
   save: g("bxf bx-save"),
-  /** Open a saved quest snapshot. */
+  /** Open a saved journey snapshot. */
   folderOpen: g("bxf bx-folder-open"),
-  /** Export a local artifact such as the quest log. */
+  /** Export a local artifact such as the journey log. */
   download: g("bxf bx-arrow-to-bottom"),
   /** Read build or diagnostic source information. */
   code: g("bxf bx-code-alt"),
-  /** Browse the quest pool as a grid. */
+  /** Browse the journey pool as a grid. */
   grid: g("bxf bx-grid"),
   /** Inspect package-level draft diagnostics. */
   package: g("bxf bx-package"),
   /** Inspect a list of card sources. */
   list: g("bxf bx-list-ul"),
-  /** Edit the current quest state. */
+  /** Edit the current journey state. */
   edit: g("bxf bx-edit-alt"),
   /** The bug mark — the battle debug-menu disclosure trigger. */
   bug: g("bxf bx-bug"),
@@ -143,7 +143,7 @@ export const GLYPHS = {
   trash: g("bx bx-trash"),
   /** Play triangle used to replay an authored sequence. */
   play: g("bxf bx-play"),
-  /** The hamburger bars — the mobile quest-menu disclosure trigger. */
+  /** The hamburger bars — the mobile journey-menu disclosure trigger. */
   menu: g("bxf bx-menu"),
   /** The circular refresh arrows used by shop restock actions. */
   refresh: g("bxf bx-refresh-cw"),

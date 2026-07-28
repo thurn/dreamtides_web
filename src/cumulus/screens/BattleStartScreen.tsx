@@ -11,13 +11,13 @@ import { InlineGlyph } from "../components/typography/InlineGlyph";
 import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
-import { QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/QuestStatusBar";
+import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/JourneyStatusBar";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { ArtRef } from "../primitives/art";
 import { resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import type { Dreamsign as DreamsignData } from "../../types/quest";
+import type { Dreamsign as DreamsignData } from "../../types/journey";
 import {
   GUIDE_GALLERY_MOBILE_GUIDE_HEIGHT,
   GUIDE_GALLERY_MOBILE_GUIDE_LEFT,
@@ -160,7 +160,7 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
         style={{
           position: "absolute",
           left: GUIDE_GALLERY_MOBILE_GUIDE_LEFT,
-          bottom: QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+          bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
           width: GUIDE_GALLERY_MOBILE_GUIDE_WIDTH,
           height: GUIDE_GALLERY_MOBILE_GUIDE_HEIGHT,
           transform: `scale(${String(MOBILE_OPPONENT_SCALE)})`,
@@ -229,13 +229,13 @@ function BattleStartPanel({
         position: compact ? "absolute" : "relative",
         top: undefined,
         right: undefined,
-        bottom: compact ? QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE : undefined,
+        bottom: compact ? JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE : undefined,
         left: compact ? token("--space-4") : undefined,
         zIndex: compact ? 4 : undefined,
         width: compact ? GUIDE_GALLERY_MOBILE_PANEL_WIDTH : "100%",
         maxWidth: compact ? undefined : PANEL_MAX_WIDTH,
         maxHeight: compact
-          ? `calc(100dvh - ${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE} - ${token("--space-4")})`
+          ? `calc(100dvh - ${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE} - ${token("--space-4")})`
           : "100%",
         alignSelf: undefined,
         justifySelf: undefined,

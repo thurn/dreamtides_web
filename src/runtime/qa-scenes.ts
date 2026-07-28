@@ -1,21 +1,21 @@
-import type { QuestContent } from "../data/quest-content";
-import type { QuestState, SiteState, SiteType } from "../types/quest";
+import type { JourneyContent } from "../data/journey-content";
+import type { JourneyState, SiteState, SiteType } from "../types/journey";
 import type { SiteGenerationContext } from "../atlas/atlas-generator";
 import { regenerateAtlasForProgress } from "../atlas/atlas-generator";
-import { createDefaultState } from "../state/quest-context";
+import { createDefaultState } from "../state/journey-context";
 import { createDreamsign } from "../data/dreamsigns";
 import { TUTORIAL_DREAM_AVATAR_ID } from "../data/tutorial-cards";
-import { createQaQuestFoundation } from "./qa-quest-foundation";
+import { createQaJourneyFoundation } from "./qa-journey-foundation";
 
 /**
  * Developer-only "QA scenes": named jump points to screens that are otherwise
- * reachable only by playing a quest forward through battles. Each scene builds a
- * complete, valid {@link QuestState} from live quest content (the same
- * generators the real quest uses, never hand-faked fixtures) and parks the run
+ * reachable only by playing a journey forward through battles. Each scene builds a
+ * complete, valid {@link JourneyState} from live journey content (the same
+ * generators the real journey uses, never hand-faked fixtures) and parks the run
  * directly on the target screen, so a screen like the Dream Atlas can be opened
  * for browser QA from an empty room.
  *
- * Reached with `?goto=<id>` on the quest app (see `src/App.tsx`). To add a
+ * Reached with `?goto=<id>` on the journey app (see `src/App.tsx`). To add a
  * scene, register a {@link QaScene} here; the URL handling and mutation are
  * generic and need no further changes.
  */
@@ -28,24 +28,24 @@ export interface QaScene {
   description: string;
   /**
    * When true, this scene's destination is the DreamAvatar-selection
-   * (`questStart`) screen the fresh room already opens on — i.e. its built
+   * (`journeyStart`) screen the fresh room already opens on — i.e. its built
    * state keeps `dreamAvatar: null`. App must not hold the "Opening QA scene…"
    * loading gate for such a scene: that gate waits for a DreamAvatar to be
    * selected and would otherwise spin forever.
    */
-  landsOnQuestStart?: boolean;
+  landsOnJourneyStart?: boolean;
   /** Loads a folded battle slice immediately instead of the pre-battle reveal. */
   loadsBattle?: boolean;
   /**
-   * Builds the parked quest state from current quest content, or returns null
+   * Builds the parked journey state from current journey content, or returns null
    * when required content is missing.
    */
-  build: (questContent: QuestContent) => QuestState | null;
+  build: (journeyContent: JourneyContent) => JourneyState | null;
 }
 
 /**
  * The DreamAvatar selection screen a run opens on. This is the fresh-room
- * `questStart` state ({@link createDefaultState}, `dreamAvatar: null`), which
+ * `journeyStart` state ({@link createDefaultState}, `dreamAvatar: null`), which
  * the "Create Game" lobby button also lands on — parking a room directly on it
  * lets the choose-your-avatar UI be QA'd from a `?goto=` URL without
  * clicking through the lobby first.
@@ -55,32 +55,32 @@ const DREAM_AVATAR_SELECT_SCENE: QaScene = {
   label: "Avatar Select",
   description:
     "The choose-your-avatar screen a run opens on, parked directly on " +
-    "questStart for UI QA without creating a game from the lobby.",
-  landsOnQuestStart: true,
+    "journeyStart for UI QA without creating a game from the lobby.",
+  landsOnJourneyStart: true,
   build: () => createDefaultState(),
 };
 
 export { TUTORIAL_DREAM_AVATAR_ID };
 
 /**
- * Tutorial DreamAvatar selection: the normal quest-start presentation and
- * start-quest action with one fixed, centered offer and no reroll control.
+ * Tutorial DreamAvatar selection: the normal journey-start presentation and
+ * start-journey action with one fixed, centered offer and no reroll control.
  */
 const TUTORIAL_DREAM_AVATAR_SELECT_SCENE: QaScene = {
   id: "tutorial-dream-avatar-select",
   label: "Tutorial Avatar Select",
   description:
     "The tutorial DreamAvatar selection screen with its one fixed avatar.",
-  landsOnQuestStart: true,
-  build: (questContent) => {
-    const tutorialDreamAvatar = questContent.dreamAvatars.find(
+  landsOnJourneyStart: true,
+  build: (journeyContent) => {
+    const tutorialDreamAvatar = journeyContent.dreamAvatars.find(
       (dreamAvatar) => dreamAvatar.id === TUTORIAL_DREAM_AVATAR_ID,
     );
     if (tutorialDreamAvatar === undefined) return null;
     return {
       ...createDefaultState(),
       screen: {
-        type: "questStart",
+        type: "journeyStart",
         tutorialDreamAvatarId: tutorialDreamAvatar.id,
       },
     };
@@ -107,8 +107,8 @@ const TUTORIAL_DREAM_AVATAR_SELECT_SCENE: QaScene = {
  * inside the starter dreamscape at that depth and never rests on the atlas there.
  */
 function atlasLayerSceneState(layer: number): QaScene["build"] {
-  return (questContent) => {
-    const foundation = createQaQuestFoundation(questContent);
+  return (journeyContent) => {
+    const foundation = createQaJourneyFoundation(journeyContent);
     if (foundation === null) {
       return null;
     }
@@ -120,10 +120,10 @@ function atlasLayerSceneState(layer: number): QaScene["build"] {
       layer,
       context,
       {
-        dreamscapes: questContent.dreamscapes,
-        atlasConfig: questContent.atlasConfig,
+        dreamscapes: journeyContent.dreamscapes,
+        atlasConfig: journeyContent.atlasConfig,
         dreamsignPoolIds: foundation.state.remainingDreamsignPool,
-        apollyonIncarnations: questContent.apollyonIncarnations,
+        apollyonIncarnations: journeyContent.apollyonIncarnations,
       },
       { logEvents: true },
     );
@@ -178,7 +178,7 @@ function atlasLayerScene(displayLayer: number): QaScene {
 }
 
 /**
- * Builds the Battle site inside the UI's one-indexed atlas Layer N. The quest's
+ * Builds the Battle site inside the UI's one-indexed atlas Layer N. The journey's
  * `completionLevel` is zero-indexed, so Layer N uses completion level N - 1 —
  * the same mapping as `atlasN`. Replaying N - 1 real completions produces the
  * reachable frontier for that layer; the scene enters its topmost available
@@ -186,8 +186,8 @@ function atlasLayerScene(displayLayer: number): QaScene {
  * battle exactly before the opposing-Avatar preview.
  */
 function battleLayerSceneState(displayLayer: number): QaScene["build"] {
-  return (questContent) => {
-    const foundation = createQaQuestFoundation(questContent);
+  return (journeyContent) => {
+    const foundation = createQaJourneyFoundation(journeyContent);
     if (foundation === null) {
       return null;
     }
@@ -200,10 +200,10 @@ function battleLayerSceneState(displayLayer: number): QaScene["build"] {
             completionLevel,
             {},
             {
-              dreamscapes: questContent.dreamscapes,
-              atlasConfig: questContent.atlasConfig,
+              dreamscapes: journeyContent.dreamscapes,
+              atlasConfig: journeyContent.atlasConfig,
               dreamsignPoolIds: foundation.state.remainingDreamsignPool,
-              apollyonIncarnations: questContent.apollyonIncarnations,
+              apollyonIncarnations: journeyContent.apollyonIncarnations,
             },
             { logEvents: true },
           );
@@ -273,14 +273,14 @@ const PLAYABLE_BATTLE_SCENE: QaScene = {
   description:
     "The Layer 1 keeper battle, mounted directly on the playable board with owned Dreamsigns for UI QA.",
   loadsBattle: true,
-  build: (questContent) => {
-    const state = battleLayerSceneState(1)(questContent);
+  build: (journeyContent) => {
+    const state = battleLayerSceneState(1)(journeyContent);
     if (state === null) {
       return null;
     }
     return {
       ...state,
-      dreamsigns: questContent.dreamsignTemplates
+      dreamsigns: journeyContent.dreamsignTemplates
         .slice(0, 3)
         .map((template) => createDreamsign(template)),
     };
@@ -289,16 +289,16 @@ const PLAYABLE_BATTLE_SCENE: QaScene = {
 
 /**
  * Builds the inside-a-dreamscape overview parked on the starter dreamscape,
- * seeded with `dreamsignCount` owned dreamsigns so the QuestStatusBar's docked
+ * seeded with `dreamsignCount` owned dreamsigns so the JourneyStatusBar's docked
  * dreamsign strip is exercised (inline up to four, an overflow stack beyond).
  */
 function dreamscapeSceneState(dreamsignCount: number): QaScene["build"] {
-  return (questContent) => {
-    const foundation = createQaQuestFoundation(questContent);
+  return (journeyContent) => {
+    const foundation = createQaJourneyFoundation(journeyContent);
     if (foundation === null) {
       return null;
     }
-    const dreamsigns = questContent.dreamsignTemplates
+    const dreamsigns = journeyContent.dreamsignTemplates
       .slice(0, dreamsignCount)
       .map((template) => createDreamsign(template));
     return {
@@ -314,7 +314,7 @@ function dreamscapeSceneState(dreamsignCount: number): QaScene["build"] {
  * The inside-a-dreamscape overview, parked on the starter dreamscape with its
  * scatter of sites and a few docked dreamsigns. Otherwise reached only by
  * winning the keeper battle and choosing a dreamscape; parking here lets the
- * Cumulus dreamscape redesign (the scene, the site nodes, and the QuestStatusBar
+ * Cumulus dreamscape redesign (the scene, the site nodes, and the JourneyStatusBar
  * HUD) be QA'd from a URL.
  */
 const DREAMSCAPE_SCENE: QaScene = {
@@ -322,7 +322,7 @@ const DREAMSCAPE_SCENE: QaScene = {
   label: "Dreamscape",
   description:
     "The inside-a-dreamscape overview with its floating site nodes and the " +
-    "persistent QuestStatusBar, parked on the dreamscape screen for UI QA.",
+    "persistent JourneyStatusBar, parked on the dreamscape screen for UI QA.",
   build: dreamscapeSceneState(3),
 };
 
@@ -337,8 +337,8 @@ const DREAMSCAPE_WITH_ESSENCE_SCENE: QaScene = {
   description:
     "The starter dreamscape overview with an Essence site ready to enter, " +
     "parked before its in-place collection animation for QA.",
-  build: (questContent) => {
-    const foundation = createQaQuestFoundation(questContent);
+  build: (journeyContent) => {
+    const foundation = createQaJourneyFoundation(journeyContent);
     if (foundation === null) {
       return null;
     }
@@ -381,8 +381,8 @@ const REWARD_SCENE: QaScene = {
   description:
     "The starter dreamscape overview with a Reward site ready to collect " +
     "in place, without navigating away from the dreamscape.",
-  build: (questContent) => {
-    const foundation = createQaQuestFoundation(questContent);
+  build: (journeyContent) => {
+    const foundation = createQaJourneyFoundation(journeyContent);
     if (foundation === null) {
       return null;
     }
@@ -421,18 +421,18 @@ const REWARD_AT_CAP_SCENE: QaScene = {
   description:
     "The starter dreamscape with a Reward site whose Dreamsign opens the " +
     "replacement dialog after its in-place reveal.",
-  build: (questContent) => {
-    const state = REWARD_SCENE.build(questContent);
+  build: (journeyContent) => {
+    const state = REWARD_SCENE.build(journeyContent);
     if (state === null || state.currentDreamscape === null) return null;
     const site = state.atlas.nodes[state.currentDreamscape]?.sites.find(
       (candidate) => candidate.type === "Reward",
     );
-    const heldTemplates = questContent.dreamsignTemplates.slice(
+    const heldTemplates = journeyContent.dreamsignTemplates.slice(
       0,
       state.maxDreamsigns,
     );
     const pendingTemplate =
-      questContent.dreamsignTemplates[state.maxDreamsigns];
+      journeyContent.dreamsignTemplates[state.maxDreamsigns];
     if (site === undefined || pendingTemplate === undefined) return null;
     const pendingDreamsign = createDreamsign(pendingTemplate);
     return {
@@ -457,7 +457,7 @@ const REWARD_AT_CAP_SCENE: QaScene = {
  * The scene id that opens the deck-viewer overlay. The overlay is App-local
  * state (not a `Screen`), so parking on it takes two steps: this scene builds
  * the underlying dreamscape state (giving the run a full deck to show), and
- * `QuestApp` opens the overlay when it sees this scene id. Exported so App and
+ * `JourneyApp` opens the overlay when it sees this scene id. Exported so App and
  * this registry name it from one place rather than duplicating the string.
  */
 export const DECK_VIEWER_SCENE_ID = "deckviewer";
@@ -493,7 +493,7 @@ const POOL_VIEWER_SCENE: QaScene = {
  * The starting-deck reveal popup over the starter dreamscape. The popup is
  * driven by persisted state — it shows the first time a run has a DreamAvatar
  * and has not yet seen it — so this scene builds the starter dreamscape and
- * clears `hasSeenStartingDeckPopup`, and `QuestApp` reveals the popup on its
+ * clears `hasSeenStartingDeckPopup`, and `JourneyApp` reveals the popup on its
  * own. Otherwise reached only on the very first entry into a fresh dreamscape;
  * parking here lets the popup's frosted-glass chrome be QA'd from a URL.
  */
@@ -503,8 +503,8 @@ const STARTING_DECK_SCENE: QaScene = {
   description:
     "The starting-deck reveal popup over the starter dreamscape, shown on " +
     "boot so its frosted-glass chrome can be QA'd from a URL.",
-  build: (questContent) => {
-    const state = dreamscapeSceneState(3)(questContent);
+  build: (journeyContent) => {
+    const state = dreamscapeSceneState(3)(journeyContent);
     if (state === null) {
       return null;
     }
@@ -521,8 +521,8 @@ const STARTING_DECK_SCENE: QaScene = {
  * offers) is created on entry by the screen itself, exactly as in normal play.
  */
 function parkOnSite(siteType: SiteType, isEnhanced: boolean): QaScene["build"] {
-  return (questContent) => {
-    const foundation = createQaQuestFoundation(questContent);
+  return (journeyContent) => {
+    const foundation = createQaJourneyFoundation(journeyContent);
     if (foundation === null) {
       return null;
     }
@@ -554,19 +554,19 @@ function parkOnSite(siteType: SiteType, isEnhanced: boolean): QaScene["build"] {
 }
 
 /**
- * The quest victory end screen, shown after the final boss is defeated. Built
- * by parking the run on the `questComplete` screen with a full completion count,
+ * The journey victory end screen, shown after the final boss is defeated. Built
+ * by parking the run on the `journeyComplete` screen with a full completion count,
  * so the summary stats and final-deck reveal can be QA'd without playing seven
  * battles forward.
  */
-const QUEST_COMPLETE_SCENE: QaScene = {
-  id: "questcomplete",
-  label: "Quest Complete",
+const JOURNEY_COMPLETE_SCENE: QaScene = {
+  id: "journeycomplete",
+  label: "Journey Complete",
   description:
     "The victory end screen with completion stats and the final-deck reveal, " +
-    "parked on the questComplete screen for UI QA.",
-  build: (questContent) => {
-    const foundation = createQaQuestFoundation(questContent);
+    "parked on the journeyComplete screen for UI QA.",
+  build: (journeyContent) => {
+    const foundation = createQaJourneyFoundation(journeyContent);
     if (foundation === null) {
       return null;
     }
@@ -574,10 +574,10 @@ const QUEST_COMPLETE_SCENE: QaScene = {
       6,
       {},
       {
-        dreamscapes: questContent.dreamscapes,
-        atlasConfig: questContent.atlasConfig,
+        dreamscapes: journeyContent.dreamscapes,
+        atlasConfig: journeyContent.atlasConfig,
         dreamsignPoolIds: foundation.state.remainingDreamsignPool,
-        apollyonIncarnations: questContent.apollyonIncarnations,
+        apollyonIncarnations: journeyContent.apollyonIncarnations,
       },
       { logEvents: true },
     );
@@ -585,7 +585,7 @@ const QUEST_COMPLETE_SCENE: QaScene = {
     if (boss === undefined) {
       return null;
     }
-    const dreamsigns = questContent.dreamsignTemplates
+    const dreamsigns = journeyContent.dreamsignTemplates
       .slice(0, 4)
       .map((template) => createDreamsign(template));
     return {
@@ -600,24 +600,24 @@ const QUEST_COMPLETE_SCENE: QaScene = {
       completionLevel: 7,
       currentDreamscape: boss.id,
       dreamsigns,
-      screen: { type: "questComplete" },
+      screen: { type: "journeyComplete" },
     };
   },
 };
 
 /**
- * The quest defeat end screen, shown after a lost battle. Built with a frozen
+ * The journey defeat end screen, shown after a lost battle. Built with a frozen
  * failure summary describing a defeat, so the result title, reason badge, and
  * summary grid can be QA'd without losing a real battle.
  */
-const QUEST_FAILED_SCENE: QaScene = {
-  id: "questfailed",
-  label: "Quest Failed",
+const JOURNEY_FAILED_SCENE: QaScene = {
+  id: "journeyfailed",
+  label: "Journey Failed",
   description:
     "The defeat end screen with its failure summary, parked on the " +
-    "questFailed screen for UI QA.",
-  build: (questContent) => {
-    const foundation = createQaQuestFoundation(questContent);
+    "journeyFailed screen for UI QA.",
+  build: (journeyContent) => {
+    const foundation = createQaJourneyFoundation(journeyContent);
     if (foundation === null) {
       return null;
     }
@@ -628,7 +628,7 @@ const QUEST_FAILED_SCENE: QaScene = {
       ...foundation.state,
       completionLevel: 2,
       currentDreamscape: node.id,
-      screen: { type: "questFailed" },
+      screen: { type: "journeyFailed" },
       failureSummary: {
         battleId: "qa-battle",
         result: "defeat",
@@ -745,8 +745,8 @@ export const QA_SCENES: readonly QaScene[] = [
     "DreamsignRevelation",
     true,
   ),
-  QUEST_COMPLETE_SCENE,
-  QUEST_FAILED_SCENE,
+  JOURNEY_COMPLETE_SCENE,
+  JOURNEY_FAILED_SCENE,
 ];
 
 /** Returns the QA scene for `id`, or null when `id` is not registered. */
@@ -761,12 +761,12 @@ export function qaSceneLoadsBattle(id: string): boolean {
 }
 
 /**
- * Builds the parked quest state for `id`, or null when the id is unknown or the
- * scene cannot be built from the current quest content.
+ * Builds the parked journey state for `id`, or null when the id is unknown or the
+ * scene cannot be built from the current journey content.
  */
 export function buildQaScene(
   id: string,
-  questContent: QuestContent,
-): QuestState | null {
-  return findQaScene(id)?.build(questContent) ?? null;
+  journeyContent: JourneyContent,
+): JourneyState | null {
+  return findQaScene(id)?.build(journeyContent) ?? null;
 }

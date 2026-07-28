@@ -6,15 +6,15 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DesktopDeckViewerAdapter } from "./DesktopDeckViewerAdapter";
 import { logEvent } from "../../logging";
-import { useQuest } from "../../state/quest-context";
-import type { QuestContent } from "../../data/quest-content";
-import type { QuestMutations } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
+import type { JourneyContent } from "../../data/journey-content";
+import type { JourneyMutations } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
-import type { QuestState } from "../../types/quest";
+import type { JourneyState } from "../../types/journey";
 import { asCardId, asCardName } from "../../types/card-identity";
 
-vi.mock("../../state/quest-context", () => ({
-  useQuest: vi.fn(),
+vi.mock("../../state/journey-context", () => ({
+  useJourney: vi.fn(),
 }));
 
 vi.mock("../../logging", () => ({
@@ -27,8 +27,8 @@ vi.mock("../../cumulus/screens/DesktopDeckViewer", () => ({
   ),
 }));
 
-function makeMutations(): QuestMutations {
-  return {} as QuestMutations;
+function makeMutations(): JourneyMutations {
+  return {} as JourneyMutations;
 }
 
 function makeCardDatabase(): Map<number, CardData> {
@@ -53,9 +53,9 @@ function makeCardDatabase(): Map<number, CardData> {
   ]);
 }
 
-function makeState(): QuestState {
+function makeState(): JourneyState {
   return {
-    runId: "quest:test",
+    runId: "journey:test",
     seed: "test-seed",
     essence: 100,
     essenceCap: 500,
@@ -114,15 +114,15 @@ function makeState(): QuestState {
   };
 }
 
-function setQuestContext(state: QuestState): void {
+function setJourneyContext(state: JourneyState): void {
   const cardDatabase = makeCardDatabase();
-  vi.mocked(useQuest).mockReturnValue({
+  vi.mocked(useJourney).mockReturnValue({
     state,
     mutations: makeMutations(),
     cardDatabase,
-    questContent: {
+    journeyContent: {
       cardDatabase,
-    } as QuestContent,
+    } as JourneyContent,
   });
 }
 
@@ -153,8 +153,8 @@ afterEach(() => {
 });
 
 describe("DesktopDeckViewerAdapter", () => {
-  it("logs the opened event once per open session even if quest state refreshes while mounted", () => {
-    setQuestContext(makeState());
+  it("logs the opened event once per open session even if journey state refreshes while mounted", () => {
+    setJourneyContext(makeState());
     const onClose = vi.fn();
     const { root } = mount(
       <DesktopDeckViewerAdapter isOpen={false} onClose={onClose} />,
@@ -173,7 +173,7 @@ describe("DesktopDeckViewerAdapter", () => {
       hasDreamAvatar: true,
     });
 
-    setQuestContext(makeState());
+    setJourneyContext(makeState());
     act(() => {
       root.render(<DesktopDeckViewerAdapter isOpen={true} onClose={onClose} />);
     });
@@ -185,7 +185,7 @@ describe("DesktopDeckViewerAdapter", () => {
         <DesktopDeckViewerAdapter isOpen={false} onClose={onClose} />,
       );
     });
-    setQuestContext(makeState());
+    setJourneyContext(makeState());
     act(() => {
       root.render(<DesktopDeckViewerAdapter isOpen={true} onClose={onClose} />);
     });

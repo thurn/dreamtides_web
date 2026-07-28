@@ -54,8 +54,8 @@ export interface EventPayloads {
   SET_COMPLETION_LEVEL: { value: number };
 
   // --- lifecycle ---
-  START_QUEST: Record<string, unknown>;
-  RESET_QUEST: Record<string, never>;
+  START_JOURNEY: Record<string, unknown>;
+  RESET_JOURNEY: Record<string, never>;
   LOAD_STATE: { snapshot: unknown; battle?: unknown };
 
   // --- dreamAvatar ---
@@ -250,8 +250,8 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   SET_ESSENCE_CAP: true,
   SET_MAX_DREAMSIGNS: true,
   SET_COMPLETION_LEVEL: true,
-  START_QUEST: true,
-  RESET_QUEST: true,
+  START_JOURNEY: true,
+  RESET_JOURNEY: true,
   LOAD_STATE: true,
   SELECT_DREAM_AVATAR: true,
   REROLL_DREAM_AVATAR_OFFER: true,

@@ -6,7 +6,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { CumulusRoot } from "../CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LayerName } from "../../types/layer-name";
-import type { DreamscapeNode } from "../../types/quest";
+import type { DreamscapeNode } from "../../types/journey";
 import type { AtlasMapNode } from "../components/atlas/AtlasMap";
 import type { AtlasNodeModel, AtlasNodePrimary } from "../components/atlas/AtlasNode";
 import { artRef } from "../primitives/art";
@@ -264,7 +264,7 @@ describe("Cumulus AtlasScreen", () => {
     expect(container.querySelectorAll("[data-node-state]")).toHaveLength(3);
     expect(container.querySelector("[data-node-starting]")).not.toBeNull();
     expect(container.querySelector("[data-node-boss]")).not.toBeNull();
-    expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
+    expect(container.querySelector("[data-journey-status-bar-anchor]")).toBeNull();
 
     act(() => {
       root.unmount();

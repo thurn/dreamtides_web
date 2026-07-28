@@ -1,4 +1,4 @@
-import type { Dreamsign as DreamsignData } from "../../../types/quest";
+import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { DreamsignGalleryPanel } from "../../components/card/DreamsignGalleryPanel";
 import { GLYPHS } from "../../primitives/glyph";
 import type { CumulusComponent } from "../registry";

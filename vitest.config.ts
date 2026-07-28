@@ -2,14 +2,14 @@ import { defineConfig } from "vitest/config";
 import { availableParallelism } from "node:os";
 
 const requestedWorkers = Number.parseInt(
-  process.env.QUEST_TEST_WORKERS ?? "2",
+  process.env.JOURNEY_TEST_WORKERS ?? "2",
   10,
 );
 const maxWorkers = Number.isInteger(requestedWorkers) && requestedWorkers > 0
   ? requestedWorkers
   : 2;
 const requestedTimeout = Number.parseInt(
-  process.env.QUEST_TEST_TIMEOUT_MS ?? "15000",
+  process.env.JOURNEY_TEST_TIMEOUT_MS ?? "15000",
   10,
 );
 const testTimeout = Number.isInteger(requestedTimeout) && requestedTimeout > 0

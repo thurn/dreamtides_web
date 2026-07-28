@@ -1,13 +1,13 @@
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { SiteState } from "../../types/quest";
+import type { SiteState } from "../../types/journey";
 import type { CardData } from "../../types/cards";
 import {
   createBattleLogBaseFields,
   logEvent,
   logEventOnce,
 } from "../../logging";
-import { useQuest } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
 import { PoolViewerFloatingController } from "./PoolViewerFloatingController";
 import {
   useActions,
@@ -35,7 +35,7 @@ import type {
   BattleSide,
   BrowseableZone,
 } from "../types";
-import type { QuestContent } from "../../data/quest-content";
+import type { JourneyContent } from "../../data/journey-content";
 import type { BattleCommand } from "../debug/commands";
 import type { PromptResolution } from "../../rules/battle/effect-runner-core";
 import { useBattleAi } from "../ai/use-battle-ai";
@@ -198,7 +198,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     [battle],
   );
 
-  const { state: questState, cardDatabase, questContent } = useQuest();
+  const { state: journeyState, cardDatabase, journeyContent } = useJourney();
   const isCumulusDesktopLayout = useIsDesktop();
   const [perspectiveSide, setPerspectiveSide] = useState<BattleSide>("player");
   const [isBattleLogOpen, setIsBattleLogOpen] = useState(false);
@@ -838,8 +838,8 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   }
 
   // The reducer's `applyDefeat` (END_BATTLE "defeat") already freezes the
-  // `failureSummary` from the terminal board and routes the quest slice to the
-  // `questFailed` screen — the whole legacy `beginQuestFailureRoute` bridge
+  // `failureSummary` from the terminal board and routes the journey slice to the
+  // `journeyFailed` screen — the whole legacy `beginJourneyFailureRoute` bridge
   // (building the summary client-side, dispatching `setFailureSummary`,
   // clearing the shared battle slot) collapses to a single event.
   function handleFailureReset(): void {
@@ -1182,7 +1182,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
 
   const enemyDreamAvatarSummary = resolveEnemyDreamAvatarSummary(
     battleInit.enemyDescriptor,
-    questContent,
+    journeyContent,
   );
 
   const requestBattlefieldPreview = useCallback(
@@ -1475,8 +1475,8 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       ) : null}
       <PoolViewerFloatingController
         cardDatabase={cardDatabase}
-        draftState={questState.draftState}
-        resolvedPackage={questState.resolvedPackage}
+        draftState={journeyState.draftState}
+        resolvedPackage={journeyState.resolvedPackage}
         isOpen={isPoolViewerOpen}
         onClose={() => setIsPoolViewerOpen(false)}
         onPoolCardDragEnd={handleCardDragEnd}
@@ -1705,11 +1705,11 @@ function decrementBattleTurnPair(
 
 function resolveEnemyDreamAvatarSummary(
   enemyDescriptor: BattleEnemyDescriptor,
-  questContent: QuestContent,
+  journeyContent: JourneyContent,
 ): BattleDreamAvatarSummary {
   const sourceDreamAvatar = findEnemySourceDreamAvatar(
     enemyDescriptor,
-    questContent,
+    journeyContent,
   );
   return {
     id: sourceDreamAvatar?.id ?? enemyDescriptor.id,
@@ -1726,11 +1726,11 @@ function resolveEnemyDreamAvatarSummary(
 
 function findEnemySourceDreamAvatar(
   enemyDescriptor: BattleEnemyDescriptor,
-  questContent: QuestContent,
+  journeyContent: JourneyContent,
 ) {
   const sourceId = parseEnemySourceDreamAvatarId(enemyDescriptor.id);
   if (sourceId !== null) {
-    const byId = questContent.dreamAvatars.find(
+    const byId = journeyContent.dreamAvatars.find(
       (dreamAvatar) => dreamAvatar.id === sourceId,
     );
     if (byId !== undefined) {
@@ -1739,7 +1739,7 @@ function findEnemySourceDreamAvatar(
   }
 
   const descriptorName = enemyDescriptor.name.toLocaleLowerCase();
-  return questContent.dreamAvatars.find((dreamAvatar) => {
+  return journeyContent.dreamAvatars.find((dreamAvatar) => {
     const fullName = dreamAvatar.name.toLocaleLowerCase();
     const shortName = fullName.split(",")[0] ?? fullName;
     return (

@@ -42,8 +42,8 @@ vi.mock("../eventlog/room", async () => {
   };
 });
 
-vi.mock("./quest-log-sink", () => ({
-  installQuestLogSink: () => ({
+vi.mock("./journey-log-sink", () => ({
+  installJourneyLogSink: () => ({
     flushNow: vi.fn().mockResolvedValue(undefined),
     dispose: vi.fn().mockResolvedValue(undefined),
   }),

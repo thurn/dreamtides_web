@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { LayerName } from "../../../types/layer-name";
-import type { DreamscapeNode } from "../../../types/quest";
+import type { DreamscapeNode } from "../../../types/journey";
 import { artRef, resolveArtRef } from "../../primitives/art";
 import type { AtlasMapNode } from "./AtlasMap";
 import { atlasPreflightImageUrls } from "./atlas-preflight";

@@ -80,12 +80,12 @@ function captureAllDrafts(): EventDraft[] {
   void actions.setEssenceCap(1);
   void actions.setMaxDreamsigns(1);
   void actions.setCompletionLevel(1);
-  void actions.startQuest({});
-  void actions.resetQuest();
+  void actions.startJourney({});
+  void actions.resetJourney();
   void actions.loadState({});
   void actions.selectDreamAvatar("dc-1");
   void actions.rerollDreamAvatarOffer();
-  void actions.setScreen({ type: "questStart" });
+  void actions.setScreen({ type: "journeyStart" });
   void actions.travelToDreamscape("node-1");
   void actions.markSiteVisited("site-1");
   void actions.dismissStartingDeckPopup();
@@ -209,10 +209,10 @@ describe("coop actions facade", () => {
     });
 
     void actions.advanceFrontDoor("loading", "event:9");
-    void actions.openSite("site-7", "quest:12");
-    void actions.enterDraftSite("site-7", "quest:12");
-    void actions.acceptEssence("site-7", "quest:12");
-    void actions.completeSite("site-7", "quest:12");
+    void actions.openSite("site-7", "journey:12");
+    void actions.enterDraftSite("site-7", "journey:12");
+    void actions.acceptEssence("site-7", "journey:12");
+    void actions.completeSite("site-7", "journey:12");
     void actions.battleCommand(
       { id: "DEBUG_EDIT" },
       "battle:b-1:dreamwell:player:2",
@@ -223,10 +223,10 @@ describe("coop actions facade", () => {
 
     expect(captured.map((draft) => draft.intentKey)).toEqual([
       "front-door:event:9:loading",
-      "open-site:quest:12:site-7",
-      "enter-draft-site:quest:12:site-7",
-      "accept-essence:quest:12:site-7",
-      "complete-site:quest:12:site-7",
+      "open-site:journey:12:site-7",
+      "enter-draft-site:journey:12:site-7",
+      "accept-essence:journey:12:site-7",
+      "complete-site:journey:12:site-7",
       "battle:b-1:dreamwell:player:2",
       "tutorial-battle:event:9:begin",
       "tutorial-battle:tutorial-battle:event:9:0:client-a:restart:client-a",

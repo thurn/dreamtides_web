@@ -21,7 +21,7 @@
 //
 // The corpus, growth, and signature resolution are the real ones from
 // `src/draft/pool` (no re-port): it calls `generatePoolFromData` exactly as the
-// quest does, so what it measures is what ships.
+// journey does, so what it measures is what ships.
 //
 // Run: node scripts/sigseed-experiment.mjs [--seeds 200] [--dream-avatar "Edran"] [--json]
 

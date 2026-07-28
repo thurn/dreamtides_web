@@ -14,7 +14,7 @@
     {
       "seq": 1,
       "event": {
-        "type": "START_QUEST",
+        "type": "START_JOURNEY",
         "payload": {
           "dreamAvatarId": "dc-fixture"
         },
@@ -105,5 +105,5 @@
       }
     }
   ],
-  "finalHash": "cb3d046be588e22dab3f8a889dbe7c4cd604f47cc2ff2ec42ec4b4535871d0c4"
+  "finalHash": "0e43ac345c20e9e1fc9a01df53eb978e477848136e3f755054e17e9217314133"
 }

@@ -9,7 +9,7 @@ import {
 import { createPortal } from "react-dom";
 import type { CardData } from "../types/cards";
 import type { DreamAvatarContent } from "../types/content";
-import { loadQuestContent, type QuestContent } from "../data/quest-content";
+import { loadJourneyContent, type JourneyContent } from "../data/journey-content";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { GameCard } from "../cumulus/components/card/CardView";
 import {
@@ -49,7 +49,7 @@ import { idfCosine } from "../draft/pool/variant-idf.ts";
  * most central to the cluster of signature-fitting decks. See
  * {@link SelectionMode}.
  *
- * Everything is derived live in the browser from the same quest content the
+ * Everything is derived live in the browser from the same journey content the
  * battle integration loads, so the result tracks the current card names and
  * the current signature lists with no precomputed artifact to go stale.
  */
@@ -161,7 +161,7 @@ export interface SignatureDeck {
 }
 
 /**
- * Build the per-DreamAvatar signature deck assignment from quest content.
+ * Build the per-DreamAvatar signature deck assignment from journey content.
  *
  * Everything keys on stable cards_v2 UUIDs, never display names: 24 cards share
  * a name with another distinct card, so name matching would conflate them (and
@@ -169,7 +169,7 @@ export interface SignatureDeck {
  * DreamAvatars carry `signatureCardIds` for exactly this reason.
  */
 export function computeSignatureDecks(
-  content: QuestContent,
+  content: JourneyContent,
   mode: SelectionMode,
 ): SignatureDeck[] {
   // Resolve a UUID to its card record (for rendering and signature names).
@@ -591,7 +591,7 @@ function parseMode(search: string): SelectionMode {
 }
 
 export default function SignatureDecksApp() {
-  const [content, setContent] = useState<QuestContent | null>(null);
+  const [content, setContent] = useState<JourneyContent | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [mode, setMode] = useState<SelectionMode>(() =>
     parseMode(window.location.search),
@@ -609,7 +609,7 @@ export default function SignatureDecksApp() {
 
   useEffect(() => {
     let cancelled = false;
-    loadQuestContent(DEFAULT_POOL_VARIANT)
+    loadJourneyContent(DEFAULT_POOL_VARIANT)
       .then((loaded) => {
         if (!cancelled) setContent(loaded);
       })
@@ -733,7 +733,7 @@ export default function SignatureDecksApp() {
               fontSize: 13,
             }}
           >
-            Failed to load quest content: {loadError}
+            Failed to load journey content: {loadError}
           </div>
         )}
 

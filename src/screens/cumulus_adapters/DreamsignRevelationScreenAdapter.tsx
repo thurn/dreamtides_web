@@ -1,13 +1,13 @@
 // Adapter for the Cumulus Dreamsign Revelation screen. Wiring only: it acquires
-// live quest state, ensures the offer runtime exists, mints the guide line, and
-// invokes the quest mutations after the screen's claim animation starts.
+// live journey state, ensures the offer runtime exists, mints the guide line, and
+// invokes the journey mutations after the screen's claim animation starts.
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { logEventOnce } from "../../logging";
-import type { Dreamsign } from "../../types/quest";
+import type { Dreamsign } from "../../types/journey";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import { DreamsignRevelationScreen } from "../../cumulus/screens/DreamsignRevelationScreen";
-import { useQuest } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
 import { buildDreamsignRevelationView, resolveDreamsignRevelationGuide } from "./dreamsign-revelation-view-model";
 
 const FLY_TO_HUD_MS = 900;
@@ -17,7 +17,7 @@ export function DreamsignRevelationScreenAdapter({
 }: {
   siteId: string;
 }) {
-  const { state, mutations, questContent } = useQuest();
+  const { state, mutations, journeyContent } = useJourney();
   const node = state.currentDreamscape !== null
     ? state.atlas.nodes[state.currentDreamscape] ?? null
     : null;
@@ -27,7 +27,7 @@ export function DreamsignRevelationScreenAdapter({
   const options = offerRuntime?.offeredDreamsigns ?? null;
   const optionCount = site?.isEnhanced === true ? 4 : 3;
   const remainingDreamsignPoolKey = state.remainingDreamsignPool.join("\u0000");
-  const guide = resolveDreamsignRevelationGuide(questContent.guides);
+  const guide = resolveDreamsignRevelationGuide(journeyContent.guides);
   const guideLine = useMemo(() => {
     if (guide === null || guide.dialog.length === 0) return null;
     return guide.dialog[Math.floor(Math.random() * guide.dialog.length)];

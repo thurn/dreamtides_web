@@ -549,7 +549,7 @@ function scoreTerminalResult(
 ): "victory" | "defeat" | null {
   if (board.result !== null) return null;
   if (board.sides.player.score >= battle.init.scoreToWin) return "victory";
-  if (battleModeOf(battle).kind === "quest" && board.sides.enemy.score >= battle.init.scoreToWin) {
+  if (battleModeOf(battle).kind === "journey" && board.sides.enemy.score >= battle.init.scoreToWin) {
     return "defeat";
   }
   return null;

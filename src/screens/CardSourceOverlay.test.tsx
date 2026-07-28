@@ -5,7 +5,7 @@ import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CardSourceOverlay } from "./CardSourceOverlay";
-import type { CardSourceDebugEntry, CardSourceDebugState } from "../types/quest";
+import type { CardSourceDebugEntry, CardSourceDebugState } from "../types/journey";
 import type {
   Idf3ProvenanceSummary,
   SeedProvenanceSummary,

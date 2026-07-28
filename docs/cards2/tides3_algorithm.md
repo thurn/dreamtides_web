@@ -4,13 +4,13 @@
 (`src/draft/pool/variant-sigseed.ts`) grows each Dream Avatar's 150-card draft
 pool live — from a random subset of the Dream Avatar's signature cards, expanded
 through the pick-affinity corpus — `tides3` bakes that growth offline into **32
-preconstructed decks called tides** a player can go read, and a quest combines a
+preconstructed decks called tides** a player can go read, and a journey combines a
 few of them into the pool. It is selectable with `?algo=tides3`.
 
 Player story:
 
 > "There are 32 preconstructed decks called tides — each has a known decklist
-> you can go read. We combine a few of them at the start of a quest: your
+> you can go read. We combine a few of them at the start of a journey: your
 > Dream Avatar's own signature tide leads, shuffled together with broad tides
 > until there are enough cards, and we deal the first 150 — never more than 2
 > copies of a card."
@@ -68,7 +68,7 @@ neutral count and seed floor) live in the `TUNING` block at the top of the bake.
 
 ## 2. The runtime (`src/draft/pool/variant-tides3.ts`, `generateTides3`)
 
-`tides3` pins its pool size to `sigseed`'s 150 copies (it ignores the quest's
+`tides3` pins its pool size to `sigseed`'s 150 copies (it ignores the journey's
 200-copy request, exactly as `sigseed`/`pickfit` ignore it), so it reproduces the
 pools `sigseed` actually ships.
 

@@ -160,7 +160,7 @@ export function IntroSection(): ReactElement {
             gentle motion, floating up and down rather than sitting inert, so
             the world reads as alive rather than as a static document. Motion
             is a property of the object, not the screen: chrome meant for
-            reviewing already-seen values, like the <strong>QuestStatusBar</strong>{" "}
+            reviewing already-seen values, like the <strong>JourneyStatusBar</strong>{" "}
             or a deck viewer, is allowed to hold still, because its job is
             legibility, not presence. When in doubt, a tangible object drifts;
             a readout rests.

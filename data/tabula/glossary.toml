@@ -381,7 +381,7 @@ variants = [ "duplicated", "duplicates" ]
 
 [[entries]]
 id = "bane"
-category = "Quest Terms"
+category = "Journey Terms"
 term = "Bane"
 definition = "A penalty card forced into your deck."
 priority = 65
@@ -390,7 +390,7 @@ variants = [ "banes" ]
 
 [[entries]]
 id = "essence"
-category = "Quest Terms"
+category = "Journey Terms"
 term = "Essence"
 definition = "Currency you gain and spend over the course of a run."
 priority = 10
@@ -399,7 +399,7 @@ variants = []
 
 [[entries]]
 id = "void"
-category = "Quest Terms"
+category = "Journey Terms"
 term = "Void"
 definition = "Your discard pile"
 priority = 10
@@ -408,7 +408,7 @@ variants = []
 
 [[entries]]
 id = "enhanced"
-category = "Quest Terms"
+category = "Journey Terms"
 term = "Enhanced"
 definition = "An improved site that offers better or additional rewards."
 priority = 65
@@ -518,16 +518,16 @@ variants = []
 id = "starting-essence"
 category = "Resources"
 term = "Starting Essence"
-definition = "The essence this avatar begins the quest with, spent at sites this run."
+definition = "The essence this avatar begins the journey with, spent at sites this run."
 priority = 0
 matches-rules-text = false
 variants = []
 
 [[entries]]
 id = "tides"
-category = "Quest Terms"
+category = "Journey Terms"
 term = "Tides"
-definition = "Pools of cards you will see during the quest. Different tides are used every time you play."
+definition = "Pools of cards you will see during the journey. Different tides are used every time you play."
 priority = 0
 matches-rules-text = false
 variants = []

@@ -22,7 +22,7 @@ import {
 } from "./scripts/config-data.mjs";
 import { createImageViewerApiMiddleware } from "./scripts/image-viewer-api.mjs";
 import { createCardImageApiMiddleware } from "./scripts/card-image-api.mjs";
-import { createSavedQuestsApiMiddleware } from "./scripts/saved-quests-api.mjs";
+import { createSavedJourneysApiMiddleware } from "./scripts/saved-journeys-api.mjs";
 import { createTutorialEditorApiMiddleware } from "./scripts/tutorial-editor-api.mjs";
 import { createGlossaryEditorApiMiddleware } from "./scripts/glossary-editor-api.mjs";
 import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs";
@@ -55,10 +55,10 @@ function resolveBuildGitSha(): string {
   }
 }
 
-/** Vite plugin that writes quest log events to disk during development. */
-function questLogPlugin(): Plugin {
+/** Vite plugin that writes journey log events to disk during development. */
+function journeyLogPlugin(): Plugin {
   return {
-    name: "quest-log-writer",
+    name: "journey-log-writer",
     configureServer(server) {
       server.middlewares.use("/api/log", (req, res, next) => {
         if (req.method !== "POST") {
@@ -71,7 +71,7 @@ function questLogPlugin(): Plugin {
           const logDir = path.join(__dirname, "logs");
           fs.mkdirSync(logDir, { recursive: true });
           fs.appendFileSync(
-            path.join(logDir, "quest-log.jsonl"),
+            path.join(logDir, "journey-log.jsonl"),
             body + "\n",
           );
           res.writeHead(200, { "Content-Type": "text/plain" });
@@ -214,7 +214,7 @@ function figmentEditorApiPlugin(): Plugin {
  * dev watcher (see `server.watch.ignored`), so this plugin watches the file
  * directly, regenerates `public/figments-data.json` via
  * {@link refreshFigmentDataJson}, and emits a `figment-data:changed` custom HMR
- * event. Only the battle/quest app reloads on that event (see src/main.tsx); the
+ * event. Only the battle/journey app reloads on that event (see src/main.tsx); the
  * editor pages ignore it, so saving in the figment editor never reloads the page
  * and closes an open art editor. `apply: "serve"` keeps it out of production
  * builds.
@@ -239,7 +239,7 @@ function figmentDataHotReloadPlugin(): Plugin {
             "[figment-data] figments.toml changed -> regenerated figments-data.json -> notifying running app",
           );
           // Send a targeted custom event rather than a full reload. Only the
-          // running battle/quest app registers a handler for it (see
+          // running battle/journey app registers a handler for it (see
           // `figment-data:changed` in src/main.tsx) and reloads to pick up the
           // edit; the figment and card editor pages register no handler, so a
           // save from the editor does not reload the page out from under an open
@@ -327,7 +327,7 @@ function tutorialEditorApiPlugin(): Plugin {
  * the dev watcher (see `server.watch.ignored`), so this plugin watches the file
  * directly, regenerates `public/dreamwell-data.json` via
  * {@link refreshDreamwellDataJson}, and emits a `dreamwell-data:changed` custom
- * HMR event. Only the battle/quest app reloads on that event (see src/main.tsx);
+ * HMR event. Only the battle/journey app reloads on that event (see src/main.tsx);
  * the editor pages ignore it, so saving in the Dreamwell editor never reloads
  * the page out from under an open card editor. `apply: "serve"` keeps it out of
  * production builds.
@@ -406,7 +406,7 @@ function dreamwellDataHotReloadPlugin(): Plugin {
 
 /**
  * Dev-only Vite plugin that hot-reloads the simple Dream Atlas config TOMLs into
- * a running battle/quest app when one is edited. The configs covered are the
+ * a running battle/journey app when one is edited. The configs covered are the
  * single-TOML-to-single-JSON catalogs registered in scripts/config-data.mjs
  * (`dreamscapes.toml`, `dream_guides.toml`, `affiliations.toml`,
  * `atlas_config.toml`, `apollyon_incarnations.toml`, `dreamsign_profiles.toml`).
@@ -416,7 +416,7 @@ function dreamwellDataHotReloadPlugin(): Plugin {
  * directly with `fs.watch`, and on a change to one of the registered TOMLs it
  * regenerates just that config's JSON via {@link regenerateConfigData} (the same
  * TOML->JSON transform `setup-assets` uses, so no full asset rebuild is needed)
- * and emits a `config-data:changed` custom HMR event. Only the battle/quest app
+ * and emits a `config-data:changed` custom HMR event. Only the battle/journey app
  * reloads on that event (see src/main.tsx) and re-fetches the config on load;
  * the editor pages register no handler, so a save never reloads them. The
  * generated JSON paths are added to `server.watch.ignored`, so writing them does
@@ -535,14 +535,14 @@ function cardImageApiPlugin(): Plugin {
   };
 }
 
-/** Vite plugin that serves the saved-quest read/write endpoints. */
-function savedQuestsApiPlugin(): Plugin {
+/** Vite plugin that serves the saved-journey read/write endpoints. */
+function savedJourneysApiPlugin(): Plugin {
   return {
-    name: "saved-quests-api",
+    name: "saved-journeys-api",
     apply: "serve",
     configureServer(server) {
       server.middlewares.use(
-        createSavedQuestsApiMiddleware({ rootDir: __dirname }),
+        createSavedJourneysApiMiddleware({ rootDir: __dirname }),
       );
     },
   };
@@ -559,10 +559,10 @@ function savedQuestsApiPlugin(): Plugin {
  *      `public/cards_v2-data.json`) via {@link regenerateCardData}, reusing the
  *      exact TOML->JSON transform `setup-assets` uses (no duplication). The
  *      writes are synchronous, so the fresh JSON is fully on disk before step 2.
- *   2. Emits a `card-data:changed` custom HMR event. Only the battle/quest app
+ *   2. Emits a `card-data:changed` custom HMR event. Only the battle/journey app
  *      reloads on it (see src/main.tsx); the editor pages register no handler,
  *      so a card editor save does not reload the page and close an open art
- *      editor or discard an inline edit. Quest/battle state lives in the
+ *      editor or discard an inline edit. Journey/battle state lives in the
  *      Firebase room keyed by the `?game=<id>` URL and rehydrates on reload, and
  *      the card database is re-fetched fresh from `/cards_v2-data.json` on load,
  *      so the running game picks up the edited card text within a second of
@@ -596,7 +596,7 @@ export function cardDataHotReloadPlugin(): Plugin {
             "[card-data] cards_v2.toml changed -> regenerated card JSON -> notifying running app",
           );
           // Targeted custom event rather than a full reload: only the running
-          // battle/quest app reloads to pick up the edit (see
+          // battle/journey app reloads to pick up the edit (see
           // `card-data:changed` in src/main.tsx), so saving in the card editor
           // does not reload the page and close an open art editor.
           server.ws.send({ type: "custom", event: "card-data:changed" });
@@ -817,7 +817,7 @@ export default defineConfig({
     firebaseConfigGuardPlugin(),
     react(),
     tailwindcss(),
-    questLogPlugin(),
+    journeyLogPlugin(),
     cardEditorApiPlugin(),
     dreamsignEditorApiPlugin(),
     glossaryEditorApiPlugin(),
@@ -832,7 +832,7 @@ export default defineConfig({
     dreamwellDataHotReloadPlugin(),
     imageViewerApiPlugin(),
     cardImageApiPlugin(),
-    savedQuestsApiPlugin(),
+    savedJourneysApiPlugin(),
     cardDataHotReloadPlugin(),
     configDataHotReloadPlugin(),
     generatedCardDataDriftPlugin(),
@@ -861,9 +861,9 @@ export default defineConfig({
       ignored: [
         path.resolve(path.join(__dirname, "data", "tabula")) + "/**",
         imageViewerStatePath,
-        // Saving a quest writes a JSON file here; ignore it so the save does
+        // Saving a journey writes a JSON file here; ignore it so the save does
         // not trigger a full page reload that would close the debug overlay.
-        path.resolve(path.join(__dirname, "saved-quests")) + "/**",
+        path.resolve(path.join(__dirname, "saved-journeys")) + "/**",
         path.resolve(path.join(__dirname, ".worktrees")) + "/**",
         path.resolve(path.join(__dirname, ".claude", "worktrees")) + "/**",
         // Regenerated on every card save (its per-card name fields track the

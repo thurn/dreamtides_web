@@ -27,7 +27,7 @@ import type {
   DreamscapeNode,
   SiteState,
   SiteType,
-} from "../types/quest";
+} from "../types/journey";
 import {
   LayerName,
   layerAtOrdinal,
@@ -750,7 +750,7 @@ describe("advanceAtlas", () => {
   // runs on every victory including the final boss (isFinalBoss only gates the
   // screen change, not the advance), so an unguarded `forwardIds` iteration
   // throws `forwardIds is not iterable` at the worst possible moment — winning
-  // the run — stranding quest progression. This drives the full graph from start
+  // the run — stranding journey progression. This drives the full graph from start
   // through every layer up to and INCLUDING the boss on an atlas with all empty
   // arrays stripped, asserting no throw and that the boss ends completed.
   it("advances a fully RTDB-stripped atlas through every layer including the boss", () => {
@@ -825,7 +825,7 @@ describe("advanceAtlas", () => {
   // generator + advance logic from start through every layer (always taking the
   // first available forward node) and asserts that every AtlasNodeState value
   // shows up somewhere across the run, so the UI always has each state to render.
-  it("produces every AtlasNodeState across a played-through quest", () => {
+  it("produces every AtlasNodeState across a played-through journey", () => {
     let atlas = freshAtlas();
     const seenStates = new Set<AtlasNodeState>();
 
@@ -961,7 +961,7 @@ describe("regenerateAtlasForProgress", () => {
     });
 
     // No dreamscape has been completed yet, and the only entry point is the
-    // starter — the same shape a brand-new quest begins with.
+    // starter — the same shape a brand-new journey begins with.
     expect(countCompleted(atlas)).toBe(0);
     expect(atlas.nodes[atlas.startingNodeId].state).toBe("available");
     expect(countAvailable(atlas)).toBeGreaterThan(0);

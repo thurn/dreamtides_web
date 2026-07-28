@@ -25,7 +25,7 @@
 #     the build fails fast if they are missing.
 #   - `firebase` CLI authenticated (`firebase login`).
 #   - `gcloud` CLI authenticated with write access to the bucket (`gcloud auth login`);
-#     see docs/quest_prototype/asset-hosting.md.
+#     see docs/journey_prototype/asset-hosting.md.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

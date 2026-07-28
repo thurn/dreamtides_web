@@ -401,7 +401,7 @@ White-filled, black-outlined gear, ~energy-pip sized, under `.c-cost`, shown onl
 
 ### Task 11: Browser QA
 
-Validate the integrated feature through the real player workflow per `AGENTS.md`/the quest-battle QA setup. **Start the QA Vite server on a non-default port** (e.g. `npm run dev -- --port 5174`), capture its PID, and at teardown kill **only** that process (`pkill -f "vite --port 5174"` or by PID) — never a broad `pkill -f vite`.
+Validate the integrated feature through the real player workflow per `AGENTS.md`/the journey-battle QA setup. **Start the QA Vite server on a non-default port** (e.g. `npm run dev -- --port 5174`), capture its PID, and at teardown kill **only** that process (`pkill -f "vite --port 5174"` or by PID) — never a broad `pkill -f vite`.
 
 - [ ] **Step 1:** Launch the QA server on port 5174 and drive a battle with basic automation **on** (per the battle browser-QA setup: copy `.env`, run setup-assets, click "Create Game").
 

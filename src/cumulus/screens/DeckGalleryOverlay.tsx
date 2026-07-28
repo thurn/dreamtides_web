@@ -22,8 +22,8 @@ export interface DeckGalleryOverlayProps {
   emptyLabel: string;
   /** Accessible label for the close control and dialog. */
   closeLabel: string;
-  /** Reserve the mobile top-left band for persistent quest menu chrome. */
-  clearMobileQuestMenu?: boolean;
+  /** Reserve the mobile top-left band for persistent journey menu chrome. */
+  clearMobileJourneyMenu?: boolean;
   /** Dismisses the gallery. */
   onClose: () => void;
 }
@@ -40,11 +40,11 @@ export function DeckGalleryOverlay({
   cards,
   emptyLabel,
   closeLabel,
-  clearMobileQuestMenu = false,
+  clearMobileJourneyMenu = false,
   onClose,
 }: DeckGalleryOverlayProps): ReactElement {
   const isDesktop = useIsDesktop();
-  const clearsMobileMenu = !isDesktop && clearMobileQuestMenu;
+  const clearsMobileMenu = !isDesktop && clearMobileJourneyMenu;
   const mobileMenuClearance =
     `calc(max(var(--safe-area-inset-top), ${String(MENU_EDGE_INSET_MOBILE_PX)}px) + ` +
     `${String(MENU_BUTTON_PX)}px + ${token("--space-4")})`;

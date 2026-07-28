@@ -3,11 +3,11 @@
 Date: 2026-07-01
 Status: approved design; implementation plan at
 `docs/superpowers/plans/2026-07-01-coop-event-sourcing-rewrite.md`
-Source proposal: `docs/quest_prototype/coop_event_sourcing_proposal.md`
+Source proposal: `docs/journey_prototype/coop_event_sourcing_proposal.md`
 
 ## Goal
 
-Rewrite the quest prototype's cooperative multiplayer structure as the
+Rewrite the journey prototype's cooperative multiplayer structure as the
 event-sourced "shared log, local fold" architecture from the proposal. The
 result is equivalent to deleting all existing sync/orchestration code and
 writing it from scratch: clients append intent events to a totally-ordered
@@ -26,7 +26,7 @@ machinery survives.
    contexts, both effect-runner hooks, the battle entry seam, presence
    consumers. Already-pure rules functions (`applyDebugEdit`, the card-effect
    script tables, `planNextEffectStep`, `applyPromptResolution`, the domain
-   math inside the quest mutations) are relocated and re-plumbed into the
+   math inside the journey mutations) are relocated and re-plumbed into the
    reducer with their logic preserved.
 3. **Undo is removed entirely.** No `UNDO` event, no checkpoint stack, no
    undo/redo UI. `src/battle/state/history.ts` and every consumer of it is
@@ -38,7 +38,7 @@ machinery survives.
 ## Non-goals
 
 - Preserving any existing RTDB data, schema version, or in-flight room.
-- Quest-level or battle-level undo.
+- Journey-level or battle-level undo.
 - An authoritative server or Cloud Functions (excluded by the proposal's
   requirements).
 - Generalizing the engine for other games or transports beyond what one
@@ -63,7 +63,7 @@ src/rules/               # the pure game reducer — importing Firebase or React
   events.ts              # discriminated union of every event type + payload types
   reducer.ts             # root fold: CAS guard → domain reducers → {state, outcome}
   fold-state.ts          # FoldState type + genesis-state constructor
-  quest/                 # feature-grouped event cases (deck, shop, sites, draft, atlas, essence, lifecycle, modifiers)
+  journey/                 # feature-grouped event cases (deck, shop, sites, draft, atlas, essence, lifecycle, modifiers)
   battle/                # BattleFoldState, event application, effect engine (queue/prompts/triggers)
                          # relocated: apply-debug-edit, script tables, step planner, dreamwell table
 
@@ -114,13 +114,13 @@ rooms/{roomId}/
     head:         number       # seq of newest event
     events:       { [seq]: JSON string }   # dense integer keys in (baseSeq, head]
   presence/       { clientId: { connected, lastSeenAt } }
-  logs/           # quest-log sink (push-keyed JSONL strings), kept as today
+  logs/           # journey-log sink (push-keyed JSONL strings), kept as today
 ```
 
 **Events and snapshots are stored as JSON strings**, not RTDB trees. RTDB
 strips empty arrays, `undefined`, and empty objects from trees; today that
 requires ~250 lines of normalization (`battle-normalize.ts`, the
-`normalizeQuestState` family) plus `stripUndefinedForRtdb`. Opaque strings
+`normalizeJourneyState` family) plus `stripUndefinedForRtdb`. Opaque strings
 round-trip byte-exact, which also makes `stateHashAfter` comparisons stable.
 None of the normalization/sanitization layer is carried over. The reducer
 must still produce JSON-safe state (no functions, no `undefined` values in
@@ -141,7 +141,7 @@ interface GameEvent {
 
 ```ts
 interface FoldState {
-  quest: QuestState;
+  journey: JourneyState;
   battle: BattleFoldState | null;
 }
 ```
@@ -261,7 +261,7 @@ the same multi-path update that creates the log node.
 ```
 reduce(state, event, ctx):
   1. if event.type is CAS-exempt → skip rules 2-4 (initial exempt set: card-note
-     events and OPEN_SITE — see Quest events); rule 5 validation still applies
+     events and OPEN_SITE — see Journey events); rule 5 validation still applies
   2. if event is RESOLVE_PROMPT whose promptId matches the open prompt →
      skip rules 3-4 (see below)
   3. if ctx.intervening is unknown, or contains any event whose
@@ -298,10 +298,10 @@ The reducer never throws on any event content — malformed or stale intents
 bounce; throwing is reserved for programmer errors caught in dev (and
 contained in production, see Safety rails).
 
-### Quest events
+### Journey events
 
-Every multiplayer mutation in `src/state/multiplayer-quest-context.tsx`
-becomes an event type with a reducer case in `src/rules/quest/`, grouped by
+Every multiplayer mutation in `src/state/multiplayer-journey-context.tsx`
+becomes an event type with a reducer case in `src/rules/journey/`, grouped by
 feature (essence, lifecycle, dream avatar, navigation, deck, transfiguration,
 dreamsigns, draft, sites, merchant, shop, limits, atlas, modifiers, misc).
 The implementation plan carries the authoritative 1:1 table from the
@@ -310,16 +310,16 @@ mutation catalogue produced during exploration; representative examples:
 - `changeEssence` → `ADJUST_ESSENCE { delta }`
 - `pickDraftCard` → `PICK_DRAFT_CARD { packIndex, cardId }`
 - `buyShopSlot` → `BUY_SHOP_SLOT { siteId, slotIndex }`
-- `startQuest` / `resetQuest` / `loadQuestState` / QA bootstraps →
-  `START_QUEST`, `RESET_QUEST`, `LOAD_STATE { snapshot }` (debug-only, large
+- `startJourney` / `resetJourney` / `loadJourneyState` / QA bootstraps →
+  `START_JOURNEY`, `RESET_JOURNEY`, `LOAD_STATE { snapshot }` (debug-only, large
   payload is fine — compaction absorbs it)
 
 `SELECT_DREAM_AVATAR { dreamAvatarId }` carries only the chosen Dream Avatar
 UUID. The reducer derives `resolvedPackage` and `remainingDreamsignPool`
-deterministically from that UUID and the immutable folded `quest.seed`
-(= `genesis.seed`) — running the `startQuestFromDreamAvatar` pool pipeline
-through the `QuestLifecycleContentProvider` — rather than trusting a
-client-computed package. `quest.seed` is fixed at room genesis and identical on
+deterministically from that UUID and the immutable folded `journey.seed`
+(= `genesis.seed`) — running the `startJourneyFromDreamAvatar` pool pipeline
+through the `JourneyLifecycleContentProvider` — rather than trusting a
+client-computed package. `journey.seed` is fixed at room genesis and identical on
 every client, so all clients compute a byte-identical package. Resolution is
 seed-keyed and independent of the event's seq, so a `SELECT_DREAM_AVATAR` at any
 position in the log yields the same package.
@@ -328,7 +328,7 @@ The `ensure*SiteRuntime` family (five mutations) simplifies structurally:
 those writes exist because generation used `Math.random()` and had to be
 stored before rendering. In the new model a single `OPEN_SITE { siteId }`
 event generates the site runtime **deterministically inside the reducer**
-from `ctx.rng`, stores it in `state.quest.siteRuntime`, and both clients
+from `ctx.rng`, stores it in `state.journey.siteRuntime`, and both clients
 compute identical offers. `OPEN_SITE` is CAS-exempt and idempotent: its
 reducer case draws only from `ctx.rng` at its own seq and is a no-change
 **applied** when the runtime already exists, so both players opening the
@@ -337,13 +337,13 @@ same site simultaneously converge without a bounce toast. Rerolls
 from the rng stream at their own seq.
 
 The `NON_NULLABLE_RUN_FIELDS` invariant guard is deleted rather than ported:
-no code path writes quest state, so there is no bad write to guard against.
+no code path writes journey state, so there is no bad write to guard against.
 Its spirit survives as reducer unit tests asserting no event sequence can
 null `draftState`/`resolvedPackage`/`dreamAvatar` mid-run.
 
 ### Battle events
 
-- **`BEGIN_BATTLE { siteId }`** — constructs `BattleFoldState` from quest
+- **`BEGIN_BATTLE { siteId }`** — constructs `BattleFoldState` from journey
   state deterministically (deck, dream avatar, opponent deck drawn via
   `ctx.rng`). This replaces `ensureBattleSession`'s init race and the
   client-local `begunEntryKey`: "battle has begun" is a derivable fact of
@@ -375,11 +375,11 @@ null `draftState`/`resolvedPackage`/`dreamAvatar` mid-run.
   prompt is open (root rule 4). All prompt-ownership machinery
   (`ownsRunRef`, `cancelPromptSignal`, prompt-internal `sourceSurface`
   exemptions) has no equivalent — either player resolves, both fold it.
-- **`END_BATTLE { result }`** — folds victory/defeat into quest state
+- **`END_BATTLE { result }`** — folds victory/defeat into journey state
   (today's `incrementCompletionLevel` / `setFailureSummary` seam) and clears
   `state.battle`.
 - **Card notes** (`SET_CARD_NOTE`) are CAS-exempt: no rules meaning, no
-  decision context. (`OPEN_SITE` is the only other exempt type — see Quest
+  decision context. (`OPEN_SITE` is the only other exempt type — see Journey
   events.)
 
 The relocated pure pieces keep their tests and their logic:
@@ -402,7 +402,7 @@ reducer commands.
 ## Client layer
 
 - **`RoomGate.tsx`** — replaces `MultiplayerRoomGate.tsx`: parse `?game=`,
-  create/join, write presence, subscribe, install the quest-log sink, and
+  create/join, write presence, subscribe, install the journey-log sink, and
   gate on `genesis.reducerVersion === BUILD_HASH`. Mismatch renders
   `VersionGateScreen` (read-only, "start a new game").
 - **`hooks.ts`** — `useGameState()` returns the displayed fold
@@ -414,7 +414,7 @@ reducer commands.
   optimistic echo, the resolve waits for its confirmation — a mispredicted
   seq would otherwise target a promptId that never comes to exist.
 - **`actions.ts`** — named action creators mirroring today's
-  `QuestMutations` call ergonomics (`actions.pickDraftCard(...)` appends
+  `JourneyMutations` call ergonomics (`actions.pickDraftCard(...)` appends
   `PICK_DRAFT_CARD`). Screens keep their call-site shape; only the provider
   they read from changes. This bounds the churn across the ~100 consumer
   components to import/provider swaps plus removal of undo controls.
@@ -429,7 +429,7 @@ reducer commands.
 ## Logging and observability
 
 - Every appended event is mirrored into the room's `logs/` sink and thence
-  `quest-log.jsonl` (existing tooling keeps working), tagged with `gameId`,
+  `journey-log.jsonl` (existing tooling keeps working), tagged with `gameId`,
   `seq`, `type`, `actor`, `outcome`, and `stateHashAfter` when present.
   **Single-writer rule**: each client mirrors only the events it appended
   (its own actor plus its `ai:` actor), tracked past a high-water seq so a
@@ -499,7 +499,7 @@ reducer commands.
   are replaced by pure fold tests: the "two clients race" scenarios become
   "two orderings of the same intents fold to a deterministic result" — data
   tests, no React. New suites: prompt lifecycle via events, trigger firing
-  at edit-apply time, quest event cases per feature, run-field nullability
+  at edit-apply time, journey event cases per feature, run-field nullability
   properties, prompt-gating bounces.
 - **Replay CI**: fixture logs (recorded from real sessions once the system
   runs, plus synthetic seeds) replayed in CI asserting the recorded final
@@ -530,11 +530,11 @@ Deleted outright (no successor keeps any of their code):
   `action-log.ts` (the event log is the action record),
   `rtdb-sanitize.ts`, `battle-normalize.ts`, `log-sink.ts` and
   `room-log-service.ts` (rewritten minimally inside `src/coop/` for the
-  quest-log sink), `RoomLogViewer.tsx`, `room-id.ts` (regenerated in
+  journey-log sink), `RoomLogViewer.tsx`, `room-id.ts` (regenerated in
   `eventlog/room.ts`).
-- `src/state/multiplayer-quest-context.tsx` (all 5,051 lines),
+- `src/state/multiplayer-journey-context.tsx` (all 5,051 lines),
   `multiplayer-battle-context.tsx` (`remoteCommandEpoch`, reconciliation),
-  `use-ensure-battle-session.ts`, `quest-state-invariants.ts`.
+  `use-ensure-battle-session.ts`, `journey-state-invariants.ts`.
 - `src/battle/automation/use-battle-effect-runner.ts`,
   `use-dreamwell-effect-runner.ts`, their helper/diff functions and jsdom
   test suites.

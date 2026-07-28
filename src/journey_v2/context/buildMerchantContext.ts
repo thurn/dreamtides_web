@@ -1,7 +1,7 @@
-import type { QuestContent } from "../../data/quest-content";
+import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
 import type { DreamsignTemplate } from "../../types/content";
-import type { DeckEntry, Dreamsign, QuestState, SiteState } from "../../types/quest";
+import type { DeckEntry, Dreamsign, JourneyState, SiteState } from "../../types/journey";
 import type {
   MerchantContext,
   MerchantCatalogCard,
@@ -9,8 +9,8 @@ import type {
 } from "../types";
 
 interface BuildMerchantContextInput {
-  questState: QuestState;
-  questContent: QuestContent;
+  journeyState: JourneyState;
+  journeyContent: JourneyContent;
   site: SiteState;
 }
 
@@ -60,17 +60,17 @@ function projectCatalogCard(card: CardData): MerchantCatalogCard {
 }
 
 /**
- * Resolves the quest's draft pool to the set of card UUIDs the player could
+ * Resolves the journey's draft pool to the set of card UUIDs the player could
  * draft this game. `draftPoolCopiesByCard` is keyed by card number (as a
  * string); we map each number to its UUID via `cardByNumber`. Returns an empty
  * set when no package has been resolved (e.g. before the pool is built).
  */
 function buildDraftPoolCardUuids(
-  questState: QuestState,
+  journeyState: JourneyState,
   cardByNumber: ReadonlyMap<number, CardData>,
 ): ReadonlySet<string> {
   const draftPoolCardUuids = new Set<string>();
-  const copiesByCard = questState.resolvedPackage?.draftPoolCopiesByCard;
+  const copiesByCard = journeyState.resolvedPackage?.draftPoolCopiesByCard;
   if (copiesByCard === undefined) return draftPoolCardUuids;
   for (const cardNumberKey of Object.keys(copiesByCard)) {
     const cardNumber = Number(cardNumberKey);
@@ -117,15 +117,15 @@ function isAvailableDreamsignTemplate(
 }
 
 export function buildMerchantContext({
-  questState,
-  questContent,
+  journeyState,
+  journeyContent,
   site,
 }: BuildMerchantContextInput): MerchantContext {
-  const cardByNumber = new Map(questContent.cardDatabase);
+  const cardByNumber = new Map(journeyContent.cardDatabase);
   const cardByUuid = buildCardByUuid(cardByNumber);
 
   const deckCards = Object.freeze(
-    questState.deck
+    journeyState.deck
       .map((deckEntry) => projectDeckCard(deckEntry, cardByNumber))
       .filter((deckCard): deckCard is MerchantDeckCard => deckCard !== null),
   );
@@ -141,14 +141,14 @@ export function buildMerchantContext({
     [...cardByNumber.values()].filter(isGrantCandidate).map(projectCatalogCard),
   );
 
-  const draftPoolCardUuids = buildDraftPoolCardUuids(questState, cardByNumber);
+  const draftPoolCardUuids = buildDraftPoolCardUuids(journeyState, cardByNumber);
 
-  const heldDreamsignIds = buildHeldDreamsignIds(questState.dreamsigns);
+  const heldDreamsignIds = buildHeldDreamsignIds(journeyState.dreamsigns);
   const heldDreamsignFallbackNames = buildHeldDreamsignFallbackNames(
-    questState.dreamsigns,
+    journeyState.dreamsigns,
   );
   const candidateDreamsigns = Object.freeze(
-    questContent.dreamsignTemplates.filter((template) =>
+    journeyContent.dreamsignTemplates.filter((template) =>
       isAvailableDreamsignTemplate(
         template,
         heldDreamsignIds,
@@ -157,7 +157,7 @@ export function buildMerchantContext({
     ),
   );
 
-  const siteRuntime = questState.siteRuntime[site.id];
+  const siteRuntime = journeyState.siteRuntime[site.id];
   const rerollNonce =
     siteRuntime?.kind === "dreamAugury" ? siteRuntime.rerollNonce ?? 0 : 0;
   const forcedArchetypeId =
@@ -166,12 +166,12 @@ export function buildMerchantContext({
       : undefined;
 
   return {
-    questSeed: questState.seed,
+    journeySeed: journeyState.seed,
     site,
     rerollNonce,
     ...(forcedArchetypeId === undefined ? {} : { forcedArchetypeId }),
-    essence: questState.essence,
-    essenceCap: questState.essenceCap,
+    essence: journeyState.essence,
+    essenceCap: journeyState.essenceCap,
     deckCards,
     cardByUuid,
     cardByNumber,
@@ -182,10 +182,10 @@ export function buildMerchantContext({
     heldDreamsignFallbackNames,
     candidateGrantCards,
     candidateDreamsigns,
-    fitModel: questContent.fitModel,
-    merchantCorpus: questContent.merchantCorpus,
-    dreamsignProfiles: questContent.dreamsignProfiles,
-    cardDatabase: questContent.cardDatabase,
-    dreamsignTemplates: questContent.dreamsignTemplates,
+    fitModel: journeyContent.fitModel,
+    merchantCorpus: journeyContent.merchantCorpus,
+    dreamsignProfiles: journeyContent.dreamsignProfiles,
+    cardDatabase: journeyContent.cardDatabase,
+    dreamsignTemplates: journeyContent.dreamsignTemplates,
   };
 }

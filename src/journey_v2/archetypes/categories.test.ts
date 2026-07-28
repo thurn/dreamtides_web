@@ -6,7 +6,7 @@ import {
   makeMerchantTestContent,
   makeMerchantTestCorpus,
   makeMerchantTestDeckEntry,
-  makeMerchantTestQuestState,
+  makeMerchantTestJourneyState,
   makeMerchantTestSite,
 } from "../testing/fixtures";
 import type { CardData } from "../../types/cards";
@@ -27,7 +27,7 @@ function makeContext(input: {
   clusters?: { id: number; flagship: string; members: string[] }[];
   corpusCards?: Record<string, { quality: number }>;
 }): MerchantContext {
-  const questContent = makeMerchantTestContent({
+  const journeyContent = makeMerchantTestContent({
     cards: input.poolCards,
     merchantCorpus: makeMerchantTestCorpus({
       cards: input.corpusCards ?? {},
@@ -38,8 +38,8 @@ function makeContext(input: {
     makeMerchantTestDeckEntry({ entryId: e.entryId, cardNumber: e.cardNumber }),
   );
   return buildMerchantContext({
-    questState: makeMerchantTestQuestState({ deck }),
-    questContent,
+    journeyState: makeMerchantTestJourneyState({ deck }),
+    journeyContent,
     site: makeMerchantTestSite(),
   });
 }

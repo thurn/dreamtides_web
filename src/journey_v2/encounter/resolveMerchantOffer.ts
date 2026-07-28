@@ -1,18 +1,18 @@
 import { mergeCardKeywordModification } from "../../card-type-change";
 import { createDreamsign } from "../../data/dreamsigns";
-import type { QuestContent } from "../../data/quest-content";
+import type { JourneyContent } from "../../data/journey-content";
 import { deriveEntryIdCounter } from "../../state/deck-entry-ids";
 import {
   addSiteToCurrentDreamscape,
-  completeQuestSite,
-  setQuestScreen,
-} from "../../state/quest-state-actions";
+  completeJourneySite,
+  setJourneyScreen,
+} from "../../state/journey-state-actions";
 import type {
   DeckEntry,
   Dreamsign,
-  QuestState,
+  JourneyState,
   SiteState,
-} from "../../types/quest";
+} from "../../types/journey";
 import { buildMerchantContext } from "../context/buildMerchantContext";
 import type {
   MerchantAcceptRequest,
@@ -36,20 +36,20 @@ export type MerchantResolveFailureReason =
 export type ResolveMerchantOfferResult =
   | {
       ok: true;
-      state: QuestState;
+      state: JourneyState;
       offer: MerchantOffer;
       appliedPayload: MerchantApplyPayload;
     }
   | {
       ok: false;
       reason: MerchantResolveFailureReason;
-      state: QuestState;
+      state: JourneyState;
     };
 
 export type ResolveMerchantDeclineResult =
   | {
       ok: true;
-      state: QuestState;
+      state: JourneyState;
     }
   | {
       ok: false;
@@ -58,19 +58,19 @@ export type ResolveMerchantDeclineResult =
         | "stale_encounter"
         | "offer_not_found"
         | "site_unavailable";
-      state: QuestState;
+      state: JourneyState;
     };
 
 interface ResolveMerchantOfferInput {
-  state: QuestState;
-  questContent: QuestContent;
+  state: JourneyState;
+  journeyContent: JourneyContent;
   site: SiteState;
   request: MerchantAcceptRequest;
 }
 
 interface ResolveMerchantDeclineInput {
-  state: QuestState;
-  questContent: QuestContent;
+  state: JourneyState;
+  journeyContent: JourneyContent;
   site: SiteState;
   request: MerchantDeclineRequest;
 }
@@ -82,7 +82,7 @@ interface EntryIdAllocator {
 /**
  * Builds the allocator a merchant resolution mints fresh deck entries
  * through. When the caller supplies `mintEntryId` (the reducer path, backed
- * by `mintEntryId(deck, ctx.seq, index)` from src/rules/quest/deck.ts — see
+ * by `mintEntryId(deck, ctx.seq, index)` from src/rules/journey/deck.ts — see
  * `site-provider.ts`'s `resolveMerchant`), every minted id follows that SAME
  * seq-keyed scheme every other minting case in the game uses, rather than
  * this module's own independently-evolving `deriveEntryIdCounter` counter
@@ -114,24 +114,24 @@ function createEntryIdAllocator(
 }
 
 function fail(
-  state: QuestState,
+  state: JourneyState,
   reason: MerchantResolveFailureReason,
 ): ResolveMerchantOfferResult {
   return { ok: false, reason, state };
 }
 
 function validateCatalogCard(
-  questContent: QuestContent,
+  journeyContent: JourneyContent,
   cardUuid: string,
   cardNumber: number,
 ): boolean {
-  const card = questContent.cardDatabase.get(cardNumber);
+  const card = journeyContent.cardDatabase.get(cardNumber);
   return card !== undefined && card.id === cardUuid;
 }
 
 function validateDeckTarget(
-  state: QuestState,
-  questContent: QuestContent,
+  state: JourneyState,
+  journeyContent: JourneyContent,
   payload: {
     entryId: string;
     cardUuid: string;
@@ -142,16 +142,16 @@ function validateDeckTarget(
   if (entry === undefined || entry.cardNumber !== payload.cardNumber) {
     return null;
   }
-  return validateCatalogCard(questContent, payload.cardUuid, payload.cardNumber)
+  return validateCatalogCard(journeyContent, payload.cardUuid, payload.cardNumber)
     ? entry
     : null;
 }
 
 function dreamsignFromPayload(
-  questContent: QuestContent,
+  journeyContent: JourneyContent,
   payload: Extract<MerchantApplyPayload, { kind: "add_dreamsign" }>,
 ): Dreamsign | null {
-  const template = questContent.dreamsignTemplates.find(
+  const template = journeyContent.dreamsignTemplates.find(
     (candidate) => candidate.id === payload.dreamsignId,
   );
   if (template === undefined || template.id !== payload.dreamsignTemplate.id) {
@@ -160,10 +160,10 @@ function dreamsignFromPayload(
   return createDreamsign(template, false);
 }
 
-function markSiteComplete(state: QuestState, siteId: string): QuestState | null {
-  const completed = completeQuestSite(state, siteId);
+function markSiteComplete(state: JourneyState, siteId: string): JourneyState | null {
+  const completed = completeJourneySite(state, siteId);
   if (completed === state) return null;
-  return setQuestScreen(
+  return setJourneyScreen(
     {
       ...completed,
       siteRuntime: {
@@ -176,14 +176,14 @@ function markSiteComplete(state: QuestState, siteId: string): QuestState | null 
 }
 
 function applyMerchantPayload(
-  state: QuestState,
-  questContent: QuestContent,
+  state: JourneyState,
+  journeyContent: JourneyContent,
   payload: MerchantApplyPayload,
   entryIds: EntryIdAllocator,
-): QuestState | null {
+): JourneyState | null {
   switch (payload.kind) {
     case "add_catalog_card": {
-      if (!validateCatalogCard(questContent, payload.cardUuid, payload.cardNumber)) {
+      if (!validateCatalogCard(journeyContent, payload.cardUuid, payload.cardNumber)) {
         return null;
       }
       return {
@@ -200,7 +200,7 @@ function applyMerchantPayload(
       };
     }
     case "add_dreamsign": {
-      const dreamsign = dreamsignFromPayload(questContent, payload);
+      const dreamsign = dreamsignFromPayload(journeyContent, payload);
       if (dreamsign === null) return null;
       return {
         ...state,
@@ -208,7 +208,7 @@ function applyMerchantPayload(
       };
     }
     case "transfigure_deck_entry": {
-      const target = validateDeckTarget(state, questContent, payload);
+      const target = validateDeckTarget(state, journeyContent, payload);
       if (target === null) return null;
       return {
         ...state,
@@ -220,7 +220,7 @@ function applyMerchantPayload(
       };
     }
     case "duplicate_deck_entry": {
-      const target = validateDeckTarget(state, questContent, payload);
+      const target = validateDeckTarget(state, journeyContent, payload);
       if (target === null) return null;
       return {
         ...state,
@@ -234,14 +234,14 @@ function applyMerchantPayload(
       };
     }
     case "remove_deck_entry": {
-      if (validateDeckTarget(state, questContent, payload) === null) return null;
+      if (validateDeckTarget(state, journeyContent, payload) === null) return null;
       return {
         ...state,
         deck: state.deck.filter((entry) => entry.entryId !== payload.entryId),
       };
     }
     case "change_deck_entry_keywords": {
-      const target = validateDeckTarget(state, questContent, payload);
+      const target = validateDeckTarget(state, journeyContent, payload);
       if (target === null) return null;
       const keywordModification = mergeCardKeywordModification(
         target.keywordModification,
@@ -257,7 +257,7 @@ function applyMerchantPayload(
       };
     }
     case "change_deck_entry_type": {
-      if (validateDeckTarget(state, questContent, payload) === null) return null;
+      if (validateDeckTarget(state, journeyContent, payload) === null) return null;
       return {
         ...state,
         deck: state.deck.map((entry) =>
@@ -273,9 +273,9 @@ function applyMerchantPayload(
       return addSiteToCurrentDreamscape(state, payload.siteType, payload.siteType);
     }
     case "composite": {
-      let next: QuestState | null = state;
+      let next: JourneyState | null = state;
       for (const child of payload.children) {
-        next = applyMerchantPayload(next, questContent, child, entryIds);
+        next = applyMerchantPayload(next, journeyContent, child, entryIds);
         if (next === null) return null;
       }
       return next;
@@ -285,34 +285,34 @@ function applyMerchantPayload(
 
 export function applyMerchantPayloadToState({
   state,
-  questContent,
+  journeyContent,
   payload,
   mintEntryId,
 }: {
-  state: QuestState;
-  questContent: QuestContent;
+  state: JourneyState;
+  journeyContent: JourneyContent;
   payload: MerchantApplyPayload;
   mintEntryId?: (deck: readonly DeckEntry[], index: number) => string;
-}): QuestState | null {
+}): JourneyState | null {
   return applyMerchantPayload(
     state,
-    questContent,
+    journeyContent,
     payload,
     createEntryIdAllocator(state.deck, mintEntryId),
   );
 }
 
 function findCurrentOffer(input: {
-  state: QuestState;
-  questContent: QuestContent;
+  state: JourneyState;
+  journeyContent: JourneyContent;
   site: SiteState;
   request: MerchantAcceptRequest;
 }): MerchantOffer | MerchantResolveFailureReason {
-  const { state, questContent, site, request } = input;
+  const { state, journeyContent, site, request } = input;
   let encounter;
   try {
     encounter = generateMerchantEncounter(
-      buildMerchantContext({ questState: state, questContent, site }),
+      buildMerchantContext({ journeyState: state, journeyContent, site }),
     );
   } catch {
     return "encounter_unavailable";
@@ -351,14 +351,14 @@ function payloadForRequest(
 
 export function resolveMerchantOffer({
   state,
-  questContent,
+  journeyContent,
   site,
   request,
   mintEntryId,
 }: ResolveMerchantOfferInput & {
   mintEntryId?: (deck: readonly DeckEntry[], index: number) => string;
 }): ResolveMerchantOfferResult {
-  const offer = findCurrentOffer({ state, questContent, site, request });
+  const offer = findCurrentOffer({ state, journeyContent, site, request });
   if (typeof offer === "string") return fail(state, offer);
 
   const payload = payloadForRequest(offer, request);
@@ -366,7 +366,7 @@ export function resolveMerchantOffer({
 
   const rewardedState = applyMerchantPayload(
     state,
-    questContent,
+    journeyContent,
     payload,
     createEntryIdAllocator(state.deck, mintEntryId),
   );
@@ -385,13 +385,13 @@ export function resolveMerchantOffer({
 
 export function resolveMerchantDecline({
   state,
-  questContent,
+  journeyContent,
   site,
   request,
 }: ResolveMerchantDeclineInput): ResolveMerchantDeclineResult {
   try {
     const encounter = generateMerchantEncounter(
-      buildMerchantContext({ questState: state, questContent, site }),
+      buildMerchantContext({ journeyState: state, journeyContent, site }),
     );
     if (encounter.encounterSignature !== request.encounterSignature) {
       return { ok: false, reason: "stale_encounter", state };

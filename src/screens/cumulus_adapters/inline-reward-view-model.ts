@@ -1,9 +1,9 @@
 import type {
   DreamscapeNode,
-  QuestState,
+  JourneyState,
   SiteRuntimeState,
   SiteState,
-} from "../../types/quest";
+} from "../../types/journey";
 import { requireDreamsignId } from "../../data/dreamsigns";
 
 export type InlineRewardCompletionKind = "essence" | "reward";
@@ -21,7 +21,7 @@ export function resolveInlineReward(
   site: SiteState | undefined,
   runtime: SiteRuntimeState | undefined,
   state: Pick<
-    QuestState,
+    JourneyState,
     "essence" | "essenceCap" | "dreamsigns" | "maxDreamsigns"
   >,
 ): InlineRewardResolution | null {
@@ -40,7 +40,7 @@ export function resolveInlineReward(
 /** Resolves a held Dreamsign UUID against the live collection. */
 export function resolveRewardReplacement(
   node: DreamscapeNode,
-  state: QuestState,
+  state: JourneyState,
   siteId: string,
   dreamsignId: string,
 ) {
@@ -74,7 +74,7 @@ export function resolveRewardReplacement(
 /** Resolves an at-cap decline against the live Reward runtime. */
 export function resolveRewardDecline(
   node: DreamscapeNode,
-  state: QuestState,
+  state: JourneyState,
   siteId: string,
 ) {
   const site = node.sites.find((candidate) => candidate.id === siteId);
@@ -99,7 +99,7 @@ export function resolveRewardDecline(
 export function buildInlineRewardCompletionLog(
   site: SiteState | undefined,
   runtime: SiteRuntimeState | undefined,
-  state: Pick<QuestState, "essence" | "essenceCap">,
+  state: Pick<JourneyState, "essence" | "essenceCap">,
 ): InlineRewardCompletionLog | null {
   if (site?.type === "Essence" && runtime?.kind === "essence") {
     if (runtime.accepted) return null;

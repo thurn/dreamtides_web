@@ -15,10 +15,10 @@ import type {
 import type {
   CardSourceDebugState,
   DreamscapeNode,
-  QuestState,
+  JourneyState,
   ShopSiteRuntime,
   SiteState,
-} from "../../types/quest";
+} from "../../types/journey";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
   CardShopOfferView,
@@ -116,7 +116,7 @@ export function buildCardShopDebugState(
 
 /** Build the complete Cumulus Card Shop view-model. */
 export function buildCardShopSiteView(params: {
-  state: QuestState;
+  state: JourneyState;
   sceneNode: DreamscapeNode | null;
   site: SiteState;
   runtime: ShopSiteRuntime;

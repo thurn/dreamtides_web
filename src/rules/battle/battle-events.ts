@@ -21,7 +21,7 @@
 // `ctx.rng` (the deterministic `(drawIndex) => number` per-event stream) and
 // `ctx.timestamp` unchanged, so two clients folding the same `BEGIN_BATTLE`
 // build a byte-identical battle. `END_BATTLE` needs no async content — its
-// bookkeeping is pure quest-state math and lives entirely here.
+// bookkeeping is pure journey-state math and lives entirely here.
 //
 // Cards / dreamAvatars are keyed by UUID and deck entries by entry-id — never
 // by name (AGENTS.md).
@@ -43,12 +43,12 @@ import { FRONT_RANK_SLOTS, frontRankSlotId, rankSlotIds } from "../../battle/typ
 import type { BattleCommand, BattleDebugEdit } from "../../battle/debug/commands";
 import type {
   BattleModifier,
-  QuestFailureBattleResult,
-  QuestFailureReason,
-  QuestFailureSummary,
-  QuestState,
+  JourneyFailureBattleResult,
+  JourneyFailureReason,
+  JourneyFailureSummary,
+  JourneyState,
   Screen,
-} from "../../types/quest";
+} from "../../types/journey";
 import type { FoldState } from "../fold-state";
 import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
 import { createEmptyTransitionData } from "../../battle/engine/result";
@@ -103,25 +103,25 @@ import {
   semanticPlayTargetsAreLegal,
 } from "../../battle/semantic-play";
 import { TUTORIAL_DREAM_AVATAR_ID } from "../../data/tutorial-cards";
-import { resetQuest } from "../quest/lifecycle";
+import { resetJourney } from "../journey/lifecycle";
 
 // ---------------------------------------------------------------------------
 // Battle-init provider seam (BEGIN_BATTLE construction)
 // ---------------------------------------------------------------------------
 
 /**
- * The deterministic construction `BEGIN_BATTLE` needs to turn quest state into
+ * The deterministic construction `BEGIN_BATTLE` needs to turn journey state into
  * a fresh {@link BattleFoldState}. The reducer resolves double-begin itself,
  * then delegates the immutable `init` (`BattleInit`) plus board / dreamAvatar /
  * opponent-deck construction — which reads async-loaded card, dreamAvatar, and
  * dreamwell data — to this provider.
  *
  * The registered provider (`createBattleInitProvider`) constructs the battle
- * deterministically from folded quest state: `createBattleInit` derives all of
+ * deterministically from folded journey state: `createBattleInit` derives all of
  * its randomness from a `BattleRng` stream keyed by
- * `deriveBattleSeed(quest.seed:battleEntryKey)`, and `createInitialBattleState`
- * is pure. That seed comes straight from the folded quest, so every client on
- * the room builds a byte-identical battle from the same quest seed and site.
+ * `deriveBattleSeed(journey.seed:battleEntryKey)`, and `createInitialBattleState`
+ * is pure. That seed comes straight from the folded journey, so every client on
+ * the room builds a byte-identical battle from the same journey seed and site.
  * Until a provider is registered, `BEGIN_BATTLE` bounces (a recorded no-op,
  * never a throw).
  *
@@ -135,13 +135,13 @@ import { resetQuest } from "../quest/lifecycle";
 export interface BattleInitProvider {
   /**
    * Build the initial {@link BattleFoldState} for `siteId` deterministically
-   * from `(quest, rng, timestamp)`, or `null` to bounce (e.g. the site is not a
-   * battle, or its content is unavailable). Must not mutate `quest`. The result
+   * from `(journey, rng, timestamp)`, or `null` to bounce (e.g. the site is not a
+   * battle, or its content is unavailable). Must not mutate `journey`. The result
    * must populate the immutable `init` (`BattleInit`) and set `effectQueue: []`
    * and `pendingPrompt: null`.
    */
   beginBattle(input: {
-    quest: QuestState;
+    journey: JourneyState;
     siteId: string;
     seedOverride: number | null;
     seq: number;
@@ -153,7 +153,7 @@ export interface BattleInitProvider {
 /** Deterministic construction seam for the authored tutorial handoff. */
 export interface TutorialBattleInitProvider {
   beginTutorialBattle(input: {
-    quest: QuestState;
+    journey: JourneyState;
     actions: readonly TutorialAction[];
     tutorialRunId: string;
     driverClientId: string;
@@ -196,7 +196,7 @@ export function registerTutorialBattleInitProvider(
 
 /**
  * `BEGIN_BATTLE { siteId, seedOverride? }`: construct the in-battle fold slice deterministically
- * from quest state. Returns the next {@link FoldState} on success, or `null` to
+ * from journey state. Returns the next {@link FoldState} on success, or `null` to
  * bounce when:
  *   - a battle is already in progress (`state.battle !== null`) — a pure
  *     derivable check on fold state;
@@ -232,7 +232,7 @@ export function beginBattle(
     return null;
   }
   const battle = provider.beginBattle({
-    quest: state.quest,
+    journey: state.journey,
     siteId,
     seedOverride,
     seq: ctx.seq,
@@ -246,7 +246,7 @@ export function beginBattle(
     ...state,
     battle: {
       ...battle,
-      mode: battle.mode ?? { kind: "quest" },
+      mode: battle.mode ?? { kind: "journey" },
       basicAutomationEnabled: true,
     },
   };
@@ -327,7 +327,7 @@ export function restartTutorialBattle(
   );
 }
 
-/** Hand a completed tutorial battle into the fixed tutorial quest-start offer. */
+/** Hand a completed tutorial battle into the fixed tutorial journey-start offer. */
 export function exitTutorialBattle(
   state: FoldState,
   payload: Record<string, unknown>,
@@ -344,14 +344,14 @@ export function exitTutorialBattle(
   ) {
     return null;
   }
-  const reset = resetQuest(state);
+  const reset = resetJourney(state);
   return {
     ...reset,
     frontDoor: { phase: "main", journeyId: null, tutorial: null },
-    quest: {
-      ...reset.quest,
+    journey: {
+      ...reset.journey,
       screen: {
-        type: "questStart",
+        type: "journeyStart",
         tutorialDreamAvatarId: TUTORIAL_DREAM_AVATAR_ID,
       },
     },
@@ -368,7 +368,7 @@ function buildTutorialBattle(
   const provider = tutorialBattleInitProvider;
   if (provider === null) return null;
   const battle = provider.beginTutorialBattle({
-    quest: state.quest,
+    journey: state.journey,
     actions: state.frontDoor.tutorial?.actions ?? [],
     tutorialRunId,
     driverClientId,
@@ -413,7 +413,7 @@ export function setBattleAutomation(
 const FINAL_COMPLETION_LEVEL = 7;
 
 /**
- * `END_BATTLE { result }`: fold a victory or defeat into quest state and clear
+ * `END_BATTLE { result }`: fold a victory or defeat into journey state and clear
  * the battle slice. Returns the next {@link FoldState}, or `null` to bounce when
  * no battle exists or `result` is not a recognized outcome.
  */
@@ -441,16 +441,16 @@ export function endBattle(
  * dropped modifier introduced. The battle slice is torn down.
  */
 function applyVictory(state: FoldState): FoldState {
-  const quest = state.quest;
-  const newLevel = quest.completionLevel + 1;
+  const journey = state.journey;
+  const newLevel = journey.completionLevel + 1;
   const screen: Screen =
     newLevel >= FINAL_COMPLETION_LEVEL
-      ? { type: "questComplete" }
+      ? { type: "journeyComplete" }
       : { type: "atlas" };
 
   const droppedBaneEntryIds = new Set<string>();
   const battleModifiers: BattleModifier[] = [];
-  for (const modifier of quest.battleModifiers) {
+  for (const modifier of journey.battleModifiers) {
     const battlesRemaining = modifier.battlesRemaining - 1;
     if (battlesRemaining <= 0) {
       if (modifier.kind === "temporary_bane_grant") {
@@ -464,13 +464,13 @@ function applyVictory(state: FoldState): FoldState {
   }
   const deck =
     droppedBaneEntryIds.size === 0
-      ? quest.deck
-      : quest.deck.filter((entry) => !droppedBaneEntryIds.has(entry.entryId));
+      ? journey.deck
+      : journey.deck.filter((entry) => !droppedBaneEntryIds.has(entry.entryId));
 
   return {
     ...state,
-    quest: {
-      ...quest,
+    journey: {
+      ...journey,
       completionLevel: newLevel,
       screen,
       battleModifiers,
@@ -483,17 +483,17 @@ function applyVictory(state: FoldState): FoldState {
 
 /**
  * Defeat bookkeeping: freeze a
- * {@link QuestFailureSummary} from the battle board + quest slice, route to the
- * `questFailed` screen, and tear down the battle slice.
+ * {@link JourneyFailureSummary} from the battle board + journey slice, route to the
+ * `journeyFailed` screen, and tear down the battle slice.
  */
 function applyDefeat(state: FoldState, battle: BattleFoldState): FoldState {
-  const quest = state.quest;
+  const journey = state.journey;
   return {
     ...state,
-    quest: {
-      ...quest,
-      failureSummary: deriveFailureSummary(battle.init, battle.board, quest),
-      screen: { type: "questFailed" },
+    journey: {
+      ...journey,
+      failureSummary: deriveFailureSummary(battle.init, battle.board, journey),
+      screen: { type: "journeyFailed" },
     },
     battle: null,
   };
@@ -501,8 +501,8 @@ function applyDefeat(state: FoldState, battle: BattleFoldState): FoldState {
 
 /**
  * Derive the failure summary from the immutable battle `init`, the terminal
- * `board`, and the quest slice. `battleId`, `turnNumber`, and both scores come
- * from the board; `dreamscapeIdOrNone` comes from the active quest position;
+ * `board`, and the journey slice. `battleId`, `turnNumber`, and both scores come
+ * from the board; `dreamscapeIdOrNone` comes from the active journey position;
  * the win / turn-limit thresholds come from `init`.
  *
  * The failure `reason` mirrors the battle result evaluation:
@@ -514,16 +514,16 @@ function applyDefeat(state: FoldState, battle: BattleFoldState): FoldState {
  * SEAM (Task 27, UI): `siteLabel` is a display string that needs async site
  * content the pure reducer cannot reach (it is not on `BattleInit`), so it
  * defaults to the `siteId`; the UI resolves the human-facing label when it
- * renders the `questFailed` screen.
+ * renders the `journeyFailed` screen.
  */
 function deriveFailureSummary(
   init: BattleInit,
   board: BattleMutableState,
-  quest: QuestState,
-): QuestFailureSummary {
-  const result: QuestFailureBattleResult =
+  journey: JourneyState,
+): JourneyFailureSummary {
+  const result: JourneyFailureBattleResult =
     board.result === "draw" ? "draw" : "defeat";
-  let reason: QuestFailureReason;
+  let reason: JourneyFailureReason;
   if (board.forcedResult !== null) {
     reason = "forced_result";
   } else if (
@@ -534,14 +534,14 @@ function deriveFailureSummary(
   } else {
     reason = "score_target_reached";
   }
-  const siteId = quest.activeSiteId ?? init.siteId;
+  const siteId = journey.activeSiteId ?? init.siteId;
   return {
     battleId: board.battleId,
     result,
     reason,
     siteId,
     siteLabel: siteId,
-    dreamscapeIdOrNone: quest.currentDreamscape,
+    dreamscapeIdOrNone: journey.currentDreamscape,
     turnNumber: board.turnNumber,
     playerScore: board.sides.player.score,
     enemyScore: board.sides.enemy.score,
@@ -2073,7 +2073,7 @@ function scoreOrTurnLimitResult(
 ): BattleResult | null {
   if (board.result !== null) return null;
   if (board.sides.player.score >= battle.init.scoreToWin) return "victory";
-  if (battleModeOf(battle).kind === "quest") {
+  if (battleModeOf(battle).kind === "journey") {
     if (board.sides.enemy.score >= battle.init.scoreToWin) return "defeat";
     if (board.turnNumber > battle.init.turnLimit) return "draw";
   }

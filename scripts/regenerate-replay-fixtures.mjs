@@ -6,7 +6,7 @@
 //
 // The rules modules use TS enums and extensionless imports node's
 // --experimental-strip-types resolver cannot follow, so this script runs under
-// `tsx` (the supported fallback per docs/quest_prototype/qa_tooling.md).
+// `tsx` (the supported fallback per docs/journey_prototype/qa_tooling.md).
 //
 // Each fixture is a checked-in `{ providerSet, genesis, events, finalHash }`.
 // These are SYNTHETIC seeds: they use the DETERMINISTIC fixture providers
@@ -114,13 +114,13 @@ function expectOutcomes(label, events, gen, expected) {
 }
 
 // ---------------------------------------------------------------------------
-// (a) quest-only: start -> dreamAvatar -> travel -> open/accept -> shop buy
+// (a) journey-only: start -> dreamAvatar -> travel -> open/accept -> shop buy
 // ---------------------------------------------------------------------------
 
-function questOnlyFixture() {
-  const gen = genesis("fixture-quest-only");
+function journeyOnlyFixture() {
+  const gen = genesis("fixture-journey-only");
   const events = chain("p1", [
-    ["START_QUEST", { dreamAvatarId: DREAM_AVATAR_ID }],
+    ["START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }],
     ["SELECT_DREAM_AVATAR", { dreamAvatarId: DREAM_AVATAR_ID }],
     ["TRAVEL_TO_DREAMSCAPE", { nodeId: NODE_ID }],
     ["OPEN_SITE", { siteId: ESSENCE_SITE_ID }],
@@ -128,7 +128,7 @@ function questOnlyFixture() {
     ["OPEN_SITE", { siteId: SHOP_SITE_ID }],
     ["BUY_SHOP_SLOT", { siteId: SHOP_SITE_ID, slotIndex: 0 }],
   ]);
-  expectOutcomes("quest-only", events, gen, {
+  expectOutcomes("journey-only", events, gen, {
     1: "applied",
     2: "applied",
     3: "applied",
@@ -137,7 +137,7 @@ function questOnlyFixture() {
     6: "applied",
     7: "applied",
   });
-  return finalize("quest-only", gen, events);
+  return finalize("journey-only", gen, events);
 }
 
 // ---------------------------------------------------------------------------
@@ -148,7 +148,7 @@ function battleFixture() {
   const gen = genesis("fixture-battle");
   // Events up to the prompt-parking command; discover the promptId by folding.
   const prefix = chain("p1", [
-    ["START_QUEST", { dreamAvatarId: DREAM_AVATAR_ID }],
+    ["START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }],
     ["BEGIN_BATTLE", { siteId: BATTLE_SITE_ID }],
     ["BATTLE_COMMAND", moveToFront(BATTLE_CARD_DETERMINISTIC, DETERMINISTIC_SLOT)],
     ["BATTLE_COMMAND", drawDreamwell()],
@@ -186,7 +186,7 @@ function battleFixture() {
 function adversarialFixture() {
   const gen = genesis("fixture-adversarial");
   const prefix = [
-    ev(1, "START_QUEST", { dreamAvatarId: DREAM_AVATAR_ID }, "alice", 0),
+    ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }, "alice", 0),
     // bob's essence adjust applies; alice's, based on the pre-bob state, sees
     // bob's applied non-neutral event in its window and BOUNCES (CAS rule 3).
     ev(2, "ADJUST_ESSENCE", { delta: 10 }, "bob", 1),
@@ -243,7 +243,7 @@ function finalize(name, gen, events) {
 function main() {
   registerReplayFixtureProviders();
   try {
-    const fixtures = [questOnlyFixture(), battleFixture(), adversarialFixture()];
+    const fixtures = [journeyOnlyFixture(), battleFixture(), adversarialFixture()];
     for (const { name, fixture } of fixtures) {
       const path = resolve(FIXTURE_DIR, `${name}.json`);
       writeFileSync(path, `${JSON.stringify(fixture, null, 2)}\n`);

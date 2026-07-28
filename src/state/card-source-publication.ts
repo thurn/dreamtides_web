@@ -1,4 +1,4 @@
-import type { CardSourceDebugState } from "../types/quest";
+import type { CardSourceDebugState } from "../types/journey";
 
 export interface CardSourcePublication {
   ownerId: string | null;

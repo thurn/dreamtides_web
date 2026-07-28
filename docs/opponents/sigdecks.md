@@ -9,7 +9,7 @@ Source: [`src/debug/SignatureDecksApp.tsx`](../../src/debug/SignatureDecksApp.ts
 (route wired in [`src/main.tsx`](../../src/main.tsx) at path `/sigdecks`).
 
 The selection runs **live in the browser** every time the screen loads, from the
-same quest content the battle integration consumes. There is no precomputed
+same journey content the battle integration consumes. There is no precomputed
 artifact: the result tracks the current card data and signature lists.
 
 ## Inputs

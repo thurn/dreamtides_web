@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { LayerName } from "../../types/layer-name";
-import type { DreamAtlas, DreamscapeNode } from "../../types/quest";
-import type { QuestContent } from "../../data/quest-content";
+import type { DreamAtlas, DreamscapeNode } from "../../types/journey";
+import type { JourneyContent } from "../../data/journey-content";
 import { MINIMAL_ATLAS_CONFIG } from "../../__test-helpers__/atlas-fixtures";
 import {
   ATLAS_LAYOUT_DESKTOP,
@@ -18,8 +18,8 @@ import {
   resolveAtlasNodeGeometry,
 } from "./atlas-view-model";
 
-/** A structurally valid but content-free QuestContent for builder tests. */
-const EMPTY_CONTENT: QuestContent = {
+/** A structurally valid but content-free JourneyContent for builder tests. */
+const EMPTY_CONTENT: JourneyContent = {
   cardDatabase: new Map(),
   dreamAvatars: [],
   dreamwellCards: [],
@@ -317,7 +317,7 @@ describe("buildAtlasMapNodes", () => {
         isVisited: false,
       },
     ];
-    const content: QuestContent = {
+    const content: JourneyContent = {
       ...EMPTY_CONTENT,
       dreamscapes: [
         {

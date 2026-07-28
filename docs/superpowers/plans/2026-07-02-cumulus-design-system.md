@@ -8,7 +8,7 @@
 
 **Tech Stack:** React 19 + TypeScript (bundler mode, `react-jsx`), Vite, Vitest + jsdom, flat-config ESLint (typescript-eslint), `react-docgen-typescript` (new dev dep), Boxicons 3 (self-hosted) + one new Phosphor fill face.
 
-**Companion spec (read first, do not re-decide):** `docs/quest_prototype/cumulus_design_system.md`. That document holds the design decisions this plan implements — the isolation rule, routing choice, token pipeline, docgen approach, per-component roster, the input-adaptive press-reveal model, and the GroupPanel-is-CSS-only correction. Where this plan says "per the spec," consult that file rather than re-deriving the decision.
+**Companion spec (read first, do not re-decide):** `docs/journey_prototype/cumulus_design_system.md`. That document holds the design decisions this plan implements — the isolation rule, routing choice, token pipeline, docgen approach, per-component roster, the input-adaptive press-reveal model, and the GroupPanel-is-CSS-only correction. Where this plan says "per the spec," consult that file rather than re-deriving the decision.
 
 **Design source of record:** Claude Design project `10fa84a8-cdc2-4e83-80af-47df24d1c247`, read via the `claude_design` MCP (`DesignSync get_file` / `list_files`), authorized with `/design-login`. Component source files are `.jsx` + `.d.ts` + `.card.html` under `components/<group>/`; tokens are under `tokens/`.
 
@@ -33,7 +33,7 @@ src/cumulus/
     Icon.tsx                # boxicon/phosphor glyph helper
   components/
     GlassButton.tsx  ResourceChip.tsx  InfoCard.tsx  SegmentedControl.tsx
-    StatTile.tsx  TidePill.tsx  Motes.tsx  QuestStatusBar.tsx  GroupPanel.tsx
+    StatTile.tsx  TidePill.tsx  Motes.tsx  JourneyStatusBar.tsx  GroupPanel.tsx
     GameCard.tsx  RulesText.tsx  Dreamsign.tsx  SiteNode.tsx
     AtlasNode.tsx  AtlasEdge.tsx  AtlasEdgeDefs.tsx
     <moved helper closure: card-text.ts, card-display-scale.ts, GlowIcon.tsx,
@@ -418,7 +418,7 @@ Dispatch **one subagent per component** (per super-subagent-driven-development).
 | `segmented-control` | SegmentedControl | components | `components/pills/SegmentedControl.jsx` | — |
 | `stat-tile` | StatTile | components | `components/pills/StatTile.jsx` | — |
 | `tide-pill` | TidePill | components | `components/pills/TidePill.jsx` | **Keep the name.** Tones `violet/blue/gold/green/rust/red/neutral`; presentational; optional `onPress`. |
-| `motes` | Motes | components | `components/quest/Motes.jsx` | Atmospheric particle layer; `tint` `warm`/`violet`; the one sanctioned opacity animation; respects `prefers-reduced-motion`. |
+| `motes` | Motes | components | `components/journey/Motes.jsx` | Atmospheric particle layer; `tint` `warm`/`violet`; the one sanctioned opacity animation; respects `prefers-reduced-motion`. |
 
 ### Task 2.0 (prerequisite): bundle the Phosphor face
 
@@ -453,11 +453,11 @@ The one **decision that changes the port** (not in the design source): generaliz
 
 Port the design's `components/surfaces/GroupPanel.jsx` **as-is** — it is already CSS-only (`backdrop-filter: blur(22px) saturate(1.5)`, specular gradient, inset rim/wash, drop shadow). Replace its literal rgba/px values with the corresponding Cumulus tokens where a token exists (`--border-soft`, `--r-popover`, `--space-6`); keep the bespoke glass gradient/shadow literals that have no token. Expose `groupPanelStyle(radius)` and the `GroupPanel` wrapper (`as`, `padding`, `radius`). No dependency. Recipe verification + commit + push.
 
-### Task 3.3: QuestStatusBar
+### Task 3.3: JourneyStatusBar
 
-**Files:** Create `src/cumulus/components/QuestStatusBar.tsx`; demo + registry entry.
+**Files:** Create `src/cumulus/components/JourneyStatusBar.tsx`; demo + registry entry.
 
-Import per recipe from `components/quest/QuestStatusBar.jsx`. The transparent bottom HUD (no surface); text/icons use `.hud-outline` (rung 1 of the legibility ladder) — port that outline utility into Cumulus CSS. Recipe verification + commit + push.
+Import per recipe from `components/journey/JourneyStatusBar.jsx`. The transparent bottom HUD (no surface); text/icons use `.hud-outline` (rung 1 of the legibility ladder) — port that outline utility into Cumulus CSS. Recipe verification + commit + push.
 
 ---
 
@@ -511,7 +511,7 @@ These are **moves**, not imports. The production component and its component-spe
 
 **Files:**
 - Create: `src/cumulus/components/Dreamsign.tsx` (unify local `DreamsignHoverCard` / `DreamsignArtTile` with design `components/entities/Dreamsign.jsx`).
-- Create: `src/cumulus/components/SiteNode.tsx` (unify local `DreamscapeSiteNode` with design `components/quest/SiteNode.jsx`).
+- Create: `src/cumulus/components/SiteNode.tsx` (unify local `DreamscapeSiteNode` with design `components/journey/SiteNode.jsx`).
 - Move any remaining local helper closure these need.
 
 - [ ] Dispatch one subagent each: read both the local component(s) and the design source, produce a unified `.tsx` whose touch/hover preview routes through `InfoCard` (`object` variant for Dreamsign, `SITE_DISC`/`icon` for SiteNode) per the input-adaptive model. Keep props documented for docgen.

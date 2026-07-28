@@ -26,7 +26,7 @@ import {
 import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import type { Dreamsign as DreamsignData } from "../../types/quest";
+import type { Dreamsign as DreamsignData } from "../../types/journey";
 import { GuideGallerySiteLayout } from "./GuideGallerySiteLayout";
 
 export interface DreamAuguryGuideView {

@@ -5,18 +5,18 @@
 // no state hooks — the adapter acquires live state and calls this; this module
 // maps domain data to the screen's view types and nothing else. The run's
 // stable avatar UUID and seed resolve the same selected tide preview shown at
-// quest start.
+// journey start.
 
 import type { CardData } from "../../types/cards";
 import type { DreamAvatarContent } from "../../types/content";
-import type { RunPoolContext } from "../../data/quest-content";
-import type { DeckEntry, DreamAvatar, Dreamsign } from "../../types/quest";
+import type { RunPoolContext } from "../../data/journey-content";
+import type { DeckEntry, DreamAvatar, Dreamsign } from "../../types/journey";
 import type {
   DeckDreamAvatarView,
   DesktopDeckView,
 } from "../../cumulus/screens/DesktopDeckViewer";
 import { buildMobileDeckView } from "./mobile-deck-view-model";
-import { buildDreamAvatarTideViews } from "./quest-start-view-model";
+import { buildDreamAvatarTideViews } from "./journey-start-view-model";
 
 /** Map the run's DreamAvatar to the sidebar view (portrait visual + rules text). */
 function toDreamAvatarView(
@@ -44,7 +44,7 @@ export function buildDesktopDeckView(
   dreamsigns: readonly Dreamsign[],
   dreamAvatars: readonly DreamAvatarContent[] = [],
   poolContext?: RunPoolContext,
-  questSeed = "",
+  journeySeed = "",
 ): DesktopDeckView {
   const dreamAvatarContent =
     dreamAvatar === null
@@ -57,6 +57,6 @@ export function buildDesktopDeckView(
     tides:
       dreamAvatarContent === undefined
         ? []
-        : buildDreamAvatarTideViews(poolContext, dreamAvatarContent, questSeed),
+        : buildDreamAvatarTideViews(poolContext, dreamAvatarContent, journeySeed),
   };
 }

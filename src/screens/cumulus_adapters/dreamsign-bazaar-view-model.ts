@@ -11,10 +11,10 @@ import type { DreamGuideContent } from "../../types/content";
 import type {
   DreamscapeNode,
   Dreamsign,
-  QuestState,
+  JourneyState,
   ShopSiteRuntime,
   SiteState,
-} from "../../types/quest";
+} from "../../types/journey";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
   DreamsignBazaarOfferView,
@@ -52,7 +52,7 @@ export function buildDreamsignBazaarGuideView(
 /** Resolve persistent Dreamsign slots into UUID-derived, effectively priced wares. */
 export function buildDreamsignBazaarOffers(
   runtime: ShopSiteRuntime,
-  state: Pick<QuestState, "essence" | "dreamsigns" | "maxDreamsigns">,
+  state: Pick<JourneyState, "essence" | "dreamsigns" | "maxDreamsigns">,
   priceModifiers: ShopPriceModifiers,
 ): DreamsignBazaarOfferView[] {
   const offers: DreamsignBazaarOfferView[] = [];
@@ -101,7 +101,7 @@ export function buildDreamsignBazaarRestock(
 
 /** Build the replacement overlay shown when a purchase reaches the cap. */
 export function buildDreamsignBazaarPurgeView(
-  state: Pick<QuestState, "dreamsigns" | "maxDreamsigns">,
+  state: Pick<JourneyState, "dreamsigns" | "maxDreamsigns">,
   pendingDreamsign: Dreamsign | null,
 ): DreamsignBazaarPurgeView | null {
   return pendingDreamsign === null
@@ -115,7 +115,7 @@ export function buildDreamsignBazaarPurgeView(
 
 /** Build the complete Cumulus Dreamsign Bazaar view-model. */
 export function buildDreamsignBazaarSiteView(params: {
-  state: QuestState;
+  state: JourneyState;
   sceneNode: DreamscapeNode | null;
   site: SiteState;
   runtime: ShopSiteRuntime;

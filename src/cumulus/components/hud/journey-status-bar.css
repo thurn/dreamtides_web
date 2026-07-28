@@ -1,0 +1,70 @@
+/* JourneyStatusBar — component-owned styles.
+   ================================================================
+   Everything here is scoped under `.cumulus` so it never leaks onto the
+   rest of the app, matching how cumulus-tokens.css scopes its declarations.
+
+   The `.hud-outline` on-media legibility utility this bar relies on lives in
+   the shared `src/cumulus/primitives/legibility.css` (loaded globally), so the
+   HUD text and dreamsign strip that sit directly on scene art are legible
+   wherever the bar renders. This file carries the JourneyStatusBar's own
+   structural rules (deck press, DreamAvatar bust sizing, HUD baseline
+   alignment, elevation transform, and the overflow-window entrance keyframe),
+   ported from the design source's `<style id="qsb-styles">` injection. */
+
+/* ---- The deck sprite compresses on touch-down by the one press factor ---- */
+.cumulus .qsbDeck {
+  transition: transform var(--dur-fast) var(--ease-out);
+  transform-origin: center bottom;
+}
+/* Hover-capable pointers get the shared hover-enlarge; the :active rule
+   below wins while pressed via the :not guard. */
+@media (hover: hover) {
+  .cumulus .qsbDeck:hover:not(:active) {
+    transform: scale(var(--hover-scale, 1.03));
+  }
+}
+.cumulus .qsbDeck:active {
+  transform: scale(var(--press-scale, 0.9));
+}
+
+/* ---- DreamAvatar bust: fixed HUD footprint. The component owns the inner
+   image crop because it resolves each DreamAvatar's authored head focus. ---- */
+.cumulus .qsb button[aria-label="Avatar"] {
+  width: var(--qsb-dc-size, 66px) !important;
+  height: var(--qsb-dc-size, 66px) !important;
+}
+
+/* ---- HUD baseline: the essence mark hugs its number. The portrait bust and
+   deck sprite rest on the shared bottom baseline (so they don't look wrong
+   flush against the screen's rounded corners), while the essence value is
+   lifted into a raised row — up to about where the portrait's corner radius
+   starts — that the dreamsign strip vertically centers on. ---- */
+.cumulus .qsbHud > div > div > span {
+  gap: 0 !important;
+}
+.cumulus .qsbHud > div {
+  align-items: flex-end !important;
+}
+.cumulus .qsbHud > div > div {
+  /* --qsb-elev raises the essence cluster off the baseline; 14px seats it
+     around the portrait's corner-radius start. */
+  transform: translateY(calc(-1 * var(--qsb-elev, 14px)));
+}
+
+/* ---- Overflow dreamsign-window entrance ---- */
+@keyframes qsbCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cumulus .qsb * {
+    animation: none !important;
+  }
+}

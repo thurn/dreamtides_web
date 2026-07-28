@@ -8,19 +8,19 @@ import {
 import type { ReactElement, ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { QuestContent } from "./data/quest-content";
-import { loadQuestContent } from "./data/quest-content";
+import type { JourneyContent } from "./data/journey-content";
+import { loadJourneyContent } from "./data/journey-content";
 import { getFirebaseDatabase } from "./firebase/app-config";
 import type { CardData } from "./types/cards";
-import type { QuestMutations } from "./state/quest-context";
-import type { QuestState } from "./types/quest";
+import type { JourneyMutations } from "./state/journey-context";
+import type { JourneyState } from "./types/journey";
 import { LayerName } from "./types/layer-name";
-import App, { QuestApp } from "./App";
-import { useQuest } from "./state/quest-context";
+import App, { JourneyApp } from "./App";
+import { useJourney } from "./state/journey-context";
 import { registerGameProviders } from "./coop/providers/register-game-providers";
 
-vi.mock("./data/quest-content", () => ({
-  loadQuestContent: vi.fn(),
+vi.mock("./data/journey-content", () => ({
+  loadJourneyContent: vi.fn(),
 }));
 vi.mock("./data/tutorial-actions", () => ({
   loadTutorialConfiguration: vi.fn(() => Promise.resolve({
@@ -65,14 +65,14 @@ vi.mock("./coop/providers/register-game-providers", () => ({
   registerGameProviders: vi.fn(),
 }));
 
-vi.mock("./state/coop-quest-context", () => ({
-  CoopQuestProvider: ({ children }: { children: ReactNode }) => (
-    <div data-coop-quest-provider>{children}</div>
+vi.mock("./state/coop-journey-context", () => ({
+  CoopJourneyProvider: ({ children }: { children: ReactNode }) => (
+    <div data-coop-journey-provider>{children}</div>
   ),
 }));
 
-vi.mock("./state/quest-context", () => ({
-  useQuest: vi.fn(),
+vi.mock("./state/journey-context", () => ({
+  useJourney: vi.fn(),
 }));
 
 vi.mock("./components/ScreenRouter", () => ({
@@ -148,10 +148,10 @@ vi.mock("./screens/CardSourceOverlay", () => ({
   CardSourceOverlay: () => <div>Card Source Overlay</div>,
 }));
 
-function makeMutations(): QuestMutations {
+function makeMutations(): JourneyMutations {
   return {
     changeEssence: vi.fn(),
-    startQuest: vi.fn(),
+    startJourney: vi.fn(),
     rerollDreamAvatarOffer: vi.fn(),
     completeSite: vi.fn(),
     ensureRewardSiteRuntime: vi.fn(),
@@ -191,7 +191,7 @@ function makeMutations(): QuestMutations {
     setDraftState: vi.fn(),
     setFailureSummary: vi.fn(),
     dismissStartingDeckPopup: vi.fn(),
-    resetQuest: vi.fn(),
+    resetJourney: vi.fn(),
     setEssence: vi.fn(),
     changeMaxEssence: vi.fn(),
     addCardById: vi.fn(),
@@ -213,9 +213,9 @@ function makeMutations(): QuestMutations {
   };
 }
 
-function makeState(overrides: Partial<QuestState> = {}): QuestState {
+function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
   return {
-    runId: "quest:test",
+    runId: "journey:test",
     seed: "test-seed",
     essence: 250,
     essenceCap: 500,
@@ -239,7 +239,7 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
     visitedSites: [],
     siteRuntime: {},
     draftState: null,
-    screen: { type: "questStart" },
+    screen: { type: "journeyStart" },
     activeSiteId: null,
     failureSummary: null,
     hasSeenStartingDeckPopup: false,
@@ -253,7 +253,7 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
   };
 }
 
-function makeQuestContent(): QuestContent {
+function makeJourneyContent(): JourneyContent {
   return {
     cardDatabase: new Map<number, CardData>(),
     dreamAvatars: [],
@@ -267,12 +267,12 @@ function makeQuestContent(): QuestContent {
   };
 }
 
-function setQuestState(state: QuestState): void {
-  vi.mocked(useQuest).mockReturnValue({
+function setJourneyState(state: JourneyState): void {
+  vi.mocked(useJourney).mockReturnValue({
     state,
     mutations: makeMutations(),
     cardDatabase: new Map<number, CardData>(),
-    questContent: {
+    journeyContent: {
       cardDatabase: new Map(),
       dreamAvatars: [],
 
@@ -310,7 +310,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   vi.spyOn(console, "log").mockImplementation(() => {});
   vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null));
-  vi.mocked(loadQuestContent).mockResolvedValue(makeQuestContent());
+  vi.mocked(loadJourneyContent).mockResolvedValue(makeJourneyContent());
   vi.mocked(getFirebaseDatabase).mockReturnValue(
     {} as ReturnType<typeof getFirebaseDatabase>,
   );
@@ -344,8 +344,8 @@ afterEach(() => {
 });
 
 describe("App", () => {
-  it("routes loaded quest content through the coop room gate", async () => {
-    setQuestState(makeState());
+  it("routes loaded journey content through the coop room gate", async () => {
+    setJourneyState(makeState());
 
     const { container, root } = mount(
       <App
@@ -364,7 +364,7 @@ describe("App", () => {
     expect(container.querySelector("[data-room-gate='ab12cd']")).not.toBeNull();
     expect(container.querySelector("[data-coop-provider]")).not.toBeNull();
     expect(
-      container.querySelector("[data-coop-quest-provider]"),
+      container.querySelector("[data-coop-journey-provider]"),
     ).not.toBeNull();
 
     act(() => {
@@ -372,8 +372,8 @@ describe("App", () => {
     });
   });
 
-  it("blocks room entry and provider registration when quest content loading fails", async () => {
-    vi.mocked(loadQuestContent).mockRejectedValueOnce(
+  it("blocks room entry and provider registration when journey content loading fails", async () => {
+    vi.mocked(loadJourneyContent).mockRejectedValueOnce(
       new Error("Failed to load draft records: 503 Test Failure"),
     );
 
@@ -391,7 +391,7 @@ describe("App", () => {
     await flushAppEffects();
 
     expect(container.querySelector('[data-application-state="recoverableError"]')).not.toBeNull();
-    expect(container.textContent).toContain("Quest Content Failed to Load");
+    expect(container.textContent).toContain("Journey Content Failed to Load");
     expect(container.textContent).toContain("Failed to load draft records");
     expect(container.querySelector("[data-room-gate]")).toBeNull();
     expect(container.querySelector("[data-coop-provider]")).toBeNull();
@@ -468,10 +468,10 @@ describe("App", () => {
   });
 });
 
-describe("QuestApp", () => {
+describe("JourneyApp", () => {
   const starterCallerState = (
-    overrides: Partial<QuestState> = {},
-  ): QuestState =>
+    overrides: Partial<JourneyState> = {},
+  ): JourneyState =>
     makeState({
       deck: Array.from({ length: 10 }, (_, index) => ({
         entryId: `deck-${String(index + 1)}`,
@@ -492,10 +492,10 @@ describe("QuestApp", () => {
     });
 
   it("keeps the deck viewer and starting-deck modal closed before any dreamAvatar is selected", () => {
-    setQuestState(makeState());
+    setJourneyState(makeState());
 
     const { container, root } = mount(
-      <QuestApp
+      <JourneyApp
         cardDatabase={new Map()}
         runtimeConfig={{
           seedOverride: null,
@@ -522,10 +522,10 @@ describe("QuestApp", () => {
   });
 
   it("opens the starting-deck modal (not the full DeckViewer) immediately after a dreamAvatar is picked", () => {
-    setQuestState(starterCallerState());
+    setJourneyState(starterCallerState());
 
     const { container, root } = mount(
-      <QuestApp
+      <JourneyApp
         cardDatabase={new Map()}
         runtimeConfig={{
           seedOverride: null,
@@ -555,11 +555,11 @@ describe("QuestApp", () => {
 
   it("dispatches dismissStartingDeckPopup when the starting-deck modal close handler fires", () => {
     const mutations = makeMutations();
-    vi.mocked(useQuest).mockReturnValue({
+    vi.mocked(useJourney).mockReturnValue({
       state: starterCallerState(),
       mutations,
       cardDatabase: new Map<number, CardData>(),
-      questContent: {
+      journeyContent: {
         cardDatabase: new Map(),
         dreamAvatars: [],
 
@@ -573,7 +573,7 @@ describe("QuestApp", () => {
     });
 
     const { root } = mount(
-      <QuestApp
+      <JourneyApp
         cardDatabase={new Map()}
         runtimeConfig={{
           seedOverride: null,
@@ -603,10 +603,10 @@ describe("QuestApp", () => {
   });
 
   it("does not re-open the starting-deck modal when hasSeenStartingDeckPopup is already true (reload case)", () => {
-    setQuestState(starterCallerState({ hasSeenStartingDeckPopup: true }));
+    setJourneyState(starterCallerState({ hasSeenStartingDeckPopup: true }));
 
     const { root } = mount(
-      <QuestApp
+      <JourneyApp
         cardDatabase={new Map()}
         runtimeConfig={{
           seedOverride: null,
@@ -629,11 +629,11 @@ describe("QuestApp", () => {
     });
   });
 
-  it("opens and closes the Pool Viewer from Cumulus quest chrome", () => {
-    setQuestState(starterCallerState({ hasSeenStartingDeckPopup: true }));
+  it("opens and closes the Pool Viewer from Cumulus journey chrome", () => {
+    setJourneyState(starterCallerState({ hasSeenStartingDeckPopup: true }));
 
     const { container, root } = mount(
-      <QuestApp
+      <JourneyApp
         cardDatabase={new Map()}
         runtimeConfig={{
           seedOverride: null,
@@ -672,7 +672,7 @@ describe("QuestApp", () => {
   });
 
   it("renders battle sites through the same Cumulus gameplay router", () => {
-    setQuestState(
+    setJourneyState(
       makeState({
         atlas: {
           nodes: {
@@ -712,7 +712,7 @@ describe("QuestApp", () => {
     );
 
     const { container, root } = mount(
-      <QuestApp
+      <JourneyApp
         cardDatabase={new Map()}
         runtimeConfig={{
           seedOverride: null,
@@ -733,7 +733,7 @@ describe("QuestApp", () => {
   });
 
   it("hides the shared HUD on the desktop Cumulus draft site", () => {
-    setQuestState(
+    setJourneyState(
       makeState({
         atlas: {
           nodes: {
@@ -773,7 +773,7 @@ describe("QuestApp", () => {
     );
 
     const { container, root } = mount(
-      <QuestApp
+      <JourneyApp
         cardDatabase={new Map()}
         runtimeConfig={{
           seedOverride: null,

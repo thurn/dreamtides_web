@@ -1,4 +1,4 @@
-import type { DeckEntry } from "../types/quest";
+import type { DeckEntry } from "../types/journey";
 
 /**
  * Recovers the high-water mark for the `deck-N` entry id sequence from a

@@ -1,4 +1,4 @@
-import type { CardSourceDebugState } from "../../types/quest";
+import type { CardSourceDebugState } from "../../types/journey";
 import type { Idf3ProvenanceSummary, SeedProvenanceSummary, Tides4ProvenanceSummary } from "../../types/content";
 import type { CardSourceView } from "../../cumulus/screens/CardSourceDialog";
 import type { CardData } from "../../types/cards";

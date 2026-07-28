@@ -1,7 +1,7 @@
 // TransfigurationFormButton — the canonical forge-form choice.
 
 import { TRANSFIGURATION_COLORS } from "../../../runtime/transfiguration-display";
-import type { TransfigurationType } from "../../../types/quest";
+import type { TransfigurationType } from "../../../types/journey";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";

@@ -326,7 +326,7 @@ function commitFiles(writes, fileSystem) {
 }
 
 function generateDreamwellDataJsonFromToml(patchedSource, fileSystem) {
-  const tempRoot = fileSystem.mkdtempSync(join(tmpdir(), "quest-dreamwell-editor-refresh-"));
+  const tempRoot = fileSystem.mkdtempSync(join(tmpdir(), "journey-dreamwell-editor-refresh-"));
 
   try {
     fileSystem.mkdirSync(join(tempRoot, "data", "tabula"), { recursive: true });

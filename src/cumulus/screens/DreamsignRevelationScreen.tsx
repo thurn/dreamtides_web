@@ -1,17 +1,17 @@
 // DreamsignRevelationScreen — the Cumulus rendering of Sigrun's dreamsign-offer
 // site. The scene stays full-bleed, the guide and her speech occupy the left
-// side on desktop, and the dreamsign choices sit opposite. Persistent quest
+// side on desktop, and the dreamsign choices sit opposite. Persistent journey
 // chrome is supplied by the router-owned wrapper.
 
 import { motion } from "framer-motion";
 import { requireDreamsignId } from "../../data/dreamsigns";
-import type { Dreamsign as DreamsignData } from "../../types/quest";
+import type { Dreamsign as DreamsignData } from "../../types/journey";
 import { GlassButton } from "../components/controls/GlassButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { Motes } from "../components/hud/Motes";
 import {
-  QUEST_STATUS_BAR_CLEARANCE_OP,
-} from "../components/hud/QuestStatusBar";
+  JOURNEY_STATUS_BAR_CLEARANCE_OP,
+} from "../components/hud/JourneyStatusBar";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
@@ -58,14 +58,14 @@ export interface DreamsignRevelationScreenProps {
   onPurge: (dreamsignId: string) => void;
   /** Cancel cap handling and return to the offer. */
   onCancelPurge: () => void;
-  /** Index currently animating toward the QuestStatusBar. */
+  /** Index currently animating toward the JourneyStatusBar. */
   claimedIndex: number | null;
 }
 
 const CONTENT_VERTICAL_OFFSET = "10dvh";
 const GUIDE_LAYER_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${CONTENT_VERTICAL_OFFSET})`;
 const OFFER_TOP = `max(44dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")} + ${CONTENT_VERTICAL_OFFSET}))`;
-const HUD_CLEARANCE = `calc(${QUEST_STATUS_BAR_CLEARANCE_OP})`;
+const HUD_CLEARANCE = `calc(${JOURNEY_STATUS_BAR_CLEARANCE_OP})`;
 const MOBILE_OFFER_TILE_SIZE = 120;
 const DESKTOP_OFFER_TILE_SIZE = 154;
 const DESKTOP_ENHANCED_OFFER_TILE_SIZE = 140;
@@ -73,7 +73,7 @@ const DESKTOP_DECLINE_GAP = token("--space-12");
 
 /**
  * The Cumulus mobile Dreamsign Revelation screen. Pure and props-driven: it owns
- * presentation and animation only; the adapter owns live quest state.
+ * presentation and animation only; the adapter owns live journey state.
  */
 export function DreamsignRevelationScreen({
   view,

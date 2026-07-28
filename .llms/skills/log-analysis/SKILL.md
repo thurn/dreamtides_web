@@ -1,11 +1,11 @@
 ---
 name: log-analysis
-description: Answer "why did the algorithm do X?" questions by reconstructing behavior from logs/quest-log.jsonl. Focuses on draft pool construction and dream journey / merchant offer construction. Triggers on log analysis, why did my draft pool, why was this card offered, draft pool debugging, dream journey debugging, merchant offer debugging, reconstruct algorithm, quest-log.jsonl.
+description: Answer "why did the algorithm do X?" questions by reconstructing behavior from logs/journey-log.jsonl. Focuses on draft pool construction and dream journey / merchant offer construction. Triggers on log analysis, why did my draft pool, why was this card offered, draft pool debugging, dream journey debugging, merchant offer debugging, reconstruct algorithm, journey-log.jsonl.
 ---
 
 # Log Analysis Skill
 
-Quest logs live in `logs/quest-log.jsonl` — one JSON object per line. The guiding
+Journey logs live in `logs/journey-log.jsonl` — one JSON object per line. The guiding
 question this skill answers: *"If someone asked me to reconstruct what this
 algorithm did in a given production game, would I be able to?"* Read the logs;
 never argue about algorithm behavior from the source code alone when a
@@ -13,7 +13,7 @@ production trace exists.
 
 A run played in the browser also mirrors its log to Firebase Realtime Database,
 so a deployed/production game can be reconstructed even though it never touched
-`logs/quest-log.jsonl`. See **Getting production logs** below before answering a
+`logs/journey-log.jsonl`. See **Getting production logs** below before answering a
 question about a game you can't find in the local file.
 
 This skill targets two question families:
@@ -36,11 +36,11 @@ order.
 
 ```bash
 # Find recent games and their construction algo/seed
-grep '"event":"draft_pool_constructed"' logs/quest-log.jsonl | tail -20
+grep '"event":"draft_pool_constructed"' logs/journey-log.jsonl | tail -20
 
 # Pull every line for one game, in file order
-grep '"gameId":"7koodm"' logs/quest-log.jsonl | python3 -m json.tool --json-lines 2>/dev/null \
-  || grep '"gameId":"7koodm"' logs/quest-log.jsonl
+grep '"gameId":"7koodm"' logs/journey-log.jsonl | python3 -m json.tool --json-lines 2>/dev/null \
+  || grep '"gameId":"7koodm"' logs/journey-log.jsonl
 ```
 
 If a question references a game with no `gameId` on its events, fall back to the
@@ -51,7 +51,7 @@ on raw JSONL when you actually need a field.
 
 ## Getting production logs
 
-`logs/quest-log.jsonl` only captures runs played against the local Vite dev
+`logs/journey-log.jsonl` only captures runs played against the local Vite dev
 server. A run played in a browser against Realtime Database — the deployed
 `redacted-firebase-project.web.app` build, or a local run in a multiplayer room —
 mirrors every `logEvent` into `rooms/<roomId>/logs`, where **`roomId` is the
@@ -72,18 +72,18 @@ yields valid JSONL (each value is already a JSON line):
 ROOM=r3f7vk
 curl -s "https://redacted-firebase-project-default-rtdb.firebaseio.com/rooms/$ROOM/logs.json" \
   | python3 -c 'import json,sys; d=json.load(sys.stdin) or {}; [print(d[k]) for k in sorted(d)]' \
-  > "/tmp/quest-log-$ROOM.jsonl"
-wc -l "/tmp/quest-log-$ROOM.jsonl"   # 0 lines ⇒ no logs stored (game predates persistence, or wrong id)
+  > "/tmp/journey-log-$ROOM.jsonl"
+wc -l "/tmp/journey-log-$ROOM.jsonl"   # 0 lines ⇒ no logs stored (game predates persistence, or wrong id)
 
 # Local emulator (npm run dev) — note the ns and that the port may vary (9000, 9002, ...)
-curl -s "http://127.0.0.1:9000/rooms/$ROOM/logs.json?ns=demo-quest-prototype" \
+curl -s "http://127.0.0.1:9000/rooms/$ROOM/logs.json?ns=demo-journey-prototype" \
   | python3 -c 'import json,sys; d=json.load(sys.stdin) or {}; [print(d[k]) for k in sorted(d)]' \
-  > "/tmp/quest-log-$ROOM.jsonl"
+  > "/tmp/journey-log-$ROOM.jsonl"
 ```
 
 The database URL is `VITE_FIREBASE_DATABASE_URL` (project `redacted-firebase-project`).
-Then run the rest of this skill against `/tmp/quest-log-$ROOM.jsonl` exactly as
-if it were `logs/quest-log.jsonl` — every entry already carries its `gameId`, so
+Then run the rest of this skill against `/tmp/journey-log-$ROOM.jsonl` exactly as
+if it were `logs/journey-log.jsonl` — every entry already carries its `gameId`, so
 `grep '"gameId":"r3f7vk"'` still isolates it (the converted file holds only that
 game). Non-CLI alternative: open `https://redacted-firebase-project.web.app/?viewLogs=<roomId>`
 (or `http://localhost:5173/?viewLogs=<roomId>` locally) and use the viewer's

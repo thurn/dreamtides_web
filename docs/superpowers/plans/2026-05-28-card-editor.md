@@ -4,7 +4,7 @@
 
 **Goal:** Build a standalone `/editor` card editor that loads every source card from `data/tabula/rendered-cards.toml`, edits supported fields inline, and writes confirmed edits back to TOML by UUID.
 
-**Architecture:** Add focused Node-side editor helpers and Vite middleware for TOML reading, targeted patching, validation, and focused `public/card-data.json` refresh. Add a React editor route that bypasses the quest runtime, reuses shared card rendering primitives with the normal quest card UI, keeps display state in URL query parameters, and performs optimistic per-field saves.
+**Architecture:** Add focused Node-side editor helpers and Vite middleware for TOML reading, targeted patching, validation, and focused `public/card-data.json` refresh. Add a React editor route that bypasses the journey runtime, reuses shared card rendering primitives with the normal journey card UI, keeps display state in URL query parameters, and performs optimistic per-field saves.
 
 **Tech Stack:** React 19, TypeScript, Vite middleware, Vitest, `smol-toml`, existing `CardDisplay`/`RulesText`/`PipBadge` card UI, `/opt/homebrew/bin/agent-browser` manual QA.
 
@@ -22,7 +22,7 @@ Hard requirements from the spec:
 - `card-type` is display-only and is not editable.
 - Enter is the only save action; Escape discards; blur does not save.
 - TOML patching preserves unrelated file bytes and field order.
-- Normal quest card surfaces and editor card surfaces share one maintained rendering path.
+- Normal journey card surfaces and editor card surfaces share one maintained rendering path.
 - Every UI slice has a separate `agent-browser` QA subagent checkpoint before the next UI slice proceeds.
 
 ## File Structure
@@ -53,7 +53,7 @@ Create or modify these files:
 - Modify `src/components/CardDisplay.tsx`: thin compatibility wrapper around `CardView`.
 - Modify `src/components/CardDisplay.test.tsx`: preserve existing card-rendering behavior and add slot/refactor coverage.
 - Modify `src/main.tsx`: mount `CardEditorApp` when `window.location.pathname === "/editor"`.
-- Modify `docs/quest_prototype/url_parameters.md`: document `/editor` query parameters as current behavior.
+- Modify `docs/journey_prototype/url_parameters.md`: document `/editor` query parameters as current behavior.
 
 ## QA Gate Protocol For UI Tasks
 
@@ -226,7 +226,7 @@ In `scripts/card-editor-api.d.ts`, declare `createCardEditorApiMiddleware` so `v
 Modify `vite.config.ts`:
 
 - Import `createCardEditorApiMiddleware`.
-- Add a `cardEditorApiPlugin()` next to `questLogPlugin()`.
+- Add a `cardEditorApiPlugin()` next to `journeyLogPlugin()`.
 - Register the middleware in `configureServer`.
 - Include `cardEditorApiPlugin()` in the plugin list before `generatedCardDataDriftPlugin()` so a successful edit refreshes `public/card-data.json` before the drift guard reacts to file changes.
 
@@ -261,7 +261,7 @@ git push
 - Create: `src/editor/CardEditorApp.tsx`
 - Create: `src/editor/CardEditorApp.test.tsx`
 - Modify: `src/main.tsx`
-- Modify: `docs/quest_prototype/url_parameters.md`
+- Modify: `docs/journey_prototype/url_parameters.md`
 
 - [ ] **Step 1: Write failing URL state tests**
 
@@ -294,7 +294,7 @@ In `src/editor/CardEditorApp.test.tsx`, cover these bug classes:
 - The route shell renders a loading state while cards load.
 - A successful load renders the editor title and total source-card count.
 - A failed load renders a retryable error state.
-- The editor route does not require Firebase, quest providers, or `App`.
+- The editor route does not require Firebase, journey providers, or `App`.
 
 Use an injectable API client prop or module mock so tests do not hit real Vite middleware.
 
@@ -316,7 +316,7 @@ Modify `src/main.tsx` so `/editor` mounts `CardEditorApp` before normal runtime 
 
 - [ ] **Step 5: Document `/editor` query parameters**
 
-Update `docs/quest_prototype/url_parameters.md` with a current-state section for `/editor` query parameters. Mention that these parameters are live editor display state and are updated with `replaceState`.
+Update `docs/journey_prototype/url_parameters.md` with a current-state section for `/editor` query parameters. Mention that these parameters are live editor display state and are updated with `replaceState`.
 
 - [ ] **Step 6: Run route shell tests**
 
@@ -333,7 +333,7 @@ Expected: PASS.
 
 Dispatch a separate QA subagent using the QA Gate Protocol. The subagent must verify:
 
-- `/editor` opens without creating or joining a quest room.
+- `/editor` opens without creating or joining a journey room.
 - The loading state is visible before data resolves when network delay is simulated.
 - The loaded shell shows the editor title and source-card count.
 - The route does not show Firebase setup, Create Game, Dream Avatar selection, HUD, or room presence UI.
@@ -350,7 +350,7 @@ Required screenshots:
 Run:
 
 ```bash
-git add src/editor/types.ts src/editor/editor-url-state.ts src/editor/editor-url-state.test.ts src/editor/editor-api.ts src/editor/CardEditorApp.tsx src/editor/CardEditorApp.test.tsx src/main.tsx docs/quest_prototype/url_parameters.md
+git add src/editor/types.ts src/editor/editor-url-state.ts src/editor/editor-url-state.test.ts src/editor/editor-api.ts src/editor/CardEditorApp.tsx src/editor/CardEditorApp.test.tsx src/main.tsx docs/journey_prototype/url_parameters.md
 git commit -m "Add card editor route shell" -m "Mount the standalone /editor route with URL display state parsing, local API loading, and route-shell documentation."
 git push
 ```
@@ -493,7 +493,7 @@ export interface CardViewSlots {
 }
 ```
 
-This interface is the important design decision: editor fields wrap shared slots, while normal quest cards keep the default slot nodes.
+This interface is the important design decision: editor fields wrap shared slots, while normal journey cards keep the default slot nodes.
 
 - [ ] **Step 3: Write failing grid tests**
 

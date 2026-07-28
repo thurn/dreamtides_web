@@ -20,7 +20,7 @@ Complete. The compatibility APIs and independent reveal engine are deleted, the 
 - Migrated product consumers:
   - editor tide card source uses `GameCard`;
   - HUD overflow renders every clipped item as a named `Dreamsign` source;
-  - QuestStart aggregate help is static explanatory copy;
+  - JourneyStart aggregate help is static explanatory copy;
   - CardSource aggregate tide help is static explanatory copy;
   - Draft compact deck rows use strict `CompactGameCardRow` semantics.
 - Retired-symbol source audit is empty after the stale DeckViewer test comment cleanup.
@@ -254,14 +254,14 @@ Stable path: `screenshots/entity-reveals/`
   local lookalike `GameCardProps`, and an alias with unknown composition.
 - Typed-spread safety is provenance-based. The rule records only type-only
   imports of the exact props symbol from the approved component module
-  (`GameCardProps` from `CardView`, and `QuestStatusBarProps` from
-  `QuestStatusBar`). A parameter is safe only as that direct imported reference
+  (`GameCardProps` from `CardView`, and `JourneyStatusBarProps` from
+  `JourneyStatusBar`). A parameter is safe only as that direct imported reference
   or one conservative `Omit`/`Pick` whose key argument is a string literal or a
   union of string literals. Intersections, unions, nested/unknown aliases,
   lookalike names, non-type imports, and unrelated modules remain opaque and are
   rejected on named reveal components.
-- The real QuestStatusBar demo retains its safe
-  `Omit<QuestStatusBarProps, "stageRef">` spread because both module provenance
+- The real JourneyStatusBar demo retains its safe
+  `Omit<JourneyStatusBarProps, "stageRef">` spread because both module provenance
   and literal omission are proven. Direct `GameCardProps` and literal-key
   `Pick<GameCardProps, ...>` have explicit negative-control coverage.
 - The focused lint-rule suite passes 45 cases. Lint, typecheck, the full
@@ -310,7 +310,7 @@ Stable path: `screenshots/entity-reveals/`
 - Lifecycle tracking keys registration, reason, and interaction epoch. Paired open/close diagnostics carry the same interaction id/reason; focus-hover-focus and pre-measure dismissal cases prove exact pairing.
 - Hover-capable pen interactions retain pen modality. `visualViewport.resize` dismisses with cleanup.
 - Generated battle figments derive a deterministic UUID from `battleCardId`, independent of display name, and use `BattleGameCard`. Battle hover-preview callback APIs are deleted and lint rejects arbitrary hover/press handlers while preserving semantic activation.
-- Dreamsign, SiteNode, AtlasNode, and QuestStatusBar sources allow pan scrolling; coordinator scroll cancellation remains authoritative.
+- Dreamsign, SiteNode, AtlasNode, and JourneyStatusBar sources allow pan scrolling; coordinator scroll cancellation remains authoritative.
 - Atlas preview/clamp components, obsolete CSS, and orphaned Cumulus tokens are deleted. Current documentation describes coordinator ownership.
 - The conformance integration renders canonical and generated `BattleGameCard` fixtures and actively installs deterministic reduced motion.
 - Regeneration completed 12/12. Final verification: lint passed; typecheck passed; 392 files passed and 1 skipped; 4,273 tests passed and 4 skipped; `git diff --check` passed.

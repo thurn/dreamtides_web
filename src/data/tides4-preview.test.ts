@@ -10,7 +10,7 @@ import type { Tides4DecksJson } from "../draft/pool/tides4-io.ts";
 import { generateTides4 } from "../draft/pool/variant-tides4.ts";
 import type { PoolData } from "../draft/pool/types.ts";
 import type { DreamAvatarContent } from "../types/content.ts";
-import { hashStringToSeed, type RunPoolContext } from "./quest-content.ts";
+import { hashStringToSeed, type RunPoolContext } from "./journey-content.ts";
 import { selectedTides4Decks } from "./tides4-preview.ts";
 
 function makeTides4(): Tides4DecksJson {
@@ -78,7 +78,7 @@ describe("selectedTides4Decks", () => {
   it("returns the tides the draft deals from, in join order, matching generateTides4", () => {
     const decks = makeTides4();
     const ctx = makeContext(decks, "tides4");
-    const seed = "quest-seed-1";
+    const seed = "journey-seed-1";
 
     const preview = selectedTides4Decks(ctx, DREAM_AVATAR, seed);
     const direct = generateTides4(

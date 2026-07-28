@@ -66,8 +66,8 @@ export interface Genesis {
   /** Epoch milliseconds (see rationale above). */
   createdAt: number;
   /**
-   * Standalone front-door scene a newly created room starts on. Quest rooms
-   * omit this and use the default main-menu scene; the quest router ignores
+   * Standalone front-door scene a newly created room starts on. Journey rooms
+   * omit this and use the default main-menu scene; the journey router ignores
    * the front-door slice entirely.
    */
   frontDoorEntry?: "main" | "loading" | "tutorial";

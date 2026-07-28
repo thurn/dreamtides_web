@@ -16,7 +16,7 @@ Rebuild it from `Cumulus MVP > Rebuild Shop Glass Demo`. The builder also expose
 
 ## Dreamsign glass demo
 
-Open `Assets/Scenes/CumulusDreamsignGlassDemo.unity` to inspect three quest
+Open `Assets/Scenes/CumulusDreamsignGlassDemo.unity` to inspect three journey
 Dreamsigns as alpha-cut world-space meshes over the shared blurred glass. The
 `CumulusMvp/Dreamsign` shader anchors each production UUID image to the web
 brightness and saturation transform, then applies bounded directional and

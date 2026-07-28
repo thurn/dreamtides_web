@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { DuplicationSiteScreen } from "../../cumulus/screens/DuplicationSiteScreen";
 import { logEvent, logEventOnce } from "../../logging";
-import { useQuest } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
 import {
   buildDuplicationSiteView,
   buildDuplicationOfferLog,
@@ -11,7 +11,7 @@ import {
 } from "./duplication-view-model";
 
 export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
-  const { state, mutations, questContent } = useQuest();
+  const { state, mutations, journeyContent } = useJourney();
   const node = state.currentDreamscape === null
     ? null
     : (state.atlas.nodes[state.currentDreamscape] ?? null);
@@ -22,7 +22,7 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
     persistedRuntime.choiceKind === "duplication"
       ? persistedRuntime
       : null;
-  const guide = resolveDuplicationGuide(questContent.guides);
+  const guide = resolveDuplicationGuide(journeyContent.guides);
   const guideLineRef = useRef<string | null | undefined>(undefined);
   if (guideLineRef.current === undefined) {
     guideLineRef.current =
@@ -40,11 +40,11 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
             sceneNode: node,
             site,
             runtime,
-            cardDatabase: questContent.cardDatabase,
+            cardDatabase: journeyContent.cardDatabase,
             guide,
             guideLine: guideLineRef.current ?? null,
           }),
-    [state, node, site, runtime, questContent.cardDatabase, guide],
+    [state, node, site, runtime, journeyContent.cardDatabase, guide],
   );
 
   useEffect(() => {
@@ -58,7 +58,7 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
     const offeredEntries = buildDuplicationOfferLog(
       state,
       runtime,
-      questContent.cardDatabase,
+      journeyContent.cardDatabase,
     );
     logEventOnce(`duplication:${site.id}:site-entered`, "site_entered", {
       siteType: site.type,
@@ -67,7 +67,7 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
       candidateCount: runtime.entryIds.length,
       offeredEntries,
     });
-  }, [questContent.cardDatabase, runtime, site, state]);
+  }, [journeyContent.cardDatabase, runtime, site, state]);
 
   useEffect(() => {
     if (site === null) return;
@@ -96,7 +96,7 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
     logEvent("duplication_completed", {
       siteId: site.id,
       entryId,
-      cardId: questContent.cardDatabase.get(entry.cardNumber)?.id ?? null,
+      cardId: journeyContent.cardDatabase.get(entry.cardNumber)?.id ?? null,
       copyCount: 1,
       isEnhanced: site.isEnhanced,
       deckSizeBefore: state.deck.length,
@@ -105,7 +105,7 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
       completionLevel: state.completionLevel,
     });
     mutations.acceptDuplicationChoice(site.id, entryId);
-  }, [mutations, questContent.cardDatabase, runtime, site, state]);
+  }, [mutations, journeyContent.cardDatabase, runtime, site, state]);
 
   if (site === null || view === null) return null;
   return <DuplicationSiteScreen view={view} onClose={handleClose} onDuplicate={handleDuplicate} />;

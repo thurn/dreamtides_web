@@ -1,20 +1,20 @@
-// Adapter for the Cumulus Purge site. Wiring only: acquire live quest state,
+// Adapter for the Cumulus Purge site. Wiring only: acquire live journey state,
 // build the view-model, log the visit, and commit the selected deck entries.
 
 import { useCallback, useEffect, useMemo } from "react";
 import { logEvent, logEventOnce } from "../../logging";
-import { useQuest } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
 import { PurgeSiteScreen } from "../../cumulus/screens/PurgeSiteScreen";
 import { buildPurgeSiteView, resolvePurgeGuide } from "./purge-view-model";
 
 export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
-  const { state, mutations, questContent } = useQuest();
+  const { state, mutations, journeyContent } = useJourney();
   const node =
     state.currentDreamscape !== null
       ? (state.atlas.nodes[state.currentDreamscape] ?? null)
       : null;
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
-  const guide = resolvePurgeGuide(questContent.guides);
+  const guide = resolvePurgeGuide(journeyContent.guides);
   const guideLine = useMemo(() => {
     if (guide === null || guide.dialog.length === 0) return null;
     return guide.dialog[Math.floor(Math.random() * guide.dialog.length)];
@@ -28,11 +28,11 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
             state,
             sceneNode: node,
             site,
-            cardDatabase: questContent.cardDatabase,
+            cardDatabase: journeyContent.cardDatabase,
             guide,
             guideLine,
           }),
-    [state, node, site, questContent.cardDatabase, guide, guideLine],
+    [state, node, site, journeyContent.cardDatabase, guide, guideLine],
   );
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
         entryIdSet.has(entry.entryId),
       );
       const purgedCardIds = purgedEntries
-        .map((entry) => questContent.cardDatabase.get(entry.cardNumber)?.id)
+        .map((entry) => journeyContent.cardDatabase.get(entry.cardNumber)?.id)
         .filter((id): id is NonNullable<typeof id> => id !== undefined);
 
       logEvent("purge_completed", {
@@ -92,7 +92,7 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
 
       mutations.purgeDeckCards(site.id, entryIds, cost, "purge");
     },
-    [mutations, questContent.cardDatabase, site, state],
+    [mutations, journeyContent.cardDatabase, site, state],
   );
 
   if (site === null || view === null) return null;

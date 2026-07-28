@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { logEvent, logEventOnce } from "../../logging";
-import { useQuest } from "../../state/quest-context";
-import type { TransfigurationType } from "../../types/quest";
+import { useJourney } from "../../state/journey-context";
+import type { TransfigurationType } from "../../types/journey";
 import { TransfigurationSiteScreen } from "../../cumulus/screens/TransfigurationSiteScreen";
 import {
   buildTransfigurationSiteView,
@@ -11,7 +11,7 @@ import {
 } from "./transfiguration-view-model";
 
 export function TransfigurationSiteScreenAdapter({ siteId }: { siteId: string }) {
-  const { state, mutations, questContent } = useQuest();
+  const { state, mutations, journeyContent } = useJourney();
   const node =
     state.currentDreamscape === null
       ? null
@@ -23,7 +23,7 @@ export function TransfigurationSiteScreenAdapter({ siteId }: { siteId: string })
     persistedRuntime.choiceKind === "transfiguration"
       ? persistedRuntime
       : null;
-  const guide = resolveTransfigurationGuide(questContent.guides);
+  const guide = resolveTransfigurationGuide(journeyContent.guides);
   const guideLineRef = useRef<string | null | undefined>(undefined);
   if (guideLineRef.current === undefined) {
     guideLineRef.current =
@@ -41,11 +41,11 @@ export function TransfigurationSiteScreenAdapter({ siteId }: { siteId: string })
             sceneNode: node,
             site,
             runtime,
-            cardDatabase: questContent.cardDatabase,
+            cardDatabase: journeyContent.cardDatabase,
             guide,
             guideLine: guideLineRef.current ?? null,
           }),
-    [state, node, site, runtime, questContent.cardDatabase, guide],
+    [state, node, site, runtime, journeyContent.cardDatabase, guide],
   );
 
   useEffect(() => {
@@ -91,7 +91,7 @@ export function TransfigurationSiteScreenAdapter({ siteId }: { siteId: string })
       logEvent("transfiguration_completed", {
         siteId: site.id,
         entryId,
-        cardId: questContent.cardDatabase.get(entry.cardNumber)?.id ?? null,
+        cardId: journeyContent.cardDatabase.get(entry.cardNumber)?.id ?? null,
         transfigurationType: type,
         effectDescription,
         effectDetails,
@@ -109,7 +109,7 @@ export function TransfigurationSiteScreenAdapter({ siteId }: { siteId: string })
         site.id, entryId, type, effectDescription, effectDetails,
       );
     },
-    [mutations, questContent.cardDatabase, runtime, site, state],
+    [mutations, journeyContent.cardDatabase, runtime, site, state],
   );
 
   if (site === null || view === null) return null;

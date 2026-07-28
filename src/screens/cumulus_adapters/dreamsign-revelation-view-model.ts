@@ -2,7 +2,7 @@
 
 import { guideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
-import type { DreamscapeNode, Dreamsign, QuestState } from "../../types/quest";
+import type { DreamscapeNode, Dreamsign, JourneyState } from "../../types/journey";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
   DreamsignRevelationGuideView,
@@ -38,7 +38,7 @@ export function buildDreamsignRevelationGuideView(
 
 /** Build the complete Cumulus Dreamsign Revelation view-model. */
 export function buildDreamsignRevelationView(params: {
-  state: QuestState;
+  state: JourneyState;
   sceneNode: DreamscapeNode | null;
   guide: DreamGuideContent | null;
   guideLine: string | null;

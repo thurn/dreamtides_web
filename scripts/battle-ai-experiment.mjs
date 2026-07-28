@@ -41,7 +41,7 @@
 // Run: npx tsx scripts/battle-ai-experiment.mjs
 //   (The src/battle modules use extensionless imports, which node's
 //   --experimental-strip-types resolver cannot follow; `npx tsx` is the
-//   supported fallback per docs/quest_prototype/qa_tooling.md.)
+//   supported fallback per docs/journey_prototype/qa_tooling.md.)
 
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";

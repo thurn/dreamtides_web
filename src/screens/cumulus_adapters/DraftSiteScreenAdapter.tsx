@@ -1,15 +1,15 @@
-// Adapter bridging live quest state to the pure Cumulus draft screen
-// (`src/cumulus/screens/DraftScreen`). Wiring only: it owns `useQuest()`, the
+// Adapter bridging live journey state to the pure Cumulus draft screen
+// (`src/cumulus/screens/DraftScreen`). Wiring only: it owns `useJourney()`, the
 // draft-site entry intent, the pick mutation, and returning to the dreamscape
 // once the pack is exhausted. Domain mapping lives in the builder
 // (`draft-view-model.ts`); entering a site is a single `ENTER_DRAFT_SITE`
 // intent (`src/coop/actions.ts`) folded by the reducer
-// (`src/rules/quest/draft.ts`) — the reducer's optimistic echo paints the
+// (`src/rules/journey/draft.ts`) — the reducer's optimistic echo paints the
 // first offer immediately, so the adapter itself carries no local draft-state
 // bootstrap.
 
 import { useCallback, useEffect, useMemo } from "react";
-import { useQuest } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
 import { logEvent } from "../../logging";
 import { readDraftSiteProgress } from "../../data/draft-site-bootstrap";
 import { buildDraftView } from "./draft-view-model";
@@ -18,7 +18,7 @@ import { DraftScreen } from "../../cumulus/screens/DraftScreen";
 /** Live draft site screen: enters the site, builds the view-model, picks a
  * card, and completes back to the dreamscape once the pack runs out. */
 export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
-  const { state, mutations, cardDatabase } = useQuest();
+  const { state, mutations, cardDatabase } = useJourney();
 
   // Enter this site whenever the displayed draft state has not advanced to
   // `siteId`. The run-scoped event-log key gives every mount and connected

@@ -129,7 +129,7 @@ describe("DesktopDeckViewer", () => {
     act(() => root.unmount());
   });
 
-  it("shows current quest tides two per row with the shared tide reveal", () => {
+  it("shows current journey tides two per row with the shared tide reveal", () => {
     const { container, root } = mount(
       <DesktopDeckViewer
         view={{

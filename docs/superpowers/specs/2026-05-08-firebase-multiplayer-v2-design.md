@@ -2,8 +2,8 @@
 
 ## Purpose
 
-The V2 quest prototype is a two-player remote prototyping experience. Both
-players co-pilot one shared quest run through Firebase Realtime Database and
+The V2 journey prototype is a two-player remote prototyping experience. Both
+players co-pilot one shared journey run through Firebase Realtime Database and
 Firebase Hosting. A player can make a shared decision, such as picking a card,
 and the connected partner sees the resulting state and animation from the same
 shared run.
@@ -12,19 +12,19 @@ The rewrite prioritizes setup speed and iteration over security hardening. Room
 data is throwaway prototype data, and open Realtime Database rules are acceptable
 for this project.
 
-Battle-mode Firebase support is future work. The quest-mode architecture should
+Battle-mode Firebase support is future work. The journey-mode architecture should
 keep reusable room, presence, and action-log boundaries so battle mode can adopt
 the same multiplayer patterns later.
 
 ## Goals
 
 - Support share-link multiplayer rooms through `?game=<roomId>`.
-- Use Firebase Realtime Database as the canonical quest-mode store.
+- Use Firebase Realtime Database as the canonical journey-mode store.
 - Deploy the app through Firebase Hosting with Vite's `dist/` output.
 - Preserve a co-pilot model where either connected player can take shared
   actions.
 - Keep browser-local overlays and transient UI controls local to each player.
-- Preserve independent concurrent writes to different parts of quest state.
+- Preserve independent concurrent writes to different parts of journey state.
 - Store enough action history to debug recent shared actions without making the
   action log the source of truth.
 - Keep multiplayer UI minimal: create game, loading/error states, connection
@@ -37,7 +37,7 @@ the same multiplayer patterns later.
 - Player seats, roles, private hands, turn ownership, cursors, names, lobbies, or
   rich collaboration UI.
 - Full replay from an event stream.
-- Firebase-backed battle mode in this V2 quest rewrite.
+- Firebase-backed battle mode in this V2 journey rewrite.
 
 ## User Flow
 
@@ -50,23 +50,23 @@ shows a loading state until the first room snapshot arrives. Missing rooms show
 a compact game-not-found state with a create-new-game action.
 
 Rooms persist until a shared reset or manual deletion. A refreshed browser
-resubscribes to the same room and renders the latest stored quest state.
+resubscribes to the same room and renders the latest stored journey state.
 
 ## Architecture
 
-Firebase Realtime Database is the canonical quest-mode store. The React app boots
-through a room gate, then renders the quest experience from the subscribed room
+Firebase Realtime Database is the canonical journey-mode store. The React app boots
+through a room gate, then renders the journey experience from the subscribed room
 state.
 
-The main runtime boundary is a Firebase-backed quest provider that preserves the
-existing `useQuest()` consumer shape as much as practical:
+The main runtime boundary is a Firebase-backed journey provider that preserves the
+existing `useJourney()` consumer shape as much as practical:
 
 - `state`
 - `mutations`
 - `cardDatabase`
-- `questContent`
+- `journeyContent`
 
-Quest screens should keep using the quest context and should not import Firebase
+Journey screens should keep using the journey context and should not import Firebase
 directly. Shared behavior lives in provider/domain modules. Browser-local UI
 state stays in React components, including deck viewer visibility, debug panels,
 card inspection overlays, hover state, animation phases, and pending local
@@ -79,12 +79,12 @@ The Firebase layer should be split into three focused areas:
 - `multiplayer/room`: handles room id generation, room references,
   create/join bootstrapping, schema version checks, presence, and subscription
   status.
-- `state/multiplayer-quest-context`: owns Firebase-backed quest state and
-  mutations while preserving the quest context API for screens.
+- `state/multiplayer-journey-context`: owns Firebase-backed journey state and
+  mutations while preserving the journey context API for screens.
 
 ## Firebase Room Shape
 
-Each room stores shared quest state, metadata, presence, and recent action
+Each room stores shared journey state, metadata, presence, and recent action
 history.
 
 ```text
@@ -93,8 +93,8 @@ rooms/<roomId>
     schemaVersion
     createdAt
     updatedAt
-  questState
-    ...QuestState fields or null before quest start
+  journeyState
+    ...JourneyState fields or null before journey start
   presence
     <clientId>
       connected
@@ -108,19 +108,19 @@ rooms/<roomId>
       summary
 ```
 
-`questState` starts as `null`. When either player picks a Dream Avatar, that
-browser builds the initial run and commits the first shared `QuestState`.
+`journeyState` starts as `null`. When either player picks a Dream Avatar, that
+browser builds the initial run and commits the first shared `JourneyState`.
 
-The action log stores the last N shared actions for diagnostics. `questState`
+The action log stores the last N shared actions for diagnostics. `journeyState`
 remains the source of truth for rendering and refresh recovery.
 
-## Quest State And Site Runtime
+## Journey State And Site Runtime
 
-The current top-level `QuestState` remains the shared model. V2 should add a
+The current top-level `JourneyState` remains the shared model. V2 should add a
 typed shared site-runtime map keyed by site id:
 
 ```text
-questState.siteRuntime[siteId]
+journeyState.siteRuntime[siteId]
 ```
 
 `siteRuntime` stores generated one-time reveal data and per-site shared progress
@@ -144,13 +144,13 @@ using `DraftState` for the current offer and fixed-pool progress.
 
 ## Data Flow
 
-Room creation writes an empty room with `questState: null`, metadata, and schema
+Room creation writes an empty room with `journeyState: null`, metadata, and schema
 version.
 
-Quest start is a race-safe composed action. Either player can choose a
+Journey start is a race-safe composed action. Either player can choose a
 Dream Avatar. The initiating browser resolves the Dream Avatar package, adds the
 starter cards, initializes draft state, generates the atlas, sets the first
-screen, and commits the initialized `QuestState`.
+screen, and commits the initialized `JourneyState`.
 
 Shared controls update Firebase through centralized mutations. Simple actions can
 patch focused paths. Grouped flows should commit one coherent update per user
@@ -158,7 +158,7 @@ action so connected clients observe complete transitions.
 
 Composed shared actions should include:
 
-- `startQuest`
+- `startJourney`
 - `pickDraftCard`
 - `completeSite`
 - `buyShopSlot`
@@ -167,7 +167,7 @@ Composed shared actions should include:
 - `acceptDreamsign`
 - `transfigureCard`
 - `duplicateCard`
-- `resetQuest`
+- `resetJourney`
 
 The exact mutation surface can remain close to the current interface during the
 transition, but multi-step screen flows should move toward domain-level composed
@@ -192,17 +192,17 @@ seeing different offers for the same site.
 Conflict behavior is field-scoped. Independent updates from both players should
 compose.
 
-Routine mutations should avoid writing a whole `questState` object from a stale
+Routine mutations should avoid writing a whole `journeyState` object from a stale
 local snapshot. Instead, they should use:
 
-- Path updates for independent fields such as `questState/essence`,
-  `questState/screen`, `questState/currentDreamscape`, and
+- Path updates for independent fields such as `journeyState/essence`,
+  `journeyState/screen`, `journeyState/currentDreamscape`, and
   `presence/<clientId>`.
 - Multi-location updates for one user action that touches several fields, such
   as a draft pick updating `deck`, `draftState`, metadata, and `actionLog`.
 - Transactions when the next value depends on the latest shared value, such as
   increasing essence, spending essence, first-successful random reveals, draft
-  picks from the current offer, reset, and quest-start race protection.
+  picks from the current offer, reset, and journey-start race protection.
 
 Last-write behavior is acceptable for same-field conflicts where stale state does
 not break the run. Transactions are required where accepting stale state can
@@ -236,7 +236,7 @@ The multiplayer shell should keep UI minimal:
 - Firebase config or permission failures show a setup/error panel with the
   Firebase error message and required environment variable names.
 - Disconnected state shows a small persistent connection indicator while keeping
-  the last received quest state visible.
+  the last received journey state visible.
 - Presence shows a compact connected-player count or dots.
 
 Presence should use Firebase connection state and `onDisconnect` cleanup where
@@ -258,13 +258,13 @@ use an SPA fallback so share links like `/?game=<roomId>` load `index.html`.
 
 Testing should focus on the synchronization boundary and shared state helpers.
 
-- Unit-test pure state transition helpers for composed actions: start quest,
+- Unit-test pure state transition helpers for composed actions: start journey,
   draft pick, shop purchase, site completion, reward accept, and reset.
 - Unit-test room path/update builders so independent field updates do not
   overwrite unrelated state.
 - Mock Firebase in provider tests for loading, missing room, subscribed room,
   pending write, permission failure, and disconnect indicator states.
-- Preserve existing quest screen tests by keeping `useQuest()` as the primary
+- Preserve existing journey screen tests by keeping `useJourney()` as the primary
   consumer API.
 - Add manual two-window QA for shared start, shared draft pick, shared deck
   update, concurrent essence/draft updates, refresh recovery, and reset.
@@ -272,8 +272,8 @@ Testing should focus on the synchronization boundary and shared state helpers.
 ## Rollout Plan
 
 1. Add Firebase config, Hosting files, and the room gate.
-2. Add Firebase-backed quest state subscription and room metadata handling.
-3. Convert quest start and simple shared mutations.
+2. Add Firebase-backed journey state subscription and room metadata handling.
+3. Convert journey start and simple shared mutations.
 4. Convert draft flow to composed writes and shared draft offers.
 5. Convert remaining random reveal site flows to `siteRuntime`.
 6. Add action log, presence, and connection UI.
@@ -282,7 +282,7 @@ Testing should focus on the synchronization boundary and shared state helpers.
 ## Acceptance Criteria
 
 - Opening the app without `?game=` creates a share-link path through the UI.
-- Two browser windows on the same `?game=` render the same quest start state.
+- Two browser windows on the same `?game=` render the same journey start state.
 - Either player can choose the Dream Avatar for an empty room.
 - A draft pick in one browser updates the other browser's offer, deck, and draft
   progress.

@@ -3,7 +3,7 @@
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { Dreamsign } from "../../types/quest";
+import type { Dreamsign } from "../../types/journey";
 import { CumulusRoot } from "../CumulusRoot";
 import { artRef } from "../primitives/art";
 import {
@@ -146,7 +146,7 @@ describe("DreamsignBazaarSiteScreen", () => {
     const onBuy = vi.fn();
     const onRestock = vi.fn();
     const hudTarget = document.createElement("div");
-    hudTarget.dataset.questStatusBarAnchor = "";
+    hudTarget.dataset.journeyStatusBarAnchor = "";
     document.body.append(hudTarget);
     const { container, root } = mount(
       <DreamsignBazaarSiteScreen

@@ -9,7 +9,7 @@
 // `ctx.timestamp` and all randomness via `ctx.rng` in the reducer.
 
 import type { Genesis } from "../eventlog/types";
-import type { QuestState } from "../types/quest";
+import type { JourneyState } from "../types/journey";
 import type { TutorialPlaybackState } from "../types/tutorial";
 
 // The authoritative battle fold shape lives in `battle/fold.ts` (Task 18),
@@ -30,25 +30,25 @@ export interface FrontDoorState {
 }
 
 /**
- * The complete state folded from a room's event log: the quest slice plus an
+ * The complete state folded from a room's event log: the journey slice plus an
  * optional in-battle slice. `battle` is null whenever no battle is active.
  */
 export interface FoldState {
   readonly frontDoor: FrontDoorState;
-  readonly quest: QuestState;
+  readonly journey: JourneyState;
   readonly battle: BattleFoldState | null;
   /** First-occurrence tutorials already presented in this shared room. */
   readonly tutorialTriggerIdsSeen?: readonly string[];
 }
 
 /**
- * Builds the pre-quest fold state a fresh room shows before `START_QUEST`.
+ * Builds the pre-journey fold state a fresh room shows before `START_JOURNEY`.
  *
- * Mirrors legacy `createDefaultState()` (src/state/quest-context.tsx) — the
- * initial `questState` a newly created room seeded — with two adjustments:
+ * Mirrors legacy `createDefaultState()` (src/state/journey-context.tsx) — the
+ * initial `journeyState` a newly created room seeded — with two adjustments:
  * `seed` is taken from `genesis.seed` so replays are deterministic per room,
  * and `battle` starts null. The values are inlined here (rather than imported
- * from quest-context.tsx) because that module pulls in React, which the
+ * from journey-context.tsx) because that module pulls in React, which the
  * src/rules/ lint rails forbid.
  */
 export function genesisFoldState(genesis: Genesis): FoldState {
@@ -59,12 +59,12 @@ export function genesisFoldState(genesis: Genesis): FoldState {
       journeyId: entry === "main" ? null : `genesis:${genesis.seed}`,
       tutorial: null,
     },
-    quest: genesisQuestState(genesis),
+    journey: genesisJourneyState(genesis),
     battle: null,
   };
 }
 
-function genesisQuestState(genesis: Genesis): QuestState {
+function genesisJourneyState(genesis: Genesis): JourneyState {
   return {
     runId: null,
     seed: genesis.seed,
@@ -91,7 +91,7 @@ function genesisQuestState(genesis: Genesis): QuestState {
     visitedSites: [],
     siteRuntime: {},
     draftState: null,
-    screen: { type: "questStart" },
+    screen: { type: "journeyStart" },
     activeSiteId: null,
     failureSummary: null,
     hasSeenStartingDeckPopup: false,

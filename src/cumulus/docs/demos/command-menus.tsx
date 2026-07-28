@@ -5,8 +5,8 @@ import { GLYPHS } from "../../primitives/glyph";
 import type { CumulusComponent } from "../registry";
 
 const demoActions: readonly CommandMenuItem[] = [
-  { kind: "action", id: "save", label: "Save Quest", glyph: GLYPHS.check, onCommand: () => undefined },
-  { kind: "group", id: "saved", label: "Saved Quests", glyph: GLYPHS.chevronRight, actions: [
+  { kind: "action", id: "save", label: "Save Journey", glyph: GLYPHS.check, onCommand: () => undefined },
+  { kind: "group", id: "saved", label: "Saved Journeys", glyph: GLYPHS.chevronRight, actions: [
     { kind: "action", id: "load", label: "Load Firstlight", glyph: GLYPHS.arrowRight, onCommand: () => undefined },
   ] },
 ];
@@ -23,7 +23,7 @@ export const commandMenusDemo: CumulusComponent = {
   id: "corner-utility-menu",
   title: "Corner Utility Menu",
   blurb: "The strict app-chrome command offering: a fixed icon trigger and a hierarchical inward-opening utility menu.",
-  callout: "Use this for fixed quest chrome. Use ContextActionMenu for an activated card or pointer target, Select for compact value choice, DisclosureSection for reading flow, and InfoCard for entity reveals rather than commands.",
+  callout: "Use this for fixed journey chrome. Use ContextActionMenu for an activated card or pointer target, Select for compact value choice, DisclosureSection for reading flow, and InfoCard for entity reveals rather than commands.",
   group: "Components",
   docName: "CornerUtilityMenu",
   Component: CommandMenusDemo,
@@ -33,7 +33,7 @@ export const commandMenusDemo: CumulusComponent = {
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <CornerUtilityMenu
-  trigger={{ glyph: GLYPHS.gear, label: "Open quest utilities", corner: "topEnd" }}
+  trigger={{ glyph: GLYPHS.gear, label: "Open journey utilities", corner: "topEnd" }}
   actions={utilityActions}
 />`,
   }],

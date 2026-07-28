@@ -3,7 +3,7 @@
 // combines into draft pools. `tides3` is the human-legible counterpart of
 // `sigseed`: where `sigseed` grows each pool live from a DreamAvatar's signature
 // cards through the pick-affinity corpus, `tides3` bakes that growth offline into
-// 32 preconstructed decks ("tides") a player can go read, and a quest combines a
+// 32 preconstructed decks ("tides") a player can go read, and a journey combines a
 // few of them into the pool.
 //
 // The artifact carries both halves of the algorithm so it is self-contained

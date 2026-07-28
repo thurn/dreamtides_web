@@ -128,7 +128,7 @@ const readJsonc = (p) =>
 // partner. Recalibrate here after reading the real numbers below.
 export const TIER_TARGET = { 1: 0.1, 2: 0.18, 3: 0.25 };
 
-// Matches src/data/quest-content.ts (POOL_TARGET_SIZE) so simulated pools are the
+// Matches src/data/journey-content.ts (POOL_TARGET_SIZE) so simulated pools are the
 // size the game actually ships. Overridable with `--pool-size N` to study how the
 // pool's size trades off against the metrics.
 const POOL_TARGET_SIZE = 200;

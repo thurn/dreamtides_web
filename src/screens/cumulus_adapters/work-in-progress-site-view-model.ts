@@ -7,7 +7,7 @@ import type {
 } from "../../cumulus/screens/WorkInProgressSiteScreen";
 import { guideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
-import type { DreamscapeNode, SiteState, SiteType } from "../../types/quest";
+import type { DreamscapeNode, SiteState, SiteType } from "../../types/journey";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 interface WorkInProgressCopy {

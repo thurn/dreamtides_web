@@ -10,7 +10,7 @@ import {
   buildDreamAvatarProvenance,
   buildDreamAvatarTides4Provenance,
   type RunPoolContext,
-} from "./quest-content";
+} from "./journey-content";
 import type { Tides4DecksJson } from "../draft/pool/tides4-io.ts";
 
 // Two card names that the name index maps to starter card numbers. These names

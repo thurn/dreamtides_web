@@ -39,7 +39,7 @@ Line three.
 }
 
 function writeFixtureRoot() {
-  const rootDir = mkdtempSync(join(tmpdir(), "quest-dreamsign-editor-data-"));
+  const rootDir = mkdtempSync(join(tmpdir(), "journey-dreamsign-editor-data-"));
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
   mkdirSync(join(rootDir, "public"), { recursive: true });
   writeFileSync(join(rootDir, "data", "tabula", "dreamsigns.toml"), fixtureToml());

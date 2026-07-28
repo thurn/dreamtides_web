@@ -22,7 +22,7 @@ import * as React from "react";
 import type { CSSProperties } from "react";
 import { richText, type RichText } from "../card/rich-text";
 import { type ScatterPoint } from "./dreamscape-scatter";
-import type { SiteState } from "../../../types/quest";
+import type { SiteState } from "../../../types/journey";
 import { type Glyph, GLYPHS } from "../../primitives/glyph";
 import { type CumulusColor, withAlpha } from "../../primitives/color";
 import { useRevealSource } from "../../internal/reveal/context";

@@ -58,7 +58,7 @@ ruleTester.run("no-purple-text-on-glass", rule, {
     },
     {
       name: "accent text is legal in a non-glass file",
-      filename: "src/cumulus/screens/QuestStartScreen.tsx",
+      filename: "src/cumulus/screens/JourneyStartScreen.tsx",
       code: 'const style = { color: token("--accent-bright") };',
     },
     {

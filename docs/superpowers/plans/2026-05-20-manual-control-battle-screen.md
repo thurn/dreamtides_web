@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use super-subagent-driven-development (recommended) or super-executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking. Each phase ends green (lint + typecheck + test + browser QA) and is independently shippable.
 
-**Goal:** Convert the quest-prototype battle screen from a rules-enforcing engine into a manual sandbox: the player drags any card between any zones on either side, nothing changes energy/score/phase/result automatically, and there is no card-playability dimming, judgment execution, victory detection, or AI.
+**Goal:** Convert the journey-prototype battle screen from a rules-enforcing engine into a manual sandbox: the player drags any card between any zones on either side, nothing changes energy/score/phase/result automatically, and there is no card-playability dimming, judgment execution, victory detection, or AI.
 
 **Architecture:** The battle already has a clean command layer (`BattleCommand` → `applyBattleCommand` → `battleReducer`) and a rich set of *unrestricted* manual operations as debug edits (`SET/ADJUST_CURRENT_ENERGY`, `MOVE_CARD_TO_ZONE` for every zone, `DRAW_CARD`, `FORCE_RESULT`/`SKIP_TO_REWARDS`). This refactor leans on that existing manual machinery: it routes every normal player gesture through the unrestricted `MOVE_CARD_TO_ZONE` move, deletes the automatic engine (turn flow, judgment, result evaluation, AI), and strips the UI's rule-driven dimming/disabling. State changes only ever happen as a direct result of one player gesture or an explicit debug edit.
 
@@ -26,7 +26,7 @@ These were confirmed with the product owner. Implement them as written.
 ### Behaviors deliberately kept
 
 - **Undo/redo, history, logging** — unchanged. Every manual move still commits a history entry and emits log events.
-- **`result` field, reward surface, defeat/draw overlay, quest-completion bridge** — kept, but `result` is now reachable only by `FORCE_RESULT`/`SKIP_TO_REWARDS`.
+- **`result` field, reward surface, defeat/draw overlay, journey-completion bridge** — kept, but `result` is now reachable only by `FORCE_RESULT`/`SKIP_TO_REWARDS`.
 - **Figment stacking/merging on move** — kept (it is a property of how figments occupy a slot, not rules enforcement).
 - **Opponent-hand visibility, notes, markers, foresee, deck reorder, figment creator, zone browser, inspector** — kept; these are inspection/debug tools, not enforcement.
 - **`turnNumber` and `activeSide`** — no longer mutated by anything; they sit at their initial values (`turnNumber: 1`, `activeSide: "player"`) for the life of the battle. No manual setter is added for them (out of scope).
@@ -93,7 +93,7 @@ This is the full set of behaviors being removed or neutralized, with their ownin
 
 **Files modified** (primary): `src/battle/types.ts`, `src/battle/state/reducer.ts`, `src/battle/state/controller.ts`, `src/battle/state/selectors.ts`, `src/battle/state/apply-debug-edit.ts`, `src/battle/debug/commands.ts`, `src/battle/debug/apply-command.ts`, `src/battle/components/PlayableBattleScreen.tsx`, `src/battle/components/BattleActionBar.tsx`, `src/battle/components/BattleStatusBar.tsx`, `src/battle/components/BattleHandTray.tsx`, `src/battle/components/BattleOpponentHandTray.tsx`, `src/battle/components/BattlefieldGrid.tsx`, `src/battle/components/BattleContextMenu.tsx`, `src/battle/components/BattleInspector.tsx`, `src/battle/battle.css`.
 
-**Files modified** (consumers, to keep build green): `src/state/use-ensure-battle-session.ts`, `src/multiplayer/battle-service.ts`, `src/state/multiplayer-battle-context.tsx`, `src/runtime/runtime-config.ts` (drop `enableAi`), `src/components/BattleSiteRoute.tsx`, `src/state/quest-context.tsx`.
+**Files modified** (consumers, to keep build green): `src/state/use-ensure-battle-session.ts`, `src/multiplayer/battle-service.ts`, `src/state/multiplayer-battle-context.tsx`, `src/runtime/runtime-config.ts` (drop `enableAi`), `src/components/BattleSiteRoute.tsx`, `src/state/journey-context.tsx`.
 
 ---
 
@@ -117,7 +117,7 @@ Goal: every card is always fully bright and draggable; no control is disabled be
 
 - [ ] **Step 1: Write/adjust the failing test.** In `BattleHandTray.test.tsx`, assert the invariant that **no hand card carries the `unaffordable` or `playable`/`unplayable` class and every hand card element is `draggable`, regardless of `currentEnergy` or phase.** Render the tray with a card whose `energyCost` exceeds `currentEnergy`. Bug class caught: energy-based dimming or non-draggable gating reappearing.
 - [ ] **Step 2: Run it; expect FAIL** (`npx vitest run src/battle/components/BattleHandTray.test.tsx`) because the current code adds `unaffordable` and sets `draggable={isPlayable}`.
-- [ ] **Step 3: Implement.** In `BattleHandTray.tsx` delete `isUnaffordable`/`isPlayable` computation and the `unaffordable`/`playable` class strings; set `draggable` to a constant `true`; keep `data-battle-card-playable` only if other code reads it (grep first — if unused, remove it). Do the same removal of `unaffordable` in `BattleOpponentHandTray.tsx`. In `battle.css` delete the `.battle-card.hand-card.quest-card.unaffordable`, `.battle-card.unaffordable`, `.battle-card.hand-card.quest-card.playable…`, and `.battle-card.playable` rules.
+- [ ] **Step 3: Implement.** In `BattleHandTray.tsx` delete `isUnaffordable`/`isPlayable` computation and the `unaffordable`/`playable` class strings; set `draggable` to a constant `true`; keep `data-battle-card-playable` only if other code reads it (grep first — if unused, remove it). Do the same removal of `unaffordable` in `BattleOpponentHandTray.tsx`. In `battle.css` delete the `.battle-card.hand-card.journey-card.unaffordable`, `.battle-card.unaffordable`, `.battle-card.hand-card.journey-card.playable…`, and `.battle-card.playable` rules.
 - [ ] **Step 4: Run the test; expect PASS.**
 - [ ] **Step 5: Commit** (`feat(battle): hand cards always bright and draggable`).
 
@@ -165,7 +165,7 @@ Goal: every card is always fully bright and draggable; no control is disabled be
 ### Task 1.5: Phase 1 verification
 
 - [ ] Run `npm run lint`, `npm run typecheck`, `npm test`. Fix fallout (mostly tests asserting removed classes/disabled states).
-- [ ] Browser QA (`agent-browser`, `http://localhost:5173/?startInBattle=1`): confirm an unaffordable hand card is full-brightness and draggable; confirm there is no End Turn button; confirm undo/redo/log still work. Screenshot evidence per the quest-battle QA rules.
+- [ ] Browser QA (`agent-browser`, `http://localhost:5173/?startInBattle=1`): confirm an unaffordable hand card is full-brightness and draggable; confirm there is no End Turn button; confirm undo/redo/log still work. Screenshot evidence per the journey-battle QA rules.
 - [ ] Commit any test fixups.
 
 ---
@@ -381,7 +381,7 @@ Goal: reaching a score target or turn limit does nothing. `result` changes only 
 - Verify: `src/battle/components/PlayableBattleScreen.tsx` reward effect (~288–320) still keys on `result === "victory"`. No change expected — `SKIP_TO_REWARDS`/`FORCE_RESULT("victory")` set `result`, which fires the effect.
 - Test: `PlayableBattleScreen.test.tsx`.
 
-- [ ] **Step 1: Test** — dispatching `SKIP_TO_REWARDS` opens the reward surface (`BattleRewardSurface`), and the defeat/draw overlay opens on `FORCE_RESULT("defeat")`. Bug class: reward/quest-completion flow broken by the result refactor.
+- [ ] **Step 1: Test** — dispatching `SKIP_TO_REWARDS` opens the reward surface (`BattleRewardSurface`), and the defeat/draw overlay opens on `FORCE_RESULT("defeat")`. Bug class: reward/journey-completion flow broken by the result refactor.
 - [ ] **Step 2: Run; expect PASS** (no code change) — if it fails, fix the effect to read the manual `result`.
 - [ ] **Step 3: Commit** any fix.
 
@@ -397,8 +397,8 @@ Goal: reaching a score target or turn limit does nothing. `result` changes only 
 ### Task 5.1: Remove `enableAi` plumbing and other dead config
 
 **Files:**
-- Modify: `src/runtime/runtime-config.ts` (drop `enableAi` field + parse), `src/components/BattleSiteRoute.tsx`, `src/state/quest-context.tsx` (the `enableAi: false` literal), `src/state/use-ensure-battle-session.ts` (`enableAi` input), `src/battle/integration/create-battle-init.ts` (`enableAi` field/default).
-- Modify: `docs/quest_prototype/url_parameters.md` — remove the `?enableAi=1` entry.
+- Modify: `src/runtime/runtime-config.ts` (drop `enableAi` field + parse), `src/components/BattleSiteRoute.tsx`, `src/state/journey-context.tsx` (the `enableAi: false` literal), `src/state/use-ensure-battle-session.ts` (`enableAi` input), `src/battle/integration/create-battle-init.ts` (`enableAi` field/default).
+- Modify: `docs/journey_prototype/url_parameters.md` — remove the `?enableAi=1` entry.
 
 - [ ] **Step 1:** Delete `enableAi` everywhere the compiler flags it; run `npm run typecheck` as the checklist.
 - [ ] **Step 2:** Grep for orphaned symbols: `selectCan*`, `selectShouldEndTurnFromDay`, `selectHasAffordableFastSpeedHandPlay`, `selectIsBattleCardReservedThisTurn`, `enteredReserveTurnNumber`, `pendingExtraTurns`, `BattleLaneJudgment`, `BattleJudgmentResolution`, `RUN_AI_TURN`, `CLEAR_FORCED_RESULT`, `FORCE_JUDGMENT`, `GRANT_EXTRA_TURN`. Each should have zero non-test references. Remove any stragglers.
@@ -407,8 +407,8 @@ Goal: reaching a score target or turn limit does nothing. `result` changes only 
 ### Task 5.2: Update battle docs to describe the manual model
 
 **Files:**
-- Modify: `docs/battle_rules/battle_rules.md` and/or add a short `docs/quest_prototype` note describing the prototype's **manual sandbox** behavior (phase is a manual label; energy/score/draw/result are manual; cards drag freely across all zones and sides). Follow the project doc style: describe the current system directly; **do not** write "no longer", "removed", or "unlike before" phrasing.
-- Update the `quest-battle` skill's expectations only if a step there now contradicts reality (e.g. references to End Turn flows) — optional.
+- Modify: `docs/battle_rules/battle_rules.md` and/or add a short `docs/journey_prototype` note describing the prototype's **manual sandbox** behavior (phase is a manual label; energy/score/draw/result are manual; cards drag freely across all zones and sides). Follow the project doc style: describe the current system directly; **do not** write "no longer", "removed", or "unlike before" phrasing.
+- Update the `journey-battle` skill's expectations only if a step there now contradicts reality (e.g. references to End Turn flows) — optional.
 
 - [ ] **Step 1:** Write the manual-model description.
 - [ ] **Step 2:** Commit (`docs(battle): describe manual-control battle sandbox`).
@@ -417,7 +417,7 @@ Goal: reaching a score target or turn limit does nothing. `result` changes only 
 
 - [ ] `npm run lint`, `npm run typecheck`, `npm test` (whole suite, from repo root; `npm install` first in a fresh worktree).
 - [ ] `npx vitest run src/battle/components/PlayableBattleScreen.test.tsx`.
-- [ ] Browser QA full pass per the quest-battle checklist: drag across every zone and both sides; phase control; manual energy/score/draw via inspector; force result + reward; undo/redo after a sequence of manual moves; foresee/deck-reorder/zone-browser/notes still work. Capture screenshots and inspect the error buffer for render errors / console errors.
+- [ ] Browser QA full pass per the journey-battle checklist: drag across every zone and both sides; phase control; manual energy/score/draw via inspector; force result + reward; undo/redo after a sequence of manual moves; foresee/deck-reorder/zone-browser/notes still work. Capture screenshots and inspect the error buffer for render errors / console errors.
 
 ---
 

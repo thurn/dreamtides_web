@@ -1,5 +1,5 @@
 // Opponent descriptor primitives + the coherent-draft deck algorithm for the
-// Battle site (quests doc "Battle"; design
+// Battle site (journeys doc "Battle"; design
 // `docs/cards2/opponent_deck_coherent_draft_design.md`).
 //
 // Every battle uses this module's descriptor primitives —
@@ -23,7 +23,7 @@
 // known-good decklist corpus is supplied; the `/opponent` debug tool exposes
 // this algorithm directly as "Coherent". Both paths log
 // `opponent_deck_constructed` so the build can be reconstructed from
-// `logs/quest-log.jsonl`.
+// `logs/journey-log.jsonl`.
 
 import type { CardData } from "../../types/cards";
 import type {
@@ -32,8 +32,8 @@ import type {
   DreamscapeContent,
   DreamsignTemplate,
 } from "../../types/content";
-import type { DreamscapeNode } from "../../types/quest";
-import type { RunPoolContext } from "../../data/quest-content";
+import type { DreamscapeNode } from "../../types/journey";
+import type { RunPoolContext } from "../../data/journey-content";
 import type { DraftRecord } from "../../data/cards-v2-database";
 import {
   buildAffiliationWeightContext,
@@ -649,7 +649,7 @@ export function buildOpponentDeck(args: {
  * the pick budget and removal count, the winning per-pick trace (pack candidates,
  * chosen card, fit, rank), and the cards removed in the post-draft prune — so a
  * battle's opponent and the decision process that built it can be reconstructed
- * from `logs/quest-log.jsonl` filtered by `gameId`.
+ * from `logs/journey-log.jsonl` filtered by `gameId`.
  */
 export interface OpponentDeckLogArgs {
   battleEntryKey: string;

@@ -27,7 +27,7 @@ body {
 /*
  * Default cursor styles for interactive controls. Tailwind v4 (Preflight)
  * leaves `<button>` with the user-agent's auto cursor, which renders as an
- * arrow in most browsers. Quest-prototype buttons are always meant to be
+ * arrow in most browsers. Journey-prototype buttons are always meant to be
  * clicked, so we promote them to the pointer cursor here. Disabled buttons
  * get the `not-allowed` cursor so the affordance matches the visual
  * disabled state. Individual components can still override either of these

@@ -8,10 +8,10 @@ import type {
 import type {
   BattleModifier,
   DreamscapeNode,
-  QuestState,
+  JourneyState,
   SiteState,
-} from "../../types/quest";
-import type { RunPoolContext } from "../../data/quest-content";
+} from "../../types/journey";
+import type { RunPoolContext } from "../../data/journey-content";
 import type { DraftRecord } from "../../data/cards-v2-database";
 import type { FitModel } from "../../draft/replay/fit-model";
 import { DEFAULT_POOL_VARIANT } from "../../draft/pool/types";
@@ -39,7 +39,7 @@ import { selectSignatureCards } from "./signature-cards";
 import type {
   KnownGoodDecklist,
   DreamsignSignature,
-} from "../../data/quest-content";
+} from "../../data/journey-content";
 import { logEvent } from "../../logging";
 import type {
   BattleDeckCardDefinition,
@@ -47,7 +47,7 @@ import type {
   BattleDreamsignSummary,
   BattleEnemyDescriptor,
   BattleInit,
-  BattleQuestDeckEntry,
+  BattleJourneyDeckEntry,
   BattleSignatureCard,
   DreamwellCardDefinition,
 } from "../types";
@@ -55,22 +55,22 @@ import type { DreamwellCard } from "../../data/dreamwell-database";
 import type { TutorialTriggerDefinition } from "../../types/tutorial";
 
 /**
- * Minimum quest deck size for a battle. A deck below this is padded with
+ * Minimum journey deck size for a battle. A deck below this is padded with
  * whole-deck copies until it reaches the threshold, so a player who has not
  * drafted much still has a workable battle deck.
  */
 const MIN_BATTLE_DECK_SIZE = 25;
 
 /**
- * Pads a quest deck up to `MIN_BATTLE_DECK_SIZE` for battle by repeating
+ * Pads a journey deck up to `MIN_BATTLE_DECK_SIZE` for battle by repeating
  * whole-deck copies (e.g. a 9-card deck becomes 27). Padded entries reuse the
- * original entry references, so they share `sourceDeckEntryId` with the quest
+ * original entry references, so they share `sourceDeckEntryId` with the journey
  * deck entry they copy. Decks at or above the threshold (and empty decks) are
  * returned unchanged.
  */
 function padBattleDeck(
-  deck: readonly QuestState["deck"][number][],
-): QuestState["deck"][number][] {
+  deck: readonly JourneyState["deck"][number][],
+): JourneyState["deck"][number][] {
   if (deck.length === 0 || deck.length >= MIN_BATTLE_DECK_SIZE) {
     return [...deck];
   }
@@ -87,7 +87,7 @@ export interface CreateBattleInitInput {
   battleInstanceId?: string;
   site: SiteState;
   state: Pick<
-    QuestState,
+    JourneyState,
     | "atlas"
     | "battleModifiers"
     | "completionLevel"
@@ -221,7 +221,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   } = input;
   const seed = resolveSeed(battleEntryKey, state.seed, seedOverride);
   const streams = createBattleRngStreams(seed);
-  const questDeckEntries: readonly BattleQuestDeckEntry[] = Object.freeze(
+  const journeyDeckEntries: readonly BattleJourneyDeckEntry[] = Object.freeze(
     state.deck.map((entry) => Object.freeze({
       entryId: entry.entryId,
       cardNumber: entry.cardNumber,
@@ -233,21 +233,21 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       isBane: entry.isBane,
     })),
   );
-  // The quest deck is padded up to the minimum battle deck size before being
-  // shuffled into the battle draw order. `questDeckEntries` above still
-  // mirrors the unpadded quest deck.
+  // The journey deck is padded up to the minimum battle deck size before being
+  // shuffled into the battle draw order. `journeyDeckEntries` above still
+  // mirrors the unpadded journey deck.
   const battleDeck = padBattleDeck(state.deck);
   const playerDeckOrder = streams.playerDeckOrder
     .shuffle(battleDeck)
     .map((entry) => {
       const card = cardDatabase.get(entry.cardNumber);
       if (card === undefined) {
-        throw new Error(`Missing card data for quest deck entry #${String(entry.cardNumber)}`);
+        throw new Error(`Missing card data for journey deck entry #${String(entry.cardNumber)}`);
       }
       return freezeBattleDeckCardDefinition(normalizePlayerDeckCard(entry, card));
     });
   // The opponent is built by emulating its DreamAvatar's journey to the
-  // equivalent run depth (quests doc "Battle"): a deterministic opponent
+  // equivalent run depth (journeys doc "Battle"): a deterministic opponent
   // DreamAvatar drawn from the dreamscape's residents, a single dreamsign from
   // the run midpoint onward, and a deck selected by the corpus algorithm — a
   // known-good human decklist matching the DreamAvatar's signature cards and the
@@ -476,7 +476,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       : {
           tutorialTriggers: Object.freeze([...input.tutorialTriggers]),
         }),
-    questDeckEntries,
+    journeyDeckEntries,
     playerDeckOrder: Object.freeze(playerDeckOrder),
     dreamwellDeck: Object.freeze(dreamwellDeck),
     enemyDescriptor,
@@ -581,11 +581,11 @@ function toDreamwellCardDefinition(card: DreamwellCard): DreamwellCardDefinition
  */
 function resolveSeed(
   battleEntryKey: string,
-  questSeed: string,
+  journeySeed: string,
   seedOverride: number | null | undefined,
 ): number {
   if (seedOverride === undefined || seedOverride === null) {
-    return deriveBattleSeed(`${questSeed}:${battleEntryKey}`);
+    return deriveBattleSeed(`${journeySeed}:${battleEntryKey}`);
   }
   if (
     !Number.isFinite(seedOverride) ||
@@ -601,7 +601,7 @@ function resolveSeed(
 }
 
 /**
- * Assembles the enemy descriptor shown before the battle (quests doc "Battle"):
+ * Assembles the enemy descriptor shown before the battle (journeys doc "Battle"):
  * the chosen opponent DreamAvatar's identity and ability text, plus the concrete
  * dreamsigns it carries (none before the run midpoint, one from the midpoint on).
  * The dreamsigns are resolved by the caller via
@@ -774,7 +774,7 @@ function cloneBattleDeckCardDefinition(
 }
 
 function normalizePlayerDeckCard(
-  entry: QuestState["deck"][number],
+  entry: JourneyState["deck"][number],
   card: CardData,
 ): BattleDeckCardDefinition {
   // Resolve the deck entry so the battle card carries the modified cost, spark,
@@ -858,7 +858,7 @@ function freezeBattleEnemyDescriptor(
 }
 
 function freezeBattleDreamAvatarSummary(
-  dreamAvatar: QuestState["dreamAvatar"],
+  dreamAvatar: JourneyState["dreamAvatar"],
 ): BattleDreamAvatarSummary | null {
   if (dreamAvatar === null) {
     return null;
@@ -879,7 +879,7 @@ function freezeBattleDreamAvatarSummary(
 }
 
 function freezeBattleDreamsignSummary(
-  dreamsign: QuestState["dreamsigns"][number],
+  dreamsign: JourneyState["dreamsigns"][number],
 ): BattleDreamsignSummary {
   return Object.freeze({
     id: dreamsign.id,
@@ -891,7 +891,7 @@ function freezeBattleDreamsignSummary(
   });
 }
 
-function freezeAtlasSnapshot(atlas: QuestState["atlas"]): QuestState["atlas"] {
+function freezeAtlasSnapshot(atlas: JourneyState["atlas"]): JourneyState["atlas"] {
   return deepFreeze(structuredClone(atlas));
 }
 

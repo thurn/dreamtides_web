@@ -6,7 +6,7 @@
  * is built. A {@link MerchantOfferTrace} captures *what the builder already
  * computed* — the candidate set, each candidate's score and the components that
  * score blends, the sampling band, the branch taken, and the tuning weights
- * applied — so a human reading `logs/quest-log.jsonl` can reconstruct and
+ * applied — so a human reading `logs/journey-log.jsonl` can reconstruct and
  * second-guess the decision without re-running any code.
  *
  * The builders stay pure: they assemble a trace from their own score maps (no

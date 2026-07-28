@@ -23,7 +23,7 @@ export const MIN_DREAM_AVATARS_PER_REGION = 3;
 export const MAX_DREAM_AVATARS_PER_REGION = 4;
 
 /**
- * The SiteType enum (see `src/types/quest.ts`). A dreamscape's `signature-site`
+ * The SiteType enum (see `src/types/journey.ts`). A dreamscape's `signature-site`
  * is the one site type its resident Dream Guide enhances at home, so the editor
  * constrains edits to this fixed set. Kept in sync with the TS enum by hand;
  * SiteType is source code, not authored game-design data.

@@ -3,13 +3,13 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { QuestContent } from "../../data/quest-content";
+import type { JourneyContent } from "../../data/journey-content";
 import type {
-  QuestContextValue,
-  QuestMutations,
-} from "../../state/quest-context";
-import { useQuest } from "../../state/quest-context";
-import type { DreamscapeNode, QuestState } from "../../types/quest";
+  JourneyContextValue,
+  JourneyMutations,
+} from "../../state/journey-context";
+import { useJourney } from "../../state/journey-context";
+import type { DreamscapeNode, JourneyState } from "../../types/journey";
 import { LayerName } from "../../types/layer-name";
 import type { DreamscapeScreenProps } from "../../cumulus/screens/DreamscapeScreen";
 import { logEvent } from "../../logging";
@@ -19,8 +19,8 @@ const screenMock = vi.hoisted(() =>
   vi.fn<(props: DreamscapeScreenProps) => void>(),
 );
 
-vi.mock("../../state/quest-context", () => ({
-  useQuest: vi.fn(),
+vi.mock("../../state/journey-context", () => ({
+  useJourney: vi.fn(),
 }));
 
 vi.mock("../../logging", () => ({
@@ -41,7 +41,7 @@ function lastScreenProps(): DreamscapeScreenProps {
   return last[0];
 }
 
-function makeState(overrides: Partial<QuestState> = {}): QuestState {
+function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
   const node: DreamscapeNode = {
     id: "node-1",
     layer: LayerName.One,
@@ -104,18 +104,18 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
       },
     },
     ...overrides,
-  } as unknown as QuestState;
+  } as unknown as JourneyState;
 }
 
-function setQuestContext(
-  mutations: QuestMutations,
-  state: QuestState = makeState(),
+function setJourneyContext(
+  mutations: JourneyMutations,
+  state: JourneyState = makeState(),
 ): void {
-  vi.mocked(useQuest).mockReturnValue({
+  vi.mocked(useJourney).mockReturnValue({
     state,
     mutations,
-    questContent: {} as QuestContent,
-  } as QuestContextValue);
+    journeyContent: {} as JourneyContent,
+  } as JourneyContextValue);
 }
 
 beforeEach(() => {
@@ -131,8 +131,8 @@ describe("DreamscapeScreenAdapter", () => {
       ensureEssenceSiteRuntime: vi.fn(),
       acceptEssenceSite: vi.fn(),
       setScreen: vi.fn(),
-    } as unknown as QuestMutations;
-    setQuestContext(mutations);
+    } as unknown as JourneyMutations;
+    setJourneyContext(mutations);
     const container = document.createElement("div");
     const root = createRoot(container);
     act(() => root.render(<DreamscapeScreenAdapter />));
@@ -162,8 +162,8 @@ describe("DreamscapeScreenAdapter", () => {
       ensureRewardSiteRuntime: vi.fn(),
       acceptRewardSite: vi.fn(),
       setScreen: vi.fn(),
-    } as unknown as QuestMutations;
-    setQuestContext(mutations);
+    } as unknown as JourneyMutations;
+    setJourneyContext(mutations);
     const container = document.createElement("div");
     const root = createRoot(container);
     act(() => root.render(<DreamscapeScreenAdapter />));
@@ -192,8 +192,8 @@ describe("DreamscapeScreenAdapter", () => {
       ensureEssenceSiteRuntime: vi.fn(),
       ensureRewardSiteRuntime: vi.fn(),
       setScreen: vi.fn(),
-    } as unknown as QuestMutations;
-    setQuestContext(mutations, makeState({ siteRuntime: {} }));
+    } as unknown as JourneyMutations;
+    setJourneyContext(mutations, makeState({ siteRuntime: {} }));
     const container = document.createElement("div");
     const root = createRoot(container);
     act(() => root.render(<DreamscapeScreenAdapter />));
@@ -215,8 +215,8 @@ describe("DreamscapeScreenAdapter", () => {
       ensureRewardSiteRuntime: vi.fn(),
       acceptRewardSite: vi.fn(),
       setScreen: vi.fn(),
-    } as unknown as QuestMutations;
-    setQuestContext(
+    } as unknown as JourneyMutations;
+    setJourneyContext(
       mutations,
       makeState({
         maxDreamsigns: 2,
@@ -267,8 +267,8 @@ describe("DreamscapeScreenAdapter", () => {
       acceptRewardSite: vi.fn(),
       completeSite: vi.fn(),
       setScreen: vi.fn(),
-    } as unknown as QuestMutations;
-    setQuestContext(
+    } as unknown as JourneyMutations;
+    setJourneyContext(
       mutations,
       makeState({
         maxDreamsigns: 1,
@@ -308,8 +308,8 @@ describe("DreamscapeScreenAdapter", () => {
   it("safely ignores a stale replacement UUID", () => {
     const mutations = {
       acceptRewardSite: vi.fn(),
-    } as unknown as QuestMutations;
-    setQuestContext(
+    } as unknown as JourneyMutations;
+    setJourneyContext(
       mutations,
       makeState({
         maxDreamsigns: 1,
@@ -339,8 +339,8 @@ describe("DreamscapeScreenAdapter", () => {
       ensureRewardSiteRuntime: vi.fn(),
       acceptRewardSite: vi.fn(),
       setScreen: vi.fn(),
-    } as unknown as QuestMutations;
-    setQuestContext(mutations);
+    } as unknown as JourneyMutations;
+    setJourneyContext(mutations);
     const container = document.createElement("div");
     const root = createRoot(container);
     act(() => root.render(<DreamscapeScreenAdapter />));

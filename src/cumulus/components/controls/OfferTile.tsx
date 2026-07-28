@@ -11,7 +11,7 @@ import {
 import { identiconsForced } from "../../../runtime/identicon-mode";
 import type { CardId } from "../../../types/card-identity";
 import type { FrozenCardData } from "../../../types/cards";
-import type { TransfigurationType } from "../../../types/quest";
+import type { TransfigurationType } from "../../../types/journey";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";

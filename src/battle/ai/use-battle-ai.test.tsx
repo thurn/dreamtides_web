@@ -61,9 +61,9 @@ function makeBareState(): BattleMutableState {
   };
 }
 
-function questDeckProvenance(): BattleCardProvenance {
+function journeyDeckProvenance(): BattleCardProvenance {
   return {
-    kind: "quest-deck",
+    kind: "journey-deck",
     sourceBattleCardId: null,
     chosenSpark: null,
     chosenSubtype: null,
@@ -134,7 +134,7 @@ function makeEnemyTurnState(
     owner: "enemy",
     controller: "enemy",
     isRevealedToPlayer: false,
-    provenance: questDeckProvenance(),
+    provenance: journeyDeckProvenance(),
   });
   mutable.sides.enemy.backRank.B0 = cardId;
   mutate?.(mutable);
@@ -199,7 +199,7 @@ function placeFrontRankCharacterInSlot(
     owner: side,
     controller: side,
     isRevealedToPlayer: side === "enemy" ? false : true,
-    provenance: questDeckProvenance(),
+    provenance: journeyDeckProvenance(),
   });
   state.sides[side].frontRank[slot] = id;
   return id;
@@ -227,7 +227,7 @@ function placeBackRankCharacter(
     owner: side,
     controller: side,
     isRevealedToPlayer: side === "enemy" ? false : true,
-    provenance: questDeckProvenance(),
+    provenance: journeyDeckProvenance(),
   });
   state.sides[side].backRank[slot] = id;
   return id;
@@ -389,7 +389,7 @@ describe("useBattleAi", () => {
         owner: "enemy",
         controller: "enemy",
         isRevealedToPlayer: false,
-        provenance: questDeckProvenance(),
+        provenance: journeyDeckProvenance(),
       });
       mutable.cardInstances[centerOccupantId].status.isExhausted = true;
       mutable.sides.enemy.backRank.B4 = centerOccupantId;
@@ -399,7 +399,7 @@ describe("useBattleAi", () => {
         owner: "enemy",
         controller: "enemy",
         isRevealedToPlayer: false,
-        provenance: questDeckProvenance(),
+        provenance: journeyDeckProvenance(),
       });
       mutable.sides.enemy.hand = [supportId];
     });
@@ -622,7 +622,7 @@ describe("useBattleAi", () => {
   });
 
   it("still runs in single-player (sole connected client) with aiMode on", async () => {
-    // The single-player quest flow is a room with exactly one connected client.
+    // The single-player journey flow is a room with exactly one connected client.
     // The gate must NOT disable the AI there: with aiMode on and count 1, the
     // hook produces a proposal on the AI's turn.
     const dispatch = vi.fn();

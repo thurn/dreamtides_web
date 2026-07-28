@@ -8,11 +8,11 @@ import {
   makeMerchantTestContent,
   makeMerchantTestCorpus,
   makeMerchantTestDeckEntry,
-  makeMerchantTestQuestState,
+  makeMerchantTestJourneyState,
   makeMerchantTestSite,
 } from "../testing/fixtures";
 import type { CardData } from "../../types/cards";
-import type { DeckEntry } from "../../types/quest";
+import type { DeckEntry } from "../../types/journey";
 import type { FitModel } from "../../draft/replay/fit-model";
 import type { MerchantContext } from "../types";
 import { purgeBuilder, purgeReplaceBuilder } from "./remove";
@@ -39,15 +39,15 @@ function makeContext(input: {
 }): MerchantContext {
   // Pool cards are all cards passed; the context filters by isGrantCandidate.
   const allCards = [...input.cards, ...(input.poolCards ?? [])];
-  const questContent = makeMerchantTestContent({
+  const journeyContent = makeMerchantTestContent({
     cards: allCards,
     fitModel: input.fitModel,
     merchantCorpus: makeMerchantTestCorpus({ cards: input.corpusCards ?? {} }),
   });
-  const questState = makeMerchantTestQuestState({ deck: [...input.deckEntries] });
+  const journeyState = makeMerchantTestJourneyState({ deck: [...input.deckEntries] });
   return buildMerchantContext({
-    questState,
-    questContent,
+    journeyState,
+    journeyContent,
     site: makeMerchantTestSite(),
   });
 }
@@ -421,21 +421,21 @@ describe("purge_replace — accept removes exactly one entry and adds exactly on
       corpusCards[c.id] = { quality: 0.5, df: 10 };
     });
 
-    const questContent = makeMerchantTestContent({
+    const journeyContent = makeMerchantTestContent({
       cards: allCards,
       merchantCorpus: makeMerchantTestCorpus({ cards: corpusCards }),
     });
-    const questState = makeMerchantTestQuestState({ deck: [...deckEntries] });
+    const journeyState = makeMerchantTestJourneyState({ deck: [...deckEntries] });
 
     const context = buildMerchantContext({
-      questState,
-      questContent,
+      journeyState,
+      journeyContent,
       site: makeMerchantTestSite(),
     });
 
     expect(purgeReplaceBuilder.eligible(context)).toBe(true);
 
-    const initialDeckSize = questState.deck.length;
+    const initialDeckSize = journeyState.deck.length;
 
     // Find a seed that builds a valid offer
     let foundOffer = false;
@@ -452,8 +452,8 @@ describe("purge_replace — accept removes exactly one entry and adds exactly on
       if (payload === undefined) continue;
 
       const resultState = applyMerchantPayloadToState({
-        state: questState,
-        questContent,
+        state: journeyState,
+        journeyContent,
         payload,
       });
 

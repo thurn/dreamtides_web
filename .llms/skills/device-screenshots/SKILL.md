@@ -1,11 +1,11 @@
 ---
 name: device-screenshots
-description: Use when asked to mock up, preview, or screenshot the quest prototype UI on phones or desktop resolutions (iPhone 16, iPhone SE, Galaxy S25 Ultra, Galaxy A16, Razr+, Z Flip7, 1920x1080, 2560x1440, 2560x1600, 3440x1440, 2560x1080). Triggers on device screenshot, desktop screenshot, mobile screenshot, mobile mock-up, phone preview, desktop preview, device frame, how does this look on mobile, how does this look on desktop, iPhone screenshot, Android screenshot, /device-screenshots.
+description: Use when asked to mock up, preview, or screenshot the journey prototype UI on phones or desktop resolutions (iPhone 16, iPhone SE, Galaxy S25 Ultra, Galaxy A16, Razr+, Z Flip7, 1920x1080, 2560x1440, 2560x1600, 3440x1440, 2560x1080). Triggers on device screenshot, desktop screenshot, mobile screenshot, mobile mock-up, phone preview, desktop preview, device frame, how does this look on mobile, how does this look on desktop, iPhone screenshot, Android screenshot, /device-screenshots.
 ---
 
 # Device Screenshot Mock-ups
 
-Render the running quest prototype web app at a phone or desktop target's
+Render the running journey prototype web app at a phone or desktop target's
 resolution, aspect ratio, and pixel density, and capture a PNG. Use it to
 preview how a screen looks on common phones and desktop viewports.
 
@@ -123,7 +123,7 @@ dimensions match the target id exactly unless `--scale` is supplied.
 
 - `--route <path>` - app route, e.g. `--route /editor`. Default `/`.
 - `--scene <id>` - jump to a QA scene via `?goto=<id>` (e.g. `shop`, `atlas`,
-  `purge`). See `docs/quest_prototype/qa_scenes.md` for the full list. Scenes
+  `purge`). See `docs/journey_prototype/qa_scenes.md` for the full list. Scenes
   need the dev server's Firebase emulator running (a plain `vite` is not
   enough); prefer `npm run dev` / `--start`.
 - `--query <str>` - append a raw query string (without a leading `?`/`&`),

@@ -1,5 +1,5 @@
 // Registry demo for Dreamsign — the dreamsign entity tile whose hover / press
-// reveal routes through InfoCard's `object` variant. Like QuestStatusBar,
+// reveal routes through InfoCard's `object` variant. Like JourneyStatusBar,
 // Dreamsign anchors its reveal to a `stageRef` (the screen root), so the demo's
 // `Component` is a small wrapper that supplies a phone-proportioned,
 // `position: relative` stage with a dark scene-like backdrop, owns the
@@ -10,7 +10,7 @@
 
 import { useRef } from "react";
 import { Dreamsign } from "../../components/hud/Dreamsign";
-import type { Dreamsign as DreamsignData } from "../../../types/quest";
+import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
 

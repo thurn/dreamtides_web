@@ -326,7 +326,7 @@ function commitFiles(writes, fileSystem) {
 }
 
 function generateFigmentDataJsonFromToml(patchedSource, fileSystem) {
-  const tempRoot = fileSystem.mkdtempSync(join(tmpdir(), "quest-figment-editor-refresh-"));
+  const tempRoot = fileSystem.mkdtempSync(join(tmpdir(), "journey-figment-editor-refresh-"));
 
   try {
     fileSystem.mkdirSync(join(tempRoot, "data", "tabula"), { recursive: true });

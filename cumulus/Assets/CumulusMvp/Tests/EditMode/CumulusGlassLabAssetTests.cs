@@ -149,7 +149,7 @@ namespace CumulusMvp.Tests
         }
 
         [Test]
-        public void DreamsignGlassDemo_UsesThreeParityLitShadowCapableQuestMeshesOnSharedGlass()
+        public void DreamsignGlassDemo_UsesThreeParityLitShadowCapableJourneyMeshesOnSharedGlass()
         {
             CumulusDreamsignGlassDemoBuilder.Rebuild();
             Scene scene = EditorSceneManager.OpenScene(

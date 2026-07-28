@@ -1,13 +1,13 @@
 import { describe, it, expect } from "vitest";
 
-import { createDefaultState } from "../state/quest-context";
+import { createDefaultState } from "../state/journey-context";
 import type {
   DreamscapeNode,
-  QuestState,
+  JourneyState,
   SiteState,
   SiteType,
-} from "../types/quest";
-import { screenToQuestPath, siteTypeSlug, slugify } from "./screen-url";
+} from "../types/journey";
+import { screenToJourneyPath, siteTypeSlug, slugify } from "./screen-url";
 import { LayerName, layerAtOrdinal } from "../types/layer-name";
 
 function makeSite(id: string, type: SiteType): SiteState {
@@ -43,7 +43,7 @@ function stateInDreamscape(
   sites: SiteState[],
   nodeId = "dreamscape-3",
   layer = 2,
-): QuestState {
+): JourneyState {
   const node = makeNode(nodeId, biomeName, sites, layer);
   const base = createDefaultState();
   return {
@@ -59,26 +59,26 @@ function stateInDreamscape(
   };
 }
 
-describe("screenToQuestPath", () => {
+describe("screenToJourneyPath", () => {
   it("maps the top-level screens", () => {
     const base = createDefaultState();
-    expect(screenToQuestPath({ ...base, screen: { type: "questStart" } })).toBe(
+    expect(screenToJourneyPath({ ...base, screen: { type: "journeyStart" } })).toBe(
       "/",
     );
-    expect(screenToQuestPath({ ...base, screen: { type: "atlas" } })).toBe(
+    expect(screenToJourneyPath({ ...base, screen: { type: "atlas" } })).toBe(
       "/atlas",
     );
     expect(
-      screenToQuestPath({ ...base, screen: { type: "questComplete" } }),
+      screenToJourneyPath({ ...base, screen: { type: "journeyComplete" } }),
     ).toBe("/complete");
-    expect(screenToQuestPath({ ...base, screen: { type: "questFailed" } })).toBe(
+    expect(screenToJourneyPath({ ...base, screen: { type: "journeyFailed" } })).toBe(
       "/failed",
     );
   });
 
   it("keys the dreamscape screen by the layer + biome slug", () => {
     const state = stateInDreamscape("Ember Wood", [], "dreamscape-3", 2);
-    expect(screenToQuestPath({ ...state, screen: { type: "dreamscape" } })).toBe(
+    expect(screenToJourneyPath({ ...state, screen: { type: "dreamscape" } })).toBe(
       "/dreamscape/2-ember-wood",
     );
   });
@@ -87,10 +87,10 @@ describe("screenToQuestPath", () => {
     const layer1 = stateInDreamscape("Ember Wood", [], "dreamscape-3", 1);
     const layer4 = stateInDreamscape("Ember Wood", [], "dreamscape-9", 4);
     expect(
-      screenToQuestPath({ ...layer1, screen: { type: "dreamscape" } }),
+      screenToJourneyPath({ ...layer1, screen: { type: "dreamscape" } }),
     ).toBe("/dreamscape/1-ember-wood");
     expect(
-      screenToQuestPath({ ...layer4, screen: { type: "dreamscape" } }),
+      screenToJourneyPath({ ...layer4, screen: { type: "dreamscape" } }),
     ).toBe("/dreamscape/4-ember-wood");
   });
 
@@ -99,13 +99,13 @@ describe("screenToQuestPath", () => {
     const augury = makeSite("site-8", "DreamAugury");
     const state = stateInDreamscape("Ember Wood", [purge, augury], "dreamscape-3", 2);
     expect(
-      screenToQuestPath({
+      screenToJourneyPath({
         ...state,
         screen: { type: "site", siteId: "site-7" },
       }),
     ).toBe("/dreamscape/2-ember-wood/purge");
     expect(
-      screenToQuestPath({
+      screenToJourneyPath({
         ...state,
         screen: { type: "site", siteId: "site-8" },
       }),
@@ -114,7 +114,7 @@ describe("screenToQuestPath", () => {
 
   it("falls back to the node id slug when the biome is unnamed", () => {
     const state = stateInDreamscape("", [], "dreamscape-4", 3);
-    expect(screenToQuestPath({ ...state, screen: { type: "dreamscape" } })).toBe(
+    expect(screenToJourneyPath({ ...state, screen: { type: "dreamscape" } })).toBe(
       "/dreamscape/3-dreamscape-4",
     );
   });
@@ -122,7 +122,7 @@ describe("screenToQuestPath", () => {
   it("degrades gracefully when the dreamscape or site is missing", () => {
     const base = createDefaultState();
     expect(
-      screenToQuestPath({
+      screenToJourneyPath({
         ...base,
         currentDreamscape: null,
         screen: { type: "dreamscape" },
@@ -131,7 +131,7 @@ describe("screenToQuestPath", () => {
 
     const state = stateInDreamscape("Ember Wood", [], "dreamscape-3", 2);
     expect(
-      screenToQuestPath({
+      screenToJourneyPath({
         ...state,
         screen: { type: "site", siteId: "does-not-exist" },
       }),

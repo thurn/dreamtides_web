@@ -186,7 +186,7 @@ export default tseslint.config(
             {
               group: ["**/state/**", "**/state"],
               message:
-                "View-model builders take domain data as arguments; acquiring live quest state is the adapter's job.",
+                "View-model builders take domain data as arguments; acquiring live journey state is the adapter's job.",
             },
           ],
         },

@@ -5,9 +5,9 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState, type ReactElement, type ReactNode } from "react";
 import {
-  QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
-  QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP,
-} from "../components/hud/QuestStatusBar";
+  JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+  JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP,
+} from "../components/hud/JourneyStatusBar";
 import { Motes } from "../components/hud/Motes";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
@@ -66,7 +66,7 @@ const REVELATION_GUIDE_TOP = `calc(max(var(--safe-area-inset-top), ${token("--sa
 const REVELATION_GALLERY_TOP = `max(44dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")} + ${REVELATION_VERTICAL_OFFSET}))`;
 const REVELATION_GALLERY_TOP_EXPANDED = `max(36dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")} + ${REVELATION_VERTICAL_OFFSET}))`;
 // The grand desktop HUD is taller than the root HUD token.
-const DESKTOP_HUD_CLEARANCE = `calc(${QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`;
+const DESKTOP_HUD_CLEARANCE = `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`;
 // Three 240px cards plus the showcase gallery's compact gutters and padding.
 // This is a content-box measure used to leave the guide the remaining width.
 const SHOWCASE_GALLERY_RESERVE_PX = 800;
@@ -137,7 +137,7 @@ export function GuideGallerySiteLayout({
         boxSizing: "border-box",
         paddingBottom: isDesktop || revelationMobile
           ? undefined
-          : QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+          : JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
         paddingTop: isDesktop || revelationMobile
           ? undefined
           : "max(var(--safe-area-inset-top, 0px), var(--safe-top, 0px))",
@@ -258,7 +258,7 @@ function MobileRevelationComposition({
               : REVELATION_GALLERY_TOP,
           left: 0,
           right: 0,
-          bottom: QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+          bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
           display: "grid",
           placeItems: "stretch center",
           zIndex: 20,

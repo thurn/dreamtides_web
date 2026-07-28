@@ -12,8 +12,8 @@
 // (see `reduceGameEvent`) because rule 4 would otherwise wedge the room.
 //
 // Domain cases land per-task by extending the `routeDomain` switch. Until a
-// type has a case it falls through to a bounce. The quest lifecycle, essence,
-// and navigation cases live in `./quest/lifecycle` as pure `(quest, payload)`
+// type has a case it falls through to a bounce. The journey lifecycle, essence,
+// and navigation cases live in `./journey/lifecycle` as pure `(journey, payload)`
 // functions; `routeDomain` wraps their result over the fold state.
 
 import type { BounceReason, EventContext, GameEvent } from "../eventlog/types";
@@ -24,14 +24,14 @@ import {
   type GameEventType,
 } from "./events";
 import type { FoldState } from "./fold-state";
-import type { QuestState } from "../types/quest";
+import type { JourneyState } from "../types/journey";
 import * as frontDoor from "./front-door";
 import * as battleEvents from "./battle/battle-events";
-import * as deck from "./quest/deck";
-import * as draft from "./quest/draft";
-import * as lifecycle from "./quest/lifecycle";
-import * as shop from "./quest/shop";
-import * as sites from "./quest/sites";
+import * as deck from "./journey/deck";
+import * as draft from "./journey/draft";
+import * as lifecycle from "./journey/lifecycle";
+import * as shop from "./journey/shop";
+import * as sites from "./journey/sites";
 
 /** The reducer's return shape (matches `EngineConfig.reducer`). */
 export type ReduceResult =
@@ -192,7 +192,7 @@ export function routeDomain(
     return bounce(state);
   }
   const payload = event.payload ?? {};
-  const quest = state.quest;
+  const journey = state.journey;
   const type: GameEventType = event.type;
   if (
     state.battle?.tutorialPresentation != null &&
@@ -247,138 +247,138 @@ export function routeDomain(
 
     // --- essence & limits ---
     case "ADJUST_ESSENCE":
-      return questCase(state, lifecycle.adjustEssence(quest, payload));
+      return journeyCase(state, lifecycle.adjustEssence(journey, payload));
     case "SET_ESSENCE":
-      return questCase(state, lifecycle.setEssence(quest, payload));
+      return journeyCase(state, lifecycle.setEssence(journey, payload));
     case "ADJUST_ESSENCE_CAP":
-      return questCase(state, lifecycle.adjustEssenceCap(quest, payload));
+      return journeyCase(state, lifecycle.adjustEssenceCap(journey, payload));
     case "SET_ESSENCE_CAP":
-      return questCase(state, lifecycle.setEssenceCap(quest, payload));
+      return journeyCase(state, lifecycle.setEssenceCap(journey, payload));
     case "SET_MAX_DREAMSIGNS":
-      return questCase(state, lifecycle.setMaxDreamsigns(quest, payload));
+      return journeyCase(state, lifecycle.setMaxDreamsigns(journey, payload));
     case "SET_COMPLETION_LEVEL":
-      return questCase(state, lifecycle.setCompletionLevel(quest, payload));
+      return journeyCase(state, lifecycle.setCompletionLevel(journey, payload));
 
     // --- navigation ---
     case "SET_SCREEN":
-      return questCase(state, lifecycle.setScreen(quest, payload));
+      return journeyCase(state, lifecycle.setScreen(journey, payload));
     case "TRAVEL_TO_DREAMSCAPE":
-      return questCase(state, lifecycle.travelToDreamscape(quest, payload));
+      return journeyCase(state, lifecycle.travelToDreamscape(journey, payload));
     case "MARK_SITE_VISITED":
-      return questCase(state, lifecycle.markSiteVisited(quest, payload));
+      return journeyCase(state, lifecycle.markSiteVisited(journey, payload));
     case "DISMISS_STARTING_DECK_POPUP":
-      return questCase(state, lifecycle.dismissStartingDeckPopup(quest));
+      return journeyCase(state, lifecycle.dismissStartingDeckPopup(journey));
 
     // --- dreamAvatar & run assembly ---
     case "SELECT_DREAM_AVATAR":
-      return questCase(state, lifecycle.selectDreamAvatar(quest, payload));
+      return journeyCase(state, lifecycle.selectDreamAvatar(journey, payload));
     case "REROLL_DREAM_AVATAR_OFFER":
-      return questCase(state, lifecycle.rerollDreamAvatarOffer(quest));
-    case "START_QUEST":
-      return questCase(state, lifecycle.startQuest(quest, payload, ctx));
+      return journeyCase(state, lifecycle.rerollDreamAvatarOffer(journey));
+    case "START_JOURNEY":
+      return journeyCase(state, lifecycle.startJourney(journey, payload, ctx));
 
     // --- deck & transfiguration ---
     case "ADD_CARD":
-      return questCase(state, deck.addCard(quest, payload, ctx));
+      return journeyCase(state, deck.addCard(journey, payload, ctx));
     case "REMOVE_DECK_ENTRY":
-      return questCase(state, deck.removeDeckEntry(quest, payload));
+      return journeyCase(state, deck.removeDeckEntry(journey, payload));
     case "PURGE_DECK_CARDS":
-      return questCase(state, sites.purgeDeckCards(quest, payload));
+      return journeyCase(state, sites.purgeDeckCards(journey, payload));
     case "DUPLICATE_DECK_ENTRY":
-      return questCase(state, deck.duplicateDeckEntry(quest, payload, ctx));
+      return journeyCase(state, deck.duplicateDeckEntry(journey, payload, ctx));
     case "SET_DECK_ENTRY_STAT_OVERRIDE":
-      return questCase(state, deck.setDeckEntryStatOverride(quest, payload));
+      return journeyCase(state, deck.setDeckEntryStatOverride(journey, payload));
     case "SET_DECK_ENTRY_KEYWORDS":
-      return questCase(state, deck.setDeckEntryKeywords(quest, payload));
+      return journeyCase(state, deck.setDeckEntryKeywords(journey, payload));
     case "SET_DECK_ENTRY_TYPE":
-      return questCase(state, deck.setDeckEntryType(quest, payload));
+      return journeyCase(state, deck.setDeckEntryType(journey, payload));
     case "TRANSFIGURE_CARD":
-      return questCase(state, deck.transfigureCard(quest, payload));
+      return journeyCase(state, deck.transfigureCard(journey, payload));
     case "PURGE_ALL_BANE_CARDS":
-      return questCase(state, deck.purgeAllBaneCards(quest));
+      return journeyCase(state, deck.purgeAllBaneCards(journey));
     case "PURGE_RANDOM_BANE_CARDS":
-      return questCase(state, deck.purgeRandomBaneCards(quest, payload, ctx));
+      return journeyCase(state, deck.purgeRandomBaneCards(journey, payload, ctx));
 
     case "ACCEPT_TRANSFIGURATION_CHOICE":
-      return questCase(
+      return journeyCase(
         state,
-        sites.acceptTransfigurationChoice(quest, payload),
+        sites.acceptTransfigurationChoice(journey, payload),
       );
     case "ACCEPT_DUPLICATION_CHOICE":
-      return questCase(
+      return journeyCase(
         state,
-        sites.acceptDuplicationChoice(quest, payload, ctx),
+        sites.acceptDuplicationChoice(journey, payload, ctx),
       );
 
     // --- sites ---
     case "OPEN_SITE":
-      return questCase(state, sites.openSite(quest, payload, ctx));
+      return journeyCase(state, sites.openSite(journey, payload, ctx));
     case "COMPLETE_DREAM_AUGURY":
-      return questCase(state, sites.completeDreamAugury(quest, payload));
+      return journeyCase(state, sites.completeDreamAugury(journey, payload));
     case "ACCEPT_REWARD":
-      return questCase(state, sites.acceptReward(quest, payload));
+      return journeyCase(state, sites.acceptReward(journey, payload));
     case "ACCEPT_DREAMSIGN_OFFER":
-      return questCase(state, sites.acceptDreamsignOffer(quest, payload));
+      return journeyCase(state, sites.acceptDreamsignOffer(journey, payload));
     case "REJECT_DREAMSIGN_OFFER":
-      return questCase(state, sites.rejectDreamsignOffer(quest, payload));
+      return journeyCase(state, sites.rejectDreamsignOffer(journey, payload));
     case "ACCEPT_ESSENCE":
-      return questCase(state, sites.acceptEssence(quest, payload, ctx));
+      return journeyCase(state, sites.acceptEssence(journey, payload, ctx));
     case "REROLL_DREAM_AUGURY":
-      return questCase(state, sites.rerollDreamAugury(quest, payload));
+      return journeyCase(state, sites.rerollDreamAugury(journey, payload));
     case "FORCE_DREAM_AUGURY_ARCHETYPE":
-      return questCase(state, sites.forceDreamAuguryArchetype(quest, payload));
+      return journeyCase(state, sites.forceDreamAuguryArchetype(journey, payload));
     case "COMPLETE_SITE":
-      return questCase(state, sites.completeSite(quest, payload));
+      return journeyCase(state, sites.completeSite(journey, payload));
 
     // --- shop, merchant & modifiers ---
     case "BUY_SHOP_SLOT":
-      return questCase(state, shop.buyShopSlot(quest, payload, ctx));
+      return journeyCase(state, shop.buyShopSlot(journey, payload, ctx));
     case "REROLL_SHOP":
-      return questCase(state, shop.rerollShop(quest, payload, ctx));
+      return journeyCase(state, shop.rerollShop(journey, payload, ctx));
     case "GRANT_FREE_REROLLS":
-      return questCase(state, shop.grantFreeRerolls(quest, payload));
+      return journeyCase(state, shop.grantFreeRerolls(journey, payload));
     case "APPLY_SHOP_DISCOUNT":
-      return questCase(state, shop.applyShopDiscount(quest, payload));
+      return journeyCase(state, shop.applyShopDiscount(journey, payload));
     case "ACCEPT_MERCHANT_OFFER":
-      return questCase(state, shop.acceptMerchantOffer(quest, payload, ctx));
+      return journeyCase(state, shop.acceptMerchantOffer(journey, payload, ctx));
     case "DECLINE_MERCHANT":
-      return questCase(state, shop.declineMerchant(quest, payload, ctx));
+      return journeyCase(state, shop.declineMerchant(journey, payload, ctx));
     case "PUSH_BATTLE_MODIFIER":
-      return questCase(state, shop.pushBattleModifier(quest, payload));
+      return journeyCase(state, shop.pushBattleModifier(journey, payload));
     case "PUSH_TEMPORARY_BANE_GRANT":
-      return questCase(state, shop.pushTemporaryBaneGrant(quest, payload, ctx));
+      return journeyCase(state, shop.pushTemporaryBaneGrant(journey, payload, ctx));
     case "BAN_SITE_TYPE":
-      return questCase(state, shop.banSiteType(quest, payload));
+      return journeyCase(state, shop.banSiteType(journey, payload));
     case "BOOST_SITE_APPEARANCE":
-      return questCase(state, shop.boostSiteAppearance(quest, payload));
+      return journeyCase(state, shop.boostSiteAppearance(journey, payload));
     case "REPLACE_SITE_TYPE":
-      return questCase(state, shop.replaceSiteType(quest, payload));
+      return journeyCase(state, shop.replaceSiteType(journey, payload));
     case "ADD_SITE_TO_DREAMSCAPE":
-      return questCase(state, shop.addSiteToDreamscape(quest, payload));
+      return journeyCase(state, shop.addSiteToDreamscape(journey, payload));
     case "UPDATE_ATLAS":
-      return questCase(state, shop.updateAtlas(quest, payload));
+      return journeyCase(state, shop.updateAtlas(journey, payload));
     case "SET_CARD_SOURCE_DEBUG":
-      return questCase(state, shop.setCardSourceDebug(quest, payload));
+      return journeyCase(state, shop.setCardSourceDebug(journey, payload));
 
     // --- draft ---
     case "PICK_DRAFT_CARD":
-      return questCase(state, draft.pickDraftCard(quest, payload, ctx));
+      return journeyCase(state, draft.pickDraftCard(journey, payload, ctx));
     case "REROLL_DRAFT_OFFER":
-      return questCase(state, draft.rerollDraftOffer(quest, payload, ctx));
+      return journeyCase(state, draft.rerollDraftOffer(journey, payload, ctx));
     case "ENTER_DRAFT_SITE":
-      return questCase(state, draft.enterDraftSite(quest, payload, ctx));
+      return journeyCase(state, draft.enterDraftSite(journey, payload, ctx));
     case "SET_DRAFT_STATE":
-      return questCase(state, draft.setDraftState(quest, payload));
+      return journeyCase(state, draft.setDraftState(journey, payload));
 
     // --- dreamsigns ---
     case "ADD_DREAMSIGN":
-      return questCase(state, deck.addDreamsign(quest, payload));
+      return journeyCase(state, deck.addDreamsign(journey, payload));
     case "REMOVE_DREAMSIGN":
-      return questCase(state, deck.removeDreamsign(quest, payload));
+      return journeyCase(state, deck.removeDreamsign(journey, payload));
     case "SET_DREAMSIGN_POOL":
-      return questCase(state, deck.setDreamsignPool(quest, payload));
+      return journeyCase(state, deck.setDreamsignPool(journey, payload));
     case "SET_DREAMSIGN_IS_BANE":
-      return questCase(state, deck.setDreamsignIsBane(quest, payload));
+      return journeyCase(state, deck.setDreamsignIsBane(journey, payload));
 
     // --- battle lifecycle (create / tear down the battle slice) ---
     case "BEGIN_BATTLE":
@@ -413,8 +413,8 @@ export function routeDomain(
       return foldCase(state, battleEvents.setCardNote(state, payload, ctx));
 
     // --- whole-fold cases (touch the battle slice) ---
-    case "RESET_QUEST":
-      return foldCase(state, lifecycle.resetQuest(state));
+    case "RESET_JOURNEY":
+      return foldCase(state, lifecycle.resetJourney(state));
     case "LOAD_STATE":
       return foldCase(state, lifecycle.loadState(state, payload, ctx));
 
@@ -429,15 +429,15 @@ export function routeDomain(
 }
 
 /**
- * Wrap a quest-only domain result: `null` bounces (invalid-in-state / malformed
- * payload), a new `QuestState` is applied over the existing battle slice.
+ * Wrap a journey-only domain result: `null` bounces (invalid-in-state / malformed
+ * payload), a new `JourneyState` is applied over the existing battle slice.
  */
-function questCase(
+function journeyCase(
   state: FoldState,
-  nextQuest: QuestState | null,
+  nextJourney: JourneyState | null,
 ): ReduceResult {
-  if (nextQuest === null) return bounce(state);
-  return { state: { ...state, quest: nextQuest }, outcome: "applied" };
+  if (nextJourney === null) return bounce(state);
+  return { state: { ...state, journey: nextJourney }, outcome: "applied" };
 }
 
 function frontDoorCase(

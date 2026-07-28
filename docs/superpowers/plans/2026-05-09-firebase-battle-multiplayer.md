@@ -5,15 +5,15 @@
 **Goal:** Replicate the entire battle reducer state — mutable slice, full
 past/future history, last transition — through Firebase Realtime Database so
 both connected clients can co-pilot a single shared battle, mirroring the V2
-quest multiplayer architecture.
+journey multiplayer architecture.
 
 **Architecture:** A new `battleState` slot lives at the room root next to
-`questState`. Each battle command runs the existing pure `battleReducer`
+`journeyState`. Each battle command runs the existing pure `battleReducer`
 inside a Firebase transaction at `rooms/<roomId>/battleState`, so concurrent
 commits from both clients converge through RTDB serialization. Init is
 race-safe (first commit wins). UI overlays stay local. Action log gets one
 entry per battle command. Slot is wiped on victory hand-off, on failure
-route, and on quest reset.
+route, and on journey reset.
 
 **Tech Stack:** TypeScript, React 19, Firebase Realtime Database
 (`firebase/database`), Vite, Vitest, Testing Library.
@@ -47,9 +47,9 @@ route, and on quest reset.
   `createRoomRecord`; route through `normalizeBattleStateSnapshot` inside
   `normalizeRoomSnapshot`.
 - `src/multiplayer/room-service.test.ts` — schema version expectations.
-- `src/state/multiplayer-quest-context.tsx` — clear `battleState` inside
-  `resetQuest`'s transaction.
-- `src/state/multiplayer-quest-context.test.tsx` — cover
+- `src/state/multiplayer-journey-context.tsx` — clear `battleState` inside
+  `resetJourney`'s transaction.
+- `src/state/multiplayer-journey-context.test.tsx` — cover
   battleState-clear-on-reset case.
 - `src/components/BattleSiteRoute.tsx` — drop `usePlayableBattleCache`
   reliance; consume `useEnsureBattleSession` and the new context.
@@ -70,8 +70,8 @@ route, and on quest reset.
 - `src/battle/integration/failure-route.test.ts` — assert the callback
   fires.
 - `src/App.tsx` — mount the new `MultiplayerBattleProvider` between
-  `MultiplayerQuestProvider` and `QuestApp`.
-- `docs/quest_prototype/firebase_multiplayer.md` — document the
+  `MultiplayerJourneyProvider` and `JourneyApp`.
+- `docs/journey_prototype/firebase_multiplayer.md` — document the
   `battleState` slot and the schema version bump.
 
 **Tests for unchanged code** (`useBattleController` and friends) remain
@@ -96,7 +96,7 @@ transition (init, command, undo, redo, reset). Local effect dedup keys off
 this value.
 
 `battleEntryKey`: existing `siteId::completionLevel::dreamscapeId` string
-from `createBattleEntryKey`. Identifies one battle within a quest run.
+from `createBattleEntryKey`. Identifies one battle within a journey run.
 
 `battleStatePath(roomId)` returns `rooms/<roomId>/battleState`.
 
@@ -156,7 +156,7 @@ git commit -m "Add SharedBattleState and SharedBattleReducerSlice types"
 In `src/multiplayer/room-types.ts`:
 
 ```ts
-import type { QuestState } from "../types/quest";
+import type { JourneyState } from "../types/journey";
 import type { SharedBattleState } from "./battle-types";
 
 export const ROOM_SCHEMA_VERSION = 2;
@@ -166,7 +166,7 @@ export const ACTION_LOG_LIMIT = 50;
 
 export interface MultiplayerRoom {
   metadata: RoomMetadata;
-  questState: QuestState | null;
+  journeyState: JourneyState | null;
   battleState: SharedBattleState | null;
   presence?: Record<string, PresenceEntry>;
   actionLog?: Record<string, ActionLogEntry>;
@@ -183,7 +183,7 @@ returned object includes `battleState: null`:
 ```ts
 return {
   metadata,
-  questState: null,
+  journeyState: null,
   battleState: null,
   presence: {},
   actionLog: {},
@@ -199,7 +199,7 @@ In the same file, extend `normalizeRoomSnapshot` to default a missing
 function normalizeRoomSnapshot(room: MultiplayerRoom): MultiplayerRoom {
   return {
     ...room,
-    questState: normalizeQuestState(room.questState),
+    journeyState: normalizeJourneyState(room.journeyState),
     battleState: room.battleState ?? null,
     presence: room.presence ?? {},
     actionLog: room.actionLog ?? {},
@@ -345,7 +345,7 @@ function makeRawSnapshot(overrides: Record<string, unknown>) {
       playerDrawSkipsTurnOne: true,
       enableAi: false,
       rewardOptions: [],
-      questDeckEntries: [],
+      journeyDeckEntries: [],
       playerDeckOrder: [],
       enemyDescriptor: {
         id: "enemy",
@@ -820,14 +820,14 @@ Append to `src/multiplayer/battle-service.test.ts`:
 import { applyBattleCommandToRoom } from "./battle-service";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
 import { createBattleInit } from "../battle/integration/create-battle-init";
-import { createTestQuestState, createTestSite, createTestCardDatabase, createTestDreamAvatars } from "../battle/test-support";
+import { createTestJourneyState, createTestSite, createTestCardDatabase, createTestDreamAvatars } from "../battle/test-support";
 
 describe("applyBattleCommandToRoom", () => {
   it("runs battleControllerReducer inside the room transaction and bumps commandSerial", () => {
     const init = createBattleInit({
       battleEntryKey: "test-1",
       site: createTestSite(),
-      state: createTestQuestState(),
+      state: createTestJourneyState(),
       cardDatabase: createTestCardDatabase(),
       dreamAvatars: createTestDreamAvatars(),
       seedOverride: 1,
@@ -836,7 +836,7 @@ describe("applyBattleCommandToRoom", () => {
     const initial = createInitialBattleState(init);
     const initialRoom = {
       metadata: { schemaVersion: 2, createdAt: "0", updatedAt: "0" },
-      questState: null,
+      journeyState: null,
       battleState: {
         init,
         reducer: {
@@ -868,7 +868,7 @@ describe("applyBattleCommandToRoom", () => {
   it("returns the input unchanged when battleState slot is null", () => {
     const room = {
       metadata: { schemaVersion: 2, createdAt: "0", updatedAt: "0" },
-      questState: null,
+      journeyState: null,
       battleState: null,
       presence: {},
       actionLog: {},
@@ -1706,7 +1706,7 @@ Open `src/multiplayer/MultiplayerRoomGate.tsx` and confirm that the
 render prop receives `session: RoomSession`. The session contains
 `session.room.battleState` (after Task 4's normalizer runs).
 
-- [ ] **Step 2: Wrap `QuestApp` with the battle provider**
+- [ ] **Step 2: Wrap `JourneyApp` with the battle provider**
 
 In `src/App.tsx`, add the import:
 
@@ -1719,10 +1719,10 @@ And update the JSX:
 ```tsx
 <MultiplayerRoomGate database={database} gameId={runtimeConfig.gameId}>
   {(session) => (
-    <MultiplayerQuestProvider
+    <MultiplayerJourneyProvider
       database={database}
       session={session}
-      questContent={questContent}
+      journeyContent={journeyContent}
     >
       <MultiplayerBattleProvider
         database={database}
@@ -1730,12 +1730,12 @@ And update the JSX:
         clientId={session.clientId}
         battleState={session.room.battleState}
       >
-        <QuestApp
-          cardDatabase={questContent.cardDatabase}
+        <JourneyApp
+          cardDatabase={journeyContent.cardDatabase}
           runtimeConfig={runtimeConfig}
         />
       </MultiplayerBattleProvider>
-    </MultiplayerQuestProvider>
+    </MultiplayerJourneyProvider>
   )}
 </MultiplayerRoomGate>
 ```
@@ -1752,7 +1752,7 @@ Expected: PASS (or unchanged).
 
 ```bash
 git add src/App.tsx
-git commit -m "Mount MultiplayerBattleProvider above QuestApp"
+git commit -m "Mount MultiplayerBattleProvider above JourneyApp"
 ```
 
 ---
@@ -1776,7 +1776,7 @@ git commit -m "Mount MultiplayerBattleProvider above QuestApp"
 
 `useEnsureBattleSession` watches the multiplayer battle slot. When it is
 null (and the user is on a battle screen), it computes a `BattleInit`
-plus prepared initial mutable from the live quest state and calls
+plus prepared initial mutable from the live journey state and calls
 `ensureBattleSession`. If the slot already has an init, it skips.
 
 - [ ] **Step 1: Write the hook**
@@ -1792,7 +1792,7 @@ import { createInitialBattleState } from "../battle/state/create-initial-state";
 import { prepareInitialBattleState } from "../battle/engine/turn-flow";
 import type { CardData } from "../types/cards";
 import type { DreamAvatarContent } from "../types/content";
-import type { QuestState, SiteState } from "../types/quest";
+import type { JourneyState, SiteState } from "../types/journey";
 
 export function useEnsureBattleSession(input: {
   database: Database;
@@ -1800,8 +1800,8 @@ export function useEnsureBattleSession(input: {
   battleState: SharedBattleState | null;
   battleEntryKey: string;
   site: SiteState;
-  questState: Pick<
-    QuestState,
+  journeyState: Pick<
+    JourneyState,
     "atlas" | "completionLevel" | "currentDreamscape" | "deck" |
     "dreamAvatar" | "dreamsigns" | "resolvedPackage"
   >;
@@ -1825,7 +1825,7 @@ export function useEnsureBattleSession(input: {
     const init = createBattleInit({
       battleEntryKey: input.battleEntryKey,
       site: input.site,
-      state: input.questState,
+      state: input.journeyState,
       cardDatabase: input.cardDatabase,
       dreamAvatars: input.dreamAvatars,
       seedOverride: input.seedOverride,
@@ -1852,7 +1852,7 @@ export function useEnsureBattleSession(input: {
     input.database,
     input.dreamAvatars,
     input.enableAi,
-    input.questState,
+    input.journeyState,
     input.roomId,
     input.seedOverride,
     input.site,
@@ -1866,8 +1866,8 @@ In `src/components/BattleSiteRoute.tsx`, replace the body with:
 
 ```tsx
 import type { CardData } from "../types/cards";
-import type { SiteState } from "../types/quest";
-import { useQuest } from "../state/quest-context";
+import type { SiteState } from "../types/journey";
+import { useJourney } from "../state/journey-context";
 import { useMultiplayerBattle } from "../state/multiplayer-battle-context";
 import { useEnsureBattleSession } from "../state/use-ensure-battle-session";
 import type { RuntimeConfig } from "../runtime/runtime-config";
@@ -1891,7 +1891,7 @@ export function BattleSiteRoute({
   cardDatabase: Map<number, CardData>;
   runtimeConfig: RuntimeConfig;
 }) {
-  const { state, questContent } = useQuest();
+  const { state, journeyContent } = useJourney();
   const { database, session } = useMultiplayerSession();
   const { battleState } = useMultiplayerBattle();
 
@@ -1907,9 +1907,9 @@ export function BattleSiteRoute({
     battleState,
     battleEntryKey,
     site,
-    questState: state,
+    journeyState: state,
     cardDatabase,
-    dreamAvatars: questContent.dreamAvatars,
+    dreamAvatars: journeyContent.dreamAvatars,
     seedOverride: runtimeConfig.seedOverride,
     enableAi: runtimeConfig.enableAi,
   });
@@ -2107,7 +2107,7 @@ git commit -m "Render PlayableBattleScreen from useMultiplayerBattle"
 - Modify: `src/battle/integration/battle-completion-bridge.test.ts`
 - Modify: `src/battle/components/PlayableBattleScreen.tsx`
 
-After `completeQuestHandoff` runs (whether via the timer path or
+After `completeJourneyHandoff` runs (whether via the timer path or
 immediate path), call a caller-supplied `clearBattleStateForRoom`
 callback so the slot is wiped.
 
@@ -2123,10 +2123,10 @@ export interface CompleteBattleSiteVictoryInput {
 }
 ```
 
-- [ ] **Step 2: Invoke the callback at the end of `completeQuestHandoff`**
+- [ ] **Step 2: Invoke the callback at the end of `completeJourneyHandoff`**
 
 ```ts
-const completeQuestHandoff = () => {
+const completeJourneyHandoff = () => {
   if (!isFinalBoss) {
     mutations.setScreen({ type: "atlas" });
   }
@@ -2187,11 +2187,11 @@ git commit -m "Clear battleState slot after victory hand-off"
 - Modify: `src/battle/integration/failure-route.test.ts`
 - Modify: `src/battle/components/PlayableBattleScreen.tsx`
 
-- [ ] **Step 1: Extend `BeginQuestFailureRouteInput`**
+- [ ] **Step 1: Extend `BeginJourneyFailureRouteInput`**
 
 ```ts
-export interface BeginQuestFailureRouteInput extends FreezeQuestFailureSummaryInput {
-  mutations: Pick<QuestMutations, "setFailureSummary" | "setScreen">;
+export interface BeginJourneyFailureRouteInput extends FreezeJourneyFailureSummaryInput {
+  mutations: Pick<JourneyMutations, "setFailureSummary" | "setScreen">;
   clearBattleStateForRoom?: () => void;
 }
 ```
@@ -2200,7 +2200,7 @@ export interface BeginQuestFailureRouteInput extends FreezeQuestFailureSummaryIn
 
 ```ts
 input.mutations.setFailureSummary(summary, "battle_failure_confirmed");
-input.mutations.setScreen({ type: "questFailed" });
+input.mutations.setScreen({ type: "journeyFailed" });
 if (typeof input.clearBattleStateForRoom === "function") {
   input.clearBattleStateForRoom();
 }
@@ -2213,7 +2213,7 @@ Add assertion that the callback runs after `setScreen` is called.
 - [ ] **Step 4: Wire the call site in `PlayableBattleScreen.handleFailureReset`**
 
 ```ts
-beginQuestFailureRoute({
+beginJourneyFailureRoute({
   // ... existing fields ...
   clearBattleStateForRoom: () => {
     void dispatchClearBattleState({
@@ -2242,20 +2242,20 @@ git commit -m "Clear battleState slot after failure route"
 
 ---
 
-## Task 16: Clear `battleState` on quest reset
+## Task 16: Clear `battleState` on journey reset
 
 **Files:**
-- Modify: `src/state/multiplayer-quest-context.tsx`
-- Modify: `src/state/multiplayer-quest-context.test.tsx`
+- Modify: `src/state/multiplayer-journey-context.tsx`
+- Modify: `src/state/multiplayer-journey-context.test.tsx`
 
-`resetQuest` already runs a transaction that overwrites the room with
+`resetJourney` already runs a transaction that overwrites the room with
 the initial-state default. Extend that updater to also set
 `battleState: null` so a reset issued mid-battle clears the slot.
 
-- [ ] **Step 1: Locate the `resetQuest` updater**
+- [ ] **Step 1: Locate the `resetJourney` updater**
 
-In `multiplayer-quest-context.tsx` around line 1023, find the
-`resetQuest = useCallback(...)` block. Identify the room transformation
+In `multiplayer-journey-context.tsx` around line 1023, find the
+`resetJourney = useCallback(...)` block. Identify the room transformation
 inside its transaction.
 
 - [ ] **Step 2: Set `battleState: null` in the returned room**
@@ -2267,23 +2267,23 @@ writes the correct null).
 
 - [ ] **Step 3: Add a test case**
 
-In `multiplayer-quest-context.test.tsx`, add a test that:
+In `multiplayer-journey-context.test.tsx`, add a test that:
 
 1. Starts with a room that has a non-null `battleState`.
-2. Calls `resetQuest()`.
+2. Calls `resetJourney()`.
 3. Asserts the resulting room snapshot has `battleState: null`.
 
 - [ ] **Step 4: Run tests**
 
-Run: `npm test -- src/state/multiplayer-quest-context.test.tsx`
+Run: `npm test -- src/state/multiplayer-journey-context.test.tsx`
 Expected: PASS.
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add src/state/multiplayer-quest-context.tsx \
-  src/state/multiplayer-quest-context.test.tsx
-git commit -m "Clear battleState on quest reset"
+git add src/state/multiplayer-journey-context.tsx \
+  src/state/multiplayer-journey-context.test.tsx
+git commit -m "Clear battleState on journey reset"
 ```
 
 ---
@@ -2291,11 +2291,11 @@ git commit -m "Clear battleState on quest reset"
 ## Task 17: Document the schema in `firebase_multiplayer.md`
 
 **Files:**
-- Modify: `docs/quest_prototype/firebase_multiplayer.md`
+- Modify: `docs/journey_prototype/firebase_multiplayer.md`
 
 - [ ] **Step 1: Add a `battleState` section**
 
-Insert a new section after the `questState` description that documents:
+Insert a new section after the `journeyState` description that documents:
 
 - The `battleState` slot at `rooms/<roomId>/battleState`.
 - That it is `null` between battles.
@@ -2314,7 +2314,7 @@ Find any reference to the schema version and update from `1` to `2`.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add docs/quest_prototype/firebase_multiplayer.md
+git add docs/journey_prototype/firebase_multiplayer.md
 git commit -m "Document the battleState slot and schema version 2"
 ```
 
@@ -2337,7 +2337,7 @@ Expected: PASS.
 
 - [ ] **Step 3: Spin up two browser windows on the same `?game=<roomId>`**
 
-Navigate quest progression on one window until a battle site is
+Navigate journey progression on one window until a battle site is
 reached. Confirm:
 
 - Both windows render the same battle init (deck order, reward
@@ -2350,7 +2350,7 @@ reached. Confirm:
   both windows back to the atlas with reward applied.
 - Failure route from one window surfaces the failed screen on both,
   and the room battle slot is null.
-- Quest reset during an active battle clears both `questState` and
+- Journey reset during an active battle clears both `journeyState` and
   `battleState`.
 - Refreshing either window mid-battle reloads the same shared state.
 - Setting `?enableAi=1` on only one window still produces identical
@@ -2393,7 +2393,7 @@ Spec coverage check (each major spec section maps to one or more tasks):
 - **Local UI State → Tasks:** Task 13 keeps every overlay local.
 - **Reset Battle → Tasks:** Task 8 (service) and Task 13 (UI).
 - **Lifecycle → Tasks:** Tasks 14, 15, 16 cover victory, failure, and
-  quest reset clears.
+  journey reset clears.
 - **AI Turn Handling → Tasks:** Task 13 keeps the existing
   `useAiTurnDriver`; the standalone bootstrap `RUN_AI_TURN` falls through
   to the same `APPLY_COMMAND` pipeline if ever triggered.

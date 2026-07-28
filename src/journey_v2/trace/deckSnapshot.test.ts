@@ -5,7 +5,7 @@ import {
   makeMerchantTestCard,
   makeMerchantTestContent,
   makeMerchantTestDeckEntry,
-  makeMerchantTestQuestState,
+  makeMerchantTestJourneyState,
   makeMerchantTestSite,
 } from "../testing/fixtures";
 import type { CardData } from "../../types/cards";
@@ -13,8 +13,8 @@ import type { MerchantContext } from "../types";
 import { buildMerchantDeckSnapshot, deckFeatureTallies } from "./deckSnapshot";
 
 function contextWithDeck(cards: readonly CardData[]): MerchantContext {
-  const questContent = makeMerchantTestContent({ cards });
-  const questState = makeMerchantTestQuestState({
+  const journeyContent = makeMerchantTestContent({ cards });
+  const journeyState = makeMerchantTestJourneyState({
     deck: cards.map((card, i) =>
       makeMerchantTestDeckEntry({
         entryId: `entry-${String(i)}`,
@@ -23,8 +23,8 @@ function contextWithDeck(cards: readonly CardData[]): MerchantContext {
     ),
   });
   return buildMerchantContext({
-    questState,
-    questContent,
+    journeyState,
+    journeyContent,
     site: makeMerchantTestSite(),
   });
 }

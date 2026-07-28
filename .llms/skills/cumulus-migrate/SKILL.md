@@ -1,14 +1,14 @@
 ---
 name: cumulus-migrate
-description: Use when building or changing a quest screen in the Cumulus design system — the ordered screen/builder/adapter checklist plus the working idioms (adapter randomness minting, screen-test incantations, exhaustive registry + QA steps). Companion to the cumulus skill. Triggers on Cumulus screen, screen builder adapter, view-model builder, FooScreenAdapter, screenFor, siteDispositionFor, registry launch.
+description: Use when building or changing a journey screen in the Cumulus design system — the ordered screen/builder/adapter checklist plus the working idioms (adapter randomness minting, screen-test incantations, exhaustive registry + QA steps). Companion to the cumulus skill. Triggers on Cumulus screen, screen builder adapter, view-model builder, FooScreenAdapter, screenFor, siteDispositionFor, registry launch.
 ---
 
-# Migrating a quest screen to Cumulus — the checklist
+# Migrating a journey screen to Cumulus — the checklist
 
 This is the step-by-step recipe for building a screen in the Cumulus design
 system. The architecture and its rationale live in the companion
 [cumulus](../cumulus/SKILL.md) skill and
-[cumulus_design_system.md](../../../docs/quest_prototype/cumulus_design_system.md);
+[cumulus_design_system.md](../../../docs/journey_prototype/cumulus_design_system.md);
 this skill is the ordered checklist plus the working idioms the pilot screens
 established. Work the steps in order; registration (step 6) adds the route to
 the exhaustive production resolver.
@@ -33,7 +33,7 @@ answer.
 ## 1. The Cumulus screen — `src/cumulus/screens/FooScreen.tsx`
 
 Pure presentation: renders from a view-model, reports events through
-callbacks. No `useQuest()`, no mutations, no navigation, no logging. Local UI
+callbacks. No `useJourney()`, no mutations, no navigation, no logging. Local UI
 state (hover, selection, animation phase) lives here.
 
 - The screen **owns and exports its view types** (`FooView`,
@@ -70,7 +70,7 @@ Established idioms:
   `MENU_BUTTON_PX` / `MENU_EDGE_INSET_MOBILE_PX` in
   [`chrome-geometry.ts`](../../../src/cumulus/screens/chrome-geometry.ts). QA the
   screen through its `?goto=draft` scene (registered in `qa-scenes.ts`; see
-  [qa_scenes.md](../../../docs/quest_prototype/qa_scenes.md)).
+  [qa_scenes.md](../../../docs/journey_prototype/qa_scenes.md)).
 
 ## 2. The view-model builder — `src/screens/cumulus_adapters/foo-view-model.ts`
 
@@ -85,13 +85,13 @@ Export every non-trivial helper individually so the test can hit it directly.
 ## 3. Builder tests — `src/screens/cumulus_adapters/foo-view-model.test.ts`
 
 Plain-fixture vitest unit tests beside the builder (see
-`quest-start-view-model.test.ts` for the style). Build fixtures by hand or
+`journey-start-view-model.test.ts` for the style). Build fixtures by hand or
 derive them from live content; per AGENTS.md, never assert specific
 production TOML values.
 
 ## 4. The adapter — `src/screens/cumulus_adapters/FooScreenAdapter.tsx`
 
-Wiring only, ≤120 lines (lint-enforced): acquire state with `useQuest()`,
+Wiring only, ≤120 lines (lint-enforced): acquire state with `useJourney()`,
 call the builder inside `useMemo` keyed on exactly its arguments, wire
 callbacks to mutations, render the screen. `cumulus/thin-adapters` bans
 module-level helpers, extra exports, intrinsic JSX elements, and any import
@@ -108,7 +108,7 @@ Established idioms:
 
   ```tsx
   const seedRef = useRef<string | null>(null);
-  if (seedRef.current === null) seedRef.current = generateQuestSeed();
+  if (seedRef.current === null) seedRef.current = generateJourneySeed();
   ```
 
 - **Mount effects and logging** (`site_entered`, ensure-runtime calls) are
@@ -121,7 +121,7 @@ Established idioms:
 
 Rendered with `createRoot` + `act` and asserted via the `data-*` hooks (no
 testing-library). Two required incantations, copied from
-`QuestStartScreen.test.tsx`:
+`JourneyStartScreen.test.tsx`:
 
 - `IS_REACT_ACT_ENVIRONMENT = true` on `globalThis`.
 - A `window.matchMedia` stub — jsdom lacks it and `Pressable` reads the
@@ -131,9 +131,9 @@ testing-library). Two required incantations, copied from
 
 - Add the non-site case to `screenFor`, or add the site case to
   `siteDispositionFor`, in `src/screens/cumulus_adapters/registry.tsx`.
-- Registration automatically wraps the screen in `CumulusQuestChrome`, which
-  supplies the persistent `QuestStatusBar` and platform menu from live quest
-  state. Do not add HUD data to the screen view-model or render persistent quest
+- Registration automatically wraps the screen in `CumulusJourneyChrome`, which
+  supplies the persistent `JourneyStatusBar` and platform menu from live journey
+  state. Do not add HUD data to the screen view-model or render persistent journey
   chrome inside the pure screen.
 - Update `src/screens/cumulus_adapters/registry.test.tsx` so the table covers
   the new case and its production disposition. The permanent UI-boundary test

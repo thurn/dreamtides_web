@@ -1,5 +1,5 @@
 // Draft-site progress derivation for the draft screens. The reducer's
-// `ENTER_DRAFT_SITE` case (`src/rules/quest/draft.ts`) is the source of truth
+// `ENTER_DRAFT_SITE` case (`src/rules/journey/draft.ts`) is the source of truth
 // for a player's draft-site entry and offer minting — it rolls the offer
 // deterministically from `ctx.rng` so both clients folding the same event see
 // byte-identical packs. This module reads the resulting draft state back into

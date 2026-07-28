@@ -11,8 +11,8 @@ describe("toRepoRelativePosix (thin-adapters)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/screens/cumulus_adapters/FooAdapter.tsx",
-        "/Users/x/quest_prototype",
+        "/Users/x/journey_prototype/src/screens/cumulus_adapters/FooAdapter.tsx",
+        "/Users/x/journey_prototype",
       ),
     ).toBe("src/screens/cumulus_adapters/FooAdapter.tsx");
   });
@@ -24,11 +24,11 @@ describe("isAdapterFile", () => {
   });
   it("ignores the registry, view-model modules, and tests", () => {
     expect(isAdapterFile("src/screens/cumulus_adapters/registry.tsx")).toBe(false);
-    expect(isAdapterFile("src/screens/cumulus_adapters/quest-start-view-model.ts")).toBe(
+    expect(isAdapterFile("src/screens/cumulus_adapters/journey-start-view-model.ts")).toBe(
       false,
     );
     expect(
-      isAdapterFile("src/screens/cumulus_adapters/QuestStartScreenAdapter.test.tsx"),
+      isAdapterFile("src/screens/cumulus_adapters/JourneyStartScreenAdapter.test.tsx"),
     ).toBe(false);
   });
   it("ignores Adapter-named files outside src/screens/cumulus_adapters/", () => {
@@ -68,11 +68,11 @@ const ruleTester = new RuleTester({
 const ADAPTER = "src/screens/cumulus_adapters/FooScreenAdapter.tsx";
 
 const MINIMAL_ADAPTER = `
-import { useQuest } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
 import { buildFooViewModel } from "./foo-view-model";
 import { FooScreen } from "../../cumulus/screens/FooScreen";
 export function FooScreenAdapter() {
-  const { state } = useQuest();
+  const { state } = useJourney();
   return <FooScreen model={buildFooViewModel(state)} />;
 }
 `;
@@ -123,7 +123,7 @@ export function FooScreenAdapter() {
       name: "wiring inputs (state/data/types/runtime/logging) are importable",
       filename: ADAPTER,
       code: `
-import { useQuest } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
 import { selectOffer } from "../../data/offer-selection";
 import type { Content } from "../../types/content";
 import { getRuntimeConfig } from "../../runtime/runtime-config";

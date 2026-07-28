@@ -1,4 +1,4 @@
-import type { QuestFailureBattleResult } from "../../types/quest";
+import type { JourneyFailureBattleResult } from "../../types/journey";
 import type {
   BattleCardInstance,
   BattleCardLocation,
@@ -6,7 +6,7 @@ import type {
   BattleFieldSlotAddress,
   BattleHistoryEntry,
   BattleMutableState,
-  BattleQuestDeckEntry,
+  BattleJourneyDeckEntry,
   BattleSide,
   BattlefieldZone,
   FrontRankSlotId,
@@ -28,19 +28,19 @@ import { cardIsRevealedTo } from "./card-visibility";
 import { centerPreferredEmptySlot } from "../center-preferred-slot";
 
 /**
- * Summary of B-5 quest deck metadata captured at battle-init time. The
- * `questDeckEntries` mirror on `BattleInit` is spec-mandated (every battle
- * session must retain the quest-deck identity of each card it draws from)
+ * Summary of B-5 journey deck metadata captured at battle-init time. The
+ * `journeyDeckEntries` mirror on `BattleInit` is spec-mandated (every battle
+ * session must retain the journey-deck identity of each card it draws from)
  * and exposed through this selector so the Battle Inspector can render the
  * "N banes / M transfigured" line required by spec §B-21 without walking the
  * mutable card-instance graph (bug-037).
  */
-export function selectBattleQuestDeckSummary(
-  questDeckEntries: readonly BattleQuestDeckEntry[],
+export function selectBattleJourneyDeckSummary(
+  journeyDeckEntries: readonly BattleJourneyDeckEntry[],
 ): { totalEntries: number; baneCount: number; transfiguredCount: number } {
   let baneCount = 0;
   let transfiguredCount = 0;
-  for (const entry of questDeckEntries) {
+  for (const entry of journeyDeckEntries) {
     if (entry.isBane) {
       baneCount += 1;
     }
@@ -49,7 +49,7 @@ export function selectBattleQuestDeckSummary(
     }
   }
   return {
-    totalEntries: questDeckEntries.length,
+    totalEntries: journeyDeckEntries.length,
     baneCount,
     transfiguredCount,
   };
@@ -166,7 +166,7 @@ export function selectDeployedSpark(
 
 export function selectFailureOverlayResult(
   result: BattleMutableState["result"],
-): QuestFailureBattleResult | null {
+): JourneyFailureBattleResult | null {
   if (result === "defeat" || result === "draw") {
     return result;
   }

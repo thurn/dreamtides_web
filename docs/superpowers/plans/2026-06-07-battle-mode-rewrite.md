@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use super-subagent-driven-development (recommended) or super-executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Rebuild quest-prototype battle mode (`src/battle/`) to match the current `docs/battle_rules/battle_rules.md` and `data/tabula/cards_v2.toml` as a manual sandbox with structural automation — correct terminology, discrete figment stacking, exhaust/awaken, counters, energy-track Dreamwell, expanded Basic Automation defaulted ON, an updated debug rail, and an enemy AI adapted to the new model — with **no card-text interpretation** (players resolve their own card effects).
+**Goal:** Rebuild journey-prototype battle mode (`src/battle/`) to match the current `docs/battle_rules/battle_rules.md` and `data/tabula/cards_v2.toml` as a manual sandbox with structural automation — correct terminology, discrete figment stacking, exhaust/awaken, counters, energy-track Dreamwell, expanded Basic Automation defaulted ON, an updated debug rail, and an enemy AI adapted to the new model — with **no card-text interpretation** (players resolve their own card effects).
 
 **Architecture:** Keep the model-agnostic shell (controller/history/undo, the `BattleCommand`/`DEBUG_EDIT` envelope, logging, React components). Rebuild the model-bound semantics: rename the board to front/back rank, add card-instance status state, replace the integer figment count with discrete figments, model an energy track + Dreamwell/Draw step, unify the two divergent Challenge resolvers into one keyword-aware engine, broaden Basic Automation, refresh the debug rail, and re-point the AI. Structural automation expands one UI gesture into an ordered list of `DEBUG_EDIT`s (undoable), acting only on card *fields* and board *state*, never card prose.
 
@@ -40,7 +40,7 @@
 - `src/battle/components/PlayableBattleScreen.tsx` — automation default, phase-control sequence, relabels, new rail wiring.
 - `src/battle/components/{BattleInspector,BattleContextMenu,BattleFigmentCreator,BattlefieldGrid,BattleStatusStrip,BattleSideSummaryPopover,battle-ui-commands}.tsx/ts` — relabels + new rail tools.
 - `src/battle/ai/*` — slot/phase/figment/resolver re-point; Starter per-card model name refresh.
-- `docs/battle_rules/battle_rules.md`, `docs/quest_prototype/{quest_prototype.md,battle_ai.md,url_parameters.md}` — doc updates.
+- `docs/battle_rules/battle_rules.md`, `docs/journey_prototype/{journey_prototype.md,battle_ai.md,url_parameters.md}` — doc updates.
 
 **Untouched shell (do not restructure):** `state/history.ts`, `state/controller.ts`, `state/transition.ts`, `state/reducer.ts`, `debug/apply-command.ts` envelope, logging, provenance/notes/markers.
 
@@ -435,7 +435,7 @@ Relabel "Reserve"/"Deployed" → "Back Rank"/"Front Rank" and "Judgment" → "Ch
 
 ### Task 4.7: Browser QA of the rail
 
-**Files:** none (manual QA per the `quest-battle` skill and the `reference_battle_browser_qa_setup` memory).
+**Files:** none (manual QA per the `journey-battle` skill and the `reference_battle_browser_qa_setup` memory).
 
 - [ ] **Step 1:** Start a QA Vite server on a non-5173 port (`npm run dev -- --port 5174`), capture its PID.
 - [ ] **Step 2:** Enter a battle (copy `.env`, run setup-assets, click "Create Game" per the memory). Exercise each new rail tool; after each action take a screenshot and re-measure invariants (hand count, rank counts, energy, score). Inspect the error buffer (`agent-browser errors`) for render errors / unhandled rejections.
@@ -527,7 +527,7 @@ With both systems on by default, the human-ended turn is automated while the AI 
 
 ### Task 6.4: Documentation
 
-**Files:** `docs/quest_prototype/quest_prototype.md` (Battle Prototype Behavior section), `docs/quest_prototype/battle_ai.md` (stale `?ai=1` note + drifted card names), `docs/quest_prototype/url_parameters.md` (add `automation`). 
+**Files:** `docs/journey_prototype/journey_prototype.md` (Battle Prototype Behavior section), `docs/journey_prototype/battle_ai.md` (stale `?ai=1` note + drifted card names), `docs/journey_prototype/url_parameters.md` (add `automation`).
 
 Describe the **current** system (repo doc rule: no "no longer / removed" phrasing). Update the battle section to: structural automation default-on; front/back rank + Challenge terminology; the energy track; the rail tools; `?automation=0`.
 

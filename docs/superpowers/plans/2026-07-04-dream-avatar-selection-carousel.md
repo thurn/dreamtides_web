@@ -4,7 +4,7 @@
 
 **Goal:** Replace the Cumulus Dream Avatar-selection screen (a static row of cards) with the imported mobile design — a full-bleed swipe carousel — and, along the way, make every glossary-keyword reveal render as `InfoCard` tiles.
 
-**Architecture:** Three cooperating changes. (1) `CardTermDefinitions` is evolved in place to render `InfoCard` tiles instead of the legacy `GlossaryDefinitionCard`, so `Dreamsign`/`GameCard` and two shared legacy consumers inherit the new look automatically. (2) A new `TideCluster` Cumulus component carries the collapsed-discs→named-pills container-transform. (3) `QuestStartScreen` is rewritten as a pure swipe carousel composed from Cumulus, using a screen-local full-bleed portrait, `GroupPanel`, `Button`, `TideCluster`, `ResourceChip`, and an ability reveal wired through `InfoCard.PressInfo` + `CardTermDefinitions`. The adapter and view-model are unchanged.
+**Architecture:** Three cooperating changes. (1) `CardTermDefinitions` is evolved in place to render `InfoCard` tiles instead of the legacy `GlossaryDefinitionCard`, so `Dreamsign`/`GameCard` and two shared legacy consumers inherit the new look automatically. (2) A new `TideCluster` Cumulus component carries the collapsed-discs→named-pills container-transform. (3) `JourneyStartScreen` is rewritten as a pure swipe carousel composed from Cumulus, using a screen-local full-bleed portrait, `GroupPanel`, `Button`, `TideCluster`, `ResourceChip`, and an ability reveal wired through `InfoCard.PressInfo` + `CardTermDefinitions`. The adapter and view-model are unchanged.
 
 **Tech Stack:** TypeScript, React 18, Vite, Vitest (jsdom), the Cumulus design system (`src/cumulus`), ESLint with the `cumulus/*` rule suite.
 
@@ -37,9 +37,9 @@
 
 **Task 3 — The carousel screen**
 - Modify: `src/cumulus/primitives/glyph.ts` (add `chevronLeft`/`chevronRight`)
-- Rewrite: `src/cumulus/screens/QuestStartScreen.tsx` (carousel; keeps exported view types)
-- Rewrite: `src/cumulus/screens/QuestStartScreen.test.tsx`
-- Unchanged (verify only): `src/screens/cumulus_adapters/QuestStartScreenAdapter.tsx`, `src/screens/cumulus_adapters/quest-start-view-model.ts`, `src/screens/cumulus_adapters/registry.tsx` (already wires `questStart`)
+- Rewrite: `src/cumulus/screens/JourneyStartScreen.tsx` (carousel; keeps exported view types)
+- Rewrite: `src/cumulus/screens/JourneyStartScreen.test.tsx`
+- Unchanged (verify only): `src/screens/cumulus_adapters/JourneyStartScreenAdapter.tsx`, `src/screens/cumulus_adapters/journey-start-view-model.ts`, `src/screens/cumulus_adapters/registry.tsx` (already wires `journeyStart`)
 
 **Task 4 — Verification & browser QA**
 - No new files; runs the full check suite and an agent-browser pass.
@@ -861,18 +861,18 @@ git push
 
 ---
 
-## Task 3: Rewrite `QuestStartScreen` as the swipe carousel
+## Task 3: Rewrite `JourneyStartScreen` as the swipe carousel
 
 Replaces the static card row with the full-bleed swipe carousel. Pure presentation: renders from the existing `DreamAvatarOfferView[]`, calls `onPick(id)`. Uses a screen-local full-bleed portrait, `Motes`, `GroupPanel` console, the ability reveal (`InfoCard.PressInfo` + `CardTermDefinitions`, guarded on term presence), `TideCluster`, `ResourceChip`, and `Button`.
 
 **Files:**
 - Modify: `src/cumulus/primitives/glyph.ts`
-- Rewrite: `src/cumulus/screens/QuestStartScreen.tsx`
-- Rewrite: `src/cumulus/screens/QuestStartScreen.test.tsx`
+- Rewrite: `src/cumulus/screens/JourneyStartScreen.tsx`
+- Rewrite: `src/cumulus/screens/JourneyStartScreen.test.tsx`
 
 **Interfaces:**
 - Consumes: `DreamAvatarOfferView` (kept, exported from this file); `Motes`, `ResourceChip`, `TideCluster`, `Button`, `GroupPanel`, `RulesText`, `CardTermDefinitions`, `InfoCard`, `Pressable`, `token`, `GLYPHS`, `richText`, `dreamAvatarImageSrc`, `extractGlossaryTerms`.
-- Produces: `QuestStartScreen({ dreamAvatars, onPick })` — unchanged public props; the exported view types (`DreamAvatarOfferView`, `DreamAvatarTideView`, `DreamAvatarSignatureCardView`, `QuestStartScreenProps`) are preserved so the adapter and builder need no change (the screen simply stops reading `signatureCards`).
+- Produces: `JourneyStartScreen({ dreamAvatars, onPick })` — unchanged public props; the exported view types (`DreamAvatarOfferView`, `DreamAvatarTideView`, `DreamAvatarSignatureCardView`, `JourneyStartScreenProps`) are preserved so the adapter and builder need no change (the screen simply stops reading `signatureCards`).
 
 - [ ] **Step 1: Add chevron glyphs**
 
@@ -885,7 +885,7 @@ In `src/cumulus/primitives/glyph.ts`, add to the `GLYPHS` object (near `info`):
 
 - [ ] **Step 2: Write the failing screen test**
 
-Replace the entire contents of `src/cumulus/screens/QuestStartScreen.test.tsx` with:
+Replace the entire contents of `src/cumulus/screens/JourneyStartScreen.test.tsx` with:
 
 ```tsx
 // @vitest-environment jsdom
@@ -895,9 +895,9 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  QuestStartScreen,
+  JourneyStartScreen,
   type DreamAvatarOfferView,
-} from "./QuestStartScreen";
+} from "./JourneyStartScreen";
 
 const OFFERED: DreamAvatarOfferView[] = [
   {
@@ -957,10 +957,10 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
   return { container, root };
 }
 
-describe("Cumulus QuestStartScreen (carousel)", () => {
+describe("Cumulus JourneyStartScreen (carousel)", () => {
   it("renders a page with identity, essence, and a Choose action per DreamAvatar", () => {
     const { container, root } = mount(
-      <QuestStartScreen dreamAvatars={OFFERED} onPick={vi.fn()} />,
+      <JourneyStartScreen dreamAvatars={OFFERED} onPick={vi.fn()} />,
     );
 
     expect(container.textContent).toContain("Choose Your Avatar");
@@ -984,7 +984,7 @@ describe("Cumulus QuestStartScreen (carousel)", () => {
 
   it("shows the tides cluster only for DreamAvatars that have tides", () => {
     const { container, root } = mount(
-      <QuestStartScreen dreamAvatars={OFFERED} onPick={vi.fn()} />,
+      <JourneyStartScreen dreamAvatars={OFFERED} onPick={vi.fn()} />,
     );
 
     // caller-1 has no tides → no cluster.
@@ -1007,7 +1007,7 @@ describe("Cumulus QuestStartScreen (carousel)", () => {
   it("calls onPick with the DreamAvatar's id when its Choose action is pressed", () => {
     const onPick = vi.fn();
     const { container, root } = mount(
-      <QuestStartScreen dreamAvatars={OFFERED} onPick={onPick} />,
+      <JourneyStartScreen dreamAvatars={OFFERED} onPick={onPick} />,
     );
 
     const button = container.querySelector<HTMLButtonElement>(
@@ -1031,21 +1031,21 @@ describe("Cumulus QuestStartScreen (carousel)", () => {
 
 - [ ] **Step 3: Run the test to verify it fails**
 
-Run: `npx vitest run src/cumulus/screens/QuestStartScreen.test.tsx`
+Run: `npx vitest run src/cumulus/screens/JourneyStartScreen.test.tsx`
 Expected: FAIL — the current screen has no `data-dream-avatar-page` / `data-choose-dream-avatar` / `data-tide-disc` hooks.
 
 - [ ] **Step 4: Rewrite the screen**
 
-Replace the entire contents of `src/cumulus/screens/QuestStartScreen.tsx` with:
+Replace the entire contents of `src/cumulus/screens/JourneyStartScreen.tsx` with:
 
 ```tsx
-// QuestStartScreen — the Cumulus rendering of DreamAvatar selection (the quest's
+// JourneyStartScreen — the Cumulus rendering of DreamAvatar selection (the journey's
 // opening screen), as a full-bleed mobile swipe carousel: one DreamAvatar per
 // page (cinematic portrait + serif name/epithet + a frosted GroupPanel console
 // holding ability text, an expandable TideCluster, starting essence, and a
 // Choose action). PURE: it renders from a view-model and reports the chosen
 // DreamAvatar through `onPick`; the adapter owns state, the offer, the seed, and
-// startQuest.
+// startJourney.
 
 import { useRef, useState } from "react";
 import { Motes } from "../components/hud/Motes";
@@ -1089,7 +1089,7 @@ export interface DreamAvatarOfferView {
   tides: DreamAvatarTideView[];
 }
 
-export interface QuestStartScreenProps {
+export interface JourneyStartScreenProps {
   /** The DreamAvatars offered this run (typically three). */
   dreamAvatars: DreamAvatarOfferView[];
   /** Called with a DreamAvatar's id when the player commits to it. */
@@ -1210,7 +1210,7 @@ function EssenceReveal({
           glyph={GLYPHS.essence}
           title="Starting Essence"
           body={richText.plain(
-            "The essence this avatar begins the quest with, spent at sites this run.",
+            "The essence this avatar begins the journey with, spent at sites this run.",
           )}
         />
       }
@@ -1379,10 +1379,10 @@ function DreamAvatarPage({
 /**
  * The Cumulus DreamAvatar-selection carousel: a full-bleed swipe carousel of the
  * offered DreamAvatars. Pure and props-driven — it renders {@link
- * QuestStartScreenProps.dreamAvatars} and calls {@link
- * QuestStartScreenProps.onPick} with the chosen DreamAvatar's id.
+ * JourneyStartScreenProps.dreamAvatars} and calls {@link
+ * JourneyStartScreenProps.onPick} with the chosen DreamAvatar's id.
  */
-export function QuestStartScreen({ dreamAvatars, onPick }: QuestStartScreenProps) {
+export function JourneyStartScreen({ dreamAvatars, onPick }: JourneyStartScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const [dx, setDx] = useState(0);
@@ -1488,7 +1488,7 @@ export function QuestStartScreen({ dreamAvatars, onPick }: QuestStartScreenProps
 
 - [ ] **Step 5: Run the screen test to verify it passes**
 
-Run: `npx vitest run src/cumulus/screens/QuestStartScreen.test.tsx`
+Run: `npx vitest run src/cumulus/screens/JourneyStartScreen.test.tsx`
 Expected: PASS (all three cases).
 
 If `typecheck` later reports an unknown token among `--t-rules`, `--t-title-sm`, `--t-body`, `--dur-base`, `--border-soft`, `--gold`, `--tracking-eyebrow`, resolve the real name with `grep -n "<name>" src/cumulus/primitives/cumulus-tokens.css` and substitute. `--surface-glass`, `--safe-top`, `--safe-bottom`, `--gutter`, `--dur-slow`, `--ease-out`, `--line-strong`, `--bg-app`, `--bg-sunken`, `--accent`, `--accent-bright`, `--text-primary/secondary/muted`, `--space-*`, `--radius-pill` are already confirmed to exist.
@@ -1502,8 +1502,8 @@ Expected: all pass. In particular `cumulus-strict-api.contract.test.mjs` must pa
 
 ```bash
 git add src/cumulus/primitives/glyph.ts \
-        src/cumulus/screens/QuestStartScreen.tsx \
-        src/cumulus/screens/QuestStartScreen.test.tsx
+        src/cumulus/screens/JourneyStartScreen.tsx \
+        src/cumulus/screens/JourneyStartScreen.test.tsx
 git add -A src/cumulus/metadata .claude/skills/cumulus .llms 2>/dev/null || true
 git commit -m "$(cat <<'MSG'
 feat(cumulus): rewrite DreamAvatar selection as a mobile swipe carousel
@@ -1512,7 +1512,7 @@ Replace the static card row with the imported full-bleed swipe carousel: one
 DreamAvatar per page (cinematic screen-local portrait + serif name/epithet + a
 frosted GroupPanel console holding ability text with a keyword-definition
 reveal, an expandable TideCluster, starting essence, and a Choose action).
-Choose calls onPick -> startQuest, unchanged. Tides row hidden when a run has
+Choose calls onPick -> startJourney, unchanged. Tides row hidden when a run has
 no tides. Adapter and view-model unchanged.
 
 Claude-Session: https://claude.ai/code/session_01GkWjuYnPndxz9r86wiuWdv
@@ -1547,12 +1547,12 @@ Wait for Vite to report "ready".
 
 - [ ] **Step 3: Drive the carousel with agent-browser**
 
-Use `/opt/homebrew/bin/agent-browser` (fallback `npx agent-browser`) against `http://localhost:5174` (a fresh quest boots onto the Dream Avatar-selection screen). Verify, at a mobile viewport (e.g. 390×844):
+Use `/opt/homebrew/bin/agent-browser` (fallback `npx agent-browser`) against `http://localhost:5174` (a fresh journey boots onto the Dream Avatar-selection screen). Verify, at a mobile viewport (e.g. 390×844):
 - Each page shows a full-bleed portrait, the serif "{Name}, {Epithet}" title, and the frosted console.
 - Swiping left/right pages between the three Dream Avatars; edge chevrons do the same.
 - Pressing/holding the ability text reveals the keyword-definition InfoCard tiles (for a Dream Avatar whose ability has keywords), anchored and clamped on-screen.
 - Tapping the Tides cluster runs the disc→pill container-transform; the resting pills reveal their descriptions on press; pressing the essence value reveals its InfoCard.
-- Pressing "Choose {Name}" starts the quest (the screen advances past selection).
+- Pressing "Choose {Name}" starts the journey (the screen advances past selection).
 - Inspect the captured error buffer for render errors, unhandled rejections, and console errors. Confirm no clipping/overlap and stable spacing.
 
 - [ ] **Step 4: Compare against the legacy screen**

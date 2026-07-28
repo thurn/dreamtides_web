@@ -33,8 +33,8 @@ import type { StepContext } from "./effect-step";
 import type {
   BattleModifier,
   DeckEntry,
-  QuestState,
-} from "../../types/quest";
+  JourneyState,
+} from "../../types/journey";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
 import { emptyDawnFired, type BattleFoldState, type EffectRun } from "./fold";
@@ -204,7 +204,7 @@ const fakeProvider: BattleInitProvider = {
 };
 
 // ---------------------------------------------------------------------------
-// Quest-state fixtures
+// Journey-state fixtures
 // ---------------------------------------------------------------------------
 
 function makeEntry(entryId: string, isBane = false): DeckEntry {
@@ -214,12 +214,12 @@ function makeEntry(entryId: string, isBane = false): DeckEntry {
 const SITE_ID = "site-42";
 const NODE_ID = "node-1";
 
-function baseState(overrides: Partial<QuestState> = {}): FoldState {
+function baseState(overrides: Partial<JourneyState> = {}): FoldState {
   const base = genesisFoldState(GENESIS);
   return {
     ...base,
-    quest: {
-      ...base.quest,
+    journey: {
+      ...base.journey,
       activeSiteId: SITE_ID,
       currentDreamscape: NODE_ID,
       screen: { type: "site", siteId: SITE_ID },
@@ -230,7 +230,7 @@ function baseState(overrides: Partial<QuestState> = {}): FoldState {
 
 /** A fold state already inside a battle, for END_BATTLE / double-begin tests. */
 function inBattleState(
-  overrides: Partial<QuestState> = {},
+  overrides: Partial<JourneyState> = {},
   battle = makeBattle(),
 ): FoldState {
   const state = baseState(overrides);
@@ -261,7 +261,7 @@ describe("BEGIN_BATTLE", () => {
     expect(first.outcome).toBe("applied");
     expect(second.outcome).toBe("applied");
     expect(first.state.battle).not.toBeNull();
-    // Same quest state + same seq → hash-identical battle both times.
+    // Same journey state + same seq → hash-identical battle both times.
     expect(hashBattle(first.state.battle)).toBe(hashBattle(second.state.battle));
     // A fresh battle carries the immutable init and starts with an empty effect
     // queue and no open prompt.
@@ -362,26 +362,26 @@ describe("END_BATTLE victory", () => {
 
     const result = reduce(state, "END_BATTLE", { result: "victory" });
     expect(result.outcome).toBe("applied");
-    const quest = result.state.quest;
+    const journey = result.state.journey;
 
-    expect(quest.completionLevel).toBe(4);
+    expect(journey.completionLevel).toBe(4);
     // Surviving modifier decremented by one; expired one dropped.
-    expect(quest.battleModifiers).toEqual([
+    expect(journey.battleModifiers).toEqual([
       { ...survivingMod, battlesRemaining: 1 },
     ]);
     // Temporary-bane deck entries introduced by the dropped modifier leave the deck.
-    expect(quest.deck.map((e) => e.entryId)).toEqual(["keep-entry"]);
-    expect(quest.currentDreamscape).toBeNull();
+    expect(journey.deck.map((e) => e.entryId)).toEqual(["keep-entry"]);
+    expect(journey.currentDreamscape).toBeNull();
     expect(result.state.battle).toBeNull();
-    expect(quest.screen.type).toBe("atlas");
+    expect(journey.screen.type).toBe("atlas");
   });
 
-  it("routes to the quest-complete screen at the final completion level", () => {
+  it("routes to the journey-complete screen at the final completion level", () => {
     const state = inBattleState({ completionLevel: 6 });
     const result = reduce(state, "END_BATTLE", { result: "victory" });
     expect(result.outcome).toBe("applied");
-    expect(result.state.quest.completionLevel).toBe(7);
-    expect(result.state.quest.screen.type).toBe("questComplete");
+    expect(result.state.journey.completionLevel).toBe(7);
+    expect(result.state.journey.screen.type).toBe("journeyComplete");
     expect(result.state.battle).toBeNull();
   });
 });
@@ -403,25 +403,25 @@ describe("END_BATTLE defeat", () => {
 
     const result = reduce(state, "END_BATTLE", { result: "defeat" });
     expect(result.outcome).toBe("applied");
-    const quest = result.state.quest;
+    const journey = result.state.journey;
 
-    expect(quest.screen.type).toBe("questFailed");
+    expect(journey.screen.type).toBe("journeyFailed");
     expect(result.state.battle).toBeNull();
-    expect(quest.failureSummary).not.toBeNull();
-    // Derived directly from the battle board + quest slice.
-    expect(quest.failureSummary?.battleId).toBe(board.battleId);
-    expect(quest.failureSummary?.turnNumber).toBe(board.turnNumber);
-    expect(quest.failureSummary?.playerScore).toBe(board.sides.player.score);
-    expect(quest.failureSummary?.enemyScore).toBe(board.sides.enemy.score);
-    expect(quest.failureSummary?.dreamscapeIdOrNone).toBe(NODE_ID);
-    expect(quest.failureSummary?.result).toBe("defeat");
+    expect(journey.failureSummary).not.toBeNull();
+    // Derived directly from the battle board + journey slice.
+    expect(journey.failureSummary?.battleId).toBe(board.battleId);
+    expect(journey.failureSummary?.turnNumber).toBe(board.turnNumber);
+    expect(journey.failureSummary?.playerScore).toBe(board.sides.player.score);
+    expect(journey.failureSummary?.enemyScore).toBe(board.sides.enemy.score);
+    expect(journey.failureSummary?.dreamscapeIdOrNone).toBe(NODE_ID);
+    expect(journey.failureSummary?.result).toBe("defeat");
   });
 
   it("records a forced-result reason when the board carries a forced result", () => {
     const board = makeBoard({ forcedResult: "defeat", result: "defeat" });
     const state = inBattleState({}, makeBattle(board));
     const result = reduce(state, "END_BATTLE", { result: "defeat" });
-    expect(result.state.quest.failureSummary?.reason).toBe("forced_result");
+    expect(result.state.journey.failureSummary?.reason).toBe("forced_result");
   });
 
   it("records a turn-limit reason when the turn count reached the limit below the score target", () => {
@@ -437,7 +437,7 @@ describe("END_BATTLE defeat", () => {
     });
     const state = inBattleState({}, makeBattle(board, init));
     const result = reduce(state, "END_BATTLE", { result: "defeat" });
-    expect(result.state.quest.failureSummary?.reason).toBe("turn_limit_reached");
+    expect(result.state.journey.failureSummary?.reason).toBe("turn_limit_reached");
   });
 
   it("records a score-target reason when the score target was reached before the turn limit", () => {
@@ -451,7 +451,7 @@ describe("END_BATTLE defeat", () => {
     });
     const state = inBattleState({}, makeBattle(board, init));
     const result = reduce(state, "END_BATTLE", { result: "defeat" });
-    expect(result.state.quest.failureSummary?.reason).toBe("score_target_reached");
+    expect(result.state.journey.failureSummary?.reason).toBe("score_target_reached");
   });
 });
 
@@ -463,7 +463,7 @@ describe("END_BATTLE bounces", () => {
   it("bounces when no battle exists", () => {
     const result = reduce(baseState(), "END_BATTLE", { result: "victory" });
     expect(result.outcome).toBe("bounced");
-    expect(result.state.quest.completionLevel).toBe(0);
+    expect(result.state.journey.completionLevel).toBe(0);
   });
 
   it("bounces an unknown result", () => {
@@ -530,7 +530,7 @@ function makeInstance(
     markers: { isPrevented: false, isCopied: false },
     notes: [],
     provenance: {
-      kind: "quest-deck",
+      kind: "journey-deck",
       sourceBattleCardId: null,
       chosenSpark: null,
       chosenSubtype: null,
@@ -2022,7 +2022,7 @@ describe("BATTLE_AI_BLOCK", () => {
     });
   });
 
-  it("leaves a quest-mode block unpaced", () => {
+  it("leaves a journey-mode block unpaced", () => {
     const blocked = reduce(
       contestedBlockingState({ tutorial: false }),
       "BATTLE_AI_BLOCK",
@@ -2281,7 +2281,7 @@ describe("paced Challenge beats", () => {
     expect(handedOff.state.battle?.board.turnNumber).toBe(4);
   });
 
-  it("resolves a quest Challenge straight through to its handoff", () => {
+  it("resolves a journey Challenge straight through to its handoff", () => {
     const resolved = reduce(
       resolvedChallengeState({ tutorial: false }),
       "BATTLE_COMMAND",

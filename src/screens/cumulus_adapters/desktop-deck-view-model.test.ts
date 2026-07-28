@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import type { CardData } from "../../types/cards";
 import type { DreamAvatarContent } from "../../types/content";
-import type { DeckEntry, DreamAvatar, Dreamsign } from "../../types/quest";
-import type { RunPoolContext } from "../../data/quest-content";
+import type { DeckEntry, DreamAvatar, Dreamsign } from "../../types/journey";
+import type { RunPoolContext } from "../../data/journey-content";
 import type { PoolData } from "../../draft/pool/types";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { buildDesktopDeckView } from "./desktop-deck-view-model";
@@ -148,7 +148,7 @@ describe("buildDesktopDeckView", () => {
     expect(view.dreamsigns).not.toBe(signs);
   });
 
-  it("derives the current quest tides from the chosen avatar id and stable run seed", () => {
+  it("derives the current journey tides from the chosen avatar id and stable run seed", () => {
     const view = buildDesktopDeckView(
       [],
       database(),

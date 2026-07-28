@@ -22,7 +22,7 @@ const commonGitDir = resolve(
     encoding: "utf8",
   }).trim(),
 );
-const lockPath = join(commonGitDir, "quest-full-review.lock");
+const lockPath = join(commonGitDir, "journey-full-review.lock");
 const task = process.argv[2];
 const passthrough = process.argv.slice(3);
 const validTasks = new Set([
@@ -64,10 +64,10 @@ function revisionExists(revision) {
 }
 
 function reviewBase() {
-  const configuredBase = process.env.QUEST_REVIEW_BASE;
+  const configuredBase = process.env.JOURNEY_REVIEW_BASE;
   if (configuredBase !== undefined) {
     if (!revisionExists(configuredBase)) {
-      throw new Error(`QUEST_REVIEW_BASE does not exist: ${configuredBase}`);
+      throw new Error(`JOURNEY_REVIEW_BASE does not exist: ${configuredBase}`);
     }
     return gitOutput(["rev-parse", configuredBase]);
   }
@@ -195,7 +195,7 @@ function commandFor(step, extraArgs = []) {
   if (step === "typecheck") {
     const buildInfo = nodeModulePath(
       ".cache",
-      "quest-review",
+      "journey-review",
       "tsconfig.tsbuildinfo",
     );
     mkdirSync(dirname(buildInfo), { recursive: true });

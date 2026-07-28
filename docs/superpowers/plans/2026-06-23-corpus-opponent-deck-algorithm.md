@@ -53,7 +53,7 @@ Hard rules for all code written in this plan:
 **Modified files:**
 - `scripts/setup-assets.mjs` — add `buildKnownGoodDecklists` write; add `dreamsign_signatures.toml` parse/validate/write.
 - `scripts/config-data.mjs` — add the `dreamsign_signatures.toml` hot-reload entry.
-- `src/data/quest-content.ts` — add `knownGoodDecklists` and `dreamsignSignatures` to `QuestContent` (+ their types); load them in `loadQuestContent`.
+- `src/data/journey-content.ts` — add `knownGoodDecklists` and `dreamsignSignatures` to `JourneyContent` (+ their types); load them in `loadJourneyContent`.
 - `src/debug/SignatureDecksApp.tsx` — refactor its local IDF/fit onto `src/draft/idf-fit.ts` (behavior-preserving).
 - `src/affiliations/affiliation-weights.ts` — refactor `computeAffinityByName` to delegate to `computeAffinity` (behavior-preserving).
 - `src/debug/OpponentDebugApp.tsx` — route through the algorithm registry; add the `?algo=` switcher and the corpus provenance panel.
@@ -197,7 +197,7 @@ Behavior-preserving: `/sigdecks` must render identically. This is the cleanup th
 
 - [ ] **Step 1: Capture current behavior**
 
-`/sigdecks` has no unit test today and its output is data-derived. Rather than snapshot live data (forbidden — it changes with TOML), assert structural invariants in a new `src/debug/SignatureDecksApp.test.ts`: extract `computeSignatureDecks` so it is importable, then for a synthetic `QuestContent` fixture assert that the chosen deck for a Dream Avatar is the one with the highest `signatureFit` among candidates, and that a Dream Avatar whose signatures appear in no fixture deck yields no row (**catches the refactor changing selection or candidate gating**). Run: `npx vitest run src/debug/SignatureDecksApp.test.ts` → PASS against the pre-refactor code.
+`/sigdecks` has no unit test today and its output is data-derived. Rather than snapshot live data (forbidden — it changes with TOML), assert structural invariants in a new `src/debug/SignatureDecksApp.test.ts`: extract `computeSignatureDecks` so it is importable, then for a synthetic `JourneyContent` fixture assert that the chosen deck for a Dream Avatar is the one with the highest `signatureFit` among candidates, and that a Dream Avatar whose signatures appear in no fixture deck yields no row (**catches the refactor changing selection or candidate gating**). Run: `npx vitest run src/debug/SignatureDecksApp.test.ts` → PASS against the pre-refactor code.
 
 - [ ] **Step 2: Replace the local implementation**
 
@@ -248,11 +248,11 @@ git commit -m "refactor(affiliations): share affinity core with idf-fit module"
 
 ---
 
-## Task 5: Known-good decklist artifact + QuestContent wiring
+## Task 5: Known-good decklist artifact + JourneyContent wiring
 
 **Files:**
 - Modify: `scripts/setup-assets.mjs` (add `buildKnownGoodDecklists`, write `public/known-good-decklists-data.json`, after the `draftRecords` write ~line 870)
-- Modify: `src/data/quest-content.ts` (add `KnownGoodDecklist` type + `knownGoodDecklists` field; load it in `loadQuestContent`)
+- Modify: `src/data/journey-content.ts` (add `KnownGoodDecklist` type + `knownGoodDecklists` field; load it in `loadJourneyContent`)
 - Test: `scripts/setup-assets.test.*` if one exists, else assert via a node script step
 
 - [ ] **Step 1: Implement `buildKnownGoodDecklists` in `setup-assets.mjs`**
@@ -267,9 +267,9 @@ Write to `public/known-good-decklists-data.json` with the same `JSON.stringify(v
 
 The `name` field is **display-only**. The join key and all card identity are `draftId#seat` and `mainboardIds` (lowercased UUIDs). Do not emit a name-keyed mainboard field — downstream code keys on `mainboardIds` exclusively.
 
-- [ ] **Step 2: Add the QuestContent type + field**
+- [ ] **Step 2: Add the JourneyContent type + field**
 
-In `src/data/quest-content.ts`:
+In `src/data/journey-content.ts`:
 
 ```typescript
 export interface KnownGoodDecklist {
@@ -279,11 +279,11 @@ export interface KnownGoodDecklist {
   name: string;
   mainboardIds: string[];
 }
-// in interface QuestContent:
+// in interface JourneyContent:
 knownGoodDecklists?: readonly KnownGoodDecklist[];
 ```
 
-Load it in `loadQuestContent` by fetching `known-good-decklists-data.json`, mirroring how the existing artifacts (e.g. `draft-records-data.json` / `dreamsign-profiles-data.json`) are fetched and attached.
+Load it in `loadJourneyContent` by fetching `known-good-decklists-data.json`, mirroring how the existing artifacts (e.g. `draft-records-data.json` / `dreamsign-profiles-data.json`) are fetched and attached.
 
 - [ ] **Step 3: Regenerate + assert the artifact**
 
@@ -299,7 +299,7 @@ Expected: all checks print OK.
 - [ ] **Step 4: Commit**
 
 ```bash
-git add scripts/setup-assets.mjs src/data/quest-content.ts public/known-good-decklists-data.json
+git add scripts/setup-assets.mjs src/data/journey-content.ts public/known-good-decklists-data.json
 git commit -m "feat(opponents): bundle known-good decklists corpus artifact"
 ```
 
@@ -311,8 +311,8 @@ git commit -m "feat(opponents): bundle known-good decklists corpus artifact"
 - Create: `data/tabula/dreamsign_signatures.toml`
 - Modify: `scripts/config-data.mjs` (add hot-reload entry)
 - Modify: `scripts/setup-assets.mjs` (parse/validate/write → `public/dreamsign-signatures-data.json`)
-- Modify: `src/data/quest-content.ts` (add `DreamsignSignature` type + `dreamsignSignatures` map; load it)
-- Test: `src/data/quest-content.dreamsign-signatures.test.ts` (structural invariants only)
+- Modify: `src/data/journey-content.ts` (add `DreamsignSignature` type + `dreamsignSignatures` map; load it)
+- Test: `src/data/journey-content.dreamsign-signatures.test.ts` (structural invariants only)
 
 - [ ] **Step 1: Prepare grounded reference inputs**
 
@@ -345,7 +345,7 @@ signature-card-ids = ["<uuid>", "..."]   # empty for neutral
 - `scripts/config-data.mjs`: add `{ tomlFile: "dreamsign_signatures.toml", jsonFile: "dreamsign-signatures-data.json", arrayKey: "dreamsigns", transform: transformDreamsignProfile }` (the generic kebab→camel transform yields `{id, category, signatureCardIds}`).
 - `scripts/setup-assets.mjs`: add a parse/write block mirroring the `dreamsign_profiles.toml` block (~line 1081), and **call `validateCardIds(entry.signatureCardIds ?? [], cardMaps.idToName, ...)` for each entry before writing** so a stale UUID fails the build.
 
-- [ ] **Step 5: Add the QuestContent type + field + loader**
+- [ ] **Step 5: Add the JourneyContent type + field + loader**
 
 ```typescript
 export interface DreamsignSignature {
@@ -353,23 +353,23 @@ export interface DreamsignSignature {
   category: "neutral" | "tailored";
   signatureCardIds: string[];
 }
-// in QuestContent:
+// in JourneyContent:
 dreamsignSignatures?: ReadonlyMap<string, DreamsignSignature>;
 ```
 
-Load `dreamsign-signatures-data.json` and index by `id` (mirror how `dreamsignProfiles` is built into a `ReadonlyMap` in `loadQuestContent`).
+Load `dreamsign-signatures-data.json` and index by `id` (mirror how `dreamsignProfiles` is built into a `ReadonlyMap` in `loadJourneyContent`).
 
 - [ ] **Step 6: Structural-invariant test**
 
 In the new test, load the generated map and assert (bug class: malformed/ungrounded artifact, resilient to data edits): every `category` is `"neutral"` or `"tailored"`; every `signatureCardIds` entry is a lowercased UUID present in the catalog; neutral entries have an empty `signatureCardIds`. **Do not** assert how many are tailored or which dreamsign got which cards.
 
-Run: `npx vitest run src/data/quest-content.dreamsign-signatures.test.ts`
+Run: `npx vitest run src/data/journey-content.dreamsign-signatures.test.ts`
 Expected: PASS.
 
 - [ ] **Step 7: Commit**
 
 ```bash
-git add data/tabula/dreamsign_signatures.toml scripts/config-data.mjs scripts/setup-assets.mjs src/data/quest-content.ts public/dreamsign-signatures-data.json src/data/quest-content.dreamsign-signatures.test.ts
+git add data/tabula/dreamsign_signatures.toml scripts/config-data.mjs scripts/setup-assets.mjs src/data/journey-content.ts public/dreamsign-signatures-data.json src/data/journey-content.dreamsign-signatures.test.ts
 git commit -m "feat(opponents): classify dreamsigns (neutral/tailored) + signature-card artifact"
 ```
 
@@ -524,7 +524,7 @@ Introduce one interface both algorithms produce, so the panel renders uniformly 
 ```typescript
 import type { ReactNode } from "react";
 import type { CardData } from "../types/cards";
-import type { QuestContent } from "../data/quest-content";
+import type { JourneyContent } from "../data/journey-content";
 
 export interface AlgorithmView {
   deckCards: CardData[];
@@ -539,7 +539,7 @@ export interface AlgorithmView {
 export interface DebugAlgorithm {
   id: string;       // "coherent" | "corpus"
   label: string;
-  build(content: QuestContent, params: {
+  build(content: JourneyContent, params: {
     opponentDreamAvatar: DreamAvatarContent | null;
     affiliation: AffiliationContent | null;
     completionLevel: number;

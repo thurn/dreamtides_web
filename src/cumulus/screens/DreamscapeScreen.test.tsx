@@ -8,7 +8,7 @@ import { DreamscapeScreen, type DreamscapeView } from "./DreamscapeScreen";
 import type { DreamscapeSiteModel } from "../components/dreamscape/SiteNode";
 import { glyph } from "../primitives/glyph";
 import { artRef } from "../primitives/art";
-import type { SiteState } from "../../types/quest";
+import type { SiteState } from "../../types/journey";
 import { CumulusRoot } from "../CumulusRoot";
 
 vi.mock("framer-motion", () => ({
@@ -127,13 +127,13 @@ describe("DreamscapeScreen", () => {
     expect(container.querySelector('[data-site-id="s-draft"]')).not.toBeNull();
   });
 
-  it("leaves persistent quest chrome to the router-owned wrapper", () => {
+  it("leaves persistent journey chrome to the router-owned wrapper", () => {
     act(() => {
       root.render(
         <CumulusRoot><DreamscapeScreen view={VIEW} onSelectSite={() => undefined} onInlineRewardAnimationComplete={() => undefined} onReplaceDreamsign={() => undefined} onDeclineReward={() => undefined} /></CumulusRoot>,
       );
     });
-    expect(container.querySelector("[data-quest-status-bar-anchor]")).toBeNull();
+    expect(container.querySelector("[data-journey-status-bar-anchor]")).toBeNull();
   });
 
   it("animates an Essence reward at its node before completing it in place", () => {

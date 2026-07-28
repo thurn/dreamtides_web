@@ -31,7 +31,7 @@ data/
 src/data/
   merchant-corpus.ts              # NEW: loader + types for baked artifact
   dreamsign-profiles.ts           # NEW: loader + types for profiles
-  quest-content.ts                # MODIFY: add merchantCorpus, dreamsignProfiles
+  journey-content.ts                # MODIFY: add merchantCorpus, dreamsignProfiles
 src/draft/replay/fit-model.ts     # MODIFY: extract scoreCandidatesForDeck
 src/journey_v2/
   tuning.ts                       # NEW: every weight/band/blend constant
@@ -53,8 +53,8 @@ src/journey_v2/
   catalog/pricing.ts              # DELETE (with its test)
   catalog/rewardCatalog.ts        # DELETE (replaced by archetypes/, test deleted)
   metrics/                        # (nothing here; harness lives in scripts/)
-src/state/quest-state-actions.ts  # MODIFY: addSiteToCurrentDreamscape
-src/types/quest.ts                # MODIFY: SiteRuntimeState commit flag
+src/state/journey-state-actions.ts  # MODIFY: addSiteToCurrentDreamscape
+src/types/journey.ts                # MODIFY: SiteRuntimeState commit flag
 docs/journey2/rewards.md          # REWRITE: describe v3 as current state
 ```
 
@@ -149,13 +149,13 @@ re-implementations).
       Expected: exit 0, "parity OK" message.
 - [ ] **Step 5: Commit and push.**
 
-### Task 3: Runtime plumbing — loaders and QuestContent
+### Task 3: Runtime plumbing — loaders and JourneyContent
 
 **Files:**
 - Modify: `scripts/setup-assets.mjs`
 - Create: `src/data/merchant-corpus.ts`
 - Create: `src/data/dreamsign-profiles.ts`
-- Modify: `src/data/quest-content.ts`
+- Modify: `src/data/journey-content.ts`
 - Create: `data/tabula/dreamsign_profiles.toml` (placeholder with 2 entries;
   Task 4 fills it)
 - Test: `src/data/merchant-corpus.test.ts`, `src/data/dreamsign-profiles.test.ts`
@@ -202,9 +202,9 @@ export interface DreamsignProfile {
 }
 ```
 
-`QuestContent` gains optional `merchantCorpus?: MerchantCorpus` and
+`JourneyContent` gains optional `merchantCorpus?: MerchantCorpus` and
 `dreamsignProfiles?: ReadonlyMap<string, DreamsignProfile>`, populated in
-`loadQuestContent()` whenever the v2 journey can be reached (load
+`loadJourneyContent()` whenever the v2 journey can be reached (load
 unconditionally — the artifact is small). A dreamsign with no profile entry
 is treated downstream as featureless quality 2 (do not require full
 coverage at load time).
@@ -220,7 +220,7 @@ scores).
 - [ ] **Step 2: Run them to verify failure.**
       Run: `npx vitest run src/data/merchant-corpus.test.ts src/data/dreamsign-profiles.test.ts`
       Expected: FAIL (modules do not exist).
-- [ ] **Step 3: Implement loaders, setup-assets changes, QuestContent fields,
+- [ ] **Step 3: Implement loaders, setup-assets changes, JourneyContent fields,
       and the 2-entry placeholder TOML.**
 - [ ] **Step 4: Run the tests.** Expected: PASS.
 - [ ] **Step 5: Run** `npm run setup-assets` and confirm both
@@ -501,7 +501,7 @@ kind exists now so the union is stable). `MerchantAcceptRequest` loses
 **Generator pipeline** (`generateMerchantEncounter.ts`):
 1. Filter `MERCHANT_ARCHETYPE_BUILDERS` (registry) by `eligible(context)`.
 2. Slot A: `weightedSample` over eligible with `MERCHANT_TUNING.weights`,
-   rng salt `(questSeed, site.id, "A", "archetype")`. Call `build`; on null,
+   rng salt `(journeySeed, site.id, "A", "archetype")`. Call `build`; on null,
    remove the archetype and redraw (an eligibility/build mismatch must not
    abort the encounter).
 3. Slot B: same over eligible builders whose `family !== offerA.family`.
@@ -529,7 +529,7 @@ unchanged in shape. `applyMerchantPayloadToState` drops the essence cases.
 **Context cleanup:** `buildMerchantContext` drops `supportMetaByUuid`,
 `candidateGrantCards` precomputation tied to support meta, and the
 `buildaround_support.json` import; gains `merchantCorpus` and
-`dreamsignProfiles` passthrough from `QuestContent`. Keep
+`dreamsignProfiles` passthrough from `JourneyContent`. Keep
 `cardByUuid`/`cardByNumber`/`deckEntryById`/`ownedCardUuids`/
 `heldDreamsignIds`. `essence`/`essenceCap` stay on the context (other screens
 read them) but the merchant ignores them.
@@ -745,7 +745,7 @@ Tests by bug class:
 
 **Files:** Modify `src/journey_v2/archetypes/dreamsign.ts`, create
 `src/journey_v2/archetypes/site.ts`, modify
-`src/state/quest-state-actions.ts`, `src/types/quest.ts` (only if SiteState
+`src/state/journey-state-actions.ts`, `src/types/journey.ts` (only if SiteState
 creation needs a helper), `src/journey_v2/encounter/resolveMerchantOffer.ts`
 + tests.
 
@@ -760,9 +760,9 @@ the site type; always eligible.
 State mutation: find the implementation behind v1's
 `mut.addSiteToDreamscape("current", siteType, source)`
 (`src/journeys/adapter/journeyMutations.ts:94` is the adapter; follow it to
-the underlying QuestState mutation). Extract/expose it as
-`addSiteToCurrentDreamscape(state: QuestState, siteType: SiteType, sourceId: string): QuestState`
-in `src/state/quest-state-actions.ts` with the v1 adapter delegating to it,
+the underlying JourneyState mutation). Extract/expose it as
+`addSiteToCurrentDreamscape(state: JourneyState, siteType: SiteType, sourceId: string): JourneyState`
+in `src/state/journey-state-actions.ts` with the v1 adapter delegating to it,
 then call it from `applyMerchantPayloadToState` for the `add_site` kind.
 Generated site ids must derive from (sourceId, existing site count), not
 from `Date.now()`/`Math.random()` — determinism of the apply step matters
@@ -786,7 +786,7 @@ Tests by bug class:
 ### Task 15: Commit-then-reveal
 
 **Files:**
-- Modify: `src/types/quest.ts` (`SiteRuntimeState` gains
+- Modify: `src/types/journey.ts` (`SiteRuntimeState` gains
   `merchantCommittedOfferId?: string`)
 - Modify: `src/journey_v2/encounter/resolveMerchantOffer.ts` (new export
   `resolveMerchantCommit`), `src/journey_v2/types.ts`
@@ -798,11 +798,11 @@ Contract per spec "Commit-then-reveal": `resolveMerchantCommit` validates
 signature + offerId + `hiddenUntilCommit === true`, writes
 `merchantCommittedOfferId` into `siteRuntime[site.id]`, does NOT complete the
 site. After commit, `resolveMerchantOffer` for that site accepts ONLY the
-committed offerId; the UI learns the committed state from quest state (so
+committed offerId; the UI learns the committed state from journey state (so
 reload lands on the reveal view). Accepting a `hiddenUntilCommit` offer
 without a prior commit is rejected. Decline after commit is rejected (the
 other offer is forfeit; the player must pick from the revealed set).
-`completeQuestSite` clears the runtime flag (verify it already discards
+`completeJourneySite` clears the runtime flag (verify it already discards
 site runtime; if not, clear explicitly).
 
 Tests by bug class: the four rejection/acceptance rules above, each asserted
@@ -879,19 +879,19 @@ major).
 
 Inputs: `public/draft-records-data.json` (records with `pickIds`),
 `public/cards_v2-data.json`, `public/merchant-corpus-data.json`,
-`public/dreamsign-profiles-data.json`. Build `QuestContent` via the same
+`public/dreamsign-profiles-data.json`. Build `JourneyContent` via the same
 loaders the app uses where feasible; otherwise construct the maps directly
 from the public JSON (cardDatabase keyed by cardNumber, fit model via
-`buildFitModel` over record mainboards exactly as `quest-content.ts:480`
+`buildFitModel` over record mainboards exactly as `journey-content.ts:480`
 does).
 
 **Simulated deck states:** for each sampled record (default 60 records,
 deterministic slice), build deck prefixes at picks 0/5/10/20: the standard
-starter deck (locate the new-quest initial deck construction — search
-`src/state` for where a fresh `QuestState.deck` is populated — and reuse it)
+starter deck (locate the new-journey initial deck construction — search
+`src/state` for where a fresh `JourneyState.deck` is populated — and reuse it)
 plus the record's first N `pickIds` mapped to cardNumbers via `CardData.id`.
 For each deck state, generate encounters across S seeds (default 40),
-varying the quest seed; site id fixed.
+varying the journey seed; site id fixed.
 
 **Report** (per spec "Metrics harness", all five metric families; print a
 table per metric and write `merchant-metric-report.json` to repo root,

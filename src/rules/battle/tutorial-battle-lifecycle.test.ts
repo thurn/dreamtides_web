@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
-import type { QuestContent } from "../../data/quest-content";
+import type { JourneyContent } from "../../data/journey-content";
 import { genesisFoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
 import {
@@ -110,7 +110,7 @@ function card(cardNumber: number, id: string): CardData {
   };
 }
 
-function content(): QuestContent {
+function content(): JourneyContent {
   const cards = [
     ...STARTERS.map(([number, id]) => card(number, id)),
     card(520, "229ab3a1-3720-41a2-924c-8fe112188f8e"),
@@ -998,7 +998,7 @@ describe("tutorial battle lifecycle", () => {
   it("restarts with a new driver, then hands victory into the tutorial DreamAvatar offer", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const first = begin();
-    const beforeQuest = first.state.quest;
+    const beforeJourney = first.state.journey;
     const original = first.state.battle!;
     const restart = reduceGameEvent(first.state, {
       type: "RESTART_TUTORIAL_BATTLE",
@@ -1010,7 +1010,7 @@ describe("tutorial battle lifecycle", () => {
     expect(rebuilt.mode).toMatchObject({ driverClientId: "client-b", restartNumber: 1 });
     expect(rebuilt.board.battleId).not.toBe(original.board.battleId);
     expect(ids(rebuilt, "player", "deck")).not.toEqual(ids(original, "player", "deck"));
-    const replay = createTutorialBattleInitProvider(content()).beginTutorialBattle({ quest: beforeQuest, actions: TUTORIAL_ACTIONS, tutorialRunId: RUN_ID, driverClientId: "client-b", restartNumber: 1, seq: 43, rng: () => 0, timestamp: CTX.timestamp });
+    const replay = createTutorialBattleInitProvider(content()).beginTutorialBattle({ journey: beforeJourney, actions: TUTORIAL_ACTIONS, tutorialRunId: RUN_ID, driverClientId: "client-b", restartNumber: 1, seq: 43, rng: () => 0, timestamp: CTX.timestamp });
     expect(rebuilt).toMatchObject({
       ...replay,
       basicAutomationEnabled: true,
@@ -1022,10 +1022,10 @@ describe("tutorial battle lifecycle", () => {
     expect(exited.state).toMatchObject({
       battle: null,
       frontDoor: { phase: "main", journeyId: null, tutorial: null },
-      quest: {
-        ...beforeQuest,
+      journey: {
+        ...beforeJourney,
         screen: {
-          type: "questStart",
+          type: "journeyStart",
           tutorialDreamAvatarId: TUTORIAL_DREAM_AVATAR_ID,
         },
       },
@@ -1269,14 +1269,14 @@ describe("tutorial battle lifecycle", () => {
     expect(reduceTutorial(resumed.state, "RESOLVE_PROMPT", resolution, automaticActor).outcome).toBe("applied");
   });
 
-  it("leaves quest-mode command, play, gesture, and blocking actor behavior unchanged", () => {
+  it("leaves journey-mode command, play, gesture, and blocking actor behavior unchanged", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const started = begin().state;
-    const questState = {
+    const journeyState = {
       ...started,
       battle: {
         ...started.battle!,
-        mode: { kind: "quest" as const },
+        mode: { kind: "journey" as const },
         board: { ...started.battle!.board, phase: "day" as const },
       },
     };
@@ -1286,14 +1286,14 @@ describe("tutorial battle lifecycle", () => {
       edit: { kind: "SET_SCORE", side: "enemy", value: 8 },
       sourceSurface: "test",
     };
-    expect(reduceTutorial(questState, "BATTLE_COMMAND", { command: scoreCommand }, observer).outcome).toBe("applied");
-    expect(reduceTutorial(questState, "BATTLE_GESTURE", { commands: [scoreCommand] }, observer).outcome).toBe("applied");
-    expect(reduceTutorial(questState, "BATTLE_PLAY_CARD", {
-      battleCardId: questState.battle.board.sides.player.hand[0], targetBattleCardIds: [], aiChoices: [],
+    expect(reduceTutorial(journeyState, "BATTLE_COMMAND", { command: scoreCommand }, observer).outcome).toBe("applied");
+    expect(reduceTutorial(journeyState, "BATTLE_GESTURE", { commands: [scoreCommand] }, observer).outcome).toBe("applied");
+    expect(reduceTutorial(journeyState, "BATTLE_PLAY_CARD", {
+      battleCardId: journeyState.battle.board.sides.player.hand[0], targetBattleCardIds: [], aiChoices: [],
     }, observer).outcome).toBe("applied");
     const blockingState = {
-      ...questState,
-      battle: { ...questState.battle, board: { ...questState.battle.board, phase: "dusk" as const } },
+      ...journeyState,
+      battle: { ...journeyState.battle, board: { ...journeyState.battle.board, phase: "dusk" as const } },
     };
     expect(reduceTutorial(blockingState, "BATTLE_AI_BLOCK", { aiSide: "enemy" }, observer).outcome).toBe("applied");
   });
@@ -1576,17 +1576,17 @@ describe("tutorial battle lifecycle", () => {
     expect(continued.state.battle!.board.sides.enemy.backRank.B0).toBeNull();
   });
 
-  it("normalizes a mode-less persisted battle to quest mode through LOAD_STATE", () => {
+  it("normalizes a mode-less persisted battle to journey mode through LOAD_STATE", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const battle = begin().state.battle!;
     const legacy = JSON.parse(JSON.stringify(battle)) as Record<string, unknown>;
     delete legacy.mode;
     const state = terminalTutorialState();
     const loaded = reduceGameEvent(state, {
-      type: "LOAD_STATE", payload: { snapshot: state.quest, battle: legacy }, actor: "client-a", basedOnSeq: 41, clientTimestamp: CTX.timestamp,
+      type: "LOAD_STATE", payload: { snapshot: state.journey, battle: legacy }, actor: "client-a", basedOnSeq: 41, clientTimestamp: CTX.timestamp,
     }, CTX);
     expect(loaded.outcome).toBe("applied");
-    expect(loaded.state.battle?.mode).toEqual({ kind: "quest" });
+    expect(loaded.state.battle?.mode).toEqual({ kind: "journey" });
     expect(JSON.parse(JSON.stringify(begin().state.battle))).toMatchObject({ mode: { kind: "tutorial" } });
   });
 });

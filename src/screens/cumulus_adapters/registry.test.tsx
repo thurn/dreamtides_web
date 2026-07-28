@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
-import type { SiteState, SiteType } from "../../types/quest";
+import type { SiteState, SiteType } from "../../types/journey";
 import { screenFor, siteDispositionFor, type NonSiteScreen } from "./registry";
 
 describe("screenFor", () => {
   it.each<NonSiteScreen>([
-    { type: "questStart" },
+    { type: "journeyStart" },
     { type: "dreamscape" },
     { type: "atlas" },
-    { type: "questComplete" },
-    { type: "questFailed" },
+    { type: "journeyComplete" },
+    { type: "journeyFailed" },
   ])("resolves $type to a Cumulus adapter", (screen) => {
     expect(screenFor(screen)).toBeTruthy();
   });

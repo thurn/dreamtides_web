@@ -120,7 +120,7 @@ describe("buildBattleTutorialGuidanceView", () => {
       markers: { isPrevented: false, isCopied: false },
       notes: [],
       provenance: {
-        kind: "quest-deck",
+        kind: "journey-deck",
         sourceBattleCardId: null,
         chosenSpark: null,
         chosenSubtype: null,

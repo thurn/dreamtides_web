@@ -7,7 +7,7 @@ import {
   makeMerchantTestDeckEntry,
   makeMerchantTestDreamsignProfile,
   makeMerchantTestDreamsignTemplate,
-  makeMerchantTestQuestState,
+  makeMerchantTestJourneyState,
   makeMerchantTestSite,
   makeMerchantTestDreamsign,
 } from "../testing/fixtures";
@@ -24,14 +24,14 @@ function makeContext(input: {
   const dreamsigns = (input.heldDreamsignIds ?? []).map((id) =>
     makeMerchantTestDreamsign({ id, name: `Held ${id}` }),
   );
-  const questContent = makeMerchantTestContent({
+  const journeyContent = makeMerchantTestContent({
     cards: [],
     dreamsignTemplates,
   });
-  const questState = makeMerchantTestQuestState({ dreamsigns });
+  const journeyState = makeMerchantTestJourneyState({ dreamsigns });
   return buildMerchantContext({
-    questState,
-    questContent,
+    journeyState,
+    journeyContent,
     site: makeMerchantTestSite(),
   });
 }
@@ -160,12 +160,12 @@ describe("suited dreamsign pool — generic signs never crowd out a real match",
         makeMerchantTestDreamsignProfile({ id, subtypes: ["Warrior"] }),
       ]),
     );
-    const questContent = makeMerchantTestContent({
+    const journeyContent = makeMerchantTestContent({
       cards: deckCards,
       dreamsignTemplates: templates,
       dreamsignProfiles: profiles,
     });
-    const questState = makeMerchantTestQuestState({
+    const journeyState = makeMerchantTestJourneyState({
       deck: deckCards.map((card, i) =>
         makeMerchantTestDeckEntry({
           entryId: `deck-entry-${String(i)}`,
@@ -174,8 +174,8 @@ describe("suited dreamsign pool — generic signs never crowd out a real match",
       ),
     });
     return buildMerchantContext({
-      questState,
-      questContent,
+      journeyState,
+      journeyContent,
       site: makeMerchantTestSite(),
     });
   }

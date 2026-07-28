@@ -6,16 +6,16 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { StartingDeckOverlayAdapter } from "./StartingDeckOverlayAdapter";
 import { logEvent } from "../../logging";
-import { useQuest } from "../../state/quest-context";
-import type { QuestContent } from "../../data/quest-content";
-import type { QuestMutations } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
+import type { JourneyContent } from "../../data/journey-content";
+import type { JourneyMutations } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
-import type { QuestState } from "../../types/quest";
+import type { JourneyState } from "../../types/journey";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { StartingDeckView } from "../../cumulus/screens/StartingDeckOverlay";
 
-vi.mock("../../state/quest-context", () => ({
-  useQuest: vi.fn(),
+vi.mock("../../state/journey-context", () => ({
+  useJourney: vi.fn(),
 }));
 
 vi.mock("../../logging", () => ({
@@ -67,7 +67,7 @@ function makeCardDatabase(): Map<number, CardData> {
   ]);
 }
 
-function makeState(): QuestState {
+function makeState(): JourneyState {
   return {
     deck: [
       {
@@ -77,16 +77,16 @@ function makeState(): QuestState {
         isBane: false,
       },
     ],
-  } as unknown as QuestState;
+  } as unknown as JourneyState;
 }
 
-function setQuestContext(): void {
+function setJourneyContext(): void {
   const cardDatabase = makeCardDatabase();
-  vi.mocked(useQuest).mockReturnValue({
+  vi.mocked(useJourney).mockReturnValue({
     state: makeState(),
-    mutations: {} as QuestMutations,
+    mutations: {} as JourneyMutations,
     cardDatabase,
-    questContent: { cardDatabase } as QuestContent,
+    journeyContent: { cardDatabase } as JourneyContent,
   });
 }
 
@@ -108,7 +108,7 @@ beforeEach(() => {
   (
     globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
   ).IS_REACT_ACT_ENVIRONMENT = true;
-  setQuestContext();
+  setJourneyContext();
 });
 
 afterEach(() => {
@@ -139,7 +139,7 @@ describe("StartingDeckOverlayAdapter", () => {
     });
 
     // A state refresh while open does not re-log the open.
-    setQuestContext();
+    setJourneyContext();
     act(() => {
       root.render(
         <StartingDeckOverlayAdapter isOpen={true} onClose={onClose} />,

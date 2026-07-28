@@ -1,7 +1,7 @@
 /**
  * Unit tests for `computeSignatureDecks` — structural/contract invariants only.
  *
- * Uses a synthetic QuestContent fixture built from distinct UUIDs so tests
+ * Uses a synthetic JourneyContent fixture built from distinct UUIDs so tests
  * never break when real card TOML data changes.
  */
 import { describe, it, expect } from "vitest";
@@ -11,7 +11,7 @@ import {
 } from "./SignatureDecksApp.tsx";
 import { buildIdfStats, signatureFit } from "../draft/idf-fit.ts";
 import { idfCosine } from "../draft/pool/variant-idf.ts";
-import type { QuestContent } from "../data/quest-content.ts";
+import type { JourneyContent } from "../data/journey-content.ts";
 import type { CardData } from "../types/cards.ts";
 import type { DreamAvatarContent } from "../types/content.ts";
 import type { DraftRecord } from "../data/cards-v2-database.ts";
@@ -68,7 +68,7 @@ function makeDreamAvatar(
 }
 
 /**
- * Build a minimal QuestContent fixture. computeSignatureDecks reads:
+ * Build a minimal JourneyContent fixture. computeSignatureDecks reads:
  *   - content.cardDatabase (Map<number, CardData>) — for UUID → name lookup
  *   - content.draftRecords (DraftRecord[]) — the corpus
  *   - content.dreamAvatars (DreamAvatarContent[]) — the DreamAvatars
@@ -77,7 +77,7 @@ function makeContent(
   cards: CardData[],
   dreamAvatars: DreamAvatarContent[],
   draftRecords: DraftRecord[],
-): QuestContent {
+): JourneyContent {
   const cardDatabase = new Map<number, CardData>(
     cards.map((c, i) => [i, c]),
   );
@@ -85,8 +85,8 @@ function makeContent(
     cardDatabase,
     dreamAvatars,
     draftRecords,
-    // Other QuestContent fields are not touched by computeSignatureDecks.
-  } as unknown as QuestContent;
+    // Other JourneyContent fields are not touched by computeSignatureDecks.
+  } as unknown as JourneyContent;
 }
 
 // ---------------------------------------------------------------------------

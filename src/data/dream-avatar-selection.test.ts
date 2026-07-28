@@ -3,7 +3,7 @@ import {
   selectDreamAvatarOffer,
   selectDreamAvatarOfferForReroll,
   selectDreamAvatarOfferForSeed,
-  toQuestDreamAvatar,
+  toJourneyDreamAvatar,
 } from "./dream-avatar-selection";
 import type { DreamAvatarContent } from "../types/content";
 
@@ -90,9 +90,9 @@ describe("selectDreamAvatarOffer", () => {
   });
 });
 
-describe("toQuestDreamAvatar", () => {
+describe("toJourneyDreamAvatar", () => {
   it("returns the player-facing DreamAvatar display fields", () => {
-    expect(toQuestDreamAvatar(makeDreamAvatar("a"))).toEqual({
+    expect(toJourneyDreamAvatar(makeDreamAvatar("a"))).toEqual({
       id: "a",
       name: "DreamAvatar a",
       title: "Title a",
@@ -107,7 +107,7 @@ describe("toQuestDreamAvatar", () => {
     const dreamAvatar = makeDreamAvatar("a");
     delete dreamAvatar.portraitFocus;
 
-    const result = toQuestDreamAvatar(dreamAvatar);
+    const result = toJourneyDreamAvatar(dreamAvatar);
 
     expect(result).toEqual({
       id: "a",

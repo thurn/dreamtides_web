@@ -59,11 +59,11 @@ vi.mock("firebase/database", () => ({
 
 const completeEnv = {
   VITE_FIREBASE_API_KEY: "api-key",
-  VITE_FIREBASE_AUTH_DOMAIN: "quest.example.firebaseapp.com",
-  VITE_FIREBASE_DATABASE_URL: "https://quest.example.firebaseio.com",
-  VITE_FIREBASE_PROJECT_ID: "quest-example",
+  VITE_FIREBASE_AUTH_DOMAIN: "journey.example.firebaseapp.com",
+  VITE_FIREBASE_DATABASE_URL: "https://journey.example.firebaseio.com",
+  VITE_FIREBASE_PROJECT_ID: "journey-example",
   VITE_FIREBASE_APP_ID: "1:123:web:abc",
-  VITE_FIREBASE_STORAGE_BUCKET: "quest.example.appspot.com",
+  VITE_FIREBASE_STORAGE_BUCKET: "journey.example.appspot.com",
   VITE_FIREBASE_MESSAGING_SENDER_ID: "123",
 };
 
@@ -77,11 +77,11 @@ describe("readFirebaseConfig", () => {
   it("maps Vite Firebase env values to Firebase config", () => {
     expect(readFirebaseConfig(completeEnv)).toEqual({
       apiKey: "api-key",
-      authDomain: "quest.example.firebaseapp.com",
-      databaseURL: "https://quest.example.firebaseio.com",
-      projectId: "quest-example",
+      authDomain: "journey.example.firebaseapp.com",
+      databaseURL: "https://journey.example.firebaseio.com",
+      projectId: "journey-example",
       appId: "1:123:web:abc",
-      storageBucket: "quest.example.appspot.com",
+      storageBucket: "journey.example.appspot.com",
       messagingSenderId: "123",
     });
   });
@@ -95,9 +95,9 @@ describe("readFirebaseConfig", () => {
       }),
     ).toEqual({
       apiKey: "api-key",
-      authDomain: "quest.example.firebaseapp.com",
-      databaseURL: "https://quest.example.firebaseio.com",
-      projectId: "quest-example",
+      authDomain: "journey.example.firebaseapp.com",
+      databaseURL: "https://journey.example.firebaseio.com",
+      projectId: "journey-example",
       appId: "1:123:web:abc",
     });
   });
@@ -106,9 +106,9 @@ describe("readFirebaseConfig", () => {
     expect(() =>
       readFirebaseConfig({
         VITE_FIREBASE_API_KEY: "",
-        VITE_FIREBASE_AUTH_DOMAIN: "quest.example.firebaseapp.com",
+        VITE_FIREBASE_AUTH_DOMAIN: "journey.example.firebaseapp.com",
         VITE_FIREBASE_DATABASE_URL: "",
-        VITE_FIREBASE_PROJECT_ID: "quest-example",
+        VITE_FIREBASE_PROJECT_ID: "journey-example",
         VITE_FIREBASE_APP_ID: "1:123:web:abc",
       }),
     ).toThrow(FirebaseConfigError);
@@ -116,9 +116,9 @@ describe("readFirebaseConfig", () => {
     try {
       readFirebaseConfig({
         VITE_FIREBASE_API_KEY: "",
-        VITE_FIREBASE_AUTH_DOMAIN: "quest.example.firebaseapp.com",
+        VITE_FIREBASE_AUTH_DOMAIN: "journey.example.firebaseapp.com",
         VITE_FIREBASE_DATABASE_URL: "",
-        VITE_FIREBASE_PROJECT_ID: "quest-example",
+        VITE_FIREBASE_PROJECT_ID: "journey-example",
         VITE_FIREBASE_APP_ID: "1:123:web:abc",
       });
     } catch (error) {
@@ -135,34 +135,34 @@ describe("getFirebaseApp", () => {
   it("creates a named demo app for emulator mode without env config", () => {
     const app = getFirebaseApp("emulator", {});
 
-    expect(app.name).toBe("quest-prototype-emulator");
+    expect(app.name).toBe("journey-prototype-emulator");
     expect(firebaseMocks.initializeApp).toHaveBeenCalledWith(
       {
         apiKey: "demo-api-key",
-        authDomain: "demo-quest-prototype.firebaseapp.com",
-        databaseURL: "https://demo-quest-prototype.firebaseio.com",
-        projectId: "demo-quest-prototype",
+        authDomain: "demo-journey-prototype.firebaseapp.com",
+        databaseURL: "https://demo-journey-prototype.firebaseio.com",
+        projectId: "demo-journey-prototype",
         appId: "demo-app-id",
       },
-      "quest-prototype-emulator",
+      "journey-prototype-emulator",
     );
   });
 
   it("creates a named realtime app from Vite env config", () => {
     const app = getFirebaseApp("realtime", completeEnv);
 
-    expect(app.name).toBe("quest-prototype-realtime");
+    expect(app.name).toBe("journey-prototype-realtime");
     expect(firebaseMocks.initializeApp).toHaveBeenCalledWith(
       {
         apiKey: "api-key",
-        authDomain: "quest.example.firebaseapp.com",
-        databaseURL: "https://quest.example.firebaseio.com",
-        projectId: "quest-example",
+        authDomain: "journey.example.firebaseapp.com",
+        databaseURL: "https://journey.example.firebaseio.com",
+        projectId: "journey-example",
         appId: "1:123:web:abc",
-        storageBucket: "quest.example.appspot.com",
+        storageBucket: "journey.example.appspot.com",
         messagingSenderId: "123",
       },
-      "quest-prototype-realtime",
+      "journey-prototype-realtime",
     );
   });
 

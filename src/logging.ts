@@ -42,7 +42,7 @@ let logSnapshotCache: ReadonlyArray<Readonly<LogEntry>> = [];
 let isLogSnapshotDirty = false;
 
 // Ambient fields merged into every event so a whole session can be filtered out
-// of the shared `logs/quest-log.jsonl`. The room gate sets `{ gameId }` once a
+// of the shared `logs/journey-log.jsonl`. The room gate sets `{ gameId }` once a
 // room is ready, which is what lets `grep '"gameId":"h3ppju"'` isolate one
 // game's events from every other run interleaved in the same file. Defaults to
 // empty, so off the multiplayer path (tests, isolated units) entries are
@@ -451,7 +451,7 @@ export function downloadLog(): void {
   const url = URL.createObjectURL(blob);
 
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-  const filename = `quest-log-${timestamp}.jsonl`;
+  const filename = `journey-log-${timestamp}.jsonl`;
 
   const anchor = document.createElement("a");
   anchor.href = url;

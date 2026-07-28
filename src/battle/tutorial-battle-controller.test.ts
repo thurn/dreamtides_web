@@ -18,7 +18,7 @@ function stateFor(
   const board = boardFor(boardOverrides);
   return {
     frontDoor: { phase: "tutorial", journeyId: "journey-uuid", tutorial: null },
-    quest: {} as FoldState["quest"],
+    journey: {} as FoldState["journey"],
     battle: {
       mode: {
         kind: "tutorial",
@@ -104,7 +104,7 @@ function card(battleCardId: string, controller: "player" | "enemy"): BattleCardI
     },
     markers: { isPrevented: false, isCopied: false },
     notes: [],
-    provenance: { kind: "quest-deck", sourceBattleCardId: null, chosenSpark: null, chosenSubtype: null, createdAtTurnNumber: 1, createdAtSide: controller, createdAtMs: 0 },
+    provenance: { kind: "journey-deck", sourceBattleCardId: null, chosenSpark: null, chosenSubtype: null, createdAtTurnNumber: 1, createdAtSide: controller, createdAtMs: 0 },
     definition: {
       sourceDeckEntryId: null,
       cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",

@@ -15,7 +15,7 @@
  * Requires the Google Cloud SDK (`gcloud`) on PATH and an authenticated account
  * with write access to the bucket (`gcloud auth login`). One-time bucket setup
  * (creation, public read, CORS) is documented in
- * docs/quest_prototype/asset-hosting.md.
+ * docs/journey_prototype/asset-hosting.md.
  *
  * The bucket defaults to the project's Firebase Storage bucket and can be
  * overridden with the ASSET_BUCKET env var; it must match the origin in
@@ -67,7 +67,7 @@ function preflight() {
     throw new Error(
       `Cannot reach gs://${BUCKET}. Run \`gcloud auth login\`, select the ` +
         "project, and confirm the bucket exists (see " +
-        "docs/quest_prototype/asset-hosting.md).",
+        "docs/journey_prototype/asset-hosting.md).",
     );
   }
 }
@@ -78,7 +78,7 @@ function main() {
   // Stage real files before upload: `public/<dir>` entries are symlinks into
   // ~/Documents (and the image cache), and `gcloud storage rsync` skips
   // symlinks. `cp -RL` follows them so the staged tree holds the actual bytes.
-  const staging = mkdtempSync(join(tmpdir(), "quest-assets-"));
+  const staging = mkdtempSync(join(tmpdir(), "journey-assets-"));
   try {
     const present = [];
     for (const dir of ART_DIRS) {

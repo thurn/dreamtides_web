@@ -5,12 +5,12 @@ import { deriveBattleSeed } from "../random";
 import type { DraftRecord } from "../../data/cards-v2-database";
 import { buildFitModel, type FitModel } from "../../draft/replay/fit-model";
 import { buildPoolData } from "../../draft/pool/pool-data";
-import type { RunPoolContext } from "../../data/quest-content";
+import type { RunPoolContext } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { DreamAvatarContent } from "../../types/content";
 import type { PoolCard } from "../../draft/pool/types";
-import type { CardKeywordModification, CardTypeChange } from "../../types/quest";
+import type { CardKeywordModification, CardTypeChange } from "../../types/journey";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
 import { TRANSFIGURE_MARK_END, TRANSFIGURE_MARK_START } from "../../runtime/transfigure-markers";
@@ -227,11 +227,11 @@ describe("createBattleInit", () => {
       ).toBe(false);
     });
 
-    it("same battle entry in different quest seeds uses a different battle seed", () => {
+    it("same battle entry in different journey seeds uses a different battle seed", () => {
       const baseInput = makeBaseInput();
       const otherInput: CreateBattleInitInput = {
         ...baseInput,
-        state: { ...baseInput.state, seed: "another-quest-seed" },
+        state: { ...baseInput.state, seed: "another-journey-seed" },
       };
 
       const a = createBattleInit(baseInput);
@@ -412,11 +412,11 @@ describe("createBattleInit", () => {
   });
 
   describe("playerDeckOrder", () => {
-    it("preserves entryId for every quest deck entry", () => {
+    it("preserves entryId for every journey deck entry", () => {
       const init = createBattleInit(makeBaseInput());
-      // The battle deck is padded up to the minimum size, so the same quest
+      // The battle deck is padded up to the minimum size, so the same journey
       // entry id can appear multiple times; the set of distinct ids still
-      // matches the quest deck exactly.
+      // matches the journey deck exactly.
       const sourceIds = [
         ...new Set(
           init.playerDeckOrder
@@ -428,11 +428,11 @@ describe("createBattleInit", () => {
       expect(sourceIds).toEqual(inputIds);
     });
 
-    it("pads a small quest deck up to the minimum battle deck size", () => {
+    it("pads a small journey deck up to the minimum battle deck size", () => {
       const init = createBattleInit(makeBaseInput());
       // makeBattleTestState has an 8-card deck: padded to 32 (8 -> 16 -> 24 -> 32).
       expect(init.playerDeckOrder.length).toBeGreaterThanOrEqual(25);
-      expect(init.questDeckEntries).toHaveLength(8);
+      expect(init.journeyDeckEntries).toHaveLength(8);
     });
 
     it("freezes the player deck order and each card", () => {
@@ -443,15 +443,15 @@ describe("createBattleInit", () => {
       }
     });
 
-    it("mirrors each quest deck entry into the top-level questDeckEntries field (B-3)", () => {
+    it("mirrors each journey deck entry into the top-level journeyDeckEntries field (B-3)", () => {
       const baseInput = makeBaseInput();
       const init = createBattleInit(baseInput);
 
-      expect(init.questDeckEntries).toHaveLength(baseInput.state.deck.length);
-      expect(Object.isFrozen(init.questDeckEntries)).toBe(true);
+      expect(init.journeyDeckEntries).toHaveLength(baseInput.state.deck.length);
+      expect(Object.isFrozen(init.journeyDeckEntries)).toBe(true);
 
       const byEntryId = new Map(
-        init.questDeckEntries.map((entry) => [entry.entryId, entry]),
+        init.journeyDeckEntries.map((entry) => [entry.entryId, entry]),
       );
       for (const sourceEntry of baseInput.state.deck) {
         const mirrored = byEntryId.get(sourceEntry.entryId);
@@ -466,19 +466,19 @@ describe("createBattleInit", () => {
       }
     });
 
-    it("keeps questDeckEntries consistent with playerDeckOrder per-card metadata", () => {
+    it("keeps journeyDeckEntries consistent with playerDeckOrder per-card metadata", () => {
       const init = createBattleInit(makeBaseInput());
-      const questEntriesByEntryId = new Map(
-        init.questDeckEntries.map((entry) => [entry.entryId, entry]),
+      const journeyEntriesByEntryId = new Map(
+        init.journeyDeckEntries.map((entry) => [entry.entryId, entry]),
       );
 
       for (const card of init.playerDeckOrder) {
         if (card.sourceDeckEntryId === null) {
           continue;
         }
-        const questEntry = questEntriesByEntryId.get(card.sourceDeckEntryId);
-        expect(questEntry).toBeDefined();
-        expect(questEntry).toEqual({
+        const journeyEntry = journeyEntriesByEntryId.get(card.sourceDeckEntryId);
+        expect(journeyEntry).toBeDefined();
+        expect(journeyEntry).toEqual({
           entryId: card.sourceDeckEntryId,
           cardNumber: card.cardNumber,
           transfiguration: card.transfiguration,
@@ -566,7 +566,7 @@ describe("createBattleInit", () => {
         .not.toContain(`${TRANSFIGURE_MARK_START}Reclaim`);
     });
 
-    it("applies quest deck entry type changes to player battle card definitions", () => {
+    it("applies journey deck entry type changes to player battle card definitions", () => {
       const baseInput = makeBaseInput();
       const changedEntryId = "deck-5";
       const typeChange: CardTypeChange = {
@@ -600,7 +600,7 @@ describe("createBattleInit", () => {
       });
     });
 
-    it("applies quest deck entry keyword changes to player battle card definitions", () => {
+    it("applies journey deck entry keyword changes to player battle card definitions", () => {
       const baseInput = makeBaseInput();
       const changedEntryId = "deck-5";
       const keywordModification: CardKeywordModification = { fast: true, reclaim: 2 };
@@ -633,7 +633,7 @@ describe("createBattleInit", () => {
       expect(changedCard?.renderedText).toContain("Reclaim 2●");
     });
 
-    it("applies quest deck entry stat overrides to player battle card definitions", () => {
+    it("applies journey deck entry stat overrides to player battle card definitions", () => {
       const baseInput = makeBaseInput();
       const changedEntryId = "deck-1";
       const changedEntry = baseInput.state.deck.find(
@@ -685,7 +685,7 @@ describe("createBattleInit", () => {
       expect(changedCard?.printedSpark).toBe(overriddenSpark);
     });
 
-    it("throws when a quest deck entry references a missing card number", () => {
+    it("throws when a journey deck entry references a missing card number", () => {
       const baseInput = makeBaseInput();
       const stateWithUnknownCard = {
         ...baseInput.state,

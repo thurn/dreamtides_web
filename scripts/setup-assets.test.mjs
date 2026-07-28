@@ -105,7 +105,7 @@ describe("validateDreamAvatarMapping", () => {
 
 describe("setupAssets", () => {
   it("normalizes TOML cards and dreamAvatars into runtime JSON artifacts", () => {
-    const tempRoot = mkdtempSync(join(tmpdir(), "quest-setup-assets-"));
+    const tempRoot = mkdtempSync(join(tmpdir(), "journey-setup-assets-"));
     const publicDir = join(tempRoot, "public");
     const imageCacheDir = join(tempRoot, "image-cache");
     const dreamAvatarArtDir = join(tempRoot, "dream-avatar-art");
@@ -303,7 +303,7 @@ rendered-text = "Use the canonical Dreamsign text."
   });
 
   it("passes through tuned starting-essence values from the TOML", () => {
-    const tempRoot = mkdtempSync(join(tmpdir(), "quest-setup-assets-"));
+    const tempRoot = mkdtempSync(join(tmpdir(), "journey-setup-assets-"));
     const publicDir = join(tempRoot, "public");
     const imageCacheDir = join(tempRoot, "image-cache");
     const dreamAvatarArtDir = join(tempRoot, "dream-avatar-art");
@@ -386,7 +386,7 @@ rendered-text = ""
   });
 
   it("retains the rarity field on Legendary cards and omits it otherwise", () => {
-    const tempRoot = mkdtempSync(join(tmpdir(), "quest-setup-assets-"));
+    const tempRoot = mkdtempSync(join(tmpdir(), "journey-setup-assets-"));
     const publicDir = join(tempRoot, "public");
     const imageCacheDir = join(tempRoot, "image-cache");
     const dreamAvatarArtDir = join(tempRoot, "dream-avatar-art");
@@ -632,7 +632,7 @@ describe("buildDraftRecords", () => {
   }
 
   it("skips a file that has no seats array", () => {
-    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    const dir = mkdtempSync(join(tmpdir(), "journey-draft-records-"));
     writeFileSync(
       join(dir, "names.jsonc"),
       JSON.stringify({ notSeats: true }),
@@ -642,7 +642,7 @@ describe("buildDraftRecords", () => {
   });
 
   it("drops a seat with empty mainboard", () => {
-    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    const dir = mkdtempSync(join(tmpdir(), "journey-draft-records-"));
     writeFileSync(
       join(dir, "draft.jsonc"),
       JSON.stringify({
@@ -659,7 +659,7 @@ describe("buildDraftRecords", () => {
   });
 
   it("skips a seat with no picks array without throwing", () => {
-    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    const dir = mkdtempSync(join(tmpdir(), "journey-draft-records-"));
     writeFileSync(
       join(dir, "draft.jsonc"),
       JSON.stringify({
@@ -676,7 +676,7 @@ describe("buildDraftRecords", () => {
   });
 
   it("trims a complete seat to exactly 30 packs and picks, in pickNumber order, preserving raw packCards order including duplicates", () => {
-    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    const dir = mkdtempSync(join(tmpdir(), "journey-draft-records-"));
     // Pack 2, pick-in-pack 3 gets a duplicate "Dup" to prove no dedup.
     const picks = makePicks({ extraPackCards: [] });
     // Insert a duplicate into pack 2, pickInPack 3 (which trims to <=10, so it stays).
@@ -720,7 +720,7 @@ describe("buildDraftRecords", () => {
   });
 
   it("emits id as <draftId>#<seat>", () => {
-    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    const dir = mkdtempSync(join(tmpdir(), "journey-draft-records-"));
     writeFileSync(
       join(dir, "draft.jsonc"),
       JSON.stringify({
@@ -734,7 +734,7 @@ describe("buildDraftRecords", () => {
   });
 
   it("skips a seat with fewer than 30 trimmed picks (incomplete record)", () => {
-    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    const dir = mkdtempSync(join(tmpdir(), "journey-draft-records-"));
     // Only 2 packs × 10 = 20 trimmed picks — incomplete.
     const incompletePicks = makePicks({ picksPerPack: 10 }).filter(
       (p) => p.pack <= 2,
@@ -751,7 +751,7 @@ describe("buildDraftRecords", () => {
   });
 
   it("keeps only the first three packs from a draft with more than three packs", () => {
-    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    const dir = mkdtempSync(join(tmpdir(), "journey-draft-records-"));
     // A 5-pack draft, 10 picks per pack. Packs 1-3 (pickInPack <= 10) yield the
     // 30 trimmed picks; packs 4-5 are dropped entirely. Each pick is tagged with
     // its pack marker (P1..P5) so we can assert which packs survived.
@@ -793,7 +793,7 @@ describe("buildDraftRecords", () => {
   });
 
   it("drops tokens that are not a known card UUID and excludes them from output", () => {
-    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    const dir = mkdtempSync(join(tmpdir(), "journey-draft-records-"));
     // A UUID that is not in cardMaps.idToName (an unknown/removed card).
     const UNKNOWN = "99999999-9999-9999-9999-999999999999";
     const picks = makePicks();
@@ -822,7 +822,7 @@ describe("buildDraftRecords", () => {
   });
 
   it("resolves UUID tokens through idToName, surviving a rename (JSONC input)", () => {
-    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    const dir = mkdtempSync(join(tmpdir(), "journey-draft-records-"));
     // The corpus stores stable ids. `RENAMED_ID`'s historical display name does
     // not appear anywhere; idToName maps the id to its current name — so the pick
     // must survive and surface the new name purely from its UUID.

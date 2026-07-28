@@ -1,16 +1,16 @@
 import { advanceAtlas } from "../../atlas/atlas-generator";
 import type { AtlasBuildContext } from "../../atlas/atlas-generator";
 import { logEvent } from "../../logging";
-import type { QuestMutations } from "../../state/quest-context";
-import type { DreamAtlas, DreamscapeModifier } from "../../types/quest";
+import type { JourneyMutations } from "../../state/journey-context";
+import type { DreamAtlas, DreamscapeModifier } from "../../types/journey";
 
 /**
  * Ownership note (spec K-5 / K-6, L-1):
  * Although this module lives under `src/battle/integration/`, the events it
  * emits (`essence_granted`, `site_completed`, `dreamscape_completed`) are
- * semantically quest-level. Spec K-6 says the battle module emits only
+ * semantically journey-level. Spec K-6 says the battle module emits only
  * `battle_proto_*` events; this bridge is exempt because it is the sanctioned
- * adapter that translates a battle victory into persistent quest-state
+ * adapter that translates a battle victory into persistent journey-state
  * mutations. The file's physical location reflects the caller (playable
  * battle screen) rather than the logical owner of the emitted events.
  */
@@ -38,7 +38,7 @@ export interface CompleteBattleSiteVictoryInput {
    */
   atlasBuildContext: AtlasBuildContext;
   mutations: Pick<
-    QuestMutations,
+    JourneyMutations,
     | "changeEssence"
     | "incrementCompletionLevel"
     | "markSiteVisited"
@@ -106,7 +106,7 @@ export function completeBattleSiteVictory(
     outcome: `Victory - earned ${String(essenceReward)} essence`,
   });
 
-  const completeQuestHandoff = () => {
+  const completeJourneyHandoff = () => {
     if (!isFinalBoss) {
       mutations.setScreen({ type: "atlas" });
     }
@@ -149,13 +149,13 @@ export function completeBattleSiteVictory(
       if (controller.signal.aborted) {
         return;
       }
-      completeQuestHandoff();
+      completeJourneyHandoff();
     }, postVictoryHandoffDelayMs);
     pendingPostVictoryHandoffTimers.add(handle);
     return;
   }
 
-  completeQuestHandoff();
+  completeJourneyHandoff();
 }
 
 function clearBridgeState(): void {
@@ -168,7 +168,7 @@ function clearBridgeState(): void {
 }
 
 /**
- * Production-facing reset hook. Called by `resetQuest()` so a brand-new run
+ * Production-facing reset hook. Called by `resetJourney()` so a brand-new run
  * starts with an empty idempotency set and no pending atlas-handoff timers.
  * Any timer scheduled by a prior session is marked aborted before being
  * cleared, so a callback that has already been pulled off the event loop

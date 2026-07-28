@@ -5,7 +5,7 @@ import { DreamAvatarPortrait } from "../cumulus/components/hud/DreamAvatarPortra
 import { RulesText } from "../cumulus/components/card/RulesText";
 import { SIZE_PRESETS } from "./card-size";
 import type { CardData } from "../types/cards";
-import type { QuestContent } from "../data/quest-content";
+import type { JourneyContent } from "../data/journey-content";
 import type { Tides4DeckJson, Tides4DecksJson } from "../draft/pool/tides4-io";
 import { resolveTideDeck, type TideDeckResolution } from "./tide-deck-resolution";
 import { TIDE_DOT_COLOR } from "./TidePoolModal";
@@ -18,11 +18,11 @@ export interface DreamAvatarDetailViewProps {
   dreamAvatar: EditorDreamAvatarRecord;
   tides: readonly EditorTideOption[];
   /**
-   * Quest content backing the signature-card lookup. `null` while the bundle
+   * Journey content backing the signature-card lookup. `null` while the bundle
    * is still loading; an error string when the load failed.
    */
-  questContent: QuestContent | null;
-  questContentError: string | null;
+  journeyContent: JourneyContent | null;
+  journeyContentError: string | null;
   /**
    * The committed `tides4` artifact backing the tide decklists shown when a Tide
    * is clicked. `null` while it is still loading; an error string when the load
@@ -344,8 +344,8 @@ function TideCardPanel({
 export default function DreamAvatarDetailView({
   dreamAvatar,
   tides,
-  questContent,
-  questContentError,
+  journeyContent,
+  journeyContentError,
   tideDecks,
   tideDecksError,
   onClose,
@@ -391,22 +391,22 @@ export default function DreamAvatarDetailView({
   // signature-card panel below.
   const cardsByUuid = useMemo(() => {
     const byId = new Map<string, CardData>();
-    if (questContent !== null) {
-      for (const card of questContent.cardDatabase.values()) {
+    if (journeyContent !== null) {
+      for (const card of journeyContent.cardDatabase.values()) {
         byId.set(card.id.toLowerCase(), card);
       }
     }
     return byId;
-  }, [questContent]);
+  }, [journeyContent]);
 
   // Resolve the DreamAvatar's signature cards to renderable CardData. Resolution
   // uses `signatureCardIds` (stable cards_v2 UUIDs, index-aligned with
   // `signatureCards`) so two cards that share a display name are never confused.
   const signature = useMemo<SignatureResolution>(() => {
-    if (questContent === null) {
+    if (journeyContent === null) {
       return { cards: [], unresolved: [] };
     }
-    const match = questContent.dreamAvatars.find(
+    const match = journeyContent.dreamAvatars.find(
       (entry) => entry.id === dreamAvatar.id,
     );
     const ids = match?.signatureCardIds ?? [];
@@ -434,7 +434,7 @@ export default function DreamAvatarDetailView({
       }
     }
     return { cards, unresolved };
-  }, [questContent, dreamAvatar.id, cardsByUuid]);
+  }, [journeyContent, dreamAvatar.id, cardsByUuid]);
 
   // Which Tide (if any) the viewer has clicked to reveal its decklist.
   const [selectedTideId, setSelectedTideId] = useState<string | null>(null);
@@ -472,8 +472,8 @@ export default function DreamAvatarDetailView({
   // The decklist needs both the card database (for renderable cards) and the
   // tides4 artifact (for the tide -> card mapping); we are loading until both
   // arrive, and only surface an error once a selection actually needs them.
-  const tideCardsLoading = questContent === null || tideDecks === null;
-  const tideCardsError = tideDecksError ?? questContentError;
+  const tideCardsLoading = journeyContent === null || tideDecks === null;
+  const tideCardsError = tideDecksError ?? journeyContentError;
 
   function handleSelectTide(id: string) {
     setSelectedTideId((current) => (current === id ? null : id));
@@ -567,11 +567,11 @@ export default function DreamAvatarDetailView({
       >
         <section style={{ marginBottom: 28 }}>
           <h2 style={sectionTitleStyle}>Signature cards</h2>
-          {questContentError !== null ? (
+          {journeyContentError !== null ? (
             <p style={{ margin: 0, color: "#fecaca", fontSize: "0.85rem" }}>
-              Failed to load card data: {questContentError}
+              Failed to load card data: {journeyContentError}
             </p>
-          ) : questContent === null ? (
+          ) : journeyContent === null ? (
             <p style={{ margin: 0, color: "#94a3b8", fontSize: "0.85rem" }}>
               Loading card database…
             </p>
@@ -581,7 +581,7 @@ export default function DreamAvatarDetailView({
             </p>
           ) : (
             <>
-              {/* Tile the signature cards at the quest draft-offer width so the
+              {/* Tile the signature cards at the journey draft-offer width so the
                   display matches the Deck Viewer's "large" preset. The grid is
                   an inline-size container so the cards' `100cqw`-based width
                   resolves against the grid, not the viewport. */}

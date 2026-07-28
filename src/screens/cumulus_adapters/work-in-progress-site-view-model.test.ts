@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { DreamGuideContent } from "../../types/content";
-import type { SiteState } from "../../types/quest";
+import type { SiteState } from "../../types/journey";
 import {
   buildWorkInProgressSiteView,
   isWorkInProgressSiteType,

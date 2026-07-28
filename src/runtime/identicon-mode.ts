@@ -2,9 +2,9 @@
  * `identicons=1` URL parameter handling.
  *
  * When present, every card renders its generated identicon art instead of its
- * assigned image. Both the quest prototype and the standalone card editor
+ * assigned image. Both the journey prototype and the standalone card editor
  * render cards through `CardView`, so a single shared reader covers both
- * surfaces. Like the other quest runtime parameters this is read once per page
+ * surfaces. Like the other journey runtime parameters this is read once per page
  * load and is not reactive; changing it requires a reload.
  */
 

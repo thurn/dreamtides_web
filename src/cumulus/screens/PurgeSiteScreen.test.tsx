@@ -7,7 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { artRef } from "../primitives/art";
-import { QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/QuestStatusBar";
+import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/JourneyStatusBar";
 import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 import {
   PurgeSiteScreen,
@@ -147,7 +147,7 @@ describe("PurgeSiteScreen", () => {
       container.querySelector('[data-testid="cumulus-purge-commit-bar"]'),
     ).toBeNull();
     expect(
-      container.querySelector("[data-quest-status-bar-anchor]"),
+      container.querySelector("[data-journey-status-bar-anchor]"),
     ).toBeNull();
 
     act(() => {
@@ -240,7 +240,7 @@ describe("PurgeSiteScreen", () => {
     expect(
       container.querySelector<HTMLElement>("[data-guide-gallery-site]")?.style
         .paddingBottom,
-    ).toBe(QUEST_STATUS_BAR_FLOATING_PANEL_CLEARANCE);
+    ).toBe(JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE);
     expect(cardRegion?.style.height).toBe("100%");
     expect(cardRegion?.style.width).toBe("calc(100vw - (var(--space-4) * 2))");
     expect(cardRegion?.style.minHeight).toBe("0px");
@@ -266,12 +266,12 @@ describe("PurgeSiteScreen", () => {
     });
   });
 
-  it("leaves persistent quest chrome to the router-owned wrapper", () => {
+  it("leaves persistent journey chrome to the router-owned wrapper", () => {
     const { container, root } = mount(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
     expect(
-      container.querySelector("[data-quest-status-bar-anchor]"),
+      container.querySelector("[data-journey-status-bar-anchor]"),
     ).toBeNull();
 
     act(() => {

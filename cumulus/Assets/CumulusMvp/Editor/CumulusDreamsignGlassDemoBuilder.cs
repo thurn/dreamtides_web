@@ -17,7 +17,7 @@ using UnityEngine.SceneManagement;
 namespace CumulusMvp.Editor
 {
     /// <summary>
-    /// Authors three UUID-backed quest Dreamsigns as lit world-space meshes
+    /// Authors three UUID-backed journey Dreamsigns as lit world-space meshes
     /// floating immediately above the shared Cumulus shop glass.
     /// </summary>
     public static class CumulusDreamsignGlassDemoBuilder
@@ -358,7 +358,7 @@ namespace CumulusMvp.Editor
             TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
             if (importer == null)
             {
-                throw new InvalidOperationException($"Missing quest Dreamsign texture at {path}.");
+                throw new InvalidOperationException($"Missing journey Dreamsign texture at {path}.");
             }
 
             bool changed =

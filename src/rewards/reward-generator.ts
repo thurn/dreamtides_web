@@ -1,5 +1,5 @@
 import type { DreamsignTemplate } from "../types/content";
-import type { Dreamsign } from "../types/quest";
+import type { Dreamsign } from "../types/journey";
 import {
   readDreamsignPool,
   resolveDreamsignTemplates,

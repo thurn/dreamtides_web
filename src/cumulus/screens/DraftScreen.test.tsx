@@ -190,7 +190,7 @@ describe("Cumulus DraftScreen", () => {
     });
   });
 
-  it("renders the reroll control beside the top-right quest menu and dispatches it", () => {
+  it("renders the reroll control beside the top-right journey menu and dispatches it", () => {
     const onReroll = vi.fn();
     const { container, root } = mount(
       <DraftScreen

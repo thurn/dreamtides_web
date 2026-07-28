@@ -5,7 +5,7 @@
 // a player can be told in one sentence:
 //
 //   "There are 32 preconstructed decks called tides — each has a known decklist
-//    you can go read. We combine a few of them at the start of a quest: your
+//    you can go read. We combine a few of them at the start of a journey: your
 //    DreamAvatar's own signature tide leads, shuffled together with broad tides
 //    until there are enough cards, then we deal the first 150, never more than
 //    2 copies of a card."
@@ -46,7 +46,7 @@ import type { Tides3DecksJson } from "./tides3-io.ts";
 
 interface Tides3Tuning {
   // Copies dealt into the pool. Pinned to `sigseed`'s pool size (150) rather
-  // than the quest's 200 so `tides3` reproduces the same pools `sigseed` ships;
+  // than the journey's 200 so `tides3` reproduces the same pools `sigseed` ships;
   // the passed `targetSize` is ignored, exactly as `sigseed`/`pickfit` ignore it.
   dealSize: number;
   // Max copies of any single card dealt (the pool-wide 2-copy rule).

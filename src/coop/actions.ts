@@ -13,8 +13,8 @@
 //   - `useActions()` (see hooks.ts) — binds `append` to the room's LogClient and
 //     adds the RESOLVE_PROMPT confirmed-prompt guard.
 //
-// Signatures mirror the legacy `QuestMutations` call ergonomics
-// (src/state/quest-context.tsx) closely enough that Task 26 can back that
+// Signatures mirror the legacy `JourneyMutations` call ergonomics
+// (src/state/journey-context.tsx) closely enough that Task 26 can back that
 // interface with these creators; complex payload shapes are typed `unknown`
 // here to keep this module import-light (the reducer's domain case is the one
 // place that narrows them).
@@ -70,8 +70,8 @@ export interface CoopActions {
   setCompletionLevel: (value: number) => Promise<number>;
 
   // --- lifecycle ---
-  startQuest: (payload?: Record<string, unknown>) => Promise<number>;
-  resetQuest: () => Promise<number>;
+  startJourney: (payload?: Record<string, unknown>) => Promise<number>;
+  resetJourney: () => Promise<number>;
   loadState: (snapshot: unknown, battle?: unknown) => Promise<number>;
 
   // --- dreamAvatar ---
@@ -320,8 +320,8 @@ export function makeActions(append: AppendFn): CoopActions {
     setCompletionLevel: (value) => emit("SET_COMPLETION_LEVEL", { value }),
 
     // --- lifecycle ---
-    startQuest: (payload = {}) => emit("START_QUEST", { ...payload }),
-    resetQuest: () => emit("RESET_QUEST", {}),
+    startJourney: (payload = {}) => emit("START_JOURNEY", { ...payload }),
+    resetJourney: () => emit("RESET_JOURNEY", {}),
     loadState: (snapshot, battle) =>
       emit(
         "LOAD_STATE",

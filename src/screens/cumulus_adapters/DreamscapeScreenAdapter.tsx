@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DreamscapeScreen } from "../../cumulus/screens/DreamscapeScreen";
 import { logEvent } from "../../logging";
-import { useQuest } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
 import {
   buildDreamscapeOverviewLog,
   buildDreamscapeView,
@@ -13,9 +13,9 @@ import {
   resolveRewardReplacement,
 } from "./inline-reward-view-model";
 
-/** Wires the live quest fold to the pure Cumulus Dreamscape screen. */
+/** Wires the live journey fold to the pure Cumulus Dreamscape screen. */
 export function DreamscapeScreenAdapter() {
-  const { state, mutations } = useQuest();
+  const { state, mutations } = useJourney();
   const node = state.currentDreamscape === null
     ? undefined
     : state.atlas.nodes[state.currentDreamscape];

@@ -6,7 +6,7 @@ import {
   guidePortraitUrl,
 } from "../cumulus/components/atlas/atlas-display";
 import { siteTypeIcon } from "../atlas/atlas-generator";
-import type { SiteType } from "../types/quest";
+import type { SiteType } from "../types/journey";
 import DreamscapeResidents, {
   type ResidentAssignmentStatus,
 } from "./DreamscapeResidents";

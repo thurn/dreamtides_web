@@ -1,4 +1,4 @@
-import type { SiteType } from "../../types/quest";
+import type { SiteType } from "../../types/journey";
 import type {
   MerchantChoiceCandidate,
   MerchantDeckCard,

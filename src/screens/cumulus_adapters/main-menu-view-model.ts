@@ -2,7 +2,7 @@ import { artRef } from "../../cumulus/primitives/art";
 import { GLYPHS } from "../../cumulus/primitives/glyph";
 import type { MainMenuView } from "../../cumulus/screens/MainMenuScreen";
 
-/** Build the static identity and action order of the pre-quest main menu. */
+/** Build the static identity and action order of the pre-journey main menu. */
 export function buildMainMenuView(): MainMenuView {
   return {
     title: "Dreamtides",

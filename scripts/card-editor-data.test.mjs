@@ -93,7 +93,7 @@ card-number = 1000
 }
 
 function writeFixtureRoot() {
-  const rootDir = mkdtempSync(join(tmpdir(), "quest-card-editor-data-"));
+  const rootDir = mkdtempSync(join(tmpdir(), "journey-card-editor-data-"));
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
   mkdirSync(join(rootDir, "public"), { recursive: true });
   writeFileSync(join(rootDir, "data", "tabula", "cards_v2.toml"), fixtureToml());

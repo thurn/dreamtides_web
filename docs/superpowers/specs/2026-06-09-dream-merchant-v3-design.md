@@ -37,7 +37,7 @@ property of the system.
 - Exactly two offers, `A` and `B`. The player accepts at most one or declines.
   Accepting or declining completes the site.
 - Both offers are free. There is no pricing, locking, or payment step.
-- Generation is deterministic per (quest seed, site id, deck state). The
+- Generation is deterministic per (journey seed, site id, deck state). The
   regenerate-and-validate-on-accept pattern from the current implementation is
   retained: acceptance rebuilds the encounter from current state, validates the
   encounter signature and offer identity, applies the reward, and completes the
@@ -49,7 +49,7 @@ property of the system.
 Archetypes that hide their candidate cards until the player commits
 (`category_draft_known`, `premium_draft`) accept in two steps:
 
-1. **Commit mutation**: records the committed offer id in quest state and
+1. **Commit mutation**: records the committed offer id in journey state and
    forfeits the other offer. The site is not yet complete. The commit flag
    exists so a reload cannot recover the forfeited offer; deterministic
    generation guarantees the revealed candidates are stable across reload.
@@ -63,7 +63,7 @@ Fully face-up archetypes keep the single accept-with-choice mutation.
 
 All sampling uses the existing stable-hash utility (SHA-256 over string parts,
 as used today for jitter and dialogue selection), mapped to uniform floats.
-Every draw salts the hash with (quest seed, site id, slot, purpose), e.g.
+Every draw salts the hash with (journey seed, site id, slot, purpose), e.g.
 `hash(seed, siteId, "B", "archetype")`, `hash(seed, siteId, "B", "target", i)`.
 Draws are therefore independent of one another and reproducible. The same run
 always shows the same offers at a given merchant; different runs diverge
@@ -87,7 +87,7 @@ delivers "never know what you'll get". Archetypes may override `bandFraction`
 ## Generation pipeline
 
 ```
-buildMerchantContext(questState, questContent)
+buildMerchantContext(journeyState, journeyContent)
   -> MerchantContext { deck, dreamsigns, cardDatabase, corpus signals,
                        dreamsign profiles }
 

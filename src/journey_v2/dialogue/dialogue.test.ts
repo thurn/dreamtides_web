@@ -4,7 +4,7 @@ import { buildMerchantContext } from "../context/buildMerchantContext";
 import {
   makeMerchantTestCard,
   makeMerchantTestContent,
-  makeMerchantTestQuestState,
+  makeMerchantTestJourneyState,
   makeMerchantTestSite,
 } from "../testing/fixtures";
 import type { MerchantArchetypeId } from "../archetypes/types";
@@ -29,7 +29,7 @@ function wordCount(text: string): number {
 }
 
 function makeContext(input?: { seed?: string; siteId?: string }): MerchantContext {
-  const questContent = makeMerchantTestContent({
+  const journeyContent = makeMerchantTestContent({
     cards: [
       makeMerchantTestCard({
         id: asCardId("11111111-1111-4111-8111-111111111111"),
@@ -37,13 +37,13 @@ function makeContext(input?: { seed?: string; siteId?: string }): MerchantContex
       }),
     ],
   });
-  const questState = makeMerchantTestQuestState({
+  const journeyState = makeMerchantTestJourneyState({
     seed: input?.seed ?? "dialogue-fixture-seed",
   });
   const site = makeMerchantTestSite({
     id: input?.siteId ?? "site-dialogue-fixture",
   });
-  return buildMerchantContext({ questState, questContent, site });
+  return buildMerchantContext({ journeyState, journeyContent, site });
 }
 
 function makeOffer(input: {

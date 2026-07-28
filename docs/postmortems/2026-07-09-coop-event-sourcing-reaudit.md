@@ -68,7 +68,7 @@ not by design.
   ways for dreamwell (per-(side,turn) no-op guard, edge detection,
   `dawnFired` marker) and materialized triggers fire exactly once regardless
   of which layer moved the card.
-- `applyDebugEdit` deep-clones; quest cases spread immutably; no
+- `applyDebugEdit` deep-clones; journey cases spread immutably; no
   identity-keyed memoization inside `src/rules/`; rng is a pure keyed
   sha256 stream honoring the one-consumer-per-event convention.
 - Provider registration is synchronous before any fold can run
@@ -78,7 +78,7 @@ not by design.
   state returned before any rng draw on the already-open path.
 - `hooks.ts` LogClient lifecycle is StrictMode-correct (two sequential
   clients, never two live subscriptions); the pre-baseline append queue
-  drains exactly once; the quest-log sink's high-water + fresh-per-mount
+  drains exactly once; the journey-log sink's high-water + fresh-per-mount
   clientId dedupe correctly across refolds.
 - CI runs lint/typecheck/vitest plus the emulator suite (including a
   real-reducer two-client storm with compaction and a post-compaction joiner)
@@ -183,7 +183,7 @@ not by design.
   recording that compaction has failed 10,000 times. Fix: `applyAppend`
   can't do IO, so surface it structurally — e.g. persist a
   `compactionFailureCount`/last-error field on the node (updated inside the
-  same transaction) that the client logs loudly (quest-log
+  same transaction) that the client logs loudly (journey-log
   `compaction_failing` record) when it crosses a threshold, or have the
   client detect `head - baseSeq > 2×COMPACT_THRESHOLD` and log.
 
@@ -219,8 +219,8 @@ not by design.
 - **R-P1-5. Provider content is environment-dependent: per-client
   fetch-failure fallbacks silently violate the identical-providers
   invariant.** `registerGameProviders` documents that registered content
-  must be identical across clients or folds diverge, but `loadQuestContent`
-  (`src/data/quest-content.ts:799-830`) degrades per client on network
+  must be identical across clients or folds diverge, but `loadJourneyContent`
+  (`src/data/journey-content.ts:799-830`) degrades per client on network
   failure: `loadDecklistIds().catch(() => [])`,
   `loadDraftRecords().catch(() => [])`,
   `loadKnownGoodDecklists().catch(() => [])`,
@@ -296,7 +296,7 @@ not by design.
 - **R-P2-4. `LOAD_STATE` can plant an unresolvable `pendingPrompt`, wedging
   the room permanently — the exact state the sanctioned catch exists to
   prevent.** `asValidBattleFoldState`
-  (`src/rules/quest/lifecycle.ts:479-493`) validates run cursors but not
+  (`src/rules/journey/lifecycle.ts:479-493`) validates run cursors but not
   `pendingPrompt.promptId`'s type or `options`' shape. A snapshot whose
   `promptId` is a string applies; `isMatchingResolve` requires a finite
   number, so no resolve can ever match, and CAS rule 4 bounces every
@@ -381,7 +381,7 @@ not by design.
   says) but it compounds R-P1-2, and `appliedIndex` could be pruned to the
   window above `min(basedOnSeq)` of live events if rooms ever live longer.
 - **R-P3-8.** `createRoomEvictingStale` downloads the entire `rooms/` tree
-  (every room's full log and quest-log mirror) to read each `genesis`
+  (every room's full log and journey-log mirror) to read each `genesis`
   string (`room.ts:229-231`); a per-child shallow read of
   `rooms/*/log/genesis` scales instead.
 - **R-P3-9.** `generateRoomId` (`room.ts:59`) has modulo bias
@@ -402,7 +402,7 @@ not by design.
   restarts `nonceCounter` at 0 (`client.ts:334`); client #2's first nonce
   can collide with client #1's committed event and strip the wrong pending
   echo. Dev-only, tiny window; a random component in the nonce closes it.
-- **R-P3-14.** Quest-log-sink completeness claims overstate: an appender
+- **R-P3-14.** Journey-log-sink completeness claims overstate: an appender
   closing its tab before folding its own confirm leaves that event mirrored
   by nobody, and after a rewind `mirroredHighWater` suppresses re-mirroring
   rewritten own events. Best-effort is fine — soften the header claim or
@@ -428,7 +428,7 @@ compaction and a post-compaction joiner, all wired into CI). What's missing,
 in value order:
 
 1. **Battle-phase chaos storm.** The real-reducer concurrent storm
-   (emulator scenario D) is quest-only: no `BEGIN_BATTLE`,
+   (emulator scenario D) is journey-only: no `BEGIN_BATTLE`,
    `BATTLE_COMMAND`, `BATTLE_GESTURE`, `RESOLVE_PROMPT`, or `END_BATTLE`
    ever flows through two concurrent clients in any test. Battle carries
    the prompt gate, trigger queue, and dreamwell — the highest-risk
@@ -437,7 +437,7 @@ in value order:
    promptIds) whenever a prompt is open. This storm would have caught
    R-P0-1 immediately.
 2. **Two-actor ordering-convergence property sweep (pure fold, in
-   `npm test`).** `quest-properties.test.ts` runs 100 seeds but single
+   `npm test`).** `journey-properties.test.ts` runs 100 seeds but single
    actor, always-fresh `basedOnSeq` — it never trips CAS staleness, partner
    windows, or compaction horizons. Add a two-actor variant with randomized
    stale `basedOnSeq` asserting fold-vs-compact-at-k equivalence with the

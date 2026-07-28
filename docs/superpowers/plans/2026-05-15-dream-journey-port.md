@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use super-subagent-driven-development (recommended) or super-executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the quest prototype's existing Dream Journey screen with a port of the `~/journeys` CLI's plugin-based generator, rendering manifests as 1–3 circular images in a horizontal row with hover-cards and an Enter Dream button per option.
+**Goal:** Replace the journey prototype's existing Dream Journey screen with a port of the `~/journeys` CLI's plugin-based generator, rendering manifests as 1–3 circular images in a horizontal row with hover-cards and an Enter Dream button per option.
 
-**Architecture:** All new code lives in `src/journeys/`. Only `src/journeys/adapter/` is allowed to import from the rest of the quest prototype. The CLI's plugin shapes, predicates, costs/rewards, value model, validators, and manifest contract port verbatim; Node-specific seams (RNG, fs loaders, terminal renderers) are replaced. The viability layer is *extended* past the CLI's bare-bones gating to honor live deck/pool/resource state. Decision-tree shapes advance step-by-step inside the journey screen via a single `advanceTree` helper that consumes the manifest's precommitted random outcomes.
+**Architecture:** All new code lives in `src/journeys/`. Only `src/journeys/adapter/` is allowed to import from the rest of the journey prototype. The CLI's plugin shapes, predicates, costs/rewards, value model, validators, and manifest contract port verbatim; Node-specific seams (RNG, fs loaders, terminal renderers) are replaced. The viability layer is *extended* past the CLI's bare-bones gating to honor live deck/pool/resource state. Decision-tree shapes advance step-by-step inside the journey screen via a single `advanceTree` helper that consumes the manifest's precommitted random outcomes.
 
 **Tech Stack:** TypeScript, React 19, Vite, framer-motion (already used by the existing screen), vitest, smol-toml (already a dev dep), js-sha256 (new dep, ~3 KB, zero transitive deps, replaces Node `crypto.createHash`).
 
@@ -17,7 +17,7 @@
 The directory layout is fixed by the spec's Architecture section. The plan adds these files (one task per logical group). Where a file ports verbatim from the CLI, the source path under `/Users/dthurn/journeys/src/journey/` is named; the implementer copies, then makes the minimal browser adjustments described.
 
 - `src/journeys/index.ts` — public surface (re-exports `JourneyScreen` and `journeySeedForSite`).
-- `src/journeys/adapter/seed.ts`, `content-bridge.ts`, `buildContext.ts` — quest state → journey context translation.
+- `src/journeys/adapter/seed.ts`, `content-bridge.ts`, `buildContext.ts` — journey state → journey context translation.
 - `src/journeys/content/types.ts`, `keywords.ts` — internal Card/Dreamsign/Dream Avatar types.
 - `src/journeys/util/rng.ts`, `stableJson.ts`, `tree.ts` — labeled-hash RNG, stable JSON, decision-tree traversal.
 - `src/journeys/journey/manifest.ts`, `symbols.ts`, `rewardArtTypes.ts`, `effects.ts`, `value.ts`, `operationBuilders.ts`, `assembly.ts`, `generate.ts` — the pipeline.
@@ -29,7 +29,7 @@ The directory layout is fixed by the spec's Architecture section. The plan adds 
 - `src/journeys/data/reward-art-matches.toml` — the ledger.
 - `public/journeys/<imageId>.<ext>` — image assets, populated by `scripts/setup-assets.mjs` at build time.
 
-Files removed: `src/data/dream-journeys.ts`, `src/screens/DreamJourneyScreen.tsx`, `src/screens/DreamJourneyScreen.test.tsx`. Files modified: `src/types/quest.ts`, `src/state/quest-context.tsx`, `src/state/multiplayer-quest-context.tsx`, the screen router that dispatches site rendering, `scripts/setup-assets.mjs`, `package.json`.
+Files removed: `src/data/dream-journeys.ts`, `src/screens/DreamJourneyScreen.tsx`, `src/screens/DreamJourneyScreen.test.tsx`. Files modified: `src/types/journey.ts`, `src/state/journey-context.tsx`, `src/state/multiplayer-journey-context.tsx`, the screen router that dispatches site rendering, `scripts/setup-assets.mjs`, `package.json`.
 
 ---
 
@@ -124,16 +124,16 @@ This is the only directory allowed to import from `src/types/` or `src/state/`. 
 Three concrete decisions the spec already settled:
 - Rarity: `"Legendary"` → `"Rare"`, `"Starter"` → `"Starter"`, otherwise → `"Uncommon"`.
 - Dreamsign kind: non-empty `packageTides` → `tidal`, empty → `neutral`.
-- Seed: `sha256(questState.atlas.startingNodeId + ":" + site.id).slice(0, 16)`.
+- Seed: `sha256(journeyState.atlas.startingNodeId + ":" + site.id).slice(0, 16)`.
 
 - [ ] **Step 1: Write the rarity-normalization test.** Three input rarities and `undefined`, four expected outputs. **Bug class:** drift in the normalization table.
 - [ ] **Step 2: Write the dreamsign-kind test.** Two inputs, two expected outputs. Same bug class.
 - [ ] **Step 3: Write the seed-determinism test.** Same site + state → identical seed across calls; different sites → different seeds. **Bug class:** non-determinism in seed derivation (would break manifest stability across renders).
 - [ ] **Step 4: Write the bane-derivation test.** Build a deck fixture containing two bane-flagged entries and three normal cards; assert `projection.banes` has exactly the two banes and `projection.deck` has all five entries. **Bug class:** banes silently disappearing from the projection.
 - [ ] **Step 5: Run tests; expect FAIL.**
-- [ ] **Step 6: Implement adapter.** `seed.ts` is small (one hash call). `content-bridge.ts` maps quest types to journey-internal types. `buildContext.ts` assembles the `JourneyContext` and computes `contentVersion`.
+- [ ] **Step 6: Implement adapter.** `seed.ts` is small (one hash call). `content-bridge.ts` maps journey types to journey-internal types. `buildContext.ts` assembles the `JourneyContext` and computes `contentVersion`.
 - [ ] **Step 7: Run tests; expect PASS.**
-- [ ] **Step 8: Commit.** "Implement adapter from quest state to journey context."
+- [ ] **Step 8: Commit.** "Implement adapter from journey state to journey context."
 
 ---
 
@@ -184,7 +184,7 @@ This is the first place the port *extends* the CLI rather than copying it. The C
 | Deck contains predicate match | `deckContainsPredicate(ctx, predicateId, count)`. | `purge_random_predicate_card`, `purge_chosen_predicate_card`, `remove_transfigurations_from_random_predicate`. |
 | Deck contains named card | `deckContainsCard(ctx, cardId)`. | `purge_named_card` (when the templated card name is parametric — verify against the CLI's parameter shape). |
 | Deck size ≥ N | `deckHasMinSize(ctx, N)`. | `discard_X_cards` patterns; `pay_essence_random_range` if it has a draw-X-cards companion. |
-| Active dreamsign required | `ctx.state.quest.activeDreamsigns.length >= N`. | `purge_named_dreamsign`, `purge_random_dreamsign`, `purge_chosen_dreamsign`, `transform_dreamsign_to_random`. |
+| Active dreamsign required | `ctx.state.journey.activeDreamsigns.length >= N`. | `purge_named_dreamsign`, `purge_random_dreamsign`, `purge_chosen_dreamsign`, `transform_dreamsign_to_random`. |
 | Bane count ≥ N | `baneCount(ctx) >= N`. | `gain_random_banes`, `gain_named_banes` (these are bane-imposing, so they're always viable in kind; the "≥ N" pattern matters for "remove banes" rewards in Task 9, not for costs). |
 | Battle/shop/route modifier | `() => true`; the effect doesn't interrogate deck state. | `battle_reward_reduction_flat`, `battle_reward_reduction_percent`, `remove_shop_sites_from_next_dreamscapes`, `remove_dreamsign_sites_from_next_dreamscapes`, `set_starting_dreamwell_negative`, `shuffle_negative_dreamwell_cards`. |
 
@@ -217,14 +217,14 @@ Same shape as Task 8 but for rewards. The CLI ships viability functions on most 
 | Resource gain | `() => true`. | `gain_essence`, `gain_omens`, `set_essence_to_percent_of_max`, `gain_essence_random_range`, `gain_essence_to_max`, `increase_max_essence`. |
 | Deck predicate match required (≥ N) | `deckContainsPredicate(ctx, predicateId, N)`. | `gain_random_predicate_cards`, `draft_predicate_cards_from_4`, `take_any_from_predicate_choices`, `apply_named_transfiguration_to_chosen_predicate_cards`, `apply_named_transfiguration_to_random_predicate_cards`, `purge_chosen_predicate_cards`, `purge_chosen_predicate_with_replacement`, `transform_chosen_predicate_into_named`, `duplicate_random_predicate`, `draft_2_predicate_cards_from_4`, `draft_predicate_card_with_copies`, `draft_predicate_card_with_transfiguration`, `apply_named_transfiguration_to_all_predicate_cards`. |
 | Deck contains named card | `deckContainsCard(ctx, cardId)`. | `duplicate_named_card_X` *(currently checks only non-empty deck — upgrade)*, `apply_named_transfiguration_to_card_name`, `transform_card_in_deck_into_named`. |
-| Deck contains a discard-ability card | substring search `"discard"` (case-insensitive) over `card.renderedText` in `ctx.state.quest.deck`. | Any template whose effect references the discard mechanic. Grep `costs.ts`/`rewards.ts` for `discard` to find them. |
+| Deck contains a discard-ability card | substring search `"discard"` (case-insensitive) over `card.renderedText` in `ctx.state.journey.deck`. | Any template whose effect references the discard mechanic. Grep `costs.ts`/`rewards.ts` for `discard` to find them. |
 | Transfiguration target available | `transfigurationHasEligibleTarget(ctx, transfigurationId)`. | `apply_chosen_transfiguration_to_chosen_card`, `apply_named_transfiguration_to_*` (re-check that the eligibility filter is enforced for the *named* transfiguration, not just any transfiguration), `transfigure_random_starters`, `transfigure_all_starters`, `transfigure_chosen_starters`, `apply_random_transfigurations_to_random_cards`. |
 | Starter cards in deck | `starterCardCount(ctx) >= N`. | `transfigure_random_starters`, `transfigure_all_starters`, `purge_named_starter`, `purge_random_starter`, `purge_random_starter_with_predicate_replacement`, `transform_starter_into_named_card`, `purge_chosen_starters`, `purge_all_starters`, `replace_starter_via_draft`. |
 | Dreamsign pool match required | `poolHasDreamsignWithTide(ctx, tide)` or `dreamsignMatches(ctx).length >= N` for the unfiltered form. | `gain_random_dreamsign`, `gain_named_dreamsign`, `choose_1_of_X_dreamsigns`, `temporary_dreamsign_for_X_battles`. |
-| Active dreamsign required | `ctx.state.quest.activeDreamsigns.length >= 1`. | `gain_copy_of_random_dreamsign`, `gain_copy_of_chosen_dreamsign`, `transform_dreamsign_to_named`. |
+| Active dreamsign required | `ctx.state.journey.activeDreamsigns.length >= 1`. | `gain_copy_of_random_dreamsign`, `gain_copy_of_chosen_dreamsign`, `transform_dreamsign_to_named`. |
 | Bane count ≥ N | `baneCount(ctx) >= N`. | `purge_X_banes`, `purge_all_banes`. |
 | Route/shop modifier | `() => true`. | `add_site_to_dreamscape`, `add_site_to_next_dreamscape`, `replace_site_type`, `boost_site_appearance_chance`, `next_X_shop_rerolls_free`, `shop_essence_discount`, `shop_omen_discount`, `set_starting_dreamwell_positive`, `shuffle_positive_dreamwell_cards`. |
-| Deck size ≥ N (no predicate filter) | `ctx.state.quest.deck.summary.totalCards >= N`. | `duplicate_chosen_cards`, `draw_X_and_duplicate_chosen`, `make_random_cards_reclaim`, `make_random_cards_fast`, `apply_random_transfigurations_to_random_cards`, `change_card_to_become_type`, `make_card_reclaim`, `modify_random_cards_to_types`, `opening_hand_grant_for_X_battles`, `temporary_card_copy_for_X_battles`. |
+| Deck size ≥ N (no predicate filter) | `ctx.state.journey.deck.summary.totalCards >= N`. | `duplicate_chosen_cards`, `draw_X_and_duplicate_chosen`, `make_random_cards_reclaim`, `make_random_cards_fast`, `apply_random_transfigurations_to_random_cards`, `change_card_to_become_type`, `make_card_reclaim`, `modify_random_cards_to_types`, `opening_hand_grant_for_X_battles`, `temporary_card_copy_for_X_battles`. |
 | Always viable in kind | `() => true`. | `card_cost_reduction_for_X_battles` (operates on future battles, not the current deck). |
 
 **Smell patterns to fix during the audit:**
@@ -429,36 +429,36 @@ Tests use a mocked `generateNextJourney` so each test owns its manifest. This ke
 
 ## Phase I: Cutover
 
-### Task 20: Wire the new screen into the quest prototype
+### Task 20: Wire the new screen into the journey prototype
 
 **Files:**
-- Modify: `src/types/quest.ts` — simplify the `DreamJourneySiteRuntime` arm to `{ kind: "dreamJourney"; completed: boolean }` (drop `optionIds`).
-- Modify: `src/state/quest-context.tsx` — add `completeDreamJourneySite(siteId)` mutation; expose via the `QuestMutations` interface.
-- Modify: `src/state/multiplayer-quest-context.tsx` — mirror the new mutation.
+- Modify: `src/types/journey.ts` — simplify the `DreamJourneySiteRuntime` arm to `{ kind: "dreamJourney"; completed: boolean }` (drop `optionIds`).
+- Modify: `src/state/journey-context.tsx` — add `completeDreamJourneySite(siteId)` mutation; expose via the `JourneyMutations` interface.
+- Modify: `src/state/multiplayer-journey-context.tsx` — mirror the new mutation.
 - Modify: the screen router that dispatches site rendering (find via grep — likely `src/components/ScreenRouter.tsx` or a sibling) so that `"DreamJourney"` sites render `<JourneyScreen site={site} onClose={...} />` from `src/journeys`.
-- Modify: `src/state/quest-context.tsx` — the existing `ensureDreamJourneyRuntime` continues to fire to populate the simplified `{ completed: false }` slot on first visit. The `optionIds` field is removed from the assignment.
+- Modify: `src/state/journey-context.tsx` — the existing `ensureDreamJourneyRuntime` continues to fire to populate the simplified `{ completed: false }` slot on first visit. The `optionIds` field is removed from the assignment.
 
 The new mutation marks the site visited and returns to the dreamscape. Same logging events fire from the new screen.
 
-- [ ] **Step 1: Add `completeDreamJourneySite` mutation** in both quest contexts.
+- [ ] **Step 1: Add `completeDreamJourneySite` mutation** in both journey contexts.
 - [ ] **Step 2: Update the screen router** to dispatch DreamJourney sites to the new screen.
 - [ ] **Step 3: Update `ensureDreamJourneyRuntime`** to write the simplified runtime slot.
 - [ ] **Step 4: Write one integration test** for the new mutation: dispatch `completeDreamJourneySite("site-1")`; assert the site is in `visitedSites`, the runtime is `{ kind: "dreamJourney", completed: true }`, deck and resources are unchanged. **Bug class:** the new mutation accidentally mutating deck/resources, which is the central no-effects-applied contract.
-- [ ] **Step 5: Commit.** "Wire the new JourneyScreen into the quest prototype."
+- [ ] **Step 5: Commit.** "Wire the new JourneyScreen into the journey prototype."
 
 ### Task 21: Delete the old dream journey system
 
 **Files:**
 - Delete: `src/data/dream-journeys.ts`, `src/screens/DreamJourneyScreen.tsx`, `src/screens/DreamJourneyScreen.test.tsx`.
-- Modify: `src/state/quest-context.tsx` — remove `ensureDreamJourneyRuntime` (replaced by inline runtime creation in the new flow if needed), `completeDreamJourneyOption`, `applyDreamJourneyEffect`, `dreamJourneyOptionId`, `findDreamJourneyOption`.
-- Modify: `src/state/multiplayer-quest-context.tsx` — mirror the removals.
-- Modify: `src/types/quest.ts` — remove the `JourneyEffect` union (already moved earlier).
+- Modify: `src/state/journey-context.tsx` — remove `ensureDreamJourneyRuntime` (replaced by inline runtime creation in the new flow if needed), `completeDreamJourneyOption`, `applyDreamJourneyEffect`, `dreamJourneyOptionId`, `findDreamJourneyOption`.
+- Modify: `src/state/multiplayer-journey-context.tsx` — mirror the removals.
+- Modify: `src/types/journey.ts` — remove the `JourneyEffect` union (already moved earlier).
 - Modify: tests anywhere in `src/` that referenced `DREAM_JOURNEYS`, `completeDreamJourneyOption`, or `ensureDreamJourneyRuntime` — delete the assertions; if a test loses all its assertions, delete the whole test.
 
 The previous task left the old `ensureDreamJourneyRuntime` in place writing a simplified slot. If the new flow doesn't need a runtime-creation step at all (the runtime can be lazily created by the new screen's mount), drop `ensureDreamJourneyRuntime` entirely.
 
 - [ ] **Step 1: Delete the doomed files.**
-- [ ] **Step 2: Strip the old mutations and helpers** from both quest contexts.
+- [ ] **Step 2: Strip the old mutations and helpers** from both journey contexts.
 - [ ] **Step 3: Run `npm test`** and triage failures. For each failing test that references deleted code: if the test's bug class is still relevant under the new flow, rewrite it against the new mutation; otherwise delete it.
 - [ ] **Step 4: Run `npm run typecheck`** and resolve any straggling references.
 - [ ] **Step 5: Commit.** "Delete the legacy dream-journey system."

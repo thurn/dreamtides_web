@@ -200,7 +200,7 @@ describe("CardShopSiteScreen", () => {
     const onBuy = vi.fn();
     const onRestock = vi.fn();
     const deckTarget = document.createElement("div");
-    deckTarget.dataset.questDeckTarget = "";
+    deckTarget.dataset.journeyDeckTarget = "";
     document.body.append(deckTarget);
     const { container, root } = mount(
       <CardShopSiteScreen

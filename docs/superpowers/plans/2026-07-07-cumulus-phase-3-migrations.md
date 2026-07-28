@@ -12,7 +12,7 @@
 > - [ ] Task 2 — Mobile deck close → `IconButton` (`md`)
 > - [ ] Task 3 — Dreamscape/Atlas gear → `IconButton` (`md`)
 > - [ ] Task 4 — `EdgeChevron` → `IconButton` (`sm`) — material bug fix
-> - [ ] Task 5 — QuestStatusBar dreamsigns close → `IconButton` (`sm`) — bug fix
+> - [ ] Task 5 — JourneyStatusBar dreamsigns close → `IconButton` (`sm`) — bug fix
 > - [ ] Task 6 — Desktop deck sort-direction: `SegmentedControl` → `IconButton` toggle
 > - [ ] Task 7 — `GlassBackdrop`/`GridPlaceholder` shared adoption in both deck viewers
 > - [ ] Task 8 — StartingDeckModal → Cumulus tier (overlay + view-model + adapter)
@@ -51,7 +51,7 @@ here sheds its `status: "incubating"` flag.
   (`src/cumulus/components/overlay/GlassDialog.tsx`); `economy-spec.ts`;
   `useScaleToFit`; the integrity-test `BASELINE` arrays in `scripts/cumulus-*.test.mjs`;
   and the `eslint.config.js` `cumulus/internal` `no-restricted-imports` block whose
-  `ignores` list names `StartingDeckModal.tsx` + `DreamscapeQuestMenu.tsx` (Task 3
+  `ignores` list names `StartingDeckModal.tsx` + `DreamscapeJourneyMenu.tsx` (Task 3
   and Task 8 delete those two entries). At Phase 3 start `DraftScreen.tsx` already
   reads `var(--safe-area-inset-top)` (Phase-1 `no-raw-safe-area-env` fix).
 - **Tiers:** presentational Cumulus screens/components live in `src/cumulus/**`
@@ -81,7 +81,7 @@ Browser QA via `agent-browser` against a local Vite server.
   (`git push` right after `git commit`; end messages with the
   `Claude-Session:` trailer per `AGENTS.md`). Never create branches.
 - **Every visual migration gets browser QA** per
-  `docs/quest_prototype/qa_tooling.md`: dev server on a **non-5173** port
+  `docs/journey_prototype/qa_tooling.md`: dev server on a **non-5173** port
   (`npm run dev -- --port 5174`), a **unique `--session <name>`** per
   `agent-browser` run, **assert `location.href` + `window.innerWidth`** before
   every screenshot, inspect the captured error buffer, and tear down **only your
@@ -182,20 +182,20 @@ Browser QA via `agent-browser` against a local Vite server.
 ### Task 3 — Dreamscape/Atlas gear → `IconButton` (`md`)
 
 **Files**
-- `src/components/DreamscapeQuestMenu.tsx` — the bespoke gear/hamburger disc, the
+- `src/components/DreamscapeJourneyMenu.tsx` — the bespoke gear/hamburger disc, the
   local sizing consts (`menuGlyphSize`/`menuBtnSize`/`menuEdgeInset`), and its
   `glassIconButtonChrome` import.
-- `src/components/DreamscapeQuestMenu.test.tsx` — the trigger selector.
+- `src/components/DreamscapeJourneyMenu.test.tsx` — the trigger selector.
 - `src/cumulus/primitives/glyph.ts` — add `gear`, `menu` to `GLYPHS`.
 - `src/cumulus/components/controls/IconButton.tsx` — add optional `testId?` +
   `ariaExpanded?` passthrough (see note).
-- `eslint.config.js` — delete the `DreamscapeQuestMenu.tsx` entry from the
+- `eslint.config.js` — delete the `DreamscapeJourneyMenu.tsx` entry from the
   `cumulus/internal` `no-restricted-imports` `ignores` list.
 
 **Interfaces**
 - Consumes: `IconButton` (`md`), new `GLYPHS.gear` (`bxf bx-cog`) /
   `GLYPHS.menu` (`bxf bx-menu`).
-- Produces: `DreamscapeQuestMenu` no longer imports any `cumulus/internal` recipe
+- Produces: `DreamscapeJourneyMenu` no longer imports any `cumulus/internal` recipe
   → its `ignores` entry is removed.
 - New glyphs (raw `bxf bx-*` strings are legal only in `glyph.ts`; both classes
   exist in `src/vendor/boxicons/boxicons-filled.css`):
@@ -214,7 +214,7 @@ spreads `aria-*`/`data-*`, use that instead and skip the extension.
   becomes an `IconButton size="md"` with `glyph={isDesktop ? GLYPHS.gear : GLYPHS.menu}`,
   `label="Open menu"`, `ariaExpanded={open}`, `testId="dreamscape-menu-button"`,
   and the same `onPress` toggle (`setMenuView("root")` + toggle `open`).
-- `DreamscapeQuestMenu.tsx` imports `IconButton` and `GLYPHS` from `src/cumulus/**`
+- `DreamscapeJourneyMenu.tsx` imports `IconButton` and `GLYPHS` from `src/cumulus/**`
   (legal — legacy screens may render public Cumulus components). Delete the
   `glassIconButtonChrome` import and the `menuGlyphSize` const. **Keep**
   `menuBtnSize` and `menuEdgeInset`: the wrapper still positions the disc via
@@ -222,7 +222,7 @@ spreads `aria-*`/`data-*`, use that instead and skip the extension.
 - Test: keep selecting by `data-testid="dreamscape-menu-button"` (preserved via
   `testId`); if the extension was skipped, switch to `getByLabelText("Open menu")`.
   The `aria-expanded` assertion must still hold.
-- Delete the `DreamscapeQuestMenu.tsx` `ignores` entry from `eslint.config.js`;
+- Delete the `DreamscapeJourneyMenu.tsx` `ignores` entry from `eslint.config.js`;
   confirm the file now imports nothing from `cumulus/internal`.
 - Run `scripts/regenerate-assets.sh` (glyph registry + docs adoption changed);
   stage drift.
@@ -237,14 +237,14 @@ spreads `aria-*`/`data-*`, use that instead and skip the extension.
   Assert: glass disc opens/closes the menu, `aria-expanded` toggles, glyph and
   corner correct per platform; error buffer clean.
 
-**Commit:** `refactor(dreamscape): migrate quest-menu gear to IconButton (md)`
+**Commit:** `refactor(dreamscape): migrate journey-menu gear to IconButton (md)`
 
 ---
 
 ### Task 4 — `EdgeChevron` → `IconButton` (`sm`) — material bug fix
 
 **Files**
-- `src/cumulus/screens/quest-start-mobile.tsx` — the `EdgeChevron` component body.
+- `src/cumulus/screens/journey-start-mobile.tsx` — the `EdgeChevron` component body.
 
 **Interfaces**
 - Consumes: `IconButton` (`sm`), `GLYPHS.chevronLeft`/`GLYPHS.chevronRight`.
@@ -276,14 +276,14 @@ makes the chevrons real glass. **This is a visible change; QA it.**
   Assert: left/right chevrons are frosted glass discs (scene refracts through
   them), page the carousel, do not trigger a swipe on tap; error buffer clean.
 
-**Commit:** `fix(quest-start): EdgeChevron becomes real glass via IconButton (sm)`
+**Commit:** `fix(journey-start): EdgeChevron becomes real glass via IconButton (sm)`
 
 ---
 
-### Task 5 — QuestStatusBar dreamsigns close → `IconButton` (`sm`) — bug fix
+### Task 5 — JourneyStatusBar dreamsigns close → `IconButton` (`sm`) — bug fix
 
 **Files**
-- `src/cumulus/components/hud/QuestStatusBar.tsx` — the dreamsigns-window close
+- `src/cumulus/components/hud/JourneyStatusBar.tsx` — the dreamsigns-window close
   button.
 
 **Interfaces**
@@ -433,7 +433,7 @@ internals are deduped here.
 - **Delete:** `src/components/StartingDeckModal.tsx`, `src/components/StartingDeckModal.test.tsx`
 - `eslint.config.js` — delete the `StartingDeckModal.tsx` `cumulus/internal` `ignores` entry.
 - `scripts/cumulus-legacy-ratchet.test.mjs` — delete the `StartingDeckModal` `BASELINE` entry.
-- `src/runtime/qa-scenes.ts` + `docs/quest_prototype/qa_scenes.md` — keep/extend
+- `src/runtime/qa-scenes.ts` + `docs/journey_prototype/qa_scenes.md` — keep/extend
   the `startingdeck` scene.
 - `src/cumulus/docs/` — the `GlassDialog` registry entry (delete `incubating`).
 
@@ -499,7 +499,7 @@ tests over `buildStartingDeckView` (fixtures derived like the modal test's
 order, (3) drops a missing card. Assert order + `entryId` keys, never names.
 
 **Overlay contract.** `StartingDeckOverlay` renders through `GlassDialog`
-(title "Starting Deck", subtitle "These are the cards you begin the quest with.",
+(title "Starting Deck", subtitle "These are the cards you begin the journey with.",
 `onClose`, `closeLabel="Close starting deck"`, `cutoutAwareClose`). Behaviors
 that must carry over from the modal, as a checklist:
 - Desktop bounded / mobile full-bleed — **GlassDialog owns this**.
@@ -515,7 +515,7 @@ that must carry over from the modal, as a checklist:
   `starting-deck-modal-card-${entryId}` (keep the `-modal-` testids so no external
   selector breaks).
 
-**Adapter contract.** `StartingDeckOverlayAdapter` (thin, ≤120 lines): `useQuest()`
+**Adapter contract.** `StartingDeckOverlayAdapter` (thin, ≤120 lines): `useJourney()`
 for `state.deck` + `cardDatabase`, `useMemo(buildStartingDeckView, …)`, the
 open/close logging (`starting_deck_modal_opened` on open with `cardCount`,
 `starting_deck_modal_closed` with `durationMs`), and renders
@@ -531,8 +531,8 @@ desktop via `useIsDesktop`; exactly one button = the close with
 internal `overflow-y-auto` scroll.
 
 **App wiring contract.** Replace the `StartingDeckModal` import + render with
-`<StartingDeckOverlayAdapter isOpen={showStarterDeckIntro} onClose={handleBeginQuest} />`
-— the adapter owns `cardDatabase` via `useQuest`, so App stops threading it. Keep
+`<StartingDeckOverlayAdapter isOpen={showStarterDeckIntro} onClose={handleBeginJourney} />`
+— the adapter owns `cardDatabase` via `useJourney`, so App stops threading it. Keep
 the surrounding `ErrorBoundary scope="overlay:starting-deck-modal"`.
 
 **Cleanup contract.**
@@ -541,7 +541,7 @@ the surrounding `ErrorBoundary scope="overlay:starting-deck-modal"`.
   `StartingDeckModal` `BASELINE` entry (`scripts/cumulus-legacy-ratchet.test.mjs`).
 - Delete `status: "incubating"` from the `GlassDialog` docs-registry entry.
 - The `startingdeck` scene already builds the starter dreamscape with
-  `hasSeenStartingDeckPopup: false` — keep it; confirm `QuestApp` still reveals the
+  `hasSeenStartingDeckPopup: false` — keep it; confirm `JourneyApp` still reveals the
   overlay from that flag now that it renders the adapter.
 - Run `scripts/regenerate-assets.sh`; stage drift.
 
@@ -549,7 +549,7 @@ the surrounding `ErrorBoundary scope="overlay:starting-deck-modal"`.
 - Checks green (adapter ≤120 lines; `thin-adapters` passes; view-model has no
   React/state import).
 - Browser QA at both viewports **including the simulated cut-out** (read
-  `docs/quest_prototype/qa_scenes.md` + the `?deviceFrame=` device-frame demo):
+  `docs/journey_prototype/qa_scenes.md` + the `?deviceFrame=` device-frame demo):
   ```bash
   agent-browser --session t8-desk goto "http://localhost:5174/?goto=startingdeck"                    # w 1280 → bounded centered glass dialog, corner close
   agent-browser --session t8-mob  goto "http://localhost:5174/?goto=startingdeck&deviceFrame=iphone16" # w ~393 → full-bleed; close floated BESIDE the island
@@ -566,7 +566,7 @@ the surrounding `ErrorBoundary scope="overlay:starting-deck-modal"`.
 ### Task 9 — Convergence: `QsbSignObject` → `Dreamsign`
 
 **Files**
-- `src/cumulus/components/hud/QuestStatusBar.tsx` — the `QsbDreamsign` type,
+- `src/cumulus/components/hud/JourneyStatusBar.tsx` — the `QsbDreamsign` type,
   `QsbSignObject`, its use in the strip and the window, and the `DS_SHADOW` const.
 - `src/cumulus/components/hud/Dreamsign.tsx` — extend with a `variant`; receive
   `DS_SHADOW`.
@@ -594,26 +594,26 @@ based); align the producer rather than fork the renderer.
   `filter` as the join of `dreamsign.isBane ? BANE_FILTER : null` and
   `variant === "hud" ? DS_SHADOW : null` (falling back to `"none"`).
   `DS_SHADOW = "drop-shadow(0 3px 6px rgba(0,0,0,0.55)) drop-shadow(0 0 13px rgba(147,51,234,0.32))"`
-  moves in from QuestStatusBar (keep its "faithfully-copied literal, no token"
+  moves in from JourneyStatusBar (keep its "faithfully-copied literal, no token"
   comment).
 - **Retype the producer, not the renderer:** change `toQsbDreamsigns` to return
   the domain dreamsign shape `Dreamsign` needs (pass
   `imageName`/`effectDescription`/`isBane` through; drop the
   `artRef.dreamsign(...)` pre-resolution and the `ability` rename). Retype
-  `QsbDreamsign` in QuestStatusBar to the domain `Dreamsign`
-  (`import type { Dreamsign } from "../../../types/quest"`) or a structural subset
+  `QsbDreamsign` in JourneyStatusBar to the domain `Dreamsign`
+  (`import type { Dreamsign } from "../../../types/journey"`) or a structural subset
   carrying `{ id, name, imageName, effectDescription?, isBane, imageAlt? }`. Update
   `buildDreamscapeHudView`'s `dreamsigns` field type accordingly.
 - Delete `QsbSignObject`. In the strip render
   `<Dreamsign variant="hud" dreamsign={s} sizePx={SIGN} stageRef={stageRef} />`;
   in the window render the same with `sizePx={60}`. Pass `testid`/`revealTestid`
-  to match any existing QuestStatusBar selectors.
+  to match any existing JourneyStatusBar selectors.
 - `QsbOverflowStack` (which also rendered `resolveArtRef(s.art)`) now sources art
   from `dreamsignArtUrl(imageName)` (exported by `Dreamsign.tsx`) — the compressed
   overlap stack keeps its own layout but reads `imageName`.
 - Remove now-unused `resolveArtRef`/`ArtRef` imports if the fold eliminated every
   use (lint confirms).
-- Update/extend the QuestStatusBar test + the `Dreamsign` demo to cover the
+- Update/extend the JourneyStatusBar test + the `Dreamsign` demo to cover the
   `variant="hud"` shadow.
 
 **Verify**
@@ -852,7 +852,7 @@ reference is not an ad-hoc literal).
 
 **Files**
 - `src/cumulus/screens/chrome-geometry.ts` (**new** — shared source of truth)
-- `src/components/DreamscapeQuestMenu.tsx` — consume the shared consts.
+- `src/components/DreamscapeJourneyMenu.tsx` — consume the shared consts.
 - `src/cumulus/screens/DraftScreen.tsx` — the top-band clearance math (`TOP_SAFE_OP`).
 
 **Interfaces**
@@ -863,7 +863,7 @@ reference is not an ad-hoc literal).
   ```
 
 **Boundary reconciliation (NOT a name change).** The seam wants
-`DreamscapeQuestMenu`'s geometry consumed by `DraftScreen`. `DraftScreen` is
+`DreamscapeJourneyMenu`'s geometry consumed by `DraftScreen`. `DraftScreen` is
 `src/cumulus/**` and **cannot import from `src/components/**`** (`no-external-ui-imports`,
 `ALLOWED_PREFIXES`). So the pinned constants `MENU_BUTTON_PX` /
 `MENU_EDGE_INSET_MOBILE_PX` live in a shared **Cumulus** module
@@ -889,7 +889,7 @@ const TOP_SAFE_OP =
 - Create `chrome-geometry.ts` with the two pinned exports (+ doc comment: the
   shared dreamscape-menu chrome geometry, read by the menu and by screens that
   must clear it).
-- In `DreamscapeQuestMenu.tsx`, import them and set `const menuBtnSize = MENU_BUTTON_PX;`
+- In `DreamscapeJourneyMenu.tsx`, import them and set `const menuBtnSize = MENU_BUTTON_PX;`
   and `const menuEdgeInset = isDesktop ? 22 : MENU_EDGE_INSET_MOBILE_PX;` (the
   desktop `22` stays local — the seam is about the mobile inset the draft screen
   must clear).
@@ -917,10 +917,10 @@ const TOP_SAFE_OP =
 
 **Files**
 - `src/runtime/qa-scenes.ts` — the `siteScene("draft", "Draft", "Draft")` entry.
-- `docs/quest_prototype/qa_scenes.md`
+- `docs/journey_prototype/qa_scenes.md`
 
 **Interfaces**
-- Consumes: `parkOnSite` + the QA foundation (`createQaQuestFoundation`), which
+- Consumes: `parkOnSite` + the QA foundation (`createQaJourneyFoundation`), which
   already seeds a non-null `draftState` (`initializeDraftState(...)` in
   `start-in-battle-state.ts`).
 
@@ -942,7 +942,7 @@ existing one paints an empty pack.
   confirm `draftState` non-null, register in `QA_SCENES` as `"draftsite"`). Given
   the foundation seeds `draftState`, the existing `siteScene("draft",…)` should
   suffice — prefer documenting it over a duplicate.
-- Add a `?goto=draft` row to `docs/quest_prototype/qa_scenes.md`: what it shows
+- Add a `?goto=draft` row to `docs/journey_prototype/qa_scenes.md`: what it shows
   (the Cumulus draft site with a rolled first offer + the floating
   `Draft (n/total)` pick counter over the starter dreamscape), that it is
   mobile-gated for the Cumulus screen (desktop falls back to the legacy draft
@@ -983,7 +983,7 @@ binds `src/cumulus/**` + `src/screens/cumulus_adapters/**`). Detect string/templ
 literals matching `/\bbxf?\b|\bbx-[a-z-]+/` and report unless the file is
 `src/cumulus/primitives/glyph.ts`.
 
-**Why it lands here.** After Task 5 (QuestStatusBar raw `<i className="bxf bx-x">`
+**Why it lands here.** After Task 5 (JourneyStatusBar raw `<i className="bxf bx-x">`
 → `IconButton`) and Task 3 (gear glyphs moved into `GLYPHS`), the only in-scope
 raw-class site is cleared. `ShopScreen.tsx` (`"bxf bx-refresh"`) is
 **legacy-tier** (`src/screens/`, outside the rule's scope) — the
@@ -1131,7 +1131,7 @@ hand-rolled key handling. Widening the scope now ships clean.
   sanctioned escape) — record this in the commit body and flag it for Phase 4 to
   either find a labeled-glass consumer or reassess. Not a name deviation.
 - Confirm both `cumulus/internal` `ignores` entries (`StartingDeckModal.tsx`,
-  `DreamscapeQuestMenu.tsx`) and the `StartingDeckModal` legacy-ratchet `BASELINE`
+  `DreamscapeJourneyMenu.tsx`) and the `StartingDeckModal` legacy-ratchet `BASELINE`
   entry are gone.
 - Final `git push`.
 
@@ -1144,6 +1144,6 @@ hand-rolled key handling. Widening the scope now ships clean.
 **None.** The one reconciliation: the pinned `MENU_BUTTON_PX` /
 `MENU_EDGE_INSET_MOBILE_PX` constants (Task 15) are exported from a shared Cumulus
 module (`src/cumulus/screens/chrome-geometry.ts`) rather than literally from
-`src/components/DreamscapeQuestMenu.tsx`, because `no-external-ui-imports`
+`src/components/DreamscapeJourneyMenu.tsx`, because `no-external-ui-imports`
 forbids `DraftScreen` (`src/cumulus/**`) importing from `src/components/**`. The
 spec explicitly permits "a shared chrome spec"; the names are unchanged.

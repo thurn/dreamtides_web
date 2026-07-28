@@ -1,13 +1,13 @@
-// Real BattleInitProvider: turns quest state into a fresh battle fold slice on
+// Real BattleInitProvider: turns journey state into a fresh battle fold slice on
 // `BEGIN_BATTLE`. Battle construction is ALREADY fully seeded — `createBattleInit`
 // derives all of its randomness from a `BattleRng` stream keyed by
-// `deriveBattleSeed(quest.seed:battleEntryKey)`, and `createInitialBattleState`
-// is pure — so it needs no `ctx.rng`: given the same quest seed and site, every
+// `deriveBattleSeed(journey.seed:battleEntryKey)`, and `createInitialBattleState`
+// is pure — so it needs no `ctx.rng`: given the same journey seed and site, every
 // client builds a byte-identical battle. The `battleEntryKey` is derived
 // deterministically from `(siteId, completionLevel, dreamscapeId)` so it is
 // identical across clients too.
 
-import type { QuestContent } from "../../data/quest-content";
+import type { JourneyContent } from "../../data/journey-content";
 import { createBattleInit } from "../../battle/integration/create-battle-init";
 import {
   allocateBattleCardInstance,
@@ -23,14 +23,14 @@ import type {
   BattleSide,
   DreamwellCardDefinition,
 } from "../../battle/types";
-import { findSite } from "../../rules/quest/sites";
+import { findSite } from "../../rules/journey/sites";
 import type { BattleFoldState } from "../../rules/fold-state";
 import { emptyDawnFired } from "../../rules/battle/fold";
 import type {
   BattleInitProvider,
   TutorialBattleInitProvider,
 } from "../../rules/battle/battle-events";
-import type { QuestState } from "../../types/quest";
+import type { JourneyState } from "../../types/journey";
 import type {
   TutorialAction,
   TutorialBattleConfiguration,
@@ -68,41 +68,41 @@ function battleEntryKeyFor(
 }
 
 /**
- * Build the immutable battle preview from folded quest state and loaded
- * content. Battle construction is keyed by the quest seed and battle entry,
+ * Build the immutable battle preview from folded journey state and loaded
+ * content. Battle construction is keyed by the journey seed and battle entry,
  * so this is byte-identical to the init `BEGIN_BATTLE` will fold without
  * creating any game state outside the reducer.
  */
 export function createBattlePreview(
-  content: QuestContent,
-  quest: QuestState,
+  content: JourneyContent,
+  journey: JourneyState,
   siteId: string,
   seedOverride: number | null = null,
 ): BattleInit | null {
-  return buildBattleInit(content, quest, siteId, seedOverride, () => {});
+  return buildBattleInit(content, journey, siteId, seedOverride, () => {});
 }
 
 function buildBattleInit(
-  content: QuestContent,
-  quest: QuestState,
+  content: JourneyContent,
+  journey: JourneyState,
   siteId: string,
   seedOverride: number | null,
   deferOpponentLog: (emit: () => void) => void,
 ): BattleInit | null {
-  const site = findSite(quest, siteId);
+  const site = findSite(journey, siteId);
   if (site === null || site.type !== "Battle") return null;
 
   const battleEntryKey = battleEntryKeyFor(
-    quest.currentDreamscape,
+    journey.currentDreamscape,
     siteId,
-    quest.completionLevel,
+    journey.completionLevel,
   );
   return createBattleInit({
     battleEntryKey,
-    battleInstanceId: `battle:${quest.runId ?? "unscoped"}:${battleEntryKey}`,
+    battleInstanceId: `battle:${journey.runId ?? "unscoped"}:${battleEntryKey}`,
     seedOverride,
     site,
-    state: quest,
+    state: journey,
     cardDatabase: content.cardDatabase,
     dreamAvatars: content.dreamAvatars,
     dreamscapes: content.dreamscapes,
@@ -136,13 +136,13 @@ export function settleDeferredOpponentLog(
 }
 
 export function createBattleInitProvider(
-  content: QuestContent,
+  content: JourneyContent,
 ): BattleInitProvider {
   return {
-    beginBattle: ({ quest, siteId, seedOverride, seq }): BattleFoldState | null => {
+    beginBattle: ({ journey, siteId, seedOverride, seq }): BattleFoldState | null => {
       const init = buildBattleInit(
         content,
-        quest,
+        journey,
         siteId,
         seedOverride,
         (emit) => deferredOpponentLogs.set(seq, emit),
@@ -161,27 +161,27 @@ export function createBattleInitProvider(
 }
 
 /**
- * Builds the authored post-tutorial snapshot without needing a quest Battle
+ * Builds the authored post-tutorial snapshot without needing a journey Battle
  * site. All identity comes from UUIDs and both remaining decks use streams
  * keyed by the room seed, tutorial run, side, and restart number.
  */
 export function createTutorialBattleInitProvider(
-  content: QuestContent,
+  content: JourneyContent,
 ): TutorialBattleInitProvider {
   return {
     beginTutorialBattle: ({
-      quest,
+      journey,
       actions,
       tutorialRunId,
       driverClientId,
       restartNumber,
     }) => {
-      const key = `tutorial:${quest.seed}:${tutorialRunId}:${String(restartNumber)}`;
+      const key = `tutorial:${journey.seed}:${tutorialRunId}:${String(restartNumber)}`;
       const battleId = `tutorial-battle:${tutorialRunId}:${String(restartNumber)}:${driverClientId}`;
       const battleConfiguration = requireTutorialBattleConfiguration(content);
       const init = createTutorialBattleInit(
         content,
-        quest,
+        journey,
         key,
         battleId,
         battleConfiguration,
@@ -207,8 +207,8 @@ export function createTutorialBattleInitProvider(
 }
 
 function createTutorialBattleInit(
-  content: QuestContent,
-  quest: QuestState,
+  content: JourneyContent,
+  journey: JourneyState,
   key: string,
   battleId: string,
   battleConfiguration: TutorialBattleConfiguration,
@@ -234,7 +234,7 @@ function createTutorialBattleInit(
     seed: deriveBattleSeed(key),
     siteId: "tutorial-handoff",
     dreamscapeId: null,
-    completionLevelAtStart: quest.completionLevel,
+    completionLevelAtStart: journey.completionLevel,
     isFinalBoss: false,
     essenceReward: 0,
     openingHandSize: 0,
@@ -246,7 +246,7 @@ function createTutorialBattleInit(
     startingSide: "player",
     playerDrawSkipsTurnOne: false,
     tutorialTriggers: content.tutorialTriggers ?? [],
-    questDeckEntries: [],
+    journeyDeckEntries: [],
     playerDeckOrder: makeDeck("player"),
     dreamwellDeck: tutorialDreamwellDeck(
       content,
@@ -264,12 +264,12 @@ function createTutorialBattleInit(
       ...(tensho.portraitFocus ? { portraitFocus: tensho.portraitFocus } : {}),
     },
     dreamsignSummaries: [],
-    atlasSnapshot: quest.atlas,
+    atlasSnapshot: journey.atlas,
   };
 }
 
 function arrangeTutorialHandoff(
-  content: QuestContent,
+  content: JourneyContent,
   board: BattleMutableState,
   actions: readonly TutorialAction[],
   battleConfiguration: TutorialBattleConfiguration,
@@ -354,7 +354,7 @@ function deriveTutorialHandCardIds(
 }
 
 function materializeAuthoredHand(
-  content: QuestContent,
+  content: JourneyContent,
   board: BattleMutableState,
   side: BattleSide,
   cardIds: readonly string[],
@@ -431,7 +431,7 @@ function stackTutorialEnemyDeck(
 }
 
 function tutorialDreamwellDeck(
-  content: QuestContent,
+  content: JourneyContent,
   key: string,
   cardIds: readonly string[],
 ): readonly DreamwellCardDefinition[] {
@@ -462,7 +462,7 @@ function tutorialDreamwellDeck(
 }
 
 function requireTutorialBattleConfiguration(
-  content: QuestContent,
+  content: JourneyContent,
 ): TutorialBattleConfiguration {
   if (content.tutorialBattle === undefined) {
     throw new Error(
@@ -472,19 +472,19 @@ function requireTutorialBattleConfiguration(
   return content.tutorialBattle;
 }
 
-function cardById(content: QuestContent, cardId: string) {
+function cardById(content: JourneyContent, cardId: string) {
   const card = [...content.cardDatabase.values()].find((candidate) => candidate.id === cardId);
   if (card === undefined) throw new Error(`Tutorial card ${cardId} is missing from the runtime catalog.`);
   return card;
 }
 
-function dreamAvatarById(content: QuestContent, id: string) {
+function dreamAvatarById(content: JourneyContent, id: string) {
   const dreamAvatar = content.dreamAvatars.find((candidate) => candidate.id === id);
   if (dreamAvatar === undefined) throw new Error(`Tutorial DreamAvatar ${id} is missing from the runtime catalog.`);
   return dreamAvatar;
 }
 
-function tutorialEnemyDescriptor(threxan: QuestContent["dreamAvatars"][number]): BattleEnemyDescriptor {
+function tutorialEnemyDescriptor(threxan: JourneyContent["dreamAvatars"][number]): BattleEnemyDescriptor {
   return {
     id: threxan.id,
     name: threxan.name,
@@ -501,7 +501,7 @@ function tutorialEnemyDescriptor(threxan: QuestContent["dreamAvatars"][number]):
 
 function tutorialProvenance() {
   return {
-    kind: "quest-deck" as const,
+    kind: "journey-deck" as const,
     sourceBattleCardId: null,
     chosenSpark: null,
     chosenSubtype: null,

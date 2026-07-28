@@ -2,13 +2,13 @@
  * Dream Merchant v3 metrics harness.
  *
  * Drives the REAL generator (`src/journey_v2`) under vite-node — no JS mirror —
- * across many simulated deck states x quest seeds, then reports the five metric
+ * across many simulated deck states x journey seeds, then reports the five metric
  * families with PASS/FAIL against their targets. This is the BASELINE feed for
  * the Task 19 tuning loop, so the measurements must be correct.
  *
  * Run: `npm run merchant-metric` (which first runs `setup-assets` to refresh the
  * `public/*-data.json` inputs). Flags `--records N` and `--seeds S` shrink the
- * run. The only randomness is the varied quest-seed string per generated
+ * run. The only randomness is the varied journey-seed string per generated
  * encounter; the record slice is a deterministic prefix and nothing uses
  * `Date.now`/`Math.random`.
  *
@@ -22,14 +22,14 @@ import { fileURLToPath } from "node:url";
 
 import type { MerchantCorpus, MerchantCorpusCard } from "../src/data/merchant-corpus";
 import type { DreamsignProfile } from "../src/data/dreamsign-profiles";
-import type { QuestContent } from "../src/data/quest-content";
+import type { JourneyContent } from "../src/data/journey-content";
 import { buildFitModel } from "../src/draft/replay/fit-model";
 import type { FitModel } from "../src/draft/replay/fit-model";
 import { buildIdIndex } from "../src/data/cards-v2-database";
 import { STARTER_CARD_NUMBERS } from "../src/data/starter-cards";
 import type { CardData } from "../src/types/cards";
 import type { DreamsignTemplate } from "../src/types/content";
-import type { DeckEntry, QuestState, SiteState } from "../src/types/quest";
+import type { DeckEntry, JourneyState, SiteState } from "../src/types/journey";
 
 import { buildMerchantContext } from "../src/journey_v2/context/buildMerchantContext";
 import {
@@ -66,7 +66,7 @@ import {
   applyTransfigurationToCard,
   eligibleTransfigurations,
 } from "../src/transfiguration/transfiguration-logic";
-import type { TransfigurationType } from "../src/types/quest";
+import type { TransfigurationType } from "../src/types/journey";
 
 // ---------------------------------------------------------------------------
 // CLI flags
@@ -157,15 +157,15 @@ function loadDreamsignProfilesFromDisk(): ReadonlyMap<string, DreamsignProfile> 
 }
 
 /**
- * Builds a `QuestContent` compatible with `buildMerchantContext`:
+ * Builds a `JourneyContent` compatible with `buildMerchantContext`:
  * - `cardDatabase` keyed by cardNumber (CardData carries id=UUID),
  * - `fitModel` via `buildFitModel` over record mainboards, exactly as
- *   `src/data/quest-content.ts` constructs it for the v2 journey,
+ *   `src/data/journey-content.ts` constructs it for the v2 journey,
  * - `merchantCorpus` and `dreamsignProfiles` from the baked public JSON,
  * - `dreamsignTemplates` from the dreamsign data.
  */
-function buildQuestContent(): {
-  questContent: QuestContent;
+function buildJourneyContent(): {
+  journeyContent: JourneyContent;
   records: RawDraftRecord[];
   idToCardNumber: Map<string, number>;
 } {
@@ -191,12 +191,12 @@ function buildQuestContent(): {
 
   const records = readJson<RawDraftRecord[]>("draft-records-data.json");
 
-  // Mirror production (quest-content.ts): score fit over UUID-keyed mainboards
+  // Mirror production (journey-content.ts): score fit over UUID-keyed mainboards
   // translated through the collision-free id index, so a deck containing a card
   // that shares a display name with another scores identically to live play.
   const idIndex = buildIdIndex(cardDatabase);
   // Live fit corpus = all record mainboards (no per-record leave-one-out),
-  // matching quest-content.ts.
+  // matching journey-content.ts.
   const fitModel: FitModel = buildFitModel(
     records.map((r) => r.mainboardIds),
     idIndex,
@@ -205,7 +205,7 @@ function buildQuestContent(): {
   const merchantCorpus = loadMerchantCorpusFromDisk();
   const dreamsignProfiles = loadDreamsignProfilesFromDisk();
 
-  const questContent: QuestContent = {
+  const journeyContent: JourneyContent = {
     cardDatabase,
     dreamAvatars: [],
     dreamsignTemplates,
@@ -214,7 +214,7 @@ function buildQuestContent(): {
     dreamsignProfiles,
   };
 
-  return { questContent, records, idToCardNumber };
+  return { journeyContent, records, idToCardNumber };
 }
 
 // ---------------------------------------------------------------------------
@@ -228,7 +228,7 @@ const HARNESS_SITE: SiteState = {
   isVisited: false,
 };
 
-/** The standard starter deck every new quest begins with (cardNumbers 510–519). */
+/** The standard starter deck every new journey begins with (cardNumbers 510–519). */
 function starterDeckEntries(): DeckEntry[] {
   return STARTER_CARD_NUMBERS.map((cardNumber, i) => ({
     entryId: `deck-${String(i + 1)}`,
@@ -274,7 +274,7 @@ function buildDeckPrefix(
   return deck;
 }
 
-function questStateFor(deck: DeckEntry[], seed: string): QuestState {
+function journeyStateFor(deck: DeckEntry[], seed: string): JourneyState {
   return {
     seed,
     essence: 0,
@@ -293,7 +293,7 @@ function questStateFor(deck: DeckEntry[], seed: string): QuestState {
     visitedSites: [],
     siteRuntime: {},
     draftState: null,
-    screen: { type: "questStart" },
+    screen: { type: "journeyStart" },
     activeSiteId: null,
     failureSummary: null,
     hasSeenStartingDeckPopup: false,
@@ -1221,7 +1221,7 @@ function reachableDreamsigns(
 
 export function computeContentCoverage(
   samples: readonly SampledEncounter[],
-  questContent: QuestContent,
+  journeyContent: JourneyContent,
 ): ContentCoverageReport {
   // Transfiguration type shares.
   const transfigCounts = new Map<TransfigurationType, number>();
@@ -1275,7 +1275,7 @@ export function computeContentCoverage(
     reachableTransfigurationTypesList.every((t) => (transfigCounts.get(t) ?? 0) > 0);
 
   // Dreamsign coverage: raw (of all templates) and of the reachable set.
-  const dreamsignTotal = questContent.dreamsignTemplates?.length ?? 0;
+  const dreamsignTotal = journeyContent.dreamsignTemplates?.length ?? 0;
   const dreamsignTemplateCoverage =
     dreamsignTotal > 0 ? dreamsignOffered.size / dreamsignTotal : 0;
   const dreamsignReachableSet = reachableDreamsigns(samples);
@@ -1290,7 +1290,7 @@ export function computeContentCoverage(
 
   // Non-starter pool card coverage.
   const nonStarterCards: CardData[] = [];
-  for (const card of questContent.cardDatabase.values()) {
+  for (const card of journeyContent.cardDatabase.values()) {
     if (card.isStarter) continue;
     if (card.rarity === "Starter" || card.rarity === "Special") continue;
     nonStarterCards.push(card);
@@ -1387,7 +1387,7 @@ function main(): void {
     `Dream Merchant metrics harness — ${String(RECORD_COUNT)} records x ${String(SEED_COUNT)} seeds x ${String(PICK_BUCKETS.length)} buckets`,
   );
 
-  const { questContent, records, idToCardNumber } = buildQuestContent();
+  const { journeyContent, records, idToCardNumber } = buildJourneyContent();
 
   // Deterministic record slice: the first RECORD_COUNT records (no shuffle).
   const sliced = records.slice(0, RECORD_COUNT);
@@ -1404,15 +1404,15 @@ function main(): void {
     }
   }
 
-  // Generate encounters. The only varied randomness is the quest-seed string.
+  // Generate encounters. The only varied randomness is the journey-seed string.
   const samples: SampledEncounter[] = [];
   for (const state of deckStates) {
     for (let seedIdx = 0; seedIdx < SEED_COUNT; seedIdx += 1) {
       const seed = `merchant-metric:${state.recordId}:${String(state.bucket)}:${String(seedIdx)}`;
-      const questState = questStateFor(state.deck, seed);
+      const journeyState = journeyStateFor(state.deck, seed);
       const context = buildMerchantContext({
-        questState,
-        questContent,
+        journeyState,
+        journeyContent,
         site: HARNESS_SITE,
       });
       const { encounter, debug } = generateMerchantEncounterWithDebug(context);
@@ -1492,7 +1492,7 @@ function main(): void {
   results.push({ name: "archetype_coverage", pass: coveragePass });
 
   // ---- Metric 5: content coverage ----
-  const content = computeContentCoverage(samples, questContent);
+  const content = computeContentCoverage(samples, journeyContent);
   console.log("=== Metric 5: Content coverage ===");
   console.log(
     "Transfiguration types (target: every type ANY reachable pool/deck card is eligible for appears):",

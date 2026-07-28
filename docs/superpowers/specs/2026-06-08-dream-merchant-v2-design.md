@@ -11,7 +11,7 @@ merchant encounter shows two useful rewards, each priced in essence. The player
 may take one offer or walk away. The reward pool is broad and concrete: the
 merchant can grant fitting non-starter catalog cards, grant fitting non-bane
 Dreamsigns, duplicate deck entries, remove weak deck entries, apply
-transfigurations, add card keyword/type modifications where supported by quest
+transfigurations, add card keyword/type modifications where supported by journey
 mutations, and adjust immediate resources. The pool excludes future-run
 modifiers such as shop discounts, battle reward modifiers, route/site boosts,
 temporary protections, and delayed rewards.
@@ -40,7 +40,7 @@ avoid meaningful duplication without changing existing journey behavior.
   building the `FitModel` in normal pool-mode runs. The merchant uses this model
   to rank support cards, replacements, and chooser candidates.
 - **Memory:** Merchant memory in this pass is ordinary site completion.
-  Dialogue and encounter generation are deterministic from quest seed, site id,
+  Dialogue and encounter generation are deterministic from journey seed, site id,
   deck, resources, and loaded content.
 - **UI direction:** The screen uses a center-stage layout. A large middle region
   is reserved for a future merchant image. The two offers flank the image on
@@ -76,7 +76,7 @@ browser QA a normal player path into the merchant.
 
 Internal directories:
 
-- `context/` for quest/content projection
+- `context/` for journey/content projection
 - `read/` for deck read and need ranking
 - `catalog/` for reward builders and pricing
 - `dialogue/` for procedural grammar and dialogue beats
@@ -85,10 +85,10 @@ Internal directories:
 
 ## Context
 
-`buildMerchantContext(state, questContent, site, runtimeConfig)` projects only
+`buildMerchantContext(state, journeyContent, site, runtimeConfig)` projects only
 the data the merchant needs:
 
-- quest seed, site id, essence, essence cap
+- journey seed, site id, essence, essence cap
 - deck entries keyed by entry id and card UUID
 - loaded card database, including UUID, card number, type, subtype, cost,
   spark, text, rarity, starter/special flags, and image metadata
@@ -117,7 +117,7 @@ currently held duplicates unless a reward explicitly supports duplication.
 
 ## Content Loading
 
-`loadQuestContent()` already loads draft records and builds `FitModel` for
+`loadJourneyContent()` already loads draft records and builds `FitModel` for
 replay and fresh20 modes. The v2 runtime flag extends this to normal pool mode
 when `journeyVariant === "v2"`.
 
@@ -207,9 +207,9 @@ Immediate reward builders:
   catalog card. This is a high-value offer with both removed and gained cards
   visible.
 - `add_reclaim_to_event`: applies a keyword modification to a central event
-  when recursion is missing and the quest mutation supports it.
+  when recursion is missing and the journey mutation supports it.
 - `add_fast_to_event`: applies a keyword modification to a central event when
-  tempo is missing and the quest mutation supports it.
+  tempo is missing and the journey mutation supports it.
 - `reduce_reclaim_cost`: improves an existing reclaim value when the card and
   mutation model support it.
 - `convert_event_to_role`: applies a type/subtype change only when the existing
@@ -245,7 +245,7 @@ Inputs:
   severe needs price at `0.90-1.00`, light needs at `1.00-1.12`.
 - `scarcityMultiplier` accounts for catalog reach and chooser strength:
   outside-pool card grants, legendary grants, and Dreamsign grants trend higher.
-- `marketJitter` is seeded per `(quest seed, site id, offer id, builder id)` in
+- `marketJitter` is seeded per `(journey seed, site id, offer id, builder id)` in
   the `0.95-1.08` range.
 
 Prices clamp to useful bounds:
@@ -315,9 +315,9 @@ accepting an offer after another client has changed the deck or resources.
 ## Mutation And Persistence
 
 Merchant memory in this pass uses ordinary site completion and adds no
-merchant-specific field to `QuestState`.
+merchant-specific field to `JourneyState`.
 
-New quest mutations:
+New journey mutations:
 
 - `acceptDreamMerchantOffer(siteId, request)`
 - `declineDreamMerchant(siteId, encounterSignature)`
@@ -326,7 +326,7 @@ The multiplayer provider implements both with `runRoomTransaction`.
 
 Accept transaction:
 
-1. Normalize current room quest state.
+1. Normalize current room journey state.
 2. Rebuild merchant context and encounter from current state.
 3. Match the requested offer id and choice.
 4. Verify price, affordability, target availability, and encounter signature.
@@ -341,7 +341,7 @@ Decline transaction:
 2. Mark the site visited and return to dreamscape.
 3. Write an action log entry.
 
-Single-player quest context mirrors the same state transforms directly.
+Single-player journey context mirrors the same state transforms directly.
 
 Events:
 
@@ -528,7 +528,7 @@ The implementation plan should proceed in this order:
 3. Deck-read engine with tests.
 4. Reward catalog and pricing with tests.
 5. Encounter director and dialogue grammar with tests.
-6. Quest mutations for accept/decline in single-player and multiplayer
+6. Journey mutations for accept/decline in single-player and multiplayer
    providers.
 7. Center-stage UI and chooser panels.
 8. Browser QA and polishing.

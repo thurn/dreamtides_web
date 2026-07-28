@@ -223,7 +223,7 @@ export const dreamsignDraftBuilder: MerchantArchetypeBuilder = {
     // Step 2: seeded count in [2, min(4, bandSize)] — use a separate rng stream
     // with a distinct salt so count and target sampling are independent.
     const countRng = merchantRng(
-      context.questSeed,
+      context.journeySeed,
       context.site.id,
       "dreamsign_draft",
       "count",

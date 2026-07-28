@@ -2,13 +2,13 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use super-subagent-driven-development (recommended) or super-executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Wire each Dream Journey option's chosen template into actual `QuestState` mutations on Enter Dream, including an inline chooser overlay for chosen-target templates.
+**Goal:** Wire each Dream Journey option's chosen template into actual `JourneyState` mutations on Enter Dream, including an inline chooser overlay for chosen-target templates.
 
-**Architecture:** A new `src/journeys/apply/` directory exposes `applyOption` / `applyBranch` that walk the manifest's `costs[]` and `effects[]` envelopes, dispatch on `templateId`, and call a `JourneyMutations` interface implemented by an adapter at `src/journeys/adapter/journeyMutations.ts`. The cost/reward template catalog gains an `apply(params, ctx, mut, resolution?)` method per template; the journey module stays isolated from `src/state` and `src/types`. Wave 1 lands every non-choice template plus the `QuestState` extensions; Wave 2 adds the chooser overlay and chosen-target templates.
+**Architecture:** A new `src/journeys/apply/` directory exposes `applyOption` / `applyBranch` that walk the manifest's `costs[]` and `effects[]` envelopes, dispatch on `templateId`, and call a `JourneyMutations` interface implemented by an adapter at `src/journeys/adapter/journeyMutations.ts`. The cost/reward template catalog gains an `apply(params, ctx, mut, resolution?)` method per template; the journey module stays isolated from `src/state` and `src/types`. Wave 1 lands every non-choice template plus the `JourneyState` extensions; Wave 2 adds the chooser overlay and chosen-target templates.
 
-**Tech Stack:** TypeScript, React, Vitest, existing `src/state/quest-context.tsx` reducer pattern.
+**Tech Stack:** TypeScript, React, Vitest, existing `src/state/journey-context.tsx` reducer pattern.
 
-**Spec:** `docs/superpowers/specs/2026-05-16-dream-journey-effects-design.md` is the source of truth for the `JourneyMutations` method list, `QuestState` field shapes, per-template apply behavior, chooser contract, and rollout boundaries. This plan references spec sections by name; **do not re-decide anything the spec already settled** — if the spec and this plan disagree, the spec wins.
+**Spec:** `docs/superpowers/specs/2026-05-16-dream-journey-effects-design.md` is the source of truth for the `JourneyMutations` method list, `JourneyState` field shapes, per-template apply behavior, chooser contract, and rollout boundaries. This plan references spec sections by name; **do not re-decide anything the spec already settled** — if the spec and this plan disagree, the spec wins.
 
 **Worktree rule:** All work executes on the dedicated worktree at `/Users/dthurn/quest_prototype/.claude/worktrees/dream-journey-effects` on branch `worktree-dream-journey-effects` (created by the super-using-git-worktrees skill via the harness's native `EnterWorktree` tool — note the `worktree-` prefix the harness adds). **Nothing is pushed to master at any point.**
 
@@ -21,7 +21,7 @@
 - `src/journeys/apply/payloads.ts` — narrowing helpers for `option.costs[]` / `option.effects[]`
 - `src/journeys/apply/applyOption.ts` — walks an option's costs+effects
 - `src/journeys/apply/applyBranch.ts` — walks a branch's or terminal's costs+effects
-- `src/journeys/adapter/journeyMutations.ts` — implements `JourneyMutations` via `QuestMutations`
+- `src/journeys/adapter/journeyMutations.ts` — implements `JourneyMutations` via `JourneyMutations`
 - `src/journeys/journey/shared/costs.apply.test.ts` — per-template apply unit tests (covers all Cost templates)
 - `src/journeys/journey/shared/rewards.apply.test.ts` — per-template apply unit tests (covers all Reward templates)
 - `src/journeys/apply/applyOption.test.ts`
@@ -45,9 +45,9 @@
 - `src/journeys/ui/JourneyScreen.tsx` — accept `mutations` prop, call `applyOption` / `applyBranch`, host chooser overlay (Wave 2)
 - `src/journeys/ui/JourneyScreen.test.tsx` — new cases for apply integration
 - `src/components/ScreenRouter.tsx` — pass `mutations` into `JourneyScreen`
-- `src/state/quest-context.tsx` — add `battleModifiers`, `shopModifiers`, `dreamscapeModifiers`, new mutations, decay reducers
-- `src/types/quest.ts` — extend `QuestState` field types (or wherever `QuestState` lives — verify in Task 5)
-- `src/state/quest-context.test.tsx` — reducer extensions tests
+- `src/state/journey-context.tsx` — add `battleModifiers`, `shopModifiers`, `dreamscapeModifiers`, new mutations, decay reducers
+- `src/types/journey.ts` — extend `JourneyState` field types (or wherever `JourneyState` lives — verify in Task 5)
+- `src/state/journey-context.test.tsx` — reducer extensions tests
 - `src/journeys/index.ts` — re-export `JourneyMutations`, `applyOption`, `applyBranch`
 
 ---
@@ -89,7 +89,7 @@ If `npm run typecheck` is not the right command, grep `package.json` for the scr
 
 Read `docs/superpowers/specs/2026-05-16-dream-journey-effects-design.md` from the worktree. Sections that are load-bearing across many tasks:
 - "JourneyMutations interface" — Tasks 2 and 6
-- "QuestState extensions" — Task 5
+- "JourneyState extensions" — Task 5
 - "Template-by-template plan" — Tasks 9–18 and 22–25
 - "Chooser shapes" — Tasks 19–25
 - "JourneyScreen wiring" — Tasks 4 and 21
@@ -170,10 +170,10 @@ template family at a time without breaking the build.
 Copy the full `JourneyMutations` declaration from the spec section "JourneyMutations interface" into `src/journeys/apply/JourneyMutations.ts`. Add the imports the methods need:
 
 ```ts
-import type { Dreamsign, SiteType, TransfigurationType } from "../../types/quest";
+import type { Dreamsign, SiteType, TransfigurationType } from "../../types/journey";
 ```
 
-(Yes, this file imports `src/types/quest.ts`. The isolation contract in the spec calls out `src/journeys/apply/` as a file that MUST NOT import from `src/state/`; importing pure types from `src/types/` is permitted because they are type-only and add no runtime coupling. If the existing isolation lint rule disallows even types, gate it with the appropriate ignore comment and note the exception in the file's docstring.)
+(Yes, this file imports `src/types/journey.ts`. The isolation contract in the spec calls out `src/journeys/apply/` as a file that MUST NOT import from `src/state/`; importing pure types from `src/types/` is permitted because they are type-only and add no runtime coupling. If the existing isolation lint rule disallows even types, gate it with the appropriate ignore comment and note the exception in the file's docstring.)
 
 - [ ] **Step 2: Verify the isolation rule still holds**
 
@@ -195,7 +195,7 @@ wave1: define JourneyMutations interface.
 Captures the spec's effect-application API. Cost/Reward template
 apply methods take a JourneyMutations as their third arg; the
 adapter in src/journeys/adapter/journeyMutations.ts (later task)
-implements it via QuestMutations.
+implements it via JourneyMutations.
 ```
 
 ---
@@ -272,21 +272,21 @@ so every per-template apply test in subsequent tasks stays a one-liner.
 
 ---
 
-### Task 5: Add `QuestState` extensions and reducer hookups
+### Task 5: Add `JourneyState` extensions and reducer hookups
 
 **Files:**
-- Modify: `src/types/quest.ts` (or wherever `QuestState` lives — confirm via `grep -rn "interface QuestState" src/types`)
-- Modify: `src/state/quest-context.tsx`
-- Test: `src/state/quest-context.test.tsx`
+- Modify: `src/types/journey.ts` (or wherever `JourneyState` lives — confirm via `grep -rn "interface JourneyState" src/types`)
+- Modify: `src/state/journey-context.tsx`
+- Test: `src/state/journey-context.test.tsx`
 
 **Why:** The Wave 1 effects depend on three new state fields (`battleModifiers`, `shopModifiers`, `dreamscapeModifiers`) plus the mutations that push/decay them. Land these before the adapter so Task 6 can wire `JourneyMutations` to real mutation methods.
 
 - [ ] **Step 1: Write the state-shape and reducer-behavior tests**
 
 Pin these invariants (one test per bullet; no snapshots):
-- `battleModifiers` is an empty readonly array on a freshly created `QuestState`.
+- `battleModifiers` is an empty readonly array on a freshly created `JourneyState`.
 - `shopModifiers` initializes to `{ freeRerolls: 0, upcomingOmenDiscounts: 0, essenceDiscountPercent: 0 }`.
-- `dreamscapeModifiers` is an empty readonly array on a freshly created `QuestState`.
+- `dreamscapeModifiers` is an empty readonly array on a freshly created `JourneyState`.
 - `pushBattleRewardModifier("flat", 10, 2, src)` appends a `{ kind: "reward_reduction_flat", amount: 10, battlesRemaining: 2, source }` entry.
 - `pushTemporaryBaneGrant(name, count, battles, src)` (a) appends a `{ kind: "temporary_bane_grant", ... addedEntryIds: [...] }` entry and (b) adds `count` bane cards to the deck whose `entryId`s match `addedEntryIds`.
 - `incrementCompletionLevel(..., isMiniboss=*)` for a battle decrements every `battleModifiers[*].battlesRemaining`; entries at 0 drop; `temporary_bane_grant` entries at 0 additionally `removeDeckEntry` for each `addedEntryId`.
@@ -305,13 +305,13 @@ Pick representative state fixtures, not the full content bundle.
 
 - [ ] **Step 2: Run tests, confirm failure**
 
-- [ ] **Step 3: Extend `QuestState` types**
+- [ ] **Step 3: Extend `JourneyState` types**
 
-In `src/types/quest.ts` (or wherever `QuestState` is defined), add the three fields per the spec's "QuestState extensions" section. Update the type discriminants for `BattleModifier` and `DreamscapeModifier` exactly as the spec defines them.
+In `src/types/journey.ts` (or wherever `JourneyState` is defined), add the three fields per the spec's "JourneyState extensions" section. Update the type discriminants for `BattleModifier` and `DreamscapeModifier` exactly as the spec defines them.
 
-- [ ] **Step 4: Extend `QuestMutations`**
+- [ ] **Step 4: Extend `JourneyMutations`**
 
-Add the new method signatures to `QuestMutations` in `src/state/quest-context.tsx`. Method names must be exactly:
+Add the new method signatures to `JourneyMutations` in `src/state/journey-context.tsx`. Method names must be exactly:
 
 ```
 pushBattleRewardModifier, pushTemporaryBaneGrant,
@@ -321,13 +321,13 @@ boostSiteAppearance, removeDeckEntry, duplicateDeckEntry, addCardById,
 addBaneCardById, setEssence, changeOmens, changeMaxEssence
 ```
 
-Several of these (`removeCard`, `addCard`, `addBaneCard`, `changeEssence`) already exist on `QuestMutations` but operate on `cardNumber: number` while the spec's `JourneyMutations` operates on `cardId: string`. Implement `addCardById` / `addBaneCardById` as new wrappers that look up the card by id (using `questContent.cardDatabase` keyed on `cardNumber` — adapter will pass the right number after lookup). `removeDeckEntry` should match the existing `removeCard(entryId, source)` exactly; if so, the new method can be an alias inside the adapter rather than a new reducer.
+Several of these (`removeCard`, `addCard`, `addBaneCard`, `changeEssence`) already exist on `JourneyMutations` but operate on `cardNumber: number` while the spec's `JourneyMutations` operates on `cardId: string`. Implement `addCardById` / `addBaneCardById` as new wrappers that look up the card by id (using `journeyContent.cardDatabase` keyed on `cardNumber` — adapter will pass the right number after lookup). `removeDeckEntry` should match the existing `removeCard(entryId, source)` exactly; if so, the new method can be an alias inside the adapter rather than a new reducer.
 
-The naming pivot here is intentional: `JourneyMutations` uses `cardId` (the journey module's identifier) while `QuestMutations` uses `cardNumber` (the prototype's identifier). The adapter in Task 6 is the conversion site.
+The naming pivot here is intentional: `JourneyMutations` uses `cardId` (the journey module's identifier) while `JourneyMutations` uses `cardNumber` (the prototype's identifier). The adapter in Task 6 is the conversion site.
 
 - [ ] **Step 5: Implement reducers**
 
-For each new mutation method on `QuestMutations`, implement the `useCallback` reducer following the existing pattern in `quest-context.tsx`. The decay hookups:
+For each new mutation method on `JourneyMutations`, implement the `useCallback` reducer following the existing pattern in `journey-context.tsx`. The decay hookups:
 - Add a "decrement and drop" pass to `incrementCompletionLevel` for `battleModifiers` when the completing site is a Battle (`completionLevel` increment is keyed on battle sites; verify the discriminator).
 - Add a "decrement and drop" pass to `setCurrentDreamscape` when `nodeId !== prev.currentDreamscape`.
 - Modify `rerollShop` to consume `freeRerolls` before charging omens.
@@ -340,15 +340,15 @@ Initialize the three new fields to their empty defaults.
 
 - [ ] **Step 8: `npm run typecheck`**
 
-Expected: passes. The bigger `QuestMutations` doesn't break callers (existing methods are unchanged).
+Expected: passes. The bigger `JourneyMutations` doesn't break callers (existing methods are unchanged).
 
 - [ ] **Step 9: Commit**
 
 ```
-wave1: QuestState extensions + reducer hookups for journey effects.
+wave1: JourneyState extensions + reducer hookups for journey effects.
 
 Adds battleModifiers, shopModifiers, dreamscapeModifiers fields and
-the QuestMutations methods Wave-1 journey templates dispatch to.
+the JourneyMutations methods Wave-1 journey templates dispatch to.
 Decay hookups: per-battle for battleModifiers (via
 incrementCompletionLevel), per-dreamscape for dreamscapeModifiers
 (via setCurrentDreamscape). rerollShop now consumes free-reroll
@@ -361,18 +361,18 @@ commit lands the push and the decay only.
 
 ---
 
-### Task 6: Build the adapter — `JourneyMutations` → `QuestMutations`
+### Task 6: Build the adapter — `JourneyMutations` → `JourneyMutations`
 
 **Files:**
 - Create: `src/journeys/adapter/journeyMutations.ts`
 - Test: `src/journeys/adapter/journeyMutations.test.ts`
 
-**What this catches:** Wiring drift between `JourneyMutations` method names / argument orders and the underlying `QuestMutations`. Catching this once in adapter unit tests beats catching it in 50 template apply integration tests.
+**What this catches:** Wiring drift between `JourneyMutations` method names / argument orders and the underlying `JourneyMutations`. Catching this once in adapter unit tests beats catching it in 50 template apply integration tests.
 
 - [ ] **Step 1: Write the adapter test**
 
-The test takes a recording `QuestMutations` (record `{ name, args }` per call), passes it through the adapter factory, and asserts:
-- Each `JourneyMutations.<method>(...)` call results in exactly one corresponding `QuestMutations.<method>(...)` call with the args translated correctly (especially `cardId: string` → `cardNumber: number` lookups, and `transfigureDeckEntry(entryId, null, source)` → `transfigureCard(entryId, null, ...)` for the "remove transfiguration" variant).
+The test takes a recording `JourneyMutations` (record `{ name, args }` per call), passes it through the adapter factory, and asserts:
+- Each `JourneyMutations.<method>(...)` call results in exactly one corresponding `JourneyMutations.<method>(...)` call with the args translated correctly (especially `cardId: string` → `cardNumber: number` lookups, and `transfigureDeckEntry(entryId, null, source)` → `transfigureCard(entryId, null, ...)` for the "remove transfiguration" variant).
 
 Do not test every method individually as a separate "registers method X" assertion — that's a table-mirror test. Group them: one test per *class of translation* (passthrough, id→number lookup, null-transfiguration, source-string convention).
 
@@ -380,7 +380,7 @@ Do not test every method individually as a separate "registers method X" asserti
 
 - [ ] **Step 3: Implement the adapter**
 
-Export `createJourneyMutations(args: { mutations: QuestMutations; cardDatabase: Map<number, CardData> }): JourneyMutations`. Each method delegates. The `cardDatabase` is used by `addCardById` / `addBaneCardById` to convert `cardId: string` → `cardNumber: number`; if the id is missing from the database, log a `console.warn` and skip.
+Export `createJourneyMutations(args: { mutations: JourneyMutations; cardDatabase: Map<number, CardData> }): JourneyMutations`. Each method delegates. The `cardDatabase` is used by `addCardById` / `addBaneCardById` to convert `cardId: string` → `cardNumber: number`; if the id is missing from the database, log a `console.warn` and skip.
 
 For `transfigureDeckEntry(entryId, null, source)`, the adapter calls `mutations.transfigureCard(entryId, null, "remove_transfiguration", {})` — depending on Task 5's null support in the underlying reducer, this may need a small reducer addition there. If so, defer that addition into Task 5's commit by going back and amending; do not introduce it in this commit.
 
@@ -389,10 +389,10 @@ For `transfigureDeckEntry(entryId, null, source)`, the adapter calls `mutations.
 - [ ] **Step 5: Commit**
 
 ```
-wave1: adapter wiring JourneyMutations to QuestMutations.
+wave1: adapter wiring JourneyMutations to JourneyMutations.
 
 Single conversion site between the journey module's effect-application
-API and the quest prototype's mutation reducers. Handles the
+API and the journey prototype's mutation reducers. Handles the
 cardId→cardNumber translation and the null-transfiguration variant of
 transfigureCard.
 ```
@@ -504,8 +504,8 @@ In `src/components/ScreenRouter.tsx`'s `DreamJourneySiteScreen`, build the adapt
 
 ```ts
 const journeyMutations = useMemo(
-  () => createJourneyMutations({ mutations, cardDatabase: questContent.cardDatabase }),
-  [mutations, questContent.cardDatabase],
+  () => createJourneyMutations({ mutations, cardDatabase: journeyContent.cardDatabase }),
+  [mutations, journeyContent.cardDatabase],
 );
 
 return (
@@ -550,7 +550,7 @@ wave1: route JourneyScreen Enter Dream through applyOption/applyBranch.
 
 JourneyScreen now accepts a JourneyMutations prop and dispatches the
 chosen option's costs and effects through it before closing. The
-dreamscape site router wires the adapter built from QuestMutations +
+dreamscape site router wires the adapter built from JourneyMutations +
 the card database. Template apply methods are still stubs at this
 point; subsequent tasks implement them template family by template
 family.

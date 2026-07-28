@@ -5,20 +5,20 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ScreenRouter } from "./ScreenRouter";
 import {
-  QuestContextProvider,
+  JourneyContextProvider,
   createDefaultState,
-  type QuestMutations,
-} from "../state/quest-context";
+  type JourneyMutations,
+} from "../state/journey-context";
 import { parseRuntimeConfig } from "../runtime/runtime-config";
-import type { QuestContent } from "../data/quest-content";
+import type { JourneyContent } from "../data/journey-content";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import type {
   CardSourceDebugState,
-  QuestState,
+  JourneyState,
   SiteState,
-} from "../types/quest";
+} from "../types/journey";
 import { LayerName } from "../types/layer-name";
 import {
   makeMerchantTestCard,
@@ -26,7 +26,7 @@ import {
   makeMerchantTestCorpus,
   makeMerchantTestDeckEntry,
   makeMerchantTestDreamsignTemplate,
-  makeMerchantTestQuestState,
+  makeMerchantTestJourneyState,
 } from "../journey_v2/testing/fixtures";
 import { getLogEntries, resetLog } from "../logging";
 import {
@@ -158,10 +158,10 @@ function merchantContent() {
   });
 }
 
-function makeMutations(): QuestMutations {
+function makeMutations(): JourneyMutations {
   return {
     changeEssence: vi.fn(),
-    startQuest: vi.fn(),
+    startJourney: vi.fn(),
     rerollDreamAvatarOffer: vi.fn(),
     completeSite: vi.fn(),
     ensureRewardSiteRuntime: vi.fn(),
@@ -201,7 +201,7 @@ function makeMutations(): QuestMutations {
     setDraftState: vi.fn(),
     setFailureSummary: vi.fn(),
     dismissStartingDeckPopup: vi.fn(),
-    resetQuest: vi.fn(),
+    resetJourney: vi.fn(),
     setEssence: vi.fn(),
     changeMaxEssence: vi.fn(),
     addCardById: vi.fn(() => null),
@@ -234,8 +234,8 @@ function makeSite(type: SiteState["type"]): SiteState {
   };
 }
 
-function makeStateFor(site: SiteState): QuestState {
-  const merchantState = makeMerchantTestQuestState({
+function makeStateFor(site: SiteState): JourneyState {
+  const merchantState = makeMerchantTestJourneyState({
     seed: "router-merchant-seed",
     essence: 180,
     essenceCap: 360,
@@ -275,33 +275,33 @@ function makeStateFor(site: SiteState): QuestState {
   };
 }
 
-function renderWithQuest({
+function renderWithJourney({
   state,
-  questContent,
+  journeyContent,
   mutations = makeMutations(),
   children,
   strict = false,
 }: {
-  state: QuestState;
-  questContent: QuestContent;
-  mutations?: QuestMutations;
+  state: JourneyState;
+  journeyContent: JourneyContent;
+  mutations?: JourneyMutations;
   children: ReactElement;
   strict?: boolean;
 }) {
-  return mountWithQuest({ state, questContent, mutations, children, strict })
+  return mountWithJourney({ state, journeyContent, mutations, children, strict })
     .container;
 }
 
-function mountWithQuest({
+function mountWithJourney({
   state,
-  questContent,
+  journeyContent,
   mutations = makeMutations(),
   children,
   strict = false,
 }: {
-  state: QuestState;
-  questContent: QuestContent;
-  mutations?: QuestMutations;
+  state: JourneyState;
+  journeyContent: JourneyContent;
+  mutations?: JourneyMutations;
   children: ReactElement;
   strict?: boolean;
 }) {
@@ -311,34 +311,34 @@ function mountWithQuest({
   roots.push(root);
 
   const renderTree = (
-    nextState: QuestState,
-    nextMutations: QuestMutations = mutations,
+    nextState: JourneyState,
+    nextMutations: JourneyMutations = mutations,
   ) => {
     const tree = (
-      <QuestContextProvider
+      <JourneyContextProvider
         value={{
           state: nextState,
           mutations: nextMutations,
-          cardDatabase: questContent.cardDatabase,
-          questContent,
+          cardDatabase: journeyContent.cardDatabase,
+          journeyContent,
         }}
       >
         {children}
-      </QuestContextProvider>
+      </JourneyContextProvider>
     );
     const cumulusTree = <CumulusRoot>{tree}</CumulusRoot>;
     root.render(strict ? <StrictMode>{cumulusTree}</StrictMode> : cumulusTree);
   };
   const renderState = (
-    nextState: QuestState,
-    nextMutations: QuestMutations = mutations,
+    nextState: JourneyState,
+    nextMutations: JourneyMutations = mutations,
   ) =>
     act(() => {
       renderTree(nextState, nextMutations);
     });
   const renderStateAndFlush = async (
-    nextState: QuestState,
-    nextMutations: QuestMutations = mutations,
+    nextState: JourneyState,
+    nextMutations: JourneyMutations = mutations,
   ) => {
     await act(async () => {
       renderTree(nextState, nextMutations);
@@ -365,9 +365,9 @@ describe("ScreenRouter DreamAugury routing", () => {
   it("renders the Cumulus Dream Augury screen", () => {
     const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
-    const container = renderWithQuest({
+    const container = renderWithJourney({
       state,
-      questContent: makeMerchantTestContent({ cards: fixtureCards() }),
+      journeyContent: makeMerchantTestContent({ cards: fixtureCards() }),
       children: (
         <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
@@ -381,9 +381,9 @@ describe("ScreenRouter DreamAugury routing", () => {
   it("renders generated offers for a DreamAugury site", () => {
     const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
-    const container = renderWithQuest({
+    const container = renderWithJourney({
       state,
-      questContent: merchantContent(),
+      journeyContent: merchantContent(),
       children: (
         <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
@@ -396,9 +396,9 @@ describe("ScreenRouter DreamAugury routing", () => {
 
   it("renders the Cumulus Dream Augury screen by default", () => {
     const site = makeSite("DreamAugury");
-    const container = renderWithQuest({
+    const container = renderWithJourney({
       state: makeStateFor(site),
-      questContent: merchantContent(),
+      journeyContent: merchantContent(),
       children: (
         <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
@@ -414,7 +414,7 @@ describe("ScreenRouter DreamAugury routing", () => {
     ).toMatchObject({ screenType: "site", siteId: site.id });
   });
 
-  it("adds reroll and force-category debug commands to the Cumulus quest menu", () => {
+  it("adds reroll and force-category debug commands to the Cumulus journey menu", () => {
     const site = makeSite("DreamAugury");
     const mutations = makeMutations();
     const state = makeStateFor(site);
@@ -426,10 +426,10 @@ describe("ScreenRouter DreamAugury routing", () => {
       imageNumber: "0000",
       startingEssence: 180,
     };
-    const container = renderWithQuest({
+    const container = renderWithJourney({
       state,
       mutations,
-      questContent: merchantContent(),
+      journeyContent: merchantContent(),
       children: (
         <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
@@ -482,9 +482,9 @@ describe("ScreenRouter DreamAugury routing", () => {
   it("logs screen_rendered exactly once per navigation under strict mode", () => {
     const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
-    renderWithQuest({
+    renderWithJourney({
       state,
-      questContent: merchantContent(),
+      journeyContent: merchantContent(),
       children: (
         <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
@@ -504,9 +504,9 @@ describe("ScreenRouter DreamAugury routing", () => {
   it("logs the generated encounter debug once per encounter signature under strict mode", () => {
     const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
-    renderWithQuest({
+    renderWithJourney({
       state,
-      questContent: merchantContent(),
+      journeyContent: merchantContent(),
       children: (
         <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
@@ -536,9 +536,9 @@ describe("ScreenRouter DreamAugury routing", () => {
   it("emits a per-offer merchant_offer_built event joined to the encounter", () => {
     const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
-    renderWithQuest({
+    renderWithJourney({
       state,
-      questContent: merchantContent(),
+      journeyContent: merchantContent(),
       children: (
         <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
@@ -595,10 +595,10 @@ describe("ScreenRouter DreamAugury routing", () => {
     // encounter reliably surfaces visible catalog grant cards.
     const state = { ...makeStateFor(site), deck: [] };
     const mutations = makeMutations();
-    renderWithQuest({
+    renderWithJourney({
       state,
       mutations,
-      questContent: contentWithoutDreamsigns,
+      journeyContent: contentWithoutDreamsigns,
       children: (
         <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
@@ -624,10 +624,10 @@ describe("ScreenRouter DreamAugury routing", () => {
     const mutations = makeMutations();
     const foldedMutations = makeMutations();
     const content = merchantContent();
-    const mounted = mountWithQuest({
+    const mounted = mountWithJourney({
       state,
       mutations,
-      questContent: content,
+      journeyContent: content,
       children: (
         <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
@@ -648,10 +648,10 @@ describe("ScreenRouter DreamAugury routing", () => {
   it("does not clear or republish card source debug during StrictMode effect replay", () => {
     const site = makeSite("DreamAugury");
     const mutations = makeMutations();
-    renderWithQuest({
+    renderWithJourney({
       state: { ...makeStateFor(site), deck: [] },
       mutations,
-      questContent: merchantContent(),
+      journeyContent: merchantContent(),
       children: (
         <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
@@ -668,9 +668,9 @@ describe("ScreenRouter DreamAugury routing", () => {
   it("fails closed when persisted state targets an inline-only site", () => {
     const site = makeSite("Reward");
     const state = makeStateFor(site);
-    const container = renderWithQuest({
+    const container = renderWithJourney({
       state,
-      questContent: merchantContent(),
+      journeyContent: merchantContent(),
       children: (
         <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
@@ -685,10 +685,10 @@ describe("ScreenRouter DreamAugury routing", () => {
     const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
     const mutations = makeMutations();
-    const container = renderWithQuest({
+    const container = renderWithJourney({
       state,
       mutations,
-      questContent: makeMerchantTestContent({ cards: [] }),
+      journeyContent: makeMerchantTestContent({ cards: [] }),
       children: (
         <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />
       ),
@@ -710,9 +710,9 @@ describe("ScreenRouter DreamAugury routing", () => {
 });
 
 describe("ScreenRouter terminal Cumulus routing", () => {
-  it("renders Quest Failed with utility chrome, no status bar, and the reset action", () => {
+  it("renders Journey Failed with utility chrome, no status bar, and the reset action", () => {
     const state = createDefaultState();
-    state.screen = { type: "questFailed" };
+    state.screen = { type: "journeyFailed" };
     state.completionLevel = 2;
     state.dreamAvatar = {
       id: "73000000-0000-4000-8000-000000000001",
@@ -734,39 +734,39 @@ describe("ScreenRouter terminal Cumulus routing", () => {
       enemyScore: 10,
     };
     const mutations = makeMutations();
-    const container = renderWithQuest({
+    const container = renderWithJourney({
       state,
       mutations,
-      questContent: merchantContent(),
+      journeyContent: merchantContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
     expect(
-      container.querySelector('[data-testid="cumulus-quest-failed-screen"]'),
+      container.querySelector('[data-testid="cumulus-journey-failed-screen"]'),
     ).not.toBeNull();
     expect(
-      container.querySelector("[data-quest-status-bar-anchor]"),
+      container.querySelector("[data-journey-status-bar-anchor]"),
     ).toBeNull();
     expect(
       container.querySelector('[data-testid="dreamscape-menu-button"]'),
     ).not.toBeNull();
     expect(
       getLogEntries().find(
-        (entry) => entry.event === "quest_failed_screen_shown",
+        (entry) => entry.event === "journey_failed_screen_shown",
       ),
     ).toMatchObject({
       battleId: "router-failure-battle",
       siteId: "router-failure-site",
     });
 
-    const newQuest = container.querySelector<HTMLButtonElement>(
-      '[data-testid="quest-failed-start-new-run"]',
+    const newJourney = container.querySelector<HTMLButtonElement>(
+      '[data-testid="journey-failed-start-new-run"]',
     );
-    act(() => newQuest?.click());
-    expect(mutations.resetQuest).toHaveBeenCalledOnce();
+    act(() => newJourney?.click());
+    expect(mutations.resetJourney).toHaveBeenCalledOnce();
     expect(
       getLogEntries().find(
-        (entry) => entry.event === "quest_failed_start_new_run",
+        (entry) => entry.event === "journey_failed_start_new_run",
       ),
     ).toMatchObject({
       battleId: "router-failure-battle",
@@ -787,9 +787,9 @@ describe("ScreenRouter site-dispatch completeness", () => {
       sites: [],
     };
     state.currentDreamscape = "next-dreamscape";
-    const container = renderWithQuest({
+    const container = renderWithJourney({
       state,
-      questContent: merchantContent(),
+      journeyContent: merchantContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
@@ -805,9 +805,9 @@ describe("ScreenRouter site-dispatch completeness", () => {
     (type) => {
       const site = makeSite(type);
       const mutations = makeMutations();
-      const container = renderWithQuest({
+      const container = renderWithJourney({
         state: makeStateFor(site),
-        questContent: merchantContent(),
+        journeyContent: merchantContent(),
         mutations,
         children: (
           <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />

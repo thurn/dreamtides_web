@@ -15,7 +15,7 @@ import {
 const temporaryDirectories = [];
 
 function lockFixture() {
-  const directory = mkdtempSync(join(tmpdir(), "quest-review-lock-"));
+  const directory = mkdtempSync(join(tmpdir(), "journey-review-lock-"));
   temporaryDirectories.push(directory);
   return join(directory, "review.lock");
 }

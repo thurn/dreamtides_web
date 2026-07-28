@@ -23,7 +23,7 @@ import {
 import { Motes } from "../components/hud/Motes";
 import { token } from "../primitives/tokens";
 
-/** Everything the atlas screen renders, mapped from live quest state. */
+/** Everything the atlas screen renders, mapped from live journey state. */
 export interface AtlasView {
   /** The design canvas the stage scales to fit (letterboxed): portrait on
    * mobile, landscape on desktop. */

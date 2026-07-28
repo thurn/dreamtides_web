@@ -64,8 +64,8 @@ export function normalizeOpponentDebugAlgo(
  * The shareable generation id for `params`, e.g.
  * `opponent-debug:pharaohs_gate:3:2`. This is byte-for-byte the
  * `battleEntryKey` the generation logs as, so the same string both addresses a
- * URL (`?gen=<id>`) and greps the quest log
- * (`grep '"battleEntryKey":"<id>"' logs/quest-log.jsonl`).
+ * URL (`?gen=<id>`) and greps the journey log
+ * (`grep '"battleEntryKey":"<id>"' logs/journey-log.jsonl`).
  */
 export function opponentGenerationId(params: OpponentDebugParams): string {
   const dreamscape = params.dreamscapeId ?? "neutral";

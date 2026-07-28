@@ -22,7 +22,7 @@ vi.mock("../eventlog/subscribe", () => ({
   },
 }));
 
-vi.mock("./quest-log-sink", () => ({
+vi.mock("./journey-log-sink", () => ({
   readRoomLogLines: vi.fn(() => Promise.resolve([])),
 }));
 

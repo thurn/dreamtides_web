@@ -27,4 +27,4 @@ jobs:
       - run: npm ci
       - run: npm run review:full
         env:
-          QUEST_TEST_WORKERS: "4"
+          JOURNEY_TEST_WORKERS: "4"

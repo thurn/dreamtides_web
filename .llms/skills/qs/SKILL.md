@@ -1,69 +1,69 @@
 ---
 name: qs
-description: Use when working with the quest prototype, adding quest features, fixing quest bugs, or running quest prototype tests and typechecking. Triggers on quest prototype, quest sim, qs, quest bug, quest_prototype.
+description: Use when working with the journey prototype, adding journey features, fixing journey bugs, or running journey prototype tests and typechecking. Triggers on journey prototype, journey sim, qs, journey bug, journey_prototype.
 ---
 
-# Quest Prototype (QS)
+# Journey Prototype (QS)
 
 Read these first:
 
-- **Architecture + current flow**: [docs/quest_prototype/quest_prototype.md](../../../docs/quest_prototype/quest_prototype.md)
-- **Multiplayer + Firebase**: [docs/quest_prototype/firebase_multiplayer.md](../../../docs/quest_prototype/firebase_multiplayer.md)
-- **URL parameters**: [docs/quest_prototype/url_parameters.md](../../../docs/quest_prototype/url_parameters.md)
-- **Browser QA + tooling notes**: [docs/quest_prototype/qa_tooling.md](../../../docs/quest_prototype/qa_tooling.md)
+- **Architecture + current flow**: [docs/journey_prototype/journey_prototype.md](../../../docs/journey_prototype/journey_prototype.md)
+- **Multiplayer + Firebase**: [docs/journey_prototype/firebase_multiplayer.md](../../../docs/journey_prototype/firebase_multiplayer.md)
+- **URL parameters**: [docs/journey_prototype/url_parameters.md](../../../docs/journey_prototype/url_parameters.md)
+- **Browser QA + tooling notes**: [docs/journey_prototype/qa_tooling.md](../../../docs/journey_prototype/qa_tooling.md)
 
 ## Current Runtime Model
 
 - The prototype is this repository (`~/quest_prototype/`).
-- Every quest runs inside a Firebase Realtime Database room. The landing
+- Every journey runs inside a Firebase Realtime Database room. The landing
   screen is the **room gate** rendered by
   `src/multiplayer/MultiplayerRoomGate.tsx`:
   - Without a `?game=` parameter the gate shows a **Create Game** button that
     creates a room, navigates to `?game=<id>`, and joins it.
   - With `?game=<id>` the gate subscribes to the room snapshot and mounts the
-    quest UI once the snapshot is `ready`.
-- Once the room is mounted, `src/state/multiplayer-quest-context.tsx`
-  derives `state` from `session.room.questState` (defaulting via
-  `createDefaultState()` when the room has no quest yet) and exposes
-  `useQuest()` so screens see the same shape as the single-player path.
-- Quest start is a **Dream Avatar selection** screen with 3 choices. Picking a
+    journey UI once the snapshot is `ready`.
+- Once the room is mounted, `src/state/multiplayer-journey-context.tsx`
+  derives `state` from `session.room.journeyState` (defaulting via
+  `createDefaultState()` when the room has no journey yet) and exposes
+  `useJourney()` so screens see the same shape as the single-player path.
+- Journey start is a **Dream Avatar selection** screen with 3 choices. Picking a
   Dream Avatar resolves a fixed package, builds the starter deck, draft state,
-  and atlas via `startQuestFromDreamAvatar`, and transitions
+  and atlas via `startJourneyFromDreamAvatar`, and transitions
   `state.screen` straight to the first dreamscape.
-- Top-level state is `QuestState` in `src/types/quest.ts`. Routing is driven
+- Top-level state is `JourneyState` in `src/types/journey.ts`. Routing is driven
   by `state.screen` and dispatched in
-  `src/components/ScreenRouter.tsx` (`questStart`, `atlas`, `dreamscape`,
-  `site`, `questComplete`, `questFailed`).
-- Use `useQuest()` from `src/state/quest-context.tsx`, not
-  `useQuestContext()`.
+  `src/components/ScreenRouter.tsx` (`journeyStart`, `atlas`, `dreamscape`,
+  `site`, `journeyComplete`, `journeyFailed`).
+- Use `useJourney()` from `src/state/journey-context.tsx`, not
+  `useJourneyContext()`.
 - Logging goes through `logEvent()` in `src/logging.ts`. In dev it:
   1. writes one JSON line to `console.log`
   2. stores entries in-memory for tests via `getLogEntries()`
   3. POSTs to `/api/log`
-  4. gets appended by Vite to `logs/quest-log.jsonl`
+  4. gets appended by Vite to `logs/journey-log.jsonl`
 
 ## Multiplayer Persistence (Important)
 
-All quest mutations route through `src/multiplayer/room-service.ts`. The two
+All journey mutations route through `src/multiplayer/room-service.ts`. The two
 write paths are:
 
 - `writeRoomUpdate` — focused multi-path `update()` for individual fields
-  (e.g. `writeQuestField`, `writeWholeQuestState`).
+  (e.g. `writeJourneyField`, `writeWholeJourneyState`).
 - `runRoomTransaction` — full-room transaction whose updater receives a
   normalized `MultiplayerRoom | null` and returns the next room.
 
 Realtime Database **silently drops** `null` values, empty arrays, and empty
 objects on write. A room round-tripped through Firebase therefore loses any
 field whose default value is `null`, `[]`, or `{}`. `normalizeRoomSnapshot`
-and `normalizeQuestState` in `room-service.ts` restore those fields against
+and `normalizeJourneyState` in `room-service.ts` restore those fields against
 `createDefaultState()` before the snapshot reaches React or transaction
 updaters.
 
-When you add a `QuestState` field, or a nested field on `DreamAtlas`,
+When you add a `JourneyState` field, or a nested field on `DreamAtlas`,
 `DreamscapeNode`, `DraftState`, etc., that defaults to `null`, `[]`, or `{}`:
 
-1. Add the field to `createDefaultState()` in `src/state/quest-context.tsx`.
-2. Add a default in `normalizeQuestState` (or its nested helpers) in
+1. Add the field to `createDefaultState()` in `src/state/journey-context.tsx`.
+2. Add a default in `normalizeJourneyState` (or its nested helpers) in
    `src/multiplayer/room-service.ts`.
 3. Add a `room-service.test.ts` case that feeds an RTDB-stripped snapshot
    (field omitted) and asserts the default is restored.
@@ -76,7 +76,7 @@ the first time a fresh room is loaded back from Firebase.
 
 `.env` is required for Firebase to initialize. Copy `.env.example` to `.env`
 and fill in the seven `VITE_FIREBASE_*` values
-(see [firebase_multiplayer.md](../../../docs/quest_prototype/firebase_multiplayer.md)).
+(see [firebase_multiplayer.md](../../../docs/journey_prototype/firebase_multiplayer.md)).
 `.env` is gitignored.
 
 ```bash
@@ -110,17 +110,17 @@ typecheck, lint, tests, or browser QA in a fresh worktree.
 
 | File | Role |
 |------|------|
-| `src/App.tsx` | App shell, loads quest content + Firebase, mounts the room gate, HUD, deck viewer intro, debug overlay |
-| `src/multiplayer/MultiplayerRoomGate.tsx` | Create / join / subscribe / presence; renders the quest only when the room is `ready` |
-| `src/multiplayer/room-service.ts` | RTDB read/write primitives, snapshot normalization (`normalizeQuestState`, `normalizeAtlas`, `normalizeDraftState`), transaction helper |
+| `src/App.tsx` | App shell, loads journey content + Firebase, mounts the room gate, HUD, deck viewer intro, debug overlay |
+| `src/multiplayer/MultiplayerRoomGate.tsx` | Create / join / subscribe / presence; renders the journey only when the room is `ready` |
+| `src/multiplayer/room-service.ts` | RTDB read/write primitives, snapshot normalization (`normalizeJourneyState`, `normalizeAtlas`, `normalizeDraftState`), transaction helper |
 | `src/multiplayer/room-types.ts` | `MultiplayerRoom`, `RoomSession`, `RoomMetadata`, schema version |
-| `src/state/multiplayer-quest-context.tsx` | Multiplayer mutations: every change is written via `writeRoomUpdate` or `runRoomTransaction` |
-| `src/state/quest-context.tsx` | `useQuest()` consumer hook, `createDefaultState()`, single-player provider for tests |
-| `src/types/quest.ts` | `QuestState`, `Screen`, `SiteType`, atlas/site types |
+| `src/state/multiplayer-journey-context.tsx` | Multiplayer mutations: every change is written via `writeRoomUpdate` or `runRoomTransaction` |
+| `src/state/journey-context.tsx` | `useJourney()` consumer hook, `createDefaultState()`, single-player provider for tests |
+| `src/types/journey.ts` | `JourneyState`, `Screen`, `SiteType`, atlas/site types |
 | `src/components/ScreenRouter.tsx` | Dispatches `state.screen` and site screens |
-| `src/screens/QuestStartScreen.tsx` | Dream Avatar offer UI |
-| `src/state/quest-state-actions.ts` | `startQuestFromDreamAvatar`, screen/site/atlas transitions |
-| `src/data/quest-content.ts` | Loads normalized quest content and validates Dream Avatar packages |
+| `src/screens/JourneyStartScreen.tsx` | Dream Avatar offer UI |
+| `src/state/journey-state-actions.ts` | `startJourneyFromDreamAvatar`, screen/site/atlas transitions |
+| `src/data/journey-content.ts` | Loads normalized journey content and validates Dream Avatar packages |
 | `src/atlas/atlas-generator.ts` | Atlas generation, site pools, site metadata, dreamscape creation |
 | `src/draft/draft-engine.ts` | Fixed-pool draft logic with 4-card offers and persisted draft state |
 | `src/firebase/app-config.ts` | Reads `VITE_FIREBASE_*` env vars and initializes the Firebase app + database |
@@ -130,7 +130,7 @@ typecheck, lint, tests, or browser QA in a fresh worktree.
 
 At minimum, update the places that define type, routing, and reachability:
 
-1. Add the new variant to `SiteType` in `src/types/quest.ts`.
+1. Add the new variant to `SiteType` in `src/types/journey.ts`.
 2. Implement the site UI in `src/screens/`.
 3. Route it from `SiteScreen` in `src/components/ScreenRouter.tsx`.
 4. Add display metadata to `SITE_TYPE_META` in `src/atlas/atlas-generator.ts`.
@@ -140,21 +140,21 @@ At minimum, update the places that define type, routing, and reachability:
 
 Without the atlas pool change, the site is unreachable in normal gameplay.
 
-## Extending Quest State
+## Extending Journey State
 
-- Update `QuestState` in `src/types/quest.ts`.
-- Thread the new data through `QuestContextValue`, `QuestMutations`, and
-  `createDefaultState()` in `src/state/quest-context.tsx`.
+- Update `JourneyState` in `src/types/journey.ts`.
+- Thread the new data through `JourneyContextValue`, `JourneyMutations`, and
+  `createDefaultState()` in `src/state/journey-context.tsx`.
 - Update any bootstrap/reset helpers that need to preserve or clear the field.
-- Add a default in `normalizeQuestState` (or a nested helper) in
+- Add a default in `normalizeJourneyState` (or a nested helper) in
   `src/multiplayer/room-service.ts` if the field can be `null`, `[]`, or
   `{}`. See **Multiplayer Persistence** above.
-- Wire the mutation through `multiplayer-quest-context.tsx`. Field-scoped
-  writes go through `writeQuestField`; whole-state replacements go through
-  `writeWholeQuestState`; multi-field invariants go through
+- Wire the mutation through `multiplayer-journey-context.tsx`. Field-scoped
+  writes go through `writeJourneyField`; whole-state replacements go through
+  `writeWholeJourneyState`; multi-field invariants go through
   `writeRoomTransaction`.
-- Every mutation or state transition that changes quest state should emit a
-  `logEvent()` entry. Missing quest logs are a conformance problem.
+- Every mutation or state transition that changes journey state should emit a
+  `logEvent()` entry. Missing journey logs are a conformance problem.
 
 For tests, prefer the public surface and assert log behavior through
 `getLogEntries()` rather than adding test-only hooks.
@@ -166,10 +166,10 @@ For tests, prefer the public surface and assert log behavior through
   infrastructure, cross-cutting changes, releases, or an explicit full-suite
   request.
 - Select browser and visual QA by the risk matrix in
-  `docs/quest_prototype/qa_tooling.md`. Browser QA is required for changed
+  `docs/journey_prototype/qa_tooling.md`. Browser QA is required for changed
   runtime behavior; screenshot QA is required for changed visual output.
 - Always run the relevant persisted-room workflow when a change touches
-  `room-service.ts`, `multiplayer-quest-context.tsx`, or reshapes `QuestState`.
+  `room-service.ts`, `multiplayer-journey-context.tsx`, or reshapes `JourneyState`.
 
 ## Browser QA With agent-browser
 
@@ -258,12 +258,12 @@ empty tree — almost always an unhandled exception during render. Steps:
    ```
 
    Missing `null`/empty fields confirm an RTDB-stripping issue — extend
-   `normalizeQuestState`. See **Multiplayer Persistence** above.
+   `normalizeJourneyState`. See **Multiplayer Persistence** above.
 
 ### Smoke Path
 
 Use only the relevant portion of this flow. Run the complete path when the
-change can affect quest-wide progression or persistence:
+change can affect journey-wide progression or persistence:
 
 1. Open the app and confirm the landing screen renders a single
    **Create Game** button.
@@ -311,12 +311,12 @@ Inspect screenshots visually after capture. Verify:
 Use the current logging surfaces:
 
 ```bash
-tail -n 40 /Users/dthurn/quest_prototype/logs/quest-log.jsonl
+tail -n 40 /Users/dthurn/quest_prototype/logs/journey-log.jsonl
 agent-browser console get | tail -40
 agent-browser eval "JSON.stringify(window.__caps)"
 ```
 
-`window.__questLog` and `window.__errors` are not published by the app — use
+`window.__journeyLog` and `window.__errors` are not published by the app — use
 the JSONL file, the captured `__caps` buffer, and `agent-browser console get`
 instead. Watch the dev-server terminal for asset-load errors. If you need a
 saved copy from the UI, use the HUD `Download Log` button.
@@ -328,8 +328,8 @@ so you can inspect any room state directly:
 
 ```bash
 curl -s "https://redacted-firebase-project-default-rtdb.firebaseio.com/rooms/<id>.json" | jq .
-curl -s "https://redacted-firebase-project-default-rtdb.firebaseio.com/rooms/<id>/questState.json" | jq .
-curl -s "https://redacted-firebase-project-default-rtdb.firebaseio.com/rooms/<id>/questState/draftState.json" | jq .
+curl -s "https://redacted-firebase-project-default-rtdb.firebaseio.com/rooms/<id>/journeyState.json" | jq .
+curl -s "https://redacted-firebase-project-default-rtdb.firebaseio.com/rooms/<id>/journeyState/draftState.json" | jq .
 ```
 
 This is the fastest way to confirm whether a write succeeded and to spot

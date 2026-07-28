@@ -10,7 +10,7 @@ import type {
   DreamAtlas,
   DreamscapeNode,
   SiteState,
-} from "../types/quest";
+} from "../types/journey";
 import { LayerName } from "../types/layer-name";
 
 /**
@@ -23,7 +23,7 @@ import { LayerName } from "../types/layer-name";
 
 /**
  * A self-contained atlas config for tests that only need a structurally valid
- * `QuestContent` and never invoke the generator. Reads no files. Generation
+ * `JourneyContent` and never invoke the generator. Reads no files. Generation
  * invariant tests use {@link loadTestAtlasConfig} against the live bundle.
  */
 export const MINIMAL_ATLAS_CONFIG: AtlasConfig = {
@@ -105,7 +105,7 @@ export function makeTestAtlasNode(
 
 /**
  * Builds a minimal single-node atlas around `node` for tests that only need the
- * quest state to reference a current dreamscape and its sites.
+ * journey state to reference a current dreamscape and its sites.
  */
 export function makeTestAtlas(node: DreamscapeNode): DreamAtlas {
   return {

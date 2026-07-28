@@ -18,7 +18,7 @@ import DreamAvatarEditorGrid from "./DreamAvatarEditorGrid";
 import DreamAvatarEditorToolbar from "./DreamAvatarEditorToolbar";
 import DreamAvatarDetailView from "./DreamAvatarDetailView";
 import TidePoolModal from "./TidePoolModal";
-import { loadQuestContent, type QuestContent } from "../data/quest-content";
+import { loadJourneyContent, type JourneyContent } from "../data/journey-content";
 import { loadTides4Decks } from "../data/cards-v2-database";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import type { Tides4DecksJson } from "../draft/pool/tides4-io";
@@ -241,8 +241,8 @@ export default function DreamAvatarEditorApp({
   const [detailId, setDetailId] = useState<string | null>(() =>
     parseDetailIdFromUrl(window.location.search),
   );
-  const [questContent, setQuestContent] = useState<QuestContent | null>(null);
-  const [questContentError, setQuestContentError] = useState<string | null>(null);
+  const [journeyContent, setJourneyContent] = useState<JourneyContent | null>(null);
+  const [journeyContentError, setJourneyContentError] = useState<string | null>(null);
   const [tideDecks, setTideDecks] = useState<Tides4DecksJson | null>(null);
   const [tideDecksError, setTideDecksError] = useState<string | null>(null);
 
@@ -279,28 +279,28 @@ export default function DreamAvatarEditorApp({
   }, [apiClient, loadAttempt]);
 
   // The detail screen resolves each DreamAvatar's signature cards from the same
-  // quest content the battle integration loads. Fetch it lazily the first time
+  // journey content the battle integration loads. Fetch it lazily the first time
   // a detail screen is opened so the editor's normal load path is unaffected.
   useEffect(() => {
-    if (detailId === null || questContent !== null || questContentError !== null) {
+    if (detailId === null || journeyContent !== null || journeyContentError !== null) {
       return;
     }
     let cancelled = false;
-    loadQuestContent(DEFAULT_POOL_VARIANT)
+    loadJourneyContent(DEFAULT_POOL_VARIANT)
       .then((loaded) => {
         if (!cancelled) {
-          setQuestContent(loaded);
+          setJourneyContent(loaded);
         }
       })
       .catch((error: unknown) => {
         if (!cancelled) {
-          setQuestContentError(errorMessageFor(error));
+          setJourneyContentError(errorMessageFor(error));
         }
       });
     return () => {
       cancelled = true;
     };
-  }, [detailId, questContent, questContentError]);
+  }, [detailId, journeyContent, journeyContentError]);
 
   // Clicking a Tide on the detail screen reveals that tide's decklist. Resolve
   // the cards from the committed `tides4` artifact (the same source the editor's
@@ -717,8 +717,8 @@ export default function DreamAvatarEditorApp({
         <DreamAvatarDetailView
           dreamAvatar={detailDreamAvatar}
           tides={tides}
-          questContent={questContent}
-          questContentError={questContentError}
+          journeyContent={journeyContent}
+          journeyContentError={journeyContentError}
           tideDecks={tideDecks}
           tideDecksError={tideDecksError}
           onClose={handleCloseDetail}

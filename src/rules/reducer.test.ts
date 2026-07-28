@@ -10,7 +10,7 @@ import type {
 import { emptyBackRankSlots, emptyFrontRankSlots } from "../battle/test-support";
 import { genesisFoldState, type FoldState } from "./fold-state";
 import { GAME_ENGINE_CONFIG } from "./replay/replay";
-import { registerQuestLifecycleContentProvider } from "./quest/lifecycle";
+import { registerJourneyLifecycleContentProvider } from "./journey/lifecycle";
 import {
   isCasExempt,
   isInterveningWindowClear,
@@ -34,8 +34,8 @@ function foldStateWithEssence(essence: number, essenceCap?: number): FoldState {
   const base = genesisFoldState(GENESIS);
   return {
     ...base,
-    quest: {
-      ...base.quest,
+    journey: {
+      ...base.journey,
       essence,
       ...(essenceCap === undefined ? {} : { essenceCap }),
     },
@@ -88,7 +88,7 @@ describe("rule 3 — compare-and-swap window", () => {
     );
     expect(result.outcome).toBe("bounced");
     expect(result.bounceReason).toBe("partner_conflict");
-    expect(result.state.quest.essence).toBe(100);
+    expect(result.state.journey.essence).toBe(100);
   });
 
   it("applies when a partner SET_CARD_NOTE (decision-neutral) intervened", () => {
@@ -101,7 +101,7 @@ describe("rule 3 — compare-and-swap window", () => {
       }),
     );
     expect(result.outcome).toBe("applied");
-    expect(result.state.quest.essence).toBe(110);
+    expect(result.state.journey.essence).toBe(110);
   });
 
   it("applies when a partner MARK_SITE_VISITED (decision-neutral) intervened", () => {
@@ -116,7 +116,7 @@ describe("rule 3 — compare-and-swap window", () => {
       }),
     );
     expect(result.outcome).toBe("applied");
-    expect(result.state.quest.essence).toBe(110);
+    expect(result.state.journey.essence).toBe(110);
   });
 
   it("applies when a partner DISMISS_STARTING_DECK_POPUP (decision-neutral) intervened", () => {
@@ -131,7 +131,7 @@ describe("rule 3 — compare-and-swap window", () => {
       }),
     );
     expect(result.outcome).toBe("applied");
-    expect(result.state.quest.essence).toBe(110);
+    expect(result.state.journey.essence).toBe(110);
   });
 
   it("applies a self-chain window (only own-actor events intervened)", () => {
@@ -147,7 +147,7 @@ describe("rule 3 — compare-and-swap window", () => {
       }),
     );
     expect(result.outcome).toBe("applied");
-    expect(result.state.quest.essence).toBe(110);
+    expect(result.state.journey.essence).toBe(110);
   });
 
   it("bounces when the intervening window is unknown", () => {
@@ -159,7 +159,7 @@ describe("rule 3 — compare-and-swap window", () => {
     );
     expect(result.outcome).toBe("bounced");
     expect(result.bounceReason).toBe("unknown_conflict");
-    expect(result.state.quest.essence).toBe(100);
+    expect(result.state.journey.essence).toBe(100);
   });
 });
 
@@ -251,7 +251,7 @@ function makeCardInstance(battleCardId: string): BattleCardInstance {
     markers: { isPrevented: false, isCopied: false },
     notes: [],
     provenance: {
-      kind: "quest-deck",
+      kind: "journey-deck",
       sourceBattleCardId: null,
       chosenSpark: null,
       chosenSubtype: null,
@@ -304,7 +304,7 @@ describe("rule 4 — prompt gate", () => {
     const result = reduceGameEvent(state, adjustEssence(10), ctx());
     expect(result.outcome).toBe("bounced");
     expect(result.bounceReason).toBe("prompt_pending");
-    expect(result.state.quest.essence).toBe(100);
+    expect(result.state.journey.essence).toBe(100);
   });
 
   it("applies a matching-promptId RESOLVE_PROMPT past the CAS gate (rule 2 fast path)", () => {
@@ -401,7 +401,7 @@ describe("rule 5 — routing and garbage tolerance", () => {
     );
     expect(result.outcome).toBe("bounced");
     expect(result.bounceReason).toBe("invalid_action");
-    expect(result.state.quest.essence).toBe(100);
+    expect(result.state.journey.essence).toBe(100);
   });
 });
 
@@ -414,7 +414,7 @@ describe("ADJUST_ESSENCE domain case", () => {
     const state = foldStateWithEssence(100, 500);
     const result = reduceGameEvent(state, adjustEssence(50), ctx());
     expect(result.outcome).toBe("applied");
-    expect(result.state.quest.essence).toBe(150);
+    expect(result.state.journey.essence).toBe(150);
   });
 
   it("never leaves the [0, essenceCap] range across a delta sweep", () => {
@@ -423,9 +423,9 @@ describe("ADJUST_ESSENCE domain case", () => {
       for (const delta of [-1000, -250, -1, 0, 1, 250, 1000]) {
         const state = foldStateWithEssence(start, cap);
         const result = reduceGameEvent(state, adjustEssence(delta), ctx());
-        expect(result.state.quest.essence).toBeGreaterThanOrEqual(0);
-        expect(result.state.quest.essence).toBeLessThanOrEqual(cap);
-        expect(result.state.quest.essence).toBe(
+        expect(result.state.journey.essence).toBeGreaterThanOrEqual(0);
+        expect(result.state.journey.essence).toBeLessThanOrEqual(cap);
+        expect(result.state.journey.essence).toBe(
           Math.max(0, Math.min(start + delta, cap)),
         );
       }
@@ -435,7 +435,7 @@ describe("ADJUST_ESSENCE domain case", () => {
   it("does not mutate the input state (returns a new object)", () => {
     const state = foldStateWithEssence(100);
     const result = reduceGameEvent(state, adjustEssence(10), ctx());
-    expect(state.quest.essence).toBe(100);
+    expect(state.journey.essence).toBe(100);
     expect(result.state).not.toBe(state);
   });
 });
@@ -598,12 +598,12 @@ describe("isInterveningWindowClear (rule 3)", () => {
 });
 
 describe("genesisFoldState", () => {
-  it("produces a null battle and a quest state seeded from genesis", () => {
+  it("produces a null battle and a journey state seeded from genesis", () => {
     const fold = genesisFoldState(GENESIS);
     expect(fold.battle).toBeNull();
-    expect(fold.quest.seed).toBe(GENESIS.seed);
-    expect(typeof fold.quest.essence).toBe("number");
-    expect(typeof fold.quest.essenceCap).toBe("number");
+    expect(fold.journey.seed).toBe(GENESIS.seed);
+    expect(typeof fold.journey.essence).toBe("number");
+    expect(typeof fold.journey.essenceCap).toBe("number");
   });
 });
 
@@ -614,27 +614,27 @@ describe("genesisFoldState", () => {
 
 describe("reducer containment at the foldEvents layer", () => {
   it("a throwing domain case propagates in dev fold mode and becomes fold_error in prod fold mode", () => {
-    // A lifecycle provider whose START_QUEST assembly THROWS — a stand-in for a
+    // A lifecycle provider whose START_JOURNEY assembly THROWS — a stand-in for a
     // programmer error deep inside a domain case (the reducer never swallows it).
-    registerQuestLifecycleContentProvider({
+    registerJourneyLifecycleContentProvider({
       resolveDreamAvatarPackage: () => {
         throw new Error("resolveDreamAvatarPackage exploded");
       },
-      startQuest: () => {
-        throw new Error("startQuest exploded");
+      startJourney: () => {
+        throw new Error("startJourney exploded");
       },
     });
     try {
       const state = genesisFoldState(GENESIS);
       const batch = [
-        { seq: 1, event: event("START_QUEST", { dreamAvatarId: "dc-x" }) },
+        { seq: 1, event: event("START_JOURNEY", { dreamAvatarId: "dc-x" }) },
       ];
       const base = { seq: 0, state };
 
       // Dev fold mode: the programmer error surfaces at its origin.
       expect(() =>
         foldEvents(GAME_ENGINE_CONFIG, GENESIS, base, batch, { devMode: true }),
-      ).toThrow(/startQuest exploded/);
+      ).toThrow(/startJourney exploded/);
 
       // Prod fold mode: contained as a bounce plus a loud error report; the
       // pre-event state is untouched (no partial application).
@@ -645,7 +645,7 @@ describe("reducer containment at the foldEvents layer", () => {
       expect(result.outcomes[0].error).toBeDefined();
       expect(result.state).toBe(state);
     } finally {
-      registerQuestLifecycleContentProvider(null);
+      registerJourneyLifecycleContentProvider(null);
     }
   });
 });

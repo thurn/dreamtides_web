@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
-import type { QuestContent } from "../../data/quest-content";
+import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
 import type { MerchantCorpusCard } from "../../data/merchant-corpus";
 import type { DreamsignProfile } from "../../data/dreamsign-profiles";
-import type { QuestState, SiteState } from "../../types/quest";
+import type { JourneyState, SiteState } from "../../types/journey";
 import { LayerName } from "../../types/layer-name";
 import { buildMerchantContext } from "../context/buildMerchantContext";
 import {
@@ -14,7 +14,7 @@ import {
   makeMerchantTestDeckEntry,
   makeMerchantTestDreamsignProfile,
   makeMerchantTestDreamsignTemplate,
-  makeMerchantTestQuestState,
+  makeMerchantTestJourneyState,
   makeMerchantTestSite,
 } from "../testing/fixtures";
 import type { MerchantAcceptRequest, MerchantOffer } from "../types";
@@ -58,8 +58,8 @@ function dreamsignFixture(count: number) {
 }
 
 function makeFixture(overrides: { seed?: string } = {}): {
-  state: QuestState;
-  questContent: QuestContent;
+  state: JourneyState;
+  journeyContent: JourneyContent;
   site: SiteState;
 } {
   const site = makeMerchantTestSite({
@@ -68,13 +68,13 @@ function makeFixture(overrides: { seed?: string } = {}): {
   });
   const { cards, corpus } = poolCards(30);
   const { templates, profiles } = dreamsignFixture(10);
-  const questContent = makeMerchantTestContent({
+  const journeyContent = makeMerchantTestContent({
     cards,
     dreamsignTemplates: templates,
     merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
     dreamsignProfiles: new Map(Object.entries(profiles)),
   });
-  const state = makeMerchantTestQuestState({
+  const state = makeMerchantTestJourneyState({
     seed: overrides.seed ?? "merchant-resolve-seed",
     currentDreamscape: "dreamscape-a",
     screen: { type: "site", siteId: site.id },
@@ -110,18 +110,18 @@ function makeFixture(overrides: { seed?: string } = {}): {
       knownDreamsignCarrierIds: [],
     },
   });
-  return { state, questContent, site };
+  return { state, journeyContent, site };
 }
 
 function encounterFor(fixture: {
-  state: QuestState;
-  questContent: QuestContent;
+  state: JourneyState;
+  journeyContent: JourneyContent;
   site: SiteState;
 }) {
   return generateMerchantEncounter(
     buildMerchantContext({
-      questState: fixture.state,
-      questContent: fixture.questContent,
+      journeyState: fixture.state,
+      journeyContent: fixture.journeyContent,
       site: fixture.site,
     }),
   );
@@ -142,7 +142,7 @@ describe("resolveMerchantOffer", () => {
     const offer = encounter.offers[0];
     const result = resolveMerchantOffer({
       state: fixture.state,
-      questContent: fixture.questContent,
+      journeyContent: fixture.journeyContent,
       site: fixture.site,
       request: { ...requestFor(offer), encounterSignature: "stale" },
     });
@@ -161,7 +161,7 @@ describe("resolveMerchantOffer", () => {
       offer.archetypeId === "strong_card" ? "dreamsign" : "strong_card";
     const result = resolveMerchantOffer({
       state: fixture.state,
-      questContent: fixture.questContent,
+      journeyContent: fixture.journeyContent,
       site: fixture.site,
       request: { ...requestFor(offer), archetypeId: wrongArchetype },
     });
@@ -188,7 +188,7 @@ describe("resolveMerchantOffer", () => {
     const beforeDeckJson = JSON.stringify(fixture.state.deck);
     const result = resolveMerchantOffer({
       state: fixture.state,
-      questContent: fixture.questContent,
+      journeyContent: fixture.journeyContent,
       site: fixture.site,
       request: requestFor(directOffer),
     });
@@ -213,7 +213,7 @@ describe("resolveMerchantOffer", () => {
     const encounter = encounterFor(fixture);
     const result = resolveMerchantDecline({
       state: fixture.state,
-      questContent: fixture.questContent,
+      journeyContent: fixture.journeyContent,
       site: fixture.site,
       request: {
         encounterSignature: encounter.encounterSignature,
@@ -232,12 +232,12 @@ describe("resolveMerchantOffer", () => {
 describe("applyMerchantPayloadToState", () => {
   it("appends a catalog card to the deck", () => {
     const fixture = makeFixture();
-    const card = fixture.questContent.cardDatabase.get(1000);
+    const card = fixture.journeyContent.cardDatabase.get(1000);
     expect(card).toBeDefined();
     if (card === undefined) return;
     const next = applyMerchantPayloadToState({
       state: fixture.state,
-      questContent: fixture.questContent,
+      journeyContent: fixture.journeyContent,
       payload: {
         kind: "add_catalog_card",
         cardUuid: card.id,
@@ -252,7 +252,7 @@ describe("applyMerchantPayloadToState", () => {
     const fixture = makeFixture();
     const next = applyMerchantPayloadToState({
       state: fixture.state,
-      questContent: fixture.questContent,
+      journeyContent: fixture.journeyContent,
       payload: { kind: "add_site", siteType: "Shop" },
     });
     expect(next).not.toBeNull();

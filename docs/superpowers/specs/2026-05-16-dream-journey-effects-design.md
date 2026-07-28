@@ -4,13 +4,13 @@ Status: approved spec, ready for implementation planning.
 Author: brainstorming session, 2026-05-16.
 Supersedes nothing. Follow-up to `2026-05-15-dream-journey-port-design.md`,
 which landed the generator and read-only UI; this spec wires the chosen
-option's mechanical effects into the quest state.
+option's mechanical effects into the journey state.
 
 ## Goal
 
 When the player clicks Enter Dream on a Dream Journey option (flat manifest)
 or branch (decision-tree manifest), the chosen template's mechanical effects
-apply to `QuestState` via the existing `QuestMutations`, then the screen
+apply to `JourneyState` via the existing `JourneyMutations`, then the screen
 advances or closes.
 
 Player choice (for templates such as "Apply Enduring to a chosen card") is
@@ -22,7 +22,7 @@ it from the adapter layer. The cost/reward template catalog in
 `shared/costs.ts` and `shared/rewards.ts` gains an `apply(params, ctx, mut)`
 method per template; no other directory under `src/journeys/journey/`,
 `src/journeys/content/`, `src/journeys/ui/`, or `src/journeys/util/` imports
-`QuestMutations` or `QuestState`.
+`JourneyMutations` or `JourneyState`.
 
 ## Non-goals
 
@@ -56,7 +56,7 @@ src/journeys/
 │   ├── chooserPlan.ts                  # Pure: turns an option/branch into 0+ chooser requests.
 │   └── payloads.ts                     # Narrow `option.costs[]`/`option.effects[]` envelopes.
 ├── adapter/
-│   ├── journeyMutations.ts             # NEW. Implements JourneyMutations via QuestMutations.
+│   ├── journeyMutations.ts             # NEW. Implements JourneyMutations via JourneyMutations.
 │   └── ...existing files...
 ├── journey/shared/
 │   ├── costs.ts                        # Each Cost gains `apply(params, ctx, mut)`.
@@ -77,7 +77,7 @@ src/journeys/
   `src/journeys/util/`, and define types. It MUST NOT import from
   `src/types/` or `src/state/`.
 - `src/journeys/adapter/journeyMutations.ts` is the only file that imports
-  both `JourneyMutations` (from `apply/`) and `QuestMutations` (from
+  both `JourneyMutations` (from `apply/`) and `JourneyMutations` (from
   `src/state/`).
 - `src/journeys/journey/shared/costs.ts` and `shared/rewards.ts` gain an
   `apply` method that depends only on `JourneyMutations` (defined inside
@@ -110,13 +110,13 @@ applyOption(option, ctx, mutations, resolutions)
 JourneyMutations (interface, defined inside src/journeys/apply/)
     │
     ▼
-adapter/journeyMutations.ts (delegates to QuestMutations)
+adapter/journeyMutations.ts (delegates to JourneyMutations)
     │
     ▼
-QuestMutations.changeEssence / addBaneCard / transfigureCard / …
+JourneyMutations.changeEssence / addBaneCard / transfigureCard / …
     │
     ▼
-QuestState (mutation via existing reducers)
+JourneyState (mutation via existing reducers)
 ```
 
 When `applyOption` returns `{ needsChoice }`, the screen mounts the
@@ -245,13 +245,13 @@ Wave 1 implements every method in this interface. Wave 2 adds the chooser
 glue but does not extend the interface (choosers compute a resolution that
 gets fed into existing apply methods, e.g. `duplicateDeckEntry(entryId)`).
 
-## QuestState extensions
+## JourneyState extensions
 
-Two new fields on `QuestState` to support the battle-window and
+Two new fields on `JourneyState` to support the battle-window and
 shop-modifier mutations:
 
 ```ts
-interface QuestState {
+interface JourneyState {
   // ...existing fields...
 
   /** Modifiers consumed by future battles. Each modifier has a remaining
@@ -656,7 +656,7 @@ its effects too.
 ## Locking re-check at apply time
 
 Templates set `option.locked = true` at generation time when a cost is
-unaffordable. The UI disables Enter Dream for locked options. But quest
+unaffordable. The UI disables Enter Dream for locked options. But journey
 state can change between generation and clicking (a parallel mutation —
 unlikely in the prototype, but defensive):
 
@@ -765,10 +765,10 @@ Hard rules from the port spec apply: under 10 seconds per test preferred,
    - Compound cost (`meta_pay_2_costs`): both sub-costs apply.
 3. **Tree apply** at `applyBranch.test.ts`. Same shape as `applyOption`.
 4. **Adapter wiring** at `adapter/journeyMutations.test.ts`. Stubs
-   `QuestMutations`, calls each `JourneyMutations` method, asserts the
+   `JourneyMutations`, calls each `JourneyMutations` method, asserts the
    correct delegation. Includes the `null` transfiguration variant.
-5. **QuestState reducer extensions** at
-   `src/state/quest-context.test.tsx`. Cases:
+5. **JourneyState reducer extensions** at
+   `src/state/journey-context.test.tsx`. Cases:
    - `pushBattleRewardModifier` adds an entry; `incrementCompletionLevel`
      for a battle decrements; at 0 the entry drops.
    - `pushTemporaryBaneGrant` adds the bane card AND a modifier; at 0
@@ -819,7 +819,7 @@ Lands inside one worktree commit:
 - `apply` method added to every Cost and Reward template.
 - `mutations` prop added to `JourneyScreen`; dreamscape site router wires
   the adapter helper.
-- `QuestState.battleModifiers`, `shopModifiers`, `dreamscapeModifiers`
+- `JourneyState.battleModifiers`, `shopModifiers`, `dreamscapeModifiers`
   fields plus reducer hookups for push and decay.
 - `JourneyMutations` methods 1–17 (everything except chooser).
 - All Wave-1 template apply implementations.

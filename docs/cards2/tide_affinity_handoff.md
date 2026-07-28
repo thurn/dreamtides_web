@@ -8,7 +8,7 @@ verification gates.
 
 ## 1. Problem domain in three paragraphs
 
-Dreamtides is a card game prototype. At the start of a quest run, each
+Dreamtides is a card game prototype. At the start of a journey run, each
 Dream Avatar (a hero the player picks; 32 exist, defined in
 `data/tabula/dream_avatars_v2.toml`) gets a 200-copy **draft pool** the player
 drafts cards from. Pool construction algorithms are selected by the `?algo=`
@@ -24,7 +24,7 @@ card).
 Playtest feedback is that `idf3` pools feel "magical" (opaque). The `tides`
 variant (`src/draft/pool/variant-tides.ts`) is its human-legible counterpart:
 **32 preconstructed decks called "tide decks"**, baked offline from the same
-decklist corpus, combined at quest start by a process a player can be told in
+decklist corpus, combined at journey start by a process a player can be told in
 one sentence. The decklists are committed in `data/tides.jsonc` (cards keyed
 by stable cards_v2 UUID) and rendered for players in
 `docs/cards2/tide_decklists.md`. The bake (`npm run bake-tides`,
@@ -224,7 +224,7 @@ Fisher-Yates shuffle of the bag → deal. Change only the selection:
 - Plumb the relationships data exactly like the tide decks: new field
   `tideRelationships?` on `PoolData` (`src/draft/pool/types.ts`), a
   `loadTideRelationships()` in `src/data/cards-v2-database.ts`, gated fetch in
-  `src/data/quest-content.ts` (`POOL_VARIANTS_NEEDING_TIDES` already exists),
+  `src/data/journey-content.ts` (`POOL_VARIANTS_NEEDING_TIDES` already exists),
   and direct file reads in
   `scripts/pool-metrics.mjs` (`loadContext`) and
   `scripts/tides-similarity-experiment.mjs` (`loadContext`). Follow the
@@ -238,7 +238,7 @@ Fisher-Yates shuffle of the bag → deal. Change only the selection:
   that (it is the debug surface).
 
 The RNG contract: `generatePoolFromData` seeds mulberry32 from
-`hash(questSeed:dreamAvatarId)`; all draws must come from the passed `rng` in
+`hash(journeySeed:dreamAvatarId)`; all draws must come from the passed `rng` in
 a fixed call order so pools stay reproducible per (seed, Dream Avatar).
 
 ### 4.4 Tuning dials (expect to iterate)
@@ -269,7 +269,7 @@ prefer not to re-bake decklists): `tideSize` 160, `doubleShare` 0.35,
    player-facing "you can go read it" artifact must show the relationships,
    since they are now part of the algorithm's story. Also update the
    one-sentence story in `variant-tides.ts`'s header comment, the `HEADER`
-   in `bake-tides.mjs`, and `docs/quest_prototype/url_parameters.md`
+   in `bake-tides.mjs`, and `docs/journey_prototype/url_parameters.md`
    (`algo=tides` bullet).
 5. Measure, iterate dials (4.4), lock.
 

@@ -136,7 +136,7 @@ function CardShopGallery({
       document.querySelectorAll<HTMLElement>("[data-gallery-entry-id]"),
     ).find((element) => element.dataset.galleryEntryId === offer.entryId);
     const deckTarget = document.querySelector<HTMLElement>(
-      "[data-quest-deck-target]",
+      "[data-journey-deck-target]",
     );
     if (source !== undefined && deckTarget !== null) {
       const sourceRect = snapshotRect(source.getBoundingClientRect());

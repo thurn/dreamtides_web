@@ -58,9 +58,9 @@ function figmentProvenance(subtype: string, chosenSpark: number): BattleCardProv
   };
 }
 
-function questDeckProvenance(): BattleCardProvenance {
+function journeyDeckProvenance(): BattleCardProvenance {
   return {
-    kind: "quest-deck",
+    kind: "journey-deck",
     sourceBattleCardId: null,
     chosenSpark: null,
     chosenSubtype: null,
@@ -104,7 +104,7 @@ function makeNonFigment(battleCardId: string, printedSpark: number): BattleCardI
     status: createDefaultBattleCardStatus(),
     markers: { isPrevented: false, isCopied: false },
     notes: [],
-    provenance: questDeckProvenance(),
+    provenance: journeyDeckProvenance(),
   };
 }
 

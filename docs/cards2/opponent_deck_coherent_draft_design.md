@@ -72,7 +72,7 @@ All existing opponent deck-card construction code is deleted and rewritten.
 - `AGENTS.md` — repository conventions: identify cards by UUID, treat all TOML
   game-design data as subject to change (tests must not assert specific card
   data), and log enough that any algorithm's behavior can be reconstructed from
-  `logs/quest-log.jsonl`.
+  `logs/journey-log.jsonl`.
 
 ## Terminology
 
@@ -167,7 +167,7 @@ external judgment about what archetypes exist or which cards are "good."
   corpus decks.
 - Keep construction fully deterministic in its seed, Dream Avatar, and completion
   level, and log enough to reconstruct both the pick sequence and the resulting
-  coherence from `logs/quest-log.jsonl`.
+  coherence from `logs/journey-log.jsonl`.
 - Keep opponent Dream Avatar identity meaningful: an opponent's deck should reflect
   that Dream Avatar's signature cards.
 - In an affiliated dreamscape, the opponent deck must visibly belong to that
@@ -336,7 +336,7 @@ removals, and final deck.
 
 The `opponent_deck_constructed` log event is retained and enriched so a deck's
 construction and its measured coherence can be reconstructed from
-`logs/quest-log.jsonl` filtered by game. In addition to the existing fields
+`logs/journey-log.jsonl` filtered by game. In addition to the existing fields
 (opponent Dream Avatar, completion level, layer count, deck size, top
 card numbers), the event records: the target affiliation, if any; the number of
 candidate drafts run and the index of the winning draft; the winning deck's
@@ -545,7 +545,7 @@ Set up: run the local dev server on a non-default port so it does not collide
 with a developer's own server, and boot directly into battles. Use the battle
 QA entry that starts a run and lets you advance through layers, capturing the
 game token so the constructed decks can be cross-referenced in
-`logs/quest-log.jsonl`.
+`logs/journey-log.jsonl`.
 
 Primary flow — early battle coherence. Enter the opening Battle (completion level
 zero) in a neutral dreamscape — the exact configuration that produced the

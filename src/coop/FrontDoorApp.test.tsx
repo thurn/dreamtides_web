@@ -3,11 +3,11 @@
 import { act, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { QuestContent } from "../data/quest-content";
+import type { JourneyContent } from "../data/journey-content";
 import FrontDoorApp from "./FrontDoorApp";
 
 const mocks = vi.hoisted(() => ({
-  loadQuestContent: vi.fn<() => Promise<QuestContent>>(),
+  loadJourneyContent: vi.fn<() => Promise<JourneyContent>>(),
   loadTutorialConfiguration: vi.fn(() => Promise.resolve({
     actions: [],
     triggers: [],
@@ -16,8 +16,8 @@ const mocks = vi.hoisted(() => ({
   registerGameProviders: vi.fn(),
 }));
 
-vi.mock("../data/quest-content", () => ({
-  loadQuestContent: mocks.loadQuestContent,
+vi.mock("../data/journey-content", () => ({
+  loadJourneyContent: mocks.loadJourneyContent,
 }));
 vi.mock("../data/tutorial-actions", () => ({
   loadTutorialConfiguration: mocks.loadTutorialConfiguration,
@@ -67,7 +67,7 @@ describe("FrontDoorApp provider bootstrap", () => {
     container = document.createElement("div");
     document.body.append(container);
     root = createRoot(container);
-    mocks.loadQuestContent.mockReset();
+    mocks.loadJourneyContent.mockReset();
     mocks.loadTutorialConfiguration.mockClear();
     mocks.registerGameProviders.mockReset();
   });
@@ -78,8 +78,8 @@ describe("FrontDoorApp provider bootstrap", () => {
   });
 
   it("registers content providers before mounting the room fold", async () => {
-    let resolveContent!: (content: QuestContent) => void;
-    mocks.loadQuestContent.mockReturnValue(new Promise((resolve) => {
+    let resolveContent!: (content: JourneyContent) => void;
+    mocks.loadJourneyContent.mockReturnValue(new Promise((resolve) => {
       resolveContent = resolve;
     }));
 
@@ -95,7 +95,7 @@ describe("FrontDoorApp provider bootstrap", () => {
     expect(container.querySelector("[data-room-gate]")).toBeNull();
 
     await act(async () => {
-      resolveContent({} as QuestContent);
+      resolveContent({} as JourneyContent);
       await Promise.resolve();
     });
 
@@ -105,7 +105,7 @@ describe("FrontDoorApp provider bootstrap", () => {
   });
 
   it("threads the direct victory preview into the front-door router", async () => {
-    mocks.loadQuestContent.mockResolvedValue({} as QuestContent);
+    mocks.loadJourneyContent.mockResolvedValue({} as JourneyContent);
 
     await act(async () => {
       root.render(

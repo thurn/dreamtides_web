@@ -103,7 +103,6 @@ export const BASELINE = [
   // weight + size + face for a voice UI code applies by role.
   "--t-popover-body",
   "--t-popover-epithet",
-  "--t-popover-headline",
 ];
 
 /** Whether `fullPath` is walked at all: TS/TSX/CSS source under src/. */

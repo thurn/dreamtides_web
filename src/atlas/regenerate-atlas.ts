@@ -1,12 +1,12 @@
-// Debug atlas regeneration, shared by the app-shell quest menu so the atlas can
-// be rebuilt with the current generation logic without starting a new quest.
+// Debug atlas regeneration, shared by the app-shell journey menu so the atlas can
+// be rebuilt with the current generation logic without starting a new journey.
 // Extracted from the atlas screen so any chrome that hosts the "Regenerate
 // Atlas" action (the Cumulus dreamscape/atlas hamburger menu) can trigger it
 // without owning the generation + logging orchestration.
 
 import { logEvent } from "../logging";
-import type { QuestContent } from "../data/quest-content";
-import type { DreamAtlas, QuestState } from "../types/quest";
+import type { JourneyContent } from "../data/journey-content";
+import type { DreamAtlas, JourneyState } from "../types/journey";
 import {
   regenerateAtlasForProgress,
   type SiteGenerationContext,
@@ -14,8 +14,8 @@ import {
 
 /** The state slices and mutation hooks the regeneration needs. */
 export interface RegenerateAtlasParams {
-  state: QuestState;
-  questContent: QuestContent;
+  state: JourneyState;
+  journeyContent: JourneyContent;
   updateAtlas: (atlas: DreamAtlas) => void;
   setCurrentDreamscape: (nodeId: string | null) => void;
 }
@@ -32,7 +32,7 @@ export interface RegenerateAtlasParams {
  */
 export function regenerateAtlasInPlace({
   state,
-  questContent,
+  journeyContent,
   updateAtlas,
   setCurrentDreamscape,
 }: RegenerateAtlasParams): void {
@@ -45,10 +45,10 @@ export function regenerateAtlasInPlace({
     state.completionLevel,
     context,
     {
-      dreamscapes: questContent.dreamscapes,
-      atlasConfig: questContent.atlasConfig,
+      dreamscapes: journeyContent.dreamscapes,
+      atlasConfig: journeyContent.atlasConfig,
       dreamsignPoolIds: state.remainingDreamsignPool,
-      apollyonIncarnations: questContent.apollyonIncarnations,
+      apollyonIncarnations: journeyContent.apollyonIncarnations,
     },
     { logEvents: true },
   );
@@ -68,7 +68,7 @@ export function regenerateAtlasInPlace({
   updateAtlas(regenerated);
   // After completing a dreamscape the player stands at the atlas frontier with
   // no dreamscape entered; a zero-depth replay leaves them at the freshly
-  // generated starter, as a new quest does.
+  // generated starter, as a new journey does.
   setCurrentDreamscape(
     state.completionLevel > 0 ? null : regenerated.startingNodeId,
   );

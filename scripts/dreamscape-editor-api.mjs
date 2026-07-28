@@ -238,7 +238,7 @@ function commitFiles(writes, fileSystem) {
 }
 
 function generateDreamscapesDataJsonFromToml(patchedSource, fileSystem) {
-  const tempRoot = fileSystem.mkdtempSync(join(tmpdir(), "quest-dreamscape-editor-refresh-"));
+  const tempRoot = fileSystem.mkdtempSync(join(tmpdir(), "journey-dreamscape-editor-refresh-"));
 
   try {
     fileSystem.mkdirSync(join(tempRoot, "data", "tabula"), { recursive: true });

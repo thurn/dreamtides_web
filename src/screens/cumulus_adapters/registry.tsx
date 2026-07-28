@@ -1,10 +1,10 @@
 // The exhaustive production registry. Each screen entry renders an adapter
-// outside `src/cumulus/` that owns quest state and supplies a pure Cumulus
+// outside `src/cumulus/` that owns journey state and supplies a pure Cumulus
 // screen with a view model and callbacks.
 
 import type { ReactNode } from "react";
-import type { Screen, SiteState } from "../../types/quest";
-import { QuestStartScreenAdapter } from "./QuestStartScreenAdapter";
+import type { Screen, SiteState } from "../../types/journey";
+import { JourneyStartScreenAdapter } from "./JourneyStartScreenAdapter";
 import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
 import { AtlasScreenAdapter } from "./AtlasScreenAdapter";
 import { DraftSiteScreenAdapter } from "./DraftSiteScreenAdapter";
@@ -16,8 +16,8 @@ import { TransfigurationSiteScreenAdapter } from "./TransfigurationSiteScreenAda
 import { DuplicationSiteScreenAdapter } from "./DuplicationSiteScreenAdapter";
 import { DreamAugurySiteScreenAdapter } from "./DreamAugurySiteScreenAdapter";
 import { WorkInProgressSiteScreenAdapter } from "./WorkInProgressSiteScreenAdapter";
-import { QuestCompleteScreenAdapter } from "./QuestCompleteScreenAdapter";
-import { QuestFailedScreenAdapter } from "./QuestFailedScreenAdapter";
+import { JourneyCompleteScreenAdapter } from "./JourneyCompleteScreenAdapter";
+import { JourneyFailedScreenAdapter } from "./JourneyFailedScreenAdapter";
 
 export type NonSiteScreen = Exclude<Screen, { type: "site" }>;
 
@@ -29,16 +29,16 @@ export type SiteDisposition =
 /** Resolves every top-level, non-site gameplay screen to its Cumulus adapter. */
 export function screenFor(screen: NonSiteScreen): ReactNode {
   switch (screen.type) {
-    case "questStart":
-      return <QuestStartScreenAdapter />;
+    case "journeyStart":
+      return <JourneyStartScreenAdapter />;
     case "dreamscape":
       return <DreamscapeScreenAdapter />;
     case "atlas":
       return <AtlasScreenAdapter />;
-    case "questComplete":
-      return <QuestCompleteScreenAdapter />;
-    case "questFailed":
-      return <QuestFailedScreenAdapter />;
+    case "journeyComplete":
+      return <JourneyCompleteScreenAdapter />;
+    case "journeyFailed":
+      return <JourneyFailedScreenAdapter />;
   }
 }
 

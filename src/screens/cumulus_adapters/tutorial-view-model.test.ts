@@ -642,7 +642,7 @@ describe("buildTutorialView", () => {
     });
   });
 
-  it("builds a quest-independent opposing Day phase with full decks and empty hands", () => {
+  it("builds a journey-independent opposing Day phase with full decks and empty hands", () => {
     const tutorial = buildTutorialView({
       runId: "event:7",
       currentActionIndex: 0,

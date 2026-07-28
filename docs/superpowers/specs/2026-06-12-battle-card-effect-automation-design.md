@@ -257,7 +257,7 @@ rendered **underneath** the `.c-cost` energy pip.
 
 Per the project logging standard ("could I reconstruct what this algorithm did
 in a given production game?"), the battle effect runner logs to
-`logs/quest-log.jsonl` — **one entry per automation action, never per render or
+`logs/journey-log.jsonl` — **one entry per automation action, never per render or
 per step**:
 
 - **Effect resolved** — one entry when a single card's Dawn or Materialized

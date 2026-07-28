@@ -11,8 +11,8 @@ describe("toRepoRelativePosix (no-escape-hatch-props)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/cumulus/components/GlassButton.tsx",
-        "/Users/x/quest_prototype",
+        "/Users/x/journey_prototype/src/cumulus/components/GlassButton.tsx",
+        "/Users/x/journey_prototype",
       ),
     ).toBe("src/cumulus/components/GlassButton.tsx");
   });

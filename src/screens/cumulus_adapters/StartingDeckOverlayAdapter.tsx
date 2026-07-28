@@ -1,12 +1,12 @@
-// Adapter bridging live quest state to the pure starting-deck overlay
+// Adapter bridging live journey state to the pure starting-deck overlay
 // (`src/cumulus/screens/StartingDeckOverlay`). Wiring only: it acquires
-// `useQuest()`, builds the view-model from the live deck and card database, logs
+// `useJourney()`, builds the view-model from the live deck and card database, logs
 // the open (once per open session) and the close (with the elapsed duration),
 // and renders the Cumulus overlay. All resolution logic lives in the pure builder
 // (`starting-deck-view-model.ts`); the overlay itself stays pure.
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { useQuest } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
 import { logEvent } from "../../logging";
 import { StartingDeckOverlay } from "../../cumulus/screens/StartingDeckOverlay";
 import { buildStartingDeckView } from "./starting-deck-view-model";
@@ -18,7 +18,7 @@ interface StartingDeckOverlayAdapterProps {
 }
 
 /**
- * Live starting-deck reveal: builds the deck view-model from quest state,
+ * Live starting-deck reveal: builds the deck view-model from journey state,
  * instruments open/close, and renders the Cumulus overlay (which owns the
  * open/close animation, so it is rendered whether or not it is open).
  */
@@ -26,13 +26,13 @@ export function StartingDeckOverlayAdapter({
   isOpen,
   onClose,
 }: StartingDeckOverlayAdapterProps) {
-  const { state, questContent } = useQuest();
+  const { state, journeyContent } = useJourney();
   const openTimestampRef = useRef(0);
   const wasOpenRef = useRef(false);
 
   const view = useMemo(
-    () => buildStartingDeckView(state.deck, questContent.cardDatabase),
-    [state.deck, questContent.cardDatabase],
+    () => buildStartingDeckView(state.deck, journeyContent.cardDatabase),
+    [state.deck, journeyContent.cardDatabase],
   );
   const cardCount = view.cards.length;
 

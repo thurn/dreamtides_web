@@ -1,6 +1,6 @@
-import type { AtlasConfig } from "../types/quest";
+import type { AtlasConfig } from "../types/journey";
 
-export type { AtlasConfig } from "../types/quest";
+export type { AtlasConfig } from "../types/journey";
 
 const ATLAS_CONFIG_JSON_PATH = "/atlas-config-data.json";
 

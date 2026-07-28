@@ -1,7 +1,7 @@
 import { asCardId, asCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { DreamAvatarContent, ResolvedDreamAvatarPackage } from "../types/content";
-import type { DeckEntry, DreamAvatar, Dreamsign, QuestState, SiteState } from "../types/quest";
+import type { DeckEntry, DreamAvatar, Dreamsign, JourneyState, SiteState } from "../types/journey";
 import { LayerName } from "../types/layer-name";
 import { backRankSlotIds, createEmptySlotRecord, frontRankSlotIds } from "./types";
 import type { BackRankSlotId, FrontRankSlotId } from "./types";
@@ -121,7 +121,7 @@ export function makeBattleTestCardDatabase(): Map<number, CardData> {
 }
 
 export function makeBattleTestState(): Pick<
-  QuestState,
+  JourneyState,
   | "atlas"
   | "battleModifiers"
   | "completionLevel"
@@ -164,7 +164,7 @@ export function makeBattleTestState(): Pick<
     dreamAvatar: makeBattleTestDreamAvatar(),
     dreamsigns: makeBattleTestDreamsigns(),
     resolvedPackage: makeResolvedPackage(),
-    seed: "test-quest-seed",
+    seed: "test-journey-seed",
   };
 }
 

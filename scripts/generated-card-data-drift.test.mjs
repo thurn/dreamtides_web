@@ -35,7 +35,7 @@ card-number = 113
 
 describe("checkGeneratedCardData", () => {
   it("passes when generated card data matches the TOML source", () => {
-    const rootDir = mkdtempSync(join(tmpdir(), "quest-card-drift-"));
+    const rootDir = mkdtempSync(join(tmpdir(), "journey-card-drift-"));
     mkdirSync(join(rootDir, "public"), { recursive: true });
     writeFixtureToml(rootDir);
     writeFileSync(
@@ -47,7 +47,7 @@ describe("checkGeneratedCardData", () => {
   });
 
   it("reports the first stale rarity field", () => {
-    const rootDir = mkdtempSync(join(tmpdir(), "quest-card-drift-"));
+    const rootDir = mkdtempSync(join(tmpdir(), "journey-card-drift-"));
     mkdirSync(join(rootDir, "public"), { recursive: true });
     writeFixtureToml(rootDir);
     const staleCards = expectedCardDataFromToml({ rootDir });

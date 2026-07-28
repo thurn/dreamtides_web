@@ -3,7 +3,7 @@
 // `CoopProvider` owns exactly ONE `createLogClient(GAME_ENGINE_CONFIG, io, ...)`
 // per ready room. It binds the client's IO to `subscribeToLog` + `appendEvent`
 // (RTDB-backed via the room's `db` + `roomId` from RoomGate's ready context),
-// wires the client's callbacks to the quest-log sink's record helpers, keeps the
+// wires the client's callbacks to the journey-log sink's record helpers, keeps the
 // displayed fold in React state, and drives the own-bounce toast.
 //
 // Hooks exposed:

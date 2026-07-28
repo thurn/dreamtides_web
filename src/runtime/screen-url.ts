@@ -1,13 +1,13 @@
-import type { QuestState, SiteType } from "../types/quest";
+import type { JourneyState, SiteType } from "../types/journey";
 import { layerOrdinal } from "../types/layer-name";
 
 /**
- * Maps the quest's current screen to a human-readable address-bar path, so the
+ * Maps the journey's current screen to a human-readable address-bar path, so the
  * URL reflects where the player is (e.g. `/dreamscape/2-ember-wood/purge` for
  * the Purge site of the layer-2 Ember Wood dreamscape, `/atlas` for the Dream
  * Atlas).
  *
- * The path is a passive *reflection* of authoritative, Firebase-synced quest
+ * The path is a passive *reflection* of authoritative, Firebase-synced journey
  * state — it is derived from state, never the source of it. The room id in the
  * query string (`?game=<roomId>`) remains the resume key: a reload restores the
  * run from the room and the path is re-derived from the restored screen. Because
@@ -17,24 +17,24 @@ import { layerOrdinal } from "../types/layer-name";
  *
  * Path grammar:
  * ```
- * /                                  DreamAvatar selection (questStart)
+ * /                                  DreamAvatar selection (journeyStart)
  * /atlas                             Dream Atlas
  * /dreamscape/<layer>-<biome>        a dreamscape's site-selection screen
  * /dreamscape/<layer>-<biome>/<site> a specific site within a dreamscape
- * /complete                          quest victory
- * /failed                            quest defeat
+ * /complete                          journey victory
+ * /failed                            journey defeat
  * ```
  */
-export function screenToQuestPath(state: QuestState): string {
+export function screenToJourneyPath(state: JourneyState): string {
   const { screen } = state;
   switch (screen.type) {
-    case "questStart":
+    case "journeyStart":
       return "/";
     case "atlas":
       return "/atlas";
-    case "questComplete":
+    case "journeyComplete":
       return "/complete";
-    case "questFailed":
+    case "journeyFailed":
       return "/failed";
     case "dreamscape":
       return dreamscapeBasePath(state);
@@ -47,7 +47,7 @@ export function screenToQuestPath(state: QuestState): string {
 }
 
 /** Base path for the current dreamscape, keyed by its biome slug when known. */
-function dreamscapeBasePath(state: QuestState): string {
+function dreamscapeBasePath(state: JourneyState): string {
   const slug = dreamscapeSlug(state);
   return slug === null ? "/dreamscape" : `/dreamscape/${slug}`;
 }
@@ -60,7 +60,7 @@ function dreamscapeBasePath(state: QuestState): string {
  * id slug when the node is unnamed. `null` when the player is not inside a
  * dreamscape (e.g. on the Atlas).
  */
-function dreamscapeSlug(state: QuestState): string | null {
+function dreamscapeSlug(state: JourneyState): string | null {
   const nodeId = state.currentDreamscape;
   if (nodeId === null) return null;
   const node = state.atlas.nodes[nodeId];
@@ -70,7 +70,7 @@ function dreamscapeSlug(state: QuestState): string | null {
 }
 
 /** Resolves the site occupied on a `site` screen, or `undefined` if missing. */
-function activeSite(state: QuestState, siteId: string) {
+function activeSite(state: JourneyState, siteId: string) {
   const nodeId = state.currentDreamscape;
   if (nodeId === null) return undefined;
   return state.atlas.nodes[nodeId]?.sites.find((site) => site.id === siteId);

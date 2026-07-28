@@ -1,5 +1,5 @@
 // Committed QA helper: generates a v2 mid-run Dream Atlas with every
-// AtlasNodeState present and writes it into a saved-quest fixture so the atlas
+// AtlasNodeState present and writes it into a saved-journey fixture so the atlas
 // screen's completed/forgone visuals can be browser-QA'd. Run with vite-node.
 import { readFileSync, writeFileSync } from "node:fs";
 import {
@@ -36,18 +36,18 @@ for (const n of Object.values(atlas.nodes)) {
 console.log("states:", states);
 
 const base = JSON.parse(
-  readFileSync("saved-quests/spirit-animals-after-first-battle-a1021b7.json", "utf8"),
-) as { name: string; savedAt: string; questState: Record<string, unknown> };
+  readFileSync("saved-journeys/spirit-animals-after-first-battle-a1021b7.json", "utf8"),
+) as { name: string; savedAt: string; journeyState: Record<string, unknown> };
 
 base.name = "qa_midrun_atlas";
-base.questState.atlas = atlas;
-base.questState.completionLevel = 2;
-base.questState.currentDreamscape = chosen;
-base.questState.screen = { type: "atlas" };
-base.questState.activeSiteId = null;
+base.journeyState.atlas = atlas;
+base.journeyState.completionLevel = 2;
+base.journeyState.currentDreamscape = chosen;
+base.journeyState.screen = { type: "atlas" };
+base.journeyState.activeSiteId = null;
 
 writeFileSync(
-  "saved-quests/qa-midrun-atlas.json",
+  "saved-journeys/qa-midrun-atlas.json",
   JSON.stringify(base, null, 2),
 );
-console.log("wrote saved-quests/qa-midrun-atlas.json");
+console.log("wrote saved-journeys/qa-midrun-atlas.json");

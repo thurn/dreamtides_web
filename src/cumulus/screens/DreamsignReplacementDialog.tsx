@@ -1,5 +1,5 @@
 import { requireDreamsignId } from "../../data/dreamsigns";
-import type { Dreamsign as DreamsignData } from "../../types/quest";
+import type { Dreamsign as DreamsignData } from "../../types/journey";
 import { GlassButton } from "../components/controls/GlassButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { GlassDialog } from "../components/overlay/GlassDialog";

@@ -5,7 +5,7 @@
 // content-coupled event chain through the canonical game engine config, so the
 // previously-bouncing provider-backed events APPLY:
 //
-//   START_QUEST -> SELECT_DREAM_AVATAR -> OPEN_SITE (every content-coupled site
+//   START_JOURNEY -> SELECT_DREAM_AVATAR -> OPEN_SITE (every content-coupled site
 //   type) -> REROLL_SHOP -> BEGIN_BATTLE
 //
 // Two invariants:
@@ -17,7 +17,7 @@
 //       the two folds diverge and fail (b), which is exactly the desync this
 //       task exists to prevent.
 //
-// Data-resilient per AGENTS.md: the QuestContent is built from the shared
+// Data-resilient per AGENTS.md: the JourneyContent is built from the shared
 // __test-helpers__ (live compiled dreamscape / atlas-config bundles) plus a
 // hand-authored card/dreamsign corpus. Site ids and the dreamAvatar id are
 // RESOLVED from the folded state / content, never hardcoded, and the assertions
@@ -29,11 +29,11 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { Genesis } from "../../eventlog/types";
 import type { SeqEvent } from "../../rules/replay/replay";
 import { replayLog } from "../../rules/replay/replay";
-import type { QuestContent } from "../../data/quest-content";
+import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
 import type { DreamAvatarContent, DreamsignTemplate } from "../../types/content";
 import type { FoldState } from "../../rules/fold-state";
-import type { QuestState, SiteState, SiteType } from "../../types/quest";
+import type { JourneyState, SiteState, SiteType } from "../../types/journey";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { STARTER_CARD_NUMBERS } from "../../data/starter-cards";
 import {
@@ -56,7 +56,7 @@ import {
   makeMerchantTestDeckEntry,
   makeMerchantTestDreamsignProfile,
   makeMerchantTestDreamsignTemplate,
-  makeMerchantTestQuestState,
+  makeMerchantTestJourneyState,
   makeMerchantTestSite,
 } from "../../journey_v2/testing/fixtures";
 import type { MerchantCorpusCard } from "../../data/merchant-corpus";
@@ -116,11 +116,11 @@ function makeDreamAvatar(id: string): DreamAvatarContent {
 }
 
 /**
- * A {@link QuestContent} built from the shared test helpers plus a hand-authored
- * card / dreamsign corpus, exercising the REAL quest-start, atlas, shop, and
+ * A {@link JourneyContent} built from the shared test helpers plus a hand-authored
+ * card / dreamsign corpus, exercising the REAL journey-start, atlas, shop, and
  * battle-init generators without any network fetch.
  */
-function makeQuestContent(): QuestContent {
+function makeJourneyContent(): JourneyContent {
   const dreamsignTemplates = makeDreamsignTemplates();
   const dreamsignIds = dreamsignTemplates.map((template) => template.id);
   const starterCards = STARTER_CARD_NUMBERS.map((cardNumber) =>
@@ -170,29 +170,29 @@ function ev(
   };
 }
 
-/** The current dreamscape node id after START_QUEST, or throws. */
+/** The current dreamscape node id after START_JOURNEY, or throws. */
 function currentNodeId(state: FoldState): string {
-  const id = state.quest.currentDreamscape;
+  const id = state.journey.currentDreamscape;
   if (id === null) {
-    throw new Error("expected a current dreamscape after START_QUEST");
+    throw new Error("expected a current dreamscape after START_JOURNEY");
   }
   return id;
 }
 
 describe("registerGameProviders (real content providers)", () => {
   beforeAll(() => {
-    registerGameProviders(makeQuestContent());
+    registerGameProviders(makeJourneyContent());
   });
   afterAll(() => {
     clearGameProviders();
   });
 
-  it("folds START_QUEST -> SELECT_DREAM_AVATAR -> OPEN_SITE(each type) -> REROLL_SHOP -> BEGIN_BATTLE, all applied, deterministically", () => {
+  it("folds START_JOURNEY -> SELECT_DREAM_AVATAR -> OPEN_SITE(each type) -> REROLL_SHOP -> BEGIN_BATTLE, all applied, deterministically", () => {
     // Phase 1: start the run and add one site of every content-coupled type
     // (plus a Battle site) to the starting node, so OPEN_SITE / BEGIN_BATTLE
     // have live targets regardless of what the atlas generator rolled.
     const prefix: SeqEvent[] = [
-      ev(1, "START_QUEST", { dreamAvatarId: DREAM_AVATAR_ID }),
+      ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }),
       ev(2, "SELECT_DREAM_AVATAR", { dreamAvatarId: DREAM_AVATAR_ID }),
     ];
     const started = replayLog({ genesis: GENESIS, events: prefix });
@@ -217,7 +217,7 @@ describe("registerGameProviders (real content providers)", () => {
         withSites.outcomes.find((o) => o.seq === added.seq)?.outcome,
       ).toBe("applied");
     }
-    const node = withSites.finalState.quest.atlas.nodes[nodeId];
+    const node = withSites.finalState.journey.atlas.nodes[nodeId];
     const siteIdByType = new Map<SiteType, string>();
     for (const site of node.sites) {
       if (!siteIdByType.has(site.type)) siteIdByType.set(site.type, site.id);
@@ -268,7 +268,7 @@ describe("registerGameProviders (real content providers)", () => {
     const marketSiteId = siteIdByType.get("DreamsignMarket");
     expect(marketSiteId).toBeDefined();
     if (marketSiteId !== undefined) {
-      const marketRuntime = first.finalState.quest.siteRuntime[marketSiteId];
+      const marketRuntime = first.finalState.journey.siteRuntime[marketSiteId];
       expect(marketRuntime?.kind).toBe("shop");
       if (marketRuntime?.kind === "shop") {
         expect(marketRuntime.slots).toHaveLength(3);
@@ -289,17 +289,17 @@ describe("registerGameProviders (real content providers)", () => {
 // ---------------------------------------------------------------------------
 
 const MERCHANT_SEED = "merchant-real-provider-seed";
-// The merchant fixture quest is seeded with MERCHANT_SEED, and the LOAD_STATE
+// The merchant fixture journey is seeded with MERCHANT_SEED, and the LOAD_STATE
 // validator requires the loaded snapshot's seed to equal the room seed, so these
 // merchant replays run against a genesis pinned to the same seed.
 const MERCHANT_GENESIS: Genesis = { ...GENESIS, seed: MERCHANT_SEED };
 const MERCHANT_SITE_ID = "site-merchant-resolve";
 const MERCHANT_NODE_ID = "dreamscape-a";
 
-/** A DreamAugury merchant fixture: content with a corpus + a quest state whose current dreamscape holds the merchant site. */
+/** A DreamAugury merchant fixture: content with a corpus + a journey state whose current dreamscape holds the merchant site. */
 function makeMerchantFixture(): {
-  quest: QuestState;
-  content: QuestContent;
+  journey: JourneyState;
+  content: JourneyContent;
   site: SiteState;
 } {
   const site = makeMerchantTestSite({ id: MERCHANT_SITE_ID, type: "DreamAugury" });
@@ -334,7 +334,7 @@ function makeMerchantFixture(): {
     dreamsignProfiles: new Map(Object.entries(profiles)),
   });
 
-  const quest = makeMerchantTestQuestState({
+  const journey = makeMerchantTestJourneyState({
     seed: MERCHANT_SEED,
     currentDreamscape: MERCHANT_NODE_ID,
     screen: { type: "site", siteId: site.id },
@@ -367,15 +367,15 @@ function makeMerchantFixture(): {
       knownDreamsignCarrierIds: [],
     },
   });
-  return { quest, content, site };
+  return { journey, content, site };
 }
 
 describe("registerGameProviders — merchant resolution", () => {
   const fixture = makeMerchantFixture();
   const encounter = generateMerchantEncounter(
     buildMerchantContext({
-      questState: fixture.quest,
-      questContent: fixture.content,
+      journeyState: fixture.journey,
+      journeyContent: fixture.content,
       site: fixture.site,
     }),
   );
@@ -387,11 +387,11 @@ describe("registerGameProviders — merchant resolution", () => {
     clearGameProviders();
   });
 
-  // LOAD_STATE injects the merchant fixture quest state into the fold; the
+  // LOAD_STATE injects the merchant fixture journey state into the fold; the
   // merchant event then resolves against the same state the encounter was
   // generated from, so the signature matches and the event APPLIES.
   const loadState = (): SeqEvent =>
-    ev(1, "LOAD_STATE", { snapshot: fixture.quest });
+    ev(1, "LOAD_STATE", { snapshot: fixture.journey });
 
   it("folds LOAD_STATE -> ACCEPT_MERCHANT_OFFER: applies + deterministic", () => {
     // A direct-payload (non-chooser) offer, exactly as the merchant unit test
@@ -415,7 +415,7 @@ describe("registerGameProviders — merchant resolution", () => {
       first.outcomes.find((o) => o.seq === 2)?.error?.message,
     ).toBe("applied");
     // The merchant site completed and returned to the dreamscape.
-    expect(first.finalState.quest.screen).toEqual({ type: "dreamscape" });
+    expect(first.finalState.journey.screen).toEqual({ type: "dreamscape" });
 
     const second = replayLog({ genesis: MERCHANT_GENESIS, events });
     expect(second.finalHash).toBe(first.finalHash);
@@ -457,8 +457,8 @@ describe("registerGameProviders — merchant resolution", () => {
       result.outcomes.find((o) => o.seq === 2)?.error?.message,
     ).toBe("applied");
 
-    const beforeIds = new Set(fixture.quest.deck.map((entry) => entry.entryId));
-    const newEntries = result.finalState.quest.deck.filter(
+    const beforeIds = new Set(fixture.journey.deck.map((entry) => entry.entryId));
+    const newEntries = result.finalState.journey.deck.filter(
       (entry) => !beforeIds.has(entry.entryId),
     );
     expect(newEntries).toHaveLength(1);
@@ -484,7 +484,7 @@ describe("registerGameProviders — merchant resolution", () => {
       first.outcomes.find((o) => o.seq === 2)?.outcome,
       first.outcomes.find((o) => o.seq === 2)?.error?.message,
     ).toBe("applied");
-    expect(first.finalState.quest.screen).toEqual({ type: "dreamscape" });
+    expect(first.finalState.journey.screen).toEqual({ type: "dreamscape" });
 
     const second = replayLog({ genesis: MERCHANT_GENESIS, events });
     expect(second.finalHash).toBe(first.finalHash);

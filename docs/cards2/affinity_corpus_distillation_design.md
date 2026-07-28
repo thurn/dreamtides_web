@@ -37,7 +37,7 @@ against the existing `pool-metrics.mjs` quality metric.
 
 ## 1. Domain background (what these words mean)
 
-**Dreamtides** is a digital card game. The **quest prototype** (this repo) is its
+**Dreamtides** is a digital card game. The **journey prototype** (this repo) is its
 single-player roguelike shell. During a run the player drafts a deck from a
 **draft pool**: a fixed multiset of ~150–200 card copies (each distinct card
 appears 1 or 2 times — the "2-copy cap"). The pool is generated per **Dream Avatar**
@@ -89,10 +89,10 @@ pick `i`) and `pickIds[i]` (UUIDs taken), aligned index-for-index — the
 
 1. `loadDraftRecords()` (`src/data/cards-v2-database.ts:~66`) `fetch`es
    `/draft-records-data.json` — the 19 MB records bundle.
-2. `quest-content.ts:~421` calls
+2. `journey-content.ts:~421` calls
    `buildPoolData(cards, decklists, draftRecords.map(r => ({packs: r.packIds, picks: r.pickIds})))`
    (`src/draft/pool/pool-data.ts:46`) → a `PoolData` carrying `draftRecords`.
-3. Per Dream Avatar, `generateDreamAvatarPool` (`quest-content.ts:136`) calls
+3. Per Dream Avatar, `generateDreamAvatarPool` (`journey-content.ts:136`) calls
    `generatePoolFromData(poolData, seed, …, "sigseed", …, signatureCards)`
    (`src/draft/pool/generate.ts:60`), which builds a seeded RNG
    (`makeRng`, mulberry32, `rng.ts:4`) and dispatches to the `sigseed` strategy.
@@ -271,16 +271,16 @@ card has a consistent vector.
 
 **Covers** the affinity-corpus consumers: `sigseed` (default) and the rest of the
 affinity-grown family (`pickfit`, `pickcohere`, `picksig`, `pickearly`, `pickpos`,
-`pickchoice`) — see `POOL_VARIANTS_NEEDING_RECORDS` (`quest-content.ts:84`).
+`pickchoice`) — see `POOL_VARIANTS_NEEDING_RECORDS` (`journey-content.ts:84`).
 
 **Does not cover** two other runtime consumers of `draft-records-data.json`, which
 keep working as-is:
 
 - **Record-replay draft mode** replays actual recorded drafts and fundamentally
-  needs the raw seats (`loadDraftRecords` → `quest-state-actions.ts:~414`,
+  needs the raw seats (`loadDraftRecords` → `journey-state-actions.ts:~414`,
   `App.tsx:~96`).
 - **The `replay` fit-model** is built from record *mainboards*
-  (`buildFitModel(draftRecords.map(r => r.mainboard))`, `quest-content.ts:~440`) —
+  (`buildFitModel(draftRecords.map(r => r.mainboard))`, `journey-content.ts:~440`) —
   a different corpus, separately distillable later.
 
 **Runtime dependency:** the pool path loads the committed embedding rather than the
@@ -424,7 +424,7 @@ reproducible. `rank` is tunable; **16–32 is the validated band, 32 is the defa
    when present, else build from `draftRecords` (preserves every test/experiment
    that passes raw records). The `WeakMap` cache still applies.
 4. **Runtime loader.** Add `loadAffinityCorpus()` to `cards-v2-database.ts` (fetch
-   `/affinity-corpus-data.json`, `deserializeCorpus`). In `quest-content.ts`
+   `/affinity-corpus-data.json`, `deserializeCorpus`). In `journey-content.ts`
    (~line 421), when the active variant is corpus-driven, load the embedding and
    set `poolData.affinityCorpus`; the pool path then no longer calls
    `loadDraftRecords` (records are loaded only for record-replay mode / the
@@ -549,8 +549,8 @@ controls, and (c) scores each with the metric's **exported** pure functions
 | `generatePickCohere` / `PICKCOHERE` | `variant-pickcohere.ts:56` / `:36` | no-signature fallback |
 | `buildPoolData` / `PoolData` | `pool-data.ts:46` / `types.ts:84` | add `affinityCorpus` here |
 | `generatePoolFromData` / `makeRng` | `generate.ts:60` / `rng.ts:4` | entry point + RNG |
-| runtime fetch / build | `cards-v2-database.ts:~66` / `quest-content.ts:~421` | where the 19 MB loads today |
-| variant gate | `quest-content.ts:84` (`POOL_VARIANTS_NEEDING_RECORDS`) | extend to fetch the embedding |
+| runtime fetch / build | `cards-v2-database.ts:~66` / `journey-content.ts:~421` | where the 19 MB loads today |
+| variant gate | `journey-content.ts:84` (`POOL_VARIANTS_NEEDING_RECORDS`) | extend to fetch the embedding |
 | asset bake | `setup-assets.mjs:228`, `:599` | wire the copy-to-public here |
 | quality metric | `pool-metrics.mjs` (`npm run pool-metrics`) | acceptance oracle |
 | metric card metadata | `data/buildaround_support.json` | add entries for new cards |

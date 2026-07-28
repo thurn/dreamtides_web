@@ -1,5 +1,5 @@
 import type { CardData } from "../types/cards";
-import type { TransfigurationType } from "../types/quest";
+import type { TransfigurationType } from "../types/journey";
 import {
   TRANSFIGURE_MARK_END,
   TRANSFIGURE_MARK_START,

@@ -20,7 +20,7 @@ describe("parseRuntimeConfig", () => {
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "pool",
       fresh20PackSize: undefined,
-      loadQuestName: null,
+      loadJourneyName: null,
       gotoScene: null,
       viewLogs: null,
     });
@@ -39,18 +39,18 @@ describe("parseRuntimeConfig", () => {
     });
   });
 
-  describe("loadQuestName", () => {
-    it("returns null when loadQuest is absent or blank", () => {
-      expect(parseRuntimeConfig("").loadQuestName).toBeNull();
-      expect(parseRuntimeConfig("?loadQuest=").loadQuestName).toBeNull();
-      expect(parseRuntimeConfig("?loadQuest=%20%20").loadQuestName).toBeNull();
+  describe("loadJourneyName", () => {
+    it("returns null when loadJourney is absent or blank", () => {
+      expect(parseRuntimeConfig("").loadJourneyName).toBeNull();
+      expect(parseRuntimeConfig("?loadJourney=").loadJourneyName).toBeNull();
+      expect(parseRuntimeConfig("?loadJourney=%20%20").loadJourneyName).toBeNull();
     });
 
-    it("returns the trimmed, decoded name when loadQuest is present", () => {
+    it("returns the trimmed, decoded name when loadJourney is present", () => {
       expect(
-        parseRuntimeConfig("?loadQuest=warriors%20draft").loadQuestName,
+        parseRuntimeConfig("?loadJourney=warriors%20draft").loadJourneyName,
       ).toBe("warriors draft");
-      expect(parseRuntimeConfig("?loadQuest=%20foo%20").loadQuestName).toBe(
+      expect(parseRuntimeConfig("?loadJourney=%20foo%20").loadJourneyName).toBe(
         "foo",
       );
     });
@@ -117,8 +117,8 @@ describe("parseRuntimeConfig", () => {
 
   describe("gameId", () => {
     it("returns a normalized game id from game", () => {
-      expect(parseRuntimeConfig("?game=QuestRoom123").gameId).toBe(
-        "questroom123",
+      expect(parseRuntimeConfig("?game=JourneyRoom123").gameId).toBe(
+        "journeyroom123",
       );
     });
 
@@ -235,8 +235,8 @@ describe("parseRuntimeConfig", () => {
 
   describe("viewLogs", () => {
     it("returns a normalized room id from viewLogs", () => {
-      expect(parseRuntimeConfig("?viewLogs=QuestRoom123").viewLogs).toBe(
-        "questroom123",
+      expect(parseRuntimeConfig("?viewLogs=JourneyRoom123").viewLogs).toBe(
+        "journeyroom123",
       );
     });
 

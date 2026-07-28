@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * device-screenshots - fast device mock-ups of the quest prototype UI.
+ * device-screenshots - fast device mock-ups of the journey prototype UI.
  *
- * Renders the running quest prototype web app inside a selected phone or
+ * Renders the running journey prototype web app inside a selected phone or
  * desktop viewport and captures a PNG. This is a *mock-up*, not real hardware:
  * it drives a headless Chromium (via the `agent-browser` CLI) at the target
  * viewport and device-pixel-ratio, paints phone screen cut-outs and home
@@ -35,7 +35,7 @@ import {
 const DEFAULT_PORT = 5178;
 const DEFAULT_WAIT_MS = 4500;
 
-const HELP = `device-screenshots - emulated device mock-ups of the quest prototype UI.
+const HELP = `device-screenshots - emulated device mock-ups of the journey prototype UI.
 
 Usage:
   node scripts/device-screenshots.mjs [options]
@@ -57,7 +57,7 @@ Target UI:
       --port <n>      Shortcut for --url http://localhost:<n>.
       --route <path>  App route/path to open. Default: /
       --scene <id>    Jump to a QA scene (adds ?goto=<id>). See
-                      docs/quest_prototype/qa_scenes.md.
+                      docs/journey_prototype/qa_scenes.md.
       --query <str>   Extra raw query string appended to the URL
                       (without a leading ? or &).
       --start         Start a dev server (npm run dev) for the run and stop it

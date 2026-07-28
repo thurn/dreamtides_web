@@ -5,7 +5,7 @@ Author: brainstorming session, 2026-05-15.
 
 ## Goal
 
-Replace the existing Dream Journey system in the quest prototype with a port of
+Replace the existing Dream Journey system in the journey prototype with a port of
 the `~/journeys` CLI tool's plugin-based generator. The port preserves the
 CLI's plugin architecture (shape plugins, predicates, costs, rewards, value
 model, manifest contract), rewrites only the Node-specific seams for the
@@ -15,7 +15,7 @@ Clicking Enter Dream advances decision-tree state for tree shapes, or closes
 the journey screen for flat shapes. None of the manifest's mechanical effects
 (deck changes, resource changes, dreamsign gains, bane gains, etc.) are
 applied — closing returns the player to the dreamscape with their state
-untouched. Journey generation does, however, query the live quest state to
+untouched. Journey generation does, however, query the live journey state to
 determine which options are eligible to show and which are unaffordable.
 
 ## Non-goals
@@ -34,12 +34,12 @@ determine which options are eligible to show and which are unaffordable.
 
 ## Architecture
 
-All journey code lives under `src/journeys/`. The rest of the quest prototype
+All journey code lives under `src/journeys/`. The rest of the journey prototype
 imports exactly two things from it:
 
 1. `<JourneyScreen site={...} onClose={...} />` — the React entry point that
    the dreamscape site router renders.
-2. `journeySeedForSite(site, questState)` — a pure helper that derives the
+2. `journeySeedForSite(site, journeyState)` — a pure helper that derives the
    deterministic generation seed.
 
 Inside `src/journeys/`:
@@ -102,7 +102,7 @@ src/journeys/
   `src/state/` is `src/journeys/adapter/`.
 - The whole module is consumed as
   `import { JourneyScreen, journeySeedForSite } from "../journeys"` from
-  quest prototype code.
+  journey prototype code.
 
 ### Plugin modularity
 
@@ -120,19 +120,19 @@ code is forbidden in `shared/` (the same rule the CLI's `AGENTS.md` enforces).
 
 ## Adapter and journey context
 
-The adapter is the only seam between the quest prototype and the journey
+The adapter is the only seam between the journey prototype and the journey
 module.
 
 ### Journey-internal projection
 
 ```ts
 interface JourneyContext {
-  readonly state: { quest: QuestStateProjection };
+  readonly state: { journey: JourneyStateProjection };
   readonly content: JourneyContentBundle;
   readonly contentVersion: string;
 }
 
-interface QuestStateProjection {
+interface JourneyStateProjection {
   readonly seed: string;
   readonly resources: {
     essence: number;
@@ -156,13 +156,13 @@ matches the CLI's `JourneyContext`, with `pacingLedger` and `history` dropped
 
 ### `buildContext`
 
-`buildContext(questState, content, site)` performs four translations:
+`buildContext(journeyState, content, site)` performs four translations:
 
-1. Reads card / dream avatar / dreamsign catalogs from the quest prototype's
+1. Reads card / dream avatar / dreamsign catalogs from the journey prototype's
    content layer (already loaded at app startup; no extra I/O).
-2. Maps quest prototype types into journey-internal types via
+2. Maps journey prototype types into journey-internal types via
    `content-bridge.ts`:
-   - `CardData` → journey `Card`. Quest `id` becomes journey `id`. Tides pass
+   - `CardData` → journey `Card`. Journey `id` becomes journey `id`. Tides pass
      through. Rarity normalizes: `"Legendary"` → `"Rare"`, `"Starter"` →
      `"Starter"`, otherwise → `"Uncommon"` (the CLI's default bucket).
      `cardNumber` is retained for image lookups.
@@ -171,34 +171,34 @@ matches the CLI's `JourneyContext`, with `pacingLedger` and `history` dropped
    - `DreamsignTemplate` → journey `Dreamsign`. `kind` derives from
      `packageTides`: non-empty → `tidal`; empty → `neutral`. `orientation` is
      omitted.
-3. Builds the `QuestStateProjection` from `QuestState`:
-   - `deck`, `activeDreamsigns`, `banes` from the quest state, with banes
+3. Builds the `JourneyStateProjection` from `JourneyState`:
+   - `deck`, `activeDreamsigns`, `banes` from the journey state, with banes
      derived from deck entries flagged as bane cards.
    - `dreamscape` from `state.currentDreamscape?.number ?? 0`.
    - `dreamsignPoolIds` from `state.remainingDreamsignPool`.
    - `draftPool` from `state.resolvedPackage.draftPoolCopiesByCard`.
 4. Computes `contentVersion`: a stable hash over the catalog ids plus the
    journey's catalog-version constants (shape, effect, value, manifest).
-   Quest content changes invalidate seeds.
+   Journey content changes invalidate seeds.
 
 ### Seed derivation
 
-`journeySeedForSite(site, questState)` returns:
+`journeySeedForSite(site, journeyState)` returns:
 
 ```
-sha256(questState.seed + ":" + questState.atlas.startingNodeId + ":" + site.id).slice(0, 16)
+sha256(journeyState.seed + ":" + journeyState.atlas.startingNodeId + ":" + site.id).slice(0, 16)
 ```
 
-`questState.seed` is the per-quest random seed (a UUID string from
-`crypto.randomUUID()`) generated once at quest start by
-`startQuestFromDreamAvatar` and persisted on `QuestState`. It supplies the
-per-game entropy axis: two fresh quests on the same atlas site land on
+`journeyState.seed` is the per-journey random seed (a UUID string from
+`crypto.randomUUID()`) generated once at journey start by
+`startJourneyFromDreamAvatar` and persisted on `JourneyState`. It supplies the
+per-game entropy axis: two fresh journeys on the same atlas site land on
 different shapes and dream art. The `startingNodeId` and `siteId` axes keep
 seeds distinct across sites and across runs that share a seed in tests.
 
-Stable per site for the life of a quest run; identical across page reloads
-of the same quest room; distinct per site, per starting node, and per
-quest.
+Stable per site for the life of a journey run; identical across page reloads
+of the same journey room; distinct per site, per starting node, and per
+journey.
 
 ### Decision-tree progress
 
@@ -213,7 +213,7 @@ across-reload persistence is wanted later, only a single
 The pipeline ports `src/journey/generate.ts` essentially verbatim. The six
 phases from the CLI's technical doc hold:
 
-1. **Stage resolution.** Map `context.state.quest.resources.dreamscape` to
+1. **Stage resolution.** Map `context.state.journey.resources.dreamscape` to
    `early` / `mid` / `late` via the CLI's threshold function.
 2. **Tag derivation.** `desiredTagsFor(context, stage)` produces the
    contextual tag set (build / cleanup / reward / immediate plus
@@ -348,7 +348,7 @@ byte-identical.
 
 ### Error and loading states
 
-If `generateNextJourney` throws on the current quest state, the screen
+If `generateNextJourney` throws on the current journey state, the screen
 renders:
 
 > This dream eludes you. Press × to leave.
@@ -450,7 +450,7 @@ Examples that must be enforced:
 - "Transfigure a card to Enduring" (or any of Empowered, Amplified, Kindled,
   Inspired, Enduring, Resonant, Attuned, Perfected) → at least one deck entry must
   pass that transfiguration's eligibility filter. The port shares the
-  existing `assignTransfiguration` helper from the quest prototype via the
+  existing `assignTransfiguration` helper from the journey prototype via the
   content bridge so the journey module does not reimplement eligibility.
 - "Discard X cards" cost → `deck.size >= X`.
 - "Sacrifice a Warrior" cost → `deck.contains(predicate: warrior)`.
@@ -514,7 +514,7 @@ preferred. Timing test execution is part of test authoring.
    Target: <5 s total.
 4. **Validator tests** at `src/journeys/journey/validate/*.test.ts`. Positive
    and negative cases per rule. Pure. Target: <50 ms each.
-5. **Adapter tests** at `src/journeys/adapter/buildContext.test.ts`. Quest
+5. **Adapter tests** at `src/journeys/adapter/buildContext.test.ts`. Journey
    state → journey context translation; rarity normalization; dreamsign
    kind derivation; seed derivation. Pure. Target: <100 ms.
 6. **UI tests** at `src/journeys/ui/JourneyScreen.test.tsx`. Six cases:
@@ -530,7 +530,7 @@ preferred. Timing test execution is part of test authoring.
 
 ### Hard rules
 
-- No test loads the full quest prototype `card-data.json`,
+- No test loads the full journey prototype `card-data.json`,
   `dreamsign-data.json`, or `dream-avatar-data.json`. Fixture contexts are
   hand-built.
 - No test uses fake timers or waits on time.
@@ -543,7 +543,7 @@ preferred. Timing test execution is part of test authoring.
 ### Tests deleted in the cutover
 
 - `src/screens/DreamJourneyScreen.test.tsx`.
-- Any quest-context test asserting on `ensureDreamJourneyRuntime` or
+- Any journey-context test asserting on `ensureDreamJourneyRuntime` or
   `completeDreamJourneyOption` mutation flows; replace with a single test
   for `completeDreamJourneySite`.
 - Any test asserting on `DREAM_JOURNEYS` contents.
@@ -555,11 +555,11 @@ preferred. Timing test execution is part of test authoring.
 - `src/data/dream-journeys.ts` (data + `JourneyEffect` union).
 - `src/screens/DreamJourneyScreen.tsx` and
   `src/screens/DreamJourneyScreen.test.tsx`.
-- The `DreamJourneySiteRuntime` interface arm in `src/types/quest.ts`.
+- The `DreamJourneySiteRuntime` interface arm in `src/types/journey.ts`.
 - The `applyDreamJourneyEffect`, `dreamJourneyOptionId`, and
-  `findDreamJourneyOption` helpers in `src/state/quest-context.tsx`.
+  `findDreamJourneyOption` helpers in `src/state/journey-context.tsx`.
 - The `ensureDreamJourneyRuntime` and `completeDreamJourneyOption`
-  mutations in `quest-context.tsx` and `multiplayer-quest-context.tsx`.
+  mutations in `journey-context.tsx` and `multiplayer-journey-context.tsx`.
 
 ### Replaced by
 
@@ -604,7 +604,7 @@ Checklist:
   and Enter Dream buttons.
 - Confirm the Close button is enabled on every shape except
   `choose_your_loss`.
-- Force a low-essence quest state and confirm at least one option renders
+- Force a low-essence journey state and confirm at least one option renders
   with a `[LOCKED]` prefix and a disabled Enter Dream button.
 - Trigger a decision-tree shape (e.g., `push_your_luck`) and confirm Enter
   Dream advances to the next node and eventually closes the screen at a

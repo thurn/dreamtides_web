@@ -99,7 +99,7 @@ export interface CornerUtilityMenuStatus {
 
 /**
  * The app-chrome command offering: a fixed `IconButton` trigger and an
- * inward-opening hierarchy. Use this for quest utilities (save, load, logs,
+ * inward-opening hierarchy. Use this for journey utilities (save, load, logs,
  * and route actions); use ContextActionMenu for a pointer/card action instead.
  */
 export function CornerUtilityMenu({
@@ -183,7 +183,7 @@ export function CornerUtilityMenu({
       )}
     </div>
   );
-  // A full-screen app-shell overlay may live outside the quest chrome's fixed
+  // A full-screen app-shell overlay may live outside the journey chrome's fixed
   // stacking context. Elevated utility chrome therefore portals to the document
   // root, where its semantic elevation remains above that overlay.
   return elevated ? createPortal(menu, document.body) : menu;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { TransfigurationType } from "../../../types/quest";
+import type { TransfigurationType } from "../../../types/journey";
 import {
   TransfigurationFormButton,
   type TransfigurationFormButtonVariant,

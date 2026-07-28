@@ -49,7 +49,7 @@ post-Phase-0 layout.
 - Commits are detailed conventional commits, pushed immediately (repo convention:
   commit + `git push`; do not open branches). End commit messages with the
   `Claude-Session` trailer.
-- Visual changes get browser QA per `docs/quest_prototype/qa_tooling.md`:
+- Visual changes get browser QA per `docs/journey_prototype/qa_tooling.md`:
   `agent-browser` with a unique `--session <name>`, a dev server on a non-5173
   port (`npm run dev -- --port 5174`), assert `location.href` + `window.innerWidth`
   before each screenshot, and tear down only your own server (match
@@ -172,11 +172,11 @@ chrome, not glass; the name collision already misled `EdgeChevron`. Rename them
   `src/cumulus/docs/ControlPanel.tsx`, `src/cumulus/docs/mockups/info-card.tsx`,
   `src/cumulus/docs/mockups/resource-chip.tsx`, `src/cumulus/docs/mockups/tide-pill.tsx`,
   `src/cumulus/docs/mockups/button.tsx`, `src/cumulus/docs/mockups/pressable.tsx`,
-  `src/cumulus/screens/quest-start-mobile.tsx` (the `EdgeChevron`),
+  `src/cumulus/screens/journey-start-mobile.tsx` (the `EdgeChevron`),
   `src/cumulus/components/hud/ResourceChip.tsx`.
 - The **3 `--surface-glass-strong` readers** — repoint to
-  `token("--surface-chrome-strong")`: `src/cumulus/components/hud/QuestStatusBar.tsx`,
-  `src/components/DreamscapeQuestMenu.tsx` (two sites).
+  `token("--surface-chrome-strong")`: `src/cumulus/components/hud/JourneyStatusBar.tsx`,
+  `src/components/DreamscapeJourneyMenu.tsx` (two sites).
 - Test: `npm run lint` (`valid-token-references` flags a stale
   `var(--surface-glass)` in a product-tier file), `npm test`.
 
@@ -294,7 +294,7 @@ the tide palette's home.
 
 **Deviation from the spec's "five dead `--glow-*`":** grep shows **only four**
 glow tokens are dead. `--glow-accent-soft` is **kept** (live product consumers:
-`DesktopDeckViewer.tsx`, `QuestStatusBar.tsx`). `--glow-danger` is **kept** (live
+`DesktopDeckViewer.tsx`, `JourneyStatusBar.tsx`). `--glow-danger` is **kept** (live
 via `leave-site-button.css`). Delete the four verified-dead glows only.
 
 **Files:**

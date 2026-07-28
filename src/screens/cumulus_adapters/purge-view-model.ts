@@ -11,9 +11,9 @@ import type { CardData } from "../../types/cards";
 import type {
   DeckEntry,
   DreamscapeNode,
-  QuestState,
+  JourneyState,
   SiteState,
-} from "../../types/quest";
+} from "../../types/journey";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
   PurgeCardView,
@@ -77,7 +77,7 @@ export function buildPurgeVisitCosts(modifiers: PurgePriceModifiers): number[] {
 
 /** Build the complete Cumulus purge-site view-model. */
 export function buildPurgeSiteView(params: {
-  state: QuestState;
+  state: JourneyState;
   sceneNode: DreamscapeNode | null;
   site: SiteState;
   cardDatabase: Map<number, CardData>;

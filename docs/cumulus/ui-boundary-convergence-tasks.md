@@ -8,12 +8,12 @@ that keeps the boundary healthy.
 
 ## Why this program exists
 
-Cumulus is the presentation system for the quest prototype. Its public
+Cumulus is the presentation system for the journey prototype. Its public
 components have strict typed APIs, its product screens render from plain view
 models, and lint rules enforce semantic tokens, named glyphs, canonical
 interaction behavior, and the absence of per-call styling escape hatches.
 
-The production screen registry is exhaustive. Every non-site quest screen is a
+The production screen registry is exhaustive. Every non-site journey screen is a
 Cumulus screen behind an adapter, and every site type resolves to a Cumulus
 screen, the battle route, or an interaction rendered inline by the Cumulus
 Dreamscape screen. The remaining UI outside `src/cumulus/` is therefore not a
@@ -44,7 +44,7 @@ Use the following ownership test for every file touched by this program.
 | Reusable visual component, material, interaction engine, or authored component CSS | `src/cumulus/components/`, `src/cumulus/primitives/`, or `src/cumulus/internal/` as appropriate |
 | Pure gameplay, overlay, bootstrap, or gate presentation built from a plain view model and callbacks | `src/cumulus/screens/` |
 | Mapping domain data into a screen-owned view model | a pure builder outside Cumulus, normally beside its adapter or controller |
-| Reading live quest, coop, Firebase, URL, or battle state; performing effects; dispatching actions | adapter/controller outside Cumulus |
+| Reading live journey, coop, Firebase, URL, or battle state; performing effects; dispatching actions | adapter/controller outside Cumulus |
 | Application routing and shared stateful chrome wiring | app shell outside Cumulus, composing public Cumulus components |
 | Standalone editor, image viewer, or algorithm diagnostic route | explicit operator-tool directory outside Cumulus |
 | Minimal fallback that must render when the design system itself fails | an explicit emergency-fallback exemption outside Cumulus |
@@ -117,7 +117,7 @@ dispositions described below.
 | 3 | CUM-OUT-03: move GameCard implementation CSS into its Cumulus closure | CUM-OUT-01 |
 | 4 | CUM-OUT-04: converge Dreamwell card rendering | CUM-OUT-01 |
 | 5 | CUM-OUT-05: add strict Cumulus command-menu offerings | CUM-OUT-01 |
-| 6 | CUM-OUT-06: migrate the quest utility menu presentation | CUM-OUT-05 |
+| 6 | CUM-OUT-06: migrate the journey utility menu presentation | CUM-OUT-05 |
 | 7 | CUM-OUT-07: migrate bootstrap, coop gate, and transient status presentation | CUM-OUT-01 |
 | 8 | CUM-OUT-08: rebuild Pool Viewer as a Cumulus overlay screen | CUM-OUT-03 |
 | 9 | CUM-OUT-09: migrate in-game diagnostic overlays or gate them as operator tools | CUM-OUT-05, CUM-OUT-07 |
@@ -360,13 +360,13 @@ QA the active battle Dreamwell card, opened history, and the editor preview.
 
 ### Goal
 
-Give quest chrome and battle context actions catalog-owned menu surfaces so
+Give journey chrome and battle context actions catalog-owned menu surfaces so
 consumers do not assemble glass panels, action rows, icon strings, focus
 behavior, and submenus independently.
 
 ### Context
 
-The quest utility dropdown and the desktop battle context menu are different
+The journey utility dropdown and the desktop battle context menu are different
 semantic surfaces, but both currently build command rows and nested menus
 outside Cumulus. Treating either as an `InfoCard` reveal would violate the
 pointer-transparent reveal contract. They need interactive command-menu
@@ -397,7 +397,7 @@ components.
 
 ### Acceptance criteria
 
-- Quest and battle consumers can express all current action structures without
+- Journey and battle consumers can express all current action structures without
   appearance or DOM escape hatches.
 - The menu family uses named glyphs and canonical glass/control treatments.
 - Menus are interactive overlays and remain separate from entity reveals.
@@ -409,25 +409,25 @@ components.
 Run component tests, generated-doc checks, strict-API contracts, and browser QA
 for desktop pointer menus and narrow/mobile dialog behavior.
 
-## CUM-OUT-06: Migrate quest utility menu presentation
+## CUM-OUT-06: Migrate journey utility menu presentation
 
 ### Goal
 
-Keep quest save/load/logging effects in the app shell while rendering all menu
+Keep journey save/load/logging effects in the app shell while rendering all menu
 presentation through the strict Cumulus utility-menu component.
 
 ### Context
 
-`DreamscapeQuestMenu.tsx` correctly owns viewport choice and app-shell
+`DreamscapeJourneyMenu.tsx` correctly owns viewport choice and app-shell
 callbacks, but it builds stringly typed actions and custom panel geometry.
-`QuestUtilityMenu.tsx` mixes `useQuest`, persistence, timers, and logging with
+`JourneyUtilityMenu.tsx` mixes `useJourney`, persistence, timers, and logging with
 an open visual API containing `CSSProperties`, `className`, arbitrary trigger
 rendering, raw icon classes, and custom action rows.
 
 ### Work
 
-1. Split menu state/effects from rendering. Keep saved-quest reads and writes,
-   log downloads, build SHA reporting, quest mutations, and status timers in an
+1. Split menu state/effects from rendering. Keep saved-journey reads and writes,
+   log downloads, build SHA reporting, journey mutations, and status timers in an
    outer controller or hook.
 2. Build a plain utility-menu view model containing structured root actions,
    submenu actions, status text, loading/error state, and typed glyphs.
@@ -437,14 +437,14 @@ rendering, raw icon classes, and custom action rows.
    mobile menu at the top left, using shared chrome geometry and `IconButton`.
 5. Preserve contextual actions supplied by the active route without allowing
    them to inject JSX, raw icons, or styles.
-6. Preserve existing logging sources and saved-quest behavior.
+6. Preserve existing logging sources and saved-journey behavior.
 7. Remove the external presentation component or reduce it to a clearly named
    controller with no rendered material of its own.
 8. Delete its visual baseline entries.
 
 ### Acceptance criteria
 
-- `QuestUtilityMenu` exposes no style, class, or render-prop customization.
+- `JourneyUtilityMenu` exposes no style, class, or render-prop customization.
 - All action glyphs are `Glyph` values.
 - Save, load, download-log, build-SHA, deck, pool, diagnostic, and contextual
   actions continue to satisfy their existing behavior contracts.
@@ -453,7 +453,7 @@ rendering, raw icon classes, and custom action rows.
 ### Verification
 
 Test action construction and effects separately from the Cumulus component.
-Browser-QA the desktop and mobile quest menu, saved-quest submenu, one
+Browser-QA the desktop and mobile journey menu, saved-journey submenu, one
 contextual site action, a status message, escape/outside dismissal, and the
 mobile deck-viewer elevated state.
 
@@ -546,7 +546,7 @@ shared entity-reveal system.
    provenance sections, replay history rows, empty/error states, and callbacks.
 2. Add a pure builder outside Cumulus that maps draft, pool, replay, and
    provenance data into that view model. Keep algorithm registry access and
-   mutable quest/battle integration outside the screen.
+   mutable journey/battle integration outside the screen.
 3. Use UUID-backed `GameCardModel` values and stable entry IDs. Do not use card
    names as keys. Translate drag payloads to a domain identifier only at the
    adapter boundary when an existing action still requires one.
@@ -594,13 +594,13 @@ and drag-to-deck. Inspect the error buffer after each workflow.
 
 ### Goal
 
-Resolve the ambiguous status of diagnostic UI mounted inside the shipped quest
+Resolve the ambiguous status of diagnostic UI mounted inside the shipped journey
 application.
 
 ### Context
 
-`DebugScreen`, `QuestDebugEditor`, `QuestDebugDeckSection`, and
-`CardSourceOverlay` are production-entry reachable through the quest utility
+`DebugScreen`, `JourneyDebugEditor`, `JourneyDebugDeckSection`, and
+`CardSourceOverlay` are production-entry reachable through the journey utility
 menu. Their presentation is bespoke and outside the Cumulus visual rules. They
 are not equivalent to standalone `/editor` or `/offers` routes because they
 render inside the active game shell.
@@ -620,7 +620,7 @@ render inside the active game shell.
    `GlassDialog`, `GlassPanel`, `GroupPanel`, `TextField`, `Select`,
    `NumberStepper`, `DisclosureSection`, `GameCard`, and canonical action
    controls as appropriate.
-4. Keep quest mutations, saved-state I/O, algorithm reconstruction, provenance
+4. Keep journey mutations, saved-state I/O, algorithm reconstruction, provenance
    calculation, and clipboard/download effects in external adapters or
    controllers.
 5. Use UUID-backed card models and stable action IDs throughout view models.
@@ -716,7 +716,7 @@ presentation and tool-specific UI have their designated owners.
 1. Recompute consumers for every module under `src/components/` and
    `src/components/card-browser/`.
 2. Keep only named app-shell/controller modules at the generic shell boundary:
-   routing, Cumulus quest chrome wiring, battle route wiring, and the emergency
+   routing, Cumulus journey chrome wiring, battle route wiring, and the emergency
    ErrorBoundary mechanism.
 3. Move editor-only card-browser, size, tooltip, and preview utilities under an
    explicit editor or shared-operator directory. Their names and imports should
@@ -779,7 +779,7 @@ one-time migrations.
 6. Add or update direct QA scenes for any migrated overlay whose normal workflow
    is expensive to reach. QA scenes supplement rather than replace the normal
    player workflow.
-7. Run a final cold visual review of the player bootstrap, quest shell, Pool
+7. Run a final cold visual review of the player bootstrap, journey shell, Pool
    Viewer, retained diagnostics, and battle overlay suite. Reviewers receive
    screenshots and scene names, not the migration checklist.
 8. Write a dated Cumulus sweep report recording the audited range, baseline
@@ -805,8 +805,8 @@ one-time migrations.
 
 ## Key source references
 
-- [Cumulus design-system architecture](../quest_prototype/cumulus_design_system.md)
-- [Cumulus screen composition](../quest_prototype/cumulus_screen_composition.md)
+- [Cumulus design-system architecture](../journey_prototype/cumulus_design_system.md)
+- [Cumulus screen composition](../journey_prototype/cumulus_screen_composition.md)
 - [Entity reveal interaction contract](entity-reveal-interactions.md)
 - [Production screen registry](../../src/screens/cumulus_adapters/registry.tsx)
 - [Application shell](../../src/App.tsx)
@@ -814,7 +814,7 @@ one-time migrations.
 - [ESLint configuration](../../eslint.config.js)
 - [Global stylesheet](../../src/index.css)
 - [Cumulus GameCard implementation](../../src/cumulus/components/card/CardView.tsx)
-- [Quest utility menu controller/presentation](../../src/components/QuestUtilityMenu.tsx)
+- [Journey utility menu controller/presentation](../../src/components/JourneyUtilityMenu.tsx)
 - [Pool Viewer screen](../../src/cumulus/screens/PoolViewerScreen.tsx)
 - [Pool Viewer view-model builder](../../src/screens/cumulus_adapters/pool-viewer-view-model.ts)
 - [Coop room gate](../../src/coop/RoomGate.tsx)

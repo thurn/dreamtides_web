@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { CSSProperties } from "react";
-import type { DreamscapeNode } from "../../../types/quest";
+import type { DreamscapeNode } from "../../../types/journey";
 import { richText } from "../card/rich-text";
 import type { RevealInfoCardModel, RevealSpec } from "../../internal/reveal/model";
 import { useRevealSource } from "../../internal/reveal/context";

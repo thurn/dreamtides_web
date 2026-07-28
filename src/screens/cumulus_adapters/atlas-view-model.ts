@@ -1,5 +1,5 @@
 // The pure view-model builder for the Cumulus Dream Atlas screen. Every mapping
-// rule between quest domain data and `AtlasScreen`'s view types lives here as
+// rule between journey domain data and `AtlasScreen`'s view types lives here as
 // plain, unit-testable functions — no React, no state hooks, no effects.
 // `AtlasScreenAdapter` acquires live state and calls `buildAtlasView`.
 //
@@ -47,8 +47,8 @@ import type {
 import { artRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
 import type { AtlasView } from "../../cumulus/screens/AtlasScreen";
-import type { QuestContent } from "../../data/quest-content";
-import type { DreamAtlas, DreamscapeNode } from "../../types/quest";
+import type { JourneyContent } from "../../data/journey-content";
+import type { DreamAtlas, DreamscapeNode } from "../../types/journey";
 import { type LayerName, layerOrdinal } from "../../types/layer-name";
 
 /**
@@ -75,11 +75,11 @@ export const ATLAS_STAGE_LANDSCAPE_HEIGHT = 1080;
  *   fit: portrait on mobile, landscape on desktop.
  * - `contentRect` is the stage-space rectangle the graph is fitted into. On
  *   portrait its vertical span is the layer axis and leaves room at the top for
- *   the boss node and at the bottom for the persistent QuestStatusBar and the
+ *   the boss node and at the bottom for the persistent JourneyStatusBar and the
  *   starter node, while its horizontal span is the within-layer spread. On
  *   landscape the axes swap: the horizontal span is the layer axis (starter left,
  *   boss right) and the vertical span is the within-layer spread, kept clear of
- *   the docked QuestStatusBar along the bottom.
+ *   the docked JourneyStatusBar along the bottom.
  * - `nodeSize` / `anchorNodeSize` are node diameters in stage pixels. Mobile
  *   draws larger nodes so that, once the smaller mobile fit-scale is applied,
  *   the on-screen node and its badges stay comfortably above the 48px touch
@@ -118,7 +118,7 @@ const EDGE_ANCHOR_INSET = 10;
 /** Desktop: a landscape stage read left-to-right, with smaller nodes spread
  * across a wide content rectangle. The layer axis crosses the stage (starter at
  * the left, boss at the right); the within-layer spread fans vertically and is
- * kept clear of the docked grand QuestStatusBar along the bottom and the
+ * kept clear of the docked grand JourneyStatusBar along the bottom and the
  * top-right gear button. */
 export const ATLAS_LAYOUT_DESKTOP: AtlasLayoutProfile = {
   orientation: "landscape",
@@ -332,7 +332,7 @@ const STARTER_BODY = "A quiet place where every dream journey begins.";
 /** Resolves a node's pre-revealed known-dreamsign card, or null when it has none. */
 function buildDreamsignCard(
   node: DreamscapeNode,
-  questContent: QuestContent,
+  journeyContent: JourneyContent,
   isReachable: boolean,
 ): AtlasNodeDreamsign | null {
   // An unreachable node hides its known-dreamsign card along with the rest of
@@ -341,7 +341,7 @@ function buildDreamsignCard(
     return null;
   }
   const dreamsign =
-    questContent.dreamsignTemplates.find(
+    journeyContent.dreamsignTemplates.find(
       (t) => t.id === node.knownDreamsignId,
     ) ?? null;
   if (dreamsign === null) {
@@ -360,7 +360,7 @@ function buildDreamsignCard(
 
 /** Resolves the signature site's standard InfoCard payload. */
 function buildSignatureSiteCard(
-  dreamscape: NonNullable<QuestContent["dreamscapes"][number]>,
+  dreamscape: NonNullable<JourneyContent["dreamscapes"][number]>,
   siteId: string,
 ): AtlasNodeSite {
   return {
@@ -385,7 +385,7 @@ function affiliationCardTheme(name: string): string {
 
 /** Resolves the affiliation explanatory InfoCard payload. */
 function buildAffiliationCard(
-  affiliation: QuestContent["affiliations"][number] | null,
+  affiliation: JourneyContent["affiliations"][number] | null,
 ): AtlasNodeAffiliation | null {
   return affiliation !== null
     ? {
@@ -412,7 +412,7 @@ function buildAffiliationCard(
 function buildNodeCard(
   node: DreamscapeNode,
   geo: NodeGeometry,
-  questContent: QuestContent,
+  journeyContent: JourneyContent,
   atlas: DreamAtlas,
   isReachable: boolean,
 ): {
@@ -421,12 +421,12 @@ function buildNodeCard(
   site: AtlasNodeSite | null;
   affiliation: AtlasNodeAffiliation | null;
 } {
-  const dreamsign = buildDreamsignCard(node, questContent, isReachable);
+  const dreamsign = buildDreamsignCard(node, journeyContent, isReachable);
 
   if (geo.isBoss) {
     const bossIncarnation =
       atlas.bossIncarnationId != null
-        ? ((questContent.apollyonIncarnations ?? []).find(
+        ? ((journeyContent.apollyonIncarnations ?? []).find(
             (i) => i.id === atlas.bossIncarnationId,
           ) ?? null)
         : null;
@@ -455,7 +455,7 @@ function buildNodeCard(
   // presents the compact "unseen dream" card rather than leaking it.
   const dreamscape =
     isReachable && node.dreamscapeId !== null
-      ? (questContent.dreamscapes.find((d) => d.id === node.dreamscapeId) ??
+      ? (journeyContent.dreamscapes.find((d) => d.id === node.dreamscapeId) ??
         null)
       : null;
 
@@ -483,11 +483,11 @@ function buildNodeCard(
 
   const guide =
     dreamscape.guideId != null
-      ? (questContent.guides.find((g) => g.id === dreamscape.guideId) ?? null)
+      ? (journeyContent.guides.find((g) => g.id === dreamscape.guideId) ?? null)
       : null;
   const affiliation =
     dreamscape.affiliationId != null
-      ? (questContent.affiliations.find(
+      ? (journeyContent.affiliations.find(
           (a) => a.id === dreamscape.affiliationId,
         ) ?? null)
       : null;
@@ -523,7 +523,7 @@ function buildNodeCard(
 /** Builds the placed node items — faces and resolved hover cards. */
 export function buildAtlasMapNodes(
   atlas: DreamAtlas,
-  questContent: QuestContent,
+  journeyContent: JourneyContent,
   profile: AtlasLayoutProfile = ATLAS_LAYOUT_MOBILE,
 ): AtlasMapNode[] {
   const geometry = resolveAtlasNodeGeometry(atlas, profile);
@@ -545,7 +545,7 @@ export function buildAtlasMapNodes(
     // badge.
     const dreamscape =
       isReachable && node.dreamscapeId !== null
-        ? (questContent.dreamscapes.find((d) => d.id === node.dreamscapeId) ??
+        ? (journeyContent.dreamscapes.find((d) => d.id === node.dreamscapeId) ??
           null)
         : null;
 
@@ -569,7 +569,7 @@ export function buildAtlasMapNodes(
 
     const dreamsignTemplate =
       isReachable && node.knownDreamsignId !== null
-        ? (questContent.dreamsignTemplates.find(
+        ? (journeyContent.dreamsignTemplates.find(
             (t) => t.id === node.knownDreamsignId,
           ) ?? null)
         : null;
@@ -590,7 +590,7 @@ export function buildAtlasMapNodes(
       siteBadgeGlyph,
       knownDreamsignRef,
       badgeScale: profile.badgeScale,
-      ...buildNodeCard(node, geo, questContent, atlas, isReachable),
+      ...buildNodeCard(node, geo, journeyContent, atlas, isReachable),
     });
   }
   return items;
@@ -602,14 +602,14 @@ export function buildAtlasMapNodes(
  */
 export function buildAtlasView(
   atlas: DreamAtlas,
-  questContent: QuestContent,
+  journeyContent: JourneyContent,
   isDesktop = false,
 ): AtlasView {
   const profile = atlasLayoutProfile(isDesktop);
   return {
     stageWidth: profile.stageWidth,
     stageHeight: profile.stageHeight,
-    nodes: buildAtlasMapNodes(atlas, questContent, profile),
+    nodes: buildAtlasMapNodes(atlas, journeyContent, profile),
     edges: buildAtlasMapEdges(atlas, profile),
   };
 }

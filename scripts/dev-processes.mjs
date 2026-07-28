@@ -44,7 +44,7 @@ export function readRuntimeStates(root) {
       worktree,
       "node_modules",
       ".cache",
-      "quest-dev",
+      "journey-dev",
     );
     if (!existsSync(stateDir)) continue;
     for (const filename of readdirSync(stateDir)) {
@@ -101,7 +101,7 @@ async function stopState(state) {
 
 function printStates(states) {
   if (states.length === 0) {
-    console.log("No managed quest development servers are running.");
+    console.log("No managed journey development servers are running.");
     return;
   }
   for (const state of states) {
@@ -130,8 +130,8 @@ async function main() {
   if (selected.length === 0) {
     console.log(
       all
-        ? "No managed quest development servers are running."
-        : "No managed quest development server is running in this worktree.",
+        ? "No managed journey development servers are running."
+        : "No managed journey development server is running in this worktree.",
     );
     return;
   }

@@ -48,7 +48,26 @@ const VISUAL =
  * entry's `[fileA, fileB]` and its literal starts with that entry's
  * `literalPrefix`.
  */
-export const BASELINE = [];
+export const BASELINE = [
+  // Battle result and tutorial result surfaces share the same safe-area-aware
+  // mobile content padding while remaining separate screen compositions.
+  [
+    'max(var(--safe-area-inset-left), ${token("--space-6")})',
+    "src/cumulus/screens/BattleResultSurface.tsx",
+    "src/cumulus/screens/TutorialBattleScreen.tsx",
+  ],
+  [
+    'max(var(--safe-area-inset-right), ${token("--space-6")})',
+    "src/cumulus/screens/BattleResultSurface.tsx",
+    "src/cumulus/screens/TutorialBattleScreen.tsx",
+  ],
+  // Both battle screens use this material for the same raised card-preview role.
+  [
+    'radial-gradient(circle at 38% 28%, ${token("--surface-raised")}',
+    "src/cumulus/screens/MobileBattleScreen.tsx",
+    "src/cumulus/screens/TutorialBattleScreen.tsx",
+  ],
+];
 
 /** Whether `fullPath` is walked at all: TS/TSX/CSS source under src/cumulus. */
 function isCandidateFile(name) {

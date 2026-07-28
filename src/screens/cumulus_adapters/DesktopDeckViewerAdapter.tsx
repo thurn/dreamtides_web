@@ -1,12 +1,12 @@
-// Adapter bridging live quest state to the pure desktop deck viewer
-// (`src/cumulus/screens/DesktopDeckViewer`). Wiring only: it acquires `useQuest()`,
+// Adapter bridging live journey state to the pure desktop deck viewer
+// (`src/cumulus/screens/DesktopDeckViewer`). Wiring only: it acquires `useJourney()`,
 // builds the view-model from the live deck, card database, DreamAvatar,
 // dreamsigns, run seed, and pool context; logs the open; and renders nothing
 // while closed. All resolution logic lives in the pure builder
 // (`desktop-deck-view-model.ts`); the screen itself stays pure.
 
 import { useEffect, useMemo, useRef } from "react";
-import { useQuest } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
 import { logEvent } from "../../logging";
 import { DesktopDeckViewer } from "../../cumulus/screens/DesktopDeckViewer";
 import { buildDesktopDeckView } from "./desktop-deck-view-model";
@@ -18,34 +18,34 @@ interface DesktopDeckViewerAdapterProps {
 }
 
 /**
- * Live desktop deck viewer: builds the deck view-model from quest state and
+ * Live desktop deck viewer: builds the deck view-model from journey state and
  * renders the Cumulus screen while open.
  */
 export function DesktopDeckViewerAdapter({
   isOpen,
   onClose,
 }: DesktopDeckViewerAdapterProps) {
-  const { state, questContent } = useQuest();
+  const { state, journeyContent } = useJourney();
   const wasOpenRef = useRef(false);
 
   const view = useMemo(
     () =>
       buildDesktopDeckView(
         state.deck,
-        questContent.cardDatabase,
+        journeyContent.cardDatabase,
         state.dreamAvatar,
         state.dreamsigns,
-        questContent.dreamAvatars,
-        questContent.poolContext,
+        journeyContent.dreamAvatars,
+        journeyContent.poolContext,
         state.seed,
       ),
     [
       state.deck,
-      questContent.cardDatabase,
+      journeyContent.cardDatabase,
       state.dreamAvatar,
       state.dreamsigns,
-      questContent.dreamAvatars,
-      questContent.poolContext,
+      journeyContent.dreamAvatars,
+      journeyContent.poolContext,
       state.seed,
     ],
   );

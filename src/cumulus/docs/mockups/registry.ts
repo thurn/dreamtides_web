@@ -22,7 +22,7 @@ import { GroupPanelMockup } from "./group-panel";
 import { InfoCardMockup } from "./info-card";
 import { MotesMockup } from "./motes";
 import { PressableMockup } from "./pressable";
-import { QuestStatusBarMockup } from "./quest-status-bar";
+import { JourneyStatusBarMockup } from "./journey-status-bar";
 import { ResourceChipMockup } from "./resource-chip";
 import { RulesTextMockup } from "./rules-text";
 import { SegmentedControlMockup } from "./segmented-control";
@@ -34,7 +34,7 @@ import { SiteNodeMockup } from "./site-node";
  */
 export const MOCKUPS: Record<string, ComponentType> = {
   "game-card": GameCardMockup,
-  "quest-status-bar": QuestStatusBarMockup,
+  "journey-status-bar": JourneyStatusBarMockup,
   "rules-text": RulesTextMockup,
   "atlas-map": AtlasMapMockup,
   "atlas-node": AtlasMapMockup,

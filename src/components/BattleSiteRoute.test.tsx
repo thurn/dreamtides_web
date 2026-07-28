@@ -10,9 +10,9 @@ import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import { BattleSiteRoute } from "./BattleSiteRoute";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import type { CoopActions } from "../coop/actions";
-import { createDefaultState, useQuest } from "../state/quest-context";
+import { createDefaultState, useJourney } from "../state/journey-context";
 import type { FoldState } from "../rules/fold-state";
-import type { CardSourceDebugState, Screen, SiteState } from "../types/quest";
+import type { CardSourceDebugState, Screen, SiteState } from "../types/journey";
 import {
   makeBattleTestCardDatabase,
   makeBattleTestDreamAvatars,
@@ -23,9 +23,9 @@ import { createBattleInit } from "../battle/integration/create-battle-init";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
 import { emptyDawnFired } from "../rules/battle/fold";
 
-vi.mock("../state/quest-context", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("../state/quest-context")>()),
-  useQuest: vi.fn(),
+vi.mock("../state/journey-context", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../state/journey-context")>()),
+  useJourney: vi.fn(),
 }));
 
 let mockGameState: FoldState;
@@ -111,7 +111,7 @@ function makeFoldStateWithBattle(): FoldState {
   const board = createInitialBattleState(init);
   return {
     frontDoor: { phase: "main", journeyId: null, tutorial: null },
-    quest: makeQuestState(),
+    journey: makeJourneyState(),
     battle: {
       init,
       board,
@@ -122,7 +122,7 @@ function makeFoldStateWithBattle(): FoldState {
   };
 }
 
-function makeQuestState(
+function makeJourneyState(
   overrides: {
     atlasStartingNodeId?: string;
     cardSourceDebug?: CardSourceDebugState | null;
@@ -144,7 +144,7 @@ function makeQuestState(
   return {
     ...createDefaultState(),
     ...battleState,
-    runId: "quest:test",
+    runId: "journey:test",
     essence: 250,
     cardSourceDebug,
     completionLevel,
@@ -161,14 +161,14 @@ function makeQuestState(
   };
 }
 
-function setQuestState(
-  overrides: Parameters<typeof makeQuestState>[0] = {},
+function setJourneyState(
+  overrides: Parameters<typeof makeJourneyState>[0] = {},
 ): void {
-  vi.mocked(useQuest).mockReturnValue({
-    state: makeQuestState(overrides),
-    mutations: {} as ReturnType<typeof useQuest>["mutations"],
+  vi.mocked(useJourney).mockReturnValue({
+    state: makeJourneyState(overrides),
+    mutations: {} as ReturnType<typeof useJourney>["mutations"],
     cardDatabase: makeBattleTestCardDatabase(),
-    questContent: {
+    journeyContent: {
       cardDatabase: makeBattleTestCardDatabase(),
       dreamAvatars: makeBattleTestDreamAvatars(),
       dreamwellCards: [],
@@ -203,10 +203,10 @@ beforeEach(() => {
     unobserve(): void {}
     disconnect(): void {}
   };
-  setQuestState();
+  setJourneyState();
   mockGameState = {
     frontDoor: { phase: "main", journeyId: null, tutorial: null },
-    quest: makeQuestState(),
+    journey: makeJourneyState(),
     battle: null,
   };
   (
@@ -272,7 +272,7 @@ describe("BattleSiteRoute", () => {
       container.querySelector('[data-screen="cumulus-battle-start"]'),
     ).not.toBeNull();
     expect(
-      container.querySelector("[data-cumulus-quest-chrome]"),
+      container.querySelector("[data-cumulus-journey-chrome]"),
     ).not.toBeNull();
     expect(beginBattleSpy).not.toHaveBeenCalled();
     act(() => {
@@ -303,10 +303,10 @@ describe("BattleSiteRoute", () => {
       container.querySelector('[data-screen="cumulus-playable"]'),
     ).not.toBeNull();
     expect(
-      container.querySelector("[data-cumulus-quest-chrome]"),
+      container.querySelector("[data-cumulus-journey-chrome]"),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-quest-status-bar-variant="battle"]'),
+      container.querySelector('[data-journey-status-bar-variant="battle"]'),
     ).not.toBeNull();
     expect(container.querySelector('[aria-label^="View deck"]')).toBeNull();
     expect(container.querySelector('[aria-label="DreamAvatar"]')).toBeNull();
@@ -335,14 +335,14 @@ describe("BattleSiteRoute", () => {
       container.querySelector('[data-screen="cumulus-battle-start"]'),
     ).toBeNull();
     expect(
-      container.querySelector("[data-cumulus-quest-chrome]"),
+      container.querySelector("[data-cumulus-journey-chrome]"),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-quest-status-bar-variant="battle"]'),
+      container.querySelector('[data-journey-status-bar-variant="battle"]'),
     ).not.toBeNull();
   });
 
-  it("omits the partial quest status bar from the mobile Cumulus battle", () => {
+  it("omits the partial journey status bar from the mobile Cumulus battle", () => {
     stubViewport(false);
     mockGameState = makeFoldStateWithBattle();
     const { container } = mount(
@@ -362,7 +362,7 @@ describe("BattleSiteRoute", () => {
       container.querySelector('[data-screen="cumulus-playable"]'),
     ).not.toBeNull();
     expect(
-      container.querySelector("[data-quest-status-bar-anchor]"),
+      container.querySelector("[data-journey-status-bar-anchor]"),
     ).toBeNull();
   });
 
@@ -480,7 +480,7 @@ describe("BattleSiteRoute", () => {
 
   it("returns to the Battle Start preview after the folded battle is cleared", () => {
     mockGameState = makeFoldStateWithBattle();
-    setQuestState({ completionLevel: 3 });
+    setJourneyState({ completionLevel: 3 });
     const { container, root } = mount(
       <BattleSiteRoute
         site={makeSite()}
@@ -500,10 +500,10 @@ describe("BattleSiteRoute", () => {
 
     mockGameState = {
       frontDoor: { phase: "main", journeyId: null, tutorial: null },
-      quest: makeQuestState({ completionLevel: 4 }),
+      journey: makeJourneyState({ completionLevel: 4 }),
       battle: null,
     };
-    setQuestState({ completionLevel: 4 });
+    setJourneyState({ completionLevel: 4 });
     act(() => {
       root.render(
         <BattleSiteRoute

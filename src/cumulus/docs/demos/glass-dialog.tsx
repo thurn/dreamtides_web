@@ -63,7 +63,7 @@ export const glassDialogDemo: CumulusComponent = {
 
 <GlassDialog
   title="Starting Deck"
-  subtitle="These are the cards you begin the quest with."
+  subtitle="These are the cards you begin the journey with."
   onClose={closeModal}
 >
   <DeckGrid entries={entries} />

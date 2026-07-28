@@ -305,8 +305,8 @@ engine/automation modules.
   resolver and remove the `engine/judgment.ts` shim; AI tests.
 - **Phase 6 — Default-on & integration.** Flip automation default; update the two
   `PlayableBattleScreen.test.tsx` expectations; QA the AI-on + automation-on
-  cross-product; update `docs/quest_prototype/quest_prototype.md`,
-  `docs/quest_prototype/battle_ai.md`, and `docs/quest_prototype/url_parameters.md`.
+  cross-product; update `docs/journey_prototype/journey_prototype.md`,
+  `docs/journey_prototype/battle_ai.md`, and `docs/journey_prototype/url_parameters.md`.
 
 ## 8. Risks & mitigations
 
@@ -335,7 +335,7 @@ engine/automation modules.
   figment-challenge examples and Fatigue doubling.
 - Update React tests that assume automation-off
   (`PlayableBattleScreen.test.tsx:339–359, 361–388`).
-- Browser QA per `quest-battle` skill: launch on a non-5173 port, capture PID,
+- Browser QA per `journey-battle` skill: launch on a non-5173 port, capture PID,
   validate via the player workflow, inspect the error buffer, and tear down only
   the QA server.
 - Acceptance: the §5 / Appendix B coverage map is fully addressed — every mechanic

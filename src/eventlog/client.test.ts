@@ -379,7 +379,7 @@ describe("LogClient double-apply of own intent", () => {
     const draft = {
       type: "T",
       payload: { tag: "automatic" },
-      intentKey: "complete-site:quest:9:site-7",
+      intentKey: "complete-site:journey:9:site-7",
     };
     await expect(client.submit(draft)).resolves.toBe(5);
     await expect(client.submit(draft)).resolves.toBe(5);

@@ -5,14 +5,14 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DreamsignRevelationScreenAdapter } from "./DreamsignRevelationScreenAdapter";
-import { useQuest } from "../../state/quest-context";
-import type { QuestContent } from "../../data/quest-content";
+import { useJourney } from "../../state/journey-context";
+import type { JourneyContent } from "../../data/journey-content";
 import type {
-  QuestContextValue,
-  QuestMutations,
-} from "../../state/quest-context";
+  JourneyContextValue,
+  JourneyMutations,
+} from "../../state/journey-context";
 import type { DreamGuideContent } from "../../types/content";
-import type { DreamscapeNode, Dreamsign, QuestState } from "../../types/quest";
+import type { DreamscapeNode, Dreamsign, JourneyState } from "../../types/journey";
 import { LayerName } from "../../types/layer-name";
 
 const screenMock = vi.hoisted(() => vi.fn());
@@ -39,8 +39,8 @@ const loggingMock = vi.hoisted(() => {
   };
 });
 
-vi.mock("../../state/quest-context", () => ({
-  useQuest: vi.fn(),
+vi.mock("../../state/journey-context", () => ({
+  useJourney: vi.fn(),
 }));
 
 vi.mock("../../logging", () => ({
@@ -74,7 +74,7 @@ function makeDreamsign(id: string): Dreamsign {
   };
 }
 
-function makeState(): QuestState {
+function makeState(): JourneyState {
   const site = {
     id: "site-1",
     type: "DreamsignRevelation",
@@ -120,21 +120,21 @@ function makeState(): QuestState {
     dreamAvatar: null,
     dreamsigns: [],
     maxDreamsigns: 12,
-  } as unknown as QuestState;
+  } as unknown as JourneyState;
 }
 
-function setQuestContext(state = makeState()): void {
-  vi.mocked(useQuest).mockReturnValue({
+function setJourneyContext(state = makeState()): void {
+  vi.mocked(useJourney).mockReturnValue({
     state,
     mutations: {
       ensureDreamsignOfferRuntime: vi.fn(),
       acceptDreamsignOffer: vi.fn(),
       rejectDreamsignOffer: vi.fn(),
-    } as unknown as QuestMutations,
-    questContent: {
+    } as unknown as JourneyMutations,
+    journeyContent: {
       guides: [GUIDE],
-    } as unknown as QuestContent,
-  } as QuestContextValue);
+    } as unknown as JourneyContent,
+  } as JourneyContextValue);
 }
 
 function mount(element: ReactElement): {
@@ -157,7 +157,7 @@ beforeEach(() => {
   (
     globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
   ).IS_REACT_ACT_ENVIRONMENT = true;
-  setQuestContext();
+  setJourneyContext();
 });
 
 afterEach(() => {
@@ -212,7 +212,7 @@ describe("DreamsignRevelationScreenAdapter", () => {
       },
     );
 
-    setQuestContext(makeState());
+    setJourneyContext(makeState());
     act(() => {
       root.render(<DreamsignRevelationScreenAdapter siteId="site-1" />);
     });

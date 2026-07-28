@@ -3,7 +3,7 @@ import type {
   EssenceSiteRuntime,
   RewardSiteRuntime,
   SiteState,
-} from "../../types/quest";
+} from "../../types/journey";
 import { buildInlineRewardCompletionLog } from "./inline-reward-view-model";
 
 const STATE = { essence: 90, essenceCap: 100 };

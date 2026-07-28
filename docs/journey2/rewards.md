@@ -2,7 +2,7 @@
 
 The dream merchant in `src/journey_v2` offers the player two free, immediate,
 permanent rewards per visit. The player accepts one offer or declines. All
-generation is deterministic for a given (quest seed, site id, deck state), and
+generation is deterministic for a given (journey seed, site id, deck state), and
 variance is a measurable, tunable property verified by the metrics harness.
 
 ## Encounter Structure
@@ -38,7 +38,7 @@ signatures are rejected without state mutation.
 ## Seeded Randomness and Band Sampling
 
 All sampling uses SHA-256 over string parts, mapped to uniform floats. Every
-draw salts the hash with `(quest seed, site id, slot, purpose)`, keeping draws
+draw salts the hash with `(journey seed, site id, slot, purpose)`, keeping draws
 independent and reproducible.
 
 **Band sampling** is the target-selection primitive used throughout:
@@ -265,7 +265,7 @@ everywhere without beating a genuinely suited one. The `dreamsign` /
 positive score) whenever any exists.
 
 The loader is `src/data/dreamsign-profiles.ts`. Profiles are populated in
-`QuestContent` and passed through `buildMerchantContext` into `dreamsignMatch.ts`.
+`JourneyContent` and passed through `buildMerchantContext` into `dreamsignMatch.ts`.
 
 ## Dialogue
 

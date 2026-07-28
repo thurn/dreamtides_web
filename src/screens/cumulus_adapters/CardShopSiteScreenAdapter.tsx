@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { logEvent, logEventOnce } from "../../logging";
-import { useQuest } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
 import { useCardSourceDebugPublication } from "../../state/use-card-source-debug-publication";
 import { CardShopSiteScreen } from "../../cumulus/screens/CardShopSiteScreen";
 import {
@@ -12,7 +12,7 @@ import {
 } from "./card-shop-view-model";
 
 export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
-  const { state, mutations, questContent } = useQuest();
+  const { state, mutations, journeyContent } = useJourney();
   const node =
     state.currentDreamscape !== null
       ? (state.atlas.nodes[state.currentDreamscape] ?? null)
@@ -20,7 +20,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
   const runtime = state.siteRuntime[siteId];
   const shopRuntime = runtime?.kind === "shop" ? runtime : null;
-  const guide = resolveCardShopGuide(questContent.guides);
+  const guide = resolveCardShopGuide(journeyContent.guides);
   const guideLineRef = useRef<string | null | undefined>(undefined);
   if (guideLineRef.current === undefined) {
     guideLineRef.current =
@@ -38,7 +38,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
             sceneNode: node,
             site,
             runtime: shopRuntime,
-            cardDatabase: questContent.cardDatabase,
+            cardDatabase: journeyContent.cardDatabase,
             guide,
             guideLine: guideLineRef.current ?? null,
           }),
@@ -51,7 +51,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
       node,
       site,
       shopRuntime,
-      questContent.cardDatabase,
+      journeyContent.cardDatabase,
       guide,
     ],
   );

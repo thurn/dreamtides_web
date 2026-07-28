@@ -14,7 +14,7 @@ Turn the load-bearing-but-uncataloged Cumulus patterns into first-class componen
 the glass button suite (`IconButton`, `GlassButton`, `GlassDialog`/`GlassBackdrop`),
 a shared economy glyph/color table both `Button` and `ResourceChip` render from,
 `DreamAvatarPortrait` `standing`/`fullBleed` variants that retire the two
-quest-start figure forks, a reusable `useScaleToFit` primitive, the rewritten
+journey-start figure forks, a reusable `useScaleToFit` primitive, the rewritten
 `Button` doctrine, and the `no-numeric-style-props` ESLint rule that enforces
 "variants are enumerated, never open numbers" across the component tier.
 
@@ -67,7 +67,7 @@ Vite dev server for browser QA, `agent-browser` for automated QA.
   Phase-0 `no-ghost-components` check requires a consumer OR `status: "incubating"`;
   `IconButton`/`GlassButton`/`GlassDialog` are marked `incubating` here and lose
   the flag in Phase 3 when the five bespoke call sites migrate onto them.
-- **Browser QA** per `docs/quest_prototype/qa_tooling.md`: isolate every
+- **Browser QA** per `docs/journey_prototype/qa_tooling.md`: isolate every
   `agent-browser` call with a unique `--session`, start the dev server on a
   non-5173 port (`npm run dev -- --port 5174`), assert `location.href` +
   `window.innerWidth` before each screenshot, and tear down only your own server
@@ -441,15 +441,15 @@ modeled on `StartingDeckModal`.
 
 ---
 
-### Task 6 — `DreamAvatarPortrait` `standing`/`fullBleed` variants; retire the quest-start forks
+### Task 6 — `DreamAvatarPortrait` `standing`/`fullBleed` variants; retire the journey-start forks
 
 Add the two full-bleed framings, fold `StandingFigure`/`FullBleedPortrait` onto the
 component, and collapse the thrice-pasted monogram gradient to one source.
 
 **Files**
 - Modify `src/cumulus/components/hud/DreamAvatarPortrait.tsx` — extend the variant union; add branches; dedupe the fallback gradient.
-- Modify `src/cumulus/screens/quest-start-desktop.tsx` — delete `StandingFigure` + `PORTRAIT_SCALE`; use the `standing` variant.
-- Modify `src/cumulus/screens/quest-start-mobile.tsx` — delete `FullBleedPortrait`; use the `fullBleed` variant.
+- Modify `src/cumulus/screens/journey-start-desktop.tsx` — delete `StandingFigure` + `PORTRAIT_SCALE`; use the `standing` variant.
+- Modify `src/cumulus/screens/journey-start-mobile.tsx` — delete `FullBleedPortrait`; use the `fullBleed` variant.
 - Modify the Phase-0 duplicate-literal detector's `BASELINE` allowlist — delete the monogram-gradient entry (locate via `grep -rl "50% 20%" scripts/ src/cumulus/` or search the detector for "monogram").
 - Create `src/cumulus/components/hud/DreamAvatarPortrait.test.tsx` — variant render + fallback tests.
 
@@ -471,7 +471,7 @@ these as geometry facts, matching the current call sites)
   for its `background` instead of re-inlining the literal, and the Phase-0 `BASELINE`
   allowlist entry for it is deleted so the detector guards it going forward.
 - `standing` = a `PORTRAIT_STANDING_SCALE = 1.2` module constant (moved from
-  quest-start-desktop, keep the "grows the cutout from the feet" comment) + an
+  journey-start-desktop, keep the "grows the cutout from the feet" comment) + an
   aria-hidden glow div `radial-gradient(72% 56% at 50% 62%, color-mix(in srgb,
   ${token("--accent")} 26%, transparent) 0%, color-mix(in srgb, ${token("--gold")}
   10%, transparent) 46%, transparent 72%)` (`position:absolute; inset:0;
@@ -510,20 +510,20 @@ these as geometry facts, matching the current call sites)
   the union, dedupe `fallbackStyle` onto `portraitBackdrop()`, add
   `PORTRAIT_STANDING_SCALE`, and branch to the `standing`/`fullBleed` fragments
   before the framed-`div` return.
-- [ ] Edit `quest-start-desktop.tsx`: delete `PORTRAIT_SCALE` and the whole
+- [ ] Edit `journey-start-desktop.tsx`: delete `PORTRAIT_SCALE` and the whole
   `StandingFigure` function; replace `<StandingFigure dreamAvatar={dreamAvatar} />`
   with `<DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="standing" />` + the
   import; drop now-unused imports (`useState`, `dreamAvatarCutoutSrc`) — let typecheck
   catch leftovers.
-- [ ] Edit `quest-start-mobile.tsx`: delete the whole `FullBleedPortrait` function;
+- [ ] Edit `journey-start-mobile.tsx`: delete the whole `FullBleedPortrait` function;
   replace `<FullBleedPortrait dreamAvatar={dreamAvatar} />` with
   `<DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="fullBleed" />` + the import;
   drop now-unused imports.
 - [ ] Delete the monogram-gradient entry from the Phase-0 duplicate-literal `BASELINE`
   allowlist (the literal now appears once, in `portraitBackdrop()`).
 - [ ] Run `npx vitest run src/cumulus/components/hud/DreamAvatarPortrait.test.tsx` — expect pass.
-- [ ] Run `npx vitest run src/cumulus/screens/QuestStartScreen.test.tsx` — expect the
-  existing quest-start screen tests still green (they assert on
+- [ ] Run `npx vitest run src/cumulus/screens/JourneyStartScreen.test.tsx` — expect the
+  existing journey-start screen tests still green (they assert on
   `data-dream-avatar-page`/`-column`, `data-choose-dream-avatar`,
   `data-starting-essence-value`, and tide discs — none touch the figure markup).
 - [ ] Run `npm run cumulus-metadata` (the variant union changed), then
@@ -536,7 +536,7 @@ these as geometry facts, matching the current call sites)
   `agent-browser --session cumulus-qs-m` narrow (`innerWidth < 900`): confirm the
   full-bleed cinematic figure fills the page with the tinted backdrop and Motes.
   Check the error buffer. Tear down only your own server.
-- [ ] Commit + push: `refactor(cumulus): add DreamAvatarPortrait standing/fullBleed variants and retire the quest-start figure forks`.
+- [ ] Commit + push: `refactor(cumulus): add DreamAvatarPortrait standing/fullBleed variants and retire the journey-start figure forks`.
 
 ---
 
@@ -606,7 +606,7 @@ production-required box/measure/multiplier values by name.
 `PressInfoProps.gap`, `DreamAvatarPortraitProps.size`. All five are legitimate
 box/measure/multiplier values with no enumerable form, so they go in the rule's
 `allow` list with per-entry comments. (`PipBadgeProps.scale`, `RulesTextProps`,
-`Dreamsign.sizePx`, `Motes`'s `size`, `QuestStatusBar`'s `scale` inline object types
+`Dreamsign.sizePx`, `Motes`'s `size`, `JourneyStatusBar`'s `scale` inline object types
 are NOT exported `*Props`/`*View` decls, or the name is not a knob word, so they are
 out of scope.)
 
@@ -673,7 +673,7 @@ out of scope.)
 - [ ] Report the phase complete: economy-spec shared and ResourceChip enumerated;
   IconButton/GlassButton/GlassDialog(+GlassBackdrop) shipped incubating with
   test+demo+registry; Dream AvatarPortrait standing/fullBleed variants replacing the
-  two quest-start forks; useScaleToFit adopted by AtlasMap; GlassButton doctrine documented;
+  two journey-start forks; useScaleToFit adopted by AtlasMap; GlassButton doctrine documented;
   no-numeric-style-props enforcing the enumerated-variant rule with a documented
   five-entry allowlist. Phase 3 removes the `incubating` flags when the five bespoke
   call sites migrate onto IconButton/GlassButton/GlassDialog.

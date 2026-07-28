@@ -12,7 +12,7 @@
 
 import type { ReactNode } from "react";
 import type { CardData } from "../types/cards";
-import type { QuestContent } from "../data/quest-content";
+import type { JourneyContent } from "../data/journey-content";
 import type {
   AffiliationContent,
   DreamAvatarContent,
@@ -86,7 +86,7 @@ export interface AlgorithmParams {
 export interface DebugAlgorithm {
   id: string;
   label: string;
-  build(content: QuestContent, params: AlgorithmParams): AlgorithmView | null;
+  build(content: JourneyContent, params: AlgorithmParams): AlgorithmView | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -112,7 +112,7 @@ const coherentAlgorithm: DebugAlgorithm = {
       poolSeed: params.poolSeed,
     });
 
-    // Record the generation so the debug run is reconstructable from the quest
+    // Record the generation so the debug run is reconstructable from the journey
     // log just like a production battle's opponent build.
     logOpponentDeckConstructed({
       battleEntryKey: params.battleEntryKey,

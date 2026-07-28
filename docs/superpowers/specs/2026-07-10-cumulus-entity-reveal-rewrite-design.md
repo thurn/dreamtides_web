@@ -11,7 +11,7 @@ The Cumulus library implements reveal policy through one root coordinator, and
 named semantic components are the public way to participate in it.
 
 The scope includes every consumer of Cumulus entity components: player-facing
-quest screens, battle, Atlas, HUD, draft, deck and shop surfaces, component
+journey screens, battle, Atlas, HUD, draft, deck and shop surfaces, component
 documentation, mockups, debug tools, and transitional screens that directly
 render Cumulus entities. Unrelated legacy UI remains outside this project.
 

@@ -30,7 +30,7 @@ import type {
   DreamscapeContent,
 } from "../types/content.ts";
 import type { CardData } from "../types/cards.ts";
-import type { DreamscapeNode } from "../types/quest.ts";
+import type { DreamscapeNode } from "../types/journey.ts";
 import { logEvent } from "../logging.ts";
 import type { PoolData } from "../draft/pool/types.ts";
 import { type IdfCorpus, idfCorpus } from "../draft/pool/variant-idf.ts";
@@ -197,7 +197,7 @@ export function buildAffiliationNumberWeights(
  * Reconstruction logging for one affiliated draw (spec §8). Records the
  * affiliation, the signature cards that formed the probe, the highest-weighted
  * candidates with their weights, and the card that was ultimately picked, so the
- * draw can be reconstructed from `logs/quest-log.jsonl`.
+ * draw can be reconstructed from `logs/journey-log.jsonl`.
  *
  * `drawSite` names the sampler ("draft_offer", "shop_stock", "dream_augury", ...);
  * `candidateWeights` is the `cardNumber -> multiplier` map actually applied;

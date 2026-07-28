@@ -46,7 +46,7 @@ import { numberStepperDemo } from "./demos/number-stepper";
 import { offerTileDemo } from "./demos/offer-tile";
 import { pipBadgeDemo } from "./demos/pip-badge";
 import { pressableDemo } from "./demos/pressable";
-import { questStatusBarDemo } from "./demos/quest-status-bar";
+import { journeyStatusBarDemo } from "./demos/journey-status-bar";
 import { resourceChipDemo } from "./demos/resource-chip";
 import { richTextDemo } from "./demos/rich-text";
 import { rulesTextDemo } from "./demos/rules-text";
@@ -182,7 +182,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   inlineGlyphDemo,
   glowIconDemo,
   pipBadgeDemo,
-  questStatusBarDemo,
+  journeyStatusBarDemo,
   coopPresenceStatusDemo,
   battleStatusDisplayDemo,
   dreamwellCardDemo,

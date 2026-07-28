@@ -13,7 +13,7 @@ implement, for example:
 > Implement: Card Purge.html
 
 Your job is to **reproduce the look and feel** of that mock-up inside the real
-quest prototype.
+journey prototype.
 
 ## The single most important thing to understand
 

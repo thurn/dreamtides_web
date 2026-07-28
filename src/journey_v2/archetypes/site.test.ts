@@ -5,17 +5,17 @@ import { buildMerchantContext } from "../context/buildMerchantContext";
 import {
   makeMerchantTestCard,
   makeMerchantTestContent,
-  makeMerchantTestQuestState,
+  makeMerchantTestJourneyState,
   makeMerchantTestSite,
 } from "../testing/fixtures";
-import type { QuestState } from "../../types/quest";
+import type { JourneyState } from "../../types/journey";
 import { LayerName } from "../../types/layer-name";
 import type { MerchantContext } from "../types";
 import { asCardId } from "../../types/card-identity";
 import { addSiteBuilder, MERCHANT_PLACEABLE_SITE_TYPES } from "./site";
 
-function makeDreamscapeState(overrides: Partial<QuestState> = {}): QuestState {
-  const base = makeMerchantTestQuestState(overrides);
+function makeDreamscapeState(overrides: Partial<JourneyState> = {}): JourneyState {
+  const base = makeMerchantTestJourneyState(overrides);
   // Set up a current dreamscape with some pre-existing sites
   return {
     ...base,
@@ -82,11 +82,11 @@ function makeDreamscapeState(overrides: Partial<QuestState> = {}): QuestState {
   };
 }
 
-function makeContext(state: QuestState): MerchantContext {
-  const questContent = makeMerchantTestContent({
+function makeContext(state: JourneyState): MerchantContext {
+  const journeyContent = makeMerchantTestContent({
     cards: [makeMerchantTestCard({ id: asCardId("11111111-1111-4111-8111-111111111111"), cardNumber: 1 })],
   });
-  return buildMerchantContext({ questState: state, questContent, site: makeMerchantTestSite() });
+  return buildMerchantContext({ journeyState: state, journeyContent, site: makeMerchantTestSite() });
 }
 
 // ---------------------------------------------------------------------------
@@ -101,7 +101,7 @@ describe("add_site — always eligible", () => {
   });
 
   it("is eligible with no current dreamscape", () => {
-    const state = makeMerchantTestQuestState();
+    const state = makeMerchantTestJourneyState();
     const context = makeContext(state);
     expect(addSiteBuilder.eligible(context)).toBe(true);
   });
@@ -115,7 +115,7 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
   it("adds exactly one site to the current dreamscape", () => {
     const state = makeDreamscapeState();
     const context = makeContext(state);
-    const questContent = makeMerchantTestContent({
+    const journeyContent = makeMerchantTestContent({
       cards: [makeMerchantTestCard({ id: asCardId("11111111-1111-4111-8111-111111111111"), cardNumber: 1 })],
     });
 
@@ -129,7 +129,7 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
     expect(offer.applyPayload.kind).toBe("add_site");
 
     const payload = offer.applyPayload;
-    const resultState = applyMerchantPayloadToState({ state, questContent, payload });
+    const resultState = applyMerchantPayloadToState({ state, journeyContent, payload });
     expect(resultState).not.toBeNull();
     if (resultState === null) return;
 
@@ -150,7 +150,7 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
   it("does not modify other dreamscapes", () => {
     const state = makeDreamscapeState();
     const context = makeContext(state);
-    const questContent = makeMerchantTestContent({
+    const journeyContent = makeMerchantTestContent({
       cards: [makeMerchantTestCard({ id: asCardId("11111111-1111-4111-8111-111111111111"), cardNumber: 1 })],
     });
 
@@ -162,7 +162,7 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
 
     const resultState = applyMerchantPayloadToState({
       state,
-      questContent,
+      journeyContent,
       payload: offer.applyPayload,
     });
     expect(resultState).not.toBeNull();
@@ -183,7 +183,7 @@ describe("add_site apply — distinct site ids on repeated apply", () => {
   it("applying the same payload twice yields sites with distinct ids", () => {
     const state = makeDreamscapeState();
     const context = makeContext(state);
-    const questContent = makeMerchantTestContent({
+    const journeyContent = makeMerchantTestContent({
       cards: [makeMerchantTestCard({ id: asCardId("11111111-1111-4111-8111-111111111111"), cardNumber: 1 })],
     });
 
@@ -195,12 +195,12 @@ describe("add_site apply — distinct site ids on repeated apply", () => {
     const payload = offer.applyPayload;
 
     // Apply once
-    const state1 = applyMerchantPayloadToState({ state, questContent, payload });
+    const state1 = applyMerchantPayloadToState({ state, journeyContent, payload });
     expect(state1).not.toBeNull();
     if (state1 === null) return;
 
     // Apply again to the already-modified state (simulate getting the same payload twice)
-    const state2 = applyMerchantPayloadToState({ state: state1, questContent, payload });
+    const state2 = applyMerchantPayloadToState({ state: state1, journeyContent, payload });
     expect(state2).not.toBeNull();
     if (state2 === null) return;
 

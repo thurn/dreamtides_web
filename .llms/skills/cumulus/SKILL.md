@@ -1,11 +1,11 @@
 ---
 name: cumulus
-description: Use when writing or changing any quest prototype UI — building screens, using or adding Cumulus design-system components, styling, spacing, colors, icons, or reviewing UI code. Triggers on cumulus, design system, UI component, component API, Pressable, Button, GroupPanel, InfoCard, GameCard, tokens, spacing, styling, /cumulus.
+description: Use when writing or changing any journey prototype UI — building screens, using or adding Cumulus design-system components, styling, spacing, colors, icons, or reviewing UI code. Triggers on cumulus, design system, UI component, component API, Pressable, Button, GroupPanel, InfoCard, GameCard, tokens, spacing, styling, /cumulus.
 ---
 
 # Cumulus Design System
 
-Cumulus (`src/cumulus/`) is the design system every screen in the quest prototype
+Cumulus (`src/cumulus/`) is the design system every screen in the journey prototype
 is built from: one small, strict catalog of components with tightly typed
 APIs. All UI work starts here — first find the Cumulus component that does the
 job, then compose it. Writing bespoke UI is the last resort, and customizing a
@@ -31,9 +31,9 @@ component past its typed surface is not an available move at all (see
   `http://localhost:5173/cumulus`), with `/cumulus#/<id>` per component —
   interactive demos and the same props tables, useful during browser QA.
 - **Design philosophy in depth**:
-  [docs/quest_prototype/cumulus_design_system.md](../../../docs/quest_prototype/cumulus_design_system.md).
+  [docs/journey_prototype/cumulus_design_system.md](../../../docs/journey_prototype/cumulus_design_system.md).
 - **Screen composition current state**:
-  [docs/quest_prototype/cumulus_screen_composition.md](../../../docs/quest_prototype/cumulus_screen_composition.md).
+  [docs/journey_prototype/cumulus_screen_composition.md](../../../docs/journey_prototype/cumulus_screen_composition.md).
 
 The reference files and the index are projections of the component sources
 (prop JSDoc via `npm run cumulus-metadata`, prose via the demo entries in
@@ -42,23 +42,23 @@ The reference files and the index are projections of the component sources
 
 ## Required screen chrome
 
-Registered Cumulus product screens receive shared quest chrome from the
-router-owned `CumulusQuestChrome` wrapper, with route-specific end-state and
+Registered Cumulus product screens receive shared journey chrome from the
+router-owned `CumulusJourneyChrome` wrapper, with route-specific end-state and
 battle-shell exceptions:
 
 - a top-right gear icon on desktop;
 - a top-left hamburger menu icon on mobile;
-- the `QuestStatusBar` bottom HUD on active-run screens, replacing any legacy
+- the `JourneyStatusBar` bottom HUD on active-run screens, replacing any legacy
   status bar on the screen.
 
-Terminal quest-result screens keep the utility menu and omit the status bar
+Terminal journey-result screens keep the utility menu and omit the status bar
 because their screen-owned summaries carry the final run or battle readout.
-Quest start has no selected run inventory, and the playable battle uses its
+Journey start has no selected run inventory, and the playable battle uses its
 battle-specific shell.
 
 Pure screen files and their view models do not import, render, or carry data for
 this chrome. Registration applies it automatically, and the screen-chrome
-contract test rejects local `QuestStatusBar` or quest-menu rendering under
+contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 `src/cumulus/screens/`.
 
 ## Component index
@@ -96,7 +96,7 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 | Inline Glyph | Primitives | 7 | [components/inline-glyph.md](components/inline-glyph.md) | The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size. |
 | Glow Icon | Primitives | 17 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark. |
 | Pip Badge | Components | 2 | [components/pip-badge.md](components/pip-badge.md) | The compact circled number used in dense card rows and inline rules text for spark or energy values. |
-| Quest Status Bar | Components | 5 | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |
+| Journey Status Bar | Components | 5 | [components/journey-status-bar.md](components/journey-status-bar.md) | The persistent, transparent bottom HUD for journey screens. |
 | Coop Presence Status | Components | 1 | [components/coop-presence-status.md](components/coop-presence-status.md) | The compact, non-interactive app chrome that reports connected room participants from an explicit view-model count. |
 | Battle Status Display | Components | 1 | [components/battle-status-display.md](components/battle-status-display.md) | The glass status card for one battle participant: centered current and maximum energy at left, a head-focused DreamAvatar portrait or loading placeholder at center, and centered current points at right. |
 | Dreamwell Card | Components | 4 | [components/dreamwell-card.md](components/dreamwell-card.md) | The static landscape card drawn from the Dreamwell: UUID-keyed art, energy grant, name, and complete rules text in one readable object. |
@@ -287,7 +287,7 @@ architectural disposition before it ships.
 
 ## Building a product screen: screen / builder / adapter
 
-A quest screen is three files with strictly separated roles. Lint
+A journey screen is three files with strictly separated roles. Lint
 enforces the split (`thin-adapters`, the builder-purity import block, and the
 Cumulus boundary rules), so put each kind of code in its home from the start.
 **When building a screen, follow the ordered checklist in the
@@ -296,7 +296,7 @@ working idioms (adapter randomness minting, screen-test incantations, the
 registry/QA steps) that this overview compresses:
 
 - **Cumulus screen** (`src/cumulus/screens/FooScreen.tsx`) — pure: renders from a
-  view-model, reports events through callbacks. No `useQuest()`, no
+  view-model, reports events through callbacks. No `useJourney()`, no
   mutations, no navigation. The screen **owns and exports its view types**
   (`FooView`, `FooScreenProps`). Presentation logic and local UI state
   (hover, selection, pan/zoom, animation phase) belong here — most of the
@@ -327,7 +327,7 @@ is deep, re-expose it through a screen-scoped React context defined inside
 hooks). Split the builder into per-region functions
 (`buildAtlasNodeViews`, `buildAtlasEdgeViews`, …) and memoize each in the
 adapter against its own inputs. Full rationale:
-[docs/quest_prototype/cumulus_design_system.md](../../../docs/quest_prototype/cumulus_design_system.md) §2.
+[docs/journey_prototype/cumulus_design_system.md](../../../docs/journey_prototype/cumulus_design_system.md) §2.
 
 ## Core rendering rules
 

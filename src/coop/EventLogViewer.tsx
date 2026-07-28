@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react
 import type { Database } from "firebase/database";
 import type { LogNode } from "../eventlog/types";
 import { subscribeToLog } from "../eventlog/subscribe";
-import { readRoomLogLines } from "./quest-log-sink";
+import { readRoomLogLines } from "./journey-log-sink";
 
 interface EventLogViewerProps {
   db: Database;
@@ -136,7 +136,7 @@ export function EventLogViewer({ db, gameId }: EventLogViewerProps): ReactNode {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = `quest-log-${gameId}.jsonl`;
+    anchor.download = `journey-log-${gameId}.jsonl`;
     document.body.appendChild(anchor);
     anchor.click();
     document.body.removeChild(anchor);

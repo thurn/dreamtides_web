@@ -21,7 +21,7 @@
 // values keeps their fields visibly distinct.
 //
 // Ported from the Claude Design "Dreamtides Mobile" project
-// (components/quest/Motes.jsx / .d.ts).
+// (components/journey/Motes.jsx / .d.ts).
 
 import { useEffect, useMemo } from "react";
 import { token } from "../../primitives/tokens";

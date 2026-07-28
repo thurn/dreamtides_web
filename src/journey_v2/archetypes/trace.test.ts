@@ -11,7 +11,7 @@ import {
   makeMerchantTestDreamsignProfile,
   makeMerchantTestDreamsignTemplate,
   makeMerchantTestFitModel,
-  makeMerchantTestQuestState,
+  makeMerchantTestJourneyState,
   makeMerchantTestSite,
 } from "../testing/fixtures";
 import type { CardData } from "../../types/cards";
@@ -68,7 +68,7 @@ function grantContext(input: {
   corpusCards?: Record<string, { quality: number }>;
   fitModel?: FitModel;
 }): MerchantContext {
-  const questContent = makeMerchantTestContent({
+  const journeyContent = makeMerchantTestContent({
     cards: input.poolCards,
     fitModel: input.fitModel,
     merchantCorpus: makeMerchantTestCorpus({ cards: input.corpusCards ?? {} }),
@@ -77,8 +77,8 @@ function grantContext(input: {
     makeMerchantTestDeckEntry({ entryId: e.entryId, cardNumber: e.cardNumber }),
   );
   return buildMerchantContext({
-    questState: makeMerchantTestQuestState({ deck }),
-    questContent,
+    journeyState: makeMerchantTestJourneyState({ deck }),
+    journeyContent,
     site: makeMerchantTestSite(),
   });
 }
@@ -151,12 +151,12 @@ describe("dreamsign trace", () => {
         makeMerchantTestDreamsignProfile({ id, subtypes: ["Warrior"] }),
       ]),
     );
-    const questContent = makeMerchantTestContent({
+    const journeyContent = makeMerchantTestContent({
       cards: deckCards,
       dreamsignTemplates: templates,
       dreamsignProfiles: profiles,
     });
-    const questState = makeMerchantTestQuestState({
+    const journeyState = makeMerchantTestJourneyState({
       deck: deckCards.map((card, i) =>
         makeMerchantTestDeckEntry({
           entryId: `deck-${String(i)}`,
@@ -165,8 +165,8 @@ describe("dreamsign trace", () => {
       ),
     });
     return buildMerchantContext({
-      questState,
-      questContent,
+      journeyState,
+      journeyContent,
       site: makeMerchantTestSite(),
     });
   }
@@ -200,7 +200,7 @@ describe("dreamsign trace", () => {
         subtype: "Warrior",
       }),
     );
-    const questContent = makeMerchantTestContent({
+    const journeyContent = makeMerchantTestContent({
       cards: deckCards,
       dreamsignTemplates: [makeMerchantTestDreamsignTemplate({ id: "ds-off" })],
       dreamsignProfiles: new Map<string, DreamsignProfile>([
@@ -213,7 +213,7 @@ describe("dreamsign trace", () => {
         ],
       ]),
     });
-    const questState = makeMerchantTestQuestState({
+    const journeyState = makeMerchantTestJourneyState({
       deck: deckCards.map((card, i) =>
         makeMerchantTestDeckEntry({
           entryId: `off-${String(i)}`,
@@ -222,8 +222,8 @@ describe("dreamsign trace", () => {
       ),
     });
     const context = buildMerchantContext({
-      questState,
-      questContent,
+      journeyState,
+      journeyContent,
       site: makeMerchantTestSite(),
     });
     const draft = dreamsignBuilder.build(context, merchantRng("ds", "2"));

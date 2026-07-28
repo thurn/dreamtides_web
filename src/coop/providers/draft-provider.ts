@@ -1,18 +1,18 @@
 // Real DraftContentProvider: resolves `PICK_DRAFT_CARD` against the loaded
 // content and supplies the deck-fit deps the draft engine needs to reveal the
 // next offer. The engine draws from the reducer-supplied `ctx.rng` (threaded by
-// `src/rules/quest/draft.ts`), so this adapter contributes only pure,
+// `src/rules/journey/draft.ts`), so this adapter contributes only pure,
 // deterministic lookups.
 
-import type { QuestContent } from "../../data/quest-content";
+import type { JourneyContent } from "../../data/journey-content";
 import { buildIdIndex } from "../../data/cards-v2-database";
 import { DEFAULT_DRAFT_CONFIG, type OfferDeps } from "../../draft/draft-engine";
 import type { DraftConfig, DraftState } from "../../types/draft";
 import type { CardData } from "../../types/cards";
-import type { DraftContentProvider } from "../../rules/quest/draft";
+import type { DraftContentProvider } from "../../rules/journey/draft";
 
 export function createDraftContentProvider(
-  content: QuestContent,
+  content: JourneyContent,
 ): DraftContentProvider {
   const idIndex = buildIdIndex(content.cardDatabase);
   const allCardNumbers = [...content.cardDatabase.keys()];

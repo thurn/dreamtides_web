@@ -2031,7 +2031,7 @@
       ],
       "required": false,
       "defaultValue": "flat",
-      "description": "The tile's material. `\"flat\"` (default) is the chrome-free collectible tile\nused in lists over a solid surface; `\"hud\"` composes {@link DS_SHADOW} — a\ndrop-shadow + violet glow — into the tile filter so the object lifts off busy\nscene art in the transparent quest HUD. `\"revelation\"` uses a stronger\npath-following shadow for large choices over bright Revelation site art."
+      "description": "The tile's material. `\"flat\"` (default) is the chrome-free collectible tile\nused in lists over a solid surface; `\"hud\"` composes {@link DS_SHADOW} — a\ndrop-shadow + violet glow — into the tile filter so the object lifts off busy\nscene art in the transparent journey HUD. `\"revelation\"` uses a stronger\npath-following shadow for large choices over bright Revelation site art."
     }
   ],
   "DreamsignGalleryPanel": [
@@ -3232,6 +3232,160 @@
       "description": "Accessible meaning. Omit only when surrounding copy already names the glyph."
     }
   ],
+  "JourneyStatusBar": [
+    {
+      "name": "stageRef",
+      "tsType": "RefObject<HTMLElement | null>",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Ref to the screen root (position:absolute inset:0 in the scaled frame). Required."
+    },
+    {
+      "name": "essence",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Essence total shown in the HUD."
+    },
+    {
+      "name": "dreamsigns",
+      "tsType": "Dreamsign[]",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "[]",
+      "description": "The Dreamsigns to dock. Journey overflow opens a viewer; battle Dreamsigns\nflow bottom-up and right-to-left in two-high columns.",
+      "nested": {
+        "name": "Dreamsign",
+        "fields": [
+          {
+            "name": "id",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "name",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "effectDescription",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "imageName",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "imageAlt",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "isBane",
+            "tsType": "boolean",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "deck",
+      "tsType": "string | number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "0",
+      "description": "Deck size (used in the deck button's aria-label)."
+    },
+    {
+      "name": "onViewDeck",
+      "tsType": "(() => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Open the deck viewer — fired on a tap / click of the deck sprite."
+    },
+    {
+      "name": "dreamAvatar",
+      "tsType": "QsbDreamAvatar",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "",
+      "nested": {
+        "name": "QsbDreamAvatar",
+        "fields": [
+          {
+            "name": "id",
+            "tsType": "string",
+            "optional": false,
+            "description": "Stable DreamAvatar UUID."
+          },
+          {
+            "name": "name",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "epithet",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "portrait",
+            "tsType": "ArtRef",
+            "optional": false,
+            "description": "The portrait art as an {@link ArtRef}. Required — a docked DreamAvatar always has art."
+          },
+          {
+            "name": "portraitFocus",
+            "tsType": "DreamAvatarPortraitFocus",
+            "optional": true,
+            "description": "Normalized head position used to center the square HUD crop."
+          },
+          {
+            "name": "ability",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "size",
+      "tsType": "\"compact\" | \"grand\"",
+      "unionMembers": [
+        "compact",
+        "grand"
+      ],
+      "required": false,
+      "defaultValue": "compact",
+      "description": "HUD size. `compact` (default) is the mobile / touch size; `grand` is the\nlarger desktop size the dreamscape screen picks above the wide-viewport\nbreakpoint."
+    },
+    {
+      "name": "variant",
+      "tsType": "\"journey\" | \"battle\"",
+      "unionMembers": [
+        "journey",
+        "battle"
+      ],
+      "required": false,
+      "defaultValue": "journey",
+      "description": "Content arrangement. `journey` shows the complete run inventory;\n`battle` keeps only essence at the lower start edge and bottom-up,\nright-to-left Dreamsign columns at the lower end edge of the playable\nbattle board."
+    }
+  ],
   "MainMenuButton": [
     {
       "name": "label",
@@ -3776,160 +3930,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Content rendered inside the pressable element."
-    }
-  ],
-  "QuestStatusBar": [
-    {
-      "name": "stageRef",
-      "tsType": "RefObject<HTMLElement | null>",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Ref to the screen root (position:absolute inset:0 in the scaled frame). Required."
-    },
-    {
-      "name": "essence",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Essence total shown in the HUD."
-    },
-    {
-      "name": "dreamsigns",
-      "tsType": "Dreamsign[]",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "[]",
-      "description": "The Dreamsigns to dock. Quest overflow opens a viewer; battle Dreamsigns\nflow bottom-up and right-to-left in two-high columns.",
-      "nested": {
-        "name": "Dreamsign",
-        "fields": [
-          {
-            "name": "id",
-            "tsType": "string",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "name",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "effectDescription",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "imageName",
-            "tsType": "string",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "imageAlt",
-            "tsType": "string",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "isBane",
-            "tsType": "boolean",
-            "optional": false,
-            "description": ""
-          }
-        ]
-      }
-    },
-    {
-      "name": "deck",
-      "tsType": "string | number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "0",
-      "description": "Deck size (used in the deck button's aria-label)."
-    },
-    {
-      "name": "onViewDeck",
-      "tsType": "(() => void)",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Open the deck viewer — fired on a tap / click of the deck sprite."
-    },
-    {
-      "name": "dreamAvatar",
-      "tsType": "QsbDreamAvatar",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "",
-      "nested": {
-        "name": "QsbDreamAvatar",
-        "fields": [
-          {
-            "name": "id",
-            "tsType": "string",
-            "optional": false,
-            "description": "Stable DreamAvatar UUID."
-          },
-          {
-            "name": "name",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "epithet",
-            "tsType": "string",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "portrait",
-            "tsType": "ArtRef",
-            "optional": false,
-            "description": "The portrait art as an {@link ArtRef}. Required — a docked DreamAvatar always has art."
-          },
-          {
-            "name": "portraitFocus",
-            "tsType": "DreamAvatarPortraitFocus",
-            "optional": true,
-            "description": "Normalized head position used to center the square HUD crop."
-          },
-          {
-            "name": "ability",
-            "tsType": "string",
-            "optional": true,
-            "description": ""
-          }
-        ]
-      }
-    },
-    {
-      "name": "size",
-      "tsType": "\"compact\" | \"grand\"",
-      "unionMembers": [
-        "compact",
-        "grand"
-      ],
-      "required": false,
-      "defaultValue": "compact",
-      "description": "HUD size. `compact` (default) is the mobile / touch size; `grand` is the\nlarger desktop size the dreamscape screen picks above the wide-viewport\nbreakpoint."
-    },
-    {
-      "name": "variant",
-      "tsType": "\"quest\" | \"battle\"",
-      "unionMembers": [
-        "quest",
-        "battle"
-      ],
-      "required": false,
-      "defaultValue": "quest",
-      "description": "Content arrangement. `quest` shows the complete run inventory;\n`battle` keeps only essence at the lower start edge and bottom-up,\nright-to-left Dreamsign columns at the lower end edge of the playable\nbattle board."
     }
   ],
   "ResourceChip": [

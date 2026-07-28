@@ -8,7 +8,7 @@ defaults (60 records × 40 seeds × 4 buckets = 9600 encounters), and records th
 movement.
 
 The harness drives the real generator; the only varied randomness is the
-quest-seed string. Numbers below are at defaults unless a smaller
+journey-seed string. Numbers below are at defaults unless a smaller
 `--records/--seeds` sweep is noted for in-flight iteration.
 
 ## Baseline — 2026-06-09, commit `6c56b80b`

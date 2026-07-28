@@ -1,12 +1,12 @@
 // The pure view-model builder for the Cumulus draft screen. Every mapping rule
-// between quest domain data and `DraftScreen`'s view types lives here as plain,
+// between journey domain data and `DraftScreen`'s view types lives here as plain,
 // unit-testable functions — no React, no state hooks, no effects.
 // `DraftSiteScreenAdapter` acquires live state (and mints the draft offer) and
 // calls `buildDraftView`; this module never acquires anything itself.
 
 import { draftSitePickCount } from "../../draft/draft-site-config";
 import type { CardData } from "../../types/cards";
-import type { DreamscapeNode, SiteState } from "../../types/quest";
+import type { DreamscapeNode, SiteState } from "../../types/journey";
 import type { DraftView } from "../../cumulus/screens/DraftScreen";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 

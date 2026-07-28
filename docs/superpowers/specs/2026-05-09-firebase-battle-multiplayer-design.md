@@ -12,7 +12,7 @@ The connected players do not represent battle sides. The battle still has a
 single `player` side and a single `enemy` side; the two human clients share
 control of the `player` side and observe the AI-driven `enemy` side together.
 
-This work extends the V2 quest multiplayer architecture
+This work extends the V2 journey multiplayer architecture
 (`docs/superpowers/specs/2026-05-08-firebase-multiplayer-v2-design.md`) with a
 new `battleState` slot on each room. Battle reuses the existing room,
 presence, and action-log boundaries; it does not introduce new rooms or new
@@ -78,16 +78,16 @@ The runtime stack at battle time becomes:
   shared room. It calls a `useEnsureBattleSession()` helper that:
   - Reads the room's `battleState`.
   - If `null`, runs `createBattleInit` and `prepareInitialBattleState` from
-    the live `questState` and commits both via the race-safe init
+    the live `journeyState` and commits both via the race-safe init
     transaction.
   - Otherwise, hands the existing init through.
   - Renders `PlayableBattleScreen` once init is available.
 - **`PlayableBattleScreen` (modified):** Consumes
   `useMultiplayerBattle()` for `(reducerState, dispatch, battleInit)`. All
   other props and overlays stay local.
-- **Quest provider integration:** `MultiplayerQuestProvider` gains a small
-  surface for clearing `battleState` and adds `clear-on-quest-reset` to its
-  reset path. The bulk of `multiplayer-quest-context.tsx` is untouched.
+- **Journey provider integration:** `MultiplayerJourneyProvider` gains a small
+  surface for clearing `battleState` and adds `clear-on-journey-reset` to its
+  reset path. The bulk of `multiplayer-journey-context.tsx` is untouched.
 
 The `multiplayer/battle` module mirrors how `multiplayer/room-service` works:
 small, focused, framework-free helpers; the React context is the only React
@@ -118,7 +118,7 @@ src/battle/state/
 ## Room Schema
 
 The room schema gains a sibling `battleState` slot at the room root, alongside
-`questState`, `presence`, and `actionLog`. `ROOM_SCHEMA_VERSION` bumps from
+`journeyState`, `presence`, and `actionLog`. `ROOM_SCHEMA_VERSION` bumps from
 `1` to `2`.
 
 ```text
@@ -127,7 +127,7 @@ rooms/<roomId>
     schemaVersion        # 2 once a battle slot is supported
     createdAt
     updatedAt
-  questState             # unchanged
+  journeyState             # unchanged
   presence               # unchanged
   actionLog              # unchanged; battle commands appended here too
   battleState            # null between battles
@@ -150,7 +150,7 @@ transitions for animation, logging, and effect dedup.
 
 ## Serialization Concerns
 
-Realtime Database has well-known shape quirks the V2 quest implementation
+Realtime Database has well-known shape quirks the V2 journey implementation
 already handles via `normalizeRoomSnapshot` in `room-service.ts`:
 
 - Empty arrays and empty objects are dropped on write and come back missing.
@@ -179,7 +179,7 @@ fidelity. Concrete consequences:
   RTDB-may-elide; they round-trip through `null` defaults.
 
 A new `multiplayer/battle-service.ts#normalizeBattleStateSnapshot` does the
-same job as `normalizeRoomSnapshot` does for quest state today. It is the
+same job as `normalizeRoomSnapshot` does for journey state today. It is the
 only place that knows the shape quirks; tests live alongside it and exercise
 each empty-array, missing-record, and key-order case.
 
@@ -240,7 +240,7 @@ across clients — only the originating client supplies it for that command.
 ## Battle Init (Race-Safe Transaction)
 
 When `BattleSiteRoute` mounts and observes `battleState === null` while the
-quest screen is `{ type: "battle" }` (or however the quest currently selects
+journey screen is `{ type: "battle" }` (or however the journey currently selects
 a battle site), it kicks off `ensureBattleSession`:
 
 ```text
@@ -274,16 +274,16 @@ the first commit wins and the loser's would-be init is dropped. Subsequent
 commands run against the winning init. This eliminates the V1 risk of
 silent drift between two browsers' battle decks.
 
-`createBattleInit` requires the live quest state (deck, dreamsigns,
+`createBattleInit` requires the live journey state (deck, dreamsigns,
 dream avatar, atlas, completionLevel, currentDreamscape, resolvedPackage).
-The `useEnsureBattleSession` hook reads these from `useQuest()` (the
-multiplayer-backed quest context). Both clients see the same quest state
+The `useEnsureBattleSession` hook reads these from `useJourney()` (the
+multiplayer-backed journey context). Both clients see the same journey state
 through the existing subscription, so any client could win the init race
 and produce equivalent inits.
 
 `atlasSnapshot` is captured at init time so the post-victory atlas update
 runs against the atlas the battle was generated against, even if a remote
-quest mutation has changed `state.atlas` mid-battle.
+journey mutation has changed `state.atlas` mid-battle.
 
 ## Shared History And Undo/Redo
 
@@ -319,7 +319,7 @@ descendants. Nothing under the `battleState` slot in RTDB describes UI
 visibility.
 
 The reward overlay is a partial exception. The reward *commit* is shared:
-it calls quest mutations that propagate to the room. The overlay's open
+it calls journey mutations that propagate to the room. The overlay's open
 state and selected-but-not-confirmed index stay local. Either client may
 press confirm; the existing idempotency in
 `completeBattleSiteVictory` (the `completedBattleIds` set keyed by
@@ -351,28 +351,28 @@ than a sequence of undos.
 
 A battle has four lifecycle states observable in the room:
 
-1. **No battle active.** `battleState` is `null` (or absent). Quest screen
+1. **No battle active.** `battleState` is `null` (or absent). Journey screen
    may be on atlas, dreamscape, or any other site type.
 2. **Battle running.** `battleState.init` exists; `battleState.reducer`
    tracks live state. `result` may transiently be `null`.
 3. **Battle resolved, post-game in progress.** `battleState.reducer.mutable.
    result !== null`. The reward overlay (on victory) or failure route (on
    defeat/draw) is in flight on at least one client.
-4. **Hand-off complete.** Quest mutations have applied (rewards or failure
+4. **Hand-off complete.** Journey mutations have applied (rewards or failure
    route). `battleState` is wiped to `null` by a final clear transaction.
 
 Concrete clear hooks:
 
 - **Victory clear.** `completeBattleSiteVictory` runs from
-  `BattleRewardSurface`'s confirm. After the existing idempotent quest
+  `BattleRewardSurface`'s confirm. After the existing idempotent journey
   mutations apply (and after the post-victory atlas hand-off), a new
   `clearBattleStateInRoom` transaction sets `battleState` to `null`.
   Idempotent: subsequent clears no-op.
-- **Failure clear.** `beginQuestFailureRoute` already sets
-  `failureSummary` and screen via quest mutations. Append a
+- **Failure clear.** `beginJourneyFailureRoute` already sets
+  `failureSummary` and screen via journey mutations. Append a
   `clearBattleStateInRoom` call after the route call so the slot is empty
-  before `QuestFailedScreen` triggers `resetQuest`.
-- **Quest reset clear.** `MultiplayerQuestProvider.resetQuest` is the
+  before `JourneyFailedScreen` triggers `resetJourney`.
+- **Journey reset clear.** `MultiplayerJourneyProvider.resetJourney` is the
   existing point of truth for blowing away a run. Add `battleState` to the
   paths it nulls so a reset issued during a battle leaves a clean room.
 
@@ -419,7 +419,7 @@ shared `actionLog` map under `rooms/<roomId>`. Entries use the shared
   `commandKind` for `DEBUG_EDIT`.
 
 The 50-entry cap and `pruneRoomActionLog` prune transaction continue to
-apply. Battle commands and quest mutations share the same action-log
+apply. Battle commands and journey mutations share the same action-log
 budget; under heavy battle play the log will skew battle-heavy. That is
 acceptable for prototype diagnostics.
 
@@ -428,7 +428,7 @@ acceptable for prototype diagnostics.
 All shared battle writes go through `runTransaction(battleState)`. The
 existing `enqueueRoomWrite` queue in `room-service.ts` already serializes
 all room-scoped writes per `roomId`; battle dispatches use the same queue
-so quest writes and battle writes interleave deterministically on a single
+so journey writes and battle writes interleave deterministically on a single
 client.
 
 Inter-client serialization happens at the RTDB transaction layer. Two
@@ -451,7 +451,7 @@ The existing room-loading flow (loading state, missing-room state,
 permission errors) covers battle entry — `battleState` is just another
 slot under the room. Specific battle-side cases:
 
-- **Quest screen says battle, but `battleState` is still loading.**
+- **Journey screen says battle, but `battleState` is still loading.**
   `BattleSiteRoute` renders a small loading state while
   `useEnsureBattleSession` completes its first transaction. This should
   resolve in one round-trip.
@@ -462,9 +462,9 @@ slot under the room. Specific battle-side cases:
   unchanged; subscription will continue to reflect the canonical state.
   No optimistic apply means there is no local rollback to perform.
 - **Battle slot becomes null mid-screen.** A clear from another client
-  (or a quest reset) drops the slot. `PlayableBattleScreen` unmounts
+  (or a journey reset) drops the slot. `PlayableBattleScreen` unmounts
   cleanly because `BattleSiteRoute` sees the missing slot and stops
-  rendering the screen; the quest screen state should already have moved
+  rendering the screen; the journey screen state should already have moved
   off the battle site by the time a clear lands.
 
 Disconnect/presence behavior is unchanged from V2. A disconnected client
@@ -506,7 +506,7 @@ local writes are queued offline.
   - Victory reward selected on one client clears the slot and routes
     both clients back to the atlas.
   - Failure route from one client surfaces the failed screen on both.
-  - Quest reset during an active battle clears the slot for both.
+  - Journey reset during an active battle clears the slot for both.
   - Refreshing either browser mid-battle reloads the same shared state.
   - URL-parameter mismatches (`?enableAi=1` on one client, off on the
     other) produce identical battles because the init transaction's
@@ -526,14 +526,14 @@ local writes are queued offline.
    `useMultiplayerBattle()`. Adjust effects to dedup by `commandSerial`.
 6. Convert Reset Battle to a single shared `RESET_BATTLE` operation.
 7. Wire `clearBattleStateInRoom` into the victory hand-off, the failure
-   route, and `MultiplayerQuestProvider.resetQuest`.
+   route, and `MultiplayerJourneyProvider.resetJourney`.
 8. Add battle commands to the action log writer.
 9. Run typecheck, full test suite, production build, and two-window manual
    QA.
 
 ## Acceptance Criteria
 
-- A new room created with the V2 quest flow has `battleState: null` and
+- A new room created with the V2 journey flow has `battleState: null` and
   `metadata.schemaVersion: 2`.
 - Entering a battle site populates `battleState.init` and
   `battleState.reducer` exactly once, even if both clients enter at the
@@ -548,13 +548,13 @@ local writes are queued offline.
   composed state without lost writes.
 - All overlays, hover previews, selection, and dismiss state remain
   per-client.
-- A victory hand-off applies quest rewards through the existing
-  multiplayer quest mutations, then clears `battleState` so the slot is
+- A victory hand-off applies journey rewards through the existing
+  multiplayer journey mutations, then clears `battleState` so the slot is
   null when the atlas screen returns.
-- A failure route writes the failure summary through the existing quest
+- A failure route writes the failure summary through the existing journey
   mutations, then clears `battleState` so the failed-screen reset starts
   with a clean room.
-- A quest reset issued during an active battle clears both `questState`
+- A journey reset issued during an active battle clears both `journeyState`
   and `battleState`.
 - Refreshing either browser mid-battle reloads the latest shared battle
   state.

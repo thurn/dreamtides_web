@@ -29,13 +29,13 @@
  * | Enduring (Reclaim)                   |  50  |  ±30   |    20–80     |
  * | Resonant (widened trigger)           |  50  |  ±30   |    20–80     |
  *
- * The jitter is drawn from a deterministic per-visit stream salted by the quest
+ * The jitter is drawn from a deterministic per-visit stream salted by the journey
  * seed, the site id, the deck entry, and the form, so a given form's price is
  * stable for the whole visit and reproducible from the logged inputs.
  */
 
 import type { CardData } from "../types/cards";
-import type { TransfigurationType } from "../types/quest";
+import type { TransfigurationType } from "../types/journey";
 import { merchantRng } from "../journey_v2/signals/rng";
 
 /** Lowest and highest essence a transfiguration can ever cost. */

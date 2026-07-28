@@ -105,7 +105,7 @@ async function* iterDrafts(shortId) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "User-Agent": "quest-prototype-draft-saver",
+        "User-Agent": "journey-prototype-draft-saver",
       },
       body: JSON.stringify({ cubeId, lastKey }),
     });
@@ -144,7 +144,7 @@ async function resolveNames(ids, nameCache) {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        "User-Agent": "quest-prototype-draft-saver",
+        "User-Agent": "journey-prototype-draft-saver",
       },
       body: JSON.stringify({ identifiers: batch.map((id) => ({ id })) }),
     });

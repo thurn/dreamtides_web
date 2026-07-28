@@ -65,7 +65,7 @@ function makeInit(): BattleInit {
     maxEnergyCap: 8,
     startingSide: "player",
     playerDrawSkipsTurnOne: true,
-    questDeckEntries: [],
+    journeyDeckEntries: [],
     playerDeckOrder: Array.from({ length: 8 }, (_unused, index) =>
       definition(index + 1),
     ),

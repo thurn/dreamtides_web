@@ -6,14 +6,14 @@ import {
   screenFor,
   siteDispositionFor,
 } from "../screens/cumulus_adapters/registry";
-import { useQuest } from "../state/quest-context";
-import type { Screen } from "../types/quest";
+import { useJourney } from "../state/journey-context";
+import type { Screen } from "../types/journey";
 import { BattleSiteRoute } from "./BattleSiteRoute";
 import {
-  CumulusQuestChrome,
-  type CumulusQuestChromeHandlers,
-} from "./CumulusQuestChrome";
-import { useDreamAuguryQuestMenuActions } from "./DreamAuguryQuestMenu";
+  CumulusJourneyChrome,
+  type CumulusJourneyChromeHandlers,
+} from "./CumulusJourneyChrome";
+import { useDreamAuguryJourneyMenuActions } from "./DreamAuguryJourneyMenu";
 import { ErrorBoundary } from "./ErrorBoundary";
 
 function screenKey(screen: Screen): string {
@@ -28,9 +28,9 @@ export function ScreenRouter({
   cumulusChromeHandlers,
 }: {
   runtimeConfig: RuntimeConfig;
-  cumulusChromeHandlers?: CumulusQuestChromeHandlers;
+  cumulusChromeHandlers?: CumulusJourneyChromeHandlers;
 }) {
-  const { state } = useQuest();
+  const { state } = useJourney();
   const { screen } = state;
   const siteId = screen.type === "site" ? screen.siteId : null;
   const lastLoggedNavigationRef = useRef<string | null>(null);
@@ -49,25 +49,25 @@ export function ScreenRouter({
         runtimeConfig={runtimeConfig}
         cumulusChromeHandlers={cumulusChromeHandlers}
       />
-    ) : screen.type === "questStart" ? (
+    ) : screen.type === "journeyStart" ? (
       screenFor(screen)
     ) : (
-      <CumulusQuestChrome
+      <CumulusJourneyChrome
         handlers={cumulusChromeHandlers}
         showAtlasRegenerate={screen.type === "atlas"}
         showStatusBar={
-          screen.type !== "questComplete" && screen.type !== "questFailed"
+          screen.type !== "journeyComplete" && screen.type !== "journeyFailed"
         }
       >
         {screenFor(screen)}
-      </CumulusQuestChrome>
+      </CumulusJourneyChrome>
     );
 
   return (
     <AnimatePresence mode="wait">
       <motion.div
         key={screenKey(screen)}
-        data-quest-screen={screen.type}
+        data-journey-screen={screen.type}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -91,9 +91,9 @@ function SiteRoute({
 }: {
   siteId: string;
   runtimeConfig: RuntimeConfig;
-  cumulusChromeHandlers?: CumulusQuestChromeHandlers;
+  cumulusChromeHandlers?: CumulusJourneyChromeHandlers;
 }) {
-  const { state, cardDatabase } = useQuest();
+  const { state, cardDatabase } = useJourney();
   const activeNode =
     state.currentDreamscape === null
       ? undefined
@@ -104,11 +104,11 @@ function SiteRoute({
       candidate.sites.some((site) => site.id === siteId)
     );
   const site = node?.sites.find((candidate) => candidate.id === siteId);
-  const dreamAuguryMenuActions = useDreamAuguryQuestMenuActions(site, node);
+  const dreamAuguryMenuActions = useDreamAuguryJourneyMenuActions(site, node);
 
   if (site === undefined) {
     throw new Error(
-      `Gameplay site ${siteId} is not present in the quest atlas.`,
+      `Gameplay site ${siteId} is not present in the journey atlas.`,
     );
   }
 
@@ -141,8 +141,8 @@ function SiteRoute({
         };
 
   return (
-    <CumulusQuestChrome handlers={handlers}>
+    <CumulusJourneyChrome handlers={handlers}>
       {disposition.screen}
-    </CumulusQuestChrome>
+    </CumulusJourneyChrome>
   );
 }

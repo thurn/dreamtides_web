@@ -1,7 +1,7 @@
 # Dream Merchant — explainability logging
 
 This system makes the Dream Merchant's offer decisions reconstructable from
-`logs/quest-log.jsonl` alone. For a given game (filter by `gameId`) a reader can
+`logs/journey-log.jsonl` alone. For a given game (filter by `gameId`) a reader can
 answer, without opening source:
 
 1. **Why is this dreamsign here?** — which sign was offered, which pool tier it
@@ -114,7 +114,7 @@ Isolate one game first; every line carries the ambient `gameId`.
 **"Why is this dreamsign here?"**
 
 ```bash
-grep '"gameId":"<id>"' logs/quest-log.jsonl \
+grep '"gameId":"<id>"' logs/journey-log.jsonl \
   | grep '"event":"merchant_offer_built"' \
   | grep '"archetypeId":"dreamsign"'
 ```
@@ -129,7 +129,7 @@ encounter line by `encounterSignature` and read its `deck.features`.
 **"How did these cards get picked for game id 123?"**
 
 ```bash
-grep '"gameId":"123"' logs/quest-log.jsonl \
+grep '"gameId":"123"' logs/journey-log.jsonl \
   | grep '"event":"merchant_offer_built"' \
   | grep '"family":"grant"'
 ```
@@ -143,7 +143,7 @@ you whether the candidate list was bounded.
 **Which rolls died before the offer landed?**
 
 ```bash
-grep '"gameId":"123"' logs/quest-log.jsonl \
+grep '"gameId":"123"' logs/journey-log.jsonl \
   | grep '"event":"merchant_encounter_generated"'
 ```
 

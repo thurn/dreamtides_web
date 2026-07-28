@@ -1,5 +1,5 @@
 import { LayerName } from "../../types/layer-name";
-import type { DreamscapeNode } from "../../types/quest";
+import type { DreamscapeNode } from "../../types/journey";
 import type { AtlasNodeModel, AtlasNodePrimary } from "../components/atlas/AtlasNode";
 import {
   ATLAS_ANCHOR_NODE_SIZE_DESKTOP,

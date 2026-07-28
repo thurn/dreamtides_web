@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { createDefaultState } from "../../state/quest-context";
+import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
-import type { ShopSiteRuntime, SiteState } from "../../types/quest";
+import type { ShopSiteRuntime, SiteState } from "../../types/journey";
 import {
   buildCardShopOffers,
   buildCardShopRestock,

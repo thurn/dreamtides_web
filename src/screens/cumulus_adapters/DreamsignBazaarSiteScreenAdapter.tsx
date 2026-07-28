@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { logEvent, logEventOnce } from "../../logging";
-import { useQuest } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import { DreamsignBazaarSiteScreen } from "../../cumulus/screens/DreamsignBazaarSiteScreen";
 import {
@@ -11,14 +11,14 @@ import {
 } from "./dreamsign-bazaar-view-model";
 
 export function DreamsignBazaarSiteScreenAdapter({ siteId }: { siteId: string }) {
-  const { state, mutations, questContent } = useQuest();
+  const { state, mutations, journeyContent } = useJourney();
   const node = state.currentDreamscape === null
     ? null
     : state.atlas.nodes[state.currentDreamscape] ?? null;
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
   const runtime = state.siteRuntime[siteId];
   const shopRuntime = runtime?.kind === "shop" ? runtime : null;
-  const guide = resolveDreamsignBazaarGuide(questContent.guides);
+  const guide = resolveDreamsignBazaarGuide(journeyContent.guides);
   const guideLineRef = useRef<string | null | undefined>(undefined);
   const [pendingSlotIndex, setPendingSlotIndex] = useState<number | null>(null);
   const pendingDreamsign = pendingSlotIndex === null || shopRuntime === null

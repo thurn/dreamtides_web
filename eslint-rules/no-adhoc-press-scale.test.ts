@@ -12,10 +12,10 @@ describe("toRepoRelativePosix (no-adhoc-press-scale)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/cumulus/components/hud/QuestStatusBar.tsx",
-        "/Users/x/quest_prototype",
+        "/Users/x/journey_prototype/src/cumulus/components/hud/JourneyStatusBar.tsx",
+        "/Users/x/journey_prototype",
       ),
-    ).toBe("src/cumulus/components/hud/QuestStatusBar.tsx");
+    ).toBe("src/cumulus/components/hud/JourneyStatusBar.tsx");
   });
 });
 
@@ -30,7 +30,7 @@ describe("isTestFile", () => {
 
 describe("isGovernedFile", () => {
   it("governs a cumulus component file", () => {
-    expect(isGovernedFile("src/cumulus/components/hud/QuestStatusBar.tsx")).toBe(
+    expect(isGovernedFile("src/cumulus/components/hud/JourneyStatusBar.tsx")).toBe(
       true,
     );
   });
@@ -79,7 +79,7 @@ const ruleTester = new RuleTester({
   },
 });
 
-const COMPONENT = "src/cumulus/components/hud/QuestStatusBar.tsx";
+const COMPONENT = "src/cumulus/components/hud/JourneyStatusBar.tsx";
 const PRESSABLE = "src/cumulus/primitives/Pressable.tsx";
 
 ruleTester.run("no-adhoc-press-scale", rule, {

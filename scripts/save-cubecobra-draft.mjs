@@ -45,7 +45,7 @@ export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 export async function fetchText(url) {
   const res = await fetch(url, {
-    headers: { "User-Agent": "quest-prototype-draft-saver" },
+    headers: { "User-Agent": "journey-prototype-draft-saver" },
   });
   if (!res.ok) throw new Error(`GET ${url} -> HTTP ${res.status}`);
   return res.text();

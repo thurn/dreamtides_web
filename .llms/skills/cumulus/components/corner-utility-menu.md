@@ -10,7 +10,7 @@ Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
 The strict app-chrome command offering: a fixed icon trigger and a hierarchical inward-opening utility menu.
 
-> **Guidance:** Use this for fixed quest chrome. Use ContextActionMenu for an activated card or pointer target, Select for compact value choice, DisclosureSection for reading flow, and InfoCard for entity reveals rather than commands.
+> **Guidance:** Use this for fixed journey chrome. Use ContextActionMenu for an activated card or pointer target, Select for compact value choice, DisclosureSection for reading flow, and InfoCard for entity reveals rather than commands.
 
 ## Props
 
@@ -46,7 +46,7 @@ import { CornerUtilityMenu } from "src/cumulus/components/overlay/CommandMenus";
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <CornerUtilityMenu
-  trigger={{ glyph: GLYPHS.gear, label: "Open quest utilities", corner: "topEnd" }}
+  trigger={{ glyph: GLYPHS.gear, label: "Open journey utilities", corner: "topEnd" }}
   actions={utilityActions}
 />
 ```

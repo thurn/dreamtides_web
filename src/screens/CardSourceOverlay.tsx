@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { CardSourceDebugState } from "../types/quest";
+import type { CardSourceDebugState } from "../types/journey";
 import type { CardData } from "../types/cards";
 import type { Idf3ProvenanceSummary, SeedProvenanceSummary, Tides4ProvenanceSummary } from "../types/content";
 import { CardSourceDialog } from "../cumulus/screens/CardSourceDialog";

@@ -37,8 +37,8 @@ describe("generated card data drift Vite integration", () => {
     // The whole data/tabula directory is ignored so editor writes to any card
     // or tag TOML (not just the default cards_v2.toml) never trigger a full
     // page reload. The image-viewer state file is ignored so favorite and used
-    // mutations remain in the current editor session. The saved-quests
-    // directory is ignored so saving a quest from the debug overlay does not
+    // mutations remain in the current editor session. The saved-journeys
+    // directory is ignored so saving a journey from the debug overlay does not
     // reload the page. The .worktrees and
     // .claude/worktrees directories are ignored so creating a git worktree
     // (which writes a full repo copy, including a tsconfig.json) does not force
@@ -55,7 +55,7 @@ describe("generated card data drift Vite integration", () => {
     expect(viteConfig.server?.watch?.ignored).toEqual([
       resolve(join(rootDir, "data", "tabula")) + "/**",
       resolve(join(rootDir, "data", "image-viewer-state.json")),
-      resolve(join(rootDir, "saved-quests")) + "/**",
+      resolve(join(rootDir, "saved-journeys")) + "/**",
       resolve(join(rootDir, ".worktrees")) + "/**",
       resolve(join(rootDir, ".claude", "worktrees")) + "/**",
       resolve(join(rootDir, "data", "buildaround_support.json")),

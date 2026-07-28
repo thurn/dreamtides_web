@@ -4,7 +4,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
-import type { Dreamsign as DreamsignData } from "../../../types/quest";
+import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { CumulusRoot } from "../../CumulusRoot";
 import { GameCard } from "../../components/card/CardView";
 import { GlossaryTerm } from "../../components/card/GlossaryTerm";

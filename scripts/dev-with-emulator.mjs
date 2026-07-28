@@ -17,13 +17,13 @@ const preferredDatabasePort = 9000;
 const preferredUiPort = 4000;
 const preferredHubPort = 4400;
 const preferredLoggingPort = 4500;
-const projectId = "demo-quest-prototype";
+const projectId = "demo-journey-prototype";
 const children = new Set();
 const runtimeStateDir = join(
   process.cwd(),
   "node_modules",
   ".cache",
-  "quest-dev",
+  "journey-dev",
 );
 const runtimeStatePath = join(runtimeStateDir, `${String(process.pid)}.json`);
 const reservedPorts = new Set();
@@ -211,7 +211,7 @@ async function findAvailablePort(preferredPort) {
 }
 
 async function writeFirebaseConfig(databasePort, uiPort, hubPort, loggingPort) {
-  tempConfigDir = await mkdtemp(join(tmpdir(), "quest-firebase-emulator-"));
+  tempConfigDir = await mkdtemp(join(tmpdir(), "journey-firebase-emulator-"));
   const configPath = join(tempConfigDir, "firebase.json");
   await writeFile(
     configPath,

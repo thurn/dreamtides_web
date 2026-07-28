@@ -371,7 +371,7 @@ function commitFiles(writes, fileSystem) {
 }
 
 function generateDreamsignDataJsonFromToml(patchedSource, fileSystem) {
-  const tempRoot = fileSystem.mkdtempSync(join(tmpdir(), "quest-dreamsign-editor-refresh-"));
+  const tempRoot = fileSystem.mkdtempSync(join(tmpdir(), "journey-dreamsign-editor-refresh-"));
 
   try {
     fileSystem.mkdirSync(join(tempRoot, "data", "tabula"), { recursive: true });

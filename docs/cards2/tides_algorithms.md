@@ -76,9 +76,9 @@ be far larger than the dealable count.
 
 `generatePoolFromData` (`src/draft/pool/generate.ts`) seeds a mulberry32 RNG from
 a numeric seed and passes it to the selected variant; every random draw a variant
-makes comes from that one RNG in a fixed order. At quest time the seed is
-`hash(questSeed:dreamAvatarId)`, so a Dream Avatar's pool is reproducible per
-`(questSeed, DreamAvatar)`. The offline bake and seed scripts use **no**
+makes comes from that one RNG in a fixed order. At journey time the seed is
+`hash(journeySeed:dreamAvatarId)`, so a Dream Avatar's pool is reproducible per
+`(journeySeed, DreamAvatar)`. The offline bake and seed scripts use **no**
 randomness at all (deterministic tie-breaks throughout), so re-running them on the
 same inputs produces byte-identical files.
 
@@ -252,7 +252,7 @@ pool grown from hundreds of real decklists. `tides3` reproduces **`sigseed`**, t
 default pool variant, whose pools are grown *only* from a Dream Avatar's signature
 cards and therefore never drift onto an unrelated identity. The promise to the
 player has the same shape as the other tides — there are 32 preconstructed decks
-a player can read, and a quest combines a few of them at the start of a run — but
+a player can read, and a journey combines a few of them at the start of a run — but
 the decks themselves, and the way they are combined, are built so that the pool a
 player drafts from carries the Dream Avatar's own theme as faithfully as `sigseed`
 does. The slogan a player hears: *"your Dream Avatar's own signature tide leads,
@@ -290,7 +290,7 @@ earn a second copy; the fringe stays at one. The whole walk runs in card-UUID
 space, so a card rename never shifts the result.
 
 Where `sigseed` and `tides3` diverge from one another is only in *when* that growth
-happens. `sigseed` runs it live, once per quest, from a fresh random subset of the
+happens. `sigseed` runs it live, once per journey, from a fresh random subset of the
 Dream Avatar's signature cards — and that random subset is where its run-to-run
 variety comes from: a single signature card leans the pool one way, a pair or
 triple blends them. `tides3` runs the same growth offline, at bake time, and
@@ -379,7 +379,7 @@ neutral pool reaches.
 ### 4.4 Building the pool at runtime
 
 The runtime, in `src/draft/pool/variant-tides3.ts`, is short. It pins the pool to
-**150 copies**, not the quest's usual 200, and ignores the size the quest asks
+**150 copies**, not the journey's usual 200, and ignores the size the journey asks
 for — exactly as `sigseed` and `pickfit` ignore it. This is not an oversight: the
 default variant `sigseed` itself ships 150-card pools, and several of the metrics
 the two are compared on (trap counts especially) scale with pool size, so matching
@@ -626,7 +626,7 @@ in the run, tagged by *why* it was joined (`starter`, `facet-drawn`,
 `facet-fill`, `neutral-fill`), its full resolvable decklist, and, per pooled
 card, the joined tides that contain it and which one is its home (the earliest in
 join order). The summary is recomputed on demand and resolved to card numbers by
-`buildDreamAvatarTides4Provenance` (`src/data/quest-content.ts`); it is never
+`buildDreamAvatarTides4Provenance` (`src/data/journey-content.ts`); it is never
 persisted, because the pool is deterministic per `(seed, dreamAvatarId)` and
 reproduces exactly.
 
@@ -711,7 +711,7 @@ falls back to the tide name for it. To relabel a `tides5` tide, edit the matchin
 its served path. The browser fetches the served copies through loaders in
 `src/data/cards-v2-database.ts` (`loadTideDecks`, `loadTides2Decks`,
 `loadTides2Relationships`, `loadTides3Decks`, `loadTides4Decks`);
-`src/data/quest-content.ts` fetches them only for the variant that needs them. The
+`src/data/journey-content.ts` fetches them only for the variant that needs them. The
 metric harnesses (`scripts/pool-metrics.mjs`,
 `scripts/tides-similarity-experiment.mjs`) read the committed `.jsonc` files
 directly. `tides3` and `tides4` are each self-contained in one file — their decks

@@ -11,10 +11,10 @@ describe("toRepoRelativePosix (no-raw-icon-classes)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/cumulus/components/hud/QuestStatusBar.tsx",
-        "/Users/x/quest_prototype",
+        "/Users/x/journey_prototype/src/cumulus/components/hud/JourneyStatusBar.tsx",
+        "/Users/x/journey_prototype",
       ),
-    ).toBe("src/cumulus/components/hud/QuestStatusBar.tsx");
+    ).toBe("src/cumulus/components/hud/JourneyStatusBar.tsx");
   });
 });
 
@@ -31,7 +31,7 @@ describe("isTestFile", () => {
 
 describe("isGovernedFile", () => {
   it("governs a cumulus component file", () => {
-    expect(isGovernedFile("src/cumulus/components/hud/QuestStatusBar.tsx")).toBe(
+    expect(isGovernedFile("src/cumulus/components/hud/JourneyStatusBar.tsx")).toBe(
       true,
     );
   });
@@ -69,7 +69,7 @@ const ruleTester = new RuleTester({
 });
 
 const GLYPH_FILE = "src/cumulus/primitives/glyph.ts";
-const COMPONENT = "src/cumulus/components/hud/QuestStatusBar.tsx";
+const COMPONENT = "src/cumulus/components/hud/JourneyStatusBar.tsx";
 
 ruleTester.run("no-raw-icon-classes", rule, {
   valid: [

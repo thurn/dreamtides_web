@@ -1,7 +1,7 @@
 // DreamscapeScreen — the Cumulus rendering of the inside-a-dreamscape view (the
 // mobile redesign). The dreamscape fills the viewport as its scene art; each
 // site floats over it as a circular SiteNode, warm Motes drift for atmosphere,
-// while the router-owned CumulusQuestChrome supplies persistent inventory and
+// while the router-owned CumulusJourneyChrome supplies persistent inventory and
 // the platform menu. Legibility comes from object treatments and InfoCard
 // reveals — never a scrim over the art.
 //
@@ -20,7 +20,7 @@ import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
-import type { Dreamsign as DreamsignData } from "../../types/quest";
+import type { Dreamsign as DreamsignData } from "../../types/journey";
 import {
   DreamsignReplacementDialog,
   type DreamsignReplacementView,
@@ -35,7 +35,7 @@ export type InlineRewardView =
       requiresReplacement: boolean;
     };
 
-/** Everything the screen renders, mapped from live quest state by the builder. */
+/** Everything the screen renders, mapped from live journey state by the builder. */
 export interface DreamscapeView {
   /** The dreamscape's scene art, or null while the dreamscape is unrevealed. */
   scene: ArtRef | null;

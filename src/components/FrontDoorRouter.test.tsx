@@ -10,7 +10,7 @@ const stateMocks = vi.hoisted<{
     phase: "main" | "mainExiting" | "loading" | "tutorial";
     journeyId: string | null;
   };
-  battle?: { mode?: { kind: "tutorial" | "quest" } } | null;
+  battle?: { mode?: { kind: "tutorial" | "journey" } } | null;
 }>(() => ({
   frontDoor: { phase: "main", journeyId: null },
 }));

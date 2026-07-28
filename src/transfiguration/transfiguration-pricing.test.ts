@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { CardData } from "../types/cards";
-import type { TransfigurationType } from "../types/quest";
+import type { TransfigurationType } from "../types/journey";
 import { asCardId, asCardName } from "../types/card-identity";
 import {
   MAX_TRANSFIGURATION_COST,

@@ -10,8 +10,8 @@
 //   - a header naming the screen and carrying the corner close disc;
 //   - a LEFT SIDEBAR profiling the run — the DreamAvatar as a bare portrait
 //     that reveals its name, title, and ability on hover / press through the
-//     shared InfoCard (the same reveal the quest status bar's DreamAvatar bust
-//     uses), then the collected dreamsigns and current quest tides;
+//     shared InfoCard (the same reveal the journey status bar's DreamAvatar bust
+//     uses), then the collected dreamsigns and current journey tides;
 //   - the MAIN column: a control bar, then a scrolling grid of the deck's cards.
 //
 // The desktop control bar spends the room the mobile band lacks on granular,
@@ -33,7 +33,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { requireDreamsignId } from "../../data/dreamsigns";
-import type { Dreamsign as DreamsignData } from "../../types/quest";
+import type { Dreamsign as DreamsignData } from "../../types/journey";
 import { GameCard } from "../components/card/CardView";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import {
@@ -47,7 +47,7 @@ import { IconButton } from "../components/controls/IconButton";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { DeckCardView } from "./MobileDeckViewer";
-import { TideDiscReveal, type DreamAvatarTideView } from "./quest-start-shared";
+import { TideDiscReveal, type DreamAvatarTideView } from "./journey-start-shared";
 import { DeckViewerBackdrop, GridPlaceholder } from "./deck-viewer-shared";
 import {
   type DesktopDeckFilterSort,
@@ -77,7 +77,7 @@ export interface DesktopDeckView {
   dreamAvatar: DeckDreamAvatarView | null;
   /** The dreamsigns collected so far, in collection order. */
   dreamsigns: DreamsignData[];
-  /** The exact tide set selected for this run, matching the quest-start preview. */
+  /** The exact tide set selected for this run, matching the journey-start preview. */
   tides: DreamAvatarTideView[];
 }
 
@@ -337,7 +337,7 @@ function Sidebar({
  * ability tucked into a hover / press reveal instead of laid out beneath it.
  * The reveal is the shared InfoCard `fullBleed` variant driven by the one
  * press-reveal engine (hover on a fine pointer, press-hold on touch) and
- * portalled into the screen stage — the same reveal the quest status bar's
+ * portalled into the screen stage — the same reveal the journey status bar's
  * DreamAvatar bust uses, so the two read identically.
  */
 function DreamAvatarBlock({
@@ -359,7 +359,7 @@ function DreamAvatarBlock({
             shared press/hover scale, while the reveal coordinator (its pointer handlers
             chained through) owns the show/hide of the portalled InfoCard. The
             button carries the accent frame — the same 2px violet border, glow,
-            and control radius the quest status bar's DreamAvatar bust wears — so
+            and control radius the journey status bar's DreamAvatar bust wears — so
             the two portraits read as the same object; `overflow: hidden` clips
             the art to that rounded frame. */}
         <div
@@ -425,7 +425,7 @@ function DreamsignsBlock({ dreamsigns }: { dreamsigns: DreamsignData[] }) {
   );
 }
 
-/** The run's selected tides, using the quest-start discs and reveal behavior. */
+/** The run's selected tides, using the journey-start discs and reveal behavior. */
 function TidesBlock({ tides }: { tides: DreamAvatarTideView[] }) {
   if (tides.length === 0) return null;
   return (

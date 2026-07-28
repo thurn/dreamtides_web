@@ -2965,7 +2965,7 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it("mounts without quest runtime providers or Firebase setup", async () => {
+  it("mounts without journey runtime providers or Firebase setup", async () => {
     const { container, root } = mount(
       <CardEditorApp
         apiClient={makeApiClient(() => Promise.resolve([makeEditorCard()]))}

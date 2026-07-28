@@ -9,7 +9,7 @@ fail()
 }
 
 public_root=$(git rev-parse --show-toplevel 2>/dev/null) ||
-    fail "run this command from a quest_prototype worktree"
+    fail "run this command from a journey_prototype worktree"
 target="$public_root/cumulus/Assets/ThirdParty"
 branch=${1:-$(git branch --show-current)}
 
@@ -20,10 +20,10 @@ git check-ref-format --branch "$branch" >/dev/null 2>&1 ||
 
 licensed_repo=${CUMULUS_LICENSED_REPO:-}
 if [ -z "$licensed_repo" ]; then
-    licensed_repo=$(git config --get quest.cumulusLicensedRepo 2>/dev/null || true)
+    licensed_repo=$(git config --get journey.cumulusLicensedRepo 2>/dev/null || true)
 fi
 [ -n "$licensed_repo" ] ||
-    fail "set CUMULUS_LICENSED_REPO or git config quest.cumulusLicensedRepo"
+    fail "set CUMULUS_LICENSED_REPO or git config journey.cumulusLicensedRepo"
 [ -d "$licensed_repo" ] ||
     fail "licensed repository does not exist: $licensed_repo"
 licensed_repo=$(CDPATH= cd -- "$licensed_repo" && pwd -P)
@@ -33,8 +33,8 @@ licensed_git_dir=$(git -C "$licensed_repo" rev-parse --path-format=absolute --gi
 [ "$(git -C "$licensed_repo" rev-parse --is-bare-repository)" = "true" ] ||
     fail "licensed repository must be bare: $licensed_repo"
 
-[ "$(git -C "$licensed_repo" config --bool --get quest.localOnly 2>/dev/null || true)" = "true" ] ||
-    fail "licensed repository must set quest.localOnly=true"
+[ "$(git -C "$licensed_repo" config --bool --get journey.localOnly 2>/dev/null || true)" = "true" ] ||
+    fail "licensed repository must set journey.localOnly=true"
 [ -z "$(git -C "$licensed_repo" remote)" ] ||
     fail "licensed repository must not have a remote"
 git -C "$licensed_repo" show-ref --verify --quiet refs/heads/main ||
@@ -42,10 +42,10 @@ git -C "$licensed_repo" show-ref --verify --quiet refs/heads/main ||
 
 licensed_seed=${CUMULUS_LICENSED_SEED:-}
 if [ -z "$licensed_seed" ]; then
-    licensed_seed=$(git config --get quest.cumulusLicensedSeed 2>/dev/null || true)
+    licensed_seed=$(git config --get journey.cumulusLicensedSeed 2>/dev/null || true)
 fi
 [ -n "$licensed_seed" ] ||
-    fail "set CUMULUS_LICENSED_SEED or git config quest.cumulusLicensedSeed"
+    fail "set CUMULUS_LICENSED_SEED or git config journey.cumulusLicensedSeed"
 [ -d "$licensed_seed" ] ||
     fail "licensed seed does not exist: $licensed_seed"
 licensed_seed=$(CDPATH= cd -- "$licensed_seed" && pwd -P)

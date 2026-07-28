@@ -16,24 +16,24 @@ describe("fast review plan", () => {
 
   it("selects bounded checks for application changes", () => {
     expect(buildReviewPlan([
-      "src/state/quest-state-actions.test.ts",
-      "src/state/quest-state-actions.ts",
+      "src/state/journey-state-actions.test.ts",
+      "src/state/journey-state-actions.ts",
     ])).toEqual({
       changedFiles: [
-        "src/state/quest-state-actions.test.ts",
-        "src/state/quest-state-actions.ts",
+        "src/state/journey-state-actions.test.ts",
+        "src/state/journey-state-actions.ts",
       ],
       lintFiles: [
-        "src/state/quest-state-actions.test.ts",
-        "src/state/quest-state-actions.ts",
+        "src/state/journey-state-actions.test.ts",
+        "src/state/journey-state-actions.ts",
       ],
       shouldTypecheck: true,
       shouldValidate: false,
       testInputs: [
         "scripts/cumulus-generated-docs-drift.test.mjs",
         "scripts/cumulus-ui-boundary.test.mjs",
-        "src/state/quest-state-actions.test.ts",
-        "src/state/quest-state-actions.ts",
+        "src/state/journey-state-actions.test.ts",
+        "src/state/journey-state-actions.ts",
       ],
     });
   });

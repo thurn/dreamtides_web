@@ -4,7 +4,7 @@ import type {
   CardTypeChange,
   DeckEntry,
   DeckEntryCardModification,
-} from "./types/quest";
+} from "./types/journey";
 import { applyTransfigurationToCard } from "./transfiguration/transfiguration-logic";
 
 type CardTypeFields = Pick<CardData, "cardType" | "subtype">;

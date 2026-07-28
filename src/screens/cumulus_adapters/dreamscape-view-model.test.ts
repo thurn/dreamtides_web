@@ -3,9 +3,9 @@ import type {
   DreamAvatar,
   Dreamsign,
   DreamscapeNode,
-  QuestState,
+  JourneyState,
   SiteState,
-} from "../../types/quest";
+} from "../../types/journey";
 import { resolveArtRef } from "../../cumulus/primitives/art";
 import {
   battleLabel,
@@ -161,7 +161,7 @@ describe("buildDreamscapeView", () => {
       dreamAvatar: null,
       dreamsigns: [],
       completionLevel: 2,
-    } as unknown as QuestState;
+    } as unknown as JourneyState;
     const view = buildDreamscapeView(node(), state);
     expect(view.title).toBe("Ember Wood");
     expect(view.sites).toHaveLength(3);
@@ -181,7 +181,7 @@ describe("buildDreamscapeView", () => {
       siteRuntime: {
         "s-essence": { kind: "essence", amount: 275, accepted: false },
       },
-    } as unknown as QuestState;
+    } as unknown as JourneyState;
 
     expect(buildDreamscapeView(essenceNode, state).inlineRewards).toEqual({
       "s-essence": { kind: "essence", amount: 275 },
@@ -213,7 +213,7 @@ describe("buildDreamscapeView", () => {
           accepted: false,
         },
       },
-    } as unknown as QuestState;
+    } as unknown as JourneyState;
 
     expect(buildDreamscapeView(rewardNode, state).inlineRewards).toEqual({
       "s-reward": {
@@ -251,7 +251,7 @@ describe("buildDreamscapeView", () => {
           accepted: false,
         },
       },
-    } as unknown as QuestState;
+    } as unknown as JourneyState;
 
     const view = buildDreamscapeView(rewardNode, state, "s-reward");
     expect(view.inlineRewards["s-reward"]).toMatchObject({
@@ -274,7 +274,7 @@ describe("buildDreamscapeHudView", () => {
       dreamAvatar: null,
       dreamsigns: [],
       completionLevel: 0,
-    } as unknown as QuestState;
+    } as unknown as JourneyState;
     const hud = buildDreamscapeHudView(state);
     expect(hud.essence).toBe(10);
     expect(hud.deck).toBe(2);

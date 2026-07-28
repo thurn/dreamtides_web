@@ -40,7 +40,7 @@ toward zero.
   `control-treatment.ts` (module paths only; no behavior change), update
   in-cumulus imports, and add a `no-restricted-imports` patterns entry
   forbidding `cumulus/internal` imports outside `src/cumulus/`. Baseline:
-  StartingDeckModal and DreamscapeQuestMenu, both removed in Phase 3. The
+  StartingDeckModal and DreamscapeJourneyMenu, both removed in Phase 3. The
   error message directs authors to the public component or the
   cumulus-migrate path.
 - **Integrity trio** (unit tests, cross-file):
@@ -137,9 +137,9 @@ Each migration is browser-QA'd at the standard viewports before its
 commit.
 
 - **Six icon-button call sites onto `IconButton`:** desktop deck close
-  (`sm`), mobile deck close (`md`), dreamscape/atlas gear (`md`), quest
+  (`sm`), mobile deck close (`md`), dreamscape/atlas gear (`md`), journey
   start `EdgeChevron` (`sm` — also a material bug fix from opaque
-  `--surface-chrome` to real glass), QuestStatusBar dreamsigns close (bug
+  `--surface-chrome` to real glass), JourneyStatusBar dreamsigns close (bug
   fix from the third bespoke recipe + raw `<i>`), StartingDeckModal close
   (44 → `md`).
 - **Desktop deck sort-direction control:** the two-item `SegmentedControl`
@@ -160,7 +160,7 @@ commit.
   `MAX_SCALE`; `AtlasNode` / `SiteNode` hover scales route through
   `usePress` constants (or one tokenized node-scale, documented).
 - **Draft screen seams:** hamburger clearance reads exported
-  menu-geometry constants from `DreamscapeQuestMenu` (or a shared chrome
+  menu-geometry constants from `DreamscapeJourneyMenu` (or a shared chrome
   spec) instead of hand-guessed numbers; a `?goto=` qa-scene for the
   draft site is registered.
 
@@ -202,7 +202,7 @@ this program, each landing in the phase that cleans its known violations
 - **`no-numeric-style-props`** — Phase 2, with ResourceChip's enumerated
   variants (its grandfathered `size`/`gap` violation).
 - **`no-raw-icon-classes`** — Phase 3, after `economy-spec.ts` (Phase 2)
-  centralizes the glyph tables and the QuestStatusBar raw `<i>` close is
+  centralizes the glyph tables and the JourneyStatusBar raw `<i>` close is
   migrated; includes the generation-time check that every registered
   glyph class exists in the vendored stylesheet.
 - **`no-adhoc-press-scale`** — Phase 3, with the `AtlasNode`/`SiteNode`

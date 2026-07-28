@@ -5,7 +5,7 @@
 
 import { DEFAULT_DRAFT_CONFIG, type ReplayDeps } from "../draft-engine";
 import type { FitModel } from "./fit-model";
-import type { DeckEntry } from "../../types/quest";
+import type { DeckEntry } from "../../types/journey";
 
 /**
  * Build the {@link ReplayDeps} for the given deck and fit model, or `undefined`

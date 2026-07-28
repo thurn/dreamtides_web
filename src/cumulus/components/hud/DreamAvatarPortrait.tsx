@@ -449,7 +449,7 @@ function DreamAvatarPortraitSurface({
 
   return (
     // `cumulus` carries the design-token scope so the frame tokens resolve when
-    // the portrait is mounted outside a `.cumulus` subtree (e.g. a quest screen).
+    // the portrait is mounted outside a `.cumulus` subtree (e.g. a journey screen).
     <div className="cumulus" style={{ ...frameStyle(variant), ...sizeStyle }}>
       {broken ? (
         <div style={fallbackStyle(variant)}>

@@ -198,7 +198,7 @@ function makeInstance(
     markers: { isPrevented: false, isCopied: false },
     notes: [],
     provenance: {
-      kind: "quest-deck",
+      kind: "journey-deck",
       sourceBattleCardId: null,
       chosenSpark: null,
       chosenSubtype: null,
@@ -349,7 +349,7 @@ describe("advanceEffectQueue — Nomad's Verge dreamwell placement", () => {
     id: "51caf26d-83bf-45a9-bc80-010d353277db",
   };
 
-  it("places the figment at the leftmost open back-rank slot in a quest battle", () => {
+  it("places the figment at the leftmost open back-rank slot in a journey battle", () => {
     const result = advanceEffectQueue(
       foldState([newEffectRun(NOMADS_VERGE_REF, "enemy")]),
       ctx({ seq: 1 }),

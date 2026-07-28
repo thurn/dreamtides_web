@@ -8,9 +8,9 @@ import {
   makeBattleTestDreamAvatars,
   makeBattleTestState,
 } from "../../battle/test-support";
-import type { QuestContent } from "../../data/quest-content";
-import { createDefaultState } from "../../state/quest-context";
-import type { QuestState } from "../../types/quest";
+import type { JourneyContent } from "../../data/journey-content";
+import { createDefaultState } from "../../state/journey-context";
+import type { JourneyState } from "../../types/journey";
 import { getLogEntries, resetLog } from "../../logging";
 import {
   createBattleInitProvider,
@@ -18,7 +18,7 @@ import {
   settleDeferredOpponentLog,
 } from "./battle-init-provider";
 
-function makeContent(): QuestContent {
+function makeContent(): JourneyContent {
   return {
     cardDatabase: makeBattleTestCardDatabase(),
     dreamAvatars: makeBattleTestDreamAvatars(),
@@ -31,11 +31,11 @@ function makeContent(): QuestContent {
   };
 }
 
-function makeQuest(): QuestState {
+function makeJourney(): JourneyState {
   return {
     ...createDefaultState(),
     ...makeBattleTestState(),
-    runId: "quest:test",
+    runId: "journey:test",
   };
 }
 
@@ -44,11 +44,11 @@ describe("battle init provider", () => {
 
   it("builds the same preview init that BEGIN_BATTLE will fold", () => {
     const content = makeContent();
-    const quest = makeQuest();
+    const journey = makeJourney();
 
-    const preview = createBattlePreview(content, quest, "site-7", 4242);
+    const preview = createBattlePreview(content, journey, "site-7", 4242);
     const battle = createBattleInitProvider(content).beginBattle({
-      quest,
+      journey,
       siteId: "site-7",
       seedOverride: 4242,
       seq: 17,

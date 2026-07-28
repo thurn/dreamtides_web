@@ -10,8 +10,8 @@ describe("toRepoRelativePosix (no-classname-in-product-ui)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/cumulus/screens/HomeScreen.tsx",
-        "/Users/x/quest_prototype",
+        "/Users/x/journey_prototype/src/cumulus/screens/HomeScreen.tsx",
+        "/Users/x/journey_prototype",
       ),
     ).toBe("src/cumulus/screens/HomeScreen.tsx");
   });

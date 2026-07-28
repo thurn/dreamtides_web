@@ -13,7 +13,7 @@ import {
   buildTransfigurationDisplay,
   type CardTransfigurationDisplay,
 } from "../../transfiguration/transfiguration-logic";
-import type { TransfigurationType } from "../../types/quest";
+import type { TransfigurationType } from "../../types/journey";
 import type {
   MerchantApplyPayload,
   MerchantChoiceCandidate,

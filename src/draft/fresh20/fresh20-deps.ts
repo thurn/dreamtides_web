@@ -9,7 +9,7 @@ import { DEFAULT_DRAFT_CONFIG } from "../draft-engine";
 import type { Fresh20Deps } from "./fresh20-offer";
 import type { FitModel } from "../replay/fit-model";
 import type { CardData } from "../../types/cards";
-import type { DeckEntry } from "../../types/quest";
+import type { DeckEntry } from "../../types/journey";
 
 /**
  * Build the {@link Fresh20Deps} for the given deck, fit model, and card

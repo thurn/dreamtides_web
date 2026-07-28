@@ -9,11 +9,11 @@ import {
   makeMerchantTestCorpus,
   makeMerchantTestDeckEntry,
   makeMerchantTestFitModel,
-  makeMerchantTestQuestState,
+  makeMerchantTestJourneyState,
   makeMerchantTestSite,
 } from "../testing/fixtures";
 import type { CardData } from "../../types/cards";
-import type { DeckEntry } from "../../types/quest";
+import type { DeckEntry } from "../../types/journey";
 import type { MerchantContext } from "../types";
 import { asCardId } from "../../types/card-identity";
 import type { CardId } from "../../types/card-identity";
@@ -60,15 +60,15 @@ function makeContext(input: {
   corpusCards?: Record<string, { quality: number; df?: number }>;
   fitModel?: FitModel;
 }): MerchantContext {
-  const questContent = makeMerchantTestContent({
+  const journeyContent = makeMerchantTestContent({
     cards: input.cards,
     fitModel: input.fitModel,
     merchantCorpus: makeMerchantTestCorpus({ cards: input.corpusCards ?? {} }),
   });
-  const questState = makeMerchantTestQuestState({ deck: [...input.deckEntries] });
+  const journeyState = makeMerchantTestJourneyState({ deck: [...input.deckEntries] });
   return buildMerchantContext({
-    questState,
-    questContent,
+    journeyState,
+    journeyContent,
     site: makeMerchantTestSite(),
   });
 }
@@ -235,15 +235,15 @@ describe("duplicate — applied state gains one entry with the same cardNumber",
     const entry = makeMerchantTestDeckEntry({ entryId: "orig", cardNumber: 20 });
     const corpusCards = { [uuid(20)]: { quality: 0.5, df: 10 } };
 
-    const questContent = makeMerchantTestContent({
+    const journeyContent = makeMerchantTestContent({
       cards: [card],
       fitModel: makeFlatFitModel([card]),
       merchantCorpus: makeMerchantTestCorpus({ cards: corpusCards }),
     });
-    const questState = makeMerchantTestQuestState({ deck: [entry] });
+    const journeyState = makeMerchantTestJourneyState({ deck: [entry] });
     const context = buildMerchantContext({
-      questState,
-      questContent,
+      journeyState,
+      journeyContent,
       site: makeMerchantTestSite(),
     });
 
@@ -259,11 +259,11 @@ describe("duplicate — applied state gains one entry with the same cardNumber",
     if (payload === undefined) return;
     expect(payload.kind).toBe("duplicate_deck_entry");
 
-    const resultState = applyMerchantPayloadToState({ state: questState, questContent, payload });
+    const resultState = applyMerchantPayloadToState({ state: journeyState, journeyContent, payload });
     expect(resultState).not.toBeNull();
     if (resultState === null) return;
 
-    expect(resultState.deck.length).toBe(questState.deck.length + 1);
+    expect(resultState.deck.length).toBe(journeyState.deck.length + 1);
     const newEntry = resultState.deck.find((e) => e.entryId !== "orig");
     expect(newEntry).toBeDefined();
     if (newEntry !== undefined) {
@@ -288,15 +288,15 @@ describe("duplicate — applied state gains one entry with the same cardNumber",
       [uuid(32)]: { quality: 0.4, df: 10 },
     };
 
-    const questContent = makeMerchantTestContent({
+    const journeyContent = makeMerchantTestContent({
       cards,
       fitModel: makeFlatFitModel(cards),
       merchantCorpus: makeMerchantTestCorpus({ cards: corpusCards }),
     });
-    const questState = makeMerchantTestQuestState({ deck: [...entries] });
+    const journeyState = makeMerchantTestJourneyState({ deck: [...entries] });
     const context = buildMerchantContext({
-      questState,
-      questContent,
+      journeyState,
+      journeyContent,
       site: makeMerchantTestSite(),
     });
 
@@ -315,11 +315,11 @@ describe("duplicate — applied state gains one entry with the same cardNumber",
     if (payload.kind !== "duplicate_deck_entry") return;
 
     const chosenCardNumber = payload.cardNumber;
-    const resultState = applyMerchantPayloadToState({ state: questState, questContent, payload });
+    const resultState = applyMerchantPayloadToState({ state: journeyState, journeyContent, payload });
     expect(resultState).not.toBeNull();
     if (resultState === null) return;
 
-    expect(resultState.deck.length).toBe(questState.deck.length + 1);
+    expect(resultState.deck.length).toBe(journeyState.deck.length + 1);
     const existingEntryIds = new Set(entries.map((e) => e.entryId));
     const newEntries = resultState.deck.filter((e) => !existingEntryIds.has(e.entryId));
     expect(newEntries).toHaveLength(1);

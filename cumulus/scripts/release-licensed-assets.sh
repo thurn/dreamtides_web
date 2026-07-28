@@ -9,7 +9,7 @@ fail()
 }
 
 public_root=$(git rev-parse --show-toplevel 2>/dev/null) ||
-    fail "run this command from a quest_prototype worktree"
+    fail "run this command from a journey_prototype worktree"
 target="$public_root/cumulus/Assets/ThirdParty"
 
 if [ ! -e "$target" ]; then
@@ -19,10 +19,10 @@ fi
 
 licensed_repo=${CUMULUS_LICENSED_REPO:-}
 if [ -z "$licensed_repo" ]; then
-    licensed_repo=$(git config --get quest.cumulusLicensedRepo 2>/dev/null || true)
+    licensed_repo=$(git config --get journey.cumulusLicensedRepo 2>/dev/null || true)
 fi
 [ -n "$licensed_repo" ] ||
-    fail "set CUMULUS_LICENSED_REPO or git config quest.cumulusLicensedRepo"
+    fail "set CUMULUS_LICENSED_REPO or git config journey.cumulusLicensedRepo"
 [ -d "$licensed_repo" ] ||
     fail "licensed repository does not exist: $licensed_repo"
 licensed_repo=$(CDPATH= cd -- "$licensed_repo" && pwd -P)

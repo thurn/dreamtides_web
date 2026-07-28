@@ -1,11 +1,11 @@
 // Real SiteContentProvider: generates the content-coupled site runtimes
-// (`OPEN_SITE`) and the shop restock (`REROLL_SHOP`) from the loaded quest
+// (`OPEN_SITE`) and the shop restock (`REROLL_SHOP`) from the loaded journey
 // content, drawing ALL randomness from the reducer-supplied `ctx.rng` (adapted
 // to a `() => number` stream) so two clients folding the same event roll
 // byte-identical offers. Every generator's `Math.random` was threaded off this
 // stream (see the reward / dreamsign / shop generators).
 
-import type { QuestContent } from "../../data/quest-content";
+import type { JourneyContent } from "../../data/journey-content";
 import type { DraftState } from "../../types/draft";
 import type {
   CardChoiceSiteRuntime,
@@ -14,8 +14,8 @@ import type {
   RewardSiteRuntime,
   SiteRuntimeState,
   SiteState,
-  QuestState,
-} from "../../types/quest";
+  JourneyState,
+} from "../../types/journey";
 import type { CardData } from "../../types/cards";
 import { generateRewardSiteData } from "../../rewards/reward-generator";
 import { drawDreamsignOptions } from "../../dreamsign/dreamsign-pool";
@@ -35,12 +35,12 @@ import {
 } from "../../journey_v2/encounter/resolveMerchantOffer";
 import type { MerchantChoice } from "../../journey_v2/types";
 import type { MerchantArchetypeId } from "../../journey_v2/archetypes/types";
-import { mintEntryId } from "../../rules/quest/deck";
+import { mintEntryId } from "../../rules/journey/deck";
 import type {
   ShopRerollResult,
   SiteContentProvider,
   SiteOpenResult,
-} from "../../rules/quest/sites";
+} from "../../rules/journey/sites";
 import { streamFromKeyed } from "./rng-stream";
 
 function asString(value: unknown): string | null {
@@ -55,9 +55,9 @@ function coerceMerchantChoice(value: unknown): MerchantChoice | undefined {
 }
 
 /** Whether the run's draft is a deck-fit mode (replay / fresh20). */
-function isDeckFitDraft(quest: QuestState): boolean {
+function isDeckFitDraft(journey: JourneyState): boolean {
   return (
-    quest.draftState?.mode === "replay" || quest.draftState?.mode === "fresh20"
+    journey.draftState?.mode === "replay" || journey.draftState?.mode === "fresh20"
   );
 }
 
@@ -67,10 +67,10 @@ function isDeckFitDraft(quest: QuestState): boolean {
  * frozen pack sequence, not a multiset); pool runs draw from the run draft
  * state directly.
  */
-function shopSourceDraftState(quest: QuestState): DraftState | null {
-  return isDeckFitDraft(quest)
-    ? replayShopDraftState(quest.resolvedPackage)
-    : quest.draftState;
+function shopSourceDraftState(journey: JourneyState): DraftState | null {
+  return isDeckFitDraft(journey)
+    ? replayShopDraftState(journey.resolvedPackage)
+    : journey.draftState;
 }
 
 /** A uniform rng shuffle (no ambient `Math.random`). */
@@ -116,14 +116,14 @@ function selectCardChoiceEntryIds(
 
 /** Build a Transfiguration / Duplication card-choice runtime. */
 function buildCardChoiceRuntime(
-  quest: QuestState,
+  journey: JourneyState,
   site: SiteState,
   cardDatabase: Map<number, CardData>,
   kind: "transfiguration" | "duplication",
   rng: () => number,
 ): CardChoiceSiteRuntime {
   const entryIds = selectCardChoiceEntryIds(
-    quest.deck,
+    journey.deck,
     cardDatabase,
     kind,
     site.isEnhanced,
@@ -134,7 +134,7 @@ function buildCardChoiceRuntime(
     return { kind: "cardChoice", choiceKind: "duplication", entryIds, acceptedEntryIds: [] };
   }
 
-  const deckByEntryId = new Map(quest.deck.map((entry) => [entry.entryId, entry]));
+  const deckByEntryId = new Map(journey.deck.map((entry) => [entry.entryId, entry]));
   const transfigurationOffers: CardChoiceTransfigurationOffer[] = [];
   for (const entryId of entryIds) {
     const entry = deckByEntryId.get(entryId);
@@ -149,7 +149,7 @@ function buildCardChoiceRuntime(
         effectDetails: transfigurationEffectDetails(offer, card),
         previewCard: offer.previewCard,
         essenceCost: transfigurationEssenceCost(
-          quest.seed,
+          journey.seed,
           site.id,
           entryId,
           card,
@@ -168,20 +168,20 @@ function buildCardChoiceRuntime(
 }
 
 export function createSiteContentProvider(
-  content: QuestContent,
+  content: JourneyContent,
 ): SiteContentProvider {
-  const dreamsignRegenerationPoolIds = (quest: QuestState): readonly string[] =>
-    quest.resolvedPackage?.dreamsignPoolIds ?? [];
+  const dreamsignRegenerationPoolIds = (journey: JourneyState): readonly string[] =>
+    journey.resolvedPackage?.dreamsignPoolIds ?? [];
 
   return {
-    openSite: ({ quest, site, rng }): SiteOpenResult | null => {
+    openSite: ({ journey, site, rng }): SiteOpenResult | null => {
       const stream = streamFromKeyed(rng);
       switch (site.type) {
         case "Reward": {
           const generated = generateRewardSiteData({
             dreamsignTemplates: content.dreamsignTemplates,
-            remainingDreamsignPoolIds: quest.remainingDreamsignPool,
-            regenerationPoolIds: dreamsignRegenerationPoolIds(quest),
+            remainingDreamsignPoolIds: journey.remainingDreamsignPool,
+            regenerationPoolIds: dreamsignRegenerationPoolIds(journey),
             rng: stream,
           });
           const runtime: RewardSiteRuntime = {
@@ -203,10 +203,10 @@ export function createSiteContentProvider(
         case "DreamsignRevelation": {
           const optionCount = site.isEnhanced ? 4 : 3;
           const draw = drawDreamsignOptions(
-            quest.remainingDreamsignPool,
+            journey.remainingDreamsignPool,
             content.dreamsignTemplates,
             optionCount,
-            dreamsignRegenerationPoolIds(quest),
+            dreamsignRegenerationPoolIds(journey),
             stream,
           );
           const runtime: SiteRuntimeState = {
@@ -222,10 +222,10 @@ export function createSiteContentProvider(
           const isMarket = site.type === "DreamsignMarket";
           const generated = generateShopInventory({
             cardDatabase: content.cardDatabase,
-            draftState: isMarket ? null : shopSourceDraftState(quest),
-            remainingDreamsignPoolIds: quest.remainingDreamsignPool,
+            draftState: isMarket ? null : shopSourceDraftState(journey),
+            remainingDreamsignPoolIds: journey.remainingDreamsignPool,
             dreamsignTemplates: content.dreamsignTemplates,
-            dreamsignRegenerationPoolIds: dreamsignRegenerationPoolIds(quest),
+            dreamsignRegenerationPoolIds: dreamsignRegenerationPoolIds(journey),
             ...(isMarket ? { cardCount: 0, dreamsignCount: 3 } : {}),
             rng: stream,
           });
@@ -249,7 +249,7 @@ export function createSiteContentProvider(
         case "Duplication": {
           const kind = site.type === "Transfiguration" ? "transfiguration" : "duplication";
           const runtime = buildCardChoiceRuntime(
-            quest,
+            journey,
             site,
             content.cardDatabase,
             kind,
@@ -262,25 +262,25 @@ export function createSiteContentProvider(
       }
     },
 
-    rerollShop: ({ quest, site, rng }): ShopRerollResult | null => {
+    rerollShop: ({ journey, site, rng }): ShopRerollResult | null => {
       const stream = streamFromKeyed(rng);
       const isMarket = site.type === "DreamsignMarket";
       const generated = generateShopInventory({
         cardDatabase: content.cardDatabase,
-        draftState: isMarket ? null : shopSourceDraftState(quest),
-        remainingDreamsignPoolIds: quest.remainingDreamsignPool,
+        draftState: isMarket ? null : shopSourceDraftState(journey),
+        remainingDreamsignPoolIds: journey.remainingDreamsignPool,
         dreamsignTemplates: content.dreamsignTemplates,
-        dreamsignRegenerationPoolIds: dreamsignRegenerationPoolIds(quest),
+        dreamsignRegenerationPoolIds: dreamsignRegenerationPoolIds(journey),
         ...(isMarket ? { cardCount: 0, dreamsignCount: 3 } : {}),
         rng: stream,
       });
       // Task-15 trap: deck-fit runs keep the live draft state, and a card-less
       // shop hands back no draft state (`generated.draftState` is `undefined`),
-      // so `?? quest.draftState` keeps the run's draft pool intact rather than
+      // so `?? journey.draftState` keeps the run's draft pool intact rather than
       // null-wiping it on a reroll. ALWAYS returns the resolved draft state.
-      const draftState = isDeckFitDraft(quest)
-        ? quest.draftState
-        : generated.draftState ?? quest.draftState;
+      const draftState = isDeckFitDraft(journey)
+        ? journey.draftState
+        : generated.draftState ?? journey.draftState;
       return {
         slots: shopSlotsToRuntime(generated.slots),
         remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
@@ -291,11 +291,11 @@ export function createSiteContentProvider(
 
     // Resolve a Dream Merchant / DreamAugury ACCEPT / DECLINE. The whole
     // resolution (encounter regeneration, offer lookup, payload application,
-    // site completion) is a PURE function of `(quest, questContent, site,
+    // site completion) is a PURE function of `(journey, journeyContent, site,
     // request)` — no rng, no clock — so the provider `rng` is unused. Both
-    // resolvers regenerate the encounter deterministically from the same quest
+    // resolvers regenerate the encounter deterministically from the same journey
     // state the reducer folds against, so two clients resolve identically.
-    resolveMerchant: ({ quest, site, action, payload, seq }): QuestState | null => {
+    resolveMerchant: ({ journey, site, action, payload, seq }): JourneyState | null => {
       const encounterSignature = asString(payload.encounterSignature);
       const offerId = asString(payload.offerId);
       if (encounterSignature === null || offerId === null) return null;
@@ -303,8 +303,8 @@ export function createSiteContentProvider(
 
       if (action === "decline") {
         const result = resolveMerchantDecline({
-          state: quest,
-          questContent: content,
+          state: journey,
+          journeyContent: content,
           site,
           request: { encounterSignature, offerId, ...(choice ? { choice } : {}) },
         });
@@ -314,8 +314,8 @@ export function createSiteContentProvider(
       const archetypeId = asString(payload.archetypeId);
       if (archetypeId === null) return null;
       const result = resolveMerchantOffer({
-        state: quest,
-        questContent: content,
+        state: journey,
+        journeyContent: content,
         site,
         request: {
           encounterSignature,

@@ -65,7 +65,7 @@ function makeInstance(
     markers: { isPrevented: false, isCopied: false },
     notes: [],
     provenance: {
-      kind: options.isFigment ? "generated-figment" : "quest-deck",
+      kind: options.isFigment ? "generated-figment" : "journey-deck",
       sourceBattleCardId: null,
       chosenSpark: null,
       chosenSubtype: null,

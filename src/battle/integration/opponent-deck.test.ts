@@ -21,7 +21,7 @@ import type { DraftRecord } from "../../data/cards-v2-database";
 import { buildFitModel, type FitModel } from "../../draft/replay/fit-model";
 import { buildPoolData } from "../../draft/pool/pool-data";
 import { getLogEntries, resetLog } from "../../logging";
-import type { RunPoolContext } from "../../data/quest-content";
+import type { RunPoolContext } from "../../data/journey-content";
 import type {
   AffiliationContent,
   DreamAvatarContent,

@@ -1,7 +1,7 @@
 import type { FitModel } from "../draft/replay/fit-model";
 import type { MerchantCorpus } from "../data/merchant-corpus";
 import type { DreamsignProfile } from "../data/dreamsign-profiles";
-import type { QuestContent } from "../data/quest-content";
+import type { JourneyContent } from "../data/journey-content";
 import type { CardTransfigurationDisplay } from "../transfiguration/transfiguration-logic";
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate } from "../types/content";
@@ -12,7 +12,7 @@ import type {
   SiteState,
   SiteType,
   TransfigurationType,
-} from "../types/quest";
+} from "../types/journey";
 import type {
   MerchantArchetypeId,
   MerchantOfferFamily,
@@ -58,11 +58,11 @@ export interface MerchantCatalogCard extends MerchantCardIdentity {
 }
 
 export interface MerchantContext {
-  questSeed: string;
+  journeySeed: string;
   site: SiteState;
   /**
    * Debug reroll counter for this site. Mixed into the encounter RNG salt so a
-   * non-zero value produces a fresh encounter from the same quest parameters
+   * non-zero value produces a fresh encounter from the same journey parameters
    * (seed, deck, dreamsigns). Defaults to `0`, which leaves the salt unchanged
    * so untouched encounters keep their original signatures.
    */
@@ -85,7 +85,7 @@ export interface MerchantContext {
   deckEntryById: ReadonlyMap<string, MerchantDeckCard>;
   ownedCardUuids: ReadonlySet<string>;
   /**
-   * UUIDs of the cards in this quest's resolved draft pool (the cards the player
+   * UUIDs of the cards in this journey's resolved draft pool (the cards the player
    * could actually draft this game). Empty when no draft pool has been resolved.
    * Category drafts (`category_draft_known`) only offer cards in this set, and
    * every grant trace marks each candidate's pool membership (`inDraftPool`) so a
@@ -103,7 +103,7 @@ export interface MerchantContext {
   merchantCorpus?: MerchantCorpus;
   /** Curated dreamsign profiles keyed by dreamsign UUID. */
   dreamsignProfiles?: ReadonlyMap<string, DreamsignProfile>;
-  cardDatabase: QuestContent["cardDatabase"];
+  cardDatabase: JourneyContent["cardDatabase"];
   dreamsignTemplates: readonly DreamsignTemplate[];
 }
 

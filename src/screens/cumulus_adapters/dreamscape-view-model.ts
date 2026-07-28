@@ -1,5 +1,5 @@
 // The pure view-model builder for the Cumulus dreamscape screen. Every mapping
-// rule between quest domain data and `DreamscapeScreen`'s view types lives here
+// rule between journey domain data and `DreamscapeScreen`'s view types lives here
 // as plain, unit-testable functions — no React, no state hooks, no effects.
 // `DreamscapeScreenAdapter` acquires live state and calls `buildDreamscapeView`;
 // this module never acquires anything itself.
@@ -19,7 +19,7 @@ import type { DreamscapeSiteModel } from "../../cumulus/components/dreamscape/Si
 import type {
   QsbDreamAvatar,
   QsbDreamsign,
-} from "../../cumulus/components/hud/QuestStatusBar";
+} from "../../cumulus/components/hud/JourneyStatusBar";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
 import type {
@@ -31,8 +31,8 @@ import type {
   DreamAvatar,
   Dreamsign,
   DreamscapeNode,
-  QuestState,
-} from "../../types/quest";
+  JourneyState,
+} from "../../types/journey";
 
 /** The completion level at which the guardian battle is the final boss. */
 const FINAL_BOSS_COMPLETION_LEVEL = 6;
@@ -40,8 +40,8 @@ const FINAL_BOSS_COMPLETION_LEVEL = 6;
 /** Fallback scatter point when a site index has no seeded position. */
 const FALLBACK_POS = { x: 50, y: 58 } as const;
 
-/** App-shell data consumed once by CumulusQuestChrome for every product screen. */
-export interface QuestChromeHudView {
+/** App-shell data consumed once by CumulusJourneyChrome for every product screen. */
+export interface JourneyChromeHudView {
   essence: number;
   deck: number;
   dreamAvatar?: QsbDreamAvatar;
@@ -140,7 +140,7 @@ export function buildSiteModels(
   });
 }
 
-/** Map the active DreamAvatar to the bust the QuestStatusBar docks. */
+/** Map the active DreamAvatar to the bust the JourneyStatusBar docks. */
 export function toQsbDreamAvatar(
   dreamAvatar: DreamAvatar | null,
 ): QsbDreamAvatar | undefined {
@@ -171,7 +171,7 @@ export function toQsbDreamsigns(
       return;
     }
     docked.push({
-      id: requireDreamsignId(sign, "QuestStatusBar docked"),
+      id: requireDreamsignId(sign, "JourneyStatusBar docked"),
       name: sign.name,
       imageName: sign.imageName,
       imageAlt: sign.imageAlt,
@@ -183,7 +183,7 @@ export function toQsbDreamsigns(
 }
 
 /** The bottom-HUD slice of the view-model, from live run state. */
-export function buildDreamscapeHudView(state: QuestState): QuestChromeHudView {
+export function buildDreamscapeHudView(state: JourneyState): JourneyChromeHudView {
   return {
     essence: state.essence,
     deck: state.deck.length,
@@ -206,11 +206,11 @@ export function dreamscapeTitle(node: DreamscapeNode): string {
 
 /**
  * The full view-model for the dreamscape screen: the scene and its placed site
- * nodes. Persistent quest chrome is derived once by the router-owned wrapper.
+ * nodes. Persistent journey chrome is derived once by the router-owned wrapper.
  */
 export function buildDreamscapeView(
   node: DreamscapeNode,
-  state: QuestState,
+  state: JourneyState,
   replacementSiteId: string | null = null,
 ): DreamscapeView {
   const inlineRewards: Record<string, InlineRewardView> = {};
@@ -247,7 +247,7 @@ export function buildDreamscapeView(
 
 /** Build the UUID-backed replacement choice for an at-cap Reward site. */
 export function buildDreamsignReplacementView(
-  state: QuestState,
+  state: JourneyState,
   siteId: string | null,
 ): DreamsignReplacementView | null {
   if (siteId === null || state.dreamsigns.length < state.maxDreamsigns) {

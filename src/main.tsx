@@ -152,7 +152,7 @@ if (pathname === "/editor" || pathname === "/cards") {
   // The dev card/figment/config data hot-reload plugins (see vite.config.ts)
   // emit targeted custom HMR events instead of a full reload, so that saving in
   // the card or figment editor never reloads the editor page. The running
-  // battle/quest app opts in here: it reloads to pick up edited card, figment,
+  // battle/journey app opts in here: it reloads to pick up edited card, figment,
   // or Dream Atlas config data (the catalogs are re-fetched and rehydrated on
   // load). The editor routes above never register these handlers, so an editor
   // save leaves the page — and any open art editor — untouched.
@@ -189,7 +189,7 @@ if (pathname === "/editor" || pathname === "/cards") {
   const runtimeConfig = parseRuntimeConfig(canonicalSearch);
 
   // Standalone component demos for browser QA. Mount with
-  // `?demo=<name>` to bypass the full quest workflow when inspecting a
+  // `?demo=<name>` to bypass the full journey workflow when inspecting a
   // specific component in isolation.
   const demoParam = new URLSearchParams(window.location.search).get("demo");
 

@@ -8,7 +8,7 @@ export const TUTORIAL_PLAYER_CARD_ID = "e83014d3-9d35-4e80-a1b3-9b25360ad2af";
 export const TUTORIAL_PLAYER_CARD_INSTANCE_ID = "tutorial-player-deck-1";
 export const TUTORIAL_DREAMWELL_CARD_ID =
   "02e8ea92-1218-413c-9f0b-4c865a3921d3";
-/** UUID of the DreamAvatar offered when the tutorial hands off to a new quest. */
+/** UUID of the DreamAvatar offered when the tutorial hands off to a new journey. */
 export const TUTORIAL_DREAM_AVATAR_ID =
   "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
 

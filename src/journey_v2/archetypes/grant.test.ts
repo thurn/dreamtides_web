@@ -10,7 +10,7 @@ import {
   makeMerchantTestCorpus,
   makeMerchantTestDeckEntry,
   makeMerchantTestFitModel,
-  makeMerchantTestQuestState,
+  makeMerchantTestJourneyState,
   makeMerchantTestResolvedPackage,
   makeMerchantTestSite,
 } from "../testing/fixtures";
@@ -89,14 +89,14 @@ function makeContext(input: {
   corpusCards?: Record<string, { quality: number; multiplicity?: number }>;
   fitModel?: FitModel;
   /**
-   * Card numbers in this quest's resolved draft pool. Defaults to every catalog
+   * Card numbers in this journey's resolved draft pool. Defaults to every catalog
    * card, so tests that don't care about the pool treat the whole catalog as
    * draftable; pass a subset to exercise the draft-pool restriction.
    */
   draftPoolCardNumbers?: readonly number[];
 }): MerchantContext {
   const fitModel = input.fitModel;
-  const questContent = makeMerchantTestContent({
+  const journeyContent = makeMerchantTestContent({
     cards: input.poolCards,
     fitModel,
     merchantCorpus: makeMerchantTestCorpus({ cards: input.corpusCards ?? {} }),
@@ -104,7 +104,7 @@ function makeContext(input: {
   const deck = (input.deckEntries ?? []).map((e) =>
     makeMerchantTestDeckEntry({ entryId: e.entryId, cardNumber: e.cardNumber }),
   );
-  // Treat every fixture pool card as draftable from this quest's pool, so
+  // Treat every fixture pool card as draftable from this journey's pool, so
   // `category_draft_known` (which only offers draft-pool cards) can fire.
   const draftPoolCardNumbers =
     input.draftPoolCardNumbers ?? input.poolCards.map((card) => card.cardNumber);
@@ -112,13 +112,13 @@ function makeContext(input: {
   for (const cardNumber of draftPoolCardNumbers) {
     draftPoolCopiesByCard[String(cardNumber)] = 1;
   }
-  const questState = makeMerchantTestQuestState({
+  const journeyState = makeMerchantTestJourneyState({
     deck,
     resolvedPackage: makeMerchantTestResolvedPackage({ draftPoolCopiesByCard }),
   });
   return buildMerchantContext({
-    questState,
-    questContent,
+    journeyState,
+    journeyContent,
     site: makeMerchantTestSite(),
   });
 }
@@ -268,15 +268,15 @@ describe("grant family — copies_draft", () => {
 
     const candidate = candidates[0];
     expect(candidate).toBeDefined();
-    const questContent = makeMerchantTestContent({ cards: allCards });
-    const questState = makeMerchantTestQuestState({
+    const journeyContent = makeMerchantTestContent({ cards: allCards });
+    const journeyState = makeMerchantTestJourneyState({
       deck: deckEntries.map((e) =>
         makeMerchantTestDeckEntry({ entryId: e.entryId, cardNumber: e.cardNumber }),
       ),
     });
     const next = applyMerchantPayloadToState({
-      state: questState,
-      questContent,
+      state: journeyState,
+      journeyContent,
       payload: candidate.applyPayload,
     });
     expect(next).not.toBeNull();
@@ -602,15 +602,15 @@ describe("grant family — transfigured_draft", () => {
     const candidate = draft?.choiceRequest?.candidates[0] as MerchantChoiceCandidate;
     expect(candidate.applyPayload.kind).toBe("add_catalog_card");
 
-    const questContent = makeMerchantTestContent({ cards: allCards });
-    const questState = makeMerchantTestQuestState({
+    const journeyContent = makeMerchantTestContent({ cards: allCards });
+    const journeyState = makeMerchantTestJourneyState({
       deck: deckEntries.map((e) =>
         makeMerchantTestDeckEntry({ entryId: e.entryId, cardNumber: e.cardNumber }),
       ),
     });
     const next = applyMerchantPayloadToState({
-      state: questState,
-      questContent,
+      state: journeyState,
+      journeyContent,
       payload: candidate.applyPayload,
     });
     expect(next).not.toBeNull();

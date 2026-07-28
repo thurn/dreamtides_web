@@ -167,7 +167,7 @@ function offerIdentity(offer: MerchantOffer): unknown {
 
 function inputSignature(context: MerchantContext): unknown {
   return {
-    questSeed: context.questSeed,
+    journeySeed: context.journeySeed,
     siteId: context.site.id,
     deck: context.deckCards
       .map((deckCard) => ({
@@ -262,7 +262,7 @@ export function generateMerchantEncounterWithDebug(
   const eligibleArchetypeIds = eligible.map((builder) => builder.archetypeId);
 
   // A non-zero debug reroll nonce mixes a "reroll|N" suffix into the salt so
-  // the same quest parameters yield a fresh encounter. A zero/absent nonce
+  // the same journey parameters yield a fresh encounter. A zero/absent nonce
   // contributes nothing, leaving untouched encounters bit-identical.
   const rerollSalt =
     context.rerollNonce && context.rerollNonce > 0
@@ -270,7 +270,7 @@ export function generateMerchantEncounterWithDebug(
       : [];
 
   // A debug-forced archetype only applies when it is actually eligible for the
-  // current quest state; otherwise it is silently ignored and slot A rolls
+  // current journey state; otherwise it is silently ignored and slot A rolls
   // normally. Forcing targets slot A so the encounter always shows at least one
   // offer of the chosen category.
   const forcedBuilder =
@@ -280,7 +280,7 @@ export function generateMerchantEncounterWithDebug(
           (builder) => builder.archetypeId === context.forcedArchetypeId,
         ) ?? null);
 
-  const slotASalt = [context.questSeed, context.site.id, "A", ...rerollSalt];
+  const slotASalt = [context.journeySeed, context.site.id, "A", ...rerollSalt];
   // Slot A: a forced builder's attempts come first; if it never builds we fall
   // back to a normal roll and concatenate both attempt logs so the dead forced
   // rolls remain visible alongside the eventual pick.
@@ -312,7 +312,7 @@ export function generateMerchantEncounterWithDebug(
   const eligibleB = eligible.filter(
     (builder) => builder.family !== slotA.builder.family,
   );
-  const slotBSalt = [context.questSeed, context.site.id, "B", ...rerollSalt];
+  const slotBSalt = [context.journeySeed, context.site.id, "B", ...rerollSalt];
   const rolledB = rollSlot(eligibleB, context, slotBSalt);
   if (rolledB.result === null) {
     throw new Error("Dream Merchant could not roll a second offer");

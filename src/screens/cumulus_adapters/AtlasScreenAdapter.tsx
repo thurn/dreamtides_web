@@ -1,6 +1,6 @@
-// Adapter bridging live quest state to the pure Cumulus atlas screen
+// Adapter bridging live journey state to the pure Cumulus atlas screen
 // (`src/cumulus/screens/AtlasScreen`). Adapters are wiring only: this one owns
-// `useQuest()`, builds the view-model, wires node entry to `setCurrentDreamscape`
+// `useJourney()`, builds the view-model, wires node entry to `setCurrentDreamscape`
 // + `setScreen`, and emits the reconstruction logging. All mapping from domain
 // data to the screen's view types lives in the pure builder
 // (`atlas-view-model.ts`); the Cumulus screen itself stays pure. The atlas's
@@ -8,7 +8,7 @@
 // app-shell hamburger menu, not this adapter.
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { useQuest } from "../../state/quest-context";
+import { useJourney } from "../../state/journey-context";
 import { logEvent } from "../../logging";
 import { AtlasScreen } from "../../cumulus/screens/AtlasScreen";
 import { useIsDesktop } from "../../cumulus/screens/use-is-desktop";
@@ -20,13 +20,13 @@ import { buildAtlasView, atlasChoiceLayer } from "./atlas-view-model";
  * the presented atlas once per navigation for reconstruction.
  */
 export function AtlasScreenAdapter() {
-  const { state, mutations, questContent } = useQuest();
+  const { state, mutations, journeyContent } = useJourney();
   const { atlas } = state;
   const isDesktop = useIsDesktop();
 
   const view = useMemo(
-    () => buildAtlasView(atlas, questContent, isDesktop),
-    [atlas, questContent, isDesktop],
+    () => buildAtlasView(atlas, journeyContent, isDesktop),
+    [atlas, journeyContent, isDesktop],
   );
 
   // Reconstruction log: which atlas was presented, its current frontier, and

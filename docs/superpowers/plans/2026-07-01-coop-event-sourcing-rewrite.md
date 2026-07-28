@@ -2,13 +2,13 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use super-subagent-driven-development (recommended) or super-executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace the quest prototype's coop multiplayer with the event-sourced "shared log, local fold" architecture: clients append intent events to a totally-ordered RTDB log; every client folds the log with a pure reducer; all simulation lives in the reducer; no legacy sync code survives.
+**Goal:** Replace the journey prototype's coop multiplayer with the event-sourced "shared log, local fold" architecture: clients append intent events to a totally-ordered RTDB log; every client folds the log with a pure reducer; all simulation lives in the reducer; no legacy sync code survives.
 
-**Architecture:** Three packages with strict dependency direction — `src/eventlog/` (game-agnostic append/fold/compaction/echo engine parameterized by a reducer), `src/rules/` (pure game reducer: quest events, battle events, fold-time effect engine), `src/coop/` (thin React layer). Big-bang cutover; undo removed; no Firebase data compatibility.
+**Architecture:** Three packages with strict dependency direction — `src/eventlog/` (game-agnostic append/fold/compaction/echo engine parameterized by a reducer), `src/rules/` (pure game reducer: journey events, battle events, fold-time effect engine), `src/coop/` (thin React layer). Big-bang cutover; undo removed; no Firebase data compatibility.
 
 **Tech Stack:** TypeScript, React, Vite, Vitest, Firebase RTDB (+ emulator), ESLint flat config.
 
-**Authoritative documents:** the spec `docs/superpowers/specs/2026-07-01-coop-event-sourcing-rewrite-design.md` (all type shapes: `GameEvent`, `Genesis`, `EngineConfig`, `FoldState`, `BattleFoldState`, `EffectRun`, `PendingPrompt`, the CAS policy, the RTDB schema) and the proposal `docs/quest_prototype/coop_event_sourcing_proposal.md`. When this plan says "per spec §X", the spec section is the contract — do not re-derive it.
+**Authoritative documents:** the spec `docs/superpowers/specs/2026-07-01-coop-event-sourcing-rewrite-design.md` (all type shapes: `GameEvent`, `Genesis`, `EngineConfig`, `FoldState`, `BattleFoldState`, `EffectRun`, `PendingPrompt`, the CAS policy, the RTDB schema) and the proposal `docs/journey_prototype/coop_event_sourcing_proposal.md`. When this plan says "per spec §X", the spec section is the contract — do not re-derive it.
 
 **Execution rules for every task:**
 - Per AGENTS.md: commit with a detailed message **and `git push`** at the end of every task. Work on `master`; do not create branches.
@@ -37,8 +37,8 @@ src/rules/                       # Stage B/C — pure reducer (lint-banned: fire
   events.ts                          # discriminated union of every event type (table below)
   fold-state.ts                      # FoldState + genesisFoldState(genesis)
   reducer.ts      reducer.test.ts    # root fold: CAS policy → domain routing
-  quest/
-    lifecycle.ts   lifecycle.test.ts # START_QUEST, RESET_QUEST, LOAD_STATE, SELECT_DREAM_AVATAR, screens/travel
+  journey/
+    lifecycle.ts   lifecycle.test.ts # START_JOURNEY, RESET_JOURNEY, LOAD_STATE, SELECT_DREAM_AVATAR, screens/travel
     deck.ts        deck.test.ts      # deck, transfiguration, dreamsign events
     draft.ts       draft.test.ts     # PICK_DRAFT_CARD, SET_DRAFT_STATE
     sites.ts       sites.test.ts     # OPEN_SITE generation + site interaction events
@@ -59,20 +59,20 @@ src/coop/                        # Stage D — React layer
   build-hash.ts                      # __BUILD_HASH__ accessor (env fallback for tests)
   RoomGate.tsx                       # create/join, presence, subscribe, version gate, log sink
   hooks.ts                           # useGameState(), useAppend(), useConnectedCount()
-  actions.ts      actions.test.ts    # named action creators mirroring legacy QuestMutations
+  actions.ts      actions.test.ts    # named action creators mirroring legacy JourneyMutations
   BounceToast.tsx                    # "your partner acted first" notification
   VersionGateScreen.tsx              # read-only new-version state
   EventLogViewer.tsx                 # ?viewLogs= viewer over the event log
-  quest-log-sink.ts                  # minimal rewrite of the JSONL sink → rooms/{id}/logs
+  journey-log-sink.ts                  # minimal rewrite of the JSONL sink → rooms/{id}/logs
 ```
 
-Deleted in Stage E (full inventory in Task 28): all of `src/multiplayer/`, `src/state/multiplayer-quest-context.tsx`, `src/state/multiplayer-battle-context.tsx`, `src/state/use-ensure-battle-session.ts`, `src/state/quest-state-invariants.ts`, `src/battle/automation/use-battle-effect-runner.ts`, `src/battle/automation/use-dreamwell-effect-runner.ts`, `src/battle/state/history.ts`, and their tests.
+Deleted in Stage E (full inventory in Task 28): all of `src/multiplayer/`, `src/state/multiplayer-journey-context.tsx`, `src/state/multiplayer-battle-context.tsx`, `src/state/use-ensure-battle-session.ts`, `src/state/journey-state-invariants.ts`, `src/battle/automation/use-battle-effect-runner.ts`, `src/battle/automation/use-dreamwell-effect-runner.ts`, `src/battle/state/history.ts`, and their tests.
 
 ---
 
 ## Legacy mutation → event mapping (the authoritative table)
 
-Every multiplayer mutation in `src/state/multiplayer-quest-context.tsx` maps to exactly one row. Payload fields mirror the legacy mutation's parameters (UUIDs and indices only — never card names) unless a note says the reducer now derives the value. Rows marked *(debug)* are debug/QA-only surface and keep working.
+Every multiplayer mutation in `src/state/multiplayer-journey-context.tsx` maps to exactly one row. Payload fields mirror the legacy mutation's parameters (UUIDs and indices only — never card names) unless a note says the reducer now derives the value. Rows marked *(debug)* are debug/QA-only surface and keep working.
 
 **Consolidations** (approved in spec): the five `ensure*SiteRuntime` writers collapse into `OPEN_SITE` (generation moves in-reducer, drawn from `ctx.rng`); the four add-card variants collapse into `ADD_CARD` with option fields; `setDeckEntryTypeChange`/`changeDeckEntryType` collapse into `SET_DECK_ENTRY_TYPE`; the QA bootstraps compose `LOAD_STATE` (+ `BEGIN_BATTLE` for start-in-battle) on the client.
 
@@ -84,11 +84,11 @@ Every multiplayer mutation in `src/state/multiplayer-quest-context.tsx` maps to 
 | setEssenceCap *(debug)* | `SET_ESSENCE_CAP` | `{ value }` |
 | setMaxDreamsigns *(debug)* | `SET_MAX_DREAMSIGNS` | `{ value }` |
 | setCompletionLevel *(debug)* | `SET_COMPLETION_LEVEL` | `{ value }` |
-| startQuest | `START_QUEST` | payload mirrors legacy args; initial state built via `ctx.rng` |
-| resetQuest | `RESET_QUEST` | `{}`; resets to genesis quest state, clears battle |
-| loadQuestState / bootstrapQaScene *(debug)* | `LOAD_STATE` | `{ snapshot: FoldState["quest"], battle?: BattleFoldState }`; large payload is fine, compaction absorbs it |
+| startJourney | `START_JOURNEY` | payload mirrors legacy args; initial state built via `ctx.rng` |
+| resetJourney | `RESET_JOURNEY` | `{}`; resets to genesis journey state, clears battle |
+| loadJourneyState / bootstrapQaScene *(debug)* | `LOAD_STATE` | `{ snapshot: FoldState["journey"], battle?: BattleFoldState }`; large payload is fine, compaction absorbs it |
 | bootstrapStartInBattle *(debug)* | `LOAD_STATE` then `BEGIN_BATTLE` | client appends both |
-| setDream AvatarSelection | `SELECT_DREAM_AVATAR` | `{ dreamAvatarId }`; reducer derives `resolvedPackage` and `remainingDreamsignPool` deterministically from the UUID and the folded `quest.seed` (= `genesis.seed`, identical on every client) via the `QuestLifecycleContentProvider`, instead of trusting a client-computed package |
+| setDream AvatarSelection | `SELECT_DREAM_AVATAR` | `{ dreamAvatarId }`; reducer derives `resolvedPackage` and `remainingDreamsignPool` deterministically from the UUID and the folded `journey.seed` (= `genesis.seed`, identical on every client) via the `JourneyLifecycleContentProvider`, instead of trusting a client-computed package |
 | setScreen | `SET_SCREEN` | `{ screen, activeSiteId }` |
 | setCurrentDreamscape | `TRAVEL_TO_DREAMSCAPE` | `{ nodeId }`; visitedSites + dreamscapeModifiers decrement in-case |
 | markSiteVisited | `MARK_SITE_VISITED` | `{ siteId }` |
@@ -135,7 +135,7 @@ Every multiplayer mutation in `src/state/multiplayer-quest-context.tsx` maps to 
 | updateAtlas *(debug)* | `UPDATE_ATLAS` | `{ atlas }` |
 | setCardSourceDebug *(debug)* | `SET_CARD_SOURCE_DEBUG` | `{ state }` |
 | incrementCompletionLevel | `END_BATTLE` | `{ result: "victory" }`; reducer bumps completionLevel, sets screen, decrements battleModifiers, applies deck changes, clears `state.battle` |
-| setFailureSummary | `END_BATTLE` | `{ result: "defeat" }`; reducer derives the failure summary from the battle fold state. If a non-battle caller of setFailureSummary exists, it maps to `QUEST_FAILED { summary }` |
+| setFailureSummary | `END_BATTLE` | `{ result: "defeat" }`; reducer derives the failure summary from the battle fold state. If a non-battle caller of setFailureSummary exists, it maps to `JOURNEY_FAILED { summary }` |
 
 Battle events (new, no legacy 1:1): `BEGIN_BATTLE { siteId }`, `BATTLE_COMMAND { command: BattleCommand }` (the existing command type wrapping `BattleDebugEdit` / force-result), `RESOLVE_PROMPT { promptId, resolution: PromptResolution }`, `SET_CARD_NOTE { instanceId, note }` (CAS-exempt, alongside `OPEN_SITE`).
 
@@ -254,31 +254,31 @@ Follow the harness pattern of the existing `src/multiplayer/firebase-emulator.in
 
 ---
 
-## Stage B — rules: quest domain
+## Stage B — rules: journey domain
 
 ### Task 10: `fold-state.ts`, `events.ts`, root reducer with CAS policy
 
 **Files:** Create: `src/rules/fold-state.ts`, `src/rules/events.ts`, `src/rules/reducer.ts`, `src/rules/reducer.test.ts`
 
-- `fold-state.ts`: `FoldState` per spec (quest + battle, no undo), `genesisFoldState(genesis)` producing the pre-quest state (the state a fresh room shows before `START_QUEST` — mirror what legacy `createRoom` seeded as the initial `questState`).
+- `fold-state.ts`: `FoldState` per spec (journey + battle, no undo), `genesisFoldState(genesis)` producing the pre-journey state (the state a fresh room shows before `START_JOURNEY` — mirror what legacy `createRoom` seeded as the initial `journeyState`).
 - `events.ts`: the discriminated union. Add every type from the mapping table now, each with its payload interface; domain cases land per-task and until then unknown-to-the-router types **bounce** (never throw).
 - `reducer.ts`: `reduceGameEvent(state, event, ctx): { state, outcome }` implementing spec §Root fold and CAS policy rules 1–6 verbatim: CAS-exempt check (`SET_CARD_NOTE` and `OPEN_SITE`) → matching-`RESOLVE_PROMPT` fast path → intervening/unknown bounce (ignoring decision-neutral types: `SET_CARD_NOTE`) → prompt gate → domain routing → invalid-intent bounce. The reducer must never throw on any event content.
 
 - [ ] **Step 1: Failing tests for the policy** (use `ADJUST_ESSENCE` as the probe event once its case exists — write these tests against a minimal `ADJUST_ESSENCE` case implemented in this task as the first domain case). Bug classes: **partner-intervening applied** (event with an applied partner seq in the window must bounce even if it would be valid); **note is decision-neutral** (an applied partner `SET_CARD_NOTE` in the window must not bounce an unrelated intent); **self-chain bounced** (own-actor-only window must apply); **unknown window applied** (`intervening: "unknown"` must bounce); **prompt gate leak** (with `pendingPrompt` set, `ADJUST_ESSENCE` bounces, matching `RESOLVE_PROMPT` is routed); **CAS-exempt discipline** (`SET_CARD_NOTE` applies through both a partner window and an open prompt); **throw on garbage** (an event with `type: "NOT_A_REAL_TYPE"` and payload `null` returns a bounce, does not throw).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**
 
-### Task 11: Quest lifecycle, essence, navigation events
+### Task 11: Journey lifecycle, essence, navigation events
 
-**Files:** Create: `src/rules/quest/lifecycle.ts`, `src/rules/quest/lifecycle.test.ts`; Modify: `src/rules/reducer.ts` (routing)
+**Files:** Create: `src/rules/journey/lifecycle.ts`, `src/rules/journey/lifecycle.test.ts`; Modify: `src/rules/reducer.ts` (routing)
 
-Implement the reducer cases for: `START_QUEST`, `RESET_QUEST`, `LOAD_STATE`, `SELECT_DREAM_AVATAR`, `SET_SCREEN`, `TRAVEL_TO_DREAMSCAPE`, `MARK_SITE_VISITED`, `DISMISS_STARTING_DECK_POPUP`, `SET_ESSENCE`, `ADJUST_ESSENCE`, `SET_ESSENCE_CAP`, `ADJUST_ESSENCE_CAP`, `SET_MAX_DREAMSIGNS`, `SET_COMPLETION_LEVEL`. **Method:** for each, locate the legacy mutation body in `src/state/multiplayer-quest-context.tsx` (grep by mutation name), move its domain math into a pure function taking `(quest, payload, ctx)`, and drop the transaction/normalization/actionLog wrapper. `SELECT_DREAM_AVATAR` additionally absorbs the package-resolution logic the legacy mutation received pre-computed from the client — find where callers compute `resolvedPackage` today and move that computation in-reducer, replacing any `Math.random` with `ctx.rng`.
+Implement the reducer cases for: `START_JOURNEY`, `RESET_JOURNEY`, `LOAD_STATE`, `SELECT_DREAM_AVATAR`, `SET_SCREEN`, `TRAVEL_TO_DREAMSCAPE`, `MARK_SITE_VISITED`, `DISMISS_STARTING_DECK_POPUP`, `SET_ESSENCE`, `ADJUST_ESSENCE`, `SET_ESSENCE_CAP`, `ADJUST_ESSENCE_CAP`, `SET_MAX_DREAMSIGNS`, `SET_COMPLETION_LEVEL`. **Method:** for each, locate the legacy mutation body in `src/state/multiplayer-journey-context.tsx` (grep by mutation name), move its domain math into a pure function taking `(journey, payload, ctx)`, and drop the transaction/normalization/actionLog wrapper. `SELECT_DREAM_AVATAR` additionally absorbs the package-resolution logic the legacy mutation received pre-computed from the client — find where callers compute `resolvedPackage` today and move that computation in-reducer, replacing any `Math.random` with `ctx.rng`.
 
-- [ ] **Step 1: Failing tests.** Bug classes: **cap clamp** (essence never exits `[0, essenceCap]` across a property sweep of random deltas); **travel modifier decrement** (`TRAVEL_TO_DREAMSCAPE` decrements dreamscapeModifiers and drops zeroed entries — the documented contract on `QuestState.dreamscapeModifiers`); **dream avatar determinism** (same seed + same seq → `SELECT_DREAM_AVATAR` yields byte-identical resolvedPackage via `hashState`); **reset completeness** (`RESET_QUEST` output equals `genesisFoldState` output by hash — catches fields forgotten on reset).
+- [ ] **Step 1: Failing tests.** Bug classes: **cap clamp** (essence never exits `[0, essenceCap]` across a property sweep of random deltas); **travel modifier decrement** (`TRAVEL_TO_DREAMSCAPE` decrements dreamscapeModifiers and drops zeroed entries — the documented contract on `JourneyState.dreamscapeModifiers`); **dream avatar determinism** (same seed + same seq → `SELECT_DREAM_AVATAR` yields byte-identical resolvedPackage via `hashState`); **reset completeness** (`RESET_JOURNEY` output equals `genesisFoldState` output by hash — catches fields forgotten on reset).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**
 
 ### Task 12: Deck, transfiguration, dreamsign events
 
-**Files:** Create: `src/rules/quest/deck.ts`, `src/rules/quest/deck.test.ts`; Modify: `src/rules/reducer.ts`
+**Files:** Create: `src/rules/journey/deck.ts`, `src/rules/journey/deck.test.ts`; Modify: `src/rules/reducer.ts`
 
 Cases: `ADD_CARD`, `REMOVE_DECK_ENTRY`, `PURGE_DECK_CARDS`, `DUPLICATE_DECK_ENTRY`, `SET_DECK_ENTRY_STAT_OVERRIDE`, `SET_DECK_ENTRY_KEYWORDS`, `SET_DECK_ENTRY_TYPE`, `TRANSFIGURE_CARD`, `ACCEPT_TRANSFIGURATION_CHOICE`, `ACCEPT_DUPLICATION_CHOICE`, `PURGE_ALL_BANE_CARDS`, `PURGE_RANDOM_BANE_CARDS`, `ADD_DREAMSIGN`, `REMOVE_DREAMSIGN`, `SET_DREAMSIGN_POOL`, `SET_DREAMSIGN_IS_BANE`. Same relocation method as Task 11.
 
@@ -287,7 +287,7 @@ Cases: `ADD_CARD`, `REMOVE_DECK_ENTRY`, `PURGE_DECK_CARDS`, `DUPLICATE_DECK_ENTR
 
 ### Task 13: Draft events
 
-**Files:** Create: `src/rules/quest/draft.ts`, `src/rules/quest/draft.test.ts`; Modify: `src/rules/reducer.ts`, `src/draft/draft-engine.ts` (or wherever `weightedSample` at `draft-engine.ts:99` lives)
+**Files:** Create: `src/rules/journey/draft.ts`, `src/rules/journey/draft.test.ts`; Modify: `src/rules/reducer.ts`, `src/draft/draft-engine.ts` (or wherever `weightedSample` at `draft-engine.ts:99` lives)
 
 Cases: `PICK_DRAFT_CARD`, `SET_DRAFT_STATE`. Also plug the RNG leak the spec names: `weightedSample` in draft-engine takes an injected `rng: () => number` parameter; all callers thread it (reducer callers pass `ctx.rng`-derived streams; any non-reducer caller passes an explicit rng from its own seed context).
 
@@ -296,7 +296,7 @@ Cases: `PICK_DRAFT_CARD`, `SET_DRAFT_STATE`. Also plug the RNG leak the spec nam
 
 ### Task 14: Site events with in-reducer generation
 
-**Files:** Create: `src/rules/quest/sites.ts`, `src/rules/quest/sites.test.ts`; Modify: `src/rules/reducer.ts`
+**Files:** Create: `src/rules/journey/sites.ts`, `src/rules/journey/sites.test.ts`; Modify: `src/rules/reducer.ts`
 
 Cases: `OPEN_SITE`, `COMPLETE_DREAM_AUGURY`, `ACCEPT_REWARD`, `ACCEPT_DREAMSIGN_OFFER`, `REJECT_DREAMSIGN_OFFER`, `ACCEPT_ESSENCE`, `REROLL_DREAM_AUGURY`, `FORCE_DREAM_AUGURY_ARCHETYPE`, `COMPLETE_SITE`. `OPEN_SITE` dispatches on the site's type and relocates the generation logic from each legacy `ensure*SiteRuntime` body, drawing from `ctx.rng`. Idempotence rule from the mapping table: existing runtime → unchanged state, outcome **applied**.
 
@@ -305,20 +305,20 @@ Cases: `OPEN_SITE`, `COMPLETE_DREAM_AUGURY`, `ACCEPT_REWARD`, `ACCEPT_DREAMSIGN_
 
 ### Task 15: Shop, merchant, modifier events
 
-**Files:** Create: `src/rules/quest/shop.ts`, `src/rules/quest/shop.test.ts`; Modify: `src/rules/reducer.ts`
+**Files:** Create: `src/rules/journey/shop.ts`, `src/rules/journey/shop.test.ts`; Modify: `src/rules/reducer.ts`
 
-Cases: `BUY_SHOP_SLOT`, `REROLL_SHOP`, `GRANT_FREE_REROLLS`, `APPLY_SHOP_DISCOUNT`, `ACCEPT_MERCHANT_OFFER`, `DECLINE_MERCHANT`, `PUSH_BATTLE_MODIFIER`, `PUSH_TEMPORARY_BANE_GRANT`, `BAN_SITE_TYPE`, `BOOST_SITE_APPEARANCE`, `REPLACE_SITE_TYPE`, `ADD_SITE_TO_DREAMSCAPE`, `UPDATE_ATLAS`, `SET_CARD_SOURCE_DEBUG`. Also in this task: grep the callers of the legacy `setFailureSummary`; if any caller sets a failure summary outside the battle-defeat path, add `QUEST_FAILED { summary }` (to `events.ts`, this file, and `actions.ts` in Task 25); otherwise `END_BATTLE { result: "defeat" }` fully covers it and no extra event exists.
+Cases: `BUY_SHOP_SLOT`, `REROLL_SHOP`, `GRANT_FREE_REROLLS`, `APPLY_SHOP_DISCOUNT`, `ACCEPT_MERCHANT_OFFER`, `DECLINE_MERCHANT`, `PUSH_BATTLE_MODIFIER`, `PUSH_TEMPORARY_BANE_GRANT`, `BAN_SITE_TYPE`, `BOOST_SITE_APPEARANCE`, `REPLACE_SITE_TYPE`, `ADD_SITE_TO_DREAMSCAPE`, `UPDATE_ATLAS`, `SET_CARD_SOURCE_DEBUG`. Also in this task: grep the callers of the legacy `setFailureSummary`; if any caller sets a failure summary outside the battle-defeat path, add `JOURNEY_FAILED { summary }` (to `events.ts`, this file, and `actions.ts` in Task 25); otherwise `END_BATTLE { result: "defeat" }` fully covers it and no extra event exists.
 
 - [ ] **Step 1: Failing tests.** Bug classes: **insufficient-essence bounce** (BUY with price > essence bounces, essence unchanged); **double-buy bounce** (second BUY on the same slot bounces — the coop race); **discount application** (BUY with `shopModifiers.essenceDiscountPercent` set charges the discounted price — pins the documented ShopModifiers contract); **free-reroll consumption order** (REROLL consumes freeRerolls before charging essence).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**
 
-### Task 16: Quest-level property tests
+### Task 16: Journey-level property tests
 
-**Files:** Create: `src/rules/quest/quest-properties.test.ts`
+**Files:** Create: `src/rules/journey/journey-properties.test.ts`
 
-Cross-cutting suites that only make sense once all quest cases exist:
+Cross-cutting suites that only make sense once all journey cases exist:
 
-- [ ] **Step 1: Write the tests.** (a) **Run-field nullability** — the successor to the deleted `NON_NULLABLE_RUN_FIELDS` guard: for 100 random event sequences (seeded generator drawing from the full quest event union with arbitrary payloads) applied after a `START_QUEST`+`SELECT_DREAM_AVATAR` prefix, no reachable state has `draftState`/`resolvedPackage`/`dreamAvatar` transition non-null → null except via `RESET_QUEST`/`LOAD_STATE`. (b) **Total fold safety** — the same 100 sequences never throw and every outcome is applied|bounced. (c) **Determinism** — each sequence folded twice yields identical final hash. (d) **JSON purity** — final states survive `config.encode`/`decode` round-trip with hash equality (catches functions/undefined smuggled into state).
+- [ ] **Step 1: Write the tests.** (a) **Run-field nullability** — the successor to the deleted `NON_NULLABLE_RUN_FIELDS` guard: for 100 random event sequences (seeded generator drawing from the full journey event union with arbitrary payloads) applied after a `START_JOURNEY`+`SELECT_DREAM_AVATAR` prefix, no reachable state has `draftState`/`resolvedPackage`/`dreamAvatar` transition non-null → null except via `RESET_JOURNEY`/`LOAD_STATE`. (b) **Total fold safety** — the same 100 sequences never throw and every outcome is applied|bounced. (c) **Determinism** — each sequence folded twice yields identical final hash. (d) **JSON purity** — final states survive `config.encode`/`decode` round-trip with hash equality (catches functions/undefined smuggled into state).
 - [ ] **Step 2: Run — expect PASS (these validate Stage B; failures are real bugs in Tasks 10–15, fix them now).**
 - [ ] **Step 3: Commit and push.**
 
@@ -354,9 +354,9 @@ Logic is preserved (spec decision 2). Two mechanical changes only: (1) `collectD
 
 **Files:** Create: `src/rules/battle/battle-events.ts`, `src/rules/battle/battle-events.test.ts`; Modify: `src/rules/reducer.ts`
 
-`BEGIN_BATTLE { siteId }`: constructs `BattleFoldState` from quest state deterministically. Relocate the init logic from `src/multiplayer/battle-service.ts::ensureBattleSession`'s init construction and its callers in `src/state/use-ensure-battle-session.ts` (deck → battle board, dream avatar, opponent-deck construction), replacing every random draw with `ctx.rng` and every timestamp with `ctx.timestamp`. Bounces if a battle is already in progress. `END_BATTLE { result }`: relocate `incrementCompletionLevel` (victory) and the defeat/failure-summary path from `multiplayer-quest-context.tsx`; clears `state.battle`; bounces if no battle exists.
+`BEGIN_BATTLE { siteId }`: constructs `BattleFoldState` from journey state deterministically. Relocate the init logic from `src/multiplayer/battle-service.ts::ensureBattleSession`'s init construction and its callers in `src/state/use-ensure-battle-session.ts` (deck → battle board, dream avatar, opponent-deck construction), replacing every random draw with `ctx.rng` and every timestamp with `ctx.timestamp`. Bounces if a battle is already in progress. `END_BATTLE { result }`: relocate `incrementCompletionLevel` (victory) and the defeat/failure-summary path from `multiplayer-journey-context.tsx`; clears `state.battle`; bounces if no battle exists.
 
-- [ ] **Step 1: Failing tests.** Bug classes: **init nondeterminism** (same quest state, same seq → hash-identical BattleFoldState twice — the ensureBattleSession race, eliminated); **double-begin bounce** (second BEGIN_BATTLE bounces — the `begunEntryKey` class); **victory bookkeeping** (END_BATTLE victory: completionLevel +1, battleModifiers each decremented and zero-entries dropped, battle null — pins the documented `battleModifiers` contract); **defeat summary** (END_BATTLE defeat: failureSummary populated from the battle state, battle null).
+- [ ] **Step 1: Failing tests.** Bug classes: **init nondeterminism** (same journey state, same seq → hash-identical BattleFoldState twice — the ensureBattleSession race, eliminated); **double-begin bounce** (second BEGIN_BATTLE bounces — the `begunEntryKey` class); **victory bookkeeping** (END_BATTLE victory: completionLevel +1, battleModifiers each decremented and zero-entries dropped, battle null — pins the documented `battleModifiers` contract); **defeat summary** (END_BATTLE defeat: failureSummary populated from the battle state, battle null).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**
 
 ### Task 20: `BATTLE_COMMAND` with fold-time triggers
@@ -380,7 +380,7 @@ The reducer case replacing both effect-runner hooks' orchestration:
 
 `RESOLVE_PROMPT { promptId, resolution }`: matches `state.battle.pendingPrompt.promptId` (else bounce — root rule 4 already gates non-RESOLVE events; this task adds the matching-id apply path, which the root rule-2 fast path routes past the CAS check), applies via `resolvePendingPrompt`, continues the queue. `SET_CARD_NOTE { instanceId, note }`: CAS-exempt; stores the note with `event.clientTimestamp` (relocate whatever note shape `BattleCardNoteEditor.tsx` writes today).
 
-- [ ] **Step 1: Failing tests.** Bug classes: **prompt race** (two RESOLVE_PROMPT events for the same promptId in sequence: first applies, second bounces — both players answering simultaneously); **stale promptId** (RESOLVE_PROMPT with an old promptId after the prompt already resolved bounces); **foresee no-op contract** (a `foresee` resolution applies no edits itself, matching `applyPromptResolution`'s documented behavior — catches regressions in the relocation); **note through prompt** (SET_CARD_NOTE applies while a prompt is open); **resolve through neutral noise** (a matching RESOLVE_PROMPT applies even with an applied partner `SET_CARD_NOTE` or quest-level `OPEN_SITE` in its window — the spec's rule-2 fast path).
+- [ ] **Step 1: Failing tests.** Bug classes: **prompt race** (two RESOLVE_PROMPT events for the same promptId in sequence: first applies, second bounces — both players answering simultaneously); **stale promptId** (RESOLVE_PROMPT with an old promptId after the prompt already resolved bounces); **foresee no-op contract** (a `foresee` resolution applies no edits itself, matching `applyPromptResolution`'s documented behavior — catches regressions in the relocation); **note through prompt** (SET_CARD_NOTE applies while a prompt is open); **resolve through neutral noise** (a matching RESOLVE_PROMPT applies even with an applied partner `SET_CARD_NOTE` or journey-level `OPEN_SITE` in its window — the spec's rule-2 fast path).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**
 
 ### Task 22: Replay harness and fixtures CI
@@ -389,7 +389,7 @@ The reducer case replacing both effect-runner hooks' orchestration:
 
 `replay.ts`: `replayLog({ genesis, events }): { finalState, finalHash, outcomes }` — the full `EngineConfig` for the real game (reducer + genesisFoldState + JSON encode/decode + hashState), exported as `GAME_ENGINE_CONFIG` (this config object is also what `src/coop/` consumes in Stage D — single definition).
 
-- [ ] **Step 1: Build 3 synthetic fixtures** via a generator script: (a) a quest-only session (start → dream avatar → travel → open/accept sites → shop buy), (b) a battle session (begin → commands materializing scripted cards → prompt → resolve → end victory), (c) an adversarial session (interleaved two-actor events producing bounces, a prompt race, an OPEN_SITE race). Each fixture stores `{ genesis, events, finalHash }`. `scripts/regenerate-replay-fixtures.mjs` re-runs the generator and re-stamps hashes — the one-command regeneration for intentional reducer changes. Per AGENTS.md, fixtures assert hashes/structure only, never TOML-derived content; the generator resolves card UUIDs from live data at generation time.
+- [ ] **Step 1: Build 3 synthetic fixtures** via a generator script: (a) a journey-only session (start → dream avatar → travel → open/accept sites → shop buy), (b) a battle session (begin → commands materializing scripted cards → prompt → resolve → end victory), (c) an adversarial session (interleaved two-actor events producing bounces, a prompt race, an OPEN_SITE race). Each fixture stores `{ genesis, events, finalHash }`. `scripts/regenerate-replay-fixtures.mjs` re-runs the generator and re-stamps hashes — the one-command regeneration for intentional reducer changes. Per AGENTS.md, fixtures assert hashes/structure only, never TOML-derived content; the generator resolves card UUIDs from live data at generation time.
 - [ ] **Step 2: Failing test → implement → green.** The test replays each fixture and asserts `finalHash` matches. Bug class: any nondeterminism or unintended rules change — this is the permanent regression net for the whole reducer.
 - [ ] **Step 3: Commit and push** (fixtures included).
 
@@ -406,11 +406,11 @@ The reducer case replacing both effect-runner hooks' orchestration:
 - [ ] **Step 1: Implement; `npm run typecheck` and `npm test` green (existing suites must not break on the new global).**
 - [ ] **Step 2: Commit and push.**
 
-### Task 24: RoomGate, quest-log sink, EventLogViewer
+### Task 24: RoomGate, journey-log sink, EventLogViewer
 
-**Files:** Create: `src/coop/RoomGate.tsx`, `src/coop/quest-log-sink.ts`, `src/coop/EventLogViewer.tsx`, `src/coop/VersionGateScreen.tsx`
+**Files:** Create: `src/coop/RoomGate.tsx`, `src/coop/journey-log-sink.ts`, `src/coop/EventLogViewer.tsx`, `src/coop/VersionGateScreen.tsx`
 
-`RoomGate.tsx` (fresh code; same observable flow as legacy `MultiplayerRoomGate.tsx`): parse `?game=`, auto-create via `createRoomEvictingStale` + navigate, subscribe with a 15s timeout state, write presence, install the quest-log sink with `{ gameId: roomId }` context, and gate: if `genesis.reducerVersion !== getBuildHash()`, render `VersionGateScreen` (read-only message + "start a new game" button that creates a fresh room). `quest-log-sink.ts`: minimal buffered sink appending JSONL strings to `rooms/{id}/logs` with the legacy limits (2000 entries, flush on visibility change) — fresh minimal code, not a port. Single-writer rule per spec §Logging: each client mirrors only the events it appended (its own actor plus its `ai:` actor), tracked past a high-water seq so refolds after reconnect or compaction never re-mirror, as `{ event: "coop_event", seq, type, actor, outcome, stateHashAfter?, gameId }`; its own bounces additionally log `{ event: "event_bounced", seq, interveningSeqs }`; hash mismatches are logged by any observing client as `{ event: "fold_divergence", seq, expected, actual, clientId }`. `EventLogViewer.tsx`: `?viewLogs=<roomId>` renders the decoded event log (seq, type, actor, outcome) plus the raw JSONL sink, with download.
+`RoomGate.tsx` (fresh code; same observable flow as legacy `MultiplayerRoomGate.tsx`): parse `?game=`, auto-create via `createRoomEvictingStale` + navigate, subscribe with a 15s timeout state, write presence, install the journey-log sink with `{ gameId: roomId }` context, and gate: if `genesis.reducerVersion !== getBuildHash()`, render `VersionGateScreen` (read-only message + "start a new game" button that creates a fresh room). `journey-log-sink.ts`: minimal buffered sink appending JSONL strings to `rooms/{id}/logs` with the legacy limits (2000 entries, flush on visibility change) — fresh minimal code, not a port. Single-writer rule per spec §Logging: each client mirrors only the events it appended (its own actor plus its `ai:` actor), tracked past a high-water seq so refolds after reconnect or compaction never re-mirror, as `{ event: "coop_event", seq, type, actor, outcome, stateHashAfter?, gameId }`; its own bounces additionally log `{ event: "event_bounced", seq, interveningSeqs }`; hash mismatches are logged by any observing client as `{ event: "fold_divergence", seq, expected, actual, clientId }`. `EventLogViewer.tsx`: `?viewLogs=<roomId>` renders the decoded event log (seq, type, actor, outcome) plus the raw JSONL sink, with download.
 
 - [ ] **Step 1: Implement.** No new unit tests for the React shells themselves (they are wiring; browser QA in Task 30 covers them) — but the sink's prune/flush logic gets a unit test. Bug class: unbounded log growth (append 2,300 entries → prune keeps newest 2,000).
 - [ ] **Step 2: Checks green. Commit and push.**
@@ -419,19 +419,19 @@ The reducer case replacing both effect-runner hooks' orchestration:
 
 **Files:** Create: `src/coop/hooks.ts`, `src/coop/actions.ts`, `src/coop/actions.test.ts`, `src/coop/BounceToast.tsx`
 
-`hooks.ts`: a `CoopProvider` owning one `createLogClient(GAME_ENGINE_CONFIG, …)` instance per room; `useGameState(): FoldState` (displayed = confirmed + optimistic); `useAppend()`; `useConnectedCount()`; `useEventOutcomes(cb)` for the toast. Bounce UX: when `onEventOutcome` reports a bounce for this client's own event, show `BounceToast` ("Your partner acted first — the board has changed."). `actions.ts`: one named creator per event type in the mapping table, signature-compatible with the legacy `QuestMutations` methods screens call today (verify against the `QuestMutations` interface in `src/state/quest-context.tsx`), each building the payload and calling `append`. Battle: `actions.battleCommand(command)`, `actions.resolvePrompt(promptId, resolution)`, `actions.beginBattle(siteId)`, `actions.endBattle(result)`, `actions.setCardNote(...)`.
+`hooks.ts`: a `CoopProvider` owning one `createLogClient(GAME_ENGINE_CONFIG, …)` instance per room; `useGameState(): FoldState` (displayed = confirmed + optimistic); `useAppend()`; `useConnectedCount()`; `useEventOutcomes(cb)` for the toast. Bounce UX: when `onEventOutcome` reports a bounce for this client's own event, show `BounceToast` ("Your partner acted first — the board has changed."). `actions.ts`: one named creator per event type in the mapping table, signature-compatible with the legacy `JourneyMutations` methods screens call today (verify against the `JourneyMutations` interface in `src/state/journey-context.tsx`), each building the payload and calling `append`. Battle: `actions.battleCommand(command)`, `actions.resolvePrompt(promptId, resolution)`, `actions.beginBattle(siteId)`, `actions.endBattle(result)`, `actions.setCardNote(...)`.
 
 - [ ] **Step 1: Failing test for the facade contract.** Bug class: facade/event drift — every action creator produces an event whose `type` exists in the `events.ts` union and whose payload the root reducer routes without bouncing-on-unknown (table-driven: call each creator with minimal valid args against a prepared state, assert outcome ≠ bounced-for-unknown-type). This catches a renamed event type breaking a screen silently.
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**
 
-### Task 26: Cutover — quest screens
+### Task 26: Cutover — journey screens
 
-**Files:** Modify: `src/App.tsx`, `src/state/quest-context.tsx`; every `useQuest` consumer that needs signature adjustments (compiler-driven)
+**Files:** Modify: `src/App.tsx`, `src/state/journey-context.tsx`; every `useJourney` consumer that needs signature adjustments (compiler-driven)
 
-Swap the provider tree: `RoomGate` (new) replaces `MultiplayerRoomGate`; `CoopProvider` replaces `MultiplayerQuestProvider`. Rewrite `src/state/quest-context.tsx`'s provider so `QuestContextValue` is backed by `useGameState().quest` and the Task 25 actions facade — the interface shape screens consume stays, its implementation is new. Remove from the interface the mutations that no longer exist (none expected — the facade covers the full table; anything discovered missing here is a facade gap to fix in `actions.ts`).
+Swap the provider tree: `RoomGate` (new) replaces `MultiplayerRoomGate`; `CoopProvider` replaces `MultiplayerJourneyProvider`. Rewrite `src/state/journey-context.tsx`'s provider so `JourneyContextValue` is backed by `useGameState().journey` and the Task 25 actions facade — the interface shape screens consume stays, its implementation is new. Remove from the interface the mutations that no longer exist (none expected — the facade covers the full table; anything discovered missing here is a facade gap to fix in `actions.ts`).
 
 - [ ] **Step 1: Rewire, then let `npm run typecheck` drive out every consumer error.**
-- [ ] **Step 2: `npm run lint && npm run typecheck && npm test` green.** Legacy quest-context tests asserting transaction behavior move to deletion (Stage E); tests asserting interface behavior keep passing.
+- [ ] **Step 2: `npm run lint && npm run typecheck && npm test` green.** Legacy journey-context tests asserting transaction behavior move to deletion (Stage E); tests asserting interface behavior keep passing.
 - [ ] **Step 3: Commit and push** (note in the message: app is mid-cutover until Task 28).
 
 ### Task 27: Cutover — battle screens, AI, undo removal
@@ -449,7 +449,7 @@ Swap the provider tree: `RoomGate` (new) replaces `MultiplayerRoomGate`; `CoopPr
 
 **Files — Delete (complete inventory):**
 - `src/multiplayer/room-service.ts`, `battle-service.ts`, `MultiplayerRoomGate.tsx`, `room-paths.ts`, `battle-paths.ts`, `room-types.ts`, `battle-types.ts`, `action-log.ts`, `rtdb-sanitize.ts`, `battle-normalize.ts`, `log-sink.ts`, `room-log-service.ts`, `RoomLogViewer.tsx`, `room-id.ts`, `firebase-emulator.integration.test.ts`, and every other file under `src/multiplayer/` plus all their test files (the directory ends up empty and removed)
-- `src/state/multiplayer-quest-context.tsx`, `src/state/multiplayer-battle-context.tsx`, `src/state/use-ensure-battle-session.ts`, `src/state/quest-state-invariants.ts` + tests
+- `src/state/multiplayer-journey-context.tsx`, `src/state/multiplayer-battle-context.tsx`, `src/state/use-ensure-battle-session.ts`, `src/state/journey-state-invariants.ts` + tests
 - `src/battle/automation/use-battle-effect-runner.ts`, `use-dreamwell-effect-runner.ts`, `use-battle-effect-runner.test.tsx`, `use-dreamwell-effect-runner.test.tsx`, `battle-effect-runner-helpers.test.ts` (and the helper module it tests if the helpers were not relocated in Task 20)
 - `src/battle/state/history.ts` + tests; `src/battle/state/reducer.ts` if Task 20 absorbed its routing (verify no remaining importers)
 
@@ -459,10 +459,10 @@ Swap the provider tree: `RoomGate` (new) replaces `MultiplayerRoomGate`; `CoopPr
 
 ### Task 29: Docs and guardrails
 
-**Files:** Modify: `AGENTS.md`; Check: `docs/quest_prototype/qa_scenes.md`, `docs/quest_prototype/coop_event_sourcing_proposal.md`
+**Files:** Modify: `AGENTS.md`; Check: `docs/journey_prototype/qa_scenes.md`, `docs/journey_prototype/coop_event_sourcing_proposal.md`
 
 - [ ] **Step 1: AGENTS.md** gains the review rule from the spec, stated as current practice (never "no longer" phrasing per the documentation style rule): "Coop game state is a fold of the room event log. React `useState`/`useRef` never gates game flow; anything both players must agree on is an event in the log. Clients write intent events only, via `src/coop/actions.ts`." 
-- [ ] **Step 2: Verify `?goto=`, `?loadQuest=`, `?startInBattle=1` QA mechanics still work** through the LOAD_STATE/BEGIN_BATTLE bootstraps (they are wired in Task 26/27; update `docs/quest_prototype/qa_scenes.md` only if the mechanics' user-facing behavior changed).
+- [ ] **Step 2: Verify `?goto=`, `?loadJourney=`, `?startInBattle=1` QA mechanics still work** through the LOAD_STATE/BEGIN_BATTLE bootstraps (they are wired in Task 26/27; update `docs/journey_prototype/qa_scenes.md` only if the mechanics' user-facing behavior changed).
 - [ ] **Step 3: Update the proposal's Status line** to implemented, pointing at the spec.
 - [ ] **Step 4: Commit and push.**
 
@@ -470,11 +470,11 @@ Swap the provider tree: `RoomGate` (new) replaces `MultiplayerRoomGate`; `CoopPr
 
 - [ ] **Step 1: Full checks:** `npm run lint && npm run typecheck && npm test`.
 - [ ] **Step 2: Browser QA** per AGENTS.md: start `npm run dev -- --port 5174` (capture the PID; kill only that PID at teardown), drive with `/opt/homebrew/bin/agent-browser`. Scenarios, each checking the error buffer for render errors/unhandled rejections/console errors and visual coherence:
-  1. Fresh room → start quest → pick dream avatar → travel → open a site → accept — single-player happy path.
+  1. Fresh room → start journey → pick dream avatar → travel → open a site → accept — single-player happy path.
   2. **Two tabs, same room:** both click the same shop slot near-simultaneously → exactly one purchase, the loser sees the bounce toast, boards converge.
   3. Two tabs: enter a battle site, one clicks Begin → both see the battle; **reload one tab mid-battle** → it re-folds to the battle screen (the `begunEntryKey` regression test).
   4. Battle: materialize a scripted interactive card → prompt renders in both tabs → both answer → one resolution applies, boards converge.
   5. `?viewLogs=<roomId>` shows the event log with outcomes.
   6. Confirm no undo/redo controls render anywhere in battle.
-- [ ] **Step 3:** Grep `logs/quest-log.jsonl` for the session's `gameId`: `coop_event` entries present with seq/type/actor/outcome; zero `fold_divergence`.
+- [ ] **Step 3:** Grep `logs/journey-log.jsonl` for the session's `gameId`: `coop_event` entries present with seq/type/actor/outcome; zero `fold_divergence`.
 - [ ] **Step 4: Commit any QA fixes and push.** Deploy (`npm run deploy`) only if the user asks.

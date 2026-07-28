@@ -45,7 +45,7 @@ function stripExtension(relativePath) {
  *
  * Deriving the root from `cwd` (rather than a substring heuristic like
  * `indexOf("/src/")`) is critical: a checkout under a path that itself contains
- * a `src` segment (e.g. `~/src/quest_prototype`) would otherwise resolve to the
+ * a `src` segment (e.g. `~/src/journey_prototype`) would otherwise resolve to the
  * wrong `src/` and silently disable this fail-closed rule.
  */
 export function toRepoRelativePosix(absolutePath, cwd) {

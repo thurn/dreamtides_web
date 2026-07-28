@@ -19,7 +19,7 @@ printf '%s\n' "fixture-guid" >"$licensed_source/Synty/Example/Asset.prefab.meta"
 git -C "$licensed_source" add --all
 git -C "$licensed_source" commit -q -m "Licensed fixture"
 git clone -q --bare "$licensed_source" "$licensed_repo"
-git -C "$licensed_repo" config quest.localOnly true
+git -C "$licensed_repo" config journey.localOnly true
 git -C "$licensed_repo" remote remove origin 2>/dev/null || true
 git -C "$licensed_repo" worktree add -q "$licensed_seed" main
 

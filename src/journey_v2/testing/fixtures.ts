@@ -7,15 +7,15 @@ import type {
   MerchantCluster,
 } from "../../data/merchant-corpus";
 import type { DreamsignProfile } from "../../data/dreamsign-profiles";
-import type { QuestContent } from "../../data/quest-content";
+import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
 import type {
   DreamAvatarContent,
   DreamsignTemplate,
   ResolvedDreamAvatarPackage,
 } from "../../types/content";
-import type { DeckEntry, Dreamsign, QuestState, SiteState } from "../../types/quest";
-import { createDefaultState } from "../../state/quest-context";
+import type { DeckEntry, Dreamsign, JourneyState, SiteState } from "../../types/journey";
+import { createDefaultState } from "../../state/journey-context";
 
 export const TEST_CARD_UUIDS = {
   ordinary: "11111111-1111-4111-8111-111111111111",
@@ -94,9 +94,9 @@ export function makeMerchantTestDreamsign(
   };
 }
 
-export function makeMerchantTestQuestState(
-  overrides: Partial<QuestState> = {},
-): QuestState {
+export function makeMerchantTestJourneyState(
+  overrides: Partial<JourneyState> = {},
+): JourneyState {
   return {
     ...createDefaultState(),
     seed: "merchant-fixture-seed",
@@ -145,7 +145,7 @@ export function makeMerchantTestContent({
   fitModel?: FitModel;
   merchantCorpus?: MerchantCorpus;
   dreamsignProfiles?: ReadonlyMap<string, DreamsignProfile>;
-}): QuestContent {
+}): JourneyContent {
   return {
     cardDatabase: new Map(cards.map((card) => [card.cardNumber, card])),
     dreamAvatars: [],

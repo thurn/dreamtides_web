@@ -5,7 +5,7 @@ Author: brainstorming session, 2026-05-28.
 
 ## Goal
 
-Create a standalone card editor for the quest prototype at `/editor`. The
+Create a standalone card editor for the journey prototype at `/editor`. The
 editor reads all card records from `data/tabula/rendered-cards.toml`, displays
 them in a full-card grid, and writes inline edits back to the TOML source as
 soon as the user confirms an edit with Enter.
@@ -13,7 +13,7 @@ soon as the user confirms an edit with Enter.
 The editor is a development tool for fast card iteration. It must preserve the
 existing TOML formatting as much as possible, keep typing and browsing
 responsive, reflect display controls in URL query parameters, and reuse the
-quest prototype's existing card visual language.
+journey prototype's existing card visual language.
 
 ## Scope
 
@@ -53,7 +53,7 @@ The editor supports:
 
 ## Existing Context
 
-The quest prototype currently loads cards from generated
+The journey prototype currently loads cards from generated
 `public/card-data.json` through `src/data/card-database.ts`. The source of that
 generated JSON is `data/tabula/rendered-cards.toml`, transformed by
 `scripts/setup-assets.mjs`.
@@ -76,14 +76,14 @@ to `rendered-cards.toml`.
 
 ## Architecture
 
-`/editor` is selected before the normal quest app mounts. The editor bypasses
-Firebase setup, multiplayer room setup, quest state providers, and the normal
+`/editor` is selected before the normal journey app mounts. The editor bypasses
+Firebase setup, multiplayer room setup, journey state providers, and the normal
 room gate. This keeps editor startup fast and lets the editor run without
-quest runtime prerequisites.
+journey runtime prerequisites.
 
 Top-level routing:
 
-- `/` mounts the existing quest prototype.
+- `/` mounts the existing journey prototype.
 - `/editor` mounts the card editor.
 - Existing `?demo=` component demos keep their current behavior.
 
@@ -91,7 +91,7 @@ The editor has three main layers:
 
 - **Editor route and state**: React route shell, URL query state, card list
   state, optimistic save state, and error state.
-- **Editor card UI**: a grid of editable card previews that reuse the quest
+- **Editor card UI**: a grid of editable card previews that reuse the journey
   prototype's card chrome, art, pips, type line, and rules text rendering.
 - **Local editor API**: Vite dev-server middleware that reads and patches
   `data/tabula/rendered-cards.toml` and refreshes `public/card-data.json`
@@ -201,7 +201,7 @@ Top-level regions:
 - Scrollable card grid.
 - Inline save/validation status rendered on the affected card or field.
 
-The grid shares the normal quest card rendering path:
+The grid shares the normal journey card rendering path:
 
 - Card art from `public/cards/<cardNumber>.webp`
 - Event and Character chrome
@@ -210,7 +210,7 @@ The grid shares the normal quest card rendering path:
 - Rules text rendering, including symbols and glossary formatting
 
 Implementation should refactor `CardDisplay` into shared render primitives that
-the normal quest surfaces and the editor both consume. The editor can wrap
+the normal journey surfaces and the editor both consume. The editor can wrap
 editable regions around shared slots, but the visual card structure, chrome,
 text scaling, pips, art handling, type line formatting, rarity treatment, and
 rules text rendering should have one maintained implementation. This shared
@@ -419,9 +419,9 @@ Keep implementation units small:
 - `src/editor/` owns editor React components, URL state, API client, and editor
   validation helpers that are safe for browser code.
 - Vite middleware owns filesystem access and TOML patching.
-- Shared card display extraction is expected so normal quest card surfaces and
+- Shared card display extraction is expected so normal journey card surfaces and
   editor card surfaces use the same rendering primitives.
-- Existing quest runtime state and multiplayer code should stay out of the
+- Existing journey runtime state and multiplayer code should stay out of the
   editor.
 
 ## Acceptance Criteria
@@ -440,7 +440,7 @@ Keep implementation units small:
 - `public/card-data.json` refreshes through the focused transform when it can
   stay within the responsiveness budget.
 - Save and validation errors are visible, local, and recoverable.
-- Editor cards and normal quest cards share one maintained rendering path.
+- Editor cards and normal journey cards share one maintained rendering path.
 - The full automated check suite passes.
 - Every UI slice has a completed `agent-browser` QA subagent checkpoint with
   screenshots and analysis against the required visual checklist.

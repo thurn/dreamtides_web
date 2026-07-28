@@ -1,6 +1,6 @@
 export type CardSizePreset = "small" | "medium" | "large";
 
-const CARD_SIZE_STORAGE_KEY = "quest-prototype-card-size";
+const CARD_SIZE_STORAGE_KEY = "journey-prototype-card-size";
 
 import { DRAFT_OFFER_CARD_WIDTH } from "../cumulus/components/card/card-aspect";
 
@@ -28,7 +28,7 @@ export const SIZE_PRESETS: Readonly<
     label: "M",
   },
   large: {
-    // Tile cards at the quest draft offer width so the "large" preset matches
+    // Tile cards at the journey draft offer width so the "large" preset matches
     // the size players see while drafting. The track is a fixed length (no
     // `1fr`), so cards stay at the draft width instead of stretching to fill.
     columns: `repeat(auto-fill, ${DRAFT_OFFER_CARD_WIDTH})`,

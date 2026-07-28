@@ -578,7 +578,7 @@ export const DEFAULT_STARTING_ESSENCE = 200;
  * to a content card and add it to the player's deck; without these names in
  * `card-data.json` the apply step finds no card and silently no-ops the deck
  * mutation. The catalog currently ships `Nightmare`; other entries
- * (Despair, Oblivion, ...) are documented in `docs/quests/banes.md` and will
+ * (Despair, Oblivion, ...) are documented in `docs/journeys/banes.md` and will
  * land as content cards in a future content drop.
  *
  * Mirrors `BANE_NAMES` in `src/journeys/journey/effects.ts`. Keep the two in
@@ -834,7 +834,7 @@ export function transformAtlasConfig(config) {
 
 /**
  * Parse `cards_v2.toml` and write both runtime card JSON catalogs — the
- * Special-filtered `card-data.json` the quest/battle runtime fetches, and the
+ * Special-filtered `card-data.json` the journey/battle runtime fetches, and the
  * unfiltered `cards_v2-data.json` that `cards-v2-database.ts` fetches with the
  * draft-pool metadata merged in. This is the TOML->JSON card transform shared by
  * the full `setupAssets` build and the dev hot-reload plugin

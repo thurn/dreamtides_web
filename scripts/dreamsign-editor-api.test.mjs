@@ -46,7 +46,7 @@ color = "#1d4ed8"
 }
 
 function writeFixtureRoot() {
-  const rootDir = mkdtempSync(join(tmpdir(), "quest-dreamsign-editor-api-"));
+  const rootDir = mkdtempSync(join(tmpdir(), "journey-dreamsign-editor-api-"));
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
   mkdirSync(join(rootDir, "public"), { recursive: true });
   writeFileSync(join(rootDir, "data", "tabula", "dreamsigns.toml"), fixtureToml());

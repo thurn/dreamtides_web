@@ -105,7 +105,7 @@ describe("InfoCard shell treatment", () => {
     const html = renderToStaticMarkup(
       React.createElement(InfoCard, {
         title: "Essence",
-        body: richText.plain("Currency carried through a quest."),
+        body: richText.plain("Currency carried through a journey."),
         slots: {
           title: (_context, defaultNode) =>
             React.createElement("span", { "data-title-editor": "" }, defaultNode),
@@ -117,7 +117,7 @@ describe("InfoCard shell treatment", () => {
 
     expect(html).toContain('data-title-editor=""');
     expect(html).toContain('data-body-editor=""');
-    expect(html).toContain("Currency carried through a quest.");
+    expect(html).toContain("Currency carried through a journey.");
     expect(html).toContain(TOKENS["--glass-fill-popover"].var);
   });
 

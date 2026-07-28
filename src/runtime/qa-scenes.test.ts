@@ -5,7 +5,7 @@ import {
 } from "../__test-helpers__/atlas-fixtures";
 import type { CardData } from "../types/cards";
 import { layerOrdinal } from "../types/layer-name";
-import type { QuestContent } from "../data/quest-content";
+import type { JourneyContent } from "../data/journey-content";
 import type {
   ApollyonIncarnationContent,
   DreamAvatarContent,
@@ -51,9 +51,9 @@ function makeIncarnations(): ApollyonIncarnationContent[] {
   ];
 }
 
-function makeQuestContent(
+function makeJourneyContent(
   incarnations: ApollyonIncarnationContent[] = makeIncarnations(),
-): QuestContent {
+): JourneyContent {
   const cardDatabase = new Map<number, CardData>(
     buildTestCorpusCards().map((card) => [card.cardNumber, card]),
   );
@@ -89,16 +89,16 @@ describe("QA scenes", () => {
 
   it("returns null for an unknown scene id", () => {
     expect(findQaScene("not-a-real-scene")).toBeNull();
-    expect(buildQaScene("not-a-real-scene", makeQuestContent())).toBeNull();
+    expect(buildQaScene("not-a-real-scene", makeJourneyContent())).toBeNull();
   });
 });
 
 describe('the "dream-avatar-select" QA scene', () => {
-  it("parks the run on the questStart DreamAvatar selection screen", () => {
-    const state = buildQaScene("dream-avatar-select", makeQuestContent());
+  it("parks the run on the journeyStart DreamAvatar selection screen", () => {
+    const state = buildQaScene("dream-avatar-select", makeJourneyContent());
 
     expect(state).not.toBeNull();
-    expect(state?.screen.type).toBe("questStart");
+    expect(state?.screen.type).toBe("journeyStart");
     // The selection screen is shown before a DreamAvatar is chosen, so no
     // DreamAvatar, package, or draft state has been resolved yet.
     expect(state?.dreamAvatar).toBeNull();
@@ -108,15 +108,15 @@ describe('the "dream-avatar-select" QA scene', () => {
 });
 
 describe('the "tutorial-dream-avatar-select" QA scene', () => {
-  it("parks questStart on the one fixed tutorial DreamAvatar UUID", () => {
-    const content = makeQuestContent();
+  it("parks journeyStart on the one fixed tutorial DreamAvatar UUID", () => {
+    const content = makeJourneyContent();
     content.dreamAvatars = [makeDreamAvatar(TUTORIAL_DREAM_AVATAR_ID)];
 
     const state = buildQaScene("tutorial-dream-avatar-select", content);
 
     expect(state).not.toBeNull();
     expect(state?.screen).toEqual({
-      type: "questStart",
+      type: "journeyStart",
       tutorialDreamAvatarId: TUTORIAL_DREAM_AVATAR_ID,
     });
     expect(state?.dreamAvatar).toBeNull();
@@ -126,14 +126,14 @@ describe('the "tutorial-dream-avatar-select" QA scene', () => {
 
   it("fails to build when the required tutorial DreamAvatar is unavailable", () => {
     expect(
-      buildQaScene("tutorial-dream-avatar-select", makeQuestContent()),
+      buildQaScene("tutorial-dream-avatar-select", makeJourneyContent()),
     ).toBeNull();
   });
 });
 
 describe('the "atlas" QA scene', () => {
   it("parks the run on the atlas screen with a generated boss node", () => {
-    const state = buildQaScene("atlas", makeQuestContent());
+    const state = buildQaScene("atlas", makeJourneyContent());
 
     expect(state).not.toBeNull();
     expect(state?.screen.type).toBe("atlas");
@@ -151,7 +151,7 @@ describe('the "atlas" QA scene', () => {
 
   it("assigns a boss incarnation drawn from the supplied incarnations", () => {
     const incarnations = makeIncarnations();
-    const state = buildQaScene("atlas", makeQuestContent(incarnations));
+    const state = buildQaScene("atlas", makeJourneyContent(incarnations));
 
     const incarnationId = state?.atlas.bossIncarnationId;
     expect(incarnationId).toBeTruthy();
@@ -159,7 +159,7 @@ describe('the "atlas" QA scene', () => {
   });
 
   it("parks on the layer-1 frontier, a genuinely reachable resting state", () => {
-    const state = buildQaScene("atlas", makeQuestContent());
+    const state = buildQaScene("atlas", makeJourneyContent());
     // "atlas" is the first real resting screen (one dreamscape completed), so
     // the completion level and frontier depth are both 1.
     expect(state?.completionLevel).toBe(1);
@@ -184,7 +184,7 @@ describe("the atlas layer QA scenes", () => {
     it(`atlas${String(displayLayer)} parks on the atlas with the frontier on the "Layer ${String(displayLayer)}" column`, () => {
       const state = buildQaScene(
         `atlas${String(displayLayer)}`,
-        makeQuestContent(),
+        makeJourneyContent(),
       );
 
       expect(state).not.toBeNull();
@@ -215,7 +215,7 @@ describe("the atlas layer QA scenes", () => {
     for (const displayLayer of displayLayers) {
       const state = buildQaScene(
         `atlas${String(displayLayer)}`,
-        makeQuestContent(),
+        makeJourneyContent(),
       );
       const nodes = state?.atlas.nodes ?? {};
       const available = Object.values(nodes).filter(
@@ -251,7 +251,7 @@ describe("the battle layer QA scenes", () => {
     it(`battle${String(displayLayer)} parks on the Layer ${String(displayLayer)} Battle start screen`, () => {
       const state = buildQaScene(
         `battle${String(displayLayer)}`,
-        makeQuestContent(),
+        makeJourneyContent(),
       );
 
       expect(state).not.toBeNull();
@@ -283,7 +283,7 @@ describe("the battle layer QA scenes", () => {
   }
 
   it('aliases plain "battle" to the Layer 1 battle scene', () => {
-    const state = buildQaScene("battle", makeQuestContent());
+    const state = buildQaScene("battle", makeJourneyContent());
 
     expect(state).not.toBeNull();
     expect(state?.completionLevel).toBe(0);
@@ -306,7 +306,7 @@ describe("site QA scenes", () => {
     ] as const;
 
     for (const [sceneId, siteType] of expectedSites) {
-      const state = buildQaScene(sceneId, makeQuestContent());
+      const state = buildQaScene(sceneId, makeJourneyContent());
       expect(state).not.toBeNull();
       expect(state?.screen.type).toBe("site");
       expect(state?.currentDreamscape).not.toBeNull();
@@ -328,7 +328,7 @@ describe("site QA scenes", () => {
 
 describe('the "dreamscape-with-essence" QA scene', () => {
   it("parks on the dreamscape overview with an unvisited Essence site", () => {
-    const state = buildQaScene("dreamscape-with-essence", makeQuestContent());
+    const state = buildQaScene("dreamscape-with-essence", makeJourneyContent());
 
     expect(state).not.toBeNull();
     expect(state?.screen.type).toBe("dreamscape");
@@ -346,7 +346,7 @@ describe('the "dreamscape-with-essence" QA scene', () => {
 
 describe('the "reward" QA scene', () => {
   it("parks on the dreamscape overview with an unvisited Reward site", () => {
-    const state = buildQaScene("reward", makeQuestContent());
+    const state = buildQaScene("reward", makeJourneyContent());
 
     expect(state).not.toBeNull();
     expect(state?.screen.type).toBe("dreamscape");
@@ -362,7 +362,7 @@ describe('the "reward" QA scene', () => {
   });
 
   it("builds the at-cap replacement state with UUID-backed Dreamsigns", () => {
-    const content = makeQuestContent();
+    const content = makeJourneyContent();
     content.dreamsignTemplates = Array.from({ length: 13 }, (_, index) => ({
       id: `dreamsign-${String(index + 1)}`,
       name: `Dreamsign ${String(index + 1)}`,

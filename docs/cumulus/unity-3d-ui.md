@@ -34,7 +34,7 @@ is the declared quality difference.
 
 ## Related Information
 
-- [Cumulus design system](../quest_prototype/cumulus_design_system.md) defines the
+- [Cumulus design system](../journey_prototype/cumulus_design_system.md) defines the
   component, material, typography, motion, and interaction principles that the
   Unity system must preserve.
 - [Cumulus material reference](../../.llms/skills/cumulus/materials.md) documents

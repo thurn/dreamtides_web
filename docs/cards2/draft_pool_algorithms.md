@@ -1,6 +1,6 @@
 # Draft Pool Construction Algorithms
 
-The quest prototype builds a card pool that a player drafts from. The pool is
+The journey prototype builds a card pool that a player drafts from. The pool is
 assembled by one of several interchangeable construction algorithms, selected
 with the `?algo=` URL parameter: `color_pool`, `diverse`, `decklists`, `idf`,
 and `idf2` (for example, `?algo=decklists`). The run-time half of all of them
@@ -55,7 +55,7 @@ once, because the rest of this document refers to these stores by name.
   array of arrays of names. `loadDecklists` (in `cards-v2-database.ts`) fetches
   it into `string[][]`, or returns an empty array if the bundle is missing.
 
-Quest content loading (`src/data/quest-content.ts`) loads all three, then calls
+Journey content loading (`src/data/journey-content.ts`) loads all three, then calls
 `buildPoolData` once to fold the card records (and the decklists) into the single
 `PoolData` structure described next. When the player picks a Dream Avatar,
 `generatePoolFromData` runs with that `PoolData`, the chosen variant, and

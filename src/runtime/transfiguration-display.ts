@@ -10,7 +10,7 @@
 // module. `transfiguration-logic.ts` re-exports every symbol below, so its
 // existing consumers are unaffected.
 
-import type { TransfigurationType } from "../types/quest";
+import type { TransfigurationType } from "../types/journey";
 
 /** Color hex value for each transfiguration type. The `#${string}` type matches
  * Cumulus's `HexColor`, so these feed a strict `CumulusColor` prop directly. */

@@ -4,7 +4,7 @@
 
 **Goal:** Resolve the findings of `docs/postmortems/2026-07-08-coop-event-sourcing-audit.md` — close the three P0 convergence holes, make every failure path visible and non-terminal, fix the converge-but-wrong game-correctness bugs, and stand up CI so the resilience tests actually run.
 
-**Architecture:** Five sequential tasks sized for one subagent each. Task 1 changes engine semantics (event outcomes become immutable across compaction; fold-relevant config moves into genesis) and must land first — every later task's tests run against the corrected engine. Task 2 hardens the failure paths (containment, append rejection, refold hygiene). Task 3 migrates the draft bootstrap into the reducer. Task 4 fixes game-correctness bugs in the battle/quest reducers. Task 5 adds CI, the missing convergence tests, and the hygiene tail. Tasks 3 and 4 are independent of each other; everything else is ordered.
+**Architecture:** Five sequential tasks sized for one subagent each. Task 1 changes engine semantics (event outcomes become immutable across compaction; fold-relevant config moves into genesis) and must land first — every later task's tests run against the corrected engine. Task 2 hardens the failure paths (containment, append rejection, refold hygiene). Task 3 migrates the draft bootstrap into the reducer. Task 4 fixes game-correctness bugs in the battle/journey reducers. Task 5 adds CI, the missing convergence tests, and the hygiene tail. Tasks 3 and 4 are independent of each other; everything else is ordered.
 
 **Tech Stack:** TypeScript, Vite, Vitest, Firebase RTDB (+ emulator), js-sha256. No new dependencies.
 
@@ -165,7 +165,7 @@ export function decodeLogNode(encoded: EncodedLogNode): LogNode | null; // null 
 it("a throwing domain case propagates in dev fold mode and becomes fold_error in prod fold mode", () => {
   // Poison a domain path via a payload the case dereferences after validation
   // is impossible — instead: register a throwing fixture provider (lifecycle
-  // seam) and fold START_QUEST through foldEvents twice:
+  // seam) and fold START_JOURNEY through foldEvents twice:
   //   devMode: true  → expect(() => fold).toThrow()
   //   devMode: false → outcome "bounced" + outcomes[0].error defined
 });
@@ -200,7 +200,7 @@ it("returns null for a corrupt genesis string and never throws", ...);
 
 - [ ] **Step 5: Run to verify failure, implement, re-run.** Implement per pinned policies; `npx vitest run src/eventlog/` green.
 
-- [ ] **Step 6: Wire the UX.** `hooks.ts`: register the two new callbacks where `onEventOutcome`/`onDivergence` are wired; both route to the existing bounce-toast surface with distinct copy ("Action failed to send — try again" / "Connection recovered — unconfirmed actions were discarded") and to the quest-log sink (`event_append_failed`, `pending_dropped` records with `gameId`, `type`, `nonce`). `RoomGate.tsx`: `onCorrupt` → a terminal "room unreadable — start a new game" status using the `VersionGateScreen` pattern.
+- [ ] **Step 6: Wire the UX.** `hooks.ts`: register the two new callbacks where `onEventOutcome`/`onDivergence` are wired; both route to the existing bounce-toast surface with distinct copy ("Action failed to send — try again" / "Connection recovered — unconfirmed actions were discarded") and to the journey-log sink (`event_append_failed`, `pending_dropped` records with `gameId`, `type`, `nonce`). `RoomGate.tsx`: `onCorrupt` → a terminal "room unreadable — start a new game" status using the `VersionGateScreen` pattern.
 
 - [ ] **Step 7: Full verification and commit.** `npm run lint && npm run typecheck && npm test && npm run test:emulator`. Commit (one commit for the reducer containment, one for the client/engine hygiene is a sensible split) and push.
 
@@ -213,15 +213,15 @@ Fixes audit finding **P0-3**. Scope note: `PICK_DRAFT_CARD` already advances off
 **Files:**
 - Modify: `src/rules/events.ts` (new event type)
 - Modify: `src/rules/reducer.ts` (route + CAS-exempt set)
-- Modify: `src/rules/quest/draft.ts` (new `enterDraftSite` case; provider surface extension)
+- Modify: `src/rules/journey/draft.ts` (new `enterDraftSite` case; provider surface extension)
 - Modify: `src/coop/providers/draft-provider.ts` (real provider methods)
 - Modify: `src/coop/actions.ts` (new creator)
 - Modify: `src/screens/DraftSiteScreen.tsx`, `src/screens/cumulus_adapters/DraftSiteScreenAdapter.tsx` (replace bootstrap effect)
 - Modify: `src/data/draft-site-bootstrap.ts` (rng injected; `Math.random` call sites removed from the live path)
-- Test: `src/rules/quest/draft.test.ts`, `src/rules/reducer.test.ts`, plus browser QA
+- Test: `src/rules/journey/draft.test.ts`, `src/rules/reducer.test.ts`, plus browser QA
 
 **Interfaces:**
-- Consumes: `EventContext.rng`, `DraftContentProvider` (existing methods `cardDatabase()`, `offerDepsFor(draftState, deckCardNumbers)`, `draftConfigFor(draftState)` — see `src/rules/quest/draft.ts:48-68`), the existing `enterDraftSite(state, siteId, cardDatabase, draftConfig, offerDeps, random)` engine function that `src/data/draft-site-bootstrap.ts:92` calls today.
+- Consumes: `EventContext.rng`, `DraftContentProvider` (existing methods `cardDatabase()`, `offerDepsFor(draftState, deckCardNumbers)`, `draftConfigFor(draftState)` — see `src/rules/journey/draft.ts:48-68`), the existing `enterDraftSite(state, siteId, cardDatabase, draftConfig, offerDeps, random)` engine function that `src/data/draft-site-bootstrap.ts:92` calls today.
 - Produces:
 
 ```ts
@@ -236,14 +236,14 @@ enterDraftSite: (siteId: string) => Promise<number>;
 ```
 
 **Pinned semantics for the `ENTER_DRAFT_SITE` reducer case** (mirror `OPEN_SITE`, `sites.ts:305-351`):
-1. Bounce when: payload malformed, no provider registered, `quest.draftState === null`, or the site is not a draft site for this run.
+1. Bounce when: payload malformed, no provider registered, `journey.draftState === null`, or the site is not a draft site for this run.
 2. **Idempotent no-change applied** when `draftState.activeSiteId === siteId` already (zero rng draws on this path — replay at a later seq must not reroll the offer).
-3. Otherwise clone `draftState`, call `enterDraftSite(clone, siteId, provider.cardDatabase(), provider.draftConfigFor(clone) ?? DEFAULT_DRAFT_CONFIG, provider.offerDepsFor(clone, deckCardNumbers), rngStream(ctx))` — the same `rngStream` adapter `PICK_DRAFT_CARD` uses (`draft.ts:106`) — and return the updated quest with outcome applied.
+3. Otherwise clone `draftState`, call `enterDraftSite(clone, siteId, provider.cardDatabase(), provider.draftConfigFor(clone) ?? DEFAULT_DRAFT_CONFIG, provider.offerDepsFor(clone, deckCardNumbers), rngStream(ctx))` — the same `rngStream` adapter `PICK_DRAFT_CARD` uses (`draft.ts:106`) — and return the updated journey with outcome applied.
 4. `enterDraftSiteState` in `draft-site-bootstrap.ts` gains an rng parameter used for its `enterDraftSite` call; the reducer path supplies `ctx.rng`-backed draws. (The function keeps working for any remaining preview callers, but after this task the screens have none.)
 
 **Pinned UI change:** both `DraftSiteScreen.tsx` and `DraftSiteScreenAdapter.tsx` delete the `localDraftState` / `draftStateRef` / `writtenLocalDraftStateRef` bootstrap machinery (the effect at `DraftSiteScreen.tsx:520-566` and its adapter twin) and instead fire `actions.enterDraftSite(siteId)` once per site visit — from an effect keyed on `siteId` guarded only by "the displayed `draftState.activeSiteId` differs from `siteId`". The instant first paint the local bootstrap existed for is provided by the optimistic echo (the intent folds locally with a predicted-seq rng; a skewed prediction shows a preview offer that reconciles to the confirmed one within a round-trip, per the design spec's echo semantics). `SET_DRAFT_STATE` remains as the debug event `App.tsx:587` (`onForceLegendaryOffer`) uses.
 
-- [ ] **Step 1: Write the failing reducer tests** in `src/rules/quest/draft.test.ts` (register the fixture draft provider the existing suite uses):
+- [ ] **Step 1: Write the failing reducer tests** in `src/rules/journey/draft.test.ts` (register the fixture draft provider the existing suite uses):
 
 ```ts
 it("ENTER_DRAFT_SITE activates the site and reveals a non-empty offer from ctx.rng", ...);
@@ -256,13 +256,13 @@ it("bounces without a provider / with a null draftState / for a non-draft site",
 it("counts as intervening: a partner intent based before ENTER_DRAFT_SITE bounces", ...); // reducer.test.ts
 ```
 
-- [ ] **Step 2: Run to verify failure.** `npx vitest run src/rules/quest/draft.test.ts`.
+- [ ] **Step 2: Run to verify failure.** `npx vitest run src/rules/journey/draft.test.ts`.
 
 - [ ] **Step 3: Implement** the event type, reducer case, provider threading, and action creator per the pinned semantics. Run the draft + reducer suites green, then `npm test` and regenerate replay fixtures if any hash moved (the new event type alone should not move them).
 
 - [ ] **Step 4: Migrate the two screens.** Delete the bootstrap machinery; add the intent effect. `npm run lint && npm run typecheck` — the deleted refs will surface every dangling consumer (e.g. `effectiveDraftState` derivations collapse to the displayed state).
 
-- [ ] **Step 5: Browser QA (required — this is player-facing).** From the worktree: `npm run dev -- --port 5174`, then with `/opt/homebrew/bin/agent-browser --session coop-hardening-draft`: open two tabs on the same room, navigate to a draft site (`docs/quest_prototype/qa_scenes.md` for `?goto=` routes), and verify: (a) the offer paints immediately on entry with no flicker, (b) both tabs show the identical offer after a round-trip, (c) both tabs entering simultaneously produces no bounce toast and one shared offer, (d) picking works and reveals the next offer on both tabs, (e) the captured error buffer is clean. Assert `location.href` + `window.innerWidth` before each screenshot. Tear down only this session and this server (`dev-with-emulator.mjs --port 5174` process tree — see `docs/quest_prototype/qa_tooling.md`).
+- [ ] **Step 5: Browser QA (required — this is player-facing).** From the worktree: `npm run dev -- --port 5174`, then with `/opt/homebrew/bin/agent-browser --session coop-hardening-draft`: open two tabs on the same room, navigate to a draft site (`docs/journey_prototype/qa_scenes.md` for `?goto=` routes), and verify: (a) the offer paints immediately on entry with no flicker, (b) both tabs show the identical offer after a round-trip, (c) both tabs entering simultaneously produces no bounce toast and one shared offer, (d) picking works and reveals the next offer on both tabs, (e) the captured error buffer is clean. Assert `location.href` + `window.innerWidth` before each screenshot. Tear down only this session and this server (`dev-with-emulator.mjs --port 5174` process tree — see `docs/journey_prototype/qa_tooling.md`).
 
 - [ ] **Step 6: Commit and push** with the QA evidence summarized in the message.
 
@@ -276,12 +276,12 @@ Fixes audit findings **P1-8** (gesture atomicity), **P1-9** (hash/encode `undefi
 - Modify: `src/rules/events.ts`, `src/rules/reducer.ts` (BATTLE_GESTURE; decision-neutral set)
 - Modify: `src/rules/battle/battle-events.ts` (gesture case, reveal side, resolution validation, support ordering)
 - Modify: `src/rules/battle/driver.ts` (post-drain support recompute seam if needed)
-- Modify: `src/rules/quest/lifecycle.ts` (LOAD_STATE validation)
+- Modify: `src/rules/journey/lifecycle.ts` (LOAD_STATE validation)
 - Modify: `src/eventlog/hash.ts` (JSON-semantics canonicalization)
 - Modify: `src/eventlog/client.ts` (dev-mode JSON-safety assertion)
 - Modify: `src/coop/hooks.ts` (`useSingleFlight`)
 - Modify: `src/battle/components/PlayableBattleScreen.tsx` (submit one gesture)
-- Test: respective suites + `src/rules/quest/quest-properties.test.ts`
+- Test: respective suites + `src/rules/journey/journey-properties.test.ts`
 - Regenerate: `src/rules/replay/fixtures/*.json` (support ordering changes draw order)
 
 **Interfaces:**
@@ -307,7 +307,7 @@ export function assertJsonSafe(value: unknown, label: string): void;
 - **Support recompute**: today `battle-events.ts:464` recomputes before the queue drains. Move the recompute to run **after** `advanceEffectQueue` returns (recompute `advanced.board`, preserving `advanced.pendingPrompt`/`effectQueue`), and equivalently after the drain inside the `RESOLVE_PROMPT` path (`resolvePendingPrompt` return). Recompute is idempotent, so running it while a prompt is parked is safe. This changes rng draw order → regenerate replay fixtures.
 - **Dreamwell reveal side**: replace the single `revealSide = boardAfter.activeSide` check (`battle-events.ts:441`) with a per-side edge check — for each of the two sides, if `dreamwellDrawnTurn` transitioned to `turnNumber` in this event, queue that side's revealed card script (same phase/turn/result guards).
 - **`RESOLVE_PROMPT` candidate validation**: before resolving a `pick-cards` prompt, require every chosen id to be a member of the candidate ids recorded in `pendingPrompt.options` and the count within the prompt's min/max; violation bounces (rule 5), it does not clear the prompt.
-- **LOAD_STATE**: add `validateLoadedState(payload, genesis): FoldState | null` — structural checks (required QuestState fields present with correct primitive types; `seed === genesis.seed`; run-field nullability rules; if a battle slice is present, every `effectQueue`/`pendingPrompt` `scriptRef` resolves via `selectBattleCardEffectScript`/`selectDreamwellEffectScript` and cursors are in range). `null` → bounce. Remove the LOAD_STATE carve-out from the nullability property test where the validator now enforces it.
+- **LOAD_STATE**: add `validateLoadedState(payload, genesis): FoldState | null` — structural checks (required JourneyState fields present with correct primitive types; `seed === genesis.seed`; run-field nullability rules; if a battle slice is present, every `effectQueue`/`pendingPrompt` `scriptRef` resolves via `selectBattleCardEffectScript`/`selectDreamwellEffectScript` and cursors are in range). `null` → bounce. Remove the LOAD_STATE carve-out from the nullability property test where the validator now enforces it.
 - **Decision-neutral no-ops**: adding the two types to `DECISION_NEUTRAL_EVENT_TYPES` is the complete fix (they stop invalidating partners' windows); their reducer cases are unchanged.
 - **Double-click**: apply `useSingleFlight` to the reward/purchase surfaces that emit delta events (`grep -rn "changeEssence\|grantFreeRerolls\|purgeRandomBaneCards" src/screens src/cumulus src/components` and wrap the button handlers found); debug-panel deltas are exempt by design (rapid repeat is a feature there).
 
@@ -329,13 +329,13 @@ it("assertJsonSafe names the path of an undefined value / NaN", ...);
 
 - [ ] **Step 2: Run to verify failures, implement per pinned semantics, re-run green.** Suites: `npx vitest run src/rules/ src/eventlog/hash.test.ts`.
 
-- [ ] **Step 3: Regenerate replay fixtures** (`node scripts/regenerate-replay-fixtures.mjs`), run `npm test`, and extend `quest-properties.test.ts` to register the fixture `BattleInitProvider` (from `src/rules/replay/fixture-providers.ts`) so the battle slice participates in the determinism/JSON-purity/hash properties — the audit's coverage gap G2.
+- [ ] **Step 3: Regenerate replay fixtures** (`node scripts/regenerate-replay-fixtures.mjs`), run `npm test`, and extend `journey-properties.test.ts` to register the fixture `BattleInitProvider` (from `src/rules/replay/fixture-providers.ts`) so the battle slice participates in the determinism/JSON-purity/hash properties — the audit's coverage gap G2.
 
 - [ ] **Step 4: Client-layer pieces.** `useSingleFlight` + its hook test (two synchronous invocations → one append on the fake); wire it at the delta-emitting surfaces found by the pinned grep; the `assertJsonSafe` call in `client.ts` behind the existing `devMode` resolution. `PlayableBattleScreen` gesture submit. `npm run lint && npm run typecheck && npm test`.
 
 - [ ] **Step 5: Browser QA** (battle surface changed): from the worktree on port 5174 with a fresh `--session coop-hardening-battle`, use `?startInBattle=1` (see the battle QA memory/docs), play a card and hand off a turn in a two-tab room, verify no half-applied gesture under rapid alternating clicks and a clean error buffer. Tear down the session and server.
 
-- [ ] **Step 6: Commit and push** (logical commits: hash+walker, battle fixes, quest fixes, UI wiring).
+- [ ] **Step 6: Commit and push** (logical commits: hash+walker, battle fixes, journey fixes, UI wiring).
 
 ---
 
@@ -345,7 +345,7 @@ Fixes audit findings **P1-10** (CI runs zero tests; chaos storm toy-only), **P2-
 
 **Files:**
 - Create: `.github/workflows/checks.yml`
-- Modify: `src/eventlog/emulator.integration.test.ts` (real-reducer scenario), `src/eventlog/room.ts`, `src/eventlog/subscribe.ts`/`client.ts` (decode path), `src/eventlog/fold.ts` (+`interveningSeqs` on bounced outcomes), `src/battle/ai/ai-may-run-here.ts`, `src/rules/battle/battle-events.ts` (timestamp parse), `src/rules/events.ts` (registry tie), `src/state/resolveMerchantOffer.ts` (entry ids), `src/rules/quest/lifecycle.ts` (clamps), `src/coop/hooks.ts`/`quest-log-sink.ts` (intervening seqs), `package.json`, `eslint.config.js` (`Date.parse` restriction)
+- Modify: `src/eventlog/emulator.integration.test.ts` (real-reducer scenario), `src/eventlog/room.ts`, `src/eventlog/subscribe.ts`/`client.ts` (decode path), `src/eventlog/fold.ts` (+`interveningSeqs` on bounced outcomes), `src/battle/ai/ai-may-run-here.ts`, `src/rules/battle/battle-events.ts` (timestamp parse), `src/rules/events.ts` (registry tie), `src/state/resolveMerchantOffer.ts` (entry ids), `src/rules/journey/lifecycle.ts` (clamps), `src/coop/hooks.ts`/`journey-log-sink.ts` (intervening seqs), `package.json`, `eslint.config.js` (`Date.parse` restriction)
 - Test: respective suites
 
 **Interfaces:**
@@ -368,9 +368,9 @@ export class RoomExistsError extends Error {}
 export function isoTimestampToMs(timestamp: string): number | null;
 ```
 
-**Pinned CI shape (`.github/workflows/checks.yml`):** one workflow, `on: [push: {branches: [master]}, pull_request]`, two jobs — `checks`: `npm ci`, `npm run lint`, `npm run typecheck`, `npm test`; `emulator`: `npm ci`, install JDK (`actions/setup-java@v4`, temurin 21) and `firebase-tools` (`npm i -g firebase-tools`), then `firebase emulators:exec --only database --project demo-quest-prototype "npx vitest run --no-file-parallelism src/eventlog/emulator.integration.test.ts"`. Also fix `package.json`'s `test:emulator` to drop the `src/multiplayer/...` filter. Copy the Node-version pin rationale from `firebase-hosting-merge.yml` if a pin exists there.
+**Pinned CI shape (`.github/workflows/checks.yml`):** one workflow, `on: [push: {branches: [master]}, pull_request]`, two jobs — `checks`: `npm ci`, `npm run lint`, `npm run typecheck`, `npm test`; `emulator`: `npm ci`, install JDK (`actions/setup-java@v4`, temurin 21) and `firebase-tools` (`npm i -g firebase-tools`), then `firebase emulators:exec --only database --project demo-journey-prototype "npx vitest run --no-file-parallelism src/eventlog/emulator.integration.test.ts"`. Also fix `package.json`'s `test:emulator` to drop the `src/multiplayer/...` filter. Copy the Node-version pin rationale from `firebase-hosting-merge.yml` if a pin exists there.
 
-**Pinned real-reducer convergence scenario** (in `emulator.integration.test.ts`): register the deterministic fixture providers (`registerReplayFixtureProviders` from `src/rules/replay/fixture-providers.ts` — real `GAME_ENGINE_CONFIG`, synthetic content, no TOML dependence per Global Constraints) and run a two-client storm of real quest events (`START_QUEST`, `SELECT_DREAM_AVATAR`, `ADJUST_ESSENCE`, `OPEN_SITE`, `ENTER_DRAFT_SITE`, `PICK_DRAFT_CARD`, interleaved invalid/stale intents) asserting: identical final hashes on both clients and on a third client that joins only after compaction has run, dense seqs, zero thrown errors. Clear providers in `afterAll`.
+**Pinned real-reducer convergence scenario** (in `emulator.integration.test.ts`): register the deterministic fixture providers (`registerReplayFixtureProviders` from `src/rules/replay/fixture-providers.ts` — real `GAME_ENGINE_CONFIG`, synthetic content, no TOML dependence per Global Constraints) and run a two-client storm of real journey events (`START_JOURNEY`, `SELECT_DREAM_AVATAR`, `ADJUST_ESSENCE`, `OPEN_SITE`, `ENTER_DRAFT_SITE`, `PICK_DRAFT_CARD`, interleaved invalid/stale intents) asserting: identical final hashes on both clients and on a third client that joins only after compaction has run, dense seqs, zero thrown errors. Clear providers in `afterAll`.
 
 **Pinned small fixes:** AI gate returns `false` while presence is unknown (`ai-may-run-here.ts:40-45`; update its tests); merchant entries mint through `mintEntryId` (`deck.ts:116`) with fixtures regenerated; `setMaxDreamsigns`/`setCompletionLevel` clamp to non-negative integers; the rule-2 doc comment in `reducer.ts` states the real invariant ("no CAS-exempt type alters decision-relevant battle state — notes mutate `cardInstances[id].notes` only"); event-type registries tied with a compile-time check, e.g.:
 

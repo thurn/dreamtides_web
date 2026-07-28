@@ -116,7 +116,7 @@ export class ErrorBoundary extends Component<
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
     // Funnel the failure through `logEvent` so it appears alongside other
-    // quest events in `logs/quest-log.jsonl`. Browser-QA additionally reads
+    // journey events in `logs/journey-log.jsonl`. Browser-QA additionally reads
     // `window.__caps.errors`, so mirror the message there.
     logEvent("error_boundary_caught", {
       scope: this.props.scope,

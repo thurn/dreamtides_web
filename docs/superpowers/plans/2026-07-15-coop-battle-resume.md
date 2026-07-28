@@ -4,7 +4,7 @@
 
 **Goal:** Make the folded battle slice the sole authority for whether the playable battle or the pre-battle reveal renders, including after reload.
 
-**Architecture:** Build the opposing-Dream Avatar preview deterministically from quest state and loaded content without creating fold battle state. The reveal appends `BEGIN_BATTLE`; once that event folds, every client renders the playable surface from `FoldState.battle`. QA preview scenes load only quest state, while the dedicated playable scene may load a battle slice.
+**Architecture:** Build the opposing-Dream Avatar preview deterministically from journey state and loaded content without creating fold battle state. The reveal appends `BEGIN_BATTLE`; once that event folds, every client renders the playable surface from `FoldState.battle`. QA preview scenes load only journey state, while the dedicated playable scene may load a battle slice.
 
 **Tech Stack:** React 19, TypeScript, Vitest, Firebase RTDB event log, `agent-browser`.
 
@@ -25,11 +25,11 @@
 - Modify: `src/components/BattleSiteRoute.test.tsx`
 - Modify: `src/coop/providers/battle-init-provider.ts`
 - Test: `src/coop/providers/battle-init-provider.test.ts`
-- Modify: `src/state/coop-quest-context.tsx`
+- Modify: `src/state/coop-journey-context.tsx`
 - Test: `src/runtime/qa-scenes.test.ts`
 
 **Interfaces:**
-- Produces: `createBattlePreview(content: QuestContent, quest: QuestState, siteId: string): BattleInit | null`.
+- Produces: `createBattlePreview(content: JourneyContent, journey: JourneyState, siteId: string): BattleInit | null`.
 - `BattleSiteRoute` renders the preview only when `FoldState.battle === null`; its Begin callback appends `BEGIN_BATTLE`.
 - `BattleSiteRoute` renders `PlayableBattleScreen` whenever `FoldState.battle !== null`, including first mount and reload.
 
@@ -48,7 +48,7 @@ Expected: FAIL because the local `begunEntryKey` starts empty on mount.
 
 - [x] **Step 2: Add deterministic preview coverage**
 
-Assert that the preview `BattleInit` equals the `init` produced by the registered `BEGIN_BATTLE` provider for the same quest, site, and content.
+Assert that the preview `BattleInit` equals the `init` produced by the registered `BEGIN_BATTLE` provider for the same journey, site, and content.
 
 - [x] **Step 3: Implement fold-derived route selection**
 
@@ -56,7 +56,7 @@ Remove the local begin gate and eager mount effect. Build the deterministic prev
 
 - [x] **Step 4: Correct QA bootstrap semantics**
 
-Load battle preview scenes with quest state only. Include a battle slice only for `battle-playable`, preserving its direct-board contract.
+Load battle preview scenes with journey state only. Include a battle slice only for `battle-playable`, preserving its direct-board contract.
 
 - [x] **Step 5: Run focused verification**
 

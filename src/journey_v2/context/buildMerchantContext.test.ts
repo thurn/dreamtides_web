@@ -9,7 +9,7 @@ import {
   makeMerchantTestDreamsign,
   makeMerchantTestDreamsignTemplate,
   makeMerchantTestFitModel,
-  makeMerchantTestQuestState,
+  makeMerchantTestJourneyState,
   makeMerchantTestResolvedPackage,
   makeMerchantTestSite,
 } from "../testing/fixtures";
@@ -26,8 +26,8 @@ describe("buildMerchantContext", () => {
     });
 
     const context = buildMerchantContext({
-      questState: makeMerchantTestQuestState(),
-      questContent: makeMerchantTestContent({ cards: [ordinaryCard, deckCard] }),
+      journeyState: makeMerchantTestJourneyState(),
+      journeyContent: makeMerchantTestContent({ cards: [ordinaryCard, deckCard] }),
       site: makeMerchantTestSite(),
     });
 
@@ -46,8 +46,8 @@ describe("buildMerchantContext", () => {
     });
 
     const context = buildMerchantContext({
-      questState: makeMerchantTestQuestState({ deck: [deckEntry] }),
-      questContent: makeMerchantTestContent({ cards: [deckCard] }),
+      journeyState: makeMerchantTestJourneyState({ deck: [deckEntry] }),
+      journeyContent: makeMerchantTestContent({ cards: [deckCard] }),
       site: makeMerchantTestSite(),
     });
 
@@ -68,7 +68,7 @@ describe("buildMerchantContext", () => {
 
   it("skips deck entries whose card records are missing", () => {
     const context = buildMerchantContext({
-      questState: makeMerchantTestQuestState({
+      journeyState: makeMerchantTestJourneyState({
         deck: [
           makeMerchantTestDeckEntry({
             entryId: "entry-missing-card",
@@ -76,7 +76,7 @@ describe("buildMerchantContext", () => {
           }),
         ],
       }),
-      questContent: makeMerchantTestContent({ cards: [] }),
+      journeyContent: makeMerchantTestContent({ cards: [] }),
       site: makeMerchantTestSite(),
     });
 
@@ -106,8 +106,8 @@ describe("buildMerchantContext", () => {
     });
 
     const context = buildMerchantContext({
-      questState: makeMerchantTestQuestState(),
-      questContent: makeMerchantTestContent({
+      journeyState: makeMerchantTestJourneyState(),
+      journeyContent: makeMerchantTestContent({
         cards: [
           ordinaryCard,
           starterFlagCard,
@@ -130,8 +130,8 @@ describe("buildMerchantContext", () => {
     });
 
     const context = buildMerchantContext({
-      questState: makeMerchantTestQuestState(),
-      questContent: makeMerchantTestContent({ cards: [ordinaryCard] }),
+      journeyState: makeMerchantTestJourneyState(),
+      journeyContent: makeMerchantTestContent({ cards: [ordinaryCard] }),
       site: makeMerchantTestSite(),
     });
 
@@ -161,7 +161,7 @@ describe("buildMerchantContext", () => {
     });
 
     const context = buildMerchantContext({
-      questState: makeMerchantTestQuestState({
+      journeyState: makeMerchantTestJourneyState({
         resolvedPackage: makeMerchantTestResolvedPackage({
           draftPoolCopiesByCard: {
             [String(inPoolCard.cardNumber)]: 1,
@@ -170,7 +170,7 @@ describe("buildMerchantContext", () => {
           },
         }),
       }),
-      questContent: makeMerchantTestContent({
+      journeyContent: makeMerchantTestContent({
         cards: [
           inPoolCard,
           outsidePoolCard,
@@ -192,10 +192,10 @@ describe("buildMerchantContext", () => {
     const openTemplate = makeMerchantTestDreamsignTemplate({ id: "sign-open" });
 
     const context = buildMerchantContext({
-      questState: makeMerchantTestQuestState({
+      journeyState: makeMerchantTestJourneyState({
         dreamsigns: [makeMerchantTestDreamsign({ id: "sign-held" })],
       }),
-      questContent: makeMerchantTestContent({
+      journeyContent: makeMerchantTestContent({
         cards: [],
         dreamsignTemplates: [heldTemplate, openTemplate],
       }),
@@ -215,7 +215,7 @@ describe("buildMerchantContext", () => {
     const openTemplate = makeMerchantTestDreamsignTemplate({ id: "sign-open" });
 
     const context = buildMerchantContext({
-      questState: makeMerchantTestQuestState({
+      journeyState: makeMerchantTestJourneyState({
         dreamsigns: [
           makeMerchantTestDreamsign({
             id: undefined,
@@ -223,7 +223,7 @@ describe("buildMerchantContext", () => {
           }),
         ],
       }),
-      questContent: makeMerchantTestContent({
+      journeyContent: makeMerchantTestContent({
         cards: [],
         dreamsignTemplates: [heldNameTemplate, openTemplate],
       }),
@@ -239,8 +239,8 @@ describe("buildMerchantContext", () => {
     const fitModel = makeMerchantTestFitModel();
 
     const context = buildMerchantContext({
-      questState: makeMerchantTestQuestState(),
-      questContent: makeMerchantTestContent({ cards: [], fitModel }),
+      journeyState: makeMerchantTestJourneyState(),
+      journeyContent: makeMerchantTestContent({ cards: [], fitModel }),
       site: makeMerchantTestSite(),
     });
 

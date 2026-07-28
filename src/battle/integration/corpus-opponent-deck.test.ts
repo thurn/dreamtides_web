@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import type {
   DreamsignSignature,
   KnownGoodDecklist,
-} from "../../data/quest-content";
+} from "../../data/journey-content";
 import type {
   AffiliationContent,
   DreamAvatarContent,

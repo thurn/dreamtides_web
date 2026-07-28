@@ -22,7 +22,7 @@ These apply to every task in every phase plan; each phase plan restates any it d
 - Components never take numeric style props (`size`, `gap`, `scale`, `padding`, `radius`, `blur`, `opacity` as numbers); variants are enumerated strings.
 - Never key or compare cards by name; identity is UUID/card number, names resolve only at the display edge.
 - Documentation and code comments describe the current system directly.
-- Browser QA per `docs/quest_prototype/qa_tooling.md`: isolated `--session <unique-name>` per QA run, Vite on a port other than 5173, assert `location.href` + `window.innerWidth` before every screenshot, tear down only your own server.
+- Browser QA per `docs/journey_prototype/qa_tooling.md`: isolated `--session <unique-name>` per QA run, Vite on a port other than 5173, assert `location.href` + `window.innerWidth` before every screenshot, tear down only your own server.
 - Screen adapters are thin wiring (≤120 lines, enforced); view-model builders are pure and React-free (enforced).
 
 ## Phase order and gates
@@ -34,7 +34,7 @@ Execute strictly in order. A phase is complete when its plan's final "Phase boun
 2. **Phase 1 — Materials and tokens:** `docs/superpowers/plans/2026-07-07-cumulus-phase-1-materials-tokens.md`
    One glass recipe reading `--glass-*` tokens; `--glass-fill-popover`; `--surface-chrome*` rename; safe-area unification (DraftScreen `env()` fix, `device-frame.ts` imports token names, `--display-cutout-right` deleted); dead-token pruning; `--badge-disc-gradient`; `--cv-textbox-blur` moves into Cumulus; breakpoint derivation; `valid-token-references` ownership extension; Materials docs page + safe-area chapter.
 3. **Phase 2 — The component suite:** `docs/superpowers/plans/2026-07-07-cumulus-phase-2-component-suite.md`
-   `IconButton` (sm 40/22, md 48/26), `GlassButton`, `GlassDialog` + `GlassBackdrop`, `economy-spec.ts` (ResourceChip imports it; ResourceChip variants enumerated), `DreamAvatarPortrait` `standing`/`fullBleed` variants folding the quest-start forks, `useScaleToFit`, GlassButton doctrine, `no-numeric-style-props` rule.
+   `IconButton` (sm 40/22, md 48/26), `GlassButton`, `GlassDialog` + `GlassBackdrop`, `economy-spec.ts` (ResourceChip imports it; ResourceChip variants enumerated), `DreamAvatarPortrait` `standing`/`fullBleed` variants folding the journey-start forks, `useScaleToFit`, GlassButton doctrine, `no-numeric-style-props` rule.
 4. **Phase 3 — Migrations:** `docs/superpowers/plans/2026-07-07-cumulus-phase-3-migrations.md`
    Six icon-button call sites onto `IconButton`; deck sort-direction control; `GlassBackdrop`/`GridPlaceholder` dedupe; StartingDeckModal → `StartingDeckOverlay` + adapter in the Cumulus tier (legacy file deleted, baselines shrink); convergence folds (`QsbSignObject`→`Dreamsign`, `DreamscapeMotes`→`Motes`, dreamscape module moves, `HOVER_TARGET_WIDTH_PX` derivation, press-scale routing); draft-screen clearance constants + qa-scene; `no-raw-icon-classes`, `no-adhoc-press-scale`, `no-raw-interactive-elements` components-tier extension.
 5. **Phase 4 — Deletions and catalog honesty:** `docs/superpowers/plans/2026-07-07-cumulus-phase-4-catalog.md`
@@ -55,7 +55,7 @@ Names pinned across phase plans; a later phase consumes exactly these.
 - `src/cumulus/screens/deck-viewer-shared.tsx` (Phase 3): `export function GridPlaceholder(...)` shared by both deck viewers.
 - `src/cumulus/screens/StartingDeckOverlay.tsx`, `src/screens/cumulus_adapters/StartingDeckOverlayAdapter.tsx`, `src/screens/cumulus_adapters/starting-deck-view-model.ts` (Phase 3).
 - `src/cumulus/components/dreamscape/` (Phase 3): destination for `SiteNode.tsx`, `site-node.css`, `dreamscape-scatter.ts`.
-- `src/cumulus/screens/chrome-geometry.ts` (Phase 3): `export const MENU_BUTTON_PX = 48`; `export const MENU_EDGE_INSET_MOBILE_PX = 18` — shared by `DreamscapeQuestMenu` and `DraftScreen`'s clearance math (a Cumulus module, because `no-external-ui-imports` bars `src/cumulus/**` from importing `src/components/**`).
+- `src/cumulus/screens/chrome-geometry.ts` (Phase 3): `export const MENU_BUTTON_PX = 48`; `export const MENU_EDGE_INSET_MOBILE_PX = 18` — shared by `DreamscapeJourneyMenu` and `DraftScreen`'s clearance math (a Cumulus module, because `no-external-ui-imports` bars `src/cumulus/**` from importing `src/components/**`).
 - Phase 3 API extensions to Phase 2/earlier components (additive, enumerated): `GlassDialog` gains its cutout-aware close placement; `Dreamsign` gains `variant?: "flat" | "hud"` (default `flat`); `Motes` gains tint `"dreamscape"` backed by `--mote-dreamscape` / `--mote-dreamscape-glow` tokens.
 - Baseline mechanism: exported `const BASELINE` arrays at the top of each `scripts/cumulus-*.test.mjs`; eslint-side baselines are `ignores` entries in the relevant `eslint.config.js` block. Later phases edit these in the same commit as the cleanup that empties them.
 

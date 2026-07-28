@@ -17,11 +17,11 @@ const SRC_ROOT = resolve(ROOT, "src");
 const CUMULUS_PREFIX = "src/cumulus/";
 
 const SCREEN_TYPES = [
-  "questStart",
+  "journeyStart",
   "atlas",
   "dreamscape",
-  "questComplete",
-  "questFailed",
+  "journeyComplete",
+  "journeyFailed",
 ];
 
 const SITE_TYPES = [
@@ -50,16 +50,16 @@ const ROUTER_FILES = [
 
 const GENERIC_COMPONENT_SOURCES = [
   "src/components/BattleSiteRoute.tsx",
-  "src/components/CumulusQuestChrome.tsx",
-  "src/components/DreamAuguryQuestMenu.ts",
-  "src/components/DreamscapeQuestMenu.tsx",
+  "src/components/CumulusJourneyChrome.tsx",
+  "src/components/DreamAuguryJourneyMenu.ts",
+  "src/components/DreamscapeJourneyMenu.tsx",
   "src/components/ErrorBoundary.tsx",
   "src/components/FrontDoorRouter.tsx",
-  "src/components/QuestUtilityMenuController.ts",
+  "src/components/JourneyUtilityMenuController.ts",
   "src/components/ScreenRouter.tsx",
 ];
 
-const DELETED_PLAYER_UI = /\/(?:AtlasScreen|QuestStartScreen|QuestCompleteScreen|QuestFailedScreen|DreamscapeScreen|DraftSiteScreen|ShopScreen|EssenceSiteScreen|DreamsignRevelationScreen|PurgeSiteScreen|TransfigurationSiteScreen|DuplicationSiteScreen|RewardSiteScreen|StubSiteScreen|HUD|BattleStartScreen)$/;
+const DELETED_PLAYER_UI = /\/(?:AtlasScreen|JourneyStartScreen|JourneyCompleteScreen|JourneyFailedScreen|DreamscapeScreen|DraftSiteScreen|ShopScreen|EssenceSiteScreen|DreamsignRevelationScreen|PurgeSiteScreen|TransfigurationSiteScreen|DuplicationSiteScreen|RewardSiteScreen|StubSiteScreen|HUD|BattleStartScreen)$/;
 
 function collectFiles(dir) {
   const files = [];

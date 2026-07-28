@@ -1,9 +1,9 @@
 import type { DreamAvatarContent } from "../types/content";
-import type { DreamAvatar } from "../types/quest";
+import type { DreamAvatar } from "../types/journey";
 
 /**
  * Pick a stable random offer of DreamAvatars without replacement. Generic over
- * the DreamAvatar shape so both the quest start screen (`DreamAvatarContent`)
+ * the DreamAvatar shape so both the journey start screen (`DreamAvatarContent`)
  * and the draft test harness (`DraftDreamAvatar`) can share the selection logic.
  */
 export function selectDreamAvatarOffer<T = DreamAvatarContent>(
@@ -37,7 +37,7 @@ function hashSeed(seed: string): number {
   return hash >>> 0;
 }
 
-/** Deterministic `[0, 1)` stream used only for the shared quest-start offer. */
+/** Deterministic `[0, 1)` stream used only for the shared journey-start offer. */
 function offerRng(seed: string): () => number {
   let state = hashSeed(`${seed}:dream-avatar-offer`);
   return () => {
@@ -108,8 +108,8 @@ export function selectDreamAvatarOfferForReroll<
   return offer;
 }
 
-/** Convert normalized DreamAvatar content into quest-state display data. */
-export function toQuestDreamAvatar(
+/** Convert normalized DreamAvatar content into journey-state display data. */
+export function toJourneyDreamAvatar(
   dreamAvatar: DreamAvatarContent,
 ): DreamAvatar {
   return {

@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { createDefaultState } from "../../state/quest-context";
+import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type {
   CardChoiceSiteRuntime,
   DeckEntry,
   SiteState,
-} from "../../types/quest";
+} from "../../types/journey";
 import {
   buildDuplicationCards,
   buildDuplicationOfferLog,

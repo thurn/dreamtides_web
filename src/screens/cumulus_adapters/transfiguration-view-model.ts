@@ -8,9 +8,9 @@ import type { DreamGuideContent } from "../../types/content";
 import type {
   CardChoiceSiteRuntime,
   DreamscapeNode,
-  QuestState,
+  JourneyState,
   SiteState,
-} from "../../types/quest";
+} from "../../types/journey";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
   TransfigurationCandidateView,
@@ -47,7 +47,7 @@ export function buildTransfigurationGuideView(
 
 /** Group persisted form rows into card choices for the active visit mode. */
 export function buildTransfigurationCandidates(
-  state: QuestState,
+  state: JourneyState,
   runtime: CardChoiceSiteRuntime | null,
   cardDatabase: ReadonlyMap<number, CardData>,
   isEnhanced: boolean,
@@ -129,7 +129,7 @@ export function buildTransfigurationCandidates(
 
 /** Build the complete standard desktop Transfiguration site view. */
 export function buildTransfigurationSiteView(params: {
-  state: QuestState;
+  state: JourneyState;
   sceneNode: DreamscapeNode | null;
   site: SiteState;
   runtime: CardChoiceSiteRuntime | null;

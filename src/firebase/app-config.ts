@@ -32,9 +32,9 @@ const REQUIRED_KEYS = [
   "VITE_FIREBASE_APP_ID",
 ] as const satisfies readonly (keyof FirebaseRuntimeEnv)[];
 
-const EMULATOR_PROJECT_ID = "demo-quest-prototype";
-const EMULATOR_APP_NAME = "quest-prototype-emulator";
-const REALTIME_APP_NAME = "quest-prototype-realtime";
+const EMULATOR_PROJECT_ID = "demo-journey-prototype";
+const EMULATOR_APP_NAME = "journey-prototype-emulator";
+const REALTIME_APP_NAME = "journey-prototype-realtime";
 const EMULATOR_DATABASE_HOST = "127.0.0.1";
 const EMULATOR_DATABASE_PORT = 9000;
 const connectedEmulatorDatabases = new WeakSet<Database>();

@@ -6,7 +6,7 @@ import type {
   DreamscapeContent,
   DreamsignTemplate,
 } from "../types/content";
-import { loadQuestContent, type QuestContent } from "../data/quest-content";
+import { loadJourneyContent, type JourneyContent } from "../data/journey-content";
 import {
   buildOpponentDreamsigns,
   DEFAULT_RUN_LAYER_COUNT,
@@ -73,7 +73,7 @@ interface OpponentGeneration {
 const NEUTRAL_DREAMSCAPE = "__neutral__";
 
 function generateOpponent(
-  content: QuestContent,
+  content: JourneyContent,
   completionLevel: number,
   dreamscapeId: string | null,
   nonce: number,
@@ -126,7 +126,7 @@ function generateOpponent(
   if (algo === "corpus") {
     // Reconstruction record for the dreamscape-restricted DreamAvatar pick: the
     // resident pool the seed drew from and the DreamAvatar it landed on, so a
-    // corpus generation can be replayed from `logs/quest-log.jsonl`.
+    // corpus generation can be replayed from `logs/journey-log.jsonl`.
     logEvent("corpus_opponent_dream_avatar_selected", {
       battleEntryKey,
       dreamscapeId,
@@ -205,7 +205,7 @@ export default function OpponentDebugApp() {
   // discrete `?layer=&dreamscape=&n=` form) to reconstruct exactly what someone
   // else saw.
   const initialParams = parseOpponentDebugParams(window.location.search);
-  const [content, setContent] = useState<QuestContent | null>(null);
+  const [content, setContent] = useState<JourneyContent | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [completionLevel, setCompletionLevel] = useState(
     initialParams.completionLevel,
@@ -235,7 +235,7 @@ export default function OpponentDebugApp() {
 
   useEffect(() => {
     let cancelled = false;
-    loadQuestContent(DEFAULT_POOL_VARIANT)
+    loadJourneyContent(DEFAULT_POOL_VARIANT)
       .then((loaded) => {
         if (!cancelled) setContent(loaded);
       })
@@ -351,7 +351,7 @@ export default function OpponentDebugApp() {
               fontSize: 13,
             }}
           >
-            Failed to load quest content: {loadError}
+            Failed to load journey content: {loadError}
           </div>
         )}
 

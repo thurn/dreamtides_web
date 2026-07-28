@@ -4,9 +4,9 @@
 
 **Goal:** Build the gated `?journey=v2` Dream Merchant experience for Dream Journey sites, with two essence-priced offers, high-quality deck-aware rewards, chooser-backed rewards, deterministic dialogue, and center-stage UI.
 
-**Architecture:** Add a sibling `src/journey_v2/` module with its own context projection, deck-read engine, reward catalog, offer director, dialogue grammar, and UI. The classic Dream Journey route stays on `src/journeys/`; `ScreenRouter` selects the v2 merchant only when `RuntimeConfig.journeyVariant === "v2"`. Offer acceptance is a single validated quest mutation that recomputes the encounter from current state before paying essence, applying the reward, and completing the site.
+**Architecture:** Add a sibling `src/journey_v2/` module with its own context projection, deck-read engine, reward catalog, offer director, dialogue grammar, and UI. The classic Dream Journey route stays on `src/journeys/`; `ScreenRouter` selects the v2 merchant only when `RuntimeConfig.journeyVariant === "v2"`. Offer acceptance is a single validated journey mutation that recomputes the encounter from current state before paying essence, applying the reward, and completing the site.
 
-**Tech Stack:** TypeScript, React 19, Vite, Vitest, Firebase Realtime Database transactions, existing quest context and card/Dreamsign UI components.
+**Tech Stack:** TypeScript, React 19, Vite, Vitest, Firebase Realtime Database transactions, existing journey context and card/Dreamsign UI components.
 
 **Spec:** `docs/superpowers/specs/2026-06-08-dream-merchant-v2-design.md` is the source of truth. If this plan and the spec disagree, follow the spec and update the plan before implementation.
 
@@ -19,7 +19,7 @@
 **Create:**
 - `src/journey_v2/index.ts` — public exports for the v2 module.
 - `src/journey_v2/types.ts` — core merchant types shared by context/read/catalog/dialogue/UI.
-- `src/journey_v2/context/buildMerchantContext.ts` — projects `QuestState`, `QuestContent`, and `SiteState` into merchant-safe inputs.
+- `src/journey_v2/context/buildMerchantContext.ts` — projects `JourneyState`, `JourneyContent`, and `SiteState` into merchant-safe inputs.
 - `src/journey_v2/context/buildMerchantContext.test.ts` — candidate filtering and UUID index tests.
 - `src/journey_v2/read/deckRead.ts` — deck profiling and need ranking.
 - `src/journey_v2/read/deckRead.test.ts` — need invariants and crafted deck fixtures.
@@ -44,15 +44,15 @@
 **Modify:**
 - `src/runtime/runtime-config.ts` — add `journeyVariant`.
 - `src/runtime/runtime-config.test.ts` — parse/default tests for `?journey=v2`.
-- `src/data/quest-content.ts` — load adapted draft records and build `FitModel` when v2 is active.
-- `src/data/quest-content.test.ts` — v2 fit-model content-load test.
+- `src/data/journey-content.ts` — load adapted draft records and build `FitModel` when v2 is active.
+- `src/data/journey-content.test.ts` — v2 fit-model content-load test.
 - `src/components/ScreenRouter.tsx` — route Dream Journey sites to v2 screen when requested.
 - `src/components/ScreenRouter.test.tsx` or `src/App.test.tsx` — route selection coverage, choosing the local existing test surface that already mounts routing cleanly.
-- `src/state/quest-context.tsx` — add `acceptDreamMerchantOffer` and `declineDreamMerchant` to `QuestMutations` and single-player provider.
-- `src/state/quest-context.test.tsx` — single-player mutation behavior.
-- `src/state/multiplayer-quest-context.tsx` — implement accept/decline as room transactions.
-- `src/state/multiplayer-quest-context.test.tsx` — transaction behavior and action log coverage.
-- `docs/quest_prototype/url_parameters.md` — document `journey=v2` directly as a runtime parameter.
+- `src/state/journey-context.tsx` — add `acceptDreamMerchantOffer` and `declineDreamMerchant` to `JourneyMutations` and single-player provider.
+- `src/state/journey-context.test.tsx` — single-player mutation behavior.
+- `src/state/multiplayer-journey-context.tsx` — implement accept/decline as room transactions.
+- `src/state/multiplayer-journey-context.test.tsx` — transaction behavior and action log coverage.
+- `docs/journey_prototype/url_parameters.md` — document `journey=v2` directly as a runtime parameter.
 
 ---
 
@@ -62,7 +62,7 @@
 - Commit and push after every task that changes files.
 - Use card UUIDs and deck `entryId`s for algorithmic identity. Card names are display/dialogue only.
 - Keep all v2 feature code under `src/journey_v2/` unless the task explicitly modifies a shared entry point.
-- Do not add merchant-specific persistent memory to `QuestState`.
+- Do not add merchant-specific persistent memory to `JourneyState`.
 - Do not add future-run modifier rewards.
 - Use `npm install` before checks if `node_modules` is missing in the worktree.
 - For focused tests, use `npx vitest run <file>`.
@@ -91,7 +91,7 @@ Run:
 
 ```bash
 npm run typecheck
-npx vitest run src/runtime/runtime-config.test.ts src/data/quest-content.test.ts
+npx vitest run src/runtime/runtime-config.test.ts src/data/journey-content.test.ts
 ```
 
 Expected: pass. If baseline fails, record the failure before making feature changes.
@@ -107,7 +107,7 @@ If `npm install` changed tracked files, commit and push with a detailed message.
 **Files:**
 - Modify: `src/runtime/runtime-config.ts`
 - Test: `src/runtime/runtime-config.test.ts`
-- Modify: `docs/quest_prototype/url_parameters.md`
+- Modify: `docs/journey_prototype/url_parameters.md`
 
 **Bug class caught:** accidental v2 activation on malformed query strings, or missing runtime field causing downstream router code to branch on `undefined`.
 
@@ -138,7 +138,7 @@ Implement parsing with exact-match behavior: only `params.get("journey") === "v2
 
 - [ ] **Step 3: Document the URL parameter**
 
-In `docs/quest_prototype/url_parameters.md`, add a concise `journey` section that says `journey=v2` renders Dream Journey sites with the Dream Merchant v2 encounter.
+In `docs/journey_prototype/url_parameters.md`, add a concise `journey` section that says `journey=v2` renders Dream Journey sites with the Dream Merchant v2 encounter.
 
 - [ ] **Step 4: Run focused verification**
 
@@ -156,7 +156,7 @@ Expected: pass.
 Run:
 
 ```bash
-git add src/runtime/runtime-config.ts src/runtime/runtime-config.test.ts docs/quest_prototype/url_parameters.md
+git add src/runtime/runtime-config.ts src/runtime/runtime-config.test.ts docs/journey_prototype/url_parameters.md
 git commit -m "Add Dream Merchant v2 runtime flag" -m "Parse ?journey=v2 into RuntimeConfig.journeyVariant while keeping the default route on the classic journey surface. Document the parameter for local QA and future implementation tasks."
 git push
 ```
@@ -166,14 +166,14 @@ git push
 ## Task 2: Load Fit Model For v2 Pool-Mode Runs
 
 **Files:**
-- Modify: `src/data/quest-content.ts`
-- Test: `src/data/quest-content.test.ts`
+- Modify: `src/data/journey-content.ts`
+- Test: `src/data/journey-content.test.ts`
 
 **Bug class caught:** v2 merchant recommendations silently falling back to weak local heuristics during normal pool-mode runs.
 
 - [ ] **Step 1: Write the failing content-load test**
 
-Extend the quest-content tests with a pool-mode runtime config whose `journeyVariant` is `"v2"`. Mock adapted draft records with one valid record and assert the returned `QuestContent` includes both `draftRecords` and `fitModel`.
+Extend the journey-content tests with a pool-mode runtime config whose `journeyVariant` is `"v2"`. Mock adapted draft records with one valid record and assert the returned `JourneyContent` includes both `draftRecords` and `fitModel`.
 
 The test should catch:
 - `draftRecords` not fetched in v2 pool mode
@@ -183,21 +183,21 @@ The test should catch:
 Run:
 
 ```bash
-npx vitest run src/data/quest-content.test.ts
+npx vitest run src/data/journey-content.test.ts
 ```
 
 Expected: fail because v2 pool mode does not yet request records.
 
 - [ ] **Step 2: Extend the content-load condition**
 
-In `loadQuestContent()`, add v2 to the condition that fetches draft records and builds `FitModel`. Keep `fitModel` optional in the type because tests and fallback paths can omit it.
+In `loadJourneyContent()`, add v2 to the condition that fetches draft records and builds `FitModel`. Keep `fitModel` optional in the type because tests and fallback paths can omit it.
 
 - [ ] **Step 3: Run focused verification**
 
 Run:
 
 ```bash
-npx vitest run src/data/quest-content.test.ts
+npx vitest run src/data/journey-content.test.ts
 npm run typecheck
 ```
 
@@ -208,7 +208,7 @@ Expected: pass.
 Run:
 
 ```bash
-git add src/data/quest-content.ts src/data/quest-content.test.ts
+git add src/data/journey-content.ts src/data/journey-content.test.ts
 git commit -m "Load draft fit model for Dream Merchant v2" -m "Make ?journey=v2 opt into adapted draft-record loading and FitModel construction in pool-mode runs so merchant recommendations can rank broad catalog rewards from real draft data."
 git push
 ```
@@ -271,7 +271,7 @@ Expected: fail because the files do not exist.
 
 - [ ] **Step 3: Implement `buildMerchantContext`**
 
-Use `QuestState`, `QuestContent`, and `SiteState` as inputs. Read `data/buildaround_support.json` through a static JSON import. Build maps once and return immutable arrays/maps where practical.
+Use `JourneyState`, `JourneyContent`, and `SiteState` as inputs. Read `data/buildaround_support.json` through a static JSON import. Build maps once and return immutable arrays/maps where practical.
 
 Do not use card names for algorithmic identity. Names may be stored as display fields.
 
@@ -653,7 +653,7 @@ Expected: fail.
 
 - [ ] **Step 2: Implement reward payload application**
 
-Implement pure state transforms for the payload variants from Task 6. Use the same semantics as `QuestMutations`:
+Implement pure state transforms for the payload variants from Task 6. Use the same semantics as `JourneyMutations`:
 - add card by UUID by resolving through the content card database
 - add Dreamsign from template
 - duplicate/remove/transfigure by `entryId`
@@ -665,7 +665,7 @@ Keep this transform pure so both single-player and multiplayer providers can use
 
 - [ ] **Step 3: Implement accept/decline resolution**
 
-`resolveMerchantOffer({ state, questContent, site, request })` recomputes context and encounter, validates the request, applies payment/reward, and completes the site. Return a discriminated result so callers can log validation failures.
+`resolveMerchantOffer({ state, journeyContent, site, request })` recomputes context and encounter, validates the request, applies payment/reward, and completes the site. Return a discriminated result so callers can log validation failures.
 
 - [ ] **Step 4: Run focused verification**
 
@@ -690,20 +690,20 @@ git push
 
 ---
 
-## Task 10: Add Quest Mutations For Accept And Decline
+## Task 10: Add Journey Mutations For Accept And Decline
 
 **Files:**
-- Modify: `src/state/quest-context.tsx`
-- Modify: `src/state/quest-context.test.tsx`
-- Modify: `src/state/multiplayer-quest-context.tsx`
-- Modify: `src/state/multiplayer-quest-context.test.tsx`
+- Modify: `src/state/journey-context.tsx`
+- Modify: `src/state/journey-context.test.tsx`
+- Modify: `src/state/multiplayer-journey-context.tsx`
+- Modify: `src/state/multiplayer-journey-context.test.tsx`
 - Modify: `src/journey_v2/types.ts` if request/result types need export refinements
 
 **Bug class caught:** UI composing multiple mutation calls that can interleave in multiplayer, missing action logs, or single-player and multiplayer behavior diverging.
 
 - [ ] **Step 1: Write failing single-player mutation tests**
 
-In `quest-context.test.tsx`, cover:
+In `journey-context.test.tsx`, cover:
 - `acceptDreamMerchantOffer` applies one valid generated offer and completes the site
 - invalid request leaves state unchanged and logs validation failure
 - `declineDreamMerchant` completes the site without deck/resource changes
@@ -711,14 +711,14 @@ In `quest-context.test.tsx`, cover:
 Run:
 
 ```bash
-npx vitest run src/state/quest-context.test.tsx
+npx vitest run src/state/journey-context.test.tsx
 ```
 
 Expected: fail because mutations are missing.
 
 - [ ] **Step 2: Add mutation signatures**
 
-Extend `QuestMutations`:
+Extend `JourneyMutations`:
 
 ```ts
 acceptDreamMerchantOffer: (siteId: string, request: MerchantAcceptRequest) => void;
@@ -733,7 +733,7 @@ Find the current site from atlas state, call `resolveMerchantOffer`, update stat
 
 - [ ] **Step 4: Write failing multiplayer transaction tests**
 
-In `multiplayer-quest-context.test.tsx`, cover:
+In `multiplayer-journey-context.test.tsx`, cover:
 - accept uses one `runRoomTransaction`
 - transaction updater applies essence/reward/site completion together
 - stale request returns unchanged room and action log failure entry
@@ -742,21 +742,21 @@ In `multiplayer-quest-context.test.tsx`, cover:
 Run:
 
 ```bash
-npx vitest run src/state/multiplayer-quest-context.test.tsx
+npx vitest run src/state/multiplayer-journey-context.test.tsx
 ```
 
 Expected: fail until multiplayer provider is implemented.
 
 - [ ] **Step 5: Implement multiplayer mutations**
 
-Use `runRoomTransaction`. Inside the updater, derive the site from the transaction room state, call the pure resolver, write the next quest state, update metadata, and append action log entries.
+Use `runRoomTransaction`. Inside the updater, derive the site from the transaction room state, call the pure resolver, write the next journey state, update metadata, and append action log entries.
 
 - [ ] **Step 6: Run focused verification**
 
 Run:
 
 ```bash
-npx vitest run src/state/quest-context.test.tsx src/state/multiplayer-quest-context.test.tsx
+npx vitest run src/state/journey-context.test.tsx src/state/multiplayer-journey-context.test.tsx
 npm run typecheck
 ```
 
@@ -767,8 +767,8 @@ Expected: pass.
 Run:
 
 ```bash
-git add src/state/quest-context.tsx src/state/quest-context.test.tsx src/state/multiplayer-quest-context.tsx src/state/multiplayer-quest-context.test.tsx src/journey_v2/types.ts
-git commit -m "Wire Dream Merchant offer mutations" -m "Expose accept and decline mutations in single-player and multiplayer quest providers. Multiplayer uses a single room transaction so price payment, reward application, action logging, and site completion commit together."
+git add src/state/journey-context.tsx src/state/journey-context.test.tsx src/state/multiplayer-journey-context.tsx src/state/multiplayer-journey-context.test.tsx src/journey_v2/types.ts
+git commit -m "Wire Dream Merchant offer mutations" -m "Expose accept and decline mutations in single-player and multiplayer journey providers. Multiplayer uses a single room transaction so price payment, reward application, action logging, and site completion commit together."
 git push
 ```
 
@@ -800,7 +800,7 @@ Expected: fail until router switch exists.
 
 - [ ] **Step 3: Implement router switch**
 
-In `DreamJourneySiteScreen` or its call site, branch on `runtimeConfig.journeyVariant`. The v2 wrapper should build the merchant context from `state`, `questContent`, and `site`, then pass the generated encounter and mutations to the v2 screen.
+In `DreamJourneySiteScreen` or its call site, branch on `runtimeConfig.journeyVariant`. The v2 wrapper should build the merchant context from `state`, `journeyContent`, and `site`, then pass the generated encounter and mutations to the v2 screen.
 
 - [ ] **Step 4: Run focused verification**
 
@@ -874,7 +874,7 @@ Run:
 
 ```bash
 git add src/journey_v2/ui
-git commit -m "Render Dream Merchant reward objects" -m "Add v2 merchant game-object rendering for deck cards, catalog card grants, Dreamsigns, resource tokens, badges, and composite rewards using existing quest UI components."
+git commit -m "Render Dream Merchant reward objects" -m "Add v2 merchant game-object rendering for deck cards, catalog card grants, Dreamsigns, resource tokens, badges, and composite rewards using existing journey UI components."
 git push
 ```
 
@@ -995,8 +995,8 @@ git push
 
 **Files:**
 - Modify: `src/journey_v2/ui/DreamMerchantScreen.tsx`
-- Modify: `src/state/quest-context.tsx`
-- Modify: `src/state/multiplayer-quest-context.tsx`
+- Modify: `src/state/journey-context.tsx`
+- Modify: `src/state/multiplayer-journey-context.tsx`
 - Modify: relevant tests from Tasks 10 and 14
 
 **Bug class caught:** merchant offers appearing without analytics/action-log attribution or without source overlays showing offered card provenance.
@@ -1030,7 +1030,7 @@ If an offer or chooser displays grantable cards, set card source debug state wit
 Run:
 
 ```bash
-npx vitest run src/journey_v2/ui/DreamMerchantScreen.test.tsx src/state/quest-context.test.tsx src/state/multiplayer-quest-context.test.tsx
+npx vitest run src/journey_v2/ui/DreamMerchantScreen.test.tsx src/state/journey-context.test.tsx src/state/multiplayer-journey-context.test.tsx
 npm run typecheck
 ```
 
@@ -1041,7 +1041,7 @@ Expected: pass.
 Run:
 
 ```bash
-git add src/journey_v2/ui/DreamMerchantScreen.tsx src/state/quest-context.tsx src/state/multiplayer-quest-context.tsx src/state/quest-context.test.tsx src/state/multiplayer-quest-context.test.tsx
+git add src/journey_v2/ui/DreamMerchantScreen.tsx src/state/journey-context.tsx src/state/multiplayer-journey-context.tsx src/state/journey-context.test.tsx src/state/multiplayer-journey-context.test.tsx
 git commit -m "Log Dream Merchant v2 encounters" -m "Emit shown, accepted, declined, and validation-failed merchant events with site, offer, need, price, UUID, entry-id, and Dreamsign metadata. Surface visible grant cards through card source debug while the merchant screen is mounted."
 git push
 ```
@@ -1139,7 +1139,7 @@ git push
 
 **Files:** modify only if QA finds issues.
 
-**Bug class caught:** render-time errors, broken Firebase room flow, clipped UI, unusable chooser controls, bad mobile stacking, or accepted rewards not visibly changing quest state.
+**Bug class caught:** render-time errors, broken Firebase room flow, clipped UI, unusable chooser controls, bad mobile stacking, or accepted rewards not visibly changing journey state.
 
 - [ ] **Step 1: Start QA server on a non-5173 port**
 

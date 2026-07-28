@@ -4,13 +4,13 @@ import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { Dreamsign } from "../../types/quest";
+import type { Dreamsign } from "../../types/journey";
 import { artRef } from "../primitives/art";
 import {
   DreamsignRevelationScreen,
   type DreamsignRevelationView,
 } from "./DreamsignRevelationScreen";
-import { QUEST_STATUS_BAR_CLEARANCE_OP } from "../components/hud/QuestStatusBar";
+import { JOURNEY_STATUS_BAR_CLEARANCE_OP } from "../components/hud/JourneyStatusBar";
 import { CumulusRoot } from "../CumulusRoot";
 
 function dreamsign(id: string, imageName: string): Dreamsign {
@@ -123,7 +123,7 @@ describe("DreamsignRevelationScreen", () => {
     );
 
     expect(region?.style.bottom).toBe(
-      `calc(${QUEST_STATUS_BAR_CLEARANCE_OP})`,
+      `calc(${JOURNEY_STATUS_BAR_CLEARANCE_OP})`,
     );
     expect(offer?.style.gridTemplateRows).toBe("auto minmax(0, 1fr)");
     expect(offer?.style.height).toBe("100%");

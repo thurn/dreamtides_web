@@ -6,7 +6,7 @@ import { reconcileLintBaselines } from "./lint-baselines.mjs";
 const root = process.cwd();
 const requestedFiles = process.argv.slice(2);
 const requestedConcurrency = Number.parseInt(
-  process.env.QUEST_ESLINT_WORKERS ?? "2",
+  process.env.JOURNEY_ESLINT_WORKERS ?? "2",
   10,
 );
 const concurrency = Number.isInteger(requestedConcurrency) && requestedConcurrency > 0

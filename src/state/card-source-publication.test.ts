@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { CardSourceDebugState } from "../types/quest";
+import type { CardSourceDebugState } from "../types/journey";
 import { updateCardSourcePublication } from "./card-source-publication";
 
 function debugState(label: string): CardSourceDebugState {

@@ -102,7 +102,7 @@ function instance(): BattleCardInstance {
     markers: { isPrevented: false, isCopied: false },
     notes: [],
     provenance: {
-      kind: "quest-deck",
+      kind: "journey-deck",
       sourceBattleCardId: null,
       chosenSpark: null,
       chosenSubtype: null,
@@ -147,7 +147,7 @@ function state(): FoldState {
   };
   return {
     frontDoor: { phase: "tutorial", journeyId: "journey-uuid", tutorial: null },
-    quest: {} as FoldState["quest"],
+    journey: {} as FoldState["journey"],
     battle: {
       mode: {
         kind: "tutorial",

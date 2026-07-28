@@ -8,7 +8,7 @@ import {
   eligibleTransfigurations,
 } from "../../transfiguration/transfiguration-logic";
 import type { CardData } from "../../types/cards";
-import type { CardTypeChange, TransfigurationType } from "../../types/quest";
+import type { CardTypeChange, TransfigurationType } from "../../types/journey";
 import { centrality } from "../signals/fit";
 import { bandSample, type MerchantRng } from "../signals/rng";
 import { MERCHANT_TUNING } from "../tuning";

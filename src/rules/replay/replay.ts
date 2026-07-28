@@ -22,7 +22,7 @@ import { reduceGameEvent } from "../reducer";
  * The canonical `EngineConfig<FoldState>` for the real Dreamtides coop game.
  *
  * - `reducer`   — the root fold + CAS policy (`reduceGameEvent`).
- * - `genesisState` — the pre-quest fold state a fresh room shows.
+ * - `genesisState` — the pre-journey fold state a fresh room shows.
  * - `encode` / `decode` — JSON round-trip of the pure-data `FoldState`, used for
  *   the compaction base snapshot. `FoldState` holds only JSON-safe data (no
  *   functions / `undefined` / class instances), so `JSON.stringify` /

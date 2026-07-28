@@ -1,17 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
-import type { QuestContent } from "../../data/quest-content";
+import type { JourneyContent } from "../../data/journey-content";
 import type { MerchantCorpusCard } from "../../data/merchant-corpus";
 import type { DreamsignProfile } from "../../data/dreamsign-profiles";
-import type { QuestState } from "../../types/quest";
+import type { JourneyState } from "../../types/journey";
 import {
   makeMerchantTestCard,
   makeMerchantTestContent,
   makeMerchantTestCorpus,
   makeMerchantTestDreamsignProfile,
   makeMerchantTestDreamsignTemplate,
-  makeMerchantTestQuestState,
+  makeMerchantTestJourneyState,
   makeMerchantTestSite,
 } from "../testing/fixtures";
 import { buildMerchantContext } from "../context/buildMerchantContext";
@@ -60,7 +60,7 @@ function dreamsignTemplates(count: number) {
 function fixtureContent(input: {
   poolCount?: number;
   dreamsignCount?: number;
-}): QuestContent {
+}): JourneyContent {
   const { cards, corpus } = poolCards(input.poolCount ?? 30);
   const { templates, profiles } = dreamsignTemplates(input.dreamsignCount ?? 10);
   return makeMerchantTestContent({
@@ -71,10 +71,10 @@ function fixtureContent(input: {
   });
 }
 
-function contextFor(content: QuestContent, state: QuestState) {
+function contextFor(content: JourneyContent, state: JourneyState) {
   return buildMerchantContext({
-    questState: state,
-    questContent: content,
+    journeyState: state,
+    journeyContent: content,
     site: makeMerchantTestSite({ id: "site-gen-fixture" }),
   });
 }
@@ -88,7 +88,7 @@ describe("generateMerchantEncounter", () => {
   it("produces exactly two offers from different families across seeds", () => {
     const content = fixtureContent({});
     for (let s = 0; s < 30; s += 1) {
-      const state = makeMerchantTestQuestState({ seed: `seed-${String(s)}` });
+      const state = makeMerchantTestJourneyState({ seed: `seed-${String(s)}` });
       const encounter = generateMerchantEncounter(contextFor(content, state));
       expect(encounter.offers).toHaveLength(2);
       const [a, b] = encounter.offers;
@@ -104,7 +104,7 @@ describe("generateMerchantEncounter", () => {
   it("records roll attempts and attaches a trace to each offer", () => {
     const content = fixtureContent({});
     for (let s = 0; s < 10; s += 1) {
-      const state = makeMerchantTestQuestState({ seed: `rolls-${String(s)}` });
+      const state = makeMerchantTestJourneyState({ seed: `rolls-${String(s)}` });
       const { encounter, debug } = generateMerchantEncounterWithDebug(
         contextFor(content, state),
       );
@@ -133,7 +133,7 @@ describe("generateMerchantEncounter", () => {
 
   it("is deterministic for the same (seed, site, state)", () => {
     const content = fixtureContent({});
-    const state = makeMerchantTestQuestState({ seed: "stable-seed" });
+    const state = makeMerchantTestJourneyState({ seed: "stable-seed" });
     const a = generateMerchantEncounter(contextFor(content, state));
     const b = generateMerchantEncounter(contextFor(content, state));
     expect(a).toEqual(b);
@@ -143,7 +143,7 @@ describe("generateMerchantEncounter", () => {
     const content = fixtureContent({});
     const tuples = new Set<string>();
     for (let s = 0; s < 30; s += 1) {
-      const state = makeMerchantTestQuestState({ seed: `vary-${String(s)}` });
+      const state = makeMerchantTestJourneyState({ seed: `vary-${String(s)}` });
       const encounter = generateMerchantEncounter(contextFor(content, state));
       const [a, b] = encounter.offers;
       tuples.add(
@@ -155,7 +155,7 @@ describe("generateMerchantEncounter", () => {
 
   it("still yields a valid encounter for an empty deck", () => {
     const content = fixtureContent({});
-    const state = makeMerchantTestQuestState({ seed: "empty-deck", deck: [] });
+    const state = makeMerchantTestJourneyState({ seed: "empty-deck", deck: [] });
     const encounter = generateMerchantEncounter(contextFor(content, state));
     expect(encounter.offers).toHaveLength(2);
     expect(encounter.offers[0].family).not.toBe(encounter.offers[1].family);
@@ -163,7 +163,7 @@ describe("generateMerchantEncounter", () => {
 
   it("forces an eligible archetype into slot A when requested", () => {
     const content = fixtureContent({});
-    const state = makeMerchantTestQuestState({ seed: "force-seed" });
+    const state = makeMerchantTestJourneyState({ seed: "force-seed" });
     const baseContext = contextFor(content, state);
     const { debug } = generateMerchantEncounterWithDebug(baseContext);
 
@@ -184,7 +184,7 @@ describe("generateMerchantEncounter", () => {
 
   it("ignores a forced archetype that is not eligible", () => {
     const content = fixtureContent({});
-    const state = makeMerchantTestQuestState({ seed: "force-ineligible" });
+    const state = makeMerchantTestJourneyState({ seed: "force-ineligible" });
     const baseContext = contextFor(content, state);
     const baseline = generateMerchantEncounter(baseContext);
     const { encounter, debug } = generateMerchantEncounterWithDebug({
@@ -202,7 +202,7 @@ describe("generateMerchantEncounter", () => {
 
   it("forcing is deterministic for the same parameters", () => {
     const content = fixtureContent({});
-    const state = makeMerchantTestQuestState({ seed: "force-deterministic" });
+    const state = makeMerchantTestJourneyState({ seed: "force-deterministic" });
     const baseContext = contextFor(content, state);
     const { debug } = generateMerchantEncounterWithDebug(baseContext);
     const archetypeId = debug.eligibleArchetypeIds[0];
@@ -214,7 +214,7 @@ describe("generateMerchantEncounter", () => {
 
   it("renders a single dialogue line and an accept reaction", () => {
     const content = fixtureContent({});
-    const state = makeMerchantTestQuestState({ seed: "dialogue" });
+    const state = makeMerchantTestJourneyState({ seed: "dialogue" });
     const encounter = generateMerchantEncounter(contextFor(content, state));
     expect(encounter.dialogue.line.length).toBeGreaterThan(0);
     expect(

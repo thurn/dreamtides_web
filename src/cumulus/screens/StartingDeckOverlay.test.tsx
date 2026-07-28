@@ -184,7 +184,7 @@ describe("StartingDeckOverlay", () => {
     const title = container.querySelector("h2");
     expect(title?.textContent).toBe("Starting Deck");
     expect(dialog?.textContent).toContain(
-      "These are the cards you begin the quest with.",
+      "These are the cards you begin the journey with.",
     );
 
     const cards = Array.from(

@@ -32,7 +32,7 @@ function hashStringToSeed(input: string): number {
 /**
  * A deterministic `[0, 1)` stream seeded by a string (mulberry32). Used by the
  * lifecycle provider to seed atlas generation from the run seed: two clients
- * folding the same `START_QUEST` derive the same stream and build a
+ * folding the same `START_JOURNEY` derive the same stream and build a
  * byte-identical atlas.
  */
 export function seededRngFromString(seed: string): () => number {

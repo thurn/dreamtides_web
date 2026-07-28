@@ -22,7 +22,7 @@
 ## Reference facts verified for this plan (do not re-derive; trust these)
 
 - **Importers of `glass-surface.ts`** (5, all real `import` statements): `src/cumulus/screens/MobileDeckViewer.tsx:37`, `src/cumulus/screens/DesktopDeckViewer.tsx:59`, `src/cumulus/components/overlay/InfoCard.tsx:59`, `src/cumulus/components/overlay/InfoCard.test.ts:21`, `src/components/StartingDeckModal.tsx:12`.
-- **Importers of `control-treatment.ts`** (6): `src/cumulus/screens/DesktopDeckViewer.tsx:60`, `src/cumulus/screens/MobileDeckViewer.tsx:40`, `src/cumulus/components/controls/SegmentedControl.tsx:24`, `src/cumulus/components/controls/Select.tsx:49` (multi-line named import ending at that line), `src/components/StartingDeckModal.tsx:13`, `src/components/DreamscapeQuestMenu.tsx:29`.
+- **Importers of `control-treatment.ts`** (6): `src/cumulus/screens/DesktopDeckViewer.tsx:60`, `src/cumulus/screens/MobileDeckViewer.tsx:40`, `src/cumulus/components/controls/SegmentedControl.tsx:24`, `src/cumulus/components/controls/Select.tsx:49` (multi-line named import ending at that line), `src/components/StartingDeckModal.tsx:13`, `src/components/DreamscapeJourneyMenu.tsx:29`.
 - The two moved files import only from `../../primitives/tokens` and `../../primitives/color`; they do **not** import each other.
 - `no-untokenized-lengths.js`, `no-hardcoded-values.js`, `no-raw-interactive-elements.js`, and `valid-token-references.js` each carry an `EXEMPT_PREFIXES` array with `src/cumulus/primitives/` and `src/cumulus/components/` (the last three also `src/cumulus/docs/`; the first two also `src/cumulus/screens/devtools/`). Moving the two material files to `src/cumulus/internal/` removes them from the `components/` exemption, so `no-hardcoded-values` would start firing on their raw color literals — Task 1 adds `src/cumulus/internal/` to all four.
 - `npm test` (vitest) discovers `scripts/**/*.test.mjs` and `eslint-rules/**/*.test.{ts,js}` (`vite.config.ts` `test.include`). `npm run lint` runs `eslint src/` only — `scripts/` and `eslint-rules/` are not linted.
@@ -61,7 +61,7 @@ Steps:
   - `src/cumulus/components/controls/SegmentedControl.tsx` → `"../../internal/control-treatment"`
   - `src/cumulus/components/controls/Select.tsx` → `"../../internal/control-treatment"`
   - `src/components/StartingDeckModal.tsx` → `"../cumulus/internal/control-treatment"`
-  - `src/components/DreamscapeQuestMenu.tsx` → `"../cumulus/internal/control-treatment"`
+  - `src/components/DreamscapeJourneyMenu.tsx` → `"../cumulus/internal/control-treatment"`
 - [ ] Add `"src/cumulus/internal/"` as a new element of the `EXEMPT_PREFIXES` array in all four rules, so the material tier keeps authoring raw values exactly as `components/` did. Post-edit the array in `no-untokenized-lengths.js` must contain exactly these five prefixes (the other three rules add `internal/` to their existing set):
   ```js
   const EXEMPT_PREFIXES = [
@@ -75,7 +75,7 @@ Steps:
   Also update each rule's JSDoc that enumerates the exempt tiers to name `internal/` (the material recipes) alongside `primitives/` and `components/` — write the current state, no removed-state phrasing.
 - [ ] Add a `no-restricted-imports` boundary block to `eslint.config.js`, inserted into the `tseslint.config(...)` array immediately before the final `{ ignores: [...] }` block. Contract:
   - `files: ["src/**/*.{ts,tsx}"]`.
-  - `ignores` baselines exactly the cumulus tier and the two legacy reach-in files: `"src/cumulus/**"`, `"src/components/StartingDeckModal.tsx"`, `"src/components/DreamscapeQuestMenu.tsx"`.
+  - `ignores` baselines exactly the cumulus tier and the two legacy reach-in files: `"src/cumulus/**"`, `"src/components/StartingDeckModal.tsx"`, `"src/components/DreamscapeJourneyMenu.tsx"`.
   - Rule `"no-restricted-imports"` set to `"error"` with one pattern group `["**/cumulus/internal/**", "**/cumulus/internal"]` and a message directing the author to import a public Cumulus component or migrate the screen (naming the `cumulus-migrate` skill).
   - Rationale comment: public Cumulus components rendered from a legacy screen are the migration story and stay legal; wearing raw materials outside the linted `src/cumulus/` tier is not. The two baselined files are removed in Phase 3 (StartingDeckModal migrates to the Cumulus tier; the dreamscape gear moves onto IconButton), at which point their `ignores` entries shrink to nothing.
 - [ ] Run lint, typecheck, test — all must pass. In-cumulus importers spell `../internal/…` or `../../internal/…` (no substring `cumulus/internal`, so the pattern does not fire on them); the two legacy files spell `../cumulus/internal/…` and match the pattern but are baselined by `ignores`.
@@ -197,7 +197,7 @@ Detector contract:
 - `isBaselined(dup)`: the sorted `[a, b]` file pair equals a BASELINE `[_, fileA, fileB]` and `dup.literal` starts with that entry's `literalPrefix`.
 - Two tests: (1) every duplicate is baselined — assert `findCrossFileDuplicates().filter(d => !isBaselined(d))` equals `[]`, with a failure message listing each unexpected `DUPLICATE <literal>` and its files; (2) no stale BASELINE entry — assert every BASELINE entry still matches a live duplicate, listing any to remove.
 
-The verified current cross-file duplicates (post-Task-1 paths) are exactly nine: two between `CardStatOrb.tsx` and `PipBadge.tsx`, six between the two internal glass files, one monogram gradient between `DreamAvatarPortrait.tsx` and `quest-start-desktop.tsx`. BASELINE is a data contract — reproduce it literally:
+The verified current cross-file duplicates (post-Task-1 paths) are exactly nine: two between `CardStatOrb.tsx` and `PipBadge.tsx`, six between the two internal glass files, one monogram gradient between `DreamAvatarPortrait.tsx` and `journey-start-desktop.tsx`. BASELINE is a data contract — reproduce it literally:
 
 ```js
 export const BASELINE = [
@@ -244,7 +244,7 @@ export const BASELINE = [
   [
     "radial-gradient(circle at 50% 20%, color-mix(in srgb, ${token(\"--gold\")}",
     "src/cumulus/components/hud/DreamAvatarPortrait.tsx",
-    "src/cumulus/screens/quest-start-desktop.tsx",
+    "src/cumulus/screens/journey-start-desktop.tsx",
   ],
 ];
 ```
@@ -434,7 +434,7 @@ Both arrays are data contracts — reproduce literally:
 
 ```js
 export const INTERNAL_IMPORTERS = [
-  "src/components/DreamscapeQuestMenu.tsx",
+  "src/components/DreamscapeJourneyMenu.tsx",
   "src/components/StartingDeckModal.tsx",
 ];
 
@@ -450,8 +450,8 @@ export const COMPONENTS_TSX = [
   "DeckViewer.tsx",
   "DreamAvatarPopover.test.tsx",
   "DreamAvatarPopover.tsx",
-  "DreamscapeQuestMenu.test.tsx",
-  "DreamscapeQuestMenu.tsx",
+  "DreamscapeJourneyMenu.test.tsx",
+  "DreamscapeJourneyMenu.tsx",
   "DreamwellCardView.tsx",
   "ErrorBoundary.test.tsx",
   "ErrorBoundary.tsx",

@@ -3,8 +3,8 @@
 import { act, StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it, vi } from "vitest";
-import type { CardSourceDebugState } from "../types/quest";
-import type { QuestMutations } from "./quest-context";
+import type { CardSourceDebugState } from "../types/journey";
+import type { JourneyMutations } from "./journey-context";
 import { useCardSourceDebugPublication } from "./use-card-source-debug-publication";
 
 const debugState: CardSourceDebugState = {
@@ -13,14 +13,14 @@ const debugState: CardSourceDebugState = {
   entries: [],
 };
 
-function Publisher({ publish }: { publish: QuestMutations["setCardSourceDebug"] }) {
+function Publisher({ publish }: { publish: JourneyMutations["setCardSourceDebug"] }) {
   useCardSourceDebugPublication(publish, debugState, "shown", "hidden");
   return null;
 }
 
 describe("useCardSourceDebugPublication", () => {
   it("publishes once through StrictMode replay and clears once on final unmount", async () => {
-    const publish = vi.fn<QuestMutations["setCardSourceDebug"]>();
+    const publish = vi.fn<JourneyMutations["setCardSourceDebug"]>();
     const container = document.createElement("div");
     const root = createRoot(container);
 

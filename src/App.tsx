@@ -7,23 +7,23 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./cumulus/primitives/cumulus-base.css";
 import type { Database } from "firebase/database";
 import type { CardData } from "./types/cards";
-import type { QuestContent } from "./data/quest-content";
+import type { JourneyContent } from "./data/journey-content";
 import {
   AFFINITY_GROWN_POOL_VARIANTS,
   buildDreamAvatarProvenance,
   buildDreamAvatarSeedProvenance,
   buildDreamAvatarTides4Provenance,
-  loadQuestContent,
+  loadJourneyContent,
   poolVariantNeedsTides4,
-} from "./data/quest-content";
+} from "./data/journey-content";
 import { loadTutorialConfiguration } from "./data/tutorial-actions";
 import { getFirebaseDatabase } from "./firebase/app-config";
 import { RoomGate } from "./coop/RoomGate";
 import { CoopProvider, useConfirmedHead, useConnectedCount } from "./coop/hooks";
 import { EventLogViewer } from "./coop/EventLogViewer";
 import { registerGameProviders } from "./coop/providers/register-game-providers";
-import { useQuest } from "./state/quest-context";
-import { CoopQuestProvider } from "./state/coop-quest-context";
+import { useJourney } from "./state/journey-context";
+import { CoopJourneyProvider } from "./state/coop-journey-context";
 import { ScreenRouter } from "./components/ScreenRouter";
 import { DesktopDeckViewerAdapter } from "./screens/cumulus_adapters/DesktopDeckViewerAdapter";
 import { MobileDeckViewerAdapter } from "./screens/cumulus_adapters/MobileDeckViewerAdapter";
@@ -32,37 +32,37 @@ import { ApplicationStateScreen } from "./cumulus/screens/ApplicationStateScreen
 import { PoolViewerAdapter } from "./screens/cumulus_adapters/PoolViewerAdapter";
 import { StartingDeckOverlayAdapter } from "./screens/cumulus_adapters/StartingDeckOverlayAdapter";
 import { DebugScreen } from "./screens/DebugScreen";
-import QuestDebugEditor from "./screens/QuestDebugEditor";
+import JourneyDebugEditor from "./screens/JourneyDebugEditor";
 import { CardSourceOverlay } from "./screens/CardSourceOverlay";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { STARTER_CARD_NUMBERS } from "./data/starter-cards";
-import { getSavedQuest } from "./state/saved-quests";
+import { getSavedJourney } from "./state/saved-journeys";
 import { logEvent } from "./logging";
 import { regenerateAtlasInPlace } from "./atlas/regenerate-atlas";
 import type { RuntimeConfig } from "./runtime/runtime-config";
 import { DECK_VIEWER_SCENE_ID, POOL_VIEWER_SCENE_ID, findQaScene } from "./runtime/qa-scenes";
-import { useQuestUrlSync } from "./runtime/use-quest-url-sync";
-import type { QuestState, SiteState } from "./types/quest";
+import { useJourneyUrlSync } from "./runtime/use-journey-url-sync";
+import type { JourneyState, SiteState } from "./types/journey";
 
 /** Inner component that renders the gameplay router and retained app overlays. */
-export function QuestApp({
+export function JourneyApp({
   cardDatabase,
   runtimeConfig,
 }: {
   cardDatabase: Map<number, CardData>;
   runtimeConfig: RuntimeConfig;
 }) {
-  const { state, mutations, questContent } = useQuest();
+  const { state, mutations, journeyContent } = useJourney();
   // Reflect the current screen into the address-bar path (e.g.
   // `/dreamscape/ember-wood/purge`, `/atlas`) so the URL shows where the player
   // is. Passive reflection via `history.replaceState`; the `?game=<roomId>`
-  // query param remains the resume key. See `useQuestUrlSync`.
-  useQuestUrlSync();
+  // query param remains the resume key. See `useJourneyUrlSync`.
+  useJourneyUrlSync();
   // The starter-deck reveal popup is shown the first time a player picks a
-  // DreamAvatar. Visibility is driven entirely by persisted quest state
+  // DreamAvatar. Visibility is driven entirely by persisted journey state
   // (`dreamAvatar` set + `hasSeenStartingDeckPopup` false) so a reload of the
   // same `?game=` URL does not re-open the popup. The flag round-trips
-  // through `normalizeQuestState` so a fresh client joining the same room
+  // through `normalizeJourneyState` so a fresh client joining the same room
   // also sees the correct state. The popup uses a full-bleed alpha scrim on
   // mobile and a centered bounded glass panel on desktop, layered on top of the
   // live dreamscape; the HUD and screen return once it is dismissed.
@@ -76,7 +76,7 @@ export function QuestApp({
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
   const [poolViewerOpen, setPoolViewerOpen] = useState(false);
   const [debugScreenOpen, setDebugScreenOpen] = useState(false);
-  const [questEditorOpen, setQuestEditorOpen] = useState(false);
+  const [journeyEditorOpen, setJourneyEditorOpen] = useState(false);
   const [cardSourceOverlayOpen, setCardSourceOverlayOpen] = useState(false);
   const confirmedHead = useConfirmedHead();
   const connectedCount = useConnectedCount();
@@ -84,17 +84,17 @@ export function QuestApp({
   const gotoSceneFiredRef = useRef(false);
   const openDeckFiredRef = useRef(false);
   const openPoolViewerFiredRef = useRef(false);
-  const loadQuestFiredRef = useRef(false);
-  const loadQuestName = runtimeConfig.loadQuestName ?? null;
-  // `?loadQuest=<name>` boot flow: 'pending' holds a loading screen until the
+  const loadJourneyFiredRef = useRef(false);
+  const loadJourneyName = runtimeConfig.loadJourneyName ?? null;
+  // `?loadJourney=<name>` boot flow: 'pending' holds a loading screen until the
   // saved snapshot has been fetched and dispatched; 'error' surfaces a failure;
   // 'done' (or no load requested) lets the game render normally.
-  const [loadQuestStatus, setLoadQuestStatus] = useState<
+  const [loadJourneyStatus, setLoadJourneyStatus] = useState<
     "idle" | "pending" | "done" | "error"
-  >(loadQuestName === null ? "idle" : "pending");
-  const [loadQuestError, setLoadQuestError] = useState<string | null>(null);
+  >(loadJourneyName === null ? "idle" : "pending");
+  const [loadJourneyError, setLoadJourneyError] = useState<string | null>(null);
 
-  // `?goto=<scene>`: replace the freshly created room's empty quest state with
+  // `?goto=<scene>`: replace the freshly created room's empty journey state with
   // one parked on a developer QA scene (e.g. `?goto=atlas`), letting browser QA
   // open screens that are otherwise reachable only by playing battles forward.
   // Fires once per mount, and the multiplayer mutation guards on
@@ -145,68 +145,68 @@ export function QuestApp({
     setPoolViewerOpen(true);
   }, [runtimeConfig.gotoScene, state.dreamAvatar]);
 
-  // `?loadQuest=<name>`: fetch the named snapshot from the dev server and
-  // replace the room's quest state with it, then render the loaded run. Once
-  // the snapshot is applied, the `loadQuest` param is stripped from the URL so
+  // `?loadJourney=<name>`: fetch the named snapshot from the dev server and
+  // replace the room's journey state with it, then render the loaded run. Once
+  // the snapshot is applied, the `loadJourney` param is stripped from the URL so
   // a later reload — including a Vite HMR full reload triggered by editing a
   // file — keeps the in-session run instead of re-applying the snapshot and
   // discarding progress.
   useEffect(() => {
-    const questName = loadQuestName;
-    if (questName === null || loadQuestFiredRef.current) {
+    const journeyName = loadJourneyName;
+    if (journeyName === null || loadJourneyFiredRef.current) {
       return;
     }
-    if (mutations.loadQuestState === undefined) {
-      setLoadQuestError(
-        "Loading a saved quest is unavailable in this context.",
+    if (mutations.loadJourneyState === undefined) {
+      setLoadJourneyError(
+        "Loading a saved journey is unavailable in this context.",
       );
-      setLoadQuestStatus("error");
+      setLoadJourneyStatus("error");
       return;
     }
 
-    loadQuestFiredRef.current = true;
-    const loadQuestState = mutations.loadQuestState;
-    void getSavedQuest(questName)
+    loadJourneyFiredRef.current = true;
+    const loadJourneyState = mutations.loadJourneyState;
+    void getSavedJourney(journeyName)
       .then((loaded) => {
         if (loaded === null) {
-          setLoadQuestError(`No saved quest named "${questName}".`);
-          setLoadQuestStatus("error");
+          setLoadJourneyError(`No saved journey named "${journeyName}".`);
+          setLoadJourneyStatus("error");
           return;
         }
-        logEvent("debug_quest_loaded", {
-          source: "load_quest_url",
-          name: questName,
+        logEvent("debug_journey_loaded", {
+          source: "load_journey_url",
+          name: journeyName,
           screen: loaded.screen?.type ?? "unknown",
         });
-        loadQuestState(loaded, "load_quest_url");
-        stripLoadQuestParam();
-        setLoadQuestStatus("done");
+        loadJourneyState(loaded, "load_journey_url");
+        stripLoadJourneyParam();
+        setLoadJourneyStatus("done");
       })
       .catch((error: unknown) => {
-        setLoadQuestError(
+        setLoadJourneyError(
           error instanceof Error
             ? error.message
-            : "Failed to load the saved quest.",
+            : "Failed to load the saved journey.",
         );
-        setLoadQuestStatus("error");
+        setLoadJourneyStatus("error");
       });
-  }, [loadQuestName, mutations]);
+  }, [loadJourneyName, mutations]);
 
   const hasDraftData = state.resolvedPackage !== null;
   const hasCardSourceDebug = state.cardSourceDebug !== null;
 
   // In record-replay draft mode the Pool Viewer surfaces the replayed record's
   // own deck and pick log. Resolve the record the draft state points at from
-  // the bundled corpus (loaded into `questContent`) so the viewer can show the
+  // the bundled corpus (loaded into `journeyContent`) so the viewer can show the
   // deck the original drafter built and their pack-by-pack picks.
   const draftState = state.draftState;
   const replayRecord = useMemo(() => {
     if (draftState === null || draftState.mode !== "replay") {
       return null;
     }
-    const records = questContent.draftRecords ?? [];
+    const records = journeyContent.draftRecords ?? [];
     return records.find((record) => record.id === draftState.recordId) ?? null;
-  }, [draftState, questContent.draftRecords]);
+  }, [draftState, journeyContent.draftRecords]);
 
   // Recompute the full idf3 provenance for the "Why Cards" overlay on demand
   // from the run seed and the pool corpus. It is deterministic per
@@ -216,18 +216,18 @@ export function QuestApp({
   // package, so an empty-array strip cannot silently lose the steer.
   const resolvedDreamAvatarId = state.resolvedPackage?.dreamAvatar.id ?? null;
   const cardSourceProvenance = useMemo(() => {
-    const poolContext = questContent.poolContext;
+    const poolContext = journeyContent.poolContext;
     if (!cardSourceOverlayOpen || poolContext === undefined) return null;
     if (resolvedDreamAvatarId === null) return null;
-    const dreamAvatar = questContent.dreamAvatars.find(
+    const dreamAvatar = journeyContent.dreamAvatars.find(
       (dc) => dc.id === resolvedDreamAvatarId,
     );
     if (dreamAvatar === undefined) return null;
     return buildDreamAvatarProvenance(dreamAvatar, poolContext, state.seed);
   }, [
     cardSourceOverlayOpen,
-    questContent.poolContext,
-    questContent.dreamAvatars,
+    journeyContent.poolContext,
+    journeyContent.dreamAvatars,
     resolvedDreamAvatarId,
     state.seed,
   ]);
@@ -244,18 +244,18 @@ export function QuestApp({
   const seedProvenanceNeeded =
     isAffinityGrownVariant && (cardSourceOverlayOpen || poolViewerOpen);
   const seedProvenance = useMemo(() => {
-    const poolContext = questContent.poolContext;
+    const poolContext = journeyContent.poolContext;
     if (!seedProvenanceNeeded || poolContext === undefined) return null;
     if (resolvedDreamAvatarId === null) return null;
-    const dreamAvatar = questContent.dreamAvatars.find(
+    const dreamAvatar = journeyContent.dreamAvatars.find(
       (dc) => dc.id === resolvedDreamAvatarId,
     );
     if (dreamAvatar === undefined) return null;
     return buildDreamAvatarSeedProvenance(dreamAvatar, poolContext, state.seed);
   }, [
     seedProvenanceNeeded,
-    questContent.poolContext,
-    questContent.dreamAvatars,
+    journeyContent.poolContext,
+    journeyContent.dreamAvatars,
     resolvedDreamAvatarId,
     state.seed,
   ]);
@@ -272,10 +272,10 @@ export function QuestApp({
   const tides4ProvenanceNeeded =
     isTides4Variant && (cardSourceOverlayOpen || poolViewerOpen);
   const tides4Provenance = useMemo(() => {
-    const poolContext = questContent.poolContext;
+    const poolContext = journeyContent.poolContext;
     if (!tides4ProvenanceNeeded || poolContext === undefined) return null;
     if (resolvedDreamAvatarId === null) return null;
-    const dreamAvatar = questContent.dreamAvatars.find(
+    const dreamAvatar = journeyContent.dreamAvatars.find(
       (dc) => dc.id === resolvedDreamAvatarId,
     );
     if (dreamAvatar === undefined) return null;
@@ -286,15 +286,15 @@ export function QuestApp({
     );
   }, [
     tides4ProvenanceNeeded,
-    questContent.poolContext,
-    questContent.dreamAvatars,
+    journeyContent.poolContext,
+    journeyContent.dreamAvatars,
     resolvedDreamAvatarId,
     state.seed,
   ]);
 
   useEffect(() => {
     // FIND-01-6 (Stage 4): do NOT auto-open the deck viewer when leaving the
-    // quest-start screen. The mid-quest-start deck overlay hid the first
+    // journey-start screen. The mid-journey-start deck overlay hid the first
     // site beneath a blocking modal. The starter-deck reference is one
     // "View Deck" click away on the HUD; let the player land on the site
     // unobstructed. We still observe the transition to keep the ref
@@ -329,7 +329,7 @@ export function QuestApp({
     setPoolViewerOpen(false);
   }, []);
 
-  const handleBeginQuest = useCallback(() => {
+  const handleBeginJourney = useCallback(() => {
     mutations.dismissStartingDeckPopup();
   }, [mutations]);
 
@@ -341,12 +341,12 @@ export function QuestApp({
     setDebugScreenOpen(false);
   }, []);
 
-  const handleOpenQuestEditor = useCallback(() => {
-    setQuestEditorOpen(true);
+  const handleOpenJourneyEditor = useCallback(() => {
+    setJourneyEditorOpen(true);
   }, []);
 
-  const handleCloseQuestEditor = useCallback(() => {
-    setQuestEditorOpen(false);
+  const handleCloseJourneyEditor = useCallback(() => {
+    setJourneyEditorOpen(false);
   }, []);
 
   const handleToggleCardSourceOverlay = useCallback(() => {
@@ -360,23 +360,23 @@ export function QuestApp({
   const handleRegenerateAtlas = useCallback(() => {
     regenerateAtlasInPlace({
       state,
-      questContent,
+      journeyContent,
       updateAtlas: mutations.updateAtlas,
       setCurrentDreamscape: mutations.setCurrentDreamscape,
     });
-  }, [state, questContent, mutations]);
+  }, [state, journeyContent, mutations]);
 
   // `?goto=<scene>`: hold a loading screen — rather than the DreamAvatar
   // selection screen — until `bootstrapQaScene` round-trips through Firebase,
   // so QA lands directly on the requested scene (e.g. the Dream Atlas). Scenes
-  // whose destination *is* the DreamAvatar selection screen (`landsOnQuestStart`)
+  // whose destination *is* the DreamAvatar selection screen (`landsOnJourneyStart`)
   // are exempt: their state keeps `dreamAvatar` null, so this gate — which waits
   // for a DreamAvatar to be selected — would otherwise spin forever.
   const gotoSceneName = runtimeConfig.gotoScene ?? null;
   const gotoScene = gotoSceneName === null ? null : findQaScene(gotoSceneName);
   if (
     gotoScene !== null &&
-    gotoScene.landsOnQuestStart !== true &&
+    gotoScene.landsOnJourneyStart !== true &&
     state.dreamAvatar === null
   ) {
     return (
@@ -384,37 +384,37 @@ export function QuestApp({
         view={{
           kind: "loading",
           title: "Opening QA Scene",
-          message: "Preparing this quest state.",
+          message: "Preparing this journey state.",
           busyLabel: "Opening QA Scene",
         }}
       />
     );
   }
 
-  // Hold a loading screen while the `?loadQuest=` snapshot is being fetched and
+  // Hold a loading screen while the `?loadJourney=` snapshot is being fetched and
   // applied, so the player lands directly on the loaded run rather than the
   // DreamAvatar selection screen.
-  if (loadQuestStatus === "pending") {
+  if (loadJourneyStatus === "pending") {
     return (
       <ApplicationStateScreen
         view={{
           kind: "loading",
-          title: "Loading Saved Quest",
-          message: `Loading ${loadQuestName ?? "saved quest"}.`,
-          busyLabel: "Loading Saved Quest",
+          title: "Loading Saved Journey",
+          message: `Loading ${loadJourneyName ?? "saved journey"}.`,
+          busyLabel: "Loading Saved Journey",
         }}
       />
     );
   }
 
-  if (loadQuestStatus === "error") {
+  if (loadJourneyStatus === "error") {
     return (
       <ApplicationStateScreen
         view={{
           kind: "recoverableError",
-          title: "Could Not Load Saved Quest",
-          message: "The saved quest could not be opened.",
-          detail: loadQuestError ?? "Failed to load saved quest.",
+          title: "Could Not Load Saved Journey",
+          message: "The saved journey could not be opened.",
+          detail: loadJourneyError ?? "Failed to load saved journey.",
         }}
       />
     );
@@ -434,12 +434,12 @@ export function QuestApp({
             onViewDeck: handleOpenDeckViewer,
             onOpenPoolViewer: handleOpenPoolViewer,
             onOpenDebugScreen: handleOpenDebugScreen,
-            onOpenQuestEditor: handleOpenQuestEditor,
+            onOpenJourneyEditor: handleOpenJourneyEditor,
             onToggleCardSourceOverlay: handleToggleCardSourceOverlay,
             hasCardSourceDebug,
             isCardSourceOverlayOpen: cardSourceOverlayOpen,
             hasDraftData,
-            onLoadQuestState: mutations.loadQuestState,
+            onLoadJourneyState: mutations.loadJourneyState,
             onRegenerateAtlas: handleRegenerateAtlas,
             elevated: deckViewerOpen && !isDesktopViewport,
             showConnectedCount: !showConnectedCount,
@@ -486,11 +486,11 @@ export function QuestApp({
         </ErrorBoundary>
         <ErrorBoundary
           scope="overlay:starting-deck-modal"
-          onClose={handleBeginQuest}
+          onClose={handleBeginJourney}
         >
           <StartingDeckOverlayAdapter
             isOpen={showStarterDeckIntro}
-            onClose={handleBeginQuest}
+            onClose={handleBeginJourney}
           />
         </ErrorBoundary>
         <ErrorBoundary
@@ -504,19 +504,19 @@ export function QuestApp({
             cardDatabase={cardDatabase}
             resolvedPackage={state.resolvedPackage}
             remainingDreamsignPool={state.remainingDreamsignPool}
-            dreamsignTemplates={questContent.dreamsignTemplates}
+            dreamsignTemplates={journeyContent.dreamsignTemplates}
             onForceLegendaryOffer={mutations.setDraftState}
-            questState={state}
-            onLoadQuestState={mutations.loadQuestState}
+            journeyState={state}
+            onLoadJourneyState={mutations.loadJourneyState}
           />
         </ErrorBoundary>
         <ErrorBoundary
-          scope="overlay:quest-editor"
-          onClose={handleCloseQuestEditor}
+          scope="overlay:journey-editor"
+          onClose={handleCloseJourneyEditor}
         >
-          <QuestDebugEditor
-            isOpen={questEditorOpen}
-            onClose={handleCloseQuestEditor}
+          <JourneyDebugEditor
+            isOpen={journeyEditorOpen}
+            onClose={handleCloseJourneyEditor}
           />
         </ErrorBoundary>
         <ErrorBoundary
@@ -539,25 +539,25 @@ export function QuestApp({
 }
 
 /**
- * Remove the `loadQuest` query param from the current URL without reloading the
+ * Remove the `loadJourney` query param from the current URL without reloading the
  * page. Called once the named snapshot has been applied so a later reload — for
  * example a Vite HMR full reload after editing a file — keeps the in-session run
  * rather than re-fetching the snapshot and discarding progress.
  */
-function stripLoadQuestParam(): void {
+function stripLoadJourneyParam(): void {
   if (typeof window === "undefined") {
     return;
   }
   const url = new URL(window.location.href);
-  if (!url.searchParams.has("loadQuest")) {
+  if (!url.searchParams.has("loadJourney")) {
     return;
   }
-  url.searchParams.delete("loadQuest");
+  url.searchParams.delete("loadJourney");
   window.history.replaceState(window.history.state, "", url.toString());
 }
 
 /** The site the run is currently parked on, or null when it cannot be resolved. */
-function resolveActiveSite(state: QuestState): SiteState | null {
+function resolveActiveSite(state: JourneyState): SiteState | null {
   if (state.screen.type !== "site" || state.currentDreamscape === null) {
     return null;
   }
@@ -573,7 +573,7 @@ export default function App({
 }: {
   runtimeConfig: RuntimeConfig;
 }) {
-  const [questContent, setQuestContent] = useState<QuestContent | null>(null);
+  const [journeyContent, setJourneyContent] = useState<JourneyContent | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [database, setDatabase] = useState<Database | null>(null);
   const [firebaseError, setFirebaseError] = useState<string | null>(null);
@@ -598,7 +598,7 @@ export default function App({
 
   useEffect(() => {
     Promise.all([
-      loadQuestContent(
+      loadJourneyContent(
         runtimeConfig.poolVariant,
         runtimeConfig.draftMode,
         runtimeConfig.fresh20PackSize,
@@ -613,20 +613,20 @@ export default function App({
         };
         // Register the five real reducer content providers from the loaded
         // content BEFORE any room folds an event. Until this runs, every
-        // provider-backed event (START_QUEST, SELECT_DREAM_AVATAR, ADD_CARD,
+        // provider-backed event (START_JOURNEY, SELECT_DREAM_AVATAR, ADD_CARD,
         // ADD_DREAMSIGN, content-coupled OPEN_SITE / REROLL_SHOP / BEGIN_BATTLE)
-        // bounces. Registering here — before `setQuestContent` unblocks the
+        // bounces. Registering here — before `setJourneyContent` unblocks the
         // render that mounts RoomGate / CoopProvider — guarantees the ordering,
         // and the registration is identical across clients on the same build.
         registerGameProviders(content);
-        setQuestContent(content);
+        setJourneyContent(content);
         setLoadError(null);
       })
       .catch((error) => {
         setLoadError(
           error instanceof Error
             ? error.message
-            : "Failed to load quest content.",
+            : "Failed to load journey content.",
         );
       });
   }, [
@@ -636,7 +636,7 @@ export default function App({
   ]);
 
   useEffect(() => {
-    if (questContent === null) {
+    if (journeyContent === null) {
       return;
     }
 
@@ -651,15 +651,15 @@ export default function App({
           : "Failed to initialize Firebase.",
       );
     }
-  }, [questContent, runtimeConfig.databaseMode]);
+  }, [journeyContent, runtimeConfig.databaseMode]);
 
   if (loadError !== null) {
     return (
       <ApplicationStateScreen
         view={{
           kind: "recoverableError",
-          title: "Quest Content Failed to Load",
-          message: "The quest content could not be prepared.",
+          title: "Journey Content Failed to Load",
+          message: "The journey content could not be prepared.",
           detail: loadError,
           actions: [
             {
@@ -678,14 +678,14 @@ export default function App({
     );
   }
 
-  if (questContent === null) {
+  if (journeyContent === null) {
     return (
       <ApplicationStateScreen
         view={{
           kind: "loading",
-          title: "Loading Quest Content",
+          title: "Loading Journey Content",
           message: "Gathering the dream’s cards and paths.",
-          busyLabel: "Loading Quest Content",
+          busyLabel: "Loading Journey Content",
         }}
       />
     );
@@ -732,12 +732,12 @@ export default function App({
     >
       {(context) => (
         <CoopProvider context={context}>
-          <CoopQuestProvider questContent={questContent}>
-            <QuestApp
-              cardDatabase={questContent.cardDatabase}
+          <CoopJourneyProvider journeyContent={journeyContent}>
+            <JourneyApp
+              cardDatabase={journeyContent.cardDatabase}
               runtimeConfig={runtimeConfig}
             />
-          </CoopQuestProvider>
+          </CoopJourneyProvider>
         </CoopProvider>
       )}
     </RoomGate>

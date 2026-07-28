@@ -1,6 +1,6 @@
 import { createDreamsign } from "../data/dreamsigns";
 import type { DreamsignTemplate } from "../types/content";
-import type { Dreamsign } from "../types/quest";
+import type { Dreamsign } from "../types/journey";
 
 export interface DreamsignPoolDraw {
   offeredIds: string[];

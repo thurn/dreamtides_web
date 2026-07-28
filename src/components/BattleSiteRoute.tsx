@@ -1,16 +1,16 @@
 import { useMemo } from "react";
 import type { CardData } from "../types/cards";
-import type { SiteState } from "../types/quest";
-import { useQuest } from "../state/quest-context";
+import type { SiteState } from "../types/journey";
+import { useJourney } from "../state/journey-context";
 import { useGameState, useActions } from "../coop/hooks";
 import { createBattlePreview } from "../coop/providers/battle-init-provider";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { PlayableBattleScreen } from "../battle/components/PlayableBattleScreen";
 import { BattleStartScreenAdapter } from "../screens/cumulus_adapters/BattleStartScreenAdapter";
 import {
-  CumulusQuestChrome,
-  type CumulusQuestChromeHandlers,
-} from "./CumulusQuestChrome";
+  CumulusJourneyChrome,
+  type CumulusJourneyChromeHandlers,
+} from "./CumulusJourneyChrome";
 import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
 
 /**
@@ -28,9 +28,9 @@ export function BattleSiteRoute({
   site: SiteState;
   cardDatabase: Map<number, CardData>;
   runtimeConfig: RuntimeConfig;
-  cumulusChromeHandlers?: CumulusQuestChromeHandlers;
+  cumulusChromeHandlers?: CumulusJourneyChromeHandlers;
 }) {
-  const { state, questContent } = useQuest();
+  const { state, journeyContent } = useJourney();
   const gameState = useGameState();
   const actions = useActions();
   const battle = gameState.battle;
@@ -45,13 +45,13 @@ export function BattleSiteRoute({
     () =>
       battle === null
         ? createBattlePreview(
-            questContent,
+            journeyContent,
             state,
             site.id,
             runtimeConfig.seedOverride,
           )
         : null,
-    [battle, questContent, runtimeConfig.seedOverride, site.id, state],
+    [battle, journeyContent, runtimeConfig.seedOverride, site.id, state],
   );
 
   if (battle === null) {
@@ -67,19 +67,19 @@ export function BattleSiteRoute({
       );
     }
     return (
-      <CumulusQuestChrome handlers={cumulusChromeHandlers}>
+      <CumulusJourneyChrome handlers={cumulusChromeHandlers}>
         <BattleStartScreenAdapter
           init={preview}
           cardDatabase={cardDatabase}
           onBegin={beginBattle}
         />
-      </CumulusQuestChrome>
+      </CumulusJourneyChrome>
     );
   }
 
   return (
-    <CumulusQuestChrome variant="battle">
+    <CumulusJourneyChrome variant="battle">
       <PlayableBattleScreen site={site} aiMode={runtimeConfig.aiMode} />
-    </CumulusQuestChrome>
+    </CumulusJourneyChrome>
   );
 }

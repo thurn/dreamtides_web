@@ -1,7 +1,7 @@
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate, ResolvedDreamAvatarPackage } from "../types/content";
 import type { DraftState, PoolDraftState } from "../types/draft";
-import type { Dreamsign, RuntimeShopSlot } from "../types/quest";
+import type { Dreamsign, RuntimeShopSlot } from "../types/journey";
 
 import { drawAndSpendUniqueCards } from "../draft/draft-engine";
 import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";

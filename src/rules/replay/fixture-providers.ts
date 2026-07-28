@@ -1,6 +1,6 @@
 // Deterministic content providers for the synthetic replay fixtures.
 //
-// The reducer's five content seams (quest lifecycle, deck, draft, site, battle
+// The reducer's five content seams (journey lifecycle, deck, draft, site, battle
 // init) BOUNCE every provider-backed event until a provider is registered. The
 // REAL generators register through `src/coop/providers/registerGameProviders`,
 // but the permanent replay regression net deliberately uses these minimal
@@ -42,7 +42,7 @@ import type {
   DreamscapeNode,
   RuntimeShopSlot,
   SiteState,
-} from "../../types/quest";
+} from "../../types/journey";
 import { LayerName } from "../../types/layer-name";
 import { emptyDawnFired, type BattleFoldState } from "../battle/fold";
 import { DREAMWELL_EFFECTS } from "../battle/dreamwell-effects-table";
@@ -53,19 +53,19 @@ import {
 import {
   registerDeckContentProvider,
   type DeckContentProvider,
-} from "../quest/deck";
+} from "../journey/deck";
 import {
   registerDraftContentProvider,
   type DraftContentProvider,
-} from "../quest/draft";
+} from "../journey/draft";
 import {
-  registerQuestLifecycleContentProvider,
-  type QuestLifecycleContentProvider,
-} from "../quest/lifecycle";
+  registerJourneyLifecycleContentProvider,
+  type JourneyLifecycleContentProvider,
+} from "../journey/lifecycle";
 import {
   registerSiteContentProvider,
   type SiteContentProvider,
-} from "../quest/sites";
+} from "../journey/sites";
 
 // ---------------------------------------------------------------------------
 // Stable ids the fixture event logs reference
@@ -124,7 +124,7 @@ function makePrng(seed: number): () => number {
 }
 
 // ---------------------------------------------------------------------------
-// Quest lifecycle provider
+// Journey lifecycle provider
 // ---------------------------------------------------------------------------
 
 function fixturePackage(
@@ -202,15 +202,15 @@ function fixtureDraftState(): PoolDraftState {
   };
 }
 
-function lifecycleProvider(): QuestLifecycleContentProvider {
+function lifecycleProvider(): JourneyLifecycleContentProvider {
   return {
     resolveDreamAvatarPackage: (dreamAvatarId, seed) =>
       fixturePackage(dreamAvatarId, seed),
-    startQuest: ({ quest, dreamAvatarId, seed }) => {
+    startJourney: ({ journey, dreamAvatarId, seed }) => {
       const pkg = fixturePackage(dreamAvatarId, seed);
       return {
-        ...quest,
-        seed: quest.seed,
+        ...journey,
+        seed: journey.seed,
         essence: pkg.dreamAvatar.startingEssence,
         dreamAvatar: {
           id: pkg.dreamAvatar.id,
@@ -225,7 +225,7 @@ function lifecycleProvider(): QuestLifecycleContentProvider {
         draftState: fixtureDraftState(),
         currentDreamscape: NODE_ID,
         atlas: {
-          ...quest.atlas,
+          ...journey.atlas,
           nodes: { [NODE_ID]: fixtureNode() },
           startingNodeId: NODE_ID,
           currentNodeId: NODE_ID,
@@ -351,7 +351,7 @@ function makeInstance(
     markers: { isPrevented: false, isCopied: false },
     notes: [],
     provenance: {
-      kind: "quest-deck",
+      kind: "journey-deck",
       sourceBattleCardId: null,
       chosenSpark: null,
       chosenSubtype: null,
@@ -453,7 +453,7 @@ export function fixtureBattleInitProvider(): BattleInitProvider {
 
 /** Register the deterministic fixture providers on all five seams. */
 export function registerReplayFixtureProviders(): void {
-  registerQuestLifecycleContentProvider(lifecycleProvider());
+  registerJourneyLifecycleContentProvider(lifecycleProvider());
   registerDeckContentProvider(deckProvider());
   registerDraftContentProvider(draftProvider());
   registerSiteContentProvider(siteProvider());
@@ -462,7 +462,7 @@ export function registerReplayFixtureProviders(): void {
 
 /** Clear every fixture-provider registration so no other suite is affected. */
 export function clearReplayFixtureProviders(): void {
-  registerQuestLifecycleContentProvider(null);
+  registerJourneyLifecycleContentProvider(null);
   registerDeckContentProvider(null);
   registerDraftContentProvider(null);
   registerSiteContentProvider(null);

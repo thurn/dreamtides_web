@@ -31,8 +31,8 @@ const fileRoles = {
   "src/vendor/boxicons/boxicons-logos.css": OUTER_UI_ROLES.VENDOR_ASSET,
 
   "src/components/BattleSiteRoute.tsx": OUTER_UI_ROLES.APP_SHELL,
-  "src/components/CumulusQuestChrome.tsx": OUTER_UI_ROLES.APP_SHELL,
-  "src/components/DreamscapeQuestMenu.tsx": OUTER_UI_ROLES.APP_SHELL,
+  "src/components/CumulusJourneyChrome.tsx": OUTER_UI_ROLES.APP_SHELL,
+  "src/components/DreamscapeJourneyMenu.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/ErrorBoundary.tsx": OUTER_UI_ROLES.EMERGENCY_FALLBACK,
   "src/components/FrontDoorRouter.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/ScreenRouter.tsx": OUTER_UI_ROLES.APP_SHELL,
@@ -66,10 +66,10 @@ const fileRoles = {
 
   "src/screens/CardSourceOverlay.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/screens/DebugScreen.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
-  "src/screens/QuestDebugEditor.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
-  "src/state/coop-quest-context.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/screens/JourneyDebugEditor.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/state/coop-journey-context.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/state/front-door-context.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
-  "src/state/quest-context.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/state/journey-context.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
 };
 
 for (const name of [
@@ -80,7 +80,7 @@ for (const name of [
   "LoadingScreenAdapter",
   "MobileBattleScreenAdapter", "MobileDeckViewerAdapter", "PurgeSiteScreenAdapter",
   "MainMenuScreenAdapter",
-  "QuestCompleteScreenAdapter", "QuestFailedScreenAdapter", "QuestStartScreenAdapter",
+  "JourneyCompleteScreenAdapter", "JourneyFailedScreenAdapter", "JourneyStartScreenAdapter",
   "StartingDeckOverlayAdapter", "TransfigurationSiteScreenAdapter",
   "TutorialBattleScreenAdapter", "TutorialScreenAdapter",
   "WorkInProgressSiteScreenAdapter", "registry",

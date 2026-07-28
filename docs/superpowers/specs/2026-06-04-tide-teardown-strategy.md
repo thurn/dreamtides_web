@@ -49,10 +49,10 @@ injected from that metadata at build time and must stop being injected.
 ### System B runtime consumers (dead — remove or redesign)
 | Location | What it did | Strategy |
 |---|---|---|
-| `src/screens/QuestStartScreen.tsx` (tide chips via `structural-tides.dreamAvatarTidesForDisplay`) | Showed a dream avatar's strategy as tide chips; now hidden (empty) | **Redesign:** show the dream avatar's `signatureCards` (or labels derived from them) as the strategy preview. |
+| `src/screens/JourneyStartScreen.tsx` (tide chips via `structural-tides.dreamAvatarTidesForDisplay`) | Showed a dream avatar's strategy as tide chips; now hidden (empty) | **Redesign:** show the dream avatar's `signatureCards` (or labels derived from them) as the strategy preview. |
 | `src/screens/DreamsignSourceOverlay.tsx` (+ buttons in `DreamsignDraftScreen.tsx`, `DreamsignOfferingScreen.tsx`) | Explained why a dreamsign was offered (tide match) | **Remove** — dreamsigns are random now; there is no source to explain. Delete overlay + its launch buttons + props. |
 | `src/debug/card-source-debug.ts`, `src/screens/CardSourceOverlay.tsx` | Showed why a draft card was in the pool (tide match → on-theme/fallback) | **Redesign (debug-only):** report idf3 provenance (e.g. whether the card is in the chosen starter decklist) instead of tide match, or remove. |
-| `src/state/draft-engine.ts` / `quest-context.tsx` / `multiplayer-quest-context.tsx` `selectedTides`/`selectedPackageTides` references | Reward/concurrency/logging | Remove the references (already inert). |
+| `src/state/draft-engine.ts` / `journey-context.tsx` / `multiplayer-journey-context.tsx` `selectedTides`/`selectedPackageTides` references | Reward/concurrency/logging | Remove the references (already inert). |
 | `src/screens/debug-helpers.ts`, `src/screens/DebugScreen.tsx` package-tide fields | Debug display | Remove the tide fields from `PackageDebugInfo`. |
 | `src/multiplayer/room-service.ts` `normalizeResolvedPackage` | RTDB persist of package tide fields | Remove the tide fields from the normalized shape. |
 
@@ -60,16 +60,16 @@ injected from that metadata at build time and must stop being injected.
 | Module | Consumers | Strategy |
 |---|---|---|
 | `src/data/tide-weights.ts` | **none** (non-test) | **Delete now** — already orphaned. |
-| `src/data/structural-tides.ts` | `QuestStartScreen`, `DreamsignSourceOverlay`, `card-source-debug` | Delete after those consumers are redesigned/removed (System B above). |
+| `src/data/structural-tides.ts` | `JourneyStartScreen`, `DreamsignSourceOverlay`, `card-source-debug` | Delete after those consumers are redesigned/removed (System B above). |
 | `src/data/tide-docs.ts` + `src/components/TideDocumentationHover.tsx` + `tides/tides.md` | `DreamsignSourceOverlay`, `CardSourceOverlay`, `DebugScreen` | Delete after consumers are redesigned/removed. |
 
-### Already-orphaned quest-pool tide code (safe to delete now)
-- `src/data/quest-content.ts`: `resolveDreamAvatarPackage`, `buildDraftPoolCopies`,
+### Already-orphaned journey-pool tide code (safe to delete now)
+- `src/data/journey-content.ts`: `resolveDreamAvatarPackage`, `buildDraftPoolCopies`,
   `enumeratePackageCandidates`, `buildCombinations`, `chooseBestCandidate`,
   `compareSubsetKeys`, the pool-size constants, the package-adjacency helpers
   (`countPackageOverlap`/`isPackageAdjacent`/`packageOverlapWeight`/`selectPackageAdjacent*`),
   `buildCardsByPackageTideIndex`/`cardsByPackageTide`, and `loadDreamAvatarContent`.
-- `QuestContent.resolvedPackagesByDreamAvatarId` (always empty) + its ~25 test mocks.
+- `JourneyContent.resolvedPackagesByDreamAvatarId` (always empty) + its ~25 test mocks.
 
 ### Editor / experiment tooling (separate decision)
 - Card editor tide panel (`src/editor/CardEditorApp.tsx`, `EditableCard.tsx`,
@@ -80,12 +80,12 @@ injected from that metadata at build time and must stop being injected.
 
 ## Suggested order
 
-1. Delete already-orphaned code (`tide-weights.ts`, dead `quest-content.ts`
+1. Delete already-orphaned code (`tide-weights.ts`, dead `journey-content.ts`
    functions, `resolvedPackagesByDreamAvatarId`).
 2. Stop injecting `CARDS_V2_POOL_METADATA` tides into `cards_v2-data.json`;
    redesign battle-art hue off a non-tide key.
 3. Decide journey `tideOverlap` fate; remove or re-base.
-4. Remove System B UI: redesign QuestStartScreen (signature cards), delete
+4. Remove System B UI: redesign JourneyStartScreen (signature cards), delete
    DreamsignSourceOverlay, simplify card-source debug.
 5. Delete `structural-tides.ts`, `tide-docs.ts`, `TideDocumentationHover`.
 6. Remove `card.tides`, then the System B fields, then `PackageTideId`.

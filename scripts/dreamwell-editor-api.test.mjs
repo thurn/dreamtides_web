@@ -44,7 +44,7 @@ card-number = 2
 }
 
 function writeFixtureRoot() {
-  const rootDir = mkdtempSync(join(tmpdir(), "quest-dreamwell-editor-api-"));
+  const rootDir = mkdtempSync(join(tmpdir(), "journey-dreamwell-editor-api-"));
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
   mkdirSync(join(rootDir, "public"), { recursive: true });
   writeFileSync(join(rootDir, "data", "tabula", "dreamwell.toml"), fixtureToml());

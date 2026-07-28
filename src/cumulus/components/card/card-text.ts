@@ -35,7 +35,7 @@ export type SymbolType =
  *   written in front of it (`"50"` for `50 essence`) or is `null` for a bare
  *   reference (`the essence you gain`). The renderer draws the amount glued
  *   directly to the crypto glyph; the word "essence" itself is dropped.
- * - `siteName` is the name of a quest site (`draft`, `shop`, `dream journey`,
+ * - `siteName` is the name of a journey site (`draft`, `shop`, `dream journey`,
  *   …) written immediately before the word "site"/"sites". The renderer tints
  *   it so the site reads at a glance; the trailing "site"/"sites" stays plain.
  */
@@ -147,7 +147,7 @@ function splitEssence(text: string): TextSegment[] {
 }
 
 /**
- * Quest site names that are tinted when they appear directly before the word
+ * Journey site names that are tinted when they appear directly before the word
  * "site"/"sites". Multi-word names are listed before any shorter name they
  * share a first word with so the regex prefers the longer match. Battle is
  * intentionally excluded. The trailing "site"/"sites" is matched by a lookahead
@@ -158,7 +158,7 @@ const SITE_NAME_RE =
 
 /**
  * Splits text into plain-text runs and `siteName` segments, tinting the name of
- * a quest site written in front of "site"/"sites". The "site"/"sites" word
+ * a journey site written in front of "site"/"sites". The "site"/"sites" word
  * itself is left in the surrounding text.
  */
 function splitSiteNames(text: string): TextSegment[] {
@@ -568,10 +568,10 @@ function scanSegments(
 
 /**
  * Parses rules text into segments of plain text, symbols, glossary terms,
- * essence currency values, and quest site names.
+ * essence currency values, and journey site names.
  *
  * Essence references are pulled out first (see `splitEssence`) so the amount in
- * front of the word is captured and the word itself dropped; quest site names
+ * front of the word is captured and the word itself dropped; journey site names
  * are then tinted (see `splitSiteNames`); the remaining text runs are scanned
  * for symbols and glossary terms. The icon-binding pass runs once over the
  * combined list so the word in front of an essence amount stays glued to it.

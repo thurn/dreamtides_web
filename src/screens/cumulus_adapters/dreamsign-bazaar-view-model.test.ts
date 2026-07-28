@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { createDefaultState } from "../../state/quest-context";
-import type { Dreamsign, ShopSiteRuntime, SiteState } from "../../types/quest";
+import { createDefaultState } from "../../state/journey-context";
+import type { Dreamsign, ShopSiteRuntime, SiteState } from "../../types/journey";
 import {
   buildDreamsignBazaarOffers,
   buildDreamsignBazaarRestock,

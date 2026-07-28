@@ -84,7 +84,7 @@ export function buildReplayOffer(
  * Returns the selected card numbers.
  *
  * Randomness is injected: `rng` is a required `() => number` returning a
- * uniform value in `[0, 1)`. Callers reached from the pure quest reducer pass a
+ * uniform value in `[0, 1)`. Callers reached from the pure journey reducer pass a
  * `ctx.rng`-derived stream so two clients folding the same event draw the same
  * sample; other callers pass an explicit source (e.g. `Math.random`). This
  * function reads no ambient randomness of its own.
@@ -135,7 +135,7 @@ function weightedSample(
  * (see `src/affiliations/affiliation-weights.ts`).
  *
  * `rng` is the injected randomness source (uniform `[0, 1)`); it defaults to
- * `Math.random` for callers that have no seed context, while the pure quest
+ * `Math.random` for callers that have no seed context, while the pure journey
  * reducer passes a `ctx.rng`-derived stream so a draw is deterministic per
  * `(seed, seq)`.
  */

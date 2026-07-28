@@ -1,6 +1,6 @@
 // Guards the UUID-keyed card-reference systems against drift. Every hand-authored
 // place that names cards in data — the `signature-cards` in
-// `dream_avatars_v2.toml`, the tutorial quest pool, the pool metadata in
+// `dream_avatars_v2.toml`, the tutorial journey pool, the pool metadata in
 // `cards-v2-metadata.ts`, and the build-around metadata in
 // `buildaround_support.json` — references cards by their stable `id` UUID from
 // `cards_v2.toml`. These tests fail if any reference points at a UUID that is not
@@ -70,7 +70,7 @@ describe("card references resolve to real cards", () => {
 
   it("the tutorial tag identifies exactly the UUID-authored tutorial pool", () => {
     const tutorialPool = parseToml(
-      readFileSync(join(TABULA, "tutorial_quest_pool.toml"), "utf8"),
+      readFileSync(join(TABULA, "tutorial_journey_pool.toml"), "utf8"),
     ) as {
       tides?: Array<{ cards?: Array<{ id: string }> }>;
     };
@@ -81,7 +81,7 @@ describe("card references resolve to real cards", () => {
     );
     expect(poolCardIds.size).toBeGreaterThan(0);
     for (const id of poolCardIds) {
-      expectCard("tutorial_quest_pool.toml", id);
+      expectCard("tutorial_journey_pool.toml", id);
       expect(STARTER_CARD_NUMBERS).not.toContain(
         idToCard.get(id)?.["card-number"],
       );

@@ -1,5 +1,5 @@
 // chrome-geometry — the shared dreamscape-menu chrome geometry, read by the
-// menu (DreamscapeQuestMenu) and by screens that must clear it (DraftScreen's
+// menu (DreamscapeJourneyMenu) and by screens that must clear it (DraftScreen's
 // top-band clearance math). It lives in src/cumulus/ so a src/cumulus screen can
 // import it without reaching into src/components (no-external-ui-imports); the
 // menu, which may import from src/cumulus, is the other consumer.
@@ -26,5 +26,5 @@ export const MENU_EDGE_INSET_MOBILE_PX = 18;
  */
 export const MENU_EDGE_INSET_DESKTOP_PX = 22;
 
-/** The shared top edge for debug reroll controls on quest scene art. */
+/** The shared top edge for debug reroll controls on journey scene art. */
 export const DEBUG_REROLL_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${token("--space-5")})`;

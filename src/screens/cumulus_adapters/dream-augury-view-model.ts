@@ -5,7 +5,7 @@ import {
 } from "../../atlas/atlas-generator";
 import { buildCardSourceDebugState } from "../../debug/card-source-debug";
 import { guideForSiteType } from "../../data/dreamscapes";
-import type { QuestContent } from "../../data/quest-content";
+import type { JourneyContent } from "../../data/journey-content";
 import {
   buildMerchantContext,
   buildMerchantDeckSnapshot,
@@ -34,9 +34,9 @@ import type {
   CardSourceDebugState,
   DreamscapeNode,
   Dreamsign,
-  QuestState,
+  JourneyState,
   SiteState,
-} from "../../types/quest";
+} from "../../types/journey";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
 import type {
@@ -793,10 +793,10 @@ function collectVisibleGrantCards(encounter: MerchantEncounter): CardData[] {
 }
 
 export function buildDreamAugurySiteModel(params: {
-  state: QuestState;
+  state: JourneyState;
   sceneNode: DreamscapeNode | null;
   site: SiteState;
-  questContent: QuestContent;
+  journeyContent: JourneyContent;
   guide: DreamGuideContent | null;
   guideLine: string | null;
 }): DreamAuguryBuildResult {
@@ -809,8 +809,8 @@ export function buildDreamAugurySiteModel(params: {
   };
   try {
     const context = buildMerchantContext({
-      questState: params.state,
-      questContent: params.questContent,
+      journeyState: params.state,
+      journeyContent: params.journeyContent,
       site: params.site,
     });
     const { encounter, debug } = generateMerchantEncounterWithDebug(context);
