@@ -3,17 +3,8 @@ import {
   parseTutorialInstructionMarkup,
   type TutorialInstructionParagraph,
 } from "../../data/tutorial-instruction-markup";
-import {
-  ENERGY_ICON_CLASS,
-  ENERGY_ICON_COLOR,
-} from "../components/controls/GlowIcon";
-import { InlineGlyph } from "../components/typography/InlineGlyph";
-import { GLYPHS } from "../primitives/glyph";
+import { renderRulesSymbolsInline } from "../components/card/RulesText";
 import { token } from "../primitives/tokens";
-
-const inlineIconStyle = {
-  whiteSpace: "nowrap",
-} as const;
 
 const parenthesizedIconStyle = {
   whiteSpace: "nowrap",
@@ -21,7 +12,7 @@ const parenthesizedIconStyle = {
 
 function renderInstructionText(instruction: string): ReactElement {
   const parts = instruction.split(
-    /(\b(?:points|spark)\s+\(\s*[⍟✦]\s*\)|\(\s*[⍟✦●]\s*\)|\d+\s*⍟|[⍟✦●])/giu,
+    /(\b(?:points|spark)\s+\(\s*[⍟✦]\s*\)|\(\s*[⍟✦●]\s*\))/giu,
   );
 
   return (
@@ -39,12 +30,7 @@ function renderInstructionText(instruction: string): ReactElement {
                 : { "data-tutorial-how-to-play-spark-term": "" })}
               style={parenthesizedIconStyle}
             >
-              {resourceTerm[1]} (
-              <InlineGlyph
-                glyph={points ? GLYPHS.points : GLYPHS.sparkInline}
-                color={points ? "text-primary" : "spark"}
-              />
-              )
+              {renderRulesSymbolsInline(part)}
             </span>
           );
         }
@@ -58,13 +44,7 @@ function renderInstructionText(instruction: string): ReactElement {
                 data-tutorial-how-to-play-energy-term=""
                 style={parenthesizedIconStyle}
               >
-                (
-                <InlineGlyph
-                  glyph={ENERGY_ICON_CLASS}
-                  color={ENERGY_ICON_COLOR}
-                  label="energy"
-                />
-                )
+                {renderRulesSymbolsInline(part)}
               </span>
             );
           }
@@ -77,55 +57,14 @@ function renderInstructionText(instruction: string): ReactElement {
                 : { "data-tutorial-how-to-play-spark-term": "" })}
               style={parenthesizedIconStyle}
             >
-              (
-              <InlineGlyph
-                glyph={points ? GLYPHS.points : GLYPHS.sparkInline}
-                color={points ? "text-primary" : "spark"}
-              />
-              )
+              {renderRulesSymbolsInline(part)}
             </span>
           );
         }
 
-        const pointsValue = /^(\d+)(\s*)⍟$/u.exec(part);
-        if (pointsValue !== null) {
-          return (
-            <span key={index} style={inlineIconStyle}>
-              {pointsValue[1]}
-              {pointsValue[2] === "" ? null : " "}
-              <InlineGlyph
-                glyph={GLYPHS.points}
-                color="text-primary"
-                label="points"
-              />
-            </span>
-          );
-        }
-
-        if (part === "⍟" || part === "✦") {
-          const points = part === "⍟";
-          return (
-            <InlineGlyph
-              key={index}
-              glyph={points ? GLYPHS.points : GLYPHS.sparkInline}
-              color={points ? "text-primary" : "spark"}
-              label={points ? "points" : "spark"}
-            />
-          );
-        }
-
-        if (part === "●") {
-          return (
-            <InlineGlyph
-              key={index}
-              glyph={ENERGY_ICON_CLASS}
-              color={ENERGY_ICON_COLOR}
-              label="energy"
-            />
-          );
-        }
-
-        return part;
+        return (
+          <Fragment key={index}>{renderRulesSymbolsInline(part)}</Fragment>
+        );
       })}
     </>
   );

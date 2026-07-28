@@ -1683,7 +1683,7 @@ describe("TutorialScreen", () => {
     );
     expect(purpleHighlight?.textContent).toBe("event");
     expect(purpleHighlight?.style.color).toBe("var(--accent-bright)");
-    expect(dialog?.querySelectorAll('[aria-label="points"]')).toHaveLength(1);
+    expect(dialog?.querySelectorAll('[aria-label="points"]')).toHaveLength(2);
     expect(
       dialog?.querySelector('[aria-label="points"] i')?.className,
     ).toContain("bxf bx-star-circle");
@@ -1736,14 +1736,11 @@ describe("TutorialScreen", () => {
     expect(
       paragraphs[1]?.querySelector('[aria-label="points"] i')?.className,
     ).toContain("bxf bx-star-circle");
-    expect(
-      paragraphs[1]?.querySelector('[aria-label="points"]')?.parentElement
-        ?.textContent,
-    ).toBe("12");
-    expect(
-      paragraphs[1]?.querySelector<HTMLElement>('[aria-label="points"]')
-        ?.parentElement?.style.whiteSpace,
-    ).toBe("nowrap");
+    const scoreUnit = paragraphs[1]
+      ?.querySelector<HTMLElement>('[aria-label="points"]')
+      ?.closest<HTMLElement>('span[style*="white-space: nowrap"]');
+    expect(scoreUnit?.textContent).toBe("Score 12");
+    expect(scoreUnit?.style.whiteSpace).toBe("nowrap");
     expect(
       paragraphs[1]?.querySelector<HTMLElement>('[aria-label="points"]')
         ?.parentElement?.style.display,
@@ -1978,9 +1975,12 @@ describe("TutorialScreen", () => {
     expect(energyIcon?.querySelector("i")?.className).toContain(
       "bxf bx-fire-alt",
     );
-    const expectedEnergyColor = document.createElement("span");
-    expectedEnergyColor.style.color = ENERGY_ICON_COLOR;
-    expect(energyIcon?.style.color).toBe(expectedEnergyColor.style.color);
+    expect(energyIcon?.parentElement?.style.color).toContain(
+      "--cv-rules-energy-color",
+    );
+    expect(energyIcon?.parentElement?.style.color).toContain(
+      ENERGY_ICON_COLOR,
+    );
     expect(energyIcon?.dataset.inlineGlyph).toBe("");
     const energyMetric = energyIcon?.querySelector<HTMLElement>(
       "[data-inline-glyph-metric]",

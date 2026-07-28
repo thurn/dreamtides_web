@@ -1316,7 +1316,7 @@
             "name": "text",
             "tsType": "string",
             "optional": false,
-            "description": "Spoken line shown by the speech bubble with tutorial instruction formatting."
+            "description": "Spoken line shown with tutorial highlights and canonical inline rules glyphs."
           }
         ]
       }
@@ -4313,7 +4313,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "The spoken line. Uses tutorial instruction formatting for yellow and\nevent-frame purple highlights plus inline points, spark, and energy glyphs."
+      "description": "The spoken line. Uses tutorial instruction formatting for yellow and\nevent-frame purple highlights plus canonical inline rules glyphs."
     },
     {
       "name": "size",

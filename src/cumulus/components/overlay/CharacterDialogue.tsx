@@ -49,7 +49,7 @@ export interface CharacterDialogueModel {
   readonly portraitAlt: string;
   /** Character name shown by the speech bubble. */
   readonly speakerName: string;
-  /** Spoken line shown by the speech bubble with tutorial instruction formatting. */
+  /** Spoken line shown with tutorial highlights and canonical inline rules glyphs. */
   readonly text: string;
 }
 

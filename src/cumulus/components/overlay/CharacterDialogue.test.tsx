@@ -158,7 +158,45 @@ describe("CharacterDialogue", () => {
       "bxf bx-star-circle",
     );
     expect(sparkIcon?.querySelector("i")?.className).toContain("bxf bx-sparkle");
-    expect(sparkIcon?.style.color).toBe("var(--spark)");
+    expect(sparkIcon?.parentElement?.style.color).toContain(
+      "var(--cv-rules-spark-color",
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("renders the complete canonical rules-symbol vocabulary through InlineGlyph", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <CharacterDialogue
+            dialogue={{
+              portrait: artRef.characterPortrait("mira"),
+              portraitAlt: "Mira",
+              speakerName: "Mira",
+              text:
+                "A ▸Dissolved ability may cost 1● and ☪, store 1⧗, gain 2⍟ and 1✦, or use ❖.",
+            }}
+            visible
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(container.querySelector("i.bxf.bx-caret-right")).not.toBeNull();
+    expect(container.querySelector("i.bxf.bx-fire-alt")).not.toBeNull();
+    expect(container.querySelector("i.bxf.bx-moon")).not.toBeNull();
+    expect(container.querySelector("i.fa-solid.fa-brain")).not.toBeNull();
+    expect(container.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
+    expect(container.querySelector("i.bxf.bx-sparkle")).not.toBeNull();
+    expect(container.querySelector("i.bxf.bx-bolt")).not.toBeNull();
+    expect(container.querySelectorAll("[data-inline-glyph]")).toHaveLength(7);
+    expect(container.textContent).not.toMatch(/[▸●☪⧗⍟✦❖]/u);
 
     act(() => root.unmount());
     container.remove();
