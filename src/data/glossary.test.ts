@@ -95,6 +95,17 @@ describe("glossary", () => {
     expect(lookupGlossaryTerm(bare.toLowerCase())).toBeUndefined();
   });
 
+  it("defines Challenge as an arrow-gated challenger declaration trigger", () => {
+    const challengeTrigger = requireGlossaryEntry("challenge-trigger");
+    expect(challengeTrigger).toMatchObject({
+      term: "▸Challenge",
+      definition:
+        "Triggers when this character is declared as a challenger.",
+    });
+    expect(lookupGlossaryTerm("▸Challenge")).toBe(challengeTrigger);
+    expect(lookupGlossaryTerm("Challenge")).toBeUndefined();
+  });
+
   it("falls back to the bare term for an arrow-prefixed word", () => {
     // A non-arrow term still resolves if it appears arrow-prefixed, via the
     // bare-keyword fallback.

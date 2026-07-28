@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { GlossaryCatalogEntry } from "../../../data/glossary";
-import { glossaryDefinitionsCardModel } from "./rules-text-reveal";
+import {
+  glossaryDefinitionsCardModel,
+  rulesTextDefinitionCards,
+} from "./rules-text-reveal";
 
 function entry(
   id: string,
@@ -23,6 +26,26 @@ function entry(
 }
 
 describe("glossaryDefinitionsCardModel", () => {
+  it("builds the Challenge trigger's hover definition card", () => {
+    expect(rulesTextDefinitionCards("▸Challenge: Draw a card.")).toEqual([
+      {
+        variant: "text",
+        body: {
+          kind: "definitions",
+          entries: [
+            {
+              term: "▸Challenge",
+              definition:
+                "Triggers when this character is declared as a challenger.",
+              symbol: undefined,
+              termPresentation: undefined,
+            },
+          ],
+        },
+      },
+    ]);
+  });
+
   it("attaches production rule symbols to their definition rows", () => {
     const card = glossaryDefinitionsCardModel([
       entry("fast", "Fast", { definitionSymbol: "fast" }),

@@ -26,6 +26,15 @@ matches-rules-text = true
 variants = [ "dawn" ]
 
 [[entries]]
+id = "challenge-trigger"
+category = "Triggers & Timing"
+term = "▸Challenge"
+definition = "Triggers when this character is declared as a challenger."
+priority = 40
+matches-rules-text = true
+variants = []
+
+[[entries]]
 id = "night-trigger"
 category = "Triggers & Timing"
 term = "▸Night"
