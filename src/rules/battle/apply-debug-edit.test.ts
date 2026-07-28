@@ -169,6 +169,58 @@ describe("applyDebugEdit Figments leaving play", () => {
     return { state: created.state, battleCardId };
   }
 
+  it("creates same-type Figments as distinct characters in their chosen slots", () => {
+    const first = applyDebugEdit(createTestState(), {
+      kind: "CREATE_FIGMENT",
+      side: "player",
+      chosenSubtype: "Shadow",
+      chosenSpark: 2,
+      name: "First Shadow",
+      destination: { side: "player", zone: "backRank", slotId: "B0" },
+      createdAtMs: 0,
+    }, EMISSION);
+    const second = applyDebugEdit(first.state, {
+      kind: "CREATE_FIGMENT",
+      side: "player",
+      chosenSubtype: "Shadow",
+      chosenSpark: 3,
+      name: "Second Shadow",
+      destination: { side: "player", zone: "backRank", slotId: "B1" },
+      createdAtMs: 1,
+    }, EMISSION);
+
+    const firstId = second.state.sides.player.backRank.B0;
+    const secondId = second.state.sides.player.backRank.B1;
+    expect(firstId).not.toBeNull();
+    expect(secondId).not.toBeNull();
+    expect(secondId).not.toBe(firstId);
+    expect(second.state.cardInstances[firstId!]?.figments).toEqual([2]);
+    expect(second.state.cardInstances[secondId!]?.figments).toEqual([3]);
+    expect(second.transition.logEvents).toHaveLength(1);
+    expect(second.transition.logEvents[0]?.fields).toMatchObject({
+      battleCardId: secondId,
+      destinationZone: "player:backRank:B1",
+    });
+  });
+
+  it("does not merge a newly created Figment into an occupied same-type slot", () => {
+    const { state, battleCardId } = createBattlefieldFigment();
+    const result = applyDebugEdit(state, {
+      kind: "CREATE_FIGMENT",
+      side: "player",
+      chosenSubtype: "Shadow",
+      chosenSpark: 3,
+      name: "Second Shadow",
+      destination: { side: "player", zone: "backRank", slotId: "B0" },
+      createdAtMs: 1,
+    }, EMISSION);
+
+    expect(result.state).toBe(state);
+    expect(result.state.sides.player.backRank.B0).toBe(battleCardId);
+    expect(result.state.cardInstances[battleCardId]?.figments).toEqual([2]);
+    expect(result.transition.logEvents).toEqual([]);
+  });
+
   it.each(["hand", "void", "banished"] as const)(
     "destroys a single Figment rather than moving it to %s",
     (zone) => {

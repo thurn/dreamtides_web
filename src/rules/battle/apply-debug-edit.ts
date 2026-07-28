@@ -1160,41 +1160,6 @@ function createFigment(
     ? catalogEntry?.baseSpark ?? 0
     : chosenSpark;
 
-  if ("slotId" in destination) {
-    const existingStack = findBattlefieldFigmentStack(
-      nextState,
-      destination.side,
-      chosenSubtype,
-    );
-    if (existingStack !== null) {
-      addFigmentsToStackInPlace(nextState, existingStack.battleCardId, 1, resolvedSpark);
-      const stack = nextState.cardInstances[existingStack.battleCardId];
-      return {
-        state: nextState,
-        transition: {
-          ...createEmptyTransitionData(),
-          logEvents: [
-            createBattleProtoCardCreatedLogEvent(
-              nextState,
-              {
-                battleCardId: existingStack.battleCardId,
-                destinationZone: formatDestinationZoneLabel(existingStack.location),
-                figmentCount: stack === undefined ? 1 : selectFigmentCount(stack),
-                name: stack?.definition.name ?? name,
-                ownerSide: side,
-                printedSpark: stack?.definition.printedSpark ?? resolvedSpark,
-                provenanceKind: "generated-figment",
-                sourceBattleCardId: null,
-                subtype: chosenSubtype,
-              },
-              context,
-            ),
-          ],
-        },
-      };
-    }
-  }
-
   if (!isDestinationAvailable(nextState, destination)) {
     return {
       state,

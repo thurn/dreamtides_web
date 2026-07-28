@@ -112,8 +112,7 @@ export function BattleFigmentCreator({
   // refuse the mint. Non-battlefield zones (hand/void/deck/banished) have no
   // slot constraint.
   const slotIsOccupied = isBattlefieldSlotOccupied(state, side, zone, slot);
-  const slotCanStack = canStackIntoBattlefieldSlot(state, side, zone, slot, subtype);
-  const slotIsValid = !slotIsOccupied || slotCanStack;
+  const slotIsValid = !slotIsOccupied;
   const canSubmit = nameIsValid && subtypeIsValid && sparkIsValid && slotIsValid;
   const disabledReason = !nameIsValid || !subtypeIsValid || !sparkIsValid
     ? "Name, subtype, and non-negative spark are required."
@@ -288,36 +287,4 @@ function findFirstOpenDeploySlot(
   const frontRank = state.sides[side].frontRank;
   const open = rankSlotIds(frontRank).find((slotId) => frontRank[slotId] === null);
   return open ?? frontRankSlotId(rankSlotIds(frontRank).length);
-}
-
-function canStackIntoBattlefieldSlot(
-  state: BattleMutableState,
-  side: BattleSide,
-  zone: BattleFigmentZone,
-  slot: FigmentBattlefieldSlotId,
-  subtype: string,
-): boolean {
-  const occupantId = selectBattlefieldSlotOccupant(state, side, zone, slot);
-  if (occupantId === null) {
-    return false;
-  }
-
-  const occupant = state.cardInstances[occupantId];
-  return occupant?.provenance.kind === "generated-figment" &&
-    occupant.definition.subtype.trim().toLowerCase() === subtype.trim().toLowerCase();
-}
-
-function selectBattlefieldSlotOccupant(
-  state: BattleMutableState,
-  side: BattleSide,
-  zone: BattleFigmentZone,
-  slot: FigmentBattlefieldSlotId,
-): string | null {
-  if (zone === "backRank" && isReserveSlot(slot)) {
-    return state.sides[side].backRank[slot] ?? null;
-  }
-  if (zone === "frontRank" && isDeploySlot(slot)) {
-    return state.sides[side].frontRank[slot] ?? null;
-  }
-  return null;
 }
