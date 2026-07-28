@@ -410,8 +410,8 @@ signature-cards = [
 ]
 
 [[dreamAvatar]]
-name = "Gunnar Deepforge"
-title = "The Hammer's Echo"
+name = "Eldrik"
+title = "The Clan-Caller"
 id = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5"
 image-number = "0108"
 portrait-focus = { x = 0.580, y = 0.233 }
