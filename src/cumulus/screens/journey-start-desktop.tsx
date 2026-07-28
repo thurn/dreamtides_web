@@ -17,6 +17,7 @@ import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
 import { DreamAvatarAbilityText } from "../components/hud/DreamAvatarAbilityText";
 import {
   ConsoleDivider,
+  JourneyStartGuideDialogue,
   JourneyStartRerollControl,
   TidesEssenceBlock,
   type DreamAvatarOfferView,
@@ -199,6 +200,7 @@ function DreamAvatarColumn({
  * fixed-width portrait columns. */
 export function DesktopSelect({
   dreamAvatars,
+  guideDialogue,
   onPick,
   onReroll,
 }: JourneyStartScreenProps) {
@@ -229,6 +231,12 @@ export function DesktopSelect({
         }}
       />
       <Motes on tint="violet" zIndex={0} />
+      {guideDialogue !== undefined && (
+        <JourneyStartGuideDialogue
+          dialogue={guideDialogue}
+          layout="desktop"
+        />
+      )}
       {onReroll !== undefined && (
         <JourneyStartRerollControl onReroll={onReroll} />
       )}

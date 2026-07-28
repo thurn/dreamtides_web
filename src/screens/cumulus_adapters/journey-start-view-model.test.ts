@@ -4,6 +4,7 @@ import type { Tides4DeckJson } from "../../draft/pool/tides4-io";
 import type { TutorialJourneyPool } from "../../data/tutorial-journey-pool";
 import {
   buildDreamAvatarOfferViews,
+  buildJourneyStartGuideDialogue,
   largestTides,
   resolveDreamAvatarOffer,
   toDreamAvatarOfferView,
@@ -109,6 +110,21 @@ describe("resolveDreamAvatarOffer", () => {
 
     expect(offer).toHaveLength(3);
     expect(new Set(offer.map((candidate) => candidate.id)).size).toBe(3);
+  });
+});
+
+describe("buildJourneyStartGuideDialogue", () => {
+  it("builds Mira's exact tutorial guidance for a UUID-pinned offer", () => {
+    expect(buildJourneyStartGuideDialogue("tutorial-avatar-uuid")).toEqual({
+      portrait: { kind: "character-portrait", characterId: "mira" },
+      portraitAlt: "Mira",
+      speakerName: "Mira",
+      text: "For each journey, you must choose a [purple]Dream Avatar[/purple] who provides a permanent ability.",
+    });
+  });
+
+  it("omits guidance from ordinary journey-start offers", () => {
+    expect(buildJourneyStartGuideDialogue()).toBeUndefined();
   });
 });
 

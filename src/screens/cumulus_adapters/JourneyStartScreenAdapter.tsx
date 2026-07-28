@@ -11,6 +11,7 @@ import { useJourney } from "../../state/journey-context";
 import { logEventOnce } from "../../logging";
 import {
   buildDreamAvatarOfferViews,
+  buildJourneyStartGuideDialogue,
   resolveDreamAvatarOffer,
 } from "./journey-start-view-model";
 import { JourneyStartScreen } from "../../cumulus/screens/JourneyStartScreen";
@@ -70,6 +71,29 @@ export function JourneyStartScreenAdapter() {
       tutorialDreamAvatarId,
     ],
   );
+  const guideDialogue = useMemo(
+    () => buildJourneyStartGuideDialogue(tutorialDreamAvatarId),
+    [tutorialDreamAvatarId],
+  );
+
+  useEffect(() => {
+    if (tutorialDreamAvatarId === undefined || guideDialogue === undefined) {
+      return;
+    }
+    logEventOnce(
+      `tutorial-dream-avatar-guidance:${journeySeed}:${tutorialDreamAvatarId}`,
+      "tutorial_dream_avatar_guidance_shown",
+      {
+        dreamAvatarId: tutorialDreamAvatarId,
+        speakerName: guideDialogue.speakerName,
+        text: guideDialogue.text,
+      },
+    );
+  }, [
+    guideDialogue,
+    journeySeed,
+    tutorialDreamAvatarId,
+  ]);
 
   const handlePick = useCallback(
     (dreamAvatarId: string) => {
@@ -90,6 +114,7 @@ export function JourneyStartScreenAdapter() {
     <JourneyStartScreen
       key={rerollCount}
       dreamAvatars={dreamAvatars}
+      guideDialogue={guideDialogue}
       onPick={handlePick}
       onReroll={
         tutorialDreamAvatarId === undefined ? handleReroll : undefined

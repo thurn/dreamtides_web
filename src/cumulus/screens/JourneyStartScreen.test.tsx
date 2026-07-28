@@ -11,6 +11,13 @@ import {
 import { CumulusRoot } from "../CumulusRoot";
 import { lookupGlossaryTerm } from "../../data/glossary";
 
+class ResizeObserverStub {
+  constructor(_callback: ResizeObserverCallback) {}
+  observe(_target: Element) {}
+  unobserve(_target: Element) {}
+  disconnect() {}
+}
+
 const OFFERED: DreamAvatarOfferView[] = [
   {
     id: "caller-1",
@@ -56,6 +63,7 @@ beforeEach(() => {
   (
     globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
   ).IS_REACT_ACT_ENVIRONMENT = true;
+  globalThis.ResizeObserver = ResizeObserverStub;
   // Default to the mobile carousel; desktop tests opt in via stubViewport(true).
   stubViewport(false);
 });
@@ -221,6 +229,40 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     });
   });
 
+  it("fades in Mira's tutorial guidance with highlighted Dream Avatar copy", () => {
+    const { container, root } = mount(
+      <JourneyStartScreen
+        dreamAvatars={[OFFERED[0]]}
+        guideDialogue={{
+          portrait: { kind: "character-portrait", characterId: "mira" },
+          portraitAlt: "Mira",
+          speakerName: "Mira",
+          text: "Choose a [purple]Dream Avatar[/purple].",
+        }}
+        onPick={vi.fn()}
+      />,
+    );
+
+    const dialogue = container.querySelector(
+      '[data-testid="journey-start-tutorial-dialogue"]',
+    );
+    expect(dialogue?.getAttribute("aria-label")).toBe("Mira speaks");
+    expect(dialogue?.getAttribute("data-character-dialogue-visible")).toBe(
+      "true",
+    );
+    expect(dialogue?.getAttribute("data-character-dialogue-size")).toBe(
+      "compact",
+    );
+    const highlighted = dialogue?.querySelector<HTMLElement>(
+      '[data-tutorial-instruction-highlight="purple"]',
+    );
+    expect(highlighted?.textContent).toBe("Dream Avatar");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("reveals every defined term from the whole DreamAvatar ability box", () => {
     const reclaim = lookupGlossaryTerm("reclaim");
     const bane = lookupGlossaryTerm("bane");
@@ -330,6 +372,32 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
     expect(
       container.querySelector("[data-dream-avatar-reroll-control]"),
     ).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders tutorial guidance at the prominent desktop scale", () => {
+    const { container, root } = mount(
+      <JourneyStartScreen
+        dreamAvatars={[OFFERED[0]]}
+        guideDialogue={{
+          portrait: { kind: "character-portrait", characterId: "mira" },
+          portraitAlt: "Mira",
+          speakerName: "Mira",
+          text: "Choose a [purple]Dream Avatar[/purple].",
+        }}
+        onPick={vi.fn()}
+      />,
+    );
+
+    const dialogue = container.querySelector(
+      '[data-testid="journey-start-tutorial-dialogue"]',
+    );
+    expect(dialogue?.getAttribute("data-character-dialogue-size")).toBe(
+      "prominent",
+    );
 
     act(() => {
       root.unmount();

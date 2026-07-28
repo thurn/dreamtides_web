@@ -16,6 +16,7 @@ import { token } from "../primitives/tokens";
 import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
 import {
   ConsoleDivider,
+  JourneyStartGuideDialogue,
   OnMediaEyebrow,
   JourneyStartRerollControl,
   TidesEssenceBlock,
@@ -221,6 +222,7 @@ function DreamAvatarPage({
  * the offered DreamAvatars, one per page. */
 export function CarouselSelect({
   dreamAvatars,
+  guideDialogue,
   onPick,
   onReroll,
 }: JourneyStartScreenProps) {
@@ -270,6 +272,9 @@ export function CarouselSelect({
       onPointerCancel={onPointerUp}
     >
       <ScreenHeader />
+      {guideDialogue !== undefined && (
+        <JourneyStartGuideDialogue dialogue={guideDialogue} layout="mobile" />
+      )}
       {onReroll !== undefined && (
         <JourneyStartRerollControl onReroll={onReroll} />
       )}

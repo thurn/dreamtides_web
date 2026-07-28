@@ -19,6 +19,7 @@ export type {
   DreamAvatarOfferView,
   DreamAvatarSignatureCardView,
   DreamAvatarTideView,
+  JourneyStartGuideDialogueView,
   JourneyStartScreenProps,
 } from "./journey-start-shared";
 

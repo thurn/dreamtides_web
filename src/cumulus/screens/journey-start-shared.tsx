@@ -7,6 +7,10 @@
 import { ResourceChip } from "../components/hud/ResourceChip";
 import { IconButton } from "../components/controls/IconButton";
 import { TideDisc, type TideDiscSize } from "../components/hud/TideDisc";
+import {
+  CharacterDialogue,
+  type CharacterDialogueModel,
+} from "../components/overlay/CharacterDialogue";
 import { type Tide } from "../components/hud/tide-spec";
 import { token } from "../primitives/tokens";
 import { GLYPHS } from "../primitives/glyph";
@@ -177,13 +181,53 @@ export interface DreamAvatarOfferView {
   tides: DreamAvatarTideView[];
 }
 
+/** Character-led guidance shown only for the fixed tutorial offer. */
+export type JourneyStartGuideDialogueView = CharacterDialogueModel;
+
 export interface JourneyStartScreenProps {
   /** The DreamAvatars offered this run (three normally; one in the tutorial). */
   dreamAvatars: DreamAvatarOfferView[];
+  /** Mira's introduction to the fixed tutorial DreamAvatar choice. */
+  guideDialogue?: JourneyStartGuideDialogueView;
   /** Called with a DreamAvatar's id when the player commits to it. */
   onPick: (dreamAvatarId: string) => void;
   /** Requests a shared debug reroll. Omitted for a fixed tutorial offer. */
   onReroll?: () => void;
+}
+
+/** Responsive placement for the tutorial's canonical portrait-and-bubble pair. */
+export function JourneyStartGuideDialogue({
+  dialogue,
+  layout,
+}: {
+  readonly dialogue: JourneyStartGuideDialogueView;
+  readonly layout: "desktop" | "mobile";
+}) {
+  const desktop = layout === "desktop";
+  return (
+    <div
+      data-journey-start-guide-dialogue=""
+      style={{
+        position: "absolute",
+        zIndex: 7,
+        top: desktop ? "50%" : "36%",
+        left: `max(var(--safe-area-inset-left), ${token("--gutter")})`,
+        right: desktop
+          ? undefined
+          : `max(var(--safe-area-inset-right), ${token("--gutter")})`,
+        width: desktop ? "min(700px, calc(50vw - 250px))" : undefined,
+        transform: desktop ? "translateY(-50%)" : undefined,
+        pointerEvents: "none",
+      }}
+    >
+      <CharacterDialogue
+        dialogue={dialogue}
+        visible
+        size={desktop ? "prominent" : "compact"}
+        testId="journey-start-tutorial-dialogue"
+      />
+    </div>
+  );
 }
 
 /** Shared top-right debug action used by both journey-start layouts. */
