@@ -49,10 +49,11 @@ function presentationState(): FoldState {
   };
 }
 
-function Harness({ visiblePresentationId }: {
+function Harness({ visiblePresentationId, paused = false }: {
   readonly visiblePresentationId: string | null;
+  readonly paused?: boolean;
 }) {
-  const controller = useTutorialBattleController();
+  const controller = useTutorialBattleController({ paused });
   useEffect(() => {
     if (visiblePresentationId !== null) {
       controller.onPresentationVisible(visiblePresentationId);
@@ -116,7 +117,6 @@ describe("useTutorialBattleController", () => {
 
     act(() => root.unmount());
   });
-
   it("does not resume Challenge resolution until the result animation completes", () => {
     const container = document.createElement("div");
     document.body.append(container);
@@ -158,6 +158,27 @@ describe("useTutorialBattleController", () => {
       vi.advanceTimersByTime(1);
     });
     expect(mocks.completePresentation).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+  });
+
+  it("keeps the direct victory preview from advancing battle automation", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <Harness
+          visiblePresentationId="opponent-play:bc_0042"
+          paused
+        />,
+      );
+    });
+    act(() => {
+      vi.advanceTimersByTime(3_000);
+    });
+    expect(mocks.completePresentation).not.toHaveBeenCalled();
 
     act(() => root.unmount());
   });

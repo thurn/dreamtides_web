@@ -69,7 +69,7 @@ function view(
     foresee: null,
     presentationId: null,
     presentation: null,
-    victorySummary: null,
+    victoryVisible: false,
     terminalRestartAvailable: false,
     ...overrides,
   };
@@ -116,6 +116,7 @@ function mount(
   movementStatusMessage: string | null = null,
   onMovementStatusDismiss = vi.fn(),
   onPresentationVisible = vi.fn(),
+  onNewJourney = vi.fn(),
 ) {
   const container = document.createElement("div");
   document.body.append(container);
@@ -130,7 +131,7 @@ function mount(
           onMovementStatusDismiss={onMovementStatusDismiss}
           onForeseeConfirm={() => {}}
           onRestart={() => {}}
-          onReturnToMainMenu={() => {}}
+          onNewJourney={onNewJourney}
           guidance={null}
           onGuidanceContinue={() => {}}
           onGuidanceDurationComplete={() => {}}
@@ -159,6 +160,41 @@ afterEach(() => {
 });
 
 describe("TutorialBattleScreen", () => {
+  it("presents the animated victory payoff with only its New Journey copy", () => {
+    const onNewJourney = vi.fn();
+    const { container, root } = mount(
+      view({ victoryVisible: true }),
+      null,
+      vi.fn(),
+      vi.fn(),
+      onNewJourney,
+    );
+    const victory = container.querySelector(
+      "[data-tutorial-victory-screen]",
+    );
+    const button = container.querySelector<HTMLButtonElement>(
+      '[data-testid="tutorial-battle-new-journey"]',
+    );
+
+    expect(victory).not.toBeNull();
+    expect(
+      victory?.querySelector("[data-tutorial-victory-orbit]"),
+    ).not.toBeNull();
+    expect(
+      victory?.querySelector("[data-tutorial-victory-ripple]"),
+    ).not.toBeNull();
+    expect(
+      Array.from(victory?.querySelectorAll("button") ?? []).map(
+        (candidate) => candidate.textContent,
+      ),
+    ).toEqual(["New Journey"]);
+    expect(victory?.querySelector("h1, h2, p")).toBeNull();
+    act(() => button?.click());
+    expect(onNewJourney).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+  });
+
   it.each(["driver", "observer"] as const)(
     "keeps normal %s play free of persistent tutorial-state chrome",
     (ownership) => {
@@ -514,7 +550,7 @@ describe("TutorialBattleScreen", () => {
               onMovementStatusDismiss={() => {}}
               onForeseeConfirm={() => {}}
               onRestart={() => {}}
-              onReturnToMainMenu={() => {}}
+              onNewJourney={() => {}}
               guidance={currentGuidance}
               onGuidanceContinue={() => {}}
               onGuidanceDurationComplete={() => {}}

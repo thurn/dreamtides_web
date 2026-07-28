@@ -102,6 +102,7 @@ export function buildTutorialBattleView(
   battle: BattleFoldState,
   controller: TutorialBattleControllerPlan,
   confirmedPromptId: number | null,
+  previewVictory = false,
 ): TutorialBattleView {
   const presentation = battle.tutorialPresentation ?? null;
   const mobile = buildMobileBattleView(
@@ -160,10 +161,12 @@ export function buildTutorialBattleView(
         ? null
         : presentation.id,
     presentation: tutorialPresentationView(presentation, battle),
-    victorySummary:
-      battle.board.result === "victory" && controller.status === "terminal" && controller.isCurrentClientDriver && controller.isDriverPresent
-        ? `You reached ${String(battle.board.sides.player.score)} ⍟.`
-        : null,
+    victoryVisible:
+      controller.isCurrentClientDriver &&
+      controller.isDriverPresent &&
+      (previewVictory ||
+        (battle.board.result === "victory" &&
+          controller.status === "terminal")),
     terminalRestartAvailable: controller.status === "terminal" && !controller.isDriverPresent,
   };
 }

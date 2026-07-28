@@ -57,7 +57,11 @@ export function tutorialBattlePresentationDwellMs(
  * fold and submits normal coop intents; the room log remains the sole flow
  * authority and intent keys absorb StrictMode/remount/reload duplicates.
  */
-export function useTutorialBattleController(): TutorialBattleControllerRuntime {
+export function useTutorialBattleController({
+  paused = false,
+}: {
+  readonly paused?: boolean;
+} = {}): TutorialBattleControllerRuntime {
   const state = useConfirmedGameState();
   const clientId = useClientId();
   const connectedClientIds = useConnectedClientIds();
@@ -73,7 +77,7 @@ export function useTutorialBattleController(): TutorialBattleControllerRuntime {
   );
 
   useEffect(() => {
-    if (plan.status !== "driver" || plan.intent === null) return;
+    if (paused || plan.status !== "driver" || plan.intent === null) return;
     const intent = plan.intent;
     const battle = state.battle;
     if (battle === null) return;
@@ -138,7 +142,7 @@ export function useTutorialBattleController(): TutorialBattleControllerRuntime {
         ).catch(() => undefined);
         return;
     }
-  }, [actions, clientId, plan, state.battle, visiblePresentationId]);
+  }, [actions, clientId, paused, plan, state.battle, visiblePresentationId]);
 
   return useMemo(
     () => ({ ...plan, onPresentationVisible }),

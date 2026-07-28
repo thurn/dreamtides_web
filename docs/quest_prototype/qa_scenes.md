@@ -110,6 +110,15 @@ framed mobile QA, e.g.:
 http://localhost:5174/?goto=draft&deviceFrame=iphone16
 ```
 
+## Standalone tutorial scenes
+
+`?goto=tutorial-battle` opens the live tutorial battle directly, and
+`?goto=tutorial-victory` opens its animated victory payoff. These routes mount
+the standalone tutorial runtime rather than bootstrapping a `QA_SCENES` quest
+snapshot. New Journey on the victory payoff resets the shared quest slice to
+the fixed tutorial Dream Avatar selection and enters the quest runtime in the
+same room.
+
 ## Registered scenes
 
 The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.

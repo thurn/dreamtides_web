@@ -19,6 +19,7 @@ const adapterMocks = vi.hoisted(() => ({
   loadingSpeed: null as number | null,
   tutorialSpeed: null as number | null,
   tutorialDirectLive: null as boolean | null,
+  tutorialVictoryPreview: null as boolean | null,
 }));
 const DREAM_AVATARS = [] as const;
 
@@ -58,7 +59,14 @@ vi.mock("../screens/cumulus_adapters/TutorialScreenAdapter", () => ({
 }));
 
 vi.mock("../screens/cumulus_adapters/TutorialBattleScreenAdapter", () => ({
-  TutorialBattleScreenAdapter: () => <main data-tutorial-live-battle />,
+  TutorialBattleScreenAdapter: ({
+    previewVictory,
+  }: {
+    previewVictory?: boolean;
+  }) => {
+    adapterMocks.tutorialVictoryPreview = previewVictory ?? false;
+    return <main data-tutorial-live-battle />;
+  },
 }));
 
 beforeEach(() => {
@@ -73,6 +81,7 @@ beforeEach(() => {
   adapterMocks.loadingSpeed = null;
   adapterMocks.tutorialSpeed = null;
   adapterMocks.tutorialDirectLive = null;
+  adapterMocks.tutorialVictoryPreview = null;
 });
 
 afterEach(() => {
@@ -153,6 +162,36 @@ describe("FrontDoorRouter", () => {
     );
     expect(container.querySelector("[data-tutorial-screen]")).not.toBeNull();
     expect(adapterMocks.tutorialDirectLive).toBe(true);
+    act(() => root.unmount());
+  });
+
+  it("starts the live tutorial handoff and previews victory for its direct route", () => {
+    stateMocks.frontDoor = { phase: "tutorial", journeyId: "event:direct" };
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() =>
+      root.render(
+        <FrontDoorRouter
+          dreamAvatars={DREAM_AVATARS}
+          previewTutorialVictory
+        />,
+      ),
+    );
+    expect(adapterMocks.tutorialDirectLive).toBe(true);
+
+    stateMocks.battle = { mode: { kind: "tutorial" } };
+    act(() =>
+      root.render(
+        <FrontDoorRouter
+          dreamAvatars={DREAM_AVATARS}
+          previewTutorialVictory
+        />,
+      ),
+    );
+    expect(adapterMocks.tutorialVictoryPreview).toBe(true);
+
     act(() => root.unmount());
   });
 });

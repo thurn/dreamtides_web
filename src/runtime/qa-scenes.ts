@@ -4,6 +4,7 @@ import type { SiteGenerationContext } from "../atlas/atlas-generator";
 import { regenerateAtlasForProgress } from "../atlas/atlas-generator";
 import { createDefaultState } from "../state/quest-context";
 import { createDreamsign } from "../data/dreamsigns";
+import { TUTORIAL_DREAM_AVATAR_ID } from "../data/tutorial-cards";
 import { createQaQuestFoundation } from "./qa-quest-foundation";
 
 /**
@@ -59,9 +60,7 @@ const DREAM_AVATAR_SELECT_SCENE: QaScene = {
   build: () => createDefaultState(),
 };
 
-/** The only DreamAvatar offered by the tutorial selection QA scene. */
-export const TUTORIAL_DREAM_AVATAR_ID =
-  "BFC40414-5264-41BF-86E1-A0F41EE4F5B5";
+export { TUTORIAL_DREAM_AVATAR_ID };
 
 /**
  * Tutorial DreamAvatar selection: the normal quest-start presentation and

@@ -13,10 +13,12 @@ export function FrontDoorRouter({
   dreamAvatars,
   tutorialPlaybackSpeed = 1,
   directTutorialBattle = false,
+  previewTutorialVictory = false,
 }: {
   readonly dreamAvatars: readonly DreamAvatarContent[];
   readonly tutorialPlaybackSpeed?: number;
   readonly directTutorialBattle?: boolean;
+  readonly previewTutorialVictory?: boolean;
 }) {
   const { state, battle } = useFrontDoor();
 
@@ -50,13 +52,17 @@ export function FrontDoorRouter({
       battle !== undefined &&
       battleModeOf(battle).kind === "tutorial"
     ) {
-      return <TutorialBattleScreenAdapter />;
+      return (
+        <TutorialBattleScreenAdapter
+          previewVictory={previewTutorialVictory}
+        />
+      );
     }
     return (
       <TutorialScreenAdapter
         dreamAvatars={dreamAvatars}
         playbackSpeed={tutorialPlaybackSpeed}
-        directLive={directTutorialBattle}
+        directLive={directTutorialBattle || previewTutorialVictory}
       />
     );
   }

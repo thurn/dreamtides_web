@@ -17,6 +17,7 @@ interface FrontDoorAppProps {
   runtimeConfig: RuntimeConfig;
   entry: FrontDoorEntry;
   directTutorialBattle?: boolean;
+  previewTutorialVictory?: boolean;
 }
 
 /** Firebase-backed runtime shared by the standalone front-door endpoints. */
@@ -24,6 +25,7 @@ export default function FrontDoorApp({
   runtimeConfig,
   entry,
   directTutorialBattle = false,
+  previewTutorialVictory = false,
 }: FrontDoorAppProps): ReactNode {
   const [contentState, setContentState] = useState<
     | { status: "loading" }
@@ -129,6 +131,7 @@ export default function FrontDoorApp({
               dreamAvatars={contentState.content.dreamAvatars}
               tutorialPlaybackSpeed={runtimeConfig.tutorialPlaybackSpeed ?? 1}
               directTutorialBattle={directTutorialBattle}
+              previewTutorialVictory={previewTutorialVictory}
             />
           </FrontDoorProvider>
         </CoopProvider>

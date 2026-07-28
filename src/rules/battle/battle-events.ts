@@ -102,6 +102,8 @@ import {
   isBattleCardSemanticPlayAutomated,
   semanticPlayTargetsAreLegal,
 } from "../../battle/semantic-play";
+import { TUTORIAL_DREAM_AVATAR_ID } from "../../data/tutorial-cards";
+import { resetQuest } from "../quest/lifecycle";
 
 // ---------------------------------------------------------------------------
 // Battle-init provider seam (BEGIN_BATTLE construction)
@@ -325,7 +327,7 @@ export function restartTutorialBattle(
   );
 }
 
-/** Return from an active tutorial battle to the front door without quest writes. */
+/** Hand a completed tutorial battle into the fixed tutorial quest-start offer. */
 export function exitTutorialBattle(
   state: FoldState,
   payload: Record<string, unknown>,
@@ -342,10 +344,17 @@ export function exitTutorialBattle(
   ) {
     return null;
   }
+  const reset = resetQuest(state);
   return {
-    ...state,
+    ...reset,
     frontDoor: { phase: "main", journeyId: null, tutorial: null },
-    battle: null,
+    quest: {
+      ...reset.quest,
+      screen: {
+        type: "questStart",
+        tutorialDreamAvatarId: TUTORIAL_DREAM_AVATAR_ID,
+      },
+    },
   };
 }
 

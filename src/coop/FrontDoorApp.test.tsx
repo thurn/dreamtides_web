@@ -40,8 +40,22 @@ vi.mock("../state/front-door-context", () => ({
   FrontDoorProvider: ({ children }: { children: ReactNode }) => <>{children}</>,
 }));
 vi.mock("../components/FrontDoorRouter", () => ({
-  FrontDoorRouter: ({ directTutorialBattle }: { directTutorialBattle?: boolean }) => (
-    <div data-front-door-router={directTutorialBattle ? "direct" : "standard"} />
+  FrontDoorRouter: ({
+    directTutorialBattle,
+    previewTutorialVictory,
+  }: {
+    directTutorialBattle?: boolean;
+    previewTutorialVictory?: boolean;
+  }) => (
+    <div
+      data-front-door-router={
+        previewTutorialVictory
+          ? "victory"
+          : directTutorialBattle
+            ? "direct"
+            : "standard"
+      }
+    />
   ),
 }));
 
@@ -88,5 +102,24 @@ describe("FrontDoorApp provider bootstrap", () => {
     expect(mocks.registerGameProviders).toHaveBeenCalledOnce();
     expect(container.querySelector("[data-room-gate]")).not.toBeNull();
     expect(container.querySelector("[data-front-door-router=direct]")).not.toBeNull();
+  });
+
+  it("threads the direct victory preview into the front-door router", async () => {
+    mocks.loadQuestContent.mockResolvedValue({} as QuestContent);
+
+    await act(async () => {
+      root.render(
+        <FrontDoorApp
+          runtimeConfig={{ seedOverride: null, aiMode: false, gameId: null, databaseMode: "emulator" }}
+          entry="tutorial"
+          previewTutorialVictory
+        />,
+      );
+      await Promise.resolve();
+    });
+
+    expect(
+      container.querySelector("[data-front-door-router=victory]"),
+    ).not.toBeNull();
   });
 });

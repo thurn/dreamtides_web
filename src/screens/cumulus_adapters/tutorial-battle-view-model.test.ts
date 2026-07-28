@@ -417,4 +417,53 @@ describe("buildTutorialBattleView", () => {
     expect(view.battle.near).toBe(view.battle.player);
     expect(view.battle.far).toBe(view.battle.enemy);
   });
+
+  it("exposes the victory payoff for a completed battle and the direct QA preview", () => {
+    vi.mocked(buildMobileBattleView).mockReturnValue({
+      perspective: "player",
+      player,
+      enemy,
+      near: player,
+      far: enemy,
+    } as MobileBattleView);
+    const battle = {
+      init: {
+        enemyDescriptor: {
+          id: "enemy-avatar-uuid",
+          imageNumber: "0025",
+          name: "Enemy",
+          subtitle: "Opponent",
+          abilityText: "Enemy printed ability.",
+        },
+        dreamwellDeck: [],
+      },
+      board: { result: null },
+      pendingPrompt: null,
+    } as unknown as BattleFoldState;
+    const activeController = {
+      status: "driver",
+      isCurrentClientDriver: true,
+      isDriverPresent: true,
+      requiresHumanDecision: false,
+      driverClientId: "driver-client",
+    } as TutorialBattleControllerPlan;
+
+    expect(
+      buildTutorialBattleView(battle, activeController, null).victoryVisible,
+    ).toBe(false);
+    expect(
+      buildTutorialBattleView(battle, activeController, null, true)
+        .victoryVisible,
+    ).toBe(true);
+    expect(
+      buildTutorialBattleView(
+        {
+          ...battle,
+          board: { result: "victory" },
+        } as BattleFoldState,
+        { ...activeController, status: "terminal" },
+        null,
+      ).victoryVisible,
+    ).toBe(true);
+  });
 });

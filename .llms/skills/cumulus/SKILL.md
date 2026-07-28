@@ -90,7 +90,7 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 | Tide Disc | Components | 1 | [components/tide-disc.md](components/tide-disc.md) | The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal, sized 'sm' or 'lg'. |
 | Transfiguration Form Button | Components | 1 | [components/transfiguration-form-button.md](components/transfiguration-form-button.md) | The canonical forge-form choice: compact and price-bearing controls with shared glyph, color, state, and accessibility behavior. |
 | Transient Status Toast | Components | 2 | [components/transient-status-toast.md](components/transient-status-toast.md) | The fixed, safe-area-aware short-lived status surface for player notices that need a semantic severity and structured copy. |
-| Motes | Components | 10 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
+| Motes | Components | 11 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | 7 | [components/info-card.md](components/info-card.md) | The strict information-card presentation. |
 | Group Panel | Components | 8 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
 | Inline Glyph | Primitives | 7 | [components/inline-glyph.md](components/inline-glyph.md) | The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size. |

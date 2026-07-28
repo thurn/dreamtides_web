@@ -5,6 +5,7 @@ import { battleCardLayoutId } from "../components/battle/battle-card-layout";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
+import { Motes } from "../components/hud/Motes";
 import { TransientStatusToast } from "../components/status/TransientStatusToast";
 import { token } from "../primitives/tokens";
 import { motionTimeSeconds } from "../primitives/motion-time";
@@ -67,7 +68,7 @@ export interface TutorialBattleView {
       readonly points: number;
     } | null;
   } | null;
-  readonly victorySummary: string | null;
+  readonly victoryVisible: boolean;
   readonly terminalRestartAvailable: boolean;
 }
 
@@ -82,7 +83,7 @@ export interface TutorialBattleScreenProps {
     readonly voidCardIds: readonly string[];
   }) => void;
   readonly onRestart: () => void;
-  readonly onReturnToMainMenu: () => void;
+  readonly onNewJourney: () => void;
   readonly guidance: BattleTutorialGuidanceView | null;
   readonly onGuidanceContinue: () => void;
   readonly onGuidanceDurationComplete: () => void;
@@ -97,7 +98,7 @@ export function TutorialBattleScreen({
   onMovementStatusDismiss,
   onForeseeConfirm,
   onRestart,
-  onReturnToMainMenu,
+  onNewJourney,
   guidance,
   onGuidanceContinue,
   onGuidanceDurationComplete,
@@ -227,18 +228,8 @@ export function TutorialBattleScreen({
           onConfirm={onForeseeConfirm}
         />
       ) : null}
-      {view.victorySummary !== null ? (
-        <GlassDialog title="Tutorial Complete" subtitle={view.victorySummary}>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <GlassButton
-              label="Return to Main Menu"
-              variant="accent"
-              placement="onGlass"
-              testId="tutorial-battle-return-main-menu"
-              onPress={onReturnToMainMenu}
-            />
-          </div>
-        </GlassDialog>
+      {view.victoryVisible ? (
+        <TutorialVictorySurface onNewJourney={onNewJourney} />
       ) : null}
       <BattleTutorialGuidance
         view={visibleGuidance}
@@ -246,6 +237,221 @@ export function TutorialBattleScreen({
         onDurationComplete={onGuidanceDurationComplete}
       />
     </div>
+  );
+}
+
+const TUTORIAL_VICTORY_STAGE_SIZE = "min(76vw, 420px)";
+const TUTORIAL_VICTORY_CORE_SIZE = "min(43vw, 236px)";
+const TUTORIAL_VICTORY_BUTTON_MAX_WIDTH = 240;
+const TUTORIAL_VICTORY_ARRIVAL_SCALE = 0.36;
+const TUTORIAL_VICTORY_OVERSHOOT_SCALE = 1.08;
+const TUTORIAL_VICTORY_RIPPLE_START_SCALE = 0.72;
+const TUTORIAL_VICTORY_RIPPLE_END_SCALE = 1.46;
+const TUTORIAL_VICTORY_BREATHE_LOW_SCALE = 0.97;
+const TUTORIAL_VICTORY_BREATHE_HIGH_SCALE = 1.03;
+const TUTORIAL_VICTORY_STAR_LOW_SCALE = 0.92;
+const TUTORIAL_VICTORY_STAR_HIGH_SCALE = 1.08;
+
+const TUTORIAL_VICTORY_CSS = `
+  @keyframes tutorial-victory-arrival {
+    0% { opacity: 0; transform: scale(${String(TUTORIAL_VICTORY_ARRIVAL_SCALE)}) rotate(-18deg); }
+    18% { opacity: 1; transform: scale(${String(TUTORIAL_VICTORY_OVERSHOOT_SCALE)}) rotate(3deg); }
+    32%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  @keyframes tutorial-victory-orbit {
+    from { transform: rotate(-70deg); }
+    to { transform: rotate(290deg); }
+  }
+
+  @keyframes tutorial-victory-counter-orbit {
+    from { transform: rotate(40deg); }
+    to { transform: rotate(-320deg); }
+  }
+
+  @keyframes tutorial-victory-ripple {
+    0% { opacity: 0; transform: scale(${String(TUTORIAL_VICTORY_RIPPLE_START_SCALE)}); }
+    18% { opacity: 0.68; }
+    78%, 100% { opacity: 0; transform: scale(${String(TUTORIAL_VICTORY_RIPPLE_END_SCALE)}); }
+  }
+
+  @keyframes tutorial-victory-breathe {
+    0%, 100% { transform: scale(${String(TUTORIAL_VICTORY_BREATHE_LOW_SCALE)}); }
+    50% { transform: scale(${String(TUTORIAL_VICTORY_BREATHE_HIGH_SCALE)}); }
+  }
+
+  @keyframes tutorial-victory-star {
+    0%, 100% { transform: rotate(0deg) scale(${String(TUTORIAL_VICTORY_STAR_LOW_SCALE)}); }
+    50% { transform: rotate(45deg) scale(${String(TUTORIAL_VICTORY_STAR_HIGH_SCALE)}); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-tutorial-victory-arrival],
+    [data-tutorial-victory-orbit],
+    [data-tutorial-victory-counter-orbit],
+    [data-tutorial-victory-ripple],
+    [data-tutorial-victory-core],
+    [data-tutorial-victory-star] {
+      animation: none !important;
+    }
+  }
+`;
+
+/** Sparse full-screen tutorial payoff inspired by the battle turn announcement. */
+function TutorialVictorySurface({
+  onNewJourney,
+}: {
+  readonly onNewJourney: () => void;
+}): ReactElement {
+  const introDuration = `calc(${token("--dur-slow")} * 5)`;
+  return (
+    <section
+      role="dialog"
+      aria-modal="true"
+      aria-label="Tutorial complete"
+      data-tutorial-victory-screen=""
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 90,
+        minHeight: "100dvh",
+        boxSizing: "border-box",
+        overflow: "hidden",
+        background:
+          `radial-gradient(circle at 50% 42%, ${token("--accent-tint")} 0%, transparent 46%), ` +
+          token("--bg-app"),
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: token("--space-8"),
+        paddingTop: `max(var(--safe-area-inset-top), ${token("--space-8")})`,
+        paddingRight: `max(var(--safe-area-inset-right), ${token("--space-6")})`,
+        paddingBottom: `max(var(--safe-area-inset-bottom), ${token("--space-8")})`,
+        paddingLeft: `max(var(--safe-area-inset-left), ${token("--space-6")})`,
+      }}
+    >
+      <style>{TUTORIAL_VICTORY_CSS}</style>
+      <Motes on tint="violet" count={24} seed={121} zIndex={1} />
+      <Motes on tint="warm" count={12} seed={243} zIndex={1} />
+      <div
+        aria-hidden="true"
+        data-tutorial-victory-arrival=""
+        style={{
+          position: "relative",
+          zIndex: 2,
+          width: TUTORIAL_VICTORY_STAGE_SIZE,
+          aspectRatio: "1",
+          display: "grid",
+          placeItems: "center",
+          animation: `tutorial-victory-arrival ${introDuration} ${token("--ease-dream")} both`,
+        }}
+      >
+        <span
+          data-tutorial-victory-ripple=""
+          style={{
+            position: "absolute",
+            inset: token("--space-5"),
+            border: `${token("--space-1")} solid ${token("--border-accent")}`,
+            borderRadius: token("--radius-pill"),
+            animation: `tutorial-victory-ripple ${introDuration} ${token("--ease-out")} infinite`,
+          }}
+        />
+        <span
+          data-tutorial-victory-ripple=""
+          style={{
+            position: "absolute",
+            inset: token("--space-5"),
+            border: `${token("--space-1")} solid ${token("--border-accent")}`,
+            borderRadius: token("--radius-pill"),
+            animation: `tutorial-victory-ripple ${introDuration} ${token("--ease-out")} calc(${introDuration} / 2) infinite`,
+          }}
+        />
+        <span
+          data-tutorial-victory-orbit=""
+          style={{
+            position: "absolute",
+            inset: token("--space-6"),
+            border: `${token("--space-1")} solid ${token("--border-accent")}`,
+            borderTopColor: token("--accent-bright"),
+            borderBottomColor: "transparent",
+            borderRadius: token("--radius-pill"),
+            animation: `tutorial-victory-orbit calc(${token("--dur-slow")} * 12) linear infinite`,
+          }}
+        >
+          <span
+            style={{
+              position: "absolute",
+              left: "50%",
+              top: `calc(-1 * ${token("--space-3")})`,
+              width: token("--space-6"),
+              height: token("--space-6"),
+              borderRadius: token("--radius-pill"),
+              background: token("--gold"),
+              boxShadow: token("--glow-accent-soft"),
+            }}
+          />
+        </span>
+        <span
+          data-tutorial-victory-counter-orbit=""
+          style={{
+            position: "absolute",
+            inset: token("--space-12"),
+            border: `${token("--space-1")} solid ${token("--border-soft")}`,
+            borderLeftColor: token("--gold"),
+            borderRightColor: "transparent",
+            borderRadius: token("--radius-pill"),
+            animation: `tutorial-victory-counter-orbit calc(${token("--dur-slow")} * 16) linear infinite`,
+          }}
+        />
+        <span
+          data-tutorial-victory-core=""
+          style={{
+            position: "relative",
+            width: TUTORIAL_VICTORY_CORE_SIZE,
+            aspectRatio: "1",
+            display: "grid",
+            placeItems: "center",
+            border: `${token("--space-1")} solid ${token("--border-accent")}`,
+            borderRadius: token("--radius-pill"),
+            background: `radial-gradient(circle at 38% 28%, ${token("--surface-raised")} 0%, ${token("--surface-card")} 56%, ${token("--bg-sunken")} 100%)`,
+            boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
+            animation: `tutorial-victory-breathe calc(${token("--dur-slow")} * 7) ${token("--ease-in-out")} infinite`,
+          }}
+        >
+          <span
+            data-tutorial-victory-star=""
+            style={{
+              width: "42%",
+              aspectRatio: "1",
+              background: token("--gold"),
+              clipPath:
+                "polygon(50% 0%, 56% 44%, 100% 50%, 56% 56%, 50% 100%, 44% 56%, 0% 50%, 44% 44%)",
+              boxShadow: token("--glow-accent-soft"),
+              animation: `tutorial-victory-star calc(${token("--dur-slow")} * 8) ${token("--ease-in-out")} infinite`,
+            }}
+          />
+        </span>
+      </div>
+      <div
+        data-tutorial-victory-action=""
+        style={{
+          position: "relative",
+          zIndex: 3,
+          width: "100%",
+          maxWidth: TUTORIAL_VICTORY_BUTTON_MAX_WIDTH,
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <GlassButton
+          label="New Journey"
+          variant="accent"
+          testId="tutorial-battle-new-journey"
+          onPress={onNewJourney}
+        />
+      </div>
+    </section>
   );
 }
 

@@ -13,6 +13,7 @@ import type { EventContext } from "../../eventlog/types";
 import type { FoldState } from "../fold-state";
 import { MINIMAL_ATLAS_CONFIG } from "../../__test-helpers__/atlas-fixtures";
 import type { TutorialAction } from "../../types/tutorial";
+import { TUTORIAL_DREAM_AVATAR_ID } from "../../data/tutorial-cards";
 
 const GENESIS = {
   seed: "tutorial-room-seed",
@@ -994,7 +995,7 @@ describe("tutorial battle lifecycle", () => {
     });
   });
 
-  it("restarts with a new driver and deterministic new restart stream, then exits without quest mutation", () => {
+  it("restarts with a new driver, then hands victory into the tutorial DreamAvatar offer", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const first = begin();
     const beforeQuest = first.state.quest;
@@ -1018,7 +1019,17 @@ describe("tutorial battle lifecycle", () => {
     const exited = reduceGameEvent(restart.state, {
       type: "EXIT_TUTORIAL_BATTLE", payload: { battleId: rebuilt.board.battleId }, actor: "client-b", basedOnSeq: 43, clientTimestamp: CTX.timestamp,
     }, { ...CTX, seq: 44 });
-    expect(exited.state).toMatchObject({ battle: null, frontDoor: { phase: "main", journeyId: null, tutorial: null }, quest: beforeQuest });
+    expect(exited.state).toMatchObject({
+      battle: null,
+      frontDoor: { phase: "main", journeyId: null, tutorial: null },
+      quest: {
+        ...beforeQuest,
+        screen: {
+          type: "questStart",
+          tutorialDreamAvatarId: TUTORIAL_DREAM_AVATAR_ID,
+        },
+      },
+    });
   });
 
   it("binds tutorial begin, restart, and exit claims to their stated driver", () => {
