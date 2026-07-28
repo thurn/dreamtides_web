@@ -2602,7 +2602,11 @@ function PlayArea({
       style={{
         ...ROW_STYLE,
         gridRow: position === "far" ? 3 : 4,
-        overflow: "hidden",
+        overflow:
+          showChallengerChevrons &&
+          challengerChevronSettings.style === "circle-badge"
+            ? "visible"
+            : "hidden",
         containerType: "size",
       }}
     >

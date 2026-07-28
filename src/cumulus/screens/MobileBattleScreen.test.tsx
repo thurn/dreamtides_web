@@ -3472,6 +3472,11 @@ describe("MobileBattleScreen", () => {
       circleBadge?.querySelectorAll("polyline")[1]?.getAttribute("points"),
     ).toBe("13,32 25,19 37,32");
     expect(
+      container.querySelector<HTMLElement>(
+        '[data-battle-play-area="player"]',
+      )?.style.overflow,
+    ).toBe("visible");
+    expect(
       circleBadge?.querySelector("[data-battle-challenger-marker-animated]"),
     ).toBeNull();
 
