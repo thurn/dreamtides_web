@@ -66,9 +66,75 @@
 
 const uniform = (n) => ({ top: n, right: n, bottom: n, left: n });
 
-const desktop = (id, width, height) => ({
+export const DESKTOP_VIEWPORTS = [
+  {
+    id: "desktop-1280x720",
+    label: "1280 × 720",
+    width: 1280,
+    height: 720,
+    rationale: "Smallest supported desktop and constrained-height edge case.",
+  },
+  {
+    id: "desktop-1366x768",
+    label: "1366 × 768",
+    width: 1366,
+    height: 768,
+    rationale: "Common laptop with constrained vertical space.",
+  },
+  {
+    id: "desktop-1440x900",
+    label: "1440 × 900",
+    width: 1440,
+    height: 900,
+    rationale: "Representative 16:10 laptop workspace.",
+  },
+  {
+    id: "desktop-1536x864",
+    label: "1536 × 864",
+    width: 1536,
+    height: 864,
+    rationale: "Common scaled laptop viewport.",
+  },
+  {
+    id: "desktop-1920x1080",
+    label: "1920 × 1080",
+    width: 1920,
+    height: 1080,
+    rationale: "Mainstream desktop workspace.",
+  },
+  {
+    id: "desktop-2560x1080",
+    label: "2560 × 1080",
+    width: 2560,
+    height: 1080,
+    rationale: "Wide desktop with limited vertical space.",
+  },
+  {
+    id: "desktop-2560x1440",
+    label: "2560 × 1440",
+    width: 2560,
+    height: 1440,
+    rationale: "Large 16:9 desktop workspace.",
+  },
+  {
+    id: "desktop-2560x1600",
+    label: "2560 × 1600",
+    width: 2560,
+    height: 1600,
+    rationale: "Large 16:10 desktop workspace.",
+  },
+  {
+    id: "desktop-3440x1440",
+    label: "3440 × 1440",
+    width: 3440,
+    height: 1440,
+    rationale: "Ultrawide max-width and horizontal-composition risk.",
+  },
+];
+
+const desktop = ({ id, label, width, height, rationale }) => ({
   id,
-  name: `${width} x ${height} Desktop`,
+  name: `${label} Desktop`,
   kind: "desktop",
   os: "desktop",
   logicalWidth: width,
@@ -79,7 +145,7 @@ const desktop = (id, width, height) => ({
   home: "none",
   bezel: uniform(0),
   body: "#000000",
-  note: "Desktop browser viewport.",
+  note: rationale,
 });
 
 /** @type {Device[]} */
@@ -175,11 +241,7 @@ export const DEVICES = [
     foldable: true,
     note: "Inner (unfolded) 6.9\" display.",
   },
-  desktop("desktop-1920x1080", 1920, 1080),
-  desktop("desktop-2560x1440", 2560, 1440),
-  desktop("desktop-2560x1600", 2560, 1600),
-  desktop("desktop-3440x1440", 3440, 1440),
-  desktop("desktop-2560x1080", 2560, 1080),
+  ...DESKTOP_VIEWPORTS.map(desktop),
 ];
 
 /** Look up a device by id (case-insensitive). */

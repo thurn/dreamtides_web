@@ -180,6 +180,21 @@ agent-browser --session qa-5174 snapshot -i
 agent-browser --session qa-5174 eval "JSON.stringify(window.__caps)"
 ```
 
+For a desktop/laptop layout sweep, use the screenshot matrix documented in
+[desktop_screenshot_matrix.md](desktop_screenshot_matrix.md):
+
+```bash
+npm run screenshots:desktop -- --start --smoke
+```
+
+Review its contact sheet PNGs first, open full-resolution cells only when a
+thumbnail looks suspicious, and target the affected scene/viewports on the next
+run. The matrix starts one server, uses one isolated browser session, captures
+each registered `?goto=` scene directly at 1× DPR, and records URL, viewport,
+root, scroll, image, readiness, and error-buffer assertions in `manifest.json`.
+Its gitignored artifacts live under
+`artifacts/journey-desktop-screenshots/<run-id>/`.
+
 `window.__journeyLog` and `window.__errors` are not application APIs. Never use
 `window.__errors ?? []`: a missing buffer then looks like a clean run. Install
 `window.__caps` before the first tested action, reinstall it after every full

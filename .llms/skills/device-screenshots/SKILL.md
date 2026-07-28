@@ -9,6 +9,12 @@ Render the running journey prototype web app at a phone or desktop target's
 resolution, aspect ratio, and pixel density, and capture a PNG. Use it to
 preview how a screen looks on common phones and desktop viewports.
 
+For a matrix of Dream Journey scenes across laptop and desktop viewport
+classes, use `npm run screenshots:desktop -- --start`. It captures direct app
+viewports at 1× DPR and produces compact contact sheets plus an HTML grid and
+manifest. The full workflow and presets are documented in
+`docs/journey_prototype/desktop_screenshot_matrix.md`.
+
 The tool is `scripts/device-screenshots.mjs`. It drives a headless Chromium via
 `agent-browser`, loading the app in an `<iframe>` sized to the target screen at
 the correct device pixel ratio. Phone targets paint the screen cut-out (Dynamic
@@ -109,11 +115,15 @@ node scripts/device-screenshots.mjs --list
 | `galaxy-a16-5g`        | Samsung Galaxy A16 5G     | center punch-hole                        |
 | `razr-plus-2025`       | Motorola Razr+ 2025       | foldable inner display                  |
 | `galaxy-z-flip7`       | Samsung Galaxy Z Flip7    | foldable inner display                  |
+| `desktop-1280x720`     | 1280 x 720 Desktop        | smallest supported desktop              |
+| `desktop-1366x768`     | 1366 x 768 Desktop        | constrained-height common laptop        |
+| `desktop-1440x900`     | 1440 x 900 Desktop        | 16:10 laptop                             |
+| `desktop-1536x864`     | 1536 x 864 Desktop        | common scaled laptop                     |
 | `desktop-1920x1080`    | 1920 x 1080 Desktop       | desktop browser viewport                |
+| `desktop-2560x1080`    | 2560 x 1080 Desktop       | wide constrained-height desktop          |
 | `desktop-2560x1440`    | 2560 x 1440 Desktop       | desktop browser viewport                |
 | `desktop-2560x1600`    | 2560 x 1600 Desktop       | desktop browser viewport                |
 | `desktop-3440x1440`    | 3440 x 1440 Desktop       | desktop browser viewport                |
-| `desktop-2560x1080`    | 2560 x 1080 Desktop       | desktop browser viewport                |
 
 Phone resolutions/densities are close approximations of the real hardware,
 enough to judge layout. Desktop targets capture at 1x density, so image

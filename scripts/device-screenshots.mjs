@@ -18,8 +18,7 @@
  * Run with --help for the full flag list.
  */
 
-import { spawn, execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, isAbsolute, resolve as resolvePath, extname } from "node:path";
@@ -31,8 +30,17 @@ import {
   physicalResolution,
   renderWrapper,
 } from "./screenshot-devices.mjs";
+import {
+  DEFAULT_SCREENSHOT_PORT,
+  buildAppUrl as buildSharedAppUrl,
+  makeAgentBrowserRunner,
+  resolveAgentBrowser,
+  startScreenshotDevServer,
+  stopProcessTree,
+  waitForServer,
+} from "./screenshot-runtime.mjs";
 
-const DEFAULT_PORT = 5178;
+const DEFAULT_PORT = DEFAULT_SCREENSHOT_PORT;
 const DEFAULT_WAIT_MS = 4500;
 
 const HELP = `device-screenshots - emulated device mock-ups of the journey prototype UI.
@@ -196,67 +204,17 @@ function buildBaseUrl(values) {
 }
 
 function buildAppUrl(values, base) {
-  let route = values.route ?? "/";
-  if (!route.startsWith("/")) route = `/${route}`;
   const params = [];
-  if (values.scene) params.push(`goto=${encodeURIComponent(values.scene)}`);
-  if (values.query) params.push(values.query.replace(/^[?&]/, ""));
-  const query = params.length ? `?${params.join("&")}` : "";
-  return `${base}${route}${query}`;
-}
-
-function resolveAgentBrowser() {
-  if (process.env.AGENT_BROWSER) return process.env.AGENT_BROWSER.split(" ");
-  const homebrew = "/opt/homebrew/bin/agent-browser";
-  if (existsSync(homebrew)) return [homebrew];
-  return ["agent-browser"];
-}
-
-function makeRunner(binary, session) {
-  return function run(args, { capture = false } = {}) {
-    const full = [...binary.slice(1), "--session", session, ...args];
-    return execFileSync(binary[0], full, {
-      stdio: capture ? ["ignore", "pipe", "pipe"] : ["ignore", "inherit", "inherit"],
-      encoding: "utf8",
-    });
-  };
-}
-
-function sleep(ms) {
-  return new Promise((r) => setTimeout(r, ms));
-}
-
-async function waitForServer(base, timeoutMs) {
-  const deadline = Date.now() + timeoutMs;
-  while (Date.now() < deadline) {
-    try {
-      const res = await fetch(base, { method: "GET" });
-      if (res.ok || res.status < 500) return true;
-    } catch {
-      // not up yet
-    }
-    await sleep(500);
-  }
-  return false;
-}
-
-async function startDevServer(port) {
-  process.stderr.write(`Starting dev server on port ${port} …\n`);
-  const child = spawn("npm", ["run", "dev", "--", "--port", String(port)], {
-    stdio: ["ignore", "inherit", "inherit"],
-    detached: false,
+  if (values.scene) params.push(["goto", values.scene]);
+  const appUrl = buildSharedAppUrl(base, {
+    route: values.route ?? "/",
+    params,
   });
-  const base = `http://localhost:${port}`;
-  const ready = await waitForServer(base, 90_000);
-  if (!ready) {
-    try {
-      child.kill("SIGTERM");
-    } catch {
-      // ignore
-    }
-    fail(`dev server did not become ready at ${base} within 90s`);
-  }
-  return child;
+  if (!values.query) return appUrl;
+  const url = new URL(appUrl);
+  const raw = values.query.replace(/^[?&]/, "");
+  const separator = url.search ? "&" : "?";
+  return `${url.toString().replace(/\?$/, "")}${separator}${raw}`;
 }
 
 function outputPathFor(device, values, devices) {
@@ -297,7 +255,7 @@ async function main() {
 
   const binary = resolveAgentBrowser();
   const session = values.session ?? `devicecap-${process.pid}`;
-  const run = makeRunner(binary, session);
+  const run = makeAgentBrowserRunner(binary, session);
 
   const tmpDir = mkdtempSync(join(tmpdir(), "device-screenshots-"));
   let devServer = null;
@@ -305,7 +263,7 @@ async function main() {
   try {
     if (values.start) {
       const port = values.port ? Number(values.port) : DEFAULT_PORT;
-      devServer = await startDevServer(port);
+      devServer = await startScreenshotDevServer(port);
     } else {
       const up = await waitForServer(base, 4000);
       if (!up) {
@@ -376,11 +334,7 @@ async function main() {
     }
     if (devServer) {
       process.stderr.write("Stopping dev server …\n");
-      try {
-        devServer.kill("SIGTERM");
-      } catch {
-        // ignore
-      }
+      await stopProcessTree(devServer);
     }
     rmSync(tmpDir, { recursive: true, force: true });
   }

@@ -31,6 +31,7 @@
     "upload-assets": "node scripts/upload-assets-to-storage.mjs",
     "send-screenshots": "node scripts/send-screenshots-to-discord.mjs",
     "device-screenshots": "node scripts/device-screenshots.mjs",
+    "screenshots:desktop": "node scripts/desktop-screenshots.mjs",
     "compare-cumulus-scene": "bash cumulus/scripts/compare-scene.sh",
     "open-cumulus-scene-comparison": "bash cumulus/scripts/open-scene-comparison.sh",
     "regenerate-assets": "bash scripts/regenerate-assets.sh",
