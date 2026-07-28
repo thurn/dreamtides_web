@@ -17,7 +17,7 @@ fix flagged issues:
 
  ~/.llms/skills/independent-review
 
-Run one independent review per session, there is no need to re-run it for follow-up tasks.
+Run one independent review maximum, there is no need to re-run it for follow-up tasks.
 
 Dreamtides battle rules are in docs/battle_rules/battle_rules.md
 
