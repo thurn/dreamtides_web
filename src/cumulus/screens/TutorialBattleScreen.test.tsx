@@ -160,7 +160,7 @@ afterEach(() => {
 });
 
 describe("TutorialBattleScreen", () => {
-  it("moves Victory above the payoff before revealing New Journey", () => {
+  it("holds Victory centered before its slower move and action reveal", () => {
     const onNewJourney = vi.fn();
     const { container, root } = mount(
       view({ victoryVisible: true }),
@@ -181,6 +181,9 @@ describe("TutorialBattleScreen", () => {
     const action = victory?.querySelector<HTMLElement>(
       "[data-tutorial-victory-action]",
     );
+    const titleCopy = victory?.querySelector<HTMLElement>(
+      "[data-tutorial-victory-title-copy]",
+    );
 
     expect(victory).not.toBeNull();
     expect(
@@ -196,8 +199,19 @@ describe("TutorialBattleScreen", () => {
     ).toEqual(["New Journey"]);
     expect(title?.tagName).toBe("H1");
     expect(title?.textContent).toBe("Victory");
-    expect(title?.style.animation).toContain("tutorial-victory-title");
-    expect(action?.style.animation).toContain("tutorial-victory-action");
+    expect(title?.style.animation).toContain(
+      "tutorial-victory-title-move calc(var(--dur-slow) * 3)",
+    );
+    expect(title?.style.animation).toContain("3s both");
+    expect(titleCopy?.style.animation).toContain(
+      "tutorial-victory-title-fade calc(var(--dur-slow) * 0.7)",
+    );
+    expect(action?.style.animation).toContain(
+      "tutorial-victory-action calc(var(--dur-slow) * 1.4)",
+    );
+    expect(action?.style.animation).toContain(
+      "calc(3s + var(--dur-slow) * 3) both",
+    );
     expect(
       action?.hasAttribute("data-tutorial-victory-action-entering"),
     ).toBe(true);

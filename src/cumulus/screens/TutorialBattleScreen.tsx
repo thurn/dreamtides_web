@@ -251,6 +251,14 @@ const TUTORIAL_VICTORY_BREATHE_LOW_SCALE = 0.97;
 const TUTORIAL_VICTORY_BREATHE_HIGH_SCALE = 1.03;
 const TUTORIAL_VICTORY_STAR_LOW_SCALE = 0.92;
 const TUTORIAL_VICTORY_STAR_HIGH_SCALE = 1.08;
+const TUTORIAL_VICTORY_INTRO_DURATION = `calc(${token("--dur-slow")} * 5)`;
+const TUTORIAL_VICTORY_TITLE_HOLD_DURATION = "3s";
+const TUTORIAL_VICTORY_TITLE_MOVE_DURATION = `calc(${token("--dur-slow")} * 3)`;
+const TUTORIAL_VICTORY_TITLE_TOTAL_DURATION =
+  `calc(${TUTORIAL_VICTORY_TITLE_HOLD_DURATION} + ` +
+  `${token("--dur-slow")} * 3)`;
+const TUTORIAL_VICTORY_TITLE_FADE_DURATION = `calc(${token("--dur-slow")} * 0.7)`;
+const TUTORIAL_VICTORY_ACTION_FADE_DURATION = `calc(${token("--dur-slow")} * 1.4)`;
 
 const TUTORIAL_VICTORY_CSS = `
   @keyframes tutorial-victory-arrival {
@@ -280,15 +288,19 @@ const TUTORIAL_VICTORY_CSS = `
     50% { transform: scale(${String(TUTORIAL_VICTORY_BREATHE_HIGH_SCALE)}); }
   }
 
-  @keyframes tutorial-victory-title {
-    0% { opacity: 0; top: 50%; transform: translate(-50%, -50%); }
-    14%, 42% { opacity: 1; top: 50%; transform: translate(-50%, -50%); }
-    72%, 100% { opacity: 1; top: 0; transform: translate(-50%, calc(-100% - ${token("--space-5")})); }
+  @keyframes tutorial-victory-title-move {
+    from { top: 50%; transform: translate(-50%, -50%); }
+    to { top: 0; transform: translate(-50%, calc(-100% - ${token("--space-5")})); }
+  }
+
+  @keyframes tutorial-victory-title-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   @keyframes tutorial-victory-star-reveal {
-    0%, 42% { opacity: 0; }
-    72%, 100% { opacity: 1; }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   @keyframes tutorial-victory-star-spin {
@@ -297,8 +309,8 @@ const TUTORIAL_VICTORY_CSS = `
   }
 
   @keyframes tutorial-victory-action {
-    0%, 72% { opacity: 0; transform: translateY(${token("--space-4")}); }
-    100% { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(${token("--space-4")}); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   [data-tutorial-victory-action][data-tutorial-victory-action-entering] {
@@ -312,6 +324,7 @@ const TUTORIAL_VICTORY_CSS = `
     [data-tutorial-victory-ripple],
     [data-tutorial-victory-core],
     [data-tutorial-victory-title],
+    [data-tutorial-victory-title-copy],
     [data-tutorial-victory-star],
     [data-tutorial-victory-action] {
       animation: none !important;
@@ -331,7 +344,6 @@ function TutorialVictorySurface({
 }): ReactElement {
   const [titleSettled, setTitleSettled] = useState(false);
   const [actionSettled, setActionSettled] = useState(false);
-  const introDuration = `calc(${token("--dur-slow")} * 5)`;
   return (
     <section
       role="dialog"
@@ -371,12 +383,16 @@ function TutorialVictorySurface({
           aspectRatio: "1",
           display: "grid",
           placeItems: "center",
-          animation: `tutorial-victory-arrival ${introDuration} ${token("--ease-dream")} both`,
+          animation: `tutorial-victory-arrival ${TUTORIAL_VICTORY_INTRO_DURATION} ${token("--ease-dream")} both`,
         }}
       >
         <h1
           data-tutorial-victory-title=""
-          onAnimationEnd={() => setTitleSettled(true)}
+          onAnimationEnd={(event) => {
+            if (event.currentTarget === event.target) {
+              setTitleSettled(true);
+            }
+          }}
           style={{
             position: "absolute",
             left: "50%",
@@ -391,10 +407,18 @@ function TutorialVictorySurface({
             transform: `translate(-50%, calc(-100% - ${token("--space-5")}))`,
             animation: titleSettled
               ? undefined
-              : `tutorial-victory-title ${introDuration} ${token("--ease-dream")} both`,
+              : `tutorial-victory-title-move ${TUTORIAL_VICTORY_TITLE_MOVE_DURATION} ${token("--ease-dream")} ${TUTORIAL_VICTORY_TITLE_HOLD_DURATION} both`,
           }}
         >
-          Victory
+          <span
+            data-tutorial-victory-title-copy=""
+            style={{
+              display: "block",
+              animation: `tutorial-victory-title-fade ${TUTORIAL_VICTORY_TITLE_FADE_DURATION} ${token("--ease-out")} both`,
+            }}
+          >
+            Victory
+          </span>
         </h1>
         <span
           aria-hidden="true"
@@ -404,7 +428,7 @@ function TutorialVictorySurface({
             inset: token("--space-5"),
             border: `${token("--space-1")} solid ${token("--border-accent")}`,
             borderRadius: token("--radius-pill"),
-            animation: `tutorial-victory-ripple ${introDuration} ${token("--ease-out")} infinite`,
+            animation: `tutorial-victory-ripple ${TUTORIAL_VICTORY_INTRO_DURATION} ${token("--ease-out")} infinite`,
           }}
         />
         <span
@@ -415,7 +439,7 @@ function TutorialVictorySurface({
             inset: token("--space-5"),
             border: `${token("--space-1")} solid ${token("--border-accent")}`,
             borderRadius: token("--radius-pill"),
-            animation: `tutorial-victory-ripple ${introDuration} ${token("--ease-out")} calc(${introDuration} / 2) infinite`,
+            animation: `tutorial-victory-ripple ${TUTORIAL_VICTORY_INTRO_DURATION} ${token("--ease-out")} calc(${TUTORIAL_VICTORY_INTRO_DURATION} / 2) infinite`,
           }}
         />
         <span
@@ -482,8 +506,8 @@ function TutorialVictorySurface({
                 "polygon(50% 0%, 56% 44%, 100% 50%, 56% 56%, 50% 100%, 44% 56%, 0% 50%, 44% 44%)",
               boxShadow: token("--glow-accent-soft"),
               animation:
-                `tutorial-victory-star-reveal ${introDuration} ${token("--ease-out")} both, ` +
-                `tutorial-victory-star-spin calc(${token("--dur-slow")} * 8) ${token("--ease-in-out")} ${introDuration} infinite`,
+                `tutorial-victory-star-reveal ${TUTORIAL_VICTORY_TITLE_MOVE_DURATION} ${token("--ease-out")} ${TUTORIAL_VICTORY_TITLE_HOLD_DURATION} both, ` +
+                `tutorial-victory-star-spin calc(${token("--dur-slow")} * 8) ${token("--ease-in-out")} ${TUTORIAL_VICTORY_TITLE_TOTAL_DURATION} infinite`,
             }}
           />
         </span>
@@ -508,7 +532,7 @@ function TutorialVictorySurface({
           justifyContent: "center",
           animation: actionSettled
             ? undefined
-            : `tutorial-victory-action ${introDuration} ${token("--ease-out")} both`,
+            : `tutorial-victory-action ${TUTORIAL_VICTORY_ACTION_FADE_DURATION} ${token("--ease-out")} ${TUTORIAL_VICTORY_TITLE_TOTAL_DURATION} both`,
         }}
       >
         <GlassButton
