@@ -84,6 +84,7 @@ function tutorialPresentationView(
         kind: presentation.kind,
         presentationId: presentation.id,
         paired: presentation.blockerBattleCardId !== null,
+        dissolved: presentation.dissolved.map((entry) => ({ ...entry })),
         scored: presentation.scored,
       };
     case "tutorial-guidance":
@@ -105,27 +106,48 @@ export function buildTutorialBattleView(
   previewVictory = false,
 ): TutorialBattleView {
   const presentation = battle.tutorialPresentation ?? null;
-  const mobile = buildMobileBattleView(
-    battle.init,
+  const enemyDreamAvatar = {
+    id: battle.init.enemyDescriptor.id,
+    imageNumber: battle.init.enemyDescriptor.imageNumber ?? "001",
+    name: battle.init.enemyDescriptor.name,
+    renderedText: battle.init.enemyDescriptor.abilityText,
+    title: battle.init.enemyDescriptor.subtitle,
+  };
+  const mobileOptions = {
+    aiMode: false,
+    isOpponentHandRevealed: false,
+    isPlayerHandHidden: false,
+    pendingPrompt: battle.pendingPrompt,
+    confirmedPromptId,
+  } as const;
+  const buildBattleView = (
+    board: BattleFoldState["board"],
+  ): TutorialBattleView["battle"] => {
+    const projected = buildMobileBattleView(
+      battle.init,
+      board,
+      enemyDreamAvatar,
+      null,
+      mobileOptions,
+    );
+    const player = withInactiveTutorialAvatarAbility(projected.player);
+    const enemy = withInactiveTutorialAvatarAbility(projected.enemy);
+    return {
+      ...projected,
+      player,
+      enemy,
+      near: projected.perspective === "player" ? player : enemy,
+      far: projected.perspective === "player" ? enemy : player,
+      result: null,
+    };
+  };
+  const mobile = buildBattleView(
     boardBeforeOpponentPlayPresentation(battle, presentation),
-    {
-      id: battle.init.enemyDescriptor.id,
-      imageNumber: battle.init.enemyDescriptor.imageNumber ?? "001",
-      name: battle.init.enemyDescriptor.name,
-      renderedText: battle.init.enemyDescriptor.abilityText,
-      title: battle.init.enemyDescriptor.subtitle,
-    },
-    null,
-    {
-      aiMode: false,
-      isOpponentHandRevealed: false,
-      isPlayerHandHidden: false,
-      pendingPrompt: battle.pendingPrompt,
-      confirmedPromptId,
-    },
   );
-  const player = withInactiveTutorialAvatarAbility(mobile.player);
-  const enemy = withInactiveTutorialAvatarAbility(mobile.enemy);
+  const challengeOriginBoard = boardBeforeChallengeResolutionPresentation(
+    battle,
+    presentation,
+  );
   const prompt = battle.pendingPrompt;
   const confirmedHumanPrompt = controller.status === "driver" &&
     controller.isCurrentClientDriver &&
@@ -133,14 +155,11 @@ export function buildTutorialBattleView(
     prompt !== null &&
     confirmedPromptId === prompt.promptId;
   return {
-    battle: {
-      ...mobile,
-      player,
-      enemy,
-      near: mobile.perspective === "player" ? player : enemy,
-      far: mobile.perspective === "player" ? enemy : player,
-      result: null,
-    },
+    battle: mobile,
+    challengeOriginBattle:
+      challengeOriginBoard === null
+        ? null
+        : buildBattleView(challengeOriginBoard),
     ownership: controller.status === "not-tutorial" ? "observer" : controller.status,
     driverClientId: controller.driverClientId,
     manualControls: controller.status === "driver" && controller.isCurrentClientDriver && controller.requiresHumanDecision,
@@ -168,6 +187,57 @@ export function buildTutorialBattleView(
         (battle.board.result === "victory" &&
           controller.status === "terminal")),
     terminalRestartAvailable: controller.status === "terminal" && !controller.isDriverPresent,
+  };
+}
+
+/**
+ * Reconstruct the last painted Challenge lane from persisted UUIDs. The
+ * authoritative board already contains the void moves; this local projection
+ * supplies a source frame even when the screen mounts after those moves were
+ * folded from the room log.
+ */
+function boardBeforeChallengeResolutionPresentation(
+  battle: BattleFoldState,
+  presentation: TutorialBattlePresentation | null,
+): BattleFoldState["board"] | null {
+  if (
+    presentation?.kind !== "challenge-resolved" ||
+    presentation.dissolved.length === 0
+  ) {
+    return null;
+  }
+  const sides = {
+    player: { ...battle.board.sides.player },
+    enemy: { ...battle.board.sides.enemy },
+  };
+  for (const entry of presentation.dissolved) {
+    const side = sides[entry.side];
+    const backRank = { ...side.backRank };
+    const frontRank = { ...side.frontRank };
+    for (const slotId of rankSlotIds(backRank)) {
+      if (backRank[slotId] === entry.battleCardId) backRank[slotId] = null;
+    }
+    for (const slotId of rankSlotIds(frontRank)) {
+      if (frontRank[slotId] === entry.battleCardId) frontRank[slotId] = null;
+    }
+    sides[entry.side] = {
+      ...side,
+      deck: side.deck.filter((candidate) => candidate !== entry.battleCardId),
+      hand: side.hand.filter((candidate) => candidate !== entry.battleCardId),
+      void: side.void.filter((candidate) => candidate !== entry.battleCardId),
+      banished: side.banished.filter(
+        (candidate) => candidate !== entry.battleCardId,
+      ),
+      backRank,
+      frontRank: {
+        ...frontRank,
+        [presentation.slotId]: entry.battleCardId,
+      },
+    };
+  }
+  return {
+    ...battle.board,
+    sides,
   };
 }
 

@@ -28,6 +28,11 @@ export type TutorialBattleOwnership = "driver" | "observer" | "paused-driver-abs
 
 export interface TutorialBattleView {
   readonly battle: MobileBattleView;
+  /**
+   * Historical board projection for the painted frame immediately before
+   * dissolved Challenge cards travel to their authoritative void positions.
+   */
+  readonly challengeOriginBattle: MobileBattleView | null;
   readonly ownership: TutorialBattleOwnership;
   readonly driverClientId: string | null;
   readonly manualControls: boolean;
@@ -62,6 +67,10 @@ export interface TutorialBattleView {
     readonly kind: "challenge-resolved";
     readonly presentationId: string;
     readonly paired: boolean;
+    readonly dissolved: readonly {
+      readonly battleCardId: string;
+      readonly side: "player" | "enemy";
+    }[];
     readonly scored: {
       readonly battleCardId: string;
       readonly side: "player" | "enemy";
@@ -104,6 +113,7 @@ export function TutorialBattleScreen({
   onGuidanceDurationComplete,
   onPresentationVisible,
 }: TutorialBattleScreenProps): ReactElement {
+  const reduceMotion = useReducedMotion();
   const paused = view.ownership === "paused-driver-absent" || view.terminalRestartAvailable;
   const turnAnnouncementKey =
     `${view.battle.battleId}:${view.battle.inspector.turn}:${view.battle.activeSide}`;
@@ -122,10 +132,33 @@ export function TutorialBattleScreen({
     completedTurnAnnouncementKey === turnAnnouncementKey
       ? guidance
       : null;
+  const challengeTravel =
+    view.presentation?.kind === "challenge-resolved" &&
+    view.presentation.dissolved.length > 0 &&
+    view.challengeOriginBattle !== null
+      ? {
+          presentationId: view.presentation.presentationId,
+          originBattle: view.challengeOriginBattle,
+        }
+      : null;
+  const challengeTravelPresentationId =
+    challengeTravel?.presentationId ?? null;
+  const [
+    startedChallengeTravelPresentationId,
+    setStartedChallengeTravelPresentationId,
+  ] = useState<string | null>(null);
+  const challengeTravelStarted =
+    challengeTravel === null ||
+    startedChallengeTravelPresentationId === challengeTravelPresentationId;
   const presentationVisible =
     view.presentationId !== null &&
+    challengeTravelStarted &&
     (view.presentation?.kind !== "dreamwell-reveal" ||
       completedTurnAnnouncementKey === turnAnnouncementKey);
+  const displayedBattle =
+    challengeTravel !== null && !challengeTravelStarted
+      ? challengeTravel.originBattle
+      : view.battle;
   const challengeCardOverlay =
     view.presentation?.kind === "challenge-resolved" &&
     !view.presentation.paired &&
@@ -137,6 +170,30 @@ export function TutorialBattleScreen({
           points: view.presentation.scored.points,
         }
       : null;
+
+  useEffect(() => {
+    if (challengeTravelPresentationId === null) return;
+    if (reduceMotion) {
+      setStartedChallengeTravelPresentationId(
+        challengeTravelPresentationId,
+      );
+      return;
+    }
+    let destinationFrame = 0;
+    const paintedOriginFrame = window.requestAnimationFrame(() => {
+      destinationFrame = window.requestAnimationFrame(() => {
+        setStartedChallengeTravelPresentationId(
+          challengeTravelPresentationId,
+        );
+      });
+    });
+    return () => {
+      window.cancelAnimationFrame(paintedOriginFrame);
+      if (destinationFrame !== 0) {
+        window.cancelAnimationFrame(destinationFrame);
+      }
+    };
+  }, [challengeTravelPresentationId, reduceMotion]);
 
   useEffect(() => {
     if (view.presentationId === null || !presentationVisible) return;
@@ -165,7 +222,7 @@ export function TutorialBattleScreen({
     >
       <LayoutGroup id={`tutorial-battle:${view.battle.battleId}`}>
         <MobileBattleScreen
-          view={view.battle}
+          view={displayedBattle}
           interactions={interactions}
           cardOverlay={challengeCardOverlay}
           cardLayoutGroup="inherited"

@@ -366,11 +366,114 @@ describe("buildTutorialBattleView", () => {
         kind,
         presentationId,
         ...(kind === "challenge-resolved"
-          ? { paired: true, scored: null }
+          ? { paired: true, dissolved: [], scored: null }
           : {}),
       });
     },
   );
+
+  it("reconstructs dissolved UUIDs in their Challenge lane for a cold animation origin", () => {
+    const settledView = {
+      perspective: "player",
+      player,
+      enemy,
+      near: player,
+      far: enemy,
+      battleId: "settled",
+    } as MobileBattleView;
+    const originView = {
+      ...settledView,
+      battleId: "origin",
+    } as MobileBattleView;
+    vi.mocked(buildMobileBattleView)
+      .mockReturnValueOnce(settledView)
+      .mockReturnValueOnce(originView);
+    const enemyLoser = "enemy-loser-uuid";
+    const playerLoser = "player-loser-uuid";
+    const battle = {
+      init: {
+        enemyDescriptor: {
+          id: "enemy-avatar-uuid",
+          imageNumber: "0025",
+          name: "Enemy",
+          subtitle: "Opponent",
+          abilityText: "Enemy printed ability.",
+        },
+        dreamwellDeck: [],
+      },
+      board: {
+        result: null,
+        sides: {
+          player: {
+            deck: [],
+            hand: [],
+            void: [playerLoser],
+            banished: [],
+            backRank: {},
+            frontRank: { F4: null },
+          },
+          enemy: {
+            deck: [],
+            hand: [],
+            void: [enemyLoser],
+            banished: [],
+            backRank: {},
+            frontRank: { F4: null },
+          },
+        },
+        cardInstances: {},
+      },
+      effectQueue: [],
+      dawnFired: { player: null, enemy: null },
+      pendingPrompt: null,
+      tutorialPresentation: {
+        id: "challenge-resolved:player:5:F4",
+        kind: "challenge-resolved",
+        activeSide: "player",
+        slotId: "F4",
+        challengerBattleCardId: playerLoser,
+        blockerBattleCardId: enemyLoser,
+        scored: null,
+        dissolved: [
+          { battleCardId: playerLoser, side: "player" },
+          { battleCardId: enemyLoser, side: "enemy" },
+        ],
+      },
+    } as unknown as BattleFoldState;
+
+    const view = buildTutorialBattleView(
+      battle,
+      {
+        status: "driver",
+        isCurrentClientDriver: true,
+        requiresHumanDecision: false,
+        driverClientId: "driver-client",
+      } as TutorialBattleControllerPlan,
+      null,
+    );
+
+    const calls = vi.mocked(buildMobileBattleView).mock.calls;
+    const settledBoard = calls[calls.length - 2]?.[1];
+    const originBoard = calls[calls.length - 1]?.[1];
+    expect(settledBoard?.sides.player.void).toEqual([playerLoser]);
+    expect(settledBoard?.sides.enemy.void).toEqual([enemyLoser]);
+    expect(originBoard?.sides.player).toMatchObject({
+      void: [],
+      frontRank: { F4: playerLoser },
+    });
+    expect(originBoard?.sides.enemy).toMatchObject({
+      void: [],
+      frontRank: { F4: enemyLoser },
+    });
+    expect(view.challengeOriginBattle?.battleId).toBe("origin");
+    expect(view.presentation).toMatchObject({
+      kind: "challenge-resolved",
+      dissolved: [
+        { battleCardId: playerLoser, side: "player" },
+        { battleCardId: enemyLoser, side: "enemy" },
+      ],
+    });
+  });
 
   it("keeps both DreamAvatar abilities unavailable after the scripted handoff", () => {
     vi.mocked(buildMobileBattleView).mockReturnValue({

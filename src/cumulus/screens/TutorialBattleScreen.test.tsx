@@ -67,6 +67,7 @@ function view(
       inspector: { turn: "2" },
       activeSide: "player",
     } as TutorialBattleView["battle"],
+    challengeOriginBattle: null,
     ownership: "driver",
     driverClientId: "driver-client",
     manualControls: false,
@@ -435,14 +436,29 @@ describe("TutorialBattleScreen", () => {
   });
 
   it("holds a paired Challenge while shared-layout travel carries its loser to the void", () => {
+    vi.useFakeTimers();
     const onPresentationVisible = vi.fn();
     const presentationId = "challenge-resolved:enemy:4:F2";
+    const originBattle = {
+      battleId: "tutorial-battle",
+      inspector: { turn: "2" },
+      activeSide: "enemy",
+    } as TutorialBattleView["battle"];
+    const settledBattle = {
+      ...originBattle,
+      activeSide: "player",
+    } as TutorialBattleView["battle"];
     const { container, root } = mount(
       view({
+        battle: settledBattle,
+        challengeOriginBattle: originBattle,
         presentation: {
           kind: "challenge-resolved",
           presentationId,
           paired: true,
+          dissolved: [
+            { battleCardId: "enemy-loser-uuid", side: "enemy" },
+          ],
           scored: null,
         },
       }),
@@ -450,7 +466,23 @@ describe("TutorialBattleScreen", () => {
       vi.fn(),
       onPresentationVisible,
     );
+    const firstProps = mobileBattleProps.mock.lastCall?.[0] as {
+      readonly view: TutorialBattleView["battle"];
+    };
 
+    expect(
+      container.querySelector('[data-tutorial-challenge-animation="paired"]'),
+    ).toBeNull();
+    expect(firstProps.view).toBe(originBattle);
+    expect(onPresentationVisible).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(40);
+    });
+    const settledProps = mobileBattleProps.mock.lastCall?.[0] as {
+      readonly view: TutorialBattleView["battle"];
+    };
+    expect(settledProps.view).toBe(settledBattle);
     expect(
       container.querySelector('[data-tutorial-challenge-animation="paired"]'),
     ).not.toBeNull();
@@ -468,6 +500,7 @@ describe("TutorialBattleScreen", () => {
           kind: "challenge-resolved",
           presentationId,
           paired: false,
+          dissolved: [],
           scored: {
             battleCardId: "player-character-uuid",
             side: "player",
