@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useState, type ReactElement } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactElement,
+} from "react";
 import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { GameCard } from "../components/card/CardView";
 import { battleCardLayoutId } from "../components/battle/battle-card-layout";
@@ -24,6 +31,8 @@ import {
 } from "./BattleTutorialGuidance";
 
 export type TutorialBattleOwnership = "driver" | "observer" | "paused-driver-absent" | "terminal";
+export const TUTORIAL_CHALLENGE_TRAVEL_SECONDS =
+  motionTimeSeconds("--dur-slow");
 
 export interface TutorialBattleView {
   readonly battle: MobileBattleView;
@@ -142,6 +151,11 @@ export function TutorialBattleScreen({
     startedChallengeTravelPresentationId,
     setStartedChallengeTravelPresentationId,
   ] = useState<string | null>(null);
+  const screenRef = useRef<HTMLDivElement>(null);
+  const challengeOriginRectsRef = useRef<{
+    readonly presentationId: string;
+    readonly rects: ReadonlyMap<string, DOMRect>;
+  } | null>(null);
   const challengeTravelStarted =
     challengeTravel === null ||
     startedChallengeTravelPresentationId === challengeTravelPresentationId;
@@ -177,6 +191,23 @@ export function TutorialBattleScreen({
     let destinationFrame = 0;
     const paintedOriginFrame = window.requestAnimationFrame(() => {
       destinationFrame = window.requestAnimationFrame(() => {
+        const root = screenRef.current;
+        const rects = new Map<string, DOMRect>();
+        if (
+          root !== null &&
+          view.presentation?.kind === "challenge-resolved"
+        ) {
+          for (const entry of view.presentation.dissolved) {
+            const source = renderedBattleCard(root, entry.battleCardId);
+            if (source !== null) {
+              rects.set(entry.battleCardId, source.getBoundingClientRect());
+            }
+          }
+        }
+        challengeOriginRectsRef.current = {
+          presentationId: challengeTravelPresentationId,
+          rects,
+        };
         setStartedChallengeTravelPresentationId(
           challengeTravelPresentationId,
         );
@@ -188,7 +219,81 @@ export function TutorialBattleScreen({
         window.cancelAnimationFrame(destinationFrame);
       }
     };
-  }, [challengeTravelPresentationId, reduceMotion]);
+  }, [challengeTravelPresentationId, reduceMotion, view.presentation]);
+
+  useLayoutEffect(() => {
+    if (
+      reduceMotion ||
+      !challengeTravelStarted ||
+      challengeTravelPresentationId === null ||
+      view.presentation?.kind !== "challenge-resolved"
+    ) {
+      return;
+    }
+    const root = screenRef.current;
+    const origins = challengeOriginRectsRef.current;
+    if (
+      root === null ||
+      origins?.presentationId !== challengeTravelPresentationId
+    ) {
+      return;
+    }
+    const animations: {
+      readonly element: HTMLElement;
+      readonly animation: Animation;
+    }[] = [];
+    for (const entry of view.presentation.dissolved) {
+      const origin = origins.rects.get(entry.battleCardId);
+      const destination = renderedBattleCard(
+        root,
+        entry.battleCardId,
+        `${entry.side}-void`,
+      );
+      if (origin === undefined || destination === null) continue;
+      const destinationRect = destination.getBoundingClientRect();
+      if (destinationRect.width === 0 || destinationRect.height === 0) continue;
+      destination.dataset.tutorialChallengeVoidTravel = entry.side;
+      const animation = destination.animate(
+        [
+          {
+            transformOrigin: "top left",
+            transform:
+              `translate(${String(origin.left - destinationRect.left)}px, ` +
+              `${String(origin.top - destinationRect.top)}px) ` +
+              `scale(${String(origin.width / destinationRect.width)}, ` +
+              `${String(origin.height / destinationRect.height)})`,
+          },
+          {
+            transformOrigin: "top left",
+            transform: "none",
+          },
+        ],
+        {
+          duration: TUTORIAL_CHALLENGE_TRAVEL_SECONDS * 1_000,
+          easing: getComputedStyle(destination)
+            .getPropertyValue("--ease-out")
+            .trim(),
+          fill: "both",
+        },
+      );
+      animation.addEventListener("finish", () => {
+        animation.cancel();
+        delete destination.dataset.tutorialChallengeVoidTravel;
+      }, { once: true });
+      animations.push({ element: destination, animation });
+    }
+    return () => {
+      for (const { element, animation } of animations) {
+        animation.cancel();
+        delete element.dataset.tutorialChallengeVoidTravel;
+      }
+    };
+  }, [
+    challengeTravelPresentationId,
+    challengeTravelStarted,
+    reduceMotion,
+    view.presentation,
+  ]);
 
   useEffect(() => {
     if (view.presentationId === null || !presentationVisible) return;
@@ -203,6 +308,7 @@ export function TutorialBattleScreen({
 
   return (
     <div
+      ref={screenRef}
       className="cumulus"
       data-tutorial-live-battle=""
       data-tutorial-battle-ownership={view.ownership}
@@ -300,6 +406,25 @@ export function TutorialBattleScreen({
         onDurationComplete={onGuidanceDurationComplete}
       />
     </div>
+  );
+}
+
+function renderedBattleCard(
+  root: HTMLElement,
+  battleCardId: string,
+  zone?: `${"player" | "enemy"}-void`,
+): HTMLElement | null {
+  return (
+    Array.from(
+      root.querySelectorAll<HTMLElement>("[data-battle-card-id]"),
+    ).find((candidate) => {
+      if (candidate.dataset.battleCardId !== battleCardId) return false;
+      return (
+        zone === undefined ||
+        candidate.closest<HTMLElement>("[data-battle-zone]")?.dataset
+          .battleZone === zone
+      );
+    }) ?? null
   );
 }
 

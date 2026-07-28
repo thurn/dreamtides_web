@@ -7,6 +7,7 @@ import { asCardId, asCardName } from "../../types/card-identity";
 import { CumulusRoot } from "../CumulusRoot";
 import {
   TUTORIAL_BATTLE_REVEAL_TRAVEL_SECONDS,
+  TUTORIAL_CHALLENGE_TRAVEL_SECONDS,
   TutorialBattleScreen,
   type TutorialBattleView,
 } from "./TutorialBattleScreen";
@@ -35,7 +36,25 @@ const mobileBattleProps = vi.fn();
 vi.mock("./MobileBattleScreen", () => ({
   MobileBattleScreen: (props: unknown) => {
     mobileBattleProps(props);
-    return <main data-test-mobile-battle="" />;
+    const testCard = (
+      props as {
+        readonly view: TutorialBattleView["battle"] & {
+          readonly testChallengeCards?: readonly {
+            readonly id: string;
+            readonly zone?: "player-void" | "enemy-void";
+          }[];
+        };
+      }
+    ).view.testChallengeCards;
+    return (
+      <main data-test-mobile-battle="">
+        {testCard?.map((card) => (
+          <div key={card.id} data-battle-zone={card.zone}>
+            <div data-battle-card-id={card.id} />
+          </div>
+        ))}
+      </main>
+    );
   },
 }));
 
@@ -159,6 +178,8 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.useRealTimers();
+  vi.restoreAllMocks();
+  Reflect.deleteProperty(HTMLElement.prototype, "animate");
   document.body.innerHTML = "";
   mobileBattleProps.mockClear();
 });
@@ -430,18 +451,65 @@ describe("TutorialBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("holds a paired Challenge while shared-layout travel carries its loser to the void", () => {
+  it("holds a paired Challenge while a controlled loser travels from its lane to the player void", () => {
     vi.useFakeTimers();
     const onPresentationVisible = vi.fn();
     const presentationId = "challenge-resolved:enemy:4:F2";
+    const animations = [
+      {
+        addEventListener: vi.fn(),
+        cancel: vi.fn(),
+      },
+      {
+        addEventListener: vi.fn(),
+        cancel: vi.fn(),
+      },
+    ];
+    let animationIndex = 0;
+    const animate = vi.fn<HTMLElement["animate"]>(
+      () => animations[animationIndex++] as unknown as Animation,
+    );
+    Object.defineProperty(HTMLElement.prototype, "animate", {
+      configurable: true,
+      value: animate,
+    });
+    vi.spyOn(
+      HTMLElement.prototype,
+      "getBoundingClientRect",
+    ).mockImplementation(function getSyntheticChallengeRect(
+      this: HTMLElement,
+    ) {
+      if (this.dataset.battleCardId !== "player-loser-uuid") {
+        return this.closest("[data-battle-zone='enemy-void']") === null
+          ? new DOMRect(900, 200, 90, 90)
+          : new DOMRect(300, 80, 100, 70);
+      }
+      return this.closest("[data-battle-zone='player-void']") === null
+        ? new DOMRect(100, 120, 80, 96)
+        : new DOMRect(700, 520, 100, 70);
+    });
     const originBattle = {
       battleId: "tutorial-battle",
       inspector: { turn: "2" },
       activeSide: "enemy",
-    } as TutorialBattleView["battle"];
+      testChallengeCards: [
+        { id: "player-loser-uuid" },
+        { id: "enemy-loser-uuid" },
+      ],
+    } as unknown as TutorialBattleView["battle"];
     const settledBattle = {
       ...originBattle,
       activeSide: "player",
+      testChallengeCards: [
+        {
+          id: "player-loser-uuid",
+          zone: "player-void",
+        },
+        {
+          id: "enemy-loser-uuid",
+          zone: "enemy-void",
+        },
+      ],
     } as TutorialBattleView["battle"];
     const { container, root } = mount(
       view({
@@ -452,6 +520,7 @@ describe("TutorialBattleScreen", () => {
           presentationId,
           paired: true,
           dissolved: [
+            { battleCardId: "player-loser-uuid", side: "player" },
             { battleCardId: "enemy-loser-uuid", side: "enemy" },
           ],
           scored: null,
@@ -481,9 +550,29 @@ describe("TutorialBattleScreen", () => {
     expect(
       container.querySelector('[data-tutorial-challenge-animation="paired"]'),
     ).not.toBeNull();
+    expect(animate).toHaveBeenCalledTimes(2);
+    const playerKeyframes = animate.mock.calls[0]?.[0] as Keyframe[];
+    expect(playerKeyframes[0]?.transform).toBe(
+      "translate(-600px, -400px) scale(0.8, 1.3714285714285714)",
+    );
+    const enemyKeyframes = animate.mock.calls[1]?.[0] as Keyframe[];
+    expect(enemyKeyframes[0]?.transform).toBe(
+      "translate(600px, 120px) scale(0.9, 1.2857142857142858)",
+    );
+    expect(animate.mock.calls[0]?.[1]).toMatchObject({
+      duration: TUTORIAL_CHALLENGE_TRAVEL_SECONDS * 1_000,
+      fill: "both",
+    });
     expect(onPresentationVisible).toHaveBeenCalledWith(presentationId);
 
+    const playerFinish = animations[0].addEventListener.mock.calls.find(
+      ([eventName]) => eventName === "finish",
+    )?.[1] as EventListener | undefined;
+    playerFinish?.(new Event("finish"));
+    expect(animations[0].cancel).toHaveBeenCalledOnce();
+
     act(() => root.unmount());
+    expect(animations[1].cancel).toHaveBeenCalledOnce();
   });
 
   it("attaches unpaired Challenge points to the scoring battlefield card", () => {
