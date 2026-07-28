@@ -18,11 +18,6 @@ import {
   type MobileBattleSideView,
   type MobileBattleView,
 } from "./MobileBattleScreen";
-import {
-  CHALLENGER_CHEVRON_PRESETS,
-  CHALLENGER_CHEVRON_STYLE_OPTIONS,
-  DEFAULT_CHALLENGER_CHEVRON_SETTINGS,
-} from "./challenger-chevron";
 
 function mockDesktopViewport(matches: boolean): void {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
@@ -303,31 +298,6 @@ describe("MobileBattleScreen", () => {
     container.remove();
   });
 
-  it("keeps the dev-only chevron tweaks reachable when the inspector is hidden", () => {
-    const { container, root } = mount(makeView(), undefined, {
-      inspectorVisibility: "hidden",
-    });
-
-    expect(
-      container.querySelector('[data-testid="battle-debug-menu-trigger"]'),
-    ).toBeNull();
-    expect(
-      container.querySelector('[data-testid="battle-inspector-trigger"]'),
-    ).toBeNull();
-    const trigger = container.querySelector<HTMLButtonElement>(
-      '[data-testid="battle-challenger-chevron-tweaks-trigger"]',
-    );
-    expect(trigger).not.toBeNull();
-
-    act(() => trigger?.click());
-
-    expect(
-      container.querySelector("[data-battle-challenger-chevron-tweaks]"),
-    ).not.toBeNull();
-
-    act(() => root.unmount());
-  });
-
   it("renders the tutorial End Turn action as the sole purple primary control", () => {
     mockDesktopViewport(true);
     const onNextPhase = vi.fn();
@@ -452,27 +422,36 @@ describe("MobileBattleScreen", () => {
       '[data-battle-challenger-chevron="player"]',
     );
     expect(playerChevron?.dataset.battleChallengerChevronDirection).toBe("up");
-    expect(playerChevron?.dataset.battleChallengerChevronStyle).toBe("classic");
-    expect(playerChevron?.style.width).toBe(
-      `${String(DEFAULT_CHALLENGER_CHEVRON_SETTINGS.widthPercent)}%`,
+    expect(playerChevron?.dataset.battleChallengerChevronStyle).toBe(
+      "circle-badge",
     );
-    expect(playerChevron?.style.height).toBe(
-      `${String(DEFAULT_CHALLENGER_CHEVRON_SETTINGS.heightPercent)}%`,
+    expect(playerChevron?.style.width).toBe("22%");
+    expect(playerChevron?.style.height).toBe("16%");
+    expect(playerChevron?.style.left).toBe("50%");
+    expect(playerChevron?.style.top).toBe("-4%");
+    expect(playerChevron?.querySelector("circle")?.getAttribute("fill")).toBe(
+      "var(--surface-status-badge)",
     );
-    expect(playerChevron?.style.left).toBe(
-      `${String(
-        DEFAULT_CHALLENGER_CHEVRON_SETTINGS.horizontalPositionPercent,
-      )}%`,
+    expect(playerChevron?.querySelector("svg")?.getAttribute("viewBox")).toBe(
+      "0 0 50 50",
     );
-    expect(playerChevron?.style.top).toBe(
-      `${String(DEFAULT_CHALLENGER_CHEVRON_SETTINGS.verticalPositionPercent)}%`,
-    );
+    expect(
+      playerChevron?.querySelector("svg")?.getAttribute("preserveAspectRatio"),
+    ).toBe("xMidYMid meet");
+    expect(
+      playerChevron?.querySelectorAll("polyline")[1]?.getAttribute("points"),
+    ).toBe("13,32 25,19 37,32");
     expect(
       playerChevron?.querySelectorAll("polyline")[0]?.getAttribute("stroke"),
     ).toBe("var(--surface-status-badge)");
     expect(
       playerChevron?.querySelectorAll("polyline")[1]?.getAttribute("stroke"),
-    ).toBe(DEFAULT_CHALLENGER_CHEVRON_SETTINGS.color);
+    ).toBe("var(--battle-challenger-chevron)");
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-battle-play-area="player"]',
+      )?.style.zIndex,
+    ).toBe("6");
     expect(
       container.querySelector('[data-battle-challenger-chevron="enemy"]'),
     ).toBeNull();
@@ -500,12 +479,15 @@ describe("MobileBattleScreen", () => {
     );
     expect(enemyChevron?.dataset.battleChallengerChevronDirection).toBe("down");
     expect(enemyChevron?.style.top).toBe("");
-    expect(enemyChevron?.style.bottom).toBe(
-      `${String(DEFAULT_CHALLENGER_CHEVRON_SETTINGS.verticalPositionPercent)}%`,
-    );
+    expect(enemyChevron?.style.bottom).toBe("-4%");
     expect(enemyChevron?.querySelector("svg")?.style.transform).toBe(
       "rotate(180deg)",
     );
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-battle-play-area="enemy"]',
+      )?.style.zIndex,
+    ).toBe("6");
 
     act(() => root.unmount());
   });
@@ -3219,6 +3201,11 @@ describe("MobileBattleScreen", () => {
       container.querySelector('[data-testid="battle-debug-fill-asymmetric"]')
         ?.textContent,
     ).toContain("Fill 19 vs 9 + Voids");
+    expect(
+      container.querySelector(
+        '[data-testid="battle-debug-challenger-chevron-tweaks"]',
+      ),
+    ).toBeNull();
 
     act(() => fill?.click());
 
@@ -3227,257 +3214,6 @@ describe("MobileBattleScreen", () => {
     expect(trigger?.getAttribute("aria-expanded")).toBe("false");
     expect(
       container.querySelector('[data-testid="battle-debug-fill-grid"]'),
-    ).toBeNull();
-
-    act(() => root.unmount());
-  });
-
-  it("tunes challenger marker geometry, color, and visibility live", () => {
-    const baseView = makeView();
-    const player = {
-      ...baseView.player,
-      frontRank: [
-        {
-          id: "player-front-filled",
-          card: makeCard(24, "player-front-challenger"),
-        },
-      ],
-    };
-    const { container, root } = mount({
-      ...baseView,
-      near: player,
-      player,
-      phase: "dusk",
-    });
-
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="battle-debug-menu-trigger"]',
-        )
-        ?.click();
-    });
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="battle-debug-challenger-chevron-tweaks"]',
-        )
-        ?.click();
-    });
-
-    const panel = container.querySelector(
-      "[data-battle-challenger-chevron-tweaks]",
-    );
-    const customizedColor = ["#", "123456"].join("");
-    const width = panel?.querySelector<HTMLInputElement>(
-      '[data-challenger-chevron-tweak="widthPercent"]',
-    );
-    expect(panel).not.toBeNull();
-
-    act(() => {
-      if (width !== null && width !== undefined) {
-        Object.getOwnPropertyDescriptor(
-          HTMLInputElement.prototype,
-          "value",
-        )?.set?.call(width, "82");
-        width.dispatchEvent(new Event("input", { bubbles: true }));
-      }
-    });
-    act(() => {
-      const color = panel?.querySelector<HTMLInputElement>(
-        'input[aria-label="Marker color"]',
-      );
-      if (color !== null && color !== undefined) {
-        Object.getOwnPropertyDescriptor(
-          HTMLInputElement.prototype,
-          "value",
-        )?.set?.call(color, customizedColor);
-        color.dispatchEvent(new Event("input", { bubbles: true }));
-      }
-    });
-
-    const chevron = container.querySelector<HTMLElement>(
-      '[data-battle-challenger-chevron="player"]',
-    );
-    expect(chevron?.style.width).toBe("82%");
-    expect(
-      chevron?.querySelectorAll("polyline")[1]?.getAttribute("stroke"),
-    ).toBe(customizedColor);
-    const jsonReadout = panel?.querySelector(
-      "[data-battle-challenger-chevron-tweaks-json]",
-    );
-    expect(jsonReadout?.textContent).toContain('"widthPercent": 82');
-    expect(jsonReadout?.hasAttribute("data-cumulus-selectable")).toBe(true);
-
-    act(() => {
-      panel
-        ?.querySelector<HTMLInputElement>(
-          'input[aria-label="Display challenger chevrons"]',
-        )
-        ?.click();
-    });
-
-    expect(
-      container.querySelector("[data-battle-challenger-chevron]"),
-    ).toBeNull();
-    expect(
-      container.querySelector("[data-battle-challenger-chevron-tweaks]"),
-    ).not.toBeNull();
-
-    act(() => root.unmount());
-  });
-
-  it("switches between tuned challenger marker treatments", () => {
-    const baseView = makeView();
-    const player = {
-      ...baseView.player,
-      frontRank: [
-        {
-          id: "player-front-filled",
-          card: makeCard(24, "player-front-challenger"),
-        },
-      ],
-    };
-    const { container, root } = mount({
-      ...baseView,
-      near: player,
-      player,
-      phase: "dusk",
-    });
-
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="battle-debug-menu-trigger"]',
-        )
-        ?.click();
-    });
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="battle-debug-challenger-chevron-tweaks"]',
-        )
-        ?.click();
-    });
-
-    const select = container.querySelector<HTMLSelectElement>(
-      '[data-challenger-chevron-style]',
-    );
-    expect(
-      Array.from(select?.options ?? []).map((option) => option.textContent),
-    ).toEqual(
-      CHALLENGER_CHEVRON_STYLE_OPTIONS.map((option) => option.label),
-    );
-
-    act(() => {
-      if (select !== null) {
-        Object.getOwnPropertyDescriptor(
-          HTMLSelectElement.prototype,
-          "value",
-        )?.set?.call(select, "ember-crest");
-        select.dispatchEvent(new Event("change", { bubbles: true }));
-      }
-    });
-
-    const emberCrest = container.querySelector<HTMLElement>(
-      '[data-battle-challenger-chevron="player"]',
-    );
-    expect(emberCrest?.dataset.battleChallengerChevronStyle).toBe(
-      "ember-crest",
-    );
-    expect(emberCrest?.style.width).toBe(
-      `${String(CHALLENGER_CHEVRON_PRESETS["ember-crest"].widthPercent)}%`,
-    );
-    expect(emberCrest?.querySelectorAll("polyline")).toHaveLength(0);
-    expect(emberCrest?.querySelector("linearGradient")).not.toBeNull();
-    expect(
-      emberCrest?.querySelector<SVGGElement>(
-        "[data-battle-challenger-marker-animated]",
-      )?.style.animation,
-    ).toContain("battle-challenger-marker-arrival");
-    expect(
-      emberCrest?.querySelector<SVGPathElement>(
-        "[data-battle-challenger-marker-shimmer]",
-      )?.style.animation,
-    ).toContain("battle-challenger-marker-shimmer");
-
-    act(() => {
-      if (select !== null) {
-        Object.getOwnPropertyDescriptor(
-          HTMLSelectElement.prototype,
-          "value",
-        )?.set?.call(select, "frame-infusion");
-        select.dispatchEvent(new Event("change", { bubbles: true }));
-      }
-    });
-
-    const frameInfusion = container.querySelector<HTMLElement>(
-      '[data-battle-challenger-chevron="player"]',
-    );
-    expect(frameInfusion?.dataset.battleChallengerChevronStyle).toBe(
-      "frame-infusion",
-    );
-    expect(frameInfusion?.style.width).toBe(
-      `${String(CHALLENGER_CHEVRON_PRESETS["frame-infusion"].widthPercent)}%`,
-    );
-    expect(
-      frameInfusion?.querySelector("[data-battle-challenger-marker-frame]"),
-    ).not.toBeNull();
-    expect(frameInfusion?.querySelector("linearGradient")).toBeNull();
-    expect(
-      frameInfusion
-        ?.querySelector<SVGPathElement>(
-          "[data-battle-challenger-marker-breathe]",
-        )
-        ?.getAttribute("opacity"),
-    ).toBe("0.24");
-    expect(
-      frameInfusion?.querySelector<SVGPathElement>(
-        "[data-battle-challenger-marker-breathe]",
-      )?.style.animation,
-    ).toContain("battle-challenger-marker-breathe");
-
-    act(() => {
-      if (select !== null) {
-        Object.getOwnPropertyDescriptor(
-          HTMLSelectElement.prototype,
-          "value",
-        )?.set?.call(select, "circle-badge");
-        select.dispatchEvent(new Event("change", { bubbles: true }));
-      }
-    });
-
-    const circleBadge = container.querySelector<HTMLElement>(
-      '[data-battle-challenger-chevron="player"]',
-    );
-    expect(circleBadge?.dataset.battleChallengerChevronStyle).toBe(
-      "circle-badge",
-    );
-    expect(circleBadge?.style.width).toBe(
-      `${String(CHALLENGER_CHEVRON_PRESETS["circle-badge"].widthPercent)}%`,
-    );
-    expect(
-      circleBadge?.querySelector("[data-battle-challenger-marker-circle]"),
-    ).not.toBeNull();
-    expect(circleBadge?.querySelector("circle")?.getAttribute("fill")).toBe(
-      "var(--surface-status-badge)",
-    );
-    expect(circleBadge?.querySelector("svg")?.getAttribute("viewBox")).toBe(
-      "0 0 50 50",
-    );
-    expect(
-      circleBadge?.querySelector("svg")?.getAttribute("preserveAspectRatio"),
-    ).toBe("xMidYMid meet");
-    expect(
-      circleBadge?.querySelectorAll("polyline")[1]?.getAttribute("points"),
-    ).toBe("13,32 25,19 37,32");
-    expect(
-      container.querySelector<HTMLElement>(
-        '[data-battle-play-area="player"]',
-      )?.style.overflow,
-    ).toBe("visible");
-    expect(
-      circleBadge?.querySelector("[data-battle-challenger-marker-animated]"),
     ).toBeNull();
 
     act(() => root.unmount());

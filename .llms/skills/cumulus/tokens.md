@@ -205,8 +205,6 @@ Durations, easings, and the two material-continuity transitions (object-travel, 
 | `--dur-loading-dot-cycle` | `1200ms` |  |
 | `--dur-tutorial-dreamwell-emerge` | `1000ms` |  |
 | `--dur-tutorial-character-reposition` | `1000ms` |  |
-| `--dur-battle-challenger-shimmer` | `2400ms` |  |
-| `--dur-battle-challenger-breathe` | `3200ms` |  |
 | `--stagger-loading-dot` | `180ms` |  |
 | `--motion-object-travel` | `420ms var(--ease-out)` |  |
 | `--stagger-travel` | `55ms` |  |
@@ -260,9 +258,6 @@ Re-exports under the production codebase's --dt-* and --color-* token names. Gam
 | --- | --- | --- |
 | `--tutorial-dissolve-fragment` | `var(--primitive-line-black)` | true-black card fragments during the tutorial dissolve |
 | `--battle-challenger-chevron` | `var(--primitive-orange-400)` |  |
-| `--battle-challenger-crest-highlight` | `var(--primitive-gold-300)` |  |
-| `--battle-challenger-crest-shadow` | `var(--primitive-ember-600)` |  |
-| `--battle-challenger-marker-glow` | `drop-shadow(0 0 6px currentColor)` |  |
 | `--atlas-map-background` | `radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612)` |  |
 | `--atlas-edge-dim` | `rgba(206, 192, 236, 0.92)` |  |
 | `--atlas-edge-locked` | `rgba(182, 154, 248, 0.9)` |  |

@@ -189,9 +189,6 @@
   --surface-chrome-strong: #120e1c;  /* solid, deeper chrome for windows */
   --surface-status-badge: var(--primitive-line-black); /* high-contrast in-card status mark */
   --battle-challenger-chevron: var(--primitive-orange-400);
-  --battle-challenger-crest-highlight: var(--primitive-gold-300);
-  --battle-challenger-crest-shadow: var(--primitive-ember-600);
-  --battle-challenger-marker-glow: drop-shadow(0 0 6px currentColor);
   --surface-placeholder: var(--primitive-neutral-500); /* content reserved for imminent media */
   --surface-portrait: var(--primitive-neutral-300); /* light neutral field behind framed character art */
 
@@ -581,8 +578,6 @@
   --dur-loading-dot-cycle: 1200ms;  /* @kind other */
   --dur-tutorial-dreamwell-emerge: 1000ms;  /* @kind other */
   --dur-tutorial-character-reposition: 1000ms;  /* @kind other */
-  --dur-battle-challenger-shimmer: 2400ms;  /* @kind other */
-  --dur-battle-challenger-breathe: 3200ms;  /* @kind other */
   --stagger-loading-dot: 180ms;  /* @kind other */
 
   /* ---- Material-continuity motion ----

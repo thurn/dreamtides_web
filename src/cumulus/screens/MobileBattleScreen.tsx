@@ -1,7 +1,6 @@
 import {
   useCallback,
   useEffect,
-  useId,
   useRef,
   useState,
   type CSSProperties,
@@ -64,11 +63,6 @@ import {
   type MobileBattleResultAction,
   type MobileBattleResultView,
 } from "./BattleResultSurface";
-import { ChallengerChevronTweaksPanel } from "./devtools/ChallengerChevronTweaks";
-import {
-  DEFAULT_CHALLENGER_CHEVRON_SETTINGS,
-  type ChallengerChevronSettings,
-} from "./challenger-chevron";
 import battleBackgroundUrl from "../assets/battle-background.png";
 
 /** Canonical visual treatment for an exhausted battlefield card body. */
@@ -517,8 +511,6 @@ const PHASE_LIGHT_STREAK_HEIGHT = 2;
 const PHASE_COMET_TAIL_START_SCALE = 0.35;
 const PHASE_COMET_TAIL_PEAK_SCALE = 1.55;
 const PHASE_CHALLENGE_PULSE_PEAK_SCALE = 1.65;
-const CHALLENGER_MARKER_ARRIVAL_SCALE = 0.72;
-const CHALLENGER_MARKER_OVERSHOOT_SCALE = 1.08;
 // Five slow motion beats: arrive, settle, hold, and dissolve. The timer only
 // removes the inert presentation layer after its token-driven motion finishes.
 const TURN_ANNOUNCEMENT_DURATION_MS = 2_100;
@@ -604,23 +596,6 @@ const BATTLE_PHASE_LIGHT_CSS = `
     45% { transform: translate(-50%, -50%) scale(${String(PHASE_CHALLENGE_PULSE_PEAK_SCALE)}); opacity: 0.48; }
   }
 
-  @keyframes battle-challenger-marker-arrival {
-    0% { opacity: 0; transform: scale(${String(CHALLENGER_MARKER_ARRIVAL_SCALE)}); }
-    68% { opacity: 1; transform: scale(${String(CHALLENGER_MARKER_OVERSHOOT_SCALE)}); }
-    100% { opacity: 1; transform: scale(1); }
-  }
-
-  @keyframes battle-challenger-marker-shimmer {
-    from { stroke-dashoffset: 124; opacity: 0; }
-    18% { opacity: 0.9; }
-    42%, 100% { stroke-dashoffset: 0; opacity: 0; }
-  }
-
-  @keyframes battle-challenger-marker-breathe {
-    0%, 100% { opacity: 0.24; }
-    50% { opacity: 0.62; }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     [data-battle-turn-announcement-disc],
     [data-battle-turn-announcement-orbit],
@@ -628,10 +603,7 @@ const BATTLE_PHASE_LIGHT_CSS = `
     [data-battle-turn-announcement-copy],
     [data-battle-phase-light],
     [data-battle-phase-light-halo],
-    [data-battle-phase-light-streak],
-    [data-battle-challenger-marker-animated],
-    [data-battle-challenger-marker-shimmer],
-    [data-battle-challenger-marker-breathe] {
+    [data-battle-phase-light-streak] {
       animation: none !important;
       transition: none !important;
     }
@@ -658,6 +630,8 @@ const BATTLEFIELD_RANK_Z_INDEX = {
   front: 2,
   dragging: 4,
 } as const;
+const BATTLEFIELD_CHALLENGER_PLAY_AREA_Z_INDEX =
+  BATTLEFIELD_RANK_Z_INDEX.dragging + 2;
 // The Dreamwell extends outside its transformed side-zone row, so that row
 // must clear both battlefield-rank stacking contexts while the card is visible.
 const DREAMWELL_SIDE_ZONE_Z_INDEX = BATTLEFIELD_RANK_Z_INDEX.dragging + 1;
@@ -1415,15 +1389,9 @@ function inverseLinearTransform(element: HTMLElement | null): LinearTransform {
 
 function ChallengerChevron({
   owner,
-  settings,
 }: {
   readonly owner: MobileBattleOwner;
-  readonly settings: ChallengerChevronSettings;
 }) {
-  const crestGradientId = useId();
-  const outerStrokeWidth = settings.strokeWidth + settings.outlineWidth * 2;
-  const framePath = "M4 44 C24 27 38 25 50 6 C62 25 76 27 96 44";
-  const crestPath = "M6 46 L50 3 L94 46 L72 46 L50 24 L28 46 Z";
   return (
     <div
       role="img"
@@ -1432,33 +1400,22 @@ function ChallengerChevron({
       data-battle-challenger-chevron-direction={
         owner === "enemy" ? "down" : "up"
       }
-      data-battle-challenger-chevron-style={settings.style}
+      data-battle-challenger-chevron-style="circle-badge"
       style={{
         position: "absolute",
         zIndex: 7,
-        top:
-          owner === "enemy"
-            ? undefined
-            : `${String(settings.verticalPositionPercent)}%`,
-        bottom:
-          owner === "enemy"
-            ? `${String(settings.verticalPositionPercent)}%`
-            : undefined,
-        left: `${String(settings.horizontalPositionPercent)}%`,
-        width: `${String(settings.widthPercent)}%`,
-        height: `${String(settings.heightPercent)}%`,
-        opacity: settings.opacity,
+        top: owner === "enemy" ? undefined : "-4%",
+        bottom: owner === "enemy" ? "-4%" : undefined,
+        left: "50%",
+        width: "22%",
+        height: "16%",
         pointerEvents: "none",
         transform: "translateX(-50%)",
       }}
     >
       <svg
-        viewBox={
-          settings.style === "circle-badge" ? "0 0 50 50" : "0 0 100 50"
-        }
-        preserveAspectRatio={
-          settings.style === "circle-badge" ? "xMidYMid meet" : "none"
-        }
+        viewBox="0 0 50 50"
+        preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"
         style={{
           display: "block",
@@ -1467,176 +1424,32 @@ function ChallengerChevron({
           overflow: "visible",
           transform: owner === "enemy" ? "rotate(180deg)" : undefined,
           transformOrigin: "50% 50%",
-          color: settings.color,
-          filter:
-            settings.style === "ember-crest" ||
-            settings.style === "frame-infusion"
-              ? token("--battle-challenger-marker-glow")
-              : undefined,
         }}
       >
-        {settings.style === "classic" ? (
-          <>
-            <polyline
-              points="6,44 50,6 94,44"
-              fill="none"
-              stroke={token("--surface-status-badge")}
-              strokeWidth={outerStrokeWidth}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <polyline
-              points="6,44 50,6 94,44"
-              fill="none"
-              stroke={settings.color}
-              strokeWidth={settings.strokeWidth}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </>
-        ) : null}
-        {settings.style === "circle-badge" ? (
-          <g data-battle-challenger-marker-circle="">
-            <circle
-              cx="25"
-              cy="25"
-              r="23"
-              fill={token("--surface-status-badge")}
-            />
-            <polyline
-              points="13,32 25,19 37,32"
-              fill="none"
-              stroke={token("--surface-status-badge")}
-              strokeWidth={outerStrokeWidth}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <polyline
-              points="13,32 25,19 37,32"
-              fill="none"
-              stroke={settings.color}
-              strokeWidth={settings.strokeWidth}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </g>
-        ) : null}
-        {settings.style === "ember-crest" ? (
-          <g
-            data-battle-challenger-marker-animated=""
-            style={{
-              transformBox: "fill-box",
-              transformOrigin: "center",
-              animation: `battle-challenger-marker-arrival ${token("--dur-slow")} ${token("--ease-out")} both`,
-            }}
-          >
-            <defs>
-              <linearGradient
-                id={crestGradientId}
-                x1="0"
-                y1="1"
-                x2="0"
-                y2="0"
-              >
-                <stop
-                  offset="0%"
-                  stopColor={token("--battle-challenger-crest-shadow")}
-                />
-                <stop offset="58%" stopColor={settings.color} />
-                <stop
-                  offset="100%"
-                  stopColor={token("--battle-challenger-crest-highlight")}
-                />
-              </linearGradient>
-            </defs>
-            <path
-              d={crestPath}
-              fill={token("--surface-status-badge")}
-              stroke={token("--surface-status-badge")}
-              strokeWidth={settings.outlineWidth * 2}
-              strokeLinejoin="round"
-            />
-            <path
-              d={crestPath}
-              fill={`url(#${crestGradientId})`}
-              stroke={settings.color}
-              strokeWidth={Math.max(1, settings.strokeWidth / 6)}
-              strokeLinejoin="round"
-            />
-            <path
-              d="M50 10 L56 18 L50 26 L44 18 Z"
-              fill={token("--text-on-accent")}
-              opacity={0.72}
-            />
-            <path
-              d="M18 43 L50 10 L82 43"
-              data-battle-challenger-marker-shimmer=""
-              fill="none"
-              stroke={token("--text-on-accent")}
-              strokeWidth={Math.max(1, settings.strokeWidth / 5)}
-              strokeDasharray="14 110"
-              strokeLinecap="round"
-              opacity={0}
-              style={{
-                animation: `battle-challenger-marker-shimmer ${token("--dur-battle-challenger-shimmer")} linear infinite`,
-              }}
-            />
-          </g>
-        ) : null}
-        {settings.style === "frame-infusion" ? (
-          <g
-            data-battle-challenger-marker-animated=""
-            data-battle-challenger-marker-frame=""
-            style={{
-              transformBox: "fill-box",
-              transformOrigin: "center",
-              animation: `battle-challenger-marker-arrival ${token("--dur-slow")} ${token("--ease-out")} both`,
-            }}
-          >
-            <path
-              d={framePath}
-              fill="none"
-              stroke={token("--surface-status-badge")}
-              strokeWidth={outerStrokeWidth}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d={framePath}
-              data-battle-challenger-marker-breathe=""
-              fill="none"
-              stroke={settings.color}
-              strokeWidth={settings.strokeWidth * 1.8}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              opacity={0.24}
-              style={{
-                animation: `battle-challenger-marker-breathe ${token("--dur-battle-challenger-breathe")} ${token("--ease-in-out")} infinite`,
-              }}
-            />
-            <path
-              d={framePath}
-              fill="none"
-              stroke={settings.color}
-              strokeWidth={settings.strokeWidth}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d={framePath}
-              data-battle-challenger-marker-shimmer=""
-              fill="none"
-              stroke={token("--battle-challenger-crest-highlight")}
-              strokeWidth={Math.max(1, settings.strokeWidth / 3)}
-              strokeDasharray="18 106"
-              strokeLinecap="round"
-              opacity={0}
-              style={{
-                animation: `battle-challenger-marker-shimmer ${token("--dur-battle-challenger-shimmer")} linear infinite`,
-              }}
-            />
-          </g>
-        ) : null}
+        <g data-battle-challenger-marker-circle="">
+          <circle
+            cx="25"
+            cy="25"
+            r="23"
+            fill={token("--surface-status-badge")}
+          />
+          <polyline
+            points="13,32 25,19 37,32"
+            fill="none"
+            stroke={token("--surface-status-badge")}
+            strokeWidth={7}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <polyline
+            points="13,32 25,19 37,32"
+            fill="none"
+            stroke={token("--battle-challenger-chevron")}
+            strokeWidth={5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </g>
       </svg>
     </div>
   );
@@ -1655,10 +1468,7 @@ function FaceUpCard({
   readonly zone: string;
   readonly showRulesText?: boolean;
   readonly snapLayout?: boolean;
-  readonly challengerChevron?: {
-    readonly owner: MobileBattleOwner;
-    readonly settings: ChallengerChevronSettings;
-  };
+  readonly challengerChevron?: MobileBattleOwner;
   readonly selection?: {
     readonly selected: boolean;
     readonly color: CumulusColor;
@@ -1970,11 +1780,8 @@ function FaceUpCard({
           figmentTitleBar={card.figmentTitleBar}
           testId={`battle-card-face:${card.id}`}
         />
-        {challengerChevron?.settings.enabled === true ? (
-          <ChallengerChevron
-            owner={challengerChevron.owner}
-            settings={challengerChevron.settings}
-          />
+        {challengerChevron !== undefined ? (
+          <ChallengerChevron owner={challengerChevron} />
         ) : null}
       </motion.div>
       <BattleCardStatusIndicators card={card} />
@@ -2246,7 +2053,6 @@ function Rank({
   guidedSlotHighlight,
   preserveOccupiedSlotOutlines,
   showChallengerChevrons,
-  challengerChevronSettings,
   interactions,
 }: {
   readonly isDesktop: boolean;
@@ -2271,7 +2077,6 @@ function Rank({
   readonly guidedSlotHighlight?: MobileBattleScreenProps["guidedSlotHighlight"];
   readonly preserveOccupiedSlotOutlines?: boolean;
   readonly showChallengerChevrons: boolean;
-  readonly challengerChevronSettings: ChallengerChevronSettings;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const canDropOnOwner =
@@ -2456,7 +2261,7 @@ function Rank({
                     showChallengerChevrons &&
                     rank === "front" &&
                     slot.card.model.displaySnapshot.cardType === "Character"
-                      ? { owner, settings: challengerChevronSettings }
+                      ? owner
                       : undefined
                   }
                   selection={
@@ -2559,7 +2364,6 @@ function PlayArea({
   guidedSlotHighlight,
   preserveOccupiedSlotOutlines,
   showChallengerChevrons,
-  challengerChevronSettings,
   interactions,
 }: {
   readonly isDesktop: boolean;
@@ -2582,7 +2386,6 @@ function PlayArea({
   readonly guidedSlotHighlight?: MobileBattleScreenProps["guidedSlotHighlight"];
   readonly preserveOccupiedSlotOutlines?: boolean;
   readonly showChallengerChevrons: boolean;
-  readonly challengerChevronSettings: ChallengerChevronSettings;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const ranks =
@@ -2602,11 +2405,10 @@ function PlayArea({
       style={{
         ...ROW_STYLE,
         gridRow: position === "far" ? 3 : 4,
-        overflow:
-          showChallengerChevrons &&
-          challengerChevronSettings.style === "circle-badge"
-            ? "visible"
-            : "hidden",
+        overflow: showChallengerChevrons ? "visible" : "hidden",
+        zIndex: showChallengerChevrons
+          ? BATTLEFIELD_CHALLENGER_PLAY_AREA_Z_INDEX
+          : undefined,
         containerType: "size",
       }}
     >
@@ -2632,7 +2434,6 @@ function PlayArea({
           guidedSlotHighlight={guidedSlotHighlight}
           preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines}
           showChallengerChevrons={showChallengerChevrons}
-          challengerChevronSettings={challengerChevronSettings}
           interactions={interactions}
         />
       ))}
@@ -3536,11 +3337,9 @@ function BattleControlMessage({
 function BattleDebugMenu({
   onFillBattlefieldPreview,
   onFillAsymmetricBattlefieldPreview,
-  onOpenChallengerChevronTweaks,
 }: {
   readonly onFillBattlefieldPreview?: () => void;
   readonly onFillAsymmetricBattlefieldPreview?: () => void;
-  readonly onOpenChallengerChevronTweaks?: () => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -3603,17 +3402,6 @@ function BattleDebugMenu({
                   setIsOpen(false);
                 }}
               />
-              {onOpenChallengerChevronTweaks !== undefined ? (
-                <GlassButton
-                  label="Challenger Chevron Tweaks"
-                  placement="onGlass"
-                  testId="battle-debug-challenger-chevron-tweaks"
-                  onPress={() => {
-                    onOpenChallengerChevronTweaks();
-                    setIsOpen(false);
-                  }}
-                />
-              ) : null}
             </div>
           </GlassPanel>
         </div>
@@ -4291,10 +4079,6 @@ export function MobileBattleScreen({
     readonly pickerKey: string | null;
     readonly ids: readonly string[];
   }>({ pickerKey: null, ids: [] });
-  const [challengerChevronSettings, setChallengerChevronSettings] =
-    useState<ChallengerChevronSettings>(DEFAULT_CHALLENGER_CHEVRON_SETTINGS);
-  const [isChallengerChevronTweaksOpen, setIsChallengerChevronTweaksOpen] =
-    useState(false);
   const [selectedSide, setSelectedSide] = useState<MobileBattleOwner>("player");
   const [completedTurnAnnouncement, setCompletedTurnAnnouncement] = useState<{
     readonly battleId: string;
@@ -4594,7 +4378,6 @@ export function MobileBattleScreen({
           showChallengerChevrons={
             activeSideHasChallengers && far.owner === view.activeSide
           }
-          challengerChevronSettings={challengerChevronSettings}
           interactions={interactions}
         />
         <PlayArea
@@ -4617,7 +4400,6 @@ export function MobileBattleScreen({
           showChallengerChevrons={
             activeSideHasChallengers && near.owner === view.activeSide
           }
-          challengerChevronSettings={challengerChevronSettings}
           interactions={interactions}
         />
         <ControlRow
@@ -4717,11 +4499,6 @@ export function MobileBattleScreen({
             onFillAsymmetricBattlefieldPreview={
               interactions?.onFillAsymmetricBattlefieldPreview
             }
-            onOpenChallengerChevronTweaks={
-              import.meta.env.DEV
-                ? () => setIsChallengerChevronTweaksOpen(true)
-                : undefined
-            }
           />
           <div
             ref={(node) => {
@@ -4755,25 +4532,6 @@ export function MobileBattleScreen({
           </div>
         </div>
       ) : null}
-      {import.meta.env.DEV && inspectorVisibility === "hidden" ? (
-        <div
-          data-battle-challenger-chevron-tweaks-trigger=""
-          style={{
-            position: "absolute",
-            top: `calc(var(${SAFE_AREA_INSET_PROPERTIES.top}) + ${token("--space-4")})`,
-            right: `calc(var(${SAFE_AREA_INSET_PROPERTIES.right}) + ${token("--space-4")})`,
-            zIndex: 20,
-          }}
-        >
-          <IconButton
-            glyph={GLYPHS.gear}
-            size="sm"
-            label="Open challenger chevron tweaks"
-            testId="battle-challenger-chevron-tweaks-trigger"
-            onPress={() => setIsChallengerChevronTweaksOpen(true)}
-          />
-        </div>
-      ) : null}
       {galleryCardPicker !== null ? (
         <CardPickerGallery
           cardPicker={galleryCardPicker}
@@ -4782,13 +4540,6 @@ export function MobileBattleScreen({
           onPickerCardToggle={handlePickerCardToggle}
           interactions={interactions}
           perspective={view.perspective}
-        />
-      ) : null}
-      {import.meta.env.DEV && isChallengerChevronTweaksOpen ? (
-        <ChallengerChevronTweaksPanel
-          settings={challengerChevronSettings}
-          onChange={setChallengerChevronSettings}
-          onClose={() => setIsChallengerChevronTweaksOpen(false)}
         />
       ) : null}
     </main>
