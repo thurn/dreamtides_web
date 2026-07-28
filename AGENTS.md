@@ -17,6 +17,8 @@ fix flagged issues:
 
  ~/.llms/skills/independent-review
 
+Run one independent review per session, there is no need to re-run it for follow-up tasks.
+
 Dreamtides battle rules are in docs/battle_rules/battle_rules.md
 
 Write deterministic tests against stable observable contracts using synthetic fixtures; never gate CI on mutable production data, copy, default algorithm choices, private implementation details, statistical or timing thresholds, load-sensitive behavior, or commands that reference deleted tests.
