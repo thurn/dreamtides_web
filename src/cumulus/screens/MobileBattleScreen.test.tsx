@@ -3466,6 +3466,12 @@ describe("MobileBattleScreen", () => {
       "0 0 50 50",
     );
     expect(
+      circleBadge?.querySelector("svg")?.getAttribute("preserveAspectRatio"),
+    ).toBe("xMidYMid meet");
+    expect(
+      circleBadge?.querySelectorAll("polyline")[1]?.getAttribute("points"),
+    ).toBe("13,32 25,19 37,32");
+    expect(
       circleBadge?.querySelector("[data-battle-challenger-marker-animated]"),
     ).toBeNull();
 

@@ -1456,7 +1456,9 @@ function ChallengerChevron({
         viewBox={
           settings.style === "circle-badge" ? "0 0 50 50" : "0 0 100 50"
         }
-        preserveAspectRatio="none"
+        preserveAspectRatio={
+          settings.style === "circle-badge" ? "xMidYMid meet" : "none"
+        }
         aria-hidden="true"
         style={{
           display: "block",
@@ -1502,7 +1504,7 @@ function ChallengerChevron({
               fill={token("--surface-status-badge")}
             />
             <polyline
-              points="10,34 25,16 40,34"
+              points="13,32 25,19 37,32"
               fill="none"
               stroke={token("--surface-status-badge")}
               strokeWidth={outerStrokeWidth}
@@ -1510,7 +1512,7 @@ function ChallengerChevron({
               strokeLinejoin="round"
             />
             <polyline
-              points="10,34 25,16 40,34"
+              points="13,32 25,19 37,32"
               fill="none"
               stroke={settings.color}
               strokeWidth={settings.strokeWidth}
