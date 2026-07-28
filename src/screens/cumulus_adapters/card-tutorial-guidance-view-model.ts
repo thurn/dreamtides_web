@@ -24,7 +24,7 @@ export function buildCardTutorialGuidanceView(
       speakerName: "Mira",
       text: presentation.text,
     },
-    horizontalOffset: 0,
+    horizontalOffset: presentation.horizontalOffset,
     verticalOffset: presentation.verticalOffset,
     bubbleWidth: presentation.bubbleWidth,
     source: {

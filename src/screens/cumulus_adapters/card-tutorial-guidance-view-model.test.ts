@@ -29,6 +29,7 @@ describe("buildCardTutorialGuidanceView", () => {
         speaker: "mira",
         text: "Support helps the character in front.",
         duration: 5,
+        horizontalOffset: 24,
         verticalOffset: -20,
         bubbleWidth: 420,
       },
@@ -39,6 +40,7 @@ describe("buildCardTutorialGuidanceView", () => {
       presentationId: "card-tutorial:fixture",
       triggerId: "support",
       duration: 5,
+      horizontalOffset: 24,
       verticalOffset: -20,
       bubbleWidth: 420,
       dialogue: {

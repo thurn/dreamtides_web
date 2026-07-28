@@ -1,8 +1,0 @@
-`npm run review` typechecking fails because two tutorial guidance fixtures omit
-the required `horizontalOffset` field:
-
-- `src/rules/card-tutorial-guidance.test.ts:42`
-- `src/screens/cumulus_adapters/card-tutorial-guidance-view-model.ts:15`
-
-Both values are typed as models that now require `horizontalOffset`; neither
-file is related to the Card Editor reveal-boundary fix.

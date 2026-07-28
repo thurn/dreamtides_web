@@ -146,6 +146,7 @@ export function JourneyCardTutorialController({
       triggerId: confirmed.triggerId,
       speaker: confirmed.speaker,
       duration: confirmed.duration,
+      horizontalOffset: confirmed.horizontalOffset,
       verticalOffset: confirmed.verticalOffset,
       bubbleWidth: confirmed.bubbleWidth,
     });

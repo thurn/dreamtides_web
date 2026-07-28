@@ -235,6 +235,7 @@ describe("PICK_DRAFT_CARD", () => {
         speaker: "mira",
         text: "Support explained.",
         duration: 4,
+        horizontalOffset: 0,
         verticalOffset: 0,
         bubbleWidth: 500,
       },

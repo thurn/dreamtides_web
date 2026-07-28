@@ -12,6 +12,7 @@ export interface CardTutorialGuidancePresentation {
   readonly speaker: TutorialTriggerDefinition["speaker"];
   readonly text: string;
   readonly duration: number;
+  readonly horizontalOffset: number;
   readonly verticalOffset: number;
   readonly bubbleWidth: number;
 }
@@ -189,6 +190,7 @@ export function openCardTutorialGuidance(
       speaker: match.trigger.speaker,
       text: match.trigger.text,
       duration: match.trigger.duration,
+      horizontalOffset: match.trigger.horizontalOffset,
       verticalOffset: match.trigger.verticalOffset,
       bubbleWidth: match.trigger.bubbleWidth,
     },
