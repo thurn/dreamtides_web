@@ -1463,6 +1463,7 @@ function ChallengerChevron({
           overflow: "visible",
           transform: owner === "enemy" ? "rotate(180deg)" : undefined,
           transformOrigin: "50% 50%",
+          color: settings.color,
           filter:
             settings.style === "classic"
               ? undefined
@@ -1554,6 +1555,7 @@ function ChallengerChevron({
         {settings.style === "frame-infusion" ? (
           <g
             data-battle-challenger-marker-animated=""
+            data-battle-challenger-marker-frame=""
             style={{
               transformBox: "fill-box",
               transformOrigin: "center",
@@ -1576,6 +1578,7 @@ function ChallengerChevron({
               strokeWidth={settings.strokeWidth * 1.8}
               strokeLinecap="round"
               strokeLinejoin="round"
+              opacity={0.24}
               style={{
                 animation: `battle-challenger-marker-breathe ${token("--dur-battle-challenger-breathe")} ${token("--ease-in-out")} infinite`,
               }}

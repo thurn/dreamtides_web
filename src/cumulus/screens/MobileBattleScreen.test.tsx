@@ -20,6 +20,7 @@ import {
 } from "./MobileBattleScreen";
 import {
   CHALLENGER_CHEVRON_PRESETS,
+  CHALLENGER_CHEVRON_STYLE_OPTIONS,
   DEFAULT_CHALLENGER_CHEVRON_SETTINGS,
 } from "./challenger-chevron";
 
@@ -3364,7 +3365,9 @@ describe("MobileBattleScreen", () => {
     );
     expect(
       Array.from(select?.options ?? []).map((option) => option.textContent),
-    ).toEqual(["Classic", "Ember Crest", "Frame Infusion"]);
+    ).toEqual(
+      CHALLENGER_CHEVRON_STYLE_OPTIONS.map((option) => option.label),
+    );
 
     act(() => {
       if (select !== null) {
@@ -3418,10 +3421,16 @@ describe("MobileBattleScreen", () => {
       `${String(CHALLENGER_CHEVRON_PRESETS["frame-infusion"].widthPercent)}%`,
     );
     expect(
-      frameInfusion?.querySelectorAll(
-        'path[d="M4 44 C24 27 38 25 50 6 C62 25 76 27 96 44"]',
-      ),
-    ).toHaveLength(4);
+      frameInfusion?.querySelector("[data-battle-challenger-marker-frame]"),
+    ).not.toBeNull();
+    expect(frameInfusion?.querySelector("linearGradient")).toBeNull();
+    expect(
+      frameInfusion
+        ?.querySelector<SVGPathElement>(
+          "[data-battle-challenger-marker-breathe]",
+        )
+        ?.getAttribute("opacity"),
+    ).toBe("0.24");
     expect(
       frameInfusion?.querySelector<SVGPathElement>(
         "[data-battle-challenger-marker-breathe]",

@@ -103,7 +103,7 @@ export const TOKENS = {
   "--battle-challenger-chevron": { var: "var(--battle-challenger-chevron)", value: "var(--primitive-orange-400)" },
   "--battle-challenger-crest-highlight": { var: "var(--battle-challenger-crest-highlight)", value: "var(--primitive-gold-300)" },
   "--battle-challenger-crest-shadow": { var: "var(--battle-challenger-crest-shadow)", value: "var(--primitive-ember-600)" },
-  "--battle-challenger-marker-glow": { var: "var(--battle-challenger-marker-glow)", value: "drop-shadow(0 0 6px rgba(251, 191, 36, 0.72))" },
+  "--battle-challenger-marker-glow": { var: "var(--battle-challenger-marker-glow)", value: "drop-shadow(0 0 6px currentColor)" },
   "--surface-placeholder": { var: "var(--surface-placeholder)", value: "var(--primitive-neutral-500)" },
   "--surface-portrait": { var: "var(--surface-portrait)", value: "var(--primitive-neutral-300)" },
   "--atlas-map-background": { var: "var(--atlas-map-background)", value: "radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612)" },

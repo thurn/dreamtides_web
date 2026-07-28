@@ -262,7 +262,7 @@ Re-exports under the production codebase's --dt-* and --color-* token names. Gam
 | `--battle-challenger-chevron` | `var(--primitive-orange-400)` |  |
 | `--battle-challenger-crest-highlight` | `var(--primitive-gold-300)` |  |
 | `--battle-challenger-crest-shadow` | `var(--primitive-ember-600)` |  |
-| `--battle-challenger-marker-glow` | `drop-shadow(0 0 6px rgba(251, 191, 36, 0.72))` |  |
+| `--battle-challenger-marker-glow` | `drop-shadow(0 0 6px currentColor)` |  |
 | `--atlas-map-background` | `radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612)` |  |
 | `--atlas-edge-dim` | `rgba(206, 192, 236, 0.92)` |  |
 | `--atlas-edge-locked` | `rgba(182, 154, 248, 0.9)` |  |

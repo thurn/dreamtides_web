@@ -191,7 +191,7 @@
   --battle-challenger-chevron: var(--primitive-orange-400);
   --battle-challenger-crest-highlight: var(--primitive-gold-300);
   --battle-challenger-crest-shadow: var(--primitive-ember-600);
-  --battle-challenger-marker-glow: drop-shadow(0 0 6px rgba(251, 191, 36, 0.72));
+  --battle-challenger-marker-glow: drop-shadow(0 0 6px currentColor);
   --surface-placeholder: var(--primitive-neutral-500); /* content reserved for imminent media */
   --surface-portrait: var(--primitive-neutral-300); /* light neutral field behind framed character art */
 
