@@ -5,7 +5,12 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { Dreamsign } from "./Dreamsign";
 import type { Dreamsign as DreamsignData } from "../../../types/journey";
-import { GLOSSARY, type GlossaryEntry } from "../../../data/glossary";
+import {
+  GLOSSARY,
+  GLOSSARY_IDS,
+  requireGlossaryEntry,
+  type GlossaryEntry,
+} from "../../../data/glossary";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
 import { CumulusRoot } from "../../CumulusRoot";
 
@@ -79,6 +84,48 @@ describe("Dreamsign", () => {
     expect(description?.textContent).toContain(effect);
     expect(description?.textContent).toContain(entry.definition);
   });
+
+  it.each([
+    {
+      id: "553D2317-32F9-47BC-BAE0-5018CA26D56A",
+      effect:
+        "The first ❖ card you play during the opponent's turn costs 1● less.",
+      glossaryId: GLOSSARY_IDS.fast,
+    },
+    {
+      id: "D2A916C1-321A-4AE3-9A50-0B7F13C5EFF6",
+      effect: "You may play ❖❖ events for 1●.",
+      glossaryId: GLOSSARY_IDS.interrupt,
+    },
+  ])(
+    "keeps $glossaryId card timing prose on the card definition",
+    ({ id, effect, glossaryId }) => {
+      const sign = makeDreamsign({
+        id,
+        name: "Card timing sign",
+        effectDescription: effect,
+      });
+      const { container, root } = mountInto(
+        <Dreamsign dreamsign={sign} sizePx={64} />,
+      );
+      const tile = container.querySelector<HTMLElement>(
+        '[data-testid="dreamsign-art-tile"]',
+      );
+      const description = document.getElementById(
+        tile?.getAttribute("aria-describedby") ?? "",
+      );
+
+      expect(description?.textContent).toContain(
+        requireGlossaryEntry(glossaryId).definition,
+      );
+      expect(description?.textContent).not.toContain("ability may be activated");
+
+      act(() => {
+        root.unmount();
+      });
+    },
+  );
+
   it("requires a stable dreamsign id for render data attributes", () => {
     const sign = makeDreamsign({ name: "Nameless Id", id: undefined });
     delete sign.id;

@@ -363,6 +363,61 @@ describe("GameCard reveal contract", () => {
     },
   );
 
+  it.each([
+    {
+      label: "fast",
+      renderedText: "❖ – Draw a card.",
+      definition:
+        "A fast (❖) ability may be activated at the end of either player's turn.",
+      iconCount: 1,
+    },
+    {
+      label: "interrupt",
+      renderedText: "❖❖ – Draw a card.",
+      definition:
+        "An interrupt (❖❖) ability may be activated in response to an opponent action, or at the end of either player's turn.",
+      iconCount: 2,
+    },
+  ])(
+    "describes a $label rules-text marker as an ability",
+    async ({ renderedText, definition, iconCount }) => {
+      const { container, root } = mount(
+        <GameCard model={model(card({ renderedText }))} />,
+      );
+      const source = container.querySelector<HTMLElement>(
+        "[data-game-card-source]",
+      );
+
+      act(() => {
+        source?.dispatchEvent(
+          pointer("pointerover", { pointerType: "mouse", pointerId: 1 }),
+        );
+      });
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
+      remeasure();
+
+      await vi.waitFor(() =>
+        expect(
+          document.querySelectorAll('[data-cumulus-reveal-card="secondary"]'),
+        ).toHaveLength(1),
+      );
+      const timingCard = document.querySelector<HTMLElement>(
+        '[data-cumulus-reveal-card="secondary"]',
+      );
+      expect(timingCard?.textContent).toContain(
+        definition.replace(/❖/gu, ""),
+      );
+      expect(timingCard?.textContent).not.toContain("card may be played");
+      expect(timingCard?.querySelectorAll("i.bxf.bx-bolt")).toHaveLength(
+        iconCount,
+      );
+
+      act(() => root.unmount());
+    },
+  );
+
   it("keeps the card interactive when its exhausted glossary entry is unavailable", () => {
     vi.spyOn(glossary, "glossaryEntry").mockReturnValue(undefined);
     const { container, root } = mount(

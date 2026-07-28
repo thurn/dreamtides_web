@@ -13,7 +13,11 @@
 import { CardTermDefinitions } from "../../components/card/CardTermDefinitions";
 import type { CumulusComponent } from "../registry";
 
-const SAMPLE_TEXT = "❖ ❖❖ ☪ ⍟";
+const SAMPLE_TEXT = [
+  "❖ – Draw a card.",
+  "❖❖ – Draw another card.",
+  "☪ ⍟",
+].join("\n");
 
 // CardTermDefinitions' `text` prop is required, which the registry's
 // `ComponentType<Record<string, unknown>>` signature can't satisfy directly, and

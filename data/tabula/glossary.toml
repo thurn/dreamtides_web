@@ -207,6 +207,10 @@ rules-text-forms = [ "❖" ]
 definition-uses-rules-text = true
 term-presentation = "definition-only"
 
+[[entries.contexts]]
+pattern = "(?:^|\\n)\\s*❖\\s*[–-]"
+definition = "A fast (❖) ability may be activated at the end of either player's turn."
+
 [[entries]]
 id = "interrupt"
 category = "Keywords"
@@ -218,6 +222,10 @@ variants = []
 rules-text-forms = [ "❖❖" ]
 definition-uses-rules-text = true
 term-presentation = "definition-only"
+
+[[entries.contexts]]
+pattern = "(?:^|\\n)\\s*❖❖\\s*[–-]"
+definition = "An interrupt (❖❖) ability may be activated in response to an opponent action, or at the end of either player's turn."
 
 [[entries]]
 id = "exhaust-cost"

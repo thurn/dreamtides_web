@@ -1,0 +1,1 @@
+Card Editor glossary hover reveals can be positioned beneath the sticky editor controls, leaving the Info Card visually obscured even though the reveal is present and accessible in the DOM.
