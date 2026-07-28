@@ -160,7 +160,7 @@ export interface EventPayloads {
   // is a `BattleCommand`, validated in the domain case; the whole list applies
   // all-or-nothing so no half-applied gesture can exist in the log.
   BATTLE_GESTURE: { commands: unknown[] };
-  BATTLE_AI_DEFEND: { aiSide: string };
+  BATTLE_AI_BLOCK: { aiSide: string };
   COMPLETE_TUTORIAL_BATTLE_PRESENTATION: {
     presentationId: string;
     messageIndex?: number;
@@ -309,7 +309,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   BATTLE_REPOSITION_CHARACTER: true,
   BATTLE_PLAY_CARD: true,
   BATTLE_GESTURE: true,
-  BATTLE_AI_DEFEND: true,
+  BATTLE_AI_BLOCK: true,
   COMPLETE_TUTORIAL_BATTLE_PRESENTATION: true,
   RESOLVE_PROMPT: true,
   SET_CARD_NOTE: true,

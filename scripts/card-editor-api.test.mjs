@@ -509,7 +509,7 @@ describe("createCardEditorApiMiddleware", () => {
         body: JSON.stringify({
           id: FIRST_ID,
           field: "name",
-          value: "Normalized Attack",
+          value: "Normalized Challenge",
         }),
       },
     );
@@ -535,7 +535,7 @@ describe("createCardEditorApiMiddleware", () => {
       body: JSON.stringify({
         id: decodedRouteId,
         field: "name",
-        value: "Slash Attack",
+        value: "Slash Challenge",
       }),
     });
 
@@ -653,7 +653,7 @@ describe("createCardEditorApiMiddleware", () => {
       body: JSON.stringify({
         id: uppercaseId,
         field: "name",
-        value: "Uppercase Attack",
+        value: "Uppercase Challenge",
       }),
     });
 
@@ -676,7 +676,7 @@ describe("createCardEditorApiMiddleware", () => {
       body: JSON.stringify({
         id: "not-a-uuid",
         field: "name",
-        value: "Body Attack",
+        value: "Body Challenge",
       }),
     });
 

@@ -12,7 +12,7 @@ function stateFor(
   extras: {
     driverClientId?: string;
     pendingPrompt?: unknown;
-    aiDefenseTurn?: unknown;
+    aiBlockingTurn?: unknown;
   } = {},
 ): FoldState {
   const board = boardFor(boardOverrides);
@@ -37,7 +37,7 @@ function stateFor(
       effectQueue: [],
       pendingPrompt: (extras.pendingPrompt ?? null) as never,
       dawnFired: { player: null, enemy: null },
-      ...(extras.aiDefenseTurn === undefined ? {} : { aiDefenseTurn: extras.aiDefenseTurn as never }),
+      ...(extras.aiBlockingTurn === undefined ? {} : { aiBlockingTurn: extras.aiBlockingTurn as never }),
     },
   };
 }
@@ -156,18 +156,18 @@ describe("tutorial battle controller", () => {
     expect(plan(state, OBSERVER).status).toBe("driver");
   });
 
-  it("stops at player Day and advances player Dusk through enemy defense", () => {
+  it("stops at player Day and advances player Dusk through enemy blocking", () => {
     expect(plan(stateFor()).requiresHumanDecision).toBe(true);
-    expect(plan(stateFor({ phase: "dusk" })).intent).toMatchObject({ kind: "battle-ai-defend" });
+    expect(plan(stateFor({ phase: "dusk" })).intent).toMatchObject({ kind: "battle-ai-block" });
     expect(plan(stateFor({ phase: "dusk" }, {
-      aiDefenseTurn: { activeSide: "player", turnNumber: 4 },
+      aiBlockingTurn: { activeSide: "player", turnNumber: 4 },
     })).intent).toMatchObject({
       kind: "battle-command",
       command: { edit: { kind: "SET_BATTLE_FLOW", activeSide: "enemy", phase: "dreamwell", turnNumber: 4 } },
     });
   });
 
-  it("chump-blocks lethal on a later player Dusk despite an earlier defense marker", () => {
+  it("chump-blocks lethal on a later player Dusk despite an earlier blocking marker", () => {
     const markedDirewolfBattleCardId = "e83014d3-9d35-4e80-a1b3-9b25360ad2af";
     const runeboundChampionBattleCardId =
       "a28ad36d-fa74-4190-a463-7efd3a6233d0";
@@ -195,12 +195,12 @@ describe("tutorial battle controller", () => {
             [runeboundChampionBattleCardId]: runeboundChampion,
           },
         },
-        { aiDefenseTurn: { activeSide: "player", turnNumber: 4 } },
+        { aiBlockingTurn: { activeSide: "player", turnNumber: 4 } },
       ),
     );
 
     expect(result.intent).toMatchObject({
-      kind: "battle-ai-defend",
+      kind: "battle-ai-block",
       decision: {
         opponentScore: 8,
         scoreToWin: 10,
@@ -221,7 +221,7 @@ describe("tutorial battle controller", () => {
     });
   });
 
-  it("takes a favorable block on a later player Dusk despite an earlier defense marker", () => {
+  it("takes a favorable block on a later player Dusk despite an earlier blocking marker", () => {
     const challengerBattleCardId = "229ab3a1-3720-41a2-924c-8fe112188f8e";
     const blockerBattleCardId = "a28ad36d-fa74-4190-a463-7efd3a6233d0";
     const player = side();
@@ -247,12 +247,12 @@ describe("tutorial battle controller", () => {
             [blockerBattleCardId]: blocker,
           },
         },
-        { aiDefenseTurn: { activeSide: "player", turnNumber: 4 } },
+        { aiBlockingTurn: { activeSide: "player", turnNumber: 4 } },
       ),
     );
 
     expect(result.intent).toMatchObject({
-      kind: "battle-ai-defend",
+      kind: "battle-ai-block",
       decision: {
         lethalBeforeBlocks: false,
         lanes: [
@@ -268,10 +268,10 @@ describe("tutorial battle controller", () => {
     });
   });
 
-  it("pauses for player blocking on an enemy attack and advances empty enemy Dusk", () => {
-    const attackingEnemy = side();
-    attackingEnemy.frontRank.F0 = "enemy-card-uuid";
-    expect(plan(stateFor({ activeSide: "enemy", phase: "dusk", sides: { player: side(), enemy: attackingEnemy } }))).toMatchObject({
+  it("pauses for player blocking on an enemy challenge and advances empty enemy Dusk", () => {
+    const challengingEnemy = side();
+    challengingEnemy.frontRank.F0 = "enemy-card-uuid";
+    expect(plan(stateFor({ activeSide: "enemy", phase: "dusk", sides: { player: side(), enemy: challengingEnemy } }))).toMatchObject({
       requiresHumanDecision: true,
       intent: null,
     });
@@ -379,7 +379,7 @@ describe("tutorial battle controller", () => {
       activeSide: "player",
       slotId: "F0",
       challengerBattleCardId: "player-character-uuid",
-      defenderBattleCardId: null,
+      blockerBattleCardId: null,
       scored: {
         battleCardId: "player-character-uuid",
         side: "player",

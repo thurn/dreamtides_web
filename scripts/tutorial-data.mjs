@@ -479,14 +479,14 @@ export function validateTutorialActions(value) {
         );
       }
       if (
-        typeof candidate.defenderCardId !== "string" ||
-        !CARD_UUID_PATTERN.test(candidate.defenderCardId)
+        typeof candidate.blockerCardId !== "string" ||
+        !CARD_UUID_PATTERN.test(candidate.blockerCardId)
       ) {
         throw invalid(
-          `Tutorial action ${JSON.stringify(id)} must identify the defender by UUID.`,
+          `Tutorial action ${JSON.stringify(id)} must identify the blocker by UUID.`,
         );
       }
-      if (candidate.challengerCardId === candidate.defenderCardId) {
+      if (candidate.challengerCardId === candidate.blockerCardId) {
         throw invalid(
           `Tutorial action ${JSON.stringify(id)} must identify two different challenge characters.`,
         );
@@ -495,7 +495,7 @@ export function validateTutorialActions(value) {
         id,
         action,
         challengerCardId: candidate.challengerCardId,
-        defenderCardId: candidate.defenderCardId,
+        blockerCardId: candidate.blockerCardId,
         wait,
       };
     }

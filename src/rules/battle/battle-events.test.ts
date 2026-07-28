@@ -1849,7 +1849,7 @@ describe("SET_CARD_NOTE", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Shared battle automation and AI defense
+// Shared battle automation and AI blocking
 // ---------------------------------------------------------------------------
 
 describe("battle automation", () => {
@@ -1902,8 +1902,8 @@ describe("battle automation", () => {
   });
 });
 
-describe("BATTLE_AI_DEFEND", () => {
-  it("applies deterministic defense once and records the processed turn", () => {
+describe("BATTLE_AI_BLOCK", () => {
+  it("applies deterministic blocking once and records the processed turn", () => {
     const challenger = makeInstance("challenger", "challenger-card", "player");
     challenger.definition.printedSpark = 2;
     const blocker = makeInstance("blocker", "blocker-card", "enemy");
@@ -1917,17 +1917,17 @@ describe("BATTLE_AI_DEFEND", () => {
     board.sides.enemy.backRank[backRankSlotId(0)] = blocker.battleCardId;
     const state = { ...baseState(), battle: battleFrom(board) };
 
-    const first = reduce(state, "BATTLE_AI_DEFEND", { aiSide: "enemy" });
+    const first = reduce(state, "BATTLE_AI_BLOCK", { aiSide: "enemy" });
     expect(first.outcome).toBe("applied");
     expect(first.state.battle?.board.sides.enemy.frontRank[frontRankSlotId(0)]).toBe(
       blocker.battleCardId,
     );
-    expect(first.state.battle?.aiDefenseTurn).toEqual({
+    expect(first.state.battle?.aiBlockingTurn).toEqual({
       activeSide: "player",
       turnNumber: 3,
     });
 
-    const second = reduce(first.state, "BATTLE_AI_DEFEND", { aiSide: "enemy" });
+    const second = reduce(first.state, "BATTLE_AI_BLOCK", { aiSide: "enemy" });
     expect(second.outcome).toBe("bounced");
   });
 
@@ -1972,14 +1972,14 @@ describe("BATTLE_AI_DEFEND", () => {
       }),
     };
 
-    const result = reduce(state, "BATTLE_AI_DEFEND", { aiSide: "enemy" });
+    const result = reduce(state, "BATTLE_AI_BLOCK", { aiSide: "enemy" });
 
     expect(result.outcome).toBe("applied");
     expect(
       result.state.battle?.board.sides.enemy.frontRank[frontRankSlotId(0)],
     ).toBe(blockerId);
     const decisionLog = result.state.battle?.lastTransition?.logEvents.find(
-      (entry) => entry.event === "battle_ai_defense_decision",
+      (entry) => entry.event === "battle_ai_blocking_decision",
     );
     expect(decisionLog?.fields).toMatchObject({
       opponentScore: 6,
@@ -2007,51 +2007,51 @@ describe("BATTLE_AI_DEFEND", () => {
     });
   });
 
-  it("records an empty defense so reloads do not retry it forever", () => {
+  it("records an empty blocking so reloads do not retry it forever", () => {
     const board = makeRichBoard({ phase: "dusk", turnNumber: 4 });
     const result = reduce(
       { ...baseState(), battle: battleFrom(board) },
-      "BATTLE_AI_DEFEND",
+      "BATTLE_AI_BLOCK",
       { aiSide: "enemy" },
     );
 
     expect(result.outcome).toBe("applied");
-    expect(result.state.battle?.aiDefenseTurn).toEqual({
+    expect(result.state.battle?.aiBlockingTurn).toEqual({
       activeSide: "player",
       turnNumber: 4,
     });
   });
 
   it("leaves a quest-mode block unpaced", () => {
-    const defended = reduce(
-      contestedDefenseState({ tutorial: false }),
-      "BATTLE_AI_DEFEND",
+    const blocked = reduce(
+      contestedBlockingState({ tutorial: false }),
+      "BATTLE_AI_BLOCK",
       { aiSide: "enemy" },
     );
 
-    expect(defended.outcome).toBe("applied");
+    expect(blocked.outcome).toBe("applied");
     expect(
-      defended.state.battle?.board.sides.enemy.frontRank[frontRankSlotId(0)],
+      blocked.state.battle?.board.sides.enemy.frontRank[frontRankSlotId(0)],
     ).toBe("blocker");
-    expect(defended.state.battle?.tutorialPresentation ?? null).toBeNull();
+    expect(blocked.state.battle?.tutorialPresentation ?? null).toBeNull();
   });
 
   it("paces a tutorial block into a contested lane and names its challenger", () => {
-    const defended = reduce(
-      contestedDefenseState({ tutorial: true }),
-      "BATTLE_AI_DEFEND",
+    const blocked = reduce(
+      contestedBlockingState({ tutorial: true }),
+      "BATTLE_AI_BLOCK",
       { aiSide: "enemy" },
       ctx(),
       TUTORIAL_ACTOR,
     );
 
-    expect(defended.outcome).toBe("applied");
-    // The defender has already moved; the beat holds that committed board so the
+    expect(blocked.outcome).toBe("applied");
+    // The blocker has already moved; the beat holds that committed board so the
     // move is seen before the lane resolves.
     expect(
-      defended.state.battle?.board.sides.enemy.frontRank[frontRankSlotId(0)],
+      blocked.state.battle?.board.sides.enemy.frontRank[frontRankSlotId(0)],
     ).toBe("blocker");
-    expect(defended.state.battle?.tutorialPresentation).toMatchObject({
+    expect(blocked.state.battle?.tutorialPresentation).toMatchObject({
       kind: "opponent-block",
       activeSide: "player",
       blockers: [
@@ -2063,14 +2063,14 @@ describe("BATTLE_AI_DEFEND", () => {
       ],
     });
     expect(
-      defended.state.battle?.lastTransition?.logEvents.find(
+      blocked.state.battle?.lastTransition?.logEvents.find(
         (entry) => entry.event === "battle_ai_blockers_declared",
       )?.fields,
     ).toMatchObject({ aiSide: "enemy", paced: true, turnNumber: 3 });
   });
 
-  it("does not pace a tutorial defender that enters an uncontested lane", () => {
-    // No challenger anywhere, so the deterministic defense has nothing to block:
+  it("does not pace a tutorial blocker that enters an uncontested lane", () => {
+    // No challenger anywhere, so the deterministic blocking has nothing to block:
     // any repositioning it performs is not a block and gets no beat.
     const blocker = makeInstance("blocker", "blocker-card", "enemy");
     blocker.definition.printedSpark = 4;
@@ -2081,16 +2081,16 @@ describe("BATTLE_AI_DEFEND", () => {
     });
     board.sides.enemy.backRank[backRankSlotId(0)] = "blocker";
 
-    const defended = reduce(
+    const blocked = reduce(
       { ...baseState(), battle: battleFrom(board, { mode: TUTORIAL_MODE }) },
-      "BATTLE_AI_DEFEND",
+      "BATTLE_AI_BLOCK",
       { aiSide: "enemy" },
       ctx(),
       TUTORIAL_ACTOR,
     );
 
-    expect(defended.outcome).toBe("applied");
-    expect(defended.state.battle?.tutorialPresentation ?? null).toBeNull();
+    expect(blocked.outcome).toBe("applied");
+    expect(blocked.state.battle?.tutorialPresentation ?? null).toBeNull();
   });
 });
 
@@ -2109,7 +2109,7 @@ const TUTORIAL_MODE = {
 };
 
 /** Dusk with one player challenger in `F0` and one enemy blocker in reserve. */
-function contestedDefenseState({ tutorial }: { tutorial: boolean }): FoldState {
+function contestedBlockingState({ tutorial }: { tutorial: boolean }): FoldState {
   const challenger = makeInstance("challenger", "challenger-card", "player");
   challenger.definition.printedSpark = 2;
   const blocker = makeInstance("blocker", "blocker-card", "enemy");
@@ -2177,7 +2177,7 @@ describe("paced Challenge beats", () => {
       activeSide: "player",
       slotId: "F0",
       challengerBattleCardId: "challenger",
-      defenderBattleCardId: "blocker",
+      blockerBattleCardId: "blocker",
       scored: null,
       dissolved: [{ battleCardId: "challenger", side: "player" }],
     });
@@ -2213,18 +2213,18 @@ describe("paced Challenge beats", () => {
     scorer.definition.printedSpark = 2;
     const loser = makeInstance("loser", "loser-card", "player");
     loser.definition.printedSpark = 1;
-    const defender = makeInstance("defender", "defender-card", "enemy");
-    defender.definition.printedSpark = 3;
+    const blocker = makeInstance("blocker", "blocker-card", "enemy");
+    blocker.definition.printedSpark = 3;
     const board = makeRichBoard({
       phase: "dusk",
       turnNumber: 3,
-      instances: [scorer, loser, defender],
+      instances: [scorer, loser, blocker],
       playerFront: {
         [frontRankSlotId(0)]: "scorer",
         [frontRankSlotId(1)]: "loser",
       },
     });
-    board.sides.enemy.frontRank[frontRankSlotId(1)] = "defender";
+    board.sides.enemy.frontRank[frontRankSlotId(1)] = "blocker";
 
     const first = reduce(
       {
@@ -2241,7 +2241,7 @@ describe("paced Challenge beats", () => {
       kind: "challenge-resolved",
       slotId: "F0",
       challengerBattleCardId: "scorer",
-      defenderBattleCardId: null,
+      blockerBattleCardId: null,
       scored: { battleCardId: "scorer", side: "player", points: 2 },
       dissolved: [],
     });
@@ -2261,7 +2261,7 @@ describe("paced Challenge beats", () => {
       kind: "challenge-resolved",
       slotId: "F1",
       challengerBattleCardId: "loser",
-      defenderBattleCardId: "defender",
+      blockerBattleCardId: "blocker",
       scored: null,
       dissolved: [{ battleCardId: "loser", side: "player" }],
     });
@@ -2321,7 +2321,7 @@ describe("paced Challenge beats", () => {
       kind: "challenge-resolved",
       slotId: "F0",
       challengerBattleCardId: "challenger",
-      defenderBattleCardId: null,
+      blockerBattleCardId: null,
       scored: {
         battleCardId: "challenger",
         side: "player",

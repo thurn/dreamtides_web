@@ -64,7 +64,7 @@ import {
 import type { PromptResolution } from "./effect-runner-core";
 import { endOfTurnExhaustionClearEdits } from "../../battle/engine/handoff";
 import { forwardModelFromState } from "../../battle/ai/forward-model";
-import { planDefenseWithDecision } from "../../battle/ai/defense";
+import { planBlockingWithDecision } from "../../battle/ai/blocking";
 import { actionToCommands } from "../../battle/ai/driver";
 import { buildTrace } from "../../battle/ai/trace";
 import { planBasicAutomationCommands } from "./basic-automation";
@@ -1646,11 +1646,11 @@ export function battleGesture(
 }
 
 /**
- * Applies the AI defender's deterministic Dusk repositioning once per opposing
+ * Applies the AI blocker's deterministic Dusk repositioning once per opposing
  * turn. The processed marker lives in the fold so remounts and reloads cannot
- * repeat the defense or suppress a needed retry.
+ * repeat the blocking or suppress a needed retry.
  */
-export function battleAiDefend(
+export function battleAiBlock(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
@@ -1669,7 +1669,7 @@ export function battleAiDefend(
   }
   if (!tutorialActorIsAuthorized(battle, actor, true)) return null;
 
-  const marker = battle.aiDefenseTurn;
+  const marker = battle.aiBlockingTurn;
   if (
     marker?.activeSide === battle.board.activeSide &&
     marker.turnNumber === battle.board.turnNumber
@@ -1679,10 +1679,10 @@ export function battleAiDefend(
 
   const commands: BattleCommand[] = [];
   const model = forwardModelFromState(battle.board, aiSide);
-  const defense = planDefenseWithDecision(model, {
+  const blocking = planBlockingWithDecision(model, {
     scoreToWin: battle.init.scoreToWin,
   });
-  for (const move of defense.actions) {
+  for (const move of blocking.actions) {
     const moveCommands = actionToCommands(move, aiSide);
     const [firstCommand, ...restCommands] = moveCommands;
     const tracedCommands = firstCommand === undefined
@@ -1703,7 +1703,7 @@ export function battleAiDefend(
   const blockers = declaredBlockers(battle.board, nextBattle.board, aiSide);
   const transition =
     nextBattle.lastTransition ?? createEmptyTransitionData();
-  // The defender's move into a contested lane and that lane's resolution are one
+  // The blocker's move into a contested lane and that lane's resolution are one
   // fold step apart, so the tutorial parks here. Without the beat the blocker
   // enters and dissolves inside a single frame and the player only ever sees the
   // void. Other battle modes keep resolving without a pause.
@@ -1730,8 +1730,8 @@ export function battleAiDefend(
         logEvents: [
           ...transition.logEvents,
           {
-            event: "battle_ai_defense_decision",
-            fields: { ...defense.decision },
+            event: "battle_ai_blocking_decision",
+            fields: { ...blocking.decision },
           },
           ...(blockers.length === 0
             ? []
@@ -1747,7 +1747,7 @@ export function battleAiDefend(
             }]),
         ],
       },
-      aiDefenseTurn: {
+      aiBlockingTurn: {
         activeSide: battle.board.activeSide,
         turnNumber: battle.board.turnNumber,
       },
@@ -1756,8 +1756,8 @@ export function battleAiDefend(
 }
 
 /**
- * Every defender that entered a front-rank lane already holding an opposing
- * challenger. A defender moving into an unopposed lane is repositioning, not
+ * Every blocker that entered a front-rank lane already holding an opposing
+ * challenger. A blocker moving into an unopposed lane is repositioning, not
  * blocking, so only contested lanes are reported.
  */
 function declaredBlockers(
@@ -1768,12 +1768,12 @@ function declaredBlockers(
   const activeSide: BattleSide = aiSide === "player" ? "enemy" : "player";
   const blockers: OpponentBlockEntry[] = [];
   for (const slotId of rankSlotIds(after.sides[aiSide].frontRank)) {
-    const defenderId = after.sides[aiSide].frontRank[slotId];
+    const blockerId = after.sides[aiSide].frontRank[slotId];
     const challengerId = after.sides[activeSide].frontRank[slotId];
-    if (defenderId === null || challengerId === null) continue;
-    if (before.sides[aiSide].frontRank[slotId] === defenderId) continue;
+    if (blockerId === null || challengerId === null) continue;
+    if (before.sides[aiSide].frontRank[slotId] === blockerId) continue;
     blockers.push({
-      battleCardId: defenderId,
+      battleCardId: blockerId,
       slotId,
       challengerBattleCardId: challengerId,
     });
@@ -1974,7 +1974,7 @@ function driveChallengeCursor(
       cursor.activeSide === "player" ? "enemy" : "player";
     const challengerBattleCardId =
       current.board.sides[cursor.activeSide].frontRank[slotId] ?? null;
-    const defenderBattleCardId =
+    const blockerBattleCardId =
       current.board.sides[opposingSide].frontRank[slotId] ?? null;
     const resolution = resolveChallengeLane({
       state: current.board,
@@ -1989,7 +1989,7 @@ function driveChallengeCursor(
             turnNumber: current.board.turnNumber,
             slotId,
             challengerBattleCardId,
-            defenderBattleCardId,
+            blockerBattleCardId,
             playerScoreDelta: resolution.playerScoreDelta,
             enemyScoreDelta: resolution.enemyScoreDelta,
             dissolved: resolution.dissolved,
@@ -2027,7 +2027,7 @@ function challengeResolvedPresentation(input: {
   turnNumber: number;
   slotId: ReturnType<typeof frontRankSlotId>;
   challengerBattleCardId: string;
-  defenderBattleCardId: string | null;
+  blockerBattleCardId: string | null;
   playerScoreDelta: number;
   enemyScoreDelta: number;
   dissolved: readonly { battleCardId: string; side: BattleSide }[];
@@ -2038,7 +2038,7 @@ function challengeResolvedPresentation(input: {
           battleCardId:
             input.activeSide === "player"
               ? input.challengerBattleCardId
-              : (input.defenderBattleCardId ?? input.challengerBattleCardId),
+              : (input.blockerBattleCardId ?? input.challengerBattleCardId),
           side: "player",
           points: input.playerScoreDelta,
         }
@@ -2047,20 +2047,20 @@ function challengeResolvedPresentation(input: {
             battleCardId:
               input.activeSide === "enemy"
                 ? input.challengerBattleCardId
-                : (input.defenderBattleCardId ??
+                : (input.blockerBattleCardId ??
                   input.challengerBattleCardId),
             side: "enemy",
             points: input.enemyScoreDelta,
           }
         : null;
-  if (input.defenderBattleCardId === null && scored === null) return null;
+  if (input.blockerBattleCardId === null && scored === null) return null;
   return {
     id: `challenge-resolved:${input.activeSide}:${String(input.turnNumber)}:${input.slotId}`,
     kind: "challenge-resolved",
     activeSide: input.activeSide,
     slotId: input.slotId,
     challengerBattleCardId: input.challengerBattleCardId,
-    defenderBattleCardId: input.defenderBattleCardId,
+    blockerBattleCardId: input.blockerBattleCardId,
     scored,
     dissolved: input.dissolved.map((entry) => ({ ...entry })),
   };

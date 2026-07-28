@@ -61,19 +61,19 @@ export function useTutorialPresentationLogging(
             winnerCardId:
               view.challenge?.winnerOwner === view.challenge?.challenger.owner
                 ? view.challenge?.challenger.card.model.cardId
-                : view.challenge?.defender.card.model.cardId,
+                : view.challenge?.blocker.card.model.cardId,
             winnerSpark:
               view.challenge?.winnerOwner === view.challenge?.challenger.owner
                 ? view.challenge?.challenger.spark
-                : view.challenge?.defender.spark,
+                : view.challenge?.blocker.spark,
             loserCardId:
               view.challenge?.loserOwner === view.challenge?.challenger.owner
                 ? view.challenge?.challenger.card.model.cardId
-                : view.challenge?.defender.card.model.cardId,
+                : view.challenge?.blocker.card.model.cardId,
             loserSpark:
               view.challenge?.loserOwner === view.challenge?.challenger.owner
                 ? view.challenge?.challenger.spark
-                : view.challenge?.defender.spark,
+                : view.challenge?.blocker.spark,
             loserOwner: view.challenge?.loserOwner,
             loserDestinationZone: `${view.challenge?.loserOwner ?? "unknown"}-void`,
           }

@@ -186,7 +186,7 @@ export function selectTopmostFigmentSpark(
 
 /**
  * The combined spark of a figment stack's reserve figments — everything below
- * the topmost. This is what a stack scores when it challenges into a defender
+ * the topmost. This is what a stack scores when it challenges into a blocker
  * (rules §Figments — Challenge resolution). Zero for a non-figment or a
  * single-figment stack.
  */

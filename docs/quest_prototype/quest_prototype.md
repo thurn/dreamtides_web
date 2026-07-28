@@ -184,7 +184,7 @@ keywords (Unstoppable, Vengeful, Preeminence, Awakened).
 
 Each side has a staggered play area: a **front rank** of 9 positions (`F0`–`F8`,
 zone `frontRank`) and a **back rank** of 10 positions (`B0`–`B9`, zone
-`backRank`). Only front-rank characters become challengers and defenders.
+`backRank`). Only front-rank characters become challengers and blockers.
 A character entering play materializes into the back rank, exhausted. Back-rank
 position `Bi` supports front positions `F(i-1)` and `Fi` wherever they exist.
 
@@ -235,10 +235,10 @@ into the ordered edits the rules require:
 ### The Challenge resolver
 
 `engine/challenge.ts` `resolveChallenge` is the unified, keyword-aware resolver
-used by both sides. It compares challenger and defender spark lane by lane and
+used by both sides. It compares challenger and blocker spark lane by lane and
 scans for the four sanctioned keywords: **Preeminence** wins spark ties,
 **Vengeful** drags the winner down when its bearer loses, and **Unstoppable**
-scores even when defended. **Awakened** is detected only so keyword detection is
+scores even when blocked. **Awakened** is detected only so keyword detection is
 uniform across all four; the exhaust system, not the resolver, consumes it. The
 resolver returns the score deltas and the dissolve-to-void edits that commit the
 outcome.

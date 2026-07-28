@@ -189,7 +189,7 @@ describe("scoreAgainstOpponent", () => {
     // Fixture designed to produce both terminal infinities in a single sample set:
     // - playerScore = 25 means evaluate() returns -Infinity unless aiScore also
     //   reaches 25 first (aiScore check is first in evaluate()).
-    // - aiScore = 20 + a challenger with spark 5 means the "noDefense" archetype
+    // - aiScore = 20 + a challenger with spark 5 means the "noBlocks" archetype
     //   (unblocked scoring) pushes aiScore to 25 → +Infinity.
     // - A "tradeEvenly" response with a bigger blocker prevents scoring, leaving
     //   aiScore < 25 while playerScore = 25 → -Infinity.

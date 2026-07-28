@@ -347,7 +347,7 @@ describe("buildTutorialBattleView", () => {
               : {
                   slotId: "F0",
                   challengerBattleCardId: "enemy-challenger-uuid",
-                  defenderBattleCardId: "player-defender-uuid",
+                  blockerBattleCardId: "player-blocker-uuid",
                   scored: null,
                   dissolved: [],
                 }),

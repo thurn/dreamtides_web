@@ -11,7 +11,7 @@ const ENTRIES: readonly GlossaryCatalogEntry[] = [
     id: "spark",
     category: "Resources",
     term: "Spark",
-    definition: "A character's combat power.",
+    definition: "A character's challenge power.",
     priority: 10,
     matchesRulesText: true,
     variants: [],
@@ -94,7 +94,7 @@ describe("GlossaryEditorApp", () => {
     expect(container.textContent).not.toContain("Rendered Preview");
     expect(
       container.querySelector("[data-testid='glossary-preview']")?.textContent,
-    ).toContain("A character's combat power.");
+    ).toContain("A character's challenge power.");
 
     const description = container.querySelector<HTMLElement>(
       "[data-editor-field='description']",
@@ -167,7 +167,7 @@ describe("GlossaryEditorApp", () => {
     expect(saveEntry).toHaveBeenCalledWith({
       id: "spark",
       term: "Spark",
-      definition: "A character's combat power.",
+      definition: "A character's challenge power.",
       variants: ["Sparks", "Sparked"],
     });
 

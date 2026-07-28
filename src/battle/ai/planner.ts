@@ -104,7 +104,7 @@ interface BeamEntry {
 /**
  * Whether the AI has any committed challenger — a front-rank body that can act
  * this turn. When it does, scoring routes through the opponent-response model so
- * the plan accounts for the opponent's likely defense/removal; otherwise the
+ * the plan accounts for the opponent's likely blocking/removal; otherwise the
  * cheaper static {@link evaluate} is enough.
  */
 function hasCommittedChallenger(model: ForwardModel): boolean {

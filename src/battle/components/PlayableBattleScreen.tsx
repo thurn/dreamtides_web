@@ -342,7 +342,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     basicAutomation: true,
   });
 
-  const aiDefenseTurn = battle.aiDefenseTurn;
+  const aiBlockingTurn = battle.aiBlockingTurn;
   useEffect(() => {
     if (
       !aiDriverEnabled ||
@@ -353,15 +353,15 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       return;
     }
     if (
-      aiDefenseTurn?.activeSide === board.activeSide &&
-      aiDefenseTurn.turnNumber === board.turnNumber
+      aiBlockingTurn?.activeSide === board.activeSide &&
+      aiBlockingTurn.turnNumber === board.turnNumber
     ) {
       return;
     }
-    void actions.battleAiDefend("enemy", `ai:${clientId}`);
+    void actions.battleAiBlock("enemy", `ai:${clientId}`);
   }, [
     actions,
-    aiDefenseTurn,
+    aiBlockingTurn,
     aiDriverEnabled,
     board.activeSide,
     board.phase,

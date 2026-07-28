@@ -218,7 +218,7 @@ export interface CoopActions {
     intentKey?: string,
     actor?: string,
   ) => Promise<number>;
-  battleAiDefend: (aiSide: string, actor: string, intentKey?: string) => Promise<number>;
+  battleAiBlock: (aiSide: string, actor: string, intentKey?: string) => Promise<number>;
   completeTutorialBattlePresentation: (
     presentationId: string,
     intentKey: string,
@@ -499,9 +499,9 @@ export function makeActions(append: AppendFn): CoopActions {
         ...(intentKey === undefined ? {} : { intentKey }),
         ...(actor === undefined ? {} : { actor }),
       }),
-    battleAiDefend: (aiSide, actor, intentKey) =>
+    battleAiBlock: (aiSide, actor, intentKey) =>
       append({
-        type: "BATTLE_AI_DEFEND",
+        type: "BATTLE_AI_BLOCK",
         payload: { aiSide },
         actor,
         ...(intentKey === undefined ? {} : { intentKey }),

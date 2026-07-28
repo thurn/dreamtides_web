@@ -568,16 +568,16 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
     typeof value.basicAutomationEnabled !== "boolean"
   )
     return null;
-  if (value.aiDefenseTurn !== undefined) {
-    if (!isRecord(value.aiDefenseTurn)) return null;
+  if (value.aiBlockingTurn !== undefined) {
+    if (!isRecord(value.aiBlockingTurn)) return null;
     if (
-      value.aiDefenseTurn.activeSide !== "player" &&
-      value.aiDefenseTurn.activeSide !== "enemy"
+      value.aiBlockingTurn.activeSide !== "player" &&
+      value.aiBlockingTurn.activeSide !== "enemy"
     )
       return null;
     if (
-      typeof value.aiDefenseTurn.turnNumber !== "number" ||
-      !Number.isInteger(value.aiDefenseTurn.turnNumber)
+      typeof value.aiBlockingTurn.turnNumber !== "number" ||
+      !Number.isInteger(value.aiBlockingTurn.turnNumber)
     )
       return null;
   }

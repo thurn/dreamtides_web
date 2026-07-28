@@ -587,14 +587,14 @@ describe("tutorial battle lifecycle", () => {
       "client-a",
     ).state;
 
-    const defensePlan = plan(state);
-    expect(defensePlan.intent?.kind).toBe("battle-ai-defend");
-    if (defensePlan.intent?.kind !== "battle-ai-defend") {
-      throw new Error("expected automatic enemy defense");
+    const blockingPlan = plan(state);
+    expect(blockingPlan.intent?.kind).toBe("battle-ai-block");
+    if (blockingPlan.intent?.kind !== "battle-ai-block") {
+      throw new Error("expected automatic enemy blocking");
     }
     state = reduceTutorial(
       state,
-      "BATTLE_AI_DEFEND",
+      "BATTLE_AI_BLOCK",
       { aiSide: "enemy" },
       automaticActor,
     ).state;
@@ -1165,7 +1165,7 @@ describe("tutorial battle lifecycle", () => {
     expect(reduceTutorial(opened.state, "RESOLVE_PROMPT", resolution).outcome).toBe("applied");
   });
 
-  it("accepts only the exact tutorial AI actor for automatic command, play, defense, and prompt resolution", () => {
+  it("accepts only the exact tutorial AI actor for automatic command, play, blocking, and prompt resolution", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const started = begin().state;
     const automaticActor = "tutorial-ai:client-a";
@@ -1209,15 +1209,15 @@ describe("tutorial battle lifecycle", () => {
     expect(reduceTutorial(enemyPlayState, "BATTLE_PLAY_CARD", enemyPlay, spoofedActor).outcome).toBe("bounced");
     expect(reduceTutorial(enemyPlayState, "BATTLE_PLAY_CARD", enemyPlay, automaticActor).outcome).toBe("applied");
 
-    const defenseState = {
+    const blockingState = {
       ...started,
       battle: {
         ...started.battle!,
         board: { ...started.battle!.board, phase: "dusk" as const },
       },
     };
-    expect(reduceTutorial(defenseState, "BATTLE_AI_DEFEND", { aiSide: "enemy" }, spoofedActor).outcome).toBe("bounced");
-    expect(reduceTutorial(defenseState, "BATTLE_AI_DEFEND", { aiSide: "enemy" }, automaticActor).outcome).toBe("applied");
+    expect(reduceTutorial(blockingState, "BATTLE_AI_BLOCK", { aiSide: "enemy" }, spoofedActor).outcome).toBe("bounced");
+    expect(reduceTutorial(blockingState, "BATTLE_AI_BLOCK", { aiSide: "enemy" }, automaticActor).outcome).toBe("applied");
 
     const ringwatcherId = Object.values(started.battle!.board.cardInstances).find((instance) =>
       instance.controller === "enemy" &&
@@ -1269,7 +1269,7 @@ describe("tutorial battle lifecycle", () => {
     expect(reduceTutorial(resumed.state, "RESOLVE_PROMPT", resolution, automaticActor).outcome).toBe("applied");
   });
 
-  it("leaves quest-mode command, play, gesture, and defense actor behavior unchanged", () => {
+  it("leaves quest-mode command, play, gesture, and blocking actor behavior unchanged", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const started = begin().state;
     const questState = {
@@ -1291,11 +1291,11 @@ describe("tutorial battle lifecycle", () => {
     expect(reduceTutorial(questState, "BATTLE_PLAY_CARD", {
       battleCardId: questState.battle.board.sides.player.hand[0], targetBattleCardIds: [], aiChoices: [],
     }, observer).outcome).toBe("applied");
-    const defenseState = {
+    const blockingState = {
       ...questState,
       battle: { ...questState.battle, board: { ...questState.battle.board, phase: "dusk" as const } },
     };
-    expect(reduceTutorial(defenseState, "BATTLE_AI_DEFEND", { aiSide: "enemy" }, observer).outcome).toBe("applied");
+    expect(reduceTutorial(blockingState, "BATTLE_AI_BLOCK", { aiSide: "enemy" }, observer).outcome).toBe("applied");
   });
 
   it("runs initial and post-Dreamwell Dawn triggers exactly once through the tutorial controller", () => {

@@ -16,7 +16,7 @@ import type {
 import { frontRankSlotIds, rankSlotIds, slotIndex } from "../types";
 
 /**
- * The unified, keyword-aware Challenge resolver (rules §Challengers, Defenders,
+ * The unified, keyword-aware Challenge resolver (rules §Challengers, Blockers,
  * and Scoring + §Figments + §Keywords). It resolves every front-rank lane for
  * one active side as a pure proposal: it reads `input.state` but never mutates
  * it, never performs the void moves itself, and never interprets a card's
@@ -26,7 +26,7 @@ import { frontRankSlotIds, rankSlotIds, slotIndex } from "../types";
  *
  * The four combat keywords (rules §Keywords and Effects):
  *
- *  - **Unstoppable** — a surviving defended character scores ⍟ equal to its
+ *  - **Unstoppable** — a surviving blocked character scores ⍟ equal to its
  *    spark, in addition to resolving the spark comparison normally.
  *  - **Vengeful** — when its bearer loses a challenge, it drags the opposing
  *    enemy character down too (both dissolve).
@@ -42,7 +42,7 @@ import { frontRankSlotIds, rankSlotIds, slotIndex } from "../types";
  * the figment type's implicit keyword.
  *
  * TODO(designations): the resolver reads live front-rank positions. Challenger /
- * defender designation snapshotting (spec §4.3 — designations are fixed at the
+ * blocker designation snapshotting (spec §4.3 — designations are fixed at the
  * end of Day / Dusk and can be changed by Night repositioning) is deferred; once
  * modeled, this resolver should read the snapshot instead of the live board.
  */
@@ -262,19 +262,19 @@ function resolveLane(params: {
   } = params;
 
   const challengerId = state.sides[activeSide].frontRank[slotId] ?? null;
-  const defenderId = state.sides[opposingSide].frontRank[slotId] ?? null;
+  const blockerId = state.sides[opposingSide].frontRank[slotId] ?? null;
   const challenger =
     challengerId === null ? null : state.cardInstances[challengerId] ?? null;
-  const defender =
-    defenderId === null ? null : state.cardInstances[defenderId] ?? null;
+  const blocker =
+    blockerId === null ? null : state.cardInstances[blockerId] ?? null;
 
   const challengerSpark = laneSpark(state, challenger, challengerId, supportContribution);
-  const defenderSpark = laneSpark(state, defender, defenderId, supportContribution);
+  const blockerSpark = laneSpark(state, blocker, blockerId, supportContribution);
 
   // `playerSpark`/`enemySpark` describe the spark that actually fights in that
   // lane — for a figment stack, the topmost figment alone (rules §Figments).
-  const playerSpark = activeSide === "player" ? challengerSpark.compare : defenderSpark.compare;
-  const enemySpark = activeSide === "player" ? defenderSpark.compare : challengerSpark.compare;
+  const playerSpark = activeSide === "player" ? challengerSpark.compare : blockerSpark.compare;
+  const enemySpark = activeSide === "player" ? blockerSpark.compare : challengerSpark.compare;
 
   const lane = (winner: BattleSide | null, scoreDelta: number): BattleLaneJudgment => ({
     slotId,
@@ -285,14 +285,14 @@ function resolveLane(params: {
   });
 
   // A lane with no challenger never scores or dissolves for the active side —
-  // whether it holds an opposing defender or is empty, nothing happens.
+  // whether it holds an opposing blocker or is empty, nothing happens.
   if (challenger === null || challengerId === null) {
     return { judgment: lane(null, 0), activeScored: 0, opposingScored: 0 };
   }
 
   // Unpaired challenger: scores ⍟ equal to its total spark. For a figment stack
   // every figment is unopposed, so the whole stack scores (rules §Figments).
-  if (defender === null || defenderId === null) {
+  if (blocker === null || blockerId === null) {
     return {
       judgment: lane(null, challengerSpark.total),
       activeScored: challengerSpark.total,
@@ -306,23 +306,23 @@ function resolveLane(params: {
   const baseChallengerDissolves = dissolvesAgainst(
     challenger,
     challengerSpark.compare,
-    defender,
-    defenderSpark.compare,
+    blocker,
+    blockerSpark.compare,
   );
-  const baseDefenderDissolves = dissolvesAgainst(
-    defender,
-    defenderSpark.compare,
+  const baseBlockerDissolves = dissolvesAgainst(
+    blocker,
+    blockerSpark.compare,
     challenger,
     challengerSpark.compare,
   );
   let challengerDissolves = baseChallengerDissolves;
-  let defenderDissolves = baseDefenderDissolves;
+  let blockerDissolves = baseBlockerDissolves;
 
   // Vengeful: a bearer that loses drags the opposing character down too.
   if (baseChallengerDissolves && hasCombatKeyword(challenger, "vengeful")) {
-    defenderDissolves = true;
+    blockerDissolves = true;
   }
-  if (baseDefenderDissolves && hasCombatKeyword(defender, "vengeful")) {
+  if (baseBlockerDissolves && hasCombatKeyword(blocker, "vengeful")) {
     challengerDissolves = true;
   }
 
@@ -334,40 +334,40 @@ function resolveLane(params: {
   // non-figment has no reserves. The contested topmost scores only when it
   // survives with Unstoppable.
   activeScored += challengerSpark.reserve;
-  if (!challengerDissolves && defenderDissolves && hasCombatKeyword(challenger, "unstoppable")) {
+  if (!challengerDissolves && blockerDissolves && hasCombatKeyword(challenger, "unstoppable")) {
     activeScored += challengerSpark.compare;
   }
 
-  // A defending figment scores nothing. A defending non-figment keeps the
+  // A blocking figment scores nothing. A blocking non-figment keeps the
   // existing Unstoppable-survivor scoring.
   if (
-    !isFigmentInstance(defender) &&
-    !defenderDissolves &&
+    !isFigmentInstance(blocker) &&
+    !blockerDissolves &&
     challengerDissolves &&
-    hasCombatKeyword(defender, "unstoppable")
+    hasCombatKeyword(blocker, "unstoppable")
   ) {
-    opposingScored += defenderSpark.compare;
+    opposingScored += blockerSpark.compare;
   }
 
   if (challengerDissolves) {
     dissolved.push({ battleCardId: challengerId, side: activeSide });
   }
-  if (defenderDissolves) {
-    dissolved.push({ battleCardId: defenderId, side: opposingSide });
+  if (blockerDissolves) {
+    dissolved.push({ battleCardId: blockerId, side: opposingSide });
   }
 
   // `winner` is the side whose character survives a resolved pairing, or null
   // when both dissolve (a tie) — there is no defeated opponent to name.
   let winner: BattleSide | null = null;
-  if (defenderDissolves && !challengerDissolves) {
+  if (blockerDissolves && !challengerDissolves) {
     winner = activeSide;
-  } else if (challengerDissolves && !defenderDissolves) {
+  } else if (challengerDissolves && !blockerDissolves) {
     winner = opposingSide;
   }
 
   // The lane's `scoreDelta` records the points scored *in this lane*. Only an
   // unpaired challenger or a surviving Unstoppable character scores, so at most
-  // one side scores per defended lane; report that total.
+  // one side scores per blocked lane; report that total.
   return {
     judgment: lane(winner, activeScored + opposingScored),
     activeScored,

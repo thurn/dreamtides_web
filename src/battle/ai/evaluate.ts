@@ -98,7 +98,7 @@ export function evaluate(model: ForwardModel): number {
   let aiFrontSpark = 0;
   let expectedPoints = 0;
   // Opponent front spark, per front-rank slot, used to floor the simple
-  // expected-points estimate (a body opposite a defender scores its excess).
+  // expected-points estimate (a body opposite a blocker scores its excess).
   const opponentFrontSparkBySlot = new Map<string, number>();
   for (const body of model.opponentBodies) {
     if (body.rank === "front") {

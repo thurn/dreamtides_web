@@ -131,7 +131,7 @@ describe("useTutorialBattleController", () => {
           activeSide: "player",
           slotId: "F0",
           challengerBattleCardId: "player-character-uuid",
-          defenderBattleCardId: null,
+          blockerBattleCardId: null,
           scored: {
             battleCardId: "player-character-uuid",
             side: "player",

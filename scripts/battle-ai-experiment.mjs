@@ -451,8 +451,8 @@ function deployedEffectiveSpark(side, slot, support) {
  * Resolves the Challenge for the ACTIVE side over the World (battle_rules.md).
  * Each ready deployed challenger faces the body in the SAME deploy slot of the
  * opponent: lower effective spark dissolves, a tie dissolves both, an unpaired
- * challenger scores its spark. Reserve bodies do not defend the front rank
- * directly here -- a defender is the opponent's deployed body in that lane.
+ * challenger scores its spark. Reserve bodies do not block the front rank
+ * directly here -- a blocker is the opponent's deployed body in that lane.
  */
 function resolveChallenge(world, activeSide) {
   const active = world[activeSide];
@@ -467,8 +467,8 @@ function resolveChallenge(world, activeSide) {
     const challenger = active.deployed[slot];
     if (challenger === null || !challenger.canChallengeThisTurn) continue;
     const cSpark = deployedEffectiveSpark(active, slot, activeSupport);
-    const defender = opponent.deployed[slot];
-    if (defender === null) {
+    const blocker = opponent.deployed[slot];
+    if (blocker === null) {
       // Unpaired: scores its spark.
       active.score += cSpark;
       continue;

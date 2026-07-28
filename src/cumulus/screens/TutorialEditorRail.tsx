@@ -215,7 +215,7 @@ function defaultAction(
       id,
       action: "resolve-challenge",
       challengerCardId: TUTORIAL_OPPONENT_CARD_ID,
-      defenderCardId: TUTORIAL_PLAYER_CARD_ID,
+      blockerCardId: TUTORIAL_PLAYER_CARD_ID,
       wait: 0,
     };
   }
@@ -327,9 +327,9 @@ function changedActionType(
         action.action === "resolve-challenge"
           ? action.challengerCardId
           : TUTORIAL_OPPONENT_CARD_ID,
-      defenderCardId:
+      blockerCardId:
         action.action === "resolve-challenge"
-          ? action.defenderCardId
+          ? action.blockerCardId
           : TUTORIAL_PLAYER_CARD_ID,
       wait: action.wait,
     };
@@ -1176,24 +1176,24 @@ function TutorialActionRow({
                 update(
                   { ...action, challengerCardId },
                   isCardId(challengerCardId) &&
-                    challengerCardId !== action.defenderCardId,
+                    challengerCardId !== action.blockerCardId,
                 )
               }
             />
             <TextField
-              label="Defender UUID"
-              value={action.defenderCardId}
+              label="Blocker UUID"
+              value={action.blockerCardId}
               error={
-                isCardId(action.defenderCardId)
+                isCardId(action.blockerCardId)
                   ? undefined
-                  : "Enter a defender UUID."
+                  : "Enter a blocker UUID."
               }
-              testId={`tutorial-action-defender-card-id-${action.id}`}
-              onChange={(defenderCardId) =>
+              testId={`tutorial-action-blocker-card-id-${action.id}`}
+              onChange={(blockerCardId) =>
                 update(
-                  { ...action, defenderCardId },
-                  isCardId(defenderCardId) &&
-                    defenderCardId !== action.challengerCardId,
+                  { ...action, blockerCardId },
+                  isCardId(blockerCardId) &&
+                    blockerCardId !== action.challengerCardId,
                 )
               }
             />

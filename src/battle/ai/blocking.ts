@@ -4,12 +4,12 @@ import type { AiCard, ForwardModel } from "./forward-model";
 import type { PlannedAction } from "./planner";
 
 /**
- * Defensive repositioning for the AI on the OPPONENT's turn.
+ * Blocking repositioning for the AI on the OPPONENT's turn.
  *
- * The offensive planner (`planner.ts`) only runs on the AI's own turn. During
- * the opponent's Dusk the AI is the defender: it positions front-rank blockers
+ * The challenge planner (`planner.ts`) only runs on the AI's own turn. During
+ * the opponent's Dusk the AI is the blocker: it positions front-rank blockers
  * opposite the opponent's challengers so they do not score unopposed
- * (`battle_rules.md` §Challengers, Defenders, and Scoring — a defended
+ * (`battle_rules.md` §Challengers, Blockers, and Scoring — a blocked
  * challenger does not score). This module decides which back-rank bodies to push
  * up into which lanes; the hook dispatches the resulting moves.
  *
@@ -18,38 +18,38 @@ import type { PlannedAction } from "./planner";
  * rule that an exhausted character cannot be moved to the front rank.
  */
 
-export interface DefenseOptions {
+export interface BlockingOptions {
   /** Victory-point threshold, used to weigh whether a chump block is worth it. */
   scoreToWin: number;
 }
 
-export type DefenseBlockReason =
+export type BlockMoveReason =
   | "favorable"
   | "even-trade"
   | "score-deficit"
   | "prevent-lethal";
 
-export type DefenseDeclineReason =
-  | "already-defended"
+export type BlockDeclineReason =
+  | "already-blocked"
   | "no-available-blocker"
   | "preserve-body-while-ahead";
 
-export interface DefenseLaneDecision {
+export interface BlockingLaneDecision {
   challengerBattleCardId: string;
   lane: FrontRankSlotId;
   challengerSpark: number;
-  outcome: "blocked" | "declined" | "already-defended";
-  reason: DefenseBlockReason | DefenseDeclineReason;
+  outcome: "blocked" | "declined" | "already-blocked";
+  reason: BlockMoveReason | BlockDeclineReason;
   blockerBattleCardId: string | null;
   blockerSpark: number | null;
 }
 
 /**
- * Plain-data explanation of one deterministic defense pass. UUIDs and lane ids
+ * Plain-data explanation of one deterministic blocking pass. UUIDs and lane ids
  * make the selected and declined blocks reconstructable from production logs
  * without relying on display names.
  */
-export interface DefenseDecision {
+export interface BlockingDecision {
   aiScore: number;
   opponentScore: number;
   scoreToWin: number;
@@ -58,12 +58,12 @@ export interface DefenseDecision {
   lethalBeforeBlocks: boolean;
   lethalPreventable: boolean;
   availableBlockerBattleCardIds: string[];
-  lanes: DefenseLaneDecision[];
+  lanes: BlockingLaneDecision[];
 }
 
-export interface DefensePlan {
+export interface BlockingPlan {
   actions: PlannedAction[];
-  decision: DefenseDecision;
+  decision: BlockingDecision;
 }
 
 interface BackRankBody {
@@ -81,30 +81,30 @@ interface Challenger {
 
 interface BlockerChoice {
   blocker: BackRankBody;
-  reason: DefenseBlockReason;
+  reason: BlockMoveReason;
 }
 
 /**
- * Plans the AI's defensive repositions against the opponent's committed
+ * Plans the AI's blocking repositions against the opponent's committed
  * challengers, returning one `MOVE_CARD` action per lane the AI chooses to
  * block (back-rank body → the front-rank slot directly opposite the challenger).
  *
- * Lanes are defended biggest-threat-first so the scarce back-rank bodies cover
+ * Lanes are blocked biggest-threat-first so the scarce back-rank bodies cover
  * the challengers that would score the most. A lane already holding an AI body
- * is left alone — that body already defends it.
+ * is left alone — that body already blocks it.
  */
-export function planDefense(model: ForwardModel, opts: DefenseOptions): PlannedAction[] {
-  return planDefenseWithDecision(model, opts).actions;
+export function planBlocking(model: ForwardModel, opts: BlockingOptions): PlannedAction[] {
+  return planBlockingWithDecision(model, opts).actions;
 }
 
 /**
- * Plans the same observable moves as {@link planDefense} and returns the
+ * Plans the same observable moves as {@link planBlocking} and returns the
  * structured decision record used by tutorial battle logging.
  */
-export function planDefenseWithDecision(
+export function planBlockingWithDecision(
   model: ForwardModel,
-  opts: DefenseOptions,
-): DefensePlan {
+  opts: BlockingOptions,
+): BlockingPlan {
   const challengers: Challenger[] = model.opponentBodies
     .filter((body) => body.rank === "front" && isFrontRankSlotId(body.slot))
     .map((body) => ({
@@ -140,19 +140,19 @@ export function planDefenseWithDecision(
       opts.scoreToWin;
 
   const moves: PlannedAction[] = [];
-  const lanes: DefenseLaneDecision[] = [];
+  const lanes: BlockingLaneDecision[] = [];
   const usedBackRank = new Set<BackRankSlotId>();
   let incomingScoreAfterBlocks = incomingScoreBeforeBlocks;
   for (const challenger of challengers) {
-    // A body already sitting opposite the challenger is already defending it.
+    // A body already sitting opposite the challenger is already blocking it.
     const deployedBlocker = model.aiFrontRank[challenger.slot] ?? null;
     if (deployedBlocker !== null) {
       lanes.push({
         challengerBattleCardId: challenger.battleCardId,
         lane: challenger.slot,
         challengerSpark: challenger.spark,
-        outcome: "already-defended",
-        reason: "already-defended",
+        outcome: "already-blocked",
+        reason: "already-blocked",
         blockerBattleCardId: deployedBlocker.battleCardId,
         blockerSpark: bodySpark(deployedBlocker),
       });
@@ -241,7 +241,7 @@ function chooseBlocker(
   incomingScoreRemaining: number,
   lethalPreventable: boolean,
   model: ForwardModel,
-  opts: DefenseOptions,
+  opts: BlockingOptions,
 ): BlockerChoice | null {
   const candidates = available
     .filter((body) => !used.has(body.slot))
@@ -281,7 +281,7 @@ function chumpBlockReason(
   incomingScoreRemaining: number,
   lethalPreventable: boolean,
   model: ForwardModel,
-  opts: DefenseOptions,
+  opts: BlockingOptions,
 ): "score-deficit" | "prevent-lethal" | null {
   const incomingRemainsLethal =
     model.playerScore + incomingScoreRemaining >= opts.scoreToWin;

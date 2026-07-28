@@ -83,7 +83,7 @@ function tutorialPresentationView(
       return {
         kind: presentation.kind,
         presentationId: presentation.id,
-        paired: presentation.defenderBattleCardId !== null,
+        paired: presentation.blockerBattleCardId !== null,
         scored: presentation.scored,
       };
     case "tutorial-guidance":

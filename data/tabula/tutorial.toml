@@ -187,7 +187,7 @@ wait = 0
 id = "resolve-twilight-challenge"
 action = "resolve-challenge"
 challengerCardId = "229ab3a1-3720-41a2-924c-8fe112188f8e"
-defenderCardId = "e83014d3-9d35-4e80-a1b3-9b25360ad2af"
+blockerCardId = "e83014d3-9d35-4e80-a1b3-9b25360ad2af"
 wait = 1
 
 [[actions]]
@@ -425,7 +425,7 @@ priority = 100
 duration = 3
 bubbleWidth = 500
 match = { kind = "glossary", id = "unstoppable" }
-text = "An [yellow]unstoppable[/yellow] challenger scores points equal to its ✦ when it dissolves a defender."
+text = "An [yellow]unstoppable[/yellow] challenger scores points equal to its ✦ when it dissolves a blocker."
 
 [[triggers]]
 id = "vengeful"

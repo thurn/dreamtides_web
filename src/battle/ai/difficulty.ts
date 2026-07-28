@@ -13,7 +13,7 @@ import type { OpponentMode } from "./opponent-model";
  *   conservative play).
  * - `sampleCap` — OPPONENT-SAMPLING DEPTH. How many opponent replies the
  *   opponent model samples when scoring a committed challenger. Deeper sampling
- *   is a sharper (and costlier) read of the opponent's likely defense.
+ *   is a sharper (and costlier) read of the opponent's likely blocking.
  */
 export interface AiDifficulty {
   beamWidth: number;

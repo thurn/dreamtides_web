@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { planDefense, planDefenseWithDecision } from "./defense";
+import { planBlocking, planBlockingWithDecision } from "./blocking";
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 
@@ -47,7 +47,7 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
 
 const OPTS = { scoreToWin: 25 };
 
-describe("planDefense", () => {
+describe("planBlocking", () => {
   it("returns no moves when the opponent has no front-rank challengers", () => {
     const model = makeModel({
       aiBackRank: {
@@ -56,7 +56,7 @@ describe("planDefense", () => {
       },
       opponentBodies: [makeBody({ battleCardId: "back", rank: "back", slot: "B0" })],
     });
-    expect(planDefense(model, OPTS)).toHaveLength(0);
+    expect(planBlocking(model, OPTS)).toHaveLength(0);
   });
 
   it("blocks a challenger in its own lane with a favorable body that survives", () => {
@@ -65,14 +65,14 @@ describe("planDefense", () => {
         ...emptyBackRankSlots(),
         B0: makeCard({ battleCardId: "wolf", basePrintedSpark: 4 }),
       },
-      opponentBodies: [makeBody({ battleCardId: "atk", slot: "F2", effectiveSpark: 3 })],
+      opponentBodies: [makeBody({ battleCardId: "challenger", slot: "F2", effectiveSpark: 3 })],
     });
 
-    const moves = planDefense(model, OPTS);
+    const moves = planBlocking(model, OPTS);
     expect(moves).toHaveLength(1);
     expect(moves[0].kind).toBe("MOVE_CARD");
     expect(moves[0].self?.battleCardId).toBe("wolf");
-    // The defender goes into the lane directly opposite the challenger.
+    // The blocker goes into the lane directly opposite the challenger.
     expect(moves[0].toSlot).toBe("F2");
   });
 
@@ -83,10 +83,10 @@ describe("planDefense", () => {
         B0: makeCard({ battleCardId: "huge", basePrintedSpark: 9 }),
         B1: makeCard({ battleCardId: "just-enough", basePrintedSpark: 4 }),
       },
-      opponentBodies: [makeBody({ battleCardId: "atk", slot: "F0", effectiveSpark: 3 })],
+      opponentBodies: [makeBody({ battleCardId: "challenger", slot: "F0", effectiveSpark: 3 })],
     });
 
-    const moves = planDefense(model, OPTS);
+    const moves = planBlocking(model, OPTS);
     expect(moves).toHaveLength(1);
     expect(moves[0].self?.battleCardId).toBe("just-enough");
   });
@@ -97,12 +97,12 @@ describe("planDefense", () => {
         ...emptyBackRankSlots(),
         B0: makeCard({ battleCardId: "exhausted", basePrintedSpark: 6, canChallengeThisTurn: false }),
       },
-      opponentBodies: [makeBody({ battleCardId: "atk", slot: "F0", effectiveSpark: 3 })],
+      opponentBodies: [makeBody({ battleCardId: "challenger", slot: "F0", effectiveSpark: 3 })],
     });
-    expect(planDefense(model, OPTS)).toHaveLength(0);
+    expect(planBlocking(model, OPTS)).toHaveLength(0);
   });
 
-  it("skips a lane already defended by a deployed body", () => {
+  it("skips a lane already blocked by a deployed body", () => {
     const model = makeModel({
       aiFrontRank: {
         ...emptyFrontRankSlots(),
@@ -112,9 +112,9 @@ describe("planDefense", () => {
         ...emptyBackRankSlots(),
         B0: makeCard({ battleCardId: "backRank", basePrintedSpark: 5 }),
       },
-      opponentBodies: [makeBody({ battleCardId: "atk", slot: "F0", effectiveSpark: 3 })],
+      opponentBodies: [makeBody({ battleCardId: "challenger", slot: "F0", effectiveSpark: 3 })],
     });
-    expect(planDefense(model, OPTS)).toHaveLength(0);
+    expect(planBlocking(model, OPTS)).toHaveLength(0);
   });
 
   it("chump-blocks with the smallest body when behind and unable to win the trade", () => {
@@ -126,10 +126,10 @@ describe("planDefense", () => {
         B0: makeCard({ battleCardId: "small", basePrintedSpark: 1 }),
         B1: makeCard({ battleCardId: "medium", basePrintedSpark: 2 }),
       },
-      opponentBodies: [makeBody({ battleCardId: "atk", slot: "F1", effectiveSpark: 6 })],
+      opponentBodies: [makeBody({ battleCardId: "challenger", slot: "F1", effectiveSpark: 6 })],
     });
 
-    const moves = planDefense(model, OPTS);
+    const moves = planBlocking(model, OPTS);
     expect(moves).toHaveLength(1);
     expect(moves[0].self?.battleCardId).toBe("small");
     expect(moves[0].toSlot).toBe("F1");
@@ -144,9 +144,9 @@ describe("planDefense", () => {
         B0: makeCard({ battleCardId: "precious", basePrintedSpark: 5 }),
       },
       // Challenger outsparks the only blocker, and the hit is far from lethal.
-      opponentBodies: [makeBody({ battleCardId: "atk", slot: "F0", effectiveSpark: 8 })],
+      opponentBodies: [makeBody({ battleCardId: "challenger", slot: "F0", effectiveSpark: 8 })],
     });
-    expect(planDefense(model, OPTS)).toHaveLength(0);
+    expect(planBlocking(model, OPTS)).toHaveLength(0);
   });
 
   it("chump-blocks aggregate lethal even when no single challenger is lethal", () => {
@@ -174,7 +174,7 @@ describe("planDefense", () => {
       ],
     });
 
-    const plan = planDefenseWithDecision(model, { scoreToWin: 10 });
+    const plan = planBlockingWithDecision(model, { scoreToWin: 10 });
     expect(plan.actions).toHaveLength(1);
     expect(plan.actions[0]).toMatchObject({
       kind: "MOVE_CARD",
@@ -221,7 +221,7 @@ describe("planDefense", () => {
       ],
     });
 
-    const moves = planDefense(model, OPTS);
+    const moves = planBlocking(model, OPTS);
     expect(moves).toHaveLength(2);
     const byLane = new Map(moves.map((m) => [m.toSlot, m.self?.battleCardId]));
     // Big threat (4✦ in F1) gets the body that can beat it; the small threat

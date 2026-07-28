@@ -39,9 +39,9 @@ export interface AiCard {
   figmentCount: number;
   /**
    * Whether this character is allowed to challenge (or, on the opponent's turn,
-   * defend) during the current turn. Projection reads the authoritative
+   * block) during the current turn. Projection reads the authoritative
    * {@link BattleCardStatus.isExhausted} flag: an exhausted body cannot
-   * challenge, defend, or pay ☪ costs, so a character with `isExhausted` set is
+   * challenge, block, or pay ☪ costs, so a character with `isExhausted` set is
    * `false` and an awakened body is `true`. Characters enter play exhausted and
    * in-play exhaustion is cleared during Ending (see
    * `battle_rules.md` §Exhaust and Awaken). The planner additionally sets this
@@ -105,7 +105,7 @@ function opposingSide(side: BattleSide): BattleSide {
  */
 function projectAiCard(instance: BattleCardInstance): AiCard {
   const rawCost: number | null = instance.definition.energyCost;
-  // An exhausted body cannot challenge or be moved up to defend. The status is
+  // An exhausted body cannot challenge or be moved up to block. The status is
   // authoritative: it is set on entering play (unless awakened) and cleared
   // during Ending.
   return {

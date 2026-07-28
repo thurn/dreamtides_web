@@ -186,7 +186,7 @@ export function tutorialActionLogDetails(action: TutorialAction) {
       action: action.action,
       waitSeconds: action.wait,
       challengerCardId: action.challengerCardId,
-      defenderCardId: action.defenderCardId,
+      blockerCardId: action.blockerCardId,
       sourceZone: "front-rank",
       loserDestinationZone: "controller-void",
       resolution: "compare-spark",
@@ -691,28 +691,28 @@ export function buildTutorialView(
   if (
     challengeAction?.action === "resolve-challenge" &&
     playerCard !== null &&
-    challengeAction.defenderCardId !== playerCard.id
+    challengeAction.blockerCardId !== playerCard.id
   ) {
     throw new Error(
-      `Tutorial defender ${challengeAction.defenderCardId} does not match the loaded tutorial player card ${playerCard.id}.`,
+      `Tutorial blocker ${challengeAction.blockerCardId} does not match the loaded tutorial player card ${playerCard.id}.`,
     );
   }
   const challengerSpark = challengeOpponentCard?.spark ?? null;
-  const defenderSpark = playerCard?.spark ?? null;
+  const blockerSpark = playerCard?.spark ?? null;
   if (
     challengeAction?.action === "resolve-challenge" &&
     challengerSpark !== null &&
-    defenderSpark !== null &&
-    challengerSpark === defenderSpark
+    blockerSpark !== null &&
+    challengerSpark === blockerSpark
   ) {
     throw new Error(
       `Tutorial challenge ${challengeAction.id} requires unequal printed spark.`,
     );
   }
   const challengeLoserOwner =
-    challengerSpark === null || defenderSpark === null
+    challengerSpark === null || blockerSpark === null
       ? null
-      : challengerSpark < defenderSpark
+      : challengerSpark < blockerSpark
         ? "enemy"
         : "player";
   const challengeResolved =
@@ -960,7 +960,7 @@ export function buildTutorialView(
       tutorialCard === null ||
       playerTurnCard === null ||
       challengerSpark === null ||
-      defenderSpark === null ||
+      blockerSpark === null ||
       challengeLoserOwner === null
         ? null
         : {
@@ -970,10 +970,10 @@ export function buildTutorialView(
               card: { ...tutorialCard, exhausted: false },
               spark: challengerSpark,
             },
-            defender: {
+            blocker: {
               owner: "player",
               card: { ...playerTurnCard, exhausted: false },
-              spark: defenderSpark,
+              spark: blockerSpark,
             },
             winnerOwner: challengeLoserOwner === "enemy" ? "player" : "enemy",
             loserOwner: challengeLoserOwner,

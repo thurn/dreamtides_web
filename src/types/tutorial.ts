@@ -195,11 +195,11 @@ export interface RepositionPlayerCharacterTutorialAction extends TutorialActionB
   readonly opposingCardId: string;
 }
 
-/** Resolves one UUID-authored challenger/defender pairing with unequal spark. */
+/** Resolves one UUID-authored challenger/blocker pairing with unequal spark. */
 export interface ResolveChallengeTutorialAction extends TutorialActionBase {
   readonly action: "resolve-challenge";
   readonly challengerCardId: string;
-  readonly defenderCardId: string;
+  readonly blockerCardId: string;
 }
 
 /** Draws and reveals one UUID-authored Dreamwell card for the selected side. */

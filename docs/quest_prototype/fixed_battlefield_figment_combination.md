@@ -327,7 +327,7 @@ At execution, the target must still be an enemy character in play and a
 position must still be open. A stale or invalid target makes the effect fail.
 
 After a successful move, the controller and position change atomically.
-Support, subtype counts, static effects, challenger or defender designation,
+Support, subtype counts, static effects, challenger or blocker designation,
 and controller-dependent spark are recomputed for both sides before resulting
 triggers resolve.
 

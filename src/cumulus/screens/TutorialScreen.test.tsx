@@ -1569,7 +1569,7 @@ describe("TutorialScreen", () => {
     const onHowToPlayDismissed = vi.fn();
     const onActionComplete = vi.fn();
     const howToPlayText =
-      "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦), or [yellow]accept[/yellow] a challenge. An [purple]event[purple] resolves once.\n\nScore 12⍟ to win this configured battle.";
+      "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦), or [yellow]block[/yellow] a challenger. An [purple]event[purple] resolves once.\n\nScore 12⍟ to win this configured battle.";
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -1647,7 +1647,7 @@ describe("TutorialScreen", () => {
     expect(paragraphs[0]?.style.marginTop).toBe("0px");
     expect(paragraphs[1]?.style.marginTop).toBe("var(--space-7)");
     expect(paragraphs[0]?.textContent).toContain(
-      "Play characters and challenge with them to score points () equal to their spark (), or accept a challenge",
+      "Play characters and challenge with them to score points () equal to their spark (), or block a challenger",
     );
     expect(paragraphs[1]?.textContent?.replace(/\s+/g, " ")).toContain(
       "Score 12 to win this configured battle",
@@ -1659,13 +1659,13 @@ describe("TutorialScreen", () => {
     ];
     expect(highlights.map((highlight) => highlight.textContent)).toEqual([
       "challenge",
-      "accept",
+      "block",
     ]);
     expect(
       highlights.every((highlight) => highlight.style.color === "var(--spark)"),
     ).toBe(true);
     expect(
-      highlights.some((highlight) => highlight.textContent === "a challenge"),
+      highlights.some((highlight) => highlight.textContent === "a challenger"),
     ).toBe(false);
     const purpleHighlight = paragraphs[0]?.querySelector<HTMLElement>(
       '[data-tutorial-instruction-highlight="purple"]',
@@ -2559,7 +2559,7 @@ describe("TutorialScreen", () => {
                 id: "resolve-challenge",
                 action: "resolve-challenge",
                 challengerCardId: TUTORIAL_OPPONENT_CARD.model.cardId,
-                defenderCardId: TUTORIAL_PLAYER_CARD.model.cardId,
+                blockerCardId: TUTORIAL_PLAYER_CARD.model.cardId,
                 wait: 0,
               },
               howToPlay: null,
@@ -2572,7 +2572,7 @@ describe("TutorialScreen", () => {
                   card: TUTORIAL_OPPONENT_CARD,
                   spark: 2,
                 },
-                defender: {
+                blocker: {
                   owner: "player",
                   card: TUTORIAL_PLAYER_CARD,
                   spark: 4,

@@ -632,7 +632,7 @@ export function buildEnemyDescriptor(
       subtitle: "Battlefield Projection",
       imageNumber: "001",
       portraitSeed: 0,
-      abilityText: "A synthetic opponent assembled for prototype combat.",
+      abilityText: "A synthetic opponent assembled for a prototype battle.",
       dreamsigns,
       signatureCards: [],
     };

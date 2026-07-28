@@ -104,7 +104,7 @@ const FIXTURE_ACTIONS = [
     id: "resolve-challenge",
     action: "resolve-challenge",
     challengerCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
-    defenderCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+    blockerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
     wait: 0,
   },
 ];
@@ -315,7 +315,7 @@ describe("tutorial data", () => {
       validateTutorialActions([
         {
           ...FIXTURE_ACTIONS[8],
-          defenderCardId: FIXTURE_ACTIONS[8].challengerCardId,
+          blockerCardId: FIXTURE_ACTIONS[8].challengerCardId,
         },
       ]),
     ).toThrow(/two different/u);

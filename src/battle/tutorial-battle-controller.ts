@@ -1,8 +1,8 @@
 import { actionToCommands } from "./ai/driver";
 import {
-  planDefenseWithDecision,
-  type DefenseDecision,
-} from "./ai/defense";
+  planBlockingWithDecision,
+  type BlockingDecision,
+} from "./ai/blocking";
 import { AI_DIFFICULTY_V1 } from "./ai/difficulty";
 import { forwardModelFromState } from "./ai/forward-model";
 import { planNextAction } from "./ai/planner";
@@ -65,8 +65,8 @@ export type TutorialAutomaticIntent = (
     }
   | { kind: "battle-gesture"; commands: readonly BattleCommand[]; intentKey: string; reason: string }
   | {
-      kind: "battle-ai-defend";
-      decision: DefenseDecision;
+      kind: "battle-ai-block";
+      decision: BlockingDecision;
       intentKey: string;
       reason: string;
     }
@@ -192,11 +192,11 @@ export function planTutorialBattleController(
     if (board.phase === "day") {
       return { status: "driver", driverClientId: mode.driverClientId, isCurrentClientDriver: true, isDriverPresent: true, requiresHumanDecision: true, intent: null };
     }
-    const aiDefenseAlreadyProcessed =
-      battle.aiDefenseTurn?.activeSide === board.activeSide &&
-      battle.aiDefenseTurn.turnNumber === board.turnNumber;
-    if (board.phase === "dusk" && !aiDefenseAlreadyProcessed) {
-      const defense = planDefenseWithDecision(
+    const aiBlockingAlreadyProcessed =
+      battle.aiBlockingTurn?.activeSide === board.activeSide &&
+      battle.aiBlockingTurn.turnNumber === board.turnNumber;
+    if (board.phase === "dusk" && !aiBlockingAlreadyProcessed) {
+      const blocking = planBlockingWithDecision(
         forwardModelFromState(board, "enemy"),
         { scoreToWin: battle.init.scoreToWin },
       );
@@ -205,10 +205,10 @@ export function planTutorialBattleController(
         driverClientId: mode.driverClientId, isCurrentClientDriver: true, isDriverPresent: true,
         requiresHumanDecision: false,
         intent: {
-          kind: "battle-ai-defend",
-          decision: defense.decision,
-          intentKey: `${key}:defend`,
-          reason: "enemy-defend-player-attack",
+          kind: "battle-ai-block",
+          decision: blocking.decision,
+          intentKey: `${key}:block`,
+          reason: "enemy-block-player-challenge",
         },
       };
     }

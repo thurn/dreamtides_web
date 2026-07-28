@@ -7,7 +7,7 @@ play area. Two features distinguish it from traditional card games: the shared
 Dreamwell system replaces lands for energy production, and challenges are
 resolved positionally — at the end of each turn the active player's front-rank
 characters become challengers, the opposing player's front-rank characters
-opposite them become defenders, and each pairing is resolved by comparing
+opposite them become blockers, and each pairing is resolved by comparing
 spark.
 
 This document describes the complete design of the game and is the authoritative
@@ -23,7 +23,7 @@ reference for reading any card definition.
 - [The Play Area](#the-play-area)
 - [Turn Structure](#turn-structure)
 - [Exhaust and Awaken](#exhaust-and-awaken)
-- [Challengers, Defenders, and Scoring](#challengers-defenders-and-scoring)
+- [Challengers, Blockers, and Scoring](#challengers-blockers-and-scoring)
 - [Spark](#spark)
 - [Playing Cards and the Stack](#playing-cards-and-the-stack)
 - [Costs, Requirements, and X](#costs-requirements-and-x)
@@ -73,7 +73,7 @@ character has a spark value (✦) used during the Challenge phase, and a subtype
 (Warrior, Spirit Animal, Survivor, Outsider, and so on) that other cards can
 reference. Subtypes are an open-ended set of tribal tags. Characters can have
 triggered, activated, and static abilities. A character entering play is
-**exhausted** unless it is **awakened**, so it cannot challenge, defend, or pay
+**exhausted** unless it is **awakened**, so it cannot challenge, block, or pay
 ☪ costs on the turn it is played. Characters remain in play until removed by an
 effect (Dissolve, Banish, or Abandon) or dissolved in a challenge. Characters
 may be marked Fast (❖) or Interrupt (❖❖), controlling when they can be played
@@ -168,8 +168,8 @@ with the Support keyword benefits the up-to-two front-rank characters in the
 positions it supports (see [Support](#keywords-and-effects)).
 
 **Front rank and the back rank:** Only front-rank characters participate
-directly in the Challenge phase, as challengers or defenders. Back-rank
-characters are safe during the Challenge phase — they do not challenge, defend,
+directly in the Challenge phase, as challengers or blockers. Back-rank
+characters are safe during the Challenge phase — they do not challenge, block,
 or score, though their abilities (such as Support) can still affect front-rank
 characters.
 
@@ -236,19 +236,19 @@ and Ending run as automatic bookends.
 5. **Dusk** — The active player's ▸Dusk triggered abilities fire and resolve.
    The opposing player may reposition their own characters (subject to the rule
    that exhausted characters cannot be moved to the front rank), play Fast cards,
-   and activate Fast abilities — this is their window to position defenders
+   and activate Fast abilities — this is their window to position blockers
    opposite the active player's challengers after seeing them. The opposing
    player explicitly passes to end this phase. **At the end of Dusk, each
    opposing front-rank character directly opposite a challenger becomes a
-   defender, and that challenger becomes defended.**
+   blocker, and that challenger becomes blocked.**
 6. **Night** — ▸Night triggered abilities fire for the active player, and
    ▸Challenge triggered abilities fire for each of the active player's
    challengers. The active player may play Fast cards and activate Fast
    abilities, but may not reposition characters. The active player explicitly
    passes to end this phase. Effects during Night can change positions, which
-   can change challenger and defender designations.
+   can change challenger and blocker designations.
 7. **Challenge** — Each front-rank lane is resolved in turn, left to right
-   (see [Challengers, Defenders, and Scoring](#challengers-defenders-and-scoring)).
+   (see [Challengers, Blockers, and Scoring](#challengers-blockers-and-scoring)).
    No cards may be played during this phase, though triggered and static
    abilities still function and can modify spark.
 8. **Ending** — If the active player has more than 10 cards in hand, they
@@ -262,26 +262,26 @@ player's first turn skips the Draw phase.
 
 ## Exhaust and Awaken
 
-The **exhausted** status marks a character that cannot challenge, defend, or
+The **exhausted** status marks a character that cannot challenge, block, or
 activate abilities with ☪ costs. The status persists until the current turn's
 Ending phase, when it is cleared from every character in play.
 
-- Characters enter play exhausted and therefore cannot challenge, defend, or pay
+- Characters enter play exhausted and therefore cannot challenge, block, or pay
   ☪ costs on the turn they are played.
 - An **awakened** character enters play without the exhausted status. Awaken can
   also be applied as an effect — for example "2●: Awaken a character you
   control" clears the exhausted status, allowing that character to challenge,
-  defend, and pay ☪ costs.
+  block, and pay ☪ costs.
 - Paying a ☪ cost exhausts that character.
 
 Front-rank characters cannot activate abilities with ☪ costs. Because an
 exhausted character cannot be moved to the front rank, exhausting a back-rank
-character keeps it from challenging or defending until it awakens.
+character keeps it from challenging or blocking until it awakens.
 
-## Challengers, Defenders, and Scoring
+## Challengers, Blockers, and Scoring
 
 **Challengers** are the active player's front-rank characters as of the end of
-their Day phase. **Defenders** are the opposing player's front-rank characters
+their Day phase. **Blockers** are the opposing player's front-rank characters
 directly opposite a challenger as of the end of the Dusk phase. Repositioning
 during the Night phase can change which characters hold these designations.
 
@@ -296,10 +296,10 @@ a character scoring.
 **Challenge phase resolution:** Each front-rank lane is resolved in turn, left to
 right:
 
-- **Defended challenger:** Compare the spark of the challenger and its defender.
+- **Blocked challenger:** Compare the spark of the challenger and its blocker.
   The character with lower spark is dissolved. If both have equal spark, both are
   dissolved (unless one has Preeminence; see [Keywords](#keywords-and-effects)).
-  A defended challenger does not score unless it has Unstoppable. ▸Dissolved
+  A blocked challenger does not score unless it has Unstoppable. ▸Dissolved
   triggers fire after each lane is resolved.
 - **Unpaired challenger:** The challenger scores victory points equal to its
   spark for the active player.
@@ -470,7 +470,7 @@ includes X, X is 0.
 it is still in hand, so it must be played the turn it is drawn.
 
 **Unstoppable** — When this character wins a challenge against an opposing enemy
-character, it scores ⍟ equal to its spark. (A defended challenger with
+character, it scores ⍟ equal to its spark. (A blocked challenger with
 Unstoppable resolves the spark comparison as normal and also scores if it
 survives.)
 
@@ -503,7 +503,7 @@ position on the receiving side. It preserves its state and is exhausted through
 this turn's Ending, even if Awakened; this is not materialization. If the rank
 is full, the effect fails. Player-initiated Gain Control effects warn before
 costs are paid. After a successful move, recalculate Support, controller-based
-effects, subtype counts, and challenger or defender status before resolving
+effects, subtype counts, and challenger or blocker status before resolving
 resulting triggers.
 
 ## Ability Types

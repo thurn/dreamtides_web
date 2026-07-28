@@ -130,8 +130,8 @@ export function useTutorialBattleController({
       case "battle-gesture":
         void actions.battleGesture(intent.commands, intent.intentKey, actor).catch(() => undefined);
         return;
-      case "battle-ai-defend":
-        void actions.battleAiDefend("enemy", actor, intent.intentKey).catch(() => undefined);
+      case "battle-ai-block":
+        void actions.battleAiBlock("enemy", actor, intent.intentKey).catch(() => undefined);
         return;
       case "resolve-prompt":
         void actions.resolvePrompt(
@@ -175,8 +175,8 @@ function logTutorialIntent(
     ...(intent.kind === "resolve-prompt"
       ? { promptId: intent.promptId, resolution: intent.resolution }
       : {}),
-    ...(intent.kind === "battle-ai-defend"
-      ? { defenseDecision: intent.decision }
+    ...(intent.kind === "battle-ai-block"
+      ? { blockingDecision: intent.decision }
       : {}),
     ...(intent.kind === "complete-presentation"
       ? { presentationId: intent.presentationId }

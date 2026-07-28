@@ -7,7 +7,7 @@ import {
 describe("tutorial instruction markup", () => {
   it("parses multiple exact yellow spans without highlighting matching plain words", () => {
     const source =
-      "Position characters to [yellow]challenge[/yellow], or [yellow]accept[/yellow] a challenge.";
+      "Position characters to [yellow]challenge[/yellow], or [yellow]block[/yellow] a challenger.";
 
     expect(parseTutorialInstructionMarkup(source)).toEqual([
       {
@@ -15,13 +15,13 @@ describe("tutorial instruction markup", () => {
           { text: "Position characters to " },
           { text: "challenge", highlight: "yellow" },
           { text: ", or " },
-          { text: "accept", highlight: "yellow" },
-          { text: " a challenge." },
+          { text: "block", highlight: "yellow" },
+          { text: " a challenger." },
         ],
       },
     ]);
     expect(tutorialInstructionPlainText(source)).toBe(
-      "Position characters to challenge, or accept a challenge.",
+      "Position characters to challenge, or block a challenger.",
     );
   });
 

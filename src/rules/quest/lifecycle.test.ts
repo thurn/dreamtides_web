@@ -671,13 +671,13 @@ describe("LOAD_STATE", () => {
     expect(out.outcome).toBe("bounced");
   });
 
-  it("validates shared automation and AI-defense markers in loaded battles", () => {
+  it("validates shared automation and AI-blocking markers in loaded battles", () => {
     const start = genesis();
     const snapshot: QuestState = { ...start.quest };
     const validBattle = {
       ...emptyBattle,
       basicAutomationEnabled: true,
-      aiDefenseTurn: { activeSide: "player", turnNumber: 3 },
+      aiBlockingTurn: { activeSide: "player", turnNumber: 3 },
       tutorialAiActionOverrides: [
         {
           id: "scripted-play",
@@ -704,7 +704,7 @@ describe("LOAD_STATE", () => {
       start,
       event("LOAD_STATE", {
         snapshot,
-        battle: { ...emptyBattle, aiDefenseTurn: { activeSide: "enemy" } },
+        battle: { ...emptyBattle, aiBlockingTurn: { activeSide: "enemy" } },
       }),
       ctx(),
     );

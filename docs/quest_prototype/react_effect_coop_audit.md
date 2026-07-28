@@ -270,7 +270,7 @@ Recommended direction:
   and `src/screens/cumulus_adapters/DreamAugurySiteScreenAdapter.tsx:48` use
   signature guards and deferred generation-aware cleanup. The StrictMode test
   is `src/components/ScreenRouter.test.tsx:610`.
-- `src/battle/ai/use-battle-ai.ts:253` retains its per-turn defense ref through
+- `src/battle/ai/use-battle-ai.ts:253` retains its per-turn blocking ref through
   replay, replans against optimistic board state, and is disabled when presence
   reports multiple or unknown clients.
 - `src/cumulus/screens/DreamscapeScreen.tsx:89` cancels the replayed Essence

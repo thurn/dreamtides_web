@@ -203,7 +203,7 @@ export function routeDomain(
       type === "BATTLE_REPOSITION_CHARACTER" ||
       type === "BATTLE_PLAY_CARD" ||
       type === "BATTLE_GESTURE" ||
-      type === "BATTLE_AI_DEFEND" ||
+      type === "BATTLE_AI_BLOCK" ||
       type === "RESOLVE_PROMPT" ||
       type === "SET_CARD_NOTE"
     )
@@ -398,8 +398,8 @@ export function routeDomain(
       return foldCase(state, battleEvents.battlePlayCard(state, payload, ctx, event.actor));
     case "BATTLE_GESTURE":
       return foldCase(state, battleEvents.battleGesture(state, payload, ctx, event.actor));
-    case "BATTLE_AI_DEFEND":
-      return foldCase(state, battleEvents.battleAiDefend(state, payload, ctx, event.actor));
+    case "BATTLE_AI_BLOCK":
+      return foldCase(state, battleEvents.battleAiBlock(state, payload, ctx, event.actor));
     case "COMPLETE_TUTORIAL_BATTLE_PRESENTATION":
       return foldCase(
         state,

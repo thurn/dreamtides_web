@@ -134,16 +134,16 @@ function dissolvedIds(resolution: ChallengeResolution): string[] {
   return resolution.dissolved.map((entry) => entry.battleCardId);
 }
 
-/** Build a single-lane (`F0`) defended state with a player challenger + enemy defender. */
+/** Build a single-lane (`F0`) blocked state with a player challenger + enemy blocker. */
 function lane0State(
   challenger: BattleCardInstance,
-  defender: BattleCardInstance | null,
+  blocker: BattleCardInstance | null,
 ): BattleMutableState {
-  const instances = defender === null ? [challenger] : [challenger, defender];
+  const instances = blocker === null ? [challenger] : [challenger, blocker];
   return makeState({
     activeSide: "player",
     player: { frontRank: frontRank({ F0: challenger.battleCardId }) },
-    enemy: { frontRank: frontRank({ F0: defender?.battleCardId ?? null }) },
+    enemy: { frontRank: frontRank({ F0: blocker?.battleCardId ?? null }) },
     instances,
   });
 }
@@ -165,12 +165,12 @@ describe("resolveChallenge — plain spark comparison", () => {
     expect(dissolvedIds(resolution)).toEqual([]);
   });
 
-  it("scores nothing for an empty lane or a defender-only lane", () => {
-    const defenderOnly = makeInstance("e0", { owner: "enemy", printedSpark: 9 });
+  it("scores nothing for an empty lane or a blocker-only lane", () => {
+    const blockerOnly = makeInstance("e0", { owner: "enemy", printedSpark: 9 });
     const state = makeState({
       activeSide: "player",
       enemy: { frontRank: frontRank({ F0: "e0" }) },
-      instances: [defenderOnly],
+      instances: [blockerOnly],
     });
     const resolution = resolveChallenge({ state, activeSide: "player" });
     expect(resolution.playerScoreDelta).toBe(0);
@@ -179,7 +179,7 @@ describe("resolveChallenge — plain spark comparison", () => {
     expect(dissolvedIds(resolution)).toEqual([]);
   });
 
-  it("dissolves the lower-spark character in a defended lane", () => {
+  it("dissolves the lower-spark character in a blocked lane", () => {
     const state = lane0State(
       makeInstance("p0", { owner: "player", printedSpark: 5 }),
       makeInstance("e0", { owner: "enemy", printedSpark: 3 }),
@@ -282,7 +282,7 @@ describe("resolveChallenge — Vengeful", () => {
 });
 
 describe("resolveChallenge — Unstoppable", () => {
-  it("scores a defended Unstoppable challenger that survives", () => {
+  it("scores a blocked Unstoppable challenger that survives", () => {
     const state = lane0State(
       makeInstance("p0", { owner: "player", printedSpark: 6, renderedText: "Unstoppable" }),
       makeInstance("e0", { owner: "enemy", printedSpark: 3 }),
@@ -303,7 +303,7 @@ describe("resolveChallenge — Unstoppable", () => {
     expect(dissolvedIds(resolution)).toEqual(["p0"]);
   });
 
-  it("scores a surviving Unstoppable defender for the opposing side", () => {
+  it("scores a surviving Unstoppable blocker for the opposing side", () => {
     const state = lane0State(
       makeInstance("p0", { owner: "player", printedSpark: 2 }),
       makeInstance("e0", { owner: "enemy", printedSpark: 6, renderedText: "Unstoppable" }),
@@ -366,16 +366,16 @@ describe("resolveChallenge — keyword combinations", () => {
 });
 
 describe("resolveChallenge — figment stacks (rules §Figments)", () => {
-  it("compares only the topmost figment, so a tall stack of small figments cannot dissolve a large defender", () => {
+  it("compares only the topmost figment, so a tall stack of small figments cannot dissolve a large blocker", () => {
     // Stack of three 2✦ figments (total 6). Only the topmost (2✦) fights the 3✦
-    // defender, so the topmost dissolves and the defender survives.
+    // blocker, so the topmost dissolves and the blocker survives.
     const figment = makeInstance("fig", {
       owner: "player",
       isFigment: true,
       figmentSparks: [2, 2, 2],
     });
-    const defender = makeInstance("e0", { owner: "enemy", printedSpark: 3 });
-    const state = lane0State(figment, defender);
+    const blocker = makeInstance("e0", { owner: "enemy", printedSpark: 3 });
+    const state = lane0State(figment, blocker);
     const resolution = resolveChallenge({ state, activeSide: "player" });
     expect(dissolvedIds(resolution)).toEqual(["fig"]);
     // The two reserves (4✦) are unopposed and score; the contested topmost does not.
@@ -384,7 +384,7 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
   });
 
   it("scores reserve figments while the topmost wins and survives", () => {
-    // Three 4✦ Monstrosity figments. Topmost 4 > defender 3 → defender dissolves;
+    // Three 4✦ Monstrosity figments. Topmost 4 > blocker 3 → blocker dissolves;
     // the topmost survives scoring nothing; the two reserves score 8⍟.
     const figment = makeInstance("fig", {
       owner: "player",
@@ -392,15 +392,15 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
       subtype: "Monstrosity",
       figmentSparks: [4, 4, 4],
     });
-    const defender = makeInstance("e0", { owner: "enemy", printedSpark: 3 });
-    const state = lane0State(figment, defender);
+    const blocker = makeInstance("e0", { owner: "enemy", printedSpark: 3 });
+    const state = lane0State(figment, blocker);
     const resolution = resolveChallenge({ state, activeSide: "player" });
     expect(dissolvedIds(resolution)).toEqual(["e0"]);
     expect(resolution.playerScoreDelta).toBe(8);
   });
 
   it("scores the surviving Unstoppable topmost on top of the reserves", () => {
-    // Two 4✦ Ancient figments (Unstoppable). Topmost dissolves the 3✦ defender and
+    // Two 4✦ Ancient figments (Unstoppable). Topmost dissolves the 3✦ blocker and
     // survives, scoring 4⍟; the reserve scores 4⍟, for 8⍟ total.
     const figment = makeInstance("fig", {
       owner: "player",
@@ -408,24 +408,24 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
       subtype: "Ancient",
       figmentSparks: [4, 4],
     });
-    const defender = makeInstance("e0", { owner: "enemy", printedSpark: 3 });
-    const state = lane0State(figment, defender);
+    const blocker = makeInstance("e0", { owner: "enemy", printedSpark: 3 });
+    const state = lane0State(figment, blocker);
     const resolution = resolveChallenge({ state, activeSide: "player" });
     expect(dissolvedIds(resolution)).toEqual(["e0"]);
     expect(resolution.playerScoreDelta).toBe(8);
   });
 
-  it("trades the topmost Wraith for the defender via Vengeful and scores nothing", () => {
-    // Three 0✦ Wraith figments (Vengeful) into a 5✦ defender. The topmost is
-    // dissolved and Vengeful drags the defender down too; reserves score 0.
+  it("trades the topmost Wraith for the blocker via Vengeful and scores nothing", () => {
+    // Three 0✦ Wraith figments (Vengeful) into a 5✦ blocker. The topmost is
+    // dissolved and Vengeful drags the blocker down too; reserves score 0.
     const figment = makeInstance("fig", {
       owner: "player",
       isFigment: true,
       subtype: "Wraith",
       figmentSparks: [0, 0, 0],
     });
-    const defender = makeInstance("e0", { owner: "enemy", printedSpark: 5 });
-    const state = lane0State(figment, defender);
+    const blocker = makeInstance("e0", { owner: "enemy", printedSpark: 5 });
+    const state = lane0State(figment, blocker);
     const resolution = resolveChallenge({ state, activeSide: "player" });
     expect(dissolvedIds(resolution).sort()).toEqual(["e0", "fig"]);
     expect(resolution.playerScoreDelta).toBe(0);
@@ -444,20 +444,20 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
   });
 
   it("stack vs stack: only the challenging stack scores, by its reserves", () => {
-    // Challenger topmost 3 beats defender topmost 1: the defender stack sheds its
-    // topmost; the challenger's reserves (3✦) score. The defender stack, defending,
+    // Challenger topmost 3 beats blocker topmost 1: the blocker stack sheds its
+    // topmost; the challenger's reserves (3✦) score. The blocker stack, blocking,
     // scores nothing.
     const challenger = makeInstance("fig", {
       owner: "player",
       isFigment: true,
       figmentSparks: [3, 3],
     });
-    const defender = makeInstance("e0", {
+    const blocker = makeInstance("e0", {
       owner: "enemy",
       isFigment: true,
       figmentSparks: [1, 1, 1],
     });
-    const state = lane0State(challenger, defender);
+    const state = lane0State(challenger, blocker);
     const resolution = resolveChallenge({ state, activeSide: "player" });
     expect(dissolvedIds(resolution)).toEqual(["e0"]);
     expect(resolution.playerScoreDelta).toBe(3);
@@ -466,10 +466,10 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
 });
 
 describe("resolveChallenge — supportContribution", () => {
-  it("raises a character over its defender and flips the outcome", () => {
+  it("raises a character over its blocker and flips the outcome", () => {
     const challenger = makeInstance("p0", { owner: "player", printedSpark: 3 });
-    const defender = makeInstance("e0", { owner: "enemy", printedSpark: 4 });
-    const state = lane0State(challenger, defender);
+    const blocker = makeInstance("e0", { owner: "enemy", printedSpark: 4 });
+    const state = lane0State(challenger, blocker);
 
     // Without support: player 3 < enemy 4 → player dissolves.
     const baseline = resolveChallenge({ state, activeSide: "player" });

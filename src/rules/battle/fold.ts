@@ -152,8 +152,8 @@ export interface BattleFoldState {
   challengeCursor?: ChallengeCursor | null;
   /** Persisted automation marker. Battle command expansion is always enabled. */
   basicAutomationEnabled?: boolean;
-  /** Last opponent Dusk for which the reducer applied AI defense. */
-  aiDefenseTurn?: {
+  /** Last opponent Dusk for which the reducer applied AI blocking. */
+  aiBlockingTurn?: {
     activeSide: BattleSide;
     turnNumber: number;
   };
@@ -257,23 +257,23 @@ export interface DreamwellRevealPresentation {
  * The two paced beats that make an opposed Challenge readable in the tutorial.
  *
  * Blocking and its resolution are a single fold step apart, so without a beat
- * between them a defender enters its lane and dissolves inside one frame. Each
+ * between them a blocker enters its lane and dissolves inside one frame. Each
  * beat parks tutorial automation exactly as the other presentations do, holding
  * the board still long enough for the shared-layout travel to play and be read.
  */
 export interface OpponentBlockPresentation {
   readonly id: string;
   readonly kind: "opponent-block";
-  /** The side whose Challenge is being defended against. */
+  /** The side whose challengers are being blocked. */
   readonly activeSide: BattleSide;
-  /** Every defender that moved into a lane already holding a challenger. */
+  /** Every blocker that moved into a lane already holding a challenger. */
   readonly blockers: readonly OpponentBlockEntry[];
 }
 
 export interface OpponentBlockEntry {
   readonly battleCardId: string;
   readonly slotId: FrontRankSlotId;
-  /** The challenger this defender moved to oppose. */
+  /** The challenger this blocker moved to oppose. */
   readonly challengerBattleCardId: string;
 }
 
@@ -286,7 +286,7 @@ export interface ChallengeResolvedPresentation {
   /** The active-side character whose Challenge produced this result. */
   readonly challengerBattleCardId: string;
   /** The opposing character in the lane, or null for an unpaired Challenge. */
-  readonly defenderBattleCardId: string | null;
+  readonly blockerBattleCardId: string | null;
   /** Points scored by a character in this lane, or null when no character scored. */
   readonly scored: ChallengeScoredEntry | null;
   /** Every character this lane dissolved, in resolution order. */

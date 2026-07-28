@@ -104,7 +104,7 @@ their own cards through the debug rail. Four facts shape this design:
    parallel structure.
 
 The board model is two ranks per side: the **front rank** (zone `frontRank`,
-slots `F0`–`F3`, 4 positions) whose characters become challengers and defenders,
+slots `F0`–`F3`, 4 positions) whose characters become challengers and blockers,
 and the **back rank** (zone `backRank`, slots `B0`–`B4`, 5 positions).
 Characters materialize into the back rank, exhausted. Effective spark comes from
 `selectEffectiveSparkForInstance`: a regular character scores `printedSpark +
@@ -254,8 +254,8 @@ by both sides (the human benefits from it too).
 
 - **Challenge resolver (`engine/challenge.ts`).** At the Challenge phase, for each
   front-rank lane `F0`–`F3`, compare the controller's challenger spark against
-  the opposing defender directly opposite. Apply the rules in
-  `battle_rules.md` §Challengers, Defenders, and Scoring: lower spark dissolves,
+  the opposing blocker directly opposite. Apply the rules in
+  `battle_rules.md` §Challengers, Blockers, and Scoring: lower spark dissolves,
   ties dissolve both (respecting Preeminence — absent from the Starter pool but
   cheap to support), unpaired challengers score their spark, figment stacks
   resolve top-down using the existing `selectFigmentChallengeLossCount`.
@@ -300,7 +300,7 @@ resolver must never assume it understands the human's board. Three kinds of step
 can change a turn's outcome:
 
 1. **The opponent's interaction windows.** When the AI is the active player, the
-   human still owns the Dusk window (position defenders opposite the AI's
+   human still owns the Dusk window (position blockers opposite the AI's
    challengers; play Fast cards) and a Night Fast window. These are not triggers;
    they are the human's turn to react, and they must be preserved.
 2. **Triggers that fire inside resolution.** ▸Night and ▸Challenge fire at the
@@ -526,7 +526,7 @@ Turn" stops the loop. See [The Approval Loop](#the-approval-loop).
 ## Modeling the Opponent
 
 The one genuine uncertainty is what the human does after the AI commits its
-challengers: during the player's Dusk they reposition defenders, and on their own
+challengers: during the player's Dusk they reposition blockers, and on their own
 turn they may remove or block the AI's threats. The AI cannot simulate the
 player's specific cards, so it models the response abstractly — this is where the
 Monte Carlo / minimax-lite layer lives, kept to roughly 1.5 plies.
@@ -534,10 +534,10 @@ Monte Carlo / minimax-lite layer lives, kept to roughly 1.5 plies.
 `opponent-model.ts` defines a small set of **archetypal responses** to a proposed
 AI front rank:
 
-- **No defense** — challengers score unblocked (best case for the AI).
+- **No blocking** — challengers score unblocked (best case for the AI).
 - **Block biggest** — the opponent puts its largest available body opposite the
   AI's biggest challenger.
-- **Trade evenly** — the opponent assigns defenders to dissolve as much AI spark
+- **Trade evenly** — the opponent assigns blockers to dissolve as much AI spark
   as possible.
 - **Remove top threat** — the opponent has removal for the AI's most valuable
   challenger (probability scaled by opponent hand size and a deck-wide removal
@@ -549,7 +549,7 @@ be selected by a difficulty setting:
 - **Expectiminimax (default):** weight each response by a prior and take the
   expected evaluation. This yields measured, non-paranoid play.
 - **Worst-case (cautious):** take the minimum over the response set, producing a
-  more defensive AI that over-commits less.
+  more block-oriented AI that over-commits less.
 
 "Monte Carlo" here means sampling a handful (≤ ~16) of concrete responses from
 those archetypes — including sampling *which* unknown card the opponent might
@@ -650,7 +650,7 @@ rank.
    It surfaces "Play Nocturne Strummer to the back rank." You click **Approve**;
    the materialization commits and the planner re-plans.
 2. **Proposal: Flashpoint Detonation on your 3✦ body.** With the Strummer down, the
-   next-best action is removal — dissolving the player's only defender raises the
+   next-best action is removal — dissolving the player's only blocker raises the
    AI's expected Challenge points. The proposal names the exact target. You click
    **Approve** (or **Reject** if you know it should fizzle — say the body has Veil
    you have not revealed).
@@ -658,12 +658,12 @@ rank.
    Colossus is pushed to the front rank, with the Strummer placed in a supporting
    back-rank slot. The proposal shows its computed effective spark — 6 base + 2
    from the Strummer's Support. You **Approve**.
-4. **Proposal: Worlds Await (+3✦) on the Colossus.** With the defender gone the
+4. **Proposal: Worlds Await (+3✦) on the Colossus.** With the blocker gone the
    opponent model expects no block, so the extra spark converts straight to
    points. You **Approve**.
 5. **Proposal: End Turn.** Approving it declares challengers and yields your Dusk
-   window (position a defender, play a Fast card). The Challenge resolver then
-   proposes the outcome — "Rusted Colossus scores N⍟, no defenders" — which
+   window (position a blocker, play a Fast card). The Challenge resolver then
+   proposes the outcome — "Rusted Colossus scores N⍟, no blockers" — which
    you **Approve**. Only then does the score commit; the spine checks the win
    condition, ramps energy, and hands the turn back via `SET_BATTLE_FLOW`.
 
@@ -719,7 +719,7 @@ un-approved proposal, set `canPlayerAct` (today hardcoded to `true` in
 `PlayableBattleScreen.tsx`) to `false` so the player drives the turn only through
 the proposal bar's Approve/Reject controls rather than by free editing. During the
 human's own Dusk/Night windows the proposal bar steps aside and normal controls
-return so the player can position defenders and play Fast cards. Pass
+return so the player can position blockers and play Fast cards. Pass
 `hasAiOpponent={aiMode}` to `BattleStatusBar` (it already renders
 `data-battle-status-meta="has-ai"`).
 

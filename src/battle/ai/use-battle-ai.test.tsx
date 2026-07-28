@@ -555,7 +555,7 @@ describe("useBattleAi", () => {
     expect(gestureDispatch).toHaveBeenCalledWith(commands);
   });
 
-  it("does not dispatch defense from local hook state", async () => {
+  it("does not dispatch blocking from local hook state", async () => {
     const dispatch = vi.fn();
     const gestureDispatch = vi.fn();
     const state = makeEnemyTurnState((mutable) => {
@@ -670,7 +670,7 @@ describe("useBattleAi", () => {
   // aware `engine/challenge.resolveChallenge` (Task 5.2). These cases prove the
   // four combat keywords flow through the AI's committed Challenge edits —
   // outcomes the prior keyword-blind judgment shim dropped. Each places the AI's
-  // (enemy) challenger and the player's defender in front-rank F0, then inspects
+  // (enemy) challenger and the player's blocker in front-rank F0, then inspects
   // the endTurn proposal's DEBUG_EDIT edits.
   describe("endTurn proposal — keyword-aware Challenge resolution", () => {
     async function endTurnEdits(
@@ -693,12 +693,12 @@ describe("useBattleAi", () => {
       return proposalEdits();
     }
 
-    it("scores a surviving defended Unstoppable challenger for the AI side", async () => {
-      // Keyword-blind: a defended challenger never scored. Keyword-aware: the
+    it("scores a surviving blocked Unstoppable challenger for the AI side", async () => {
+      // Keyword-blind: a blocked challenger never scored. Keyword-aware: the
       // AI's surviving Unstoppable challenger scores its spark.
       const edits = await endTurnEdits((mutable) => {
         placeFrontRankCharacter(mutable, "enemy", "aiUnstoppable", 6, "Unstoppable");
-        placeFrontRankCharacter(mutable, "player", "defender", 3, "");
+        placeFrontRankCharacter(mutable, "player", "blocker", 3, "");
       });
 
       expect(edits).toContainEqual({
@@ -732,17 +732,17 @@ describe("useBattleAi", () => {
 
     it("lets an AI Preeminence character win a spark tie instead of trading", async () => {
       // Keyword-blind: a 4v4 tie dissolved both. Keyword-aware: the AI's
-      // Preeminence bearer survives; only the opposing defender dissolves.
+      // Preeminence bearer survives; only the opposing blocker dissolves.
       let champion = "";
-      let defender = "";
+      let blocker = "";
       const edits = await endTurnEdits((mutable) => {
         champion = placeFrontRankCharacter(mutable, "enemy", "aiPreeminence", 4, "Preeminence");
-        defender = placeFrontRankCharacter(mutable, "player", "defender", 4, "");
+        blocker = placeFrontRankCharacter(mutable, "player", "blocker", 4, "");
       });
 
       expect(edits).toContainEqual({
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: defender,
+        battleCardId: blocker,
         destination: { side: "player", zone: "void" },
       });
       expect(

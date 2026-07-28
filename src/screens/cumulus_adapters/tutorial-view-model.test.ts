@@ -220,7 +220,7 @@ describe("buildTutorialView", () => {
         id: "resolve",
         action: "resolve-challenge" as const,
         challengerCardId: OPPONENT_CARD.id,
-        defenderCardId: PLAYER_CARD.id,
+        blockerCardId: PLAYER_CARD.id,
         wait: 0,
       },
       {
@@ -450,7 +450,7 @@ describe("buildTutorialView", () => {
         id: "resolve-challenge",
         action: "resolve-challenge",
         challengerCardId: TUTORIAL_OPPONENT_CARD_ID,
-        defenderCardId: TUTORIAL_PLAYER_CARD_ID,
+        blockerCardId: TUTORIAL_PLAYER_CARD_ID,
         wait: 0,
       }),
     ).toEqual({
@@ -458,7 +458,7 @@ describe("buildTutorialView", () => {
       action: "resolve-challenge",
       waitSeconds: 0,
       challengerCardId: TUTORIAL_OPPONENT_CARD_ID,
-      defenderCardId: TUTORIAL_PLAYER_CARD_ID,
+      blockerCardId: TUTORIAL_PLAYER_CARD_ID,
       sourceZone: "front-rank",
       loserDestinationZone: "controller-void",
       resolution: "compare-spark",
@@ -962,7 +962,7 @@ describe("buildTutorialView", () => {
         id: "challenge-positioning-how-to-play",
         action: "display-how-to-play" as const,
         trigger: "immediate" as const,
-        text: "Position characters in the front rank to [yellow]challenge[/yellow] with them during your turn, or [yellow]accept[/yellow] a challenge during the opponent's turn.",
+        text: "Position characters in the front rank to [yellow]challenge[/yellow] with them during your turn, or [yellow]block[/yellow] a challenger during the opponent's turn.",
         wait: 0,
       },
       {
@@ -1335,7 +1335,7 @@ describe("buildTutorialView", () => {
     );
     expect(duskInstructions.howToPlay).toEqual({
       actionId: "challenge-positioning-how-to-play",
-      text: "Position characters in the front rank to [yellow]challenge[/yellow] with them during your turn, or [yellow]accept[/yellow] a challenge during the opponent's turn.",
+      text: "Position characters in the front rank to [yellow]challenge[/yellow] with them during your turn, or [yellow]block[/yellow] a challenger during the opponent's turn.",
       wait: 0,
       trigger: "immediate",
     });
@@ -1614,7 +1614,7 @@ describe("buildTutorialView", () => {
         id: "resolve-challenge",
         action: "resolve-challenge" as const,
         challengerCardId: TUTORIAL_OPPONENT_CARD_ID,
-        defenderCardId: TUTORIAL_PLAYER_CARD_ID,
+        blockerCardId: TUTORIAL_PLAYER_CARD_ID,
         wait: 0,
       },
     ];
@@ -1643,7 +1643,7 @@ describe("buildTutorialView", () => {
         spark: 2,
         card: { model: { cardId: TUTORIAL_OPPONENT_CARD_ID } },
       },
-      defender: {
+      blocker: {
         owner: "player",
         spark: 4,
         card: { model: { cardId: TUTORIAL_PLAYER_CARD_ID } },

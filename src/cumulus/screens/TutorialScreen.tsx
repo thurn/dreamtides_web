@@ -104,7 +104,7 @@ export interface TutorialChallengeParticipantView {
 export interface TutorialChallengeView {
   readonly actionId: string;
   readonly challenger: TutorialChallengeParticipantView;
-  readonly defender: TutorialChallengeParticipantView;
+  readonly blocker: TutorialChallengeParticipantView;
   readonly winnerOwner: TutorialDreamAvatarOwner;
   readonly loserOwner: TutorialDreamAvatarOwner;
 }
@@ -1229,7 +1229,7 @@ function TutorialOpponentCharacterReposition({
 
 interface TutorialChallengeGeometry {
   readonly challenger: TutorialCardFrame;
-  readonly defender: TutorialCardFrame;
+  readonly blocker: TutorialCardFrame;
   readonly void: TutorialCardFrame;
 }
 
@@ -1330,39 +1330,39 @@ function TutorialChallengeAnimation({
       screen,
       challenge.challenger,
     );
-    const defenderElement = tutorialChallengeCardElement(
+    const blockerElement = tutorialChallengeCardElement(
       screen,
-      challenge.defender,
+      challenge.blocker,
     );
     const voidElement = screen.querySelector<HTMLElement>(
       `[data-battle-zone="${challenge.loserOwner}-void"] [data-battle-pile-frame]`,
     );
     if (
       challengerElement === null ||
-      defenderElement === null ||
+      blockerElement === null ||
       voidElement === null
     ) {
       return undefined;
     }
     setGeometry({
       challenger: frameRelativeTo(challengerElement, screen),
-      defender: frameRelativeTo(defenderElement, screen),
+      blocker: frameRelativeTo(blockerElement, screen),
       void: frameRelativeTo(voidElement, screen),
     });
     const challengerVisual =
       challengerElement.querySelector<HTMLElement>(
         "[data-battle-card-motion]",
       ) ?? challengerElement;
-    const defenderVisual =
-      defenderElement.querySelector<HTMLElement>("[data-battle-card-motion]") ??
-      defenderElement;
+    const blockerVisual =
+      blockerElement.querySelector<HTMLElement>("[data-battle-card-motion]") ??
+      blockerElement;
     const previousChallengerVisibility = challengerVisual.style.visibility;
-    const previousDefenderVisibility = defenderVisual.style.visibility;
+    const previousBlockerVisibility = blockerVisual.style.visibility;
     challengerVisual.style.visibility = "hidden";
-    defenderVisual.style.visibility = "hidden";
+    blockerVisual.style.visibility = "hidden";
     return () => {
       challengerVisual.style.visibility = previousChallengerVisibility;
-      defenderVisual.style.visibility = previousDefenderVisibility;
+      blockerVisual.style.visibility = previousBlockerVisibility;
     };
   }, [challenge, reduceMotion, screen, started]);
 
@@ -1373,27 +1373,27 @@ function TutorialChallengeAnimation({
   ): TutorialCardFrame =>
     participant.owner === challenge.challenger.owner
       ? geometry.challenger
-      : geometry.defender;
+      : geometry.blocker;
   const winner =
     challenge.winnerOwner === challenge.challenger.owner
       ? challenge.challenger
-      : challenge.defender;
+      : challenge.blocker;
   const loser =
     challenge.loserOwner === challenge.challenger.owner
       ? challenge.challenger
-      : challenge.defender;
+      : challenge.blocker;
   const winnerFrame = frameFor(winner);
   const loserFrame = frameFor(loser);
   const challengerCenterX =
     geometry.challenger.x + geometry.challenger.width / 2;
-  const defenderCenterX = geometry.defender.x + geometry.defender.width / 2;
+  const blockerCenterX = geometry.blocker.x + geometry.blocker.width / 2;
   const challengerCenterY =
     geometry.challenger.y + geometry.challenger.height / 2;
-  const defenderCenterY = geometry.defender.y + geometry.defender.height / 2;
-  const clashCenterX = (challengerCenterX + defenderCenterX) / 2;
-  const clashCenterY = (challengerCenterY + defenderCenterY) / 2;
+  const blockerCenterY = geometry.blocker.y + geometry.blocker.height / 2;
+  const clashCenterX = (challengerCenterX + blockerCenterX) / 2;
+  const clashCenterY = (challengerCenterY + blockerCenterY) / 2;
   const clashGap =
-    Math.min(geometry.challenger.height, geometry.defender.height) * 0.04;
+    Math.min(geometry.challenger.height, geometry.blocker.height) * 0.04;
   const clashFrame = (
     participant: TutorialChallengeParticipantView,
     frame: TutorialCardFrame,
@@ -1413,7 +1413,7 @@ function TutorialChallengeAnimation({
   const loserClashCenterX = loserClash.x + loserClash.width / 2;
   const loserClashCenterY = loserClash.y + loserClash.height / 2;
   const sequenceTimes = [0, 0.16, 0.42, 0.56, 0.78, 1];
-  const participants = [challenge.challenger, challenge.defender] as const;
+  const participants = [challenge.challenger, challenge.blocker] as const;
 
   return (
     <div

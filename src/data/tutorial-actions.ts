@@ -358,14 +358,14 @@ export function parseTutorialActions(
         );
       }
       if (
-        typeof record.defenderCardId !== "string" ||
-        !isCardId(record.defenderCardId)
+        typeof record.blockerCardId !== "string" ||
+        !isCardId(record.blockerCardId)
       ) {
         throw new Error(
-          `Tutorial action ${JSON.stringify(id)} must identify the defender by UUID.`,
+          `Tutorial action ${JSON.stringify(id)} must identify the blocker by UUID.`,
         );
       }
-      if (record.challengerCardId === record.defenderCardId) {
+      if (record.challengerCardId === record.blockerCardId) {
         throw new Error(
           `Tutorial action ${JSON.stringify(id)} must identify two different challenge characters.`,
         );
@@ -374,7 +374,7 @@ export function parseTutorialActions(
         id,
         action: "resolve-challenge",
         challengerCardId: record.challengerCardId,
-        defenderCardId: record.defenderCardId,
+        blockerCardId: record.blockerCardId,
         wait,
       } satisfies TutorialAction;
     }

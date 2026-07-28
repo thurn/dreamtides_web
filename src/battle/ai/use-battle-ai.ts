@@ -24,7 +24,7 @@ import {
 export interface AiProposal {
   /**
    * `action` is a card play/move (rejectable). `endPhase` advances the AI from
-   * its Day phase to Dusk and stops, so the human (the defender on the AI's
+   * its Day phase to Dusk and stops, so the human (the blocker on the AI's
    * turn) can reposition before driving Night/Challenge. `endTurn` bundles the
    * full Challenge resolution + handoff in one step, used only when basic
    * automation is off and nothing else will resolve the turn.
@@ -306,7 +306,7 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
  *
  * - With basic automation on, the AI proposes `endPhase` to step Day → Dusk and
  *   then holds NO proposal (returns null), so the human repositions their
- *   defenders during the AI's Dusk and drives Night/Challenge with the phase
+ *   blockers during the AI's Dusk and drives Night/Challenge with the phase
  *   controls. Basic automation resolves the AI's Challenge and the handoff when
  *   the human passes Challenge.
  * - With basic automation off, nothing else will resolve the turn, so the AI
@@ -340,7 +340,7 @@ async function computeProposalAsync(
 /**
  * Builds the `endPhase` proposal: a single `SET_BATTLE_FLOW` that advances the
  * AI from its Day phase into Dusk, keeping the same side and turn. Approving it
- * hands the Dusk repositioning window to the human defender; the rest of the AI
+ * hands the Dusk repositioning window to the human blocker; the rest of the AI
  * turn is then driven by the human via the phase controls.
  */
 function buildEndPhaseProposal(

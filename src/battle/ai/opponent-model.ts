@@ -19,8 +19,8 @@ import { rankSlotIds, type FrontRankSlotId } from "../types";
  * `engine/challenge.ts`, the unified resolver, which needs real
  * `BattleMutableState` instances the projection deliberately omits), applying
  * the rules in `battle_rules.md` §"Challenge phase resolution":
- *   - Defended challenger vs defender: the lower effective spark dissolves; a
- *     tie dissolves both; a defended challenger does not score.
+ *   - Blocked challenger vs blocker: the lower effective spark dissolves; a
+ *     tie dissolves both; a blocked challenger does not score.
  *   - Unpaired challenger: scores victory points equal to its spark.
  * The Starter pool has no Preeminence/Unstoppable, so those keyword carve-outs
  * do not apply here.
@@ -39,19 +39,19 @@ const REMOVAL_PRIOR = 0.1;
 /**
  * Prior weight of each archetypal response for the expectiminimax (mean)
  * aggregation. Higher weight = the AI assumes that response is more likely.
- * "Trade evenly" and "block biggest" (competent defensive play) outweigh the
- * passive "no defense" line. Tuning knobs.
+ * "Trade evenly" and "block biggest" (competent blocking play) outweigh the
+ * passive "no blocking" line. Tuning knobs.
  */
 const ARCHETYPE_PRIORS: Record<ResponseArchetype, number> = {
-  noDefense: 1,
+  noBlocks: 1,
   blockBiggest: 2,
   tradeEvenly: 3,
 };
 
-type ResponseArchetype = "noDefense" | "blockBiggest" | "tradeEvenly";
+type ResponseArchetype = "noBlocks" | "blockBiggest" | "tradeEvenly";
 
 const ARCHETYPE_ORDER: readonly ResponseArchetype[] = [
-  "noDefense",
+  "noBlocks",
   "blockBiggest",
   "tradeEvenly",
 ];
@@ -81,8 +81,8 @@ interface Challenger {
   effectiveSpark: number;
 }
 
-/** A defender the opponent can assign: an abstract body's effective spark. */
-interface DefenderBody {
+/** A blocker the opponent can assign: an abstract body's effective spark. */
+interface BlockerBody {
   index: number;
   effectiveSpark: number;
 }
@@ -134,14 +134,14 @@ function buildChallengers(model: ForwardModel): Challenger[] {
   return challengers;
 }
 
-/** Abstract bodies the opponent could assign as defenders, biggest first. */
-function buildDefenders(model: ForwardModel): DefenderBody[] {
-  const defenders: DefenderBody[] = model.opponentBodies.map((body, index) => ({
+/** Abstract bodies the opponent could assign as blockers, biggest first. */
+function buildBlockers(model: ForwardModel): BlockerBody[] {
+  const blockers: BlockerBody[] = model.opponentBodies.map((body, index) => ({
     index,
     effectiveSpark: body.effectiveSpark,
   }));
-  defenders.sort((a, b) => b.effectiveSpark - a.effectiveSpark);
-  return defenders;
+  blockers.sort((a, b) => b.effectiveSpark - a.effectiveSpark);
+  return blockers;
 }
 
 // --- Applying a response to a cloned model --------------------------------
@@ -171,27 +171,27 @@ function consumeOpponentBody(model: ForwardModel, originalIndex: number): void {
 }
 
 /**
- * Resolves a single lane between one AI challenger and one defender body over
+ * Resolves a single lane between one AI challenger and one blocker body over
  * the cloned model (`battle_rules.md` §"Challenge phase resolution"). The
- * defended challenger never scores; the lower spark dissolves; a tie dissolves
- * both. Returns the defender's surviving spark contribution removed from play
+ * blocked challenger never scores; the lower spark dissolves; a tie dissolves
+ * both. Returns the blocker's surviving spark contribution removed from play
  * (it is consumed from `opponentBodies` if it dissolves).
  */
 function resolveLane(
   model: ForwardModel,
   challenger: Challenger,
-  defender: DefenderBody,
+  blocker: BlockerBody,
 ): void {
-  if (challenger.effectiveSpark < defender.effectiveSpark) {
-    // Challenger dissolves; defender survives.
+  if (challenger.effectiveSpark < blocker.effectiveSpark) {
+    // Challenger dissolves; blocker survives.
     dissolveChallenger(model, challenger.slot);
-  } else if (challenger.effectiveSpark > defender.effectiveSpark) {
-    // Defender dissolves; challenger survives but, being defended, does not score.
-    consumeOpponentBody(model, defender.index);
+  } else if (challenger.effectiveSpark > blocker.effectiveSpark) {
+    // Blocker dissolves; challenger survives but, being blocked, does not score.
+    consumeOpponentBody(model, blocker.index);
   } else {
     // Tie: both dissolve (no Preeminence in the Starter pool).
     dissolveChallenger(model, challenger.slot);
-    consumeOpponentBody(model, defender.index);
+    consumeOpponentBody(model, blocker.index);
   }
 }
 
@@ -225,8 +225,8 @@ function applyResponse(
   }
 
   switch (response.archetype) {
-    case "noDefense": {
-      // Opponent assigns no defenders; every challenger scores unblocked.
+    case "noBlocks": {
+      // Opponent assigns no blockers; every challenger scores unblocked.
       for (const challenger of active) {
         scoreUnpaired(clone, challenger);
       }
@@ -234,15 +234,15 @@ function applyResponse(
     }
     case "blockBiggest": {
       // Largest available opponent body opposite the AI's biggest challenger.
-      const defenders = buildDefenders(clone);
-      if (defenders.length === 0) {
+      const blockers = buildBlockers(clone);
+      if (blockers.length === 0) {
         for (const challenger of active) {
           scoreUnpaired(clone, challenger);
         }
         break;
       }
       const biggestChallenger = active[0];
-      resolveLane(clone, biggestChallenger, defenders[0]);
+      resolveLane(clone, biggestChallenger, blockers[0]);
       for (let i = 1; i < active.length; i += 1) {
         scoreUnpaired(clone, active[i]);
       }
@@ -250,20 +250,20 @@ function applyResponse(
     }
     case "tradeEvenly": {
       // Greedy: assign each opponent body to a challenger it can kill or trade
-      // with, maximizing dissolved AI spark. Defenders are taken biggest-first
+      // with, maximizing dissolved AI spark. Blockers are taken biggest-first
       // and matched to the biggest challenger they can dissolve (spark >=);
       // remaining challengers score unblocked.
-      const defenders = buildDefenders(clone);
+      const blockers = buildBlockers(clone);
       const blocked = new Set<FrontRankSlotId>();
-      for (const defender of defenders) {
-        // Pick the biggest not-yet-blocked challenger the defender can dissolve
-        // or tie (defender spark >= challenger spark removes the most AI spark).
+      for (const blocker of blockers) {
+        // Pick the biggest not-yet-blocked challenger the blocker can dissolve
+        // or tie (blocker spark >= challenger spark removes the most AI spark).
         let best: Challenger | null = null;
         for (const challenger of active) {
           if (blocked.has(challenger.slot)) {
             continue;
           }
-          if (defender.effectiveSpark >= challenger.effectiveSpark) {
+          if (blocker.effectiveSpark >= challenger.effectiveSpark) {
             if (best === null || challenger.effectiveSpark > best.effectiveSpark) {
               best = challenger;
             }
@@ -273,7 +273,7 @@ function applyResponse(
           continue;
         }
         blocked.add(best.slot);
-        resolveLane(clone, best, defender);
+        resolveLane(clone, best, blocker);
       }
       // Unblocked challengers score.
       for (const challenger of active) {

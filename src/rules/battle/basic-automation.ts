@@ -71,9 +71,9 @@ const BOOKEND_PHASES: ReadonlySet<BattlePhase> = new Set<BattlePhase>([
  *    their turn, each front-rank lane (`F0`–`F3`) is resolved by comparing
  *    spark: the lower-spark character dissolves to the void, an unpaired
  *    challenger scores ⍟ equal to its spark, and the keyword rules below apply
- *    (rules §Challengers, Defenders, and Scoring).
+ *    (rules §Challengers, Blockers, and Scoring).
  *  - **Keyword awareness.** Preeminence wins spark ties, Vengeful drags the
- *    winner down when its bearer loses, and Unstoppable scores when a defended
+ *    winner down when its bearer loses, and Unstoppable scores when a blocked
  *    character survives (rules §Keywords and Effects).
  *  - **Bookend phases auto-advance.** A `SET_PHASE` into a bookend phase
  *    (`draw`, `dawn`, `ending`) carries no player action: it folds in that
