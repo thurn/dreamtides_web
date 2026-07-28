@@ -85,8 +85,6 @@ export interface MobileBattleCardView {
   readonly figment: boolean;
   /** Whether this rendered location should participate in shared-layout travel. */
   readonly layoutMotion?: "travel" | "snap";
-  /** Number of physical Figments represented by this battle instance. */
-  readonly figmentCount: number;
   /** Stored-time counters held by this battle instance. */
   readonly storedTime: number;
   /** Draw the green playable-card outline on this hand card. */
@@ -1634,7 +1632,6 @@ function FaceUpCard({
       data-battle-card-face="up"
       data-battle-card-exhausted={card.exhausted ? "true" : "false"}
       data-battle-card-stored-time={String(card.storedTime)}
-      data-battle-card-figment-count={String(card.figmentCount)}
       data-battle-pointer-dragging="false"
       draggable={false}
       onPointerDownCapture={(event) => {
@@ -2016,25 +2013,6 @@ function BattleCardStatusIndicators({
             size={BATTLE_CARD_EXHAUST_ICON_SIZE}
             shadow
           />
-        </div>
-      ) : null}
-      {card.figmentCount > 1 ? (
-        <div
-          aria-label={`${String(card.figmentCount)} Figments`}
-          data-battle-card-status="figment-count"
-          style={{
-            ...BATTLE_CARD_STATUS_BADGE_STYLE,
-            bottom: "4%",
-            left: "4%",
-            width: BATTLE_CARD_STATUS_BADGE_SIZE,
-            paddingInline: 0,
-            borderColor: token("--text-on-accent"),
-            borderRadius: token("--radius-status-badge"),
-            background: token("--surface-status-badge"),
-            color: token("--text-on-accent"),
-          }}
-        >
-          x{String(card.figmentCount)}
         </div>
       ) : null}
       {card.storedTime > 0 ? (

@@ -2,7 +2,6 @@ import {
   selectBattleCardLocation,
   selectSidePlayAreaSize,
 } from "../../battle/state/selectors";
-import { selectFigmentCount } from "../../battle/state/figments";
 import type { AiProposal } from "../../battle/ai/use-battle-ai";
 import { evaluate } from "../../battle/ai/evaluate";
 import { forwardModelFromState } from "../../battle/ai/forward-model";
@@ -409,7 +408,6 @@ export function buildMobileBattleCardView(
     model: battleGameCardModel(instance),
     exhausted: instance.status.isExhausted,
     figment,
-    figmentCount: selectFigmentCount(instance),
     storedTime: instance.status.counters,
     showPlayableOutline,
   };

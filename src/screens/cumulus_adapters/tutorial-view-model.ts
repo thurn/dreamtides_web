@@ -231,7 +231,6 @@ function tutorialCardView(
     exhausted,
     figment: false,
     layoutMotion,
-    figmentCount: 0,
     storedTime: 0,
     showPlayableOutline,
   };

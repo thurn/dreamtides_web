@@ -11,7 +11,6 @@ import type {
 import {
   selectBattleCardLocation,
 } from "../state/selectors";
-import { isFigmentInstance } from "../state/figments";
 import type {
   BattleCardStatus,
   BattleCommandSourceSurface,
@@ -136,18 +135,6 @@ export function BattleContextMenu({
           },
         ],
       });
-      // A figment stack can also grow in size — adding members rather than
-      // bonus spark — via a quick "+N" stepper.
-      if (isFigmentInstance(card)) {
-        result.push({
-          label: "Add Figments",
-          submenu: [
-            addFigmentsItem(1),
-            addFigmentsItem(2),
-            addFigmentsItem(3),
-          ],
-        });
-      }
       result.push({ divider: true });
     }
 
@@ -247,9 +234,9 @@ export function BattleContextMenu({
         submenu: createCountersSubmenu(),
       });
       // Abandon and Rematerialize are in-play character gestures (rules
-      // §Abandon, §Rematerialize): Abandon voluntarily sends a character (or a
-      // figment stack's topmost member) to the void; Rematerialize re-runs the
-      // ▸Materialized resolution and is player-resolved (log-only).
+      // §Abandon, §Rematerialize): Abandon voluntarily sends a character away;
+      // Rematerialize re-runs the ▸Materialized resolution and is
+      // player-resolved (log-only).
       if (location.zone === "backRank" || location.zone === "frontRank") {
         result.push({ divider: true });
         result.push({
@@ -318,21 +305,6 @@ export function BattleContextMenu({
             amount,
             preferredBattleCardId: battleCardId,
             side: card.controller,
-          },
-          sourceSurface,
-        }),
-      };
-    }
-
-    function addFigmentsItem(count: number): ContextMenuItem {
-      return {
-        label: `+${String(count)}`,
-        action: () => onCommand({
-          id: "DEBUG_EDIT",
-          edit: {
-            kind: "ADD_FIGMENTS",
-            battleCardId,
-            count,
           },
           sourceSurface,
         }),

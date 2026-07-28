@@ -42,4 +42,42 @@ describe("BattleContextMenu", () => {
     expect(command).toMatchObject({ id: "DEBUG_EDIT", edit: { kind: "SET_CARD_STATUS", battleCardId } });
     act(() => root.unmount());
   });
+
+  it("does not offer stack-growth actions for figments", () => {
+    const board = state();
+    const battleCardId = board.sides.player.hand.find(
+      (id) => board.cardInstances[id]?.definition.battleCardKind === "character",
+    );
+    if (battleCardId === undefined) throw new Error("expected character");
+    board.cardInstances[battleCardId].provenance = {
+      kind: "generated-figment",
+      sourceBattleCardId: null,
+      chosenSpark: 2,
+      chosenSubtype: "Warrior",
+      createdAtTurnNumber: board.turnNumber,
+      createdAtSide: board.activeSide,
+      createdAtMs: 0,
+    };
+    board.cardInstances[battleCardId].figments = [2, 2, 2];
+
+    const host = document.createElement("div");
+    document.body.append(host);
+    const root = createRoot(host);
+    act(() => root.render(
+      <BattleContextMenu
+        battleCardId={battleCardId}
+        sourceSurface="inspector"
+        state={board}
+        x={100}
+        y={100}
+        onClose={() => undefined}
+        onCommand={() => undefined}
+        onOpenNoteEditor={() => undefined}
+      />,
+    ));
+
+    expect(document.querySelector("[data-context-action-menu]")?.textContent)
+      .not.toContain("Add Figments");
+    act(() => root.unmount());
+  });
 });

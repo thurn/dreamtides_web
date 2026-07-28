@@ -128,7 +128,6 @@ function opponentPlayCard(): MobileBattleCardView {
     },
     exhausted: true,
     figment: false,
-    figmentCount: 0,
     storedTime: 0,
     showPlayableOutline: false,
   };

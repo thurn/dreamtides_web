@@ -67,7 +67,6 @@ function makeCard(index: number, instanceId: string): MobileBattleCardView {
     model: { cardId, displaySnapshot: card },
     exhausted: index % 3 === 0,
     figment: false,
-    figmentCount: 1,
     storedTime: 0,
     showPlayableOutline: false,
   };
@@ -532,13 +531,11 @@ describe("MobileBattleScreen", () => {
       ...battlefieldCard,
       exhausted: true,
       figment: true,
-      figmentCount: 3,
       storedTime: 4,
     };
     const statusHandCard: MobileBattleCardView = {
       ...handCard,
       exhausted: true,
-      figmentCount: 2,
       storedTime: 5,
     };
     const statusView: MobileBattleView = {
@@ -562,27 +559,15 @@ describe("MobileBattleScreen", () => {
     );
     expect(battlefield?.dataset.battleCardExhausted).toBe("true");
     expect(battlefield?.dataset.battleCardStoredTime).toBe("4");
-    expect(battlefield?.dataset.battleCardFigmentCount).toBe("3");
     expect(
       battlefield?.querySelector('[aria-label="Exhausted"]'),
-    ).not.toBeNull();
-    expect(
-      battlefield?.querySelector('[aria-label="3 Figments"]'),
     ).not.toBeNull();
     expect(
       battlefield?.querySelector('[aria-label="4 stored-time counters"]'),
     ).not.toBeNull();
     expect(
-      battlefield?.querySelector('[data-battle-card-status="figment-count"]')
-        ?.textContent,
-    ).toBe("x3");
-    const figmentBadge = battlefield?.querySelector<HTMLElement>(
-      '[data-battle-card-status="figment-count"]',
-    );
-    expect(figmentBadge?.style.background).toBe("var(--surface-status-badge)");
-    expect(figmentBadge?.style.borderColor).toBe("var(--text-on-accent)");
-    expect(figmentBadge?.style.borderRadius).toBe("var(--radius-status-badge)");
-    expect(figmentBadge?.style.color).toBe("var(--text-on-accent)");
+      battlefield?.querySelector('[data-battle-card-status="figment-count"]'),
+    ).toBeNull();
     const exhaustedIcon = battlefield?.querySelector<HTMLElement>(
       '[data-battle-card-status="exhausted"] i',
     );
@@ -630,14 +615,12 @@ describe("MobileBattleScreen", () => {
     expect(battlefieldDescription).toContain("Exhausted");
 
     expect(hand?.querySelector('[aria-label="Exhausted"]')).not.toBeNull();
-    expect(hand?.querySelector('[aria-label="2 Figments"]')).not.toBeNull();
     expect(
       hand?.querySelector('[aria-label="5 stored-time counters"]'),
     ).not.toBeNull();
     expect(
-      hand?.querySelector('[data-battle-card-status="figment-count"]')
-        ?.textContent,
-    ).toBe("x2");
+      hand?.querySelector('[data-battle-card-status="figment-count"]'),
+    ).toBeNull();
     const handDescription =
       document.getElementById(
         hand
@@ -656,7 +639,6 @@ describe("MobileBattleScreen", () => {
             card: {
               ...statusBattlefieldCard,
               exhausted: false,
-              figmentCount: 1,
               storedTime: 0,
             },
           },
@@ -676,7 +658,6 @@ describe("MobileBattleScreen", () => {
     );
     expect(updatedBattlefield?.dataset.battleCardExhausted).toBe("false");
     expect(updatedBattlefield?.dataset.battleCardStoredTime).toBe("0");
-    expect(updatedBattlefield?.dataset.battleCardFigmentCount).toBe("1");
     expect(
       updatedBattlefield?.querySelector("[data-battle-card-status]"),
     ).toBeNull();

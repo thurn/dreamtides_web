@@ -236,13 +236,11 @@ describe("buildMobileBattleView", () => {
       id: board.sides.player.frontRank.F3,
       exhausted: true,
       figment: false,
-      figmentCount: 1,
       storedTime: 0,
     });
     expect(view.enemy.backRank[4].card).toMatchObject({
       id: board.sides.enemy.backRank.B4,
       figment: true,
-      figmentCount: 1,
       storedTime: 0,
     });
 
@@ -293,8 +291,6 @@ describe("buildMobileBattleView", () => {
       exhausted: true,
       storedTime: 0,
     });
-    expect(before.enemy.backRank[4].card).toMatchObject({ figmentCount: 1 });
-
     board.cardInstances[playerCardId].status.isExhausted = false;
     board.cardInstances[playerCardId].status.counters = 4;
     board.cardInstances[figmentCardId].figments = [2, 3, 4];
@@ -305,7 +301,6 @@ describe("buildMobileBattleView", () => {
       storedTime: 4,
     });
     expect(after.enemy.backRank[4].card).toMatchObject({
-      figmentCount: 3,
       model: { displaySnapshot: { spark: 9 } },
     });
   });
