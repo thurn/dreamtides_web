@@ -242,6 +242,11 @@ export function routeDomain(
         state,
         battleEvents.restartTutorialBattle(state, payload, ctx, event.actor),
       );
+    case "CLAIM_TUTORIAL_BATTLE_DRIVER":
+      return foldCase(
+        state,
+        battleEvents.claimTutorialBattleDriver(state, payload, event.actor),
+      );
     case "EXIT_TUTORIAL_BATTLE":
       return foldCase(state, battleEvents.exitTutorialBattle(state, payload, event.actor));
 

@@ -75,7 +75,6 @@ function view(
     presentationId: null,
     presentation: null,
     victoryVisible: false,
-    terminalRestartAvailable: false,
     ...overrides,
   };
   return {
@@ -136,7 +135,6 @@ function mount(
           movementStatusMessage={movementStatusMessage}
           onMovementStatusDismiss={onMovementStatusDismiss}
           onForeseeConfirm={() => {}}
-          onRestart={() => {}}
           onNewJourney={onNewJourney}
           guidance={null}
           onGuidanceContinue={() => {}}
@@ -243,16 +241,13 @@ describe("TutorialBattleScreen", () => {
     },
   );
 
-  it("keeps the absent-driver restart available as a blocking recovery action", () => {
+  it("keeps the battle visible while an absent driver is being replaced", () => {
     const { container, root } = mount(
       view({ ownership: "paused-driver-absent" }),
     );
 
-    expect(container.querySelector('[role="dialog"]')?.textContent)
-      .toContain("Battle Paused");
-    expect(
-      container.querySelector('[data-testid="tutorial-battle-restart"]'),
-    ).not.toBeNull();
+    expect(container.querySelector("[data-test-mobile-battle]")).not.toBeNull();
+    expect(container.querySelector('[role="dialog"]')).toBeNull();
 
     act(() => root.unmount());
   });
@@ -650,7 +645,6 @@ describe("TutorialBattleScreen", () => {
               movementStatusMessage={null}
               onMovementStatusDismiss={() => {}}
               onForeseeConfirm={() => {}}
-              onRestart={() => {}}
               onNewJourney={() => {}}
               guidance={currentGuidance}
               onGuidanceContinue={() => {}}

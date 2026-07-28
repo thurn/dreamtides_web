@@ -327,6 +327,50 @@ export function restartTutorialBattle(
   );
 }
 
+/**
+ * Transfer tutorial authority without rebuilding the battle. Presence chooses
+ * the claimant outside the pure fold; the event binds that claimant to its
+ * actor and uses the previous driver as a compare-and-swap guard.
+ */
+export function claimTutorialBattleDriver(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  actor: string,
+): FoldState | null {
+  const battle = state.battle;
+  const battleId = payload.battleId;
+  const previousDriverClientId = payload.previousDriverClientId;
+  const driverClientId = payload.driverClientId;
+  if (
+    battle === null ||
+    !nonBlankString(battleId) ||
+    battleId !== battle.board.battleId ||
+    !nonBlankString(previousDriverClientId) ||
+    !nonBlankString(driverClientId) ||
+    driverClientId !== actor
+  ) {
+    return null;
+  }
+  const mode = battleModeOf(battle);
+  if (
+    mode.kind !== "tutorial" ||
+    mode.driverClientId !== previousDriverClientId ||
+    driverClientId === previousDriverClientId
+  ) {
+    return null;
+  }
+  return {
+    ...state,
+    battle: {
+      ...battle,
+      mode: {
+        ...mode,
+        driverClientId,
+      },
+    },
+  };
+}
+
 /** Hand a completed tutorial battle into the fixed tutorial journey-start offer. */
 export function exitTutorialBattle(
   state: FoldState,

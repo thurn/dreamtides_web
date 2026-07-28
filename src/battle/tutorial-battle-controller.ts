@@ -48,6 +48,14 @@ export interface TutorialAiActionOverrideMiss {
 }
 
 export type TutorialAutomaticIntent = (
+  | {
+      kind: "claim-driver";
+      battleId: string;
+      previousDriverClientId: string;
+      driverClientId: string;
+      intentKey: string;
+      reason: string;
+    }
   | { kind: "battle-command"; command: BattleCommand; intentKey: string; reason: string }
   | {
       kind: "battle-play-card";
@@ -108,14 +116,41 @@ export function planTutorialBattleController(
   const isDriverPresent = input.connectedClientIds?.includes(mode.driverClientId) ?? false;
   const isCurrentClientDriver = input.clientId === mode.driverClientId;
   const presentation = battle.tutorialPresentation ?? null;
+  if (!isDriverPresent) {
+    const claimantClientId =
+      input.connectedClientIds === null
+        ? null
+        : [...input.connectedClientIds]
+            .filter((candidate) => candidate !== mode.driverClientId)
+            .sort()[0] ?? null;
+    return {
+      status:
+        battle.board.result === null
+          ? "paused-driver-absent"
+          : "terminal",
+      driverClientId: mode.driverClientId,
+      isCurrentClientDriver,
+      isDriverPresent,
+      requiresHumanDecision: false,
+      intent:
+        claimantClientId === input.clientId
+          ? {
+              kind: "claim-driver",
+              battleId: battle.board.battleId,
+              previousDriverClientId: mode.driverClientId,
+              driverClientId: input.clientId,
+              intentKey:
+                `tutorial-battle:${battle.board.battleId}:claim-driver:${mode.driverClientId}`,
+              reason: "promote-connected-viewer",
+            }
+          : null,
+    };
+  }
   if (
     battle.board.result !== null &&
-    (presentation === null || !isCurrentClientDriver || !isDriverPresent)
+    (presentation === null || !isCurrentClientDriver)
   ) {
     return { status: "terminal", driverClientId: mode.driverClientId, isCurrentClientDriver, isDriverPresent, requiresHumanDecision: false, intent: null };
-  }
-  if (!isDriverPresent) {
-    return { status: "paused-driver-absent", driverClientId: mode.driverClientId, isCurrentClientDriver, isDriverPresent, requiresHumanDecision: false, intent: null };
   }
   if (!isCurrentClientDriver) {
     return { status: "observer", driverClientId: mode.driverClientId, isCurrentClientDriver, isDriverPresent, requiresHumanDecision: false, intent: null };

@@ -454,6 +454,7 @@ describe("isCasExempt (rule 1)", () => {
     expect(isCasExempt("SET_CARD_SOURCE_DEBUG")).toBe(true);
     expect(isCasExempt("OPEN_SITE")).toBe(true);
     expect(isCasExempt("ENTER_DRAFT_SITE")).toBe(true);
+    expect(isCasExempt("CLAIM_TUTORIAL_BATTLE_DRIVER")).toBe(true);
   });
 
   it("does not exempt ordinary intents", () => {

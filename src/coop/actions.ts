@@ -59,6 +59,11 @@ export interface CoopActions {
     previousDriverClientId: string,
     driverClientId: string,
   ) => Promise<number>;
+  claimTutorialBattleDriver: (
+    battleId: string,
+    previousDriverClientId: string,
+    driverClientId: string,
+  ) => Promise<number>;
   exitTutorialBattle: (battleId: string) => Promise<number>;
 
   // --- essence & limits ---
@@ -303,6 +308,16 @@ export function makeActions(append: AppendFn): CoopActions {
         "RESTART_TUTORIAL_BATTLE",
         { battleId, previousDriverClientId, driverClientId },
         `tutorial-battle:${battleId}:restart:${previousDriverClientId}`,
+      ),
+    claimTutorialBattleDriver: (
+      battleId,
+      previousDriverClientId,
+      driverClientId,
+    ) =>
+      emit(
+        "CLAIM_TUTORIAL_BATTLE_DRIVER",
+        { battleId, previousDriverClientId, driverClientId },
+        `tutorial-battle:${battleId}:claim-driver:${previousDriverClientId}`,
       ),
     exitTutorialBattle: (battleId) =>
       emit(

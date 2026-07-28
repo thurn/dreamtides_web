@@ -186,7 +186,6 @@ export function buildTutorialBattleView(
       (previewVictory ||
         (battle.board.result === "victory" &&
           controller.status === "terminal")),
-    terminalRestartAvailable: controller.status === "terminal" && !controller.isDriverPresent,
   };
 }
 

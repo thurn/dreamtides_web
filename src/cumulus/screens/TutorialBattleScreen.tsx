@@ -3,7 +3,6 @@ import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { GameCard } from "../components/card/CardView";
 import { battleCardLayoutId } from "../components/battle/battle-card-layout";
 import { GlassButton } from "../components/controls/GlassButton";
-import { GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { Motes } from "../components/hud/Motes";
 import { TransientStatusToast } from "../components/status/TransientStatusToast";
@@ -78,7 +77,6 @@ export interface TutorialBattleView {
     } | null;
   } | null;
   readonly victoryVisible: boolean;
-  readonly terminalRestartAvailable: boolean;
 }
 
 export interface TutorialBattleScreenProps {
@@ -91,7 +89,6 @@ export interface TutorialBattleScreenProps {
     readonly orderedCardIds: readonly string[];
     readonly voidCardIds: readonly string[];
   }) => void;
-  readonly onRestart: () => void;
   readonly onNewJourney: () => void;
   readonly guidance: BattleTutorialGuidanceView | null;
   readonly onGuidanceContinue: () => void;
@@ -106,7 +103,6 @@ export function TutorialBattleScreen({
   movementStatusMessage,
   onMovementStatusDismiss,
   onForeseeConfirm,
-  onRestart,
   onNewJourney,
   guidance,
   onGuidanceContinue,
@@ -114,7 +110,6 @@ export function TutorialBattleScreen({
   onPresentationVisible,
 }: TutorialBattleScreenProps): ReactElement {
   const reduceMotion = useReducedMotion();
-  const paused = view.ownership === "paused-driver-absent" || view.terminalRestartAvailable;
   const turnAnnouncementKey =
     `${view.battle.battleId}:${view.battle.inspector.turn}:${view.battle.activeSide}`;
   const [completedTurnAnnouncementKey, setCompletedTurnAnnouncementKey] =
@@ -250,22 +245,6 @@ export function TutorialBattleScreen({
             view.presentation.presentationId
           }
         />
-      ) : null}
-      {paused ? (
-        <GlassDialog
-          title="Battle Paused"
-          subtitle="The battle driver has left. Restart to take over from the tutorial handoff."
-        >
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <GlassButton
-              label="Restart"
-              variant="accent"
-              placement="onGlass"
-              testId="tutorial-battle-restart"
-              onPress={onRestart}
-            />
-          </div>
-        </GlassDialog>
       ) : null}
       {view.manualControls && interactions.targetSelectionPrompt !== null ? (
         <div

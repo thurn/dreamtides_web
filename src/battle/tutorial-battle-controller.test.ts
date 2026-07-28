@@ -136,10 +136,29 @@ describe("tutorial battle controller", () => {
     expect(plan(state, OBSERVER)).toMatchObject({ status: "observer", intent: null });
   });
 
-  it("pauses while the driver is disconnected and resumes on reconnect", () => {
+  it("promotes the connected viewer when the driver disconnects", () => {
     const state = stateFor({ phase: "dawn" });
-    expect(plan(state, OBSERVER, [OBSERVER])).toMatchObject({ status: "paused-driver-absent", intent: null });
+    expect(plan(state, OBSERVER, [OBSERVER])).toMatchObject({
+      status: "paused-driver-absent",
+      intent: {
+        kind: "claim-driver",
+        battleId: "tutorial-battle-run-uuid",
+        previousDriverClientId: DRIVER,
+        driverClientId: OBSERVER,
+        intentKey:
+          `tutorial-battle:tutorial-battle-run-uuid:claim-driver:${DRIVER}`,
+      },
+    });
     expect(plan(state, DRIVER, [DRIVER, OBSERVER]).intent?.kind).toBe("battle-command");
+  });
+
+  it("elects one deterministic claimant when several viewers remain", () => {
+    const state = stateFor({ phase: "dawn" });
+    const otherViewer = "client-z-viewer";
+    expect(plan(state, OBSERVER, [otherViewer, OBSERVER]).intent)
+      .toMatchObject({ kind: "claim-driver", driverClientId: OBSERVER });
+    expect(plan(state, otherViewer, [otherViewer, OBSERVER]).intent).toBeNull();
+    expect(plan(state, OBSERVER, null).intent).toBeNull();
   });
 
   it("makes reload and StrictMode re-evaluation idempotent through the same key", () => {
@@ -401,7 +420,7 @@ describe("tutorial battle controller", () => {
     });
   });
 
-  it("keeps terminal authority with the present driver and exposes a departed driver", () => {
+  it("keeps terminal authority with the present driver and promotes a viewer after departure", () => {
     const terminal = stateFor({ result: "victory" });
     expect(plan(terminal, DRIVER, [DRIVER, OBSERVER])).toMatchObject({
       status: "terminal", isCurrentClientDriver: true, isDriverPresent: true,
@@ -410,7 +429,14 @@ describe("tutorial battle controller", () => {
       status: "terminal", isCurrentClientDriver: false, isDriverPresent: true,
     });
     expect(plan(terminal, OBSERVER, [OBSERVER])).toMatchObject({
-      status: "terminal", isCurrentClientDriver: false, isDriverPresent: false,
+      status: "terminal",
+      isCurrentClientDriver: false,
+      isDriverPresent: false,
+      intent: {
+        kind: "claim-driver",
+        previousDriverClientId: DRIVER,
+        driverClientId: OBSERVER,
+      },
     });
   });
 });

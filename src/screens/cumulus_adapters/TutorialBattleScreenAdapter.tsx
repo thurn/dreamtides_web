@@ -43,20 +43,6 @@ export function TutorialBattleScreenAdapter({
     () => battle === null ? null : buildBattleTutorialGuidanceView(battle),
     [battle],
   );
-  const restart = useCallback(() => {
-    if (battle === null || controller.driverClientId === null ||
-      (controller.status !== "paused-driver-absent" && !(controller.status === "terminal" && !controller.isDriverPresent))) return;
-    logEvent("tutorial_battle_restart_requested", {
-      battleId: battle.board.battleId,
-      previousDriverClientId: controller.driverClientId,
-    });
-    const restartBattle = mutations.restartTutorialBattle;
-    if (restartBattle === undefined) return;
-    void restartBattle(
-      battle.board.battleId,
-      controller.driverClientId,
-    ).catch(() => undefined);
-  }, [battle, controller.driverClientId, controller.isDriverPresent, controller.status, mutations.restartTutorialBattle]);
   const startNewJourney = useCallback(() => {
     const completedVictory =
       battle?.board.result === "victory" && controller.status === "terminal";
@@ -101,7 +87,6 @@ export function TutorialBattleScreenAdapter({
         orderedCardIds: [...resolution.orderedCardIds],
         voidCardIds: [...resolution.voidCardIds],
       })}
-      onRestart={restart}
       onNewJourney={startNewJourney}
       guidance={guidance}
       onGuidanceContinue={guidanceController.advance}

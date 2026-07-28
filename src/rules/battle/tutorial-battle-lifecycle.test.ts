@@ -1032,6 +1032,100 @@ describe("tutorial battle lifecycle", () => {
     });
   });
 
+  it("transfers driver authority without changing tutorial battle progress", () => {
+    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    const started = begin().state;
+    const original = started.battle!;
+    const claimed = reduceGameEvent(started, {
+      type: "CLAIM_TUTORIAL_BATTLE_DRIVER",
+      payload: {
+        battleId: original.board.battleId,
+        previousDriverClientId: "client-a",
+        driverClientId: "client-b",
+      },
+      actor: "client-b",
+      basedOnSeq: 0,
+      clientTimestamp: CTX.timestamp,
+    }, { ...CTX, seq: 43 });
+
+    expect(claimed.outcome).toBe("applied");
+    expect(claimed.state.battle).toEqual({
+      ...original,
+      mode: {
+        ...original.mode,
+        driverClientId: "client-b",
+      },
+    });
+  });
+
+  it("transfers authority through an open prompt and lets the promoted driver resolve it", () => {
+    registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
+    const started = begin().state;
+    const battle = started.battle!;
+    const ringwatcherId = Object.values(battle.board.cardInstances).find(
+      (instance) =>
+        instance.controller === "player" &&
+        instance.definition.cardId ===
+          "647f5150-b2e0-424b-9480-27557642524e",
+    )!.battleCardId;
+    const player = battle.board.sides.player;
+    const promptReady = {
+      ...started,
+      battle: {
+        ...battle,
+        board: {
+          ...battle.board,
+          phase: "day" as const,
+          sides: {
+            ...battle.board.sides,
+            player: {
+              ...player,
+              currentEnergy: 5,
+              hand: [ringwatcherId],
+              deck: player.deck.filter((id) => id !== ringwatcherId),
+              void: player.void.filter((id) => id !== ringwatcherId),
+              banished: player.banished.filter((id) => id !== ringwatcherId),
+            },
+          },
+        },
+      },
+    };
+    const opened = reduceTutorial(promptReady, "BATTLE_PLAY_CARD", {
+      battleCardId: ringwatcherId,
+      targetBattleCardIds: [],
+      aiChoices: [],
+    });
+    const pending = opened.state.battle!.pendingPrompt!;
+
+    const claimed = reduceTutorial(
+      opened.state,
+      "CLAIM_TUTORIAL_BATTLE_DRIVER",
+      {
+        battleId: opened.state.battle!.board.battleId,
+        previousDriverClientId: "client-a",
+        driverClientId: "client-b",
+      },
+      "client-b",
+      { ...CTX, seq: 44, intervening: "unknown" },
+    );
+
+    expect(claimed.outcome).toBe("applied");
+    expect(claimed.state.battle!.pendingPrompt).toEqual(pending);
+    expect(claimed.state.battle!.mode).toMatchObject({
+      driverClientId: "client-b",
+    });
+    expect(reduceTutorial(
+      claimed.state,
+      "RESOLVE_PROMPT",
+      {
+        promptId: pending.promptId,
+        resolution: { kind: "foresee" },
+      },
+      "client-b",
+      { ...CTX, seq: 45 },
+    ).outcome).toBe("applied");
+  });
+
   it("binds tutorial begin, restart, and exit claims to their stated driver", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     expect(reduceTutorial(
@@ -1054,6 +1148,18 @@ describe("tutorial battle lifecycle", () => {
       "RESTART_TUTORIAL_BATTLE",
       { battleId, previousDriverClientId: "client-a", driverClientId: "client-b" },
       "client-observer",
+    ).outcome).toBe("bounced");
+    expect(reduceTutorial(
+      started,
+      "CLAIM_TUTORIAL_BATTLE_DRIVER",
+      { battleId, previousDriverClientId: "client-a", driverClientId: "client-b" },
+      "client-observer",
+    ).outcome).toBe("bounced");
+    expect(reduceTutorial(
+      started,
+      "CLAIM_TUTORIAL_BATTLE_DRIVER",
+      { battleId, previousDriverClientId: "client-stale", driverClientId: "client-b" },
+      "client-b",
     ).outcome).toBe("bounced");
     expect(reduceTutorial(
       started,

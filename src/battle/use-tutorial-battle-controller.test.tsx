@@ -9,16 +9,20 @@ import { TUTORIAL_CHALLENGE_PRESENTATION_DWELL_MS } from "./tutorial-presentatio
 
 const mocks = vi.hoisted(() => ({
   completePresentation: vi.fn(() => Promise.resolve(1)),
+  claimDriver: vi.fn(() => Promise.resolve(1)),
   state: null as FoldState | null,
+  clientId: "tutorial-driver",
+  connectedClientIds: ["tutorial-driver"] as readonly string[] | null,
 }));
 
 vi.mock("../coop/hooks", () => ({
   useActions: () => ({
     completeTutorialBattlePresentation: mocks.completePresentation,
+    claimTutorialBattleDriver: mocks.claimDriver,
   }),
-  useClientId: () => "tutorial-driver",
+  useClientId: () => mocks.clientId,
   useConfirmedGameState: () => mocks.state,
-  useConnectedClientIds: () => ["tutorial-driver"],
+  useConnectedClientIds: () => mocks.connectedClientIds,
 }));
 
 function presentationState(): FoldState {
@@ -73,6 +77,9 @@ beforeEach(() => {
   ).IS_REACT_ACT_ENVIRONMENT = true;
   vi.useFakeTimers();
   mocks.completePresentation.mockClear();
+  mocks.claimDriver.mockClear();
+  mocks.clientId = "tutorial-driver";
+  mocks.connectedClientIds = ["tutorial-driver"];
   mocks.state = presentationState();
 });
 
@@ -178,6 +185,28 @@ describe("useTutorialBattleController", () => {
     act(() => {
       vi.advanceTimersByTime(3_000);
     });
+    expect(mocks.completePresentation).not.toHaveBeenCalled();
+
+    act(() => root.unmount());
+  });
+
+  it("submits the deterministic driver claim without rebuilding the battle", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    mocks.clientId = "tutorial-viewer";
+    mocks.connectedClientIds = ["tutorial-viewer"];
+
+    act(() => {
+      root.render(<Harness visiblePresentationId={null} />);
+    });
+
+    expect(mocks.claimDriver).toHaveBeenCalledOnce();
+    expect(mocks.claimDriver).toHaveBeenCalledWith(
+      "tutorial-battle",
+      "tutorial-driver",
+      "tutorial-viewer",
+    );
     expect(mocks.completePresentation).not.toHaveBeenCalled();
 
     act(() => root.unmount());

@@ -73,6 +73,7 @@ function captureAllDrafts(): EventDraft[] {
   void actions.completeTutorialAction("event:1", "welcome");
   void actions.beginTutorialBattle("event:1", "client-a");
   void actions.restartTutorialBattle("tutorial-battle:event:1:0:client-a", "client-a", "client-b");
+  void actions.claimTutorialBattleDriver("tutorial-battle:event:1:0:client-a", "client-a", "client-b");
   void actions.exitTutorialBattle("tutorial-battle:event:1:1:client-b");
   void actions.changeEssence(1);
   void actions.setEssence(1);
@@ -219,6 +220,7 @@ describe("coop actions facade", () => {
     );
     void actions.beginTutorialBattle("event:9", "client-a");
     void actions.restartTutorialBattle("tutorial-battle:event:9:0:client-a", "client-a", "client-b");
+    void actions.claimTutorialBattleDriver("tutorial-battle:event:9:0:client-a", "client-a", "client-b");
     void actions.exitTutorialBattle("tutorial-battle:event:9:1:client-b");
 
     expect(captured.map((draft) => draft.intentKey)).toEqual([
@@ -230,6 +232,7 @@ describe("coop actions facade", () => {
       "battle:b-1:dreamwell:player:2",
       "tutorial-battle:event:9:begin",
       "tutorial-battle:tutorial-battle:event:9:0:client-a:restart:client-a",
+      "tutorial-battle:tutorial-battle:event:9:0:client-a:claim-driver:client-a",
       "tutorial-battle:tutorial-battle:event:9:1:client-b:exit",
     ]);
   });

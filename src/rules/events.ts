@@ -43,6 +43,11 @@ export interface EventPayloads {
     previousDriverClientId: string;
     driverClientId: string;
   };
+  CLAIM_TUTORIAL_BATTLE_DRIVER: {
+    battleId: string;
+    previousDriverClientId: string;
+    driverClientId: string;
+  };
   EXIT_TUTORIAL_BATTLE: { battleId: string };
 
   // --- essence & limits ---
@@ -201,6 +206,7 @@ export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "ADVANCE_FRONT_DOOR",
   "BEGIN_TUTORIAL",
   "COMPLETE_TUTORIAL_ACTION",
+  "CLAIM_TUTORIAL_BATTLE_DRIVER",
   "SET_CARD_NOTE",
   "SET_CARD_SOURCE_DEBUG",
   "OPEN_SITE",
@@ -243,6 +249,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   COMPLETE_TUTORIAL_ACTION: true,
   BEGIN_TUTORIAL_BATTLE: true,
   RESTART_TUTORIAL_BATTLE: true,
+  CLAIM_TUTORIAL_BATTLE_DRIVER: true,
   EXIT_TUTORIAL_BATTLE: true,
   ADJUST_ESSENCE: true,
   SET_ESSENCE: true,

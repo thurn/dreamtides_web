@@ -160,6 +160,12 @@ filled points Boxicon. The driver completes each checkpoint after its full
 animation window, then the reducer resolves the next lane or performs the turn
 handoff.
 
+Tutorial battle authority follows room presence. When the persisted driver
+disconnects, the lexicographically first connected viewer appends a driver
+claim to the room log. The reducer transfers only `driverClientId`, preserving
+the board, prompt, presentation checkpoint, and terminal result so the promoted
+viewer continues from the shared battle state.
+
 ## Hidden-Tides Behavior
 
 - Dream Avatar selection is a journey-start choice, not a mid-run site.
