@@ -372,4 +372,76 @@ describe("BattleTutorialGuidance", () => {
     }
     boxSpy.mockRestore();
   });
+
+  it("carries a visible journey card to Mira and restores its screen position", () => {
+    const cardId = asCardId("card-a");
+    const displaySnapshot: CardData = {
+      id: cardId,
+      name: asCardName("Fixture Offer"),
+      cardNumber: 8,
+      cardType: "Character",
+      subtype: "Fixture",
+      isStarter: false,
+      energyCost: 2,
+      spark: 3,
+      isFast: false,
+      renderedText: "Support.",
+      imageNumber: 8,
+      artOwned: true,
+    };
+    const source = document.createElement("div");
+    source.dataset.gameCardSource = "";
+    source.dataset.cardId = cardId;
+    document.body.append(source);
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    const view: BattleTutorialGuidanceView = {
+      presentationId: "card-tutorial:fixture",
+      triggerId: "support",
+      messageIndex: 0,
+      messageCount: 1,
+      ...guidanceFields("Support helps the character in front."),
+      source: {
+        kind: "journey-card",
+        cardId,
+        model: { cardId, displaySnapshot },
+      },
+    };
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <BattleTutorialGuidance
+            view={view}
+            onDismiss={() => undefined}
+            onDurationComplete={() => undefined}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(source.style.visibility).toBe("hidden");
+    expect(container.querySelector("[data-card-tutorial-guidance]")).not.toBeNull();
+    expect(container.querySelector("[data-battle-tutorial-guidance]")).toBeNull();
+    expect(
+      container.querySelector('[data-testid="card-tutorial-card"]'),
+    ).not.toBeNull();
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <BattleTutorialGuidance
+            view={null}
+            onDismiss={() => undefined}
+            onDurationComplete={() => undefined}
+          />
+        </CumulusRoot>,
+      );
+    });
+    expect(source.style.visibility).toBe("");
+    expect(container.querySelector("[data-card-tutorial-guidance]")).toBeNull();
+
+    act(() => root.unmount());
+  });
 });

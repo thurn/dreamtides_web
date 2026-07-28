@@ -29,6 +29,7 @@ import { registerDeckContentProvider } from "../../rules/journey/deck";
 import { registerDraftContentProvider } from "../../rules/journey/draft";
 import { registerJourneyLifecycleContentProvider } from "../../rules/journey/lifecycle";
 import { registerSiteContentProvider } from "../../rules/journey/sites";
+import { registerCardTutorialGuidanceContentProvider } from "../../rules/card-tutorial-guidance";
 import {
   createBattleInitProvider,
   createTutorialBattleInitProvider,
@@ -37,6 +38,7 @@ import { createDeckContentProvider } from "./deck-provider";
 import { createDraftContentProvider } from "./draft-provider";
 import { createJourneyLifecycleContentProvider } from "./lifecycle-provider";
 import { createSiteContentProvider } from "./site-provider";
+import { createCardTutorialGuidanceContentProvider } from "./card-tutorial-guidance-provider";
 
 /**
  * Register the real content providers on all five reducer seams from the loaded
@@ -52,6 +54,9 @@ export function registerGameProviders(content: JourneyContent): void {
   registerSiteContentProvider(createSiteContentProvider(content));
   registerBattleInitProvider(createBattleInitProvider(content));
   registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content));
+  registerCardTutorialGuidanceContentProvider(
+    createCardTutorialGuidanceContentProvider(content),
+  );
 }
 
 /**
@@ -66,4 +71,5 @@ export function clearGameProviders(): void {
   registerSiteContentProvider(null);
   registerBattleInitProvider(null);
   registerTutorialBattleInitProvider(null);
+  registerCardTutorialGuidanceContentProvider(null);
 }

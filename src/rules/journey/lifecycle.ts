@@ -417,6 +417,9 @@ export function resetJourney(state: FoldState): FoldState {
     ...(state.tutorialTriggerIdsSeen === undefined
       ? {}
       : { tutorialTriggerIdsSeen: state.tutorialTriggerIdsSeen }),
+    ...(state.cardTutorialScreenKeysSeen === undefined
+      ? {}
+      : { cardTutorialScreenKeysSeen: state.cardTutorialScreenKeysSeen }),
   };
 }
 
@@ -446,6 +449,9 @@ export function loadState(
         ...(state.tutorialTriggerIdsSeen === undefined
           ? {}
           : { tutorialTriggerIdsSeen: state.tutorialTriggerIdsSeen }),
+        ...(state.cardTutorialScreenKeysSeen === undefined
+          ? {}
+          : { cardTutorialScreenKeysSeen: state.cardTutorialScreenKeysSeen }),
       };
 }
 

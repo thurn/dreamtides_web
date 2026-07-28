@@ -283,7 +283,7 @@ text = "An [purple]event[purple] card has a one-time effect, and then is sent th
 
 [[triggers]]
 id = "support"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 5
 match = { kind = "glossary", id = "support" }
@@ -292,7 +292,7 @@ text = "A character with [yellow]support[/yellow] gives a bonus to the character
 
 [[triggers]]
 id = "foresee"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 5
 bubbleWidth = 500
@@ -301,7 +301,7 @@ text = "To [yellow]foresee[/yellow] 1, look at the top card of your deck. You ma
 
 [[triggers]]
 id = "dissolved-trigger"
-on = [ "card-play" ]
+on = [ "card-seen", "card-play" ]
 priority = 100
 duration = 3
 bubbleWidth = 500
@@ -310,7 +310,7 @@ text = "A ▸Dissolved ability triggers when the character is sent to the void."
 
 [[triggers]]
 id = "discover"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
 bubbleWidth = 500
@@ -319,7 +319,7 @@ text = "When you [yellow]discover[/yellow] a character, reveal 3 matching from y
 
 [[triggers]]
 id = "erode"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 10
 bubbleWidth = 500
@@ -337,7 +337,7 @@ text = "Figments are token representations of characters. Multiple figments of t
 
 [[triggers]]
 id = "banish"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
 bubbleWidth = 500
@@ -346,7 +346,7 @@ text = "To [yellow]banish[/yellow] a card, remove it from the battle. It does no
 
 [[triggers]]
 id = "dissolve"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
 bubbleWidth = 500
@@ -355,7 +355,7 @@ text = "To [yellow]dissolve[/yellow] a character, send it to its controller’s 
 
 [[triggers]]
 id = "prevent"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
 bubbleWidth = 500
@@ -364,7 +364,7 @@ text = "[yellow]Prevent[/yellow] stops a card on the stack before it resolves, t
 
 [[triggers]]
 id = "rematerialize"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
 bubbleWidth = 500
@@ -373,7 +373,7 @@ text = "To [yellow]rematerialize[/yellow] a character, trigger its ▸Materializ
 
 [[triggers]]
 id = "ephemeral"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
 bubbleWidth = 500
@@ -382,7 +382,7 @@ text = "An [yellow]ephemeral[/yellow] card left in your hand at end of turn is b
 
 [[triggers]]
 id = "awakened"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
 bubbleWidth = 500
@@ -391,7 +391,7 @@ text = "An [yellow]awakened[/yellow] character can challenge and use ☪ abiliti
 
 [[triggers]]
 id = "phasing"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
 bubbleWidth = 500
@@ -400,7 +400,7 @@ text = "When a [yellow]phasing[/yellow] character is played, you may return one 
 
 [[triggers]]
 id = "veil"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
 bubbleWidth = 500
@@ -409,7 +409,7 @@ text = "If an opposing effect would dissolve a character with [yellow]veil[/yell
 
 [[triggers]]
 id = "reclaim"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
 bubbleWidth = 500
@@ -418,7 +418,7 @@ text = "[yellow]Reclaim[/yellow] lets you play this card from your void for its 
 
 [[triggers]]
 id = "offering"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
 bubbleWidth = 500
@@ -427,7 +427,7 @@ text = "[yellow]Offering[/yellow] lets you play this card for 0● by banishing 
 
 [[triggers]]
 id = "unstoppable"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
 bubbleWidth = 500
@@ -436,7 +436,7 @@ text = "An [yellow]unstoppable[/yellow] challenger scores points equal to its �
 
 [[triggers]]
 id = "vengeful"
-on = [ "card-play", "dreamwell-resolve" ]
+on = [ "card-seen", "card-play", "dreamwell-resolve" ]
 priority = 100
 duration = 3
 bubbleWidth = 500

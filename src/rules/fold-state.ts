@@ -11,6 +11,7 @@
 import type { Genesis } from "../eventlog/types";
 import type { JourneyState } from "../types/journey";
 import type { TutorialPlaybackState } from "../types/tutorial";
+import type { CardTutorialGuidancePresentation } from "./card-tutorial-guidance";
 
 // The authoritative battle fold shape lives in `battle/fold.ts` (Task 18),
 // which owns the cursor model that keeps the state closure-free. `FoldState`
@@ -39,6 +40,10 @@ export interface FoldState {
   readonly battle: BattleFoldState | null;
   /** First-occurrence tutorials already presented in this shared room. */
   readonly tutorialTriggerIdsSeen?: readonly string[];
+  /** Site-screen identities which have already presented their one card tutorial. */
+  readonly cardTutorialScreenKeysSeen?: readonly string[];
+  /** Shared card-and-speech journey currently presented over a site screen. */
+  readonly cardTutorialPresentation?: CardTutorialGuidancePresentation | null;
 }
 
 /**

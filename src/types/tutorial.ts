@@ -45,8 +45,9 @@ export interface TutorialJourneyStartConfiguration {
   };
 }
 
-/** Authoritative battle edge that may open a supplemental tutorial. */
+/** Authoritative card-visibility or battle edge that may open a supplemental tutorial. */
 export type TutorialTriggerEvent =
+  | "card-seen"
   | "card-play"
   | "dreamwell-resolve"
   | "figment-created";
@@ -65,7 +66,7 @@ export type TutorialTriggerMatcher =
       readonly kind: "any";
     };
 
-/** One TOML-authored, first-occurrence battle tutorial. */
+/** One TOML-authored first-occurrence tutorial shared across journey and battle. */
 export interface TutorialTriggerDefinition extends TutorialSpeechBubble {
   readonly id: string;
   readonly on: readonly TutorialTriggerEvent[];

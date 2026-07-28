@@ -75,6 +75,11 @@ function captureAllDrafts(): EventDraft[] {
   void actions.restartTutorialBattle("tutorial-battle:event:1:0:client-a", "client-a", "client-b");
   void actions.claimTutorialBattleDriver("tutorial-battle:event:1:0:client-a", "client-a", "client-b");
   void actions.exitTutorialBattle("tutorial-battle:event:1:1:client-b");
+  void actions.openCardTutorialGuidance("journey:1:site:site-1", ["card-1"]);
+  void actions.completeCardTutorialGuidance(
+    "card-tutorial:journey:1:site:site-1:card-1:support",
+    "journey:1:site:site-1",
+  );
   void actions.changeEssence(1);
   void actions.setEssence(1);
   void actions.changeMaxEssence(1);
@@ -234,6 +239,29 @@ describe("coop actions facade", () => {
       "tutorial-battle:tutorial-battle:event:9:0:client-a:restart:client-a",
       "tutorial-battle:tutorial-battle:event:9:0:client-a:claim-driver:client-a",
       "tutorial-battle:tutorial-battle:event:9:1:client-b:exit",
+    ]);
+  });
+
+  it("leaves card tutorial opening retriable after a reducer bounce", () => {
+    const captured: EventDraft[] = [];
+    const actions = makeActions((draft) => {
+      captured.push(draft);
+      return Promise.resolve(captured.length);
+    });
+
+    void actions.openCardTutorialGuidance(
+      "journey:12:site:site-7",
+      ["card-a"],
+    );
+
+    expect(captured).toEqual([
+      {
+        type: "OPEN_CARD_TUTORIAL_GUIDANCE",
+        payload: {
+          screenKey: "journey:12:site:site-7",
+          cardIds: ["card-a"],
+        },
+      },
     ]);
   });
 

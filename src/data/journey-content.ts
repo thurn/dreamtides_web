@@ -85,7 +85,7 @@ export interface JourneyContent {
   /** The shared Dreamwell deck source, drawn from during battle. */
   dreamwellCards: readonly DreamwellCard[];
   dreamsignTemplates: readonly DreamsignTemplate[];
-  /** Supplemental battle tutorials pinned into each created battle. */
+  /** Supplemental first-occurrence tutorials shared by journey cards and battle. */
   tutorialTriggers?: readonly TutorialTriggerDefinition[];
   /** Authored draw order for the standalone playable tutorial battle. */
   tutorialBattle?: TutorialBattleConfiguration;

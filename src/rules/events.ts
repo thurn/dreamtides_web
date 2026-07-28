@@ -49,6 +49,8 @@ export interface EventPayloads {
     driverClientId: string;
   };
   EXIT_TUTORIAL_BATTLE: { battleId: string };
+  OPEN_CARD_TUTORIAL_GUIDANCE: { screenKey: string; cardIds: string[] };
+  COMPLETE_CARD_TUTORIAL_GUIDANCE: { presentationId: string };
 
   // --- essence & limits ---
   ADJUST_ESSENCE: { delta: number };
@@ -207,6 +209,8 @@ export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "BEGIN_TUTORIAL",
   "COMPLETE_TUTORIAL_ACTION",
   "CLAIM_TUTORIAL_BATTLE_DRIVER",
+  "OPEN_CARD_TUTORIAL_GUIDANCE",
+  "COMPLETE_CARD_TUTORIAL_GUIDANCE",
   "SET_CARD_NOTE",
   "SET_CARD_SOURCE_DEBUG",
   "OPEN_SITE",
@@ -224,6 +228,8 @@ export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<string> =
     "ADVANCE_FRONT_DOOR",
     "BEGIN_TUTORIAL",
     "COMPLETE_TUTORIAL_ACTION",
+    "OPEN_CARD_TUTORIAL_GUIDANCE",
+    "COMPLETE_CARD_TUTORIAL_GUIDANCE",
     "SET_CARD_NOTE",
     "SET_CARD_SOURCE_DEBUG",
     "MARK_SITE_VISITED",
@@ -251,6 +257,8 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   RESTART_TUTORIAL_BATTLE: true,
   CLAIM_TUTORIAL_BATTLE_DRIVER: true,
   EXIT_TUTORIAL_BATTLE: true,
+  OPEN_CARD_TUTORIAL_GUIDANCE: true,
+  COMPLETE_CARD_TUTORIAL_GUIDANCE: true,
   ADJUST_ESSENCE: true,
   SET_ESSENCE: true,
   ADJUST_ESSENCE_CAP: true,

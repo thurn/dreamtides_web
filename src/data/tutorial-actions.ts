@@ -501,6 +501,7 @@ export function parseTutorialActions(
 }
 
 const TUTORIAL_TRIGGER_EVENTS: ReadonlySet<TutorialTriggerEvent> = new Set([
+  "card-seen",
   "card-play",
   "dreamwell-resolve",
   "figment-created",

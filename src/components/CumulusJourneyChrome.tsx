@@ -12,6 +12,7 @@ import { CoopPresenceStatus } from "../cumulus/components/hud/CoopPresenceStatus
 import { useIsDesktop } from "../cumulus/screens/use-is-desktop";
 import type { JourneyState } from "../types/journey";
 import { buildDreamscapeHudView } from "../screens/cumulus_adapters/dreamscape-view-model";
+import { JourneyCardTutorialController } from "./JourneyCardTutorialController";
 
 const NOOP = (): void => undefined;
 
@@ -60,6 +61,11 @@ export function CumulusJourneyChrome({
       style={{ position: "fixed", inset: 0, minHeight: "100dvh" }}
     >
       {children}
+      {variant === "journey" && (
+        <ErrorBoundary scope="overlay:card-tutorial-guidance">
+          <JourneyCardTutorialController stageRef={stageRef} />
+        </ErrorBoundary>
+      )}
       <CoopPresenceStatus
         count={handlers.connectedCount ?? null}
         visible={showConnectedCount}

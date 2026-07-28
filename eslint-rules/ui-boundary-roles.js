@@ -35,6 +35,7 @@ const fileRoles = {
   "src/components/DreamscapeJourneyMenu.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/ErrorBoundary.tsx": OUTER_UI_ROLES.EMERGENCY_FALLBACK,
   "src/components/FrontDoorRouter.tsx": OUTER_UI_ROLES.APP_SHELL,
+  "src/components/JourneyCardTutorialController.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/ScreenRouter.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/battle/components/BattleCardNoteEditor.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/battle/components/BattleContextMenu.tsx": OUTER_UI_ROLES.STATE_ADAPTER,

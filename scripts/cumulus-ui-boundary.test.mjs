@@ -55,6 +55,7 @@ const GENERIC_COMPONENT_SOURCES = [
   "src/components/DreamscapeJourneyMenu.tsx",
   "src/components/ErrorBoundary.tsx",
   "src/components/FrontDoorRouter.tsx",
+  "src/components/JourneyCardTutorialController.tsx",
   "src/components/JourneyUtilityMenuController.ts",
   "src/components/ScreenRouter.tsx",
 ];

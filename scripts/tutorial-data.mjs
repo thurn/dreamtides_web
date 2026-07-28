@@ -33,6 +33,7 @@ const SUPPORTED_TUTORIAL_HIGHLIGHT_TAGS = new Set([
 const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
 const DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
 const TUTORIAL_TRIGGER_EVENTS = new Set([
+  "card-seen",
   "card-play",
   "dreamwell-resolve",
   "figment-created",

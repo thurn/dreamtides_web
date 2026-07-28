@@ -124,6 +124,17 @@ and end turn may attach one. The model configures speaker, text, visible
 duration, desktop width, and vertical offset. The Tutorial Editor presents one
 shared control set for that model in every parent action.
 
+Supplemental tutorial triggers are shared first-occurrence explanations. Their
+seen ids live in the room fold, so a keyword explained on a journey card is
+already familiar when it later appears in battle. Card-bearing site screens
+submit the UUIDs currently visible in display order; the reducer selects the
+first card with the highest-priority unfamiliar `card-seen` trigger. One card
+may travel to reading size per run-scoped site screen, remain beside its
+authored speech bubble for the configured duration, and then return to its
+source position. Eligibility begins after the starting-deck popup has been
+dismissed. The room fold owns both the consumed screen identity and the active
+presentation, keeping reloads and connected clients aligned.
+
 When a tutorial request adds a new kind of beat, extend the action type,
 runtime and build-time validators, Tutorial Editor controls, view-model
 mapping, and presentation tests together.

@@ -32,6 +32,7 @@ import * as draft from "./journey/draft";
 import * as lifecycle from "./journey/lifecycle";
 import * as shop from "./journey/shop";
 import * as sites from "./journey/sites";
+import * as cardTutorial from "./card-tutorial-guidance";
 
 /** The reducer's return shape (matches `EngineConfig.reducer`). */
 export type ReduceResult =
@@ -195,6 +196,12 @@ export function routeDomain(
   const journey = state.journey;
   const type: GameEventType = event.type;
   if (
+    (state.cardTutorialPresentation ?? null) !== null &&
+    type !== "COMPLETE_CARD_TUTORIAL_GUIDANCE"
+  ) {
+    return bounce(state);
+  }
+  if (
     state.battle?.tutorialPresentation != null &&
     type !== "COMPLETE_TUTORIAL_BATTLE_PRESENTATION" &&
     (
@@ -249,6 +256,16 @@ export function routeDomain(
       );
     case "EXIT_TUTORIAL_BATTLE":
       return foldCase(state, battleEvents.exitTutorialBattle(state, payload, event.actor));
+    case "OPEN_CARD_TUTORIAL_GUIDANCE":
+      return foldCase(
+        state,
+        cardTutorial.openCardTutorialGuidance(state, payload),
+      );
+    case "COMPLETE_CARD_TUTORIAL_GUIDANCE":
+      return foldCase(
+        state,
+        cardTutorial.completeCardTutorialGuidance(state, payload),
+      );
 
     // --- essence & limits ---
     case "ADJUST_ESSENCE":

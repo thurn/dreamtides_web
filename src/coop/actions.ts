@@ -65,6 +65,14 @@ export interface CoopActions {
     driverClientId: string,
   ) => Promise<number>;
   exitTutorialBattle: (battleId: string) => Promise<number>;
+  openCardTutorialGuidance: (
+    screenKey: string,
+    cardIds: readonly string[],
+  ) => Promise<number>;
+  completeCardTutorialGuidance: (
+    presentationId: string,
+    screenKey: string,
+  ) => Promise<number>;
 
   // --- essence & limits ---
   changeEssence: (delta: number) => Promise<number>;
@@ -324,6 +332,17 @@ export function makeActions(append: AppendFn): CoopActions {
         "EXIT_TUTORIAL_BATTLE",
         { battleId },
         `tutorial-battle:${battleId}:exit`,
+      ),
+    openCardTutorialGuidance: (screenKey, cardIds) =>
+      emit("OPEN_CARD_TUTORIAL_GUIDANCE", {
+        screenKey,
+        cardIds: [...cardIds],
+      }),
+    completeCardTutorialGuidance: (presentationId, screenKey) =>
+      emit(
+        "COMPLETE_CARD_TUTORIAL_GUIDANCE",
+        { presentationId },
+        `card-tutorial:${screenKey}:complete`,
       ),
 
     // --- essence & limits ---

@@ -25,6 +25,11 @@ export type BattleTutorialGuidanceSourceView =
       readonly battleCardId: string;
     }
   | {
+      readonly kind: "journey-card";
+      readonly model: GameCardModel;
+      readonly cardId: string;
+    }
+  | {
       readonly kind: "dreamwell";
       readonly model: DreamwellCardModel;
       readonly side: "player" | "enemy";
@@ -65,6 +70,28 @@ function battleCardSurface(
   ) ?? null;
 }
 
+function journeyCardSurface(
+  cardId: string,
+  journey: HTMLElement,
+): HTMLElement | null {
+  const candidates = [
+    ...document.querySelectorAll<HTMLElement>(
+      '[data-game-card-source][data-card-id]',
+    ),
+  ].filter(
+    (candidate) =>
+      candidate.dataset.cardId === cardId && !journey.contains(candidate),
+  );
+  return (
+    candidates.find((candidate) => {
+      const rect = candidate.getBoundingClientRect();
+      return rect.width > 0 && rect.height > 0;
+    }) ??
+    candidates[0] ??
+    null
+  );
+}
+
 function dreamwellSurface(
   side: "player" | "enemy",
   journey: HTMLElement,
@@ -88,6 +115,8 @@ function sourceSurface(
 ): HTMLElement | null {
   return view.source.kind === "card"
     ? battleCardSurface(view.source.battleCardId, journey)
+    : view.source.kind === "journey-card"
+      ? journeyCardSurface(view.source.cardId, journey)
     : dreamwellSurface(view.source.side, journey, false);
 }
 
@@ -97,6 +126,8 @@ function destinationSurface(
 ): HTMLElement | null {
   return view.source.kind === "card"
     ? battleCardSurface(view.source.battleCardId, journey)
+    : view.source.kind === "journey-card"
+      ? journeyCardSurface(view.source.cardId, journey)
     : (dreamwellSurface(view.source.side, journey, true) ??
         dreamwellSurface(view.source.side, journey, false));
 }
@@ -210,7 +241,7 @@ export function BattleTutorialGuidance({
       : destinationSurface(journeyView, journey);
     const hideSurface =
       surface !== null &&
-      (journeyView.source.kind === "card" || !active);
+      (journeyView.source.kind !== "dreamwell" || !active);
     if (hideSurface) {
       hiddenSurfaceRef.current = {
         element: surface,
@@ -326,10 +357,17 @@ export function BattleTutorialGuidance({
   return (
     <section
       ref={journeyRef}
-      aria-label="Battle tutorial"
+      aria-label={
+        renderedView.source.kind === "journey-card"
+          ? "Card tutorial"
+          : "Battle tutorial"
+      }
       aria-live={active ? "polite" : "off"}
       aria-hidden={active ? undefined : "true"}
-      data-battle-tutorial-guidance=""
+      data-battle-tutorial-guidance={
+        renderedView.source.kind === "journey-card" ? undefined : ""
+      }
+      data-card-tutorial-guidance=""
       data-presentation-id={renderedView.presentationId}
       data-trigger-id={renderedView.triggerId}
       data-message-index={renderedView.messageIndex}
@@ -360,6 +398,10 @@ export function BattleTutorialGuidance({
               ? desktop
                 ? "min(520px, 45vw)"
                 : "min(92vw, 64dvh, 430px)"
+              : renderedView.source.kind === "journey-card"
+                ? desktop
+                  ? "min(360px, 45vw, 52dvh)"
+                  : "min(62vw, 42dvh, 280px)"
               : desktop
                 ? "min(240px, 45vw)"
                 : "min(45vw, 34dvh)",
@@ -381,8 +423,16 @@ export function BattleTutorialGuidance({
         ) : (
           <GameCard
             model={renderedView.source.model}
-            figment={renderedView.source.figment}
-            testId="battle-tutorial-card"
+            figment={
+              renderedView.source.kind === "card"
+                ? renderedView.source.figment
+                : false
+            }
+            testId={
+              renderedView.source.kind === "journey-card"
+                ? "card-tutorial-card"
+                : "battle-tutorial-card"
+            }
           />
         )}
       </div>
