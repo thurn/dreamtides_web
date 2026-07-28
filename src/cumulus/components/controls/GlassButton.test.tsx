@@ -93,11 +93,15 @@ describe("GlassButton", () => {
 
     const button = container.querySelector("button");
     expect(button?.textContent).toBe("Transfigure (20)");
-    const essenceIcon = button?.querySelector<HTMLElement>("i");
-    expect(essenceIcon?.className).toContain("bx-crypto");
+    const essenceIcon = button?.querySelector<HTMLElement>(
+      "[data-inline-glyph]",
+    );
+    expect(essenceIcon?.querySelector("i")?.className).toContain("bx-crypto");
     expect(essenceIcon?.dataset.inlineGlyph).toBe("");
     expect(essenceIcon?.style.verticalAlign).toBe("middle");
-    expect(essenceIcon?.style.transform).toBe("");
+    expect(essenceIcon?.style.transform).toBe(
+      "translateY(calc(0.5ex - 0.5cap))",
+    );
     const content = container.querySelector<HTMLElement>(
       "[data-glass-button-content]",
     );

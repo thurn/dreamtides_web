@@ -353,7 +353,7 @@ function renderSegment(
   if (segment.symbol === "energy") {
     // The inline energy glyph renders as the blue flame mark, so a `●3` reads as
     // the same resource as the corner energy stat. Its one-em inline box flows
-    // like a character and follows the current font's x-height.
+    // like a character and follows the current font's capital height.
     return (
       <span
         key={key}
@@ -373,7 +373,7 @@ function renderSegment(
     // The inline spark glyph renders as the amber-gold single-sparkle mark, so a
     // `1✦` reads as the same resource as the corner spark stat (which uses the
     // busier multi-star glyph at its larger size). Its one-em inline box follows
-    // the current font's x-height.
+    // the current font's capital height.
     return (
       <span
         key={key}

@@ -20,7 +20,7 @@ describe("RichText", () => {
     );
   });
 
-  it("composes an x-height-centered glyph inside continuous prose", () => {
+  it("composes a cap-height-centered glyph inside continuous prose", () => {
     const markup = renderToStaticMarkup(
       <RichTextView
         value={richText.inline(
@@ -34,7 +34,9 @@ describe("RichText", () => {
     expect(markup).toContain('data-inline-glyph=""');
     expect(markup).toContain('role="img" aria-label="points"');
     expect(markup).toContain("vertical-align:middle");
-    expect(markup).not.toContain("translateY");
+    expect(markup).toContain(
+      "transform:translateY(calc(0.5ex - 0.5cap))",
+    );
   });
 
   it("keeps glossary labels and definitions in compact monochrome rows", () => {

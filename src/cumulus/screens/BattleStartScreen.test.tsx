@@ -141,7 +141,12 @@ describe("Cumulus BattleStartScreen", () => {
       '[data-battle-start-stake="To Win"] > div',
     );
     expect(pointsValue?.children[0]?.textContent).toBe("12");
-    expect(pointsValue?.children[1]?.tagName).toBe("I");
+    expect(
+      pointsValue?.children[1]?.matches("[data-inline-glyph]"),
+    ).toBe(true);
+    expect(pointsValue?.children[1]?.querySelector("i")?.className).toContain(
+      "bxf bx-star-circle",
+    );
 
     act(() => root.unmount());
   });

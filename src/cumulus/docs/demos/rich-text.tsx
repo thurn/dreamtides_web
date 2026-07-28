@@ -70,7 +70,7 @@ const pointsDefinition = richText.definitions([{
     },
     {
       label: "Compose an explicit inline glyph",
-      note: "Use the glyph constructor when structured copy needs a named icon beyond the canonical rules-symbol parser; it renders through InlineGlyph and follows the current font's x-height.",
+      note: "Use the glyph constructor when structured copy needs a named icon beyond the canonical rules-symbol parser; it renders through InlineGlyph and follows the current font's capital height.",
       code: `import { richText } from "src/cumulus/components/card/rich-text";
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 

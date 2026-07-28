@@ -93,7 +93,7 @@ contract test rejects local `QuestStatusBar` or quest-menu rendering under
 | Motes | Components | 10 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | 7 | [components/info-card.md](components/info-card.md) | The strict information-card presentation. |
 | Group Panel | Components | 8 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
-| Inline Glyph | Primitives | 7 | [components/inline-glyph.md](components/inline-glyph.md) | The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's x-height at every type size. |
+| Inline Glyph | Primitives | 7 | [components/inline-glyph.md](components/inline-glyph.md) | The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size. |
 | Glow Icon | Primitives | 17 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark. |
 | Pip Badge | Components | 2 | [components/pip-badge.md](components/pip-badge.md) | The compact circled number used in dense card rows and inline rules text for spark or energy values. |
 | Quest Status Bar | Components | 5 | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |

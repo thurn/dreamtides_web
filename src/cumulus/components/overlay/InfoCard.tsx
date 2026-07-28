@@ -236,7 +236,7 @@ interface InfoCardCommonProps {
   title?: string;
   /**
    * The reveal copy, as a structured {@link RichText} value. Canonical rules
-   * symbols and explicit glyph parts render as x-height-aligned inline icons.
+   * symbols and explicit glyph parts render as cap-height-aligned inline icons.
    */
   body?: RichText;
   /** Optional wrappers for the rendered headline and body content. */

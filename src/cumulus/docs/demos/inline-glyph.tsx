@@ -17,7 +17,7 @@ function InlineGlyphDemo(args: Record<string, unknown>) {
         color: token("--text-primary"),
       }}
     >
-      A lowercase x
+      A capital X
       <InlineGlyph glyph={glyph} color={color} label={label} />
       and its inline glyph share one exact visual center.
     </p>
@@ -28,7 +28,7 @@ export const inlineGlyphDemo: CumulusComponent = {
   id: "inline-glyph",
   title: "Inline Glyph",
   blurb:
-    "The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's x-height at every type size.",
+    "The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size.",
   callout:
     "Place InlineGlyph directly in inline flow inside prose, labels, and RichText. It owns vertical alignment and the square text footprint; an inline white-space wrapper may keep a value and glyph together, while a flex wrapper opts into flex alignment instead.",
   group: "Primitives",

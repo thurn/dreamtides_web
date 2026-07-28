@@ -4,17 +4,20 @@ import { GLYPHS } from "../../primitives/glyph";
 import { InlineGlyph } from "./InlineGlyph";
 
 describe("InlineGlyph", () => {
-  it("centers a square em box on the surrounding font's x-height", () => {
+  it("centers a square em box on the surrounding font's capital height", () => {
     const markup = renderToStaticMarkup(
       <InlineGlyph glyph={GLYPHS.points} color="points" label="points" />,
     );
 
+    expect(markup).toMatch(/^<span /);
     expect(markup).toContain('data-inline-glyph=""');
     expect(markup).toContain('role="img" aria-label="points"');
     expect(markup).toContain(
-      "display:inline-grid;place-items:center;width:1em;height:1em;font-size:1em;line-height:1;vertical-align:middle",
+      "display:inline-grid;place-items:center;width:1em;height:1em;font-size:1em;line-height:1;vertical-align:middle;transform:translateY(calc(0.5ex - 0.5cap))",
     );
-    expect(markup).not.toContain("transform:");
+    expect(markup).toContain(
+      '<i class="bxf bx-star-circle" aria-hidden="true"',
+    );
   });
 
   it("inherits color and hides a glyph already named by surrounding copy", () => {

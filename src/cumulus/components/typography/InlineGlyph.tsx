@@ -18,8 +18,9 @@ export interface InlineGlyphProps {
  * A Boxicons glyph for flowing text.
  *
  * The glyph occupies one square em and uses CSS's typographic `middle`
- * alignment: the square's center lands on the surrounding font's baseline plus
- * half its x-height, which is precisely the center of a lowercase `x`.
+ * alignment as its baseline. The font-relative translation then moves that
+ * center from half the x-height to half the cap height, matching a capital
+ * `X` without baking in a font- or size-specific pixel offset.
  */
 export function InlineGlyph({
   glyph,
@@ -27,8 +28,7 @@ export function InlineGlyph({
   label,
 }: InlineGlyphProps): ReactElement {
   return (
-    <i
-      className={glyph}
+    <span
       data-inline-glyph=""
       role={label === undefined ? undefined : "img"}
       aria-label={label}
@@ -41,8 +41,18 @@ export function InlineGlyph({
         fontSize: "1em",
         lineHeight: 1,
         verticalAlign: "middle",
+        transform: "translateY(calc(0.5ex - 0.5cap))",
         color: color === undefined ? undefined : resolveColor(color),
       }}
-    />
+    >
+      <i
+        className={glyph}
+        aria-hidden="true"
+        style={{
+          fontSize: "1em",
+          lineHeight: 1,
+        }}
+      />
+    </span>
   );
 }

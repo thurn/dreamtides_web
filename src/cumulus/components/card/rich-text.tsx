@@ -41,7 +41,7 @@ export interface RichTextDefinition {
  *    the spark-amber emphasis and resource symbols (`◆`, `●`, `⍏N`) render as
  *    their inline glyphs. Use for card / dreamAvatar / dreamsign ability text.
  *  - `underline` — a semantically underlined run inside inline prose.
- *  - `glyph` — a named Boxicons glyph aligned to the current font's x-height.
+ *  - `glyph` — a named Boxicons glyph aligned to the current font's capital height.
  *  - `inline` — several parts rendered as one continuous line of prose.
  *  - `note`  — a de-emphasized secondary line (muted + italic), e.g. a
  *    "Locked" / "Visited" status shown under a site blurb.

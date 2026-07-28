@@ -3108,7 +3108,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "The reveal copy, as a structured {@link RichText} value. Canonical rules\nsymbols and explicit glyph parts render as x-height-aligned inline icons.",
+      "description": "The reveal copy, as a structured {@link RichText} value. Canonical rules\nsymbols and explicit glyph parts render as cap-height-aligned inline icons.",
       "nested": {
         "name": "RichText",
         "fields": [

@@ -1674,9 +1674,9 @@ describe("TutorialScreen", () => {
     expect(purpleHighlight?.textContent).toBe("event");
     expect(purpleHighlight?.style.color).toBe("var(--accent-bright)");
     expect(dialog?.querySelectorAll('[aria-label="points"]')).toHaveLength(1);
-    expect(dialog?.querySelector('[aria-label="points"]')?.className).toContain(
-      "bxf bx-star-circle",
-    );
+    expect(
+      dialog?.querySelector('[aria-label="points"] i')?.className,
+    ).toContain("bxf bx-star-circle");
     expect(
       paragraphs[0]?.querySelector("[data-tutorial-how-to-play-points-term] i")
         ?.className,
@@ -1724,7 +1724,7 @@ describe("TutorialScreen", () => {
       )?.textContent,
     ).toBe("points ()");
     expect(
-      paragraphs[1]?.querySelector('[aria-label="points"]')?.className,
+      paragraphs[1]?.querySelector('[aria-label="points"] i')?.className,
     ).toContain("bxf bx-star-circle");
     expect(
       paragraphs[1]?.querySelector('[aria-label="points"]')?.parentElement
@@ -1965,13 +1965,17 @@ describe("TutorialScreen", () => {
     const energyIcon = energyTerm?.querySelector<HTMLElement>(
       '[aria-label="energy"]',
     );
-    expect(energyIcon?.className).toContain("bxf bx-fire-alt");
+    expect(energyIcon?.querySelector("i")?.className).toContain(
+      "bxf bx-fire-alt",
+    );
     const expectedEnergyColor = document.createElement("span");
     expectedEnergyColor.style.color = ENERGY_ICON_COLOR;
     expect(energyIcon?.style.color).toBe(expectedEnergyColor.style.color);
     expect(energyIcon?.dataset.inlineGlyph).toBe("");
     expect(energyIcon?.style.verticalAlign).toBe("middle");
-    expect(energyIcon?.style.transform).toBe("");
+    expect(energyIcon?.style.transform).toBe(
+      "translateY(calc(0.5ex - 0.5cap))",
+    );
     expect(screenMocks.props?.view.dreamwell).toBeNull();
     expect(
       dreamwellSideZone?.dataset.tutorialDreamwellEmergenceLayer,

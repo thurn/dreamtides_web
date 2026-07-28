@@ -8,7 +8,7 @@ Primitives · Live demo & interactive props: `/cumulus#/inline-glyph`
 
 Real consumers: **7** (imports outside `src/cumulus/docs/` and tests).
 
-The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's x-height at every type size.
+The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size.
 
 > **Guidance:** Place InlineGlyph directly in inline flow inside prose, labels, and RichText. It owns vertical alignment and the square text footprint; an inline white-space wrapper may keep a value and glyph together, while a flex wrapper opts into flex alignment instead.
 

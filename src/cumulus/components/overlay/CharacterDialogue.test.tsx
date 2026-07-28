@@ -154,8 +154,10 @@ describe("CharacterDialogue", () => {
     const sparkIcon = bubble?.querySelector<HTMLElement>(
       '[aria-label="spark"]',
     );
-    expect(pointsIcon?.className).toContain("bxf bx-star-circle");
-    expect(sparkIcon?.className).toContain("bxf bx-sparkle");
+    expect(pointsIcon?.querySelector("i")?.className).toContain(
+      "bxf bx-star-circle",
+    );
+    expect(sparkIcon?.querySelector("i")?.className).toContain("bxf bx-sparkle");
     expect(sparkIcon?.style.color).toBe("var(--spark)");
 
     act(() => root.unmount());
