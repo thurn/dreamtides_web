@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type ReactElement } from "react";
 import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { GameCard } from "../components/card/CardView";
+import { battleCardLayoutId } from "../components/battle/battle-card-layout";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
@@ -13,7 +14,6 @@ import {
 } from "./BattleForeseeOverlay";
 import {
   MobileBattleScreen,
-  battleCardLayoutId,
   type MobileBattleCardView,
   type MobileBattleInteractions,
   type MobileBattleView,
@@ -236,10 +236,17 @@ function TutorialOpponentPlayReveal({
     <motion.div
       data-tutorial-opponent-play-reveal=""
       data-battle-card-id={presentation.battleCardId}
-      data-battle-card-layout-id={battleCardLayoutId(
-        presentation.battleCardId,
-      )}
-      layoutId={battleCardLayoutId(presentation.battleCardId)}
+      data-battle-card-layout-id={
+        reduceMotion
+          ? undefined
+          : battleCardLayoutId(presentation.battleCardId)
+      }
+      data-battle-card-layout-motion={reduceMotion ? "snap" : "travel"}
+      layoutId={
+        reduceMotion
+          ? undefined
+          : battleCardLayoutId(presentation.battleCardId)
+      }
       initial={{
         x: "-50%",
         y: "-50%",

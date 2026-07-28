@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
+import { act, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
@@ -12,10 +12,24 @@ import {
 } from "./TutorialBattleScreen";
 import type { MobileBattleCardView } from "./MobileBattleScreen";
 
+const reducedMotionPreference = vi.hoisted(() => ({ value: false }));
+vi.mock("framer-motion", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("framer-motion")>();
+  return {
+    ...actual,
+    LayoutGroup: ({
+      id,
+      children,
+    }: {
+      readonly id?: string;
+      readonly children: ReactNode;
+    }) => <div data-test-layout-group={id}>{children}</div>,
+    useReducedMotion: () => reducedMotionPreference.value,
+  };
+});
+
 const mobileBattleProps = vi.fn();
 vi.mock("./MobileBattleScreen", () => ({
-  battleCardLayoutId: (battleCardId: string) =>
-    `battle-card:${battleCardId}`,
   MobileBattleScreen: (props: unknown) => {
     mobileBattleProps(props);
     return <main data-test-mobile-battle="" />;
@@ -128,6 +142,7 @@ beforeEach(() => {
     }
   ).IS_REACT_ACT_ENVIRONMENT = true;
   globalThis.ResizeObserver = ResizeObserverStub;
+  reducedMotionPreference.value = false;
 });
 
 afterEach(() => {
@@ -223,6 +238,17 @@ describe("TutorialBattleScreen", () => {
         "[data-tutorial-opponent-play-reveal]",
       )?.dataset.battleCardLayoutId,
     ).toBe("battle-card:enemy-card-1");
+    const sharedLayoutGroup = container.querySelector<HTMLElement>(
+      '[data-test-layout-group="tutorial-battle:tutorial-battle"]',
+    );
+    expect(
+      sharedLayoutGroup?.querySelector("[data-test-mobile-battle]"),
+    ).not.toBeNull();
+    expect(
+      sharedLayoutGroup?.querySelector(
+        "[data-tutorial-opponent-play-reveal]",
+      ),
+    ).not.toBeNull();
     expect(container.querySelector<HTMLElement>("[data-tutorial-live-battle]")?.style)
       .toMatchObject({ position: "fixed", width: "100vw", height: "100dvh" });
     expect(onPresentationVisible).not.toHaveBeenCalled();
@@ -233,6 +259,41 @@ describe("TutorialBattleScreen", () => {
     expect(onPresentationVisible).not.toHaveBeenCalled();
     act(() => {
       vi.advanceTimersByTime(1);
+    });
+    expect(onPresentationVisible).toHaveBeenCalledWith(
+      "opponent-play:enemy-card-1",
+    );
+
+    act(() => root.unmount());
+  });
+
+  it("snaps the revealed card into place when reduced motion is requested", () => {
+    vi.useFakeTimers();
+    reducedMotionPreference.value = true;
+    const onPresentationVisible = vi.fn();
+    const { container, root } = mount(
+      view({
+        presentation: {
+          kind: "opponent-play",
+          presentationId: "opponent-play:enemy-card-1",
+          cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+          battleCardId: "enemy-card-1",
+          cardKind: "character",
+          card: opponentPlayCard(),
+        },
+      }),
+      null,
+      vi.fn(),
+      onPresentationVisible,
+    );
+    const reveal = container.querySelector<HTMLElement>(
+      "[data-tutorial-opponent-play-reveal]",
+    );
+
+    expect(reveal?.dataset.battleCardLayoutMotion).toBe("snap");
+    expect(reveal?.dataset.battleCardLayoutId).toBeUndefined();
+    act(() => {
+      vi.advanceTimersByTime(0);
     });
     expect(onPresentationVisible).toHaveBeenCalledWith(
       "opponent-play:enemy-card-1",

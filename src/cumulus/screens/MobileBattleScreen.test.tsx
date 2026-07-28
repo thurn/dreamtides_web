@@ -10,7 +10,6 @@ import { resolveColor } from "../primitives/color";
 import { DOUBLE_TAP_WINDOW_MS } from "../primitives/pointer-gesture";
 import {
   MobileBattleScreen,
-  battleCardLayoutId,
   type MobileBattleCardView,
   type MobileBattleCardPickerCandidateView,
   type MobileBattleDropResolution,
@@ -314,8 +313,13 @@ describe("MobileBattleScreen", () => {
 
     expect(board?.dataset.battleCardLayoutGroup).toBe("inherited");
     expect(cardMotion?.dataset.battleCardLayoutId).toBe(
-      battleCardLayoutId("enemy-back-card"),
+      "battle-card:enemy-back-card",
     );
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-battle-play-area="enemy"]',
+      )?.style.overflow,
+    ).toBe("visible");
 
     act(() => root.unmount());
   });

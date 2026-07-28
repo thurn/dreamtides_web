@@ -127,6 +127,13 @@ describe("CardPile", () => {
       "battle-card:instance-third",
     ]);
     expect(
+      layers.map((layer) => layer.dataset.battleCardLayoutId),
+    ).toEqual([
+      "battle-card:instance-top",
+      "battle-card:instance-second",
+      "battle-card:instance-third",
+    ]);
+    expect(
       layers.map(
         (layer) =>
           (layer.firstElementChild as HTMLElement | null)?.style.transform,

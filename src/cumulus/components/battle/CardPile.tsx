@@ -12,6 +12,7 @@ import {
   CARD_ASPECT_W,
 } from "../card/card-aspect";
 import { CardBack } from "./CardBack";
+import { battleCardLayoutId } from "./battle-card-layout";
 import { Pressable } from "../../primitives/Pressable";
 
 /** A face-down physical card instance. */
@@ -164,10 +165,15 @@ export function CardPile({
         layoutId={
           card.face === "up" && card.layoutMotion === "snap"
             ? undefined
-            : `battle-card:${card.id}`
+            : battleCardLayoutId(card.id)
         }
         data-card-pile-layer=""
         data-battle-card-id={card.id}
+        data-battle-card-layout-id={
+          card.face === "up" && card.layoutMotion === "snap"
+            ? undefined
+            : battleCardLayoutId(card.id)
+        }
         data-card-face={card.face}
         data-battle-card-layout-motion={
           card.face === "up" && card.layoutMotion === "snap"

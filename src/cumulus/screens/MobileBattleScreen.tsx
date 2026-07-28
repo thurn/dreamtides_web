@@ -23,6 +23,7 @@ import {
 } from "../components/battle/DreamwellCard";
 import { CardBack } from "../components/battle/CardBack";
 import { CardPile, type BattlePileCard } from "../components/battle/CardPile";
+import { battleCardLayoutId } from "../components/battle/battle-card-layout";
 import { GlassButton } from "../components/controls/GlassButton";
 import { DisclosureSection } from "../components/controls/DisclosureSection";
 import { GlowIcon } from "../components/controls/GlowIcon";
@@ -251,11 +252,6 @@ export type MobileBattleCardSource = "near-hand" | "battlefield";
 export type MobileBattleDropZone = "deck" | "hand" | "void";
 export type MobileBattleBrowseZone = "deck" | "void" | "banished";
 export type MobileBattleDebugAdjustment = -1 | 1;
-
-/** Stable shared-layout identity for one physical battle-card instance. */
-export function battleCardLayoutId(battleCardId: string): string {
-  return `battle-card:${battleCardId}`;
-}
 
 function BattleCardLayoutGroup({
   battleId,
@@ -2396,6 +2392,7 @@ function PlayArea({
   onBattlefieldDragChange,
   guidedSlotHighlight,
   preserveOccupiedSlotOutlines,
+  allowSharedLayoutOverflow,
   showChallengerChevrons,
   interactions,
 }: {
@@ -2418,6 +2415,7 @@ function PlayArea({
   ) => void;
   readonly guidedSlotHighlight?: MobileBattleScreenProps["guidedSlotHighlight"];
   readonly preserveOccupiedSlotOutlines?: boolean;
+  readonly allowSharedLayoutOverflow: boolean;
   readonly showChallengerChevrons: boolean;
   readonly interactions?: MobileBattleInteractions;
 }) {
@@ -2438,7 +2436,10 @@ function PlayArea({
       style={{
         ...ROW_STYLE,
         gridRow: position === "far" ? 3 : 4,
-        overflow: showChallengerChevrons ? "visible" : "hidden",
+        overflow:
+          showChallengerChevrons || allowSharedLayoutOverflow
+            ? "visible"
+            : "hidden",
         zIndex: showChallengerChevrons
           ? BATTLEFIELD_CHALLENGER_PLAY_AREA_Z_INDEX
           : undefined,
@@ -4413,6 +4414,7 @@ export function MobileBattleScreen({
           onBattlefieldDragChange={handleCardDragChange}
           guidedSlotHighlight={guidedSlotHighlight}
           preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines}
+          allowSharedLayoutOverflow={cardLayoutGroup === "inherited"}
           showChallengerChevrons={
             activeSideHasChallengers && far.owner === view.activeSide
           }
@@ -4435,6 +4437,7 @@ export function MobileBattleScreen({
           onBattlefieldDragChange={handleCardDragChange}
           guidedSlotHighlight={guidedSlotHighlight}
           preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines}
+          allowSharedLayoutOverflow={cardLayoutGroup === "inherited"}
           showChallengerChevrons={
             activeSideHasChallengers && near.owner === view.activeSide
           }
