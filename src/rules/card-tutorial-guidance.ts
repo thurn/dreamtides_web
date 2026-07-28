@@ -209,3 +209,21 @@ export function completeCardTutorialGuidance(
   }
   return { ...state, cardTutorialPresentation: null };
 }
+
+/**
+ * Keep guidance for exactly the site surface or persisted Draft offer that
+ * opened it. Normal site actions remain available; the first action that moves
+ * to another surface retires the guidance with that same folded transition.
+ */
+export function reconcileCardTutorialGuidance(
+  state: FoldState,
+): FoldState {
+  const presentation = state.cardTutorialPresentation ?? null;
+  if (
+    presentation === null ||
+    currentCardTutorialScreenKey(state) === presentation.screenKey
+  ) {
+    return state;
+  }
+  return { ...state, cardTutorialPresentation: null };
+}

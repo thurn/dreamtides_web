@@ -2,7 +2,7 @@ import type { BattleTutorialGuidanceView } from "../../cumulus/screens/BattleTut
 import type { CardTutorialGuidancePresentation } from "../../rules/card-tutorial-guidance";
 import type { CardData } from "../../types/cards";
 
-/** Map one shared site-card tutorial to the reusable card journey overlay. */
+/** Map one shared site-card tutorial to stationary inline Mira guidance. */
 export function buildCardTutorialGuidanceView(
   presentation: CardTutorialGuidancePresentation | null | undefined,
   cardDatabase: ReadonlyMap<number, CardData>,
@@ -24,6 +24,7 @@ export function buildCardTutorialGuidanceView(
       speakerName: "Mira",
       text: presentation.text,
     },
+    horizontalOffset: 0,
     verticalOffset: presentation.verticalOffset,
     bubbleWidth: presentation.bubbleWidth,
     source: {

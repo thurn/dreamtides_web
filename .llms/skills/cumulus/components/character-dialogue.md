@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/character-dialogue`
 
 Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
-A character portrait in the canonical round frame, paired with SpeechBubble and presented as one fadeable guide-dialogue object in compact or prominent scale.
+A character portrait in the canonical round frame, paired with SpeechBubble and presented as one fadeable guide-dialogue object in compact, wide, or prominent scale.
 
 > **Guidance:** Use it for character-led scene dialogue. The component owns its named portrait and bubble scales, centered pointer, crop, frame, pairing layout, and fade transition; callers provide typed art, accessible portrait copy, the speaker name, the spoken line, and visibility.
 
@@ -18,7 +18,7 @@ A character portrait in the canonical round frame, paired with SpeechBubble and 
 | --- | --- | --- | --- | --- |
 | `dialogue` | `CharacterDialogueModel` | yes | — | Character identity and spoken copy to present. |
 | `visible` | `boolean` | yes | — | Whether the paired portrait and bubble are visible; changes fade in or out. |
-| `size` | `CharacterDialogueSize` = `"compact" \| "prominent"` | no | `compact` | Authored scale for compact or prominent character-led placement. |
+| `size` | `CharacterDialogueSize` = `"compact" \| "wide" \| "prominent"` | no | `compact` | Authored scale for compact, wide, or prominent character-led placement. |
 | `testId` | `string` | no | — | Optional stable test id for product-screen QA. |
 | `playbackSpeed` | `number` | no | `1` | Multiplier applied to this dialogue's presence transition. |
 

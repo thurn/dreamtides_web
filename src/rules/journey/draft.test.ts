@@ -10,6 +10,7 @@ import { LayerName } from "../../types/layer-name";
 import type { DreamscapeNode, JourneyState, SiteState } from "../../types/journey";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
+import { currentCardTutorialScreenKey } from "../card-tutorial-guidance";
 import {
   registerDraftContentProvider,
   type DraftContentProvider,
@@ -213,6 +214,40 @@ describe("PICK_DRAFT_CARD", () => {
     for (const cardNumber of draft.currentOffer) {
       expect([1, 2, 3, 4]).not.toContain(cardNumber);
     }
+  });
+
+  it("retires guidance with the offer while applying the selected card", () => {
+    registerDraftContentProvider(provider());
+    const before = stateWithDraftSites(poolDraftState(), {
+      runId: "run-a",
+      hasSeenStartingDeckPopup: true,
+      screen: { type: "site", siteId: "site-a" },
+    });
+    const screenKey = currentCardTutorialScreenKey(before);
+    expect(screenKey).not.toBeNull();
+    const start: FoldState = {
+      ...before,
+      cardTutorialPresentation: {
+        id: "card-tutorial:fixture",
+        screenKey: screenKey!,
+        cardId: "card-1",
+        triggerId: "support",
+        speaker: "mira",
+        text: "Support explained.",
+        duration: 4,
+        verticalOffset: 0,
+        bubbleWidth: 500,
+      },
+    };
+
+    const result = reduce(start, "PICK_DRAFT_CARD", {
+      packIndex: 0,
+      cardId: "card-1",
+    });
+
+    expect(result.outcome).toBe("applied");
+    expect(result.state.journey.draftState?.pickNumber).toBe(2);
+    expect(result.state.cardTutorialPresentation).toBeNull();
   });
 
   it("bounces a pick whose card is not at the given pack position", () => {

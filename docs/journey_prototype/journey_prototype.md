@@ -128,14 +128,16 @@ Supplemental tutorial triggers are shared first-occurrence explanations. Their
 seen ids live in the room fold, so a keyword explained on a journey card is
 already familiar when it later appears in battle. Card-bearing site screens
 submit the UUIDs currently visible in display order; the reducer selects the
-first card with the highest-priority unfamiliar `card-seen` trigger. One card
-may travel to reading size per persisted four-card Draft offer; subsequent
+first card with the highest-priority unfamiliar `card-seen` trigger. Each
+persisted four-card Draft offer may present one explanation, so subsequent
 Draft picks can each explain one unfamiliar keyword. Other card-bearing sites
-allow one journey per run-scoped site screen. The selected card remains beside
-its authored speech bubble for the configured duration and then returns to its
-source position. Eligibility begins after the starting-deck popup has been
-dismissed. The room fold owns both the consumed surface identity and the active
-presentation, keeping reloads and connected clients aligned.
+allow one explanation per run-scoped site screen. Mira and her speech bubble
+appear in available viewport space outside the visible cards while every card
+remains in its screen position. The explanation stays visible for the lifetime
+of that site surface or persisted Draft offer, and the action that advances
+away from the surface retires it. Eligibility begins after the starting-deck
+popup has been dismissed. The room fold owns both the consumed surface identity
+and the active presentation, keeping reloads and connected clients aligned.
 
 When a tutorial request adds a new kind of beat, extend the action type,
 runtime and build-time validators, Tutorial Editor controls, view-model

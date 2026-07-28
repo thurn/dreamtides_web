@@ -12,12 +12,14 @@ import { SpeechBubble } from "./SpeechBubble";
 const DIALOGUE_FRAME_URL = assetUrl("/atlas/Round_frame.png");
 const DIALOGUE_FADE_SECONDS = motionTimeSeconds("--dur-slow");
 
-/** Named dialogue scales for compact mobile and prominent desktop placement. */
-export type CharacterDialogueSize = "compact" | "prominent";
+/** Named dialogue scales for compact, wide, and prominent placement. */
+export type CharacterDialogueSize = "compact" | "wide" | "prominent";
 
 const DIALOGUE_PORTRAIT_SIZE: Record<CharacterDialogueSize, number> = {
   // Matches the common one-line bubble height on constrained screens.
   compact: 64,
+  // Keeps the compact portrait while opening a long desktop dialogue line.
+  wide: 64,
   // Settled against the desktop tutorial battlefield during visual tuning.
   prominent: 150,
 };
@@ -25,6 +27,8 @@ const DIALOGUE_PORTRAIT_SIZE: Record<CharacterDialogueSize, number> = {
 const DIALOGUE_MAX_WIDTH: Record<CharacterDialogueSize, number> = {
   // Keeps a two-line call close to its authored trailing inset on mobile.
   compact: 300,
+  // Gives desktop instructional copy a broad reading measure.
+  wide: 700,
   // Lets a medium-length call remain one line at the prominent desktop scale.
   prominent: 700,
 };
@@ -58,7 +62,7 @@ export interface CharacterDialogueProps {
   readonly dialogue: CharacterDialogueModel;
   /** Whether the paired portrait and bubble are visible; changes fade in or out. */
   readonly visible: boolean;
-  /** Authored scale for compact or prominent character-led placement. */
+  /** Authored scale for compact, wide, or prominent character-led placement. */
   readonly size?: CharacterDialogueSize;
   /** Optional stable test id for product-screen QA. */
   readonly testId?: string;

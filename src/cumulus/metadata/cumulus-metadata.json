@@ -1334,11 +1334,12 @@
       "tsType": "CharacterDialogueSize",
       "unionMembers": [
         "compact",
+        "wide",
         "prominent"
       ],
       "required": false,
       "defaultValue": "compact",
-      "description": "Authored scale for compact or prominent character-led placement."
+      "description": "Authored scale for compact, wide, or prominent character-led placement."
     },
     {
       "name": "testId",

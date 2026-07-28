@@ -45,6 +45,7 @@ function trigger(
     priority,
     speaker: "mira",
     duration: 4,
+    horizontalOffset: 0,
     verticalOffset: 20,
     bubbleWidth: 500,
     match: { kind: "glossary", id },

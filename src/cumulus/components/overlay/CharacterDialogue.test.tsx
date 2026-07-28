@@ -166,6 +166,43 @@ describe("CharacterDialogue", () => {
     container.remove();
   });
 
+  it("widens desktop dialogue while retaining the compact portrait and bubble scale", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <CharacterDialogue
+            dialogue={{
+              portrait: artRef.characterPortrait("mira"),
+              portraitAlt: "Mira",
+              speakerName: "Mira",
+              text: "A broad desktop explanation.",
+            }}
+            size="wide"
+            visible
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const dialogue = container.querySelector<HTMLElement>(
+      "[data-character-dialogue]",
+    );
+    const bubble = container.querySelector<HTMLElement>(
+      "[data-character-dialogue] aside",
+    );
+    expect(dialogue?.dataset.characterDialogueSize).toBe("wide");
+    expect(dialogue?.style.gridTemplateColumns).toBe("64px minmax(0, 1fr)");
+    expect(dialogue?.style.maxWidth).toBe("700px");
+    expect(bubble?.dataset.speechBubbleSize).toBe("standard");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("renders the complete canonical rules-symbol vocabulary through InlineGlyph", () => {
     const container = document.createElement("div");
     document.body.append(container);

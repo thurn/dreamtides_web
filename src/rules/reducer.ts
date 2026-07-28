@@ -196,12 +196,6 @@ export function routeDomain(
   const journey = state.journey;
   const type: GameEventType = event.type;
   if (
-    (state.cardTutorialPresentation ?? null) !== null &&
-    type !== "COMPLETE_CARD_TUTORIAL_GUIDANCE"
-  ) {
-    return bounce(state);
-  }
-  if (
     state.battle?.tutorialPresentation != null &&
     type !== "COMPLETE_TUTORIAL_BATTLE_PRESENTATION" &&
     (
@@ -459,7 +453,13 @@ function journeyCase(
   nextJourney: JourneyState | null,
 ): ReduceResult {
   if (nextJourney === null) return bounce(state);
-  return { state: { ...state, journey: nextJourney }, outcome: "applied" };
+  return {
+    state: cardTutorial.reconcileCardTutorialGuidance({
+      ...state,
+      journey: nextJourney,
+    }),
+    outcome: "applied",
+  };
 }
 
 function frontDoorCase(

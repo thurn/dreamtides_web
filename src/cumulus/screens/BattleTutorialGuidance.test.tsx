@@ -376,7 +376,8 @@ describe("BattleTutorialGuidance", () => {
     boxSpy.mockRestore();
   });
 
-  it("carries a visible journey card to Mira and restores its screen position", () => {
+  it("keeps journey cards in place and positions only Mira's dialogue outside them", () => {
+    vi.useFakeTimers();
     const cardId = asCardId("card-a");
     const displaySnapshot: CardData = {
       id: cardId,
@@ -410,17 +411,14 @@ describe("BattleTutorialGuidance", () => {
             height: 252,
           });
         }
-        if (this.dataset.battleTutorialSource !== undefined) {
+        if (this.dataset.cardTutorialDialogueLayout !== undefined) {
           return DOMRect.fromRect({
-            x: 270,
-            y: 198,
-            width: 360,
-            height: 504,
+            width: 700,
+            height: 100,
           });
         }
         return DOMRect.fromRect();
       });
-    const finishListeners: Array<() => void> = [];
     const animations: Keyframe[][] = [];
     const animateDescriptor = Object.getOwnPropertyDescriptor(
       HTMLElement.prototype,
@@ -435,13 +433,7 @@ describe("BattleTutorialGuidance", () => {
             listener: EventListenerOrEventListenerObject,
           ) => {
             if (type !== "finish") return;
-            finishListeners.push(() => {
-              if (typeof listener === "function") {
-                listener(new Event("finish"));
-              } else {
-                listener.handleEvent(new Event("finish"));
-              }
-            });
+            if (typeof listener === "function") listener(new Event("finish"));
           },
           cancel: vi.fn(),
         } as unknown as Animation;
@@ -459,6 +451,7 @@ describe("BattleTutorialGuidance", () => {
         model: { cardId, displaySnapshot },
       },
     };
+    const onDurationComplete = vi.fn();
 
     act(() => {
       root.render(
@@ -466,28 +459,45 @@ describe("BattleTutorialGuidance", () => {
           <BattleTutorialGuidance
             view={view}
             onDismiss={() => undefined}
-            onDurationComplete={() => undefined}
+            onDurationComplete={onDurationComplete}
           />
         </CumulusRoot>,
       );
     });
 
-    expect(source.style.visibility).toBe("hidden");
+    expect(source.style.visibility).toBe("");
+    expect(source.style.opacity).toBe("");
+    expect(source.dataset.tutorialGuidanceJourneyHidden).toBeUndefined();
     expect(container.querySelector("[data-card-tutorial-guidance]")).not.toBeNull();
     expect(container.querySelector("[data-battle-tutorial-guidance]")).toBeNull();
     expect(
       container.querySelector('[data-testid="card-tutorial-card"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-testid="card-tutorial-scrim"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-testid="card-tutorial-dialogue"]'),
     ).not.toBeNull();
-    const scrim = container.querySelector<HTMLElement>(
-      '[data-testid="card-tutorial-scrim"]',
+    expect(
+      container.querySelector('[data-testid="card-tutorial-dismiss"]'),
+    ).toBeNull();
+    const dialogueLayout = container.querySelector<HTMLElement>(
+      "[data-card-tutorial-dialogue-layout]",
     );
-    expect(scrim?.style.background).toBe("var(--scrim)");
-    expect(scrim?.style.opacity).toBe("0.58");
-    expect(animations[1]).toEqual([
-      { opacity: 0 },
-      { opacity: 0.58 },
-    ]);
-    act(() => finishListeners.shift()?.());
+    expect(dialogueLayout?.style.visibility).toBe("visible");
+    expect(dialogueLayout?.style.maxWidth).toBe("700px");
+    expect(
+      Number.parseFloat(dialogueLayout?.style.top ?? "") + 100,
+    ).toBeLessThanOrEqual(500);
+    expect(animations).toHaveLength(0);
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(onDurationComplete).not.toHaveBeenCalled();
+    expect(
+      container.querySelector("[data-card-tutorial-guidance]"),
+    ).not.toBeNull();
 
     act(() => {
       root.render(
@@ -500,12 +510,11 @@ describe("BattleTutorialGuidance", () => {
         </CumulusRoot>,
       );
     });
-    expect(animations[3]).toEqual([
-      { opacity: 0.58 },
-      { opacity: 0 },
-    ]);
-    expect(source.style.opacity).toBe("0");
-    act(() => finishListeners.shift()?.());
+    expect(source.style.visibility).toBe("");
+    expect(source.style.opacity).toBe("");
+    act(() => {
+      vi.runAllTimers();
+    });
     expect(source.style.visibility).toBe("");
     expect(source.style.opacity).toBe("");
     expect(
@@ -523,5 +532,6 @@ describe("BattleTutorialGuidance", () => {
       );
     }
     boxSpy.mockRestore();
+    vi.useRealTimers();
   });
 });

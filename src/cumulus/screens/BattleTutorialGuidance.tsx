@@ -15,6 +15,7 @@ import type { CharacterDialogueModel } from "../components/overlay/CharacterDial
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
+import { placeCardTutorialDialogue } from "./card-tutorial-dialogue-placement";
 import { useIsDesktop } from "./use-is-desktop";
 
 export type BattleTutorialGuidanceSourceView =
@@ -56,7 +57,16 @@ export interface BattleTutorialGuidanceProps {
 
 const GUIDANCE_OBJECT_TRAVEL_MS =
   motionTimeSeconds("--dur-slow") * 1_000;
-const CARD_TUTORIAL_SCRIM_OPACITY = 0.58;
+// Desktop guidance uses a broad reading measure; mobile consumes the available
+// viewport width so long explanations still fit outside the stationary cards.
+const CARD_TUTORIAL_DIALOGUE_DESKTOP_WIDTH_PX = 700;
+const CARD_TUTORIAL_CLEARANCE_SELECTOR = [
+  "[data-draft-pick-counter]",
+  "[data-journey-status-bar-anchor]",
+  "[data-coop-presence-status]",
+  "[data-gallery-frame]",
+  "[data-speech-bubble-pointer-placement]",
+].join(",");
 
 function battleCardSurface(
   battleCardId: string,
@@ -151,6 +161,115 @@ function transformBetween(
   return `translate(${String(x)}px, ${String(y)}px) scale(${String(scale)})`;
 }
 
+function JourneyCardTutorialDialogue({
+  view,
+  visible,
+}: {
+  readonly view: BattleTutorialGuidanceView;
+  readonly visible: boolean;
+}): ReactElement {
+  const desktop = useIsDesktop();
+  const layoutRef = useRef<HTMLDivElement | null>(null);
+  const [position, setPosition] = useState<{ left: number; top: number } | null>(
+    null,
+  );
+
+  useLayoutEffect(() => {
+    const layout = layoutRef.current;
+    if (layout === null) return undefined;
+
+    const updatePosition = (): void => {
+      const dialogueRect = layout.getBoundingClientRect();
+      if (dialogueRect.width <= 0 || dialogueRect.height <= 0) return;
+      const cardRects = [
+        ...document.querySelectorAll<HTMLElement>(
+          '[data-game-card-source][data-card-id]',
+        ),
+      ]
+        .filter((card) => !layout.contains(card))
+        .map((card) => card.getBoundingClientRect())
+        .filter((rect) => rect.width > 0 && rect.height > 0);
+      const obstacleRects = [
+        ...document.querySelectorAll<HTMLElement>(
+          CARD_TUTORIAL_CLEARANCE_SELECTOR,
+        ),
+      ]
+        .filter((obstacle) => !layout.contains(obstacle))
+        .map((obstacle) => obstacle.getBoundingClientRect())
+        .filter((rect) => rect.width > 0 && rect.height > 0);
+      const gap = Number.parseFloat(
+        window.getComputedStyle(layout).getPropertyValue("--space-4"),
+      );
+      setPosition(
+        placeCardTutorialDialogue({
+          viewportWidth: window.innerWidth,
+          viewportHeight: window.innerHeight,
+          dialogueWidth: dialogueRect.width,
+          dialogueHeight: dialogueRect.height,
+          cardRects,
+          obstacleRects,
+          gap: Number.isFinite(gap) ? gap : 0,
+        }),
+      );
+    };
+
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    const observer = new ResizeObserver(updatePosition);
+    observer.observe(layout);
+    for (const card of document.querySelectorAll<HTMLElement>(
+      `[data-game-card-source][data-card-id], ${CARD_TUTORIAL_CLEARANCE_SELECTOR}`,
+    )) {
+      if (!layout.contains(card)) observer.observe(card);
+    }
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      observer.disconnect();
+    };
+  }, [view.presentationId, view.dialogue.text]);
+
+  return (
+    <section
+      aria-label="Card tutorial"
+      aria-live={visible ? "polite" : "off"}
+      aria-hidden={visible ? undefined : "true"}
+      data-card-tutorial-guidance=""
+      data-presentation-id={view.presentationId}
+      data-trigger-id={view.triggerId}
+      data-message-index={view.messageIndex}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: token("--layer-reveal"),
+        overflow: "hidden",
+        pointerEvents: "none",
+      }}
+    >
+      <div
+        ref={layoutRef}
+        data-card-tutorial-dialogue-layout=""
+        style={{
+          position: "absolute",
+          left: position === null ? 0 : position.left,
+          top: position === null ? 0 : position.top,
+          visibility: position === null ? "hidden" : "visible",
+          width: desktop
+            ? `min(calc(100vw - (${token("--space-4")} * 2)), ${String(CARD_TUTORIAL_DIALOGUE_DESKTOP_WIDTH_PX)}px)`
+            : `calc(100vw - (${token("--space-4")} * 2))`,
+          maxWidth: CARD_TUTORIAL_DIALOGUE_DESKTOP_WIDTH_PX,
+        }}
+      >
+        <CharacterDialogue
+          dialogue={view.dialogue}
+          visible={visible}
+          size="wide"
+          testId="card-tutorial-dialogue"
+        />
+      </div>
+    </section>
+  );
+}
+
 /**
  * Timed battle teaching moment which carries one visible game object from its
  * source, through Mira's explanation, and into the folded destination.
@@ -167,14 +286,12 @@ export function BattleTutorialGuidance({
   const journeyViewRef = useRef<BattleTutorialGuidanceView | null>(view);
   const journeyRef = useRef<HTMLElement | null>(null);
   const objectRef = useRef<HTMLDivElement | null>(null);
-  const scrimRef = useRef<HTMLDivElement | null>(null);
   const hiddenSurfaceRef = useRef<{
     readonly element: HTMLElement;
     readonly visibility: string;
     readonly opacity: string;
   } | null>(null);
   const animationRef = useRef<Animation | null>(null);
-  const scrimAnimationRef = useRef<Animation | null>(null);
   const destinationAnimationRef = useRef<Animation | null>(null);
   const renderedView = view ?? retainedView;
   const active = view !== null;
@@ -183,7 +300,9 @@ export function BattleTutorialGuidance({
   const duration = view?.duration ?? null;
 
   useEffect(() => {
-    if (duration === null) return undefined;
+    if (duration === null || view?.source.kind === "journey-card") {
+      return undefined;
+    }
     const timeout = window.setTimeout(
       onDurationComplete,
       duration * 1_000,
@@ -194,6 +313,7 @@ export function BattleTutorialGuidance({
     messageIndex,
     onDurationComplete,
     presentationId,
+    view?.source.kind,
   ]);
 
   useLayoutEffect(() => {
@@ -219,16 +339,22 @@ export function BattleTutorialGuidance({
 
   useLayoutEffect(() => {
     const journey = journeyRef.current;
-    const object = objectRef.current;
     const journeyView = journeyViewRef.current;
+    if (journeyView?.source.kind === "journey-card") {
+      if (active) return undefined;
+      const timeout = window.setTimeout(
+        () => setRetainedView(null),
+        reduceMotion ? 0 : GUIDANCE_OBJECT_TRAVEL_MS,
+      );
+      return () => window.clearTimeout(timeout);
+    }
+    const object = objectRef.current;
     if (journey === null || object === null || journeyView === null) {
       return undefined;
     }
 
     animationRef.current?.cancel();
     animationRef.current = null;
-    scrimAnimationRef.current?.cancel();
-    scrimAnimationRef.current = null;
     destinationAnimationRef.current?.cancel();
     destinationAnimationRef.current = null;
     if (hiddenSurfaceRef.current !== null) {
@@ -319,25 +445,6 @@ export function BattleTutorialGuidance({
     );
     animationRef.current = animation;
     animation.addEventListener("finish", finish, { once: true });
-    const scrim = scrimRef.current;
-    if (scrim !== null) {
-      scrimAnimationRef.current = scrim.animate(
-        active
-          ? [
-              { opacity: 0 },
-              { opacity: CARD_TUTORIAL_SCRIM_OPACITY },
-            ]
-          : [
-              { opacity: CARD_TUTORIAL_SCRIM_OPACITY },
-              { opacity: 0 },
-            ],
-        {
-          duration: GUIDANCE_OBJECT_TRAVEL_MS,
-          fill: "forwards",
-          ...(easing === "" ? {} : { easing }),
-        },
-      );
-    }
     if (!active && surface !== null) {
       destinationAnimationRef.current = surface.animate(
         [{ opacity: 0 }, { opacity: 1 }],
@@ -351,8 +458,6 @@ export function BattleTutorialGuidance({
 
     return () => {
       animation.cancel();
-      scrimAnimationRef.current?.cancel();
-      scrimAnimationRef.current = null;
       destinationAnimationRef.current?.cancel();
       destinationAnimationRef.current = null;
       if (animationRef.current === animation) animationRef.current = null;
@@ -366,7 +471,6 @@ export function BattleTutorialGuidance({
   useLayoutEffect(
     () => () => {
       animationRef.current?.cancel();
-      scrimAnimationRef.current?.cancel();
       destinationAnimationRef.current?.cancel();
       if (hiddenSurfaceRef.current !== null) {
         hiddenSurfaceRef.current.element.style.visibility =
@@ -381,20 +485,21 @@ export function BattleTutorialGuidance({
   );
 
   if (renderedView === null) return <></>;
+  if (renderedView.source.kind === "journey-card") {
+    return (
+      <JourneyCardTutorialDialogue
+        view={renderedView}
+        visible={active}
+      />
+    );
+  }
   return (
     <section
       ref={journeyRef}
-      aria-label={
-        renderedView.source.kind === "journey-card"
-          ? "Card tutorial"
-          : "Battle tutorial"
-      }
+      aria-label="Battle tutorial"
       aria-live={active ? "polite" : "off"}
       aria-hidden={active ? undefined : "true"}
-      data-battle-tutorial-guidance={
-        renderedView.source.kind === "journey-card" ? undefined : ""
-      }
-      data-card-tutorial-guidance=""
+      data-battle-tutorial-guidance=""
       data-presentation-id={renderedView.presentationId}
       data-trigger-id={renderedView.triggerId}
       data-message-index={renderedView.messageIndex}
@@ -415,20 +520,6 @@ export function BattleTutorialGuidance({
         pointerEvents: "none",
       }}
     >
-      {renderedView.source.kind === "journey-card" && (
-        <div
-          ref={scrimRef}
-          aria-hidden="true"
-          data-testid="card-tutorial-scrim"
-          style={{
-            position: "absolute",
-            inset: 0,
-            zIndex: 0,
-            background: token("--scrim"),
-            opacity: active ? CARD_TUTORIAL_SCRIM_OPACITY : 0,
-          }}
-        />
-      )}
       <div
         ref={objectRef}
         data-battle-tutorial-source=""
@@ -441,10 +532,6 @@ export function BattleTutorialGuidance({
               ? desktop
                 ? "min(520px, 45vw)"
                 : "min(92vw, 64dvh, 430px)"
-              : renderedView.source.kind === "journey-card"
-                ? desktop
-                  ? "min(360px, 45vw, 52dvh)"
-                  : "min(62vw, 42dvh, 280px)"
               : desktop
                 ? "min(240px, 45vw)"
                 : "min(45vw, 34dvh)",
@@ -466,16 +553,8 @@ export function BattleTutorialGuidance({
         ) : (
           <GameCard
             model={renderedView.source.model}
-            figment={
-              renderedView.source.kind === "card"
-                ? renderedView.source.figment
-                : false
-            }
-            testId={
-              renderedView.source.kind === "journey-card"
-                ? "card-tutorial-card"
-                : "battle-tutorial-card"
-            }
+            figment={renderedView.source.figment}
+            testId="battle-tutorial-card"
           />
         )}
       </div>
