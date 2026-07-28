@@ -12,6 +12,7 @@ import {
   type RevealPlacementDecision,
 } from "./geometry";
 import { CumulusRoot } from "../../CumulusRoot";
+import { GLYPHS } from "../../primitives/glyph";
 
 const UUID = "00000000-0000-4000-8000-000000000001";
 let root: Root;
@@ -70,6 +71,60 @@ describe("RevealOverlay", () => {
     expect(portal.style.pointerEvents).toBe("none");
     expect([...portal.querySelectorAll<HTMLElement>("*")].every((node) => getComputedStyle(node).pointerEvents === "none")).toBe(true);
     expect(document.querySelectorAll("[data-cumulus-reveal-portal]")).toHaveLength(1);
+  });
+
+  it("keeps a source reveal inside its nearest scrolling ancestor", () => {
+    const scroller = document.createElement("div");
+    scroller.style.overflowY = "auto";
+    scroller.getBoundingClientRect = () => ({
+      x: 0,
+      y: 50,
+      left: 0,
+      top: 50,
+      right: 1200,
+      bottom: 300,
+      width: 1200,
+      height: 250,
+      toJSON: () => ({}),
+    });
+    const source = document.createElement("button");
+    source.getBoundingClientRect = () => ({
+      x: 400,
+      y: 120,
+      left: 400,
+      top: 120,
+      right: 500,
+      bottom: 170,
+      width: 100,
+      height: 50,
+      toJSON: () => ({}),
+    });
+    scroller.append(source);
+    document.body.append(scroller);
+
+    act(() =>
+      renderOverlay(
+        <RevealOverlay
+          active={active({
+            element: source,
+            sourceRect: { x: 400, y: 120, width: 100, height: 50 },
+            spec: {
+              primary: {
+                kind: "galleryAction",
+                action: { glyph: GLYPHS.spark, label: "Inspect" },
+              },
+              secondaries: [],
+            },
+          })}
+        />,
+      ),
+    );
+
+    expect(
+      document.querySelector<HTMLElement>(
+        '[data-cumulus-reveal-card="primary"]',
+      )?.style.top,
+    ).toBe("50px");
   });
 
   it("measures invisibly, top-aligns the chosen complete prefix, and omits overflow", () => {

@@ -1,3 +1,8 @@
-Card Editor glossary hover reveals can be positioned beneath the sticky editor controls, leaving the Info Card visually obscured even though the reveal is present and accessible in the DOM.
+`npm run review` typechecking fails because two tutorial guidance fixtures omit
+the required `horizontalOffset` field:
 
-Resolved while verifying card tutorial presentation: the synthetic card-tutorial trigger fixture omitted the required `horizontalOffset`, causing the repository typecheck to fail.
+- `src/rules/card-tutorial-guidance.test.ts:42`
+- `src/screens/cumulus_adapters/card-tutorial-guidance-view-model.ts:15`
+
+Both values are typed as models that now require `horizontalOffset`; neither
+file is related to the Card Editor reveal-boundary fix.

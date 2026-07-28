@@ -67,6 +67,36 @@ function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
 }
 
+function safeBounds(viewport: VisualViewportSnapshot): {
+  readonly top: number;
+  readonly right: number;
+  readonly bottom: number;
+  readonly left: number;
+} {
+  return {
+    top: Math.max(
+      viewport.offsetTop + viewport.safeArea.top,
+      viewport.boundary?.y ?? Number.NEGATIVE_INFINITY,
+    ),
+    right: Math.min(
+      viewport.offsetLeft + viewport.width - viewport.safeArea.right,
+      viewport.boundary === undefined
+        ? Number.POSITIVE_INFINITY
+        : viewport.boundary.x + viewport.boundary.width,
+    ),
+    bottom: Math.min(
+      viewport.offsetTop + viewport.height - viewport.safeArea.bottom,
+      viewport.boundary === undefined
+        ? Number.POSITIVE_INFINITY
+        : viewport.boundary.y + viewport.boundary.height,
+    ),
+    left: Math.max(
+      viewport.offsetLeft + viewport.safeArea.left,
+      viewport.boundary?.x ?? Number.NEGATIVE_INFINITY,
+    ),
+  };
+}
+
 function distanceFromCircle(card: RevealRect, point: RevealPoint): number {
   const nearestX = clamp(point.x, card.x, card.x + card.width);
   const nearestY = clamp(point.y, card.y, card.y + card.height);
@@ -243,10 +273,12 @@ function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
   const cardWidth = viewport.width * MOBILE_WIDTH_FRACTION;
   const primarySize = scaled(input.primarySize, cardWidth);
   const secondarySizes = input.secondarySizes.map((size) => scaled(size, cardWidth));
-  const safeTop = viewport.offsetTop + viewport.safeArea.top;
-  const safeBottom = viewport.offsetTop + viewport.height - viewport.safeArea.bottom;
-  const safeLeft = viewport.offsetLeft + viewport.safeArea.left;
-  const safeRight = viewport.offsetLeft + viewport.width - viewport.safeArea.right;
+  const {
+    top: safeTop,
+    right: safeRight,
+    bottom: safeBottom,
+    left: safeLeft,
+  } = safeBounds(viewport);
   const safeWidth = safeRight - safeLeft;
   const horizontalPairFits = safeWidth >= cardWidth * 2;
   const distributedColumnGap = horizontalPairFits ? (safeWidth - cardWidth * 2) / 3 : 0;
@@ -368,10 +400,12 @@ function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
 
 function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision {
   const { viewport, sourceRect } = input;
-  const safeTop = viewport.offsetTop + viewport.safeArea.top;
-  const safeBottom = viewport.offsetTop + viewport.height - viewport.safeArea.bottom;
-  const safeLeft = viewport.offsetLeft + viewport.safeArea.left;
-  const safeRight = viewport.offsetLeft + viewport.width - viewport.safeArea.right;
+  const {
+    top: safeTop,
+    right: safeRight,
+    bottom: safeBottom,
+    left: safeLeft,
+  } = safeBounds(viewport);
   const secondarySizes = input.secondarySizes;
   const adjacentSizes = input.adjacentSizes ?? [];
   const secondaryWidth = secondarySizes.reduce((width, size) => Math.max(width, size.width), 0);

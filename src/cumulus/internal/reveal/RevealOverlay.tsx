@@ -9,7 +9,7 @@ import {
 } from "./geometry";
 import type { RevealCoordinatorSource, RevealGeometrySnapshot, RevealPoint, RevealReason, RevealRect, RevealSpec } from "./model";
 import { renderRevealCard, renderRevealInfoCard } from "./render-reveal-card";
-import { captureVisualViewport } from "./viewport";
+import { captureVisualViewport, findRevealBoundary } from "./viewport";
 
 export interface RevealOverlayActive {
   readonly source: RevealCoordinatorSource;
@@ -36,7 +36,16 @@ const transparent: CSSProperties = { pointerEvents: "none" };
 export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
   const key = active === null ? "" : `${active.source.registrationId}:${active.reason}:${String(active.interactionId)}`;
   const [measured, setMeasured] = useState<MeasuredDecision | null>(null);
-  const viewport = useMemo(() => active === null ? null : captureVisualViewport(), [key]);
+  const viewport = useMemo(
+    () =>
+      active === null
+        ? null
+        : captureVisualViewport(
+            window,
+            findRevealBoundary(active.element),
+          ),
+    [active, key],
+  );
 
   useLayoutEffect(() => {
     if (active === null || viewport === null) return;
@@ -74,7 +83,17 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
       });
       setMeasured({ key, decision, sourceRect: active.sourceRect });
       onPlaced?.(decision, {
-        viewport: { layout: viewport.layout, width: viewport.width, height: viewport.height, offsetLeft: viewport.offsetLeft, offsetTop: viewport.offsetTop, safeArea: viewport.safeArea },
+        viewport: {
+          layout: viewport.layout,
+          width: viewport.width,
+          height: viewport.height,
+          offsetLeft: viewport.offsetLeft,
+          offsetTop: viewport.offsetTop,
+          safeArea: viewport.safeArea,
+          ...(viewport.boundary === undefined
+            ? {}
+            : { boundary: viewport.boundary }),
+        },
         sourceRect: active.sourceRect,
         ...(active.touchPoint === undefined ? {} : { touchPoint: active.touchPoint }),
         placement: { family: decision.family, orientation: decision.orientation },

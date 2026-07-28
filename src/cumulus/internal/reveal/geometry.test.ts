@@ -67,6 +67,34 @@ describe("selectRevealPlacement", () => {
     expect(supported.primaryRect).toEqual(alone.primaryRect);
   });
 
+  it("keeps desktop card reading reveals inside their application boundary", () => {
+    const boundary = { x: 20, y: 118, width: 1160, height: 666 };
+    const result = selectRevealPlacement({
+      ...base,
+      viewport: {
+        ...viewport,
+        layout: "desktop",
+        width: 1200,
+        height: 800,
+        safeArea: { top: 0, right: 0, bottom: 0, left: 0 },
+        boundary,
+      },
+      reason: "hover",
+      touchPoint: undefined,
+      primaryKind: "gameCard",
+      sourceRect: { x: 143, y: 118, width: 150, height: 210 },
+      primarySize: { width: 150, height: 210 },
+      secondarySizes: [{ width: 248, height: 80 }],
+    });
+
+    expect(result.primaryRect.y).toBe(boundary.y);
+    expect(result.secondaryRects[0]?.y).toBe(boundary.y);
+    expect(result.primaryRect.x).toBeGreaterThanOrEqual(boundary.x);
+    expect(result.primaryRect.x + result.primaryRect.width).toBeLessThanOrEqual(
+      boundary.x + boundary.width,
+    );
+  });
+
   it("grows desktop source definitions upward from the source bottom edge", () => {
     const sourceRect = { x: 400, y: 500, width: 300, height: 40 };
     const result = selectRevealPlacement({
