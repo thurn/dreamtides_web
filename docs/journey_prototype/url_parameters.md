@@ -55,8 +55,9 @@ Rejected (treated as no override):
 
 ## `ai`
 
-The playable battle runs a local AI opponent on the enemy side by default. The
-AI plays a fixed deck of the ten `Starter` cards and proposes each enemy action
+The playable battle is a fully manual sandbox by default, with both sides driven
+by hand. Set `ai=1` to run a local AI opponent on the enemy side. The AI plays a
+fixed deck of the ten `Starter` cards and proposes each enemy action
 — playing a character, repositioning, casting an event, declaring challengers,
 and resolving the Challenge phase — through a proposal bar the human approves,
 rejects, or ends with an explicit click. Only the human's approval commits
@@ -64,14 +65,17 @@ state. While an un-approved AI action proposal is held, the human's own board
 controls are inactive; they return during the AI's end-of-turn proposal and the
 human's own turn.
 
-Set `ai=0` to switch the battle into a fully manual sandbox with no AI actor:
-both sides are driven by hand. Any other value (including `1`, `true`, empty, or
-absent) keeps the AI opponent on.
+Only the exact value `ai=1` enables the journey battle AI. Any other value
+(including `0`, `true`, empty, or absent) keeps the battle manual.
 
 The AI is a local actor that runs on a single client, so it stays off in a
 shared multiplayer room (when two or more clients are connected). `goto=battle`
-opens the first opposing-Dream Avatar preview; pair it with `ai=0` for a manual
-battle (`?goto=battle&ai=0`).
+opens the first opposing-Dream Avatar preview; pair it with `ai=1` for an AI
+battle (`?goto=battle&ai=1`).
+
+The standalone tutorial battle uses its own event-log-driven automated opponent.
+Its automation is independent of this parameter, including when the journey
+battle AI is left at the manual default.
 
 ## `realtime`
 
@@ -333,11 +337,12 @@ http://localhost:5173/?identicons=1             # force identicon art for cards
 http://localhost:5173/tutorial?tutorialSpeed=4  # play the tutorial at 4× speed
 http://localhost:5173/editor?identicons=1       # same, in the card editor
 http://localhost:5173/?goto=battle&seed=7
-http://localhost:5173/?goto=battle              # Layer I battle preview vs the local AI opponent
+http://localhost:5173/?goto=battle              # Layer I manual battle preview
 http://localhost:5173/?goto=battle5             # Layer V battle preview with a stronger opponent
 http://localhost:5173/?goto=tutorial-battle     # automated battle after the scripted tutorial
 http://localhost:5173/?goto=tutorial-victory    # tutorial victory payoff
 http://localhost:5173/?goto=battle&ai=0         # manual battle, no AI opponent
+http://localhost:5173/?goto=battle&ai=1         # battle with the local AI opponent
 http://localhost:5173/editor?q=moon&type=event
 http://localhost:5173/glossary                    # edit explanatory Info Card copy
 ```

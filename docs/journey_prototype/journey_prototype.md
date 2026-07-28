@@ -260,11 +260,11 @@ log, undo, and redo all keep working.
 
 ### URL parameters and the AI
 
-The enemy is driven by a local AI opponent on by default; `?ai=0` switches the
-battle into a sandbox where both sides are driven by hand while structural
-automation continues to resolve routine bookkeeping. The battle is the default
-entry; pair `?goto=battle` with `?ai=0` as needed (see
-`docs/journey_prototype/url_parameters.md`).
+Journey battles are manual by default, with both sides driven by hand while
+structural automation resolves routine bookkeeping. `?ai=1` enables the local
+AI opponent for the enemy side. The standalone tutorial battle has a distinct
+event-log-driven automated opponent that remains active independently of this
+journey-battle setting (see `docs/journey_prototype/url_parameters.md`).
 
 The full battle design lives in `docs/battle_rules/battle_rules.md`, and the AI
 design lives in `docs/journey_prototype/battle_ai.md`.

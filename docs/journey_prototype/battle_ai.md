@@ -53,7 +53,7 @@ It is written to be read alongside:
 - Deep, exact understanding of the AI's *own* ten cards.
 - Visible AI reasoning: the player can see what the AI is doing and, in a debug
   surface, why.
-- On by default, toggled off by a URL parameter (`?ai=0`), and integrated
+- Enabled by a URL parameter (`?ai=1`), and integrated
   through the existing battle controller, command vocabulary, and log surfaces.
 
 **Non-Goals.**
@@ -676,10 +676,10 @@ and every entry in it was something you clicked to allow.
 
 **1. URL parameter and runtime config.** `RuntimeConfig` in
 `src/runtime/runtime-config.ts` carries `aiMode: boolean`, parsed as
-`params.get("ai") !== "0"` so the AI opponent is on by default and `?ai=0`
-disables it. It is threaded through `App.tsx` → journey context/screen router →
+`params.get("ai") === "1"` so ordinary battles are manual unless `?ai=1`
+enables it. It is threaded through `App.tsx` → journey context/screen router →
 `BattleSiteRoute` → `PlayableBattleScreen`. The fast QA path is
-`http://localhost:5173/?goto=battle` (add `&ai=0` for a manual
+`http://localhost:5173/?goto=battle&ai=1` (omit `ai` for a manual
 battle).
 
 **2. The AI deck.** `ai/deck.ts` builds the enemy deck from Starter cards:
@@ -786,7 +786,7 @@ channel that already exists end to end.
   time-budget guard returning a valid best-so-far plan under an artificially
   tiny deadline; deterministic planning under a fixed seed.
 - **Browser QA** (`agent-browser` against a non-5173 port per repo QA rules) on
-  `?goto=battle` (the AI opponent is on by default): confirm the enemy takes
+  `?goto=battle&ai=1`: confirm the enemy takes
   a visible, paced turn, the
   player is gated from acting during it, the log shows the AI's choices, scores
   move on Challenge resolution, and the reward flow fires on a real win. Capture
@@ -845,7 +845,7 @@ entirely through the headless harness.
 
 | File | Change |
 | --- | --- |
-| `src/runtime/runtime-config.ts` | `aiMode` parsed from `?ai` (on unless `?ai=0`). |
+| `src/runtime/runtime-config.ts` | `aiMode` parsed from `?ai` (on only for `?ai=1`). |
 | `src/App.tsx` / screen router / `BattleSiteRoute` | Thread `aiMode` to the battle screen. |
 | `src/battle/integration/create-battle-init.ts` | When `aiMode`, build `enemyDeckDefinition` from the Starter deck. |
 | `src/battle/ai/deck.ts` | NEW — Starter-deck builder. |

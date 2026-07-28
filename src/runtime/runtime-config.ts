@@ -159,7 +159,7 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     draftMode === "pool" ? resolvePoolVariant(rawAlgo) : DEFAULT_POOL_VARIANT;
   return {
     seedOverride: parseSeedOverride(params.get("seed")),
-    aiMode: params.get("ai") !== "0",
+    aiMode: params.get("ai") === "1",
     tutorialPlaybackSpeed: parseTutorialPlaybackSpeed(
       params.get("tutorialSpeed"),
     ),

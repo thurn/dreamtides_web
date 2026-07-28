@@ -105,10 +105,12 @@ describe("main editor route", () => {
   function renderedFrontDoorProps(): {
     entry?: string;
     directTutorialBattle?: boolean;
+    runtimeConfig?: { aiMode: boolean };
   } {
     return renderedRouteComponent().props as {
       entry?: string;
       directTutorialBattle?: boolean;
+      runtimeConfig?: { aiMode: boolean };
     };
   }
 
@@ -253,6 +255,7 @@ describe("main editor route", () => {
     expect(renderedFrontDoorProps()).toMatchObject({
       entry: "tutorial",
       directTutorialBattle: true,
+      runtimeConfig: { aiMode: false },
     });
     expect(mocks.createRoot).toHaveBeenCalledWith(
       document.getElementById("root"),

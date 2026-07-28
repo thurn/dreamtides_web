@@ -13,7 +13,7 @@ describe("parseRuntimeConfig", () => {
   it("returns the default config when no params are present", () => {
     expect(parseRuntimeConfig("")).toEqual({
       seedOverride: null,
-      aiMode: true,
+      aiMode: false,
       tutorialPlaybackSpeed: 1,
       gameId: null,
       databaseMode: "emulator",
@@ -57,15 +57,12 @@ describe("parseRuntimeConfig", () => {
   });
 
   describe("aiMode", () => {
-    it("defaults to true when ai is absent or any value other than 0", () => {
-      expect(parseRuntimeConfig("").aiMode).toBe(true);
+    it("enables the journey battle AI only when ai=1", () => {
+      expect(parseRuntimeConfig("").aiMode).toBe(false);
       expect(parseRuntimeConfig("?ai=1").aiMode).toBe(true);
-      expect(parseRuntimeConfig("?ai=true").aiMode).toBe(true);
-      expect(parseRuntimeConfig("?ai=").aiMode).toBe(true);
-    });
-
-    it("returns false only when ai=0", () => {
       expect(parseRuntimeConfig("?ai=0").aiMode).toBe(false);
+      expect(parseRuntimeConfig("?ai=true").aiMode).toBe(false);
+      expect(parseRuntimeConfig("?ai=").aiMode).toBe(false);
     });
   });
 
