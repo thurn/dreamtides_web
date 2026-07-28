@@ -1411,7 +1411,14 @@ function ChallengerChevron({
       style={{
         position: "absolute",
         zIndex: 7,
-        top: `${String(settings.verticalPositionPercent)}%`,
+        top:
+          owner === "enemy"
+            ? undefined
+            : `${String(settings.verticalPositionPercent)}%`,
+        bottom:
+          owner === "enemy"
+            ? `${String(settings.verticalPositionPercent)}%`
+            : undefined,
         left: `${String(settings.horizontalPositionPercent)}%`,
         width: `${String(settings.widthPercent)}%`,
         height: `${String(settings.heightPercent)}%`,

@@ -496,6 +496,12 @@ describe("MobileBattleScreen", () => {
       '[data-battle-challenger-chevron="enemy"]',
     );
     expect(enemyChevron?.dataset.battleChallengerChevronDirection).toBe("down");
+    expect(enemyChevron?.style.top).toBe("");
+    expect(enemyChevron?.style.bottom).toBe(
+      `${String(
+        DEFAULT_CHALLENGER_CHEVRON_SETTINGS.verticalPositionPercent,
+      )}%`,
+    );
     expect(enemyChevron?.querySelector("svg")?.style.transform).toBe(
       "rotate(180deg)",
     );
