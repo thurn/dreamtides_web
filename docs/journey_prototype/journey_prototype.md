@@ -92,11 +92,13 @@ The important ownership boundaries are:
 
 `LogClient` keeps a confirmed fold and an ordered pending-intent queue. A local
 intent is optimistically folded for immediate feedback, then reconciled by its
-nonce or logical `intentKey` when Firebase confirms the committed event. A
-conflicting or invalid event is recorded as a deterministic bounce; displayed
-state is recomputed from the confirmed fold plus the pending queue. The client
-fingerprints the folded live prefix; a corrected, replaced, or missing event at
-an observed sequence triggers an authoritative refold and diagnostic record.
+nonce or by an applied event with the same logical `intentKey` when Firebase
+confirms the committed event. A conflicting or invalid event is recorded as a
+deterministic bounce and leaves its logical key available for a valid retry;
+displayed state is recomputed from the confirmed fold plus the pending queue.
+The client fingerprints the folded live prefix; a corrected, replaced, or
+missing event at an observed sequence triggers an authoritative refold and
+diagnostic record.
 
 The room log carries journey and battle transitions in one sequence. Battle
 commands, undo/redo gestures, rewards, and the return to the atlas therefore

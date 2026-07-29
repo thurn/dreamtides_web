@@ -180,6 +180,54 @@ describe("applyAppend nonce dedup", () => {
     expect(decodeEvent(afterRetry.events[1])).toEqual(first);
   });
 
+  it("lets an applied contender reuse a key previously carried by a bounced event", () => {
+    const bounceObserverConfig: EngineConfig<ToyState> = {
+      ...config,
+      reducer: (state, event, ctx) =>
+        event.actor === "observer"
+          ? { state, outcome: "bounced" }
+          : config.reducer(state, event, ctx),
+    };
+    const intentKey = "open-site:journey:9:site-7";
+    const observer = {
+      ...makeEvent(1),
+      actor: "observer",
+      nonce: "observer:1",
+      intentKey,
+    };
+    const controller = {
+      ...makeEvent(2),
+      actor: "controller",
+      nonce: "controller:1",
+      intentKey,
+    };
+
+    const afterObserver = applyAppend(
+      bounceObserverConfig,
+      emptyLog(),
+      observer,
+    );
+    const afterController = applyAppend(
+      bounceObserverConfig,
+      afterObserver,
+      controller,
+    );
+    const afterRetry = applyAppend(
+      bounceObserverConfig,
+      afterController,
+      { ...controller, nonce: "controller:2" },
+    );
+
+    expect(afterObserver.head).toBe(1);
+    expect(afterObserver.intentKeyIndex).toBeUndefined();
+    expect(afterController.head).toBe(2);
+    expect(decodeEvent(afterController.events[2])).toEqual(controller);
+    expect(JSON.parse(afterController.intentKeyIndex ?? "{}")).toEqual({
+      "2": intentKey,
+    });
+    expect(afterRetry).toBe(afterController);
+  });
+
   it("retains logical intent deduplication after the winning event is compacted", () => {
     const first = {
       ...makeEvent(1),

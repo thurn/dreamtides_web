@@ -239,13 +239,13 @@ export function createLogClient<S>(
       confirmedState = result.state;
       lastFoldedSeq = seq;
       liveFingerprints.set(seq, fingerprintEvent(event));
-      if (event.intentKey !== undefined) {
-        confirmedSeqByIntentKey.set(event.intentKey, seq);
-        confirmedEventByIntentKey.set(event.intentKey, event);
-      }
       const outcome = result.outcomes[0];
       if (outcome.outcome === "applied") {
         appliedBySeq.set(seq, { actor: event.actor, type: event.type });
+        if (event.intentKey !== undefined) {
+          confirmedSeqByIntentKey.set(event.intentKey, seq);
+          confirmedEventByIntentKey.set(event.intentKey, event);
+        }
         if (CLIENT_DEV_MODE) {
           // Catch a reducer that smuggled undefined/function/NaN into the fold at
           // its source — before it can hash-diverge or corrupt a snapshot.
@@ -301,14 +301,27 @@ export function createLogClient<S>(
         // Reconcile the pending queue: a confirmed event carrying one of our
         // nonces IS our own committed intent — remove it so it is not folded a
         // second time on top of the confirmed state.
-        if (typeof event.nonce === "string" || typeof event.intentKey === "string") {
+        if (
+          typeof event.nonce === "string" ||
+          (
+            outcome.outcome === "applied" &&
+            typeof event.intentKey === "string"
+          )
+        ) {
+          let reconciledByNonce = false;
           for (let index = pending.length - 1; index >= 0; index -= 1) {
             const candidate = pending[index];
+            const matchesNonce = candidate.nonce === event.nonce;
             if (
-              candidate.nonce === event.nonce ||
-              (event.intentKey !== undefined && candidate.intentKey === event.intentKey)
+              matchesNonce ||
+              (
+                outcome.outcome === "applied" &&
+                event.intentKey !== undefined &&
+                candidate.intentKey === event.intentKey
+              )
             ) {
               if (
+                outcome.outcome === "applied" &&
                 event.intentKey !== undefined &&
                 candidate.intentKey === event.intentKey &&
                 !sameIntentContract(candidate, event)
@@ -320,10 +333,19 @@ export function createLogClient<S>(
                   contender: candidate,
                 });
               }
+              if (matchesNonce) {
+                reconciledByNonce = true;
+              }
               pending.splice(index, 1);
             }
           }
-          if (event.intentKey !== undefined) {
+          if (
+            event.intentKey !== undefined &&
+            (
+              outcome.outcome === "applied" ||
+              reconciledByNonce
+            )
+          ) {
             submissionsByIntentKey.delete(event.intentKey);
           }
         }
@@ -425,7 +447,12 @@ export function createLogClient<S>(
       }
       foldConfirmedRange(node, node.baseSeq);
       if (corrected && pending.length > 0) {
-        reconcilePendingAgainstNode(node, pending, callbacks);
+        reconcilePendingAgainstNode(
+          node,
+          pending,
+          confirmedSeqByIntentKey,
+          callbacks,
+        );
       }
     } else {
       foldConfirmedRange(node, lastFoldedSeq);
@@ -525,7 +552,9 @@ export function createLogClient<S>(
       // No subscription update follows an RTDB transaction that made no
       // change, so retire the optimistic echo here.
       if (event.intentKey !== undefined && seq <= lastFoldedSeq) {
-        confirmedSeqByIntentKey.set(event.intentKey, seq);
+        if (appliedBySeq.has(seq)) {
+          confirmedSeqByIntentKey.set(event.intentKey, seq);
+        }
         const idx = pending.findIndex((entry) => entry.nonce === nonce);
         if (idx >= 0) {
           pending.splice(idx, 1);
@@ -595,6 +624,7 @@ function firstChangedPrefixSeq(
 function reconcilePendingAgainstNode<S>(
   node: LogNode,
   pending: GameEvent[],
+  confirmedSeqByIntentKey: ReadonlyMap<string, number>,
   callbacks: LogClientCallbacks<S>,
 ): void {
   for (const [seq, winner] of node.events) {
@@ -604,11 +634,13 @@ function reconcilePendingAgainstNode<S>(
         contender.nonce === winner.nonce ||
         (
           winner.intentKey !== undefined &&
+          confirmedSeqByIntentKey.get(winner.intentKey) === seq &&
           contender.intentKey === winner.intentKey
         );
       if (!matches) continue;
       if (
         winner.intentKey !== undefined &&
+        confirmedSeqByIntentKey.get(winner.intentKey) === seq &&
         contender.intentKey === winner.intentKey &&
         !sameIntentContract(contender, winner)
       ) {

@@ -97,11 +97,12 @@ contains:
 
 `appendEvent` runs one transaction on `rooms/<roomId>/log`. Realtime
 Database serializes concurrent transactions, so the winning updater assigns
-`head + 1` and writes the event at that sequence. A repeated nonce or logical
-intent key resolves to the original winning sequence without creating another
-event. Transactions use `applyLocally: false`; the application supplies its
-own optimistic echo and subscribers observe the authoritative transaction
-result.
+`head + 1` and writes the event at that sequence. A repeated nonce resolves to
+its original sequence. A repeated logical intent key resolves to the original
+applied event; a bounced event does not reserve the key, so a valid contender
+can commit afterward. Transactions use `applyLocally: false`; the application
+supplies its own optimistic echo and subscribers observe the authoritative
+transaction result.
 
 The pure rules reducer resolves every committed event as `applied` or
 `bounced`. It receives deterministic time and random input through the event
@@ -168,9 +169,10 @@ semantic-collision diagnostic.
 
 Hosted observers cannot submit player decisions. Deterministic lifecycle
 handoffs whose prerequisite is already fixed in the fold may be committed by
-any client; completing an exhausted Draft site is one such handoff. Its
-run-scoped intent key makes concurrent submissions one shared transition, and
-the room controller remains unchanged.
+any client. These include bootstrapping the currently displayed site or Draft
+offer and completing an exhausted Draft site. Their run-scoped intent keys make
+concurrent submissions one shared transition, and the room controller remains
+unchanged.
 
 ## Local Testing
 

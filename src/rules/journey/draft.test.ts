@@ -375,6 +375,38 @@ describe("REROLL_DRAFT_OFFER", () => {
 // ---------------------------------------------------------------------------
 
 describe("ENTER_DRAFT_SITE", () => {
+  it("allows an observer to commit the displayed draft site's deterministic entry", () => {
+    registerDraftContentProvider(provider());
+    const start = stateWithDraftSites(
+      poolDraftState({
+        activeSiteId: null,
+        currentOffer: [],
+        siteShownCardNumbers: [],
+      }),
+      {
+        screen: { type: "site", siteId: "site-a" },
+        activeSiteId: "site-a",
+      },
+    );
+    const hosted = {
+      ...start,
+      playtestControl: {
+        mode: "single-controller" as const,
+        controllerClientId: "controller",
+      },
+    };
+
+    const result = reduceGameEvent(
+      hosted,
+      event("ENTER_DRAFT_SITE", { siteId: "site-a" }, "observer"),
+      ctx({ rng: makeRng(3) }),
+    );
+
+    expect(result.outcome).toBe("applied");
+    expect(result.state.journey.draftState?.activeSiteId).toBe("site-a");
+    expect(result.state.playtestControl?.controllerClientId).toBe("controller");
+  });
+
   it("activates the site and reveals a non-empty offer from ctx.rng", () => {
     registerDraftContentProvider(provider());
     const draftState = poolDraftState({

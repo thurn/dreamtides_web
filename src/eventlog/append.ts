@@ -76,7 +76,7 @@ export function applyAppend<S>(
   encoded: EncodedLogNode,
   event: GameEvent,
 ): EncodedLogNode {
-  if (existingEventSeq(encoded, event) !== null) {
+  if (existingEventSeq(config, encoded, event) !== null) {
     return encoded;
   }
 
@@ -92,11 +92,6 @@ export function applyAppend<S>(
   // compaction folds events below the new horizon.
   let appliedIndex = encoded.appliedIndex;
   let intentKeyIndex = encoded.intentKeyIndex;
-  if (event.intentKey !== undefined) {
-    const index = decodeIntentKeyIndex(intentKeyIndex);
-    index[String(head)] = event.intentKey;
-    intentKeyIndex = JSON.stringify(index);
-  }
   let compactionError = encoded.compactionError;
 
   if (head - baseSeq > COMPACT_THRESHOLD) {
@@ -172,6 +167,14 @@ export function applyAppend<S>(
   if (compactionError !== undefined) {
     next.compactionError = compactionError;
   }
+  if (event.intentKey !== undefined) {
+    intentKeyIndex = rebuildAppliedIntentKeyIndex(config, next);
+    if (intentKeyIndex === undefined) {
+      delete next.intentKeyIndex;
+    } else {
+      next.intentKeyIndex = intentKeyIndex;
+    }
+  }
   return next;
 }
 
@@ -184,24 +187,6 @@ function liveWindowSeqForNonce(
     if (raw === undefined) continue;
     try {
       if (decodeEvent(raw).nonce === nonce) {
-        return seq;
-      }
-    } catch {
-      continue;
-    }
-  }
-  return null;
-}
-
-function liveWindowSeqForIntentKey(
-  encoded: EncodedLogNode,
-  intentKey: string,
-): number | null {
-  for (let seq = encoded.baseSeq + 1; seq <= encoded.head; seq += 1) {
-    const raw = encoded.events?.[seq];
-    if (raw === undefined) continue;
-    try {
-      if (decodeEvent(raw).intentKey === intentKey) {
         return seq;
       }
     } catch {
@@ -233,17 +218,121 @@ function decodeIntentKeyIndex(raw: string | undefined): Record<string, string> {
 function intentKeyIndexSeq(
   raw: string | undefined,
   intentKey: string,
+  appliedIndex: ReadonlyMap<number, unknown>,
+  baseSeq: number,
 ): number | null {
   for (const [rawSeq, key] of Object.entries(decodeIntentKeyIndex(raw))) {
-    if (key === intentKey) {
-      return Number(rawSeq);
+    const seq = Number(rawSeq);
+    if (key === intentKey && seq <= baseSeq && appliedIndex.has(seq)) {
+      return seq;
     }
   }
   return null;
 }
 
-/** Resolve a retry to the sequence that originally won its nonce or intent key. */
-export function existingEventSeq(
+function foldLiveWindow<S>(
+  config: EngineConfig<S>,
+  encoded: EncodedLogNode,
+): ReturnType<typeof foldEvents<S>> {
+  const genesis = JSON.parse(encoded.genesis) as Genesis;
+  const baseState =
+    encoded.baseSnapshot === null
+      ? config.genesisState(genesis)
+      : config.decode(encoded.baseSnapshot);
+  const events: Array<{ seq: number; event: GameEvent }> = [];
+  for (let seq = encoded.baseSeq + 1; seq <= encoded.head; seq += 1) {
+    const raw = encoded.events?.[seq];
+    if (raw === undefined) {
+      throw new Error(
+        `intent-key fold gap: missing event at seq ${seq} in (${encoded.baseSeq}, ${encoded.head}]`,
+      );
+    }
+    events.push({ seq, event: decodeEvent(raw) });
+  }
+  return foldEvents(
+    config,
+    genesis,
+    { seq: encoded.baseSeq, state: baseState },
+    events,
+    {
+      appliedBySeq: decodeAppliedIndex(encoded.appliedIndex),
+      coveredFromSeq: 0,
+      devMode: false,
+    },
+  );
+}
+
+function appliedEventSeqForIntentKey<S>(
+  config: EngineConfig<S>,
+  encoded: EncodedLogNode,
+  intentKey: string,
+): number | null {
+  const appliedIndex = decodeAppliedIndex(encoded.appliedIndex);
+  const compactedSeq = intentKeyIndexSeq(
+    encoded.intentKeyIndex,
+    intentKey,
+    appliedIndex,
+    encoded.baseSeq,
+  );
+  if (compactedSeq !== null) return compactedSeq;
+
+  try {
+    const folded = foldLiveWindow(config, encoded);
+    for (const outcome of folded.outcomes) {
+      if (
+        outcome.outcome === "applied" &&
+        outcome.event.intentKey === intentKey
+      ) {
+        return outcome.seq;
+      }
+    }
+  } catch {
+    // A corrupt room cannot prove that a keyed event applied. Let the append
+    // proceed so the transaction remains fail-open in the same way compaction
+    // does; fold containment will still keep the room deterministic.
+  }
+  return null;
+}
+
+/**
+ * Rebuild the durable logical-intent index from applied outcomes only.
+ *
+ * A bounced event changed no state and therefore cannot own a logical intent
+ * key. Keeping bounced keys out of this index lets a valid retry append after
+ * a stale or unauthorized contender used the same key.
+ */
+function rebuildAppliedIntentKeyIndex<S>(
+  config: EngineConfig<S>,
+  encoded: EncodedLogNode,
+): string | undefined {
+  try {
+    const appliedIndex = decodeAppliedIndex(encoded.appliedIndex);
+    const next: Record<string, string> = {};
+    for (const [rawSeq, key] of Object.entries(
+      decodeIntentKeyIndex(encoded.intentKeyIndex),
+    )) {
+      const seq = Number(rawSeq);
+      if (seq <= encoded.baseSeq && appliedIndex.has(seq)) {
+        next[rawSeq] = key;
+      }
+    }
+    for (const outcome of foldLiveWindow(config, encoded).outcomes) {
+      if (
+        outcome.outcome === "applied" &&
+        outcome.event.intentKey !== undefined
+      ) {
+        next[String(outcome.seq)] = outcome.event.intentKey;
+      }
+    }
+    return Object.keys(next).length === 0 ? undefined : JSON.stringify(next);
+  } catch {
+    return encoded.intentKeyIndex;
+  }
+}
+
+/** Resolve a retry to the sequence that originally won its nonce or applied intent key. */
+export function existingEventSeq<S>(
+  config: EngineConfig<S>,
   encoded: EncodedLogNode,
   event: GameEvent,
 ): number | null {
@@ -252,10 +341,7 @@ export function existingEventSeq(
     if (nonceSeq !== null) return nonceSeq;
   }
   if (event.intentKey !== undefined) {
-    return (
-      intentKeyIndexSeq(encoded.intentKeyIndex, event.intentKey) ??
-      liveWindowSeqForIntentKey(encoded, event.intentKey)
-    );
+    return appliedEventSeqForIntentKey(config, encoded, event.intentKey);
   }
   return null;
 }
@@ -299,5 +385,5 @@ export async function appendEvent<S>(
   if (committed === null) {
     throw new Error(`appendEvent committed an empty log at rooms/${roomId}/log`);
   }
-  return existingEventSeq(committed, event) ?? committed.head;
+  return existingEventSeq(config, committed, event) ?? committed.head;
 }

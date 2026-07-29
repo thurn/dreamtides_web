@@ -329,6 +329,48 @@ describe("OPEN_SITE generation determinism", () => {
 // ---------------------------------------------------------------------------
 
 describe("OPEN_SITE idempotence", () => {
+  it("allows an observer to commit the displayed site's deterministic bootstrap", () => {
+    const hosted = {
+      ...siteState("Essence"),
+      playtestControl: {
+        mode: "single-controller" as const,
+        controllerClientId: "controller",
+      },
+    };
+
+    const out = reduceGameEvent(
+      hosted,
+      event("OPEN_SITE", { siteId: SITE_ID }, "observer"),
+      ctx(),
+    );
+
+    expect(out.outcome).toBe("applied");
+    expect(out.state.journey.siteRuntime[SITE_ID]?.kind).toBe("essence");
+    expect(out.state.playtestControl?.controllerClientId).toBe("controller");
+  });
+
+  it("rejects an observer bootstrap for a site that is not displayed", () => {
+    const hosted = {
+      ...siteState("Essence", {
+        screen: { type: "dreamscape" as const },
+        activeSiteId: null,
+      }),
+      playtestControl: {
+        mode: "single-controller" as const,
+        controllerClientId: "controller",
+      },
+    };
+
+    const out = reduceGameEvent(
+      hosted,
+      event("OPEN_SITE", { siteId: SITE_ID }, "observer"),
+      ctx(),
+    );
+
+    expect(out.outcome).toBe("bounced");
+    expect(out.bounceReason).toBe("observer_read_only");
+  });
+
   it("bounces a repeated OPEN_SITE without changing or regenerating runtime", () => {
     const first = reduce(siteState("Essence"), "OPEN_SITE", {
       siteId: SITE_ID,

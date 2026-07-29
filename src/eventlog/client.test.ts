@@ -415,6 +415,9 @@ describe("LogClient double-apply of own intent", () => {
         baseSeq: 5,
         baseSnapshot: { applied: ["confirmed"] },
         events: {},
+        appliedIndex: new Map([
+          [5, { actor: "partner", type: "T" }],
+        ]),
       }),
     );
 
@@ -432,6 +435,135 @@ describe("LogClient double-apply of own intent", () => {
 });
 
 describe("LogClient optimistic echo rollback", () => {
+  it("does not let a bounced partner event reserve its intent key", async () => {
+    const bounceBlockedConfig: EngineConfig<ToyState> = {
+      ...config,
+      reducer: (state, event, ctx) =>
+        event.payload.tag === "blocked"
+          ? {
+              state,
+              outcome: "bounced",
+              bounceReason: "observer_read_only",
+            }
+          : config.reducer(state, event, ctx),
+    };
+    const { harness, client } = makeHarness(bounceBlockedConfig, {
+      append: () => Promise.resolve(2),
+    });
+    const intentKey = "open-site:journey:9:site-7";
+    const observer = confirmedEvent({
+      tag: "blocked",
+      actor: "observer",
+      basedOnSeq: 0,
+      intentKey,
+    });
+    harness.deliver(makeNode({ events: { 1: observer } }));
+
+    await expect(
+      client.submit({
+        type: "T",
+        payload: { tag: "controller" },
+        actor: "controller",
+        intentKey,
+      }),
+    ).resolves.toBe(2);
+
+    expect(harness.appended).toHaveLength(1);
+    expect(harness.appended[0]?.payload.tag).toBe("controller");
+    expect(harness.displayed()?.applied).toEqual(["controller"]);
+  });
+
+  it("keeps a matching controller submission pending when a partner's keyed event bounces", async () => {
+    const bounceBlockedConfig: EngineConfig<ToyState> = {
+      ...config,
+      reducer: (state, event, ctx) =>
+        event.payload.tag === "blocked"
+          ? {
+              state,
+              outcome: "bounced",
+              bounceReason: "observer_read_only",
+            }
+          : config.reducer(state, event, ctx),
+    };
+    let resolveAppend: ((seq: number) => void) | undefined;
+    const appendResult = new Promise<number>((resolve) => {
+      resolveAppend = resolve;
+    });
+    const { harness, client } = makeHarness(bounceBlockedConfig, {
+      append: () => appendResult,
+    });
+    harness.deliver(makeNode({ events: {} }));
+    const draft = {
+      type: "T",
+      payload: { tag: "controller" },
+      actor: "controller",
+      intentKey: "open-site:journey:9:site-7",
+    };
+    const first = client.submit(draft);
+    const observer = confirmedEvent({
+      tag: "blocked",
+      actor: "observer",
+      basedOnSeq: 0,
+      intentKey: draft.intentKey,
+    });
+    harness.deliver(makeNode({ events: { 1: observer } }));
+    const retry = client.submit(draft);
+
+    expect(harness.appended).toHaveLength(1);
+    expect(harness.displayed()?.applied).toEqual(["controller"]);
+
+    resolveAppend?.(2);
+    await expect(first).resolves.toBe(2);
+    await expect(retry).resolves.toBe(2);
+  });
+
+  it("does not cache its own bounced keyed event when the append acknowledgement arrives last", async () => {
+    const bounceBlockedConfig: EngineConfig<ToyState> = {
+      ...config,
+      reducer: (state, event, ctx) =>
+        event.payload.tag === "blocked"
+          ? {
+              state,
+              outcome: "bounced",
+              bounceReason: "observer_read_only",
+            }
+          : config.reducer(state, event, ctx),
+    };
+    let resolveFirstAppend: ((seq: number) => void) | undefined;
+    const firstAppendResult = new Promise<number>((resolve) => {
+      resolveFirstAppend = resolve;
+    });
+    let appendCount = 0;
+    const { harness, client } = makeHarness(bounceBlockedConfig, {
+      append: () => {
+        appendCount += 1;
+        return appendCount === 1 ? firstAppendResult : Promise.resolve(2);
+      },
+    });
+    harness.deliver(makeNode({ events: {} }));
+    const intentKey = "complete-site:journey:9:site-7";
+    const first = client.submit({
+      type: "T",
+      payload: { tag: "blocked" },
+      intentKey,
+    });
+    const bounced = harness.appended[0];
+    harness.deliver(makeNode({ events: { 1: bounced } }));
+
+    resolveFirstAppend?.(1);
+    await expect(first).resolves.toBe(1);
+    await expect(
+      client.submit({
+        type: "T",
+        payload: { tag: "controller" },
+        intentKey,
+      }),
+    ).resolves.toBe(2);
+
+    expect(harness.appended).toHaveLength(2);
+    expect(harness.appended[1]?.payload.tag).toBe("controller");
+  });
+
   it("drops the echo and reports a bounce when a partner wins the race", async () => {
     const { harness, client } = makeHarness();
     harness.deliver(makeNode({ events: {} }));
