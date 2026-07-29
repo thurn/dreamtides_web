@@ -61,6 +61,7 @@ import { createFillBattlefieldPreviewCommand } from "./battle-debug-preview";
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
 import { MobileBattleScreenAdapter } from "../../screens/cumulus_adapters/MobileBattleScreenAdapter";
 import type {
+  MobileBattleFigmentMergeTarget,
   MobileBattleInspectorAction,
   MobileBattleSlotTarget,
 } from "../../cumulus/screens/MobileBattleScreen";
@@ -70,6 +71,7 @@ import { createBattlePromptResolutionLogFields } from "./battle-prompt-logging";
 import { BattleTutorialGuidance } from "../../cumulus/screens/BattleTutorialGuidance";
 import { buildBattleTutorialGuidanceView } from "../../screens/cumulus_adapters/battle-tutorial-guidance-view-model";
 import { useBattleTutorialGuidance } from "../use-battle-tutorial-guidance";
+import { selectBattlefieldFigmentMergeTargets } from "../state/figments";
 
 // `BattleLogDrawer` renders from the append-only coop fold, so its
 // `history` prop is supplied an empty undo/redo envelope.
@@ -399,6 +401,36 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         ? "battlefield"
         : null;
   const pendingCardOwner = pendingDragLocation?.side ?? null;
+  const figmentMergeTargets: readonly MobileBattleFigmentMergeTarget[] =
+    pendingDrag?.kind === "battle-card"
+      ? selectBattlefieldFigmentMergeTargets(
+          board,
+          pendingDrag.battleCardId,
+        ).map((candidate) => ({
+          sourceBattleCardId: pendingDrag.battleCardId,
+          destinationBattleCardId: candidate.destinationBattleCardId,
+          target: {
+            owner: candidate.location.side,
+            rank:
+              candidate.location.zone === "backRank" ? "back" : "front",
+            slotId: candidate.location.slotId,
+          },
+          figmentLabel:
+            board.cardInstances[pendingDrag.battleCardId]?.definition.name ??
+            "Figment",
+          status:
+            candidate.assessment.kind === "eligible"
+              ? "eligible"
+              : "blocked-exhaustion",
+          addedSpark:
+            candidate.assessment.kind === "eligible"
+              ? candidate.assessment.addedSpark
+              : 0,
+          requiresConfirmation:
+            candidate.assessment.kind === "eligible" &&
+            candidate.assessment.requiresConfirmation,
+        }))
+      : [];
 
   // Resolves the single open prompt from the fold. Gated on
   // `useConfirmedPromptId()` so a resolve never targets a promptId that only
@@ -1131,6 +1163,28 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     setPendingDrag(null);
   }
 
+  function handleFigmentMerge(
+    sourceBattleCardId: string,
+    target: MobileBattleSlotTarget,
+  ): void {
+    if (!canPlayerAct) return;
+    pendingDragDropHandledRef.current = true;
+    handleCommand({
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: sourceBattleCardId,
+        destination: {
+          side: target.owner,
+          zone: target.rank === "back" ? "backRank" : "frontRank",
+          slotId: target.slotId as BattlefieldSlotId,
+        },
+      },
+      sourceSurface: "battlefield",
+    });
+    setPendingDrag(null);
+  }
+
   function handleZoneDrop(
     side: BattleSide,
     zone: BrowseableZone,
@@ -1502,6 +1556,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           pendingCardId: pendingDragCardId,
           pendingCardSource,
           pendingCardOwner,
+          figmentMergeTargets,
           onHandCardActivate: handleHandCardDoubleClick,
           onHandCardDrop: handlePlayPendingHandCard,
           onCardDebugActivate: (battleCardId, source, invocation) =>
@@ -1524,6 +1579,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
               slotId: slotId as BattlefieldSlotId,
             });
           },
+          onFigmentMerge: handleFigmentMerge,
           onZoneDrop: ({ owner, zone }) => {
             handleZoneDrop(
               owner,

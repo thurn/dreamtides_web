@@ -31,7 +31,18 @@ describe("BattleFigmentCreator", () => {
     expect(document.querySelectorAll('[role="option"]')).toHaveLength(FIGMENT_CATALOG_ENTRIES.length);
     act(() => document.querySelector<HTMLButtonElement>('[data-testid="battle-figment-submit"]')?.click());
     expect(submits).toHaveLength(1);
-    expect(submits[0]).toMatchObject({ kind: "CREATE_FIGMENT", side: "player", destination: { side: "player", zone: "backRank", slotId: "B0" } });
+    expect(submits[0]).toMatchObject({
+      kind: "CREATE_FIGMENT",
+      side: "player",
+      chosenFigmentId: FIGMENT_CATALOG_ENTRIES.find(
+        (entry) => entry.subtype === "Shadow",
+      )?.id,
+      destination: {
+        side: "player",
+        zone: "backRank",
+        slotId: "B0",
+      },
+    });
     act(() => root.unmount());
   });
 

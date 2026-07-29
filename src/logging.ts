@@ -310,6 +310,38 @@ export function createBattleProtoCardCreatedLogEvent(
   };
 }
 
+export function createBattleProtoFigmentsMergedLogEvent(
+  state: Pick<
+    BattleMutableState,
+    "battleId" | "turnNumber" | "phase" | "activeSide"
+  >,
+  payload: {
+    sourceBattleCardId: string;
+    destinationBattleCardId: string;
+    figmentId: string;
+    addedSpark: number;
+    destinationSparkBefore: number;
+    destinationSparkAfter: number;
+  },
+  context: {
+    sourceSurface: BattleCommandSourceSurface;
+    selectedCardId: string | null;
+  },
+): BattleDeferredLogEvent {
+  return {
+    event: "battle_proto_figments_merged",
+    fields: {
+      ...createBattleLogBaseFields(state, context),
+      sourceBattleCardId: payload.sourceBattleCardId,
+      destinationBattleCardId: payload.destinationBattleCardId,
+      figmentId: payload.figmentId,
+      addedSpark: payload.addedSpark,
+      destinationSparkBefore: payload.destinationSparkBefore,
+      destinationSparkAfter: payload.destinationSparkAfter,
+    },
+  };
+}
+
 export function createBattleProtoDeckReorderedLogEvent(
   state: Pick<BattleMutableState, "battleId" | "turnNumber" | "phase" | "activeSide">,
   payload: {

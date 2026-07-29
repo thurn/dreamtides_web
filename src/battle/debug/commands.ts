@@ -225,6 +225,8 @@ export type BattleDebugEdit =
   | {
     kind: "CREATE_FIGMENT";
     side: BattleSide;
+    /** Stable authored figment identity. Optional only for legacy commands. */
+    chosenFigmentId?: string;
     chosenSubtype: string;
     chosenSpark: number;
     name: string;

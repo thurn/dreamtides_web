@@ -1,15 +1,19 @@
 import { describe, expect, it } from "vitest";
 import {
   addFigmentsToStackInPlace,
+  assessFigmentMerge,
   canMergeFigments,
   countAlliedWarriors,
   dissolveFigmentsFromStackInPlace,
   findBattlefieldFigmentStack,
   isFigmentInstance,
   mergeFigmentsIntoStackInPlace,
+  mergeFigmentSparkInPlace,
+  selectBattlefieldFigmentMergeTargets,
   selectEffectiveSparkForInstance,
   selectFigmentCount,
   selectFigmentReserveSpark,
+  selectFigmentMergeSpark,
   selectFigmentSparks,
   selectTopmostFigmentSpark,
 } from "./figments";
@@ -333,6 +337,76 @@ describe("isFigmentInstance / canMergeFigments / findBattlefieldFigmentStack", (
     expect(canMergeFigments(shadowA, shadowB)).toBe(true);
     expect(canMergeFigments(shadowA, wisp)).toBe(false);
     expect(canMergeFigments(shadowA, makeNonFigment("c0", 2))).toBe(false);
+  });
+
+  it("uses authored UUID identity and requires matching exhaustion", () => {
+    const source = makeFigment("f0", [1], { subtype: "Warrior" });
+    const sameIdentity = makeFigment("f1", [1], { subtype: "Warrior" });
+    const differentIdentity = makeFigment("f2", [1], { subtype: "Warrior" });
+    source.definition.cardId = "00000000-0000-4000-8000-000000000001";
+    sameIdentity.definition.cardId = "00000000-0000-4000-8000-000000000001";
+    differentIdentity.definition.cardId =
+      "00000000-0000-4000-8000-000000000002";
+
+    expect(assessFigmentMerge(source, sameIdentity)).toMatchObject({
+      kind: "eligible",
+      addedSpark: 1,
+    });
+    expect(assessFigmentMerge(source, differentIdentity)).toEqual({
+      kind: "ineligible",
+      reason: "different-identity",
+    });
+
+    sameIdentity.status.isExhausted = true;
+    expect(assessFigmentMerge(source, sameIdentity)).toEqual({
+      kind: "ineligible",
+      reason: "exhaustion-mismatch",
+    });
+  });
+
+  it("transfers own spark into one destination character without static bonuses", () => {
+    const source = makeFigment("f0", [2], { subtype: "Shadow" });
+    const destination = makeFigment("f1", [2], { subtype: "Shadow" });
+    source.sparkDelta = 3;
+    source.staticSparkBonus = 4;
+    const state = makeStateWith(source);
+    state.cardInstances.f1 = destination;
+
+    expect(selectFigmentMergeSpark(source)).toBe(5);
+    expect(mergeFigmentSparkInPlace(state, "f0", "f1")).toMatchObject({
+      kind: "eligible",
+      addedSpark: 5,
+    });
+    expect(state.cardInstances.f1.sparkDelta).toBe(5);
+    expect(state.cardInstances.f1.figments).toEqual([2]);
+  });
+
+  it("lists eligible and exhaustion-blocked twins as occupied merge targets", () => {
+    const source = makeFigment("f0", [2]);
+    const eligible = makeFigment("f1", [2]);
+    const blocked = makeFigment("f2", [2]);
+    blocked.status.isExhausted = true;
+    const state = makeStateWith(source);
+    state.cardInstances.f1 = eligible;
+    state.cardInstances.f2 = blocked;
+    state.sides.player.backRank.B0 = "f0";
+    state.sides.player.backRank.B1 = "f1";
+    state.sides.player.backRank.B2 = "f2";
+
+    const targets = selectBattlefieldFigmentMergeTargets(state, "f0");
+
+    expect(targets).toHaveLength(2);
+    expect(targets[0]?.destinationBattleCardId).toBe("f1");
+    expect(targets[0]?.location).toEqual({ side: "player", zone: "backRank", slotId: "B1" });
+    expect(targets[0]?.assessment.kind).toBe("eligible");
+    expect(targets[1]).toEqual({
+      destinationBattleCardId: "f2",
+      location: { side: "player", zone: "backRank", slotId: "B2" },
+      assessment: {
+        kind: "ineligible",
+        reason: "exhaustion-mismatch",
+      },
+    });
   });
 
   it("finds a same-type figment stack on the battlefield, skipping the excluded id", () => {

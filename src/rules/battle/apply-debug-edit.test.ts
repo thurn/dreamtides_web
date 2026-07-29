@@ -221,6 +221,127 @@ describe("applyDebugEdit Figments leaving play", () => {
     expect(result.transition.logEvents).toEqual([]);
   });
 
+  it("merges a dragged twin into one destination character and logs the spark transfer", () => {
+    const first = applyDebugEdit(createTestState(), {
+      kind: "CREATE_FIGMENT",
+      side: "player",
+      chosenSubtype: "Shadow",
+      chosenSpark: 2,
+      name: "Shadow",
+      destination: { side: "player", zone: "backRank", slotId: "B0" },
+      createdAtMs: 0,
+    }, EMISSION);
+    const second = applyDebugEdit(first.state, {
+      kind: "CREATE_FIGMENT",
+      side: "player",
+      chosenSubtype: "Shadow",
+      chosenSpark: 2,
+      name: "Shadow",
+      destination: { side: "player", zone: "backRank", slotId: "B1" },
+      createdAtMs: 1,
+    }, EMISSION);
+    const sourceId = second.state.sides.player.backRank.B0;
+    const destinationId = second.state.sides.player.backRank.B1;
+    if (sourceId === null || destinationId === null) {
+      throw new Error("expected two battlefield figments");
+    }
+    second.state.cardInstances[sourceId].sparkDelta = 3;
+    second.state.cardInstances[sourceId].staticSparkBonus = 4;
+
+    const result = applyDebugEdit(second.state, {
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId: sourceId,
+      destination: { side: "player", zone: "backRank", slotId: "B1" },
+    }, EMISSION);
+
+    expect(result.state.sides.player.backRank.B0).toBeNull();
+    expect(result.state.sides.player.backRank.B1).toBe(destinationId);
+    expect(result.state.cardInstances[sourceId]).toBeUndefined();
+    expect(result.state.cardInstances[destinationId]?.figments).toEqual([2]);
+    expect(result.state.cardInstances[destinationId]?.sparkDelta).toBe(5);
+    expect(result.transition.logEvents).toHaveLength(1);
+    expect(result.transition.logEvents[0]?.event).toBe("battle_proto_figments_merged");
+    expect(result.transition.logEvents[0]?.fields).toMatchObject({
+      sourceBattleCardId: sourceId,
+      destinationBattleCardId: destinationId,
+      addedSpark: 5,
+      destinationSparkBefore: 2,
+      destinationSparkAfter: 7,
+    });
+  });
+
+  it("rejects a merge between exhausted and awakened twins", () => {
+    const first = applyDebugEdit(createTestState(), {
+      kind: "CREATE_FIGMENT",
+      side: "player",
+      chosenSubtype: "Shadow",
+      chosenSpark: 2,
+      name: "Shadow",
+      destination: { side: "player", zone: "backRank", slotId: "B0" },
+      createdAtMs: 0,
+    }, EMISSION);
+    const second = applyDebugEdit(first.state, {
+      kind: "CREATE_FIGMENT",
+      side: "player",
+      chosenSubtype: "Shadow",
+      chosenSpark: 2,
+      name: "Shadow",
+      destination: { side: "player", zone: "backRank", slotId: "B1" },
+      createdAtMs: 1,
+    }, EMISSION);
+    const sourceId = second.state.sides.player.backRank.B0;
+    const destinationId = second.state.sides.player.backRank.B1;
+    if (sourceId === null || destinationId === null) {
+      throw new Error("expected two battlefield figments");
+    }
+    second.state.cardInstances[sourceId].status.isExhausted = false;
+
+    const result = applyDebugEdit(second.state, {
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId: sourceId,
+      destination: { side: "player", zone: "backRank", slotId: "B1" },
+    }, EMISSION);
+
+    expect(result.state).toBe(second.state);
+    expect(result.transition.logEvents).toEqual([]);
+  });
+
+  it("transfers only Legionnaire base spark", () => {
+    const first = applyDebugEdit(createTestState(), {
+      kind: "CREATE_FIGMENT",
+      side: "player",
+      chosenSubtype: "Legion",
+      chosenSpark: 1,
+      name: "Legionnaire",
+      destination: { side: "player", zone: "backRank", slotId: "B0" },
+      createdAtMs: 0,
+    }, EMISSION);
+    const second = applyDebugEdit(first.state, {
+      kind: "CREATE_FIGMENT",
+      side: "player",
+      chosenSubtype: "Legion",
+      chosenSpark: 1,
+      name: "Legionnaire",
+      destination: { side: "player", zone: "backRank", slotId: "B1" },
+      createdAtMs: 1,
+    }, EMISSION);
+    const sourceId = second.state.sides.player.backRank.B0;
+    const destinationId = second.state.sides.player.backRank.B1;
+    if (sourceId === null || destinationId === null) {
+      throw new Error("expected two battlefield figments");
+    }
+    second.state.cardInstances[sourceId].sparkDelta = 6;
+
+    const result = applyDebugEdit(second.state, {
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId: sourceId,
+      destination: { side: "player", zone: "backRank", slotId: "B1" },
+    }, EMISSION);
+
+    expect(result.state.cardInstances[destinationId]?.sparkDelta).toBe(1);
+    expect(result.transition.logEvents[0]?.fields.addedSpark).toBe(1);
+  });
+
   it.each(["hand", "void", "banished"] as const)(
     "destroys a single Figment rather than moving it to %s",
     (zone) => {

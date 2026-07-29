@@ -135,6 +135,7 @@ export function BattleFigmentCreator({
     onSubmit({
       kind: "CREATE_FIGMENT",
       side,
+      chosenFigmentId: selectedEntry.id,
       chosenSubtype: subtype.trim(),
       chosenSpark: spark,
       name: name.trim(),

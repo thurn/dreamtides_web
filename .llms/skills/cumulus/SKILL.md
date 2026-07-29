@@ -89,7 +89,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | CardOrderEditor | Components | 1 | [components/card-order-editor.md](components/card-order-editor.md) | An identity-safe top-to-bottom card ordering control for the battle deck-order workflow. |
 | Tide Disc | Components | 1 | [components/tide-disc.md](components/tide-disc.md) | The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal, sized 'sm' or 'lg'. |
 | Transfiguration Form Button | Components | 1 | [components/transfiguration-form-button.md](components/transfiguration-form-button.md) | The canonical forge-form choice: compact and price-bearing controls with shared glyph, color, state, and accessibility behavior. |
-| Transient Status Toast | Components | 2 | [components/transient-status-toast.md](components/transient-status-toast.md) | The fixed, safe-area-aware short-lived status surface for player notices that need a semantic severity and structured copy. |
+| Transient Status Toast | Components | 3 | [components/transient-status-toast.md](components/transient-status-toast.md) | The fixed, safe-area-aware short-lived status surface for player notices that need a semantic severity and structured copy. |
 | Motes | Components | 11 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | 7 | [components/info-card.md](components/info-card.md) | The strict information-card presentation. |
 | Group Panel | Components | 8 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |

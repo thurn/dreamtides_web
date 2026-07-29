@@ -3515,6 +3515,206 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("animates an occupied twin as a merge target and plays a merge effect on release", () => {
+    const view = makeView();
+    const sourceCard = view.player.frontRank[0]?.card;
+    const destinationCard = view.player.backRank[1]?.card;
+    if (sourceCard === null || sourceCard === undefined || destinationCard === null || destinationCard === undefined) {
+      throw new Error("fixture requires occupied player ranks");
+    }
+    const onFigmentMerge = vi.fn();
+    const interactions: MobileBattleInteractions = {
+      canInteract: true,
+      pendingCardId: sourceCard.id,
+      pendingCardSource: "battlefield",
+      pendingCardOwner: "player",
+      figmentMergeTargets: [
+        {
+          sourceBattleCardId: sourceCard.id,
+          destinationBattleCardId: destinationCard.id,
+          target: {
+            owner: "player",
+            rank: "back",
+            slotId: "player-back-filled",
+          },
+          figmentLabel: "Shadow",
+          status: "eligible",
+          addedSpark: 2,
+          requiresConfirmation: false,
+        },
+      ],
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onFigmentMerge,
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(view, interactions);
+    const target = container.querySelector<HTMLElement>(
+      '[data-battle-rank="player-back"] [data-battle-slot-id="player-back-filled"]',
+    );
+
+    act(() => {
+      target?.dispatchEvent(
+        new MouseEvent("dragover", { bubbles: true, cancelable: true }),
+      );
+    });
+
+    expect(target?.dataset.battleFigmentMergeTarget).toBe("hovered");
+    expect(
+      container.querySelector("[data-battle-figment-merge-indicator]")
+        ?.textContent,
+    ).toContain("Merge+2✦");
+
+    act(() => {
+      target?.dispatchEvent(
+        new MouseEvent("drop", { bubbles: true, cancelable: true }),
+      );
+    });
+
+    expect(onFigmentMerge).toHaveBeenCalledWith(sourceCard.id, {
+      owner: "player",
+      rank: "back",
+      slotId: "player-back-filled",
+    });
+    expect(
+      document.querySelector("[data-battle-figment-merge-animation]"),
+    ).not.toBeNull();
+    expect(interactions.onSlotDrop).not.toHaveBeenCalled();
+
+    act(() => root.unmount());
+  });
+
+  it("explains an exhaustion-mismatched merge instead of swapping", () => {
+    const view = makeView();
+    const sourceCard = view.player.frontRank[0]?.card;
+    const destinationCard = view.player.backRank[1]?.card;
+    if (sourceCard === null || sourceCard === undefined || destinationCard === null || destinationCard === undefined) {
+      throw new Error("fixture requires occupied player ranks");
+    }
+    const interactions: MobileBattleInteractions = {
+      canInteract: true,
+      pendingCardId: sourceCard.id,
+      pendingCardSource: "battlefield",
+      pendingCardOwner: "player",
+      figmentMergeTargets: [
+        {
+          sourceBattleCardId: sourceCard.id,
+          destinationBattleCardId: destinationCard.id,
+          target: {
+            owner: "player",
+            rank: "back",
+            slotId: "player-back-filled",
+          },
+          figmentLabel: "Shadow",
+          status: "blocked-exhaustion",
+          addedSpark: 0,
+          requiresConfirmation: false,
+        },
+      ],
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onFigmentMerge: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(view, interactions);
+    const target = container.querySelector<HTMLElement>(
+      '[data-battle-rank="player-back"] [data-battle-slot-id="player-back-filled"]',
+    );
+
+    act(() => {
+      target?.dispatchEvent(
+        new MouseEvent("drop", { bubbles: true, cancelable: true }),
+      );
+    });
+
+    expect(document.body.textContent).toContain("Merge Blocked");
+    expect(document.body.textContent).toContain(
+      "An exhausted figment cannot be merged with one that isn't exhausted.",
+    );
+    expect(interactions.onFigmentMerge).not.toHaveBeenCalled();
+    expect(interactions.onSlotDrop).not.toHaveBeenCalled();
+
+    act(() => root.unmount());
+  });
+
+  it("confirms the Legionnaire base-spark consequence before merging", () => {
+    const view = makeView();
+    const sourceCard = view.player.frontRank[0]?.card;
+    const destinationCard = view.player.backRank[1]?.card;
+    if (sourceCard === null || sourceCard === undefined || destinationCard === null || destinationCard === undefined) {
+      throw new Error("fixture requires occupied player ranks");
+    }
+    const onFigmentMerge = vi.fn();
+    const interactions: MobileBattleInteractions = {
+      canInteract: true,
+      pendingCardId: sourceCard.id,
+      pendingCardSource: "battlefield",
+      pendingCardOwner: "player",
+      figmentMergeTargets: [
+        {
+          sourceBattleCardId: sourceCard.id,
+          destinationBattleCardId: destinationCard.id,
+          target: {
+            owner: "player",
+            rank: "back",
+            slotId: "player-back-filled",
+          },
+          figmentLabel: "Legionnaire",
+          status: "eligible",
+          addedSpark: 1,
+          requiresConfirmation: true,
+        },
+      ],
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onFigmentMerge,
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(view, interactions);
+    const target = container.querySelector<HTMLElement>(
+      '[data-battle-rank="player-back"] [data-battle-slot-id="player-back-filled"]',
+    );
+
+    act(() => {
+      target?.dispatchEvent(
+        new MouseEvent("drop", { bubbles: true, cancelable: true }),
+      );
+    });
+
+    expect(
+      document.querySelector("[data-battle-figment-merge-confirmation]")
+        ?.textContent,
+    ).toContain("Only 1✦");
+    expect(onFigmentMerge).not.toHaveBeenCalled();
+
+    act(() => {
+      document
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="battle-figment-merge-confirm"]',
+        )
+        ?.click();
+    });
+
+    expect(onFigmentMerge).toHaveBeenCalledTimes(1);
+    expect(
+      document.querySelector("[data-battle-figment-merge-confirmation]"),
+    ).toBeNull();
+
+    act(() => root.unmount());
+  });
+
   it("rejects the physical cell under a card instead of retargeting to an eligible cell", () => {
     const cardUuid = asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8");
     const baseView = makeView();

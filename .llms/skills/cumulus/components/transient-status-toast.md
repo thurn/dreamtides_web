@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/transient-status-toast`
 
-Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
 The fixed, safe-area-aware short-lived status surface for player notices that need a semantic severity and structured copy.
 

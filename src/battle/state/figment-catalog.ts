@@ -69,6 +69,10 @@ export interface FigmentCatalogRecord {
   art?: ArtCrop;
 }
 
+/** Stable authored identity for the Legionnaire figment. */
+export const LEGIONNAIRE_FIGMENT_ID =
+  "e757b306-5bab-4a5a-8493-28c0f3aa6440";
+
 function normalizeHydratedKeyword(keyword: string | undefined): FigmentKeyword | undefined {
   if (keyword === "unstoppable" || keyword === "vengeful" || keyword === "awakened") {
     return keyword;

@@ -40,6 +40,7 @@ import { ResourceChip } from "../components/hud/ResourceChip";
 import { GlassBackdrop, GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { DeveloperRail } from "../components/overlay/DeveloperRail";
+import { TransientStatusToast } from "../components/status/TransientStatusToast";
 import type { DreamAvatarVisual } from "../components/hud/DreamAvatarPortrait";
 import { GLYPHS } from "../primitives/glyph";
 import {
@@ -391,6 +392,17 @@ export interface MobileBattleSlotTarget {
   readonly slotId: string;
 }
 
+/** One occupied slot whose relationship to the dragged figment is rules-owned. */
+export interface MobileBattleFigmentMergeTarget {
+  readonly sourceBattleCardId: string;
+  readonly destinationBattleCardId: string;
+  readonly target: MobileBattleSlotTarget;
+  readonly figmentLabel: string;
+  readonly status: "eligible" | "blocked-exhaustion";
+  readonly addedSpark: number;
+  readonly requiresConfirmation: boolean;
+}
+
 export interface MobileBattleDropCandidate {
   readonly target: MobileBattleSlotTarget;
   readonly eligible: boolean;
@@ -460,6 +472,8 @@ export interface MobileBattleInteractions {
   readonly eligibleSlotTargets?: readonly MobileBattleSlotTarget[];
   /** Canonical rules predicate for whether the exact rendered cell is legal. */
   readonly isSlotDropEligible?: (target: MobileBattleSlotTarget) => boolean;
+  /** Occupied cells that merge with the pending figment instead of swapping. */
+  readonly figmentMergeTargets?: readonly MobileBattleFigmentMergeTarget[];
   /** A tutorial play awaiting a legal battlefield target. */
   readonly targetSelectionCardId?: string | null;
   readonly targetSelectionPrompt?: string | null;
@@ -479,6 +493,11 @@ export interface MobileBattleInteractions {
   ) => void;
   readonly onCardDragEnd: () => void;
   readonly onSlotDrop: (target: MobileBattleSlotTarget) => void;
+  /** Commits a confirmed figment merge by stable battle-instance identity. */
+  readonly onFigmentMerge?: (
+    sourceBattleCardId: string,
+    target: MobileBattleSlotTarget,
+  ) => void;
   readonly onBattlefieldDropRejected?: (
     rejection: MobileBattleDropRejection,
   ) => void;
@@ -562,6 +581,13 @@ const TURN_RIPPLE_EXIT_SCALE = 1.42;
 const TURN_COPY_ARRIVAL_SCALE = 0.72;
 const TURN_COPY_OVERSHOOT_SCALE = 1.06;
 const TURN_COPY_EXIT_SCALE = 0.94;
+const FIGMENT_MERGE_ANIMATION_SECONDS =
+  motionTimeSeconds("--dur-slow") * 2;
+const FIGMENT_MERGE_NOTICE_MS =
+  motionTimeSeconds("--dur-slow") * 4 * 1_000;
+// Pointer-dragged cards lift to z100 inside their rank; the merge disc must
+// remain visible above the physical card occupying the destination.
+const FIGMENT_MERGE_INDICATOR_Z_INDEX = 110;
 const PHASE_LIGHT_LEFT = {
   dawn: "10%",
   day: "30%",
@@ -852,6 +878,192 @@ function BattleTurnAnnouncement({
           {label}
         </span>
       </div>
+    </div>
+  );
+}
+
+function FigmentMergeTargetIndicator({
+  target,
+}: {
+  readonly target: MobileBattleFigmentMergeTarget;
+}) {
+  const reduceMotion = useReducedMotion();
+  const blocked = target.status === "blocked-exhaustion";
+  const ringColor = blocked ? token("--danger") : token("--border-accent");
+  const label = blocked ? "Cannot Merge" : "Merge";
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      data-battle-figment-merge-indicator={target.status}
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: FIGMENT_MERGE_INDICATOR_Z_INDEX,
+        display: "grid",
+        placeItems: "center",
+        pointerEvents: "none",
+      }}
+    >
+      <motion.div
+        data-battle-figment-merge-disc=""
+        animate={
+          reduceMotion
+            ? { opacity: 1, scale: 1 }
+            : { opacity: [0.72, 1, 0.72], scale: [0.9, 1.04, 0.9] }
+        }
+        transition={{
+          duration: FIGMENT_MERGE_ANIMATION_SECONDS,
+          ease: "easeInOut",
+          repeat: reduceMotion ? 0 : Number.POSITIVE_INFINITY,
+        }}
+        style={{
+          position: "relative",
+          width: "72%",
+          aspectRatio: "1",
+          display: "grid",
+          placeItems: "center",
+          borderRadius: token("--radius-pill"),
+          background: `radial-gradient(circle at 38% 28%, ${token("--surface-raised")} 0%, ${token("--surface-card")} 62%, ${token("--bg-sunken")} 100%)`,
+          boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
+        }}
+      >
+        <motion.span
+          aria-hidden="true"
+          data-battle-figment-merge-orbit=""
+          animate={
+            reduceMotion
+              ? { opacity: 0.72 }
+              : { opacity: [0.3, 0.9, 0.3], rotate: [0, 180, 360] }
+          }
+          transition={{
+            duration: FIGMENT_MERGE_ANIMATION_SECONDS,
+            ease: "linear",
+            repeat: reduceMotion ? 0 : Number.POSITIVE_INFINITY,
+          }}
+          style={{
+            position: "absolute",
+            inset: token("--space-2"),
+            border: `${token("--space-1")} solid ${ringColor}`,
+            borderTopColor: blocked ? token("--danger") : token("--accent-bright"),
+            borderRadius: token("--radius-pill"),
+          }}
+        />
+        <span
+          data-battle-figment-merge-copy=""
+          style={{
+            position: "relative",
+            display: "grid",
+            gap: token("--space-1"),
+            color: token("--text-primary"),
+            font: token("--t-caption"),
+            textAlign: "center",
+            textShadow: token("--text-outline-media"),
+          }}
+        >
+          <span>{label}</span>
+          {!blocked ? <span>+{target.addedSpark}✦</span> : null}
+        </span>
+      </motion.div>
+    </div>
+  );
+}
+
+interface FigmentMergeAnimationState {
+  readonly key: number;
+  readonly sourceCard: MobileBattleCardView;
+  readonly sourceRect: DOMRect;
+  readonly targetRect: DOMRect;
+  readonly target: MobileBattleFigmentMergeTarget;
+}
+
+function FigmentMergeAnimation({
+  animation,
+}: {
+  readonly animation: FigmentMergeAnimationState;
+}) {
+  const reduceMotion = useReducedMotion();
+  const deltaX = animation.targetRect.left - animation.sourceRect.left;
+  const deltaY = animation.targetRect.top - animation.sourceRect.top;
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      aria-label={`${animation.target.figmentLabel} merged for ${String(animation.target.addedSpark)} spark`}
+      data-battle-figment-merge-animation=""
+      data-battle-figment-merge-source={animation.target.sourceBattleCardId}
+      data-battle-figment-merge-destination={
+        animation.target.destinationBattleCardId
+      }
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 60,
+        pointerEvents: "none",
+      }}
+    >
+      <motion.div
+        initial={reduceMotion ? false : { opacity: 1, scale: 1, x: 0, y: 0 }}
+        animate={
+          reduceMotion
+            ? { opacity: 0 }
+            : {
+                opacity: [1, 0.92, 0],
+                scale: [1, 0.68, 0.16],
+                x: [0, deltaX, deltaX],
+                y: [0, deltaY, deltaY],
+                rotate: [0, 4, 14],
+              }
+        }
+        transition={{
+          duration: reduceMotion ? 0 : FIGMENT_MERGE_ANIMATION_SECONDS,
+          ease: "easeInOut",
+          times: reduceMotion ? undefined : [0, 0.72, 1],
+        }}
+        style={{
+          position: "absolute",
+          left: animation.sourceRect.left,
+          top: animation.sourceRect.top,
+          width: animation.sourceRect.width,
+          height: animation.sourceRect.height,
+          transformOrigin: "50% 50%",
+        }}
+      >
+        <GameCard
+          model={animation.sourceCard.model}
+          hideRulesText
+          exhausted={animation.sourceCard.exhausted}
+          presentation="battlefield"
+          figment
+          testId={`battle-figment-merge-traveler:${animation.sourceCard.id}`}
+        />
+      </motion.div>
+      <motion.div
+        aria-hidden="true"
+        data-battle-figment-merge-impact=""
+        initial={reduceMotion ? false : { opacity: 0, scale: 0.54 }}
+        animate={
+          reduceMotion
+            ? { opacity: 0 }
+            : { opacity: [0, 0.86, 0], scale: [0.54, 1.18, 1.42] }
+        }
+        transition={{
+          duration: reduceMotion ? 0 : FIGMENT_MERGE_ANIMATION_SECONDS,
+          ease: "easeOut",
+          times: reduceMotion ? undefined : [0, 0.72, 1],
+        }}
+        style={{
+          position: "absolute",
+          left: animation.targetRect.left,
+          top: animation.targetRect.top,
+          width: animation.targetRect.width,
+          height: animation.targetRect.height,
+          border: `${token("--space-1")} solid ${token("--border-accent")}`,
+          borderRadius: BATTLEFIELD_CARD_CORNER_RADIUS,
+          boxShadow: token("--glow-accent-soft"),
+          boxSizing: "border-box",
+        }}
+      />
     </div>
   );
 }
@@ -2160,6 +2372,61 @@ function sameSlotTarget(
   );
 }
 
+function slotTargetFromElement(
+  element: Element | null | undefined,
+): MobileBattleSlotTarget | null {
+  const slot = element?.closest<HTMLElement>(
+    '[data-battle-mobile-drop-kind="slot"]',
+  );
+  const owner = slot?.dataset.battleMobileDropOwner;
+  const rank = slot?.dataset.battleMobileDropRank;
+  const slotId = slot?.dataset.battleMobileDropSlotId;
+  if (
+    (owner !== "player" && owner !== "enemy") ||
+    (rank !== "back" && rank !== "front") ||
+    slotId === undefined
+  ) {
+    return null;
+  }
+  return { owner, rank, slotId };
+}
+
+function findBattleCardView(
+  view: MobileBattleView,
+  battleCardId: string,
+): MobileBattleCardView | null {
+  const cards = [
+    ...view.player.backRank.flatMap((slot) =>
+      slot.card === null ? [] : [slot.card],
+    ),
+    ...view.player.frontRank.flatMap((slot) =>
+      slot.card === null ? [] : [slot.card],
+    ),
+    ...view.enemy.backRank.flatMap((slot) =>
+      slot.card === null ? [] : [slot.card],
+    ),
+    ...view.enemy.frontRank.flatMap((slot) =>
+      slot.card === null ? [] : [slot.card],
+    ),
+    ...view.playerHand,
+    ...view.enemyHand,
+  ];
+  return cards.find((card) => card.id === battleCardId) ?? null;
+}
+
+function findSlotElement(
+  target: MobileBattleSlotTarget,
+): HTMLElement | null {
+  return (
+    [...document.querySelectorAll<HTMLElement>(
+      '[data-battle-mobile-drop-kind="slot"]',
+    )].find((element) => {
+      const elementTarget = slotTargetFromElement(element);
+      return elementTarget !== null && sameSlotTarget(elementTarget, target);
+    }) ?? null
+  );
+}
+
 function slotTargetIsEligible(
   interactions: MobileBattleInteractions,
   target: MobileBattleSlotTarget,
@@ -2202,6 +2469,8 @@ function Rank({
   selectedPickerCardIds,
   onPickerCardToggle,
   onBattlefieldDragChange,
+  hoveredMergeTarget,
+  onMergeTargetHover,
   guidedSlotHighlight,
   preserveOccupiedSlotOutlines,
   showChallengerChevrons,
@@ -2226,6 +2495,10 @@ function Rank({
   readonly onBattlefieldDragChange: (
     dragging: boolean,
     cardId?: string,
+  ) => void;
+  readonly hoveredMergeTarget: MobileBattleFigmentMergeTarget | null;
+  readonly onMergeTargetHover: (
+    target: MobileBattleFigmentMergeTarget | null,
   ) => void;
   readonly guidedSlotHighlight?: MobileBattleScreenProps["guidedSlotHighlight"];
   readonly preserveOccupiedSlotOutlines?: boolean;
@@ -2322,6 +2595,14 @@ function Rank({
             canDropOnOwner &&
             interactions !== undefined &&
             slotTargetIsEligible(interactions, slotTarget);
+          const mergeTarget =
+            interactions?.figmentMergeTargets?.find((candidateTarget) =>
+              sameSlotTarget(candidateTarget.target, slotTarget),
+            ) ?? null;
+          const mergeTargetHovered =
+            mergeTarget !== null &&
+            hoveredMergeTarget !== null &&
+            sameSlotTarget(mergeTarget.target, hoveredMergeTarget.target);
           const candidate =
             slot.card === null
               ? null
@@ -2339,6 +2620,15 @@ function Rank({
               data-battle-mobile-drop-rank={rank}
               data-battle-mobile-drop-slot-id={slot.id}
               data-battle-drop-target={canDrop ? "true" : undefined}
+              data-battle-figment-merge-target={
+                mergeTarget === null
+                  ? undefined
+                  : mergeTargetHovered
+                    ? mergeTarget.status === "eligible"
+                      ? "hovered"
+                      : "blocked"
+                    : "candidate"
+              }
               data-battle-card-picker-candidate={
                 candidate === null ? undefined : "true"
               }
@@ -2349,7 +2639,17 @@ function Rank({
                 isPickerHighlighted ? "true" : undefined
               }
               onDragOver={(event) => {
-                if (canDrop) event.preventDefault();
+                if (!canDrop) return;
+                event.preventDefault();
+                onMergeTargetHover(mergeTarget);
+              }}
+              onDragLeave={(event) => {
+                if (
+                  mergeTargetHovered &&
+                  !event.currentTarget.contains(event.relatedTarget as Node | null)
+                ) {
+                  onMergeTargetHover(null);
+                }
               }}
               onDrop={(event) => {
                 if (!canDrop) return;
@@ -2493,6 +2793,9 @@ function Rank({
                   }
                 />
               ) : null}
+              {mergeTargetHovered && mergeTarget !== null ? (
+                <FigmentMergeTargetIndicator target={mergeTarget} />
+              ) : null}
             </div>
           );
         })}
@@ -2516,6 +2819,8 @@ function PlayArea({
   selectedPickerCardIds,
   onPickerCardToggle,
   onBattlefieldDragChange,
+  hoveredMergeTarget,
+  onMergeTargetHover,
   guidedSlotHighlight,
   preserveOccupiedSlotOutlines,
   allowSharedLayoutOverflow,
@@ -2539,6 +2844,10 @@ function PlayArea({
   readonly onBattlefieldDragChange: (
     dragging: boolean,
     cardId?: string,
+  ) => void;
+  readonly hoveredMergeTarget: MobileBattleFigmentMergeTarget | null;
+  readonly onMergeTargetHover: (
+    target: MobileBattleFigmentMergeTarget | null,
   ) => void;
   readonly guidedSlotHighlight?: MobileBattleScreenProps["guidedSlotHighlight"];
   readonly preserveOccupiedSlotOutlines?: boolean;
@@ -2593,6 +2902,8 @@ function PlayArea({
           selectedPickerCardIds={selectedPickerCardIds}
           onPickerCardToggle={onPickerCardToggle}
           onBattlefieldDragChange={onBattlefieldDragChange}
+          hoveredMergeTarget={hoveredMergeTarget}
+          onMergeTargetHover={onMergeTargetHover}
           guidedSlotHighlight={guidedSlotHighlight}
           preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines}
           showChallengerChevrons={showChallengerChevrons}
@@ -4240,6 +4551,14 @@ export function MobileBattleScreen({
   );
   const [isCardDragActive, setIsCardDragActive] = useState(false);
   const [snapLayoutCardId, setSnapLayoutCardId] = useState<string | null>(null);
+  const [hoveredMergeTarget, setHoveredMergeTarget] =
+    useState<MobileBattleFigmentMergeTarget | null>(null);
+  const [mergeConfirmation, setMergeConfirmation] =
+    useState<MobileBattleFigmentMergeTarget | null>(null);
+  const [mergeNotice, setMergeNotice] = useState<string | null>(null);
+  const [mergeAnimation, setMergeAnimation] =
+    useState<FigmentMergeAnimationState | null>(null);
+  const mergeAnimationSequence = useRef(1);
   const [cardPickerSelection, setCardPickerSelection] = useState<{
     readonly pickerKey: string | null;
     readonly ids: readonly string[];
@@ -4321,11 +4640,147 @@ export function MobileBattleScreen({
     [onTurnAnnouncementComplete, view.battleId, view.inspector.turn],
   );
 
+  const beginFigmentMerge = useCallback(
+    (target: MobileBattleFigmentMergeTarget): void => {
+      const sourceCard = findBattleCardView(
+        view,
+        target.sourceBattleCardId,
+      );
+      const sourceElement =
+        [...document.querySelectorAll<HTMLElement>("[data-battle-card-id]")].find(
+          (element) =>
+            element.dataset.battleCardId === target.sourceBattleCardId,
+        ) ?? null;
+      const targetElement = findSlotElement(target.target);
+      if (sourceCard !== null && sourceElement !== null && targetElement !== null) {
+        setMergeAnimation({
+          key: mergeAnimationSequence.current,
+          sourceCard,
+          sourceRect: sourceElement.getBoundingClientRect(),
+          targetRect: targetElement.getBoundingClientRect(),
+          target,
+        });
+        mergeAnimationSequence.current += 1;
+      }
+      setMergeConfirmation(null);
+      setHoveredMergeTarget(null);
+      interactions?.onFigmentMerge?.(
+        target.sourceBattleCardId,
+        target.target,
+      );
+    },
+    [interactions, view],
+  );
+
+  const handlePresentedSlotDrop = useCallback(
+    (target: MobileBattleSlotTarget): void => {
+      const mergeTarget =
+        interactions?.figmentMergeTargets?.find((candidate) =>
+          sameSlotTarget(candidate.target, target),
+        ) ?? null;
+      if (mergeTarget === null) {
+        interactions?.onSlotDrop(target);
+        return;
+      }
+      if (mergeTarget.status === "blocked-exhaustion") {
+        setHoveredMergeTarget(null);
+        setMergeNotice(
+          "An exhausted figment cannot be merged with one that isn't exhausted.",
+        );
+        return;
+      }
+      if (mergeTarget.requiresConfirmation) {
+        setHoveredMergeTarget(null);
+        setMergeConfirmation(mergeTarget);
+        return;
+      }
+      beginFigmentMerge(mergeTarget);
+    },
+    [beginFigmentMerge, interactions],
+  );
+
+  const presentedInteractions =
+    interactions === undefined
+      ? undefined
+      : {
+          ...interactions,
+          onSlotDrop: handlePresentedSlotDrop,
+        };
+
+  useEffect(() => {
+    if (mergeNotice === null) return;
+    const timeout = window.setTimeout(
+      () => setMergeNotice(null),
+      FIGMENT_MERGE_NOTICE_MS / playbackSpeed,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [mergeNotice, playbackSpeed]);
+
+  useEffect(() => {
+    if (mergeAnimation === null) return;
+    const timeout = window.setTimeout(
+      () =>
+        setMergeAnimation((current) =>
+          current?.key === mergeAnimation.key ? null : current,
+        ),
+      (FIGMENT_MERGE_ANIMATION_SECONDS * 1_000) / playbackSpeed,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [mergeAnimation, playbackSpeed]);
+
+  useEffect(() => {
+    if (
+      interactions?.pendingCardId === null ||
+      interactions?.pendingCardId === undefined ||
+      interactions.figmentMergeTargets?.length === 0
+    ) {
+      setHoveredMergeTarget(null);
+      return;
+    }
+    const updateHoveredTarget = (event: MouseEvent | PointerEvent): void => {
+      const elements =
+        typeof document.elementsFromPoint === "function"
+          ? document.elementsFromPoint(event.clientX, event.clientY)
+          : typeof document.elementFromPoint === "function"
+            ? [document.elementFromPoint(event.clientX, event.clientY)].filter(
+              (element): element is Element => element !== null,
+            )
+            : [];
+      const targets = elements
+        .map((element) => slotTargetFromElement(element))
+        .filter(
+          (target): target is MobileBattleSlotTarget => target !== null,
+        );
+      if (targets.length === 0) return;
+      const next =
+        interactions.figmentMergeTargets?.find((candidate) =>
+          targets.some((target) => sameSlotTarget(candidate.target, target)),
+        ) ?? null;
+      setHoveredMergeTarget((current) => {
+        if (current === null || next === null) return next;
+        return sameSlotTarget(current.target, next.target) ? current : next;
+      });
+    };
+    window.addEventListener("pointermove", updateHoveredTarget);
+    window.addEventListener("dragover", updateHoveredTarget);
+    return () => {
+      window.removeEventListener("pointermove", updateHoveredTarget);
+      window.removeEventListener("dragover", updateHoveredTarget);
+    };
+  }, [
+    interactions?.figmentMergeTargets,
+    interactions?.pendingCardId,
+  ]);
+
   useEffect(() => {
     setSelectedSide("player");
     setInspectorOpen(inspectorStartsOpen);
     setIsCardDragActive(false);
     setSnapLayoutCardId(null);
+    setHoveredMergeTarget(null);
+    setMergeConfirmation(null);
+    setMergeNotice(null);
+    setMergeAnimation(null);
     setCardPickerSelection({ pickerKey: null, ids: [] });
   }, [inspectorStartsOpen, setInspectorOpen, view.battleId]);
 
@@ -4338,6 +4793,8 @@ export function MobileBattleScreen({
     }
     setIsCardDragActive(false);
     setSnapLayoutCardId(null);
+    setHoveredMergeTarget(null);
+    setMergeConfirmation(null);
     setCardPickerSelection({ pickerKey: null, ids: [] });
   }, [setInspectorOpen, view.perspective]);
 
@@ -4542,6 +4999,8 @@ export function MobileBattleScreen({
           selectedPickerCardIds={selectedPickerCardIds}
           onPickerCardToggle={handlePickerCardToggle}
           onBattlefieldDragChange={handleCardDragChange}
+          hoveredMergeTarget={hoveredMergeTarget}
+          onMergeTargetHover={setHoveredMergeTarget}
           guidedSlotHighlight={guidedSlotHighlight}
           preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines}
           allowSharedLayoutOverflow={cardLayoutGroup === "inherited"}
@@ -4549,7 +5008,7 @@ export function MobileBattleScreen({
             activeSideHasChallengers && far.owner === view.activeSide
           }
           cardOverlay={cardOverlay}
-          interactions={interactions}
+          interactions={presentedInteractions}
         />
         <PlayArea
           isDesktop={isDesktop}
@@ -4566,6 +5025,8 @@ export function MobileBattleScreen({
           selectedPickerCardIds={selectedPickerCardIds}
           onPickerCardToggle={handlePickerCardToggle}
           onBattlefieldDragChange={handleCardDragChange}
+          hoveredMergeTarget={hoveredMergeTarget}
+          onMergeTargetHover={setHoveredMergeTarget}
           guidedSlotHighlight={guidedSlotHighlight}
           preserveOccupiedSlotOutlines={preserveOccupiedSlotOutlines}
           allowSharedLayoutOverflow={cardLayoutGroup === "inherited"}
@@ -4573,7 +5034,7 @@ export function MobileBattleScreen({
             activeSideHasChallengers && near.owner === view.activeSide
           }
           cardOverlay={cardOverlay}
-          interactions={interactions}
+          interactions={presentedInteractions}
         />
         <ControlRow
           aiApproval={view.aiApproval}
@@ -4754,6 +5215,69 @@ export function MobileBattleScreen({
           />
         ) : null}
       </div>
+      {mergeAnimation !== null ? (
+        <FigmentMergeAnimation
+          key={mergeAnimation.key}
+          animation={mergeAnimation}
+        />
+      ) : null}
+      {mergeNotice !== null ? (
+        <TransientStatusToast
+          variant="warning"
+          copy={{ title: "Merge Blocked", message: mergeNotice }}
+          onDismiss={() => setMergeNotice(null)}
+        />
+      ) : null}
+      {mergeConfirmation !== null ? (
+        <GlassDialog
+          title={`Merge ${mergeConfirmation.figmentLabel}?`}
+          presentation="popup"
+          desktopCenterTarget="battlefield"
+          onClose={() => setMergeConfirmation(null)}
+          closeLabel="Cancel figment merge"
+        >
+          <div
+            data-battle-figment-merge-confirmation=""
+            style={{
+              display: "grid",
+              gap: token("--space-5"),
+              maxWidth: 420,
+            }}
+          >
+            <p
+              style={{
+                margin: 0,
+                color: token("--text-on-glass"),
+                font: token("--t-body"),
+              }}
+            >
+              Only {mergeConfirmation.addedSpark}✦ from this Legionnaire will
+              be added. Its Warrior-count bonus does not transfer. This merge
+              cannot be undone.
+            </p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                gap: token("--space-3"),
+              }}
+            >
+              <GlassButton
+                label="Cancel"
+                placement="onGlass"
+                onPress={() => setMergeConfirmation(null)}
+              />
+              <GlassButton
+                label="Merge"
+                variant="accent"
+                placement="onGlass"
+                testId="battle-figment-merge-confirm"
+                onPress={() => beginFigmentMerge(mergeConfirmation)}
+              />
+            </div>
+          </div>
+        </GlassDialog>
+      ) : null}
       {inspectorVisibility === "available" &&
       !isDockLayout &&
       isInspectorOpen ? (

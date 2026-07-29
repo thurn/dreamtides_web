@@ -2300,6 +2300,7 @@ function coerceBattleDebugEdit(raw: unknown): BattleDebugEdit | null {
       return isNonEmptyString(raw.battleCardId) && Number.isInteger(raw.count) ? raw as unknown as BattleDebugEdit : null;
     case "CREATE_FIGMENT":
       return isBattleSide(raw.side) &&
+        (raw.chosenFigmentId === undefined || isNonEmptyString(raw.chosenFigmentId)) &&
         typeof raw.chosenSubtype === "string" &&
         isFiniteNumber(raw.chosenSpark) &&
         typeof raw.name === "string" &&

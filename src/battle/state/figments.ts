@@ -5,6 +5,10 @@ import type {
   BattleSide,
 } from "../types";
 import { rankSlotIds } from "../types";
+import {
+  LEGIONNAIRE_FIGMENT_ID,
+  lookupFigmentCatalogEntryById,
+} from "./figment-catalog";
 
 export function isFigmentInstance(instance: BattleCardInstance | undefined | null): instance is BattleCardInstance {
   return instance?.provenance.kind === "generated-figment";
@@ -293,9 +297,176 @@ export function canMergeFigments(
   moving: BattleCardInstance | undefined | null,
   existing: BattleCardInstance | undefined | null,
 ): boolean {
-  return isFigmentInstance(moving) &&
-    isFigmentInstance(existing) &&
-    normalizeFigmentSubtype(moving.definition.subtype) === normalizeFigmentSubtype(existing.definition.subtype);
+  return assessFigmentMerge(moving, existing).kind === "eligible";
+}
+
+export type FigmentMergeIneligibleReason =
+  | "not-figments"
+  | "different-identity"
+  | "different-controller"
+  | "exhaustion-mismatch";
+
+export type FigmentMergeAssessment =
+  | {
+      readonly kind: "eligible";
+      readonly addedSpark: number;
+      readonly requiresConfirmation: boolean;
+    }
+  | {
+      readonly kind: "ineligible";
+      readonly reason: FigmentMergeIneligibleReason;
+    };
+
+function figmentCatalogIdentity(instance: BattleCardInstance): string {
+  const authoredId = instance.definition.cardId.trim().toLowerCase();
+  if (authoredId !== "") return authoredId;
+  return `legacy:${normalizeFigmentSubtype(
+    instance.provenance.chosenSubtype ?? instance.definition.subtype,
+  )}`;
+}
+
+export function isLegionnaireFigment(instance: BattleCardInstance): boolean {
+  const identity = figmentCatalogIdentity(instance);
+  return (
+    identity === LEGIONNAIRE_FIGMENT_ID ||
+    identity === "builtin:legion"
+  );
+}
+
+/**
+ * Spark permanently transferred by a manual merge. This is the source
+ * figment's own current spark: base plus persistent gains, excluding Support,
+ * anthems, and other static bonuses. Legionnaire transfers only its catalog
+ * base spark because its live Warrior-count bonus is dynamic.
+ */
+export function selectFigmentMergeSpark(
+  instance: BattleCardInstance,
+): number {
+  if (!isFigmentInstance(instance)) return 0;
+  if (isLegionnaireFigment(instance)) {
+    return Math.max(
+      0,
+      lookupFigmentCatalogEntryById(instance.definition.cardId)?.baseSpark ??
+        instance.definition.printedSpark,
+    );
+  }
+  return Math.max(
+    0,
+    instance.definition.printedSpark + instance.sparkDelta,
+  );
+}
+
+/**
+ * Applies the complete rules predicate for dragging one figment onto another.
+ * Matching exhaustion is required because the merge follows normal
+ * repositioning exhaustion rules.
+ */
+export function assessFigmentMerge(
+  moving: BattleCardInstance | undefined | null,
+  existing: BattleCardInstance | undefined | null,
+): FigmentMergeAssessment {
+  if (!isFigmentInstance(moving) || !isFigmentInstance(existing)) {
+    return { kind: "ineligible", reason: "not-figments" };
+  }
+  if (figmentCatalogIdentity(moving) !== figmentCatalogIdentity(existing)) {
+    return { kind: "ineligible", reason: "different-identity" };
+  }
+  if (moving.controller !== existing.controller) {
+    return { kind: "ineligible", reason: "different-controller" };
+  }
+  if (moving.status.isExhausted !== existing.status.isExhausted) {
+    return { kind: "ineligible", reason: "exhaustion-mismatch" };
+  }
+  return {
+    kind: "eligible",
+    addedSpark: selectFigmentMergeSpark(moving),
+    requiresConfirmation: isLegionnaireFigment(moving),
+  };
+}
+
+/**
+ * Permanently folds one eligible source figment into the destination character.
+ * The destination keeps its identity and statuses; the source ceases to exist
+ * at the caller's movement seam.
+ */
+export function mergeFigmentSparkInPlace(
+  state: BattleMutableState,
+  sourceBattleCardId: string,
+  destinationBattleCardId: string,
+): FigmentMergeAssessment | null {
+  const source = state.cardInstances[sourceBattleCardId];
+  const destination = state.cardInstances[destinationBattleCardId];
+  const assessment = assessFigmentMerge(source, destination);
+  if (assessment.kind !== "eligible") return null;
+  destination.sparkDelta += assessment.addedSpark;
+  return assessment;
+}
+
+export interface BattlefieldFigmentMergeTarget {
+  readonly destinationBattleCardId: string;
+  readonly location: BattleFieldSlotAddress;
+  readonly assessment: Extract<
+    FigmentMergeAssessment,
+    { kind: "eligible" }
+  > | {
+    readonly kind: "ineligible";
+    readonly reason: "exhaustion-mismatch";
+  };
+}
+
+/**
+ * Lists the occupied cells that read as merge destinations for one dragged
+ * figment. Exhaustion-mismatched twins remain in the list so the UI can explain
+ * why the attempted merge is blocked; unrelated occupants remain ordinary swap
+ * targets.
+ */
+export function selectBattlefieldFigmentMergeTargets(
+  state: BattleMutableState,
+  sourceBattleCardId: string,
+): BattlefieldFigmentMergeTarget[] {
+  const source = state.cardInstances[sourceBattleCardId];
+  if (!isFigmentInstance(source)) return [];
+  const side = source.controller;
+  const result: BattlefieldFigmentMergeTarget[] = [];
+  const visit = (
+    zone: "backRank" | "frontRank",
+    slotId: BattleFieldSlotAddress["slotId"],
+  ): void => {
+    const destinationBattleCardId =
+      zone === "backRank"
+        ? state.sides[side].backRank[slotId as `B${number}`]
+        : state.sides[side].frontRank[slotId as `F${number}`];
+    if (
+      destinationBattleCardId === null ||
+      destinationBattleCardId === sourceBattleCardId
+    ) {
+      return;
+    }
+    const assessment = assessFigmentMerge(
+      source,
+      state.cardInstances[destinationBattleCardId],
+    );
+    if (
+      assessment.kind === "eligible" ||
+      assessment.reason === "exhaustion-mismatch"
+    ) {
+      result.push({
+        destinationBattleCardId,
+        location: { side, zone, slotId },
+        assessment:
+          assessment.kind === "eligible"
+            ? assessment
+            : { kind: "ineligible", reason: "exhaustion-mismatch" },
+      });
+    }
+  };
+  for (const slotId of rankSlotIds(state.sides[side].backRank)) {
+    visit("backRank", slotId);
+  }
+  for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
+    visit("frontRank", slotId);
+  }
+  return result;
 }
 
 /**

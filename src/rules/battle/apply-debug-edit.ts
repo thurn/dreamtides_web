@@ -13,6 +13,7 @@ import {
   createBattleLogBaseFields,
   createBattleProtoCardCreatedLogEvent,
   createBattleProtoDeckReorderedLogEvent,
+  createBattleProtoFigmentsMergedLogEvent,
   createBattleProtoMarkerSetLogEvent,
   createBattleProtoNoteAddedLogEvent,
   createBattleProtoNoteClearedLogEvent,
@@ -53,15 +54,19 @@ import {
 } from "../../battle/state/selectors";
 import {
   addFigmentsToStackInPlace,
+  assessFigmentMerge,
   canMergeFigments,
   dissolveFigmentsFromStackInPlace,
-  findBattlefieldFigmentStack,
   isFigmentInstance,
-  mergeFigmentsIntoStackInPlace,
+  mergeFigmentSparkInPlace,
   selectFigmentCount,
   selectFigmentSparks,
 } from "../../battle/state/figments";
-import { lookupFigmentCatalogEntry, type FigmentKeyword } from "../../battle/state/figment-catalog";
+import {
+  lookupFigmentCatalogEntry,
+  lookupFigmentCatalogEntryById,
+  type FigmentKeyword,
+} from "../../battle/state/figment-catalog";
 import {
   revealCardPublicly,
   setCardRevealedTo,
@@ -249,7 +254,12 @@ export function applyDebugEdit(
         transition: createEmptyTransitionData(),
       };
     case "MOVE_CARD_TO_ZONE":
-      return moveCardToDebugZone(state, edit.battleCardId, edit.destination);
+      return moveCardToDebugZone(
+        state,
+        edit.battleCardId,
+        edit.destination,
+        context,
+      );
     case "SWAP_BATTLEFIELD_SLOTS":
       return swapBattlefieldSlots(state, edit.source, edit.target);
     case "DRAW_CARD":
@@ -261,7 +271,7 @@ export function applyDebugEdit(
     case "DISCARD_CARD":
       return discardHandCard(state, edit.battleCardId);
     case "ABANDON":
-      return abandonCard(state, edit.battleCardId);
+      return abandonCard(state, edit.battleCardId, context);
     case "REMATERIALIZE":
       return rematerializeCard(state, edit.battleCardId);
     case "KINDLE":
@@ -343,6 +353,7 @@ export function applyDebugEdit(
         state,
         nextState,
         edit.side,
+        edit.chosenFigmentId,
         edit.chosenSubtype,
         edit.chosenSpark,
         edit.name,
@@ -1142,6 +1153,7 @@ function createFigment(
   state: BattleMutableState,
   nextState: BattleMutableState,
   side: BattleSide,
+  chosenFigmentId: string | undefined,
   chosenSubtype: string,
   chosenSpark: number,
   name: string,
@@ -1155,7 +1167,11 @@ function createFigment(
   // A negative `chosenSpark` is the "use catalog default" sentinel: resolve it to
   // the catalog base spark for this figment type (rules §Figments), falling back
   // to 0 for an unknown subtype.
-  const catalogEntry = lookupFigmentCatalogEntry(chosenSubtype);
+  const catalogEntry =
+    (chosenFigmentId === undefined
+      ? undefined
+      : lookupFigmentCatalogEntryById(chosenFigmentId)) ??
+    lookupFigmentCatalogEntry(chosenSubtype);
   const resolvedSpark = chosenSpark < 0
     ? catalogEntry?.baseSpark ?? 0
     : chosenSpark;
@@ -1169,9 +1185,9 @@ function createFigment(
 
   const definition: BattleDeckCardDefinition = {
     sourceDeckEntryId: null,
-    // Synthetic generated figment with no catalog card; never registered for
-    // automation, so an empty UUID is correct here.
-    cardId: "",
+    // Figments use their authored UUID as their catalog identity. Legacy or
+    // isolated callers without a hydrated catalog retain the empty fallback.
+    cardId: catalogEntry?.id ?? chosenFigmentId ?? "",
     cardNumber: 0,
     name,
     battleCardKind: "character",
@@ -1372,7 +1388,7 @@ function fillBattlefieldPreview(
         current = moveCardToDebugZone(current, battleCardId, {
           side,
           zone: "void",
-        }).state;
+        }, context).state;
       }
     }
   }
@@ -1527,6 +1543,7 @@ function moveCardToDebugZone(
   state: BattleMutableState,
   battleCardId: string,
   destination: Extract<BattleDebugEdit, { kind: "MOVE_CARD_TO_ZONE" }>["destination"],
+  context: BattleEngineEmissionContext,
 ): {
   state: BattleMutableState;
   transition: BattleTransitionData;
@@ -1601,17 +1618,17 @@ function moveCardToDebugZone(
     };
   }
 
-  const destinationStack = "slotId" in destination && isFigmentInstance(sourceInstance)
-    ? findBattlefieldFigmentStack(state, destination.side, sourceInstance.definition.subtype, battleCardId)
-    : null;
   const destinationOccupant = "slotId" in destination
     ? selectBattlefieldSlotOccupant(state, destination)
     : null;
-  const canMergeIntoDestination = destinationStack !== null ||
-    (
-      destinationOccupant !== null &&
-      canMergeFigments(sourceInstance, state.cardInstances[destinationOccupant])
-    );
+  const mergeAssessment =
+    destinationOccupant === null
+      ? null
+      : assessFigmentMerge(
+          sourceInstance,
+          state.cardInstances[destinationOccupant],
+        );
+  const canMergeIntoDestination = mergeAssessment?.kind === "eligible";
 
   if (!isDebugDestinationPlaceable(state, destination)) {
     if (!canMergeIntoDestination) {
@@ -1622,26 +1639,51 @@ function moveCardToDebugZone(
     }
   }
 
-  const sourceFigmentSparks = selectFigmentSparks(sourceInstance);
   const nextState = cloneBattleMutableState(state);
   removeBattleCardFromLocation(nextState, source);
-  if (destinationStack !== null) {
-    mergeFigmentsIntoStackInPlace(
-      nextState,
-      destinationStack.battleCardId,
-      sourceFigmentSparks,
-    );
-    delete nextState.cardInstances[battleCardId];
-  } else if (
+  if (
     destinationOccupant !== null &&
     canMergeFigments(sourceInstance, state.cardInstances[destinationOccupant])
   ) {
-    mergeFigmentsIntoStackInPlace(
+    const destinationSparkBefore =
+      nextState.cardInstances[destinationOccupant].definition.printedSpark +
+      nextState.cardInstances[destinationOccupant].sparkDelta;
+    const merged = mergeFigmentSparkInPlace(
       nextState,
+      battleCardId,
       destinationOccupant,
-      sourceFigmentSparks,
     );
+    if (merged === null || merged.kind !== "eligible") {
+      return {
+        state,
+        transition: createEmptyTransitionData(),
+      };
+    }
     delete nextState.cardInstances[battleCardId];
+    return {
+      state: nextState,
+      transition: {
+        ...createEmptyTransitionData(),
+        logEvents: [
+          createBattleProtoFigmentsMergedLogEvent(
+            nextState,
+            {
+              sourceBattleCardId: battleCardId,
+              destinationBattleCardId: destinationOccupant,
+              figmentId: sourceInstance.definition.cardId,
+              addedSpark: merged.addedSpark,
+              destinationSparkBefore,
+              destinationSparkAfter:
+                destinationSparkBefore + merged.addedSpark,
+            },
+            {
+              sourceSurface: context.sourceSurface,
+              selectedCardId: battleCardId,
+            },
+          ),
+        ],
+      },
+    };
   } else {
     insertBattleCardAtDebugDestination(nextState, battleCardId, destination);
     const moved = nextState.cardInstances[battleCardId];
@@ -1920,6 +1962,7 @@ function discardHandCard(
 function abandonCard(
   state: BattleMutableState,
   battleCardId: string,
+  context: BattleEngineEmissionContext,
 ): {
   state: BattleMutableState;
   transition: BattleTransitionData;
@@ -1940,7 +1983,7 @@ function abandonCard(
   return moveCardToDebugZone(state, battleCardId, {
     side: location.side,
     zone: "void",
-  });
+  }, context);
 }
 
 /**
