@@ -228,7 +228,11 @@ export function CoopProvider({
           // (returns true), deduped past a high-water seq.
           const owned = logSinkRef.current.recordCoopEvent(event, seq, outcome);
           if (owned && outcome === "applied") {
-            logSinkRef.current.recordPlaytestControlChange(event, seq);
+            logSinkRef.current.recordPlaytestControlChange(
+              seq,
+              detail.stateBefore,
+              detail.stateAfter,
+            );
           }
           if (event.type === "BEGIN_BATTLE") {
             settleDeferredOpponentLog(seq, owned && outcome === "applied");

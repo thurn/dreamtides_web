@@ -30,9 +30,15 @@ room genesis.
 These rooms are single-controller hosted playtests. The first valid manual
 tutorial gameplay action, including a first live-battle input, claims control
 for that browser's room-scoped session identity. Other clients watch the same
-scripted tutorial, live battle, victory, and tutorial journey read-only. A
-disconnected controller leaves the playtest paused until a viewer explicitly
-chooses **Take Control**.
+scripted tutorial, live battle, victory, and fixed Dream Avatar selection
+read-only. A disconnected controller leaves those phases paused until a viewer
+explicitly chooses **Take Control**.
+
+Selecting the fixed Dream Avatar starts the authored tutorial journey and
+changes the room to normal collaborative control in the same event. Both
+players can take journey actions and manually control either battle side while
+the journey continues to use the guidance and first-occurrence triggers authored
+in `data/tabula/tutorial.toml`.
 
 ## `tutorialSpeed`
 
@@ -259,7 +265,7 @@ in the player's hand and two cards in the opponent's hand.
 New Journey action enters the fixed tutorial Dream Avatar selection in the same
 room. That selection presents the three authored Valor tides from
 `data/tabula/tutorial_journey_pool.toml`; choosing the avatar starts a journey with
-their 150-card pool.
+their 150-card pool and collaborative room control.
 
 ```
 http://localhost:5173/?goto=atlas

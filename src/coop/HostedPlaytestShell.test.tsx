@@ -76,6 +76,16 @@ function unclaimedTutorialState(): FoldState {
   };
 }
 
+function collaborativeJourneyState(): FoldState {
+  return {
+    ...state(null),
+    playtestControl: {
+      mode: "collaborative",
+      controllerClientId: null,
+    },
+  };
+}
+
 describe("HostedPlaytestShell", () => {
   beforeEach(() => {
     (
@@ -169,6 +179,25 @@ describe("HostedPlaytestShell", () => {
 
     expect(container.querySelector("[inert]")).toBeNull();
     expect(container.textContent).toBe("Play");
+    act(() => root.unmount());
+  });
+
+  it("leaves every client interactive after the tutorial journey becomes collaborative", () => {
+    mocks.state = collaborativeJourneyState();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(
+        <HostedPlaytestShell>
+          <button data-player-action>Control Opponent</button>
+        </HostedPlaytestShell>,
+      );
+    });
+
+    expect(container.querySelector("[inert]")).toBeNull();
+    expect(container.textContent).toBe("Control Opponent");
+    expect(container.textContent).not.toContain("Take Control");
     act(() => root.unmount());
   });
 });

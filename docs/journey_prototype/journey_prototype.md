@@ -204,12 +204,19 @@ Rooms created from `/main`, `/loading`, or `/tutorial` are hosted playtests.
 The first valid manual tutorial gameplay intent atomically records the room
 controller. This can be a card play in the scripted segment or the first live
 battle input when the scripted segment reaches battle before an input is
-needed. That controller remains authoritative through the live battle and
-tutorial journey. Connected viewers render the same fold inside an inert shell,
-including guidance and victory presentations. If presence shows the controller
-has disconnected, a viewer can choose **Take Control**; the compare-and-swap
-control event preserves the board, prompt, presentation checkpoint, terminal
-result, and journey state.
+needed. That controller remains authoritative through the live battle, victory,
+and fixed Dream Avatar selection. Connected viewers render those phases from
+the same fold inside an inert shell. If presence shows the controller has
+disconnected, a viewer can choose **Take Control**; the compare-and-swap control
+event preserves the board, prompt, presentation checkpoint, terminal result,
+and journey state.
+
+Starting the authored tutorial journey atomically changes the room to
+collaborative control. Every connected player can then take ordinary journey
+and battle actions, including using the battle inspector's **Control Opponent**
+perspective. The journey keeps its tutorial marker, authored Mira guidance,
+shared first-occurrence trigger history, and tutorial battle guidance in the
+same room event log.
 
 ## Hidden-Tides Behavior
 

@@ -52,15 +52,20 @@ export interface LogClientCallbacks<S> {
   onConfirmedHead?: (head: number) => void;
   /**
    * Every confirmed event's resolved outcome, reported once per seq. `detail`
-   * carries a bounce's machine-readable reason and diagnostic
-   * `interveningSeqs` (see `FoldOutcome`) when available; absent on an applied
-   * outcome.
+   * carries the exact confirmed fold transition plus a bounce's
+   * machine-readable reason and diagnostic `interveningSeqs` (see
+   * `FoldOutcome`) when available.
    */
   onEventOutcome: (
     event: GameEvent,
     seq: number,
     outcome: EventOutcome,
-    detail?: { interveningSeqs?: number[]; bounceReason?: BounceReason },
+    detail: {
+      stateBefore: S;
+      stateAfter: S;
+      interveningSeqs?: number[];
+      bounceReason?: BounceReason;
+    },
   ) => void;
   /** A confirmed event's `stateHashAfter` disagreed with this client's fold. */
   onDivergence: (info: { seq: number; expected: string; actual: string }) => void;
@@ -226,10 +231,11 @@ export function createLogClient<S>(
         // to the missing one and could never be corrected.
         break;
       }
+      const stateBefore = confirmedState as S;
       const result = foldEvents(
         config,
         g,
-        { seq: baseSeq, state: confirmedState as S },
+        { seq: baseSeq, state: stateBefore },
         [{ seq, event }],
         // The applied index is seeded from the node's persisted index on a full
         // refold and extended as live events apply, so it is complete from
@@ -258,12 +264,16 @@ export function createLogClient<S>(
           event,
           seq,
           outcome.outcome,
-          outcome.outcome === "bounced"
-            ? {
-                interveningSeqs: outcome.interveningSeqs,
-                bounceReason: outcome.bounceReason,
-              }
-            : undefined,
+          {
+            stateBefore,
+            stateAfter: confirmedState,
+            ...(outcome.outcome === "bounced"
+              ? {
+                  interveningSeqs: outcome.interveningSeqs,
+                  bounceReason: outcome.bounceReason,
+                }
+              : {}),
+          },
         );
 
         // Report a contained fold error under the SAME per-seq guard as the

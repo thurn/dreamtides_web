@@ -31,6 +31,7 @@ import { get, push, ref, runTransaction, update, type Database } from "firebase/
 import type { LogEntry, LogSink } from "../logging";
 import { clearLogContext, setLogContext, setLogSink } from "../logging";
 import type { BounceReason, EventOutcome, GameEvent } from "../eventlog/types";
+import type { FoldState } from "../rules/fold-state";
 
 // ---------------------------------------------------------------------------
 // Limits
@@ -371,8 +372,8 @@ export interface SemanticIntentKeyCollisionRecord {
 
 export interface PlaytestControlRecord {
   event: "playtest_control_changed";
-  kind: "claim" | "transfer";
-  controllerClientId: string;
+  kind: "claim" | "transfer" | "release";
+  controllerClientId: string | null;
   previousControllerClientId: string | null;
   seq: number;
   gameId: string;
@@ -423,10 +424,11 @@ export interface CoopLogRecorder {
     winner: GameEvent;
     contender: GameEvent;
   }): void;
-  /** Mirror an implicit first-input claim or explicit controller transfer. */
+  /** Mirror a confirmed controller claim, transfer, or collaborative release. */
   recordPlaytestControlChange(
-    event: GameEvent,
     seq: number,
+    stateBefore: FoldState,
+    stateAfter: FoldState,
   ): void;
 }
 
@@ -544,28 +546,41 @@ export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogR
       };
       emit({ ...record });
     },
-    recordPlaytestControlChange(event, seq): void {
-      const implicitClaim =
-        event.type === "FRONT_DOOR_ACTION" &&
-        event.payload.surface === "tutorial" &&
-        event.payload.actionId === "play-card";
-      const explicitTransfer = event.type === "TAKE_PLAYTEST_CONTROL";
-      if (!implicitClaim && !explicitTransfer) return;
-      const previousControllerClientId = explicitTransfer &&
-          (
-            typeof event.payload.previousControllerClientId === "string" ||
-            event.payload.previousControllerClientId === null
-          )
-        ? event.payload.previousControllerClientId
-        : null;
+    recordPlaytestControlChange(seq, stateBefore, stateAfter): void {
+      const before = stateBefore.playtestControl ?? {
+        mode: "collaborative" as const,
+        controllerClientId: null,
+      };
+      const after = stateAfter.playtestControl ?? {
+        mode: "collaborative" as const,
+        controllerClientId: null,
+      };
+      if (
+        before.mode === after.mode &&
+        before.controllerClientId === after.controllerClientId
+      ) {
+        return;
+      }
+      const released =
+        before.mode === "single-controller" &&
+        after.mode === "collaborative" &&
+        after.controllerClientId === null;
+      const claimed =
+        before.controllerClientId === null &&
+        after.mode === "single-controller" &&
+        after.controllerClientId !== null;
+      const transferred =
+        before.mode === "single-controller" &&
+        after.mode === "single-controller" &&
+        before.controllerClientId !== null &&
+        after.controllerClientId !== null &&
+        before.controllerClientId !== after.controllerClientId;
+      if (!released && !claimed && !transferred) return;
       const record: PlaytestControlRecord = {
         event: "playtest_control_changed",
-        kind:
-          explicitTransfer && previousControllerClientId !== null
-            ? "transfer"
-            : "claim",
-        controllerClientId: event.actor,
-        previousControllerClientId,
+        kind: released ? "release" : transferred ? "transfer" : "claim",
+        controllerClientId: after.controllerClientId,
+        previousControllerClientId: before.controllerClientId,
         seq,
         gameId,
       };

@@ -64,6 +64,33 @@ function genesis(): FoldState {
   return genesisFoldState(GENESIS);
 }
 
+function hostedJourneyStart(controllerClientId = "alice"): FoldState {
+  const state = genesisFoldState({
+    ...GENESIS,
+    frontDoorEntry: "tutorial",
+  });
+  return {
+    ...state,
+    frontDoor: {
+      phase: "journey",
+      journeyId: null,
+      tutorial: null,
+    },
+    playtestControl: {
+      mode: "single-controller",
+      controllerClientId,
+    },
+    tutorialTriggerIdsSeen: ["support"],
+    journey: {
+      ...state.journey,
+      screen: {
+        type: "journeyStart",
+        tutorialDreamAvatarId: "dc-tutorial",
+      },
+    },
+  };
+}
+
 /**
  * A tiny deterministic 32-bit xorshift PRNG so the property sweeps are
  * reproducible without depending on `Math.random`.
@@ -84,7 +111,9 @@ function makePrng(seed: number): () => number {
  * `(dreamAvatarId, seed)` — never on wall-clock or live randomness — so any
  * nondeterminism the reducer introduced would surface as a hash mismatch.
  */
-function deterministicProvider(): JourneyLifecycleContentProvider {
+function deterministicProvider(
+  isTutorialJourney = false,
+): JourneyLifecycleContentProvider {
   function packageFor(
     dreamAvatarId: string,
     seed: string,
@@ -123,6 +152,7 @@ function deterministicProvider(): JourneyLifecycleContentProvider {
       return {
         ...journey,
         seed: journey.seed,
+        ...(isTutorialJourney ? { isTutorialJourney: true } : {}),
         essence: pkg.dreamAvatar.startingEssence,
         dreamAvatar: {
           id: pkg.dreamAvatar.id,
@@ -494,13 +524,18 @@ describe("SELECT_DREAM_AVATAR", () => {
 
 describe("START_JOURNEY", () => {
   it("bounces when no content provider is registered", () => {
-    const start = genesis();
+    const start = hostedJourneyStart();
     const out = reduceGameEvent(
       start,
-      event("START_JOURNEY", { dreamAvatarId: "dc-1" }),
+      event("START_JOURNEY", { dreamAvatarId: "dc-tutorial" }),
       ctx(),
     );
     expect(out.outcome).toBe("bounced");
+    expect(out.state).toBe(start);
+    expect(out.state.playtestControl).toEqual({
+      mode: "single-controller",
+      controllerClientId: "alice",
+    });
   });
 
   it("assembles a run and preserves the room seed", () => {
@@ -516,6 +551,51 @@ describe("START_JOURNEY", () => {
     expect(started.journey.runId).toBe("journey:17");
     expect(started.journey.dreamAvatar?.id).toBe("dc-7");
     expect(started.journey.screen).toEqual({ type: "dreamscape" });
+  });
+
+  it("atomically releases hosted control when the tutorial journey starts", () => {
+    registerJourneyLifecycleContentProvider(deterministicProvider(true));
+    const started = reduceGameEvent(
+      hostedJourneyStart(),
+      event("START_JOURNEY", { dreamAvatarId: "dc-tutorial" }),
+      ctx({ seq: 17 }),
+    );
+
+    expect(started.outcome).toBe("applied");
+    expect(started.state.journey).toMatchObject({
+      runId: "journey:17",
+      isTutorialJourney: true,
+      screen: { type: "dreamscape" },
+    });
+    expect(started.state.playtestControl).toEqual({
+      mode: "collaborative",
+      controllerClientId: null,
+    });
+    expect(started.state.tutorialTriggerIdsSeen).toEqual(["support"]);
+
+    const partnerAction = reduceGameEvent(
+      started.state,
+      event("SET_ESSENCE", { value: 123 }, "bob"),
+      ctx({ seq: 18 }),
+    );
+    expect(partnerAction.outcome).toBe("applied");
+    expect(partnerAction.state.journey.essence).toBe(123);
+  });
+
+  it("keeps hosted authority for a non-tutorial journey start", () => {
+    registerJourneyLifecycleContentProvider(deterministicProvider());
+    const started = reduceGameEvent(
+      hostedJourneyStart(),
+      event("START_JOURNEY", { dreamAvatarId: "dc-tutorial" }),
+      ctx({ seq: 17 }),
+    );
+
+    expect(started.outcome).toBe("applied");
+    expect(started.state.journey.isTutorialJourney).not.toBe(true);
+    expect(started.state.playtestControl).toEqual({
+      mode: "single-controller",
+      controllerClientId: "alice",
+    });
   });
 
   it("bounces START_JOURNEY once a dreamAvatar is already selected", () => {

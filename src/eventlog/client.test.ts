@@ -105,6 +105,11 @@ interface Harness {
     interveningSeqs?: number[];
     bounceReason?: BounceReason;
   }>;
+  transitions: Array<{
+    seq: number;
+    stateBefore: ToyState;
+    stateAfter: ToyState;
+  }>;
   divergences: Array<{ seq: number; expected: string; actual: string }>;
   foldErrors: Array<{ seq: number; message: string }>;
   appendFailures: Array<{ event: GameEvent; error: unknown }>;
@@ -146,6 +151,7 @@ function makeHarness(
   const displayedStates: ToyState[] = [];
   const confirmedStates: ToyState[] = [];
   const outcomes: Harness["outcomes"] = [];
+  const transitions: Harness["transitions"] = [];
   const divergences: Harness["divergences"] = [];
   const foldErrors: Harness["foldErrors"] = [];
   const appendFailures: Harness["appendFailures"] = [];
@@ -178,14 +184,20 @@ function makeHarness(
     onDisplayState: (s) => displayedStates.push(s),
     onConfirmedState: (s) => confirmedStates.push(s),
     onConfirmedHead: (head) => confirmedHeads.push(head),
-    onEventOutcome: (event, seq, outcome, detail) =>
+    onEventOutcome: (event, seq, outcome, detail) => {
       outcomes.push({
         event,
         seq,
         outcome,
         interveningSeqs: detail?.interveningSeqs,
         bounceReason: detail?.bounceReason,
-      }),
+      });
+      transitions.push({
+        seq,
+        stateBefore: detail.stateBefore,
+        stateAfter: detail.stateAfter,
+      });
+    },
     onDivergence: (info) => divergences.push(info),
     onFoldError: (error) => foldErrors.push({ seq: error.seq, message: error.message }),
     onAppendFailed: (event, error) => appendFailures.push({ event, error }),
@@ -203,6 +215,7 @@ function makeHarness(
     appended,
     displayed: () => displayedStates[displayedStates.length - 1],
     outcomes,
+    transitions,
     divergences,
     foldErrors,
     appendFailures,
@@ -281,6 +294,13 @@ describe("LogClient double-apply of own intent", () => {
     // Confirmed state contains A exactly once; the pending copy was removed.
     expect(harness.displayed()?.applied).toEqual(["A"]);
     expect(harness.outcomes).toContainEqual({ event: committed, seq: 1, outcome: "applied" });
+    expect(harness.transitions).toEqual([
+      {
+        seq: 1,
+        stateBefore: { applied: [] },
+        stateAfter: { applied: ["A"] },
+      },
+    ]);
   });
 
   it("coalesces repeated local submissions and reconciles when a partner confirms the intent key", async () => {

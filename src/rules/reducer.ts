@@ -418,7 +418,10 @@ export function routeDomain(
     case "REROLL_DREAM_AVATAR_OFFER":
       return journeyCase(state, lifecycle.rerollDreamAvatarOffer(journey));
     case "START_JOURNEY":
-      return journeyCase(state, lifecycle.startJourney(journey, payload, ctx));
+      return startJourneyCase(
+        state,
+        lifecycle.startJourney(journey, payload, ctx),
+      );
 
     // --- deck & transfiguration ---
     case "ADD_CARD":
@@ -614,6 +617,32 @@ function journeyCase(
     }),
     outcome: "applied",
   };
+}
+
+/**
+ * Apply a successfully assembled run and release hosted tutorial authority at
+ * the exact event that enters the authored tutorial journey. The lifecycle
+ * provider derives `isTutorialJourney` from the pinned DreamAvatar offer and
+ * loaded tutorial pool, so the control policy never trusts URL or payload
+ * hints. A rejected start returns the untouched single-controller fold.
+ */
+function startJourneyCase(
+  state: FoldState,
+  nextJourney: JourneyState | null,
+): ReduceResult {
+  if (nextJourney === null) return bounce(state);
+  return journeyCase(
+    nextJourney.isTutorialJourney === true
+      ? {
+          ...state,
+          playtestControl: {
+            mode: "collaborative",
+            controllerClientId: null,
+          },
+        }
+      : state,
+    nextJourney,
+  );
 }
 
 function frontDoorCase(

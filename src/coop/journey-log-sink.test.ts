@@ -1,5 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
-import type { GameEvent } from "../eventlog/types";
+import type { GameEvent, Genesis } from "../eventlog/types";
+import {
+  genesisFoldState,
+  type FoldState,
+  type PlaytestControlState,
+} from "../rules/fold-state";
 import {
   ROOM_LOG_LIMIT,
   createBufferedSink,
@@ -27,6 +32,24 @@ function makeEvent(overrides: Partial<GameEvent> = {}): GameEvent {
     clientTimestamp: "0",
     basedOnSeq: 0,
     ...overrides,
+  };
+}
+
+const CONTROL_GENESIS: Genesis = {
+  seed: "control-log-seed",
+  reducerVersion: "test",
+  createdAt: 0,
+  contentConfig: {
+    poolVariant: "test",
+    draftMode: "pool",
+    fresh20PackSize: null,
+  },
+};
+
+function stateWithControl(control: PlaytestControlState): FoldState {
+  return {
+    ...genesisFoldState(CONTROL_GENESIS),
+    playtestControl: control,
   };
 }
 
@@ -214,6 +237,58 @@ describe("createCoopLogRecorder single-writer rule", () => {
     const { emitted, recorder } = setup();
     recorder.recordCoopEvent(makeEvent({ stateHashAfter: "abc123" }), 8, "applied");
     expect(emitted[0]).toMatchObject({ stateHashAfter: "abc123" });
+  });
+
+  it("records claims, transfers, and the tutorial journey collaborative release", () => {
+    const { emitted, recorder } = setup();
+    const unclaimed = stateWithControl({
+      mode: "single-controller",
+      controllerClientId: null,
+    });
+    const controlledByA = stateWithControl({
+      mode: "single-controller",
+      controllerClientId: "client-a",
+    });
+    const controlledByB = stateWithControl({
+      mode: "single-controller",
+      controllerClientId: "client-b",
+    });
+    const collaborative = stateWithControl({
+      mode: "collaborative",
+      controllerClientId: null,
+    });
+
+    recorder.recordPlaytestControlChange(10, unclaimed, controlledByA);
+    recorder.recordPlaytestControlChange(11, controlledByA, controlledByB);
+    recorder.recordPlaytestControlChange(12, controlledByB, collaborative);
+    recorder.recordPlaytestControlChange(13, collaborative, collaborative);
+
+    expect(emitted).toEqual([
+      {
+        event: "playtest_control_changed",
+        kind: "claim",
+        controllerClientId: "client-a",
+        previousControllerClientId: null,
+        seq: 10,
+        gameId: "room-1",
+      },
+      {
+        event: "playtest_control_changed",
+        kind: "transfer",
+        controllerClientId: "client-b",
+        previousControllerClientId: "client-a",
+        seq: 11,
+        gameId: "room-1",
+      },
+      {
+        event: "playtest_control_changed",
+        kind: "release",
+        controllerClientId: null,
+        previousControllerClientId: "client-b",
+        seq: 12,
+        gameId: "room-1",
+      },
+    ]);
   });
 
   it("emits the event_bounced shape with intervening seqs", () => {

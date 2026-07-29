@@ -175,6 +175,12 @@ mandatory Dreamwell card, and entering Day after the first-turn reveal. Their
 run-scoped intent keys make concurrent submissions one shared transition, and
 the room controller remains unchanged.
 
+The successful `START_JOURNEY` event for the authored tutorial journey changes
+`playtestControl` to collaborative mode in the same fold transition. Both
+clients can then submit normal journey decisions and manual actions for either
+battle side. Tutorial journey state and shared trigger history remain in the
+room fold.
+
 ## Local Testing
 
 Run:
@@ -206,24 +212,29 @@ state without starting Firebase.
    connected participants.
 4. Make the first tutorial gameplay move in one client. Confirm it becomes the
    controller and the second client remains on the shared screen with player
-   interaction inert.
-5. Open a draft site, pick a card in one client, and confirm the other client
+   interaction inert through the fixed Dream Avatar selection.
+5. Select the tutorial Dream Avatar. Confirm both clients become interactive
+   on the first dreamscape and retain the shared tutorial guidance.
+6. Open a draft site, pick a card in one client, and confirm the other client
    advances to the same next offer and deck.
-6. Trigger two valid actions from separate clients and confirm both appear in
+7. Trigger two valid actions from separate clients and confirm both appear in
    committed sequence order.
-7. Trigger conflicting choices and confirm one applies while the other shows
+8. Trigger conflicting choices and confirm one applies while the other shows
    bounce feedback.
-8. Enter a battle and confirm both clients render the same opponent, board,
+9. Enter a battle and confirm both clients render the same opponent, board,
    and battle phase.
-9. Commit a battle action, prompt resolution, and debug gesture from one client;
-   confirm the other client folds each result.
-10. Complete the battle and confirm both clients apply the same reward and
+10. Use **Control Opponent** in the second client and commit an enemy-side
+    action; confirm the first client folds the result.
+11. Commit a prompt resolution and debug gesture from either client; confirm
+    the other client folds each result.
+12. Complete the battle and confirm both clients apply the same reward and
     return to the same journey route.
-11. Reload the controller during journey play and battle; confirm its
-    room-scoped identity and authority are restored.
-12. Close the controller, confirm the observer shows **Player Disconnected**,
+13. Reload either client during journey play and battle; confirm the shared
+    collaborative state is restored.
+14. Before Dream Avatar selection, close the controller, confirm the observer
+    shows **Player Disconnected**,
     choose **Take Control**, and continue from the same fold.
-13. Open `?viewLogs=<roomId>` and confirm the persisted diagnostic records are
+15. Open `?viewLogs=<roomId>` and confirm the persisted diagnostic records are
     readable.
 
 ## Cloud Smoke QA
