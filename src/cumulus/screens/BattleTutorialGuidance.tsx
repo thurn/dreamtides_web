@@ -15,7 +15,7 @@ import type { CharacterDialogueModel } from "../components/overlay/CharacterDial
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
-import { placeCardTutorialDialogue } from "./card-tutorial-dialogue-placement";
+import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
 import { useIsDesktop } from "./use-is-desktop";
 
 export type BattleTutorialGuidanceSourceView =
@@ -57,17 +57,6 @@ export interface BattleTutorialGuidanceProps {
 
 const GUIDANCE_OBJECT_TRAVEL_MS =
   motionTimeSeconds("--dur-slow") * 1_000;
-// Desktop guidance uses a broad reading measure; mobile consumes the available
-// viewport width so long explanations still fit outside the stationary cards.
-const CARD_TUTORIAL_DIALOGUE_DESKTOP_WIDTH_PX = 700;
-const CARD_TUTORIAL_CLEARANCE_SELECTOR = [
-  "[data-draft-pick-counter]",
-  "[data-journey-status-bar-anchor]",
-  "[data-coop-presence-status]",
-  "[data-gallery-frame]",
-  "[data-speech-bubble-pointer-placement]",
-].join(",");
-
 function battleCardSurface(
   battleCardId: string,
   journey: HTMLElement,
@@ -159,115 +148,6 @@ function transformBetween(
   const y = from.top + from.height / 2 - (to.top + to.height / 2);
   const scale = Math.min(from.width / to.width, from.height / to.height);
   return `translate(${String(x)}px, ${String(y)}px) scale(${String(scale)})`;
-}
-
-function JourneyCardTutorialDialogue({
-  view,
-  visible,
-}: {
-  readonly view: BattleTutorialGuidanceView;
-  readonly visible: boolean;
-}): ReactElement {
-  const desktop = useIsDesktop();
-  const layoutRef = useRef<HTMLDivElement | null>(null);
-  const [position, setPosition] = useState<{ left: number; top: number } | null>(
-    null,
-  );
-
-  useLayoutEffect(() => {
-    const layout = layoutRef.current;
-    if (layout === null) return undefined;
-
-    const updatePosition = (): void => {
-      const dialogueRect = layout.getBoundingClientRect();
-      if (dialogueRect.width <= 0 || dialogueRect.height <= 0) return;
-      const cardRects = [
-        ...document.querySelectorAll<HTMLElement>(
-          '[data-game-card-source][data-card-id]',
-        ),
-      ]
-        .filter((card) => !layout.contains(card))
-        .map((card) => card.getBoundingClientRect())
-        .filter((rect) => rect.width > 0 && rect.height > 0);
-      const obstacleRects = [
-        ...document.querySelectorAll<HTMLElement>(
-          CARD_TUTORIAL_CLEARANCE_SELECTOR,
-        ),
-      ]
-        .filter((obstacle) => !layout.contains(obstacle))
-        .map((obstacle) => obstacle.getBoundingClientRect())
-        .filter((rect) => rect.width > 0 && rect.height > 0);
-      const gap = Number.parseFloat(
-        window.getComputedStyle(layout).getPropertyValue("--space-4"),
-      );
-      setPosition(
-        placeCardTutorialDialogue({
-          viewportWidth: window.innerWidth,
-          viewportHeight: window.innerHeight,
-          dialogueWidth: dialogueRect.width,
-          dialogueHeight: dialogueRect.height,
-          cardRects,
-          obstacleRects,
-          gap: Number.isFinite(gap) ? gap : 0,
-        }),
-      );
-    };
-
-    updatePosition();
-    window.addEventListener("resize", updatePosition);
-    const observer = new ResizeObserver(updatePosition);
-    observer.observe(layout);
-    for (const card of document.querySelectorAll<HTMLElement>(
-      `[data-game-card-source][data-card-id], ${CARD_TUTORIAL_CLEARANCE_SELECTOR}`,
-    )) {
-      if (!layout.contains(card)) observer.observe(card);
-    }
-    return () => {
-      window.removeEventListener("resize", updatePosition);
-      observer.disconnect();
-    };
-  }, [view.presentationId, view.dialogue.text]);
-
-  return (
-    <section
-      aria-label="Card tutorial"
-      aria-live={visible ? "polite" : "off"}
-      aria-hidden={visible ? undefined : "true"}
-      data-card-tutorial-guidance=""
-      data-presentation-id={view.presentationId}
-      data-trigger-id={view.triggerId}
-      data-message-index={view.messageIndex}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: token("--layer-reveal"),
-        overflow: "hidden",
-        pointerEvents: "none",
-      }}
-    >
-      <div
-        ref={layoutRef}
-        data-card-tutorial-dialogue-layout=""
-        style={{
-          position: "absolute",
-          left: position === null ? 0 : position.left,
-          top: position === null ? 0 : position.top,
-          visibility: position === null ? "hidden" : "visible",
-          width: desktop
-            ? `min(calc(100vw - (${token("--space-4")} * 2)), ${String(CARD_TUTORIAL_DIALOGUE_DESKTOP_WIDTH_PX)}px)`
-            : `calc(100vw - (${token("--space-4")} * 2))`,
-          maxWidth: CARD_TUTORIAL_DIALOGUE_DESKTOP_WIDTH_PX,
-        }}
-      >
-        <CharacterDialogue
-          dialogue={view.dialogue}
-          visible={visible}
-          size="wide"
-          testId="card-tutorial-dialogue"
-        />
-      </div>
-    </section>
-  );
 }
 
 /**
@@ -487,9 +367,18 @@ export function BattleTutorialGuidance({
   if (renderedView === null) return <></>;
   if (renderedView.source.kind === "journey-card") {
     return (
-      <JourneyCardTutorialDialogue
-        view={renderedView}
+      <ViewportTutorialDialogue
+        view={{
+          id: renderedView.presentationId,
+          dialogue: renderedView.dialogue,
+          horizontalOffset: renderedView.horizontalOffset,
+          verticalOffset: renderedView.verticalOffset,
+          bubbleWidth: renderedView.bubbleWidth,
+        }}
         visible={active}
+        kind="card"
+        triggerId={renderedView.triggerId}
+        messageIndex={renderedView.messageIndex}
       />
     );
   }

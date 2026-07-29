@@ -13,6 +13,9 @@ const mocks = vi.hoisted(() => ({
     cardTutorialPresentation: null,
     cardTutorialScreenKeysSeen: [],
     tutorialTriggerIdsSeen: [],
+    journey: {
+      screen: { type: "dreamscape" },
+    },
   } as unknown as FoldState,
 }));
 

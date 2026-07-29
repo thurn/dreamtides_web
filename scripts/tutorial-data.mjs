@@ -345,6 +345,30 @@ export function validateTutorialDreamscapeConfiguration(value) {
   };
 }
 
+/** Validate persistent Mira guidance for a first-visit site tutorial. */
+export function validateTutorialSiteConfiguration(value, siteId) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw invalid(`Tutorial data must contain a ${siteId} table.`);
+  }
+  const parsed = validateTutorialSpeechBubble(
+    value.speechBubble,
+    siteId,
+    true,
+  );
+  if (parsed.speaker !== "mira") {
+    throw invalid(`Tutorial ${siteId} speech bubble must target Mira.`);
+  }
+  return {
+    speechBubble: {
+      speaker: parsed.speaker,
+      horizontalOffset: parsed.horizontalOffset,
+      verticalOffset: parsed.verticalOffset,
+      bubbleWidth: parsed.bubbleWidth,
+      text: parsed.text,
+    },
+  };
+}
+
 /** Validate and normalize tutorial actions from TOML or the editor API. */
 export function validateTutorialActions(value) {
   if (!Array.isArray(value)) {
@@ -739,6 +763,11 @@ export function readTutorialConfiguration({
       parsed.journeyStart,
     ),
     dreamscape: validateTutorialDreamscapeConfiguration(parsed.dreamscape),
+    draft: validateTutorialSiteConfiguration(parsed.draft, "draft"),
+    dreamsignRevelation: validateTutorialSiteConfiguration(
+      parsed.dreamsignRevelation,
+      "dreamsign-revelation",
+    ),
     actions: validateTutorialActions(parsed.actions),
     triggers: validateTutorialTriggers(parsed.triggers ?? []),
     battle: validateTutorialBattleConfiguration(parsed.battle),
@@ -757,6 +786,8 @@ export function serializeTutorialToml(
   battle,
   journeyStart,
   dreamscape,
+  draft,
+  dreamsignRevelation,
 ) {
   const normalized = validateTutorialActions(actions);
   const normalizedTriggers = validateTutorialTriggers(triggers);
@@ -765,9 +796,18 @@ export function serializeTutorialToml(
     validateTutorialJourneyStartConfiguration(journeyStart);
   const normalizedDreamscape =
     validateTutorialDreamscapeConfiguration(dreamscape);
+  const normalizedDraft =
+    validateTutorialSiteConfiguration(draft, "draft");
+  const normalizedDreamsignRevelation =
+    validateTutorialSiteConfiguration(
+      dreamsignRevelation,
+      "dreamsign-revelation",
+    );
   return `# Ordered actions and first-occurrence battle tutorials.\n\n${stringify({
     journeyStart: normalizedJourneyStart,
     dreamscape: normalizedDreamscape,
+    draft: normalizedDraft,
+    dreamsignRevelation: normalizedDreamsignRevelation,
     battle: normalizedBattle,
     actions: normalized,
     triggers: normalizedTriggers,
@@ -780,7 +820,15 @@ export function refreshTutorialDataJson({
   tutorialTomlPath = DEFAULT_TUTORIAL_TOML_PATH,
   tutorialJsonPath = DEFAULT_TUTORIAL_JSON_PATH,
 } = {}) {
-  const { journeyStart, dreamscape, actions, triggers, battle } =
+  const {
+    journeyStart,
+    dreamscape,
+    draft,
+    dreamsignRevelation,
+    actions,
+    triggers,
+    battle,
+  } =
     readTutorialConfiguration({
       rootDir,
       tutorialTomlPath,
@@ -789,11 +837,21 @@ export function refreshTutorialDataJson({
   mkdirSync(dirname(absoluteJsonPath), { recursive: true });
   writeFileSync(
     absoluteJsonPath,
-    `${JSON.stringify({ journeyStart, dreamscape, actions, triggers, battle }, null, 2)}\n`,
+    `${JSON.stringify({
+      journeyStart,
+      dreamscape,
+      draft,
+      dreamsignRevelation,
+      actions,
+      triggers,
+      battle,
+    }, null, 2)}\n`,
   );
   return {
     journeyStart,
     dreamscape,
+    draft,
+    dreamsignRevelation,
     actions,
     triggers,
     battle,

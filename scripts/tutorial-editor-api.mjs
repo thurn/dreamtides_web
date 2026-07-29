@@ -124,7 +124,14 @@ export function createTutorialEditorApiMiddleware({
         });
       }
       const actions = validateTutorialActions(body.actions);
-      const { journeyStart, dreamscape, triggers, battle } =
+      const {
+        journeyStart,
+        dreamscape,
+        draft,
+        dreamsignRevelation,
+        triggers,
+        battle,
+      } =
         readTutorialConfiguration({ rootDir });
       const tomlPath = join(rootDir, DEFAULT_TUTORIAL_TOML_PATH);
       const jsonPath = join(rootDir, DEFAULT_TUTORIAL_JSON_PATH);
@@ -137,12 +144,22 @@ export function createTutorialEditorApiMiddleware({
           battle,
           journeyStart,
           dreamscape,
+          draft,
+          dreamsignRevelation,
         ),
       );
       atomicWrite(
         fileSystem,
         jsonPath,
-        `${JSON.stringify({ journeyStart, dreamscape, actions, triggers, battle }, null, 2)}\n`,
+        `${JSON.stringify({
+          journeyStart,
+          dreamscape,
+          draft,
+          dreamsignRevelation,
+          actions,
+          triggers,
+          battle,
+        }, null, 2)}\n`,
       );
       jsonResponse(res, 200, { actions });
     } catch (error) {

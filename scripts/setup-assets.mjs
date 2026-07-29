@@ -18,6 +18,7 @@ import {
 import {
   validateTutorialDreamscapeConfiguration,
   validateTutorialJourneyStartConfiguration,
+  validateTutorialSiteConfiguration,
   validateTutorialActions,
   validateTutorialBattleConfiguration,
   validateTutorialTriggers,
@@ -1129,6 +1130,14 @@ export function setupAssets({
   const tutorialDreamscape = validateTutorialDreamscapeConfiguration(
     tutorialSource.dreamscape,
   );
+  const tutorialDraft = validateTutorialSiteConfiguration(
+    tutorialSource.draft,
+    "draft",
+  );
+  const tutorialDreamsignRevelation = validateTutorialSiteConfiguration(
+    tutorialSource.dreamsignRevelation,
+    "dreamsign-revelation",
+  );
   const tutorialActions = validateTutorialActions(tutorialSource.actions);
   const tutorialTriggers = validateTutorialTriggers(tutorialSource.triggers ?? []);
   const tutorialBattle = validateTutorialBattleConfiguration(tutorialSource.battle);
@@ -1137,6 +1146,8 @@ export function setupAssets({
     `${JSON.stringify({
       journeyStart: tutorialJourneyStart,
       dreamscape: tutorialDreamscape,
+      draft: tutorialDraft,
+      dreamsignRevelation: tutorialDreamsignRevelation,
       actions: tutorialActions,
       triggers: tutorialTriggers,
       battle: tutorialBattle,

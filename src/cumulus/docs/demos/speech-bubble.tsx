@@ -31,7 +31,7 @@ export const speechBubbleDemo: CumulusComponent = {
   blurb:
     "A guide-dialog bubble for character-led screens: the same frosted information material as an InfoCard, with a strict left, top-left, or bottom-left pointer toward the speaker and shared tutorial instruction formatting backed by the canonical inline rules-glyph renderer.",
   callout:
-    "Use it beside character art or attached above/below a battle portrait, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, named display scales, pointer geometry, yellow and event-frame purple highlights, and canonical inline rules glyphs. Top-left and bottom-left pointer bases stay clear of the rounded corners.",
+    "Use it beside character art or attached above/below a battle portrait, not as a general text container. The component owns its glass material, white on-glass name treatment, quote voice, named display scales, pointer geometry, yellow highlights, bold event-frame purple highlights, and canonical inline rules glyphs. Top-left and bottom-left pointer bases stay clear of the rounded corners.",
   group: "Components",
   docName: "SpeechBubble",
   Component: SpeechBubbleDemo,

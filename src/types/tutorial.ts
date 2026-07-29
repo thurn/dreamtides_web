@@ -54,6 +54,13 @@ export interface TutorialDreamscapeConfiguration {
   };
 }
 
+/** Persistent Mira guidance shown on the first visit to one site type. */
+export interface TutorialSiteConfiguration {
+  readonly speechBubble: TutorialSpeechBubblePresentation & {
+    readonly speaker: "mira";
+  };
+}
+
 /** Authoritative card-visibility or battle edge that may open a supplemental tutorial. */
 export type TutorialTriggerEvent =
   | "card-seen"
@@ -87,6 +94,8 @@ export interface TutorialTriggerDefinition extends TutorialSpeechBubble {
 export interface TutorialConfiguration {
   readonly journeyStart: TutorialJourneyStartConfiguration;
   readonly dreamscape: TutorialDreamscapeConfiguration;
+  readonly draft: TutorialSiteConfiguration;
+  readonly dreamsignRevelation: TutorialSiteConfiguration;
   readonly actions: readonly TutorialAction[];
   readonly triggers: readonly TutorialTriggerDefinition[];
   readonly battle: TutorialBattleConfiguration;

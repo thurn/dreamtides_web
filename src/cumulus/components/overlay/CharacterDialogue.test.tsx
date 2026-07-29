@@ -143,6 +143,8 @@ describe("CharacterDialogue", () => {
     );
     expect(purpleHighlight?.textContent).toBe("event");
     expect(purpleHighlight?.style.color).toBe("var(--accent-bright)");
+    expect(purpleHighlight?.style.fontWeight).toBe("700");
+    expect(highlight?.style.fontWeight).toBe("");
     expect(bubble?.textContent).toContain(
       "Welcome, Dreamer. An event resolves once. Score  equal to your spark .",
     );

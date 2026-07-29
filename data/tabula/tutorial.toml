@@ -15,6 +15,20 @@ verticalOffset = 0
 bubbleWidth = 700
 text = "In each dream you will visit [purple]Dream Sites[/purple] to build your deck before confronting the Guardian of this dream."
 
+[draft.speechBubble]
+speaker = "mira"
+horizontalOffset = 0
+verticalOffset = 0
+bubbleWidth = 600
+text = "At a [purple]Draft[/purple] site you build your deck by repeatedly selecting one of four cards to add."
+
+[dreamsignRevelation.speechBubble]
+speaker = "mira"
+horizontalOffset = 0
+verticalOffset = 0
+bubbleWidth = 600
+text = "A [purple]Dreamsign[/purple] is a persistent artifact of the dream that gives ongoing benefits."
+
 [battle]
 # Cards are drawn from each list in order after the authored tutorial actions
 # hand control to the playable battle.

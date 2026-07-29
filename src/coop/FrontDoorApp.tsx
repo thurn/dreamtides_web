@@ -67,6 +67,8 @@ export default function FrontDoorApp({
         ...loadedContent,
         tutorialJourneyStart: tutorial.journeyStart,
         tutorialDreamscape: tutorial.dreamscape,
+        tutorialDraft: tutorial.draft,
+        tutorialDreamsignRevelation: tutorial.dreamsignRevelation,
         tutorialTriggers: tutorial.triggers,
         tutorialBattle: tutorial.battle,
       };

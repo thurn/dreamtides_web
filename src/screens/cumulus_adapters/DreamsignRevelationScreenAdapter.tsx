@@ -1,7 +1,3 @@
-// Adapter for the Cumulus Dreamsign Revelation screen. Wiring only: it acquires
-// live journey state, ensures the offer runtime exists, mints the guide line, and
-// invokes the journey mutations after the screen's claim animation starts.
-
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { logEventOnce } from "../../logging";
 import type { Dreamsign } from "../../types/journey";
@@ -12,15 +8,9 @@ import { buildDreamsignRevelationView, resolveDreamsignRevelationGuide } from ".
 
 const FLY_TO_HUD_MS = 900;
 
-export function DreamsignRevelationScreenAdapter({
-  siteId,
-}: {
-  siteId: string;
-}) {
+export function DreamsignRevelationScreenAdapter({ siteId }: { siteId: string }) {
   const { state, mutations, journeyContent } = useJourney();
-  const node = state.currentDreamscape !== null
-    ? state.atlas.nodes[state.currentDreamscape] ?? null
-    : null;
+  const node = state.currentDreamscape === null ? null : state.atlas.nodes[state.currentDreamscape] ?? null;
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
   const runtime = state.siteRuntime[siteId];
   const offerRuntime = runtime?.kind === "dreamsignOffer" ? runtime : null;
@@ -28,52 +18,58 @@ export function DreamsignRevelationScreenAdapter({
   const optionCount = site?.isEnhanced === true ? 4 : 3;
   const remainingDreamsignPoolKey = state.remainingDreamsignPool.join("\u0000");
   const guide = resolveDreamsignRevelationGuide(journeyContent.guides);
-  const guideLine = useMemo(() => {
-    if (guide === null || guide.dialog.length === 0) return null;
-    return guide.dialog[Math.floor(Math.random() * guide.dialog.length)];
-  }, [guide]);
+  const guideLine = useMemo(
+    () => guide?.dialog.length ? guide.dialog[Math.floor(Math.random() * guide.dialog.length)] : null,
+    [guide],
+  );
   const [claimedIndex, setClaimedIndex] = useState<number | null>(null);
   const [pendingPurgeDreamsign, setPendingPurgeDreamsign] = useState<Dreamsign | null>(null);
   const timeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (runtime === undefined) {
-      mutations.ensureDreamsignOfferRuntime(siteId, optionCount);
-    }
+    if (runtime === undefined) mutations.ensureDreamsignOfferRuntime(siteId, optionCount);
   }, [mutations, optionCount, remainingDreamsignPoolKey, runtime, siteId]);
 
   useEffect(() => {
     if (options === null || site === null) return;
-    logEventOnce(`dreamsign-revelation:${site.id}:site-entered`, "site_entered", {
-      siteType: site.type,
-      isEnhanced: site.isEnhanced,
-      optionCount,
-    });
+    logEventOnce(`dreamsign-revelation:${site.id}:site-entered`, "site_entered",
+      { siteType: site.type, isEnhanced: site.isEnhanced, optionCount });
   }, [site?.id, site?.type, site?.isEnhanced, optionCount, options]);
-
-  useEffect(() => {
-    if (guide === null || site === null) return;
-    logEventOnce(`dreamsign-revelation:${site.id}:guide:${guide.id}`, "dream_guide_presented", {
-      guideId: guide.id,
-      siteType: site.type,
-      isEnhanced: site.isEnhanced,
-    });
-  }, [guide?.id, site?.id, site?.type, site?.isEnhanced]);
 
   useEffect(
     () => () => {
-      if (timeoutRef.current !== null) {
-        window.clearTimeout(timeoutRef.current);
-      }
+      if (timeoutRef.current !== null) window.clearTimeout(timeoutRef.current);
     },
     [],
   );
 
   const view = useMemo(
     () =>
-      buildDreamsignRevelationView({ state, sceneNode: node, guide, guideLine, offeredDreamsigns: options, pendingPurgeDreamsign }),
-    [state, node, guide, guideLine, options, pendingPurgeDreamsign],
+      buildDreamsignRevelationView({ state, sceneNode: node, guide, guideLine,
+        offeredDreamsigns: options, pendingPurgeDreamsign,
+        tutorialConfiguration: journeyContent.tutorialDreamsignRevelation }),
+    [state, node, guide, guideLine, options, pendingPurgeDreamsign,
+      journeyContent.tutorialDreamsignRevelation],
   );
+
+  useEffect(() => {
+    if (view.tutorial === undefined) {
+      if (guide === null || site === null) return;
+      logEventOnce(`dreamsign-revelation:${site.id}:guide:${guide.id}`,
+        "dream_guide_presented",
+        { guideId: guide.id, siteType: site.type, isEnhanced: site.isEnhanced });
+      return;
+    }
+    logEventOnce(
+      `first-visit-site-tutorial:${view.tutorial.id}`,
+      "first_visit_site_tutorial_presented",
+      { tutorialId: view.tutorial.id, siteId, siteType: "DreamsignRevelation",
+        text: view.tutorial.model.text,
+        horizontalOffset: view.tutorial.horizontalOffset,
+        verticalOffset: view.tutorial.verticalOffset,
+        bubbleWidth: view.tutorial.bubbleWidth },
+    );
+  }, [guide, site, siteId, view.tutorial]);
 
   const handleClaim = useCallback(
     (index: number) => {
@@ -93,17 +89,18 @@ export function DreamsignRevelationScreenAdapter({
   );
 
   const handleSkip = useCallback(() => {
-    if (claimedIndex !== null || pendingPurgeDreamsign !== null) return;
-    mutations.rejectDreamsignOffer(siteId);
+    if (claimedIndex === null && pendingPurgeDreamsign === null) {
+      mutations.rejectDreamsignOffer(siteId);
+    }
   }, [claimedIndex, mutations, pendingPurgeDreamsign, siteId]);
 
   const handlePurge = useCallback(
     (dreamsignId: string) => {
       if (pendingPurgeDreamsign === null) return;
       const index = state.dreamsigns.findIndex(
-        (dreamsign) =>
-          requireDreamsignId(dreamsign, "Dreamsign Revelation replacement") ===
-          dreamsignId,
+        (dreamsign) => requireDreamsignId(
+          dreamsign, "Dreamsign Revelation replacement",
+        ) === dreamsignId,
       );
       if (index < 0) return;
       mutations.acceptDreamsignOffer(siteId, pendingPurgeDreamsign, index);
@@ -119,7 +116,7 @@ export function DreamsignRevelationScreenAdapter({
       onClaim={handleClaim}
       onSkip={handleSkip}
       onPurge={handlePurge}
-      onCancelPurge={() => { setPendingPurgeDreamsign(null); }}
+      onCancelPurge={() => setPendingPurgeDreamsign(null)}
       claimedIndex={claimedIndex}
     />
   );

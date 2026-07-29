@@ -28,6 +28,24 @@ const mocks = vi.hoisted(() => ({
         text: "Visit Dream Sites.",
       },
     },
+    draft: {
+      speechBubble: {
+        speaker: "mira",
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 600,
+        text: "Draft a card.",
+      },
+    },
+    dreamsignRevelation: {
+      speechBubble: {
+        speaker: "mira",
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 600,
+        text: "Choose a Dreamsign.",
+      },
+    },
     actions: [],
     triggers: [],
     battle: { playerDraws: [], enemyDraws: [], dreamwellDraws: [] },

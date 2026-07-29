@@ -73,6 +73,7 @@ import type {
   TutorialBattleConfiguration,
   TutorialDreamscapeConfiguration,
   TutorialJourneyStartConfiguration,
+  TutorialSiteConfiguration,
   TutorialTriggerDefinition,
 } from "../types/tutorial";
 import {
@@ -94,6 +95,10 @@ export interface JourneyContent {
   tutorialJourneyStart?: TutorialJourneyStartConfiguration;
   /** Authored guidance shown over the first tutorial dreamscape. */
   tutorialDreamscape?: TutorialDreamscapeConfiguration;
+  /** Authored guidance shown throughout the first Draft site visit. */
+  tutorialDraft?: TutorialSiteConfiguration;
+  /** Authored guidance shown throughout the first Dreamsign Revelation visit. */
+  tutorialDreamsignRevelation?: TutorialSiteConfiguration;
   /** Fixed three-tide draft pool used by the tutorial journey handoff. */
   tutorialJourneyPool?: TutorialJourneyPool;
   /**

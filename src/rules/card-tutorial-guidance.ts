@@ -1,6 +1,7 @@
 import type { CardData } from "../types/cards";
 import type { SiteState } from "../types/journey";
 import type { TutorialTriggerDefinition } from "../types/tutorial";
+import { activeFirstVisitTutorialSite } from "../data/site-tutorial-guidance";
 import type { FoldState } from "./fold-state";
 import { matchTutorialGuidance } from "./battle/tutorial-guidance";
 
@@ -40,7 +41,8 @@ function currentCardTutorialSite(state: FoldState): SiteState | null {
   if (
     state.battle !== null ||
     !state.journey.hasSeenStartingDeckPopup ||
-    state.journey.screen.type !== "site"
+    state.journey.screen.type !== "site" ||
+    activeFirstVisitTutorialSite(state.journey) !== null
   ) {
     return null;
   }

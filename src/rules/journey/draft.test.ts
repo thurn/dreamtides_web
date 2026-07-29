@@ -222,6 +222,7 @@ describe("PICK_DRAFT_CARD", () => {
       runId: "run-a",
       hasSeenStartingDeckPopup: true,
       screen: { type: "site", siteId: "site-a" },
+      visitedSites: ["site-b"],
     });
     const screenKey = currentCardTutorialScreenKey(before);
     expect(screenKey).not.toBeNull();

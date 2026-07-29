@@ -5,6 +5,7 @@ import {
   parseTutorialBattleConfiguration,
   parseTutorialDreamscapeConfiguration,
   parseTutorialJourneyStartConfiguration,
+  parseTutorialSiteConfiguration,
   parseTutorialTriggers,
 } from "./tutorial-actions";
 
@@ -26,6 +27,24 @@ const ACTIONS_RESPONSE = {
       verticalOffset: 0,
       bubbleWidth: 700,
       text: "Visit [purple]Dream Sites[/purple].",
+    },
+  },
+  draft: {
+    speechBubble: {
+      speaker: "mira",
+      horizontalOffset: 0,
+      verticalOffset: 0,
+      bubbleWidth: 600,
+      text: "Draft a card.",
+    },
+  },
+  dreamsignRevelation: {
+    speechBubble: {
+      speaker: "mira",
+      horizontalOffset: 0,
+      verticalOffset: 0,
+      bubbleWidth: 600,
+      text: "Choose a Dreamsign.",
     },
   },
   actions: [
@@ -219,6 +238,18 @@ describe("parseTutorialActions", () => {
       parseTutorialJourneyStartConfiguration({
         speechBubble: { speaker: "enemy", text: "No." },
       }),
+    ).toThrow(/must target Mira/u);
+  });
+
+  it("parses persistent first-visit site guidance", () => {
+    expect(
+      parseTutorialSiteConfiguration(ACTIONS_RESPONSE.draft, "draft"),
+    ).toEqual(ACTIONS_RESPONSE.draft);
+    expect(() =>
+      parseTutorialSiteConfiguration(
+        { speechBubble: { speaker: "enemy", text: "No." } },
+        "draft",
+      ),
     ).toThrow(/must target Mira/u);
   });
 

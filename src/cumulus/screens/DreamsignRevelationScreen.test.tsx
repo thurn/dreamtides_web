@@ -85,6 +85,44 @@ afterEach(() => {
 });
 
 describe("DreamsignRevelationScreen", () => {
+  it("replaces the resident guide with persistent Mira guidance on the first visit", () => {
+    const tutorialView: DreamsignRevelationView = {
+      ...view(),
+      tutorial: {
+        id: "run-a:first-visit:revelation-a:DreamsignRevelation",
+        model: {
+          portrait: { kind: "character-portrait", characterId: "mira" },
+          portraitAlt: "Mira",
+          speakerName: "Mira",
+          text: "A [purple]Dreamsign[/purple] gives ongoing benefits.",
+        },
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 600,
+      },
+    };
+    const { container, root } = mount(
+      <DreamsignRevelationScreen
+        view={tutorialView}
+        claimedIndex={null}
+        onClaim={vi.fn()}
+        onSkip={vi.fn()}
+        onPurge={vi.fn()}
+        onCancelPurge={vi.fn()}
+      />,
+    );
+
+    expect(
+      container.querySelector('[data-testid="revelation-site-tutorial-dialogue"]')
+        ?.textContent,
+    ).toContain("A Dreamsign gives ongoing benefits.");
+    expect(container.querySelector('[data-testid="revelation-speech-bubble"]'))
+      .toBeNull();
+    expect(container.querySelectorAll("[data-revelation-option]")).toHaveLength(3);
+
+    act(() => root.unmount());
+  });
+
   it("keeps unavailable choices focusable and revealable while suppressing keyboard activation", () => {
     const onClaim = vi.fn();
     const { container, root } = mount(

@@ -20,6 +20,7 @@ import { useJourney } from "../state/journey-context";
 import { BattleTutorialGuidance } from "../cumulus/screens/BattleTutorialGuidance";
 import { buildCardTutorialGuidanceView } from "../screens/cumulus_adapters/card-tutorial-guidance-view-model";
 import { createCardTutorialGuidanceContentProvider } from "../coop/providers/card-tutorial-guidance-provider";
+import { activeFirstVisitTutorialSite } from "../data/site-tutorial-guidance";
 
 const CARD_TUTORIAL_LOAD_DELAY_MS = 3_000;
 
@@ -61,9 +62,15 @@ export function JourneyCardTutorialController({
   );
   const screenKey = currentCardTutorialScreenKey(state);
   const presentation = state.cardTutorialPresentation ?? null;
+  const siteTutorialActive =
+    activeFirstVisitTutorialSite(state.journey) !== null;
   const view = useMemo(
-    () => buildCardTutorialGuidanceView(presentation, cardDatabase),
-    [cardDatabase, presentation],
+    () =>
+      buildCardTutorialGuidanceView(
+        siteTutorialActive ? null : presentation,
+        cardDatabase,
+      ),
+    [cardDatabase, presentation, siteTutorialActive],
   );
 
   useEffect(() => {

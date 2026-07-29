@@ -13,6 +13,7 @@ import {
   JOURNEY_STATUS_BAR_CLEARANCE_OP,
 } from "../components/hud/JourneyStatusBar";
 import { SpeechBubble } from "../components/overlay/SpeechBubble";
+import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
@@ -20,6 +21,7 @@ import {
   DreamsignReplacementDialog,
   type DreamsignReplacementView,
 } from "./DreamsignReplacementDialog";
+import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 
 /** The guide who speaks over the Revelation offer. */
 export interface DreamsignRevelationGuideView {
@@ -43,6 +45,8 @@ export interface DreamsignRevelationView {
   offer: readonly DreamsignData[];
   /** Null while loading, otherwise the offer is ready to display. */
   offerReady: boolean;
+  /** Persistent Mira guidance throughout the first Revelation visit. */
+  tutorial?: FirstVisitSiteTutorialView;
   /** Non-null when the player must replace an existing dreamsign. */
   purge: DreamsignReplacementView | null;
 }
@@ -285,41 +289,65 @@ function GuideScene({
         pointerEvents: "none",
       }}
     >
-      <img
-        src={guideUrl}
-        alt={view.guide.name}
-        draggable={false}
-        style={{
-          position: "absolute",
-          top: desktop ? "auto" : token("--space-4"),
-          bottom: desktop ? `calc(-1 * ${token("--space-8")})` : "auto",
-          left: desktop
-            ? "clamp(-72px, -4vw, -24px)"
-            : "calc(-1 * (var(--space-12) + var(--space-4)))",
-          width: desktop ? "clamp(320px, 29vw, 430px)" : "62vw",
-          height: desktop ? "min(78dvh, 720px)" : "70dvh",
-          objectFit: "contain",
-          objectPosition: desktop ? "50% 100%" : "50% 0%",
-          userSelect: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: desktop ? "14%" : token("--space-5"),
-          left: desktop ? "clamp(202px, 18vw, 276px)" : "34vw",
-          right: desktop
-            ? 0
-            : `calc(${token("--space-5")} + ${token("--space-11")} + ${token("--space-3")})`,
-          maxWidth: desktop ? 380 : undefined,
-        }}
-      >
-        <SpeechBubble
-          speakerName={view.guide.name}
-          text={view.guide.line}
-          testId="revelation-speech-bubble"
-        />
-      </div>
+      {view.tutorial !== undefined ? (
+        <div
+          data-revelation-site-tutorial=""
+          style={{
+            position: "absolute",
+            top: desktop ? "18%" : token("--space-4"),
+            left: desktop ? token("--space-4") : token("--space-3"),
+            right: desktop ? token("--space-4") : token("--space-3"),
+            width: `min(calc(100% - (${token("--space-4")} * 2)), ${String(view.tutorial.bubbleWidth)}px)`,
+            margin: "0 auto",
+            transform: `translate(${String(view.tutorial.horizontalOffset)}px, ${String(view.tutorial.verticalOffset)}px)`,
+          }}
+        >
+          <CharacterDialogue
+            dialogue={view.tutorial.model}
+            visible
+            size={desktop ? "wide" : "compact"}
+            testId="revelation-site-tutorial-dialogue"
+          />
+        </div>
+      ) : (
+        <>
+          <img
+            src={guideUrl}
+            alt={view.guide.name}
+            draggable={false}
+            style={{
+              position: "absolute",
+              top: desktop ? "auto" : token("--space-4"),
+              bottom: desktop ? `calc(-1 * ${token("--space-8")})` : "auto",
+              left: desktop
+                ? "clamp(-72px, -4vw, -24px)"
+                : "calc(-1 * (var(--space-12) + var(--space-4)))",
+              width: desktop ? "clamp(320px, 29vw, 430px)" : "62vw",
+              height: desktop ? "min(78dvh, 720px)" : "70dvh",
+              objectFit: "contain",
+              objectPosition: desktop ? "50% 100%" : "50% 0%",
+              userSelect: "none",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              top: desktop ? "14%" : token("--space-5"),
+              left: desktop ? "clamp(202px, 18vw, 276px)" : "34vw",
+              right: desktop
+                ? 0
+                : `calc(${token("--space-5")} + ${token("--space-11")} + ${token("--space-3")})`,
+              maxWidth: desktop ? 380 : undefined,
+            }}
+          >
+            <SpeechBubble
+              speakerName={view.guide.name}
+              text={view.guide.line}
+              testId="revelation-speech-bubble"
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }

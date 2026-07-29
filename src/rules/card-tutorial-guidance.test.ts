@@ -130,9 +130,12 @@ function siteState(
 function draftOfferState(
   pickNumber: number,
   currentOffer: number[],
+  firstVisit = false,
 ): FoldState {
   const siteId = "site-a";
   const base = siteState(siteId, "Draft");
+  const node = base.journey.atlas.nodes.node;
+  if (node === undefined) throw new Error("Fixture node is missing.");
   const draftState: PoolDraftState = {
     mode: "pool",
     currentOffer,
@@ -147,6 +150,24 @@ function draftOfferState(
     ...base,
     journey: {
       ...base.journey,
+      visitedSites: firstVisit ? [] : ["prior-draft"],
+      atlas: {
+        ...base.journey.atlas,
+        nodes: {
+          node: {
+            ...node,
+            sites: [
+              {
+                id: "prior-draft",
+                type: "Draft",
+                isEnhanced: false,
+                isVisited: !firstVisit,
+              },
+              ...node.sites,
+            ],
+          },
+        },
+      },
       draftState,
     },
   };
@@ -211,6 +232,18 @@ describe("card tutorial guidance fold", () => {
     expect(
       currentCardTutorialScreenKey(draftOfferState(1, [1, 2, 3, 4])),
     ).not.toBeNull();
+  });
+
+  it("gives the first-visit Draft tutorial priority over glossary triggers", () => {
+    registerCardTutorialGuidanceContentProvider(provider());
+    const before = draftOfferState(1, [1, 2, 3, 4], true);
+    expect(currentCardTutorialScreenKey(before)).toBeNull();
+    expect(
+      openCardTutorialGuidance(before, {
+        screenKey: `${before.journey.runId}:site:site-a`,
+        cardIds: ["card-a", "card-b", "card-c", "card-d"],
+      }),
+    ).toBeNull();
   });
 
   it("opens one shared card journey and preserves authored bubble settings", () => {

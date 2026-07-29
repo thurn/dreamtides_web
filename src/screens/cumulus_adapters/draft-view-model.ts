@@ -8,7 +8,10 @@ import { draftSitePickCount } from "../../draft/draft-site-config";
 import type { CardData } from "../../types/cards";
 import type { DreamscapeNode, SiteState } from "../../types/journey";
 import type { DraftView } from "../../cumulus/screens/DraftScreen";
+import type { JourneyState } from "../../types/journey";
+import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
+import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 
 /**
  * Sort an offered pack for display: cheapest first, then alphabetically as a
@@ -51,6 +54,8 @@ export function buildDraftView(params: {
   sceneNode: DreamscapeNode | null;
   site: Pick<SiteState, "data"> | null;
   sitePicksCompleted: number;
+  journeyState?: JourneyState;
+  tutorialConfiguration?: TutorialSiteConfiguration;
 }): DraftView {
   const pickTotal = params.site !== null ? draftSitePickCount(params.site) : 0;
   return {
@@ -66,5 +71,13 @@ export function buildDraftView(params: {
     // Clamp so the last pack never reads past the total (e.g. "(6/5)").
     pickNumber: Math.min(params.sitePicksCompleted + 1, Math.max(pickTotal, 1)),
     pickTotal,
+    tutorial:
+      params.journeyState === undefined
+        ? undefined
+        : buildFirstVisitSiteTutorialView(
+            params.journeyState,
+            "Draft",
+            params.tutorialConfiguration,
+          ),
   };
 }

@@ -10,7 +10,7 @@
 
 import { useCallback, useEffect, useMemo } from "react";
 import { useJourney } from "../../state/journey-context";
-import { logEvent } from "../../logging";
+import { logEvent, logEventOnce } from "../../logging";
 import { readDraftSiteProgress } from "../../data/draft-site-bootstrap";
 import { buildDraftView } from "./draft-view-model";
 import { DraftScreen } from "../../cumulus/screens/DraftScreen";
@@ -18,7 +18,7 @@ import { DraftScreen } from "../../cumulus/screens/DraftScreen";
 /** Live draft site screen: enters the site, builds the view-model, picks a
  * card, and completes back to the dreamscape once the pack runs out. */
 export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
-  const { state, mutations, cardDatabase } = useJourney();
+  const { state, mutations, cardDatabase, journeyContent } = useJourney();
 
   // Enter this site whenever the displayed draft state has not advanced to
   // `siteId`. The run-scoped event-log key gives every mount and connected
@@ -43,6 +43,8 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
         sceneNode: node,
         site,
         sitePicksCompleted: progress.sitePicksCompleted,
+        journeyState: state,
+        tutorialConfiguration: journeyContent.tutorialDraft,
       }),
     [
       progress.offerCardNumbers,
@@ -50,8 +52,27 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
       cardDatabase,
       node,
       site,
+      state,
+      journeyContent.tutorialDraft,
     ],
   );
+
+  useEffect(() => {
+    if (view.tutorial === undefined) return;
+    logEventOnce(
+      `first-visit-site-tutorial:${view.tutorial.id}`,
+      "first_visit_site_tutorial_presented",
+      {
+        tutorialId: view.tutorial.id,
+        siteId,
+        siteType: "Draft",
+        text: view.tutorial.model.text,
+        horizontalOffset: view.tutorial.horizontalOffset,
+        verticalOffset: view.tutorial.verticalOffset,
+        bubbleWidth: view.tutorial.bubbleWidth,
+      },
+    );
+  }, [siteId, view.tutorial]);
 
   const handlePick = useCallback(
     (cardNumber: number) => {

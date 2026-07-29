@@ -3,12 +3,14 @@
 import { guideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
 import type { DreamscapeNode, Dreamsign, JourneyState } from "../../types/journey";
+import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
   DreamsignRevelationGuideView,
   DreamsignRevelationView,
 } from "../../cumulus/screens/DreamsignRevelationScreen";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
+import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 
 const FALLBACK_GUIDE_ID = "sigrun";
 const FALLBACK_GUIDE_NAME = "Sigrún";
@@ -44,6 +46,7 @@ export function buildDreamsignRevelationView(params: {
   guideLine: string | null;
   offeredDreamsigns: readonly Dreamsign[] | null;
   pendingPurgeDreamsign: Dreamsign | null;
+  tutorialConfiguration?: TutorialSiteConfiguration;
 }): DreamsignRevelationView {
   const scene: ArtRef | null =
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
@@ -52,6 +55,11 @@ export function buildDreamsignRevelationView(params: {
     guide: buildDreamsignRevelationGuideView(params.guide, params.guideLine),
     offer: params.offeredDreamsigns ?? [],
     offerReady: params.offeredDreamsigns !== null,
+    tutorial: buildFirstVisitSiteTutorialView(
+      params.state,
+      "DreamsignRevelation",
+      params.tutorialConfiguration,
+    ),
     purge:
       params.pendingPurgeDreamsign === null
         ? null

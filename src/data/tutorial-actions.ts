@@ -5,6 +5,7 @@ import type {
   TutorialConfiguration,
   TutorialDreamscapeConfiguration,
   TutorialJourneyStartConfiguration,
+  TutorialSiteConfiguration,
   TutorialSpeechBubble,
   TutorialTriggerDefinition,
   TutorialTriggerEvent,
@@ -209,6 +210,34 @@ export function parseTutorialDreamscapeConfiguration(
     speechBubble: {
       speaker: parsed.speaker,
       delay,
+      horizontalOffset: parsed.horizontalOffset,
+      verticalOffset: parsed.verticalOffset,
+      bubbleWidth: parsed.bubbleWidth,
+      text: parsed.text,
+    },
+  };
+}
+
+/** Validate persistent Mira guidance for a first-visit site tutorial. */
+export function parseTutorialSiteConfiguration(
+  value: unknown,
+  siteId: "draft" | "dreamsign-revelation",
+): TutorialSiteConfiguration {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error(`Tutorial data must contain a ${siteId} table.`);
+  }
+  const record = value as Record<string, unknown>;
+  const parsed = parseTutorialSpeechBubble(
+    record.speechBubble,
+    siteId,
+    true,
+  );
+  if (parsed === undefined || parsed.speaker !== "mira") {
+    throw new Error(`Tutorial ${siteId} speech bubble must target Mira.`);
+  }
+  return {
+    speechBubble: {
+      speaker: parsed.speaker,
       horizontalOffset: parsed.horizontalOffset,
       verticalOffset: parsed.verticalOffset,
       bubbleWidth: parsed.bubbleWidth,
@@ -685,6 +714,11 @@ export async function loadTutorialConfiguration(
   return {
     journeyStart: parseTutorialJourneyStartConfiguration(record.journeyStart),
     dreamscape: parseTutorialDreamscapeConfiguration(record.dreamscape),
+    draft: parseTutorialSiteConfiguration(record.draft, "draft"),
+    dreamsignRevelation: parseTutorialSiteConfiguration(
+      record.dreamsignRevelation,
+      "dreamsign-revelation",
+    ),
     actions: parseTutorialActions(record.actions),
     triggers: parseTutorialTriggers(record.triggers ?? []),
     battle: parseTutorialBattleConfiguration(record.battle),

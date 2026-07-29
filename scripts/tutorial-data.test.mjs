@@ -10,6 +10,7 @@ import {
   validateTutorialActions,
   validateTutorialBattleConfiguration,
   validateTutorialDreamscapeConfiguration,
+  validateTutorialSiteConfiguration,
   validateTutorialTriggers,
 } from "./tutorial-data.mjs";
 
@@ -51,6 +52,16 @@ const FIXTURE_DREAMSCAPE = {
     verticalOffset: 0,
     bubbleWidth: 700,
     text: "Visit [purple]Dream Sites[/purple].",
+  },
+};
+
+const FIXTURE_SITE_TUTORIAL = {
+  speechBubble: {
+    speaker: "mira",
+    horizontalOffset: 0,
+    verticalOffset: 0,
+    bubbleWidth: 600,
+    text: "Visit a [purple]site[/purple].",
   },
 };
 
@@ -148,6 +159,23 @@ describe("tutorial data", () => {
     ).toThrow(/non-negative delay/u);
   });
 
+  it("normalizes persistent first-visit site guidance", () => {
+    expect(
+      validateTutorialSiteConfiguration(FIXTURE_SITE_TUTORIAL, "draft"),
+    ).toEqual(FIXTURE_SITE_TUTORIAL);
+    expect(() =>
+      validateTutorialSiteConfiguration(
+        {
+          speechBubble: {
+            ...FIXTURE_SITE_TUTORIAL.speechBubble,
+            speaker: "enemy",
+          },
+        },
+        "draft",
+      ),
+    ).toThrow(/must target Mira/u);
+  });
+
   it("round-trips typed actions through TOML and generated JSON", () => {
     const rootDir = mkdtempSync(join(tmpdir(), "tutorial-data-"));
     mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
@@ -159,6 +187,8 @@ describe("tutorial data", () => {
         FIXTURE_BATTLE,
         FIXTURE_JOURNEY_START,
         FIXTURE_DREAMSCAPE,
+        FIXTURE_SITE_TUTORIAL,
+        FIXTURE_SITE_TUTORIAL,
       ),
     );
 
@@ -168,6 +198,8 @@ describe("tutorial data", () => {
     expect(result.battle).toEqual(FIXTURE_BATTLE);
     expect(result.journeyStart).toEqual(FIXTURE_JOURNEY_START);
     expect(result.dreamscape).toEqual(FIXTURE_DREAMSCAPE);
+    expect(result.draft).toEqual(FIXTURE_SITE_TUTORIAL);
+    expect(result.dreamsignRevelation).toEqual(FIXTURE_SITE_TUTORIAL);
     expect(
       JSON.parse(
         readFileSync(join(rootDir, "public", "tutorial-data.json"), "utf8"),
@@ -175,6 +207,8 @@ describe("tutorial data", () => {
     ).toEqual({
       journeyStart: FIXTURE_JOURNEY_START,
       dreamscape: FIXTURE_DREAMSCAPE,
+      draft: FIXTURE_SITE_TUTORIAL,
+      dreamsignRevelation: FIXTURE_SITE_TUTORIAL,
       actions: FIXTURE_ACTIONS,
       triggers: [],
       battle: FIXTURE_BATTLE,
@@ -187,11 +221,15 @@ describe("tutorial data", () => {
           FIXTURE_BATTLE,
           FIXTURE_JOURNEY_START,
           FIXTURE_DREAMSCAPE,
+          FIXTURE_SITE_TUTORIAL,
+          FIXTURE_SITE_TUTORIAL,
         ),
       ),
     ).toMatchObject({
       journeyStart: FIXTURE_JOURNEY_START,
       dreamscape: FIXTURE_DREAMSCAPE,
+      draft: FIXTURE_SITE_TUTORIAL,
+      dreamsignRevelation: FIXTURE_SITE_TUTORIAL,
       actions: FIXTURE_ACTIONS,
       battle: FIXTURE_BATTLE,
     });
@@ -511,6 +549,8 @@ describe("tutorial data", () => {
           FIXTURE_BATTLE,
           FIXTURE_JOURNEY_START,
           FIXTURE_DREAMSCAPE,
+          FIXTURE_SITE_TUTORIAL,
+          FIXTURE_SITE_TUTORIAL,
         ),
       )
         .triggers,

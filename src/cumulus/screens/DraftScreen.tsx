@@ -32,6 +32,8 @@ import {
   MENU_EDGE_INSET_MOBILE_PX,
 } from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
+import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
+import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
 
 /** Everything the draft screen renders, mapped from live journey state. */
 export interface DraftView {
@@ -45,6 +47,8 @@ export interface DraftView {
   pickNumber: number;
   /** How many picks this draft site offers in total. */
   pickTotal: number;
+  /** Persistent Mira guidance throughout the first Draft site visit. */
+  tutorial?: FirstVisitSiteTutorialView;
 }
 
 export interface DraftScreenProps {
@@ -198,8 +202,23 @@ export function DraftScreen({ view, onPick, onReroll = NOOP }: DraftScreenProps)
 
       <Motes on tint="violet" />
 
+      {view.tutorial !== undefined && (
+        <ViewportTutorialDialogue
+          view={{
+            id: view.tutorial.id,
+            dialogue: view.tutorial.model,
+            horizontalOffset: view.tutorial.horizontalOffset,
+            verticalOffset: view.tutorial.verticalOffset,
+            bubbleWidth: view.tutorial.bubbleWidth,
+          }}
+          visible
+          kind="site"
+        />
+      )}
+
       <div
         data-draft-reroll-control=""
+        data-tutorial-guidance-obstacle=""
         onPointerDown={(event) => {
           event.stopPropagation();
         }}

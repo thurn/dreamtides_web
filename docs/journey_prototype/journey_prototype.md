@@ -129,6 +129,15 @@ the tutorial journey handoff. Dreamscape guidance includes its appearance delay;
 the first dreamscape begins that delay when the player dismisses the
 starting-deck modal.
 
+The `draft` and `dreamsignRevelation` tables author persistent Mira guidance
+for the first visit to each of those site types in a journey. Completed-site
+state in the shared atlas determines eligibility across dreamscape travel, so
+reloads and connected clients show the same prompt until that first site is
+completed. Site guidance takes priority over supplemental glossary triggers.
+Draft guidance is placed in measured free viewport space around the four cards;
+Dreamsign Revelation uses the screen's reserved guide region beside or above
+the offer.
+
 Supplemental tutorial triggers are shared first-occurrence explanations. Their
 seen ids live in the room fold, so a keyword explained on a journey card is
 already familiar when it later appears in battle. Draft screens submit the UUIDs

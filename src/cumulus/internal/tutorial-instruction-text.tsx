@@ -84,6 +84,7 @@ export function renderTutorialInstructionParagraph(
               color: token(
                 span.highlight === "purple" ? "--accent-bright" : "--spark",
               ),
+              fontWeight: span.highlight === "purple" ? 700 : undefined,
             }}
           >
             {renderInstructionText(span.text)}

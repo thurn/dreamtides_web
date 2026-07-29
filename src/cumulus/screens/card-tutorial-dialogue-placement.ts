@@ -48,6 +48,8 @@ export function placeCardTutorialDialogue(params: {
   readonly cardRects: readonly CardTutorialRect[];
   readonly obstacleRects?: readonly CardTutorialRect[];
   readonly gap: number;
+  readonly horizontalOffset?: number;
+  readonly verticalOffset?: number;
 }): CardTutorialPoint {
   const {
     viewportWidth,
@@ -57,6 +59,8 @@ export function placeCardTutorialDialogue(params: {
     cardRects,
     obstacleRects = [],
     gap,
+    horizontalOffset = 0,
+    verticalOffset = 0,
   } = params;
   const minLeft = gap;
   const minTop = gap;
@@ -100,6 +104,10 @@ export function placeCardTutorialDialogue(params: {
         ),
     );
 
+  const applyOffset = (candidate: CardTutorialPoint): CardTutorialPoint => ({
+    left: candidate.left + horizontalOffset,
+    top: candidate.top + verticalOffset,
+  });
   const preferred: readonly CardTutorialPoint[] = [
     {
       left: clamp(cardsCenterX - dialogueWidth / 2, minLeft, maxLeft),
@@ -117,7 +125,7 @@ export function placeCardTutorialDialogue(params: {
       left: cardsRight + gap,
       top: clamp(cardsCenterY - dialogueHeight / 2, minTop, maxTop),
     },
-  ];
+  ].map(applyOffset);
   const preferredFit = preferred.find(fits);
   if (preferredFit !== undefined) return preferredFit;
 
@@ -131,6 +139,7 @@ export function placeCardTutorialDialogue(params: {
   }
   const freeCells = [...topCandidates]
     .flatMap((top) => [...leftCandidates].map((left) => ({ left, top })))
+    .map(applyOffset)
     .filter(fits)
     .sort(
       (a, b) =>

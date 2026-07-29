@@ -61,11 +61,18 @@ function stubMatchMedia({
   });
 }
 
+class ResizeObserverStub {
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
+}
+
 beforeEach(() => {
   (
     globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
   ).IS_REACT_ACT_ENVIRONMENT = true;
   stubMatchMedia();
+  globalThis.ResizeObserver = ResizeObserverStub;
 });
 
 afterEach(() => {
@@ -83,6 +90,36 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
 }
 
 describe("Cumulus DraftScreen", () => {
+  it("shows persistent authored Mira guidance alongside the first Draft offer", () => {
+    const tutorialView: DraftView = {
+      ...view([101, 102, 103, 104]),
+      tutorial: {
+        id: "run-a:first-visit:draft-a:Draft",
+        model: {
+          portrait: { kind: "character-portrait", characterId: "mira" },
+          portraitAlt: "Mira",
+          speakerName: "Mira",
+          text: "At a [purple]Draft[/purple] site you choose cards.",
+        },
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 600,
+      },
+    };
+    const { container, root } = mount(
+      <DraftScreen view={tutorialView} onPick={vi.fn()} />,
+    );
+
+    expect(container.querySelector("[data-site-tutorial-guidance]")).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="site-tutorial-dialogue"]')
+        ?.textContent,
+    ).toContain("At a Draft site");
+    expect(container.querySelectorAll("[data-draft-offer-card]")).toHaveLength(4);
+
+    act(() => root.unmount());
+  });
+
   it("renders the mobile offer as the shipped 2x2 grid", () => {
     const { container, root } = mount(
       <DraftScreen view={view([101, 102, 103, 104])} onPick={vi.fn()} />,

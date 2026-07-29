@@ -98,6 +98,8 @@ function makeState(): JourneyState {
   };
   return {
     currentDreamscape: "node-1",
+    screen: { type: "site", siteId: "site-1" },
+    visitedSites: [],
     atlas: {
       nodes: { "node-1": node },
       layers: [["node-1"], [], [], [], [], [], []],
