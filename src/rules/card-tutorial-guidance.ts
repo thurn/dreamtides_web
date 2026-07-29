@@ -50,14 +50,7 @@ function currentCardTutorialSite(state: FoldState): SiteState | null {
     .find((candidate) => candidate.id === siteId);
   if (
     site === undefined ||
-    (
-      site.type !== "Draft" &&
-      site.type !== "Purge" &&
-      site.type !== "Shop" &&
-      site.type !== "Transfiguration" &&
-      site.type !== "Duplication" &&
-      site.type !== "DreamAugury"
-    )
+    (site.type !== "Draft" && site.type !== "Shop")
   ) {
     return null;
   }

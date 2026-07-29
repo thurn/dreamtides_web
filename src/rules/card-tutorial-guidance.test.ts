@@ -2,8 +2,9 @@ import { afterEach, describe, expect, it } from "vitest";
 import { asCardId, asCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { PoolDraftState } from "../types/draft";
-import type { TutorialTriggerDefinition } from "../types/tutorial";
+import type { SiteType } from "../types/journey";
 import { LayerName } from "../types/layer-name";
+import type { TutorialTriggerDefinition } from "../types/tutorial";
 import { genesisFoldState, type FoldState } from "./fold-state";
 import {
   completeCardTutorialGuidance,
@@ -76,7 +77,7 @@ function provider(): CardTutorialGuidanceContentProvider {
 
 function siteState(
   siteId = "site-a",
-  siteType: "Draft" | "Purge" = "Purge",
+  siteType: SiteType = "Shop",
 ): FoldState {
   const base = genesisFoldState({
     seed: "card-tutorial-test",
@@ -190,6 +191,33 @@ describe("card tutorial guidance fold", () => {
       }),
     ).toBeNull();
   });
+
+  it.each([
+    "Purge",
+    "Transfiguration",
+    "Duplication",
+    "DreamAugury",
+  ] satisfies readonly SiteType[])(
+    "does not trigger on the %s screen",
+    (siteType) => {
+      expect(
+        currentCardTutorialScreenKey(siteState("site-a", siteType)),
+      ).toBeNull();
+    },
+  );
+
+  it.each(["Shop", "Draft"] satisfies readonly SiteType[])(
+    "is eligible on the %s screen",
+    (siteType) => {
+      expect(
+        currentCardTutorialScreenKey(
+          siteType === "Draft"
+            ? draftOfferState(1, [1, 2, 3, 4])
+            : siteState("site-a", siteType),
+        ),
+      ).not.toBeNull();
+    },
+  );
 
   it("opens one shared card journey and preserves authored bubble settings", () => {
     registerCardTutorialGuidanceContentProvider(provider());
