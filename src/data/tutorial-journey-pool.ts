@@ -18,7 +18,6 @@ export interface TutorialJourneyTide {
 export interface TutorialJourneyPool {
   readonly dreamAvatarId: string;
   readonly poolSize: number;
-  /** Scripted opening cards; these may live outside the recurring tide pool. */
   readonly openingOffers: readonly (readonly string[])[];
   readonly tides: readonly TutorialJourneyTide[];
 }
@@ -179,6 +178,14 @@ export function validateTutorialJourneyPool(
     invalid(
       `tide cards contain ${String(authoredCopyCount)} copies, expected ${String(poolSize)}`,
     );
+  }
+
+  for (const openingCardId of openingCardIds) {
+    if (!seenCardIds.has(openingCardId)) {
+      invalid(
+        `opening card ${JSON.stringify(openingCardId)} is not in a tutorial tide`,
+      );
+    }
   }
 
   return { dreamAvatarId, poolSize, openingOffers, tides };

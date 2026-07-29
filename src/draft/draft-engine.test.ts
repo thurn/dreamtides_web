@@ -176,7 +176,7 @@ describe("fixed multiset offer generation", () => {
 
   it("presents authored opening offers for the first two journey picks", () => {
     const cardDatabase = buildDB(
-      Array.from({ length: 13 }, (_, index) => makeCard(index + 1)),
+      Array.from({ length: 12 }, (_, index) => makeCard(index + 1)),
     );
     const resolvedPackage = {
       ...buildResolvedPackage(
@@ -186,7 +186,7 @@ describe("fixed multiset offer generation", () => {
       ),
       openingDraftOffers: {
         "1": [8, 6, 4, 2],
-        "2": [7, 5, 3, 13],
+        "2": [7, 5, 3, 1],
       },
     };
     const state = initializeDraftState(cardDatabase, resolvedPackage);
@@ -195,8 +195,7 @@ describe("fixed multiset offer generation", () => {
     expect(state.currentOffer).toEqual([8, 6, 4, 2]);
 
     processPlayerPick(8, state, cardDatabase, undefined, undefined, () => 0);
-    expect(state.currentOffer).toEqual([7, 5, 3, 13]);
-    expect(state.draftPoolCopiesByCard["13"]).toBeUndefined();
+    expect(state.currentOffer).toEqual([7, 5, 3, 1]);
     expect(
       getLogEntries()
         .filter((entry) => entry.event === "draft_offer_revealed")
@@ -204,7 +203,7 @@ describe("fixed multiset offer generation", () => {
     ).toEqual(["authored_opening", "authored_opening"]);
 
     processPlayerPick(7, state, cardDatabase, undefined, undefined, () => 0);
-    expect(state.currentOffer).toEqual([1, 9, 10, 11]);
+    expect(state.currentOffer).toEqual([9, 10, 11, 12]);
     const revealedOffers = getLogEntries().filter(
       (entry) => entry.event === "draft_offer_revealed",
     );

@@ -118,16 +118,6 @@ describe("validateTutorialJourneyPool", () => {
     );
   });
 
-  it("allows a scripted opening card outside the recurring tide pool", () => {
-    const source = syntheticSource();
-    const openingOffers = source["opening-offers"] as string[][];
-    openingOffers[1][3] = "00000000-0000-4000-8000-000000000009";
-
-    expect(validateTutorialJourneyPool(source, 8).openingOffers[1][3]).toBe(
-      "00000000-0000-4000-8000-000000000009",
-    );
-  });
-
   it("rejects a pool that does not match the normal journey size", () => {
     expect(() => validateTutorialJourneyPool(syntheticSource(), 150)).toThrow(
       /normal journey pool size \(150\)/u,

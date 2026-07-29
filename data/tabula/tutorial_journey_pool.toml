@@ -11,7 +11,7 @@ opening-offers = [
     "b1bea643-1a7b-4e5e-b072-7174d3405421",
     "f4b34207-2ad4-421b-8798-9c20320607ae",
     "8367b757-c3d2-4c22-9043-8baadee1c5ba",
-    "229ab3a1-3720-41a2-924c-8fe112188f8e",
+    "6f1833a0-30f5-4718-9a3e-7620beb72bfc",
   ],
 ]
 
@@ -238,7 +238,7 @@ id = "a9b5afaa-e149-4bf4-9007-077e8e9f12e6"
 copies = 2
 
 [[tides.cards]]
-id = "f82c7407-b642-4ab1-8878-171f9121b3eb"
+id = "6f1833a0-30f5-4718-9a3e-7620beb72bfc"
 copies = 2
 
 [[tides.cards]]
