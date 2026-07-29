@@ -81,11 +81,10 @@ export function renderTutorialInstructionParagraph(
             key={index}
             data-tutorial-instruction-highlight={span.highlight}
             style={{
-              color: token(
+              color:
                 span.highlight === "purple"
-                  ? "--text-tutorial-highlight"
-                  : "--spark",
-              ),
+                  ? token("--text-tutorial-highlight")
+                  : token("--spark"),
               fontWeight: span.highlight === "purple" ? 700 : undefined,
             }}
           >
