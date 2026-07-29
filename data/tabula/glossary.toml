@@ -54,15 +54,6 @@ matches-rules-text = true
 variants = []
 
 [[entries]]
-id = "materialize"
-category = "Triggers & Timing"
-term = "Materialize"
-definition = "Put a character into play"
-priority = 5
-matches-rules-text = true
-variants = [ "materializes" ]
-
-[[entries]]
 id = "rematerialize"
 category = "Triggers & Timing"
 term = "Rematerialize"
@@ -410,15 +401,6 @@ id = "essence"
 category = "Journey Terms"
 term = "Essence"
 definition = "Currency you gain and spend over the course of a run."
-priority = 10
-matches-rules-text = true
-variants = []
-
-[[entries]]
-id = "void"
-category = "Journey Terms"
-term = "Void"
-definition = "Your discard pile"
 priority = 10
 matches-rules-text = true
 variants = []

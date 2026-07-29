@@ -70,11 +70,6 @@ const CARD_TIMING_GLOSSARY_IDS = [
   GLOSSARY_IDS.fast,
   GLOSSARY_IDS.interrupt,
 ] as const;
-const CARD_HOVER_GLOSSARY_EXCLUSIONS = [
-  GLOSSARY_IDS.materialize,
-  GLOSSARY_IDS.void,
-] as const;
-
 function cardTimingInfoCards(
   card: Pick<CardData, "isFast" | "isInterrupt">,
 ) {
@@ -95,7 +90,6 @@ function cardRulesTextDefinitionCards(
     card.renderedText,
     "card",
     [
-      ...CARD_HOVER_GLOSSARY_EXCLUSIONS,
       ...(card.isFast || card.isInterrupt === true
         ? CARD_TIMING_GLOSSARY_IDS
         : []),

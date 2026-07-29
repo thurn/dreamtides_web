@@ -43,8 +43,6 @@ describe("glossary", () => {
       GLOSSARY_IDS.exhaustCost,
       GLOSSARY_IDS.foresee,
       GLOSSARY_IDS.reclaim,
-      GLOSSARY_IDS.materialize,
-      GLOSSARY_IDS.void,
       GLOSSARY_IDS.nightTrigger,
       GLOSSARY_IDS.essence,
       GLOSSARY_IDS.startingEssence,
@@ -78,6 +76,11 @@ describe("glossary", () => {
   it("resolves supported through the canonical Support entry", () => {
     const support = requireGlossaryEntry("support");
     expect(lookupGlossaryTerm("supported")).toBe(support);
+  });
+
+  it("does not define ordinary Materialize or Void glossary terms", () => {
+    expect(lookupGlossaryTerm("Materialize")).toBeUndefined();
+    expect(lookupGlossaryTerm("Void")).toBeUndefined();
   });
 
   it("gates an arrow-prefixed entry to the trigger form", () => {

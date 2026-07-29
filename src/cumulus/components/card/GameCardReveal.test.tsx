@@ -127,13 +127,8 @@ describe("GameCard reveal contract", () => {
       source?.getAttribute("aria-describedby") ?? "",
     )?.textContent ?? "";
 
-    expect(description).not.toContain(
-      glossary.requireGlossaryEntry(glossary.GLOSSARY_IDS.materialize)
-        .definition,
-    );
-    expect(description).not.toContain(
-      glossary.requireGlossaryEntry(glossary.GLOSSARY_IDS.void).definition,
-    );
+    expect(description).not.toContain("Put a character into play");
+    expect(description).not.toContain("Your discard pile");
     expect(description).toContain(
       glossary.requireGlossaryEntry("materialized-trigger").definition,
     );

@@ -85,6 +85,29 @@ describe("Dreamsign", () => {
     expect(description?.textContent).toContain(entry.definition);
   });
 
+  it("omits ordinary Materialize and Void definitions from rules-text reveals", () => {
+    const sign = makeDreamsign({
+      name: "Summoning sign",
+      effectDescription: "Materialize a figment from your void.",
+    });
+    const { container, root } = mountInto(
+      <Dreamsign dreamsign={sign} sizePx={64} />,
+    );
+    const tile = container.querySelector<HTMLElement>(
+      '[data-testid="dreamsign-art-tile"]',
+    );
+    const description = document.getElementById(
+      tile?.getAttribute("aria-describedby") ?? "",
+    );
+
+    expect(description?.textContent).not.toContain("Put a character into play");
+    expect(description?.textContent).not.toContain("Your discard pile");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it.each([
     {
       id: "553D2317-32F9-47BC-BAE0-5018CA26D56A",

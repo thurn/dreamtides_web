@@ -80,8 +80,6 @@ export const GLOSSARY_IDS = {
   exhaustCost: "exhaust-cost",
   foresee: "foresee",
   reclaim: "reclaim",
-  materialize: "materialize",
-  void: "void",
   nightTrigger: "night-trigger",
   essence: "essence",
   startingEssence: "starting-essence",

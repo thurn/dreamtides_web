@@ -26,6 +26,12 @@ function entry(
 }
 
 describe("glossaryDefinitionsCardModel", () => {
+  it("omits ordinary Materialize and Void definitions from rules-text reveals", () => {
+    expect(
+      rulesTextDefinitionCards("Materialize a character from your void."),
+    ).toEqual([]);
+  });
+
   it("builds the Challenge trigger's hover definition card", () => {
     expect(rulesTextDefinitionCards("▸Challenge: Draw a card.")).toEqual([
       {
