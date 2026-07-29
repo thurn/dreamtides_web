@@ -305,6 +305,7 @@ function GuideScene({
   readonly tutorialVisible: boolean;
   readonly desktop?: boolean;
 }) {
+  const hasTutorial = view.tutorial !== undefined;
   return (
     <div
       data-revelation-guide=""
@@ -317,17 +318,48 @@ function GuideScene({
         pointerEvents: "none",
       }}
     >
+      <img
+        src={guideUrl}
+        alt={view.guide.name}
+        data-testid="revelation-guide-art"
+        draggable={false}
+        style={{
+          position: "absolute",
+          top: desktop ? "auto" : token("--space-4"),
+          bottom: desktop ? `calc(-1 * ${token("--space-8")})` : "auto",
+          left: desktop
+            ? "clamp(-72px, -4vw, -24px)"
+            : hasTutorial
+              ? `calc(-1 * ${token("--space-6")})`
+              : "calc(-1 * (var(--space-12) + var(--space-4)))",
+          width: desktop
+            ? "clamp(320px, 29vw, 430px)"
+            : hasTutorial
+              ? "38vw"
+              : "62vw",
+          height: desktop
+            ? "min(78dvh, 720px)"
+            : hasTutorial
+              ? "30dvh"
+              : "70dvh",
+          objectFit: "contain",
+          objectPosition: desktop ? "50% 100%" : "50% 0%",
+          userSelect: "none",
+        }}
+      />
       {view.tutorial !== undefined ? (
         tutorialVisible ? (
           <div
             data-revelation-site-tutorial=""
             style={{
               position: "absolute",
-              top: desktop ? "18%" : token("--space-4"),
-              left: desktop ? token("--space-4") : token("--space-3"),
-              right: desktop ? token("--space-4") : token("--space-3"),
-              width: `min(calc(100% - (${token("--space-4")} * 2)), ${String(view.tutorial.bubbleWidth)}px)`,
-              margin: "0 auto",
+              top: desktop
+                ? `calc(-1 * ${token("--space-12")})`
+                : token("--space-4"),
+              left: desktop ? "calc(100% - 240px)" : "34vw",
+              width: desktop
+                ? `min(calc(100vw - (${token("--space-4")} * 2)), ${String(view.tutorial.bubbleWidth)}px)`
+                : `calc(66vw - ${token("--space-3")})`,
               transform: `translate(${String(view.tutorial.horizontalOffset)}px, ${String(view.tutorial.verticalOffset)}px)`,
             }}
           >
@@ -340,43 +372,23 @@ function GuideScene({
           </div>
         ) : null
       ) : (
-        <>
-          <img
-            src={guideUrl}
-            alt={view.guide.name}
-            draggable={false}
-            style={{
-              position: "absolute",
-              top: desktop ? "auto" : token("--space-4"),
-              bottom: desktop ? `calc(-1 * ${token("--space-8")})` : "auto",
-              left: desktop
-                ? "clamp(-72px, -4vw, -24px)"
-                : "calc(-1 * (var(--space-12) + var(--space-4)))",
-              width: desktop ? "clamp(320px, 29vw, 430px)" : "62vw",
-              height: desktop ? "min(78dvh, 720px)" : "70dvh",
-              objectFit: "contain",
-              objectPosition: desktop ? "50% 100%" : "50% 0%",
-              userSelect: "none",
-            }}
+        <div
+          style={{
+            position: "absolute",
+            top: desktop ? "14%" : token("--space-5"),
+            left: desktop ? "clamp(202px, 18vw, 276px)" : "34vw",
+            right: desktop
+              ? 0
+              : `calc(${token("--space-5")} + ${token("--space-11")} + ${token("--space-3")})`,
+            maxWidth: desktop ? 380 : undefined,
+          }}
+        >
+          <SpeechBubble
+            speakerName={view.guide.name}
+            text={view.guide.line}
+            testId="revelation-speech-bubble"
           />
-          <div
-            style={{
-              position: "absolute",
-              top: desktop ? "14%" : token("--space-5"),
-              left: desktop ? "clamp(202px, 18vw, 276px)" : "34vw",
-              right: desktop
-                ? 0
-                : `calc(${token("--space-5")} + ${token("--space-11")} + ${token("--space-3")})`,
-              maxWidth: desktop ? 380 : undefined,
-            }}
-          >
-            <SpeechBubble
-              speakerName={view.guide.name}
-              text={view.guide.line}
-              testId="revelation-speech-bubble"
-            />
-          </div>
-        </>
+        </div>
       )}
     </div>
   );

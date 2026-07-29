@@ -119,6 +119,9 @@ describe("DreamsignRevelationScreen", () => {
     expect(
       container.querySelector('[data-testid="revelation-site-tutorial-dialogue"]'),
     ).toBeNull();
+    expect(
+      container.querySelector('[data-testid="revelation-guide-art"]'),
+    ).not.toBeNull();
     expect(container.querySelector('[data-testid="revelation-speech-bubble"]'))
       .toBeNull();
     act(() => {
@@ -135,6 +138,9 @@ describe("DreamsignRevelationScreen", () => {
         ?.textContent,
     ).toContain("A Dreamsign gives ongoing benefits.");
     expect(onTutorialShown).toHaveBeenCalledOnce();
+    expect(
+      container.querySelector('[data-testid="revelation-guide-art"]'),
+    ).not.toBeNull();
     expect(container.querySelector('[data-testid="revelation-speech-bubble"]'))
       .toBeNull();
     expect(container.querySelectorAll("[data-revelation-option]")).toHaveLength(3);
