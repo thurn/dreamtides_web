@@ -32,7 +32,6 @@ export function HostedPlaytestShell({
   const canTakeControl =
     connectedClientIds !== null &&
     !connectedClientIds.includes(controllerClientId);
-  const title = canTakeControl ? "Player Disconnected" : "Watching";
 
   const takeControl = (): void => {
     if (!canTakeControl) return;
@@ -57,29 +56,27 @@ export function HostedPlaytestShell({
       >
         {children}
       </div>
-      <div className="cumulus hosted-playtest-shell__status">
-        <GlassPanel
-          title={title}
-          headerSpacing="compact"
-          footer={
-            canTakeControl ? (
+      {canTakeControl ? (
+        <div className="cumulus hosted-playtest-shell__status">
+          <GlassPanel
+            title="Player Disconnected"
+            headerSpacing="compact"
+            footer={
               <GlassButton
                 label="Take Control"
                 variant="accent"
                 placement="onGlass"
                 onPress={takeControl}
               />
-            ) : undefined
-          }
-          testId="hosted-playtest-status"
-        >
-          <p className="hosted-playtest-shell__message">
-            {canTakeControl
-              ? "The playtest is paused. Take control when you are ready to continue."
-              : "You are seeing the controller’s shared playtest in real time."}
-          </p>
-        </GlassPanel>
-      </div>
+            }
+            testId="hosted-playtest-status"
+          >
+            <p className="hosted-playtest-shell__message">
+              The playtest is paused. Take control when you are ready to continue.
+            </p>
+          </GlassPanel>
+        </div>
+      ) : null}
     </div>
   );
 }

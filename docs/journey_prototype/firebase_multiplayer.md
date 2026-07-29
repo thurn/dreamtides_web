@@ -196,7 +196,8 @@ state without starting Firebase.
 3. Open that URL in a second browser session and confirm both clients show two
    connected participants.
 4. Make the first tutorial gameplay move in one client. Confirm it becomes the
-   controller and the second client shows the inert **Watching** panel.
+   controller and the second client remains on the shared screen with player
+   interaction inert.
 5. Open a draft site, pick a card in one client, and confirm the other client
    advances to the same next offer and deck.
 6. Trigger two valid actions from separate clients and confirm both appear in

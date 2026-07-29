@@ -93,7 +93,7 @@ describe("HostedPlaytestShell", () => {
     document.body.innerHTML = "";
   });
 
-  it("renders shared observer content inert while the controller is present", () => {
+  it("renders shared observer content inert without extra chrome", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -106,7 +106,8 @@ describe("HostedPlaytestShell", () => {
     });
 
     expect(container.querySelector("[inert]")).not.toBeNull();
-    expect(container.textContent).toContain("Watching");
+    expect(container.textContent).toBe("Play");
+    expect(container.textContent).not.toContain("Player Disconnected");
     expect(container.textContent).not.toContain("Take Control");
     act(() => root.unmount());
   });
