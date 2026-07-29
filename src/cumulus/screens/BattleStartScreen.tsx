@@ -268,7 +268,7 @@ function BattleStartPanel({
                 font: compact ? token("--t-title-sm") : token("--t-hero"),
               }}
             >
-              {view.dreamAvatar.name}
+              Battle vs. {view.dreamAvatar.name}
             </h1>
             {view.dreamAvatar.title !== "" && (
               <p
