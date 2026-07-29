@@ -80,6 +80,8 @@ export const GLOSSARY_IDS = {
   exhaustCost: "exhaust-cost",
   foresee: "foresee",
   reclaim: "reclaim",
+  materialize: "materialize",
+  void: "void",
   nightTrigger: "night-trigger",
   essence: "essence",
   startingEssence: "starting-essence",
@@ -145,8 +147,10 @@ export const GLOSSARY_INDEX: Readonly<Record<string, GlossaryCatalogEntry>> =
 export function glossaryRulesTextForms(
   entry: GlossaryCatalogEntry,
 ): readonly string[] {
-  return entry.rulesTextForms ??
-    (entry.matchesRulesText ? [entry.term, ...entry.variants] : []);
+  return (
+    entry.rulesTextForms ??
+    (entry.matchesRulesText ? [entry.term, ...entry.variants] : [])
+  );
 }
 
 /** Trigger arrow that can prefix a rules keyword. */

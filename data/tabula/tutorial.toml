@@ -373,7 +373,7 @@ delay = { card-seen = 1 }
 duration = 3
 bubbleWidth = 500
 match = { kind = "glossary", id = "banish" }
-text = "To [yellow]banish[/yellow] a card, remove it from the battle. It does not go to the void."
+text = "To [yellow]banish[/yellow] a card, remove it from the game. It does not go to the void."
 
 [[triggers]]
 id = "dissolve"
