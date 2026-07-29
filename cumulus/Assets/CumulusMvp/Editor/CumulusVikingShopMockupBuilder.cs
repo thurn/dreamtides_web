@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using CumulusMvp.Geometry;
+using CumulusMvp.Interaction;
 using CumulusMvp.Materials;
 using TMPro;
 using UnityEditor;
@@ -31,6 +32,9 @@ namespace CumulusMvp.Editor
         private const string ButtonName = "Reroll Button";
         private const string ButtonVisualName = "Reroll Button Visual";
         private const string ButtonLabelName = "Reroll Button Label";
+        private const string DreamsignTravelVisualName = "Dreamsign Travel Visual";
+        private const string DreamsignFeedbackVisualName = "Dreamsign Feedback Visual";
+        private const string DreamsignArtName = "Dreamsign Art";
         private const string PanelMeshPath =
             "Assets/CumulusMvp/Meshes/CumulusShopGlassPanel.asset";
         private const string ButtonMeshPath =
@@ -92,6 +96,7 @@ namespace CumulusMvp.Editor
                 viewWidth * HorizontalViewportInset -
                 panelWidth * 0.5f;
 
+            ReconcileCameraInteraction(camera);
             GameObject root = EnsureChild(camera.transform, RootName);
             KeepOnlyComponents(root, typeof(Transform));
             SetLocalTransform(
@@ -111,7 +116,7 @@ namespace CumulusMvp.Editor
                 font,
                 panelWidth,
                 viewHeight);
-            ReconcileDreamsigns(root.transform, viewHeight);
+            ReconcileDreamsigns(root.transform, camera, viewHeight);
             ReconcileButton(
                 root.transform,
                 buttonMesh,
@@ -199,7 +204,18 @@ namespace CumulusMvp.Editor
                 new Vector3(width / mesh.bounds.size.x, height / mesh.bounds.size.y, 1f));
         }
 
-        private static void ReconcileDreamsigns(Transform parent, float viewHeight)
+        private static void ReconcileCameraInteraction(Camera camera)
+        {
+            CumulusPointerInteractor interactor =
+                EnsureComponent<CumulusPointerInteractor>(camera.gameObject);
+            SetObjectReference(interactor, "interactionCamera", camera);
+            interactor.enabled = true;
+        }
+
+        private static void ReconcileDreamsigns(
+            Transform parent,
+            Camera camera,
+            float viewHeight)
         {
             Mesh quad = null;
             float size = viewHeight * DreamsignViewportSize;
@@ -213,23 +229,9 @@ namespace CumulusMvp.Editor
                 KeepOnlyComponents(
                     dreamsign,
                     typeof(Transform),
-                    typeof(MeshFilter),
-                    typeof(MeshRenderer));
-                RemoveChildren(dreamsign.transform);
-
-                MeshFilter filter = EnsureComponent<MeshFilter>(dreamsign);
-                if (quad == null)
-                {
-                    quad = ResolveQuadMesh(filter.sharedMesh);
-                }
-                filter.sharedMesh = quad;
-
-                MeshRenderer renderer = EnsureComponent<MeshRenderer>(dreamsign);
-                renderer.sharedMaterial = RequireAsset<Material>(
-                    $"Assets/CumulusMvp/Materials/Dreamsigns/{id}.mat");
-                ConfigureRenderer(renderer, ShadowCastingMode.On, true);
-                renderer.motionVectorGenerationMode =
-                    MotionVectorGenerationMode.ForceNoMotion;
+                    typeof(BoxCollider),
+                    typeof(CumulusPressable),
+                    typeof(CumulusDreamsignAcquisitionMotion));
 
                 float x = (index - 1) * stride;
                 Quaternion rotation = index switch
@@ -242,7 +244,92 @@ namespace CumulusMvp.Editor
                     dreamsign.transform,
                     new Vector3(x, viewHeight * DreamsignViewportY, ContentDepth),
                     rotation,
+                    Vector3.one);
+
+                BoxCollider collider = EnsureComponent<BoxCollider>(dreamsign);
+                collider.enabled = true;
+                collider.center = Vector3.zero;
+                collider.size = new Vector3(size, size, 0.12f);
+                collider.isTrigger = false;
+
+                GameObject travelVisual = EnsureChild(
+                    dreamsign.transform,
+                    DreamsignTravelVisualName);
+                KeepOnlyComponents(travelVisual, typeof(Transform));
+                SetLocalTransform(
+                    travelVisual.transform,
+                    Vector3.zero,
+                    Quaternion.identity,
+                    Vector3.one);
+
+                GameObject feedbackVisual = EnsureChild(
+                    travelVisual.transform,
+                    DreamsignFeedbackVisualName);
+                KeepOnlyComponents(feedbackVisual, typeof(Transform));
+                SetLocalTransform(
+                    feedbackVisual.transform,
+                    Vector3.zero,
+                    Quaternion.identity,
+                    Vector3.one);
+
+                GameObject art = EnsureChild(feedbackVisual.transform, DreamsignArtName);
+                KeepOnlyComponents(
+                    art,
+                    typeof(Transform),
+                    typeof(MeshFilter),
+                    typeof(MeshRenderer));
+                RemoveChildren(art.transform);
+                SetLocalTransform(
+                    art.transform,
+                    Vector3.zero,
+                    Quaternion.identity,
                     new Vector3(size, size, 1f));
+
+                MeshFilter filter = EnsureComponent<MeshFilter>(art);
+                if (quad == null)
+                {
+                    quad = ResolveQuadMesh(filter.sharedMesh);
+                }
+                filter.sharedMesh = quad;
+
+                MeshRenderer renderer = EnsureComponent<MeshRenderer>(art);
+                renderer.sharedMaterial = RequireAsset<Material>(
+                    $"Assets/CumulusMvp/Materials/Dreamsigns/{id}.mat");
+                ConfigureRenderer(renderer, ShadowCastingMode.On, true);
+                renderer.motionVectorGenerationMode =
+                    MotionVectorGenerationMode.ForceNoMotion;
+
+                RemoveUnexpectedChildren(
+                    feedbackVisual.transform,
+                    new HashSet<string>(StringComparer.Ordinal) { DreamsignArtName });
+                RemoveUnexpectedChildren(
+                    travelVisual.transform,
+                    new HashSet<string>(StringComparer.Ordinal)
+                    {
+                        DreamsignFeedbackVisualName,
+                    });
+                RemoveUnexpectedChildren(
+                    dreamsign.transform,
+                    new HashSet<string>(StringComparer.Ordinal)
+                    {
+                        DreamsignTravelVisualName,
+                    });
+
+                CumulusPressable pressable = EnsureComponent<CumulusPressable>(dreamsign);
+                SetString(pressable, "semanticId", "shop-dreamsign:" + id);
+                SetObjectReference(pressable, "hitCollider", collider);
+                SetObjectReference(pressable, "visual", feedbackVisual.transform);
+                pressable.enabled = true;
+
+                CumulusDreamsignAcquisitionMotion motion =
+                    EnsureComponent<CumulusDreamsignAcquisitionMotion>(dreamsign);
+                SetString(motion, "dreamsignId", id);
+                SetObjectReference(motion, "targetCamera", camera);
+                SetObjectReference(motion, "pressable", pressable);
+                SetObjectReference(motion, "hitCollider", collider);
+                SetObjectReference(motion, "travelVisual", travelVisual.transform);
+                SetVector2(motion, "targetViewport", new Vector2(0.94f, 0.1f));
+                motion.enabled = true;
             }
         }
 
@@ -415,6 +502,36 @@ namespace CumulusMvp.Editor
         {
             T retained = target.GetComponent<T>();
             return retained != null ? retained : target.AddComponent<T>();
+        }
+
+        private static void SetObjectReference(
+            UnityEngine.Object target,
+            string propertyName,
+            UnityEngine.Object value)
+        {
+            var serialized = new SerializedObject(target);
+            serialized.FindProperty(propertyName).objectReferenceValue = value;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void SetString(
+            UnityEngine.Object target,
+            string propertyName,
+            string value)
+        {
+            var serialized = new SerializedObject(target);
+            serialized.FindProperty(propertyName).stringValue = value;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static void SetVector2(
+            UnityEngine.Object target,
+            string propertyName,
+            Vector2 value)
+        {
+            var serialized = new SerializedObject(target);
+            serialized.FindProperty(propertyName).vector2Value = value;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private static void KeepOnlyComponents(GameObject target, params Type[] expectedTypes)
