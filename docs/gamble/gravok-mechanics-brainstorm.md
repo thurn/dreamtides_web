@@ -1,801 +1,770 @@
-# Gravok Gamble Mechanics Brainstorm
-
-Status: unified exploratory design proposal, not an implementation
-specification.
-
-Gravok runs the **Gamble** site from Farpoint Station. His site should feel like
-a collection of wagers rather than a shop with uncertain prices: the player
-knows what is at stake, understands the outcome envelope, and chooses how much
-variance or commitment to accept.
-
-This is the authoritative design catalog for Gravok's Gamble mechanics. It
-contains both the foundational wagers and the more experimental directions;
-the catalog is a content pool, not a recommendation to ship every proposal at
-once.
-
-The proposals draw primarily from the supplied Monster Train and Slay the Spire
-event catalog, with additional patterns from Roguebook, Wildfrost, and Banners
-of Ruin. The broader
-[push-your-luck survey](../journey2/gambling-push-your-luck-mechanics.md)
-provides supporting genre context.
-
-## Executive recommendation
-
-Gravok should not have one universal dice game. Build a small family of wager
-topologies that can wrap state-aware rewards:
-
-1. **A one-shot odds choice** for a fast, legible baseline.
-2. **A bank-or-press sequence** for the site's signature emotional peak.
-3. **An asset-collateral wager** in which the player chooses what they might
-   lose.
-4. **A lightweight information minigame** with no dexterity requirement.
-5. **A deferred contract** whose result depends on later player behavior.
-
-The recommended launch set is **Crystal Roll**, **Pressure Vault**, **Figment
-Reactor**, **Contraband Array**, and **Deck Cut**. Together they establish a
-fast one-shot wager, the site's signature bank-or-press scene, chosen
-collateral, purchasable information, and player-shaped odds. **Escrow Orbit**
-is the recommended first expansion after the game supports deferred contracts.
-
-The other proposals are alternate content and later design space. In
-particular, **The Orbit Book** is a richer prize-driven successor to Crystal
-Roll, while **Salvage Lock** is a gentler content variant of Pressure Vault.
-They should coexist as distinct encounters only if testing confirms that their
-different stakes and loss envelopes create meaningfully different decisions.
-
-## What Dream Augury already provides
-
-The current Dream Augury implementation is a strong prize generator but not a
-wager generator.
-
-- The Augury builds exactly two free offers, `A` and `B`. The player accepts
-  one or declines, and either decision completes the site.
-- Seventeen reward archetypes are grouped into six families: grant, improve,
-  remove, duplicate, dreamsign, and site. The second offer must come from a
-  different family than the first.
-- Eligibility and targeting react to the player's run. Card rewards are drawn
-  from the resolved draft pool when available; fit, card quality, deck
-  centrality, and Dreamsign profiles steer offers toward plausible top-band
-  candidates.
-- Rewards include individual cards, card drafts, card bundles, transfigured
-  cards, card modifications, purges, purge-and-replace offers, duplication,
-  Dreamsigns, and new sites.
-- Generation is deterministic from the journey seed, site id, deck, held
-  Dreamsigns, and debug nonce. Accepting regenerates the encounter and checks
-  its signature, offer id, archetype, and selected candidate before applying
-  the payload.
-- Offer generation logs the eligible archetypes, roll attempts, selected
-  families, candidate scores, bands, and targets. This makes a shown reward
-  reconstructable from a production log.
-- The persisted Augury runtime is intentionally small: completion plus debug
-  reroll and forced-archetype fields. The encounter itself is derived from
-  current journey state.
-- Gamble currently routes to the shared work-in-progress site screen and has
-  no wager runtime.
-
-The clean reuse boundary is:
-
-| Reuse from Augury                                   | Add for Gamble                                                                 |
-| --------------------------------------------------- | ------------------------------------------------------------------------------ |
-| State-aware reward archetypes and score signals     | Stakes, affordability, odds, and payout scaling                                |
-| Card/Dreamsign chooser models                       | Multi-step phases such as commit, reveal, press, and bank                      |
-| Deterministic signatures and stale-action rejection | Persisted pots, collateral, escrow, contracts, and resolved rolls              |
-| Atomic reward payloads and composite rewards        | Cost and liability effects such as essence loss, Banes, and temporary rules    |
-| Explainability traces                               | Wager logs containing published odds, the actual roll, and before/after assets |
-
-The Gamble site can therefore use Augury archetypes as a **prize oracle**. It
-should ask for a suitable prize or prize family, place that prize inside a
-wager topology, and freeze the combined wager before the player commits. It
-should not take an ordinary Augury offer and apply a generic numeric
-multiplier: duplicating an arbitrary payload can become invalid after its first
-child resolves, and different reward families scale in different ways.
-
-The current Augury context carries essence but its generator does not use it.
-Gamble will need explicit stake eligibility and affordability. It also needs a
-broader effect vocabulary than the Augury payload currently exposes, even
-though the journey reducer already represents some useful future-facing effects
-such as temporary Banes, future battle-reward reductions, shop modifiers, and
-Dreamscape site modifiers.
-
-## Site identity
-
-The four offer-and-decision sites closest to this design space have a useful
-division. They are a subset of the game's guide-led sites:
+# Gravok's Casino: Gamble Site Design Proposal
+
+Status: concrete rules and first-playtest tuning proposal.
+
+Gravok owns the casino aboard Farpoint Station. When Gamble appears elsewhere,
+he runs a compact traveling table; in Farpoint, the player enters his full
+casino floor and plays the enhanced version of that table.
+
+This document specifies the wager, exact odds, exact payouts, eligibility, and
+Farpoint variant for every proposed table. The listed values are the v0 balance
+values to implement and test. Changing one requires a new tuning version so a
+production log can always reconstruct the rules the player saw.
+
+The supplied Monster Train and Slay the Spire event catalog informs the
+structures: The Joust supplies the two-line bet, Scrap Ooze and Clipped Wings
+supply the press-or-bank rhythm, Match and Keep supplies the memory table, and
+Monster Train's follow-up events supply the deferred tickets.
+
+## Portfolio decision
+
+Build these five tables first:
+
+| Table                | Casino fantasy                               | System proved                                    |
+| -------------------- | -------------------------------------------- | ------------------------------------------------ |
+| **Crystal Roll**     | craps pass line and hard way                 | stakes, published odds, deterministic resolution |
+| **Pressure Vault**   | blackjack-style hit or stand                 | persisted pot, press, bank, and bust             |
+| **Figment Reactor**  | double-or-nothing collateral table           | selected deck-entry custody and atomic mutation  |
+| **Contraband Array** | three-card monte with purchasable peeks      | frozen hidden information                        |
+| **Deck Cut**         | betting on the composition of one's own deck | exact state-derived odds                         |
+
+This is the launch roster. **Escrow Orbit** is the first expansion table after
+the journey supports custody across battles. **The Orbit Book** follows when
+Gamble can consume the full Dream Augury prize generator. The remaining tables
+are authored expansion content, not launch dependencies.
+
+## House rules shared by every table
+
+### Published terms
+
+- A **buy-in** is removed when the player commits. The player can leave for free
+  until that point.
+- An essence **payout** is the total essence granted after a win. It does not
+  include a separately returned buy-in.
+- A percentage roll uses a deterministic integer from 1 through 100. A listed
+  35% result occupies 1–35; the other result occupies 36–100. A table with
+  equal discrete outcomes, such as the Sixfold Wheel, draws a uniform outcome
+  index instead.
+- Every random table shows all outcome classes and their exact probabilities
+  before commitment. A deck-derived table shows both the matching entry count
+  and the reduced fraction, such as `6 / 20 = 30%`.
+- A table's wager manifest freezes its offered objects, odds, liabilities, and
+  resolved rolls. Reloading or reconnecting cannot reroll it.
+- **Farpoint table** means the replacement rules used when the Gamble site is
+  enhanced in Farpoint Station. It does not stack with the traveling-table
+  values.
+- If the player lacks the essence, target, pool inventory, deck room, or legal
+  battle modifier required by a table, that table is ineligible for the visit.
+  The generator does not shrink a chooser or substitute an unlisted reward.
+
+### Exact reward recipes
+
+Several tables refer to one of these frozen reward recipes. These names specify
+both the candidate generator and the player-facing choice:
+
+| Recipe                      | Exact effect                                                                                                                                                                |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Card draft**              | Generate exactly 3 distinct, unowned, non-starter cards from the resolved draft pool with the Dream Augury `fit_card_draft` scorer; show all 3 and add the player's choice. |
+| **Strong card**             | Generate and show exactly 1 unowned, non-starter card with the Dream Augury `strong_card` scorer; add it when awarded.                                                      |
+| **Transfiguration service** | Generate exactly 4 legal `(deck entry id, non-Perfected transfiguration)` pairs with the Dream Augury transfiguration scorer; show all 4 and apply the player's choice.     |
+| **Duplication service**     | Generate exactly 4 legal deck entries with the Dream Augury duplication scorer; show all 4 and duplicate the player's choice once.                                          |
+| **Purge service**           | Let the player choose and permanently remove exactly 1 legal deck entry. Banes are legal; the deck floor still applies.                                                     |
+| **Dreamsign draft**         | Generate exactly 3 distinct, unheld Dreamsigns with the Dream Augury dreamsign-match scorer; show all 3 and grant the player's choice.                                      |
+
+Candidates are frozen by UUID and, for owned cards, deck entry id. Names are
+resolved only for display. If a recipe requires three or four candidates, the
+table is eligible only when that full count can be generated.
+
+### Casino presentation
+
+Gravok calls essence **chips**, a commit is a **bet**, a result is a **call**,
+and leaving is **stepping away from the table**. Each table has a physical
+centerpiece—crystal dice, a wheel, cards, cargo cases, or a betting terminal.
+The rules panel reads like a casino placard: buy-in, winning calls, losing
+calls, and payout. Gravok announces the result as a dealer; he does not describe
+the underlying random-number generator.
+
+Farpoint surrounds the same game with a permanent pit, spectators, illuminated
+odds boards, and a gold **HOME TABLE** plaque. Its mechanical advantage is
+written on that plaque so the player can compare it directly with the traveling
+version.
+
+## Immediate and press-your-luck tables
+
+### 1. Crystal Roll — the craps table
+
+Gravok rolls two faceted crystals down a zero-gravity rail. The player buys one
+50-essence chip and places it on one line:
+
+| Bet           | Win |      Payout |           Lose |
+| ------------- | --: | ----------: | -------------: |
+| **Pass line** | 65% | 130 essence | 35%: no payout |
+| **Hard way**  | 25% | 330 essence | 75%: no payout |
 
-- **Dream Augury:** choose one of two pure upsides.
-- **Tempting Offer:** exchange a known cost for a known reward.
-- **Gamble:** accept uncertainty, escalation, or a performance condition in
-  exchange for a larger reward.
-- **Temporal Fork:** choose between time horizons or temporary effects.
+Exactly one roll resolves the visit. The two bets have the same buy-in and only
+the chosen line is rolled.
 
-If both cost and reward are fully determined at the moment of acceptance, the
-idea usually belongs to Maddox. If the only tension is waiting, it usually
-belongs to Layaway. A Gravok event earns its place by asking the player to price
-variance, decide when to stop, risk chosen collateral, act under partial
-information, or make a falsifiable bet about future play.
+**Farpoint table — House Chip.** The buy-in is 0. The pass line wins 70% and
+pays 150 essence; the hard way wins 30% and pays 360 essence.
 
-The canonical site definitions in [Journeys](../journeys/journeys.md) assign
-temporary deck or game-rule changes and future rewards to Temporal Fork.
-Gravok may use the same state primitives only when uncertainty or a performance
-condition is the heart of the scene. Remove that wager and the content should
-route to Layaway instead.
+### 2. The Orbit Book — the sportsbook
 
-## Design contracts
+A holographic tote board presents three face-up prize tickets. The player buys
+one ticket for 50 essence:
 
-### Publish the important uncertainty
+| Ticket                | Win | Payout                                 |           Lose |
+| --------------------- | --: | -------------------------------------- | -------------: |
+| **Low orbit**         | 70% | Card draft                             | 30%: no payout |
+| **Transfer orbit**    | 42% | Transfiguration service and 50 essence | 58%: no payout |
+| **Escape trajectory** | 20% | Dreamsign draft and 120 essence        | 80%: no payout |
 
-Show exact odds when the game can express them cleanly. When specific outcomes
-remain hidden, show the complete outcome classes and their counts: “one clean
-crate, two crates with a Bane,” not “something bad may happen.” Randomness
-should test judgment under uncertainty rather than the player's trust in the
-UI.
+The prize manifests are frozen and previewable before the player chooses a
+ticket. One ticket receives one roll.
 
-### Let the player own the risk
+**Farpoint table — Chairman's Book.** The buy-in is 0. Low orbit wins 80% and
+pays a Card draft plus 40 essence; transfer orbit wins 52% and pays a
+Transfiguration service plus 80 essence; escape trajectory wins 28% and pays a
+Dreamsign draft plus 150 essence.
 
-Prefer a chosen card, chosen Dreamsign, selected rule, or selected risk tier
-over “lose a random valuable thing.” The player should be able to explain why
-they made the bet even when the roll goes badly.
+### 3. Loaded Blessing — the comp desk
 
-### Separate attrition from collapse
+Gravok offers a guaranteed Dreamsign draft as a casino comp, then asks the
+player which liability the house may attach. The player chooses one row before
+the Dreamsign:
 
-Attrition events repeatedly charge a known cost. Collapse events can erase a
-banked pot or convert it into a liability. Both are useful, but they produce
-very different moods and should be labeled and tuned separately.
+| Marker                | Clean call | Liability call                                        |
+| --------------------- | ---------: | ----------------------------------------------------- |
+| **Credit marker**     |        70% | 30%: lose 100 essence                                 |
+| **Nightmare marker**  |        80% | 20%: gain 1 Nightmare Bane                            |
+| **Collateral marker** |        90% | 10%: purge the chosen eligible non-starter deck entry |
 
-### Give pressing and stopping real value
+The Dreamsign is granted on either call. Credit is available only with at least
+100 essence. Collateral is selected and frozen before commitment.
 
-Each step of a push-your-luck event should change both the possible return and
-the reason to stop. If taking every step is obviously correct, it is a reward
-ladder rather than a wager.
+**Farpoint table — Owner's Comp.** The reward is a Dreamsign draft plus 50
+essence. The clean-call chances are 80% for Credit, 90% for Nightmare, and 95%
+for Collateral; the listed liabilities are unchanged.
 
-### Price catastrophe with a risk premium
+### 4. Pressure Vault — hit or stand
 
-A 25% chance to gain a Bane feels worse than one quarter of a Bane's nominal
-value. Balance with expected value plus a variance premium, and keep a few
-high-impact losses rare enough to stay memorable.
+The player pays a 30-essence buy-in. Gravok deals pressure cards against a
+sealed chip vault. Lock 1 opens automatically. After each open lock the player
+may **stand** and take the current pot, or **hit** the next lock:
 
-### Protect the run from accidental invalidation
+| Lock attempted |               Pot after success | Bust chance |
+| -------------- | ------------------------------: | ----------: |
+| 1              |                      60 essence |          0% |
+| 2              |                     150 essence |         15% |
+| 3              |                     270 essence |         35% |
+| 4              | 450 essence and Dreamsign draft |         60% |
 
-Every gamble needs a decline path before commitment. Losses should respect deck
-floors, Dreamsign capacity, essence affordability, and target availability.
-The highest-risk branches may be severe, but the player should never discover
-after clicking that the game selected an illegal or irreplaceable target.
+A bust awards no essence and adds exactly 1 Nightmare Bane. A successful lock
+replaces the pot with the listed amount; it does not add that amount to the
+previous pot.
 
-### Make the house attractive
+**Farpoint table — Gravok Stands Soft.** The buy-in is 0. Pots are
+80/180/310/500 essence and the four bust chances are 0%/10%/25%/45%. Lock 4
+also grants a Dreamsign draft. A bust still awards no essence and adds 1
+Nightmare.
 
-A Gamble site consumes a site visit and exposes the run to variance, so its
-average return should be positive before considering player preference for
-reliability. “The house always wins” is good characterization and poor route
-balance if declining every Gravok visit is optimal.
+### 5. Salvage Lock — the progressive slots
 
-## Immediate and push-your-luck wagers
+The player pays 20 essence to pull a bank of four cargo reels. A successful
+reel stages its prize in the unbanked tray. The player may collect the entire
+tray or pull the next reel:
 
-### 1. Crystal Roll
+| Reel | Bust chance | Prize added after success |
+| ---- | ----------: | ------------------------- |
+| 1    |          0% | 60 essence                |
+| 2    |         20% | Card draft                |
+| 3    |         40% | Transfiguration service   |
+| 4    |         60% | Dreamsign draft           |
 
-The simplest Gravok encounter asks for a 50 essence ante, then offers two
-published bets:
+A bust discards every staged prize and ends the visit. It does not affect
+assets the player owned before entering. Rewards with a choice are selected
+only after the player collects the tray.
 
-- **Safe crystal:** 65% chance to receive 120 essence; otherwise the ante is
-  lost.
-- **Long crystal:** 25% chance to receive 320 essence; otherwise the ante is
-  lost.
+**Farpoint table — Locked First Reel.** The buy-in is 0 and bust chances are
+0%/10%/25%/45%. The 60 essence from reel 1 enters a locked tray immediately;
+later busts discard reels 2–4 but still pay those 60 essence. A successful
+fourth reel also adds 80 essence to the unbanked tray.
 
-The values are illustrative tuning targets. What matters is that the player can
-compare a reliable modest return with a volatile jackpot in seconds. Because
-both branches use the same stake and reward type, Crystal Roll is the cleanest
-way to teach Gravok's vocabulary, verify odds presentation, and establish the
-site's deterministic resolution and logging contracts.
+### 6. Guaranteed Burn — the progressive ticket
 
-Crystal Roll should remain a fast encounter rather than grow prize families or
-side rules. At Farpoint, Gravok waives the ante and raises both payouts while
-preserving their odds. The Orbit Book is the appropriate evolution when this
-one-dimensional wager becomes too repetitive.
+Gravok sells up to four attempts at the same frozen prize: one Dreamsign draft
+and one Transfiguration service. The player pays before each attempt and may
+leave after a miss:
 
-### 2. The Orbit Book
-
-Gravok shows three face-up prize contracts generated from different reward
-families. Each has a published chance and payout scale:
-
-- **Low orbit:** high chance, ordinary reward.
-- **Transfer orbit:** medium chance, enhanced reward.
-- **Escape trajectory:** low chance, exceptional or composite reward.
-
-The player may place one fixed essence stake on one contract or decline. A miss
-loses the stake. This is the direct descendant of Slay the Spire's **The
-Joust**, but the object of the bet is a reward family the current deck values
-rather than only a gold multiple.
-
-Variant: give the player five equal chips and let them split the stake across
-the three contracts. Each funded contract receives one independent roll at its
-published chance. Chips on successful contracts pay their listed multiplier;
-chips on failed contracts are lost. Diversifying chips lowers variance while
-concentrating on the long shot creates the jackpot.
-
-### 3. Loaded Blessing
-
-A valuable prize is guaranteed, but its rider is not. Before accepting, the
-player chooses one of three liability envelopes:
-
-- 70% no rider / 30% lose essence.
-- 80% no rider / 20% gain a Bane.
-- 90% no rider / 10% lose the selected collateral card.
-
-The prize stays constant, so the decision is purely about which kind of tail
-risk the run can absorb. This borrows the guaranteed-relic/random-curse shape
-of **The Mausoleum** and the “take the treasure, then choose the consequence”
-shape of **Golden Idol**.
-
-### 4. Pressure Vault
-
-Gravok seals essence behind a series of pressure locks. After each successful
-crack, the player may bank the entire pot or attempt the next lock:
-
-| Lock | Pot if opened | Collapse chance |
-| ---- | ------------: | --------------: |
-| 1    |    60 essence |              0% |
-| 2    |   140 essence |             15% |
-| 3    |   240 essence |             35% |
-| 4    |   380 essence |             60% |
-
-On collapse, the unbanked pot is lost and the player gains one disclosed Bane.
-The first lock guarantees a small floor, while each later lock increases both
-the return and the severity of walking away empty. These figures are starting
-points for testing, not final balance.
-
-Pressure Vault is Gravok's canonical high-drama bank-or-press encounter. Its
-identity is a single fungible pot and a sharp collapse penalty. At Farpoint,
-collapse chances drop by one tuning band and the final lock gains a larger pot;
-the possibility of losing the unbanked pot remains intact.
-
-### 5. Salvage Lock
-
-Gravok opens a derelict station one compartment at a time. Each successful
-search adds a visible reward to the unbanked haul. Before every new compartment
-the UI shows its collapse chance and the next possible reward tier. The player
-may bank the haul or press deeper.
-
-A collapse loses the unbanked haul and ends the visit; the player's existing
-assets remain safe. Later variants may add a small Bane or essence cleanup fee
-on the deepest compartments.
-
-This combines **Scrap Ooze**, **Dead Adventurer**, and Monster Train's
-**Clipped Wings**. It is the lower-severity, content-rich counterpart to
-Pressure Vault: the appeal is seeing a heterogeneous haul grow, while collapse
-threatens only that compartment's unbanked rewards.
-
-### 6. Guaranteed Burn
-
-The player pays for repeated attempts at one premium prize. Each miss increases
-the next attempt's cost and success chance; maximum commitment guarantees the
-prize.
-
-Example curve:
-
-| Attempt |        Cost | Chance this attempt |
+| Attempt |        Cost | Win on this attempt |
 | ------- | ----------: | ------------------: |
 | 1       |  30 essence |                 20% |
 | 2       |  50 essence |                 35% |
 | 3       |  80 essence |                 55% |
 | 4       | 120 essence |                100% |
 
-The player may leave after any miss. This combines Monster Train's **Archus**
-and **Cave of a Thousand Eyes** with Roguebook's escalating **Magic Carpet**
-odds and the three-attempt cap of Banners of Ruin's **Gambler**. The guarantee
-makes maximum commitment a budget decision instead of an unbounded streak of
-bad luck.
-
-### 7. The Sixfold Wheel
+A win grants both rewards and ends the visit. Earlier misses do not change the
+prize.
 
-The wheel contains six fully disclosed wedges built for the current run:
-
-- a strong reward;
-- a modest reward;
-- essence;
-- a useful card transformation;
-- an immediate liability;
-- a temporary rules liability.
-
-Before spinning, the player may pay essence to rotate one adjacent pair of
-wedges, replacing one liability with a weaker reward while also reducing the
-jackpot. The minigame is deciding whether to buy down variance, not timing a
-physical spinner.
-
-This keeps the spectacle of **Wheel of Change** and Roguebook's **Wheel of
-Chaos**, while adding one strategic action before the random resolution.
+**Farpoint table — Progressive Guarantee.** Attempt costs are 0/40/70/100
+essence and win chances are 25%/45%/70%/100%. The prize also includes 100
+essence.
 
-### 8. The Conveyor
-
-Gravok presents a deterministic reward line whose prices accelerate faster
-than its rewards. After every purchase, the player may stop or unlock the next
-offer:
+### 7. The Sixfold Wheel — roulette
 
-| Pull |        Cost | Guaranteed reward             |
-| ---- | ----------: | ----------------------------- |
-| 1    |  30 essence | one card chosen from four     |
-| 2    |  50 essence | one card from a stronger pool |
-| 3    |  70 essence | one card plus 60 essence      |
-| 4    | 100 essence | one Dreamsign                 |
+The player pays 20 essence and spins one wheel. Resolution draws a uniform
+integer from 1 through 6, so every wedge is exactly one outcome:
 
-The exact rewards are frozen before the first purchase. The tension is
-attrition rather than collapse: each pull is individually acceptable, but
-buying the entire line may consume the resources needed for later sites. The
-UI should keep total spend visible beside the next marginal cost so the wager
-is about budget discipline, not arithmetic.
+| Wedge           | Probability | Call                           |
+| --------------- | ----------: | ------------------------------ |
+| Crystal jackpot |        16⅔% | gain 180 essence               |
+| Card cage       |        16⅔% | gain a Card draft              |
+| Forge light     |        16⅔% | gain a Transfiguration service |
+| Clean break     |        16⅔% | gain a Purge service           |
+| Black crystal   |        16⅔% | gain 1 Nightmare Bane          |
+| House sweep     |        16⅔% | lose 100 essence               |
 
-The Conveyor belongs at Gamble because the player repeatedly decides whether
-to escalate exposure after seeing what they have already won. If tuning makes
-the whole sequence an obvious purchase, it has become a Tempting Offer and
-should be redesigned. At Farpoint, the first pull is free and the later reward
-tiers improve, while their escalating costs remain.
+Before spinning, the player may buy **wheel insurance** for 30 essence. It
+changes Black Crystal to “no effect,” House Sweep to “lose 40 essence,” and
+Crystal Jackpot to “gain 120 essence.” The other wedges stay fixed.
 
-### 9. Overclock Wager
+**Farpoint table — Complimentary Insurance.** The buy-in and wheel insurance
+both cost 0. Insurance leaves Crystal Jackpot at 180 essence and changes both
+liability wedges to “no effect.”
 
-Gravok places 80 essence in a capacitor. The player may cash out or overclock
-it through a visible sequence—80, 160, 320, then the 500 essence cap—gaining
-one Bane with every overclock.
+### 8. The Conveyor — the cash-out ladder
 
-There is no random roll. The risk is converting immediate wealth into
-cumulative deck pollution whose future cost depends on the run. Before each
-decision, the UI shows the next payout, every Bane that will be added, and the
-total Banes already accepted. This is a wager on whether the deck can absorb
-the liability, not a disguised purchase with an obscured price.
+Four face-up cases move past the betting window. Each purchase immediately
+grants its reward and reveals the next price; the player may cash out after any
+case:
 
-Overclock Wager is the deterministic extreme of Gravok's escalation identity.
-It should be tuned so at least two stopping points are defensible for common
-deck states. At Farpoint, the first overclock adds no Bane and the last tier
-may pay a non-essence premium when the essence cap would flatten the decision.
+| Case |        Cost | Guaranteed contents               |
+| ---- | ----------: | --------------------------------- |
+| 1    |  30 essence | 50 essence                        |
+| 2    |  60 essence | Card draft                        |
+| 3    | 100 essence | Transfiguration service           |
+| 4    | 150 essence | Dreamsign draft and Purge service |
 
-## Asset-collateral wagers
+All four manifests and prices are visible before case 1. There is no random
+roll; the wager is how much of a 340-essence ladder the player can afford to
+climb.
 
-### 10. Figment Reactor
+**Farpoint table — Casino Credit.** Case 1 is free. Cases 2–4 retain their
+costs. Case 4 also contains 100 essence.
 
-Gravok displays four eligible deck entries and asks the player to stake one.
-The selected entry is frozen by id before the reactor resolves:
+### 9. Overclock Wager — the marker ladder
 
-- 50%: return the original and add one duplicate.
-- 50%: remove the selected deck entry.
+The player pays 20 essence to light an 80-essence pot. Each **double** adds the
+listed Bane immediately and replaces the available cash-out:
 
-After a successful duplication, the player may stop or overcharge the reactor.
-Overcharge has a 35% chance to add a second duplicate and apply one disclosed
-transfiguration to all resulting copies; on failure, one added copy is removed
-and the original remains intact.
+| Stop after     | Bane added by that double |    Cash-out |
+| -------------- | ------------------------- | ----------: |
+| Opening marker | none                      |  80 essence |
+| Double 1       | Nightmare                 | 170 essence |
+| Double 2       | Despair                   | 300 essence |
+| Double 3       | Oblivion                  | 500 essence |
 
-This is the launch set's clearest chosen-collateral wager. The first roll has a
-severe but legible downside, while the second decision risks only newly created
-value. Eligibility must protect deck floors and exclude entries the rules do
-not permit removing or duplicating. At Farpoint, the first duplication chance
-rises to 70% and a failed first roll returns the original unchanged.
+The Banes remain even if the player continues. There is no random roll; the
+player is betting that future deck strength is worth the accumulating markers.
 
-### 11. Collateral Auction
+**Farpoint table — First Marker on the House.** The 20-essence opening cost is
+waived, Double 1 adds no Bane, and the Double 3 cash-out grants a Dreamsign
+draft in addition to 500 essence.
 
-The player offers one deck card or Dreamsign as collateral. Gravok evaluates
-the asset's quality band and reveals a correspondingly scaled prize. The roll
-then produces one of three published outcomes:
+## Collateral tables
 
-- collateral returned and prize granted;
-- collateral exchanged for the prize;
-- collateral returned in a modified form and the prize reduced.
+### 10. Figment Reactor — double or nothing
 
-Scaling the offer from the selected asset prevents the degenerate strategy of
-staking a disposable starter for a premium jackpot. This draws from **Bonfire
-Spirits**, **N'loth**, and Monster Train's relic traders, where the identity and
-value of the sacrificed object matter.
+Gravok shows exactly four legal non-starter deck entries. The player stakes one
+entry, frozen by UUID and deck entry id:
 
-### 12. Fivefold Mirror
+| First call | Probability | Resolution                                        |
+| ---------- | ----------: | ------------------------------------------------- |
+| Double     |         50% | return the original and add 1 permanent duplicate |
+| Nothing    |         50% | permanently remove the original                   |
 
-Gravok offers a chosen card two reflections:
+After Double, the player may collect both cards or press. Pressing has a 35%
+chance to add a second permanent duplicate and apply one frozen, legal
+non-Perfected transfiguration to all three copies. On the 65% miss, the added
+copy is removed and the unchanged original remains.
 
-- **Stable reflection:** gain one ordinary duplicate.
-- **Shatter the mirror:** gain five temporary duplicates for the next two
-  battles, then roll how many become permanent; a bad roll also scars one
-  retained copy with a disclosed negative modification.
+**Farpoint table — Original Protected.** The first call is 70% Double and 30%
+return the original unchanged. The press call is 50% win and 50% miss, with the
+same win and miss effects.
 
-The original card is protected. The risky branch creates a short burst of
-power and a chance at lasting value without turning one failed click into the
-loss of the player's build-around card. This riffs on Monster Train's
-**Mysterious Mirror** and **Fissure**.
+### 11. Collateral Auction — the high-roller cage
 
-### 13. The House Chooses the Category
+The player selects one of exactly four shown, legal non-starter deck entries as
+collateral. A frozen Dreamsign draft is displayed across the cage:
 
-The player chooses a sacrifice class—starter, Event, Character, transfigured
-card, or Dreamsign—and sees the prize before committing. Gravok then selects a
-random eligible object within that class.
+| Call           | Probability | Resolution                                    |
+| -------------- | ----------: | --------------------------------------------- |
+| House bonus    |         45% | return the card and grant the Dreamsign draft |
+| Fair exchange  |         40% | purge the card and grant the Dreamsign draft  |
+| Reserve missed |         15% | return the card; grant nothing                |
 
-Narrower, more valuable classes buy stronger rewards. The category is player
-controlled while the exact asset is at risk, producing a middle ground between
-chosen and fully random loss. The UI must show every currently eligible object
-before the player commits.
+**Farpoint table — Crystal Member Rate.** The calls are 60% House Bonus, 30%
+Fair Exchange, and 10% Reserve Missed. Reserve Missed returns the card and
+grants 60 essence.
 
-## Information and tabletop minigames
+### 12. Fivefold Mirror — the multiplier booth
 
-### 14. Contraband Array
+The player selects one legal deck entry and chooses a line. This table is
+eligible only when at least two future battles remain:
 
-Three face-down cargo crates contain desirable card or Dreamsign rewards. Two
-also contain a Junk/Bane rider; one is clean. The player may:
+- **Even money:** pay 40 essence and add 1 permanent duplicate.
+- **Fivefold:** pay 40 essence; add 5 temporary copies for the next 2 battles.
+  After the second battle, the temporary copies vanish and a single roll adds
+  2 permanent copies on 35%, 1 permanent copy on 50%, or 1 Nightmare Bane and
+  no permanent copy on 15%.
 
-1. scan one crate for free;
-2. pay essence to scan another;
-3. take one revealed or unrevealed crate; or
-4. walk away.
+The original is never at risk.
 
-The distribution is public and frozen before interaction. This directly adapts
-Wildfrost's **Gnome Traveller**, but lets the player purchase information
-instead of making the hidden penalty a pure guess.
+**Farpoint table — Mirrored Suite.** Both lines cost 0. Fivefold adds 3
+permanent copies on 35%, 2 on 50%, and 1 on 15%; it cannot add a Bane.
 
-### 15. Match and Keep
+### 13. The House Chooses the Category — the face-down discard
 
-Lay out twelve face-down tokens: several reward pairs, one Bane pair, and one
-mixed “wild” pair. The player gets five attempts to reveal two tokens. Matching
-a pair banks it; unmatched tokens turn face-down again. The player may stop
-after any successful match.
+The player chooses one eligible category. Gravok then uniformly draws one of
+the listed deck entries in that category and purges it. The UI shows every
+possible entry and its exact `1 / N` chance:
 
-This is the Slay the Spire **Match and Keep** event adapted to Dreamtides
-objects. It is a deliberately more game-like Gamble scene, but remains
-turn-based, touch-friendly, deterministic, and easy to replay from the room
-log.
+| Chosen category | Eligible entries       | Guaranteed payout                      |
+| --------------- | ---------------------- | -------------------------------------- |
+| Starter         | starter cards          | 150 essence                            |
+| Event           | non-starter Events     | Transfiguration service and 50 essence |
+| Character       | non-starter Characters | Dreamsign draft                        |
 
-### 16. Signal Auction
+Only categories containing at least two legal entries are offered.
 
-Two face-down, state-aware Augury prizes are generated and frozen. Gravok gives
-one poetic clue about each prize's family or target. The player can spend
-essence to reveal increasingly precise facts:
+**Farpoint table — Two-Card Burn.** Gravok draws two distinct entries uniformly
+from the chosen category and the player chooses which one is purged. Starter
+pays 200 essence; Event pays a Transfiguration service and 100 essence;
+Character pays a Dreamsign draft and 80 essence.
 
-- reward family;
-- target class or quantity;
-- exact reward.
+## Information and tabletop games
 
-The player may claim one prize at any point, with earlier claims receiving a
-bonus multiplier. The gamble is whether to preserve value by acting on partial
-information or pay to eliminate uncertainty.
+### 14. Contraband Array — three-crate monte
 
-This turns the existing reward algorithm's explainability data into a player
-facing information game. It is especially on-theme for a dream guide who knows
-the odds but enjoys selling certainty.
+Three face-down crates receive exactly one prize each: a Card draft, a
+Transfiguration service, and a Dreamsign draft. Independently, the three
+liability cards—Clean, gain 1 Nightmare Bane, and lose 80 essence—are shuffled
+one per crate. Thus every prize appears once and every liability appears once.
 
-### 17. Quantum Hand
+The player scans one crate for free, revealing both its prize and liability.
+Scanning one additional crate costs 30 essence. The player then takes one crate
+or leaves. Taking applies both printed cards.
 
-Deal five face-up symbols derived from real card attributes: card type,
-subtype, energy band, Fast, Reclaim, and transfiguration color. The player may
-hold any symbols and pay once to redraw the rest. Reward quality follows
-published combinations such as:
+**Farpoint table — Security Override.** Two scans are free. The shuffled
+liability cards are Clean, Clean, and gain 1 Nightmare; the prizes are
+unchanged.
 
-- pair: essence;
-- three matching card types: curated draft;
-- three distinct subtypes: transfiguration;
-- low/mid/high energy straight: premium card modification;
-- five-symbol “constellation”: premium Dreamsign or composite reward.
+### 15. Match and Keep — the memory table
 
-The hand does not add the dealt cards to the deck; it only determines the prize
-table. This is a poker-like minigame using vocabulary the player already reads
-in deckbuilding, without reaction timing or opaque probability.
+Twelve face-down tokens form six exact pairs. The pairs pay: 80 essence, Card
+draft, Transfiguration service, Purge service, Duplication service, and gain 1
+Nightmare Bane. Their positions are deterministically shuffled.
 
-## Deferred and performance wagers
+The player receives five attempts. An attempt reveals two tokens; a match
+applies that pair immediately and removes it, while a miss turns both tokens
+face-down. The player may collect and leave after any matched pair or continue
+until the fifth attempt. Previously matched rewards cannot be lost.
 
-### 18. Escrow Orbit
+**Farpoint table — Seven Hands.** The player receives seven attempts. The
+Nightmare pair is replaced by a Dreamsign draft pair.
 
-The player gives Gravok a chosen card for two battles. It is absent from the
-deck while escrowed. The exact maturity table is visible before acceptance:
+### 16. Signal Auction — the blind prize window
 
-- Recall after one battle: the card returns with a modest improvement.
-- Wait for two battles: roll between a premium transfiguration, a synergistic
-  duplicate, and the original card plus an essence consolation.
-- Pay essence at any time to break escrow and recover the original immediately.
+Two sealed envelopes contain two different recipes drawn uniformly without
+replacement from Card draft, Transfiguration service, Duplication service, and
+Dreamsign draft. The player can claim one envelope at any information level:
 
-This adapts Monster Train's **Abandoned Winged → Heaven's Aid → Heaven's
-Finest** and **Lifemother's Remnant**. The risk is playing short-handed now
-plus a published maturity roll. If the outcome becomes fixed and the only
-decision is how long to wait, the concept belongs to Temporal Fork.
+| Information purchased          | Total scan cost | Bonus added to claimed prize |
+| ------------------------------ | --------------: | ---------------------------: |
+| no scan                        |               0 |                  120 essence |
+| reveal both recipe names       |      20 essence |                   70 essence |
+| reveal both complete manifests |      50 essence |                   20 essence |
 
-### 19. The Bane Bond
+The complete-manifest scan includes the exact candidate UUIDs and previews.
+Each later scan includes the earlier information.
 
-Gravok adds one visible temporary Bane to the deck and opens a bond:
+**Farpoint table — Host's Tell.** The recipe-name scan is free and the complete
+manifest costs 20 essence. Bonuses are 150 essence with no scan, 100 after the
+recipe-name scan, and 50 after the complete-manifest scan.
 
-- after one victory, cash it for a modest prize;
-- after two victories, cash it for a strong prize;
-- after three victories, the Bane transforms into a unique positive card or
-  Dreamsign.
+### 17. Quantum Hand — five-card crystal poker
 
-Purging the Bane closes the bond with no payout. The player is betting that
-they can tolerate deck pollution long enough to reach maturity. This borrows
-the “keep this object for several battles” commitment of **Armageddon
-Battlefield** while giving Purge a meaningful early-exit interaction. Gravok's
-version should add a published chance of bond default at each maturity step;
-without that uncertainty, this is Temporal Fork content.
+The house deck has exactly 20 tokens: four suits
+(`Event`, `Character`, `Fast`, `Reclaim`) crossed with ranks 0–4. The player
+pays 40 essence, receives five tokens without replacement, may hold any number,
+and may pay 30 essence once to redraw every unheld token.
 
-### 20. Borrowed Victory
+The best final hand pays:
 
-Take a premium reward immediately. In exchange, Gravok receives a percentage
-of the next two battle payouts. The exact future payment depends on how rich
-those battles would have been, and the UI shows a pessimistic and optimistic
-range.
+| Hand                                             | Initial combinations | Initial probability |      Payout |
+| ------------------------------------------------ | -------------------: | ------------------: | ----------: |
+| Constellation: all five ranks in one suit        |                    4 |              0.026% | 500 essence |
+| Four of a rank                                   |                   80 |              0.516% | 400 essence |
+| Orbit straight: all five ranks, mixed suits      |                1,020 |              6.579% | 300 essence |
+| Full array: three of one rank and two of another |                  480 |              3.096% | 220 essence |
+| Three of a rank                                  |                1,920 |             12.384% | 150 essence |
+| Two pair                                         |                4,320 |             27.864% | 100 essence |
+| One pair                                         |                7,680 |             49.536% |  50 essence |
 
-The player is effectively short-selling future rewards to stabilize the deck
-now. This uses a future battle-reward modifier the journey state can already
-represent, but frames it as a wager on the unknown size of those future
-payouts. A fixed future payment for a fixed reward belongs to Tempting Offer or
-Temporal Fork.
+The denominator is `C(20, 5) = 15,504`. After the initial deal and after every
+hold selection, the UI computes and shows exact redraw probabilities from the
+remaining token identities.
 
-### 21. Next-Battle Contract
+**Farpoint table — Owner's Poker Room.** The 40-essence buy-in and the redraw
+cost are both waived. Every essence payout increases by 50; a Constellation
+also grants a Dreamsign draft.
 
-Choose one visible contract for the next battle:
+## Deferred and performance tickets
 
-- win with a reduced opening hand;
-- win while carrying two temporary Banes;
-- win with a lower essence reward guaranteed and a large bonus for reaching a
-  score margin;
-- win after selecting one card to keep in escrow.
+### 18. Escrow Orbit — the futures window
 
-The contract pays only if its condition survives to battle completion. The
-player chooses the handicap that their deck is best positioned to beat. This
-captures the self-selected difficulty of **Battleworn Dummy** and the
-double-or-nothing escalation of **The Colosseum** without starting a battle
-inside the site.
+The player escrows one untransfigured, non-starter deck entry that has at least
+one legal non-Perfected transfiguration. The card is absent from the next two
+battles. The table is eligible only when at least two battles remain.
 
-### 22. Open-Deck Parlay
+- After one completed battle, the player may recall it unchanged and gain 50
+  essence.
+- After two completed battles, the card returns and one roll grants: one frozen
+  transfiguration on 50%; one permanent duplicate on 30%; or 120 essence on
+  20%.
+- Before either battle, the player may pay 40 essence to return the unchanged
+  card and close the ticket.
 
-Gravok proposes three measurable feats based on the current deck, such as
-playing three distinct Events, scoring with a chosen card, materializing a
-specified number of Figments, or ending a battle with no Banes in hand. The
-player chooses one feat and stakes essence on completing it during the next
-battle.
+**Farpoint table — Preferred Futures.** One-battle recall pays 80 essence and
+early return is free. At two battles, 50% returns a transfigured card plus one
+duplicate, 30% returns a transfigured card, and 20% returns a duplicate plus
+120 essence.
 
-Harder feats pay a generated Augury reward; easier feats pay essence. Internally
-all card references use UUID and deck entry id, resolving names only for
-display. A contract is offered only when its trigger is observable and
-achievable from the current deck.
+### 19. The Bane Bond — the junk-bond counter
 
-## Ambitious and unexpected directions
+Gravok adds 1 Nightmare Bane and issues a bond. The table is eligible only when
+at least three battles remain. After each victory, the player may redeem it or
+carry it into another battle:
 
-### 23. House Rules
+| Victories carried | Redemption success | Successful payout | Default   |
+| ----------------- | -----------------: | ----------------: | --------- |
+| 1                 |                80% |       100 essence | no payout |
+| 2                 |                65% |       220 essence | no payout |
+| 3                 |                50% |   Dreamsign draft | no payout |
 
-Gravok reveals three temporary rules changes and the premium reward attached to
-each. Examples:
+Redemption removes the Nightmare on either success or default and closes the
+bond. Purging the Nightmare before redemption closes the bond with no payout.
 
-- both sides draw an extra card, but the player's hand limit is lower;
-- all Characters enter with a Figment, but Figments count against a new
-  instability threshold;
-- unused energy carries between turns, but the opponent begins closer to the
-  score target;
-- every Event is Fast, but Reclaim costs are increased.
+**Farpoint table — Investment-Grade Bane.** Success chances are 90%/75%/60%.
+Successful payouts are 140 essence, 280 essence, and a Dreamsign draft plus
+100 essence.
 
-The player is not gambling on a hidden roll; they are gambling that their deck
-exploits a systemic rule better than the opponent. Gravok's version must attach
-a falsifiable performance contract—for example, the premium reward pays only
-if the player wins above a score margin under the selected rule. A temporary
-rule granted for a deterministic price belongs to Temporal Fork. This is
-high-leverage, memorable design space and should be built from a small authored
-rule library, not arbitrary effect composition.
+### 20. Borrowed Victory — the advance window
 
-### 24. Gravity Sling
+The player receives 180 essence immediately. Gravok takes 50% of the essence
+reward from each of the next two completed battles, rounded down and capped at
+100 essence per battle. A battle paying 150 therefore sends 75 to Gravok; a
+battle paying 260 sends 100. The table is eligible only when at least two
+battles remain.
 
-Gravok enhances one known future Dreamscape node with a premium site or reward,
-then locks the player's next Atlas choice to that node. The wager trades route
-optionality and matchup choice for visible power.
+There is no RNG. The wager is whether the next two battle rewards total less or
+more than the advance's break-even point.
 
-A riskier version lets the player choose between two locked destinations:
-one receives a guaranteed ordinary reward, while the other receives a random
-premium site drawn from a disclosed pool. This treats navigation freedom as a
-real asset rather than another essence denomination.
+**Farpoint table — Host's Advance.** The player receives 240 essence. Gravok
+takes 35% of each of the next two battle rewards, rounded down and capped at 80
+per battle.
 
-### 25. Pilot and Navigator
+### 21. Next-Battle Contract — the challenge book
 
-In a two-player room, one player controls the stake or risk tier while the
-other controls whether to bank or press after each result. Roles swap after
-each step. Either player can end the wager, but neither can unilaterally choose
-both exposure and greed.
+The player pays a 30-essence entry fee and signs one contract for the next
+battle. The table is eligible only when a battle remains:
 
-The mechanic uses visible sequential decisions rather than secret votes, so it
-fits the shared room event log. In solo play, the player chooses both roles.
-This is less about probability depth than making co-op negotiation part of the
-wager.
+| Contract         | Temporary battle condition                               | Payout on victory                      |
+| ---------------- | -------------------------------------------------------- | -------------------------------------- |
+| **Short Deal**   | opening hand has 2 fewer cards                           | 200 essence                            |
+| **Dirty Shoe**   | shuffle 2 temporary Nightmare Banes into the battle deck | Dreamsign draft                        |
+| **Point Spread** | win by at least 8 points                                 | Transfiguration service and 80 essence |
 
-### 26. Gravok's Running Jackpot
+The entry fee is lost and no payout is granted if the player loses or misses
+the Point Spread. Temporary changes expire after the battle.
 
-A portion of every lost essence stake enters a run-local jackpot. Future Gamble
-visits show the pot, and rare wager outcomes can claim it. If the route contains
-no later Gamble, a bounded fraction converts into a final-boss or journey-end
-payout.
+**Farpoint table — Comped Challenge.** The entry fee is 0. Short Deal pays 260
+essence; Dirty Shoe pays a Dreamsign draft plus 80 essence; Point Spread pays a
+Transfiguration service plus 140 essence.
 
-The jackpot gives bad luck memory and creates a run-spanning relationship with
-Gravok. It also acts as a soft pity system without changing the published odds.
-This needs careful caps so deliberately losing small bets cannot manufacture a
-dominant future reward.
+### 22. Open-Deck Parlay — the proposition board
 
-### 27. The Algorithm's Tell
+Gravok generates exactly three achievable, observable legs from this authored
+library. The table is eligible only when a battle remains:
 
-Gravok displays three proposed rewards and three short explanations of why the
-Augury algorithm values them for the current deck. Two explanations are
-accurate and one is fabricated. The player picks the false explanation:
+- play three distinct Events by card UUID;
+- materialize three distinct Characters by card UUID;
+- reclaim two cards;
+- play cards with three different printed energy costs;
+- end a turn with at least four cards in the void;
+- win without a Bane remaining in hand.
 
-- correct: choose one of the three rewards;
-- incorrect: receive the associated reward with a disclosed liability;
-- pay essence: eliminate one explanation before answering.
+The player pays 50 essence and selects one, two, or all three offered legs. All
+selected legs must occur in the next battle:
 
-This is a deck-knowledge puzzle built from real fit, centrality, and Dreamsign
-coverage signals. It would need plain-language clues and strong accessibility
-testing, but it is a distinctive way to turn internal recommendation logic into
-play.
+| Legs selected | Successful payout |
+| ------------- | ----------------: |
+| 1             |       110 essence |
+| 2             |       240 essence |
+| 3             |       420 essence |
 
-### 28. Deck Cut
+The wager manifest stores referenced cards by UUID and deck entry id. A leg is
+eligible only when the current deck can satisfy it.
 
-Gravok calculates exact odds from the player's current deck, then cuts the
-shuffled deck once. The top card's visible property resolves the wager:
+**Farpoint table — Parlay Boost.** The entry fee is 0 and payouts are
+140/290/500 essence.
 
-- Event versus Character;
-- low, mid, or high energy;
-- a selected subtype versus every other subtype;
-- Fast or Reclaim versus neither.
+## Rules and route tables
 
-The player chooses which property to bet on and sees its exact frequency before
-committing essence. Payouts rise as the matching portion of the deck shrinks.
-This makes deckbuilding itself a form of odds-crafting: the player owns the
-distribution rather than merely choosing from a house-authored table.
+### 23. House Rules — the private salon
 
-The reducer should select by deck entry id from a deterministic shuffle. Card
-UUIDs and entry ids remain the authoritative identity even when several copies
-share a displayed name.
+The player pays 30 essence and selects one fully authored rule contract for the
+next battle. The table is eligible only when a battle remains:
 
-### 29. Sealed Reserve
+| Salon             | Rule in force                                                                             | Condition                | Payout                                  |
+| ----------------- | ----------------------------------------------------------------------------------------- | ------------------------ | --------------------------------------- |
+| **Double Draw**   | both players draw 1 additional card each turn; the player hand limit is reduced by 2      | win by at least 5 points | Card draft and 80 essence               |
+| **Figment Floor** | each Character materializes with 1 additional Figment; the opponent starts 5 points ahead | win                      | Dreamsign draft                         |
+| **Fast Events**   | every Event is Fast; reclaiming an Event costs 1 additional energy                        | reclaim 2 Events and win | Transfiguration service and 100 essence |
 
-Gravok shows the family and quality band of a hidden prize. The player names an
-essence bid. A hidden reserve price is drawn from a fully published
-distribution:
+All temporary rules expire after the battle. The wager fails if either the win
+or the listed performance condition fails.
 
-- bid at least the reserve: pay the bid and receive the prize;
-- bid below the reserve: lose a small listing fee and reveal the reserve;
-- pay for one appraisal clue before bidding, or walk away.
+**Farpoint table — Salon Comp.** The entry fee is 0 and every successful
+contract adds 100 essence to its listed payout.
 
-This is a valuation game rather than an odds-selection game. The player weighs
-how much the partially described reward is worth to this run and how
-aggressively to avoid missing it.
+### 24. Gravity Sling — the route book
 
-### 30. Bad-Omen Hedge
+Gravok chooses two currently reachable next-dreamscape nodes and labels them:
 
-Before the next battle, bet on an outcome the player does not want: the opponent
-reaching a score threshold, the battle lasting past a turn limit, or a
-temporary Bane being drawn. If the run begins to go badly, the wager pays
-essence or a recovery effect; if the battle goes cleanly, Gravok keeps the
-stake.
+- **Red route:** lock the next Atlas move to this node and add one known
+  Dreamsign Reward site displaying its exact Dreamsign.
+- **Black route:** lock the next Atlas move to this node, then roll 50% to add a
+  Duplication site or 50% to add a Purge site whose first purge costs 0.
 
-This is genuine insurance rather than another success bonus. It diversifies the
-site's emotional texture because the payout softens a bad battle instead of
-compounding a winning run.
+The player sees both destination nodes, the Red Dreamsign, and the Black
+50/50 table before committing.
 
-### 31. Buyback
+**Farpoint table — First-Class Sling.** Red also adds an Essence site worth 100
+essence. Black adds both the Duplication site and the first-purge-free Purge
+site; it has no random roll.
 
-Offer a reward already claimed earlier in the run as collateral. Gravok rolls
-for a strictly better version from the same family:
+### 25. Pilot and Navigator — the co-op pit
 
-- an ordinary card becomes a transfigured copy;
-- a Dreamsign becomes a premium matched Dreamsign;
-- an added site becomes enhanced;
-- a duplicate becomes a curated two-card package.
+In a two-player room, the Pilot chooses one of two pressure tables and the
+Navigator decides stand or hit after each successful lock. Roles swap after
+every successful hit:
 
-A failed buyback returns the original in a temporary weakened state or charges
-the disclosed essence stake. This turns the player's own history and possible
-regret into the wager instead of generating another unrelated prize.
+| Table        |     Buy-in | Pots       | Bust chances |
+| ------------ | ---------: | ---------- | ------------ |
+| **Cautious** | 30 essence | 60/140/240 | 0%/15%/35%   |
+| **Bold**     | 30 essence | 90/230/450 | 10%/30%/55%  |
 
-## Insurance side bets
+A bust loses the pot and adds 1 Nightmare Bane. Either player may stand when it
+is their Navigator turn. Solo players make both decisions.
 
-Any immediate Gravok wager may optionally expose a small, consistently priced
-hedge: pay essence to convert the worst outcome into a partial refund, protect
-chosen collateral, or keep the first banked reward on a bust. Insurance should
-not change the published odds; it changes the loss severity.
+**Farpoint table — Partner Rate.** The buy-in is 0. Cautious pots are
+80/180/300 with 0%/10%/25% bust; Bold pots are 120/280/500 with 5%/20%/40%
+bust.
 
-This second-order decision lets risk-averse players engage with the site and
-gives Gravok another characterization beat: he sells both danger and certainty.
-The premium must be calculated from the exact wager manifest so buying
-insurance is a tradeoff rather than an automatic click.
+### 26. Gravok's Running Jackpot — the progressive meter
 
-## Gravok's Farpoint specialty
+Whenever an essence buy-in at a Gamble table produces zero payout, 25% of that
+buy-in, rounded up, enters a run-local jackpot capped at 250 essence. Liability
+payments and optional scan or insurance fees do not contribute.
 
-Farpoint should improve each topology in a way that preserves its decision:
+At a later Gamble visit, the player may buy one jackpot side ticket for 20
+essence. The ticket has a 10% chance to pay the entire meter and reset it to
+zero; on a miss, the 20 essence joins the meter subject to the cap. If the meter
+remains at journey completion, 25% of it, rounded down, is paid as essence.
 
-- waive an initial ante, but keep any press costs;
-- improve published success odds by one tuning band;
-- protect the first banked reward from collapse;
-- provide one free scan or clue in information games;
-- return collateral unchanged on the worst result;
-- add a premium payout tier rather than simply doubling essence;
-- offer three contracts instead of two.
+**Farpoint table — Progressive Lounge.** Failed buy-ins contribute 50%, the
+meter cap is 350 essence, the side ticket is free, and its claim chance is 20%.
+The journey-completion payout remains 25%.
 
-The specialty should make Gravok feel generous at home without turning the site
-into a second Dream Augury.
+### 27. The Algorithm's Tell — liar's poker
 
-## Recommended delivery portfolio
+Gravok deals three distinct face-up Strong card prizes, sampled without
+replacement from the Strong-card score band, and three plain-language claims
+about why the Dream Augury scorer selected them. Exactly two claims accurately
+describe logged score components and one is fabricated.
 
-The launch set should prove five distinct contracts without requiring deferred
-effects:
+- Pick the fabricated claim correctly: choose and gain 1 of the 3 cards.
+- Pick a true claim: gain the card beside that claim and 1 Nightmare Bane.
+- Before answering, pay 40 essence to mark and remove one of the two true
+  claims, selected uniformly at 50% each, leaving one true and one fabricated
+  claim.
 
-| Encounter        | What it proves                                                  |
-| ---------------- | --------------------------------------------------------------- |
-| Crystal Roll     | odds display, stake payment, deterministic resolution, and logs |
-| Pressure Vault   | persisted press-or-bank state, pot growth, and collapse         |
-| Figment Reactor  | chosen card collateral, target validation, and atomic mutation  |
-| Contraband Array | frozen hidden information, paid reveals, and touch interaction  |
-| Deck Cut         | exact state-derived odds and deck-entry-based resolution        |
+**Farpoint table — Gravok Blinks.** One true claim is marked and removed for
+free. A correct answer grants the chosen card plus 100 essence; an incorrect
+answer grants the adjacent card with no Bane.
 
-This set is deliberately small enough that each encounter can have a distinct
-presentation and result cadence. Crystal Roll is the implementation control
-case; Pressure Vault is the emotional centerpiece; the other three prevent the
-site from reading as an essence casino.
+### 28. Deck Cut — the player's shoe
 
-The first expansion should add **Escrow Orbit** to prove card custody and
-battle-count callbacks, then **The Orbit Book** to connect wagers to the full
-Augury prize generator. **Salvage Lock** is valuable after Pressure Vault has
-established whether heterogeneous reward pots feel different enough to justify
-a second collapse encounter.
+The house generates exactly three valid predicates from:
 
-The remaining catalog can be selected according to the system it exercises:
-information scenes (**Match and Keep**, **Signal Auction**, **Quantum Hand**),
-future battle contracts (**Bane Bond**, **Borrowed Victory**, **Next-Battle
-Contract**, **Open-Deck Parlay**, **Bad-Omen Hedge**), and high-cost bespoke
-content (**House Rules**, **Gravity Sling**, **Pilot and Navigator**,
-**Gravok's Running Jackpot**, **The Algorithm's Tell**).
+- Event;
+- Character;
+- Fast;
+- Reclaim;
+- printed energy cost 0, 1, 2, or 3+;
+- one subtype present in the deck.
 
-## Generation and persistence implications
+A predicate is valid when at least one and fewer than all legal deck entries
+match it. The player selects one predicate and pays 50 essence. Gravok
+deterministically shuffles every legal deck entry, including individual copies,
+and reveals one entry.
 
-The Gamble site needs a persisted manifest or an equivalently signed,
-deterministically regenerable state machine. A useful conceptual shape is:
+If `M` of `N` entries match, the UI publishes `p = M / N`. A hit pays
+`min(400, ceil-to-next-10(55 / p))` essence; a miss pays nothing. For example,
+`6 / 20 = 30%` pays 190 essence. The payout is frozen before commitment.
 
-- wager type and tuning version;
-- exact prize specifications;
-- exact stake and eligible target ids;
-- published outcome table;
-- phase and step;
-- banked and unbanked value;
-- committed collateral or escrow ids;
-- resolved random draws;
+**Farpoint table — Deep Cut.** The buy-in is 0 and a hit pays
+`min(450, ceil-to-next-10(70 / p))` essence.
+
+### 29. Sealed Reserve — the auction table
+
+One exact Dreamsign from the Dreamsign-draft scorer is shown face-up. Its hidden
+reserve is drawn from this public distribution:
+
+| Reserve     | Probability |
+| ----------- | ----------: |
+| 40 essence  |         25% |
+| 80 essence  |         25% |
+| 120 essence |         25% |
+| 160 essence |         25% |
+
+The player bids exactly 40, 80, 120, or 160 essence. A bid meeting the reserve
+pays the bid and grants the shown Dreamsign. A bid below reserve loses a
+20-essence listing fee instead of the bid and reveals the reserve. Before
+bidding, the player may pay 30 essence for an appraisal that reveals whether
+the reserve is in the `40/80` half or the `120/160` half.
+
+**Farpoint table — Open Reserve.** Listing and appraisal fees are 0. Reserve
+probabilities are 40 essence at 40%, 80 at 30%, 120 at 20%, and 160 at 10%.
+Winning also pays 50 essence.
+
+### 30. Bad-Omen Hedge — the insurance desk
+
+The player pays 40 essence and insures one undesirable event in the next
+battle. The table is eligible only when a battle remains:
+
+| Policy                 | Trigger                                               | Payout when triggered |
+| ---------------------- | ----------------------------------------------------- | --------------------: |
+| **Opponent hot start** | opponent reaches 8 points before the player reaches 8 |           130 essence |
+| **Long night**         | turn 9 begins                                         |           160 essence |
+| **Bad draw**           | player draws a Bane during turns 1–3                  |           120 essence |
+
+Bad Draw is offered only if the journey deck contains a Bane. The policy pays
+when its trigger occurs whether the player later wins or loses. If the trigger
+does not occur, the premium is lost.
+
+**Farpoint table — Host's Coverage.** The premium is 0 and payouts are
+160/190/150 essence.
+
+### 31. Buyback — the trade-up wheel
+
+The player selects one non-starter card gained earlier in the journey. It must
+be untransfigured and have at least one legal non-Perfected transfiguration.
+One applicable transfiguration is selected uniformly and shown before the
+player pays 50 essence and spins:
+
+| Call     | Probability | Resolution                                         |
+| -------- | ----------: | -------------------------------------------------- |
+| Trade up |         55% | apply one frozen legal transfiguration to the card |
+| Pair it  |         25% | add 1 permanent duplicate                          |
+| Push     |         20% | card is unchanged                                  |
+
+The selected card itself is never removed.
+
+**Farpoint table — Loyalty Buyback.** The spin is free. The calls are 50%
+transfigure the card and add 1 duplicate, 35% transfigure it, and 15% add 1
+duplicate.
+
+## Universal side bet
+
+An immediate table with a paid buy-in and at least a 25% chance of zero payout
+may offer **House Cover** once. House Cover costs 20 essence. If the wager's
+first committed roll produces zero payout, it refunds 25 essence; otherwise it
+pays nothing. It does not change the published outcome roll and it does not
+cover later presses.
+
+At Farpoint, House Cover costs 0 and refunds 30 essence. Tables whose Farpoint
+buy-in is already 0 do not offer it.
+
+## Site boundaries
+
+Gamble owns decisions about variance, pressing, hidden information, chosen
+collateral, or a measurable performance bet.
+
+- A fully known cost for a fully known immediate reward belongs to Tempting
+  Offer unless repeated cash-out discipline is the entire game, as in The
+  Conveyor or Overclock Wager.
+- A delayed fixed reward belongs to Temporal Fork. Escrow Orbit and Bane Bond
+  stay at Gamble because their maturity result includes a published random
+  call.
+- Dream Augury supplies state-aware prize manifests. Gamble supplies the
+  buy-in, odds, liabilities, phases, and resolution.
+
+## Generation, persistence, and logging
+
+Each generated wager records:
+
+- table id and tuning version;
+- whether the Farpoint table is active;
+- exact buy-in, optional fee, and affordability check;
+- every frozen reward recipe, candidate UUID, and deck entry id;
+- the displayed outcome table and integer roll ranges;
+- phase, press number, banked value, and unbanked value;
+- collateral or escrow entry ids;
+- resolved random integers in resolution order;
+- future contract counters and trigger progress;
 - completion state.
 
-Anything both players must agree on belongs in the room event log. UI animation,
-hovered crates, and local previews can remain presentation state. Suggested
-intent events include:
+The table definitions, tuning versions, odds, costs, and payouts are authored
+as data rather than embedded in UI components.
 
-- open or initialize wager;
-- choose stake or collateral;
-- commit;
-- reveal or purchase information;
-- press, bank, or recall;
-- accept a future contract;
-- resolve the current wager step.
+Anything both players must agree on is a room event. Clients submit intent
+events through `src/coop/actions.ts`; React state may hold only presentation
+details such as hover, animation progress, or which crate is visually raised.
+The deterministic reducer or provider performs every shuffle and roll and
+applies each buy-in, liability, and reward atomically.
 
-Random outcomes should be produced inside the deterministic reducer/provider
-path, never from React state or `Math.random()`. Resolution should apply stake,
-liability, and reward atomically so two clients cannot observe a paid stake
-without its result.
+Suggested intent events are initialize table, select line, select collateral,
+commit, buy scan, reveal, hit, stand, recall, and accept contract. An event
+contains ids and decisions, never a client-generated random result.
 
-Every production wager should answer these questions from logs alone:
+Production logs must answer:
 
-- What wager and tuning version appeared?
-- What state made it eligible?
-- What odds and outcome classes were shown?
-- What asset ids did the player stake?
-- What decision did each player submit, and at which sequence number?
-- What random draw resolved the wager?
-- What was banked, lost, returned, or deferred?
-- Which reward-generation trace produced the prize?
+1. Which base or Farpoint rules and tuning version appeared?
+2. Why was this table eligible?
+3. Which exact stakes, odds, outcome classes, and reward manifests were shown?
+4. Which UUIDs and deck entry ids were offered or committed?
+5. Which player submitted each decision, and at what room sequence number?
+6. Which deterministic draws resolved the table?
+7. What was paid, banked, lost, returned, added, removed, or deferred?
+8. Which Dream Augury scoring trace produced each prize candidate?
 
-Card identity in state and logs should remain UUID- and entry-id-based. Names
-are display-only.
+## First playtest gates
 
-## Tuning questions
+The v0 tuning advances only when all five launch tables satisfy these checks:
 
-The most important playtest questions are:
+1. At least 40% of eligible traveling-table visits receive a committed wager.
+2. Pass Line and Hard Way each receive at least 25% of Crystal Roll bets.
+3. At least 30% of Pressure Vault players who open lock 2 stand before lock 4.
+4. At least 20% of eligible Figment Reactor players stake a non-starter card.
+5. In Contraband Array, both “scan twice” and “take after one scan” occur in at
+   least 20% of committed visits.
+6. Deck Cut receives bets across at least three predicate families.
+7. Farpoint improves participation without pushing decline below 5%; a tiny
+   decline rate indicates the home tables have become automatic rewards rather
+   than bets.
 
-1. How positive must baseline expected value be before players willingly route
-   through Gamble?
-2. Which loss type creates exciting regret rather than run-killing resentment:
-   essence, a Bane, temporary weakness, future reward tax, or chosen collateral?
-3. How often should Gravok present a one-shot wager versus a multi-step scene?
-4. Should the exact outcome roll occur at site generation, at commitment, or
-   step by step? The player-facing result is identical, but logging,
-   multiplayer contention, and preview stability differ.
-5. Can information games remain fast on repeat visits, or should they be rare
-   showcase events?
-6. Which contracts can be validated as achievable without making the game solve
-   the deck for the player?
-7. How much of the Augury prize generator can be reused directly before Gamble
-   needs its own magnitude-aware prize recipes?
-8. Which future-facing and rules-changing concepts remain recognizably Gravok
-   after applying the Temporal Fork boundary?
+These are directional playtest gates, not automated CI assertions. Automated
+tests use synthetic manifests and assert deterministic resolution, exact
+boundary rolls, atomic effects, UUID identity, stale-action rejection, and
+Farpoint substitution.
