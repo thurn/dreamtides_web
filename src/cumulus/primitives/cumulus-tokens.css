@@ -101,6 +101,7 @@
   --primitive-violet-400: #a855f7;  /* primary accent (parent --dt-primary-light) */
   --primitive-violet-300: #c084fc;  /* bright glow / highlight */
   --primitive-violet-200: #d8b4fe;  /* pale violet highlight */
+  --primitive-violet-100: #e9d5ff;  /* high-contrast lavender */
 
   /* ---- Color: gold (omens, reward, victory) — matches parent ---- */
   --primitive-gold-600: #d4a017;
@@ -238,6 +239,7 @@
   --text-on-card: #f6f6f5;   /* card name on dark card chrome (parent value) */
   --text-on-glass: var(--primitive-ink-100); /* high-contrast text on blurred glass; never violet/accent */
   --text-on-glass-muted: var(--primitive-ink-300); /* secondary text on blurred glass */
+  --text-tutorial-highlight: var(--primitive-violet-100); /* high-contrast lavender emphasis in tutorial glass copy */
   --text-loading: var(--text-on-accent); /* white copy on the true-black loading stage */
 
   /* ---- Accent / primary action ---- */

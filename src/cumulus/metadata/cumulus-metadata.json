@@ -4314,7 +4314,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "The spoken line. Uses tutorial instruction formatting for yellow and\nbold high-contrast highlights plus canonical inline rules glyphs."
+      "description": "The spoken line. Uses tutorial instruction formatting for yellow and\nbold high-contrast purple highlights plus canonical inline rules glyphs."
     },
     {
       "name": "size",

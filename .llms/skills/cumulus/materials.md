@@ -45,17 +45,18 @@ to refract, so it uses a solid material instead (see "Not glass").
 
 ## Text on glass
 
-All text painted on blurred glass uses the glass text tokens:
+Text painted on blurred glass uses the glass text tokens:
 
 - `--text-on-glass` for primary labels, names, titles, and spoken copy;
 - `--text-on-glass-muted` for secondary copy.
+- `--text-tutorial-highlight` for the authored `[purple]` emphasis inside
+  tutorial copy.
 
-Accent, essence, points, and production-bridge violet tokens are never text
-colors on blurred glass. The glass material samples scene art, so bright sky,
-snow, gold, and white painterly regions can sit directly behind the glyphs; the
-purple accent family fails that contrast case. Purple may still frame a button,
-glow an object, or color an economy mark on solid chrome, but glass text stays
-white or warm near-white.
+Accent, essence, points, and production-bridge violet tokens are not text colors
+on blurred glass. The glass material samples scene art, so bright sky, snow,
+gold, and white painterly regions can sit directly behind the glyphs. Tutorial
+purple resolves through its dedicated pale-lavender token, which is lifted for
+contrast rather than reusing the darker accent family.
 
 ## Controls on glass
 

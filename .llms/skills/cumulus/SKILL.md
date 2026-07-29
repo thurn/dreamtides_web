@@ -246,11 +246,12 @@ _measures_ (width/height/min/max constraints) are content-driven layout and
 stay the caller's numbers.
 
 **Glass text is a special role.** Text on the liquid-glass material uses
-`--text-on-glass` or `--text-on-glass-muted`, never accent / essence / points
-or any violet production-bridge token. Blurred glass samples live scene art;
-purple text fails on bright sky, snow, gold, and white regions behind the
-surface. The `no-purple-text-on-glass` ESLint rule enforces this in files that
-import the shared glass recipes.
+`--text-on-glass` or `--text-on-glass-muted`; authored `[purple]` tutorial
+emphasis uses `--text-tutorial-highlight`. Do not use accent / essence / points
+or violet production-bridge tokens for glass text. Blurred glass samples live
+scene art, so the tutorial role resolves to a pale lavender lifted for contrast.
+The `no-purple-text-on-glass` ESLint rule enforces this in files that import the
+shared glass recipes.
 
 The `--dt-*` / `--color-*` / `--cv-*` families are a production bridge: the
 same values re-exported under the production codebase's token names so shared
@@ -339,8 +340,9 @@ adapter against its own inputs. Full rationale:
   info goes in a `GroupPanel`. A scrim, wash, or vignette painted over scene
   art to fake legibility is not on the ladder.
 - **Glass text contrast**: text on blurred glass is white or warm near-white
-  through `--text-on-glass` / `--text-on-glass-muted`; violet/accent/resource
-  text is not a legibility treatment on glass.
+  through `--text-on-glass` / `--text-on-glass-muted`; authored `[purple]`
+  tutorial emphasis uses the pale-lavender `--text-tutorial-highlight`.
+  Accent and resource text tokens are not legibility treatments on glass.
 - **Glass surface stacking**: never place an opaque purple container card,
   including `GroupPanel`, inside a glass panel, dialog, or popover. Lay content
   and tangible game objects directly on the glass instead.

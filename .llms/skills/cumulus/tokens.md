@@ -44,6 +44,7 @@ Text color roles and letter-spacing. Pick by role (primary/secondary/muted), nev
 | `--text-on-card` | `#f6f6f5` | card name on dark card chrome (parent value) |
 | `--text-on-glass` | `var(--primitive-ink-100)` | high-contrast text on blurred glass; never violet/accent |
 | `--text-on-glass-muted` | `var(--primitive-ink-300)` | secondary text on blurred glass |
+| `--text-tutorial-highlight` | `var(--primitive-violet-100)` | high-contrast lavender emphasis in tutorial glass copy |
 | `--text-loading` | `var(--text-on-accent)` | white copy on the true-black loading stage |
 | `--tracking-eyebrow` | `0.14em` |  |
 | `--tracking-wordmark` | `0.01em` |  |

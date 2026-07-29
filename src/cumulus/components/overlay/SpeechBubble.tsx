@@ -36,7 +36,7 @@ export interface SpeechBubbleProps {
   speakerName: string;
   /**
    * The spoken line. Uses tutorial instruction formatting for yellow and
-   * bold high-contrast highlights plus canonical inline rules glyphs.
+   * bold high-contrast purple highlights plus canonical inline rules glyphs.
    */
   text: string;
   /** Authored display scale for compact or prominent character dialogue. */
