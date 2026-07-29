@@ -14,7 +14,7 @@ delay = 1
 horizontalOffset = 0
 verticalOffset = 0
 bubbleWidth = 700
-text = "In each dream you will visit [purple]Dream Sites[/purple] to build your deck before confronting the Guardian of this dream."
+text = "In each dream, you will visit [purple]Dream Sites[/purple] to build your deck before confronting the guardian of this dream."
 
 [draft.speechBubble]
 speaker = "mira"
