@@ -172,10 +172,11 @@ describe("buildDreamscapeView", () => {
       hasSeenStartingDeckPopup: false,
     } as JourneyState;
     expect(
-      buildDreamscapeGuideDialogue(tutorialState, configuration),
+      buildDreamscapeGuideDialogue(node(), tutorialState, configuration),
     ).toBeUndefined();
     expect(
       buildDreamscapeGuideDialogue(
+        node(),
         { ...tutorialState, hasSeenStartingDeckPopup: true },
         configuration,
       ),
@@ -189,11 +190,45 @@ describe("buildDreamscapeView", () => {
     });
     expect(
       buildDreamscapeGuideDialogue(
+        node(),
         {
           ...tutorialState,
           completionLevel: 1,
           hasSeenStartingDeckPopup: true,
         },
+        configuration,
+      ),
+    ).toBeUndefined();
+  });
+
+  it("omits first-dream guidance when returning after a Draft visit", () => {
+    const configuration = {
+      speechBubble: {
+        speaker: "mira" as const,
+        delay: 2,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 700,
+        text: "Visit [purple]Dream Sites[/purple].",
+      },
+    };
+    const tutorialState = {
+      isTutorialJourney: true,
+      completionLevel: 0,
+      hasSeenStartingDeckPopup: true,
+    } as JourneyState;
+    const returnedNode = node({
+      sites: [
+        site({ id: "s-purge", type: "Purge" }),
+        site({ id: "s-draft", type: "Draft", isVisited: true }),
+        site({ id: "s-battle", type: "Battle" }),
+      ],
+    });
+
+    expect(
+      buildDreamscapeGuideDialogue(
+        returnedNode,
+        tutorialState,
         configuration,
       ),
     ).toBeUndefined();

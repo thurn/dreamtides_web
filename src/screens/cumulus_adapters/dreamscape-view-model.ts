@@ -247,21 +247,28 @@ export function buildDreamscapeView(
     inlineRewards,
     replacement: buildDreamsignReplacementView(state, replacementSiteId),
     guideDialogue: buildDreamscapeGuideDialogue(
+      node,
       state,
       tutorialConfiguration,
     ),
   };
 }
 
-/** Build Mira's guidance only after the tutorial starter-deck modal closes. */
+/**
+ * Build Mira's guidance only for the first visit to the tutorial dreamscape,
+ * after the starter-deck modal closes.
+ */
 export function buildDreamscapeGuideDialogue(
+  node: DreamscapeNode,
   state: JourneyState,
   configuration?: TutorialDreamscapeConfiguration,
 ): DreamscapeGuideDialogueView | undefined {
+  const hasVisitedSite = node.sites.some((site) => site.isVisited);
   if (
     state.isTutorialJourney !== true ||
     state.completionLevel !== 0 ||
     !state.hasSeenStartingDeckPopup ||
+    hasVisitedSite ||
     configuration === undefined
   ) {
     return undefined;
