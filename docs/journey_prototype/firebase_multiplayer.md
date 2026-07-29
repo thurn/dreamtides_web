@@ -166,6 +166,12 @@ reconciles pending intents, and records the observing client and first corrected
 sequence. Equal intent keys with different type or payload contracts produce a
 semantic-collision diagnostic.
 
+Hosted observers cannot submit player decisions. Deterministic lifecycle
+handoffs whose prerequisite is already fixed in the fold may be committed by
+any client; completing an exhausted Draft site is one such handoff. Its
+run-scoped intent key makes concurrent submissions one shared transition, and
+the room controller remains unchanged.
+
 ## Local Testing
 
 Run:

@@ -757,6 +757,70 @@ describe("COMPLETE_SITE", () => {
       "bounced",
     );
   });
+
+  it("allows an observer to commit the deterministic completed-draft handoff", () => {
+    const completedDraft = siteState("Draft", {
+      draftState: {
+        mode: "pool",
+        currentOffer: [],
+        activeSiteId: SITE_ID,
+        pickNumber: 6,
+        sitePicksCompleted: 5,
+        siteShownCardNumbers: [],
+        draftPoolCopiesByCard: {},
+        remainingCopiesByCard: {},
+      },
+    });
+    const hosted = {
+      ...completedDraft,
+      playtestControl: {
+        mode: "single-controller" as const,
+        controllerClientId: "controller",
+      },
+    };
+
+    const out = reduceGameEvent(
+      hosted,
+      event("COMPLETE_SITE", { siteId: SITE_ID }, "observer"),
+      ctx(),
+    );
+
+    expect(out.outcome).toBe("applied");
+    expect(out.state.journey.visitedSites).toContain(SITE_ID);
+    expect(out.state.journey.screen.type).toBe("dreamscape");
+    expect(out.state.playtestControl?.controllerClientId).toBe("controller");
+  });
+
+  it("keeps an observer from completing an active draft offer", () => {
+    const activeDraft = siteState("Draft", {
+      draftState: {
+        mode: "pool",
+        currentOffer: [1, 2, 3, 4],
+        activeSiteId: SITE_ID,
+        pickNumber: 5,
+        sitePicksCompleted: 4,
+        siteShownCardNumbers: [1, 2, 3, 4],
+        draftPoolCopiesByCard: { "1": 1, "2": 1, "3": 1, "4": 1 },
+        remainingCopiesByCard: { "1": 1, "2": 1, "3": 1, "4": 1 },
+      },
+    });
+    const hosted = {
+      ...activeDraft,
+      playtestControl: {
+        mode: "single-controller" as const,
+        controllerClientId: "controller",
+      },
+    };
+
+    const out = reduceGameEvent(
+      hosted,
+      event("COMPLETE_SITE", { siteId: SITE_ID }, "observer"),
+      ctx(),
+    );
+
+    expect(out.outcome).toBe("bounced");
+    expect(out.bounceReason).toBe("observer_read_only");
+  });
 });
 
 // ---------------------------------------------------------------------------

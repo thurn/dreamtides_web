@@ -25,6 +25,7 @@ import {
 } from "./events";
 import type { FoldState } from "./fold-state";
 import type { JourneyState } from "../types/journey";
+import { readDraftSiteProgress } from "../data/draft-site-bootstrap";
 import * as frontDoor from "./front-door";
 import * as battleEvents from "./battle/battle-events";
 import * as deck from "./journey/deck";
@@ -149,6 +150,7 @@ function authorizePlaytestIntent(
       ? "allow"
       : "reject";
   }
+  if (isPassiveHostedHandoff(state, event)) return "allow";
   if (!isPlayerControlledIntent(event)) return "allow";
   if (control.controllerClientId === null) {
     if (isFirstTutorialGameplayIntent(state, event)) return "claim";
@@ -159,6 +161,16 @@ function authorizePlaytestIntent(
       : "reject";
   }
   return event.actor === control.controllerClientId ? "allow" : "reject";
+}
+
+function isPassiveHostedHandoff(
+  state: FoldState,
+  event: GameEvent,
+): boolean {
+  if (event.type !== "COMPLETE_SITE") return false;
+  const siteId = event.payload.siteId;
+  if (typeof siteId !== "string") return false;
+  return readDraftSiteProgress(state.journey.draftState, siteId).isComplete;
 }
 
 const TUTORIAL_BATTLE_GAMEPLAY_EVENT_TYPES: ReadonlySet<string> = new Set([
