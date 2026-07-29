@@ -21,35 +21,38 @@ reconstruct the exact reading and rules presented to the player.
 
 ## Design decision
 
-The Space Tarot uses a **four-by-ten matrix**:
+The Space Tarot is a **thirty-two-minor/eight-Major hybrid**:
 
 - four constellations: **Suns**, **Moons**, **Comets**, and **Voids**;
-- nine numbered orbits in each constellation;
-- one named **Sign** in each constellation, with numeric value 10;
-- a fixed **Radiant** or **Umbral** aspect printed on every card.
+- eight numbered Minor Arcana in each constellation;
+- eight individually named **Major Arcana**;
+- one orbit value from 1–8, one constellation affinity, and one fixed
+  **Radiant** or **Umbral** aspect on every card.
 
-This gives every card three legible properties:
+The grid is balanced across all three ordinary properties:
 
-1. **Constellation** supports suit bets, recipe assignment, matching, and
-   25/50 splits.
-2. **Orbit value** supports thresholds, totals, runs, pressure limits, and
-   clean 10% increments.
-3. **Aspect** supports an exact 50/50 split while remaining countable as cards
-   leave the shoe.
+- each constellation contains its eight Minors plus two affiliated Majors, for
+  10 / 40 = 25%;
+- each value appears on four Minors plus one Major, for 5 / 40 = 12.5%;
+- each aspect appears on twenty cards, for 20 / 40 = 50%;
+- Major Arcana appear on eight cards, for 8 / 40 = 20%.
 
-The four Signs add named, memorable cards and a natural 10% event class without
-breaking the grid. A Sign belongs to its constellation, has value 10, and keeps
-its printed aspect unless a table explicitly reads “any Sign.”
+This balance lets a Major participate in ordinary games without becoming an
+exception. The Mirror is value 2 in Pressure Vault, a Moon in Signal Auction,
+and Umbral in Figment Reactor. Tables whose placard says **READS ARCANA** also
+resolve its named identity.
 
 ### Candidate decks considered
 
-| Candidate                                     | What it does well                                                                       | What breaks under repeated games                                                                                                       | Decision |
-| --------------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| **One hundred numbered cards**                | expresses any whole percentage directly                                                 | every game becomes a renamed percentile roll; there are no hands, matches, suits, or memorable reveals; the discard is tedious to read | reject   |
-| **Twenty-two unique named arcana**            | strongest individual art and fortune-telling flavor                                     | coarse and irregular odds; every table needs a bespoke lookup; poker, runs, pairs, and threshold play are weak                         | reject   |
-| **Thirty-six cards: four suits × nine ranks** | compact, countable, and good for set play                                               | common casino odds such as 10%, 20%, 30%, 70%, and 90% require mixed exceptions; it lacks a small named trump class                    | reject   |
-| **Forty cards: four suits × ten values**      | clean deciles, quarters, halves, thresholds, totals, sets, runs, and four special cards | needs careful presentation so three card properties do not compete for attention                                                       | choose   |
-| **Tarot reversals randomized when dealt**     | familiar tarot ritual and another binary result                                         | adds a coin flip outside the finite deck, cannot be counted from the discard, and weakens the shared-shoe premise                      | reject   |
+| Candidate                                       | What it does well                                                                          | What breaks under repeated games                                                                                                       | Decision |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| **One hundred numbered cards**                  | expresses any whole percentage directly                                                    | every game becomes a renamed percentile roll; there are no hands, matches, suits, or memorable reveals; the discard is tedious to read | reject   |
+| **Twenty-two Major Arcana only**                | maximizes named-card art, symbolism, and surprising reveals                                | coarse irregular odds; every table needs a bespoke lookup; poker, runs, pairs, and threshold play are weak                             | reject   |
+| **Thirty-six Minors: four suits × nine values** | compact, countable, and good for sets and numeric readings                                 | has no named cards to anticipate and little space for table-specific narrative                                                         | reject   |
+| **Thirty-six Minors plus four named Signs**     | clean deciles and a small 10% special class                                                | the named cards are too rare and function mainly as rank 10; they underinvest in the part of tarot players find most evocative         | reject   |
+| **Thirty-two Minors plus eight Major Arcana**   | Majors appear often, every ordinary axis remains balanced, and five-of-a-value is possible | numeric thresholds move in 12.5% steps and Arcana-reading tables need a concise named-effect panel                                     | choose   |
+| **A tarot-like 56 Minors plus 22 Majors**       | closest to a traditional tarot structure and largest art canvas                            | a journey reveals too little of the 78-card shoe for counting to mature; inventory and rule learning become a separate game            | reject   |
+| **Reversals randomized when dealt**             | familiar tarot ritual and another binary result                                            | adds a coin flip outside the finite deck, cannot be counted from the discard, and weakens the shared-shoe premise                      | reject   |
 
 Three shoe models were also considered:
 
@@ -59,21 +62,19 @@ Three shoe models were also considered:
 | let rewards permanently add and remove Space Tarot cards | creates run-building around the casino deck, but favorable edits compound into extreme odds and compete with the journey deck for attention | defer beyond v2 |
 | carry one finite shoe and public discard across the run  | every reveal matters later, counting is supported without external notes, and sealed cards connect visits across battles                    | choose          |
 
-The chosen deck is the smallest candidate that gives both a broad probability
-vocabulary and real card-game structure. Its most useful fresh-shoe partitions
-are:
+The chosen deck's most useful fresh-shoe partitions are:
 
-| Reading                          |   Cards | Probability |
-| -------------------------------- | ------: | ----------: |
-| one exact card                   |  1 / 40 |        2.5% |
-| one orbit value or all Signs     |  4 / 40 |         10% |
-| two orbit values                 |  8 / 40 |         20% |
-| one constellation                | 10 / 40 |         25% |
-| three orbit values               | 12 / 40 |         30% |
-| one aspect or two constellations | 20 / 40 |         50% |
-| values 1–7                       | 28 / 40 |         70% |
-| values 1–8                       | 32 / 40 |         80% |
-| numbered cards                   | 36 / 40 |         90% |
+| Reading                                    |   Cards | Probability |
+| ------------------------------------------ | ------: | ----------: |
+| one exact card                             |  1 / 40 |        2.5% |
+| one value                                  |  5 / 40 |       12.5% |
+| any Major Arcana                           |  8 / 40 |         20% |
+| one constellation or two values            | 10 / 40 |         25% |
+| one aspect or four values                  | 20 / 40 |         50% |
+| six values                                 | 30 / 40 |         75% |
+| any Minor Arcana                           | 32 / 40 |         80% |
+| one aspect plus all opposite-aspect Majors | 24 / 40 |         60% |
+| any Major or the four value-8 Minor Arcana | 12 / 40 |         30% |
 
 Those are baseline probabilities. The actual fraction changes as known cards
 are revealed. Hidden table and sealed cards remain in the public unseen pool
@@ -84,48 +85,68 @@ posterior fraction.
 
 The deck is reused, but the operation performed on it changes:
 
-- **Orbit Book** asks the player to choose a numeric threshold before one draw.
+- **Orbit Book** asks the player to choose between a value, aspect, or Major
+  reading before one draw.
 - **Pressure Vault** adds card values toward a visible limit and offers
   hit-or-stand decisions after every safe draw.
-- **Figment Reactor** reads aspect first, then a combined orbit/Sign class on a
+- **Figment Reactor** reads aspect first, then a combined orbit/Major class on a
   press.
 - **Contraband Array** deals a positional spread, sells information, and reads
-  constellation as prize plus orbit as liability.
+  constellation as prize plus orbit or named Arcana as rider.
 - **Quantum Hand** uses the complete cards for pairs, runs, constellations, and
-  a hold/redraw decision.
+  a hold/redraw decision; the fifth card of a value must be its Major.
 - **Bane Bond** seals one card now and lets the player choose later how strict
-  a threshold to read against it.
-- **Running Jackpot** makes the four Signs a coveted jackpot class.
-- **Fivefold Mirror** makes the same Signs the dangerous maturity class.
+  a threshold to read against it, with The Last Star and The Maw overriding
+  opposite ends of the ordinary value result.
+- **Running Jackpot** makes every Major a win and reserves the full-meter call
+  for The Crown and The Last Star.
+- **Fivefold Mirror** gives every Major a named maturity call led by The Mirror.
 
-For example, **The Door** is a Void, a Sign, value 10, and Radiant. It is a
-high-pressure card in Pressure Vault, a jackpot in Running Jackpot, a
-Void-recipe card in Signal Auction, and the top card of a Void constellation or
-value-10 pair in Quantum Hand. The identity is stable; each game chooses which
-part of that identity matters.
+For example, **The Mirror** is a Moon-affiliated, value-2, Umbral Major. It is a
+low-pressure card in Pressure Vault, qualifies Escape Trajectory in Orbit Book,
+maps to the Moon recipe in Signal Auction, completes value-2 five-of-a-kind in
+Quantum Hand, and produces the best named result in Fivefold Mirror. The
+identity is stable; each table chooses how much of it to read.
+
+### Arcana grammar
+
+Each Major has a stable motif rather than one universal executable power:
+
+- **The Wanderer** advances, moves, or redraws.
+- **The Mirror** copies.
+- **The Gate** reveals or opens a choice.
+- **The Crown** maximizes a payout.
+- **The Eclipse** reverses or replaces a result.
+- **The Maw** consumes, busts, or defaults.
+- **The Conjunction** combines or acts as a wild.
+- **The Last Star** rescues or insures.
+
+A numeric, constellation, or aspect table reads a Major exactly like any other
+card. Named effects occur only on a table marked **READS ARCANA** and are fully
+listed on its placard. This prevents a Major reveal from launching a chain of
+global interrupts while preserving a learnable personality across games.
 
 ### Candidate stress tests
 
 The forty-card structure was tested against the four operations most likely to
 expose a weak deck:
 
-1. **Single-card thresholds.** Values 1–7, 1–4, and 1–2 give Orbit Book three
-   immediately readable 70%/40%/20% lines. The table needs no arbitrary list of
-   winning card names.
-2. **Sequential pressure.** Dealing two cards and hitting against a total of 21
-   produces fresh-shoe conditional bust rates of 15.830%, 44.749%, and 64.054%
+1. **Single-card readings.** Orbit Book can offer a six-value line at 75%, an
+   aspect line at 50%, and a Major line at 20%. Its choices use three different
+   properties rather than disguising three percentile thresholds.
+2. **Sequential pressure.** Dealing two cards and hitting against a total of 17
+   produces fresh-shoe conditional bust rates of 15.739%, 45.855%, and 65.747%
    on cards three through five. The curve rises sharply enough to create three
    distinct stand decisions without stage-specific random tables.
 3. **Five-card hands.** The deck has `C(40, 5) = 658,008` initial hands,
-   including pairs, repeated values, same-constellation hands, and six possible
-   five-value runs per constellation. Quantum Hand is a native use of the deck
-   rather than a lookup layered on one-card odds.
+   including five of one value, five Majors, pairs, same-constellation hands,
+   and runs. Because every value has four Minors and one Major, its rarest set
+   advertises the hybrid structure directly.
 4. **A mixed journey sequence.** Orbit Book, Salvage Lock through reel three,
    Contraband Array, Running Jackpot, and an initial Quantum Hand expose
-   thirteen cards. That is enough information for later tables to move
-   meaningfully away from baseline while leaving most identities uncertain. A
-   recycle restores the full available composition before the count becomes
-   trivial.
+   thirteen cards. Such a sequence reveals at least one Major 97.113% of the
+   time; an opening Quantum Hand alone contains one 69.396% of the time. Majors
+   are recurring characters without overwhelming the Minors.
 
 ## Exact deck inventory
 
@@ -134,29 +155,41 @@ enter the player's journey deck, cannot be drafted or transfigured, and use
 stable UUIDs stored as `spaceTarotCardId` values for identity. Display names are
 resolved only at presentation time.
 
-| Constellation | Numbered cards | Sign (value 10)  | Radiant cards    | Umbral cards     |
-| ------------- | -------------- | ---------------- | ---------------- | ---------------- |
-| **Suns**      | values 1–9     | **The Eclipse**  | 1, 3, 5, 7, 9    | 2, 4, 6, 8, Sign |
-| **Moons**     | values 1–9     | **The Tide**     | 2, 4, 6, 8, Sign | 1, 3, 5, 7, 9    |
-| **Comets**    | values 1–9     | **The Wanderer** | 1, 3, 5, 7, 9    | 2, 4, 6, 8, Sign |
-| **Voids**     | values 1–9     | **The Door**     | 2, 4, 6, 8, Sign | 1, 3, 5, 7, 9    |
+| Constellation | Minor values | Radiant Minors | Umbral Minors | Affiliated Majors           |
+| ------------- | ------------ | -------------- | ------------- | --------------------------- |
+| **Suns**      | 1–8          | 1, 3, 5, 7     | 2, 4, 6, 8    | The Crown, The Eclipse      |
+| **Moons**     | 1–8          | 2, 4, 6, 8     | 1, 3, 5, 7    | The Mirror, The Conjunction |
+| **Comets**    | 1–8          | 1, 3, 5, 7     | 2, 4, 6, 8    | The Wanderer, The Last Star |
+| **Voids**     | 1–8          | 2, 4, 6, 8     | 1, 3, 5, 7    | The Gate, The Maw           |
 
-The aspect pattern produces exactly five Radiant and five Umbral cards in each
-constellation, twenty of each in the full deck, and two Radiant and two Umbral
-Signs. Aspect is printed and fixed; card rotation is animation only.
+| Major Arcana        | Value | Affinity | Aspect  | Motif                 |
+| ------------------- | ----: | -------- | ------- | --------------------- |
+| **The Wanderer**    |     1 | Comets   | Radiant | advance, move, redraw |
+| **The Mirror**      |     2 | Moons    | Umbral  | copy                  |
+| **The Gate**        |     3 | Voids    | Radiant | reveal, choose        |
+| **The Crown**       |     4 | Suns     | Radiant | maximize              |
+| **The Eclipse**     |     5 | Suns     | Umbral  | invert, replace       |
+| **The Maw**         |     6 | Voids    | Umbral  | consume, bust         |
+| **The Conjunction** |     7 | Moons    | Radiant | combine, wild         |
+| **The Last Star**   |     8 | Comets   | Umbral  | rescue, insure        |
+
+Each constellation has four Radiant and four Umbral Minors plus one Major of
+each aspect. The complete deck therefore contains twenty cards of each aspect.
+Aspect is printed and fixed; card rotation is animation only.
 Radiant and Umbral are polarities, not universal good and bad outcomes. Signal
 Auction, for example, pays the larger kicker on Umbral.
 
-Each face emphasizes all three properties through redundant cues:
+Each face emphasizes all four properties through redundant cues:
 
 - constellation name and unique glyph;
-- large numeric orbit or the word `SIGN` with a smaller `10`;
+- large numeric orbit;
 - the words `RADIANT` or `UMBRAL` plus a distinct border treatment;
-- unique title and illustration.
+- a `MINOR` ribbon or a named `MAJOR ARCANA` title;
+- unique illustration.
 
 Color may reinforce these cues but never carries rules by itself. During a
 game, the table visually raises the property it reads and subdues the other
-two. Pressure Vault makes values dominant; Figment Reactor makes aspect
+fields. Pressure Vault makes values dominant; Figment Reactor makes aspect
 dominant; Signal Auction makes constellation dominant.
 
 ## The shared shoe
@@ -174,8 +207,8 @@ forty card ids. The run then has four zones:
 All card-driven tables in the run use these zones. The zone state carries into
 every subsequent Gamble visit. The player can open the Space Tarot tray at any
 time a wager is visible to inspect the discard, counts by constellation, value,
-and aspect, the number of unknown sealed cards, and the number left in the
-shoe.
+aspect, and Minor/Major status, which named Majors remain unseen, the number of
+unknown sealed cards, and the number left in the shoe.
 
 A table declares its maximum draw budget. Before its first deal, if the shoe
 contains fewer cards than that budget, the wager previews a **new orbit**
@@ -256,9 +289,11 @@ authored expansion content.
 - Fixed payouts remain fixed as the shoe changes. Counting cards is allowed to
   create favorable and unfavorable visits; dynamic payout scaling would erase
   the strategic value of the shared shoe.
-- A table is eligible only when every required outcome class remains possible
-  under public information and its draw budget can be met. It does not silently
-  recycle merely to improve the house's odds.
+- Each table declares its mandatory tension classes, such as at least one win
+  and one miss. Those classes must remain possible under public information and
+  the draw budget must be met. An individual named Major branch may have zero
+  live copies; the placard shows it crossed out rather than disabling the whole
+  table. A table does not silently recycle merely to improve the house's odds.
 - A wager manifest freezes offered objects, public odds, liabilities, draw
   budget, and rules. Reloading or reconnecting cannot change the deal.
 - **Farpoint table** means the replacement rules used when Gamble is enhanced
@@ -289,7 +324,7 @@ count can be generated.
 Gravok calls essence **chips**, a commit a **bet**, a result a **reading**, and
 leaving **stepping away from the table**. He deals Space Tarot with his crystal
 fingers, names the revealed card, and then announces the table-specific call:
-“The Wanderer, Umbral. The reactor takes it.”
+“The Mirror, Umbral. The reactor takes it.”
 
 The rules placard shows:
 
@@ -303,41 +338,48 @@ Farpoint surrounds the same game with a permanent pit, spectators, an
 illuminated shoe-history board, and a gold **HOME TABLE** plaque. The replacement
 rule is written on the plaque.
 
+A Major reveal receives a longer full-card dwell, its spoken title, and a
+signature motif animation before the table call resolves. A Minor reveal stays
+fast. An Arcana-reading placard displays all eight Major portraits; known
+discarded Majors are face-up and crossed out, unseen Majors remain illustrated,
+and any partially revealed Major shows only the properties the player has
+earned. The spectacle and recognition of a named card are part of the payout.
+
 ## Resolution-source map
 
-|   # | Table                          | Source                         | Space Tarot lens                 |
-| --: | ------------------------------ | ------------------------------ | -------------------------------- |
-|   1 | Crystal Roll                   | crystal dice                   | —                                |
-|   2 | The Orbit Book                 | Space Tarot                    | value threshold                  |
-|   3 | Loaded Blessing                | Space Tarot                    | value and named Signs            |
-|   4 | Pressure Vault                 | Space Tarot                    | cumulative value                 |
-|   5 | Salvage Lock                   | Space Tarot                    | escalating value threshold       |
-|   6 | Guaranteed Burn                | Space Tarot                    | expanding value range            |
-|   7 | The Sixfold Wheel              | physical wheel                 | —                                |
-|   8 | The Conveyor                   | deterministic ladder           | —                                |
-|   9 | Overclock Wager                | deterministic liability ladder | —                                |
-|  10 | Figment Reactor                | Space Tarot                    | aspect, then value/Sign          |
-|  11 | Collateral Auction             | Space Tarot                    | aspect/Sign or value             |
-|  12 | Fivefold Mirror                | sealed Space Tarot             | value band                       |
-|  13 | The House Chooses the Category | journey deck                   | entry identity                   |
-|  14 | Contraband Array               | Space Tarot spread             | constellation and value          |
-|  15 | Match and Keep                 | paired memory tokens           | token identity                   |
-|  16 | Signal Auction                 | Space Tarot spread             | constellation and aspect         |
-|  17 | Quantum Hand                   | Space Tarot hand               | constellation and value patterns |
-|  18 | Escrow Orbit                   | sealed Space Tarot             | constellation                    |
-|  19 | The Bane Bond                  | sealed Space Tarot             | tightening value threshold       |
-|  20 | Borrowed Victory               | future battle rewards          | —                                |
-|  21 | Next-Battle Contract           | battle performance             | —                                |
-|  22 | Open-Deck Parlay               | battle performance             | —                                |
-|  23 | House Rules                    | battle performance             | —                                |
-|  24 | Gravity Sling                  | Space Tarot                    | constellation pair               |
-|  25 | Pilot and Navigator            | Space Tarot                    | cumulative value                 |
-|  26 | Gravok's Running Jackpot       | Space Tarot                    | Sign/value class                 |
-|  27 | The Algorithm's Tell           | Dream Augury claims            | —                                |
-|  28 | Deck Cut                       | journey deck                   | entry predicate                  |
-|  29 | Sealed Reserve                 | Space Tarot                    | constellation or value band      |
-|  30 | Bad-Omen Hedge                 | battle trigger                 | —                                |
-|  31 | Buyback                        | Space Tarot                    | value band                       |
+|   # | Table                          | Source                         | Space Tarot lens                  |
+| --: | ------------------------------ | ------------------------------ | --------------------------------- |
+|   1 | Crystal Roll                   | crystal dice                   | —                                 |
+|   2 | The Orbit Book                 | Space Tarot                    | value, aspect, or Major           |
+|   3 | Loaded Blessing                | Space Tarot                    | value and Major classes           |
+|   4 | Pressure Vault                 | Space Tarot                    | cumulative value                  |
+|   5 | Salvage Lock                   | Space Tarot                    | escalating value threshold        |
+|   6 | Guaranteed Burn                | Space Tarot                    | expanding value range             |
+|   7 | The Sixfold Wheel              | physical wheel                 | —                                 |
+|   8 | The Conveyor                   | deterministic ladder           | —                                 |
+|   9 | Overclock Wager                | deterministic liability ladder | —                                 |
+|  10 | Figment Reactor                | Space Tarot                    | aspect, then value/Major          |
+|  11 | Collateral Auction             | Space Tarot                    | aspect and named Major            |
+|  12 | Fivefold Mirror                | sealed Space Tarot             | value and named Major             |
+|  13 | The House Chooses the Category | journey deck                   | entry identity                    |
+|  14 | Contraband Array               | Space Tarot spread             | constellation, value, named Major |
+|  15 | Match and Keep                 | paired memory tokens           | token identity                    |
+|  16 | Signal Auction                 | Space Tarot spread             | constellation, aspect, Major      |
+|  17 | Quantum Hand                   | Space Tarot hand               | patterns and Major status         |
+|  18 | Escrow Orbit                   | sealed Space Tarot             | constellation                     |
+|  19 | The Bane Bond                  | sealed Space Tarot             | value with Major overrides        |
+|  20 | Borrowed Victory               | future battle rewards          | —                                 |
+|  21 | Next-Battle Contract           | battle performance             | —                                 |
+|  22 | Open-Deck Parlay               | battle performance             | —                                 |
+|  23 | House Rules                    | battle performance             | —                                 |
+|  24 | Gravity Sling                  | Space Tarot                    | constellation pair                |
+|  25 | Pilot and Navigator            | Space Tarot                    | cumulative value                  |
+|  26 | Gravok's Running Jackpot       | Space Tarot                    | named Major tiers                 |
+|  27 | The Algorithm's Tell           | Dream Augury claims            | —                                 |
+|  28 | Deck Cut                       | journey deck                   | entry predicate                   |
+|  29 | Sealed Reserve                 | Space Tarot                    | constellation affinity or value   |
+|  30 | Bad-Omen Hedge                 | battle trigger                 | —                                 |
+|  31 | Buyback                        | Space Tarot                    | value and named Major             |
 
 ## Immediate and press-your-luck tables
 
@@ -358,25 +400,26 @@ Exactly one deterministic percentile roll resolves the visit.
 **Farpoint table — House Chip.** The buy-in is 0. Pass Line wins 70% and
 pays 150 essence; Hard Way wins 30% and pays 360 essence.
 
-### 2. The Orbit Book — the threshold book
+### 2. The Orbit Book — the three-lens book
 
 The player buys one ticket for 50 essence, chooses a line, and receives one
-Space Tarot card. The selected line wins when the card's value is at or below
-its limit:
+Space Tarot card. Each line reads a different part of the card:
 
 | Ticket                | Fresh-shoe win class |      Baseline | Payout                                 |
 | --------------------- | -------------------- | ------------: | -------------------------------------- |
-| **Low orbit**         | values 1–7           | 28 / 40 = 70% | Card draft                             |
-| **Transfer orbit**    | values 1–4           | 16 / 40 = 40% | Transfiguration service and 50 essence |
-| **Escape trajectory** | values 1–2           |  8 / 40 = 20% | Dreamsign draft and 120 essence        |
+| **Low orbit**         | values 1–6           | 30 / 40 = 75% | Card draft                             |
+| **Transfer orbit**    | Radiant              | 20 / 40 = 50% | Transfiguration service and 50 essence |
+| **Escape trajectory** | any Major Arcana     |  8 / 40 = 20% | Dreamsign draft and 120 essence        |
 
 The prize manifests and live fractions are visible before the player chooses.
 One card resolves the selected line and then enters the discard.
 
-**Farpoint table — Chairman's Book.** The buy-in is 0. Limits are 8, 5, and 3,
-giving fresh-shoe baselines of 80%, 50%, and 30%. Low Orbit pays a Card draft
-plus 40 essence; Transfer Orbit pays a Transfiguration service plus 80 essence;
-Escape Trajectory pays a Dreamsign draft plus 150 essence.
+**Farpoint table — Chairman's Book.** The buy-in is 0. Low Orbit wins on values
+1–7 for 87.5% fresh; Transfer Orbit wins on any Radiant card or Umbral Major
+for 60%; Escape Trajectory wins on any Major or a value-8 Minor for 30%. Low
+Orbit pays a Card draft plus 40 essence; Transfer Orbit pays a Transfiguration
+service plus 80 essence; Escape Trajectory pays a Dreamsign draft plus 150
+essence.
 
 ### 3. Loaded Blessing — the comp desk
 
@@ -385,25 +428,25 @@ liability class the house may attach. One card is dealt after commitment:
 
 | Marker                | Liability class | Fresh baseline | Liability                                          |
 | --------------------- | --------------- | -------------: | -------------------------------------------------- |
-| **Credit marker**     | value 8–10      |  12 / 40 = 30% | lose 100 essence                                   |
-| **Nightmare marker**  | value 9–10      |   8 / 40 = 20% | gain 1 Nightmare Bane                              |
-| **Collateral marker** | any Sign        |   4 / 40 = 10% | purge the selected eligible non-starter deck entry |
+| **Credit marker**     | values 7–8      |  10 / 40 = 25% | lose 100 essence                                   |
+| **Nightmare marker**  | any Major       |   8 / 40 = 20% | gain 1 Nightmare Bane                              |
+| **Collateral marker** | Umbral Major    |   4 / 40 = 10% | purge the selected eligible non-starter deck entry |
 
 The Dreamsign is granted on either reading. Credit requires at least 100
 essence. Collateral is selected and frozen before the card is dealt.
 
 **Farpoint table — Owner's Comp.** The reward is a Dreamsign draft plus 50
-essence. Credit triggers on values 9–10, Nightmare on any Sign, and Collateral
-only on the two Umbral Signs, The Eclipse and The Wanderer. Their fresh
-liability baselines are 20%, 10%, and 5%.
+essence. Credit triggers on value 8, Nightmare on any Umbral Major, and
+Collateral only on The Eclipse or The Maw. Their fresh liability baselines are
+12.5%, 10%, and 5%.
 
 ### 4. Pressure Vault — twenty-one pressure
 
 The player pays 30 essence. Gravok deals two cards face-up and adds their
-values. A Sign is worth 10. The two-card total cannot exceed 20, so Lock 1 opens
-and the player may stand for 60 essence.
+values. The two-card total cannot exceed 16, so Lock 1 opens and the player may
+stand for 60 essence.
 
-Each hit deals one more card. A running total above 21 busts the vault:
+Each hit deals one more card. A running total above 17 busts the vault:
 
 | Safe state               |                   Available pot |
 | ------------------------ | ------------------------------: |
@@ -416,14 +459,14 @@ A bust awards no essence and adds exactly 1 Nightmare Bane. After every safe
 card, the UI enumerates the remaining public possibilities and shows the exact
 bust fraction for the next hit.
 
-For tuning reference, a fresh full shoe has a 15.830% bust chance on card three,
-a 44.749% conditional bust chance on card four, and a 64.054% conditional bust
+For tuning reference, a fresh full shoe has a 15.739% bust chance on card three,
+a 45.855% conditional bust chance on card four, and a 65.747% conditional bust
 chance on card five. These are baseline curve checks, not the odds displayed
 after a particular hand.
 
 **Farpoint table — Gravok Stands Soft.** The buy-in is 0, the pressure limit is
-24, and pots are 80/180/310/500 essence; the last also grants a Dreamsign draft.
-Fresh-shoe conditional bust baselines are 5.101%, 29.497%, and 52.785%. A bust
+20, and pots are 80/180/310/500 essence; the last also grants a Dreamsign draft.
+Fresh-shoe conditional bust baselines are 3.492%, 26.586%, and 51.383%. A bust
 still awards no essence and adds 1 Nightmare.
 
 ### 5. Salvage Lock — the progressive reels
@@ -434,16 +477,16 @@ safe value busts and discards every unbanked reward:
 | Reel | Safe values | Fresh bust | Prize added after success |
 | ---: | ----------- | ---------: | ------------------------- |
 |    1 | any card    |         0% | 60 essence                |
-|    2 | 1–8         |        20% | Card draft                |
-|    3 | 1–6         |        40% | Transfiguration service   |
-|    4 | 1–4         |        60% | Dreamsign draft           |
+|    2 | 1–6         |        25% | Card draft                |
+|    3 | 1–4         |        50% | Transfiguration service   |
+|    4 | 1–3         |      62.5% | Dreamsign draft           |
 
 After every successful reel, the player may collect the complete tray or pull
 again. Rewards with a choice are selected only after collection.
 
 **Farpoint table — Locked First Reel.** The buy-in is 0. Reels 2–4 are safe on
-1–9, 1–7, and 1–5, with fresh bust baselines of 10%, 30%, and 50%. Reel 1's
-60 essence is locked immediately; a later bust discards only reels 2–4. A
+1–7, 1–5, and 1–4, with fresh bust baselines of 12.5%, 37.5%, and 50%. Reel
+1's 60 essence is locked immediately; a later bust discards only reels 2–4. A
 successful fourth reel adds 80 essence.
 
 ### 6. Guaranteed Burn — the expanding ticket
@@ -454,9 +497,9 @@ attempt deals a new card:
 
 | Attempt |        Cost | Winning values | Fresh baseline |
 | ------: | ----------: | -------------- | -------------: |
-|       1 |  30 essence | 1–2            |            20% |
-|       2 |  50 essence | 1–4            |            40% |
-|       3 |  80 essence | 1–6            |            60% |
+|       1 |  30 essence | 1–2            |            25% |
+|       2 |  50 essence | 1–3            |          37.5% |
+|       3 |  80 essence | 1–5            |          62.5% |
 |       4 | 120 essence | any card       |           100% |
 
 Missed cards enter the discard, so the exact conditional chance for the next
@@ -464,8 +507,8 @@ attempt can differ materially from its fresh baseline. A win grants both
 rewards and closes the table.
 
 **Farpoint table — Progressive Guarantee.** Costs are 0/40/70/100 essence.
-Winning values are 1–3, 1–5, 1–7, and any card, for fresh baselines of
-30%/50%/70%/100%. The prize also includes 100 essence.
+Winning values are 1–3, 1–4, 1–6, and any card, for fresh baselines of
+37.5%/50%/75%/100%. The prize also includes 100 essence.
 
 ### 7. The Sixfold Wheel — roulette
 
@@ -538,35 +581,37 @@ frozen by UUID and deck entry id, and one Space Tarot card is dealt:
 | **Nothing**   | Umbral  |            50% | permanently remove the original                   |
 
 After Double, the player may collect both copies or press. Pressing deals
-another card. An inner-orbit card with value 1–3 or either Radiant Sign wins;
-that class contains 14 / 40 cards = 35% in a fresh shoe. A win adds a second
-permanent duplicate and applies one frozen legal non-Perfected transfiguration
-to all three copies. A miss removes the added copy and leaves the unchanged
-original.
+another card. Any Major or a value-1 Minor wins; that class contains 12 / 40
+cards = 30% in a fresh shoe. A win adds a second permanent duplicate and
+applies one frozen legal non-Perfected transfiguration to all three copies. A
+miss removes the added copy and leaves the unchanged original.
 
 Both draws use live shoe fractions. The first card is already absent when the
 press odds are computed.
 
 **Farpoint table — Original Protected.** Radiant doubles the card; Umbral
-returns the original unchanged. A press wins on any Radiant card, a fresh-shoe
-50% class, with the same win and miss effects.
+returns the original unchanged. A press wins on any Major or a value 1–3 Minor,
+a fresh-shoe 20 / 40 = 50% class, with the same win and miss effects.
 
 ### 11. Collateral Auction — the high-roller cage
 
 The player selects one of exactly four shown legal non-starter deck entries as
-collateral. A frozen Dreamsign draft is displayed, then Gravok deals one card:
+collateral. A frozen Dreamsign draft and Card draft are displayed, then Gravok
+deals one card. This table **READS ARCANA**:
 
-| Reading            | Class                 | Fresh baseline | Resolution                                    |
-| ------------------ | --------------------- | -------------: | --------------------------------------------- |
-| **House bonus**    | Radiant numbered card |            45% | return the card and grant the Dreamsign draft |
-| **Fair exchange**  | Umbral numbered card  |            45% | purge the card and grant the Dreamsign draft  |
-| **Reserve missed** | any Sign              |            10% | return the card; grant nothing                |
+| Class                         | Fresh baseline | Resolution                                                               |
+| ----------------------------- | -------------: | ------------------------------------------------------------------------ |
+| Radiant Minor                 |            40% | return the card and grant the Dreamsign draft                            |
+| Umbral Minor                  |            40% | purge the card and grant the Dreamsign draft                             |
+| The Crown or The Last Star    |             5% | return the card; grant the Dreamsign draft and 80 essence                |
+| The Mirror or The Conjunction |             5% | return the card; grant the Dreamsign draft and add 1 permanent duplicate |
+| The Wanderer or The Gate      |             5% | return the card and grant the Card draft                                 |
+| The Eclipse or The Maw        |             5% | return the card; grant nothing                                           |
 
-Signs form their own class regardless of printed aspect.
-
-**Farpoint table — Crystal Member Rate.** The home table reads values: 1–6 is
-House Bonus, 7–9 is Fair Exchange, and a Sign is Reserve Missed, giving fresh
-baselines of 60%/30%/10%. Reserve Missed returns the card and grants 60 essence.
+**Farpoint table — Crystal Member Rate.** Minor results are unchanged. Crown
+and Last Star add 120 essence; Mirror and Conjunction keep their result;
+Wanderer and Gate grant the Dreamsign draft instead of the Card draft; Eclipse
+and Maw return the card and grant 60 essence.
 
 ### 12. Fivefold Mirror — the sealed multiplier
 
@@ -577,19 +622,28 @@ battles must remain:
 - **Fivefold:** pay 40 essence, add 5 temporary copies for the next 2 battles,
   and seal one face-down Space Tarot card.
 
-After the second battle, temporary copies vanish and the sealed card is read:
+After the second battle, temporary copies vanish and the sealed card is read.
+This table **READS ARCANA**:
 
-| Value | Fresh baseline | Maturity                                   |
-| ----- | -------------: | ------------------------------------------ |
-| 1–3   |            30% | add 2 permanent copies                     |
-| 4–9   |            60% | add 1 permanent copy                       |
-| Sign  |            10% | add 1 Nightmare Bane and no permanent copy |
+| Card            | Fresh baseline | Maturity                                                                 |
+| --------------- | -------------: | ------------------------------------------------------------------------ |
+| value 1–3 Minor |            30% | add 2 permanent copies                                                   |
+| value 4–8 Minor |            50% | add 1 permanent copy                                                     |
+| The Wanderer    |           2.5% | add 2 permanent copies                                                   |
+| The Mirror      |           2.5% | add 5 permanent copies                                                   |
+| The Gate        |           2.5% | add 1 permanent copy and grant a Dreamsign draft                         |
+| The Crown       |           2.5% | add 4 permanent copies                                                   |
+| The Eclipse     |           2.5% | add 1 permanent copy and apply one frozen transfiguration to both copies |
+| The Maw         |           2.5% | add 1 Nightmare Bane and no permanent copy                               |
+| The Conjunction |           2.5% | add 3 permanent copies                                                   |
+| The Last Star   |           2.5% | add 2 permanent copies and 80 essence                                    |
 
 The original is never at risk. The player can inspect live posterior odds for
 the sealed card as other cards are revealed during the two battles.
 
-**Farpoint table — Mirrored Suite.** Both lines cost 0. Fivefold adds 3
-permanent copies on 1–3, 2 on 4–9, and 1 on a Sign; it cannot add a Bane.
+**Farpoint table — Mirrored Suite.** Both lines cost 0. Minor values 1–3 add 3
+permanent copies and values 4–8 add 2. Every Major result adds one more
+permanent copy than listed; The Maw adds 1 permanent copy and no Bane.
 
 ### 13. The House Chooses the Category — the face-down discard
 
@@ -625,21 +679,40 @@ one under each crate. Constellation defines the prize:
 | Comets        | Transfiguration service |
 | Voids         | Dreamsign draft         |
 
-Value defines the rider:
+Minor value defines the ordinary rider:
 
-| Value | Fresh baseline | Rider                                 |
-| ----- | -------------: | ------------------------------------- |
-| 1–5   |            50% | Clean                                 |
-| 6–8   |            30% | lose 60 essence                       |
-| 9     |            10% | gain 1 Nightmare Bane                 |
-| Sign  |            10% | Clean and add 80 essence to the prize |
+| Minor value | Fresh baseline | Rider                 |
+| ----------- | -------------: | --------------------- |
+| 1–4         |            40% | Clean                 |
+| 5–6         |            20% | lose 60 essence       |
+| 7–8         |            20% | gain 1 Nightmare Bane |
+
+The remaining 20% are Major Arcana. This table **READS ARCANA**, and a chosen
+Major replaces the ordinary rider:
+
+| Major               | Rider                                                                                    |
+| ------------------- | ---------------------------------------------------------------------------------------- |
+| **The Wanderer**    | reveal one other crate, then choose between it and this crate                            |
+| **The Mirror**      | take this prize and add a Duplication service                                            |
+| **The Gate**        | choose any of the four constellation prizes                                              |
+| **The Crown**       | take this prize and add 160 essence                                                      |
+| **The Eclipse**     | reveal both other crates and choose one; ignore its rider                                |
+| **The Maw**         | gain no prize and add 1 Nightmare Bane                                                   |
+| **The Conjunction** | reveal one other crate and gain both constellation prizes; ignore the other card's rider |
+| **The Last Star**   | take this prize and add a Dreamsign draft                                                |
+
+When a Major reveals or redirects the choice to another crate, only the effect
+written above resolves: the other card can supply its printed constellation
+prize, but its rider does not trigger unless the Major explicitly says so. Each
+crate resolves at most once, so Major effects cannot recurse into one another.
 
 The player scans one crate for free, revealing its complete card. Scanning one
 additional crate costs 30 essence. The player takes one crate or leaves; closing
 reveals all three cards and discards them.
 
-**Farpoint table — Security Override.** Two scans are free. Values 1–8 are
-Clean, value 9 loses 40 essence, and Signs are Clean and add 100 essence.
+**Farpoint table — Security Override.** Two scans are free. Minor values 1–6
+are Clean and 7–8 lose 40 essence. Major effects are unchanged except The Maw
+grants its constellation prize and adds no Bane.
 
 ### 15. Match and Keep — the memory table
 
@@ -670,8 +743,10 @@ into sealed envelopes. Their constellations map to reward recipes:
 | Comets        | Transfiguration service |
 | Voids         | Duplication service     |
 
-A Radiant card adds 20 essence to its recipe; an Umbral card adds 80. Any Sign
-adds 120 essence instead of its aspect kicker.
+A Radiant Minor adds 20 essence to its recipe; an Umbral Minor adds 80. Any
+Major adds 120 essence instead of its aspect kicker. A constellation-name scan
+reveals only affinity; the player must buy the complete scan to learn whether
+an envelope contains a Major.
 
 The player chooses one envelope at an information level:
 
@@ -692,30 +767,32 @@ names, and 50 after complete cards.
 
 The player pays 40 essence and receives five cards from the shared shoe. They
 may hold any number and pay 30 essence once to discard and redraw every unheld
-card. A Sign has value 10. Aspect does not affect hand rank.
+card. Major affinity counts as constellation; aspect does not affect hand rank.
 
 The best final hand pays:
 
-| Hand                                                            | Fresh full-deck combinations | Baseline probability |                          Payout |
-| --------------------------------------------------------------- | ---------------------------: | -------------------: | ------------------------------: |
-| Constellation run: five consecutive values in one constellation |                           24 |               0.004% | 700 essence and Dreamsign draft |
-| Four of an orbit                                                |                          360 |               0.055% |                     600 essence |
-| Constellation: five cards in one constellation                  |                          984 |               0.150% |                     500 essence |
-| Full array: three of one value and two of another               |                        2,160 |               0.328% |                     450 essence |
-| Orbit run: five consecutive values, mixed constellations        |                        6,120 |               0.930% |                     300 essence |
-| Three of an orbit                                               |                       23,040 |               3.501% |                     220 essence |
-| Two pair                                                        |                       51,840 |               7.878% |                     130 essence |
-| One pair                                                        |                      322,560 |              49.021% |                      60 essence |
-| High card                                                       |                      250,920 |              38.133% |                       no payout |
+| Hand                                                            | Fresh full-deck combinations | Baseline probability |                            Payout |
+| --------------------------------------------------------------- | ---------------------------: | -------------------: | --------------------------------: |
+| Grand Alignment: five Major Arcana                              |                           56 |               0.009% | 1,000 essence and Dreamsign draft |
+| Full Orbit: five cards of one value                             |                            8 |               0.001% |   900 essence and Dreamsign draft |
+| Constellation run: five consecutive values in one constellation |                           42 |               0.006% |                       700 essence |
+| Four of an orbit                                                |                        1,400 |               0.213% |                       600 essence |
+| Constellation: five cards in one constellation                  |                          966 |               0.147% |                       500 essence |
+| Full array: three of one value and two of another               |                        5,600 |               0.851% |                       450 essence |
+| Orbit run: five consecutive values, mixed constellations        |                       12,454 |               1.893% |                       300 essence |
+| Three of an orbit                                               |                       42,000 |               6.383% |                       200 essence |
+| Two pair                                                        |                       83,976 |              12.762% |                       120 essence |
+| One pair                                                        |                      349,600 |              53.130% |                        50 essence |
+| High card                                                       |                      161,906 |              24.605% |                         no payout |
 
-The denominator is `C(40, 5) = 658,008`. Counts are exclusive: a Constellation
-Run is not also counted as a Constellation or Orbit Run. After the initial deal
-and every hold selection, the UI enumerates exact redraw outcomes from the
-current public unseen pool.
+The denominator is `C(40, 5) = 658,008`. Counts are exclusive and use the table
+order above; the four all-Major value runs are Grand Alignments. After the
+initial deal and every hold selection, the UI enumerates exact redraw outcomes
+from the current public unseen pool.
 
 **Farpoint table — Owner's Poker Room.** Buy-in and redraw cost are waived.
-Every essence payout increases by 50; a Constellation Run grants its Dreamsign
-draft plus 100 additional essence.
+Every essence payout increases by 50; Grand Alignment and Full Orbit grant
+their Dreamsign draft plus 100 additional essence.
 
 ## Deferred and performance tickets
 
@@ -727,7 +804,8 @@ battles, and one Space Tarot card is sealed face-down with the contract.
 
 - After one completed battle, the player may recall the journey card unchanged,
   gain 50 essence, reveal the tarot card, and close the contract.
-- After two completed battles, the tarot card resolves by constellation:
+- After two completed battles, the tarot card resolves by constellation,
+  counting a Major's affinity:
   Suns or Moons returns the journey card with one frozen transfiguration;
   Comets returns it with one permanent duplicate; Voids returns it unchanged
   and grants 120 essence.
@@ -745,13 +823,14 @@ duplicate; Comets returns a transfigured card; Voids returns a duplicate plus
 
 Gravok adds 1 Nightmare Bane and seals one face-down Space Tarot card into a
 bond. At least three battles must remain. After each victory, the player may
-redeem or carry:
+redeem or carry. This table **READS ARCANA**: The Last Star always succeeds and
+The Maw always defaults; every other card uses its value.
 
-| Victories carried | Successful sealed values | Fresh baseline | Successful payout |
-| ----------------: | ------------------------ | -------------: | ----------------: |
-|                 1 | 1–8                      |            80% |       100 essence |
-|                 2 | 1–6                      |            60% |       220 essence |
-|                 3 | 1–5                      |            50% |   Dreamsign draft |
+| Victories carried | Successful reading                 | Fresh baseline | Successful payout |
+| ----------------: | ---------------------------------- | -------------: | ----------------: |
+|                 1 | values 1–6, with the two overrides |            75% |       100 essence |
+|                 2 | values 1–5 or The Last Star        |            65% |       220 essence |
+|                 3 | values 1–4 or The Last Star        |          52.5% |   Dreamsign draft |
 
 Redemption reveals the same sealed card. It removes the Nightmare and closes
 the bond on success or default. Purging the Nightmare before redemption reveals
@@ -761,9 +840,10 @@ The rising reward is paired with a tightening threshold. Other public Space
 Tarot reveals can update the posterior probability of the sealed value, giving
 the player information to use when choosing when to redeem.
 
-**Farpoint table — Investment-Grade Bane.** Successful values are 1–9, 1–7,
-and 1–6, with fresh baselines of 90%/70%/60%. Payouts are 140 essence, 280
-essence, and a Dreamsign draft plus 100 essence.
+**Farpoint table — Investment-Grade Bane.** Successful readings are values 1–7,
+1–6, and 1–5 with the same Last Star/Maw overrides. Fresh baselines are
+87.5%/75%/65%. Payouts are 140 essence, 280 essence, and a Dreamsign draft plus
+100 essence.
 
 ### 20. Borrowed Victory — the advance window
 
@@ -867,32 +947,38 @@ cards:
 
 | Table        |     Buy-in | Limit | Pots after 2/3/4 safe cards | Fresh bust baselines       |
 | ------------ | ---------: | ----: | --------------------------- | -------------------------- |
-| **Cautious** | 30 essence |    24 | 60/140/240                  | 0% / 5.101% / 29.497%      |
-| **Bold**     | 30 essence |    18 | 90/230/450                  | 2.821% / 32.927% / 58.577% |
+| **Cautious** | 30 essence |    20 | 60/140/240                  | 0% / 3.492% / 26.586%      |
+| **Bold**     | 30 essence |    14 | 90/230/450                  | 4.487% / 37.584% / 62.988% |
 
 A bust loses the pot and adds 1 Nightmare Bane. The UI shows exact live odds
 before the Pilot chooses and before every Navigator hit. Solo players make both
 decisions.
 
-**Farpoint table — Partner Rate.** The buy-in is 0. Cautious uses limit 26 and
-pots 80/180/300, with fresh baselines 0%/1.700%/20.110%. Bold uses limit 20 and
-pots 120/280/500, with fresh baselines 0%/21.377%/49.557%.
+**Farpoint table — Partner Rate.** The buy-in is 0. Cautious uses limit 22 and
+pots 80/180/300, with fresh baselines 0%/0.607%/15.451%. Bold uses limit 16 and
+pots 120/280/500, with fresh baselines 0%/22.824%/51.908%.
 
-### 26. Gravok's Running Jackpot — the Sign ticket
+### 26. Gravok's Running Jackpot — the Major ticket
 
 Whenever an essence buy-in at a Gamble table produces zero payout, 25% of that
 buy-in, rounded up, enters a run-local jackpot capped at 250 essence. Liability
 payments and optional scan or insurance fees do not contribute.
 
 At a later visit, the player may buy one side ticket for 20 essence and deal one
-Space Tarot card. Any Sign claims the meter and resets it to zero. The fresh
-chance is 4 / 40 = 10%; the live Sign count is published. On a miss, the ticket
-cost joins the meter subject to the cap. If the meter remains at journey
-completion, 25% of it, rounded down, is paid as essence.
+Space Tarot card. This table **READS ARCANA**:
+
+- **The Crown or The Last Star:** pay the full meter and reset it to zero;
+- **any other Major:** pay half the meter, rounded down, and leave the remainder
+  in the meter;
+- **any Minor:** miss; the 20-essence ticket joins the meter subject to the cap.
+
+The fresh chance of some payout is 8 / 40 = 20%, including a 2 / 40 = 5%
+full-meter call. If the meter remains at journey completion, 25% of it, rounded
+down, is paid as essence.
 
 **Farpoint table — Progressive Lounge.** Failed buy-ins contribute 50%, the
-cap is 350 essence, and the ticket is free. Value 9 or a Sign claims the meter,
-a fresh 8 / 40 = 20% class. Journey-completion payout remains 25%.
+cap is 350 essence, and the ticket is free. Any Major pays the full meter and
+resets it, a fresh 8 / 40 = 20% class. Journey-completion payout remains 25%.
 
 ### 27. The Algorithm's Tell — liar's poker
 
@@ -943,7 +1029,8 @@ copy count are the information being wagered on.
 ### 29. Sealed Reserve — the auction table
 
 One exact Dreamsign from the Dreamsign-draft scorer is shown face-up. One Space
-Tarot card is dealt face-down as its reserve:
+Tarot card is dealt face-down as its reserve. Major affinity counts as
+constellation:
 
 | Constellation | Fresh baseline |     Reserve |
 | ------------- | -------------: | ----------: |
@@ -958,9 +1045,9 @@ fee instead and reveals the card. Before bidding, a 30-essence appraisal reveals
 whether the constellation is Suns/Moons or Comets/Voids.
 
 **Farpoint table — Open Reserve.** Listing and appraisal fees are 0. The home
-table reads value: 1–4 reserves 40, 5–7 reserves 80, 8–9 reserves 120, and a
-Sign reserves 160, producing fresh 40%/30%/20%/10% classes. A winning bid also
-pays 50 essence.
+table reads value: 1–3 reserves 40, 4–5 reserves 80, 6–7 reserves 120, and
+value 8 reserves 160, producing fresh 37.5%/25%/25%/12.5% classes. A winning
+bid also pays 50 essence.
 
 ### 30. Bad-Omen Hedge — the insurance desk
 
@@ -983,18 +1070,25 @@ when its trigger occurs whether the player later wins or loses.
 The player selects one non-starter journey card gained earlier in the journey.
 It must be untransfigured and have at least one legal non-Perfected
 transfiguration. One applicable transfiguration is selected by UUID and shown
-before the player pays 50 essence and receives one tarot card:
+before the player pays 50 essence and receives one tarot card. This table
+**READS ARCANA**:
 
-| Value     | Fresh baseline | Resolution                       |
-| --------- | -------------: | -------------------------------- |
-| 1–5       |            50% | apply the frozen transfiguration |
-| 6–8       |            30% | add 1 permanent duplicate        |
-| 9 or Sign |            20% | leave the card unchanged         |
+| Card                          | Fresh baseline | Resolution                                                     |
+| ----------------------------- | -------------: | -------------------------------------------------------------- |
+| value 1–4 Minor               |            40% | apply the frozen transfiguration                               |
+| value 5–7 Minor               |            30% | add 1 permanent duplicate                                      |
+| value-8 Minor                 |            10% | leave the card unchanged                                       |
+| The Wanderer or The Gate      |             5% | choose the frozen transfiguration or 1 permanent duplicate     |
+| The Mirror or The Conjunction |             5% | add 2 permanent duplicates                                     |
+| The Crown or The Last Star    |             5% | apply the frozen transfiguration and add 1 permanent duplicate |
+| The Eclipse or The Maw        |             5% | leave the card unchanged                                       |
 
 The selected journey card itself is never removed.
 
-**Farpoint table — Loyalty Buyback.** The reading is free. Values 1–5
-transfigure and duplicate the card; 6–8 transfigures it; 9 or a Sign adds 1
+**Farpoint table — Loyalty Buyback.** The reading is free. Minor values 1–4
+transfigure and duplicate the card; 5–7 transfigures it; 8 adds 1 duplicate.
+Wanderer and Gate transfigure and duplicate; Mirror and Conjunction add 2
+duplicates; Crown and Last Star keep their result; Eclipse and Maw add 1
 duplicate. Every reading is beneficial.
 
 ## Universal side bet
@@ -1013,15 +1107,15 @@ buy-in is already 0 does not offer it.
 ### Card counting is a feature
 
 Payouts do not chase the changing shoe. If many high values are visible in the
-discard, Pressure Vault and Orbit Book become safer; if Signs remain dense,
+discard, Pressure Vault and Low Orbit become safer; if Majors remain dense,
 Running Jackpot becomes more attractive and Fivefold Mirror becomes more
-dangerous. The player receives the count in the UI, so the skill is evaluating
+volatile. The player receives the count in the UI, so the skill is evaluating
 the current opportunity rather than maintaining external notes.
 
 The generator may present an unfavorable table. Declining is part of Gamble.
 It may not present a table whose required success or failure class is publicly
 impossible after its declared recycle preflight. For example, Running Jackpot
-is ineligible when cards remain in the shoe, every Sign is already face-up in
+is ineligible when cards remain in the shoe, every Major is already face-up in
 the discard, and its one-card draw budget does not trigger a recycle.
 
 ### Recycle timing is strategically visible
@@ -1031,20 +1125,28 @@ can consume five to ten cards, while Orbit Book consumes one. The pre-deal draw
 budget makes a recycle predictable before commitment. A table cannot discover
 mid-wager that it lacks cards and reshuffle away a count the player acted on.
 
-### Named Signs must change roles
+### Major Arcana must feel authored
 
-Signs are valuable in Running Jackpot, high pressure in total games, a clean
-bonus in Contraband Array, a miss in Collateral Auction, and dangerous in the
-traveling Fivefold Mirror. This prevents “Sign equals good” from becoming a
-universal shortcut.
+A Major appears often enough to become a recurring character, but named effects
+are concentrated in tables that can give the reveal room to breathe. The
+Mirror copies in Collateral Auction, Fivefold Mirror, and Buyback. The Last Star
+rescues Bane Bond and shares the full jackpot call. The Maw consumes
+Contraband, defaults Bane Bond, and is the lone catastrophic Fivefold result.
+Ordinary value, affinity, and aspect games keep those same cards useful without
+adding eight-case lookup tables.
+
+“Any Major” is not a universal win. It is a winning class in Escape Trajectory
+and Running Jackpot, a liability in Loaded Blessing, and a spectrum of named
+outcomes at Arcana tables.
 
 ### Complexity is table-local
 
-The deck has three properties, but most tables read one. A rules placard says
-“THIS TABLE READS VALUE,” “THIS TABLE READS ASPECT,” or “THIS TABLE READS
-CONSTELLATION.” Two-property games reveal the mapping as two short rows:
-constellation determines prize; value determines rider. Quantum Hand is the
-advanced table that intentionally uses full-card structure.
+The deck has value, affinity, aspect, and Minor/Major status, but most tables
+read one or two. A rules placard says “THIS TABLE READS VALUE,” “THIS TABLE
+READS ASPECT,” or “THIS TABLE READS CONSTELLATION.” A **READS ARCANA** plaque
+opens one compact eight-card reference. Two-property games reveal the mapping
+as two short rows: constellation determines prize; value determines rider.
+Quantum Hand intentionally uses the full structure.
 
 ## Site boundaries
 
@@ -1079,6 +1181,7 @@ Each wager records:
 - exact buy-in, optional fee, and affordability check;
 - frozen reward candidates by UUID and deck entry id;
 - which card properties and classes the table reads;
+- whether a Major's named Arcana effect overrides its ordinary properties;
 - displayed matching count, denominator, fraction, and percentage at every
   decision;
 - dealt or sealed `spaceTarotCardId` UUIDs in resolution order;
@@ -1121,20 +1224,21 @@ The v0 tuning advances only when these directional gates are met:
    table call from one example card after the rules placard is shown.
 3. Pressure Vault players who survive card three stand before card five in at
    least 30% of hands.
-4. Orbit Book receives bets on all three thresholds; no line receives fewer
-   than 15% of committed tickets.
+4. Orbit Book receives bets on its value, aspect, and Major lines; no line
+   receives fewer than 15% of committed tickets.
 5. At least 20% of Contraband visits include a paid second scan and at least 20%
    take a crate after only one scan.
-6. Quantum Hand records holds from at least four hand-shape strategies: keeping
-   a pair, keeping a constellation draw, keeping an orbit-run draw, and
-   redrawing all five.
+6. Quantum Hand records holds from at least five hand-shape strategies: keeping
+   a pair, keeping a constellation draw, keeping an orbit-run draw, keeping
+   multiple Majors, and redrawing all five.
 7. Bane Bond redemptions occur after each of one, two, and three victories; no
    maturity receives fewer than 15% of redemptions.
 8. Acceptance rates measurably respond to live shoe composition. In particular,
-   Sign-dense jackpot tickets and low-value-dense Orbit Book tickets should be
+   Major-dense jackpot tickets and low-value-dense Low Orbit tickets should be
    accepted more often than their inverse states.
-9. No Sign is described as universally lucky or unlucky by a majority of
-   playtesters; its role should be table-dependent.
+9. After seeing two Arcana-reading tables, at least 70% of players can match at
+   least four Majors to their core motif, and fewer than half describe “any
+   Major” as universally lucky.
 10. Farpoint improves participation while leaving at least a 5% decline rate.
     A smaller decline rate indicates the home tables are automatic rewards
     rather than wagers.
