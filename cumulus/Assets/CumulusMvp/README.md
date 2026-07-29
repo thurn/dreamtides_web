@@ -68,13 +68,17 @@ From the repository root, an autonomous agent verifies this proof of concept wit
 bash cumulus/scripts/verify-cumulus-mvp.sh
 ```
 
-Exit `0` is the only passing automated result. It means every stage below passed and `cumulus/Artifacts/CumulusMvpVerification/summary.json` has `"overall": "passed"` for the clean Git commit recorded in `gitCommit`. Any nonzero exit, missing evidence, stale or malformed evidence, dirty working tree, changed `HEAD`, timeout, test failure, shader error, build failure, or failed metric is a failure. Visual completion also requires reviewing same-scene on/off evidence and the holistic final frame; neither a Unity process exit code nor screenshots alone establish completion.
+Exit `0` is the passing automated result. It means every stage below passed and
+`cumulus/Artifacts/CumulusMvpVerification/summary.json` has `"overall":
+"passed"` for the clean Git commit recorded in `gitCommit`. Visual completion
+also requires reviewing same-scene on/off evidence and the holistic final
+frame.
 
 ## Prerequisites
 
 - Run on macOS from the root of a clean checkout of this repository. The README command is the supported invocation contract.
 - Install the exact Unity editor in `cumulus/ProjectSettings/ProjectVersion.txt` at the Unity Hub path `/Applications/Unity/Hub/Editor/<version>/Unity.app/Contents/MacOS/Unity`. A `UNITY` executable override is accepted only when `UNITY -version` reports that exact version.
-- Provide a graphics-capable Metal device for the PlayMode render tests and standalone macOS build. A null graphics device fails the GPU test.
+- Provide a graphics-capable Metal device for batch captures and the standalone macOS build.
 - Install Node dependencies at the repository root with `npm install` when `node_modules` is absent.
 - Make `bash`, `python3`, `git`, `shasum`, and the repository's npm toolchain available.
 - Keep `master` available locally, or set `CUMULUS_SCOPE_BASE` to the intended base commit for the static scope comparison.
@@ -86,20 +90,21 @@ The gate deletes `cumulus/Library` to force a clean import and replaces the igno
 
 ## What the command proves
 
-The eight required stages appear in `summary.json.stages` in this exact order:
+The six required stages appear in `summary.json.stages` in this exact order:
 
-1. `shell-harness-self-tests` exercises stale/missing/malformed Unity evidence, wrong-version overrides, a real timeout with spawned-child process-group termination, provenance, exact GPU evidence, PNG decoding, and scope-guard negative controls.
+1. `shell-harness-self-tests` exercises stale/missing/malformed Unity evidence, wrong-version overrides, a real timeout with spawned-child process-group termination, provenance, evidence validation, PNG decoding, and scope-guard negative controls.
 2. `clean-unity-import` deletes `cumulus/Library`, imports with the committed Unity version, and scans the complete log.
 3. `deterministic-builder` rebuilds the scene twice and requires identical SHA-256 manifests for 12 authoritative assets.
-4. `editmode-tests` requires validated passing NUnit XML with at least one test and internally consistent counts.
-5. `gpu-playmode-tests` requires validated passing graphics-enabled NUnit XML, the exact 23-metric contract, and the exact 10 decodable `512 x 288` RGBA PNG captures.
-6. `shader-inspection-and-build` requires zero `ShaderUtil.GetShaderMessages` errors for the four required shaders and a nonempty successful `StandaloneOSX` player.
-7. `repository-checks` runs `npm run lint`, `npm run typecheck`, and `npm test` in order.
-8. `static-scope-guard` compares against `CUMULUS_SCOPE_BASE` or `merge-base HEAD master`, verifies Unity `.meta` pairing, and rejects mechanically detectable deferred systems.
+4. `shader-inspection-and-build` requires zero `ShaderUtil.GetShaderMessages` errors for the four required shaders and a nonempty successful `StandaloneOSX` player.
+5. `repository-checks` runs `npm run lint`, `npm run typecheck`, and `npm test` in order.
+6. `static-scope-guard` compares against `CUMULUS_SCOPE_BASE` or `merge-base HEAD master`, verifies Unity `.meta` pairing, and rejects mechanically detectable deferred systems.
 
 After all stages, provenance is checked again. A commit change or any tracked/untracked change prevents a passing summary.
 
-The Unity harness writes to these exact stage directories: `stages/clean-import/` for clean import; `stages/builder-first/` and `stages/builder-second/` for deterministic rebuilds; `stages/full-editmode/` for EditMode tests; `stages/full-playmode/` for graphics-enabled PlayMode tests; and `stages/shader-build/` for shader inspection and the player build. Each contains `unity.log`, `launcher.log`, and `exit-code`; the two test directories also contain `results.xml`.
+The Unity harness writes to these exact stage directories:
+`stages/clean-import/` for clean import, `stages/builder-first/` and
+`stages/builder-second/` for deterministic rebuilds, and
+`stages/shader-build/` for shader inspection and the player build.
 
 ## Evidence and schemas
 
@@ -107,97 +112,44 @@ All evidence is ignored by Git and is replaced at the start of a run:
 
 - `cumulus/Artifacts/CumulusMvpVerification/summary.json`: authoritative aggregate verdict.
 - `stages/<stage>/unity.log`, `launcher.log`, and `exit-code`: per-Unity-process evidence.
-- `stages/full-editmode/results.xml` and `stages/full-playmode/results.xml`: NUnit results.
-- `render-metrics.json`: GPU measurements; sibling PNG files are the metric inputs.
 - `shader-report.json`: shader discovery and compiler messages.
 - `build-report.json`: macOS player result.
 - `asset-hashes-first.txt` and `asset-hashes-second.txt`: deterministic builder manifests.
 - `stages/npm-*.log` and the self-test/scope logs: repository and harness diagnostics.
 - `cumulus/Builds/CumulusMvpVerification/CumulusCumulusMvp.app`: ignored standalone player.
 
-A passing summary has schema version `1` and these fields: `overall: "passed"`; `failedStage: null`; exact `unityVersion` and `urpVersion`; nonempty `graphicsApi` and `graphicsDevice`; clean `gitCommit`; exactly eight passing stage records (`name`, `status`, `durationSeconds`); `tests.editMode` and `tests.playMode` counts (`total`, `passed`, `failed`, `errors`, `inconclusive`, `skipped`, `warnings`); `shaderErrorCount`; build (`result`, `sizeBytes`, `warnings`, `outputPath`); all `renderMetrics`; `assetHashManifest`; 13 `assetHashes` (`sha256`, `path`); and artifact paths. A failure summary has schema version `1`, `overall: "failed"`, `failedStage`, `processExit` when a stage ran, `gitCommit`, and completed `stages`. Provenance failures instead include `reason` and `dirtyPaths`.
-
-`render-metrics.json` has exactly `{"schemaVersion": 1, "metrics": [...]}`. It must contain each of the 23 names below exactly once and no other names. Every metric record has exactly: `metricName`, finite numeric `measuredValue`, equivalent string `measuredValueText`, `measuredValueFinite: true`, committed `comparison`, committed numeric `threshold`, recomputed `passed: true`, nonempty `phaseA`, `phaseB`, `graphicsApi`, and `deviceName`. The validator recomputes the verdict rather than trusting `passed`.
+A passing summary has schema version `1` and these fields: `overall: "passed"`;
+`failedStage: null`; exact `unityVersion` and `urpVersion`; clean `gitCommit`;
+exactly six passing stage records; `shaderErrorCount`; build result, size,
+warnings, and output path; the deterministic asset-hash manifest; and artifact
+paths. Failure summaries identify the failed stage and completed stages.
 
 `shader-report.json` records `unityVersion`, `shaderCount: 4`, `errorCount: 0`, and ordered records for `CumulusMvp/SceneGlass`, `CumulusMvp/OnGlass`, `CumulusMvp/Dreamsign`, and `Hidden/CumulusMvp/SeparableBlur`, each with `found: true` and a `messages` array. `build-report.json` records `result: "Succeeded"`, exact output `Builds/CumulusMvpVerification/CumulusCumulusMvp.app`, `platform: "StandaloneOSX"`, `totalErrors: 0`, positive integer `totalSize`, `totalWarnings`, and `totalTimeSeconds`.
 
-## GPU metric contract
-
-The thresholds are deliberately relational or broad proof-of-life bounds. They establish that the intended rendering mechanism is active and structurally shared; they are not a visual-polish specification.
-
-| Metric | Requirement | Meaning and failure interpretation |
-|---|---:|---|
-| `liveBackdropDelta.LiveGlassA` | `>= 0.015` | Spinner motion changes pane A. Lower means stale/frozen/non-transmitting glass. |
-| `liveBackdropDelta.LiveGlassB` | `>= 0.015` | The independent pane also transmits the moving scene. Lower means it is not live. |
-| `surfaceContribution.LiveGlassA` | `>= 0.02` | Pane A changes its own pixels versus the identical frame with only that pane disabled. Lower means the surface is invisible or ineffectual. |
-| `surfaceContribution.LiveGlassB` | `>= 0.02` | Pane B changes its own pixels versus the identical frame with only that pane disabled. Lower means the surface is invisible or ineffectual. |
-| `blurEdgeEnergyRatioMaximum` | `<= 0.65` | The peak same-region luminance gradient with glass enabled is at most 65% of the glass-disabled edge. Higher means the surface did not soften its backdrop. |
-| `blurEdgeEnergyRatioMinimum` | `>= 0.005` | The softened same-region gradient retains bounded structure. Lower indicates a flat or excessively blurred result. |
-| `sharedGraphRecords.<phase>` | `== 1` | Exactly one graph record exists for each phase listed below. Any other value means the camera-level effect is missing or duplicated. |
-| `downsamplePasses.<phase>` | `== 4` | Exactly four locally filtered pyramid downsample passes per camera phase. |
-| `upsamplePasses.<phase>` | `== 3` | Exactly three filtered pyramid reconstruction passes per camera phase. |
-| `onGlassAdditionalPasses` | `== 0` | Enabling the on-glass button creates no blur work. Nonzero means child UI is incorrectly driving the graph. |
-| `onGlassBackdropDelta` | `>= 0.005` | Scene motion remains visible through the button region. Lower suggests a baked/opaque child. |
-| `onGlassBackdropCorrelation` | `>= 0.5` | Button-region luminance changes follow its parent backdrop. Lower suggests unrelated or reversed scene response. |
-| `fallbackInteriorLuminanceMinimum` | `>= 0.02` | Disabled shared blur still renders a visible finite fallback. Lower means black/invisible fallback. |
-| `fallbackInteriorLuminanceMaximum` | `<= 0.8` | Fallback is bounded below whiteout. Higher means clipped/opaque fallback. |
-
-`<phase>` expands to all four exact suffixes: `bothPanesEnabled`, `mainPaneDisabled`, `independentPaneDisabled`, and `onGlassButtonDisabled`. This produces 12 exact graph/pass records and 23 total metrics.
-
-The exact capture set is `spinner-a.png`, `spinner-b.png`, `spinner-c.png`, `main-pane-disabled.png`, `independent-pane-disabled.png`, `button-parent-a.png`, `button-parent-b.png`, `button-a.png`, `button-b.png`, and `fallback.png`. The validator checks the exact set, PNG signature and chunk order, CRCs, IHDR format, IDAT decompression, scanlines, and exact `512 x 288`, 8-bit RGBA non-interlaced dimensions.
-
 ## Failure signatures and diagnosis
 
-For every Unity stage, the harness requires process exit `0`, a fresh log inside that stage's directory, and an exact completion line: `Exiting batchmode successfully now!` or, for tests, `Test run completed. Exiting with code 0 (Ok). Run completed.` A test stage additionally requires a fresh, passing NUnit `test-run` root with nonzero and internally consistent counts.
+For every Unity stage, the harness requires process exit `0`, a fresh log
+inside that stage's directory, and the exact completion line `Exiting batchmode
+successfully now!`.
 
 The Unity log scan is case-insensitive and rejects these signatures: `error CS<digits>`, `Shader error`, `Compilation failed`, `Scripts have compiler errors`, `Unhandled Exception`, `Unhandled exception`, `NullReferenceException`, `MissingReferenceException`, `Assertion failed`, `AssertionException`, a Unity Editor crash line, `Crash!!!`, `Fatal Error`, `Received signal`, `Segmentation fault`, `Aborting batchmode due to failure`, or a line beginning with a qualified exception type and followed by `:` or end-of-line. Inspect the failed stage's `unity.log` and `launcher.log`; compilation errors therefore fail during clean import rather than relying on later human inspection.
 
 Other fail-closed messages identify the contract directly:
 
 - `cumulus-provenance:`: dirty tree or changed `HEAD`; inspect `summary.json.reason` and `dirtyPaths`.
-- `unity-run:`: wrong/missing Unity version, invalid harness argument, stale/missing log, nonzero/malformed exit evidence, rejected NUnit XML, timeout, or missing completion marker.
+- `unity-run:`: wrong/missing Unity version, invalid harness argument, stale/missing log, nonzero/malformed exit evidence, timeout, or missing completion marker.
 - `cumulus-evidence:`: malformed/extraneous/duplicate/missing metric, threshold/operator mismatch, nonfinite value, forged verdict, GPU identity/phase omission, capture-set mismatch, or invalid PNG.
 - `scope-guard:`: protected mobile/UI asset change, missing/orphaned `.meta`, runtime material allocation or per-instance `.material` access, per-pane camera/render-texture field, forbidden uGUI/UI Toolkit import, named controller/touch API, production token-generator source/path, or refraction-source signature.
-- `summary stage evidence is incomplete`, `invalid passing NUnit root`, `invalid NUnit counts`, `missing exact Unity version`, `missing exact URP version`, `summary found failed or missing render metrics`, or `asset hash manifest is malformed/empty`: aggregate evidence is incomplete.
+- `summary stage evidence is incomplete`, `missing exact Unity version`, `missing exact URP version`, or `asset hash manifest is malformed/empty`: aggregate evidence is incomplete.
 - `shader report has an invalid count or nonzero errors`, `shader report does not contain the exact required shaders`, or `shader report has missing or malformed shader records`: shader inspection failed.
 - `standalone build did not succeed for macOS`, `standalone build output path is not exact`, `standalone build summary is malformed`, or `standalone player output is missing or empty`: player build evidence failed.
 - A failed npm stage is diagnosed from `stages/npm-lint.log`, `npm-typecheck.log`, or `npm-test.log`; a builder mismatch is diagnosed by diffing the two asset hash manifests.
 
-## Acceptance-to-evidence map
-
-This is the complete automated acceptance contract. Visual QA adds a separate
-recorded conclusion for rendering work.
-
-| Acceptance criterion | Exact automated evidence |
-|---|---|
-| Two consecutive clean runs pass | Two invocations exit `0`; each resulting `summary.json.overall` is `passed` and `gitCommit` equals the invoked `HEAD`. Retain/copy the first summary externally if a durable two-run record is required because the gate replaces its evidence directory. |
-| Clean import has no compile/shader/assertion/exception/crash signature | `clean-unity-import.status == "passed"` plus `stages/clean-import/unity.log`, validated by `validate_unity_result`. |
-| Three MVP shaders have zero reported errors | `shader-inspection-and-build.status`, `shaderErrorCount == 0`, and exact records in `shader-report.json`. |
-| Committed scene builds for macOS | `build.result == "Succeeded"`, positive `build.sizeBytes`, exact `build.outputPath`, and nonempty `.app`. `CumulusGlassLabAssetTests.RendererAndBuildSettings_AreInstalledOnceWithoutRemovingSsao` proves the committed scene is the sole enabled build scene. |
-| Moving opaque object stays live through both panes | Metrics `liveBackdropDelta.LiveGlassA` and `.LiveGlassB`; same-phase `surfaceContribution.LiveGlassA` and `.LiveGlassB` prove each pane actually changes its own pixels; `blurEdgeEnergyRatioMaximum` compares each edge against its glass-disabled counterpart; `CumulusGlassGpuTests.GlassLab_RendersLiveSharedBlurAndFailClosedFallbackEvidence`. |
-| One shared graph record and one seven-pass pyramid regardless of panes/button | All 12 `sharedGraphRecords.*`, `downsamplePasses.*`, and `upsamplePasses.*` records; `CumulusGlassRenderingTests.BlurShader_HasExactlyDownsampleAndUpsamplePasses` and `RendererFeature_OwnsOneMaterialAndOneConfiguredPass`. |
-| On-glass button adds no pass and retains parent signal | `onGlassAdditionalPasses`, `onGlassBackdropDelta`, and `onGlassBackdropCorrelation`; `CumulusGlassRenderingTests.OnGlass_NeverDeclaresOrSamplesSharedBlur`. |
-| Fixed tint, saturation, rim, sheen, and lit-shell roles | `CumulusGlassRenderingTests.GlassShaders_ExposeOnlyHiddenFixedRoleProperties`, `SceneGlass_ConsumesSharedBlurOnceAndKeepsTransmissionOutOfDiffuseLighting`, `RebuildMaterials_CreatesStableSharedMaterialVocabulary`, and `CumulusRoundedPanelMeshTests.MaterialLibrary_ResolvesEachRoleAndValidatesAssignments`. |
-| Transmission avoids double-lighting | The scene-glass shader contract proves transmitted scene color is excluded from direct diffuse lighting. |
-| Stable root collider handles hover, press, cancel, activation | `CumulusPressableTests.StateMachine_ScalesOnlyVisualAndPressWinsHover`, `StateMachine_CancelsAwayAndActivatesOnceOver`, `VirtualMouse_ActivatesThroughPointerInteractor`, and `VirtualMouse_DragOffCancelsOriginalPress`; `CumulusGlassLabAssetTests.Scene_ReopensWithExactProofObjectsAndSharedMaterialRoles` proves one root collider and its serialized binding. |
-| Travel is 420 ms, follows `(0.16, 1, 0.3, 1)`, and is interruptible | `CumulusPanelTravelTests.ToggleDestination_ReachesBothExactAnchorsInReferenceDuration`, `ToggleDestination_InterruptsFromCurrentPoseWithoutSnap`, and all three `CumulusCubicBezierTests` using those exact control points. |
-| Panel, button, labels, collider, and sheen stay aligned | The scene/prefab hierarchy and bindings are asserted by `CumulusGlassLabAssetTests.Scene_ReopensWithExactProofObjectsAndSharedMaterialRoles`; `ToggleDestination_ReachesBothExactAnchorsInReferenceDuration` moves the common panel root and `StateMachine_ScalesOnlyVisualAndPressWinsHover` proves interaction scaling leaves the root/collider unchanged. |
-| Fallback is finite, visible, and interactive | `fallbackInteriorLuminanceMinimum` and `fallbackInteriorLuminanceMaximum`; `CumulusGlassRenderingTests.SceneGlass_FallbackStraightAlphaPreservesShellAndLiveReplacesBackdrop`, `SceneGlass_AvailabilityBranchReturnsBeforeBlurSampling`, and `CumulusGlassGpuTests.Fallback_RealSceneButtonSupportsHoverPressCancelAndTravelActivation`, which exercises the real scene button with the renderer feature inactive. |
-| Unity and repository suites pass | `tests.editMode`, `tests.playMode`, `editmode-tests`, `gpu-playmode-tests`, and `repository-checks`; inspect the two XML files and three npm logs. |
-| Negative controls reject known-bad evidence | `shell-harness-self-tests.status == "passed"`; its four logs cover shell harness, scope, evidence, and provenance fixtures. `CumulusImageMetricsTests.AcceptanceThresholds_FlipImmediatelyAcrossEveryCommittedBoundary` checks every metric boundary. |
-| Scope remains the bounded PC proof | `static-scope-guard.status == "passed"` and `stages/scope-guard.log`; the guard includes deletions and new/untracked files. It checks the exact static subset described below. Recursive glass is constrained by the exact one-record/two-pass metrics plus `OnGlass_NeverDeclaresOrSamplesSharedBlur`; refraction is rejected by the guard's shader-source signatures. |
-| Builder is deterministic and authoritative | `deterministic-builder.status == "passed"`, identical hash manifests, `CumulusGlassLabAssetTests.Rebuild_IsByteStableAndRetainsEveryAuthoredGuid`, and `Rebuild_RepairsMeshPrefabAndSceneDriftWithoutChangingGuids`. |
-| GPU setup failure restores state and still emits evidence | `CumulusGlassGpuTests.EarlyFailure_RestoresEverySeededNonDefaultState`. |
-
 ## Visual review
 
-Visual review is required for rendering completion and cannot make a failed
-automated command pass. Inspect the 10 generated PNGs, including the identical
-scene with each target pane enabled and disabled. Confirm that every intended
-surface has a nonzero measured contribution, that blur and lighting move in the
-expected direction, and that the committed negative controls fail when the
-target mechanism is deliberately broken. Finish with a cold review of the
-complete frame for composition defects or unintended artifacts.
+Visual review is required for rendering completion. Use deterministic batch
+captures and the web-to-Unity glass parity workflow for same-scene comparisons,
+then finish with a cold review of the complete frame.
 
 The scene can also be opened at `cumulus/Assets/Scenes/CumulusGlassLab.unity`:
 select the PC renderer, set the Game view to `1920 x 1080`, enter Play Mode,

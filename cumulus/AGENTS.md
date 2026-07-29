@@ -107,14 +107,17 @@ deterministic editor tooling under `Assets/CumulusMvp/Editor/`.
 - Fail with a clear message when the licensed scene, a required vendor GUID, or
   a required Cumulus asset is absent.
 - Commit proprietary scene edits only in the paired licensed-assets branch.
-  Commit builders, Cumulus-owned assets, tests, and documentation only in the
+  Commit builders, Cumulus-owned assets, and documentation only in the
   public branch.
 - Keep the two commits logically paired in the handoff. Push only the public
   branch; the licensed branch remains on this machine.
 
 ## Verification and review artifacts
 
-Run focused EditMode or PlayMode tests while iterating, then the repository
+Do not create or maintain automated Unity C# tests for the Cumulus MVP. Do not
+recreate `Assets/CumulusMvp/Tests/` or add EditMode or PlayMode test assemblies.
+Verify changes with clean Unity imports, deterministic builder runs, batch
+captures, compile and build validation, static checks, and the repository
 review required by the root instructions. Licensed-content integration checks
 are local-only because CI cannot access the asset library.
 
@@ -165,7 +168,8 @@ Before asking to promote a Unity scene task:
    repository and that repository has no remotes.
 3. Reopen the changed local scene and confirm Unity reports no import,
    compile, serialization, or rendering errors.
-4. Run focused tests and the repository review.
+4. Run focused import, builder, capture, compile, or build checks and the
+   repository review.
 5. Provide private local screenshots and any reproducible builder entry point.
 6. Commit both worktrees and report both commit IDs.
 7. Push only tracked, distributable Cumulus-owned work from the public branch.

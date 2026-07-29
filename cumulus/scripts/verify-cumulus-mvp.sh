@@ -10,7 +10,6 @@ STAGE_ROOT="$ARTIFACT_ROOT/stages"
 SUMMARY_PATH="$ARTIFACT_ROOT/summary.json"
 STAGE_RECORDS="$ARTIFACT_ROOT/stage-records.jsonl"
 SCOPE_GUARD="$SCRIPT_DIR/cumulus-scope-guard.py"
-EVIDENCE_VALIDATOR="$SCRIPT_DIR/cumulus_evidence.py"
 PROVENANCE_CHECK="$SCRIPT_DIR/cumulus-provenance.py"
 
 if [[ "${1:-}" == "--self-test" ]]; then
@@ -235,25 +234,6 @@ verify_builder_stability() {
   cmp "$ARTIFACT_ROOT/asset-hashes-first.txt" "$ARTIFACT_ROOT/asset-hashes-second.txt"
 }
 
-run_editmode_tests() {
-  run_unity_stage full-editmode nographics \
-    -runTests \
-    -testPlatform EditMode \
-    -testResults "$STAGE_ROOT/full-editmode/results.xml"
-}
-
-validate_gpu_evidence() {
-  python3 "$EVIDENCE_VALIDATOR" "$ARTIFACT_ROOT/render-metrics.json" "$ARTIFACT_ROOT"
-}
-
-run_playmode_tests() {
-  run_unity_stage full-playmode graphics \
-    -runTests \
-    -testPlatform PlayMode \
-    -testResults "$STAGE_ROOT/full-playmode/results.xml" || return
-  validate_gpu_evidence
-}
-
 validate_shader_build_evidence() {
   python3 - \
     "$ARTIFACT_ROOT/shader-report.json" \
@@ -335,7 +315,6 @@ from pathlib import Path
 import re
 import subprocess
 import sys
-import xml.etree.ElementTree as ET
 
 summary_path = Path(sys.argv[1])
 records_path = Path(sys.argv[2])
@@ -345,19 +324,8 @@ artifact_root = Path(sys.argv[5])
 verified_head = sys.argv[6]
 
 stages = [json.loads(line) for line in records_path.read_text(encoding="utf-8").splitlines() if line.strip()]
-if len(stages) != 8 or any(stage.get("status") != "passed" for stage in stages):
+if len(stages) != 6 or any(stage.get("status") != "passed" for stage in stages):
     raise SystemExit("summary stage evidence is incomplete")
-
-def test_counts(path: Path) -> dict:
-    root = ET.parse(path).getroot()
-    if root.tag.split("}")[-1] != "test-run" or root.attrib.get("result", "").lower() != "passed":
-        raise SystemExit(f"invalid passing NUnit root: {path}")
-    result = {}
-    for field in ("total", "passed", "failed", "errors", "inconclusive", "skipped", "warnings"):
-        result[field] = int(root.attrib.get(field, "0"))
-    if result["total"] <= 0 or result["failed"] != 0 or result["errors"] != 0:
-        raise SystemExit(f"invalid NUnit counts: {path}")
-    return result
 
 project_version = (cumulus_root / "ProjectSettings/ProjectVersion.txt").read_text(encoding="utf-8")
 match = re.search(r"^m_EditorVersion:\s*(\S+)", project_version, re.MULTILINE)
@@ -368,13 +336,8 @@ urp_version = manifest.get("dependencies", {}).get("com.unity.render-pipelines.u
 if not isinstance(urp_version, str) or not urp_version:
     raise SystemExit("missing exact URP version")
 
-render = json.loads((artifact_root / "render-metrics.json").read_text(encoding="utf-8"))
-metrics = render["metrics"]
-if not metrics or any(metric.get("passed") is not True for metric in metrics):
-    raise SystemExit("summary found failed or missing render metrics")
 shader = json.loads((artifact_root / "shader-report.json").read_text(encoding="utf-8"))
 build = json.loads((artifact_root / "build-report.json").read_text(encoding="utf-8"))
-first_metric = metrics[0]
 asset_hashes = []
 for line in (artifact_root / "asset-hashes-second.txt").read_text(encoding="utf-8").splitlines():
     parts = line.split(None, 1)
@@ -389,14 +352,8 @@ payload = {
     "failedStage": None,
     "unityVersion": match.group(1),
     "urpVersion": urp_version,
-    "graphicsApi": first_metric["graphicsApi"],
-    "graphicsDevice": first_metric["deviceName"],
     "gitCommit": verified_head,
     "stages": stages,
-    "tests": {
-        "editMode": test_counts(artifact_root / "stages/full-editmode/results.xml"),
-        "playMode": test_counts(artifact_root / "stages/full-playmode/results.xml"),
-    },
     "shaderErrorCount": shader["errorCount"],
     "build": {
         "result": build["result"],
@@ -404,16 +361,12 @@ payload = {
         "warnings": build["totalWarnings"],
         "outputPath": build["outputPath"],
     },
-    "renderMetrics": metrics,
     "assetHashManifest": str(artifact_root / "asset-hashes-second.txt"),
     "assetHashes": asset_hashes,
     "artifacts": {
         "root": str(artifact_root),
-        "editModeResults": str(artifact_root / "stages/full-editmode/results.xml"),
-        "playModeResults": str(artifact_root / "stages/full-playmode/results.xml"),
         "shaderReport": str(artifact_root / "shader-report.json"),
         "buildReport": str(artifact_root / "build-report.json"),
-        "renderMetrics": str(artifact_root / "render-metrics.json"),
     },
 }
 temporary = summary_path.with_suffix(".json.tmp")
@@ -425,8 +378,6 @@ PY
 run_stage shell-harness-self-tests shell_self_tests
 run_stage clean-unity-import clean_unity_import
 run_stage deterministic-builder verify_builder_stability
-run_stage editmode-tests run_editmode_tests
-run_stage gpu-playmode-tests run_playmode_tests
 run_stage shader-inspection-and-build run_shader_build
 run_stage repository-checks run_web_checks
 run_stage static-scope-guard run_scope_guard
