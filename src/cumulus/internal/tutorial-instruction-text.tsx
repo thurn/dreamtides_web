@@ -82,7 +82,7 @@ export function renderTutorialInstructionParagraph(
             data-tutorial-instruction-highlight={span.highlight}
             style={{
               color: token(
-                span.highlight === "purple" ? "--accent-bright" : "--spark",
+                span.highlight === "purple" ? "--text-on-glass" : "--spark",
               ),
               fontWeight: span.highlight === "purple" ? 700 : undefined,
             }}

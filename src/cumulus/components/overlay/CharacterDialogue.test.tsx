@@ -142,7 +142,7 @@ describe("CharacterDialogue", () => {
       '[data-tutorial-instruction-highlight="purple"]',
     );
     expect(purpleHighlight?.textContent).toBe("event");
-    expect(purpleHighlight?.style.color).toBe("var(--accent-bright)");
+    expect(purpleHighlight?.style.color).toBe("var(--text-on-glass)");
     expect(purpleHighlight?.style.fontWeight).toBe("700");
     expect(highlight?.style.fontWeight).toBe("");
     expect(bubble?.textContent).toContain(

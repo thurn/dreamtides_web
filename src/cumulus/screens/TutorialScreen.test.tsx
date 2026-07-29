@@ -1682,7 +1682,7 @@ describe("TutorialScreen", () => {
       '[data-tutorial-instruction-highlight="purple"]',
     );
     expect(purpleHighlight?.textContent).toBe("event");
-    expect(purpleHighlight?.style.color).toBe("var(--accent-bright)");
+    expect(purpleHighlight?.style.color).toBe("var(--text-on-glass)");
     expect(dialog?.querySelectorAll('[aria-label="points"]')).toHaveLength(2);
     expect(
       dialog?.querySelector('[aria-label="points"] i')?.className,
