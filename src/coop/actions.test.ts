@@ -240,7 +240,7 @@ describe("coop actions facade", () => {
     ]);
   });
 
-  it("leaves card tutorial opening retriable after a reducer bounce", () => {
+  it("deduplicates concurrent card tutorial opening while leaving bounces retriable", () => {
     const captured: EventDraft[] = [];
     const actions = makeActions((draft) => {
       captured.push(draft);
@@ -259,6 +259,7 @@ describe("coop actions facade", () => {
           screenKey: "journey:12:site:site-7",
           cardIds: ["card-a"],
         },
+        intentKey: "card-tutorial:journey:12:site:site-7:open",
       },
     ]);
   });

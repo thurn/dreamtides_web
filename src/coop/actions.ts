@@ -313,10 +313,14 @@ export function makeActions(append: AppendFn): CoopActions {
         `tutorial-battle:${battleId}:exit`,
       ),
     openCardTutorialGuidance: (screenKey, cardIds) =>
-      emit("OPEN_CARD_TUTORIAL_GUIDANCE", {
-        screenKey,
-        cardIds: [...cardIds],
-      }),
+      emit(
+        "OPEN_CARD_TUTORIAL_GUIDANCE",
+        {
+          screenKey,
+          cardIds: [...cardIds],
+        },
+        `card-tutorial:${screenKey}:open`,
+      ),
     completeCardTutorialGuidance: (presentationId, screenKey) =>
       emit(
         "COMPLETE_CARD_TUTORIAL_GUIDANCE",
