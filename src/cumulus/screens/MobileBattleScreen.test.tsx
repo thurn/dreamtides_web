@@ -5007,6 +5007,52 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("presents a shared hand card at reading size over the battlefield with normal context actions", () => {
+    mockDesktopViewport(true);
+    const card = makeCard(88, "shared-hand-card");
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onRevealedHandCardDebugActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(
+      { ...makeView(), revealedHandCard: card },
+      interactions,
+    );
+    const reveal = container.querySelector<HTMLElement>(
+      '[data-battle-revealed-hand-card][data-battle-card-id="shared-hand-card"]',
+    );
+    const face = reveal?.querySelector<HTMLElement>(
+      '[data-testid="battle-card-face:shared-hand-card"]',
+    );
+
+    expect(reveal).not.toBeNull();
+    expect(reveal?.style.gridRow).toBe("3 / 5");
+    expect(face?.dataset.gameCardPresentation).toBe("full");
+
+    act(() => {
+      reveal?.querySelector<HTMLElement>('[data-battle-card-zone="shared-reveal"]')
+        ?.dispatchEvent(new MouseEvent("contextmenu", {
+          bubbles: true,
+          cancelable: true,
+          clientX: 1020,
+          clientY: 440,
+        }));
+    });
+    expect(interactions.onRevealedHandCardDebugActivate).toHaveBeenCalledWith(
+      "shared-hand-card",
+      { presentation: "context-menu", x: 1020, y: 440 },
+    );
+    act(() => root.unmount());
+  });
+
   it("plays a quick touch tap but keeps a captured long press revealed and suppresses its click", () => {
     vi.useFakeTimers();
     const interactions = {

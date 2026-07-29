@@ -2265,6 +2265,7 @@ function coerceBattleDebugEdit(raw: unknown): BattleDebugEdit | null {
     case "ABANDON":
     case "REMATERIALIZE":
     case "CLEAR_CARD_NOTES":
+    case "REVEAL_HAND_CARD":
       return isNonEmptyString(raw.battleCardId) ? raw as unknown as BattleDebugEdit : null;
     case "SET_CARD_VISIBILITY":
       return isNonEmptyString(raw.battleCardId) &&

@@ -55,6 +55,7 @@ export function createInitialBattleState(battleInit: BattleInit): BattleMutableS
     phase: "dreamwell",
     result: null,
     forcedResult: null,
+    revealedHandCardId: null,
     dreamwellDeckIndex: 0,
     nextBattleCardOrdinal: 1,
     sides: {
@@ -91,6 +92,7 @@ export function cloneBattleMutableState(state: BattleMutableState): BattleMutabl
     phase: state.phase,
     result: state.result,
     forcedResult: state.forcedResult,
+    revealedHandCardId: state.revealedHandCardId ?? null,
     dreamwellDeckIndex: state.dreamwellDeckIndex,
     nextBattleCardOrdinal: state.nextBattleCardOrdinal,
     sides: {

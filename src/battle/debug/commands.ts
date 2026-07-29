@@ -163,6 +163,14 @@ export type BattleDebugEdit =
     isRevealedToPlayer?: boolean;
   }
   | {
+    /**
+     * Publicly reveals one card that is currently in either side's hand and
+     * presents that physical instance at reading size for every client.
+     */
+    kind: "REVEAL_HAND_CARD";
+    battleCardId: string;
+  }
+  | {
     kind: "SET_SIDE_HAND_VISIBILITY";
     side: BattleSide;
     viewer?: BattleSide;
@@ -556,6 +564,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
     case "FILL_BATTLEFIELD_PREVIEW":
       return "battlefield-position";
     case "SET_CARD_VISIBILITY":
+    case "REVEAL_HAND_CARD":
     case "SET_SIDE_HAND_VISIBILITY":
     case "REVEAL_DECK_TOP":
     case "HIDE_DECK_TOP":
@@ -645,6 +654,7 @@ function collectDebugEditTargets(
     case "ABANDON":
     case "REMATERIALIZE":
     case "SET_CARD_VISIBILITY":
+    case "REVEAL_HAND_CARD":
     case "ADD_CARD_NOTE":
     case "DISMISS_CARD_NOTE":
     case "CLEAR_CARD_NOTES":
@@ -775,6 +785,8 @@ function createDebugEditLabel(
     }
     case "SET_CARD_VISIBILITY":
       return `${visibilityEditValue(edit) ? "Reveal" : "Hide"} Hand Card`;
+    case "REVEAL_HAND_CARD":
+      return `Reveal ${readCardName(state, edit.battleCardId)}`;
     case "SET_SIDE_HAND_VISIBILITY":
       return `${visibilityEditValue(edit) ? "Reveal" : "Hide"} All ${formatSideLabel(edit.side)} Hand Cards`;
     case "ADD_CARD_NOTE":
@@ -870,6 +882,8 @@ function formatDebugEditCommandId(edit: BattleDebugEdit): string {
       return visibilityEditValue(edit)
         ? "REVEAL_OPPONENT_HAND_CARD"
         : "HIDE_OPPONENT_HAND_CARD";
+    case "REVEAL_HAND_CARD":
+      return "REVEAL_HAND_CARD";
     case "SET_SIDE_HAND_VISIBILITY":
       return visibilityEditValue(edit)
         ? `REVEAL_ALL_${edit.side.toUpperCase()}_HAND_CARDS`

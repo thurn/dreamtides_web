@@ -172,6 +172,8 @@ export interface MobileBattleView {
   readonly playerHand: readonly MobileBattleCardView[];
   readonly inspector: MobileBattleInspectorView;
   readonly result: MobileBattleResultView | null;
+  /** One room-shared hand card presented over the battlefield at reading size. */
+  readonly revealedHandCard?: MobileBattleCardView | null;
 }
 
 /** A UUID-safe card decision owned by the authoritative battle prompt. */
@@ -487,6 +489,10 @@ export interface MobileBattleInteractions {
     source: MobileBattleCardSource,
     invocation: MobileBattleDebugInvocation,
   ) => void;
+  readonly onRevealedHandCardDebugActivate?: (
+    battleCardId: string,
+    invocation: MobileBattleDebugInvocation,
+  ) => void;
   readonly onCardDragStart: (
     battleCardId: string,
     source: MobileBattleCardSource,
@@ -685,6 +691,9 @@ const DESKTOP_SIDE_PILE_HEIGHT =
 const DESKTOP_SIDE_ZONE_MIN_CLEARANCE = token("--space-5");
 const DESKTOP_SIDE_ZONE_SHIFT = `max(0px, calc(${DESKTOP_SIDE_ZONE_MIN_CLEARANCE} - 5.5vh + ${String(DESKTOP_SIDE_PILE_HEIGHT / 2)}px))`;
 const NEXT_PHASE_CONTROL_WIDTH = 120;
+// Canonical full-card reading size, constrained on narrow screens so the
+// room-shared reveal stays fully visible beside the battlefield.
+const SHARED_HAND_CARD_REVEAL_WIDTH = "min(240px, 45vw)";
 const PLAYER_HAND_Z_INDEX = 15;
 const BATTLEFIELD_RANK_Z_INDEX = {
   back: 1,
@@ -3149,6 +3158,66 @@ function NearHand({
   );
 }
 
+function SharedHandCardReveal({
+  card,
+  isDesktop,
+  interactions,
+}: {
+  readonly card: MobileBattleCardView;
+  readonly isDesktop: boolean;
+  readonly interactions?: MobileBattleInteractions;
+}) {
+  const reduceMotion = useReducedMotion();
+  const canOpenActions =
+    interactions?.canInteract === true &&
+    interactions.onRevealedHandCardDebugActivate !== undefined;
+  return (
+    <motion.div
+      data-battle-revealed-hand-card=""
+      data-battle-card-id={card.id}
+      initial={
+        reduceMotion
+          ? false
+          : { opacity: 0, scale: 0.55, x: token("--space-8") }
+      }
+      animate={{ opacity: 1, scale: 1, x: 0 }}
+      transition={{
+        duration: reduceMotion ? 0 : motionTimeSeconds("--dur-slow"),
+        ease: [0.22, 0.61, 0.36, 1],
+      }}
+      style={{
+        gridColumn: 1,
+        gridRow: "3 / 5",
+        alignSelf: "center",
+        justifySelf: "end",
+        width: SHARED_HAND_CARD_REVEAL_WIDTH,
+        marginRight: token(isDesktop ? "--space-8" : "--space-4"),
+        zIndex: token("--layer-reveal"),
+        pointerEvents: "auto",
+      }}
+    >
+      <FaceUpCard
+        card={card}
+        zone="shared-reveal"
+        showRulesText
+        interaction={
+          canOpenActions
+            ? {
+                draggable: false,
+                debugGesture: isDesktop ? "context-menu" : "double-tap",
+                onDebugActivate: (invocation) =>
+                  interactions.onRevealedHandCardDebugActivate?.(
+                    card.id,
+                    invocation,
+                  ),
+              }
+            : undefined
+        }
+      />
+    </motion.div>
+  );
+}
+
 function dropMobileCardAtPoint(
   interactions: MobileBattleInteractions,
   clientX: number,
@@ -5075,6 +5144,14 @@ export function MobileBattleScreen({
           interactions={interactions}
         />
       </BattleCardLayoutGroup>
+      {view.revealedHandCard !== undefined &&
+      view.revealedHandCard !== null ? (
+        <SharedHandCardReveal
+          card={view.revealedHandCard}
+          isDesktop={isDesktop}
+          interactions={interactions}
+        />
+      ) : null}
       <div
         data-battle-top-left-controls=""
         style={{

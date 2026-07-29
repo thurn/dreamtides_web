@@ -1141,6 +1141,35 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     expect(result.state.battle?.pendingPrompt).toBeNull();
   });
 
+  it("folds a public hand-card reveal into the shared battle snapshot", () => {
+    const instance = makeInstance(
+      "bc-shared-reveal",
+      "a5f4564c-3f13-4d5e-9073-2d1ef5472291",
+      "player",
+    );
+    const board = makeRichBoard({
+      playerHand: [instance.battleCardId],
+      instances: [instance],
+    });
+
+    const result = reduce(
+      { ...baseState(), battle: battleFrom(board) },
+      "BATTLE_COMMAND",
+      debugEdit({
+        kind: "REVEAL_HAND_CARD",
+        battleCardId: instance.battleCardId,
+      }),
+    );
+
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.revealedHandCardId).toBe(
+      instance.battleCardId,
+    );
+    expect(
+      result.state.battle?.board.cardInstances[instance.battleCardId]?.revealedTo,
+    ).toEqual({ player: true, enemy: true });
+  });
+
   it("moves a character into play without resolving its rules text", () => {
     const instance = makeInstance(
       "bc-mat",

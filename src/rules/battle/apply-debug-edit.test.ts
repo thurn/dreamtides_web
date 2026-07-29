@@ -98,6 +98,68 @@ describe("applyDebugEdit FORESEE", () => {
 });
 
 describe("viewer-aware hidden information", () => {
+  it("publicly reveals one hand card and clears its presentation when the card leaves hand", () => {
+    const state = createTestState();
+    const playerHandId = state.sides.player.hand[0];
+
+    const revealed = applyDebugEdit(state, {
+      kind: "REVEAL_HAND_CARD",
+      battleCardId: playerHandId,
+    }, EMISSION);
+
+    expect(revealed.state.revealedHandCardId).toBe(playerHandId);
+    expect(revealed.state.cardInstances[playerHandId].revealedTo).toEqual({
+      player: true,
+      enemy: true,
+    });
+    const revealLogEvent = revealed.transition.logEvents.find(
+      (event) => event.event === "battle_proto_hand_card_revealed",
+    );
+    expect(revealLogEvent?.fields).toMatchObject({
+      battleCardId: playerHandId,
+      cardUuid: state.cardInstances[playerHandId].definition.cardId,
+    });
+    expect(state.revealedHandCardId).toBeNull();
+
+    const moved = applyDebugEdit(revealed.state, {
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId: playerHandId,
+      destination: { side: "player", zone: "void" },
+    }, EMISSION);
+
+    expect(moved.state.revealedHandCardId).toBeNull();
+    expect(moved.state.sides.player.void).toContain(playerHandId);
+  });
+
+  it("rejects a public reveal for a card outside a hand", () => {
+    const state = createTestState();
+    const deckCardId = state.sides.player.deck[0];
+
+    const result = applyDebugEdit(state, {
+      kind: "REVEAL_HAND_CARD",
+      battleCardId: deckCardId,
+    }, EMISSION);
+
+    expect(result.state).toBe(state);
+  });
+
+  it("clears the shared presentation when its hand card is discarded", () => {
+    const state = createTestState();
+    const playerHandId = state.sides.player.hand[0];
+    const revealed = applyDebugEdit(state, {
+      kind: "REVEAL_HAND_CARD",
+      battleCardId: playerHandId,
+    }, EMISSION);
+
+    const discarded = applyDebugEdit(revealed.state, {
+      kind: "DISCARD_CARD",
+      battleCardId: playerHandId,
+    }, EMISSION);
+
+    expect(discarded.state.revealedHandCardId).toBeNull();
+    expect(discarded.state.sides.player.void).toContain(playerHandId);
+  });
+
   it("reveals one side's hand to the requested canonical viewer only", () => {
     const state = createTestState();
     const enemyHandId = state.sides.enemy.hand[0];

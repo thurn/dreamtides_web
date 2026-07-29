@@ -21,6 +21,39 @@ beforeEach(() => {
 afterEach(() => { document.body.innerHTML = ""; });
 
 describe("BattleContextMenu", () => {
+  it("offers a shared reveal action for cards in hand", () => {
+    const board = state();
+    const battleCardId = board.sides.player.hand[0];
+    const onCommand = vi.fn<(command: BattleCommand) => void>();
+    const host = document.createElement("div");
+    document.body.append(host);
+    const root = createRoot(host);
+
+    act(() => root.render(
+      <BattleContextMenu
+        battleCardId={battleCardId}
+        sourceSurface="hand-tray"
+        state={board}
+        x={200}
+        y={300}
+        onClose={() => undefined}
+        onCommand={onCommand}
+        onOpenNoteEditor={() => undefined}
+      />,
+    ));
+
+    const reveal = [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')]
+      .find((element) => element.textContent?.trim() === "Reveal");
+    expect(reveal).not.toBeUndefined();
+    act(() => reveal?.click());
+    expect(onCommand).toHaveBeenCalledWith({
+      id: "DEBUG_EDIT",
+      edit: { kind: "REVEAL_HAND_CARD", battleCardId },
+      sourceSurface: "hand-tray",
+    });
+    act(() => root.unmount());
+  });
+
   it("delegates clamped card actions and nested commands to ContextActionMenu", () => {
     const board = state();
     const battleCardId = board.sides.player.hand.find((id) => board.cardInstances[id]?.definition.battleCardKind === "character");

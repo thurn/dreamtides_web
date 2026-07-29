@@ -174,7 +174,20 @@ export function buildMobileBattleView(
       board,
       viewOptions.isResultOverlayDismissed ?? false,
     ),
+    revealedHandCard: buildRevealedHandCardView(board),
   };
+}
+
+function buildRevealedHandCardView(
+  board: BattleMutableState,
+): MobileBattleCardView | null {
+  const battleCardId = board.revealedHandCardId ?? null;
+  if (battleCardId === null) return null;
+  const instance = board.cardInstances[battleCardId];
+  const location = selectBattleCardLocation(board, battleCardId);
+  return instance === undefined || location?.zone !== "hand"
+    ? null
+    : buildMobileBattleCardView(instance);
 }
 
 export function buildMobileBattleResultView(

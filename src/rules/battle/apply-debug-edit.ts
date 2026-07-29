@@ -297,6 +297,40 @@ export function applyDebugEdit(
         state: nextState,
         transition: createEmptyTransitionData(),
       };
+    case "REVEAL_HAND_CARD": {
+      const location = selectBattleCardLocation(state, edit.battleCardId);
+      const instance = nextState.cardInstances[edit.battleCardId];
+      if (
+        instance === undefined ||
+        location?.zone !== "hand" ||
+        state.revealedHandCardId === edit.battleCardId
+      ) {
+        return {
+          state,
+          transition: createEmptyTransitionData(),
+        };
+      }
+      revealCardPublicly(instance);
+      nextState.revealedHandCardId = edit.battleCardId;
+      return {
+        state: nextState,
+        transition: {
+          ...createEmptyTransitionData(),
+          logEvents: [
+            {
+              event: "battle_proto_hand_card_revealed",
+              fields: {
+                ...createBattleLogBaseFields(nextState, context),
+                battleCardId: edit.battleCardId,
+                cardUuid: instance.definition.cardId,
+                controller: instance.controller,
+                owner: instance.owner,
+              },
+            },
+          ],
+        },
+      };
+    }
     case "SET_SIDE_HAND_VISIBILITY":
       return setSideHandVisibility(
         state,
@@ -1640,6 +1674,12 @@ function moveCardToDebugZone(
   }
 
   const nextState = cloneBattleMutableState(state);
+  if (
+    nextState.revealedHandCardId === battleCardId &&
+    destination.zone !== "hand"
+  ) {
+    nextState.revealedHandCardId = null;
+  }
   removeBattleCardFromLocation(nextState, source);
   if (
     destinationOccupant !== null &&
@@ -1942,6 +1982,9 @@ function discardHandCard(
   }
 
   const nextState = cloneBattleMutableState(state);
+  if (nextState.revealedHandCardId === battleCardId) {
+    nextState.revealedHandCardId = null;
+  }
   nextState.sides[source.side].hand.splice(source.index, 1);
   nextState.sides[source.side].void.push(battleCardId);
   nextState.cardInstances[battleCardId].controller = source.side;

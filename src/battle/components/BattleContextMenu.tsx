@@ -56,6 +56,19 @@ export function BattleContextMenu({
     const result: ContextMenuItem[] = [];
 
     if (location.zone === "hand") {
+      if (state.revealedHandCardId !== battleCardId) {
+        result.push({
+          label: "Reveal",
+          action: () => onCommand({
+            id: "DEBUG_EDIT",
+            edit: {
+              kind: "REVEAL_HAND_CARD",
+              battleCardId,
+            },
+            sourceSurface,
+          }),
+        });
+      }
       const playDestination = card.definition.battleCardKind === "character" ? "backRank" : "void";
       const playCommand = card.definition.battleCardKind === "character"
         ? createMoveCardToBattlefieldCommand(state, battleCardId, location.side, sourceSurface)

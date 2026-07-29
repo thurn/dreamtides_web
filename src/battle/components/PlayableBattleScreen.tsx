@@ -1565,6 +1565,12 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
               source === "near-hand" ? "hand-tray" : "battlefield",
               invocation,
             ),
+          onRevealedHandCardDebugActivate: (battleCardId, invocation) =>
+            handleCumulusCardDebugActivate(
+              battleCardId,
+              "revealed-hand-card",
+              invocation,
+            ),
           onCardDragStart: (battleCardId, source) => {
             handleCardDragStart(
               battleCardId,

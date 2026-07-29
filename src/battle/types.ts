@@ -171,6 +171,7 @@ export type BattleCommandSourceSurface =
   | "battlefield"
   | "hand-tray"
   | "opponent-hand-tray"
+  | "revealed-hand-card"
   | "inspector"
   | "zone-browser-deck"
   | "zone-browser-hand"
@@ -555,6 +556,12 @@ export interface BattleMutableState {
   phase: BattlePhase;
   result: BattleResult | null;
   forcedResult: BattleResult | null;
+  /**
+   * The hand-card instance currently presented publicly over the battlefield.
+   * The reveal is shared through the room fold and clears when the instance
+   * leaves a hand.
+   */
+  revealedHandCardId?: string | null;
   /** Next index to draw from the shared `BattleInit.dreamwellDeck`. */
   dreamwellDeckIndex: number;
   nextBattleCardOrdinal: number;

@@ -126,6 +126,20 @@ function makeBoard(init: BattleInit): BattleMutableState {
 }
 
 describe("buildMobileBattleView", () => {
+  it("maps the room-shared revealed hand card by battle instance id", () => {
+    const init = makeInit();
+    const board = makeBoard(init);
+    const battleCardId = board.sides.player.hand[0];
+    board.revealedHandCardId = battleCardId;
+
+    const view = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR);
+
+    expect(view.revealedHandCard?.id).toBe(battleCardId);
+    expect(view.revealedHandCard?.model.cardId).toBe(
+      board.cardInstances[battleCardId].definition.cardId,
+    );
+  });
+
   it("maps victory reward copy and defeat/draw presentation state", () => {
     const init = makeInit();
     const board = makeBoard(init);
