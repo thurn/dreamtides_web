@@ -114,4 +114,31 @@ describe("appendEvent Firebase transaction behavior", () => {
     ).resolves.toBe(1);
     expect(firebase.current?.head).toBe(1);
   });
+
+  it("returns the original winner when a joining client's RTDB node omits baseSnapshot", async () => {
+    firebase.current = emptyLog();
+    await appendEvent(
+      {} as never,
+      "room",
+      config,
+      event({ nonce: "host-1", intentKey: "tutorial:journey-1:begin" }),
+    );
+    if (firebase.current !== null) {
+      delete firebase.current.baseSnapshot;
+    }
+
+    await expect(
+      appendEvent(
+        {} as never,
+        "room",
+        config,
+        event({
+          actor: "joining-client",
+          nonce: "joiner-1",
+          intentKey: "tutorial:journey-1:begin",
+        }),
+      ),
+    ).resolves.toBe(1);
+    expect(firebase.current?.head).toBe(1);
+  });
 });

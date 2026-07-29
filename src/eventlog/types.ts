@@ -140,8 +140,11 @@ export interface EncodedLogNode {
   /** JSON string encoding a Genesis. */
   genesis: string;
   baseSeq: number;
-  /** JSON string encoding the compacted fold state, or null. */
-  baseSnapshot: string | null;
+  /**
+   * JSON string encoding the compacted fold state. Fresh rooms write null,
+   * which RTDB omits when another client reads the node.
+   */
+  baseSnapshot?: string | null;
   head: number;
   /** JSON string per seq, dense integer keys in (baseSeq, head]. */
   events: { [seq: number]: string };

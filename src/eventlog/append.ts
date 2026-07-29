@@ -236,7 +236,7 @@ function foldLiveWindow<S>(
 ): ReturnType<typeof foldEvents<S>> {
   const genesis = JSON.parse(encoded.genesis) as Genesis;
   const baseState =
-    encoded.baseSnapshot === null
+    encoded.baseSnapshot == null
       ? config.genesisState(genesis)
       : config.decode(encoded.baseSnapshot);
   const events: Array<{ seq: number; event: GameEvent }> = [];

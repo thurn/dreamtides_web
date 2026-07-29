@@ -180,6 +180,30 @@ describe("applyAppend nonce dedup", () => {
     expect(decodeEvent(afterRetry.events[1])).toEqual(first);
   });
 
+  it("deduplicates a logical intent after RTDB omits a fresh room's null snapshot", () => {
+    const first = {
+      ...makeEvent(1),
+      actor: "client-a",
+      nonce: "client-a:1",
+      intentKey: "front-door:journey-1:loading",
+    };
+    const afterFirst = applyAppend(config, emptyLog(), first);
+    const fromRtdb = { ...afterFirst };
+    delete fromRtdb.baseSnapshot;
+    const contender = {
+      ...makeEvent(999),
+      actor: "client-b",
+      nonce: "client-b:1",
+      intentKey: first.intentKey,
+    };
+
+    const afterContender = applyAppend(config, fromRtdb, contender);
+
+    expect(afterContender).toBe(fromRtdb);
+    expect(afterContender.head).toBe(1);
+    expect(numericEventKeys(afterContender)).toEqual([1]);
+  });
+
   it("lets an applied contender reuse a key previously carried by a bounced event", () => {
     const bounceObserverConfig: EngineConfig<ToyState> = {
       ...config,
