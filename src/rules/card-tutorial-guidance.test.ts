@@ -180,7 +180,7 @@ describe("card tutorial guidance selection", () => {
 
 describe("card tutorial guidance fold", () => {
   it("does not trigger while the starting-deck modal is pending", () => {
-    const state = siteState();
+    const state = draftOfferState(1, [1, 2, 3, 4]);
     expect(
       currentCardTutorialScreenKey({
         ...state,
@@ -193,6 +193,7 @@ describe("card tutorial guidance fold", () => {
   });
 
   it.each([
+    "Shop",
     "Purge",
     "Transfiguration",
     "Duplication",
@@ -206,26 +207,19 @@ describe("card tutorial guidance fold", () => {
     },
   );
 
-  it.each(["Shop", "Draft"] satisfies readonly SiteType[])(
-    "is eligible on the %s screen",
-    (siteType) => {
-      expect(
-        currentCardTutorialScreenKey(
-          siteType === "Draft"
-            ? draftOfferState(1, [1, 2, 3, 4])
-            : siteState("site-a", siteType),
-        ),
-      ).not.toBeNull();
-    },
-  );
+  it("is eligible on a persisted Draft offer", () => {
+    expect(
+      currentCardTutorialScreenKey(draftOfferState(1, [1, 2, 3, 4])),
+    ).not.toBeNull();
+  });
 
   it("opens one shared card journey and preserves authored bubble settings", () => {
     registerCardTutorialGuidanceContentProvider(provider());
-    const before = siteState();
+    const before = draftOfferState(1, [1, 2, 3, 4]);
     const screenKey = currentCardTutorialScreenKey(before);
     const opened = openCardTutorialGuidance(before, {
       screenKey,
-      cardIds: ["card-a", "card-b"],
+      cardIds: ["card-a", "card-b", "card-c", "card-d"],
     });
 
     expect(opened?.cardTutorialPresentation).toMatchObject({
@@ -245,11 +239,11 @@ describe("card tutorial guidance fold", () => {
 
   it("allows no second tutorial on the same screen after the first settles", () => {
     registerCardTutorialGuidanceContentProvider(provider());
-    const before = siteState();
+    const before = draftOfferState(1, [1, 2, 3, 4]);
     const screenKey = currentCardTutorialScreenKey(before);
     const opened = openCardTutorialGuidance(before, {
       screenKey,
-      cardIds: ["card-a", "card-b"],
+      cardIds: ["card-a", "card-b", "card-c", "card-d"],
     });
     expect(opened).not.toBeNull();
     const settled = completeCardTutorialGuidance(opened!, {

@@ -131,19 +131,17 @@ starting-deck modal.
 
 Supplemental tutorial triggers are shared first-occurrence explanations. Their
 seen ids live in the room fold, so a keyword explained on a journey card is
-already familiar when it later appears in battle. Shop and Draft screens submit
-the UUIDs currently visible in display order three seconds after the screen
-loads; the reducer selects the first card with the highest-priority unfamiliar
-`card-seen` trigger. Each persisted four-card Draft offer may present one
-explanation, so subsequent Draft picks can each explain one unfamiliar keyword.
-Each Shop allows one explanation per run-scoped site screen. Mira and her speech
-bubble appear in available viewport space outside the visible cards while every
-card remains in its screen position. The explanation stays visible for the
-lifetime of that Shop surface or persisted Draft offer, and the action that
-advances away from the surface retires it. Eligibility begins after the
-starting-deck popup has been dismissed. The room fold owns both the consumed
-surface identity and the active presentation, keeping reloads and connected
-clients aligned.
+already familiar when it later appears in battle. Draft screens submit the UUIDs
+currently visible in display order three seconds after the screen loads; the
+reducer selects the first card with the highest-priority unfamiliar `card-seen`
+trigger. Each persisted four-card Draft offer may present one explanation, so
+subsequent Draft picks can each explain one unfamiliar keyword. Mira and her
+speech bubble appear in available viewport space outside the visible cards
+while every card remains in its screen position. The explanation stays visible
+for the lifetime of that persisted Draft offer, and the action that advances
+away from the offer retires it. Eligibility begins after the starting-deck popup
+has been dismissed. The room fold owns both the consumed offer identity and the
+active presentation, keeping reloads and connected clients aligned.
 
 When a tutorial request adds a new kind of beat, extend the action type,
 runtime and build-time validators, Tutorial Editor controls, view-model

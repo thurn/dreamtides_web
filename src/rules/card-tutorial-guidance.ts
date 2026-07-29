@@ -48,10 +48,7 @@ function currentCardTutorialSite(state: FoldState): SiteState | null {
   const site = Object.values(state.journey.atlas.nodes)
     .flatMap((node) => node.sites)
     .find((candidate) => candidate.id === siteId);
-  if (
-    site === undefined ||
-    (site.type !== "Draft" && site.type !== "Shop")
-  ) {
+  if (site?.type !== "Draft") {
     return null;
   }
   return site;
