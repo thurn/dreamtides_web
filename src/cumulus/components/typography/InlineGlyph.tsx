@@ -57,6 +57,10 @@ export function InlineGlyph({
           className={glyph}
           aria-hidden="true"
           style={{
+            // Font Awesome reserves a 1.25em advance by default. Keep every
+            // icon pack inside InlineGlyph's documented one-em metric box so
+            // wide marks cannot intrude into adjacent punctuation.
+            width: "1em",
             fontSize: "1em",
             lineHeight: 1,
           }}
