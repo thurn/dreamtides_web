@@ -85,6 +85,53 @@ cumulus/scripts/release-licensed-assets.sh
 The release helper refuses a dirty licensed worktree and retains its branch and
 commits in the local repository.
 
+## Promotion
+
+When the user approves promotion of a Cumulus task, perform the complete paired
+promotion automatically. Do not leave licensed-scene synchronization as a
+manual setup step for the user.
+
+Before moving either repository, close every Unity editor opened by the task
+and confirm that the public task worktree, paired licensed task worktree,
+canonical licensed seed, and primary licensed checkout are clean. The primary
+licensed checkout is the repository at
+`<public-primary-checkout>/cumulus/Assets/ThirdParty/`; resolve its absolute
+path from the public repository rather than hard-coding a user-specific path.
+
+Promote licensed work while preserving both target histories:
+
+1. In the paired licensed task worktree, integrate the current licensed `main`
+   and licensed `primary` tips. If either target is not already an ancestor of
+   the task branch, merge it into the task branch there; do not perform the
+   conflict-producing merge in the primary checkout or canonical seed.
+2. If the integration conflicts in a generated Unity scene, reconstruct it in
+   the task worktree from the current `primary` scene by rerunning every
+   relevant deterministic builder or reconciler for the integrated changes.
+   Verify that the result contains the behavior from both histories; accepting
+   an entire serialized scene from either side is not a complete resolution.
+3. Commit the verified integration in the local-only licensed task branch and
+   confirm that both licensed `main` and licensed `primary` are ancestors of
+   that commit.
+4. Fast-forward the canonical seed's `main` branch and the primary licensed
+   checkout's `primary` branch to that same commit. Never use `reset` or force
+   updates to synchronize them.
+5. Confirm that licensed `main`, licensed `primary`, and the licensed task
+   branch resolve to the same commit. Reopen the promoted scene from the
+   primary Unity project and confirm that it imports without compile,
+   serialization, or rendering errors.
+
+If `main` and `primary` have diverged, a direct
+`git merge --ff-only main` from the primary checkout cannot reconcile them.
+Merge both histories into the isolated licensed task branch and run the
+builder-and-verification sequence above before fast-forwarding either target.
+Stop the promotion if the histories cannot be reconciled and verified; never
+discard either line of licensed scene work.
+
+After the licensed targets agree, promote the public task commits onto public
+`master`, push public `master`, release the nested licensed worktree, and clean
+up the public worktree and task branches. The licensed repository remains
+local-only and must not gain a remote.
+
 ## Durable scene changes
 
 Proprietary scenes are durable only in the local licensed repository. Cumulus
@@ -173,6 +220,7 @@ Before asking to promote a Unity scene task:
 5. Provide private local screenshots and any reproducible builder entry point.
 6. Commit both worktrees and report both commit IDs.
 7. Push only tracked, distributable Cumulus-owned work from the public branch.
-8. Promote the public and licensed commits deliberately; never imply that
-   promoting one repository also promoted the other.
-9. Release the nested licensed worktree before cleaning up the public worktree.
+8. On approval, run the paired promotion procedure above so licensed `main`,
+   licensed `primary`, and the licensed task branch end at one verified commit.
+9. Promote and push the public commits, then release the nested licensed
+   worktree before cleaning up the public worktree.
