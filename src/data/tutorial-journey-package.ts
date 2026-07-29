@@ -66,6 +66,18 @@ export function buildTutorialJourneyPackage(
     );
   }
 
+  const knownDreamsignIds = new Set(
+    context.allDreamsignPoolIds.map((id) => id.toLocaleLowerCase()),
+  );
+  const unresolvedDreamsignIds = tutorialPool.openingDreamsignIds.filter(
+    (id) => !knownDreamsignIds.has(id.toLocaleLowerCase()),
+  );
+  if (unresolvedDreamsignIds.length > 0) {
+    throw new Error(
+      `Tutorial opening Dreamsign offer references unknown UUIDs: ${unresolvedDreamsignIds.join(", ")}.`,
+    );
+  }
+
   const openingDraftOffers: Record<string, number[]> = {};
   for (const [offerIndex, cardIds] of tutorialPool.openingOffers.entries()) {
     const cardNumbers: number[] = [];
@@ -120,12 +132,14 @@ export function buildTutorialJourneyPackage(
     poolSize: draftPoolSize,
     distinctCardCount: Object.keys(draftPoolCopiesByCard).length,
     tideIds: tutorialPool.tides.map((tide) => tide.id),
+    openingDreamsignIds: tutorialPool.openingDreamsignIds,
   });
 
   return {
     dreamAvatar,
     draftPoolCopiesByCard,
     openingDraftOffers,
+    openingDreamsignOfferIds: [...tutorialPool.openingDreamsignIds],
     dreamsignPoolIds: [...context.allDreamsignPoolIds],
     mandatoryOnlyPoolSize: draftPoolSize,
     draftPoolSize,

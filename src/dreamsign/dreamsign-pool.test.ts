@@ -56,6 +56,21 @@ describe("drawDreamsignOptions", () => {
     expect(draw.offeredIds.every((id) => !draw.remainingDreamsignPool.includes(id))).toBe(true);
   });
 
+  it("includes required available ids before filling the rest of the offer", () => {
+    const draw = drawDreamsignOptions(
+      ["embers-whisper", "glacial-insight", "verdant-accord"],
+      DREAMSIGN_TEMPLATES,
+      2,
+      undefined,
+      () => 0,
+      ["verdant-accord"],
+    );
+
+    expect(draw.offeredIds).toHaveLength(2);
+    expect(draw.offeredIds).toContain("verdant-accord");
+    expect(draw.remainingDreamsignPool).not.toContain("verdant-accord");
+  });
+
   it("consumes the shared pool across sequential reveals without repeats", () => {
     const first = drawDreamsignOptions(
       ["embers-whisper", "glacial-insight", "verdant-accord"],

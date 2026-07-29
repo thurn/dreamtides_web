@@ -496,7 +496,8 @@ describe("journey state actions", () => {
     const authoredPackage: ResolvedDreamAvatarPackage = {
       dreamAvatar,
       draftPoolCopiesByCard: authoredCopies,
-      dreamsignPoolIds: ["dreamsign-a"],
+      openingDreamsignOfferIds: ["dreamsign-a"],
+      dreamsignPoolIds: ["dreamsign-a", "dreamsign-b"],
       mandatoryOnlyPoolSize: 3,
       draftPoolSize: 3,
       doubledCardCount: 1,
@@ -510,6 +511,7 @@ describe("journey state actions", () => {
       dreamAvatar,
       journeyContent,
       seedOverride: "tutorial-seed",
+      atlasRng: () => 0,
       resolvedPackageOverride: authoredPackage,
       isTutorialJourney: true,
     });
@@ -520,6 +522,12 @@ describe("journey state actions", () => {
     expect(
       (next.draftState as PoolDraftState).draftPoolCopiesByCard,
     ).toEqual(authoredCopies);
+    expect(next.remainingDreamsignPool).toContain("dreamsign-a");
+    expect(
+      next.atlas.knownDreamsignCarrierIds
+        .map((id) => next.atlas.nodes[id]?.knownDreamsignId)
+        .filter((id): id is string => id !== null && id !== undefined),
+    ).not.toContain("dreamsign-a");
   });
 
   it("sets the journey screen and active site together", () => {

@@ -17,11 +17,13 @@ const CARD_IDS = [
   "00000000-0000-4000-8000-000000000007",
   "00000000-0000-4000-8000-000000000008",
 ] as const;
+const OPENING_DREAMSIGN_ID = "00000000-0000-4000-8000-000000000020";
 
 function syntheticSource(): Record<string, unknown> {
   return {
     "dream-avatar-id": "00000000-0000-4000-8000-000000000010",
     "pool-size": 8,
+    "opening-dreamsigns": [OPENING_DREAMSIGN_ID],
     "opening-offers": [CARD_IDS.slice(0, 4), CARD_IDS.slice(4, 8)],
     tides: [
       {
@@ -106,6 +108,7 @@ describe("validateTutorialJourneyPool", () => {
       CARD_IDS.slice(0, 4),
       CARD_IDS.slice(4, 8),
     ]);
+    expect(pool.openingDreamsignIds).toEqual([OPENING_DREAMSIGN_ID]);
   });
 
   it("rejects pool-wide duplicate card UUIDs", () => {
@@ -131,7 +134,7 @@ describe("buildTutorialJourneyPackage", () => {
     const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
       idIndex: new Map(CARD_IDS.map((id, index) => [id, index + 101])),
-      allDreamsignPoolIds: ["dreamsign-a"],
+      allDreamsignPoolIds: [OPENING_DREAMSIGN_ID],
       poolData: {
         core: new Set(),
         archLists: new Map(),
@@ -162,7 +165,8 @@ describe("buildTutorialJourneyPackage", () => {
     });
     expect(pkg.draftPoolSize).toBe(8);
     expect(pkg.doubledCardCount).toBe(0);
-    expect(pkg.dreamsignPoolIds).toEqual(["dreamsign-a"]);
+    expect(pkg.dreamsignPoolIds).toEqual([OPENING_DREAMSIGN_ID]);
+    expect(pkg.openingDreamsignOfferIds).toEqual([OPENING_DREAMSIGN_ID]);
     expect(console.log).toHaveBeenCalledOnce();
     expect(JSON.parse(vi.mocked(console.log).mock.calls[0][0] as string)).toMatchObject({
       event: "draft_pool_constructed",
@@ -170,6 +174,7 @@ describe("buildTutorialJourneyPackage", () => {
       poolSize: 8,
       distinctCardCount: 8,
       tideIds: ["first-tide", "second-tide", "third-tide"],
+      openingDreamsignIds: [OPENING_DREAMSIGN_ID],
     });
   });
 
@@ -178,7 +183,7 @@ describe("buildTutorialJourneyPackage", () => {
     const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
       idIndex: new Map([[CARD_IDS[0], 101]]),
-      allDreamsignPoolIds: [],
+      allDreamsignPoolIds: [OPENING_DREAMSIGN_ID],
       poolData: {
         core: new Set(),
         archLists: new Map(),
@@ -194,6 +199,28 @@ describe("buildTutorialJourneyPackage", () => {
         new Map(),
       ),
     ).toThrow(/unknown card UUIDs/u);
+  });
+
+  it("rejects an opening Dreamsign outside the journey pool", () => {
+    const pool = validateTutorialJourneyPool(syntheticSource(), 8);
+    const context = {
+      idIndex: new Map(CARD_IDS.map((id, index) => [id, index + 101])),
+      allDreamsignPoolIds: [],
+      poolData: {
+        core: new Set(),
+        archLists: new Map(),
+        draftLists: new Map(),
+      },
+    } satisfies RunPoolContext;
+
+    expect(() =>
+      buildTutorialJourneyPackage(
+        dreamAvatar(pool.dreamAvatarId),
+        context,
+        pool,
+        buildCardDatabase(),
+      ),
+    ).toThrow(/opening Dreamsign offer references unknown UUIDs/u);
   });
 
   const glossaryEntry = GLOSSARY.find(
@@ -225,7 +252,7 @@ describe("buildTutorialJourneyPackage", () => {
     const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
       idIndex: new Map(CARD_IDS.map((id, index) => [id, index + 101])),
-      allDreamsignPoolIds: [],
+      allDreamsignPoolIds: [OPENING_DREAMSIGN_ID],
       poolData: {
         core: new Set(),
         archLists: new Map(),

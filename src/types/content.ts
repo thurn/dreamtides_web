@@ -339,6 +339,12 @@ export interface ResolvedDreamAvatarPackage {
    * can use this to teach with a stable opening before ordinary pool sampling.
    */
   openingDraftOffers?: Record<string, number[]>;
+  /**
+   * Dreamsign UUIDs guaranteed to appear in the opening Revelation offer.
+   * Authored tutorial flows use this to establish the run's theme while the
+   * remaining offer slots continue to draw from the shared pool.
+   */
+  openingDreamsignOfferIds?: string[];
   dreamsignPoolIds: string[];
   mandatoryOnlyPoolSize: number;
   draftPoolSize: number;

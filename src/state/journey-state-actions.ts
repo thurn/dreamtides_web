@@ -479,13 +479,21 @@ export function startJourneyFromDreamAvatar({
     });
   }
 
+  const openingDreamsignIds = new Set(
+    (resolvedPackage.openingDreamsignOfferIds ?? []).map((id) =>
+      id.toLocaleLowerCase(),
+    ),
+  );
+  const atlasDreamsignPoolIds = resolvedPackage.dreamsignPoolIds.filter(
+    (id) => !openingDreamsignIds.has(id.toLocaleLowerCase()),
+  );
   const atlas = generateInitialAtlas(
     prev.completionLevel,
     {},
     {
       dreamscapes: journeyContent.dreamscapes,
       atlasConfig: journeyContent.atlasConfig,
-      dreamsignPoolIds: resolvedPackage.dreamsignPoolIds,
+      dreamsignPoolIds: atlasDreamsignPoolIds,
       apollyonIncarnations: journeyContent.apollyonIncarnations,
     },
     { logEvents: false, ...(atlasRng === undefined ? {} : { rng: atlasRng }) },

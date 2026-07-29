@@ -65,6 +65,7 @@ import {
   clearGameProviders,
   registerGameProviders,
 } from "./register-game-providers";
+import { createSiteContentProvider } from "./site-provider";
 
 const DREAM_AVATAR_ID = "dream-avatar-real-provider";
 const TIMESTAMP = "1970-01-01T00:00:00.000Z";
@@ -281,6 +282,54 @@ describe("registerGameProviders (real content providers)", () => {
     // (b) Determinism: folding the identical log again is byte-identical.
     const second = replayLog({ genesis: GENESIS, events });
     expect(second.finalHash).toBe(first.finalHash);
+  });
+
+  it("includes the authored Dreamsign in the tutorial's opening Revelation offer", () => {
+    const content = makeJourneyContent();
+    const started = replayLog({
+      genesis: GENESIS,
+      events: [
+        ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }),
+        ev(2, "SELECT_DREAM_AVATAR", { dreamAvatarId: DREAM_AVATAR_ID }),
+      ],
+    }).finalState.journey;
+    const openingNode = started.atlas.nodes[started.atlas.startingNodeId];
+    const revelation = openingNode.sites.find(
+      (site) => site.type === "DreamsignRevelation",
+    );
+    expect(revelation).toBeDefined();
+    if (revelation === undefined || started.resolvedPackage === null) return;
+
+    const requiredId =
+      content.dreamsignTemplates[content.dreamsignTemplates.length - 1]?.id;
+    expect(requiredId).toBeDefined();
+    if (requiredId === undefined) return;
+    const tutorialJourney: JourneyState = {
+      ...started,
+      isTutorialJourney: true,
+      remainingDreamsignPool: content.dreamsignTemplates.map(
+        (template) => template.id,
+      ),
+      resolvedPackage: {
+        ...started.resolvedPackage,
+        dreamsignPoolIds: content.dreamsignTemplates.map(
+          (template) => template.id,
+        ),
+        openingDreamsignOfferIds: [requiredId],
+      },
+    };
+
+    const result = createSiteContentProvider(content).openSite({
+      journey: tutorialJourney,
+      site: revelation,
+      rng: () => 0,
+    });
+
+    expect(result?.runtime.kind).toBe("dreamsignOffer");
+    if (result?.runtime.kind !== "dreamsignOffer") return;
+    expect(
+      result.runtime.offeredDreamsigns.map((dreamsign) => dreamsign.id),
+    ).toContain(requiredId);
   });
 });
 

@@ -172,6 +172,18 @@ export function createSiteContentProvider(
 ): SiteContentProvider {
   const dreamsignRegenerationPoolIds = (journey: JourneyState): readonly string[] =>
     journey.resolvedPackage?.dreamsignPoolIds ?? [];
+  const tutorialOpeningDreamsignIds = (
+    journey: JourneyState,
+    site: SiteState,
+  ): readonly string[] => {
+    if (journey.isTutorialJourney !== true) return [];
+    const openingNode = journey.atlas.nodes[journey.atlas.startingNodeId];
+    const openingRevelation = openingNode?.sites.find(
+      (candidate) => candidate.type === "DreamsignRevelation",
+    );
+    if (openingRevelation?.id !== site.id) return [];
+    return journey.resolvedPackage?.openingDreamsignOfferIds ?? [];
+  };
 
   return {
     openSite: ({ journey, site, rng }): SiteOpenResult | null => {
@@ -208,6 +220,7 @@ export function createSiteContentProvider(
             optionCount,
             dreamsignRegenerationPoolIds(journey),
             stream,
+            tutorialOpeningDreamsignIds(journey, site),
           );
           const runtime: SiteRuntimeState = {
             kind: "dreamsignOffer",

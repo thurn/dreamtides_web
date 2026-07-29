@@ -72,6 +72,7 @@ export function drawDreamsignOptions(
   count: number,
   regenerationPoolIds?: readonly string[],
   rng: () => number = Math.random,
+  requiredIds: readonly string[] = [],
 ): DreamsignPoolDraw {
   const { availableIds, templatesById } = canonicalizeDreamsignPool(
     remainingDreamsignPool,
@@ -89,11 +90,32 @@ export function drawDreamsignOptions(
     }
   }
 
-  const offeredIds = shufflePick(
-    workingIds,
-    Math.min(count, workingIds.length),
+  const workingIdByNormalizedId = new Map(
+    workingIds.map((id) => [id.toLocaleLowerCase(), id]),
+  );
+  const requiredOfferedIds: string[] = [];
+  for (const requiredId of requiredIds) {
+    const availableId = workingIdByNormalizedId.get(
+      requiredId.toLocaleLowerCase(),
+    );
+    if (
+      availableId !== undefined &&
+      !requiredOfferedIds.includes(availableId) &&
+      requiredOfferedIds.length < count
+    ) {
+      requiredOfferedIds.push(availableId);
+    }
+  }
+  const requiredSet = new Set(requiredOfferedIds);
+  const randomOfferedIds = shufflePick(
+    workingIds.filter((id) => !requiredSet.has(id)),
+    Math.min(
+      Math.max(0, count - requiredOfferedIds.length),
+      workingIds.length - requiredOfferedIds.length,
+    ),
     rng,
   );
+  const offeredIds = [...requiredOfferedIds, ...randomOfferedIds];
 
   return {
     offeredIds,

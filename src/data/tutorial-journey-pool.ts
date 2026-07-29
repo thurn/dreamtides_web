@@ -19,6 +19,7 @@ export interface TutorialJourneyPool {
   readonly dreamAvatarId: string;
   readonly poolSize: number;
   readonly openingOffers: readonly (readonly string[])[];
+  readonly openingDreamsignIds: readonly string[];
   readonly tides: readonly TutorialJourneyTide[];
 }
 
@@ -78,6 +79,31 @@ export function validateTutorialJourneyPool(
     invalid(
       `pool-size must match the normal journey pool size (${String(expectedPoolSize)})`,
     );
+  }
+
+  const rawOpeningDreamsignIds = source["opening-dreamsigns"];
+  if (
+    !Array.isArray(rawOpeningDreamsignIds) ||
+    rawOpeningDreamsignIds.length === 0 ||
+    rawOpeningDreamsignIds.length > 3
+  ) {
+    invalid("opening-dreamsigns must contain between one and three UUIDs");
+  }
+  const openingDreamsignIds = rawOpeningDreamsignIds.map((value, index) => {
+    const id = nonBlankString(
+      value,
+      `opening-dreamsigns[${String(index)}]`,
+    );
+    if (!UUID_RE.test(id)) {
+      invalid(`opening-dreamsigns[${String(index)}] must be a UUID`);
+    }
+    return id;
+  });
+  if (
+    new Set(openingDreamsignIds.map((id) => id.toLocaleLowerCase())).size !==
+    openingDreamsignIds.length
+  ) {
+    invalid("opening-dreamsigns must not contain duplicate UUIDs");
   }
 
   if (!Array.isArray(source.tides) || source.tides.length !== 3) {
@@ -188,7 +214,13 @@ export function validateTutorialJourneyPool(
     }
   }
 
-  return { dreamAvatarId, poolSize, openingOffers, tides };
+  return {
+    dreamAvatarId,
+    poolSize,
+    openingOffers,
+    openingDreamsignIds,
+    tides,
+  };
 }
 
 export function parseTutorialJourneyPool(source: string): TutorialJourneyPool {

@@ -211,6 +211,7 @@ describe("buildDreamAvatarOfferViews", () => {
       dreamAvatarId: "dc-1",
       poolSize: 6,
       openingOffers: [],
+      openingDreamsignIds: [],
       tides: ["Bannerwake", "Sunwall", "Unfallen"].map((name, index) => ({
         id: `tide-${String(index)}`,
         name,
