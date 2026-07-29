@@ -28,7 +28,6 @@ namespace CumulusMvp.Interaction
         }
 
         [SerializeField] private string dreamsignId = string.Empty;
-        [SerializeField] private Camera targetCamera;
         [SerializeField] private CumulusPressable pressable;
         [SerializeField] private Collider hitCollider;
         [SerializeField] private Transform travelVisual;
@@ -178,6 +177,7 @@ namespace CumulusMvp.Interaction
 
         private Vector3 ResolveDestination()
         {
+            Camera targetCamera = GetComponentInParent<Camera>();
             float cameraDepth = targetCamera.WorldToViewportPoint(transform.position).z;
             Vector3 destinationWorld = targetCamera.ViewportToWorldPoint(
                 new Vector3(targetViewport.x, targetViewport.y, cameraDepth));
@@ -188,7 +188,7 @@ namespace CumulusMvp.Interaction
 
         private bool ValidateReferences()
         {
-            if (targetCamera == null ||
+            if (GetComponentInParent<Camera>() == null ||
                 pressable == null ||
                 hitCollider == null ||
                 travelVisual == null)

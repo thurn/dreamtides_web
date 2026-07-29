@@ -324,7 +324,6 @@ namespace CumulusMvp.Editor
                 CumulusDreamsignAcquisitionMotion motion =
                     EnsureComponent<CumulusDreamsignAcquisitionMotion>(dreamsign);
                 SetString(motion, "dreamsignId", id);
-                SetObjectReference(motion, "targetCamera", camera);
                 SetObjectReference(motion, "pressable", pressable);
                 SetObjectReference(motion, "hitCollider", collider);
                 SetObjectReference(motion, "travelVisual", travelVisual.transform);
