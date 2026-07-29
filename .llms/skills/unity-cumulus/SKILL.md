@@ -18,9 +18,12 @@ Treat the two branches as one task. Commit distributable Cumulus code, builders,
 tests, and documentation to the public branch. Commit proprietary scene changes
 only to the paired local licensed-assets branch. Push only the public branch.
 Before handoff, verify both worktrees are clean and report both commit IDs;
-promotion must advance both repositories deliberately. Before removing the
-public worktree, run `cumulus/scripts/release-licensed-assets.sh` so the nested
-licensed worktree is cleanly unregistered first.
+promotion must advance both repositories deliberately. On approved promotion,
+run `cumulus/scripts/promote-licensed-assets.sh`; it advances the licensed
+repository's sole durable `main` branch and updates the primary Unity checkout
+to the same commit in detached mode. Before removing the public worktree, run
+`cumulus/scripts/release-licensed-assets.sh` so the nested licensed worktree is
+cleanly unregistered first.
 
 For rendering or material changes, automated verification is necessary but not
 sufficient visual evidence. Capture the same scene with the target effect on

@@ -15,6 +15,7 @@ PROVENANCE_CHECK="$SCRIPT_DIR/cumulus-provenance.py"
 if [[ "${1:-}" == "--self-test" ]]; then
   bash "$SCRIPT_DIR/test-unity-run.sh"
   bash "$SCRIPT_DIR/test-cumulus-scope-guard.sh"
+  bash "$SCRIPT_DIR/test-promote-licensed-assets.sh"
   python3 "$SCRIPT_DIR/test-cumulus-evidence.py"
   python3 "$SCRIPT_DIR/test-cumulus-provenance.py"
   exit 0
@@ -191,6 +192,7 @@ snapshot_incidental_settings
 shell_self_tests() {
   bash "$SCRIPT_DIR/test-unity-run.sh" > "$STAGE_ROOT/shell-harness.log" 2>&1 || return
   bash "$SCRIPT_DIR/test-cumulus-scope-guard.sh" > "$STAGE_ROOT/scope-guard-self-test.log" 2>&1 || return
+  bash "$SCRIPT_DIR/test-promote-licensed-assets.sh" > "$STAGE_ROOT/licensed-promotion-self-test.log" 2>&1 || return
   python3 "$SCRIPT_DIR/test-cumulus-evidence.py" > "$STAGE_ROOT/evidence-self-test.log" 2>&1 || return
   python3 "$SCRIPT_DIR/test-cumulus-provenance.py" > "$STAGE_ROOT/provenance-self-test.log" 2>&1 || return
 }
