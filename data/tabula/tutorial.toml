@@ -2,6 +2,7 @@
 
 [journeyStart.speechBubble]
 speaker = "mira"
+delay = 1
 horizontalOffset = 40
 verticalOffset = 0
 bubbleWidth = 550
@@ -9,7 +10,7 @@ text = "For each journey, you must choose a [purple]Dream Avatar[/purple] who pr
 
 [dreamscape.speechBubble]
 speaker = "mira"
-delay = 2
+delay = 1
 horizontalOffset = 0
 verticalOffset = 0
 bubbleWidth = 700
@@ -20,6 +21,7 @@ speaker = "mira"
 horizontalOffset = 0
 verticalOffset = 0
 bubbleWidth = 600
+delay = 1
 text = "At a [purple]Draft[/purple] site you build your deck by repeatedly selecting one of four cards to add."
 
 [dreamsignRevelation.speechBubble]
@@ -27,6 +29,7 @@ speaker = "mira"
 horizontalOffset = 0
 verticalOffset = 0
 bubbleWidth = 600
+delay = 1
 text = "A [purple]Dreamsign[/purple] is a persistent artifact of the dream that gives ongoing benefits."
 
 [battle]
