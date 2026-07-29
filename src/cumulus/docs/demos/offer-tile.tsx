@@ -20,7 +20,7 @@ function card(cardId: string, imageNumber: number, cardNumber: number): OfferTil
       energyCost: 2,
       spark: 3,
       isFast: false,
-      renderedText: "▸ Dawn: Draw a card.",
+      renderedText: "▸Dawn: Draw a card.",
       imageNumber,
       artOwned: true,
     },

@@ -1,7 +1,7 @@
 // Full-screen mockup for RulesText — a card-detail / rules-reference panel. The
 // featured card (a curated real card, resolved by UUID) is shown large beside a
 // panel that renders its authored rules text through RulesText: energy/spark
-// glyphs become inline pips, `▸`/`❖` markers become caret/bolt icons, and the
+// glyphs become inline pips, `▸` stays Unicode text, `❖` becomes a bolt icon, and the
 // curated keyword set is emphasized in spark amber. Below it, a short reference
 // list renders several other real cards' authored text so the keyword
 // highlighting variety is visible at once. All rules strings come from the live

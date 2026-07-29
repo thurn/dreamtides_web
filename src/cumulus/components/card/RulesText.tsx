@@ -31,9 +31,10 @@ import {
  *   - the spark `✦` glyph swapped for the amber-gold sparkle mark
  *   - the fast marker `❖` (and interrupt `❖❖`) swapped for the filled
  *     lightning bolt(s) shown before the card name in the title bar
- *   - the points `⍟`, lunar `☪`, memory `⧗`, and trigger `▸` glyphs swapped
- *     for their filled marks (star-circle, moon, brain, caret), the
- *     trigger keeping its muted slate
+ *   - the points `⍟`, lunar `☪`, and memory `⧗` glyphs swapped for their
+ *     filled marks (star-circle, moon, brain)
+ *   - the trigger marker `▸` rendered as authored Unicode in the surrounding
+ *     font and color
  *   - glossary terms rendered as plain prose by default, with a curated set
  *     of keyword effects and action verbs (`dissolve`, `banish`, `prevent`,
  *     `foresee`, `veil`, `unstoppable`, `reclaim`, …) emphasized in the spark
@@ -44,20 +45,6 @@ import {
  * Shared rules-text renderer for card, DreamAvatar, Dreamsign, battle, editor,
  * and reward surfaces. New surfaces call this rather than duplicate the JSX.
  */
-
-/**
- * Color used for each symbol type when rendering rules text.
- *
- * The trigger arrow `▸` uses the muted slate (`#94a3b8`, slate-400) shared
- * with secondary text elsewhere (DreamAvatar subtitle, room-gate hints). It
- * marks the start of a triggered ability without competing for attention
- * with the actual rules text or the glossary keyword that follows. Using
- * the same accent orange as the draft selection ring or HUD warnings made
- * the arrow read as a UI alert rather than a typographic guide.
- */
-const SYMBOL_COLORS: Readonly<Record<string, string>> = {
-  trigger: "#94a3b8",
-};
 
 /**
  * White fill for the inline activated-ability bolt, matching the filled bolt
@@ -88,18 +75,12 @@ const SITE_NAME_COLOR = "#60a5fa";
  * Symbol types that render as an inline Boxicons mark sized to the surrounding
  * text. Energy and spark keep their dedicated branches below (each pins a
  * resource hue with a matching corner stat); these are the remaining glyphs
- * swapped for a filled icon. The trigger caret keeps the muted slate it has
- * always used so it reads as a typographic guide rather than a UI alert; the
- * rest inherit the rules-text color.
+ * swapped for a filled icon. The trigger marker stays as authored Unicode and
+ * inherits the rules-text font and color.
  */
 const SYMBOL_ICON_CLASSES: Readonly<
   Record<string, { className: Glyph; color?: string; label: string }>
 > = {
-  trigger: {
-    className: GLYPHS.caretRight,
-    color: SYMBOL_COLORS.trigger,
-    label: "trigger",
-  },
   points: { className: GLYPHS.points, label: "points" },
   lunar: { className: GLYPHS.exhaust, label: "lunar" },
   store: { className: GLYPHS.memory, label: "memory" },
@@ -350,6 +331,9 @@ function renderSegment(
       </span>
     );
   }
+  if (segment.symbol === "trigger") {
+    return <span key={key}>{segment.char}</span>;
+  }
   if (segment.symbol === "energy") {
     // The inline energy glyph renders as the blue flame mark, so a `●3` reads as
     // the same resource as the corner energy stat. Its one-em inline box flows
@@ -411,11 +395,7 @@ function renderSegment(
     );
   }
   return (
-    <span
-      key={key}
-      className="font-bold"
-      style={{ color: SYMBOL_COLORS[segment.symbol] }}
-    >
+    <span key={key} className="font-bold">
       {segment.char}
     </span>
   );
@@ -540,8 +520,8 @@ export function renderRulesTextInline(
 }
 
 /**
- * Renders canonical rules-symbol icons inline while preserving all surrounding
- * prose exactly as authored.
+ * Renders canonical rules symbols inline while preserving surrounding prose.
+ * Trigger markers normalize to the compact authored form (`▸Dawn`).
  */
 export function renderRulesSymbolsInline(text: string): ReactNode[] {
   return tokenizeRulesSymbols(stripMarkers(text)).map(

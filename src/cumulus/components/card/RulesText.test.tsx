@@ -158,7 +158,7 @@ describe("RulesText", () => {
       "text-decoration",
     );
 
-    // The caret + keyword still sit inside a nowrap group so they never wrap
+    // The arrow + keyword still sit inside a nowrap group so they never wrap
     // apart across a line break.
     const nowrapGroup = Array.from(container.querySelectorAll("span")).some(
       (s) =>
@@ -172,26 +172,19 @@ describe("RulesText", () => {
     });
   });
 
-  // Backlog task 018: the trigger arrow `▸` reads as a typographic guide,
-  // not a UI alert. It renders as the filled caret icon in the muted slate
-  // `#94a3b8` shared with secondary text elsewhere — explicitly NOT the bright
-  // orange `#f97316` that the draft selection ring and HUD warnings claim.
-  it("renders the trigger arrow ▸ as a caret icon in muted slate, not accent orange", () => {
+  it("renders ▸ as compact Unicode text that inherits the surrounding style", () => {
     const { container, root } = mount(
       <RulesText text="▸ Judgment: Draw a card." />,
     );
 
-    const caret = container.querySelector<HTMLElement>("i.bxf.bx-caret-right");
-    expect(caret).not.toBeNull();
-    expect(container.textContent).not.toContain("▸");
-    const style =
-      caret
-        ?.closest<HTMLElement>("[data-inline-glyph]")
-        ?.parentElement?.getAttribute("style") ?? "";
-    // jsdom normalizes the hex to lowercase; match either form.
-    expect(style.toLowerCase()).toContain("color: rgb(148, 163, 184)");
-    expect(style.toLowerCase()).not.toContain("rgb(249, 115, 22)");
-    expect(style.toLowerCase()).not.toContain("#f97316");
+    expect(container.querySelector("i.bxf.bx-caret-right")).toBeNull();
+    expect(container.textContent).toContain("▸Judgment: Draw a card.");
+    const arrowSpan = Array.from(container.querySelectorAll("span")).find(
+      (span) => span.textContent === "▸",
+    );
+    expect(arrowSpan).toBeDefined();
+    expect(arrowSpan?.getAttribute("style")).toBeNull();
+    expect(arrowSpan?.className).toBe("");
 
     act(() => {
       root.unmount();

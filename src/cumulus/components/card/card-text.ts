@@ -14,8 +14,8 @@ export type SymbolType =
  * - `text` is a plain string run.
  * - `symbol` is a recognized glyph rendered with its own styling. Most are
  *   swapped for an icon-font mark by the renderer: energy → flame, spark →
- *   sparkle, points `⍟` → star-circle, lunar `☪` → moon, store `⧗` →
- *   brain, trigger `▸` → caret.
+ *   sparkle, points `⍟` → star-circle, lunar `☪` → moon, and store `⧗` →
+ *   brain. The trigger `▸` remains a Unicode text character.
  * - `nobreak` groups inner segments that must render on the same line. The
  *   renderer wraps them in a `white-space: nowrap` span. A post-tokenization
  *   pass (`bindIconsToText`) wraps every inline icon together with the text it
@@ -92,13 +92,14 @@ const ACTIVATED_CHAR = "❖";
 const SPARK_PIP_RE = /^⍏(\d+)/;
 
 /**
- * Matches a trigger group at the start of a string: the `▸` arrow
- * followed by a single space, a capitalized word, and an optional trailing
+ * Matches a trigger group at the start of a string: the `▸` arrow, optional
+ * legacy horizontal whitespace, a capitalized word, and an optional trailing
  * `:` or `,` (the common separators after `Judgment`, `Materialized`,
- * `Dissolved`, `Banished`, etc.). The whole match is kept on one line by the
- * renderer.
+ * `Dissolved`, `Banished`, etc.). The renderer drops that legacy whitespace so
+ * every trigger reads in the compact `▸Dawn:` form and keeps the group on one
+ * line.
  */
-const TRIGGER_GROUP_RE = /^▸ ([A-Z][A-Za-z]*)([:,])?/;
+const TRIGGER_GROUP_RE = /^▸[ \t]*([A-Z][A-Za-z]*)([:,])?/;
 
 /**
  * Matches the next "word" at position 0 of the slice — a run of ASCII
@@ -506,11 +507,11 @@ function scanSegments(
           segments: [
             { kind: "symbol", symbol: "trigger", char: TRIGGER_CHAR },
             ...(glossaryTerms
-              ? maybeWrapKeyword(` ${match[1]}${tail}`, true)
+              ? maybeWrapKeyword(`${match[1]}${tail}`, true)
               : [
                   {
                     kind: "text" as const,
-                    value: ` ${match[1]}${tail}`,
+                    value: `${match[1]}${tail}`,
                   },
                 ]),
           ],
@@ -556,6 +557,11 @@ function scanSegments(
         ...(entry === undefined ? {} : { entry }),
       });
       i += 1;
+      if (symbolType === "trigger") {
+        while (text[i] === " " || text[i] === "\t") {
+          i += 1;
+        }
+      }
       continue;
     }
 

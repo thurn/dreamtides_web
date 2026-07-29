@@ -46,8 +46,6 @@ export const GLYPHS = {
   exhaust: g("bxf bx-moon"),
   /** Activated-ability lightning bolt. */
   bolt: g("bxf bx-bolt"),
-  /** Leading caret used before a resolved-ability clause in rules text. */
-  caretRight: g("bxf bx-caret-right"),
 
   // Tide marks (Boxicons v3 filled) — the closed set of five tide icons. These
   // mirror the editor per-color tide glyphs in `src/editor/tide-visuals`

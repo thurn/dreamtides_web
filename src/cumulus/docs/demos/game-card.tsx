@@ -12,7 +12,7 @@
 // The curated UUIDs are read live from data/tabula/cards_v2.toml (via the served
 // card-data.json), so the demo always reflects current card data rather than
 // hardcoding stats or rules text that would drift. The set exercises the card's
-// real variety: keyword highlighting, trigger carets, fast/interrupt bolts,
+// real variety: keyword highlighting, Unicode trigger markers, fast/interrupt bolts,
 // Character vs Event chrome, and the Legendary rarity shimmer.
 
 import { useEffect, useState } from "react";
@@ -34,7 +34,7 @@ import type { CumulusComponent } from "../registry";
 const CURATED_CARD_IDS = [
   // Character, 3●/3✦ — Support + Reclaim keyword highlighting, multi-line box.
   "1268a899-b209-46bb-bce4-6def1dcd0404",
-  // Character, 3●/1✦ — a ▸Challenge trigger caret.
+  // Character, 3●/1✦ — a ▸Challenge trigger marker.
   "7be2e6d7-abff-4c44-a0c3-35460da1693c",
   // Character, 2●/2✦ — a Fast card (speed bolt before the name).
   "161482b6-af07-4d9e-822d-8c738672beb9",

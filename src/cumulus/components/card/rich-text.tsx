@@ -94,9 +94,9 @@ const INLINE_RULE_SYMBOL_RE = /[●✦▸⍟☪⧗❖]/;
 interface RichTextRenderOptions {
   /**
    * Route every textual RichText field through the canonical inline rules-text
-   * tokenizer. InfoCard enables this at its shared rendering boundary so raw
-   * rules symbols cannot leak through plain, note, underline, or definition
-   * label copy.
+   * tokenizer. InfoCard enables this at its shared rendering boundary so icon
+   * substitutions and compact Unicode trigger formatting stay consistent in
+   * plain, note, underline, and definition-label copy.
    */
   readonly substituteRulesSymbols?: boolean;
 }
@@ -131,7 +131,9 @@ function renderInlineText(
     : text;
 }
 
-function definitionSymbolSpec(symbol: RichTextDefinitionSymbol): {
+function definitionSymbolSpec(
+  symbol: Exclude<RichTextDefinitionSymbol, "trigger">,
+): {
   readonly glyph: Glyph;
   readonly count: number;
 } {
@@ -142,8 +144,6 @@ function definitionSymbolSpec(symbol: RichTextDefinitionSymbol): {
       return { glyph: GLYPHS.bolt, count: 2 };
     case "exhaust":
       return { glyph: GLYPHS.exhaust, count: 1 };
-    case "trigger":
-      return { glyph: GLYPHS.caretRight, count: 1 };
   }
 }
 
@@ -156,6 +156,13 @@ function DefinitionSymbol({
   readonly title?: string;
   readonly trailingGap: boolean;
 }) {
+  if (symbol === "trigger") {
+    return (
+      <span data-definition-symbol={symbol} style={{ display: "inline" }}>
+        ▸
+      </span>
+    );
+  }
   const { glyph, count } = definitionSymbolSpec(symbol);
   return (
     <span

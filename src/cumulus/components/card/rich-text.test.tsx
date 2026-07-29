@@ -101,7 +101,10 @@ describe("RichText", () => {
 
     expect(markup.match(/bxf bx-bolt/g)).toHaveLength(3);
     expect(markup.match(/bxf bx-moon/g)).toHaveLength(1);
-    expect(markup.match(/bxf bx-caret-right/g)).toHaveLength(1);
+    expect(markup).not.toContain("bxf bx-caret-right");
+    expect(markup).toContain(
+      '<span data-definition-symbol="trigger" style="display:inline">▸</span>Night',
+    );
     expect(markup).toContain('data-definition-symbol="fast"');
     expect(markup).toContain('data-definition-symbol="interrupt"');
     expect(markup).toContain('data-definition-symbol="exhaust"');

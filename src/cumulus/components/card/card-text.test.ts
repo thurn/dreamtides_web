@@ -142,7 +142,7 @@ describe("tokenizeRulesText", () => {
       "Deal 3 damage.",
       "Pay ●2 to gain 1✦.",
       "When you abandon an ally, trigger its ▸Materialized and ▸Dawn abilities.",
-      "▸ Judgment: gain 2⍟.",
+      "▸Judgment: gain 2⍟.",
       "❖ — Draw a card.",
       "❖❖ — Abandon an ally: gain ⍏2.",
     ]) {
@@ -258,7 +258,7 @@ describe("tokenizeRulesText", () => {
   // Icon line-break protection. Every inline icon stays on one line with the
   // text it reads with — this is general, not per-icon.
 
-  // No space between the caret and its keyword (the common authored form): the
+  // No space between the arrow and its keyword (the common authored form): the
   // arrow must not be left alone at the end of a line. The keyword still
   // tokenizes as a glossary term so its popover attaches.
   it("keeps a no-space trigger arrow glued to its following keyword", () => {
@@ -317,7 +317,6 @@ describe("tokenizeRulesText", () => {
         kind: "nobreak",
         segments: [
           { kind: "symbol", symbol: "trigger", char: "▸" },
-          { kind: "text", value: " " },
           { kind: "term", word: keyword, entry },
           { kind: "text", value: ":" },
         ],
@@ -335,7 +334,6 @@ describe("tokenizeRulesText", () => {
         kind: "nobreak",
         segments: [
           { kind: "symbol", symbol: "trigger", char: "▸" },
-          { kind: "text", value: " " },
           { kind: "term", word: keyword, entry },
           { kind: "text", value: "," },
         ],
@@ -352,12 +350,19 @@ describe("tokenizeRulesText", () => {
         kind: "nobreak",
         segments: [
           { kind: "symbol", symbol: "trigger", char: "▸" },
-          { kind: "text", value: " " },
           { kind: "term", word: keyword, entry },
           { kind: "text", value: ":" },
         ],
       });
     }
+  });
+
+  it("normalizes legacy whitespace after a trigger arrow", () => {
+    const result = tokenizeRulesText("▸ Dawn: Gain 1●.");
+    expect(reconstructText(result)).toBe("▸Dawn: Gain 1●.");
+
+    const genericResult = tokenizeRulesText("▸ when played: Draw.");
+    expect(reconstructText(genericResult)).toBe("▸when played: Draw.");
   });
 
   // Glossary tokenization. The tokenizer wraps recognized keywords in `term`

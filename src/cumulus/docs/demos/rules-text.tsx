@@ -1,9 +1,10 @@
 // Registry demo entry for RulesText — see stat-tile.tsx for the wrapper recipe
 // this follows. RulesText takes a plain `text` string and renders the authored
-// rules-text markup: energy/spark glyphs become inline pips, `▸`/`❖` markers
-// become caret/bolt icons, and the curated keyword set (support, unstoppable,
-// reclaim, banish, …) is emphasized in spark amber. The memory source symbol
-// renders as its filled brain and carries the Memory glossary reveal.
+// rules-text markup: energy/spark glyphs become inline pips, `▸` remains
+// compact Unicode text, `❖` becomes a bolt icon, and the curated keyword set
+// (support, unstoppable, reclaim, banish, …) is emphasized in spark amber. The
+// memory source symbol renders as its filled brain and carries the Memory
+// glossary reveal.
 //
 // RulesText's `text` prop is required, which the registry's
 // `ComponentType<Record<string, unknown>>` signature can't satisfy directly. A
@@ -23,7 +24,7 @@ const SAMPLE_RULES_TEXT = [
   "",
   "Reclaim – 3●, Banish 3 cards from your void.",
   "",
-  "Store 1⧗. Gain 2⍟.",
+  "▸Dawn: Store 1⧗. Gain 2⍟.",
 ].join("\n");
 
 interface RulesTextDemoArgs {
@@ -38,13 +39,13 @@ export const rulesTextDemo: CumulusComponent = {
   id: "rules-text",
   title: "Rules Text",
   blurb:
-    "Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — with definition cards adapted to the exact rules sentence.",
+    "Renders Dreamtides rules copy from card data — resource pips, Unicode trigger markers, and glossary keywords styled in place — with definition cards adapted to the exact rules sentence.",
   group: "Components",
   docName: "RulesText",
   Component: RulesTextDemo,
   usage: [
     {
-      note: "Renders authored rules-text markup: energy / spark glyphs become inline pips, `⧗` becomes the memory brain, `▸` / `❖` markers become caret / bolt icons, and the curated keyword set is emphasized. Numeric Foresee, Erode, and Reclaim definitions reflect the exact count or energy cost and use singular grammar where appropriate; granted Reclaim refers to its target card. Pass the card's rendered-text string as `text`.",
+      note: "Renders authored rules-text markup: energy / spark glyphs become inline pips, `⧗` becomes the memory brain, `▸` remains compact Unicode text in the surrounding font and color, `❖` becomes a bolt icon, and the curated keyword set is emphasized. Numeric Foresee, Erode, and Reclaim definitions reflect the exact count or energy cost and use singular grammar where appropriate; granted Reclaim refers to its target card. Pass the card's rendered-text string as `text`.",
       code: `import { RulesText } from "src/cumulus/components/card/RulesText";
 
 <RulesText text={"Support – Supported allies have +2✦ and unstoppable."} />`,

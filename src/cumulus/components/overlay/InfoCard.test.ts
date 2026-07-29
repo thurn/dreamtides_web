@@ -14,7 +14,7 @@ import {
   infoCardWidth,
 } from "./InfoCard";
 
-const RAW_RULES_SYMBOL_PATTERN = /[●✦⍏▸⍟☪⧗❖]/u;
+const SUBSTITUTED_RULES_SYMBOL_PATTERN = /[●✦⍏⍟☪⧗❖]/u;
 
 describe("infoCardWidth — the viewport-driven mobile width", () => {
   it("lays a card out at ~45% of a narrow (mobile) screen", () => {
@@ -121,7 +121,7 @@ describe("InfoCard shell treatment", () => {
     expect(html).toContain(TOKENS["--glass-fill-popover"].var);
   });
 
-  it("substitutes raw rules symbols across every textual field and RichText shape", () => {
+  it("renders canonical rules symbols across every textual field and RichText shape", () => {
     const html = renderToStaticMarkup(
       React.createElement(InfoCard, {
         variant: "text",
@@ -142,14 +142,14 @@ describe("InfoCard shell treatment", () => {
       }),
     );
 
-    expect(html).not.toMatch(RAW_RULES_SYMBOL_PATTERN);
+    expect(html).not.toMatch(SUBSTITUTED_RULES_SYMBOL_PATTERN);
+    expect(html).toContain("<span>▸</span><span>Dawn</span>");
     for (const label of [
       "energy",
       "spark",
       "points",
       "lunar",
       "memory",
-      "trigger",
       "fast",
       "interrupt",
     ]) {
@@ -159,11 +159,11 @@ describe("InfoCard shell treatment", () => {
     expect(html).toContain("bxf bx-star-circle");
     expect(html).toContain("bxf bx-moon");
     expect(html).toContain("fa-solid fa-brain");
-    expect(html).toContain("bxf bx-caret-right");
+    expect(html).not.toContain("bxf bx-caret-right");
     expect(html).toContain("bxf bx-bolt");
   });
 
-  it("keeps symbol substitution at the boundary for image-backed InfoCard fields", () => {
+  it("keeps canonical symbol rendering at the boundary for image-backed InfoCard fields", () => {
     const fullBleed = renderToStaticMarkup(
       React.createElement(InfoCard, {
         variant: "fullBleed",
@@ -184,13 +184,14 @@ describe("InfoCard shell treatment", () => {
       }),
     );
 
-    expect(fullBleed).not.toMatch(RAW_RULES_SYMBOL_PATTERN);
-    expect(atlasReveal).not.toMatch(RAW_RULES_SYMBOL_PATTERN);
+    expect(fullBleed).not.toMatch(SUBSTITUTED_RULES_SYMBOL_PATTERN);
+    expect(atlasReveal).not.toMatch(SUBSTITUTED_RULES_SYMBOL_PATTERN);
     expect(fullBleed).toContain('aria-label="energy"');
     expect(fullBleed).toContain('aria-label="points"');
     expect(fullBleed).toContain('aria-label="memory"');
     expect(fullBleed).toContain('aria-label="lunar"');
-    expect(atlasReveal).toContain('aria-label="trigger"');
+    expect(atlasReveal).toContain("<span>▸</span><span>Dawn</span>");
+    expect(atlasReveal).not.toContain("bxf bx-caret-right");
     expect(atlasReveal).toContain('aria-label="fast"');
     expect(atlasReveal).toContain('aria-label="spark"');
   });

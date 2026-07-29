@@ -203,7 +203,7 @@ describe("CharacterDialogue", () => {
     container.remove();
   });
 
-  it("renders the complete canonical rules-symbol vocabulary through InlineGlyph", () => {
+  it("renders the Unicode trigger and substitutes the remaining rules-symbol vocabulary", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -225,15 +225,16 @@ describe("CharacterDialogue", () => {
       );
     });
 
-    expect(container.querySelector("i.bxf.bx-caret-right")).not.toBeNull();
+    expect(container.querySelector("i.bxf.bx-caret-right")).toBeNull();
     expect(container.querySelector("i.bxf.bx-fire-alt")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-moon")).not.toBeNull();
     expect(container.querySelector("i.fa-solid.fa-brain")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-sparkle")).not.toBeNull();
     expect(container.querySelector("i.bxf.bx-bolt")).not.toBeNull();
-    expect(container.querySelectorAll("[data-inline-glyph]")).toHaveLength(7);
-    expect(container.textContent).not.toMatch(/[▸●☪⧗⍟✦❖]/u);
+    expect(container.querySelectorAll("[data-inline-glyph]")).toHaveLength(6);
+    expect(container.textContent).toContain("▸Dissolved");
+    expect(container.textContent).not.toMatch(/[●☪⧗⍟✦❖]/u);
 
     act(() => root.unmount());
     container.remove();

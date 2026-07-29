@@ -2,7 +2,7 @@
 // characters on the board above the player's fanned hand, over a dark table wash.
 // The cards are curated real cards resolved by UUID from the live card database
 // (never by name — names are not unique). It exercises the card's real variety:
-// keyword highlighting, trigger carets, fast/interrupt bolts, Character vs Event
+// keyword highlighting, Unicode trigger markers, fast/interrupt bolts, Character vs Event
 // chrome, and the Legendary shimmer.
 
 import { useEffect, useState } from "react";
@@ -18,7 +18,7 @@ import { sceneRoot } from "./scene";
 const BOARD_CARD_IDS = [
   // Character, 3●/3✦ — Support + Reclaim keyword highlighting.
   "1268a899-b209-46bb-bce4-6def1dcd0404",
-  // Character, 3●/1✦ — a ▸Challenge trigger caret.
+  // Character, 3●/1✦ — a ▸Challenge trigger marker.
   "7be2e6d7-abff-4c44-a0c3-35460da1693c",
 ] as const;
 
