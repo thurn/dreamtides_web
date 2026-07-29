@@ -76,6 +76,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   document.body.innerHTML = "";
 });
 
@@ -90,7 +91,10 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
 }
 
 describe("Cumulus DraftScreen", () => {
-  it("shows persistent authored Mira guidance alongside the first Draft offer", () => {
+  it("shows Mira after one second and retires her with the first Draft pick", () => {
+    vi.useFakeTimers();
+    const onPick = vi.fn();
+    const onTutorialShown = vi.fn();
     const tutorialView: DraftView = {
       ...view([101, 102, 103, 104]),
       tutorial: {
@@ -107,15 +111,36 @@ describe("Cumulus DraftScreen", () => {
       },
     };
     const { container, root } = mount(
-      <DraftScreen view={tutorialView} onPick={vi.fn()} />,
+      <DraftScreen
+        view={tutorialView}
+        onPick={onPick}
+        onTutorialShown={onTutorialShown}
+      />,
     );
 
-    expect(container.querySelector("[data-site-tutorial-guidance]")).not.toBeNull();
+    expect(container.querySelector("[data-site-tutorial-guidance]")).toBeNull();
+    act(() => {
+      vi.advanceTimersByTime(999);
+    });
+    expect(container.querySelector("[data-site-tutorial-guidance]")).toBeNull();
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
     expect(
       container.querySelector('[data-testid="site-tutorial-dialogue"]')
         ?.textContent,
     ).toContain("At a Draft site");
+    expect(onTutorialShown).toHaveBeenCalledOnce();
     expect(container.querySelectorAll("[data-draft-offer-card]")).toHaveLength(4);
+
+    const firstCard = container.querySelector<HTMLElement>(
+      '[data-draft-offer-card="101"] [role="button"]',
+    );
+    act(() => {
+      firstCard?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(onPick).toHaveBeenCalledWith(101);
+    expect(container.querySelector("[data-site-tutorial-guidance]")).toBeNull();
 
     act(() => root.unmount());
   });

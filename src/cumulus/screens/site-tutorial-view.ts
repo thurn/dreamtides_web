@@ -1,6 +1,6 @@
 import type { CharacterDialogueModel } from "../components/overlay/CharacterDialogue";
 
-/** Persistent Mira guidance rendered throughout one first site visit. */
+/** Mira guidance rendered for the initial teaching window of a first site visit. */
 export interface FirstVisitSiteTutorialView {
   readonly id: string;
   readonly model: CharacterDialogueModel;

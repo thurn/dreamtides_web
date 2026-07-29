@@ -81,11 +81,14 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   document.body.innerHTML = "";
 });
 
 describe("DreamsignRevelationScreen", () => {
-  it("replaces the resident guide with persistent Mira guidance on the first visit", () => {
+  it("waits one second before replacing the resident guide with Mira", () => {
+    vi.useFakeTimers();
+    const onTutorialShown = vi.fn();
     const tutorialView: DreamsignRevelationView = {
       ...view(),
       tutorial: {
@@ -109,13 +112,29 @@ describe("DreamsignRevelationScreen", () => {
         onSkip={vi.fn()}
         onPurge={vi.fn()}
         onCancelPurge={vi.fn()}
+        onTutorialShown={onTutorialShown}
       />,
     );
 
     expect(
+      container.querySelector('[data-testid="revelation-site-tutorial-dialogue"]'),
+    ).toBeNull();
+    expect(container.querySelector('[data-testid="revelation-speech-bubble"]'))
+      .toBeNull();
+    act(() => {
+      vi.advanceTimersByTime(999);
+    });
+    expect(
+      container.querySelector('[data-testid="revelation-site-tutorial-dialogue"]'),
+    ).toBeNull();
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(
       container.querySelector('[data-testid="revelation-site-tutorial-dialogue"]')
         ?.textContent,
     ).toContain("A Dreamsign gives ongoing benefits.");
+    expect(onTutorialShown).toHaveBeenCalledOnce();
     expect(container.querySelector('[data-testid="revelation-speech-bubble"]'))
       .toBeNull();
     expect(container.querySelectorAll("[data-revelation-option]")).toHaveLength(3);

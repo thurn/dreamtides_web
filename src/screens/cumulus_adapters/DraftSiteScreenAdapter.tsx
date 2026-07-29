@@ -14,6 +14,7 @@ import { logEvent, logEventOnce } from "../../logging";
 import { readDraftSiteProgress } from "../../data/draft-site-bootstrap";
 import { buildDraftView } from "./draft-view-model";
 import { DraftScreen } from "../../cumulus/screens/DraftScreen";
+import type { FirstVisitSiteTutorialView } from "../../cumulus/screens/site-tutorial-view";
 
 /** Live draft site screen: enters the site, builds the view-model, picks a
  * card, and completes back to the dreamscape once the pack runs out. */
@@ -57,22 +58,24 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
     ],
   );
 
-  useEffect(() => {
-    if (view.tutorial === undefined) return;
-    logEventOnce(
-      `first-visit-site-tutorial:${view.tutorial.id}`,
-      "first_visit_site_tutorial_presented",
-      {
-        tutorialId: view.tutorial.id,
-        siteId,
-        siteType: "Draft",
-        text: view.tutorial.model.text,
-        horizontalOffset: view.tutorial.horizontalOffset,
-        verticalOffset: view.tutorial.verticalOffset,
-        bubbleWidth: view.tutorial.bubbleWidth,
-      },
-    );
-  }, [siteId, view.tutorial]);
+  const handleTutorialShown = useCallback(
+    (tutorial: FirstVisitSiteTutorialView) => {
+      logEventOnce(
+        `first-visit-site-tutorial:${tutorial.id}`,
+        "first_visit_site_tutorial_presented",
+        {
+          tutorialId: tutorial.id,
+          siteId,
+          siteType: "Draft",
+          text: tutorial.model.text,
+          horizontalOffset: tutorial.horizontalOffset,
+          verticalOffset: tutorial.verticalOffset,
+          bubbleWidth: tutorial.bubbleWidth,
+        },
+      );
+    },
+    [siteId],
+  );
 
   const handlePick = useCallback(
     (cardNumber: number) => {
@@ -102,6 +105,11 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
   if (progress.isComplete) return null;
 
   return (
-    <DraftScreen view={view} onPick={handlePick} onReroll={handleReroll} />
+    <DraftScreen
+      view={view}
+      onPick={handlePick}
+      onReroll={handleReroll}
+      onTutorialShown={handleTutorialShown}
+    />
   );
 }

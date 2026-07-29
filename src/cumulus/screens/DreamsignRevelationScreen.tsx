@@ -3,6 +3,7 @@
 // side on desktop, and the dreamsign choices sit opposite. Persistent journey
 // chrome is supplied by the router-owned wrapper.
 
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
@@ -22,6 +23,7 @@ import {
   type DreamsignReplacementView,
 } from "./DreamsignReplacementDialog";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
+import { useDelayedSiteTutorialVisibility } from "./use-delayed-site-tutorial-visibility";
 
 /** The guide who speaks over the Revelation offer. */
 export interface DreamsignRevelationGuideView {
@@ -64,6 +66,8 @@ export interface DreamsignRevelationScreenProps {
   onCancelPurge: () => void;
   /** Index currently animating toward the JourneyStatusBar. */
   claimedIndex: number | null;
+  /** Reports when delayed first-visit guidance becomes visible. */
+  onTutorialShown?: (tutorial: FirstVisitSiteTutorialView) => void;
 }
 
 const CONTENT_VERTICAL_OFFSET = "10dvh";
@@ -86,11 +90,18 @@ export function DreamsignRevelationScreen({
   onPurge,
   onCancelPurge,
   claimedIndex,
+  onTutorialShown,
 }: DreamsignRevelationScreenProps) {
   const isDesktop = useIsDesktop();
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const guideUrl = resolveArtRef(view.guide.art);
   const disabled = claimedIndex !== null || view.purge !== null;
+  const tutorialVisible = useDelayedSiteTutorialVisibility(view.tutorial?.id);
+  useEffect(() => {
+    if (tutorialVisible && view.tutorial !== undefined) {
+      onTutorialShown?.(view.tutorial);
+    }
+  }, [onTutorialShown, tutorialVisible, view.tutorial]);
 
   return (
     <div
@@ -131,6 +142,7 @@ export function DreamsignRevelationScreen({
           guideUrl={guideUrl}
           disabled={disabled}
           claimedIndex={claimedIndex}
+          tutorialVisible={tutorialVisible}
           onClaim={onClaim}
           onSkip={onSkip}
         />
@@ -140,6 +152,7 @@ export function DreamsignRevelationScreen({
           guideUrl={guideUrl}
           disabled={disabled}
           claimedIndex={claimedIndex}
+          tutorialVisible={tutorialVisible}
           onClaim={onClaim}
           onSkip={onSkip}
         />
@@ -162,6 +175,7 @@ function DesktopComposition({
   guideUrl,
   disabled,
   claimedIndex,
+  tutorialVisible,
   onClaim,
   onSkip,
 }: {
@@ -169,6 +183,7 @@ function DesktopComposition({
   readonly guideUrl: string;
   readonly disabled: boolean;
   readonly claimedIndex: number | null;
+  readonly tutorialVisible: boolean;
   readonly onClaim: (index: number) => void;
   readonly onSkip: () => void;
 }) {
@@ -197,7 +212,12 @@ function DesktopComposition({
           alignItems: "center",
         }}
       >
-        <GuideScene view={view} guideUrl={guideUrl} desktop />
+        <GuideScene
+          view={view}
+          guideUrl={guideUrl}
+          tutorialVisible={tutorialVisible}
+          desktop
+        />
         <OfferStack
           view={view}
           disabled={disabled}
@@ -216,6 +236,7 @@ function MobileComposition({
   guideUrl,
   disabled,
   claimedIndex,
+  tutorialVisible,
   onClaim,
   onSkip,
 }: {
@@ -223,6 +244,7 @@ function MobileComposition({
   readonly guideUrl: string;
   readonly disabled: boolean;
   readonly claimedIndex: number | null;
+  readonly tutorialVisible: boolean;
   readonly onClaim: (index: number) => void;
   readonly onSkip: () => void;
 }) {
@@ -239,7 +261,11 @@ function MobileComposition({
           pointerEvents: "none",
         }}
       >
-        <GuideScene view={view} guideUrl={guideUrl} />
+        <GuideScene
+          view={view}
+          guideUrl={guideUrl}
+          tutorialVisible={tutorialVisible}
+        />
       </section>
 
       <main
@@ -271,10 +297,12 @@ function MobileComposition({
 function GuideScene({
   view,
   guideUrl,
+  tutorialVisible,
   desktop = false,
 }: {
   readonly view: DreamsignRevelationView;
   readonly guideUrl: string;
+  readonly tutorialVisible: boolean;
   readonly desktop?: boolean;
 }) {
   return (
@@ -290,25 +318,27 @@ function GuideScene({
       }}
     >
       {view.tutorial !== undefined ? (
-        <div
-          data-revelation-site-tutorial=""
-          style={{
-            position: "absolute",
-            top: desktop ? "18%" : token("--space-4"),
-            left: desktop ? token("--space-4") : token("--space-3"),
-            right: desktop ? token("--space-4") : token("--space-3"),
-            width: `min(calc(100% - (${token("--space-4")} * 2)), ${String(view.tutorial.bubbleWidth)}px)`,
-            margin: "0 auto",
-            transform: `translate(${String(view.tutorial.horizontalOffset)}px, ${String(view.tutorial.verticalOffset)}px)`,
-          }}
-        >
-          <CharacterDialogue
-            dialogue={view.tutorial.model}
-            visible
-            size={desktop ? "wide" : "compact"}
-            testId="revelation-site-tutorial-dialogue"
-          />
-        </div>
+        tutorialVisible ? (
+          <div
+            data-revelation-site-tutorial=""
+            style={{
+              position: "absolute",
+              top: desktop ? "18%" : token("--space-4"),
+              left: desktop ? token("--space-4") : token("--space-3"),
+              right: desktop ? token("--space-4") : token("--space-3"),
+              width: `min(calc(100% - (${token("--space-4")} * 2)), ${String(view.tutorial.bubbleWidth)}px)`,
+              margin: "0 auto",
+              transform: `translate(${String(view.tutorial.horizontalOffset)}px, ${String(view.tutorial.verticalOffset)}px)`,
+            }}
+          >
+            <CharacterDialogue
+              dialogue={view.tutorial.model}
+              visible
+              size={desktop ? "wide" : "compact"}
+              testId="revelation-site-tutorial-dialogue"
+            />
+          </div>
+        ) : null
       ) : (
         <>
           <img

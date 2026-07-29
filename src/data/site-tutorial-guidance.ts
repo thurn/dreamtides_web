@@ -20,10 +20,10 @@ function isFirstVisitTutorialSiteType(
 /**
  * Resolve the active first-visit site tutorial from shared journey progress.
  *
- * A site type remains eligible throughout its first visit, including every
- * persisted Draft offer and a reload before completion. Completing that site
- * marks it visited in the atlas, which suppresses the tutorial on every later
- * site of the same type across dreamscape travel.
+ * Draft guidance remains eligible through the initial offer and retires with
+ * the first persisted pick. Dreamsign Revelation remains eligible throughout
+ * its first visit. Completing either site marks it visited in the atlas, which
+ * suppresses the tutorial on later sites of the same type across travel.
  */
 export function activeFirstVisitTutorialSite(
   state: JourneyState,
@@ -35,6 +35,13 @@ export function activeFirstVisitTutorialSite(
   if (
     current === undefined ||
     !isFirstVisitTutorialSiteType(current.type)
+  ) {
+    return null;
+  }
+  if (
+    current.type === "Draft" &&
+    state.draftState?.activeSiteId === current.id &&
+    state.draftState.sitePicksCompleted > 0
   ) {
     return null;
   }

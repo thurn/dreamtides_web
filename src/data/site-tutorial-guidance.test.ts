@@ -65,6 +65,19 @@ describe("activeFirstVisitTutorialSite", () => {
     ).toBeNull();
   });
 
+  it("retires the first Draft tutorial after its first persisted pick", () => {
+    const current = site("draft-a", "Draft");
+    expect(
+      activeFirstVisitTutorialSite({
+        ...state(current),
+        draftState: {
+          activeSiteId: current.id,
+          sitePicksCompleted: 1,
+        },
+      } as unknown as JourneyState),
+    ).toBeNull();
+  });
+
   it("does not let a visited site of another type suppress the tutorial", () => {
     const later = site("draft-b", "Draft");
     expect(

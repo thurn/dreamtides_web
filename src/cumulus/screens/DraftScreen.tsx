@@ -34,6 +34,7 @@ import {
 import { useIsDesktop } from "./use-is-desktop";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
+import { useDelayedSiteTutorialVisibility } from "./use-delayed-site-tutorial-visibility";
 
 /** Everything the draft screen renders, mapped from live journey state. */
 export interface DraftView {
@@ -47,7 +48,7 @@ export interface DraftView {
   pickNumber: number;
   /** How many picks this draft site offers in total. */
   pickTotal: number;
-  /** Persistent Mira guidance throughout the first Draft site visit. */
+  /** Mira guidance for the initial offer of the first Draft site. */
   tutorial?: FirstVisitSiteTutorialView;
 }
 
@@ -58,6 +59,8 @@ export interface DraftScreenProps {
   onPick: (cardNumber: number) => void;
   /** Requests a shared debug reroll of the current draft offer. */
   onReroll?: () => void;
+  /** Reports when delayed first-visit guidance becomes visible. */
+  onTutorialShown?: (tutorial: FirstVisitSiteTutorialView) => void;
 }
 
 // The vertical bands reserved down the screen, as raw calc operands so the
@@ -136,7 +139,12 @@ function offerCellWidthFor(params: {
  * of {@link GameCard}s over it, and drifting {@link Motes}. Persistent journey
  * chrome is supplied by the router.
  */
-export function DraftScreen({ view, onPick, onReroll = NOOP }: DraftScreenProps) {
+export function DraftScreen({
+  view,
+  onPick,
+  onReroll = NOOP,
+  onTutorialShown,
+}: DraftScreenProps) {
   const isDesktop = useIsDesktop();
   const wideDraftRow = useIsDesktop(DRAFT_ROW_MIN_WIDTH_PX);
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
@@ -162,6 +170,16 @@ export function DraftScreen({ view, onPick, onReroll = NOOP }: DraftScreenProps)
   useEffect(() => {
     setPendingPick(null);
   }, [view.offerKey]);
+  const availableTutorial =
+    pendingPick === null ? view.tutorial : undefined;
+  const tutorialVisible = useDelayedSiteTutorialVisibility(
+    availableTutorial?.id,
+  );
+  useEffect(() => {
+    if (tutorialVisible && availableTutorial !== undefined) {
+      onTutorialShown?.(availableTutorial);
+    }
+  }, [availableTutorial, onTutorialShown, tutorialVisible]);
 
   function handlePick(cardNumber: number): void {
     if (pendingPick !== null) return;
@@ -202,14 +220,14 @@ export function DraftScreen({ view, onPick, onReroll = NOOP }: DraftScreenProps)
 
       <Motes on tint="violet" />
 
-      {view.tutorial !== undefined && (
+      {tutorialVisible && availableTutorial !== undefined && (
         <ViewportTutorialDialogue
           view={{
-            id: view.tutorial.id,
-            dialogue: view.tutorial.model,
-            horizontalOffset: view.tutorial.horizontalOffset,
-            verticalOffset: view.tutorial.verticalOffset,
-            bubbleWidth: view.tutorial.bubbleWidth,
+            id: availableTutorial.id,
+            dialogue: availableTutorial.model,
+            horizontalOffset: availableTutorial.horizontalOffset,
+            verticalOffset: availableTutorial.verticalOffset,
+            bubbleWidth: availableTutorial.bubbleWidth,
           }}
           visible
           kind="site"

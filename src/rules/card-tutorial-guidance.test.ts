@@ -246,6 +246,14 @@ describe("card tutorial guidance fold", () => {
     ).toBeNull();
   });
 
+  it("allows glossary guidance after the first Draft pick", () => {
+    expect(
+      currentCardTutorialScreenKey(
+        draftOfferState(2, [1, 2, 3, 4], true),
+      ),
+    ).not.toBeNull();
+  });
+
   it("opens one shared card journey and preserves authored bubble settings", () => {
     registerCardTutorialGuidanceContentProvider(provider());
     const before = draftOfferState(1, [1, 2, 3, 4]);

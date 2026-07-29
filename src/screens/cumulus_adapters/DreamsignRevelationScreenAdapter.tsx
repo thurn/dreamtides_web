@@ -5,6 +5,7 @@ import { requireDreamsignId } from "../../data/dreamsigns";
 import { DreamsignRevelationScreen } from "../../cumulus/screens/DreamsignRevelationScreen";
 import { useJourney } from "../../state/journey-context";
 import { buildDreamsignRevelationView, resolveDreamsignRevelationGuide } from "./dreamsign-revelation-view-model";
+import type { FirstVisitSiteTutorialView } from "../../cumulus/screens/site-tutorial-view";
 
 const FLY_TO_HUD_MS = 900;
 
@@ -53,23 +54,26 @@ export function DreamsignRevelationScreenAdapter({ siteId }: { siteId: string })
   );
 
   useEffect(() => {
-    if (view.tutorial === undefined) {
-      if (guide === null || site === null) return;
-      logEventOnce(`dreamsign-revelation:${site.id}:guide:${guide.id}`,
-        "dream_guide_presented",
-        { guideId: guide.id, siteType: site.type, isEnhanced: site.isEnhanced });
-      return;
-    }
-    logEventOnce(
-      `first-visit-site-tutorial:${view.tutorial.id}`,
-      "first_visit_site_tutorial_presented",
-      { tutorialId: view.tutorial.id, siteId, siteType: "DreamsignRevelation",
-        text: view.tutorial.model.text,
-        horizontalOffset: view.tutorial.horizontalOffset,
-        verticalOffset: view.tutorial.verticalOffset,
-        bubbleWidth: view.tutorial.bubbleWidth },
-    );
-  }, [guide, site, siteId, view.tutorial]);
+    if (view.tutorial !== undefined || guide === null || site === null) return;
+    logEventOnce(`dreamsign-revelation:${site.id}:guide:${guide.id}`,
+      "dream_guide_presented",
+      { guideId: guide.id, siteType: site.type, isEnhanced: site.isEnhanced });
+  }, [guide, site, view.tutorial]);
+
+  const handleTutorialShown = useCallback(
+    (tutorial: FirstVisitSiteTutorialView) => {
+      logEventOnce(
+        `first-visit-site-tutorial:${tutorial.id}`,
+        "first_visit_site_tutorial_presented",
+        { tutorialId: tutorial.id, siteId, siteType: "DreamsignRevelation",
+          text: tutorial.model.text,
+          horizontalOffset: tutorial.horizontalOffset,
+          verticalOffset: tutorial.verticalOffset,
+          bubbleWidth: tutorial.bubbleWidth },
+      );
+    },
+    [siteId],
+  );
 
   const handleClaim = useCallback(
     (index: number) => {
@@ -118,6 +122,7 @@ export function DreamsignRevelationScreenAdapter({ siteId }: { siteId: string })
       onPurge={handlePurge}
       onCancelPurge={() => setPendingPurgeDreamsign(null)}
       claimedIndex={claimedIndex}
+      onTutorialShown={handleTutorialShown}
     />
   );
 }
