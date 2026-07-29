@@ -69,8 +69,16 @@ export interface LogClientCallbacks<S> {
   ) => void;
   /** A confirmed event's `stateHashAfter` disagreed with this client's fold. */
   onDivergence: (info: { seq: number; expected: string; actual: string }) => void;
-  /** A contained reducer throw or malformed entry (poison-event containment). */
-  onFoldError?: (error: FoldError) => void;
+  /**
+   * A contained reducer throw or malformed entry (poison-event containment),
+   * together with the exact event and confirmed fold transition that produced
+   * it. The extra context makes the failure independently replayable.
+   */
+  onFoldError?: (
+    error: FoldError,
+    event: GameEvent,
+    detail: { stateBefore: S; stateAfter: S },
+  ) => void;
   /** io.append rejected; the intent was removed from the pending queue. */
   onAppendFailed?: (event: GameEvent, error: unknown) => void;
   /** A full refold discarded these unconfirmed intents. */
@@ -280,7 +288,10 @@ export function createLogClient<S>(
         // outcome, so a full refold that re-reports an event (a rewind reset)
         // fires it exactly once alongside the outcome, never as spam.
         if (outcome.error !== undefined) {
-          callbacks.onFoldError?.(outcome.error);
+          callbacks.onFoldError?.(outcome.error, event, {
+            stateBefore,
+            stateAfter: confirmedState,
+          });
         }
 
         // Divergence tripwire. The stamped `stateHashAfter` is the appender's

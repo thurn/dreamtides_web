@@ -17,7 +17,7 @@ const preferredDatabasePort = 9000;
 const preferredUiPort = 4000;
 const preferredHubPort = 4400;
 const preferredLoggingPort = 4500;
-const projectId = "demo-journey-prototype";
+export const DEV_EMULATOR_PROJECT_ID = "demo-journey-prototype";
 const children = new Set();
 const runtimeStateDir = join(
   process.cwd(),
@@ -263,7 +263,7 @@ function cleanupTempConfig() {
 }
 
 async function waitForDatabaseEmulator(databasePort) {
-  const url = `http://${databaseHost}:${databasePort}/.json?ns=${projectId}`;
+  const url = `http://${databaseHost}:${databasePort}/.json?ns=${DEV_EMULATOR_PROJECT_ID}`;
   const deadline = Date.now() + 30_000;
 
   while (Date.now() < deadline) {
@@ -327,7 +327,7 @@ export async function runDevWithEmulator(argv = process.argv.slice(2)) {
       "--only",
       "database",
       "--project",
-      projectId,
+      DEV_EMULATOR_PROJECT_ID,
       "--config",
       firebaseConfigPath,
     ]);

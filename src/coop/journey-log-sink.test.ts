@@ -322,6 +322,41 @@ describe("createCoopLogRecorder single-writer rule", () => {
     ]);
   });
 
+  it("records replayable fold errors and dedupes them by seq", () => {
+    const { emitted, recorder } = setup();
+    const event = makeEvent({
+      actor: "client-b",
+      nonce: "client-b:9",
+      intentKey: "tutorial:advance:9",
+      type: "ADVANCE_TUTORIAL",
+    });
+    const error = {
+      seq: 9,
+      message: "tutorial-authoritative-player mismatch",
+      stack: "Error: tutorial-authoritative-player mismatch",
+    };
+
+    recorder.recordFoldError(error, event, "before-hash", "after-hash");
+    recorder.recordFoldError(error, event, "before-hash", "after-hash");
+
+    expect(emitted).toEqual([
+      {
+        event: "fold_error",
+        seq: 9,
+        type: "ADVANCE_TUTORIAL",
+        actor: "client-b",
+        nonce: "client-b:9",
+        intentKey: "tutorial:advance:9",
+        message: "tutorial-authoritative-player mismatch",
+        stack: "Error: tutorial-authoritative-player mismatch",
+        stateHashBefore: "before-hash",
+        stateHashAfter: "after-hash",
+        observingClientId: "client-a",
+        gameId: "room-1",
+      },
+    ]);
+  });
+
   it("records authoritative corrections and semantic intent-key collisions", () => {
     const { emitted, recorder } = setup();
     recorder.recordAuthoritativeCorrection({

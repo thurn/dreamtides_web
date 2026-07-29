@@ -285,3 +285,6 @@ typed `readonly` arrays. Verify readonly enforcement only through
 
 The dev server output confirms the port. If assets are missing, the setup script
 logs warnings but continues and the prototype uses placeholders.
+
+For seeded cooperative tutorial, battle, and controller-policy automation, see
+[Cooperative Demo Fuzzing](coop_demo_fuzzing.md).

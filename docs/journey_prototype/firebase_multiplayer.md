@@ -237,6 +237,9 @@ state without starting Firebase.
 15. Open `?viewLogs=<roomId>` and confirm the persisted diagnostic records are
     readable.
 
+The automated two-client certification workflow and its replay artifacts are
+documented in [Cooperative Demo Fuzzing](coop_demo_fuzzing.md).
+
 ## Cloud Smoke QA
 
 Open the local app with `?realtime=1`, create a room, and confirm the URL

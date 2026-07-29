@@ -30,6 +30,7 @@
 import { get, push, ref, runTransaction, update, type Database } from "firebase/database";
 import type { LogEntry, LogSink } from "../logging";
 import { clearLogContext, setLogContext, setLogSink } from "../logging";
+import type { FoldError } from "../eventlog/fold";
 import type { BounceReason, EventOutcome, GameEvent } from "../eventlog/types";
 import type { FoldState } from "../rules/fold-state";
 
@@ -331,6 +332,22 @@ export interface FoldDivergenceRecord {
   gameId: string;
 }
 
+/** A contained fold failure with enough event and state context to replay it. */
+export interface FoldErrorRecord {
+  event: "fold_error";
+  seq: number;
+  type: string;
+  actor: string;
+  nonce: string | null;
+  intentKey: string | null;
+  message: string;
+  stack: string | null;
+  stateHashBefore: string;
+  stateHashAfter: string;
+  observingClientId: string;
+  gameId: string;
+}
+
 /** The `event_append_failed` log shape: an intent whose `io.append` rejected. */
 export interface EventAppendFailedRecord {
   event: "event_append_failed";
@@ -407,6 +424,13 @@ export interface CoopLogRecorder {
   ): void;
   /** Mirror a fold divergence observed at `seq` (any client, stamped with clientId). */
   recordDivergence(info: { seq: number; expected: string; actual: string }): void;
+  /** Mirror a contained fold failure with its event and fold-state hashes. */
+  recordFoldError(
+    error: FoldError,
+    event: GameEvent,
+    stateHashBefore: string,
+    stateHashAfter: string,
+  ): void;
   /** Mirror an intent whose `io.append` rejected (always this client's own). */
   recordAppendFailed(event: GameEvent, error: unknown): void;
   /** Mirror the unconfirmed intents a full refold discarded (this client's own). */
@@ -446,6 +470,7 @@ export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogR
   // Divergence is reported by any observing client, so it is deduped by seq on
   // its own set rather than by ownership or the coop-event high-water.
   const divergenceReported = new Set<number>();
+  const foldErrorsReported = new Set<number>();
 
   function owns(actor: string): boolean {
     return ownedActors.has(actor);
@@ -498,6 +523,32 @@ export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogR
         expected: info.expected,
         actual: info.actual,
         clientId,
+        gameId,
+      };
+      emit({ ...record });
+    },
+    recordFoldError(
+      error: FoldError,
+      event: GameEvent,
+      stateHashBefore: string,
+      stateHashAfter: string,
+    ): void {
+      if (foldErrorsReported.has(error.seq)) {
+        return;
+      }
+      foldErrorsReported.add(error.seq);
+      const record: FoldErrorRecord = {
+        event: "fold_error",
+        seq: error.seq,
+        type: event.type,
+        actor: event.actor,
+        nonce: event.nonce ?? null,
+        intentKey: event.intentKey ?? null,
+        message: error.message,
+        stack: error.stack ?? null,
+        stateHashBefore,
+        stateHashAfter,
+        observingClientId: clientId,
         gameId,
       };
       emit({ ...record });

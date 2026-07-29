@@ -258,7 +258,13 @@ export function CoopProvider({
         onDivergence: (info) => {
           logSinkRef.current.recordDivergence(info);
         },
-        onFoldError: (error) => {
+        onFoldError: (error, event, detail) => {
+          logSinkRef.current.recordFoldError(
+            error,
+            event,
+            GAME_ENGINE_CONFIG.hash(detail.stateBefore),
+            GAME_ENGINE_CONFIG.hash(detail.stateAfter),
+          );
           console.error("Coop fold error", error);
         },
         onAppendFailed: (event, error) => {

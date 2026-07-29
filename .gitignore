@@ -49,5 +49,6 @@ merchant-metric-report.json
 # Default output directory for scripts/mobile-screenshot.mjs
 screenshots/
 artifacts/journey-desktop-screenshots/
+artifacts/coop-fuzz/
 
 cumulus/Assets/ThirdParty/

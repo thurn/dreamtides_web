@@ -27,6 +27,7 @@ import { CoopJourneyProvider } from "./state/coop-journey-context";
 import { FrontDoorProvider } from "./state/front-door-context";
 import { FrontDoorRouter } from "./components/FrontDoorRouter";
 import { HostedPlaytestShell } from "./coop/HostedPlaytestShell";
+import { FuzzProbe } from "./coop/FuzzProbe";
 import { ScreenRouter } from "./components/ScreenRouter";
 import { DesktopDeckViewerAdapter } from "./screens/cumulus_adapters/DesktopDeckViewerAdapter";
 import { MobileDeckViewerAdapter } from "./screens/cumulus_adapters/MobileDeckViewerAdapter";
@@ -746,6 +747,9 @@ export default function App({
     >
       {(context) => (
         <CoopProvider context={context}>
+          {import.meta.env.DEV && import.meta.env.VITE_FUZZ_TEST === "1" ? (
+            <FuzzProbe />
+          ) : null}
           <CoopJourneyProvider journeyContent={journeyContent}>
             <FrontDoorProvider>
               <HostedPlaytestShell>
