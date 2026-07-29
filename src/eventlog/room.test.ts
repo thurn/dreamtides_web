@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import {
   ROOM_PRESERVATION_WINDOW_MS,
   connectedClientCount,
+  decodePresence,
   generateRoomId,
   genesisLogNode,
   isValidRoomId,
@@ -154,5 +155,25 @@ describe("connectedClientCount", () => {
   it("returns null while the presence snapshot is unknown", () => {
     expect(connectedClientCount(null)).toBeNull();
     expect(connectedClientCount(undefined)).toBeNull();
+  });
+});
+
+describe("decodePresence", () => {
+  it("validates a native RTDB presence map", () => {
+    expect(
+      decodePresence({
+        clientA: { connected: true, lastSeenAt: "t1" },
+      }),
+    ).toEqual({
+      clientA: { connected: true, lastSeenAt: "t1" },
+    });
+  });
+
+  it("rejects malformed containers and entries", () => {
+    expect(decodePresence([])).toBeNull();
+    expect(decodePresence({ clientA: true })).toBeNull();
+    expect(
+      decodePresence({ clientA: { connected: true } }),
+    ).toBeNull();
   });
 });

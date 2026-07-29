@@ -1,5 +1,5 @@
 // Subscription wrapper for the event-sourcing engine: a thin `onValue` reader
-// on `rooms/{roomId}/log` that decodes the RTDB-native `EncodedLogNode` into a
+// on `rooms/{roomId}/log` that decodes the untrusted RTDB value into a
 // ready-to-fold `LogNode` and hands it to a callback. It keeps no local state
 // (the stateful fold lives in client.ts) and is game-agnostic: it never imports
 // from src/rules/ or src/coop/. Firebase IS allowed here (the firebase ban
@@ -12,7 +12,8 @@
 import { type Database, onValue, ref } from "firebase/database";
 import { decodeEvent } from "./append";
 import { decodeAppliedIndex } from "./fold";
-import type { EncodedLogNode, GameEvent, Genesis, LogNode } from "./types";
+import type { GameEvent, LogNode } from "./types";
+import { decodeRtdbLogNode } from "./wire";
 
 /**
  * Sentinel `basedOnSeq` stamped onto an event whose stored string failed to
@@ -36,7 +37,7 @@ function malformedEvent(raw: unknown): GameEvent {
 }
 
 /**
- * Decodes an RTDB-native `EncodedLogNode` into a `LogNode`. Pure and total: it
+ * Decodes an untrusted RTDB value into a `LogNode`. Pure and total: it
  * NEVER throws. It returns `null` when the room is UNREADABLE — a genesis or
  * `baseSnapshot` string that fails to `JSON.parse` — because those are the
  * fold's foundation and there is no safe way to proceed without them; the
@@ -57,47 +58,33 @@ function malformedEvent(raw: unknown): GameEvent {
  * game-agnostic module pre-parsing it with a bare `JSON.parse` that may not
  * even match a game's actual `decode`.
  */
-export function decodeLogNode(encoded: EncodedLogNode): LogNode | null {
-  let genesis: Genesis;
-  let baseSnapshot: string | null;
-  try {
-    genesis = JSON.parse(encoded.genesis) as Genesis;
-    // RTDB strips any field whose value is `null` from the stored tree, so a
-    // freshly-created room's `baseSnapshot: null` reads back as `undefined`,
-    // not `null` — both must decode to "no snapshot yet".
-    const rawBaseSnapshot = encoded.baseSnapshot ?? null;
-    if (rawBaseSnapshot !== null) {
-      // Validity check only: the parsed value is discarded. See the doc
-      // comment above for why the raw string is what's kept.
-      JSON.parse(rawBaseSnapshot);
-    }
-    baseSnapshot = rawBaseSnapshot;
-  } catch {
-    // Corrupt genesis or snapshot — the fold has no foundation. Signal an
-    // unreadable room rather than fabricate one.
-    return null;
-  }
+export function decodeLogNode(raw: unknown): LogNode | null {
+  const encoded = decodeRtdbLogNode(raw);
+  if (encoded === null) return null;
 
   const events = new Map<number, GameEvent>();
-  const rawEvents = encoded.events ?? {};
-  for (const [key, value] of Object.entries(rawEvents)) {
+  for (const [key, value] of Object.entries(encoded.events)) {
     const seq = Number(key);
-    if (!Number.isInteger(seq) || value === null || value === undefined) {
+    if (!Number.isInteger(seq)) {
       continue;
     }
     let event: GameEvent;
-    try {
-      event = decodeEvent(value);
-    } catch {
+    if (typeof value !== "string") {
       event = malformedEvent(value);
+    } else {
+      try {
+        event = decodeEvent(value);
+      } catch {
+        event = malformedEvent(value);
+      }
     }
     events.set(seq, event);
   }
 
   return {
-    genesis,
+    genesis: encoded.genesis,
     baseSeq: encoded.baseSeq,
-    baseSnapshot,
+    baseSnapshot: encoded.baseSnapshot,
     head: encoded.head,
     events,
     // A pre-compaction node has no stored index; `decodeAppliedIndex` maps that
@@ -125,14 +112,14 @@ export function subscribeToLog(
   const logRef = ref(db, `rooms/${roomId}/log`);
   let initialized = false;
   return onValue(logRef, (snapshot) => {
-    const encoded = snapshot.val() as EncodedLogNode | null;
-    if (encoded === null) {
+    const raw: unknown = snapshot.val();
+    if (raw === null) {
       if (initialized) {
         onCorrupt?.();
       }
       return;
     }
-    const node = decodeLogNode(encoded);
+    const node = decodeLogNode(raw);
     if (node === null) {
       onCorrupt?.();
       return;

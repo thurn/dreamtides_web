@@ -176,11 +176,11 @@ describe("RoomGate content-config gate", () => {
     mount(runtimeConfig());
     await flush();
 
-    const legacyGenesis = {
+    const legacyGenesis: Genesis = {
       seed: "seed-1",
       reducerVersion: BUILD_HASH,
       createdAt: 0,
-    } as unknown as Genesis;
+    };
     act(() => {
       deliverNode?.(nodeWith(legacyGenesis));
     });

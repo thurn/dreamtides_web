@@ -16,6 +16,7 @@ import {
 import { foldEvents } from "./fold";
 import { hashState } from "./hash";
 import type { EncodedLogNode, EngineConfig, EventContext, EventOutcome, GameEvent, Genesis } from "./types";
+import { decodeAppendableLogNode } from "./wire";
 
 interface ToyState {
   acc: number;
@@ -188,8 +189,12 @@ describe("applyAppend nonce dedup", () => {
       intentKey: "front-door:journey-1:loading",
     };
     const afterFirst = applyAppend(config, emptyLog(), first);
-    const fromRtdb = { ...afterFirst };
-    delete fromRtdb.baseSnapshot;
+    const {
+      baseSnapshot: _omittedBaseSnapshot,
+      ...fromRtdb
+    } = afterFirst;
+    const normalized = decodeAppendableLogNode(fromRtdb);
+    expect(normalized).not.toBeNull();
     const contender = {
       ...makeEvent(999),
       actor: "client-b",
@@ -197,9 +202,13 @@ describe("applyAppend nonce dedup", () => {
       intentKey: first.intentKey,
     };
 
-    const afterContender = applyAppend(config, fromRtdb, contender);
+    const afterContender = applyAppend(
+      config,
+      normalized as EncodedLogNode,
+      contender,
+    );
 
-    expect(afterContender).toBe(fromRtdb);
+    expect(afterContender).toBe(normalized);
     expect(afterContender.head).toBe(1);
     expect(numericEventKeys(afterContender)).toEqual([1]);
   });

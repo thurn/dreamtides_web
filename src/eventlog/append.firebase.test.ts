@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import type { EncodedLogNode, EngineConfig, GameEvent, Genesis } from "./types";
 
 const firebase = vi.hoisted<{
-  current: EncodedLogNode | null;
+  current: unknown;
   options: unknown;
 }>(() => ({ current: null, options: null }));
 
@@ -11,7 +11,7 @@ vi.mock("firebase/database", () => ({
   runTransaction: vi.fn(
     (
       _ref: unknown,
-      updater: (current: EncodedLogNode | null) => EncodedLogNode | undefined,
+      updater: (current: unknown) => EncodedLogNode | undefined,
       options: unknown,
     ) => {
       firebase.options = options;
@@ -31,7 +31,7 @@ vi.mock("firebase/database", () => ({
   ),
 }));
 
-const { appendEvent } = await import("./append");
+const { appendEvent, decodeEvent } = await import("./append");
 
 interface State {
   count: number;
@@ -112,7 +112,7 @@ describe("appendEvent Firebase transaction behavior", () => {
         }),
       ),
     ).resolves.toBe(1);
-    expect(firebase.current?.head).toBe(1);
+    expect((firebase.current as EncodedLogNode).head).toBe(1);
   });
 
   it("returns the original winner when a joining client's RTDB node omits baseSnapshot", async () => {
@@ -123,9 +123,16 @@ describe("appendEvent Firebase transaction behavior", () => {
       config,
       event({ nonce: "host-1", intentKey: "tutorial:journey-1:begin" }),
     );
-    if (firebase.current !== null) {
-      delete firebase.current.baseSnapshot;
-    }
+    const committed = firebase.current as EncodedLogNode;
+    const {
+      baseSnapshot: _omittedBaseSnapshot,
+      events,
+      ...rest
+    } = committed;
+    firebase.current = {
+      ...rest,
+      events: [null, events[1]],
+    };
 
     await expect(
       appendEvent(
@@ -139,6 +146,35 @@ describe("appendEvent Firebase transaction behavior", () => {
         }),
       ),
     ).resolves.toBe(1);
-    expect(firebase.current?.head).toBe(1);
+    expect((firebase.current as EncodedLogNode).head).toBe(1);
+  });
+
+  it("aborts instead of trusting a malformed transaction value", async () => {
+    firebase.current = {
+      genesis: "null",
+      baseSeq: 0,
+      head: 0,
+    };
+
+    await expect(
+      appendEvent({} as never, "room", config, event({ nonce: "n-1" })),
+    ).rejects.toThrow("appendEvent aborted");
+  });
+
+  it("keeps a room appendable when one stored event has a malformed native value", async () => {
+    firebase.current = {
+      genesis: JSON.stringify(genesis),
+      baseSeq: 0,
+      head: 1,
+      events: [null, { malformed: true }],
+    };
+
+    await expect(
+      appendEvent({} as never, "room", config, event({ nonce: "n-2" })),
+    ).resolves.toBe(2);
+    const committed = firebase.current as EncodedLogNode;
+    expect(committed.head).toBe(2);
+    expect(typeof committed.events[1]).toBe("string");
+    expect(() => decodeEvent(committed.events[1])).toThrow("invalid shape");
   });
 });

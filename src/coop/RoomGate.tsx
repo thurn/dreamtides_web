@@ -7,7 +7,12 @@ import {
   type ReactNode,
 } from "react";
 import { type Database } from "firebase/database";
-import type { ContentConfig, Genesis, LogNode } from "../eventlog/types";
+import type {
+  ContentConfig,
+  Genesis,
+  LogNode,
+  PinnedGenesis,
+} from "../eventlog/types";
 import {
   createRoomEvictingStale,
   generateRoomId,
@@ -71,7 +76,7 @@ export interface RoomReadyContext {
   db: Database;
   roomId: string;
   clientId: string;
-  genesis: Genesis;
+  genesis: PinnedGenesis;
   logSink: JourneyLogSinkHandle;
 }
 
@@ -90,7 +95,7 @@ type GateState =
   | { status: "creating" }
   | { status: "loading"; roomId: string }
   | { status: "unreachable"; roomId: string }
-  | { status: "ready"; roomId: string; genesis: Genesis }
+  | { status: "ready"; roomId: string; genesis: PinnedGenesis }
   | { status: "versionGate"; roomId: string; genesis: Genesis }
   | { status: "configGate"; roomId: string; genesis: Genesis }
   | { status: "unreadable"; roomId: string }
@@ -117,7 +122,7 @@ function freshSeed(): string {
 export function createFreshGenesis(
   contentConfig: ContentConfig,
   frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting" | "journey">,
-): Genesis {
+): PinnedGenesis {
   return {
     seed: freshSeed(),
     reducerVersion: getBuildHash(),
@@ -183,7 +188,7 @@ export function gateStatusFor(
   if (genesis.reducerVersion !== getBuildHash()) {
     return "versionGate";
   }
-  const roomContentConfig = genesis.contentConfig as ContentConfig | undefined;
+  const roomContentConfig = genesis.contentConfig;
   if (
     roomContentConfig === undefined ||
     !contentConfigsEqual(roomContentConfig, localContentConfig)
@@ -191,6 +196,12 @@ export function gateStatusFor(
     return "configGate";
   }
   return "ready";
+}
+
+function hasPinnedContentConfig(
+  genesis: Genesis,
+): genesis is PinnedGenesis {
+  return genesis.contentConfig !== undefined;
 }
 
 function navigateToRoom(roomId: string): void {
@@ -315,6 +326,22 @@ export function RoomGate({
         // matches. A genesis missing `contentConfig` (never written by this
         // build) is treated as a mismatch.
         const status = gateStatusFor(node.genesis, localContentConfig);
+        if (status === "ready") {
+          if (!hasPinnedContentConfig(node.genesis)) {
+            setGateState({
+              status: "configGate",
+              roomId: activeRoomId,
+              genesis: node.genesis,
+            });
+            return;
+          }
+          setGateState({
+            status,
+            roomId: activeRoomId,
+            genesis: node.genesis,
+          });
+          return;
+        }
         setGateState({ status, roomId: activeRoomId, genesis: node.genesis });
       },
       () => {

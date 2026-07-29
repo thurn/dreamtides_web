@@ -112,6 +112,10 @@ describe("createRoomEvictingStale presence protection", () => {
       keepFresh: {
         log: { genesis: genesisAt(now) },
       },
+      keepMalformedPresence: {
+        log: { genesis: genesisAt(stale) },
+        presence: "unreadable",
+      },
     };
 
     await createRoomEvictingStale({} as never, "newroom", {

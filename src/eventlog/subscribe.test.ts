@@ -94,6 +94,16 @@ describe("decodeLogNode", () => {
     expect(decodeLogNode(encoded)).toBeNull();
   });
 
+  it("returns null for malformed-but-valid JSON genesis values", () => {
+    const encoded = {
+      genesis: "null",
+      baseSeq: 0,
+      head: 0,
+    };
+    expect(() => decodeLogNode(encoded)).not.toThrow();
+    expect(decodeLogNode(encoded)).toBeNull();
+  });
+
   it("decodes a persisted appliedIndex into a seq -> {actor, type} map", () => {
     const encoded: EncodedLogNode = {
       genesis: JSON.stringify(GENESIS),
@@ -150,10 +160,9 @@ describe("decodeLogNode", () => {
     const encoded = {
       genesis: JSON.stringify(GENESIS),
       baseSeq: 0,
-      baseSnapshot: null,
       head: 2,
-      events: sparse as unknown as { [seq: number]: string },
-    } satisfies EncodedLogNode;
+      events: sparse,
+    };
     const node = decodeLogNode(encoded);
     expect(node).not.toBeNull();
     expect([...(node?.events.keys() ?? [])].sort((a, b) => a - b)).toEqual([1, 2]);
@@ -186,6 +195,18 @@ describe("decodeLogNode", () => {
     expect(result.outcomes[1].outcome).toBe("applied");
     expect(result.state.seqs).toEqual([2]);
   });
+
+  it("turns a valid JSON value with the wrong event shape into a bounce", () => {
+    const node = decodeLogNode({
+      genesis: JSON.stringify(GENESIS),
+      baseSeq: 0,
+      head: 1,
+      events: [null, "null"],
+    });
+
+    expect(node).not.toBeNull();
+    expect(node?.events.get(1)?.type).toBe("__MALFORMED__");
+  });
 });
 
 describe("subscribeToLog", () => {
@@ -194,7 +215,7 @@ describe("subscribeToLog", () => {
     firebase.unsubscribe.mockClear();
   });
 
-  function emit(value: EncodedLogNode | null): void {
+  function emit(value: unknown): void {
     const callback = firebase.callbacks[firebase.callbacks.length - 1];
     if (callback === undefined) {
       throw new Error("subscribeToLog callback was not registered");

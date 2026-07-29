@@ -78,7 +78,7 @@ export interface Genesis {
    * from each browser's URL — a client whose local config differs is gated
    * out until it adopts the room's pinned params (see RoomGate's config gate).
    */
-  contentConfig: ContentConfig;
+  contentConfig?: ContentConfig;
 }
 
 /**
@@ -92,6 +92,11 @@ export interface ContentConfig {
   poolVariant: string;
   draftMode: string;
   fresh20PackSize: number | null;
+}
+
+/** A current room genesis whose fold-relevant content settings are pinned. */
+export interface PinnedGenesis extends Genesis {
+  contentConfig: ContentConfig;
 }
 
 /**
@@ -131,20 +136,17 @@ export interface AppliedIndexEntry {
 }
 
 /**
- * The RTDB-native shape of a log node: genesis, baseSnapshot, and each
- * event are JSON strings, not RTDB trees. Opaque strings round-trip
- * byte-exact (RTDB otherwise strips empty arrays/objects and `undefined`
- * from trees) and keep `stateHashAfter` comparisons stable.
+ * The canonical log node produced by writers and consumed by the pure append
+ * updater. Firebase's native read shape is decoded into this form at the
+ * boundary; genesis, snapshots, and events remain opaque JSON strings so
+ * nested game state round-trips byte-exactly.
  */
 export interface EncodedLogNode {
   /** JSON string encoding a Genesis. */
   genesis: string;
   baseSeq: number;
-  /**
-   * JSON string encoding the compacted fold state. Fresh rooms write null,
-   * which RTDB omits when another client reads the node.
-   */
-  baseSnapshot?: string | null;
+  /** JSON string encoding the compacted fold state, or null before compaction. */
+  baseSnapshot: string | null;
   head: number;
   /** JSON string per seq, dense integer keys in (baseSeq, head]. */
   events: { [seq: number]: string };

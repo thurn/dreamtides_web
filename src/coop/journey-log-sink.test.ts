@@ -6,6 +6,7 @@ import {
   createCoopEmit,
   createCoopLogRecorder,
   createJourneyLogMirror,
+  decodeRoomLogEntries,
   pruneLogEntries,
   type SinkRecord,
 } from "./journey-log-sink";
@@ -50,6 +51,22 @@ describe("pruneLogEntries", () => {
   it("returns everything untouched when under the limit", () => {
     const entries = { [pushKey(0)]: "a", [pushKey(1)]: "b" };
     expect(pruneLogEntries(entries, 10)).toEqual(entries);
+  });
+});
+
+describe("decodeRoomLogEntries", () => {
+  it("keeps only serialized log lines from a native RTDB map", () => {
+    expect(
+      decodeRoomLogEntries({
+        "-a": "{\"event\":\"ok\"}",
+        "-b": { event: "malformed" },
+      }),
+    ).toEqual({ "-a": "{\"event\":\"ok\"}" });
+  });
+
+  it("rejects non-map containers", () => {
+    expect(decodeRoomLogEntries([])).toBeNull();
+    expect(decodeRoomLogEntries("not-a-map")).toBeNull();
   });
 });
 

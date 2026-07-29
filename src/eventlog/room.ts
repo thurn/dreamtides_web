@@ -23,6 +23,10 @@ import {
 } from "firebase/database";
 import type { EncodedLogNode, Genesis } from "./types";
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
 // ---------------------------------------------------------------------------
 // Room ids
 // ---------------------------------------------------------------------------
@@ -143,7 +147,7 @@ export async function createRoom(
 ): Promise<void> {
   const result = await runTransaction(
     ref(database, roomLogPath(roomId)),
-    (current: EncodedLogNode | null) => {
+    (current: unknown) => {
       if (current !== null) {
         // Abort: a log node already exists at this id.
         return undefined;
@@ -188,18 +192,18 @@ export function shouldEvict(
     return false;
   }
 
-  let genesis: Partial<Genesis>;
+  let parsed: unknown;
   try {
-    genesis = JSON.parse(rawGenesis) as Partial<Genesis>;
+    parsed = JSON.parse(rawGenesis);
   } catch {
     return false;
   }
 
-  if (genesis === null || typeof genesis !== "object") {
+  if (!isRecord(parsed)) {
     return false;
   }
 
-  const createdAt = genesis.createdAt;
+  const createdAt = parsed.createdAt;
   if (typeof createdAt !== "number" || !Number.isFinite(createdAt)) {
     return false;
   }
@@ -229,25 +233,29 @@ export async function createRoomEvictingStale(
 
   const roomsRef = ref(database, "rooms");
   const snapshot = await get(roomsRef);
-  const existingRooms = snapshot.exists()
-    ? (snapshot.val() as Record<
-        string,
-        { log?: { genesis?: unknown }; presence?: Record<string, PresenceEntry> | null }
-      > | null)
-    : null;
-  if (existingRooms === null) {
+  const existingRooms: unknown = snapshot.exists() ? snapshot.val() : null;
+  if (!isRecord(existingRooms)) {
     return;
   }
 
   const updateMap: Record<string, unknown> = {};
-  for (const [existingId, existingRoom] of Object.entries(existingRooms)) {
+  for (const [existingId, rawRoom] of Object.entries(existingRooms)) {
     if (existingId === roomId) {
       continue;
     }
-    if (hasConnectedPresence(existingRoom?.presence)) {
+    if (!isRecord(rawRoom)) {
       continue;
     }
-    const rawGenesis = existingRoom?.log?.genesis;
+    const presence = decodePresence(rawRoom.presence);
+    if (rawRoom.presence !== undefined && presence === null) {
+      continue;
+    }
+    if (hasConnectedPresence(presence)) {
+      continue;
+    }
+    const rawGenesis = isRecord(rawRoom.log)
+      ? rawRoom.log.genesis
+      : undefined;
     if (shouldEvict(rawGenesis, nowMs)) {
       updateMap[existingId] = null;
     }
@@ -265,6 +273,29 @@ export async function createRoomEvictingStale(
 export interface PresenceEntry {
   connected: boolean;
   lastSeenAt: string;
+}
+
+/** Validate the native presence tree returned by RTDB. */
+export function decodePresence(
+  raw: unknown,
+): Record<string, PresenceEntry> | null {
+  if (raw === null || raw === undefined) return null;
+  if (!isRecord(raw)) return null;
+  const presence: Record<string, PresenceEntry> = {};
+  for (const [clientId, value] of Object.entries(raw)) {
+    if (
+      !isRecord(value) ||
+      typeof value.connected !== "boolean" ||
+      typeof value.lastSeenAt !== "string"
+    ) {
+      return null;
+    }
+    presence[clientId] = {
+      connected: value.connected,
+      lastSeenAt: value.lastSeenAt,
+    };
+  }
+  return presence;
 }
 
 function hasConnectedPresence(

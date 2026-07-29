@@ -24,7 +24,8 @@
 
 import { type Database, ref, runTransaction } from "firebase/database";
 import { buildAppliedIndex, decodeAppliedIndex, encodeAppliedIndex, foldEvents } from "./fold";
-import type { EncodedLogNode, EngineConfig, GameEvent, Genesis } from "./types";
+import type { EncodedLogNode, EngineConfig, GameEvent } from "./types";
+import { decodeAppendableLogNode, decodeGenesis } from "./wire";
 
 /**
  * Live-event ceiling: when `head - baseSeq` exceeds this, an append triggers
@@ -46,7 +47,45 @@ export function encodeEvent(event: GameEvent): string {
 
 /** Decodes an `events[seq]` JSON string back into a `GameEvent`. */
 export function decodeEvent(raw: string): GameEvent {
-  return JSON.parse(raw) as GameEvent;
+  const parsed = JSON.parse(raw) as unknown;
+  if (
+    typeof parsed !== "object" ||
+    parsed === null ||
+    Array.isArray(parsed)
+  ) {
+    throw new Error("event must be an object");
+  }
+  const event = parsed as Record<string, unknown>;
+  const payload = event.payload;
+  if (
+    typeof event.type !== "string" ||
+    typeof payload !== "object" ||
+    payload === null ||
+    Array.isArray(payload) ||
+    typeof event.actor !== "string" ||
+    typeof event.clientTimestamp !== "string" ||
+    typeof event.basedOnSeq !== "number" ||
+    (event.nonce !== undefined && typeof event.nonce !== "string") ||
+    (event.intentKey !== undefined && typeof event.intentKey !== "string") ||
+    (event.stateHashAfter !== undefined &&
+      typeof event.stateHashAfter !== "string")
+  ) {
+    throw new Error("event has an invalid shape");
+  }
+  return {
+    type: event.type,
+    payload: payload as Record<string, unknown>,
+    actor: event.actor,
+    clientTimestamp: event.clientTimestamp,
+    basedOnSeq: event.basedOnSeq,
+    ...(event.nonce === undefined ? {} : { nonce: event.nonce }),
+    ...(event.intentKey === undefined
+      ? {}
+      : { intentKey: event.intentKey }),
+    ...(event.stateHashAfter === undefined
+      ? {}
+      : { stateHashAfter: event.stateHashAfter }),
+  };
 }
 
 /**
@@ -103,7 +142,10 @@ export function applyAppend<S>(
     // `foldEvents` runs with `devMode: false` so a reducer throw over committed
     // history is contained (a bounce plus a `fold_error`), never rethrown.
     try {
-      const genesis = JSON.parse(encoded.genesis) as Genesis;
+      const genesis = decodeGenesis(encoded.genesis);
+      if (genesis === null) {
+        throw new Error("compaction genesis JSON is unreadable");
+      }
       const newBaseSeq = head - COMPACT_TARGET;
 
       const toFold: Array<{ seq: number; event: GameEvent }> = [];
@@ -234,9 +276,12 @@ function foldLiveWindow<S>(
   config: EngineConfig<S>,
   encoded: EncodedLogNode,
 ): ReturnType<typeof foldEvents<S>> {
-  const genesis = JSON.parse(encoded.genesis) as Genesis;
+  const genesis = decodeGenesis(encoded.genesis);
+  if (genesis === null) {
+    throw new Error("intent-key genesis JSON is unreadable");
+  }
   const baseState =
-    encoded.baseSnapshot == null
+    encoded.baseSnapshot === null
       ? config.genesisState(genesis)
       : config.decode(encoded.baseSnapshot);
   const events: Array<{ seq: number; event: GameEvent }> = [];
@@ -363,13 +408,14 @@ export async function appendEvent<S>(
   const logRef = ref(db, `rooms/${roomId}/log`);
   const result = await runTransaction(
     logRef,
-    (current: EncodedLogNode | null) => {
-      if (current === null) {
-        // No log node to append to — abort the transaction rather than
-        // fabricate one; room creation is responsible for writing genesis.
+    (current: unknown) => {
+      const encoded = decodeAppendableLogNode(current);
+      if (encoded === null) {
+        // A missing or unreadable log cannot be appended safely. Abort rather
+        // than fabricate or trust a shape the rules engine cannot fold.
         return undefined;
       }
-      return applyAppend(config, current, event);
+      return applyAppend(config, encoded, event);
     },
     // LogClient already supplies the optimistic echo. Firebase's local
     // transaction events can temporarily expose mutually exclusive winners at
@@ -379,11 +425,15 @@ export async function appendEvent<S>(
   );
 
   if (!result.committed) {
-    throw new Error(`appendEvent aborted: no log node at rooms/${roomId}/log`);
+    throw new Error(
+      `appendEvent aborted: no readable log node at rooms/${roomId}/log`,
+    );
   }
-  const committed = result.snapshot.val() as EncodedLogNode | null;
+  const committed = decodeAppendableLogNode(result.snapshot.val());
   if (committed === null) {
-    throw new Error(`appendEvent committed an empty log at rooms/${roomId}/log`);
+    throw new Error(
+      `appendEvent committed an unreadable log at rooms/${roomId}/log`,
+    );
   }
   return existingEventSeq(config, committed, event) ?? committed.head;
 }

@@ -47,7 +47,7 @@ import {
 import type { EventOutcome, GameEvent } from "../eventlog/types";
 import { appendEvent } from "../eventlog/append";
 import { subscribeToLog } from "../eventlog/subscribe";
-import { connectedClientCount, type PresenceEntry } from "../eventlog/room";
+import { connectedClientCount, decodePresence } from "../eventlog/room";
 import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
 import type { FoldState } from "../rules/fold-state";
 import type { RoomReadyContext } from "./RoomGate";
@@ -308,7 +308,7 @@ export function CoopProvider({
   useEffect(() => {
     const presenceRef = ref(db, `rooms/${roomId}/presence`);
     return onValue(presenceRef, (snapshot) => {
-      const presence = snapshot.val() as Record<string, PresenceEntry> | null;
+      const presence = decodePresence(snapshot.val());
       setConnectedCount(connectedClientCount(presence));
       setConnectedClientIds(
         Object.keys(presence ?? {}).filter((clientId) => presence?.[clientId]?.connected === true).sort(),

@@ -69,6 +69,19 @@ export type SinkRecord = Readonly<Record<string, unknown>>;
 /** Persisted log entries keyed by push id; each value one serialized record. */
 export type RoomLogEntries = Record<string, string>;
 
+/** Validate the native push-key map returned by RTDB. */
+export function decodeRoomLogEntries(raw: unknown): RoomLogEntries | null {
+  if (raw === null || raw === undefined) return null;
+  if (typeof raw !== "object" || Array.isArray(raw)) return null;
+  const entries: RoomLogEntries = {};
+  for (const [key, value] of Object.entries(raw)) {
+    if (typeof value === "string") {
+      entries[key] = value;
+    }
+  }
+  return entries;
+}
+
 // ---------------------------------------------------------------------------
 // Pure prune (unbounded-growth guard)
 // ---------------------------------------------------------------------------
@@ -131,8 +144,10 @@ export async function pruneRoomLog(
 ): Promise<void> {
   await runTransaction(
     ref(database, roomLogsPath(roomId)),
-    (current: RoomLogEntries | null) => {
-      const entries = current ?? {};
+    (current: unknown) => {
+      if (current === null) return current;
+      const entries = decodeRoomLogEntries(current);
+      if (entries === null) return undefined;
       if (Object.keys(entries).length <= limit + slack) {
         return current;
       }
@@ -153,8 +168,8 @@ export async function readRoomLogLines(
   if (!snapshot.exists()) {
     return [];
   }
-  const raw = snapshot.val() as RoomLogEntries | null;
-  if (raw === null || typeof raw !== "object") {
+  const raw = decodeRoomLogEntries(snapshot.val());
+  if (raw === null) {
     return [];
   }
   return Object.entries(raw)
