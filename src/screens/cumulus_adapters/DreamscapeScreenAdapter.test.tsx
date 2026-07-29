@@ -12,7 +12,7 @@ import { useJourney } from "../../state/journey-context";
 import type { DreamscapeNode, JourneyState } from "../../types/journey";
 import { LayerName } from "../../types/layer-name";
 import type { DreamscapeScreenProps } from "../../cumulus/screens/DreamscapeScreen";
-import { logEvent } from "../../logging";
+import { logEvent, logEventOnce } from "../../logging";
 import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
 
 const screenMock = vi.hoisted(() =>
@@ -25,6 +25,7 @@ vi.mock("../../state/journey-context", () => ({
 
 vi.mock("../../logging", () => ({
   logEvent: vi.fn(),
+  logEventOnce: vi.fn(),
 }));
 
 vi.mock("../../cumulus/screens/DreamscapeScreen", () => ({
@@ -110,11 +111,12 @@ function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
 function setJourneyContext(
   mutations: JourneyMutations,
   state: JourneyState = makeState(),
+  journeyContent: JourneyContent = {} as JourneyContent,
 ): void {
   vi.mocked(useJourney).mockReturnValue({
     state,
     mutations,
-    journeyContent: {} as JourneyContent,
+    journeyContent,
   } as JourneyContextValue);
 }
 
@@ -126,6 +128,46 @@ beforeEach(() => {
 });
 
 describe("DreamscapeScreenAdapter", () => {
+  it("logs tutorial dreamscape guidance when its delayed presentation appears", () => {
+    const mutations = {} as JourneyMutations;
+    setJourneyContext(
+      mutations,
+      makeState({
+        runId: "tutorial-run",
+        isTutorialJourney: true,
+        completionLevel: 0,
+        hasSeenStartingDeckPopup: true,
+      }),
+      {
+        tutorialDreamscape: {
+          speechBubble: {
+            speaker: "mira",
+            delay: 2,
+            horizontalOffset: 0,
+            verticalOffset: 0,
+            bubbleWidth: 700,
+            text: "Visit [purple]Dream Sites[/purple].",
+          },
+        },
+      } as JourneyContent,
+    );
+    const container = document.createElement("div");
+    const root = createRoot(container);
+    act(() => root.render(<DreamscapeScreenAdapter />));
+
+    expect(lastScreenProps().view.guideDialogue?.delaySeconds).toBe(2);
+    act(() => lastScreenProps().onGuideDialogueShown?.());
+    expect(logEventOnce).toHaveBeenCalledWith(
+      "tutorial-dreamscape-guidance:tutorial-run:node-1",
+      "tutorial_dreamscape_guidance_shown",
+      expect.objectContaining({
+        nodeId: "node-1",
+        delaySeconds: 2,
+      }),
+    );
+    act(() => root.unmount());
+  });
+
   it("accepts a prepared Essence reward without reopening the site", () => {
     const mutations = {
       ensureEssenceSiteRuntime: vi.fn(),

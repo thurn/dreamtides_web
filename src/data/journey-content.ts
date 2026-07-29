@@ -71,6 +71,7 @@ import { createInitialReplayDraftState } from "../draft/draft-engine";
 import type { ReplayDraftState } from "../types/draft";
 import type {
   TutorialBattleConfiguration,
+  TutorialDreamscapeConfiguration,
   TutorialJourneyStartConfiguration,
   TutorialTriggerDefinition,
 } from "../types/tutorial";
@@ -91,6 +92,8 @@ export interface JourneyContent {
   tutorialBattle?: TutorialBattleConfiguration;
   /** Authored guidance shown beside the fixed tutorial journey-start offer. */
   tutorialJourneyStart?: TutorialJourneyStartConfiguration;
+  /** Authored guidance shown over the first tutorial dreamscape. */
+  tutorialDreamscape?: TutorialDreamscapeConfiguration;
   /** Fixed three-tide draft pool used by the tutorial journey handoff. */
   tutorialJourneyPool?: TutorialJourneyPool;
   /**

@@ -18,6 +18,10 @@ import {
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
+import {
+  CharacterDialogue,
+  type CharacterDialogueModel,
+} from "../components/overlay/CharacterDialogue";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
@@ -35,6 +39,15 @@ export type InlineRewardView =
       requiresReplacement: boolean;
     };
 
+/** Delayed persistent Mira guidance for the first tutorial dreamscape. */
+export interface DreamscapeGuideDialogueView {
+  readonly model: CharacterDialogueModel;
+  readonly delaySeconds: number;
+  readonly horizontalOffset: number;
+  readonly verticalOffset: number;
+  readonly bubbleWidth: number;
+}
+
 /** Everything the screen renders, mapped from live journey state by the builder. */
 export interface DreamscapeView {
   /** The dreamscape's scene art, or null while the dreamscape is unrevealed. */
@@ -47,6 +60,8 @@ export interface DreamscapeView {
   inlineRewards: Readonly<Record<string, InlineRewardView>>;
   /** Replacement choice shown after an at-cap Reward animation. */
   replacement: DreamsignReplacementView | null;
+  /** Mira's delayed tutorial-only explanation of Dream Sites. */
+  guideDialogue?: DreamscapeGuideDialogueView;
 }
 
 export interface DreamscapeScreenProps {
@@ -60,6 +75,8 @@ export interface DreamscapeScreenProps {
   onReplaceDreamsign: (dreamsignId: string) => void;
   /** Decline the pending Dreamsign Reward. */
   onDeclineReward: () => void;
+  /** Report when delayed tutorial guidance becomes visible. */
+  onGuideDialogueShown?: () => void;
 }
 
 /** Duration of the inline grant sequence. */
@@ -78,11 +95,13 @@ export function DreamscapeScreen({
   onInlineRewardAnimationComplete,
   onReplaceDreamsign,
   onDeclineReward,
+  onGuideDialogueShown,
 }: DreamscapeScreenProps) {
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const [collectingSiteId, setCollectingSiteId] = useState<
     string | null
   >(null);
+  const [guideDialogueVisible, setGuideDialogueVisible] = useState(false);
   const completionRequestedRef = useRef<string | null>(null);
   const onInlineRewardAnimationCompleteRef = useRef(
     onInlineRewardAnimationComplete,
@@ -131,6 +150,16 @@ export function DreamscapeScreen({
     return () => window.clearTimeout(timer);
   }, [collectingSiteId, collectingReward]);
 
+  useEffect(() => {
+    setGuideDialogueVisible(false);
+    if (view.guideDialogue === undefined) return;
+    const timer = window.setTimeout(() => {
+      setGuideDialogueVisible(true);
+      onGuideDialogueShown?.();
+    }, view.guideDialogue.delaySeconds * 1000);
+    return () => window.clearTimeout(timer);
+  }, [onGuideDialogueShown, view.guideDialogue]);
+
   return (
     <div
       className="cumulus"
@@ -163,6 +192,29 @@ export function DreamscapeScreen({
       )}
 
       <Motes on tint="warm" />
+
+      {view.guideDialogue !== undefined && (
+        <div
+          data-dreamscape-guide-dialogue-placement=""
+          style={{
+            position: "absolute",
+            zIndex: 30,
+            top: `calc(${token("--safe-top")} + ${token("--space-4")})`,
+            left: "50%",
+            width: `${String(view.guideDialogue.bubbleWidth)}px`,
+            maxWidth: `calc(100vw - 2 * ${token("--gutter")})`,
+            transform: `translate(calc(-50% + ${String(view.guideDialogue.horizontalOffset)}px), ${String(view.guideDialogue.verticalOffset)}px)`,
+            pointerEvents: "none",
+          }}
+        >
+          <CharacterDialogue
+            dialogue={view.guideDialogue.model}
+            visible={guideDialogueVisible}
+            size="wide"
+            testId="dreamscape-tutorial-dialogue"
+          />
+        </div>
+      )}
 
       {view.sites
         .filter(

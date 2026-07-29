@@ -124,19 +124,25 @@ export function createTutorialEditorApiMiddleware({
         });
       }
       const actions = validateTutorialActions(body.actions);
-      const { journeyStart, triggers, battle } =
+      const { journeyStart, dreamscape, triggers, battle } =
         readTutorialConfiguration({ rootDir });
       const tomlPath = join(rootDir, DEFAULT_TUTORIAL_TOML_PATH);
       const jsonPath = join(rootDir, DEFAULT_TUTORIAL_JSON_PATH);
       atomicWrite(
         fileSystem,
         tomlPath,
-        serializeTutorialToml(actions, triggers, battle, journeyStart),
+        serializeTutorialToml(
+          actions,
+          triggers,
+          battle,
+          journeyStart,
+          dreamscape,
+        ),
       );
       atomicWrite(
         fileSystem,
         jsonPath,
-        `${JSON.stringify({ journeyStart, actions, triggers, battle }, null, 2)}\n`,
+        `${JSON.stringify({ journeyStart, dreamscape, actions, triggers, battle }, null, 2)}\n`,
       );
       jsonResponse(res, 200, { actions });
     } catch (error) {

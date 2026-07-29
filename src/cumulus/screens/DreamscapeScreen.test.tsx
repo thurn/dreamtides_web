@@ -32,7 +32,27 @@ vi.mock("framer-motion", () => ({
         {children}
       </div>
     ),
+    section: ({
+      animate,
+      children,
+      initial: _initial,
+      transition: _transition,
+      ...props
+    }: {
+      animate?: { opacity?: number };
+      children: ReactNode;
+      initial?: unknown;
+      transition?: unknown;
+    } & HTMLAttributes<HTMLElement>) => (
+      <section
+        {...props}
+        data-motion-opacity={String(animate?.opacity)}
+      >
+        {children}
+      </section>
+    ),
   },
+  useReducedMotion: () => false,
 }));
 
 function siteModel(
@@ -112,6 +132,69 @@ afterEach(() => {
 });
 
 describe("DreamscapeScreen", () => {
+  it("shows persistent Mira guidance two seconds after it becomes eligible", () => {
+    vi.useFakeTimers();
+    const onGuideDialogueShown = vi.fn();
+    const tutorialView: DreamscapeView = {
+      ...VIEW,
+      guideDialogue: {
+        model: {
+          portrait: { kind: "character-portrait", characterId: "mira" },
+          portraitAlt: "Mira",
+          speakerName: "Mira",
+          text: "Visit [purple]Dream Sites[/purple].",
+        },
+        delaySeconds: 2,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 700,
+      },
+    };
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <DreamscapeScreen
+            view={tutorialView}
+            onSelectSite={() => undefined}
+            onInlineRewardAnimationComplete={() => undefined}
+            onReplaceDreamsign={() => undefined}
+            onDeclineReward={() => undefined}
+            onGuideDialogueShown={onGuideDialogueShown}
+          />
+        </CumulusRoot>,
+      );
+    });
+    const dialogue = () =>
+      container.querySelector('[data-testid="dreamscape-tutorial-dialogue"]');
+    expect(dialogue()?.getAttribute("data-character-dialogue-visible")).toBe(
+      "false",
+    );
+
+    act(() => {
+      vi.advanceTimersByTime(1_999);
+    });
+    expect(dialogue()?.getAttribute("data-character-dialogue-visible")).toBe(
+      "false",
+    );
+    expect(onGuideDialogueShown).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(dialogue()?.getAttribute("data-character-dialogue-visible")).toBe(
+      "true",
+    );
+    expect(onGuideDialogueShown).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      vi.advanceTimersByTime(30_000);
+    });
+    expect(dialogue()?.getAttribute("data-character-dialogue-visible")).toBe(
+      "true",
+    );
+    vi.useRealTimers();
+  });
+
   it("renders the scene, one node per unvisited site, and drops visited sites", () => {
     act(() => {
       root.render(

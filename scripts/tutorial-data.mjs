@@ -314,6 +314,37 @@ export function validateTutorialJourneyStartConfiguration(value) {
   };
 }
 
+/** Validate the delayed persistent Mira guidance for the first dreamscape. */
+export function validateTutorialDreamscapeConfiguration(value) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw invalid("Tutorial data must contain a dreamscape table.");
+  }
+  const parsed = validateTutorialSpeechBubble(
+    value.speechBubble,
+    "dreamscape",
+    true,
+  );
+  if (parsed.speaker !== "mira") {
+    throw invalid("Tutorial dreamscape speech bubble must target Mira.");
+  }
+  const delay = value.speechBubble.delay ?? 0;
+  if (typeof delay !== "number" || !Number.isFinite(delay) || delay < 0) {
+    throw invalid(
+      "Tutorial dreamscape speech bubble must have a non-negative delay.",
+    );
+  }
+  return {
+    speechBubble: {
+      speaker: parsed.speaker,
+      delay,
+      horizontalOffset: parsed.horizontalOffset,
+      verticalOffset: parsed.verticalOffset,
+      bubbleWidth: parsed.bubbleWidth,
+      text: parsed.text,
+    },
+  };
+}
+
 /** Validate and normalize tutorial actions from TOML or the editor API. */
 export function validateTutorialActions(value) {
   if (!Array.isArray(value)) {
@@ -707,6 +738,7 @@ export function readTutorialConfiguration({
     journeyStart: validateTutorialJourneyStartConfiguration(
       parsed.journeyStart,
     ),
+    dreamscape: validateTutorialDreamscapeConfiguration(parsed.dreamscape),
     actions: validateTutorialActions(parsed.actions),
     triggers: validateTutorialTriggers(parsed.triggers ?? []),
     battle: validateTutorialBattleConfiguration(parsed.battle),
@@ -724,14 +756,18 @@ export function serializeTutorialToml(
   triggers,
   battle,
   journeyStart,
+  dreamscape,
 ) {
   const normalized = validateTutorialActions(actions);
   const normalizedTriggers = validateTutorialTriggers(triggers);
   const normalizedBattle = validateTutorialBattleConfiguration(battle);
   const normalizedJourneyStart =
     validateTutorialJourneyStartConfiguration(journeyStart);
+  const normalizedDreamscape =
+    validateTutorialDreamscapeConfiguration(dreamscape);
   return `# Ordered actions and first-occurrence battle tutorials.\n\n${stringify({
     journeyStart: normalizedJourneyStart,
+    dreamscape: normalizedDreamscape,
     battle: normalizedBattle,
     actions: normalized,
     triggers: normalizedTriggers,
@@ -744,7 +780,7 @@ export function refreshTutorialDataJson({
   tutorialTomlPath = DEFAULT_TUTORIAL_TOML_PATH,
   tutorialJsonPath = DEFAULT_TUTORIAL_JSON_PATH,
 } = {}) {
-  const { journeyStart, actions, triggers, battle } =
+  const { journeyStart, dreamscape, actions, triggers, battle } =
     readTutorialConfiguration({
       rootDir,
       tutorialTomlPath,
@@ -753,7 +789,14 @@ export function refreshTutorialDataJson({
   mkdirSync(dirname(absoluteJsonPath), { recursive: true });
   writeFileSync(
     absoluteJsonPath,
-    `${JSON.stringify({ journeyStart, actions, triggers, battle }, null, 2)}\n`,
+    `${JSON.stringify({ journeyStart, dreamscape, actions, triggers, battle }, null, 2)}\n`,
   );
-  return { journeyStart, actions, triggers, battle, path: absoluteJsonPath };
+  return {
+    journeyStart,
+    dreamscape,
+    actions,
+    triggers,
+    battle,
+    path: absoluteJsonPath,
+  };
 }

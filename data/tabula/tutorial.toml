@@ -7,6 +7,14 @@ verticalOffset = 0
 bubbleWidth = 550
 text = "For each journey, you must choose a [purple]Dream Avatar[/purple] who provides a permanent ability."
 
+[dreamscape.speechBubble]
+speaker = "mira"
+delay = 2
+horizontalOffset = 0
+verticalOffset = 0
+bubbleWidth = 700
+text = "In each dream you will visit [purple]Dream Sites[/purple] to build your deck before confronting the Guardian of this dream."
+
 [battle]
 # Cards are drawn from each list in order after the authored tutorial actions
 # hand control to the playable battle.

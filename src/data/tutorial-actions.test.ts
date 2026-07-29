@@ -3,6 +3,7 @@ import {
   loadTutorialActions,
   parseTutorialActions,
   parseTutorialBattleConfiguration,
+  parseTutorialDreamscapeConfiguration,
   parseTutorialJourneyStartConfiguration,
   parseTutorialTriggers,
 } from "./tutorial-actions";
@@ -15,6 +16,16 @@ const ACTIONS_RESPONSE = {
       verticalOffset: 0,
       bubbleWidth: 550,
       text: "Choose a [purple]Dream Avatar[/purple].",
+    },
+  },
+  dreamscape: {
+    speechBubble: {
+      speaker: "mira",
+      delay: 2,
+      horizontalOffset: 0,
+      verticalOffset: 0,
+      bubbleWidth: 700,
+      text: "Visit [purple]Dream Sites[/purple].",
     },
   },
   actions: [
@@ -743,6 +754,22 @@ describe("parseTutorialActions", () => {
         text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
       },
     ]);
+  });
+});
+
+describe("parseTutorialDreamscapeConfiguration", () => {
+  it("preserves the authored delay and rejects invalid values", () => {
+    expect(
+      parseTutorialDreamscapeConfiguration(ACTIONS_RESPONSE.dreamscape),
+    ).toEqual(ACTIONS_RESPONSE.dreamscape);
+    expect(() =>
+      parseTutorialDreamscapeConfiguration({
+        speechBubble: {
+          ...ACTIONS_RESPONSE.dreamscape.speechBubble,
+          delay: -1,
+        },
+      }),
+    ).toThrow(/non-negative delay/u);
   });
 });
 

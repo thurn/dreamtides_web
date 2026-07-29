@@ -18,6 +18,16 @@ const mocks = vi.hoisted(() => ({
         text: "Choose an avatar.",
       },
     },
+    dreamscape: {
+      speechBubble: {
+        speaker: "mira",
+        delay: 2,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 700,
+        text: "Visit Dream Sites.",
+      },
+    },
     actions: [],
     triggers: [],
     battle: { playerDraws: [], enemyDraws: [], dreamwellDraws: [] },

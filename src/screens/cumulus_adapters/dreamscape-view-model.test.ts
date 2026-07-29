@@ -10,6 +10,7 @@ import { resolveArtRef } from "../../cumulus/primitives/art";
 import {
   battleLabel,
   buildDreamscapeHudView,
+  buildDreamscapeGuideDialogue,
   buildDreamscapeView,
   buildSiteModels,
   dreamscapeSceneRef,
@@ -154,6 +155,50 @@ describe("dreamscapeSceneRef / dreamscapeTitle", () => {
 });
 
 describe("buildDreamscapeView", () => {
+  it("builds first-dream guidance only after the tutorial deck modal closes", () => {
+    const configuration = {
+      speechBubble: {
+        speaker: "mira" as const,
+        delay: 2,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 700,
+        text: "Visit [purple]Dream Sites[/purple].",
+      },
+    };
+    const tutorialState = {
+      isTutorialJourney: true,
+      completionLevel: 0,
+      hasSeenStartingDeckPopup: false,
+    } as JourneyState;
+    expect(
+      buildDreamscapeGuideDialogue(tutorialState, configuration),
+    ).toBeUndefined();
+    expect(
+      buildDreamscapeGuideDialogue(
+        { ...tutorialState, hasSeenStartingDeckPopup: true },
+        configuration,
+      ),
+    ).toMatchObject({
+      delaySeconds: 2,
+      bubbleWidth: 700,
+      model: {
+        speakerName: "Mira",
+        text: "Visit [purple]Dream Sites[/purple].",
+      },
+    });
+    expect(
+      buildDreamscapeGuideDialogue(
+        {
+          ...tutorialState,
+          completionLevel: 1,
+          hasSeenStartingDeckPopup: true,
+        },
+        configuration,
+      ),
+    ).toBeUndefined();
+  });
+
   it("assembles the scene, placed sites, and bottom-HUD data", () => {
     const state = {
       essence: 240,

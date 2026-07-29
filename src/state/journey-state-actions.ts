@@ -429,6 +429,7 @@ export function startJourneyFromDreamAvatar({
   seedOverride,
   atlasRng,
   resolvedPackageOverride,
+  isTutorialJourney = false,
 }: {
   prev: JourneyState;
   dreamAvatar: DreamAvatarContent;
@@ -450,6 +451,8 @@ export function startJourneyFromDreamAvatar({
   atlasRng?: () => number;
   /** Authored package for flows such as the tutorial journey handoff. */
   resolvedPackageOverride?: ResolvedDreamAvatarPackage;
+  /** Marks the assembled run as the authored tutorial journey. */
+  isTutorialJourney?: boolean;
 }): JourneyState {
   const seed = seedOverride ?? generateJourneySeed();
   const poolContext = journeyContent.poolContext;
@@ -533,6 +536,7 @@ export function startJourneyFromDreamAvatar({
   return {
     ...prev,
     seed,
+    isTutorialJourney,
     essence: dreamAvatar.startingEssence,
     deck,
     dreamAvatar: toJourneyDreamAvatar(dreamAvatar),

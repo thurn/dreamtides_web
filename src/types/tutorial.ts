@@ -45,6 +45,15 @@ export interface TutorialJourneyStartConfiguration {
   };
 }
 
+/** Persistent guidance shown over the first tutorial dreamscape. */
+export interface TutorialDreamscapeConfiguration {
+  readonly speechBubble: TutorialSpeechBubblePresentation & {
+    readonly speaker: "mira";
+    /** Seconds after the dreamscape mounts before the bubble appears. */
+    readonly delay: number;
+  };
+}
+
 /** Authoritative card-visibility or battle edge that may open a supplemental tutorial. */
 export type TutorialTriggerEvent =
   | "card-seen"
@@ -77,6 +86,7 @@ export interface TutorialTriggerDefinition extends TutorialSpeechBubble {
 /** Complete generated tutorial configuration. */
 export interface TutorialConfiguration {
   readonly journeyStart: TutorialJourneyStartConfiguration;
+  readonly dreamscape: TutorialDreamscapeConfiguration;
   readonly actions: readonly TutorialAction[];
   readonly triggers: readonly TutorialTriggerDefinition[];
   readonly battle: TutorialBattleConfiguration;

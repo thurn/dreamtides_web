@@ -609,6 +609,7 @@ export default function App({
         const content = {
           ...loadedContent,
           tutorialJourneyStart: tutorial.journeyStart,
+          tutorialDreamscape: tutorial.dreamscape,
           tutorialTriggers: tutorial.triggers,
           tutorialBattle: tutorial.battle,
         };

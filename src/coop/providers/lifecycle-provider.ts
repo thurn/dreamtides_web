@@ -61,6 +61,7 @@ export function createJourneyLifecycleContentProvider(
         seedOverride: seed,
         atlasRng: seededRngFromString(`${seed}:atlas`),
         resolvedPackageOverride,
+        isTutorialJourney,
       });
     },
   };

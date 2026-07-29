@@ -23,6 +23,7 @@ import type {
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
 import type {
+  DreamscapeGuideDialogueView,
   DreamscapeView,
   InlineRewardView,
 } from "../../cumulus/screens/DreamscapeScreen";
@@ -33,6 +34,7 @@ import type {
   DreamscapeNode,
   JourneyState,
 } from "../../types/journey";
+import type { TutorialDreamscapeConfiguration } from "../../types/tutorial";
 
 /** The completion level at which the guardian battle is the final boss. */
 const FINAL_BOSS_COMPLETION_LEVEL = 6;
@@ -212,6 +214,7 @@ export function buildDreamscapeView(
   node: DreamscapeNode,
   state: JourneyState,
   replacementSiteId: string | null = null,
+  tutorialConfiguration?: TutorialDreamscapeConfiguration,
 ): DreamscapeView {
   const inlineRewards: Record<string, InlineRewardView> = {};
   node.sites.forEach((site) => {
@@ -242,6 +245,60 @@ export function buildDreamscapeView(
     sites: buildSiteModels(node, state.completionLevel),
     inlineRewards,
     replacement: buildDreamsignReplacementView(state, replacementSiteId),
+    guideDialogue: buildDreamscapeGuideDialogue(
+      state,
+      tutorialConfiguration,
+    ),
+  };
+}
+
+/** Build Mira's guidance only after the tutorial starter-deck modal closes. */
+export function buildDreamscapeGuideDialogue(
+  state: JourneyState,
+  configuration?: TutorialDreamscapeConfiguration,
+): DreamscapeGuideDialogueView | undefined {
+  if (
+    state.isTutorialJourney !== true ||
+    state.completionLevel !== 0 ||
+    !state.hasSeenStartingDeckPopup ||
+    configuration === undefined
+  ) {
+    return undefined;
+  }
+  const speechBubble = configuration.speechBubble;
+  return {
+    model: {
+      portrait: { kind: "character-portrait", characterId: "mira" },
+      portraitAlt: "Mira",
+      speakerName: "Mira",
+      text: speechBubble.text,
+    },
+    delaySeconds: speechBubble.delay,
+    horizontalOffset: speechBubble.horizontalOffset,
+    verticalOffset: speechBubble.verticalOffset,
+    bubbleWidth: speechBubble.bubbleWidth,
+  };
+}
+
+/** Reconstruction fields for the moment delayed dreamscape guidance appears. */
+export function buildDreamscapeGuidanceLog(
+  nodeId: string,
+  state: JourneyState,
+  dialogue: DreamscapeGuideDialogueView,
+): {
+  readonly key: string;
+  readonly fields: Record<string, unknown>;
+} {
+  return {
+    key: `tutorial-dreamscape-guidance:${state.runId ?? state.seed}:${nodeId}`,
+    fields: {
+      nodeId,
+      delaySeconds: dialogue.delaySeconds,
+      horizontalOffsetPx: dialogue.horizontalOffset,
+      verticalOffsetPx: dialogue.verticalOffset,
+      bubbleWidthPx: dialogue.bubbleWidth,
+      text: dialogue.model.text,
+    },
   };
 }
 

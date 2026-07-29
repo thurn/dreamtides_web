@@ -16,6 +16,7 @@ import {
   stripJsonComments,
 } from "./lib/card-refs.mjs";
 import {
+  validateTutorialDreamscapeConfiguration,
   validateTutorialJourneyStartConfiguration,
   validateTutorialActions,
   validateTutorialBattleConfiguration,
@@ -1125,6 +1126,9 @@ export function setupAssets({
   const tutorialJourneyStart = validateTutorialJourneyStartConfiguration(
     tutorialSource.journeyStart,
   );
+  const tutorialDreamscape = validateTutorialDreamscapeConfiguration(
+    tutorialSource.dreamscape,
+  );
   const tutorialActions = validateTutorialActions(tutorialSource.actions);
   const tutorialTriggers = validateTutorialTriggers(tutorialSource.triggers ?? []);
   const tutorialBattle = validateTutorialBattleConfiguration(tutorialSource.battle);
@@ -1132,6 +1136,7 @@ export function setupAssets({
     tutorialJsonPath,
     `${JSON.stringify({
       journeyStart: tutorialJourneyStart,
+      dreamscape: tutorialDreamscape,
       actions: tutorialActions,
       triggers: tutorialTriggers,
       battle: tutorialBattle,

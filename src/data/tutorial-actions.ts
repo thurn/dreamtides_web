@@ -3,6 +3,7 @@ import type {
   TutorialAction,
   TutorialBattleConfiguration,
   TutorialConfiguration,
+  TutorialDreamscapeConfiguration,
   TutorialJourneyStartConfiguration,
   TutorialSpeechBubble,
   TutorialTriggerDefinition,
@@ -173,6 +174,41 @@ export function parseTutorialJourneyStartConfiguration(
   return {
     speechBubble: {
       speaker: parsed.speaker,
+      horizontalOffset: parsed.horizontalOffset,
+      verticalOffset: parsed.verticalOffset,
+      bubbleWidth: parsed.bubbleWidth,
+      text: parsed.text,
+    },
+  };
+}
+
+/** Validate the delayed persistent Mira guidance for the first dreamscape. */
+export function parseTutorialDreamscapeConfiguration(
+  value: unknown,
+): TutorialDreamscapeConfiguration {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Tutorial data must contain a dreamscape table.");
+  }
+  const record = value as Record<string, unknown>;
+  const parsed = parseTutorialSpeechBubble(
+    record.speechBubble,
+    "dreamscape",
+    true,
+  );
+  if (parsed === undefined || parsed.speaker !== "mira") {
+    throw new Error("Tutorial dreamscape speech bubble must target Mira.");
+  }
+  const speechBubble = record.speechBubble as Record<string, unknown>;
+  const delay = speechBubble.delay ?? 0;
+  if (typeof delay !== "number" || !Number.isFinite(delay) || delay < 0) {
+    throw new Error(
+      "Tutorial dreamscape speech bubble must have a non-negative delay.",
+    );
+  }
+  return {
+    speechBubble: {
+      speaker: parsed.speaker,
+      delay,
       horizontalOffset: parsed.horizontalOffset,
       verticalOffset: parsed.verticalOffset,
       bubbleWidth: parsed.bubbleWidth,
@@ -648,6 +684,7 @@ export async function loadTutorialConfiguration(
   const record = body as Record<string, unknown>;
   return {
     journeyStart: parseTutorialJourneyStartConfiguration(record.journeyStart),
+    dreamscape: parseTutorialDreamscapeConfiguration(record.dreamscape),
     actions: parseTutorialActions(record.actions),
     triggers: parseTutorialTriggers(record.triggers ?? []),
     battle: parseTutorialBattleConfiguration(record.battle),

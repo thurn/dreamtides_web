@@ -483,6 +483,8 @@ export interface ShopModifiers {
 export interface JourneyState {
   /** Event-log identity of the current assembled or loaded run. */
   readonly runId: string | null;
+  /** Whether this run was assembled from the authored tutorial journey handoff. */
+  readonly isTutorialJourney?: boolean;
   /**
    * Per-journey random seed generated once at journey start. Mixed into derived
    * generators that must vary across distinct journeys but stay stable for the

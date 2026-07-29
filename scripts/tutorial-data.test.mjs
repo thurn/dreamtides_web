@@ -9,6 +9,7 @@ import {
   serializeTutorialToml,
   validateTutorialActions,
   validateTutorialBattleConfiguration,
+  validateTutorialDreamscapeConfiguration,
   validateTutorialTriggers,
 } from "./tutorial-data.mjs";
 
@@ -39,6 +40,17 @@ const FIXTURE_JOURNEY_START = {
     verticalOffset: 0,
     bubbleWidth: 550,
     text: "Choose a [purple]Dream Avatar[/purple].",
+  },
+};
+
+const FIXTURE_DREAMSCAPE = {
+  speechBubble: {
+    speaker: "mira",
+    delay: 2,
+    horizontalOffset: 0,
+    verticalOffset: 0,
+    bubbleWidth: 700,
+    text: "Visit [purple]Dream Sites[/purple].",
   },
 };
 
@@ -122,6 +134,20 @@ const FIXTURE_ACTIONS = [
 ];
 
 describe("tutorial data", () => {
+  it("normalizes persistent dreamscape guidance and rejects invalid delays", () => {
+    expect(
+      validateTutorialDreamscapeConfiguration(FIXTURE_DREAMSCAPE),
+    ).toEqual(FIXTURE_DREAMSCAPE);
+    expect(() =>
+      validateTutorialDreamscapeConfiguration({
+        speechBubble: {
+          ...FIXTURE_DREAMSCAPE.speechBubble,
+          delay: -1,
+        },
+      }),
+    ).toThrow(/non-negative delay/u);
+  });
+
   it("round-trips typed actions through TOML and generated JSON", () => {
     const rootDir = mkdtempSync(join(tmpdir(), "tutorial-data-"));
     mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
@@ -132,6 +158,7 @@ describe("tutorial data", () => {
         [],
         FIXTURE_BATTLE,
         FIXTURE_JOURNEY_START,
+        FIXTURE_DREAMSCAPE,
       ),
     );
 
@@ -140,12 +167,14 @@ describe("tutorial data", () => {
     expect(result.actions).toEqual(FIXTURE_ACTIONS);
     expect(result.battle).toEqual(FIXTURE_BATTLE);
     expect(result.journeyStart).toEqual(FIXTURE_JOURNEY_START);
+    expect(result.dreamscape).toEqual(FIXTURE_DREAMSCAPE);
     expect(
       JSON.parse(
         readFileSync(join(rootDir, "public", "tutorial-data.json"), "utf8"),
       ),
     ).toEqual({
       journeyStart: FIXTURE_JOURNEY_START,
+      dreamscape: FIXTURE_DREAMSCAPE,
       actions: FIXTURE_ACTIONS,
       triggers: [],
       battle: FIXTURE_BATTLE,
@@ -157,10 +186,12 @@ describe("tutorial data", () => {
           [],
           FIXTURE_BATTLE,
           FIXTURE_JOURNEY_START,
+          FIXTURE_DREAMSCAPE,
         ),
       ),
     ).toMatchObject({
       journeyStart: FIXTURE_JOURNEY_START,
+      dreamscape: FIXTURE_DREAMSCAPE,
       actions: FIXTURE_ACTIONS,
       battle: FIXTURE_BATTLE,
     });
@@ -479,6 +510,7 @@ describe("tutorial data", () => {
           triggers,
           FIXTURE_BATTLE,
           FIXTURE_JOURNEY_START,
+          FIXTURE_DREAMSCAPE,
         ),
       )
         .triggers,

@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DreamscapeScreen } from "../../cumulus/screens/DreamscapeScreen";
-import { logEvent } from "../../logging";
+import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
 import {
   buildDreamscapeOverviewLog,
+  buildDreamscapeGuidanceLog,
   buildDreamscapeView,
   resolveDreamscapeSiteSelection,
 } from "./dreamscape-view-model";
@@ -15,7 +16,7 @@ import {
 
 /** Wires the live journey fold to the pure Cumulus Dreamscape screen. */
 export function DreamscapeScreenAdapter() {
-  const { state, mutations } = useJourney();
+  const { state, mutations, journeyContent } = useJourney();
   const node = state.currentDreamscape === null
     ? undefined
     : state.atlas.nodes[state.currentDreamscape];
@@ -23,8 +24,18 @@ export function DreamscapeScreenAdapter() {
   const view = useMemo(
     () => node === undefined
       ? null
-      : buildDreamscapeView(node, state, replacementSiteId),
-    [node, replacementSiteId, state],
+      : buildDreamscapeView(
+          node,
+          state,
+          replacementSiteId,
+          journeyContent.tutorialDreamscape,
+        ),
+    [
+      journeyContent.tutorialDreamscape,
+      node,
+      replacementSiteId,
+      state,
+    ],
   );
   const loggedNodeRef = useRef<string | null>(null);
 
@@ -92,6 +103,12 @@ export function DreamscapeScreenAdapter() {
     setReplacementSiteId(null);
   }, [mutations, node, replacementSiteId, state]);
 
+  const handleGuideDialogueShown = useCallback(() => {
+    if (node === undefined || view?.guideDialogue === undefined) return;
+    const entry = buildDreamscapeGuidanceLog(node.id, state, view.guideDialogue);
+    logEventOnce(entry.key, "tutorial_dreamscape_guidance_shown", entry.fields);
+  }, [node, state, view?.guideDialogue]);
+
   if (view === null) return null;
   return (
     <DreamscapeScreen
@@ -100,6 +117,7 @@ export function DreamscapeScreenAdapter() {
       onInlineRewardAnimationComplete={handleInlineRewardAnimationComplete}
       onReplaceDreamsign={handleReplaceDreamsign}
       onDeclineReward={handleDeclineReward}
+      onGuideDialogueShown={handleGuideDialogueShown}
     />
   );
 }

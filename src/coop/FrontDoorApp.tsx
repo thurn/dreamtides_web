@@ -66,6 +66,7 @@ export default function FrontDoorApp({
       const content = {
         ...loadedContent,
         tutorialJourneyStart: tutorial.journeyStart,
+        tutorialDreamscape: tutorial.dreamscape,
         tutorialTriggers: tutorial.triggers,
         tutorialBattle: tutorial.battle,
       };

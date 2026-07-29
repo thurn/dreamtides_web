@@ -34,7 +34,7 @@ function fixtureRoot() {
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
   writeFileSync(
     join(rootDir, "data", "tabula", "tutorial.toml"),
-    '[journeyStart.speechBubble]\nspeaker = "mira"\nhorizontalOffset = 40\nverticalOffset = 0\nbubbleWidth = 550\ntext = "Choose a [purple]Dream Avatar[/purple]."\n\n[battle]\nplayerDraws = ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"]\nenemyDraws = ["a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"]\ndreamwellDraws = ["7171ff89-ebe4-42d0-8863-9b4b0531cad2"]\n\n[[actions]]\nid = "old"\naction = "display-speech-bubble"\nspeechBubble = { speaker = "mira", duration = 3, horizontalOffset = 0, verticalOffset = 0, bubbleWidth = 700, text = "Old." }\nwait = 0\n\n[[triggers]]\nid = "support"\non = ["card-play"]\npriority = 100\nduration = 3\nmatch = { kind = "glossary", id = "support" }\ntext = "Support."\n',
+    '[journeyStart.speechBubble]\nspeaker = "mira"\nhorizontalOffset = 40\nverticalOffset = 0\nbubbleWidth = 550\ntext = "Choose a [purple]Dream Avatar[/purple]."\n\n[dreamscape.speechBubble]\nspeaker = "mira"\ndelay = 2\nhorizontalOffset = 0\nverticalOffset = 0\nbubbleWidth = 700\ntext = "Visit [purple]Dream Sites[/purple]."\n\n[battle]\nplayerDraws = ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"]\nenemyDraws = ["a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"]\ndreamwellDraws = ["7171ff89-ebe4-42d0-8863-9b4b0531cad2"]\n\n[[actions]]\nid = "old"\naction = "display-speech-bubble"\nspeechBubble = { speaker = "mira", duration = 3, horizontalOffset = 0, verticalOffset = 0, bubbleWidth = 700, text = "Old." }\nwait = 0\n\n[[triggers]]\nid = "support"\non = ["card-play"]\npriority = 100\nduration = 3\nmatch = { kind = "glossary", id = "support" }\ntext = "Support."\n',
   );
   return rootDir;
 }
@@ -97,6 +97,12 @@ describe("tutorial editor api", () => {
           bubbleWidth: 550,
         },
       },
+      dreamscape: {
+        speechBubble: {
+          delay: 2,
+          text: "Visit [purple]Dream Sites[/purple].",
+        },
+      },
       triggers: [{ id: "support" }],
       battle: {
         playerDraws: ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"],
@@ -110,6 +116,12 @@ describe("tutorial editor api", () => {
         speechBubble: {
           horizontalOffset: 40,
           bubbleWidth: 550,
+        },
+      },
+      dreamscape: {
+        speechBubble: {
+          delay: 2,
+          text: "Visit [purple]Dream Sites[/purple].",
         },
       },
       triggers: [{ id: "support" }],

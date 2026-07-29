@@ -124,6 +124,11 @@ and end turn may attach one. The model configures speaker, text, visible
 duration, desktop width, and vertical offset. The Tutorial Editor presents one
 shared control set for that model in every parent action.
 
+The `journeyStart` and `dreamscape` tables author persistent Mira guidance for
+the tutorial journey handoff. Dreamscape guidance includes its appearance delay;
+the first dreamscape begins that delay when the player dismisses the
+starting-deck modal.
+
 Supplemental tutorial triggers are shared first-occurrence explanations. Their
 seen ids live in the room fold, so a keyword explained on a journey card is
 already familiar when it later appears in battle. Card-bearing site screens

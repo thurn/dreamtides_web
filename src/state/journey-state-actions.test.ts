@@ -511,9 +511,11 @@ describe("journey state actions", () => {
       journeyContent,
       seedOverride: "tutorial-seed",
       resolvedPackageOverride: authoredPackage,
+      isTutorialJourney: true,
     });
 
     expect(next.resolvedPackage).toBe(authoredPackage);
+    expect(next.isTutorialJourney).toBe(true);
     expect(next.draftState?.mode).toBe("pool");
     expect(
       (next.draftState as PoolDraftState).draftPoolCopiesByCard,
