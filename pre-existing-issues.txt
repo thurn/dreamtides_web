@@ -1,0 +1,22 @@
+## Coop Draft card guidance races between connected clients
+
+Two connected clients can independently submit `OPEN_CARD_TUTORIAL_GUIDANCE`
+for the same persisted Draft offer. The first intent applies, while the second
+bounces with `invalid_action` and shows the losing client:
+
+> Action not applied: it is not valid for the current game state.
+
+Reproduction:
+
+1. Join the same tutorial journey room in two browser clients.
+2. Reach a Draft offer that triggers first-occurrence card tutorial guidance.
+3. Allow both clients to render the persisted offer.
+
+Expected: the shared guidance transition is emitted once, or a duplicate intent
+is reconciled without a player-visible action failure.
+
+Observed in pre-demo room `8goftw` on 2026-07-29 at event pairs 127/128 and
+144/145. In each pair, one `OPEN_CARD_TUTORIAL_GUIDANCE` applied and the other
+bounced. The captured room log is at
+`artifacts/coop-fuzz/manual-pre-demo-20260729/room-8goftw.json` in the testing
+worktree (the artifact directory is gitignored).
