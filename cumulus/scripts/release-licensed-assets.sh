@@ -8,6 +8,15 @@ fail()
     exit 1
 }
 
+read_cumulus_config()
+{
+    config_value=$(git config --get "journey.$1" 2>/dev/null || true)
+    if [ -z "$config_value" ]; then
+        config_value=$(git config --get "quest.$1" 2>/dev/null || true)
+    fi
+    printf '%s\n' "$config_value"
+}
+
 public_root=$(git rev-parse --show-toplevel 2>/dev/null) ||
     fail "run this command from a journey_prototype worktree"
 target="$public_root/cumulus/Assets/ThirdParty"
@@ -19,7 +28,7 @@ fi
 
 licensed_repo=${CUMULUS_LICENSED_REPO:-}
 if [ -z "$licensed_repo" ]; then
-    licensed_repo=$(git config --get journey.cumulusLicensedRepo 2>/dev/null || true)
+    licensed_repo=$(read_cumulus_config cumulusLicensedRepo)
 fi
 [ -n "$licensed_repo" ] ||
     fail "set CUMULUS_LICENSED_REPO or git config journey.cumulusLicensedRepo"

@@ -19,7 +19,7 @@ printf '%s\n' "fixture-guid" >"$licensed_source/Synty/Example/Asset.prefab.meta"
 git -C "$licensed_source" add --all
 git -C "$licensed_source" commit -q -m "Licensed fixture"
 git clone -q --bare "$licensed_source" "$licensed_repo"
-git -C "$licensed_repo" config journey.localOnly true
+git -C "$licensed_repo" config quest.localOnly true
 git -C "$licensed_repo" remote remove origin 2>/dev/null || true
 git -C "$licensed_repo" worktree add -q "$licensed_seed" main
 
@@ -31,13 +31,13 @@ printf '%s\n' "cumulus/Assets/ThirdParty/" >"$public_repo/.gitignore"
 git -C "$public_repo" add .gitignore
 git -C "$public_repo" commit -q -m "Public fixture"
 git -C "$public_repo" switch -q -c wt/licensed-fixture
+git -C "$public_repo" config quest.cumulusLicensedRepo "$licensed_repo"
+git -C "$public_repo" config quest.cumulusLicensedSeed "$licensed_seed"
 
 git -C "$licensed_repo" remote add forbidden "$fixture_root/nowhere"
 if (
     cd "$public_repo"
-    CUMULUS_LICENSED_REPO="$licensed_repo" \
-    CUMULUS_LICENSED_SEED="$licensed_seed" \
-        "$script_dir/provision-licensed-assets.sh"
+    "$script_dir/provision-licensed-assets.sh"
 ); then
     echo "expected a configured remote to be rejected" >&2
     exit 1
@@ -46,12 +46,8 @@ git -C "$licensed_repo" remote remove forbidden
 
 (
     cd "$public_repo"
-    CUMULUS_LICENSED_REPO="$licensed_repo" \
-    CUMULUS_LICENSED_SEED="$licensed_seed" \
-        "$script_dir/provision-licensed-assets.sh"
-    CUMULUS_LICENSED_REPO="$licensed_repo" \
-    CUMULUS_LICENSED_SEED="$licensed_seed" \
-        "$script_dir/provision-licensed-assets.sh"
+    "$script_dir/provision-licensed-assets.sh"
+    "$script_dir/provision-licensed-assets.sh"
 )
 
 target="$public_repo/cumulus/Assets/ThirdParty"
@@ -66,14 +62,24 @@ git -C "$target" restore Synty/Example/Asset.prefab.meta
 
 (
     cd "$public_repo"
-    CUMULUS_LICENSED_REPO="$licensed_repo" \
-    CUMULUS_LICENSED_SEED="$licensed_seed" \
-        "$script_dir/release-licensed-assets.sh"
-    CUMULUS_LICENSED_REPO="$licensed_repo" \
-    CUMULUS_LICENSED_SEED="$licensed_seed" \
-        "$script_dir/release-licensed-assets.sh"
+    "$script_dir/release-licensed-assets.sh"
+    "$script_dir/release-licensed-assets.sh"
 )
 test ! -e "$target"
 git -C "$licensed_repo" show-ref --verify --quiet refs/heads/wt/licensed-fixture
+
+git -C "$public_repo" config journey.cumulusLicensedRepo "$licensed_repo"
+git -C "$public_repo" config journey.cumulusLicensedSeed "$licensed_seed"
+git -C "$public_repo" config quest.cumulusLicensedRepo "$fixture_root/stale-repo"
+git -C "$public_repo" config quest.cumulusLicensedSeed "$fixture_root/stale-seed"
+git -C "$licensed_repo" config journey.localOnly true
+git -C "$licensed_repo" config quest.localOnly false
+
+(
+    cd "$public_repo"
+    "$script_dir/provision-licensed-assets.sh"
+    "$script_dir/release-licensed-assets.sh"
+)
+test ! -e "$target"
 
 echo "provision-licensed-assets tests passed"
