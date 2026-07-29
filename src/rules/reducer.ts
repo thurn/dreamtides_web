@@ -167,6 +167,16 @@ function isPassiveHostedHandoff(
   state: FoldState,
   event: GameEvent,
 ): boolean {
+  if (
+    event.type === "BATTLE_COMMAND" &&
+    battleEvents.isPassiveHostedBattleHandoff(
+      state,
+      event.payload,
+      event.intentKey,
+    )
+  ) {
+    return true;
+  }
   if (event.type === "OPEN_SITE" || event.type === "ENTER_DRAFT_SITE") {
     const siteId = event.payload.siteId;
     return (

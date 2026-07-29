@@ -41,6 +41,7 @@ import type {
 } from "../../battle/types";
 import { FRONT_RANK_SLOTS, frontRankSlotId, rankSlotIds } from "../../battle/types";
 import type { BattleCommand, BattleDebugEdit } from "../../battle/debug/commands";
+import { automaticBattleIntentKey } from "../../battle/automatic-intent-key";
 import type {
   BattleModifier,
   JourneyFailureBattleResult,
@@ -855,6 +856,59 @@ export function battleCommand(
   actor?: string,
 ): FoldState | null {
   return battleCommandInternal(state, payload, ctx, actor, false);
+}
+
+/**
+ * Recognizes the two journey-battle lifecycle handoffs that every connected
+ * client observes and may race to append. Hosted observers remain unable to
+ * submit player or debug decisions: the command envelope, intent key, and
+ * folded prerequisites must all exactly match the automatic transition.
+ */
+export function isPassiveHostedBattleHandoff(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  intentKey: string | undefined,
+): boolean {
+  const battle = state.battle;
+  if (
+    battle === null ||
+    battleModeOf(battle).kind !== "journey" ||
+    typeof intentKey !== "string"
+  ) {
+    return false;
+  }
+  const command = coerceBattleCommand(payload.command);
+  if (
+    command === null ||
+    command.id !== "DEBUG_EDIT" ||
+    command.actor !== "system" ||
+    command.sourceSurface !== "auto-system" ||
+    automaticBattleIntentKey(
+      battle.init.battleId,
+      battle.board,
+      command,
+    ) !== intentKey
+  ) {
+    return false;
+  }
+
+  const { board } = battle;
+  if (board.result !== null || board.phase !== "dreamwell") {
+    return false;
+  }
+  if (command.edit.kind === "DRAW_DREAMWELL_CARD") {
+    return (
+      command.edit.additional !== true &&
+      command.edit.side === board.activeSide &&
+      command.edit.turnNumber === board.turnNumber
+    );
+  }
+  return (
+    command.edit.kind === "SET_PHASE" &&
+    command.edit.phase === "day" &&
+    board.turnNumber === 1 &&
+    board.sides[board.activeSide].dreamwellDrawnTurn === board.turnNumber
+  );
 }
 
 function battleCommandInternal(

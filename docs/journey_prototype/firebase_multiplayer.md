@@ -170,9 +170,10 @@ semantic-collision diagnostic.
 Hosted observers cannot submit player decisions. Deterministic lifecycle
 handoffs whose prerequisite is already fixed in the fold may be committed by
 any client. These include bootstrapping the currently displayed site or Draft
-offer and completing an exhausted Draft site. Their run-scoped intent keys make
-concurrent submissions one shared transition, and the room controller remains
-unchanged.
+offer, completing an exhausted Draft site, revealing the active side's
+mandatory Dreamwell card, and entering Day after the first-turn reveal. Their
+run-scoped intent keys make concurrent submissions one shared transition, and
+the room controller remains unchanged.
 
 ## Local Testing
 

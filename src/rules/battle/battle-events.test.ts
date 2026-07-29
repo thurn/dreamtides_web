@@ -15,6 +15,8 @@ import {
   FRONT_RANK_SLOTS,
   frontRankSlotId,
 } from "../../battle/types";
+import { automaticBattleIntentKey } from "../../battle/automatic-intent-key";
+import type { BattleCommand } from "../../battle/debug/commands";
 import { isoTimestampToMs } from "./timestamp";
 import {
   emptyBackRankSlots,
@@ -861,6 +863,168 @@ function firstSafeDeterministicDreamwell(probe: BattleMutableState): { id: strin
 function debugEdit(edit: Record<string, unknown>): Record<string, unknown> {
   return { command: { id: "DEBUG_EDIT", edit } };
 }
+
+function hostedJourneyBattleState(board: BattleMutableState): FoldState {
+  return {
+    ...baseState(),
+    playtestControl: {
+      mode: "single-controller",
+      controllerClientId: "controller",
+    },
+    battle: battleFrom(board),
+  };
+}
+
+function automaticCommand(
+  edit: Extract<BattleCommand, { id: "DEBUG_EDIT" }>["edit"],
+): BattleCommand {
+  return {
+    id: "DEBUG_EDIT",
+    edit,
+    actor: "system",
+    sourceSurface: "auto-system",
+  };
+}
+
+function reduceObserverBattleCommand(
+  state: FoldState,
+  command: BattleCommand,
+  intentKey: string | undefined,
+): ReduceResult {
+  return reduceGameEvent(
+    state,
+    {
+      ...event("BATTLE_COMMAND", { command }, "observer"),
+      ...(intentKey === undefined ? {} : { intentKey }),
+    },
+    ctx(),
+  );
+}
+
+describe("hosted journey battle automatic handoffs", () => {
+  it("lets an observer commit the mandatory Dreamwell reveal", () => {
+    const board = makeRichBoard({ phase: "dreamwell", turnNumber: 1 });
+    const state = hostedJourneyBattleState(board);
+    const command = automaticCommand({
+      kind: "DRAW_DREAMWELL_CARD",
+      side: "player",
+      turnNumber: 1,
+    });
+    const intentKey = automaticBattleIntentKey(
+      state.battle!.init.battleId,
+      board,
+      command,
+    );
+
+    const result = reduceObserverBattleCommand(state, command, intentKey);
+
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.sides.player.dreamwellDrawnTurn).toBe(1);
+    expect(result.state.playtestControl?.controllerClientId).toBe("controller");
+  });
+
+  it("lets an observer enter Day after the first-turn Dreamwell reveal", () => {
+    const board = makeRichBoard({
+      phase: "dreamwell",
+      turnNumber: 1,
+      playerDreamwellDrawnTurn: 1,
+    });
+    const state = hostedJourneyBattleState(board);
+    const command = automaticCommand({
+      kind: "SET_PHASE",
+      phase: "day",
+    });
+    const intentKey = automaticBattleIntentKey(
+      state.battle!.init.battleId,
+      board,
+      command,
+    );
+
+    const result = reduceObserverBattleCommand(state, command, intentKey);
+
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.phase).toBe("day");
+    expect(result.state.playtestControl?.controllerClientId).toBe("controller");
+  });
+
+  it("rejects observer commands without the exact automatic intent identity", () => {
+    const board = makeRichBoard({ phase: "dreamwell", turnNumber: 1 });
+    const state = hostedJourneyBattleState(board);
+    const command = automaticCommand({
+      kind: "DRAW_DREAMWELL_CARD",
+      side: "player",
+      turnNumber: 1,
+    });
+
+    for (const intentKey of [
+      undefined,
+      "battle:battle-cmd:dreamwell:enemy:1",
+    ]) {
+      const result = reduceObserverBattleCommand(state, command, intentKey);
+      expect(result.outcome).toBe("bounced");
+      expect(result.bounceReason).toBe("observer_read_only");
+      expect(result.state).toBe(state);
+    }
+  });
+
+  it("rejects observer commands outside the fixed automatic prerequisites", () => {
+    const beforeReveal = makeRichBoard({ phase: "dreamwell", turnNumber: 1 });
+    const beforeRevealState = hostedJourneyBattleState(beforeReveal);
+    const earlyDay = automaticCommand({ kind: "SET_PHASE", phase: "day" });
+    const earlyDayKey = automaticBattleIntentKey(
+      beforeRevealState.battle!.init.battleId,
+      beforeReveal,
+      earlyDay,
+    );
+    const earlyDayResult = reduceObserverBattleCommand(
+      beforeRevealState,
+      earlyDay,
+      earlyDayKey,
+    );
+    expect(earlyDayResult.outcome).toBe("bounced");
+    expect(earlyDayResult.bounceReason).toBe("observer_read_only");
+
+    const manualDraw: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "DRAW_DREAMWELL_CARD",
+        side: "player",
+        turnNumber: 1,
+        additional: true,
+      },
+      actor: "player",
+      sourceSurface: "status-strip",
+    };
+    const forgedKey = "battle:battle-cmd:dreamwell:player:1";
+    const manualDrawResult = reduceObserverBattleCommand(
+      beforeRevealState,
+      manualDraw,
+      forgedKey,
+    );
+    expect(manualDrawResult.outcome).toBe("bounced");
+    expect(manualDrawResult.bounceReason).toBe("observer_read_only");
+
+    const afterReveal = makeRichBoard({
+      phase: "dreamwell",
+      turnNumber: 1,
+      playerDreamwellDrawnTurn: 1,
+    });
+    const afterRevealState = hostedJourneyBattleState(afterReveal);
+    const forgedPhase = automaticCommand({ kind: "SET_PHASE", phase: "dusk" });
+    const forgedPhaseKey = automaticBattleIntentKey(
+      afterRevealState.battle!.init.battleId,
+      afterReveal,
+      forgedPhase,
+    );
+    const forgedPhaseResult = reduceObserverBattleCommand(
+      afterRevealState,
+      forgedPhase,
+      forgedPhaseKey,
+    );
+    expect(forgedPhaseResult.outcome).toBe("bounced");
+    expect(forgedPhaseResult.bounceReason).toBe("observer_read_only");
+  });
+});
 
 describe("BATTLE_COMMAND fold-time triggers", () => {
   it("bounces when no battle is in progress", () => {
