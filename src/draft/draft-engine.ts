@@ -231,10 +231,7 @@ function eligibleOpeningOffer(
     return null;
   }
   for (const cardNumber of authored) {
-    if (
-      shownThisVisit.has(cardNumber) ||
-      (state.remainingCopiesByCard[String(cardNumber)] ?? 0) <= 0
-    ) {
+    if (shownThisVisit.has(cardNumber)) {
       return null;
     }
   }
