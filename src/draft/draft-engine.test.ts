@@ -174,6 +174,44 @@ describe("fixed multiset offer generation", () => {
     });
   });
 
+  it("presents authored opening offers for the first two journey picks", () => {
+    const cardDatabase = buildDB(
+      Array.from({ length: 12 }, (_, index) => makeCard(index + 1)),
+    );
+    const resolvedPackage = {
+      ...buildResolvedPackage(
+        Object.fromEntries(
+          Array.from({ length: 12 }, (_, index) => [index + 1, 1]),
+        ),
+      ),
+      openingDraftOffers: {
+        "1": [8, 6, 4, 2],
+        "2": [7, 5, 3, 1],
+      },
+    };
+    const state = initializeDraftState(cardDatabase, resolvedPackage);
+
+    enterDraftSite(state, "site-a", cardDatabase, undefined, undefined, () => 0);
+    expect(state.currentOffer).toEqual([8, 6, 4, 2]);
+
+    processPlayerPick(8, state, cardDatabase, undefined, undefined, () => 0);
+    expect(state.currentOffer).toEqual([7, 5, 3, 1]);
+    expect(
+      getLogEntries()
+        .filter((entry) => entry.event === "draft_offer_revealed")
+        .map((entry) => entry.source),
+    ).toEqual(["authored_opening", "authored_opening"]);
+
+    processPlayerPick(7, state, cardDatabase, undefined, undefined, () => 0);
+    expect(state.currentOffer).toEqual([9, 10, 11, 12]);
+    const revealedOffers = getLogEntries().filter(
+      (entry) => entry.event === "draft_offer_revealed",
+    );
+    expect(revealedOffers[revealedOffers.length - 1]?.source).toBe(
+      "weighted_pool",
+    );
+  });
+
   it("samples names proportionally to remaining copies", () => {
     const cardDatabase = buildDB(
       Array.from({ length: 5 }, (_, index) => makeCard(index + 1)),

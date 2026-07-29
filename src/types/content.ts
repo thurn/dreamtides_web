@@ -334,6 +334,11 @@ export interface Tides4ProvenanceSummary {
 export interface ResolvedDreamAvatarPackage {
   dreamAvatar: DreamAvatarContent;
   draftPoolCopiesByCard: Record<string, number>;
+  /**
+   * Exact early offers keyed by their 1-indexed journey pick. Authored flows
+   * can use this to teach with a stable opening before ordinary pool sampling.
+   */
+  openingDraftOffers?: Record<string, number[]>;
   dreamsignPoolIds: string[];
   mandatoryOnlyPoolSize: number;
   draftPoolSize: number;

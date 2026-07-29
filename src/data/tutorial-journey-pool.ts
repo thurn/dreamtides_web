@@ -18,6 +18,7 @@ export interface TutorialJourneyTide {
 export interface TutorialJourneyPool {
   readonly dreamAvatarId: string;
   readonly poolSize: number;
+  readonly openingOffers: readonly (readonly string[])[];
   readonly tides: readonly TutorialJourneyTide[];
 }
 
@@ -82,6 +83,33 @@ export function validateTutorialJourneyPool(
   if (!Array.isArray(source.tides) || source.tides.length !== 3) {
     invalid("tides must contain exactly three entries");
   }
+
+  const rawOpeningOffers = source["opening-offers"];
+  if (!Array.isArray(rawOpeningOffers) || rawOpeningOffers.length !== 2) {
+    invalid("opening-offers must contain exactly two offers");
+  }
+  const openingCardIds = new Set<string>();
+  const openingOffers = rawOpeningOffers.map((value, offerIndex) => {
+    const label = `opening-offers[${String(offerIndex)}]`;
+    if (!Array.isArray(value) || value.length !== 4) {
+      return invalid(`${label} must contain exactly four card UUIDs`);
+    }
+    return value.map((cardIdValue, cardIndex) => {
+      const cardId = nonBlankString(
+        cardIdValue,
+        `${label}[${String(cardIndex)}]`,
+      );
+      if (!UUID_RE.test(cardId)) {
+        invalid(`${label}[${String(cardIndex)}] must be a UUID`);
+      }
+      const normalizedCardId = cardId.toLocaleLowerCase();
+      if (openingCardIds.has(normalizedCardId)) {
+        invalid(`${label} duplicates opening card ${JSON.stringify(cardId)}`);
+      }
+      openingCardIds.add(normalizedCardId);
+      return cardId;
+    });
+  });
 
   const seenTideIds = new Set<string>();
   const seenTideNames = new Set<string>();
@@ -152,7 +180,15 @@ export function validateTutorialJourneyPool(
     );
   }
 
-  return { dreamAvatarId, poolSize, tides };
+  for (const openingCardId of openingCardIds) {
+    if (!seenCardIds.has(openingCardId)) {
+      invalid(
+        `opening card ${JSON.stringify(openingCardId)} is not in a tutorial tide`,
+      );
+    }
+  }
+
+  return { dreamAvatarId, poolSize, openingOffers, tides };
 }
 
 export function parseTutorialJourneyPool(source: string): TutorialJourneyPool {

@@ -1,40 +1,49 @@
 import { describe, expect, it, vi } from "vitest";
+import type { CardData } from "../types/cards";
 import type { DreamAvatarContent } from "../types/content";
+import { asCardId, asCardName } from "../types/card-identity";
 import type { RunPoolContext } from "./journey-content";
 import { buildTutorialJourneyPackage } from "./tutorial-journey-package";
 import { validateTutorialJourneyPool } from "./tutorial-journey-pool";
+import { GLOSSARY, glossaryRulesTextForms } from "./glossary";
 
 const CARD_IDS = [
   "00000000-0000-4000-8000-000000000001",
   "00000000-0000-4000-8000-000000000002",
   "00000000-0000-4000-8000-000000000003",
+  "00000000-0000-4000-8000-000000000004",
+  "00000000-0000-4000-8000-000000000005",
+  "00000000-0000-4000-8000-000000000006",
+  "00000000-0000-4000-8000-000000000007",
+  "00000000-0000-4000-8000-000000000008",
 ] as const;
 
 function syntheticSource(): Record<string, unknown> {
   return {
     "dream-avatar-id": "00000000-0000-4000-8000-000000000010",
-    "pool-size": 4,
+    "pool-size": 8,
+    "opening-offers": [CARD_IDS.slice(0, 4), CARD_IDS.slice(4, 8)],
     tides: [
       {
         id: "first-tide",
         name: "First Tide",
         description: "First description.",
         type: "valor",
-        cards: [{ id: CARD_IDS[0], copies: 2 }],
+        cards: CARD_IDS.slice(0, 3).map((id) => ({ id, copies: 1 })),
       },
       {
         id: "second-tide",
         name: "Second Tide",
         description: "Second description.",
         type: "valor",
-        cards: [{ id: CARD_IDS[1], copies: 1 }],
+        cards: CARD_IDS.slice(3, 6).map((id) => ({ id, copies: 1 })),
       },
       {
         id: "third-tide",
         name: "Third Tide",
         description: "Third description.",
         type: "valor",
-        cards: [{ id: CARD_IDS[2], copies: 1 }],
+        cards: CARD_IDS.slice(6, 8).map((id) => ({ id, copies: 1 })),
       },
     ],
   };
@@ -52,9 +61,38 @@ function dreamAvatar(id: string): DreamAvatarContent {
   };
 }
 
+function buildCardDatabase(
+  firstCardOverrides: Partial<CardData> = {},
+): Map<number, CardData> {
+  return new Map(
+    CARD_IDS.map((id, index) => {
+      const cardNumber = index + 101;
+      return [
+        cardNumber,
+        {
+          id: asCardId(id),
+          name: asCardName(`Tutorial card ${String(index + 1)}`),
+          cardNumber,
+          cardType: "Character",
+          subtype: "Warrior",
+          isStarter: false,
+          energyCost: 1,
+          spark: 1,
+          isFast: false,
+          isInterrupt: false,
+          renderedText: "",
+          imageNumber: cardNumber,
+          artOwned: false,
+          ...(index === 0 ? firstCardOverrides : {}),
+        },
+      ];
+    }),
+  );
+}
+
 describe("validateTutorialJourneyPool", () => {
   it("accepts three distinct valor tides whose UUID copies fill the pool", () => {
-    const pool = validateTutorialJourneyPool(syntheticSource(), 4);
+    const pool = validateTutorialJourneyPool(syntheticSource(), 8);
 
     expect(pool.tides.map((tide) => tide.type)).toEqual([
       "valor",
@@ -62,9 +100,11 @@ describe("validateTutorialJourneyPool", () => {
       "valor",
     ]);
     expect(pool.tides.flatMap((tide) => tide.cards)).toEqual([
-      { id: CARD_IDS[0], copies: 2 },
-      { id: CARD_IDS[1], copies: 1 },
-      { id: CARD_IDS[2], copies: 1 },
+      ...CARD_IDS.map((id) => ({ id, copies: 1 })),
+    ]);
+    expect(pool.openingOffers).toEqual([
+      CARD_IDS.slice(0, 4),
+      CARD_IDS.slice(4, 8),
     ]);
   });
 
@@ -73,7 +113,7 @@ describe("validateTutorialJourneyPool", () => {
     const tides = source.tides as Array<Record<string, unknown>>;
     tides[1].cards = [{ id: CARD_IDS[0], copies: 1 }];
 
-    expect(() => validateTutorialJourneyPool(source, 4)).toThrow(
+    expect(() => validateTutorialJourneyPool(source, 8)).toThrow(
       /duplicates.*00000000-0000-4000-8000-000000000001/u,
     );
   });
@@ -88,13 +128,9 @@ describe("validateTutorialJourneyPool", () => {
 describe("buildTutorialJourneyPackage", () => {
   it("resolves UUIDs to a normal draft multiset and logs its tide provenance", () => {
     vi.spyOn(console, "log").mockImplementation(() => {});
-    const pool = validateTutorialJourneyPool(syntheticSource(), 4);
+    const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
-      idIndex: new Map([
-        [CARD_IDS[0], 101],
-        [CARD_IDS[1], 102],
-        [CARD_IDS[2], 103],
-      ]),
+      idIndex: new Map(CARD_IDS.map((id, index) => [id, index + 101])),
       allDreamsignPoolIds: ["dreamsign-a"],
       poolData: {
         core: new Set(),
@@ -107,29 +143,39 @@ describe("buildTutorialJourneyPackage", () => {
       dreamAvatar(pool.dreamAvatarId),
       context,
       pool,
+      buildCardDatabase(),
     );
 
     expect(pkg.draftPoolCopiesByCard).toEqual({
-      "101": 2,
+      "101": 1,
       "102": 1,
       "103": 1,
+      "104": 1,
+      "105": 1,
+      "106": 1,
+      "107": 1,
+      "108": 1,
     });
-    expect(pkg.draftPoolSize).toBe(4);
-    expect(pkg.doubledCardCount).toBe(1);
+    expect(pkg.openingDraftOffers).toEqual({
+      "1": [101, 102, 103, 104],
+      "2": [105, 106, 107, 108],
+    });
+    expect(pkg.draftPoolSize).toBe(8);
+    expect(pkg.doubledCardCount).toBe(0);
     expect(pkg.dreamsignPoolIds).toEqual(["dreamsign-a"]);
     expect(console.log).toHaveBeenCalledOnce();
     expect(JSON.parse(vi.mocked(console.log).mock.calls[0][0] as string)).toMatchObject({
       event: "draft_pool_constructed",
       algo: "tutorial_tides",
-      poolSize: 4,
-      distinctCardCount: 3,
+      poolSize: 8,
+      distinctCardCount: 8,
       tideIds: ["first-tide", "second-tide", "third-tide"],
     });
   });
 
   it("rejects an unknown authored card UUID", () => {
     vi.spyOn(console, "log").mockImplementation(() => {});
-    const pool = validateTutorialJourneyPool(syntheticSource(), 4);
+    const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
       idIndex: new Map([[CARD_IDS[0], 101]]),
       allDreamsignPoolIds: [],
@@ -145,7 +191,55 @@ describe("buildTutorialJourneyPackage", () => {
         dreamAvatar(pool.dreamAvatarId),
         context,
         pool,
+        new Map(),
       ),
     ).toThrow(/unknown card UUIDs/u);
+  });
+
+  const glossaryEntry = GLOSSARY.find(
+    (entry) => glossaryRulesTextForms(entry).length > 0,
+  );
+  if (glossaryEntry === undefined) {
+    throw new Error("Test requires one rules-text glossary entry.");
+  }
+
+  it.each([
+    {
+      label: "fast timing",
+      overrides: { isFast: true },
+      message: /must not be fast or interrupt/u,
+    },
+    {
+      label: "rules symbols",
+      overrides: { renderedText: "Gain 1●." },
+      message: /must not use rules symbols/u,
+    },
+    {
+      label: "glossary terms",
+      overrides: {
+        renderedText: glossaryRulesTextForms(glossaryEntry)[0],
+      },
+      message: /must not reference glossary terms/u,
+    },
+  ])("rejects opening cards with $label", ({ overrides, message }) => {
+    const pool = validateTutorialJourneyPool(syntheticSource(), 8);
+    const context = {
+      idIndex: new Map(CARD_IDS.map((id, index) => [id, index + 101])),
+      allDreamsignPoolIds: [],
+      poolData: {
+        core: new Set(),
+        archLists: new Map(),
+        draftLists: new Map(),
+      },
+    } satisfies RunPoolContext;
+
+    expect(() =>
+      buildTutorialJourneyPackage(
+        dreamAvatar(pool.dreamAvatarId),
+        context,
+        pool,
+        buildCardDatabase(overrides),
+      ),
+    ).toThrow(message);
   });
 });

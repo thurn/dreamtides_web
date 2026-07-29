@@ -49,6 +49,7 @@ export function createJourneyLifecycleContentProvider(
             dreamAvatar,
             content.poolContext,
             tutorialJourneyPool,
+            content.cardDatabase,
           )
         : undefined;
       // Seed atlas generation from the run seed so the assembled atlas is

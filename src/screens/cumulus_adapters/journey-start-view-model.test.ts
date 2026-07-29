@@ -210,6 +210,7 @@ describe("buildDreamAvatarOfferViews", () => {
     const pool: TutorialJourneyPool = {
       dreamAvatarId: "dc-1",
       poolSize: 6,
+      openingOffers: [],
       tides: ["Bannerwake", "Sunwall", "Unfallen"].map((name, index) => ({
         id: `tide-${String(index)}`,
         name,

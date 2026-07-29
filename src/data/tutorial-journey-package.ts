@@ -3,9 +3,13 @@ import type {
   DreamAvatarContent,
   ResolvedDreamAvatarPackage,
 } from "../types/content";
+import type { CardData } from "../types/cards";
 import type { RunPoolContext } from "./journey-content";
 import { STARTER_CARD_NUMBERS } from "./starter-cards";
 import type { TutorialJourneyPool } from "./tutorial-journey-pool";
+import { extractGlossaryTerms } from "./glossary-terms";
+
+const RULES_TEXT_SYMBOL_RE = /[●⍏✦▸⍟☪⧗❖]/u;
 
 /**
  * Resolve the tutorial's authored UUID multiset into the same package shape as
@@ -15,6 +19,7 @@ export function buildTutorialJourneyPackage(
   dreamAvatar: DreamAvatarContent,
   context: RunPoolContext,
   tutorialPool: TutorialJourneyPool,
+  cardDatabase: ReadonlyMap<number, CardData>,
 ): ResolvedDreamAvatarPackage {
   if (dreamAvatar.id !== tutorialPool.dreamAvatarId) {
     throw new Error(
@@ -61,6 +66,43 @@ export function buildTutorialJourneyPackage(
     );
   }
 
+  const openingDraftOffers: Record<string, number[]> = {};
+  for (const [offerIndex, cardIds] of tutorialPool.openingOffers.entries()) {
+    const cardNumbers: number[] = [];
+    for (const cardId of cardIds) {
+      const cardNumber = context.idIndex.get(cardId.toLocaleLowerCase());
+      if (cardNumber === undefined) {
+        throw new Error(
+          `Tutorial opening offer references unknown card ${cardId}.`,
+        );
+      }
+      const card = cardDatabase.get(cardNumber);
+      if (card === undefined) {
+        throw new Error(
+          `Tutorial opening offer references unknown card ${cardId}.`,
+        );
+      }
+      if (card.isFast || card.isInterrupt === true) {
+        throw new Error(
+          `Tutorial opening offer card ${card.id} must not be fast or interrupt.`,
+        );
+      }
+      if (RULES_TEXT_SYMBOL_RE.test(card.renderedText)) {
+        throw new Error(
+          `Tutorial opening offer card ${card.id} must not use rules symbols.`,
+        );
+      }
+      const glossaryTerms = extractGlossaryTerms(card.renderedText);
+      if (glossaryTerms.length > 0) {
+        throw new Error(
+          `Tutorial opening offer card ${card.id} must not reference glossary terms: ${glossaryTerms.map((entry) => entry.id).join(", ")}.`,
+        );
+      }
+      cardNumbers.push(cardNumber);
+    }
+    openingDraftOffers[String(offerIndex + 1)] = cardNumbers;
+  }
+
   const draftPoolSize = Object.values(draftPoolCopiesByCard).reduce(
     (sum, copies) => sum + copies,
     0,
@@ -83,6 +125,7 @@ export function buildTutorialJourneyPackage(
   return {
     dreamAvatar,
     draftPoolCopiesByCard,
+    openingDraftOffers,
     dreamsignPoolIds: [...context.allDreamsignPoolIds],
     mandatoryOnlyPoolSize: draftPoolSize,
     draftPoolSize,

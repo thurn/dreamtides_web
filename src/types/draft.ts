@@ -66,6 +66,11 @@ export interface PoolDraftState extends DraftStateCommon {
    * this snapshot.
    */
   draftPoolCopiesByCard: Record<string, number>;
+  /**
+   * Exact early offers keyed by their 1-indexed journey pick. When every
+   * authored card remains eligible, the engine presents the authored order.
+   */
+  openingDraftOffers?: Record<string, number[]>;
   /** Remaining copies for each card number in the fixed run pool. */
   remainingCopiesByCard: Record<string, number>;
 }

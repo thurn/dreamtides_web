@@ -1,5 +1,19 @@
 dream-avatar-id = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5"
 pool-size = 150
+opening-offers = [
+  [
+    "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+    "caaee8a9-0c22-41b4-950f-4c1131b98221",
+    "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+    "f07dfe42-566c-4e91-a250-9e2781e9d06f",
+  ],
+  [
+    "b1bea643-1a7b-4e5e-b072-7174d3405421",
+    "f4b34207-2ad4-421b-8798-9c20320607ae",
+    "8367b757-c3d2-4c22-9043-8baadee1c5ba",
+    "229ab3a1-3720-41a2-924c-8fe112188f8e",
+  ],
+]
 
 [[tides]]
 id = "tutorial-bannerwake"
@@ -104,7 +118,7 @@ id = "3076694f-ffc2-46c9-8e1a-39f3878c73c9"
 copies = 2
 
 [[tides.cards]]
-id = "08fe3190-f559-4152-941d-33ec4180f509"
+id = "f07dfe42-566c-4e91-a250-9e2781e9d06f"
 copies = 2
 
 [[tides]]
@@ -174,7 +188,7 @@ id = "f256a0e7-e396-492b-8881-284ecd36025b"
 copies = 2
 
 [[tides.cards]]
-id = "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1"
+id = "229ab3a1-3720-41a2-924c-8fe112188f8e"
 copies = 2
 
 [[tides.cards]]
@@ -264,7 +278,7 @@ id = "886c9d49-b25f-4ddd-97f0-2ec4b42eda89"
 copies = 2
 
 [[tides.cards]]
-id = "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6"
+id = "8367b757-c3d2-4c22-9043-8baadee1c5ba"
 copies = 2
 
 [[tides.cards]]

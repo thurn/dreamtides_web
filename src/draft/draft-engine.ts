@@ -217,6 +217,30 @@ function buildOffer(
   return weightedSample(entries, ctx.packSize, rng);
 }
 
+function eligibleOpeningOffer(
+  state: PoolDraftState,
+  packSize: number,
+  shownThisVisit: ReadonlySet<number>,
+): number[] | null {
+  const authored = state.openingDraftOffers?.[String(state.pickNumber)];
+  if (
+    authored === undefined ||
+    authored.length !== packSize ||
+    new Set(authored).size !== authored.length
+  ) {
+    return null;
+  }
+  for (const cardNumber of authored) {
+    if (
+      shownThisVisit.has(cardNumber) ||
+      (state.remainingCopiesByCard[String(cardNumber)] ?? 0) <= 0
+    ) {
+      return null;
+    }
+  }
+  return [...authored];
+}
+
 /**
  * Once a Legendary card is drafted, every Legendary card is banned from the
  * rest of the run's pool: removed from both the remaining multiset and the
@@ -303,16 +327,23 @@ function revealOffer(
   // visit begins (see enterDraftSite).
   const shownThisVisit = new Set(state.siteShownCardNumbers ?? []);
 
-  let offer = buildOffer(
-    {
-      remainingCopiesByCard: state.remainingCopiesByCard,
-      pickNumber: state.pickNumber,
-      packSize: config.packSize,
-      affiliationWeights: config.affiliationWeights,
-    },
-    rng,
+  const authoredOpeningOffer = eligibleOpeningOffer(
+    state,
+    config.packSize,
     shownThisVisit,
   );
+  let offer =
+    authoredOpeningOffer ??
+    buildOffer(
+      {
+        remainingCopiesByCard: state.remainingCopiesByCard,
+        pickNumber: state.pickNumber,
+        packSize: config.packSize,
+        affiliationWeights: config.affiliationWeights,
+      },
+      rng,
+      shownThisVisit,
+    );
 
   // The draft multiset is finite. When fewer than a full offer's worth of
   // unique unshown cards remain, recreate the multiset from the run's fixed
@@ -361,6 +392,8 @@ function revealOffer(
     logEvent("draft_offer_revealed", {
       pickNumber: state.pickNumber,
       offerCards: offer,
+      source:
+        authoredOpeningOffer === null ? "weighted_pool" : "authored_opening",
       poolRemaining: countRemainingCards(state.remainingCopiesByCard),
       uniqueCardsRemaining: countRemainingUniqueCards(state.remainingCopiesByCard),
     });
@@ -417,6 +450,13 @@ export function createInitialDraftState(
   return {
     mode: "pool",
     draftPoolCopiesByCard,
+    ...(resolvedPackage.openingDraftOffers === undefined
+      ? {}
+      : {
+          openingDraftOffers: structuredClone(
+            resolvedPackage.openingDraftOffers,
+          ),
+        }),
     remainingCopiesByCard: { ...draftPoolCopiesByCard },
     currentOffer: [],
     activeSiteId: null,
