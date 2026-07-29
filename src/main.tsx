@@ -15,7 +15,6 @@ import "./index.css";
 import "./cumulus/primitives/cumulus-tokens.css";
 import "./cumulus/primitives/legibility.css";
 import CardEditorApp from "./editor/CardEditorApp";
-import { verifyFonts } from "./runtime/verify-fonts";
 import { applyDeviceFrameFromSearch } from "./runtime/device-frame";
 import { CumulusRoot } from "./cumulus/CumulusRoot";
 
@@ -25,11 +24,6 @@ import { CumulusRoot } from "./cumulus/CumulusRoot";
 // CSS custom properties before first paint (a no-op on real hardware). Runs for
 // every route, since any screen can be captured.
 applyDeviceFrameFromSearch(window.location.search);
-
-// Warn (console + on-screen banner) if the card webfonts failed to load, e.g.
-// when the Google Fonts CDN is blocked or offline and cards silently fall
-// back to system fonts.
-void verifyFonts();
 
 const root = createRoot(document.getElementById("root")!);
 
