@@ -133,7 +133,7 @@ describe("HostedPlaytestShell", () => {
     act(() => root.unmount());
   });
 
-  it("keeps an unclaimed tutorial interactive while offering explicit control", () => {
+  it("keeps an unclaimed tutorial interactive without disconnected chrome", () => {
     mocks.state = unclaimedTutorialState();
     mocks.connectedClientIds = ["viewer"];
     const container = document.createElement("div");
@@ -148,9 +148,8 @@ describe("HostedPlaytestShell", () => {
     });
 
     expect(container.querySelector("[inert]")).toBeNull();
-    expect(container.textContent).toContain("Player Disconnected");
-    expect(container.textContent).toContain("Take Control");
-    expect(container.textContent).toContain("Play");
+    expect(container.textContent).toBe("Play");
+    expect(mocks.takeControl).not.toHaveBeenCalled();
     act(() => root.unmount());
   });
 

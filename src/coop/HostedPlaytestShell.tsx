@@ -24,21 +24,14 @@ export function HostedPlaytestShell({
   if (control?.mode !== "single-controller") return children;
 
   const controllerClientId = control.controllerClientId;
-  const isController = controllerClientId === clientId;
-  const unclaimedTutorial =
-    controllerClientId === null &&
-    state.frontDoor.phase === "tutorial";
-  const observer = !isController &&
-    (controllerClientId !== null || unclaimedTutorial);
-  if (!observer) return children;
+  if (controllerClientId === null) return children;
 
-  const contentIsInert = controllerClientId !== null;
+  const isController = controllerClientId === clientId;
+  if (isController) return children;
+
   const canTakeControl =
-    controllerClientId === null ||
-    (
-      connectedClientIds !== null &&
-      !connectedClientIds.includes(controllerClientId)
-    );
+    connectedClientIds !== null &&
+    !connectedClientIds.includes(controllerClientId);
   const title = canTakeControl ? "Player Disconnected" : "Watching";
 
   const takeControl = (): void => {
@@ -59,8 +52,8 @@ export function HostedPlaytestShell({
     <div className="hosted-playtest-shell">
       <div
         className="hosted-playtest-shell__content"
-        inert={contentIsInert ? true : undefined}
-        aria-hidden={contentIsInert ? "true" : undefined}
+        inert
+        aria-hidden="true"
       >
         {children}
       </div>
