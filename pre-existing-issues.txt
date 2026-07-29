@@ -1,5 +1,0 @@
-2026-07-29: `npm run review:full` fails
-`src/data/card-references.test.ts` because the UUIDs tagged `tutorial` in
-`data/tabula/cards_v2.toml` do not match the UUID-authored tutorial pool.
-The mismatch is present at base commit 5f0bce7f6519 and is outside the
-cooperative fuzz-testing change.
