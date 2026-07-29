@@ -203,6 +203,7 @@ export function DesktopSelect({
   guideDialogue,
   onPick,
   onReroll,
+  onGuideDialogueShown,
 }: JourneyStartScreenProps) {
   return (
     <div
@@ -235,6 +236,7 @@ export function DesktopSelect({
         <JourneyStartGuideDialogue
           dialogue={guideDialogue}
           layout="desktop"
+          onShown={onGuideDialogueShown}
         />
       )}
       {onReroll !== undefined && (

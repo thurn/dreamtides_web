@@ -17,6 +17,7 @@ import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
 import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
 import { useIsDesktop } from "./use-is-desktop";
+import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 
 export type BattleTutorialGuidanceSourceView =
   | {
@@ -41,6 +42,7 @@ export interface BattleTutorialGuidanceView {
   readonly triggerId: string;
   readonly messageIndex: number;
   readonly messageCount: number;
+  readonly delay?: number;
   readonly duration: number;
   readonly dialogue: CharacterDialogueModel;
   readonly horizontalOffset: number;
@@ -178,6 +180,12 @@ export function BattleTutorialGuidance({
   const presentationId = view?.presentationId ?? null;
   const messageIndex = view?.messageIndex ?? null;
   const duration = view?.duration ?? null;
+  const dialogueVisible = useDelayedTutorialSpeechBubbleVisibility(
+    view === null
+      ? undefined
+      : `${view.presentationId}:${String(view.messageIndex)}`,
+    view === null ? undefined : (view.delay ?? 0),
+  );
 
   useEffect(() => {
     if (duration === null || view?.source.kind === "journey-card") {
@@ -185,7 +193,7 @@ export function BattleTutorialGuidance({
     }
     const timeout = window.setTimeout(
       onDurationComplete,
-      duration * 1_000,
+      ((view?.delay ?? 0) + duration) * 1_000,
     );
     return () => window.clearTimeout(timeout);
   }, [
@@ -194,6 +202,7 @@ export function BattleTutorialGuidance({
     onDurationComplete,
     presentationId,
     view?.source.kind,
+    view?.delay,
   ]);
 
   useLayoutEffect(() => {
@@ -375,7 +384,7 @@ export function BattleTutorialGuidance({
           verticalOffset: renderedView.verticalOffset,
           bubbleWidth: renderedView.bubbleWidth,
         }}
-        visible={active}
+        visible={active && dialogueVisible}
         kind="card"
         triggerId={renderedView.triggerId}
         messageIndex={renderedView.messageIndex}
@@ -485,7 +494,7 @@ export function BattleTutorialGuidance({
         >
           <CharacterDialogue
             dialogue={renderedView.dialogue}
-            visible={active}
+            visible={active && dialogueVisible}
             size={desktop ? "prominent" : "compact"}
             testId="battle-tutorial-dialogue"
           />

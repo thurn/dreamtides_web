@@ -34,7 +34,7 @@ import {
 import { useIsDesktop } from "./use-is-desktop";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
-import { useDelayedSiteTutorialVisibility } from "./use-delayed-site-tutorial-visibility";
+import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 
 /** Everything the draft screen renders, mapped from live journey state. */
 export interface DraftView {
@@ -172,8 +172,11 @@ export function DraftScreen({
   }, [view.offerKey]);
   const availableTutorial =
     pendingPick === null ? view.tutorial : undefined;
-  const tutorialVisible = useDelayedSiteTutorialVisibility(
-    availableTutorial?.id,
+  const tutorialVisible = useDelayedTutorialSpeechBubbleVisibility(
+    availableTutorial?.id ?? availableTutorial?.model.text,
+    availableTutorial === undefined
+      ? undefined
+      : (availableTutorial.delaySeconds ?? 0),
   );
   useEffect(() => {
     if (tutorialVisible && availableTutorial !== undefined) {
@@ -223,7 +226,7 @@ export function DraftScreen({
       {tutorialVisible && availableTutorial !== undefined && (
         <ViewportTutorialDialogue
           view={{
-            id: availableTutorial.id,
+            id: availableTutorial.id ?? availableTutorial.model.text,
             dialogue: availableTutorial.model,
             horizontalOffset: availableTutorial.horizontalOffset,
             verticalOffset: availableTutorial.verticalOffset,

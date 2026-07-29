@@ -67,6 +67,7 @@ export function DreamsignRevelationScreenAdapter({ siteId }: { siteId: string })
         "first_visit_site_tutorial_presented",
         { tutorialId: tutorial.id, siteId, siteType: "DreamsignRevelation",
           text: tutorial.model.text,
+          delaySeconds: tutorial.delaySeconds ?? 0,
           horizontalOffset: tutorial.horizontalOffset,
           verticalOffset: tutorial.verticalOffset,
           bubbleWidth: tutorial.bubbleWidth },

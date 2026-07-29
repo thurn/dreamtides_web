@@ -18,10 +18,7 @@ import {
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
-import {
-  CharacterDialogue,
-  type CharacterDialogueModel,
-} from "../components/overlay/CharacterDialogue";
+import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
@@ -29,6 +26,8 @@ import {
   DreamsignReplacementDialog,
   type DreamsignReplacementView,
 } from "./DreamsignReplacementDialog";
+import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
+import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 
 /** A generated site reward ready to animate and grant on the dreamscape. */
 export type InlineRewardView =
@@ -40,13 +39,7 @@ export type InlineRewardView =
     };
 
 /** Delayed persistent Mira guidance for the first tutorial dreamscape. */
-export interface DreamscapeGuideDialogueView {
-  readonly model: CharacterDialogueModel;
-  readonly delaySeconds: number;
-  readonly horizontalOffset: number;
-  readonly verticalOffset: number;
-  readonly bubbleWidth: number;
-}
+export type DreamscapeGuideDialogueView = TutorialSpeechBubbleView;
 
 /** Everything the screen renders, mapped from live journey state by the builder. */
 export interface DreamscapeView {
@@ -101,7 +94,12 @@ export function DreamscapeScreen({
   const [collectingSiteId, setCollectingSiteId] = useState<
     string | null
   >(null);
-  const [guideDialogueVisible, setGuideDialogueVisible] = useState(false);
+  const guideDialogueVisible = useDelayedTutorialSpeechBubbleVisibility(
+    view.guideDialogue?.id ?? view.guideDialogue?.model.text,
+    view.guideDialogue === undefined
+      ? undefined
+      : (view.guideDialogue.delaySeconds ?? 0),
+  );
   const completionRequestedRef = useRef<string | null>(null);
   const onInlineRewardAnimationCompleteRef = useRef(
     onInlineRewardAnimationComplete,
@@ -151,14 +149,8 @@ export function DreamscapeScreen({
   }, [collectingSiteId, collectingReward]);
 
   useEffect(() => {
-    setGuideDialogueVisible(false);
-    if (view.guideDialogue === undefined) return;
-    const timer = window.setTimeout(() => {
-      setGuideDialogueVisible(true);
-      onGuideDialogueShown?.();
-    }, view.guideDialogue.delaySeconds * 1000);
-    return () => window.clearTimeout(timer);
-  }, [onGuideDialogueShown, view.guideDialogue]);
+    if (guideDialogueVisible) onGuideDialogueShown?.();
+  }, [guideDialogueVisible, onGuideDialogueShown]);
 
   return (
     <div

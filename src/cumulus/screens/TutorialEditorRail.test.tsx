@@ -538,6 +538,35 @@ describe("TutorialEditorRail", () => {
     container.remove();
   });
 
+  it("authors speech bubble appearance delay", () => {
+    const onChange = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<EditorHarness onChange={onChange} />));
+
+    const increaseDelay = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="Increase speech bubble delay for action 1"]',
+    );
+    act(() => increaseDelay?.click());
+
+    expect(onChange).toHaveBeenLastCalledWith(
+      [
+        {
+          ...INITIAL_ACTIONS[0],
+          speechBubble: {
+            ...INITIAL_SPEECH_BUBBLE,
+            delay: 0.5,
+          },
+        },
+      ],
+      true,
+    );
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("shows the same speech bubble controls on every supporting action", () => {
     const actions: readonly TutorialAction[] = [
       INITIAL_ACTIONS[0],

@@ -109,6 +109,7 @@ describe("parseTutorialActions", () => {
           action: "display-speech-bubble",
           speechBubble: {
             speaker: "enemy",
+            delay: 1,
             duration: 3,
             horizontalOffset: 20,
             verticalOffset: 0,
@@ -125,6 +126,7 @@ describe("parseTutorialActions", () => {
         action: "display-speech-bubble",
         speechBubble: {
           speaker: "enemy",
+          delay: 1,
           duration: 3,
           horizontalOffset: 20,
           verticalOffset: 0,
@@ -760,8 +762,9 @@ describe("parseTutorialActions", () => {
       parseTutorialTriggers([
         {
           id: "support",
-          on: ["card-play", "dreamwell-resolve"],
+          on: ["card-seen", "card-play", "dreamwell-resolve"],
           priority: 100,
+          delay: { "card-seen": 1 },
           speaker: "player",
           duration: 5,
           horizontalOffset: 40,
@@ -774,8 +777,9 @@ describe("parseTutorialActions", () => {
     ).toEqual([
       {
         id: "support",
-        on: ["card-play", "dreamwell-resolve"],
+        on: ["card-seen", "card-play", "dreamwell-resolve"],
         priority: 100,
+        delay: { "card-seen": 1 },
         speaker: "player",
         duration: 5,
         horizontalOffset: 40,
@@ -785,6 +789,18 @@ describe("parseTutorialActions", () => {
         text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
       },
     ]);
+    expect(() =>
+      parseTutorialTriggers([
+        {
+          id: "bad-delay-event",
+          on: ["card-play"],
+          delay: { "card-seen": 1 },
+          duration: 3,
+          match: { kind: "glossary", id: "support" },
+          text: "No.",
+        },
+      ]),
+    ).toThrow(/delay must reference one of its trigger events/u);
   });
 });
 

@@ -146,7 +146,7 @@ describe("BattleTutorialGuidance", () => {
     vi.useRealTimers();
   });
 
-  it("starts the authored dwell timer when the guidance is mounted", () => {
+  it("waits for the authored delay before showing dialogue and starting its dwell", () => {
     vi.useFakeTimers();
     const container = document.createElement("div");
     document.body.append(container);
@@ -161,6 +161,7 @@ describe("BattleTutorialGuidance", () => {
               triggerId: "erode",
               messageIndex: 0,
               messageCount: 1,
+              delay: 1,
               ...guidanceFields("Erode sends cards to the void."),
               source: {
                 kind: "dreamwell",
@@ -184,6 +185,24 @@ describe("BattleTutorialGuidance", () => {
       );
     });
 
+    const dialogue = container.querySelector(
+      '[data-testid="battle-tutorial-dialogue"]',
+    );
+    expect(dialogue?.getAttribute("data-character-dialogue-visible")).toBe(
+      "false",
+    );
+    act(() => {
+      vi.advanceTimersByTime(999);
+    });
+    expect(dialogue?.getAttribute("data-character-dialogue-visible")).toBe(
+      "false",
+    );
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(dialogue?.getAttribute("data-character-dialogue-visible")).toBe(
+      "true",
+    );
     act(() => {
       vi.advanceTimersByTime(2_999);
     });

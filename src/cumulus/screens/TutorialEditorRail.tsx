@@ -485,6 +485,8 @@ function SpeechBubbleEditor({
       />
     );
   }
+  const appearanceDelay =
+    typeof speechBubble.delay === "number" ? speechBubble.delay : 0;
 
   return (
     <div
@@ -520,6 +522,36 @@ function SpeechBubbleEditor({
         testId={`tutorial-action-speech-bubble-text-${actionId}`}
         onChange={(text) => onChange({ ...speechBubble, text }, false)}
         onCommit={(text) => onChange({ ...speechBubble, text }, true)}
+      />
+      <NumberStepper
+        label="Appearance Delay"
+        value={appearanceDelay}
+        displayValue={`${waitLabel(appearanceDelay)}s`}
+        size="sm"
+        decrementLabel={`Decrease speech bubble delay for action ${String(actionNumber)}`}
+        incrementLabel={`Increase speech bubble delay for action ${String(actionNumber)}`}
+        decrementDisabled={appearanceDelay <= 0}
+        onDecrement={() =>
+          onChange(
+            {
+              ...speechBubble,
+              delay: Math.max(
+                0,
+                Math.round((appearanceDelay - 0.5) * 10) / 10,
+              ),
+            },
+            true,
+          )
+        }
+        onIncrement={() =>
+          onChange(
+            {
+              ...speechBubble,
+              delay: Math.round((appearanceDelay + 0.5) * 10) / 10,
+            },
+            true,
+          )
+        }
       />
       <NumberStepper
         label="Visible Duration"

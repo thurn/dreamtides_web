@@ -18,10 +18,17 @@ export type TutorialDreamAvatarOwner = "player" | "enemy";
 /** Character whose portrait anchors an authored tutorial speech bubble. */
 export type TutorialSpeechBubbleSpeaker = "mira" | TutorialDreamAvatarOwner;
 
+/** Context-specific delay authored for a reusable tutorial trigger. */
+export type TutorialTriggerDelay = Readonly<
+  Partial<Record<TutorialTriggerEvent, number>>
+>;
+
 /** Shared placement and copy authored for every tutorial speech bubble. */
 export interface TutorialSpeechBubblePresentation {
   /** Character whose portrait anchors the bubble. */
   readonly speaker: TutorialSpeechBubbleSpeaker;
+  /** Seconds after the owning tutorial surface becomes active before the bubble appears. */
+  readonly delay?: number | TutorialTriggerDelay;
   /** Signed pixels added to the computed horizontal dialogue position. */
   readonly horizontalOffset: number;
   /** Signed pixels added to the computed vertical dialogue position. */
@@ -32,6 +39,13 @@ export interface TutorialSpeechBubblePresentation {
   readonly text: string;
 }
 
+/** Persistent Mira guidance used by tutorial journey surfaces. */
+export type TutorialPersistentSpeechBubble =
+  TutorialSpeechBubblePresentation & {
+    readonly speaker: "mira";
+    readonly delay?: number;
+  };
+
 /** Shared authoring model for timed tutorial speech bubbles. */
 export interface TutorialSpeechBubble extends TutorialSpeechBubblePresentation {
   /** Seconds the bubble remains visible after it appears. */
@@ -40,25 +54,17 @@ export interface TutorialSpeechBubble extends TutorialSpeechBubblePresentation {
 
 /** Persistent guidance shown beside the tutorial journey-start offer. */
 export interface TutorialJourneyStartConfiguration {
-  readonly speechBubble: TutorialSpeechBubblePresentation & {
-    readonly speaker: "mira";
-  };
+  readonly speechBubble: TutorialPersistentSpeechBubble;
 }
 
 /** Persistent guidance shown over the first tutorial dreamscape. */
 export interface TutorialDreamscapeConfiguration {
-  readonly speechBubble: TutorialSpeechBubblePresentation & {
-    readonly speaker: "mira";
-    /** Seconds after the dreamscape mounts before the bubble appears. */
-    readonly delay: number;
-  };
+  readonly speechBubble: TutorialPersistentSpeechBubble;
 }
 
 /** Persistent Mira guidance shown on the first visit to one site type. */
 export interface TutorialSiteConfiguration {
-  readonly speechBubble: TutorialSpeechBubblePresentation & {
-    readonly speaker: "mira";
-  };
+  readonly speechBubble: TutorialPersistentSpeechBubble;
 }
 
 /** Authoritative card-visibility or battle edge that may open a supplemental tutorial. */
@@ -83,10 +89,12 @@ export type TutorialTriggerMatcher =
     };
 
 /** One TOML-authored first-occurrence tutorial shared across journey and battle. */
-export interface TutorialTriggerDefinition extends TutorialSpeechBubble {
+export interface TutorialTriggerDefinition
+  extends Omit<TutorialSpeechBubble, "delay"> {
   readonly id: string;
   readonly on: readonly TutorialTriggerEvent[];
   readonly priority: number;
+  readonly delay?: TutorialTriggerDelay;
   readonly match: TutorialTriggerMatcher;
 }
 

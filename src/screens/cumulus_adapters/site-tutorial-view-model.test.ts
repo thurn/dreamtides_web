@@ -6,6 +6,7 @@ import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 const CONFIGURATION: TutorialSiteConfiguration = {
   speechBubble: {
     speaker: "mira",
+    delay: 1,
     horizontalOffset: 20,
     verticalOffset: -10,
     bubbleWidth: 600,
@@ -65,6 +66,7 @@ describe("buildFirstVisitSiteTutorialView", () => {
         speakerName: "Mira",
         text: "Choose one [purple]Dreamsign[/purple].",
       },
+      delaySeconds: 1,
       horizontalOffset: 20,
       verticalOffset: -10,
       bubbleWidth: 600,

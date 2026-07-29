@@ -20,6 +20,7 @@ import type {
   DreamAvatarTideView,
   JourneyStartGuideDialogueView,
 } from "../../cumulus/screens/JourneyStartScreen";
+import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 
 /** The select screen shows at most this many tides per DreamAvatar. */
 const MAX_TIDES_SHOWN = 4;
@@ -66,12 +67,14 @@ export function buildJourneyStartGuideDialogue(
     return undefined;
   }
   return {
+    id: `journey-start-guidance:${tutorialDreamAvatarId}`,
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
       portraitAlt: "Mira",
       speakerName: "Mira",
       text: speechBubble.text,
     },
+    delaySeconds: tutorialSpeechBubbleDelaySeconds(speechBubble),
     horizontalOffset: speechBubble.horizontalOffset,
     verticalOffset: speechBubble.verticalOffset,
     bubbleWidth: speechBubble.bubbleWidth,

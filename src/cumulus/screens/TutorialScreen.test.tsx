@@ -482,6 +482,7 @@ describe("TutorialScreen", () => {
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: {
                 kind: "guide",
+                delay: 1,
                 horizontalOffset: 20,
                 verticalOffset: 0,
                 bubbleWidth: 450,
@@ -503,6 +504,7 @@ describe("TutorialScreen", () => {
                 action: "display-speech-bubble",
                 speechBubble: {
                   speaker: "mira",
+                  delay: 1,
                   duration: 3,
                   horizontalOffset: 20,
                   verticalOffset: 0,
@@ -547,6 +549,7 @@ describe("TutorialScreen", () => {
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: {
                 kind: "guide",
+                delay: 1,
                 horizontalOffset: 0,
                 verticalOffset: 0,
                 model: {
@@ -564,6 +567,7 @@ describe("TutorialScreen", () => {
                 action: "display-speech-bubble",
                 speechBubble: {
                   speaker: "mira",
+                  delay: 1,
                   duration: 3,
                   horizontalOffset: 0,
                   verticalOffset: 0,
@@ -593,7 +597,7 @@ describe("TutorialScreen", () => {
 
     act(() => screenMocks.sceneAnimationComplete?.());
     act(() => {
-      vi.advanceTimersByTime(749);
+      vi.advanceTimersByTime(999);
     });
     expect(onActionComplete).not.toHaveBeenCalled();
     act(() => {

@@ -86,6 +86,7 @@ import {
   type PendingPrompt,
 } from "./fold";
 import { matchTutorialGuidance } from "./tutorial-guidance";
+import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 import {
   isBattleFieldSlotAddressValid,
   selectBattleCardLocation,
@@ -594,6 +595,7 @@ function openTutorialGuidance(
           triggerId: match.id,
           speaker: match.speaker,
           text: match.text,
+          delay: tutorialSpeechBubbleDelaySeconds(match, event),
           duration: match.duration,
           horizontalOffset: match.horizontalOffset,
           verticalOffset: match.verticalOffset,

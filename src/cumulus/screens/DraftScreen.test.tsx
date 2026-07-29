@@ -105,6 +105,7 @@ describe("Cumulus DraftScreen", () => {
           speakerName: "Mira",
           text: "At a [purple]Draft[/purple] site you choose cards.",
         },
+        delaySeconds: 1,
         horizontalOffset: 0,
         verticalOffset: 0,
         bubbleWidth: 600,

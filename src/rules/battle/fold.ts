@@ -183,6 +183,7 @@ export interface TutorialGuidanceMessage {
   readonly triggerId: string;
   readonly speaker: TutorialTriggerDefinition["speaker"];
   readonly text: string;
+  readonly delay?: number;
   readonly duration: number;
   readonly horizontalOffset: number;
   readonly verticalOffset: number;

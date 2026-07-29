@@ -225,6 +225,7 @@ export function CarouselSelect({
   guideDialogue,
   onPick,
   onReroll,
+  onGuideDialogueShown,
 }: JourneyStartScreenProps) {
   const [index, setIndex] = useState(0);
   const [dx, setDx] = useState(0);
@@ -273,7 +274,11 @@ export function CarouselSelect({
     >
       <ScreenHeader />
       {guideDialogue !== undefined && (
-        <JourneyStartGuideDialogue dialogue={guideDialogue} layout="mobile" />
+        <JourneyStartGuideDialogue
+          dialogue={guideDialogue}
+          layout="mobile"
+          onShown={onGuideDialogueShown}
+        />
       )}
       {onReroll !== undefined && (
         <JourneyStartRerollControl onReroll={onReroll} />

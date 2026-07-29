@@ -22,8 +22,6 @@ import { buildCardTutorialGuidanceView } from "../screens/cumulus_adapters/card-
 import { createCardTutorialGuidanceContentProvider } from "../coop/providers/card-tutorial-guidance-provider";
 import { activeFirstVisitTutorialSite } from "../data/site-tutorial-guidance";
 
-const CARD_TUTORIAL_LOAD_DELAY_MS = 3_000;
-
 function visibleCardIds(stage: HTMLElement): readonly string[] {
   const ids: string[] = [];
   const seen = new Set<string>();
@@ -108,20 +106,16 @@ export function JourneyCardTutorialController({
         .catch(() => undefined);
     };
 
-    let observer: MutationObserver | null = null;
-    const delay = window.setTimeout(() => {
-      inspect();
-      observer = new MutationObserver(inspect);
-      observer.observe(stage, {
-        attributeFilter: ["data-card-id"],
-        attributes: true,
-        childList: true,
-        subtree: true,
-      });
-    }, CARD_TUTORIAL_LOAD_DELAY_MS);
+    inspect();
+    const observer = new MutationObserver(inspect);
+    observer.observe(stage, {
+      attributeFilter: ["data-card-id"],
+      attributes: true,
+      childList: true,
+      subtree: true,
+    });
     return () => {
-      window.clearTimeout(delay);
-      observer?.disconnect();
+      observer.disconnect();
     };
   }, [
     actions,
@@ -160,6 +154,7 @@ export function JourneyCardTutorialController({
       cardId: confirmed.cardId,
       triggerId: confirmed.triggerId,
       speaker: confirmed.speaker,
+      delay: confirmed.delay,
       duration: confirmed.duration,
       horizontalOffset: confirmed.horizontalOffset,
       verticalOffset: confirmed.verticalOffset,

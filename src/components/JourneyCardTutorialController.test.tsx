@@ -121,7 +121,7 @@ afterEach(() => {
 });
 
 describe("JourneyCardTutorialController", () => {
-  it("waits three seconds before submitting visible source cards and ignores its overlay card", async () => {
+  it("submits visible source cards immediately and ignores its overlay card", async () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -131,15 +131,6 @@ describe("JourneyCardTutorialController", () => {
       await Promise.resolve();
     });
 
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(2_999);
-    });
-    expect(mocks.select).not.toHaveBeenCalled();
-    expect(mocks.open).not.toHaveBeenCalled();
-
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(1);
-    });
     expect(mocks.select).toHaveBeenCalledOnce();
     expect(mocks.select.mock.calls[0]?.[1]).toEqual(["card-a", "card-b"]);
     expect(mocks.open).toHaveBeenCalledWith(

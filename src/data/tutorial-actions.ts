@@ -8,6 +8,7 @@ import type {
   TutorialSiteConfiguration,
   TutorialSpeechBubble,
   TutorialTriggerDefinition,
+  TutorialTriggerDelay,
   TutorialTriggerEvent,
 } from "../types/tutorial";
 import { parseTutorialBattleAiActionOverrides } from "../types/tutorial-ai-action-overrides";
@@ -114,6 +115,12 @@ function parseTutorialSpeechBubble(
       `Tutorial action ${JSON.stringify(actionId)} must have a non-negative speech bubble duration.`,
     );
   }
+  const delay = record.delay ?? 0;
+  if (typeof delay !== "number" || !Number.isFinite(delay) || delay < 0) {
+    throw new Error(
+      `Tutorial action ${JSON.stringify(actionId)} must have a non-negative delay for its speech bubble.`,
+    );
+  }
   const verticalOffset = record.verticalOffset ?? 0;
   if (typeof verticalOffset !== "number" || !Number.isFinite(verticalOffset)) {
     throw new Error(
@@ -146,6 +153,7 @@ function parseTutorialSpeechBubble(
   }
   return {
     speaker,
+    ...(record.delay === undefined ? {} : { delay }),
     duration,
     horizontalOffset,
     verticalOffset,
@@ -154,27 +162,61 @@ function parseTutorialSpeechBubble(
   };
 }
 
-/** Validate the persistent Mira guidance authored for journey start. */
-export function parseTutorialJourneyStartConfiguration(
+function parseTutorialTriggerDelay(
   value: unknown,
+  events: readonly TutorialTriggerEvent[],
+  triggerId: string,
+): TutorialTriggerDelay {
+  if (value === undefined) return {};
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error(
+      `Tutorial trigger ${JSON.stringify(triggerId)} must have a delay table keyed by trigger event.`,
+    );
+  }
+  const delay: Partial<Record<TutorialTriggerEvent, number>> = {};
+  for (const [event, seconds] of Object.entries(value)) {
+    if (
+      !TUTORIAL_TRIGGER_EVENTS.has(event as TutorialTriggerEvent) ||
+      !events.includes(event as TutorialTriggerEvent)
+    ) {
+      throw new Error(
+        `Tutorial trigger ${JSON.stringify(triggerId)} delay must reference one of its trigger events.`,
+      );
+    }
+    if (
+      typeof seconds !== "number" ||
+      !Number.isFinite(seconds) ||
+      seconds < 0
+    ) {
+      throw new Error(
+        `Tutorial trigger ${JSON.stringify(triggerId)} must have non-negative finite event delays.`,
+      );
+    }
+    delay[event as TutorialTriggerEvent] = seconds;
+  }
+  return delay;
+}
+
+function parsePersistentTutorialConfiguration(
+  value: unknown,
+  configurationId: "journeyStart" | "dreamscape" | "draft" | "dreamsign-revelation",
 ): TutorialJourneyStartConfiguration {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    throw new Error("Tutorial data must contain a journeyStart table.");
+    throw new Error(`Tutorial data must contain a ${configurationId} table.`);
   }
   const record = value as Record<string, unknown>;
   const parsed = parseTutorialSpeechBubble(
     record.speechBubble,
-    "journey-start",
+    configurationId,
     true,
   );
   if (parsed === undefined || parsed.speaker !== "mira") {
-    throw new Error(
-      "Tutorial journeyStart speech bubble must target Mira.",
-    );
+    throw new Error(`Tutorial ${configurationId} speech bubble must target Mira.`);
   }
   return {
     speechBubble: {
       speaker: parsed.speaker,
+      ...(typeof parsed.delay === "number" ? { delay: parsed.delay } : {}),
       horizontalOffset: parsed.horizontalOffset,
       verticalOffset: parsed.verticalOffset,
       bubbleWidth: parsed.bubbleWidth,
@@ -183,39 +225,18 @@ export function parseTutorialJourneyStartConfiguration(
   };
 }
 
+/** Validate the persistent Mira guidance authored for journey start. */
+export function parseTutorialJourneyStartConfiguration(
+  value: unknown,
+): TutorialJourneyStartConfiguration {
+  return parsePersistentTutorialConfiguration(value, "journeyStart");
+}
+
 /** Validate the delayed persistent Mira guidance for the first dreamscape. */
 export function parseTutorialDreamscapeConfiguration(
   value: unknown,
 ): TutorialDreamscapeConfiguration {
-  if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    throw new Error("Tutorial data must contain a dreamscape table.");
-  }
-  const record = value as Record<string, unknown>;
-  const parsed = parseTutorialSpeechBubble(
-    record.speechBubble,
-    "dreamscape",
-    true,
-  );
-  if (parsed === undefined || parsed.speaker !== "mira") {
-    throw new Error("Tutorial dreamscape speech bubble must target Mira.");
-  }
-  const speechBubble = record.speechBubble as Record<string, unknown>;
-  const delay = speechBubble.delay ?? 0;
-  if (typeof delay !== "number" || !Number.isFinite(delay) || delay < 0) {
-    throw new Error(
-      "Tutorial dreamscape speech bubble must have a non-negative delay.",
-    );
-  }
-  return {
-    speechBubble: {
-      speaker: parsed.speaker,
-      delay,
-      horizontalOffset: parsed.horizontalOffset,
-      verticalOffset: parsed.verticalOffset,
-      bubbleWidth: parsed.bubbleWidth,
-      text: parsed.text,
-    },
-  };
+  return parsePersistentTutorialConfiguration(value, "dreamscape");
 }
 
 /** Validate persistent Mira guidance for a first-visit site tutorial. */
@@ -223,27 +244,7 @@ export function parseTutorialSiteConfiguration(
   value: unknown,
   siteId: "draft" | "dreamsign-revelation",
 ): TutorialSiteConfiguration {
-  if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    throw new Error(`Tutorial data must contain a ${siteId} table.`);
-  }
-  const record = value as Record<string, unknown>;
-  const parsed = parseTutorialSpeechBubble(
-    record.speechBubble,
-    siteId,
-    true,
-  );
-  if (parsed === undefined || parsed.speaker !== "mira") {
-    throw new Error(`Tutorial ${siteId} speech bubble must target Mira.`);
-  }
-  return {
-    speechBubble: {
-      speaker: parsed.speaker,
-      horizontalOffset: parsed.horizontalOffset,
-      verticalOffset: parsed.verticalOffset,
-      bubbleWidth: parsed.bubbleWidth,
-      text: parsed.text,
-    },
-  };
+  return parsePersistentTutorialConfiguration(value, siteId);
 }
 
 /** Validate untrusted generated or event-log tutorial action data. */
@@ -618,7 +619,16 @@ export function parseTutorialTriggers(
         `Tutorial trigger ${JSON.stringify(record.id)} must have a finite priority.`,
       );
     }
-    const speechBubble = parseTutorialSpeechBubble(record, record.id, true);
+    const triggerDelay = parseTutorialTriggerDelay(
+      record.delay,
+      record.on,
+      record.id,
+    );
+    const speechBubble = parseTutorialSpeechBubble(
+      { ...record, delay: 0 },
+      record.id,
+      true,
+    );
     if (speechBubble === undefined) {
       throw new Error(
         `Tutorial trigger ${JSON.stringify(record.id)} must define a speech bubble.`,
@@ -629,6 +639,8 @@ export function parseTutorialTriggers(
         `Tutorial trigger ${JSON.stringify(record.id)} must have a positive duration.`,
       );
     }
+    const { delay: _normalizedScalarDelay, ...triggerSpeechBubble } =
+      speechBubble;
     if (
       record.match === null ||
       typeof record.match !== "object" ||
@@ -674,7 +686,10 @@ export function parseTutorialTriggers(
       on: [...record.on],
       priority,
       match: parsedMatch,
-      ...speechBubble,
+      ...triggerSpeechBubble,
+      ...(Object.keys(triggerDelay).length === 0
+        ? {}
+        : { delay: triggerDelay }),
     };
   });
 }

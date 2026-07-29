@@ -118,18 +118,21 @@ describe("buildJourneyStartGuideDialogue", () => {
     expect(
       buildJourneyStartGuideDialogue("tutorial-avatar-uuid", {
         speaker: "mira",
+        delay: 1,
         horizontalOffset: 40,
         verticalOffset: -10,
         bubbleWidth: 550,
         text: "Authored [purple]Dream Avatar[/purple] guidance.",
       }),
     ).toEqual({
+      id: "journey-start-guidance:tutorial-avatar-uuid",
       model: {
         portrait: { kind: "character-portrait", characterId: "mira" },
         portraitAlt: "Mira",
         speakerName: "Mira",
         text: "Authored [purple]Dream Avatar[/purple] guidance.",
       },
+      delaySeconds: 1,
       horizontalOffset: 40,
       verticalOffset: -10,
       bubbleWidth: 550,

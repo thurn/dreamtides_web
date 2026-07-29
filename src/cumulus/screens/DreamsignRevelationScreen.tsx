@@ -23,7 +23,7 @@ import {
   type DreamsignReplacementView,
 } from "./DreamsignReplacementDialog";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
-import { useDelayedSiteTutorialVisibility } from "./use-delayed-site-tutorial-visibility";
+import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 
 /** The guide who speaks over the Revelation offer. */
 export interface DreamsignRevelationGuideView {
@@ -96,7 +96,10 @@ export function DreamsignRevelationScreen({
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const guideUrl = resolveArtRef(view.guide.art);
   const disabled = claimedIndex !== null || view.purge !== null;
-  const tutorialVisible = useDelayedSiteTutorialVisibility(view.tutorial?.id);
+  const tutorialVisible = useDelayedTutorialSpeechBubbleVisibility(
+    view.tutorial?.id ?? view.tutorial?.model.text,
+    view.tutorial === undefined ? undefined : (view.tutorial.delaySeconds ?? 0),
+  );
   useEffect(() => {
     if (tutorialVisible && view.tutorial !== undefined) {
       onTutorialShown?.(view.tutorial);

@@ -83,7 +83,7 @@ export function JourneyStartScreenAdapter() {
     ],
   );
 
-  useEffect(() => {
+  const handleGuideDialogueShown = useCallback(() => {
     if (tutorialDreamAvatarId === undefined || guideDialogue === undefined) {
       return;
     }
@@ -93,6 +93,7 @@ export function JourneyStartScreenAdapter() {
       {
         dreamAvatarId: tutorialDreamAvatarId,
         speakerName: guideDialogue.model.speakerName,
+        delaySeconds: guideDialogue.delaySeconds,
         horizontalOffsetPx: guideDialogue.horizontalOffset,
         verticalOffsetPx: guideDialogue.verticalOffset,
         bubbleWidthPx: guideDialogue.bubbleWidth,
@@ -125,6 +126,7 @@ export function JourneyStartScreenAdapter() {
       key={rerollCount}
       dreamAvatars={dreamAvatars}
       guideDialogue={guideDialogue}
+      onGuideDialogueShown={handleGuideDialogueShown}
       onPick={handlePick}
       onReroll={
         tutorialDreamAvatarId === undefined ? handleReroll : undefined

@@ -124,18 +124,19 @@ becomes visible, while completing the action remains a shared intent.
 
 Every character-led message uses the same `speechBubble` model. A standalone
 `display-speech-bubble` action requires one, while actions such as card reveal
-and end turn may attach one. The model configures speaker, text, visible
-duration, desktop width, and vertical offset. The Tutorial Editor presents one
-shared control set for that model in every parent action.
+and end turn may attach one. The model configures speaker, text, appearance
+delay, visible duration, desktop width, and placement offsets. One-context
+bubbles author a scalar delay; reusable triggers author delays by triggering
+event. The Tutorial Editor presents one shared control set for that model in
+every parent action.
 
-The `journeyStart` and `dreamscape` tables author persistent Mira guidance for
-the tutorial journey handoff. Dreamscape guidance includes its appearance delay;
-the first dreamscape begins that delay when the player dismisses the
-starting-deck modal.
+The `journeyStart` and `dreamscape` tables author delayed persistent Mira
+guidance for the tutorial journey handoff. The first dreamscape begins its
+authored delay when the player dismisses the starting-deck modal.
 
 The `draft` and `dreamsignRevelation` tables author Mira guidance for the first
-visit to each of those site types in a journey. Both appear one second after the
-site screen loads. Draft guidance retires with the first persisted pick;
+visit to each of those site types in a journey. Each begins its authored delay
+when the site screen loads. Draft guidance retires with the first persisted pick;
 Dreamsign Revelation guidance persists until the site is completed.
 Completed-site state in the shared atlas determines eligibility across
 dreamscape travel. Site guidance takes priority over supplemental glossary
@@ -148,9 +149,11 @@ yields to Mira's first-visit message.
 Supplemental tutorial triggers are shared first-occurrence explanations. Their
 seen ids live in the room fold, so a keyword explained on a journey card is
 already familiar when it later appears in battle. Draft screens submit the UUIDs
-currently visible in display order three seconds after the screen loads; the
-reducer selects the first card with the highest-priority unfamiliar `card-seen`
-trigger. Each persisted four-card Draft offer may present one explanation, so
+currently visible in display order; the reducer selects the first card with the
+highest-priority unfamiliar `card-seen` trigger. The selected bubble begins the
+delay authored for `card-seen`; the same trigger can remain immediate for
+`card-play` and `dreamwell-resolve`. Each persisted four-card Draft offer may
+present one explanation, so
 subsequent Draft picks can each explain one unfamiliar keyword. Mira and her
 speech bubble appear in available viewport space outside the visible cards
 while every card remains in its screen position. The explanation stays visible

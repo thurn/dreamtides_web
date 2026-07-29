@@ -2,6 +2,7 @@ import type { FirstVisitSiteTutorialView } from "../../cumulus/screens/site-tuto
 import { activeFirstVisitTutorialSite } from "../../data/site-tutorial-guidance";
 import type { JourneyState } from "../../types/journey";
 import type { TutorialSiteConfiguration } from "../../types/tutorial";
+import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 
 /** Map one authored first-visit site tutorial to persistent Mira dialogue. */
 export function buildFirstVisitSiteTutorialView(
@@ -26,6 +27,7 @@ export function buildFirstVisitSiteTutorialView(
       speakerName: "Mira",
       text: speechBubble.text,
     },
+    delaySeconds: tutorialSpeechBubbleDelaySeconds(speechBubble),
     horizontalOffset: speechBubble.horizontalOffset,
     verticalOffset: speechBubble.verticalOffset,
     bubbleWidth: speechBubble.bubbleWidth,

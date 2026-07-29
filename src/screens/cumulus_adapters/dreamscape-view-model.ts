@@ -35,6 +35,7 @@ import type {
   JourneyState,
 } from "../../types/journey";
 import type { TutorialDreamscapeConfiguration } from "../../types/tutorial";
+import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 
 /** The completion level at which the guardian battle is the final boss. */
 const FINAL_BOSS_COMPLETION_LEVEL = 6;
@@ -267,13 +268,14 @@ export function buildDreamscapeGuideDialogue(
   }
   const speechBubble = configuration.speechBubble;
   return {
+    id: `${state.runId ?? state.seed}:dreamscape-guidance`,
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
       portraitAlt: "Mira",
       speakerName: "Mira",
       text: speechBubble.text,
     },
-    delaySeconds: speechBubble.delay,
+    delaySeconds: tutorialSpeechBubbleDelaySeconds(speechBubble),
     horizontalOffset: speechBubble.horizontalOffset,
     verticalOffset: speechBubble.verticalOffset,
     bubbleWidth: speechBubble.bubbleWidth,

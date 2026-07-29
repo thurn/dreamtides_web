@@ -66,6 +66,7 @@ import type {
 } from "../../types/tutorial";
 import { renderTutorialInstructionParagraph } from "../internal/tutorial-instruction-text";
 import { parseTutorialInstructionMarkup } from "../../data/tutorial-instruction-markup";
+import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 
 export interface TutorialDreamAvatarView {
   readonly visual: DreamAvatarVisual;
@@ -78,6 +79,7 @@ export type TutorialDialogueView =
       readonly actionId?: string;
       readonly parentAction?: TutorialAction["action"];
       readonly kind: "guide";
+      readonly delay?: number;
       readonly duration?: number;
       readonly horizontalOffset: number;
       readonly verticalOffset: number;
@@ -89,6 +91,7 @@ export type TutorialDialogueView =
       readonly parentAction?: TutorialAction["action"];
       readonly kind: "dreamAvatar";
       readonly owner: TutorialDreamAvatarOwner;
+      readonly delay?: number;
       readonly duration?: number;
       readonly horizontalOffset?: number;
       readonly verticalOffset?: number;
@@ -1777,6 +1780,16 @@ export function TutorialScreen({
       ? view.currentAction.speechBubble?.duration
       : undefined) ??
     3;
+  const dialogueDelay =
+    view.dialogue?.delay ??
+    (view.currentAction?.action === "display-speech-bubble" ||
+    view.currentAction?.action === "reveal-and-play-opponent-card" ||
+    view.currentAction?.action === "end-turn"
+      ? view.currentAction.speechBubble === undefined
+        ? undefined
+        : tutorialSpeechBubbleDelaySeconds(view.currentAction.speechBubble)
+      : undefined) ??
+    0;
 
   useEffect(() => {
     const dialogue = view.dialogue;
@@ -1794,12 +1807,13 @@ export function TutorialScreen({
       current === actionKey ? null : current,
     );
     const startDelay =
-      dialogueParentAction === "reveal-and-play-opponent-card" && !reduceMotion
+      millisecondsAtPlaybackSpeed(dialogueDelay, playbackSpeed) +
+      (dialogueParentAction === "reveal-and-play-opponent-card" && !reduceMotion
         ? millisecondsAtPlaybackSpeed(
             TUTORIAL_CARD_TRAVEL_SECONDS + TUTORIAL_CARD_FLIP_SECONDS,
             playbackSpeed,
           )
-        : 0;
+        : 0);
     if (startDelay === 0) setVisibleDialogueActionKey(actionKey);
     const showTimeout =
       startDelay === 0

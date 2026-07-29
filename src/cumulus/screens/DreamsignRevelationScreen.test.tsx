@@ -99,6 +99,7 @@ describe("DreamsignRevelationScreen", () => {
           speakerName: "Mira",
           text: "A [purple]Dreamsign[/purple] gives ongoing benefits.",
         },
+        delaySeconds: 1,
         horizontalOffset: 0,
         verticalOffset: 0,
         bubbleWidth: 600,

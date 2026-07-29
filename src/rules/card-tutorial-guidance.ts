@@ -4,6 +4,7 @@ import type { TutorialTriggerDefinition } from "../types/tutorial";
 import { activeFirstVisitTutorialSite } from "../data/site-tutorial-guidance";
 import type { FoldState } from "./fold-state";
 import { matchTutorialGuidance } from "./battle/tutorial-guidance";
+import { tutorialSpeechBubbleDelaySeconds } from "../data/tutorial-speech-bubble";
 
 export interface CardTutorialGuidancePresentation {
   readonly id: string;
@@ -12,6 +13,7 @@ export interface CardTutorialGuidancePresentation {
   readonly triggerId: string;
   readonly speaker: TutorialTriggerDefinition["speaker"];
   readonly text: string;
+  readonly delay?: number;
   readonly duration: number;
   readonly horizontalOffset: number;
   readonly verticalOffset: number;
@@ -181,6 +183,7 @@ export function openCardTutorialGuidance(
       triggerId: match.trigger.id,
       speaker: match.trigger.speaker,
       text: match.trigger.text,
+      delay: tutorialSpeechBubbleDelaySeconds(match.trigger, "card-seen"),
       duration: match.trigger.duration,
       horizontalOffset: match.trigger.horizontalOffset,
       verticalOffset: match.trigger.verticalOffset,

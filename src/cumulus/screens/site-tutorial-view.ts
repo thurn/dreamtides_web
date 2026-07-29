@@ -1,10 +1,4 @@
-import type { CharacterDialogueModel } from "../components/overlay/CharacterDialogue";
+import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 
 /** Mira guidance rendered for the initial teaching window of a first site visit. */
-export interface FirstVisitSiteTutorialView {
-  readonly id: string;
-  readonly model: CharacterDialogueModel;
-  readonly horizontalOffset: number;
-  readonly verticalOffset: number;
-  readonly bubbleWidth: number;
-}
+export type FirstVisitSiteTutorialView = TutorialSpeechBubbleView;

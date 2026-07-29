@@ -55,6 +55,7 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
       source: guidance.source,
       triggerIds: guidance.messages.map((message) => message.triggerId),
       speakers: guidance.messages.map((message) => message.speaker),
+      delays: guidance.messages.map((message) => message.delay ?? 0),
       durations: guidance.messages.map((message) => message.duration),
       effectiveDurations: guidance.messages.map((_, messageIndex) =>
         tutorialGuidanceMessageDurationSeconds({

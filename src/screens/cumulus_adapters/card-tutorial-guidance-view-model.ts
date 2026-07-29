@@ -17,6 +17,7 @@ export function buildCardTutorialGuidanceView(
     triggerId: presentation.triggerId,
     messageIndex: 0,
     messageCount: 1,
+    delay: presentation.delay ?? 0,
     duration: presentation.duration,
     dialogue: {
       portrait: { kind: "character-portrait", characterId: "mira" },

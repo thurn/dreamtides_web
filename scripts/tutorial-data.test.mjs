@@ -525,8 +525,9 @@ describe("tutorial data", () => {
     const triggers = validateTutorialTriggers([
       {
         id: "support",
-        on: ["card-play", "dreamwell-resolve"],
+        on: ["card-seen", "card-play", "dreamwell-resolve"],
         priority: 100,
+        delay: { "card-seen": 1 },
         speaker: "enemy",
         duration: 5,
         verticalOffset: 30,
@@ -537,6 +538,7 @@ describe("tutorial data", () => {
     ]);
     expect(triggers[0]).toMatchObject({
       speaker: "enemy",
+      delay: { "card-seen": 1 },
       duration: 5,
       verticalOffset: 30,
       bubbleWidth: 300,
@@ -556,5 +558,17 @@ describe("tutorial data", () => {
         .triggers,
     )
       .toEqual(triggers);
+    expect(() =>
+      validateTutorialTriggers([
+        {
+          id: "bad-delay-event",
+          on: ["card-play"],
+          delay: { "card-seen": 1 },
+          duration: 3,
+          match: { kind: "glossary", id: "support" },
+          text: "No.",
+        },
+      ]),
+    ).toThrow(/delay must reference one of its trigger events/u);
   });
 });

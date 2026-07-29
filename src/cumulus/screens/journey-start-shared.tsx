@@ -4,19 +4,19 @@
 // console hairline, while both compose the named DreamAvatarAbilityText source.
 // PURE: no state ownership; the adapter owns the offer, the seed, and startJourney.
 
+import { useEffect } from "react";
 import { ResourceChip } from "../components/hud/ResourceChip";
 import { IconButton } from "../components/controls/IconButton";
 import { TideDisc, type TideDiscSize } from "../components/hud/TideDisc";
-import {
-  CharacterDialogue,
-  type CharacterDialogueModel,
-} from "../components/overlay/CharacterDialogue";
+import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
 import { type Tide } from "../components/hud/tide-spec";
 import { token } from "../primitives/tokens";
 import { GLYPHS } from "../primitives/glyph";
 import type { DreamAvatarPortraitFocus } from "../../types/content";
 import { GLOSSARY_IDS } from "../../data/glossary";
 import { DEBUG_REROLL_TOP } from "./chrome-geometry";
+import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
+import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 
 /** One tide shown on a DreamAvatar, already resolved to display copy. Both the
  * desktop triptych and the mobile carousel render their tide discs (and each
@@ -182,12 +182,7 @@ export interface DreamAvatarOfferView {
 }
 
 /** Character-led guidance shown only for the fixed tutorial offer. */
-export interface JourneyStartGuideDialogueView {
-  readonly model: CharacterDialogueModel;
-  readonly horizontalOffset: number;
-  readonly verticalOffset: number;
-  readonly bubbleWidth: number;
-}
+export type JourneyStartGuideDialogueView = TutorialSpeechBubbleView;
 
 export interface JourneyStartScreenProps {
   /** The DreamAvatars offered this run (three normally; one in the tutorial). */
@@ -196,6 +191,8 @@ export interface JourneyStartScreenProps {
   guideDialogue?: JourneyStartGuideDialogueView;
   /** Called with a DreamAvatar's id when the player commits to it. */
   onPick: (dreamAvatarId: string) => void;
+  /** Reports when the authored journey-start speech bubble becomes visible. */
+  onGuideDialogueShown?: () => void;
   /** Requests a shared debug reroll. Omitted for a fixed tutorial offer. */
   onReroll?: () => void;
 }
@@ -204,10 +201,19 @@ export interface JourneyStartScreenProps {
 export function JourneyStartGuideDialogue({
   dialogue,
   layout,
+  onShown,
 }: {
   readonly dialogue: JourneyStartGuideDialogueView;
   readonly layout: "desktop" | "mobile";
+  readonly onShown?: () => void;
 }) {
+  const visible = useDelayedTutorialSpeechBubbleVisibility(
+    dialogue.id ?? dialogue.model.text,
+    dialogue.delaySeconds ?? 0,
+  );
+  useEffect(() => {
+    if (visible) onShown?.();
+  }, [onShown, visible]);
   const desktop = layout === "desktop";
   const mobileLeftReserve = Math.max(0, -dialogue.horizontalOffset);
   const mobileRightReserve = Math.max(0, dialogue.horizontalOffset);
@@ -237,7 +243,7 @@ export function JourneyStartGuideDialogue({
     >
       <CharacterDialogue
         dialogue={dialogue.model}
-        visible
+        visible={visible}
         size={desktop ? "prominent" : "compact"}
         testId="journey-start-tutorial-dialogue"
       />

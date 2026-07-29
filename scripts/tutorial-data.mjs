@@ -250,6 +250,12 @@ function validateTutorialSpeechBubble(value, actionId, required) {
       `Tutorial action ${JSON.stringify(actionId)} must have a non-negative speech bubble duration.`,
     );
   }
+  const delay = value.delay ?? 0;
+  if (typeof delay !== "number" || !Number.isFinite(delay) || delay < 0) {
+    throw invalid(
+      `Tutorial action ${JSON.stringify(actionId)} must have a non-negative delay for its speech bubble.`,
+    );
+  }
   const verticalOffset = value.verticalOffset ?? 0;
   if (typeof verticalOffset !== "number" || !Number.isFinite(verticalOffset)) {
     throw invalid(
@@ -282,6 +288,7 @@ function validateTutorialSpeechBubble(value, actionId, required) {
   }
   return {
     speaker,
+    ...(value.delay === undefined ? {} : { delay }),
     duration,
     horizontalOffset,
     verticalOffset,
@@ -290,83 +297,67 @@ function validateTutorialSpeechBubble(value, actionId, required) {
   };
 }
 
-/** Validate the persistent Mira guidance authored for journey start. */
-export function validateTutorialJourneyStartConfiguration(value) {
+function validateTutorialTriggerDelay(value, events, triggerId) {
+  if (value === undefined) return {};
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    throw invalid("Tutorial data must contain a journeyStart table.");
+    throw invalid(
+      `Tutorial trigger ${JSON.stringify(triggerId)} must have a delay table keyed by trigger event.`,
+    );
+  }
+  const delay = {};
+  for (const [event, seconds] of Object.entries(value)) {
+    if (!TUTORIAL_TRIGGER_EVENTS.has(event) || !events.includes(event)) {
+      throw invalid(
+        `Tutorial trigger ${JSON.stringify(triggerId)} delay must reference one of its trigger events.`,
+      );
+    }
+    if (typeof seconds !== "number" || !Number.isFinite(seconds) || seconds < 0) {
+      throw invalid(
+        `Tutorial trigger ${JSON.stringify(triggerId)} must have non-negative finite event delays.`,
+      );
+    }
+    delay[event] = seconds;
+  }
+  return delay;
+}
+
+function validatePersistentTutorialConfiguration(value, configurationId) {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw invalid(`Tutorial data must contain a ${configurationId} table.`);
   }
   const parsed = validateTutorialSpeechBubble(
     value.speechBubble,
-    "journey-start",
+    configurationId,
     true,
   );
   if (parsed.speaker !== "mira") {
-    throw invalid("Tutorial journeyStart speech bubble must target Mira.");
+    throw invalid(`Tutorial ${configurationId} speech bubble must target Mira.`);
   }
   return {
     speechBubble: {
       speaker: parsed.speaker,
+      ...(typeof parsed.delay === "number" ? { delay: parsed.delay } : {}),
       horizontalOffset: parsed.horizontalOffset,
       verticalOffset: parsed.verticalOffset,
       bubbleWidth: parsed.bubbleWidth,
       text: parsed.text,
     },
   };
+}
+
+/** Validate the persistent Mira guidance authored for journey start. */
+export function validateTutorialJourneyStartConfiguration(value) {
+  return validatePersistentTutorialConfiguration(value, "journeyStart");
 }
 
 /** Validate the delayed persistent Mira guidance for the first dreamscape. */
 export function validateTutorialDreamscapeConfiguration(value) {
-  if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    throw invalid("Tutorial data must contain a dreamscape table.");
-  }
-  const parsed = validateTutorialSpeechBubble(
-    value.speechBubble,
-    "dreamscape",
-    true,
-  );
-  if (parsed.speaker !== "mira") {
-    throw invalid("Tutorial dreamscape speech bubble must target Mira.");
-  }
-  const delay = value.speechBubble.delay ?? 0;
-  if (typeof delay !== "number" || !Number.isFinite(delay) || delay < 0) {
-    throw invalid(
-      "Tutorial dreamscape speech bubble must have a non-negative delay.",
-    );
-  }
-  return {
-    speechBubble: {
-      speaker: parsed.speaker,
-      delay,
-      horizontalOffset: parsed.horizontalOffset,
-      verticalOffset: parsed.verticalOffset,
-      bubbleWidth: parsed.bubbleWidth,
-      text: parsed.text,
-    },
-  };
+  return validatePersistentTutorialConfiguration(value, "dreamscape");
 }
 
 /** Validate persistent Mira guidance for a first-visit site tutorial. */
 export function validateTutorialSiteConfiguration(value, siteId) {
-  if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    throw invalid(`Tutorial data must contain a ${siteId} table.`);
-  }
-  const parsed = validateTutorialSpeechBubble(
-    value.speechBubble,
-    siteId,
-    true,
-  );
-  if (parsed.speaker !== "mira") {
-    throw invalid(`Tutorial ${siteId} speech bubble must target Mira.`);
-  }
-  return {
-    speechBubble: {
-      speaker: parsed.speaker,
-      horizontalOffset: parsed.horizontalOffset,
-      verticalOffset: parsed.verticalOffset,
-      bubbleWidth: parsed.bubbleWidth,
-      text: parsed.text,
-    },
-  };
+  return validatePersistentTutorialConfiguration(value, siteId);
 }
 
 /** Validate and normalize tutorial actions from TOML or the editor API. */
@@ -710,10 +701,21 @@ export function validateTutorialTriggers(value) {
     if (typeof priority !== "number" || !Number.isFinite(priority)) {
       throw invalid(`Tutorial trigger ${JSON.stringify(id)} must have a finite priority.`);
     }
-    const speechBubble = validateTutorialSpeechBubble(candidate, id, true);
+    const triggerDelay = validateTutorialTriggerDelay(
+      candidate.delay,
+      candidate.on,
+      id,
+    );
+    const speechBubble = validateTutorialSpeechBubble(
+      { ...candidate, delay: 0 },
+      id,
+      true,
+    );
     if (speechBubble.duration <= 0) {
       throw invalid(`Tutorial trigger ${JSON.stringify(id)} must have a positive duration.`);
     }
+    const { delay: _normalizedScalarDelay, ...triggerSpeechBubble } =
+      speechBubble;
     const match = candidate.match;
     if (match === null || typeof match !== "object" || Array.isArray(match)) {
       throw invalid(`Tutorial trigger ${JSON.stringify(id)} must have a match table.`);
@@ -746,7 +748,10 @@ export function validateTutorialTriggers(value) {
       on: [...candidate.on],
       priority,
       match: normalizedMatch,
-      ...speechBubble,
+      ...triggerSpeechBubble,
+      ...(Object.keys(triggerDelay).length === 0
+        ? {}
+        : { delay: triggerDelay }),
     };
   });
 }

@@ -19,6 +19,7 @@ import type {
   TutorialPlaybackState,
   TutorialSpeechBubble,
 } from "../../types/tutorial";
+import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 import { tutorialInstructionPlainText } from "../../data/tutorial-instruction-markup";
 
 const TUTORIAL_BATTLE_ID = "tutorial-battle";
@@ -888,6 +889,13 @@ export function buildTutorialView(
               parentAction: dialogue.parentAction,
               kind: "dreamAvatar",
               owner: dialogue.speechBubble.speaker,
+              ...(tutorialSpeechBubbleDelaySeconds(dialogue.speechBubble) === 0
+                ? {}
+                : {
+                    delay: tutorialSpeechBubbleDelaySeconds(
+                      dialogue.speechBubble,
+                    ),
+                  }),
               duration: dialogue.speechBubble.duration,
               horizontalOffset: dialogue.speechBubble.horizontalOffset,
               verticalOffset: dialogue.speechBubble.verticalOffset,
@@ -902,6 +910,13 @@ export function buildTutorialView(
               actionId: dialogue.actionId,
               parentAction: dialogue.parentAction,
               kind: "guide",
+              ...(tutorialSpeechBubbleDelaySeconds(dialogue.speechBubble) === 0
+                ? {}
+                : {
+                    delay: tutorialSpeechBubbleDelaySeconds(
+                      dialogue.speechBubble,
+                    ),
+                  }),
               duration: dialogue.speechBubble.duration,
               horizontalOffset: dialogue.speechBubble.horizontalOffset,
               verticalOffset: dialogue.speechBubble.verticalOffset,

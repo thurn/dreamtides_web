@@ -68,6 +68,7 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
           siteId,
           siteType: "Draft",
           text: tutorial.model.text,
+          delaySeconds: tutorial.delaySeconds ?? 0,
           horizontalOffset: tutorial.horizontalOffset,
           verticalOffset: tutorial.verticalOffset,
           bubbleWidth: tutorial.bubbleWidth,
