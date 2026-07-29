@@ -179,6 +179,7 @@ export type BounceReason =
   | "partner_conflict"
   | "unknown_conflict"
   | "prompt_pending"
+  | "observer_read_only"
   | "invalid_action"
   | "malformed_event"
   | "fold_error";

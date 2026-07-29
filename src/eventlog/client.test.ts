@@ -109,6 +109,17 @@ interface Harness {
   foldErrors: Array<{ seq: number; message: string }>;
   appendFailures: Array<{ event: GameEvent; error: unknown }>;
   pendingDropped: GameEvent[][];
+  corrections: Array<{
+    firstChangedSeq: number;
+    previousHead: number;
+    authoritativeHead: number;
+  }>;
+  collisions: Array<{
+    intentKey: string;
+    winningSeq: number;
+    winner: GameEvent;
+    contender: GameEvent;
+  }>;
   confirmedHeads: number[];
   confirmed: () => ToyState | undefined;
 }
@@ -139,6 +150,8 @@ function makeHarness(
   const foldErrors: Harness["foldErrors"] = [];
   const appendFailures: Harness["appendFailures"] = [];
   const pendingDropped: Harness["pendingDropped"] = [];
+  const corrections: Harness["corrections"] = [];
+  const collisions: Harness["collisions"] = [];
   const confirmedHeads: number[] = [];
 
   const io: LogClientIo = {
@@ -177,6 +190,8 @@ function makeHarness(
     onFoldError: (error) => foldErrors.push({ seq: error.seq, message: error.message }),
     onAppendFailed: (event, error) => appendFailures.push({ event, error }),
     onPendingDropped: (events) => pendingDropped.push(events),
+    onAuthoritativeCorrection: (info) => corrections.push(info),
+    onIntentKeyCollision: (info) => collisions.push(info),
   }, { clientId: opts.clientId });
 
   const harness: Harness = {
@@ -192,6 +207,8 @@ function makeHarness(
     foldErrors,
     appendFailures,
     pendingDropped,
+    corrections,
+    collisions,
     confirmedHeads,
     confirmed: () => confirmedStates[confirmedStates.length - 1],
   };
@@ -336,6 +353,31 @@ describe("LogClient double-apply of own intent", () => {
     ]);
   });
 
+  it("records a semantic collision against an already-confirmed intent key", async () => {
+    const { harness, client } = makeHarness();
+    const winner = confirmedEvent({
+      tag: "winner",
+      actor: "partner",
+      basedOnSeq: 0,
+      intentKey: "logical-transition",
+    });
+    harness.deliver(makeNode({ events: { 1: winner } }));
+
+    await client.submit({
+      type: "T",
+      payload: { tag: "different-contract" },
+      intentKey: "logical-transition",
+    });
+
+    expect(harness.appended).toHaveLength(0);
+    expect(harness.collisions).toHaveLength(1);
+    expect(harness.collisions[0]).toMatchObject({
+      intentKey: "logical-transition",
+      winningSeq: 1,
+      winner,
+    });
+  });
+
   it("appends local submissions in order while echoing both immediately", async () => {
     const resolvers: Array<(seq: number) => void> = [];
     const { harness, client } = makeHarness(config, {
@@ -443,6 +485,86 @@ describe("LogClient refold after compaction", () => {
     ).state;
     expect(harness.displayed()).toEqual(batch);
     expect(harness.displayed()?.applied).toEqual(["a", "b", "c", "d", "e", "f", "g"]);
+  });
+});
+
+describe("LogClient authoritative-prefix correction", () => {
+  it("converges clients that temporarily observed different events at one sequence", () => {
+    const first = makeHarness();
+    const second = makeHarness();
+    const provisionalA = confirmedEvent({
+      tag: "provisional-a",
+      actor: "client-a",
+      basedOnSeq: 0,
+    });
+    const provisionalB = confirmedEvent({
+      tag: "provisional-b",
+      actor: "client-b",
+      basedOnSeq: 0,
+    });
+    const winner = confirmedEvent({
+      tag: "persisted-winner",
+      actor: "client-a",
+      basedOnSeq: 0,
+    });
+
+    first.harness.deliver(makeNode({ events: { 1: provisionalA } }));
+    second.harness.deliver(makeNode({ events: { 1: provisionalB } }));
+    expect(first.harness.displayed()?.applied).toEqual(["provisional-a"]);
+    expect(second.harness.displayed()?.applied).toEqual(["provisional-b"]);
+
+    const authoritative = makeNode({ events: { 1: winner } });
+    first.harness.deliver(authoritative);
+    second.harness.deliver(authoritative);
+
+    expect(first.harness.displayed()?.applied).toEqual(["persisted-winner"]);
+    expect(second.harness.displayed()?.applied).toEqual(["persisted-winner"]);
+    expect(first.harness.corrections).toEqual([{
+      firstChangedSeq: 1,
+      previousHead: 1,
+      authoritativeHead: 1,
+    }]);
+    expect(second.harness.corrections).toEqual([{
+      firstChangedSeq: 1,
+      previousHead: 1,
+      authoritativeHead: 1,
+    }]);
+  });
+
+  it("records a semantic collision when equal intent keys carry different contracts", async () => {
+    let resolveAppend: ((seq: number) => void) | undefined;
+    const { harness, client } = makeHarness(config, {
+      append: () =>
+        new Promise<number>((resolve) => {
+          resolveAppend = resolve;
+        }),
+    });
+    harness.deliver(makeNode({ events: {} }));
+    const submission = client.submit({
+      type: "T",
+      payload: { tag: "contender" },
+      intentKey: "one-logical-transition",
+    });
+    const winner = confirmedEvent({
+      tag: "winner",
+      actor: "partner",
+      basedOnSeq: 0,
+      intentKey: "one-logical-transition",
+    });
+
+    harness.deliver(makeNode({ events: { 1: winner } }));
+    resolveAppend?.(1);
+    await submission;
+
+    expect(harness.collisions).toHaveLength(1);
+    expect(harness.collisions[0]).toMatchObject({
+      intentKey: "one-logical-transition",
+      winningSeq: 1,
+      winner,
+    });
+    expect(harness.collisions[0]?.contender.payload).toEqual({
+      tag: "contender",
+    });
   });
 });
 

@@ -36,8 +36,6 @@ function renderStrict(children: ReactNode) {
 }
 
 const pathname = window.location.pathname.replace(/\/+$/, "");
-const gotoSceneParam = new URLSearchParams(window.location.search).get("goto");
-
 if (import.meta.hot && pathname !== "/glossary") {
   import.meta.hot.on("glossary-data:changed", () => {
     window.location.reload();
@@ -117,31 +115,6 @@ if (pathname === "/editor" || pathname === "/cards") {
 } else if (pathname === "/cumulus") {
   const { default: CumulusApp } = await import("./cumulus/docs/CumulusApp");
   renderStrict(<CumulusApp />);
-} else if (
-  pathname === "/main" ||
-  pathname === "/loading" ||
-  pathname === "/tutorial" ||
-  gotoSceneParam === "tutorial-battle" ||
-  gotoSceneParam === "tutorial-victory"
-) {
-  const [{ default: FrontDoorApp }, { parseRuntimeConfig }] = await Promise.all(
-    [import("./coop/FrontDoorApp"), import("./runtime/runtime-config")],
-  );
-  const runtimeConfig = parseRuntimeConfig(window.location.search);
-  const directTutorialBattle = runtimeConfig.gotoScene === "tutorial-battle";
-  const previewTutorialVictory =
-    runtimeConfig.gotoScene === "tutorial-victory";
-  const entry = (directTutorialBattle || previewTutorialVictory
-    ? "tutorial"
-    : pathname.slice(1)) as "main" | "loading" | "tutorial";
-  renderStrict(
-    <FrontDoorApp
-      runtimeConfig={runtimeConfig}
-      entry={entry}
-      directTutorialBattle={directTutorialBattle}
-      previewTutorialVictory={previewTutorialVictory}
-    />,
-  );
 } else {
   // The dev card/figment/config data hot-reload plugins (see vite.config.ts)
   // emit targeted custom HMR events instead of a full reload, so that saving in
@@ -181,6 +154,17 @@ if (pathname === "/editor" || pathname === "/cards") {
     );
   }
   const runtimeConfig = parseRuntimeConfig(canonicalSearch);
+  const directTutorialBattle = runtimeConfig.gotoScene === "tutorial-battle";
+  const previewTutorialVictory =
+    runtimeConfig.gotoScene === "tutorial-victory";
+  const frontDoorEntry =
+    directTutorialBattle || previewTutorialVictory
+      ? "tutorial"
+      : pathname === "/main" ||
+          pathname === "/loading" ||
+          pathname === "/tutorial"
+        ? pathname.slice(1) as "main" | "loading" | "tutorial"
+        : undefined;
 
   // Standalone component demos for browser QA. Mount with
   // `?demo=<name>` to bypass the full journey workflow when inspecting a
@@ -194,7 +178,12 @@ if (pathname === "/editor" || pathname === "/cards") {
       ) : demoParam === "entity-reveals" ? (
         <EntityRevealConformanceDemo />
       ) : (
-        <App runtimeConfig={runtimeConfig} />
+        <App
+          runtimeConfig={runtimeConfig}
+          frontDoorEntry={frontDoorEntry}
+          directTutorialBattle={directTutorialBattle}
+          previewTutorialVictory={previewTutorialVictory}
+        />
       )}
     </>,
   );

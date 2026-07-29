@@ -9,7 +9,11 @@ export function useTutorialBattleHandoff(
 ): void {
   const requestedKey = useRef<string | null>(null);
   useEffect(() => {
-    if (tutorial === null || tutorial.currentActionIndex !== null || beginTutorialBattle === undefined) return;
+    if (
+      tutorial === null ||
+      tutorial.currentActionIndex !== null ||
+      beginTutorialBattle === undefined
+    ) return;
     const intentKey = `tutorial-battle:${tutorial.runId}:begin`;
     if (requestedKey.current === intentKey) return;
     requestedKey.current = intentKey;

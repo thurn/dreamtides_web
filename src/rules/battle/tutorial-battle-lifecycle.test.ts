@@ -174,13 +174,17 @@ function terminalTutorialState(): FoldState {
         playerCardPlay: null,
       },
     },
+    playtestControl: {
+      mode: "single-controller",
+      controllerClientId: "client-a",
+    },
   };
 }
 
 function begin(state: FoldState = terminalTutorialState()) {
   return reduceGameEvent(state, {
     type: "BEGIN_TUTORIAL_BATTLE",
-    payload: { tutorialRunId: RUN_ID, driverClientId: "client-a" },
+    payload: { tutorialRunId: RUN_ID },
     actor: "client-a",
     basedOnSeq: 41,
     clientTimestamp: CTX.timestamp,
@@ -225,6 +229,30 @@ function handInstanceId(
 afterEach(() => registerTutorialBattleInitProvider(null));
 
 describe("tutorial battle lifecycle", () => {
+  it("materializes the live battle before any client claims the room", () => {
+    registerTutorialBattleInitProvider(
+      createTutorialBattleInitProvider(content()),
+    );
+    const unclaimed = {
+      ...terminalTutorialState(),
+      playtestControl: {
+        mode: "single-controller" as const,
+        controllerClientId: null,
+      },
+    };
+
+    const started = reduceTutorial(
+      unclaimed,
+      "BEGIN_TUTORIAL_BATTLE",
+      { tutorialRunId: RUN_ID },
+      "observer",
+    );
+
+    expect(started.outcome).toBe("applied");
+    expect(started.state.battle?.mode).toMatchObject({ kind: "tutorial" });
+    expect(started.state.playtestControl?.controllerClientId).toBeNull();
+  });
+
   it("parks a legal card play before movement and resumes it after Mira advances", () => {
     const tutorialContent = content();
     const supportCard = tutorialContent.cardDatabase.get(510);
@@ -398,7 +426,7 @@ describe("tutorial battle lifecycle", () => {
     expect(result.outcome).toBe("applied");
     const battle = result.state.battle!;
     expect(battle.mode).toEqual({
-      kind: "tutorial", tutorialRunId: RUN_ID, driverClientId: "client-a", restartNumber: 0,
+      kind: "tutorial", tutorialRunId: RUN_ID, restartNumber: 0,
       resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
     });
     expect(battle.board).toMatchObject({ activeSide: "player", turnNumber: 4, phase: "dawn", dreamwellDeckIndex: 2 });
@@ -998,33 +1026,40 @@ describe("tutorial battle lifecycle", () => {
     });
   });
 
-  it("restarts with a new driver, then hands victory into the tutorial DreamAvatar offer", () => {
+  it("restarts under transferred room control, then hands victory into the tutorial DreamAvatar offer", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const first = begin();
     const beforeJourney = first.state.journey;
     const original = first.state.battle!;
-    const restart = reduceGameEvent(first.state, {
-      type: "RESTART_TUTORIAL_BATTLE",
-      payload: { battleId: original.board.battleId, previousDriverClientId: "client-a", driverClientId: "client-b" },
-      actor: "client-b", basedOnSeq: 42, clientTimestamp: CTX.timestamp,
+    const transferred = reduceGameEvent(first.state, {
+      type: "TAKE_PLAYTEST_CONTROL",
+      payload: { previousControllerClientId: "client-a" },
+      actor: "client-b",
+      basedOnSeq: 42,
+      clientTimestamp: CTX.timestamp,
     }, { ...CTX, seq: 43 });
+    const restart = reduceGameEvent(transferred.state, {
+      type: "RESTART_TUTORIAL_BATTLE",
+      payload: { battleId: original.board.battleId },
+      actor: "client-b", basedOnSeq: 43, clientTimestamp: CTX.timestamp,
+    }, { ...CTX, seq: 44 });
     expect(restart.outcome).toBe("applied");
     const rebuilt = restart.state.battle!;
-    expect(rebuilt.mode).toMatchObject({ driverClientId: "client-b", restartNumber: 1 });
+    expect(rebuilt.mode).toMatchObject({ restartNumber: 1 });
     expect(rebuilt.board.battleId).not.toBe(original.board.battleId);
     expect(ids(rebuilt, "player", "deck")).not.toEqual(ids(original, "player", "deck"));
-    const replay = createTutorialBattleInitProvider(content()).beginTutorialBattle({ journey: beforeJourney, actions: TUTORIAL_ACTIONS, tutorialRunId: RUN_ID, driverClientId: "client-b", restartNumber: 1, seq: 43, rng: () => 0, timestamp: CTX.timestamp });
+    const replay = createTutorialBattleInitProvider(content()).beginTutorialBattle({ journey: beforeJourney, actions: TUTORIAL_ACTIONS, tutorialRunId: RUN_ID, restartNumber: 1, seq: 44, rng: () => 0, timestamp: CTX.timestamp });
     expect(rebuilt).toMatchObject({
       ...replay,
       basicAutomationEnabled: true,
       mode: rebuilt.mode,
     });
     const exited = reduceGameEvent(restart.state, {
-      type: "EXIT_TUTORIAL_BATTLE", payload: { battleId: rebuilt.board.battleId }, actor: "client-b", basedOnSeq: 43, clientTimestamp: CTX.timestamp,
-    }, { ...CTX, seq: 44 });
+      type: "EXIT_TUTORIAL_BATTLE", payload: { battleId: rebuilt.board.battleId }, actor: "client-b", basedOnSeq: 44, clientTimestamp: CTX.timestamp,
+    }, { ...CTX, seq: 45 });
     expect(exited.state).toMatchObject({
       battle: null,
-      frontDoor: { phase: "main", journeyId: null, tutorial: null },
+      frontDoor: { phase: "journey", journeyId: null, tutorial: null },
       journey: {
         ...beforeJourney,
         screen: {
@@ -1035,30 +1070,21 @@ describe("tutorial battle lifecycle", () => {
     });
   });
 
-  it("transfers driver authority without changing tutorial battle progress", () => {
+  it("transfers room authority without changing tutorial battle progress", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const started = begin().state;
     const original = started.battle!;
     const claimed = reduceGameEvent(started, {
-      type: "CLAIM_TUTORIAL_BATTLE_DRIVER",
-      payload: {
-        battleId: original.board.battleId,
-        previousDriverClientId: "client-a",
-        driverClientId: "client-b",
-      },
+      type: "TAKE_PLAYTEST_CONTROL",
+      payload: { previousControllerClientId: "client-a" },
       actor: "client-b",
       basedOnSeq: 0,
       clientTimestamp: CTX.timestamp,
     }, { ...CTX, seq: 43 });
 
     expect(claimed.outcome).toBe("applied");
-    expect(claimed.state.battle).toEqual({
-      ...original,
-      mode: {
-        ...original.mode,
-        driverClientId: "client-b",
-      },
-    });
+    expect(claimed.state.battle).toEqual(original);
+    expect(claimed.state.playtestControl?.controllerClientId).toBe("client-b");
   });
 
   it("transfers authority through an open prompt and lets the promoted driver resolve it", () => {
@@ -1102,21 +1128,15 @@ describe("tutorial battle lifecycle", () => {
 
     const claimed = reduceTutorial(
       opened.state,
-      "CLAIM_TUTORIAL_BATTLE_DRIVER",
-      {
-        battleId: opened.state.battle!.board.battleId,
-        previousDriverClientId: "client-a",
-        driverClientId: "client-b",
-      },
+      "TAKE_PLAYTEST_CONTROL",
+      { previousControllerClientId: "client-a" },
       "client-b",
       { ...CTX, seq: 44, intervening: "unknown" },
     );
 
     expect(claimed.outcome).toBe("applied");
     expect(claimed.state.battle!.pendingPrompt).toEqual(pending);
-    expect(claimed.state.battle!.mode).toMatchObject({
-      driverClientId: "client-b",
-    });
+    expect(claimed.state.playtestControl?.controllerClientId).toBe("client-b");
     expect(reduceTutorial(
       claimed.state,
       "RESOLVE_PROMPT",
@@ -1129,40 +1149,28 @@ describe("tutorial battle lifecycle", () => {
     ).outcome).toBe("applied");
   });
 
-  it("binds tutorial begin, restart, and exit claims to their stated driver", () => {
+  it("binds restart and exit to the persisted room controller", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     expect(reduceTutorial(
       terminalTutorialState(),
       "BEGIN_TUTORIAL_BATTLE",
-      { tutorialRunId: RUN_ID, driverClientId: "client-a" },
+      { tutorialRunId: RUN_ID },
       "client-observer",
-    ).outcome).toBe("bounced");
-    expect(reduceTutorial(
-      terminalTutorialState(),
-      "BEGIN_TUTORIAL_BATTLE",
-      { tutorialRunId: RUN_ID, driverClientId: "client-observer" },
-      "client-a",
-    ).outcome).toBe("bounced");
+    ).outcome).toBe("applied");
 
     const started = begin().state;
     const battleId = started.battle!.board.battleId;
     expect(reduceTutorial(
       started,
       "RESTART_TUTORIAL_BATTLE",
-      { battleId, previousDriverClientId: "client-a", driverClientId: "client-b" },
+      { battleId },
       "client-observer",
     ).outcome).toBe("bounced");
     expect(reduceTutorial(
       started,
-      "CLAIM_TUTORIAL_BATTLE_DRIVER",
-      { battleId, previousDriverClientId: "client-a", driverClientId: "client-b" },
+      "TAKE_PLAYTEST_CONTROL",
+      { previousControllerClientId: "client-stale" },
       "client-observer",
-    ).outcome).toBe("bounced");
-    expect(reduceTutorial(
-      started,
-      "CLAIM_TUTORIAL_BATTLE_DRIVER",
-      { battleId, previousDriverClientId: "client-stale", driverClientId: "client-b" },
-      "client-b",
     ).outcome).toBe("bounced");
     expect(reduceTutorial(
       started,
@@ -1383,6 +1391,10 @@ describe("tutorial battle lifecycle", () => {
     const started = begin().state;
     const journeyState = {
       ...started,
+      playtestControl: {
+        mode: "collaborative" as const,
+        controllerClientId: null,
+      },
       battle: {
         ...started.battle!,
         mode: { kind: "journey" as const },

@@ -70,6 +70,19 @@ export interface LogClientCallbacks<S> {
   onAppendFailed?: (event: GameEvent, error: unknown) => void;
   /** A full refold discarded these unconfirmed intents. */
   onPendingDropped?: (events: GameEvent[]) => void;
+  /** An already-folded live prefix was replaced, removed, or corrected. */
+  onAuthoritativeCorrection?: (info: {
+    firstChangedSeq: number;
+    previousHead: number;
+    authoritativeHead: number;
+  }) => void;
+  /** Equal intent keys were used for different semantic event contracts. */
+  onIntentKeyCollision?: (info: {
+    intentKey: string;
+    winningSeq: number;
+    winner: GameEvent;
+    contender: GameEvent;
+  }) => void;
 }
 
 /** A draft the caller submits; the client stamps the envelope fields. */
@@ -142,11 +155,13 @@ export function createLogClient<S>(
   // so a full re-fold never re-reports already-seen events.
   let lastEmittedSeq = 0;
   const divergenceReported = new Set<number>();
+  const liveFingerprints = new Map<number, string>();
 
   // Ordered queue of this client's submitted-but-unconfirmed intents.
   const pending: GameEvent[] = [];
   const submissionsByIntentKey = new Map<string, Promise<number>>();
   const confirmedSeqByIntentKey = new Map<string, number>();
+  const confirmedEventByIntentKey = new Map<string, GameEvent>();
   let appendTail: Promise<void> | null = null;
   let nonceCounter = 0;
 
@@ -223,8 +238,10 @@ export function createLogClient<S>(
       );
       confirmedState = result.state;
       lastFoldedSeq = seq;
+      liveFingerprints.set(seq, fingerprintEvent(event));
       if (event.intentKey !== undefined) {
         confirmedSeqByIntentKey.set(event.intentKey, seq);
+        confirmedEventByIntentKey.set(event.intentKey, event);
       }
       const outcome = result.outcomes[0];
       if (outcome.outcome === "applied") {
@@ -291,6 +308,18 @@ export function createLogClient<S>(
               candidate.nonce === event.nonce ||
               (event.intentKey !== undefined && candidate.intentKey === event.intentKey)
             ) {
+              if (
+                event.intentKey !== undefined &&
+                candidate.intentKey === event.intentKey &&
+                !sameIntentContract(candidate, event)
+              ) {
+                callbacks.onIntentKeyCollision?.({
+                  intentKey: event.intentKey,
+                  winningSeq: seq,
+                  winner: event,
+                  contender: candidate,
+                });
+              }
               pending.splice(index, 1);
             }
           }
@@ -341,10 +370,16 @@ export function createLogClient<S>(
     genesis = node.genesis;
 
     const rewound = initialized && node.head < lastFoldedSeq; // log rewritten
+    const firstCorrectedSeq = initialized
+      ? firstChangedPrefixSeq(node, liveFingerprints, lastFoldedSeq)
+      : null;
+    const corrected = firstCorrectedSeq !== null;
+    const previousHead = lastFoldedSeq;
     const needFullFold =
       !initialized ||
       node.baseSeq > lastFoldedSeq || // compaction advanced past our fold
-      rewound;
+      rewound ||
+      corrected;
 
     baseSeq = node.baseSeq;
 
@@ -354,7 +389,7 @@ export function createLogClient<S>(
       // is already in the snapshot) or may never have committed at all.
       // Re-echoing either would corrupt the displayed fold, so the whole queue
       // is dropped and reported for UX.
-      if (pending.length > 0) {
+      if (pending.length > 0 && !corrected) {
         const dropped = pending.splice(0);
         callbacks.onPendingDropped?.(dropped);
       }
@@ -364,13 +399,22 @@ export function createLogClient<S>(
       // dedup) so the rewritten range's outcomes/fold-errors re-report exactly
       // once. A compaction-advance full refold, by contrast, only folds live
       // events above the old high-water, so its high-water is left intact.
-      if (rewound) {
+      if (rewound || corrected) {
         lastEmittedSeq = node.baseSeq;
         divergenceReported.clear();
         confirmedSeqByIntentKey.clear();
+        confirmedEventByIntentKey.clear();
+      }
+      if (corrected) {
+        callbacks.onAuthoritativeCorrection?.({
+          firstChangedSeq: firstCorrectedSeq,
+          previousHead,
+          authoritativeHead: node.head,
+        });
       }
       confirmedState = baseState(node);
       lastFoldedSeq = node.baseSeq;
+      liveFingerprints.clear();
       // Seed the applied index from the node's persisted index (applied events
       // with seq <= baseSeq) so a fold starting at the snapshot can enumerate
       // intervening windows below the horizon, exactly as an always-connected
@@ -380,6 +424,9 @@ export function createLogClient<S>(
         appliedBySeq.set(seq, entry);
       }
       foldConfirmedRange(node, node.baseSeq);
+      if (corrected && pending.length > 0) {
+        reconcilePendingAgainstNode(node, pending, callbacks);
+      }
     } else {
       foldConfirmedRange(node, lastFoldedSeq);
     }
@@ -396,6 +443,28 @@ export function createLogClient<S>(
     if (draft.intentKey !== undefined) {
       const confirmedSeq = confirmedSeqByIntentKey.get(draft.intentKey);
       if (confirmedSeq !== undefined) {
+        const winner = confirmedEventByIntentKey.get(draft.intentKey);
+        if (
+          winner !== undefined &&
+          (
+            winner.type !== draft.type ||
+            JSON.stringify(winner.payload) !== JSON.stringify(draft.payload)
+          )
+        ) {
+          callbacks.onIntentKeyCollision?.({
+            intentKey: draft.intentKey,
+            winningSeq: confirmedSeq,
+            winner,
+            contender: {
+              type: draft.type,
+              payload: draft.payload,
+              actor: draft.actor ?? clientId,
+              clientTimestamp: new Date().toISOString(),
+              basedOnSeq: lastFoldedSeq,
+              intentKey: draft.intentKey,
+            },
+          });
+        }
         return Promise.resolve(confirmedSeq);
       }
       const existing = submissionsByIntentKey.get(draft.intentKey);
@@ -492,4 +561,65 @@ export function createLogClient<S>(
     clientId,
     close: () => unsubscribe(),
   };
+}
+
+function fingerprintEvent(event: GameEvent): string {
+  return JSON.stringify(event);
+}
+
+function sameIntentContract(left: GameEvent, right: GameEvent): boolean {
+  return left.type === right.type &&
+    JSON.stringify(left.payload) === JSON.stringify(right.payload);
+}
+
+function firstChangedPrefixSeq(
+  node: LogNode,
+  fingerprints: ReadonlyMap<number, string>,
+  lastFoldedSeq: number,
+): number | null {
+  const overlapEnd = Math.min(lastFoldedSeq, node.head);
+  for (let seq = node.baseSeq + 1; seq <= overlapEnd; seq += 1) {
+    const previous = fingerprints.get(seq);
+    if (previous === undefined) continue;
+    const authoritative = node.events.get(seq);
+    if (
+      authoritative === undefined ||
+      fingerprintEvent(authoritative) !== previous
+    ) {
+      return seq;
+    }
+  }
+  return null;
+}
+
+function reconcilePendingAgainstNode<S>(
+  node: LogNode,
+  pending: GameEvent[],
+  callbacks: LogClientCallbacks<S>,
+): void {
+  for (const [seq, winner] of node.events) {
+    for (let index = pending.length - 1; index >= 0; index -= 1) {
+      const contender = pending[index];
+      const matches =
+        contender.nonce === winner.nonce ||
+        (
+          winner.intentKey !== undefined &&
+          contender.intentKey === winner.intentKey
+        );
+      if (!matches) continue;
+      if (
+        winner.intentKey !== undefined &&
+        contender.intentKey === winner.intentKey &&
+        !sameIntentContract(contender, winner)
+      ) {
+        callbacks.onIntentKeyCollision?.({
+          intentKey: winner.intentKey,
+          winningSeq: seq,
+          winner,
+          contender,
+        });
+      }
+      pending.splice(index, 1);
+    }
+  }
 }

@@ -181,11 +181,8 @@ export function buildTutorialBattleView(
         : presentation.id,
     presentation: tutorialPresentationView(presentation, battle),
     victoryVisible:
-      controller.isCurrentClientDriver &&
-      controller.isDriverPresent &&
-      (previewVictory ||
-        (battle.board.result === "victory" &&
-          controller.status === "terminal")),
+      previewVictory ||
+      battle.board.result === "victory",
   };
 }
 

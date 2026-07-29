@@ -50,20 +50,11 @@ export interface CoopActions {
     options?: BeginTutorialOptions,
   ) => Promise<number>;
   completeTutorialAction: (runId: string, actionId: string) => Promise<number>;
-  beginTutorialBattle: (
-    tutorialRunId: string,
-    driverClientId: string,
+  takePlaytestControl: (
+    previousControllerClientId: string | null,
   ) => Promise<number>;
-  restartTutorialBattle: (
-    battleId: string,
-    previousDriverClientId: string,
-    driverClientId: string,
-  ) => Promise<number>;
-  claimTutorialBattleDriver: (
-    battleId: string,
-    previousDriverClientId: string,
-    driverClientId: string,
-  ) => Promise<number>;
+  beginTutorialBattle: (tutorialRunId: string) => Promise<number>;
+  restartTutorialBattle: (battleId: string) => Promise<number>;
   exitTutorialBattle: (battleId: string) => Promise<number>;
   openCardTutorialGuidance: (
     screenKey: string,
@@ -301,31 +292,19 @@ export function makeActions(append: AppendFn): CoopActions {
         { runId, actionId },
         `tutorial:${runId}:complete:${actionId}`,
       ),
-    beginTutorialBattle: (tutorialRunId, driverClientId) =>
+    takePlaytestControl: (previousControllerClientId) =>
+      emit("TAKE_PLAYTEST_CONTROL", { previousControllerClientId }),
+    beginTutorialBattle: (tutorialRunId) =>
       emit(
         "BEGIN_TUTORIAL_BATTLE",
-        { tutorialRunId, driverClientId },
+        { tutorialRunId },
         `tutorial-battle:${tutorialRunId}:begin`,
       ),
-    restartTutorialBattle: (
-      battleId,
-      previousDriverClientId,
-      driverClientId,
-    ) =>
+    restartTutorialBattle: (battleId) =>
       emit(
         "RESTART_TUTORIAL_BATTLE",
-        { battleId, previousDriverClientId, driverClientId },
-        `tutorial-battle:${battleId}:restart:${previousDriverClientId}`,
-      ),
-    claimTutorialBattleDriver: (
-      battleId,
-      previousDriverClientId,
-      driverClientId,
-    ) =>
-      emit(
-        "CLAIM_TUTORIAL_BATTLE_DRIVER",
-        { battleId, previousDriverClientId, driverClientId },
-        `tutorial-battle:${battleId}:claim-driver:${previousDriverClientId}`,
+        { battleId },
+        `tutorial-battle:${battleId}:restart`,
       ),
     exitTutorialBattle: (battleId) =>
       emit(

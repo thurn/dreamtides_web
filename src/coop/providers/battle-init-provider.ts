@@ -173,11 +173,10 @@ export function createTutorialBattleInitProvider(
       journey,
       actions,
       tutorialRunId,
-      driverClientId,
       restartNumber,
     }) => {
       const key = `tutorial:${journey.seed}:${tutorialRunId}:${String(restartNumber)}`;
-      const battleId = `tutorial-battle:${tutorialRunId}:${String(restartNumber)}:${driverClientId}`;
+      const battleId = `tutorial-battle:${tutorialRunId}:${String(restartNumber)}`;
       const battleConfiguration = requireTutorialBattleConfiguration(content);
       const init = createTutorialBattleInit(
         content,

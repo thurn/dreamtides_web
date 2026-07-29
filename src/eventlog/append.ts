@@ -76,14 +76,7 @@ export function applyAppend<S>(
   encoded: EncodedLogNode,
   event: GameEvent,
 ): EncodedLogNode {
-  if (event.nonce !== undefined && liveWindowHasNonce(encoded, event.nonce)) {
-    return encoded;
-  }
-  if (
-    event.intentKey !== undefined &&
-    (intentKeyIndexHas(encoded.intentKeyIndex, event.intentKey) ||
-      liveWindowHasIntentKey(encoded, event.intentKey))
-  ) {
+  if (existingEventSeq(encoded, event) !== null) {
     return encoded;
   }
 
@@ -182,34 +175,40 @@ export function applyAppend<S>(
   return next;
 }
 
-function liveWindowHasNonce(encoded: EncodedLogNode, nonce: string): boolean {
+function liveWindowSeqForNonce(
+  encoded: EncodedLogNode,
+  nonce: string,
+): number | null {
   for (let seq = encoded.baseSeq + 1; seq <= encoded.head; seq += 1) {
     const raw = encoded.events?.[seq];
     if (raw === undefined) continue;
     try {
       if (decodeEvent(raw).nonce === nonce) {
-        return true;
+        return seq;
       }
     } catch {
       continue;
     }
   }
-  return false;
+  return null;
 }
 
-function liveWindowHasIntentKey(encoded: EncodedLogNode, intentKey: string): boolean {
+function liveWindowSeqForIntentKey(
+  encoded: EncodedLogNode,
+  intentKey: string,
+): number | null {
   for (let seq = encoded.baseSeq + 1; seq <= encoded.head; seq += 1) {
     const raw = encoded.events?.[seq];
     if (raw === undefined) continue;
     try {
       if (decodeEvent(raw).intentKey === intentKey) {
-        return true;
+        return seq;
       }
     } catch {
       continue;
     }
   }
-  return false;
+  return null;
 }
 
 function decodeIntentKeyIndex(raw: string | undefined): Record<string, string> {
@@ -231,8 +230,34 @@ function decodeIntentKeyIndex(raw: string | undefined): Record<string, string> {
   }
 }
 
-function intentKeyIndexHas(raw: string | undefined, intentKey: string): boolean {
-  return Object.values(decodeIntentKeyIndex(raw)).includes(intentKey);
+function intentKeyIndexSeq(
+  raw: string | undefined,
+  intentKey: string,
+): number | null {
+  for (const [rawSeq, key] of Object.entries(decodeIntentKeyIndex(raw))) {
+    if (key === intentKey) {
+      return Number(rawSeq);
+    }
+  }
+  return null;
+}
+
+/** Resolve a retry to the sequence that originally won its nonce or intent key. */
+export function existingEventSeq(
+  encoded: EncodedLogNode,
+  event: GameEvent,
+): number | null {
+  if (event.nonce !== undefined) {
+    const nonceSeq = liveWindowSeqForNonce(encoded, event.nonce);
+    if (nonceSeq !== null) return nonceSeq;
+  }
+  if (event.intentKey !== undefined) {
+    return (
+      intentKeyIndexSeq(encoded.intentKeyIndex, event.intentKey) ??
+      liveWindowSeqForIntentKey(encoded, event.intentKey)
+    );
+  }
+  return null;
 }
 
 /**
@@ -250,21 +275,22 @@ export async function appendEvent<S>(
   event: GameEvent,
 ): Promise<number> {
   const logRef = ref(db, `rooms/${roomId}/log`);
-  const result = await runTransaction(logRef, (current: EncodedLogNode | null) => {
-    if (current === null) {
-      // No log node to append to — abort the transaction rather than
-      // fabricate one; room creation is responsible for writing genesis. This
-      // relies on the live subscription (subscribeToLog, wired before a
-      // caller can reach `submit`/`appendEvent` — see LogClient's
-      // `initialized` gate) having already warmed the RTDB client-side cache
-      // with the room's `log/` node: `runTransaction` reads through that
-      // cache, so by the time this callback runs, `current` is null ONLY
-      // when the room genuinely has no log node yet, not merely because this
-      // transaction is the first read to touch the path.
-      return undefined;
-    }
-    return applyAppend(config, current, event);
-  });
+  const result = await runTransaction(
+    logRef,
+    (current: EncodedLogNode | null) => {
+      if (current === null) {
+        // No log node to append to — abort the transaction rather than
+        // fabricate one; room creation is responsible for writing genesis.
+        return undefined;
+      }
+      return applyAppend(config, current, event);
+    },
+    // LogClient already supplies the optimistic echo. Firebase's local
+    // transaction events can temporarily expose mutually exclusive winners at
+    // the same sequence to competing clients, so keep the subscription
+    // authoritative.
+    { applyLocally: false },
+  );
 
   if (!result.committed) {
     throw new Error(`appendEvent aborted: no log node at rooms/${roomId}/log`);
@@ -273,5 +299,5 @@ export async function appendEvent<S>(
   if (committed === null) {
     throw new Error(`appendEvent committed an empty log at rooms/${roomId}/log`);
   }
-  return committed.head;
+  return existingEventSeq(committed, event) ?? committed.head;
 }

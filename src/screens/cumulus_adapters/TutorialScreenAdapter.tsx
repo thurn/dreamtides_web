@@ -9,14 +9,13 @@ import { useTutorialEndTurn } from "../../state/use-tutorial-end-turn";
 import { useTutorialPlayerReposition } from "../../state/use-tutorial-player-reposition";
 import { useTutorialCards } from "../../state/use-tutorial-cards";
 import { useTutorialBattleHandoff } from "../../state/use-tutorial-battle-handoff";
-import {
-  useTutorialHowToPlayLogging,
-  useTutorialPresentationLogging,
-} from "../../state/use-tutorial-presentation-logging";
+import { useTutorialHowToPlayLogging, useTutorialPresentationLogging } from "../../state/use-tutorial-presentation-logging";
 import type { DreamAvatarContent } from "../../types/content";
 import type { TutorialDreamAvatarOwner } from "../../types/tutorial";
 import * as tutorialView from "./tutorial-view-model";
-export function TutorialScreenAdapter({ dreamAvatars, playbackSpeed = 1, directLive = false }: {
+export function TutorialScreenAdapter({
+  dreamAvatars, playbackSpeed = 1, directLive = false,
+}: {
   readonly dreamAvatars: readonly DreamAvatarContent[];
   readonly playbackSpeed?: number;
   readonly directLive?: boolean;
@@ -41,8 +40,7 @@ export function TutorialScreenAdapter({ dreamAvatars, playbackSpeed = 1, directL
       tutorialCards === null ||
       state.tutorial !== null ||
       state.journeyId === null
-    )
-      return;
+    ) return;
     const intentKey = `tutorial:${state.journeyId}:begin`;
     if (beginRequestedKey.current === intentKey) return;
     beginRequestedKey.current = intentKey;
@@ -99,7 +97,8 @@ export function TutorialScreenAdapter({ dreamAvatars, playbackSpeed = 1, directL
     mutations.completeTutorialAction,
     view.battle.battleId,
   );
-  return <TutorialScreen
+  return (
+    <TutorialScreen
       view={view}
       playbackSpeed={playbackSpeed}
       editor={
@@ -116,5 +115,6 @@ export function TutorialScreenAdapter({ dreamAvatars, playbackSpeed = 1, directL
       onEditorActionsChange={handleEditorActionsChange}
       onReplay={handleReplay}
       onPlayFromAction={handleReplay}
-    />;
+    />
+  );
 }

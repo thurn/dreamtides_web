@@ -564,7 +564,11 @@ describe("buildTutorialBattleView", () => {
           ...battle,
           board: { result: "victory" },
         } as BattleFoldState,
-        { ...activeController, status: "terminal" },
+        {
+          ...activeController,
+          status: "observer",
+          isCurrentClientDriver: false,
+        },
         null,
       ).victoryVisible,
     ).toBe(true);

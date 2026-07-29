@@ -364,7 +364,6 @@ describe("advanceEffectQueue — Nomad's Verge dreamwell placement", () => {
       mode: {
         kind: "tutorial",
         tutorialRunId: "test-run",
-        driverClientId: "client-a",
         restartNumber: 0,
         resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
       },

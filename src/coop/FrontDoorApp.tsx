@@ -1,15 +1,6 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
-import type { Database } from "firebase/database";
-import { FrontDoorRouter } from "../components/FrontDoorRouter";
-import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
-import { loadJourneyContent, type JourneyContent } from "../data/journey-content";
-import { loadTutorialConfiguration } from "../data/tutorial-actions";
-import { getFirebaseDatabase } from "../firebase/app-config";
+import type { ReactNode } from "react";
+import App from "../App";
 import type { RuntimeConfig } from "../runtime/runtime-config";
-import { FrontDoorProvider } from "../state/front-door-context";
-import { CoopProvider } from "./hooks";
-import { registerGameProviders } from "./providers/register-game-providers";
-import { RoomGate } from "./RoomGate";
 
 export type FrontDoorEntry = "main" | "loading" | "tutorial";
 
@@ -20,126 +11,22 @@ interface FrontDoorAppProps {
   previewTutorialVictory?: boolean;
 }
 
-/** Firebase-backed runtime shared by the standalone front-door endpoints. */
+/**
+ * Compatibility entry for callers that still import the historical front-door
+ * component. It delegates to the single room runtime used by every game path.
+ */
 export default function FrontDoorApp({
   runtimeConfig,
   entry,
   directTutorialBattle = false,
   previewTutorialVictory = false,
 }: FrontDoorAppProps): ReactNode {
-  const [contentState, setContentState] = useState<
-    | { status: "loading" }
-    | { status: "ready"; content: JourneyContent }
-    | { status: "error"; message: string }
-  >({ status: "loading" });
-  const databaseResult = useMemo<
-    { database: Database; error: null } | { database: null; error: string }
-  >(() => {
-    try {
-      return {
-        database: getFirebaseDatabase(runtimeConfig.databaseMode),
-        error: null,
-      };
-    } catch (error) {
-      return {
-        database: null,
-        error:
-          error instanceof Error
-            ? error.message
-            : "Failed to initialize Firebase.",
-      };
-    }
-  }, [runtimeConfig.databaseMode]);
-
-  useEffect(() => {
-    let cancelled = false;
-    setContentState({ status: "loading" });
-    void Promise.all([
-      loadJourneyContent(
-        runtimeConfig.poolVariant,
-        runtimeConfig.draftMode,
-        runtimeConfig.fresh20PackSize,
-      ),
-      loadTutorialConfiguration(),
-    ]).then(([loadedContent, tutorial]) => {
-      if (cancelled) return;
-      const content = {
-        ...loadedContent,
-        tutorialJourneyStart: tutorial.journeyStart,
-        tutorialDreamscape: tutorial.dreamscape,
-        tutorialDraft: tutorial.draft,
-        tutorialDreamsignRevelation: tutorial.dreamsignRevelation,
-        tutorialTriggers: tutorial.triggers,
-        tutorialBattle: tutorial.battle,
-      };
-      registerGameProviders(content);
-      setContentState({ status: "ready", content });
-    }).catch((error: unknown) => {
-      if (cancelled) return;
-      setContentState({
-        status: "error",
-        message: error instanceof Error ? error.message : "Failed to load journey content.",
-      });
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [
-    runtimeConfig.draftMode,
-    runtimeConfig.fresh20PackSize,
-    runtimeConfig.poolVariant,
-  ]);
-
-  if (contentState.status === "loading") {
-    return (
-      <ApplicationStateScreen view={{
-        kind: "loading",
-        title: "Preparing Dreamtides",
-        message: "Loading the tutorial battle rules and cards.",
-        busyLabel: "Loading content",
-      }} />
-    );
-  }
-  if (contentState.status === "error") {
-    return (
-      <ApplicationStateScreen view={{
-        kind: "fatalConfiguration",
-        title: "Content Setup Issue",
-        message: "The tutorial battle content could not be loaded.",
-        detail: contentState.message,
-      }} />
-    );
-  }
-  if (databaseResult.database === null) {
-    return (
-      <ApplicationStateScreen view={{
-        kind: "fatalConfiguration",
-        title: "Firebase Setup Issue",
-        message: "This browser could not connect to the journey service.",
-        detail: databaseResult.error,
-      }} />
-    );
-  }
-
   return (
-    <RoomGate
-      db={databaseResult.database}
-      gameId={runtimeConfig.gameId}
+    <App
       runtimeConfig={runtimeConfig}
       frontDoorEntry={entry}
-    >
-      {(context) => (
-        <CoopProvider context={context}>
-          <FrontDoorProvider>
-            <FrontDoorRouter
-              dreamAvatars={contentState.content.dreamAvatars}
-              tutorialPlaybackSpeed={runtimeConfig.tutorialPlaybackSpeed ?? 1}
-              directTutorialBattle={directTutorialBattle}
-              previewTutorialVictory={previewTutorialVictory}
-            />
-          </FrontDoorProvider>
-        </CoopProvider>
-      )}
-    </RoomGate>
+      directTutorialBattle={directTutorialBattle}
+      previewTutorialVictory={previewTutorialVictory}
+    />
   );
 }

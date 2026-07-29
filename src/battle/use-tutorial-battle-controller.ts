@@ -82,14 +82,6 @@ export function useTutorialBattleController({
     const battle = state.battle;
     if (battle === null) return;
     logTutorialIntent(battle.board.battleId, clientId, intent);
-    if (intent.kind === "claim-driver") {
-      void actions.claimTutorialBattleDriver(
-        intent.battleId,
-        intent.previousDriverClientId,
-        intent.driverClientId,
-      ).catch(() => undefined);
-      return;
-    }
     if (plan.status !== "driver") return;
     const actor = `tutorial-ai:${clientId}`;
     switch (intent.kind) {
@@ -189,12 +181,6 @@ function logTutorialIntent(
       : {}),
     ...(intent.kind === "complete-presentation"
       ? { presentationId: intent.presentationId }
-      : {}),
-    ...(intent.kind === "claim-driver"
-      ? {
-          previousDriverClientId: intent.previousDriverClientId,
-          promotedDriverClientId: intent.driverClientId,
-        }
       : {}),
   });
 }

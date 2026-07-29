@@ -1374,12 +1374,15 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     const tutorial = reduce(
       {
         ...baseState(),
+        playtestControl: {
+          mode: "single-controller",
+          controllerClientId: "player",
+        },
         battle: battleFrom(tutorialBoard, {
           init: makeInit({ scoreToWin: 5 }),
           mode: {
             kind: "tutorial",
             tutorialRunId: "tutorial-run",
-            driverClientId: "player",
             restartNumber: 0,
             resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
           },
@@ -2083,7 +2086,14 @@ describe("BATTLE_AI_BLOCK", () => {
     board.sides.enemy.backRank[backRankSlotId(0)] = "blocker";
 
     const blocked = reduce(
-      { ...baseState(), battle: battleFrom(board, { mode: TUTORIAL_MODE }) },
+      {
+        ...baseState(),
+        playtestControl: {
+          mode: "single-controller",
+          controllerClientId: "player",
+        },
+        battle: battleFrom(board, { mode: TUTORIAL_MODE }),
+      },
       "BATTLE_AI_BLOCK",
       { aiSide: "enemy" },
       ctx(),
@@ -2104,7 +2114,6 @@ const TUTORIAL_ACTOR = "tutorial-ai:player";
 const TUTORIAL_MODE = {
   kind: "tutorial" as const,
   tutorialRunId: "tutorial-run",
-  driverClientId: "player",
   restartNumber: 0,
   resultConfig: { playerOnlyVictory: true as const, turnLimitDisabled: true as const },
 };
@@ -2124,6 +2133,14 @@ function contestedBlockingState({ tutorial }: { tutorial: boolean }): FoldState 
   board.sides.enemy.backRank[backRankSlotId(0)] = "blocker";
   return {
     ...baseState(),
+    ...(tutorial
+      ? {
+          playtestControl: {
+            mode: "single-controller" as const,
+            controllerClientId: "player",
+          },
+        }
+      : {}),
     battle: battleFrom(board, tutorial ? { mode: TUTORIAL_MODE } : {}),
   };
 }
@@ -2143,6 +2160,14 @@ function resolvedChallengeState({ tutorial }: { tutorial: boolean }): FoldState 
   board.sides.enemy.frontRank[frontRankSlotId(0)] = "blocker";
   return {
     ...baseState(),
+    ...(tutorial
+      ? {
+          playtestControl: {
+            mode: "single-controller" as const,
+            controllerClientId: "player",
+          },
+        }
+      : {}),
     battle: battleFrom(board, tutorial ? { mode: TUTORIAL_MODE } : {}),
   };
 }
@@ -2209,6 +2234,60 @@ describe("paced Challenge beats", () => {
     expect(resumed.state.battle?.board.turnNumber).toBe(4);
   });
 
+  it("rejects a tutorial presentation completion from an observer", () => {
+    const resolved = reduce(
+      resolvedChallengeState({ tutorial: true }),
+      "BATTLE_COMMAND",
+      HANDOFF_TO_ENEMY,
+      ctx(),
+      TUTORIAL_ACTOR,
+    );
+
+    const observer = reduce(
+      resolved.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      { presentationId: resolved.state.battle?.tutorialPresentation?.id },
+      ctx(),
+      "observer",
+    );
+
+    expect(observer.outcome).toBe("bounced");
+    expect(observer.bounceReason).toBe("observer_read_only");
+    expect(observer.state).toEqual(resolved.state);
+  });
+
+  it("claims an unclaimed tutorial room on the first live battle input", () => {
+    const initial = resolvedChallengeState({ tutorial: true });
+    const unclaimed = {
+      ...initial,
+      playtestControl: {
+        mode: "single-controller" as const,
+        controllerClientId: null,
+      },
+      battle: {
+        ...initial.battle!,
+        board: {
+          ...initial.battle!.board,
+          activeSide: "player" as const,
+          phase: "day" as const,
+        },
+      },
+    };
+
+    const claimed = reduce(
+      unclaimed,
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "SET_PHASE", phase: "dusk" }),
+      ctx(),
+      "late-player",
+    );
+
+    expect(claimed.outcome).toBe("applied");
+    expect(claimed.state.playtestControl?.controllerClientId).toBe(
+      "late-player",
+    );
+  });
+
   it("waits for each Challenge lane animation before resolving the next lane", () => {
     const scorer = makeInstance("scorer", "scorer-card", "player");
     scorer.definition.printedSpark = 2;
@@ -2230,6 +2309,10 @@ describe("paced Challenge beats", () => {
     const first = reduce(
       {
         ...baseState(),
+        playtestControl: {
+          mode: "single-controller",
+          controllerClientId: "player",
+        },
         battle: battleFrom(board, { mode: TUTORIAL_MODE }),
       },
       "BATTLE_COMMAND",
@@ -2309,6 +2392,10 @@ describe("paced Challenge beats", () => {
     const resolved = reduce(
       {
         ...baseState(),
+        playtestControl: {
+          mode: "single-controller",
+          controllerClientId: "player",
+        },
         battle: battleFrom(board, { mode: TUTORIAL_MODE }),
       },
       "BATTLE_COMMAND",

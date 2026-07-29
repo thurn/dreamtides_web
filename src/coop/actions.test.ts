@@ -71,9 +71,9 @@ function captureAllDrafts(): EventDraft[] {
   void actions.advanceFrontDoor("loading", "journey-1");
   void actions.beginTutorial([], { intentKey: "tutorial:journey-1:begin" });
   void actions.completeTutorialAction("event:1", "welcome");
-  void actions.beginTutorialBattle("event:1", "client-a");
-  void actions.restartTutorialBattle("tutorial-battle:event:1:0:client-a", "client-a", "client-b");
-  void actions.claimTutorialBattleDriver("tutorial-battle:event:1:0:client-a", "client-a", "client-b");
+  void actions.takePlaytestControl(null);
+  void actions.beginTutorialBattle("event:1");
+  void actions.restartTutorialBattle("tutorial-battle:event:1:0");
   void actions.exitTutorialBattle("tutorial-battle:event:1:1:client-b");
   void actions.openCardTutorialGuidance("journey:1:site:site-1", ["card-1"]);
   void actions.completeCardTutorialGuidance(
@@ -223,9 +223,8 @@ describe("coop actions facade", () => {
       { id: "DEBUG_EDIT" },
       "battle:b-1:dreamwell:player:2",
     );
-    void actions.beginTutorialBattle("event:9", "client-a");
-    void actions.restartTutorialBattle("tutorial-battle:event:9:0:client-a", "client-a", "client-b");
-    void actions.claimTutorialBattleDriver("tutorial-battle:event:9:0:client-a", "client-a", "client-b");
+    void actions.beginTutorialBattle("event:9");
+    void actions.restartTutorialBattle("tutorial-battle:event:9:0");
     void actions.exitTutorialBattle("tutorial-battle:event:9:1:client-b");
 
     expect(captured.map((draft) => draft.intentKey)).toEqual([
@@ -236,8 +235,7 @@ describe("coop actions facade", () => {
       "complete-site:journey:12:site-7",
       "battle:b-1:dreamwell:player:2",
       "tutorial-battle:event:9:begin",
-      "tutorial-battle:tutorial-battle:event:9:0:client-a:restart:client-a",
-      "tutorial-battle:tutorial-battle:event:9:0:client-a:claim-driver:client-a",
+      "tutorial-battle:tutorial-battle:event:9:0:restart",
       "tutorial-battle:tutorial-battle:event:9:1:client-b:exit",
     ]);
   });

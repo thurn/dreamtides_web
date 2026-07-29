@@ -23,6 +23,8 @@ export function bounceMessageForReason(reason: BounceReason | undefined): string
       return "Action not applied: finish the current choice first.";
     case "unknown_conflict":
       return "Action not applied: the game changed before it was received. Try again.";
+    case "observer_read_only":
+      return "Action not applied: this playtest is controlled from another browser.";
     case "fold_error":
     case "malformed_event":
       return "Action not applied because of an internal error. Please try again.";

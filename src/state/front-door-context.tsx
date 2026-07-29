@@ -19,7 +19,7 @@ export interface FrontDoorMutations {
   ) => Promise<number>;
   completeTutorialAction: (runId: string, actionId: string) => Promise<number>;
   beginTutorialBattle?: (tutorialRunId: string) => Promise<number>;
-  restartTutorialBattle?: (battleId: string, previousDriverClientId: string) => Promise<number>;
+  restartTutorialBattle?: (battleId: string) => Promise<number>;
   exitTutorialBattle?: (battleId: string) => Promise<number>;
 }
 
@@ -27,6 +27,7 @@ export interface FrontDoorContextValue {
   state: FrontDoorState;
   battle?: BattleFoldState | null;
   mutations: FrontDoorMutations;
+  isCurrentPlaytestController: boolean;
 }
 
 const FrontDoorContext = createContext<FrontDoorContextValue | null>(null);
@@ -43,17 +44,27 @@ export function FrontDoorProvider({ children }: { children: ReactNode }) {
       advance: actions.advanceFrontDoor,
       beginTutorial: actions.beginTutorial,
       completeTutorialAction: actions.completeTutorialAction,
-      beginTutorialBattle: (tutorialRunId) =>
-        actions.beginTutorialBattle(tutorialRunId, clientId),
-      restartTutorialBattle: (battleId, previousDriverClientId) =>
-        actions.restartTutorialBattle(battleId, previousDriverClientId, clientId),
+      beginTutorialBattle: actions.beginTutorialBattle,
+      restartTutorialBattle: actions.restartTutorialBattle,
       exitTutorialBattle: actions.exitTutorialBattle,
     }),
-    [actions, clientId],
+    [actions],
   );
   const value = useMemo<FrontDoorContextValue>(
-    () => ({ state: frontDoor, battle: gameState.battle, mutations }),
-    [frontDoor, gameState.battle, mutations],
+    () => ({
+      state: frontDoor,
+      battle: gameState.battle,
+      mutations,
+      isCurrentPlaytestController:
+        gameState.playtestControl?.controllerClientId === clientId,
+    }),
+    [
+      clientId,
+      frontDoor,
+      gameState.battle,
+      gameState.playtestControl?.controllerClientId,
+      mutations,
+    ],
   );
 
   return (

@@ -113,6 +113,7 @@ const mocks = vi.hoisted(() => ({
 vi.mock("../../state/front-door-context", () => ({
   useFrontDoor: () => ({
     state: mocks.state,
+    isCurrentPlaytestController: false,
     mutations: {
       action: mocks.action,
       beginTutorial: mocks.beginTutorial,

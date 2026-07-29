@@ -147,12 +147,15 @@ function state(): FoldState {
   };
   return {
     frontDoor: { phase: "tutorial", journeyId: "journey-uuid", tutorial: null },
+    playtestControl: {
+      mode: "single-controller",
+      controllerClientId: "driver-client",
+    },
     journey: {} as FoldState["journey"],
     battle: {
       mode: {
         kind: "tutorial",
         tutorialRunId: "tutorial-run-uuid",
-        driverClientId: "driver-client",
         restartNumber: 0,
         resultConfig: {
           playerOnlyVictory: true,

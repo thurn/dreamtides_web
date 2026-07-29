@@ -227,6 +227,9 @@ export function CoopProvider({
           // Single-writer mirror: records only events THIS client appended
           // (returns true), deduped past a high-water seq.
           const owned = logSinkRef.current.recordCoopEvent(event, seq, outcome);
+          if (owned && outcome === "applied") {
+            logSinkRef.current.recordPlaytestControlChange(event, seq);
+          }
           if (event.type === "BEGIN_BATTLE") {
             settleDeferredOpponentLog(seq, owned && outcome === "applied");
           }
@@ -267,6 +270,12 @@ export function CoopProvider({
           logSinkRef.current.recordPendingDropped(events);
           bounceMessageRef.current = PENDING_DROPPED_MESSAGE;
           setBounceToken((token) => token + 1);
+        },
+        onAuthoritativeCorrection: (info) => {
+          logSinkRef.current.recordAuthoritativeCorrection(info);
+        },
+        onIntentKeyCollision: (info) => {
+          logSinkRef.current.recordIntentKeyCollision(info);
         },
       },
       { clientId },

@@ -301,6 +301,7 @@ export interface EventBouncedRecord {
   seq: number;
   interveningSeqs: number[];
   bounceReason: BounceReason;
+  observingClientId: string;
   gameId: string;
 }
 
@@ -329,6 +330,36 @@ export interface PendingDroppedRecord {
   event: "pending_dropped";
   type: string;
   nonce: string | null;
+  gameId: string;
+}
+
+export interface AuthoritativePrefixCorrectionRecord {
+  event: "authoritative_prefix_correction";
+  firstChangedSeq: number;
+  previousHead: number;
+  authoritativeHead: number;
+  observingClientId: string;
+  gameId: string;
+}
+
+export interface SemanticIntentKeyCollisionRecord {
+  event: "semantic_intent_key_collision";
+  intentKey: string;
+  winningSeq: number;
+  winnerType: string;
+  contenderType: string;
+  winnerPayload: Record<string, unknown>;
+  contenderPayload: Record<string, unknown>;
+  observingClientId: string;
+  gameId: string;
+}
+
+export interface PlaytestControlRecord {
+  event: "playtest_control_changed";
+  kind: "claim" | "transfer";
+  controllerClientId: string;
+  previousControllerClientId: string | null;
+  seq: number;
   gameId: string;
 }
 
@@ -364,11 +395,33 @@ export interface CoopLogRecorder {
   recordAppendFailed(event: GameEvent, error: unknown): void;
   /** Mirror the unconfirmed intents a full refold discarded (this client's own). */
   recordPendingDropped(events: readonly GameEvent[]): void;
+  /** Mirror an authoritative rewrite of an already-folded live prefix. */
+  recordAuthoritativeCorrection(info: {
+    firstChangedSeq: number;
+    previousHead: number;
+    authoritativeHead: number;
+  }): void;
+  /** Mirror equal intent keys that describe different semantic events. */
+  recordIntentKeyCollision(info: {
+    intentKey: string;
+    winningSeq: number;
+    winner: GameEvent;
+    contender: GameEvent;
+  }): void;
+  /** Mirror an implicit first-input claim or explicit controller transfer. */
+  recordPlaytestControlChange(
+    event: GameEvent,
+    seq: number,
+  ): void;
 }
 
 export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogRecorder {
   const { gameId, clientId, emit } = options;
-  const aiActor = `ai:${clientId}`;
+  const ownedActors = new Set([
+    clientId,
+    `ai:${clientId}`,
+    `tutorial-ai:${clientId}`,
+  ]);
   // Highest seq this client has already mirrored. A refold after reconnect or
   // compaction re-reports every confirmed outcome; the high-water makes those
   // re-reports no-ops so the union across clients stays duplicate-free.
@@ -378,7 +431,7 @@ export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogR
   const divergenceReported = new Set<number>();
 
   function owns(actor: string): boolean {
-    return actor === clientId || actor === aiActor;
+    return ownedActors.has(actor);
   }
 
   return {
@@ -412,6 +465,7 @@ export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogR
         seq,
         interveningSeqs: [...interveningSeqs],
         bounceReason,
+        observingClientId: clientId,
         gameId,
       };
       emit({ ...record });
@@ -451,6 +505,56 @@ export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogR
         };
         emit({ ...record });
       }
+    },
+    recordAuthoritativeCorrection(info): void {
+      const record: AuthoritativePrefixCorrectionRecord = {
+        event: "authoritative_prefix_correction",
+        ...info,
+        observingClientId: clientId,
+        gameId,
+      };
+      emit({ ...record });
+    },
+    recordIntentKeyCollision(info): void {
+      const record: SemanticIntentKeyCollisionRecord = {
+        event: "semantic_intent_key_collision",
+        intentKey: info.intentKey,
+        winningSeq: info.winningSeq,
+        winnerType: info.winner.type,
+        contenderType: info.contender.type,
+        winnerPayload: { ...info.winner.payload },
+        contenderPayload: { ...info.contender.payload },
+        observingClientId: clientId,
+        gameId,
+      };
+      emit({ ...record });
+    },
+    recordPlaytestControlChange(event, seq): void {
+      const implicitClaim =
+        event.type === "FRONT_DOOR_ACTION" &&
+        event.payload.surface === "tutorial" &&
+        event.payload.actionId === "play-card";
+      const explicitTransfer = event.type === "TAKE_PLAYTEST_CONTROL";
+      if (!implicitClaim && !explicitTransfer) return;
+      const previousControllerClientId = explicitTransfer &&
+          (
+            typeof event.payload.previousControllerClientId === "string" ||
+            event.payload.previousControllerClientId === null
+          )
+        ? event.payload.previousControllerClientId
+        : null;
+      const record: PlaytestControlRecord = {
+        event: "playtest_control_changed",
+        kind:
+          explicitTransfer && previousControllerClientId !== null
+            ? "transfer"
+            : "claim",
+        controllerClientId: event.actor,
+        previousControllerClientId,
+        seq,
+        gameId,
+      };
+      emit({ ...record });
     },
   };
 }

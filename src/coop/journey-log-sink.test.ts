@@ -162,6 +162,21 @@ describe("createCoopLogRecorder single-writer rule", () => {
     expect(emitted[0].actor).toBe("ai:client-a");
   });
 
+  it("mirrors tutorial automation owned by this room client", () => {
+    const { emitted, recorder } = setup();
+    expect(
+      recorder.recordCoopEvent(
+        makeEvent({ actor: "tutorial-ai:client-a" }),
+        7,
+        "applied",
+      ),
+    ).toBe(true);
+    expect(emitted[0]).toMatchObject({
+      event: "coop_event",
+      actor: "tutorial-ai:client-a",
+    });
+  });
+
   it("does not mirror events appended by another actor", () => {
     const { emitted, recorder } = setup();
     const recorded = recorder.recordCoopEvent(makeEvent({ actor: "client-b" }), 7, "applied");
@@ -193,6 +208,7 @@ describe("createCoopLogRecorder single-writer rule", () => {
         seq: 9,
         interveningSeqs: [7, 8],
         bounceReason: "partner_conflict",
+        observingClientId: "client-a",
         gameId: "room-1",
       },
     ]);
@@ -209,6 +225,48 @@ describe("createCoopLogRecorder single-writer rule", () => {
         expected: "h1",
         actual: "h2",
         clientId: "client-a",
+        gameId: "room-1",
+      },
+    ]);
+  });
+
+  it("records authoritative corrections and semantic intent-key collisions", () => {
+    const { emitted, recorder } = setup();
+    recorder.recordAuthoritativeCorrection({
+      firstChangedSeq: 33,
+      previousHead: 33,
+      authoritativeHead: 33,
+    });
+    const winner = makeEvent({ type: "BEGIN_TUTORIAL_BATTLE" });
+    const contender = {
+      ...makeEvent({ type: "BEGIN_TUTORIAL_BATTLE" }),
+      payload: { tutorialRunId: "different" },
+    };
+    recorder.recordIntentKeyCollision({
+      intentKey: "tutorial-battle:event:1:begin",
+      winningSeq: 33,
+      winner,
+      contender,
+    });
+
+    expect(emitted).toEqual([
+      {
+        event: "authoritative_prefix_correction",
+        firstChangedSeq: 33,
+        previousHead: 33,
+        authoritativeHead: 33,
+        observingClientId: "client-a",
+        gameId: "room-1",
+      },
+      {
+        event: "semantic_intent_key_collision",
+        intentKey: "tutorial-battle:event:1:begin",
+        winningSeq: 33,
+        winnerType: "BEGIN_TUTORIAL_BATTLE",
+        contenderType: "BEGIN_TUTORIAL_BATTLE",
+        winnerPayload: {},
+        contenderPayload: { tutorialRunId: "different" },
+        observingClientId: "client-a",
         gameId: "room-1",
       },
     ]);

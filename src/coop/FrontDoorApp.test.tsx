@@ -1,162 +1,54 @@
 // @vitest-environment jsdom
 
-import { act, type ReactNode } from "react";
-import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { JourneyContent } from "../data/journey-content";
-import FrontDoorApp from "./FrontDoorApp";
+import { createRoot } from "react-dom/client";
+import { act } from "react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import type { RuntimeConfig } from "../runtime/runtime-config";
 
-const mocks = vi.hoisted(() => ({
-  loadJourneyContent: vi.fn<() => Promise<JourneyContent>>(),
-  loadTutorialConfiguration: vi.fn(() => Promise.resolve({
-    journeyStart: {
-      speechBubble: {
-        speaker: "mira",
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 550,
-        text: "Choose an avatar.",
-      },
-    },
-    dreamscape: {
-      speechBubble: {
-        speaker: "mira",
-        delay: 2,
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 700,
-        text: "Visit Dream Sites.",
-      },
-    },
-    draft: {
-      speechBubble: {
-        speaker: "mira",
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 600,
-        text: "Draft a card.",
-      },
-    },
-    dreamsignRevelation: {
-      speechBubble: {
-        speaker: "mira",
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 600,
-        text: "Choose a Dreamsign.",
-      },
-    },
-    actions: [],
-    triggers: [],
-    battle: { playerDraws: [], enemyDraws: [], dreamwellDraws: [] },
-  })),
-  registerGameProviders: vi.fn(),
-}));
+const appMock = vi.hoisted(() => vi.fn(() => <div data-unified-room-app />));
 
-vi.mock("../data/journey-content", () => ({
-  loadJourneyContent: mocks.loadJourneyContent,
-}));
-vi.mock("../data/tutorial-actions", () => ({
-  loadTutorialConfiguration: mocks.loadTutorialConfiguration,
-}));
-vi.mock("./providers/register-game-providers", () => ({
-  registerGameProviders: mocks.registerGameProviders,
-}));
-vi.mock("../firebase/app-config", () => ({
-  getFirebaseDatabase: vi.fn(() => ({})),
-}));
-vi.mock("./RoomGate", () => ({
-  RoomGate: ({ children }: { children: (context: unknown) => ReactNode }) => (
-    <div data-room-gate="">{children({})}</div>
-  ),
-}));
-vi.mock("./hooks", () => ({
-  CoopProvider: ({ children }: { children: ReactNode }) => <>{children}</>,
-}));
-vi.mock("../state/front-door-context", () => ({
-  FrontDoorProvider: ({ children }: { children: ReactNode }) => <>{children}</>,
-}));
-vi.mock("../components/FrontDoorRouter", () => ({
-  FrontDoorRouter: ({
-    directTutorialBattle,
-    previewTutorialVictory,
-  }: {
-    directTutorialBattle?: boolean;
-    previewTutorialVictory?: boolean;
-  }) => (
-    <div
-      data-front-door-router={
-        previewTutorialVictory
-          ? "victory"
-          : directTutorialBattle
-            ? "direct"
-            : "standard"
-      }
-    />
-  ),
-}));
+vi.mock("../App", () => ({ default: appMock }));
 
-describe("FrontDoorApp provider bootstrap", () => {
-  let container: HTMLDivElement;
-  let root: Root;
+const { default: FrontDoorApp } = await import("./FrontDoorApp");
 
-  beforeEach(() => {
-    container = document.createElement("div");
-    document.body.append(container);
-    root = createRoot(container);
-    mocks.loadJourneyContent.mockReset();
-    mocks.loadTutorialConfiguration.mockClear();
-    mocks.registerGameProviders.mockReset();
-  });
-
+describe("FrontDoorApp compatibility entry", () => {
   afterEach(() => {
-    act(() => root.unmount());
-    container.remove();
+    document.body.innerHTML = "";
+    appMock.mockClear();
   });
 
-  it("registers content providers before mounting the room fold", async () => {
-    let resolveContent!: (content: JourneyContent) => void;
-    mocks.loadJourneyContent.mockReturnValue(new Promise((resolve) => {
-      resolveContent = resolve;
-    }));
+  it("delegates front-door paths to the unified room runtime", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    const runtimeConfig = {
+      seedOverride: null,
+      aiMode: false,
+      gameId: "room42",
+      databaseMode: "emulator",
+    } as RuntimeConfig;
 
     act(() => {
       root.render(
         <FrontDoorApp
-          runtimeConfig={{ seedOverride: null, aiMode: false, gameId: null, databaseMode: "emulator" }}
+          runtimeConfig={runtimeConfig}
           entry="tutorial"
           directTutorialBattle
-        />,
-      );
-    });
-    expect(container.querySelector("[data-room-gate]")).toBeNull();
-
-    await act(async () => {
-      resolveContent({} as JourneyContent);
-      await Promise.resolve();
-    });
-
-    expect(mocks.registerGameProviders).toHaveBeenCalledOnce();
-    expect(container.querySelector("[data-room-gate]")).not.toBeNull();
-    expect(container.querySelector("[data-front-door-router=direct]")).not.toBeNull();
-  });
-
-  it("threads the direct victory preview into the front-door router", async () => {
-    mocks.loadJourneyContent.mockResolvedValue({} as JourneyContent);
-
-    await act(async () => {
-      root.render(
-        <FrontDoorApp
-          runtimeConfig={{ seedOverride: null, aiMode: false, gameId: null, databaseMode: "emulator" }}
-          entry="tutorial"
           previewTutorialVictory
         />,
       );
-      await Promise.resolve();
     });
 
-    expect(
-      container.querySelector("[data-front-door-router=victory]"),
-    ).not.toBeNull();
+    expect(container.querySelector("[data-unified-room-app]")).not.toBeNull();
+    expect(appMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        runtimeConfig,
+        frontDoorEntry: "tutorial",
+        directTutorialBattle: true,
+        previewTutorialVictory: true,
+      }),
+      undefined,
+    );
+    act(() => root.unmount());
   });
 });

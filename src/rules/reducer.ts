@@ -65,8 +65,22 @@ export function reduceGameEvent(
   event: GameEvent,
   ctx: EventContext,
 ): ReduceResult {
+  const controlDecision = authorizePlaytestIntent(state, event);
+  if (controlDecision === "reject") {
+    return bounce(state, "observer_read_only");
+  }
+  const routedState: FoldState =
+    controlDecision === "claim"
+      ? {
+          ...state,
+          playtestControl: {
+            mode: "single-controller",
+            controllerClientId: event.actor,
+          },
+        }
+      : state;
   const exempt = isCasExempt(event.type); // rule 1
-  const matchingResolve = isMatchingResolve(state, event); // rule 2
+  const matchingResolve = isMatchingResolve(routedState, event); // rule 2
 
   if (!exempt && !matchingResolve) {
     // rule 3 — compare-and-swap with the self-chain / decision-neutral carve-out
@@ -77,7 +91,7 @@ export function reduceGameEvent(
       return bounce(state, "partner_conflict");
     }
     // rule 4 — prompt gate
-    if (state.battle?.pendingPrompt != null) {
+    if (routedState.battle?.pendingPrompt != null) {
       return bounce(state, "prompt_pending");
     }
   }
@@ -93,18 +107,103 @@ export function reduceGameEvent(
     // value. The result is identical on both clients, so the fold stays
     // convergent. Every OTHER domain throw propagates to `fold.ts` containment.
     try {
-      return routeDomain(state, event, ctx);
+      const result = routeDomain(routedState, event, ctx);
+      return result.outcome === "bounced" && controlDecision === "claim"
+        ? { ...result, state }
+        : result;
     } catch {
       return {
         state: {
-          ...state,
-          battle: { ...state.battle!, pendingPrompt: null, effectQueue: [] },
+          ...routedState,
+          battle: { ...routedState.battle!, pendingPrompt: null, effectQueue: [] },
         },
         outcome: "applied",
       };
     }
   }
-  return routeDomain(state, event, ctx);
+  const result = routeDomain(routedState, event, ctx);
+  return result.outcome === "bounced" && controlDecision === "claim"
+    ? { ...result, state }
+    : result;
+}
+
+type PlaytestControlDecision = "allow" | "claim" | "reject";
+
+function authorizePlaytestIntent(
+  state: FoldState,
+  event: GameEvent,
+): PlaytestControlDecision {
+  const control = state.playtestControl ?? {
+    mode: "collaborative" as const,
+    controllerClientId: null,
+  };
+  if (control.mode !== "single-controller") return "allow";
+  if (event.type === "TAKE_PLAYTEST_CONTROL") return "allow";
+  if (event.type === "COMPLETE_TUTORIAL_BATTLE_PRESENTATION") {
+    const controllerClientId = control.controllerClientId;
+    return controllerClientId !== null &&
+      (
+        event.actor === controllerClientId ||
+        event.actor === `tutorial-ai:${controllerClientId}`
+      )
+      ? "allow"
+      : "reject";
+  }
+  if (!isPlayerControlledIntent(event)) return "allow";
+  if (control.controllerClientId === null) {
+    if (isFirstTutorialGameplayIntent(state, event)) return "claim";
+    return state.frontDoor.phase === "main" ||
+      state.frontDoor.phase === "mainExiting" ||
+      state.frontDoor.phase === "loading"
+      ? "allow"
+      : "reject";
+  }
+  return event.actor === control.controllerClientId ? "allow" : "reject";
+}
+
+const TUTORIAL_BATTLE_GAMEPLAY_EVENT_TYPES: ReadonlySet<string> = new Set([
+  "BATTLE_COMMAND",
+  "BATTLE_REPOSITION_CHARACTER",
+  "BATTLE_PLAY_CARD",
+  "BATTLE_GESTURE",
+  "RESOLVE_PROMPT",
+]);
+
+function isFirstTutorialGameplayIntent(
+  state: FoldState,
+  event: GameEvent,
+): boolean {
+  if (
+    event.type === "FRONT_DOOR_ACTION" &&
+    event.payload.surface === "tutorial" &&
+    event.payload.actionId === "play-card"
+  ) {
+    return true;
+  }
+  return state.battle?.mode?.kind === "tutorial" &&
+    TUTORIAL_BATTLE_GAMEPLAY_EVENT_TYPES.has(event.type);
+}
+
+const PASSIVE_HOSTED_EVENT_TYPES: ReadonlySet<string> = new Set([
+  "ADVANCE_FRONT_DOOR",
+  "BEGIN_TUTORIAL",
+  "COMPLETE_TUTORIAL_ACTION",
+  "BEGIN_TUTORIAL_BATTLE",
+  "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+  "OPEN_CARD_TUTORIAL_GUIDANCE",
+  "COMPLETE_CARD_TUTORIAL_GUIDANCE",
+  "SET_CARD_SOURCE_DEBUG",
+]);
+
+function isPlayerControlledIntent(event: GameEvent): boolean {
+  if (PASSIVE_HOSTED_EVENT_TYPES.has(event.type)) return false;
+  if (
+    event.actor.startsWith("tutorial-ai:") ||
+    event.actor.startsWith("ai:")
+  ) {
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -233,6 +332,8 @@ export function routeDomain(
         state,
         frontDoor.completeTutorialAction(state.frontDoor, payload),
       );
+    case "TAKE_PLAYTEST_CONTROL":
+      return takePlaytestControl(state, payload, event.actor);
     case "BEGIN_TUTORIAL_BATTLE":
       return foldCase(
         state,
@@ -242,11 +343,6 @@ export function routeDomain(
       return foldCase(
         state,
         battleEvents.restartTutorialBattle(state, payload, ctx, event.actor),
-      );
-    case "CLAIM_TUTORIAL_BATTLE_DRIVER":
-      return foldCase(
-        state,
-        battleEvents.claimTutorialBattleDriver(state, payload, event.actor),
       );
     case "EXIT_TUTORIAL_BATTLE":
       return foldCase(state, battleEvents.exitTutorialBattle(state, payload, event.actor));
@@ -442,6 +538,33 @@ export function routeDomain(
       return bounce(state);
     }
   }
+}
+
+function takePlaytestControl(
+  state: FoldState,
+  payload: Record<string, unknown>,
+  actor: string,
+): ReduceResult {
+  if (
+    state.playtestControl?.mode !== "single-controller" ||
+    typeof actor !== "string" ||
+    actor.length === 0 ||
+    payload.previousControllerClientId !==
+      state.playtestControl.controllerClientId ||
+    actor === state.playtestControl.controllerClientId
+  ) {
+    return bounce(state);
+  }
+  return {
+    outcome: "applied",
+    state: {
+      ...state,
+      playtestControl: {
+        ...state.playtestControl,
+        controllerClientId: actor,
+      },
+    },
+  };
 }
 
 /**

@@ -108,6 +108,18 @@ vi.mock("./state/coop-journey-context", () => ({
   ),
 }));
 
+vi.mock("./state/front-door-context", () => ({
+  FrontDoorProvider: ({ children }: { children: ReactNode }) => children,
+}));
+
+vi.mock("./coop/HostedPlaytestShell", () => ({
+  HostedPlaytestShell: ({ children }: { children: ReactNode }) => children,
+}));
+
+vi.mock("./components/FrontDoorRouter", () => ({
+  FrontDoorRouter: ({ journey }: { journey: ReactNode }) => journey,
+}));
+
 vi.mock("./state/journey-context", () => ({
   useJourney: vi.fn(),
 }));

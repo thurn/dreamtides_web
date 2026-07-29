@@ -55,7 +55,7 @@ vi.mock("firebase/database", () => ({
 }));
 
 // Imported after the mocks are registered.
-const { RoomGate } = await import("./RoomGate");
+const { RoomGate, roomScopedClientId } = await import("./RoomGate");
 
 function runtimeConfig(overrides: Partial<RuntimeConfig> = {}): RuntimeConfig {
   return {
@@ -188,5 +188,22 @@ describe("RoomGate content-config gate", () => {
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
     expect(container.querySelector("[data-room-children]")).toBeNull();
+  });
+});
+
+describe("room-scoped client identity", () => {
+  it("reuses the stored identity when a controlling tab reloads", () => {
+    const values = new Map<string, string>();
+    const storage = {
+      getItem: (key: string) => values.get(key) ?? null,
+      setItem: (key: string, value: string) => {
+        values.set(key, value);
+      },
+    };
+
+    const first = roomScopedClientId("room42", storage);
+    const reloaded = roomScopedClientId("room42", storage);
+
+    expect(reloaded).toBe(first);
   });
 });

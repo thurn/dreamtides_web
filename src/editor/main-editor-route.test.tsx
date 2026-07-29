@@ -102,16 +102,21 @@ describe("main editor route", () => {
     return strictMode.props.children.props.children;
   }
 
-  function renderedFrontDoorProps(): {
-    entry?: string;
+  function renderedAppProps(): {
+    frontDoorEntry?: string;
     directTutorialBattle?: boolean;
     runtimeConfig?: { aiMode: boolean };
   } {
-    return renderedRouteComponent().props as {
-      entry?: string;
+    type AppProps = {
+      frontDoorEntry?: string;
       directTutorialBattle?: boolean;
       runtimeConfig?: { aiMode: boolean };
     };
+    const route = renderedRouteComponent() as ReactElement<{
+      children: ReactElement<AppProps>;
+    }>;
+    const app = route.props.children;
+    return app.props;
   }
 
   it("mounts the isolated editor for the Vite-served /editor/ path", async () => {
@@ -207,39 +212,36 @@ describe("main editor route", () => {
     expect(mocks.render).toHaveBeenCalledTimes(1);
   });
 
-  it("mounts the Firebase front door for the Vite-served /loading/ path", async () => {
+  it("mounts the room app with loading as the creation entry", async () => {
     window.history.pushState(null, "", "/loading/");
 
     await import("../main.tsx");
 
-    expect(mocks.appImport).not.toHaveBeenCalled();
-    expect(renderedFrontDoorProps().entry).toBe("loading");
+    expect(renderedAppProps().frontDoorEntry).toBe("loading");
     expect(mocks.createRoot).toHaveBeenCalledWith(
       document.getElementById("root"),
     );
     expect(mocks.render).toHaveBeenCalledTimes(1);
   });
 
-  it("mounts the Firebase front door for the Vite-served /tutorial/ path", async () => {
+  it("mounts the room app with tutorial as the creation entry", async () => {
     window.history.pushState(null, "", "/tutorial/");
 
     await import("../main.tsx");
 
-    expect(mocks.appImport).not.toHaveBeenCalled();
-    expect(renderedFrontDoorProps().entry).toBe("tutorial");
+    expect(renderedAppProps().frontDoorEntry).toBe("tutorial");
     expect(mocks.createRoot).toHaveBeenCalledWith(
       document.getElementById("root"),
     );
     expect(mocks.render).toHaveBeenCalledTimes(1);
   });
 
-  it("mounts the Firebase front door for the Vite-served /main/ path", async () => {
+  it("mounts the room app with main as the creation entry", async () => {
     window.history.pushState(null, "", "/main/");
 
     await import("../main.tsx");
 
-    expect(mocks.appImport).not.toHaveBeenCalled();
-    expect(renderedFrontDoorProps().entry).toBe("main");
+    expect(renderedAppProps().frontDoorEntry).toBe("main");
     expect(mocks.createRoot).toHaveBeenCalledWith(
       document.getElementById("root"),
     );
@@ -251,9 +253,8 @@ describe("main editor route", () => {
 
     await import("../main.tsx");
 
-    expect(mocks.appImport).not.toHaveBeenCalled();
-    expect(renderedFrontDoorProps()).toMatchObject({
-      entry: "tutorial",
+    expect(renderedAppProps()).toMatchObject({
+      frontDoorEntry: "tutorial",
       directTutorialBattle: true,
       runtimeConfig: { aiMode: false },
     });

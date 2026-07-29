@@ -37,16 +37,10 @@ export interface EventPayloads {
   };
   BEGIN_TUTORIAL: { actions: unknown };
   COMPLETE_TUTORIAL_ACTION: { runId: string; actionId: string };
-  BEGIN_TUTORIAL_BATTLE: { tutorialRunId: string; driverClientId: string };
+  TAKE_PLAYTEST_CONTROL: { previousControllerClientId: string | null };
+  BEGIN_TUTORIAL_BATTLE: { tutorialRunId: string };
   RESTART_TUTORIAL_BATTLE: {
     battleId: string;
-    previousDriverClientId: string;
-    driverClientId: string;
-  };
-  CLAIM_TUTORIAL_BATTLE_DRIVER: {
-    battleId: string;
-    previousDriverClientId: string;
-    driverClientId: string;
   };
   EXIT_TUTORIAL_BATTLE: { battleId: string };
   OPEN_CARD_TUTORIAL_GUIDANCE: { screenKey: string; cardIds: string[] };
@@ -208,7 +202,7 @@ export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "ADVANCE_FRONT_DOOR",
   "BEGIN_TUTORIAL",
   "COMPLETE_TUTORIAL_ACTION",
-  "CLAIM_TUTORIAL_BATTLE_DRIVER",
+  "TAKE_PLAYTEST_CONTROL",
   "OPEN_CARD_TUTORIAL_GUIDANCE",
   "COMPLETE_CARD_TUTORIAL_GUIDANCE",
   "SET_CARD_NOTE",
@@ -227,7 +221,8 @@ export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<string> =
     "FRONT_DOOR_ACTION",
     "ADVANCE_FRONT_DOOR",
     "BEGIN_TUTORIAL",
-    "COMPLETE_TUTORIAL_ACTION",
+  "COMPLETE_TUTORIAL_ACTION",
+  "TAKE_PLAYTEST_CONTROL",
     "OPEN_CARD_TUTORIAL_GUIDANCE",
     "COMPLETE_CARD_TUTORIAL_GUIDANCE",
     "SET_CARD_NOTE",
@@ -253,9 +248,9 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   ADVANCE_FRONT_DOOR: true,
   BEGIN_TUTORIAL: true,
   COMPLETE_TUTORIAL_ACTION: true,
+  TAKE_PLAYTEST_CONTROL: true,
   BEGIN_TUTORIAL_BATTLE: true,
   RESTART_TUTORIAL_BATTLE: true,
-  CLAIM_TUTORIAL_BATTLE_DRIVER: true,
   EXIT_TUTORIAL_BATTLE: true,
   OPEN_CARD_TUTORIAL_GUIDANCE: true,
   COMPLETE_CARD_TUTORIAL_GUIDANCE: true,

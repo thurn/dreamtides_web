@@ -20,7 +20,12 @@ import type { CardTutorialGuidancePresentation } from "./card-tutorial-guidance"
 export type { BattleFoldState, PendingPrompt } from "./battle/fold";
 import type { BattleFoldState } from "./battle/fold";
 
-export type FrontDoorPhase = "main" | "mainExiting" | "loading" | "tutorial";
+export type FrontDoorPhase =
+  | "main"
+  | "mainExiting"
+  | "loading"
+  | "tutorial"
+  | "journey";
 
 export interface FrontDoorState {
   readonly phase: FrontDoorPhase;
@@ -30,12 +35,18 @@ export interface FrontDoorState {
   readonly tutorial: TutorialPlaybackState | null;
 }
 
+export interface PlaytestControlState {
+  readonly mode: "collaborative" | "single-controller";
+  readonly controllerClientId: string | null;
+}
+
 /**
  * The complete state folded from a room's event log: the journey slice plus an
  * optional in-battle slice. `battle` is null whenever no battle is active.
  */
 export interface FoldState {
   readonly frontDoor: FrontDoorState;
+  readonly playtestControl?: PlaytestControlState;
   readonly journey: JourneyState;
   readonly battle: BattleFoldState | null;
   /** First-occurrence tutorials already presented in this shared room. */
@@ -57,12 +68,19 @@ export interface FoldState {
  * src/rules/ lint rails forbid.
  */
 export function genesisFoldState(genesis: Genesis): FoldState {
-  const entry = genesis.frontDoorEntry ?? "main";
+  const entry = genesis.frontDoorEntry ?? "journey";
   return {
     frontDoor: {
       phase: entry,
       journeyId: entry === "main" ? null : `genesis:${genesis.seed}`,
       tutorial: null,
+    },
+    playtestControl: {
+      mode:
+        genesis.frontDoorEntry === undefined
+          ? "collaborative"
+          : "single-controller",
+      controllerClientId: null,
     },
     journey: genesisJourneyState(genesis),
     battle: null,

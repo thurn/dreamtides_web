@@ -51,8 +51,8 @@ file I/O should mock `fetch` or use Vitest's `node` environment.
 ## Architecture
 
 The authoritative room value is an append-only sequence of player intents.
-`src/rules/reducer.ts` folds that sequence into one `FoldState` with three
-slices: shared front-door/tutorial progress, journey state, and an optional active
+`src/rules/reducer.ts` folds that sequence into one `FoldState` containing the
+shared experience phase, playtest controller, journey state, and optional active
 battle. React renders the displayed fold and owns presentation-local state such
 as hover, open dialogs, and draft input.
 
@@ -75,9 +75,10 @@ The important ownership boundaries are:
 - `src/rules/` defines `FoldState`, the event union, and the pure Dreamtides
   reducer. Time and randomness enter through the event context, keyed by the
   room seed and committed sequence number.
-- `src/coop/RoomGate.tsx` creates or joins a room, validates its reducer build
-  and fold-relevant content configuration, writes presence, and installs the
-  room journey-log sink.
+- `src/coop/RoomGate.tsx` creates or joins a room, restores the tab's
+  room-scoped session identity, validates its reducer build and fold-relevant
+  content configuration, writes presence, and installs the room journey-log
+  sink.
 - `src/coop/hooks.ts` mounts one `LogClient` per ready room. `useGameState()`
   exposes the confirmed fold plus optimistic local intents; `useAppend()` and
   `useActions()` are the write surfaces.
@@ -85,14 +86,17 @@ The important ownership boundaries are:
   Payloads carry UUIDs, entry ids, indices, and node ids.
 - `src/state/coop-journey-context.tsx` adapts the folded journey slice and action
   facade to the `JourneyContextValue` interface used by journey screens.
-- `src/App.tsx` mounts `RoomGate`, `CoopProvider`, `CoopJourneyProvider`, and the
-  routed journey UI in that order.
+- `src/App.tsx` loads content and mounts one `RoomGate`, `CoopProvider`,
+  `CoopJourneyProvider`, and shared experience router for main, loading,
+  tutorial, live battle, victory, and journey.
 
 `LogClient` keeps a confirmed fold and an ordered pending-intent queue. A local
 intent is optimistically folded for immediate feedback, then reconciled by its
 nonce or logical `intentKey` when Firebase confirms the committed event. A
 conflicting or invalid event is recorded as a deterministic bounce; displayed
-state is recomputed from the confirmed fold plus the pending queue.
+state is recomputed from the confirmed fold plus the pending queue. The client
+fingerprints the folded live prefix; a corrected, replaced, or missing event at
+an observed sequence triggers an authoritative refold and diagnostic record.
 
 The room log carries journey and battle transitions in one sequence. Battle
 commands, undo/redo gestures, rewards, and the return to the atlas therefore
@@ -187,15 +191,20 @@ presentation checkpoints. A paired Challenge holds while each dissolved
 character travels from its front-rank position to the void. An unpaired
 character that scores holds on an animated points bubble attached directly to
 that character's battlefield card; its value is paired with the canonical
-filled points Boxicon. The driver completes each checkpoint after its full
-animation window, then the reducer resolves the next lane or performs the turn
-handoff.
+filled points Boxicon. The controller-owned tutorial automation completes each
+checkpoint after its full animation window, then the reducer resolves the next
+lane or performs the turn handoff.
 
-Tutorial battle authority follows room presence. When the persisted driver
-disconnects, the lexicographically first connected viewer appends a driver
-claim to the room log. The reducer transfers only `driverClientId`, preserving
-the board, prompt, presentation checkpoint, and terminal result so the promoted
-viewer continues from the shared battle state.
+Rooms created from `/main`, `/loading`, or `/tutorial` are hosted playtests.
+The first valid manual tutorial gameplay intent atomically records the room
+controller. This can be a card play in the scripted segment or the first live
+battle input when the scripted segment reaches battle before an input is
+needed. That controller remains authoritative through the live battle and
+tutorial journey. Connected viewers render the same fold inside an inert shell,
+including guidance and victory presentations. If presence shows the controller
+has disconnected, a viewer can choose **Take Control**; the compare-and-swap
+control event preserves the board, prompt, presentation checkpoint, terminal
+result, and journey state.
 
 ## Hidden-Tides Behavior
 

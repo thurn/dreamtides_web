@@ -24,6 +24,9 @@ import { EventLogViewer } from "./coop/EventLogViewer";
 import { registerGameProviders } from "./coop/providers/register-game-providers";
 import { useJourney } from "./state/journey-context";
 import { CoopJourneyProvider } from "./state/coop-journey-context";
+import { FrontDoorProvider } from "./state/front-door-context";
+import { FrontDoorRouter } from "./components/FrontDoorRouter";
+import { HostedPlaytestShell } from "./coop/HostedPlaytestShell";
 import { ScreenRouter } from "./components/ScreenRouter";
 import { DesktopDeckViewerAdapter } from "./screens/cumulus_adapters/DesktopDeckViewerAdapter";
 import { MobileDeckViewerAdapter } from "./screens/cumulus_adapters/MobileDeckViewerAdapter";
@@ -570,8 +573,14 @@ function resolveActiveSite(state: JourneyState): SiteState | null {
 
 export default function App({
   runtimeConfig,
+  frontDoorEntry,
+  directTutorialBattle = false,
+  previewTutorialVictory = false,
 }: {
   runtimeConfig: RuntimeConfig;
+  frontDoorEntry?: "main" | "loading" | "tutorial";
+  directTutorialBattle?: boolean;
+  previewTutorialVictory?: boolean;
 }) {
   const [journeyContent, setJourneyContent] = useState<JourneyContent | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -733,14 +742,29 @@ export default function App({
       db={database}
       gameId={runtimeConfig.gameId}
       runtimeConfig={runtimeConfig}
+      frontDoorEntry={frontDoorEntry}
     >
       {(context) => (
         <CoopProvider context={context}>
           <CoopJourneyProvider journeyContent={journeyContent}>
-            <JourneyApp
-              cardDatabase={journeyContent.cardDatabase}
-              runtimeConfig={runtimeConfig}
-            />
+            <FrontDoorProvider>
+              <HostedPlaytestShell>
+                <FrontDoorRouter
+                  dreamAvatars={journeyContent.dreamAvatars}
+                  tutorialPlaybackSpeed={
+                    runtimeConfig.tutorialPlaybackSpeed ?? 1
+                  }
+                  directTutorialBattle={directTutorialBattle}
+                  previewTutorialVictory={previewTutorialVictory}
+                  journey={
+                    <JourneyApp
+                      cardDatabase={journeyContent.cardDatabase}
+                      runtimeConfig={runtimeConfig}
+                    />
+                  }
+                />
+              </HostedPlaytestShell>
+            </FrontDoorProvider>
           </CoopJourneyProvider>
         </CoopProvider>
       )}

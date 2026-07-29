@@ -9,7 +9,6 @@ import { TUTORIAL_CHALLENGE_PRESENTATION_DWELL_MS } from "./tutorial-presentatio
 
 const mocks = vi.hoisted(() => ({
   completePresentation: vi.fn(() => Promise.resolve(1)),
-  claimDriver: vi.fn(() => Promise.resolve(1)),
   state: null as FoldState | null,
   clientId: "tutorial-driver",
   connectedClientIds: ["tutorial-driver"] as readonly string[] | null,
@@ -18,7 +17,6 @@ const mocks = vi.hoisted(() => ({
 vi.mock("../coop/hooks", () => ({
   useActions: () => ({
     completeTutorialBattlePresentation: mocks.completePresentation,
-    claimTutorialBattleDriver: mocks.claimDriver,
   }),
   useClientId: () => mocks.clientId,
   useConfirmedGameState: () => mocks.state,
@@ -28,12 +26,15 @@ vi.mock("../coop/hooks", () => ({
 function presentationState(): FoldState {
   return {
     frontDoor: { phase: "tutorial", journeyId: "journey", tutorial: null },
+    playtestControl: {
+      mode: "single-controller",
+      controllerClientId: "tutorial-driver",
+    },
     journey: {} as FoldState["journey"],
     battle: {
       mode: {
         kind: "tutorial",
         tutorialRunId: "tutorial-run",
-        driverClientId: "tutorial-driver",
         restartNumber: 0,
         resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
       },
@@ -77,7 +78,6 @@ beforeEach(() => {
   ).IS_REACT_ACT_ENVIRONMENT = true;
   vi.useFakeTimers();
   mocks.completePresentation.mockClear();
-  mocks.claimDriver.mockClear();
   mocks.clientId = "tutorial-driver";
   mocks.connectedClientIds = ["tutorial-driver"];
   mocks.state = presentationState();
@@ -190,7 +190,7 @@ describe("useTutorialBattleController", () => {
     act(() => root.unmount());
   });
 
-  it("submits the deterministic driver claim without rebuilding the battle", () => {
+  it("does not automatically promote a connected viewer", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -201,12 +201,6 @@ describe("useTutorialBattleController", () => {
       root.render(<Harness visiblePresentationId={null} />);
     });
 
-    expect(mocks.claimDriver).toHaveBeenCalledOnce();
-    expect(mocks.claimDriver).toHaveBeenCalledWith(
-      "tutorial-battle",
-      "tutorial-driver",
-      "tutorial-viewer",
-    );
     expect(mocks.completePresentation).not.toHaveBeenCalled();
 
     act(() => root.unmount());

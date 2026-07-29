@@ -52,6 +52,8 @@ const fileRoles = {
   "src/coop/ConfigGateScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/coop/EventLogViewer.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/coop/FrontDoorApp.tsx": OUTER_UI_ROLES.APP_SHELL,
+  "src/coop/HostedPlaytestShell.tsx": OUTER_UI_ROLES.APP_SHELL,
+  "src/coop/hosted-playtest-shell.css": OUTER_UI_ROLES.APP_SHELL,
   "src/coop/RoomGate.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/coop/UnreadableRoomScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/coop/VersionGateScreen.tsx": OUTER_UI_ROLES.APP_SHELL,

@@ -17,13 +17,22 @@ by `?game=<roomId>`. Opening any of these paths without `game` automatically
 creates a room and adds its id to the URL, so another player can join by opening
 the resulting address.
 
-The room event log owns the shared front-door phase. `New Journey` appends a
+One room runtime owns the full shared experience. `New Journey` appends a
 menu action that starts the main-menu exit animation; animation completion
 appends the transition to `/loading`; after five seconds the loading scene
 appends the transition to `/tutorial`. Every connected client reflects the same
-folded phase into its own pathname while preserving the room query string and
-hash. `/loading` and `/tutorial` can also create rooms directly, with their
-initial scene stamped into room genesis.
+folded phase and journey screen into its own pathname while preserving the room
+query string and hash. The initial pathname is used only while creating a room;
+joining an existing `?game=` follows that room's folded phase. `/loading` and
+`/tutorial` can create rooms directly, with their initial scene stamped into
+room genesis.
+
+These rooms are single-controller hosted playtests. The first valid manual
+tutorial gameplay action, including a first live-battle input, claims control
+for that browser's room-scoped session identity. Other clients watch the same
+scripted tutorial, live battle, victory, and tutorial journey read-only. A
+disconnected controller leaves the playtest paused until a viewer explicitly
+chooses **Take Control**.
 
 ## `tutorialSpeed`
 

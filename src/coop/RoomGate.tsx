@@ -33,6 +33,31 @@ import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScree
 // unreachable/missing. Firebase emits its initial value within a couple of
 // seconds on a healthy connection, so this is generous headroom.
 const ROOM_LOAD_TIMEOUT_MS = 15_000;
+const CLIENT_ID_STORAGE_PREFIX = "dreamtides:room-client:";
+
+interface SessionStorageLike {
+  getItem(key: string): string | null;
+  setItem(key: string, value: string): void;
+}
+
+/** Return the stable tab identity for a room, minting it once per session. */
+export function roomScopedClientId(
+  roomId: string | null,
+  storage: SessionStorageLike | null =
+    typeof window === "undefined" ? null : window.sessionStorage,
+): string {
+  if (roomId === null || storage === null) return mintClientId();
+  const key = `${CLIENT_ID_STORAGE_PREFIX}${roomId}`;
+  try {
+    const existing = storage.getItem(key);
+    if (existing !== null && existing.length > 0) return existing;
+    const minted = mintClientId();
+    storage.setItem(key, minted);
+    return minted;
+  } catch {
+    return mintClientId();
+  }
+}
 
 /**
  * Everything a mounted coop game needs from a ready room. RoomGate hands this
@@ -57,7 +82,7 @@ interface RoomGateProps {
   /** This client's runtime config; its content slice is pinned into a new room's genesis. */
   runtimeConfig: RuntimeConfig;
   /** Scene stamped into genesis only when this mount creates a fresh room. */
-  frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting">;
+  frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting" | "journey">;
   children: (context: RoomReadyContext) => ReactNode;
 }
 
@@ -91,7 +116,7 @@ function freshSeed(): string {
  */
 export function createFreshGenesis(
   contentConfig: ContentConfig,
-  frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting">,
+  frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting" | "journey">,
 ): Genesis {
   return {
     seed: freshSeed(),
@@ -121,7 +146,7 @@ const CREATE_ROOM_MAX_ATTEMPTS = 3;
 export async function createAndNavigateToRoom(
   db: Database,
   contentConfig: ContentConfig,
-  frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting">,
+  frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting" | "journey">,
 ): Promise<string> {
   for (let attempt = 0; attempt < CREATE_ROOM_MAX_ATTEMPTS; attempt++) {
     const roomId = generateRoomId();
@@ -192,7 +217,7 @@ export function RoomGate({
   frontDoorEntry,
   children,
 }: RoomGateProps): ReactNode {
-  const clientId = useMemo(mintClientId, []);
+  const clientId = useMemo(() => roomScopedClientId(gameId), [gameId]);
   const localContentConfig = useMemo(
     () => contentConfigFromRuntime(runtimeConfig),
     [runtimeConfig],
@@ -207,6 +232,18 @@ export function RoomGate({
   const [logSink, setLogSinkHandle] = useState<JourneyLogSinkHandle | null>(null);
 
   const readyRoomId = gateState.status === "ready" ? gateState.roomId : null;
+
+  useEffect(() => {
+    if (activeRoomId === null) return;
+    try {
+      const key = `${CLIENT_ID_STORAGE_PREFIX}${activeRoomId}`;
+      if (window.sessionStorage.getItem(key) === null) {
+        window.sessionStorage.setItem(key, clientId);
+      }
+    } catch {
+      // Browsers may block session storage; the in-memory identity still works.
+    }
+  }, [activeRoomId, clientId]);
 
   // Re-sync when the `?game=` prop changes (e.g. a client-side navigation).
   useEffect(() => {

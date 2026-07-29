@@ -337,7 +337,6 @@ export interface JourneyBattleMode {
 export interface TutorialBattleMode {
   kind: "tutorial";
   tutorialRunId: string;
-  driverClientId: string;
   restartNumber: number;
   resultConfig: {
     playerOnlyVictory: true;

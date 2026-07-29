@@ -7,7 +7,6 @@ import { useFrontDoor } from "../../state/front-door-context";
 import { buildTutorialBattleView } from "./tutorial-battle-view-model";
 import { useBattleTutorialGuidance } from "../../state/use-battle-tutorial-guidance";
 import { buildBattleTutorialGuidanceView } from "./battle-tutorial-guidance-view-model";
-import { tutorialJourneyUrl } from "../../runtime/tutorial-journey-url";
 
 /** Live, controller-owned continuation of the standalone tutorial handoff. */
 export function TutorialBattleScreenAdapter({
@@ -62,9 +61,6 @@ export function TutorialBattleScreenAdapter({
     const exitBattle = mutations.exitTutorialBattle;
     if (exitBattle === undefined) return;
     void exitBattle(battle.board.battleId)
-      .then(() => {
-        window.location.assign(tutorialJourneyUrl(window.location.href));
-      })
       .catch(() => undefined);
   }, [
     battle,

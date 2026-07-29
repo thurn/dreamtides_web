@@ -72,8 +72,9 @@ input across Realtime Database round trips.
 - `reducerVersion` — the build hash required to fold the room.
 - `createdAt` — epoch milliseconds used by stale-room eviction.
 - `contentConfig` — the pinned pool variant, draft mode, and fresh-pack size.
-- `frontDoorEntry` — an optional `main`, `loading`, or `tutorial`
-  starting phase for standalone front-door routes.
+- `frontDoorEntry` — an optional `main`, `loading`, or `tutorial` starting
+  phase. Its presence marks a single-controller hosted playtest; rooms without
+  it begin in collaborative journey mode.
 
 `RoomGate` compares the room's reducer version and content configuration with
 the joining client before mounting gameplay. A build mismatch opens the version
@@ -97,7 +98,10 @@ contains:
 `appendEvent` runs one transaction on `rooms/<roomId>/log`. Realtime
 Database serializes concurrent transactions, so the winning updater assigns
 `head + 1` and writes the event at that sequence. A repeated nonce or logical
-intent key resolves to the existing log without creating another event.
+intent key resolves to the original winning sequence without creating another
+event. Transactions use `applyLocally: false`; the application supplies its
+own optimistic echo and subscribers observe the authoritative transaction
+result.
 
 The pure rules reducer resolves every committed event as `applied` or
 `bounced`. It receives deterministic time and random input through the event
@@ -119,11 +123,11 @@ the complete event sequence from genesis.
 
 ### Presence
 
-`RoomGate` mints a per-tab client id and writes
+`RoomGate` restores a session-storage-backed, room-scoped client id and writes
 `presence/<clientId> = { connected: true, lastSeenAt }` after the room is
-ready. The writer arms `onDisconnect().remove()` and removes the entry during
-normal cleanup. Connected counts are derived from entries whose `connected`
-field is true.
+ready. Reloading the tab in the same room retains its authority. The writer
+arms `onDisconnect().remove()` and removes the entry during normal cleanup.
+Connected counts are derived from entries whose `connected` field is true.
 
 Room creation preserves rooms created within the last 24 hours and rooms with a
 connected presence entry. A creation pass may evict older inactive rooms whose
@@ -153,9 +157,14 @@ presence and logging, then mounts one `CoopProvider`. The provider owns one
 6. Subscription confirmation reconciles the pending intent by nonce or
    `intentKey`; an invalid or conflicting intent surfaces as a bounce.
 
-`FoldState` contains the shared front-door, journey, and active-battle slices.
-Journey navigation, site decisions, battle commands, prompts, rewards, and battle
-completion therefore share one room ordering.
+`FoldState` contains the shared experience phase, playtest controller, journey,
+and active-battle slices. Journey navigation, site decisions, battle commands,
+prompts, rewards, and battle completion therefore share one room ordering.
+The live client fingerprints every folded event in the authoritative prefix. A
+same-head replacement, gap, or correction rebuilds the fold from the room node,
+reconciles pending intents, and records the observing client and first corrected
+sequence. Equal intent keys with different type or payload contracts produce a
+semantic-collision diagnostic.
 
 ## Local Testing
 
@@ -184,9 +193,10 @@ state without starting Firebase.
 
 1. Run `npm start` and open the printed Vite URL.
 2. Confirm room creation adds `?game=<roomId>`.
-3. Open that URL in a second window and confirm both windows show two connected
-   clients.
-4. Choose a Dream Avatar and confirm both clients render the same dreamscape.
+3. Open that URL in a second browser session and confirm both clients show two
+   connected participants.
+4. Make the first tutorial gameplay move in one client. Confirm it becomes the
+   controller and the second client shows the inert **Watching** panel.
 5. Open a draft site, pick a card in one client, and confirm the other client
    advances to the same next offer and deck.
 6. Trigger two valid actions from separate clients and confirm both appear in
@@ -199,9 +209,11 @@ state without starting Firebase.
    confirm the other client folds each result.
 10. Complete the battle and confirm both clients apply the same reward and
     return to the same journey route.
-11. Reload each window during journey play and during battle; confirm the room
-    replays to the same state.
-12. Open `?viewLogs=<roomId>` and confirm the persisted diagnostic records are
+11. Reload the controller during journey play and battle; confirm its
+    room-scoped identity and authority are restored.
+12. Close the controller, confirm the observer shows **Player Disconnected**,
+    choose **Take Control**, and continue from the same fold.
+13. Open `?viewLogs=<roomId>` and confirm the persisted diagnostic records are
     readable.
 
 ## Cloud Smoke QA

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
 import { logEvent } from "../logging";
 import { LoadingScreenAdapter } from "../screens/cumulus_adapters/LoadingScreenAdapter";
 import { MainMenuScreenAdapter } from "../screens/cumulus_adapters/MainMenuScreenAdapter";
@@ -14,15 +14,18 @@ export function FrontDoorRouter({
   tutorialPlaybackSpeed = 1,
   directTutorialBattle = false,
   previewTutorialVictory = false,
+  journey = null,
 }: {
   readonly dreamAvatars: readonly DreamAvatarContent[];
   readonly tutorialPlaybackSpeed?: number;
   readonly directTutorialBattle?: boolean;
   readonly previewTutorialVictory?: boolean;
+  readonly journey?: ReactNode;
 }) {
   const { state, battle } = useFrontDoor();
 
   useEffect(() => {
+    if (state.phase === "journey") return;
     const pathname =
       state.phase === "loading"
         ? "/loading"
@@ -42,6 +45,10 @@ export function FrontDoorRouter({
       journeyId: state.journeyId,
     });
   }, [state.journeyId, state.phase]);
+
+  if (state.phase === "journey") {
+    return journey;
+  }
 
   if (state.phase === "loading") {
     return <LoadingScreenAdapter playbackSpeed={tutorialPlaybackSpeed} />;

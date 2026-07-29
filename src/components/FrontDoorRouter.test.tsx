@@ -7,7 +7,7 @@ import { FrontDoorRouter } from "./FrontDoorRouter";
 
 const stateMocks = vi.hoisted<{
   frontDoor: {
-    phase: "main" | "mainExiting" | "loading" | "tutorial";
+    phase: "main" | "mainExiting" | "loading" | "tutorial" | "journey";
     journeyId: string | null;
   };
   battle?: { mode?: { kind: "tutorial" | "journey" } } | null;
@@ -146,6 +146,18 @@ describe("FrontDoorRouter", () => {
     expect(
       container.querySelector("[data-tutorial-live-battle]"),
     ).not.toBeNull();
+
+    stateMocks.frontDoor = { phase: "journey", journeyId: "event:1" };
+    act(() =>
+      root.render(
+        <FrontDoorRouter
+          dreamAvatars={DREAM_AVATARS}
+          tutorialPlaybackSpeed={4}
+          journey={<main data-journey-screen />}
+        />,
+      ),
+    );
+    expect(container.querySelector("[data-journey-screen]")).not.toBeNull();
 
     act(() => root.unmount());
   });
