@@ -142,7 +142,7 @@ namespace CumulusMvp.Editor
                 throw new InvalidOperationException($"Could not save scene at {ScenePath}.");
             }
             AssetDatabase.SaveAssets();
-            NormalizeEmptyTmpNames(ScenePath);
+            NormalizeEmptyOwnedComponentNames(ScenePath);
             NormalizeSerializedWhitespace(ButtonMeshPath);
         }
 
@@ -611,16 +611,26 @@ namespace CumulusMvp.Editor
             }
         }
 
-        private static void NormalizeEmptyTmpNames(string scenePath)
+        private static void NormalizeEmptyOwnedComponentNames(string scenePath)
         {
-            const string serializedTmpName =
-                "  m_Name: \n" +
-                "  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro";
-            const string normalizedTmpName =
-                "  m_Name:\n" +
-                "  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro";
             string source = File.ReadAllText(scenePath);
-            string normalized = source.Replace(serializedTmpName, normalizedTmpName);
+            string normalized = source;
+            string[] identifiers =
+            {
+                "Unity.TextMeshPro::TMPro.TextMeshPro",
+                "CumulusMvp.Runtime::CumulusMvp.Interaction.CumulusDreamsignAcquisitionMotion",
+                "CumulusMvp.Runtime::CumulusMvp.Interaction.CumulusPressable",
+            };
+            foreach (string identifier in identifiers)
+            {
+                string serializedName =
+                    "  m_Name: \n" +
+                    "  m_EditorClassIdentifier: " + identifier;
+                string normalizedName =
+                    "  m_Name:\n" +
+                    "  m_EditorClassIdentifier: " + identifier;
+                normalized = normalized.Replace(serializedName, normalizedName);
+            }
             if (source == normalized)
             {
                 return;

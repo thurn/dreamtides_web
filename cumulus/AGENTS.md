@@ -104,11 +104,12 @@ Promote licensed work while preserving both target histories:
    and licensed `primary` tips. If either target is not already an ancestor of
    the task branch, merge it into the task branch there; do not perform the
    conflict-producing merge in the primary checkout or canonical seed.
-2. If the integration conflicts in a generated Unity scene, reconstruct it in
-   the task worktree from the current `primary` scene by rerunning every
-   relevant deterministic builder or reconciler for the integrated changes.
-   Verify that the result contains the behavior from both histories; accepting
-   an entire serialized scene from either side is not a complete resolution.
+2. If the integration conflicts in a generated Unity scene, use the most
+   recently built scene containing the integrated Cumulus-owned behavior as the
+   reconstruction base, then rerun every relevant deterministic builder or
+   reconciler in the task worktree. Verify that the result contains the
+   behavior from both histories; accepting an entire serialized scene from
+   either side is not a complete resolution.
 3. Commit the verified integration in the local-only licensed task branch and
    confirm that both licensed `main` and licensed `primary` are ancestors of
    that commit.
