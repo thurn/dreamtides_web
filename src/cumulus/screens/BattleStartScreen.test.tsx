@@ -186,18 +186,18 @@ describe("Cumulus BattleStartScreen", () => {
     act(() => root.unmount());
   });
 
-  it("reveals authored Mira guidance one second after the screen loads", () => {
+  it("reveals first-battle Mira guidance one second after the screen loads", () => {
     vi.useFakeTimers();
     const onGuideDialogueShown = vi.fn();
     const view: BattleStartView = {
       ...makeView(),
       guideDialogue: {
-        id: "second-battle-guidance",
+        id: "first-battle-guidance",
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
           portraitAlt: "Mira",
           speakerName: "Mira",
-          text: "For this battle, the opponent's avatar ability is active and you must score 25⍟ to win",
+          text: "Before each dream battle, you can view cards from your opponent's deck and see the ⍟ required to win",
         },
         delaySeconds: 1,
         horizontalOffset: 0,
@@ -237,10 +237,10 @@ describe("Cumulus BattleStartScreen", () => {
     });
     expect(dialogue()?.dataset.characterDialogueVisible).toBe("true");
     expect(dialogue()?.textContent).toContain(
-      "For this battle, the opponent's avatar ability is active and you must score 25",
+      "Before each dream battle, you can view cards from your opponent's deck and see the",
     );
     expect(dialogue()?.querySelector("[data-inline-glyph]")).not.toBeNull();
-    expect(dialogue()?.textContent).toContain("to win");
+    expect(dialogue()?.textContent).toContain("required to win");
     expect(onGuideDialogueShown).toHaveBeenCalledTimes(1);
 
     act(() => root.unmount());

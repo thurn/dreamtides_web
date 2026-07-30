@@ -39,7 +39,7 @@ function fixtureRoot() {
   const tutorialPath = join(rootDir, "data", "tabula", "tutorial.toml");
   writeFileSync(
     tutorialPath,
-    `${readFileSync(tutorialPath, "utf8")}\n[battleStart.speechBubble]\nspeaker = "mira"\ndelay = 1\nhorizontalOffset = 0\nverticalOffset = 0\nbubbleWidth = 700\ntext = "Prepare for the second battle."\n`,
+    `${readFileSync(tutorialPath, "utf8")}\n[battleStart.firstBattle.speechBubble]\nspeaker = "mira"\ndelay = 1\nhorizontalOffset = 0\nverticalOffset = 0\nbubbleWidth = 700\ntext = "Review the first opponent."\n\n[battleStart.secondBattle.speechBubble]\nspeaker = "mira"\ndelay = 1\nhorizontalOffset = 0\nverticalOffset = 0\nbubbleWidth = 700\ntext = "Prepare for the second battle."\n`,
   );
   return rootDir;
 }
@@ -56,7 +56,8 @@ describe("tutorial editor api", () => {
     expect(loaded.battle.playerDraws).toEqual([
       "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
     ]);
-    expect(loaded.battleStart.speechBubble.delay).toBe(1);
+    expect(loaded.battleStart.firstBattle.speechBubble.delay).toBe(1);
+    expect(loaded.battleStart.secondBattle.speechBubble.delay).toBe(1);
 
     const actions = [
       {
@@ -128,9 +129,17 @@ describe("tutorial editor api", () => {
         },
       },
       battleStart: {
-        speechBubble: {
-          delay: 1,
-          text: "Prepare for the second battle.",
+        firstBattle: {
+          speechBubble: {
+            delay: 1,
+            text: "Review the first opponent.",
+          },
+        },
+        secondBattle: {
+          speechBubble: {
+            delay: 1,
+            text: "Prepare for the second battle.",
+          },
         },
       },
       triggers: [{ id: "support" }],
@@ -173,9 +182,17 @@ describe("tutorial editor api", () => {
         },
       },
       battleStart: {
-        speechBubble: {
-          delay: 1,
-          text: "Prepare for the second battle.",
+        firstBattle: {
+          speechBubble: {
+            delay: 1,
+            text: "Review the first opponent.",
+          },
+        },
+        secondBattle: {
+          speechBubble: {
+            delay: 1,
+            text: "Prepare for the second battle.",
+          },
         },
       },
       triggers: [{ id: "support" }],

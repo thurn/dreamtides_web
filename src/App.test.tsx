@@ -72,13 +72,25 @@ vi.mock("./data/tutorial-actions", () => ({
       },
     },
     battleStart: {
-      speechBubble: {
-        speaker: "mira",
-        delay: 1,
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 700,
-        text: "Prepare for the second battle.",
+      firstBattle: {
+        speechBubble: {
+          speaker: "mira",
+          delay: 1,
+          horizontalOffset: 0,
+          verticalOffset: 0,
+          bubbleWidth: 700,
+          text: "Review the first opponent.",
+        },
+      },
+      secondBattle: {
+        speechBubble: {
+          speaker: "mira",
+          delay: 1,
+          horizontalOffset: 0,
+          verticalOffset: 0,
+          bubbleWidth: 700,
+          text: "Prepare for the second battle.",
+        },
       },
     },
     actions: [],

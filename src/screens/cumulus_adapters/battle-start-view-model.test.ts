@@ -90,20 +90,51 @@ describe("buildBattleStartView", () => {
     expect(view.dreamAvatar.abilityActive).toBe(false);
   });
 
-  it("maps authored Mira guidance only for the second tutorial-journey battle", () => {
+  it("maps authored Mira guidance for the first two tutorial-journey battles", () => {
     const { init, cardDatabase } = makeInit();
     const configuration = {
-      speechBubble: {
-        speaker: "mira" as const,
-        delay: 1,
-        horizontalOffset: 12,
-        verticalOffset: -8,
-        bubbleWidth: 700,
-        text: "Prepare for the second battle.",
+      firstBattle: {
+        speechBubble: {
+          speaker: "mira" as const,
+          delay: 1,
+          horizontalOffset: -4,
+          verticalOffset: 6,
+          bubbleWidth: 650,
+          text: "Review the first opponent.",
+        },
+      },
+      secondBattle: {
+        speechBubble: {
+          speaker: "mira" as const,
+          delay: 1,
+          horizontalOffset: 12,
+          verticalOffset: -8,
+          bubbleWidth: 700,
+          text: "Prepare for the second battle.",
+        },
       },
     };
+    const firstBattle = { ...init, completionLevelAtStart: 0 };
     const secondBattle = { ...init, completionLevelAtStart: 1 };
 
+    expect(
+      buildBattleStartView(firstBattle, cardDatabase, {
+        isTutorialJourney: true,
+        configuration,
+      }).guideDialogue,
+    ).toEqual({
+      id: `${init.battleId}:first-battle-start-guidance`,
+      model: {
+        portrait: { kind: "character-portrait", characterId: "mira" },
+        portraitAlt: "Mira",
+        speakerName: "Mira",
+        text: "Review the first opponent.",
+      },
+      delaySeconds: 1,
+      horizontalOffset: -4,
+      verticalOffset: 6,
+      bubbleWidth: 650,
+    });
     expect(
       buildBattleStartView(secondBattle, cardDatabase, {
         isTutorialJourney: true,

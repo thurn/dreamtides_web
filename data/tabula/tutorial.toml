@@ -40,7 +40,15 @@ bubbleWidth = 600
 delay = 1
 text = "A [purple]Dreamsign[/purple] is a persistent artifact of the dream that gives ongoing benefits."
 
-[battleStart.speechBubble]
+[battleStart.firstBattle.speechBubble]
+speaker = "mira"
+horizontalOffset = 0
+verticalOffset = 0
+bubbleWidth = 700
+delay = 1
+text = "Before each dream battle, you can view cards from your opponent's deck and see the ⍟ required to win"
+
+[battleStart.secondBattle.speechBubble]
 speaker = "mira"
 horizontalOffset = 0
 verticalOffset = 0

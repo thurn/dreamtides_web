@@ -60,13 +60,25 @@ const ACTIONS_RESPONSE = {
     },
   },
   battleStart: {
-    speechBubble: {
-      speaker: "mira",
-      delay: 1,
-      horizontalOffset: 0,
-      verticalOffset: 0,
-      bubbleWidth: 700,
-      text: "Prepare for the second battle.",
+    firstBattle: {
+      speechBubble: {
+        speaker: "mira",
+        delay: 1,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 700,
+        text: "Review the first opponent.",
+      },
+    },
+    secondBattle: {
+      speechBubble: {
+        speaker: "mira",
+        delay: 1,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 700,
+        text: "Prepare for the second battle.",
+      },
     },
   },
   actions: [
@@ -277,13 +289,16 @@ describe("parseTutorialActions", () => {
     ).toThrow(/must target Mira/u);
   });
 
-  it("parses delayed second-battle guidance", () => {
+  it("parses delayed first- and second-battle guidance", () => {
     expect(
       parseTutorialBattleStartConfiguration(ACTIONS_RESPONSE.battleStart),
     ).toEqual(ACTIONS_RESPONSE.battleStart);
     expect(() =>
       parseTutorialBattleStartConfiguration({
-        speechBubble: { speaker: "enemy", text: "No." },
+        firstBattle: {
+          speechBubble: { speaker: "enemy", text: "No." },
+        },
+        secondBattle: ACTIONS_RESPONSE.battleStart.secondBattle,
       }),
     ).toThrow(/must target Mira/u);
   });

@@ -365,9 +365,21 @@ export function validateTutorialSiteConfiguration(value, siteId) {
   return validatePersistentTutorialConfiguration(value, siteId);
 }
 
-/** Validate delayed Mira guidance for the second tutorial-journey battle. */
+/** Validate delayed Mira guidance for the first two tutorial-journey battles. */
 export function validateTutorialBattleStartConfiguration(value) {
-  return validatePersistentTutorialConfiguration(value, "battle-start");
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw invalid("Tutorial data must contain a battle-start table.");
+  }
+  return {
+    firstBattle: validatePersistentTutorialConfiguration(
+      value.firstBattle,
+      "battle-start.first-battle",
+    ),
+    secondBattle: validatePersistentTutorialConfiguration(
+      value.secondBattle,
+      "battle-start.second-battle",
+    ),
+  };
 }
 
 /** Validate and normalize tutorial actions from TOML or the editor API. */

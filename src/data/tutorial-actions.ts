@@ -207,7 +207,8 @@ function parsePersistentTutorialConfiguration(
     | "atlas"
     | "draft"
     | "dreamsign-revelation"
-    | "battle-start",
+    | "battle-start.first-battle"
+    | "battle-start.second-battle",
 ): TutorialJourneyStartConfiguration {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
     throw new Error(`Tutorial data must contain a ${configurationId} table.`);
@@ -262,11 +263,24 @@ export function parseTutorialSiteConfiguration(
   return parsePersistentTutorialConfiguration(value, siteId);
 }
 
-/** Validate delayed Mira guidance for the second tutorial-journey battle. */
+/** Validate delayed Mira guidance for the first two tutorial-journey battles. */
 export function parseTutorialBattleStartConfiguration(
   value: unknown,
 ): TutorialBattleStartConfiguration {
-  return parsePersistentTutorialConfiguration(value, "battle-start");
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Tutorial data must contain a battle-start table.");
+  }
+  const record = value as Record<string, unknown>;
+  return {
+    firstBattle: parsePersistentTutorialConfiguration(
+      record.firstBattle,
+      "battle-start.first-battle",
+    ),
+    secondBattle: parsePersistentTutorialConfiguration(
+      record.secondBattle,
+      "battle-start.second-battle",
+    ),
+  };
 }
 
 /** Validate untrusted generated or event-log tutorial action data. */

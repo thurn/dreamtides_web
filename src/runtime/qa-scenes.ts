@@ -277,17 +277,19 @@ const BATTLE_SCENE: QaScene = {
   build: battleLayerSceneState(1),
 };
 
-/** The tutorial journey's second keeper-battle preview with authored guidance. */
-const TUTORIAL_SECOND_BATTLE_SCENE: QaScene = {
-  id: "tutorial-battle2",
-  label: "Tutorial Battle (Layer 2)",
-  description:
-    "The tutorial journey's second keeper battle, parked on the opposing Avatar preview.",
-  build: (journeyContent) => {
-    const state = battleLayerSceneState(2)(journeyContent);
-    return state === null ? null : { ...state, isTutorialJourney: true };
-  },
-};
+/** A tutorial-journey keeper-battle preview with authored guidance. */
+function tutorialBattleScene(displayLayer: 1 | 2): QaScene {
+  return {
+    id: `tutorial-battle${String(displayLayer)}`,
+    label: `Tutorial Battle (Layer ${String(displayLayer)})`,
+    description:
+      `The tutorial journey's Layer ${String(displayLayer)} keeper battle, parked on the opposing Avatar preview.`,
+    build: (journeyContent) => {
+      const state = battleLayerSceneState(displayLayer)(journeyContent);
+      return state === null ? null : { ...state, isTutorialJourney: true };
+    },
+  };
+}
 
 /** Developer entry point that mounts the Layer 1 playable battle board. */
 export const PLAYABLE_BATTLE_SCENE_ID = "battle-playable";
@@ -700,7 +702,8 @@ export const QA_SCENES: readonly QaScene[] = [
   atlasLayerScene(6),
   atlasLayerScene(7),
   BATTLE_SCENE,
-  TUTORIAL_SECOND_BATTLE_SCENE,
+  tutorialBattleScene(1),
+  tutorialBattleScene(2),
   PLAYABLE_BATTLE_SCENE,
   battleLayerScene(1),
   battleLayerScene(2),

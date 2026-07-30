@@ -72,9 +72,15 @@ export interface TutorialSiteConfiguration {
   readonly speechBubble: TutorialPersistentSpeechBubble;
 }
 
-/** Persistent Mira guidance shown on the second tutorial-journey battle preview. */
-export interface TutorialBattleStartConfiguration {
+/** Persistent Mira guidance shown on one tutorial-journey battle preview. */
+export interface TutorialBattleStartGuidance {
   readonly speechBubble: TutorialPersistentSpeechBubble;
+}
+
+/** Persistent Mira guidance authored for the first two battle previews. */
+export interface TutorialBattleStartConfiguration {
+  readonly firstBattle: TutorialBattleStartGuidance;
+  readonly secondBattle: TutorialBattleStartGuidance;
 }
 
 /** Authoritative card-visibility or battle edge that may open a supplemental tutorial. */

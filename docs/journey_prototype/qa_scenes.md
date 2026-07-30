@@ -95,8 +95,9 @@ opposing Dream Avatar, ability, Dreamsigns, and signature cards. Select **Begin
 Battle** to enter the playable board. Plain `?goto=battle` is the same Layer I
 entry point as `battle1`.
 
-`?goto=tutorial-battle2` opens the tutorial journey's second Battle Start
-screen, including its delayed Mira guidance.
+`?goto=tutorial-battle1` and `?goto=tutorial-battle2` open the tutorial
+journey's first and second Battle Start screens, including their delayed Mira
+guidance.
 
 `?goto=battle-playable` mounts the Layer I playable board directly with three
 owned Dreamsigns for layout and interaction QA.
@@ -139,6 +140,7 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `tutorial-atlas`                | Tutorial journey's first Dream Atlas visit, including the delayed Mira guidance                                                                                                                                |
 | `atlas2` … `atlas7`             | Dream Atlas resting screen the UI labels "Layer N", with the available frontier on column N (see "Atlas layers" below)                                                                                          |
 | `battle`                        | Layer I Battle Start opponent preview; same scene depth as `battle1`                                                                                                                                            |
+| `tutorial-battle1`              | Tutorial journey's Layer I Battle Start preview, including the delayed Mira guidance                                                                                                                           |
 | `tutorial-battle2`              | Tutorial journey's Layer II Battle Start preview, including the delayed Mira guidance                                                                                                                          |
 | `battle-playable`               | Layer I playable battle board with owned Dreamsigns                                                                                                                                                             |
 | `battle1` … `battle7`           | Battle Start opponent preview for the keeper battle on atlas Layer N, with layer-tuned opponent strength (see "Battle layers")                                                                                  |

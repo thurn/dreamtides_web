@@ -103,7 +103,7 @@ export interface JourneyContent {
   tutorialDraft?: TutorialSiteConfiguration;
   /** Authored guidance shown throughout the first Dreamsign Revelation visit. */
   tutorialDreamsignRevelation?: TutorialSiteConfiguration;
-  /** Authored guidance shown on the second tutorial-journey battle preview. */
+  /** Authored guidance shown on the first two tutorial-journey battle previews. */
   tutorialBattleStart?: TutorialBattleStartConfiguration;
   /** Fixed three-tide draft pool used by the tutorial journey handoff. */
   tutorialJourneyPool?: TutorialJourneyPool;

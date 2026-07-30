@@ -25,6 +25,20 @@ export function buildBattleStartView(
     init.dreamscapeId !== null
       ? init.atlasSnapshot.nodes[init.dreamscapeId]
       : undefined;
+  const battleStartGuidance =
+    tutorial?.isTutorialJourney === true
+      ? init.completionLevelAtStart === 0
+        ? tutorial.configuration?.firstBattle
+        : init.completionLevelAtStart === 1
+          ? tutorial.configuration?.secondBattle
+          : undefined
+      : undefined;
+  const battleOrdinal =
+    init.completionLevelAtStart === 0
+      ? "first"
+      : init.completionLevelAtStart === 1
+        ? "second"
+        : undefined;
   return {
     battleId: init.battleId,
     scene:
@@ -55,12 +69,10 @@ export function buildBattleStartView(
     }),
     pointsToWin: init.scoreToWin,
     essenceReward: init.essenceReward,
-    ...(tutorial?.isTutorialJourney === true &&
-    init.completionLevelAtStart === 1 &&
-    tutorial.configuration !== undefined
+    ...(battleStartGuidance !== undefined && battleOrdinal !== undefined
       ? {
           guideDialogue: {
-            id: `${init.battleId}:second-battle-start-guidance`,
+            id: `${init.battleId}:${battleOrdinal}-battle-start-guidance`,
             model: {
               portrait: {
                 kind: "character-portrait" as const,
@@ -68,16 +80,14 @@ export function buildBattleStartView(
               },
               portraitAlt: "Mira",
               speakerName: "Mira",
-              text: tutorial.configuration.speechBubble.text,
+              text: battleStartGuidance.speechBubble.text,
             },
             delaySeconds: tutorialSpeechBubbleDelaySeconds(
-              tutorial.configuration.speechBubble,
+              battleStartGuidance.speechBubble,
             ),
-            horizontalOffset:
-              tutorial.configuration.speechBubble.horizontalOffset,
-            verticalOffset:
-              tutorial.configuration.speechBubble.verticalOffset,
-            bubbleWidth: tutorial.configuration.speechBubble.bubbleWidth,
+            horizontalOffset: battleStartGuidance.speechBubble.horizontalOffset,
+            verticalOffset: battleStartGuidance.speechBubble.verticalOffset,
+            bubbleWidth: battleStartGuidance.speechBubble.bubbleWidth,
           },
         }
       : {}),
