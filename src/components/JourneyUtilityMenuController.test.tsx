@@ -5,6 +5,10 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import { logEvent } from "../logging";
+import {
+  chooseJourneySaveFile,
+  downloadJourneySaveFile,
+} from "../state/journey-save-files";
 import { useJourney } from "../state/journey-context";
 import {
   buildJourneyUtilityMenuViewModel,
@@ -15,8 +19,13 @@ import {
 vi.mock("../state/journey-context", () => ({ useJourney: vi.fn() }));
 vi.mock("../logging", () => ({ downloadLog: vi.fn(), logEvent: vi.fn() }));
 vi.mock("../runtime/build-info", () => ({ BUILD_GIT_SHA: "abc123def456" }));
+vi.mock("../state/journey-save-files", () => ({
+  chooseJourneySaveFile: vi.fn(),
+  downloadJourneySaveFile: vi.fn(),
+}));
 
 let latest: JourneyUtilityMenuViewModel | null = null;
+const loadJourneyState = vi.fn();
 
 function Probe(): null {
   latest = useJourneyUtilityMenuController({
@@ -24,7 +33,7 @@ function Probe(): null {
     builtIns: ["saveJourney", "loadJourney", "buildSha", "downloadLog"],
     saveSource: "menu-save",
     loadSource: "menu-load",
-    onLoadJourneyState: vi.fn(),
+    onLoadJourneyState: loadJourneyState,
   });
   return null;
 }
@@ -43,7 +52,9 @@ beforeEach(() => {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
     }
   ).IS_REACT_ACT_ENVIRONMENT = true;
-  vi.mocked(useJourney).mockReturnValue({ state: {} } as ReturnType<typeof useJourney>);
+  vi.mocked(useJourney).mockReturnValue({
+    state: { screen: { type: "atlas" } },
+  } as ReturnType<typeof useJourney>);
 });
 
 afterEach(() => {
@@ -52,16 +63,14 @@ afterEach(() => {
 });
 
 describe("buildJourneyUtilityMenuViewModel", () => {
-  it("constructs typed root and loading submenu commands without presentation data", () => {
+  it("constructs typed root actions without presentation data", () => {
     const model = buildJourneyUtilityMenuViewModel({
       actions: [{ kind: "action", id: "deck", label: "View Deck", glyph: GLYPHS.affiliationRow, onCommand: vi.fn() }],
       builtIns: ["saveJourney", "loadJourney", "buildSha", "downloadLog"],
       canLoadJourney: true,
-      loadState: { kind: "loading" },
       status: "Saved journey.",
       onSaveJourney: vi.fn(),
-      onOpenLoadMenu: vi.fn(),
-      onSelectSavedJourney: vi.fn(),
+      onLoadJourney: vi.fn(),
       onDownloadLog: vi.fn(),
       onViewBuildSha: vi.fn(),
     });
@@ -71,38 +80,99 @@ describe("buildJourneyUtilityMenuViewModel", () => {
       "deck", "saveJourney", "loadJourney", "buildSha", "downloadLog",
     ]);
     const load = model.actions.find((item) => item.id === "loadJourney");
-    expect(load).toMatchObject({ kind: "group", glyph: GLYPHS.folderOpen });
-    expect(load?.kind === "group" ? load.actions : []).toMatchObject([
-      { id: "loadJourney:loading", glyph: GLYPHS.folderOpen, disabled: true },
-    ]);
+    expect(load).toMatchObject({ kind: "action", glyph: GLYPHS.folderOpen });
   });
 
-  it("keeps each saved journey's display data in a typed selectable command", () => {
-    const select = vi.fn();
-    const save = { name: "before-atlas", screenType: "atlas", savedAt: "2026-07-18T10:00:00.000Z" };
+  it("omits load when the current context cannot replace journey state", () => {
     const model = buildJourneyUtilityMenuViewModel({
       actions: [],
       builtIns: ["loadJourney"],
-      canLoadJourney: true,
-      loadState: { kind: "ready", saves: [save] },
+      canLoadJourney: false,
       status: null,
       onSaveJourney: vi.fn(),
-      onOpenLoadMenu: vi.fn(),
-      onSelectSavedJourney: select,
+      onLoadJourney: vi.fn(),
       onDownloadLog: vi.fn(),
       onViewBuildSha: vi.fn(),
     });
-    const load = model.actions[0];
-    if (load?.kind !== "group") throw new Error("Load Journey must be a group");
-    const savedJourney = load.actions[0];
-    expect(savedJourney).toMatchObject({ kind: "action", id: "loadJourney:before-atlas", glyph: GLYPHS.folderOpen });
-    if (savedJourney?.kind !== "action") throw new Error("Saved journey must be an action");
-    savedJourney.onCommand();
-    expect(select).toHaveBeenCalledWith(save);
+
+    expect(model.actions).toEqual([]);
   });
 });
 
 describe("useJourneyUtilityMenuController", () => {
+  it("downloads a named journey file and reports the result", () => {
+    vi.spyOn(window, "prompt").mockReturnValue("before atlas");
+    vi.mocked(downloadJourneySaveFile).mockReturnValue({
+      fileName: "dreamtides-journey-before-atlas.json",
+      save: {
+        format: "dreamtides-journey",
+        version: 1,
+        name: "before atlas",
+        savedAt: "2026-07-29T12:00:00.000Z",
+        buildGitSha: "abc123",
+        journeyState: { screen: { type: "atlas" } },
+      } as ReturnType<typeof downloadJourneySaveFile>["save"],
+    });
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root: Root = createRoot(container);
+    act(() => root.render(<Probe />));
+
+    act(() => actionFor("saveJourney").onCommand());
+
+    expect(downloadJourneySaveFile).toHaveBeenCalledWith(
+      "before atlas",
+      expect.objectContaining({ screen: { type: "atlas" } }),
+    );
+    expect(logEvent).toHaveBeenCalledWith(
+      "debug_journey_saved",
+      expect.objectContaining({
+        source: "menu-save",
+        name: "before atlas",
+        fileName: "dreamtides-journey-before-atlas.json",
+        formatVersion: 1,
+      }),
+    );
+    expect(latest?.status).toBe(
+      'Downloaded "dreamtides-journey-before-atlas.json".',
+    );
+    act(() => root.unmount());
+  });
+
+  it("loads a selected file through the shared journey mutation", async () => {
+    vi.mocked(chooseJourneySaveFile).mockResolvedValue({
+      fileName: "before-atlas.json",
+      name: "before atlas",
+      savedAt: "2026-07-29T12:00:00.000Z",
+      buildGitSha: "abc123",
+      journeyState: { screen: { type: "atlas" } },
+    } as Awaited<ReturnType<typeof chooseJourneySaveFile>>);
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root: Root = createRoot(container);
+    act(() => root.render(<Probe />));
+
+    await act(async () => {
+      actionFor("loadJourney").onCommand();
+      await Promise.resolve();
+    });
+
+    expect(loadJourneyState).toHaveBeenCalledWith(
+      expect.objectContaining({ screen: { type: "atlas" } }),
+      "menu-load",
+    );
+    expect(logEvent).toHaveBeenCalledWith(
+      "debug_journey_loaded",
+      expect.objectContaining({
+        source: "menu-load",
+        name: "before atlas",
+        fileName: "before-atlas.json",
+      }),
+    );
+    expect(latest?.status).toBe('Loaded "before atlas".');
+    act(() => root.unmount());
+  });
+
   it("keeps build-SHA logging and transient status in the app-shell controller", () => {
     const container = document.createElement("div");
     document.body.append(container);

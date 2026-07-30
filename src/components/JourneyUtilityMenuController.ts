@@ -6,11 +6,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { downloadLog, logEvent } from "../logging";
 import { BUILD_GIT_SHA } from "../runtime/build-info";
 import {
-  getSavedJourney,
-  listSavedJourneys,
-  saveJourney,
-  type SavedJourneySummary,
-} from "../state/saved-journeys";
+  chooseJourneySaveFile,
+  downloadJourneySaveFile,
+} from "../state/journey-save-files";
 import { useJourney } from "../state/journey-context";
 import type {
   CommandMenuAction,
@@ -29,18 +27,10 @@ export type JourneyUtilityMenuBuiltIn =
   | "downloadLog"
   | "buildSha";
 
-export type SavedJourneyLoadState =
-  | { kind: "idle" }
-  | { kind: "loading" }
-  | { kind: "ready"; saves: readonly SavedJourneySummary[] }
-  | { kind: "error"; message: string };
-
 /** Plain command data supplied to the Cumulus corner utility-menu offering. */
 export interface JourneyUtilityMenuViewModel {
   /** Root commands and groups, with named glyphs and semantic callbacks. */
   actions: readonly CommandMenuItem[];
-  /** The current saved-journey loading state, retained for controller tests. */
-  loadState: SavedJourneyLoadState;
   /** A transient result Cumulus presents beneath the trigger. */
   status: string | null;
 }
@@ -50,11 +40,9 @@ export interface BuildJourneyUtilityMenuViewModelInput {
   actions: readonly JourneyUtilityMenuAction[];
   builtIns: readonly JourneyUtilityMenuBuiltIn[];
   canLoadJourney: boolean;
-  loadState: SavedJourneyLoadState;
   status: string | null;
   onSaveJourney: () => void;
-  onOpenLoadMenu: () => void;
-  onSelectSavedJourney: (summary: SavedJourneySummary) => void;
+  onLoadJourney: () => void;
   onDownloadLog: () => void;
   onViewBuildSha: () => void;
 }
@@ -67,11 +55,9 @@ export function buildJourneyUtilityMenuViewModel({
   actions,
   builtIns,
   canLoadJourney,
-  loadState,
   status,
   onSaveJourney,
-  onOpenLoadMenu,
-  onSelectSavedJourney,
+  onLoadJourney,
   onDownloadLog,
   onViewBuildSha,
 }: BuildJourneyUtilityMenuViewModelInput): JourneyUtilityMenuViewModel {
@@ -80,7 +66,9 @@ export function buildJourneyUtilityMenuViewModel({
       case "saveJourney":
         return [{ kind: "action", id: "saveJourney", label: "Save Journey", glyph: GLYPHS.save, onCommand: onSaveJourney }];
       case "loadJourney":
-        return canLoadJourney ? [buildLoadJourneyGroup(loadState, onOpenLoadMenu, onSelectSavedJourney)] : [];
+        return canLoadJourney
+          ? [{ kind: "action", id: "loadJourney", label: "Load Journey", glyph: GLYPHS.folderOpen, onCommand: onLoadJourney }]
+          : [];
       case "downloadLog":
         return [{ kind: "action", id: "downloadLog", label: "Download Log", glyph: GLYPHS.download, onCommand: onDownloadLog }];
       case "buildSha":
@@ -88,49 +76,8 @@ export function buildJourneyUtilityMenuViewModel({
     }
   });
 
-  return { actions: [...actions, ...builtInActions], loadState, status };
+  return { actions: [...actions, ...builtInActions], status };
 }
-
-function buildLoadJourneyGroup(
-  loadState: SavedJourneyLoadState,
-  onOpen: () => void,
-  onSelect: (summary: SavedJourneySummary) => void,
-): CommandMenuGroup {
-  return {
-    kind: "group",
-    id: "loadJourney",
-    label: "Load Journey",
-    glyph: GLYPHS.folderOpen,
-    onOpen,
-    actions: loadStateToActions(loadState, onSelect),
-  };
-}
-
-function loadStateToActions(
-  loadState: SavedJourneyLoadState,
-  onSelect: (summary: SavedJourneySummary) => void,
-): readonly CommandMenuItem[] {
-  switch (loadState.kind) {
-    case "idle":
-      return [];
-    case "loading":
-      return [{ kind: "action", id: "loadJourney:loading", label: "Loading saved journeys…", glyph: GLYPHS.folderOpen, disabled: true, onCommand: NOOP }];
-    case "error":
-      return [{ kind: "action", id: "loadJourney:error", label: loadState.message, glyph: GLYPHS.warning, disabled: true, accent: "danger", onCommand: NOOP }];
-    case "ready":
-      return loadState.saves.length === 0
-        ? [{ kind: "action", id: "loadJourney:empty", label: "No saved journeys.", glyph: GLYPHS.folderOpen, disabled: true, onCommand: NOOP }]
-        : loadState.saves.map((save) => ({
-            kind: "action" as const,
-            id: `loadJourney:${save.name}`,
-            label: `${save.name} — ${save.screenType} · ${formatSavedAt(save.savedAt)}`,
-            glyph: GLYPHS.folderOpen,
-            onCommand: () => onSelect(save),
-          }));
-  }
-}
-
-const NOOP = (): void => undefined;
 
 /** App-shell inputs for {@link useJourneyUtilityMenuController}. */
 export interface JourneyUtilityMenuControllerOptions {
@@ -154,7 +101,6 @@ export function useJourneyUtilityMenuController({
   loadSource,
 }: JourneyUtilityMenuControllerOptions): JourneyUtilityMenuViewModel {
   const { state } = useJourney();
-  const [loadState, setLoadState] = useState<SavedJourneyLoadState>({ kind: "idle" });
   const [status, setStatus] = useState<string | null>(null);
   const statusTimerRef = useRef<number | null>(null);
 
@@ -171,8 +117,8 @@ export function useJourneyUtilityMenuController({
     }, 4000);
   }
 
-  async function handleSaveJourney(): Promise<void> {
-    const entered = window.prompt('Save current journey as (reload with `npm run load-journey -- "<name>"`):');
+  function handleSaveJourney(): void {
+    const entered = window.prompt("Save current journey as:");
     if (entered === null) return;
     const trimmed = entered.trim();
     if (trimmed === "") {
@@ -180,38 +126,37 @@ export function useJourneyUtilityMenuController({
       return;
     }
     try {
-      const summary = await saveJourney(trimmed, state);
-      logEvent("debug_journey_saved", { source: saveSource, name: summary.name, screen: summary.screenType });
-      flashStatus(`Saved "${summary.name}".`);
+      const { fileName, save } = downloadJourneySaveFile(trimmed, state);
+      logEvent("debug_journey_saved", {
+        source: saveSource,
+        name: save.name,
+        screen: save.journeyState.screen.type,
+        fileName,
+        formatVersion: save.version,
+      });
+      flashStatus(`Downloaded "${fileName}".`);
     } catch (error) {
       flashStatus(error instanceof Error ? error.message : "Failed to save journey.");
     }
   }
 
-  function handleOpenLoadMenu(): void {
-    setLoadState({ kind: "loading" });
-    void listSavedJourneys()
-      .then((saves) => setLoadState({ kind: "ready", saves }))
-      .catch((error: unknown) => setLoadState({
-        kind: "error",
-        message: error instanceof Error ? error.message : "Failed to list saved journeys.",
-      }));
-  }
-
-  async function handleSelectLoad(summary: SavedJourneySummary): Promise<void> {
+  async function handleLoadJourney(): Promise<void> {
     if (onLoadJourneyState === undefined) {
       flashStatus("Loading is unavailable in this context.");
       return;
     }
     try {
-      const loaded = await getSavedJourney(summary.name);
-      if (loaded === null) {
-        flashStatus(`Saved journey "${summary.name}" could not be found.`);
-        return;
-      }
-      logEvent("debug_journey_loaded", { source: loadSource, name: summary.name, screen: loaded.screen?.type ?? "unknown" });
-      onLoadJourneyState(loaded, loadSource);
-      flashStatus(`Loaded "${summary.name}".`);
+      const loaded = await chooseJourneySaveFile();
+      if (loaded === null) return;
+      logEvent("debug_journey_loaded", {
+        source: loadSource,
+        name: loaded.name,
+        screen: loaded.journeyState.screen?.type ?? "unknown",
+        fileName: loaded.fileName,
+        buildGitSha: loaded.buildGitSha,
+      });
+      onLoadJourneyState(loaded.journeyState, loadSource);
+      flashStatus(`Loaded "${loaded.name}".`);
     } catch (error) {
       flashStatus(error instanceof Error ? error.message : "Failed to load journey.");
     }
@@ -221,20 +166,13 @@ export function useJourneyUtilityMenuController({
     actions,
     builtIns,
     canLoadJourney: onLoadJourneyState !== undefined,
-    loadState,
     status,
-    onSaveJourney: () => void handleSaveJourney(),
-    onOpenLoadMenu: handleOpenLoadMenu,
-    onSelectSavedJourney: (summary) => void handleSelectLoad(summary),
+    onSaveJourney: handleSaveJourney,
+    onLoadJourney: () => void handleLoadJourney(),
     onDownloadLog: downloadLog,
     onViewBuildSha: () => {
       logEvent("build_sha_viewed", { source: "dreamscape_menu", gitSha: BUILD_GIT_SHA });
       flashStatus(`Build Git SHA: ${BUILD_GIT_SHA}`);
     },
-  }), [actions, builtIns, loadState, onLoadJourneyState, status]);
-}
-
-function formatSavedAt(savedAt: string): string {
-  const parsed = new Date(savedAt);
-  return Number.isNaN(parsed.getTime()) ? savedAt : parsed.toLocaleString();
+  }), [actions, builtIns, onLoadJourneyState, status]);
 }

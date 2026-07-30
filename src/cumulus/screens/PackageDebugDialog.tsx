@@ -29,16 +29,9 @@ export interface PackageDebugView {
   topRemainingCards: readonly PackageDebugEntryView[];
 }
 
-export interface SavedJourneyView {
-  id: string;
-  name: string;
-  detail: string;
-}
-
 export interface PackageDebugDialogProps {
   isOpen: boolean;
   view: PackageDebugView;
-  saves: readonly SavedJourneyView[];
   saveName: string;
   saveStatus: string | null;
   saveError: string | null;
@@ -49,8 +42,7 @@ export interface PackageDebugDialogProps {
   onClose: () => void;
   onSaveNameChange: (name: string) => void;
   onSave: () => void;
-  onLoad: (saveId: string) => void;
-  onDelete: (saveId: string) => void;
+  onLoad: () => void;
   onForceLegendaryOffer: () => void;
 }
 
@@ -63,16 +55,15 @@ export function PackageDebugDialog(props: PackageDebugDialogProps): ReactElement
   if (!props.isOpen) return null;
   return (
     <div className="cumulus" data-package-debug-dialog="" style={{ minHeight: "100vh" }}>
-      <GlassDialog title="Debug: Package State" subtitle="Inspect the active run and its saved snapshots." onClose={props.onClose} fullScreen>
+      <GlassDialog title="Debug: Package State" subtitle="Inspect the active run and manage a portable journey save." onClose={props.onClose} fullScreen>
         <div style={stackStyle}>
           <section data-package-debug-values="" style={{ display: "flex", flexWrap: "wrap", gap: token("--space-4") }}>
             {props.view.values.map((value) => <p key={value.id} style={{ ...mutedStyle, display: "grid", gap: token("--space-1") }}><span style={{ font: token("--t-eyebrow") }}>{value.label}</span><strong style={{ font: token("--t-lead"), color: token("--text-on-glass") }}>{value.value}</strong></p>)}
           </section>
-          <section style={stackStyle} data-package-debug-saves="">
-            <h3 style={{ margin: 0, font: token("--t-title-sm"), color: token("--text-on-glass") }}>Saved Journeys</h3>
-            <TextField label="Save name" value={props.saveName} onChange={props.onSaveNameChange} placeholder="e.g. warriors draft" disabled={props.busy || !props.canSave} testId="debug-save-journey-name" error={props.saveError ?? undefined} supportingText={props.saveStatus ?? "Save the active run locally and resume it later."} />
-            <div><GlassButton label="Save Journey" onPress={props.onSave} disabled={props.busy || !props.canSave} placement="onGlass" variant="accent" testId="debug-save-journey" /></div>
-            {props.saves.length === 0 ? <p style={mutedStyle}>No saved journeys yet.</p> : props.saves.map((save) => <div key={save.id} style={entryStyle} data-saved-journey={save.id}><p style={{ ...mutedStyle, color: token("--text-on-glass") }}>{save.name}<br /><span style={mutedStyle}>{save.detail}</span></p><div style={{ display: "flex", flexWrap: "wrap", gap: token("--space-3") }}><GlassButton label="Load" onPress={() => props.onLoad(save.id)} disabled={props.busy || !props.canLoad} placement="onGlass" testId="debug-load-journey" /><GlassButton label="Delete" onPress={() => props.onDelete(save.id)} disabled={props.busy} placement="onGlass" variant="danger" testId="debug-delete-journey" /></div></div>)}
+          <section style={stackStyle} data-package-debug-save-file="">
+            <h3 style={{ margin: 0, font: token("--t-title-sm"), color: token("--text-on-glass") }}>Journey Save File</h3>
+            <TextField label="Save name" value={props.saveName} onChange={props.onSaveNameChange} placeholder="e.g. warriors draft" disabled={props.busy || !props.canSave} testId="debug-save-journey-name" error={props.saveError ?? undefined} supportingText={props.saveStatus ?? "Download the active run as JSON, or load a journey file."} />
+            <div style={{ display: "flex", flexWrap: "wrap", gap: token("--space-3") }}><GlassButton label="Save Journey" onPress={props.onSave} disabled={props.busy || !props.canSave} placement="onGlass" variant="accent" testId="debug-save-journey" /><GlassButton label="Load Journey" onPress={props.onLoad} disabled={props.busy || !props.canLoad} placement="onGlass" testId="debug-load-journey" /></div>
           </section>
           <DiagnosticSection title="Avatar" entries={props.view.dreamAvatar === null ? [] : [{ id: "dreamAvatar", label: props.view.dreamAvatar }]} emptyLabel="No package data available yet." />
           <DiagnosticSection title="Package Validation" entries={props.view.validation.map((value) => ({ id: value.id, label: `${value.label}: ${value.value}` }))} emptyLabel="No package data available yet." />

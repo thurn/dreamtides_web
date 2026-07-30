@@ -118,6 +118,18 @@ The hidden package stays out of normal player UI. Debug surfaces can show the
 resolved package, selected optional subset, draft pool size, and the remaining
 and spent Dreamsign pools.
 
+### Journey save files
+
+The journey utility menu can download the current `JourneyState` as a versioned
+JSON file and load that file into the active room later. Loading submits the
+snapshot through the room's `LOAD_STATE` event, so every connected client folds
+the same imported journey. The room seed is applied during import and the
+rules-layer structural validator checks the snapshot before it becomes shared
+state.
+
+Journey save files capture journey progression outside an active battle. A load
+clears the room's battle slice and resumes the imported journey screen.
+
 ### Tutorial authoring
 
 The standalone tutorial is an ordered action sequence authored in
