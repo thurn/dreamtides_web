@@ -11,6 +11,37 @@ import { CardView } from "./CardView";
 const RULES_TEXT = "Discard a bane.";
 
 describe("CardView visual editor surface", () => {
+  it("clips the masked blur compositor to the bottom feather region", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => root.render(<CumulusRoot><CardView card={{
+      id: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+      name: asCardName("Twilight Troubadour"), cardNumber: 520, cardType: "Character",
+      subtype: "Musician", isStarter: false, energyCost: 2, spark: 2, isFast: false,
+      renderedText: "", imageNumber: 1792373848, artOwned: false,
+      art: { x: 0.4, y: -0.3, scale: 2.17 },
+    }} /></CumulusRoot>));
+
+    const feather = container.querySelector<HTMLElement>(
+      "[data-card-art-blur-feather]",
+    );
+    const canvas = container.querySelector<HTMLElement>(
+      "[data-card-art-blur-canvas]",
+    );
+
+    expect(parseFloat(feather?.style.top ?? "0")).toBeGreaterThan(0);
+    expect(feather?.style.bottom).toBe("0px");
+    expect(feather?.style.maskImage).toContain(
+      "rgba(0, 0, 0, 0) 0%",
+    );
+    expect(parseFloat(canvas?.style.top ?? "0")).toBeLessThan(0);
+    expect(parseFloat(canvas?.style.height ?? "0")).toBeGreaterThan(100);
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("renders card chrome without mounting an independent reveal portal", () => {
     const container = document.createElement("div");
     document.body.append(container);

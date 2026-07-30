@@ -272,7 +272,23 @@ function ArtLayers({
     0,
     seamPct - ART_EXTENSION_FEATHER_ABOVE_PCT,
   );
-  const featherMask = `linear-gradient(to bottom, rgba(0,0,0,0) ${featherStartPct.toFixed(2)}%, rgba(0,0,0,1) ${seamPct.toFixed(2)}%, rgba(0,0,0,1) 100%)`;
+  // Keep the masked compositor physically bounded to the feather and band.
+  // WebKit can intermittently ignore a gradient mask on a transformed element;
+  // if that happens, an otherwise full-card blurred copy would obscure the
+  // authored crop. The outer clip makes that failure harmless while the inner
+  // full-card canvas preserves the image's original positioning coordinates.
+  const featherHeightPct = 100 - featherStartPct;
+  const featherSeamPct =
+    featherHeightPct > 0
+      ? ((seamPct - featherStartPct) / featherHeightPct) * 100
+      : 100;
+  const featherMask = `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) ${featherSeamPct.toFixed(2)}%, rgba(0,0,0,1) 100%)`;
+  const blurCanvasHeightPct =
+    featherHeightPct > 0 ? (100 / featherHeightPct) * 100 : 100;
+  const blurCanvasTopPct =
+    featherHeightPct > 0
+      ? -(featherStartPct / featherHeightPct) * 100
+      : 0;
   const tintStartPct = Math.max(0, seamPct - ART_EXTENSION_TINT_ABOVE_PCT);
   const tintGradient = `linear-gradient(to bottom, rgba(${tintRgb}, 0) ${tintStartPct.toFixed(2)}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_SEAM_ALPHA}) ${seamPct.toFixed(2)}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_EDGE_ALPHA}) 100%)`;
   return (
@@ -312,18 +328,26 @@ function ArtLayers({
       {fullBleed ? null : (
         <div
           aria-hidden="true"
+          data-card-art-blur-feather=""
           style={{
             position: "absolute",
-            inset: 0,
+            top: `${String(featherStartPct)}%`,
+            right: 0,
+            bottom: 0,
+            left: 0,
             overflow: "hidden",
             maskImage: featherMask,
             WebkitMaskImage: featherMask,
           }}
         >
           <div
+            data-card-art-blur-canvas=""
             style={{
               position: "absolute",
-              inset: 0,
+              top: `${String(blurCanvasTopPct)}%`,
+              right: 0,
+              left: 0,
+              height: `${String(blurCanvasHeightPct)}%`,
               filter: `blur(${blurPx.toFixed(2)}px) brightness(${ART_EXTENSION_BLUR_BRIGHTNESS})`,
             }}
           >
