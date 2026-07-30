@@ -352,7 +352,7 @@ delay = { card-seen = 1 }
 duration = 3
 bubbleWidth = 500
 match = { kind = "glossary", id = "discover" }
-text = "When you [yellow]discover[/yellow] a character, reveal 3 matching from your deck and pick one to draw."
+text = "When you [yellow]discover[/yellow] a card, reveal 3 matching cards from your deck and pick one to draw."
 
 [[triggers]]
 id = "erode"

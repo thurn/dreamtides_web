@@ -797,7 +797,7 @@ art = { x = -0.319, y = 0.028, scale = 1.47 }
 name = "Riftwalker"
 mtg-name = "Aether Spellbomb"
 id = "a9b5afaa-e149-4bf4-9007-077e8e9f12e6"
-rendered-text = "1●, Abandon this character: Return a character to hand."
+rendered-text = "1●, Abandon this character: Return a character to its controller's hand."
 energy-cost = 1
 card-type = "Character"
 subtype = "Warrior"
@@ -1524,7 +1524,7 @@ id = "b977afaf-f583-45ec-8e34-99fbfa4e9190"
 rendered-text = "1●, Abandon 2 warriors: Draw a card."
 energy-cost = 2
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -4040,7 +4040,7 @@ art = { x = -0.106, y = 0.869, scale = 1.27 }
 name = "Dreadmount Sovereign"
 mtg-name = "Arcbound Ravager"
 id = "82749215-ed35-44e3-a745-72ca76036c7c"
-rendered-text = "❖❖ – ☪, Abandon a character: Give a character you control +X✦ where X is the abandoned character's ✦."
+rendered-text = "❖❖ – Abandon a character: Give a character you control +X✦ where X is the abandoned character's ✦."
 energy-cost = 4
 card-type = "Character"
 subtype = "Warrior"
@@ -6332,7 +6332,7 @@ id = "41d0aa36-f15a-487d-b97c-7fd765973921"
 rendered-text = '''
 ▸Materialized: Draw a card.
 
-Support - Supported characters gain +2✦.
+Support - Supported characters have +2✦.
 '''
 energy-cost = 2
 card-type = "Character"
