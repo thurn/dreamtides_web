@@ -170,6 +170,10 @@ guide region beside or above the offer. The Revelation composition presents
 the Dream Guide character and resident guide line together with Mira's
 first-visit message.
 
+The `battleStart` table authors Mira guidance for the second battle preview in
+the tutorial journey. Its delay begins when the Battle Start screen loads, and
+the guidance remains visible until the player begins the battle.
+
 Supplemental tutorial triggers are shared first-occurrence explanations. Their
 seen ids live in the room fold, so a keyword explained on a journey card is
 already familiar when it later appears in battle. Draft screens submit the UUIDs

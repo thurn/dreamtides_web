@@ -20,6 +20,7 @@ import {
   validateTutorialAtlasConfiguration,
   validateTutorialJourneyStartConfiguration,
   validateTutorialSiteConfiguration,
+  validateTutorialBattleStartConfiguration,
   validateTutorialActions,
   validateTutorialBattleConfiguration,
   validateTutorialTriggers,
@@ -1142,6 +1143,9 @@ export function setupAssets({
     tutorialSource.dreamsignRevelation,
     "dreamsign-revelation",
   );
+  const tutorialBattleStart = validateTutorialBattleStartConfiguration(
+    tutorialSource.battleStart,
+  );
   const tutorialActions = validateTutorialActions(tutorialSource.actions);
   const tutorialTriggers = validateTutorialTriggers(tutorialSource.triggers ?? []);
   const tutorialBattle = validateTutorialBattleConfiguration(tutorialSource.battle);
@@ -1153,6 +1157,7 @@ export function setupAssets({
       atlas: tutorialAtlas,
       draft: tutorialDraft,
       dreamsignRevelation: tutorialDreamsignRevelation,
+      battleStart: tutorialBattleStart,
       actions: tutorialActions,
       triggers: tutorialTriggers,
       battle: tutorialBattle,

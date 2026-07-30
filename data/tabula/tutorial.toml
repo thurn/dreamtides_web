@@ -40,6 +40,14 @@ bubbleWidth = 600
 delay = 1
 text = "A [purple]Dreamsign[/purple] is a persistent artifact of the dream that gives ongoing benefits."
 
+[battleStart.speechBubble]
+speaker = "mira"
+horizontalOffset = 0
+verticalOffset = 0
+bubbleWidth = 700
+delay = 1
+text = "For this battle, the opponent's avatar ability is active and you must score 25⍟ to win"
+
 [battle]
 # Cards are drawn from each list in order after the authored tutorial actions
 # hand control to the playable battle.

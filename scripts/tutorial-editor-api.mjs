@@ -130,6 +130,7 @@ export function createTutorialEditorApiMiddleware({
         atlas,
         draft,
         dreamsignRevelation,
+        battleStart,
         triggers,
         battle,
       } =
@@ -148,6 +149,7 @@ export function createTutorialEditorApiMiddleware({
           atlas,
           draft,
           dreamsignRevelation,
+          battleStart,
         ),
       );
       atomicWrite(
@@ -159,6 +161,7 @@ export function createTutorialEditorApiMiddleware({
           atlas,
           draft,
           dreamsignRevelation,
+          battleStart,
           actions,
           triggers,
           battle,

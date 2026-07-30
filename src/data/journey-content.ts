@@ -72,6 +72,7 @@ import type { ReplayDraftState } from "../types/draft";
 import type {
   TutorialAtlasConfiguration,
   TutorialBattleConfiguration,
+  TutorialBattleStartConfiguration,
   TutorialDreamscapeConfiguration,
   TutorialJourneyStartConfiguration,
   TutorialSiteConfiguration,
@@ -102,6 +103,8 @@ export interface JourneyContent {
   tutorialDraft?: TutorialSiteConfiguration;
   /** Authored guidance shown throughout the first Dreamsign Revelation visit. */
   tutorialDreamsignRevelation?: TutorialSiteConfiguration;
+  /** Authored guidance shown on the second tutorial-journey battle preview. */
+  tutorialBattleStart?: TutorialBattleStartConfiguration;
   /** Fixed three-tide draft pool used by the tutorial journey handoff. */
   tutorialJourneyPool?: TutorialJourneyPool;
   /**

@@ -2,7 +2,7 @@
 // share one complete opponent dossier; only its placement and object scale
 // respond to the viewport.
 
-import { useRef, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
 import { RulesText } from "../components/card/RulesText";
@@ -13,6 +13,7 @@ import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/JourneyStatusBar";
 import { GlassPanel } from "../components/overlay/GlassPanel";
+import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
 import type { ArtRef } from "../primitives/art";
 import { resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
@@ -25,6 +26,8 @@ import {
   GUIDE_GALLERY_MOBILE_PANEL_WIDTH,
 } from "./guide-gallery-geometry";
 import { useIsDesktop } from "./use-is-desktop";
+import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
+import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 
 export interface BattleStartDreamAvatarView {
   id: string;
@@ -48,11 +51,13 @@ export interface BattleStartView {
   signatureCards: readonly BattleStartSignatureCardView[];
   pointsToWin: number;
   essenceReward: number;
+  guideDialogue?: TutorialSpeechBubbleView;
 }
 
 export interface BattleStartScreenProps {
   view: BattleStartView;
   onBegin: () => void;
+  onGuideDialogueShown?: () => void;
 }
 
 type PanelDensity = "standard" | "compact";
@@ -68,10 +73,21 @@ const COMPACT_DREAMSIGN_SIZE = 52;
 /** Enlarges the feet-anchored mobile opponent behind the bottom dossier. */
 const MOBILE_OPPONENT_SCALE = 3;
 
-export function BattleStartScreen({ view, onBegin }: BattleStartScreenProps) {
+export function BattleStartScreen({
+  view,
+  onBegin,
+  onGuideDialogueShown,
+}: BattleStartScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const isDesktop = useIsDesktop();
+  const guideDialogueVisible = useDelayedTutorialSpeechBubbleVisibility(
+    view.guideDialogue?.id ?? view.guideDialogue?.model.text,
+    view.guideDialogue?.delaySeconds ?? 0,
+  );
+  useEffect(() => {
+    if (guideDialogueVisible) onGuideDialogueShown?.();
+  }, [guideDialogueVisible, onGuideDialogueShown]);
 
   return (
     <div
@@ -110,6 +126,29 @@ export function BattleStartScreen({ view, onBegin }: BattleStartScreenProps) {
         <DesktopBattleStartLayout view={view} onBegin={onBegin} />
       ) : (
         <MobileBattleStartLayout view={view} onBegin={onBegin} />
+      )}
+
+      {view.guideDialogue !== undefined && (
+        <div
+          data-battle-start-guide-dialogue-placement=""
+          style={{
+            position: "absolute",
+            zIndex: token("--layer-reveal"),
+            top: `calc(${token("--safe-top")} + ${token("--space-4")})`,
+            left: "50%",
+            width: `${String(view.guideDialogue.bubbleWidth)}px`,
+            maxWidth: `calc(100vw - 2 * ${token("--gutter")})`,
+            transform: `translate(calc(-50% + ${String(view.guideDialogue.horizontalOffset)}px), ${String(view.guideDialogue.verticalOffset)}px)`,
+            pointerEvents: "none",
+          }}
+        >
+          <CharacterDialogue
+            dialogue={view.guideDialogue.model}
+            visible={guideDialogueVisible}
+            size={isDesktop ? "wide" : "compact"}
+            testId="battle-start-tutorial-dialogue"
+          />
+        </div>
       )}
     </div>
   );

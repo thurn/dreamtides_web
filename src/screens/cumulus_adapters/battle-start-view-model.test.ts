@@ -90,6 +90,53 @@ describe("buildBattleStartView", () => {
     expect(view.dreamAvatar.abilityActive).toBe(false);
   });
 
+  it("maps authored Mira guidance only for the second tutorial-journey battle", () => {
+    const { init, cardDatabase } = makeInit();
+    const configuration = {
+      speechBubble: {
+        speaker: "mira" as const,
+        delay: 1,
+        horizontalOffset: 12,
+        verticalOffset: -8,
+        bubbleWidth: 700,
+        text: "Prepare for the second battle.",
+      },
+    };
+    const secondBattle = { ...init, completionLevelAtStart: 1 };
+
+    expect(
+      buildBattleStartView(secondBattle, cardDatabase, {
+        isTutorialJourney: true,
+        configuration,
+      }).guideDialogue,
+    ).toEqual({
+      id: `${init.battleId}:second-battle-start-guidance`,
+      model: {
+        portrait: { kind: "character-portrait", characterId: "mira" },
+        portraitAlt: "Mira",
+        speakerName: "Mira",
+        text: "Prepare for the second battle.",
+      },
+      delaySeconds: 1,
+      horizontalOffset: 12,
+      verticalOffset: -8,
+      bubbleWidth: 700,
+    });
+    expect(
+      buildBattleStartView(secondBattle, cardDatabase, {
+        isTutorialJourney: false,
+        configuration,
+      }).guideDialogue,
+    ).toBeUndefined();
+    expect(
+      buildBattleStartView(
+        { ...init, completionLevelAtStart: 2 },
+        cardDatabase,
+        { isTutorialJourney: true, configuration },
+      ).guideDialogue,
+    ).toBeUndefined();
+  });
+
   it("filters a missing card by number instead of rendering broken data", () => {
     const { init, cardDatabase } = makeInit();
     const missingNumber = 999_999;

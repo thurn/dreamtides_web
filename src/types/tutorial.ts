@@ -72,6 +72,11 @@ export interface TutorialSiteConfiguration {
   readonly speechBubble: TutorialPersistentSpeechBubble;
 }
 
+/** Persistent Mira guidance shown on the second tutorial-journey battle preview. */
+export interface TutorialBattleStartConfiguration {
+  readonly speechBubble: TutorialPersistentSpeechBubble;
+}
+
 /** Authoritative card-visibility or battle edge that may open a supplemental tutorial. */
 export type TutorialTriggerEvent =
   | "card-seen"
@@ -110,6 +115,7 @@ export interface TutorialConfiguration {
   readonly atlas: TutorialAtlasConfiguration;
   readonly draft: TutorialSiteConfiguration;
   readonly dreamsignRevelation: TutorialSiteConfiguration;
+  readonly battleStart: TutorialBattleStartConfiguration;
   readonly actions: readonly TutorialAction[];
   readonly triggers: readonly TutorialTriggerDefinition[];
   readonly battle: TutorialBattleConfiguration;

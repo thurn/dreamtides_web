@@ -365,6 +365,11 @@ export function validateTutorialSiteConfiguration(value, siteId) {
   return validatePersistentTutorialConfiguration(value, siteId);
 }
 
+/** Validate delayed Mira guidance for the second tutorial-journey battle. */
+export function validateTutorialBattleStartConfiguration(value) {
+  return validatePersistentTutorialConfiguration(value, "battle-start");
+}
+
 /** Validate and normalize tutorial actions from TOML or the editor API. */
 export function validateTutorialActions(value) {
   if (!Array.isArray(value)) {
@@ -779,6 +784,7 @@ export function readTutorialConfiguration({
       parsed.dreamsignRevelation,
       "dreamsign-revelation",
     ),
+    battleStart: validateTutorialBattleStartConfiguration(parsed.battleStart),
     actions: validateTutorialActions(parsed.actions),
     triggers: validateTutorialTriggers(parsed.triggers ?? []),
     battle: validateTutorialBattleConfiguration(parsed.battle),
@@ -800,6 +806,7 @@ export function serializeTutorialToml(
   atlas,
   draft,
   dreamsignRevelation,
+  battleStart,
 ) {
   const normalized = validateTutorialActions(actions);
   const normalizedTriggers = validateTutorialTriggers(triggers);
@@ -816,12 +823,15 @@ export function serializeTutorialToml(
       dreamsignRevelation,
       "dreamsign-revelation",
     );
+  const normalizedBattleStart =
+    validateTutorialBattleStartConfiguration(battleStart);
   return `# Ordered actions and first-occurrence battle tutorials.\n\n${stringify({
     journeyStart: normalizedJourneyStart,
     dreamscape: normalizedDreamscape,
     atlas: normalizedAtlas,
     draft: normalizedDraft,
     dreamsignRevelation: normalizedDreamsignRevelation,
+    battleStart: normalizedBattleStart,
     battle: normalizedBattle,
     actions: normalized,
     triggers: normalizedTriggers,
@@ -840,6 +850,7 @@ export function refreshTutorialDataJson({
     atlas,
     draft,
     dreamsignRevelation,
+    battleStart,
     actions,
     triggers,
     battle,
@@ -858,6 +869,7 @@ export function refreshTutorialDataJson({
       atlas,
       draft,
       dreamsignRevelation,
+      battleStart,
       actions,
       triggers,
       battle,
@@ -869,6 +881,7 @@ export function refreshTutorialDataJson({
     atlas,
     draft,
     dreamsignRevelation,
+    battleStart,
     actions,
     triggers,
     battle,

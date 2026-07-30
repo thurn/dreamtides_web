@@ -11,10 +11,18 @@ import { CumulusRoot } from "../CumulusRoot";
 import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 import { BattleStartScreen, type BattleStartView } from "./BattleStartScreen";
 
+class ResizeObserverStub {
+  constructor(_callback: ResizeObserverCallback) {}
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
+}
+
 beforeEach(() => {
   (
     globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
   ).IS_REACT_ACT_ENVIRONMENT = true;
+  globalThis.ResizeObserver = ResizeObserverStub;
   stubMatchMedia(true);
 });
 
@@ -176,6 +184,67 @@ describe("Cumulus BattleStartScreen", () => {
     expect(onBegin).toHaveBeenCalledTimes(1);
 
     act(() => root.unmount());
+  });
+
+  it("reveals authored Mira guidance one second after the screen loads", () => {
+    vi.useFakeTimers();
+    const onGuideDialogueShown = vi.fn();
+    const view: BattleStartView = {
+      ...makeView(),
+      guideDialogue: {
+        id: "second-battle-guidance",
+        model: {
+          portrait: { kind: "character-portrait", characterId: "mira" },
+          portraitAlt: "Mira",
+          speakerName: "Mira",
+          text: "For this battle, the opponent's avatar ability is active and you must score 25⍟ to win",
+        },
+        delaySeconds: 1,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 700,
+      },
+    };
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <BattleStartScreen
+            view={view}
+            onBegin={vi.fn()}
+            onGuideDialogueShown={onGuideDialogueShown}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const dialogue = () =>
+      container.querySelector<HTMLElement>(
+        '[data-testid="battle-start-tutorial-dialogue"]',
+      );
+    expect(dialogue()?.dataset.characterDialogueVisible).toBe("false");
+    expect(onGuideDialogueShown).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(999);
+    });
+    expect(dialogue()?.dataset.characterDialogueVisible).toBe("false");
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(dialogue()?.dataset.characterDialogueVisible).toBe("true");
+    expect(dialogue()?.textContent).toContain(
+      "For this battle, the opponent's avatar ability is active and you must score 25",
+    );
+    expect(dialogue()?.querySelector("[data-inline-glyph]")).not.toBeNull();
+    expect(dialogue()?.textContent).toContain("to win");
+    expect(onGuideDialogueShown).toHaveBeenCalledTimes(1);
+
+    act(() => root.unmount());
+    vi.useRealTimers();
   });
 
   it("shows the complete desktop dossier in one compact mobile glass panel", () => {

@@ -257,6 +257,14 @@ describe("the battle layer QA scenes", () => {
     expect(qaSceneLoadsBattle("battle-playable")).toBe(true);
   });
 
+  it("parks the tutorial journey on its second Battle start screen", () => {
+    const state = buildQaScene("tutorial-battle2", makeJourneyContent());
+
+    expect(state?.screen.type).toBe("site");
+    expect(state?.completionLevel).toBe(1);
+    expect(state?.isTutorialJourney).toBe(true);
+  });
+
   for (const displayLayer of displayLayers) {
     it(`battle${String(displayLayer)} parks on the Layer ${String(displayLayer)} Battle start screen`, () => {
       const state = buildQaScene(

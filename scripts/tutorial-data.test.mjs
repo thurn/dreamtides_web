@@ -10,6 +10,7 @@ import {
   validateTutorialActions,
   validateTutorialAtlasConfiguration,
   validateTutorialBattleConfiguration,
+  validateTutorialBattleStartConfiguration,
   validateTutorialDreamscapeConfiguration,
   validateTutorialSiteConfiguration,
   validateTutorialTriggers,
@@ -74,6 +75,17 @@ const FIXTURE_SITE_TUTORIAL = {
     verticalOffset: 0,
     bubbleWidth: 600,
     text: "Visit a [purple]site[/purple].",
+  },
+};
+
+const FIXTURE_BATTLE_START = {
+  speechBubble: {
+    speaker: "mira",
+    delay: 1,
+    horizontalOffset: 0,
+    verticalOffset: 0,
+    bubbleWidth: 700,
+    text: "Prepare for the second battle.",
   },
 };
 
@@ -194,6 +206,12 @@ describe("tutorial data", () => {
     ).toThrow(/must target Mira/u);
   });
 
+  it("normalizes persistent second-battle guidance", () => {
+    expect(
+      validateTutorialBattleStartConfiguration(FIXTURE_BATTLE_START),
+    ).toEqual(FIXTURE_BATTLE_START);
+  });
+
   it("round-trips typed actions through TOML and generated JSON", () => {
     const rootDir = mkdtempSync(join(tmpdir(), "tutorial-data-"));
     mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
@@ -208,6 +226,7 @@ describe("tutorial data", () => {
         FIXTURE_ATLAS,
         FIXTURE_SITE_TUTORIAL,
         FIXTURE_SITE_TUTORIAL,
+        FIXTURE_BATTLE_START,
       ),
     );
 
@@ -220,6 +239,7 @@ describe("tutorial data", () => {
     expect(result.atlas).toEqual(FIXTURE_ATLAS);
     expect(result.draft).toEqual(FIXTURE_SITE_TUTORIAL);
     expect(result.dreamsignRevelation).toEqual(FIXTURE_SITE_TUTORIAL);
+    expect(result.battleStart).toEqual(FIXTURE_BATTLE_START);
     expect(
       JSON.parse(
         readFileSync(join(rootDir, "public", "tutorial-data.json"), "utf8"),
@@ -230,6 +250,7 @@ describe("tutorial data", () => {
       atlas: FIXTURE_ATLAS,
       draft: FIXTURE_SITE_TUTORIAL,
       dreamsignRevelation: FIXTURE_SITE_TUTORIAL,
+      battleStart: FIXTURE_BATTLE_START,
       actions: FIXTURE_ACTIONS,
       triggers: [],
       battle: FIXTURE_BATTLE,
@@ -245,6 +266,7 @@ describe("tutorial data", () => {
           FIXTURE_ATLAS,
           FIXTURE_SITE_TUTORIAL,
           FIXTURE_SITE_TUTORIAL,
+          FIXTURE_BATTLE_START,
         ),
       ),
     ).toMatchObject({
@@ -253,6 +275,7 @@ describe("tutorial data", () => {
       atlas: FIXTURE_ATLAS,
       draft: FIXTURE_SITE_TUTORIAL,
       dreamsignRevelation: FIXTURE_SITE_TUTORIAL,
+      battleStart: FIXTURE_BATTLE_START,
       actions: FIXTURE_ACTIONS,
       battle: FIXTURE_BATTLE,
     });
@@ -577,6 +600,7 @@ describe("tutorial data", () => {
           FIXTURE_ATLAS,
           FIXTURE_SITE_TUTORIAL,
           FIXTURE_SITE_TUTORIAL,
+          FIXTURE_BATTLE_START,
         ),
       )
         .triggers,

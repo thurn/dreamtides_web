@@ -4,6 +4,7 @@ import {
   parseTutorialActions,
   parseTutorialAtlasConfiguration,
   parseTutorialBattleConfiguration,
+  parseTutorialBattleStartConfiguration,
   parseTutorialDreamscapeConfiguration,
   parseTutorialJourneyStartConfiguration,
   parseTutorialSiteConfiguration,
@@ -56,6 +57,16 @@ const ACTIONS_RESPONSE = {
       verticalOffset: 0,
       bubbleWidth: 600,
       text: "Choose a Dreamsign.",
+    },
+  },
+  battleStart: {
+    speechBubble: {
+      speaker: "mira",
+      delay: 1,
+      horizontalOffset: 0,
+      verticalOffset: 0,
+      bubbleWidth: 700,
+      text: "Prepare for the second battle.",
     },
   },
   actions: [
@@ -263,6 +274,17 @@ describe("parseTutorialActions", () => {
         { speechBubble: { speaker: "enemy", text: "No." } },
         "draft",
       ),
+    ).toThrow(/must target Mira/u);
+  });
+
+  it("parses delayed second-battle guidance", () => {
+    expect(
+      parseTutorialBattleStartConfiguration(ACTIONS_RESPONSE.battleStart),
+    ).toEqual(ACTIONS_RESPONSE.battleStart);
+    expect(() =>
+      parseTutorialBattleStartConfiguration({
+        speechBubble: { speaker: "enemy", text: "No." },
+      }),
     ).toThrow(/must target Mira/u);
   });
 

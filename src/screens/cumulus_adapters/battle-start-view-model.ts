@@ -3,14 +3,22 @@ import {
 } from "../../battle/integration/opponent-deck";
 import type { BattleInit } from "../../battle/types";
 import type { CardData } from "../../types/cards";
+import type { TutorialBattleStartConfiguration } from "../../types/tutorial";
 import { artRef } from "../../cumulus/primitives/art";
 import type { BattleStartView } from "../../cumulus/screens/BattleStartScreen";
+import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 
 export type BattleStartInit = BattleInit;
+
+export interface BattleStartTutorialContext {
+  readonly isTutorialJourney: boolean;
+  readonly configuration?: TutorialBattleStartConfiguration;
+}
 
 export function buildBattleStartView(
   init: BattleInit,
   cardDatabase: ReadonlyMap<number, CardData>,
+  tutorial?: BattleStartTutorialContext,
 ): BattleStartView {
   const enemy = init.enemyDescriptor;
   const node =
@@ -47,5 +55,31 @@ export function buildBattleStartView(
     }),
     pointsToWin: init.scoreToWin,
     essenceReward: init.essenceReward,
+    ...(tutorial?.isTutorialJourney === true &&
+    init.completionLevelAtStart === 1 &&
+    tutorial.configuration !== undefined
+      ? {
+          guideDialogue: {
+            id: `${init.battleId}:second-battle-start-guidance`,
+            model: {
+              portrait: {
+                kind: "character-portrait" as const,
+                characterId: "mira",
+              },
+              portraitAlt: "Mira",
+              speakerName: "Mira",
+              text: tutorial.configuration.speechBubble.text,
+            },
+            delaySeconds: tutorialSpeechBubbleDelaySeconds(
+              tutorial.configuration.speechBubble,
+            ),
+            horizontalOffset:
+              tutorial.configuration.speechBubble.horizontalOffset,
+            verticalOffset:
+              tutorial.configuration.speechBubble.verticalOffset,
+            bubbleWidth: tutorial.configuration.speechBubble.bubbleWidth,
+          },
+        }
+      : {}),
   };
 }

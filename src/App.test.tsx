@@ -71,6 +71,16 @@ vi.mock("./data/tutorial-actions", () => ({
         text: "Choose a Dreamsign.",
       },
     },
+    battleStart: {
+      speechBubble: {
+        speaker: "mira",
+        delay: 1,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 700,
+        text: "Prepare for the second battle.",
+      },
+    },
     actions: [],
     triggers: [],
     battle: { playerDraws: [], enemyDraws: [], dreamwellDraws: [] },

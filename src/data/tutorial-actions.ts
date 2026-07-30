@@ -3,6 +3,7 @@ import type {
   TutorialAction,
   TutorialAtlasConfiguration,
   TutorialBattleConfiguration,
+  TutorialBattleStartConfiguration,
   TutorialConfiguration,
   TutorialDreamscapeConfiguration,
   TutorialJourneyStartConfiguration,
@@ -205,7 +206,8 @@ function parsePersistentTutorialConfiguration(
     | "dreamscape"
     | "atlas"
     | "draft"
-    | "dreamsign-revelation",
+    | "dreamsign-revelation"
+    | "battle-start",
 ): TutorialJourneyStartConfiguration {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
     throw new Error(`Tutorial data must contain a ${configurationId} table.`);
@@ -258,6 +260,13 @@ export function parseTutorialSiteConfiguration(
   siteId: "draft" | "dreamsign-revelation",
 ): TutorialSiteConfiguration {
   return parsePersistentTutorialConfiguration(value, siteId);
+}
+
+/** Validate delayed Mira guidance for the second tutorial-journey battle. */
+export function parseTutorialBattleStartConfiguration(
+  value: unknown,
+): TutorialBattleStartConfiguration {
+  return parsePersistentTutorialConfiguration(value, "battle-start");
 }
 
 /** Validate untrusted generated or event-log tutorial action data. */
@@ -748,6 +757,7 @@ export async function loadTutorialConfiguration(
       record.dreamsignRevelation,
       "dreamsign-revelation",
     ),
+    battleStart: parseTutorialBattleStartConfiguration(record.battleStart),
     actions: parseTutorialActions(record.actions),
     triggers: parseTutorialTriggers(record.triggers ?? []),
     battle: parseTutorialBattleConfiguration(record.battle),
