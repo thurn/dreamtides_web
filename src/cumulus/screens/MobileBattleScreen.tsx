@@ -80,6 +80,8 @@ import battleBackgroundUrl from "../assets/battle-background.png";
 export const BATTLEFIELD_CARD_EXHAUSTED_FILTER =
   "grayscale(0.5) brightness(0.62)";
 const POINTER_DROP_COMMIT_HOLD_MS = motionTimeSeconds("--dur-slow") * 1_000;
+const CARD_PICKER_HIGHLIGHT_COLOR: CumulusColor = "accent-bright";
+const CARD_PICKER_SELECTION_COLOR: CumulusColor = "gold-light";
 
 /** One physical face-up card instance rendered by the battle board. */
 export interface MobileBattleCardView {
@@ -1216,8 +1218,8 @@ function FarHand({
                         selected:
                           selectedPickerCardIds.includes(cardId) || highlighted,
                         color: selectedPickerCardIds.includes(cardId)
-                          ? "gold-light"
-                          : "gold",
+                          ? CARD_PICKER_SELECTION_COLOR
+                          : CARD_PICKER_HIGHLIGHT_COLOR,
                       }
                 }
                 interaction={
@@ -2739,7 +2741,9 @@ function Rank({
                         : undefined
                       : {
                           selected: isPickerSelected || isPickerHighlighted,
-                          color: isPickerSelected ? "gold-light" : "gold",
+                          color: isPickerSelected
+                            ? CARD_PICKER_SELECTION_COLOR
+                            : CARD_PICKER_HIGHLIGHT_COLOR,
                         }
                   }
                   interaction={
@@ -3023,7 +3027,9 @@ function NearHand({
                 ? undefined
                 : {
                     selected: isPickerSelected || isPickerHighlighted,
-                    color: isPickerSelected ? "gold-light" : "gold",
+                    color: isPickerSelected
+                      ? CARD_PICKER_SELECTION_COLOR
+                      : CARD_PICKER_HIGHLIGHT_COLOR,
                   }
             }
             interaction={
@@ -3583,7 +3589,9 @@ function CardPickerGallery({
               entryId: candidate.instanceId,
               model: candidate.card.model,
               selected: selected || candidate.highlighted,
-              selectionColor: selected ? "gold-light" : "gold",
+              selectionColor: selected
+                ? CARD_PICKER_SELECTION_COLOR
+                : CARD_PICKER_HIGHLIGHT_COLOR,
               caption: {
                 kind: "text" as const,
                 text: pickerZoneCaption(candidate, perspective),

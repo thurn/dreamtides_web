@@ -2668,7 +2668,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("keeps highlighted candidates visible before selection", () => {
+  it("distinguishes a highlighted just-drawn candidate from its selected state", () => {
     const view = makeView();
     const highlighted = view.playerHand[0];
     const { container, root } = mount({
@@ -2692,7 +2692,23 @@ describe("MobileBattleScreen", () => {
     expect(candidate).not.toBeNull();
     expect(
       candidate?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
-    ).toContain("var(--gold)");
+    ).toContain(resolveColor("accent-bright"));
+    expect(
+      candidate?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
+    ).not.toContain(resolveColor("gold-light"));
+
+    act(() => {
+      candidate
+        ?.querySelector<HTMLElement>('[data-battle-card-zone="near-hand"]')
+        ?.click();
+    });
+
+    expect(
+      candidate?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
+    ).toContain(resolveColor("gold-light"));
+    expect(
+      candidate?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
+    ).not.toContain(resolveColor("accent-bright"));
 
     act(() => root.unmount());
   });
