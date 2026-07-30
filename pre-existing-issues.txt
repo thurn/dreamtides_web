@@ -1,0 +1,2 @@
+At a 1366×768 viewport on Dreamsign Revelation, the centered co-op presence
+badge overlaps the top edge of Mira's first-visit tutorial dialogue.

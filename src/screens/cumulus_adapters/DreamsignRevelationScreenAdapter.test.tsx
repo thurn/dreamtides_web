@@ -13,6 +13,7 @@ import type {
 } from "../../state/journey-context";
 import type { DreamGuideContent } from "../../types/content";
 import type { DreamscapeNode, Dreamsign, JourneyState } from "../../types/journey";
+import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { LayerName } from "../../types/layer-name";
 
 const screenMock = vi.hoisted(() => vi.fn());
@@ -61,6 +62,17 @@ const GUIDE: DreamGuideContent = {
   siteType: "DreamsignRevelation",
   dialog: ["Choose what the frost reveals."],
   homeSpecialty: "Dreamsign Revelation",
+};
+
+const TUTORIAL_CONFIGURATION: TutorialSiteConfiguration = {
+  speechBubble: {
+    speaker: "mira",
+    delay: 1,
+    horizontalOffset: 0,
+    verticalOffset: 0,
+    bubbleWidth: 600,
+    text: "A [purple]Dreamsign[/purple] gives ongoing benefits.",
+  },
 };
 
 function makeDreamsign(id: string): Dreamsign {
@@ -125,7 +137,10 @@ function makeState(): JourneyState {
   } as unknown as JourneyState;
 }
 
-function setJourneyContext(state = makeState()): void {
+function setJourneyContext(
+  state = makeState(),
+  tutorialConfiguration?: TutorialSiteConfiguration,
+): void {
   vi.mocked(useJourney).mockReturnValue({
     state,
     mutations: {
@@ -135,6 +150,7 @@ function setJourneyContext(state = makeState()): void {
     } as unknown as JourneyMutations,
     journeyContent: {
       guides: [GUIDE],
+      tutorialDreamsignRevelation: tutorialConfiguration,
     } as unknown as JourneyContent,
   } as JourneyContextValue);
 }
@@ -220,6 +236,27 @@ describe("DreamsignRevelationScreenAdapter", () => {
     });
 
     expect(loggingMock.emitted).toHaveLength(2);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("logs the resident guide while first-visit Mira guidance is active", () => {
+    setJourneyContext(makeState(), TUTORIAL_CONFIGURATION);
+    const { root } = mount(
+      <DreamsignRevelationScreenAdapter siteId="site-1" />,
+    );
+
+    expect(loggingMock.emitted).toContainEqual({
+      key: "dreamsign-revelation:site-1:guide:sigrun-guide",
+      event: "dream_guide_presented",
+      fields: {
+        guideId: "sigrun-guide",
+        siteType: "DreamsignRevelation",
+        isEnhanced: false,
+      },
+    });
 
     act(() => {
       root.unmount();

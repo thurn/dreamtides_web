@@ -144,9 +144,9 @@ Completed-site state in the shared atlas determines eligibility across
 dreamscape travel. Site guidance takes priority over supplemental glossary
 triggers while active. Draft guidance is placed in measured free viewport
 space around the four cards; Dreamsign Revelation uses the screen's reserved
-guide region beside or above the offer. The Dream Guide character remains in
-the Revelation composition while Mira speaks, and the resident guide line
-yields to Mira's first-visit message.
+guide region beside or above the offer. The Revelation composition presents
+the Dream Guide character and resident guide line together with Mira's
+first-visit message.
 
 Supplemental tutorial triggers are shared first-occurrence explanations. Their
 seen ids live in the room fold, so a keyword explained on a journey card is

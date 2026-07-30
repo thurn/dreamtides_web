@@ -73,6 +73,7 @@ export interface DreamsignRevelationScreenProps {
 const CONTENT_VERTICAL_OFFSET = "10dvh";
 const GUIDE_LAYER_TOP = `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${CONTENT_VERTICAL_OFFSET})`;
 const OFFER_TOP = `max(44dvh, calc(${token("--safe-top")} + ${token("--space-12")} + ${token("--space-12")} + ${token("--space-7")} + ${CONTENT_VERTICAL_OFFSET}))`;
+const TUTORIAL_OFFER_TOP = "50dvh";
 const HUD_CLEARANCE = `calc(${JOURNEY_STATUS_BAR_CLEARANCE_OP})`;
 const MOBILE_OFFER_TILE_SIZE = 120;
 const DESKTOP_OFFER_TILE_SIZE = 154;
@@ -275,7 +276,7 @@ function MobileComposition({
         data-revelation-mobile-offer-region=""
         style={{
           position: "absolute",
-          top: OFFER_TOP,
+          top: view.tutorial === undefined ? OFFER_TOP : TUTORIAL_OFFER_TOP,
           left: token("--space-4"),
           right: token("--space-4"),
           bottom: HUD_CLEARANCE,
@@ -350,49 +351,52 @@ function GuideScene({
           userSelect: "none",
         }}
       />
-      {view.tutorial !== undefined ? (
-        tutorialVisible ? (
-          <div
-            data-revelation-site-tutorial=""
-            style={{
-              position: "absolute",
-              top: desktop
-                ? `calc(-1 * ${token("--space-12")})`
-                : token("--space-4"),
-              left: desktop ? "calc(100% - 240px)" : "34vw",
-              width: desktop
-                ? `min(calc(100vw - (${token("--space-4")} * 2)), ${String(view.tutorial.bubbleWidth)}px)`
-                : `calc(66vw - ${token("--space-3")})`,
-              transform: `translate(${String(view.tutorial.horizontalOffset)}px, ${String(view.tutorial.verticalOffset)}px)`,
-            }}
-          >
-            <CharacterDialogue
-              dialogue={view.tutorial.model}
-              visible
-              size={desktop ? "wide" : "compact"}
-              testId="revelation-site-tutorial-dialogue"
-            />
-          </div>
-        ) : null
-      ) : (
+      {view.tutorial !== undefined && tutorialVisible && (
         <div
+          data-revelation-site-tutorial=""
           style={{
             position: "absolute",
-            top: desktop ? "14%" : token("--space-5"),
-            left: desktop ? "clamp(202px, 18vw, 276px)" : "34vw",
-            right: desktop
-              ? 0
-              : `calc(${token("--space-5")} + ${token("--space-11")} + ${token("--space-3")})`,
-            maxWidth: desktop ? 380 : undefined,
+            top: desktop
+              ? `calc(-1 * ${token("--space-12")})`
+              : token("--space-4"),
+            left: desktop ? "calc(100% - 240px)" : "34vw",
+            width: desktop
+              ? `min(calc(100vw - (${token("--space-4")} * 2)), ${String(view.tutorial.bubbleWidth)}px)`
+              : `calc(66vw - ${token("--space-3")})`,
+            transform: `translate(${String(view.tutorial.horizontalOffset)}px, ${String(view.tutorial.verticalOffset)}px)`,
           }}
         >
-          <SpeechBubble
-            speakerName={view.guide.name}
-            text={view.guide.line}
-            testId="revelation-speech-bubble"
+          <CharacterDialogue
+            dialogue={view.tutorial.model}
+            visible
+            size={desktop ? "wide" : "compact"}
+            testId="revelation-site-tutorial-dialogue"
           />
         </div>
       )}
+      <div
+        style={{
+          position: "absolute",
+          top: desktop
+            ? hasTutorial
+              ? "30%"
+              : "14%"
+            : hasTutorial
+              ? `calc(50% + ${token("--space-4")})`
+              : token("--space-5"),
+          left: desktop ? "clamp(202px, 18vw, 276px)" : "34vw",
+          right: desktop
+            ? 0
+            : `calc(${token("--space-5")} + ${token("--space-11")} + ${token("--space-3")})`,
+          maxWidth: desktop ? 380 : undefined,
+        }}
+      >
+        <SpeechBubble
+          speakerName={view.guide.name}
+          text={view.guide.line}
+          testId="revelation-speech-bubble"
+        />
+      </div>
     </div>
   );
 }

@@ -86,7 +86,7 @@ afterEach(() => {
 });
 
 describe("DreamsignRevelationScreen", () => {
-  it("waits one second before replacing the resident guide with Mira", () => {
+  it("waits one second before revealing Mira beside the resident guide dialogue", () => {
     vi.useFakeTimers();
     const onTutorialShown = vi.fn();
     const tutorialView: DreamsignRevelationView = {
@@ -123,8 +123,10 @@ describe("DreamsignRevelationScreen", () => {
     expect(
       container.querySelector('[data-testid="revelation-guide-art"]'),
     ).not.toBeNull();
-    expect(container.querySelector('[data-testid="revelation-speech-bubble"]'))
-      .toBeNull();
+    expect(
+      container.querySelector('[data-testid="revelation-speech-bubble"]')
+        ?.textContent,
+    ).toContain("Choose one sign.");
     act(() => {
       vi.advanceTimersByTime(999);
     });
@@ -142,8 +144,10 @@ describe("DreamsignRevelationScreen", () => {
     expect(
       container.querySelector('[data-testid="revelation-guide-art"]'),
     ).not.toBeNull();
-    expect(container.querySelector('[data-testid="revelation-speech-bubble"]'))
-      .toBeNull();
+    expect(
+      container.querySelector('[data-testid="revelation-speech-bubble"]')
+        ?.textContent,
+    ).toContain("Choose one sign.");
     expect(container.querySelectorAll("[data-revelation-option]")).toHaveLength(3);
 
     act(() => root.unmount());

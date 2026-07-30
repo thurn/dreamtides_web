@@ -54,11 +54,11 @@ export function DreamsignRevelationScreenAdapter({ siteId }: { siteId: string })
   );
 
   useEffect(() => {
-    if (view.tutorial !== undefined || guide === null || site === null) return;
+    if (guide === null || site === null) return;
     logEventOnce(`dreamsign-revelation:${site.id}:guide:${guide.id}`,
       "dream_guide_presented",
       { guideId: guide.id, siteType: site.type, isEnhanced: site.isEnhanced });
-  }, [guide, site, view.tutorial]);
+  }, [guide, site]);
 
   const handleTutorialShown = useCallback(
     (tutorial: FirstVisitSiteTutorialView) => {
