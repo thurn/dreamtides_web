@@ -4,9 +4,9 @@ import { buildCardSourceDebugState } from "../../debug/card-source-debug";
 import { guideForSiteType } from "../../data/dreamscapes";
 import {
   effectivePrice,
-  rerollCost,
   type ShopPriceModifiers,
 } from "../../shop/shop-generator";
+import { rerollCost } from "../../shop/shop-pricing";
 import type { CardData } from "../../types/cards";
 import type {
   DreamGuideContent,

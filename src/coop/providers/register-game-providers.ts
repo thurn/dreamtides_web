@@ -22,6 +22,7 @@
 
 import type { JourneyContent } from "../../data/journey-content";
 import {
+  registerBattleCompletionProvider,
   registerBattleInitProvider,
   registerTutorialBattleInitProvider,
 } from "../../rules/battle/battle-events";
@@ -31,6 +32,7 @@ import { registerJourneyLifecycleContentProvider } from "../../rules/journey/lif
 import { registerSiteContentProvider } from "../../rules/journey/sites";
 import { registerCardTutorialGuidanceContentProvider } from "../../rules/card-tutorial-guidance";
 import {
+  createBattleCompletionProvider,
   createBattleInitProvider,
   createTutorialBattleInitProvider,
 } from "./battle-init-provider";
@@ -53,6 +55,7 @@ export function registerGameProviders(content: JourneyContent): void {
   registerDraftContentProvider(createDraftContentProvider(content));
   registerSiteContentProvider(createSiteContentProvider(content));
   registerBattleInitProvider(createBattleInitProvider(content));
+  registerBattleCompletionProvider(createBattleCompletionProvider(content));
   registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content));
   registerCardTutorialGuidanceContentProvider(
     createCardTutorialGuidanceContentProvider(content),
@@ -70,6 +73,7 @@ export function clearGameProviders(): void {
   registerDraftContentProvider(null);
   registerSiteContentProvider(null);
   registerBattleInitProvider(null);
+  registerBattleCompletionProvider(null);
   registerTutorialBattleInitProvider(null);
   registerCardTutorialGuidanceContentProvider(null);
 }

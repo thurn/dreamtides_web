@@ -293,10 +293,7 @@ describe("REROLL_SHOP", () => {
       essence: 300,
       shopModifiers: { freeRerolls: 0, essenceDiscountPercent: 0 },
     });
-    const result = reduce(state, "REROLL_SHOP", {
-      siteId: SITE_ID,
-      essenceCost: cost,
-    });
+    const result = reduce(state, "REROLL_SHOP", { siteId: SITE_ID });
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.shopModifiers.freeRerolls).toBe(0);
     expect(result.state.journey.essence).toBe(300 - cost);
@@ -308,10 +305,7 @@ describe("REROLL_SHOP", () => {
       essence: 20,
       shopModifiers: { freeRerolls: 0, essenceDiscountPercent: 0 },
     });
-    const result = reduce(state, "REROLL_SHOP", {
-      siteId: SITE_ID,
-      essenceCost: 50,
-    });
+    const result = reduce(state, "REROLL_SHOP", { siteId: SITE_ID });
     expect(result.outcome).toBe("bounced");
     expect(result.state.journey.essence).toBe(20);
   });
@@ -486,7 +480,10 @@ describe("dreamscape modifiers", () => {
 
 describe("atlas edits", () => {
   it("REPLACE_SITE_TYPE swaps a matching unvisited site for a new one", () => {
-    const state = shopState([cardSlot()], {}); // node has one Shop site
+    const state = shopState([cardSlot()], {
+      screen: { type: "dreamscape" },
+      activeSiteId: null,
+    }); // node has one Shop site
     const result = reduce(state, "REPLACE_SITE_TYPE", {
       nodeId: NODE_ID,
       fromSiteType: "Shop",
@@ -533,23 +530,6 @@ describe("atlas edits", () => {
     ).toBe("bounced");
   });
 
-  it("UPDATE_ATLAS replaces the atlas wholesale", () => {
-    const state = shopState([cardSlot()]);
-    const newAtlas = {
-      ...state.journey.atlas,
-      startingNodeId: "brand-new-node",
-    };
-    const result = reduce(state, "UPDATE_ATLAS", { atlas: newAtlas });
-    expect(result.outcome).toBe("applied");
-    expect(result.state.journey.atlas.startingNodeId).toBe("brand-new-node");
-  });
-
-  it("UPDATE_ATLAS bounces a non-object atlas", () => {
-    const state = shopState([cardSlot()]);
-    expect(reduce(state, "UPDATE_ATLAS", { atlas: 42 }).outcome).toBe(
-      "bounced",
-    );
-  });
 });
 
 // ---------------------------------------------------------------------------
@@ -584,14 +564,14 @@ describe("merchant offers", () => {
         return null;
       },
       resolveMerchant({ journey, action }) {
-        return action === "accept" ? { ...journey, essence: 999 } : null;
+        return action === "accept" ? { ...journey, essence: 499 } : null;
       },
     };
     registerSiteContentProvider(provider);
     const state = stateWith([makeSite("DreamAugury")]);
     const result = reduce(state, "ACCEPT_MERCHANT_OFFER", { siteId: SITE_ID });
     expect(result.outcome).toBe("applied");
-    expect(result.state.journey.essence).toBe(999);
+    expect(result.state.journey.essence).toBe(499);
   });
 
   it("ACCEPT_MERCHANT_OFFER bounces when the provider returns null", () => {

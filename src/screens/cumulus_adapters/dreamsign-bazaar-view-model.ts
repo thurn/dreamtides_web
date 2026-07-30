@@ -4,9 +4,9 @@ import { guideForSiteType } from "../../data/dreamscapes";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import {
   effectivePrice,
-  rerollCost,
   type ShopPriceModifiers,
 } from "../../shop/shop-generator";
+import { rerollCost } from "../../shop/shop-pricing";
 import type { DreamGuideContent } from "../../types/content";
 import type {
   DreamscapeNode,

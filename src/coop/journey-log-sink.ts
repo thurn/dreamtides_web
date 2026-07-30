@@ -341,6 +341,7 @@ export interface FoldErrorRecord {
   nonce: string | null;
   intentKey: string | null;
   message: string;
+  invariantCodes?: string[];
   stack: string | null;
   stateHashBefore: string;
   stateHashAfter: string;
@@ -545,6 +546,16 @@ export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogR
         nonce: event.nonce ?? null,
         intentKey: event.intentKey ?? null,
         message: error.message,
+        ...(error.message.startsWith("Fold invariant violation:")
+          ? {
+              invariantCodes: [
+                ...error.message.matchAll(
+                  /(?:Fold invariant violation: |; )([a-z0-9_]+) \(/g,
+                ),
+              ]
+                .map((match) => match[1]),
+            }
+          : {}),
         stack: error.stack ?? null,
         stateHashBefore,
         stateHashAfter,

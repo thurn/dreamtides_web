@@ -869,16 +869,14 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     });
   }
 
-  // The reducer's `applyDefeat` (END_BATTLE "defeat") already freezes the
-  // `failureSummary` from the terminal board and routes the journey slice to the
-  // `journeyFailed` screen — the whole legacy `beginJourneyFailureRoute` bridge
-  // (building the summary client-side, dispatching `setFailureSummary`,
-  // clearing the shared battle slot) collapses to a single event.
+  // The reducer's `applyDefeat` (END_BATTLE) freezes the `failureSummary` from
+  // the terminal board, routes the journey slice to `journeyFailed`, clears the
+  // active site, and tears down the shared battle in one fold.
   function handleFailureReset(): void {
     if (failureResult === null) {
       return;
     }
-    void actions.endBattle("defeat");
+    void actions.endBattle();
   }
 
   // Debug-only "Reset battle" control. The coop battle fold is append-only, so
@@ -898,15 +896,14 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     setIsBattleLogOpen(false);
   }
 
-  // The reducer's `applyVictory` (END_BATTLE "victory") already performs the
-  // completion-level bump, screen route, modifier decrement, and dreamscape
-  // clear — the legacy `completeBattleSiteVictory` bridge collapses to one
-  // event.
+  // `END_BATTLE` derives victory from the terminal board and commits reward,
+  // site completion, Atlas advancement, route, modifier expiry, and teardown
+  // as one event.
   function handleContinueReward(): void {
     if (board.result !== "victory") {
       return;
     }
-    void actions.endBattle("victory");
+    void actions.endBattle();
   }
 
   function handleCumulusResultAction(action: MobileBattleResultAction): void {

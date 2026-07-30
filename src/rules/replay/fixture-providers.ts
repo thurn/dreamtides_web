@@ -47,7 +47,9 @@ import { LayerName } from "../../types/layer-name";
 import { emptyDawnFired, type BattleFoldState } from "../battle/fold";
 import { DREAMWELL_EFFECTS } from "../battle/dreamwell-effects-table";
 import {
+  registerBattleCompletionProvider,
   registerBattleInitProvider,
+  type BattleCompletionProvider,
   type BattleInitProvider,
 } from "../battle/battle-events";
 import {
@@ -76,6 +78,7 @@ export const FIXTURE_PROVIDER_SET = "synthetic-deterministic-v1";
 
 export const DREAM_AVATAR_ID = "dc-fixture";
 export const NODE_ID = "node-start";
+export const NEXT_NODE_ID = "node-next";
 export const ESSENCE_SITE_ID = "site-essence";
 export const SHOP_SITE_ID = "site-shop";
 export const BATTLE_SITE_ID = "site-battle";
@@ -159,26 +162,49 @@ function fixturePackage(
 /** The atlas node the fixtures travel to: an Essence site, a Shop site, a
  *  Draft site, and a Battle site (visited last), so OPEN_SITE /
  *  ENTER_DRAFT_SITE / BUY_SHOP_SLOT / BEGIN_BATTLE have live targets. */
-function fixtureNode(): DreamscapeNode {
-  const sites: SiteState[] = [
+function fixtureNode(
+  includedSiteTypes: ReadonlySet<SiteState["type"]> | null = null,
+): DreamscapeNode {
+  const allSites: SiteState[] = [
     { id: ESSENCE_SITE_ID, type: "Essence", isEnhanced: false, isVisited: false },
     { id: SHOP_SITE_ID, type: "Shop", isEnhanced: false, isVisited: false },
     { id: DRAFT_SITE_ID, type: "Draft", isEnhanced: false, isVisited: false },
     { id: BATTLE_SITE_ID, type: "Battle", isEnhanced: false, isVisited: false },
   ];
+  const sites = includedSiteTypes === null
+    ? allSites
+    : allSites.filter((site) => includedSiteTypes.has(site.type));
   return {
     id: NODE_ID,
     layer: LayerName.One,
     indexInLayer: 0,
-    dreamscapeId: null,
-    biomeName: "",
-    biomeColor: "",
+    dreamscapeId: "dreamscape-start",
+    biomeName: "Fixture Beginning",
+    biomeColor: "#336699",
     sites,
     position: { x: 0, y: 0 },
     state: "available",
     enhancedSiteType: null,
-    forwardIds: [],
+    forwardIds: [NEXT_NODE_ID],
     backwardIds: [],
+    knownDreamsignId: null,
+  };
+}
+
+function fixtureNextNode(): DreamscapeNode {
+  return {
+    id: NEXT_NODE_ID,
+    layer: LayerName.Two,
+    indexInLayer: 0,
+    dreamscapeId: null,
+    biomeName: "",
+    biomeColor: "",
+    sites: [],
+    position: { x: 0, y: 1 },
+    state: "unrevealed",
+    enhancedSiteType: null,
+    forwardIds: [],
+    backwardIds: [NODE_ID],
     knownDreamsignId: null,
   };
 }
@@ -208,6 +234,12 @@ function lifecycleProvider(): JourneyLifecycleContentProvider {
       fixturePackage(dreamAvatarId, seed),
     startJourney: ({ journey, dreamAvatarId, seed }) => {
       const pkg = fixturePackage(dreamAvatarId, seed);
+      const includedSiteTypes =
+        seed === "fixture-battle"
+          ? new Set<SiteState["type"]>(["Battle"])
+          : seed === "fixture-adversarial"
+            ? new Set<SiteState["type"]>(["Essence", "Battle"])
+            : null;
       return {
         ...journey,
         seed: journey.seed,
@@ -226,8 +258,13 @@ function lifecycleProvider(): JourneyLifecycleContentProvider {
         currentDreamscape: NODE_ID,
         atlas: {
           ...journey.atlas,
-          nodes: { [NODE_ID]: fixtureNode() },
+          layers: [[NODE_ID], [NEXT_NODE_ID]],
+          nodes: {
+            [NODE_ID]: fixtureNode(includedSiteTypes),
+            [NEXT_NODE_ID]: fixtureNextNode(),
+          },
           startingNodeId: NODE_ID,
+          bossNodeId: NEXT_NODE_ID,
           currentNodeId: NODE_ID,
         },
         siteRuntime: {},
@@ -390,10 +427,21 @@ function makeInit(siteId: string): BattleInit {
   }
   return {
     battleId: `battle-${siteId}`,
+    battleEntryKey: `fixture:${siteId}`,
+    seed: 1,
     siteId,
-    dreamscapeId: null,
+    dreamscapeId: NODE_ID,
+    completionLevelAtStart: 0,
+    isFinalBoss: false,
+    essenceReward: 75,
+    openingHandSize: 0,
     scoreToWin: 30,
     turnLimit: 12,
+    maxEnergyCap: 12,
+    startingSide: "player",
+    playerDrawSkipsTurnOne: true,
+    journeyDeckEntries: [],
+    playerDeckOrder: [],
     dreamwellDeck: [{
       id: foresee.id,
       name: "Fixture Dreamwell",
@@ -403,12 +451,44 @@ function makeInit(siteId: string): BattleInit {
       cardNumber: 0,
       imageNumber: 0,
     }],
+    enemyDescriptor: {
+      id: "fixture-enemy",
+      name: "Fixture Enemy",
+      title: "",
+      imageNumber: "1",
+    },
+    enemyDeckDefinition: [],
+    dreamAvatarSummary: null,
+    dreamsignSummaries: [],
+    atlasSnapshot: {
+      layers: [[NODE_ID], [NEXT_NODE_ID]],
+      nodes: {
+        [NODE_ID]: fixtureNode(),
+        [NEXT_NODE_ID]: fixtureNextNode(),
+      },
+      startingNodeId: NODE_ID,
+      bossNodeId: NEXT_NODE_ID,
+      bossIncarnationId: null,
+      currentNodeId: NODE_ID,
+      knownDreamsignCarrierIds: [],
+    },
   } as unknown as BattleInit;
 }
 
 export function fixtureBattleInitProvider(): BattleInitProvider {
   return {
-    beginBattle: ({ siteId }) => {
+    beginBattle: ({ journey, siteId }) => {
+      const site = Object.values(journey.atlas.nodes)
+        .flatMap((node) => node.sites)
+        .find((candidate) => candidate.id === siteId);
+      if (
+        site?.type !== "Battle" ||
+        journey.screen.type !== "site" ||
+        journey.screen.siteId !== siteId ||
+        journey.activeSiteId !== siteId
+      ) {
+        return null;
+      }
       const player = makeSide();
       player.hand = [BATTLE_CARD_DETERMINISTIC, BATTLE_CARD_FORESEE];
       const enemy = makeSide();
@@ -447,17 +527,51 @@ export function fixtureBattleInitProvider(): BattleInitProvider {
   };
 }
 
+function fixtureBattleCompletionProvider(): BattleCompletionProvider {
+  return {
+    advanceAtlas: ({ journey, battle, completionLevel }) => {
+      if (
+        battle.init.dreamscapeId !== NODE_ID ||
+        completionLevel !== 1 ||
+        journey.atlas.nodes[NODE_ID] === undefined ||
+        journey.atlas.nodes[NEXT_NODE_ID] === undefined
+      ) {
+        return null;
+      }
+      return {
+        ...journey.atlas,
+        currentNodeId: NODE_ID,
+        nodes: {
+          ...journey.atlas.nodes,
+          [NODE_ID]: {
+            ...journey.atlas.nodes[NODE_ID],
+            state: "completed",
+          },
+          [NEXT_NODE_ID]: {
+            ...journey.atlas.nodes[NEXT_NODE_ID],
+            dreamscapeId: "dreamscape-next",
+            biomeName: "Fixture Continuation",
+            biomeColor: "#663399",
+            state: "available",
+          },
+        },
+      };
+    },
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Registration
 // ---------------------------------------------------------------------------
 
-/** Register the deterministic fixture providers on all five seams. */
+/** Register the deterministic fixture providers on every content seam. */
 export function registerReplayFixtureProviders(): void {
   registerJourneyLifecycleContentProvider(lifecycleProvider());
   registerDeckContentProvider(deckProvider());
   registerDraftContentProvider(draftProvider());
   registerSiteContentProvider(siteProvider());
   registerBattleInitProvider(fixtureBattleInitProvider());
+  registerBattleCompletionProvider(fixtureBattleCompletionProvider());
 }
 
 /** Clear every fixture-provider registration so no other suite is affected. */
@@ -467,4 +581,5 @@ export function clearReplayFixtureProviders(): void {
   registerDraftContentProvider(null);
   registerSiteContentProvider(null);
   registerBattleInitProvider(null);
+  registerBattleCompletionProvider(null);
 }

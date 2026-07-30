@@ -350,11 +350,24 @@ export async function runDevWithEmulator(argv = process.argv.slice(2)) {
       }
     });
 
+    const builtArtifact = argv.includes("--built-artifact");
+    const forwardedArgs = argv.filter((arg) => arg !== "--built-artifact");
+
     await waitForExit(spawnChild(process.execPath, ["scripts/setup-assets.mjs"]));
     await waitForDatabaseEmulator(databasePort);
 
+    if (builtArtifact) {
+      await waitForExit(spawnChild("vite", ["build"], emulatorEnv));
+    }
     viteStarted = true;
-    const vite = spawnChild("vite", normalizeForwardedViteArgs(argv), emulatorEnv);
+    const vite = spawnChild(
+      "vite",
+      [
+        ...(builtArtifact ? ["preview"] : []),
+        ...normalizeForwardedViteArgs(forwardedArgs),
+      ],
+      emulatorEnv,
+    );
     vite.on("exit", (code, signal) => {
       if (!shuttingDown) {
         shutdown(typeof code === "number" ? code : signal === "SIGINT" ? 130 : 1);

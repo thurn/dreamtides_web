@@ -50,13 +50,13 @@
     {
       "seq": 4,
       "event": {
-        "type": "OPEN_SITE",
+        "type": "ENTER_SITE",
         "payload": {
           "siteId": "site-essence"
         },
         "actor": "alice",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 1
+        "basedOnSeq": 3
       }
     },
     {
@@ -66,13 +66,49 @@
         "payload": {
           "siteId": "site-essence"
         },
-        "actor": "bob",
+        "actor": "alice",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 1
+        "basedOnSeq": 4
       }
     },
     {
       "seq": 6,
+      "event": {
+        "type": "OPEN_SITE",
+        "payload": {
+          "siteId": "site-essence"
+        },
+        "actor": "bob",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 4
+      }
+    },
+    {
+      "seq": 7,
+      "event": {
+        "type": "ACCEPT_ESSENCE",
+        "payload": {
+          "siteId": "site-essence"
+        },
+        "actor": "alice",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 6
+      }
+    },
+    {
+      "seq": 8,
+      "event": {
+        "type": "ENTER_SITE",
+        "payload": {
+          "siteId": "site-battle"
+        },
+        "actor": "alice",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 7
+      }
+    },
+    {
+      "seq": 9,
       "event": {
         "type": "BEGIN_BATTLE",
         "payload": {
@@ -80,11 +116,11 @@
         },
         "actor": "alice",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 5
+        "basedOnSeq": 8
       }
     },
     {
-      "seq": 7,
+      "seq": 10,
       "event": {
         "type": "BATTLE_COMMAND",
         "payload": {
@@ -99,39 +135,39 @@
         },
         "actor": "alice",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 6
+        "basedOnSeq": 9
       }
     },
     {
-      "seq": 8,
+      "seq": 11,
       "event": {
         "type": "RESOLVE_PROMPT",
         "payload": {
-          "promptId": 7,
+          "promptId": 10,
           "resolution": {
             "kind": "foresee"
           }
         },
         "actor": "alice",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 7
+        "basedOnSeq": 10
       }
     },
     {
-      "seq": 9,
+      "seq": 12,
       "event": {
         "type": "RESOLVE_PROMPT",
         "payload": {
-          "promptId": 7,
+          "promptId": 10,
           "resolution": {
             "kind": "foresee"
           }
         },
         "actor": "bob",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 7
+        "basedOnSeq": 10
       }
     }
   ],
-  "finalHash": "86f8234a16494b3860afd75b98fad7d24171a610e195dbba481ced71e6ca82c8"
+  "finalHash": "7e129d6f6f8f6832193dda0dd14720986c56bf317fc99c194fa0c55fd61592f4"
 }

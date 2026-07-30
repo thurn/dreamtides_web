@@ -34,6 +34,7 @@ import * as lifecycle from "./journey/lifecycle";
 import * as shop from "./journey/shop";
 import * as sites from "./journey/sites";
 import * as cardTutorial from "./card-tutorial-guidance";
+import { assertFoldInvariants } from "./invariants";
 
 /** The reducer's return shape (matches `EngineConfig.reducer`). */
 export type ReduceResult =
@@ -107,13 +108,11 @@ export function reduceGameEvent(
     // prompt and drops queued automation, keeping the board at its last good
     // value. The result is identical on both clients, so the fold stays
     // convergent. Every OTHER domain throw propagates to `fold.ts` containment.
+    let result: ReduceResult;
     try {
-      const result = routeDomain(routedState, event, ctx);
-      return result.outcome === "bounced" && controlDecision === "claim"
-        ? { ...result, state }
-        : result;
+      result = routeDomain(routedState, event, ctx);
     } catch {
-      return {
+      result = {
         state: {
           ...routedState,
           battle: { ...routedState.battle!, pendingPrompt: null, effectQueue: [] },
@@ -121,11 +120,29 @@ export function reduceGameEvent(
         outcome: "applied",
       };
     }
+    const controlled =
+      result.outcome === "bounced" && controlDecision === "claim"
+        ? { ...result, state }
+        : result;
+    // Invariant checks stay outside the sanctioned domain-error catch. A
+    // semantic programmer error must reach fold containment and diagnostics.
+    return enforceInvariants(event, controlled);
   }
   const result = routeDomain(routedState, event, ctx);
-  return result.outcome === "bounced" && controlDecision === "claim"
+  const controlled = result.outcome === "bounced" && controlDecision === "claim"
     ? { ...result, state }
     : result;
+  return enforceInvariants(event, controlled);
+}
+
+function enforceInvariants(
+  event: GameEvent,
+  result: ReduceResult,
+): ReduceResult {
+  if (result.outcome === "applied" && event.type !== "LOAD_STATE") {
+    assertFoldInvariants(result.state);
+  }
+  return result;
 }
 
 type PlaytestControlDecision = "allow" | "claim" | "reject";
@@ -399,16 +416,13 @@ export function routeDomain(
       return journeyCase(state, lifecycle.setEssenceCap(journey, payload));
     case "SET_MAX_DREAMSIGNS":
       return journeyCase(state, lifecycle.setMaxDreamsigns(journey, payload));
-    case "SET_COMPLETION_LEVEL":
-      return journeyCase(state, lifecycle.setCompletionLevel(journey, payload));
-
     // --- navigation ---
-    case "SET_SCREEN":
-      return journeyCase(state, lifecycle.setScreen(journey, payload));
+    case "ENTER_SITE":
+      return journeyCase(state, lifecycle.enterSite(journey, payload));
     case "TRAVEL_TO_DREAMSCAPE":
       return journeyCase(state, lifecycle.travelToDreamscape(journey, payload));
-    case "MARK_SITE_VISITED":
-      return journeyCase(state, lifecycle.markSiteVisited(journey, payload));
+    case "REGENERATE_ATLAS":
+      return journeyCase(state, lifecycle.regenerateAtlas(journey, payload, ctx));
     case "DISMISS_STARTING_DECK_POPUP":
       return journeyCase(state, lifecycle.dismissStartingDeckPopup(journey));
 
@@ -501,8 +515,6 @@ export function routeDomain(
       return journeyCase(state, shop.replaceSiteType(journey, payload));
     case "ADD_SITE_TO_DREAMSCAPE":
       return journeyCase(state, shop.addSiteToDreamscape(journey, payload));
-    case "UPDATE_ATLAS":
-      return journeyCase(state, shop.updateAtlas(journey, payload));
     case "SET_CARD_SOURCE_DEBUG":
       return journeyCase(state, shop.setCardSourceDebug(journey, payload));
 
@@ -532,7 +544,7 @@ export function routeDomain(
     case "SET_BATTLE_AUTOMATION":
       return foldCase(state, battleEvents.setBattleAutomation(state, payload));
     case "END_BATTLE":
-      return foldCase(state, battleEvents.endBattle(state, payload));
+      return foldCase(state, battleEvents.endBattle(state, payload, ctx));
     case "BATTLE_COMMAND":
       return foldCase(state, battleEvents.battleCommand(state, payload, ctx, event.actor));
     case "BATTLE_REPOSITION_CHARACTER":

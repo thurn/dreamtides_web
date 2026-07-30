@@ -18,7 +18,7 @@ import type { BattleFoldState, FoldState } from "../fold-state";
 import { battleModeOf, resolveScript } from "../battle/fold";
 import { toJourneyDreamAvatar } from "../../data/dream-avatar-selection";
 import type { ResolvedDreamAvatarPackage } from "../../types/content";
-import type { JourneyState, Screen } from "../../types/journey";
+import type { JourneyState } from "../../types/journey";
 import type { EffectStep } from "../battle/effect-step";
 import type { EffectRun, ScriptRef } from "../battle/fold";
 import type { ChallengeCursor } from "../battle/fold";
@@ -26,6 +26,7 @@ import type { EventContext } from "../../eventlog/types";
 import { cloneBattleMutableState } from "../../battle/state/create-initial-state";
 import { FRONT_RANK_SLOTS } from "../../battle/types";
 import { isTutorialBattleAiActionOverrides } from "../../types/tutorial-ai-action-overrides";
+import { canVisitSite } from "./sites";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (SELECT_DREAM_AVATAR / START_JOURNEY)
@@ -68,6 +69,12 @@ export interface JourneyLifecycleContentProvider {
     journey: JourneyState;
     dreamAvatarId: string;
     seed: string;
+  }): JourneyState | null;
+  /** Rebuild the Atlas at the journey's authoritative progress depth. */
+  regenerateAtlas?(input: {
+    journey: JourneyState;
+    completionLevel: number;
+    rng: (drawIndex: number) => number;
   }): JourneyState | null;
 }
 
@@ -173,59 +180,31 @@ export function setMaxDreamsigns(
   return { ...journey, maxDreamsigns: clampToNonNegativeInteger(value) };
 }
 
-/**
- * `SET_COMPLETION_LEVEL { value }` — legacy `setCompletionLevel` (debug edit).
- * Clamped to a non-negative integer; a non-finite payload still bounces.
- */
-export function setCompletionLevel(
-  journey: JourneyState,
-  payload: Record<string, unknown>,
-): JourneyState | null {
-  const value = finiteNumber(payload.value);
-  if (value === null) return null;
-  return { ...journey, completionLevel: clampToNonNegativeInteger(value) };
-}
-
 // ---------------------------------------------------------------------------
 // Navigation
 // ---------------------------------------------------------------------------
 
-const SCREEN_TYPES: ReadonlySet<Screen["type"]> = new Set<Screen["type"]>([
-  "journeyStart",
-  "atlas",
-  "dreamscape",
-  "site",
-  "journeyComplete",
-  "journeyFailed",
-]);
-
-function asScreen(value: unknown): Screen | null {
-  if (typeof value !== "object" || value === null) return null;
-  const candidate = value as { type?: unknown; siteId?: unknown };
-  if (
-    typeof candidate.type !== "string" ||
-    !SCREEN_TYPES.has(candidate.type as Screen["type"])
-  ) {
-    return null;
-  }
-  if (candidate.type === "site") {
-    if (typeof candidate.siteId !== "string") return null;
-    return { type: "site", siteId: candidate.siteId };
-  }
-  return { type: candidate.type as Exclude<Screen["type"], "site"> };
-}
-
-/** `SET_SCREEN { screen }` — legacy `setScreen` / `setJourneyScreen`. */
-export function setScreen(
+/** Enter an eligible site in the current dreamscape. */
+export function enterSite(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const screen = asScreen(payload.screen);
-  if (screen === null) return null;
+  const siteId = payload.siteId;
+  if (
+    typeof siteId !== "string" ||
+    journey.screen.type !== "dreamscape" ||
+    journey.currentDreamscape === null ||
+    !canVisitSite(journey, siteId) ||
+    !journey.atlas.nodes[journey.currentDreamscape]?.sites.some(
+      (site) => site.id === siteId,
+    )
+  ) {
+    return null;
+  }
   return {
     ...journey,
-    screen,
-    activeSiteId: screen.type === "site" ? screen.siteId : null,
+    screen: { type: "site", siteId },
+    activeSiteId: siteId,
   };
 }
 
@@ -240,6 +219,22 @@ export function travelToDreamscape(
 ): JourneyState | null {
   const nodeId = payload.nodeId;
   if (typeof nodeId !== "string") return null;
+  const node = journey.atlas.nodes[nodeId];
+  if (
+    node === undefined ||
+    node.state !== "available" ||
+    journey.screen.type !== "atlas"
+  ) {
+    return null;
+  }
+  const currentNodeId = journey.atlas.currentNodeId;
+  if (
+    currentNodeId !== null &&
+    currentNodeId !== nodeId &&
+    !journey.atlas.nodes[currentNodeId]?.forwardIds.includes(nodeId)
+  ) {
+    return null;
+  }
   const isAdvancing = nodeId !== journey.currentDreamscape;
   const dreamscapeModifiers = isAdvancing
     ? journey.dreamscapeModifiers
@@ -259,35 +254,30 @@ export function travelToDreamscape(
   };
 }
 
-/** `MARK_SITE_VISITED { siteId }` — legacy `markSiteVisited` (idempotent). */
-export function markSiteVisited(
+/** Rebuild the Atlas from authoritative progress and registered content. */
+export function regenerateAtlas(
   journey: JourneyState,
   payload: Record<string, unknown>,
+  ctx: EventContext,
 ): JourneyState | null {
-  const siteId = payload.siteId;
-  if (typeof siteId !== "string") return null;
-  if (journey.visitedSites.includes(siteId)) {
-    // Already visited — recorded no-op (returns unchanged state, "applied").
-    return journey;
+  const rawLevel = payload.completionLevel;
+  const completionLevel =
+    rawLevel === undefined ? journey.completionLevel : finiteNumber(rawLevel);
+  if (
+    completionLevel === null ||
+    !Number.isSafeInteger(completionLevel) ||
+    completionLevel < 0 ||
+    completionLevel > 7
+  ) {
+    return null;
   }
-  const updatedNodes = { ...journey.atlas.nodes };
-  for (const [nodeId, node] of Object.entries(updatedNodes)) {
-    const siteIndex = node.sites.findIndex((site) => site.id === siteId);
-    if (siteIndex !== -1) {
-      updatedNodes[nodeId] = {
-        ...node,
-        sites: node.sites.map((site, index) =>
-          index === siteIndex ? { ...site, isVisited: true } : site,
-        ),
-      };
-      break;
-    }
-  }
-  return {
-    ...journey,
-    visitedSites: [...journey.visitedSites, siteId],
-    atlas: { ...journey.atlas, nodes: updatedNodes },
-  };
+  return (
+    contentProvider?.regenerateAtlas?.({
+      journey,
+      completionLevel,
+      rng: ctx.rng,
+    }) ?? null
+  );
 }
 
 /** `DISMISS_STARTING_DECK_POPUP { }` — legacy `dismissStartingDeckPopup`. */

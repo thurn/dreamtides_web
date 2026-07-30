@@ -104,21 +104,6 @@ describe("rule 3 — compare-and-swap window", () => {
     expect(result.state.journey.essence).toBe(110);
   });
 
-  it("applies when a partner MARK_SITE_VISITED (decision-neutral) intervened", () => {
-    // An already-visited MARK_SITE_VISITED applies as an idempotent no-op, so it
-    // must not bounce an unrelated partner's concurrent ADJUST_ESSENCE.
-    const state = foldStateWithEssence(100);
-    const result = reduceGameEvent(
-      state,
-      adjustEssence(10, "alice"),
-      ctx({
-        intervening: [{ seq: 5, actor: "bob", type: "MARK_SITE_VISITED" }],
-      }),
-    );
-    expect(result.outcome).toBe("applied");
-    expect(result.state.journey.essence).toBe(110);
-  });
-
   it("applies when a partner DISMISS_STARTING_DECK_POPUP (decision-neutral) intervened", () => {
     const state = foldStateWithEssence(100);
     const result = reduceGameEvent(
@@ -142,7 +127,7 @@ describe("rule 3 — compare-and-swap window", () => {
       ctx({
         intervening: [
           { seq: 4, actor: "alice", type: "ADJUST_ESSENCE" },
-          { seq: 5, actor: "alice", type: "SET_SCREEN" },
+          { seq: 5, actor: "alice", type: "ENTER_SITE" },
         ],
       }),
     );
@@ -533,7 +518,7 @@ describe("isInterveningWindowClear (rule 3)", () => {
       isInterveningWindowClear(
         [
           { seq: 1, actor: "alice", type: "ADJUST_ESSENCE" },
-          { seq: 2, actor: "alice", type: "SET_SCREEN" },
+          { seq: 2, actor: "alice", type: "ENTER_SITE" },
         ],
         "alice",
       ),
@@ -558,13 +543,10 @@ describe("isInterveningWindowClear (rule 3)", () => {
     ).toBe(true);
   });
 
-  it("ignores decision-neutral idempotent no-op events (MARK_SITE_VISITED / DISMISS_STARTING_DECK_POPUP)", () => {
+  it("ignores a decision-neutral starting-deck dismissal", () => {
     expect(
       isInterveningWindowClear(
-        [
-          { seq: 1, actor: "bob", type: "MARK_SITE_VISITED" },
-          { seq: 2, actor: "bob", type: "DISMISS_STARTING_DECK_POPUP" },
-        ],
+        [{ seq: 2, actor: "bob", type: "DISMISS_STARTING_DECK_POPUP" }],
         "alice",
       ),
     ).toBe(true);
@@ -704,5 +686,24 @@ describe("RESOLVE_PROMPT throw containment", () => {
     expect(result.outcome).toBe("applied");
     expect(result.state.battle?.pendingPrompt).toBeNull();
     expect(result.state.battle?.effectQueue).toEqual([]);
+  });
+
+  it("does not swallow an invariant violation after domain-error recovery", () => {
+    const state = stateWithPoisonedPrompt(1);
+    const invalid = {
+      ...state,
+      journey: { ...state.journey, essence: -1 },
+    };
+
+    expect(() =>
+      reduceGameEvent(
+        invalid,
+        event("RESOLVE_PROMPT", {
+          promptId: 1,
+          resolution: { kind: "foresee" },
+        }),
+        ctx(),
+      ),
+    ).toThrow("essence_out_of_bounds");
   });
 });

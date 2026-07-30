@@ -131,13 +131,14 @@ function maxSiteIdSuffix(atlas: DreamAtlas): number {
 }
 
 /**
- * Advances the internal node/site id counters past everything already present in
- * `atlas` so a mutation applied to a persisted atlas (whose generator state has
- * since reset, e.g. across a reload) never reissues an existing id.
+ * Derives the node/site id counters from the input Atlas. Each generation call
+ * is therefore a pure function of its explicit inputs even when an optimistic
+ * fold and a confirmed refold execute sequentially in the same JavaScript
+ * runtime.
  */
 export function syncAtlasGeneratorCounters(atlas: DreamAtlas): void {
-  nodeIdCounter = Math.max(nodeIdCounter, maxNodeIdSuffix(atlas));
-  siteIdCounter = Math.max(siteIdCounter, maxSiteIdSuffix(atlas));
+  nodeIdCounter = maxNodeIdSuffix(atlas);
+  siteIdCounter = maxSiteIdSuffix(atlas);
 }
 
 /** Resets internal counters. Call when starting a new journey. */
@@ -1155,6 +1156,30 @@ export function advanceAtlas(
   build: AtlasBuildContext,
   options: AtlasGenerationOptions = {},
 ): DreamAtlas {
+  const previousAtlasRandom = atlasRandom;
+  atlasRandom = options.rng ?? Math.random;
+  try {
+    return advanceAtlasInternal(
+      atlas,
+      completedNodeId,
+      completionLevel,
+      context,
+      build,
+      options,
+    );
+  } finally {
+    atlasRandom = previousAtlasRandom;
+  }
+}
+
+function advanceAtlasInternal(
+  atlas: DreamAtlas,
+  completedNodeId: string,
+  completionLevel: number,
+  context: SiteGenerationContext,
+  build: AtlasBuildContext,
+  options: AtlasGenerationOptions,
+): DreamAtlas {
   const completedNode = atlas.nodes[completedNodeId];
   if (completedNode === undefined) {
     return atlas;
@@ -1330,11 +1355,11 @@ function completedPathIsConnected(
 
 /**
  * Rebuilds an atlas that reflects a player who has completed
- * `completedDreamscapes` dreamscapes, by replaying the live progression rather
- * than restoring a persisted layout. It starts from a fresh initial atlas at
+ * `completedDreamscapes` dreamscapes by replaying the live progression. It
+ * starts from a fresh initial atlas at
  * Completion Level 0 and applies one {@link advanceAtlas} expansion per
- * completed dreamscape — the exact same primitive the post-victory
- * `battle-completion-bridge` drives — advancing the Completion Level on each
+ * completed dreamscape — the same primitive the authoritative post-victory
+ * reducer transition drives — advancing the Completion Level on each
  * step as a battle victory does (the first expansion runs at level 1). The
  * result is a brand-new layout whose progress depth — completed nodes, the
  * available frontier two layers behind the reveal edge, and the

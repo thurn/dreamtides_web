@@ -344,16 +344,13 @@ describe("bane purges", () => {
 // ---------------------------------------------------------------------------
 
 describe("PURGE_DECK_CARDS", () => {
-  it("removes the listed entries", () => {
-    const out = reduce(stateWithDeck(), "PURGE_DECK_CARDS", {
+  it("requires an authoritative active Purge-site context", () => {
+    const state = stateWithDeck();
+    const out = reduce(state, "PURGE_DECK_CARDS", {
       entryIds: ["deck-1", "deck-3"],
     });
-    expect(out.outcome).toBe("applied");
-    expect(out.state.journey.deck.map((e) => e.entryId)).toEqual([
-      "deck-2",
-      "deck-4",
-      "deck-5",
-    ]);
+    expect(out.outcome).toBe("bounced");
+    expect(out.state).toBe(state);
   });
 
   it("bounces when no listed entry is present", () => {

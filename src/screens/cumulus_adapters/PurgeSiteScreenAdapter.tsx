@@ -90,7 +90,7 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
         currentDreamscape: state.currentDreamscape,
       });
 
-      mutations.purgeDeckCards(site.id, entryIds, cost, "purge");
+      mutations.purgeDeckCards(site.id, entryIds, "purge");
     },
     [mutations, journeyContent.cardDatabase, site, state],
   );

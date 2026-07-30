@@ -35,13 +35,17 @@ import type { StepContext } from "./effect-step";
 import type {
   BattleModifier,
   DeckEntry,
+  DreamAtlas,
   JourneyState,
 } from "../../types/journey";
+import { LayerName } from "../../types/layer-name";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
 import { emptyDawnFired, type BattleFoldState, type EffectRun } from "./fold";
 import {
+  registerBattleCompletionProvider,
   registerBattleInitProvider,
+  type BattleCompletionProvider,
   type BattleInitProvider,
 } from "./battle-events";
 
@@ -165,7 +169,9 @@ function makeInit(overrides: Partial<BattleInit> = {}): BattleInit {
   return {
     battleId: "battle-xyz",
     siteId: SITE_ID,
-    dreamscapeId: null,
+    dreamscapeId: NODE_ID,
+    completionLevelAtStart: 0,
+    essenceReward: 100,
     scoreToWin: 30,
     turnLimit: 12,
     dreamwellDeck: [],
@@ -215,6 +221,56 @@ function makeEntry(entryId: string, isBane = false): DeckEntry {
 
 const SITE_ID = "site-42";
 const NODE_ID = "node-1";
+const NEXT_NODE_ID = "node-2";
+
+function journeyAtlas(): DreamAtlas {
+  return {
+    layers: [[NODE_ID], [NEXT_NODE_ID]],
+    nodes: {
+      [NODE_ID]: {
+        id: NODE_ID,
+        layer: LayerName.One,
+        indexInLayer: 0,
+        dreamscapeId: "dreamscape-one",
+        biomeName: "One",
+        biomeColor: "#111111",
+        sites: [
+          {
+            id: SITE_ID,
+            type: "Battle",
+            isEnhanced: false,
+            isVisited: false,
+          },
+        ],
+        position: { x: 0, y: 0 },
+        state: "available",
+        enhancedSiteType: null,
+        forwardIds: [NEXT_NODE_ID],
+        backwardIds: [],
+        knownDreamsignId: null,
+      },
+      [NEXT_NODE_ID]: {
+        id: NEXT_NODE_ID,
+        layer: LayerName.Two,
+        indexInLayer: 0,
+        dreamscapeId: null,
+        biomeName: "",
+        biomeColor: "",
+        sites: [],
+        position: { x: 1, y: 0 },
+        state: "unrevealed",
+        enhancedSiteType: null,
+        forwardIds: [],
+        backwardIds: [NODE_ID],
+        knownDreamsignId: null,
+      },
+    },
+    startingNodeId: NODE_ID,
+    bossNodeId: NEXT_NODE_ID,
+    currentNodeId: NODE_ID,
+    knownDreamsignCarrierIds: [],
+  };
+}
 
 function baseState(overrides: Partial<JourneyState> = {}): FoldState {
   const base = genesisFoldState(GENESIS);
@@ -223,6 +279,7 @@ function baseState(overrides: Partial<JourneyState> = {}): FoldState {
     journey: {
       ...base.journey,
       activeSiteId: SITE_ID,
+      atlas: journeyAtlas(),
       currentDreamscape: NODE_ID,
       screen: { type: "site", siteId: SITE_ID },
       ...overrides,
@@ -233,15 +290,47 @@ function baseState(overrides: Partial<JourneyState> = {}): FoldState {
 /** A fold state already inside a battle, for END_BATTLE / double-begin tests. */
 function inBattleState(
   overrides: Partial<JourneyState> = {},
-  battle = makeBattle(),
+  battle?: BattleFoldState,
 ): FoldState {
   const state = baseState(overrides);
-  return { ...state, battle };
+  return {
+    ...state,
+    battle:
+      battle ??
+      makeBattle(
+        makeBoard(),
+        makeInit({ completionLevelAtStart: state.journey.completionLevel }),
+      ),
+  };
 }
 
 afterEach(() => {
   registerBattleInitProvider(null);
+  registerBattleCompletionProvider(null);
 });
+
+const fakeCompletionProvider: BattleCompletionProvider = {
+  advanceAtlas({ journey, battle }) {
+    const dreamscapeId = battle.init.dreamscapeId;
+    if (dreamscapeId === null) return null;
+    const completed = journey.atlas.nodes[dreamscapeId];
+    if (completed === undefined) return null;
+    const nodes = { ...journey.atlas.nodes };
+    nodes[dreamscapeId] = { ...completed, state: "completed" };
+    for (const forwardId of completed.forwardIds) {
+      const forward = nodes[forwardId];
+      if (forward !== undefined) {
+        nodes[forwardId] = {
+          ...forward,
+          dreamscapeId: "dreamscape-two",
+          biomeName: "Two",
+          state: "available",
+        };
+      }
+    }
+    return { ...journey.atlas, nodes, currentNodeId: dreamscapeId };
+  },
+};
 
 // ---------------------------------------------------------------------------
 // BEGIN_BATTLE
@@ -341,7 +430,8 @@ describe("BEGIN_BATTLE", () => {
 // ---------------------------------------------------------------------------
 
 describe("END_BATTLE victory", () => {
-  it("bumps completion level, decrements/drops battle modifiers, clears the dreamscape, and ends the battle", () => {
+  it("atomically rewards, completes the Battle site, advances the Atlas, expires modifiers, and ends the battle", () => {
+    registerBattleCompletionProvider(fakeCompletionProvider);
     const survivingMod: BattleModifier = {
       kind: "reward_reduction_flat",
       amount: 5,
@@ -356,17 +446,31 @@ describe("END_BATTLE victory", () => {
       addedEntryIds: ["bane-entry"],
       source: "test",
     };
-    const state = inBattleState({
-      completionLevel: 3,
-      battleModifiers: [survivingMod, expiringBaneMod],
-      deck: [makeEntry("keep-entry"), makeEntry("bane-entry", true)],
-    });
+    const state = inBattleState(
+      {
+        essence: 50,
+        battleModifiers: [survivingMod, expiringBaneMod],
+        deck: [makeEntry("keep-entry"), makeEntry("bane-entry", true)],
+      },
+      makeBattle(makeBoard({ result: "victory" }), makeInit()),
+    );
 
-    const result = reduce(state, "END_BATTLE", { result: "victory" });
+    const result = reduce(state, "END_BATTLE", {});
     expect(result.outcome).toBe("applied");
     const journey = result.state.journey;
 
-    expect(journey.completionLevel).toBe(4);
+    expect(journey.completionLevel).toBe(1);
+    expect(journey.essence).toBe(150);
+    expect(journey.visitedSites).toContain(SITE_ID);
+    expect(
+      journey.atlas.nodes[NODE_ID].sites.find((site) => site.id === SITE_ID)
+        ?.isVisited,
+    ).toBe(true);
+    expect(journey.atlas.nodes[NODE_ID].state).toBe("completed");
+    expect(journey.atlas.nodes[NEXT_NODE_ID]).toMatchObject({
+      state: "available",
+      dreamscapeId: "dreamscape-two",
+    });
     // Surviving modifier decremented by one; expired one dropped.
     expect(journey.battleModifiers).toEqual([
       { ...survivingMod, battlesRemaining: 1 },
@@ -379,8 +483,15 @@ describe("END_BATTLE victory", () => {
   });
 
   it("routes to the journey-complete screen at the final completion level", () => {
-    const state = inBattleState({ completionLevel: 6 });
-    const result = reduce(state, "END_BATTLE", { result: "victory" });
+    registerBattleCompletionProvider(fakeCompletionProvider);
+    const state = inBattleState(
+      { completionLevel: 6 },
+      makeBattle(
+        makeBoard({ result: "victory" }),
+        makeInit({ completionLevelAtStart: 6 }),
+      ),
+    );
+    const result = reduce(state, "END_BATTLE", {});
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.completionLevel).toBe(7);
     expect(result.state.journey.screen.type).toBe("journeyComplete");
@@ -403,7 +514,7 @@ describe("END_BATTLE defeat", () => {
     });
     const state = inBattleState({}, makeBattle(board));
 
-    const result = reduce(state, "END_BATTLE", { result: "defeat" });
+    const result = reduce(state, "END_BATTLE", {});
     expect(result.outcome).toBe("applied");
     const journey = result.state.journey;
 
@@ -422,7 +533,7 @@ describe("END_BATTLE defeat", () => {
   it("records a forced-result reason when the board carries a forced result", () => {
     const board = makeBoard({ forcedResult: "defeat", result: "defeat" });
     const state = inBattleState({}, makeBattle(board));
-    const result = reduce(state, "END_BATTLE", { result: "defeat" });
+    const result = reduce(state, "END_BATTLE", {});
     expect(result.state.journey.failureSummary?.reason).toBe("forced_result");
   });
 
@@ -438,7 +549,7 @@ describe("END_BATTLE defeat", () => {
       enemyScore: 8,
     });
     const state = inBattleState({}, makeBattle(board, init));
-    const result = reduce(state, "END_BATTLE", { result: "defeat" });
+    const result = reduce(state, "END_BATTLE", {});
     expect(result.state.journey.failureSummary?.reason).toBe("turn_limit_reached");
   });
 
@@ -452,7 +563,7 @@ describe("END_BATTLE defeat", () => {
       enemyScore: 30,
     });
     const state = inBattleState({}, makeBattle(board, init));
-    const result = reduce(state, "END_BATTLE", { result: "defeat" });
+    const result = reduce(state, "END_BATTLE", {});
     expect(result.state.journey.failureSummary?.reason).toBe("score_target_reached");
   });
 });
@@ -463,13 +574,13 @@ describe("END_BATTLE defeat", () => {
 
 describe("END_BATTLE bounces", () => {
   it("bounces when no battle exists", () => {
-    const result = reduce(baseState(), "END_BATTLE", { result: "victory" });
+    const result = reduce(baseState(), "END_BATTLE", {});
     expect(result.outcome).toBe("bounced");
     expect(result.state.journey.completionLevel).toBe(0);
   });
 
-  it("bounces an unknown result", () => {
-    const result = reduce(inBattleState(), "END_BATTLE", { result: "draw?" });
+  it("bounces while the folded board is not terminal", () => {
+    const result = reduce(inBattleState(), "END_BATTLE", {});
     expect(result.outcome).toBe("bounced");
     expect(result.state.battle).not.toBeNull();
   });

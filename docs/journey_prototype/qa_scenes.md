@@ -55,11 +55,12 @@ Because the columns are 1-indexed, "Layer N" is the 0-indexed frontier layer
 reads `N - 1`).
 
 The state is built by replaying those real dreamscape completions through
-`regenerateAtlasForProgress` — the same generate-then-`advanceAtlas` code path a
-battle victory drives, and the same one the in-atlas debug "regenerate" button
-uses. The run is then parked exactly as `battle-completion-bridge` leaves it after
-a win: `screen: atlas`, `currentDreamscape: null`, and `completionLevel` matching
-the depth. Because each advance runs for real, the reveal-two-layers-ahead rule
+`regenerateAtlasForProgress` — the same generate-then-`advanceAtlas` code path
+the authoritative battle-victory reducer transition drives, and the same one
+the in-atlas debug "regenerate" button uses. The run is then parked at the
+post-victory resting state: `screen: atlas`, `currentDreamscape: null`, and
+`completionLevel` matching the depth. Because each advance runs for real, the
+reveal-two-layers-ahead rule
 fires on every step, so the frontier always shows one layer ahead — the scene
 never reproduces an impossible resting view where the next layer is still an
 unseen dream. Node ids, dreamscape assignments, and the boss incarnation are

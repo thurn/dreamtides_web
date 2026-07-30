@@ -153,15 +153,14 @@ commands.
 #### Cumulus draft completion
 
 `src/screens/cumulus_adapters/DraftSiteScreenAdapter.tsx:66` automatically
-submits `COMPLETE_SITE` and `SET_SCREEN` when the draft becomes complete. Its
-`completedRef` is local to one client.
+submits one `COMPLETE_SITE` intent when the draft becomes complete. The intent
+uses a run-scoped logical key, so connected clients converge on one durable
+submission.
 
-`COMPLETE_SITE` bounces once the site is visited in
-`src/rules/journey/sites.ts:759`. `SET_SCREEN` always applies in
-`src/rules/journey/lifecycle.ts:214`, even when the requested screen is already
-current. `logs/journey-log.jsonl:44204` and `:44205` demonstrate an applied
-`COMPLETE_SITE` followed by an applied same-hash `SET_SCREEN` in a single
-client.
+`COMPLETE_SITE` validates the matching site screen, active-site identity, and
+visit eligibility in `src/rules/journey/sites.ts`. One applied fold marks both
+site representations visited, clears the active site, and routes to the
+dreamscape. A stale completion bounces without changing state.
 
 #### Legacy Essence completion
 

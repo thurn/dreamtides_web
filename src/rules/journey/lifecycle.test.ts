@@ -164,6 +164,31 @@ function deterministicProvider(
         },
         resolvedPackage: pkg,
         remainingDreamsignPool: [...pkg.dreamsignPoolIds],
+        atlas: {
+          layers: [["node-start"]],
+          nodes: {
+            "node-start": {
+              id: "node-start",
+              layer: LayerName.One,
+              indexInLayer: 0,
+              dreamscapeId: "dreamscape-start",
+              biomeName: "Starting Dreamscape",
+              biomeColor: "#000000",
+              sites: [],
+              position: { x: 0, y: 0 },
+              state: "available",
+              enhancedSiteType: null,
+              forwardIds: [],
+              backwardIds: [],
+              knownDreamsignId: null,
+            },
+          },
+          startingNodeId: "node-start",
+          bossNodeId: "node-start",
+          bossIncarnationId: null,
+          currentNodeId: "node-start",
+          knownDreamsignCarrierIds: [],
+        },
         currentDreamscape: "node-start",
         screen: { type: "dreamscape" },
       };
@@ -292,40 +317,6 @@ describe("limits and completion", () => {
     ).toBe("bounced");
   });
 
-  it("SET_COMPLETION_LEVEL sets the value", () => {
-    expect(
-      apply(genesis(), "SET_COMPLETION_LEVEL", { value: 3 }).journey
-        .completionLevel,
-    ).toBe(3);
-  });
-
-  it("SET_COMPLETION_LEVEL clamps a negative value to 0", () => {
-    expect(
-      apply(genesis(), "SET_COMPLETION_LEVEL", { value: -2 }).journey
-        .completionLevel,
-    ).toBe(0);
-  });
-
-  it("SET_COMPLETION_LEVEL truncates a fractional value to an integer", () => {
-    expect(
-      apply(genesis(), "SET_COMPLETION_LEVEL", { value: 2.9 }).journey
-        .completionLevel,
-    ).toBe(2);
-  });
-
-  it("SET_COMPLETION_LEVEL bounces a non-finite value (NaN/Infinity)", () => {
-    expect(
-      reduceGameEvent(genesis(), event("SET_COMPLETION_LEVEL", { value: Number.NaN }), ctx())
-        .outcome,
-    ).toBe("bounced");
-    expect(
-      reduceGameEvent(
-        genesis(),
-        event("SET_COMPLETION_LEVEL", { value: Number.POSITIVE_INFINITY }),
-        ctx(),
-      ).outcome,
-    ).toBe("bounced");
-  });
 });
 
 // ---------------------------------------------------------------------------
@@ -333,36 +324,27 @@ describe("limits and completion", () => {
 // ---------------------------------------------------------------------------
 
 describe("navigation", () => {
-  it("SET_SCREEN sets the screen and derives activeSiteId for site screens", () => {
-    const siteScreen = apply(genesis(), "SET_SCREEN", {
-      screen: { type: "site", siteId: "site-1" },
-    });
+  it("ENTER_SITE validates and enters a site in the current dreamscape", () => {
+    const base = genesis();
+    const state = {
+      ...base,
+      journey: {
+        ...withAtlasSite(base.journey, "node-1", "site-1"),
+        currentDreamscape: "node-1",
+        screen: { type: "dreamscape" as const },
+      },
+    };
+    const siteScreen = apply(state, "ENTER_SITE", { siteId: "site-1" });
     expect(siteScreen.journey.screen).toEqual({ type: "site", siteId: "site-1" });
     expect(siteScreen.journey.activeSiteId).toBe("site-1");
 
-    const atlasScreen = apply(siteScreen, "SET_SCREEN", {
-      screen: { type: "atlas" },
-    });
-    expect(atlasScreen.journey.screen).toEqual({ type: "atlas" });
-    expect(atlasScreen.journey.activeSiteId).toBeNull();
-  });
-
-  it("MARK_SITE_VISITED records the visit once and flips the atlas site flag", () => {
-    let state = genesis();
-    state = {
-      ...state,
-      journey: withAtlasSite(state.journey, "node-1", "site-9"),
-    };
-    const visited = apply(state, "MARK_SITE_VISITED", { siteId: "site-9" });
-    expect(visited.journey.visitedSites).toEqual(["site-9"]);
     expect(
-      visited.journey.atlas.nodes["node-1"]?.sites.find((s) => s.id === "site-9")
-        ?.isVisited,
-    ).toBe(true);
-
-    // Re-visiting is idempotent.
-    const again = apply(visited, "MARK_SITE_VISITED", { siteId: "site-9" });
-    expect(again.journey.visitedSites).toEqual(["site-9"]);
+      reduceGameEvent(
+        state,
+        event("ENTER_SITE", { siteId: "unknown" }),
+        ctx(),
+      ).outcome,
+    ).toBe("bounced");
   });
 
   it("DISMISS_STARTING_DECK_POPUP flips the flag", () => {
@@ -390,7 +372,27 @@ describe("TRAVEL_TO_DREAMSCAPE", () => {
       ...base,
       journey: {
         ...base.journey,
+        atlas: {
+          ...base.journey.atlas,
+          currentNodeId: "node-a",
+          nodes: {
+            "node-a": {
+              ...withAtlasSite(base.journey, "node-a", "site-a").atlas.nodes[
+                "node-a"
+              ],
+              forwardIds: ["node-b"],
+            },
+            "node-b": {
+              ...withAtlasSite(base.journey, "node-b", "site-b").atlas.nodes[
+                "node-b"
+              ],
+              layer: LayerName.Two,
+              backwardIds: ["node-a"],
+            },
+          },
+        },
         currentDreamscape: "node-a",
+        screen: { type: "atlas" },
         visitedSites: ["stale-site"],
         dreamscapeModifiers: [modifier(1, "one"), modifier(2, "two")],
       },
@@ -409,7 +411,12 @@ describe("TRAVEL_TO_DREAMSCAPE", () => {
       ...base,
       journey: {
         ...base.journey,
+        atlas: {
+          ...withAtlasSite(base.journey, "node-a", "site-a").atlas,
+          currentNodeId: "node-a",
+        },
         currentDreamscape: "node-a",
+        screen: { type: "atlas" },
         dreamscapeModifiers: [modifier(2, "two")],
       },
     };
@@ -614,8 +621,14 @@ describe("RESET_JOURNEY", () => {
   it("resets journey state to the genesis fold and clears battle", () => {
     registerJourneyLifecycleContentProvider(deterministicProvider());
     let state = apply(genesis(), "START_JOURNEY", { dreamAvatarId: "dc-7" });
-    state = apply(state, "SET_COMPLETION_LEVEL", { value: 5 });
-    state = apply(state, "ADJUST_ESSENCE", { delta: 50 });
+    state = {
+      ...state,
+      journey: {
+        ...state.journey,
+        completionLevel: 5,
+        essence: state.journey.essence + 50,
+      },
+    };
     // A battle in progress with no open prompt (an open prompt would be gated
     // by CAS rule 4 before routing — see the seam note in the task report).
     state = {

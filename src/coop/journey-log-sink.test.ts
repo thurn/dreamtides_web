@@ -357,6 +357,29 @@ describe("createCoopLogRecorder single-writer rule", () => {
     ]);
   });
 
+  it("tags contained invariant failures with machine-readable invariant codes", () => {
+    const { emitted, recorder } = setup();
+    recorder.recordFoldError(
+      {
+        seq: 10,
+        message:
+          "Fold invariant violation: atlas_frontier_missing (1); atlas_frontier_unseen (node-2)",
+      },
+      makeEvent({ type: "END_BATTLE" }),
+      "before-hash",
+      "after-hash",
+    );
+
+    expect(emitted[0]).toMatchObject({
+      event: "fold_error",
+      seq: 10,
+      invariantCodes: [
+        "atlas_frontier_missing",
+        "atlas_frontier_unseen",
+      ],
+    });
+  });
+
   it("records authoritative corrections and semantic intent-key collisions", () => {
     const { emitted, recorder } = setup();
     recorder.recordAuthoritativeCorrection({

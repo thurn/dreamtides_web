@@ -26,7 +26,7 @@
     {
       "seq": 2,
       "event": {
-        "type": "BEGIN_BATTLE",
+        "type": "ENTER_SITE",
         "payload": {
           "siteId": "site-battle"
         },
@@ -37,6 +37,18 @@
     },
     {
       "seq": 3,
+      "event": {
+        "type": "BEGIN_BATTLE",
+        "payload": {
+          "siteId": "site-battle"
+        },
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 2
+      }
+    },
+    {
+      "seq": 4,
       "event": {
         "type": "BATTLE_COMMAND",
         "payload": {
@@ -55,11 +67,11 @@
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 2
+        "basedOnSeq": 3
       }
     },
     {
-      "seq": 4,
+      "seq": 5,
       "event": {
         "type": "BATTLE_COMMAND",
         "payload": {
@@ -74,36 +86,48 @@
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 3
-      }
-    },
-    {
-      "seq": 5,
-      "event": {
-        "type": "RESOLVE_PROMPT",
-        "payload": {
-          "promptId": 4,
-          "resolution": {
-            "kind": "foresee"
-          }
-        },
-        "actor": "p1",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
         "basedOnSeq": 4
       }
     },
     {
       "seq": 6,
       "event": {
-        "type": "END_BATTLE",
+        "type": "RESOLVE_PROMPT",
         "payload": {
-          "result": "victory"
+          "promptId": 5,
+          "resolution": {
+            "kind": "foresee"
+          }
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
         "basedOnSeq": 5
       }
+    },
+    {
+      "seq": 7,
+      "event": {
+        "type": "BATTLE_COMMAND",
+        "payload": {
+          "command": {
+            "id": "SKIP_TO_REWARDS"
+          }
+        },
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 6
+      }
+    },
+    {
+      "seq": 8,
+      "event": {
+        "type": "END_BATTLE",
+        "payload": {},
+        "actor": "p1",
+        "clientTimestamp": "1970-01-01T00:00:00.000Z",
+        "basedOnSeq": 7
+      }
     }
   ],
-  "finalHash": "0de5c70cbbac0d86cc5e17dff36c60c29e039821ea636ebba34f11eb454c3cce"
+  "finalHash": "7626616ea21f2105a242ffb5f478a746b0a57dfdec13154711a732ac03a648ce"
 }

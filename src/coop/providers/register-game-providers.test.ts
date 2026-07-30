@@ -27,8 +27,11 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import type { Genesis } from "../../eventlog/types";
+import { eventRng } from "../../eventlog/rng";
 import type { SeqEvent } from "../../rules/replay/replay";
 import { replayLog } from "../../rules/replay/replay";
+import { genesisFoldState } from "../../rules/fold-state";
+import { reduceGameEvent } from "../../rules/reducer";
 import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
 import type { DreamAvatarContent, DreamsignTemplate } from "../../types/content";
@@ -227,30 +230,42 @@ describe("registerGameProviders (real content providers)", () => {
       expect(siteIdByType.get(siteType)).toBeDefined();
     }
 
-    // Phase 2: OPEN each content site, REROLL both shop variants, BEGIN battle.
+    // Phase 2: enter and complete every non-Battle site, exercising OPEN_SITE
+    // for every content-backed type and rerolling both shop variants. The
+    // Battle-last rule then permits the terminal battle sequence.
     const tail: SeqEvent[] = [];
-    for (const siteType of CONTENT_SITE_TYPES) {
+    const openedTypes = new Set<SiteType>();
+    for (const site of node.sites.filter((candidate) => candidate.type !== "Battle")) {
       seq += 1;
-      tail.push(
-        ev(seq, "OPEN_SITE", { siteId: siteIdByType.get(siteType) }),
-      );
+      tail.push(ev(seq, "ENTER_SITE", { siteId: site.id }));
+      if (CONTENT_SITE_TYPES.includes(site.type) && !openedTypes.has(site.type)) {
+        openedTypes.add(site.type);
+        seq += 1;
+        tail.push(ev(seq, "OPEN_SITE", { siteId: site.id }));
+        if (site.type === "Shop" || site.type === "DreamsignMarket") {
+          seq += 1;
+          tail.push(ev(seq, "REROLL_SHOP", { siteId: site.id }));
+        }
+      }
+      seq += 1;
+      tail.push(ev(seq, "COMPLETE_SITE", { siteId: site.id }));
     }
+    const battleSiteId = node.sites.find(
+      (site) => site.type === "Battle",
+    )?.id;
+    expect(battleSiteId).toBeDefined();
+    seq += 1;
+    tail.push(ev(seq, "ENTER_SITE", { siteId: battleSiteId }));
+    seq += 1;
+    tail.push(ev(seq, "BEGIN_BATTLE", { siteId: battleSiteId }));
     seq += 1;
     tail.push(
-      ev(seq, "REROLL_SHOP", {
-        siteId: siteIdByType.get("Shop"),
-        essenceCost: 0,
+      ev(seq, "BATTLE_COMMAND", {
+        command: { id: "SKIP_TO_REWARDS" },
       }),
     );
     seq += 1;
-    tail.push(
-      ev(seq, "REROLL_SHOP", {
-        siteId: siteIdByType.get("DreamsignMarket"),
-        essenceCost: 0,
-      }),
-    );
-    seq += 1;
-    tail.push(ev(seq, "BEGIN_BATTLE", { siteId: siteIdByType.get("Battle") }));
+    tail.push(ev(seq, "END_BATTLE", {}));
 
     const events = [...prefix, ...addSiteEvents, ...tail];
     const first = replayLog({ genesis: GENESIS, events });
@@ -264,8 +279,19 @@ describe("registerGameProviders (real content providers)", () => {
         }`,
       ).toBe("applied");
     }
-    // The battle slice exists after BEGIN_BATTLE.
-    expect(first.finalState.battle).not.toBeNull();
+    // The terminal event commits the full journey handoff.
+    expect(first.finalState.battle).toBeNull();
+    expect(first.finalState.journey.completionLevel).toBe(1);
+    expect(first.finalState.journey.screen.type).toBe("atlas");
+    const completedNode = first.finalState.journey.atlas.nodes[nodeId];
+    expect(completedNode.state).toBe("completed");
+    const frontier = completedNode.forwardIds
+      .map((id) => first.finalState.journey.atlas.nodes[id])
+      .filter((candidate) => candidate?.state === "available");
+    expect(frontier.length).toBeGreaterThan(0);
+    expect(
+      frontier.every((candidate) => candidate.dreamscapeId !== null),
+    ).toBe(true);
     const marketSiteId = siteIdByType.get("DreamsignMarket");
     expect(marketSiteId).toBeDefined();
     if (marketSiteId !== undefined) {
@@ -330,6 +356,110 @@ describe("registerGameProviders (real content providers)", () => {
     expect(
       result.runtime.offeredDreamsigns.map((dreamsign) => dreamsign.id),
     ).toContain(requiredId);
+  });
+
+  it("rebuilds debug progress as one consistent Atlas transition", () => {
+    const events = [
+      ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }),
+      ev(2, "REGENERATE_ATLAS", { completionLevel: 3 }),
+    ];
+    const result = replayLog({ genesis: GENESIS, events });
+
+    expect(result.outcomes.map((outcome) => outcome.outcome)).toEqual([
+      "applied",
+      "applied",
+    ]);
+    expect(result.finalState.journey.completionLevel).toBe(3);
+    expect(result.finalState.journey.screen.type).toBe("atlas");
+    expect(
+      Object.values(result.finalState.journey.atlas.nodes).filter(
+        (node) => node.state === "completed",
+      ),
+    ).toHaveLength(3);
+    expect(
+      Object.values(result.finalState.journey.atlas.nodes)
+        .filter((node) => node.state === "available")
+        .every((node) => node.dreamscapeId !== null),
+    ).toBe(true);
+  });
+
+  it("plays all seven real-content layers through authoritative reducer events", () => {
+    let state = genesisFoldState(GENESIS);
+    let seq = 1;
+    const apply = (
+      type: string,
+      payload: Record<string, unknown>,
+    ): void => {
+      const event = {
+        type,
+        payload,
+        actor: "p1",
+        clientTimestamp: TIMESTAMP,
+        basedOnSeq: seq - 1,
+      };
+      const result = reduceGameEvent(state, event, {
+        seq,
+        timestamp: TIMESTAMP,
+        rng: eventRng(GENESIS.seed, seq),
+        intervening: [],
+      });
+      expect(
+        result.outcome,
+        `seq ${String(seq)} ${type} ${
+          result.outcome === "bounced" ? result.bounceReason : ""
+        }`,
+      ).toBe("applied");
+      state = result.state;
+      seq += 1;
+    };
+
+    apply("START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID });
+    const layerCount = state.journey.atlas.layers.length;
+    for (let layer = 0; layer < layerCount; layer += 1) {
+      const nodeId = state.journey.currentDreamscape;
+      expect(nodeId).not.toBeNull();
+      if (nodeId === null) return;
+      const node = state.journey.atlas.nodes[nodeId];
+      for (const site of node.sites.filter(
+        (candidate) => candidate.type !== "Battle",
+      )) {
+        apply("ENTER_SITE", { siteId: site.id });
+        apply("COMPLETE_SITE", { siteId: site.id });
+      }
+      const battle = node.sites.find((site) => site.type === "Battle");
+      expect(battle).toBeDefined();
+      if (battle === undefined) return;
+      apply("ENTER_SITE", { siteId: battle.id });
+      apply("BEGIN_BATTLE", { siteId: battle.id });
+      apply("BATTLE_COMMAND", {
+        command: { id: "SKIP_TO_REWARDS" },
+      });
+      apply("END_BATTLE", {});
+
+      expect(state.journey.atlas.nodes[nodeId].state).toBe("completed");
+      expect(state.journey.completionLevel).toBe(layer + 1);
+      if (layer < layerCount - 1) {
+        const nextId = node.forwardIds.find(
+          (candidate) =>
+            state.journey.atlas.nodes[candidate]?.state === "available",
+        );
+        expect(nextId).toBeDefined();
+        if (nextId === undefined) return;
+        expect(state.journey.atlas.nodes[nextId].dreamscapeId).not.toBeNull();
+        apply("TRAVEL_TO_DREAMSCAPE", { nodeId: nextId });
+      }
+    }
+
+    expect(state.battle).toBeNull();
+    expect(state.journey.completionLevel).toBe(layerCount);
+    expect(state.journey.screen.type).toBe("journeyComplete");
+    for (const layer of state.journey.atlas.layers) {
+      expect(
+        layer.filter(
+          (nodeId) => state.journey.atlas.nodes[nodeId].state === "completed",
+        ),
+      ).toHaveLength(1);
+    }
   });
 });
 

@@ -62,7 +62,7 @@ export function DreamscapeScreenAdapter() {
         mutations.ensureRewardSiteRuntime(siteId);
       }
     } else {
-      mutations.setScreen({ type: "site", siteId });
+      mutations.enterSite(siteId);
     }
   }, [mutations, node, state.essence, state.siteRuntime]);
 

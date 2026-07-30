@@ -96,8 +96,8 @@ const TUTORIAL_DREAM_AVATAR_SELECT_SCENE: QaScene = {
  * 0 plus N-1 interior dreamscapes), so the scene is built by replaying N real
  * dreamscape completions through {@link regenerateAtlasForProgress}: the same
  * generate-then-`advanceAtlas` code path a battle victory drives, never a
- * hand-faked layout. The run is then parked on the resting atlas state exactly as
- * `battle-completion-bridge` leaves it after a win — `screen: atlas`,
+ * hand-faked layout. The run is then parked on the authoritative post-victory
+ * resting state — `screen: atlas`,
  * `currentDreamscape: null`, and `completionLevel` matching the depth.
  *
  * Because the atlas is advanced for real, the frontier always shows one layer

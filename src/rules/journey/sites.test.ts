@@ -881,29 +881,26 @@ describe("PURGE_DECK_CARDS full behavior", () => {
     });
   }
 
-  it("deck-only path (no siteId) still removes the listed entries", () => {
+  it("bounces without a Purge site identity", () => {
     const out = reduce(purgeState(), "PURGE_DECK_CARDS", {
       entryIds: ["deck-1"],
     });
-    expect(out.outcome).toBe("applied");
-    expect(out.state.journey.deck.map((e) => e.entryId)).toEqual(["deck-2"]);
-    // No site coupling on the deck-only path.
-    expect(out.state.journey.visitedSites).not.toContain(SITE_ID);
+    expect(out.outcome).toBe("bounced");
   });
 
-  it("site path charges essence, removes free bane dreamsigns, completes site", () => {
+  it("derives the canonical price and completes the site atomically", () => {
     const state = purgeState();
     const out = reduce(state, "PURGE_DECK_CARDS", {
       entryIds: ["deck-1"],
       siteId: SITE_ID,
-      cost: 120,
-      baneDreamsignIndices: [1],
     });
     expect(out.outcome).toBe("applied");
-    expect(out.state.journey.essence).toBe(500 - 120);
+    expect(out.state.journey.essence).toBe(500 - 40);
     expect(out.state.journey.deck.map((e) => e.entryId)).toEqual(["deck-2"]);
-    // The bane dreamsign at index 1 is removed for free; the keeper remains.
-    expect(out.state.journey.dreamsigns.map((d) => d.id)).toEqual(["keep"]);
+    expect(out.state.journey.dreamsigns.map((d) => d.id)).toEqual([
+      "keep",
+      "bane",
+    ]);
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
     expect(out.state.journey.screen.type).toBe("dreamscape");
   });
@@ -916,7 +913,6 @@ describe("PURGE_DECK_CARDS full behavior", () => {
       {
         entryIds: ["deck-1"],
         siteId: SITE_ID,
-        cost: 4,
       },
     );
     expect(out.outcome).toBe("bounced");
@@ -924,10 +920,10 @@ describe("PURGE_DECK_CARDS full behavior", () => {
     expect(out.state.journey.visitedSites).not.toContain(SITE_ID);
   });
 
-  it("treats a negative site purge cost as zero", () => {
+  it("ignores a forged client price and charges the derived price", () => {
     const state = purgeState();
     const out = reduce(
-      { ...state, journey: { ...state.journey, essence: 3 } },
+      { ...state, journey: { ...state.journey, essence: 100 } },
       "PURGE_DECK_CARDS",
       {
         entryIds: ["deck-1"],
@@ -936,7 +932,7 @@ describe("PURGE_DECK_CARDS full behavior", () => {
       },
     );
     expect(out.outcome).toBe("applied");
-    expect(out.state.journey.essence).toBe(3);
+    expect(out.state.journey.essence).toBe(60);
   });
 
   it("does not remove a non-bane dreamsign even if its index is listed", () => {
@@ -944,7 +940,6 @@ describe("PURGE_DECK_CARDS full behavior", () => {
     const out = reduce(state, "PURGE_DECK_CARDS", {
       entryIds: ["deck-1"],
       siteId: SITE_ID,
-      cost: 0,
       baneDreamsignIndices: [0],
     });
     expect(out.outcome).toBe("applied");
@@ -958,12 +953,10 @@ describe("PURGE_DECK_CARDS full behavior", () => {
     const done = reduce(purgeState(), "PURGE_DECK_CARDS", {
       entryIds: ["deck-1"],
       siteId: SITE_ID,
-      cost: 0,
     }).state;
     const out = reduce(done, "PURGE_DECK_CARDS", {
       entryIds: ["deck-2"],
       siteId: SITE_ID,
-      cost: 0,
     });
     expect(out.outcome).toBe("bounced");
   });

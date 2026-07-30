@@ -23,6 +23,7 @@
 // is registered those cases bounce (a recorded no-op, never a throw).
 
 import type { EventContext } from "../../eventlog/types";
+import { rerollCost } from "../../shop/shop-pricing";
 import type {
   BattleModifier,
   DeckEntry,
@@ -217,12 +218,12 @@ export function buyShopSlot(
 // ---------------------------------------------------------------------------
 
 /**
- * `REROLL_SHOP { siteId, essenceCost? }` — legacy `rerollShop`. Restocks a
+ * `REROLL_SHOP { siteId }` — restock a
  * shop's slots once. The pure reducer owns the money math: it consumes a free
  * reroll (`shopModifiers.freeRerolls`) BEFORE charging essence, so a player
  * with a free reroll pays nothing and keeps their essence; only when no free
- * reroll remains does the paid path charge `essenceCost` (production pricing
- * carried on the event, like `PURGE_DECK_CARDS`'s `cost`). The content redraw —
+ * reroll remains does the paid path charge the canonical price derived from the
+ * folded site and runtime. The content redraw —
  * the new slots, Dreamsign pools, and draft state — is delegated to the
  * registered {@link SiteContentProvider}'s `rerollShop`, handed `ctx.rng`.
  *
@@ -248,7 +249,9 @@ export function rerollShop(
   if (site === null) return null;
 
   const useFreeReroll = journey.shopModifiers.freeRerolls > 0;
-  const cost = useFreeReroll ? 0 : finiteNumber(payload.essenceCost) ?? 0;
+  const cost = useFreeReroll
+    ? 0
+    : rerollCost(runtime.rerollCount, site.isEnhanced);
   if (!useFreeReroll && cost > journey.essence) return null;
 
   const provider = getSiteContentProvider();
@@ -581,6 +584,7 @@ export function replaceSiteType(
     (site) => site.type === fromSiteType && !site.isVisited,
   );
   if (targetIndex === -1) return null;
+  if (node.sites[targetIndex].id === journey.activeSiteId) return null;
 
   const replacement: SiteState = {
     id: nextSiteId(journey.atlas),
@@ -631,21 +635,6 @@ export function addSiteToDreamscape(
       },
     },
   };
-}
-
-/**
- * `UPDATE_ATLAS { atlas }` (debug) — legacy `updateAtlas`. Replaces the whole
- * atlas with the provided value. Bounces on a non-object atlas.
- */
-export function updateAtlas(
-  journey: JourneyState,
-  payload: Record<string, unknown>,
-): JourneyState | null {
-  const atlas = payload.atlas;
-  if (typeof atlas !== "object" || atlas === null || Array.isArray(atlas)) {
-    return null;
-  }
-  return { ...journey, atlas: atlas as DreamAtlas };
 }
 
 /**

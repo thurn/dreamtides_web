@@ -368,11 +368,9 @@ const DEBUG_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "SET_ESSENCE",
   "SET_ESSENCE_CAP",
   "SET_MAX_DREAMSIGNS",
-  "SET_COMPLETION_LEVEL",
   "SET_DREAMSIGN_POOL",
   "SET_DECK_ENTRY_STAT_OVERRIDE",
   "SET_DECK_ENTRY_KEYWORDS",
-  "UPDATE_ATLAS",
   "SET_CARD_SOURCE_DEBUG",
   "REROLL_DREAM_AUGURY",
   "REROLL_DREAM_AVATAR_OFFER",
@@ -455,20 +453,8 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
   (rng) => ({ type: "ADJUST_ESSENCE_CAP", payload: { delta: smallInt(rng, 1000) } }),
 
   // navigation
-  (rng) => ({
-    type: "SET_SCREEN",
-    payload: {
-      screen: pick(rng, [
-        { type: "atlas" },
-        { type: "dreamscape" },
-        { type: "journeyStart" },
-        { type: "site", siteId: pick(rng, SITE_IDS) },
-        { type: "journeyComplete" },
-      ]),
-    },
-  }),
+  (rng) => ({ type: "ENTER_SITE", payload: { siteId: pick(rng, SITE_IDS) } }),
   (rng) => ({ type: "TRAVEL_TO_DREAMSCAPE", payload: { nodeId: pick(rng, NODE_IDS) } }),
-  (rng) => ({ type: "MARK_SITE_VISITED", payload: { siteId: pick(rng, SITE_IDS) } }),
   () => ({ type: "DISMISS_STARTING_DECK_POPUP", payload: {} }),
 
   // deck & transfiguration
@@ -547,7 +533,7 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
   (rng) => ({ type: "REROLL_SHOP", payload: { siteId: pick(rng, SITE_IDS) } }),
   // REROLL_SHOP aimed at the seeded Shop site so it APPLIES (rewriting
   // draftState from the Site fake's non-null restock) at least once per run,
-  // before MARK_SITE_VISITED / a prior reroll can close it.
+  // before another action can close it.
   () => ({ type: "REROLL_SHOP", payload: { siteId: SHOP_SITE_ID } }),
   (rng) => ({ type: "GRANT_FREE_REROLLS", payload: { count: Math.floor(rng() * 3) } }),
   (rng) => ({ type: "APPLY_SHOP_DISCOUNT", payload: { percent: Math.floor(rng() * 50) } }),
@@ -582,7 +568,7 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent>
 
   // battle bridges & CAS-exempt (no journey case → routed to a bounce; here to
   // stress total-fold safety with types outside the journey domain switch)
-  (rng) => ({ type: "END_BATTLE", payload: { result: pick(rng, ["victory", "defeat"]) } }),
+  () => ({ type: "END_BATTLE", payload: {} }),
   (rng) => ({ type: "BEGIN_BATTLE", payload: { siteId: pick(rng, SITE_IDS) } }),
   // Battle-slice mutation (applies once a BEGIN_BATTLE has created the slice), so
   // the determinism / JSON-purity / hash properties exercise a live battle fold.

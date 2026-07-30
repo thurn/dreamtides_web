@@ -30,7 +30,6 @@ import type { DraftState } from "../../types/draft";
 import type {
   DeckEntry,
   DreamAugurySiteRuntime,
-  Dreamsign,
   JourneyState,
   RuntimeShopSlot,
   SiteRuntimeState,
@@ -38,6 +37,10 @@ import type {
   TransfigurationType,
 } from "../../types/journey";
 import { mintEntryId } from "./deck";
+import {
+  MAX_PURGE_PER_VISIT,
+  purgeVisitCost,
+} from "../../purge/purge-pricing";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (OPEN_SITE generation for content-coupled site types)
@@ -184,10 +187,6 @@ function integer(value: unknown): number | null {
   return typeof value === "number" && Number.isInteger(value) ? value : null;
 }
 
-function finiteNumber(value: unknown): number | null {
-  return typeof value === "number" && Number.isFinite(value) ? value : null;
-}
-
 function clampEssence(value: number, cap: number): number {
   return Math.max(0, Math.min(value, cap));
 }
@@ -207,7 +206,7 @@ export function findSite(journey: JourneyState, siteId: string): SiteState | nul
  * dreamscape, belong to it; it must be unvisited; a Battle site must be visited
  * last (every non-Battle sibling already visited).
  */
-function canVisitSite(journey: JourneyState, siteId: string): boolean {
+export function canVisitSite(journey: JourneyState, siteId: string): boolean {
   for (const node of Object.values(journey.atlas.nodes)) {
     const site = node.sites.find((candidate) => candidate.id === siteId);
     if (site === undefined) continue;
@@ -229,7 +228,10 @@ function canVisitSite(journey: JourneyState, siteId: string): boolean {
 }
 
 /** Mark `siteId` visited in `visitedSites` and the atlas (legacy `completeJourneySite`). */
-function completeJourneySite(journey: JourneyState, siteId: string): JourneyState {
+export function completeJourneySite(
+  journey: JourneyState,
+  siteId: string,
+): JourneyState {
   if (!canVisitSite(journey, siteId)) return journey;
   const updatedNodes = { ...journey.atlas.nodes };
   for (const [nodeId, node] of Object.entries(updatedNodes)) {
@@ -759,8 +761,15 @@ export function completeSite(
   payload: Record<string, unknown>,
 ): JourneyState | null {
   const siteId = asString(payload.siteId);
-  if (siteId === null) return null;
-  if (journey.visitedSites.includes(siteId)) return null;
+  if (
+    siteId === null ||
+    journey.screen.type !== "site" ||
+    journey.screen.siteId !== siteId ||
+    journey.activeSiteId !== siteId ||
+    !canVisitSite(journey, siteId)
+  ) {
+    return null;
+  }
   return completeAndReturn(journey, siteId);
 }
 
@@ -769,56 +778,51 @@ export function completeSite(
 // ---------------------------------------------------------------------------
 
 /**
- * `PURGE_DECK_CARDS { entryIds, siteId?, cost?, baneDreamsignIndices? }` —
- * legacy `purgeDeckCards`. Removes every listed deck entry. When `siteId` is
- * present the event is a Purge-site visit: it additionally charges `cost`
- * essence (clamped), removes the bane Dreamsigns at `baneDreamsignIndices` for
- * free (only indices pointing at an actual bane Dreamsign are honored), and
- * completes the site — the whole visit committing atomically. `cost` is
- * production pricing carried on the event, not computed here.
+ * `PURGE_DECK_CARDS { siteId, entryIds }` — remove the selected deck entries,
+ * derive the visit price from authoritative state, charge essence, and complete
+ * the Purge site atomically. Bane cards are free; paid cards use the canonical
+ * visit price ladder and folded discounts.
  *
- * Bounces on a malformed `entryIds` list, when no listed entry is present, or
- * (site path) when the site is already visited (the double-charge guard).
+ * Bounces on malformed or duplicate ids, an ineligible/non-Purge site, an
+ * oversized paid selection, or insufficient essence.
  */
 export function purgeDeckCards(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
   const raw = payload.entryIds;
-  if (!Array.isArray(raw) || !raw.every((id) => typeof id === "string")) {
+  if (
+    !Array.isArray(raw) ||
+    raw.length === 0 ||
+    !raw.every((id) => typeof id === "string")
+  ) {
     return null;
   }
   const targets = new Set<string>(raw);
+  if (targets.size !== raw.length) return null;
   const removed = journey.deck.filter((entry) => targets.has(entry.entryId));
-  if (removed.length === 0) return null;
+  if (removed.length !== targets.size) return null;
   const deck = journey.deck.filter((entry) => !targets.has(entry.entryId));
 
   const siteId = asString(payload.siteId);
-  if (siteId === null) {
-    // Deck-only purge (no site coupling).
-    return { ...journey, deck };
+  if (siteId === null) return null;
+  const site = findSite(journey, siteId);
+  if (
+    site?.type !== "Purge" ||
+    !canVisitSite(journey, siteId) ||
+    journey.screen.type !== "site" ||
+    journey.activeSiteId !== siteId
+  ) {
+    return null;
   }
-
-  // Site purge: double-charge guard, essence charge, free bane-dreamsign
-  // removal, and site completion.
-  if (journey.visitedSites.includes(siteId)) return null;
-
-  const rawCost = finiteNumber(payload.cost) ?? 0;
-  const cost = Math.max(0, rawCost);
+  const paidCount = removed.filter((entry) => !entry.isBane).length;
+  if (paidCount > MAX_PURGE_PER_VISIT) return null;
+  const cost = purgeVisitCost(paidCount, {
+    isEnhanced: site.isEnhanced,
+    essenceDiscountPercent: journey.shopModifiers.essenceDiscountPercent,
+  });
   if (journey.essence < cost) return null;
-  const baneIndicesRaw = Array.isArray(payload.baneDreamsignIndices)
-    ? payload.baneDreamsignIndices
-    : [];
-  const baneIndexSet = new Set<number>(
-    baneIndicesRaw.filter(
-      (index): index is number =>
-        typeof index === "number" && journey.dreamsigns[index]?.isBane === true,
-    ),
-  );
-  const dreamsigns: Dreamsign[] = journey.dreamsigns.filter(
-    (_, index) => !baneIndexSet.has(index),
-  );
   const essence = clampEssence(journey.essence - cost, journey.essenceCap);
 
-  return completeAndReturn({ ...journey, deck, dreamsigns, essence }, siteId);
+  return completeAndReturn({ ...journey, deck, essence }, siteId);
 }

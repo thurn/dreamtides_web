@@ -42,7 +42,6 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { STARTER_CARD_NUMBERS } from "./data/starter-cards";
 import { getSavedJourney } from "./state/saved-journeys";
 import { logEvent } from "./logging";
-import { regenerateAtlasInPlace } from "./atlas/regenerate-atlas";
 import type { RuntimeConfig } from "./runtime/runtime-config";
 import { DECK_VIEWER_SCENE_ID, POOL_VIEWER_SCENE_ID, findQaScene } from "./runtime/qa-scenes";
 import { useJourneyUrlSync } from "./runtime/use-journey-url-sync";
@@ -362,13 +361,8 @@ export function JourneyApp({
   }, []);
 
   const handleRegenerateAtlas = useCallback(() => {
-    regenerateAtlasInPlace({
-      state,
-      journeyContent,
-      updateAtlas: mutations.updateAtlas,
-      setCurrentDreamscape: mutations.setCurrentDreamscape,
-    });
-  }, [state, journeyContent, mutations]);
+    mutations.regenerateAtlas?.();
+  }, [mutations]);
 
   // `?goto=<scene>`: hold a loading screen — rather than the DreamAvatar
   // selection screen — until `bootstrapQaScene` round-trips through Firebase,
@@ -748,7 +742,7 @@ export default function App({
     >
       {(context) => (
         <CoopProvider context={context}>
-          {import.meta.env.DEV && import.meta.env.VITE_FUZZ_TEST === "1" ? (
+          {import.meta.env.VITE_FUZZ_TEST === "1" ? (
             <FuzzProbe />
           ) : null}
           <CoopJourneyProvider journeyContent={journeyContent}>

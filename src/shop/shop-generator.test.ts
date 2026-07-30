@@ -7,12 +7,12 @@ import {
   generateShopInventory,
   effectivePrice,
   replayShopDraftState,
-  rerollCost,
   runtimeSlotsToShopSlots,
   shopSlotsToRuntime,
   STANDARD_CARD_PRICE,
   SPECIALTY_CARD_PRICE,
 } from "./shop-generator";
+import { rerollCost } from "./shop-pricing";
 import { asCardId, asCardName } from "../types/card-identity";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {

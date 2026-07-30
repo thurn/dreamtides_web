@@ -10,11 +10,8 @@ import type {
   CardKeywordModification,
   CardTypeChange,
   CardSourceDebugState,
-  DreamAtlas,
   Dreamsign,
-  JourneyFailureSummary,
   JourneyState,
-  Screen,
   SiteState,
   SiteType,
   TransfigurationType,
@@ -166,20 +163,10 @@ export interface JourneyMutations {
     remainingDreamsignPool: string[],
     source: string,
   ) => void;
-  incrementCompletionLevel: (
-    essenceReward: number,
-    rewardCardNumber: number | null,
-    rewardCardName: string | null,
-  ) => void;
-  setScreen: (screen: Screen) => void;
-  markSiteVisited: (siteId: string) => void;
-  setCurrentDreamscape: (nodeId: string | null) => void;
-  updateAtlas: (atlas: DreamAtlas) => void;
+  enterSite: (siteId: string) => void;
+  travelToDreamscape: (nodeId: string) => void;
+  regenerateAtlas?: (completionLevel?: number) => void;
   setDraftState: (draftState: DraftState, source: string) => void;
-  setFailureSummary: (
-    failureSummary: JourneyFailureSummary | null,
-    source: string,
-  ) => void;
   /**
    * Marks the one-time starter-deck reveal popup as dismissed. Called from
    * the popup's "Continue" button so subsequent reloads of the same room
@@ -209,7 +196,6 @@ export interface JourneyMutations {
   /** Debug-only: set `maxDreamsigns` to `value`. */
   setMaxDreamsigns?: (value: number, source: string) => void;
   /** Debug-only: set `completionLevel` to `value`. */
-  setCompletionLevel?: (value: number, source: string) => void;
   /** Debug-only: set or clear absolute stat overrides on a deck entry. */
   setDeckEntryStatOverride?: (
     entryId: string,
@@ -256,18 +242,13 @@ export interface JourneyMutations {
   /** Remove the deck entry with the given entryId. Mirrors `removeCard`. */
   removeDeckEntry: (entryId: string, source: string) => void;
   /**
-   * Purge the given deck entries at a Purge site: removes the entries, spends
-   * `cost` essence, marks the site visited, and returns to the dreamscape, all
-   * atomically. `baneDreamsignIndices` removes the listed bane Dreamsigns in
-   * the same visit for free (banes are always free to remove at Purge); only
-   * indices that point at a bane Dreamsign are removed.
+   * Purge the given deck entries at a Purge site. The reducer derives the
+   * authoritative price from the selected entries, site, and folded modifiers.
    */
   purgeDeckCards: (
     siteId: string,
     entryIds: readonly string[],
-    cost: number,
     source: string,
-    baneDreamsignIndices?: readonly number[],
   ) => void;
   /** Add a duplicate of the deck entry with the given entryId. */
   duplicateDeckEntry: (entryId: string, source: string) => void;
@@ -291,7 +272,7 @@ export interface JourneyMutations {
   purgeAllBaneCards: (source: string) => void;
   /**
    * Stack a battle-window reward-reduction modifier. Decremented per battle
-   * in `incrementCompletionLevel`; entries at zero drop.
+   * by the authoritative victory transition; entries at zero drop.
    */
   pushBattleRewardModifier: (
     kind: "flat" | "percent",

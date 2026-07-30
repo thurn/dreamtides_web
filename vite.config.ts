@@ -57,28 +57,34 @@ function resolveBuildGitSha(): string {
 
 /** Vite plugin that writes journey log events to disk during development. */
 function journeyLogPlugin(): Plugin {
+  const install = (server: {
+    middlewares: ViteDevServer["middlewares"];
+  }): void => {
+    server.middlewares.use("/api/log", (req, res, next) => {
+      if (req.method !== "POST") {
+        next();
+        return;
+      }
+      let body = "";
+      req.on("data", (chunk: string) => {
+        body += chunk;
+      });
+      req.on("end", () => {
+        const logDir = path.join(__dirname, "logs");
+        fs.mkdirSync(logDir, { recursive: true });
+        fs.appendFileSync(
+          path.join(logDir, "journey-log.jsonl"),
+          body + "\n",
+        );
+        res.writeHead(200, { "Content-Type": "text/plain" });
+        res.end("ok");
+      });
+    });
+  };
   return {
     name: "journey-log-writer",
-    configureServer(server) {
-      server.middlewares.use("/api/log", (req, res, next) => {
-        if (req.method !== "POST") {
-          next();
-          return;
-        }
-        let body = "";
-        req.on("data", (chunk: string) => { body += chunk; });
-        req.on("end", () => {
-          const logDir = path.join(__dirname, "logs");
-          fs.mkdirSync(logDir, { recursive: true });
-          fs.appendFileSync(
-            path.join(logDir, "journey-log.jsonl"),
-            body + "\n",
-          );
-          res.writeHead(200, { "Content-Type": "text/plain" });
-          res.end("ok");
-        });
-      });
-    },
+    configureServer: install,
+    configurePreviewServer: install,
   };
 }
 

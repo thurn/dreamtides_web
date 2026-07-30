@@ -172,7 +172,7 @@ describe("DreamscapeScreenAdapter", () => {
     const mutations = {
       ensureEssenceSiteRuntime: vi.fn(),
       acceptEssenceSite: vi.fn(),
-      setScreen: vi.fn(),
+      enterSite: vi.fn(),
     } as unknown as JourneyMutations;
     setJourneyContext(mutations);
     const container = document.createElement("div");
@@ -181,7 +181,7 @@ describe("DreamscapeScreenAdapter", () => {
 
     act(() => lastScreenProps().onSelectSite("s-essence"));
     expect(mutations.ensureEssenceSiteRuntime).not.toHaveBeenCalled();
-    expect(mutations.setScreen).not.toHaveBeenCalled();
+    expect(mutations.enterSite).not.toHaveBeenCalled();
 
     act(() => lastScreenProps().onInlineRewardAnimationComplete("s-essence"));
     expect(mutations.acceptEssenceSite).toHaveBeenCalledWith("s-essence");
@@ -203,7 +203,7 @@ describe("DreamscapeScreenAdapter", () => {
     const mutations = {
       ensureRewardSiteRuntime: vi.fn(),
       acceptRewardSite: vi.fn(),
-      setScreen: vi.fn(),
+      enterSite: vi.fn(),
     } as unknown as JourneyMutations;
     setJourneyContext(mutations);
     const container = document.createElement("div");
@@ -212,7 +212,7 @@ describe("DreamscapeScreenAdapter", () => {
 
     act(() => lastScreenProps().onSelectSite("s-reward"));
     expect(mutations.ensureRewardSiteRuntime).not.toHaveBeenCalled();
-    expect(mutations.setScreen).not.toHaveBeenCalled();
+    expect(mutations.enterSite).not.toHaveBeenCalled();
 
     act(() => lastScreenProps().onInlineRewardAnimationComplete("s-reward"));
     expect(mutations.acceptRewardSite).toHaveBeenCalledWith("s-reward");
@@ -233,7 +233,7 @@ describe("DreamscapeScreenAdapter", () => {
     const mutations = {
       ensureEssenceSiteRuntime: vi.fn(),
       ensureRewardSiteRuntime: vi.fn(),
-      setScreen: vi.fn(),
+      enterSite: vi.fn(),
     } as unknown as JourneyMutations;
     setJourneyContext(mutations, makeState({ siteRuntime: {} }));
     const container = document.createElement("div");
@@ -247,7 +247,7 @@ describe("DreamscapeScreenAdapter", () => {
     );
     act(() => lastScreenProps().onSelectSite("s-reward"));
     expect(mutations.ensureRewardSiteRuntime).toHaveBeenCalledWith("s-reward");
-    expect(mutations.setScreen).not.toHaveBeenCalled();
+    expect(mutations.enterSite).not.toHaveBeenCalled();
 
     act(() => root.unmount());
   });
@@ -256,7 +256,7 @@ describe("DreamscapeScreenAdapter", () => {
     const mutations = {
       ensureRewardSiteRuntime: vi.fn(),
       acceptRewardSite: vi.fn(),
-      setScreen: vi.fn(),
+      enterSite: vi.fn(),
     } as unknown as JourneyMutations;
     setJourneyContext(
       mutations,
@@ -284,7 +284,7 @@ describe("DreamscapeScreenAdapter", () => {
 
     act(() => lastScreenProps().onInlineRewardAnimationComplete("s-reward"));
 
-    expect(mutations.setScreen).not.toHaveBeenCalled();
+    expect(mutations.enterSite).not.toHaveBeenCalled();
     expect(lastScreenProps().view.replacement).toMatchObject({
       maxDreamsigns: 2,
       pendingDreamsign: { id: "dreamsign-uuid" },
@@ -308,7 +308,7 @@ describe("DreamscapeScreenAdapter", () => {
     const mutations = {
       acceptRewardSite: vi.fn(),
       completeSite: vi.fn(),
-      setScreen: vi.fn(),
+      enterSite: vi.fn(),
     } as unknown as JourneyMutations;
     setJourneyContext(
       mutations,
@@ -380,7 +380,7 @@ describe("DreamscapeScreenAdapter", () => {
       acceptEssenceSite: vi.fn(),
       ensureRewardSiteRuntime: vi.fn(),
       acceptRewardSite: vi.fn(),
-      setScreen: vi.fn(),
+      enterSite: vi.fn(),
     } as unknown as JourneyMutations;
     setJourneyContext(mutations);
     const container = document.createElement("div");
@@ -388,10 +388,7 @@ describe("DreamscapeScreenAdapter", () => {
     act(() => root.render(<DreamscapeScreenAdapter />));
 
     act(() => lastScreenProps().onSelectSite("s-purge"));
-    expect(mutations.setScreen).toHaveBeenCalledWith({
-      type: "site",
-      siteId: "s-purge",
-    });
+    expect(mutations.enterSite).toHaveBeenCalledWith("s-purge");
     expect(mutations.ensureEssenceSiteRuntime).not.toHaveBeenCalled();
 
     act(() => root.unmount());

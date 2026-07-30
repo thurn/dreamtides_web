@@ -30,7 +30,6 @@ import {
   type JourneyMutations,
 } from "./journey-context";
 import { mergeCardKeywordModification } from "../card-type-change";
-import { rerollCost } from "../shop/shop-generator";
 import { buildQaScene, qaSceneLoadsBattle } from "../runtime/qa-scenes";
 import {
   createBattleInitProvider,
@@ -133,7 +132,6 @@ export function CoopJourneyProvider({
       changeMaxEssence: (delta) => dispatch(actions.changeMaxEssence(delta)),
       setEssenceCap: (value) => dispatch(actions.setEssenceCap(value)),
       setMaxDreamsigns: (value) => dispatch(actions.setMaxDreamsigns(value)),
-      setCompletionLevel: (value) => dispatch(actions.setCompletionLevel(value)),
 
       // ---- lifecycle ----
       startJourney: (dreamAvatar) =>
@@ -181,16 +179,11 @@ export function CoopJourneyProvider({
         dispatch(actions.dismissStartingDeckPopup()),
 
       // ---- navigation ----
-      setScreen: (screen) => dispatch(actions.setScreen(screen)),
-      markSiteVisited: (siteId) => dispatch(actions.markSiteVisited(siteId)),
-      setCurrentDreamscape: (nodeId) => {
-        // travelToDreamscape(null) is not a coop intent: the battle-completion
-        // return-to-map path is handled by END_BATTLE(victory), so a null here
-        // is a dead path for journey and is intentionally a no-op.
-        if (nodeId === null) return;
-        dispatch(actions.travelToDreamscape(nodeId));
-      },
-      updateAtlas: (atlas) => dispatch(actions.updateAtlas(atlas)),
+      enterSite: (siteId) => dispatch(actions.enterSite(siteId)),
+      travelToDreamscape: (nodeId) =>
+        dispatch(actions.travelToDreamscape(nodeId)),
+      regenerateAtlas: (completionLevel) =>
+        dispatch(actions.regenerateAtlas(completionLevel)),
 
       // ---- deck & transfiguration ----
       addCard: (cardNumber, source) => {
@@ -239,16 +232,8 @@ export function CoopJourneyProvider({
         dispatch(actions.setDeckEntryType(entryId, typeChange)),
       changeDeckEntryType: (entryId, typeChange) =>
         dispatch(actions.setDeckEntryType(entryId, typeChange)),
-      purgeDeckCards: (siteId, entryIds, cost, _source, baneDreamsignIndices) =>
-        dispatch(
-          actions.purgeDeckCards(entryIds, {
-            siteId,
-            cost,
-            ...(baneDreamsignIndices === undefined
-              ? {}
-              : { baneDreamsignIndices }),
-          }),
-        ),
+      purgeDeckCards: (siteId, entryIds) =>
+        dispatch(actions.purgeDeckCards(siteId, entryIds)),
       purgeRandomBaneCards: (count) =>
         dispatch(actions.purgeRandomBaneCards(count)),
       purgeAllBaneCards: () => dispatch(actions.purgeAllBaneCards()),
@@ -351,13 +336,7 @@ export function CoopJourneyProvider({
           slotIndex,
           ...(purgeIndex === undefined ? {} : { purgeIndex }),
         }),
-      rerollShop: (site) => {
-        // The reducer reads `essenceCost` for a paid reroll; free rerolls (from
-        // shopModifiers) are charged 0 there. Compute the cost the way the
-        // legacy provider did so a paid reroll spends the right essence.
-        const essenceCost = rerollCost(0, site.isEnhanced);
-        emit("REROLL_SHOP", { siteId: site.id, essenceCost });
-      },
+      rerollShop: (site) => dispatch(actions.rerollShop(site.id)),
       grantFreeShopRerolls: (count) =>
         dispatch(actions.grantFreeRerolls(count)),
       applyShopEssenceDiscount: (percent) =>
@@ -419,18 +398,6 @@ export function CoopJourneyProvider({
         dispatch(actions.boostSiteAppearance(siteType, percent, dreamscapes)),
       setCardSourceDebug: publishCardSourceDebug,
 
-      // ---- completion & failure (battle-completion bridges; Task 27) ----
-      // Battle victory/defeat fold through `END_BATTLE`: the reducer's
-      // `applyVictory` bumps the completion level and `applyDefeat` freezes the
-      // failure summary from the terminal board and routes to the `journeyFailed`
-      // screen. The battle screen appends `END_BATTLE` directly; these facade
-      // methods keep the legacy `JourneyMutations` shape mapping onto the same
-      // events. `setFailureSummary` bounces when no battle is in progress.
-      incrementCompletionLevel: () => dispatch(actions.endBattle("victory")),
-      setFailureSummary: (failureSummary) => {
-        if (failureSummary === null) return;
-        dispatch(actions.endBattle("defeat"));
-      },
     };
   }, [actions, append, journeyContent, cardDatabase, publishCardSourceDebug]);
 

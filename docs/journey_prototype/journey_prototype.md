@@ -83,7 +83,8 @@ The important ownership boundaries are:
   exposes the confirmed fold plus optimistic local intents; `useAppend()` and
   `useActions()` are the write surfaces.
 - `src/coop/actions.ts` maps named player actions to one intent event apiece.
-  Payloads carry UUIDs, entry ids, indices, and node ids.
+  Payloads carry UUIDs, entry ids, indices, and node ids. Prices, rewards,
+  outcomes, progression, and generated content are derived in the reducer.
 - `src/state/coop-journey-context.tsx` adapts the folded journey slice and action
   facade to the `JourneyContextValue` interface used by journey screens.
 - `src/App.tsx` loads content and mounts one `RoomGate`, `CoopProvider`,
@@ -105,6 +106,13 @@ commands, undo/redo gestures, rewards, and the return to the atlas therefore
 share the same ordering and conflict rules as journey navigation and site
 choices. Anything both players must agree on is an event; component-local
 interaction state stays in the presenting client.
+
+Cross-domain and terminal events commit their complete handoff in one fold.
+`END_BATTLE`, for example, derives the result from the terminal board and
+atomically commits the reward, Battle-site completion, completion level, Atlas
+expansion, route, modifier expiry, deck cleanup, and battle teardown. Applied
+events pass the shared fold invariants before their state is exposed. See
+[Authoritative Transitions](authoritative_transitions.md).
 
 The hidden package stays out of normal player UI. Debug surfaces can show the
 resolved package, selected optional subset, draft pool size, and the remaining

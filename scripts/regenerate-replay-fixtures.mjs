@@ -113,7 +113,7 @@ function expectOutcomes(label, events, gen, expected) {
 }
 
 // ---------------------------------------------------------------------------
-// (a) journey-only: start -> dreamAvatar -> travel -> open/accept -> shop buy
+// (a) journey-only: start -> dreamAvatar -> open/accept -> shop buy
 // ---------------------------------------------------------------------------
 
 function journeyOnlyFixture() {
@@ -121,7 +121,6 @@ function journeyOnlyFixture() {
   const events = chain("p1", [
     ["START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }],
     ["SELECT_DREAM_AVATAR", { dreamAvatarId: DREAM_AVATAR_ID }],
-    ["TRAVEL_TO_DREAMSCAPE", { nodeId: NODE_ID }],
     ["OPEN_SITE", { siteId: ESSENCE_SITE_ID }],
     ["ACCEPT_ESSENCE", { siteId: ESSENCE_SITE_ID }],
     ["OPEN_SITE", { siteId: SHOP_SITE_ID }],
@@ -134,7 +133,6 @@ function journeyOnlyFixture() {
     4: "applied",
     5: "applied",
     6: "applied",
-    7: "applied",
   });
   return finalize("journey-only", gen, events);
 }
@@ -148,6 +146,7 @@ function battleFixture() {
   // Events up to the prompt-parking command; discover the promptId by folding.
   const prefix = chain("p1", [
     ["START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }],
+    ["ENTER_SITE", { siteId: BATTLE_SITE_ID }],
     ["BEGIN_BATTLE", { siteId: BATTLE_SITE_ID }],
     ["BATTLE_COMMAND", moveToFront(BATTLE_CARD_DETERMINISTIC, DETERMINISTIC_SLOT)],
     ["BATTLE_COMMAND", drawDreamwell()],
@@ -155,12 +154,17 @@ function battleFixture() {
   const parked = replayLog({ genesis: gen, events: prefix });
   const promptId = parked.finalState.battle?.pendingPrompt?.promptId;
   if (typeof promptId !== "number") {
-    throw new Error("battle fixture: Dreamwell reveal did not park a prompt");
+    throw new Error(
+      `battle fixture: Dreamwell reveal did not park a prompt: ${JSON.stringify(
+        parked.outcomes,
+      )}`,
+    );
   }
   const events = [
     ...prefix,
-    ev(5, "RESOLVE_PROMPT", { promptId, resolution: { kind: "foresee" } }, "p1", 4),
-    ev(6, "END_BATTLE", { result: "victory" }, "p1", 5),
+    ev(6, "RESOLVE_PROMPT", { promptId, resolution: { kind: "foresee" } }, "p1", 5),
+    ev(7, "BATTLE_COMMAND", { command: { id: "SKIP_TO_REWARDS" } }, "p1", 6),
+    ev(8, "END_BATTLE", {}, "p1", 7),
   ];
   expectOutcomes("battle", events, gen, {
     1: "applied",
@@ -169,11 +173,19 @@ function battleFixture() {
     4: "applied",
     5: "applied",
     6: "applied",
+    7: "applied",
+    8: "applied",
   });
   // Victory clears the battle slice.
   const done = replayLog({ genesis: gen, events });
   if (done.finalState.battle !== null) {
     throw new Error("battle fixture: END_BATTLE victory did not clear the battle");
+  }
+  if (
+    done.finalState.journey.completionLevel !== 1 ||
+    done.finalState.journey.atlas.nodes[NODE_ID]?.state !== "completed"
+  ) {
+    throw new Error("battle fixture: END_BATTLE did not commit Atlas progress");
   }
   return finalize("battle", gen, events);
 }
@@ -190,12 +202,16 @@ function adversarialFixture() {
     // bob's applied non-neutral event in its window and BOUNCES (CAS rule 3).
     ev(2, "ADJUST_ESSENCE", { delta: 10 }, "bob", 1),
     ev(3, "ADJUST_ESSENCE", { delta: 20 }, "alice", 1),
-    // OPEN_SITE race — both apply (CAS-exempt); bob's is an idempotent no-op.
-    ev(4, "OPEN_SITE", { siteId: ESSENCE_SITE_ID }, "alice", 1),
-    ev(5, "OPEN_SITE", { siteId: ESSENCE_SITE_ID }, "bob", 1),
+    ev(4, "ENTER_SITE", { siteId: ESSENCE_SITE_ID }, "alice", 3),
+    // OPEN_SITE race — both are accepted at the log boundary; bob's reducer
+    // attempt observes the already-open runtime and bounces.
+    ev(5, "OPEN_SITE", { siteId: ESSENCE_SITE_ID }, "alice", 4),
+    ev(6, "OPEN_SITE", { siteId: ESSENCE_SITE_ID }, "bob", 4),
+    ev(7, "ACCEPT_ESSENCE", { siteId: ESSENCE_SITE_ID }, "alice", 6),
+    ev(8, "ENTER_SITE", { siteId: BATTLE_SITE_ID }, "alice", 7),
     // Begin a battle and park a Dreamwell Foresee prompt.
-    ev(6, "BEGIN_BATTLE", { siteId: BATTLE_SITE_ID }, "alice", 5),
-    ev(7, "BATTLE_COMMAND", drawDreamwell(), "alice", 6),
+    ev(9, "BEGIN_BATTLE", { siteId: BATTLE_SITE_ID }, "alice", 8),
+    ev(10, "BATTLE_COMMAND", drawDreamwell(), "alice", 9),
   ];
   const parked = replayLog({ genesis: gen, events: prefix });
   const promptId = parked.finalState.battle?.pendingPrompt?.promptId;
@@ -205,19 +221,22 @@ function adversarialFixture() {
   const events = [
     ...prefix,
     // Prompt race — alice's matching resolve applies, bob's duplicate bounces.
-    ev(8, "RESOLVE_PROMPT", { promptId, resolution: { kind: "foresee" } }, "alice", 7),
-    ev(9, "RESOLVE_PROMPT", { promptId, resolution: { kind: "foresee" } }, "bob", 7),
+    ev(11, "RESOLVE_PROMPT", { promptId, resolution: { kind: "foresee" } }, "alice", 10),
+    ev(12, "RESOLVE_PROMPT", { promptId, resolution: { kind: "foresee" } }, "bob", 10),
   ];
   expectOutcomes("adversarial", events, gen, {
     1: "applied",
     2: "applied",
     3: "bounced", // CAS intervening-window bounce
     4: "applied",
-    5: "bounced", // OPEN_SITE race loser observes the already-open site
-    6: "applied",
+    5: "applied",
+    6: "bounced", // OPEN_SITE race loser observes the already-open site
     7: "applied",
-    8: "applied", // prompt race winner
-    9: "bounced", // prompt race loser
+    8: "applied",
+    9: "applied",
+    10: "applied",
+    11: "applied", // prompt race winner
+    12: "bounced", // prompt race loser
   });
   return finalize("adversarial", gen, events);
 }

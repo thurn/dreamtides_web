@@ -6,15 +6,10 @@
 // into the `TypedGameEvent` discriminated union — plus the classification sets
 // (CAS-exempt, decision-neutral) the root CAS policy consults.
 //
-// Every row of the plan's "Legacy mutation → event mapping" table plus the
-// battle events line appears here. Domain reducer cases land per-task; until a
-// type has a case the root reducer routes it to a bounce (never a throw), so
-// declaring a type here is safe before its behaviour exists.
-//
-// Payloads use UUIDs and indices only — never card names (AGENTS.md). Complex
-// payload shapes (screens, atlases, snapshots, draft state, battle commands)
-// are typed as `unknown` here so this file stays import-light; the owning task
-// narrows them when it implements the domain case.
+// Payloads use UUIDs, selections, and indices — never card names (AGENTS.md).
+// Derived outcomes, prices, rewards, routes, and progression stay in the
+// reducer. Complex debug snapshots and battle commands are typed as `unknown`
+// here so this file stays import-light; the owning domain case validates them.
 
 // ---------------------------------------------------------------------------
 // Payload map — the single source of truth for event type → payload shape.
@@ -52,7 +47,6 @@ export interface EventPayloads {
   ADJUST_ESSENCE_CAP: { delta: number };
   SET_ESSENCE_CAP: { value: number };
   SET_MAX_DREAMSIGNS: { value: number };
-  SET_COMPLETION_LEVEL: { value: number };
 
   // --- lifecycle ---
   START_JOURNEY: Record<string, unknown>;
@@ -64,9 +58,9 @@ export interface EventPayloads {
   REROLL_DREAM_AVATAR_OFFER: Record<string, never>;
 
   // --- navigation ---
-  SET_SCREEN: { screen: unknown; activeSiteId?: string | null };
+  ENTER_SITE: { siteId: string };
   TRAVEL_TO_DREAMSCAPE: { nodeId: string };
-  MARK_SITE_VISITED: { siteId: string };
+  REGENERATE_ATLAS: { completionLevel?: number };
   DISMISS_STARTING_DECK_POPUP: Record<string, never>;
 
   // --- deck & transfiguration ---
@@ -77,7 +71,7 @@ export interface EventPayloads {
     source?: unknown;
   };
   REMOVE_DECK_ENTRY: { entryId: string };
-  PURGE_DECK_CARDS: { entryIds: string[] };
+  PURGE_DECK_CARDS: { siteId: string; entryIds: string[] };
   DUPLICATE_DECK_ENTRY: { entryId: string };
   SET_DECK_ENTRY_STAT_OVERRIDE: { entryId: string; override: unknown };
   SET_DECK_ENTRY_KEYWORDS: { entryId: string; keywords: unknown };
@@ -134,11 +128,10 @@ export interface EventPayloads {
     toSiteType: string;
   };
   ADD_SITE_TO_DREAMSCAPE: { nodeId: string; siteType: string };
-  UPDATE_ATLAS: { atlas: unknown };
   SET_CARD_SOURCE_DEBUG: { state: unknown };
 
   // --- battle lifecycle bridges ---
-  END_BATTLE: { result: "victory" | "defeat" };
+  END_BATTLE: Record<string, never>;
 
   // --- battle events (no legacy 1:1) ---
   BEGIN_BATTLE: { siteId: string; seedOverride?: number };
@@ -227,7 +220,6 @@ export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<string> =
     "COMPLETE_CARD_TUTORIAL_GUIDANCE",
     "SET_CARD_NOTE",
     "SET_CARD_SOURCE_DEBUG",
-    "MARK_SITE_VISITED",
     "DISMISS_STARTING_DECK_POPUP",
     "OPEN_SITE",
     "ENTER_DRAFT_SITE",
@@ -259,15 +251,14 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   ADJUST_ESSENCE_CAP: true,
   SET_ESSENCE_CAP: true,
   SET_MAX_DREAMSIGNS: true,
-  SET_COMPLETION_LEVEL: true,
   START_JOURNEY: true,
   RESET_JOURNEY: true,
   LOAD_STATE: true,
   SELECT_DREAM_AVATAR: true,
   REROLL_DREAM_AVATAR_OFFER: true,
-  SET_SCREEN: true,
+  ENTER_SITE: true,
   TRAVEL_TO_DREAMSCAPE: true,
-  MARK_SITE_VISITED: true,
+  REGENERATE_ATLAS: true,
   DISMISS_STARTING_DECK_POPUP: true,
   ADD_CARD: true,
   REMOVE_DECK_ENTRY: true,
@@ -310,7 +301,6 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   BOOST_SITE_APPEARANCE: true,
   REPLACE_SITE_TYPE: true,
   ADD_SITE_TO_DREAMSCAPE: true,
-  UPDATE_ATLAS: true,
   SET_CARD_SOURCE_DEBUG: true,
   END_BATTLE: true,
   BEGIN_BATTLE: true,

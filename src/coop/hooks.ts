@@ -50,6 +50,7 @@ import { subscribeToLog } from "../eventlog/subscribe";
 import { connectedClientCount, decodePresence } from "../eventlog/room";
 import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
 import type { FoldState } from "../rules/fold-state";
+import { logEvent } from "../logging";
 import type { RoomReadyContext } from "./RoomGate";
 import { makeActions, type AppendFn, type CoopActions } from "./actions";
 import {
@@ -233,6 +234,41 @@ export function CoopProvider({
               detail.stateBefore,
               detail.stateAfter,
             );
+            if (
+              event.type === "END_BATTLE" &&
+              detail.stateBefore.battle?.board.result === "victory"
+            ) {
+              const before = detail.stateBefore;
+              const after = detail.stateAfter;
+              const init = before.battle!.init;
+              const completedNode = before.journey.atlas.nodes[
+                init.dreamscapeId ?? ""
+              ];
+              const availableForwardIds = (completedNode?.forwardIds ?? [])
+                .filter(
+                  (nodeId) =>
+                    after.journey.atlas.nodes[nodeId]?.state === "available",
+                );
+              logEvent("battle_victory_committed", {
+                coopSeq: seq,
+                battleId: init.battleId,
+                siteId: init.siteId,
+                dreamscapeId: init.dreamscapeId,
+                essenceReward: init.essenceReward,
+                essenceBefore: before.journey.essence,
+                essenceAfter: after.journey.essence,
+                completionLevelBefore: before.journey.completionLevel,
+                completionLevelAfter: after.journey.completionLevel,
+                completedNodeState:
+                  after.journey.atlas.nodes[init.dreamscapeId ?? ""]?.state ??
+                  null,
+                availableForwardIds,
+                availableForwardDreamscapeIds: availableForwardIds.map(
+                  (nodeId) =>
+                    after.journey.atlas.nodes[nodeId]?.dreamscapeId ?? null,
+                ),
+              });
+            }
           }
           if (event.type === "BEGIN_BATTLE") {
             settleDeferredOpponentLog(seq, owned && outcome === "applied");

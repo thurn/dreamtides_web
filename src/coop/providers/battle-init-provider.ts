@@ -27,6 +27,7 @@ import { findSite } from "../../rules/journey/sites";
 import type { BattleFoldState } from "../../rules/fold-state";
 import { emptyDawnFired } from "../../rules/battle/fold";
 import type {
+  BattleCompletionProvider,
   BattleInitProvider,
   TutorialBattleInitProvider,
 } from "../../rules/battle/battle-events";
@@ -35,6 +36,7 @@ import type {
   TutorialAction,
   TutorialBattleConfiguration,
 } from "../../types/tutorial";
+import { advanceAtlas } from "../../atlas/atlas-generator";
 
 const deferredOpponentLogs = new Map<number, () => void>();
 
@@ -156,6 +158,41 @@ export function createBattleInitProvider(
         pendingPrompt: null,
         dawnFired: emptyDawnFired(),
       };
+    },
+  };
+}
+
+/**
+ * Advance the live Atlas from authoritative folded journey/battle state.
+ * Content is pinned by the room build and every random draw comes from the
+ * `END_BATTLE` event stream.
+ */
+export function createBattleCompletionProvider(
+  content: JourneyContent,
+): BattleCompletionProvider {
+  return {
+    advanceAtlas: ({ journey, battle, completionLevel, rng }) => {
+      const dreamscapeId = battle.init.dreamscapeId;
+      if (dreamscapeId === null) return null;
+      let drawIndex = 0;
+      return advanceAtlas(
+        journey.atlas,
+        dreamscapeId,
+        completionLevel,
+        journey.dreamscapeModifiers.length === 0
+          ? {}
+          : { dreamscapeModifiers: journey.dreamscapeModifiers },
+        {
+          dreamscapes: content.dreamscapes,
+          atlasConfig: content.atlasConfig,
+          dreamsignPoolIds: journey.remainingDreamsignPool,
+          apollyonIncarnations: content.apollyonIncarnations,
+        },
+        {
+          logEvents: false,
+          rng: () => rng(drawIndex++),
+        },
+      );
     },
   };
 }

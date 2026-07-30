@@ -16,9 +16,6 @@ export const SPECIALTY_CARD_PRICE = 200;
 /** Fixed price for dreamsign items, paid in essence. */
 const DREAMSIGN_ESSENCE_PRICE = 50;
 
-/** Base cost for a shop reroll, paid in essence. */
-const REROLL_ESSENCE_COST = 50;
-
 /**
  * Standard Card Shop composition: 5 cards to purchase and no dreamsigns.
  * Dreamsigns are sold exclusively at the Dreamsign Market, which overrides
@@ -156,12 +153,6 @@ export function effectivePrice(
   return discountPercent === 0
     ? slot.basePrice
     : Math.round(slot.basePrice * (1 - discountPercent / 100));
-}
-
-/** Computes the essence reroll cost. Enhanced shops reroll for free. */
-export function rerollCost(_rerollCount: number, isEnhanced: boolean): number {
-  if (isEnhanced) return 0;
-  return REROLL_ESSENCE_COST;
 }
 
 export function shopSlotsToRuntime(

@@ -16,10 +16,13 @@ import type {
 } from "../eventlog/types";
 import { genesisLogNode } from "../eventlog/room";
 import type { FoldState } from "../rules/fold-state";
+import { foldInvariantViolations } from "../rules/invariants";
 import {
   BATTLE_SITE_ID,
   DREAM_AVATAR_ID,
   ESSENCE_SITE_ID,
+  NEXT_NODE_ID,
+  NODE_ID,
 } from "../rules/replay/fixture-providers";
 import {
   GAME_ENGINE_CONFIG,
@@ -146,16 +149,47 @@ function stateAwareDraft(state: FoldState, value: number): EventDraft {
     };
   }
   if (state.battle !== null) {
+    if (state.battle.board.result !== null) {
+      return { type: "END_BATTLE", payload: {} };
+    }
     if (value % 5 === 0) {
-      return { type: "END_BATTLE", payload: { result: "victory" } };
+      return {
+        type: "BATTLE_COMMAND",
+        payload: { command: { id: "SKIP_TO_REWARDS" } },
+      };
     }
     return battleDebugDelta(value);
   }
-  if (value % 5 === 0) {
+  if (state.journey.screen.type === "site") {
+    const siteId = state.journey.screen.siteId;
+    const site = state.journey.atlas.nodes[
+      state.journey.currentDreamscape ?? ""
+    ]?.sites.find((candidate) => candidate.id === siteId);
+    return site?.type === "Battle"
+      ? { type: "BEGIN_BATTLE", payload: { siteId } }
+      : { type: "COMPLETE_SITE", payload: { siteId } };
+  }
+  const current =
+    state.journey.currentDreamscape === null
+      ? undefined
+      : state.journey.atlas.nodes[state.journey.currentDreamscape];
+  const nextSite = current?.sites.find(
+    (site) =>
+      !site.isVisited &&
+      !state.journey.visitedSites.includes(site.id) &&
+      (site.type !== "Battle" ||
+        current.sites.every(
+          (candidate) =>
+            candidate.type === "Battle" ||
+            candidate.isVisited ||
+            state.journey.visitedSites.includes(candidate.id),
+        )),
+  );
+  if (nextSite !== undefined) {
     return {
-      type: "BEGIN_BATTLE",
-      payload: { siteId: BATTLE_SITE_ID },
-      intentKey: `fuzz:battle:${state.journey.runId}`,
+      type: "ENTER_SITE",
+      payload: { siteId: nextSite.id },
+      intentKey: `fuzz:enter:${state.journey.runId}:${nextSite.id}`,
     };
   }
   if (value % 3 === 0) {
@@ -418,6 +452,14 @@ export class CoopFuzzRoom {
     if (hashes.size !== 1) {
       throw new Error(`clients did not converge: ${[...hashes].join(", ")}`);
     }
+    const violations = foldInvariantViolations(canonical.finalState);
+    if (violations.length > 0) {
+      throw new Error(
+        `semantic fold invariants failed: ${violations
+          .map((violation) => `${violation.code}:${violation.detail}`)
+          .join(", ")}`,
+      );
+    }
 
     const appliedKeys = new Set<string>();
     for (const outcome of canonical.outcomes) {
@@ -447,6 +489,35 @@ export async function runCoopFuzz(options: {
   runs: number;
   operations?: number;
 }): Promise<void> {
+  const victoryRoom = new CoopFuzzRoom();
+  try {
+    victoryRoom.deliverBoth("object");
+    for (let step = 0; step < 12; step += 1) {
+      await victoryRoom.submitStateAware("publisher", 5);
+      victoryRoom.deliverBoth("firebase-omissions");
+      if (
+        victoryRoom.replay().finalState.journey.completionLevel === 1
+      ) {
+        break;
+      }
+    }
+    victoryRoom.assertHealthy();
+    const victory = victoryRoom.replay().finalState;
+    if (
+      victory.battle !== null ||
+      victory.journey.completionLevel !== 1 ||
+      victory.journey.essence !== 375 ||
+      victory.journey.atlas.nodes[NODE_ID]?.state !== "completed" ||
+      victory.journey.atlas.nodes[NEXT_NODE_ID]?.state !== "available" ||
+      victory.journey.atlas.nodes[NEXT_NODE_ID]?.dreamscapeId === null ||
+      !victory.journey.visitedSites.includes(BATTLE_SITE_ID)
+    ) {
+      throw new Error("deterministic battle-victory sentinel failed");
+    }
+  } finally {
+    victoryRoom.close();
+  }
+
   const poisonRoom = new CoopFuzzRoom();
   try {
     poisonRoom.deliverBoth("firebase-omissions");

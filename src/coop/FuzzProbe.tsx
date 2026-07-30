@@ -37,9 +37,10 @@ function copyState(state: FoldState): FoldState {
 }
 
 /**
- * Dev-only, read-only automation seam. It exposes copies of the two fold
+ * Build-flagged, read-only automation seam. It exposes copies of the two fold
  * states plus stable hashes and identities; callers cannot append events or
- * mutate live state through this surface.
+ * mutate live state through this surface. Production builds omit it unless the
+ * certification-only VITE_FUZZ_TEST flag is explicitly enabled.
  */
 export function FuzzProbe() {
   const clientId = useClientId();
@@ -48,7 +49,7 @@ export function FuzzProbe() {
   const confirmedState = useConfirmedGameState();
 
   useEffect(() => {
-    if (!import.meta.env.DEV || import.meta.env.VITE_FUZZ_TEST !== "1") {
+    if (import.meta.env.VITE_FUZZ_TEST !== "1") {
       return;
     }
 

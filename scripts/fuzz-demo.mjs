@@ -18,6 +18,10 @@ function option(name, fallback) {
   return index === -1 ? fallback : process.argv[index + 1];
 }
 
+function hasFlag(name) {
+  return process.argv.includes(name);
+}
+
 function positiveInteger(name, fallback) {
   const raw = option(name, String(fallback));
   const value = Number(raw);
@@ -49,7 +53,7 @@ async function waitForHttp(url, timeoutMs = 60_000) {
   throw new Error(`timed out waiting for ${url}`);
 }
 
-async function startServer(port) {
+async function startServer(port, builtArtifact) {
   const output = [];
   let databasePort = null;
   let ready = false;
@@ -61,7 +65,12 @@ async function startServer(port) {
   });
   const child = spawn(
     process.execPath,
-    ["scripts/dev-with-emulator.mjs", "--port", String(port)],
+    [
+      "scripts/dev-with-emulator.mjs",
+      ...(builtArtifact ? ["--built-artifact"] : []),
+      "--port",
+      String(port),
+    ],
     {
       cwd: process.cwd(),
       env: { ...process.env, VITE_FUZZ_TEST: "1" },
@@ -306,6 +315,10 @@ async function battleScenario(baseUrl, seed, host, publisher, actions) {
   await publisher.goto(url);
   await waitForProbe(publisher);
   await waitForConvergence(host, publisher);
+  const before = await snapshot(host);
+  if (before?.confirmedState.battle === null) {
+    throw new Error("battle scenario has no authoritative battle");
+  }
 
   const openInspector = host.getByRole("button", {
     name: "Open battle inspector",
@@ -332,6 +345,86 @@ async function battleScenario(baseUrl, seed, host, publisher, actions) {
   await increasePoints.waitFor({ state: "visible", timeout: 30_000 });
   await clickRecorded(host, increasePoints, "host", actions);
   await waitForConvergence(host, publisher);
+
+  const endBattleSection = host.getByText("End Battle", { exact: true });
+  await endBattleSection.scrollIntoViewIfNeeded();
+  await endBattleSection.waitFor({ state: "visible", timeout: 30_000 });
+  await clickRecorded(host, endBattleSection, "host", actions);
+  const skipToRewards = host.getByRole("button", {
+    name: "Skip to Rewards",
+    exact: true,
+  });
+  await skipToRewards.waitFor({ state: "visible", timeout: 30_000 });
+  await clickRecorded(host, skipToRewards, "host", actions);
+  await host.waitForFunction(
+    () =>
+      window.__questFuzzProbe?.snapshot().confirmedState.battle?.board.result ===
+      "victory",
+    null,
+    { timeout: 60_000 },
+  );
+
+  const continueReward = host.getByRole("button", {
+    name: "Continue",
+    exact: true,
+  });
+  await continueReward.waitFor({ state: "visible", timeout: 30_000 });
+  await clickRecorded(host, continueReward, "host", actions);
+  await host.waitForFunction(
+    () => {
+      const probe = window.__questFuzzProbe?.snapshot();
+      return probe?.battleId === null && probe.screenType === "atlas";
+    },
+    null,
+    { timeout: 60_000 },
+  );
+  await waitForConvergence(host, publisher);
+
+  const assertVictoryHandoff = async (page, label) => {
+    const after = await snapshot(page);
+    const battleInit = before.confirmedState.battle.init;
+    const sourceNode =
+      before.confirmedState.journey.atlas.nodes[battleInit.dreamscapeId];
+    const afterJourney = after.confirmedState.journey;
+    const availableForwardIds = sourceNode.forwardIds.filter(
+      (nodeId) => afterJourney.atlas.nodes[nodeId]?.state === "available",
+    );
+    const expectedEssence = Math.min(
+      before.confirmedState.journey.essenceCap,
+      before.confirmedState.journey.essence + battleInit.essenceReward,
+    );
+    if (
+      after.confirmedState.battle !== null ||
+      afterJourney.screen.type !== "atlas" ||
+      afterJourney.currentDreamscape !== null ||
+      afterJourney.completionLevel !==
+        before.confirmedState.journey.completionLevel + 1 ||
+      afterJourney.essence !== expectedEssence ||
+      afterJourney.atlas.nodes[battleInit.dreamscapeId]?.state !==
+        "completed" ||
+      !afterJourney.visitedSites.includes(battleInit.siteId) ||
+      availableForwardIds.length === 0 ||
+      availableForwardIds.some(
+        (nodeId) => afterJourney.atlas.nodes[nodeId]?.dreamscapeId === null,
+      )
+    ) {
+      throw new Error(`${label} observed an incomplete victory handoff`);
+    }
+  };
+  await assertVictoryHandoff(host, "host");
+  await assertVictoryHandoff(publisher, "publisher");
+
+  await Promise.all([host.reload(), publisher.reload()]);
+  actions.push({
+    at: new Date().toISOString(),
+    page: "both",
+    action: "reload",
+    target: "completed battle room",
+  });
+  await Promise.all([waitForProbe(host), waitForProbe(publisher)]);
+  await waitForConvergence(host, publisher);
+  await assertVictoryHandoff(host, "host after reload");
+  await assertVictoryHandoff(publisher, "publisher after reload");
   return { game, url };
 }
 
@@ -721,6 +814,7 @@ async function main() {
   const seed = positiveInteger("--seed", 20260729);
   const port = positiveInteger("--port", 5197);
   const runs = positiveInteger("--runs", profile === "soak" ? 1000 : 1);
+  const builtArtifact = hasFlag("--built");
   const durationMinutes = Number(
     option("--duration-minutes", profile === "soak" ? "60" : "5"),
   );
@@ -733,7 +827,7 @@ async function main() {
   const suppliedBaseUrl = option("--base-url", null);
   const server =
     suppliedBaseUrl === null
-      ? await startServer(port)
+      ? await startServer(port, builtArtifact)
       : {
           baseUrl: suppliedBaseUrl,
           databasePort: () => null,

@@ -71,7 +71,6 @@ export interface CoopActions {
   changeMaxEssence: (delta: number) => Promise<number>;
   setEssenceCap: (value: number) => Promise<number>;
   setMaxDreamsigns: (value: number) => Promise<number>;
-  setCompletionLevel: (value: number) => Promise<number>;
 
   // --- lifecycle ---
   startJourney: (payload?: Record<string, unknown>) => Promise<number>;
@@ -83,9 +82,9 @@ export interface CoopActions {
   rerollDreamAvatarOffer: () => Promise<number>;
 
   // --- navigation ---
-  setScreen: (screen: unknown, activeSiteId?: string | null) => Promise<number>;
+  enterSite: (siteId: string) => Promise<number>;
   travelToDreamscape: (nodeId: string) => Promise<number>;
-  markSiteVisited: (siteId: string) => Promise<number>;
+  regenerateAtlas: (completionLevel?: number) => Promise<number>;
   dismissStartingDeckPopup: () => Promise<number>;
 
   // --- deck & transfiguration ---
@@ -97,12 +96,8 @@ export interface CoopActions {
   }) => Promise<number>;
   removeDeckEntry: (entryId: string) => Promise<number>;
   purgeDeckCards: (
+    siteId: string,
     entryIds: readonly string[],
-    options?: {
-      siteId?: string;
-      cost?: number;
-      baneDreamsignIndices?: readonly number[];
-    },
   ) => Promise<number>;
   duplicateDeckEntry: (entryId: string) => Promise<number>;
   setDeckEntryStatOverride: (
@@ -178,11 +173,10 @@ export interface CoopActions {
     toSiteType: string,
   ) => Promise<number>;
   addSiteToDreamscape: (nodeId: string, siteType: string) => Promise<number>;
-  updateAtlas: (atlas: unknown) => Promise<number>;
   setCardSourceDebug: (state: unknown) => Promise<number>;
 
   // --- battle lifecycle bridges ---
-  endBattle: (result: "victory" | "defeat") => Promise<number>;
+  endBattle: () => Promise<number>;
 
   // --- battle events ---
   beginBattle: (
@@ -334,7 +328,6 @@ export function makeActions(append: AppendFn): CoopActions {
     changeMaxEssence: (delta) => emit("ADJUST_ESSENCE_CAP", { delta }),
     setEssenceCap: (value) => emit("SET_ESSENCE_CAP", { value }),
     setMaxDreamsigns: (value) => emit("SET_MAX_DREAMSIGNS", { value }),
-    setCompletionLevel: (value) => emit("SET_COMPLETION_LEVEL", { value }),
 
     // --- lifecycle ---
     startJourney: (payload = {}) => emit("START_JOURNEY", { ...payload }),
@@ -351,26 +344,22 @@ export function makeActions(append: AppendFn): CoopActions {
     rerollDreamAvatarOffer: () => emit("REROLL_DREAM_AVATAR_OFFER", {}),
 
     // --- navigation ---
-    setScreen: (screen, activeSiteId) =>
-      emit(
-        "SET_SCREEN",
-        activeSiteId === undefined ? { screen } : { screen, activeSiteId },
-      ),
+    enterSite: (siteId) => emit("ENTER_SITE", { siteId }),
     travelToDreamscape: (nodeId) => emit("TRAVEL_TO_DREAMSCAPE", { nodeId }),
-    markSiteVisited: (siteId) => emit("MARK_SITE_VISITED", { siteId }),
+    regenerateAtlas: (completionLevel) =>
+      emit(
+        "REGENERATE_ATLAS",
+        completionLevel === undefined ? {} : { completionLevel },
+      ),
     dismissStartingDeckPopup: () => emit("DISMISS_STARTING_DECK_POPUP", {}),
 
     // --- deck & transfiguration ---
     addCard: (options) => emit("ADD_CARD", { ...options }),
     removeDeckEntry: (entryId) => emit("REMOVE_DECK_ENTRY", { entryId }),
-    purgeDeckCards: (entryIds, options) =>
+    purgeDeckCards: (siteId, entryIds) =>
       emit("PURGE_DECK_CARDS", {
+        siteId,
         entryIds: [...entryIds],
-        ...(options?.siteId === undefined ? {} : { siteId: options.siteId }),
-        ...(options?.cost === undefined ? {} : { cost: options.cost }),
-        ...(options?.baneDreamsignIndices === undefined
-          ? {}
-          : { baneDreamsignIndices: [...options.baneDreamsignIndices] }),
       }),
     duplicateDeckEntry: (entryId) => emit("DUPLICATE_DECK_ENTRY", { entryId }),
     setDeckEntryStatOverride: (entryId, override) =>
@@ -466,11 +455,10 @@ export function makeActions(append: AppendFn): CoopActions {
       emit("REPLACE_SITE_TYPE", { nodeId, fromSiteType, toSiteType }),
     addSiteToDreamscape: (nodeId, siteType) =>
       emit("ADD_SITE_TO_DREAMSCAPE", { nodeId, siteType }),
-    updateAtlas: (atlas) => emit("UPDATE_ATLAS", { atlas }),
     setCardSourceDebug: (state) => emit("SET_CARD_SOURCE_DEBUG", { state }),
 
     // --- battle lifecycle bridges ---
-    endBattle: (result) => emit("END_BATTLE", { result }),
+    endBattle: () => emit("END_BATTLE", {}),
 
     // --- battle events ---
     beginBattle: (siteId, seedOverride) =>

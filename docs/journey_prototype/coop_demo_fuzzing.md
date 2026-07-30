@@ -18,9 +18,12 @@ finishes by requiring:
 - both clients to reach the canonical room head;
 - both confirmed state hashes to match a fresh replay;
 - an empty fold-error and divergence buffer;
-- at most one applied event for each logical intent key.
+- at most one applied event for each logical intent key;
+- an empty semantic fold-invariant violation set.
 
-Each model invocation also runs two deterministic sentinels: a malformed
+Each model invocation also runs three deterministic sentinels: a complete
+battle victory must atomically commit reward, Battle-site completion, Atlas
+progress, assigned frontier, routing, and teardown; a malformed
 committed event must be contained, reported by both clients, and converge; a
 205-event schedule must compact and converge from a non-zero base sequence and
 encoded snapshot.
@@ -34,11 +37,14 @@ npm run fuzz:coop -- --seed 20260729 --runs 500 --operations 35
 Fast-check prints the seed and shrink path for a failing case. Reusing the
 printed seed reproduces the generated schedule.
 
-The browser harness starts an isolated Firebase Database emulator and Vite
-server, launches publisher and host contexts, and drives the visible UI. The
+The browser harness starts an isolated Firebase Database emulator and serves a
+fresh production-style Vite build, launches publisher and host contexts, and
+drives the visible UI. The
 smoke profile covers the fixed tutorial Dream Avatar selection, a second-client
 join, a playable battle, **Control Opponent**, and an opponent score edit
-through the battle inspector. The rehearsal profile enters through `/main`,
+through the battle inspector. It then skips to rewards, continues to the Atlas,
+checks the complete victory handoff on both clients, reloads both clients, and
+checks the persisted fold again. The rehearsal profile enters through `/main`,
 plays all authored tutorial actions at accelerated playback, waits for the
 shared live-battle handoff, and then runs the avatar and cooperative battle
 scenarios. The soak profile repeats smoke runs for a bounded duration with a new
@@ -46,6 +52,7 @@ deterministic seed per room.
 
 ```bash
 npm run fuzz:demo -- --profile smoke --seed 20260729 --runs 1
+npm run fuzz:demo:built
 npm run fuzz:demo -- --profile rehearsal --seed 20260729 --runs 1
 npm run fuzz:demo -- --profile soak --seed 20260729 --duration-minutes 60
 ```
@@ -65,7 +72,8 @@ npx playwright install chromium
 
 ## Browser oracle
 
-`VITE_FUZZ_TEST=1` installs `window.__questFuzzProbe` in development builds.
+`VITE_FUZZ_TEST=1` installs `window.__questFuzzProbe` in the isolated
+certification build.
 The probe is read-only: `snapshot()` returns copies of displayed and confirmed
 fold state together with the confirmed head, canonical hashes, client id,
 controller id, route, screen type, and battle id. The production bundle and
@@ -110,9 +118,11 @@ npx playwright show-trace artifacts/coop-fuzz/<run>/run-<seed>/host-trace.zip
 
 The room's persisted `fold_error` record includes the committed sequence,
 event type, actor, nonce, intent key, message, stack, before/after state hashes,
-observer client id, and game id. This record can be correlated with the RTDB
-room dump and the action timeline without relying on a browser console that may
-have closed.
+observer client id, game id, and invariant codes when the failure is semantic.
+Successful terminal victories emit `battle_victory_committed` with the reward,
+completion delta, completed node state, and assigned frontier. These records can
+be correlated with the RTDB room dump and the action timeline without relying
+on a browser console that may have closed.
 
 ## Pre-demo gate
 

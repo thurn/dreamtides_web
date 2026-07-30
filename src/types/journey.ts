@@ -418,7 +418,7 @@ export type Screen =
 
 /**
  * A modifier that affects upcoming battle resolutions. Pushed by Dream Augury
- * effects; decremented by `incrementCompletionLevel` each time a battle
+ * effects; decremented by the authoritative victory transition each time a battle
  * completes. Entries at `battlesRemaining === 0` drop on the same tick that
  * brought them to zero. Battle initialization reads `battleModifiers` to apply
  * reward reductions to the visible reward and the payout amount.
@@ -530,7 +530,7 @@ export interface JourneyState {
   hasSeenStartingDeckPopup: boolean;
   /**
    * Modifiers consumed by future battles. Each modifier carries a remaining
-   * count of battles; `incrementCompletionLevel` decrements each entry and
+   * count of battles; the authoritative victory transition decrements each entry and
    * drops entries that reach zero.
    */
   readonly battleModifiers: readonly BattleModifier[];

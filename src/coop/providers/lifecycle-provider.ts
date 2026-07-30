@@ -17,6 +17,7 @@ import { buildTutorialJourneyPackage } from "../../data/tutorial-journey-package
 import { startJourneyFromDreamAvatar } from "../../state/journey-state-actions";
 import type { JourneyLifecycleContentProvider } from "../../rules/journey/lifecycle";
 import { seededRngFromString } from "./rng-stream";
+import { regenerateAtlasForProgress } from "../../atlas/atlas-generator";
 
 export function createJourneyLifecycleContentProvider(
   content: JourneyContent,
@@ -64,6 +65,40 @@ export function createJourneyLifecycleContentProvider(
         resolvedPackageOverride,
         isTutorialJourney,
       });
+    },
+    regenerateAtlas: ({ journey, completionLevel, rng }) => {
+      let drawIndex = 0;
+      const atlas = regenerateAtlasForProgress(
+        completionLevel,
+        journey.dreamscapeModifiers.length === 0
+          ? {}
+          : { dreamscapeModifiers: journey.dreamscapeModifiers },
+        {
+          dreamscapes: content.dreamscapes,
+          atlasConfig: content.atlasConfig,
+          dreamsignPoolIds: journey.remainingDreamsignPool,
+          apollyonIncarnations: content.apollyonIncarnations,
+        },
+        {
+          logEvents: false,
+          rng: () => rng(drawIndex++),
+        },
+      );
+      return {
+        ...journey,
+        completionLevel,
+        atlas,
+        currentDreamscape:
+          completionLevel === 0 ? atlas.startingNodeId : null,
+        screen:
+          completionLevel === 0
+            ? { type: "dreamscape" }
+            : completionLevel >= 7
+              ? { type: "journeyComplete" }
+              : { type: "atlas" },
+        activeSiteId: null,
+        visitedSites: [],
+      };
     },
   };
 }

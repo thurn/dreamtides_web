@@ -119,7 +119,7 @@ function makeSite(id: string, type: SiteState["type"]): SiteState {
 function makeNode(sites: SiteState[]): DreamscapeNode {
   return {
     id: NODE_ID,
-    layer: LayerName.Two,
+    layer: LayerName.One,
     indexInLayer: 0,
     dreamscapeId: "d1",
     biomeName: "Biome",
@@ -161,6 +161,7 @@ function stateWithDraftSites(
         startingNodeId: NODE_ID,
         currentNodeId: NODE_ID,
       },
+      currentDreamscape: NODE_ID,
       ...overrides,
     },
   };
@@ -222,6 +223,7 @@ describe("PICK_DRAFT_CARD", () => {
       runId: "run-a",
       hasSeenStartingDeckPopup: true,
       screen: { type: "site", siteId: "site-a" },
+      activeSiteId: "site-a",
       visitedSites: ["site-b"],
     });
     const screenKey = currentCardTutorialScreenKey(before);

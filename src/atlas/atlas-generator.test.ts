@@ -625,6 +625,29 @@ describe("generateInitialAtlas structural invariants", () => {
 });
 
 describe("advanceAtlas", () => {
+  it("is byte-identical across optimistic and confirmed refolds in one runtime", () => {
+    const atlas = freshAtlas();
+    const options = { logEvents: false, rng: () => 0.25 };
+    const first = advanceAtlas(
+      atlas,
+      atlas.startingNodeId,
+      1,
+      defaultContext(),
+      buildContext(),
+      options,
+    );
+    const second = advanceAtlas(
+      atlas,
+      atlas.startingNodeId,
+      1,
+      defaultContext(),
+      buildContext(),
+      options,
+    );
+
+    expect(second).toEqual(first);
+  });
+
   it("marks the completed node completed and its forward targets available", () => {
     const atlas = freshAtlas();
     const advanced = advanceAtlas(

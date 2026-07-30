@@ -38,9 +38,9 @@
     {
       "seq": 3,
       "event": {
-        "type": "TRAVEL_TO_DREAMSCAPE",
+        "type": "OPEN_SITE",
         "payload": {
-          "nodeId": "node-start"
+          "siteId": "site-essence"
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
@@ -50,7 +50,7 @@
     {
       "seq": 4,
       "event": {
-        "type": "OPEN_SITE",
+        "type": "ACCEPT_ESSENCE",
         "payload": {
           "siteId": "site-essence"
         },
@@ -62,9 +62,9 @@
     {
       "seq": 5,
       "event": {
-        "type": "ACCEPT_ESSENCE",
+        "type": "OPEN_SITE",
         "payload": {
-          "siteId": "site-essence"
+          "siteId": "site-shop"
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
@@ -74,18 +74,6 @@
     {
       "seq": 6,
       "event": {
-        "type": "OPEN_SITE",
-        "payload": {
-          "siteId": "site-shop"
-        },
-        "actor": "p1",
-        "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 5
-      }
-    },
-    {
-      "seq": 7,
-      "event": {
         "type": "BUY_SHOP_SLOT",
         "payload": {
           "siteId": "site-shop",
@@ -93,9 +81,9 @@
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
-        "basedOnSeq": 6
+        "basedOnSeq": 5
       }
     }
   ],
-  "finalHash": "4823d4f8dcf6d5c954558ab9135866c773fcfe22d47fe34702f1e7cc4e1fca65"
+  "finalHash": "4395e0ad4bda8a15b7b951653715122db1ea072e1ffa8cdf6fffd54fbc61b888"
 }

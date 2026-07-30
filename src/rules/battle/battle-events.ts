@@ -9,9 +9,10 @@
 //     "Battle has begun" is a derivable fact of the log: the state carries the
 //     battle, so a reload lands on the right screen from fold state alone. It
 //     bounces when a battle is already in progress.
-//   - `END_BATTLE { result }` performs the completion-level bump (victory), the
-//     failure-summary defeat path, and the `setCurrentDreamscape(null)`
-//     battle-completion bookkeeping. It bounces when no battle exists.
+//   - `END_BATTLE {}` derives the terminal outcome from the folded board. A
+//     journey victory commits the reward, Battle-site completion, Atlas
+//     advancement, route, modifier expiry, and battle teardown atomically.
+//     Defeat/draw freezes the failure summary and tears down the battle.
 //
 // The src/rules/ lint rails forbid Firebase, React, and any live clock/rng.
 // Battle init reads TOML-sourced card / deck / dreamAvatar data that only loads
@@ -20,8 +21,9 @@
 // (mirroring `SiteContentProvider`): the reducer forwards the provider
 // `ctx.rng` (the deterministic `(drawIndex) => number` per-event stream) and
 // `ctx.timestamp` unchanged, so two clients folding the same `BEGIN_BATTLE`
-// build a byte-identical battle. `END_BATTLE` needs no async content — its
-// bookkeeping is pure journey-state math and lives entirely here.
+// build a byte-identical battle. Atlas advancement needs loaded dreamscape
+// content, so `END_BATTLE` delegates that one deterministic calculation to
+// {@link BattleCompletionProvider}; all state bookkeeping remains here.
 //
 // Cards / dreamAvatars are keyed by UUID and deck entries by entry-id — never
 // by name (AGENTS.md).
@@ -49,6 +51,7 @@ import type {
   JourneyFailureSummary,
   JourneyState,
   Screen,
+  DreamAtlas,
 } from "../../types/journey";
 import type { FoldState } from "../fold-state";
 import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
@@ -106,6 +109,11 @@ import {
 } from "../../battle/semantic-play";
 import { TUTORIAL_DREAM_AVATAR_ID } from "../../data/tutorial-cards";
 import { resetJourney } from "../journey/lifecycle";
+import {
+  canVisitSite,
+  completeJourneySite,
+  findSite,
+} from "../journey/sites";
 
 // ---------------------------------------------------------------------------
 // Battle-init provider seam (BEGIN_BATTLE construction)
@@ -152,6 +160,20 @@ export interface BattleInitProvider {
   }): BattleFoldState | null;
 }
 
+/**
+ * Loaded-content seam used by a journey victory to reveal the next Atlas
+ * frontier. The reducer owns the complete transition and delegates only the
+ * content-dependent Atlas generation step.
+ */
+export interface BattleCompletionProvider {
+  advanceAtlas(input: {
+    journey: JourneyState;
+    battle: BattleFoldState;
+    completionLevel: number;
+    rng: (drawIndex: number) => number;
+  }): DreamAtlas | null;
+}
+
 /** Deterministic construction seam for the authored tutorial handoff. */
 export interface TutorialBattleInitProvider {
   beginTutorialBattle(input: {
@@ -166,6 +188,7 @@ export interface TutorialBattleInitProvider {
 }
 
 let battleInitProvider: BattleInitProvider | null = null;
+let battleCompletionProvider: BattleCompletionProvider | null = null;
 let tutorialBattleInitProvider: TutorialBattleInitProvider | null = null;
 
 /**
@@ -182,6 +205,13 @@ export function registerBattleInitProvider(
 /** The currently registered provider, or `null` when none is wired. */
 export function getBattleInitProvider(): BattleInitProvider | null {
   return battleInitProvider;
+}
+
+/** Register the loaded-content Atlas advancement used by `END_BATTLE`. */
+export function registerBattleCompletionProvider(
+  provider: BattleCompletionProvider | null,
+): void {
+  battleCompletionProvider = provider;
 }
 
 /** Register the deterministic provider for the tutorial's canonical battle. */
@@ -215,6 +245,15 @@ export function beginBattle(
   }
   const siteId = payload.siteId;
   if (typeof siteId !== "string" || siteId.length === 0) {
+    return null;
+  }
+  if (
+    state.journey.screen.type !== "site" ||
+    state.journey.screen.siteId !== siteId ||
+    state.journey.activeSiteId !== siteId ||
+    findSite(state.journey, siteId)?.type !== "Battle" ||
+    !canVisitSite(state.journey, siteId)
+  ) {
     return null;
   }
   const rawSeedOverride = payload.seedOverride;
@@ -403,25 +442,25 @@ export function setBattleAutomation(
 const FINAL_COMPLETION_LEVEL = 7;
 
 /**
- * `END_BATTLE { result }`: fold a victory or defeat into journey state and clear
- * the battle slice. Returns the next {@link FoldState}, or `null` to bounce when
- * no battle exists or `result` is not a recognized outcome.
+ * `END_BATTLE {}`: derive the terminal result from the folded battle board and
+ * commit the complete journey handoff. Returns `null` while the battle is not
+ * terminal or when its durable identity no longer matches the journey state.
  */
 export function endBattle(
   state: FoldState,
-  payload: Record<string, unknown>,
+  _payload: Record<string, unknown>,
+  ctx: EventContext,
 ): FoldState | null {
-  if (state.battle === null) {
+  const battle = state.battle;
+  if (battle === null || battleModeOf(battle).kind !== "journey") {
     return null;
   }
-  const result = payload.result;
-  if (result === "victory") {
-    return applyVictory(state);
+  if (battle.board.result === "victory") {
+    return applyVictory(state, battle, ctx);
   }
-  if (result === "defeat") {
-    return applyDefeat(state, state.battle);
-  }
-  return null;
+  return battle.board.result === "defeat" || battle.board.result === "draw"
+    ? applyDefeat(state, battle)
+    : null;
 }
 
 /**
@@ -430,13 +469,40 @@ export function endBattle(
  * drop those that reach zero — removing any temporary-bane deck entries a
  * dropped modifier introduced. The battle slice is torn down.
  */
-function applyVictory(state: FoldState): FoldState {
+function applyVictory(
+  state: FoldState,
+  battle: BattleFoldState,
+  ctx: EventContext,
+): FoldState | null {
   const journey = state.journey;
+  const init = battle.init;
+  const dreamscapeId = init.dreamscapeId;
+  if (
+    dreamscapeId === null ||
+    journey.currentDreamscape !== dreamscapeId ||
+    journey.completionLevel !== init.completionLevelAtStart ||
+    journey.activeSiteId !== init.siteId ||
+    journey.atlas.nodes[dreamscapeId] === undefined ||
+    findSite(journey, init.siteId)?.type !== "Battle" ||
+    !canVisitSite(journey, init.siteId)
+  ) {
+    return null;
+  }
   const newLevel = journey.completionLevel + 1;
   const screen: Screen =
     newLevel >= FINAL_COMPLETION_LEVEL
       ? { type: "journeyComplete" }
       : { type: "atlas" };
+  const completedJourney = completeJourneySite(journey, init.siteId);
+  const provider = battleCompletionProvider;
+  if (provider === null) return null;
+  const atlas = provider.advanceAtlas({
+    journey: completedJourney,
+    battle,
+    completionLevel: newLevel,
+    rng: ctx.rng,
+  });
+  if (atlas === null) return null;
 
   const droppedBaneEntryIds = new Set<string>();
   const battleModifiers: BattleModifier[] = [];
@@ -460,9 +526,15 @@ function applyVictory(state: FoldState): FoldState {
   return {
     ...state,
     journey: {
-      ...journey,
+      ...completedJourney,
       completionLevel: newLevel,
       screen,
+      activeSiteId: null,
+      atlas,
+      essence: Math.min(
+        completedJourney.essenceCap,
+        completedJourney.essence + init.essenceReward,
+      ),
       battleModifiers,
       deck,
       currentDreamscape: null,
@@ -484,6 +556,7 @@ function applyDefeat(state: FoldState, battle: BattleFoldState): FoldState {
       ...journey,
       failureSummary: deriveFailureSummary(battle.init, battle.board, journey),
       screen: { type: "journeyFailed" },
+      activeSiteId: null,
     },
     battle: null,
   };

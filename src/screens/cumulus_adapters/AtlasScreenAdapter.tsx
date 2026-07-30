@@ -1,7 +1,7 @@
 // Adapter bridging live journey state to the pure Cumulus atlas screen
 // (`src/cumulus/screens/AtlasScreen`). Adapters are wiring only: this one owns
-// `useJourney()`, builds the view-model, wires node entry to `setCurrentDreamscape`
-// + `setScreen`, and emits the reconstruction logging. All mapping from domain
+// `useJourney()`, builds the view-model, wires node entry to the authoritative
+// travel intent, and emits the reconstruction logging. All mapping from domain
 // data to the screen's view types lives in the pure builder
 // (`atlas-view-model.ts`); the Cumulus screen itself stays pure. The atlas's
 // utility actions (deck viewer, glossary, Regenerate Atlas, ...) live in the
@@ -66,7 +66,7 @@ export function AtlasScreenAdapter() {
       if (node === undefined || node.state !== "available") {
         return;
       }
-      mutations.setCurrentDreamscape(nodeId);
+      mutations.travelToDreamscape(nodeId);
     },
     [atlas.nodes, mutations],
   );
