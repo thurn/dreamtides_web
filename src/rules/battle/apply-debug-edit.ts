@@ -28,6 +28,7 @@ import type {
   BattleDeckCardDefinition,
   BattleEngineEmissionContext,
   BattleFieldSlotAddress,
+  BattlefieldSlotId,
   BattleMutableState,
   BattleResult,
   BattleSide,
@@ -388,6 +389,7 @@ export function applyDebugEdit(
         nextState,
         edit.side,
         edit.chosenFigmentId,
+        edit.count ?? 1,
         edit.chosenSubtype,
         edit.chosenSpark,
         edit.name,
@@ -1188,6 +1190,7 @@ function createFigment(
   nextState: BattleMutableState,
   side: BattleSide,
   chosenFigmentId: string | undefined,
+  count: number,
   chosenSubtype: string,
   chosenSpark: number,
   name: string,
@@ -1210,7 +1213,8 @@ function createFigment(
     ? catalogEntry?.baseSpark ?? 0
     : chosenSpark;
 
-  if (!isDestinationAvailable(nextState, destination)) {
+  const destinations = figmentDestinations(nextState, destination, count);
+  if (destinations === null) {
     return {
       state,
       transition: createEmptyTransitionData(),
@@ -1249,57 +1253,96 @@ function createFigment(
     createdAtSide: nextState.activeSide,
     createdAtMs,
   };
-  const battleCardId = allocateBattleCardInstance(nextState, {
-    definition,
-    owner: side,
-    controller: destination.side,
-    provenance,
+  const logEvents = destinations.map((resolvedDestination) => {
+    const battleCardId = allocateBattleCardInstance(nextState, {
+      definition,
+      owner: side,
+      controller: resolvedDestination.side,
+      provenance,
+    });
+
+    insertBattleCardAtDebugDestination(
+      nextState,
+      battleCardId,
+      resolvedDestination,
+    );
+    revealPublicDestination(
+      nextState.cardInstances[battleCardId],
+      resolvedDestination,
+    );
+
+    applyFigmentKeywordToStatus(nextState, battleCardId, catalogEntry?.keyword);
+
+    // A figment materialized into the back rank enters exhausted unless it is
+    // Awakened, matching the rule that a created character enters the back rank
+    // exhausted (rules §Exhaust and Awaken, §Figments).
+    const materializedFigment = nextState.cardInstances[battleCardId];
+    if (
+      materializedFigment !== undefined &&
+      "slotId" in resolvedDestination &&
+      resolvedDestination.zone === "backRank" &&
+      !materializedFigment.status.grantedAwakened
+    ) {
+      materializedFigment.status.isExhausted = true;
+    }
+
+    return createBattleProtoCardCreatedLogEvent(
+      nextState,
+      {
+        battleCardId,
+        destinationZone: formatDestinationZoneLabel(resolvedDestination),
+        figmentCount: selectFigmentCount(nextState.cardInstances[battleCardId]),
+        name,
+        ownerSide: side,
+        printedSpark: resolvedSpark,
+        provenanceKind: "generated-figment",
+        sourceBattleCardId: null,
+        subtype: chosenSubtype,
+      },
+      context,
+    );
   });
-
-  insertBattleCardAtDebugDestination(nextState, battleCardId, destination);
-  revealPublicDestination(nextState.cardInstances[battleCardId], destination);
-
-  applyFigmentKeywordToStatus(nextState, battleCardId, catalogEntry?.keyword);
-
-  // A figment materialized into the back rank enters exhausted unless it is
-  // Awakened, matching the rule that a created character enters the back rank
-  // exhausted (rules §Exhaust and Awaken, §Figments). Without this, a figment
-  // created mid-turn — e.g. Foxfire Thicket's dreamwell ability spawning an
-  // Ethereal Figment — could be repositioned to the front rank and declared as
-  // a challenger on the same turn, which is an illegal play.
-  const materializedFigment = nextState.cardInstances[battleCardId];
-  if (
-    materializedFigment !== undefined &&
-    "slotId" in destination &&
-    destination.zone === "backRank" &&
-    !materializedFigment.status.grantedAwakened
-  ) {
-    materializedFigment.status.isExhausted = true;
-  }
 
   return {
     state: nextState,
     transition: {
       ...createEmptyTransitionData(),
-      logEvents: [
-        createBattleProtoCardCreatedLogEvent(
-          nextState,
-          {
-            battleCardId,
-            destinationZone: formatDestinationZoneLabel(destination),
-            figmentCount: selectFigmentCount(nextState.cardInstances[battleCardId]),
-            name,
-            ownerSide: side,
-            printedSpark: resolvedSpark,
-            provenanceKind: "generated-figment",
-            sourceBattleCardId: null,
-            subtype: chosenSubtype,
-          },
-          context,
-        ),
-      ],
+      logEvents,
     },
   };
+}
+
+function figmentDestinations(
+  state: BattleMutableState,
+  destination: BattleDebugZoneDestination,
+  count: number,
+): readonly BattleDebugZoneDestination[] | null {
+  if (!Number.isInteger(count) || count < 1 || count > 10) {
+    return null;
+  }
+  if (!("slotId" in destination)) {
+    return Array.from({ length: count }, () => destination);
+  }
+
+  const openSlotIds: readonly BattlefieldSlotId[] =
+    destination.zone === "backRank"
+      ? rankSlotIds(state.sides[destination.side].backRank).filter(
+          (slotId) =>
+            state.sides[destination.side].backRank[slotId] === null,
+        )
+      : rankSlotIds(state.sides[destination.side].frontRank).filter(
+          (slotId) =>
+            state.sides[destination.side].frontRank[slotId] === null,
+        );
+  if (!openSlotIds.includes(destination.slotId) || openSlotIds.length < count) {
+    return null;
+  }
+
+  const orderedSlotIds = [
+    destination.slotId,
+    ...openSlotIds.filter((slotId) => slotId !== destination.slotId),
+  ].slice(0, count);
+  return orderedSlotIds.map((slotId) => ({ ...destination, slotId }));
 }
 
 /**

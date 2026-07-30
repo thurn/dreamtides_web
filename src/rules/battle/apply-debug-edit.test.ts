@@ -265,6 +265,40 @@ describe("applyDebugEdit Figments leaving play", () => {
     });
   });
 
+  it("creates a requested group as independent characters in open battlefield slots", () => {
+    const result = applyDebugEdit(createTestState(), {
+      kind: "CREATE_FIGMENT",
+      side: "player",
+      chosenSubtype: "Shadow",
+      chosenSpark: 2,
+      count: 3,
+      name: "Shadow",
+      destination: { side: "player", zone: "backRank", slotId: "B2" },
+      createdAtMs: 0,
+    }, EMISSION);
+
+    const createdIds = ["B2", "B0", "B1"].map(
+      (slotId) => result.state.sides.player.backRank[
+        slotId as keyof typeof result.state.sides.player.backRank
+      ],
+    );
+    expect(createdIds.every((battleCardId) => battleCardId !== null)).toBe(true);
+    expect(new Set(createdIds).size).toBe(3);
+    expect(
+      createdIds.map((battleCardId) =>
+        result.state.cardInstances[battleCardId!]?.figments,
+      ),
+    ).toEqual([[2], [2], [2]]);
+    expect(result.transition.logEvents).toHaveLength(3);
+    expect(
+      result.transition.logEvents.map((event) => event.fields.destinationZone),
+    ).toEqual([
+      "player:backRank:B2",
+      "player:backRank:B0",
+      "player:backRank:B1",
+    ]);
+  });
+
   it("does not merge a newly created Figment into an occupied same-type slot", () => {
     const { state, battleCardId } = createBattlefieldFigment();
     const result = applyDebugEdit(state, {

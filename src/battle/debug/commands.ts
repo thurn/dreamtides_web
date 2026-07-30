@@ -235,6 +235,8 @@ export type BattleDebugEdit =
     side: BattleSide;
     /** Stable authored figment identity. Optional only for legacy commands. */
     chosenFigmentId?: string;
+    /** Number of independent figments to create. Defaults to 1 for legacy commands. */
+    count?: number;
     chosenSubtype: string;
     chosenSpark: number;
     name: string;
@@ -806,7 +808,7 @@ function createDebugEditLabel(
     case "ADD_FIGMENTS":
       return `Add ${String(edit.count)} Figment${edit.count === 1 ? "" : "s"} to ${readCardName(state, edit.battleCardId)}`;
     case "CREATE_FIGMENT":
-      return `Create Figment (${edit.chosenSubtype}/${String(edit.chosenSpark)})`;
+      return `Create ${String(edit.count ?? 1)} Figment${(edit.count ?? 1) === 1 ? "" : "s"} (${edit.chosenSubtype}/${String(edit.chosenSpark)})`;
     case "CREATE_CARD_FROM_DEFINITION":
       return `Create ${edit.definition.name}`;
     case "FILL_BATTLEFIELD_PREVIEW":

@@ -29,11 +29,19 @@ describe("BattleFigmentCreator", () => {
     expect(document.querySelector('[data-battle-figment-creator]')).not.toBeNull();
     act(() => document.querySelector<HTMLButtonElement>('button[aria-label="Figment type"]')?.click());
     expect(document.querySelectorAll('[role="option"]')).toHaveLength(FIGMENT_CATALOG_ENTRIES.length);
+    act(() => [...document.querySelectorAll<HTMLButtonElement>('[role="option"]')]
+      .find((element) => element.textContent?.includes("Shadow"))?.click());
+    act(() => document.querySelector<HTMLButtonElement>('button[aria-label="Figment battlefield slot"]')?.click());
+    expect(document.querySelectorAll('[role="option"]')).toHaveLength(10);
+    act(() => document.querySelector<HTMLButtonElement>('[role="option"]')?.click());
+    act(() => document.querySelector<HTMLButtonElement>('button[aria-label="Create more figments"]')?.click());
+    act(() => document.querySelector<HTMLButtonElement>('button[aria-label="Create more figments"]')?.click());
     act(() => document.querySelector<HTMLButtonElement>('[data-testid="battle-figment-submit"]')?.click());
     expect(submits).toHaveLength(1);
     expect(submits[0]).toMatchObject({
       kind: "CREATE_FIGMENT",
       side: "player",
+      count: 3,
       chosenFigmentId: FIGMENT_CATALOG_ENTRIES.find(
         (entry) => entry.subtype === "Shadow",
       )?.id,
@@ -54,5 +62,50 @@ describe("BattleFigmentCreator", () => {
     expect(spark?.value).toBe("4");
     expect(document.querySelector('[data-battle-figment-keyword]')?.textContent).toContain("Unstoppable");
     act(() => root.unmount());
+  });
+
+  it("restores the last selected type when the creator is reopened", () => {
+    const board = state();
+    const host = document.createElement("div");
+    document.body.append(host);
+    const root = createRoot(host);
+    let rememberedTypeId: string | undefined;
+
+    act(() => root.render(
+      <BattleFigmentCreator
+        initialSide="player"
+        state={board}
+        onClose={() => undefined}
+        onSubmit={() => undefined}
+        onTypeChange={(typeId) => {
+          rememberedTypeId = typeId;
+        }}
+      />,
+    ));
+    chooseType("Ancient");
+    act(() => root.unmount());
+
+    const reopenedHost = document.createElement("div");
+    document.body.append(reopenedHost);
+    const reopenedRoot = createRoot(reopenedHost);
+    act(() => reopenedRoot.render(
+      <BattleFigmentCreator
+        initialSide="player"
+        initialTypeId={rememberedTypeId}
+        state={board}
+        onClose={() => undefined}
+        onSubmit={() => undefined}
+      />,
+    ));
+
+    expect(
+      document.querySelector<HTMLInputElement>(
+        '[data-battle-figment-field="spark"] input',
+      )?.value,
+    ).toBe("4");
+    expect(
+      document.querySelector('[data-battle-figment-keyword]')?.textContent,
+    ).toContain("Unstoppable");
+    act(() => reopenedRoot.unmount());
   });
 });

@@ -84,7 +84,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Select | Components | 9 | [components/select.md](components/select.md) | The compact dropdown control, and Cumulus's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. |
 | TextField | Components | 7 | [components/text-field.md](components/text-field.md) | The reusable labeled text and search input on Cumulus control chrome, with supporting and validation messaging. |
 | Text Area | Components | 1 | [components/text-area.md](components/text-area.md) | The reusable multiline authoring field on Cumulus control chrome, with explicit draft and commit callbacks. |
-| NumberStepper | Components | 4 | [components/number-stepper.md](components/number-stepper.md) | A labeled, accessible decrement/value/increment row with optional canonical resource notation. |
+| NumberStepper | Components | 5 | [components/number-stepper.md](components/number-stepper.md) | A labeled, accessible decrement/value/increment row with optional canonical resource notation. |
 | DisclosureSection | Components | 5 | [components/disclosure-section.md](components/disclosure-section.md) | A controlled Cumulus section for progressively revealing dense secondary information. |
 | CardOrderEditor | Components | 1 | [components/card-order-editor.md](components/card-order-editor.md) | An identity-safe top-to-bottom card ordering control for the battle deck-order workflow. |
 | Tide Disc | Components | 1 | [components/tide-disc.md](components/tide-disc.md) | The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal, sized 'sm' or 'lg'. |

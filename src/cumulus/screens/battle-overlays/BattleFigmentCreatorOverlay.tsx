@@ -1,5 +1,6 @@
 import type { ReactElement, Ref } from "react";
 import { GlassButton } from "../../components/controls/GlassButton";
+import { NumberStepper } from "../../components/controls/NumberStepper";
 import { SegmentedControl } from "../../components/controls/SegmentedControl";
 import { Select } from "../../components/controls/Select";
 import { TextField } from "../../components/controls/TextField";
@@ -23,6 +24,8 @@ export interface BattleFigmentCreatorOverlayProps {
   readonly typeId: string;
   readonly typeOptions: readonly { readonly value: string; readonly label: string }[];
   readonly keywordText: string;
+  readonly count: number;
+  readonly maxCount: number;
   readonly sparkText: string;
   readonly sparkError?: string;
   readonly baseSpark: number;
@@ -34,6 +37,7 @@ export interface BattleFigmentCreatorOverlayProps {
   readonly canSubmit: boolean;
   readonly disabledReason: string | null;
   readonly onNameChange: (value: string) => void;
+  readonly onCountChange: (value: number) => void;
   readonly onTypeChange: (value: string) => void;
   readonly onSparkChange: (value: string) => void;
   readonly onSideChange: (value: BattleFigmentSide) => void;
@@ -60,6 +64,8 @@ export function BattleFigmentCreatorOverlay({
   typeId,
   typeOptions,
   keywordText,
+  count,
+  maxCount,
   sparkText,
   sparkError,
   baseSpark,
@@ -71,6 +77,7 @@ export function BattleFigmentCreatorOverlay({
   canSubmit,
   disabledReason,
   onNameChange,
+  onCountChange,
   onTypeChange,
   onSparkChange,
   onSideChange,
@@ -130,6 +137,20 @@ export function BattleFigmentCreatorOverlay({
             onChange={onSparkChange}
             error={sparkError}
             supportingText={`Base spark ${String(baseSpark)} — editable.`}
+          />
+        </div>
+        <div data-battle-figment-field="count">
+          <NumberStepper
+            label="Quantity"
+            value={count}
+            decrementLabel="Create fewer figments"
+            incrementLabel="Create more figments"
+            decrementDisabled={count <= 1}
+            incrementDisabled={count >= maxCount}
+            placement="onGlass"
+            testId="battle-figment-count"
+            onDecrement={() => onCountChange(Math.max(1, count - 1))}
+            onIncrement={() => onCountChange(Math.min(maxCount, count + 1))}
           />
         </div>
         <div
@@ -217,7 +238,7 @@ export function BattleFigmentCreatorOverlay({
             onPress={onCancel}
           />
           <GlassButton
-            label="Create Figment"
+            label={count === 1 ? "Create Figment" : `Create ${String(count)} Figments`}
             placement="onGlass"
             variant="accent"
             disabled={!canSubmit}

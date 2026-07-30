@@ -221,6 +221,9 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     useState<BattleSide | null>(null);
   const [openFigmentCreator, setOpenFigmentCreator] =
     useState<BattleSide | null>(null);
+  const [lastFigmentTypeId, setLastFigmentTypeId] = useState<
+    string | undefined
+  >(undefined);
   const [isPoolViewerOpen, setIsPoolViewerOpen] = useState(false);
   const [openNoteEditor, setOpenNoteEditor] = useState<string | null>(null);
   const [isResultOverlayDismissed, setIsResultOverlayDismissed] =
@@ -1521,8 +1524,10 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       {openFigmentCreator !== null ? (
         <BattleFigmentCreator
           initialSide={openFigmentCreator}
+          initialTypeId={lastFigmentTypeId}
           state={board}
           onClose={() => setOpenFigmentCreator(null)}
+          onTypeChange={setLastFigmentTypeId}
           onSubmit={(edit) =>
             handleCommand({
               id: "DEBUG_EDIT",

@@ -7,9 +7,7 @@ import {
 import type { BattleDebugEdit, BattleDebugZoneDestination } from "../debug/commands";
 import type { BattleMutableState, BattleSide, FrontRankSlotId, BackRankSlotId } from "../types";
 import {
-  backRankSlotId,
   backRankSlotIds,
-  frontRankSlotId,
   frontRankSlotIds,
   isBackRankSlotId,
   isFrontRankSlotId,
@@ -27,6 +25,7 @@ import {
 
 type FigmentBattlefieldSlotId = BackRankSlotId | FrontRankSlotId;
 const DEFAULT_FIGMENT_SUBTYPE = "Shadow";
+const MAX_FIGMENT_CREATION_COUNT = 10;
 
 function figmentTypeName(subtype: string): string {
   return `${subtype} Figment`;
@@ -52,20 +51,29 @@ const FIGMENT_KEYWORD_LABELS: Readonly<Record<FigmentKeyword, string>> = {
 
 export function BattleFigmentCreator({
   initialSide,
+  initialTypeId,
   onClose,
   onSubmit,
+  onTypeChange,
   state,
 }: {
   initialSide: BattleSide;
+  initialTypeId?: string;
   onClose: () => void;
   onSubmit: (edit: BattleDebugEdit) => void;
+  onTypeChange?: (figmentTypeId: string) => void;
   state: BattleMutableState;
 }) {
   const defaultEntry =
     lookupFigmentCatalogEntry(DEFAULT_FIGMENT_SUBTYPE) ?? FIGMENT_CATALOG_ENTRIES[0];
-  const [figmentTypeId, setFigmentTypeId] = useState<string>(defaultEntry.id);
-  const [name, setName] = useState(defaultFigmentName(defaultEntry));
-  const [sparkText, setSparkText] = useState(String(defaultEntry.baseSpark));
+  const initialEntry =
+    (initialTypeId === undefined
+      ? undefined
+      : lookupFigmentCatalogEntryById(initialTypeId)) ?? defaultEntry;
+  const [figmentTypeId, setFigmentTypeId] = useState<string>(initialEntry.id);
+  const [name, setName] = useState(defaultFigmentName(initialEntry));
+  const [sparkText, setSparkText] = useState(String(initialEntry.baseSpark));
+  const [count, setCount] = useState(1);
   const [side, setSide] = useState<BattleSide>(initialSide);
   const [zone, setZone] = useState<BattleFigmentZone>("backRank");
   const [position, setPosition] = useState<BattleFigmentDeckPosition>("top");
@@ -95,6 +103,7 @@ export function BattleFigmentCreator({
     const entry = lookupFigmentCatalogEntryById(nextFigmentTypeId);
     if (entry === undefined) return;
     setFigmentTypeId(nextFigmentTypeId);
+    onTypeChange?.(nextFigmentTypeId);
     setSparkText(String(entry.baseSpark));
     setName((current) =>
       current.trim() === "" || isAutoDerivedFigmentName(current)
@@ -107,17 +116,41 @@ export function BattleFigmentCreator({
   const sparkIsValid = !Number.isNaN(spark) && spark >= 0;
   const subtypeIsValid = subtype.trim().length > 0;
   const nameIsValid = name.trim().length > 0;
+  const slotOptions = zone === "backRank"
+    ? backRankSlotIds(selectPlayAreaSize(state).backSize)
+    : frontRankSlotIds(selectPlayAreaSize(state).frontSize);
   // bug-114: pre-validate that the chosen battlefield slot is empty so Create
   // Figment does not silently close when the apply-debug-edit reducer would
   // refuse the mint. Non-battlefield zones (hand/void/deck/banished) have no
   // slot constraint.
   const slotIsOccupied = isBattlefieldSlotOccupied(state, side, zone, slot);
-  const slotIsValid = !slotIsOccupied;
+  const availableDestinationCount =
+    zone === "backRank" || zone === "frontRank"
+      ? slotOptions.filter(
+          (candidateSlot) =>
+            !isBattlefieldSlotOccupied(
+              state,
+              side,
+              zone,
+              candidateSlot,
+            ),
+        ).length
+      : MAX_FIGMENT_CREATION_COUNT;
+  const maxCount = Math.max(
+    1,
+    Math.min(MAX_FIGMENT_CREATION_COUNT, availableDestinationCount),
+  );
+  useEffect(() => {
+    setCount((current) => Math.min(current, maxCount));
+  }, [maxCount]);
+  const slotIsValid = !slotIsOccupied && count <= availableDestinationCount;
   const canSubmit = nameIsValid && subtypeIsValid && sparkIsValid && slotIsValid;
   const disabledReason = !nameIsValid || !subtypeIsValid || !sparkIsValid
     ? "Name, subtype, and non-negative spark are required."
     : !slotIsValid
-      ? `${slot} is occupied — pick another slot or change zone.`
+      ? availableDestinationCount === 0
+        ? "This rank has no open slots."
+        : `${slot} is occupied — pick another slot or change zone.`
       : null;
 
   function handleSubmit(): void {
@@ -136,6 +169,7 @@ export function BattleFigmentCreator({
       kind: "CREATE_FIGMENT",
       side,
       chosenFigmentId: selectedEntry.id,
+      count,
       chosenSubtype: subtype.trim(),
       chosenSpark: spark,
       name: name.trim(),
@@ -144,10 +178,6 @@ export function BattleFigmentCreator({
     });
     onClose();
   }
-
-  const slotOptions = zone === "backRank"
-    ? backRankSlotIds(selectPlayAreaSize(state).backSize + 1)
-    : frontRankSlotIds(selectPlayAreaSize(state).frontSize + 1);
 
   return (
     <BattleFigmentCreatorOverlay
@@ -161,6 +191,8 @@ export function BattleFigmentCreator({
       keywordText={selectedKeyword === undefined
         ? "No keyword."
         : `Keyword: ${FIGMENT_KEYWORD_LABELS[selectedKeyword]}.`}
+      count={count}
+      maxCount={maxCount}
       sparkText={sparkText}
       sparkError={sparkIsValid
         ? undefined
@@ -174,6 +206,7 @@ export function BattleFigmentCreator({
       canSubmit={canSubmit}
       disabledReason={disabledReason}
       onNameChange={setName}
+      onCountChange={setCount}
       onTypeChange={handleSelectType}
       onSparkChange={setSparkText}
       onSideChange={setSide}
@@ -278,7 +311,7 @@ function findFirstOpenReserveSlot(
 ): BackRankSlotId | null {
   const backRank = state.sides[side].backRank;
   const open = rankSlotIds(backRank).find((slotId) => backRank[slotId] === null);
-  return open ?? backRankSlotId(rankSlotIds(backRank).length);
+  return open ?? null;
 }
 
 function findFirstOpenDeploySlot(
@@ -287,5 +320,5 @@ function findFirstOpenDeploySlot(
 ): FrontRankSlotId | null {
   const frontRank = state.sides[side].frontRank;
   const open = rankSlotIds(frontRank).find((slotId) => frontRank[slotId] === null);
-  return open ?? frontRankSlotId(rankSlotIds(frontRank).length);
+  return open ?? null;
 }
