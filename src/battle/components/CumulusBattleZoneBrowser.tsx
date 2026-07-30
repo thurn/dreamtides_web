@@ -20,6 +20,7 @@ export interface CumulusBattleZoneBrowserProps {
   readonly perspectiveSide: BattleSide;
   readonly state: BattleMutableState;
   readonly onClose: () => void;
+  readonly onSideChange: (side: BattleSide) => void;
   readonly onCardContextMenu?: (
     battleCardId: string,
     event: ReactMouseEvent<HTMLDivElement>,
@@ -54,6 +55,7 @@ export function CumulusBattleZoneBrowser({
   perspectiveSide,
   state,
   onClose,
+  onSideChange,
   onCardContextMenu,
   onCardDoubleTap,
   onCardDragEnd,
@@ -75,6 +77,8 @@ export function CumulusBattleZoneBrowser({
   });
   const isDropTarget =
     pendingDragSourceSurface !== null && onCardDropToBrowser !== undefined;
+  const opponentSide: BattleSide =
+    perspectiveSide === "player" ? "enemy" : "player";
 
   return (
     <div
@@ -96,6 +100,20 @@ export function CumulusBattleZoneBrowser({
         ownerLabel={browser.side === perspectiveSide ? "Your" : "Opponent"}
         zone={browser.zone}
         cards={cards}
+        ownerSwitch={
+          browser.zone === "banished"
+            ? {
+                value:
+                  browser.side === perspectiveSide ? "viewer" : "opponent",
+                viewerCount: state.sides[perspectiveSide].banished.length,
+                opponentCount: state.sides[opponentSide].banished.length,
+                onChange: (owner) =>
+                  onSideChange(
+                    owner === "viewer" ? perspectiveSide : opponentSide,
+                  ),
+              }
+            : undefined
+        }
         onClose={onClose}
         onCardDragStart={(battleCardId) => {
           onCardDragStart?.(battleCardId, sourceSurface);

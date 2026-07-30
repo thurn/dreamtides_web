@@ -32,6 +32,7 @@ function CardGalleryPanelDemo() {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("current");
   const [filter, setFilter] = useState("all");
+  const [owner, setOwner] = useState("viewer");
 
   useEffect(() => {
     let cancelled = false;
@@ -84,6 +85,15 @@ function CardGalleryPanelDemo() {
         }}
         cards={cards}
         toolbar={{
+          segmented: {
+            options: [
+              { value: "viewer", label: "Your Cards · 4" },
+              { value: "opponent", label: "Opponent Cards · 2" },
+            ],
+            value: owner,
+            onChange: setOwner,
+            full: true,
+          },
           search: { label: "Search Cards", value: query, onChange: setQuery },
           sort: {
             ariaLabel: "Sort cards",
@@ -126,7 +136,7 @@ export const cardGalleryPanelDemo: CumulusComponent = {
   blurb:
     "The shared card-browser surface: GlassPanel title and action chrome around a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.",
   callout:
-    "Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal, a card-selection site, or a searchable zone browser. The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, optional search/sort/filter toolbar, accessory slot, internal scroll, fixed grid modes, optional captions and footer actions, and mobile press-preview sizing with whole-card touch-circle clearance. Callers provide resolved card models keyed by entry id or UUID.",
+    "Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal, a card-selection site, or a searchable zone browser. The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, optional mode/search/sort/filter toolbar, accessory slot, internal scroll, fixed grid modes, optional captions and footer actions, and mobile press-preview sizing with whole-card touch-circle clearance. Callers provide resolved card models keyed by entry id or UUID.",
   group: "Components",
   docName: "CardGalleryPanel",
   Component: CardGalleryPanelDemo,

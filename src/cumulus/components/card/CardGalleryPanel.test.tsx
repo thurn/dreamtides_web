@@ -156,12 +156,22 @@ describe("CardGalleryPanel", () => {
   it("renders optional browser controls and physical card gestures", () => {
     const dragStart = vi.fn();
     const contextMenu = vi.fn();
+    const ownerChange = vi.fn();
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
     act(() => root.render(<CumulusRoot><CardGalleryPanel
       title="Your Deck"
       cards={[{ entryId: "physical-card", model: model("Physical"), draggable: true }]}
       toolbar={{
+        segmented: {
+          options: [
+            { value: "viewer", label: "Your Cards · 1" },
+            { value: "opponent", label: "Opponent Cards · 2" },
+          ],
+          value: "viewer",
+          onChange: ownerChange,
+          full: true,
+        },
         search: { label: "Search Cards", value: "", onChange: vi.fn(), testId: "search" },
         sort: { ariaLabel: "Sort cards", value: "current", options: [{ value: "current", label: "Current Order" }], onChange: vi.fn() },
         filter: { ariaLabel: "Filter cards", value: "all", options: [{ value: "all", label: "All Types" }], onChange: vi.fn() },
@@ -173,6 +183,13 @@ describe("CardGalleryPanel", () => {
     /></CumulusRoot>));
 
     expect(container.querySelector("[data-gallery-toolbar]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-gallery-toolbar-segmented]"),
+    ).not.toBeNull();
+    const opponentTab = Array.from(
+      container.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
+    ).find((button) => button.textContent === "Opponent Cards · 2");
+    expect(opponentTab?.getAttribute("aria-selected")).toBe("false");
     expect(container.querySelector('[data-testid="search"]')).not.toBeNull();
     expect(container.querySelector('button[aria-label="Sort cards"]')).not.toBeNull();
     expect(container.querySelector('button[aria-label="Filter cards"]')).not.toBeNull();
@@ -185,9 +202,11 @@ describe("CardGalleryPanel", () => {
     expect(entry?.draggable).toBe(true);
 
     act(() => {
+      opponentTab?.click();
       entry?.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
       entry?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true }));
     });
+    expect(ownerChange).toHaveBeenCalledWith("opponent");
     expect(dragStart).toHaveBeenCalledWith("physical-card", expect.any(Object));
     expect(contextMenu).toHaveBeenCalledWith("physical-card", expect.any(Object));
 

@@ -21,6 +21,18 @@ import { useIsDesktop } from "./use-is-desktop";
 export type CardZoneBrowserZone = "deck" | "void" | "banished";
 export type CardZoneBrowserSort = "current" | "cost" | "spark" | "name";
 export type CardZoneBrowserFilter = "all" | "character" | "event";
+export type CardZoneBrowserOwner = "viewer" | "opponent";
+
+export interface CardZoneBrowserOwnerSwitch {
+  /** Owner whose cards are currently shown. */
+  readonly value: CardZoneBrowserOwner;
+  /** Number of banished cards controlled from the viewer's perspective. */
+  readonly viewerCount: number;
+  /** Number of banished cards controlled by the opposing perspective. */
+  readonly opponentCount: number;
+  /** Requests cards for the selected owner. */
+  readonly onChange: (owner: CardZoneBrowserOwner) => void;
+}
 
 export interface CardZoneBrowserOverlayProps {
   /** Human-facing owner prefix, such as `Your` or `Enemy`. */
@@ -29,6 +41,8 @@ export interface CardZoneBrowserOverlayProps {
   readonly zone: CardZoneBrowserZone;
   /** Resolved physical card entries in the zone's current order. */
   readonly cards: readonly CardGalleryCardView[];
+  /** Optional viewer-relative owner switch for a shared zone browser. */
+  readonly ownerSwitch?: CardZoneBrowserOwnerSwitch;
   /** Dismisses the browser. */
   readonly onClose: () => void;
   /** Starts a native drag for one physical card entry. */
@@ -118,6 +132,7 @@ export function CardZoneBrowserOverlay({
   ownerLabel,
   zone,
   cards,
+  ownerSwitch,
   onClose,
   onCardDragStart,
   onCardDragEnd,
@@ -183,8 +198,27 @@ export function CardZoneBrowserOverlay({
       ? { caption: { kind: "text" as const, text: `#${String(index + 1)}` } }
       : {}),
   }));
+  const segmented = ownerSwitch === undefined
+    ? undefined
+    : {
+        options: [
+          {
+            value: "viewer",
+            label: `Your Cards · ${String(ownerSwitch.viewerCount)}`,
+          },
+          {
+            value: "opponent",
+            label: `Opponent Cards · ${String(ownerSwitch.opponentCount)}`,
+          },
+        ],
+        value: ownerSwitch.value,
+        onChange: (value: string) =>
+          ownerSwitch.onChange(value as CardZoneBrowserOwner),
+        full: true,
+      };
   const toolbar: CardGalleryToolbar = zone === "void"
     ? {
+        segmented,
         sort: {
           ariaLabel: "Sort zone cards",
           options: SORT_OPTIONS,
@@ -193,6 +227,7 @@ export function CardZoneBrowserOverlay({
         },
       }
     : {
+        segmented,
         search: {
           label: "Search Cards",
           value: query,
@@ -215,14 +250,18 @@ export function CardZoneBrowserOverlay({
         },
       };
   const fillsDesktopFrame = isDesktop && zone !== "void";
+  const title = ownerSwitch === undefined
+    ? `${ownerLabel} ${zoneLabel(zone)}`
+    : "Banished Cards";
 
   return (
     <motion.div
       role="dialog"
       aria-modal="true"
-      aria-label={`${ownerLabel} ${zoneLabel(zone)}`}
+      aria-label={title}
       className="cumulus"
       data-card-zone-browser={`${ownerLabel.toLocaleLowerCase()}:${zone}`}
+      data-card-zone-browser-owner={ownerSwitch?.value}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.2 }}
@@ -262,7 +301,7 @@ export function CardZoneBrowserOverlay({
         }}
       >
         <CardGalleryPanel
-          title={`${ownerLabel} ${zoneLabel(zone)}`}
+          title={title}
           subtitle={subtitle}
           rightAccessory={{
             kind: "iconButton",

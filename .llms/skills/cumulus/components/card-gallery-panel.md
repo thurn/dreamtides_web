@@ -10,7 +10,7 @@ Real consumers: **8** (imports outside `src/cumulus/docs/` and tests).
 
 The shared card-browser surface: GlassPanel title and action chrome around a scrolling GameCard grid, framed as floating glass or a full-bleed alpha scrim.
 
-> **Guidance:** Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal, a card-selection site, or a searchable zone browser. The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, optional search/sort/filter toolbar, accessory slot, internal scroll, fixed grid modes, optional captions and footer actions, and mobile press-preview sizing with whole-card touch-circle clearance. Callers provide resolved card models keyed by entry id or UUID.
+> **Guidance:** Use this when a screen presents a card collection as the primary task surface, such as the Starting Deck reveal, a card-selection site, or a searchable zone browser. The component derives material from frame geometry: floating is rounded glass and full-bleed is the edge-to-edge standard alpha scrim. It owns the header, optional mode/search/sort/filter toolbar, accessory slot, internal scroll, fixed grid modes, optional captions and footer actions, and mobile press-preview sizing with whole-card touch-circle clearance. Callers provide resolved card models keyed by entry id or UUID.
 
 ## Props
 
@@ -63,6 +63,7 @@ The shared card-browser surface: GlassPanel title and action chrome around a scr
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
+| `segmented` | `CardGallerySegmentedControl` | yes | Optional primary mode switch rendered on its own toolbar row. |
 | `search` | `CardGallerySearchControl` | yes | Search-by-name control. |
 | `sort` | `CardGallerySelectControl` | yes | Sort-order control. |
 | `filter` | `CardGallerySelectControl` | yes | Type-filter control. |

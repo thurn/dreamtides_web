@@ -39,6 +39,7 @@ function mount(
   readonly onCardContextMenu: ReturnType<typeof vi.fn>;
   readonly onCardDoubleTap: ReturnType<typeof vi.fn>;
   readonly onCardDragStart: ReturnType<typeof vi.fn>;
+  readonly onSideChange: ReturnType<typeof vi.fn>;
 } {
   const state = createState();
   mutateState?.(state);
@@ -48,6 +49,7 @@ function mount(
   const onCardContextMenu = vi.fn();
   const onCardDoubleTap = vi.fn();
   const onCardDragStart = vi.fn();
+  const onSideChange = vi.fn();
 
   act(() => {
     root.render(
@@ -57,6 +59,7 @@ function mount(
           perspectiveSide={options.perspectiveSide ?? "player"}
           state={state}
           onClose={() => undefined}
+          onSideChange={onSideChange}
           onCardContextMenu={onCardContextMenu}
           onCardDoubleTap={onCardDoubleTap}
           onCardDragStart={onCardDragStart}
@@ -72,6 +75,7 @@ function mount(
     onCardContextMenu,
     onCardDoubleTap,
     onCardDragStart,
+    onSideChange,
   };
 }
 
@@ -126,14 +130,26 @@ describe("CumulusBattleZoneBrowser", () => {
     act(() => mounted.root.unmount());
   });
 
-  it("labels a zone relative to the current battle perspective", () => {
+  it("switches between viewer-relative banished zones", () => {
     const mounted = mount("banished", undefined, {
       browserSide: "player",
       perspectiveSide: "enemy",
     });
 
-    expect(mounted.container.textContent).toContain("Opponent Banished");
-    expect(mounted.container.textContent).not.toContain("Your Banished");
+    expect(mounted.container.querySelector("h2")?.textContent).toBe(
+      "Banished Cards",
+    );
+    const yourTab = Array.from(
+      mounted.container.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
+    ).find((button) => button.textContent === "Your Cards · 0");
+    const opponentTab = Array.from(
+      mounted.container.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
+    ).find((button) => button.textContent === "Opponent Cards · 0");
+    expect(yourTab?.getAttribute("aria-selected")).toBe("false");
+    expect(opponentTab?.getAttribute("aria-selected")).toBe("true");
+
+    act(() => yourTab?.click());
+    expect(mounted.onSideChange).toHaveBeenCalledWith("enemy");
 
     act(() => mounted.root.unmount());
   });

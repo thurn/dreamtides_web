@@ -1436,6 +1436,13 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           perspectiveSide={perspectiveSide}
           state={board}
           onClose={() => setOpenZoneBrowser(null)}
+          onSideChange={(side) =>
+            handleOpenZoneBrowser(
+              side,
+              "banished",
+              "zone-browser-banished",
+            )
+          }
           onCardContextMenu={handleCardContextMenu}
           onCardDoubleTap={(battleCardId, sourceSurface) =>
             handleCumulusCardDebugActivate(battleCardId, sourceSurface, {

@@ -29,6 +29,10 @@ import { DOUBLE_TAP_WINDOW_MS } from "../../primitives/pointer-gesture";
 import { token } from "../../primitives/tokens";
 import { EssenceValue } from "../hud/EssenceValue";
 import { GlassButton, type GlassButtonVariant } from "../controls/GlassButton";
+import {
+  SegmentedControl,
+  type SegmentedOption,
+} from "../controls/SegmentedControl";
 import { Select, type SelectOption } from "../controls/Select";
 import { TextField } from "../controls/TextField";
 import {
@@ -207,8 +211,22 @@ export interface CardGallerySelectControl {
   onChange: (value: string) => void;
 }
 
-/** Structured search, sort, and filter controls for browser galleries. */
+/** Controlled mode switch shown across the top of a browser gallery. */
+export interface CardGallerySegmentedControl {
+  /** Segments represented by stable values and visible labels. */
+  options: readonly (string | SegmentedOption)[];
+  /** Currently selected segment value. */
+  value: string;
+  /** Reports segment changes. */
+  onChange: (value: string) => void;
+  /** Stretch the control across its toolbar row. */
+  full?: boolean;
+}
+
+/** Structured mode, search, sort, and filter controls for browser galleries. */
 export interface CardGalleryToolbar {
+  /** Optional primary mode switch rendered on its own toolbar row. */
+  segmented?: CardGallerySegmentedControl;
   /** Search-by-name control. */
   search?: CardGallerySearchControl;
   /** Sort-order control. */
@@ -785,6 +803,19 @@ export function CardGalleryPanel({
         paddingLeft: galleryPadding,
       }}
     >
+      {toolbar.segmented === undefined ? null : (
+        <div
+          data-gallery-toolbar-segmented=""
+          style={{ flex: "1 0 100%", minWidth: 0 }}
+        >
+          <SegmentedControl
+            options={[...toolbar.segmented.options]}
+            value={toolbar.segmented.value}
+            onChange={toolbar.segmented.onChange}
+            full={toolbar.segmented.full}
+          />
+        </div>
+      )}
       {toolbar.search === undefined ? null : (
         <div style={{ flex: "1 1 280px", minWidth: 0 }}>
           <TextField

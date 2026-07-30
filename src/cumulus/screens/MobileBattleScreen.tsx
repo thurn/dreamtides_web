@@ -4663,6 +4663,10 @@ export function MobileBattleScreen({
   const snapLayoutOriginView = useRef<MobileBattleView | null>(null);
   const near = view.perspective === "player" ? view.player : view.enemy;
   const far = view.perspective === "player" ? view.enemy : view.player;
+  const banishedCardCount =
+    near.banishedCardCount + far.banishedCardCount;
+  const initialBanishedOwner =
+    near.banishedCardCount > 0 ? near.owner : far.owner;
   const nearHandNeededByPrompt =
     view.cardPicker?.candidates.some(
       (candidate) =>
@@ -5182,42 +5186,29 @@ export function MobileBattleScreen({
           gap: token("--space-3"),
         }}
       >
-        {isDesktop && interactions?.onZoneOpen !== undefined
-          ? (
-              [
-                {
-                  side: near,
-                  label: "Your Banished",
-                  testId: "near-battle-banished",
-                },
-                {
-                  side: far,
-                  label: "Opponent Banished",
-                  testId: "far-battle-banished",
-                },
-              ] as const
-            ).map(({ side, label, testId }) =>
-              side.banishedCardCount > 0 ? (
-                <div
-                  key={side.owner}
-                  data-battle-zone={`${side.owner}-banished`}
-                  data-battle-zone-count={String(side.banishedCardCount)}
-                >
-                  <GlassButton
-                    glyph={GLYPHS.block}
-                    label={`${label} · ${String(side.banishedCardCount)}`}
-                    testId={testId}
-                    onPress={() =>
-                      interactions.onZoneOpen?.({
-                        owner: side.owner,
-                        zone: "banished",
-                      })
-                    }
-                  />
-                </div>
-              ) : null,
-            )
-          : null}
+        {isDesktop &&
+        banishedCardCount > 0 &&
+        interactions?.onZoneOpen !== undefined ? (
+          <div
+            data-battle-zone="banished"
+            data-battle-zone-count={String(banishedCardCount)}
+            data-battle-zone-near-count={String(near.banishedCardCount)}
+            data-battle-zone-far-count={String(far.banishedCardCount)}
+          >
+            <IconButton
+              glyph={GLYPHS.block}
+              size="sm"
+              label={`Open banished cards, ${String(banishedCardCount)} total`}
+              testId="near-battle-banished"
+              onPress={() =>
+                interactions.onZoneOpen?.({
+                  owner: initialBanishedOwner,
+                  zone: "banished",
+                })
+              }
+            />
+          </div>
+        ) : null}
         <BattleControlMessage
           aiApproval={view.aiApproval}
           choicePrompt={view.choicePrompt}

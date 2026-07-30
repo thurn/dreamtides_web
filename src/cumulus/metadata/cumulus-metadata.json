@@ -623,6 +623,12 @@
         "name": "CardGalleryToolbar",
         "fields": [
           {
+            "name": "segmented",
+            "tsType": "CardGallerySegmentedControl",
+            "optional": true,
+            "description": "Optional primary mode switch rendered on its own toolbar row."
+          },
+          {
             "name": "search",
             "tsType": "CardGallerySearchControl",
             "optional": true,
