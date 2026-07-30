@@ -24,7 +24,8 @@
 //
 // Effect atoms map to the downstream builder vocabulary:
 //   Deterministic builders -> kinds: gain-energy, gain-points, draw, erode,
-//     add-spark (target:self), discard (your whole hand), support-spark.
+//     add-spark (target:self), discard (your whole hand), support-spark,
+//     support-spark-allied-warriors.
 //   Interactive prompts (scriptable, need a player choice) -> kinds: foresee
 //     (the only interactive atom the parser emits; draw/discard atoms are always
 //     deterministic).
@@ -205,7 +206,8 @@ function parseClause(body) {
 //
 // Recognized: "Supported <filter> have +N✦" optionally followed by
 // " and have unstoppable" (partial — spark scriptable, unstoppable manual).
-// "for each ..." variants are conditional/for-each -> manual.
+// The allied-warrior-count variant is deterministic from the board. Other
+// "for each ..." variants remain manual.
 
 const SUPPORT_SUBTYPES = {
   'spirit animals': 'Spirit Animal',
@@ -216,6 +218,17 @@ const SUPPORT_SUBTYPES = {
 
 /** Parse a Support clause body into atoms. Returns { atoms, partialNote? }. */
 function parseSupport(body) {
+  if (
+    /^Supported characters have \+1✦ for each warrior you control\.?$/.test(body)
+  ) {
+    return {
+      atoms: [{
+        kind: 'support-spark-allied-warriors',
+        target: 'all-supported',
+      }],
+    };
+  }
+
   // e.g. "Supported spirit animals have +2✦."
   //      "Supported allies have +2✦ and have unstoppable."
   let m = body.match(
@@ -256,6 +269,7 @@ const DETERMINISTIC_KINDS = new Set([
   'draw',
   'discard',
   'support-spark',
+  'support-spark-allied-warriors',
 ]);
 
 /**

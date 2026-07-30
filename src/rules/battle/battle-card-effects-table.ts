@@ -1,5 +1,6 @@
 import type { BattleDebugEdit } from "../../battle/debug/commands";
 import { supportedDeploySlots, supportingReserveSlots } from "../../battle/engine/support";
+import { countAlliedWarriors } from "../../battle/state/figments";
 import type {
   BattleCardInstance,
   BattleMutableState,
@@ -200,6 +201,14 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
     support: {
       bonus: () => 1,
       applies: (ally) => ally.definition.subtype === "Spirit Animal",
+    },
+  },
+  "56411ed4-bda9-4fdf-82e5-b5492de67039": {
+    id: "56411ed4-bda9-4fdf-82e5-b5492de67039",
+    trigger: "support",
+    textHash: "84f5be41",
+    support: {
+      bonus: (ctx) => countAlliedWarriors(ctx.state, ctx.side),
     },
   },
   "1268a899-b209-46bb-bce4-6def1dcd0404": {

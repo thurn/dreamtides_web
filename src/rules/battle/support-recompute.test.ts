@@ -18,6 +18,8 @@ import { supportedDeploySlots } from "../../battle/engine/support";
 const WOODLAND_APPARITION = "1268a899-b209-46bb-bce4-6def1dcd0404";
 /** Eternal Stag — Support: supported spirit animals have +1✦ (predicate). */
 const ETERNAL_STAG = "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6";
+/** Skyflame Commander — Support: +1✦ per allied warrior. */
+const SKYFLAME_COMMANDER = "56411ed4-bda9-4fdf-82e5-b5492de67039";
 /** A card with no registered support script. */
 const UNREGISTERED = "00000000-0000-0000-0000-000000000000";
 
@@ -46,7 +48,9 @@ function makeInstance(spec: InstanceSpec): BattleCardInstance {
     definition: {
       cardId: spec.cardId,
       subtype: spec.subtype ?? null,
+      battleCardKind: "character",
     },
+    provenance: { kind: "journey-deck" },
     staticSparkBonus: spec.staticSparkBonus ?? 0,
   } as unknown as BattleCardInstance;
 }
@@ -173,6 +177,37 @@ describe("planSupportRecompute — predicate filter", () => {
     ]);
     // The non-spirit-animal ally has target 0; already 0 ⇒ no edit emitted.
     expect(edits.some((e) => "battleCardId" in e && e.battleCardId === "other")).toBe(false);
+  });
+});
+
+describe("planSupportRecompute — dynamic warrior count", () => {
+  it("Skyflame Commander grants +1 for each warrior its controller has in play", () => {
+    const state = makeState({
+      player: {
+        back: {
+          B0: { battleCardId: "warrior-0", cardId: UNREGISTERED, subtype: "Warrior" },
+          B1: { battleCardId: "commander", cardId: SKYFLAME_COMMANDER, subtype: "Warrior" },
+          B2: { battleCardId: "warrior-2", cardId: UNREGISTERED, subtype: "Warrior" },
+          B3: { battleCardId: "non-warrior", cardId: UNREGISTERED, subtype: "Mage" },
+        },
+        front: {
+          F0: { battleCardId: "supported-warrior", cardId: UNREGISTERED, subtype: "Warrior" },
+        },
+      },
+    });
+
+    expect(planSupportRecompute(state, true, () => 0, 0)).toContainEqual({
+      kind: "SET_CARD_STATIC_SPARK_BONUS",
+      battleCardId: "supported-warrior",
+      value: 4,
+    });
+
+    state.sides.player.backRank.B0 = null;
+    expect(planSupportRecompute(state, true, () => 0, 0)).toContainEqual({
+      kind: "SET_CARD_STATIC_SPARK_BONUS",
+      battleCardId: "supported-warrior",
+      value: 3,
+    });
   });
 });
 

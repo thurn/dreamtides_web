@@ -140,7 +140,7 @@
     },
     {
       "id": "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e",
-      "name": "Doorlight Foundling",
+      "name": "Prism Caller",
       "triggers": [
         "materialized"
       ],
@@ -179,7 +179,7 @@
     },
     {
       "id": "19aeffa6-fd1b-4b8f-bb0c-c35659521976",
-      "name": "Nocturne",
+      "name": "Night Scavenger",
       "triggers": [
         "materialized"
       ],
@@ -219,7 +219,7 @@
     },
     {
       "id": "1bae969b-0bc4-4777-86f3-1e860d601c5c",
-      "name": "Blood Sun Oppressor",
+      "name": "Bloodsun Oppressor",
       "triggers": [
         "materialized"
       ],
@@ -257,7 +257,7 @@
     },
     {
       "id": "22239029-f53c-4ba9-b9b6-29f6592bb722",
-      "name": "Rift Pilgrim",
+      "name": "Mirrorsea Pilgrim",
       "triggers": [
         "materialized"
       ],
@@ -313,7 +313,7 @@
     },
     {
       "id": "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7",
-      "name": "Headtaker Wurm",
+      "name": "Foundry Horror",
       "triggers": [
         "materialized"
       ],
@@ -385,7 +385,7 @@
     },
     {
       "id": "3811a0a2-66af-4c06-b179-948dfa9b2ee3",
-      "name": "Weblight Waif",
+      "name": "Cloudtop Chronicler",
       "triggers": [
         "materialized"
       ],
@@ -403,7 +403,7 @@
     },
     {
       "id": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
-      "name": "Tidecaller",
+      "name": "Firebrand Saboteur",
       "triggers": [
         "materialized"
       ],
@@ -444,7 +444,7 @@
     },
     {
       "id": "3e6a5236-9850-4a69-9fe1-48389365a399",
-      "name": "Dusk Duelist",
+      "name": "Blind Butcher",
       "triggers": [
         "materialized"
       ],
@@ -498,18 +498,23 @@
     },
     {
       "id": "41d0aa36-f15a-487d-b97c-7fd765973921",
-      "name": "Sage of the Prelude",
+      "name": "Symphonic Muse",
       "triggers": [
-        "materialized"
+        "materialized",
+        "support"
       ],
       "ruleLines": {
-        "materialized": "▸Materialized: Draw a card."
+        "materialized": "▸Materialized: Draw a card.",
+        "support": "Support - Supported characters gain +2✦."
       },
       "effects": [
         {
           "kind": "draw",
           "amount": 1,
           "target": "self"
+        },
+        {
+          "kind": "other"
         }
       ],
       "classification": "manual",
@@ -518,7 +523,7 @@
     },
     {
       "id": "44ae8838-4714-43a5-a7bd-e9f806f35ca9",
-      "name": "Nomad of Endless Paths",
+      "name": "Brawler Battlesuit",
       "triggers": [
         "materialized"
       ],
@@ -770,12 +775,12 @@
       },
       "effects": [
         {
-          "kind": "other"
+          "kind": "support-spark-allied-warriors",
+          "target": "all-supported"
         }
       ],
-      "classification": "manual",
-      "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "classification": "deterministic",
+      "scriptable": true
     },
     {
       "id": "5832785d-fb97-40b5-a12b-bb660f5e04b6",
@@ -952,7 +957,7 @@
     },
     {
       "id": "6af8cf81-9e9e-481f-b518-f5dadad99b27",
-      "name": "Winterbough Monk",
+      "name": "Relic Collector",
       "triggers": [
         "materialized"
       ],
@@ -991,7 +996,7 @@
     },
     {
       "id": "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc",
-      "name": "Verdant Wayfarer",
+      "name": "Salvage Colossus",
       "triggers": [
         "materialized"
       ],
@@ -1051,7 +1056,7 @@
     },
     {
       "id": "7530e916-e4b9-4988-b3ac-0e400c7a04ff",
-      "name": "Pilgrim of Old Stones",
+      "name": "Neural Interrogator",
       "triggers": [
         "materialized"
       ],
@@ -1231,7 +1236,7 @@
     },
     {
       "id": "87f075b1-b058-4570-a75f-c4f8f544e192",
-      "name": "Wondrous Clearing",
+      "name": "Aether Diver",
       "triggers": [
         "materialized"
       ],
@@ -1274,12 +1279,12 @@
     },
     {
       "id": "890970bd-475f-4da4-b835-2fb75882a84d",
-      "name": "Vortex Claimant",
+      "name": "Signal Hijacker",
       "triggers": [
         "materialized"
       ],
       "ruleLines": {
-        "materialized": "▸Materialized: An enemy loses all activated abilities. This character gains those abilities."
+        "materialized": "▸Materialized: An enemy loses all abilities. This character gains those abilities."
       },
       "effects": [
         {
@@ -1295,7 +1300,7 @@
     },
     {
       "id": "8adfa141-6864-4f5f-a9ca-59306eaf5432",
-      "name": "Urban Cipher",
+      "name": "Skybreak Ascendant",
       "triggers": [
         "materialized"
       ],
@@ -1338,7 +1343,7 @@
     },
     {
       "id": "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
-      "name": "Planetgazer",
+      "name": "Cloud Drifter",
       "triggers": [
         "materialized"
       ],
@@ -1376,14 +1381,17 @@
     },
     {
       "id": "95711262-8510-475c-a572-c1cd144d54cb",
-      "name": "Somber Flockmaster",
+      "name": "Pastward Wanderer",
       "triggers": [
         "dawn"
       ],
       "ruleLines": {
-        "dawn": "▸Dawn: An event in your void with cost less than or equal to this character's ✦ gains reclaim 0●."
+        "dawn": "▸Dawn: Choose an event in your void with cost less than or equal to this character's ✦. That event gains reclaim 0●."
       },
       "effects": [
+        {
+          "kind": "other"
+        },
         {
           "kind": "other"
         }
@@ -1457,7 +1465,7 @@
     },
     {
       "id": "99101fce-f2b4-4032-b999-317ce3e4a6dd",
-      "name": "Keeper of the Tides",
+      "name": "Dune Interceptor",
       "triggers": [
         "materialized"
       ],
@@ -1533,12 +1541,12 @@
     },
     {
       "id": "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
-      "name": "Ambush Operative",
+      "name": "Obliterator of Worlds",
       "triggers": [
         "materialized"
       ],
       "ruleLines": {
-        "materialized": "▸Materialized: Banish an enemy."
+        "materialized": "▸Materialized: Dissolve an enemy."
       },
       "effects": [
         {
@@ -1551,7 +1559,7 @@
     },
     {
       "id": "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b",
-      "name": "Blazepath Traveler",
+      "name": "Flamecaller",
       "triggers": [
         "materialized"
       ],
@@ -1623,7 +1631,7 @@
     },
     {
       "id": "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9",
-      "name": "Seeker of the Radiant Wilds",
+      "name": "Wrathful Gearwright",
       "triggers": [
         "materialized"
       ],
@@ -1643,7 +1651,7 @@
     },
     {
       "id": "b4754e5a-29e6-418c-bdfa-8e0230a21b7b",
-      "name": "Featherlight Summoner",
+      "name": "Nightmare Shepherd",
       "triggers": [
         "materialized"
       ],
@@ -1681,7 +1689,7 @@
     },
     {
       "id": "b6bad2a1-b857-4dd7-8b22-050eb68433a5",
-      "name": "Ferryman of the Falls",
+      "name": "The Annihilator",
       "triggers": [
         "dawn"
       ],
@@ -1769,12 +1777,12 @@
     },
     {
       "id": "bf323913-3695-49ee-8d13-8165657e3dc9",
-      "name": "Dreadwood Emissary",
+      "name": "Whisper Forager",
       "triggers": [
         "materialized"
       ],
       "ruleLines": {
-        "materialized": "▸Materialized: An event in your void gains reclaim."
+        "materialized": "▸Materialized: Chose an event in your void to gain reclaim."
       },
       "effects": [
         {
@@ -1806,7 +1814,7 @@
     },
     {
       "id": "c73f978e-8196-4589-a432-845265115555",
-      "name": "Lightningborn",
+      "name": "Lightning Channeler",
       "triggers": [
         "materialized"
       ],
@@ -1922,7 +1930,7 @@
     },
     {
       "id": "cc1c1acd-f0ff-46cc-94d9-401b9daf253f",
-      "name": "Forgotten Factory Titan",
+      "name": "Ancient Battlesuit",
       "triggers": [
         "materialized"
       ],
@@ -2033,28 +2041,8 @@
       "notes": "character-triggered effects are resolved manually; only Support is automated"
     },
     {
-      "id": "d30bd488-f921-49cb-a44f-353c54cb6548",
-      "name": "Nightprowler Panther",
-      "triggers": [
-        "dawn"
-      ],
-      "ruleLines": {
-        "dawn": "▸Dawn: Gain 1●."
-      },
-      "effects": [
-        {
-          "kind": "gain-energy",
-          "amount": 1,
-          "target": "self"
-        }
-      ],
-      "classification": "manual",
-      "scriptable": false,
-      "notes": "character-triggered effects are resolved manually; only Support is automated"
-    },
-    {
       "id": "d8c90a33-a581-469a-9fd3-9a80d1cc5315",
-      "name": "Veilseeker",
+      "name": "Voidsire",
       "triggers": [
         "materialized"
       ],
@@ -2074,7 +2062,7 @@
     },
     {
       "id": "dbd014b1-1ec8-4762-bd96-48a2a4824de2",
-      "name": "Abyssal Enforcer",
+      "name": "Repulsion Detail",
       "triggers": [
         "materialized"
       ],
@@ -2115,10 +2103,12 @@
       "id": "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49",
       "name": "Ethereal Trailblazer",
       "triggers": [
-        "dawn"
+        "dawn",
+        "materialized"
       ],
       "ruleLines": {
-        "dawn": "▸Dawn: If you control 3 or more warriors, gain 1●."
+        "dawn": "▸Materialized, Dawn: If you control 3 or more warriors, gain 1●.",
+        "materialized": "▸Materialized, Dawn: If you control 3 or more warriors, gain 1●."
       },
       "effects": [
         {
@@ -2131,7 +2121,7 @@
     },
     {
       "id": "ecf77f27-df0f-47c4-99c2-48d7fa46a137",
-      "name": "Scrapyard Custodian",
+      "name": "Revenant Automaton",
       "triggers": [
         "materialized"
       ],
@@ -2255,7 +2245,7 @@
     },
     {
       "id": "f860e815-3ed9-463d-ac4d-ed8d2778f8ad",
-      "name": "Night Prowler",
+      "name": "Night Stalker",
       "triggers": [
         "dawn",
         "materialized"
@@ -2277,7 +2267,7 @@
     },
     {
       "id": "f9a65b32-537b-457c-9eaf-b512cf1f3791",
-      "name": "Still Dreamer",
+      "name": "Dragonfly Engine",
       "triggers": [
         "materialized"
       ],

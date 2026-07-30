@@ -813,13 +813,11 @@ describe("BATTLE_PLAY_CARD", () => {
   });
 });
 
-/** The first unconditional back-rank support script (no `applies` subtype
- *  filter), so it grants spark to ANY supported front ally regardless of type. */
-function firstSupportScript(): { id: string } {
-  const script = Object.values(BATTLE_CARD_EFFECTS).find(
-    (s) => s.support.applies === undefined,
-  );
-  if (script === undefined) throw new Error("no unconditional support script registered");
+/** A fixed positive, unconditional Support script for fold-boundary fixtures. */
+function staticSupportFixtureScript(): { id: string } {
+  const id = "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f";
+  const script = BATTLE_CARD_EFFECTS[id];
+  if (script === undefined) throw new Error(`missing Support fixture script: ${id}`);
   return script;
 }
 
@@ -1416,7 +1414,7 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
 
   // --- support convergence: recompute at the fold boundary is idempotent ---
   it("recomputes Support so an immediate re-recompute yields zero edits", () => {
-    const support = firstSupportScript();
+    const support = staticSupportFixtureScript();
     const supporter = makeInstance("bc-support", support.id, "player");
     const ally = makeInstance("bc-ally", "ally-card", "player");
     // Supporter at B0 supports the front ally at F0 (supportedDeploySlots(B0) = [F0]).
@@ -1462,7 +1460,7 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
   });
 
   it("resolves Challenge lanes from the settled board after an F0 dissolved trigger", () => {
-    const support = firstSupportScript();
+    const support = staticSupportFixtureScript();
     const f0 = makeInstance("challenge-f0", BATTLE_EFFECT_DISSOLVE_SUPPORT_FIXTURE_CARD_ID, "player");
     f0.definition.printedSpark = 1;
     const f0Enemy = makeInstance("challenge-f0-enemy", "enemy-f0", "enemy");
@@ -2767,7 +2765,7 @@ describe("support recompute ordering", () => {
     // Celestial-Gateway shape: a dreamwell reveal queues a script that moves a
     // scripted supporter out of the void and into play DURING the drain. Support
     // must be recomputed AFTER the drain, so the final board is self-consistent.
-    const support = firstSupportScript();
+    const support = staticSupportFixtureScript();
     const probe = makeRichBoard({
       playerVoid: ["bc-support"],
       playerFront: { [frontRankSlotId(0)]: "bc-ally" },
