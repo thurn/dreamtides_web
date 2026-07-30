@@ -64,13 +64,13 @@ export function ScreenRouter({
     );
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="sync">
       <motion.div
         key={screenKey(screen)}
         data-journey-screen={screen.type}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+        exit={{ opacity: 0, pointerEvents: "none" }}
         transition={{ duration: 0.35 }}
       >
         <ErrorBoundary

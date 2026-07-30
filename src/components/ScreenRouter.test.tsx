@@ -44,11 +44,29 @@ import { TEMPORAL_FORK_CARD_IDS } from "../screens/cumulus_adapters/temporal-for
 const reducedMotionPreference = vi.hoisted(() => ({ value: false }));
 
 vi.mock("framer-motion", () => ({
-  AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
+  AnimatePresence: ({
+    children,
+    mode,
+  }: {
+    children: ReactNode;
+    mode?: string;
+  }) => <div data-animate-presence-mode={mode}>{children}</div>,
   useReducedMotion: () => reducedMotionPreference.value,
   motion: {
-    div: ({ children, ...props }: { children: ReactNode }) => (
-      <div {...props}>{children}</div>
+    div: ({
+      children,
+      exit,
+      ...props
+    }: {
+      children: ReactNode;
+      exit?: { pointerEvents?: string };
+    }) => (
+      <div
+        {...props}
+        data-exit-pointer-events={exit?.pointerEvents}
+      >
+        {children}
+      </div>
     ),
     img: ({
       initial: _initial,
@@ -379,6 +397,26 @@ afterEach(() => {
 });
 
 describe("ScreenRouter DreamAugury routing", () => {
+  it("mounts the next route without waiting on the outgoing screen", () => {
+    const site = makeSite("DreamAugury");
+    const container = renderWithJourney({
+      state: makeStateFor(site),
+      journeyContent: merchantContent(),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
+    });
+
+    expect(
+      container
+        .querySelector("[data-animate-presence-mode]")
+        ?.getAttribute("data-animate-presence-mode"),
+    ).toBe("sync");
+    expect(
+      container
+        .querySelector("[data-journey-screen]")
+        ?.getAttribute("data-exit-pointer-events"),
+    ).toBe("none");
+  });
+
   it("renders the Cumulus Dream Augury screen", () => {
     const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
