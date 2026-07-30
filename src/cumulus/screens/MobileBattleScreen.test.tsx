@@ -3137,6 +3137,47 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("labels the phase advance Continue while a Dreamwell card is visible", () => {
+    const interactions = {
+      canInteract: true,
+      pendingCardId: null,
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const cardId = asCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
+    const view: MobileBattleView = {
+      ...makeView(),
+      dreamwell: {
+        side: "player",
+        model: {
+          cardId,
+          displaySnapshot: {
+            id: cardId,
+            name: "Fixture Beacon",
+            renderedText: "Draw a card.",
+            energyAdded: 2,
+            imageNumber: 42,
+          },
+        },
+      },
+    };
+    const { container, root } = mount(view, interactions);
+    const next = container.querySelector<HTMLButtonElement>(
+      "[data-battle-phase-next] button",
+    );
+
+    expect(next?.textContent).toBe("Continue");
+    act(() => next?.click());
+    expect(interactions.onNextPhase).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+  });
+
   it("replaces Next Phase with AI proposal controls and a compact mobile caption", () => {
     const interactions = {
       canInteract: false,

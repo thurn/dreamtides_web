@@ -3626,6 +3626,7 @@ function ControlRow({
   isDesktop,
   interactions,
   layoutBackSlotCount,
+  nextPhaseLabel,
   phaseNavigation,
   perspective,
   tutorialNextLabel,
@@ -3637,6 +3638,7 @@ function ControlRow({
   readonly isDesktop: boolean;
   readonly interactions?: MobileBattleInteractions;
   readonly layoutBackSlotCount: number;
+  readonly nextPhaseLabel: "Continue" | "Next Phase";
   readonly phaseNavigation: "both" | "end-turn" | "tutorial" | "hidden";
   readonly perspective: BattlePerspectiveSide;
   readonly tutorialNextLabel: "End Turn" | "Start Challenge";
@@ -3807,7 +3809,7 @@ function ControlRow({
                     ? "End Turn"
                     : phaseNavigation === "tutorial"
                       ? tutorialNextLabel
-                      : "Next Phase"
+                      : nextPhaseLabel
                 }
                 variant="accent"
                 disabled={disabled}
@@ -5117,6 +5119,9 @@ export function MobileBattleScreen({
           isDesktop={isDesktop}
           interactions={interactions}
           layoutBackSlotCount={layoutBackSlotCount}
+          nextPhaseLabel={
+            view.dreamwell === null ? "Next Phase" : "Continue"
+          }
           phaseNavigation={phaseNavigation}
           perspective={view.perspective}
           tutorialNextLabel={
