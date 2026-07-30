@@ -28,6 +28,10 @@ function createState() {
 function mount(
   zone: "deck" | "void" | "banished",
   mutateState?: (state: ReturnType<typeof createState>) => void,
+  options: {
+    readonly browserSide?: "player" | "enemy";
+    readonly perspectiveSide?: "player" | "enemy";
+  } = {},
 ): {
   readonly container: HTMLDivElement;
   readonly root: Root;
@@ -49,7 +53,8 @@ function mount(
     root.render(
       <CumulusRoot>
         <CumulusBattleZoneBrowser
-          browser={{ side: "player", zone }}
+          browser={{ side: options.browserSide ?? "player", zone }}
+          perspectiveSide={options.perspectiveSide ?? "player"}
           state={state}
           onClose={() => undefined}
           onCardContextMenu={onCardContextMenu}
@@ -117,6 +122,18 @@ describe("CumulusBattleZoneBrowser", () => {
     expect(
       container.querySelector<HTMLElement>("section")?.dataset.galleryHeightMode,
     ).toBe("fill");
+
+    act(() => mounted.root.unmount());
+  });
+
+  it("labels a zone relative to the current battle perspective", () => {
+    const mounted = mount("banished", undefined, {
+      browserSide: "player",
+      perspectiveSide: "enemy",
+    });
+
+    expect(mounted.container.textContent).toContain("Opponent Banished");
+    expect(mounted.container.textContent).not.toContain("Your Banished");
 
     act(() => mounted.root.unmount());
   });

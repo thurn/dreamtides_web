@@ -5182,27 +5182,42 @@ export function MobileBattleScreen({
           gap: token("--space-3"),
         }}
       >
-        {isDesktop &&
-        near.banishedCardCount > 0 &&
-        interactions?.onZoneOpen !== undefined ? (
-          <div
-            data-battle-zone={`${near.owner}-banished`}
-            data-battle-zone-count={String(near.banishedCardCount)}
-          >
-            <IconButton
-              glyph={GLYPHS.block}
-              size="sm"
-              label={`Open your banished cards, ${String(near.banishedCardCount)} ${near.banishedCardCount === 1 ? "card" : "cards"}`}
-              testId="near-battle-banished"
-              onPress={() =>
-                interactions.onZoneOpen?.({
-                  owner: near.owner,
-                  zone: "banished",
-                })
-              }
-            />
-          </div>
-        ) : null}
+        {isDesktop && interactions?.onZoneOpen !== undefined
+          ? (
+              [
+                {
+                  side: near,
+                  label: "Your Banished",
+                  testId: "near-battle-banished",
+                },
+                {
+                  side: far,
+                  label: "Opponent Banished",
+                  testId: "far-battle-banished",
+                },
+              ] as const
+            ).map(({ side, label, testId }) =>
+              side.banishedCardCount > 0 ? (
+                <div
+                  key={side.owner}
+                  data-battle-zone={`${side.owner}-banished`}
+                  data-battle-zone-count={String(side.banishedCardCount)}
+                >
+                  <GlassButton
+                    glyph={GLYPHS.block}
+                    label={`${label} · ${String(side.banishedCardCount)}`}
+                    testId={testId}
+                    onPress={() =>
+                      interactions.onZoneOpen?.({
+                        owner: side.owner,
+                        zone: "banished",
+                      })
+                    }
+                  />
+                </div>
+              ) : null,
+            )
+          : null}
         <BattleControlMessage
           aiApproval={view.aiApproval}
           choicePrompt={view.choicePrompt}

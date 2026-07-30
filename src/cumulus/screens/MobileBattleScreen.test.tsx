@@ -1739,7 +1739,7 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
-  it("shows a block icon button at the desktop top left for a non-empty banished zone", () => {
+  it("labels both non-empty desktop banished zones by viewer relationship", () => {
     mockDesktopViewport(true);
     const view = makeView();
     const onZoneOpen = vi.fn();
@@ -1759,16 +1759,22 @@ describe("MobileBattleScreen", () => {
       {
         ...view,
         player: { ...view.player, banishedCardCount: 2 },
-        enemy: { ...view.enemy, banishedCardCount: 0 },
+        enemy: { ...view.enemy, banishedCardCount: 1 },
       },
       interactions,
     );
 
-    const controlFrame = container.querySelector<HTMLElement>(
+    const nearControlFrame = container.querySelector<HTMLElement>(
       '[data-battle-zone="player-banished"]',
     );
-    const button = controlFrame?.querySelector<HTMLButtonElement>(
+    const farControlFrame = container.querySelector<HTMLElement>(
+      '[data-battle-zone="enemy-banished"]',
+    );
+    const nearButton = nearControlFrame?.querySelector<HTMLButtonElement>(
       '[data-testid="near-battle-banished"]',
+    );
+    const farButton = farControlFrame?.querySelector<HTMLButtonElement>(
+      '[data-testid="far-battle-banished"]',
     );
     const topLeftControls = container.querySelector<HTMLElement>(
       "[data-battle-top-left-controls]",
@@ -1778,11 +1784,61 @@ describe("MobileBattleScreen", () => {
     expect(topLeftControls?.style.left).toBe(
       "calc(var(--safe-area-inset-left) + var(--space-4))",
     );
-    expect(controlFrame?.dataset.battleZoneCount).toBe("2");
-    expect(button?.getAttribute("aria-label")).toBe(
-      "Open your banished cards, 2 cards",
+    expect(nearControlFrame?.dataset.battleZoneCount).toBe("2");
+    expect(farControlFrame?.dataset.battleZoneCount).toBe("1");
+    expect(nearButton?.textContent).toBe("Your Banished · 2");
+    expect(farButton?.textContent).toBe("Opponent Banished · 1");
+    expect(nearButton?.querySelector(".bx-block")).not.toBeNull();
+    expect(farButton?.querySelector(".bx-block")).not.toBeNull();
+
+    act(() => {
+      nearButton?.click();
+      farButton?.click();
+    });
+    expect(onZoneOpen).toHaveBeenNthCalledWith(1, {
+      owner: "player",
+      zone: "banished",
+    });
+    expect(onZoneOpen).toHaveBeenNthCalledWith(2, {
+      owner: "enemy",
+      zone: "banished",
+    });
+
+    act(() => root.unmount());
+  });
+
+  it("shows a far-side banished zone when the near-side zone is empty", () => {
+    mockDesktopViewport(true);
+    const view = makeView();
+    const onZoneOpen = vi.fn();
+    const { container, root } = mount(
+      {
+        ...view,
+        perspective: "enemy",
+        player: { ...view.player, banishedCardCount: 2 },
+        enemy: { ...view.enemy, banishedCardCount: 0 },
+      },
+      {
+        canInteract: true,
+        pendingCardId: null,
+        onHandCardActivate: vi.fn(),
+        onCardDragStart: vi.fn(),
+        onCardDragEnd: vi.fn(),
+        onSlotDrop: vi.fn(),
+        onZoneDrop: vi.fn(),
+        onZoneOpen,
+        onPreviousPhase: vi.fn(),
+        onNextPhase: vi.fn(),
+      },
     );
-    expect(button?.querySelector(".bx-block")).not.toBeNull();
+
+    expect(
+      container.querySelector('[data-testid="near-battle-banished"]'),
+    ).toBeNull();
+    const button = container.querySelector<HTMLButtonElement>(
+      '[data-testid="far-battle-banished"]',
+    );
+    expect(button?.textContent).toBe("Opponent Banished · 2");
 
     act(() => button?.click());
     expect(onZoneOpen).toHaveBeenCalledWith({

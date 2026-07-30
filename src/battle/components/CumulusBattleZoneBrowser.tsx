@@ -17,6 +17,7 @@ export interface CumulusBattleZoneBrowserProps {
     readonly side: BattleSide;
     readonly zone: CumulusBrowseableZone;
   };
+  readonly perspectiveSide: BattleSide;
   readonly state: BattleMutableState;
   readonly onClose: () => void;
   readonly onCardContextMenu?: (
@@ -50,6 +51,7 @@ function sourceSurfaceForZone(
 /** Battle-state adapter for the pure Cumulus card-zone browser overlay. */
 export function CumulusBattleZoneBrowser({
   browser,
+  perspectiveSide,
   state,
   onClose,
   onCardContextMenu,
@@ -91,7 +93,7 @@ export function CumulusBattleZoneBrowser({
       }}
     >
       <CardZoneBrowserOverlay
-        ownerLabel={browser.side === "player" ? "Your" : "Enemy"}
+        ownerLabel={browser.side === perspectiveSide ? "Your" : "Opponent"}
         zone={browser.zone}
         cards={cards}
         onClose={onClose}

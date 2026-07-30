@@ -1433,6 +1433,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
             side: openZoneBrowser.side,
             zone: openZoneBrowser.zone,
           }}
+          perspectiveSide={perspectiveSide}
           state={board}
           onClose={() => setOpenZoneBrowser(null)}
           onCardContextMenu={handleCardContextMenu}
