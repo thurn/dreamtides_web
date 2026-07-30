@@ -7,6 +7,10 @@ import {
 import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { GlassButton } from "../components/controls/GlassButton";
 import { IconButton } from "../components/controls/IconButton";
+import {
+  DreamwellCard,
+  type DreamwellCardModel,
+} from "../components/battle/DreamwellCard";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { GLYPHS } from "../primitives/glyph";
 import { POINTER_MOVEMENT_SLOP_PX } from "../primitives/pointer-gesture";
@@ -21,6 +25,9 @@ const FORESEE_INDICATOR_WIDTH_MOBILE_PX = 64;
 /** Keeps both drop indicators aligned to the complete card silhouette. */
 const FORESEE_ROW_HEIGHT_DESKTOP_PX = 252;
 const FORESEE_ROW_HEIGHT_MOBILE_PX = 146;
+/** Readable source-card widths while leaving room for the Foresee workflow. */
+const FORESEE_SOURCE_CARD_WIDTH_DESKTOP_PX = 360;
+const FORESEE_SOURCE_CARD_WIDTH_MOBILE_PX = 260;
 
 /** One UUID-backed battle card in the inspected deck prefix. */
 export interface BattleForeseeCardView {
@@ -36,6 +43,8 @@ export interface BattleForeseeView {
   initialCount: number;
   /** Available cards in their original top-to-bottom deck order. */
   cards: readonly BattleForeseeCardView[];
+  /** Dreamwell card whose effect opened this authoritative prompt. */
+  sourceDreamwellCard?: DreamwellCardModel;
 }
 
 /** The complete staged result emitted by one confirmation. */
@@ -85,6 +94,9 @@ export function BattleForeseeOverlay({
   const rowHeightPx = isDesktop
     ? FORESEE_ROW_HEIGHT_DESKTOP_PX
     : FORESEE_ROW_HEIGHT_MOBILE_PX;
+  const sourceCardWidthPx = isDesktop
+    ? FORESEE_SOURCE_CARD_WIDTH_DESKTOP_PX
+    : FORESEE_SOURCE_CARD_WIDTH_MOBILE_PX;
   const allCardIds = view.cards.map((card) => card.battleCardId);
   const minimumCount = allCardIds.length === 0 ? 0 : 1;
   const initialCount = Math.min(
@@ -337,6 +349,31 @@ export function BattleForeseeOverlay({
         data-battle-cumulus-foresee=""
         style={{ display: "grid", gap: token("--space-5") }}
       >
+        {view.sourceDreamwellCard === undefined ? null : (
+          <section
+            data-battle-prompt-source="dreamwell"
+            style={{
+              display: "grid",
+              justifyItems: "center",
+              gap: token("--space-2"),
+            }}
+          >
+            <span
+              style={{
+                color: token("--text-on-glass-muted"),
+                font: token("--t-eyebrow"),
+                letterSpacing: token("--tracking-eyebrow"),
+                textTransform: "uppercase",
+              }}
+            >
+              Triggered By
+            </span>
+            <div style={{ width: sourceCardWidthPx, maxWidth: "100%" }}>
+              <DreamwellCard model={view.sourceDreamwellCard} />
+            </div>
+          </section>
+        )}
+
         <div
           data-foresee-count-controls=""
           style={{

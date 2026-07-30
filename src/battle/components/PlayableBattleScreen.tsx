@@ -199,6 +199,15 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     () => buildBattleTutorialGuidanceView(battle),
     [battle],
   );
+  const pendingPromptDreamwellCard = useMemo(
+    () =>
+      pendingPrompt?.run.scriptRef.table === "dreamwell"
+        ? battleInit.dreamwellDeck.find(
+            (card) => card.id === pendingPrompt.run.scriptRef.id,
+          )
+        : undefined,
+    [battleInit.dreamwellDeck, pendingPrompt],
+  );
 
   const { state: journeyState, cardDatabase, journeyContent } = useJourney();
   const isCumulusDesktopLayout = useIsDesktop();
@@ -1494,6 +1503,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           initialCount={pendingPrompt.options.count}
           side={pendingPrompt.run.side}
           state={board}
+          sourceDreamwellCard={pendingPromptDreamwellCard}
           onConfirm={({ viewedCardIds, orderedCardIds, voidCardIds }) =>
             resolvePendingPrompt({
               kind: "foresee",

@@ -46,6 +46,17 @@ function makeView(initialCount = 1): BattleForeseeView {
   };
 }
 
+const SOURCE_DREAMWELL_CARD = {
+  cardId: asCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
+  displaySnapshot: {
+    id: asCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
+    name: "Skypath",
+    renderedText: "Foresee 1.",
+    energyAdded: 1,
+    imageNumber: 1897537165,
+  },
+} as const;
+
 function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
   const container = document.createElement("div");
   document.body.append(container);
@@ -144,6 +155,31 @@ afterEach(() => {
 });
 
 describe("BattleForeseeOverlay", () => {
+  it("shows the Dreamwell card that triggered an authoritative Foresee prompt", () => {
+    const { container, root } = mount(
+      <BattleForeseeOverlay
+        view={{
+          ...makeView(),
+          sourceDreamwellCard: SOURCE_DREAMWELL_CARD,
+        }}
+        onConfirm={() => {}}
+      />,
+    );
+
+    const source = container.querySelector<HTMLElement>(
+      '[data-battle-prompt-source="dreamwell"]',
+    );
+    expect(source?.textContent).toContain("Triggered By");
+    expect(
+      source?.querySelector("[data-dreamwell-card]")
+        ?.getAttribute("data-dreamwell-card"),
+    ).toBe(SOURCE_DREAMWELL_CARD.cardId);
+    expect(source?.querySelector("[data-dreamwell-card-name]")?.textContent)
+      .toBe("Skypath");
+
+    act(() => root.unmount());
+  });
+
   it("renders one horizontal workflow with count controls and Confirm", () => {
     const { container, root } = mount(
       <BattleForeseeOverlay view={makeView()} onConfirm={() => {}} />,

@@ -4,13 +4,19 @@ import {
   type BattleForeseeResolution,
   type BattleForeseeView,
 } from "../../cumulus/screens/BattleForeseeOverlay";
-import type { BattleMutableState, BattleSide } from "../types";
+import type {
+  BattleMutableState,
+  BattleSide,
+  DreamwellCardDefinition,
+} from "../types";
 import { battleGameCardModel } from "../ui/battle-game-card-model";
+import { dreamwellCardModel } from "../ui/dreamwell-card-model";
 
 export interface CumulusBattleForeseeOverlayProps {
   initialCount: number;
   side: BattleSide;
   state: BattleMutableState;
+  sourceDreamwellCard?: DreamwellCardDefinition;
   onConfirm: (resolution: BattleForeseeResolution) => void;
 }
 
@@ -19,6 +25,7 @@ export function CumulusBattleForeseeOverlay({
   initialCount,
   side,
   state,
+  sourceDreamwellCard,
   onConfirm,
 }: CumulusBattleForeseeOverlayProps) {
   const view = useMemo<BattleForeseeView>(() => ({
@@ -33,7 +40,16 @@ export function CumulusBattleForeseeOverlay({
               model: battleGameCardModel(instance),
             }];
       }),
-  }), [initialCount, side, state.cardInstances, state.sides]);
+    ...(sourceDreamwellCard === undefined
+      ? {}
+      : { sourceDreamwellCard: dreamwellCardModel(sourceDreamwellCard) }),
+  }), [
+    initialCount,
+    side,
+    sourceDreamwellCard,
+    state.cardInstances,
+    state.sides,
+  ]);
 
   return (
     <BattleForeseeOverlay
