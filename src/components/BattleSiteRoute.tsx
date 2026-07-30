@@ -34,6 +34,8 @@ export function BattleSiteRoute({
   const gameState = useGameState();
   const actions = useActions();
   const battle = gameState.battle;
+  const isActiveSite =
+    state.screen.type === "site" && state.screen.siteId === site.id;
   const beginBattle = (): void => {
     if (runtimeConfig.seedOverride === null) {
       void actions.beginBattle(site.id);
@@ -43,7 +45,7 @@ export function BattleSiteRoute({
   };
   const preview = useMemo(
     () =>
-      battle === null
+      battle === null && isActiveSite
         ? createBattlePreview(
             journeyContent,
             state,
@@ -51,10 +53,24 @@ export function BattleSiteRoute({
             runtimeConfig.seedOverride,
           )
         : null,
-    [battle, journeyContent, runtimeConfig.seedOverride, site.id, state],
+    [
+      battle,
+      isActiveSite,
+      journeyContent,
+      runtimeConfig.seedOverride,
+      site.id,
+      state,
+    ],
   );
 
   if (battle === null) {
+    // AnimatePresence keeps the previous site route mounted while it fades
+    // out. END_BATTLE atomically tears down the battle and routes to the Atlas,
+    // so that exiting route must not reinterpret the cleared battle as a fresh
+    // pre-battle preview.
+    if (!isActiveSite) {
+      return null;
+    }
     if (preview === null) {
       return (
         <ApplicationStateScreen

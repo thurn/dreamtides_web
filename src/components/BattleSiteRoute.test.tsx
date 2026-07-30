@@ -523,4 +523,62 @@ describe("BattleSiteRoute", () => {
       container.querySelector('[data-screen="cumulus-battle-start"]'),
     ).not.toBeNull();
   });
+
+  it("does not show Battle Start while the completed battle route exits to the Atlas", () => {
+    mockGameState = makeFoldStateWithBattle();
+    const { container, root } = mount(
+      <BattleSiteRoute
+        site={makeSite()}
+        cardDatabase={makeBattleTestCardDatabase()}
+        runtimeConfig={{
+          seedOverride: null,
+          aiMode: false,
+          gameId: "9a9qfv",
+          databaseMode: "emulator",
+        }}
+      />,
+    );
+
+    expect(
+      container.querySelector('[data-screen="cumulus-playable"]'),
+    ).not.toBeNull();
+
+    mockGameState = {
+      frontDoor: { phase: "main", journeyId: null, tutorial: null },
+      journey: makeJourneyState({
+        completionLevel: 4,
+        currentDreamscape: null,
+        screen: { type: "atlas" },
+        visitedSites: ["site-7"],
+      }),
+      battle: null,
+    };
+    setJourneyState({
+      completionLevel: 4,
+      currentDreamscape: null,
+      screen: { type: "atlas" },
+      visitedSites: ["site-7"],
+    });
+    act(() => {
+      root.render(
+        <BattleSiteRoute
+          site={makeSite()}
+          cardDatabase={makeBattleTestCardDatabase()}
+          runtimeConfig={{
+            seedOverride: null,
+            aiMode: false,
+            gameId: "9a9qfv",
+            databaseMode: "emulator",
+          }}
+        />,
+      );
+    });
+
+    expect(
+      container.querySelector('[data-screen="cumulus-battle-start"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-screen="cumulus-playable"]'),
+    ).toBeNull();
+  });
 });
