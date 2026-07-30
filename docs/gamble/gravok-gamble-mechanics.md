@@ -5,16 +5,16 @@ The retained 22-candidate working set is in
 
 ## Signature suggestions
 
-- **Three-Way Wager** offers 69.23%, 46.15%, and 30.77% win bands, letting the player trade probability for a shown Dreamsign plus increasingly valuable deck rewards.
-- **Progressive Draw** offers up to four separately purchased draws whose winning top-rank bands expand from Q–A to 6–A after each failure.
-- **Cash-Out Ladder** banks a larger prize after each safe draw, then asks whether to keep it or risk the entire bank against a widening low-rank bust band.
-- **Red-or-Black Insurance** guarantees a shown Dreamsign, then lets the player pay to protect either clubs or spades from an otherwise exact 50% Bane rider.
-- **Four-Suit Escrow** lets the player choose which deck card to remove for two battles before a suit determines its disclosed return contract.
-- **High–Low** is a four-call higher/lower game with ace-high card ordering, live card-counting odds, escalating cash-out values, and total loss of the unbanked payout on one wrong call.
-- **Twenty-One** combines blackjack with Cursed Tome and Knowing Skull: each hit costs Essence, while totals of 19, 20, and 21 earn explicitly different prizes.
-- **Five-Card Draw** lets the player choose which cards to hold, publishes exact outcome counts for that hold, and pays loss, push, Essence, Transfiguration, and Dreamsign tiers.
-- **Odds Auction** asks the player to assign three different assets to unequal rank bands before one card determines which posted price buys a fixed premium reward.
-- **Challenge Bet** lets the player choose standard or double stakes before a card discloses the exact next-battle handicap and victory reward.
+- **Three-Way Wager:** click `Safe`, `Risky`, or `Long Shot`, each showing its odds and reward; one card then wins that reward or loses the 50-Essence stake.
+- **Progressive Draw:** click `Draw` or `Leave`; after each loss, the next draw costs more but has better odds of winning the shown Dreamsign.
+- **Cash-Out Ladder:** a safe draw creates a prize and offers `Cash Out` or `Risk It`; a later bust erases that prize and adds the shown Bane.
+- **Red-or-Black Insurance:** gain the shown Dreamsign, but choose whether to pay to protect clubs or spades from an otherwise 50% chance to add a disclosed Bane.
+- **Four-Suit Escrow:** select a deck card to remove, then one equally likely suit determines when and how it returns—or whether it is purged.
+- **High–Low:** call `Higher` or `Lower` with exact live odds, then cash out an increasing payout or risk losing it on another call.
+- **Twenty-One:** choose `Hit — 10 Essence` or `Stand`; the final blackjack total loses, refunds, or upgrades the payout shown on screen.
+- **Five-Card Draw:** toggle which playing cards to hold while the exact payout chances update, then replace the rest and resolve the poker hand.
+- **Odds Auction:** assign three possible prices to three unequal rank bands, then one card chooses the single price paid for a fixed reward.
+- **Challenge Bet:** choose standard or doubled next-battle effects, then one card randomly selects the exact handicap and victory reward from the displayed tables.
 
 ## Design position
 
@@ -180,85 +180,38 @@ general-purpose RNG may not choose the game.
 
 ## 1. Three-Way Wager
 
-### Player-facing promise
+The screen shows one Dreamsign, a card to Transfigure, and three wager buttons.
+Each button states the same 50-Essence stake, its exact chance to win, and its
+complete reward. The player may change the selected deck card before choosing
+`Safe`, `Risky`, or `Long Shot`, or choose `Leave` for free. Choosing a wager
+pays the table fee and stake, immediately draws one playing card, and either
+grants that button’s reward or loses the stake.
 
-Choose a `36 / 52 = 69.23%`, `24 / 52 = 46.15%`, or
-`16 / 52 = 30.77%` win band. Every tier awards one shown Dreamsign, while the
-two narrower bands add progressively stronger deck rewards. Every tier risks
-50 Essence.
+| Button | Winning draw | Chance | Reward on a win |
+| --- | --- | ---: | --- |
+| `Safe — 50 Essence` | ranks 6–A | 36 / 52 = 69.23% | gain the shown Dreamsign |
+| `Risky — 50 Essence` | ranks 9–A | 24 / 52 = 46.15% | gain the Dreamsign and apply the previewed Transfiguration |
+| `Long Shot — 50 Essence` | ranks J–A | 16 / 52 = 30.77% | gain the Dreamsign, apply the Transfiguration, and add a copy of that entry |
 
-### Inspiration and playing-card translation
-
-The Joust offers a safer, lower-payout combatant and a riskier, higher-payout
-combatant. The supplied corpus describes those relative lanes but does not state
-their numerical odds. The prompt’s illustrative design target supplies 70% and
-30%. A full deck approximates those endpoints with top-rank bands of 36 and 16
-cards. A 24-card middle band adds the requested third reward tier without
-changing the same “lower probability buys a larger payout” result.
-
-### Setup and eligibility
-
-1. Prepare and display the shown Dreamsign.
-2. Let the player select and lock one eligible non-Bane deck entry with an
-   eligible Transfiguration. Show its Transfiguration preview and the copy the
-   top tier would create.
-3. When no such target exists, keep all three tiers available: replace the
-   middle tier’s card reward with 100 Essence and the top tier’s card rewards
-   with 200 Essence.
-4. Display all three tiers, every reward, the 50-Essence stake, and the exact
-   winning ranks.
-5. The player chooses one tier, pays the table fee and stake, then draws one
-   card.
-
-### Resolution
-
-| Tier | Win cards | Exact win chance | Win | Loss |
-| --- | --- | ---: | --- | --- |
-| Low payout | ranks 6–A | 36 / 52 = 69.23% | gain the shown Dreamsign | lose the 50-Essence stake |
-| Medium payout | ranks 9–A | 24 / 52 = 46.15% | gain the shown Dreamsign and apply the previewed Transfiguration | lose the 50-Essence stake |
-| High payout | ranks J–A | 16 / 52 = 30.77% | gain the shown Dreamsign, apply the previewed Transfiguration, and add one copy of the resulting entry | lose the 50-Essence stake |
-
-The drawn suit has no mechanical effect. Any Essence fallback described during
-setup replaces only the deck reward in the corresponding row.
+The drawn card and winning ranks remain visible on the result screen; suit has
+no effect. If no non-Bane entry can be Transfigured, `Risky` instead awards 100
+Essence and `Long Shot` 200 Essence in place of their deck rewards.
 
 ### Farpoint Station
 
-The table fee is waived. Low, medium, and high payout wins also grant 50, 100,
-and 150 Essence respectively. The rank thresholds and stake remain unchanged.
-
-### Why it belongs
-
-This is the fastest Gravok encounter: one meaningful decision, one card, one
-result. The three published bands teach that a narrower ace-high interval buys
-a more valuable prize.
+The table fee is waived. `Safe`, `Risky`, and `Long Shot` wins also grant 50,
+100, and 150 Essence respectively. The rank thresholds and stake remain
+unchanged.
 
 ## 2. Progressive Draw
 
-### Player-facing promise
-
-Buy up to four draws to win one shown Dreamsign. Every failure reveals a card,
-then offers a more expensive draw with a wider published top-rank band.
-
-### Inspiration and playing-card translation
-
-Scrap Ooze charges increasing HP while its relic chance rises by ten percentage
-points per attempt. Tablet of Truth similarly invites repeated permanent
-payment for incremental gain. Here each purchase increases both the Essence
-cost and the size of an ace-high winning band. Reassembling the deck after a
-failure keeps each published fraction fixed and auditable.
-
-### Setup and sequence
-
-1. Prepare and show the Dreamsign.
-2. The player may buy Draw 1 or decline.
-3. On a failure, show the drawn card, the cumulative Essence spent, and the next
-   draw’s exact cost and odds.
-4. The player may stop with no reward or pay for the next draw.
-5. Before each paid draw, reassemble all 52 cards and derive a new shuffle.
-6. The first win grants the Dreamsign and completes the site. Four failures
-   complete the site with no reward.
-
-### Resolution table
+The screen shows the Dreamsign being chased, all four draw costs and win
+chances, and buttons for `Draw — 15 Essence` and `Leave`. Clicking `Draw`
+pays the table fee plus its listed cost and reveals a card. A winning rank
+grants the Dreamsign and ends the game. After a loss, the screen keeps the
+failed card and total spent visible, then offers `Draw Again` at the next row’s
+higher price and better odds, or `Leave` with no reward. Four losses end the
+game.
 
 | Draw | Cost for this draw | Cumulative cost | Win cards | Exact win chance |
 | --- | ---: | ---: | --- | ---: |
@@ -267,49 +220,27 @@ failure keeps each published fraction fixed and auditable.
 | 3 | 40 Essence | 80 | ranks 8–A | 28 / 52 = 53.85% |
 | 4 | 60 Essence | 140 | ranks 6–A | 36 / 52 = 69.23% |
 
-If the player buys all four draws, the probability of at least one win is
-
-`1 − (40/52 × 32/52 × 24/52 × 16/52) = 93.28%`.
-
-The 6.72% four-failure tail grants nothing; the player knowingly bought four
-separate chances rather than a guaranteed Dreamsign.
+The deck is reassembled and reshuffled before each purchase, so every displayed
+fraction uses 52 cards. Buying all four draws costs 140 Essence and has a
+93.28% chance to win at least once; the remaining 6.72% grants nothing.
 
 ### Farpoint Station
 
 The costs are 10/20/30/45 Essence, for a maximum of 105 Essence. A win also
 grants 50 Essence. The odds are unchanged.
 
-### Why it belongs
-
-This is the pure attrition model. Failure never erases an accumulated reward or
-adds a Bane; the risk is deciding how much Essence to bleed into improving odds.
-
 ## 3. Cash-Out Ladder
 
-### Player-facing promise
+The opening screen shows the three-step ladder, the Dreamsign at its top, and
+the exact Bane added by any bust. Its buttons are `Draw` and `Leave`. The first
+draw costs only the table fee. A safe card creates a 60-Essence bank and
+replaces the controls with `Cash Out — 60 Essence` and `Risk It`.
 
-Avoid the bust band, bank a prize, and choose whether to cash out or expose the
-whole bank to a more dangerous draw.
-
-### Inspiration and playing-card translation
-
-Clipped Wings escalates from a safe reward toward rarer wings while collapse
-odds rise. Dead Adventurer increases the danger of each search. The Colosseum
-asks the player to leave with current rewards or continue into a harder second
-fight. Cash-Out Ladder expresses that shared mechanical result with three
-published low-rank bust bands.
-
-### Setup and sequence
-
-1. Starting the game pays only the ordinary table fee.
-2. Each draw reassembles and reshuffles the deck.
-3. A bust card ends the game, forfeits the entire unclaimed bank, and adds
-   one disclosed Bane.
-4. A surviving card replaces the bank with the value in the table.
-5. After Draw 1 or Draw 2, the player may cash out or continue.
-6. Surviving Draw 3 automatically cashes out.
-
-### Resolution table
+`Cash Out` immediately grants the displayed bank. `Risk It` draws again with
+the next row’s larger bust band: a safe card replaces the bank with the next
+prize, while a bust erases the entire unclaimed bank, adds the shown Bane, and
+ends the game. The third safe draw cashes out automatically. The deck is
+reassembled and reshuffled for every draw.
 
 | Draw | Bust cards | Bust chance | Safe chance | Bank after a safe draw |
 | --- | --- | ---: | ---: | --- |
@@ -317,12 +248,7 @@ published low-rank bust bands.
 | 2 | ranks 2–4 | 12 / 52 = 23.08% | 40 / 52 = 76.92% | 140 Essence |
 | 3 | ranks 2–7 | 24 / 52 = 46.15% | 28 / 52 = 53.85% | 140 Essence plus the shown Dreamsign |
 
-The probability of surviving all three draws is
-
-`48/52 × 40/52 × 28/52 = 38.23%`.
-
-The player can instead lock the 92.31% first-draw result or the 71.01% chance of
-surviving through Draw 2.
+The chance of reaching and collecting the top prize is 38.23%.
 
 ### Farpoint Station
 
@@ -337,46 +263,24 @@ The bust sets are Twos, 2–3, and 2–5:
 The probability of surviving all three enhanced draws is 54.07%. Farpoint also
 waives the table fee.
 
-### Why it belongs
-
-Progressive Draw risks only additional spend. Cash-Out Ladder risks a prize the
-player already feels they own. That loss texture creates a different emotional
-decision despite both games having escalating odds.
-
 ## 4. Red-or-Black Insurance
 
-### Player-facing promise
+The screen shows the guaranteed Dreamsign and previews two Banes: the one added
+by clubs and the one added by spades. The player has four buttons:
+`Play Uninsured`, `Insure Clubs — 40 Essence`, `Insure Spades — 40 Essence`,
+and `Leave`. Each play button shows its exact clean-card chance and immediately
+draws one card after charging the table fee and any listed premium. The
+Dreamsign is granted on every draw; insurance only changes which black suit can
+add its displayed Bane.
 
-Take one shown Dreamsign, then choose whether to accept an exact 50% Bane risk
-or pay 40 Essence to insure either clubs or spades.
+| Button | Premium | Clean draw | Bane draw |
+| --- | ---: | --- | --- |
+| `Play Uninsured` | 0 | hearts or diamonds: 50% | clubs add the club Bane; spades add the spade Bane |
+| `Insure Clubs` | 40 Essence | hearts, diamonds, or clubs: 75% | spades add the spade Bane |
+| `Insure Spades` | 40 Essence | hearts, diamonds, or spades: 75% | clubs add the club Bane |
 
-### Inspiration and playing-card translation
-
-The Mausoleum guarantees a relic and has a 50% chance to add Writhe. The
-uninsured wager recreates that mechanical result exactly: the 26 red cards are
-clean and the 26 black cards carry a rider. Golden Shrine contributes the
-broader idea of accepting a larger reward with a lasting deck-pollution cost.
-The insurance decision adds agency without changing the source event’s baseline
-odds.
-
-### Setup and resolution
-
-1. Display the shown Dreamsign.
-2. Display the exact club Bane id and spade Bane id.
-3. The player chooses one of three coverage options, pays the ordinary table
-   fee and any premium, or declines for free.
-4. Draw one card. The Dreamsign is always gained.
-
-| Coverage choice | Premium | Clean cards | Exact clean chance | Bane result |
-| --- | ---: | --- | ---: | --- |
-| Uninsured | 0 | hearts or diamonds | 26 / 52 = 50.00% | clubs add the disclosed club Bane; spades add the disclosed spade Bane |
-| Insure clubs | 40 Essence | hearts, diamonds, or clubs | 39 / 52 = 75.00% | spades add the disclosed spade Bane |
-| Insure spades | 40 Essence | hearts, diamonds, or spades | 39 / 52 = 75.00% | clubs add the disclosed club Bane |
-
-The insured options have equal probabilities but expose different Banes. Their
-choice therefore depends on which disclosed Bane is less damaging to the
-current deck. If the Dreamsign has fallen back to 150 Essence, the Bane and
-insurance rules remain unchanged.
+If the Dreamsign is replaced with its 150-Essence fallback, the Bane and
+insurance rules stay the same.
 
 ### Farpoint Station
 
@@ -384,38 +288,13 @@ Every outcome also grants 75 Essence, and either insurance premium is 25
 Essence. The uninsured 50% Bane chance and insured 25% Bane chance are
 unchanged.
 
-### Why it belongs
-
-This is a compact “guaranteed upside, uncertain contamination” event. The
-player prices that contamination using two disclosed Banes, current Essence,
-and access to a future Purge site.
-
 ## 5. Four-Suit Escrow
 
-### Player-facing promise
-
-Place one selected card in escrow, then draw its contract: early
-Transfiguration, delayed duplication, delayed compensation, or permanent loss.
-
-### Inspiration and playing-card translation
-
-Abandoned Winged removes a card and returns it upgraded through Heaven’s Aid;
-waiting again produces Heaven’s Finest. Armageddon Battlefield rewards keeping
-a special card through two battles. Lifemother’s Remnant trades immediate value
-against a stronger delayed version. Four-Suit Escrow keeps their run-spanning
-commitment but lets a four-suit draw select the exact contract.
-
-### Setup and eligibility
-
-- Select one non-starter, non-Bane deck entry.
-- The player sees all four suit contracts before accepting.
-- Accepting pays the ordinary table fee and moves the entry into an escrow
-  state immediately.
-- Draw one card. Its rank is cosmetic; its suit has exactly 25% probability.
-- Store the resolved suit, entry id, card UUID, and battles remaining. Discard
-  the playing-card deck.
-
-### Contracts
+The screen lets the player select one non-starter, non-Bane deck card and shows
+all four equally likely contracts below. Its controls are `Place in Escrow` and
+`Leave`. Clicking `Place in Escrow` pays the table fee, immediately removes the
+selected card from the deck, and draws one playing card. The suit locks the
+card’s contract; rank has no effect.
 
 | Suit | Chance | Contract |
 | --- | ---: | --- |
@@ -424,10 +303,10 @@ commitment but lets a four-suit draw select the exact contract.
 | Clubs | 13 / 52 = 25% | After two completed battles, return the original unchanged and grant 150 Essence. |
 | Spades | 13 / 52 = 25% | After two completed battles, permanently purge the entry. |
 
-A completed battle decrements the countdown after its reward is resolved. The
-card returns before the next dreamscape becomes interactive when the countdown
-reaches zero. Loading the room or save state preserves the contract. If the run
-ends first, no further effect resolves.
+The result screen shows the drawn suit, the locked contract, and the number of
+battles remaining. Completed battles tick the counter after their rewards; a
+returning card is restored before the next dreamscape becomes interactive. If
+the run ends first, the contract has no further effect.
 
 ### Farpoint Station
 
@@ -438,40 +317,19 @@ ends first, no further effect resolves.
 - Clubs pays 225 Essence.
 - Spades returns the card unchanged after two battles.
 
-### Why it belongs
-
-This is the strongest Monster Train-style proposal. Its stake changes the next
-two battles even before the random contract pays off. Choosing the exact card
-at risk changes both the short-term deck weakness and the value of every
-possible contract.
-
 ## 6. High–Low
 
-### Player-facing promise
+The opening screen shows the payout ladder and offers
+`Play — 25 Essence` or `Leave`. Playing pays the table fee and stake, shuffles
+once, and reveals a starting card. The screen then shows two buttons such as
+`Higher — 32/51 (62.75%)` and `Lower — 19/51 (37.25%)`; their odds update from
+the cards still in the deck.
 
-Call whether the next card is higher or lower, then cash out or press the whole
-bank through as many as four correct calls.
-
-### Inspiration and playing-card translation
-
-Gremlin Looter grants a reward, then tempts the player to haggle again until a
-failed roll ends the chain. Clipped Wings exposes accumulated value to repeated
-collapse. High–Low turns those structures into a recognizable casino game
-whose conditional odds can be counted exactly from the visible shoe.
-
-### Setup and sequence
-
-1. Pay the ordinary table fee and a 25-Essence stake.
-2. Shuffle once and reveal the first card.
-3. Count every undealt card higher and lower under the total order
-   2♣ < 2♦ < 2♥ < 2♠ < … < A♠.
-4. Display both exact fractions. The player calls one direction.
-5. Reveal the next card without replacement.
-6. A correct call advances the bank. The player may cash out or call again.
-7. A wrong call loses the stake and the entire unclaimed bank.
-8. Four correct calls automatically cash out.
-
-### Payout ladder
+Clicking a direction reveals the next card without replacement. A wrong call
+loses the 25-Essence stake and every unclaimed payout. After a correct call,
+the new card becomes the reference and the screen offers `Cash Out` for the
+current payout or new `Higher` and `Lower` calls. Four correct calls cash out
+automatically.
 
 | Consecutive correct calls | Total cash-out payout | Profit after the 25-Essence stake |
 | ---: | ---: | ---: |
@@ -480,54 +338,25 @@ whose conditional odds can be counted exactly from the visible shoe.
 | 3 | 200 Essence | 175 |
 | 4 | 400 Essence | 375 |
 
-There are no ties because all cards have a unique position. Suppose 49 cards
-remain, with 31 higher and 18 lower than the visible card. The buttons must read
-`Higher: 31 / 49 = 63.27%` and `Lower: 18 / 49 = 36.73%`.
-
-The player may always choose the larger set, but the odds evolve with every
-removed card. 2♣ guarantees a first higher call; A♠ guarantees a first lower
-call. Those rare edges are part of the game rather than silently corrected by
-the house.
+Cards use the unique order 2♣ < 2♦ < 2♥ < 2♠ < … < A♠, so calls never tie.
 
 ### Farpoint Station
 
 The table fee is waived. Total payouts are 60/125/250/500 Essence. The
 25-Essence stake and card-order rules are unchanged.
 
-### Why it belongs
-
-This is the clearest skill-expressive casino game. Randomness creates the shoe;
-visible composition, risk tolerance, and the player’s stopping decision
-determine how to use it.
-
 ## 7. Twenty-One
 
-### Player-facing promise
+The opening screen shows the payout table, the Dreamsign awarded for 21, and
+buttons for `Deal — 50 Essence` and `Leave`. Dealing pays the table fee and
+stake, then shows two face-up cards and their blackjack total. The player then
+chooses `Stand` or `Hit — 10 Essence`. Above those buttons, the UI counts how
+many remaining cards would leave the hand at 15 or less, 16–18, 19–20, exactly
+21, or bust.
 
-Build a blackjack total toward 21. Every hit costs 10 Essence; a bust or timid
-stand loses the stake, while 19, 20, and 21 pay explicit reward tiers.
-
-### Inspiration and playing-card translation
-
-Cursed Tome asks the player to endure escalating damage for a rare relic.
-Knowing Skull sells repeated answers at increasing HP cost, and Sensory Stone
-raises reward quality with additional payments. Twenty-One converts “pay again
-or stop” into a solo blackjack decision. The next-card danger is computed from
-the remaining physical deck.
-
-### Setup and hand rules
-
-1. Pay the ordinary table fee and a 50-Essence stake.
-2. Deal two cards face up without replacement.
-3. J/Q/K count as 10. Each Ace takes the value 1 or 11 that yields the highest
-   total at or below 21; if every assignment busts, use the lowest total.
-4. At totals below 21, the player may stand or pay 10 Essence to hit.
-5. Exactly 21 resolves immediately without another decision.
-6. Before a hit, enumerate every remaining card and display the exact number
-   that would produce 15 or less, 16–18, 19–20, 21, or a bust after Ace
-   optimization.
-
-### Resolution
+`Hit` pays 10 Essence and deals another card without replacement. The same
+choice repeats below 21; exactly 21 or a bust resolves immediately. `Stand`
+ends the hand at the current row:
 
 | Terminal total | Result |
 | --- | --- |
@@ -537,53 +366,27 @@ the remaining physical deck.
 | 19–20 by standing | receive 150 Essence total |
 | Exactly 21 | receive 150 Essence and the shown Dreamsign |
 
-The payout is total returned value, not profit: standing on 19–20 produces a
-100-Essence profit before hit fees and the ordinary table fee.
+J/Q/K count as 10. Aces use 1 or 11 to make the highest total at or below 21.
+Payouts are total returns, so 150 Essence is 100 profit before hit fees and the
+table fee.
 
 ### Farpoint Station
 
 Hits cost 0 Essence. Totals 19–20 pay 200 Essence. Exactly 21 pays 200 Essence
 plus the shown Dreamsign. The 50-Essence stake remains.
 
-### Why it belongs
-
-The player never needs a vague “bust risk” label. The UI can derive the exact
-next-card distribution from the current hand and remaining deck, turning a
-familiar casino decision into transparent roguelike resource management.
-
 ## 8. Five-Card Draw
 
-### Player-facing promise
+The opening screen shows the Dreamsign, lets the player select one non-Bane
+deck card to Transfigure, previews that change, and offers
+`Deal — 50 Essence` or `Leave`. Dealing pays the table fee and stake, then
+shows five face-up playing cards.
 
-Stake 50 Essence, deal five cards, then choose which cards to hold and replace.
-Before the draw is confirmed, see the exact payout distribution produced by
-that specific hold.
-
-### Inspiration and playing-card translation
-
-Wheel of Change maps one random result across several good and bad outcomes.
-The Joust asks for a stake against a payout tier. Five-Card Draw uses standard
-poker categories for the outcome table, then adds a hold/discard decision so
-the player can reshape the exact distribution instead of merely watching a
-random payout.
-
-### Setup and player decision
-
-1. Select one eligible non-Bane deck entry with at least one eligible
-   Transfiguration.
-2. Display its resulting Transfiguration preview and the shown Dreamsign.
-3. Pay the ordinary table fee and a 50-Essence stake.
-4. Deal five cards face up without replacement.
-5. The player marks any zero to five cards as held. Unheld cards will be
-   discarded and cannot return.
-6. If `d` cards will be replaced, the remaining 47-card deck has
-   `C(47, d)` equally likely replacement sets. Enumerate every set, evaluate
-   the resulting hand, and display the exact count and percentage for each
-   payout row.
-7. The player may change the hold freely while comparing those distributions,
-   then confirms once. Deal `d` cards and evaluate the final hand.
-
-### Final-hand payout table
+Clicking any dealt card toggles `Hold`; every unheld card will be replaced.
+As the selection changes, the UI recomputes the exact chance of every payout
+row. The confirmation button reads `Draw N Cards`. Clicking it discards the
+unheld cards, deals replacements without replacement, and resolves the final
+poker hand:
 
 | Final category | Result |
 | --- | --- |
@@ -596,19 +399,10 @@ random payout.
 “Straight or flush” excludes straight flushes. “High card” excludes straights
 and flushes. Ace is high except in the A-2-3-4-5 straight.
 
-For example, suppose the deal is A♣, A♦, 7♠, 4♥, 2♣ and the player holds the
-two Aces. Drawing three cards produces `C(47, 3) = 16,215` equally likely
-replacement sets:
-
-| Result tier | Replacement sets | Exact chance |
-| --- | ---: | ---: |
-| Exactly one pair | 11,559 | 11,559 / 16,215 = 71.2858% |
-| Two pair or three of a kind | 4,446 | 4,446 / 16,215 = 27.4191% |
-| Full house or four of a kind | 210 | 210 / 16,215 = 1.2951% |
-
-The three counts total 16,215. This hand cannot finish as high card, straight,
-flush, or straight flush while both Aces remain held, so those rows correctly
-show zero.
+If `d` cards are replaced, the UI enumerates all `C(47, d)` possible replacement
+sets. For example, holding two Aces and replacing the other three cards yields
+a 71.2858% chance of exactly one pair, 27.4191% of two pair or three of a kind,
+and 1.2951% of a full house or four of a kind.
 
 ### Farpoint Station
 
@@ -616,48 +410,19 @@ Every 150-Essence total becomes 200 Essence. A full house or better also
 duplicates the Transfigured entry. The stake and hold-dependent probabilities
 are unchanged.
 
-### Why it belongs
-
-Every initial deal poses a different optimization problem: preserve a modest
-made hand, break it to chase a rarer payout, or hold cards that support a
-straight or flush. The exact enumerator lets that be an informed risk decision.
-
 ## 9. Odds Auction
 
-### Player-facing promise
+The screen first shows the fixed reward: the shown Dreamsign, 150 Essence, and
+a previewed Transfiguration for a player-selected deck card. It then asks the
+player to select one held Dreamsign they could surrender and one of two
+displayed Banes they could add.
 
-Assign three disclosed prices to three unequal rank bands, then draw one card.
-The selected band determines which single price is paid for a fixed premium
-reward.
-
-### Inspiration and playing-card translation
-
-This is an original, more ambitious extension of Wheel of Change’s
-one-draw/multiple-outcome structure and Golden Shrine’s exchange of immediate
-value for lasting deck pollution. The player prices three unlike assets first,
-then the deck uses a complete 24/16/12 partition to select exactly one payment.
-The decision is strategic because Essence, a held Dreamsign, and a disclosed
-Bane have run-dependent values.
-
-### Setup
-
-1. Prepare and display the fixed reward: gain the shown Dreamsign, gain 150
-   Essence, and apply one previewed Transfiguration to a selected eligible
-   deck entry.
-2. This game is eligible only when the player holds at least one Dreamsign and
-   can pay the largest possible Essence price in addition to the table fee:
-   100 Essence at an ordinary site or 75 Essence at Farpoint Station.
-3. Display the three prices:
-   - pay 100 Essence;
-   - surrender one player-selected held Dreamsign;
-   - add one player-selected Bane from two disclosed Bane ids.
-4. The player assigns each price to exactly one of the three rank bands below.
-   All six assignments are legal and can be previewed.
-5. After the assignment, pay the ordinary table fee and draw one card.
-6. Pay only the price assigned to the drawn rank band, then gain the complete
-   fixed reward.
-
-### Rank bands
+The player assigns three price tiles—`Pay 100 Essence`, `Lose selected
+Dreamsign`, and `Add selected Bane`—to the three rank bands below. The UI shows
+each band’s chance throughout and allows all six arrangements. Once every price
+has a band, the controls are `Accept & Draw` and `Leave`. Accepting pays the
+table fee and reveals one card. The player pays only the single price assigned
+to its rank band, then receives the entire fixed reward.
 
 | Band | Cards | Exact chance |
 | --- | ---: | ---: |
@@ -665,9 +430,8 @@ Bane have run-dependent values.
 | ranks 8–J | 16 | 16 / 52 = 30.77% |
 | ranks Q–A | 12 | 12 / 52 = 23.08% |
 
-The bands are exhaustive and mutually exclusive. Suit has no effect. The
-assignment is locked before the shuffle, so the player cannot move a price
-after seeing the card.
+Suit has no effect. The game appears only when the player holds a Dreamsign and
+can afford the possible Essence price in addition to the table fee.
 
 ### Farpoint Station
 
@@ -675,41 +439,23 @@ The table fee is waived, the Essence price falls to 75, and the fixed reward
 grants 225 Essence. The Dreamsign and Bane prices, rank bands, and
 Transfiguration are unchanged.
 
-### Why it belongs
-
-This proposal asks the player to compare unlike assets rather than merely pick
-the largest percentage. A strong deck may value the Bane as the worst price;
-a Dreamsign-dependent deck may protect its held sign; an Essence-poor run may
-put the 100-Essence payment in the narrowest band.
-
 ## 10. Challenge Bet
 
-### Player-facing promise
+The screen presents two contract panels, `Standard Challenge` and
+`Double Challenge`, plus `Leave`. Each panel shows the four possible
+next-battle handicaps and both possible victory rewards before the player
+chooses. The table fee is the only upfront cost; “double” means doubled
+handicap and larger reward.
 
-Choose standard or double stakes for the next battle. One card then discloses
-both the exact handicap, from its suit, and the exact victory reward, from its
-rank.
+Clicking a challenge pays the table fee and immediately draws one card. Its
+suit selects the exact next-battle handicap; its rank selects the exact reward
+for winning that battle. The result screen states both in one sentence—for
+example, “Opposing characters enter with +2 spark. Win the next battle to gain
+the shown Dreamsign and 200 Essence.” There are no further gamble choices.
 
-### Inspiration and playing-card translation
-
-Battleworn Dummy lets the player choose a harder combat target for a stronger
-reward. The Colosseum risks a second elite fight after the player could leave
-with existing loot. Divine Shards trades a dangerous Pyre state for an
-artifact. Challenge Bet compresses those structures into a chosen difficulty
-tier and one 52-outcome contract: four equally likely battle rules crossed with
-thirteen reward ranks.
-
-### Setup and commitment
-
-1. Display the standard and double-stakes handicap tables and reward bands.
-2. The player chooses a tier and pays the ordinary table fee, or declines
-   freely.
-3. Draw one card and discard the rest of the playing-card deck.
-4. Store the chosen tier, revealed card, battle modifier, and victory reward.
-5. Apply the modifier to the Battle site in the current dreamscape.
-6. A victory grants the stored reward after the ordinary battle reward. A
-   defeat ends the run under the normal journey rule, so the stored reward is
-   never granted.
+The contract applies to the Battle site in the current dreamscape. Victory
+grants the stored prize after the normal battle reward. A defeat ends the run
+normally, so the stored prize is not granted.
 
 ### Standard-stakes battle rule
 
@@ -727,7 +473,7 @@ thirteen reward ranks.
 | 2–9 | 32 | 32 / 52 = 61.54% | 175 Essence |
 | 10–A | 20 | 20 / 52 = 38.46% | the shown Dreamsign and 100 Essence |
 
-### Double-stakes battle rule
+### Double-stakes battle rule and reward
 
 | Suit | Chance | Next-battle rule |
 | --- | ---: | --- |
@@ -741,9 +487,6 @@ thirteen reward ranks.
 | 2–9 | 32 | 32 / 52 = 61.54% | 300 Essence |
 | 10–A | 20 | 20 / 52 = 38.46% | the shown Dreamsign and 200 Essence |
 
-Suit and rank are independent in a complete deck, so each individual
-rule-and-rank combination has probability `1 / 52 = 1.92%`.
-
 ### Farpoint Station
 
 The table fee is waived. Standard-stakes victory rewards become 225 Essence or
@@ -756,12 +499,6 @@ the shown Dreamsign plus 150 Essence, and its handicaps become:
 - Spades: the opponent begins with +1 score.
 
 Double-stakes rewards and handicaps remain unchanged.
-
-### Why it belongs
-
-This is the most systemically ambitious event. The draw is resolved and logged
-at Gravok’s table, while its consequence changes a later battle rule without
-persisting the playing-card deck itself.
 
 ## Recommended content mix
 
