@@ -116,13 +116,13 @@
 }
 .dream-atlas .node-selectable-highlight {
   position: absolute;
-  inset: -5%;
+  inset: 0;
   z-index: 1;
   pointer-events: none;
 }
 .dream-atlas .node-selectable-highlight-layer {
   position: absolute;
-  inset: 0;
+  inset: calc(0px - var(--atlas-node-selectable-outline-width));
   background: var(--atlas-node-selectable-outline);
   mask-position: center;
   mask-repeat: no-repeat;
@@ -136,9 +136,8 @@
 }
 .dream-atlas .node-selectable-highlight-pulse {
   filter: var(--atlas-node-selectable-pulse-glow);
-  transform-origin: center;
-  /* The node art sits above this exact-frame copy, so scaling it exposes a
-     wider outer band without letting the pulse wash across the scene art. */
+  /* The node art sits above this exact-frame copy, so expanding its inset
+     exposes a wider outer band without washing across the scene art. */
   animation: dream-atlas-selectable-width-pulse
     var(--atlas-node-selectable-pulse-duration)
     var(--ease-in-out)
@@ -148,11 +147,15 @@
   0%,
   100% {
     opacity: 0.18;
-    transform: scale(0.98);
+    inset: calc(0px - var(--atlas-node-selectable-outline-width));
   }
   50% {
     opacity: 1;
-    transform: scale(1.1);
+    inset: calc(
+      0px
+      - var(--atlas-node-selectable-outline-width)
+      - var(--atlas-node-selectable-outline-width)
+    );
   }
 }
 

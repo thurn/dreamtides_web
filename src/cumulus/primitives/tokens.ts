@@ -120,6 +120,7 @@ export const TOKENS = {
   "--atlas-node-available-halo": { var: "var(--atlas-node-available-halo)", value: "rgba(168, 85, 247, 0.32)" },
   "--atlas-node-available-glow": { var: "var(--atlas-node-available-glow)", value: "rgba(168, 85, 247, 0.6)" },
   "--atlas-node-selectable-outline": { var: "var(--atlas-node-selectable-outline)", value: "var(--primitive-violet-300)" },
+  "--atlas-node-selectable-outline-width": { var: "var(--atlas-node-selectable-outline-width)", value: "2.5%" },
   "--atlas-node-selectable-frame-glow": { var: "var(--atlas-node-selectable-frame-glow)", value: "drop-shadow(0 0 3px rgba(216, 180, 254, 0.95))\n    drop-shadow(0 0 10px rgba(168, 85, 247, 0.85))\n    drop-shadow(0 0 22px rgba(124, 58, 237, 0.75))" },
   "--atlas-node-selectable-pulse-glow": { var: "var(--atlas-node-selectable-pulse-glow)", value: "drop-shadow(0 0 5px rgba(233, 213, 255, 1))\n    drop-shadow(0 0 16px rgba(192, 132, 252, 0.95))\n    drop-shadow(0 0 34px rgba(124, 58, 237, 0.9))" },
   "--atlas-node-selectable-pulse-duration": { var: "var(--atlas-node-selectable-pulse-duration)", value: "2200ms" },

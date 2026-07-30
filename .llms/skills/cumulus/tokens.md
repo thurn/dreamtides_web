@@ -275,6 +275,7 @@ Re-exports under the production codebase's --dt-* and --color-* token names. Gam
 | `--atlas-node-available-halo` | `rgba(168, 85, 247, 0.32)` |  |
 | `--atlas-node-available-glow` | `rgba(168, 85, 247, 0.6)` |  |
 | `--atlas-node-selectable-outline` | `var(--primitive-violet-300)` |  |
+| `--atlas-node-selectable-outline-width` | `2.5%` |  |
 | `--atlas-node-selectable-frame-glow` | `drop-shadow(0 0 3px rgba(216, 180, 254, 0.95)) drop-shadow(0 0 10px rgba(168, 85, 247, 0.85)) drop-shadow(0 0 22px rgba(124, 58, 237, 0.75))` |  |
 | `--atlas-node-selectable-pulse-glow` | `drop-shadow(0 0 5px rgba(233, 213, 255, 1)) drop-shadow(0 0 16px rgba(192, 132, 252, 0.95)) drop-shadow(0 0 34px rgba(124, 58, 237, 0.9))` |  |
 | `--atlas-node-selectable-pulse-duration` | `2200ms` |  |
