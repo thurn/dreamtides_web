@@ -1488,7 +1488,7 @@ describe("tutorial battle lifecycle", () => {
     expect(duplicateDawn.state.battle?.triggerDawnFired).toEqual({ player: 4, enemy: 5 });
   });
 
-  it("keeps the tutorial handoff playable through draw, Dreamwell, scoring, and player-only victory", () => {
+  it("keeps the tutorial handoff playable through Dreamwell, draw, scoring, and player-only victory", () => {
     registerTutorialBattleInitProvider(createTutorialBattleInitProvider(content()));
     const automaticActor = "tutorial-ai:client-a";
     const started = begin().state;
@@ -1527,7 +1527,7 @@ describe("tutorial battle lifecycle", () => {
       handedOffState = completed.state;
     }
     expect(handedOffState.battle?.board).toMatchObject({ activeSide: "enemy", phase: "dreamwell", turnNumber: 5 });
-    expect(handedOffState.battle?.board.sides.enemy.hand).toHaveLength(enemyHandBefore + 1);
+    expect(handedOffState.battle?.board.sides.enemy.hand).toHaveLength(enemyHandBefore);
 
     const revealPlan = planTutorialBattleController({
       state: handedOffState,
@@ -1554,11 +1554,39 @@ describe("tutorial battle lifecycle", () => {
     expect(dreamwellContinued.outcome).toBe("applied");
     expect(dreamwellContinued.state.battle?.tutorialPresentation).toBeNull();
 
+    const dawnPlan = planTutorialBattleController({
+      state: dreamwellContinued.state,
+      clientId: "client-a",
+      connectedClientIds: ["client-a"],
+    });
+    expect(dawnPlan.intent).toMatchObject({
+      kind: "battle-command",
+      command: { edit: { kind: "SET_PHASE", phase: "dawn" } },
+    });
+    if (dawnPlan.intent?.kind !== "battle-command") {
+      throw new Error("expected post-Dreamwell Dawn advance");
+    }
+    const afterDreamwell = reduceTutorial(
+      dreamwellContinued.state,
+      "BATTLE_COMMAND",
+      { command: dawnPlan.intent.command },
+      automaticActor,
+    );
+    expect(afterDreamwell.outcome).toBe("applied");
+    expect(afterDreamwell.state.battle?.board).toMatchObject({
+      activeSide: "enemy",
+      phase: "day",
+      turnNumber: 5,
+    });
+    expect(afterDreamwell.state.battle?.board.sides.enemy.hand).toHaveLength(
+      enemyHandBefore + 1,
+    );
+
     const enemyTen = reduceTutorial({
-      ...dreamwellContinued.state,
+      ...afterDreamwell.state,
       battle: {
-        ...dreamwellContinued.state.battle!,
-        board: { ...dreamwellContinued.state.battle!.board, turnNumber: Number.MAX_SAFE_INTEGER - 1 },
+        ...afterDreamwell.state.battle!,
+        board: { ...afterDreamwell.state.battle!.board, turnNumber: Number.MAX_SAFE_INTEGER - 1 },
       },
     }, "BATTLE_COMMAND", {
       command: {

@@ -82,9 +82,9 @@ const BOOKEND_PHASES: ReadonlySet<BattlePhase> = new Set<BattlePhase>([
  *  - **Dreamwell reveal raises energy.** Revealing a side's Dreamwell card
  *    (`DRAW_DREAMWELL_CARD`) raises its maximum ● by the card's `energyAdded`
  *    and refills current ● (rules §The Dreamwell and Energy).
- *  - **Start of turn draws.** The incoming player draws a card on the handoff
- *    (skipped on the very first turn of the battle) (rules §Turn Structure —
- *    Draw).
+ *  - **Start of turn draws.** After the active side's Dreamwell effect resolves,
+ *    leaving Dreamwell draws a card before Dawn/Day (skipped on the very first
+ *    turn of the battle) (rules §Turn Structure — Draw).
  *  - **Ending exhaustion clear is the reducer's job.** Every in-play character
  *    is awakened when the reducer folds the turn handoff.
  *  - **End-of-turn hand limit.** The outgoing player discards down to ten cards
@@ -131,15 +131,30 @@ export function planBasicAutomationCommands(
     case "DRAW_DREAMWELL_CARD":
       return planDreamwellReveal(state, command, command.edit, caps);
     case "SET_BATTLE_FLOW":
+      if (
+        command.edit.activeSide === state.activeSide &&
+        state.phase === "dreamwell" &&
+        command.edit.phase !== "dreamwell"
+      ) {
+        return planDreamwellExit(state, command);
+      }
       return planTurnHandoff(state, command, command.edit, caps);
-    case "SET_PHASE":
-      if (command.edit.phase === "challenge") {
-        return planChallengeOnly(state, command, caps);
+    case "SET_PHASE": {
+      const advance =
+        command.edit.phase === "challenge"
+          ? planChallengeOnly(state, command, caps)
+          : BOOKEND_PHASES.has(command.edit.phase)
+            ? planBookendAdvance(state, command, command.edit)
+            : [command];
+      if (
+        state.phase !== "dreamwell" ||
+        command.edit.phase === "dreamwell" ||
+        command.edit.phase === "draw"
+      ) {
+        return advance;
       }
-      if (BOOKEND_PHASES.has(command.edit.phase)) {
-        return planBookendAdvance(state, command, command.edit);
-      }
-      return [command];
+      return planDreamwellExit(state, advance);
+    }
     default:
       return [command];
   }
@@ -247,8 +262,9 @@ function planDreamwellReveal(
 /**
  * A turn handoff (the `SET_BATTLE_FLOW` that flips the active side) ends the
  * outgoing player's turn and begins the incoming player's. Automation resolves
- * the outgoing Challenge, enforces the hand limit, forces a result if the
- * threshold was reached, then ramps energy and draws for the incoming side.
+ * the outgoing Challenge, enforces the hand limit, and forces a result if the
+ * threshold was reached. The incoming side draws only after its Dreamwell
+ * effect resolves, when the flow leaves Dreamwell.
  *
  * The Challenge resolves exactly once per turn, at the moment the outgoing side
  * *enters* the `challenge` phase — whether that entry came from the Challenge
@@ -256,8 +272,8 @@ function planDreamwellReveal(
  * into Challenge (a same-side `SET_BATTLE_FLOW`, handled below). By the time the
  * handoff fires the side already sits in `challenge` with its scoring committed,
  * so the handoff does not re-resolve; it only runs the rest of the Ending
- * bookend (hand-limit discard, end-of-turn banishes and exhaustion clear) plus
- * the incoming side's ramp and draw.
+ * bookend (hand-limit discard, end-of-turn banishes and exhaustion clear) and
+ * lands the incoming side on Dreamwell.
  */
 function planTurnHandoff(
   state: BattleMutableState,
@@ -313,13 +329,28 @@ function planTurnHandoff(
   // `planDreamwellReveal`).
   commands.push(command);
 
-  // Draw for the incoming side, skipping only the first player's first turn
-  // (see `drawsAtStartOfTurn`).
-  if (drawsAtStartOfTurn(incomingSide, edit.turnNumber)) {
-    commands.push(autoCommand({ kind: "DRAW_CARD", side: incomingSide }));
-  }
-
   return commands;
+}
+
+/**
+ * Leaves Dreamwell only after its reveal script has drained. A prompt-bearing
+ * Dreamwell keeps the board parked in this phase, so this transition cannot be
+ * accepted until the prompt resolves. The ordinary turn draw is therefore
+ * guaranteed to observe the deck after every Dreamwell effect, including
+ * Foresee, and before Dawn/Day begins.
+ */
+function planDreamwellExit(
+  state: BattleMutableState,
+  commands: BattleCommand | BattleCommand[],
+): BattleCommand[] {
+  const planned = Array.isArray(commands) ? commands : [commands];
+  if (!drawsAtStartOfTurn(state.activeSide, state.turnNumber)) {
+    return planned;
+  }
+  return [
+    autoCommand({ kind: "DRAW_CARD", side: state.activeSide }),
+    ...planned,
+  ];
 }
 
 /**

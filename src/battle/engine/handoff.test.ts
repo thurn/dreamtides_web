@@ -174,45 +174,26 @@ describe("planHandoff", () => {
         plan.flowEdit,
         ...plan.endingBanishEdits,
         ...plan.exhaustionClearEdits,
-        ...plan.drawEdits,
       ].filter(
         (edit) =>
           edit.kind === "SET_MAX_ENERGY" || edit.kind === "SET_CURRENT_ENERGY",
       );
       expect(energyEdits).toHaveLength(0);
     });
-  });
 
-  describe("drawEdits", () => {
-    it("produces a DRAW_CARD for the next side on a non-first turn", () => {
+    it("leaves the incoming deck untouched for the post-Dreamwell draw", () => {
       const state = makeHandoffState({ activeSide: "player", turnNumber: 2 });
-      const plan = planHandoff({ state, ...DEFAULT_CONFIG });
-      expect(plan.drawEdits).toHaveLength(1);
-      expect(plan.drawEdits[0]).toMatchObject({ kind: "DRAW_CARD", side: "enemy" });
-    });
+      state.sides.enemy.deck = ["enemy-top"];
 
-    it("produces a DRAW_CARD for player when enemy ends turn and increments", () => {
-      const state = makeHandoffState({ activeSide: "enemy", turnNumber: 3 });
       const plan = planHandoff({ state, ...DEFAULT_CONFIG });
-      expect(plan.drawEdits).toHaveLength(1);
-      expect(plan.drawEdits[0]).toMatchObject({ kind: "DRAW_CARD", side: "player" });
-    });
+      const edits = [
+        ...plan.endingBanishEdits,
+        ...plan.exhaustionClearEdits,
+        plan.flowEdit,
+      ];
 
-    it("draws for the second player (enemy) on their first turn", () => {
-      // active=player at turn 1 advances to enemy at turn 1 (a player→enemy
-      // handoff keeps the turnNumber). The enemy is the second player, so their
-      // first turn still draws — only the first player's first turn is skipped.
-      const state = makeHandoffState({ activeSide: "player", turnNumber: 1 });
-      const plan = planHandoff({ state, ...DEFAULT_CONFIG });
-      expect(plan.drawEdits).toHaveLength(1);
-      expect(plan.drawEdits[0]).toMatchObject({ kind: "DRAW_CARD", side: "enemy" });
-    });
-
-    it("does draw on turn 2 (no longer first turn)", () => {
-      const state = makeHandoffState({ activeSide: "enemy", turnNumber: 1 });
-      const plan = planHandoff({ state, ...DEFAULT_CONFIG });
-      // next is player at turn 2 — not first turn, draw happens
-      expect(plan.drawEdits).toHaveLength(1);
+      expect(edits.some((edit) => edit.kind === "DRAW_CARD")).toBe(false);
+      expect(state.sides.enemy.deck).toEqual(["enemy-top"]);
     });
   });
 

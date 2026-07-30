@@ -1342,6 +1342,113 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     expect(result.state.battle?.pendingPrompt).toBeNull();
   });
 
+  it("draws the card Foresee leaves on top only after the Dreamwell prompt resolves", () => {
+    const foreseenTop = makeInstance(
+      "bc-foreseen-top",
+      "00000000-0000-0000-0000-000000000001",
+    );
+    const nextCard = makeInstance(
+      "bc-next",
+      "00000000-0000-0000-0000-000000000002",
+    );
+    const skypath: DreamwellCardDefinition = {
+      id: "f9b479cf-02cb-40e1-bb64-70b29977bf15",
+      name: "Fixture Dreamwell",
+      renderedText: "Foresee 1.",
+      energyAdded: 1,
+      order: 1,
+      cardNumber: 8,
+      imageNumber: 0,
+    };
+    const board = makeRichBoard({
+      turnNumber: 1,
+      phase: "challenge",
+      instances: [foreseenTop, nextCard],
+      playerDeck: [foreseenTop.battleCardId, nextCard.battleCardId],
+    });
+    board.activeSide = "enemy";
+    const initial = {
+      ...baseState(),
+      battle: battleFrom(board, {
+        init: makeInit({ dreamwellDeck: [skypath] }),
+      }),
+    };
+
+    const handedOff = reduce(
+      initial,
+      "BATTLE_COMMAND",
+      debugEdit({
+        kind: "SET_BATTLE_FLOW",
+        phase: "dreamwell",
+        activeSide: "player",
+        turnNumber: 2,
+      }),
+      ctx({ seq: 144 }),
+    );
+    expect(handedOff.outcome).toBe("applied");
+    expect(handedOff.state.battle?.board.sides.player).toMatchObject({
+      deck: [foreseenTop.battleCardId, nextCard.battleCardId],
+      hand: [],
+    });
+
+    const revealed = reduce(
+      handedOff.state,
+      "BATTLE_COMMAND",
+      debugEdit({
+        kind: "DRAW_DREAMWELL_CARD",
+        side: "player",
+        turnNumber: 2,
+      }),
+      ctx({ seq: 145 }),
+    );
+    const prompt = revealed.state.battle?.pendingPrompt;
+    expect(revealed.outcome).toBe("applied");
+    expect(prompt?.options).toMatchObject({
+      kind: "foresee",
+      cardIds: [foreseenTop.battleCardId],
+    });
+    if (prompt?.options.kind !== "foresee") {
+      throw new Error("expected Skypath to open a Foresee prompt");
+    }
+
+    const resolved = reduce(
+      revealed.state,
+      "RESOLVE_PROMPT",
+      {
+        promptId: prompt.promptId,
+        resolution: {
+          kind: "foresee",
+          viewedCardIds: [foreseenTop.battleCardId],
+          orderedCardIds: [foreseenTop.battleCardId],
+          voidCardIds: [],
+        },
+      },
+      ctx({ seq: 146 }),
+    );
+    expect(resolved.outcome).toBe("applied");
+    expect(resolved.state.battle?.board.sides.player).toMatchObject({
+      deck: [foreseenTop.battleCardId, nextCard.battleCardId],
+      hand: [],
+    });
+
+    const advanced = reduce(
+      resolved.state,
+      "BATTLE_COMMAND",
+      debugEdit({
+        kind: "SET_BATTLE_FLOW",
+        phase: "day",
+        activeSide: "player",
+        turnNumber: 2,
+      }),
+      ctx({ seq: 147 }),
+    );
+    expect(advanced.outcome).toBe("applied");
+    expect(advanced.state.battle?.board.sides.player).toMatchObject({
+      deck: [nextCard.battleCardId],
+      hand: [foreseenTop.battleCardId],
+    });
+  });
+
   it("parks a matching Dreamwell card before reveal and resumes its effect after Mira advances", () => {
     const dreamwellCard: DreamwellCardDefinition = {
       id: "03e4e701-4720-4278-8198-9b7e0514d4cf",

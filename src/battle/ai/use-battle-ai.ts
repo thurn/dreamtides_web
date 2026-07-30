@@ -520,8 +520,8 @@ function enrichDeferredCommands(
  * Builds the endTurn proposal: the challenge-resolution edits from the unified,
  * keyword-aware {@link resolveChallenge} (using the card-keyed support map from
  * {@link buildSupportContribution}), followed by the handoff edits
- * (`endingBanishEdits`, `exhaustionClearEdits`, `flowEdit`, `drawEdits`,
- * `energyEdits`) from {@link planHandoff}. Every edit is wrapped as an
+ * (`endingBanishEdits`, `exhaustionClearEdits`, `flowEdit`) from
+ * {@link planHandoff}. Every edit is wrapped as an
  * AI-authored DEBUG_EDIT command.
  *
  * The AI resolves combat through the same source of truth the rest of the
@@ -561,7 +561,6 @@ function buildEndTurnProposal(
     ...handoff.endingBanishEdits,
     ...handoff.exhaustionClearEdits,
     handoff.flowEdit,
-    ...handoff.drawEdits,
   ];
   const commands = edits.map((edit) => makeAiCommand(edit, aiSide));
 

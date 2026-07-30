@@ -1727,8 +1727,8 @@ function normalizePhaseForControls(
   phase: BattleMutableState["phase"],
 ): (typeof PHASE_CONTROL_SEQUENCE)[number] {
   switch (phase) {
-    // Draw and Dawn run as bookkeeping during the turn handoff and are never the
-    // resting phase; the surfaced start-of-turn stop is Dreamwell.
+    // Draw and Dawn run as bookkeeping when the flow leaves Dreamwell and are
+    // never resting phases; the surfaced start-of-turn stop is Dreamwell.
     case "draw":
     case "dawn":
       return "dreamwell";

@@ -529,7 +529,7 @@ describe("useBattleAi", () => {
     expect(latest?.proposal?.kind).toBe("endTurn");
   });
 
-  it("approve() submits a multi-command endTurn proposal as one gesture", async () => {
+  it("approve() submits a single-command endTurn proposal directly", async () => {
     const dispatch = vi.fn();
     const gestureDispatch = vi.fn();
     mount(
@@ -544,15 +544,15 @@ describe("useBattleAi", () => {
 
     const commands = latest?.proposal?.commands ?? [];
     expect(latest?.proposal?.kind).toBe("endTurn");
-    expect(commands.length).toBeGreaterThan(1);
+    expect(commands.length).toBeGreaterThan(0);
 
     act(() => {
       latest?.approve();
     });
 
-    expect(dispatch).not.toHaveBeenCalled();
-    expect(gestureDispatch).toHaveBeenCalledTimes(1);
-    expect(gestureDispatch).toHaveBeenCalledWith(commands);
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledWith(commands[0]);
+    expect(gestureDispatch).not.toHaveBeenCalled();
   });
 
   it("does not dispatch blocking from local hook state", async () => {

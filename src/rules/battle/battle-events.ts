@@ -1620,7 +1620,7 @@ function isNullableFiniteNumber(value: unknown): value is number | null {
 /**
  * `BATTLE_GESTURE { commands }`: one player gesture the automation planner
  * expanded into an ordered list of battle commands (a play that also spends
- * energy, a turn handoff that resolves the Challenge, ramps energy, and draws).
+ * energy, or a turn handoff that resolves the Challenge and Ending cleanup).
  * Folds each command through {@link applyBattleCommandStep} SEQUENTIALLY within
  * this one fold step, threading a SINGLE continuing draw counter so no two
  * commands collide on an rng index.

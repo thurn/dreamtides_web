@@ -305,7 +305,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
 // into the automation command stream.
 
 describe("planBasicAutomationCommands — turn handoff", () => {
-  it("resolves the challenge and draws for the incoming side (energy follows the Dreamwell reveal)", () => {
+  it("resolves the challenge and leaves the incoming deck for the post-Dreamwell draw", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 3,
@@ -325,8 +325,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     expect(result).toContainEqual({ kind: "ADJUST_SCORE", side: "player", amount: 4 });
     // The user's own flow edit is preserved.
     expect(result).toContainEqual({ kind: "SET_BATTLE_FLOW", phase: "dreamwell", activeSide: "enemy", turnNumber: 3 });
-    // Incoming-side draw (turn > 1).
-    expect(result).toContainEqual({ kind: "DRAW_CARD", side: "enemy" });
+    expect(result.some((edit) => edit.kind === "DRAW_CARD")).toBe(false);
     // The handoff itself does not ramp energy; that follows the Dreamwell reveal.
     expect(result.some((edit) => edit.kind === "SET_MAX_ENERGY")).toBe(false);
   });
@@ -352,14 +351,12 @@ describe("planBasicAutomationCommands — turn handoff", () => {
 
     // No second scoring of the outgoing player's surviving challenger.
     expect(result.some((edit) => edit.kind === "ADJUST_SCORE")).toBe(false);
-    // The handoff still flips the side and draws for the incoming side.
+    // The handoff still flips the side without drawing ahead of Dreamwell.
     expect(result).toContainEqual({ kind: "SET_BATTLE_FLOW", phase: "dreamwell", activeSide: "enemy", turnNumber: 3 });
-    expect(result).toContainEqual({ kind: "DRAW_CARD", side: "enemy" });
+    expect(result.some((edit) => edit.kind === "DRAW_CARD")).toBe(false);
   });
 
-  it("draws for the second player (enemy) on their first turn, which shares turnNumber 1", () => {
-    // The opening player→enemy handoff keeps turnNumber at 1; only the first
-    // player's first turn skips the draw, so the enemy still draws here.
+  it("does not draw for the second player until their Dreamwell phase finishes", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 1,
@@ -372,7 +369,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     };
 
     const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
-    expect(result).toContainEqual({ kind: "DRAW_CARD", side: "enemy" });
+    expect(result.some((edit) => edit.kind === "DRAW_CARD")).toBe(false);
   });
 
   it("discards the outgoing side down to the hand limit", () => {
@@ -448,9 +445,9 @@ describe("planBasicAutomationCommands — turn handoff", () => {
 
     // No explicit exhaustion-clear for either side; the reducer owns it.
     expect(result.some((edit) => edit.kind === "SET_CARD_STATUS")).toBe(false);
-    // The flip and the incoming draw are still expanded.
+    // The side flip is preserved without an early incoming draw.
     expect(result).toContainEqual({ kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 5 });
-    expect(result).toContainEqual({ kind: "DRAW_CARD", side: "enemy" });
+    expect(result.some((edit) => edit.kind === "DRAW_CARD")).toBe(false);
   });
 
   it("emits no explicit status clear when no characters are in play", () => {
@@ -596,6 +593,83 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
     { id: firstPromptDreamwellEffectId(), name: "Opening", renderedText: "", energyAdded: 2, order: 0, cardNumber: 1, imageNumber: 0 },
     { id: "dw-1", name: "Bonus", renderedText: "", energyAdded: 1, order: 1, cardNumber: 2, imageNumber: 0 },
   ];
+
+  it("draws before entering Day when a later turn leaves Dreamwell", () => {
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 2,
+      phase: "dreamwell",
+      player: { deck: ["foreseen-top"] },
+    });
+    const advance: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "SET_BATTLE_FLOW",
+        phase: "day",
+        activeSide: "player",
+        turnNumber: 2,
+      },
+      sourceSurface: "phase-controls",
+    };
+
+    expect(edits(planBasicAutomationCommands(state, advance, CAPS))).toEqual([
+      { kind: "DRAW_CARD", side: "player" },
+      {
+        kind: "SET_BATTLE_FLOW",
+        phase: "day",
+        activeSide: "player",
+        turnNumber: 2,
+      },
+    ]);
+  });
+
+  it("draws before the tutorial controller advances from Dreamwell through Dawn", () => {
+    const state = makeState({
+      activeSide: "enemy",
+      turnNumber: 1,
+      phase: "dreamwell",
+      enemy: { deck: ["foreseen-top"] },
+    });
+    const advance: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_PHASE", phase: "dawn" },
+      sourceSurface: "auto-system",
+    };
+
+    expect(edits(planBasicAutomationCommands(state, advance, CAPS))).toEqual([
+      { kind: "DRAW_CARD", side: "enemy" },
+      { kind: "SET_PHASE", phase: "dawn" },
+      { kind: "SET_PHASE", phase: "day" },
+    ]);
+  });
+
+  it("skips the ordinary draw when the first player's opening turn leaves Dreamwell", () => {
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 1,
+      phase: "dreamwell",
+      player: { deck: ["opening-top"] },
+    });
+    const advance: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "SET_BATTLE_FLOW",
+        phase: "day",
+        activeSide: "player",
+        turnNumber: 1,
+      },
+      sourceSurface: "phase-controls",
+    };
+
+    expect(edits(planBasicAutomationCommands(state, advance, CAPS))).toEqual([
+      {
+        kind: "SET_BATTLE_FLOW",
+        phase: "day",
+        activeSide: "player",
+        turnNumber: 1,
+      },
+    ]);
+  });
 
   it("passes a Dreamwell phase navigation through unchanged", () => {
     const state = makeState({ activeSide: "player", turnNumber: 3 });

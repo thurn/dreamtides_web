@@ -1,5 +1,4 @@
 import type { BattleDebugEdit } from "../debug/commands";
-import { drawsAtStartOfTurn } from "../state/turn-utils";
 import type { BattleMutableState, BattleResult, BattleSide } from "../types";
 import { rankSlotIds } from "../types";
 
@@ -30,7 +29,6 @@ export interface HandoffPlan {
    * the side flip.
    */
   exhaustionClearEdits: BattleDebugEdit[];
-  drawEdits: BattleDebugEdit[];       // DRAW_CARD for the next side (empty on the first player's first turn)
 }
 
 /**
@@ -140,7 +138,7 @@ function advanceTurnPair(
 
 /**
  * Plans the handoff between turns: checks for a game-ending result, then
- * builds the SET_BATTLE_FLOW, energy-ramp, and draw edits for the next side.
+ * builds the Ending cleanup and SET_BATTLE_FLOW edit for the next side.
  *
  * Win-check order (from the player's POV):
  *  1. player score >= scoreToWin → "victory"
@@ -151,10 +149,8 @@ function advanceTurnPair(
  * A non-null result is still accompanied by a valid flowEdit; callers gate
  * on result to decide whether to continue the game loop.
  *
- * Draw skip: drawEdits is empty only for the first player's very first turn
- * (the second player draws normally on their first turn even though it shares
- * turnNumber 1). See `drawsAtStartOfTurn`. All other turns receive a DRAW_CARD
- * for the incoming side.
+ * The incoming side's ordinary turn draw belongs to the later transition out
+ * of Dreamwell, after that card's effect has resolved.
  */
 export function planHandoff(input: HandoffInput): HandoffPlan {
   const { state, scoreToWin, turnLimit } = input;
@@ -185,17 +181,6 @@ export function planHandoff(input: HandoffInput): HandoffPlan {
     turnNumber: next.turnNumber,
   };
 
-  // --- drawEdits: the incoming side draws unless it is the first player on the
-  // battle's first turn (see `drawsAtStartOfTurn`). Checking turnNumber alone is
-  // wrong: a player→enemy handoff keeps turnNumber at 1, so the enemy's first
-  // turn would otherwise be skipped. ---
-  const drawEdits: BattleDebugEdit[] = drawsAtStartOfTurn(
-    next.activeSide,
-    next.turnNumber,
-  )
-    ? [{ kind: "DRAW_CARD", side: next.activeSide }]
-    : [];
-
   // --- Ending bookend edits ---
   const banishEdits = endingBanishEdits(state, state.activeSide);
   const clearEdits = [
@@ -208,6 +193,5 @@ export function planHandoff(input: HandoffInput): HandoffPlan {
     endingBanishEdits: banishEdits,
     flowEdit,
     exhaustionClearEdits: clearEdits,
-    drawEdits,
   };
 }
