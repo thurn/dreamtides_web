@@ -355,6 +355,11 @@ export function validateTutorialDreamscapeConfiguration(value) {
   return validatePersistentTutorialConfiguration(value, "dreamscape");
 }
 
+/** Validate the delayed persistent Mira guidance for the first Atlas visit. */
+export function validateTutorialAtlasConfiguration(value) {
+  return validatePersistentTutorialConfiguration(value, "atlas");
+}
+
 /** Validate persistent Mira guidance for a first-visit site tutorial. */
 export function validateTutorialSiteConfiguration(value, siteId) {
   return validatePersistentTutorialConfiguration(value, siteId);
@@ -768,6 +773,7 @@ export function readTutorialConfiguration({
       parsed.journeyStart,
     ),
     dreamscape: validateTutorialDreamscapeConfiguration(parsed.dreamscape),
+    atlas: validateTutorialAtlasConfiguration(parsed.atlas),
     draft: validateTutorialSiteConfiguration(parsed.draft, "draft"),
     dreamsignRevelation: validateTutorialSiteConfiguration(
       parsed.dreamsignRevelation,
@@ -791,6 +797,7 @@ export function serializeTutorialToml(
   battle,
   journeyStart,
   dreamscape,
+  atlas,
   draft,
   dreamsignRevelation,
 ) {
@@ -801,6 +808,7 @@ export function serializeTutorialToml(
     validateTutorialJourneyStartConfiguration(journeyStart);
   const normalizedDreamscape =
     validateTutorialDreamscapeConfiguration(dreamscape);
+  const normalizedAtlas = validateTutorialAtlasConfiguration(atlas);
   const normalizedDraft =
     validateTutorialSiteConfiguration(draft, "draft");
   const normalizedDreamsignRevelation =
@@ -811,6 +819,7 @@ export function serializeTutorialToml(
   return `# Ordered actions and first-occurrence battle tutorials.\n\n${stringify({
     journeyStart: normalizedJourneyStart,
     dreamscape: normalizedDreamscape,
+    atlas: normalizedAtlas,
     draft: normalizedDraft,
     dreamsignRevelation: normalizedDreamsignRevelation,
     battle: normalizedBattle,
@@ -828,6 +837,7 @@ export function refreshTutorialDataJson({
   const {
     journeyStart,
     dreamscape,
+    atlas,
     draft,
     dreamsignRevelation,
     actions,
@@ -845,6 +855,7 @@ export function refreshTutorialDataJson({
     `${JSON.stringify({
       journeyStart,
       dreamscape,
+      atlas,
       draft,
       dreamsignRevelation,
       actions,
@@ -855,6 +866,7 @@ export function refreshTutorialDataJson({
   return {
     journeyStart,
     dreamscape,
+    atlas,
     draft,
     dreamsignRevelation,
     actions,

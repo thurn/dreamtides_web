@@ -16,6 +16,14 @@ verticalOffset = 0
 bubbleWidth = 700
 text = "In each dream, you will visit [purple]sites[/purple] to build your deck and prepare for a [purple]dream battle[/purple]."
 
+[atlas.speechBubble]
+speaker = "mira"
+delay = 1
+horizontalOffset = 0
+verticalOffset = 0
+bubbleWidth = 700
+text = "On the [purple]Atlas[/purple] screen, you will pick which dream to enter next."
+
 [draft.speechBubble]
 speaker = "mira"
 horizontalOffset = 0

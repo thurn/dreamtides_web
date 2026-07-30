@@ -70,6 +70,7 @@ import {
 import { createInitialReplayDraftState } from "../draft/draft-engine";
 import type { ReplayDraftState } from "../types/draft";
 import type {
+  TutorialAtlasConfiguration,
   TutorialBattleConfiguration,
   TutorialDreamscapeConfiguration,
   TutorialJourneyStartConfiguration,
@@ -95,6 +96,8 @@ export interface JourneyContent {
   tutorialJourneyStart?: TutorialJourneyStartConfiguration;
   /** Authored guidance shown over the first tutorial dreamscape. */
   tutorialDreamscape?: TutorialDreamscapeConfiguration;
+  /** Authored guidance shown on the first tutorial Atlas visit. */
+  tutorialAtlas?: TutorialAtlasConfiguration;
   /** Authored guidance shown throughout the first Draft site visit. */
   tutorialDraft?: TutorialSiteConfiguration;
   /** Authored guidance shown throughout the first Dreamsign Revelation visit. */

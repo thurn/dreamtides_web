@@ -9,10 +9,14 @@
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useJourney } from "../../state/journey-context";
-import { logEvent } from "../../logging";
+import { logEvent, logEventOnce } from "../../logging";
 import { AtlasScreen } from "../../cumulus/screens/AtlasScreen";
 import { useIsDesktop } from "../../cumulus/screens/use-is-desktop";
-import { buildAtlasView, atlasChoiceLayer } from "./atlas-view-model";
+import {
+  buildAtlasGuidanceLog,
+  buildAtlasView,
+  atlasChoiceLayer,
+} from "./atlas-view-model";
 
 /**
  * Live atlas screen: builds the vertical run-graph view-model from the current
@@ -25,8 +29,15 @@ export function AtlasScreenAdapter() {
   const isDesktop = useIsDesktop();
 
   const view = useMemo(
-    () => buildAtlasView(atlas, journeyContent, isDesktop),
-    [atlas, journeyContent, isDesktop],
+    () =>
+      buildAtlasView(
+        atlas,
+        journeyContent,
+        isDesktop,
+        state,
+        journeyContent.tutorialAtlas,
+      ),
+    [atlas, journeyContent, isDesktop, state],
   );
 
   // Reconstruction log: which atlas was presented, its current frontier, and
@@ -60,5 +71,17 @@ export function AtlasScreenAdapter() {
     [atlas.nodes, mutations],
   );
 
-  return <AtlasScreen view={view} onEnterNode={handleEnterNode} />;
+  const handleGuideDialogueShown = useCallback(() => {
+    if (view.guideDialogue === undefined) return;
+    const entry = buildAtlasGuidanceLog(state, view.guideDialogue);
+    logEventOnce(entry.key, "tutorial_atlas_guidance_shown", entry.fields);
+  }, [state, view.guideDialogue]);
+
+  return (
+    <AtlasScreen
+      view={view}
+      onEnterNode={handleEnterNode}
+      onGuideDialogueShown={handleGuideDialogueShown}
+    />
+  );
 }

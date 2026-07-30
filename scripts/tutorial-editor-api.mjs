@@ -127,6 +127,7 @@ export function createTutorialEditorApiMiddleware({
       const {
         journeyStart,
         dreamscape,
+        atlas,
         draft,
         dreamsignRevelation,
         triggers,
@@ -144,6 +145,7 @@ export function createTutorialEditorApiMiddleware({
           battle,
           journeyStart,
           dreamscape,
+          atlas,
           draft,
           dreamsignRevelation,
         ),
@@ -154,6 +156,7 @@ export function createTutorialEditorApiMiddleware({
         `${JSON.stringify({
           journeyStart,
           dreamscape,
+          atlas,
           draft,
           dreamsignRevelation,
           actions,

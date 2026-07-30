@@ -15,13 +15,17 @@
 // node hover previews live in the `AtlasMap` component; this screen composes
 // that surface with drifting Motes.
 
+import { useEffect } from "react";
 import {
   AtlasMap,
   type AtlasMapEdge,
   type AtlasMapNode,
 } from "../components/atlas/AtlasMap";
 import { Motes } from "../components/hud/Motes";
+import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
 import { token } from "../primitives/tokens";
+import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
+import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 
 /** Everything the atlas screen renders, mapped from live journey state. */
 export interface AtlasView {
@@ -33,6 +37,8 @@ export interface AtlasView {
   nodes: AtlasMapNode[];
   /** Forward connectors between nodes. */
   edges: AtlasMapEdge[];
+  /** Mira's delayed tutorial-only explanation of the Atlas. */
+  guideDialogue?: TutorialSpeechBubbleView;
 }
 
 export interface AtlasScreenProps {
@@ -40,13 +46,30 @@ export interface AtlasScreenProps {
   view: AtlasView;
   /** Enter a node's dreamscape; fired on a tap / click of an available node. */
   onEnterNode: (nodeId: string) => void;
+  /** Report when delayed tutorial guidance becomes visible. */
+  onGuideDialogueShown?: () => void;
 }
 
 /**
  * The Cumulus Dream Atlas. Pure and props-driven: the vertical {@link AtlasMap}
  * of the run graph and drifting {@link Motes}.
  */
-export function AtlasScreen({ view, onEnterNode }: AtlasScreenProps) {
+export function AtlasScreen({
+  view,
+  onEnterNode,
+  onGuideDialogueShown,
+}: AtlasScreenProps) {
+  const guideDialogueVisible = useDelayedTutorialSpeechBubbleVisibility(
+    view.guideDialogue?.id ?? view.guideDialogue?.model.text,
+    view.guideDialogue === undefined
+      ? undefined
+      : (view.guideDialogue.delaySeconds ?? 0),
+  );
+
+  useEffect(() => {
+    if (guideDialogueVisible) onGuideDialogueShown?.();
+  }, [guideDialogueVisible, onGuideDialogueShown]);
+
   return (
     <div
       className="cumulus"
@@ -67,6 +90,29 @@ export function AtlasScreen({ view, onEnterNode }: AtlasScreenProps) {
         edges={view.edges}
         onEnterNode={onEnterNode}
       />
+
+      {view.guideDialogue !== undefined && (
+        <div
+          data-atlas-guide-dialogue-placement=""
+          style={{
+            position: "absolute",
+            zIndex: 30,
+            top: `calc(${token("--safe-top")} + ${token("--space-4")})`,
+            left: "50%",
+            width: `${String(view.guideDialogue.bubbleWidth)}px`,
+            maxWidth: `calc(100vw - 2 * ${token("--gutter")})`,
+            transform: `translate(calc(-50% + ${String(view.guideDialogue.horizontalOffset)}px), ${String(view.guideDialogue.verticalOffset)}px)`,
+            pointerEvents: "none",
+          }}
+        >
+          <CharacterDialogue
+            dialogue={view.guideDialogue.model}
+            visible={guideDialogueVisible}
+            size="wide"
+            testId="atlas-tutorial-dialogue"
+          />
+        </div>
+      )}
     </div>
   );
 }

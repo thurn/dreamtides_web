@@ -620,6 +620,7 @@ export default function App({
           ...loadedContent,
           tutorialJourneyStart: tutorial.journeyStart,
           tutorialDreamscape: tutorial.dreamscape,
+          tutorialAtlas: tutorial.atlas,
           tutorialDraft: tutorial.draft,
           tutorialDreamsignRevelation: tutorial.dreamsignRevelation,
           tutorialTriggers: tutorial.triggers,

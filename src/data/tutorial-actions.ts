@@ -1,6 +1,7 @@
 import { isCardId } from "../types/card-identity";
 import type {
   TutorialAction,
+  TutorialAtlasConfiguration,
   TutorialBattleConfiguration,
   TutorialConfiguration,
   TutorialDreamscapeConfiguration,
@@ -199,7 +200,12 @@ function parseTutorialTriggerDelay(
 
 function parsePersistentTutorialConfiguration(
   value: unknown,
-  configurationId: "journeyStart" | "dreamscape" | "draft" | "dreamsign-revelation",
+  configurationId:
+    | "journeyStart"
+    | "dreamscape"
+    | "atlas"
+    | "draft"
+    | "dreamsign-revelation",
 ): TutorialJourneyStartConfiguration {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
     throw new Error(`Tutorial data must contain a ${configurationId} table.`);
@@ -237,6 +243,13 @@ export function parseTutorialDreamscapeConfiguration(
   value: unknown,
 ): TutorialDreamscapeConfiguration {
   return parsePersistentTutorialConfiguration(value, "dreamscape");
+}
+
+/** Validate the delayed persistent Mira guidance for the first Atlas visit. */
+export function parseTutorialAtlasConfiguration(
+  value: unknown,
+): TutorialAtlasConfiguration {
+  return parsePersistentTutorialConfiguration(value, "atlas");
 }
 
 /** Validate persistent Mira guidance for a first-visit site tutorial. */
@@ -729,6 +742,7 @@ export async function loadTutorialConfiguration(
   return {
     journeyStart: parseTutorialJourneyStartConfiguration(record.journeyStart),
     dreamscape: parseTutorialDreamscapeConfiguration(record.dreamscape),
+    atlas: parseTutorialAtlasConfiguration(record.atlas),
     draft: parseTutorialSiteConfiguration(record.draft, "draft"),
     dreamsignRevelation: parseTutorialSiteConfiguration(
       record.dreamsignRevelation,

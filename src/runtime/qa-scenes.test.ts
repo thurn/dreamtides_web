@@ -173,6 +173,16 @@ describe('the "atlas" QA scene', () => {
   });
 });
 
+describe('the "tutorial-atlas" QA scene', () => {
+  it("parks the tutorial journey at its first Atlas frontier", () => {
+    const state = buildQaScene("tutorial-atlas", makeJourneyContent());
+
+    expect(state?.screen.type).toBe("atlas");
+    expect(state?.completionLevel).toBe(1);
+    expect(state?.isTutorialJourney).toBe(true);
+  });
+});
+
 describe("the atlas layer QA scenes", () => {
   // `atlasN` is numbered by the UI's 1-indexed "Layer N" column label, so it
   // parks the frontier on 0-indexed layer N-1. Column I (the starter) is never

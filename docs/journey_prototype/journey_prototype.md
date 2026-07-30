@@ -132,9 +132,11 @@ bubbles author a scalar delay; reusable triggers author delays by triggering
 event. The Tutorial Editor presents one shared control set for that model in
 every parent action.
 
-The `journeyStart` and `dreamscape` tables author delayed persistent Mira
-guidance for the tutorial journey handoff. The first dreamscape begins its
-authored delay when the player dismisses the starting-deck modal.
+The `journeyStart`, `dreamscape`, and `atlas` tables author delayed persistent
+Mira guidance for the tutorial journey handoff. The first dreamscape begins its
+authored delay when the player dismisses the starting-deck modal. The Atlas
+guidance begins when the player reaches the Atlas after completing the starter
+dream.
 
 The `draft` and `dreamsignRevelation` tables author Mira guidance for the first
 visit to each of those site types in a journey. Each begins its authored delay

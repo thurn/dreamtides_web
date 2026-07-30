@@ -51,6 +51,13 @@ beforeEach(() => {
   );
   originalVisualViewport = Object.getOwnPropertyDescriptor(window, "visualViewport");
   stubViewport(false);
+  class StubResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+  (globalThis as { ResizeObserver?: unknown }).ResizeObserver =
+    StubResizeObserver;
 });
 
 afterEach(() => {
@@ -255,6 +262,58 @@ function makeView(): AtlasView {
 }
 
 describe("Cumulus AtlasScreen", () => {
+  it("shows persistent Mira guidance one second after the Atlas loads", () => {
+    vi.useFakeTimers();
+    const onGuideDialogueShown = vi.fn();
+    const view: AtlasView = {
+      ...makeView(),
+      guideDialogue: {
+        id: "tutorial-run:atlas-guidance",
+        model: {
+          portrait: { kind: "character-portrait", characterId: "mira" },
+          portraitAlt: "Mira",
+          speakerName: "Mira",
+          text: "On the [purple]Atlas[/purple] screen, choose a dream.",
+        },
+        delaySeconds: 1,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 700,
+      },
+    };
+    const { container, root } = mount(
+      <AtlasScreen
+        view={view}
+        onEnterNode={vi.fn()}
+        onGuideDialogueShown={onGuideDialogueShown}
+      />,
+    );
+    const dialogue = () =>
+      container.querySelector('[data-testid="atlas-tutorial-dialogue"]');
+    expect(dialogue()?.getAttribute("data-character-dialogue-visible")).toBe(
+      "false",
+    );
+
+    act(() => {
+      vi.advanceTimersByTime(999);
+    });
+    expect(dialogue()?.getAttribute("data-character-dialogue-visible")).toBe(
+      "false",
+    );
+    expect(onGuideDialogueShown).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(dialogue()?.getAttribute("data-character-dialogue-visible")).toBe(
+      "true",
+    );
+    expect(onGuideDialogueShown).toHaveBeenCalledTimes(1);
+
+    act(() => root.unmount());
+    vi.useRealTimers();
+  });
+
   it("renders every node and leaves persistent chrome to the router", () => {
     const { container, root } = mount(
       <AtlasScreen view={makeView()} onEnterNode={vi.fn()} />,

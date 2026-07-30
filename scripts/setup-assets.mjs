@@ -17,6 +17,7 @@ import {
 } from "./lib/card-refs.mjs";
 import {
   validateTutorialDreamscapeConfiguration,
+  validateTutorialAtlasConfiguration,
   validateTutorialJourneyStartConfiguration,
   validateTutorialSiteConfiguration,
   validateTutorialActions,
@@ -1130,6 +1131,9 @@ export function setupAssets({
   const tutorialDreamscape = validateTutorialDreamscapeConfiguration(
     tutorialSource.dreamscape,
   );
+  const tutorialAtlas = validateTutorialAtlasConfiguration(
+    tutorialSource.atlas,
+  );
   const tutorialDraft = validateTutorialSiteConfiguration(
     tutorialSource.draft,
     "draft",
@@ -1146,6 +1150,7 @@ export function setupAssets({
     `${JSON.stringify({
       journeyStart: tutorialJourneyStart,
       dreamscape: tutorialDreamscape,
+      atlas: tutorialAtlas,
       draft: tutorialDraft,
       dreamsignRevelation: tutorialDreamsignRevelation,
       actions: tutorialActions,

@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   loadTutorialActions,
   parseTutorialActions,
+  parseTutorialAtlasConfiguration,
   parseTutorialBattleConfiguration,
   parseTutorialDreamscapeConfiguration,
   parseTutorialJourneyStartConfiguration,
@@ -27,6 +28,16 @@ const ACTIONS_RESPONSE = {
       verticalOffset: 0,
       bubbleWidth: 700,
       text: "Visit [purple]Dream Sites[/purple].",
+    },
+  },
+  atlas: {
+    speechBubble: {
+      speaker: "mira",
+      delay: 1,
+      horizontalOffset: 0,
+      verticalOffset: 0,
+      bubbleWidth: 700,
+      text: "Choose the next [purple]dream[/purple].",
     },
   },
   draft: {
@@ -813,6 +824,22 @@ describe("parseTutorialDreamscapeConfiguration", () => {
       parseTutorialDreamscapeConfiguration({
         speechBubble: {
           ...ACTIONS_RESPONSE.dreamscape.speechBubble,
+          delay: -1,
+        },
+      }),
+    ).toThrow(/non-negative delay/u);
+  });
+});
+
+describe("parseTutorialAtlasConfiguration", () => {
+  it("preserves the authored delay and rejects invalid values", () => {
+    expect(
+      parseTutorialAtlasConfiguration(ACTIONS_RESPONSE.atlas),
+    ).toEqual(ACTIONS_RESPONSE.atlas);
+    expect(() =>
+      parseTutorialAtlasConfiguration({
+        speechBubble: {
+          ...ACTIONS_RESPONSE.atlas.speechBubble,
           delay: -1,
         },
       }),

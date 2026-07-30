@@ -48,7 +48,13 @@ import { artRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
 import type { AtlasView } from "../../cumulus/screens/AtlasScreen";
 import type { JourneyContent } from "../../data/journey-content";
-import type { DreamAtlas, DreamscapeNode } from "../../types/journey";
+import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
+import type {
+  DreamAtlas,
+  DreamscapeNode,
+  JourneyState,
+} from "../../types/journey";
+import type { TutorialAtlasConfiguration } from "../../types/tutorial";
 import { type LayerName, layerOrdinal } from "../../types/layer-name";
 
 /**
@@ -604,6 +610,8 @@ export function buildAtlasView(
   atlas: DreamAtlas,
   journeyContent: JourneyContent,
   isDesktop = false,
+  state?: JourneyState,
+  tutorialConfiguration?: TutorialAtlasConfiguration,
 ): AtlasView {
   const profile = atlasLayoutProfile(isDesktop);
   return {
@@ -611,5 +619,58 @@ export function buildAtlasView(
     stageHeight: profile.stageHeight,
     nodes: buildAtlasMapNodes(atlas, journeyContent, profile),
     edges: buildAtlasMapEdges(atlas, profile),
+    guideDialogue:
+      state === undefined
+        ? undefined
+        : buildAtlasGuideDialogue(state, tutorialConfiguration),
+  };
+}
+
+/** Build Mira's guidance only for the tutorial journey's first Atlas visit. */
+export function buildAtlasGuideDialogue(
+  state: JourneyState,
+  configuration?: TutorialAtlasConfiguration,
+): AtlasView["guideDialogue"] {
+  if (
+    state.isTutorialJourney !== true ||
+    state.completionLevel !== 1 ||
+    configuration === undefined
+  ) {
+    return undefined;
+  }
+  const speechBubble = configuration.speechBubble;
+  return {
+    id: `${state.runId ?? state.seed}:atlas-guidance`,
+    model: {
+      portrait: { kind: "character-portrait", characterId: "mira" },
+      portraitAlt: "Mira",
+      speakerName: "Mira",
+      text: speechBubble.text,
+    },
+    delaySeconds: tutorialSpeechBubbleDelaySeconds(speechBubble),
+    horizontalOffset: speechBubble.horizontalOffset,
+    verticalOffset: speechBubble.verticalOffset,
+    bubbleWidth: speechBubble.bubbleWidth,
+  };
+}
+
+/** Reconstruction fields for the moment delayed Atlas guidance appears. */
+export function buildAtlasGuidanceLog(
+  state: JourneyState,
+  dialogue: NonNullable<AtlasView["guideDialogue"]>,
+): {
+  readonly key: string;
+  readonly fields: Record<string, unknown>;
+} {
+  return {
+    key: `tutorial-atlas-guidance:${state.runId ?? state.seed}`,
+    fields: {
+      completionLevel: state.completionLevel,
+      delaySeconds: dialogue.delaySeconds,
+      horizontalOffsetPx: dialogue.horizontalOffset,
+      verticalOffsetPx: dialogue.verticalOffset,
+      bubbleWidthPx: dialogue.bubbleWidth,
+      text: dialogue.model.text,
+    },
   };
 }

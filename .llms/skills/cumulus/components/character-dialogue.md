@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/character-dialogue`
 
-Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **7** (imports outside `src/cumulus/docs/` and tests).
 
 A character portrait in the canonical round frame, paired with SpeechBubble and presented as one fadeable guide-dialogue object in compact, wide, or prominent scale.
 

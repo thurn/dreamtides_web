@@ -43,6 +43,16 @@ vi.mock("./data/tutorial-actions", () => ({
         text: "Visit Dream Sites.",
       },
     },
+    atlas: {
+      speechBubble: {
+        speaker: "mira",
+        delay: 1,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 700,
+        text: "Choose the next dream.",
+      },
+    },
     draft: {
       speechBubble: {
         speaker: "mira",

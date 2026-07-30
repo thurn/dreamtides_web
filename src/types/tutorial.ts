@@ -62,6 +62,11 @@ export interface TutorialDreamscapeConfiguration {
   readonly speechBubble: TutorialPersistentSpeechBubble;
 }
 
+/** Persistent guidance shown on the first tutorial Atlas visit. */
+export interface TutorialAtlasConfiguration {
+  readonly speechBubble: TutorialPersistentSpeechBubble;
+}
+
 /** Persistent Mira guidance shown on the first visit to one site type. */
 export interface TutorialSiteConfiguration {
   readonly speechBubble: TutorialPersistentSpeechBubble;
@@ -102,6 +107,7 @@ export interface TutorialTriggerDefinition
 export interface TutorialConfiguration {
   readonly journeyStart: TutorialJourneyStartConfiguration;
   readonly dreamscape: TutorialDreamscapeConfiguration;
+  readonly atlas: TutorialAtlasConfiguration;
   readonly draft: TutorialSiteConfiguration;
   readonly dreamsignRevelation: TutorialSiteConfiguration;
   readonly actions: readonly TutorialAction[];

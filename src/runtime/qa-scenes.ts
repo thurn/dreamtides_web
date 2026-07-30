@@ -159,6 +159,18 @@ const ATLAS_SCENE: QaScene = {
   build: atlasLayerSceneState(1),
 };
 
+/** The first Atlas frontier in the authored tutorial journey. */
+const TUTORIAL_ATLAS_SCENE: QaScene = {
+  id: "tutorial-atlas",
+  label: "Tutorial Dream Atlas",
+  description:
+    "The tutorial journey's first Atlas visit after completing the starter dream.",
+  build: (journeyContent) => {
+    const state = ATLAS_SCENE.build(journeyContent);
+    return state === null ? null : { ...state, isTutorialJourney: true };
+  },
+};
+
 /**
  * Registers a `?goto=atlasN` scene parked on the atlas resting screen the UI
  * labels "Layer N". The UI numbers its seven columns I–VII (1-indexed), so the
@@ -664,6 +676,7 @@ export const QA_SCENES: readonly QaScene[] = [
   DREAM_AVATAR_SELECT_SCENE,
   TUTORIAL_DREAM_AVATAR_SELECT_SCENE,
   ATLAS_SCENE,
+  TUTORIAL_ATLAS_SCENE,
   // Atlas resting screen at each reachable frontier, numbered by the UI's
   // "Layer N" column label (columns I–VII). Column I is the starter you begin
   // in and is never a resting frontier, so the numbered scenes run Layer II

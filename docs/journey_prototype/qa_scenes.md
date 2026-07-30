@@ -70,6 +70,10 @@ completing the starter dreamscape) — the same screen as `atlas2` — and is th
 natural entry point for boss-preview QA, since the boss node is revealed from that
 depth onward.
 
+`?goto=tutorial-atlas` opens that same first frontier as an authored tutorial
+journey, including the delayed Mira guidance shown on the player's first Atlas
+visit.
+
 ## Battle layers
 
 `?goto=battleN` opens the Battle site inside the dreamscape on atlas **Layer N**,
@@ -128,6 +132,7 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `dream-avatar-select`            | Choose-your-Dream Avatar screen a run opens on (`journeyStart`), without the lobby                                                                                                                                 |
 | `tutorial-dream-avatar-select`   | Tutorial Dream Avatar selection with only `BFC40414-5264-41BF-86E1-A0F41EE4F5B5` shown, centered beside its three authored Valor tides; choosing it starts a journey with their 150-card pool                    |
 | `atlas`                         | Dream Atlas resting screen at the first frontier the UI labels "Layer II" (one dreamscape completed), with a generated boss node and Apollyon incarnation (atlas UI + boss-preview QA); same screen as `atlas2` |
+| `tutorial-atlas`                | Tutorial journey's first Dream Atlas visit, including the delayed Mira guidance                                                                                                                                |
 | `atlas2` … `atlas7`             | Dream Atlas resting screen the UI labels "Layer N", with the available frontier on column N (see "Atlas layers" below)                                                                                          |
 | `battle`                        | Layer I Battle Start opponent preview; same scene depth as `battle1`                                                                                                                                            |
 | `battle-playable`               | Layer I playable battle board with owned Dreamsigns                                                                                                                                                             |

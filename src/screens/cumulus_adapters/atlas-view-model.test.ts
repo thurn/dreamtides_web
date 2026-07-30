@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { LayerName } from "../../types/layer-name";
-import type { DreamAtlas, DreamscapeNode } from "../../types/journey";
+import type {
+  DreamAtlas,
+  DreamscapeNode,
+  JourneyState,
+} from "../../types/journey";
 import type { JourneyContent } from "../../data/journey-content";
 import { MINIMAL_ATLAS_CONFIG } from "../../__test-helpers__/atlas-fixtures";
 import {
@@ -12,6 +16,8 @@ import {
   ATLAS_STAGE_WIDTH,
   atlasChoiceLayer,
   atlasEdgeKind,
+  buildAtlasGuidanceLog,
+  buildAtlasGuideDialogue,
   buildAtlasMapEdges,
   buildAtlasMapNodes,
   buildAtlasView,
@@ -224,6 +230,66 @@ describe("atlasChoiceLayer", () => {
     const atlas = makeVerticalAtlas();
     atlas.nodes.middle.state = "completed";
     expect(atlasChoiceLayer(atlas)).toBeNull();
+  });
+});
+
+describe("buildAtlasGuideDialogue", () => {
+  const configuration = {
+    speechBubble: {
+      speaker: "mira" as const,
+      delay: 1,
+      horizontalOffset: 0,
+      verticalOffset: 0,
+      bubbleWidth: 700,
+      text: "On the [purple]Atlas[/purple] screen, choose a dream.",
+    },
+  };
+
+  it("builds guidance only on the tutorial journey's first Atlas visit", () => {
+    const firstAtlasState = {
+      isTutorialJourney: true,
+      completionLevel: 1,
+      runId: "tutorial-run",
+      seed: "tutorial-seed",
+    } as JourneyState;
+
+    expect(
+      buildAtlasGuideDialogue(firstAtlasState, configuration),
+    ).toMatchObject({
+      id: "tutorial-run:atlas-guidance",
+      delaySeconds: 1,
+      bubbleWidth: 700,
+      model: {
+        speakerName: "Mira",
+        text: "On the [purple]Atlas[/purple] screen, choose a dream.",
+      },
+    });
+    expect(
+      buildAtlasGuideDialogue(
+        { ...firstAtlasState, completionLevel: 2 },
+        configuration,
+      ),
+    ).toBeUndefined();
+    expect(
+      buildAtlasGuideDialogue(
+        { ...firstAtlasState, isTutorialJourney: false },
+        configuration,
+      ),
+    ).toBeUndefined();
+
+    const dialogue = buildAtlasGuideDialogue(firstAtlasState, configuration);
+    expect(dialogue).toBeDefined();
+    expect(buildAtlasGuidanceLog(firstAtlasState, dialogue!)).toEqual({
+      key: "tutorial-atlas-guidance:tutorial-run",
+      fields: {
+        completionLevel: 1,
+        delaySeconds: 1,
+        horizontalOffsetPx: 0,
+        verticalOffsetPx: 0,
+        bubbleWidthPx: 700,
+        text: "On the [purple]Atlas[/purple] screen, choose a dream.",
+      },
+    });
   });
 });
 
