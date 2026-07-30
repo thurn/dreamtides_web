@@ -160,6 +160,7 @@ export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactEle
     marginTop: -model.size / 2,
     touchAction: "pan-x pan-y",
     WebkitTapHighlightColor: "transparent",
+    cursor: isAvailable ? "pointer" : "default",
     "--atlas-node-size": `${String(model.size)}px`,
     "--atlas-badge-scale": String(model.badgeScale ?? 1),
     ...binding.sourceProps.style,
@@ -170,6 +171,7 @@ export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactEle
       as="button"
       ref={binding.ref}
       {...binding.sourceProps}
+      pressFeedback={isAvailable ? "scale" : "stationary"}
       className={className}
       style={nodeStyle}
       aria-label={ariaLabel}

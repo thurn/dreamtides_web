@@ -208,6 +208,25 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(available.onActivate).toHaveBeenCalledWith(NODE_ID);
 
     const unavailable = renderNode(model("completed"));
+    unavailable.source.getBoundingClientRect = () => ({
+      x: 80,
+      y: 90,
+      left: 80,
+      top: 90,
+      right: 212,
+      bottom: 222,
+      width: 132,
+      height: 132,
+      toJSON: () => ({}),
+    });
+    act(() => {
+      unavailable.source.dispatchEvent(
+        pointer("pointerdown", { pointerType: "mouse" }),
+      );
+    });
+    expect(unavailable.source.style.transform).toBe("none");
+    expect(unavailable.source.style.cursor).toBe("default");
+
     act(() => unavailable.source.click());
     expect(unavailable.onActivate).not.toHaveBeenCalled();
     expect(unavailable.source.getAttribute("aria-disabled")).toBe("true");
