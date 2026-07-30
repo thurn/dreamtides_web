@@ -216,16 +216,16 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(highlight).not.toBeNull();
     expect(highlight?.getAttribute("aria-hidden")).toBe("true");
     expect(baseHighlight?.style.maskImage).toContain(
-      "/atlas/Round_frame_main.png",
+      "/atlas/Round_frame_main.png?v=1",
     );
     expect(baseHighlight?.style.webkitMaskImage).toContain(
-      "/atlas/Round_frame_main.png",
+      "/atlas/Round_frame_main.png?v=1",
     );
     expect(pulseHighlight?.style.maskImage).toContain(
-      "/atlas/Round_frame_main.png",
+      "/atlas/Round_frame_main.png?v=1",
     );
     expect(pulseHighlight?.style.webkitMaskImage).toContain(
-      "/atlas/Round_frame_main.png",
+      "/atlas/Round_frame_main.png?v=1",
     );
     expect(highlight?.getAttribute("data-ambient-paused")).toBe("false");
     act(() => available.source.click());

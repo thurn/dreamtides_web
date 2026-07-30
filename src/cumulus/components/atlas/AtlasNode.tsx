@@ -12,6 +12,10 @@ import { atlasPrimaryInfoCard } from "./AtlasHoverCard";
 import { BOSS_DISPLAY, ROUND_FRAME_URL } from "./atlas-display";
 import "./atlas.css";
 
+// The frame is a cross-origin CSS mask in production. Keep its cache key
+// versioned so response-header or source-art changes can take effect immediately.
+const ROUND_FRAME_MASK_URL = `${ROUND_FRAME_URL}?v=1`;
+
 /** Atlas-primary display data. The component selects the strict InfoCard variant. */
 export interface AtlasNodePrimary {
   sceneArt: ArtRef | null;
@@ -166,8 +170,8 @@ export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactEle
     ...binding.sourceProps.style,
   } as CSSProperties;
   const selectableHighlightStyle = {
-    maskImage: `url("${ROUND_FRAME_URL}")`,
-    WebkitMaskImage: `url("${ROUND_FRAME_URL}")`,
+    maskImage: `url("${ROUND_FRAME_MASK_URL}")`,
+    WebkitMaskImage: `url("${ROUND_FRAME_MASK_URL}")`,
   } as CSSProperties;
 
   return (
