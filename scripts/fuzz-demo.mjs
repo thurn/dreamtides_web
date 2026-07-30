@@ -7,6 +7,7 @@ import { resolve } from "node:path";
 import process from "node:process";
 import { chromium } from "@playwright/test";
 import { DEV_EMULATOR_PROJECT_ID } from "./dev-with-emulator.mjs";
+import { inspectJourneyPresentation } from "./lib/journey-presentation-oracle.mjs";
 
 const FAILURE_TEXT =
   /action not applied|fold error|tutorial-authoritative|application error|something went wrong/i;
@@ -230,6 +231,58 @@ async function assertBounceCaptureOracle(page, records) {
   records.length = 0;
 }
 
+async function assertJourneyPresentationOracle(page) {
+  await page.goto(
+    "data:text/html," +
+      encodeURIComponent(
+        '<main data-journey-screen="site" style="opacity:0">' +
+          "<button>Decline Offer</button></main>",
+      ),
+  );
+  const report = await page.evaluate(inspectJourneyPresentation, "dreamscape");
+  const codes = report.violations.map((violation) => violation.code);
+  if (
+    !codes.includes("expected_journey_screen_missing") ||
+    !codes.includes("transparent_journey_screen_intercepts_input")
+  ) {
+    throw new Error(
+      "journey-presentation oracle missed its stuck-screen negative control: " +
+        JSON.stringify(report),
+    );
+  }
+}
+
+async function presentation(page) {
+  const probe = await snapshot(page);
+  if (probe === null) return null;
+  if (probe.frontDoorPhase !== "journey") {
+    return {
+      expectedScreenType: probe.displayedState.journey.screen.type,
+      screens: [],
+      skippedForFrontDoorPhase: probe.frontDoorPhase,
+      violations: [],
+    };
+  }
+  return page.evaluate(
+    inspectJourneyPresentation,
+    probe.displayedState.journey.screen.type,
+  );
+}
+
+async function waitForHealthyPresentation(page, label) {
+  const deadline = Date.now() + 15_000;
+  let report = null;
+  while (Date.now() < deadline) {
+    report = await presentation(page);
+    if (report !== null && report.violations.length === 0) return;
+    await sleep(50);
+  }
+  throw new Error(
+    `${label} journey presentation did not match the displayed fold state: ` +
+      JSON.stringify(report),
+  );
+}
+
 async function waitForProbe(page) {
   await page.waitForFunction(
     () =>
@@ -238,6 +291,7 @@ async function waitForProbe(page) {
     null,
     { timeout: 60_000 },
   );
+  await waitForHealthyPresentation(page, "client");
 }
 
 async function snapshot(page) {
@@ -254,11 +308,40 @@ async function waitForConvergence(left, right) {
       a.confirmedHead === b.confirmedHead &&
       a.confirmedHash === b.confirmedHash
     ) {
+      await Promise.all([
+        waitForHealthyPresentation(left, "left client"),
+        waitForHealthyPresentation(right, "right client"),
+      ]);
       return;
     }
     await sleep(100);
   }
   throw new Error("two clients did not converge within 30 seconds");
+}
+
+async function waitForScreenType(page, screenType, label) {
+  await page.waitForFunction(
+    (expected) =>
+      window.__questFuzzProbe?.snapshot().displayedState.journey.screen.type ===
+      expected,
+    screenType,
+    { timeout: 60_000 },
+  );
+  const firstReport = await page.evaluate(
+    inspectJourneyPresentation,
+    screenType,
+  );
+  if (
+    firstReport.violations.some(
+      (violation) => violation.code === "expected_journey_screen_missing",
+    )
+  ) {
+    throw new Error(
+      `${label} did not mount ${screenType} in the fold-state render: ` +
+        JSON.stringify(firstReport),
+    );
+  }
+  await waitForHealthyPresentation(page, label);
 }
 
 async function clickRecorded(page, locator, label, actions) {
@@ -294,6 +377,39 @@ async function avatarScenario(baseUrl, seed, publisher, host, actions) {
     null,
     { timeout: 60_000 },
   );
+  await waitForConvergence(publisher, host);
+  return { game, url };
+}
+
+async function dreamAuguryExitScenario(
+  baseUrl,
+  seed,
+  publisher,
+  host,
+  actions,
+) {
+  const entryUrl =
+    `${baseUrl}/?goto=dreamaugury&seed=` +
+    encodeURIComponent(`${seed}:dream-augury-exit`);
+  await publisher.goto(entryUrl);
+  await waitForProbe(publisher);
+  const url = publisher.url();
+  const game = new URL(url).searchParams.get("game");
+  if (game === null)
+    throw new Error("Dream Augury scenario did not create a room");
+  await host.goto(url);
+  await waitForProbe(host);
+  await waitForConvergence(publisher, host);
+
+  const exit = publisher.locator(
+    [
+      '[data-testid="cumulus-dream-augury-decline"]',
+      '[data-testid="cumulus-dream-augury-unavailable-exit"]',
+    ].join(","),
+  );
+  await exit.waitFor({ state: "visible", timeout: 30_000 });
+  await clickRecorded(publisher, exit, "publisher", actions);
+  await waitForScreenType(publisher, "dreamscape", "publisher");
   await waitForConvergence(publisher, host);
   return { game, url };
 }
@@ -717,6 +833,7 @@ async function runBrowserIteration({
   await installCapture(publisher, "publisher", records);
   await installCapture(host, "host", records);
   await assertBounceCaptureOracle(publisher, records);
+  await assertJourneyPresentationOracle(publisher);
   const scenarios = [];
   let failure = null;
 
@@ -729,11 +846,17 @@ async function runBrowserIteration({
         await avatarScenario(baseUrl, seed, publisher, host, actions),
       );
       scenarios.push(
+        await dreamAuguryExitScenario(baseUrl, seed, publisher, host, actions),
+      );
+      scenarios.push(
         await battleScenario(baseUrl, seed, host, publisher, actions),
       );
     } else {
       scenarios.push(
         await avatarScenario(baseUrl, seed, publisher, host, actions),
+      );
+      scenarios.push(
+        await dreamAuguryExitScenario(baseUrl, seed, publisher, host, actions),
       );
       scenarios.push(
         await battleScenario(baseUrl, seed, host, publisher, actions),
@@ -764,6 +887,8 @@ async function runBrowserIteration({
     hostUrl: host.url(),
     publisherProbe: await snapshot(publisher).catch(() => null),
     hostProbe: await snapshot(host).catch(() => null),
+    publisherPresentation: await presentation(publisher).catch(() => null),
+    hostPresentation: await presentation(host).catch(() => null),
     createdAt: new Date().toISOString(),
   };
   json(resolve(artifactDir, "metadata.json"), metadata);

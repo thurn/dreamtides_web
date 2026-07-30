@@ -41,12 +41,13 @@ The browser harness starts an isolated Firebase Database emulator and serves a
 fresh production-style Vite build, launches publisher and host contexts, and
 drives the visible UI. The
 smoke profile covers the fixed tutorial Dream Avatar selection, a second-client
-join, a playable battle, **Control Opponent**, and an opponent score edit
-through the battle inspector. It then skips to rewards, continues to the Atlas,
-checks the complete victory handoff on both clients, reloads both clients, and
-checks the persisted fold again. The rehearsal profile enters through `/main`,
-plays all authored tutorial actions at accelerated playback, waits for the
-shared live-battle handoff, and then runs the avatar and cooperative battle
+join, a Dream Augury exit back to its Dreamscape, a playable battle,
+**Control Opponent**, and an opponent score edit through the battle inspector.
+It then skips to rewards, continues to the Atlas, checks the complete victory
+handoff on both clients, reloads both clients, and checks the persisted fold
+again. The rehearsal profile enters through `/main`, plays all authored
+tutorial actions at accelerated playback, waits for the shared live-battle
+handoff, and then runs the avatar, Dream Augury, and cooperative battle
 scenarios. The soak profile repeats smoke runs for a bounded duration with a new
 deterministic seed per room.
 
@@ -85,12 +86,20 @@ A browser run fails on:
 - visible text matching fold errors, tutorial-authoritative errors,
   application failures, or “action not applied”;
 - clients that do not converge to the same confirmed head and state hash;
+- a journey route whose displayed fold screen is missing, transparent, has no
+  layout area, or sits wholly outside the viewport;
+- a displayed route whose visible controls cannot receive pointer hits;
+- a transparent inactive route that still intercepts pointer input, or retains
+  keyboard focus;
+- a failed image occupying visible space on the displayed journey route;
 - a required publisher/host interaction that is absent or disabled.
 
 An init-script observer records every cooperative bounce toast as it appears,
 so the four-second toast lifetime cannot hide an error from the final oracle.
 Each iteration first renders a synthetic bounce toast and requires the observer
-to capture it as a negative control.
+to capture it as a negative control. It also renders the stuck-transition shape
+of a transparent, interactive site route while the fold expects a Dreamscape
+and requires the presentation oracle to reject it.
 
 ## Failure artifacts and replay
 
@@ -98,6 +107,7 @@ Each browser iteration writes under `artifacts/coop-fuzz/`, which is ignored by
 Git. A run directory contains:
 
 - `metadata.json` with profile, seed, scenario URLs, probes, and failure stack;
+- the final presentation-oracle reports for both clients in `metadata.json`;
 - `actions.json` with the ordered semantic UI actions;
 - `browser-records.json` with console, page, and request failures;
 - one `room-<game>.json` RTDB dump for each scenario;
