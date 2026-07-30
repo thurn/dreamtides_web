@@ -31,8 +31,8 @@ function runtimeJsonPaths(rootDir) {
 }
 
 /**
- * Resolve the coop reducer identity from the checked-in commit, every local
- * source change, and the generated JSON catalogs that the browser fold reads.
+ * Resolve the deployed client identity from the checked-in commit, every local
+ * source change, and the generated JSON catalogs the browser reads.
  */
 export function resolveBuildHash(rootDir) {
   let revision = "dev";

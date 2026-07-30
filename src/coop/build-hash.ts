@@ -8,12 +8,9 @@ declare global {
 }
 
 /**
- * Returns the build hash of the currently running client.
- *
- * Used as the coop reducer version: `createRoom` stamps the genesis's
- * `reducerVersion` with this value, and a joining client compares it against
- * its own build to decide whether it is on a compatible build (writable) or a
- * mismatched build (read-only version gate).
+ * Returns the exact build identity of the currently running client for
+ * diagnostics. Reducer compatibility is versioned separately in
+ * `reducer-version.ts`.
  *
  * Under vitest the Vite `define` is not applied, so `__BUILD_HASH__` is
  * undefined; we fall back to `"test"` there.

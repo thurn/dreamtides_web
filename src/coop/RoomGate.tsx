@@ -26,7 +26,13 @@ import {
   contentConfigsEqual,
   type RuntimeConfig,
 } from "../runtime/runtime-config";
+import { logEvent } from "../logging";
 import { getBuildHash } from "./build-hash";
+import {
+  classifyReducerVersion,
+  CURRENT_REDUCER_VERSION,
+  isReducerVersionCompatible,
+} from "./reducer-version";
 import type { FrontDoorPhase } from "../rules/fold-state";
 import { installJourneyLogSink, type JourneyLogSinkHandle } from "./journey-log-sink";
 import { ConfigGateScreen } from "./ConfigGateScreen";
@@ -66,11 +72,12 @@ export function roomScopedClientId(
 
 /**
  * Everything a mounted coop game needs from a ready room. RoomGate hands this
- * to `children` once the room's log node exists and its `reducerVersion`
- * matches this build. Task 25's `CoopProvider` consumes it: it builds a
- * `LogClient` from `db` + `roomId` (subscribing via `subscribeToLog`, appending
- * via the eventlog append path) and wires the client's `onEventOutcome` /
- * `onDivergence` callbacks to `logSink`'s record helpers.
+ * to `children` once the room's log node exists and its `reducerVersion` is
+ * compatible with this reducer protocol. Task 25's `CoopProvider` consumes it:
+ * it builds a `LogClient` from `db` + `roomId` (subscribing via
+ * `subscribeToLog`, appending via the eventlog append path) and wires the
+ * client's `onEventOutcome` / `onDivergence` callbacks to `logSink`'s record
+ * helpers.
  */
 export interface RoomReadyContext {
   db: Database;
@@ -115,9 +122,9 @@ function freshSeed(): string {
 }
 
 /**
- * Build the genesis for a brand-new room: fresh seed, this build's hash, now,
- * and the fold-relevant content parameters pinned from this client's config so
- * every joiner folds the same content.
+ * Build the genesis for a brand-new room: fresh seed, the semantic reducer
+ * protocol, now, and the fold-relevant content parameters pinned from this
+ * client's config so every joiner folds the same content.
  */
 export function createFreshGenesis(
   contentConfig: ContentConfig,
@@ -125,7 +132,7 @@ export function createFreshGenesis(
 ): PinnedGenesis {
   return {
     seed: freshSeed(),
-    reducerVersion: getBuildHash(),
+    reducerVersion: CURRENT_REDUCER_VERSION,
     createdAt: Date.now(),
     contentConfig,
     ...(frontDoorEntry === undefined ? {} : { frontDoorEntry }),
@@ -175,8 +182,8 @@ export async function createAndNavigateToRoom(
 }
 
 /**
- * Decides how a delivered genesis gates against this client: a reducer-version
- * mismatch (fatal, checked first) shows the version gate; a content-config
+ * Decides how a delivered genesis gates against this client: an incompatible
+ * reducer version (fatal, checked first) shows the version gate; a content-config
  * mismatch — including a genesis with no `contentConfig` at all — shows the
  * recoverable config gate; otherwise the room is ready. Pure, so it is unit
  * testable without rendering.
@@ -185,7 +192,7 @@ export function gateStatusFor(
   genesis: Genesis,
   localContentConfig: ContentConfig,
 ): "ready" | "versionGate" | "configGate" {
-  if (genesis.reducerVersion !== getBuildHash()) {
+  if (!isReducerVersionCompatible(genesis.reducerVersion)) {
     return "versionGate";
   }
   const roomContentConfig = genesis.contentConfig;
@@ -216,10 +223,9 @@ function navigateToRoom(roomId: string): void {
 
 /**
  * Coop room gate: parse `?game=`, create/join, subscribe to the room log,
- * write presence, install the journey-log sink, and gate on
- * `genesis.reducerVersion === getBuildHash()`. On a match it renders
- * `children` with the ready room context; on a mismatch it renders the
- * read-only `VersionGateScreen`.
+ * write presence, install the journey-log sink, and gate on reducer-protocol
+ * compatibility. A compatible room renders `children` with the ready room
+ * context; an incompatible room renders the read-only `VersionGateScreen`.
  */
 export function RoomGate({
   db,
@@ -243,6 +249,8 @@ export function RoomGate({
   const [logSink, setLogSinkHandle] = useState<JourneyLogSinkHandle | null>(null);
 
   const readyRoomId = gateState.status === "ready" ? gateState.roomId : null;
+  const readyReducerVersion =
+    gateState.status === "ready" ? gateState.genesis.reducerVersion : null;
 
   useEffect(() => {
     if (activeRoomId === null) return;
@@ -395,13 +403,19 @@ export function RoomGate({
   // record helpers the CoopProvider wires to the LogClient callbacks. A
   // `visibilitychange` flush captures the tail when the tab is backgrounded.
   useEffect(() => {
-    if (readyRoomId === null) {
+    if (readyRoomId === null || readyReducerVersion === null) {
       setLogSinkHandle(null);
       return undefined;
     }
 
     const handle = installJourneyLogSink(db, { gameId: readyRoomId, clientId });
     setLogSinkHandle(handle);
+    logEvent("room_reducer_compatibility", {
+      clientBuildHash: getBuildHash(),
+      clientReducerVersion: CURRENT_REDUCER_VERSION,
+      compatibility: classifyReducerVersion(readyReducerVersion),
+      roomReducerVersion: readyReducerVersion,
+    });
 
     const handleVisibilityChange = (): void => {
       if (document.visibilityState === "hidden") {
@@ -415,7 +429,7 @@ export function RoomGate({
       void handle.dispose();
       setLogSinkHandle(null);
     };
-  }, [db, readyRoomId, clientId]);
+  }, [db, readyRoomId, readyReducerVersion, clientId]);
 
   if (gateState.status === "versionGate") {
     return <VersionGateScreen db={db} contentConfig={localContentConfig} />;

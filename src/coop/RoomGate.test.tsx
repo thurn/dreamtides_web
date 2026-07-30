@@ -10,15 +10,16 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Genesis, LogNode } from "../eventlog/types";
+import { getLogEntries, resetLog } from "../logging";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 
-const BUILD_HASH = "build-1";
+const REDUCER_VERSION = "dreamtides-coop-v1";
 
 // Captured subscriber so a test can hand RoomGate a chosen log node.
 let deliverNode: ((node: LogNode) => void) | null = null;
 
 vi.mock("./build-hash", () => ({
-  getBuildHash: () => BUILD_HASH,
+  getBuildHash: () => "build-1",
 }));
 
 vi.mock("../eventlog/subscribe", () => ({
@@ -55,7 +56,7 @@ vi.mock("firebase/database", () => ({
 }));
 
 // Imported after the mocks are registered.
-const { RoomGate, roomScopedClientId } = await import("./RoomGate");
+const { createFreshGenesis, RoomGate, roomScopedClientId } = await import("./RoomGate");
 
 function runtimeConfig(overrides: Partial<RuntimeConfig> = {}): RuntimeConfig {
   return {
@@ -73,7 +74,7 @@ function runtimeConfig(overrides: Partial<RuntimeConfig> = {}): RuntimeConfig {
 function genesisWith(contentConfig: Genesis["contentConfig"]): Genesis {
   return {
     seed: "seed-1",
-    reducerVersion: BUILD_HASH,
+    reducerVersion: REDUCER_VERSION,
     createdAt: 0,
     contentConfig,
   };
@@ -91,14 +92,14 @@ function nodeWith(genesis: Genesis): LogNode {
 }
 
 let container: HTMLDivElement;
-let root: Root;
+let root: Root | null = null;
 
 function mount(config: RuntimeConfig): void {
   container = document.createElement("div");
   document.body.append(container);
   root = createRoot(container);
   act(() => {
-    root.render(
+    root?.render(
       <RoomGate db={{} as never} gameId={config.gameId} runtimeConfig={config}>
         {() => <div data-room-children="true">room children</div>}
       </RoomGate>,
@@ -117,17 +118,29 @@ beforeEach(() => {
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT =
     true;
   deliverNode = null;
+  resetLog();
 });
 
 afterEach(() => {
   act(() => {
-    root.unmount();
+    root?.unmount();
   });
+  root = null;
   document.body.innerHTML = "";
   vi.clearAllMocks();
 });
 
 describe("RoomGate content-config gate", () => {
+  it("pins new rooms to the semantic reducer protocol", () => {
+    const genesis = createFreshGenesis({
+      poolVariant: "tides4",
+      draftMode: "pool",
+      fresh20PackSize: null,
+    });
+
+    expect(genesis.reducerVersion).toBe(REDUCER_VERSION);
+  });
+
   it("renders the config gate when genesis.contentConfig differs from the local runtime config", async () => {
     mount(runtimeConfig());
     await flush();
@@ -178,7 +191,7 @@ describe("RoomGate content-config gate", () => {
 
     const legacyGenesis: Genesis = {
       seed: "seed-1",
-      reducerVersion: BUILD_HASH,
+      reducerVersion: REDUCER_VERSION,
       createdAt: 0,
     };
     act(() => {
@@ -187,6 +200,60 @@ describe("RoomGate content-config gate", () => {
     await flush();
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
+    expect(container.querySelector("[data-room-children]")).toBeNull();
+  });
+
+  it("mounts children for a reviewed legacy reducer build", async () => {
+    mount(runtimeConfig());
+    await flush();
+
+    act(() => {
+      deliverNode?.(
+        nodeWith({
+          ...genesisWith({
+            poolVariant: "tides4",
+            draftMode: "pool",
+            fresh20PackSize: null,
+          }),
+          reducerVersion: "0dfbc840a6a3-6d94b82e9b7a",
+        }),
+      );
+    });
+    await flush();
+
+    expect(container.querySelector("[data-version-gate]")).toBeNull();
+    expect(container.querySelector("[data-room-children]")).not.toBeNull();
+    expect(
+      getLogEntries().find(
+        (entry) => entry.event === "room_reducer_compatibility",
+      ),
+    ).toMatchObject({
+      clientBuildHash: "build-1",
+      clientReducerVersion: REDUCER_VERSION,
+      compatibility: "legacy",
+      roomReducerVersion: "0dfbc840a6a3-6d94b82e9b7a",
+    });
+  });
+
+  it("renders the version gate for an incompatible reducer protocol", async () => {
+    mount(runtimeConfig());
+    await flush();
+
+    act(() => {
+      deliverNode?.(
+        nodeWith({
+          ...genesisWith({
+            poolVariant: "tides4",
+            draftMode: "pool",
+            fresh20PackSize: null,
+          }),
+          reducerVersion: "incompatible-rules-v2",
+        }),
+      );
+    });
+    await flush();
+
+    expect(container.querySelector("[data-version-gate]")).not.toBeNull();
     expect(container.querySelector("[data-room-children]")).toBeNull();
   });
 });

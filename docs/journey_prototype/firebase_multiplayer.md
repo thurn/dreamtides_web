@@ -69,16 +69,20 @@ input across Realtime Database round trips.
 `genesis` is written once when the room is created and contains:
 
 - `seed` — the deterministic room seed.
-- `reducerVersion` — the build hash required to fold the room.
+- `reducerVersion` — the semantic reducer protocol required to fold the room.
 - `createdAt` — epoch milliseconds used by stale-room eviction.
 - `contentConfig` — the pinned pool variant, draft mode, and fresh-pack size.
 - `frontDoorEntry` — an optional `main`, `loading`, or `tutorial` starting
   phase. Its presence marks a single-controller hosted playtest; rooms without
   it begin in collaborative journey mode.
 
-`RoomGate` compares the room's reducer version and content configuration with
-the joining client before mounting gameplay. A build mismatch opens the version
-gate; a content mismatch opens the configuration gate.
+`RoomGate` compares the room's reducer protocol and content configuration with
+the joining client before mounting gameplay. Presentation and tooling patches
+keep the same reducer protocol, so active rooms resume across those deploys.
+An incompatible reducer protocol opens the version gate; a content mismatch
+opens the configuration gate. Exact reviewed build identities in
+`src/coop/reducer-version.ts` bridge rooms created before semantic protocol
+versioning.
 
 ### Event log
 

@@ -76,7 +76,7 @@ The important ownership boundaries are:
   reducer. Time and randomness enter through the event context, keyed by the
   room seed and committed sequence number.
 - `src/coop/RoomGate.tsx` creates or joins a room, restores the tab's
-  room-scoped session identity, validates its reducer build and fold-relevant
+  room-scoped session identity, validates its reducer protocol and fold-relevant
   content configuration, writes presence, and installs the room journey-log
   sink.
 - `src/coop/hooks.ts` mounts one `LogClient` per ready room. `useGameState()`
