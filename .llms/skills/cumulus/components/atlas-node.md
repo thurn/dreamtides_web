@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/atlas-node`
 
 Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
-One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — including a gently pulsing, frame-shaped violet outline for the next selectable dreamscape — and which reveals its scene / detail card on hover or press.
+One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — including a frame-shaped violet outline that visibly widens and contracts around the next selectable dreamscape — and which reveals its scene / detail card on hover or press.
 
 ## Props
 

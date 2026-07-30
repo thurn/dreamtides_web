@@ -207,10 +207,24 @@ describe("AtlasNode semantic reveal contract", () => {
     const highlight = available.source.querySelector<HTMLElement>(
       ".node-selectable-highlight",
     );
+    const baseHighlight = highlight?.querySelector<HTMLElement>(
+      ".node-selectable-highlight-base",
+    );
+    const pulseHighlight = highlight?.querySelector<HTMLElement>(
+      ".node-selectable-highlight-pulse",
+    );
     expect(highlight).not.toBeNull();
     expect(highlight?.getAttribute("aria-hidden")).toBe("true");
-    expect(highlight?.style.maskImage).toContain("/atlas/Round_frame_main.png");
-    expect(highlight?.style.webkitMaskImage).toContain(
+    expect(baseHighlight?.style.maskImage).toContain(
+      "/atlas/Round_frame_main.png",
+    );
+    expect(baseHighlight?.style.webkitMaskImage).toContain(
+      "/atlas/Round_frame_main.png",
+    );
+    expect(pulseHighlight?.style.maskImage).toContain(
+      "/atlas/Round_frame_main.png",
+    );
+    expect(pulseHighlight?.style.webkitMaskImage).toContain(
       "/atlas/Round_frame_main.png",
     );
     expect(highlight?.getAttribute("data-ambient-paused")).toBe("false");

@@ -119,6 +119,10 @@
   inset: -5%;
   z-index: 1;
   pointer-events: none;
+}
+.dream-atlas .node-selectable-highlight-layer {
+  position: absolute;
+  inset: 0;
   background: var(--atlas-node-selectable-outline);
   mask-position: center;
   mask-repeat: no-repeat;
@@ -126,19 +130,29 @@
   -webkit-mask-position: center;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: contain;
+}
+.dream-atlas .node-selectable-highlight-base {
   filter: var(--atlas-node-selectable-frame-glow);
-  animation: dream-atlas-selectable-pulse
+}
+.dream-atlas .node-selectable-highlight-pulse {
+  filter: var(--atlas-node-selectable-pulse-glow);
+  transform-origin: center;
+  /* The node art sits above this exact-frame copy, so scaling it exposes a
+     wider outer band without letting the pulse wash across the scene art. */
+  animation: dream-atlas-selectable-width-pulse
     var(--atlas-node-selectable-pulse-duration)
     var(--ease-in-out)
     infinite;
 }
-@keyframes dream-atlas-selectable-pulse {
+@keyframes dream-atlas-selectable-width-pulse {
   0%,
   100% {
-    filter: var(--atlas-node-selectable-frame-glow);
+    opacity: 0.18;
+    transform: scale(0.98);
   }
   50% {
-    filter: var(--atlas-node-selectable-frame-glow-strong);
+    opacity: 1;
+    transform: scale(1.1);
   }
 }
 
@@ -191,7 +205,9 @@
   box-shadow: 0 0 42px 10px var(--atlas-node-active-glow);
 }
 .dream-atlas .node-glow[data-ambient-paused="true"],
-.dream-atlas .node-selectable-highlight[data-ambient-paused="true"] {
+.dream-atlas
+  .node-selectable-highlight[data-ambient-paused="true"]
+  .node-selectable-highlight-pulse {
   animation-play-state: paused;
 }
 
@@ -313,9 +329,12 @@
 
 @media (prefers-reduced-motion: reduce) {
   .dream-atlas .node-glow,
-  .dream-atlas .node-selectable-highlight,
+  .dream-atlas .node-selectable-highlight-pulse,
   .dream-atlas .known-badge::after,
   .dream-atlas .edge-open-flow {
     animation: none !important;
+  }
+  .dream-atlas .node-selectable-highlight-pulse {
+    display: none;
   }
 }

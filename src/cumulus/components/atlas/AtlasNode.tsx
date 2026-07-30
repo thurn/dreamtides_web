@@ -206,10 +206,18 @@ export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactEle
       {isAvailable && (
         <div
           className="node-selectable-highlight"
-          style={selectableHighlightStyle}
           data-ambient-paused={active ? "true" : "false"}
           aria-hidden="true"
-        />
+        >
+          <div
+            className="node-selectable-highlight-layer node-selectable-highlight-pulse"
+            style={selectableHighlightStyle}
+          />
+          <div
+            className="node-selectable-highlight-layer node-selectable-highlight-base"
+            style={selectableHighlightStyle}
+          />
+        </div>
       )}
       <div className="node-glow" data-ambient-paused={active ? "true" : "false"} />
       <div className="node-art">{face}</div>

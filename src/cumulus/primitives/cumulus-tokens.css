@@ -217,7 +217,7 @@
     drop-shadow(0 0 3px rgba(216, 180, 254, 0.95))
     drop-shadow(0 0 10px rgba(168, 85, 247, 0.85))
     drop-shadow(0 0 22px rgba(124, 58, 237, 0.75));
-  --atlas-node-selectable-frame-glow-strong:
+  --atlas-node-selectable-pulse-glow:
     drop-shadow(0 0 5px rgba(233, 213, 255, 1))
     drop-shadow(0 0 16px rgba(192, 132, 252, 0.95))
     drop-shadow(0 0 34px rgba(124, 58, 237, 0.9));
