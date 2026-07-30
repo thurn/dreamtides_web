@@ -61,40 +61,62 @@ function deckIds(container: HTMLElement): (string | undefined)[] {
   );
 }
 
-function transfer(): DataTransfer {
-  const data = new Map<string, string>();
+function pointerEvent(
+  type: string,
+  coordinates: { readonly clientX: number; readonly clientY: number },
+): Event {
+  const event = new Event(type, { bubbles: true, cancelable: true });
+  Object.defineProperties(event, {
+    pointerId: { value: 1 },
+    pointerType: { value: "mouse" },
+    button: { value: 0 },
+    clientX: { value: coordinates.clientX },
+    clientY: { value: coordinates.clientY },
+  });
+  return event;
+}
+
+function rect(left: number, top: number, width: number, height: number): DOMRect {
   return {
-    effectAllowed: "none",
-    dropEffect: "none",
-    files: {} as FileList,
-    items: {} as DataTransferItemList,
-    types: [],
-    clearData: (format?: string) => {
-      if (format === undefined) data.clear();
-      else data.delete(format);
-    },
-    getData: (format: string) => data.get(format) ?? "",
-    setData: (format: string, value: string) => {
-      data.set(format, value);
-    },
-    setDragImage: () => {},
+    x: left,
+    y: top,
+    left,
+    top,
+    right: left + width,
+    bottom: top + height,
+    width,
+    height,
+    toJSON: () => ({}),
   };
 }
 
-function dragEvent(
-  type: string,
-  dataTransfer: DataTransfer,
-  coordinates?: { readonly clientX: number; readonly clientY: number },
-): Event {
-  const event = new Event(type, { bubbles: true, cancelable: true });
-  Object.defineProperty(event, "dataTransfer", { value: dataTransfer });
-  if (coordinates !== undefined) {
-    Object.defineProperties(event, {
-      clientX: { value: coordinates.clientX },
-      clientY: { value: coordinates.clientY },
-    });
-  }
-  return event;
+function stubDropGeometry(container: HTMLElement): void {
+  vi.spyOn(
+    container.querySelector<HTMLElement>("[data-foresee-row]") as HTMLElement,
+    "getBoundingClientRect",
+  ).mockReturnValue(rect(0, 0, 1_000, 400));
+  vi.spyOn(
+    container.querySelector<HTMLElement>(
+      '[data-foresee-indicator="deck"]',
+    ) as HTMLElement,
+    "getBoundingClientRect",
+  ).mockReturnValue(rect(100, 100, 180, 252));
+  vi.spyOn(
+    container.querySelector<HTMLElement>(
+      '[data-foresee-indicator="void"]',
+    ) as HTMLElement,
+    "getBoundingClientRect",
+  ).mockReturnValue(rect(700, 100, 180, 252));
+}
+
+function pointerDrag(
+  element: HTMLElement,
+  from: { readonly clientX: number; readonly clientY: number },
+  to: { readonly clientX: number; readonly clientY: number },
+): void {
+  element.dispatchEvent(pointerEvent("pointerdown", from));
+  element.dispatchEvent(pointerEvent("pointermove", to));
+  element.dispatchEvent(pointerEvent("pointerup", to));
 }
 
 function stubMatchMedia(matches: boolean): void {
@@ -194,11 +216,15 @@ describe("BattleForeseeOverlay", () => {
     const third = container.querySelector<HTMLElement>(
       '[data-foresee-card-id="battle-card-3"]',
     );
-    const voidZone = container.querySelector<HTMLElement>('[data-foresee-zone="void"]');
-    const dragData = transfer();
+    stubDropGeometry(container);
     act(() => {
-      third?.dispatchEvent(dragEvent("dragstart", dragData));
-      voidZone?.dispatchEvent(dragEvent("drop", dragData));
+      if (third !== null) {
+        pointerDrag(
+          third,
+          { clientX: 400, clientY: 200 },
+          { clientX: 790, clientY: 200 },
+        );
+      }
     });
     expect(container.querySelector('[data-foresee-card-zone="void"]')
       ?.getAttribute("data-foresee-card-id")).toBe("battle-card-3");
@@ -225,12 +251,18 @@ describe("BattleForeseeOverlay", () => {
     const third = container.querySelector<HTMLElement>(
       '[data-foresee-card-id="battle-card-3"]',
     );
-    const voidZone = container.querySelector<HTMLElement>('[data-foresee-zone="void"]');
-    const dragData = transfer();
+    stubDropGeometry(container);
+    vi.spyOn(third as HTMLElement, "getBoundingClientRect")
+      .mockReturnValue(rect(400, 100, 180, 252));
 
     act(() => {
-      first?.dispatchEvent(dragEvent("dragstart", dragData));
-      third?.dispatchEvent(dragEvent("drop", dragData));
+      if (first !== null) {
+        pointerDrag(
+          first,
+          { clientX: 300, clientY: 200 },
+          { clientX: 450, clientY: 200 },
+        );
+      }
     });
     expect(deckIds(container)).toEqual([
       "battle-card-2",
@@ -242,8 +274,13 @@ describe("BattleForeseeOverlay", () => {
       '[data-foresee-card-id="battle-card-2"]',
     );
     act(() => {
-      second?.dispatchEvent(dragEvent("dragstart", dragData));
-      voidZone?.dispatchEvent(dragEvent("drop", dragData));
+      if (second !== null) {
+        pointerDrag(
+          second,
+          { clientX: 350, clientY: 200 },
+          { clientX: 790, clientY: 200 },
+        );
+      }
     });
     expect(deckIds(container)).toEqual(["battle-card-1", "battle-card-3"]);
     expect(
@@ -290,37 +327,20 @@ describe("BattleForeseeOverlay", () => {
     const second = container.querySelector<HTMLElement>(
       `[data-foresee-card-id="${cardInstanceIds[1]}"]`,
     );
-    const voidZone = container.querySelector<HTMLElement>(
-      '[data-foresee-zone="void"]',
-    );
+    vi.spyOn(row as HTMLElement, "getBoundingClientRect")
+      .mockReturnValue(rect(0, 0, 900, 400));
     vi.spyOn(deckIndicator as HTMLElement, "getBoundingClientRect")
-      .mockReturnValue({
-        x: 100,
-        y: 100,
-        left: 100,
-        top: 100,
-        right: 280,
-        bottom: 352,
-        width: 180,
-        height: 252,
-        toJSON: () => ({}),
-      });
+      .mockReturnValue(rect(100, 100, 180, 252));
     vi.spyOn(voidIndicator as HTMLElement, "getBoundingClientRect")
-      .mockReturnValue({
-        x: 700,
-        y: 100,
-        left: 700,
-        top: 100,
-        right: 880,
-        bottom: 352,
-        width: 180,
-        height: 252,
-        toJSON: () => ({}),
-      });
-    const dragData = transfer();
+      .mockReturnValue(rect(700, 100, 180, 252));
     act(() => {
-      second?.dispatchEvent(dragEvent("dragstart", dragData));
-      voidZone?.dispatchEvent(dragEvent("drop", dragData));
+      if (second !== null) {
+        pointerDrag(
+          second,
+          { clientX: 350, clientY: 226 },
+          { clientX: 790, clientY: 226 },
+        );
+      }
     });
     expect(
       container.querySelector('[data-foresee-card-zone="void"]')
@@ -330,10 +350,16 @@ describe("BattleForeseeOverlay", () => {
     const adjacentRelease = { clientX: 60, clientY: 226 };
     expect(100 - adjacentRelease.clientX).toBe(40);
     act(() => {
-      container.querySelector<HTMLElement>(
+      const returnedCard = container.querySelector<HTMLElement>(
         `[data-foresee-card-id="${cardInstanceIds[1]}"]`,
-      )?.dispatchEvent(dragEvent("dragstart", dragData));
-      row?.dispatchEvent(dragEvent("drop", dragData, adjacentRelease));
+      );
+      if (returnedCard !== null) {
+        pointerDrag(
+          returnedCard,
+          { clientX: 790, clientY: 226 },
+          adjacentRelease,
+        );
+      }
     });
 
     expect(deckIds(container)).toEqual([
@@ -362,6 +388,28 @@ describe("BattleForeseeOverlay", () => {
     expect(Array.from(indicators, (indicator) => indicator.style.width))
       .toEqual(["64px", "64px"]);
     expect(container.querySelectorAll("button")).toHaveLength(3);
+
+    act(() => root.unmount());
+  });
+
+  it("uses pointer capture instead of native HTML drag", () => {
+    const { container, root } = mount(
+      <BattleForeseeOverlay view={makeView()} onConfirm={() => {}} />,
+    );
+    const card = container.querySelector<HTMLElement>(
+      '[data-foresee-card-zone="deck"]',
+    );
+    const nativeDrag = new Event("dragstart", {
+      bubbles: true,
+      cancelable: true,
+    });
+
+    act(() => {
+      card?.dispatchEvent(nativeDrag);
+    });
+
+    expect(card?.draggable).toBe(false);
+    expect(nativeDrag.defaultPrevented).toBe(true);
 
     act(() => root.unmount());
   });

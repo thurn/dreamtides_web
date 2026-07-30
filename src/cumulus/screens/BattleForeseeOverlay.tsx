@@ -1,7 +1,7 @@
 import {
   useRef,
   useState,
-  type DragEvent,
+  type PointerEvent as ReactPointerEvent,
   type ReactElement,
 } from "react";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
@@ -9,6 +9,7 @@ import { GlassButton } from "../components/controls/GlassButton";
 import { IconButton } from "../components/controls/IconButton";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { GLYPHS } from "../primitives/glyph";
+import { POINTER_MOVEMENT_SLOP_PX } from "../primitives/pointer-gesture";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
 
@@ -54,9 +55,21 @@ export interface BattleForeseeOverlayProps {
   onConfirm: (resolution: BattleForeseeResolution) => void;
 }
 
+interface ForeseePointerDrag {
+  pointerId: number;
+  battleCardId: string;
+  startX: number;
+  startY: number;
+  dragging: boolean;
+  restingTransform: string;
+  restingZIndex: string;
+}
+
 /**
  * One-row Cumulus Foresee modal. Cards stay as tangible objects directly on
- * the glass surface while drag-and-drop stages their deck order or void move.
+ * the glass surface while pointer capture stages their deck order or void move.
+ * Avoiding native HTML drag keeps Firefox from rasterizing the complete card
+ * and glass compositor subtree into an engine-owned drag image.
  */
 export function BattleForeseeOverlay({
   view,
@@ -83,7 +96,8 @@ export function BattleForeseeOverlay({
     allCardIds.slice(0, initialCount),
   );
   const [voidCardIds, setVoidCardIds] = useState<readonly string[]>([]);
-  const draggedCardId = useRef<string | null>(null);
+  const pointerDragRef = useRef<ForeseePointerDrag | null>(null);
+  const dragSuppressedRef = useRef(false);
   const cardById = new Map(view.cards.map((card) => [card.battleCardId, card]));
 
   const incrementCount = (): void => {
@@ -124,15 +138,96 @@ export function BattleForeseeOverlay({
     });
   };
 
-  const beginDrag = (event: DragEvent<HTMLElement>, battleCardId: string): void => {
-    draggedCardId.current = battleCardId;
-    event.dataTransfer.effectAllowed = "move";
-    event.dataTransfer.setData("text/plain", battleCardId);
+  const resolvePointerDrop = (
+    battleCardId: string,
+    clientX: number,
+    clientY: number,
+    sourceElement: HTMLElement,
+  ): void => {
+    const row = sourceElement.closest<HTMLElement>("[data-foresee-row]");
+    if (row === null) return;
+    const deckIndicator = row.querySelector<HTMLElement>(
+      '[data-foresee-indicator="deck"]',
+    );
+    const voidIndicator = row.querySelector<HTMLElement>(
+      '[data-foresee-indicator="void"]',
+    );
+    if (
+      deckIndicator === null ||
+      voidIndicator === null ||
+      !rectContainsPoint(row.getBoundingClientRect(), clientX, clientY)
+    ) {
+      return;
+    }
+
+    const targetCard = Array.from(
+      row.querySelectorAll<HTMLElement>('[data-foresee-card-zone="deck"]'),
+    )
+      .filter((element) => element.dataset.foreseeCardId !== battleCardId)
+      .map((element) => ({
+        battleCardId: element.dataset.foreseeCardId,
+        bounds: element.getBoundingClientRect(),
+      }))
+      .filter(
+        (candidate) =>
+          candidate.battleCardId !== undefined &&
+          rectContainsPoint(candidate.bounds, clientX, clientY),
+      )
+      .sort(
+        (left, right) =>
+          distanceSquaredToRect(clientX, clientY, left.bounds) -
+          distanceSquaredToRect(clientX, clientY, right.bounds),
+      )[0];
+    if (targetCard?.battleCardId !== undefined) {
+      moveToDeck(battleCardId, targetCard.battleCardId);
+      return;
+    }
+
+    const deckDistance = distanceSquaredToRect(
+      clientX,
+      clientY,
+      deckIndicator.getBoundingClientRect(),
+    );
+    const voidDistance = distanceSquaredToRect(
+      clientX,
+      clientY,
+      voidIndicator.getBoundingClientRect(),
+    );
+    if (deckDistance <= voidDistance) {
+      moveToDeck(battleCardId, orderedCardIds[0]);
+    } else {
+      moveToVoid(battleCardId);
+    }
   };
 
-  const droppedCardId = (event: DragEvent<HTMLElement>): string | null => {
-    const id = draggedCardId.current ?? event.dataTransfer.getData("text/plain");
-    return allCardIds.includes(id) ? id : null;
+  const finishPointerDrag = (
+    event: ReactPointerEvent<HTMLElement>,
+    commit: boolean,
+  ): void => {
+    const pointerDrag = pointerDragRef.current;
+    if (pointerDrag?.pointerId !== event.pointerId) return;
+    if (pointerDrag.dragging) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (commit) {
+        resolvePointerDrop(
+          pointerDrag.battleCardId,
+          event.clientX,
+          event.clientY,
+          event.currentTarget,
+        );
+      }
+    }
+    try {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    } catch {
+      // Pointer capture may already be released after a window-level cancel.
+    }
+    event.currentTarget.style.transform = pointerDrag.restingTransform;
+    event.currentTarget.style.zIndex = pointerDrag.restingZIndex;
+    event.currentTarget.style.cursor = "grab";
+    event.currentTarget.dataset.foreseePointerDragging = "false";
+    pointerDragRef.current = null;
   };
 
   const renderCard = (
@@ -146,24 +241,65 @@ export function BattleForeseeOverlay({
     return (
       <article
         key={battleCardId}
-        draggable
+        draggable={false}
         data-foresee-card-id={battleCardId}
         data-foresee-card-zone={zone}
-        onDragStart={(event) => beginDrag(event, battleCardId)}
-        onDragEnd={() => {
-          draggedCardId.current = null;
+        data-foresee-pointer-dragging="false"
+        onDragStart={(event) => {
+          event.preventDefault();
         }}
-        onDragOver={(event) => {
-          if (zone === "deck") event.preventDefault();
+        onPointerDownCapture={(event) => {
+          dragSuppressedRef.current = false;
+          if (event.button !== 0) return;
+          pointerDragRef.current = {
+            pointerId: event.pointerId,
+            battleCardId,
+            startX: event.clientX,
+            startY: event.clientY,
+            dragging: false,
+            restingTransform: event.currentTarget.style.transform,
+            restingZIndex: event.currentTarget.style.zIndex,
+          };
+          try {
+            event.currentTarget.setPointerCapture(event.pointerId);
+          } catch {
+            // Pointer capture is best-effort on older touch browsers.
+          }
         }}
-        onDrop={(event) => {
-          if (zone !== "deck") return;
+        onPointerMove={(event) => {
+          const pointerDrag = pointerDragRef.current;
+          if (pointerDrag?.pointerId !== event.pointerId) return;
+          const x = event.clientX - pointerDrag.startX;
+          const y = event.clientY - pointerDrag.startY;
+          if (
+            !pointerDrag.dragging &&
+            Math.hypot(x, y) <= POINTER_MOVEMENT_SLOP_PX
+          ) {
+            return;
+          }
+          event.preventDefault();
+          if (!pointerDrag.dragging) {
+            pointerDrag.dragging = true;
+            dragSuppressedRef.current = true;
+            event.currentTarget.dataset.foreseePointerDragging = "true";
+            event.currentTarget.style.zIndex = "100";
+            event.currentTarget.style.cursor = "grabbing";
+            window.dispatchEvent(new Event("dragstart"));
+          }
+          event.currentTarget.style.transform =
+            `translate3d(${String(x)}px, ${String(y)}px, 0)`;
+        }}
+        onPointerUpCapture={(event) => {
+          finishPointerDrag(event, true);
+        }}
+        onPointerCancelCapture={(event) => {
+          finishPointerDrag(event, false);
+        }}
+        onClickCapture={(event) => {
+          if (!dragSuppressedRef.current) return;
+          dragSuppressedRef.current = false;
           event.preventDefault();
           event.stopPropagation();
-          const dragged = droppedCardId(event);
-          if (dragged !== null && dragged !== battleCardId) {
-            moveToDeck(dragged, battleCardId);
-          }
         }}
         style={{
           width: cardWidthPx,
@@ -171,6 +307,8 @@ export function BattleForeseeOverlay({
           marginInlineStart: stackIndex === 0 ? 0 : -(cardWidthPx / 2),
           position: "relative",
           zIndex: stackSize - stackIndex,
+          cursor: "grab",
+          touchAction: "none",
         }}
       >
         <GameCard model={card.model} presentation="full" />
@@ -229,36 +367,6 @@ export function BattleForeseeOverlay({
           <div
             data-foresee-row=""
             data-foresee-drop-geometry="nearest-destination"
-            onDragOver={(event) => event.preventDefault()}
-            onDrop={(event) => {
-              event.preventDefault();
-              const dragged = droppedCardId(event);
-              if (dragged === null) return;
-              const deckIndicator =
-                event.currentTarget.querySelector<HTMLElement>(
-                  '[data-foresee-indicator="deck"]',
-                );
-              const voidIndicator =
-                event.currentTarget.querySelector<HTMLElement>(
-                  '[data-foresee-indicator="void"]',
-                );
-              if (deckIndicator === null || voidIndicator === null) return;
-              const deckDistance = distanceSquaredToRect(
-                event.clientX,
-                event.clientY,
-                deckIndicator.getBoundingClientRect(),
-              );
-              const voidDistance = distanceSquaredToRect(
-                event.clientX,
-                event.clientY,
-                voidIndicator.getBoundingClientRect(),
-              );
-              if (deckDistance <= voidDistance) {
-                moveToDeck(dragged, orderedCardIds[0]);
-              } else {
-                moveToVoid(dragged);
-              }
-            }}
             style={{
               display: "flex",
               alignItems: "center",
@@ -269,13 +377,6 @@ export function BattleForeseeOverlay({
           >
             <div
               data-foresee-indicator="deck"
-              onDragOver={(event) => event.preventDefault()}
-              onDrop={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                const dragged = droppedCardId(event);
-                if (dragged !== null) moveToDeck(dragged, orderedCardIds[0]);
-              }}
               style={indicatorStyle}
             >
               Deck
@@ -312,13 +413,6 @@ export function BattleForeseeOverlay({
             <div
               data-foresee-indicator="void"
               data-foresee-zone="void"
-              onDragOver={(event) => event.preventDefault()}
-              onDrop={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                const dragged = droppedCardId(event);
-                if (dragged !== null) moveToVoid(dragged);
-              }}
               style={indicatorStyle}
             >
               Void
@@ -360,4 +454,13 @@ function distanceSquaredToRect(
       ? y - bounds.bottom
       : 0;
   return deltaX * deltaX + deltaY * deltaY;
+}
+
+function rectContainsPoint(bounds: DOMRect, x: number, y: number): boolean {
+  return (
+    x >= bounds.left &&
+    x <= bounds.right &&
+    y >= bounds.top &&
+    y <= bounds.bottom
+  );
 }
