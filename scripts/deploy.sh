@@ -41,10 +41,8 @@ step() {
   printf '\n\033[1m========== %s ==========\033[0m\n' "$1"
 }
 
-if [[ ! -d node_modules ]]; then
-  step "Installing dependencies (node_modules is missing)"
-  npm install
-fi
+step "Installing locked dependencies"
+npm ci --include=dev
 
 step "1/3  build — compile + bundle code, HTML, and data catalogs into dist/"
 npm run build
