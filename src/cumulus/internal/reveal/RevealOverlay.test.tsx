@@ -13,6 +13,7 @@ import {
 } from "./geometry";
 import { CumulusRoot } from "../../CumulusRoot";
 import { GLYPHS } from "../../primitives/glyph";
+import { artRef } from "../../primitives/art";
 
 const UUID = "00000000-0000-4000-8000-000000000001";
 let root: Root;
@@ -136,6 +137,78 @@ describe("RevealOverlay", () => {
     expect(cards[0].style.top).toBe(cards[1].style.top);
     expect(Number.parseFloat(cards[2].style.top) + Number.parseFloat(cards[2].style.height)).toBeLessThanOrEqual(236);
     expect(document.querySelector<HTMLElement>("[data-reveal-measurement-layer]")?.style.visibility).toBe("hidden");
+  });
+
+  it("reserves the atlas reveal's full native width before placing secondaries", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(function (this: HTMLElement) {
+        if (
+          this.dataset.revealMeasure === "primary" ||
+          this.dataset.revealMeasure === "secondary"
+        ) {
+          const width = Number.parseFloat(this.style.width);
+          const height =
+            this.dataset.revealMeasure === "primary" ? 180 : 80;
+          return {
+            x: 0,
+            y: 0,
+            left: 0,
+            top: 0,
+            right: width,
+            bottom: height,
+            width,
+            height,
+            toJSON: () => ({}),
+          };
+        }
+        return {
+          x: 0,
+          y: 0,
+          left: 0,
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: 0,
+          height: 0,
+          toJSON: () => ({}),
+        };
+      });
+    const spec: RevealSpec = {
+      primary: {
+        kind: "infoCard",
+        card: {
+          variant: "atlasReveal",
+          image: artRef.dreamscapeScene("wilderveil"),
+          title: "Wilderveil",
+        },
+      },
+      secondaries: [
+        {
+          variant: "text",
+          title: "Affiliation",
+          body: { kind: "plain", text: "Character cards are more likely here." },
+        },
+      ],
+    };
+
+    act(() => renderOverlay(<RevealOverlay active={active({ spec })} />));
+
+    const measuredPrimary = document.querySelector<HTMLElement>(
+      '[data-reveal-measure="primary"]',
+    )!;
+    const primary = document.querySelector<HTMLElement>(
+      '[data-cumulus-reveal-card="primary"]',
+    )!;
+    const secondary = document.querySelector<HTMLElement>(
+      '[data-cumulus-reveal-card="secondary"]',
+    )!;
+    const primaryRight =
+      Number.parseFloat(primary.style.left) +
+      Number.parseFloat(primary.style.width);
+
+    expect(measuredPrimary.style.width).toBe("360px");
+    expect(primary.style.width).toBe("360px");
+    expect(Number.parseFloat(secondary.style.left) - primaryRight).toBe(10);
   });
 
   it("keeps complete source content in place and stacks all definition cards in one column", () => {

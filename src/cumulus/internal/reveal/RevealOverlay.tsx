@@ -7,6 +7,7 @@ import {
   type RevealPlacementDecision,
   type RevealSize,
 } from "./geometry";
+import { infoCardNativeWidth } from "../../components/overlay/InfoCard";
 import type { RevealCoordinatorSource, RevealGeometrySnapshot, RevealPoint, RevealReason, RevealRect, RevealSpec } from "./model";
 import { renderRevealCard, renderRevealInfoCard } from "./render-reveal-card";
 import { captureVisualViewport, findRevealBoundary } from "./viewport";
@@ -134,7 +135,11 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
   const mobileWidth = viewport.width * 0.45;
   const measurePrimaryWidth = viewport.layout === "mobile"
     ? mobileWidth
-    : primaryIsCardShaped ? Math.max(DESKTOP_GAME_CARD_WIDTH, active.sourceRect.width) : 248;
+    : active.spec.primary.kind === "infoCard"
+      ? infoCardNativeWidth(active.spec.primary.card.variant)
+      : primaryIsCardShaped
+        ? Math.max(DESKTOP_GAME_CARD_WIDTH, active.sourceRect.width)
+        : 248;
   const measureSecondaryWidth = viewport.layout === "mobile" ? mobileWidth : 248;
   const adjacentCards = viewport.layout === "desktop"
     ? active.spec.adjacentCards ?? []

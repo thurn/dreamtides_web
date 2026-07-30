@@ -134,9 +134,10 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
     },
     {
       label: "Mobile scale",
-      note: "Every info card is 248px wide at native. On a narrow viewport it lays out at 45% of the viewport width, capped at that native 248px, so the implicit mobile cutoff is 248 ÷ 0.45 ≈ 551px and desktop keeps the authored geometry. Mobile-sized cards use a 0.86 internal type scale, preserving a 12px body voice; copy wraps into natural height so legibility grows vertically while the 45% width stays fixed. Both dimensions are driven by the live viewport — never a caller prop — through the exported `infoCardWidth` / `infoCardTextScale` helpers and the `INFO_CARD_WIDTH` constant.",
-      code: `import { infoCardWidth, infoCardTextScale, INFO_CARD_WIDTH } from "src/cumulus/components/overlay/InfoCard";
+      note: "Standard info cards are 248px wide at native; the scene-led atlasReveal variant is 360px. On a narrow viewport each lays out at 45% of the viewport width, capped at its native width, so desktop keeps the authored geometry. Mobile-sized cards use a 0.86 internal type scale, preserving a 12px body voice; copy wraps into natural height while the 45% width stays fixed. Placement consumers read the same variant width through `infoCardNativeWidth`.",
+      code: `import { infoCardNativeWidth, infoCardWidth, infoCardTextScale, INFO_CARD_WIDTH } from "src/cumulus/components/overlay/InfoCard";
 const w = infoCardWidth(window.innerWidth);         // min(248, 0.45 * vw)
+const atlasW = infoCardNativeWidth("atlasReveal"); // 360
 const scale = infoCardTextScale(window.innerWidth); // 1 on desktop, 0.86 on mobile`,
     },
   ],

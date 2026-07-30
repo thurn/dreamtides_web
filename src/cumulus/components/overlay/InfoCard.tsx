@@ -400,6 +400,17 @@ export type InfoCardProps =
   | InfoCardTideProps
   | InfoCardTextProps;
 
+/**
+ * Returns the authored desktop width for an InfoCard variant. Reveal placement
+ * uses this same contract so a wide strict variant cannot overflow the geometry
+ * reserved for it.
+ */
+export function infoCardNativeWidth(
+  variant: InfoCardProps["variant"],
+): number {
+  return variant === "atlasReveal" ? ATLAS_REVEAL_CARD_W : CARD_W;
+}
+
 /* ================================================================
    InfoCard — content, media variants, one shell.
    ================================================================ */
@@ -902,8 +913,7 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
  */
 export function InfoCard(props: InfoCardProps): React.ReactElement {
   const viewportWidth = useViewportWidth();
-  const nativeWidth =
-    props.variant === "atlasReveal" ? ATLAS_REVEAL_CARD_W : CARD_W;
+  const nativeWidth = infoCardNativeWidth(props.variant);
   const cardWidth = infoCardWidth(
     viewportWidth,
     MOBILE_WIDTH_FRACTION,

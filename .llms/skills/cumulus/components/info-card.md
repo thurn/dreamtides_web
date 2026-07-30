@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/info-card`
 
-Real consumers: **7** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **8** (imports outside `src/cumulus/docs/` and tests).
 
 The strict information-card presentation. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell; named semantic sources register cards with the root reveal coordinator. On a narrow viewport a card lays out at 45% of screen width capped at its native 248px, so below ~551px (248 ÷ 0.45) it begins scaling down — an intentional content-driven cutoff, distinct from the 900px desktop/mobile breakpoint.
 
@@ -167,10 +167,11 @@ A named `tide` on its OWN colored disc, with the tide's alignment name (Valor, S
 
 ### Mobile scale
 
-Every info card is 248px wide at native. On a narrow viewport it lays out at 45% of the viewport width, capped at that native 248px, so the implicit mobile cutoff is 248 ÷ 0.45 ≈ 551px and desktop keeps the authored geometry. Mobile-sized cards use a 0.86 internal type scale, preserving a 12px body voice; copy wraps into natural height so legibility grows vertically while the 45% width stays fixed. Both dimensions are driven by the live viewport — never a caller prop — through the exported `infoCardWidth` / `infoCardTextScale` helpers and the `INFO_CARD_WIDTH` constant.
+Standard info cards are 248px wide at native; the scene-led atlasReveal variant is 360px. On a narrow viewport each lays out at 45% of the viewport width, capped at its native width, so desktop keeps the authored geometry. Mobile-sized cards use a 0.86 internal type scale, preserving a 12px body voice; copy wraps into natural height while the 45% width stays fixed. Placement consumers read the same variant width through `infoCardNativeWidth`.
 
 ```tsx
-import { infoCardWidth, infoCardTextScale, INFO_CARD_WIDTH } from "src/cumulus/components/overlay/InfoCard";
+import { infoCardNativeWidth, infoCardWidth, infoCardTextScale, INFO_CARD_WIDTH } from "src/cumulus/components/overlay/InfoCard";
 const w = infoCardWidth(window.innerWidth);         // min(248, 0.45 * vw)
+const atlasW = infoCardNativeWidth("atlasReveal"); // 360
 const scale = infoCardTextScale(window.innerWidth); // 1 on desktop, 0.86 on mobile
 ```

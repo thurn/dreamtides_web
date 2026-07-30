@@ -10,6 +10,7 @@ import { TOKENS } from "../../primitives/tokens";
 import {
   InfoCard,
   INFO_CARD_WIDTH,
+  infoCardNativeWidth,
   infoCardTextScale,
   infoCardWidth,
 } from "./InfoCard";
@@ -40,6 +41,12 @@ describe("infoCardWidth — the viewport-driven mobile width", () => {
   it("returns native width for a zero / unmeasured viewport width", () => {
     expect(infoCardWidth(0)).toBe(INFO_CARD_WIDTH);
     expect(infoCardWidth(-100)).toBe(INFO_CARD_WIDTH);
+  });
+
+  it("publishes the wider atlas reveal geometry to placement consumers", () => {
+    expect(infoCardNativeWidth("text")).toBe(INFO_CARD_WIDTH);
+    expect(infoCardNativeWidth(undefined)).toBe(INFO_CARD_WIDTH);
+    expect(infoCardNativeWidth("atlasReveal")).toBe(360);
   });
 });
 
