@@ -213,6 +213,7 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(highlight?.style.webkitMaskImage).toContain(
       "/atlas/Round_frame_main.png",
     );
+    expect(highlight?.getAttribute("data-ambient-paused")).toBe("false");
     act(() => available.source.click());
     expect(available.onActivate).toHaveBeenCalledWith(NODE_ID);
 
@@ -303,6 +304,10 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(getComputedStyle(source.querySelector<HTMLElement>(".node-art")!).transform).toBe("none");
     expect(source.querySelector(".node-glow")?.getAttribute("data-ambient-paused"))
       .toBe("true");
+    expect(
+      source.querySelector(".node-selectable-highlight")
+        ?.getAttribute("data-ambient-paused"),
+    ).toBe("true");
   });
 
   it("applies touch press feedback once on the root without scaling node art", () => {

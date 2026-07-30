@@ -207,6 +207,7 @@ export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactEle
         <div
           className="node-selectable-highlight"
           style={selectableHighlightStyle}
+          data-ambient-paused={active ? "true" : "false"}
           aria-hidden="true"
         />
       )}

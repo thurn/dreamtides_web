@@ -127,6 +127,19 @@
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   filter: var(--atlas-node-selectable-frame-glow);
+  animation: dream-atlas-selectable-pulse
+    var(--atlas-node-selectable-pulse-duration)
+    var(--ease-in-out)
+    infinite;
+}
+@keyframes dream-atlas-selectable-pulse {
+  0%,
+  100% {
+    filter: var(--atlas-node-selectable-frame-glow);
+  }
+  50% {
+    filter: var(--atlas-node-selectable-frame-glow-strong);
+  }
 }
 
 .dream-atlas .node-completed .node-glow {
@@ -177,7 +190,8 @@
 .dream-atlas .node-available[data-reveal-active="true"] .node-glow {
   box-shadow: 0 0 42px 10px var(--atlas-node-active-glow);
 }
-.dream-atlas .node-glow[data-ambient-paused="true"] {
+.dream-atlas .node-glow[data-ambient-paused="true"],
+.dream-atlas .node-selectable-highlight[data-ambient-paused="true"] {
   animation-play-state: paused;
 }
 
@@ -299,6 +313,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .dream-atlas .node-glow,
+  .dream-atlas .node-selectable-highlight,
   .dream-atlas .known-badge::after,
   .dream-atlas .edge-open-flow {
     animation: none !important;
