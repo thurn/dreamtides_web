@@ -34,6 +34,16 @@ interface MeasuredDecision { readonly key: string; readonly decision: RevealPlac
 
 const transparent: CSSProperties = { pointerEvents: "none" };
 
+function battleHandHoverScale(active: RevealOverlayActive): number {
+  if (active.reason !== "hover") return 1;
+  const rawScale = active.element
+    .closest<HTMLElement>("[data-battle-hand-card-hover-scale]")
+    ?.getAttribute("data-battle-hand-card-hover-scale");
+  if (rawScale === null || rawScale === undefined) return 1;
+  const scale = Number(rawScale);
+  return Number.isFinite(scale) && scale > 0 ? scale : 1;
+}
+
 export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
   const key = active === null ? "" : `${active.source.registrationId}:${active.reason}:${String(active.interactionId)}`;
   const [measured, setMeasured] = useState<MeasuredDecision | null>(null);
@@ -61,6 +71,8 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
       if (disposed) return;
       if (layer.querySelector("[data-reveal-render-pending]") !== null) return;
       const primaryRect = primary.getBoundingClientRect();
+      const minimumGameCardWidth =
+        DESKTOP_GAME_CARD_WIDTH * battleHandHoverScale(active);
       const secondarySizes: RevealSize[] = secondaries.map((node) => {
         const value = node.getBoundingClientRect();
         return { width: value.width, height: value.height };
@@ -77,6 +89,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
         sourceRect: active.sourceRect,
         ...(active.touchPoint === undefined ? {} : { touchPoint: active.touchPoint }),
         primarySize: { width: primaryRect.width, height: primaryRect.height },
+        minimumGameCardWidth,
         secondarySizes,
         adjacentSizes,
         sourceShowsCompleteGameCard: active.sourceShowsCompleteGameCard,
@@ -133,12 +146,14 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
 
   if (active === null || viewport === null) return null;
   const mobileWidth = viewport.width * 0.45;
+  const desktopGameCardWidth =
+    DESKTOP_GAME_CARD_WIDTH * battleHandHoverScale(active);
   const measurePrimaryWidth = viewport.layout === "mobile"
     ? mobileWidth
     : active.spec.primary.kind === "infoCard"
       ? infoCardNativeWidth(active.spec.primary.card.variant)
       : primaryIsCardShaped
-        ? Math.max(DESKTOP_GAME_CARD_WIDTH, active.sourceRect.width)
+        ? Math.max(desktopGameCardWidth, active.sourceRect.width)
         : 248;
   const measureSecondaryWidth = viewport.layout === "mobile" ? mobileWidth : 248;
   const adjacentCards = viewport.layout === "desktop"

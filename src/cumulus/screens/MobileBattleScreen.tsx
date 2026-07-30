@@ -28,7 +28,10 @@ import {
 } from "../components/battle/DreamwellCard";
 import { CardBack } from "../components/battle/CardBack";
 import { CardPile, type BattlePileCard } from "../components/battle/CardPile";
-import { battleCardLayoutId } from "../components/battle/battle-card-layout";
+import {
+  BATTLE_HAND_CARD_HOVER_SCALE,
+  battleCardLayoutId,
+} from "../components/battle/battle-card-layout";
 import { GlassButton } from "../components/controls/GlassButton";
 import { DisclosureSection } from "../components/controls/DisclosureSection";
 import { GlowIcon } from "../components/controls/GlowIcon";
@@ -2957,6 +2960,7 @@ function NearHand({
       data-battle-hand-owner={owner}
       data-battle-hand-count={cards.length}
       data-battle-hand-visible-count={cards.length}
+      data-battle-hand-card-hover-scale={String(BATTLE_HAND_CARD_HOVER_SCALE)}
       data-battle-mobile-drop-kind="zone"
       data-battle-mobile-drop-owner={owner}
       data-battle-mobile-drop-zone="hand"

@@ -528,6 +528,21 @@ describe("GameCard reveal contract", () => {
     act(() => wide.root.unmount());
   });
 
+  it("scales the desktop reading copy for a hovered battle hand card", async () => {
+    const { container, root } = mount(
+      <div data-test-width="160" data-battle-hand-card-hover-scale="1.25">
+        <GameCard model={model()} />
+      </div>,
+    );
+    const source = container.querySelector<HTMLElement>("[data-game-card-source]");
+    act(() => { source?.dispatchEvent(pointer("pointerover", { pointerType: "mouse", pointerId: 1 })); });
+    await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); });
+    remeasure();
+    await vi.waitFor(() => expect(document.querySelector('[data-cumulus-reveal-card="primary"]')).not.toBeNull());
+    expect(document.querySelector<HTMLElement>('[data-cumulus-reveal-card="primary"]')?.style.width).toBe("300px");
+    act(() => root.unmount());
+  });
+
   it("keeps hidden-rules cards eligible for a complete popup", async () => {
     const { container, root } = mount(<GameCard model={model()} hideRulesText />);
     const source = container.querySelector<HTMLElement>("[data-game-card-source]");

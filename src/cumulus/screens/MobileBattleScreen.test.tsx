@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { CumulusRoot } from "../CumulusRoot";
+import { BATTLE_HAND_CARD_HOVER_SCALE } from "../components/battle/battle-card-layout";
 import { resolveColor } from "../primitives/color";
 import { DOUBLE_TAP_WINDOW_MS } from "../primitives/pointer-gesture";
 import {
@@ -1241,6 +1242,9 @@ describe("MobileBattleScreen", () => {
     expect(playerCards?.[1]?.parentElement?.style.left).toBe("50%");
     expect(playerHand?.style.transform).toBe("translateY(var(--space-8))");
     expect(playerHand?.style.pointerEvents).toBe("none");
+    expect(playerHand?.dataset.battleHandCardHoverScale).toBe(
+      String(BATTLE_HAND_CARD_HOVER_SCALE),
+    );
     expect(controls?.style.justifyContent).toBe("center");
     expect(controls?.style.gridColumn).toBe("1");
     expect(controls?.style.width).toBe("100%");

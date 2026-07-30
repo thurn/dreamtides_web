@@ -18,6 +18,8 @@ export interface RevealPlacementInput {
   readonly sourceRect: RevealRect;
   readonly touchPoint?: RevealPoint;
   readonly primarySize: RevealSize;
+  /** Minimum desktop width for a game-card reading copy. */
+  readonly minimumGameCardWidth?: number;
   readonly secondarySizes: readonly RevealSize[];
   /** Small tangible cards shown beyond the desktop definition stack. */
   readonly adjacentSizes?: readonly RevealSize[];
@@ -435,7 +437,9 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
     });
   }
   const cardShaped = input.primaryKind !== "infoCard";
-  const primaryWidth = cardShaped ? Math.max(DESKTOP_GAME_CARD_WIDTH, sourceRect.width) : input.primarySize.width;
+  const primaryWidth = cardShaped
+    ? Math.max(input.minimumGameCardWidth ?? DESKTOP_GAME_CARD_WIDTH, sourceRect.width)
+    : input.primarySize.width;
   const primarySize = scaled(input.primarySize, primaryWidth);
   if (cardShaped) {
     if (input.sourceIsBattlefieldGameCard) {
