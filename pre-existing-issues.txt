@@ -1,2 +1,7 @@
 At a 1366×768 viewport on Dreamsign Revelation, the centered co-op presence
 badge overlaps the top edge of Mira's first-visit tutorial dialogue.
+
+Opening the `?goto=atlas` QA scene records an
+`[ErrorBoundary:overlay:card-tutorial-guidance] Coop hooks must be used within
+a CoopProvider` render error because `JourneyCardTutorialController` mounts
+outside the co-op provider in that direct-scene path.

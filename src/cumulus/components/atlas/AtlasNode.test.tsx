@@ -204,6 +204,15 @@ describe("AtlasNode semantic reveal contract", () => {
 
   it("activates only an available node", () => {
     const available = renderNode(model("available"));
+    const highlight = available.source.querySelector<HTMLElement>(
+      ".node-selectable-highlight",
+    );
+    expect(highlight).not.toBeNull();
+    expect(highlight?.getAttribute("aria-hidden")).toBe("true");
+    expect(highlight?.style.maskImage).toContain("/atlas/Round_frame_main.png");
+    expect(highlight?.style.webkitMaskImage).toContain(
+      "/atlas/Round_frame_main.png",
+    );
     act(() => available.source.click());
     expect(available.onActivate).toHaveBeenCalledWith(NODE_ID);
 
@@ -226,7 +235,9 @@ describe("AtlasNode semantic reveal contract", () => {
     });
     expect(unavailable.source.style.transform).toBe("none");
     expect(unavailable.source.style.cursor).toBe("default");
-
+    expect(
+      unavailable.source.querySelector(".node-selectable-highlight"),
+    ).toBeNull();
     act(() => unavailable.source.click());
     expect(unavailable.onActivate).not.toHaveBeenCalled();
     expect(unavailable.source.getAttribute("aria-disabled")).toBe("true");

@@ -114,6 +114,20 @@
   z-index: 1;
   pointer-events: none;
 }
+.dream-atlas .node-selectable-highlight {
+  position: absolute;
+  inset: -5%;
+  z-index: 1;
+  pointer-events: none;
+  background: var(--atlas-node-selectable-outline);
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  filter: var(--atlas-node-selectable-frame-glow);
+}
 
 .dream-atlas .node-completed .node-glow {
   background: radial-gradient(closest-side, var(--atlas-node-completed-halo), transparent);

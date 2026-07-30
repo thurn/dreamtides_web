@@ -165,6 +165,10 @@ export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactEle
     "--atlas-badge-scale": String(model.badgeScale ?? 1),
     ...binding.sourceProps.style,
   } as CSSProperties;
+  const selectableHighlightStyle = {
+    maskImage: `url("${ROUND_FRAME_URL}")`,
+    WebkitMaskImage: `url("${ROUND_FRAME_URL}")`,
+  } as CSSProperties;
 
   return (
     <Pressable
@@ -199,6 +203,13 @@ export function AtlasNode({ model, onActivate }: AtlasNodeProps): React.ReactEle
         onActivate(node.id);
       }}
     >
+      {isAvailable && (
+        <div
+          className="node-selectable-highlight"
+          style={selectableHighlightStyle}
+          aria-hidden="true"
+        />
+      )}
       <div className="node-glow" data-ambient-paused={active ? "true" : "false"} />
       <div className="node-art">{face}</div>
 
