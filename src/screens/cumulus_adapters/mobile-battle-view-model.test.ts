@@ -869,6 +869,22 @@ describe("buildMobileBattleView", () => {
       title: "",
     });
   });
+
+  it("replaces the opening opponent ability with dormant hover copy", () => {
+    const init = { ...makeInit(), completionLevelAtStart: 0 };
+    const board = makeBoard(init);
+    const view = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR);
+
+    expect(view.enemy.status.dreamAvatarProfile).toEqual({
+      id: "enemy-dream-avatar-uuid",
+      ability: "Opponent avatar ability is not active.",
+      unavailable: true,
+    });
+    expect(view.player.status.dreamAvatarProfile).toEqual({
+      id: "player-dream-avatar-uuid",
+      ability: "Another synthetic test ability.",
+    });
+  });
 });
 
 function promptContext(seq: number): EventContext {

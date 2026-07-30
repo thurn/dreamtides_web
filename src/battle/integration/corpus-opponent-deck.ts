@@ -34,6 +34,10 @@ import {
 import type { IdfCorpus, IdfDeck } from "../../draft/idf-fit.ts";
 import { logEvent } from "../../logging.ts";
 import { createBattleRng } from "../random.ts";
+import {
+  OPPONENT_ABILITY_ACTIVE_FROM_LAYER,
+  opponentAbilityIsActive,
+} from "./opponent-deck.ts";
 
 import type { KnownGoodDecklist, DreamsignSignature } from "../../data/journey-content.ts";
 import type { CardData } from "../../types/cards.ts";
@@ -66,9 +70,6 @@ const TOP_K = 8;
 // descriptor `STAGE_B_LAYER_SPEC` is DERIVED from these constants so tests can
 // drive off the schedule shape without hardcoding individual values.
 // ---------------------------------------------------------------------------
-
-/** From this layer on, the opponent DreamAvatar's ability is active. */
-const ABILITY_ACTIVE_FROM_LAYER = 1;
 
 /** From this layer on, Legendary cards in the base deck are retained. */
 const LEGENDARY_ALLOWED_FROM_LAYER = 5;
@@ -107,7 +108,7 @@ export interface StageBLayerSpec {
  */
 export const STAGE_B_LAYER_SPEC: readonly StageBLayerSpec[] = (() => {
   const highest = Math.max(
-    ABILITY_ACTIVE_FROM_LAYER,
+    OPPONENT_ABILITY_ACTIVE_FROM_LAYER,
     LEGENDARY_ALLOWED_FROM_LAYER,
     DREAMSIGN_FROM_LAYER,
     STARTER_DILUTION.length - 1,
@@ -116,7 +117,7 @@ export const STAGE_B_LAYER_SPEC: readonly StageBLayerSpec[] = (() => {
   for (let layer = 0; layer <= highest; layer += 1) {
     spec.push({
       layer,
-      abilityActive: layer >= ABILITY_ACTIVE_FROM_LAYER,
+      abilityActive: opponentAbilityIsActive(layer),
       legendaryAllowed: layer >= LEGENDARY_ALLOWED_FROM_LAYER,
       startersAdded: starterDilutionAt(layer),
       dreamsignAssigned: layer >= DREAMSIGN_FROM_LAYER,
@@ -552,7 +553,7 @@ export function buildCorpusOpponentDeck(args: {
   }
 
   // Step 4 — Ability flag.
-  const abilityActive = layer >= ABILITY_ACTIVE_FROM_LAYER;
+  const abilityActive = opponentAbilityIsActive(layer);
 
   const finalCards = deck;
 

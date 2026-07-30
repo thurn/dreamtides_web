@@ -36,12 +36,16 @@ import {
 import type { MobileBattleResultView } from "../../cumulus/screens/BattleResultSurface";
 import { cardIsRevealedTo } from "../../battle/state/card-visibility";
 import { starterCardHasRequiredTargets } from "../../battle/starter-card-targets";
+import { opponentAbilityIsActive } from "../../battle/integration/opponent-deck";
 
 const FALLBACK_PLAYER_DREAM_AVATAR = {
   imageNumber: "001",
   name: "Avatar",
   title: "",
 } as const;
+
+const INACTIVE_OPPONENT_AVATAR_ABILITY =
+  "Opponent avatar ability is not active.";
 
 export type MobileBattleInit = BattleInit;
 export type MobileBattleBoard = BattleMutableState;
@@ -86,6 +90,7 @@ export function buildMobileBattleView(
     "enemy" === perspective ? "near" : "far",
     enemyDreamAvatar,
     board,
+    !opponentAbilityIsActive(init.completionLevelAtStart),
   );
   const near = perspective === "player" ? player : enemy;
   const far = farSide === "player" ? player : enemy;
@@ -431,6 +436,7 @@ function buildSideView(
   position: BattleBoardPosition,
   dreamAvatar: BattleDreamAvatarSummary | typeof FALLBACK_PLAYER_DREAM_AVATAR,
   board: BattleMutableState,
+  abilityUnavailable = false,
 ): MobileBattleSideView {
   const sideState = board.sides[side];
   const { frontSize, backSize } = selectSidePlayAreaSize(board, side);
@@ -446,7 +452,7 @@ function buildSideView(
     frontRank: frontRankSlotIds(frontSize).map((slotId) =>
       buildSlotView(slotId, sideState.frontRank[slotId] ?? null, board),
     ),
-    status: buildStatusView(dreamAvatar, sideState),
+    status: buildStatusView(dreamAvatar, sideState, abilityUnavailable),
   };
 }
 
@@ -479,6 +485,7 @@ function buildSlotView(
 function buildStatusView(
   dreamAvatar: BattleDreamAvatarSummary | typeof FALLBACK_PLAYER_DREAM_AVATAR,
   sideState: BattleMutableState["sides"][BattleSide],
+  abilityUnavailable: boolean,
 ): MobileBattleStatusView {
   return {
     dreamAvatar: {
@@ -494,7 +501,10 @@ function buildStatusView(
       ? {
           dreamAvatarProfile: {
             id: dreamAvatar.id,
-            ability: dreamAvatar.renderedText,
+            ability: abilityUnavailable
+              ? INACTIVE_OPPONENT_AVATAR_ABILITY
+              : dreamAvatar.renderedText,
+            ...(abilityUnavailable ? { unavailable: true } : {}),
           },
         }
       : {}),

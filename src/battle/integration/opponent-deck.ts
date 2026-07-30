@@ -63,6 +63,17 @@ import type { BattleRng } from "../random";
  */
 export const DEFAULT_RUN_LAYER_COUNT = 7;
 
+/** The first 0-indexed completion level whose opponent ability is active. */
+export const OPPONENT_ABILITY_ACTIVE_FROM_LAYER = 1;
+
+/**
+ * Whether the opposing DreamAvatar's ability is active at this run layer.
+ * The opening battle is the sole dormant layer.
+ */
+export function opponentAbilityIsActive(completionLevel: number): boolean {
+  return completionLevel >= OPPONENT_ABILITY_ACTIVE_FROM_LAYER;
+}
+
 /**
  * Minimum and maximum number of distinct cards the opponent drafts for the final
  * deck, after post-draft removals. Every card in the deck is a singleton — the

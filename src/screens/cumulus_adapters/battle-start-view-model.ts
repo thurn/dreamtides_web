@@ -1,6 +1,5 @@
 import {
-  opponentCarriesDreamsign,
-  resolveRunLayerCount,
+  opponentAbilityIsActive,
 } from "../../battle/integration/opponent-deck";
 import type { BattleInit } from "../../battle/types";
 import type { CardData } from "../../types/cards";
@@ -30,10 +29,7 @@ export function buildBattleStartView(
       title: enemy.subtitle,
       imageNumber: enemy.imageNumber ?? "001",
       ability: enemy.abilityText.trim(),
-      abilityActive: opponentCarriesDreamsign(
-        init.completionLevelAtStart,
-        resolveRunLayerCount(init.atlasSnapshot.layers),
-      ),
+      abilityActive: opponentAbilityIsActive(init.completionLevelAtStart),
     },
     dreamsigns: (enemy.dreamsigns ?? []).flatMap((dreamsign) =>
       dreamsign.id === undefined ? [] : [{ ...dreamsign, id: dreamsign.id }],

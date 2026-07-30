@@ -7,6 +7,7 @@ import { createBattleInit } from "./create-battle-init";
 import type { CreateBattleInitInput } from "./create-battle-init";
 import {
   buildOpponentDreamsigns,
+  opponentAbilityIsActive,
   opponentCarriesDreamsign,
   opponentDistinctCardCount,
   opponentDraftTemperature,
@@ -280,6 +281,12 @@ afterEach(() => {
 });
 
 describe("opponent deck pure helpers", () => {
+  it("keeps only the opening opponent ability dormant", () => {
+    expect(opponentAbilityIsActive(0)).toBe(false);
+    expect(opponentAbilityIsActive(1)).toBe(true);
+    expect(opponentAbilityIsActive(6)).toBe(true);
+  });
+
   it("derives the midpoint from the run length (7-layer run midpoint = 3)", () => {
     expect(runMidpointCompletionLevel(7)).toBe(3);
     // Midpoint tracks the layer count rather than a hardcoded number.

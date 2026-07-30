@@ -66,6 +66,7 @@ describe("buildBattleStartView", () => {
       name: "The Long-Named Opponent",
       title: "Keeper of the Last Horizon",
       ability: "Whenever you score, foresee 1.",
+      abilityActive: true,
     });
     expect(view.signatureCards.map((card) => card.cardId)).toEqual(
       init.enemyDescriptor.signatureCards.map((card) => card.cardId),
@@ -77,6 +78,16 @@ describe("buildBattleStartView", () => {
     });
     expect(view.pointsToWin).toBe(15);
     expect(view.essenceReward).toBe(90);
+  });
+
+  it("keeps the opponent ability dormant in the opening battle", () => {
+    const { init, cardDatabase } = makeInit();
+    const view = buildBattleStartView(
+      { ...init, completionLevelAtStart: 0 },
+      cardDatabase,
+    );
+
+    expect(view.dreamAvatar.abilityActive).toBe(false);
   });
 
   it("filters a missing card by number instead of rendering broken data", () => {
