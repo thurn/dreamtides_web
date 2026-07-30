@@ -126,7 +126,7 @@ A square hero `image` filling the whole card, with the shared glass text card la
 
 ### Atlas reveal variant
 
-The large desktop Dream Atlas reveal: a scene hero, an optional right-side figure, and place / guide / body copy in the shared glass panel. Use this strict variant instead of creating a screen-local fork of InfoCard.
+The large desktop Dream Atlas reveal: a scene hero, an optional right-side figure, and place / guide / body copy in the shared glass panel. Cards with a figure reserve a narrower left text column so the figure cannot obscure the copy. Use this strict variant instead of creating a screen-local fork of InfoCard.
 
 ```tsx
 <InfoCard

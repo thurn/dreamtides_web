@@ -102,7 +102,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
     },
     {
       label: "Atlas reveal variant",
-      note: "The large desktop Dream Atlas reveal: a scene hero, an optional right-side figure, and place / guide / body copy in the shared glass panel. Use this strict variant instead of creating a screen-local fork of InfoCard.",
+      note: "The large desktop Dream Atlas reveal: a scene hero, an optional right-side figure, and place / guide / body copy in the shared glass panel. Cards with a figure reserve a narrower left text column so the figure cannot obscure the copy. Use this strict variant instead of creating a screen-local fork of InfoCard.",
       code: `<InfoCard
   variant="atlasReveal"
   image={artRef.dreamscapeScene("wilderveil")}

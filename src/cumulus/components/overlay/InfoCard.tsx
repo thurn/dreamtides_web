@@ -56,8 +56,14 @@ const ATLAS_REVEAL_HERO_H = 160;
 const ATLAS_REVEAL_FIGURE_H = 248;
 /** Inset (px) of the atlas-reveal figure from the card's right edge. */
 const ATLAS_REVEAL_FIGURE_RIGHT = 4;
-/** Fraction of the atlas-reveal glass panel reserved for text. */
+/** Fraction of a guideless atlas-reveal glass panel reserved for text. */
 const ATLAS_REVEAL_TEXT_FRACTION = 0.68;
+/**
+ * Fraction of the atlas-reveal glass panel reserved for text when a figure is
+ * present. The narrower measure keeps copy out of the figure's visible body
+ * while preserving readable name and body wrapping on scaled mobile cards.
+ */
+const ATLAS_REVEAL_FIGURE_TEXT_FRACTION = 0.56;
 const INFO_CARD_GLASS_FILL = token("--glass-fill-popover");
 const INFO_CARD_GLASS_BACKGROUND = `${token("--glass-sheen")}, ${INFO_CARD_GLASS_FILL}`;
 const geometryPx = (px: number): string =>
@@ -728,7 +734,11 @@ function InfoCardBody(props: InfoCardProps): React.ReactElement {
           <div
             style={{
               width: `${String(
-                Math.round(ATLAS_REVEAL_TEXT_FRACTION * 100),
+                Math.round(
+                  (figure === undefined
+                    ? ATLAS_REVEAL_TEXT_FRACTION
+                    : ATLAS_REVEAL_FIGURE_TEXT_FRACTION) * 100,
+                ),
               )}%`,
               display: "flex",
               flexDirection: "column",
