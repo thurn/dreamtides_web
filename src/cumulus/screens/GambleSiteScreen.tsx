@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { PlayingCard } from "../components/card/PlayingCard";
 import { IconButton } from "../components/controls/IconButton";
 import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
+import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
 import {
   GuideGallerySiteLayout,
@@ -40,6 +42,47 @@ export interface GambleSiteScreenProps {
 }
 
 const DESKTOP_GAMBLE_REGION_MAX_WIDTH = 620;
+
+function FlippablePlayingCard({
+  card,
+  size,
+}: {
+  card: GamblePlayingCardView;
+  size: Parameters<typeof PlayingCard>[0]["size"];
+}) {
+  const [face, setFace] = useState<"front" | "back">("front");
+  const isFaceDown = face === "back";
+
+  return (
+    <Pressable
+      as="button"
+      aria-label={
+        isFaceDown
+          ? `Show ${card.rank} of ${card.suit}`
+          : `Turn ${card.rank} of ${card.suit} face down`
+      }
+      aria-pressed={isFaceDown}
+      data-gamble-playing-card={card.id}
+      data-gamble-playing-card-face={face}
+      snapFeedbackExit
+      onClick={() => setFace(isFaceDown ? "front" : "back")}
+      style={{
+        display: "block",
+        appearance: "none",
+        padding: 0,
+        border: 0,
+        background: "transparent",
+      }}
+    >
+      <PlayingCard
+        rank={card.rank}
+        suit={card.suit}
+        size={size}
+        face={face}
+      />
+    </Pressable>
+  );
+}
 
 export function GambleSiteScreen({
   view,
@@ -116,10 +159,9 @@ export function GambleSiteScreen({
             }}
           >
             {view.cards.map((card) => (
-              <PlayingCard
-                key={card.id}
-                rank={card.rank}
-                suit={card.suit}
+              <FlippablePlayingCard
+                key={`${view.dealId}:${card.id}`}
+                card={card}
                 size={layout === "desktop" ? "standard" : "compact"}
               />
             ))}

@@ -5,3 +5,8 @@ Opening the `?goto=atlas` QA scene records an
 `[ErrorBoundary:overlay:card-tutorial-guidance] Coop hooks must be used within
 a CoopProvider` render error because `JourneyCardTutorialController` mounts
 outside the co-op provider in that direct-scene path.
+
+The PlayingCard color test still asserted the component's previous red, black,
+and black-suit outline values after PLAYING_CARD_DESIGN was updated in commit
+073f7545. The overlapping test now derives its expectations from the exported
+design constants so it validates the current configured treatment.

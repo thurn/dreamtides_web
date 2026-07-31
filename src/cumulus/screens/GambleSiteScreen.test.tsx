@@ -89,6 +89,23 @@ describe("GambleSiteScreen", () => {
     expect(
       hand?.querySelector('[data-playing-card="10-hearts"]')?.textContent,
     ).toBe("10♥");
+    const firstCard = hand?.querySelector<HTMLButtonElement>(
+      '[data-gamble-playing-card="A-spades"]',
+    );
+    expect(firstCard?.dataset.gamblePlayingCardFace).toBe("front");
+    expect(firstCard?.getAttribute("aria-pressed")).toBe("false");
+
+    act(() => firstCard?.click());
+    expect(firstCard?.dataset.gamblePlayingCardFace).toBe("back");
+    expect(firstCard?.getAttribute("aria-pressed")).toBe("true");
+    expect(
+      firstCard?.querySelector("[data-playing-card]")
+        ?.getAttribute("data-playing-card-face"),
+    ).toBe("back");
+
+    act(() => firstCard?.click());
+    expect(firstCard?.dataset.gamblePlayingCardFace).toBe("front");
+    expect(firstCard?.getAttribute("aria-pressed")).toBe("false");
     expect(
       container.querySelector('[data-testid="cumulus-gamble-guide-art"]')
         ?.getAttribute("alt"),

@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/playing-card`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The standard rank-and-suit object: an Impact index centered on a quartic-superellipse square made from the shared liquid glass.
+The standard rank-and-suit object: an Impact index and a bordered checkerboard back on a quartic-superellipse square made from the shared liquid glass.
 
 > **Guidance:** Use the named size only; suit-specific optical corrections keep every Unicode mark aligned with its rank.
 
@@ -19,6 +19,7 @@ The standard rank-and-suit object: an Impact index centered on a quartic-superel
 | `rank` | `PlayingCardRank` = `"A" \| "2" \| "3" \| "4" \| "5" \| "6" \| "7" \| "8" \| "9" \| "10" \| "J" \| "Q" \| "K"` | yes | — | Playing-card rank shown before the suit mark. |
 | `suit` | `PlayingCardSuit` = `"clubs" \| "diamonds" \| "hearts" \| "spades"` | yes | — | Standard playing-card suit. |
 | `size` | `"compact" \| "standard"` | no | `standard` | Named square and type-size tuple. Defaults to `standard`. |
+| `face` | `PlayingCardFace` = `"front" \| "back"` | no | `front` | Visible side of the card. Defaults to `front`. |
 
 ## Usage
 
@@ -36,4 +37,12 @@ The compact square fits dense three-column mobile hands.
 
 ```tsx
 <PlayingCard rank="A" suit="spades" size="compact" />
+```
+
+### Back Face
+
+The inset superellipse carries the canonical two-color checkerboard.
+
+```tsx
+<PlayingCard rank="A" suit="spades" face="back" />
 ```

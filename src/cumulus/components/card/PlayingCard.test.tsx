@@ -40,10 +40,13 @@ describe("PlayingCard", () => {
     expect(card.style.width).toBe(
       `${String(PLAYING_CARD_DESIGN.sizes.standard.square)}px`,
     );
-    expect(card.style.clipPath).toContain("polygon(");
+    expect(
+      card.querySelector<HTMLElement>("[data-playing-card-front]")?.style
+        .clipPath,
+    ).toContain("polygon(");
   });
 
-  it("uses the bright red for red suits and black for black suits", () => {
+  it("uses the configured suit colors and character outlines", () => {
     const red = renderCard({ rank: "Q", suit: "diamonds" });
     const black = renderCard({ rank: "A", suit: "spades" });
     const redIndex = red.querySelector<HTMLElement>(
@@ -53,20 +56,48 @@ describe("PlayingCard", () => {
       "[data-playing-card-index]",
     );
 
-    expect(redIndex?.style.color).toBe("rgb(255, 82, 104)");
+    const expectedRed = document.createElement("span");
+    expectedRed.style.color = PLAYING_CARD_DESIGN.colors.red;
+    const expectedBlack = document.createElement("span");
+    expectedBlack.style.color = PLAYING_CARD_DESIGN.colors.black;
+
+    expect(redIndex?.style.color).toBe(expectedRed.style.color);
     expect(redIndex?.style.webkitTextStroke).toBe(
       `${String(
         PLAYING_CARD_DESIGN.sizes.standard.redCharacterOutlineWidth,
       )}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
     );
     expect(redIndex?.style.filter).toBe("");
-    expect(blackIndex?.style.color).toBe("rgb(7, 7, 10)");
-    expect(
-      PLAYING_CARD_DESIGN.sizes.standard.blackCharacterOutlineWidth,
-    ).toBe(0);
-    expect(blackIndex?.style.webkitTextStroke).toBe("");
-    expect(blackIndex?.style.paintOrder).toBe("");
+    expect(blackIndex?.style.color).toBe(expectedBlack.style.color);
+    expect(blackIndex?.style.webkitTextStroke).toBe(
+      `${String(
+        PLAYING_CARD_DESIGN.sizes.standard.blackCharacterOutlineWidth,
+      )}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
+    );
+    expect(blackIndex?.style.paintOrder).toBe("stroke fill");
     expect(blackIndex?.style.filter).toBe("");
+  });
+
+  it("renders the bordered checkerboard back from the shared design constants", () => {
+    const card = renderCard({ rank: "K", suit: "clubs", face: "back" });
+    const border = card.querySelector<HTMLElement>(
+      "[data-playing-card-back-border]",
+    );
+    const checkerboard = card.querySelector<HTMLElement>(
+      "[data-playing-card-checkerboard]",
+    );
+
+    expect(card.getAttribute("aria-label")).toBe("Face-down playing card");
+    expect(card.dataset.playingCardFace).toBe("back");
+    expect(border?.style.inset).toBe(
+      `${String(PLAYING_CARD_DESIGN.backFace.panelInsetPercent)}%`,
+    );
+    expect(checkerboard?.style.inset).toBe(
+      `${String(PLAYING_CARD_DESIGN.backFace.borderWidth)}px`,
+    );
+    expect(checkerboard?.style.backgroundSize).toBe(
+      `${String(PLAYING_CARD_DESIGN.backFace.checkerSquareSize * 2)}px ${String(PLAYING_CARD_DESIGN.backFace.checkerSquareSize * 2)}px`,
+    );
   });
 
   it("applies equal-weight suit scaling and glyph-specific alignment", () => {

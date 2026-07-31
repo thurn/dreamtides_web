@@ -1,5 +1,6 @@
 import {
   PlayingCard,
+  type PlayingCardFace,
   type PlayingCardRank,
   type PlayingCardSize,
   type PlayingCardSuit,
@@ -38,14 +39,15 @@ function PlayingCardDemo(args: Record<string, unknown>) {
     : "hearts";
   const size: PlayingCardSize =
     args.size === "compact" ? "compact" : "standard";
-  return <PlayingCard rank={rank} suit={suit} size={size} />;
+  const face: PlayingCardFace = args.face === "back" ? "back" : "front";
+  return <PlayingCard rank={rank} suit={suit} size={size} face={face} />;
 }
 
 export const playingCardDemo: CumulusComponent = {
   id: "playing-card",
   title: "Playing Card",
   blurb:
-    "The standard rank-and-suit object: an Impact index centered on a quartic-superellipse square made from the shared liquid glass.",
+    "The standard rank-and-suit object: an Impact index and a bordered checkerboard back on a quartic-superellipse square made from the shared liquid glass.",
   callout:
     "Use the named size only; suit-specific optical corrections keep every Unicode mark aligned with its rank.",
   group: "Components",
@@ -62,12 +64,18 @@ export const playingCardDemo: CumulusComponent = {
       note: "The compact square fits dense three-column mobile hands.",
       code: `<PlayingCard rank="A" suit="spades" size="compact" />`,
     },
+    {
+      label: "Back Face",
+      note: "The inset superellipse carries the canonical two-color checkerboard.",
+      code: `<PlayingCard rank="A" suit="spades" face="back" />`,
+    },
   ],
   demo: {
     defaultArgs: {
       rank: "10",
       suit: "hearts",
       size: "standard",
+      face: "front",
     },
   },
 };

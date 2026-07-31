@@ -1,12 +1,13 @@
-// PlayingCard — a standard rank-and-suit index on the shared Cumulus glass.
+// PlayingCard — a flippable rank-and-suit object on the shared Cumulus glass.
 
-import type { ReactElement } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import type { CSSProperties, ReactElement } from "react";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { token } from "../../primitives/tokens";
 
 /**
  * The deliberately centralized playing-card art direction. Change these
- * constants to retune the square, type, colors, superellipse, or suit optics.
+ * constants to retune the square, type, colors, faces, motion, or suit optics.
  */
 export const PLAYING_CARD_DESIGN = {
   sizes: {
@@ -30,6 +31,16 @@ export const PLAYING_CARD_DESIGN = {
     black: "#2196F3",
     red: "#FF9800",
     characterOutline: "#000000",
+  },
+  backFace: {
+    panelInsetPercent: 8,
+    borderWidth: 5,
+    checkerSquareSize: 6,
+  },
+  flip: {
+    perspective: 1000,
+    durationSeconds: 0.42,
+    ease: [0.22, 0.61, 0.36, 1],
   },
   superellipseExponent: 4,
   superellipseSamples: 96,
@@ -64,6 +75,8 @@ export type PlayingCardRank =
 export type PlayingCardSuit = "clubs" | "diamonds" | "hearts" | "spades";
 
 export type PlayingCardSize = keyof typeof PLAYING_CARD_DESIGN.sizes;
+
+export type PlayingCardFace = "front" | "back";
 
 const SUIT_SYMBOLS: Record<PlayingCardSuit, string> = {
   clubs: "♣",
@@ -117,6 +130,44 @@ const SUPERELLIPSE_RIM_PATH = superellipsePoints(
   .join(" ")
   .concat(" Z");
 
+const CARD_FACE_STYLE: CSSProperties = {
+  position: "absolute",
+  inset: 0,
+  width: "100%",
+  height: "100%",
+  overflow: "hidden",
+  clipPath: SUPERELLIPSE_CLIP_PATH,
+  backfaceVisibility: "hidden",
+  WebkitBackfaceVisibility: "hidden",
+  ...glassSurfaceStyle({ radius: null }),
+  border: 0,
+};
+
+function PlayingCardRim(): ReactElement {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      style={{
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+      }}
+    >
+      <path
+        d={SUPERELLIPSE_RIM_PATH}
+        fill="none"
+        stroke={token("--glass-rim")}
+        strokeWidth="1"
+        vectorEffect="non-scaling-stroke"
+      />
+    </svg>
+  );
+}
+
 export interface PlayingCardProps {
   /** Playing-card rank shown before the suit mark. */
   rank: PlayingCardRank;
@@ -124,14 +175,18 @@ export interface PlayingCardProps {
   suit: PlayingCardSuit;
   /** Named square and type-size tuple. Defaults to `standard`. */
   size?: PlayingCardSize;
+  /** Visible side of the card. Defaults to `front`. */
+  face?: PlayingCardFace;
 }
 
-/** A static glass playing card with an optically aligned rank-and-suit index. */
+/** A glass playing card with animated front and checkerboard-back faces. */
 export function PlayingCard({
   rank,
   suit,
   size = "standard",
+  face = "front",
 }: PlayingCardProps): ReactElement {
+  const reduceMotion = useReducedMotion() === true;
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const suitOptics = PLAYING_CARD_DESIGN.suitOptics[suit];
   const isRedSuit = RED_SUITS.has(suit);
@@ -141,88 +196,128 @@ export function PlayingCard({
   const characterOutlineWidth = isRedSuit
     ? sizeSpec.redCharacterOutlineWidth
     : sizeSpec.blackCharacterOutlineWidth;
+  const backFace = PLAYING_CARD_DESIGN.backFace;
+  const checkerTileSize = backFace.checkerSquareSize * 2;
 
   return (
     <div
       role="img"
-      aria-label={`${rank} of ${suit}`}
+      aria-label={face === "front" ? `${rank} of ${suit}` : "Face-down playing card"}
       data-playing-card={`${rank}-${suit}`}
       data-playing-card-rank={rank}
       data-playing-card-suit={suit}
       data-playing-card-size={size}
+      data-playing-card-face={face}
       style={{
         position: "relative",
         width: sizeSpec.square,
         height: sizeSpec.square,
         flex: "0 0 auto",
-        display: "grid",
-        placeItems: "center",
-        overflow: "hidden",
-        clipPath: SUPERELLIPSE_CLIP_PATH,
-        ...glassSurfaceStyle({ radius: null }),
-        border: 0,
+        perspective: PLAYING_CARD_DESIGN.flip.perspective,
       }}
     >
-      <span
-        aria-hidden="true"
-        data-playing-card-index=""
+      <motion.div
+        data-playing-card-flip=""
+        initial={false}
+        animate={{ rotateY: face === "front" ? 0 : 180 }}
+        transition={
+          reduceMotion
+            ? { duration: 0 }
+            : {
+                duration: PLAYING_CARD_DESIGN.flip.durationSeconds,
+                ease: PLAYING_CARD_DESIGN.flip.ease,
+              }
+        }
         style={{
           position: "relative",
-          zIndex: 1,
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: sizeSpec.rankSuitGap,
-          color: foreground,
-          fontFamily: PLAYING_CARD_DESIGN.fontFamily,
-          fontSize: sizeSpec.fontSize,
-          fontWeight: 900,
-          fontStyle: "normal",
-          lineHeight: 1,
-          letterSpacing: "-0.025em",
-          whiteSpace: "nowrap",
-          ...(characterOutlineWidth > 0
-            ? {
-                WebkitTextStroke: `${String(characterOutlineWidth)}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
-                paintOrder: "stroke fill",
-              }
-            : {}),
-        }}
-      >
-        <span data-playing-card-rank-glyph="">{rank}</span>
-        <span
-          data-playing-card-suit-glyph=""
-          style={{
-            position: "relative",
-            top: sizeSpec.fontSize * suitOptics.verticalOffsetEm,
-            display: "inline-block",
-            fontSize: sizeSpec.fontSize * suitOptics.scale,
-            lineHeight: 1,
-          }}
-        >
-          {SUIT_SYMBOLS[suit]}
-        </span>
-      </span>
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-        style={{
-          position: "absolute",
-          inset: 0,
           width: "100%",
           height: "100%",
-          pointerEvents: "none",
+          transformStyle: "preserve-3d",
         }}
       >
-        <path
-          d={SUPERELLIPSE_RIM_PATH}
-          fill="none"
-          stroke={token("--glass-rim")}
-          strokeWidth="1"
-          vectorEffect="non-scaling-stroke"
-        />
-      </svg>
+        <div
+          aria-hidden="true"
+          data-playing-card-front=""
+          style={{
+            ...CARD_FACE_STYLE,
+            display: "grid",
+            placeItems: "center",
+          }}
+        >
+          <span
+            data-playing-card-index=""
+            style={{
+              position: "relative",
+              zIndex: 1,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: sizeSpec.rankSuitGap,
+              color: foreground,
+              fontFamily: PLAYING_CARD_DESIGN.fontFamily,
+              fontSize: sizeSpec.fontSize,
+              fontWeight: 900,
+              fontStyle: "normal",
+              lineHeight: 1,
+              letterSpacing: "-0.025em",
+              whiteSpace: "nowrap",
+              ...(characterOutlineWidth > 0
+                ? {
+                    WebkitTextStroke: `${String(characterOutlineWidth)}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
+                    paintOrder: "stroke fill",
+                  }
+                : {}),
+            }}
+          >
+            <span data-playing-card-rank-glyph="">{rank}</span>
+            <span
+              data-playing-card-suit-glyph=""
+              style={{
+                position: "relative",
+                top: sizeSpec.fontSize * suitOptics.verticalOffsetEm,
+                display: "inline-block",
+                fontSize: sizeSpec.fontSize * suitOptics.scale,
+                lineHeight: 1,
+              }}
+            >
+              {SUIT_SYMBOLS[suit]}
+            </span>
+          </span>
+          <PlayingCardRim />
+        </div>
+        <div
+          aria-hidden="true"
+          data-playing-card-back=""
+          style={{
+            ...CARD_FACE_STYLE,
+            transform: "rotateY(180deg)",
+          }}
+        >
+          <div
+            data-playing-card-back-border=""
+            style={{
+              position: "absolute",
+              inset: `${String(backFace.panelInsetPercent)}%`,
+              overflow: "hidden",
+              clipPath: SUPERELLIPSE_CLIP_PATH,
+              background: PLAYING_CARD_DESIGN.colors.characterOutline,
+            }}
+          >
+            <div
+              data-playing-card-checkerboard=""
+              style={{
+                position: "absolute",
+                inset: backFace.borderWidth,
+                clipPath: SUPERELLIPSE_CLIP_PATH,
+                backgroundColor: PLAYING_CARD_DESIGN.colors.black,
+                backgroundImage: `conic-gradient(from 90deg, ${PLAYING_CARD_DESIGN.colors.black} 25%, ${PLAYING_CARD_DESIGN.colors.red} 0 50%, ${PLAYING_CARD_DESIGN.colors.black} 0 75%, ${PLAYING_CARD_DESIGN.colors.red} 0)`,
+                backgroundSize: `${String(checkerTileSize)}px ${String(checkerTileSize)}px`,
+              }}
+            />
+          </div>
+          <PlayingCardRim />
+        </div>
+      </motion.div>
     </div>
   );
 }

@@ -66,7 +66,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run cumulus-docs) -->
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
-| Pressable | Primitives | 31 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Pressable | Primitives | 32 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Resource Chip | Components | 4 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
 | Essence Value | Components | 8 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
 | Icon Button | Components | 19 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
@@ -104,7 +104,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | DreamAvatar Portrait | Components | 17 | [components/dream-avatar-portrait.md](components/dream-avatar-portrait.md) | The shared framed and stage-filling DreamAvatar art surface: the transparent full-body cutout in one of six fixed framings. |
 | Rich Text | Components | 15 | [components/rich-text.md](components/rich-text.md) | The design system's model for a run of formatted copy. |
 | Rules Text | Components | 12 | [components/rules-text.md](components/rules-text.md) | Renders Dreamtides rules copy from card data — resource pips, Unicode trigger markers, and glossary keywords styled in place — with definition cards adapted to the exact rules sentence. |
-| Playing Card | Components | 1 | [components/playing-card.md](components/playing-card.md) | The standard rank-and-suit object: an Impact index centered on a quartic-superellipse square made from the shared liquid glass. |
+| Playing Card | Components | 1 | [components/playing-card.md](components/playing-card.md) | The standard rank-and-suit object: an Impact index and a bordered checkerboard back on a quartic-superellipse square made from the shared liquid glass. |
 | Game Card | Components | 29 | [components/game-card.md](components/game-card.md) | The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name. |
 | Card Back | Components | 4 | [components/card-back.md](components/card-back.md) | The canonical face-down Dreamtides card object: the shipped card-back sprite on the shared 5:7 card geometry, with fixed crop, edge, and elevation. |
 | Card Pile | Components | 1 | [components/card-pile.md](components/card-pile.md) | A physical deck or void stack built from structured, topmost-first card instances. |
