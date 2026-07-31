@@ -75,7 +75,6 @@ describe("PlayingCard", () => {
       suit: "spades",
       variant: "rank-target",
     });
-
     expect(rank.dataset.playingCardVariant).toBe("rank-display");
     expect(rank.getAttribute("aria-label")).toBe("Rank 7");
     expect(rank.textContent).toBe("7");

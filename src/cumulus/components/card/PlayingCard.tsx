@@ -27,6 +27,7 @@ export const PLAYING_CARD_DESIGN = {
     },
   },
   fontFamily: "Inter",
+  displayFontScale: 1.5,
   colors: {
     black: "#2196F3",
     red: "#FF9800",
@@ -202,6 +203,11 @@ export function PlayingCard({
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const suitOptics = PLAYING_CARD_DESIGN.suitOptics[suit];
   const isRedSuit = RED_SUITS.has(suit);
+  const fontSize =
+    sizeSpec.fontSize *
+    (variant === "rank-display" || variant === "suit-display"
+      ? PLAYING_CARD_DESIGN.displayFontScale
+      : 1);
   const foreground =
     variant === "rank-display" || variant === "rank-target"
       ? PLAYING_CARD_DESIGN.colors.white
@@ -276,7 +282,7 @@ export function PlayingCard({
               gap: sizeSpec.rankSuitGap,
               color: foreground,
               fontFamily: PLAYING_CARD_DESIGN.fontFamily,
-              fontSize: sizeSpec.fontSize,
+              fontSize,
               fontWeight: 900,
               fontStyle: "normal",
               lineHeight: 1,
@@ -301,9 +307,9 @@ export function PlayingCard({
                 data-playing-card-suit-glyph=""
                 style={{
                   position: "relative",
-                  top: sizeSpec.fontSize * suitOptics.verticalOffsetEm,
+                  top: fontSize * suitOptics.verticalOffsetEm,
                   display: "inline-block",
-                  fontSize: sizeSpec.fontSize * suitOptics.scale,
+                  fontSize: fontSize * suitOptics.scale,
                   lineHeight: 1,
                 }}
               >
