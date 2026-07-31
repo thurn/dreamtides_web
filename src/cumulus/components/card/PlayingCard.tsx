@@ -14,21 +14,21 @@ export const PLAYING_CARD_DESIGN = {
       square: 104,
       fontSize: 48,
       rankSuitGap: 3,
-      redCharacterOutlineWidth: 6,
-      blackCharacterOutlineWidth: 0,
+      redCharacterOutlineWidth: 5,
+      blackCharacterOutlineWidth: 5,
     },
     standard: {
       square: 156,
       fontSize: 74,
       rankSuitGap: 5,
-      redCharacterOutlineWidth: 6,
-      blackCharacterOutlineWidth: 0,
+      redCharacterOutlineWidth: 5,
+      blackCharacterOutlineWidth: 5,
     },
   },
   fontFamily: "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif",
   colors: {
-    black: "#07070a",
-    red: "#ff5268",
+    black: "#2196F3",
+    red: "#FF9800",
     characterOutline: "#000000",
   },
   superellipseExponent: 4,
@@ -72,10 +72,7 @@ const SUIT_SYMBOLS: Record<PlayingCardSuit, string> = {
   spades: "♠",
 };
 
-const RED_SUITS: ReadonlySet<PlayingCardSuit> = new Set([
-  "diamonds",
-  "hearts",
-]);
+const RED_SUITS: ReadonlySet<PlayingCardSuit> = new Set(["diamonds", "hearts"]);
 
 function superellipsePoint(
   index: number,
@@ -87,14 +84,10 @@ function superellipsePoint(
   const radius = (100 - insetPercent * 2) / 2;
   const x =
     50 +
-    Math.sign(Math.cos(angle)) *
-      Math.abs(Math.cos(angle)) ** power *
-      radius;
+    Math.sign(Math.cos(angle)) * Math.abs(Math.cos(angle)) ** power * radius;
   const y =
     50 +
-    Math.sign(Math.sin(angle)) *
-      Math.abs(Math.sin(angle)) ** power *
-      radius;
+    Math.sign(Math.sin(angle)) * Math.abs(Math.sin(angle)) ** power * radius;
   return [x, y];
 }
 
@@ -112,8 +105,7 @@ function superellipsePoints(insetPercent: number): readonly string[] {
   );
 }
 
-const SUPERELLIPSE_CLIP_PATH =
-  `polygon(${superellipsePoints(0).join(", ")})`;
+const SUPERELLIPSE_CLIP_PATH = `polygon(${superellipsePoints(0).join(", ")})`;
 
 const SUPERELLIPSE_RIM_PATH = superellipsePoints(
   PLAYING_CARD_DESIGN.rimInsetPercent,
