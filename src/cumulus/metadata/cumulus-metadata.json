@@ -3725,7 +3725,7 @@
       ],
       "required": true,
       "defaultValue": null,
-      "description": "Playing-card rank shown before the suit mark."
+      "description": "Playing-card rank used by rank-bearing front variants."
     },
     {
       "name": "suit",
@@ -3738,7 +3738,7 @@
       ],
       "required": true,
       "defaultValue": null,
-      "description": "Standard playing-card suit."
+      "description": "Standard playing-card suit used by suit-bearing front variants."
     },
     {
       "name": "size",
@@ -3761,6 +3761,19 @@
       "required": false,
       "defaultValue": "front",
       "description": "Visible side of the card. Defaults to `front`."
+    },
+    {
+      "name": "variant",
+      "tsType": "PlayingCardVariant",
+      "unionMembers": [
+        "rank-and-suit",
+        "rank-display",
+        "suit-display",
+        "rank-target"
+      ],
+      "required": false,
+      "defaultValue": "rank-and-suit",
+      "description": "Front-face content treatment. Defaults to `rank-and-suit`."
     }
   ],
   "Pressable": [

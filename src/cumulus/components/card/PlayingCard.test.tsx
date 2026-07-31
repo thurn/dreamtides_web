@@ -16,13 +16,17 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-function renderCard(
-  card: Parameters<typeof PlayingCard>[0],
-): HTMLDivElement {
+function renderCard(card: Parameters<typeof PlayingCard>[0]): HTMLDivElement {
   const host = document.createElement("div");
   document.body.append(host);
   const root = createRoot(host);
-  act(() => root.render(<CumulusRoot><PlayingCard {...card} /></CumulusRoot>));
+  act(() =>
+    root.render(
+      <CumulusRoot>
+        <PlayingCard {...card} />
+      </CumulusRoot>,
+    ),
+  );
   const rendered = host.querySelector<HTMLDivElement>("[data-playing-card]");
   if (rendered === null) throw new Error("expected playing card");
   return rendered;
@@ -55,6 +59,41 @@ describe("PlayingCard", () => {
     expect(card.dataset.playingCardSuit).toBe(suit);
   });
 
+  it("renders the three focused front variants", () => {
+    const rank = renderCard({
+      rank: "7",
+      suit: "hearts",
+      variant: "rank-display",
+    });
+    const suit = renderCard({
+      rank: "7",
+      suit: "hearts",
+      variant: "suit-display",
+    });
+    const target = renderCard({
+      rank: "7",
+      suit: "spades",
+      variant: "rank-target",
+    });
+
+    expect(rank.dataset.playingCardVariant).toBe("rank-display");
+    expect(rank.getAttribute("aria-label")).toBe("Rank 7");
+    expect(rank.textContent).toBe("7");
+    expect(rank.querySelector("[data-playing-card-suit-glyph]")).toBeNull();
+
+    expect(suit.dataset.playingCardVariant).toBe("suit-display");
+    expect(suit.getAttribute("aria-label")).toBe("hearts");
+    expect(suit.textContent).toBe("♥");
+    expect(suit.querySelector("[data-playing-card-rank-glyph]")).toBeNull();
+
+    expect(target.dataset.playingCardVariant).toBe("rank-target");
+    expect(target.getAttribute("aria-label")).toBe("Rank target 7 or higher");
+    expect(target.textContent).toBe("7+");
+    expect(
+      target.querySelector("[data-playing-card-target-glyph]")?.textContent,
+    ).toBe("+");
+  });
+
   it("announces a face-down card without exposing its hidden identity", () => {
     const card = renderCard({ rank: "K", suit: "clubs", face: "back" });
 
@@ -62,7 +101,9 @@ describe("PlayingCard", () => {
     expect(card.dataset.playingCardFace).toBe("back");
     expect(card.querySelector("[data-playing-card-front]")).not.toBeNull();
     expect(card.querySelector("[data-playing-card-back]")).not.toBeNull();
-    expect(card.querySelector("[data-playing-card-checkerboard]")).not.toBeNull();
+    expect(
+      card.querySelector("[data-playing-card-checkerboard]"),
+    ).not.toBeNull();
   });
 
   it("exposes the selected named size without changing card identity", () => {

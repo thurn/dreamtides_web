@@ -4,7 +4,9 @@ import {
   type PlayingCardRank,
   type PlayingCardSize,
   type PlayingCardSuit,
+  type PlayingCardVariant,
 } from "../../components/card/PlayingCard";
+import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
 
 const RANKS: readonly PlayingCardRank[] = [
@@ -30,6 +32,23 @@ const SUITS: readonly PlayingCardSuit[] = [
   "spades",
 ];
 
+const VARIANTS: readonly PlayingCardVariant[] = [
+  "rank-and-suit",
+  "rank-display",
+  "suit-display",
+  "rank-target",
+];
+
+const FOCUSED_VARIANTS: readonly {
+  label: string;
+  variant: PlayingCardVariant;
+  suit: PlayingCardSuit;
+}[] = [
+  { label: "Rank Display", variant: "rank-display", suit: "clubs" },
+  { label: "Suit Display", variant: "suit-display", suit: "hearts" },
+  { label: "Rank Target", variant: "rank-target", suit: "spades" },
+];
+
 function PlayingCardDemo(args: Record<string, unknown>) {
   const rank = RANKS.includes(args.rank as PlayingCardRank)
     ? (args.rank as PlayingCardRank)
@@ -40,16 +59,72 @@ function PlayingCardDemo(args: Record<string, unknown>) {
   const size: PlayingCardSize =
     args.size === "compact" ? "compact" : "standard";
   const face: PlayingCardFace = args.face === "back" ? "back" : "front";
-  return <PlayingCard rank={rank} suit={suit} size={size} face={face} />;
+  const variant = VARIANTS.includes(args.variant as PlayingCardVariant)
+    ? (args.variant as PlayingCardVariant)
+    : "rank-and-suit";
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: token("--space-8"),
+      }}
+    >
+      <PlayingCard
+        rank={rank}
+        suit={suit}
+        size={size}
+        face={face}
+        variant={variant}
+      />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          gap: token("--space-6"),
+        }}
+      >
+        {FOCUSED_VARIANTS.map((entry) => (
+          <div
+            key={entry.variant}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: token("--space-3"),
+            }}
+          >
+            <PlayingCard
+              rank="7"
+              suit={entry.suit}
+              size="compact"
+              variant={entry.variant}
+            />
+            <span
+              style={{
+                color: token("--text-muted"),
+                font: token("--t-caption"),
+              }}
+            >
+              {entry.label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export const playingCardDemo: CumulusComponent = {
   id: "playing-card",
   title: "Playing Card",
   blurb:
-    "The standard rank-and-suit object: an Impact index and a fitted 4×4 checkerboard back on a quartic-superellipse square made from the shared liquid glass.",
+    "The standard playing-card object: full rank-and-suit, focused rank, colored suit, rank-target, and fitted 4×4 checkerboard treatments on a quartic-superellipse square made from the shared liquid glass.",
   callout:
-    "Use the named size only; suit-specific optical corrections keep every Unicode mark aligned with its rank.",
+    "Choose the front variant by its game meaning and use the named size only; suit-specific optical corrections keep every Unicode mark aligned.",
   group: "Components",
   docName: "PlayingCard",
   Component: PlayingCardDemo,
@@ -65,6 +140,21 @@ export const playingCardDemo: CumulusComponent = {
       code: `<PlayingCard rank="A" suit="spades" size="compact" />`,
     },
     {
+      label: "Rank Display",
+      note: "A white rank with no suit mark.",
+      code: `<PlayingCard rank="7" suit="clubs" variant="rank-display" />`,
+    },
+    {
+      label: "Suit Display",
+      note: "The colored suit mark with no rank.",
+      code: `<PlayingCard rank="7" suit="hearts" variant="suit-display" />`,
+    },
+    {
+      label: "Rank Target",
+      note: "A white rank followed by a plus sign.",
+      code: `<PlayingCard rank="7" suit="spades" variant="rank-target" />`,
+    },
+    {
       label: "Back Face",
       note: "The inset superellipse carries a fitted 4×4 two-color checkerboard.",
       code: `<PlayingCard rank="A" suit="spades" face="back" />`,
@@ -76,6 +166,7 @@ export const playingCardDemo: CumulusComponent = {
       suit: "hearts",
       size: "standard",
       face: "front",
+      variant: "rank-and-suit",
     },
   },
 };

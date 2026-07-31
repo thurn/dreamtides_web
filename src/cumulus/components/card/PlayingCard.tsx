@@ -1,4 +1,4 @@
-// PlayingCard — a flippable rank-and-suit object on the shared Cumulus glass.
+// PlayingCard — a flippable playing-card display on the shared Cumulus glass.
 
 import { motion, useReducedMotion } from "framer-motion";
 import type { CSSProperties, ReactElement } from "react";
@@ -30,6 +30,7 @@ export const PLAYING_CARD_DESIGN = {
   colors: {
     black: "#2196F3",
     red: "#FF9800",
+    white: "#FFFFFF",
     characterOutline: "#000000",
   },
   backFace: {
@@ -58,25 +59,16 @@ export const PLAYING_CARD_DESIGN = {
 } as const;
 
 export type PlayingCardRank =
-  | "A"
-  | "2"
-  | "3"
-  | "4"
-  | "5"
-  | "6"
-  | "7"
-  | "8"
-  | "9"
-  | "10"
-  | "J"
-  | "Q"
-  | "K";
+  "A" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "J" | "Q" | "K";
 
 export type PlayingCardSuit = "clubs" | "diamonds" | "hearts" | "spades";
 
 export type PlayingCardSize = keyof typeof PLAYING_CARD_DESIGN.sizes;
 
 export type PlayingCardFace = "front" | "back";
+
+export type PlayingCardVariant =
+  "rank-and-suit" | "rank-display" | "suit-display" | "rank-target";
 
 const SUIT_SYMBOLS: Record<PlayingCardSuit, string> = {
   clubs: "♣",
@@ -169,14 +161,33 @@ function PlayingCardRim(): ReactElement {
 }
 
 export interface PlayingCardProps {
-  /** Playing-card rank shown before the suit mark. */
+  /** Playing-card rank used by rank-bearing front variants. */
   rank: PlayingCardRank;
-  /** Standard playing-card suit. */
+  /** Standard playing-card suit used by suit-bearing front variants. */
   suit: PlayingCardSuit;
   /** Named square and type-size tuple. Defaults to `standard`. */
   size?: PlayingCardSize;
   /** Visible side of the card. Defaults to `front`. */
   face?: PlayingCardFace;
+  /** Front-face content treatment. Defaults to `rank-and-suit`. */
+  variant?: PlayingCardVariant;
+}
+
+function frontAriaLabel(
+  rank: PlayingCardRank,
+  suit: PlayingCardSuit,
+  variant: PlayingCardVariant,
+): string {
+  switch (variant) {
+    case "rank-display":
+      return `Rank ${rank}`;
+    case "suit-display":
+      return suit;
+    case "rank-target":
+      return `Rank target ${rank} or higher`;
+    case "rank-and-suit":
+      return `${rank} of ${suit}`;
+  }
 }
 
 /** A glass playing card with animated front and checkerboard-back faces. */
@@ -185,17 +196,22 @@ export function PlayingCard({
   suit,
   size = "standard",
   face = "front",
+  variant = "rank-and-suit",
 }: PlayingCardProps): ReactElement {
   const reduceMotion = useReducedMotion() === true;
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const suitOptics = PLAYING_CARD_DESIGN.suitOptics[suit];
   const isRedSuit = RED_SUITS.has(suit);
-  const foreground = isRedSuit
-    ? PLAYING_CARD_DESIGN.colors.red
-    : PLAYING_CARD_DESIGN.colors.black;
-  const characterOutlineWidth = isRedSuit
-    ? sizeSpec.redCharacterOutlineWidth
-    : sizeSpec.blackCharacterOutlineWidth;
+  const foreground =
+    variant === "rank-display" || variant === "rank-target"
+      ? PLAYING_CARD_DESIGN.colors.white
+      : isRedSuit
+        ? PLAYING_CARD_DESIGN.colors.red
+        : PLAYING_CARD_DESIGN.colors.black;
+  const characterOutlineWidth =
+    (variant === "rank-and-suit" || variant === "suit-display") && isRedSuit
+      ? sizeSpec.redCharacterOutlineWidth
+      : sizeSpec.blackCharacterOutlineWidth;
   const backFace = PLAYING_CARD_DESIGN.backFace;
   const checkerTilePercent = (2 / backFace.checkerSquaresPerSide) * 100;
 
@@ -203,13 +219,16 @@ export function PlayingCard({
     <div
       role="img"
       aria-label={
-        face === "front" ? `${rank} of ${suit}` : "Face-down playing card"
+        face === "front"
+          ? frontAriaLabel(rank, suit, variant)
+          : "Face-down playing card"
       }
       data-playing-card={`${rank}-${suit}`}
       data-playing-card-rank={rank}
       data-playing-card-suit={suit}
       data-playing-card-size={size}
       data-playing-card-face={face}
+      data-playing-card-variant={variant}
       style={{
         position: "relative",
         width: sizeSpec.square,
@@ -271,19 +290,26 @@ export function PlayingCard({
                 : {}),
             }}
           >
-            <span data-playing-card-rank-glyph="">{rank}</span>
-            <span
-              data-playing-card-suit-glyph=""
-              style={{
-                position: "relative",
-                top: sizeSpec.fontSize * suitOptics.verticalOffsetEm,
-                display: "inline-block",
-                fontSize: sizeSpec.fontSize * suitOptics.scale,
-                lineHeight: 1,
-              }}
-            >
-              {SUIT_SYMBOLS[suit]}
-            </span>
+            {variant !== "suit-display" && (
+              <span data-playing-card-rank-glyph="">{rank}</span>
+            )}
+            {variant === "rank-target" && (
+              <span data-playing-card-target-glyph="">+</span>
+            )}
+            {(variant === "rank-and-suit" || variant === "suit-display") && (
+              <span
+                data-playing-card-suit-glyph=""
+                style={{
+                  position: "relative",
+                  top: sizeSpec.fontSize * suitOptics.verticalOffsetEm,
+                  display: "inline-block",
+                  fontSize: sizeSpec.fontSize * suitOptics.scale,
+                  lineHeight: 1,
+                }}
+              >
+                {SUIT_SYMBOLS[suit]}
+              </span>
+            )}
           </span>
           <PlayingCardRim />
         </div>
@@ -307,9 +333,7 @@ export function PlayingCard({
           >
             <div
               data-playing-card-checkerboard=""
-              data-playing-card-checker-squares={
-                backFace.checkerSquaresPerSide
-              }
+              data-playing-card-checker-squares={backFace.checkerSquaresPerSide}
               style={{
                 position: "absolute",
                 inset: backFace.borderWidth,
