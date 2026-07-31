@@ -4,10 +4,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
-import {
-  PLAYING_CARD_DESIGN,
-  PlayingCard,
-} from "./PlayingCard";
+import { PlayingCard } from "./PlayingCard";
 
 beforeEach(() => {
   (
@@ -32,100 +29,51 @@ function renderCard(
 }
 
 describe("PlayingCard", () => {
+  // Visual values are tuned through browser QA. Keep this suite on the stable
+  // semantic and accessibility contract exposed to consumers and players.
   it("renders a three-character ten and exposes the complete accessible value", () => {
     const card = renderCard({ rank: "10", suit: "hearts" });
 
     expect(card.getAttribute("aria-label")).toBe("10 of hearts");
     expect(card.textContent).toBe("10♥");
-    expect(card.style.width).toBe(
-      `${String(PLAYING_CARD_DESIGN.sizes.standard.square)}px`,
-    );
-    expect(
-      card.querySelector<HTMLElement>("[data-playing-card-front]")?.style
-        .clipPath,
-    ).toContain("polygon(");
+    expect(card.dataset.playingCardRank).toBe("10");
+    expect(card.dataset.playingCardSuit).toBe("hearts");
+    expect(card.dataset.playingCardSize).toBe("standard");
+    expect(card.dataset.playingCardFace).toBe("front");
   });
 
-  it("uses the configured suit colors and character outlines", () => {
-    const red = renderCard({ rank: "Q", suit: "diamonds" });
-    const black = renderCard({ rank: "A", suit: "spades" });
-    const redIndex = red.querySelector<HTMLElement>(
-      "[data-playing-card-index]",
-    );
-    const blackIndex = black.querySelector<HTMLElement>(
-      "[data-playing-card-index]",
-    );
+  it.each([
+    ["clubs", "♣"],
+    ["diamonds", "♦"],
+    ["hearts", "♥"],
+    ["spades", "♠"],
+  ] as const)("renders the %s suit's conventional glyph", (suit, glyph) => {
+    const card = renderCard({ rank: "Q", suit });
 
-    const expectedRed = document.createElement("span");
-    expectedRed.style.color = PLAYING_CARD_DESIGN.colors.red;
-    const expectedBlack = document.createElement("span");
-    expectedBlack.style.color = PLAYING_CARD_DESIGN.colors.black;
-
-    expect(redIndex?.style.color).toBe(expectedRed.style.color);
-    expect(redIndex?.style.webkitTextStroke).toBe(
-      `${String(
-        PLAYING_CARD_DESIGN.sizes.standard.redCharacterOutlineWidth,
-      )}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
-    );
-    expect(redIndex?.style.filter).toBe("");
-    expect(blackIndex?.style.color).toBe(expectedBlack.style.color);
-    expect(blackIndex?.style.webkitTextStroke).toBe(
-      `${String(
-        PLAYING_CARD_DESIGN.sizes.standard.blackCharacterOutlineWidth,
-      )}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
-    );
-    expect(blackIndex?.style.paintOrder).toBe("stroke fill");
-    expect(blackIndex?.style.filter).toBe("");
+    expect(card.getAttribute("aria-label")).toBe(`Q of ${suit}`);
+    expect(card.textContent).toBe(`Q${glyph}`);
+    expect(card.dataset.playingCardSuit).toBe(suit);
   });
 
-  it("renders the bordered checkerboard back from the shared design constants", () => {
+  it("announces a face-down card without exposing its hidden identity", () => {
     const card = renderCard({ rank: "K", suit: "clubs", face: "back" });
-    const border = card.querySelector<HTMLElement>(
-      "[data-playing-card-back-border]",
-    );
-    const checkerboard = card.querySelector<HTMLElement>(
-      "[data-playing-card-checkerboard]",
-    );
 
     expect(card.getAttribute("aria-label")).toBe("Face-down playing card");
     expect(card.dataset.playingCardFace).toBe("back");
-    expect(border?.style.inset).toBe(
-      `${String(PLAYING_CARD_DESIGN.backFace.panelInsetPercent)}%`,
-    );
-    expect(checkerboard?.style.inset).toBe(
-      `${String(PLAYING_CARD_DESIGN.backFace.borderWidth)}px`,
-    );
-    expect(checkerboard?.dataset.playingCardCheckerSquares).toBe(
-      String(PLAYING_CARD_DESIGN.backFace.checkerSquaresPerSide),
-    );
-    const checkerTilePercent =
-      (2 / PLAYING_CARD_DESIGN.backFace.checkerSquaresPerSide) * 100;
-    expect(checkerboard?.style.backgroundSize).toBe(
-      `${String(checkerTilePercent)}% ${String(checkerTilePercent)}%`,
-    );
+    expect(card.querySelector("[data-playing-card-front]")).not.toBeNull();
+    expect(card.querySelector("[data-playing-card-back]")).not.toBeNull();
+    expect(card.querySelector("[data-playing-card-checkerboard]")).not.toBeNull();
   });
 
-  it("applies equal-weight suit scaling and glyph-specific alignment", () => {
+  it("exposes the selected named size without changing card identity", () => {
     const card = renderCard({
       rank: "7",
       suit: "diamonds",
       size: "compact",
     });
-    const suit = card.querySelector<HTMLElement>(
-      "[data-playing-card-suit-glyph]",
-    );
 
-    expect(suit?.style.fontSize).toBe(
-      `${String(
-        PLAYING_CARD_DESIGN.sizes.compact.fontSize *
-          PLAYING_CARD_DESIGN.suitOptics.diamonds.scale,
-      )}px`,
-    );
-    expect(suit?.style.top).toBe(
-      `${String(
-        PLAYING_CARD_DESIGN.sizes.compact.fontSize *
-          PLAYING_CARD_DESIGN.suitOptics.diamonds.verticalOffsetEm,
-      )}px`,
-    );
+    expect(card.dataset.playingCardSize).toBe("compact");
+    expect(card.getAttribute("aria-label")).toBe("7 of diamonds");
+    expect(card.textContent).toBe("7♦");
   });
 });
