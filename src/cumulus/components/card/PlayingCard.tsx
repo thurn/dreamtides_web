@@ -10,27 +10,38 @@ import { token } from "../../primitives/tokens";
  */
 export const PLAYING_CARD_DESIGN = {
   sizes: {
-    compact: { square: 104, fontSize: 48, rankSuitGap: 3 },
-    standard: { square: 156, fontSize: 74, rankSuitGap: 5 },
+    compact: {
+      square: 104,
+      fontSize: 48,
+      rankSuitGap: 3,
+      characterOutlineWidth: 1.35,
+    },
+    standard: {
+      square: 156,
+      fontSize: 74,
+      rankSuitGap: 5,
+      characterOutlineWidth: 2,
+    },
   },
   fontFamily: "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif",
   colors: {
     black: "#07070a",
     red: "#ff5268",
+    characterOutline: "#000000",
     legibilityHalo: "rgba(255, 248, 236, 0.52)",
   },
   superellipseExponent: 4,
   superellipseSamples: 96,
   rimInsetPercent: 0.65,
-  // Production card indices put a smaller suit beneath the rank. This inline
-  // treatment preserves that hierarchy, then lowers each Unicode suit by its
-  // measured optical amount; the diamond needs the largest correction because
-  // its font box otherwise makes its top point read higher than the digit.
+  // Production card indices size and position suit marks optically instead of
+  // trusting Unicode em boxes. These per-glyph values equalize apparent ink
+  // weight with the rank and align their visual centers; the diamond needs the
+  // largest scale because its pointed silhouette occupies less of its em box.
   suitOptics: {
-    clubs: { scale: 0.76, verticalOffsetEm: 0.07 },
-    diamonds: { scale: 0.72, verticalOffsetEm: 0.09 },
-    hearts: { scale: 0.76, verticalOffsetEm: 0.075 },
-    spades: { scale: 0.76, verticalOffsetEm: 0.07 },
+    clubs: { scale: 1.13, verticalOffsetEm: -0.09 },
+    diamonds: { scale: 1.43, verticalOffsetEm: -0.155 },
+    hearts: { scale: 1.21, verticalOffsetEm: -0.12 },
+    spades: { scale: 1.32, verticalOffsetEm: -0.14 },
   },
 } as const;
 
@@ -173,6 +184,8 @@ export function PlayingCard({
           lineHeight: 1,
           letterSpacing: "-0.025em",
           whiteSpace: "nowrap",
+          WebkitTextStroke: `${String(sizeSpec.characterOutlineWidth)}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
+          paintOrder: "stroke fill",
           filter: `drop-shadow(0 0 0.035em ${PLAYING_CARD_DESIGN.colors.legibilityHalo})`,
         }}
       >

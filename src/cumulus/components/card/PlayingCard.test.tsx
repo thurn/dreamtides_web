@@ -46,16 +46,22 @@ describe("PlayingCard", () => {
   it("uses the bright red for red suits and black for black suits", () => {
     const red = renderCard({ rank: "Q", suit: "diamonds" });
     const black = renderCard({ rank: "A", suit: "spades" });
+    const redIndex = red.querySelector<HTMLElement>(
+      "[data-playing-card-index]",
+    );
 
-    expect(
-      red.querySelector<HTMLElement>("[data-playing-card-index]")?.style.color,
-    ).toBe("rgb(255, 82, 104)");
+    expect(redIndex?.style.color).toBe("rgb(255, 82, 104)");
+    expect(redIndex?.style.webkitTextStroke).toBe(
+      `${String(
+        PLAYING_CARD_DESIGN.sizes.standard.characterOutlineWidth,
+      )}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
+    );
     expect(
       black.querySelector<HTMLElement>("[data-playing-card-index]")?.style.color,
     ).toBe("rgb(7, 7, 10)");
   });
 
-  it("applies the diamond-specific optical scale and downward correction", () => {
+  it("applies equal-weight suit scaling and glyph-specific alignment", () => {
     const card = renderCard({
       rank: "7",
       suit: "diamonds",
@@ -70,6 +76,9 @@ describe("PlayingCard", () => {
         PLAYING_CARD_DESIGN.sizes.compact.fontSize *
           PLAYING_CARD_DESIGN.suitOptics.diamonds.scale,
       )}px`,
+    );
+    expect(Number.parseFloat(suit?.style.fontSize ?? "0")).toBeGreaterThan(
+      PLAYING_CARD_DESIGN.sizes.compact.fontSize,
     );
     expect(suit?.style.top).toBe(
       `${String(
