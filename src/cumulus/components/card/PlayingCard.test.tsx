@@ -49,16 +49,21 @@ describe("PlayingCard", () => {
     const redIndex = red.querySelector<HTMLElement>(
       "[data-playing-card-index]",
     );
+    const blackIndex = black.querySelector<HTMLElement>(
+      "[data-playing-card-index]",
+    );
 
     expect(redIndex?.style.color).toBe("rgb(255, 82, 104)");
     expect(redIndex?.style.webkitTextStroke).toBe(
       `${String(
-        PLAYING_CARD_DESIGN.sizes.standard.characterOutlineWidth,
+        PLAYING_CARD_DESIGN.sizes.standard.redCharacterOutlineWidth,
       )}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
     );
-    expect(
-      black.querySelector<HTMLElement>("[data-playing-card-index]")?.style.color,
-    ).toBe("rgb(7, 7, 10)");
+    expect(redIndex?.style.filter).toBe("");
+    expect(blackIndex?.style.color).toBe("rgb(7, 7, 10)");
+    expect(blackIndex?.style.webkitTextStroke).toBe("");
+    expect(blackIndex?.style.paintOrder).toBe("");
+    expect(blackIndex?.style.filter).toBe("");
   });
 
   it("applies equal-weight suit scaling and glyph-specific alignment", () => {

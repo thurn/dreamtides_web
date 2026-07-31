@@ -14,13 +14,13 @@ export const PLAYING_CARD_DESIGN = {
       square: 104,
       fontSize: 48,
       rankSuitGap: 3,
-      characterOutlineWidth: 1.35,
+      redCharacterOutlineWidth: 6,
     },
     standard: {
       square: 156,
       fontSize: 74,
       rankSuitGap: 5,
-      characterOutlineWidth: 2,
+      redCharacterOutlineWidth: 6,
     },
   },
   fontFamily: "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif",
@@ -28,7 +28,6 @@ export const PLAYING_CARD_DESIGN = {
     black: "#07070a",
     red: "#ff5268",
     characterOutline: "#000000",
-    legibilityHalo: "rgba(255, 248, 236, 0.52)",
   },
   superellipseExponent: 4,
   superellipseSamples: 96,
@@ -141,7 +140,8 @@ export function PlayingCard({
 }: PlayingCardProps): ReactElement {
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const suitOptics = PLAYING_CARD_DESIGN.suitOptics[suit];
-  const foreground = RED_SUITS.has(suit)
+  const isRedSuit = RED_SUITS.has(suit);
+  const foreground = isRedSuit
     ? PLAYING_CARD_DESIGN.colors.red
     : PLAYING_CARD_DESIGN.colors.black;
 
@@ -184,9 +184,12 @@ export function PlayingCard({
           lineHeight: 1,
           letterSpacing: "-0.025em",
           whiteSpace: "nowrap",
-          WebkitTextStroke: `${String(sizeSpec.characterOutlineWidth)}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
-          paintOrder: "stroke fill",
-          filter: `drop-shadow(0 0 0.035em ${PLAYING_CARD_DESIGN.colors.legibilityHalo})`,
+          ...(isRedSuit
+            ? {
+                WebkitTextStroke: `${String(sizeSpec.redCharacterOutlineWidth)}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
+                paintOrder: "stroke fill",
+              }
+            : {}),
         }}
       >
         <span data-playing-card-rank-glyph="">{rank}</span>
