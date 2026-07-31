@@ -61,6 +61,9 @@ describe("PlayingCard", () => {
     );
     expect(redIndex?.style.filter).toBe("");
     expect(blackIndex?.style.color).toBe("rgb(7, 7, 10)");
+    expect(
+      PLAYING_CARD_DESIGN.sizes.standard.blackCharacterOutlineWidth,
+    ).toBe(0);
     expect(blackIndex?.style.webkitTextStroke).toBe("");
     expect(blackIndex?.style.paintOrder).toBe("");
     expect(blackIndex?.style.filter).toBe("");

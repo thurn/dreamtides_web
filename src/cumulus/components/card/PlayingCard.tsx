@@ -15,12 +15,14 @@ export const PLAYING_CARD_DESIGN = {
       fontSize: 48,
       rankSuitGap: 3,
       redCharacterOutlineWidth: 6,
+      blackCharacterOutlineWidth: 0,
     },
     standard: {
       square: 156,
       fontSize: 74,
       rankSuitGap: 5,
       redCharacterOutlineWidth: 6,
+      blackCharacterOutlineWidth: 0,
     },
   },
   fontFamily: "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif",
@@ -144,6 +146,9 @@ export function PlayingCard({
   const foreground = isRedSuit
     ? PLAYING_CARD_DESIGN.colors.red
     : PLAYING_CARD_DESIGN.colors.black;
+  const characterOutlineWidth = isRedSuit
+    ? sizeSpec.redCharacterOutlineWidth
+    : sizeSpec.blackCharacterOutlineWidth;
 
   return (
     <div
@@ -184,9 +189,9 @@ export function PlayingCard({
           lineHeight: 1,
           letterSpacing: "-0.025em",
           whiteSpace: "nowrap",
-          ...(isRedSuit
+          ...(characterOutlineWidth > 0
             ? {
-                WebkitTextStroke: `${String(sizeSpec.redCharacterOutlineWidth)}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
+                WebkitTextStroke: `${String(characterOutlineWidth)}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
                 paintOrder: "stroke fill",
               }
             : {}),
