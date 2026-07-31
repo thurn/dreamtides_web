@@ -33,9 +33,9 @@ export const PLAYING_CARD_DESIGN = {
     characterOutline: "#000000",
   },
   backFace: {
-    panelInsetPercent: 8,
-    borderWidth: 5,
-    checkerSquareSize: 6,
+    panelInsetPercent: 10,
+    borderWidth: 0,
+    checkerSquareSize: 31.5,
   },
   flip: {
     perspective: 1000,
@@ -202,7 +202,9 @@ export function PlayingCard({
   return (
     <div
       role="img"
-      aria-label={face === "front" ? `${rank} of ${suit}` : "Face-down playing card"}
+      aria-label={
+        face === "front" ? `${rank} of ${suit}` : "Face-down playing card"
+      }
       data-playing-card={`${rank}-${suit}`}
       data-playing-card-rank={rank}
       data-playing-card-suit={suit}
