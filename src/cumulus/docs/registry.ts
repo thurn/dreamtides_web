@@ -45,6 +45,7 @@ import { motesDemo } from "./demos/motes";
 import { numberStepperDemo } from "./demos/number-stepper";
 import { offerTileDemo } from "./demos/offer-tile";
 import { pipBadgeDemo } from "./demos/pip-badge";
+import { playingCardDemo } from "./demos/playing-card";
 import { pressableDemo } from "./demos/pressable";
 import { journeyStatusBarDemo } from "./demos/journey-status-bar";
 import { resourceChipDemo } from "./demos/resource-chip";
@@ -190,6 +191,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   dreamAvatarPortraitDemo,
   richTextDemo,
   rulesTextDemo,
+  playingCardDemo,
   gameCardDemo,
   cardBackDemo,
   cardPileDemo,

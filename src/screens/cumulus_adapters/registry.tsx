@@ -15,6 +15,7 @@ import { DreamsignBazaarSiteScreenAdapter } from "./DreamsignBazaarSiteScreenAda
 import { TransfigurationSiteScreenAdapter } from "./TransfigurationSiteScreenAdapter";
 import { DuplicationSiteScreenAdapter } from "./DuplicationSiteScreenAdapter";
 import { DreamAugurySiteScreenAdapter } from "./DreamAugurySiteScreenAdapter";
+import { GambleSiteScreenAdapter } from "./GambleSiteScreenAdapter";
 import { WorkInProgressSiteScreenAdapter } from "./WorkInProgressSiteScreenAdapter";
 import { TemporalForkSiteScreenAdapter } from "./TemporalForkSiteScreenAdapter";
 import { JourneyCompleteScreenAdapter } from "./JourneyCompleteScreenAdapter";
@@ -92,10 +93,14 @@ export function siteDispositionFor(site: SiteState): SiteDisposition {
         screen: <DreamAugurySiteScreenAdapter siteId={site.id} />,
       };
     case "TemptingOffer":
-    case "Gamble":
       return {
         kind: "screen",
         screen: <WorkInProgressSiteScreenAdapter siteId={site.id} />,
+      };
+    case "Gamble":
+      return {
+        kind: "screen",
+        screen: <GambleSiteScreenAdapter siteId={site.id} />,
       };
     case "TemporalFork":
       return {

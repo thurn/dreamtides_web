@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { SiteState, SiteType } from "../../types/journey";
 import { screenFor, siteDispositionFor, type NonSiteScreen } from "./registry";
 import { TemporalForkSiteScreenAdapter } from "./TemporalForkSiteScreenAdapter";
+import { GambleSiteScreenAdapter } from "./GambleSiteScreenAdapter";
 
 describe("screenFor", () => {
   it.each<NonSiteScreen>([
@@ -46,6 +47,17 @@ describe("siteDispositionFor", () => {
       isValidElement(disposition.screen)
     ) {
       expect(disposition.screen.type).toBe(TemporalForkSiteScreenAdapter);
+    }
+  });
+
+  it("routes Gamble to its dedicated playing-card adapter", () => {
+    const disposition = siteDispositionFor(site("Gamble"));
+    expect(disposition.kind).toBe("screen");
+    expect(
+      disposition.kind === "screen" && isValidElement(disposition.screen),
+    ).toBe(true);
+    if (disposition.kind === "screen" && isValidElement(disposition.screen)) {
+      expect(disposition.screen.type).toBe(GambleSiteScreenAdapter);
     }
   });
 

@@ -3704,6 +3704,54 @@
       "description": "Optional stable TOML glossary id. When provided, the badge becomes its own\nhover anchor and reveals that glossary entry."
     }
   ],
+  "PlayingCard": [
+    {
+      "name": "rank",
+      "tsType": "PlayingCardRank",
+      "unionMembers": [
+        "A",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "J",
+        "Q",
+        "K"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Playing-card rank shown before the suit mark."
+    },
+    {
+      "name": "suit",
+      "tsType": "PlayingCardSuit",
+      "unionMembers": [
+        "clubs",
+        "diamonds",
+        "hearts",
+        "spades"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Standard playing-card suit."
+    },
+    {
+      "name": "size",
+      "tsType": "\"compact\" | \"standard\"",
+      "unionMembers": [
+        "compact",
+        "standard"
+      ],
+      "required": false,
+      "defaultValue": "standard",
+      "description": "Named square and type-size tuple. Defaults to `standard`."
+    }
+  ],
   "Pressable": [
     {
       "name": "as",

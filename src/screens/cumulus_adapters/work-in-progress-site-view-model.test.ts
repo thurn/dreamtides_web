@@ -7,20 +7,9 @@ import {
   resolveWorkInProgressGuide,
 } from "./work-in-progress-site-view-model";
 
-const guides: readonly DreamGuideContent[] = [
-  {
-    id: "fixture-gambler",
-    name: "Fixture Gambler",
-    homeDreamscapeId: "fixture-dreamscape",
-    siteType: "Gamble",
-    dialog: ["A fixture greeting."],
-    homeSpecialty: "Fixture specialty.",
-  },
-];
-
 function site(
-  type: "TemptingOffer" | "Gamble",
-): SiteState & { type: "TemptingOffer" | "Gamble" } {
+  type: "TemptingOffer",
+): SiteState & { type: "TemptingOffer" } {
   return {
     id: `${type}-site`,
     type,
@@ -30,9 +19,9 @@ function site(
 }
 
 describe("work-in-progress-site-view-model", () => {
-  it("recognizes the two Cumulus work-in-progress site types", () => {
+  it("recognizes the remaining Cumulus work-in-progress site type", () => {
     expect(isWorkInProgressSiteType("TemptingOffer")).toBe(true);
-    expect(isWorkInProgressSiteType("Gamble")).toBe(true);
+    expect(isWorkInProgressSiteType("Gamble")).toBe(false);
     expect(isWorkInProgressSiteType("TemporalFork")).toBe(false);
   });
 
@@ -57,25 +46,35 @@ describe("work-in-progress-site-view-model", () => {
   });
 
   it("resolves the matching guide and uses explicit dialog when provided", () => {
-    const guide = resolveWorkInProgressGuide(guides, "Gamble");
+    const guides: readonly DreamGuideContent[] = [
+      {
+        id: "fixture-bargainer",
+        name: "Fixture Bargainer",
+        homeDreamscapeId: "fixture-dreamscape",
+        siteType: "TemptingOffer",
+        dialog: ["A fixture greeting."],
+        homeSpecialty: "Fixture specialty.",
+      },
+    ];
+    const guide = resolveWorkInProgressGuide(guides, "TemptingOffer");
     const view = buildWorkInProgressSiteView({
       sceneNode: null,
-      site: site("Gamble"),
+      site: site("TemptingOffer"),
       guide,
       guideLine: "A chosen greeting.",
     });
 
     expect(view).toMatchObject({
-      siteId: "Gamble-site",
-      siteType: "Gamble",
-      title: "Gamble",
+      siteId: "TemptingOffer-site",
+      siteType: "TemptingOffer",
+      title: "Tempting Offer",
       isEnhanced: false,
       guide: {
-        id: "fixture-gambler",
-        name: "Fixture Gambler",
+        id: "fixture-bargainer",
+        name: "Fixture Bargainer",
         line: "A chosen greeting.",
       },
     });
-    expect(view.message).toContain("wager");
+    expect(view.message).toContain("offer");
   });
 });

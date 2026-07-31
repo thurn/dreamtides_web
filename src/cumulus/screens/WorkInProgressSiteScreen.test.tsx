@@ -15,18 +15,18 @@ function view(
   overrides: Partial<WorkInProgressSiteView> = {},
 ): WorkInProgressSiteView {
   return {
-    siteId: "gamble-site",
-    siteType: "Gamble",
+    siteId: "tempting-offer-site",
+    siteType: "TemptingOffer",
     scene: null,
-    title: "Gamble",
+    title: "Tempting Offer",
     isEnhanced: false,
     message:
-      "The wager is still being shaped. Continue your journey while its stakes settle into place.",
+      "The offer is still being shaped. Continue your journey while its terms settle into place.",
     guide: {
-      id: "gravok",
-      name: "Gravok",
-      line: "Fortune favors the bold, traveler.",
-      art: artRef.dreamGuide("gravok"),
+      id: "maddox",
+      name: "Maddox",
+      line: "Every bargain has a price.",
+      art: artRef.dreamGuide("maddox"),
     },
     ...overrides,
   };
@@ -76,7 +76,7 @@ afterEach(() => {
 });
 
 describe("WorkInProgressSiteScreen", () => {
-  it("stages the Dream Guide on the left and explains that Gamble is unfinished", () => {
+  it("stages the Dream Guide and explains that Tempting Offer is unfinished", () => {
     const { container, root } = mount(
       <WorkInProgressSiteScreen view={view()} onContinue={vi.fn()} />,
     );
@@ -89,15 +89,15 @@ describe("WorkInProgressSiteScreen", () => {
     expect(
       container.querySelector('[data-testid="cumulus-work-in-progress-guide-art"]')
         ?.getAttribute("alt"),
-    ).toBe("Gravok");
-    expect(container.querySelector("h1")?.textContent).toBe("Gamble");
+    ).toBe("Maddox");
+    expect(container.querySelector("h1")?.textContent).toBe("Tempting Offer");
     expect(container.textContent).toContain("Work In Progress");
     expect(container.textContent).toContain("still being shaped");
 
     act(() => root.unmount());
   });
 
-  it("continues from either remaining placeholder and identifies enhanced sites", () => {
+  it("continues from the remaining placeholder and identifies enhanced sites", () => {
     const onContinue = vi.fn();
     const { container, root } = mount(
       <WorkInProgressSiteScreen

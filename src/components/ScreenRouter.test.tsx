@@ -853,7 +853,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
     ).toBe(site.id);
   });
 
-  it.each(["TemptingOffer", "Gamble"] as const)(
+  it.each(["TemptingOffer"] as const)(
     "routes %s to the Cumulus work-in-progress site and completes it",
     (type) => {
       const site = makeSite(type);
@@ -890,6 +890,23 @@ describe("ScreenRouter site-dispatch completeness", () => {
       );
     },
   );
+
+  it("routes Gamble to its six-card Cumulus prototype", () => {
+    const site = makeSite("Gamble");
+    const container = renderWithJourney({
+      state: makeStateFor(site),
+      journeyContent: merchantContent(),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
+    });
+
+    expect(
+      container.querySelectorAll("[data-gamble-hand] [data-playing-card]"),
+    ).toHaveLength(6);
+    expect(
+      container.querySelector('[data-testid="cumulus-gamble-reroll"]'),
+    ).toBeInstanceOf(HTMLButtonElement);
+    expect(container.querySelector("[data-work-in-progress-panel]")).toBeNull();
+  });
 
   it("routes TemporalFork to its fullscreen frame-break prototype", () => {
     reducedMotionPreference.value = true;

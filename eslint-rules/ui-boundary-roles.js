@@ -81,6 +81,7 @@ for (const name of [
   "DesktopDeckViewerAdapter", "DraftSiteScreenAdapter", "DreamAugurySiteScreenAdapter", "PoolViewerAdapter",
   "DreamscapeScreenAdapter", "DreamsignBazaarSiteScreenAdapter",
   "DreamsignRevelationScreenAdapter", "DuplicationSiteScreenAdapter",
+  "GambleSiteScreenAdapter",
   "LoadingScreenAdapter",
   "MobileBattleScreenAdapter", "MobileDeckViewerAdapter", "PurgeSiteScreenAdapter",
   "MainMenuScreenAdapter",

@@ -27,24 +27,13 @@ const SITE_COPY: Record<WorkInProgressSiteType, WorkInProgressCopy> = {
     fallbackGuideName: "Maddox",
     fallbackGuideLine: "Every bargain has a price.",
   },
-  Gamble: {
-    title: "Gamble",
-    message:
-      "The wager is still being shaped. Continue your journey while its stakes and rewards settle into place.",
-    fallbackGuideId: "gravok",
-    fallbackGuideName: "Gravok",
-    fallbackGuideLine: "Fortune favors the bold, traveler.",
-  },
 };
 
 /** Whether a site type uses the shared Cumulus work-in-progress screen. */
 export function isWorkInProgressSiteType(
   siteType: SiteType,
 ): siteType is WorkInProgressSiteType {
-  return (
-    siteType === "TemptingOffer" ||
-    siteType === "Gamble"
-  );
+  return siteType === "TemptingOffer";
 }
 
 /** Resolve the Dream Guide who tends the given placeholder site. */
