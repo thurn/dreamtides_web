@@ -12,20 +12,20 @@ export const PLAYING_CARD_DESIGN = {
   sizes: {
     compact: {
       square: 104,
-      fontSize: 48,
+      fontSize: 40,
       rankSuitGap: 3,
       redCharacterOutlineWidth: 5,
       blackCharacterOutlineWidth: 5,
     },
     standard: {
       square: 156,
-      fontSize: 74,
-      rankSuitGap: 5,
+      fontSize: 65,
+      rankSuitGap: 2,
       redCharacterOutlineWidth: 5,
       blackCharacterOutlineWidth: 5,
     },
   },
-  fontFamily: "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif",
+  fontFamily: "Inter",
   colors: {
     black: "#2196F3",
     red: "#FF9800",
@@ -39,10 +39,10 @@ export const PLAYING_CARD_DESIGN = {
   // weight with the rank and align their visual centers; the diamond needs the
   // largest scale because its pointed silhouette occupies less of its em box.
   suitOptics: {
-    clubs: { scale: 1.13, verticalOffsetEm: -0.09 },
-    diamonds: { scale: 1.43, verticalOffsetEm: -0.155 },
-    hearts: { scale: 1.21, verticalOffsetEm: -0.12 },
-    spades: { scale: 1.32, verticalOffsetEm: -0.14 },
+    clubs: { scale: 0.9, verticalOffsetEm: 0.01 },
+    diamonds: { scale: 0.8, verticalOffsetEm: 0 },
+    hearts: { scale: 0.8, verticalOffsetEm: 0 },
+    spades: { scale: 0.9, verticalOffsetEm: 0 },
   },
 } as const;
 
