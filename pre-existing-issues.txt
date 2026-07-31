@@ -10,3 +10,8 @@ The PlayingCard color test still asserted the component's previous red, black,
 and black-suit outline values after PLAYING_CARD_DESIGN was updated in commit
 073f7545. The overlapping test now derives its expectations from the exported
 design constants so it validates the current configured treatment.
+
+The PlayingCard suit-optics test required the compact diamond glyph to be
+larger than its rank after commit 089e3eeb configured that glyph to 80% scale.
+The overlapping test now verifies the configured scale directly without the
+stale size-direction assumption.

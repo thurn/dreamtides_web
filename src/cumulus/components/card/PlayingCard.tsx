@@ -35,7 +35,7 @@ export const PLAYING_CARD_DESIGN = {
   backFace: {
     panelInsetPercent: 10,
     borderWidth: 0,
-    checkerSquareSize: 31.5,
+    checkerSquaresPerSide: 4,
   },
   flip: {
     perspective: 1000,
@@ -197,7 +197,7 @@ export function PlayingCard({
     ? sizeSpec.redCharacterOutlineWidth
     : sizeSpec.blackCharacterOutlineWidth;
   const backFace = PLAYING_CARD_DESIGN.backFace;
-  const checkerTileSize = backFace.checkerSquareSize * 2;
+  const checkerTilePercent = (2 / backFace.checkerSquaresPerSide) * 100;
 
   return (
     <div
@@ -307,13 +307,16 @@ export function PlayingCard({
           >
             <div
               data-playing-card-checkerboard=""
+              data-playing-card-checker-squares={
+                backFace.checkerSquaresPerSide
+              }
               style={{
                 position: "absolute",
                 inset: backFace.borderWidth,
                 clipPath: SUPERELLIPSE_CLIP_PATH,
                 backgroundColor: PLAYING_CARD_DESIGN.colors.black,
                 backgroundImage: `conic-gradient(from 90deg, ${PLAYING_CARD_DESIGN.colors.black} 25%, ${PLAYING_CARD_DESIGN.colors.red} 0 50%, ${PLAYING_CARD_DESIGN.colors.black} 0 75%, ${PLAYING_CARD_DESIGN.colors.red} 0)`,
-                backgroundSize: `${String(checkerTileSize)}px ${String(checkerTileSize)}px`,
+                backgroundSize: `${String(checkerTilePercent)}% ${String(checkerTilePercent)}%`,
               }}
             />
           </div>

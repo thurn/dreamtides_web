@@ -95,8 +95,13 @@ describe("PlayingCard", () => {
     expect(checkerboard?.style.inset).toBe(
       `${String(PLAYING_CARD_DESIGN.backFace.borderWidth)}px`,
     );
+    expect(checkerboard?.dataset.playingCardCheckerSquares).toBe(
+      String(PLAYING_CARD_DESIGN.backFace.checkerSquaresPerSide),
+    );
+    const checkerTilePercent =
+      (2 / PLAYING_CARD_DESIGN.backFace.checkerSquaresPerSide) * 100;
     expect(checkerboard?.style.backgroundSize).toBe(
-      `${String(PLAYING_CARD_DESIGN.backFace.checkerSquareSize * 2)}px ${String(PLAYING_CARD_DESIGN.backFace.checkerSquareSize * 2)}px`,
+      `${String(checkerTilePercent)}% ${String(checkerTilePercent)}%`,
     );
   });
 
@@ -115,9 +120,6 @@ describe("PlayingCard", () => {
         PLAYING_CARD_DESIGN.sizes.compact.fontSize *
           PLAYING_CARD_DESIGN.suitOptics.diamonds.scale,
       )}px`,
-    );
-    expect(Number.parseFloat(suit?.style.fontSize ?? "0")).toBeGreaterThan(
-      PLAYING_CARD_DESIGN.sizes.compact.fontSize,
     );
     expect(suit?.style.top).toBe(
       `${String(
