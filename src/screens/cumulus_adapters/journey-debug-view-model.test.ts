@@ -25,7 +25,6 @@ function card(overrides: Partial<CardData> = {}): CardData {
 function state(): JourneyState {
   return {
     essence: 4,
-    essenceCap: 9,
     maxDreamsigns: 3,
     completionLevel: 2,
     dreamsigns: [{ id: "sign-a", name: "Shared Sign", effectDescription: "Fixture", isBane: false }],

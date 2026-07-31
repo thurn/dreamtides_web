@@ -496,11 +496,6 @@ export interface JourneyState {
   readonly seed: string;
   essence: number;
   /**
-   * Maximum essence the player can hold. Essence gained beyond this cap is
-   * lost. Defaults to 500; effects such as Dream Augury rewards can raise it.
-   */
-  essenceCap: number;
-  /**
    * Maximum number of Dreamsigns the player can hold at once. Defaults to 12;
    * certain effects can reduce it.
    */

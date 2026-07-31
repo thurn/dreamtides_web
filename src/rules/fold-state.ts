@@ -92,7 +92,6 @@ function genesisJourneyState(genesis: Genesis): JourneyState {
     runId: null,
     seed: genesis.seed,
     essence: 200,
-    essenceCap: 500,
     maxDreamsigns: 12,
     deck: [],
     dreamAvatar: null,

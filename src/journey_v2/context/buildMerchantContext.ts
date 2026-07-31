@@ -171,7 +171,6 @@ export function buildMerchantContext({
     rerollNonce,
     ...(forcedArchetypeId === undefined ? {} : { forcedArchetypeId }),
     essence: journeyState.essence,
-    essenceCap: journeyState.essenceCap,
     deckCards,
     cardByUuid,
     cardByNumber,

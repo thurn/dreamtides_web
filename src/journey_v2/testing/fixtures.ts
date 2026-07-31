@@ -101,7 +101,6 @@ export function makeMerchantTestJourneyState(
     ...createDefaultState(),
     seed: "merchant-fixture-seed",
     essence: 120,
-    essenceCap: 360,
     ...overrides,
   };
 }

@@ -505,10 +505,8 @@ async function battleScenario(baseUrl, seed, host, publisher, actions) {
     const availableForwardIds = sourceNode.forwardIds.filter(
       (nodeId) => afterJourney.atlas.nodes[nodeId]?.state === "available",
     );
-    const expectedEssence = Math.min(
-      before.confirmedState.journey.essenceCap,
-      before.confirmedState.journey.essence + battleInit.essenceReward,
-    );
+    const expectedEssence =
+      before.confirmedState.journey.essence + battleInit.essenceReward;
     if (
       after.confirmedState.battle !== null ||
       afterJourney.screen.type !== "atlas" ||

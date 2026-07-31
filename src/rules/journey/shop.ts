@@ -77,8 +77,8 @@ function asSiteType(value: unknown): SiteType | null {
     : null;
 }
 
-function clampEssence(value: number, cap: number): number {
-  return Math.max(0, Math.min(value, cap));
+function clampEssence(value: number): number {
+  return Math.max(0, value);
 }
 
 /**
@@ -171,7 +171,7 @@ export function buyShopSlot(
 
   let next: JourneyState = {
     ...journey,
-    essence: clampEssence(journey.essence - price, journey.essenceCap),
+    essence: clampEssence(journey.essence - price),
   };
 
   if (slot.itemType === "card") {
@@ -266,7 +266,7 @@ export function rerollShop(
     : journey.shopModifiers;
   const essence = useFreeReroll
     ? journey.essence
-    : clampEssence(journey.essence - cost, journey.essenceCap);
+    : clampEssence(journey.essence - cost);
 
   const nextRuntime: ShopSiteRuntime = {
     ...runtime,

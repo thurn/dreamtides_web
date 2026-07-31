@@ -21,7 +21,6 @@ export function buildJourneyDebugEditorView(
 ): JourneyDebugEditorView {
   return {
     essence: state.essence,
-    essenceCap: state.essenceCap,
     maxDreamsigns: state.maxDreamsigns,
     completionLevel: state.completionLevel,
     dreamsigns: state.dreamsigns.map((dreamsign, index): JourneyDebugDreamsignView => ({

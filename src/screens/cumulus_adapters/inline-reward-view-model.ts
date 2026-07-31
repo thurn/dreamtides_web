@@ -20,10 +20,7 @@ export type InlineRewardResolution =
 export function resolveInlineReward(
   site: SiteState | undefined,
   runtime: SiteRuntimeState | undefined,
-  state: Pick<
-    JourneyState,
-    "essence" | "essenceCap" | "dreamsigns" | "maxDreamsigns"
-  >,
+  state: Pick<JourneyState, "essence" | "dreamsigns" | "maxDreamsigns">,
 ): InlineRewardResolution | null {
   const completion = buildInlineRewardCompletionLog(site, runtime, state);
   if (completion === null) return null;
@@ -99,7 +96,7 @@ export function resolveRewardDecline(
 export function buildInlineRewardCompletionLog(
   site: SiteState | undefined,
   runtime: SiteRuntimeState | undefined,
-  state: Pick<JourneyState, "essence" | "essenceCap">,
+  state: Pick<JourneyState, "essence">,
 ): InlineRewardCompletionLog | null {
   if (site?.type === "Essence" && runtime?.kind === "essence") {
     if (runtime.accepted) return null;
@@ -112,10 +109,7 @@ export function buildInlineRewardCompletionLog(
         rewardAmount: runtime.amount,
         isEnhanced: site.isEnhanced,
         essenceBefore: state.essence,
-        essenceAfter: Math.min(
-          state.essenceCap,
-          state.essence + runtime.amount,
-        ),
+        essenceAfter: state.essence + runtime.amount,
       },
     };
   }
@@ -139,10 +133,7 @@ export function buildInlineRewardCompletionLog(
         : {
             rewardAmount: reward.essenceAmount,
             essenceBefore: state.essence,
-            essenceAfter: Math.min(
-              state.essenceCap,
-              state.essence + reward.essenceAmount,
-            ),
+            essenceAfter: state.essence + reward.essenceAmount,
           }),
       isEnhanced: site.isEnhanced,
     },

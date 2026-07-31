@@ -278,7 +278,6 @@ function journeyStateFor(deck: DeckEntry[], seed: string): JourneyState {
   return {
     seed,
     essence: 0,
-    essenceCap: 0,
     omens: 0,
     maxDreamsigns: 12,
     deck,

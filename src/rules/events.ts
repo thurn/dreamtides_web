@@ -44,8 +44,6 @@ export interface EventPayloads {
   // --- essence & limits ---
   ADJUST_ESSENCE: { delta: number };
   SET_ESSENCE: { value: number };
-  ADJUST_ESSENCE_CAP: { delta: number };
-  SET_ESSENCE_CAP: { value: number };
   SET_MAX_DREAMSIGNS: { value: number };
 
   // --- lifecycle ---
@@ -248,8 +246,6 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   COMPLETE_CARD_TUTORIAL_GUIDANCE: true,
   ADJUST_ESSENCE: true,
   SET_ESSENCE: true,
-  ADJUST_ESSENCE_CAP: true,
-  SET_ESSENCE_CAP: true,
   SET_MAX_DREAMSIGNS: true,
   START_JOURNEY: true,
   RESET_JOURNEY: true,

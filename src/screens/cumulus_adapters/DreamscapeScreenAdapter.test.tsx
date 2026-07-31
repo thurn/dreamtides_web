@@ -82,7 +82,6 @@ function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
     atlas: { nodes: { [node.id]: node } },
     completionLevel: 1,
     essence: 240,
-    essenceCap: 500,
     deck: [],
     dreamAvatar: null,
     dreamsigns: [],
@@ -192,7 +191,7 @@ describe("DreamscapeScreenAdapter", () => {
         outcome: "collected",
         rewardAmount: 275,
         essenceBefore: 240,
-        essenceAfter: 500,
+        essenceAfter: 515,
       }),
     );
 

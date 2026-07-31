@@ -448,7 +448,7 @@ describe("END_BATTLE victory", () => {
     };
     const state = inBattleState(
       {
-        essence: 50,
+        essence: 450,
         battleModifiers: [survivingMod, expiringBaneMod],
         deck: [makeEntry("keep-entry"), makeEntry("bane-entry", true)],
       },
@@ -460,7 +460,7 @@ describe("END_BATTLE victory", () => {
     const journey = result.state.journey;
 
     expect(journey.completionLevel).toBe(1);
-    expect(journey.essence).toBe(150);
+    expect(journey.essence).toBe(550);
     expect(journey.visitedSites).toContain(SITE_ID);
     expect(
       journey.atlas.nodes[NODE_ID].sites.find((site) => site.id === SITE_ID)

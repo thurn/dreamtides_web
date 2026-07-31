@@ -410,10 +410,6 @@ export function routeDomain(
       return journeyCase(state, lifecycle.adjustEssence(journey, payload));
     case "SET_ESSENCE":
       return journeyCase(state, lifecycle.setEssence(journey, payload));
-    case "ADJUST_ESSENCE_CAP":
-      return journeyCase(state, lifecycle.adjustEssenceCap(journey, payload));
-    case "SET_ESSENCE_CAP":
-      return journeyCase(state, lifecycle.setEssenceCap(journey, payload));
     case "SET_MAX_DREAMSIGNS":
       return journeyCase(state, lifecycle.setMaxDreamsigns(journey, payload));
     // --- navigation ---

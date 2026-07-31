@@ -187,8 +187,8 @@ function integer(value: unknown): number | null {
   return typeof value === "number" && Number.isInteger(value) ? value : null;
 }
 
-function clampEssence(value: number, cap: number): number {
-  return Math.max(0, Math.min(value, cap));
+function clampEssence(value: number): number {
+  return Math.max(0, value);
 }
 
 /** Locate a site by id anywhere in the atlas (relocated legacy `findSite`). */
@@ -409,7 +409,7 @@ export function acceptReward(
   } else {
     next = {
       ...journey,
-      essence: clampEssence(journey.essence + reward.essenceAmount, journey.essenceCap),
+      essence: clampEssence(journey.essence + reward.essenceAmount),
     };
   }
 
@@ -421,8 +421,8 @@ export function acceptReward(
 
 /**
  * `ACCEPT_ESSENCE { siteId }` — legacy `acceptEssenceSite`. Generates the
- * site's deterministic reward when it has not been opened, adds the amount
- * (clamped to the essence cap), marks accepted, and completes the site.
+ * site's deterministic reward when it has not been opened, adds the amount,
+ * marks accepted, and completes the site.
  * Bounces on a wrong site/runtime kind or an already-accepted site.
  */
 export function acceptEssence(
@@ -452,7 +452,7 @@ export function acceptEssence(
   const next = withRuntime(
     {
       ...journey,
-      essence: clampEssence(journey.essence + runtime.amount, journey.essenceCap),
+      essence: clampEssence(journey.essence + runtime.amount),
     },
     siteId,
     { ...runtime, accepted: true },
@@ -595,7 +595,7 @@ export function acceptTransfigurationChoice(
 
   const cost = offered.essenceCost;
   if (journey.essence < cost) return null;
-  const essenceAfter = clampEssence(journey.essence - cost, journey.essenceCap);
+  const essenceAfter = clampEssence(journey.essence - cost);
 
   const next: JourneyState = {
     ...journey,
@@ -822,7 +822,7 @@ export function purgeDeckCards(
     essenceDiscountPercent: journey.shopModifiers.essenceDiscountPercent,
   });
   if (journey.essence < cost) return null;
-  const essence = clampEssence(journey.essence - cost, journey.essenceCap);
+  const essence = clampEssence(journey.essence - cost);
 
   return completeAndReturn({ ...journey, deck, essence }, siteId);
 }

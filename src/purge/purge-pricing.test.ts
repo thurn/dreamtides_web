@@ -49,7 +49,7 @@ describe("purgeVisitCost", () => {
 
   it("matches the doc's economy anchors", () => {
     // One standard shop card costs 100 essence; purging two cards in a visit
-    // costs the same. The default cap (five cards) costs 500 essence.
+    // costs the same. Purging five cards in one visit costs 500 essence.
     expect(purgeVisitCost(2)).toBe(100);
     expect(purgeVisitCost(5)).toBe(500);
   });

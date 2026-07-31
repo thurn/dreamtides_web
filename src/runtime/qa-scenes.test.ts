@@ -355,6 +355,7 @@ describe('the "dreamscape-with-essence" QA scene', () => {
 
     expect(state).not.toBeNull();
     expect(state?.screen.type).toBe("dreamscape");
+    expect(state?.essence).toBe(450);
     expect(state?.activeSiteId).toBeNull();
     expect(state?.currentDreamscape).not.toBeNull();
 

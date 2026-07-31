@@ -531,10 +531,7 @@ function applyVictory(
       screen,
       activeSiteId: null,
       atlas,
-      essence: Math.min(
-        completedJourney.essenceCap,
-        completedJourney.essence + init.essenceReward,
-      ),
+      essence: completedJourney.essence + init.essenceReward,
       battleModifiers,
       deck,
       currentDreamscape: null,

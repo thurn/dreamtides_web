@@ -4,7 +4,6 @@
   "journeyState": {
     "seed": "e1105c12-b0e8-4b2c-a6ee-7ac723baa121",
     "essence": 160,
-    "essenceCap": 500,
     "maxDreamsigns": 12,
     "deck": [
       {

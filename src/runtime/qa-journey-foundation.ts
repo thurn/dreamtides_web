@@ -69,7 +69,6 @@ export function createQaJourneyFoundation(
     runId: null,
     seed,
     essence: 200,
-    essenceCap: 500,
     maxDreamsigns: 12,
     deck: STARTER_CARD_NUMBERS.map((cardNumber, index) => ({
       entryId: `deck-${String(index + 1)}`,

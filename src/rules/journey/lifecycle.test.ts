@@ -210,61 +210,37 @@ afterEach(() => {
 });
 
 // ---------------------------------------------------------------------------
-// Essence / cap clamp
+// Essence floor
 // ---------------------------------------------------------------------------
 
-describe("essence and cap clamp", () => {
-  it("ADJUST_ESSENCE clamps to [0, essenceCap]", () => {
+describe("essence floor", () => {
+  it("ADJUST_ESSENCE allows arbitrary gains and floors losses at zero", () => {
     const start = genesis();
     const up = apply(start, "ADJUST_ESSENCE", { delta: 10_000 });
-    expect(up.journey.essence).toBe(start.journey.essenceCap);
+    expect(up.journey.essence).toBe(start.journey.essence + 10_000);
     const down = apply(up, "ADJUST_ESSENCE", { delta: -10_000 });
-    expect(down.journey.essence).toBe(0);
+    expect(down.journey.essence).toBe(start.journey.essence);
   });
 
-  it("SET_ESSENCE clamps to [0, essenceCap]", () => {
+  it("SET_ESSENCE allows arbitrary non-negative values and floors at zero", () => {
     const start = genesis();
-    expect(apply(start, "SET_ESSENCE", { value: 10_000 }).journey.essence).toBe(
-      start.journey.essenceCap,
-    );
+    expect(apply(start, "SET_ESSENCE", { value: 10_000 }).journey.essence).toBe(10_000);
     expect(apply(start, "SET_ESSENCE", { value: -5 }).journey.essence).toBe(0);
   });
 
-  it("ADJUST_ESSENCE_CAP re-clamps essence when the cap drops below it", () => {
-    let state = apply(genesis(), "SET_ESSENCE", { value: 400 });
-    state = apply(state, "ADJUST_ESSENCE_CAP", { delta: -300 });
-    expect(state.journey.essenceCap).toBe(200);
-    expect(state.journey.essence).toBe(200);
-  });
-
-  it("SET_ESSENCE_CAP re-clamps essence to the new cap", () => {
-    let state = apply(genesis(), "SET_ESSENCE", { value: 450 });
-    state = apply(state, "SET_ESSENCE_CAP", { value: 300 });
-    expect(state.journey.essenceCap).toBe(300);
-    expect(state.journey.essence).toBe(300);
-  });
-
-  it("keeps essence within [0, essenceCap] across a random sweep", () => {
+  it("keeps essence non-negative across a random sweep", () => {
     const rng = makePrng(12345);
     let state = genesis();
     for (let iteration = 0; iteration < 800; iteration += 1) {
       const roll = rng();
-      if (roll < 0.4) {
+      if (roll < 0.5) {
         const delta = Math.floor((rng() - 0.5) * 4000);
         state = apply(state, "ADJUST_ESSENCE", { delta });
-      } else if (roll < 0.7) {
+      } else {
         const value = Math.floor((rng() - 0.5) * 4000);
         state = apply(state, "SET_ESSENCE", { value });
-      } else if (roll < 0.9) {
-        const delta = Math.floor((rng() - 0.5) * 2000);
-        state = apply(state, "ADJUST_ESSENCE_CAP", { delta });
-      } else {
-        const value = Math.floor(rng() * 3000);
-        state = apply(state, "SET_ESSENCE_CAP", { value });
       }
       expect(state.journey.essence).toBeGreaterThanOrEqual(0);
-      expect(state.journey.essence).toBeLessThanOrEqual(state.journey.essenceCap);
-      expect(state.journey.essenceCap).toBeGreaterThanOrEqual(0);
     }
   });
 

@@ -238,7 +238,6 @@ function makeMutations(): JourneyMutations {
     dismissStartingDeckPopup: vi.fn(),
     resetJourney: vi.fn(),
     setEssence: vi.fn(),
-    changeMaxEssence: vi.fn(),
     addCardById: vi.fn(() => null),
     addCardByIdWithTransfiguration: vi.fn(() => null),
     addBaneCardById: vi.fn(),
@@ -273,7 +272,6 @@ function makeStateFor(site: SiteState): JourneyState {
   const merchantState = makeMerchantTestJourneyState({
     seed: "router-merchant-seed",
     essence: 180,
-    essenceCap: 360,
     deck: [1, 2, 3, 4, 5, 6].map((cardNumber, index) =>
       makeMerchantTestDeckEntry({
         entryId: `router-entry-${index + 1}`,

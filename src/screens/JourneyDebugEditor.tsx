@@ -12,7 +12,6 @@ export default function JourneyDebugEditor({ isOpen, onClose }: { isOpen: boolea
   const dreamsignIndex = (actionId: string): number => Number(actionId.slice(actionId.lastIndexOf(":") + 1));
   const changeResource = (id: JourneyDebugResourceId, delta: number): void => {
     if (id === "essence") mutations.setEssence(state.essence + delta, SOURCE);
-    else if (id === "essenceCap") mutations.setEssenceCap?.(state.essenceCap + delta, SOURCE);
     else if (id === "maxDreamsigns") mutations.setMaxDreamsigns?.(state.maxDreamsigns + delta, SOURCE);
     else mutations.regenerateAtlas?.(state.completionLevel + delta);
   };

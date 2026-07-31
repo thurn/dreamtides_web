@@ -58,7 +58,6 @@ function makeState(): JourneyState {
     runId: "journey:test",
     seed: "test-seed",
     essence: 100,
-    essenceCap: 500,
     maxDreamsigns: 12,
     deck: [
       {

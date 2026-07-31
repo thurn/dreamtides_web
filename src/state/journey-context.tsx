@@ -191,8 +191,6 @@ export interface JourneyMutations {
    * test/demo mutation stubs omit it.
    */
   loadJourneyState?: (state: JourneyState, source: string) => void;
-  /** Debug-only: set `essenceCap` to `value`; current essence reclamps. */
-  setEssenceCap?: (value: number, source: string) => void;
   /** Debug-only: set `maxDreamsigns` to `value`. */
   setMaxDreamsigns?: (value: number, source: string) => void;
   /** Debug-only: set `completionLevel` to `value`. */
@@ -220,10 +218,8 @@ export interface JourneyMutations {
   resetJourney: () => void;
 
   // ---- Dream Augury effect plumbing (Wave 1) ----
-  /** Set essence to `value`, clamped to `[0, essenceCap]`. */
+  /** Set essence to a non-negative `value`. */
   setEssence: (value: number, source: string) => void;
-  /** Add `delta` to `essenceCap`; current essence clamps to the new cap. */
-  changeMaxEssence: (delta: number, source: string) => void;
   /**
    * Add a non-bane card to the deck by catalog `cardId`. Mirrors `addCard`,
    * but resolves the catalog id internally by linear-scanning the small
@@ -370,7 +366,6 @@ export function createDefaultState(): JourneyState {
     runId: null,
     seed: "default",
     essence: 200,
-    essenceCap: 500,
     maxDreamsigns: 12,
     deck: [],
     dreamAvatar: null,

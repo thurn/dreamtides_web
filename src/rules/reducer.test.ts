@@ -30,14 +30,13 @@ const GENESIS: Genesis = {
 };
 
 /** A base fold state with a known, mutable essence value. */
-function foldStateWithEssence(essence: number, essenceCap?: number): FoldState {
+function foldStateWithEssence(essence: number): FoldState {
   const base = genesisFoldState(GENESIS);
   return {
     ...base,
     journey: {
       ...base.journey,
       essence,
-      ...(essenceCap === undefined ? {} : { essenceCap }),
     },
   };
 }
@@ -396,23 +395,19 @@ describe("rule 5 — routing and garbage tolerance", () => {
 
 describe("ADJUST_ESSENCE domain case", () => {
   it("applies a positive delta", () => {
-    const state = foldStateWithEssence(100, 500);
+    const state = foldStateWithEssence(100);
     const result = reduceGameEvent(state, adjustEssence(50), ctx());
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.essence).toBe(150);
   });
 
-  it("never leaves the [0, essenceCap] range across a delta sweep", () => {
-    const cap = 500;
+  it("never leaves the non-negative range across a delta sweep", () => {
     for (const start of [0, 100, 250, 500]) {
       for (const delta of [-1000, -250, -1, 0, 1, 250, 1000]) {
-        const state = foldStateWithEssence(start, cap);
+        const state = foldStateWithEssence(start);
         const result = reduceGameEvent(state, adjustEssence(delta), ctx());
         expect(result.state.journey.essence).toBeGreaterThanOrEqual(0);
-        expect(result.state.journey.essence).toBeLessThanOrEqual(cap);
-        expect(result.state.journey.essence).toBe(
-          Math.max(0, Math.min(start + delta, cap)),
-        );
+        expect(result.state.journey.essence).toBe(Math.max(0, start + delta));
       }
     }
   });
@@ -586,7 +581,6 @@ describe("genesisFoldState", () => {
     expect(fold.battle).toBeNull();
     expect(fold.journey.seed).toBe(GENESIS.seed);
     expect(typeof fold.journey.essence).toBe("number");
-    expect(typeof fold.journey.essenceCap).toBe("number");
   });
 });
 

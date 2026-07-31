@@ -12,7 +12,7 @@ import { GlassDialog } from "../components/overlay/GlassDialog";
 import type { CardKeywordModification, CardTypeChange, TransfigurationType } from "../../types/journey";
 import { token } from "../primitives/tokens";
 
-export type JourneyDebugResourceId = "essence" | "essenceCap" | "maxDreamsigns" | "completionLevel";
+export type JourneyDebugResourceId = "essence" | "maxDreamsigns" | "completionLevel";
 export interface JourneyDebugDreamsignView { actionId: string; templateId: string; name: string; isBane: boolean; }
 export interface JourneyDebugCardSearchView { cardId: string; title: string; model: GameCardModel; }
 export interface JourneyDebugDeckEntryView {
@@ -29,7 +29,6 @@ export interface JourneyDebugDeckEntryView {
 }
 export interface JourneyDebugEditorView {
   essence: number;
-  essenceCap: number;
   maxDreamsigns: number;
   completionLevel: number;
   dreamsigns: readonly JourneyDebugDreamsignView[];
@@ -116,7 +115,7 @@ export function JourneyDebugEditorScreen(props: JourneyDebugEditorScreenProps): 
 }
 
 function ResourceSteppers({ view, onChange }: { view: JourneyDebugEditorView; onChange: JourneyDebugEditorScreenProps["onResourceChange"] }): ReactElement {
-  const resources: readonly [JourneyDebugResourceId, string, number][] = [["essence", "Essence", view.essence], ["essenceCap", "Essence cap", view.essenceCap], ["maxDreamsigns", "Max dreamsigns", view.maxDreamsigns], ["completionLevel", "Completion level", view.completionLevel]];
+  const resources: readonly [JourneyDebugResourceId, string, number][] = [["essence", "Essence", view.essence], ["maxDreamsigns", "Max dreamsigns", view.maxDreamsigns], ["completionLevel", "Completion level", view.completionLevel]];
   return <div style={sectionStyle}>{resources.map(([id, label, value]) => <NumberStepper key={id} label={label} value={value} decrementLabel={`Decrease ${label}`} incrementLabel={`Increase ${label}`} onDecrement={() => onChange(id, -1)} onIncrement={() => onChange(id, 1)} placement="onGlass" testId={`journey-debug-${id}`} />)}</div>;
 }
 

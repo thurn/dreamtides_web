@@ -34,10 +34,7 @@ Journeys revolve primarily around drafting and refining a deck to bring into
 future battles. Journeys use a single currency, **essence**, which is spent at
 shops and in various other ways. Players begin each journey with 200 essence by
 default, then choose a Dream Avatar and review their fixed starter deck and
-starting dreamscape. By
-default, journeys have a maximum essence cap of 500; any essence gained beyond
-this cap is lost unless the cap has been increased by an effect such as a Dream
-Augury reward. Dreamtides does not use an explicit rarity system for cards,
+starting dreamscape. Dreamtides does not use an explicit rarity system for cards,
 except for certain powerful cards that are designated as legendary cards.
 
 In addition to deck cards, users during a journey will select 1 of 3 Dream Avatars
@@ -433,8 +430,6 @@ Icon: `boxicons3/rectangle-vertical`
 ### Essence
 
 An essence site grants the user a fixed amount of essence, often around 200-300.
-Essence is capped at 500 by default, and any amount above the current cap is
-lost. Effects such as Dream Augury rewards may increase this cap.
 
 **UI:** Unlike with other sites, the camera does not zoom in to essence sites.
 Instead the button simply vanishes on click and a purple particle effect
@@ -635,11 +630,10 @@ the counter resets every dreamscape. The Nth card removed in a visit costs
 | 6      | 240           | 740        |
 
 Removing one or two cards is cheap, three or four is a real commitment, and five
-or more requires arriving with a nearly full essence bar. Two anchors tie the
-curve to the rest of the economy: two cards cost the same as one standard shop
-card (100 essence), and five cards cost the full default essence cap (500). Up to
-six cards may be removed in a single visit. Essence discounts also reduce purge
-prices. The pricing logic lives in `src/purge/purge-pricing.ts`.
+or more requires a substantial essence reserve. Two cards cost the same as one
+standard shop card (100 essence). Up to six cards may be removed in a single
+visit. Essence discounts also reduce purge prices. The pricing logic lives in
+`src/purge/purge-pricing.ts`.
 
 **Home Specialty.** In Tsukiren, Master Takeshi allows the player to remove up to
 3 cards (ordinary cards or banes) at no cost.
@@ -793,10 +787,6 @@ below bracket that target.
 Journey decks can contain a maximum of 50 cards during battles. If this limit is
 exceeded, before the battle starts the user gains the ability to purge cards of
 their choice to get back down under 50 cards.
-
-Journey runs also have a maximum essence cap of 500 by default. If the player would
-gain essence above their current cap, the excess is lost. This cap can be
-increased by effects such as Dream Augury rewards.
 
 Journey decks must contain a minimum of 25 cards. If the user has not completed
 enough drafts to reach this threshold, additional copies of their deck are added

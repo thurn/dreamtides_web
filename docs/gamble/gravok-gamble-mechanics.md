@@ -83,9 +83,9 @@ target is removed and redrawn, and Offer B excludes Offer A’s entire family.
 11. The logs record eligible archetypes, failed build attempts, selection
     bands, candidate scores, deck snapshots, offer targets, and the accepted or
     declined result.
-12. Essence and Essence cap exist on the merchant context but do not affect
-    archetype eligibility, weights, targets, or payouts. The chosen Augury
-    reward has no fee or stake.
+12. Essence exists on the merchant context but does not affect archetype
+    eligibility, weights, targets, or payouts. The chosen Augury reward has no
+    fee or stake.
 13. `isEnhanced` is recorded in the screen logs. The Augury generator currently
     applies the same reward rules to ordinary and enhanced Augury sites.
 

@@ -69,7 +69,7 @@ dream-art matching, and the circular-image UI are not part of the Reckoner.
   `{ entryId, cardNumber, transfiguration, typeChange?, keywordModification?, isBane }`
   (`src/types/journey.ts:53`). `cardNumber` resolves to `CardData`
   (`src/types/cards.ts`); `CardData.id` is the stable UUID.
-- **Essence** — the journey currency (`JourneyState.essence`, cap `essenceCap`).
+- **Essence** — the journey currency (`JourneyState.essence`).
 - **Transfiguration** — a permanent per-card modification stored on the
   `DeckEntry` and applied to the battle card at `create-battle-init.ts:428`.
   Empowered halves cost (`Math.round(cost/2)`); Kindled doubles spark (`0→1`);
@@ -483,8 +483,8 @@ interface EffectMutations {
 | `grant_dreamsign` | `missing_role`, `under_supported_payoff` | a need-aligned dreamsign from the run pool | the dreamsign object | `addDreamsign(sign, …)` | `DREAMSIGN_VALUE_CONSTANTS.namedGain` 145 |
 | `lower_curve_card` | `curve_problem` | a cost-heavy central card eligible for Empowered | that card + `Empowered` badge | `transfigureCard(entryId,"Empowered",…)` | 85 |
 
-(The remaining ~3 builders cover Kindled-for-finisher, keyword grants, and
-essence-cap raises; the table shows the shape.)
+(The remaining builders cover Kindled-for-finisher and keyword grants; the
+table shows the shape.)
 
 ### 6.3 Cost builders
 
@@ -507,7 +507,7 @@ a small menu the Director matches to a target value (§7.3).
 
 ```ts
 function directEncounter(read: DeckRead, merchant: MerchantState,
-                         resources: { essence: number; essenceCap: number },
+                         resources: { essence: number },
                          seed: string): Encounter
 ```
 
@@ -515,7 +515,7 @@ function directEncounter(read: DeckRead, merchant: MerchantState,
 
 ```
 p(one-offer) = 0.5
-  + (essence < 0.25*essenceCap ? +0.25 : 0)     // poor ⇒ prefer non-essence price
+  + (essence < 125 ? +0.25 : 0)                 // poor ⇒ prefer non-essence price
   + (distinctStrongNeeds >= 2 ? -0.20 : +0.20)  // many needs ⇒ prefer two-offer
   + (mood <= -2 ? +0.15 : 0)                     // cold ⇒ he wants a pound of flesh
 mode = seededBernoulli(seed, clamp(p, 0.1, 0.9)) ? "one-offer" : "two-offer"

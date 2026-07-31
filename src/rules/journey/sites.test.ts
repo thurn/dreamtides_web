@@ -430,7 +430,7 @@ describe("ACCEPT_ESSENCE", () => {
   });
 
   it("generates and accepts the reward atomically when the site was not opened", () => {
-    const state = siteState("Essence");
+    const state = siteState("Essence", { essence: 450 });
     const out = reduce(state, "ACCEPT_ESSENCE", { siteId: SITE_ID });
     expect(out.outcome).toBe("applied");
     const runtime = out.state.journey.siteRuntime[SITE_ID];
@@ -440,7 +440,7 @@ describe("ACCEPT_ESSENCE", () => {
     expect(runtime.amount).toBeLessThanOrEqual(300);
     expect(runtime.accepted).toBe(true);
     expect(out.state.journey.essence).toBe(
-      Math.min(state.journey.essenceCap, state.journey.essence + runtime.amount),
+      state.journey.essence + runtime.amount,
     );
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
   });
@@ -475,9 +475,7 @@ describe("ACCEPT_REWARD (essence reward)", () => {
     ).reward.essenceAmount;
     const out = reduce(state, "ACCEPT_REWARD", { siteId: SITE_ID });
     expect(out.outcome).toBe("applied");
-    expect(out.state.journey.essence).toBe(
-      Math.min(amount, state.journey.essenceCap),
-    );
+    expect(out.state.journey.essence).toBe(amount);
     expect(out.state.journey.visitedSites).toContain(SITE_ID);
   });
 
@@ -663,7 +661,7 @@ describe("ACCEPT_TRANSFIGURATION_CHOICE", () => {
     registerSiteContentProvider(fakeProvider);
     const deck = [makeEntry({ entryId: "deck-1", cardNumber: 7 })];
     return reduce(
-      siteState("Transfiguration", { deck, essence, essenceCap: 2000 }),
+      siteState("Transfiguration", { deck, essence }),
       "OPEN_SITE",
       { siteId: SITE_ID },
     ).state;

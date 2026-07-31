@@ -82,8 +82,6 @@ function captureAllDrafts(): EventDraft[] {
   );
   void actions.changeEssence(1);
   void actions.setEssence(1);
-  void actions.changeMaxEssence(1);
-  void actions.setEssenceCap(1);
   void actions.setMaxDreamsigns(1);
   void actions.startJourney({});
   void actions.resetJourney();

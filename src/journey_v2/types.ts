@@ -77,8 +77,6 @@ export interface MerchantContext {
   forcedArchetypeId?: string;
   /** Retained on the context for other screens; the merchant ignores it. */
   essence: number;
-  /** Retained on the context for other screens; the merchant ignores it. */
-  essenceCap: number;
   deckCards: readonly MerchantDeckCard[];
   cardByUuid: ReadonlyMap<string, CardData>;
   cardByNumber: ReadonlyMap<number, CardData>;

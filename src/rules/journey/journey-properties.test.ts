@@ -366,7 +366,6 @@ afterAll(() => {
 const DEBUG_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "SET_DRAFT_STATE",
   "SET_ESSENCE",
-  "SET_ESSENCE_CAP",
   "SET_MAX_DREAMSIGNS",
   "SET_DREAMSIGN_POOL",
   "SET_DECK_ENTRY_STAT_OVERRIDE",
@@ -450,7 +449,6 @@ function maybeCorrupt(
 const NON_DEBUG_GENERATORS: ReadonlyArray<(rng: () => number) => GeneratedEvent> = [
   // essence & limits (non-debug)
   (rng) => ({ type: "ADJUST_ESSENCE", payload: { delta: smallInt(rng, 3000) } }),
-  (rng) => ({ type: "ADJUST_ESSENCE_CAP", payload: { delta: smallInt(rng, 1000) } }),
 
   // navigation
   (rng) => ({ type: "ENTER_SITE", payload: { siteId: pick(rng, SITE_IDS) } }),

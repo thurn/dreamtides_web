@@ -354,8 +354,9 @@ const DREAMSCAPE_SCENE: QaScene = {
 
 /**
  * The starter dreamscape overview with one non-battle site retyped to Essence.
- * Keeping the run on the overview lets QA exercise the in-place Essence gain
- * animation and the visited site's removal from the dreamscape.
+ * The run starts at 450 essence so collecting the site visibly demonstrates
+ * that gains can exceed 500. Keeping the run on the overview lets QA exercise
+ * the in-place Essence gain animation and the visited site's removal.
  */
 const DREAMSCAPE_WITH_ESSENCE_SCENE: QaScene = {
   id: "dreamscape-with-essence",
@@ -388,6 +389,7 @@ const DREAMSCAPE_WITH_ESSENCE_SCENE: QaScene = {
 
     return {
       ...foundation.state,
+      essence: 450,
       atlas,
       currentDreamscape: node.id,
       screen: { type: "dreamscape" },

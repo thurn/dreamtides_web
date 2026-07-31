@@ -68,8 +68,6 @@ export interface CoopActions {
   // --- essence & limits ---
   changeEssence: (delta: number) => Promise<number>;
   setEssence: (value: number) => Promise<number>;
-  changeMaxEssence: (delta: number) => Promise<number>;
-  setEssenceCap: (value: number) => Promise<number>;
   setMaxDreamsigns: (value: number) => Promise<number>;
 
   // --- lifecycle ---
@@ -325,8 +323,6 @@ export function makeActions(append: AppendFn): CoopActions {
     // --- essence & limits ---
     changeEssence: (delta) => emit("ADJUST_ESSENCE", { delta }),
     setEssence: (value) => emit("SET_ESSENCE", { value }),
-    changeMaxEssence: (delta) => emit("ADJUST_ESSENCE_CAP", { delta }),
-    setEssenceCap: (value) => emit("SET_ESSENCE_CAP", { value }),
     setMaxDreamsigns: (value) => emit("SET_MAX_DREAMSIGNS", { value }),
 
     // --- lifecycle ---

@@ -6,14 +6,14 @@ import type {
 } from "../../types/journey";
 import { buildInlineRewardCompletionLog } from "./inline-reward-view-model";
 
-const STATE = { essence: 90, essenceCap: 100 };
+const STATE = { essence: 90 };
 
 function site(type: SiteState["type"]): SiteState {
   return { id: "site-uuid", type, isEnhanced: false, isVisited: false };
 }
 
 describe("buildInlineRewardCompletionLog", () => {
-  it("describes a capped Essence grant", () => {
+  it("describes an Essence grant", () => {
     const runtime: EssenceSiteRuntime = {
       kind: "essence",
       amount: 25,
@@ -29,7 +29,7 @@ describe("buildInlineRewardCompletionLog", () => {
     expect(result?.fields.siteId).toBe("site-uuid");
     expect(result?.fields.rewardAmount).toBe(25);
     expect(result?.fields.essenceBefore).toBe(90);
-    expect(result?.fields.essenceAfter).toBe(100);
+    expect(result?.fields.essenceAfter).toBe(115);
   });
 
   it("identifies a Dreamsign grant by UUID", () => {

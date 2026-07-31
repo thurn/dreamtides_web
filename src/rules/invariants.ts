@@ -32,10 +32,10 @@ export function foldInvariantViolations(
 ): FoldInvariantViolation[] {
   const journey = state.journey;
   const violations: FoldInvariantViolation[] = [];
-  if (journey.essence < 0 || journey.essence > journey.essenceCap) {
+  if (journey.essence < 0) {
     violations.push({
       code: "essence_out_of_bounds",
-      detail: `${String(journey.essence)}/${String(journey.essenceCap)}`,
+      detail: String(journey.essence),
     });
   }
 

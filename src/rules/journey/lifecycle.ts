@@ -96,12 +96,12 @@ export function getJourneyLifecycleContentProvider(): JourneyLifecycleContentPro
 }
 
 // ---------------------------------------------------------------------------
-// Essence & caps
+// Essence
 // ---------------------------------------------------------------------------
 
-/** Clamp essence to `[0, cap]` (relocated from `journey-state-actions.clampEssence`). */
-function clampEssence(value: number, cap: number): number {
-  return Math.max(0, Math.min(value, cap));
+/** Clamp essence to zero or greater. */
+function clampEssence(value: number): number {
+  return Math.max(0, value);
 }
 
 function finiteNumber(value: unknown): number | null {
@@ -117,7 +117,7 @@ export function adjustEssence(
   if (delta === null) return null;
   return {
     ...journey,
-    essence: clampEssence(journey.essence + delta, journey.essenceCap),
+    essence: clampEssence(journey.essence + delta),
   };
 }
 
@@ -128,37 +128,7 @@ export function setEssence(
 ): JourneyState | null {
   const value = finiteNumber(payload.value);
   if (value === null) return null;
-  return { ...journey, essence: clampEssence(value, journey.essenceCap) };
-}
-
-/** `ADJUST_ESSENCE_CAP { delta }` — legacy `changeMaxEssence` (cap floored at 0, essence re-clamped). */
-export function adjustEssenceCap(
-  journey: JourneyState,
-  payload: Record<string, unknown>,
-): JourneyState | null {
-  const delta = finiteNumber(payload.delta);
-  if (delta === null) return null;
-  const essenceCap = Math.max(0, journey.essenceCap + delta);
-  return {
-    ...journey,
-    essenceCap,
-    essence: clampEssence(journey.essence, essenceCap),
-  };
-}
-
-/** `SET_ESSENCE_CAP { value }` — legacy `setEssenceCap` (essence re-clamped to the new cap). */
-export function setEssenceCap(
-  journey: JourneyState,
-  payload: Record<string, unknown>,
-): JourneyState | null {
-  const value = finiteNumber(payload.value);
-  if (value === null) return null;
-  const essenceCap = Math.max(0, value);
-  return {
-    ...journey,
-    essenceCap,
-    essence: clampEssence(journey.essence, essenceCap),
-  };
+  return { ...journey, essence: clampEssence(value) };
 }
 
 /** Clamp a debug-setter value to a non-negative integer (floor at 0, truncate toward 0). */
@@ -497,12 +467,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
  */
 function isJourneyStateShape(value: unknown): value is JourneyState {
   if (!isRecord(value)) return false;
-  const numberKeys = [
-    "essence",
-    "essenceCap",
-    "maxDreamsigns",
-    "completionLevel",
-  ];
+  const numberKeys = ["essence", "maxDreamsigns", "completionLevel"];
   for (const key of numberKeys) {
     if (typeof value[key] !== "number" || !Number.isFinite(value[key]))
       return false;

@@ -129,8 +129,6 @@ export function CoopJourneyProvider({
       // ---- essence & limits ----
       changeEssence: (delta) => dispatch(actions.changeEssence(delta)),
       setEssence: (value) => dispatch(actions.setEssence(value)),
-      changeMaxEssence: (delta) => dispatch(actions.changeMaxEssence(delta)),
-      setEssenceCap: (value) => dispatch(actions.setEssenceCap(value)),
       setMaxDreamsigns: (value) => dispatch(actions.setMaxDreamsigns(value)),
 
       // ---- lifecycle ----
