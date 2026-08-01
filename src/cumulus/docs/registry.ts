@@ -47,6 +47,7 @@ import { offerTileDemo } from "./demos/offer-tile";
 import { pipBadgeDemo } from "./demos/pip-badge";
 import { playingCardDemo } from "./demos/playing-card";
 import { pressableDemo } from "./demos/pressable";
+import { radialAnnouncementDemo } from "./demos/radial-announcement";
 import { journeyStatusBarDemo } from "./demos/journey-status-bar";
 import { resourceChipDemo } from "./demos/resource-chip";
 import { richTextDemo } from "./demos/rich-text";
@@ -177,6 +178,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   tideDiscDemo,
   transfigurationFormButtonDemo,
   transientStatusToastDemo,
+  radialAnnouncementDemo,
   motesDemo,
   infoCardDemo,
   groupPanelDemo,

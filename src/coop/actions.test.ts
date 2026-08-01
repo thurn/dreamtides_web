@@ -121,6 +121,8 @@ function captureAllDrafts(): EventDraft[] {
   void actions.rerollDreamAugury("site-1");
   void actions.forceDreamAuguryArchetype("site-1", "arch-1");
   void actions.completeSite("site-1");
+  void actions.placeGravokWager("site-1", "six");
+  void actions.replaceGravokWagerDreamsign("site-1", "ds-1");
   void actions.acceptMerchantOffer("site-1");
   void actions.declineMerchant("site-1");
   void actions.buyShopSlot("site-1", 0);

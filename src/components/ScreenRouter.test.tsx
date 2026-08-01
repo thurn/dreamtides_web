@@ -202,6 +202,9 @@ function makeMutations(): JourneyMutations {
     startJourney: vi.fn(),
     rerollDreamAvatarOffer: vi.fn(),
     completeSite: vi.fn(),
+    ensureGambleSiteRuntime: vi.fn(),
+    placeGravokWager: vi.fn(),
+    replaceGravokWagerDreamsign: vi.fn(),
     ensureRewardSiteRuntime: vi.fn(),
     acceptRewardSite: vi.fn(),
     ensureDreamsignOfferRuntime: vi.fn(),
@@ -891,20 +894,25 @@ describe("ScreenRouter site-dispatch completeness", () => {
     },
   );
 
-  it("routes Gamble to its six-card Cumulus prototype", () => {
+  it("routes Gamble to the Three-Gate Wager screen", () => {
     const site = makeSite("Gamble");
+    const mutations = makeMutations();
     const container = renderWithJourney({
       state: makeStateFor(site),
       journeyContent: merchantContent(),
+      mutations,
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
     expect(
-      container.querySelectorAll("[data-gamble-hand] [data-playing-card]"),
-    ).toHaveLength(6);
+      container.querySelectorAll("[data-gamble-gates] [data-gamble-gate]"),
+    ).toHaveLength(3);
+    expect(container.querySelectorAll("[data-gamble-draw-card] [data-playing-card]"))
+      .toHaveLength(1);
     expect(
-      container.querySelector('[data-testid="cumulus-gamble-reroll"]'),
+      container.querySelector('[data-testid="gamble-choose-six"]'),
     ).toBeInstanceOf(HTMLButtonElement);
+    expect(mutations.ensureGambleSiteRuntime).toHaveBeenCalledWith(site.id);
     expect(container.querySelector("[data-work-in-progress-panel]")).toBeNull();
   });
 

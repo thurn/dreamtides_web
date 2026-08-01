@@ -1,4 +1,4 @@
-// Integration coverage for the REAL content providers behind the five reducer
+// Integration coverage for the real content providers behind reducer
 // seams (Task 25b). Unlike the per-case rules unit tests (which register minimal
 // deterministic FAKES) and the synthetic replay fixtures, this suite registers
 // the ACTUAL generators via `registerGameProviders(content)` and folds a full
@@ -154,6 +154,7 @@ const CONTENT_SITE_TYPES: SiteType[] = [
   "DreamsignMarket",
   "Transfiguration",
   "Duplication",
+  "Gamble",
 ];
 
 /** A single-actor committed event: basedOnSeq = seq - 1 (empty intervening window). */
@@ -302,6 +303,24 @@ describe("registerGameProviders (real content providers)", () => {
         expect(
           marketRuntime.slots.every((slot) => slot.itemType === "dreamsign"),
         ).toBe(true);
+      }
+    }
+    const gambleSiteId = siteIdByType.get("Gamble");
+    expect(gambleSiteId).toBeDefined();
+    if (gambleSiteId !== undefined) {
+      const gambleRuntime = first.finalState.journey.siteRuntime[gambleSiteId];
+      expect(gambleRuntime).toMatchObject({
+        kind: "gamble",
+        gameId: "gravok-three-gate-wager",
+        wagerCost: 50,
+        result: null,
+      });
+      if (gambleRuntime?.kind === "gamble") {
+        expect(gambleRuntime.shuffleCommitment).toMatch(/^[0-9a-f]{16}$/);
+        expect(gambleRuntime.dreamsignCandidateIds).toContain(
+          gambleRuntime.rewardDreamsign?.id,
+        );
+        expect(gambleRuntime.rewardDreamsign?.id).toBeDefined();
       }
     }
 

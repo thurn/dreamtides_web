@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
+import { createDefaultState } from "../../state/journey-context";
 import type { DreamGuideContent } from "../../types/content";
-import type { SiteState } from "../../types/journey";
+import type { GambleSiteRuntime, SiteState } from "../../types/journey";
 import {
+  buildGambleGateViews,
   buildGambleSiteView,
-  buildStandardPlayingCardDeck,
-  dealGamblePlayingCards,
   resolveGambleGuide,
 } from "./gamble-site-view-model";
 
@@ -15,31 +15,125 @@ const GAMBLE_SITE: SiteState & { type: "Gamble" } = {
   isVisited: false,
 };
 
-describe("gamble-site-view-model", () => {
-  it("builds exactly one entry for every rank-and-suit combination", () => {
-    const deck = buildStandardPlayingCardDeck();
+const RUNTIME: GambleSiteRuntime = {
+  kind: "gamble",
+  gameId: "gravok-three-gate-wager",
+  rulesVersion: "fixture-rules",
+  isFarpoint: false,
+  wagerCost: 50,
+  shuffleCommitment: "fixture-commitment",
+  committedCard: { rank: "Q", suit: "hearts" },
+  dreamsignCandidateIds: ["fixture-sign"],
+  rewardDreamsign: {
+    id: "fixture-sign",
+    name: "Fixture Sign",
+    effectDescription: "A fixture effect.",
+    isBane: false,
+  },
+  result: null,
+};
 
-    expect(deck).toHaveLength(52);
-    expect(new Set(deck.map((card) => card.id)).size).toBe(52);
-    expect(deck).toContainEqual({
-      id: "10-diamonds",
-      rank: "10",
-      suit: "diamonds",
+describe("gamble-site-view-model", () => {
+  it("maps all exact gate targets, odds, rewards, and the locked jackpot", () => {
+    const gates = buildGambleGateViews(RUNTIME, 12);
+
+    expect(gates).toMatchObject([
+      {
+        id: "six",
+        targetLabel: "6+",
+        chanceLabel: "69.23%",
+        essenceReward: 100,
+        rewardDreamsign: null,
+        available: true,
+      },
+      {
+        id: "nine",
+        targetLabel: "9+",
+        chanceLabel: "46.15%",
+        essenceReward: 150,
+        rewardDreamsign: null,
+        available: true,
+      },
+      {
+        id: "jack",
+        targetLabel: "J+",
+        chanceLabel: "30.77%",
+        essenceReward: 200,
+        rewardDreamsign: { id: "fixture-sign" },
+        available: true,
+      },
+    ]);
+  });
+
+  it("keeps the committed card concealed until the shared result exists", () => {
+    const state = {
+      ...createDefaultState(),
+      essence: 75,
+      siteRuntime: { [GAMBLE_SITE.id]: RUNTIME },
+    };
+    const view = buildGambleSiteView({
+      state,
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+      guideLine: null,
+    });
+
+    expect(view.runtimeReady).toBe(true);
+    expect(view.canAfford).toBe(true);
+    expect(view.card).toEqual({ rank: "A", suit: "spades", face: "back" });
+    expect(view.result).toBeNull();
+  });
+
+  it("maps a jackpot result and its at-cap replacement by UUID", () => {
+    const resultRuntime: GambleSiteRuntime = {
+      ...RUNTIME,
+      result: {
+        gateId: "jack",
+        card: RUNTIME.committedCard,
+        won: true,
+        essenceGained: 200,
+        dreamsignAwarded: false,
+        pendingDreamsignReplacement: true,
+      },
+    };
+    const state = {
+      ...createDefaultState(),
+      essence: 350,
+      maxDreamsigns: 1,
+      dreamsigns: [
+        {
+          id: "held-sign",
+          name: "Held Sign",
+          effectDescription: "Held effect.",
+          isBane: false,
+        },
+      ],
+      siteRuntime: { [GAMBLE_SITE.id]: resultRuntime },
+    };
+    const view = buildGambleSiteView({
+      state,
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+      guideLine: null,
+    });
+
+    expect(view.card).toEqual({ rank: "Q", suit: "hearts", face: "front" });
+    expect(view.result).toMatchObject({
+      gateId: "jack",
+      won: true,
+      rewardDreamsign: { id: "fixture-sign" },
+      pendingDreamsignReplacement: true,
+    });
+    expect(view.replacement).toMatchObject({
+      pendingDreamsign: { id: "fixture-sign" },
+      currentDreamsigns: [{ id: "held-sign" }],
+      maxDreamsigns: 1,
     });
   });
 
-  it("deals six unique cards reproducibly from a seed", () => {
-    const first = dealGamblePlayingCards("fixture-seed-a");
-    const repeat = dealGamblePlayingCards("fixture-seed-a");
-    const other = dealGamblePlayingCards("fixture-seed-b");
-
-    expect(first).toHaveLength(6);
-    expect(new Set(first.map((card) => card.id)).size).toBe(6);
-    expect(repeat).toEqual(first);
-    expect(other).not.toEqual(first);
-  });
-
-  it("maps the resident guide and dealt cards without production-data assertions", () => {
+  it("resolves the resident Gamble guide without production copy assertions", () => {
     const guides: readonly DreamGuideContent[] = [
       {
         id: "fixture-gambler",
@@ -50,24 +144,7 @@ describe("gamble-site-view-model", () => {
         homeSpecialty: "Fixture specialty.",
       },
     ];
-    const guide = resolveGambleGuide(guides);
-    const view = buildGambleSiteView({
-      sceneNode: null,
-      site: GAMBLE_SITE,
-      guide,
-      guideLine: "A chosen greeting.",
-      dealSeed: "fixture-deal",
-    });
 
-    expect(view).toMatchObject({
-      siteId: "fixture-gamble-site",
-      dealId: "fixture-deal",
-      guide: {
-        id: "fixture-gambler",
-        name: "Fixture Gambler",
-        line: "A chosen greeting.",
-      },
-    });
-    expect(view.cards).toHaveLength(6);
+    expect(resolveGambleGuide(guides)?.id).toBe("fixture-gambler");
   });
 });

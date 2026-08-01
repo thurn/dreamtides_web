@@ -11,12 +11,19 @@ import type {
   CardChoiceSiteRuntime,
   CardChoiceTransfigurationOffer,
   DeckEntry,
+  GambleSiteRuntime,
   RewardSiteRuntime,
   SiteRuntimeState,
   SiteState,
   JourneyState,
 } from "../../types/journey";
 import type { CardData } from "../../types/cards";
+import {
+  GRAVOK_WAGER_COST,
+  GRAVOK_WAGER_RULES_VERSION,
+  STANDARD_PLAYING_CARD_DECK,
+} from "../../data/gravok-wager";
+import { createDreamsign } from "../../data/dreamsigns";
 import { generateRewardSiteData } from "../../rewards/reward-generator";
 import { drawDreamsignOptions } from "../../dreamsign/dreamsign-pool";
 import {
@@ -42,6 +49,7 @@ import type {
   SiteOpenResult,
 } from "../../rules/journey/sites";
 import { streamFromKeyed } from "./rng-stream";
+import { readDreamsignPool } from "../../dreamsign/dreamsign-pool";
 
 function asString(value: unknown): string | null {
   return typeof value === "string" ? value : null;
@@ -81,6 +89,57 @@ function rngShuffle<T>(items: readonly T[], rng: () => number): T[] {
     [pool[index], pool[swap]] = [pool[swap], pool[index]];
   }
   return pool;
+}
+
+function buildGambleRuntime(
+  journey: JourneyState,
+  site: SiteState,
+  content: JourneyContent,
+  rng: () => number,
+): GambleSiteRuntime {
+  const shuffleCommitment = Array.from({ length: 4 }, () =>
+    Math.floor(rng() * 0x1_0000)
+      .toString(16)
+      .padStart(4, "0"),
+  ).join("");
+  const committedCard =
+    STANDARD_PLAYING_CARD_DECK[
+      Math.floor(rng() * STANDARD_PLAYING_CARD_DECK.length)
+    ];
+  const heldIds = new Set(
+    journey.dreamsigns.flatMap((dreamsign) =>
+      dreamsign.id === undefined ? [] : [dreamsign.id],
+    ),
+  );
+  const { availableIds, templatesById } = readDreamsignPool(
+    journey.remainingDreamsignPool,
+    content.dreamsignTemplates,
+  );
+  const dreamsignCandidateIds = availableIds.filter((id) => !heldIds.has(id));
+  const selectedDreamsignId =
+    dreamsignCandidateIds.length === 0
+      ? null
+      : dreamsignCandidateIds[
+          Math.floor(rng() * dreamsignCandidateIds.length)
+        ];
+  const selectedTemplate =
+    selectedDreamsignId === null
+      ? null
+      : templatesById.get(selectedDreamsignId) ?? null;
+
+  return {
+    kind: "gamble",
+    gameId: "gravok-three-gate-wager",
+    rulesVersion: GRAVOK_WAGER_RULES_VERSION,
+    isFarpoint: site.isEnhanced,
+    wagerCost: site.isEnhanced ? 0 : GRAVOK_WAGER_COST,
+    shuffleCommitment,
+    committedCard,
+    dreamsignCandidateIds,
+    rewardDreamsign:
+      selectedTemplate === null ? null : createDreamsign(selectedTemplate),
+    result: null,
+  };
 }
 
 /**
@@ -269,6 +328,11 @@ export function createSiteContentProvider(
             stream,
           );
           return { runtime };
+        }
+        case "Gamble": {
+          return {
+            runtime: buildGambleRuntime(journey, site, content, stream),
+          };
         }
         default:
           return null;

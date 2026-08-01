@@ -31,6 +31,7 @@ import * as battleEvents from "./battle/battle-events";
 import * as deck from "./journey/deck";
 import * as draft from "./journey/draft";
 import * as lifecycle from "./journey/lifecycle";
+import * as gamble from "./journey/gamble";
 import * as shop from "./journey/shop";
 import * as sites from "./journey/sites";
 import * as cardTutorial from "./card-tutorial-guidance";
@@ -485,6 +486,13 @@ export function routeDomain(
       return journeyCase(state, sites.forceDreamAuguryArchetype(journey, payload));
     case "COMPLETE_SITE":
       return journeyCase(state, sites.completeSite(journey, payload));
+    case "PLACE_GRAVOK_WAGER":
+      return journeyCase(state, gamble.placeGravokWager(journey, payload));
+    case "REPLACE_GRAVOK_WAGER_DREAMSIGN":
+      return journeyCase(
+        state,
+        gamble.replaceGravokWagerDreamsign(journey, payload),
+      );
 
     // --- shop, merchant & modifiers ---
     case "BUY_SHOP_SLOT":

@@ -102,6 +102,14 @@ export interface EventPayloads {
   REROLL_DREAM_AUGURY: { siteId: string };
   FORCE_DREAM_AUGURY_ARCHETYPE: { siteId: string; archetypeId: string };
   COMPLETE_SITE: { siteId: string };
+  PLACE_GRAVOK_WAGER: {
+    siteId: string;
+    gateId: "six" | "nine" | "jack";
+  };
+  REPLACE_GRAVOK_WAGER_DREAMSIGN: {
+    siteId: string;
+    replacedDreamsignId: string;
+  };
 
   // --- merchant & shop ---
   ACCEPT_MERCHANT_OFFER: { siteId: string; offer?: unknown };
@@ -285,6 +293,8 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   REROLL_DREAM_AUGURY: true,
   FORCE_DREAM_AUGURY_ARCHETYPE: true,
   COMPLETE_SITE: true,
+  PLACE_GRAVOK_WAGER: true,
+  REPLACE_GRAVOK_WAGER_DREAMSIGN: true,
   ACCEPT_MERCHANT_OFFER: true,
   DECLINE_MERCHANT: true,
   BUY_SHOP_SLOT: true,

@@ -17,6 +17,7 @@ import type {
   TransfigurationType,
 } from "../types/journey";
 import type { DraftState } from "../types/draft";
+import type { GravokGateId } from "../types/gamble";
 import { deriveEntryIdCounter } from "./deck-entry-ids";
 import type {
   MerchantAcceptRequest,
@@ -35,6 +36,15 @@ export interface JourneyMutations {
   /** Request a shared debug reroll of the journey-start DreamAvatar offer. */
   rerollDreamAvatarOffer: () => void;
   completeSite: (siteId: string, source: string) => void;
+  /** Materialize the shared Three-Gate Wager deck commitment and Dreamsign. */
+  ensureGambleSiteRuntime: (siteId: string) => void;
+  /** Commit one gate choice; the reducer derives the draw, cost, and payout. */
+  placeGravokWager: (siteId: string, gateId: GravokGateId) => void;
+  /** Replace a held Dreamsign after a jackpot win at the collection cap. */
+  replaceGravokWagerDreamsign: (
+    siteId: string,
+    replacedDreamsignId: string,
+  ) => void;
   ensureRewardSiteRuntime: (siteId: string) => void;
   /**
    * Accepts the Dreamsign Reward at the given site. When the player is at the

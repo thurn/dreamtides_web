@@ -8,6 +8,7 @@
 
 import {
   GlassButton,
+  type GlassButtonSize,
   type GlassButtonVariant,
 } from "../../components/controls/GlassButton";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
@@ -20,6 +21,7 @@ interface GlassButtonDemoArgs {
   withGlyph?: boolean;
   variant?: GlassButtonVariant;
   placement?: GlassControlPlacement;
+  size?: GlassButtonSize;
   disabled?: boolean;
   pressed?: boolean;
 }
@@ -36,6 +38,7 @@ function GlassButtonDemo({
   withGlyph = false,
   variant = "accent",
   placement = "onMedia",
+  size = "standard",
   disabled = false,
   pressed,
 }: GlassButtonDemoArgs) {
@@ -46,6 +49,7 @@ function GlassButtonDemo({
       glyph={withGlyph ? GLYPHS.sort : undefined}
       variant={variant}
       placement={placement}
+      size={size}
       disabled={disabled}
       pressed={pressed}
       onPress={() => {}}
@@ -134,6 +138,29 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
 />`,
     },
     {
+      label: "Separated wager price",
+      note: "Use the centered-dot cost treatment for parallel wager choices whose price is part of the comparison.",
+      code: `<GlassButton
+  label="Choose"
+  accessibilityLabel="Choose the Six Gate for 50 Essence"
+  essenceCost={50}
+  essenceCostStyle="separated"
+  variant="accent"
+  onPress={chooseGate}
+/>`,
+    },
+    {
+      label: "Compact parallel action",
+      note: "Use the compact label scale and horizontal spacing when several actions must remain separate in a narrow row. The touch target stays 42px tall.",
+      code: `<GlassButton
+  label="Choose"
+  essenceCost={50}
+  essenceCostStyle="separated"
+  size="compact"
+  onPress={chooseGate}
+/>`,
+    },
+    {
       label: "Stable dynamic width",
       note: "Pass every reachable label/essence-cost state through `widthReservations` when one action changes copy. The hidden sizing grid holds the widest intrinsic footprint while only the current state remains visible.",
       code: `<GlassButton
@@ -151,6 +178,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
       withGlyph: false,
       variant: "accent",
       placement: "onMedia",
+      size: "standard",
       disabled: false,
       pressed: false,
     },

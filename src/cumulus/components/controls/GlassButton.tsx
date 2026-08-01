@@ -34,6 +34,12 @@ const GLASS_BUTTON_HEIGHT = 42;
 /** Visual treatment for the glass button surface. */
 export type GlassButtonVariant = "default" | "danger" | "accent";
 
+/** How an optional Essence cost is punctuated after the button label. */
+export type GlassButtonEssenceCostStyle = "parenthetical" | "separated";
+
+/** Horizontal density and label scale; both sizes preserve the 42px target. */
+export type GlassButtonSize = "standard" | "compact";
+
 /** One possible label/essence-cost state whose intrinsic width is reserved. */
 export interface GlassButtonWidthReservation {
   label: string;
@@ -79,6 +85,10 @@ export interface GlassButtonProps {
    * `Transfigure (20◆)`.
    */
   essenceCost?: number | null;
+  /** Parenthesized cost, or a centered-dot-separated wager price. */
+  essenceCostStyle?: GlassButtonEssenceCostStyle;
+  /** Standard label spacing, or compact spacing for narrow parallel actions. */
+  size?: GlassButtonSize;
   /**
    * Possible dynamic label/essence-cost states. The button reserves the widest
    * state while rendering only the current one, preventing surrounding layout
@@ -98,6 +108,8 @@ export interface GlassButtonProps {
   disabled?: boolean;
   /** Toggle state for controls whose action switches a persistent local mode. */
   pressed?: boolean;
+  /** Accessible name when the visible label alone does not distinguish siblings. */
+  accessibilityLabel?: string;
   /** A `data-testid` for selecting the button in tests. */
   testId?: string;
 }
@@ -113,11 +125,14 @@ export function GlassButton({
   onPress,
   glyph,
   essenceCost = null,
+  essenceCostStyle = "parenthetical",
+  size = "standard",
   widthReservations = [],
   variant = "default",
   placement = "onMedia",
   disabled = false,
   pressed,
+  accessibilityLabel,
   testId,
 }: GlassButtonProps): ReactElement {
   const chrome = controlChrome(placement);
@@ -128,6 +143,7 @@ export function GlassButton({
       data-glass-placement={placement}
       data-glass-variant={variant}
       data-testid={testId}
+      aria-label={accessibilityLabel}
       aria-pressed={pressed}
       data-pressed={pressed === undefined ? undefined : String(pressed)}
       disabled={disabled}
@@ -138,9 +154,9 @@ export function GlassButton({
         justifyContent: "center",
         gap: 8,
         height: GLASS_BUTTON_HEIGHT,
-        padding: "0 14px",
+        padding: size === "compact" ? "0 8px" : "0 14px",
         boxSizing: "border-box",
-        font: token("--t-button"),
+        font: token(size === "compact" ? "--t-button-sm" : "--t-button"),
         color: token("--text-on-glass"),
         textAlign: "center",
         whiteSpace: "nowrap",
@@ -166,6 +182,7 @@ export function GlassButton({
         <GlassButtonContent
           label={label}
           essenceCost={essenceCost}
+          essenceCostStyle={essenceCostStyle}
         />
         {widthReservations.map((reservation, index) => (
           <span
@@ -183,6 +200,7 @@ export function GlassButton({
             <GlassButtonContent
               label={reservation.label}
               essenceCost={reservation.essenceCost ?? null}
+              essenceCostStyle={essenceCostStyle}
             />
           </span>
         ))}
@@ -205,9 +223,11 @@ function resolveVariantChrome(
 function GlassButtonContent({
   label,
   essenceCost,
+  essenceCostStyle,
 }: {
   readonly label: string;
   readonly essenceCost: number | null;
+  readonly essenceCostStyle: GlassButtonEssenceCostStyle;
 }): ReactElement {
   return (
     <span
@@ -226,16 +246,18 @@ function GlassButtonContent({
           data-glass-button-essence-cost=""
           style={{ marginLeft: token("--space-2") }}
         >
-          {" ("}
+          {essenceCostStyle === "parenthetical" ? " (" : " · "}
           <EssenceValue amount={essenceCost} tone="inherit" />
-          <span
-            data-glass-button-cost-close=""
-            // Boxicons leaves a wide right side-bearing on the essence mark;
-            // pull the close parenthesis into that empty advance width.
-            style={{ marginLeft: "-0.2em" }}
-          >
-            )
-          </span>
+          {essenceCostStyle === "parenthetical" && (
+            <span
+              data-glass-button-cost-close=""
+              // Boxicons leaves a wide right side-bearing on the essence mark;
+              // pull the close parenthesis into that empty advance width.
+              style={{ marginLeft: "-0.2em" }}
+            >
+              )
+            </span>
+          )}
         </span>
       )}
     </span>

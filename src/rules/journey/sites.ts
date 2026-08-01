@@ -293,7 +293,7 @@ function randomIntInRange(
  *   - Essence / DreamAugury: generated purely in-reducer (Essence draws its
  *     amount from `ctx.rng`; DreamAugury seeds a fresh, un-completed runtime).
  *   - Reward / DreamsignRevelation / Shop / DreamsignMarket / Transfiguration /
- *     Duplication: delegated to the registered {@link SiteContentProvider}.
+ *     Duplication / Gamble: delegated to the registered {@link SiteContentProvider}.
  *
  * An existing runtime is authoritative, so a repeated event bounces without
  * regenerating it. The event-log intent key prevents repeated screen mounts and
@@ -339,7 +339,8 @@ export function openSite(
     case "Shop":
     case "DreamsignMarket":
     case "Transfiguration":
-    case "Duplication": {
+    case "Duplication":
+    case "Gamble": {
       const provider = contentProvider;
       if (provider === null) return null;
       const result = provider.openSite({ journey, site, rng: ctx.rng });
@@ -349,7 +350,7 @@ export function openSite(
       return { ...next, remainingDreamsignPool: [...result.remainingDreamsignPool] };
     }
     default:
-      // Battle / Draft / Purge / TemptingOffer / Gamble / TemporalFork carry no
+      // Battle / Draft / Purge / TemptingOffer / TemporalFork carry no
       // site runtime — nothing to generate.
       return null;
   }

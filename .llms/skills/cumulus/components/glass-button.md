@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/glass-button`
 
-Real consumers: **26** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **27** (imports outside `src/cumulus/docs/` and tests).
 
 The labeled glass action — a bold text label with optional numerical essence cost on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.
 
@@ -20,11 +20,14 @@ The labeled glass action — a bold text label with optional numerical essence c
 | `onPress` | `() => void` | yes | — | Fires when the button is activated (no-op while disabled). |
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `GlowIcon` before the label. |
 | `essenceCost` | `number \| null` | no | `null` | Optional numerical essence cost rendered in parentheses after the label: `Transfigure (20◆)`. |
+| `essenceCostStyle` | `GlassButtonEssenceCostStyle` = `"parenthetical" \| "separated"` | no | `parenthetical` | Parenthesized cost, or a centered-dot-separated wager price. |
+| `size` | `GlassButtonSize` = `"compact" \| "standard"` | no | `standard` | Standard label spacing, or compact spacing for narrow parallel actions. |
 | `widthReservations` | `readonly GlassButtonWidthReservation[]` | no | `[]` | Possible dynamic label/essence-cost states. The button reserves the widest state while rendering only the current one, preventing surrounding layout shift. |
 | `variant` | `GlassButtonVariant` = `"default" \| "danger" \| "accent"` | no | `default` | Strict surface treatment: accent for primary/commit actions, default for secondary actions, or danger for destructive actions. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
 | `disabled` | `boolean` | no | `false` | Dims the control, detaches click / press feedback, and marks it `aria-disabled`. |
 | `pressed` | `boolean` | no | — | Toggle state for controls whose action switches a persistent local mode. |
+| `accessibilityLabel` | `string` | no | — | Accessible name when the visible label alone does not distinguish siblings. |
 | `testId` | `string` | no | — | A `data-testid` for selecting the button in tests. |
 
 ## Usage
@@ -117,6 +120,35 @@ Use the purple soft-wash accent for primary and commit actions. A numerical esse
   variant="accent"
   placement="onGlass"
   onPress={transfigure}
+/>
+```
+
+### Separated wager price
+
+Use the centered-dot cost treatment for parallel wager choices whose price is part of the comparison.
+
+```tsx
+<GlassButton
+  label="Choose"
+  accessibilityLabel="Choose the Six Gate for 50 Essence"
+  essenceCost={50}
+  essenceCostStyle="separated"
+  variant="accent"
+  onPress={chooseGate}
+/>
+```
+
+### Compact parallel action
+
+Use the compact label scale and horizontal spacing when several actions must remain separate in a narrow row. The touch target stays 42px tall.
+
+```tsx
+<GlassButton
+  label="Choose"
+  essenceCost={50}
+  essenceCostStyle="separated"
+  size="compact"
+  onPress={chooseGate}
 />
 ```
 

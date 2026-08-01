@@ -24,6 +24,7 @@
 
 import type { EventDraft } from "../eventlog/client";
 import type { BeginTutorialOptions, TutorialAction } from "../types/tutorial";
+import type { GravokGateId } from "../types/gamble";
 
 /**
  * Appends a stamped event, resolving to its committed seq. In production this
@@ -144,6 +145,14 @@ export interface CoopActions {
     archetypeId: string,
   ) => Promise<number>;
   completeSite: (siteId: string, runId?: string) => Promise<number>;
+  placeGravokWager: (
+    siteId: string,
+    gateId: GravokGateId,
+  ) => Promise<number>;
+  replaceGravokWagerDreamsign: (
+    siteId: string,
+    replacedDreamsignId: string,
+  ) => Promise<number>;
 
   // --- merchant & shop ---
   acceptMerchantOffer: (siteId: string, offer?: unknown) => Promise<number>;
@@ -420,6 +429,13 @@ export function makeActions(append: AppendFn): CoopActions {
         { siteId },
         siteIntentKey("complete-site", siteId, runId),
       ),
+    placeGravokWager: (siteId, gateId) =>
+      emit("PLACE_GRAVOK_WAGER", { siteId, gateId }),
+    replaceGravokWagerDreamsign: (siteId, replacedDreamsignId) =>
+      emit("REPLACE_GRAVOK_WAGER_DREAMSIGN", {
+        siteId,
+        replacedDreamsignId,
+      }),
 
     // --- merchant & shop ---
     acceptMerchantOffer: (siteId, offer) =>

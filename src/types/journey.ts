@@ -5,6 +5,10 @@ import type {
 import type { CardData, CardType } from "./cards";
 import type { DraftState } from "./draft";
 import type { LayerName } from "./layer-name";
+import type {
+  GravokGateId,
+  StandardPlayingCard,
+} from "./gamble";
 
 /** Badge applied to a card via a Transfiguration site. */
 export type TransfigurationType =
@@ -389,6 +393,31 @@ export interface DreamAugurySiteRuntime {
   forcedArchetypeId?: string;
 }
 
+/** Resolved one-card outcome for Gravok's Three-Gate Wager. */
+export interface GravokWagerResult {
+  gateId: GravokGateId;
+  card: StandardPlayingCard;
+  won: boolean;
+  essenceGained: number;
+  dreamsignAwarded: boolean;
+  pendingDreamsignReplacement: boolean;
+  replacedDreamsignId?: string;
+}
+
+/** Shared, replayable runtime for one Gravok's Three-Gate Wager encounter. */
+export interface GambleSiteRuntime {
+  kind: "gamble";
+  gameId: "gravok-three-gate-wager";
+  rulesVersion: string;
+  isFarpoint: boolean;
+  wagerCost: number;
+  shuffleCommitment: string;
+  committedCard: StandardPlayingCard;
+  dreamsignCandidateIds: string[];
+  rewardDreamsign: Dreamsign | null;
+  result: GravokWagerResult | null;
+}
+
 /** Serialized runtime state keyed by site id. */
 export type SiteRuntimeState =
   | ShopSiteRuntime
@@ -396,7 +425,8 @@ export type SiteRuntimeState =
   | DreamsignOfferSiteRuntime
   | EssenceSiteRuntime
   | CardChoiceSiteRuntime
-  | DreamAugurySiteRuntime;
+  | DreamAugurySiteRuntime
+  | GambleSiteRuntime;
 
 /** Discriminated union for the current screen. */
 export type Screen =

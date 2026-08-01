@@ -285,10 +285,18 @@ export function CoopJourneyProvider({
         dispatch(actions.openSite(site.id, stateRef.current.runId ?? undefined)),
       ensureCardChoiceRuntime: (siteId) =>
         dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
+      ensureGambleSiteRuntime: (siteId) =>
+        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
 
       // ---- sites: player actions ----
       completeSite: (siteId) =>
         dispatch(actions.completeSite(siteId, stateRef.current.runId ?? undefined)),
+      placeGravokWager: (siteId, gateId) =>
+        dispatch(actions.placeGravokWager(siteId, gateId)),
+      replaceGravokWagerDreamsign: (siteId, replacedDreamsignId) =>
+        dispatch(
+          actions.replaceGravokWagerDreamsign(siteId, replacedDreamsignId),
+        ),
       acceptRewardSite: (siteId, purgeIndex) => {
         // ACCEPT_REWARD's reducer reads `purgeIndex` (the at-cap Dreamsign
         // replace slot), which the typed facade does not carry.

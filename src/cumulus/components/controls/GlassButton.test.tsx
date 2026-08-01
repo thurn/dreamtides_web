@@ -139,6 +139,27 @@ describe("GlassButton", () => {
     act(() => root.unmount());
   });
 
+  it("supports a centered-dot wager price and a distinct accessible name", () => {
+    const { container, root } = mount(
+      <GlassButton
+        label="Choose"
+        essenceCost={50}
+        essenceCostStyle="separated"
+        accessibilityLabel="Choose the Six Gate for 50 Essence"
+        onPress={() => {}}
+      />,
+    );
+
+    const button = container.querySelector("button");
+    expect(button?.textContent).toBe("Choose · 50");
+    expect(button?.getAttribute("aria-label")).toBe(
+      "Choose the Six Gate for 50 Essence",
+    );
+    expect(button?.querySelector("[data-glass-button-cost-close]")).toBeNull();
+
+    act(() => root.unmount());
+  });
+
   it("keeps every dynamic width reservation in one hidden sizing grid", () => {
     const reservations = [
       { label: "Decline", essenceCost: null },
@@ -205,6 +226,19 @@ describe("GlassButton", () => {
       button?.querySelector<HTMLElement>("[data-glass-button-content]")
         ?.style.justifyContent,
     ).toBe("center");
+
+    act(() => root.unmount());
+  });
+
+  it("keeps the canonical target height with compact label spacing", () => {
+    const { container, root } = mount(
+      <GlassButton label="Choose" size="compact" onPress={() => {}} />,
+    );
+
+    const button = container.querySelector<HTMLButtonElement>("button");
+    expect(button?.style.height).toBe("42px");
+    expect(button?.style.padding).toBe("0px 8px");
+    expect(button?.style.font).toBe("var(--t-button-sm)");
 
     act(() => root.unmount());
   });

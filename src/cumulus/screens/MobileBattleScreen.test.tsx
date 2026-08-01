@@ -843,7 +843,7 @@ describe("MobileBattleScreen", () => {
       enemyStatus?.querySelector("[data-battle-dreamwell-layer]"),
     ).toBeNull();
     expect(
-      container.querySelector('[data-battle-turn-announcement="enemy"]'),
+      container.querySelector('[data-radial-announcement="enemy"]'),
     ).not.toBeNull();
     act(() => {
       vi.advanceTimersByTime(2_100);
@@ -1891,31 +1891,39 @@ describe("MobileBattleScreen", () => {
     render(view);
 
     expect(
-      container.querySelector("[data-battle-turn-announcement]"),
+      container.querySelector("[data-radial-announcement]"),
     ).toBeNull();
 
     render({ ...view, activeSide: "enemy" });
     const opponentAnnouncement = container.querySelector<HTMLElement>(
-      '[data-battle-turn-announcement="enemy"]',
+      '[data-radial-announcement="enemy"]',
     );
-    expect(opponentAnnouncement?.textContent).toBe("Opponent Turn");
+    expect(
+      opponentAnnouncement?.querySelector(
+        "[data-radial-announcement-copy]",
+      )?.textContent,
+    ).toBe("Opponent Turn");
     expect(opponentAnnouncement?.querySelector("i, svg")).toBeNull();
 
     render({ ...view, activeSide: "player" });
     const playerAnnouncement = container.querySelector<HTMLElement>(
-      '[data-battle-turn-announcement="player"]',
+      '[data-radial-announcement="player"]',
     );
     const playerDisc = playerAnnouncement?.querySelector<HTMLElement>(
-      "[data-battle-turn-announcement-disc]",
+      "[data-radial-announcement-disc]",
     );
 
-    expect(playerAnnouncement?.textContent).toBe("Your Turn");
+    expect(
+      playerAnnouncement?.querySelector(
+        "[data-radial-announcement-copy]",
+      )?.textContent,
+    ).toBe("Your Turn");
     expect(playerAnnouncement?.querySelector("i, svg")).toBeNull();
     expect(playerDisc?.style.width).toBe("184px");
     expect(playerDisc?.style.height).toBe("184px");
     expect(playerDisc?.style.borderRadius).toBe("var(--radius-pill)");
     expect(playerDisc?.style.animation).toContain(
-      "battle-turn-announcement-disc",
+      "radial-announcement-disc",
     );
 
     act(() => {
@@ -1923,7 +1931,7 @@ describe("MobileBattleScreen", () => {
     });
     expect(onTurnAnnouncementComplete).not.toHaveBeenCalled();
     expect(
-      container.querySelector("[data-battle-turn-announcement]"),
+      container.querySelector("[data-radial-announcement]"),
     ).not.toBeNull();
 
     act(() => {
@@ -1932,7 +1940,7 @@ describe("MobileBattleScreen", () => {
     expect(onTurnAnnouncementComplete).toHaveBeenCalledOnce();
     expect(onTurnAnnouncementComplete).toHaveBeenCalledWith("player");
     expect(
-      container.querySelector("[data-battle-turn-announcement]"),
+      container.querySelector("[data-radial-announcement]"),
     ).toBeNull();
 
     act(() => root.unmount());
@@ -1944,13 +1952,13 @@ describe("MobileBattleScreen", () => {
     const { container, root } = mount(makeView());
 
     expect(
-      container.querySelector("[data-battle-turn-announcement]"),
+      container.querySelector("[data-radial-announcement]"),
     ).toBeNull();
     act(() => {
       vi.advanceTimersByTime(2_100);
     });
     expect(
-      container.querySelector("[data-battle-turn-announcement]"),
+      container.querySelector("[data-radial-announcement]"),
     ).toBeNull();
 
     act(() => root.unmount());

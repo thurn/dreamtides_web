@@ -228,6 +228,21 @@ const fakeProvider: SiteContentProvider = {
             acceptedEntryIds: [],
           },
         };
+      case "Gamble":
+        return {
+          runtime: {
+            kind: "gamble",
+            gameId: "gravok-three-gate-wager",
+            rulesVersion: "fixture-rules",
+            isFarpoint: site.isEnhanced,
+            wagerCost: site.isEnhanced ? 0 : 50,
+            shuffleCommitment: `fixture-${String(draw)}`,
+            committedCard: { rank: "7", suit: "clubs" },
+            dreamsignCandidateIds: [],
+            rewardDreamsign: null,
+            result: null,
+          },
+        };
       default:
         return null;
     }
@@ -253,6 +268,7 @@ describe("OPEN_SITE generation determinism", () => {
     "Shop",
     "Transfiguration",
     "Duplication",
+    "Gamble",
   ];
 
   for (const type of providerTypes) {

@@ -1,79 +1,86 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { GambleSiteScreen } from "../../cumulus/screens/GambleSiteScreen";
-import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
-import { generateJourneySeed } from "../../state/journey-state-actions";
+import type { GravokGateId } from "../../types/gamble";
+import {
+  logGamblePrepared,
+  logGambleReplacement,
+  logGambleResolved,
+  logGambleSiteEntered,
+} from "./gamble-site-logging-view-model";
 import {
   buildGambleSiteView,
   resolveGambleGuide,
 } from "./gamble-site-view-model";
 
 export function GambleSiteScreenAdapter({ siteId }: { siteId: string }) {
-  const { state, journeyContent } = useJourney();
+  const { state, journeyContent, mutations } = useJourney();
   const node = state.currentDreamscape === null
     ? null
     : (state.atlas.nodes[state.currentDreamscape] ?? null);
   const candidate = node?.sites.find((entry) => entry.id === siteId) ?? null;
-  const site =
-    candidate?.type === "Gamble"
-      ? { ...candidate, type: candidate.type }
-      : null;
+  const site = candidate?.type === "Gamble"
+    ? { ...candidate, type: candidate.type }
+    : null;
+  const runtimeCandidate = state.siteRuntime[siteId];
+  const runtime = runtimeCandidate?.kind === "gamble" ? runtimeCandidate : null;
   const guide = resolveGambleGuide(journeyContent.guides);
   const guideLineRef = useRef<string | null | undefined>(undefined);
   if (guideLineRef.current === undefined) {
     const lines = guide?.dialog ?? [];
-    guideLineRef.current =
-      lines.length === 0
-        ? null
-        : lines[Math.floor(Math.random() * lines.length)] ?? null;
+    guideLineRef.current = lines.length === 0
+      ? null
+      : lines[Math.floor(Math.random() * lines.length)] ?? null;
   }
-  const initialDealSeedRef = useRef<string | null>(null);
-  if (initialDealSeedRef.current === null) {
-    initialDealSeedRef.current = generateJourneySeed();
-  }
-  const [dealSeed, setDealSeed] = useState(initialDealSeedRef.current);
   const view = useMemo(
-    () =>
-      site === null
-        ? null
-        : buildGambleSiteView({
-            sceneNode: node,
-            site,
-            guide,
-            guideLine: guideLineRef.current ?? null,
-            dealSeed,
-          }),
-    [dealSeed, guide, node, site],
+    () => site === null
+      ? null
+      : buildGambleSiteView({
+          state,
+          sceneNode: node,
+          site,
+          guide,
+          guideLine: guideLineRef.current ?? null,
+        }),
+    [guide, node, site, state],
   );
 
   useEffect(() => {
-    if (site === null || view === null) return;
-    logEventOnce(`Gamble:${site.id}:site-entered`, "site_entered", {
-      siteType: site.type,
-      isEnhanced: site.isEnhanced,
-    });
-    logEventOnce(
-      `Gamble:${site.id}:playing-cards:${view.dealId}`,
-      "gamble_playing_cards_dealt",
-      {
-        siteId: site.id,
-        dealSeed: view.dealId,
-        cards: view.cards.map((card) => card.id),
-      },
-    );
-  }, [site, view]);
-
-  const handleReroll = useCallback(() => {
     if (site === null) return;
-    const nextDealSeed = generateJourneySeed();
-    logEvent("gamble_playing_cards_rerolled", {
-      siteId: site.id,
-      previousDealSeed: dealSeed,
-      nextDealSeed,
-    });
-    setDealSeed(nextDealSeed);
-  }, [dealSeed, site]);
+    mutations.ensureGambleSiteRuntime(site.id);
+    logGambleSiteEntered(site);
+  }, [mutations, site]);
+
+  useEffect(() => {
+    if (runtime === null || view === null) return;
+    logGamblePrepared(siteId, runtime, view.gates);
+    logGambleResolved(siteId, runtime, view.gates, view.result?.id);
+  }, [runtime, siteId, view]);
+
+  const chooseGate = useCallback(
+    (gateId: GravokGateId) => mutations.placeGravokWager(siteId, gateId),
+    [mutations, siteId],
+  );
+  const complete = useCallback(
+    () => mutations.completeSite(siteId, "gravok_three_gate_wager"),
+    [mutations, siteId],
+  );
+  const replaceDreamsign = useCallback(
+    (dreamsignId: string) => {
+      logGambleReplacement(siteId, dreamsignId, runtime?.rewardDreamsign?.id);
+      mutations.replaceGravokWagerDreamsign(siteId, dreamsignId);
+    },
+    [mutations, runtime?.rewardDreamsign?.id, siteId],
+  );
 
   if (view === null) return null;
-  return <GambleSiteScreen view={view} onReroll={handleReroll} />;
+  return (
+    <GambleSiteScreen
+      view={view}
+      onChooseGate={chooseGate}
+      onLeave={complete}
+      onOutcomeComplete={complete}
+      onReplaceDreamsign={replaceDreamsign}
+    />
+  );
 }

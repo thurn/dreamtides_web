@@ -2413,6 +2413,28 @@
       "description": "Optional numerical essence cost rendered in parentheses after the label:\n`Transfigure (20◆)`."
     },
     {
+      "name": "essenceCostStyle",
+      "tsType": "GlassButtonEssenceCostStyle",
+      "unionMembers": [
+        "parenthetical",
+        "separated"
+      ],
+      "required": false,
+      "defaultValue": "parenthetical",
+      "description": "Parenthesized cost, or a centered-dot-separated wager price."
+    },
+    {
+      "name": "size",
+      "tsType": "GlassButtonSize",
+      "unionMembers": [
+        "compact",
+        "standard"
+      ],
+      "required": false,
+      "defaultValue": "standard",
+      "description": "Standard label spacing, or compact spacing for narrow parallel actions."
+    },
+    {
       "name": "widthReservations",
       "tsType": "readonly GlassButtonWidthReservation[]",
       "unionMembers": [],
@@ -2458,6 +2480,14 @@
       "required": false,
       "defaultValue": null,
       "description": "Toggle state for controls whose action switches a persistent local mode."
+    },
+    {
+      "name": "accessibilityLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Accessible name when the visible label alone does not distinguish siblings."
     },
     {
       "name": "testId",
@@ -3707,7 +3737,7 @@
   "PlayingCard": [
     {
       "name": "rank",
-      "tsType": "PlayingCardRank",
+      "tsType": "StandardPlayingCardRank",
       "unionMembers": [
         "A",
         "2",
@@ -3729,7 +3759,7 @@
     },
     {
       "name": "suit",
-      "tsType": "PlayingCardSuit",
+      "tsType": "StandardPlayingCardSuit",
       "unionMembers": [
         "clubs",
         "diamonds",
@@ -4009,6 +4039,63 @@
       "required": false,
       "defaultValue": null,
       "description": "Content rendered inside the pressable element."
+    }
+  ],
+  "RadialAnnouncement": [
+    {
+      "name": "headline",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Primary announcement copy."
+    },
+    {
+      "name": "detail",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional supporting copy beneath the headline."
+    },
+    {
+      "name": "essenceGained",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional gained Essence amount, rendered with the canonical currency glyph."
+    },
+    {
+      "name": "tone",
+      "tsType": "RadialAnnouncementTone",
+      "unionMembers": [
+        "danger",
+        "accent",
+        "reward"
+      ],
+      "required": false,
+      "defaultValue": "accent",
+      "description": "Semantic orbit and ripple color. Defaults to accent."
+    },
+    {
+      "name": "size",
+      "tsType": "\"compact\" | \"standard\"",
+      "unionMembers": [
+        "compact",
+        "standard"
+      ],
+      "required": false,
+      "defaultValue": "standard",
+      "description": "Named disc diameter. Defaults to standard."
+    },
+    {
+      "name": "announcementId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Stable identifier exposed on the announcement root."
     }
   ],
   "ResourceChip": [

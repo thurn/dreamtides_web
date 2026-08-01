@@ -756,8 +756,13 @@ export const QA_SCENES: readonly QaScene[] = [
   ),
   siteScene("tempting", "Offer", "TemptingOffer"),
   siteScene("tempting-enhanced", "Offer (Enhanced)", "TemptingOffer", true),
-  siteScene("gamble", "Gamble", "Gamble"),
-  siteScene("gamble-enhanced", "Gamble (Enhanced)", "Gamble", true),
+  siteScene("gamble", "Gravok’s Three-Gate Wager", "Gamble"),
+  siteScene(
+    "gamble-enhanced",
+    "Gravok’s Three-Gate Wager (Farpoint)",
+    "Gamble",
+    true,
+  ),
   siteScene("temporal-fork", "Temporal Fork", "TemporalFork"),
   siteScene(
     "temporal-fork-enhanced",

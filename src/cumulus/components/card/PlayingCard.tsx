@@ -2,6 +2,10 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import type { CSSProperties, ReactElement } from "react";
+import type {
+  StandardPlayingCardRank,
+  StandardPlayingCardSuit,
+} from "../../../types/gamble";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { token } from "../../primitives/tokens";
 
@@ -59,10 +63,9 @@ export const PLAYING_CARD_DESIGN = {
   },
 } as const;
 
-export type PlayingCardRank =
-  "A" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "J" | "Q" | "K";
+export type PlayingCardRank = StandardPlayingCardRank;
 
-export type PlayingCardSuit = "clubs" | "diamonds" | "hearts" | "spades";
+export type PlayingCardSuit = StandardPlayingCardSuit;
 
 export type PlayingCardSize = keyof typeof PLAYING_CARD_DESIGN.sizes;
 

@@ -16,8 +16,8 @@ The standard playing-card object: full rank-and-suit, focused rank, colored suit
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `rank` | `PlayingCardRank` = `"A" \| "2" \| "3" \| "4" \| "5" \| "6" \| "7" \| "8" \| "9" \| "10" \| "J" \| "Q" \| "K"` | yes | — | Playing-card rank used by rank-bearing front variants. |
-| `suit` | `PlayingCardSuit` = `"clubs" \| "diamonds" \| "hearts" \| "spades"` | yes | — | Standard playing-card suit used by suit-bearing front variants. |
+| `rank` | `StandardPlayingCardRank` = `"A" \| "2" \| "3" \| "4" \| "5" \| "6" \| "7" \| "8" \| "9" \| "10" \| "J" \| "Q" \| "K"` | yes | — | Playing-card rank used by rank-bearing front variants. |
+| `suit` | `StandardPlayingCardSuit` = `"clubs" \| "diamonds" \| "hearts" \| "spades"` | yes | — | Standard playing-card suit used by suit-bearing front variants. |
 | `size` | `"compact" \| "standard"` | no | `standard` | Named square and type-size tuple. Defaults to `standard`. |
 | `face` | `PlayingCardFace` = `"front" \| "back"` | no | `front` | Visible side of the card. Defaults to `front`. |
 | `variant` | `PlayingCardVariant` = `"rank-and-suit" \| "rank-display" \| "suit-display" \| "rank-target"` | no | `rank-and-suit` | Front-face content treatment. Defaults to `rank-and-suit`. |

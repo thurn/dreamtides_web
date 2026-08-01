@@ -1,60 +1,22 @@
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
-  GamblePlayingCardView,
+  GambleGateView,
   GambleSiteView,
 } from "../../cumulus/screens/GambleSiteScreen";
-import type {
-  PlayingCardRank,
-  PlayingCardSuit,
-} from "../../cumulus/components/card/PlayingCard";
+import {
+  GRAVOK_GATE_RULES,
+  GRAVOK_WAGER_COST,
+  gravokGateChanceLabel,
+} from "../../data/gravok-wager";
 import { guideForSiteType } from "../../data/dreamscapes";
-import { hashStringToSeed } from "../../data/journey-content";
-import { makeRng, shuffle } from "../../draft/pool/rng";
 import type { DreamGuideContent } from "../../types/content";
-import type { DreamscapeNode, SiteState } from "../../types/journey";
+import type {
+  DreamscapeNode,
+  GambleSiteRuntime,
+  JourneyState,
+  SiteState,
+} from "../../types/journey";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
-
-const PLAYING_CARD_RANKS: readonly PlayingCardRank[] = [
-  "A",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "10",
-  "J",
-  "Q",
-  "K",
-];
-
-const PLAYING_CARD_SUITS: readonly PlayingCardSuit[] = [
-  "clubs",
-  "diamonds",
-  "hearts",
-  "spades",
-];
-
-/** Build the complete 52-card standard deck in stable rank-major order. */
-export function buildStandardPlayingCardDeck(): GamblePlayingCardView[] {
-  return PLAYING_CARD_RANKS.flatMap((rank) =>
-    PLAYING_CARD_SUITS.map((suit) => ({
-      id: `${rank}-${suit}`,
-      rank,
-      suit,
-    })),
-  );
-}
-
-/** Deterministically deal six unique cards for a logged deal seed. */
-export function dealGamblePlayingCards(
-  seed: string,
-): readonly GamblePlayingCardView[] {
-  const rng = makeRng(hashStringToSeed(`gamble-playing-cards:${seed}`));
-  return shuffle(rng, buildStandardPlayingCardDeck()).slice(0, 6);
-}
 
 /** Resolve the resident Dream Guide for Gamble. */
 export function resolveGambleGuide(
@@ -63,31 +25,97 @@ export function resolveGambleGuide(
   return guideForSiteType(guides, "Gamble");
 }
 
-/** Build the complete view for the visual Gamble playing-card prototype. */
+/** Map the authoritative rules table and locked jackpot into three choices. */
+export function buildGambleGateViews(
+  runtime: GambleSiteRuntime | null,
+  maxDreamsigns: number,
+): readonly GambleGateView[] {
+  return GRAVOK_GATE_RULES.map((gate) => ({
+    id: gate.id,
+    name: gate.name,
+    targetLabel: `${gate.threshold}+`,
+    chanceLabel: gravokGateChanceLabel(gate),
+    oddsNumerator: gate.oddsNumerator,
+    oddsDenominator: gate.oddsDenominator,
+    essenceReward: gate.essenceReward,
+    rewardDreamsign: gate.awardsDreamsign
+      ? runtime?.rewardDreamsign ?? null
+      : null,
+    available:
+      !gate.awardsDreamsign ||
+      (runtime?.rewardDreamsign !== null &&
+        runtime?.rewardDreamsign !== undefined &&
+        maxDreamsigns > 0),
+  }));
+}
+
+/** Build the complete view for Gravok's Three-Gate Wager. */
 export function buildGambleSiteView(params: {
+  state: JourneyState;
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent | null;
   guideLine: string | null;
-  dealSeed: string;
 }): GambleSiteView {
+  const runtimeCandidate = params.state.siteRuntime[params.site.id];
+  const runtime =
+    runtimeCandidate?.kind === "gamble" ? runtimeCandidate : null;
   const guideId = params.guide?.id ?? "gravok";
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
+  const result = runtime?.result ?? null;
+  const rewardDreamsign =
+    result?.won === true && result.gateId === "jack"
+      ? runtime?.rewardDreamsign ?? null
+      : null;
+
   return {
     siteId: params.site.id,
     scene,
-    isEnhanced: params.site.isEnhanced,
-    dealId: params.dealSeed,
-    cards: dealGamblePlayingCards(params.dealSeed),
+    isFarpoint: runtime?.isFarpoint ?? params.site.isEnhanced,
+    runtimeReady: runtime !== null,
+    wagerCost:
+      runtime?.wagerCost ?? (params.site.isEnhanced ? 0 : GRAVOK_WAGER_COST),
+    canAfford:
+      params.state.essence >=
+      (runtime?.wagerCost ??
+        (params.site.isEnhanced ? 0 : GRAVOK_WAGER_COST)),
+    card: {
+      rank: result?.card.rank ?? "A",
+      suit: result?.card.suit ?? "spades",
+      face: result === null ? "back" : "front",
+    },
+    gates: buildGambleGateViews(runtime, params.state.maxDreamsigns),
     guide: {
       id: guideId,
       name: params.guide?.name ?? "Gravok",
       line:
         params.guideLine ??
         params.guide?.dialog[0] ??
-        "Fortune favors the bold, traveler.",
+        "Choose your threshold. Fortune turns on a single card.",
       art: artRef.dreamGuide(guideId),
     },
+    result:
+      result === null
+        ? null
+        : {
+            id: `${params.site.id}:${result.gateId}:${result.card.rank}-${result.card.suit}`,
+            gateId: result.gateId,
+            won: result.won,
+            essenceGained: result.essenceGained,
+            rewardDreamsign,
+            pendingDreamsignReplacement:
+              result.pendingDreamsignReplacement,
+          },
+    replacement:
+      result?.pendingDreamsignReplacement === true &&
+      runtime?.rewardDreamsign !== null &&
+      runtime?.rewardDreamsign !== undefined
+        ? {
+            pendingDreamsign: runtime.rewardDreamsign,
+            currentDreamsigns: params.state.dreamsigns,
+            maxDreamsigns: params.state.maxDreamsigns,
+          }
+        : null,
   };
 }
