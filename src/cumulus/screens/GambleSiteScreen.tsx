@@ -100,8 +100,8 @@ export interface GambleSiteScreenProps {
   onLeave: () => void;
   /** Settle the wager as its result announcement enters. */
   onOutcomeShown: () => void;
-  /** Complete the site after the result animation. */
-  onOutcomeComplete: () => void;
+  /** Prepare a fresh committed draw after the result animation. */
+  onPlayAgain: () => void;
   /** Replace one UUID-identified held Dreamsign after a jackpot win. */
   onReplaceDreamsign: (dreamsignId: string) => void;
 }
@@ -269,13 +269,14 @@ export function GambleSiteScreen({
   onChooseGate,
   onLeave,
   onOutcomeShown,
-  onOutcomeComplete,
+  onPlayAgain,
   onReplaceDreamsign,
 }: GambleSiteScreenProps) {
   const reduceMotion = useReducedMotion() === true;
   const [revealStarted, setRevealStarted] = useState(false);
   const [outcomeVisible, setOutcomeVisible] = useState(false);
   const [replacementVisible, setReplacementVisible] = useState(false);
+  const [roundActionsVisible, setRoundActionsVisible] = useState(false);
   const onOutcomeShownRef = useRef(onOutcomeShown);
   const settledResultIdRef = useRef<string | undefined>(undefined);
   const resultId = view.result?.id;
@@ -290,6 +291,7 @@ export function GambleSiteScreen({
   useEffect(() => {
     setOutcomeVisible(false);
     setReplacementVisible(false);
+    setRoundActionsVisible(false);
     setRevealStarted(false);
     if (resultId === undefined) return;
     const revealDelay = reduceMotion
@@ -323,19 +325,32 @@ export function GambleSiteScreen({
         if (pendingDreamsignReplacement) {
           setReplacementVisible(true);
         } else {
-          onOutcomeComplete();
+          setRoundActionsVisible(true);
         }
       },
       RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
     );
     return () => window.clearTimeout(timeout);
   }, [
-    onOutcomeComplete,
     essenceSettled,
     outcomeVisible,
     pendingDreamsignReplacement,
     resultId,
   ]);
+
+  useEffect(() => {
+    if (
+      !replacementVisible ||
+      view.result === null ||
+      view.replacement !== null ||
+      view.result.pendingDreamsignReplacement ||
+      !view.result.essenceSettled
+    ) {
+      return;
+    }
+    setReplacementVisible(false);
+    setRoundActionsVisible(true);
+  }, [replacementVisible, view.replacement, view.result]);
 
   return (
     <GuideGallerySiteLayout
@@ -454,28 +469,50 @@ export function GambleSiteScreen({
 
             <div
               data-gamble-choice-buttons=""
+              data-gamble-round-actions={
+                roundActionsVisible ? "visible" : "hidden"
+              }
               style={{
                 width: "100%",
-                display: "grid",
-                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                display: roundActionsVisible ? "flex" : "grid",
+                gridTemplateColumns: roundActionsVisible
+                  ? undefined
+                  : "repeat(3, minmax(0, 1fr))",
                 gap:
                   layout === "desktop"
                     ? token("--space-4")
                     : token("--space-2"),
                 justifyItems: "center",
+                justifyContent: "center",
               }}
             >
-              {view.gates.map((gate) => (
-                <GambleBetButton
-                  key={gate.id}
-                  gate={gate}
-                  view={view}
-                  layout={layout}
-                  wagerLocked={wagerLocked}
-                  selected={view.result?.gateId === gate.id}
-                  onChooseGate={onChooseGate}
-                />
-              ))}
+              {roundActionsVisible ? (
+                <>
+                  <GlassButton
+                    label="Play Again"
+                    variant="accent"
+                    testId="gamble-play-again"
+                    onPress={onPlayAgain}
+                  />
+                  <GlassButton
+                    label="Leave"
+                    testId="gamble-leave-after-round"
+                    onPress={onLeave}
+                  />
+                </>
+              ) : (
+                view.gates.map((gate) => (
+                  <GambleBetButton
+                    key={gate.id}
+                    gate={gate}
+                    view={view}
+                    layout={layout}
+                    wagerLocked={wagerLocked}
+                    selected={view.result?.gateId === gate.id}
+                    onChooseGate={onChooseGate}
+                  />
+                ))
+              )}
             </div>
 
             {!wagerLocked && (

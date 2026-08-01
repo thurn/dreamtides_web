@@ -106,7 +106,11 @@ export interface EventPayloads {
     siteId: string;
     gateId: "six" | "nine" | "jack";
   };
-  SETTLE_GRAVOK_WAGER: { siteId: string };
+  SETTLE_GRAVOK_WAGER: { siteId: string; shuffleCommitment: string };
+  PLAY_AGAIN_GRAVOK_WAGER: {
+    siteId: string;
+    previousShuffleCommitment: string;
+  };
   REPLACE_GRAVOK_WAGER_DREAMSIGN: {
     siteId: string;
     replacedDreamsignId: string;
@@ -296,6 +300,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   COMPLETE_SITE: true,
   PLACE_GRAVOK_WAGER: true,
   SETTLE_GRAVOK_WAGER: true,
+  PLAY_AGAIN_GRAVOK_WAGER: true,
   REPLACE_GRAVOK_WAGER_DREAMSIGN: true,
   ACCEPT_MERCHANT_OFFER: true,
   DECLINE_MERCHANT: true,

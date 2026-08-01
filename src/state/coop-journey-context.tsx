@@ -293,10 +293,19 @@ export function CoopJourneyProvider({
         dispatch(actions.completeSite(siteId, stateRef.current.runId ?? undefined)),
       placeGravokWager: (siteId, gateId) =>
         dispatch(actions.placeGravokWager(siteId, gateId)),
-      settleGravokWager: (siteId) =>
+      settleGravokWager: (siteId, shuffleCommitment) =>
         dispatch(
           actions.settleGravokWager(
             siteId,
+            shuffleCommitment,
+            stateRef.current.runId ?? undefined,
+          ),
+        ),
+      playAgainGravokWager: (siteId, previousShuffleCommitment) =>
+        dispatch(
+          actions.playAgainGravokWager(
+            siteId,
+            previousShuffleCommitment,
             stateRef.current.runId ?? undefined,
           ),
         ),

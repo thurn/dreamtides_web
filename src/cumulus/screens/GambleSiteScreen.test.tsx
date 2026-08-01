@@ -126,7 +126,7 @@ describe("GambleSiteScreen", () => {
         onChooseGate={onChooseGate}
         onLeave={onLeave}
         onOutcomeShown={() => undefined}
-        onOutcomeComplete={() => undefined}
+        onPlayAgain={() => undefined}
         onReplaceDreamsign={() => undefined}
       />,
     );
@@ -202,7 +202,8 @@ describe("GambleSiteScreen", () => {
 
   it("fades the locked bets immediately, flips a non-selected prize, and keeps the outcome readable", () => {
     vi.useFakeTimers();
-    const onOutcomeComplete = vi.fn();
+    const onPlayAgain = vi.fn();
+    const onLeave = vi.fn();
     const onOutcomeShown = vi.fn();
     const resultView: GambleSiteView = {
       ...VIEW,
@@ -222,9 +223,9 @@ describe("GambleSiteScreen", () => {
       <GambleSiteScreen
         view={resultView}
         onChooseGate={() => undefined}
-        onLeave={() => undefined}
+        onLeave={onLeave}
         onOutcomeShown={onOutcomeShown}
-        onOutcomeComplete={onOutcomeComplete}
+        onPlayAgain={onPlayAgain}
         onReplaceDreamsign={() => undefined}
       />,
     );
@@ -302,18 +303,30 @@ describe("GambleSiteScreen", () => {
               result: { ...resultView.result!, essenceSettled: true },
             }}
             onChooseGate={() => undefined}
-            onLeave={() => undefined}
+            onLeave={onLeave}
             onOutcomeShown={onOutcomeShown}
-            onOutcomeComplete={onOutcomeComplete}
+            onPlayAgain={onPlayAgain}
             onReplaceDreamsign={() => undefined}
           />
         </CumulusRoot>,
       );
     });
     void act(() => vi.advanceTimersByTime(3_359));
-    expect(onOutcomeComplete).not.toHaveBeenCalled();
+    expect(container.querySelector('[data-testid="gamble-play-again"]'))
+      .toBeNull();
     void act(() => vi.advanceTimersByTime(1));
-    expect(onOutcomeComplete).toHaveBeenCalledOnce();
+    const playAgain = container.querySelector<HTMLButtonElement>(
+      '[data-testid="gamble-play-again"]',
+    );
+    const leave = container.querySelector<HTMLButtonElement>(
+      '[data-testid="gamble-leave-after-round"]',
+    );
+    expect(playAgain?.textContent).toBe("Play Again");
+    expect(leave?.textContent).toBe("Leave");
+    act(() => leave?.click());
+    expect(onLeave).toHaveBeenCalledOnce();
+    act(() => playAgain?.click());
+    expect(onPlayAgain).toHaveBeenCalledOnce();
 
     act(() => root.unmount());
   });
@@ -353,7 +366,7 @@ describe("GambleSiteScreen", () => {
         onChooseGate={() => undefined}
         onLeave={() => undefined}
         onOutcomeShown={() => undefined}
-        onOutcomeComplete={() => undefined}
+        onPlayAgain={() => undefined}
         onReplaceDreamsign={onReplaceDreamsign}
       />,
     );

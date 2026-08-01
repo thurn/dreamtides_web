@@ -411,6 +411,8 @@ export interface GambleSiteRuntime {
   kind: "gamble";
   gameId: "gravok-three-gate-wager";
   rulesVersion: string;
+  /** One-based wager number within this site visit. */
+  roundNumber?: number;
   isFarpoint: boolean;
   wagerCost: number;
   shuffleCommitment: string;

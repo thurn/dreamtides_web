@@ -131,6 +131,7 @@ function buildGambleRuntime(
     kind: "gamble",
     gameId: "gravok-three-gate-wager",
     rulesVersion: GRAVOK_WAGER_RULES_VERSION,
+    roundNumber: 1,
     isFarpoint: site.isEnhanced,
     wagerCost: site.isEnhanced ? 0 : GRAVOK_WAGER_COST,
     shuffleCommitment,

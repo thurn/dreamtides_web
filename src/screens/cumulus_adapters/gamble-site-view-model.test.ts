@@ -21,6 +21,7 @@ const RUNTIME: GambleSiteRuntime = {
   kind: "gamble",
   gameId: "gravok-three-gate-wager",
   rulesVersion: "fixture-rules",
+  roundNumber: 1,
   isFarpoint: false,
   wagerCost: 50,
   shuffleCommitment: "fixture-commitment",

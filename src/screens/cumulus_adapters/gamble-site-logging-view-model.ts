@@ -23,6 +23,9 @@ export function logGamblePrepared(
       siteId,
       gameId: runtime.gameId,
       rulesVersion: runtime.rulesVersion,
+      roundNumber: runtime.roundNumber ?? 1,
+      playerDecision:
+        (runtime.roundNumber ?? 1) === 1 ? "initial" : "play_again",
       isFarpoint: runtime.isFarpoint,
       wagerCost: runtime.wagerCost,
       shuffleCommitment: runtime.shuffleCommitment,

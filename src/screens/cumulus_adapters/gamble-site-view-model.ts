@@ -108,7 +108,7 @@ export function buildGambleSiteView(params: {
       result === null
         ? null
         : {
-            id: `${params.site.id}:${result.gateId}:${result.card.rank}-${result.card.suit}`,
+            id: `${params.site.id}:${runtime?.shuffleCommitment ?? "unprepared"}:${result.gateId}:${result.card.rank}-${result.card.suit}`,
             gateId: result.gateId,
             revealGateId: gravokRevealGateId(result.gateId),
             won: result.won,

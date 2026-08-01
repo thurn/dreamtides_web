@@ -59,10 +59,14 @@ export function GambleSiteScreenAdapter({ siteId }: { siteId: string }) {
     () => mutations.completeSite(siteId, "gravok_three_gate_wager"),
     [mutations, siteId],
   );
-  const settle = useCallback(
-    () => mutations.settleGravokWager(siteId),
-    [mutations, siteId],
-  );
+  const settle = useCallback(() => {
+    if (runtime === null) return;
+    mutations.settleGravokWager(siteId, runtime.shuffleCommitment);
+  }, [mutations, runtime, siteId]);
+  const playAgain = useCallback(() => {
+    if (runtime === null) return;
+    mutations.playAgainGravokWager(siteId, runtime.shuffleCommitment);
+  }, [mutations, runtime, siteId]);
   const replaceDreamsign = useCallback(
     (dreamsignId: string) => {
       logGambleReplacement(siteId, dreamsignId, runtime?.rewardDreamsign?.id);
@@ -78,7 +82,7 @@ export function GambleSiteScreenAdapter({ siteId }: { siteId: string }) {
       onChooseGate={chooseGate}
       onLeave={complete}
       onOutcomeShown={settle}
-      onOutcomeComplete={complete}
+      onPlayAgain={playAgain}
       onReplaceDreamsign={replaceDreamsign}
     />
   );

@@ -490,6 +490,11 @@ export function routeDomain(
       return journeyCase(state, gamble.placeGravokWager(journey, payload));
     case "SETTLE_GRAVOK_WAGER":
       return journeyCase(state, gamble.settleGravokWager(journey, payload));
+    case "PLAY_AGAIN_GRAVOK_WAGER":
+      return journeyCase(
+        state,
+        gamble.playAgainGravokWager(journey, payload, ctx),
+      );
     case "REPLACE_GRAVOK_WAGER_DREAMSIGN":
       return journeyCase(
         state,

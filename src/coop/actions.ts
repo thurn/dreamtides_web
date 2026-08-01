@@ -149,7 +149,16 @@ export interface CoopActions {
     siteId: string,
     gateId: GravokGateId,
   ) => Promise<number>;
-  settleGravokWager: (siteId: string, runId?: string) => Promise<number>;
+  settleGravokWager: (
+    siteId: string,
+    shuffleCommitment: string,
+    runId?: string,
+  ) => Promise<number>;
+  playAgainGravokWager: (
+    siteId: string,
+    previousShuffleCommitment: string,
+    runId?: string,
+  ) => Promise<number>;
   replaceGravokWagerDreamsign: (
     siteId: string,
     replacedDreamsignId: string,
@@ -432,11 +441,17 @@ export function makeActions(append: AppendFn): CoopActions {
       ),
     placeGravokWager: (siteId, gateId) =>
       emit("PLACE_GRAVOK_WAGER", { siteId, gateId }),
-    settleGravokWager: (siteId, runId) =>
+    settleGravokWager: (siteId, shuffleCommitment, runId) =>
       emit(
         "SETTLE_GRAVOK_WAGER",
-        { siteId },
-        siteIntentKey("settle-gravok-wager", siteId, runId),
+        { siteId, shuffleCommitment },
+        `${siteIntentKey("settle-gravok-wager", siteId, runId)}:${shuffleCommitment}`,
+      ),
+    playAgainGravokWager: (siteId, previousShuffleCommitment, runId) =>
+      emit(
+        "PLAY_AGAIN_GRAVOK_WAGER",
+        { siteId, previousShuffleCommitment },
+        `${siteIntentKey("play-again-gravok-wager", siteId, runId)}:${previousShuffleCommitment}`,
       ),
     replaceGravokWagerDreamsign: (siteId, replacedDreamsignId) =>
       emit("REPLACE_GRAVOK_WAGER_DREAMSIGN", {

@@ -7,7 +7,7 @@ makes with the casino’s otherworldly character.
 
 | Game | Core decision |
 | --- | --- |
-| **Gravok’s Three-Gate Wager** | Choose one of three rank thresholds before a single draw. |
+| **Gravok’s Three-Gate Wager** | Choose one of three rank thresholds before each draw. |
 | **Tidemark Progressive Draw** | Buy increasingly favorable attempts at one strong Dreamsign. |
 | **Gravok’s Cash-Out Climb** | Bank an Essence prize or risk it on the next rung. |
 | **Four-Suit Reprise** | Risk one deck card, then accept its suit outcome or pay to draw again. |
@@ -78,9 +78,9 @@ ordinary and Farpoint Station sites.
 
 ## 1. Gravok’s Three-Gate Wager
 
-Gravok’s Three-Gate Wager is a one-card bet. The player chooses the minimum
-rank that will win, pays 50 Essence, and draws once. A losing draw awards
-nothing. Suit has no effect.
+Gravok’s Three-Gate Wager is a sequence of one-card bets. For each wager, the
+player chooses the minimum rank that will win, pays 50 Essence, and draws once.
+A losing draw awards nothing. Suit has no effect.
 
 The controls are `Six Gate — 50 Essence`, `Nine Gate — 50 Essence`,
 `Jack Gate — 50 Essence`, and `Leave`. Each wager button shows its winning
@@ -93,7 +93,10 @@ ranks, exact chance, and complete reward.
 | `Jack Gate` | ranks J–A | 16 / 52 = 30.77% | 200 Essence and the displayed random Dreamsign |
 
 The result shows the drawn card, the chosen gate, and whether the rank crossed
-the threshold.
+the threshold. After the result and any required Dreamsign replacement, the
+controls are `Play Again` and `Leave`. Playing again prepares a new random
+Dreamsign reward and reassembles and reshuffles all 52 cards before the next
+wager.
 
 ### Farpoint Station
 

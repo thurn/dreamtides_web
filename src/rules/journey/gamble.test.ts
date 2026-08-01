@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import type { GravokGateId, StandardPlayingCardRank } from "../../types/gamble";
 import { LayerName } from "../../types/layer-name";
@@ -10,6 +10,10 @@ import type {
 } from "../../types/journey";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
+import {
+  registerSiteContentProvider,
+  type SiteContentProvider,
+} from "./sites";
 
 const SITE_ID = "fixture-gamble";
 const NODE_ID = "fixture-node";
@@ -38,6 +42,7 @@ function runtime(
     kind: "gamble",
     gameId: "gravok-three-gate-wager",
     rulesVersion: "fixture-rules",
+    roundNumber: 1,
     isFarpoint: false,
     wagerCost: 50,
     shuffleCommitment: "fixture-commitment",
@@ -106,6 +111,7 @@ function apply(
   type:
     | "PLACE_GRAVOK_WAGER"
     | "SETTLE_GRAVOK_WAGER"
+    | "PLAY_AGAIN_GRAVOK_WAGER"
     | "REPLACE_GRAVOK_WAGER_DREAMSIGN"
     | "COMPLETE_SITE",
   payload: Record<string, unknown>,
@@ -126,12 +132,23 @@ function apply(
   return reduceGameEvent(state, event, context);
 }
 
+afterEach(() => {
+  registerSiteContentProvider(null);
+});
+
 function wager(state: FoldState, gateId: GravokGateId) {
   return apply(state, "PLACE_GRAVOK_WAGER", { siteId: SITE_ID, gateId });
 }
 
 function settleWager(state: FoldState) {
-  return apply(state, "SETTLE_GRAVOK_WAGER", { siteId: SITE_ID });
+  const siteRuntime = state.journey.siteRuntime[SITE_ID];
+  if (siteRuntime?.kind !== "gamble") {
+    throw new Error("expected Gamble runtime");
+  }
+  return apply(state, "SETTLE_GRAVOK_WAGER", {
+    siteId: SITE_ID,
+    shuffleCommitment: siteRuntime.shuffleCommitment,
+  });
 }
 
 describe("Gravok's Three-Gate Wager", () => {
@@ -163,6 +180,9 @@ describe("Gravok's Three-Gate Wager", () => {
     const duplicate = settleWager(settled.state);
     expect(duplicate.outcome).toBe("bounced");
     expect(duplicate.state).toEqual(settled.state);
+    expect(
+      apply(settled.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
+    ).toBe("applied");
   });
 
   it("busts below the chosen threshold and grants no reward", () => {
@@ -264,8 +284,11 @@ describe("Gravok's Three-Gate Wager", () => {
     expect(replaced.state.journey.dreamsigns.map((sign) => sign.id)).toEqual([
       "reward-sign",
     ]);
-    expect(replaced.state.journey.visitedSites).toContain(SITE_ID);
-    expect(replaced.state.journey.screen).toEqual({ type: "dreamscape" });
+    expect(replaced.state.journey.visitedSites).not.toContain(SITE_ID);
+    expect(replaced.state.journey.screen).toEqual({
+      type: "site",
+      siteId: SITE_ID,
+    });
     expect(replaced.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       result: {
         dreamsignAwarded: true,
@@ -281,5 +304,45 @@ describe("Gravok's Three-Gate Wager", () => {
 
     expect(second.outcome).toBe("bounced");
     expect(second.state).toEqual(first.state);
+  });
+
+  it("prepares a fresh full-deck commitment when the player plays again", () => {
+    const provider: SiteContentProvider = {
+      openSite: () => ({
+        runtime: runtime("K", {
+          shuffleCommitment: "next-commitment",
+          committedCard: { rank: "K", suit: "diamonds" },
+        }),
+      }),
+    };
+    registerSiteContentProvider(provider);
+
+    const wagered = wager(stateWith("6"), "six");
+    const settled = settleWager(wagered.state);
+    const replayed = apply(settled.state, "PLAY_AGAIN_GRAVOK_WAGER", {
+      siteId: SITE_ID,
+      previousShuffleCommitment: "fixture-commitment",
+    });
+
+    expect(replayed.outcome).toBe("applied");
+    expect(replayed.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      kind: "gamble",
+      roundNumber: 2,
+      shuffleCommitment: "next-commitment",
+      committedCard: { rank: "K", suit: "diamonds" },
+      result: null,
+    });
+    expect(replayed.state.journey.essence).toBe(250);
+    expect(replayed.state.journey.screen).toEqual({
+      type: "site",
+      siteId: SITE_ID,
+    });
+
+    const duplicate = apply(replayed.state, "PLAY_AGAIN_GRAVOK_WAGER", {
+      siteId: SITE_ID,
+      previousShuffleCommitment: "fixture-commitment",
+    });
+    expect(duplicate.outcome).toBe("bounced");
+    expect(wager(replayed.state, "nine").outcome).toBe("applied");
   });
 });

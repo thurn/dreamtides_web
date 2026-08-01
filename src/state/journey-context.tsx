@@ -41,7 +41,12 @@ export interface JourneyMutations {
   /** Commit one gate choice; the reducer derives the draw, cost, and payout. */
   placeGravokWager: (siteId: string, gateId: GravokGateId) => void;
   /** Apply the wager's net Essence when the result announcement appears. */
-  settleGravokWager: (siteId: string) => void;
+  settleGravokWager: (siteId: string, shuffleCommitment: string) => void;
+  /** Reassemble the deck and lock a fresh draw for another wager. */
+  playAgainGravokWager: (
+    siteId: string,
+    previousShuffleCommitment: string,
+  ) => void;
   /** Replace a held Dreamsign after a jackpot win at the collection cap. */
   replaceGravokWagerDreamsign: (
     siteId: string,

@@ -9,7 +9,8 @@ import type {
   GambleSiteRuntime,
   JourneyState,
 } from "../../types/journey";
-import { completeJourneySite, findSite } from "./sites";
+import type { EventContext } from "../../eventlog/types";
+import { findSite, getSiteContentProvider } from "./sites";
 
 const GATE_IDS: ReadonlySet<string> = new Set(["six", "nine", "jack"]);
 
@@ -128,11 +129,13 @@ export function settleGravokWager(
   payload: Record<string, unknown>,
 ): JourneyState | null {
   const siteId = asString(payload.siteId);
-  if (siteId === null) return null;
+  const shuffleCommitment = asString(payload.shuffleCommitment);
+  if (siteId === null || shuffleCommitment === null) return null;
 
   const runtime = runtimeFor(journey, siteId);
   if (
     runtime === null ||
+    runtime.shuffleCommitment !== shuffleCommitment ||
     runtime.result === null ||
     runtime.result.essenceSettled !== false ||
     journey.essence < runtime.wagerCost
@@ -152,6 +155,42 @@ export function settleGravokWager(
       result: { ...runtime.result, essenceSettled: true },
     },
   );
+}
+
+/** Reassemble the deck and prepare another independently committed wager. */
+export function playAgainGravokWager(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  const previousShuffleCommitment = asString(
+    payload.previousShuffleCommitment,
+  );
+  if (siteId === null || previousShuffleCommitment === null) return null;
+
+  const runtime = runtimeFor(journey, siteId);
+  const site = findSite(journey, siteId);
+  const provider = getSiteContentProvider();
+  if (
+    runtime === null ||
+    site?.type !== "Gamble" ||
+    provider === null ||
+    runtime.shuffleCommitment !== previousShuffleCommitment ||
+    runtime.result === null ||
+    runtime.result.essenceSettled !== true ||
+    runtime.result.pendingDreamsignReplacement
+  ) {
+    return null;
+  }
+
+  const generated = provider.openSite({ journey, site, rng: ctx.rng });
+  if (generated?.runtime.kind !== "gamble") return null;
+
+  return withRuntime(journey, siteId, {
+    ...generated.runtime,
+    roundNumber: (runtime.roundNumber ?? 1) + 1,
+  });
 }
 
 /** Replace one held Dreamsign after a winning Jack Gate wager at the cap. */
@@ -193,14 +232,9 @@ export function replaceGravokWagerDreamsign(
       replacedDreamsignId,
     },
   };
-  const resolved = withRuntime(
+  return withRuntime(
     { ...journey, dreamsigns },
     siteId,
     nextRuntime,
   );
-  return {
-    ...completeJourneySite(resolved, siteId),
-    screen: { type: "dreamscape" },
-    activeSiteId: null,
-  };
 }
