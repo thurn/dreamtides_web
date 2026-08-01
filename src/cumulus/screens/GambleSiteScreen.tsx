@@ -384,6 +384,10 @@ export function GambleSiteScreen({
             : view.gates.findIndex(
                 (gate) => gate.id === view.result?.revealGateId,
               );
+        const roundActionGridColumn =
+          Math.abs(selectedGateIndex - revealGateIndex) === 2
+            ? "1 / span 3"
+            : `${Math.min(selectedGateIndex, revealGateIndex) + 1} / span 2`;
         return (
           <main
             data-gamble-wager-region=""
@@ -496,41 +500,34 @@ export function GambleSiteScreen({
               }}
             >
               {roundActionsVisible ? (
-                <>
+                <div
+                  data-gamble-round-action-group=""
+                  style={{
+                    gridColumn: roundActionGridColumn,
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap:
+                      layout === "desktop"
+                        ? token("--space-4")
+                        : token("--space-2"),
+                  }}
+                >
                   {view.canPlayAgain && (
-                    <div
-                      data-gamble-round-action="play-again"
-                      style={{
-                        gridColumn: selectedGateIndex + 1,
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <GlassButton
-                        label="Play Again"
-                        variant="accent"
-                        testId="gamble-play-again"
-                        onPress={onPlayAgain}
-                      />
-                    </div>
-                  )}
-                  <div
-                    data-gamble-round-action="leave"
-                    style={{
-                      gridColumn: revealGateIndex + 1,
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
                     <GlassButton
-                      label="Leave"
-                      testId="gamble-leave-after-round"
-                      onPress={onLeave}
+                      label="Play Again"
+                      variant="accent"
+                      testId="gamble-play-again"
+                      onPress={onPlayAgain}
                     />
-                  </div>
-                </>
+                  )}
+                  <GlassButton
+                    label="Leave"
+                    testId="gamble-leave-after-round"
+                    onPress={onLeave}
+                  />
+                </div>
               ) : (
                 view.gates.map((gate) => (
                   <GambleBetButton

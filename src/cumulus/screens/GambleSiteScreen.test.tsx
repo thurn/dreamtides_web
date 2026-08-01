@@ -324,14 +324,13 @@ describe("GambleSiteScreen", () => {
     );
     expect(playAgain?.textContent).toBe("Play Again");
     expect(leave?.textContent).toBe("Leave");
-    expect(
-      playAgain?.closest<HTMLElement>("[data-gamble-round-action]")?.style
-        .gridColumn,
-    ).toBe("2");
-    expect(
-      leave?.closest<HTMLElement>("[data-gamble-round-action]")?.style
-        .gridColumn,
-    ).toBe("3");
+    const actionGroup = playAgain?.closest<HTMLElement>(
+      "[data-gamble-round-action-group]",
+    );
+    expect(actionGroup).toBe(
+      leave?.closest("[data-gamble-round-action-group]"),
+    );
+    expect(actionGroup?.style.gridColumn).toBe("2 / span 2");
     act(() => leave?.click());
     expect(onLeave).toHaveBeenCalledOnce();
     act(() => playAgain?.click());
@@ -341,7 +340,15 @@ describe("GambleSiteScreen", () => {
       root.render(
         <CumulusRoot>
           <GambleSiteScreen
-            view={{ ...resultView, canPlayAgain: false }}
+            view={{
+              ...resultView,
+              canPlayAgain: false,
+              result: {
+                ...resultView.result!,
+                gateId: "jack",
+                revealGateId: "six",
+              },
+            }}
             onChooseGate={() => undefined}
             onLeave={onLeave}
             onOutcomeShown={onOutcomeShown}
@@ -355,6 +362,11 @@ describe("GambleSiteScreen", () => {
       .toBeNull();
     expect(container.querySelector('[data-testid="gamble-leave-after-round"]'))
       .not.toBeNull();
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-gamble-round-action-group]",
+      )?.style.gridColumn,
+    ).toBe("1 / span 3");
 
     act(() => root.unmount());
   });
