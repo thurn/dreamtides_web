@@ -116,6 +116,7 @@ export function placeGravokWager(
   return withRuntime(
     {
       ...journey,
+      essence: journey.essence - runtime.wagerCost,
       dreamsigns,
       remainingDreamsignPool,
     },
@@ -124,7 +125,7 @@ export function placeGravokWager(
   );
 }
 
-/** Apply the wager's cost and payout when its result announcement appears. */
+/** Apply the wager's payout when its result announcement appears. */
 export function settleGravokWager(
   journey: JourneyState,
   payload: Record<string, unknown>,
@@ -138,8 +139,7 @@ export function settleGravokWager(
     runtime === null ||
     runtime.shuffleCommitment !== shuffleCommitment ||
     runtime.result === null ||
-    runtime.result.essenceSettled !== false ||
-    journey.essence < runtime.wagerCost
+    runtime.result.essenceSettled !== false
   ) {
     return null;
   }
@@ -147,8 +147,7 @@ export function settleGravokWager(
   return withRuntime(
     {
       ...journey,
-      essence:
-        journey.essence - runtime.wagerCost + runtime.result.essenceGained,
+      essence: journey.essence + runtime.result.essenceGained,
     },
     siteId,
     {

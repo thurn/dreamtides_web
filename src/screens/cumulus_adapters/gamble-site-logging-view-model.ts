@@ -71,7 +71,7 @@ export function logGambleResolved(
   );
 }
 
-/** Record when the result presentation applies the wager's net Essence. */
+/** Record when the result presentation applies the wager's payout. */
 export function logGambleSettled(
   siteId: string,
   runtime: GambleSiteRuntime,
@@ -86,6 +86,7 @@ export function logGambleSettled(
       gateId: runtime.result.gateId,
       payment: runtime.wagerCost,
       essenceGained: runtime.result.essenceGained,
+      essenceChangeAtSettlement: runtime.result.essenceGained,
       netEssenceChange: runtime.result.essenceGained - runtime.wagerCost,
     },
   );

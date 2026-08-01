@@ -95,11 +95,11 @@ describe("gamble-site-view-model", () => {
     expect(view.result).toBeNull();
   });
 
-  it("offers no further replay after three retries", () => {
+  it("offers no further replay after two retries", () => {
     const state = {
       ...createDefaultState(),
       siteRuntime: {
-        [GAMBLE_SITE.id]: { ...RUNTIME, roundNumber: 4 },
+        [GAMBLE_SITE.id]: { ...RUNTIME, roundNumber: 3 },
       },
     };
 

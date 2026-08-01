@@ -399,7 +399,7 @@ export interface GravokWagerResult {
   card: StandardPlayingCard;
   won: boolean;
   essenceGained: number;
-  /** False until the result announcement applies the wager's net Essence. */
+  /** False until the result announcement applies the wager's payout. */
   essenceSettled?: boolean;
   dreamsignAwarded: boolean;
   pendingDreamsignReplacement: boolean;

@@ -7,7 +7,7 @@ import type {
 
 export const GRAVOK_WAGER_RULES_VERSION = "three-gate-v1";
 export const GRAVOK_WAGER_COST = 50;
-export const GRAVOK_WAGER_MAX_RETRIES = 3;
+export const GRAVOK_WAGER_MAX_RETRIES = 2;
 
 export interface GravokGateRule {
   id: GravokGateId;

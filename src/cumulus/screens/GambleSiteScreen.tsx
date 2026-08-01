@@ -55,7 +55,7 @@ export interface GambleResultView {
   won: boolean;
   /** Essence granted by the result. */
   essenceGained: number;
-  /** Whether the shared wager event has applied its net Essence. */
+  /** Whether the shared wager event has applied its payout. */
   essenceSettled: boolean;
   /** Jackpot Dreamsign shown in the reward announcement. */
   rewardDreamsign: DreamsignData | null;

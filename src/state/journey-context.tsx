@@ -40,7 +40,7 @@ export interface JourneyMutations {
   ensureGambleSiteRuntime: (siteId: string) => void;
   /** Commit one gate choice; the reducer derives the draw, cost, and payout. */
   placeGravokWager: (siteId: string, gateId: GravokGateId) => void;
-  /** Apply the wager's net Essence when the result announcement appears. */
+  /** Apply the wager's payout when the result announcement appears. */
   settleGravokWager: (siteId: string, shuffleCommitment: string) => void;
   /** Reassemble the deck and lock a fresh draw for another wager. */
   playAgainGravokWager: (

@@ -156,7 +156,7 @@ describe("Gravok's Three-Gate Wager", () => {
     const wagered = wager(stateWith("6"), "six");
 
     expect(wagered.outcome).toBe("applied");
-    expect(wagered.state.journey.essence).toBe(200);
+    expect(wagered.state.journey.essence).toBe(150);
     expect(wagered.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       kind: "gamble",
       result: {
@@ -189,7 +189,7 @@ describe("Gravok's Three-Gate Wager", () => {
     const out = wager(stateWith("10"), "jack");
 
     expect(out.outcome).toBe("applied");
-    expect(out.state.journey.essence).toBe(200);
+    expect(out.state.journey.essence).toBe(150);
     expect(out.state.journey.dreamsigns).toEqual([]);
     expect(out.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       result: { won: false, essenceGained: 0, dreamsignAwarded: false },
@@ -201,7 +201,7 @@ describe("Gravok's Three-Gate Wager", () => {
     const out = wager(stateWith("J"), "jack");
 
     expect(out.outcome).toBe("applied");
-    expect(out.state.journey.essence).toBe(200);
+    expect(out.state.journey.essence).toBe(150);
     expect(out.state.journey.dreamsigns.map((sign) => sign.id)).toEqual([
       "reward-sign",
     ]);
@@ -346,7 +346,7 @@ describe("Gravok's Three-Gate Wager", () => {
     expect(wager(replayed.state, "nine").outcome).toBe("applied");
   });
 
-  it("allows three retries and bounces a fourth", () => {
+  it("allows two retries and bounces a third", () => {
     const provider: SiteContentProvider = {
       openSite: () => ({
         runtime: runtime("K", {
@@ -357,25 +357,25 @@ describe("Gravok's Three-Gate Wager", () => {
     };
     registerSiteContentProvider(provider);
 
-    const thirdRound = settleWager(
-      wager(stateWith("6", {}, { roundNumber: 3 }), "six").state,
+    const secondRound = settleWager(
+      wager(stateWith("6", {}, { roundNumber: 2 }), "six").state,
     );
-    const thirdRetry = apply(thirdRound.state, "PLAY_AGAIN_GRAVOK_WAGER", {
+    const secondRetry = apply(secondRound.state, "PLAY_AGAIN_GRAVOK_WAGER", {
       siteId: SITE_ID,
       previousShuffleCommitment: "fixture-commitment",
     });
-    expect(thirdRetry.outcome).toBe("applied");
-    expect(thirdRetry.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      roundNumber: 4,
+    expect(secondRetry.outcome).toBe("applied");
+    expect(secondRetry.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      roundNumber: 3,
       shuffleCommitment: "final-commitment",
     });
 
-    const fourthRound = settleWager(wager(thirdRetry.state, "six").state);
-    const fourthRetry = apply(fourthRound.state, "PLAY_AGAIN_GRAVOK_WAGER", {
+    const thirdRound = settleWager(wager(secondRetry.state, "six").state);
+    const thirdRetry = apply(thirdRound.state, "PLAY_AGAIN_GRAVOK_WAGER", {
       siteId: SITE_ID,
       previousShuffleCommitment: "final-commitment",
     });
-    expect(fourthRetry.outcome).toBe("bounced");
-    expect(fourthRetry.state).toEqual(fourthRound.state);
+    expect(thirdRetry.outcome).toBe("bounced");
+    expect(thirdRetry.state).toEqual(thirdRound.state);
   });
 });
