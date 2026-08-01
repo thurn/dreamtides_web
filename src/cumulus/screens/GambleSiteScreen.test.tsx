@@ -190,7 +190,7 @@ describe("GambleSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("flips a non-selected prize, fades the other, pauses, and keeps the outcome readable", () => {
+  it("fades the locked bets immediately, flips a non-selected prize, and keeps the outcome readable", () => {
     vi.useFakeTimers();
     const onOutcomeComplete = vi.fn();
     const resultView: GambleSiteView = {
@@ -228,6 +228,15 @@ describe("GambleSiteScreen", () => {
       ),
     ).toBe("revealed");
     expect(container.querySelector('[data-testid="gamble-leave"]')).toBeNull();
+    const lockedBet = container.querySelector<HTMLElement>(
+      '[data-gamble-bet="nine"]',
+    );
+    const lockedButton = lockedBet?.querySelector<HTMLButtonElement>("button");
+    expect(lockedBet?.getAttribute("aria-hidden")).toBe("true");
+    expect(lockedBet?.hasAttribute("inert")).toBe(true);
+    expect(lockedBet?.style.pointerEvents).toBe("none");
+    expect(lockedButton?.disabled).toBe(false);
+    expect(lockedButton?.style.opacity).toBe("1");
     void act(() => vi.advanceTimersByTime(250));
     expect(
       container.querySelector('[data-gamble-gate="jack"] [data-playing-card]')

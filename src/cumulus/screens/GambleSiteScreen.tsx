@@ -177,7 +177,6 @@ function GambleBetButton({
   layout,
   wagerLocked,
   selected,
-  revealStarted,
   onChooseGate,
 }: {
   gate: GambleGateView;
@@ -185,7 +184,6 @@ function GambleBetButton({
   layout: "mobile" | "desktop";
   wagerLocked: boolean;
   selected: boolean;
-  revealStarted: boolean;
   onChooseGate: (gateId: GravokGateId) => void;
 }) {
   const button = (
@@ -197,10 +195,8 @@ function GambleBetButton({
       size={layout === "mobile" ? "compact" : "standard"}
       variant="accent"
       disabled={
-        !view.runtimeReady ||
-        wagerLocked ||
-        !view.canAfford ||
-        !gate.available
+        !wagerLocked &&
+        (!view.runtimeReady || !view.canAfford || !gate.available)
       }
       testId={`gamble-choose-${gate.id}`}
       onPress={() => onChooseGate(gate.id)}
@@ -223,11 +219,15 @@ function GambleBetButton({
       data-gamble-bet={gate.id}
       data-gamble-bet-presentation="faded"
       data-gamble-bet-selected={selected ? "true" : "false"}
-      aria-hidden={revealStarted || undefined}
-      initial={false}
-      animate={{ opacity: revealStarted ? 0 : 1 }}
-      transition={{ duration: FADE_DURATION_SECONDS, ease: "easeOut" }}
-      style={{ pointerEvents: revealStarted ? "none" : "auto" }}
+      aria-hidden="true"
+      inert
+      initial={{ opacity: 1 }}
+      animate={{
+        opacity: 0,
+        transitionEnd: { visibility: "hidden" },
+      }}
+      transition={{ duration: FADE_DURATION_SECONDS, ease: "linear" }}
+      style={{ pointerEvents: "none" }}
     >
       {button}
     </motion.div>
@@ -428,7 +428,6 @@ export function GambleSiteScreen({
                   layout={layout}
                   wagerLocked={wagerLocked}
                   selected={view.result?.gateId === gate.id}
-                  revealStarted={revealStarted}
                   onChooseGate={onChooseGate}
                 />
               ))}
