@@ -345,4 +345,37 @@ describe("Gravok's Three-Gate Wager", () => {
     expect(duplicate.outcome).toBe("bounced");
     expect(wager(replayed.state, "nine").outcome).toBe("applied");
   });
+
+  it("allows three retries and bounces a fourth", () => {
+    const provider: SiteContentProvider = {
+      openSite: () => ({
+        runtime: runtime("K", {
+          shuffleCommitment: "final-commitment",
+          committedCard: { rank: "K", suit: "diamonds" },
+        }),
+      }),
+    };
+    registerSiteContentProvider(provider);
+
+    const thirdRound = settleWager(
+      wager(stateWith("6", {}, { roundNumber: 3 }), "six").state,
+    );
+    const thirdRetry = apply(thirdRound.state, "PLAY_AGAIN_GRAVOK_WAGER", {
+      siteId: SITE_ID,
+      previousShuffleCommitment: "fixture-commitment",
+    });
+    expect(thirdRetry.outcome).toBe("applied");
+    expect(thirdRetry.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      roundNumber: 4,
+      shuffleCommitment: "final-commitment",
+    });
+
+    const fourthRound = settleWager(wager(thirdRetry.state, "six").state);
+    const fourthRetry = apply(fourthRound.state, "PLAY_AGAIN_GRAVOK_WAGER", {
+      siteId: SITE_ID,
+      previousShuffleCommitment: "final-commitment",
+    });
+    expect(fourthRetry.outcome).toBe("bounced");
+    expect(fourthRetry.state).toEqual(fourthRound.state);
+  });
 });

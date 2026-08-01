@@ -2,6 +2,7 @@
 
 import {
   gravokGateRule,
+  GRAVOK_WAGER_MAX_RETRIES,
   rankWinsGravokGate,
 } from "../../data/gravok-wager";
 import type { GravokGateId } from "../../types/gamble";
@@ -172,6 +173,7 @@ export function playAgainGravokWager(
   const runtime = runtimeFor(journey, siteId);
   const site = findSite(journey, siteId);
   const provider = getSiteContentProvider();
+  const roundNumber = runtime?.roundNumber ?? 1;
   if (
     runtime === null ||
     site?.type !== "Gamble" ||
@@ -179,7 +181,8 @@ export function playAgainGravokWager(
     runtime.shuffleCommitment !== previousShuffleCommitment ||
     runtime.result === null ||
     runtime.result.essenceSettled !== true ||
-    runtime.result.pendingDreamsignReplacement
+    runtime.result.pendingDreamsignReplacement ||
+    roundNumber > GRAVOK_WAGER_MAX_RETRIES
   ) {
     return null;
   }
@@ -189,7 +192,7 @@ export function playAgainGravokWager(
 
   return withRuntime(journey, siteId, {
     ...generated.runtime,
-    roundNumber: (runtime.roundNumber ?? 1) + 1,
+    roundNumber: roundNumber + 1,
   });
 }
 

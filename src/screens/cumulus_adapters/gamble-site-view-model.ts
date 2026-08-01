@@ -6,6 +6,7 @@ import type {
 import {
   GRAVOK_GATE_RULES,
   GRAVOK_WAGER_COST,
+  GRAVOK_WAGER_MAX_RETRIES,
   gravokGateChanceLabel,
 } from "../../data/gravok-wager";
 import { guideForSiteType } from "../../data/dreamscapes";
@@ -93,6 +94,8 @@ export function buildGambleSiteView(params: {
       params.state.essence >=
       (runtime?.wagerCost ??
         (params.site.isEnhanced ? 0 : GRAVOK_WAGER_COST)),
+    canPlayAgain:
+      (runtime?.roundNumber ?? 1) <= GRAVOK_WAGER_MAX_RETRIES,
     card: {
       rank: result?.card.rank ?? "A",
       suit: result?.card.suit ?? "spades",

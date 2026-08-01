@@ -26,6 +26,7 @@ const VIEW: GambleSiteView = {
   runtimeReady: true,
   wagerCost: 50,
   canAfford: true,
+  canPlayAgain: true,
   card: { rank: "A", suit: "spades" },
   gates: [
     {
@@ -323,10 +324,37 @@ describe("GambleSiteScreen", () => {
     );
     expect(playAgain?.textContent).toBe("Play Again");
     expect(leave?.textContent).toBe("Leave");
+    expect(
+      playAgain?.closest<HTMLElement>("[data-gamble-round-action]")?.style
+        .gridColumn,
+    ).toBe("2");
+    expect(
+      leave?.closest<HTMLElement>("[data-gamble-round-action]")?.style
+        .gridColumn,
+    ).toBe("3");
     act(() => leave?.click());
     expect(onLeave).toHaveBeenCalledOnce();
     act(() => playAgain?.click());
     expect(onPlayAgain).toHaveBeenCalledOnce();
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <GambleSiteScreen
+            view={{ ...resultView, canPlayAgain: false }}
+            onChooseGate={() => undefined}
+            onLeave={onLeave}
+            onOutcomeShown={onOutcomeShown}
+            onPlayAgain={onPlayAgain}
+            onReplaceDreamsign={() => undefined}
+          />
+        </CumulusRoot>,
+      );
+    });
+    expect(container.querySelector('[data-testid="gamble-play-again"]'))
+      .toBeNull();
+    expect(container.querySelector('[data-testid="gamble-leave-after-round"]'))
+      .not.toBeNull();
 
     act(() => root.unmount());
   });

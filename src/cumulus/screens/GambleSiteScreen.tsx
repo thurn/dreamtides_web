@@ -76,6 +76,8 @@ export interface GambleSiteView {
   wagerCost: number;
   /** Whether the player can pay the wager cost. */
   canAfford: boolean;
+  /** Whether another wager remains within this visit's retry limit. */
+  canPlayAgain: boolean;
   /** Committed card kept concealed until the result choreography begins. */
   card: {
     rank: PlayingCardRank;
@@ -372,6 +374,16 @@ export function GambleSiteScreen({
                   gate.id !== view.result?.revealGateId,
               );
         const outcomeGate = view.gates[outcomeGateIndex];
+        const selectedGateIndex =
+          view.result === null
+            ? -1
+            : view.gates.findIndex((gate) => gate.id === view.result?.gateId);
+        const revealGateIndex =
+          view.result === null
+            ? -1
+            : view.gates.findIndex(
+                (gate) => gate.id === view.result?.revealGateId,
+              );
         return (
           <main
             data-gamble-wager-region=""
@@ -474,31 +486,50 @@ export function GambleSiteScreen({
               }
               style={{
                 width: "100%",
-                display: roundActionsVisible ? "flex" : "grid",
-                gridTemplateColumns: roundActionsVisible
-                  ? undefined
-                  : "repeat(3, minmax(0, 1fr))",
+                display: "grid",
+                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
                 gap:
                   layout === "desktop"
                     ? token("--space-4")
                     : token("--space-2"),
                 justifyItems: "center",
-                justifyContent: "center",
               }}
             >
               {roundActionsVisible ? (
                 <>
-                  <GlassButton
-                    label="Play Again"
-                    variant="accent"
-                    testId="gamble-play-again"
-                    onPress={onPlayAgain}
-                  />
-                  <GlassButton
-                    label="Leave"
-                    testId="gamble-leave-after-round"
-                    onPress={onLeave}
-                  />
+                  {view.canPlayAgain && (
+                    <div
+                      data-gamble-round-action="play-again"
+                      style={{
+                        gridColumn: selectedGateIndex + 1,
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <GlassButton
+                        label="Play Again"
+                        variant="accent"
+                        testId="gamble-play-again"
+                        onPress={onPlayAgain}
+                      />
+                    </div>
+                  )}
+                  <div
+                    data-gamble-round-action="leave"
+                    style={{
+                      gridColumn: revealGateIndex + 1,
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <GlassButton
+                      label="Leave"
+                      testId="gamble-leave-after-round"
+                      onPress={onLeave}
+                    />
+                  </div>
                 </>
               ) : (
                 view.gates.map((gate) => (

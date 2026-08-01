@@ -96,7 +96,8 @@ The result shows the drawn card, the chosen gate, and whether the rank crossed
 the threshold. After the result and any required Dreamsign replacement, the
 controls are `Play Again` and `Leave`. Playing again prepares a new random
 Dreamsign reward and reassembles and reshuffles all 52 cards before the next
-wager.
+wager. The player may retry three times, for a maximum of four wagers during
+the visit.
 
 ### Farpoint Station
 

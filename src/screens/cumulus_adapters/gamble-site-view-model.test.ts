@@ -89,9 +89,28 @@ describe("gamble-site-view-model", () => {
 
     expect(view.runtimeReady).toBe(true);
     expect(view.canAfford).toBe(true);
+    expect(view.canPlayAgain).toBe(true);
     expect(view.card).toEqual({ rank: "A", suit: "spades" });
     expect(view.guide.line).toBe(GRAVOK_WAGER_GUIDE_LINE);
     expect(view.result).toBeNull();
+  });
+
+  it("offers no further replay after three retries", () => {
+    const state = {
+      ...createDefaultState(),
+      siteRuntime: {
+        [GAMBLE_SITE.id]: { ...RUNTIME, roundNumber: 4 },
+      },
+    };
+
+    const view = buildGambleSiteView({
+      state,
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+
+    expect(view.canPlayAgain).toBe(false);
   });
 
   it("maps a jackpot result and its at-cap replacement by UUID", () => {
