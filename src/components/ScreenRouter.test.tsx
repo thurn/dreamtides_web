@@ -908,10 +908,13 @@ describe("ScreenRouter site-dispatch completeness", () => {
       container.querySelectorAll("[data-gamble-gates] [data-gamble-gate]"),
     ).toHaveLength(3);
     expect(container.querySelectorAll("[data-gamble-draw-card] [data-playing-card]"))
-      .toHaveLength(1);
+      .toHaveLength(0);
     expect(
       container.querySelector('[data-testid="gamble-choose-six"]'),
     ).toBeInstanceOf(HTMLButtonElement);
+    expect(
+      container.querySelector('[data-testid="gamble-choose-six"]')?.textContent,
+    ).toBe("Bet · 50");
     expect(mutations.ensureGambleSiteRuntime).toHaveBeenCalledWith(site.id);
     expect(container.querySelector("[data-work-in-progress-panel]")).toBeNull();
   });

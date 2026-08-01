@@ -15,6 +15,7 @@ import { Motes } from "../components/hud/Motes";
 import { TransientStatusToast } from "../components/status/TransientStatusToast";
 import { token } from "../primitives/tokens";
 import { motionTimeSeconds } from "../primitives/motion-time";
+import { RADIAL_DISC_BACKGROUND } from "../primitives/radial-disc-material";
 import {
   BattleForeseeOverlay,
   type BattleForeseeView,
@@ -679,7 +680,7 @@ function TutorialVictorySurface({
             placeItems: "center",
             border: `${token("--space-1")} solid ${token("--border-accent")}`,
             borderRadius: token("--radius-pill"),
-            background: `radial-gradient(circle at 38% 28%, ${token("--surface-raised")} 0%, ${token("--surface-card")} 56%, ${token("--bg-sunken")} 100%)`,
+            background: RADIAL_DISC_BACKGROUND,
             boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
             animation: `tutorial-victory-breathe calc(${token("--dur-slow")} * 7) ${token("--ease-in-out")} infinite`,
           }}

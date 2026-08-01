@@ -40,6 +40,14 @@ The reference files and the index are projections of the component sources
 `src/cumulus/docs/demos/`). Regenerate with `npm run cumulus-docs` (included in
 `npm run regenerate-assets`); edit the sources, never the generated files.
 
+## Requested content only
+
+Do not add unrequested visible text elements to a design. Treat the supplied
+headings, labels, captions, instructions, and body copy as the complete visible
+content brief. Accessibility-only names and descriptions remain required; if
+missing visible copy would make the requested interaction unusable, pause and
+surface the content decision instead of inventing prose.
+
 ## Required screen chrome
 
 Registered Cumulus product screens receive shared journey chrome from the
@@ -66,7 +74,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run cumulus-docs) -->
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
-| Pressable | Primitives | 31 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Pressable | Primitives | 32 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Resource Chip | Components | 4 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
 | Essence Value | Components | 10 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
 | Icon Button | Components | 18 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
@@ -117,6 +125,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Atlas Edge | Components | 1 | [components/atlas-edge.md](components/atlas-edge.md) | The connector between two Atlas nodes, drawn inside the map's SVG. |
 | Atlas Map | Components | 1 | [components/atlas-map.md](components/atlas-map.md) | The Dream Atlas map surface — the run graph of dreamscape nodes and their connectors, fitted into a fixed portrait design stage that uniformly scales to fit its container (letterboxed). |
 | Dreamsign | Components | 10 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
+| Dreamsign Name | Components | 1 | [components/dreamsign-name.md](components/dreamsign-name.md) | The text-only Dreamsign entity: an underlined authored name that reveals the Dreamsign's primary object InfoCard and glossary definitions. |
 | Dreamsign Gallery Panel | Components | 1 | [components/dreamsign-gallery-panel.md](components/dreamsign-gallery-panel.md) | The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action. |
 | Site Node | Components | 2 | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node carrying a glyph and accent ring. |
 <!-- END GENERATED COMPONENT INDEX -->

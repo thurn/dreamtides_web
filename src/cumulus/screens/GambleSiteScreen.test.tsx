@@ -12,9 +12,10 @@ import {
 } from "./GambleSiteScreen";
 
 const JACKPOT_DREAMSIGN = {
-  id: "fixture-jackpot-sign",
+  id: "00000000-0000-4000-8000-000000000041",
   name: "Fixture Jackpot",
-  effectDescription: "A fixture jackpot effect.",
+  imageName: "fixture-jackpot.png",
+  effectDescription: "Foresee 1.",
   isBane: false,
 };
 
@@ -116,7 +117,7 @@ afterEach(() => {
 });
 
 describe("GambleSiteScreen", () => {
-  it("presents one concealed draw above three glass gates and separate wager buttons", () => {
+  it("presents three compact prize gates without a card before the bet", () => {
     const onChooseGate = vi.fn();
     const onLeave = vi.fn();
     const { container, root } = mount(
@@ -130,25 +131,34 @@ describe("GambleSiteScreen", () => {
     );
 
     expect(
-      container.querySelector("[data-gamble-draw-card] [data-playing-card]")
-        ?.getAttribute("data-playing-card-face"),
-    ).toBe("back");
+      container.querySelector("[data-gamble-draw-card] [data-playing-card]"),
+    ).toBeNull();
     expect(container.querySelectorAll("[data-gamble-gate]")).toHaveLength(3);
     expect(container.querySelectorAll('[data-glass-panel-frame="floating"]'))
       .toHaveLength(3);
     expect(container.querySelector('[data-gamble-gate="six"]')?.textContent)
-      .toContain("6+69.23% chance");
+      .toBe("Draw 6+Win 100");
+    expect(container.querySelector('[data-gamble-gate="nine"]')?.textContent)
+      .toBe("Draw 9+Win 150");
     expect(container.querySelector('[data-gamble-gate="jack"]')?.textContent)
-      .toContain("J+30.77% chance");
-    expect(container.querySelector("[data-testid=gamble-jackpot-dreamsign]"))
+      .toBe("Draw J+Win 200Fixture Jackpot");
+    expect(container.textContent).not.toContain("chance");
+    expect(container.textContent).not.toContain("Gravok’s Casino");
+    expect(container.textContent).not.toContain("Three-Gate Wager");
+    const dreamsignName = container.querySelector<HTMLElement>(
+      "[data-testid=gamble-jackpot-dreamsign-name]",
+    );
+    expect(dreamsignName)
       .not.toBeNull();
+    expect(dreamsignName?.style.textDecoration).toContain("underline");
+    expect(dreamsignName?.dataset.revealPrimaryVariant).toBe("object");
 
     const chooseSix = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-choose-six"]',
     );
-    expect(chooseSix?.textContent).toBe("Choose · 50");
+    expect(chooseSix?.textContent).toBe("Bet · 50");
     expect(chooseSix?.getAttribute("aria-label")).toBe(
-      "Choose Six Gate for 50 Essence",
+      "Bet on Six Gate for 50 Essence",
     );
     act(() => chooseSix?.click());
     expect(onChooseGate).toHaveBeenCalledWith("six");
@@ -162,7 +172,7 @@ describe("GambleSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("flips the shared card and completes after a win announcement", () => {
+  it("appears face-down, flips the shared card, and completes after a win announcement", () => {
     vi.useFakeTimers();
     const onOutcomeComplete = vi.fn();
     const resultView: GambleSiteView = {
@@ -190,9 +200,14 @@ describe("GambleSiteScreen", () => {
     expect(
       container.querySelector("[data-gamble-draw-card] [data-playing-card]")
         ?.getAttribute("data-playing-card-face"),
-    ).toBe("front");
+    ).toBe("back");
     expect(container.querySelector('[data-testid="gamble-leave"]')).toBeNull();
-    void act(() => vi.advanceTimersByTime(480));
+    void act(() => vi.advanceTimersByTime(180));
+    expect(
+      container.querySelector("[data-gamble-draw-card] [data-playing-card]")
+        ?.getAttribute("data-playing-card-face"),
+    ).toBe("front");
+    void act(() => vi.advanceTimersByTime(500));
     const announcement = container.querySelector(
       '[data-radial-announcement="fixture-result"]',
     );
@@ -254,7 +269,7 @@ describe("GambleSiteScreen", () => {
       />,
     );
 
-    void act(() => vi.advanceTimersByTime(480));
+    void act(() => vi.advanceTimersByTime(680));
     void act(() => vi.advanceTimersByTime(2_100));
     expect(container.querySelector("[data-dreamsign-replacement-dialog]"))
       .not.toBeNull();

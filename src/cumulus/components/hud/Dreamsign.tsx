@@ -43,6 +43,35 @@ export function dreamsignArtUrl(imageName: string): string {
   return assetUrl(`/dreamsigns/${imageName}`);
 }
 
+/** Build the shared Dreamsign detail card and ordered glossary definitions. */
+export function dreamsignRevealSpec(
+  dreamsign: DreamsignData,
+  showImage: boolean,
+) {
+  const effect = dreamsign.effectDescription ?? "";
+  return {
+    primary: {
+      kind: "infoCard" as const,
+      card: showImage
+        ? {
+            variant: "object" as const,
+            image: artRef.dreamsign(String(dreamsign.imageName)),
+            imageFilter: dreamsign.isBane
+              ? ("dreamsign-portrait-bane" as const)
+              : ("dreamsign-portrait" as const),
+            title: dreamsign.name,
+            body: effect ? richText.rules(effect) : undefined,
+          }
+        : {
+            variant: "text" as const,
+            title: dreamsign.name,
+            body: effect ? richText.rules(effect) : undefined,
+          },
+    },
+    secondaries: rulesTextDefinitionCards(effect),
+  };
+}
+
 export interface DreamsignProps {
   /** The dreamsign to show. Identified by `id` (never by name). */
   dreamsign: DreamsignData;
@@ -85,18 +114,9 @@ export function Dreamsign({
   const showImage = Boolean(dreamsign.imageName) && !imageBroken;
   const imgAlt = dreamsign.imageAlt ?? dreamsign.name;
   const dreamsignId = requireDreamsignId(dreamsign, "Dreamsign tile");
-  const effect = dreamsign.effectDescription ?? "";
   const binding = useRevealSource({
     identity: { entityType: "dreamsign", entityId: revealEntityId("dreamsign", dreamsignId) },
-    spec: {
-      primary: {
-        kind: "infoCard",
-        card: showImage
-          ? { variant: "object", image: artRef.dreamsign(String(dreamsign.imageName)), imageFilter: dreamsign.isBane ? "dreamsign-portrait-bane" : "dreamsign-portrait", title: dreamsign.name, body: effect ? richText.rules(effect) : undefined }
-          : { variant: "text", title: dreamsign.name, body: effect ? richText.rules(effect) : undefined },
-      },
-      secondaries: rulesTextDefinitionCards(effect),
-    },
+    spec: dreamsignRevealSpec(dreamsign, showImage),
     onActivate: unavailable ? undefined : onPress,
   });
   const lastPointerType = React.useRef<string | null>(null);

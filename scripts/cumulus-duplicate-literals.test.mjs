@@ -61,12 +61,6 @@ export const BASELINE = [
     "src/cumulus/screens/BattleResultSurface.tsx",
     "src/cumulus/screens/TutorialBattleScreen.tsx",
   ],
-  // Both battle screens use this material for the same raised card-preview role.
-  [
-    'radial-gradient(circle at 38% 28%, ${token("--surface-raised")}',
-    "src/cumulus/screens/MobileBattleScreen.tsx",
-    "src/cumulus/screens/TutorialBattleScreen.tsx",
-  ],
 ];
 
 /** Whether `fullPath` is walked at all: TS/TSX/CSS source under src/cumulus. */

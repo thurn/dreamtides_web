@@ -69,6 +69,13 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
         const binding = useRevealSource({ identity: { entityType: "dream-avatar-ability", entityId: revealEntityId("dream-avatar-ability", id) }, spec });`,
     },
     {
+      name: "Dreamsign name owns its semantic reveal and identity",
+      filename: "src/cumulus/components/hud/DreamsignName.tsx",
+      code: `import { useRevealSource } from "../../internal/reveal/context";
+        import { revealEntityId } from "../../internal/reveal/identity";
+        const binding = useRevealSource({ identity: { entityType: "dreamsign", entityId: revealEntityId("dreamsign", id) }, spec });`,
+    },
+    {
       name: "transfiguration form owns its semantic reveal and identity",
       filename:
         "src/cumulus/components/controls/TransfigurationFormButton.tsx",

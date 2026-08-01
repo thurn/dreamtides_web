@@ -4,7 +4,7 @@ import type { GravokGateId } from "../../types/gamble";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
 import { PlayingCard } from "../components/card/PlayingCard";
 import { GlassButton } from "../components/controls/GlassButton";
-import { Dreamsign } from "../components/hud/Dreamsign";
+import { DreamsignName } from "../components/hud/DreamsignName";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import {
@@ -100,65 +100,64 @@ export interface GambleSiteScreenProps {
 }
 
 const DESKTOP_GAMBLE_REGION_MAX_WIDTH = 650;
-const DESKTOP_GATE_HEIGHT = 210;
-const MOBILE_GATE_HEIGHT = 134;
-const DESKTOP_DREAMSIGN_SIZE = 58;
-const MOBILE_DREAMSIGN_SIZE = 38;
-const CARD_REVEAL_DELAY_MS = 480;
+const DESKTOP_GATE_MIN_HEIGHT = 132;
+const MOBILE_GATE_MIN_HEIGHT = 112;
+const CARD_FACE_DOWN_HOLD_MS = 180;
+const CARD_FLIP_DURATION_MS = 420;
+const CARD_OUTCOME_SETTLE_MS = 80;
 const REDUCED_MOTION_DELAY_MS = 80;
 
-function GateReward({
+function GatePrize({
   gate,
   layout,
 }: {
   gate: GambleGateView;
   layout: "mobile" | "desktop";
 }) {
-  const dreamsignSize =
-    layout === "desktop" ? DESKTOP_DREAMSIGN_SIZE : MOBILE_DREAMSIGN_SIZE;
   return (
     <div
-      data-gamble-gate-reward={gate.id}
+      data-gamble-gate-prize={gate.id}
       style={{
-        flex: "1 1 auto",
-        minHeight: 0,
+        minHeight:
+          layout === "desktop"
+            ? DESKTOP_GATE_MIN_HEIGHT
+            : MOBILE_GATE_MIN_HEIGHT,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: layout === "desktop" ? token("--space-3") : token("--space-1"),
+        gap: layout === "desktop" ? token("--space-2") : token("--space-1"),
         padding:
           layout === "desktop" ? token("--space-4") : token("--space-2"),
         textAlign: "center",
       }}
     >
-      <span
+      <h2
+        data-gamble-gate-title=""
+        style={{
+          margin: 0,
+          font:
+            layout === "desktop" ? token("--t-title") : token("--t-title-sm"),
+          color: token("--text-on-glass"),
+        }}
+      >
+        Draw {gate.targetLabel}
+      </h2>
+      <div
+        data-gamble-gate-body=""
         style={{
           font:
             layout === "desktop" ? token("--t-title-sm") : token("--t-body"),
           color: token("--text-on-glass"),
         }}
       >
-        <EssenceValue amount={gate.essenceReward} tone="inherit" />
-      </span>
+        Win <EssenceValue amount={gate.essenceReward} tone="inherit" />
+      </div>
       {gate.id === "jack" && gate.rewardDreamsign !== null && (
-        <Dreamsign
+        <DreamsignName
           dreamsign={gate.rewardDreamsign}
-          sizePx={dreamsignSize}
-          testid="gamble-jackpot-dreamsign"
-          variant="hud"
+          testId="gamble-jackpot-dreamsign-name"
         />
-      )}
-      {gate.id === "jack" && gate.rewardDreamsign === null && (
-        <span
-          data-gamble-jackpot-unavailable=""
-          style={{
-            font: token("--t-body-sm"),
-            color: token("--text-on-glass-muted"),
-          }}
-        >
-          Dreamsign unavailable
-        </span>
       )}
     </div>
   );
@@ -176,50 +175,10 @@ function GambleGatePanel({
       data-gamble-gate={gate.id}
       style={{
         width: "100%",
-        height:
-          layout === "desktop" ? DESKTOP_GATE_HEIGHT : MOBILE_GATE_HEIGHT,
       }}
     >
       <GlassPanel radius="panel" testId={`gamble-gate-${gate.id}`}>
-        <GateReward gate={gate} layout={layout} />
-        <div
-          style={{
-            flex: "0 0 auto",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: token("--space-1"),
-            padding:
-              layout === "desktop"
-                ? `${token("--space-4")} ${token("--space-3")}`
-                : `${token("--space-2")} ${token("--space-1")}`,
-            borderTop: `1px solid ${token("--border-strong")}`,
-            textAlign: "center",
-          }}
-        >
-          <span
-            style={{
-              font:
-                layout === "desktop"
-                  ? token("--t-title")
-                  : token("--t-title-sm"),
-              color: token("--text-on-glass"),
-            }}
-          >
-            {gate.targetLabel}
-          </span>
-          <span
-            style={{
-              font: token("--t-eyebrow"),
-              color: token("--text-on-glass-muted"),
-              letterSpacing: token("--tracking-eyebrow"),
-              textTransform: "uppercase",
-            }}
-          >
-            {gate.chanceLabel} chance
-          </span>
-        </div>
+        <GatePrize gate={gate} layout={layout} />
       </GlassPanel>
     </div>
   );
@@ -253,6 +212,7 @@ export function GambleSiteScreen({
 }: GambleSiteScreenProps) {
   const reduceMotion = useReducedMotion() === true;
   const isDesktop = useIsDesktop();
+  const [cardFace, setCardFace] = useState<"back" | "front">("back");
   const [outcomeVisible, setOutcomeVisible] = useState(false);
   const [replacementVisible, setReplacementVisible] = useState(false);
   const resultId = view.result?.id;
@@ -262,12 +222,28 @@ export function GambleSiteScreen({
   useEffect(() => {
     setOutcomeVisible(false);
     setReplacementVisible(false);
+    setCardFace("back");
     if (resultId === undefined) return;
-    const timeout = window.setTimeout(
-      () => setOutcomeVisible(true),
-      reduceMotion ? REDUCED_MOTION_DELAY_MS : CARD_REVEAL_DELAY_MS,
+    const flipDelay = reduceMotion
+      ? REDUCED_MOTION_DELAY_MS
+      : CARD_FACE_DOWN_HOLD_MS;
+    const outcomeDelay = reduceMotion
+      ? REDUCED_MOTION_DELAY_MS * 2
+      : CARD_FACE_DOWN_HOLD_MS +
+        CARD_FLIP_DURATION_MS +
+        CARD_OUTCOME_SETTLE_MS;
+    const flipTimeout = window.setTimeout(
+      () => setCardFace("front"),
+      flipDelay,
     );
-    return () => window.clearTimeout(timeout);
+    const outcomeTimeout = window.setTimeout(
+      () => setOutcomeVisible(true),
+      outcomeDelay,
+    );
+    return () => {
+      window.clearTimeout(flipTimeout);
+      window.clearTimeout(outcomeTimeout);
+    };
   }, [reduceMotion, resultId]);
 
   useEffect(() => {
@@ -338,48 +314,16 @@ export function GambleSiteScreen({
               pointerEvents: "auto",
             }}
           >
-            <header
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: token("--space-1"),
-                textAlign: "center",
-                textShadow: token("--text-outline-media"),
-              }}
-            >
-              <span
-                style={{
-                  font: token("--t-eyebrow"),
-                  letterSpacing: token("--tracking-eyebrow"),
-                  textTransform: "uppercase",
-                  color: token("--text-secondary"),
-                }}
-              >
-                Gravok’s Casino
-              </span>
-              <h1
-                style={{
-                  margin: 0,
-                  font:
-                    layout === "desktop"
-                      ? token("--t-title")
-                      : token("--t-title-sm"),
-                  color: token("--text-primary"),
-                }}
-              >
-                Three-Gate Wager
-              </h1>
-            </header>
-
-            <div data-gamble-draw-card="">
-              <PlayingCard
-                rank={view.card.rank}
-                suit={view.card.suit}
-                face={view.card.face}
-                size={layout === "desktop" ? "standard" : "compact"}
-              />
-            </div>
+            {view.result !== null && (
+              <div data-gamble-draw-card="">
+                <PlayingCard
+                  rank={view.card.rank}
+                  suit={view.card.suit}
+                  face={cardFace}
+                  size={layout === "desktop" ? "standard" : "compact"}
+                />
+              </div>
+            )}
 
             <section
               aria-label="Three wager gates"
@@ -416,8 +360,8 @@ export function GambleSiteScreen({
               {view.gates.map((gate) => (
                 <GlassButton
                   key={gate.id}
-                  label="Choose"
-                  accessibilityLabel={`Choose ${gate.name} for ${String(view.wagerCost)} Essence`}
+                  label="Bet"
+                  accessibilityLabel={`Bet on ${gate.name} for ${String(view.wagerCost)} Essence`}
                   essenceCost={view.wagerCost}
                   essenceCostStyle="separated"
                   size={layout === "mobile" ? "compact" : "standard"}

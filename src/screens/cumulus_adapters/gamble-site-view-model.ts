@@ -18,6 +18,9 @@ import type {
 } from "../../types/journey";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
+export const GRAVOK_WAGER_GUIDE_LINE =
+  "The game's called Three Gates. Place your bet on the next card drawn!";
+
 /** Resolve the resident Dream Guide for Gamble. */
 export function resolveGambleGuide(
   guides: readonly DreamGuideContent[],
@@ -55,7 +58,6 @@ export function buildGambleSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent | null;
-  guideLine: string | null;
 }): GambleSiteView {
   const runtimeCandidate = params.state.siteRuntime[params.site.id];
   const runtime =
@@ -89,10 +91,7 @@ export function buildGambleSiteView(params: {
     guide: {
       id: guideId,
       name: params.guide?.name ?? "Gravok",
-      line:
-        params.guideLine ??
-        params.guide?.dialog[0] ??
-        "Choose your threshold. Fortune turns on a single card.",
+      line: GRAVOK_WAGER_GUIDE_LINE,
       art: artRef.dreamGuide(guideId),
     },
     result:

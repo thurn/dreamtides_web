@@ -4,6 +4,7 @@
 import type { ReactElement } from "react";
 import { EssenceValue } from "../hud/EssenceValue";
 import { token } from "../../primitives/tokens";
+import { RADIAL_DISC_BACKGROUND } from "../../primitives/radial-disc-material";
 
 export const RADIAL_ANNOUNCEMENT_DURATION_MS = 2_100;
 
@@ -130,7 +131,7 @@ export function RadialAnnouncement({
           width: RADIAL_ANNOUNCEMENT_SIZE[size],
           height: RADIAL_ANNOUNCEMENT_SIZE[size],
           borderRadius: token("--radius-pill"),
-          background: `radial-gradient(circle at 38% 28%, ${token("--surface-raised")} 0%, ${token("--surface-card")} 56%, ${token("--bg-sunken")} 100%)`,
+          background: RADIAL_DISC_BACKGROUND,
           boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
           animation: `radial-announcement-disc ${animationDuration} ${token("--ease-in-out")} both`,
         }}

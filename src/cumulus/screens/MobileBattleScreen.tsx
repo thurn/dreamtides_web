@@ -59,6 +59,7 @@ import type { CumulusColor } from "../primitives/color";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
+import { RADIAL_DISC_BACKGROUND } from "../primitives/radial-disc-material";
 import {
   BATTLE_HUD_END_CLEARANCE_PROPERTY,
   BATTLE_HUD_START_CLEARANCE_PROPERTY,
@@ -2033,7 +2034,7 @@ function BattleCardPointsOverlay({
           width: BATTLE_CARD_POINTS_BUBBLE_WIDTH,
           aspectRatio: "1",
           borderRadius: token("--radius-pill"),
-          background: `radial-gradient(circle at 38% 28%, ${token("--surface-raised")} 0%, ${token("--surface-card")} 56%, ${token("--bg-sunken")} 100%)`,
+          background: RADIAL_DISC_BACKGROUND,
           boxShadow: `${token("--shadow-lg")}, ${token("--glow-accent-soft")}`,
           color: token("--text-primary"),
           font: token("--t-popover-headline"),

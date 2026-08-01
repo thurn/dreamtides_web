@@ -2165,6 +2165,65 @@
       "description": "Stable test id for the panel root."
     }
   ],
+  "DreamsignName": [
+    {
+      "name": "dreamsign",
+      "tsType": "Dreamsign",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The UUID-identified Dreamsign whose authored name is shown.",
+      "nested": {
+        "name": "Dreamsign",
+        "fields": [
+          {
+            "name": "id",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "name",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "effectDescription",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "imageName",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "imageAlt",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "isBane",
+            "tsType": "boolean",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "dreamsign-name",
+      "description": "Optional stable selector for focused screen tests."
+    }
+  ],
   "DreamwellCard": [
     {
       "name": "model",

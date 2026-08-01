@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { GambleSiteScreen } from "../../cumulus/screens/GambleSiteScreen";
 import { useJourney } from "../../state/journey-context";
 import type { GravokGateId } from "../../types/gamble";
@@ -25,13 +25,6 @@ export function GambleSiteScreenAdapter({ siteId }: { siteId: string }) {
   const runtimeCandidate = state.siteRuntime[siteId];
   const runtime = runtimeCandidate?.kind === "gamble" ? runtimeCandidate : null;
   const guide = resolveGambleGuide(journeyContent.guides);
-  const guideLineRef = useRef<string | null | undefined>(undefined);
-  if (guideLineRef.current === undefined) {
-    const lines = guide?.dialog ?? [];
-    guideLineRef.current = lines.length === 0
-      ? null
-      : lines[Math.floor(Math.random() * lines.length)] ?? null;
-  }
   const view = useMemo(
     () => site === null
       ? null
@@ -40,7 +33,6 @@ export function GambleSiteScreenAdapter({ siteId }: { siteId: string }) {
           sceneNode: node,
           site,
           guide,
-          guideLine: guideLineRef.current ?? null,
         }),
     [guide, node, site, state],
   );

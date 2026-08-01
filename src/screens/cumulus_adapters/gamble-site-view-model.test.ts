@@ -5,6 +5,7 @@ import type { GambleSiteRuntime, SiteState } from "../../types/journey";
 import {
   buildGambleGateViews,
   buildGambleSiteView,
+  GRAVOK_WAGER_GUIDE_LINE,
   resolveGambleGuide,
 } from "./gamble-site-view-model";
 
@@ -76,12 +77,12 @@ describe("gamble-site-view-model", () => {
       sceneNode: null,
       site: GAMBLE_SITE,
       guide: null,
-      guideLine: null,
     });
 
     expect(view.runtimeReady).toBe(true);
     expect(view.canAfford).toBe(true);
     expect(view.card).toEqual({ rank: "A", suit: "spades", face: "back" });
+    expect(view.guide.line).toBe(GRAVOK_WAGER_GUIDE_LINE);
     expect(view.result).toBeNull();
   });
 
@@ -116,7 +117,6 @@ describe("gamble-site-view-model", () => {
       sceneNode: null,
       site: GAMBLE_SITE,
       guide: null,
-      guideLine: null,
     });
 
     expect(view.card).toEqual({ rank: "Q", suit: "hearts", face: "front" });
