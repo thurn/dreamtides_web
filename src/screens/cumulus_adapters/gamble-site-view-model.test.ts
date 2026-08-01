@@ -5,6 +5,7 @@ import type { GambleSiteRuntime, SiteState } from "../../types/journey";
 import {
   buildGambleGateViews,
   buildGambleSiteView,
+  gravokRevealGateId,
   GRAVOK_WAGER_GUIDE_LINE,
   resolveGambleGuide,
 } from "./gamble-site-view-model";
@@ -35,6 +36,12 @@ const RUNTIME: GambleSiteRuntime = {
 };
 
 describe("gamble-site-view-model", () => {
+  it("uses the next non-selected gate as the stable reveal object", () => {
+    expect(gravokRevealGateId("six")).toBe("nine");
+    expect(gravokRevealGateId("nine")).toBe("jack");
+    expect(gravokRevealGateId("jack")).toBe("six");
+  });
+
   it("maps all exact gate targets, odds, rewards, and the locked jackpot", () => {
     const gates = buildGambleGateViews(RUNTIME, 12);
 
@@ -81,7 +88,7 @@ describe("gamble-site-view-model", () => {
 
     expect(view.runtimeReady).toBe(true);
     expect(view.canAfford).toBe(true);
-    expect(view.card).toEqual({ rank: "A", suit: "spades", face: "back" });
+    expect(view.card).toEqual({ rank: "A", suit: "spades" });
     expect(view.guide.line).toBe(GRAVOK_WAGER_GUIDE_LINE);
     expect(view.result).toBeNull();
   });
@@ -119,9 +126,10 @@ describe("gamble-site-view-model", () => {
       guide: null,
     });
 
-    expect(view.card).toEqual({ rank: "Q", suit: "hearts", face: "front" });
+    expect(view.card).toEqual({ rank: "Q", suit: "hearts" });
     expect(view.result).toMatchObject({
       gateId: "jack",
+      revealGateId: "six",
       won: true,
       rewardDreamsign: { id: "fixture-sign" },
       pendingDreamsignReplacement: true,

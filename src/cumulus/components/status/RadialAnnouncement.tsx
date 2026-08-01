@@ -7,6 +7,7 @@ import { token } from "../../primitives/tokens";
 import { RADIAL_DISC_BACKGROUND } from "../../primitives/radial-disc-material";
 
 export const RADIAL_ANNOUNCEMENT_DURATION_MS = 2_100;
+export const RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS = 3_360;
 
 const RADIAL_ANNOUNCEMENT_SIZE = {
   compact: 184,
@@ -69,6 +70,9 @@ export type RadialAnnouncementTone = "accent" | "reward" | "danger";
 /** Named disc size for viewport-scaled announcement contexts. */
 export type RadialAnnouncementSize = keyof typeof RADIAL_ANNOUNCEMENT_SIZE;
 
+/** Named display dwell for ordinary and longer reading moments. */
+export type RadialAnnouncementDuration = "standard" | "extended";
+
 export interface RadialAnnouncementProps {
   /** Primary announcement copy. */
   headline: string;
@@ -80,6 +84,8 @@ export interface RadialAnnouncementProps {
   tone?: RadialAnnouncementTone;
   /** Named disc diameter. Defaults to standard. */
   size?: RadialAnnouncementSize;
+  /** Named animation and reading dwell. Defaults to standard. */
+  duration?: RadialAnnouncementDuration;
   /** Stable identifier exposed on the announcement root. */
   announcementId?: string;
 }
@@ -97,10 +103,11 @@ export function RadialAnnouncement({
   essenceGained,
   tone = "accent",
   size = "standard",
+  duration = "standard",
   announcementId,
 }: RadialAnnouncementProps): ReactElement {
   const accent = toneColor(tone);
-  const animationDuration = `calc(${token("--dur-slow")} * 5)`;
+  const animationDuration = `calc(${token("--dur-slow")} * ${duration === "extended" ? "8" : "5"})`;
 
   return (
     <div
@@ -108,6 +115,7 @@ export function RadialAnnouncement({
       aria-live="polite"
       data-radial-announcement={announcementId ?? ""}
       data-radial-announcement-tone={tone}
+      data-radial-announcement-duration={duration}
       style={{
         position: "absolute",
         inset: 0,

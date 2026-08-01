@@ -62,6 +62,7 @@ import { textFieldDemo } from "./demos/text-field";
 import { textAreaDemo } from "./demos/text-area";
 import { transfigurationFormButtonDemo } from "./demos/transfiguration-form-button";
 import { transientStatusToastDemo } from "./demos/transient-status-toast";
+import { wagerPrizeCardDemo } from "./demos/wager-prize-card";
 
 /**
  * A single authored usage snippet shown on a component's doc page. The source
@@ -209,6 +210,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   dreamsignNameDemo,
   dreamsignGalleryPanelDemo,
   siteNodeDemo,
+  wagerPrizeCardDemo,
 ];
 
 /** Look up a registry entry by its route id. */

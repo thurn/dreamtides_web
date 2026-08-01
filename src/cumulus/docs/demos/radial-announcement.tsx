@@ -33,6 +33,7 @@ export const radialAnnouncementDemo: CumulusComponent = {
   headline="Won!"
   essenceGained={150}
   tone="reward"
+  duration="extended"
 />`,
   }],
   demo: { defaultArgs: { tone: "reward" } },

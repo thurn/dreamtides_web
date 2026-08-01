@@ -18,6 +18,7 @@ describe("RadialAnnouncement", () => {
           essenceGained={200}
           tone="reward"
           size="compact"
+          duration="extended"
           announcementId="fixture-win"
         />,
       );
@@ -28,6 +29,7 @@ describe("RadialAnnouncement", () => {
     );
     expect(announcement?.dataset.radialAnnouncement).toBe("fixture-win");
     expect(announcement?.dataset.radialAnnouncementTone).toBe("reward");
+    expect(announcement?.dataset.radialAnnouncementDuration).toBe("extended");
     expect(announcement?.textContent).toContain("Won!");
     expect(announcement?.textContent).toContain("+200");
     expect(

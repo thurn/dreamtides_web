@@ -3831,10 +3831,12 @@
     },
     {
       "name": "size",
-      "tsType": "\"compact\" | \"standard\"",
+      "tsType": "\"compact\" | \"standard\" | \"wagerCompact\" | \"wager\"",
       "unionMembers": [
         "compact",
-        "standard"
+        "standard",
+        "wagerCompact",
+        "wager"
       ],
       "required": false,
       "defaultValue": "standard",
@@ -4147,6 +4149,17 @@
       "required": false,
       "defaultValue": "standard",
       "description": "Named disc diameter. Defaults to standard."
+    },
+    {
+      "name": "duration",
+      "tsType": "RadialAnnouncementDuration",
+      "unionMembers": [
+        "standard",
+        "extended"
+      ],
+      "required": false,
+      "defaultValue": "standard",
+      "description": "Named animation and reading dwell. Defaults to standard."
     },
     {
       "name": "announcementId",
@@ -4981,6 +4994,79 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional dismissal callback; lifecycle ownership remains outside Cumulus."
+    }
+  ],
+  "WagerPrizeCard": [
+    {
+      "name": "gateId",
+      "tsType": "GravokGateId",
+      "unionMembers": [
+        "six",
+        "nine",
+        "jack"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Stable Three Gates choice represented by this prize object."
+    },
+    {
+      "name": "targetLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Inclusive winning rank shown as authored compact notation."
+    },
+    {
+      "name": "essenceReward",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Essence awarded when the gate wins."
+    },
+    {
+      "name": "rewardDreamsign",
+      "tsType": "Dreamsign | null",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Jackpot Dreamsign appended to the reward sentence, when present."
+    },
+    {
+      "name": "size",
+      "tsType": "WagerPrizeCardSize",
+      "unionMembers": [
+        "wagerCompact",
+        "wager"
+      ],
+      "required": false,
+      "defaultValue": "wager",
+      "description": "Named desktop or mobile square size. Defaults to `wager`."
+    },
+    {
+      "name": "drawnCard",
+      "tsType": "{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } | null",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "null",
+      "description": "Committed card shown on the reverse face after a bet."
+    },
+    {
+      "name": "revealDrawnCard",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Turn the prize face over to its committed card."
+    },
+    {
+      "name": "dreamsignTestId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional stable selector for the jackpot Dreamsign name."
     }
   ]
 }

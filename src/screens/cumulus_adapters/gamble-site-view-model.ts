@@ -16,10 +16,21 @@ import type {
   JourneyState,
   SiteState,
 } from "../../types/journey";
+import type { GravokGateId } from "../../types/gamble";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 export const GRAVOK_WAGER_GUIDE_LINE =
   "The game's called Three Gates. Place your bet on the next card drawn!";
+
+/** The next gate in display order supplies the non-selected reveal object. */
+export function gravokRevealGateId(selectedGateId: GravokGateId): GravokGateId {
+  const selectedIndex = GRAVOK_GATE_RULES.findIndex(
+    (gate) => gate.id === selectedGateId,
+  );
+  return GRAVOK_GATE_RULES[
+    (selectedIndex + 1) % GRAVOK_GATE_RULES.length
+  ].id;
+}
 
 /** Resolve the resident Dream Guide for Gamble. */
 export function resolveGambleGuide(
@@ -85,7 +96,6 @@ export function buildGambleSiteView(params: {
     card: {
       rank: result?.card.rank ?? "A",
       suit: result?.card.suit ?? "spades",
-      face: result === null ? "back" : "front",
     },
     gates: buildGambleGateViews(runtime, params.state.maxDreamsigns),
     guide: {
@@ -100,6 +110,7 @@ export function buildGambleSiteView(params: {
         : {
             id: `${params.site.id}:${result.gateId}:${result.card.rank}-${result.card.suit}`,
             gateId: result.gateId,
+            revealGateId: gravokRevealGateId(result.gateId),
             won: result.won,
             essenceGained: result.essenceGained,
             rewardDreamsign,

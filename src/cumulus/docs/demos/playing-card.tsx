@@ -57,7 +57,11 @@ function PlayingCardDemo(args: Record<string, unknown>) {
     ? (args.suit as PlayingCardSuit)
     : "hearts";
   const size: PlayingCardSize =
-    args.size === "compact" ? "compact" : "standard";
+    args.size === "compact" ||
+    args.size === "wagerCompact" ||
+    args.size === "wager"
+      ? args.size
+      : "standard";
   const face: PlayingCardFace = args.face === "back" ? "back" : "front";
   const variant = VARIANTS.includes(args.variant as PlayingCardVariant)
     ? (args.variant as PlayingCardVariant)
@@ -138,6 +142,11 @@ export const playingCardDemo: CumulusComponent = {
       label: "Compact",
       note: "The compact square fits dense three-column mobile hands.",
       code: `<PlayingCard rank="A" suit="spades" size="compact" />`,
+    },
+    {
+      label: "Wager Squares",
+      note: "The wager sizes align a drawn card with the desktop and mobile Three Gates prize objects.",
+      code: `<PlayingCard rank="Q" suit="hearts" size="wager" />`,
     },
     {
       label: "Rank Display",

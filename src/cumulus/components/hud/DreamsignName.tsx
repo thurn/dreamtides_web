@@ -49,7 +49,7 @@ export function DreamsignName({
       data-dreamsign-name=""
       data-dreamsign-id={dreamsignId}
       style={{
-        display: "inline",
+        display: "inline-block",
         color: "inherit",
         font: "inherit",
         textDecoration: "underline",

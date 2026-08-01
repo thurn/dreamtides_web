@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { GravokGateId } from "../../types/gamble";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
-import { PlayingCard } from "../components/card/PlayingCard";
-import { GlassButton } from "../components/controls/GlassButton";
-import { DreamsignName } from "../components/hud/DreamsignName";
-import { EssenceValue } from "../components/hud/EssenceValue";
-import { GlassPanel } from "../components/overlay/GlassPanel";
 import {
-  RADIAL_ANNOUNCEMENT_DURATION_MS,
+  PLAYING_CARD_FLIP_DURATION_MS,
+  WagerPrizeCard,
+  type PlayingCardRank,
+  type PlayingCardSuit,
+} from "../components/card/PlayingCard";
+import { GlassButton } from "../components/controls/GlassButton";
+import {
+  RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
   RadialAnnouncement,
 } from "../components/status/RadialAnnouncement";
 import type { ArtRef } from "../primitives/art";
+import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
 import { DreamsignReplacementDialog } from "./DreamsignReplacementDialog";
 import type { DreamsignReplacementView } from "./DreamsignReplacementDialog";
@@ -47,6 +50,8 @@ export interface GambleResultView {
   id: string;
   /** Gate chosen by the player. */
   gateId: GravokGateId;
+  /** Non-selected gate whose prize object turns into the drawn card. */
+  revealGateId: GravokGateId;
   /** Whether the revealed rank crossed the chosen threshold. */
   won: boolean;
   /** Essence granted by the result. */
@@ -70,11 +75,10 @@ export interface GambleSiteView {
   wagerCost: number;
   /** Whether the player can pay the wager cost. */
   canAfford: boolean;
-  /** Face-down commitment or revealed result card. */
+  /** Committed card kept concealed until the result choreography begins. */
   card: {
-    rank: Parameters<typeof PlayingCard>[0]["rank"];
-    suit: Parameters<typeof PlayingCard>[0]["suit"];
-    face: Parameters<typeof PlayingCard>[0]["face"];
+    rank: PlayingCardRank;
+    suit: PlayingCardSuit;
   };
   /** Three gate choices in ascending risk order. */
   gates: readonly GambleGateView[];
@@ -100,87 +104,133 @@ export interface GambleSiteScreenProps {
 }
 
 const DESKTOP_GAMBLE_REGION_MAX_WIDTH = 650;
-const DESKTOP_GATE_MIN_HEIGHT = 132;
-const MOBILE_GATE_MIN_HEIGHT = 112;
-const CARD_FACE_DOWN_HOLD_MS = 180;
-const CARD_FLIP_DURATION_MS = 420;
-const CARD_OUTCOME_SETTLE_MS = 80;
+const BET_SETTLE_DELAY_MS = 250;
+const DRAWN_CARD_HOLD_MS = 1_250;
 const REDUCED_MOTION_DELAY_MS = 80;
+const FADE_DURATION_SECONDS = motionTimeSeconds("--dur-slow");
 
-function GatePrize({
+type GambleGatePresentation =
+  | "available"
+  | "selected"
+  | "revealed"
+  | "faded";
+
+function GambleGateCard({
   gate,
   layout,
+  presentation,
+  revealStarted,
+  drawnCard,
 }: {
   gate: GambleGateView;
   layout: "mobile" | "desktop";
+  presentation: GambleGatePresentation;
+  revealStarted: boolean;
+  drawnCard: GambleSiteView["card"];
 }) {
-  return (
-    <div
-      data-gamble-gate-prize={gate.id}
-      style={{
-        minHeight:
-          layout === "desktop"
-            ? DESKTOP_GATE_MIN_HEIGHT
-            : MOBILE_GATE_MIN_HEIGHT,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: layout === "desktop" ? token("--space-2") : token("--space-1"),
-        padding:
-          layout === "desktop" ? token("--space-4") : token("--space-2"),
-        textAlign: "center",
-      }}
-    >
-      <h2
-        data-gamble-gate-title=""
-        style={{
-          margin: 0,
-          font:
-            layout === "desktop" ? token("--t-title") : token("--t-title-sm"),
-          color: token("--text-on-glass"),
-        }}
-      >
-        Draw {gate.targetLabel}
-      </h2>
+  const prizeCard = (
+    <WagerPrizeCard
+      gateId={gate.id}
+      targetLabel={gate.targetLabel}
+      essenceReward={gate.essenceReward}
+      rewardDreamsign={gate.rewardDreamsign}
+      size={layout === "desktop" ? "wager" : "wagerCompact"}
+      drawnCard={presentation === "revealed" ? drawnCard : null}
+      revealDrawnCard={presentation === "revealed" && revealStarted}
+      dreamsignTestId={
+        gate.id === "jack" ? "gamble-jackpot-dreamsign-name" : undefined
+      }
+    />
+  );
+
+  if (presentation !== "faded") {
+    return (
       <div
-        data-gamble-gate-body=""
-        style={{
-          font:
-            layout === "desktop" ? token("--t-title-sm") : token("--t-body"),
-          color: token("--text-on-glass"),
-        }}
+        data-gamble-gate={gate.id}
+        data-gamble-gate-presentation={presentation}
       >
-        Win <EssenceValue amount={gate.essenceReward} tone="inherit" />
+        {prizeCard}
       </div>
-      {gate.id === "jack" && gate.rewardDreamsign !== null && (
-        <DreamsignName
-          dreamsign={gate.rewardDreamsign}
-          testId="gamble-jackpot-dreamsign-name"
-        />
-      )}
-    </div>
+    );
+  }
+
+  return (
+    <motion.div
+      data-gamble-gate={gate.id}
+      data-gamble-gate-presentation={presentation}
+      aria-hidden={revealStarted || undefined}
+      initial={false}
+      animate={{ opacity: revealStarted ? 0 : 1 }}
+      transition={{
+        duration: FADE_DURATION_SECONDS,
+        ease: "easeOut",
+      }}
+      style={{ pointerEvents: revealStarted ? "none" : "auto" }}
+    >
+      {prizeCard}
+    </motion.div>
   );
 }
 
-function GambleGatePanel({
+function GambleBetButton({
   gate,
+  view,
   layout,
+  wagerLocked,
+  selected,
+  revealStarted,
+  onChooseGate,
 }: {
   gate: GambleGateView;
+  view: GambleSiteView;
   layout: "mobile" | "desktop";
+  wagerLocked: boolean;
+  selected: boolean;
+  revealStarted: boolean;
+  onChooseGate: (gateId: GravokGateId) => void;
 }) {
+  const button = (
+    <GlassButton
+      label="Bet"
+      accessibilityLabel={`Bet on ${gate.name} for ${String(view.wagerCost)} Essence`}
+      essenceCost={view.wagerCost}
+      essenceCostStyle="separated"
+      size={layout === "mobile" ? "compact" : "standard"}
+      variant="accent"
+      disabled={
+        !view.runtimeReady ||
+        wagerLocked ||
+        !view.canAfford ||
+        !gate.available
+      }
+      testId={`gamble-choose-${gate.id}`}
+      onPress={() => onChooseGate(gate.id)}
+    />
+  );
+
+  if (!wagerLocked || selected) {
+    return (
+      <div
+        data-gamble-bet={gate.id}
+        data-gamble-bet-presentation={selected ? "selected" : "available"}
+      >
+        {button}
+      </div>
+    );
+  }
+
   return (
-    <div
-      data-gamble-gate={gate.id}
-      style={{
-        width: "100%",
-      }}
+    <motion.div
+      data-gamble-bet={gate.id}
+      data-gamble-bet-presentation="faded"
+      aria-hidden={revealStarted || undefined}
+      initial={false}
+      animate={{ opacity: revealStarted ? 0 : 1 }}
+      transition={{ duration: FADE_DURATION_SECONDS, ease: "easeOut" }}
+      style={{ pointerEvents: revealStarted ? "none" : "auto" }}
     >
-      <GlassPanel radius="panel" testId={`gamble-gate-${gate.id}`}>
-        <GatePrize gate={gate} layout={layout} />
-      </GlassPanel>
-    </div>
+      {button}
+    </motion.div>
   );
 }
 
@@ -199,6 +249,7 @@ function GambleOutcome({
       essenceGained={result.won ? result.essenceGained : undefined}
       tone={result.won ? "reward" : "danger"}
       size={layout === "desktop" ? "standard" : "compact"}
+      duration="extended"
     />
   );
 }
@@ -212,7 +263,7 @@ export function GambleSiteScreen({
 }: GambleSiteScreenProps) {
   const reduceMotion = useReducedMotion() === true;
   const isDesktop = useIsDesktop();
-  const [cardFace, setCardFace] = useState<"back" | "front">("back");
+  const [revealStarted, setRevealStarted] = useState(false);
   const [outcomeVisible, setOutcomeVisible] = useState(false);
   const [replacementVisible, setReplacementVisible] = useState(false);
   const resultId = view.result?.id;
@@ -222,26 +273,26 @@ export function GambleSiteScreen({
   useEffect(() => {
     setOutcomeVisible(false);
     setReplacementVisible(false);
-    setCardFace("back");
+    setRevealStarted(false);
     if (resultId === undefined) return;
-    const flipDelay = reduceMotion
+    const revealDelay = reduceMotion
       ? REDUCED_MOTION_DELAY_MS
-      : CARD_FACE_DOWN_HOLD_MS;
+      : BET_SETTLE_DELAY_MS;
     const outcomeDelay = reduceMotion
-      ? REDUCED_MOTION_DELAY_MS * 2
-      : CARD_FACE_DOWN_HOLD_MS +
-        CARD_FLIP_DURATION_MS +
-        CARD_OUTCOME_SETTLE_MS;
-    const flipTimeout = window.setTimeout(
-      () => setCardFace("front"),
-      flipDelay,
+      ? REDUCED_MOTION_DELAY_MS + DRAWN_CARD_HOLD_MS
+      : BET_SETTLE_DELAY_MS +
+        PLAYING_CARD_FLIP_DURATION_MS +
+        DRAWN_CARD_HOLD_MS;
+    const revealTimeout = window.setTimeout(
+      () => setRevealStarted(true),
+      revealDelay,
     );
     const outcomeTimeout = window.setTimeout(
       () => setOutcomeVisible(true),
       outcomeDelay,
     );
     return () => {
-      window.clearTimeout(flipTimeout);
+      window.clearTimeout(revealTimeout);
       window.clearTimeout(outcomeTimeout);
     };
   }, [reduceMotion, resultId]);
@@ -257,16 +308,13 @@ export function GambleSiteScreen({
           onOutcomeComplete();
         }
       },
-      reduceMotion
-        ? REDUCED_MOTION_DELAY_MS
-        : RADIAL_ANNOUNCEMENT_DURATION_MS,
+      RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
     );
     return () => window.clearTimeout(timeout);
   }, [
     onOutcomeComplete,
     outcomeVisible,
     pendingDreamsignReplacement,
-    reduceMotion,
     resultId,
   ]);
 
@@ -314,17 +362,6 @@ export function GambleSiteScreen({
               pointerEvents: "auto",
             }}
           >
-            {view.result !== null && (
-              <div data-gamble-draw-card="">
-                <PlayingCard
-                  rank={view.card.rank}
-                  suit={view.card.suit}
-                  face={cardFace}
-                  size={layout === "desktop" ? "standard" : "compact"}
-                />
-              </div>
-            )}
-
             <section
               aria-label="Three wager gates"
               data-gamble-gates=""
@@ -337,11 +374,29 @@ export function GambleSiteScreen({
                     ? token("--space-4")
                     : token("--space-2"),
                 alignItems: "center",
+                justifyItems: "center",
               }}
             >
-              {view.gates.map((gate) => (
-                <GambleGatePanel key={gate.id} gate={gate} layout={layout} />
-              ))}
+              {view.gates.map((gate) => {
+                const presentation: GambleGatePresentation =
+                  view.result === null
+                    ? "available"
+                    : gate.id === view.result.gateId
+                      ? "selected"
+                      : gate.id === view.result.revealGateId
+                        ? "revealed"
+                        : "faded";
+                return (
+                  <GambleGateCard
+                    key={gate.id}
+                    gate={gate}
+                    layout={layout}
+                    presentation={presentation}
+                    revealStarted={revealStarted}
+                    drawnCard={view.card}
+                  />
+                );
+              })}
             </section>
 
             <div
@@ -358,32 +413,37 @@ export function GambleSiteScreen({
               }}
             >
               {view.gates.map((gate) => (
-                <GlassButton
+                <GambleBetButton
                   key={gate.id}
-                  label="Bet"
-                  accessibilityLabel={`Bet on ${gate.name} for ${String(view.wagerCost)} Essence`}
-                  essenceCost={view.wagerCost}
-                  essenceCostStyle="separated"
-                  size={layout === "mobile" ? "compact" : "standard"}
-                  variant="accent"
-                  disabled={
-                    !view.runtimeReady ||
-                    wagerLocked ||
-                    !view.canAfford ||
-                    !gate.available
-                  }
-                  testId={`gamble-choose-${gate.id}`}
-                  onPress={() => onChooseGate(gate.id)}
+                  gate={gate}
+                  view={view}
+                  layout={layout}
+                  wagerLocked={wagerLocked}
+                  selected={view.result?.gateId === gate.id}
+                  revealStarted={revealStarted}
+                  onChooseGate={onChooseGate}
                 />
               ))}
             </div>
 
             {!wagerLocked && (
-              <GlassButton
-                label="Leave"
-                testId="gamble-leave"
-                onPress={onLeave}
-              />
+              <div
+                data-gamble-leave-slot=""
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <GlassButton
+                  label="Leave"
+                  testId="gamble-leave"
+                  onPress={onLeave}
+                />
+              </div>
             )}
             {view.result?.pendingDreamsignReplacement === true &&
               !replacementVisible &&

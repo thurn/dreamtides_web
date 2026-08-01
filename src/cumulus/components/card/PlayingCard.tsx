@@ -3,11 +3,15 @@
 import { motion, useReducedMotion } from "framer-motion";
 import type { CSSProperties, ReactElement } from "react";
 import type {
+  GravokGateId,
   StandardPlayingCardRank,
   StandardPlayingCardSuit,
 } from "../../../types/gamble";
+import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { token } from "../../primitives/tokens";
+import { DreamsignName } from "../hud/DreamsignName";
+import { EssenceValue } from "../hud/EssenceValue";
 
 /**
  * The deliberately centralized playing-card art direction. Change these
@@ -29,6 +33,20 @@ export const PLAYING_CARD_DESIGN = {
       redCharacterOutlineWidth: 5,
       blackCharacterOutlineWidth: 5,
     },
+    wagerCompact: {
+      square: 116,
+      fontSize: 46,
+      rankSuitGap: 3,
+      redCharacterOutlineWidth: 5,
+      blackCharacterOutlineWidth: 5,
+    },
+    wager: {
+      square: 188,
+      fontSize: 76,
+      rankSuitGap: 3,
+      redCharacterOutlineWidth: 5,
+      blackCharacterOutlineWidth: 5,
+    },
   },
   fontFamily: "Inter",
   displayFontScale: 1.5,
@@ -45,7 +63,7 @@ export const PLAYING_CARD_DESIGN = {
   },
   flip: {
     perspective: 1000,
-    durationSeconds: 0.42,
+    durationSeconds: 0.72,
     ease: [0.22, 0.61, 0.36, 1],
   },
   superellipseExponent: 4,
@@ -63,6 +81,11 @@ export const PLAYING_CARD_DESIGN = {
   },
 } as const;
 
+/** Stable timing shared by card-flip choreography and the screen that stages it. */
+export const PLAYING_CARD_FLIP_DURATION_MS = Math.round(
+  PLAYING_CARD_DESIGN.flip.durationSeconds * 1000,
+);
+
 export type PlayingCardRank = StandardPlayingCardRank;
 
 export type PlayingCardSuit = StandardPlayingCardSuit;
@@ -73,6 +96,9 @@ export type PlayingCardFace = "front" | "back";
 
 export type PlayingCardVariant =
   "rank-and-suit" | "rank-display" | "suit-display" | "rank-target";
+
+/** Named square sizes reserved for the Three Gates prize row. */
+export type WagerPrizeCardSize = "wagerCompact" | "wager";
 
 const SUIT_SYMBOLS: Record<PlayingCardSuit, string> = {
   clubs: "♣",
@@ -194,15 +220,17 @@ function frontAriaLabel(
   }
 }
 
-/** A glass playing card with animated front and checkerboard-back faces. */
-export function PlayingCard({
+function PlayingCardIndex({
   rank,
   suit,
-  size = "standard",
-  face = "front",
-  variant = "rank-and-suit",
-}: PlayingCardProps): ReactElement {
-  const reduceMotion = useReducedMotion() === true;
+  size,
+  variant,
+}: {
+  rank: PlayingCardRank;
+  suit: PlayingCardSuit;
+  size: PlayingCardSize;
+  variant: PlayingCardVariant;
+}): ReactElement {
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const suitOptics = PLAYING_CARD_DESIGN.suitOptics[suit];
   const isRedSuit = RED_SUITS.has(suit);
@@ -221,6 +249,67 @@ export function PlayingCard({
     (variant === "rank-and-suit" || variant === "suit-display") && isRedSuit
       ? sizeSpec.redCharacterOutlineWidth
       : sizeSpec.blackCharacterOutlineWidth;
+
+  return (
+    <span
+      data-playing-card-index=""
+      style={{
+        position: "relative",
+        zIndex: 1,
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: sizeSpec.rankSuitGap,
+        color: foreground,
+        fontFamily: PLAYING_CARD_DESIGN.fontFamily,
+        fontSize,
+        fontWeight: 900,
+        fontStyle: "normal",
+        lineHeight: 1,
+        letterSpacing: "-0.025em",
+        whiteSpace: "nowrap",
+        ...(characterOutlineWidth > 0
+          ? {
+              WebkitTextStroke: `${String(characterOutlineWidth)}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
+              paintOrder: "stroke fill",
+            }
+          : {}),
+      }}
+    >
+      {variant !== "suit-display" && (
+        <span data-playing-card-rank-glyph="">{rank}</span>
+      )}
+      {variant === "rank-target" && (
+        <span data-playing-card-target-glyph="">+</span>
+      )}
+      {(variant === "rank-and-suit" || variant === "suit-display") && (
+        <span
+          data-playing-card-suit-glyph=""
+          style={{
+            position: "relative",
+            top: fontSize * suitOptics.verticalOffsetEm,
+            display: "inline-block",
+            fontSize: fontSize * suitOptics.scale,
+            lineHeight: 1,
+          }}
+        >
+          {SUIT_SYMBOLS[suit]}
+        </span>
+      )}
+    </span>
+  );
+}
+
+/** A glass playing card with animated front and checkerboard-back faces. */
+export function PlayingCard({
+  rank,
+  suit,
+  size = "standard",
+  face = "front",
+  variant = "rank-and-suit",
+}: PlayingCardProps): ReactElement {
+  const reduceMotion = useReducedMotion() === true;
+  const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const backFace = PLAYING_CARD_DESIGN.backFace;
   const checkerTilePercent = (2 / backFace.checkerSquaresPerSide) * 100;
 
@@ -274,52 +363,12 @@ export function PlayingCard({
             placeItems: "center",
           }}
         >
-          <span
-            data-playing-card-index=""
-            style={{
-              position: "relative",
-              zIndex: 1,
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: sizeSpec.rankSuitGap,
-              color: foreground,
-              fontFamily: PLAYING_CARD_DESIGN.fontFamily,
-              fontSize,
-              fontWeight: 900,
-              fontStyle: "normal",
-              lineHeight: 1,
-              letterSpacing: "-0.025em",
-              whiteSpace: "nowrap",
-              ...(characterOutlineWidth > 0
-                ? {
-                    WebkitTextStroke: `${String(characterOutlineWidth)}px ${PLAYING_CARD_DESIGN.colors.characterOutline}`,
-                    paintOrder: "stroke fill",
-                  }
-                : {}),
-            }}
-          >
-            {variant !== "suit-display" && (
-              <span data-playing-card-rank-glyph="">{rank}</span>
-            )}
-            {variant === "rank-target" && (
-              <span data-playing-card-target-glyph="">+</span>
-            )}
-            {(variant === "rank-and-suit" || variant === "suit-display") && (
-              <span
-                data-playing-card-suit-glyph=""
-                style={{
-                  position: "relative",
-                  top: fontSize * suitOptics.verticalOffsetEm,
-                  display: "inline-block",
-                  fontSize: fontSize * suitOptics.scale,
-                  lineHeight: 1,
-                }}
-              >
-                {SUIT_SYMBOLS[suit]}
-              </span>
-            )}
-          </span>
+          <PlayingCardIndex
+            rank={rank}
+            suit={suit}
+            size={size}
+            variant={variant}
+          />
           <PlayingCardRim />
         </div>
         <div
@@ -353,6 +402,191 @@ export function PlayingCard({
               }}
             />
           </div>
+          <PlayingCardRim />
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+export interface WagerPrizeCardProps {
+  /** Stable Three Gates choice represented by this prize object. */
+  gateId: GravokGateId;
+  /** Inclusive winning rank shown as authored compact notation. */
+  targetLabel: string;
+  /** Essence awarded when the gate wins. */
+  essenceReward: number;
+  /** Jackpot Dreamsign appended to the reward sentence, when present. */
+  rewardDreamsign: DreamsignData | null;
+  /** Named desktop or mobile square size. Defaults to `wager`. */
+  size?: WagerPrizeCardSize;
+  /** Committed card shown on the reverse face after a bet. */
+  drawnCard?: {
+    rank: PlayingCardRank;
+    suit: PlayingCardSuit;
+  } | null;
+  /** Turn the prize face over to its committed card. */
+  revealDrawnCard?: boolean;
+  /** Optional stable selector for the jackpot Dreamsign name. */
+  dreamsignTestId?: string;
+}
+
+/**
+ * A Three Gates prize on the PlayingCard superellipse. Its jackpot copy stays
+ * one sentence, and an assigned result flips into the standard rank-and-suit
+ * face without changing the object's footprint.
+ */
+export function WagerPrizeCard({
+  gateId,
+  targetLabel,
+  essenceReward,
+  rewardDreamsign,
+  size = "wager",
+  drawnCard = null,
+  revealDrawnCard = false,
+  dreamsignTestId,
+}: WagerPrizeCardProps): ReactElement {
+  const reduceMotion = useReducedMotion() === true;
+  const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
+  const showingDrawnCard = revealDrawnCard && drawnCard !== null;
+  const prizeLabel = `Draw ${targetLabel}. Win ${String(essenceReward)} Essence${
+    rewardDreamsign === null ? "" : ` and ${rewardDreamsign.name}`
+  }.`;
+  const drawnCardLabel =
+    drawnCard === null
+      ? prizeLabel
+      : frontAriaLabel(drawnCard.rank, drawnCard.suit, "rank-and-suit");
+
+  return (
+    <div
+      role={showingDrawnCard ? "img" : "group"}
+      aria-label={showingDrawnCard ? drawnCardLabel : prizeLabel}
+      data-wager-prize-card={gateId}
+      data-wager-prize-card-state={showingDrawnCard ? "drawn" : "prize"}
+      data-wager-prize-card-size={size}
+      data-wager-prize-drawn-card={
+        drawnCard === null ? undefined : `${drawnCard.rank}-${drawnCard.suit}`
+      }
+      data-playing-card={
+        showingDrawnCard
+          ? `${drawnCard?.rank ?? "A"}-${drawnCard?.suit ?? "spades"}`
+          : undefined
+      }
+      data-playing-card-face={showingDrawnCard ? "front" : undefined}
+      style={{
+        position: "relative",
+        width: sizeSpec.square,
+        height: sizeSpec.square,
+        flex: "0 0 auto",
+        perspective: PLAYING_CARD_DESIGN.flip.perspective,
+      }}
+    >
+      <motion.div
+        data-wager-prize-card-flip=""
+        initial={false}
+        animate={{ rotateY: showingDrawnCard ? 180 : 0 }}
+        transition={
+          reduceMotion
+            ? { duration: 0 }
+            : {
+                duration: PLAYING_CARD_DESIGN.flip.durationSeconds,
+                ease: PLAYING_CARD_DESIGN.flip.ease,
+              }
+        }
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          transformStyle: "preserve-3d",
+        }}
+      >
+        <div
+          aria-hidden={showingDrawnCard || undefined}
+          data-wager-prize-face=""
+          style={{
+            ...CARD_FACE_STYLE,
+            display: "grid",
+            placeItems: "center",
+            pointerEvents: showingDrawnCard ? "none" : "auto",
+          }}
+        >
+          <div
+            data-wager-prize-copy=""
+            style={{
+              position: "relative",
+              zIndex: 1,
+              width: "100%",
+              padding:
+                size === "wager"
+                  ? token("--space-4")
+                  : token("--space-2"),
+              boxSizing: "border-box",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap:
+                size === "wager"
+                  ? token("--space-3")
+                  : token("--space-2"),
+              textAlign: "center",
+              color: token("--text-on-glass"),
+            }}
+          >
+            <h2
+              data-wager-prize-title=""
+              style={{
+                margin: 0,
+                font:
+                  size === "wager"
+                    ? token("--t-title")
+                    : token("--t-title-sm"),
+              }}
+            >
+              Draw {targetLabel}
+            </h2>
+            <p
+              data-wager-prize-description=""
+              style={{
+                margin: 0,
+                font:
+                  size === "wager"
+                    ? token("--t-body")
+                    : token("--t-body-sm"),
+              }}
+            >
+              Win <EssenceValue amount={essenceReward} tone="inherit" />
+              {rewardDreamsign !== null && (
+                <>
+                  {" and "}
+                  <DreamsignName
+                    dreamsign={rewardDreamsign}
+                    testId={dreamsignTestId}
+                  />
+                </>
+              )}
+            </p>
+          </div>
+          <PlayingCardRim />
+        </div>
+        <div
+          aria-hidden={!showingDrawnCard || undefined}
+          data-wager-drawn-card-face=""
+          style={{
+            ...CARD_FACE_STYLE,
+            display: "grid",
+            placeItems: "center",
+            transform: "rotateY(180deg)",
+          }}
+        >
+          {drawnCard !== null && (
+            <PlayingCardIndex
+              rank={drawnCard.rank}
+              suit={drawnCard.suit}
+              size={size}
+              variant="rank-and-suit"
+            />
+          )}
           <PlayingCardRim />
         </div>
       </motion.div>

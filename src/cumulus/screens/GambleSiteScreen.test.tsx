@@ -26,7 +26,7 @@ const VIEW: GambleSiteView = {
   runtimeReady: true,
   wagerCost: 50,
   canAfford: true,
-  card: { rank: "A", suit: "spades", face: "back" },
+  card: { rank: "A", suit: "spades" },
   gates: [
     {
       id: "six",
@@ -117,7 +117,7 @@ afterEach(() => {
 });
 
 describe("GambleSiteScreen", () => {
-  it("presents three compact prize gates without a card before the bet", () => {
+  it("presents three square prize cards and pins Leave to the HUD edge", () => {
     const onChooseGate = vi.fn();
     const onLeave = vi.fn();
     const { container, root } = mount(
@@ -131,17 +131,17 @@ describe("GambleSiteScreen", () => {
     );
 
     expect(
-      container.querySelector("[data-gamble-draw-card] [data-playing-card]"),
+      container.querySelector("[data-playing-card]"),
     ).toBeNull();
     expect(container.querySelectorAll("[data-gamble-gate]")).toHaveLength(3);
-    expect(container.querySelectorAll('[data-glass-panel-frame="floating"]'))
+    expect(container.querySelectorAll("[data-wager-prize-card]"))
       .toHaveLength(3);
     expect(container.querySelector('[data-gamble-gate="six"]')?.textContent)
       .toBe("Draw 6+Win 100");
     expect(container.querySelector('[data-gamble-gate="nine"]')?.textContent)
       .toBe("Draw 9+Win 150");
     expect(container.querySelector('[data-gamble-gate="jack"]')?.textContent)
-      .toBe("Draw J+Win 200Fixture Jackpot");
+      .toBe("Draw J+Win 200 and Fixture Jackpot");
     expect(container.textContent).not.toContain("chance");
     expect(container.textContent).not.toContain("Gravok’s Casino");
     expect(container.textContent).not.toContain("Three-Gate Wager");
@@ -151,7 +151,16 @@ describe("GambleSiteScreen", () => {
     expect(dreamsignName)
       .not.toBeNull();
     expect(dreamsignName?.style.textDecoration).toContain("underline");
+    expect(dreamsignName?.parentElement?.hasAttribute(
+      "data-wager-prize-description",
+    )).toBe(true);
+    expect(dreamsignName?.style.font).toBe("inherit");
     expect(dreamsignName?.dataset.revealPrimaryVariant).toBe("object");
+    const leaveSlot = container.querySelector<HTMLElement>(
+      "[data-gamble-leave-slot]",
+    );
+    expect(leaveSlot?.style.position).toBe("absolute");
+    expect(leaveSlot?.style.bottom).toBe("0px");
 
     const chooseSix = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-choose-six"]',
@@ -172,15 +181,16 @@ describe("GambleSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("appears face-down, flips the shared card, and completes after a win announcement", () => {
+  it("flips a non-selected prize, fades the other, pauses, and keeps the outcome readable", () => {
     vi.useFakeTimers();
     const onOutcomeComplete = vi.fn();
     const resultView: GambleSiteView = {
       ...VIEW,
-      card: { rank: "Q", suit: "hearts", face: "front" },
+      card: { rank: "Q", suit: "hearts" },
       result: {
         id: "fixture-result",
         gateId: "nine",
+        revealGateId: "jack",
         won: true,
         essenceGained: 150,
         rewardDreamsign: null,
@@ -197,21 +207,42 @@ describe("GambleSiteScreen", () => {
       />,
     );
 
+    expect(container.querySelector("[data-playing-card]")).toBeNull();
     expect(
-      container.querySelector("[data-gamble-draw-card] [data-playing-card]")
-        ?.getAttribute("data-playing-card-face"),
-    ).toBe("back");
+      container.querySelector('[data-gamble-gate="nine"]')?.getAttribute(
+        "data-gamble-gate-presentation",
+      ),
+    ).toBe("selected");
+    expect(
+      container.querySelector('[data-gamble-gate="jack"]')?.getAttribute(
+        "data-gamble-gate-presentation",
+      ),
+    ).toBe("revealed");
     expect(container.querySelector('[data-testid="gamble-leave"]')).toBeNull();
-    void act(() => vi.advanceTimersByTime(180));
+    void act(() => vi.advanceTimersByTime(250));
     expect(
-      container.querySelector("[data-gamble-draw-card] [data-playing-card]")
+      container.querySelector('[data-gamble-gate="jack"] [data-playing-card]')
         ?.getAttribute("data-playing-card-face"),
     ).toBe("front");
-    void act(() => vi.advanceTimersByTime(500));
+    expect(
+      container.querySelector('[data-gamble-gate="six"]')?.getAttribute(
+        "aria-hidden",
+      ),
+    ).toBe("true");
+    expect(
+      container.querySelector('[data-gamble-bet="jack"]')?.getAttribute(
+        "aria-hidden",
+      ),
+    ).toBe("true");
+    void act(() => vi.advanceTimersByTime(1_969));
+    expect(container.querySelector("[data-radial-announcement]")).toBeNull();
+    void act(() => vi.advanceTimersByTime(1));
     const announcement = container.querySelector(
       '[data-radial-announcement="fixture-result"]',
     );
     expect(announcement?.textContent).toContain("Won!+150");
+    expect(announcement?.getAttribute("data-radial-announcement-duration"))
+      .toBe("extended");
     void act(() => vi.advanceTimersByTime(1_000));
     act(() => {
       root.render(
@@ -226,7 +257,9 @@ describe("GambleSiteScreen", () => {
         </CumulusRoot>,
       );
     });
-    void act(() => vi.advanceTimersByTime(1_100));
+    void act(() => vi.advanceTimersByTime(2_359));
+    expect(onOutcomeComplete).not.toHaveBeenCalled();
+    void act(() => vi.advanceTimersByTime(1));
     expect(onOutcomeComplete).toHaveBeenCalledOnce();
 
     act(() => root.unmount());
@@ -237,10 +270,11 @@ describe("GambleSiteScreen", () => {
     const onReplaceDreamsign = vi.fn();
     const replacementView: GambleSiteView = {
       ...VIEW,
-      card: { rank: "A", suit: "clubs", face: "front" },
+      card: { rank: "A", suit: "clubs" },
       result: {
         id: "fixture-jackpot-result",
         gateId: "jack",
+        revealGateId: "six",
         won: true,
         essenceGained: 200,
         rewardDreamsign: JACKPOT_DREAMSIGN,
@@ -269,8 +303,8 @@ describe("GambleSiteScreen", () => {
       />,
     );
 
-    void act(() => vi.advanceTimersByTime(680));
-    void act(() => vi.advanceTimersByTime(2_100));
+    void act(() => vi.advanceTimersByTime(2_220));
+    void act(() => vi.advanceTimersByTime(3_360));
     expect(container.querySelector("[data-dreamsign-replacement-dialog]"))
       .not.toBeNull();
     act(() => {

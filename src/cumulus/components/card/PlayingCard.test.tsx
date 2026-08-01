@@ -4,7 +4,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
-import { PlayingCard } from "./PlayingCard";
+import { PlayingCard, WagerPrizeCard } from "./PlayingCard";
 
 beforeEach(() => {
   (
@@ -115,5 +115,64 @@ describe("PlayingCard", () => {
     expect(card.dataset.playingCardSize).toBe("compact");
     expect(card.getAttribute("aria-label")).toBe("7 of diamonds");
     expect(card.textContent).toBe("7♦");
+  });
+
+  it("keeps the jackpot reward in one sentence and flips into the drawn card", () => {
+    const host = document.createElement("div");
+    document.body.append(host);
+    const root = createRoot(host);
+    const dreamsign = {
+      id: "00000000-0000-4000-8000-000000000051",
+      name: "Bezoar",
+      effectDescription: "Foresee 1.",
+      isBane: false,
+    };
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <WagerPrizeCard
+            gateId="jack"
+            targetLabel="J+"
+            essenceReward={200}
+            rewardDreamsign={dreamsign}
+            size="wagerCompact"
+            drawnCard={{ rank: "Q", suit: "hearts" }}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const prize = host.querySelector<HTMLElement>("[data-wager-prize-card]");
+    const description = prize?.querySelector<HTMLElement>(
+      "[data-wager-prize-description]",
+    );
+    expect(description?.textContent).toBe("Win 200 and Bezoar");
+    expect(description?.querySelector("[data-dreamsign-name]")).not.toBeNull();
+    expect(prize?.dataset.wagerPrizeCardState).toBe("prize");
+    expect(prize?.dataset.playingCard).toBeUndefined();
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <WagerPrizeCard
+            gateId="jack"
+            targetLabel="J+"
+            essenceReward={200}
+            rewardDreamsign={dreamsign}
+            size="wagerCompact"
+            drawnCard={{ rank: "Q", suit: "hearts" }}
+            revealDrawnCard
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    const revealed = host.querySelector<HTMLElement>("[data-wager-prize-card]");
+    expect(revealed?.dataset.wagerPrizeCardState).toBe("drawn");
+    expect(revealed?.dataset.playingCard).toBe("Q-hearts");
+    expect(revealed?.getAttribute("aria-label")).toBe("Q of hearts");
+
+    act(() => root.unmount());
   });
 });
