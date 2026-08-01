@@ -31,7 +31,7 @@ const VIEW: GambleSiteView = {
     {
       id: "six",
       name: "Six Gate",
-      targetLabel: "6+",
+      targetLabel: "6-A",
       chanceLabel: "69.23%",
       oddsNumerator: 36,
       oddsDenominator: 52,
@@ -42,7 +42,7 @@ const VIEW: GambleSiteView = {
     {
       id: "nine",
       name: "Nine Gate",
-      targetLabel: "9+",
+      targetLabel: "9-A",
       chanceLabel: "46.15%",
       oddsNumerator: 24,
       oddsDenominator: 52,
@@ -53,7 +53,7 @@ const VIEW: GambleSiteView = {
     {
       id: "jack",
       name: "Jack Gate",
-      targetLabel: "J+",
+      targetLabel: "J-A",
       chanceLabel: "30.77%",
       oddsNumerator: 16,
       oddsDenominator: 52,
@@ -137,11 +137,11 @@ describe("GambleSiteScreen", () => {
     expect(container.querySelectorAll("[data-wager-prize-card]"))
       .toHaveLength(3);
     expect(container.querySelector('[data-gamble-gate="six"]')?.textContent)
-      .toBe("Draw 6+Win 100");
+      .toBe("Draw 6-AWin 100");
     expect(container.querySelector('[data-gamble-gate="nine"]')?.textContent)
-      .toBe("Draw 9+Win 150");
+      .toBe("Draw 9-AWin 150");
     expect(container.querySelector('[data-gamble-gate="jack"]')?.textContent)
-      .toBe("Draw J+Win 200 and Fixture Jackpot");
+      .toBe("Draw J-AWin 200 and Fixture Jackpot");
     expect(container.textContent).not.toContain("chance");
     expect(container.textContent).not.toContain("Gravok’s Casino");
     expect(container.textContent).not.toContain("Three-Gate Wager");
@@ -151,11 +151,20 @@ describe("GambleSiteScreen", () => {
     expect(dreamsignName)
       .not.toBeNull();
     expect(dreamsignName?.style.textDecoration).toContain("underline");
-    expect(dreamsignName?.parentElement?.hasAttribute(
-      "data-wager-prize-description",
-    )).toBe(true);
+    expect(
+      dreamsignName?.parentElement?.hasAttribute(
+        "data-wager-prize-description",
+      ),
+    ).toBe(true);
     expect(dreamsignName?.style.font).toBe("inherit");
-    expect(dreamsignName?.dataset.revealPrimaryVariant).toBe("object");
+    const dreamsignSource = container.querySelector<HTMLElement>(
+      '[data-gamble-gate="jack"] [data-wager-prize-dreamsign-source]',
+    );
+    expect(dreamsignSource?.dataset.revealPrimaryVariant).toBe("object");
+    expect(dreamsignSource?.querySelector("[data-wager-prize-title]"))
+      .not.toBeNull();
+    expect(dreamsignSource?.querySelector("[data-wager-prize-description]"))
+      .not.toBeNull();
     const leaveSlot = container.querySelector<HTMLElement>(
       "[data-gamble-leave-slot]",
     );
@@ -234,6 +243,14 @@ describe("GambleSiteScreen", () => {
         "aria-hidden",
       ),
     ).toBe("true");
+    expect(
+      container.querySelector('[data-gamble-bet="nine"]')?.getAttribute(
+        "aria-hidden",
+      ),
+    ).toBe("true");
+    expect(
+      container.querySelectorAll('[data-gamble-bet][aria-hidden="true"]'),
+    ).toHaveLength(3);
     void act(() => vi.advanceTimersByTime(1_969));
     expect(container.querySelector("[data-radial-announcement]")).toBeNull();
     void act(() => vi.advanceTimersByTime(1));
@@ -243,6 +260,9 @@ describe("GambleSiteScreen", () => {
     expect(announcement?.textContent).toContain("Won!+150");
     expect(announcement?.getAttribute("data-radial-announcement-duration"))
       .toBe("extended");
+    expect(
+      announcement?.parentElement?.hasAttribute("data-gamble-outcome-anchor"),
+    ).toBe(true);
     void act(() => vi.advanceTimersByTime(1_000));
     act(() => {
       root.render(

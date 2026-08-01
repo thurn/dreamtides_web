@@ -124,6 +124,7 @@ describe("PlayingCard", () => {
     const dreamsign = {
       id: "00000000-0000-4000-8000-000000000051",
       name: "Bezoar",
+      imageName: "bezoar.png",
       effectDescription: "Foresee 1.",
       isBane: false,
     };
@@ -133,7 +134,7 @@ describe("PlayingCard", () => {
         <CumulusRoot>
           <WagerPrizeCard
             gateId="jack"
-            targetLabel="J+"
+            targetLabel="J-A"
             essenceReward={200}
             rewardDreamsign={dreamsign}
             size="wagerCompact"
@@ -148,7 +149,22 @@ describe("PlayingCard", () => {
       "[data-wager-prize-description]",
     );
     expect(description?.textContent).toBe("Win 200 and Bezoar");
-    expect(description?.querySelector("[data-dreamsign-name]")).not.toBeNull();
+    expect(
+      description?.querySelector("[data-wager-prize-dreamsign-name]"),
+    ).not.toBeNull();
+    const dreamsignSource = prize?.querySelector<HTMLElement>(
+      "[data-wager-prize-dreamsign-source]",
+    );
+    expect(dreamsignSource?.dataset.revealEntityType).toBe("dreamsign");
+    expect(dreamsignSource?.dataset.revealPrimaryVariant).toBe("object");
+    const descriptionId = dreamsignSource?.getAttribute("aria-describedby") ?? "";
+    expect(document.getElementById(descriptionId)?.textContent).toContain(
+      "Look at the top card of your deck",
+    );
+    expect(dreamsignSource?.querySelector("[data-wager-prize-title]"))
+      .not.toBeNull();
+    expect(dreamsignSource?.querySelector("[data-wager-prize-description]"))
+      .not.toBeNull();
     expect(prize?.dataset.wagerPrizeCardState).toBe("prize");
     expect(prize?.dataset.playingCard).toBeUndefined();
 
@@ -157,7 +173,7 @@ describe("PlayingCard", () => {
         <CumulusRoot>
           <WagerPrizeCard
             gateId="jack"
-            targetLabel="J+"
+            targetLabel="J-A"
             essenceReward={200}
             rewardDreamsign={dreamsign}
             size="wagerCompact"

@@ -8,21 +8,21 @@ Components · Live demo & interactive props: `/cumulus#/wager-prize-card`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The Three Gates prize object: one PlayingCard superellipse with a target title, a single reward sentence, and an optional committed-card reverse face.
+The Three Gates prize object: one PlayingCard superellipse with a target title, a single reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face.
 
-> **Guidance:** Keep the reward in one sentence; assign a drawn card only when this non-selected gate owns the result reveal.
+> **Guidance:** Keep the reward in one sentence. When a Dreamsign is present, the entire prize face is its hover and press reveal source.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `gateId` | `GravokGateId` = `"six" \| "nine" \| "jack"` | yes | — | Stable Three Gates choice represented by this prize object. |
-| `targetLabel` | `string` | yes | — | Inclusive winning rank shown as authored compact notation. |
+| `targetLabel` | `string` | yes | — | Inclusive winning rank range shown as authored compact notation. |
 | `essenceReward` | `number` | yes | — | Essence awarded when the gate wins. |
 | `rewardDreamsign` | `Dreamsign \| null` | yes | — | Jackpot Dreamsign appended to the reward sentence, when present. |
-| `size` | `WagerPrizeCardSize` = `"wagerCompact" \| "wager"` | no | `wager` | Named desktop or mobile square size. Defaults to `wager`. |
-| `drawnCard` | `{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| null` | no | `null` | Committed card shown on the reverse face after a bet. |
-| `revealDrawnCard` | `boolean` | no | `false` | Turn the prize face over to its committed card. |
+| `size` | `WagerPrizeCardSize` = `"wagerCompact" \| "wager"` | no | — | Named desktop or mobile square size. Defaults to `wager`. |
+| `drawnCard` | `{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| null` | no | — | Committed card shown on the reverse face after a bet. |
+| `revealDrawnCard` | `boolean` | no | — | Turn the prize face over to its committed card. |
 | `dreamsignTestId` | `string` | no | — | Optional stable selector for the jackpot Dreamsign name. |
 
 ## Usage
@@ -32,7 +32,7 @@ The Three Gates prize object: one PlayingCard superellipse with a target title, 
 ```tsx
 <WagerPrizeCard
   gateId="jack"
-  targetLabel="J+"
+  targetLabel="J-A"
   essenceReward={200}
   rewardDreamsign={dreamsign}
 />
@@ -44,7 +44,7 @@ The Three Gates prize object: one PlayingCard superellipse with a target title, 
 ```tsx
 <WagerPrizeCard
   gateId="jack"
-  targetLabel="J+"
+  targetLabel="J-A"
   essenceReward={200}
   rewardDreamsign={dreamsign}
   drawnCard={{ rank: "Q", suit: "hearts" }}

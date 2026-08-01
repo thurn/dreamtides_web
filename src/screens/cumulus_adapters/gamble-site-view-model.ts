@@ -47,7 +47,7 @@ export function buildGambleGateViews(
   return GRAVOK_GATE_RULES.map((gate) => ({
     id: gate.id,
     name: gate.name,
-    targetLabel: `${gate.threshold}+`,
+    targetLabel: `${gate.threshold}-A`,
     chanceLabel: gravokGateChanceLabel(gate),
     oddsNumerator: gate.oddsNumerator,
     oddsDenominator: gate.oddsDenominator,

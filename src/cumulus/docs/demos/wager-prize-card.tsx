@@ -20,7 +20,7 @@ function WagerPrizeCardDemo({
   return (
     <WagerPrizeCard
       gateId="jack"
-      targetLabel="J+"
+      targetLabel="J-A"
       essenceReward={200}
       rewardDreamsign={SAMPLE_DREAMSIGN}
       drawnCard={{ rank: "Q", suit: "hearts" }}
@@ -33,9 +33,9 @@ export const wagerPrizeCardDemo: CumulusComponent = {
   id: "wager-prize-card",
   title: "Wager Prize Card",
   blurb:
-    "The Three Gates prize object: one PlayingCard superellipse with a target title, a single reward sentence, and an optional committed-card reverse face.",
+    "The Three Gates prize object: one PlayingCard superellipse with a target title, a single reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face.",
   callout:
-    "Keep the reward in one sentence; assign a drawn card only when this non-selected gate owns the result reveal.",
+    "Keep the reward in one sentence. When a Dreamsign is present, the entire prize face is its hover and press reveal source.",
   group: "Components",
   docName: "WagerPrizeCard",
   Component: WagerPrizeCardDemo,
@@ -44,7 +44,7 @@ export const wagerPrizeCardDemo: CumulusComponent = {
       label: "Prize",
       code: `<WagerPrizeCard
   gateId="jack"
-  targetLabel="J+"
+  targetLabel="J-A"
   essenceReward={200}
   rewardDreamsign={dreamsign}
 />
@@ -54,7 +54,7 @@ export const wagerPrizeCardDemo: CumulusComponent = {
       label: "Drawn reverse",
       code: `<WagerPrizeCard
   gateId="jack"
-  targetLabel="J+"
+  targetLabel="J-A"
   essenceReward={200}
   rewardDreamsign={dreamsign}
   drawnCard={{ rank: "Q", suit: "hearts" }}

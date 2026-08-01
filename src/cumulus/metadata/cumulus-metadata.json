@@ -2165,65 +2165,6 @@
       "description": "Stable test id for the panel root."
     }
   ],
-  "DreamsignName": [
-    {
-      "name": "dreamsign",
-      "tsType": "Dreamsign",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The UUID-identified Dreamsign whose authored name is shown.",
-      "nested": {
-        "name": "Dreamsign",
-        "fields": [
-          {
-            "name": "id",
-            "tsType": "string",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "name",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "effectDescription",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "imageName",
-            "tsType": "string",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "imageAlt",
-            "tsType": "string",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "isBane",
-            "tsType": "boolean",
-            "optional": false,
-            "description": ""
-          }
-        ]
-      }
-    },
-    {
-      "name": "testId",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "dreamsign-name",
-      "description": "Optional stable selector for focused screen tests."
-    }
-  ],
   "DreamwellCard": [
     {
       "name": "model",
@@ -5015,7 +4956,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Inclusive winning rank shown as authored compact notation."
+      "description": "Inclusive winning rank range shown as authored compact notation."
     },
     {
       "name": "essenceReward",
@@ -5041,7 +4982,7 @@
         "wager"
       ],
       "required": false,
-      "defaultValue": "wager",
+      "defaultValue": null,
       "description": "Named desktop or mobile square size. Defaults to `wager`."
     },
     {
@@ -5049,7 +4990,7 @@
       "tsType": "{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } | null",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "null",
+      "defaultValue": null,
       "description": "Committed card shown on the reverse face after a bet."
     },
     {
@@ -5057,7 +4998,7 @@
       "tsType": "boolean",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "false",
+      "defaultValue": null,
       "description": "Turn the prize face over to its committed card."
     },
     {

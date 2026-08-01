@@ -26,7 +26,6 @@ import { dreamAvatarAbilityTextDemo } from "./demos/dream-avatar-ability-text";
 import { dreamAvatarPortraitDemo } from "./demos/dream-avatar-portrait";
 import { dreamwellCardDemo } from "./demos/dreamwell-card";
 import { dreamsignDemo } from "./demos/dreamsign";
-import { dreamsignNameDemo } from "./demos/dreamsign-name";
 import { dreamsignGalleryPanelDemo } from "./demos/dreamsign-gallery-panel";
 import { disclosureSectionDemo } from "./demos/disclosure-section";
 import { developerRailDemo } from "./demos/developer-rail";
@@ -207,7 +206,6 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   atlasEdgeDemo,
   atlasMapDemo,
   dreamsignDemo,
-  dreamsignNameDemo,
   dreamsignGalleryPanelDemo,
   siteNodeDemo,
   wagerPrizeCardDemo,

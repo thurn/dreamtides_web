@@ -48,7 +48,7 @@ describe("gamble-site-view-model", () => {
     expect(gates).toMatchObject([
       {
         id: "six",
-        targetLabel: "6+",
+        targetLabel: "6-A",
         chanceLabel: "69.23%",
         essenceReward: 100,
         rewardDreamsign: null,
@@ -56,7 +56,7 @@ describe("gamble-site-view-model", () => {
       },
       {
         id: "nine",
-        targetLabel: "9+",
+        targetLabel: "9-A",
         chanceLabel: "46.15%",
         essenceReward: 150,
         rewardDreamsign: null,
@@ -64,7 +64,7 @@ describe("gamble-site-view-model", () => {
       },
       {
         id: "jack",
-        targetLabel: "J+",
+        targetLabel: "J-A",
         chanceLabel: "30.77%",
         essenceReward: 200,
         rewardDreamsign: { id: "fixture-sign" },

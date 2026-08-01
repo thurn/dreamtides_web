@@ -125,10 +125,9 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Atlas Edge | Components | 1 | [components/atlas-edge.md](components/atlas-edge.md) | The connector between two Atlas nodes, drawn inside the map's SVG. |
 | Atlas Map | Components | 1 | [components/atlas-map.md](components/atlas-map.md) | The Dream Atlas map surface — the run graph of dreamscape nodes and their connectors, fitted into a fixed portrait design stage that uniformly scales to fit its container (letterboxed). |
 | Dreamsign | Components | 10 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
-| Dreamsign Name | Components | 1 | [components/dreamsign-name.md](components/dreamsign-name.md) | The text-only Dreamsign entity: an underlined authored name that reveals the Dreamsign's primary object InfoCard and glossary definitions. |
 | Dreamsign Gallery Panel | Components | 1 | [components/dreamsign-gallery-panel.md](components/dreamsign-gallery-panel.md) | The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action. |
 | Site Node | Components | 2 | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node carrying a glyph and accent ring. |
-| Wager Prize Card | Components | 1 | [components/wager-prize-card.md](components/wager-prize-card.md) | The Three Gates prize object: one PlayingCard superellipse with a target title, a single reward sentence, and an optional committed-card reverse face. |
+| Wager Prize Card | Components | 1 | [components/wager-prize-card.md](components/wager-prize-card.md) | The Three Gates prize object: one PlayingCard superellipse with a target title, a single reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face. |
 <!-- END GENERATED COMPONENT INDEX -->
 
 ## Customization: step back before adding any knob

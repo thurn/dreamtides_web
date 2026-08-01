@@ -8,10 +8,16 @@ import type {
   StandardPlayingCardSuit,
 } from "../../../types/gamble";
 import type { Dreamsign as DreamsignData } from "../../../types/journey";
+import { requireDreamsignId } from "../../../data/dreamsigns";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
+import { useRevealSource } from "../../internal/reveal/context";
+import { revealEntityId } from "../../internal/reveal/identity";
+import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
-import { DreamsignName } from "../hud/DreamsignName";
+import { dreamsignRevealSpec } from "../hud/Dreamsign";
 import { EssenceValue } from "../hud/EssenceValue";
+
+type WagerRevealSourceBinding = ReturnType<typeof useRevealSource>;
 
 /**
  * The deliberately centralized playing-card art direction. Change these
@@ -412,7 +418,7 @@ export function PlayingCard({
 export interface WagerPrizeCardProps {
   /** Stable Three Gates choice represented by this prize object. */
   gateId: GravokGateId;
-  /** Inclusive winning rank shown as authored compact notation. */
+  /** Inclusive winning rank range shown as authored compact notation. */
   targetLabel: string;
   /** Essence awarded when the gate wins. */
   essenceReward: number;
@@ -436,7 +442,43 @@ export interface WagerPrizeCardProps {
  * one sentence, and an assigned result flips into the standard rank-and-suit
  * face without changing the object's footprint.
  */
-export function WagerPrizeCard({
+export function WagerPrizeCard(
+  props: WagerPrizeCardProps,
+): ReactElement {
+  if (props.rewardDreamsign !== null) {
+    return (
+      <DreamsignWagerPrizeCard
+        {...props}
+        rewardDreamsign={props.rewardDreamsign}
+      />
+    );
+  }
+  return <WagerPrizeCardObject {...props} />;
+}
+
+function DreamsignWagerPrizeCard(
+  props: WagerPrizeCardProps & { rewardDreamsign: DreamsignData },
+): ReactElement {
+  const dreamsignId = requireDreamsignId(
+    props.rewardDreamsign,
+    "Wager prize card",
+  );
+  const revealBinding = useRevealSource({
+    identity: {
+      entityType: "dreamsign",
+      entityId: revealEntityId("dreamsign", dreamsignId),
+    },
+    spec: dreamsignRevealSpec(
+      props.rewardDreamsign,
+      Boolean(props.rewardDreamsign.imageName),
+    ),
+    feedback: "stationary",
+  });
+
+  return <WagerPrizeCardObject {...props} revealBinding={revealBinding} />;
+}
+
+function WagerPrizeCardObject({
   gateId,
   targetLabel,
   essenceReward,
@@ -445,7 +487,10 @@ export function WagerPrizeCard({
   drawnCard = null,
   revealDrawnCard = false,
   dreamsignTestId,
-}: WagerPrizeCardProps): ReactElement {
+  revealBinding,
+}: WagerPrizeCardProps & {
+  revealBinding?: WagerRevealSourceBinding;
+}): ReactElement {
   const reduceMotion = useReducedMotion() === true;
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const showingDrawnCard = revealDrawnCard && drawnCard !== null;
@@ -456,6 +501,73 @@ export function WagerPrizeCard({
     drawnCard === null
       ? prizeLabel
       : frontAriaLabel(drawnCard.rank, drawnCard.suit, "rank-and-suit");
+  const prizeFaceContent = (
+    <>
+      <div
+        data-wager-prize-copy=""
+        style={{
+          position: "relative",
+          zIndex: 1,
+          width: "100%",
+          padding:
+            size === "wager" ? token("--space-4") : token("--space-2"),
+          boxSizing: "border-box",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: size === "wager" ? token("--space-3") : token("--space-2"),
+          textAlign: "center",
+          color: token("--text-on-glass"),
+        }}
+      >
+        <h2
+          data-wager-prize-title=""
+          style={{
+            margin: 0,
+            font:
+              size === "wager" ? token("--t-title") : token("--t-title-sm"),
+          }}
+        >
+          Draw {targetLabel}
+        </h2>
+        <p
+          data-wager-prize-description=""
+          style={{
+            margin: 0,
+            font:
+              size === "wager" ? token("--t-body") : token("--t-body-sm"),
+          }}
+        >
+          Win <EssenceValue amount={essenceReward} tone="inherit" />
+          {rewardDreamsign !== null && (
+            <>
+              {" and "}
+              <span
+                data-testid={dreamsignTestId}
+                data-wager-prize-dreamsign-name=""
+                style={{
+                  display: "inline-block",
+                  font: "inherit",
+                  textDecoration: "underline",
+                }}
+              >
+                {rewardDreamsign.name}
+              </span>
+            </>
+          )}
+        </p>
+      </div>
+      <PlayingCardRim />
+    </>
+  );
+  const prizeFaceStyle: CSSProperties = {
+    ...CARD_FACE_STYLE,
+    ...revealBinding?.sourceProps.style,
+    display: "grid",
+    placeItems: "center",
+    pointerEvents: showingDrawnCard ? "none" : "auto",
+  };
 
   return (
     <div
@@ -500,75 +612,32 @@ export function WagerPrizeCard({
           transformStyle: "preserve-3d",
         }}
       >
-        <div
-          aria-hidden={showingDrawnCard || undefined}
-          data-wager-prize-face=""
-          style={{
-            ...CARD_FACE_STYLE,
-            display: "grid",
-            placeItems: "center",
-            pointerEvents: showingDrawnCard ? "none" : "auto",
-          }}
-        >
+        {revealBinding === undefined ? (
           <div
-            data-wager-prize-copy=""
-            style={{
-              position: "relative",
-              zIndex: 1,
-              width: "100%",
-              padding:
-                size === "wager"
-                  ? token("--space-4")
-                  : token("--space-2"),
-              boxSizing: "border-box",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap:
-                size === "wager"
-                  ? token("--space-3")
-                  : token("--space-2"),
-              textAlign: "center",
-              color: token("--text-on-glass"),
-            }}
+            aria-hidden={showingDrawnCard || undefined}
+            data-wager-prize-face=""
+            style={prizeFaceStyle}
           >
-            <h2
-              data-wager-prize-title=""
-              style={{
-                margin: 0,
-                font:
-                  size === "wager"
-                    ? token("--t-title")
-                    : token("--t-title-sm"),
-              }}
-            >
-              Draw {targetLabel}
-            </h2>
-            <p
-              data-wager-prize-description=""
-              style={{
-                margin: 0,
-                font:
-                  size === "wager"
-                    ? token("--t-body")
-                    : token("--t-body-sm"),
-              }}
-            >
-              Win <EssenceValue amount={essenceReward} tone="inherit" />
-              {rewardDreamsign !== null && (
-                <>
-                  {" and "}
-                  <DreamsignName
-                    dreamsign={rewardDreamsign}
-                    testId={dreamsignTestId}
-                  />
-                </>
-              )}
-            </p>
+            {prizeFaceContent}
           </div>
-          <PlayingCardRim />
-        </div>
+        ) : (
+          <Pressable
+            as="div"
+            ref={revealBinding.ref}
+            {...revealBinding.sourceProps}
+            role="button"
+            tabIndex={showingDrawnCard ? -1 : 0}
+            aria-label={`Dreamsign: ${rewardDreamsign?.name ?? ""}`}
+            aria-hidden={showingDrawnCard || undefined}
+            pressFeedback="stationary"
+            hoverFeedback="stationary"
+            data-wager-prize-face=""
+            data-wager-prize-dreamsign-source=""
+            style={prizeFaceStyle}
+          >
+            {prizeFaceContent}
+          </Pressable>
+        )}
         <div
           aria-hidden={!showingDrawnCard || undefined}
           data-wager-drawn-card-face=""

@@ -22,14 +22,13 @@ import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
-import { useIsDesktop } from "./use-is-desktop";
 
 export interface GambleGateView {
   /** Stable gate id used by the wager intent. */
   id: GravokGateId;
   /** Literary gate name used in accessible labels. */
   name: string;
-  /** Inclusive minimum rank shown as compact card notation. */
+  /** Inclusive winning rank range shown as compact card notation. */
   targetLabel: string;
   /** Exact winning probability. */
   chanceLabel: string;
@@ -208,11 +207,11 @@ function GambleBetButton({
     />
   );
 
-  if (!wagerLocked || selected) {
+  if (!wagerLocked) {
     return (
       <div
         data-gamble-bet={gate.id}
-        data-gamble-bet-presentation={selected ? "selected" : "available"}
+        data-gamble-bet-presentation="available"
       >
         {button}
       </div>
@@ -223,6 +222,7 @@ function GambleBetButton({
     <motion.div
       data-gamble-bet={gate.id}
       data-gamble-bet-presentation="faded"
+      data-gamble-bet-selected={selected ? "true" : "false"}
       aria-hidden={revealStarted || undefined}
       initial={false}
       animate={{ opacity: revealStarted ? 0 : 1 }}
@@ -262,7 +262,6 @@ export function GambleSiteScreen({
   onReplaceDreamsign,
 }: GambleSiteScreenProps) {
   const reduceMotion = useReducedMotion() === true;
-  const isDesktop = useIsDesktop();
   const [revealStarted, setRevealStarted] = useState(false);
   const [outcomeVisible, setOutcomeVisible] = useState(false);
   const [replacementVisible, setReplacementVisible] = useState(false);
@@ -365,7 +364,9 @@ export function GambleSiteScreen({
             <section
               aria-label="Three wager gates"
               data-gamble-gates=""
+              data-gamble-outcome-anchor=""
               style={{
+                position: "relative",
                 width: "100%",
                 display: "grid",
                 gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
@@ -397,6 +398,13 @@ export function GambleSiteScreen({
                   />
                 );
               })}
+              {outcomeVisible && view.result !== null && (
+                <GambleOutcome
+                  key={view.result.id}
+                  result={view.result}
+                  layout={layout}
+                />
+              )}
             </section>
 
             <div
@@ -459,13 +467,6 @@ export function GambleSiteScreen({
         );
       }}
     >
-      {outcomeVisible && view.result !== null && (
-        <GambleOutcome
-          key={view.result.id}
-          result={view.result}
-          layout={isDesktop ? "desktop" : "mobile"}
-        />
-      )}
       {replacementVisible && view.replacement !== null && (
         <DreamsignReplacementDialog
           view={view.replacement}
