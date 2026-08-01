@@ -149,6 +149,7 @@ export interface CoopActions {
     siteId: string,
     gateId: GravokGateId,
   ) => Promise<number>;
+  settleGravokWager: (siteId: string, runId?: string) => Promise<number>;
   replaceGravokWagerDreamsign: (
     siteId: string,
     replacedDreamsignId: string,
@@ -431,6 +432,12 @@ export function makeActions(append: AppendFn): CoopActions {
       ),
     placeGravokWager: (siteId, gateId) =>
       emit("PLACE_GRAVOK_WAGER", { siteId, gateId }),
+    settleGravokWager: (siteId, runId) =>
+      emit(
+        "SETTLE_GRAVOK_WAGER",
+        { siteId },
+        siteIntentKey("settle-gravok-wager", siteId, runId),
+      ),
     replaceGravokWagerDreamsign: (siteId, replacedDreamsignId) =>
       emit("REPLACE_GRAVOK_WAGER_DREAMSIGN", {
         siteId,

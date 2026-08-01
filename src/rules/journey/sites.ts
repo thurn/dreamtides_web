@@ -771,6 +771,13 @@ export function completeSite(
   ) {
     return null;
   }
+  const runtime = journey.siteRuntime[siteId];
+  if (
+    runtime?.kind === "gamble" &&
+    runtime.result?.essenceSettled === false
+  ) {
+    return null;
+  }
   return completeAndReturn(journey, siteId);
 }
 

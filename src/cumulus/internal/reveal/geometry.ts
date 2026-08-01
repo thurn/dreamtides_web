@@ -538,17 +538,6 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
   const pairFitsSafeWidth = secondarySizes.length > 0 && primaryWidth + CARD_GAP + secondaryWidth <= safeRight - safeLeft;
   const usableSecondaries = pairFitsSafeWidth ? secondarySizes : [];
   const groupWidth = primaryWidth + (usableSecondaries.length > 0 ? CARD_GAP + secondaryWidth : 0);
-  const aboveAvailableHeight = sourceRect.y - DESKTOP_SOURCE_GAP - safeTop;
-  if (primarySize.height <= aboveAvailableHeight) {
-    const count = fitGroupPrefix(usableSecondaries, aboveAvailableHeight, primarySize.height);
-    const groupHeight = Math.max(primarySize.height, stackHeight(usableSecondaries, count));
-    const aboveY = sourceRect.y - DESKTOP_SOURCE_GAP - groupHeight;
-    const visibleGroupWidth = primaryWidth + (count > 0 ? CARD_GAP + secondaryWidth : 0);
-    const x = clamp(sourceRect.x + sourceRect.width / 2 - visibleGroupWidth / 2, safeLeft, safeRight - visibleGroupWidth);
-    return result(input, { family: "desktop-above", orientation: "primary-left", primaryRect: rect(x, aboveY, primarySize),
-      secondaryRects: secondaryRectsAt(usableSecondaries, count, x + primaryWidth + CARD_GAP, aboveY), pressInPlace: false,
-      sideFallback: false, bestEffortPrimaryOverlap: false });
-  }
   const rightSpace = safeRight - (sourceRect.x + sourceRect.width + DESKTOP_SOURCE_GAP);
   const leftSpace = sourceRect.x - DESKTOP_SOURCE_GAP - safeLeft;
   const useRight = rightSpace >= groupWidth || rightSpace >= leftSpace;

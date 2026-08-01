@@ -247,13 +247,18 @@ describe("selectRevealPlacement", () => {
     expect(result.orientation).toBe("primary-right");
   });
 
-  it("uses desktop above-first and right-side fallback families", () => {
+  it("places desktop InfoCards beside their source at every vertical position", () => {
     const desktop = { ...base, viewport: { ...viewport, layout: "desktop" as const, width: 1200 }, reason: "hover" as const, touchPoint: undefined, sourceRect: { x: 400, y: 500, width: 100, height: 80 } };
-    expect(selectRevealPlacement(desktop).family).toBe("desktop-above");
-    expect(selectRevealPlacement({ ...desktop, sourceRect: { x: 400, y: 20, width: 100, height: 80 } }).family).toBe("desktop-side-right");
+    for (const input of [desktop, { ...desktop, sourceRect: { x: 400, y: 20, width: 100, height: 80 } }]) {
+      const result = selectRevealPlacement(input);
+      expect(result.family).toBe("desktop-side-right");
+      expect(result.primaryRect.x).toBeGreaterThanOrEqual(
+        input.sourceRect.x + input.sourceRect.width + 14,
+      );
+    }
   });
 
-  it("places only a complete leading secondary prefix inside the full desktop group above the source", () => {
+  it("places only a complete leading secondary prefix beside the desktop primary", () => {
     const result = selectRevealPlacement({
       ...base,
       viewport: { ...viewport, layout: "desktop", width: 1200, height: 900 },
@@ -261,17 +266,19 @@ describe("selectRevealPlacement", () => {
       touchPoint: undefined,
       sourceRect: { x: 500, y: 600, width: 80, height: 60 },
       primarySize: { width: 248, height: 180 },
-      secondarySizes: [{ width: 248, height: 400 }, { width: 248, height: 200 }],
+      secondarySizes: [{ width: 248, height: 200 }, { width: 248, height: 200 }],
     });
-    expect(result.family).toBe("desktop-above");
+    expect(result.family).toBe("desktop-side-right");
     expect(result.secondaryRects).toHaveLength(1);
-    expect(result.primaryRect.y).toBe(186);
-    expect(result.secondaryRects[0].y).toBe(186);
-    expect(result.secondaryRects[0].y + result.secondaryRects[0].height).toBe(586);
+    expect(result.primaryRect.y).toBe(600);
+    expect(result.secondaryRects[0].y).toBe(600);
+    expect(result.secondaryRects[0].x).toBe(
+      result.primaryRect.x + result.primaryRect.width + 10,
+    );
   });
 
-  it("centers a lone desktop primary when the first secondary cannot fit above", () => {
-    const sourceRect = { x: 500, y: 250, width: 100, height: 60 };
+  it("keeps a lone desktop primary beside the source when a secondary cannot fit", () => {
+    const sourceRect = { x: 500, y: 700, width: 100, height: 60 };
     const result = selectRevealPlacement({
       ...base,
       viewport: { ...viewport, layout: "desktop", width: 1200, height: 900 },
@@ -281,10 +288,10 @@ describe("selectRevealPlacement", () => {
       primarySize: { width: 248, height: 180 },
       secondarySizes: [{ width: 248, height: 300 }],
     });
-    expect(result.family).toBe("desktop-above");
+    expect(result.family).toBe("desktop-side-right");
     expect(result.orientation).toBe("primary-left");
     expect(result.secondaryRects).toEqual([]);
-    expect(result.primaryRect.x).toBe(sourceRect.x + sourceRect.width / 2 - 124);
+    expect(result.primaryRect.x).toBe(sourceRect.x + sourceRect.width + 14);
   });
 
   it.each([500, 480])("truncates a desktop InfoCard pair that cannot fit the %ipx safe width", (width) => {

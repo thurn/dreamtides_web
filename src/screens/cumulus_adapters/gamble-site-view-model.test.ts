@@ -101,6 +101,7 @@ describe("gamble-site-view-model", () => {
         card: RUNTIME.committedCard,
         won: true,
         essenceGained: 200,
+        essenceSettled: false,
         dreamsignAwarded: false,
         pendingDreamsignReplacement: true,
       },
@@ -131,6 +132,7 @@ describe("gamble-site-view-model", () => {
       gateId: "jack",
       revealGateId: "six",
       won: true,
+      essenceSettled: false,
       rewardDreamsign: { id: "fixture-sign" },
       pendingDreamsignReplacement: true,
     });

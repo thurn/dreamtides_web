@@ -293,6 +293,13 @@ export function CoopJourneyProvider({
         dispatch(actions.completeSite(siteId, stateRef.current.runId ?? undefined)),
       placeGravokWager: (siteId, gateId) =>
         dispatch(actions.placeGravokWager(siteId, gateId)),
+      settleGravokWager: (siteId) =>
+        dispatch(
+          actions.settleGravokWager(
+            siteId,
+            stateRef.current.runId ?? undefined,
+          ),
+        ),
       replaceGravokWagerDreamsign: (siteId, replacedDreamsignId) =>
         dispatch(
           actions.replaceGravokWagerDreamsign(siteId, replacedDreamsignId),

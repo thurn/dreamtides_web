@@ -113,6 +113,7 @@ export function buildGambleSiteView(params: {
             revealGateId: gravokRevealGateId(result.gateId),
             won: result.won,
             essenceGained: result.essenceGained,
+            essenceSettled: result.essenceSettled !== false,
             rewardDreamsign,
             pendingDreamsignReplacement:
               result.pendingDreamsignReplacement,

@@ -6,6 +6,7 @@ import {
   logGamblePrepared,
   logGambleReplacement,
   logGambleResolved,
+  logGambleSettled,
   logGambleSiteEntered,
 } from "./gamble-site-logging-view-model";
 import {
@@ -47,6 +48,7 @@ export function GambleSiteScreenAdapter({ siteId }: { siteId: string }) {
     if (runtime === null || view === null) return;
     logGamblePrepared(siteId, runtime, view.gates);
     logGambleResolved(siteId, runtime, view.gates, view.result?.id);
+    logGambleSettled(siteId, runtime, view.result?.id);
   }, [runtime, siteId, view]);
 
   const chooseGate = useCallback(
@@ -55,6 +57,10 @@ export function GambleSiteScreenAdapter({ siteId }: { siteId: string }) {
   );
   const complete = useCallback(
     () => mutations.completeSite(siteId, "gravok_three_gate_wager"),
+    [mutations, siteId],
+  );
+  const settle = useCallback(
+    () => mutations.settleGravokWager(siteId),
     [mutations, siteId],
   );
   const replaceDreamsign = useCallback(
@@ -71,6 +77,7 @@ export function GambleSiteScreenAdapter({ siteId }: { siteId: string }) {
       view={view}
       onChooseGate={chooseGate}
       onLeave={complete}
+      onOutcomeShown={settle}
       onOutcomeComplete={complete}
       onReplaceDreamsign={replaceDreamsign}
     />

@@ -4082,10 +4082,12 @@
     },
     {
       "name": "size",
-      "tsType": "\"compact\" | \"standard\"",
+      "tsType": "\"compact\" | \"standard\" | \"wager\" | \"mini\"",
       "unionMembers": [
         "compact",
-        "standard"
+        "standard",
+        "wager",
+        "mini"
       ],
       "required": false,
       "defaultValue": "standard",

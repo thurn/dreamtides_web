@@ -44,4 +44,27 @@ describe("RadialAnnouncement", () => {
     act(() => root.unmount());
     container.remove();
   });
+
+  it("keeps the mini outcome ripple close to its compact disc", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(<RadialAnnouncement headline="Bust!" size="mini" />);
+    });
+
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-radial-announcement-disc]",
+      )?.style.width,
+    ).toBe("108px");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-radial-announcement-ripple]",
+      )?.style.inset,
+    ).toBe("calc(-1 * var(--space-1))");
+
+    act(() => root.unmount());
+    container.remove();
+  });
 });

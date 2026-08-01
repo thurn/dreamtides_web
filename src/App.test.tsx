@@ -237,6 +237,7 @@ function makeMutations(): JourneyMutations {
     completeSite: vi.fn(),
     ensureGambleSiteRuntime: vi.fn(),
     placeGravokWager: vi.fn(),
+    settleGravokWager: vi.fn(),
     replaceGravokWagerDreamsign: vi.fn(),
     ensureRewardSiteRuntime: vi.fn(),
     acceptRewardSite: vi.fn(),

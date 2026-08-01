@@ -128,14 +128,15 @@ describe("RevealOverlay", () => {
     ).toBe("50px");
   });
 
-  it("measures invisibly, top-aligns the chosen complete prefix, and omits overflow", () => {
+  it("measures invisibly, side-aligns the chosen complete prefix, and omits overflow", () => {
     act(() => renderOverlay(<RevealOverlay active={active()} />));
     const group = document.querySelector<HTMLElement>("[data-cumulus-reveal-group]")!;
     const cards = [...group.querySelectorAll<HTMLElement>("[data-cumulus-reveal-card]")];
     expect(group.style.visibility).toBe("visible");
-    expect(cards).toHaveLength(3);
+    expect(cards).toHaveLength(2);
     expect(cards[0].style.top).toBe(cards[1].style.top);
-    expect(Number.parseFloat(cards[2].style.top) + Number.parseFloat(cards[2].style.height)).toBeLessThanOrEqual(236);
+    expect(cards[0].style.left).toBe("514px");
+    expect(cards[1].style.left).toBe("624px");
     expect(document.querySelector<HTMLElement>("[data-reveal-measurement-layer]")?.style.visibility).toBe("hidden");
   });
 

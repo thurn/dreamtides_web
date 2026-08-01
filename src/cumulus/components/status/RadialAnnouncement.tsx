@@ -10,6 +10,8 @@ export const RADIAL_ANNOUNCEMENT_DURATION_MS = 2_100;
 export const RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS = 3_360;
 
 const RADIAL_ANNOUNCEMENT_SIZE = {
+  mini: 108,
+  wager: 164,
   compact: 184,
   standard: 236,
 } as const;
@@ -21,6 +23,10 @@ const ORBIT_ARRIVAL_SCALE = 0.64;
 const ORBIT_EXIT_SCALE = 1.24;
 const RIPPLE_ARRIVAL_SCALE = 0.68;
 const RIPPLE_EXIT_SCALE = 1.42;
+const MINI_RIPPLE_ARRIVAL_SCALE = 0.82;
+const MINI_RIPPLE_EXIT_SCALE = 1.16;
+const WAGER_RIPPLE_ARRIVAL_SCALE = 0.76;
+const WAGER_RIPPLE_EXIT_SCALE = 1.08;
 const COPY_ARRIVAL_SCALE = 0.72;
 const COPY_OVERSHOOT_SCALE = 1.06;
 const COPY_EXIT_SCALE = 0.94;
@@ -44,6 +50,18 @@ const RADIAL_ANNOUNCEMENT_CSS = `
     0%, 18% { opacity: 0; transform: scale(${String(RIPPLE_ARRIVAL_SCALE)}); }
     36% { opacity: 0.7; }
     100% { opacity: 0; transform: scale(${String(RIPPLE_EXIT_SCALE)}); }
+  }
+
+  @keyframes radial-announcement-ripple-mini {
+    0%, 18% { opacity: 0; transform: scale(${String(MINI_RIPPLE_ARRIVAL_SCALE)}); }
+    36% { opacity: 0.7; }
+    100% { opacity: 0; transform: scale(${String(MINI_RIPPLE_EXIT_SCALE)}); }
+  }
+
+  @keyframes radial-announcement-ripple-wager {
+    0%, 18% { opacity: 0; transform: scale(${String(WAGER_RIPPLE_ARRIVAL_SCALE)}); }
+    36% { opacity: 0.7; }
+    100% { opacity: 0; transform: scale(${String(WAGER_RIPPLE_EXIT_SCALE)}); }
   }
 
   @keyframes radial-announcement-copy {
@@ -161,10 +179,20 @@ export function RadialAnnouncement({
           data-radial-announcement-ripple=""
           style={{
             position: "absolute",
-            inset: `calc(-1 * ${token("--space-4")})`,
+            inset: `calc(-1 * ${token(
+              size === "mini" || size === "wager"
+                ? "--space-1"
+                : "--space-4",
+            )})`,
             border: `${token("--space-1")} solid ${accent}`,
             borderRadius: token("--radius-pill"),
-            animation: `radial-announcement-ripple ${animationDuration} ${token("--ease-out")} both`,
+            animation: `${
+              size === "mini"
+                ? "radial-announcement-ripple-mini"
+                : size === "wager"
+                  ? "radial-announcement-ripple-wager"
+                : "radial-announcement-ripple"
+            } ${animationDuration} ${token("--ease-out")} both`,
           }}
         />
         <div
@@ -181,11 +209,19 @@ export function RadialAnnouncement({
             animation: `radial-announcement-copy ${animationDuration} ${token("--ease-out")} both`,
           }}
         >
-          <span style={{ font: token("--t-title") }}>{headline}</span>
+          <span
+            style={{
+              font: token(size === "mini" ? "--t-title-sm" : "--t-title"),
+            }}
+          >
+            {headline}
+          </span>
           {essenceGained !== undefined && (
             <span
               data-radial-announcement-essence=""
-              style={{ font: token("--t-title-sm") }}
+              style={{
+                font: token(size === "mini" ? "--t-body" : "--t-title-sm"),
+              }}
             >
               +<EssenceValue amount={essenceGained} tone="inherit" />
             </span>
@@ -194,8 +230,8 @@ export function RadialAnnouncement({
             <span
               data-radial-announcement-detail=""
               style={{
-                maxWidth: "72%",
-                font: token("--t-body-sm"),
+                maxWidth: size === "mini" ? "84%" : "72%",
+                font: token(size === "mini" ? "--t-caption" : "--t-body-sm"),
                 color: token("--text-secondary"),
               }}
             >

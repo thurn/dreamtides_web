@@ -125,6 +125,7 @@ describe("GambleSiteScreen", () => {
         view={VIEW}
         onChooseGate={onChooseGate}
         onLeave={onLeave}
+        onOutcomeShown={() => undefined}
         onOutcomeComplete={() => undefined}
         onReplaceDreamsign={() => undefined}
       />,
@@ -134,6 +135,15 @@ describe("GambleSiteScreen", () => {
       container.querySelector("[data-playing-card]"),
     ).toBeNull();
     expect(container.querySelectorAll("[data-gamble-gate]")).toHaveLength(3);
+    expect(
+      [...container.querySelectorAll<HTMLElement>("[data-gamble-gate]")].map(
+        (gate) => [gate.style.gridColumn, gate.style.gridRow],
+      ),
+    ).toEqual([
+      ["1", "1"],
+      ["2", "1"],
+      ["3", "1"],
+    ]);
     expect(container.querySelectorAll("[data-wager-prize-card]"))
       .toHaveLength(3);
     expect(container.querySelector('[data-gamble-gate="six"]')?.textContent)
@@ -193,6 +203,7 @@ describe("GambleSiteScreen", () => {
   it("fades the locked bets immediately, flips a non-selected prize, and keeps the outcome readable", () => {
     vi.useFakeTimers();
     const onOutcomeComplete = vi.fn();
+    const onOutcomeShown = vi.fn();
     const resultView: GambleSiteView = {
       ...VIEW,
       card: { rank: "Q", suit: "hearts" },
@@ -202,6 +213,7 @@ describe("GambleSiteScreen", () => {
         revealGateId: "jack",
         won: true,
         essenceGained: 150,
+        essenceSettled: false,
         rewardDreamsign: null,
         pendingDreamsignReplacement: false,
       },
@@ -211,6 +223,7 @@ describe("GambleSiteScreen", () => {
         view={resultView}
         onChooseGate={() => undefined}
         onLeave={() => undefined}
+        onOutcomeShown={onOutcomeShown}
         onOutcomeComplete={onOutcomeComplete}
         onReplaceDreamsign={() => undefined}
       />,
@@ -262,6 +275,7 @@ describe("GambleSiteScreen", () => {
     ).toHaveLength(3);
     void act(() => vi.advanceTimersByTime(1_969));
     expect(container.querySelector("[data-radial-announcement]")).toBeNull();
+    expect(onOutcomeShown).not.toHaveBeenCalled();
     void act(() => vi.advanceTimersByTime(1));
     const announcement = container.querySelector(
       '[data-radial-announcement="fixture-result"]',
@@ -270,23 +284,33 @@ describe("GambleSiteScreen", () => {
     expect(announcement?.getAttribute("data-radial-announcement-duration"))
       .toBe("extended");
     expect(
-      announcement?.parentElement?.hasAttribute("data-gamble-outcome-anchor"),
-    ).toBe(true);
+      announcement?.querySelector<HTMLElement>(
+        "[data-radial-announcement-disc]",
+      )?.style.width,
+    ).toBe("164px");
+    expect(onOutcomeShown).toHaveBeenCalledOnce();
+    expect(
+      announcement?.parentElement?.getAttribute("data-gamble-outcome-slot"),
+    ).toBe("six");
     void act(() => vi.advanceTimersByTime(1_000));
     act(() => {
       root.render(
         <CumulusRoot>
           <GambleSiteScreen
-            view={{ ...resultView, result: { ...resultView.result! } }}
+            view={{
+              ...resultView,
+              result: { ...resultView.result!, essenceSettled: true },
+            }}
             onChooseGate={() => undefined}
             onLeave={() => undefined}
+            onOutcomeShown={onOutcomeShown}
             onOutcomeComplete={onOutcomeComplete}
             onReplaceDreamsign={() => undefined}
           />
         </CumulusRoot>,
       );
     });
-    void act(() => vi.advanceTimersByTime(2_359));
+    void act(() => vi.advanceTimersByTime(3_359));
     expect(onOutcomeComplete).not.toHaveBeenCalled();
     void act(() => vi.advanceTimersByTime(1));
     expect(onOutcomeComplete).toHaveBeenCalledOnce();
@@ -306,6 +330,7 @@ describe("GambleSiteScreen", () => {
         revealGateId: "six",
         won: true,
         essenceGained: 200,
+        essenceSettled: true,
         rewardDreamsign: JACKPOT_DREAMSIGN,
         pendingDreamsignReplacement: true,
       },
@@ -327,6 +352,7 @@ describe("GambleSiteScreen", () => {
         view={replacementView}
         onChooseGate={() => undefined}
         onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
         onOutcomeComplete={() => undefined}
         onReplaceDreamsign={onReplaceDreamsign}
       />,

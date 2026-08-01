@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import type { GravokGateId } from "../../types/gamble";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
@@ -55,6 +55,8 @@ export interface GambleResultView {
   won: boolean;
   /** Essence granted by the result. */
   essenceGained: number;
+  /** Whether the shared wager event has applied its net Essence. */
+  essenceSettled: boolean;
   /** Jackpot Dreamsign shown in the reward announcement. */
   rewardDreamsign: DreamsignData | null;
   /** Whether a held Dreamsign must be replaced before leaving. */
@@ -96,6 +98,8 @@ export interface GambleSiteScreenProps {
   onChooseGate: (gateId: GravokGateId) => void;
   /** Leave before committing a wager. */
   onLeave: () => void;
+  /** Settle the wager as its result announcement enters. */
+  onOutcomeShown: () => void;
   /** Complete the site after the result animation. */
   onOutcomeComplete: () => void;
   /** Replace one UUID-identified held Dreamsign after a jackpot win. */
@@ -120,12 +124,14 @@ function GambleGateCard({
   presentation,
   revealStarted,
   drawnCard,
+  gridColumn,
 }: {
   gate: GambleGateView;
   layout: "mobile" | "desktop";
   presentation: GambleGatePresentation;
   revealStarted: boolean;
   drawnCard: GambleSiteView["card"];
+  gridColumn: number;
 }) {
   const prizeCard = (
     <WagerPrizeCard
@@ -147,6 +153,7 @@ function GambleGateCard({
       <div
         data-gamble-gate={gate.id}
         data-gamble-gate-presentation={presentation}
+        style={{ gridColumn, gridRow: 1 }}
       >
         {prizeCard}
       </div>
@@ -164,7 +171,11 @@ function GambleGateCard({
         duration: FADE_DURATION_SECONDS,
         ease: "easeOut",
       }}
-      style={{ pointerEvents: revealStarted ? "none" : "auto" }}
+      style={{
+        gridColumn,
+        gridRow: 1,
+        pointerEvents: revealStarted ? "none" : "auto",
+      }}
     >
       {prizeCard}
     </motion.div>
@@ -248,7 +259,7 @@ function GambleOutcome({
       detail={result.won ? result.rewardDreamsign?.name : undefined}
       essenceGained={result.won ? result.essenceGained : undefined}
       tone={result.won ? "reward" : "danger"}
-      size={layout === "desktop" ? "standard" : "compact"}
+      size={layout === "mobile" ? "mini" : "wager"}
       duration="extended"
     />
   );
@@ -258,6 +269,7 @@ export function GambleSiteScreen({
   view,
   onChooseGate,
   onLeave,
+  onOutcomeShown,
   onOutcomeComplete,
   onReplaceDreamsign,
 }: GambleSiteScreenProps) {
@@ -265,9 +277,16 @@ export function GambleSiteScreen({
   const [revealStarted, setRevealStarted] = useState(false);
   const [outcomeVisible, setOutcomeVisible] = useState(false);
   const [replacementVisible, setReplacementVisible] = useState(false);
+  const onOutcomeShownRef = useRef(onOutcomeShown);
+  const settledResultIdRef = useRef<string | undefined>(undefined);
   const resultId = view.result?.id;
   const pendingDreamsignReplacement =
     view.result?.pendingDreamsignReplacement === true;
+  const essenceSettled = view.result?.essenceSettled === true;
+
+  useEffect(() => {
+    onOutcomeShownRef.current = onOutcomeShown;
+  }, [onOutcomeShown]);
 
   useEffect(() => {
     setOutcomeVisible(false);
@@ -286,10 +305,13 @@ export function GambleSiteScreen({
       () => setRevealStarted(true),
       revealDelay,
     );
-    const outcomeTimeout = window.setTimeout(
-      () => setOutcomeVisible(true),
-      outcomeDelay,
-    );
+    const outcomeTimeout = window.setTimeout(() => {
+      setOutcomeVisible(true);
+      if (settledResultIdRef.current !== resultId) {
+        settledResultIdRef.current = resultId;
+        onOutcomeShownRef.current();
+      }
+    }, outcomeDelay);
     return () => {
       window.clearTimeout(revealTimeout);
       window.clearTimeout(outcomeTimeout);
@@ -297,7 +319,7 @@ export function GambleSiteScreen({
   }, [reduceMotion, resultId]);
 
   useEffect(() => {
-    if (!outcomeVisible || resultId === undefined) return;
+    if (!outcomeVisible || resultId === undefined || !essenceSettled) return;
     const timeout = window.setTimeout(
       () => {
         setOutcomeVisible(false);
@@ -312,6 +334,7 @@ export function GambleSiteScreen({
     return () => window.clearTimeout(timeout);
   }, [
     onOutcomeComplete,
+    essenceSettled,
     outcomeVisible,
     pendingDreamsignReplacement,
     resultId,
@@ -328,6 +351,15 @@ export function GambleSiteScreen({
       speechBubbleTestId="cumulus-gamble-speech-bubble"
       renderGallery={(layout) => {
         const wagerLocked = view.result !== null;
+        const outcomeGateIndex =
+          view.result === null
+            ? -1
+            : view.gates.findIndex(
+                (gate) =>
+                  gate.id !== view.result?.gateId &&
+                  gate.id !== view.result?.revealGateId,
+              );
+        const outcomeGate = view.gates[outcomeGateIndex];
         return (
           <main
             data-gamble-wager-region=""
@@ -364,7 +396,6 @@ export function GambleSiteScreen({
             <section
               aria-label="Three wager gates"
               data-gamble-gates=""
-              data-gamble-outcome-anchor=""
               style={{
                 position: "relative",
                 width: "100%",
@@ -378,7 +409,7 @@ export function GambleSiteScreen({
                 justifyItems: "center",
               }}
             >
-              {view.gates.map((gate) => {
+              {view.gates.map((gate, gateIndex) => {
                 const presentation: GambleGatePresentation =
                   view.result === null
                     ? "available"
@@ -395,16 +426,33 @@ export function GambleSiteScreen({
                     presentation={presentation}
                     revealStarted={revealStarted}
                     drawnCard={view.card}
+                    gridColumn={gateIndex + 1}
                   />
                 );
               })}
-              {outcomeVisible && view.result !== null && (
-                <GambleOutcome
-                  key={view.result.id}
-                  result={view.result}
-                  layout={layout}
-                />
-              )}
+              {outcomeVisible &&
+                view.result !== null &&
+                outcomeGate !== undefined && (
+                  <div
+                    data-gamble-outcome-slot={outcomeGate.id}
+                    style={{
+                      position: "relative",
+                      gridColumn: outcomeGateIndex + 1,
+                      gridRow: 1,
+                      width: "100%",
+                      height: "100%",
+                      alignSelf: "stretch",
+                      justifySelf: "stretch",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <GambleOutcome
+                      key={view.result.id}
+                      result={view.result}
+                      layout={layout}
+                    />
+                  </div>
+                )}
             </section>
 
             <div

@@ -106,6 +106,7 @@ export interface EventPayloads {
     siteId: string;
     gateId: "six" | "nine" | "jack";
   };
+  SETTLE_GRAVOK_WAGER: { siteId: string };
   REPLACE_GRAVOK_WAGER_DREAMSIGN: {
     siteId: string;
     replacedDreamsignId: string;
@@ -294,6 +295,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   FORCE_DREAM_AUGURY_ARCHETYPE: true,
   COMPLETE_SITE: true,
   PLACE_GRAVOK_WAGER: true,
+  SETTLE_GRAVOK_WAGER: true,
   REPLACE_GRAVOK_WAGER_DREAMSIGN: true,
   ACCEPT_MERCHANT_OFFER: true,
   DECLINE_MERCHANT: true,

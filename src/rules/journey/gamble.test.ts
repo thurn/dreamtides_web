@@ -103,7 +103,11 @@ function stateWith(
 
 function apply(
   state: FoldState,
-  type: "PLACE_GRAVOK_WAGER" | "REPLACE_GRAVOK_WAGER_DREAMSIGN",
+  type:
+    | "PLACE_GRAVOK_WAGER"
+    | "SETTLE_GRAVOK_WAGER"
+    | "REPLACE_GRAVOK_WAGER_DREAMSIGN"
+    | "COMPLETE_SITE",
   payload: Record<string, unknown>,
 ) {
   const event: GameEvent = {
@@ -126,39 +130,58 @@ function wager(state: FoldState, gateId: GravokGateId) {
   return apply(state, "PLACE_GRAVOK_WAGER", { siteId: SITE_ID, gateId });
 }
 
-describe("Gravok's Three-Gate Wager", () => {
-  it("charges once and pays the Six Gate at its inclusive threshold", () => {
-    const out = wager(stateWith("6"), "six");
+function settleWager(state: FoldState) {
+  return apply(state, "SETTLE_GRAVOK_WAGER", { siteId: SITE_ID });
+}
 
-    expect(out.outcome).toBe("applied");
-    expect(out.state.journey.essence).toBe(250);
-    expect(out.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+describe("Gravok's Three-Gate Wager", () => {
+  it("settles the Six Gate exactly once when its result is presented", () => {
+    const wagered = wager(stateWith("6"), "six");
+
+    expect(wagered.outcome).toBe("applied");
+    expect(wagered.state.journey.essence).toBe(200);
+    expect(wagered.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       kind: "gamble",
       result: {
         gateId: "six",
         card: { rank: "6", suit: "clubs" },
         won: true,
         essenceGained: 100,
+        essenceSettled: false,
       },
     });
+    expect(
+      apply(wagered.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
+    ).toBe("bounced");
+
+    const settled = settleWager(wagered.state);
+    expect(settled.outcome).toBe("applied");
+    expect(settled.state.journey.essence).toBe(250);
+    expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      result: { essenceSettled: true },
+    });
+    const duplicate = settleWager(settled.state);
+    expect(duplicate.outcome).toBe("bounced");
+    expect(duplicate.state).toEqual(settled.state);
   });
 
   it("busts below the chosen threshold and grants no reward", () => {
     const out = wager(stateWith("10"), "jack");
 
     expect(out.outcome).toBe("applied");
-    expect(out.state.journey.essence).toBe(150);
+    expect(out.state.journey.essence).toBe(200);
     expect(out.state.journey.dreamsigns).toEqual([]);
     expect(out.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       result: { won: false, essenceGained: 0, dreamsignAwarded: false },
     });
+    expect(settleWager(out.state).state.journey.essence).toBe(150);
   });
 
   it("awards both jackpot rewards and spends the UUID-backed Dreamsign", () => {
     const out = wager(stateWith("J"), "jack");
 
     expect(out.outcome).toBe("applied");
-    expect(out.state.journey.essence).toBe(350);
+    expect(out.state.journey.essence).toBe(200);
     expect(out.state.journey.dreamsigns.map((sign) => sign.id)).toEqual([
       "reward-sign",
     ]);
@@ -170,6 +193,7 @@ describe("Gravok's Three-Gate Wager", () => {
         pendingDreamsignReplacement: false,
       },
     });
+    expect(settleWager(out.state).state.journey.essence).toBe(350);
   });
 
   it("applies Farpoint's free cost without changing thresholds or payouts", () => {
@@ -179,10 +203,11 @@ describe("Gravok's Three-Gate Wager", () => {
     );
 
     expect(out.outcome).toBe("applied");
-    expect(out.state.journey.essence).toBe(350);
+    expect(out.state.journey.essence).toBe(200);
     expect(out.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       result: { gateId: "nine", won: true, essenceGained: 150 },
     });
+    expect(settleWager(out.state).state.journey.essence).toBe(350);
   });
 
   it("bounces an unaffordable wager and an unavailable jackpot", () => {
@@ -220,7 +245,18 @@ describe("Gravok's Three-Gate Wager", () => {
       },
     });
 
-    const replaced = apply(won.state, "REPLACE_GRAVOK_WAGER_DREAMSIGN", {
+    const unsettledReplacement = apply(
+      won.state,
+      "REPLACE_GRAVOK_WAGER_DREAMSIGN",
+      {
+        siteId: SITE_ID,
+        replacedDreamsignId: "held-sign",
+      },
+    );
+    expect(unsettledReplacement.outcome).toBe("bounced");
+
+    const settled = settleWager(won.state);
+    const replaced = apply(settled.state, "REPLACE_GRAVOK_WAGER_DREAMSIGN", {
       siteId: SITE_ID,
       replacedDreamsignId: "held-sign",
     });

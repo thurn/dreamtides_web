@@ -80,7 +80,6 @@ export function placeGravokWager(
   }
 
   const won = rankWinsGravokGate(runtime.committedCard.rank, gateId);
-  const essenceAfterCost = journey.essence - runtime.wagerCost;
   const essenceGained = won ? gate.essenceReward : 0;
   const winsDreamsign = won && gate.awardsDreamsign;
   const needsReplacement =
@@ -106,6 +105,7 @@ export function placeGravokWager(
       card: runtime.committedCard,
       won,
       essenceGained,
+      essenceSettled: false,
       dreamsignAwarded: rewardDreamsign !== null && !needsReplacement,
       pendingDreamsignReplacement: needsReplacement,
     },
@@ -114,12 +114,43 @@ export function placeGravokWager(
   return withRuntime(
     {
       ...journey,
-      essence: essenceAfterCost + essenceGained,
       dreamsigns,
       remainingDreamsignPool,
     },
     siteId,
     nextRuntime,
+  );
+}
+
+/** Apply the wager's cost and payout when its result announcement appears. */
+export function settleGravokWager(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  if (siteId === null) return null;
+
+  const runtime = runtimeFor(journey, siteId);
+  if (
+    runtime === null ||
+    runtime.result === null ||
+    runtime.result.essenceSettled !== false ||
+    journey.essence < runtime.wagerCost
+  ) {
+    return null;
+  }
+
+  return withRuntime(
+    {
+      ...journey,
+      essence:
+        journey.essence - runtime.wagerCost + runtime.result.essenceGained,
+    },
+    siteId,
+    {
+      ...runtime,
+      result: { ...runtime.result, essenceSettled: true },
+    },
   );
 }
 
@@ -139,6 +170,7 @@ export function replaceGravokWagerDreamsign(
     runtime.result === null ||
     !runtime.result.won ||
     runtime.result.gateId !== "jack" ||
+    runtime.result.essenceSettled === false ||
     !runtime.result.pendingDreamsignReplacement
   ) {
     return null;

@@ -68,6 +68,26 @@ export function logGambleResolved(
   );
 }
 
+/** Record when the result presentation applies the wager's net Essence. */
+export function logGambleSettled(
+  siteId: string,
+  runtime: GambleSiteRuntime,
+  resultId: string | undefined,
+): void {
+  if (runtime.result?.essenceSettled !== true) return;
+  logEventOnce(
+    `Gamble:${siteId}:settled:${resultId ?? "unknown"}`,
+    "gamble_wager_settled",
+    {
+      siteId,
+      gateId: runtime.result.gateId,
+      payment: runtime.wagerCost,
+      essenceGained: runtime.result.essenceGained,
+      netEssenceChange: runtime.result.essenceGained - runtime.wagerCost,
+    },
+  );
+}
+
 /** Record the UUID replacement that completed an at-cap jackpot. */
 export function logGambleReplacement(
   siteId: string,

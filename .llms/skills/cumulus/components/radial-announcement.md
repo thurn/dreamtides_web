@@ -20,7 +20,7 @@ The orbiting circular status moment for turn handoffs, wins, and failures.
 | `detail` | `string` | no | — | Optional supporting copy beneath the headline. |
 | `essenceGained` | `number` | no | — | Optional gained Essence amount, rendered with the canonical currency glyph. |
 | `tone` | `RadialAnnouncementTone` = `"danger" \| "accent" \| "reward"` | no | `accent` | Semantic orbit and ripple color. Defaults to accent. |
-| `size` | `"compact" \| "standard"` | no | `standard` | Named disc diameter. Defaults to standard. |
+| `size` | `"compact" \| "standard" \| "wager" \| "mini"` | no | `standard` | Named disc diameter. Defaults to standard. |
 | `duration` | `RadialAnnouncementDuration` = `"standard" \| "extended"` | no | `standard` | Named animation and reading dwell. Defaults to standard. |
 | `announcementId` | `string` | no | — | Stable identifier exposed on the announcement root. |
 
