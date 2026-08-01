@@ -9,7 +9,7 @@ export type CardType = "Character" | "Event";
  * `GameCard`), `Starter` (cards that seed the fixed starter deck), and
  * `Special` (bane content like Nightmare that journey effects reference by
  * name to add to the player's deck — see `addBaneCardById` and
- * `pushTemporaryBaneGrant`). Sourced from `data/tabula/cards_v2.toml`
+ * `pushTemporaryBaneGrant`). Sourced from `data/tabula/cards.toml`
  * and surfaced through the setup-assets transform.
  */
 export type Rarity = "Legendary" | "Starter" | "Special";
@@ -77,7 +77,7 @@ export interface CardData {
    * from a TOML `mtg-name` and carried through the setup-assets transform.
    * Surfaced as a reference hover tooltip in card-browsing surfaces (the card
    * editor and the Pool Viewer). Present on sources that record it (e.g.
-   * `cards_v2.toml`); absent on cards whose source TOML omits `mtg-name`.
+   * `cards.toml`); absent on cards whose source TOML omits `mtg-name`.
    */
   mtgName?: string;
   imageNumber: number;

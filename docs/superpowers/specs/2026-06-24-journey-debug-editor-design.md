@@ -29,7 +29,7 @@ At minimum it must support:
 - **Deck entries:** `DeckEntry` in `src/types/journey.ts` holds
   `{ entryId, cardNumber, transfiguration, typeChange?, keywordModification?, isBane }`.
   Base stats (energy cost, spark, subtype) come from `CardData`
-  (`src/types/cards.ts`, sourced from `data/tabula/cards_v2.toml`); per-entry
+  (`src/types/cards.ts`, sourced from `data/tabula/cards.toml`); per-entry
   overrides today are transfiguration, typeChange (cardType + subtype), and
   keywordModification (fast / reclaim).
 - **Persistence:** journey state lives in a Firebase RTDB room. All writes go

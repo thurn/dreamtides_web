@@ -58,7 +58,7 @@ It is written to be read alongside:
 
 **Non-Goals.**
 
-- A full rules engine that simulates every card in `cards_v2.toml`. The AI
+- A full rules engine that simulates every card in `cards.toml`. The AI
   understands its own deck plus general rules and broad *classes* of cards; it
   treats opponent cards abstractly.
 - Perfect play or a difficulty-tuned ladder. One competent difficulty is the

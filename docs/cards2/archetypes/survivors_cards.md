@@ -1,6 +1,6 @@
 # Survivors — Card Pool
 
-A companion to [survivors.md](survivors.md), listing every CardsV2 card with a specific affinity for the Survivors archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards_v2.toml`.
+A companion to [survivors.md](survivors.md), listing every CardsV2 card with a specific affinity for the Survivors archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards.toml`.
 
 ## Core tribal enablers and payoffs
 

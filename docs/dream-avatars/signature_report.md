@@ -8,7 +8,7 @@ in game-mechanics terms.
 
 **When signatures were introduced.** Signature cards did not exist in the
 original `dreamAvatars.toml` (which used legacy tide metadata) nor in the first
-version of `dream_avatars_v2.toml`. They were first added in commit `70a4f6ad`
+version of `dream_avatars.toml`. They were first added in commit `70a4f6ad`
 *("Standardize on idf3: move pool metadata between toml and TypeScript",
 2026-06-04)*, which gave **20 of the 32 Dream Avatars** a fixed list of **five
 signature cards each, referenced by card name**. Throughout this report,
@@ -25,9 +25,9 @@ replaced over the following days:
 - `a98fbb67` *(2026-06-13)* — reworked Edran around three evasive outsiders.
 
 **Comparison method.** Original signatures are resolved by name against
-`cards_v2.toml` at `70a4f6ad` (all 100 references resolved to a single card —
+`cards.toml` at `70a4f6ad` (all 100 references resolved to a single card —
 no ambiguous names). Current signatures are resolved by UUID against the live
-`cards_v2.toml`. "Kept" / "removed" / "added" are computed on **card UUID**, so a
+`cards.toml`. "Kept" / "removed" / "added" are computed on **card UUID**, so a
 card that was merely renamed or reworded but kept its UUID counts as *kept* (and
 is called out where it happens).
 

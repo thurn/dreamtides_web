@@ -112,8 +112,8 @@ function tomlParamFromUrl(url) {
 
 // Resolve the `toml` query parameter to a repository-relative path that is
 // guaranteed to live directly inside `data/tabula`. The value may be a bare
-// filename (`cards_v2.toml`) or the full relative path (`data/tabula/cards_v2.toml`).
-// When the parameter is absent the canonical card file (cards_v2.toml) is used.
+// filename (`cards.toml`) or the full relative path (`data/tabula/cards.toml`).
+// When the parameter is absent the canonical card file (cards.toml) is used.
 function resolveRequestedTomlPath(rootDir, requested) {
   if (requested === null || requested === undefined || requested.trim() === "") {
     return { ok: true, relativePath: DEFAULT_CARD_TOML_PATH };
@@ -518,7 +518,7 @@ async function handlePatch(req, res, rootDir, cardId, cardTomlPath, fileSystem) 
   const patchMs = elapsedMs(patchStart);
 
   // The runtime card catalog (public/card-data.json) is generated from the
-  // canonical card file (cards_v2.toml). Editing any other source TOML writes
+  // canonical card file (cards.toml). Editing any other source TOML writes
   // only that file so an alternate dataset never overwrites the runtime catalog.
   const refreshesCardJson = cardTomlPath === DEFAULT_CARD_TOML_PATH;
   const refreshStart = performance.now();

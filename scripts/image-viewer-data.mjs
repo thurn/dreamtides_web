@@ -58,18 +58,18 @@ export const ART_REWORK_TAG = "Art Rework";
 export const ART_OK_TAG = "Art OK";
 
 /** Default card data file used to decide which images are already in use. */
-export const DEFAULT_CARDS_TOML = join("data", "tabula", "cards_v2.toml");
+export const DEFAULT_CARDS_TOML = join("data", "tabula", "cards.toml");
 
 /** Default figment catalog scanned for image numbers claimed by a figment. */
 export const DEFAULT_FIGMENTS_TOML = join("data", "tabula", "figments.toml");
 
 /**
  * Card data files scanned for the names an image number has ever been given.
- * `cards_v2.toml` is the live card set; it records every name a given
+ * `cards.toml` is the live card set; it records every name a given
  * Shutterstock image has been published under.
  */
 export const DEFAULT_NAME_HISTORY_TOMLS = [
-  join("data", "tabula", "cards_v2.toml"),
+  join("data", "tabula", "cards.toml"),
 ];
 
 /**

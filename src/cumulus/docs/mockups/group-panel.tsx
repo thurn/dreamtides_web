@@ -2,7 +2,7 @@
 // glass panes over real scene art, each collecting one DreamAvatar's related
 // info (portrait, name + title, ability) into a single unit — the canonical
 // "console" use this component's own doc comment calls out. Both DreamAvatars
-// are real records from `data/tabula/dream_avatars_v2.toml` (Threxan, Drusus
+// are real records from `data/tabula/dream_avatars.toml` (Threxan, Drusus
 // Calvus), identified by id, with their real portraits and real ability text
 // (`rendered-text`) — never invented copy.
 
@@ -28,7 +28,7 @@ interface DreamAvatarCard {
   ability: string;
 }
 
-// Real dreamAvatar records, from data/tabula/dream_avatars_v2.toml.
+// Real dreamAvatar records, from data/tabula/dream_avatars.toml.
 const CANDIDATES: DreamAvatarCard[] = [
   {
     id: "B99936CA-97F9-4930-AF5A-FA9EF92557EF",

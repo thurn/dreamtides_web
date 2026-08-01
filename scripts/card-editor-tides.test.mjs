@@ -28,8 +28,8 @@ const FIRST_ID = "11111111-1111-4111-8111-111111111111";
 const SECOND_ID = "22222222-2222-4222-8222-222222222222";
 const THIRD_ID = "33333333-3333-4333-8333-333333333333";
 
-const CARDS_REL_PATH = join("data", "tabula", "cards_v2.toml");
-const REGISTRY_REL_PATH = join("data", "tabula", "cards_v2.tides.toml");
+const CARDS_REL_PATH = join("data", "tabula", "cards.toml");
+const REGISTRY_REL_PATH = join("data", "tabula", "cards.tides.toml");
 
 const servers = [];
 
@@ -84,7 +84,7 @@ card-number = 3
 function writeFixtureRoot({ withRegistry = false } = {}) {
   const rootDir = mkdtempSync(join(tmpdir(), "journey-card-editor-tides-"));
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
-  // cards_v2.toml is the canonical card file, so editing it through the API
+  // cards.toml is the canonical card file, so editing it through the API
   // regenerates public/card-data.json; the directory must exist for the write.
   mkdirSync(join(rootDir, "public"), { recursive: true });
   writeFileSync(join(rootDir, CARDS_REL_PATH), fixtureToml());
@@ -145,7 +145,7 @@ describe("tide data model", () => {
   });
 
   it("derives the tide registry sidecar path from the card file path", () => {
-    expect(tideRegistryPathFor(join("data", "tabula", "cards_v2.toml"))).toBe(
+    expect(tideRegistryPathFor(join("data", "tabula", "cards.toml"))).toBe(
       REGISTRY_REL_PATH,
     );
   });
@@ -220,7 +220,7 @@ describe("serializeTideRegistry", () => {
       { name: "discover_toolbox", color: "#00ff00" },
     ];
     const serialized = serializeTideRegistry(tides, {
-      cardTomlBasename: "cards_v2.toml",
+      cardTomlBasename: "cards.toml",
     });
     expect(serialized).toContain("[[tides]]");
     expect(parse(serialized).tides).toEqual(tides);
@@ -245,7 +245,7 @@ describe("tide registry API", () => {
 
     const { response, body } = await requestJson(
       origin,
-      "/api/editor/tides?toml=cards_v2.toml",
+      "/api/editor/tides?toml=cards.toml",
     );
     expect(response.status).toBe(200);
     expect(body.tags.map((tide) => tide.name).sort()).toEqual([
@@ -261,7 +261,7 @@ describe("tide registry API", () => {
     // Keep only discover_toolbox; event_chain is deleted and must be stripped.
     const { response, body } = await requestJson(
       origin,
-      "/api/editor/tides?toml=cards_v2.toml",
+      "/api/editor/tides?toml=cards.toml",
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -285,7 +285,7 @@ describe("tide registry API", () => {
 
     const { response, body } = await requestJson(
       origin,
-      "/api/editor/tides?toml=cards_v2.toml",
+      "/api/editor/tides?toml=cards.toml",
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -305,7 +305,7 @@ describe("card tide PATCH", () => {
 
     const { response, body } = await requestJson(
       origin,
-      `/api/editor/cards/${THIRD_ID}?toml=cards_v2.toml`,
+      `/api/editor/cards/${THIRD_ID}?toml=cards.toml`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -327,7 +327,7 @@ describe("card tide PATCH", () => {
 
     const { response, body } = await requestJson(
       origin,
-      `/api/editor/cards/${THIRD_ID}?toml=cards_v2.toml`,
+      `/api/editor/cards/${THIRD_ID}?toml=cards.toml`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

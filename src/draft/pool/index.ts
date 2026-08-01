@@ -2,11 +2,11 @@
 // color-coherent Dreamtides card pool from per-card metadata — see
 // `docs/cards2/draft_pool_algorithms.md` for the full design.
 //
-// The generator's inputs are reconstructed from `cards_v2.toml` records (loaded
+// The generator's inputs are reconstructed from `cards.toml` records (loaded
 // in the browser via `cards-v2-database.ts`): `core` cards seed every pool,
 // `tides` supply the mechanic-archetype themes, and `colors` / `draftArchetypes`
 // supply the color-combo lists and color+archetype slices. The output is a
-// multiset of card *names*; the caller maps those names onto `cards_v2.toml`
+// multiset of card *names*; the caller maps those names onto `cards.toml`
 // records.
 //
 // The implementation is split across the `color-pool/` directory: shared

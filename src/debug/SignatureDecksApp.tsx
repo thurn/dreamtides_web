@@ -25,7 +25,7 @@ import { idfCosine } from "../draft/pool/variant-idf.ts";
 
 /**
  * `/sigdecks` — a temporary visualization tool. For each DreamAvatar that
- * carries `signature-cards` (see `data/tabula/dream_avatars_v2.toml`), it finds
+ * carries `signature-cards` (see `data/tabula/dream_avatars.toml`), it finds
  * the single real draft deck in the adapted draft corpus
  * (`docs/draft_records_adapted`, bundled as `/draft-records-data.json`) most
  * strongly correlated with that DreamAvatar and renders the whole mainboard.

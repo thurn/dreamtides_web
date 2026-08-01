@@ -5,8 +5,8 @@
 Switch **all real journey play** to the V2 content set and the `idf3` draft-pool
 algorithm:
 
-- Cards come from `data/tabula/cards_v2.toml` (→ `/cards_v2-data.json`).
-- Dream Avatars come from `data/tabula/dream_avatars_v2.toml`
+- Cards come from `data/tabula/cards.toml` (→ `/cards_v2-data.json`).
+- Dream Avatars come from `data/tabula/dream_avatars.toml`
   (→ `/dream-avatars-v2-data.json`), all 32 offered.
 - Draft pools are built by `idf3` (`generateIdf3`), steered by each
   Dream Avatar's `signature-cards` and sourced from the `docs/drafts_anon/`
@@ -41,7 +41,7 @@ The runtime starter deck is the hardcoded `STARTER_CARD_NUMBERS` (v1 cards
 711–720), which do not exist in V2 (cards run 1–509). The seven name matches in
 V2 are **unrelated cards**, not the starter cards.
 
-**Port all ten v1 starter cards into `cards_v2.toml`** as new entries, card
+**Port all ten v1 starter cards into `cards.toml`** as new entries, card
 numbers **510–519**, each **renamed** to avoid colliding with the unrelated V2
 cards (and with the `drafts_anon` corpus), and each with `rendered-text`
 rewritten to `docs/cards2/style_guide.md` and `docs/battle_rules/battle_rules.md`.

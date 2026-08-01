@@ -3,7 +3,7 @@
 //
 // The pool-construction algorithm itself lives in `src/draft/pool/index.ts`
 // and is the single source of truth shared with the in-app draft test harness:
-// this script only loads the source data (cards_v2.toml, dream_avatars_v2.toml)
+// this script only loads the source data (cards.toml, dream_avatars.toml)
 // and formats the result. Node strips the TypeScript types on import, so the
 // same code runs here and in the browser — pools generated here match the app
 // byte-for-byte for a given seed.
@@ -14,7 +14,7 @@
 //   - tides            supply the mechanic-archetype themes (one per tide base name)
 //   - colors           the bare color-combo lists that define legality + fill
 //   - draftArchetypes  the color+archetype slices that supply color-tied themes
-// cards_v2.toml supplies the card list (names); the metadata is merged in here.
+// cards.toml supplies the card list (names); the metadata is merged in here.
 //
 // A DreamAvatar's `draftArchetypes` (from {@link DREAM_AVATAR_ARCHETYPES_BY_ID} in
 // `src/data/dream-avatars-v2-database.ts`) seed construction; passing
@@ -41,16 +41,16 @@ import { DREAM_AVATAR_ARCHETYPES_BY_ID } from "../src/data/dream-avatars-v2-data
 
 export { buildPoolData };
 
-const CARD_TOML = new URL("../data/tabula/cards_v2.toml", import.meta.url)
+const CARD_TOML = new URL("../data/tabula/cards.toml", import.meta.url)
   .pathname;
 const DREAM_AVATAR_TOML = new URL(
-  "../data/tabula/dream_avatars_v2.toml",
+  "../data/tabula/dream_avatars.toml",
   import.meta.url,
 ).pathname;
 
 /**
  * Load and normalize the card records the generator needs. The card list (names)
- * comes from cards_v2.toml; the draft-pool metadata is merged in by each card's
+ * comes from cards.toml; the draft-pool metadata is merged in by each card's
  * stable id from {@link CARDS_V2_POOL_METADATA}.
  */
 export function loadCards(tomlPath = CARD_TOML) {
@@ -73,7 +73,7 @@ export function loadCards(tomlPath = CARD_TOML) {
 
 /**
  * Load the v2 DreamAvatar identities. The id, name, and title come from
- * dream_avatars_v2.toml; the optional `draftArchetypes` list that seeds pool
+ * dream_avatars.toml; the optional `draftArchetypes` list that seeds pool
  * construction is merged in by UUID from {@link DREAM_AVATAR_ARCHETYPES_BY_ID}. A
  * DreamAvatar without that list rolls the unconstrained random pool.
  */

@@ -20,7 +20,7 @@ from a source file through a fixed pipeline. It is worth following that pipeline
 once, because the rest of this document refers to these stores by name.
 
 - **The card records** start as `[[cards]]` entries in
-  `data/tabula/cards_v2.toml`, which supplies each card's `name` and rules text.
+  `data/tabula/cards.toml`, which supplies each card's `name` and rules text.
   The draft-pool metadata the non-`idf3` variants read lives in TypeScript, in
   `src/data/cards-v2-metadata.ts`, keyed by card name: `core` (a boolean
   staple flag), `tides` (mechanic tags such as `"Abandon"` or `"Storm"`),
@@ -33,7 +33,7 @@ once, because the rest of this document refers to these stores by name.
   by card number.
 
 - **The Dream Avatar records** start as `[[dreamAvatar]]` entries in
-  `data/tabula/dream_avatars_v2.toml`, which supplies each Dream Avatar's name,
+  `data/tabula/dream_avatars.toml`, which supplies each Dream Avatar's name,
   ability, and `signature-cards` (the standard `idf3` steering data). The
   `draft-archetypes` the non-`idf3` variants seed from live in TypeScript, in the
   `DREAM_AVATAR_ARCHETYPES_BY_ID` map in `dream-avatars-v2-database.ts`. The
@@ -470,7 +470,7 @@ with every value traced to where it is stored. (The exact decks and scores below
 depend on the random seed; the data sources and the order of operations do not.)
 
 **Setup — what Kragg brings.** The player picks Kragg. From
-`dream_avatars_v2.toml`, Kragg's `draft-archetypes` are loaded as his
+`dream_avatars.toml`, Kragg's `draft-archetypes` are loaded as his
 `draftArchetypes`: `b-aristocrats`, `bg-midrange`, `bg-midrange-reanimator`,
 `br-aristocrats`, `brg-lands-monsters`, `brg-midrange`, `ug-cheaty-ramp`,
 `ug-sneak`, `wb-aristocrats`, `wbg-midrange`, `wbg-value-midrange`,
@@ -483,7 +483,7 @@ those `draftArchetypes` as the seed archetypes, and `["abandon"]` as the theme
 archetypes.
 
 **The theme card set.** The algorithm looks up `abandon` in `PoolData.archLists`
-— the set of every card whose `cards_v2.toml` record carried `"Abandon"` in its
+— the set of every card whose `cards.toml` record carried `"Abandon"` in its
 `tides`. That set becomes Kragg's **theme card set**, and every deck in the
 corpus gets a 0-to-1 theme density measuring how heavily, IDF-weighted, it leans
 on those Abandon cards.

@@ -49,9 +49,9 @@ Read logs for all production game design debugging.
 
 # Cards
 
-Card data lives in data/tabula/cards_v2.toml
+Card data lives in data/tabula/cards.toml
 
-Dream Avatars live in data/tabula/dream_avatars_v2.toml
+Dream Avatars live in data/tabula/dream_avatars.toml
 
 Please always identify cards by UUID, *never* by card name.
 

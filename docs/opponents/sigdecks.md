@@ -34,7 +34,7 @@ Each bundled record carries both names and stable UUIDs, index-aligned:
 ### Dream Avatar signatures
 
 Signatures come from the `signature-cards` lists in
-[`data/tabula/dream_avatars_v2.toml`](../../data/tabula/dream_avatars_v2.toml),
+[`data/tabula/dream_avatars.toml`](../../data/tabula/dream_avatars.toml),
 authored as stable cards_v2 UUIDs. `setup-assets.mjs` resolves each to its current
 display name and emits both, index-aligned, on every Dream Avatar in
 `public/dream-avatars-v2-data.json`:

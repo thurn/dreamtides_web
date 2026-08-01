@@ -1,9 +1,9 @@
 // Guards the UUID-keyed card-reference systems against drift. Every hand-authored
 // place that names cards in data — the `signature-cards` in
-// `dream_avatars_v2.toml`, the tutorial journey pool, the pool metadata in
+// `dream_avatars.toml`, the tutorial journey pool, the pool metadata in
 // `cards-v2-metadata.ts`, and the build-around metadata in
 // `buildaround_support.json` — references cards by their stable `id` UUID from
-// `cards_v2.toml`. These tests fail if any reference points at a UUID that is not
+// `cards.toml`. These tests fail if any reference points at a UUID that is not
 // a real card, so renaming a card can never silently desynchronize one of these
 // files. (The adapted draft records in
 // `docs/draft_records_adapted` are imported data, not a maintained reference: the
@@ -36,7 +36,7 @@ interface RawDreamAvatar {
 }
 
 const cards = (
-  parseToml(readFileSync(join(TABULA, "cards_v2.toml"), "utf8")) as {
+  parseToml(readFileSync(join(TABULA, "cards.toml"), "utf8")) as {
     cards?: RawCard[];
   }
 ).cards ?? [];
@@ -47,7 +47,7 @@ const idToCard = new Map(cards.map((card) => [card.id, card]));
 function expectCard(label: string, ref: string): string {
   expect(CARD_ID_RE.test(ref), `${label}: ${ref} is not a UUID`).toBe(true);
   const name = idToName.get(ref);
-  expect(name, `${label}: ${ref} is not a card in cards_v2.toml`).toBeDefined();
+  expect(name, `${label}: ${ref} is not a card in cards.toml`).toBeDefined();
   return name as string;
 }
 
@@ -55,7 +55,7 @@ describe("card references resolve to real cards", () => {
   it("every signature card is a real card UUID", () => {
     const dreamAvatars = (
       parseToml(
-        readFileSync(join(TABULA, "dream_avatars_v2.toml"), "utf8"),
+        readFileSync(join(TABULA, "dream_avatars.toml"), "utf8"),
       ) as { dreamAvatar?: RawDreamAvatar[] }
     ).dreamAvatar ?? [];
     let checked = 0;
@@ -95,7 +95,7 @@ describe("card references resolve to real cards", () => {
     expect(taggedCardIds).toEqual(poolCardIds);
 
     const tagRegistry = parseToml(
-      readFileSync(join(TABULA, "cards_v2.tags.toml"), "utf8"),
+      readFileSync(join(TABULA, "cards.tags.toml"), "utf8"),
     ) as { tags?: Array<{ name?: string }> };
     expect(tagRegistry.tags?.some((tag) => tag.name === "tutorial")).toBe(true);
   });

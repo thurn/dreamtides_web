@@ -22,13 +22,13 @@ import { parse } from "smol-toml";
 import { buildPoolData, generatePoolFromData } from "../src/draft/pool/index.ts";
 import { loadCards, loadDreamAvatars, findDreamAvatar } from "./generate-color-pool.mjs";
 
-const CARD_TOML = new URL("../data/tabula/cards_v2.toml", import.meta.url)
+const CARD_TOML = new URL("../data/tabula/cards.toml", import.meta.url)
   .pathname;
 
 const DEFAULT_SEEDS = 200;
 const DEFAULT_TOP = 12;
 
-/** Build a card-name -> { cost, type, spark } metadata map from cards_v2.toml. */
+/** Build a card-name -> { cost, type, spark } metadata map from cards.toml. */
 function loadCardMeta(tomlPath = CARD_TOML) {
   const parsed = parse(readFileSync(tomlPath, "utf8"));
   const meta = new Map();

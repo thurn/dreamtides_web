@@ -1,7 +1,7 @@
 # Color pool generator card coverage
 
 `scripts/generate-color-pool.mjs` can produce **all 509 cards** in
-`data/tabula/cards_v2.toml`. Every card appears in at least some generated pool.
+`data/tabula/cards.toml`. Every card appears in at least some generated pool.
 
 ## The producible set
 

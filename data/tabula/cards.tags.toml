@@ -1,4 +1,4 @@
-# Tag registry for cards_v2.toml.
+# Tag registry for cards.toml.
 # Each [[tags]] entry defines an available card tag and its display color.
 # Managed by the card editor's "Manage tags" panel.
 

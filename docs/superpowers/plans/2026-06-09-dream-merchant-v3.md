@@ -71,7 +71,7 @@ docs/journey2/rewards.md          # REWRITE: describe v3 as current state
 
 The script reads `docs/draft_records_adapted/*.jsonc` (strip comments with
 `stripJsonComments` from `scripts/lib/card-refs.mjs`; per-seat records as
-`scripts/setup-assets.mjs` parses them) and `data/tabula/cards_v2.toml` (via
+`scripts/setup-assets.mjs` parses them) and `data/tabula/cards.toml` (via
 `loadCardMaps` from the same lib for name<->UUID mapping). It computes, keyed
 by card UUID:
 

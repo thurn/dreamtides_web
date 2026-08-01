@@ -1,6 +1,6 @@
 # Blink — Card Pool
 
-A companion to [blink.md](blink.md), listing every CardsV2 card with a specific affinity for the Blink archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards_v2.toml`.
+A companion to [blink.md](blink.md), listing every CardsV2 card with a specific affinity for the Blink archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards.toml`.
 
 ## Rematerialize enablers
 

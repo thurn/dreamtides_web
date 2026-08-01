@@ -1,6 +1,6 @@
 # Discard / Madness — Card Pool
 
-A companion to [discard-madness.md](discard-madness.md), listing every CardsV2 card with a specific affinity for the Discard / Madness archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards_v2.toml`.
+A companion to [discard-madness.md](discard-madness.md), listing every CardsV2 card with a specific affinity for the Discard / Madness archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards.toml`.
 
 ## Discard outlets
 

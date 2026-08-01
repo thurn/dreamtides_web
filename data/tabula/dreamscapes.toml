@@ -18,7 +18,7 @@
 #   dream-avatar-ids The 3-4 resident DreamAvatars of this region, by id (omitted
 #                   for the starter). Every non-starter DreamAvatar belongs to
 #                   exactly one dreamscape, so these lists partition
-#                   dream_avatars_v2.toml: each id appears under exactly one
+#                   dream_avatars.toml: each id appears under exactly one
 #                   dreamscape, and the build fails if that invariant breaks.
 #                   Assignments are affiliation-driven where a DreamAvatar's
 #                   ability names the region's theme (the warriors live in

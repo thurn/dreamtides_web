@@ -6,7 +6,7 @@ removal/redesign strategy for each.
 
 **Hard constraint:** the game/runtime must not depend on `CARDS_V2_POOL_METADATA`
 (`src/data/cards-v2-metadata.ts`) — it is draft-pool *experiment* scaffolding for
-the non-idf3 `?algo=` variants, not authored card data. V2 `cards_v2.toml` has
+the non-idf3 `?algo=` variants, not authored card data. V2 `cards.toml` has
 **zero** per-card tides; the ~451 `card.tides` values in `cards_v2-data.json` are
 injected from that metadata at build time and must stop being injected.
 
@@ -26,7 +26,7 @@ injected from that metadata at build time and must stop being injected.
 |---|---|---|---|
 | `src/data/cards-v2-metadata.ts` `CARDS_V2_POOL_METADATA` (`tides`/`core`/`colors`/`draftArchetypes`) | A | Disallowed in runtime; only non-idf3 variants + experiments read it | **Stop merging into `cards_v2-data.json`** (remove the merge in `setup-assets.mjs`). Then remove the file once its last consumers (non-idf3 variants, `generate-color-pool.mjs`) are retired. |
 | `scripts/setup-assets.mjs` (V2 merge of `meta.tides`/etc.; `transformCard` `tides` default) | A | Injects tides into runtime JSON | Drop the metadata merge for the runtime card JSON. Keep a `tides: []`-free CardData (see types). |
-| `data/tabula/cards_v2.tides.toml` (name→color registry) | A | Editor-only authoring registry | Keep or remove with the editor tide panel (separate decision; out of scope here). |
+| `data/tabula/cards.tides.toml` (name→color registry) | A | Editor-only authoring registry | Keep or remove with the editor tide panel (separate decision; out of scope here). |
 
 ### Types
 | Location | System | Strategy |

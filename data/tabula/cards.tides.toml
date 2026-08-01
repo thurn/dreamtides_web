@@ -1,4 +1,4 @@
-# Tides registry for cards_v2.toml.
+# Tides registry for cards.toml.
 # Each [[tides]] entry defines an available card tide and its display color.
 # Managed by the card editor's "Manage tides" panel.
 

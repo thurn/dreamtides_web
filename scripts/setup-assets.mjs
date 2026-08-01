@@ -492,7 +492,7 @@ export function validateCardIds(keys, idToName, label) {
 
 /**
  * Enforce the dreamscape <-> DreamAvatar mapping invariant at build time:
- * non-starter dreamscapes partition `dream_avatars_v2.toml` into resident groups.
+ * non-starter dreamscapes partition `dream_avatars.toml` into resident groups.
  * `dreamscapes` are the transformed dreamscape records and `dreamAvatarIds` the
  * set of every real DreamAvatar id. Fatal violations depend only on
  * `dreamscapes.toml` itself, so a routine edit elsewhere can never trip them:
@@ -845,13 +845,13 @@ export function transformAtlasConfig(config) {
 }
 
 /**
- * Parse `cards_v2.toml` and write both runtime card JSON catalogs — the
+ * Parse `cards.toml` and write both runtime card JSON catalogs — the
  * Special-filtered `card-data.json` the journey/battle runtime fetches, and the
  * unfiltered `cards_v2-data.json` that `cards-v2-database.ts` fetches with the
  * draft-pool metadata merged in. This is the TOML->JSON card transform shared by
  * the full `setupAssets` build and the dev hot-reload plugin
  * (`cardDataHotReloadPlugin` in vite.config.ts): the plugin calls it on every
- * `cards_v2.toml` save so the running browser can refetch fresh card data
+ * `cards.toml` save so the running browser can refetch fresh card data
  * without a full asset rebuild. It writes only the two card JSON files (and
  * refreshes the build-around name index); image symlinks and the other catalogs
  * are left to `setupAssets`.
@@ -861,13 +861,13 @@ export function transformAtlasConfig(config) {
  * catalogs so the transform runs once.
  */
 export function regenerateCardData({
-  cardTomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
-  cardV2TomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
+  cardTomlPath = join(DATA_DIR, "tabula", "cards.toml"),
+  cardV2TomlPath = join(DATA_DIR, "tabula", "cards.toml"),
   publicDir = PUBLIC_DIR,
   cardJsonPath = join(publicDir, "card-data.json"),
   cardV2JsonPath = join(publicDir, "cards_v2-data.json"),
 } = {}) {
-  console.log("Parsing cards_v2.toml for the runtime card catalog...");
+  console.log("Parsing cards.toml for the runtime card catalog...");
   const cardTomlContent = readFileSync(cardTomlPath, "utf8");
   const parsedCards = parse(cardTomlContent);
   const allCards = parsedCards.cards;
@@ -899,15 +899,15 @@ export function regenerateCardData({
   // is transformed with the same kebab->camel rules as the runtime pool and
   // written to its own JSON so it can be fetched with the draft-pool metadata
   // merged in, separate from card-data.json (which the dev drift guard pins to
-  // cards_v2.toml). Special-rarity filtering is intentionally skipped here: the
+  // cards.toml). Special-rarity filtering is intentionally skipped here: the
   // pool draws on the whole catalog.
-  console.log("Parsing cards_v2.toml...");
+  console.log("Parsing cards.toml...");
   const cardV2TomlContent = readFileSync(cardV2TomlPath, "utf8");
   const parsedCardsV2 = parse(cardV2TomlContent);
   const allCardsV2 = parsedCardsV2.cards;
 
   if (!Array.isArray(allCardsV2)) {
-    throw new Error("Expected [[cards]] array in cards_v2.toml");
+    throw new Error("Expected [[cards]] array in cards.toml");
   }
 
   // id<->name maps for resolving the UUID-keyed reference systems (signatures,
@@ -941,7 +941,7 @@ export function regenerateCardData({
 
   // The draft-pool metadata (core/colors/draft-archetypes) the non-`idf3`
   // pool variants consume lives in TypeScript (`cards-v2-metadata.ts`), not in
-  // cards_v2.toml. It is keyed by the stable card id; merge it back into each
+  // cards.toml. It is keyed by the stable card id; merge it back into each
   // record before serializing so the generated JSON the pool experiments read is
   // complete. The standard `idf3` variant ignores all of it. Per-card `tides`
   // are deliberately not injected: the runtime card data carries no tide values.
@@ -1035,9 +1035,9 @@ function setupCatalogFixture({
 }
 
 export function setupAssets({
-  cardTomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
-  cardV2TomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
-  dreamAvatarV2TomlPath = join(DATA_DIR, "tabula", "dream_avatars_v2.toml"),
+  cardTomlPath = join(DATA_DIR, "tabula", "cards.toml"),
+  cardV2TomlPath = join(DATA_DIR, "tabula", "cards.toml"),
+  dreamAvatarV2TomlPath = join(DATA_DIR, "tabula", "dream_avatars.toml"),
   dreamwellTomlPath = join(DATA_DIR, "tabula", "dreamwell.toml"),
   dreamsignTomlPath = join(DATA_DIR, "tabula", "dreamsigns.toml"),
   dreamsignProfilesTomlPath = join(DATA_DIR, "tabula", "dreamsign_profiles.toml"),
@@ -1338,25 +1338,25 @@ export function setupAssets({
     );
   }
 
-  // The v2 DreamAvatar identities (`dream_avatars_v2.toml`) drive the standalone
+  // The v2 DreamAvatar identities (`dream_avatars.toml`) drive the standalone
   // draft test harness. They carry a kebab->camel normalization and a
   // `signature-cards` list that steers the standard `idf3` pool variant. The
   // `draft-archetypes` the non-`idf3` variants seed from live in TypeScript
   // ({@link DREAM_AVATAR_ARCHETYPES_BY_ID}) and are merged in below.
-  console.log("Parsing dream_avatars_v2.toml...");
+  console.log("Parsing dream_avatars.toml...");
   const dreamAvatarV2TomlContent = readFileSync(dreamAvatarV2TomlPath, "utf8");
   const parsedDreamAvatarsV2 = parse(dreamAvatarV2TomlContent);
   const allDreamAvatarsV2 = parsedDreamAvatarsV2.dreamAvatar;
 
   if (!Array.isArray(allDreamAvatarsV2)) {
-    throw new Error("Expected [[dreamAvatar]] array in dream_avatars_v2.toml");
+    throw new Error("Expected [[dreamAvatar]] array in dream_avatars.toml");
   }
 
   // Signatures are authored as stable card-id UUIDs (`docs/cards2/
   // idf3_signature_design.md`). Resolve them to the current card names here so
   // the runtime bundle and the name-based pool engine see names, and so a
-  // dangling signature UUID fails the build. Renaming a card in cards_v2.toml
-  // therefore needs no edit to dream_avatars_v2.toml. The resolved UUIDs are also
+  // dangling signature UUID fails the build. Renaming a card in cards.toml
+  // therefore needs no edit to dream_avatars.toml. The resolved UUIDs are also
   // emitted as `signatureCardIds` (index-aligned with `signatureCards`) so
   // consumers that must distinguish two cards sharing a name can key on the id.
   const jsonDreamAvatarsV2 = allDreamAvatarsV2.map((dreamAvatar) => {
@@ -1483,7 +1483,7 @@ export function setupAssets({
 
   const jsonDreamscapes = allDreamscapes.map(transformDreamscape);
   // Enforce the resident-DreamAvatar invariant: non-starter dreamscapes
-  // partition dream_avatars_v2.toml into 3-4 per region with no DreamAvatar in
+  // partition dream_avatars.toml into 3-4 per region with no DreamAvatar in
   // two regions. `jsonDreamAvatarsV2` was parsed above, so its ids are the
   // authoritative set checked against.
   const dreamAvatarCounts = validateDreamAvatarMapping(

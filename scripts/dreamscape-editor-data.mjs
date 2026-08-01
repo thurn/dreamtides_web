@@ -10,7 +10,7 @@ export const DEFAULT_DREAMSCAPE_TOML_PATH = join("data", "tabula", "dreamscapes.
 const DREAMSCAPE_JSON_PATH = join("public", "dreamscapes-data.json");
 const DREAM_GUIDES_TOML_PATH = join("data", "tabula", "dream_guides.toml");
 const AFFILIATIONS_TOML_PATH = join("data", "tabula", "affiliations.toml");
-const DREAM_AVATARS_TOML_PATH = join("data", "tabula", "dream_avatars_v2.toml");
+const DREAM_AVATARS_TOML_PATH = join("data", "tabula", "dream_avatars.toml");
 
 /**
  * Each non-starter dreamscape must list 3-4 resident DreamAvatars and every

@@ -277,7 +277,7 @@ describe("editor URL display state", () => {
   });
 
   it("preserves the toml file selection across display-state URL updates", () => {
-    window.history.pushState(null, "", "/editor?toml=data/tabula/cards_v2.toml");
+    window.history.pushState(null, "", "/editor?toml=data/tabula/cards.toml");
     const replaceState = vi.spyOn(window.history, "replaceState");
 
     replaceEditorDisplayStateInUrl({
@@ -288,7 +288,7 @@ describe("editor URL display state", () => {
     expect(replaceState).toHaveBeenCalledWith(
       null,
       "",
-      "/editor?q=spark&toml=data%2Ftabula%2Fcards_v2.toml",
+      "/editor?q=spark&toml=data%2Ftabula%2Fcards.toml",
     );
     replaceState.mockRestore();
   });

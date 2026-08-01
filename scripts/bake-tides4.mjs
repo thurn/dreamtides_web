@@ -573,7 +573,7 @@ function makeCardEntry(id, copies, nameOf, detailOf) {
   if (name === undefined) {
     throw new Error(
       `data/tides4-overrides.jsonc references unknown card UUID ${id} (no current ` +
-        `name in cards_v2.toml). Fix or remove that UUID in the overrides file.`,
+        `name in cards.toml). Fix or remove that UUID in the overrides file.`,
     );
   }
   const detail = detailOf(id) ?? {};

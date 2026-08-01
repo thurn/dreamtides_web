@@ -9,7 +9,7 @@
 // the whole set; `docName` still points at the real GameCard so the props table
 // reports its actual API.
 //
-// The curated UUIDs are read live from data/tabula/cards_v2.toml (via the served
+// The curated UUIDs are read live from data/tabula/cards.toml (via the served
 // card-data.json), so the demo always reflects current card data rather than
 // hardcoding stats or rules text that would drift. The set exercises the card's
 // real variety: keyword highlighting, Unicode trigger markers, fast/interrupt bolts,
@@ -27,7 +27,7 @@ import { type CumulusColor } from "../../primitives/color";
 import type { CumulusComponent } from "../registry";
 
 /**
- * Curated, deterministic real card UUIDs from data/tabula/cards_v2.toml. Ordered
+ * Curated, deterministic real card UUIDs from data/tabula/cards.toml. Ordered
  * for a coherent showcase; each is annotated with what facet of the card it
  * exercises so the set stays intentional if it is ever re-curated.
  */

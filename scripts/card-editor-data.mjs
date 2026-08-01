@@ -9,7 +9,7 @@ import {
 import { BANE_NAMES, transformCard } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-export const DEFAULT_CARD_TOML_PATH = join("data", "tabula", "cards_v2.toml");
+export const DEFAULT_CARD_TOML_PATH = join("data", "tabula", "cards.toml");
 const CARD_JSON_PATH = join("public", "card-data.json");
 
 export const EDITABLE_CARD_FIELDS = new Set([
@@ -103,8 +103,8 @@ export function defaultTagColor(name) {
 }
 
 // A facet registry lives in a sidecar TOML next to the card file it annotates:
-// `data/tabula/cards_v2.toml` -> `data/tabula/cards_v2.tags.toml` (tags) or
-// `data/tabula/cards_v2.tides.toml` (tides).
+// `data/tabula/cards.toml` -> `data/tabula/cards.tags.toml` (tags) or
+// `data/tabula/cards.tides.toml` (tides).
 function facetRegistryPathFor(cardTomlPath, facet) {
   return cardTomlPath.replace(/\.toml$/iu, facet.registrySuffix);
 }

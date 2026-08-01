@@ -1,5 +1,5 @@
 // Draft-pool metadata for the experimental cards_v2 pool, keyed by each card's
-// stable `id` UUID from `cards_v2.toml`. Keying by UUID keeps the metadata in
+// stable `id` UUID from `cards.toml`. Keying by UUID keeps the metadata in
 // sync across display renames; the trailing `// Name` comments are maintained
 // from the current card name.
 //
@@ -9,7 +9,7 @@
 // `decklists`): `core` flags an always-included staple, `tides` supply
 // the mechanic-archetype themes, and `colors` / `draftArchetypes` supply the
 // color-combo lists and color+archetype slices. They live here in TypeScript
-// rather than in `cards_v2.toml`; `scripts/setup-assets.mjs` merges them into
+// rather than in `cards.toml`; `scripts/setup-assets.mjs` merges them into
 // `cards_v2-data.json`, and `scripts/generate-color-pool.mjs` reads them directly.
 // See `docs/cards2/draft_pool_algorithms.md`.
 

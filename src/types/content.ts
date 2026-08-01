@@ -59,7 +59,7 @@ export interface DreamsignTemplate {
  *
  * `dreamAvatarIds` lists the 3-4 DreamAvatars resident in this region (empty for
  * the starter). Across all dreamscapes these lists partition
- * dream_avatars_v2.toml: every non-starter DreamAvatar appears under exactly one
+ * dream_avatars.toml: every non-starter DreamAvatar appears under exactly one
  * dreamscape, an invariant the asset build enforces.
  */
 export interface DreamscapeContent {

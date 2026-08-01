@@ -1,6 +1,6 @@
 # Celestial Reverie Combo — Card Pool
 
-A companion to [celestial-reverie-combo.md](celestial-reverie-combo.md), listing every CardsV2 card with a specific affinity for the Celestial Reverie Combo archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards_v2.toml`.
+A companion to [celestial-reverie-combo.md](celestial-reverie-combo.md), listing every CardsV2 card with a specific affinity for the Celestial Reverie Combo archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards.toml`.
 
 ## Combo core: draw-on-play triggers
 

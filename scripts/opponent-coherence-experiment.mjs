@@ -610,7 +610,7 @@ function run() {
 
   // Affiliation fit: build affiliated decks per affiliation, compare to neutral.
   const affiliationsToml = parse(readText("data/tabula/affiliations.toml")).affiliations ?? [];
-  const cardsV2 = parse(readText("data/tabula/cards_v2.toml")).cards;
+  const cardsV2 = parse(readText("data/tabula/cards.toml")).cards;
   const { idToName } = buildCardMaps(cardsV2);
   const affLevel = Math.floor(LAYER_COUNT / 2);
   const affiliationResults = [];

@@ -38,7 +38,7 @@ import {
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 // Corpus files reference cards by their stable id UUID; resolve to current names.
-const CARD_MAPS = loadCardMaps(join(REPO_ROOT, 'data', 'tabula', 'cards_v2.toml'));
+const CARD_MAPS = loadCardMaps(join(REPO_ROOT, 'data', 'tabula', 'cards.toml'));
 // This tool scores IDF-cosine on card ids (the same key space as the in-app idf
 // engine), so two distinct cards that share a display name stay distinct. Card
 // keys are resolved to current display names only for the human-readable report.
@@ -164,11 +164,11 @@ function parseDeck(path) {
   return { set: seen };
 }
 
-// Map card id -> its rules text from cards_v2.toml, collapsed to a single line
+// Map card id -> its rules text from cards.toml, collapsed to a single line
 // (rendered-text is often a multi-line TOML string). Cards with no rules text
 // map to ''.
 function loadRulesText() {
-  const tomlPath = join(REPO_ROOT, 'data', 'tabula', 'cards_v2.toml');
+  const tomlPath = join(REPO_ROOT, 'data', 'tabula', 'cards.toml');
   const parsed = parse(readFileSync(tomlPath, 'utf8'));
   const byId = new Map();
   for (const card of parsed.cards ?? []) {

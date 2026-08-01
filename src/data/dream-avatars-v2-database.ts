@@ -1,5 +1,5 @@
 /**
- * Loads the v2 DreamAvatar identities (`dream_avatars_v2.toml`, normalized by
+ * Loads the v2 DreamAvatar identities (`dream_avatars.toml`, normalized by
  * `scripts/setup-assets.mjs`) for the standalone draft test harness. Served from
  * the public directory at `/dream-avatars-v2-data.json`.
  */
@@ -36,7 +36,7 @@ export interface DraftDreamAvatar {
   /**
    * The DreamAvatar's signature: a short list of distinctive card names that
    * stands in for "what this avatar wants to do", sourced from the
-   * `signature-cards` field in `dream_avatars_v2.toml`. The `idf3` pool variant
+   * `signature-cards` field in `dream_avatars.toml`. The `idf3` pool variant
    * (the standard algorithm) treats it as a query to locate the real decks that
    * most embody the DreamAvatar and steers the starter draw toward them (see
    * `docs/cards2/idf3_signature_design.md`). Empty for DreamAvatars with no
@@ -95,9 +95,9 @@ export const DREAM_AVATAR_THEMES_BY_ID: Record<string, readonly string[]> = {
  * Maps each themed DreamAvatar UUID to the draft archetypes its pool is
  * steered toward by the non-`idf3` `?algo=` variants (`default`, `diverse`,
  * `decklists`). The standard `idf3` variant reads none of this — it
- * steers from each DreamAvatar's `signature-cards` in `dream_avatars_v2.toml`
+ * steers from each DreamAvatar's `signature-cards` in `dream_avatars.toml`
  * instead. These labels live here in TypeScript rather
- * than in `dream_avatars_v2.toml`; `scripts/setup-assets.mjs` merges them into
+ * than in `dream_avatars.toml`; `scripts/setup-assets.mjs` merges them into
  * `dream-avatars-v2-data.json`, and `scripts/generate-color-pool.mjs` reads them
  * directly. Edit a list to retune which archetypes a DreamAvatar pulls toward.
  */

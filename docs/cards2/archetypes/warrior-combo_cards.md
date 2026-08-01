@@ -1,6 +1,6 @@
 # Warrior Combo — Card Pool
 
-A companion to [warrior-combo.md](warrior-combo.md), listing every CardsV2 card with a specific affinity for the Warrior Combo archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards_v2.toml`.
+A companion to [warrior-combo.md](warrior-combo.md), listing every CardsV2 card with a specific affinity for the Warrior Combo archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards.toml`.
 
 ## Recursion engines
 

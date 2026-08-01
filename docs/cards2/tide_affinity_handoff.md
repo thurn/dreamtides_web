@@ -10,7 +10,7 @@ verification gates.
 
 Dreamtides is a card game prototype. At the start of a journey run, each
 Dream Avatar (a hero the player picks; 32 exist, defined in
-`data/tabula/dream_avatars_v2.toml`) gets a 200-copy **draft pool** the player
+`data/tabula/dream_avatars.toml`) gets a 200-copy **draft pool** the player
 drafts cards from. Pool construction algorithms are selected by the `?algo=`
 URL parameter; each is a `PoolStrategy` registered in
 `src/draft/pool/registry.ts`. The best-performing algorithm is `idf3`
@@ -349,7 +349,7 @@ exercise the neutral tide-pool path.
   unknown UUIDs. Dream Avatar `signatureCards` are NAMES; Dream Avatar `id` is
   a UUID and is threaded to strategies as `PoolGenerationRequest.dreamAvatarId`.
 - **"Tides" is an overloaded word**: legacy card metadata (`card.tides`,
-  `cards_v2.tides.toml`, `TIDE_TO_ARCHETYPE`) is mechanic-archetype tagging
+  `cards.tides.toml`, `TIDE_TO_ARCHETYPE`) is mechanic-archetype tagging
   and per `AGENTS.md` must be ignored entirely. Only "tide decks" /
   `TideDecksJson` relate to this work. `public/tides/` is an *images*
   directory — unrelated.

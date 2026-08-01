@@ -62,7 +62,7 @@ const DOC_REL = "docs/cards2/tides5_decklists.md";
 const OVERRIDES_REL = "data/tides5-overrides.jsonc";
 const KNOWN_GOOD_REL = "docs/known_good_decklists.json";
 const ADAPTED_RECORDS_REL = "docs/draft_records_adapted";
-const CARDS_TOML_REL = "data/tabula/cards_v2.toml";
+const CARDS_TOML_REL = "data/tabula/cards.toml";
 const CARDS_JSON_REL = "public/cards_v2-data.json";
 const DREAM_AVATARS_JSON_REL = "public/dream-avatars-v2-data.json";
 
@@ -162,7 +162,7 @@ function readPublicJson(rootDir, rel) {
  * draft records are rebuilt from `docs/draft_records_adapted` through the canonical
  * `buildDraftRecords` reader, filtered to the known-good seats and with the
  * exactly-30-picks rule relaxed so non-standard known-good drafts survive. The
- * card maps come from `cards_v2.toml` (the full card universe), exactly as
+ * card maps come from `cards.toml` (the full card universe), exactly as
  * `setup-assets` builds them, so a kept seat's record matches its `tides4` record
  * card-for-card.
  */

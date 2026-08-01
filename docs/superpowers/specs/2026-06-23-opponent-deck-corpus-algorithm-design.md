@@ -43,7 +43,7 @@ All of these are available at runtime (some require a new generated artifact, no
 - **IDF statistics** computed over the known-good corpus (document frequency,
   per-card IDF, per-deck L2 norms).
 - **Dream Avatar signatures** — `signatureCardIds` from
-  [data/tabula/dream_avatars_v2.toml](../../data/tabula/dream_avatars_v2.toml).
+  [data/tabula/dream_avatars.toml](../../data/tabula/dream_avatars.toml).
 - **Affiliation signatures** — `signatureCards` from
   [data/tabula/affiliations.toml](../../data/tabula/affiliations.toml); the
   dreamscape's affiliation is resolved the same way `buildOpponentDeck` does today.

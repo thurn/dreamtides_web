@@ -1,6 +1,6 @@
 # Cheap Characters — Card Pool
 
-A companion to [cheap-characters.md](cheap-characters.md), listing every CardsV2 card with a specific affinity for the Cheap Characters (cost 2● or less) archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards_v2.toml`.
+A companion to [cheap-characters.md](cheap-characters.md), listing every CardsV2 card with a specific affinity for the Cheap Characters (cost 2● or less) archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards.toml`.
 
 ## Acceleration and cost reducers
 

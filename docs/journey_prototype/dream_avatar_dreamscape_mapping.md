@@ -2,7 +2,7 @@
 
 Every non-starter dreamscape in `data/tabula/dreamscapes.toml` lists the 3–4
 Dream Avatars that call it home, under a `dream-avatar-ids` field. Together these
-lists **partition** `data/tabula/dream_avatars_v2.toml`: each of the 32
+lists **partition** `data/tabula/dream_avatars.toml`: each of the 32
 Dream Avatars belongs to exactly one dreamscape, and no Dream Avatar is shared.
 The starter region (Firstlight Meadow) has no residents.
 

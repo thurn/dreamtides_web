@@ -1,13 +1,13 @@
 #!/usr/bin/env node
-// Dumps every card in data/tabula/cards_v2.toml as a readable plain-text list
+// Dumps every card in data/tabula/cards.toml as a readable plain-text list
 // for archetype-pool analysis. Output: name, type/subtype, cost, spark, tags,
 // and full rules text for each card. Usage: node scripts/dump-cards-v2.mjs
 import { readFileSync } from 'node:fs';
 
-const raw = readFileSync(new URL('../data/tabula/cards_v2.toml', import.meta.url), 'utf8');
+const raw = readFileSync(new URL('../data/tabula/cards.toml', import.meta.url), 'utf8');
 
 // Lightweight TOML parse limited to the [[cards]] array-of-tables shape used by
-// cards_v2.toml. Handles basic strings, triple-quoted strings, numbers, bools,
+// cards.toml. Handles basic strings, triple-quoted strings, numbers, bools,
 // and inline arrays for the fields we render.
 const blocks = raw.split(/\[\[cards\]\]\n/).slice(1);
 const lines = [];

@@ -1469,7 +1469,7 @@
             "name": "mtgName",
             "tsType": "string",
             "optional": true,
-            "description": "Name of the Magic: The Gathering card this card is derived from, sourced\nfrom a TOML `mtg-name` and carried through the setup-assets transform.\nSurfaced as a reference hover tooltip in card-browsing surfaces (the card\neditor and the Pool Viewer). Present on sources that record it (e.g.\n`cards_v2.toml`); absent on cards whose source TOML omits `mtg-name`."
+            "description": "Name of the Magic: The Gathering card this card is derived from, sourced\nfrom a TOML `mtg-name` and carried through the setup-assets transform.\nSurfaced as a reference hover tooltip in card-browsing surfaces (the card\neditor and the Pool Viewer). Present on sources that record it (e.g.\n`cards.toml`); absent on cards whose source TOML omits `mtg-name`."
           },
           {
             "name": "imageNumber",

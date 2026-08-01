@@ -141,14 +141,14 @@ export function formatStaleMessage(result) {
   } else if (result.selectionsMatch) {
     lines.push("Every tide's card selection is current; only derived fields (card");
     lines.push("names / rendered text / pool ordering) lag — typically a card was renamed");
-    lines.push("or its text edited in data/tabula/cards_v2.toml without a re-bake.");
+    lines.push("or its text edited in data/tabula/cards.toml without a re-bake.");
     lines.push("");
   }
 
   lines.push("────────────────────────────────────────────────────────────────────────");
   lines.push("  FIX 1 — you changed a bake INPUT and just need to regenerate:");
   lines.push("────────────────────────────────────────────────────────────────────────");
-  lines.push("Inputs are data/tabula/cards_v2.toml, data/tabula/dream_avatars_v2.toml,");
+  lines.push("Inputs are data/tabula/cards.toml, data/tabula/dream_avatars.toml,");
   lines.push("docs/draft_records_adapted/, and data/tides4-overrides.jsonc. After editing");
   lines.push("any of them, regenerate and re-stage:");
   lines.push("");

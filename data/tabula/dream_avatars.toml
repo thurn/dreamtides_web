@@ -16,7 +16,7 @@
 # `mtg-name` field. `docs/cards2/card_associations.md` lists, for every archetype,
 # the five MTG cards most uniquely associated with it across real draft decks. Each
 # of those MTG cards is mapped back to its Dreamtides equivalent(s) through the
-# `mtg-name` field in `data/tabula/cards_v2.toml`, and the resulting Dreamtides
+# `mtg-name` field in `data/tabula/cards.toml`, and the resulting Dreamtides
 # cards form the signature list. A DreamAvatar can therefore end up with fewer than
 # five signatures (when an associated MTG card has no Dreamtides equivalent) or more
 # than five (when one MTG card maps to several Dreamtides cards).

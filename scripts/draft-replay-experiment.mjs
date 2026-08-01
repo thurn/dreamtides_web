@@ -21,7 +21,7 @@
 // src/draft/replay/fit-model.ts, the same established pattern as
 // variant-idf.ts <-> scripts/idf3-*.mjs. If you change a formula in one, change
 // it in the other. The eval CORPUS is built exactly the way the live bundle is
-// (buildDraftRecords + buildCardMaps over cards_v2.toml), so the corpus the
+// (buildDraftRecords + buildCardMaps over cards.toml), so the corpus the
 // heuristic is measured on is the corpus it runs on in the game.
 //
 // LEAVE-ONE-OUT. A record's own final deck must never be in the model that
@@ -392,9 +392,9 @@ function dedupe(names) {
  * id->card-number index for the tie-break. Returns { records, numberOf }.
  */
 export function loadCorpus() {
-  const cardsV2 = parse(readText("data/tabula/cards_v2.toml")).cards;
+  const cardsV2 = parse(readText("data/tabula/cards.toml")).cards;
   if (!Array.isArray(cardsV2)) {
-    throw new Error("Expected [[cards]] array in cards_v2.toml");
+    throw new Error("Expected [[cards]] array in cards.toml");
   }
   const cardMaps = buildCardMaps(cardsV2);
   // buildDraftRecords logs its skip/drop counts to stdout; silence those during

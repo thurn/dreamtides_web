@@ -1,4 +1,4 @@
-Character cards in cards_v2.toml with empty subtype whose matching
+Character cards in cards.toml with empty subtype whose matching
 rendered-cards.toml subtype was NOT copied (excluded subtype values:
 warrior, spirit animal, outsider, survivor).
 

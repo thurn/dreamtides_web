@@ -1,6 +1,6 @@
 # Events — Card Pool
 
-A companion to [events.md](events.md), listing every CardsV2 card with a specific affinity for the Events archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards_v2.toml`.
+A companion to [events.md](events.md), listing every CardsV2 card with a specific affinity for the Events archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards.toml`.
 
 ## Event payoffs ("when you play an event")
 

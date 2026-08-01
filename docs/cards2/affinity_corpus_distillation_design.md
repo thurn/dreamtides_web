@@ -51,7 +51,7 @@ A pool generator can **steer** toward a signature so the pool supports that hero
 strategy.
 
 **Cards are identified by stable UUIDs**, never by display name. A card's printed
-name can be re-skinned; the UUID (`data/tabula/cards_v2.toml`, field `id`) is the
+name can be re-skinned; the UUID (`data/tabula/cards.toml`, field `id`) is the
 permanent identity. All draft data, signatures, and metadata key on these UUIDs.
 
 There are many **pool-generation variants** (algorithms), selectable at runtime via
@@ -74,10 +74,10 @@ sources in `data/` and `docs/`):
 
 | Source (checked in) | Built asset (`public/`, gitignored) | Role |
 |---|---|---|
-| `data/tabula/cards_v2.toml` | `cards_v2-data.json` (516 KB) | card catalog (519 cards: id, name, …) |
+| `data/tabula/cards.toml` | `cards_v2-data.json` (516 KB) | card catalog (519 cards: id, name, …) |
 | `docs/draft_records_adapted/*.jsonc` (1061 files) | `draft-records-data.json` (**19 MB**) | 993 real draft "seats", each 30 picks with the full pack offered at each pick |
 | `docs/draft_records_adapted/*` (mainboards) | `decklists-data.json` (709 KB) | finished decklists (used by other variants) |
-| `data/tabula/dream_avatars_v2.toml` | `dream-avatars-v2-data.json` (23 KB) | the 32 Dream Avatars + their signatures |
+| `data/tabula/dream_avatars.toml` | `dream-avatars-v2-data.json` (23 KB) | the 32 Dream Avatars + their signatures |
 | `data/buildaround_support.json` (checked in) | (read directly) | per-card theme metadata for the **quality metric** (Section 4) |
 
 `buildDraftRecords` (`scripts/setup-assets.mjs:228`) bundles the adapted records

@@ -38,7 +38,7 @@ const imageViewerStatePath = path.join(
   "image-viewer-state.json",
 );
 export const generatedCardDataWatchPaths = [
-  path.join(__dirname, "data", "tabula", "cards_v2.toml"),
+  path.join(__dirname, "data", "tabula", "cards.toml"),
   path.join(__dirname, "public", "card-data.json"),
   path.join(__dirname, "public", "cards_v2-data.json"),
 ].map((filePath) => path.resolve(filePath));
@@ -514,9 +514,9 @@ function imageViewerApiPlugin(): Plugin {
     configureServer(server) {
       server.middlewares.use(
         createImageViewerApiMiddleware({
-          cardsTomlPath: path.join(__dirname, "data", "tabula", "cards_v2.toml"),
+          cardsTomlPath: path.join(__dirname, "data", "tabula", "cards.toml"),
           nameHistoryTomlPaths: [
-            path.join(__dirname, "data", "tabula", "cards_v2.toml"),
+            path.join(__dirname, "data", "tabula", "cards.toml"),
           ],
           statePath: imageViewerStatePath,
         }),
@@ -556,7 +556,7 @@ function savedJourneysApiPlugin(): Plugin {
 
 /**
  * Dev-only Vite plugin that hot-reloads card data into the running browser when
- * `data/tabula/cards_v2.toml` is edited. The dev watcher ignores the TOML
+ * `data/tabula/cards.toml` is edited. The dev watcher ignores the TOML
  * directory (see `server.watch.ignored`), so a TOML save normally has no effect
  * on the page; this plugin watches the file directly with `fs.watch`, and on
  * change:
@@ -584,7 +584,7 @@ function savedJourneysApiPlugin(): Plugin {
  */
 export function cardDataHotReloadPlugin(): Plugin {
   const cardTomlPath = path.resolve(
-    path.join(__dirname, "data", "tabula", "cards_v2.toml"),
+    path.join(__dirname, "data", "tabula", "cards.toml"),
   );
   const tomlDir = path.dirname(cardTomlPath);
   const tomlBasename = path.basename(cardTomlPath);
@@ -599,7 +599,7 @@ export function cardDataHotReloadPlugin(): Plugin {
         try {
           regenerateCardData();
           console.log(
-            "[card-data] cards_v2.toml changed -> regenerated card JSON -> notifying running app",
+            "[card-data] cards.toml changed -> regenerated card JSON -> notifying running app",
           );
           // Targeted custom event rather than a full reload: only the running
           // battle/journey app reloads to pick up the edit (see
@@ -612,7 +612,7 @@ export function cardDataHotReloadPlugin(): Plugin {
           server.ws.send({
             type: "error",
             err: {
-              message: "Failed to regenerate card data from cards_v2.toml",
+              message: "Failed to regenerate card data from cards.toml",
               stack: message,
             },
           });

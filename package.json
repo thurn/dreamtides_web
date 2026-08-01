@@ -8,7 +8,7 @@
     "qai": "npm install && npm start -- --open \"/?ai=1\"",
     "load-journey": "npm install && node scripts/load-saved-journey.mjs",
     "editor": "npm install && npm run dev:vite -- --open /editor",
-    "editor2": "npm install && npm run dev:vite -- --open \"/editor?toml=data/tabula/cards_v2.toml\"",
+    "editor2": "npm install && npm run dev:vite -- --open \"/editor?toml=data/tabula/cards.toml\"",
     "dreamsigns": "npm install && npm run dev:vite -- --open \"/dreamsigns?toml=data/tabula/dreamsigns.toml\"",
     "images": "npm install && npm run dev:vite -- --open /images",
     "start": "node scripts/dev-with-emulator.mjs",

@@ -91,10 +91,10 @@ git push
 
 ## Phase 2 — Starter cards & decklist corpus (additive data)
 
-### Task 2.1: Port the 10 starter cards into `cards_v2.toml`
+### Task 2.1: Port the 10 starter cards into `cards.toml`
 
 **Files:**
-- Modify: `data/tabula/cards_v2.toml` (append 10 `[[cards]]` entries, card numbers 510–519)
+- Modify: `data/tabula/cards.toml` (append 10 `[[cards]]` entries, card numbers 510–519)
 - Modify: `src/data/starter-cards.ts`
 
 **Decision (renames + revised text):** the 10 v1 starter cards are ported with new names that don't collide with existing V2 cards, text rewritten per `docs/cards2/style_guide.md`. Use exactly these entries (each is a `[[cards]]` block; set `mtg-name = ""`, `rarity = "Starter"`, `is-fast = false`, `is-interrupt = false`, `tags = []`, `image-number = ""`, `art-owned = false`, and a fresh lowercase-hex UUID `id`). Spark for events is `""`.
@@ -114,7 +114,7 @@ git push
 
 - [ ] **Step 1: Append the 10 entries**
 
-Append to `data/tabula/cards_v2.toml` *before* the trailing `[metadata]` section (entries must live in the `[[cards]]` array, which precedes metadata). Match the field layout of an existing `[[cards]]` block in that file. Generate a unique lowercase-hex UUID per card for `id`.
+Append to `data/tabula/cards.toml` *before* the trailing `[metadata]` section (entries must live in the `[[cards]]` array, which precedes metadata). Match the field layout of an existing `[[cards]]` block in that file. Generate a unique lowercase-hex UUID per card for `id`.
 
 - [ ] **Step 2: Update the starter constant**
 
@@ -124,7 +124,7 @@ In `src/data/starter-cards.ts`, set `STARTER_CARD_NUMBERS` to `[510, 511, 512, 5
 
 **File:** `src/data/starter-cards.test.ts` (create)
 
-Catches: a starter number with no matching TOML entry, a starter entry missing `rarity = "Starter"`, and drift between `STARTER_CARD_NUMBERS` and the actual Starter-rarity rows (e.g. a typo'd number or a forgotten entry). Parse `data/tabula/cards_v2.toml` with the same `@iarna/toml` `parse` used by `scripts/setup-assets.mjs` (read the file via `node:fs`), then assert: every number in `STARTER_CARD_NUMBERS` matches exactly one `[[cards]]` row; the set of `card-number`s whose `rarity === "Starter"` equals the set in `STARTER_CARD_NUMBERS`; and each such row has a non-empty `name` and a `card-type` of `Character` or `Event`.
+Catches: a starter number with no matching TOML entry, a starter entry missing `rarity = "Starter"`, and drift between `STARTER_CARD_NUMBERS` and the actual Starter-rarity rows (e.g. a typo'd number or a forgotten entry). Parse `data/tabula/cards.toml` with the same `@iarna/toml` `parse` used by `scripts/setup-assets.mjs` (read the file via `node:fs`), then assert: every number in `STARTER_CARD_NUMBERS` matches exactly one `[[cards]]` row; the set of `card-number`s whose `rarity === "Starter"` equals the set in `STARTER_CARD_NUMBERS`; and each such row has a non-empty `name` and a `card-type` of `Character` or `Event`.
 
 - [ ] **Step 4: Run the test**
 
@@ -134,8 +134,8 @@ Expected: PASS.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add data/tabula/cards_v2.toml src/data/starter-cards.ts src/data/starter-cards.test.ts
-git commit -m "feat: port the 10 starter cards into cards_v2.toml"
+git add data/tabula/cards.toml src/data/starter-cards.ts src/data/starter-cards.test.ts
+git commit -m "feat: port the 10 starter cards into cards.toml"
 git push
 ```
 
@@ -569,7 +569,7 @@ git push
 
 Remove all tide-related code now that nothing drives it. Run only after Phase 8 confirms the V2 experience works. Each task is a vertical slice — one tide concept plus every consumer — and must end green (`npm run typecheck && npm test`). Because the slices share the `PackageTideId` type and ripple through types, **commit each task before starting the next** even if dispatched as a batch; an agent owning a slice removes the field *and* fixes every reader in the same commit so the tree never stays red.
 
-Scope: the journey runtime, shared types, battle, dreamsigns, journeys, debug, and screens. The card-authoring tide tooling (the card editor's "Manage tides" panel, `data/tabula/cards_v2.tides.toml`, `scripts/apply-archetype-tides.mjs`, `scripts/card-editor-tides.*`) is authoring metadata for a separate tool — Task 9.7 covers it last and may be left out if it balloons; note that choice in the commit if so.
+Scope: the journey runtime, shared types, battle, dreamsigns, journeys, debug, and screens. The card-authoring tide tooling (the card editor's "Manage tides" panel, `data/tabula/cards.tides.toml`, `scripts/apply-archetype-tides.mjs`, `scripts/card-editor-tides.*`) is authoring metadata for a separate tool — Task 9.7 covers it last and may be left out if it balloons; note that choice in the commit if so.
 
 Before starting, build the consumer map: `grep -rn "tide\|Tide\|PackageTideId" src/ | grep -v draft_test` and keep it open; each task clears one cluster.
 
@@ -617,7 +617,7 @@ Before starting, build the consumer map: `grep -rn "tide\|Tide\|PackageTideId" s
 
 ### Task 9.7 (optional): Remove card-authoring tide tooling
 
-**Files:** `data/tabula/cards_v2.tides.toml`, `scripts/apply-archetype-tides.mjs`, `scripts/card-editor-tides.*`, the card editor's "Manage tides" panel under `src/editor/`.
+**Files:** `data/tabula/cards.tides.toml`, `scripts/apply-archetype-tides.mjs`, `scripts/card-editor-tides.*`, the card editor's "Manage tides" panel under `src/editor/`.
 
 - [ ] Remove the tide-authoring registry, scripts, and editor panel. This touches a separate tool; if it expands beyond a clean deletion, stop and leave it, noting the decision in the commit message. Run `npm run lint && npm run typecheck && npm test`; commit + push.
 

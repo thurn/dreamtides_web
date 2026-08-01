@@ -4,7 +4,7 @@ A companion to
 [dreamtides_archetype_cards.md](dreamtides_archetype_cards.md). That document's
 final section lists every Synergy Cube card from
 [../calebgannon/archetype_cards.md](../calebgannon/archetype_cards.md) with no
-card carrying its name as an `mtg-name` in `data/tabula/cards_v2.toml`. The bulk
+card carrying its name as an `mtg-name` in `data/tabula/cards.toml`. The bulk
 of those entries are lands, fetchlands, utility lands, and Moxen — effects the
 shared Dreamwell and energy curve absorb, so they have no reason to exist as
 cards.

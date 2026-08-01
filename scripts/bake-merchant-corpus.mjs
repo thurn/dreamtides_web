@@ -5,7 +5,7 @@
 //
 // Inputs are the adapted draft records (`docs/draft_records_adapted/*.jsonc`,
 // parsed per seat exactly the way `scripts/setup-assets.mjs` bundles them) and
-// `data/tabula/cards_v2.toml` for the name<->UUID maps. Everything in the
+// `data/tabula/cards.toml` for the name<->UUID maps. Everything in the
 // artifact is keyed by card UUID; display names appear only in console output.
 //
 // Per card UUID the bake computes:
@@ -25,7 +25,7 @@
 //                     Clusters with >= 8 members are retained; each cluster's
 //                     flagship maximizes idf(c) * quality(c).
 //
-// The bake is a pure function of the records + cards_v2.toml: no Date.now, no
+// The bake is a pure function of the records + cards.toml: no Date.now, no
 // Math.random, every tie broken deterministically (lexicographic UUID). Re-
 // baking the same inputs yields a byte-identical artifact, which is what the
 // parity check (`npm run merchant-corpus-parity`) verifies.
@@ -435,14 +435,14 @@ function buildClusters(labels, idf, quality) {
 
 /**
  * Compute the full merchant corpus artifact from the adapted draft records and
- * cards_v2.toml. Pure function of the inputs: deterministic, no I/O beyond the
+ * cards.toml. Pure function of the inputs: deterministic, no I/O beyond the
  * reads. Returns `{ artifact, idToName }` — `artifact` is the JSON-shaped
  * object the bake writes and the parity script re-derives; `idToName` lets
  * callers render display names in console output only.
  */
 export function computeMerchantCorpus({
   recordsDir = resolve(ROOT, SOURCE),
-  cardsTomlPath = join(ROOT, "data", "tabula", "cards_v2.toml"),
+  cardsTomlPath = join(ROOT, "data", "tabula", "cards.toml"),
 } = {}) {
   const cardMaps = loadCardMaps(cardsTomlPath);
   const records = buildDraftRecords(recordsDir, cardMaps);

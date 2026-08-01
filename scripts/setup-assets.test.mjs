@@ -120,8 +120,8 @@ describe("setupAssets", () => {
       "licensed-art",
       "tutorial-round-frame.png",
     );
-    const cardTomlPath = join(tempRoot, "cards_v2.toml");
-    const dreamAvatarV2TomlPath = join(tempRoot, "dream_avatars_v2.toml");
+    const cardTomlPath = join(tempRoot, "cards.toml");
+    const dreamAvatarV2TomlPath = join(tempRoot, "dream_avatars.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
     const cachedImagePath = join(imageCacheDir, imageHash(101));
 
@@ -308,8 +308,8 @@ rendered-text = "Use the canonical Dreamsign text."
     const imageCacheDir = join(tempRoot, "image-cache");
     const dreamAvatarArtDir = join(tempRoot, "dream-avatar-art");
     const dreamsignArtDir = join(tempRoot, "dreamsign-art");
-    const cardTomlPath = join(tempRoot, "cards_v2.toml");
-    const dreamAvatarV2TomlPath = join(tempRoot, "dream_avatars_v2.toml");
+    const cardTomlPath = join(tempRoot, "cards.toml");
+    const dreamAvatarV2TomlPath = join(tempRoot, "dream_avatars.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
 
     mkdirSync(imageCacheDir, { recursive: true });
@@ -391,8 +391,8 @@ rendered-text = ""
     const imageCacheDir = join(tempRoot, "image-cache");
     const dreamAvatarArtDir = join(tempRoot, "dream-avatar-art");
     const dreamsignArtDir = join(tempRoot, "dreamsign-art");
-    const cardTomlPath = join(tempRoot, "cards_v2.toml");
-    const dreamAvatarV2TomlPath = join(tempRoot, "dream_avatars_v2.toml");
+    const cardTomlPath = join(tempRoot, "cards.toml");
+    const dreamAvatarV2TomlPath = join(tempRoot, "dream_avatars.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
 
     mkdirSync(imageCacheDir, { recursive: true });

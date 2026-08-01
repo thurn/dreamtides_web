@@ -328,7 +328,7 @@ Run the full checks (`npm run lint`, `npm run typecheck`, `npm test`), then do
 browser QA in the card editor against `cards_v2`:
 
 ```
-http://localhost:<port>/editor?toml=cards_v2.toml&size=large
+http://localhost:<port>/editor?toml=cards.toml&size=large
 ```
 
 Validate at both `medium` and `large` sizes. For close inspection, pin a single

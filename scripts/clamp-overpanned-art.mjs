@@ -95,8 +95,8 @@ function aspectFor(imageNumber) {
 const round3 = (v) => Math.round(v * 1000) / 1000;
 
 const path = process.argv[2]?.startsWith("--")
-  ? "data/tabula/cards_v2.toml"
-  : process.argv[2] ?? "data/tabula/cards_v2.toml";
+  ? "data/tabula/cards.toml"
+  : process.argv[2] ?? "data/tabula/cards.toml";
 const apply = process.argv.includes("--apply");
 
 const text = readFileSync(path, "utf8");

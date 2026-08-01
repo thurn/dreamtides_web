@@ -35,7 +35,7 @@ function callHotUpdate(plugin, context) {
 describe("generated card data drift Vite integration", () => {
   it("keeps editor-written card data files out of Vite's reload watcher", () => {
     // The whole data/tabula directory is ignored so editor writes to any card
-    // or tag TOML (not just the default cards_v2.toml) never trigger a full
+    // or tag TOML (not just the default cards.toml) never trigger a full
     // page reload. The image-viewer state file is ignored so favorite and used
     // mutations remain in the current editor session. The saved-journeys
     // directory is ignored so saving a journey from the debug overlay does not
@@ -77,7 +77,7 @@ describe("generated card data drift Vite integration", () => {
       callHotUpdate(
         plugin,
         makeHotUpdateContext(
-          join(rootDir, "data", "tabula", "cards_v2.toml"),
+          join(rootDir, "data", "tabula", "cards.toml"),
         ),
       ),
     ).toEqual([]);

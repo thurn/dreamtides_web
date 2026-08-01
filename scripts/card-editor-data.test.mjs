@@ -96,7 +96,7 @@ function writeFixtureRoot() {
   const rootDir = mkdtempSync(join(tmpdir(), "journey-card-editor-data-"));
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
   mkdirSync(join(rootDir, "public"), { recursive: true });
-  writeFileSync(join(rootDir, "data", "tabula", "cards_v2.toml"), fixtureToml());
+  writeFileSync(join(rootDir, "data", "tabula", "cards.toml"), fixtureToml());
   writeFileSync(join(rootDir, "public", "untouched.json"), '{"keep":true}\n');
   return rootDir;
 }

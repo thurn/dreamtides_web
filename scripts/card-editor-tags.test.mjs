@@ -29,8 +29,8 @@ const FIRST_ID = "11111111-1111-4111-8111-111111111111";
 const SECOND_ID = "22222222-2222-4222-8222-222222222222";
 const THIRD_ID = "33333333-3333-4333-8333-333333333333";
 
-const CARDS_REL_PATH = join("data", "tabula", "cards_v2.toml");
-const REGISTRY_REL_PATH = join("data", "tabula", "cards_v2.tags.toml");
+const CARDS_REL_PATH = join("data", "tabula", "cards.toml");
+const REGISTRY_REL_PATH = join("data", "tabula", "cards.tags.toml");
 
 const servers = [];
 
@@ -85,7 +85,7 @@ card-number = 3
 function writeFixtureRoot({ withRegistry = false } = {}) {
   const rootDir = mkdtempSync(join(tmpdir(), "journey-card-editor-tags-"));
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
-  // cards_v2.toml is the canonical card file, so editing it through the API
+  // cards.toml is the canonical card file, so editing it through the API
   // regenerates public/card-data.json; the directory must exist for the write.
   mkdirSync(join(rootDir, "public"), { recursive: true });
   writeFileSync(join(rootDir, CARDS_REL_PATH), fixtureToml());
@@ -146,7 +146,7 @@ describe("tag data model", () => {
   });
 
   it("derives the registry sidecar path from the card file path", () => {
-    expect(tagRegistryPathFor(join("data", "tabula", "cards_v2.toml"))).toBe(
+    expect(tagRegistryPathFor(join("data", "tabula", "cards.toml"))).toBe(
       REGISTRY_REL_PATH,
     );
   });
@@ -253,7 +253,7 @@ describe("serializeTagRegistry", () => {
       { name: "Removal", color: "#ff0000" },
       { name: "Discover", color: "#00ff00" },
     ];
-    const parsed = parse(serializeTagRegistry(tags, { cardTomlBasename: "cards_v2.toml" }));
+    const parsed = parse(serializeTagRegistry(tags, { cardTomlBasename: "cards.toml" }));
     expect(parsed.tags).toEqual(tags);
   });
 });
@@ -278,7 +278,7 @@ describe("tag registry API", () => {
 
     const { response, body } = await requestJson(
       origin,
-      "/api/editor/tags?toml=cards_v2.toml",
+      "/api/editor/tags?toml=cards.toml",
     );
     expect(response.status).toBe(200);
     expect(body.tags.map((tag) => tag.name).sort()).toEqual(["Discover", "Removal"]);
@@ -290,7 +290,7 @@ describe("tag registry API", () => {
 
     const { response, body } = await requestJson(
       origin,
-      "/api/editor/tags?toml=cards_v2.toml",
+      "/api/editor/tags?toml=cards.toml",
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -318,7 +318,7 @@ describe("tag registry API", () => {
     // Keep only Discover; Removal is deleted and must be stripped from cards.
     const { response, body } = await requestJson(
       origin,
-      "/api/editor/tags?toml=cards_v2.toml",
+      "/api/editor/tags?toml=cards.toml",
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -344,7 +344,7 @@ describe("tag registry API", () => {
 
     const { response, body } = await requestJson(
       origin,
-      "/api/editor/tags?toml=cards_v2.toml",
+      "/api/editor/tags?toml=cards.toml",
       {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -364,7 +364,7 @@ describe("card tag PATCH", () => {
 
     const { response, body } = await requestJson(
       origin,
-      `/api/editor/cards/${THIRD_ID}?toml=cards_v2.toml`,
+      `/api/editor/cards/${THIRD_ID}?toml=cards.toml`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -382,7 +382,7 @@ describe("card tag PATCH", () => {
 
     const { response, body } = await requestJson(
       origin,
-      `/api/editor/cards/${THIRD_ID}?toml=cards_v2.toml`,
+      `/api/editor/cards/${THIRD_ID}?toml=cards.toml`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

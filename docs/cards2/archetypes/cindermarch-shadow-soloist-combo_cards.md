@@ -1,6 +1,6 @@
 # Cindermarch / Shadow Soloist Combo — Card Pool
 
-A companion to [cindermarch-shadow-soloist-combo.md](cindermarch-shadow-soloist-combo.md), listing every CardsV2 card with a specific affinity for the Cindermarch / Shadow Soloist Combo archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards_v2.toml`.
+A companion to [cindermarch-shadow-soloist-combo.md](cindermarch-shadow-soloist-combo.md), listing every CardsV2 card with a specific affinity for the Cindermarch / Shadow Soloist Combo archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards.toml`.
 
 ## Backbone awakeners and ▸Dawn re-triggers
 

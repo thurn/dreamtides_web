@@ -1,7 +1,7 @@
-# Rules-Text Templating Consistency — `cards_v2.toml`
+# Rules-Text Templating Consistency — `cards.toml`
 
 This report audits the `rendered-text` of all 502 cards in
-`data/tabula/cards_v2.toml` for templating consistency: writing the same effect
+`data/tabula/cards.toml` for templating consistency: writing the same effect
 the same way every time. It identifies the major sources of variation that are
 worth standardizing.
 

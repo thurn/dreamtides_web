@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use super-subagent-driven-development (recommended) or super-executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Rebuild journey-prototype battle mode (`src/battle/`) to match the current `docs/battle_rules/battle_rules.md` and `data/tabula/cards_v2.toml` as a manual sandbox with structural automation — correct terminology, discrete figment stacking, exhaust/awaken, counters, energy-track Dreamwell, expanded Basic Automation defaulted ON, an updated debug rail, and an enemy AI adapted to the new model — with **no card-text interpretation** (players resolve their own card effects).
+**Goal:** Rebuild journey-prototype battle mode (`src/battle/`) to match the current `docs/battle_rules/battle_rules.md` and `data/tabula/cards.toml` as a manual sandbox with structural automation — correct terminology, discrete figment stacking, exhaust/awaken, counters, energy-track Dreamwell, expanded Basic Automation defaulted ON, an updated debug rail, and an enemy AI adapted to the new model — with **no card-text interpretation** (players resolve their own card effects).
 
 **Architecture:** Keep the model-agnostic shell (controller/history/undo, the `BattleCommand`/`DEBUG_EDIT` envelope, logging, React components). Rebuild the model-bound semantics: rename the board to front/back rank, add card-instance status state, replace the integer figment count with discrete figments, model an energy track + Dreamwell/Draw step, unify the two divergent Challenge resolvers into one keyword-aware engine, broaden Basic Automation, refresh the debug rail, and re-point the AI. Structural automation expands one UI gesture into an ordered list of `DEBUG_EDIT`s (undoable), acting only on card *fields* and board *state*, never card prose.
 
@@ -473,9 +473,9 @@ The AI tree is tightly coupled to the old model (slots, phases, `judgment.ts`, f
 
 **Files:** `src/battle/ai/cards/*` and `ai/cards/card-numbers.ts`. Tests: the co-located `ai/cards/*.test.ts`.
 
-The deck (numbers 510–519) is unchanged and exists in `cards_v2.toml`; only the code constants/labels drifted (`SIGILSWORN_CHAMPION`, `DISTANT_WORLDS`, `MEADOWFORGED_COLOSSUS`, etc.). Rename constants/files to the current names (Runebound Champion, Worlds Await, Wildflower Colossus, …) and verify each model's modeled ability still matches the card's current `rendered-text`.
+The deck (numbers 510–519) is unchanged and exists in `cards.toml`; only the code constants/labels drifted (`SIGILSWORN_CHAMPION`, `DISTANT_WORLDS`, `MEADOWFORGED_COLOSSUS`, etc.). Rename constants/files to the current names (Runebound Champion, Worlds Await, Wildflower Colossus, …) and verify each model's modeled ability still matches the card's current `rendered-text`.
 
-- [ ] **Step 1:** Cross-check each 510–519 card's current text in `cards_v2.toml` against its model; fix any drifted behavior (e.g. Support value, ▸Dawn point, ▸Dissolved draw).
+- [ ] **Step 1:** Cross-check each 510–519 card's current text in `cards.toml` against its model; fix any drifted behavior (e.g. Support value, ▸Dawn point, ▸Dissolved draw).
 - [ ] **Step 2:** Rename stale constants/identifiers to current names; update tests.
 - [ ] **Step 3:** `npm run typecheck && npm test`.
 - [ ] **Step 4:** Commit: `refactor(battle/ai): refresh Starter card models to current names and text`.

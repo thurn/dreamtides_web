@@ -1,11 +1,11 @@
 // Shared helpers for resolving card references by their stable cards_v2 UUID.
 //
 // Every system that names cards in data — the signature lists in
-// `dream_avatars_v2.toml`, the pool metadata in `cards-v2-metadata.ts`, the
+// `dream_avatars.toml`, the pool metadata in `cards-v2-metadata.ts`, the
 // build-around metadata in `buildaround_support.json`, and the adapted draft
 // records under `docs/draft_records_adapted` — keys cards by their `id` UUID
-// from `data/tabula/cards_v2.toml`. The UUID is stable across display renames,
-// so renaming a card in `cards_v2.toml` keeps every one of those files in sync.
+// from `data/tabula/cards.toml`. The UUID is stable across display renames,
+// so renaming a card in `cards.toml` keeps every one of those files in sync.
 //
 // The adapted draft records (`docs/draft_records_adapted/*.jsonc`) store one
 // card per array entry as a `<uuid>` string with an inline `// <Card Name>`
@@ -21,7 +21,7 @@ export const CARD_ID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 
 /**
- * Read `cards_v2.toml` and return the `idToName` lookup map: a card's stable
+ * Read `cards.toml` and return the `idToName` lookup map: a card's stable
  * UUID resolved to its current display name. Every card-reference system keys on
  * the UUID, so this map is the source of truth for resolving a reference to the
  * name shown in the UI.

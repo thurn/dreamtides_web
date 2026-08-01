@@ -1,6 +1,6 @@
 # Fading Farewell — Card Pool
 
-A companion to [fading-farewell.md](fading-farewell.md), listing every CardsV2 card with a specific affinity for the Fading Farewell archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards_v2.toml`.
+A companion to [fading-farewell.md](fading-farewell.md), listing every CardsV2 card with a specific affinity for the Fading Farewell archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards.toml`.
 
 ## The centerpiece
 

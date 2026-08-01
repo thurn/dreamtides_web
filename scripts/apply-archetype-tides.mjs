@@ -1,12 +1,12 @@
-// One-off: stamp archetype tides onto cards_v2.toml from the archetype card-pool
+// One-off: stamp archetype tides onto cards.toml from the archetype card-pool
 // and splash docs, and write the tides registry sidecar with color coding.
 import { readFileSync, writeFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = new URL("..", import.meta.url).pathname;
 const ARCH_DIR = join(ROOT, "docs/cards2/archetypes");
-const CARD_TOML = join(ROOT, "data/tabula/cards_v2.toml");
-const TIDE_TOML = join(ROOT, "data/tabula/cards_v2.tides.toml");
+const CARD_TOML = join(ROOT, "data/tabula/cards.toml");
+const TIDE_TOML = join(ROOT, "data/tabula/cards.tides.toml");
 
 // --- gather (tideName -> set of card names) from the docs ----------------------
 const cardNameToTides = new Map();
@@ -41,7 +41,7 @@ for (const file of files) {
   }
 }
 
-// --- patch cards_v2.toml -------------------------------------------------------
+// --- patch cards.toml -------------------------------------------------------
 const src = readFileSync(CARD_TOML, "utf8").split("\n");
 const matched = new Set();
 let currentName = null;
@@ -99,7 +99,7 @@ const registry = tideOrder.map((tide) => {
 });
 
 const out = [
-  "# Tides registry for cards_v2.toml.",
+  "# Tides registry for cards.toml.",
   "# Each [[tides]] entry defines an available card tide and its display color.",
   '# Managed by the card editor\'s "Manage tides" panel.',
   "",

@@ -14,13 +14,13 @@ const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 export const DEFAULT_DREAM_AVATAR_TOML_PATH = join(
   "data",
   "tabula",
-  "dream_avatars_v2.toml",
+  "dream_avatars.toml",
 );
 export const TIDES4_SOURCE_PATH = join("data", "tides4.jsonc");
 const DREAM_AVATAR_JSON_PATH = join("public", "dream-avatars-v2-data.json");
 const TIDES4_JSON_PATH = join("public", "tides4-data.json");
 
-// The text fields edited inline live on the `dream_avatars_v2.toml` record;
+// The text fields edited inline live on the `dream_avatars.toml` record;
 // `tide-pool` is edited separately against `data/tides4.jsonc` and is therefore
 // not part of the TOML-patch field set.
 export const EDITABLE_DREAM_AVATAR_TOML_FIELDS = new Set([

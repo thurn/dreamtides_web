@@ -4,10 +4,10 @@ import { parse } from "smol-toml";
 import { describe, expect, it } from "vitest";
 import { STARTER_CARD_NUMBERS } from "./starter-cards";
 
-// Parse cards_v2.toml with the same TOML parser scripts/setup-assets.mjs uses
+// Parse cards.toml with the same TOML parser scripts/setup-assets.mjs uses
 // (smol-toml) so this test exercises the exact data the asset pipeline reads.
 const tomlPath = fileURLToPath(
-  new URL("../../data/tabula/cards_v2.toml", import.meta.url),
+  new URL("../../data/tabula/cards.toml", import.meta.url),
 );
 
 interface CardRow {

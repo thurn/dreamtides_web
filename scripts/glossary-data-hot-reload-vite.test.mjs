@@ -68,7 +68,7 @@ describe("glossary data hot reload Vite integration", () => {
         ws: { send },
       });
 
-      onChange("change", "cards_v2.toml");
+      onChange("change", "cards.toml");
       await vi.advanceTimersByTimeAsync(120);
 
       expect(onFileChange).not.toHaveBeenCalled();

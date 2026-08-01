@@ -39,10 +39,10 @@ describe("fast review plan", () => {
   });
 
   it("adds asset validation for production data without forcing typecheck", () => {
-    expect(buildReviewPlan(["data/tabula/cards_v2.toml"])).toMatchObject({
+    expect(buildReviewPlan(["data/tabula/cards.toml"])).toMatchObject({
       shouldTypecheck: false,
       shouldValidate: true,
-      testInputs: ["data/tabula/cards_v2.toml"],
+      testInputs: ["data/tabula/cards.toml"],
     });
   });
 

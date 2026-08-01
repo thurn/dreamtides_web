@@ -87,13 +87,13 @@ function writeFixtureRoot() {
   const rootDir = mkdtempSync(join(tmpdir(), "journey-card-editor-api-"));
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
   mkdirSync(join(rootDir, "public"), { recursive: true });
-  writeFileSync(join(rootDir, "data", "tabula", "cards_v2.toml"), fixtureToml());
+  writeFileSync(join(rootDir, "data", "tabula", "cards.toml"), fixtureToml());
   writeFileSync(join(rootDir, "public", "card-data.json"), "[]\n");
   return rootDir;
 }
 
 function readToml(rootDir) {
-  return readFileSync(join(rootDir, "data", "tabula", "cards_v2.toml"), "utf8");
+  return readFileSync(join(rootDir, "data", "tabula", "cards.toml"), "utf8");
 }
 
 function readCardJson(rootDir) {

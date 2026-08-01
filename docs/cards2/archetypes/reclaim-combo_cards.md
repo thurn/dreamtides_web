@@ -1,6 +1,6 @@
 # Reclaim Combo — Card Pool
 
-A companion to [reclaim-combo.md](reclaim-combo.md), listing every CardsV2 card with a specific affinity for the Reclaim Combo archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards_v2.toml`.
+A companion to [reclaim-combo.md](reclaim-combo.md), listing every CardsV2 card with a specific affinity for the Reclaim Combo archetype — the cards you would prioritize drafting when building this deck. Cards are drawn from `data/tabula/cards.toml`.
 
 ## The Static — the combo's heart
 

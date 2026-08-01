@@ -9,7 +9,7 @@ import {
 } from "./dreamscape-editor-data.mjs";
 
 // Self-contained ids so these assertions never depend on the production
-// dream_avatars_v2.toml / dreamscapes.toml.
+// dream_avatars.toml / dreamscapes.toml.
 const A1 = "AAAAAAA1-0000-0000-0000-000000000001";
 const A2 = "AAAAAAA2-0000-0000-0000-000000000002";
 const A3 = "AAAAAAA3-0000-0000-0000-000000000003";

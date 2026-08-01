@@ -192,10 +192,10 @@ machinery precise.
 The new data is a per-Dream Avatar `signature-cards` field, a card list:
 
 ```
-signature-cards : cardName[]   # one per [[dreamAvatar]] in dream_avatars_v2.toml
+signature-cards : cardName[]   # one per [[dreamAvatar]] in dream_avatars.toml
 ```
 
-It lives in `data/tabula/dream_avatars_v2.toml` alongside each Dream Avatar's name,
+It lives in `data/tabula/dream_avatars.toml` alongside each Dream Avatar's name,
 title, and ability, and flows into the loaded Dream Avatar records as
 `signatureCards`. Its values are **card names only** — the algorithm's native
 vocabulary. A typical entry is a handful of names:
@@ -414,7 +414,7 @@ on-identity as well — steering the starter alone is sufficient, which is why
 The pieces fit into the existing pool-construction flow as follows:
 
 1. **The data.** Add a `signature-cards` card list to each `[[dreamAvatar]]` in
-   `dream_avatars_v2.toml`.
+   `dream_avatars.toml`.
 2. **Load it.** The asset build carries `signature-cards` into the generated
    Dream Avatar JSON as `signatureCards` (an empty list when absent), and the
    records expose it like other per-Dream Avatar guidance.
@@ -442,7 +442,7 @@ Suppose Kragg is a black-red sacrifice Dream Avatar whose decks lean on Abandon
 payoffs. An author writes a three-to-six card signature of Kragg's distinctive
 sacrifice payoffs and Abandon enablers — not the format's staples or mana, which
 would be zeroed anyway — and records it as `signature-cards` on the `Kragg`
-entry in `dream_avatars_v2.toml`.
+entry in `dream_avatars.toml`.
 
 At run time, the player picks Kragg. The probe is formed from those signature
 cards (Step 1). The algorithm scores every real deck by similarity to the probe

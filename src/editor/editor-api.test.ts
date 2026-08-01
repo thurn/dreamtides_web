@@ -109,15 +109,15 @@ describe("editor-api", () => {
   it("reads the toml selection from the URL", () => {
     expect(editorTomlParam()).toBeNull();
 
-    window.history.replaceState({}, "", "/editor?toml=data/tabula/cards_v2.toml");
-    expect(editorTomlParam()).toBe("data/tabula/cards_v2.toml");
+    window.history.replaceState({}, "", "/editor?toml=data/tabula/cards.toml");
+    expect(editorTomlParam()).toBe("data/tabula/cards.toml");
 
     window.history.replaceState({}, "", "/editor?toml=");
     expect(editorTomlParam()).toBeNull();
   });
 
   it("forwards the toml selection on the card load request", async () => {
-    window.history.replaceState({}, "", "/editor?toml=data/tabula/cards_v2.toml");
+    window.history.replaceState({}, "", "/editor?toml=data/tabula/cards.toml");
     const fetchMock = vi.fn(
       () =>
         Promise.resolve(
@@ -129,13 +129,13 @@ describe("editor-api", () => {
     await loadEditorCards();
 
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/editor/cards?toml=data%2Ftabula%2Fcards_v2.toml",
+      "/api/editor/cards?toml=data%2Ftabula%2Fcards.toml",
       expect.anything(),
     );
   });
 
   it("forwards the toml selection on the field save request", async () => {
-    window.history.replaceState({}, "", "/editor?toml=cards_v2.toml");
+    window.history.replaceState({}, "", "/editor?toml=cards.toml");
     const fetchMock = vi.fn(
       () =>
         Promise.resolve(
@@ -147,7 +147,7 @@ describe("editor-api", () => {
     await saveEditorCardField({ field: "name", id: "card-id", value: "Renamed" });
 
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/editor/cards/card-id?toml=cards_v2.toml",
+      "/api/editor/cards/card-id?toml=cards.toml",
       expect.objectContaining({ method: "PATCH" }),
     );
   });

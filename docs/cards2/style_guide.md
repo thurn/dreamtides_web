@@ -1,7 +1,7 @@
-# Card Text Style Guide — `cards_v2.toml`
+# Card Text Style Guide — `cards.toml`
 
 This guide is the canonical reference for writing the `rendered-text` field of a
-card in `data/tabula/cards_v2.toml`. It defines how every effect is templated so
+card in `data/tabula/cards.toml`. It defines how every effect is templated so
 that the same effect is always written the same way. Mechanics terms used here
 (Materialize, Reclaim, Veil, Exhaust, Spark, and so on) are defined in
 `docs/battle_rules/battle_rules.md`, which remains authoritative for what each

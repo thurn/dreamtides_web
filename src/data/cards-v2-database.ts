@@ -20,7 +20,7 @@ import {
 import type { AffinityCorpusJson } from "../draft/pool";
 
 /**
- * Fetches the experimental v2 card pool (generated from `cards_v2.toml` by
+ * Fetches the experimental v2 card pool (generated from `cards.toml` by
  * `scripts/setup-assets.mjs`) and returns a Map keyed by card number. Served
  * from the public directory at `/cards_v2-data.json`, which carries the
  * draft-pool metadata merged in alongside the base card fields.
