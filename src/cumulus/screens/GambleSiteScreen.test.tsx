@@ -273,7 +273,7 @@ describe("GambleSiteScreen", () => {
     expect(
       container.querySelectorAll('[data-gamble-bet][aria-hidden="true"]'),
     ).toHaveLength(3);
-    void act(() => vi.advanceTimersByTime(1_969));
+    void act(() => vi.advanceTimersByTime(719));
     expect(container.querySelector("[data-radial-announcement]")).toBeNull();
     expect(onOutcomeShown).not.toHaveBeenCalled();
     void act(() => vi.advanceTimersByTime(1));
@@ -358,7 +358,7 @@ describe("GambleSiteScreen", () => {
       />,
     );
 
-    void act(() => vi.advanceTimersByTime(2_220));
+    void act(() => vi.advanceTimersByTime(970));
     void act(() => vi.advanceTimersByTime(3_360));
     expect(container.querySelector("[data-dreamsign-replacement-dialog]"))
       .not.toBeNull();

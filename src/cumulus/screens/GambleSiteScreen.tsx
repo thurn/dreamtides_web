@@ -108,7 +108,6 @@ export interface GambleSiteScreenProps {
 
 const DESKTOP_GAMBLE_REGION_MAX_WIDTH = 650;
 const BET_SETTLE_DELAY_MS = 250;
-const DRAWN_CARD_HOLD_MS = 1_250;
 const REDUCED_MOTION_DELAY_MS = 80;
 const FADE_DURATION_SECONDS = motionTimeSeconds("--dur-slow");
 
@@ -297,10 +296,8 @@ export function GambleSiteScreen({
       ? REDUCED_MOTION_DELAY_MS
       : BET_SETTLE_DELAY_MS;
     const outcomeDelay = reduceMotion
-      ? REDUCED_MOTION_DELAY_MS + DRAWN_CARD_HOLD_MS
-      : BET_SETTLE_DELAY_MS +
-        PLAYING_CARD_FLIP_DURATION_MS +
-        DRAWN_CARD_HOLD_MS;
+      ? REDUCED_MOTION_DELAY_MS
+      : BET_SETTLE_DELAY_MS + PLAYING_CARD_FLIP_DURATION_MS;
     const revealTimeout = window.setTimeout(
       () => setRevealStarted(true),
       revealDelay,
