@@ -65,9 +65,10 @@ validating an encounter.
 
 7. Apply the scene-only gate to every candidate. Hide the templates and actions,
    then ask: “Does this stand alone as a specific, evocative view of the card's
-   world, even if nothing needs fixing?” Reject scenes that merely announce a
-   decision, manufacture a predicament, depend on symbolic word substitution,
-   or exist to disguise a game operation.
+   world, even if nothing needs fixing? Does it introduce its subjects instead
+   of assuming the reader has already seen them?” Reject scenes that merely
+   announce a decision, manufacture a predicament, depend on symbolic word
+   substitution, or exist to disguise a game operation.
 
 8. Infer deck intent from the ability and canonical metadata. Ask what choosing
    this card suggests the player is building toward. Inspect repository tags
@@ -107,6 +108,13 @@ validating an encounter.
 
 - Write in second-person present tense. The interface already establishes that
   the player entered the card, so begin inside the moment.
+- Treat every `prose` field as the reader's first glimpse of an independent
+  scene. Introduce each subject on first mention with `a` or `an`: “A hovering
+  bird...” or “A great bird...” Never begin with an unintroduced definite or
+  possessive phrase such as “the hovering bird,” “the great bird,” or “the
+  creature's wings.” Use `the` only after the same prose field has established
+  that subject. Use `a` or `an`, not `one`, to introduce a singular scene
+  element; do not open on an unexplained body part, motion, or consequence.
 - Keep the entire `prose` field near 10–15 words and never above 20. Use more
   than one sentence only when the extra sentence adds real value.
 - Describe a scene, not a miniature quest or an illustrated reward. Establish
