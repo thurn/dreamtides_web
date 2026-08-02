@@ -38,10 +38,12 @@ validating an encounter.
    substituting different data. Treat the supplied `card_type` and `subtype` as
    authoritative; do not recategorize the art.
 
-4. Read the depicted scene. Privately note concrete subjects, setting, motion,
-   scale, posture, distance, mood, sensory atmosphere, and relationships. If a
-   claim depends on exact color, measure the image rather than trusting visual
-   color perception.
+4. Read the depicted scene. Privately separate three kinds of claims:
+   **observed** details plainly visible in the image, **strongly implied**
+   sensory qualities such as heat from visible fire, and **unsupported**
+   additions. Note concrete subjects, setting, motion, scale, posture, distance,
+   mood, sensory atmosphere, and relationships. If a claim depends on exact
+   color, measure the image rather than trusting visual color perception.
 
 5. Read the card as an archetype, not a named individual. Dreamtides card names
    identify kinds of beings or manifestations: the art depicts *a* blazing
@@ -53,23 +55,29 @@ validating an encounter.
    prose fields and omit it entirely when a common description is stronger.
    Do not repeat the card name mechanically in prose or labels.
 
-6. Set the templates aside and build a private scene bank from the art, card
-   name, and archetypal identity. Draft at least eight atmospheric tableaux.
-   Each should place the player before a specific subject in a particular
-   setting and evoke scale, posture or movement, sensory detail, and an implied
-   relationship. Vary composition rather than manufacturing plot: distance,
-   vantage point, gesture, movement, weather, light, stillness, and the player's
-   relationship to the subject. A scene does not need conflict, danger, stakes,
-   a dilemma, a request, a problem, a resolution, or unresolved tension. Do not
-   use template quantities, operations, or reward concepts as scene ingredients.
+6. Set the templates aside and build a private scene bank from the artwork.
+   Draft at least eight poetic descriptions of the depicted moment. Vary what
+   receives emphasis—distance, vantage point, posture, scale, motion, light,
+   texture, stillness, and the player's relationship to the visible subject—not
+   which people, creatures, objects, or structures exist. Create richness by
+   sharpening the language around observed details, not by enlarging the cast or
+   inventing adjacent events. A scene does not need conflict, danger, stakes, a
+   dilemma, a request, a problem, a resolution, or unresolved tension. Do not
+   use template quantities, operations, reward concepts, or needed effect
+   recipients as scene ingredients.
 
-7. Apply the scene-only gate to every candidate. Hide the templates and actions,
-   then ask: “Does this stand alone as a specific, evocative view of the card's
-   world, even if nothing needs fixing? Does it introduce its subjects instead
-   of assuming the reader has already seen them?” Reject scenes that merely
+7. Apply the scene-only and art-fidelity gates to every candidate. Hide the
+   templates and actions, then ask: “Does this stand alone as a specific,
+   evocative description of what the artwork actually depicts? Can every
+   material subject, object, setting feature, and action be traced to an
+   observed or strongly implied detail?” Reject scenes that add a companion,
+   crowd, creature, prop, structure, weather event, or ongoing incident merely
+   because it would make an effect easier to explain. Do not turn screens,
+   reflections, silhouettes, debris, or ambiguous background forms into people
+   or formations without clear visual evidence. Also reject scenes that
    announce a decision, manufacture a predicament, depend on symbolic word
-   substitution, or exist to disguise a game operation. Freeze the prose of
-   every passing scene. Do not revise it to support a mechanic later.
+   substitution, or disguise a game operation. Freeze every passing prose
+   field. Do not revise it to support a mechanic later.
 
 8. Infer deck intent from the ability and canonical metadata. Ask what choosing
    this card suggests the player is building toward. Inspect repository tags
@@ -83,8 +91,11 @@ validating an encounter.
    purposeful action label that is natural in the scene and makes the effect a
    plausible consequence. Privately complete: “When the player [label],
    [effect] follows because ___.” Require a concrete, scene-grounded answer
-   without game terminology. If that test fails, revise the label, resolution,
-   variables, or scene assignment; never revise the frozen prose.
+   without game terminology. Let the action and resolution carry any new
+   consequence that happens after the player's choice; never pre-seed the prose
+   with extra figures or objects to literalize a mechanic. If the test fails,
+   revise the label, resolution, variables, or scene assignment; never revise
+   the frozen prose.
 
 10. Write a 5–10 word `resolution` for each action. Show the immediate response
     to the player's act and bridge naturally into the displayed effect without
@@ -99,10 +110,11 @@ validating an encounter.
    operate at a different order of magnitude.
 
 12. Compare all five designs using the contract rubric, then assign unique
-    ranks. Score mechanical connection by the weaker of the two action chains,
-    not their average. Revise any chain below 7/10. Mechanical literalism never
-    raises a scene score, and beautiful prose never excuses an incoherent
-    action-to-effect connection.
+    ranks. Rank art-faithful poetic precision above mechanic-friendly scene
+    invention. Score mechanical connection by the weaker of the two action
+    chains, not their average. Revise any chain below 7/10. Mechanical
+    literalism never raises a scene score, and beautiful prose never excuses an
+    incoherent action-to-effect connection.
 
 13. Sort the five completed event objects by ascending `rank` as a final
     readability pass, so rank 1 appears first and rank 5 last. Keep each event's
@@ -135,11 +147,32 @@ validating an encounter.
   wholly observational; nothing needs to be wrong, threatened, requested, or
   unresolved. Keep game terms such as card, deck, draft, purge, essence,
   dreamsign, and transfiguration out of the prose.
+- Treat the artwork as the source of truth for every material element in the
+  prose. Describe the moment inside the frame rather than a larger inferred
+  world. If the art shows a lone figure, keep the figure alone; do not add a
+  column, crowd, companion, or hidden population to service a Character effect.
 - Prefer concrete nouns, observable actions, and simple causal relationships.
   Surreal events are welcome when their internal logic is clear.
-- Extrapolate beyond the frame when useful. Stay faithful to the subject,
-  relationship, and mood rather than mechanically inventorying visible details
-  or inventing a conflict.
+- Make faithful description evocative through precise verbs, rhythm, scale,
+  sensory immediacy, and fresh comparisons grounded in visible forms. Do not
+  settle for a flat inventory of objects, but do not mistake added objects for
+  poetic richness.
+- Extrapolate only immediate sensory qualities strongly supported by the image,
+  such as heat from visible fire or wind from visibly blown fabric. Do not add
+  material subjects, props, architecture, terrain, weather, or events outside
+  the frame. A resolution may introduce a plausible response after the player
+  acts; the initial prose may not anticipate that response.
+- Use these art-fidelity regression checks:
+  - For art showing a lone twin-bladed warrior above burning ruins, prefer “A
+    twin-bladed warrior stands above the ruined street as cinders rise around
+    you.” Reject “A weary column gathers beneath a warrior” when no column
+    appears.
+  - Reject “A resting runner studies suspended screens” when the art contains
+    projections but no resting individual. Do not invent an observer to animate
+    an abstract or environmental composition.
+  - Reject “A scorched warrior inspects a silent shield wall” when no shield
+    wall appears. Do not promote ambiguous background shapes into a group or
+    formation.
 - Allow wonder, melancholy, danger, uncanniness, and mythic intensity. Avoid
   graphic harm, cruelty, modern slang, mood-breaking comedy, and obvious
   good-versus-evil framing.

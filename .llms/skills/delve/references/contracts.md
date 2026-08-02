@@ -162,10 +162,15 @@ using game terminology or repeating `effect_text`.
 
 Score each component from 1–10:
 
-- `scene_quality` (40%): Whether the prose is a coherent, specific, evocative
-  tableau grounded in the card's art and mood. Score it with mechanics and
-  actions hidden. Conflict, plot, and an unresolved problem earn no inherent
-  credit.
+- `scene_quality` (40%): Whether the prose is a coherent, specific, evocative,
+  and materially faithful description of the card's artwork. Score it with
+  mechanics and actions hidden. Every subject, object, setting feature, and
+  depicted action must be visible or strongly implied by visible evidence.
+  Reward poetic compression, sensory immediacy, posture, scale, and precise
+  attention to observed details. A faithful but flat inventory is competent,
+  not excellent. Reject a candidate before scoring if it invents a companion,
+  crowd, creature, prop, structure, weather event, or incident to support a
+  mechanic. Conflict, plot, and an unresolved problem earn no inherent credit.
 - `action_quality` (15%): Whether both labels are distinct, purposeful things to
   do in the scene and both resolutions are concise, vivid responses.
 - `mechanical_connection` (30%): Whether each label and resolution make its
@@ -177,8 +182,9 @@ Score each component from 1–10:
 - `overall`: The weighted score above, rounded to the nearest integer.
 
 Assign every rank from 1 through 5 exactly once. Higher overall scores outrank
-lower scores; use qualitative comparison to break tied overall scores. Sort the
-final list from rank 1 through rank 5. Preserve the authoritative input pairing
-through `template_pair_id`, and preserve the two template actions in their input
-order within each event. The `ranking_rationale` is one concise sentence
-explaining the design's score and rank.
+lower scores; use art fidelity and evocative precision as the first qualitative
+tiebreakers, followed by the strength of the two complete action chains. Sort
+the final list from rank 1 through rank 5. Preserve the authoritative input
+pairing through `template_pair_id`, and preserve the two template actions in
+their input order within each event. The `ranking_rationale` is one concise
+sentence explaining the design's score and rank.
