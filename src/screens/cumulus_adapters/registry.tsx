@@ -17,7 +17,7 @@ import { DuplicationSiteScreenAdapter } from "./DuplicationSiteScreenAdapter";
 import { DreamAugurySiteScreenAdapter } from "./DreamAugurySiteScreenAdapter";
 import { GambleSiteScreenAdapter } from "./GambleSiteScreenAdapter";
 import { WorkInProgressSiteScreenAdapter } from "./WorkInProgressSiteScreenAdapter";
-import { TemporalForkSiteScreenAdapter } from "./TemporalForkSiteScreenAdapter";
+import { ExplorationSiteScreenAdapter } from "./ExplorationSiteScreenAdapter";
 import { JourneyCompleteScreenAdapter } from "./JourneyCompleteScreenAdapter";
 import { JourneyFailedScreenAdapter } from "./JourneyFailedScreenAdapter";
 
@@ -102,10 +102,10 @@ export function siteDispositionFor(site: SiteState): SiteDisposition {
         kind: "screen",
         screen: <GambleSiteScreenAdapter siteId={site.id} />,
       };
-    case "TemporalFork":
+    case "Exploration":
       return {
         kind: "screen",
-        screen: <TemporalForkSiteScreenAdapter siteId={site.id} />,
+        screen: <ExplorationSiteScreenAdapter siteId={site.id} />,
       };
   }
 }

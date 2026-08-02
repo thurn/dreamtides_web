@@ -196,7 +196,7 @@ id = "grid_city"
 name = "Grid City"
 aesthetic = "A neon-drenched cyberpunk city of rain and chrome."
 guide-id = "layaway"
-signature-site = "TemporalFork"
+signature-site = "Exploration"
 affiliation-id = "discard"
 site-icon = "game-icons.net/sbed/sands-of-time"
 # Discard: turn discarding into advantage. Vrakmoth and Corvath both convert a

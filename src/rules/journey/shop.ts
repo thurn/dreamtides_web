@@ -56,7 +56,7 @@ const SITE_TYPES: ReadonlySet<SiteType> = new Set<SiteType>([
   "DreamsignRevelation",
   "TemptingOffer",
   "Gamble",
-  "TemporalFork",
+  "Exploration",
 ]);
 
 function asString(value: unknown): string | null {

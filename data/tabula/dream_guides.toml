@@ -117,9 +117,9 @@ home-specialty = "Gravok offers you his highest rewards and best odds."
 id = "layaway"
 name = "\"Layaway\""
 home-dreamscape-id = "grid_city"
-site-type = "TemporalFork"
+site-type = "Exploration"
 dialog = [
-  "Pay later, collect sooner. Deal?",
-  "Time's just another currency, choom.",
+  "Every card dreams, choom. Draw one, and we'll delve inside.",
+  "Pick a direction. The dream will make the path.",
 ]
-home-specialty = "Layaway will shape the future towards your needs."
+home-specialty = "Layaway guides you deeper into the dream within the drawn card."

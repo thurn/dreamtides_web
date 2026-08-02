@@ -42,7 +42,7 @@ export const SITE_TYPES = [
   "DreamsignRevelation",
   "TemptingOffer",
   "Gamble",
-  "TemporalFork",
+  "Exploration",
 ];
 
 /**

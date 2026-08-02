@@ -1,4 +1,4 @@
-// TemporalForkSiteScreen — Layaway draws one possibility from the player's
+// ExplorationSiteScreen — Layaway draws one possibility from the player's
 // deck anchor, flips it face up, and holds it in the encounter panel.
 
 import { motion, useReducedMotion } from "framer-motion";
@@ -36,7 +36,7 @@ import {
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 
-export interface TemporalForkSiteView {
+export interface ExplorationSiteView {
   /** Stable site id exposed to QA and logging. */
   siteId: string;
   /** Current dreamscape scene art behind the encounter, when resolved. */
@@ -45,15 +45,15 @@ export interface TemporalForkSiteView {
   isEnhanced: boolean;
   /** Resident Dream Guide art and greeting. */
   guide: GuideGalleryGuideView;
-  /** UUID-backed card selected from the Temporal Fork prototype pool. */
+  /** UUID-backed card selected from the Exploration prototype pool. */
   card: GameCardModel;
   /** Licensed full-resolution source for the selected card's frame break. */
   fullArt: ArtRef;
 }
 
-export interface TemporalForkSiteScreenProps {
+export interface ExplorationSiteScreenProps {
   /** Complete presentation view-model. */
-  view: TemporalForkSiteView;
+  view: ExplorationSiteView;
   /** Record the start of this client's frame-break presentation. */
   onChannel: () => void;
   /** Complete the site after the card has returned to the journey deck. */
@@ -236,11 +236,11 @@ function useCardTrajectory(
   return trajectory;
 }
 
-export function TemporalForkSiteScreen({
+export function ExplorationSiteScreen({
   view,
   onChannel,
   onExit,
-}: TemporalForkSiteScreenProps) {
+}: ExplorationSiteScreenProps) {
   const reduceMotion = useReducedMotion() === true;
   const isDesktop = useIsDesktop();
   const cardTargetRef = useRef<HTMLDivElement>(null);
@@ -323,7 +323,7 @@ export function TemporalForkSiteScreen({
     onExit();
   };
 
-  const exitTemporalFork = (): void => {
+  const exitExploration = (): void => {
     setCollapseIntent("exit");
     setFrameBreakActive(false);
     if (reduceMotion) {
@@ -366,14 +366,14 @@ export function TemporalForkSiteScreen({
       siteId={view.siteId}
       scene={view.scene}
       guide={view.guide}
-      screenTestId="cumulus-temporal-fork-site-screen"
-      guideArtTestId="cumulus-temporal-fork-guide-art"
-      speechAnchorTestId="cumulus-temporal-fork-speech-anchor"
-      speechBubbleTestId="cumulus-temporal-fork-speech"
+      screenTestId="cumulus-exploration-site-screen"
+      guideArtTestId="cumulus-exploration-guide-art"
+      speechAnchorTestId="cumulus-exploration-speech-anchor"
+      speechBubbleTestId="cumulus-exploration-speech"
       renderGallery={(layout) => (
         <section
-          data-temporal-fork-panel=""
-          data-temporal-fork-layout={layout}
+          data-exploration-panel=""
+          data-exploration-layout={layout}
           style={{
             position: "relative",
             zIndex: 10,
@@ -392,14 +392,14 @@ export function TemporalForkSiteScreen({
         >
           <GlassPanel
             eyebrow={
-              view.isEnhanced ? "Enhanced Temporal Fork" : "Temporal Fork"
+              view.isEnhanced ? "Enhanced Exploration" : "Exploration"
             }
             title="Channel A Possibility"
             subtitle="A single thread rises from your deck."
             headingLevel="h1"
             titleVoice="standard"
             headerSpacing="medium"
-            testId="cumulus-temporal-fork-panel"
+            testId="cumulus-exploration-panel"
           >
             <div
               style={{
@@ -419,7 +419,7 @@ export function TemporalForkSiteScreen({
               >
                 <div
                   ref={cardTargetRef}
-                  data-temporal-fork-card-slot=""
+                  data-exploration-card-slot=""
                   data-card-id={view.card.cardId}
                   style={{
                     position: "relative",
@@ -432,7 +432,7 @@ export function TemporalForkSiteScreen({
                 >
                   {revealed && (
                     <motion.div
-                      data-temporal-fork-card-frame-state={frameBreakPhase}
+                      data-exploration-card-frame-state={frameBreakPhase}
                       animate={
                         frameBreakActive
                           ? {
@@ -450,13 +450,13 @@ export function TemporalForkSiteScreen({
                     >
                       <GameCard
                         model={view.card}
-                        testId="cumulus-temporal-fork-revealed-card"
+                        testId="cumulus-exploration-revealed-card"
                       />
                     </motion.div>
                   )}
                 </div>
                 <div
-                  data-temporal-fork-channel-state={
+                  data-exploration-channel-state={
                     !revealed
                       ? "waiting"
                       : frameBreakGeometry === null
@@ -484,7 +484,7 @@ export function TemporalForkSiteScreen({
                         variant="accent"
                         placement="onGlass"
                         onPress={startFrameBreak}
-                        testId="cumulus-temporal-fork-channel"
+                        testId="cumulus-exploration-channel"
                       />
                     </motion.div>
                   )}
@@ -500,9 +500,9 @@ export function TemporalForkSiteScreen({
         returnTrajectory === null &&
         trajectory !== null && (
         <motion.div
-          data-temporal-fork-card-travel=""
+          data-exploration-card-travel=""
           data-card-id={view.card.cardId}
-          data-temporal-fork-source={trajectory.sourceKind}
+          data-exploration-source={trajectory.sourceKind}
           initial={{
             x: trajectory.source.left,
             y: trajectory.source.top,
@@ -530,7 +530,7 @@ export function TemporalForkSiteScreen({
           }}
         >
           <motion.div
-            data-temporal-fork-card-flip=""
+            data-exploration-card-flip=""
             initial={{ rotateY: 0 }}
             animate={{ rotateY: 180 }}
             transition={{
@@ -552,7 +552,7 @@ export function TemporalForkSiteScreen({
                 backfaceVisibility: "hidden",
               }}
             >
-              <CardBack label="Temporal Fork card, face down" />
+              <CardBack label="Exploration card, face down" />
             </div>
             <div
               style={{
@@ -569,9 +569,9 @@ export function TemporalForkSiteScreen({
       )}
       {!reduceMotion && returnTrajectory !== null && (
         <motion.div
-          data-temporal-fork-card-return=""
+          data-exploration-card-return=""
           data-card-id={view.card.cardId}
-          data-temporal-fork-destination={returnTrajectory.sourceKind}
+          data-exploration-destination={returnTrajectory.sourceKind}
           initial={{
             x: returnTrajectory.target.left,
             y: returnTrajectory.target.top,
@@ -599,7 +599,7 @@ export function TemporalForkSiteScreen({
           }}
         >
           <motion.div
-            data-temporal-fork-card-return-flip=""
+            data-exploration-card-return-flip=""
             initial={{ rotateY: 180 }}
             animate={{ rotateY: 360 }}
             transition={{
@@ -621,7 +621,7 @@ export function TemporalForkSiteScreen({
                 backfaceVisibility: "hidden",
               }}
             >
-              <CardBack label="Temporal Fork card returning face down" />
+              <CardBack label="Exploration card returning face down" />
             </div>
             <div
               style={{
@@ -646,7 +646,7 @@ export function TemporalForkSiteScreen({
       />
       {frameBreakGeometry !== null && frameBreakPhase === "fracturing" && (
         <motion.div
-          data-temporal-fork-frame-fracture=""
+          data-exploration-frame-fracture=""
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{
             opacity: [0, 1, 0],
@@ -671,10 +671,10 @@ export function TemporalForkSiteScreen({
       )}
       {frameBreakGeometry !== null && (
         <motion.div
-          data-temporal-fork-frame-break=""
-          data-temporal-fork-frame-break-phase={frameBreakPhase}
-          data-temporal-fork-full-art-image-number={
-            view.fullArt.kind === "temporal-fork-card"
+          data-exploration-frame-break=""
+          data-exploration-frame-break-phase={frameBreakPhase}
+          data-exploration-full-art-image-number={
+            view.fullArt.kind === "exploration-card"
               ? view.fullArt.imageNumber
               : undefined
           }
@@ -722,7 +722,7 @@ export function TemporalForkSiteScreen({
           }}
         >
           <Pressable
-            aria-label="Return to Temporal Fork"
+            aria-label="Return to Exploration"
             pressFeedback="stationary"
             hoverFeedback="stationary"
             onClick={
@@ -740,7 +740,7 @@ export function TemporalForkSiteScreen({
             }}
           >
             <motion.img
-              data-temporal-fork-full-art=""
+              data-exploration-full-art=""
               src={fullArtUrl}
               alt=""
               aria-hidden="true"
@@ -790,7 +790,7 @@ export function TemporalForkSiteScreen({
       )}
       {frameBreakGeometry !== null && frameBreakPhase === "open" && (
         <motion.div
-          data-temporal-fork-exit-control=""
+          data-exploration-exit-control=""
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{
@@ -808,9 +808,9 @@ export function TemporalForkSiteScreen({
         >
           <IconButton
             glyph={GLYPHS.close}
-            label="Leave Temporal Fork"
-            onPress={exitTemporalFork}
-            testId="cumulus-temporal-fork-exit"
+            label="Leave Exploration"
+            onPress={exitExploration}
+            testId="cumulus-exploration-exit"
           />
         </motion.div>
       )}

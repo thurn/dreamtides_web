@@ -22,7 +22,7 @@ describe("work-in-progress-site-view-model", () => {
   it("recognizes the remaining Cumulus work-in-progress site type", () => {
     expect(isWorkInProgressSiteType("TemptingOffer")).toBe(true);
     expect(isWorkInProgressSiteType("Gamble")).toBe(false);
-    expect(isWorkInProgressSiteType("TemporalFork")).toBe(false);
+    expect(isWorkInProgressSiteType("Exploration")).toBe(false);
   });
 
   it("builds the Tempting Offer fallback without depending on production TOML", () => {

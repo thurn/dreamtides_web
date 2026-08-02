@@ -1283,6 +1283,10 @@ describe("siteTypeDescription", () => {
 });
 
 describe("siteTypeIcon", () => {
+  it("uses the filled compass for Exploration", () => {
+    expect(siteTypeIcon("Exploration")).toBe("bxf bx-compass");
+  });
+
   it("returns an icon class (not an emoji) for every site type", () => {
     // Site icons are Boxicons 3 filled (`bxf bx-*`); Transfiguration is the
     // lone Font Awesome exception because Boxicons has no hammer glyph.

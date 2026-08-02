@@ -763,11 +763,11 @@ export const QA_SCENES: readonly QaScene[] = [
     "Gamble",
     true,
   ),
-  siteScene("temporal-fork", "Temporal Fork", "TemporalFork"),
+  siteScene("exploration", "Exploration", "Exploration"),
   siteScene(
-    "temporal-fork-enhanced",
-    "Temporal Fork (Enhanced)",
-    "TemporalFork",
+    "exploration-enhanced",
+    "Exploration (Enhanced)",
+    "Exploration",
     true,
   ),
   siteScene(

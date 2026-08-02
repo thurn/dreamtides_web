@@ -649,10 +649,10 @@ matches-rules-text = false
 variants = []
 
 [[entries]]
-id = "site-temporal-fork"
+id = "site-exploration"
 category = "Sites"
-term = "Temporal Fork"
-definition = "Gain a temporary bonus or future reward."
+term = "Exploration"
+definition = "Draw a card from your deck, then delve into the dream within it."
 priority = 0
 matches-rules-text = false
 variants = []

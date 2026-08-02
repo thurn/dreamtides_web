@@ -350,7 +350,7 @@ export function openSite(
       return { ...next, remainingDreamsignPool: [...result.remainingDreamsignPool] };
     }
     default:
-      // Battle / Draft / Purge / TemptingOffer / TemporalFork carry no
+      // Battle / Draft / Purge / TemptingOffer / Exploration carry no
       // site runtime — nothing to generate.
       return null;
   }

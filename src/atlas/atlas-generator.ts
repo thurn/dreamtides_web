@@ -1501,9 +1501,9 @@ const SITE_TYPE_META: Record<
     icon: "bxf bx-coin",
     glossaryId: GLOSSARY_IDS.sites.Gamble,
   },
-  TemporalFork: {
-    icon: "bxf bx-clock",
-    glossaryId: GLOSSARY_IDS.sites.TemporalFork,
+  Exploration: {
+    icon: "bxf bx-compass",
+    glossaryId: GLOSSARY_IDS.sites.Exploration,
   },
 };
 

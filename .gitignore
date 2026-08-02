@@ -2,7 +2,7 @@ node_modules/
 dist/
 public/cards/
 public/card-frame/
-public/temporal-fork/
+public/exploration/
 public/dream-avatars/
 public/dreamsigns/
 public/journeys/

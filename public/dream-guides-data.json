@@ -105,11 +105,11 @@
     "id": "layaway",
     "name": "\"Layaway\"",
     "homeDreamscapeId": "grid_city",
-    "siteType": "TemporalFork",
+    "siteType": "Exploration",
     "dialog": [
-      "Pay later, collect sooner. Deal?",
-      "Time's just another currency, choom."
+      "Every card dreams, choom. Draw one, and we'll delve inside.",
+      "Pick a direction. The dream will make the path."
     ],
-    "homeSpecialty": "Layaway will shape the future towards your needs."
+    "homeSpecialty": "Layaway guides you deeper into the dream within the drawn card."
   }
 ]

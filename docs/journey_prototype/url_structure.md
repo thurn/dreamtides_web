@@ -42,7 +42,7 @@ reflected automatically:
 | `DreamsignRevelation`| `dreamsign-revelation`|
 | `TemptingOffer`      | `tempting-offer`      |
 | `Gamble`             | `gamble`              |
-| `TemporalFork`       | `temporal-fork`       |
+| `Exploration`       | `exploration`       |
 
 Examples:
 

@@ -8,9 +8,9 @@ import type { CardData } from "../../types/cards";
 import { CumulusRoot } from "../CumulusRoot";
 import { artRef } from "../primitives/art";
 import {
-  TemporalForkSiteScreen,
-  type TemporalForkSiteView,
-} from "./TemporalForkSiteScreen";
+  ExplorationSiteScreen,
+  type ExplorationSiteView,
+} from "./ExplorationSiteScreen";
 
 const reducedMotionPreference = vi.hoisted(() => ({ value: true }));
 
@@ -71,23 +71,23 @@ function makeCard(): CardData {
   };
 }
 
-function view(): TemporalForkSiteView {
+function view(): ExplorationSiteView {
   const selected = makeCard();
   return {
-    siteId: "temporal-fork-site",
+    siteId: "exploration-site",
     scene: null,
     isEnhanced: true,
     guide: {
       id: "layaway",
       name: '"Layaway"',
-      line: "Time is just another currency.",
+      line: "Every card dreams, choom. Draw one, and we'll delve inside.",
       art: artRef.dreamGuide("layaway"),
     },
     card: {
       cardId: selected.id,
       displaySnapshot: selected,
     },
-    fullArt: artRef.temporalForkCard(selected.imageNumber),
+    fullArt: artRef.explorationCard(selected.imageNumber),
   };
 }
 
@@ -140,11 +140,11 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-describe("TemporalForkSiteScreen", () => {
+describe("ExplorationSiteScreen", () => {
   it("breaks the selected card's licensed art into a dismissible fullscreen layer", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
       function getBoundingClientRect(this: HTMLElement) {
-        if (this.hasAttribute("data-temporal-fork-card-slot")) {
+        if (this.hasAttribute("data-exploration-card-slot")) {
           return new DOMRect(900, 180, 240, 336);
         }
         if (this instanceof HTMLImageElement && this.alt !== "") {
@@ -156,7 +156,7 @@ describe("TemporalForkSiteScreen", () => {
     const onChannel = vi.fn();
     const onExit = vi.fn();
     const { container, root } = mount(
-      <TemporalForkSiteScreen
+      <ExplorationSiteScreen
         view={view()}
         onChannel={onChannel}
         onExit={onExit}
@@ -164,10 +164,10 @@ describe("TemporalForkSiteScreen", () => {
     );
 
     const cardSlot = container.querySelector<HTMLElement>(
-      "[data-temporal-fork-card-slot]",
+      "[data-exploration-card-slot]",
     );
     const channel = container.querySelector<HTMLButtonElement>(
-      '[data-testid="cumulus-temporal-fork-channel"]',
+      '[data-testid="cumulus-exploration-channel"]',
     );
     expect(container.querySelector("h1")?.textContent).toBe(
       "Channel A Possibility",
@@ -175,7 +175,7 @@ describe("TemporalForkSiteScreen", () => {
     expect(cardSlot?.dataset.cardId).toBe(view().card.cardId);
     expect(
       container
-        .querySelector('[data-testid="cumulus-temporal-fork-revealed-card"]')
+        .querySelector('[data-testid="cumulus-exploration-revealed-card"]')
         ?.getAttribute("data-card-id"),
     ).toBe(view().card.cardId);
     expect(channel?.textContent).toContain("Channel");
@@ -185,35 +185,35 @@ describe("TemporalForkSiteScreen", () => {
     act(() => channel?.click());
     expect(onChannel).toHaveBeenCalledOnce();
     const frameBreak = container.querySelector<HTMLElement>(
-      "[data-temporal-fork-frame-break]",
+      "[data-exploration-frame-break]",
     );
-    expect(frameBreak?.dataset.temporalForkFrameBreakPhase).toBe("open");
-    expect(frameBreak?.dataset.temporalForkFullArtImageNumber).toBe("17");
+    expect(frameBreak?.dataset.explorationFrameBreakPhase).toBe("open");
+    expect(frameBreak?.dataset.explorationFullArtImageNumber).toBe("17");
     expect(
       frameBreak
-        ?.querySelector("[data-temporal-fork-full-art]")
+        ?.querySelector("[data-exploration-full-art]")
         ?.getAttribute("src"),
-    ).toContain("/temporal-fork/17.jpg");
+    ).toContain("/exploration/17.jpg");
     expect(
-      container.querySelector('[data-testid="cumulus-temporal-fork-channel"]'),
+      container.querySelector('[data-testid="cumulus-exploration-channel"]'),
     ).toBeNull();
     expect(
-      container.querySelector('[data-testid="cumulus-temporal-fork-exit"]'),
+      container.querySelector('[data-testid="cumulus-exploration-exit"]'),
     ).not.toBeNull();
     expect(
       container.querySelector("[data-journey-status-bar-anchor]"),
     ).toBeNull();
 
     const returnButton = container.querySelector<HTMLButtonElement>(
-      'button[aria-label="Return to Temporal Fork"]',
+      'button[aria-label="Return to Exploration"]',
     );
     act(() => returnButton?.click());
     expect(onExit).not.toHaveBeenCalled();
     expect(
-      container.querySelector("[data-temporal-fork-frame-break]"),
+      container.querySelector("[data-exploration-frame-break]"),
     ).toBeNull();
     expect(
-      container.querySelector('[data-testid="cumulus-temporal-fork-channel"]'),
+      container.querySelector('[data-testid="cumulus-exploration-channel"]'),
     ).not.toBeNull();
     act(() => root.unmount());
   });
@@ -222,7 +222,7 @@ describe("TemporalForkSiteScreen", () => {
     reducedMotionPreference.value = false;
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
       function getBoundingClientRect(this: HTMLElement) {
-        if (this.hasAttribute("data-temporal-fork-card-slot")) {
+        if (this.hasAttribute("data-exploration-card-slot")) {
           return new DOMRect(900, 180, 240, 336);
         }
         if (this instanceof HTMLImageElement && this.alt !== "") {
@@ -237,7 +237,7 @@ describe("TemporalForkSiteScreen", () => {
     document.body.append(deckTarget);
     const onExit = vi.fn();
     const { container, root } = mount(
-      <TemporalForkSiteScreen
+      <ExplorationSiteScreen
         view={view()}
         onChannel={vi.fn()}
         onExit={onExit}
@@ -246,53 +246,53 @@ describe("TemporalForkSiteScreen", () => {
 
     act(() => {
       container
-        .querySelector("[data-temporal-fork-card-travel]")
+        .querySelector("[data-exploration-card-travel]")
         ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
     });
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-temporal-fork-channel"]',
+          '[data-testid="cumulus-exploration-channel"]',
         )
         ?.click(),
     );
     act(() => {
       container
-        .querySelector("[data-temporal-fork-frame-break]")
+        .querySelector("[data-exploration-frame-break]")
         ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
     });
     const exitButton = container.querySelector<HTMLButtonElement>(
-      '[data-testid="cumulus-temporal-fork-exit"]',
+      '[data-testid="cumulus-exploration-exit"]',
     );
-    expect(exitButton?.getAttribute("aria-label")).toBe("Leave Temporal Fork");
+    expect(exitButton?.getAttribute("aria-label")).toBe("Leave Exploration");
 
     act(() => exitButton?.click());
     expect(onExit).not.toHaveBeenCalled();
     expect(
       container
-        .querySelector("[data-temporal-fork-frame-break]")
-        ?.getAttribute("data-temporal-fork-frame-break-phase"),
+        .querySelector("[data-exploration-frame-break]")
+        ?.getAttribute("data-exploration-frame-break-phase"),
     ).toBe("collapsing");
 
     act(() => {
       container
-        .querySelector("[data-temporal-fork-frame-break]")
+        .querySelector("[data-exploration-frame-break]")
         ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
     });
     expect(
-      container.querySelector("[data-temporal-fork-frame-break]"),
+      container.querySelector("[data-exploration-frame-break]"),
     ).toBeNull();
     const cardReturn = container.querySelector(
-      "[data-temporal-fork-card-return]",
+      "[data-exploration-card-return]",
     );
-    expect(cardReturn?.getAttribute("data-temporal-fork-destination")).toBe(
+    expect(cardReturn?.getAttribute("data-exploration-destination")).toBe(
       "journey-deck",
     );
     expect(
       cardReturn?.querySelector('[data-card-back=""]'),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-testid="cumulus-temporal-fork-channel"]'),
+      container.querySelector('[data-testid="cumulus-exploration-channel"]'),
     ).toBeNull();
     expect(onExit).not.toHaveBeenCalled();
 
@@ -309,7 +309,7 @@ describe("TemporalForkSiteScreen", () => {
     reducedMotionPreference.value = false;
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
       function getBoundingClientRect(this: HTMLElement) {
-        if (this.hasAttribute("data-temporal-fork-card-slot")) {
+        if (this.hasAttribute("data-exploration-card-slot")) {
           return new DOMRect(900, 180, 240, 336);
         }
         return new DOMRect(0, 0, 100, 100);
@@ -321,15 +321,15 @@ describe("TemporalForkSiteScreen", () => {
     document.body.append(deckTarget);
 
     const { container, root } = mount(
-      <TemporalForkSiteScreen
+      <ExplorationSiteScreen
         view={view()}
         onChannel={vi.fn()}
         onExit={vi.fn()}
       />,
     );
 
-    const travel = container.querySelector("[data-temporal-fork-card-travel]");
-    expect(travel?.getAttribute("data-temporal-fork-source")).toBe(
+    const travel = container.querySelector("[data-exploration-card-travel]");
+    expect(travel?.getAttribute("data-exploration-source")).toBe(
       "journey-deck",
     );
     expect(travel?.querySelector("[data-card-back]")).not.toBeNull();
@@ -338,8 +338,8 @@ describe("TemporalForkSiteScreen", () => {
     ).not.toBeNull();
     expect(
       container
-        .querySelector("[data-temporal-fork-channel-state]")
-        ?.getAttribute("data-temporal-fork-channel-state"),
+        .querySelector("[data-exploration-channel-state]")
+        ?.getAttribute("data-exploration-channel-state"),
     ).toBe("waiting");
 
     act(() => root.unmount());

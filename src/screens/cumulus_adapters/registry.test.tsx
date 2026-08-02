@@ -2,7 +2,7 @@ import { isValidElement } from "react";
 import { describe, expect, it } from "vitest";
 import type { SiteState, SiteType } from "../../types/journey";
 import { screenFor, siteDispositionFor, type NonSiteScreen } from "./registry";
-import { TemporalForkSiteScreenAdapter } from "./TemporalForkSiteScreenAdapter";
+import { ExplorationSiteScreenAdapter } from "./ExplorationSiteScreenAdapter";
 import { GambleSiteScreenAdapter } from "./GambleSiteScreenAdapter";
 
 describe("screenFor", () => {
@@ -29,15 +29,15 @@ describe("siteDispositionFor", () => {
     "DreamsignRevelation",
     "TemptingOffer",
     "Gamble",
-    "TemporalFork",
+    "Exploration",
   ] as const satisfies readonly SiteType[];
 
   it.each(screenTypes)("routes %s to a Cumulus screen adapter", (type) => {
     expect(siteDispositionFor(site(type)).kind).toBe("screen");
   });
 
-  it("routes Temporal Fork to its dedicated card-channeling adapter", () => {
-    const disposition = siteDispositionFor(site("TemporalFork"));
+  it("routes Exploration to its dedicated card-channeling adapter", () => {
+    const disposition = siteDispositionFor(site("Exploration"));
     expect(disposition.kind).toBe("screen");
     expect(
       disposition.kind === "screen" && isValidElement(disposition.screen),
@@ -46,7 +46,7 @@ describe("siteDispositionFor", () => {
       disposition.kind === "screen" &&
       isValidElement(disposition.screen)
     ) {
-      expect(disposition.screen.type).toBe(TemporalForkSiteScreenAdapter);
+      expect(disposition.screen.type).toBe(ExplorationSiteScreenAdapter);
     }
   });
 

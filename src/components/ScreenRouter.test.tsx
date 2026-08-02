@@ -39,7 +39,7 @@ import {
   MERCHANT_ARCHETYPE_LABELS,
   type MerchantArchetypeId,
 } from "../journey_v2";
-import { TEMPORAL_FORK_CARD_IDS } from "../screens/cumulus_adapters/temporal-fork-view-model";
+import { EXPLORATION_CARD_IDS } from "../screens/cumulus_adapters/exploration-view-model";
 
 const reducedMotionPreference = vi.hoisted(() => ({ value: false }));
 
@@ -921,11 +921,11 @@ describe("ScreenRouter site-dispatch completeness", () => {
     expect(container.querySelector("[data-work-in-progress-panel]")).toBeNull();
   });
 
-  it("routes TemporalFork to its fullscreen frame-break prototype", () => {
+  it("routes Exploration to its fullscreen frame-break prototype", () => {
     reducedMotionPreference.value = true;
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
       function getBoundingClientRect(this: HTMLElement) {
-        if (this.hasAttribute("data-temporal-fork-card-slot")) {
+        if (this.hasAttribute("data-exploration-card-slot")) {
           return new DOMRect(900, 180, 240, 336);
         }
         if (this instanceof HTMLImageElement && this.alt !== "") {
@@ -934,10 +934,10 @@ describe("ScreenRouter site-dispatch completeness", () => {
         return new DOMRect(0, 0, 100, 100);
       },
     );
-    const site = makeSite("TemporalFork");
+    const site = makeSite("Exploration");
     const mutations = makeMutations();
     const journeyContent = merchantContent();
-    const selectedCard = card(TEMPORAL_FORK_CARD_IDS[0], 901);
+    const selectedCard = card(EXPLORATION_CARD_IDS[0], 901);
     journeyContent.cardDatabase.set(selectedCard.cardNumber, selectedCard);
     const container = renderWithJourney({
       state: makeStateFor(site),
@@ -948,35 +948,35 @@ describe("ScreenRouter site-dispatch completeness", () => {
 
     expect(
       container.querySelector(
-        '[data-testid="cumulus-temporal-fork-site-screen"]',
+        '[data-testid="cumulus-exploration-site-screen"]',
       ),
     ).not.toBeNull();
     expect(
       container
-        .querySelector("[data-temporal-fork-card-slot]")
+        .querySelector("[data-exploration-card-slot]")
         ?.getAttribute("data-card-id"),
     ).toBe(selectedCard.id);
 
     const channelButton = container.querySelector(
-      '[data-testid="cumulus-temporal-fork-channel"]',
+      '[data-testid="cumulus-exploration-channel"]',
     );
     if (!(channelButton instanceof HTMLButtonElement)) {
-      throw new Error("expected a Channel button for TemporalFork");
+      throw new Error("expected a Channel button for Exploration");
     }
     act(() => {
       channelButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     const frameBreak = container.querySelector<HTMLElement>(
-      "[data-temporal-fork-frame-break]",
+      "[data-exploration-frame-break]",
     );
-    expect(frameBreak?.dataset.temporalForkFullArtImageNumber).toBe(
+    expect(frameBreak?.dataset.explorationFullArtImageNumber).toBe(
       String(selectedCard.imageNumber),
     );
-    expect(frameBreak?.dataset.temporalForkFrameBreakPhase).toBe("open");
+    expect(frameBreak?.dataset.explorationFrameBreakPhase).toBe("open");
     expect(mutations.completeSite).not.toHaveBeenCalled();
     expect(
       getLogEntries().find(
-        (entry) => entry.event === "temporal_fork_frame_break_started",
+        (entry) => entry.event === "exploration_frame_break_started",
       ),
     ).toMatchObject({
       siteId: site.id,
@@ -985,20 +985,20 @@ describe("ScreenRouter site-dispatch completeness", () => {
     });
 
     const exitButton = container.querySelector(
-      '[data-testid="cumulus-temporal-fork-exit"]',
+      '[data-testid="cumulus-exploration-exit"]',
     );
     if (!(exitButton instanceof HTMLButtonElement)) {
-      throw new Error("expected a Leave Temporal Fork button");
+      throw new Error("expected a Leave Exploration button");
     }
     act(() => {
       exitButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     expect(mutations.completeSite).toHaveBeenCalledWith(
       site.id,
-      "temporal_fork_left",
+      "exploration_left",
     );
     expect(
-      getLogEntries().find((entry) => entry.event === "temporal_fork_left"),
+      getLogEntries().find((entry) => entry.event === "exploration_left"),
     ).toMatchObject({
       siteId: site.id,
       cardId: selectedCard.id,

@@ -4,12 +4,12 @@ import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
 import type { SiteState } from "../../types/journey";
 import {
-  TEMPORAL_FORK_CARD_IDS,
-  buildTemporalForkSiteView,
-  resolveTemporalForkCardPool,
-  resolveTemporalForkGuide,
-  selectTemporalForkCard,
-} from "./temporal-fork-view-model";
+  EXPLORATION_CARD_IDS,
+  buildExplorationSiteView,
+  resolveExplorationCardPool,
+  resolveExplorationGuide,
+  selectExplorationCard,
+} from "./exploration-view-model";
 
 function card(id: CardData["id"], cardNumber: number): CardData {
   return {
@@ -28,9 +28,9 @@ function card(id: CardData["id"], cardNumber: number): CardData {
   };
 }
 
-const temporalForkSite: SiteState & { type: "TemporalFork" } = {
-  id: "site-temporal-fixture",
-  type: "TemporalFork",
+const explorationSite: SiteState & { type: "Exploration" } = {
+  id: "site-exploration-fixture",
+  type: "Exploration",
   isEnhanced: true,
   isVisited: false,
 };
@@ -39,16 +39,16 @@ const guide: DreamGuideContent = {
   id: "fixture-layaway",
   name: "Fixture Guide",
   homeDreamscapeId: "fixture-dreamscape",
-  siteType: "TemporalFork",
-  dialog: ["The future is already accruing interest."],
+  siteType: "Exploration",
+  dialog: ["Every card dreams. Draw one, and we'll delve inside."],
   homeSpecialty: "Fixture specialty.",
 };
 
-describe("temporal-fork-view-model", () => {
+describe("exploration-view-model", () => {
   it("keeps only UUIDs from the prototype pool that exist in the loaded catalog", () => {
-    const first = card(TEMPORAL_FORK_CARD_IDS[0], 101);
+    const first = card(EXPLORATION_CARD_IDS[0], 101);
     const last = card(
-      TEMPORAL_FORK_CARD_IDS[TEMPORAL_FORK_CARD_IDS.length - 1],
+      EXPLORATION_CARD_IDS[EXPLORATION_CARD_IDS.length - 1],
       202,
     );
     const unrelated = card(asCardId("unrelated-card-id"), 303);
@@ -57,47 +57,47 @@ describe("temporal-fork-view-model", () => {
     );
 
     expect(
-      resolveTemporalForkCardPool(database).map((entry) => entry.id),
+      resolveExplorationCardPool(database).map((entry) => entry.id),
     ).toEqual([first.id, last.id]);
   });
 
   it("selects the same UUID for the same room seed and site id", () => {
-    const cards = TEMPORAL_FORK_CARD_IDS.slice(0, 3).map((id, index) =>
+    const cards = EXPLORATION_CARD_IDS.slice(0, 3).map((id, index) =>
       card(id, index + 1),
     );
     const database = new Map(cards.map((entry) => [entry.cardNumber, entry]));
 
-    const first = selectTemporalForkCard({
+    const first = selectExplorationCard({
       cardDatabase: database,
       journeySeed: "fixture-room-seed",
-      siteId: temporalForkSite.id,
+      siteId: explorationSite.id,
     });
-    const second = selectTemporalForkCard({
+    const second = selectExplorationCard({
       cardDatabase: database,
       journeySeed: "fixture-room-seed",
-      siteId: temporalForkSite.id,
+      siteId: explorationSite.id,
     });
 
     expect(first?.id).toBe(second?.id);
-    expect(TEMPORAL_FORK_CARD_IDS).toContain(first?.id);
+    expect(EXPLORATION_CARD_IDS).toContain(first?.id);
   });
 
   it("builds a UUID-backed card and Layaway presentation from synthetic data", () => {
-    const selected = card(TEMPORAL_FORK_CARD_IDS[2], 17);
-    const view = buildTemporalForkSiteView({
+    const selected = card(EXPLORATION_CARD_IDS[2], 17);
+    const view = buildExplorationSiteView({
       sceneNode: null,
-      site: temporalForkSite,
+      site: explorationSite,
       guide,
       card: selected,
     });
 
-    expect(resolveTemporalForkGuide([guide])).toBe(guide);
+    expect(resolveExplorationGuide([guide])).toBe(guide);
     expect(view).toMatchObject({
-      siteId: temporalForkSite.id,
+      siteId: explorationSite.id,
       scene: null,
       isEnhanced: true,
       fullArt: {
-        kind: "temporal-fork-card",
+        kind: "exploration-card",
         imageNumber: selected.imageNumber,
       },
       guide: {
@@ -114,10 +114,10 @@ describe("temporal-fork-view-model", () => {
 
   it("returns null when none of the prototype UUIDs exist in the catalog", () => {
     expect(
-      selectTemporalForkCard({
+      selectExplorationCard({
         cardDatabase: new Map(),
         journeySeed: "fixture-room-seed",
-        siteId: temporalForkSite.id,
+        siteId: explorationSite.id,
       }),
     ).toBeNull();
   });

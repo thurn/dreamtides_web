@@ -888,7 +888,7 @@
               "id": "site-13",
               "isEnhanced": false,
               "isVisited": false,
-              "type": "TemporalFork"
+              "type": "Exploration"
             },
             {
               "id": "site-14",
@@ -963,7 +963,7 @@
               "id": "site-9",
               "isEnhanced": false,
               "isVisited": false,
-              "type": "TemporalFork"
+              "type": "Exploration"
             },
             {
               "id": "site-10",

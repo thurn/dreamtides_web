@@ -1,17 +1,17 @@
-// Wiring-only adapter for the Temporal Fork prototype encounter.
+// Wiring-only adapter for the Exploration prototype encounter.
 
 import { useCallback, useEffect, useMemo } from "react";
-import { TemporalForkSiteScreen } from "../../cumulus/screens/TemporalForkSiteScreen";
+import { ExplorationSiteScreen } from "../../cumulus/screens/ExplorationSiteScreen";
 import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
 import {
-  buildTemporalForkSiteView,
-  resolveTemporalForkGuide,
-  resolveTemporalForkCardPool,
-  selectTemporalForkCard,
-} from "./temporal-fork-view-model";
+  buildExplorationSiteView,
+  resolveExplorationGuide,
+  resolveExplorationCardPool,
+  selectExplorationCard,
+} from "./exploration-view-model";
 
-export function TemporalForkSiteScreenAdapter({ siteId }: { siteId: string }) {
+export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, journeyContent, mutations } = useJourney();
   const node =
     state.currentDreamscape === null
@@ -19,15 +19,15 @@ export function TemporalForkSiteScreenAdapter({ siteId }: { siteId: string }) {
       : (state.atlas.nodes[state.currentDreamscape] ?? null);
   const candidate = node?.sites.find((site) => site.id === siteId) ?? null;
   const site =
-    candidate?.type === "TemporalFork"
+    candidate?.type === "Exploration"
       ? { ...candidate, type: candidate.type }
       : null;
-  const guide = resolveTemporalForkGuide(journeyContent.guides);
+  const guide = resolveExplorationGuide(journeyContent.guides);
   const card = useMemo(
     () =>
       site === null
         ? null
-        : selectTemporalForkCard({
+        : selectExplorationCard({
             cardDatabase: journeyContent.cardDatabase,
             journeySeed: state.seed,
             siteId: site.id,
@@ -38,7 +38,7 @@ export function TemporalForkSiteScreenAdapter({ siteId }: { siteId: string }) {
     () =>
       site === null || card === null
         ? null
-        : buildTemporalForkSiteView({
+        : buildExplorationSiteView({
             sceneNode: node,
             site,
             guide,
@@ -49,17 +49,17 @@ export function TemporalForkSiteScreenAdapter({ siteId }: { siteId: string }) {
 
   useEffect(() => {
     if (site === null || card === null) return;
-    logEventOnce(`temporal-fork:${site.id}:site-entered`, "site_entered", {
+    logEventOnce(`exploration:${site.id}:site-entered`, "site_entered", {
       siteType: site.type,
       isEnhanced: site.isEnhanced,
       presentedCardId: card.id,
-      prototypePoolSize: resolveTemporalForkCardPool(
+      prototypePoolSize: resolveExplorationCardPool(
         journeyContent.cardDatabase,
       ).length,
     });
     if (guide !== null) {
       logEventOnce(
-        `temporal-fork:${site.id}:guide:${guide.id}`,
+        `exploration:${site.id}:guide:${guide.id}`,
         "dream_guide_presented",
         {
           guideId: guide.id,
@@ -72,7 +72,7 @@ export function TemporalForkSiteScreenAdapter({ siteId }: { siteId: string }) {
 
   const handleChannel = useCallback(() => {
     if (site === null || card === null) return;
-    logEvent("temporal_fork_frame_break_started", {
+    logEvent("exploration_frame_break_started", {
       siteId: site.id,
       cardId: card.id,
       highResolutionImageNumber: card.imageNumber,
@@ -82,18 +82,18 @@ export function TemporalForkSiteScreenAdapter({ siteId }: { siteId: string }) {
 
   const handleExit = useCallback(() => {
     if (site === null || card === null) return;
-    logEvent("temporal_fork_left", {
+    logEvent("exploration_left", {
       siteId: site.id,
       cardId: card.id,
       highResolutionImageNumber: card.imageNumber,
       isEnhanced: site.isEnhanced,
     });
-    mutations.completeSite(site.id, "temporal_fork_left");
+    mutations.completeSite(site.id, "exploration_left");
   }, [card, mutations, site]);
 
   if (site === null || view === null) return null;
   return (
-    <TemporalForkSiteScreen
+    <ExplorationSiteScreen
       view={view}
       onChannel={handleChannel}
       onExit={handleExit}

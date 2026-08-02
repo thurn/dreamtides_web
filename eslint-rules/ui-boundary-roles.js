@@ -87,7 +87,7 @@ for (const name of [
   "MainMenuScreenAdapter",
   "JourneyCompleteScreenAdapter", "JourneyFailedScreenAdapter", "JourneyStartScreenAdapter",
   "StartingDeckOverlayAdapter", "TransfigurationSiteScreenAdapter",
-  "TemporalForkSiteScreenAdapter",
+  "ExplorationSiteScreenAdapter",
   "TutorialBattleScreenAdapter", "TutorialScreenAdapter",
   "WorkInProgressSiteScreenAdapter", "registry",
 ]) {

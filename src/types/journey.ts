@@ -60,7 +60,7 @@ export type SiteType =
   | "DreamsignRevelation"
   | "TemptingOffer"
   | "Gamble"
-  | "TemporalFork";
+  | "Exploration";
 
 /**
  * Lifecycle state of one Dream Atlas node in the v2 atlas model. A node starts

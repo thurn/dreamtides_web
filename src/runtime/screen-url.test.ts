@@ -144,7 +144,7 @@ describe("siteTypeSlug", () => {
     expect(siteTypeSlug("Purge")).toBe("purge");
     expect(siteTypeSlug("DreamAugury")).toBe("dream-augury");
     expect(siteTypeSlug("DreamsignMarket")).toBe("dreamsign-market");
-    expect(siteTypeSlug("TemporalFork")).toBe("temporal-fork");
+    expect(siteTypeSlug("Exploration")).toBe("exploration");
   });
 });
 

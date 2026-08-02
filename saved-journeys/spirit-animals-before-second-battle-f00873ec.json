@@ -1083,7 +1083,7 @@
           "biomeColor": "#38bdf8",
           "biomeName": "Grid City",
           "dreamscapeId": "grid_city",
-          "enhancedSiteType": "TemporalFork",
+          "enhancedSiteType": "Exploration",
           "forwardIds": [
             "dreamscape-6"
           ],
@@ -1099,7 +1099,7 @@
               "id": "site-24",
               "isEnhanced": true,
               "isVisited": false,
-              "type": "TemporalFork"
+              "type": "Exploration"
             },
             {
               "data": {
@@ -1206,7 +1206,7 @@
           "biomeColor": "#38bdf8",
           "biomeName": "Grid City",
           "dreamscapeId": "grid_city",
-          "enhancedSiteType": "TemporalFork",
+          "enhancedSiteType": "Exploration",
           "forwardIds": [
             "dreamscape-9"
           ],
@@ -1222,7 +1222,7 @@
               "id": "site-35",
               "isEnhanced": true,
               "isVisited": false,
-              "type": "TemporalFork"
+              "type": "Exploration"
             },
             {
               "data": {

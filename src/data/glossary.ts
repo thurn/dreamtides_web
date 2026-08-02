@@ -101,7 +101,7 @@ export const GLOSSARY_IDS = {
     DreamsignRevelation: "site-dreamsign-revelation",
     TemptingOffer: "site-tempting-offer",
     Gamble: "site-gamble",
-    TemporalFork: "site-temporal-fork",
+    Exploration: "site-exploration",
   },
 } as const;
 

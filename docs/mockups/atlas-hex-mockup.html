@@ -128,7 +128,7 @@ const SITE_GLYPH = {
   Battle:"⚔️", Draft:"🃏", Shop:"🏪", Purge:"🔥", Essence:"✨",
   Transfiguration:"🦋", Duplication:"⧉", Reward:"🎁", DreamAugury:"🔮",
   DreamsignMarket:"🜍", DreamsignRevelation:"🌟", TemptingOffer:"💎",
-  Gamble:"🎲", TemporalFork:"⏳",
+  Gamble:"🎲", Exploration:"🧭",
 };
 
 // Real fnv1aHash → deterministic accent colour (matches production output).
@@ -217,7 +217,7 @@ function buildSites(n, L, bossLayer){
   if(L>=1 && L<=2 && Math.random()<0.6) add("Purge");
   if(L===1) add("DreamAugury");
   // weighted fill
-  const fillTypes=["Shop","Essence","Gamble","TemptingOffer","Transfiguration","Duplication","TemporalFork","DreamsignMarket"];
+  const fillTypes=["Shop","Essence","Gamble","TemptingOffer","Transfiguration","Duplication","Exploration","DreamsignMarket"];
   const fill = Math.max(0, ri(2,4)-sites.length);
   for(let i=0;i<fill;i++){
     const opts=fillTypes.filter(t=>!have.has(t));

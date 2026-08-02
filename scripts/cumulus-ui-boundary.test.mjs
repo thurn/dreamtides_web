@@ -38,7 +38,7 @@ const SITE_TYPES = [
   "DreamsignRevelation",
   "TemptingOffer",
   "Gamble",
-  "TemporalFork",
+  "Exploration",
 ];
 
 const ROUTER_FILES = [

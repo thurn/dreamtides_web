@@ -180,10 +180,10 @@ sites appear and no site is enhanced.
 ### Grid City
 
 - **Dream Guide:** "Layaway"
-- **Signature Site:** [Temporal Fork](#temporal-fork)
+- **Signature Site:** [Exploration](#exploration)
 - **Aesthetic:** A cyberpunk city.
 - **Affiliation:** Discard
-- **Site Icon:** `boxicons3/clock`
+- **Site Icon:** `boxicons3/compass` (filled)
 
 ### Limbo
 
@@ -712,24 +712,21 @@ map. A close button allows the user to decline before wagering.
 
 Icon: `boxicons3/coin`
 
-### Temporal Fork
+### Exploration
 
-Temporal Fork is run by **"Layaway"** (home: Grid City). The player is offered a
-choice of two time-based effects: temporary modifications to the player's deck or
-game rules, or rewards that arrive in the future. This is where time-limited big
-effects live.
+Exploration is run by **"Layaway"** (home: Grid City). The player is offered a
+card drawn from their deck, then journeys within it by delving into the dream
+the card contains.
 
-**Home Specialty.** In Grid City, Layaway offers effects with a longer duration,
-or future rewards that arrive sooner.
+**Home Specialty.** In Grid City, the site is presented as Enhanced Exploration.
 
-**UI:** Layaway performs an animation and displays a speech bubble. The two effect
-cards animate in beside him in landscape and below in portrait, each showing its
-effect and its duration or timing. A purple button accepts an effect; the
-not-selected card animates away, and the chosen effect plays a custom animation
-(for example, a clock motif marking when a future reward will arrive). The camera
-then pulls back to the map. A close button allows the user to decline.
+**UI:** Layaway displays a speech bubble while one card rises from the player's
+deck, turns face up, and settles beside him in landscape or below him in portrait.
+Channeling the card breaks its frame open until the card's dream fills the
+viewport. Leaving the dream collapses the art back into the card and returns it
+to the deck before the player returns to the map.
 
-Icon: `boxicons3/clock`
+Icon: `boxicons3/compass` (filled)
 
 ## Home Specialties
 
@@ -747,7 +744,7 @@ enhancements are:
 | Aldric, the Seer | Wilderveil | Dream Augury | Bigger rewards, curated to the deck |
 | Maddox | The Rust Expanse | Tempting Offer | Choose between two offers |
 | Gravok | Farpoint Station | Gamble | No initial fee, bigger payouts |
-| "Layaway" | Grid City | Temporal Fork | Longer duration / sooner future rewards |
+| "Layaway" | Grid City | Exploration | Enhanced Exploration presentation |
 
 The guide's signature site is always present and enhanced in the home dreamscape.
 The same site can also appear in the random fill of other dreamscapes, where the
