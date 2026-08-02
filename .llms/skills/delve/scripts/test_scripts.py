@@ -657,10 +657,10 @@ rendered-text = "Gain 1 energy."
 
     def test_rejects_long_prose(self) -> None:
         data = output()
-        data[0]["prose"] = " ".join(["dream"] * 21)
+        data[0]["prose"] = " ".join(["dream"] * 17)
         result = self.run_validator(request(), data)
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("at most 20 words", result.stderr)
+        self.assertIn("at most 16 words", result.stderr)
 
     def test_validates_resolution_length(self) -> None:
         data = output()

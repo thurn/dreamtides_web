@@ -432,8 +432,8 @@ def validate_output(
         seen_pair_ids.add(pair_id)
 
         prose = require_string(event_obj.get("prose"), f"{event_path}.prose")
-        if len(words(prose)) > 20:
-            fail(f"{event_path}.prose", "must contain at most 20 words")
+        if len(words(prose)) > 16:
+            fail(f"{event_path}.prose", "must contain at most 16 words")
 
         actions = require_list(event_obj.get("actions"), f"{event_path}.actions")
         if len(actions) != 2:

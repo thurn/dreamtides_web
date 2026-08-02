@@ -8,11 +8,11 @@ description: Design and rank five Dreamtides Delve narrative encounters from a c
 Create five production-ready encounters that make a player feel they have
 entered the dream depicted by one card. Give every description distinct wording,
 though all five may share the same overall narrative and strongest visual focus.
-Choose prose for fidelity of impression, evocative force, and its ability to
+Choose prose for vivid descriptive precision, art fidelity, and its ability to
 support both actions in the assigned template pair. The artwork supplies the
-material truth of the scene, not a checklist of details to transcribe. Return
-strict JSON by default, or render the validated designs as user-facing Markdown
-in display mode.
+material truth of the scene, but the prose selects only its strongest image
+instead of inventorying the whole frame. Return strict JSON by default, or
+render the validated designs as user-facing Markdown in display mode.
 
 ## Required input
 
@@ -105,17 +105,16 @@ harness commentary.
    substituting different data. Treat the supplied `card_type` and `subtype` as
    authoritative; do not recategorize the art.
 
-4. Read the depicted scene. Privately separate three kinds of claims:
-   **material facts** plainly visible or strongly implied in the image,
-   **evocative interpretations** that express the supported mood or experiential
-   consequence of those facts, and **material inventions** that add a subject,
-   object, event, history, or physical condition. Heat from visible fire, a
-   hush suggested by immense stillness, or a horizon that *feels* commanded by
-   a towering figure can be supported interpretations; an unseen crowd or an
-   invented attack is not. Note concrete subjects, setting, motion, scale,
-   posture, distance, mood, sensory atmosphere, and relationships. If a claim
-   depends on exact color, measure the image rather than trusting visual color
-   perception.
+4. Read the depicted scene. Privately separate **material facts** plainly
+   visible or strongly implied in the image, **descriptive atmosphere** conveyed
+   by supported scale, light, texture, motion, stillness, or weather, and
+   **inventions** that add agency, symbolism, events, history, or physical
+   conditions. Heat from visible fire, an enigmatic figure obscured by smoke,
+   or coils of shadow where dark cables curl are descriptive; a threshold that
+   chooses someone or smoke that forgets its shape invents a poetic conceit.
+   Note concrete subjects, setting, motion, scale, posture, distance, mood, and
+   sensory atmosphere. If a claim depends on exact color, measure the image
+   rather than trusting visual color perception.
 
 5. Interpret the card according to its canonical type, then make a private
    source-name watchlist. Do not quote the complete card name, use a distinctive
@@ -136,53 +135,49 @@ harness commentary.
    offscreen lore.
 
 6. Set the templates aside and build a private scene bank from the artwork.
-   First state the scene's **imaginative thesis**: what makes this particular
-   moment uncanny, wondrous, menacing, intimate, mournful, or mythic to inhabit.
-   Then choose the smallest set of visible anchors needed to carry that thesis.
-   Translate composition into experience through a charged verb, metaphor,
-   comparison, sensory compression, impossible-seeming scale, symbolic
-   resemblance, rhythmic contrast, or immediate imaginative consequence. Omit
-   secondary details freely. The reader should recognize the dream without
-   being given stock-image alt text for it.
+   Choose one dominant visual image: usually a subject or action, plus at most
+   one supporting detail of scale, light, texture, motion, stillness, or
+   atmosphere. Omit secondary subjects and props freely. Describe that image
+   with specific nouns, strong verbs, and economical modifiers. Aim for the
+   clarity of “The figure of a bird towers above you, wreathed in flame” or
+   “Coils of shadow curl around an enigmatic figure.” Both are materially
+   descriptive, selective, and atmospheric without explaining what the image
+   symbolizes or making the scene behave impossibly.
 
    Draft only enough candidates to find prose that can support the generated
    mechanics; one excellent scene may support several template pairs. Draft
    enough faithful variants to give every final `prose` field distinct wording.
-   Variants may share the same imaginative thesis and visual focus; vary syntax,
-   reader position, or the expressive transformation of supported details
-   rather than adding material for variety. Figurative language is welcome but
-   not mandatory: vivid diction, omission, rhythm, and sensory immediacy can
-   also transform a scene. A scene does not need conflict, danger, stakes, a
+   Variants may share the same dominant image; vary syntax, reader position, or
+   which supported atmospheric detail accompanies it rather than adding
+   material for variety. A scene does not need conflict, danger, stakes, a
    dilemma, a request, a problem, a resolution, or unresolved tension. Do not
    use template quantities, operations, reward concepts, or needed effect
    recipients as scene ingredients.
 
-7. Apply six gates to every candidate with templates and actions hidden:
+7. Apply seven gates to every candidate with templates and actions hidden:
    - **Name gate:** Does it quote the complete source name, turn a distinctive
      portion of that name into a proper noun, or lean on repeated name words
      instead of fresh scene language? Reject it. Do not reject an independently
      useful ordinary word merely because it also occurs in the card name.
-   - **Material-fidelity gate:** Are all literal subjects, objects, setting
+   - **Material-fidelity gate:** Are all subjects, objects, setting
      features, actions, and physical conditions visible or strongly implied?
      Reject invented companions, crowds, creatures, props, structures, weather
-     events, histories, or incidents. This gate does not require figurative or
-     experiential language to be literally visible; it asks whether that
-     language transforms supported evidence without asserting a new material
-     fact.
-   - **Caption gate:** Could the line pass unchanged as stock-image alt text, or
-     does it mainly enumerate who stands where, what they carry, and what they
-     face? Reject it even when every detail and spatial relationship is accurate.
-     Scale adjectives, `you`, and a semicolon do not turn a caption into an
-     encounter.
-   - **Evocative gate:** Does the line make at least one supported aspect of the
-     scene feel newly immediate through charged diction, sensory implication,
-     metaphor, comparison, rhythm, omission, symbolic resemblance, or
-     imaginative consequence? Reject prose whose only achievement is accurate
-     reconstruction. Also reject vague dream-fantasy atmosphere that could fit
-     unrelated art.
-   - **Clarity gate:** Can an ordinary reader understand the central image and
-     imaginative turn on first reading? The prose need not let the reader
-     reconstruct every depicted detail. Mystery is welcome; confusion is not.
+     events, histories, or incidents.
+   - **Focus gate:** Does the line select one dominant image, or does it inventory
+     actors, equipment, positions, and background elements? Reject exhaustive
+     captions. Omission—not metaphor—is the primary way to avoid flat alt text.
+   - **Vividness gate:** Do precise nouns, verbs, and restrained modifiers give
+     the selected image atmosphere, motion, texture, or scale? Reject generic
+     descriptions such as `a man stands near a shape`, even when accurate.
+   - **No-conceit gate:** Reject metaphor, simile, personification, symbolic
+     equivalence, impossible agency, and reality-bending conclusions. In
+     particular, thresholds do not choose, smoke does not forget, light does not
+     hold a person in a spell, and the world does not fray. Conventional visual
+     phrasing such as `wreathed in flame` or `coils of shadow` is allowed when it
+     directly describes appearance and introduces no agency or hidden meaning.
+   - **Clarity gate:** Can an ordinary reader understand the selected image on
+     first reading? Mystery may come from what the image withholds, not from an
+     opaque poetic claim.
    - **Embodiment gate:** Does the prose assign the reader a body, clothing,
      posture, biography, or precise emotion that the artwork does not establish
      from the reader's point of view? Supported felt experience—pressure,
@@ -236,13 +231,14 @@ harness commentary.
    operate at a different order of magnitude.
 
 12. Compare all five designs using the contract rubric, then assign unique
-    ranks. Rank fidelity of impression, evocative force, and mechanical
-    connection above literal completeness or ornament. A faithful caption does
-    not become excellent prose by naming more visible details. Score mechanical
-    connection by the weaker of the two action chains, not their average. Revise
-    any chain below 7/10. A shared narrative or visual focus loses no points,
-    and textual novelty earns no points beyond satisfying the distinct-wording
-    requirement.
+    ranks. Rank vivid descriptive precision, art fidelity, focus, and mechanical
+    connection above literal completeness or poetic ornament. A faithful caption
+    does not become excellent prose by naming more visible details, and a poetic
+    conceit does not become excellent prose by sounding profound. Score
+    mechanical connection by the weaker of the two action chains, not their
+    average. Revise any chain below 7/10. A shared narrative or visual focus
+    loses no points, and textual novelty earns no points beyond satisfying the
+    distinct-wording requirement.
 
 13. Sort the five completed event objects by ascending `rank` as a final
     readability pass, so rank 1 appears first and rank 5 last. Keep each event's
@@ -273,74 +269,73 @@ harness commentary.
   the player entered the card, so begin inside the moment.
 - Treat every `prose` field as the reader's first glimpse of an independent
   scene. Introduce material subjects clearly, but let the sentence lead with an
-  atmosphere, action, comparison, or sensory impression when that creates a
+  atmosphere, action, or sensory detail when that creates a
   stronger entrance. Use `a` or `an`, not `one`, when directly introducing a
   singular subject. A definite or possessive phrase may open the line when its
   referent is immediately clear from the same image and sentence; reject only
-  genuine ambiguity, not poetic sequencing.
-- Keep the entire `prose` field near 10–15 words and never above 20. Use more
+  genuine ambiguity, not expressive sequencing.
+- Keep the entire `prose` field near 8–14 words and never above 16. Use more
   than one sentence only when the extra sentence adds real value.
 - Describe a scene, not a miniature quest or an illustrated reward. Establish
-  what the player encounters and how the moment feels to inhabit. Atmosphere
+  what the player encounters through selective visual description. Atmosphere
   may arise from supported scale, posture, motion, stillness, light, texture,
-  distance, or sensory pressure. Do not diagnose a depicted subject's private
-  emotions or dictate a precise player emotion. Nothing needs to be wrong,
-  threatened, requested, or unresolved. Keep game terms such as card, deck,
-  draft, purge, essence, dreamsign, and transfiguration out of the prose.
+  distance, weather, or obscurity. Do not diagnose a depicted subject's private
+  emotions, dictate a precise player emotion, or explain the image's symbolic
+  meaning. Nothing needs to be wrong, threatened, requested, or unresolved.
+  Keep game terms such as card, deck, draft, purge, essence, dreamsign, and
+  transfiguration out of the prose.
 - Treat the artwork as the source of truth for every material element in the
-  prose, not the required surface form of each clause. Select, omit, compress,
-  compare, and recast visible evidence freely. If the art shows a lone figure,
-  keep the figure alone; do not add a column, crowd, companion, or hidden
-  population to service a Character effect.
-- Use concrete anchors as a launch point rather than a destination. The line
-  should perform an imaginative transformation: make scale alter the apparent
-  world, let stillness exert pressure, let a visible form suggest a symbol, or
-  use rhythm and charged verbs to make motion immediate. A reader should gain
-  an experience that a literal inventory cannot provide.
+  prose. Select and omit visible evidence freely, but do not recast it as a
+  symbol or give it impossible behavior. If the art shows a lone figure, keep
+  the figure alone; do not add a column, crowd, companion, or hidden population
+  to service a Character effect.
+- Build each line around one dominant image and one optional atmospheric detail.
+  Strong verbs, exact nouns, restrained adjectives, rhythm, and omission create
+  intensity without metaphor. A concise line may be wholly literal and still
+  excellent when it chooses the image's most striking subject, motion, scale,
+  light, or texture.
 - Reject caption-shaped prose even when it is specific, spatially accurate, and
-  written in second person. Naming a subject, its equipment, its position, a
-  larger subject, and the setting still produces alt text unless the language
-  changes how the composition feels.
-- Prefer “A vast bird bows toward you, and silence bridges the difference” over
-  a complete report of the bird's posture and distance. `Silence bridges the
-  difference` is a supported imaginative consequence of visible scale and
-  stillness; it need not be an object in the frame. Reject a figure of speech
-  only when it is generic, incoherent, or smuggles in a new material fact.
+  written in second person. Naming every subject, its equipment, its position,
+  the opposing subject, and the setting produces alt text. Keep the strongest
+  image and omit the rest.
+- Do not use poetic conceits. Reject metaphors, similes, personification,
+  symbolic equations, impossible agency, and conclusions about reality. Allow
+  conventional descriptive imagery such as `wreathed in flame` and `coils of
+  shadow` when it is a compact account of visible appearance rather than a claim
+  that the scene thinks, chooses, remembers, or means something hidden.
 - Use these caption-regression comparisons as a quality floor:
   - Reject “You watch two backpacked travelers face a colossal horse and mounted
-    silhouette overhead.” Prefer “Two travelers shrink to punctuation beneath a
-    horseman vast enough to command the sky.”
+    silhouette overhead.” Prefer “A colossal rider fades into starlight above two
+    waiting travelers.”
   - Reject “A lone gunman stands above you, outlined by a luminous triangle amid
-    smoke.” Prefer “A radiant triangle burns through the smoke, making a solitary
-    gunman seem summoned.”
+    smoke.” Prefer “Coils of shadow curl around an enigmatic figure.”
   - Reject “You face a vast skull-headed figure; its hanging lantern nearly fills
-    the space between you.” Prefer “A lantern hangs like a captured sun beneath a
-    towering death-mask.”
+    the space between you.” Prefer “A child reaches into the lantern of a
+    towering, skull-faced watcher.”
   - Reject “A crouched archer separates you from a colossal wolf advancing
-    through burning grass.” Prefer “A crouched archer faces a wolf so vast the
-    burning field feels suddenly narrow.”
+    through burning grass.” Prefer “A lone archer crouches as a colossal wolf
+    emerges from the fire.”
 - Do not optimize for different compositions or sensory focuses across the five
   scenes. Every `prose` field must nevertheless have distinct wording. Rephrase
-  a shared imaginative thesis through syntax, reader position, or a different
-  transformation of supported details, and keep each version at least as
-  evocative, faithful, and mechanically useful.
+  a shared dominant image through syntax, reader position, or a different
+  supported atmospheric detail, and keep each version at least as vivid,
+  faithful, and mechanically useful.
 - For an Event card, foreground the depicted action or charged instant implied
   by its name and ability. Ask what is being prevented, completed, revealed,
-  broken, escaped, or otherwise changed in the frame, and capture the felt
-  meaning of that instant before cataloguing secondary scenery. The ability
-  helps interpret what the image means; it does not authorize a literal rules
-  paraphrase or an unsupported material event.
-- Extrapolate immediate sensory and imaginative consequences strongly supported
-  by the image: heat from visible fire, pressure from colossal scale, a hush
-  implied by stillness, a horizon that seems claimed, or a field that feels too
-  small. Do not add material subjects, props, architecture, terrain, weather,
-  history, or events outside the frame. A resolution may introduce a plausible
-  material response after the player acts; the initial prose may not anticipate
-  that response.
+  broken, escaped, or otherwise changed in the frame, and describe that instant
+  before secondary scenery. The ability helps select the relevant visible
+  action; it does not authorize a rules paraphrase, symbolic interpretation, or
+  unsupported material event.
+- Extrapolate only immediate sensory qualities strongly supported by the image,
+  such as heat from visible fire or wind from visibly blown fabric. Do not add
+  material subjects, props, architecture, terrain, weather, history, events,
+  impossible agency, or symbolic meaning. A resolution may introduce a
+  plausible material response after the player acts; the initial prose may not
+  anticipate that response.
 - Use these art-fidelity regression checks:
   - For art showing a lone twin-bladed warrior above burning ruins, prefer “A
-    twin-bladed warrior holds the ruined street above you while cinders climb.”
-    Reject “A weary column gathers beneath a warrior” when no column appears.
+    twin-bladed warrior towers above the ruined street as cinders rise.” Reject
+    “A weary column gathers beneath a warrior” when no column appears.
   - Reject “A resting runner studies suspended screens” when the art contains
     projections but no resting individual. Do not invent an observer to animate
     an abstract or environmental composition.
