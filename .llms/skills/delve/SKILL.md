@@ -1,18 +1,53 @@
 ---
 name: delve
-description: Design and rank five Dreamtides Delve narrative encounters from a canonical card, its full-size artwork, and five pairs of mechanical event templates. Use when creating Delve event prose, narrative choice labels, template variables, custom Delve rewards, or card-specific encounter JSON.
+description: Design and rank five Dreamtides Delve narrative encounters from a canonical card, its full-size artwork, and five pairs of mechanical event templates. Use when creating Delve event prose, narrative choice labels, template variables, custom Delve rewards, card-specific encounter JSON, or a user-facing Markdown display of encounter designs.
 ---
 
 # Delve Encounter Design
 
 Create five independent, production-ready encounters that make a player feel
-they have entered the dream depicted by one card. Return strict JSON only.
+they have entered the dream depicted by one card. Return strict JSON by default,
+or render the validated designs as user-facing Markdown in display mode.
 
 ## Required input
 
 Require one JSON request containing a card and exactly five template pairs. Read
 [`references/contracts.md`](references/contracts.md) before designing or
 validating an encounter.
+
+## Output modes
+
+- Use **JSON mode** by default. Return the complete validated event objects as
+  strict JSON.
+- Use **display mode** when the user explicitly requests it. Treat the mode as a
+  presentation instruction outside the validated JSON request. Design and
+  validate the same complete event objects as JSON, then present only their
+  user-facing fields in Markdown.
+
+In display mode, emit only this structure, with no introduction, summary,
+scores, ranks, rationale, IDs, raw templates, variables, or commentary:
+
+```markdown
+![Source artwork for <card name>](</absolute/path/to/source-image>)
+
+1. <prose>
+   - **<action label>** — <fully populated effect_text>
+     - **Response:** <resolution>
+   - **<action label>** — <fully populated effect_text>
+     - **Response:** <resolution>
+
+2. <prose>
+   - ...
+```
+
+Use the absolute image path returned by `find-card-art.py` in the Markdown image
+destination so the source artwork renders inline. Include all five designs in
+ascending rank order. For each design, put `prose` at the top level, preserve
+the two actions' template-pair order, and render each action as a sub-bullet.
+Put its thematic `label` and complete `effect_text` on that same sub-bullet,
+then put its `resolution` in a nested response bullet. Use `effect_text`, not
+the unresolved `template`, so every placeholder and special token is populated
+for display.
 
 ## Workflow
 
@@ -121,13 +156,18 @@ validating an encounter.
     `template_pair_id` and two actions together; sorting events must not alter
     or swap the actions within a template pair.
 
-14. Validate the JSON, fix every error, and emit the JSON list with no Markdown
-    fence or surrounding commentary:
+14. Write the complete event objects to JSON, validate them, and fix every
+    error regardless of output mode:
 
    ```bash
    python3 .llms/skills/delve/scripts/validate-delve.py \
      --input <request.json> --output <events.json>
    ```
+
+15. Emit the validated result in the selected output mode. In JSON mode, emit
+    the bare JSON list with no Markdown fence or surrounding commentary. In
+    display mode, render only the Markdown structure specified in **Output
+    modes**; do not expose the underlying design metadata.
 
 ## Narrative standards
 

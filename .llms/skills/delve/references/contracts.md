@@ -36,7 +36,7 @@ exactly two actions.
 Use the `template_id` and `template` values in [`templates.json`](templates.json)
 exactly. The example shows one pair for brevity; a valid request contains five.
 
-## Output
+## JSON output
 
 Return a bare JSON list of five event objects sorted by ascending `rank`:
 
@@ -82,6 +82,26 @@ Return a bare JSON list of five event objects sorted by ascending `rank`:
 ```
 
 The example shows one event for brevity; a valid output contains five.
+
+This JSON contract is authoritative in both output modes. In display mode,
+validate the complete JSON first, then render only the user-facing fields as
+Markdown:
+
+```markdown
+![Source artwork for Blazing Emberwing](</absolute/path/to/source-image>)
+
+1. A great bird with wings wreathed in flame towers above you.
+   - **Call Others to Witness** — Take any number of Spirit Animal cards from 4 random choices
+     - **Response:** Distant figures gather beneath the burning wings.
+   - **Call Down Its Kin** — Gain one copy of each of 2 random Spirit Animal cards
+     - **Response:** Winged shapes descend through the heated sky.
+```
+
+The complete display contains five top-level entries in ascending rank order.
+Each entry uses `prose` as its top-level text, preserves action order, places
+the action's `label` and fully populated `effect_text` together in a sub-bullet,
+and places its `resolution` in a nested response bullet. Omit all other JSON
+fields and any surrounding commentary from the display response.
 
 ### Action variables
 
