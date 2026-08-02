@@ -85,7 +85,8 @@ def output() -> list[dict[str, object]]:
                     },
                 ],
                 "scores": {
-                    "story_mechanics_fit": score,
+                    "story_quality": score,
+                    "choice_quality": score,
                     "archetype_fit": score,
                     "overall": score,
                 },

@@ -48,30 +48,45 @@ validating an encounter.
    identifiable faces, fixed biographies, named locations, or offscreen lore.
    Refer naturally to “an emberwing” or “the emberwing.”
 
-6. Infer deck intent from the ability and canonical metadata. Ask what choosing
+6. Set the templates aside and build a private story bank from the art, card
+   name, and archetypal identity. Draft at least eight concrete premises. Give
+   each premise identifiable actors, a comprehensible situation, an unresolved
+   tension, and two plausible things the player could do. Vary the engine of
+   the scene: trust, caretaking, misunderstanding, obstacle, request, discovery,
+   or danger. Do not use imminent catastrophe as the default source of stakes.
+   Do not use template quantities, operations, or reward concepts as story
+   ingredients.
+
+7. Apply the story-only gate to every candidate. Hide the templates and ask:
+   “Is this a specific, intelligible vignette? Would anyone want to know what
+   happens next?” Reject premises that only sound dreamlike, depend on symbolic
+   word substitution, or exist to disguise a game operation.
+
+8. Infer deck intent from the ability and canonical metadata. Ask what choosing
    this card suggests the player is building toward. Inspect repository tags
    and canonical content when useful. Favor values, predicates, and real UUID
    references that support that plan. Both choices should remain useful to the
    likely deck: one may deepen its synergy while the other offers flexibility,
    conversion, or risk management.
 
-7. Calibrate mechanical values against the current game. Before choosing a
+9. Match the five strongest story premises to the five template pairs. Preserve
+   input order and never alter or swap templates. Choose two labels that are
+   genuine responses to the story. Attach the mechanics afterward. A reward
+   may follow a choice by loose thematic association; it does not need to be a
+   literal consequence or be explained by the prose.
+
+10. Calibrate mechanical values against the current game. Before choosing a
    count or essence value, inspect relevant economy, pricing, pool, and effect
    data in the repository. Compare the likely low, typical, and high result of
    each choice. Do not guess a small-looking number in an economy whose units
    operate at a different order of magnitude.
 
-8. Design one independent encounter for each pair, preserving input order.
-   Never alter or swap its two templates. Give the encounter one immediate
-   situation with two credible responses of roughly comparable value.
+11. Compare all five designs using the story-first contract rubric, then assign
+   unique ranks. Revise weak stories rather than adding mystical language to
+   conceal them. A mechanically noncredible choice still requires revision,
+   but mechanical literalism never raises a story score.
 
-9. Compare all five designs. Score story-to-mechanics coherence and archetype
-   fit using the contract rubric, then assign unique ranks. Coherent mapping of
-   the supplied mechanics matters more than making all five premises radically
-   different. A mechanically noncredible choice caps both component scores at
-   6 until revised. Revise the highest-potential candidates before finalizing.
-
-10. Validate the JSON, fix every error, and emit the JSON list with no Markdown
+12. Validate the JSON, fix every error, and emit the JSON list with no Markdown
    fence or surrounding commentary:
 
    ```bash
@@ -85,21 +100,34 @@ validating an encounter.
   the player entered the card, so begin inside the moment.
 - Keep the entire `prose` field near 10–15 words and never above 20. Use more
   than one sentence only when the extra sentence adds real value.
-- Set up a genuine tension without listing the choices. Keep game terms such as
-  card, deck, draft, purge, essence, dreamsign, and transfiguration out of the
-  prose.
-- Extrapolate dreamlike hazards, rituals, transformations, and stakes only when
-  grounded by at least two concrete visual anchors.
+- Tell a small story, not an illustrated reward. Establish who is present, what
+  is happening, and why the moment is unresolved. Keep game terms such as card,
+  deck, draft, purge, essence, dreamsign, and transfiguration out of the prose.
+- Prefer concrete nouns, observable actions, and simple causal relationships.
+  Surreal events are welcome when their internal logic is clear.
+- Extrapolate beyond the frame when useful. Stay faithful to the subject,
+  relationship, and mood rather than mechanically inventorying visible details.
 - Allow wonder, melancholy, danger, uncanniness, and mythic intensity. Avoid
   graphic harm, cruelty, modern slang, mood-breaking comedy, and obvious
   good-versus-evil framing.
 - Make each choice label a 2–4 word narrative act, at most 24 characters. Do
-  not paraphrase the reward. The label and mechanic should form clear
-  metaphorical cause and effect.
-- Both labels must answer the same situation. Each effect should feel natural
-  in hindsight even though the prose contains no rules exposition.
-- Prefer distinct premises and story beats across the set, but prioritize the
-  fit between each fixed template pair and its encounter.
+  not paraphrase the reward. Both labels must be meaningful responses to the
+  situation even when their mechanical effects are hidden.
+- Do not mirror a template's number in the fiction. Four offered cards do not
+  imply four figures, sparks, doors, paths, or voices in the scene.
+- Do not translate mechanics into mystical synonyms. Purging is not erasing a
+  footprint or burning a memory; speed is not quickening a shadow; essence is
+  not automatically flame; random rewards are not scattered fragments.
+- Avoid vague dream-fantasy filler—unexplained sparks, shadows, echoes, threads,
+  paths, whispers, fragments, and transformations—unless each is a concrete,
+  story-bearing part of this particular scene.
+- Avoid generic decision language such as “awaiting your answer,” “offers two
+  paths,” or “asks what you will choose.” Show the predicament itself.
+- Prefer distinct premises and story beats across the set, but never sacrifice
+  clarity or specificity merely to make the stories different.
+- Across the final five, use no more than two premises built chiefly around an
+  approaching fire, storm, predator, pursuer, collapse, or similar external
+  emergency.
 
 ## Mechanical standards
 
@@ -120,4 +148,7 @@ validating an encounter.
   tokens resolved. Keep the exact template and structured values authoritative.
 - Choose conservative values when balance evidence is incomplete, but keep
   them on the live system's scale. Reject an option pair with an obvious
-  universal best choice. Do not let evocative prose conceal a dead option.
+  universal best choice.
+- Never revise good prose to explain an effect. If a story and pair cannot
+  coexist without forced symbolism, assign that story to another pair or accept
+  a looser association between choice and reward.

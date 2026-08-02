@@ -44,10 +44,10 @@ Return a bare JSON list of five event objects in input order:
 [
   {
     "template_pair_id": "pair-1",
-    "prose": "Four firelit silhouettes rise beneath the circling wings, awaiting your signal.",
+    "prose": "A child offers the emberwing a hand; the great bird lowers its burning head.",
     "actions": [
       {
-        "label": "Call the Flock",
+        "label": "Pull Them Back",
         "template_id": 16,
         "template": "Take any number of {predicate} cards from 4 random choices",
         "variables": {
@@ -56,23 +56,24 @@ Return a bare JSON list of five event objects in input order:
         "effect_text": "Take any number of Character cards from 4 random choices"
       },
       {
-        "label": "Share the Spark",
+        "label": "Approach Together",
         "template_id": 52,
         "template": "Gain one copy of each of {count} random {predicate} cards",
         "variables": {
-          "count": 3,
-          "predicate": "Character"
+          "count": 2,
+          "predicate": "Spirit Animal"
         },
-        "effect_text": "Gain one copy of each of 3 random Character cards"
+        "effect_text": "Gain one copy of each of 2 random Spirit Animal cards"
       }
     ],
     "scores": {
-      "story_mechanics_fit": 9,
+      "story_quality": 9,
+      "choice_quality": 9,
       "archetype_fit": 10,
       "overall": 9
     },
     "rank": 1,
-    "ranking_rationale": "Both responses turn the gathering flock into character-focused rewards that reinforce the source card's strategy."
+    "ranking_rationale": "The encounter presents a clear relationship and dilemma, while both rewards remain useful to the card's character-heavy strategy."
   }
 ]
 ```
@@ -151,14 +152,14 @@ remain the authoritative machine-readable design.
 
 Score each component from 1–10:
 
-- `story_mechanics_fit`: How naturally both narrative actions arise from one
-  situation and explain their fixed effects. This cannot exceed 6 when the
-  selected variables make one choice mechanically noncredible.
-- `archetype_fit`: How well the values and rewards support the strategy implied
-  by owning the source card. This cannot exceed 6 when one option is effectively
-  dead for that likely deck.
-- `overall`: `70% story_mechanics_fit + 30% archetype_fit`, rounded to the
-  nearest integer.
+- `story_quality` (60%): Whether the prose is a coherent, specific, evocative
+  vignette grounded in the card's world. Score it with the mechanics hidden.
+- `choice_quality` (25%): Whether both labels are distinct, plausible responses
+  to the situation. The effects must not contradict the choices, but literal
+  explanation of the effects earns no credit.
+- `archetype_fit` (15%): Whether both mechanical outcomes are credible and
+  useful for the strategy implied by owning the source card.
+- `overall`: The weighted score above, rounded to the nearest integer.
 
 Assign every rank from 1 through 5 exactly once. Higher overall scores outrank
 lower scores; use qualitative comparison to break tied overall scores. Keep the

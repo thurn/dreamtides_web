@@ -421,8 +421,13 @@ def validate_output(
 
         scores = require_object(event_obj.get("scores"), f"{event_path}.scores")
         story_score = require_int(
-            scores.get("story_mechanics_fit"),
-            f"{event_path}.scores.story_mechanics_fit",
+            scores.get("story_quality"),
+            f"{event_path}.scores.story_quality",
+            1,
+        )
+        choice_score = require_int(
+            scores.get("choice_quality"),
+            f"{event_path}.scores.choice_quality",
             1,
         )
         archetype_score = require_int(
@@ -431,15 +436,23 @@ def validate_output(
         overall = require_int(scores.get("overall"), f"{event_path}.scores.overall", 1)
         for key, value in scores.items():
             if (
-                key in {"story_mechanics_fit", "archetype_fit", "overall"}
+                key
+                in {
+                    "story_quality",
+                    "choice_quality",
+                    "archetype_fit",
+                    "overall",
+                }
                 and value > 10
             ):
                 fail(f"{event_path}.scores.{key}", "must be at most 10")
-        expected_overall = int(0.7 * story_score + 0.3 * archetype_score + 0.5)
+        expected_overall = int(
+            0.6 * story_score + 0.25 * choice_score + 0.15 * archetype_score + 0.5
+        )
         if overall != expected_overall:
             fail(
                 f"{event_path}.scores.overall",
-                f"must equal the rounded 70/30 weighted score ({expected_overall})",
+                f"must equal the rounded 60/25/15 weighted score ({expected_overall})",
             )
 
         rank = require_int(event_obj.get("rank"), f"{event_path}.rank", 1)
