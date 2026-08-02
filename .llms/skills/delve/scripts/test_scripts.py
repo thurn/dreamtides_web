@@ -18,7 +18,8 @@ SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parents[3]
 VALIDATOR = SCRIPTS_DIR / "validate-delve.py"
 LOCATOR_PATH = SCRIPTS_DIR / "find-card-art.py"
-CATALOG = REPO_ROOT / "docs/delve/delve_templates.md"
+GENERATOR = REPO_ROOT / "scripts/generate-delve-input.py"
+CATALOG = SCRIPTS_DIR.parent / "references/templates.json"
 
 
 def load_locator():
@@ -131,6 +132,66 @@ class FindCardArtTests(unittest.TestCase):
             (images_dir / "second-123456.png").touch()
             with self.assertRaises(RuntimeError):
                 locator.find_image("123456", images_dir)
+
+
+class GenerateDelveInputTests(unittest.TestCase):
+    def test_prints_valid_seeded_request(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            templates_path = root / "templates.json"
+            templates_path.write_text(
+                json.dumps(
+                    [
+                        {"template_id": i, "template": f"Synthetic template {i}"}
+                        for i in range(1, 13)
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            cards_path = root / "cards.toml"
+            cards_path.write_text(
+                """
+[[cards]]
+id = "11111111-1111-4111-8111-111111111111"
+name = "Synthetic Animal"
+rendered-text = "Gain 1 energy."
+image-number = 123456
+card-type = "Character"
+subtype = "Spirit Animal"
+""".strip(),
+                encoding="utf-8",
+            )
+
+            command = [
+                sys.executable,
+                str(GENERATOR),
+                "--seed",
+                "7",
+                "--templates",
+                str(templates_path),
+                "--cards",
+                str(cards_path),
+            ]
+            first = subprocess.run(
+                command, capture_output=True, text=True, check=False
+            )
+            second = subprocess.run(
+                command, capture_output=True, text=True, check=False
+            )
+
+            self.assertEqual(first.returncode, 0, first.stderr)
+            self.assertEqual(first.stdout, second.stdout)
+            self.assertEqual(first.stderr, "")
+            generated = json.loads(first.stdout)
+            self.assertEqual(generated["card"], card())
+            self.assertEqual(len(generated["template_pairs"]), 5)
+            actions = [
+                action
+                for pair in generated["template_pairs"]
+                for action in pair["actions"]
+            ]
+            self.assertEqual(len(actions), 10)
+            self.assertEqual(len({action["template_id"] for action in actions}), 10)
 
 
 class ValidateDelveTests(unittest.TestCase):

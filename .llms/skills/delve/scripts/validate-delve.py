@@ -14,7 +14,7 @@ from typing import Any
 import tomllib
 
 DEFAULT_TEMPLATE_CATALOG = (
-    Path(__file__).resolve().parents[4] / "docs/delve/delve_templates.md"
+    Path(__file__).resolve().parents[1] / "references/templates.json"
 )
 DEFAULT_CARDS_DATA = Path(__file__).resolve().parents[4] / "data/tabula/cards.toml"
 DEFAULT_DREAMSIGNS_DATA = (
@@ -99,15 +99,23 @@ def load_json(path: Path) -> Any:
 
 def read_template_catalog(path: Path) -> dict[int, str]:
     try:
-        text = path.read_text(encoding="utf-8")
+        data = load_json(path)
     except FileNotFoundError as error:
         raise ValidationError(f"Template catalog does not exist: {path}") from error
-    templates = {
-        int(match.group(1)): match.group(2).strip()
-        for match in re.finditer(r"^(\d+)\. (.+)$", text, flags=re.MULTILINE)
-    }
+    entries = require_list(data, "$templates")
+    templates: dict[int, str] = {}
+    for index, entry in enumerate(entries):
+        entry_path = f"$templates[{index}]"
+        obj = require_object(entry, entry_path)
+        template_id = require_int(
+            obj.get("template_id"), f"{entry_path}.template_id", 1
+        )
+        template = require_string(obj.get("template"), f"{entry_path}.template")
+        if template_id in templates:
+            fail(f"{entry_path}.template_id", "must be unique")
+        templates[template_id] = template
     if not templates:
-        raise ValidationError(f"No numbered templates found in {path}")
+        raise ValidationError(f"No templates found in {path}")
     return templates
 
 

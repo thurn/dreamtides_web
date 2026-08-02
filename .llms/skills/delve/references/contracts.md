@@ -33,8 +33,8 @@ exactly two actions.
 }
 ```
 
-Use the numbered strings in `docs/delve/delve_templates.md` exactly. The example
-shows one pair for brevity; a valid request contains five.
+Use the `template_id` and `template` values in [`templates.json`](templates.json)
+exactly. The example shows one pair for brevity; a valid request contains five.
 
 ## Output
 

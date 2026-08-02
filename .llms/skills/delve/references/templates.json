@@ -1,0 +1,290 @@
+[
+  {
+    "template_id": 1,
+    "template": "Gain {essence} essence"
+  },
+  {
+    "template_id": 2,
+    "template": "Gain a random amount of essence between {essence1} and {essence2}"
+  },
+  {
+    "template_id": 3,
+    "template": "Purge a chosen card"
+  },
+  {
+    "template_id": 4,
+    "template": "Purge a chosen {predicate} card"
+  },
+  {
+    "template_id": 5,
+    "template": "Purge up to {count} chosen cards"
+  },
+  {
+    "template_id": 6,
+    "template": "Purge up to {count} chosen {predicate} cards"
+  },
+  {
+    "template_id": 7,
+    "template": "Purge a chosen {predicate} card and gain a random {predicate} replacement"
+  },
+  {
+    "template_id": 8,
+    "template": "Purge up to {count} chosen {predicate} cards and gain a random {predicate} replacement for each card purged"
+  },
+  {
+    "template_id": 9,
+    "template": "Gain a random {predicate} card"
+  },
+  {
+    "template_id": 10,
+    "template": "Gain {card_id}"
+  },
+  {
+    "template_id": 11,
+    "template": "Gain $OFFERED_CARD"
+  },
+  {
+    "template_id": 12,
+    "template": "Gain {count} copies of $OFFERED_CARD"
+  },
+  {
+    "template_id": 13,
+    "template": "Gain {count} random {predicate} cards"
+  },
+  {
+    "template_id": 14,
+    "template": "Draft a {predicate} card from 4 random choices"
+  },
+  {
+    "template_id": 15,
+    "template": "Draft a {predicate} card from 4 random choices and gain {count} copies of it"
+  },
+  {
+    "template_id": 16,
+    "template": "Take any number of {predicate} cards from 4 random choices"
+  },
+  {
+    "template_id": 17,
+    "template": "Apply a transfiguration of your choice to a chosen card"
+  },
+  {
+    "template_id": 18,
+    "template": "Apply {transfiguration} to a chosen card"
+  },
+  {
+    "template_id": 19,
+    "template": "Apply {transfiguration} to $DECK_CARD"
+  },
+  {
+    "template_id": 20,
+    "template": "Apply a transfiguration to {count} chosen {predicate} cards"
+  },
+  {
+    "template_id": 21,
+    "template": "Apply {transfiguration} to {count} chosen {predicate} cards"
+  },
+  {
+    "template_id": 22,
+    "template": "Apply a transfiguration to {count} random {predicate} cards"
+  },
+  {
+    "template_id": 23,
+    "template": "Apply {transfiguration} to {count} random {predicate} cards"
+  },
+  {
+    "template_id": 24,
+    "template": "Transfigure {count} random starter cards"
+  },
+  {
+    "template_id": 25,
+    "template": "Transfigure all starter cards"
+  },
+  {
+    "template_id": 26,
+    "template": "Gain $CUSTOM_CARD"
+  },
+  {
+    "template_id": 27,
+    "template": "Gain {dreamsign_name}"
+  },
+  {
+    "template_id": 28,
+    "template": "Gain a random dreamsign"
+  },
+  {
+    "template_id": 29,
+    "template": "Gain one of 3 offered dreamsigns"
+  },
+  {
+    "template_id": 30,
+    "template": "Replace a chosen dreamsign with one of 3 offered dreamsigns"
+  },
+  {
+    "template_id": 31,
+    "template": "Gain $CUSTOM_DREAMSIGN"
+  },
+  {
+    "template_id": 32,
+    "template": "Purge $STARTER_CARD"
+  },
+  {
+    "template_id": 33,
+    "template": "Purge a random starter card"
+  },
+  {
+    "template_id": 34,
+    "template": "Purge a random starter card and gain a {predicate} card"
+  },
+  {
+    "template_id": 35,
+    "template": "Purge all starter cards and replace each one with a {predicate} card"
+  },
+  {
+    "template_id": 36,
+    "template": "Choose one of 2 packs of {predicate} cards to add to your deck"
+  },
+  {
+    "template_id": 37,
+    "template": "The next draft or shop site you visit will contain transfigured cards"
+  },
+  {
+    "template_id": 38,
+    "template": "Draw {count} additional cards at the start of your next battle"
+  },
+  {
+    "template_id": 39,
+    "template": "Gain {count} additional energy at the start of your next battle"
+  },
+  {
+    "template_id": 40,
+    "template": "Transfigure all cards in your deck"
+  },
+  {
+    "template_id": 41,
+    "template": "Add a duplication site to this dreamscape"
+  },
+  {
+    "template_id": 42,
+    "template": "Add a card market site to this dreamscape"
+  },
+  {
+    "template_id": 43,
+    "template": "Add a dreamsign bazaar site to this dreamscape"
+  },
+  {
+    "template_id": 44,
+    "template": "Add a transfiguration site to this dreamscape"
+  },
+  {
+    "template_id": 45,
+    "template": "Add a purge site to this dreamscape."
+  },
+  {
+    "template_id": 46,
+    "template": "Choose one of three site types to add to this dreamscape."
+  },
+  {
+    "template_id": 47,
+    "template": "Choose a card to purge and replace it with {card_id}"
+  },
+  {
+    "template_id": 48,
+    "template": "Purge a random {predicate} card and replace it with {card_id}"
+  },
+  {
+    "template_id": 49,
+    "template": "Gain {count} copies of $DECK_CARD"
+  },
+  {
+    "template_id": 50,
+    "template": "Gain {count} copies of a chosen card"
+  },
+  {
+    "template_id": 51,
+    "template": "Gain one copy of each of {count} chosen cards"
+  },
+  {
+    "template_id": 52,
+    "template": "Gain one copy of each of {count} random {predicate} cards"
+  },
+  {
+    "template_id": 53,
+    "template": "Change $DECK_CARD to become a {card_type}"
+  },
+  {
+    "template_id": 54,
+    "template": "Modify {count} random cards to become {card_type} cards"
+  },
+  {
+    "template_id": 55,
+    "template": "Select 4 random cards from your deck and choose one to gain a copy of"
+  },
+  {
+    "template_id": 56,
+    "template": "All items in the next shop you visit are free"
+  },
+  {
+    "template_id": 57,
+    "template": "Pick a new Dream Avatar from 3 choices"
+  },
+  {
+    "template_id": 58,
+    "template": "Change a chosen Character card to have {subtype}"
+  },
+  {
+    "template_id": 59,
+    "template": "Gain {essence_per_card} essence for each {predicate} card in your deck"
+  },
+  {
+    "template_id": 60,
+    "template": "Purge a chosen card and gain {essence_per_energy} essence for each ✦ it had"
+  },
+  {
+    "template_id": 61,
+    "template": "Purge a chosen card and gain a copy of another chosen card"
+  },
+  {
+    "template_id": 62,
+    "template": "Purge a chosen dreamsign and gain {essence} essence"
+  },
+  {
+    "template_id": 63,
+    "template": "Replace all of your dreamsigns with random dreamsigns"
+  },
+  {
+    "template_id": 64,
+    "template": "All characters in your deck gain +1✦"
+  },
+  {
+    "template_id": 65,
+    "template": "All cards in your deck are reduced in cost by 1●. Gain {count} \"Nightmare\" bane cards."
+  },
+  {
+    "template_id": 66,
+    "template": "All cards in your deck become ❖ (fast)"
+  },
+  {
+    "template_id": 67,
+    "template": "All characters in your deck become the subtype of your choice."
+  },
+  {
+    "template_id": 68,
+    "template": "Double your current essence."
+  },
+  {
+    "template_id": 69,
+    "template": "Gain {count} \"Nightmare\" bane cards. Gain {dreamsign}."
+  },
+  {
+    "template_id": 70,
+    "template": "Gain {count} \"Nightmare\" bane cards. Gain {card_name}."
+  },
+  {
+    "template_id": 71,
+    "template": "Gain {count} \"Nightmare\" bane cards. Gain one of 3 offered dreamsigns."
+  },
+  {
+    "template_id": 72,
+    "template": "Gain a random legendary card."
+  }
+]
