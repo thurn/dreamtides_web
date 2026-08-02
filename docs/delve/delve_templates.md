@@ -40,39 +40,61 @@ Record the selection predicate for any special card variable in the output JSON'
 12. Gain {count} copies of $OFFERED_CARD
 13. Gain {count} random {predicate} cards
 14. Draft a {predicate} card from 4 random choices
-15. Take any number of {predicate} cards from 4 random choices
-16. Apply a transfiguration of your choice to a chosen card
-17. Apply {transfiguration} to a chosen card
-18. Apply {transfiguration} to $DECK_CARD
-19. Apply a transfiguration to {count} chosen {predicate} cards
-20. Apply {transfiguration} to {count} chosen {predicate} cards
-21. Apply a transfiguration to {count} random {predicate} cards
-22. Apply {transfiguration} to {count} random {predicate} cards
-23. Transfigure {count} random starter cards
-24. Transfigure all starter cards
-25. Gain $CUSTOM_CARD
-26. Gain {dreamsign_name}
-27. Gain a random dreamsign
-28. Gain one of 3 offered dreamsigns
-29. Gain $CUSTOM_DREAMSIGN
-30. Purge $STARTER_CARD
-31. Purge a random starter card
-32. Purge a random starter card and gain a {predicate} card
-33. Purge all starter cards and replace each one with a {predicate} card
-34. Choose one of 2 packs of {predicate} cards to add to your deck
-35. The next draft or shop site you visit will contain transfigured cards
-36. Draw {count} additional cards at the start of your next battle
-37. Gain {count} additional energy at the start of your next battle
-38. Transfigure all cards in your deck
-39. Add {site} to this dreamscape
-40. Choose a card to purge and replace it with {card_id}
-41. Purge a random {predicate} card and replace it with {card_id}
-42. Gain {count} copies of $DECK_CARD
-43. Gain {count} copies of a chosen card
-44. Gain one copy of each of {count} chosen cards
-45. Gain one copy of each of {count} random {predicate} cards
-46. Change $DECK_CARD to become a {card_type}
-47. Modify {count} random cards to become {card_type} cards
-48. Select 4 random cards from your deck and choose one to gain a copy of
-49. All items in the next shop you visit are free
-50. Pick a new Dream Avatar from 3 choices
+15. Draft a {predicate} card from 4 random choices and gain {count} copies of it
+16. Take any number of {predicate} cards from 4 random choices
+17. Apply a transfiguration of your choice to a chosen card
+18. Apply {transfiguration} to a chosen card
+19. Apply {transfiguration} to $DECK_CARD
+20. Apply a transfiguration to {count} chosen {predicate} cards
+21. Apply {transfiguration} to {count} chosen {predicate} cards
+22. Apply a transfiguration to {count} random {predicate} cards
+23. Apply {transfiguration} to {count} random {predicate} cards
+24. Transfigure {count} random starter cards
+25. Transfigure all starter cards
+26. Gain $CUSTOM_CARD
+27. Gain {dreamsign_name}
+28. Gain a random dreamsign
+29. Gain one of 3 offered dreamsigns
+30. Replace a chosen dreamsign with one of 3 offered dreamsigns
+31. Gain $CUSTOM_DREAMSIGN
+32. Purge $STARTER_CARD
+33. Purge a random starter card
+34. Purge a random starter card and gain a {predicate} card
+35. Purge all starter cards and replace each one with a {predicate} card
+36. Choose one of 2 packs of {predicate} cards to add to your deck
+37. The next draft or shop site you visit will contain transfigured cards
+38. Draw {count} additional cards at the start of your next battle
+39. Gain {count} additional energy at the start of your next battle
+40. Transfigure all cards in your deck
+41. Add a duplication site to this dreamscape
+42. Add a card market site to this dreamscape
+43. Add a dreamsign bazaar site to this dreamscape
+44. Add a transfiguration site to this dreamscape
+45. Add a purge site to this dreamscape.
+46. Choose one of three site types to add to this dreamscape.
+47. Choose a card to purge and replace it with {card_id}
+48. Purge a random {predicate} card and replace it with {card_id}
+49. Gain {count} copies of $DECK_CARD
+50. Gain {count} copies of a chosen card
+51. Gain one copy of each of {count} chosen cards
+52. Gain one copy of each of {count} random {predicate} cards
+53. Change $DECK_CARD to become a {card_type}
+54. Modify {count} random cards to become {card_type} cards
+55. Select 4 random cards from your deck and choose one to gain a copy of
+56. All items in the next shop you visit are free
+57. Pick a new Dream Avatar from 3 choices
+58. Change a chosen Character card to have {subtype}
+59. Gain {essence_per_card} essence for each {predicate} card in your deck
+60. Purge a chosen card and gain {essence_per_energy} essence for each ✦ it had
+61. Purge a chosen card and gain a copy of another chosen card
+62. Purge a chosen dreamsign and gain {essence} essence
+63. Replace all of your dreamsigns with random dreamsigns
+64. All characters in your deck gain +1✦
+65. All cards in your deck are reduced in cost by 1●. Gain {count} "Nightmare" bane cards.
+66. All cards in your deck become ❖ (fast)
+67. All characters in your deck become the subtype of your choice.
+68. Double your current essence.
+69. Gain {count} "Nightmare" bane cards. Gain {dreamsign}.
+70. Gain {count} "Nightmare" bane cards. Gain {card_name}.
+71. Gain {count} "Nightmare" bane cards. Gain one of 3 offered dreamsigns.
+72. Gain a random legendary card.
