@@ -227,8 +227,8 @@ Score each component from 1–10:
   Figurative language earns credit only when it clarifies the same concrete
   relationship. Reject a candidate before scoring if it contains a meaningful
   word from the source card name, invents material or emotional content, or uses
-  abstraction that merely sounds evocative. Reusing strong prose across events
-  does not lower this score; novelty does not raise it.
+  abstraction that merely sounds evocative. Reusing a strong visual focus across
+  distinctly worded scenes does not lower this score; novelty does not raise it.
 - `action_quality` (15%): Whether both labels are distinct, purposeful things to
   do in the scene and both resolutions are concise, vivid responses.
 - `mechanical_connection` (30%): Whether each label and resolution make its
@@ -242,8 +242,9 @@ Score each component from 1–10:
 Assign every rank from 1 through 5 exactly once. Higher overall scores outrank
 lower scores; use art fidelity, encounter-making relationship, and immediate
 clarity as the first qualitative tiebreakers, followed by the strength of the
-two complete action chains. Do not use prose distinctness as a score or
-tiebreaker. Sort the final list from rank 1 through rank 5. Preserve the
+two complete action chains. Beyond requiring distinct wording for all five
+`prose` fields, do not use prose novelty as a score or tiebreaker. Sort the final
+list from rank 1 through rank 5. Preserve the
 authoritative input pairing through
 `template_pair_id`, and preserve the two template actions in their input order
 within each event. The `ranking_rationale` is one concise sentence explaining

@@ -6,11 +6,11 @@ description: Design and rank five Dreamtides Delve narrative encounters from a c
 # Delve Encounter Design
 
 Create five production-ready encounters that make a player feel they have
-entered the dream depicted by one card. The five descriptions do not need to
-differ. Choose prose for art fidelity and its ability to support both actions in
-the assigned template pair; reuse the artwork's strongest visual focus whenever
-it remains the best mechanical fit. Return strict JSON by default, or render the
-validated designs as user-facing Markdown in display mode.
+entered the dream depicted by one card. Give every description distinct wording,
+though all five may share the same overall narrative and strongest visual focus.
+Choose prose for art fidelity and its ability to support both actions in the
+assigned template pair. Return strict JSON by default, or render the validated
+designs as user-facing Markdown in display mode.
 
 ## Required input
 
@@ -139,9 +139,11 @@ harness commentary.
    arrangement matters from inside the scene.
 
    Draft only enough candidates to find prose that can support the generated
-   mechanics; one excellent scene may support several template pairs.
-   Candidates may share the same visual focus, sentence shape, or exact prose.
-   Repetition is better than a weaker description written only for variety.
+   mechanics; one excellent scene may support several template pairs. Draft
+   enough faithful variants to give every final `prose` field distinct wording.
+   Variants may share the same visual focus and sentence shape; vary syntax,
+   reader position, or emphasis among already-supported details rather than
+   adding material for variety.
 
    Use figurative language only when it makes a visible relationship clearer or
    more immediate. Figurative language is optional, but evocative force is not:
@@ -203,8 +205,9 @@ harness commentary.
 
 9. Match the strongest compatible frozen scene to each template pair
    independently. Preserve input order and never alter or swap templates. Reuse
-   a scene verbatim whenever it remains the strongest fit; do not choose the
-   fifth-best description merely to avoid repetition. For each effect, write a
+   the strongest scene concept whenever it remains the best fit, but assign a
+   distinctly worded frozen variant to each event. Do not choose a weaker visual
+   relationship merely to force a different narrative. For each effect, write a
    purposeful action label that is natural in the scene and makes the effect a
    plausible consequence. Privately complete: “When the player [label],
    [effect] follows because ___.” Require a concrete, scene-grounded answer
@@ -230,8 +233,9 @@ harness commentary.
     ranks. Rank art fidelity, encounter-making relationship, immediate clarity,
     and mechanical connection above novelty or ornament. Score mechanical
     connection by the weaker of the two action chains, not their average. Revise
-    any chain below 7/10. Repeated prose loses no points, and distinct prose
-    earns no points by itself.
+    any chain below 7/10. A shared narrative or visual focus loses no points, and
+    textual novelty earns no points beyond satisfying the distinct-wording
+    requirement.
 
 13. Sort the five completed event objects by ascending `rank` as a final
     readability pass, so rank 1 appears first and rank 5 last. Keep each event's
@@ -298,10 +302,11 @@ harness commentary.
   encloses your slight frame” when neither enclosure nor the reader's physique
   is established. Reject “distant lights forget their edges”: visible defocus
   does not make that personification informative.
-- Do not optimize for syntactic, compositional, or sensory variety across the
-  five scenes. Reuse the strongest visual relationship and similar or identical
-  wording whenever they support the mechanics. Vary prose only when the new
-  version is at least as clear, faithful, and mechanically useful.
+- Do not optimize for different compositions or sensory focuses across the five
+  scenes. Every `prose` field must nevertheless have distinct wording. Rephrase
+  a shared strongest visual relationship through syntax, reader position, or
+  emphasis among supported details, and keep each version at least as clear,
+  faithful, and mechanically useful.
 - For an Event card, foreground the depicted action or charged instant implied
   by its name and ability. Ask what is being prevented, completed, revealed,
   broken, escaped, or otherwise changed in the frame, and capture that visible
@@ -356,10 +361,10 @@ harness commentary.
   story-bearing part of this particular scene.
 - Avoid generic decision language such as “awaiting your answer,” “offers two
   paths,” or “asks what you will choose.” Show the scene itself.
-- Distinctness is not a quality criterion. Similar or identical scenes are
-  acceptable across the set when each one supports both choices. Never add
-  abstraction, unsupported embodiment, or decorative imagery to differentiate
-  events.
+- Distinct wording is a presentation requirement, not a quality criterion.
+  Similar scenes and the same overall narrative are acceptable across the set
+  when each supports both choices. Never add abstraction, unsupported
+  embodiment, or decorative imagery to differentiate events.
 
 ## Mechanical standards
 
