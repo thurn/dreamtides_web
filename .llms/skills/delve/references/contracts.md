@@ -150,10 +150,32 @@ restricted:
 }
 ```
 
-Predicates must describe objective card data or rules and create a meaningful
-restriction, such as `Spirit Animal`, `cost 2 or less`, or `has an activated
-ability`. `Character` is forbidden because it covers roughly 70% of the card
-catalog and is not mechanically selective.
+The standard predicate values are exactly `Event`, `Warrior`, `Spirit Animal`,
+`Survivor`, and `≤2● cost Character`. For a special runtime variable, omitting
+its `selection` entry is the standard `none` choice and leaves it unrestricted.
+For a `{predicate}` placeholder, choose one of the five standard values.
+`Character` is always forbidden because no constraint is the more useful broad
+option.
+
+Use a nonstandard predicate only for a strong, card-specific design reason that
+none of the standard values can express. Verify that the relevant canonical
+pool contains enough eligible targets for the template, then put a concise
+`predicate_exception_rationale` on the action alongside `variables` and
+`effect_text`:
+
+```json
+{
+  "variables": {
+    "predicate": "has a ▸Dawn ability"
+  },
+  "predicate_exception_rationale": "The source ability repeats ▸Dawn triggers, and the relevant pool contains 18 eligible cards."
+}
+```
+
+The rationale must identify the source-card connection and the verified target
+availability. Mechanical variety, visual flavor, and the source card's own type
+or cost are not strong reasons. Choose predicates independently for each action;
+do not reuse one merely because it appeared elsewhere in the set.
 
 For `$CUSTOM_CARD`, set `variables.custom_card`:
 

@@ -501,7 +501,7 @@ rendered-text = "Gain 1 energy."
         )
         result = self.run_validator(request_data, output_data)
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("must be more selective than Character", result.stderr)
+        self.assertIn("must not be Character", result.stderr)
 
     def test_rejects_character_selection_predicate(self) -> None:
         request_data = request()
@@ -523,7 +523,116 @@ rendered-text = "Gain 1 energy."
         )
         result = self.run_validator(request_data, output_data)
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("must be more selective than Character", result.stderr)
+        self.assertIn("must not be Character", result.stderr)
+
+    def test_accepts_each_standard_predicate(self) -> None:
+        for predicate in (
+            "Event",
+            "Warrior",
+            "Spirit Animal",
+            "Survivor",
+            "≤2● cost Character",
+        ):
+            with self.subTest(predicate=predicate):
+                request_data = request()
+                output_data = output()
+                replace_action(
+                    request_data,
+                    output_data,
+                    0,
+                    14,
+                    "Draft a {predicate} card from 4 random choices",
+                    {
+                        "label": "Welcome an Ally",
+                        "template_id": 14,
+                        "template": "Draft a {predicate} card from 4 random choices",
+                        "variables": {"predicate": predicate},
+                        "effect_text": f"Draft a {predicate} card from 4 random choices",
+                    },
+                )
+                result = self.run_validator(request_data, output_data)
+                self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_requires_rationale_for_nonstandard_predicate(self) -> None:
+        request_data = request()
+        output_data = output()
+        replace_action(
+            request_data,
+            output_data,
+            0,
+            14,
+            "Draft a {predicate} card from 4 random choices",
+            {
+                "label": "Welcome an Ally",
+                "template_id": 14,
+                "template": "Draft a {predicate} card from 4 random choices",
+                "variables": {"predicate": "has a ▸Dawn ability"},
+                "effect_text": "Draft a card with a ▸Dawn ability from 4 random choices",
+            },
+        )
+        result = self.run_validator(request_data, output_data)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("predicate_exception_rationale", result.stderr)
+
+        output_data[0]["actions"][0]["predicate_exception_rationale"] = (
+            "The source repeats Dawn triggers, and the relevant pool has 18 targets."
+        )
+        result = self.run_validator(request_data, output_data)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_requires_rationale_for_nonstandard_selection_predicate(self) -> None:
+        request_data = request()
+        output_data = output()
+        replace_action(
+            request_data,
+            output_data,
+            0,
+            49,
+            "Gain {count} copies of $DECK_CARD",
+            {
+                "label": "Echo a Companion",
+                "template_id": 49,
+                "template": "Gain {count} copies of $DECK_CARD",
+                "variables": {"count": 2},
+                "selection": {
+                    "$DECK_CARD": {"predicate": "has a ▸Dawn ability"}
+                },
+                "effect_text": "Gain 2 copies of a card with a ▸Dawn ability from your deck",
+            },
+        )
+        result = self.run_validator(request_data, output_data)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("predicate_exception_rationale", result.stderr)
+
+        output_data[0]["actions"][0]["predicate_exception_rationale"] = (
+            "The source repeats Dawn triggers, and the relevant deck has 3 targets."
+        )
+        result = self.run_validator(request_data, output_data)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_rejects_character_even_with_exception_rationale(self) -> None:
+        request_data = request()
+        output_data = output()
+        replace_action(
+            request_data,
+            output_data,
+            0,
+            14,
+            "Draft a {predicate} card from 4 random choices",
+            {
+                "label": "Welcome an Ally",
+                "template_id": 14,
+                "template": "Draft a {predicate} card from 4 random choices",
+                "variables": {"predicate": "Character"},
+                "predicate_exception_rationale": (
+                    "The source rewards characters, and the pool has many targets."
+                ),
+                "effect_text": "Draft a Character card from 4 random choices",
+            },
+        )
+        result = self.run_validator(request_data, output_data)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("must not be Character", result.stderr)
 
     def test_rejects_noncanonical_transfiguration(self) -> None:
         request_data = request()

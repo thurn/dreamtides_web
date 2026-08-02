@@ -154,7 +154,15 @@ harness commentary.
    and canonical content when useful. Favor values, predicates, and real UUID
    references that support that plan. Both choices should remain useful to the
    likely deck: one may deepen its synergy while the other offers flexibility,
-   conversion, or risk management.
+   conversion, or risk management. Use only the standard predicate vocabulary:
+   `Event`, `Warrior`, `Spirit Animal`, `Survivor`, or `≤2● cost Character`.
+   For special variables such as `$DECK_CARD`, prefer no constraint by omitting
+   `selection` when none of those restrictions materially improves the design.
+   Choose each predicate independently; never carry a predicate into another
+   action merely because it fit once. Depart from the standard vocabulary only
+   for a strong card-specific design reason, after verifying the exception has
+   enough eligible targets in the relevant canonical pool. Record that reason
+   in the action's `predicate_exception_rationale` for validation.
 
 9. Match the five strongest frozen scenes to the five template pairs. Preserve
    input order and never alter or swap templates. For each effect, write a
@@ -293,13 +301,23 @@ harness commentary.
 ## Mechanical standards
 
 - Preserve each `template_id` and exact canonical `template` string.
-- Populate every `{placeholder}` in `variables`. Use objective, playable
-  predicates from canonical game vocabulary; never invent predicates such as
-  “fiery cards.”
+- Populate every `{placeholder}` in `variables`. The standard predicate values
+  are exactly `Event`, `Warrior`, `Spirit Animal`, `Survivor`, and `≤2● cost
+  Character`. A special runtime variable may instead remain unrestricted by
+  omitting its `selection` entry. Do not manufacture a restriction merely to
+  make an effect appear tailored.
 - Never use `"Character"` as a predicate in `variables` or `selection`. It
   covers roughly 70% of the card catalog and does not create a mechanically
-  interesting restriction. Choose a narrower subtype, cost, spark, ability, or
-  combined objective condition that supports the source card's strategy.
+  interesting restriction; use no constraint instead.
+- Use a predicate outside the standard vocabulary only when the source card's
+  ability or established archetype creates a strong design reason that none of
+  the standard predicates can serve. Verify the exception against canonical
+  content, including enough eligible targets for the specific template, and add
+  a concise `predicate_exception_rationale` to that action. Mechanical variety,
+  surface flavor, or the source card's own type or cost is not sufficient.
+- Evaluate each predicate-bearing action separately. Reuse a predicate only
+  when it is independently the best standard choice for that action, not as a
+  set-wide theme or default.
 - Reference existing cards and dreamsigns with real canonical UUIDs. Resolve
   names only for display. Validate transfiguration names and other fixed content
   against repository sources. Never key, compare, or select cards by name.
@@ -313,7 +331,8 @@ harness commentary.
   required by the contract. Custom card names describe archetypes rather than
   proper-named individuals.
 - Record restrictions for `$DECK_CARD`, `$OFFERED_CARD`, `$STARTER_CARD`, or
-  other special variables in `selection`. Omission means unrestricted.
+  other special variables in `selection`. Omission means unrestricted and is
+  the standard `none` choice.
 - Write `effect_text` as readable display copy with all placeholders and special
   tokens resolved. Keep the exact template and structured values authoritative.
 - Choose conservative values when balance evidence is incomplete, but keep

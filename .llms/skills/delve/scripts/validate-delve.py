@@ -26,6 +26,13 @@ DEFAULT_TRANSFIGURATIONS_DATA = (
 PLACEHOLDER_RE = re.compile(r"\{([a-z][a-z0-9_]*)\}")
 SPECIAL_RE = re.compile(r"\$[A-Z][A-Z0-9_]*")
 WORD_RE = re.compile(r"[^\W_]+(?:['’\-][^\W_]+)*", re.UNICODE)
+STANDARD_PREDICATES = {
+    "Event",
+    "Warrior",
+    "Spirit Animal",
+    "Survivor",
+    "≤2● cost Character",
+}
 
 
 class ValidationError(Exception):
@@ -297,14 +304,20 @@ def validate_custom_dreamsign(
     require_string(obj.get("rendered_text"), f"{path}.rendered_text")
 
 
-def validate_predicate(value: Any, path: str) -> str:
+def validate_predicate(
+    value: Any,
+    path: str,
+    predicate_exception_rationale: Any,
+    rationale_path: str,
+) -> str:
     predicate = require_string(value, path)
     if predicate == "Character":
         fail(
             path,
-            "must be more selective than Character; choose a subtype, cost, "
-            "spark, ability, or combined objective condition",
+            "must not be Character; omit the selection for no constraint",
         )
+    if predicate not in STANDARD_PREDICATES:
+        require_string(predicate_exception_rationale, rationale_path)
     return predicate
 
 
@@ -317,6 +330,8 @@ def validate_variables(
     transfigurations: set[str],
 ) -> None:
     variables = require_object(action.get("variables"), f"{path}.variables")
+    predicate_exception_rationale = action.get("predicate_exception_rationale")
+    rationale_path = f"{path}.predicate_exception_rationale"
     for placeholder in sorted(set(PLACEHOLDER_RE.findall(template))):
         if placeholder not in variables:
             fail(f"{path}.variables", f"is missing {{{placeholder}}}")
@@ -335,7 +350,12 @@ def validate_variables(
                     + ", ".join(sorted(transfigurations)),
                 )
         elif placeholder == "predicate":
-            validate_predicate(value, value_path)
+            validate_predicate(
+                value,
+                value_path,
+                predicate_exception_rationale,
+                rationale_path,
+            )
         elif placeholder in {
             "count",
             "essence",
@@ -374,6 +394,8 @@ def validate_variables(
             validate_predicate(
                 rule_obj.get("predicate"),
                 f"{path}.selection.{special}.predicate",
+                predicate_exception_rationale,
+                rationale_path,
             )
 
 
