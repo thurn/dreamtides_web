@@ -8,9 +8,11 @@ description: Design and rank five Dreamtides Delve narrative encounters from a c
 Create five production-ready encounters that make a player feel they have
 entered the dream depicted by one card. Give every description distinct wording,
 though all five may share the same overall narrative and strongest visual focus.
-Choose prose for art fidelity and its ability to support both actions in the
-assigned template pair. Return strict JSON by default, or render the validated
-designs as user-facing Markdown in display mode.
+Choose prose for fidelity of impression, evocative force, and its ability to
+support both actions in the assigned template pair. The artwork supplies the
+material truth of the scene, not a checklist of details to transcribe. Return
+strict JSON by default, or render the validated designs as user-facing Markdown
+in display mode.
 
 ## Required input
 
@@ -104,85 +106,89 @@ harness commentary.
    authoritative; do not recategorize the art.
 
 4. Read the depicted scene. Privately separate three kinds of claims:
-   **observed** details plainly visible in the image, **strongly implied**
-   sensory qualities such as heat from visible fire, and **unsupported**
-   additions. Note concrete subjects, setting, motion, scale, posture, distance,
-   mood, sensory atmosphere, and relationships. If a claim depends on exact
-   color, measure the image rather than trusting visual color perception.
+   **material facts** plainly visible or strongly implied in the image,
+   **evocative interpretations** that express the supported mood or experiential
+   consequence of those facts, and **material inventions** that add a subject,
+   object, event, history, or physical condition. Heat from visible fire, a
+   hush suggested by immense stillness, or a horizon that *feels* commanded by
+   a towering figure can be supported interpretations; an unseen crowd or an
+   invented attack is not. Note concrete subjects, setting, motion, scale,
+   posture, distance, mood, sensory atmosphere, and relationships. If a claim
+   depends on exact color, measure the image rather than trusting visual color
+   perception.
 
 5. Interpret the card according to its canonical type, then make a private
-   forbidden-name lexicon. Normalize the card name and collect every meaningful
-   word, excluding only grammatical connectors such as `a`, `an`, `the`, `of`,
-   `to`, and `and`; include obvious inflections and compounds that would still
-   sound like the name. Do not use any forbidden-name word in `prose`, `label`,
-   or `resolution`. The display heading and mechanically populated
-   `effect_text` are exempt. For `Night Scavenger`, both `night` and
-   `scavenger` are forbidden; describe the visible subject as a bundled,
-   hooded, kneeling, or crouching figure instead. Read a Character as an
-   archetype rather than a named individual, but never reuse its archetype name
-   as convenient scene copy. For an Event, use the name and ability privately
-   to identify the central action, change, or condition without quoting their
-   language. An Event whose ability prevents a played card should feel like
-   interruption, refusal, or something arrested before completion. This is an
-   interpretive lens, not permission to add objects, actors, outcomes, or rules
-   text absent from the image. Do not invent proper names, identifiable faces,
-   fixed biographies, named locations, or offscreen lore.
+   source-name watchlist. Do not quote the complete card name, use a distinctive
+   multiword portion of it as a proper name, or mechanically repeat its words
+   across `prose`, `label`, and `resolution`. Individual name words remain
+   available when they are ordinary language and the strongest description of
+   visible evidence; do not replace `rider` with `mounted silhouette` merely
+   because the card name contains `Rider`. For `Night Scavenger`, do not call
+   the subject `the Night Scavenger`, but `night` or `scavenging` may appear when
+   independently supported and evocative. Read a Character name as an archetype
+   label rather than a named individual. For an Event, use the name and ability
+   privately to identify the central action, change, or condition without
+   quoting their language as scene copy. An Event whose ability prevents a
+   played card should feel like interruption, refusal, or something arrested
+   before completion. This is an interpretive lens, not permission to add
+   objects, actors, outcomes, or rules text absent from the image. Do not invent
+   proper names, identifiable faces, fixed biographies, named locations, or
+   offscreen lore.
 
 6. Set the templates aside and build a private scene bank from the artwork.
-   Start with the clearest visible subject, posture, scale, distance, motion,
-   texture, or stillness. For each candidate, identify an **encounter-making
-   relationship**: the specific relation among visible elements and the
-   reader's position that makes this moment striking to inhabit. Scale,
-   proximity, posture, gaze, occlusion, motion against stillness, or a supported
-   sensory contrast can provide that relationship. A list of depicted nouns and
-   actions is accurate but insufficient when it does not establish why their
-   arrangement matters from inside the scene.
+   First state the scene's **imaginative thesis**: what makes this particular
+   moment uncanny, wondrous, menacing, intimate, mournful, or mythic to inhabit.
+   Then choose the smallest set of visible anchors needed to carry that thesis.
+   Translate composition into experience through a charged verb, metaphor,
+   comparison, sensory compression, impossible-seeming scale, symbolic
+   resemblance, rhythmic contrast, or immediate imaginative consequence. Omit
+   secondary details freely. The reader should recognize the dream without
+   being given stock-image alt text for it.
 
    Draft only enough candidates to find prose that can support the generated
    mechanics; one excellent scene may support several template pairs. Draft
    enough faithful variants to give every final `prose` field distinct wording.
-   Variants may share the same visual focus and sentence shape; vary syntax,
-   reader position, or emphasis among already-supported details rather than
-   adding material for variety.
-
-   Use figurative language only when it makes a visible relationship clearer or
-   more immediate. Figurative language is optional, but evocative force is not:
-   precise literal prose must still use selection, perspective, and relationship
-   to make the encounter palpable. Do not require a metaphor, personification,
-   emotional conclusion, or different perceptual center from every candidate. A
-   scene does not need conflict, danger, stakes, a dilemma, a request, a problem,
-   a resolution, or unresolved tension. Do not use template quantities,
-   operations, reward concepts, or needed effect recipients as scene
-   ingredients.
+   Variants may share the same imaginative thesis and visual focus; vary syntax,
+   reader position, or the expressive transformation of supported details
+   rather than adding material for variety. Figurative language is welcome but
+   not mandatory: vivid diction, omission, rhythm, and sensory immediacy can
+   also transform a scene. A scene does not need conflict, danger, stakes, a
+   dilemma, a request, a problem, a resolution, or unresolved tension. Do not
+   use template quantities, operations, reward concepts, or needed effect
+   recipients as scene ingredients.
 
 7. Apply six gates to every candidate with templates and actions hidden:
-   - **Name gate:** Does it contain a forbidden-name word? Reject it if so,
-     even when that word also works as an ordinary noun.
-   - **Fidelity gate:** Can every material subject, object, setting feature,
-     and action be traced to an observed or strongly implied detail? Reject any
-     added companion, crowd, creature, prop, structure, weather event, or
-     ongoing incident. Do not promote ambiguous screens, reflections,
-     silhouettes, or debris into people or formations.
-   - **Encounter gate:** Does the line establish a specific relationship among
-     the visible elements and the reader's position, or does it merely catalog
-     what is present? Require a concrete answer to “What is striking about being
-     here?” without inventing plot, danger, or a subject's feelings.
-   - **Clarity gate:** Can an ordinary reader immediately connect every clause
-     to something visible or strongly implied in this image? Reject language
-     that merely sounds evocative, requires interpretation to recover the
-     picture, or could fit unrelated fantasy art.
-   - **Figurative-language gate:** If the line uses a metaphor,
-     personification, or abstraction, does it clarify a concrete visual
-     relationship? Privately paraphrase the figure of speech as a visible fact
-     plus its supported experiential consequence. Reject it if that paraphrase
-     is vague or impossible. Then remove the figure of speech: keep it only if
-     the sentence loses meaningful scale, intimacy, tension, rhythm, or
-     stillness—not merely prettiness. Reject decorative profundity, emotional
-     arithmetic, and material claims smuggled in as poetry.
+   - **Name gate:** Does it quote the complete source name, turn a distinctive
+     portion of that name into a proper noun, or lean on repeated name words
+     instead of fresh scene language? Reject it. Do not reject an independently
+     useful ordinary word merely because it also occurs in the card name.
+   - **Material-fidelity gate:** Are all literal subjects, objects, setting
+     features, actions, and physical conditions visible or strongly implied?
+     Reject invented companions, crowds, creatures, props, structures, weather
+     events, histories, or incidents. This gate does not require figurative or
+     experiential language to be literally visible; it asks whether that
+     language transforms supported evidence without asserting a new material
+     fact.
+   - **Caption gate:** Could the line pass unchanged as stock-image alt text, or
+     does it mainly enumerate who stands where, what they carry, and what they
+     face? Reject it even when every detail and spatial relationship is accurate.
+     Scale adjectives, `you`, and a semicolon do not turn a caption into an
+     encounter.
+   - **Evocative gate:** Does the line make at least one supported aspect of the
+     scene feel newly immediate through charged diction, sensory implication,
+     metaphor, comparison, rhythm, omission, symbolic resemblance, or
+     imaginative consequence? Reject prose whose only achievement is accurate
+     reconstruction. Also reject vague dream-fantasy atmosphere that could fit
+     unrelated art.
+   - **Clarity gate:** Can an ordinary reader understand the central image and
+     imaginative turn on first reading? The prose need not let the reader
+     reconstruct every depicted detail. Mystery is welcome; confusion is not.
    - **Embodiment gate:** Does the prose assign the reader a body, clothing,
-     posture, or emotion that the artwork does not establish from the reader's
-     point of view? Second person places the reader in the scene; it does not
-     make every depicted figure's physique or feelings the reader's own.
+     posture, biography, or precise emotion that the artwork does not establish
+     from the reader's point of view? Supported felt experience—pressure,
+     vertigo, hush, heat, awe, menace, or the world seeming small—is allowed.
+     Second person places the reader in the scene; it does not make every
+     depicted figure's physique or feelings the reader's own.
 
    Also reject scenes that announce a decision, manufacture a predicament,
    depend on symbolic word substitution, or disguise a game operation. Freeze
@@ -230,11 +236,12 @@ harness commentary.
    operate at a different order of magnitude.
 
 12. Compare all five designs using the contract rubric, then assign unique
-    ranks. Rank art fidelity, encounter-making relationship, immediate clarity,
-    and mechanical connection above novelty or ornament. Score mechanical
+    ranks. Rank fidelity of impression, evocative force, and mechanical
+    connection above literal completeness or ornament. A faithful caption does
+    not become excellent prose by naming more visible details. Score mechanical
     connection by the weaker of the two action chains, not their average. Revise
-    any chain below 7/10. A shared narrative or visual focus loses no points, and
-    textual novelty earns no points beyond satisfying the distinct-wording
+    any chain below 7/10. A shared narrative or visual focus loses no points,
+    and textual novelty earns no points beyond satisfying the distinct-wording
     requirement.
 
 13. Sort the five completed event objects by ascending `rank` as a final
@@ -242,10 +249,12 @@ harness commentary.
     `template_pair_id` and two actions together; sorting events must not alter
     or swap the actions within a template pair.
 
-14. Before validation, scan every `prose`, `label`, and `resolution`
-    case-insensitively against the forbidden-name lexicon and replace every
-    match. Then write the complete event objects to JSON, validate them, and
-    fix every error regardless of output mode:
+14. Before validation, scan every `prose`, `label`, and `resolution` for the
+    complete card name, distinctive multiword fragments used as names, and
+    mechanical repetition of source-name language. Replace those matches while
+    preserving independently useful ordinary words. Then write the complete
+    event objects to JSON, validate them, and fix every error regardless of
+    output mode:
 
    ```bash
    python3 .llms/skills/delve/scripts/validate-delve.py \
@@ -263,66 +272,75 @@ harness commentary.
 - Write in second-person present tense. The interface already establishes that
   the player entered the card, so begin inside the moment.
 - Treat every `prose` field as the reader's first glimpse of an independent
-  scene. Introduce each subject on first mention with `a` or `an`: “A hovering
-  bird...” or “A great bird...” Never begin with an unintroduced definite or
-  possessive phrase such as “the hovering bird,” “the great bird,” or “the
-  creature's wings.” Use `the` only after the same prose field has established
-  that subject. Use `a` or `an`, not `one`, to introduce a singular scene
-  element; do not open on an unexplained body part, motion, or consequence.
+  scene. Introduce material subjects clearly, but let the sentence lead with an
+  atmosphere, action, comparison, or sensory impression when that creates a
+  stronger entrance. Use `a` or `an`, not `one`, when directly introducing a
+  singular subject. A definite or possessive phrase may open the line when its
+  referent is immediately clear from the same image and sentence; reject only
+  genuine ambiguity, not poetic sequencing.
 - Keep the entire `prose` field near 10–15 words and never above 20. Use more
   than one sentence only when the extra sentence adds real value.
 - Describe a scene, not a miniature quest or an illustrated reward. Establish
-  what the player encounters and the visible or strongly implied spatial and
-  sensory relationship. Do not assign the player or a depicted subject an
-  emotion merely to provide atmosphere. The prose may be wholly observational;
-  nothing needs to be wrong, threatened, requested, or unresolved. Keep game
-  terms such as card, deck, draft, purge, essence, dreamsign, and
-  transfiguration out of the prose.
+  what the player encounters and how the moment feels to inhabit. Atmosphere
+  may arise from supported scale, posture, motion, stillness, light, texture,
+  distance, or sensory pressure. Do not diagnose a depicted subject's private
+  emotions or dictate a precise player emotion. Nothing needs to be wrong,
+  threatened, requested, or unresolved. Keep game terms such as card, deck,
+  draft, purge, essence, dreamsign, and transfiguration out of the prose.
 - Treat the artwork as the source of truth for every material element in the
-  prose. Describe the moment inside the frame rather than a larger inferred
-  world. If the art shows a lone figure, keep the figure alone; do not add a
-  column, crowd, companion, or hidden population to service a Character effect.
-- Prefer direct concrete nouns and observable relationships. Every scene must
-  do more than inventory the image: select and arrange details so the reader
-  immediately experiences a specific relation of scale, proximity, posture,
-  gaze, motion, stillness, occlusion, or supported sensation. Figurative
-  language is optional; when used, it must sharpen that relationship rather
-  than merely make the sentence sound literary, and it may not add a material
-  subject, event, history, physique, or emotion.
-- Reject generic inventories such as “A person and an animal are outside.”
-  Prefer a specific visible relationship in plain language: “A bundled figure
-  reaches toward a rat beneath ruined walls that dwarf them both.” The figure,
-  posture, rat, setting, and scale create an encounter without vague
-  personification.
-- For art showing a person beside a colossal bird, both “A colossal bird lowers
-  its beak until it nearly touches the figure beside it” and “A vast bird bows
-  toward you, and silence bridges the difference” work. The first is literal
-  but gains force from scale and proximity; the second compresses that same
-  visible relationship into a supported sensory impression. Reject “A bird
-  encloses your slight frame” when neither enclosure nor the reader's physique
-  is established. Reject “distant lights forget their edges”: visible defocus
-  does not make that personification informative.
+  prose, not the required surface form of each clause. Select, omit, compress,
+  compare, and recast visible evidence freely. If the art shows a lone figure,
+  keep the figure alone; do not add a column, crowd, companion, or hidden
+  population to service a Character effect.
+- Use concrete anchors as a launch point rather than a destination. The line
+  should perform an imaginative transformation: make scale alter the apparent
+  world, let stillness exert pressure, let a visible form suggest a symbol, or
+  use rhythm and charged verbs to make motion immediate. A reader should gain
+  an experience that a literal inventory cannot provide.
+- Reject caption-shaped prose even when it is specific, spatially accurate, and
+  written in second person. Naming a subject, its equipment, its position, a
+  larger subject, and the setting still produces alt text unless the language
+  changes how the composition feels.
+- Prefer “A vast bird bows toward you, and silence bridges the difference” over
+  a complete report of the bird's posture and distance. `Silence bridges the
+  difference` is a supported imaginative consequence of visible scale and
+  stillness; it need not be an object in the frame. Reject a figure of speech
+  only when it is generic, incoherent, or smuggles in a new material fact.
+- Use these caption-regression comparisons as a quality floor:
+  - Reject “You watch two backpacked travelers face a colossal horse and mounted
+    silhouette overhead.” Prefer “Two travelers shrink to punctuation beneath a
+    horseman vast enough to command the sky.”
+  - Reject “A lone gunman stands above you, outlined by a luminous triangle amid
+    smoke.” Prefer “A radiant triangle burns through the smoke, making a solitary
+    gunman seem summoned.”
+  - Reject “You face a vast skull-headed figure; its hanging lantern nearly fills
+    the space between you.” Prefer “A lantern hangs like a captured sun beneath a
+    towering death-mask.”
+  - Reject “A crouched archer separates you from a colossal wolf advancing
+    through burning grass.” Prefer “A crouched archer faces a wolf so vast the
+    burning field feels suddenly narrow.”
 - Do not optimize for different compositions or sensory focuses across the five
   scenes. Every `prose` field must nevertheless have distinct wording. Rephrase
-  a shared strongest visual relationship through syntax, reader position, or
-  emphasis among supported details, and keep each version at least as clear,
-  faithful, and mechanically useful.
+  a shared imaginative thesis through syntax, reader position, or a different
+  transformation of supported details, and keep each version at least as
+  evocative, faithful, and mechanically useful.
 - For an Event card, foreground the depicted action or charged instant implied
   by its name and ability. Ask what is being prevented, completed, revealed,
-  broken, escaped, or otherwise changed in the frame, and capture that visible
-  action before mentioning secondary scenery. The ability helps interpret what
-  the image means; it does not authorize a literal rules paraphrase or an
-  unsupported event.
-- Extrapolate only immediate sensory qualities strongly supported by the image,
-  such as heat from visible fire or wind from visibly blown fabric. Do not add
-  material subjects, props, architecture, terrain, weather, or events outside
-  the frame. A resolution may introduce a plausible response after the player
-  acts; the initial prose may not anticipate that response.
+  broken, escaped, or otherwise changed in the frame, and capture the felt
+  meaning of that instant before cataloguing secondary scenery. The ability
+  helps interpret what the image means; it does not authorize a literal rules
+  paraphrase or an unsupported material event.
+- Extrapolate immediate sensory and imaginative consequences strongly supported
+  by the image: heat from visible fire, pressure from colossal scale, a hush
+  implied by stillness, a horizon that seems claimed, or a field that feels too
+  small. Do not add material subjects, props, architecture, terrain, weather,
+  history, or events outside the frame. A resolution may introduce a plausible
+  material response after the player acts; the initial prose may not anticipate
+  that response.
 - Use these art-fidelity regression checks:
   - For art showing a lone twin-bladed warrior above burning ruins, prefer “A
-    twin-bladed warrior stands above the ruined street as cinders rise around
-    you.” Reject “A weary column gathers beneath a warrior” when no column
-    appears.
+    twin-bladed warrior holds the ruined street above you while cinders climb.”
+    Reject “A weary column gathers beneath a warrior” when no column appears.
   - Reject “A resting runner studies suspended screens” when the art contains
     projections but no resting individual. Do not invent an observer to animate
     an abstract or environmental composition.
@@ -346,11 +364,11 @@ harness commentary.
   world does immediately after the action. Keep game terminology and explicit
   reward text out of it. Do not use the resolution to explain rules, repeat the
   action label, or introduce unrelated lore.
-- Enforce the forbidden-name lexicon across `prose`, `label`, and `resolution`.
-  Do not treat a content word from the source card name as harmless merely
-  because it also names an archetype or visible subject. Use a concrete visual
-  description that is independent of the canonical name. The Markdown heading
-  and canonical names required inside `effect_text` remain unchanged.
+- Keep source-name language from becoming a refrain across `prose`, `label`, and
+  `resolution`. Do not quote the complete name or treat an archetype label as a
+  proper noun. Ordinary words from the name may still describe visible evidence
+  when they are the most evocative choice. The Markdown heading and canonical
+  names required inside `effect_text` remain unchanged.
 - Do not mirror a template's number in the fiction. Four offered cards do not
   imply four figures, sparks, doors, paths, or voices in the scene.
 - Do not translate mechanics into mystical synonyms. Purging is not erasing a

@@ -44,7 +44,7 @@ Return a bare JSON list of five event objects sorted by ascending `rank`:
 [
   {
     "template_pair_id": "pair-1",
-    "prose": "A great bird with wings wreathed in flame towers above you.",
+    "prose": "A great bird makes the burning sky feel small as it towers above you.",
     "actions": [
       {
         "label": "Call Others to Witness",
@@ -94,7 +94,7 @@ Markdown:
 
 ![Source artwork for Blazing Emberwing](</absolute/path/to/source-image>)
 
-1. A great bird with wings wreathed in flame towers above you.
+1. A great bird makes the burning sky feel small as it towers above you.
    - ***Call Others to Witness*** — Take any number of Spirit Animal cards from 4 random choices
      - **Response:** Distant figures gather beneath the burning wings.
    - ***Call Down Its Kin*** — Gain one copy of each of 2 random Spirit Animal cards
@@ -215,20 +215,22 @@ using game terminology or repeating `effect_text`.
 
 Score each component from 1–10:
 
-- `scene_quality` (40%): Whether the prose is a coherent, specific, immediately
-  understandable, and materially faithful description of the card's artwork.
-  Score it with mechanics and actions hidden. Every subject, object, setting
-  feature, depicted action, bodily claim, and emotion must be visible or
-  strongly implied by visible evidence. Require an encounter-making relationship
-  among the visible elements and the reader's position, expressed through
-  specific scale, proximity, posture, gaze, motion, stillness, occlusion, or
-  supported sensation. Precise literal prose can score highly when its selection
-  and perspective make that relationship palpable; a factual inventory cannot.
-  Figurative language earns credit only when it clarifies the same concrete
-  relationship. Reject a candidate before scoring if it contains a meaningful
-  word from the source card name, invents material or emotional content, or uses
-  abstraction that merely sounds evocative. Reusing a strong visual focus across
-  distinctly worded scenes does not lower this score; novelty does not raise it.
+- `scene_quality` (40%): Whether the prose is a coherent, specific, evocative,
+  and materially faithful encounter with the card's artwork. Score it with
+  mechanics and actions hidden. Literal subjects, objects, setting features,
+  depicted actions, and physical conditions must be visible or strongly implied.
+  Figurative and experiential language may express the supported mood,
+  sensory pressure, symbolic resemblance, or imaginative consequence of those
+  facts without being literally depicted. Require the prose to transform
+  selected evidence through charged diction, sensory implication, metaphor,
+  comparison, rhythm, omission, or scale. Reject a candidate before scoring if
+  it reads as stock-image alt text—even accurate, specific alt text—contains a
+  quoted source name or distinctive name fragment used as a proper noun,
+  invents a material fact, or uses generic abstraction that could fit unrelated
+  fantasy art. An ordinary word remains available when it independently gives
+  the strongest account of visible evidence. Reusing a strong imaginative
+  thesis across distinctly worded scenes does not lower this score; novelty
+  does not raise it.
 - `action_quality` (15%): Whether both labels are distinct, purposeful things to
   do in the scene and both resolutions are concise, vivid responses.
 - `mechanical_connection` (30%): Whether each label and resolution make its
@@ -240,9 +242,9 @@ Score each component from 1–10:
 - `overall`: The weighted score above, rounded to the nearest integer.
 
 Assign every rank from 1 through 5 exactly once. Higher overall scores outrank
-lower scores; use art fidelity, encounter-making relationship, and immediate
-clarity as the first qualitative tiebreakers, followed by the strength of the
-two complete action chains. Beyond requiring distinct wording for all five
+lower scores; use fidelity of impression and evocative force as the first
+qualitative tiebreakers, followed by the strength of the two complete action
+chains and immediate clarity. Beyond requiring distinct wording for all five
 `prose` fields, do not use prose novelty as a score or tiebreaker. Sort the final
 list from rank 1 through rank 5. Preserve the
 authoritative input pairing through
