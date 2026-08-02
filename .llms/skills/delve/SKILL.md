@@ -38,29 +38,36 @@ validating an encounter.
    substituting different data. Treat the supplied `card_type` and `subtype` as
    authoritative; do not recategorize the art.
 
-4. Read the visual story. Privately note concrete subjects, setting, motion,
-   scale, mood, and relationships. If a claim depends on exact color, measure
-   the image rather than trusting visual color perception.
+4. Read the depicted scene. Privately note concrete subjects, setting, motion,
+   scale, posture, distance, mood, sensory atmosphere, and relationships. If a
+   claim depends on exact color, measure the image rather than trusting visual
+   color perception.
 
 5. Read the card as an archetype, not a named individual. Dreamtides card names
    identify kinds of beings or manifestations: the art depicts *a* blazing
    emberwing, not a person named Emberwing. Do not invent proper names,
    identifiable faces, fixed biographies, named locations, or offscreen lore.
-   Refer naturally to “an emberwing” or “the emberwing.”
+   Prefer ordinary visual descriptions such as “a great bird,” “the
+   flame-wreathed creature,” or “a winged shape.” Use the card name only when it
+   is the clearest wording. As a default, use it in at most one of the five
+   prose fields and omit it entirely when a common description is stronger.
+   Do not repeat the card name mechanically in prose or labels.
 
-6. Set the templates aside and build a private story bank from the art, card
-   name, and archetypal identity. Draft at least eight concrete premises. Give
-   each premise identifiable actors, a comprehensible situation, an unresolved
-   tension, and two plausible things the player could do. Vary the engine of
-   the scene: trust, caretaking, misunderstanding, obstacle, request, discovery,
-   or danger. Do not use imminent catastrophe as the default source of stakes.
-   Do not use template quantities, operations, or reward concepts as story
-   ingredients.
+6. Set the templates aside and build a private scene bank from the art, card
+   name, and archetypal identity. Draft at least eight atmospheric tableaux.
+   Each should place the player before a specific subject in a particular
+   setting and evoke scale, posture or movement, sensory detail, and an implied
+   relationship. Vary composition rather than manufacturing plot: distance,
+   vantage point, gesture, movement, weather, light, stillness, and the player's
+   relationship to the subject. A scene does not need conflict, danger, stakes,
+   a dilemma, a request, a problem, a resolution, or unresolved tension. Do not
+   use template quantities, operations, or reward concepts as scene ingredients.
 
-7. Apply the story-only gate to every candidate. Hide the templates and ask:
-   “Is this a specific, intelligible vignette? Would anyone want to know what
-   happens next?” Reject premises that only sound dreamlike, depend on symbolic
-   word substitution, or exist to disguise a game operation.
+7. Apply the scene-only gate to every candidate. Hide the templates and actions,
+   then ask: “Does this stand alone as a specific, evocative view of the card's
+   world, even if nothing needs fixing?” Reject scenes that merely announce a
+   decision, manufacture a predicament, depend on symbolic word substitution,
+   or exist to disguise a game operation.
 
 8. Infer deck intent from the ability and canonical metadata. Ask what choosing
    this card suggests the player is building toward. Inspect repository tags
@@ -69,11 +76,13 @@ validating an encounter.
    likely deck: one may deepen its synergy while the other offers flexibility,
    conversion, or risk management.
 
-9. Match the five strongest story premises to the five template pairs. Preserve
-   input order and never alter or swap templates. Choose two labels that are
-   genuine responses to the story. Attach the mechanics afterward. A reward
-   may follow a choice by loose thematic association; it does not need to be a
-   literal consequence or be explained by the prose.
+9. Match the five strongest scenes to the five template pairs. Preserve input
+   order and never alter or swap templates. Choose two labels for natural things
+   a person might do in the depicted moment: approach, wait, bow, shield their
+   eyes, call out, follow, listen, or watch. The actions are ways of engaging
+   with the scene, not solutions to a dilemma. Attach the mechanics afterward.
+   A reward may follow an action by loose thematic association; it does not
+   need to be a literal consequence or be explained by the prose.
 
 10. Calibrate mechanical values against the current game. Before choosing a
    count or essence value, inspect relevant economy, pricing, pool, and effect
@@ -81,10 +90,10 @@ validating an encounter.
    each choice. Do not guess a small-looking number in an economy whose units
    operate at a different order of magnitude.
 
-11. Compare all five designs using the story-first contract rubric, then assign
-   unique ranks. Revise weak stories rather than adding mystical language to
-   conceal them. A mechanically noncredible choice still requires revision,
-   but mechanical literalism never raises a story score.
+11. Compare all five designs using the scene-first contract rubric, then assign
+   unique ranks. Revise weak scenes rather than adding mystical language to
+   conceal them. A mechanically noncredible action still requires revision,
+   but mechanical literalism never raises a scene score.
 
 12. Validate the JSON, fix every error, and emit the JSON list with no Markdown
    fence or surrounding commentary:
@@ -100,19 +109,28 @@ validating an encounter.
   the player entered the card, so begin inside the moment.
 - Keep the entire `prose` field near 10–15 words and never above 20. Use more
   than one sentence only when the extra sentence adds real value.
-- Tell a small story, not an illustrated reward. Establish who is present, what
-  is happening, and why the moment is unresolved. Keep game terms such as card,
-  deck, draft, purge, essence, dreamsign, and transfiguration out of the prose.
+- Describe a scene, not a miniature quest or an illustrated reward. Establish
+  what the player encounters and how it feels to stand there. The prose may be
+  wholly observational; nothing needs to be wrong, threatened, requested, or
+  unresolved. Keep game terms such as card, deck, draft, purge, essence,
+  dreamsign, and transfiguration out of the prose.
 - Prefer concrete nouns, observable actions, and simple causal relationships.
   Surreal events are welcome when their internal logic is clear.
 - Extrapolate beyond the frame when useful. Stay faithful to the subject,
-  relationship, and mood rather than mechanically inventorying visible details.
+  relationship, and mood rather than mechanically inventorying visible details
+  or inventing a conflict.
 - Allow wonder, melancholy, danger, uncanniness, and mythic intensity. Avoid
   graphic harm, cruelty, modern slang, mood-breaking comedy, and obvious
   good-versus-evil framing.
-- Make each choice label a 2–4 word narrative act, at most 24 characters. Do
-  not paraphrase the reward. Both labels must be meaningful responses to the
-  situation even when their mechanical effects are hidden.
+- Make each choice label a 2–4 word natural act, at most 24 characters. Do not
+  paraphrase the reward. Both labels must be plausible ways to engage with the
+  scene even when their mechanical effects are hidden; they need not solve or
+  resolve anything.
+- Treat the card name as an archetype label, not a proper noun or mandatory
+  refrain. Prefer varied, concrete descriptions of the visible being or event.
+  As a default, mention the source card name in no more than one prose field
+  across the set, and avoid it entirely when plain visual language is more
+  evocative. Never repeat it in every scene or choice label.
 - Do not mirror a template's number in the fiction. Four offered cards do not
   imply four figures, sparks, doors, paths, or voices in the scene.
 - Do not translate mechanics into mystical synonyms. Purging is not erasing a
@@ -122,12 +140,9 @@ validating an encounter.
   paths, whispers, fragments, and transformations—unless each is a concrete,
   story-bearing part of this particular scene.
 - Avoid generic decision language such as “awaiting your answer,” “offers two
-  paths,” or “asks what you will choose.” Show the predicament itself.
-- Prefer distinct premises and story beats across the set, but never sacrifice
-  clarity or specificity merely to make the stories different.
-- Across the final five, use no more than two premises built chiefly around an
-  approaching fire, storm, predator, pursuer, collapse, or similar external
-  emergency.
+  paths,” or “asks what you will choose.” Show the scene itself.
+- Prefer distinct compositions and sensory moments across the set, but never
+  sacrifice clarity or specificity merely to make the scenes different.
 
 ## Mechanical standards
 
@@ -149,6 +164,6 @@ validating an encounter.
 - Choose conservative values when balance evidence is incomplete, but keep
   them on the live system's scale. Reject an option pair with an obvious
   universal best choice.
-- Never revise good prose to explain an effect. If a story and pair cannot
-  coexist without forced symbolism, assign that story to another pair or accept
-  a looser association between choice and reward.
+- Never revise good prose to explain an effect. If a scene and pair cannot
+  coexist without forced symbolism, assign that scene to another pair or accept
+  a looser association between action and reward.

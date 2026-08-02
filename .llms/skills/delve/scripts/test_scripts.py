@@ -67,7 +67,7 @@ def output() -> list[dict[str, object]]:
         events.append(
             {
                 "template_pair_id": f"pair-{i}",
-                "prose": "A synthetic threshold opens, asking which promise you will carry.",
+                "prose": "A vast silver arch hums softly above the waiting road.",
                 "actions": [
                     {
                         "label": "Gather Warmth",
@@ -85,13 +85,13 @@ def output() -> list[dict[str, object]]:
                     },
                 ],
                 "scores": {
-                    "story_quality": score,
-                    "choice_quality": score,
+                    "scene_quality": score,
+                    "action_quality": score,
                     "archetype_fit": score,
                     "overall": score,
                 },
                 "rank": i,
-                "ranking_rationale": "The synthetic premise maps cleanly to both fixed effects.",
+                "ranking_rationale": "The synthetic scene supports two natural actions and both fixed effects.",
             }
         )
     return events

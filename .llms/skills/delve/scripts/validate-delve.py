@@ -420,14 +420,14 @@ def validate_output(
                 )
 
         scores = require_object(event_obj.get("scores"), f"{event_path}.scores")
-        story_score = require_int(
-            scores.get("story_quality"),
-            f"{event_path}.scores.story_quality",
+        scene_score = require_int(
+            scores.get("scene_quality"),
+            f"{event_path}.scores.scene_quality",
             1,
         )
-        choice_score = require_int(
-            scores.get("choice_quality"),
-            f"{event_path}.scores.choice_quality",
+        action_score = require_int(
+            scores.get("action_quality"),
+            f"{event_path}.scores.action_quality",
             1,
         )
         archetype_score = require_int(
@@ -438,8 +438,8 @@ def validate_output(
             if (
                 key
                 in {
-                    "story_quality",
-                    "choice_quality",
+                    "scene_quality",
+                    "action_quality",
                     "archetype_fit",
                     "overall",
                 }
@@ -447,7 +447,7 @@ def validate_output(
             ):
                 fail(f"{event_path}.scores.{key}", "must be at most 10")
         expected_overall = int(
-            0.6 * story_score + 0.25 * choice_score + 0.15 * archetype_score + 0.5
+            0.6 * scene_score + 0.25 * action_score + 0.15 * archetype_score + 0.5
         )
         if overall != expected_overall:
             fail(
