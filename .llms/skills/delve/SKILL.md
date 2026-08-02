@@ -130,21 +130,30 @@ harness commentary.
 
 6. Set the templates aside and build a private scene bank from the artwork.
    Start with the clearest visible subject, posture, scale, distance, motion,
-   texture, or stillness. Draft only enough candidates to find prose that can
-   support the generated mechanics; one excellent scene may support several
-   template pairs. Candidates may share the same visual focus, sentence shape,
-   or exact prose. Repetition is better than a weaker description written only
-   for variety.
+   texture, or stillness. For each candidate, identify an **encounter-making
+   relationship**: the specific relation among visible elements and the
+   reader's position that makes this moment striking to inhabit. Scale,
+   proximity, posture, gaze, occlusion, motion against stillness, or a supported
+   sensory contrast can provide that relationship. A list of depicted nouns and
+   actions is accurate but insufficient when it does not establish why their
+   arrangement matters from inside the scene.
+
+   Draft only enough candidates to find prose that can support the generated
+   mechanics; one excellent scene may support several template pairs.
+   Candidates may share the same visual focus, sentence shape, or exact prose.
+   Repetition is better than a weaker description written only for variety.
 
    Use figurative language only when it makes a visible relationship clearer or
-   more immediate. A precise literal observation is fully acceptable. Do not
-   require a metaphor, personification, emotional conclusion, or different
-   perceptual center from every candidate. A scene does not need conflict,
-   danger, stakes, a dilemma, a request, a problem, a resolution, or unresolved
-   tension. Do not use template quantities, operations, reward concepts, or
-   needed effect recipients as scene ingredients.
+   more immediate. Figurative language is optional, but evocative force is not:
+   precise literal prose must still use selection, perspective, and relationship
+   to make the encounter palpable. Do not require a metaphor, personification,
+   emotional conclusion, or different perceptual center from every candidate. A
+   scene does not need conflict, danger, stakes, a dilemma, a request, a problem,
+   a resolution, or unresolved tension. Do not use template quantities,
+   operations, reward concepts, or needed effect recipients as scene
+   ingredients.
 
-7. Apply five gates to every candidate with templates and actions hidden:
+7. Apply six gates to every candidate with templates and actions hidden:
    - **Name gate:** Does it contain a forbidden-name word? Reject it if so,
      even when that word also works as an ordinary noun.
    - **Fidelity gate:** Can every material subject, object, setting feature,
@@ -152,16 +161,22 @@ harness commentary.
      added companion, crowd, creature, prop, structure, weather event, or
      ongoing incident. Do not promote ambiguous screens, reflections,
      silhouettes, or debris into people or formations.
+   - **Encounter gate:** Does the line establish a specific relationship among
+     the visible elements and the reader's position, or does it merely catalog
+     what is present? Require a concrete answer to “What is striking about being
+     here?” without inventing plot, danger, or a subject's feelings.
    - **Clarity gate:** Can an ordinary reader immediately connect every clause
      to something visible or strongly implied in this image? Reject language
      that merely sounds evocative, requires interpretation to recover the
-     picture, or could fit unrelated fantasy art. Literal description passes
-     when it establishes a specific encounter rather than a generic inventory.
+     picture, or could fit unrelated fantasy art.
    - **Figurative-language gate:** If the line uses a metaphor,
      personification, or abstraction, does it clarify a concrete visual
-     relationship? Remove the figure of speech when the sentence becomes
-     equally meaningful or clearer without it. Reject decorative profundity,
-     emotional arithmetic, and material claims smuggled in as poetry.
+     relationship? Privately paraphrase the figure of speech as a visible fact
+     plus its supported experiential consequence. Reject it if that paraphrase
+     is vague or impossible. Then remove the figure of speech: keep it only if
+     the sentence loses meaningful scale, intimacy, tension, rhythm, or
+     stillness—not merely prettiness. Reject decorative profundity, emotional
+     arithmetic, and material claims smuggled in as poetry.
    - **Embodiment gate:** Does the prose assign the reader a body, clothing,
      posture, or emotion that the artwork does not establish from the reader's
      point of view? Second person places the reader in the scene; it does not
@@ -212,10 +227,11 @@ harness commentary.
    operate at a different order of magnitude.
 
 12. Compare all five designs using the contract rubric, then assign unique
-    ranks. Rank art fidelity, immediate clarity, and mechanical connection above
-    novelty or ornament. Score mechanical connection by the weaker of the two
-    action chains, not their average. Revise any chain below 7/10. Repeated
-    prose loses no points, and distinct prose earns no points by itself.
+    ranks. Rank art fidelity, encounter-making relationship, immediate clarity,
+    and mechanical connection above novelty or ornament. Score mechanical
+    connection by the weaker of the two action chains, not their average. Revise
+    any chain below 7/10. Repeated prose loses no points, and distinct prose
+    earns no points by itself.
 
 13. Sort the five completed event objects by ascending `rank` as a final
     readability pass, so rank 1 appears first and rank 5 last. Keep each event's
@@ -262,22 +278,26 @@ harness commentary.
   prose. Describe the moment inside the frame rather than a larger inferred
   world. If the art shows a lone figure, keep the figure alone; do not add a
   column, crowd, companion, or hidden population to service a Character effect.
-- Prefer direct concrete nouns and observable relationships. Figurative
-  language is optional; when used, anchor it in visible forms, posture, scale,
-  distance, motion, stillness, or strongly implied sensation. It must sharpen
-  the reader's understanding of the frame, not merely make the sentence sound
-  literary, and it may not add a material subject, event, history, physique, or
-  emotion.
+- Prefer direct concrete nouns and observable relationships. Every scene must
+  do more than inventory the image: select and arrange details so the reader
+  immediately experiences a specific relation of scale, proximity, posture,
+  gaze, motion, stillness, occlusion, or supported sensation. Figurative
+  language is optional; when used, it must sharpen that relationship rather
+  than merely make the sentence sound literary, and it may not add a material
+  subject, event, history, physique, or emotion.
 - Reject generic inventories such as “A person and an animal are outside.”
-  Prefer the most specific visible relationship in plain language: “Before you,
-  a bundled figure reaches toward a rat beneath ruined walls.” The figure,
-  posture, rat, and setting remain concrete without relying on vague
+  Prefer a specific visible relationship in plain language: “A bundled figure
+  reaches toward a rat beneath ruined walls that dwarf them both.” The figure,
+  posture, rat, setting, and scale create an encounter without vague
   personification.
-- For art showing a person beside a colossal bird, prefer “A vast bird bows
-  toward you, and silence bridges the difference.” Reject “A bird encloses your
-  slight frame” when neither enclosure nor the reader's physique is established.
-  Reject “distant lights forget their edges”: visible defocus does not make that
-  personification informative.
+- For art showing a person beside a colossal bird, both “A colossal bird lowers
+  its beak until it nearly touches the figure beside it” and “A vast bird bows
+  toward you, and silence bridges the difference” work. The first is literal
+  but gains force from scale and proximity; the second compresses that same
+  visible relationship into a supported sensory impression. Reject “A bird
+  encloses your slight frame” when neither enclosure nor the reader's physique
+  is established. Reject “distant lights forget their edges”: visible defocus
+  does not make that personification informative.
 - Do not optimize for syntactic, compositional, or sensory variety across the
   five scenes. Reuse the strongest visual relationship and similar or identical
   wording whenever they support the mechanics. Vary prose only when the new

@@ -219,10 +219,13 @@ Score each component from 1–10:
   understandable, and materially faithful description of the card's artwork.
   Score it with mechanics and actions hidden. Every subject, object, setting
   feature, depicted action, bodily claim, and emotion must be visible or
-  strongly implied by visible evidence. A precise literal observation is fully
-  acceptable. Figurative language earns credit only when it clarifies a visible
-  relationship such as posture, scale, distance, motion, or stillness. Reject a
-  candidate before scoring if it is a generic inventory, contains a meaningful
+  strongly implied by visible evidence. Require an encounter-making relationship
+  among the visible elements and the reader's position, expressed through
+  specific scale, proximity, posture, gaze, motion, stillness, occlusion, or
+  supported sensation. Precise literal prose can score highly when its selection
+  and perspective make that relationship palpable; a factual inventory cannot.
+  Figurative language earns credit only when it clarifies the same concrete
+  relationship. Reject a candidate before scoring if it contains a meaningful
   word from the source card name, invents material or emotional content, or uses
   abstraction that merely sounds evocative. Reusing strong prose across events
   does not lower this score; novelty does not raise it.
@@ -237,10 +240,11 @@ Score each component from 1–10:
 - `overall`: The weighted score above, rounded to the nearest integer.
 
 Assign every rank from 1 through 5 exactly once. Higher overall scores outrank
-lower scores; use art fidelity and immediate clarity as the first qualitative
-tiebreakers, followed by the strength of the two complete action chains. Do not
-use prose distinctness as a score or tiebreaker. Sort the final list from rank 1
-through rank 5. Preserve the authoritative input pairing through
+lower scores; use art fidelity, encounter-making relationship, and immediate
+clarity as the first qualitative tiebreakers, followed by the strength of the
+two complete action chains. Do not use prose distinctness as a score or
+tiebreaker. Sort the final list from rank 1 through rank 5. Preserve the
+authoritative input pairing through
 `template_pair_id`, and preserve the two template actions in their input order
 within each event. The `ranking_rationale` is one concise sentence explaining
 the design's score and rank.
