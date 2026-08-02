@@ -107,15 +107,23 @@ harness commentary.
    mood, sensory atmosphere, and relationships. If a claim depends on exact
    color, measure the image rather than trusting visual color perception.
 
-5. Read the card as an archetype, not a named individual. Dreamtides card names
-   identify kinds of beings or manifestations: the art depicts *a* blazing
-   emberwing, not a person named Emberwing. Do not invent proper names,
-   identifiable faces, fixed biographies, named locations, or offscreen lore.
-   Prefer ordinary visual descriptions such as “a great bird,” “the
-   flame-wreathed creature,” or “a winged shape.” Use the card name only when it
-   is the clearest wording. As a default, use it in at most one of the five
-   prose fields and omit it entirely when a common description is stronger.
-   Do not repeat the card name mechanically in prose or labels.
+5. Interpret the card according to its canonical type. Read a Character as an
+   archetype, not a named individual: the art depicts *a* blazing emberwing,
+   not a person named Emberwing. For an Event, treat the name and ability as the
+   central action, change, or condition that gives the depicted moment meaning.
+   Let that action organize the prose rather than exhaustively cataloguing
+   secondary visual elements. An Event named `Abolish` with an ability that
+   prevents a played card should feel like interruption, refusal, or something
+   arrested before completion; a flock in its artwork may support that moment
+   without becoming the subject of every description. This is an interpretive
+   lens, not permission to add objects, actors, outcomes, or rules text absent
+   from the image. Do not invent proper names, identifiable faces, fixed
+   biographies, named locations, or offscreen lore. Prefer ordinary visual
+   descriptions such as “a great bird,” “the flame-wreathed creature,” or “a
+   winged shape.” Use the card name only when it is the clearest wording. As a
+   default, use it in at most one of the five prose fields and omit it entirely
+   when a common description is stronger. Do not repeat the card name
+   mechanically in prose or labels.
 
 6. Set the templates aside and build a private scene bank from the artwork.
    Draft at least eight poetic descriptions of the depicted moment. Vary what
@@ -225,6 +233,12 @@ harness commentary.
   sensory immediacy, and fresh comparisons grounded in visible forms. Do not
   settle for a flat inventory of objects, but do not mistake added objects for
   poetic richness.
+- For an Event card, foreground the depicted action or charged instant implied
+  by its name and ability. Ask what is being prevented, completed, revealed,
+  broken, escaped, or otherwise changed in the frame, and capture that poetic
+  action before mentioning secondary scenery. The ability helps interpret what
+  the image means; it does not authorize a literal rules paraphrase or an
+  unsupported event.
 - Extrapolate only immediate sensory qualities strongly supported by the image,
   such as heat from visible fire or wind from visibly blown fabric. Do not add
   material subjects, props, architecture, terrain, weather, or events outside
