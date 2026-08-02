@@ -4,6 +4,8 @@ import type { GravokGateId } from "../../types/gamble";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
 import {
   PLAYING_CARD_FLIP_DURATION_MS,
+  PLAYING_CARD_DESIGN,
+  PlayingCard,
   WagerPrizeCard,
   type PlayingCardRank,
   type PlayingCardSuit,
@@ -13,6 +15,7 @@ import {
   RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
   RadialAnnouncement,
 } from "../components/status/RadialAnnouncement";
+import { Dreamsign } from "../components/hud/Dreamsign";
 import type { ArtRef } from "../primitives/art";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
@@ -63,7 +66,8 @@ export interface GambleResultView {
   pendingDreamsignReplacement: boolean;
 }
 
-export interface GambleSiteView {
+export interface GravokWagerSiteView {
+  gameId: "gravok-three-gate-wager";
   /** Stable journey site id. */
   siteId: string;
   /** Current dreamscape scene art behind the site, if resolved. */
@@ -93,6 +97,43 @@ export interface GambleSiteView {
   replacement: DreamsignReplacementView | null;
 }
 
+export interface ProgressiveDrawResultView {
+  /** Stable result identity for animation replay. */
+  id: string;
+  /** One-based attempt that produced this card. */
+  attemptNumber: 1 | 2 | 3 | 4;
+  card: {
+    rank: PlayingCardRank;
+    suit: PlayingCardSuit;
+  };
+  won: boolean;
+  resultSettled: boolean;
+  terminal: boolean;
+  /** Present only after the winning outcome has settled. */
+  rewardDreamsign: DreamsignData | null;
+  pendingDreamsignReplacement: boolean;
+}
+
+export interface ProgressiveDrawSiteView {
+  gameId: "tidemark-progressive-draw";
+  siteId: string;
+  scene: ArtRef | null;
+  isFarpoint: boolean;
+  runtimeReady: boolean;
+  /** Only the currently unlocked attempt; future attempts stay undisclosed. */
+  nextDraw: {
+    attemptNumber: 1 | 2 | 3 | 4;
+    cost: number;
+    canAfford: boolean;
+    available: boolean;
+  } | null;
+  guide: GuideGalleryGuideView;
+  result: ProgressiveDrawResultView | null;
+  replacement: DreamsignReplacementView | null;
+}
+
+export type GambleSiteView = GravokWagerSiteView | ProgressiveDrawSiteView;
+
 export interface GambleSiteScreenProps {
   /** View-model rendered by the pure screen. */
   view: GambleSiteView;
@@ -104,6 +145,10 @@ export interface GambleSiteScreenProps {
   onOutcomeShown: () => void;
   /** Prepare a fresh committed draw after the result animation. */
   onPlayAgain: () => void;
+  /** Buy and reveal the next Progressive Draw attempt. */
+  onDrawProgressive: () => void;
+  /** Settle a Progressive Draw result when its outcome appears. */
+  onProgressiveOutcomeShown: () => void;
   /** Replace one UUID-identified held Dreamsign after a jackpot win. */
   onReplaceDreamsign: (dreamsignId: string) => void;
 }
@@ -131,7 +176,7 @@ function GambleGateCard({
   layout: "mobile" | "desktop";
   presentation: GambleGatePresentation;
   revealStarted: boolean;
-  drawnCard: GambleSiteView["card"];
+  drawnCard: GravokWagerSiteView["card"];
   gridColumn: number;
 }) {
   const prizeCard = (
@@ -192,7 +237,7 @@ function GambleBetButton({
   onChooseGate,
 }: {
   gate: GambleGateView;
-  view: GambleSiteView;
+  view: GravokWagerSiteView;
   layout: "mobile" | "desktop";
   wagerLocked: boolean;
   selected: boolean;
@@ -272,8 +317,44 @@ export function GambleSiteScreen({
   onLeave,
   onOutcomeShown,
   onPlayAgain,
+  onDrawProgressive,
+  onProgressiveOutcomeShown,
   onReplaceDreamsign,
 }: GambleSiteScreenProps) {
+  if (view.gameId === "tidemark-progressive-draw") {
+    return (
+      <ProgressiveDrawScreen
+        view={view}
+        onDraw={onDrawProgressive}
+        onLeave={onLeave}
+        onOutcomeShown={onProgressiveOutcomeShown}
+        onReplaceDreamsign={onReplaceDreamsign}
+      />
+    );
+  }
+  return (
+    <GravokWagerScreen
+      view={view}
+      onChooseGate={onChooseGate}
+      onLeave={onLeave}
+      onOutcomeShown={onOutcomeShown}
+      onPlayAgain={onPlayAgain}
+      onReplaceDreamsign={onReplaceDreamsign}
+    />
+  );
+}
+
+function GravokWagerScreen({
+  view,
+  onChooseGate,
+  onLeave,
+  onOutcomeShown,
+  onPlayAgain,
+  onReplaceDreamsign,
+}: Omit<
+  GambleSiteScreenProps,
+  "view" | "onDrawProgressive" | "onProgressiveOutcomeShown"
+> & { view: GravokWagerSiteView }) {
   const reduceMotion = useReducedMotion() === true;
   const [revealStarted, setRevealStarted] = useState(false);
   const [outcomeVisible, setOutcomeVisible] = useState(false);
@@ -569,6 +650,338 @@ export function GambleSiteScreen({
                   label="Choose Replacement"
                   variant="accent"
                   testId="gamble-open-replacement"
+                  onPress={() => setReplacementVisible(true)}
+                />
+              )}
+          </main>
+        );
+      }}
+    >
+      {replacementVisible && view.replacement !== null && (
+        <DreamsignReplacementDialog
+          view={view.replacement}
+          cancelLabel="Not Yet"
+          closeLabel="Close replacement choice"
+          onCancel={() => setReplacementVisible(false)}
+          onReplace={onReplaceDreamsign}
+        />
+      )}
+    </GuideGallerySiteLayout>
+  );
+}
+
+function ProgressiveDrawScreen({
+  view,
+  onDraw,
+  onLeave,
+  onOutcomeShown,
+  onReplaceDreamsign,
+}: {
+  view: ProgressiveDrawSiteView;
+  onDraw: () => void;
+  onLeave: () => void;
+  onOutcomeShown: () => void;
+  onReplaceDreamsign: (dreamsignId: string) => void;
+}) {
+  const reduceMotion = useReducedMotion() === true;
+  const [revealedResultId, setRevealedResultId] = useState<string | null>(null);
+  const [outcomeResultId, setOutcomeResultId] = useState<string | null>(null);
+  const [roundActionsVisible, setRoundActionsVisible] = useState(false);
+  const [replacementVisible, setReplacementVisible] = useState(false);
+  const settledResultIdRef = useRef<string | undefined>(undefined);
+  const onOutcomeShownRef = useRef(onOutcomeShown);
+  const resultId = view.result?.id;
+
+  useEffect(() => {
+    onOutcomeShownRef.current = onOutcomeShown;
+  }, [onOutcomeShown]);
+
+  useEffect(() => {
+    setRoundActionsVisible(false);
+    setReplacementVisible(false);
+    if (resultId === undefined) {
+      setRevealedResultId(null);
+      setOutcomeResultId(null);
+      return;
+    }
+    const revealDelay = reduceMotion
+      ? REDUCED_MOTION_DELAY_MS
+      : BET_SETTLE_DELAY_MS;
+    const outcomeDelay = reduceMotion
+      ? REDUCED_MOTION_DELAY_MS
+      : BET_SETTLE_DELAY_MS + PLAYING_CARD_FLIP_DURATION_MS;
+    const revealTimeout = window.setTimeout(
+      () => setRevealedResultId(resultId),
+      revealDelay,
+    );
+    const outcomeTimeout = window.setTimeout(() => {
+      setOutcomeResultId(resultId);
+      if (settledResultIdRef.current !== resultId) {
+        settledResultIdRef.current = resultId;
+        onOutcomeShownRef.current();
+      }
+    }, outcomeDelay);
+    return () => {
+      window.clearTimeout(revealTimeout);
+      window.clearTimeout(outcomeTimeout);
+    };
+  }, [reduceMotion, resultId]);
+
+  useEffect(() => {
+    const result = view.result;
+    if (
+      result === null ||
+      outcomeResultId !== result.id ||
+      !result.resultSettled
+    ) {
+      return;
+    }
+    const timeout = window.setTimeout(() => {
+      setOutcomeResultId(null);
+      if (result.pendingDreamsignReplacement) {
+        setReplacementVisible(true);
+      } else {
+        setRoundActionsVisible(true);
+      }
+    }, RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS);
+    return () => window.clearTimeout(timeout);
+  }, [outcomeResultId, view.result]);
+
+  useEffect(() => {
+    if (
+      !replacementVisible ||
+      view.result === null ||
+      view.replacement !== null ||
+      view.result.pendingDreamsignReplacement ||
+      !view.result.resultSettled
+    ) {
+      return;
+    }
+    setReplacementVisible(false);
+    setRoundActionsVisible(true);
+  }, [replacementVisible, view.replacement, view.result]);
+
+  return (
+    <GuideGallerySiteLayout
+      siteId={view.siteId}
+      scene={view.scene}
+      guide={view.guide}
+      screenTestId="cumulus-gamble-site-screen"
+      guideArtTestId="cumulus-gamble-guide-art"
+      speechAnchorTestId="cumulus-gamble-speech-anchor"
+      speechBubbleTestId="cumulus-gamble-speech-bubble"
+      renderGallery={(layout) => {
+        const result = view.result;
+        const resultRevealed =
+          result !== null && revealedResultId === result.id;
+        const outcomeVisible =
+          result !== null && outcomeResultId === result.id;
+        const rewardVisible =
+          result?.won === true &&
+          result.resultSettled &&
+          result.rewardDreamsign !== null;
+        const cardSize = layout === "desktop" ? "wager" : "wagerCompact";
+        const dreamsignSize = PLAYING_CARD_DESIGN.sizes[cardSize].square;
+        return (
+          <main
+            data-gamble-wager-region=""
+            data-gamble-game={view.gameId}
+            data-gamble-layout={layout}
+            data-gamble-farpoint={view.isFarpoint ? "true" : "false"}
+            style={{
+              position: "relative",
+              zIndex: 10,
+              width: "100%",
+              maxWidth:
+                layout === "desktop"
+                  ? DESKTOP_GAMBLE_REGION_MAX_WIDTH
+                  : undefined,
+              height: "100%",
+              minHeight: 0,
+              justifySelf: "center",
+              alignSelf: "center",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap:
+                layout === "desktop"
+                  ? token("--space-4")
+                  : token("--space-2"),
+              boxSizing: "border-box",
+              padding:
+                layout === "desktop"
+                  ? token("--space-6")
+                  : token("--space-2"),
+              pointerEvents: "auto",
+            }}
+          >
+            <section
+              aria-label="Progressive draw"
+              data-progressive-draw-stage=""
+              style={{
+                position: "relative",
+                width: "100%",
+                display: "grid",
+                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                gap:
+                  layout === "desktop"
+                    ? token("--space-4")
+                    : token("--space-2"),
+                alignItems: "center",
+                justifyItems: "center",
+              }}
+            >
+              {outcomeVisible && result !== null && (
+                <div
+                  data-progressive-outcome=""
+                  style={{
+                    position: "relative",
+                    gridColumn: 1,
+                    gridRow: 1,
+                    width: "100%",
+                    height: "100%",
+                    pointerEvents: "none",
+                  }}
+                >
+                  <RadialAnnouncement
+                    announcementId={result.id}
+                    headline={result.won ? "Won" : "Miss"}
+                    tone={result.won ? "reward" : "danger"}
+                    size={layout === "mobile" ? "mini" : "wager"}
+                    duration="extended"
+                  />
+                </div>
+              )}
+              <div
+                data-progressive-draw-card=""
+                style={{ gridColumn: 2, gridRow: 1 }}
+              >
+                <PlayingCard
+                  rank={result?.card.rank ?? "A"}
+                  suit={result?.card.suit ?? "spades"}
+                  size={cardSize}
+                  face={resultRevealed ? "front" : "back"}
+                />
+              </div>
+              {rewardVisible && result.rewardDreamsign !== null && (
+                <motion.div
+                  key={result.id}
+                  data-progressive-dreamsign-reward=""
+                  initial={reduceMotion ? false : { opacity: 0, scale: 0.72 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    duration: FADE_DURATION_SECONDS,
+                    ease: "easeOut",
+                  }}
+                  style={{ gridColumn: 3, gridRow: 1 }}
+                >
+                  <Dreamsign
+                    dreamsign={result.rewardDreamsign}
+                    sizePx={dreamsignSize}
+                    variant="revelation"
+                    testid="progressive-dreamsign-reward"
+                  />
+                </motion.div>
+              )}
+            </section>
+
+            <div
+              data-progressive-actions={
+                roundActionsVisible ? "visible" : "hidden"
+              }
+              style={{
+                width: "100%",
+                display: "grid",
+                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                gap:
+                  layout === "desktop"
+                    ? token("--space-4")
+                    : token("--space-2"),
+                justifyItems: "center",
+              }}
+            >
+              {result === null && view.nextDraw !== null ? (
+                <div style={{ gridColumn: 2 }}>
+                  <GlassButton
+                    label="Draw"
+                    accessibilityLabel={`Draw attempt ${String(view.nextDraw.attemptNumber)} for ${String(view.nextDraw.cost)} Essence`}
+                    essenceCost={view.nextDraw.cost}
+                    essenceCostStyle="separated"
+                    variant="accent"
+                    disabled={
+                      !view.runtimeReady ||
+                      !view.nextDraw.available ||
+                      !view.nextDraw.canAfford
+                    }
+                    testId="gamble-progressive-draw"
+                    onPress={onDraw}
+                  />
+                </div>
+              ) : roundActionsVisible ? (
+                <div
+                  data-progressive-round-action-group=""
+                  style={{
+                    gridColumn: "1 / span 3",
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap:
+                      layout === "desktop"
+                        ? token("--space-4")
+                        : token("--space-2"),
+                  }}
+                >
+                  {view.nextDraw !== null && (
+                    <GlassButton
+                      label="Draw"
+                      accessibilityLabel={`Draw attempt ${String(view.nextDraw.attemptNumber)} for ${String(view.nextDraw.cost)} Essence`}
+                      essenceCost={view.nextDraw.cost}
+                      essenceCostStyle="separated"
+                      variant="accent"
+                      disabled={
+                        !view.nextDraw.available || !view.nextDraw.canAfford
+                      }
+                      testId="gamble-progressive-draw-again"
+                      onPress={onDraw}
+                    />
+                  )}
+                  <GlassButton
+                    label="Leave"
+                    testId="gamble-progressive-leave-after-draw"
+                    onPress={onLeave}
+                  />
+                </div>
+              ) : null}
+            </div>
+
+            {result === null && (
+              <div
+                data-gamble-leave-slot=""
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <GlassButton
+                  label="Leave"
+                  testId="gamble-progressive-leave"
+                  onPress={onLeave}
+                />
+              </div>
+            )}
+            {result?.pendingDreamsignReplacement === true &&
+              !replacementVisible &&
+              !outcomeVisible && (
+                <GlassButton
+                  label="Choose Replacement"
+                  variant="accent"
+                  testId="gamble-progressive-open-replacement"
                   onPress={() => setReplacementVisible(true)}
                 />
               )}

@@ -17,7 +17,7 @@ import type {
   TransfigurationType,
 } from "../types/journey";
 import type { DraftState } from "../types/draft";
-import type { GravokGateId } from "../types/gamble";
+import type { GambleGameId, GravokGateId } from "../types/gamble";
 import { deriveEntryIdCounter } from "./deck-entry-ids";
 import type {
   MerchantAcceptRequest,
@@ -37,7 +37,10 @@ export interface JourneyMutations {
   rerollDreamAvatarOffer: () => void;
   completeSite: (siteId: string, source: string) => void;
   /** Materialize the shared Three-Gate Wager deck commitment and Dreamsign. */
-  ensureGambleSiteRuntime: (siteId: string) => void;
+  ensureGambleSiteRuntime: (
+    siteId: string,
+    gambleGameId?: GambleGameId,
+  ) => void;
   /** Materialize the shared encounter and every randomized follow-up offer. */
   ensureExplorationSiteRuntime: (siteId: string) => void;
   /** Resolve one authored choice and its optional card-selection payload. */
@@ -57,6 +60,18 @@ export interface JourneyMutations {
   ) => void;
   /** Replace a held Dreamsign after a jackpot win at the collection cap. */
   replaceGravokWagerDreamsign: (
+    siteId: string,
+    replacedDreamsignId: string,
+  ) => void;
+  /** Buy and reveal the next Progressive Draw attempt. */
+  drawTidemarkProgressive: (siteId: string) => void;
+  /** Settle the current Progressive Draw outcome after its card reveal. */
+  settleTidemarkProgressive: (
+    siteId: string,
+    shuffleCommitment: string,
+  ) => void;
+  /** Replace a held Dreamsign after a Progressive Draw win at the cap. */
+  replaceTidemarkProgressiveDreamsign: (
     siteId: string,
     replacedDreamsignId: string,
   ) => void;

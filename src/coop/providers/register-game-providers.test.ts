@@ -309,17 +309,19 @@ describe("registerGameProviders (real content providers)", () => {
     expect(gambleSiteId).toBeDefined();
     if (gambleSiteId !== undefined) {
       const gambleRuntime = first.finalState.journey.siteRuntime[gambleSiteId];
-      expect(gambleRuntime).toMatchObject({
-        kind: "gamble",
-        gameId: "gravok-three-gate-wager",
-        wagerCost: 50,
-        result: null,
-      });
+      expect(gambleRuntime).toMatchObject({ kind: "gamble", result: null });
       if (gambleRuntime?.kind === "gamble") {
-        expect(gambleRuntime.shuffleCommitment).toMatch(/^[0-9a-f]{16}$/);
-        expect(gambleRuntime.dreamsignCandidateIds).toContain(
-          gambleRuntime.rewardDreamsign?.id,
-        );
+        if (gambleRuntime.gameId === "gravok-three-gate-wager") {
+          expect(gambleRuntime.wagerCost).toBe(50);
+          expect(gambleRuntime.shuffleCommitment).toMatch(/^[0-9a-f]{16}$/);
+          expect(gambleRuntime.dreamsignCandidateIds).toContain(
+            gambleRuntime.rewardDreamsign?.id,
+          );
+        } else {
+          expect(gambleRuntime.shuffleCommitments).toHaveLength(4);
+          expect(gambleRuntime.committedCards).toHaveLength(4);
+          expect(gambleRuntime.strongPoolSize).toBeGreaterThan(0);
+        }
         expect(gambleRuntime.rewardDreamsign?.id).toBeDefined();
       }
     }
@@ -611,6 +613,101 @@ function makeMerchantFixture(): {
   });
   return { journey, content, site };
 }
+
+describe("createSiteContentProvider — Gamble", () => {
+  it("chooses either game randomly unless a game is forced", () => {
+    const fixture = makeMerchantFixture();
+    const site = makeMerchantTestSite({ id: "gamble-site", type: "Gamble" });
+    const journey = {
+      ...fixture.journey,
+      remainingDreamsignPool: fixture.content.dreamsignTemplates.map(
+        (template) => template.id,
+      ),
+    };
+    const provider = createSiteContentProvider(fixture.content);
+
+    const randomThreeGate = provider.openSite({
+      journey,
+      site,
+      rng: () => 0,
+    });
+    const randomProgressive = provider.openSite({
+      journey,
+      site,
+      rng: () => 0.999,
+    });
+    const forcedThreeGate = provider.openSite({
+      journey,
+      site,
+      rng: () => 0.999,
+      gambleGameId: "gravok-three-gate-wager",
+    });
+    const forcedProgressive = provider.openSite({
+      journey,
+      site,
+      rng: () => 0,
+      gambleGameId: "tidemark-progressive-draw",
+    });
+
+    expect(randomThreeGate?.runtime).toMatchObject({
+      kind: "gamble",
+      gameId: "gravok-three-gate-wager",
+    });
+    expect(randomProgressive?.runtime).toMatchObject({
+      kind: "gamble",
+      gameId: "tidemark-progressive-draw",
+    });
+    expect(forcedThreeGate?.runtime).toMatchObject({
+      kind: "gamble",
+      gameId: "gravok-three-gate-wager",
+    });
+    expect(forcedProgressive?.runtime).toMatchObject({
+      kind: "gamble",
+      gameId: "tidemark-progressive-draw",
+    });
+  });
+
+  it("selects the Progressive Draw reward uniformly from the strongest 50", () => {
+    const fixture = makeMerchantFixture();
+    const templates = Array.from({ length: 55 }, (_value, index) => {
+      const id = `dsign-${String(index).padStart(3, "0")}`;
+      return makeMerchantTestDreamsignTemplate({ id, name: `Sign ${String(index)}` });
+    });
+    const profiles = new Map(
+      templates.map((template) => [
+        template.id,
+        makeMerchantTestDreamsignProfile({ id: template.id }),
+      ]),
+    );
+    const content = makeMerchantTestContent({
+      cards: [...fixture.content.cardDatabase.values()],
+      dreamsignTemplates: templates,
+      dreamsignProfiles: profiles,
+    });
+    const journey = {
+      ...fixture.journey,
+      remainingDreamsignPool: templates.map((template) => template.id),
+    };
+
+    const result = createSiteContentProvider(content).openSite({
+      journey,
+      site: makeMerchantTestSite({ id: "gamble-site", type: "Gamble" }),
+      rng: () => 0.999,
+      gambleGameId: "tidemark-progressive-draw",
+    });
+
+    expect(result?.runtime.kind).toBe("gamble");
+    if (
+      result?.runtime.kind !== "gamble" ||
+      result.runtime.gameId !== "tidemark-progressive-draw"
+    ) {
+      return;
+    }
+    expect(result.runtime.dreamsignCandidateScores).toHaveLength(55);
+    expect(result.runtime.strongPoolSize).toBe(50);
+    expect(result.runtime.rewardDreamsign?.id).toBe("dsign-049");
+  });
+});
 
 describe("registerGameProviders — merchant resolution", () => {
   const fixture = makeMerchantFixture();

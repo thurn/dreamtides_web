@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { GambleSiteScreen } from "../../cumulus/screens/GambleSiteScreen";
 import { useJourney } from "../../state/journey-context";
-import type { GravokGateId } from "../../types/gamble";
+import type { GambleGameId, GravokGateId } from "../../types/gamble";
 import {
   logGamblePrepared,
   logGambleReplacement,
@@ -14,7 +14,13 @@ import {
   resolveGambleGuide,
 } from "./gamble-site-view-model";
 
-export function GambleSiteScreenAdapter({ siteId }: { siteId: string }) {
+export function GambleSiteScreenAdapter({
+  siteId,
+  gambleGameId,
+}: {
+  siteId: string;
+  gambleGameId: GambleGameId | null;
+}) {
   const { state, journeyContent, mutations } = useJourney();
   const node = state.currentDreamscape === null
     ? null
@@ -29,26 +35,24 @@ export function GambleSiteScreenAdapter({ siteId }: { siteId: string }) {
   const view = useMemo(
     () => site === null
       ? null
-      : buildGambleSiteView({
-          state,
-          sceneNode: node,
-          site,
-          guide,
-        }),
+      : buildGambleSiteView({ state, sceneNode: node, site, guide }),
     [guide, node, site, state],
   );
 
   useEffect(() => {
     if (site === null) return;
-    mutations.ensureGambleSiteRuntime(site.id);
+    mutations.ensureGambleSiteRuntime(
+      site.id,
+      gambleGameId ?? undefined,
+    );
     logGambleSiteEntered(site);
-  }, [mutations, site]);
+  }, [gambleGameId, mutations, site]);
 
   useEffect(() => {
     if (runtime === null || view === null) return;
-    logGamblePrepared(siteId, runtime, view.gates);
-    logGambleResolved(siteId, runtime, view.gates, view.result?.id);
-    logGambleSettled(siteId, runtime, view.result?.id);
+    logGamblePrepared(siteId, runtime, view);
+    logGambleResolved(siteId, runtime, view);
+    logGambleSettled(siteId, runtime, view);
   }, [runtime, siteId, view]);
 
   const chooseGate = useCallback(
@@ -56,24 +60,45 @@ export function GambleSiteScreenAdapter({ siteId }: { siteId: string }) {
     [mutations, siteId],
   );
   const complete = useCallback(
-    () => mutations.completeSite(siteId, "gravok_three_gate_wager"),
-    [mutations, siteId],
+    () => mutations.completeSite(siteId, runtime?.gameId ?? "gamble"),
+    [mutations, runtime?.gameId, siteId],
   );
-  const settle = useCallback(() => {
-    if (runtime === null) return;
+  const settleGravok = useCallback(() => {
+    if (runtime?.gameId !== "gravok-three-gate-wager") return;
     mutations.settleGravokWager(siteId, runtime.shuffleCommitment);
   }, [mutations, runtime, siteId]);
   const playAgain = useCallback(() => {
-    if (runtime === null) return;
+    if (runtime?.gameId !== "gravok-three-gate-wager") return;
     mutations.playAgainGravokWager(siteId, runtime.shuffleCommitment);
   }, [mutations, runtime, siteId]);
-  const replaceDreamsign = useCallback(
-    (dreamsignId: string) => {
-      logGambleReplacement(siteId, dreamsignId, runtime?.rewardDreamsign?.id);
-      mutations.replaceGravokWagerDreamsign(siteId, dreamsignId);
-    },
-    [mutations, runtime?.rewardDreamsign?.id, siteId],
+  const drawProgressive = useCallback(
+    () => mutations.drawTidemarkProgressive(siteId),
+    [mutations, siteId],
   );
+  const settleProgressive = useCallback(() => {
+    if (
+      runtime?.gameId !== "tidemark-progressive-draw" ||
+      runtime.result === null
+    ) return;
+    const commitment =
+      runtime.shuffleCommitments[runtime.result.attemptNumber - 1];
+    if (commitment === undefined) return;
+    mutations.settleTidemarkProgressive(siteId, commitment);
+  }, [mutations, runtime, siteId]);
+  const replaceDreamsign = useCallback((dreamsignId: string) => {
+    if (runtime === null) return;
+    logGambleReplacement(
+      siteId,
+      runtime.gameId,
+      dreamsignId,
+      runtime.rewardDreamsign?.id,
+    );
+    if (runtime.gameId === "tidemark-progressive-draw") {
+      mutations.replaceTidemarkProgressiveDreamsign(siteId, dreamsignId);
+    } else {
+      mutations.replaceGravokWagerDreamsign(siteId, dreamsignId);
+    }
+  }, [mutations, runtime, siteId]);
 
   if (view === null) return null;
   return (
@@ -81,8 +106,10 @@ export function GambleSiteScreenAdapter({ siteId }: { siteId: string }) {
       view={view}
       onChooseGate={chooseGate}
       onLeave={complete}
-      onOutcomeShown={settle}
+      onOutcomeShown={settleGravok}
       onPlayAgain={playAgain}
+      onDrawProgressive={drawProgressive}
+      onProgressiveOutcomeShown={settleProgressive}
       onReplaceDreamsign={replaceDreamsign}
     />
   );

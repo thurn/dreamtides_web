@@ -18,12 +18,18 @@ import type {
   JourneyState,
   RuntimeShopSlot,
 } from "../../types/journey";
+import type { GambleGameId } from "../../types/gamble";
 import type { CardData } from "../../types/cards";
 import {
   GRAVOK_WAGER_COST,
   GRAVOK_WAGER_RULES_VERSION,
   STANDARD_PLAYING_CARD_DECK,
 } from "../../data/gravok-wager";
+import {
+  scoreTidemarkDreamsignCandidates,
+  TIDEMARK_PROGRESSIVE_RULES_VERSION,
+  TIDEMARK_STRONG_POOL_LIMIT,
+} from "../../data/tidemark-progressive-draw";
 import { createDreamsign } from "../../data/dreamsigns";
 import { generateRewardSiteData } from "../../rewards/reward-generator";
 import { drawDreamsignOptions } from "../../dreamsign/dreamsign-pool";
@@ -111,21 +117,24 @@ function transfigureShopSlots(
   });
 }
 
-function buildGambleRuntime(
-  journey: JourneyState,
-  site: SiteState,
-  content: JourneyContent,
-  rng: () => number,
-): GambleSiteRuntime {
-  const shuffleCommitment = Array.from({ length: 4 }, () =>
+function gambleShuffleCommitment(rng: () => number): string {
+  return Array.from({ length: 4 }, () =>
     Math.floor(rng() * 0x1_0000)
       .toString(16)
       .padStart(4, "0"),
   ).join("");
-  const committedCard =
-    STANDARD_PLAYING_CARD_DECK[
-      Math.floor(rng() * STANDARD_PLAYING_CARD_DECK.length)
-    ];
+}
+
+function gambleCommittedCard(rng: () => number) {
+  return STANDARD_PLAYING_CARD_DECK[
+    Math.floor(rng() * STANDARD_PLAYING_CARD_DECK.length)
+  ];
+}
+
+function eligibleGambleDreamsigns(
+  journey: JourneyState,
+  content: JourneyContent,
+) {
   const heldIds = new Set(
     journey.dreamsigns.flatMap((dreamsign) =>
       dreamsign.id === undefined ? [] : [dreamsign.id],
@@ -136,6 +145,25 @@ function buildGambleRuntime(
     content.dreamsignTemplates,
   );
   const dreamsignCandidateIds = availableIds.filter((id) => !heldIds.has(id));
+  const templates = dreamsignCandidateIds.flatMap((id) => {
+    const template = templatesById.get(id);
+    return template === undefined ? [] : [template];
+  });
+  return { dreamsignCandidateIds, templatesById, templates };
+}
+
+function buildGravokWagerRuntime(
+  journey: JourneyState,
+  site: SiteState,
+  content: JourneyContent,
+  rng: () => number,
+): GambleSiteRuntime {
+  const shuffleCommitment = gambleShuffleCommitment(rng);
+  const committedCard = gambleCommittedCard(rng);
+  const { dreamsignCandidateIds, templatesById } = eligibleGambleDreamsigns(
+    journey,
+    content,
+  );
   const selectedDreamsignId =
     dreamsignCandidateIds.length === 0
       ? null
@@ -161,6 +189,77 @@ function buildGambleRuntime(
       selectedTemplate === null ? null : createDreamsign(selectedTemplate),
     result: null,
   };
+}
+
+function buildTidemarkProgressiveRuntime(
+  journey: JourneyState,
+  site: SiteState,
+  content: JourneyContent,
+  rng: () => number,
+): GambleSiteRuntime {
+  const commitments = Array.from({ length: 4 }, () => ({
+    shuffleCommitment: gambleShuffleCommitment(rng),
+    card: gambleCommittedCard(rng),
+  }));
+  const { templates } = eligibleGambleDreamsigns(journey, content);
+  const deckCards = journey.deck.flatMap((entry) => {
+    const card = content.cardDatabase.get(entry.cardNumber);
+    return card === undefined ? [] : [card];
+  });
+  const dreamsignCandidateScores = scoreTidemarkDreamsignCandidates({
+    templates,
+    profiles: content.dreamsignProfiles,
+    deckCards,
+  });
+  const strongPool = dreamsignCandidateScores.slice(
+    0,
+    TIDEMARK_STRONG_POOL_LIMIT,
+  );
+  const selectedCandidate =
+    strongPool.length === 0
+      ? undefined
+      : strongPool[Math.floor(rng() * strongPool.length)];
+  const selectedTemplate =
+    selectedCandidate === undefined
+      ? null
+      : templates.find(
+          (template) => template.id === selectedCandidate.dreamsignId,
+        ) ?? null;
+
+  return {
+    kind: "gamble",
+    gameId: "tidemark-progressive-draw",
+    rulesVersion: TIDEMARK_PROGRESSIVE_RULES_VERSION,
+    isFarpoint: site.isEnhanced,
+    shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
+    committedCards: commitments.map((entry) => entry.card),
+    dreamsignCandidateScores,
+    strongPoolSize: strongPool.length,
+    strongPoolCutoffScore:
+      strongPool[strongPool.length - 1]?.score ?? null,
+    rewardDreamsign:
+      selectedTemplate === null ? null : createDreamsign(selectedTemplate),
+    revealedCards: [],
+    cumulativeCost: 0,
+    result: null,
+  };
+}
+
+function buildGambleRuntime(
+  journey: JourneyState,
+  site: SiteState,
+  content: JourneyContent,
+  rng: () => number,
+  requestedGameId: GambleGameId | undefined,
+): GambleSiteRuntime {
+  const gameId =
+    requestedGameId ??
+    (rng() < 0.5
+      ? "gravok-three-gate-wager"
+      : "tidemark-progressive-draw");
+  return gameId === "tidemark-progressive-draw"
+    ? buildTidemarkProgressiveRuntime(journey, site, content, rng)
+    : buildGravokWagerRuntime(journey, site, content, rng);
 }
 
 /**
@@ -266,7 +365,7 @@ export function createSiteContentProvider(
   };
 
   return {
-    openSite: ({ journey, site, rng }): SiteOpenResult | null => {
+    openSite: ({ journey, site, rng, gambleGameId }): SiteOpenResult | null => {
       const stream = streamFromKeyed(rng);
       switch (site.type) {
         case "Reward": {
@@ -382,7 +481,13 @@ export function createSiteContentProvider(
         }
         case "Gamble": {
           return {
-            runtime: buildGambleRuntime(journey, site, content, stream),
+            runtime: buildGambleRuntime(
+              journey,
+              site,
+              content,
+              stream,
+              gambleGameId,
+            ),
           };
         }
         case "Exploration": {

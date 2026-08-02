@@ -4,6 +4,7 @@
 
 import type { ReactNode } from "react";
 import type { Screen, SiteState } from "../../types/journey";
+import type { GambleGameId } from "../../types/gamble";
 import { JourneyStartScreenAdapter } from "./JourneyStartScreenAdapter";
 import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
 import { AtlasScreenAdapter } from "./AtlasScreenAdapter";
@@ -45,7 +46,10 @@ export function screenFor(screen: NonSiteScreen): ReactNode {
 }
 
 /** Resolves every site type to its production rendering disposition. */
-export function siteDispositionFor(site: SiteState): SiteDisposition {
+export function siteDispositionFor(
+  site: SiteState,
+  gambleGameId: GambleGameId | null = null,
+): SiteDisposition {
   switch (site.type) {
     case "Battle":
       return { kind: "battle" };
@@ -100,7 +104,12 @@ export function siteDispositionFor(site: SiteState): SiteDisposition {
     case "Gamble":
       return {
         kind: "screen",
-        screen: <GambleSiteScreenAdapter siteId={site.id} />,
+        screen: (
+          <GambleSiteScreenAdapter
+            siteId={site.id}
+            gambleGameId={gambleGameId}
+          />
+        ),
       };
     case "Exploration":
       return {

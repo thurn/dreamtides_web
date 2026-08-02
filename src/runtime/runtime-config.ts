@@ -3,6 +3,7 @@ import type { PoolVariant } from "../draft/pool";
 import { normalizeRoomId } from "../eventlog/room";
 import type { ContentConfig } from "../eventlog/types";
 import { asCardId, isCardId, type CardId } from "../types/card-identity";
+import type { GambleGameId } from "../types/gamble";
 
 export interface RuntimeConfig {
   seedOverride: number | null;
@@ -79,6 +80,11 @@ export interface RuntimeConfig {
    * literals can omit it.
    */
   viewLogs?: string | null;
+  /**
+   * Optional Gamble game forced by `?gambleGame=`. Null lets OPEN_SITE choose
+   * randomly; the resolved game is persisted in the room event log.
+   */
+  gambleGameId?: GambleGameId | null;
 }
 
 export type DatabaseMode = "emulator" | "realtime";
@@ -180,6 +186,7 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     gotoScene: parseGotoScene(params.get("goto")),
     explorationCardId: parseExplorationCardId(params.get("card")),
     viewLogs: normalizeRoomId(params.get("viewLogs")),
+    gambleGameId: parseGambleGameId(params.get("gambleGame")),
   };
 }
 
@@ -187,6 +194,12 @@ function parseExplorationCardId(rawCardId: string | null): CardId | null {
   if (rawCardId === null) return null;
   const normalized = rawCardId.trim().toLowerCase();
   return isCardId(normalized) ? asCardId(normalized) : null;
+}
+
+function parseGambleGameId(rawGame: string | null): GambleGameId | null {
+  if (rawGame === "three-gate") return "gravok-three-gate-wager";
+  if (rawGame === "progressive-draw") return "tidemark-progressive-draw";
+  return null;
 }
 
 function parseTutorialPlaybackSpeed(rawSpeed: string | null): number {

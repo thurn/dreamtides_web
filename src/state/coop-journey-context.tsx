@@ -268,8 +268,14 @@ export function CoopJourneyProvider({
         dispatch(actions.openSite(site.id, stateRef.current.runId ?? undefined)),
       ensureCardChoiceRuntime: (siteId) =>
         dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
-      ensureGambleSiteRuntime: (siteId) =>
-        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
+      ensureGambleSiteRuntime: (siteId, gambleGameId) =>
+        dispatch(
+          actions.openSite(
+            siteId,
+            stateRef.current.runId ?? undefined,
+            gambleGameId,
+          ),
+        ),
       ensureExplorationSiteRuntime: (siteId) =>
         dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
 
@@ -299,6 +305,23 @@ export function CoopJourneyProvider({
       replaceGravokWagerDreamsign: (siteId, replacedDreamsignId) =>
         dispatch(
           actions.replaceGravokWagerDreamsign(siteId, replacedDreamsignId),
+        ),
+      drawTidemarkProgressive: (siteId) =>
+        dispatch(actions.drawTidemarkProgressive(siteId)),
+      settleTidemarkProgressive: (siteId, shuffleCommitment) =>
+        dispatch(
+          actions.settleTidemarkProgressive(
+            siteId,
+            shuffleCommitment,
+            stateRef.current.runId ?? undefined,
+          ),
+        ),
+      replaceTidemarkProgressiveDreamsign: (siteId, replacedDreamsignId) =>
+        dispatch(
+          actions.replaceTidemarkProgressiveDreamsign(
+            siteId,
+            replacedDreamsignId,
+          ),
         ),
       acceptRewardSite: (siteId, purgeIndex) => {
         // ACCEPT_REWARD's reducer reads `purgeIndex` (the at-cap Dreamsign

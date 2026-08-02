@@ -27,6 +27,7 @@
 
 import type { EventContext } from "../../eventlog/types";
 import type { DraftState } from "../../types/draft";
+import type { GambleGameId } from "../../types/gamble";
 import type {
   DeckEntry,
   AugurySiteRuntime,
@@ -85,6 +86,8 @@ export interface SiteContentProvider {
     journey: JourneyState;
     site: SiteState;
     rng: (drawIndex: number) => number;
+    /** Optional URL-selected Gamble game written into the OPEN_SITE intent. */
+    gambleGameId?: GambleGameId;
   }): SiteOpenResult | null;
 
   /**
@@ -324,6 +327,14 @@ export function openSite(
 
   const site = findSite(journey, siteId);
   if (site === null) return null;
+  const rawGambleGameId = payload.gambleGameId;
+  if (
+    rawGambleGameId !== undefined &&
+    rawGambleGameId !== "gravok-three-gate-wager" &&
+    rawGambleGameId !== "tidemark-progressive-draw"
+  ) {
+    return null;
+  }
 
   switch (site.type) {
     case "Essence": {
@@ -355,7 +366,14 @@ export function openSite(
     case "Exploration": {
       const provider = contentProvider;
       if (provider === null) return null;
-      const result = provider.openSite({ journey, site, rng: ctx.rng });
+      const result = provider.openSite({
+        journey,
+        site,
+        rng: ctx.rng,
+        ...(rawGambleGameId === undefined
+          ? {}
+          : { gambleGameId: rawGambleGameId }),
+      });
       if (result === null) return null;
       const next = withRuntime(journey, siteId, result.runtime);
       return {
@@ -806,11 +824,20 @@ export function completeSite(
     return null;
   }
   const runtime = journey.siteRuntime[siteId];
-  if (
-    runtime?.kind === "gamble" &&
-    runtime.result?.essenceSettled === false
-  ) {
-    return null;
+  if (runtime?.kind === "gamble") {
+    if (
+      runtime.gameId === "gravok-three-gate-wager" &&
+      runtime.result?.essenceSettled === false
+    ) {
+      return null;
+    }
+    if (
+      runtime.gameId === "tidemark-progressive-draw" &&
+      (runtime.result?.resultSettled === false ||
+        runtime.result?.pendingDreamsignReplacement === true)
+    ) {
+      return null;
+    }
   }
   if (runtime?.kind === "exploration" && runtime.resolution === null) {
     return null;

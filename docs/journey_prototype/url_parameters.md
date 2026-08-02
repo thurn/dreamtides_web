@@ -285,6 +285,17 @@ http://localhost:5173/?goto=exploration&card=161482b6-af07-4d9e-822d-8c738672beb
 http://localhost:5173/?goto=exploration-duplicates&card=b1d36337-5668-4f1d-b155-2d07fc00f872
 ```
 
+## `gambleGame`
+
+Chooses the game prepared when a Gamble site opens. Omit it to choose randomly
+between Three-Gate Wager and Progressive Draw. The supported values are
+`three-gate` and `progressive-draw`; other values use the random selection.
+
+```
+http://localhost:5173/?goto=gamble&gambleGame=three-gate
+http://localhost:5173/?goto=gamble&gambleGame=progressive-draw
+```
+
 ## `identicons`
 
 When set to exactly `1`, every card renders its generated identicon art in
@@ -358,6 +369,7 @@ http://localhost:5173/?game=journey42             # parsed multiplayer room id
 http://localhost:5173/?viewLogs=journey42         # read-only journey-log viewer for a room
 http://localhost:5173/?goto=atlas               # jump straight to a QA scene
 http://localhost:5173/?goto=augury              # jump straight to the Augury site
+http://localhost:5173/?goto=gamble&gambleGame=progressive-draw
 http://localhost:5173/?realtime=1               # use cloud Firebase RTDB
 http://localhost:5173/?identicons=1             # force identicon art for cards
 http://localhost:5173/tutorial?tutorialSpeed=4  # play the tutorial at 4× speed

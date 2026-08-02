@@ -92,7 +92,12 @@ export interface EventPayloads {
   ENTER_DRAFT_SITE: { siteId: string };
 
   // --- sites ---
-  OPEN_SITE: { siteId: string };
+  OPEN_SITE: {
+    siteId: string;
+    gambleGameId?:
+      | "gravok-three-gate-wager"
+      | "tidemark-progressive-draw";
+  };
   RESOLVE_EXPLORATION_CHOICE: {
     siteId: string;
     actionId: string;
@@ -116,6 +121,15 @@ export interface EventPayloads {
     previousShuffleCommitment: string;
   };
   REPLACE_GRAVOK_WAGER_DREAMSIGN: {
+    siteId: string;
+    replacedDreamsignId: string;
+  };
+  DRAW_TIDEMARK_PROGRESSIVE: { siteId: string };
+  SETTLE_TIDEMARK_PROGRESSIVE: {
+    siteId: string;
+    shuffleCommitment: string;
+  };
+  REPLACE_TIDEMARK_PROGRESSIVE_DREAMSIGN: {
     siteId: string;
     replacedDreamsignId: string;
   };
@@ -312,6 +326,9 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   SETTLE_GRAVOK_WAGER: true,
   PLAY_AGAIN_GRAVOK_WAGER: true,
   REPLACE_GRAVOK_WAGER_DREAMSIGN: true,
+  DRAW_TIDEMARK_PROGRESSIVE: true,
+  SETTLE_TIDEMARK_PROGRESSIVE: true,
+  REPLACE_TIDEMARK_PROGRESSIVE_DREAMSIGN: true,
   ACCEPT_MERCHANT_OFFER: true,
   DECLINE_MERCHANT: true,
   BUY_SHOP_SLOT: true,

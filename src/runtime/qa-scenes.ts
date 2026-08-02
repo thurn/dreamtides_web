@@ -862,10 +862,10 @@ export const QA_SCENES: readonly QaScene[] = [
   ),
   siteScene("tempting", "Offer", "TemptingOffer"),
   siteScene("tempting-enhanced", "Offer (Enhanced)", "TemptingOffer", true),
-  siteScene("gamble", "Gravok’s Three-Gate Wager", "Gamble"),
+  siteScene("gamble", "Gamble", "Gamble"),
   siteScene(
     "gamble-enhanced",
-    "Gravok’s Three-Gate Wager (Farpoint)",
+    "Gamble (Farpoint)",
     "Gamble",
     true,
   ),

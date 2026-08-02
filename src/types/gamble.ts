@@ -29,3 +29,11 @@ export interface StandardPlayingCard {
 
 /** The three wager choices in Gravok's Three-Gate Wager. */
 export type GravokGateId = "six" | "nine" | "jack";
+
+/** Stable game ids persisted by Gamble site runtimes. */
+export type GambleGameId =
+  | "gravok-three-gate-wager"
+  | "tidemark-progressive-draw";
+
+/** One-based attempt number in Tidemark Progressive Draw. */
+export type TidemarkProgressiveAttemptNumber = 1 | 2 | 3 | 4;

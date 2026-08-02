@@ -8,7 +8,8 @@ import { CumulusRoot } from "../CumulusRoot";
 import { artRef } from "../primitives/art";
 import {
   GambleSiteScreen,
-  type GambleSiteView,
+  type GravokWagerSiteView,
+  type ProgressiveDrawSiteView,
 } from "./GambleSiteScreen";
 
 const JACKPOT_DREAMSIGN = {
@@ -19,7 +20,8 @@ const JACKPOT_DREAMSIGN = {
   isNegative: false,
 };
 
-const VIEW: GambleSiteView = {
+const VIEW: GravokWagerSiteView = {
+  gameId: "gravok-three-gate-wager",
   siteId: "fixture-gamble-site",
   scene: null,
   isFarpoint: false,
@@ -128,6 +130,8 @@ describe("GambleSiteScreen", () => {
         onLeave={onLeave}
         onOutcomeShown={() => undefined}
         onPlayAgain={() => undefined}
+        onDrawProgressive={() => undefined}
+        onProgressiveOutcomeShown={() => undefined}
         onReplaceDreamsign={() => undefined}
       />,
     );
@@ -206,7 +210,7 @@ describe("GambleSiteScreen", () => {
     const onPlayAgain = vi.fn();
     const onLeave = vi.fn();
     const onOutcomeShown = vi.fn();
-    const resultView: GambleSiteView = {
+    const resultView: GravokWagerSiteView = {
       ...VIEW,
       card: { rank: "Q", suit: "hearts" },
       result: {
@@ -227,6 +231,8 @@ describe("GambleSiteScreen", () => {
         onLeave={onLeave}
         onOutcomeShown={onOutcomeShown}
         onPlayAgain={onPlayAgain}
+        onDrawProgressive={() => undefined}
+        onProgressiveOutcomeShown={() => undefined}
         onReplaceDreamsign={() => undefined}
       />,
     );
@@ -307,6 +313,8 @@ describe("GambleSiteScreen", () => {
             onLeave={onLeave}
             onOutcomeShown={onOutcomeShown}
             onPlayAgain={onPlayAgain}
+            onDrawProgressive={() => undefined}
+            onProgressiveOutcomeShown={() => undefined}
             onReplaceDreamsign={() => undefined}
           />
         </CumulusRoot>,
@@ -353,6 +361,8 @@ describe("GambleSiteScreen", () => {
             onLeave={onLeave}
             onOutcomeShown={onOutcomeShown}
             onPlayAgain={onPlayAgain}
+            onDrawProgressive={() => undefined}
+            onProgressiveOutcomeShown={() => undefined}
             onReplaceDreamsign={() => undefined}
           />
         </CumulusRoot>,
@@ -374,7 +384,7 @@ describe("GambleSiteScreen", () => {
   it("opens the shared Dreamsign replacement flow after an at-cap jackpot", () => {
     vi.useFakeTimers();
     const onReplaceDreamsign = vi.fn();
-    const replacementView: GambleSiteView = {
+    const replacementView: GravokWagerSiteView = {
       ...VIEW,
       card: { rank: "A", suit: "clubs" },
       result: {
@@ -407,6 +417,8 @@ describe("GambleSiteScreen", () => {
         onLeave={() => undefined}
         onOutcomeShown={() => undefined}
         onPlayAgain={() => undefined}
+        onDrawProgressive={() => undefined}
+        onProgressiveOutcomeShown={() => undefined}
         onReplaceDreamsign={onReplaceDreamsign}
       />,
     );
@@ -421,6 +433,198 @@ describe("GambleSiteScreen", () => {
       )?.click();
     });
     expect(onReplaceDreamsign).toHaveBeenCalledWith("held-sign");
+
+    act(() => root.unmount());
+  });
+});
+
+const PROGRESSIVE_VIEW: ProgressiveDrawSiteView = {
+  gameId: "tidemark-progressive-draw",
+  siteId: "fixture-gamble-site",
+  scene: null,
+  isFarpoint: false,
+  runtimeReady: true,
+  nextDraw: {
+    attemptNumber: 1,
+    cost: 15,
+    canAfford: true,
+    available: true,
+  },
+  guide: VIEW.guide,
+  result: null,
+  replacement: null,
+};
+
+describe("GambleSiteScreen — Progressive Draw", () => {
+  it("shows only draw one without future odds or the Dreamsign identity", () => {
+    const onDraw = vi.fn();
+    const { container, root } = mount(
+      <GambleSiteScreen
+        view={PROGRESSIVE_VIEW}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawProgressive={onDraw}
+        onProgressiveOutcomeShown={() => undefined}
+        onReplaceDreamsign={() => undefined}
+      />,
+    );
+
+    expect(container.querySelectorAll("[data-playing-card]")).toHaveLength(1);
+    expect(
+      container
+        .querySelector("[data-playing-card]")
+        ?.getAttribute("data-playing-card-face"),
+    ).toBe("back");
+    expect(container.querySelectorAll("[data-gamble-gate]")).toHaveLength(0);
+    expect(container.querySelector("[data-progressive-dreamsign-reward]"))
+      .toBeNull();
+    expect(container.textContent).not.toContain("Fixture Jackpot");
+    expect(container.textContent).not.toContain("%");
+    const draw = container.querySelector<HTMLButtonElement>(
+      '[data-testid="gamble-progressive-draw"]',
+    );
+    expect(draw?.textContent).toBe("Draw · 15");
+    act(() => draw?.click());
+    expect(onDraw).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+  });
+
+  it("reveals the next paid draw only after a miss settles", () => {
+    vi.useFakeTimers();
+    const onDraw = vi.fn();
+    const onOutcomeShown = vi.fn();
+    const resultView: ProgressiveDrawSiteView = {
+      ...PROGRESSIVE_VIEW,
+      nextDraw: null,
+      result: {
+        id: "progressive-attempt-1",
+        attemptNumber: 1,
+        card: { rank: "J", suit: "clubs" },
+        won: false,
+        resultSettled: false,
+        terminal: false,
+        rewardDreamsign: null,
+        pendingDreamsignReplacement: false,
+      },
+    };
+    const { container, root } = mount(
+      <GambleSiteScreen
+        view={resultView}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawProgressive={onDraw}
+        onProgressiveOutcomeShown={onOutcomeShown}
+        onReplaceDreamsign={() => undefined}
+      />,
+    );
+
+    expect(container.querySelector('[data-testid="gamble-progressive-draw-again"]'))
+      .toBeNull();
+    void act(() => vi.advanceTimersByTime(970));
+    expect(onOutcomeShown).toHaveBeenCalledOnce();
+    expect(container.querySelector("[data-radial-announcement]")?.textContent)
+      .toContain("Miss");
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <GambleSiteScreen
+            view={{
+              ...resultView,
+              nextDraw: {
+                attemptNumber: 2,
+                cost: 25,
+                canAfford: true,
+                available: true,
+              },
+              result: { ...resultView.result!, resultSettled: true },
+            }}
+            onChooseGate={() => undefined}
+            onLeave={() => undefined}
+            onOutcomeShown={() => undefined}
+            onPlayAgain={() => undefined}
+            onDrawProgressive={onDraw}
+            onProgressiveOutcomeShown={onOutcomeShown}
+            onReplaceDreamsign={() => undefined}
+          />
+        </CumulusRoot>,
+      );
+    });
+    void act(() => vi.advanceTimersByTime(3_360));
+    const drawAgain = container.querySelector<HTMLButtonElement>(
+      '[data-testid="gamble-progressive-draw-again"]',
+    );
+    expect(drawAgain?.textContent).toBe("Draw · 25");
+    act(() => drawAgain?.click());
+    expect(onDraw).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+  });
+
+  it("shows the won Dreamsign only at the settled outcome", () => {
+    vi.useFakeTimers();
+    const resultView: ProgressiveDrawSiteView = {
+      ...PROGRESSIVE_VIEW,
+      nextDraw: null,
+      result: {
+        id: "progressive-win",
+        attemptNumber: 1,
+        card: { rank: "A", suit: "hearts" },
+        won: true,
+        resultSettled: false,
+        terminal: true,
+        rewardDreamsign: null,
+        pendingDreamsignReplacement: false,
+      },
+    };
+    const { container, root } = mount(
+      <GambleSiteScreen
+        view={resultView}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawProgressive={() => undefined}
+        onProgressiveOutcomeShown={() => undefined}
+        onReplaceDreamsign={() => undefined}
+      />,
+    );
+
+    expect(container.querySelector("[data-progressive-dreamsign-reward]"))
+      .toBeNull();
+    void act(() => vi.advanceTimersByTime(970));
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <GambleSiteScreen
+            view={{
+              ...resultView,
+              result: {
+                ...resultView.result!,
+                resultSettled: true,
+                rewardDreamsign: JACKPOT_DREAMSIGN,
+              },
+            }}
+            onChooseGate={() => undefined}
+            onLeave={() => undefined}
+            onOutcomeShown={() => undefined}
+            onPlayAgain={() => undefined}
+            onDrawProgressive={() => undefined}
+            onProgressiveOutcomeShown={() => undefined}
+            onReplaceDreamsign={() => undefined}
+          />
+        </CumulusRoot>,
+      );
+    });
+    expect(
+      container
+        .querySelector("[data-progressive-dreamsign-reward]")
+        ?.querySelector('[data-dreamsign-id="00000000-0000-4000-8000-000000000041"]'),
+    ).not.toBeNull();
 
     act(() => root.unmount());
   });

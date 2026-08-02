@@ -216,6 +216,9 @@ function makeMutations(): JourneyMutations {
     settleGravokWager: vi.fn(),
     playAgainGravokWager: vi.fn(),
     replaceGravokWagerDreamsign: vi.fn(),
+    drawTidemarkProgressive: vi.fn(),
+    settleTidemarkProgressive: vi.fn(),
+    replaceTidemarkProgressiveDreamsign: vi.fn(),
     ensureRewardSiteRuntime: vi.fn(),
     acceptRewardSite: vi.fn(),
     ensureDreamsignOfferRuntime: vi.fn(),
@@ -924,8 +927,26 @@ describe("ScreenRouter site-dispatch completeness", () => {
   it("routes Gamble to the Three-Gate Wager screen", () => {
     const site = makeSite("Gamble");
     const mutations = makeMutations();
+    const state = makeStateFor(site);
     const container = renderWithJourney({
-      state: makeStateFor(site),
+      state: {
+        ...state,
+        siteRuntime: {
+          [site.id]: {
+            kind: "gamble",
+            gameId: "gravok-three-gate-wager",
+            rulesVersion: "fixture-rules",
+            roundNumber: 1,
+            isFarpoint: false,
+            wagerCost: 50,
+            shuffleCommitment: "fixture-commitment",
+            committedCard: { rank: "A", suit: "spades" },
+            dreamsignCandidateIds: [],
+            rewardDreamsign: null,
+            result: null,
+          },
+        },
+      },
       journeyContent: merchantContent(),
       mutations,
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
@@ -942,8 +963,34 @@ describe("ScreenRouter site-dispatch completeness", () => {
     expect(
       container.querySelector('[data-testid="gamble-choose-six"]')?.textContent,
     ).toBe("Bet · 50");
-    expect(mutations.ensureGambleSiteRuntime).toHaveBeenCalledWith(site.id);
+    expect(mutations.ensureGambleSiteRuntime).toHaveBeenCalledWith(
+      site.id,
+      undefined,
+    );
     expect(container.querySelector("[data-work-in-progress-panel]")).toBeNull();
+  });
+
+  it("passes a forced Progressive Draw URL choice into Gamble initialization", () => {
+    const site = makeSite("Gamble");
+    const mutations = makeMutations();
+    const container = renderWithJourney({
+      state: makeStateFor(site),
+      journeyContent: merchantContent(),
+      mutations,
+      children: (
+        <ScreenRouter
+          runtimeConfig={parseRuntimeConfig(
+            "?gambleGame=progressive-draw",
+          )}
+        />
+      ),
+    });
+
+    expect(mutations.ensureGambleSiteRuntime).toHaveBeenCalledWith(
+      site.id,
+      "tidemark-progressive-draw",
+    );
+    expect(container.querySelector("[data-gamble-gates]")).toBeNull();
   });
 
   it("routes Exploration to its fullscreen frame-break prototype", () => {

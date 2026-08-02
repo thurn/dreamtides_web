@@ -1,12 +1,17 @@
 import { afterEach, describe, expect, it } from "vitest";
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
-import type { GravokGateId, StandardPlayingCardRank } from "../../types/gamble";
+import type {
+  GravokGateId,
+  StandardPlayingCard,
+  StandardPlayingCardRank,
+} from "../../types/gamble";
 import { LayerName } from "../../types/layer-name";
 import type {
   Dreamsign,
-  GambleSiteRuntime,
+  GravokWagerSiteRuntime,
   JourneyState,
   SiteState,
+  TidemarkProgressiveSiteRuntime,
 } from "../../types/journey";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
@@ -36,8 +41,8 @@ const REWARD_DREAMSIGN: Dreamsign = {
 
 function runtime(
   rank: StandardPlayingCardRank,
-  overrides: Partial<GambleSiteRuntime> = {},
-): GambleSiteRuntime {
+  overrides: Partial<GravokWagerSiteRuntime> = {},
+): GravokWagerSiteRuntime {
   return {
     kind: "gamble",
     gameId: "gravok-three-gate-wager",
@@ -57,7 +62,7 @@ function runtime(
 function stateWith(
   rank: StandardPlayingCardRank,
   overrides: Partial<JourneyState> = {},
-  runtimeOverrides: Partial<GambleSiteRuntime> = {},
+  runtimeOverrides: Partial<GravokWagerSiteRuntime> = {},
 ): FoldState {
   const base = genesisFoldState(GENESIS);
   const site: SiteState = {
@@ -113,6 +118,9 @@ function apply(
     | "SETTLE_GRAVOK_WAGER"
     | "PLAY_AGAIN_GRAVOK_WAGER"
     | "REPLACE_GRAVOK_WAGER_DREAMSIGN"
+    | "DRAW_TIDEMARK_PROGRESSIVE"
+    | "SETTLE_TIDEMARK_PROGRESSIVE"
+    | "REPLACE_TIDEMARK_PROGRESSIVE_DREAMSIGN"
     | "COMPLETE_SITE",
   payload: Record<string, unknown>,
 ) {
@@ -142,7 +150,10 @@ function wager(state: FoldState, gateId: GravokGateId) {
 
 function settleWager(state: FoldState) {
   const siteRuntime = state.journey.siteRuntime[SITE_ID];
-  if (siteRuntime?.kind !== "gamble") {
+  if (
+    siteRuntime?.kind !== "gamble" ||
+    siteRuntime.gameId !== "gravok-three-gate-wager"
+  ) {
     throw new Error("expected Gamble runtime");
   }
   return apply(state, "SETTLE_GRAVOK_WAGER", {
@@ -377,5 +388,224 @@ describe("Gravok's Three-Gate Wager", () => {
     });
     expect(thirdRetry.outcome).toBe("bounced");
     expect(thirdRetry.state).toEqual(thirdRound.state);
+  });
+});
+
+function progressiveRuntime(
+  cards: readonly StandardPlayingCard[],
+  overrides: Partial<TidemarkProgressiveSiteRuntime> = {},
+): TidemarkProgressiveSiteRuntime {
+  return {
+    kind: "gamble",
+    gameId: "tidemark-progressive-draw",
+    rulesVersion: "fixture-progressive-rules",
+    isFarpoint: false,
+    shuffleCommitments: ["attempt-1", "attempt-2", "attempt-3", "attempt-4"],
+    committedCards: [...cards],
+    dreamsignCandidateScores: [
+      { dreamsignId: "reward-sign", score: 1 },
+    ],
+    strongPoolSize: 1,
+    strongPoolCutoffScore: 1,
+    rewardDreamsign: REWARD_DREAMSIGN,
+    revealedCards: [],
+    cumulativeCost: 0,
+    result: null,
+    ...overrides,
+  };
+}
+
+function progressiveStateWith(
+  cards: readonly StandardPlayingCard[],
+  journeyOverrides: Partial<JourneyState> = {},
+  runtimeOverrides: Partial<TidemarkProgressiveSiteRuntime> = {},
+): FoldState {
+  const base = stateWith("2", journeyOverrides);
+  return {
+    ...base,
+    journey: {
+      ...base.journey,
+      siteRuntime: {
+        [SITE_ID]: progressiveRuntime(cards, runtimeOverrides),
+      },
+    },
+  };
+}
+
+function drawProgressive(state: FoldState) {
+  return apply(state, "DRAW_TIDEMARK_PROGRESSIVE", { siteId: SITE_ID });
+}
+
+function settleProgressive(state: FoldState) {
+  const siteRuntime = state.journey.siteRuntime[SITE_ID];
+  if (
+    siteRuntime?.kind !== "gamble" ||
+    siteRuntime.gameId !== "tidemark-progressive-draw" ||
+    siteRuntime.result === null
+  ) {
+    throw new Error("expected Progressive Draw result");
+  }
+  return apply(state, "SETTLE_TIDEMARK_PROGRESSIVE", {
+    siteId: SITE_ID,
+    shuffleCommitment:
+      siteRuntime.shuffleCommitments[siteRuntime.result.attemptNumber - 1],
+  });
+}
+
+describe("Tidemark Progressive Draw", () => {
+  const missCards: readonly StandardPlayingCard[] = [
+    { rank: "J", suit: "clubs" },
+    { rank: "9", suit: "diamonds" },
+    { rank: "7", suit: "hearts" },
+    { rank: "5", suit: "spades" },
+  ];
+
+  it("charges attempt one and grants its hidden Dreamsign only at settlement", () => {
+    const drawn = drawProgressive(
+      progressiveStateWith([
+        { rank: "Q", suit: "clubs" },
+        ...missCards.slice(1),
+      ]),
+    );
+
+    expect(drawn.outcome).toBe("applied");
+    expect(drawn.state.journey.essence).toBe(185);
+    expect(drawn.state.journey.dreamsigns).toEqual([]);
+    expect(drawn.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      cumulativeCost: 15,
+      revealedCards: [{ rank: "Q", suit: "clubs" }],
+      result: {
+        attemptNumber: 1,
+        won: true,
+        costPaid: 15,
+        resultSettled: false,
+      },
+    });
+    expect(
+      apply(drawn.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
+    ).toBe("bounced");
+
+    const settled = settleProgressive(drawn.state);
+    expect(settled.outcome).toBe("applied");
+    expect(settled.state.journey.dreamsigns.map((sign) => sign.id)).toEqual([
+      "reward-sign",
+    ]);
+    expect(settled.state.journey.remainingDreamsignPool).toEqual([
+      "other-sign",
+    ]);
+    expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      result: {
+        resultSettled: true,
+        dreamsignAwarded: true,
+        pendingDreamsignReplacement: false,
+      },
+    });
+    expect(drawProgressive(settled.state).outcome).toBe("bounced");
+    expect(
+      apply(settled.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
+    ).toBe("applied");
+  });
+
+  it("unlocks broader attempts one at a time with Farpoint's reduced costs", () => {
+    const start = progressiveStateWith(
+      [
+        { rank: "J", suit: "clubs" },
+        { rank: "10", suit: "diamonds" },
+        ...missCards.slice(2),
+      ],
+      {},
+      { isFarpoint: true },
+    );
+    const first = drawProgressive(start);
+    expect(first.state.journey.essence).toBe(190);
+    expect(first.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      result: { attemptNumber: 1, won: false, costPaid: 10 },
+    });
+    expect(drawProgressive(first.state).outcome).toBe("bounced");
+
+    const firstSettled = settleProgressive(first.state);
+    const second = drawProgressive(firstSettled.state);
+    expect(second.state.journey.essence).toBe(170);
+    expect(second.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      cumulativeCost: 30,
+      result: { attemptNumber: 2, won: true, costPaid: 20 },
+    });
+  });
+
+  it("charges 140 Essence across four misses and stops after the last draw", () => {
+    let current = progressiveStateWith(missCards);
+    for (let attempt = 1; attempt <= 4; attempt += 1) {
+      const drawn = drawProgressive(current);
+      expect(drawn.outcome).toBe("applied");
+      expect(drawn.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+        result: { attemptNumber: attempt, won: false },
+      });
+      current = settleProgressive(drawn.state).state;
+    }
+
+    expect(current.journey.essence).toBe(60);
+    expect(current.journey.dreamsigns).toEqual([]);
+    expect(current.journey.siteRuntime[SITE_ID]).toMatchObject({
+      cumulativeCost: 140,
+      revealedCards: missCards,
+    });
+    expect(drawProgressive(current).outcome).toBe("bounced");
+  });
+
+  it("bounces unavailable and unaffordable attempts without charging Essence", () => {
+    const unavailable = drawProgressive(
+      progressiveStateWith(missCards, {}, { rewardDreamsign: null }),
+    );
+    const poor = drawProgressive(
+      progressiveStateWith(missCards, { essence: 14 }),
+    );
+
+    expect(unavailable.outcome).toBe("bounced");
+    expect(unavailable.state.journey.essence).toBe(200);
+    expect(poor.outcome).toBe("bounced");
+    expect(poor.state.journey.essence).toBe(14);
+  });
+
+  it("holds a win at the cap until UUID replacement settles", () => {
+    const held: Dreamsign = {
+      id: "held-sign",
+      name: "Held Sign",
+      effectDescription: "Held effect.",
+      isNegative: false,
+    };
+    const drawn = drawProgressive(
+      progressiveStateWith(
+        [{ rank: "A", suit: "spades" }, ...missCards.slice(1)],
+        { maxDreamsigns: 1, dreamsigns: [held] },
+      ),
+    );
+    const settled = settleProgressive(drawn.state);
+    expect(settled.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      result: {
+        resultSettled: true,
+        dreamsignAwarded: false,
+        pendingDreamsignReplacement: true,
+      },
+    });
+    expect(
+      apply(settled.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
+    ).toBe("bounced");
+
+    const replaced = apply(
+      settled.state,
+      "REPLACE_TIDEMARK_PROGRESSIVE_DREAMSIGN",
+      { siteId: SITE_ID, replacedDreamsignId: "held-sign" },
+    );
+    expect(replaced.outcome).toBe("applied");
+    expect(replaced.state.journey.dreamsigns.map((sign) => sign.id)).toEqual([
+      "reward-sign",
+    ]);
+    expect(replaced.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      result: {
+        dreamsignAwarded: true,
+        pendingDreamsignReplacement: false,
+        replacedDreamsignId: "held-sign",
+      },
+    });
   });
 });

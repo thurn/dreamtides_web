@@ -24,6 +24,26 @@ describe("parseRuntimeConfig", () => {
       gotoScene: null,
       explorationCardId: null,
       viewLogs: null,
+      gambleGameId: null,
+    });
+  });
+
+  describe("gambleGameId", () => {
+    it("forces either implemented Gamble game by its URL value", () => {
+      expect(parseRuntimeConfig("?gambleGame=three-gate").gambleGameId).toBe(
+        "gravok-three-gate-wager",
+      );
+      expect(
+        parseRuntimeConfig("?gambleGame=progressive-draw").gambleGameId,
+      ).toBe("tidemark-progressive-draw");
+    });
+
+    it("uses random selection for absent or unrecognized values", () => {
+      expect(parseRuntimeConfig("").gambleGameId).toBeNull();
+      expect(parseRuntimeConfig("?gambleGame=").gambleGameId).toBeNull();
+      expect(
+        parseRuntimeConfig("?gambleGame=twenty-one").gambleGameId,
+      ).toBeNull();
     });
   });
 

@@ -179,8 +179,8 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `reward-at-cap`                 | Dreamscape Reward with a full Dreamsign collection and a pending replacement dialog                                                                                                                             |
 | `tempting`                      | Tempting Offer work-in-progress site                                                                                                                                                                            |
 | `tempting-enhanced`             | Tempting Offer work-in-progress site, enhanced                                                                                                                                                                  |
-| `gamble`                        | Gravok’s Three-Gate Wager                                                                                                                                                                                       |
-| `gamble-enhanced`               | Gravok’s Three-Gate Wager at Farpoint Station (free wagers)                                                                                                                                                    |
+| `gamble`                        | Gamble site; the game is selected randomly or fixed with `?gambleGame=three-gate` / `?gambleGame=progressive-draw`                                                                                            |
+| `gamble-enhanced`               | Farpoint Gamble site with the selected game’s discounted cost rule                                                                                                                                              |
 | `exploration`                   | Exploration card-channeling site                                                                                                                                                                               |
 | `exploration-enhanced`          | Exploration card-channeling site, enhanced                                                                                                                                                                     |
 | `exploration-duplicates`        | Exploration card-channeling site with two duplicated card UUIDs in the QA deck                                                                                                                                |
@@ -194,7 +194,8 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 `?goto=` composes with the other runtime parameters documented in
 `url_parameters.md` (read once at page load, not reactive). For example, pair it
 with `?seed=` for a fixed RNG seed, or `?algo=` to select a draft-pool strategy
-for the bootstrapped run.
+for the bootstrapped run. Use `?goto=gamble&gambleGame=progressive-draw` for a
+stable Progressive Draw QA entry point.
 
 ## Adding a scene
 

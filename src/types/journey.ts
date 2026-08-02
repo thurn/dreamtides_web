@@ -6,8 +6,10 @@ import type { CardData, CardType } from "./cards";
 import type { DraftState } from "./draft";
 import type { LayerName } from "./layer-name";
 import type {
+  GambleGameId,
   GravokGateId,
   StandardPlayingCard,
+  TidemarkProgressiveAttemptNumber,
 } from "./gamble";
 
 /** Badge applied to a card via a Transfiguration site. */
@@ -418,7 +420,7 @@ export interface GravokWagerResult {
 }
 
 /** Shared, replayable runtime for one Gravok's Three-Gate Wager encounter. */
-export interface GambleSiteRuntime {
+export interface GravokWagerSiteRuntime {
   kind: "gamble";
   gameId: "gravok-three-gate-wager";
   rulesVersion: string;
@@ -485,6 +487,55 @@ export interface ExplorationSiteRuntime {
   actionOffers: ExplorationActionOfferRuntime[];
   resolution: ExplorationResolution | null;
 }
+
+/** One scored candidate considered for a strong-pool Dreamsign reward. */
+export interface TidemarkDreamsignCandidateScore {
+  dreamsignId: string;
+  score: number;
+}
+
+/** The currently revealed attempt in Tidemark Progressive Draw. */
+export interface TidemarkProgressiveResult {
+  attemptNumber: TidemarkProgressiveAttemptNumber;
+  card: StandardPlayingCard;
+  won: boolean;
+  costPaid: number;
+  cumulativeCost: number;
+  /** False until the result choreography reaches its outcome moment. */
+  resultSettled: boolean;
+  dreamsignAwarded: boolean;
+  pendingDreamsignReplacement: boolean;
+  replacedDreamsignId?: string;
+}
+
+/** Shared, replayable runtime for one Tidemark Progressive Draw encounter. */
+export interface TidemarkProgressiveSiteRuntime {
+  kind: "gamble";
+  gameId: "tidemark-progressive-draw";
+  rulesVersion: string;
+  isFarpoint: boolean;
+  /** One independent full-deck commitment for each possible attempt. */
+  shuffleCommitments: string[];
+  committedCards: StandardPlayingCard[];
+  /** All eligible candidates, sorted by descending match score then UUID. */
+  dreamsignCandidateScores: TidemarkDreamsignCandidateScore[];
+  /** Number retained in the strong pool (at most 50). */
+  strongPoolSize: number;
+  /** Score of the final retained candidate, or null for an empty pool. */
+  strongPoolCutoffScore: number | null;
+  rewardDreamsign: Dreamsign | null;
+  revealedCards: StandardPlayingCard[];
+  cumulativeCost: number;
+  result: TidemarkProgressiveResult | null;
+}
+
+/** Every game runtime currently available at a Gamble site. */
+export type GambleSiteRuntime =
+  | GravokWagerSiteRuntime
+  | TidemarkProgressiveSiteRuntime;
+
+/** Stable Gamble game id, re-exported beside its persisted runtime union. */
+export type GambleSiteGameId = GambleGameId;
 
 /** Serialized runtime state keyed by site id. */
 export type SiteRuntimeState =

@@ -2,26 +2,34 @@ import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
   GambleGateView,
   GambleSiteView,
+  GravokWagerSiteView,
+  ProgressiveDrawSiteView,
 } from "../../cumulus/screens/GambleSiteScreen";
 import {
   GRAVOK_GATE_RULES,
-  GRAVOK_WAGER_COST,
   GRAVOK_WAGER_MAX_RETRIES,
   gravokGateChanceLabel,
 } from "../../data/gravok-wager";
+import {
+  nextTidemarkAttemptNumber,
+  tidemarkAttemptCost,
+} from "../../data/tidemark-progressive-draw";
 import { guideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
 import type {
   DreamscapeNode,
   GambleSiteRuntime,
+  GravokWagerSiteRuntime,
   JourneyState,
   SiteState,
+  TidemarkProgressiveSiteRuntime,
 } from "../../types/journey";
 import type { GravokGateId } from "../../types/gamble";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 
 export const GRAVOK_WAGER_GUIDE_LINE =
   "The game's called Three Gates. Place your bet on the next card drawn!";
+export const TIDEMARK_PROGRESSIVE_GUIDE_LINE = "Draw?";
 
 /** The next gate in display order supplies the non-selected reveal object. */
 export function gravokRevealGateId(selectedGateId: GravokGateId): GravokGateId {
@@ -42,7 +50,7 @@ export function resolveGambleGuide(
 
 /** Map the authoritative rules table and locked jackpot into three choices. */
 export function buildGambleGateViews(
-  runtime: GambleSiteRuntime | null,
+  runtime: GravokWagerSiteRuntime | null,
   maxDreamsigns: number,
 ): readonly GambleGateView[] {
   return GRAVOK_GATE_RULES.map((gate) => ({
@@ -64,54 +72,63 @@ export function buildGambleGateViews(
   }));
 }
 
-/** Build the complete view for Gravok's Three-Gate Wager. */
-export function buildGambleSiteView(params: {
+function commonGambleView(params: {
+  sceneNode: DreamscapeNode | null;
+  guide: DreamGuideContent | null;
+  guideLine: string;
+}): { scene: ArtRef | null; guide: GravokWagerSiteView["guide"] } {
+  const guideId = params.guide?.id ?? "gravok";
+  return {
+    scene:
+      params.sceneNode === null
+        ? null
+        : dreamscapeSceneRef(params.sceneNode),
+    guide: {
+      id: guideId,
+      name: params.guide?.name ?? "Gravok",
+      line: params.guideLine,
+      art: artRef.dreamGuide(guideId),
+    },
+  };
+}
+
+function buildGravokWagerSiteView(params: {
   state: JourneyState;
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent | null;
-}): GambleSiteView {
-  const runtimeCandidate = params.state.siteRuntime[params.site.id];
-  const runtime =
-    runtimeCandidate?.kind === "gamble" ? runtimeCandidate : null;
-  const guideId = params.guide?.id ?? "gravok";
-  const scene: ArtRef | null =
-    params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
-  const result = runtime?.result ?? null;
+  runtime: GravokWagerSiteRuntime;
+}): GravokWagerSiteView {
+  const { runtime } = params;
+  const result = runtime.result;
   const rewardDreamsign =
     result?.won === true && result.gateId === "jack"
-      ? runtime?.rewardDreamsign ?? null
+      ? runtime.rewardDreamsign
       : null;
 
   return {
+    gameId: "gravok-three-gate-wager",
     siteId: params.site.id,
-    scene,
-    isFarpoint: runtime?.isFarpoint ?? params.site.isEnhanced,
-    runtimeReady: runtime !== null,
-    wagerCost:
-      runtime?.wagerCost ?? (params.site.isEnhanced ? 0 : GRAVOK_WAGER_COST),
-    canAfford:
-      params.state.essence >=
-      (runtime?.wagerCost ??
-        (params.site.isEnhanced ? 0 : GRAVOK_WAGER_COST)),
-    canPlayAgain:
-      (runtime?.roundNumber ?? 1) <= GRAVOK_WAGER_MAX_RETRIES,
+    ...commonGambleView({
+      sceneNode: params.sceneNode,
+      guide: params.guide,
+      guideLine: GRAVOK_WAGER_GUIDE_LINE,
+    }),
+    isFarpoint: runtime.isFarpoint,
+    runtimeReady: true,
+    wagerCost: runtime.wagerCost,
+    canAfford: params.state.essence >= runtime.wagerCost,
+    canPlayAgain: (runtime.roundNumber ?? 1) <= GRAVOK_WAGER_MAX_RETRIES,
     card: {
       rank: result?.card.rank ?? "A",
       suit: result?.card.suit ?? "spades",
     },
     gates: buildGambleGateViews(runtime, params.state.maxDreamsigns),
-    guide: {
-      id: guideId,
-      name: params.guide?.name ?? "Gravok",
-      line: GRAVOK_WAGER_GUIDE_LINE,
-      art: artRef.dreamGuide(guideId),
-    },
     result:
       result === null
         ? null
         : {
-            id: `${params.site.id}:${runtime?.shuffleCommitment ?? "unprepared"}:${result.gateId}:${result.card.rank}-${result.card.suit}`,
+            id: `${params.site.id}:${runtime.shuffleCommitment}:${result.gateId}:${result.card.rank}-${result.card.suit}`,
             gateId: result.gateId,
             revealGateId: gravokRevealGateId(result.gateId),
             won: result.won,
@@ -123,8 +140,7 @@ export function buildGambleSiteView(params: {
           },
     replacement:
       result?.pendingDreamsignReplacement === true &&
-      runtime?.rewardDreamsign !== null &&
-      runtime?.rewardDreamsign !== undefined
+      runtime.rewardDreamsign !== null
         ? {
             pendingDreamsign: runtime.rewardDreamsign,
             currentDreamsigns: params.state.dreamsigns,
@@ -132,4 +148,85 @@ export function buildGambleSiteView(params: {
           }
         : null,
   };
+}
+
+function buildProgressiveDrawSiteView(params: {
+  state: JourneyState;
+  sceneNode: DreamscapeNode | null;
+  site: SiteState & { type: "Gamble" };
+  guide: DreamGuideContent | null;
+  runtime: TidemarkProgressiveSiteRuntime;
+}): ProgressiveDrawSiteView {
+  const { runtime } = params;
+  const result = runtime.result;
+  const nextAttempt = nextTidemarkAttemptNumber(runtime);
+  const nextCost =
+    nextAttempt === null
+      ? null
+      : tidemarkAttemptCost(nextAttempt, runtime.isFarpoint);
+
+  return {
+    gameId: "tidemark-progressive-draw",
+    siteId: params.site.id,
+    ...commonGambleView({
+      sceneNode: params.sceneNode,
+      guide: params.guide,
+      guideLine: TIDEMARK_PROGRESSIVE_GUIDE_LINE,
+    }),
+    isFarpoint: runtime.isFarpoint,
+    runtimeReady: true,
+    nextDraw:
+      nextAttempt === null || nextCost === null
+        ? null
+        : {
+            attemptNumber: nextAttempt,
+            cost: nextCost,
+            canAfford: params.state.essence >= nextCost,
+            available:
+              runtime.rewardDreamsign !== null &&
+              params.state.maxDreamsigns > 0,
+          },
+    result:
+      result === null
+        ? null
+        : {
+            id: `${params.site.id}:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? "unprepared"}:${String(result.attemptNumber)}`,
+            attemptNumber: result.attemptNumber,
+            card: result.card,
+            won: result.won,
+            resultSettled: result.resultSettled,
+            terminal: result.won || result.attemptNumber === 4,
+            rewardDreamsign:
+              result.won && result.resultSettled
+                ? runtime.rewardDreamsign
+                : null,
+            pendingDreamsignReplacement:
+              result.pendingDreamsignReplacement,
+          },
+    replacement:
+      result?.pendingDreamsignReplacement === true &&
+      runtime.rewardDreamsign !== null
+        ? {
+            pendingDreamsign: runtime.rewardDreamsign,
+            currentDreamsigns: params.state.dreamsigns,
+            maxDreamsigns: params.state.maxDreamsigns,
+          }
+        : null,
+  };
+}
+
+/** Build the selected Gamble game's view without exposing future outcomes. */
+export function buildGambleSiteView(params: {
+  state: JourneyState;
+  sceneNode: DreamscapeNode | null;
+  site: SiteState & { type: "Gamble" };
+  guide: DreamGuideContent | null;
+}): GambleSiteView | null {
+  const runtimeCandidate = params.state.siteRuntime[params.site.id];
+  const runtime: GambleSiteRuntime | null =
+    runtimeCandidate?.kind === "gamble" ? runtimeCandidate : null;
+  if (runtime === null) return null;
+  return runtime.gameId === "tidemark-progressive-draw"
+    ? buildProgressiveDrawSiteView({ ...params, runtime })
+    : buildGravokWagerSiteView({ ...params, runtime });
 }

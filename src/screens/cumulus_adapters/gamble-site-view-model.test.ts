@@ -1,12 +1,21 @@
 import { describe, expect, it } from "vitest";
 import { createDefaultState } from "../../state/journey-context";
 import type { DreamGuideContent } from "../../types/content";
-import type { GambleSiteRuntime, SiteState } from "../../types/journey";
+import type {
+  GravokWagerSiteRuntime,
+  SiteState,
+  TidemarkProgressiveSiteRuntime,
+} from "../../types/journey";
+import type {
+  GambleSiteView,
+  GravokWagerSiteView,
+} from "../../cumulus/screens/GambleSiteScreen";
 import {
   buildGambleGateViews,
   buildGambleSiteView,
   gravokRevealGateId,
   GRAVOK_WAGER_GUIDE_LINE,
+  TIDEMARK_PROGRESSIVE_GUIDE_LINE,
   resolveGambleGuide,
 } from "./gamble-site-view-model";
 
@@ -17,7 +26,7 @@ const GAMBLE_SITE: SiteState & { type: "Gamble" } = {
   isVisited: false,
 };
 
-const RUNTIME: GambleSiteRuntime = {
+const RUNTIME: GravokWagerSiteRuntime = {
   kind: "gamble",
   gameId: "gravok-three-gate-wager",
   rulesVersion: "fixture-rules",
@@ -35,6 +44,15 @@ const RUNTIME: GambleSiteRuntime = {
   },
   result: null,
 };
+
+function expectGravokView(
+  view: GambleSiteView | null,
+): asserts view is GravokWagerSiteView {
+  expect(view?.gameId).toBe("gravok-three-gate-wager");
+  if (view?.gameId !== "gravok-three-gate-wager") {
+    throw new Error("expected Three-Gate view");
+  }
+}
 
 describe("gamble-site-view-model", () => {
   it("uses the next non-selected gate as the stable reveal object", () => {
@@ -86,6 +104,7 @@ describe("gamble-site-view-model", () => {
       site: GAMBLE_SITE,
       guide: null,
     });
+    expectGravokView(view);
 
     expect(view.runtimeReady).toBe(true);
     expect(view.canAfford).toBe(true);
@@ -109,12 +128,13 @@ describe("gamble-site-view-model", () => {
       site: GAMBLE_SITE,
       guide: null,
     });
+    expectGravokView(view);
 
     expect(view.canPlayAgain).toBe(false);
   });
 
   it("maps a jackpot result and its at-cap replacement by UUID", () => {
-    const resultRuntime: GambleSiteRuntime = {
+    const resultRuntime: GravokWagerSiteRuntime = {
       ...RUNTIME,
       result: {
         gateId: "jack",
@@ -146,6 +166,7 @@ describe("gamble-site-view-model", () => {
       site: GAMBLE_SITE,
       guide: null,
     });
+    expectGravokView(view);
 
     expect(view.card).toEqual({ rank: "Q", suit: "hearts" });
     expect(view.result).toMatchObject({
@@ -176,5 +197,168 @@ describe("gamble-site-view-model", () => {
     ];
 
     expect(resolveGambleGuide(guides)?.id).toBe("fixture-gambler");
+  });
+});
+
+const PROGRESSIVE_RUNTIME: TidemarkProgressiveSiteRuntime = {
+  kind: "gamble",
+  gameId: "tidemark-progressive-draw",
+  rulesVersion: "fixture-progressive-rules",
+  isFarpoint: false,
+  shuffleCommitments: ["attempt-1", "attempt-2", "attempt-3", "attempt-4"],
+  committedCards: [
+    { rank: "J", suit: "clubs" },
+    { rank: "10", suit: "diamonds" },
+    { rank: "8", suit: "hearts" },
+    { rank: "6", suit: "spades" },
+  ],
+  dreamsignCandidateScores: [
+    { dreamsignId: "fixture-sign", score: 1 },
+  ],
+  strongPoolSize: 1,
+  strongPoolCutoffScore: 1,
+  rewardDreamsign: RUNTIME.rewardDreamsign,
+  revealedCards: [],
+  cumulativeCost: 0,
+  result: null,
+};
+
+describe("gamble-site-view-model — Progressive Draw", () => {
+  it("shows only draw one and keeps the locked Dreamsign out of the view", () => {
+    const state = {
+      ...createDefaultState(),
+      essence: 75,
+      siteRuntime: { [GAMBLE_SITE.id]: PROGRESSIVE_RUNTIME },
+    };
+    const view = buildGambleSiteView({
+      state,
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+
+    expect(view?.gameId).toBe("tidemark-progressive-draw");
+    if (view?.gameId !== "tidemark-progressive-draw") {
+      throw new Error("expected Progressive Draw view");
+    }
+    expect(view.nextDraw).toEqual({
+      attemptNumber: 1,
+      cost: 15,
+      canAfford: true,
+      available: true,
+    });
+    expect(view.result).toBeNull();
+    expect(view.guide.line).toBe(TIDEMARK_PROGRESSIVE_GUIDE_LINE);
+    expect(JSON.stringify(view)).not.toContain("Fixture Sign");
+    expect(JSON.stringify(view)).not.toContain("attempt-2");
+  });
+
+  it("reveals only the next cost after a settled miss", () => {
+    const runtime: TidemarkProgressiveSiteRuntime = {
+      ...PROGRESSIVE_RUNTIME,
+      revealedCards: [PROGRESSIVE_RUNTIME.committedCards[0]],
+      cumulativeCost: 15,
+      result: {
+        attemptNumber: 1,
+        card: PROGRESSIVE_RUNTIME.committedCards[0],
+        won: false,
+        costPaid: 15,
+        cumulativeCost: 15,
+        resultSettled: true,
+        dreamsignAwarded: false,
+        pendingDreamsignReplacement: false,
+      },
+    };
+    const view = buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        essence: 20,
+        siteRuntime: { [GAMBLE_SITE.id]: runtime },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+
+    expect(view?.gameId).toBe("tidemark-progressive-draw");
+    if (view?.gameId !== "tidemark-progressive-draw") {
+      throw new Error("expected Progressive Draw view");
+    }
+    expect(view.nextDraw).toEqual({
+      attemptNumber: 2,
+      cost: 25,
+      canAfford: false,
+      available: true,
+    });
+    expect(view.result).toMatchObject({
+      attemptNumber: 1,
+      won: false,
+      rewardDreamsign: null,
+    });
+  });
+
+  it("reveals the Dreamsign only after a winning result settles", () => {
+    const winningResult = {
+      attemptNumber: 1 as const,
+      card: { rank: "Q" as const, suit: "hearts" as const },
+      won: true,
+      costPaid: 15,
+      cumulativeCost: 15,
+      resultSettled: false,
+      dreamsignAwarded: false,
+      pendingDreamsignReplacement: false,
+    };
+    const build = (resultSettled: boolean) => buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        siteRuntime: {
+          [GAMBLE_SITE.id]: {
+            ...PROGRESSIVE_RUNTIME,
+            revealedCards: [winningResult.card],
+            cumulativeCost: 15,
+            result: { ...winningResult, resultSettled },
+          },
+        },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+
+    const before = build(false);
+    const after = build(true);
+    expect(before?.gameId).toBe("tidemark-progressive-draw");
+    expect(after?.gameId).toBe("tidemark-progressive-draw");
+    if (
+      before?.gameId !== "tidemark-progressive-draw" ||
+      after?.gameId !== "tidemark-progressive-draw"
+    ) {
+      throw new Error("expected Progressive Draw views");
+    }
+    expect(before.result?.rewardDreamsign).toBeNull();
+    expect(after.result?.rewardDreamsign).toMatchObject({
+      id: "fixture-sign",
+    });
+    expect(after.nextDraw).toBeNull();
+  });
+
+  it("maps Farpoint's reduced current cost", () => {
+    const view = buildGambleSiteView({
+      state: {
+        ...createDefaultState(),
+        siteRuntime: {
+          [GAMBLE_SITE.id]: { ...PROGRESSIVE_RUNTIME, isFarpoint: true },
+        },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: null,
+    });
+
+    expect(view?.gameId).toBe("tidemark-progressive-draw");
+    if (view?.gameId !== "tidemark-progressive-draw") {
+      throw new Error("expected Progressive Draw view");
+    }
+    expect(view.nextDraw?.cost).toBe(10);
   });
 });

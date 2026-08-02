@@ -543,6 +543,21 @@ export function routeDomain(
         state,
         gamble.replaceGravokWagerDreamsign(journey, payload),
       );
+    case "DRAW_TIDEMARK_PROGRESSIVE":
+      return journeyCase(
+        state,
+        gamble.drawTidemarkProgressive(journey, payload),
+      );
+    case "SETTLE_TIDEMARK_PROGRESSIVE":
+      return journeyCase(
+        state,
+        gamble.settleTidemarkProgressive(journey, payload),
+      );
+    case "REPLACE_TIDEMARK_PROGRESSIVE_DREAMSIGN":
+      return journeyCase(
+        state,
+        gamble.replaceTidemarkProgressiveDreamsign(journey, payload),
+      );
 
     // --- shop, merchant & modifiers ---
     case "BUY_SHOP_SLOT":

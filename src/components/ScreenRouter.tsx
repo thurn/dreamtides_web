@@ -140,7 +140,7 @@ function SiteRoute({
     );
   }
 
-  const disposition = siteDispositionFor(site);
+  const disposition = siteDispositionFor(site, runtimeConfig.gambleGameId);
   if (disposition.kind === "inline") {
     throw new Error(
       `${site.type} site ${site.id} is resolved inline from the Dreamscape.`,

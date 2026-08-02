@@ -5,10 +5,17 @@ import {
   GRAVOK_WAGER_MAX_RETRIES,
   rankWinsGravokGate,
 } from "../../data/gravok-wager";
+import {
+  nextTidemarkAttemptNumber,
+  rankWinsTidemarkAttempt,
+  tidemarkAttemptCost,
+} from "../../data/tidemark-progressive-draw";
 import type { GravokGateId } from "../../types/gamble";
 import type {
   GambleSiteRuntime,
+  GravokWagerSiteRuntime,
   JourneyState,
+  TidemarkProgressiveSiteRuntime,
 } from "../../types/journey";
 import type { EventContext } from "../../eventlog/types";
 import { findSite, getSiteContentProvider } from "./sites";
@@ -50,6 +57,22 @@ function withRuntime(
   };
 }
 
+function gravokRuntimeFor(
+  journey: JourneyState,
+  siteId: string,
+): GravokWagerSiteRuntime | null {
+  const runtime = runtimeFor(journey, siteId);
+  return runtime?.gameId === "gravok-three-gate-wager" ? runtime : null;
+}
+
+function tidemarkRuntimeFor(
+  journey: JourneyState,
+  siteId: string,
+): TidemarkProgressiveSiteRuntime | null {
+  const runtime = runtimeFor(journey, siteId);
+  return runtime?.gameId === "tidemark-progressive-draw" ? runtime : null;
+}
+
 /**
  * Commit one chosen gate. The intent carries only the gate id; cost, draw,
  * threshold, payout, and Dreamsign handling derive from the locked runtime.
@@ -69,7 +92,7 @@ export function placeGravokWager(
   }
 
   const gateId = rawGateId as GravokGateId;
-  const runtime = runtimeFor(journey, siteId);
+  const runtime = gravokRuntimeFor(journey, siteId);
   if (runtime === null || runtime.result !== null) return null;
   if (journey.essence < runtime.wagerCost) return null;
 
@@ -134,7 +157,7 @@ export function settleGravokWager(
   const shuffleCommitment = asString(payload.shuffleCommitment);
   if (siteId === null || shuffleCommitment === null) return null;
 
-  const runtime = runtimeFor(journey, siteId);
+  const runtime = gravokRuntimeFor(journey, siteId);
   if (
     runtime === null ||
     runtime.shuffleCommitment !== shuffleCommitment ||
@@ -169,7 +192,7 @@ export function playAgainGravokWager(
   );
   if (siteId === null || previousShuffleCommitment === null) return null;
 
-  const runtime = runtimeFor(journey, siteId);
+  const runtime = gravokRuntimeFor(journey, siteId);
   const site = findSite(journey, siteId);
   const provider = getSiteContentProvider();
   const roundNumber = runtime?.roundNumber ?? 1;
@@ -186,8 +209,18 @@ export function playAgainGravokWager(
     return null;
   }
 
-  const generated = provider.openSite({ journey, site, rng: ctx.rng });
-  if (generated?.runtime.kind !== "gamble") return null;
+  const generated = provider.openSite({
+    journey,
+    site,
+    rng: ctx.rng,
+    gambleGameId: "gravok-three-gate-wager",
+  });
+  if (
+    generated?.runtime.kind !== "gamble" ||
+    generated.runtime.gameId !== "gravok-three-gate-wager"
+  ) {
+    return null;
+  }
 
   return withRuntime(journey, siteId, {
     ...generated.runtime,
@@ -204,7 +237,7 @@ export function replaceGravokWagerDreamsign(
   const replacedDreamsignId = asString(payload.replacedDreamsignId);
   if (siteId === null || replacedDreamsignId === null) return null;
 
-  const runtime = runtimeFor(journey, siteId);
+  const runtime = gravokRuntimeFor(journey, siteId);
   if (
     runtime === null ||
     runtime.rewardDreamsign === null ||
@@ -238,5 +271,150 @@ export function replaceGravokWagerDreamsign(
     { ...journey, dreamsigns },
     siteId,
     nextRuntime,
+  );
+}
+
+/** Buy and reveal the next independently committed Progressive Draw attempt. */
+export function drawTidemarkProgressive(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  if (siteId === null) return null;
+
+  const runtime = tidemarkRuntimeFor(journey, siteId);
+  if (runtime === null || runtime.rewardDreamsign === null) return null;
+  if (journey.maxDreamsigns === 0) return null;
+
+  const attemptNumber = nextTidemarkAttemptNumber(runtime);
+  if (attemptNumber === null) return null;
+  const card = runtime.committedCards[attemptNumber - 1];
+  const shuffleCommitment = runtime.shuffleCommitments[attemptNumber - 1];
+  if (card === undefined || shuffleCommitment === undefined) return null;
+
+  const costPaid = tidemarkAttemptCost(attemptNumber, runtime.isFarpoint);
+  if (journey.essence < costPaid) return null;
+  const cumulativeCost = runtime.cumulativeCost + costPaid;
+  const won = rankWinsTidemarkAttempt(card.rank, attemptNumber);
+
+  return withRuntime(
+    { ...journey, essence: journey.essence - costPaid },
+    siteId,
+    {
+      ...runtime,
+      revealedCards: [...runtime.revealedCards, card],
+      cumulativeCost,
+      result: {
+        attemptNumber,
+        card,
+        won,
+        costPaid,
+        cumulativeCost,
+        resultSettled: false,
+        dreamsignAwarded: false,
+        pendingDreamsignReplacement: false,
+      },
+    },
+  );
+}
+
+/**
+ * Settle the revealed Progressive Draw result at the outcome moment, granting
+ * its locked Dreamsign only after a win becomes visible.
+ */
+export function settleTidemarkProgressive(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  const shuffleCommitment = asString(payload.shuffleCommitment);
+  if (siteId === null || shuffleCommitment === null) return null;
+
+  const runtime = tidemarkRuntimeFor(journey, siteId);
+  const result = runtime?.result ?? null;
+  if (
+    runtime === null ||
+    result === null ||
+    result.resultSettled ||
+    runtime.shuffleCommitments[result.attemptNumber - 1] !== shuffleCommitment
+  ) {
+    return null;
+  }
+
+  if (!result.won) {
+    return withRuntime(journey, siteId, {
+      ...runtime,
+      result: { ...result, resultSettled: true },
+    });
+  }
+
+  const rewardDreamsign = runtime.rewardDreamsign;
+  const rewardDreamsignId = rewardDreamsign?.id;
+  if (rewardDreamsign === null || rewardDreamsignId === undefined) return null;
+  const needsReplacement =
+    journey.dreamsigns.length >= journey.maxDreamsigns;
+  const dreamsigns = needsReplacement
+    ? journey.dreamsigns
+    : [...journey.dreamsigns, rewardDreamsign];
+  const remainingDreamsignPool = journey.remainingDreamsignPool.filter(
+    (id) => id !== rewardDreamsignId,
+  );
+
+  return withRuntime(
+    { ...journey, dreamsigns, remainingDreamsignPool },
+    siteId,
+    {
+      ...runtime,
+      result: {
+        ...result,
+        resultSettled: true,
+        dreamsignAwarded: !needsReplacement,
+        pendingDreamsignReplacement: needsReplacement,
+      },
+    },
+  );
+}
+
+/** Replace one held Dreamsign after a settled Progressive Draw win at the cap. */
+export function replaceTidemarkProgressiveDreamsign(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  const replacedDreamsignId = asString(payload.replacedDreamsignId);
+  if (siteId === null || replacedDreamsignId === null) return null;
+
+  const runtime = tidemarkRuntimeFor(journey, siteId);
+  if (
+    runtime === null ||
+    runtime.rewardDreamsign === null ||
+    runtime.result === null ||
+    !runtime.result.won ||
+    !runtime.result.resultSettled ||
+    !runtime.result.pendingDreamsignReplacement
+  ) {
+    return null;
+  }
+
+  const replaceIndex = journey.dreamsigns.findIndex(
+    (dreamsign) => dreamsign.id === replacedDreamsignId,
+  );
+  if (replaceIndex < 0) return null;
+  const dreamsigns = journey.dreamsigns.map((dreamsign, index) =>
+    index === replaceIndex ? runtime.rewardDreamsign! : dreamsign,
+  );
+
+  return withRuntime(
+    { ...journey, dreamsigns },
+    siteId,
+    {
+      ...runtime,
+      result: {
+        ...runtime.result,
+        dreamsignAwarded: true,
+        pendingDreamsignReplacement: false,
+        replacedDreamsignId,
+      },
+    },
   );
 }

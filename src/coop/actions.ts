@@ -24,7 +24,7 @@
 
 import type { EventDraft } from "../eventlog/client";
 import type { BeginTutorialOptions, TutorialAction } from "../types/tutorial";
-import type { GravokGateId } from "../types/gamble";
+import type { GambleGameId, GravokGateId } from "../types/gamble";
 
 /**
  * Appends a stamped event, resolving to its committed seq. In production this
@@ -129,7 +129,11 @@ export interface CoopActions {
   enterDraftSite: (siteId: string, runId?: string) => Promise<number>;
 
   // --- sites ---
-  openSite: (siteId: string, runId?: string) => Promise<number>;
+  openSite: (
+    siteId: string,
+    runId?: string,
+    gambleGameId?: GambleGameId,
+  ) => Promise<number>;
   resolveExplorationChoice: (
     siteId: string,
     actionId: string,
@@ -164,6 +168,16 @@ export interface CoopActions {
     runId?: string,
   ) => Promise<number>;
   replaceGravokWagerDreamsign: (
+    siteId: string,
+    replacedDreamsignId: string,
+  ) => Promise<number>;
+  drawTidemarkProgressive: (siteId: string) => Promise<number>;
+  settleTidemarkProgressive: (
+    siteId: string,
+    shuffleCommitment: string,
+    runId?: string,
+  ) => Promise<number>;
+  replaceTidemarkProgressiveDreamsign: (
     siteId: string,
     replacedDreamsignId: string,
   ) => Promise<number>;
@@ -422,8 +436,14 @@ export function makeActions(append: AppendFn): CoopActions {
       ),
 
     // --- sites ---
-    openSite: (siteId, runId) =>
-      emit("OPEN_SITE", { siteId }, siteIntentKey("open-site", siteId, runId)),
+    openSite: (siteId, runId, gambleGameId) =>
+      emit(
+        "OPEN_SITE",
+        gambleGameId === undefined ? { siteId } : { siteId, gambleGameId },
+        gambleGameId === undefined
+          ? siteIntentKey("open-site", siteId, runId)
+          : `${siteIntentKey("open-site", siteId, runId)}:${gambleGameId}`,
+      ),
     resolveExplorationChoice: (siteId, actionId, selection) =>
       emit("RESOLVE_EXPLORATION_CHOICE", {
         siteId,
@@ -471,6 +491,22 @@ export function makeActions(append: AppendFn): CoopActions {
       ),
     replaceGravokWagerDreamsign: (siteId, replacedDreamsignId) =>
       emit("REPLACE_GRAVOK_WAGER_DREAMSIGN", {
+        siteId,
+        replacedDreamsignId,
+      }),
+    drawTidemarkProgressive: (siteId) =>
+      emit("DRAW_TIDEMARK_PROGRESSIVE", { siteId }),
+    settleTidemarkProgressive: (siteId, shuffleCommitment, runId) =>
+      emit(
+        "SETTLE_TIDEMARK_PROGRESSIVE",
+        { siteId, shuffleCommitment },
+        `${siteIntentKey("settle-tidemark-progressive", siteId, runId)}:${shuffleCommitment}`,
+      ),
+    replaceTidemarkProgressiveDreamsign: (
+      siteId,
+      replacedDreamsignId,
+    ) =>
+      emit("REPLACE_TIDEMARK_PROGRESSIVE_DREAMSIGN", {
         siteId,
         replacedDreamsignId,
       }),
