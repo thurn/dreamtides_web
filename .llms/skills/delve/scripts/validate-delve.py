@@ -375,20 +375,25 @@ def validate_output(
     if len(events) != 5:
         fail("$output", "must contain exactly 5 events")
 
-    input_pairs = request["template_pairs"]
+    input_pairs_by_id = {pair["id"]: pair for pair in request["template_pairs"]}
+    seen_pair_ids: set[str] = set()
     seen_ranks: set[int] = set()
     score_by_rank: dict[int, int] = {}
-    for event_index, (event, pair) in enumerate(zip(events, input_pairs)):
+    for event_index, event in enumerate(events):
         event_path = f"$output[{event_index}]"
         event_obj = require_object(event, event_path)
         pair_id = require_string(
             event_obj.get("template_pair_id"), f"{event_path}.template_pair_id"
         )
-        if pair_id != pair["id"]:
+        pair = input_pairs_by_id.get(pair_id)
+        if pair is None:
             fail(
                 f"{event_path}.template_pair_id",
-                f"must preserve input order and equal {pair['id']!r}",
+                "must identify a template pair from the input",
             )
+        if pair_id in seen_pair_ids:
+            fail(f"{event_path}.template_pair_id", "must be unique in the output")
+        seen_pair_ids.add(pair_id)
 
         prose = require_string(event_obj.get("prose"), f"{event_path}.prose")
         if len(words(prose)) > 20:
@@ -482,6 +487,12 @@ def validate_output(
         rank = require_int(event_obj.get("rank"), f"{event_path}.rank", 1)
         if rank > 5:
             fail(f"{event_path}.rank", "must be at most 5")
+        expected_rank = event_index + 1
+        if rank != expected_rank:
+            fail(
+                f"{event_path}.rank",
+                f"must equal {expected_rank}; events must be sorted by ascending rank",
+            )
         if rank in seen_ranks:
             fail(f"{event_path}.rank", "must be unique")
         seen_ranks.add(rank)
@@ -494,6 +505,8 @@ def validate_output(
 
     if seen_ranks != {1, 2, 3, 4, 5}:
         fail("$output[*].rank", "must assign every rank from 1 through 5 exactly once")
+    if seen_pair_ids != set(input_pairs_by_id):
+        fail("$output[*].template_pair_id", "must use every input pair exactly once")
     ordered_scores = [score_by_rank[rank] for rank in range(1, 6)]
     if ordered_scores != sorted(ordered_scores, reverse=True):
         fail("$output[*].rank", "higher overall scores must receive better ranks")

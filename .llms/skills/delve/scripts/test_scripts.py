@@ -548,6 +548,31 @@ rendered-text = "Gain 1 energy."
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("40/15/30/15 weighted score", result.stderr)
 
+    def test_accepts_rank_order_independent_of_input_pair_order(self) -> None:
+        data = output()
+        rank_by_pair = {"pair-1": 2, "pair-2": 5, "pair-3": 1, "pair-4": 4, "pair-5": 3}
+        for event in data:
+            event["rank"] = rank_by_pair[event["template_pair_id"]]
+            for key in (
+                "scene_quality",
+                "action_quality",
+                "mechanical_connection",
+                "archetype_fit",
+                "overall",
+            ):
+                event["scores"][key] = 8
+        data.sort(key=lambda event: event["rank"])
+
+        result = self.run_validator(request(), data)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_rejects_events_not_sorted_by_rank(self) -> None:
+        data = output()
+        data[0], data[1] = data[1], data[0]
+        result = self.run_validator(request(), data)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("must be sorted by ascending rank", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()

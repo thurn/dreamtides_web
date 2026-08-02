@@ -104,8 +104,13 @@ validating an encounter.
     raises a scene score, and beautiful prose never excuses an incoherent
     action-to-effect connection.
 
-13. Validate the JSON, fix every error, and emit the JSON list with no Markdown
-   fence or surrounding commentary:
+13. Sort the five completed event objects by ascending `rank` as a final
+    readability pass, so rank 1 appears first and rank 5 last. Keep each event's
+    `template_pair_id` and two actions together; sorting events must not alter
+    or swap the actions within a template pair.
+
+14. Validate the JSON, fix every error, and emit the JSON list with no Markdown
+    fence or surrounding commentary:
 
    ```bash
    python3 .llms/skills/delve/scripts/validate-delve.py \

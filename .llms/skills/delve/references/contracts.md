@@ -38,7 +38,7 @@ exactly. The example shows one pair for brevity; a valid request contains five.
 
 ## Output
 
-Return a bare JSON list of five event objects in input order:
+Return a bare JSON list of five event objects sorted by ascending `rank`:
 
 ```json
 [
@@ -177,6 +177,8 @@ Score each component from 1–10:
 - `overall`: The weighted score above, rounded to the nearest integer.
 
 Assign every rank from 1 through 5 exactly once. Higher overall scores outrank
-lower scores; use qualitative comparison to break tied overall scores. Keep the
-events in input order rather than sorting them. The `ranking_rationale` is one
-concise sentence explaining the design's score and rank.
+lower scores; use qualitative comparison to break tied overall scores. Sort the
+final list from rank 1 through rank 5. Preserve the authoritative input pairing
+through `template_pair_id`, and preserve the two template actions in their input
+order within each event. The `ranking_rationale` is one concise sentence
+explaining the design's score and rank.
