@@ -1,0 +1,4 @@
+interface:
+  display_name: "Delve Encounter Designer"
+  short_description: "Design card-art narrative encounters"
+  default_prompt: "Use $delve to design five narrative encounters for this Dreamtides card and these template pairs."
