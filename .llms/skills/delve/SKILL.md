@@ -1,6 +1,6 @@
 ---
 name: delve
-description: Design and rank five Dreamtides Delve narrative encounters from a canonical card, its full-size artwork, and five pairs of mechanical event templates. Use when creating Delve event prose, narrative choice labels, template variables, custom Delve rewards, card-specific encounter JSON, or a user-facing Markdown display of encounter designs.
+description: Design and rank five Dreamtides Delve narrative encounters from a canonical card, its full-size artwork, and five pairs of mechanical event templates. Use when creating Delve event prose, narrative choice labels, template variables, custom Delve rewards, card-specific encounter JSON, a user-facing Markdown display, or a display-mode test from randomly generated input.
 ---
 
 # Delve Encounter Design
@@ -11,9 +11,10 @@ or render the validated designs as user-facing Markdown in display mode.
 
 ## Required input
 
-Require one JSON request containing a card and exactly five template pairs. Read
-[`references/contracts.md`](references/contracts.md) before designing or
-validating an encounter.
+For normal operation, require one JSON request containing a card and exactly
+five template pairs. In test mode, generate that request with the repository
+script instead. Read [`references/contracts.md`](references/contracts.md)
+before designing or validating an encounter.
 
 ## Output modes
 
@@ -25,29 +26,55 @@ validating an encounter.
   user-facing fields in Markdown.
 
 In display mode, emit only this structure, with no introduction, summary,
-scores, ranks, rationale, IDs, raw templates, variables, or commentary:
+scores, ranking rationale, IDs, raw templates, variables, or commentary:
 
 ```markdown
+# <card name>
+
+<card ability>
+
 ![Source artwork for <card name>](</absolute/path/to/source-image>)
 
 1. <prose>
-   - **<action label>** — <fully populated effect_text>
+   - ***<action label>*** — <fully populated effect_text>
      - **Response:** <resolution>
-   - **<action label>** — <fully populated effect_text>
+   - ***<action label>*** — <fully populated effect_text>
      - **Response:** <resolution>
 
 2. <prose>
    - ...
 ```
 
-Use the absolute image path returned by `find-card-art.py` in the Markdown image
-destination so the source artwork renders inline. Include all five designs in
-ascending rank order. For each design, put `prose` at the top level, preserve
-the two actions' template-pair order, and render each action as a sub-bullet.
-Put its thematic `label` and complete `effect_text` on that same sub-bullet,
-then put its `resolution` in a nested response bullet. Use `effect_text`, not
-the unresolved `template`, so every placeholder and special token is populated
-for display.
+Start with the canonical card `name` as a heading and its complete `ability` on
+the next paragraph. Then use the absolute image path returned by
+`find-card-art.py` in the Markdown image destination so the source artwork
+renders inline. Include all five designs in ascending rank order. For each
+design, put `prose` at the top level, preserve the two actions' template-pair
+order, and render each action as a sub-bullet. Bold and italicize its thematic
+`label` with triple asterisks and put the complete `effect_text` on that same
+sub-bullet, then put its `resolution` in a nested response bullet. Use
+`effect_text`, not the unresolved `template`, so every placeholder and special
+token is populated for display.
+
+## Test mode
+
+Use **test mode** when the user explicitly requests it. Test mode obtains a
+random request from the repository generator and then follows the complete
+display-mode workflow, including input validation, artwork inspection, JSON
+design, output validation, and ranked Markdown rendering:
+
+```bash
+python3 scripts/generate-delve-input.py
+```
+
+If the user supplies a seed, pass it through with `--seed <integer>`. Otherwise,
+use the generator's unseeded random output. Preserve the generated card,
+template pairs, pair order, and action order as the test fixture; never reroll
+silently because the combination is difficult. If a generated pair makes a
+required contract impossible—such as one action being strictly dominated—stop
+and report the failed test rather than presenting an invalid design. Successful
+test-mode responses use the display-mode format exactly and contain no test
+harness commentary.
 
 ## Workflow
 
@@ -166,8 +193,9 @@ for display.
 
 15. Emit the validated result in the selected output mode. In JSON mode, emit
     the bare JSON list with no Markdown fence or surrounding commentary. In
-    display mode, render only the Markdown structure specified in **Output
-    modes**; do not expose the underlying design metadata.
+    display mode, including successful test mode, render only the Markdown
+    structure specified in **Output modes**; do not expose the underlying
+    design metadata.
 
 ## Narrative standards
 

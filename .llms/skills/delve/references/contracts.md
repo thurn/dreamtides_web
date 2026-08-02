@@ -88,20 +88,29 @@ validate the complete JSON first, then render only the user-facing fields as
 Markdown:
 
 ```markdown
+# Blazing Emberwing
+
+☪: Gain 1● for each character you control.
+
 ![Source artwork for Blazing Emberwing](</absolute/path/to/source-image>)
 
 1. A great bird with wings wreathed in flame towers above you.
-   - **Call Others to Witness** — Take any number of Spirit Animal cards from 4 random choices
+   - ***Call Others to Witness*** — Take any number of Spirit Animal cards from 4 random choices
      - **Response:** Distant figures gather beneath the burning wings.
-   - **Call Down Its Kin** — Gain one copy of each of 2 random Spirit Animal cards
+   - ***Call Down Its Kin*** — Gain one copy of each of 2 random Spirit Animal cards
      - **Response:** Winged shapes descend through the heated sky.
 ```
 
-The complete display contains five top-level entries in ascending rank order.
-Each entry uses `prose` as its top-level text, preserves action order, places
-the action's `label` and fully populated `effect_text` together in a sub-bullet,
-and places its `resolution` in a nested response bullet. Omit all other JSON
-fields and any surrounding commentary from the display response.
+The display starts with the canonical card `name` and complete `ability`, then
+the inline source artwork. It contains five top-level entries in ascending rank
+order. Each entry uses `prose` as its top-level text, preserves action order,
+places the bold-italic `label` and fully populated `effect_text` together in a
+sub-bullet, and places its `resolution` in a nested response bullet. Omit all
+other JSON fields and any surrounding commentary from the display response.
+
+Test mode uses `scripts/generate-delve-input.py` to supply this contract's input
+and emits the same display format after validating the generated request and
+complete JSON output.
 
 ### Action variables
 
