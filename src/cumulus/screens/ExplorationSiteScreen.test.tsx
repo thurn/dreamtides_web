@@ -57,7 +57,7 @@ vi.mock("framer-motion", async () => {
 function makeCard(): CardData {
   return {
     id: asCardId("00000000-0000-4000-8000-000000000017"),
-    name: asCardName("Temporal Fixture"),
+    name: asCardName("Exploration Fixture"),
     cardNumber: 17,
     cardType: "Character",
     subtype: "Fixture",
