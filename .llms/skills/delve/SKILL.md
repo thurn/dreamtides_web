@@ -5,9 +5,12 @@ description: Design and rank five Dreamtides Delve narrative encounters from a c
 
 # Delve Encounter Design
 
-Create five independent, production-ready encounters that make a player feel
-they have entered the dream depicted by one card. Return strict JSON by default,
-or render the validated designs as user-facing Markdown in display mode.
+Create five production-ready encounters that make a player feel they have
+entered the dream depicted by one card. The five descriptions do not need to
+differ. Choose prose for art fidelity and its ability to support both actions in
+the assigned template pair; reuse the artwork's strongest visual focus whenever
+it remains the best mechanical fit. Return strict JSON by default, or render the
+validated designs as user-facing Markdown in display mode.
 
 ## Required input
 
@@ -126,22 +129,22 @@ harness commentary.
    fixed biographies, named locations, or offscreen lore.
 
 6. Set the templates aside and build a private scene bank from the artwork.
-   Draft at least eight descriptions that each combine a literal anchor with a
-   grounded poetic turn. The literal anchor fixes the reader inside visible
-   subjects, forms, motion, posture, scale, light, texture, distance, or
-   stillness. The poetic turn changes how that evidence feels through a precise
-   metaphor, comparison, personification, sensory compression, rhythmic
-   contrast, or relationship between visible elements. Reject a candidate that
-   only inventories subject, action, and setting, even when every detail is
-   accurate. Vary the perceptual center and sentence architecture, not the cast:
-   do not produce eight versions of `A <adjective> figure <verb> beside a
-   <creature>`. Create richness without inventing adjacent events. A scene does
-   not need conflict, danger, stakes, a dilemma, a request, a problem, a
-   resolution, or unresolved tension. Do not use template quantities,
-   operations, reward concepts, or needed effect recipients as scene
-   ingredients.
+   Start with the clearest visible subject, posture, scale, distance, motion,
+   texture, or stillness. Draft only enough candidates to find prose that can
+   support the generated mechanics; one excellent scene may support several
+   template pairs. Candidates may share the same visual focus, sentence shape,
+   or exact prose. Repetition is better than a weaker description written only
+   for variety.
 
-7. Apply four gates to every candidate with templates and actions hidden:
+   Use figurative language only when it makes a visible relationship clearer or
+   more immediate. A precise literal observation is fully acceptable. Do not
+   require a metaphor, personification, emotional conclusion, or different
+   perceptual center from every candidate. A scene does not need conflict,
+   danger, stakes, a dilemma, a request, a problem, a resolution, or unresolved
+   tension. Do not use template quantities, operations, reward concepts, or
+   needed effect recipients as scene ingredients.
+
+7. Apply five gates to every candidate with templates and actions hidden:
    - **Name gate:** Does it contain a forbidden-name word? Reject it if so,
      even when that word also works as an ordinary noun.
    - **Fidelity gate:** Can every material subject, object, setting feature,
@@ -149,14 +152,20 @@ harness commentary.
      added companion, crowd, creature, prop, structure, weather event, or
      ongoing incident. Do not promote ambiguous screens, reflections,
      silhouettes, or debris into people or formations.
-   - **Caption gate:** Could the line pass unchanged as stock-image alt text, or
-     reduce without meaningful loss to `A thing does something in a place`?
-     Reject it. Accuracy is necessary but a literal caption is not encounter
-     prose.
-   - **Poetry gate:** Does the figurative turn bind visible evidence into a
-     specific mood, scale, rhythm, or relationship? Reject vague atmosphere
-     that could fit unrelated fantasy art, and reject figurative language that
-     asserts a new material fact.
+   - **Clarity gate:** Can an ordinary reader immediately connect every clause
+     to something visible or strongly implied in this image? Reject language
+     that merely sounds evocative, requires interpretation to recover the
+     picture, or could fit unrelated fantasy art. Literal description passes
+     when it establishes a specific encounter rather than a generic inventory.
+   - **Figurative-language gate:** If the line uses a metaphor,
+     personification, or abstraction, does it clarify a concrete visual
+     relationship? Remove the figure of speech when the sentence becomes
+     equally meaningful or clearer without it. Reject decorative profundity,
+     emotional arithmetic, and material claims smuggled in as poetry.
+   - **Embodiment gate:** Does the prose assign the reader a body, clothing,
+     posture, or emotion that the artwork does not establish from the reader's
+     point of view? Second person places the reader in the scene; it does not
+     make every depicted figure's physique or feelings the reader's own.
 
    Also reject scenes that announce a decision, manufacture a predicament,
    depend on symbolic word substitution, or disguise a game operation. Freeze
@@ -177,8 +186,10 @@ harness commentary.
    enough eligible targets in the relevant canonical pool. Record that reason
    in the action's `predicate_exception_rationale` for validation.
 
-9. Match the five strongest frozen scenes to the five template pairs. Preserve
-   input order and never alter or swap templates. For each effect, write a
+9. Match the strongest compatible frozen scene to each template pair
+   independently. Preserve input order and never alter or swap templates. Reuse
+   a scene verbatim whenever it remains the strongest fit; do not choose the
+   fifth-best description merely to avoid repetition. For each effect, write a
    purposeful action label that is natural in the scene and makes the effect a
    plausible consequence. Privately complete: “When the player [label],
    [effect] follows because ___.” Require a concrete, scene-grounded answer
@@ -186,7 +197,7 @@ harness commentary.
    consequence that happens after the player's choice; never pre-seed the prose
    with extra figures or objects to literalize a mechanic. If the test fails,
    revise the label, resolution, variables, or scene assignment; never revise
-   the frozen prose.
+   the frozen prose merely to distinguish it from another event.
 
 10. Write a 5–10 word `resolution` for each action. Show the immediate response
     to the player's act and bridge naturally into the displayed effect without
@@ -201,11 +212,10 @@ harness commentary.
    operate at a different order of magnitude.
 
 12. Compare all five designs using the contract rubric, then assign unique
-    ranks. Rank art-faithful poetic precision above mechanic-friendly scene
-    invention. Score mechanical connection by the weaker of the two action
-    chains, not their average. Revise any chain below 7/10. Mechanical
-    literalism never raises a scene score, and beautiful prose never excuses an
-    incoherent action-to-effect connection.
+    ranks. Rank art fidelity, immediate clarity, and mechanical connection above
+    novelty or ornament. Score mechanical connection by the weaker of the two
+    action chains, not their average. Revise any chain below 7/10. Repeated
+    prose loses no points, and distinct prose earns no points by itself.
 
 13. Sort the five completed event objects by ascending `rank` as a final
     readability pass, so rank 1 appears first and rank 5 last. Keep each event's
@@ -242,32 +252,39 @@ harness commentary.
 - Keep the entire `prose` field near 10–15 words and never above 20. Use more
   than one sentence only when the extra sentence adds real value.
 - Describe a scene, not a miniature quest or an illustrated reward. Establish
-  what the player encounters and how it feels to stand there. The prose may be
-  wholly observational; nothing needs to be wrong, threatened, requested, or
-  unresolved. Keep game terms such as card, deck, draft, purge, essence,
-  dreamsign, and transfiguration out of the prose.
+  what the player encounters and the visible or strongly implied spatial and
+  sensory relationship. Do not assign the player or a depicted subject an
+  emotion merely to provide atmosphere. The prose may be wholly observational;
+  nothing needs to be wrong, threatened, requested, or unresolved. Keep game
+  terms such as card, deck, draft, purge, essence, dreamsign, and
+  transfiguration out of the prose.
 - Treat the artwork as the source of truth for every material element in the
   prose. Describe the moment inside the frame rather than a larger inferred
   world. If the art shows a lone figure, keep the figure alone; do not add a
   column, crowd, companion, or hidden population to service a Character effect.
-- Anchor every poetic turn in concrete nouns, observable actions, or strongly
-  implied sensation. Personify a visible environment, compare visible forms,
-  compress a supported sensory impression, or contrast scale, light, motion,
-  and stillness. Figurative language may change how the frame feels; it may not
-  add a material subject, event, or history.
-- Reject literal captions such as “A backpacked scavenger crouches beside a rat
-  where cold light enters the ruins.” It repeats a forbidden card-name word and
-  merely reports the composition. Prefer “Before you, a city forgets to breathe
-  as a bundled figure reaches toward a rat.” The city, figure, posture, and rat
-  remain visible anchors, while the personification creates atmosphere without
-  adding an object or incident.
-- Across the five scenes, vary syntax and perceptual focus. Do not repeatedly
-  introduce the subject as `A <adjective> figure` and change only the setting
-  clause. Each scene should discover a different expressive relationship among
-  the same visible evidence.
+- Prefer direct concrete nouns and observable relationships. Figurative
+  language is optional; when used, anchor it in visible forms, posture, scale,
+  distance, motion, stillness, or strongly implied sensation. It must sharpen
+  the reader's understanding of the frame, not merely make the sentence sound
+  literary, and it may not add a material subject, event, history, physique, or
+  emotion.
+- Reject generic inventories such as “A person and an animal are outside.”
+  Prefer the most specific visible relationship in plain language: “Before you,
+  a bundled figure reaches toward a rat beneath ruined walls.” The figure,
+  posture, rat, and setting remain concrete without relying on vague
+  personification.
+- For art showing a person beside a colossal bird, prefer “A vast bird bows
+  toward you, and silence bridges the difference.” Reject “A bird encloses your
+  slight frame” when neither enclosure nor the reader's physique is established.
+  Reject “distant lights forget their edges”: visible defocus does not make that
+  personification informative.
+- Do not optimize for syntactic, compositional, or sensory variety across the
+  five scenes. Reuse the strongest visual relationship and similar or identical
+  wording whenever they support the mechanics. Vary prose only when the new
+  version is at least as clear, faithful, and mechanically useful.
 - For an Event card, foreground the depicted action or charged instant implied
   by its name and ability. Ask what is being prevented, completed, revealed,
-  broken, escaped, or otherwise changed in the frame, and capture that poetic
+  broken, escaped, or otherwise changed in the frame, and capture that visible
   action before mentioning secondary scenery. The ability helps interpret what
   the image means; it does not authorize a literal rules paraphrase or an
   unsupported event.
@@ -319,8 +336,10 @@ harness commentary.
   story-bearing part of this particular scene.
 - Avoid generic decision language such as “awaiting your answer,” “offers two
   paths,” or “asks what you will choose.” Show the scene itself.
-- Prefer distinct compositions and sensory moments across the set, but never
-  sacrifice clarity or specificity merely to make the scenes different.
+- Distinctness is not a quality criterion. Similar or identical scenes are
+  acceptable across the set when each one supports both choices. Never add
+  abstraction, unsupported embodiment, or decorative imagery to differentiate
+  events.
 
 ## Mechanical standards
 
@@ -363,5 +382,5 @@ harness commentary.
   them on the live system's scale. Reject an option pair with an obvious
   universal best choice.
 - Never revise frozen prose to explain an effect. If a scene and pair cannot
-  support two causal label-and-resolution chains, assign a different frozen
-  scene to that pair.
+  support two causal label-and-resolution chains, assign another compatible
+  frozen scene to that pair; that scene may already be used by another pair.
