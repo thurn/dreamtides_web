@@ -47,7 +47,8 @@ Return a bare JSON list of five event objects in input order:
     "prose": "A great bird with wings wreathed in flame towers above you.",
     "actions": [
       {
-        "label": "Step Closer",
+        "label": "Call Others to Witness",
+        "resolution": "Distant figures gather beneath the burning wings.",
         "template_id": 16,
         "template": "Take any number of {predicate} cards from 4 random choices",
         "variables": {
@@ -56,7 +57,8 @@ Return a bare JSON list of five event objects in input order:
         "effect_text": "Take any number of Character cards from 4 random choices"
       },
       {
-        "label": "Shield Your Eyes",
+        "label": "Call Down Its Kin",
+        "resolution": "Winged shapes descend through the heated sky.",
         "template_id": 52,
         "template": "Gain one copy of each of {count} random {predicate} cards",
         "variables": {
@@ -69,11 +71,12 @@ Return a bare JSON list of five event objects in input order:
     "scores": {
       "scene_quality": 9,
       "action_quality": 9,
+      "mechanical_connection": 9,
       "archetype_fit": 10,
       "overall": 9
     },
     "rank": 1,
-    "ranking_rationale": "The imposing tableau supports two natural actions, while both rewards remain useful to the card's character-heavy strategy."
+    "ranking_rationale": "The imposing tableau supports two causal action chains, while both rewards remain useful to the card's character-heavy strategy."
   }
 ]
 ```
@@ -148,18 +151,27 @@ For `$CUSTOM_DREAMSIGN`, set `variables.custom_dreamsign` with a new UUID,
 `$SPECIAL_VARIABLE` tokens. The `template`, `variables`, and `selection` fields
 remain the authoritative machine-readable design.
 
+### Action resolutions
+
+Every action includes a `resolution` of 5–10 words. It is brief post-choice
+prose shown before or alongside the effect. It describes the world's immediate
+response to the label and makes the mechanical outcome feel earned without
+using game terminology or repeating `effect_text`.
+
 ## Scoring and ranking
 
 Score each component from 1–10:
 
-- `scene_quality` (60%): Whether the prose is a coherent, specific, evocative
+- `scene_quality` (40%): Whether the prose is a coherent, specific, evocative
   tableau grounded in the card's art and mood. Score it with mechanics and
   actions hidden. Conflict, plot, and an unresolved problem earn no inherent
   credit.
-- `action_quality` (25%): Whether both labels are distinct, natural things to do
-  in the presence of the scene. They need not solve a dilemma. The effects must
-  not contradict the actions, but literal explanation of the effects earns no
-  credit.
+- `action_quality` (15%): Whether both labels are distinct, purposeful things to
+  do in the scene and both resolutions are concise, vivid responses.
+- `mechanical_connection` (30%): Whether each label and resolution make its
+  effect feel like a plausible consequence, including the thematic fit of any
+  selected card, dreamsign, predicate, or custom reward. Score the weaker
+  action chain rather than averaging the two; revise scores below 7.
 - `archetype_fit` (15%): Whether both mechanical outcomes are credible and
   useful for the strategy implied by owning the source card.
 - `overall`: The weighted score above, rounded to the nearest integer.

@@ -68,7 +68,8 @@ validating an encounter.
    world, even if nothing needs fixing? Does it introduce its subjects instead
    of assuming the reader has already seen them?” Reject scenes that merely
    announce a decision, manufacture a predicament, depend on symbolic word
-   substitution, or exist to disguise a game operation.
+   substitution, or exist to disguise a game operation. Freeze the prose of
+   every passing scene. Do not revise it to support a mechanic later.
 
 8. Infer deck intent from the ability and canonical metadata. Ask what choosing
    this card suggests the player is building toward. Inspect repository tags
@@ -77,26 +78,33 @@ validating an encounter.
    likely deck: one may deepen its synergy while the other offers flexibility,
    conversion, or risk management.
 
-9. Match the five strongest scenes to the five template pairs. Preserve input
-   order and never alter or swap templates. Choose two labels for natural things
-   a person might do in the depicted moment: approach, wait, bow, shield their
-   eyes, call out, follow, listen, or watch. The actions are ways of engaging
-   with the scene, not solutions to a dilemma. Attach the mechanics afterward.
-   A reward may follow an action by loose thematic association; it does not
-   need to be a literal consequence or be explained by the prose.
+9. Match the five strongest frozen scenes to the five template pairs. Preserve
+   input order and never alter or swap templates. For each effect, write a
+   purposeful action label that is natural in the scene and makes the effect a
+   plausible consequence. Privately complete: “When the player [label],
+   [effect] follows because ___.” Require a concrete, scene-grounded answer
+   without game terminology. If that test fails, revise the label, resolution,
+   variables, or scene assignment; never revise the frozen prose.
 
-10. Calibrate mechanical values against the current game. Before choosing a
+10. Write a 5–10 word `resolution` for each action. Show the immediate response
+    to the player's act and bridge naturally into the displayed effect without
+    restating it. For example: `Call Down Its Kin` → `Winged shapes descend
+    through the heated sky.` The scene, label, resolution, and effect should
+    read as one causal sequence.
+
+11. Calibrate mechanical values against the current game. Before choosing a
    count or essence value, inspect relevant economy, pricing, pool, and effect
    data in the repository. Compare the likely low, typical, and high result of
    each choice. Do not guess a small-looking number in an economy whose units
    operate at a different order of magnitude.
 
-11. Compare all five designs using the scene-first contract rubric, then assign
-   unique ranks. Revise weak scenes rather than adding mystical language to
-   conceal them. A mechanically noncredible action still requires revision,
-   but mechanical literalism never raises a scene score.
+12. Compare all five designs using the contract rubric, then assign unique
+    ranks. Score mechanical connection by the weaker of the two action chains,
+    not their average. Revise any chain below 7/10. Mechanical literalism never
+    raises a scene score, and beautiful prose never excuses an incoherent
+    action-to-effect connection.
 
-12. Validate the JSON, fix every error, and emit the JSON list with no Markdown
+13. Validate the JSON, fix every error, and emit the JSON list with no Markdown
    fence or surrounding commentary:
 
    ```bash
@@ -130,10 +138,20 @@ validating an encounter.
 - Allow wonder, melancholy, danger, uncanniness, and mythic intensity. Avoid
   graphic harm, cruelty, modern slang, mood-breaking comedy, and obvious
   good-versus-evil framing.
-- Make each choice label a 2–4 word natural act, at most 24 characters. Do not
-  paraphrase the reward. Both labels must be plausible ways to engage with the
-  scene even when their mechanical effects are hidden; they need not solve or
-  resolve anything.
+- Make each choice label a 2–5 word causal act, at most 32 characters. Prefer a
+  performative verb with a target or intention: call, invite, welcome, release,
+  offer, follow, receive, trade, or gather. Do not paraphrase the reward. Both
+  labels must be plausible ways to engage with the scene and establish why the
+  effect follows.
+- Reject context-free gestures such as “Raise Your Arms,” “Meet Its Gaze,” or
+  “Stand Your Ground” when the effect does not naturally answer that gesture.
+  Observing, waiting, and listening suit effects involving knowledge, omens, or
+  discovery; calling and welcoming suit new characters; offering and releasing
+  suit losing or exchanging something; movement suits speed or travel.
+- Write each `resolution` in present tense using 5–10 words. Describe what the
+  world does immediately after the action. Keep game terminology and explicit
+  reward text out of it. Do not use the resolution to explain rules, repeat the
+  action label, or introduce unrelated lore.
 - Treat the card name as an archetype label, not a proper noun or mandatory
   refrain. Prefer varied, concrete descriptions of the visible being or event.
   As a default, mention the source card name in no more than one prose field
@@ -161,6 +179,11 @@ validating an encounter.
 - Reference existing cards and dreamsigns with real canonical UUIDs. Resolve
   names only for display. Validate transfiguration names and other fixed content
   against repository sources. Never key, compare, or select cards by name.
+- Choose exact cards, dreamsigns, predicates, and other variables for three-way
+  fit: they must suit the depicted world, the label-and-resolution chain, and
+  the deck strategy. Reject a named reward that is mechanically useful but
+  narratively unrelated. In particular, select a thematically resonant
+  dreamsign rather than forcing an arbitrary dreamsign into the narrative.
 - Invent content only for explicit `$CUSTOM_CARD` or `$CUSTOM_DREAMSIGN`
   templates. Give custom content a new UUID and the complete structured record
   required by the contract. Custom card names describe archetypes rather than
@@ -172,6 +195,6 @@ validating an encounter.
 - Choose conservative values when balance evidence is incomplete, but keep
   them on the live system's scale. Reject an option pair with an obvious
   universal best choice.
-- Never revise good prose to explain an effect. If a scene and pair cannot
-  coexist without forced symbolism, assign that scene to another pair or accept
-  a looser association between action and reward.
+- Never revise frozen prose to explain an effect. If a scene and pair cannot
+  support two causal label-and-resolution chains, assign a different frozen
+  scene to that pair.

@@ -406,10 +406,16 @@ def validate_output(
                 fail(f"{action_path}.template_id", "must match the input action")
             label = require_string(action_obj.get("label"), f"{action_path}.label")
             label_words = words(label)
-            if not 2 <= len(label_words) <= 4:
-                fail(f"{action_path}.label", "must contain 2 to 4 words")
-            if len(label) > 24:
-                fail(f"{action_path}.label", "must contain at most 24 characters")
+            if not 2 <= len(label_words) <= 5:
+                fail(f"{action_path}.label", "must contain 2 to 5 words")
+            if len(label) > 32:
+                fail(f"{action_path}.label", "must contain at most 32 characters")
+            resolution = require_string(
+                action_obj.get("resolution"), f"{action_path}.resolution"
+            )
+            resolution_words = words(resolution)
+            if not 5 <= len(resolution_words) <= 10:
+                fail(f"{action_path}.resolution", "must contain 5 to 10 words")
             validate_variables(
                 action_obj["template"],
                 action_obj,
@@ -438,6 +444,11 @@ def validate_output(
             f"{event_path}.scores.action_quality",
             1,
         )
+        connection_score = require_int(
+            scores.get("mechanical_connection"),
+            f"{event_path}.scores.mechanical_connection",
+            1,
+        )
         archetype_score = require_int(
             scores.get("archetype_fit"), f"{event_path}.scores.archetype_fit", 1
         )
@@ -448,6 +459,7 @@ def validate_output(
                 in {
                     "scene_quality",
                     "action_quality",
+                    "mechanical_connection",
                     "archetype_fit",
                     "overall",
                 }
@@ -455,12 +467,16 @@ def validate_output(
             ):
                 fail(f"{event_path}.scores.{key}", "must be at most 10")
         expected_overall = int(
-            0.6 * scene_score + 0.25 * action_score + 0.15 * archetype_score + 0.5
+            0.4 * scene_score
+            + 0.15 * action_score
+            + 0.3 * connection_score
+            + 0.15 * archetype_score
+            + 0.5
         )
         if overall != expected_overall:
             fail(
                 f"{event_path}.scores.overall",
-                f"must equal the rounded 60/25/15 weighted score ({expected_overall})",
+                f"must equal the rounded 40/15/30/15 weighted score ({expected_overall})",
             )
 
         rank = require_int(event_obj.get("rank"), f"{event_path}.rank", 1)

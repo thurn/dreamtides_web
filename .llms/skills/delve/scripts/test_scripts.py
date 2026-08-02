@@ -72,6 +72,7 @@ def output() -> list[dict[str, object]]:
                 "actions": [
                     {
                         "label": "Gather Warmth",
+                        "resolution": "Warm light settles gently across your hands.",
                         "template_id": 1,
                         "template": "Gain {essence} essence",
                         "variables": {"essence": i},
@@ -79,6 +80,7 @@ def output() -> list[dict[str, object]]:
                     },
                     {
                         "label": "Read the Signs",
+                        "resolution": "Clear markings brighten along the silver arch.",
                         "template_id": 28,
                         "template": "Gain a random dreamsign",
                         "variables": {},
@@ -88,6 +90,7 @@ def output() -> list[dict[str, object]]:
                 "scores": {
                     "scene_quality": score,
                     "action_quality": score,
+                    "mechanical_connection": score,
                     "archetype_fit": score,
                     "overall": score,
                 },
@@ -106,6 +109,7 @@ def replace_action(
     template: str,
     action: dict[str, object],
 ) -> None:
+    action.setdefault("resolution", "A clear answer rises from the waiting air.")
     request_data["template_pairs"][0]["actions"][action_index] = template_action(
         template_id, template
     )
@@ -505,6 +509,44 @@ rendered-text = "Gain 1 energy."
         result = self.run_validator(request(), data)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("at most 20 words", result.stderr)
+
+    def test_validates_resolution_length(self) -> None:
+        data = output()
+        del data[0]["actions"][0]["resolution"]
+        result = self.run_validator(request(), data)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("resolution: must be a non-empty string", result.stderr)
+
+        data = output()
+        data[0]["actions"][0]["resolution"] = "Too brief"
+        result = self.run_validator(request(), data)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("must contain 5 to 10 words", result.stderr)
+
+        data[0]["actions"][0]["resolution"] = " ".join(["word"] * 11)
+        result = self.run_validator(request(), data)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("must contain 5 to 10 words", result.stderr)
+
+    def test_accepts_five_word_action_label(self) -> None:
+        data = output()
+        data[0]["actions"][0]["label"] = "Call the Distant Figures Near"
+        result = self.run_validator(request(), data)
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_requires_mechanical_connection_score(self) -> None:
+        data = output()
+        del data[0]["scores"]["mechanical_connection"]
+        result = self.run_validator(request(), data)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("mechanical_connection: must be an integer", result.stderr)
+
+    def test_weights_mechanical_connection_in_overall_score(self) -> None:
+        data = output()
+        data[0]["scores"]["mechanical_connection"] = 1
+        result = self.run_validator(request(), data)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("40/15/30/15 weighted score", result.stderr)
 
 
 if __name__ == "__main__":
