@@ -219,9 +219,10 @@ Score each component from 1–10:
   and materially faithful description of the card's artwork. Score it with
   mechanics and actions hidden. Every subject, object, setting feature, and
   depicted action must be visible or strongly implied by visible evidence.
-  Reward poetic compression, sensory immediacy, posture, scale, and precise
-  attention to observed details. A faithful but flat inventory is competent,
-  not excellent. Reject a candidate before scoring if it invents a companion,
+  Require a literal visual anchor and a grounded poetic turn using compression,
+  sensory immediacy, rhythm, personification, comparison, posture, or scale.
+  Reject a candidate before scoring if it reads like stock-image alt text,
+  contains a meaningful word from the source card name, or invents a companion,
   crowd, creature, prop, structure, weather event, or incident to support a
   mechanic. Conflict, plot, and an unresolved problem earn no inherent credit.
 - `action_quality` (15%): Whether both labels are distinct, purposeful things to

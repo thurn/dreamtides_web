@@ -107,47 +107,60 @@ harness commentary.
    mood, sensory atmosphere, and relationships. If a claim depends on exact
    color, measure the image rather than trusting visual color perception.
 
-5. Interpret the card according to its canonical type. Read a Character as an
-   archetype, not a named individual: the art depicts *a* blazing emberwing,
-   not a person named Emberwing. For an Event, treat the name and ability as the
-   central action, change, or condition that gives the depicted moment meaning.
-   Let that action organize the prose rather than exhaustively cataloguing
-   secondary visual elements. An Event named `Abolish` with an ability that
-   prevents a played card should feel like interruption, refusal, or something
-   arrested before completion; a flock in its artwork may support that moment
-   without becoming the subject of every description. This is an interpretive
-   lens, not permission to add objects, actors, outcomes, or rules text absent
-   from the image. Do not invent proper names, identifiable faces, fixed
-   biographies, named locations, or offscreen lore. Prefer ordinary visual
-   descriptions such as “a great bird,” “the flame-wreathed creature,” or “a
-   winged shape.” Use the card name only when it is the clearest wording. As a
-   default, use it in at most one of the five prose fields and omit it entirely
-   when a common description is stronger. Do not repeat the card name
-   mechanically in prose or labels.
+5. Interpret the card according to its canonical type, then make a private
+   forbidden-name lexicon. Normalize the card name and collect every meaningful
+   word, excluding only grammatical connectors such as `a`, `an`, `the`, `of`,
+   `to`, and `and`; include obvious inflections and compounds that would still
+   sound like the name. Do not use any forbidden-name word in `prose`, `label`,
+   or `resolution`. The display heading and mechanically populated
+   `effect_text` are exempt. For `Night Scavenger`, both `night` and
+   `scavenger` are forbidden; describe the visible subject as a bundled,
+   hooded, kneeling, or crouching figure instead. Read a Character as an
+   archetype rather than a named individual, but never reuse its archetype name
+   as convenient scene copy. For an Event, use the name and ability privately
+   to identify the central action, change, or condition without quoting their
+   language. An Event whose ability prevents a played card should feel like
+   interruption, refusal, or something arrested before completion. This is an
+   interpretive lens, not permission to add objects, actors, outcomes, or rules
+   text absent from the image. Do not invent proper names, identifiable faces,
+   fixed biographies, named locations, or offscreen lore.
 
 6. Set the templates aside and build a private scene bank from the artwork.
-   Draft at least eight poetic descriptions of the depicted moment. Vary what
-   receives emphasis—distance, vantage point, posture, scale, motion, light,
-   texture, stillness, and the player's relationship to the visible subject—not
-   which people, creatures, objects, or structures exist. Create richness by
-   sharpening the language around observed details, not by enlarging the cast or
-   inventing adjacent events. A scene does not need conflict, danger, stakes, a
-   dilemma, a request, a problem, a resolution, or unresolved tension. Do not
-   use template quantities, operations, reward concepts, or needed effect
-   recipients as scene ingredients.
+   Draft at least eight descriptions that each combine a literal anchor with a
+   grounded poetic turn. The literal anchor fixes the reader inside visible
+   subjects, forms, motion, posture, scale, light, texture, distance, or
+   stillness. The poetic turn changes how that evidence feels through a precise
+   metaphor, comparison, personification, sensory compression, rhythmic
+   contrast, or relationship between visible elements. Reject a candidate that
+   only inventories subject, action, and setting, even when every detail is
+   accurate. Vary the perceptual center and sentence architecture, not the cast:
+   do not produce eight versions of `A <adjective> figure <verb> beside a
+   <creature>`. Create richness without inventing adjacent events. A scene does
+   not need conflict, danger, stakes, a dilemma, a request, a problem, a
+   resolution, or unresolved tension. Do not use template quantities,
+   operations, reward concepts, or needed effect recipients as scene
+   ingredients.
 
-7. Apply the scene-only and art-fidelity gates to every candidate. Hide the
-   templates and actions, then ask: “Does this stand alone as a specific,
-   evocative description of what the artwork actually depicts? Can every
-   material subject, object, setting feature, and action be traced to an
-   observed or strongly implied detail?” Reject scenes that add a companion,
-   crowd, creature, prop, structure, weather event, or ongoing incident merely
-   because it would make an effect easier to explain. Do not turn screens,
-   reflections, silhouettes, debris, or ambiguous background forms into people
-   or formations without clear visual evidence. Also reject scenes that
-   announce a decision, manufacture a predicament, depend on symbolic word
-   substitution, or disguise a game operation. Freeze every passing prose
-   field. Do not revise it to support a mechanic later.
+7. Apply four gates to every candidate with templates and actions hidden:
+   - **Name gate:** Does it contain a forbidden-name word? Reject it if so,
+     even when that word also works as an ordinary noun.
+   - **Fidelity gate:** Can every material subject, object, setting feature,
+     and action be traced to an observed or strongly implied detail? Reject any
+     added companion, crowd, creature, prop, structure, weather event, or
+     ongoing incident. Do not promote ambiguous screens, reflections,
+     silhouettes, or debris into people or formations.
+   - **Caption gate:** Could the line pass unchanged as stock-image alt text, or
+     reduce without meaningful loss to `A thing does something in a place`?
+     Reject it. Accuracy is necessary but a literal caption is not encounter
+     prose.
+   - **Poetry gate:** Does the figurative turn bind visible evidence into a
+     specific mood, scale, rhythm, or relationship? Reject vague atmosphere
+     that could fit unrelated fantasy art, and reject figurative language that
+     asserts a new material fact.
+
+   Also reject scenes that announce a decision, manufacture a predicament,
+   depend on symbolic word substitution, or disguise a game operation. Freeze
+   every passing prose field. Do not revise it to support a mechanic later.
 
 8. Infer deck intent from the ability and canonical metadata. Ask what choosing
    this card suggests the player is building toward. Inspect repository tags
@@ -199,8 +212,10 @@ harness commentary.
     `template_pair_id` and two actions together; sorting events must not alter
     or swap the actions within a template pair.
 
-14. Write the complete event objects to JSON, validate them, and fix every
-    error regardless of output mode:
+14. Before validation, scan every `prose`, `label`, and `resolution`
+    case-insensitively against the forbidden-name lexicon and replace every
+    match. Then write the complete event objects to JSON, validate them, and
+    fix every error regardless of output mode:
 
    ```bash
    python3 .llms/skills/delve/scripts/validate-delve.py \
@@ -235,12 +250,21 @@ harness commentary.
   prose. Describe the moment inside the frame rather than a larger inferred
   world. If the art shows a lone figure, keep the figure alone; do not add a
   column, crowd, companion, or hidden population to service a Character effect.
-- Prefer concrete nouns, observable actions, and simple causal relationships.
-  Surreal events are welcome when their internal logic is clear.
-- Make faithful description evocative through precise verbs, rhythm, scale,
-  sensory immediacy, and fresh comparisons grounded in visible forms. Do not
-  settle for a flat inventory of objects, but do not mistake added objects for
-  poetic richness.
+- Anchor every poetic turn in concrete nouns, observable actions, or strongly
+  implied sensation. Personify a visible environment, compare visible forms,
+  compress a supported sensory impression, or contrast scale, light, motion,
+  and stillness. Figurative language may change how the frame feels; it may not
+  add a material subject, event, or history.
+- Reject literal captions such as “A backpacked scavenger crouches beside a rat
+  where cold light enters the ruins.” It repeats a forbidden card-name word and
+  merely reports the composition. Prefer “Before you, a city forgets to breathe
+  as a bundled figure reaches toward a rat.” The city, figure, posture, and rat
+  remain visible anchors, while the personification creates atmosphere without
+  adding an object or incident.
+- Across the five scenes, vary syntax and perceptual focus. Do not repeatedly
+  introduce the subject as `A <adjective> figure` and change only the setting
+  clause. Each scene should discover a different expressive relationship among
+  the same visible evidence.
 - For an Event card, foreground the depicted action or charged instant implied
   by its name and ability. Ask what is being prevented, completed, revealed,
   broken, escaped, or otherwise changed in the frame, and capture that poetic
@@ -280,11 +304,11 @@ harness commentary.
   world does immediately after the action. Keep game terminology and explicit
   reward text out of it. Do not use the resolution to explain rules, repeat the
   action label, or introduce unrelated lore.
-- Treat the card name as an archetype label, not a proper noun or mandatory
-  refrain. Prefer varied, concrete descriptions of the visible being or event.
-  As a default, mention the source card name in no more than one prose field
-  across the set, and avoid it entirely when plain visual language is more
-  evocative. Never repeat it in every scene or choice label.
+- Enforce the forbidden-name lexicon across `prose`, `label`, and `resolution`.
+  Do not treat a content word from the source card name as harmless merely
+  because it also names an archetype or visible subject. Use a concrete visual
+  description that is independent of the canonical name. The Markdown heading
+  and canonical names required inside `effect_text` remain unchanged.
 - Do not mirror a template's number in the fiction. Four offered cards do not
   imply four figures, sparks, doors, paths, or voices in the scene.
 - Do not translate mechanics into mystical synonyms. Purging is not erasing a
