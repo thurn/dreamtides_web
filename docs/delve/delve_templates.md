@@ -58,7 +58,9 @@ can be resolved as:
 
 A predicate is an objective rule that selects or classifies cards. Predicates
 can describe card type, subtype, cost, spark, ability, legendary status, or
-starter status.
+starter status. Predicates must create a meaningful restriction; `Character` is
+forbidden because it covers roughly 70% of the card catalog. Use a narrower
+subtype, cost, spark, ability, or combined objective condition instead.
 
 Existing cards and dreamsigns use an object containing their canonical UUID and
 display name. Game logic consumes the UUID, while `effect_text` uses the display
@@ -92,7 +94,7 @@ it in `selection`:
 {
   "selection": {
     "$DECK_CARD": {
-      "predicate": "Character"
+      "predicate": "Spirit Animal"
     }
   }
 }

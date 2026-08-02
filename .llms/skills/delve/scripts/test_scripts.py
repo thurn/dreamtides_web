@@ -438,8 +438,8 @@ rendered-text = "Gain 1 energy."
                 "template_id": 49,
                 "template": "Gain {count} copies of $DECK_CARD",
                 "variables": {"count": 2},
-                "selection": {"$DECK_CARD": {"predicate": "Character"}},
-                "effect_text": "Gain 2 copies of a Character from your deck",
+                "selection": {"$DECK_CARD": {"predicate": "Spirit Animal"}},
+                "effect_text": "Gain 2 copies of a Spirit Animal from your deck",
             },
         )
         replace_action(
@@ -481,6 +481,49 @@ rendered-text = "Gain 1 energy."
         result = self.run_validator(request_data, output_data)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("is not present in the template", result.stderr)
+
+    def test_rejects_character_predicate_variable(self) -> None:
+        request_data = request()
+        output_data = output()
+        replace_action(
+            request_data,
+            output_data,
+            0,
+            14,
+            "Draft a {predicate} card from 4 random choices",
+            {
+                "label": "Welcome an Ally",
+                "template_id": 14,
+                "template": "Draft a {predicate} card from 4 random choices",
+                "variables": {"predicate": "Character"},
+                "effect_text": "Draft a Character card from 4 random choices",
+            },
+        )
+        result = self.run_validator(request_data, output_data)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("must be more selective than Character", result.stderr)
+
+    def test_rejects_character_selection_predicate(self) -> None:
+        request_data = request()
+        output_data = output()
+        replace_action(
+            request_data,
+            output_data,
+            0,
+            49,
+            "Gain {count} copies of $DECK_CARD",
+            {
+                "label": "Echo a Companion",
+                "template_id": 49,
+                "template": "Gain {count} copies of $DECK_CARD",
+                "variables": {"count": 2},
+                "selection": {"$DECK_CARD": {"predicate": "Character"}},
+                "effect_text": "Gain 2 copies of a Character from your deck",
+            },
+        )
+        result = self.run_validator(request_data, output_data)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("must be more selective than Character", result.stderr)
 
     def test_rejects_noncanonical_transfiguration(self) -> None:
         request_data = request()

@@ -297,6 +297,17 @@ def validate_custom_dreamsign(
     require_string(obj.get("rendered_text"), f"{path}.rendered_text")
 
 
+def validate_predicate(value: Any, path: str) -> str:
+    predicate = require_string(value, path)
+    if predicate == "Character":
+        fail(
+            path,
+            "must be more selective than Character; choose a subtype, cost, "
+            "spark, ability, or combined objective condition",
+        )
+    return predicate
+
+
 def validate_variables(
     template: str,
     action: dict[str, Any],
@@ -323,6 +334,8 @@ def validate_variables(
                     "must be a canonical transfiguration: "
                     + ", ".join(sorted(transfigurations)),
                 )
+        elif placeholder == "predicate":
+            validate_predicate(value, value_path)
         elif placeholder in {
             "count",
             "essence",
@@ -358,8 +371,9 @@ def validate_variables(
             if special not in template_specials:
                 fail(f"{path}.selection.{special}", "is not present in the template")
             rule_obj = require_object(rule, f"{path}.selection.{special}")
-            require_string(
-                rule_obj.get("predicate"), f"{path}.selection.{special}.predicate"
+            validate_predicate(
+                rule_obj.get("predicate"),
+                f"{path}.selection.{special}.predicate",
             )
 
 

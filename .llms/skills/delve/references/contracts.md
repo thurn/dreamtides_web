@@ -52,9 +52,9 @@ Return a bare JSON list of five event objects sorted by ascending `rank`:
         "template_id": 16,
         "template": "Take any number of {predicate} cards from 4 random choices",
         "variables": {
-          "predicate": "Character"
+          "predicate": "Spirit Animal"
         },
-        "effect_text": "Take any number of Character cards from 4 random choices"
+        "effect_text": "Take any number of Spirit Animal cards from 4 random choices"
       },
       {
         "label": "Call Down Its Kin",
@@ -115,14 +115,16 @@ restricted:
 {
   "selection": {
     "$DECK_CARD": {
-      "predicate": "Character"
+      "predicate": "Spirit Animal"
     }
   }
 }
 ```
 
-Predicates must describe objective card data or rules, such as `Character`,
-`Spirit Animal`, `cost 2 or less`, or `has an activated ability`.
+Predicates must describe objective card data or rules and create a meaningful
+restriction, such as `Spirit Animal`, `cost 2 or less`, or `has an activated
+ability`. `Character` is forbidden because it covers roughly 70% of the card
+catalog and is not mechanically selective.
 
 For `$CUSTOM_CARD`, set `variables.custom_card`:
 

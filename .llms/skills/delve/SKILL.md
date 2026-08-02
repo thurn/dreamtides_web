@@ -214,6 +214,10 @@ validating an encounter.
 - Populate every `{placeholder}` in `variables`. Use objective, playable
   predicates from canonical game vocabulary; never invent predicates such as
   “fiery cards.”
+- Never use `"Character"` as a predicate in `variables` or `selection`. It
+  covers roughly 70% of the card catalog and does not create a mechanically
+  interesting restriction. Choose a narrower subtype, cost, spark, ability, or
+  combined objective condition that supports the source card's strategy.
 - Reference existing cards and dreamsigns with real canonical UUIDs. Resolve
   names only for display. Validate transfiguration names and other fixed content
   against repository sources. Never key, compare, or select cards by name.
