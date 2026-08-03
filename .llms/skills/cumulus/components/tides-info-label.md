@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/tides-info-label`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 
-The typographic Tides eyebrow: uppercase copy followed by a filled one-em information glyph, with one shared definition reveal across the complete label.
+The typographic Tides eyebrow: a filled one-em information glyph followed by uppercase copy, with one shared definition reveal across the complete label.
 
 > **Guidance:** Use this label to introduce a tide-disc group. Hover, keyboard focus, and touch-hold reveal the canonical Tides InfoCard; InlineGlyph keeps the information mark centered on the surrounding capital height.
 
