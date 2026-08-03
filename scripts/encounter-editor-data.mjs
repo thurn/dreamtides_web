@@ -21,6 +21,7 @@ const UUID_PATTERN =
 const ENTITY_UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 const TEMPLATE_PAIR_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
+const VARIABLE_NAME_PATTERN = /^[a-z][a-z0-9_]*$/u;
 const ACTION_FIELDS = new Set(["label", "resolution"]);
 const LEGACY_ACTION_FIELDS = new Set(["effect_text", "template"]);
 const SELECTION_KINDS = ["prose", "actions"];
@@ -147,7 +148,13 @@ function renderEncounterVariableParts(template, variables) {
         ? "dreamsign"
         : null;
     if (entityKind === null || value === null || typeof value !== "object" || Array.isArray(value)) {
-      parts.push({ kind: "text", text });
+      parts.push({
+        kind: "variable",
+        placeholder: `{${placeholder}}`,
+        variableName: placeholder,
+        value,
+        text,
+      });
     } else {
       const id = requiredString(value.id, `variables.${placeholder}.id`);
       if (!ENTITY_UUID_PATTERN.test(id)) {
@@ -630,6 +637,54 @@ export function editEncounterCandidateText(
       field,
       ...(actionTemplateId === undefined ? {} : { actionTemplateId }),
       value: confirmedValue,
+    },
+  };
+}
+
+export function editEncounterCandidateVariable(
+  document,
+  { cardId, templatePairId, actionTemplateId, variableName, value },
+) {
+  canonicalUuid(cardId, "cardId");
+  requiredString(templatePairId, "templatePairId");
+  if (!Number.isInteger(actionTemplateId) || actionTemplateId < 0) {
+    throw new Error("Variable edits require a non-negative actionTemplateId.");
+  }
+  if (typeof variableName !== "string" || !VARIABLE_NAME_PATTERN.test(variableName)) {
+    throw new Error("variableName must identify a canonical template variable.");
+  }
+  if (!Number.isInteger(value) || value < 0) {
+    throw new Error("Variable quantities must be non-negative integers.");
+  }
+  const next = cloneDocument(document);
+  const encounters = groupFor(next, cardId);
+  const candidate = candidateFor(encounters, templatePairId);
+  const action = candidate.actions.find(
+    (entry) => entry.template_id === actionTemplateId,
+  );
+  if (action === undefined) {
+    const error = new Error(`Action template ${String(actionTemplateId)} was not found.`);
+    error.code = "ACTION_NOT_FOUND";
+    throw error;
+  }
+  if (!Object.hasOwn(action.variables, variableName)) {
+    const error = new Error(`Variable ${variableName} was not found on action template ${String(actionTemplateId)}.`);
+    error.code = "VARIABLE_NOT_FOUND";
+    throw error;
+  }
+  if (typeof action.variables[variableName] !== "number") {
+    throw new Error(`Variable ${variableName} is not a numeric quantity.`);
+  }
+  action.variables[variableName] = value;
+  validateEncounterCandidates(next);
+  return {
+    document: next,
+    confirmation: {
+      cardId,
+      templatePairId,
+      actionTemplateId,
+      variableName,
+      value,
     },
   };
 }

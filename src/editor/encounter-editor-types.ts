@@ -8,6 +8,13 @@ export type EncounterSelectionKind = "prose" | "actions";
 export type EncounterRenderedTemplatePart =
   | { kind: "text"; text: string }
   | {
+    kind: "variable";
+    placeholder: string;
+    variableName: string;
+    value: unknown;
+    text: string;
+  }
+  | {
     kind: "card";
     placeholder: string;
     cardId: string;
@@ -118,6 +125,15 @@ export interface EncounterSelectionSaveRequest {
   clientRevision: number;
 }
 
+export interface EncounterVariableSaveRequest {
+  cardId: string;
+  templatePairId: string;
+  actionTemplateId: number;
+  variableName: string;
+  value: number;
+  clientRevision: number;
+}
+
 export interface EncounterEditorClient {
   load(signal?: AbortSignal): Promise<EncounterEditorLoadResult>;
   loadTemplateHealth(signal?: AbortSignal): Promise<EncounterTemplateHealth>;
@@ -133,6 +149,10 @@ export interface EncounterEditorClient {
   saveText(request: EncounterTextSaveRequest): Promise<{
     clientRevision: number;
     confirmation: Omit<EncounterTextSaveRequest, "clientRevision">;
+  }>;
+  saveVariable(request: EncounterVariableSaveRequest): Promise<{
+    clientRevision: number;
+    confirmation: Omit<EncounterVariableSaveRequest, "clientRevision">;
   }>;
   saveTemplate(request: EncounterTemplateSaveRequest): Promise<{
     clientRevision: number;

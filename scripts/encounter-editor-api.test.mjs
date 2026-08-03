@@ -207,6 +207,33 @@ describe("encounter editor API", () => {
     expect(result.body.confirmation).toMatchObject({ actionTemplateId: 2, value: "A revised resolution" });
   });
 
+  it("persists only the targeted numeric template variable", async () => {
+    const url = `/api/editor/encounters/${CARD_ID}/candidates/pair-1`;
+    const result = await call("PATCH", url, {
+      field: "variable",
+      actionTemplateId: 1,
+      variableName: "count",
+      value: 4,
+      clientRevision: 11,
+    });
+    expect(result).toMatchObject({
+      status: 200,
+      body: {
+        clientRevision: 11,
+        confirmation: {
+          cardId: CARD_ID,
+          templatePairId: "pair-1",
+          actionTemplateId: 1,
+          variableName: "count",
+          value: 4,
+        },
+      },
+    });
+    const saved = JSON.parse(readFileSync(join(rootDir, "data", "encounter_candidates.json"), "utf8"));
+    expect(saved[CARD_ID][0].actions[0].variables.count).toBe(4);
+    expect(saved[CARD_ID][0].actions[1].variables).toEqual({});
+  });
+
   it("persists a template edit to templates.json and returns globally refreshed groups", async () => {
     const result = await call("PATCH", "/api/editor/encounters/templates/1", {
       value: "Draw {count} additional cards and keep $RUNTIME_CARD",

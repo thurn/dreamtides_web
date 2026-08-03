@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/glass-button`
 
-Real consumers: **30** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **31** (imports outside `src/cumulus/docs/` and tests).
 
 The labeled glass action — a bold text label with optional numerical essence cost on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.
 
@@ -21,7 +21,7 @@ The labeled glass action — a bold text label with optional numerical essence c
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `GlowIcon` before the label. |
 | `essenceCost` | `number \| null` | no | `null` | Optional numerical essence cost rendered in parentheses after the label: `Transfigure (20◆)`. |
 | `essenceCostStyle` | `GlassButtonEssenceCostStyle` = `"parenthetical" \| "separated"` | no | `parenthetical` | Parenthesized cost, or a centered-dot-separated wager price. |
-| `size` | `GlassButtonSize` = `"compact" \| "standard"` | no | `standard` | Standard label spacing, or compact spacing for narrow parallel actions. |
+| `size` | `GlassButtonSize` = `"compact" \| "standard" \| "prominent"` | no | `standard` | Prominent primary-action sizing, standard label spacing, or compact spacing for narrow parallel actions. |
 | `widthReservations` | `readonly GlassButtonWidthReservation[]` | no | `[]` | Possible dynamic label/essence-cost states. The button reserves the widest state while rendering only the current one, preventing surrounding layout shift. |
 | `variant` | `GlassButtonVariant` = `"default" \| "danger" \| "accent"` | no | `default` | Strict surface treatment: accent for primary/commit actions, default for secondary actions, or danger for destructive actions. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |

@@ -1363,8 +1363,8 @@
       "tsType": "CharacterDialogueSize",
       "unionMembers": [
         "compact",
-        "wide",
-        "prominent"
+        "prominent",
+        "wide"
       ],
       "required": false,
       "defaultValue": "compact",
@@ -2480,11 +2480,12 @@
       "tsType": "GlassButtonSize",
       "unionMembers": [
         "compact",
-        "standard"
+        "standard",
+        "prominent"
       ],
       "required": false,
       "defaultValue": "standard",
-      "description": "Standard label spacing, or compact spacing for narrow parallel actions."
+      "description": "Prominent primary-action sizing, standard label spacing, or compact\nspacing for narrow parallel actions."
     },
     {
       "name": "widthReservations",

@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import {
   editEncounterTemplate,
   editEncounterCandidateText,
+  editEncounterCandidateVariable,
   readEncounterEditorGroups,
   selectEncounterCandidate,
   updateEncounterCandidates,
@@ -156,7 +157,7 @@ function routeFor(url) {
 }
 
 function statusFor(error) {
-  if (["ENCOUNTER_NOT_FOUND", "CANDIDATE_NOT_FOUND", "ACTION_NOT_FOUND", "TEMPLATE_NOT_FOUND", "ART_NOT_FOUND"].includes(error.code)) {
+  if (["ENCOUNTER_NOT_FOUND", "CANDIDATE_NOT_FOUND", "ACTION_NOT_FOUND", "VARIABLE_NOT_FOUND", "TEMPLATE_NOT_FOUND", "ART_NOT_FOUND"].includes(error.code)) {
     return 404;
   }
   if (error.code === "AMBIGUOUS_ART") return 409;
@@ -275,13 +276,21 @@ export function createEncounterEditorApiMiddleware(options = {}) {
           throw new Error("Route template pair id must be a canonical slug.");
         }
         confirmation = updateEncounterCandidates(
-          (document) => editEncounterCandidateText(document, {
-            cardId: route.cardId,
-            templatePairId: route.templatePairId,
-            field: body.field,
-            actionTemplateId: body.actionTemplateId,
-            value: body.value,
-          }),
+          (document) => body.field === "variable"
+            ? editEncounterCandidateVariable(document, {
+                cardId: route.cardId,
+                templatePairId: route.templatePairId,
+                actionTemplateId: body.actionTemplateId,
+                variableName: body.variableName,
+                value: body.value,
+              })
+            : editEncounterCandidateText(document, {
+                cardId: route.cardId,
+                templatePairId: route.templatePairId,
+                field: body.field,
+                actionTemplateId: body.actionTemplateId,
+                value: body.value,
+              }),
           dataOptions,
         );
       }

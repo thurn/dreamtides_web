@@ -3,6 +3,7 @@ import { EntityReference } from "../cumulus/components/card/EntityReference";
 import { RulesText } from "../cumulus/components/card/RulesText";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
 import { IconButton } from "../cumulus/components/controls/IconButton";
+import { NumberStepper } from "../cumulus/components/controls/NumberStepper";
 import { GlassPanel } from "../cumulus/components/overlay/GlassPanel";
 import { artRef, resolveArtRef } from "../cumulus/primitives/art";
 import { GLYPHS } from "../cumulus/primitives/glyph";
@@ -25,6 +26,7 @@ import type {
   EncounterSelectionKind,
   EncounterTemplateHealth,
   EncounterCandidateTextField,
+  EncounterVariableSaveRequest,
 } from "./encounter-editor-types";
 import {
   beginFieldEdit,
@@ -128,6 +130,51 @@ function updateConfirmedText(
   });
 }
 
+function renderedPartText(part: EncounterRenderedTemplatePart): string {
+  if (part.kind === "card") return part.cardName;
+  if (part.kind === "dreamsign") return part.dreamsignName;
+  return part.text;
+}
+
+function updateVariableQuantity(
+  groups: EncounterEditorGroup[],
+  request: Omit<EncounterVariableSaveRequest, "clientRevision">,
+): EncounterEditorGroup[] {
+  return groups.map((group) => group.cardId !== request.cardId ? group : {
+    ...group,
+    encounters: group.encounters.map((candidate) => {
+      if (candidate.template_pair_id !== request.templatePairId) return candidate;
+      return {
+        ...candidate,
+        actions: candidate.actions.map((action) => {
+          if (action.template_id !== request.actionTemplateId) return action;
+          const renderedTemplateParts = action.rendered_template_parts.map((part) =>
+            part.kind === "variable" && part.variableName === request.variableName
+              ? { ...part, value: request.value, text: String(request.value) }
+              : part);
+          return {
+            ...action,
+            variables: { ...action.variables, [request.variableName]: request.value },
+            rendered_template: renderedTemplateParts.map(renderedPartText).join(""),
+            rendered_template_parts: renderedTemplateParts,
+          };
+        }) as [EncounterEditorAction, EncounterEditorAction],
+      };
+    }),
+  });
+}
+
+function variableLabel(variableName: string): string {
+  return variableName
+    .split("_")
+    .map((part) => part.length === 0 ? part : `${part.charAt(0).toUpperCase()}${part.slice(1)}`)
+    .join(" ");
+}
+
+function variableStep(variableName: string): number {
+  return variableName.startsWith("essence") ? 10 : 1;
+}
+
 function fieldTarget(
   group: EncounterEditorGroup,
   candidate: EncounterEditorCandidate,
@@ -153,6 +200,17 @@ function renderedTemplate(
   return parts.map((part, index) => {
     if (part.kind === "text") {
       return <span key={`text-${String(index)}`}>{part.text}</span>;
+    }
+    if (part.kind === "variable") {
+      return (
+        <span
+          data-encounter-variable={part.variableName}
+          data-encounter-variable-placeholder={part.placeholder}
+          key={`${part.placeholder}-${String(index)}`}
+        >
+          {part.text}
+        </span>
+      );
     }
     if (part.kind === "card") {
       const card = references.cardsById.get(part.cardId.toLowerCase());
@@ -449,6 +507,102 @@ function EncounterEditorRow({
     );
   }
 
+  function variableEditor(
+    candidate: EncounterEditorCandidate,
+    action: EncounterEditorAction,
+    variableName: string,
+    value: number,
+  ) {
+    const target: FieldTarget = {
+      cardId: `${group.cardId}:${candidate.template_pair_id}:${String(action.template_id)}:variable`,
+      field: variableName,
+    };
+    const entry = fieldSaveEntry(saveState, target);
+    const isSaving = entry?.status === "saving";
+    const step = variableStep(variableName);
+    const label = variableLabel(variableName);
+
+    const adjust = async (direction: -1 | 1) => {
+      if (isSaving) return;
+      const nextValue = value + direction * step;
+      if (nextValue < 0) return;
+      let revision = 0;
+      setSaveState((state) => {
+        const started = startFieldSave(state, target, nextValue, value);
+        revision = started.clientRevision;
+        return started.state;
+      });
+      const request = {
+        cardId: group.cardId,
+        templatePairId: candidate.template_pair_id,
+        actionTemplateId: action.template_id,
+        variableName,
+        value: nextValue,
+      };
+      setGroups((current) => updateVariableQuantity(current, request));
+      try {
+        const response = await client.saveVariable({ ...request, clientRevision: revision });
+        const confirmed = response.confirmation;
+        if (
+          response.clientRevision !== revision ||
+          confirmed.cardId !== request.cardId ||
+          confirmed.templatePairId !== request.templatePairId ||
+          confirmed.actionTemplateId !== request.actionTemplateId ||
+          confirmed.variableName !== request.variableName ||
+          confirmed.value !== request.value
+        ) {
+          throw new Error("The server returned a mismatched variable confirmation.");
+        }
+        setSaveState((state) => completeFieldSave(state, target, revision, nextValue));
+        logEvent("encounter_editor_variable_saved", request);
+      } catch (error) {
+        setGroups((current) => updateVariableQuantity(current, { ...request, value }));
+        setSaveState((state) => failFieldSave(
+          state,
+          target,
+          revision,
+          value,
+          messageFor(error),
+        ));
+        logEvent("encounter_editor_variable_failed", {
+          ...request,
+          message: messageFor(error),
+        });
+      }
+    };
+    const statusMessage = entry?.status === "saving"
+      ? "Saving…"
+      : entry?.status === "saved"
+        ? "Saved"
+        : entry?.status === "error"
+          ? entry.message
+          : "";
+    return (
+      <div
+        className="encounter-editor-variable-control"
+        data-save-status={entry?.status ?? "idle"}
+        key={variableName}
+      >
+        <NumberStepper
+          label={label}
+          value={value}
+          resource={variableName.startsWith("essence") ? "essence" : undefined}
+          size="sm"
+          decrementLabel={`Decrease ${label} for ${action.label}`}
+          incrementLabel={`Increase ${label} for ${action.label}`}
+          decrementDisabled={isSaving || value - step < 0}
+          incrementDisabled={isSaving}
+          testId={`encounter-variable-${group.cardId}-${candidate.template_pair_id}-${String(action.template_id)}-${variableName}`}
+          onDecrement={() => void adjust(-1)}
+          onIncrement={() => void adjust(1)}
+        />
+        <span aria-live="polite" className="encounter-editor-variable-status">
+          {statusMessage}
+        </span>
+      </div>
+    );
+  }
+
   return (
     <article
       ref={rowRef}
@@ -493,6 +647,14 @@ function EncounterEditorRow({
                       action.template,
                       <p>{renderedTemplate(action.rendered_template_parts, references)}</p>,
                       action.template_id,
+                    )}
+                    {Object.entries(action.variables).some(([, value]) => typeof value === "number") && (
+                      <div className="encounter-editor-variable-list">
+                        {Object.entries(action.variables).flatMap(([variableName, value]) =>
+                          typeof value === "number"
+                            ? [variableEditor(selectedActions, action, variableName, value)]
+                            : [])}
+                      </div>
                     )}
                     {editable(selectedActions, "resolution", action.resolution, <p className="encounter-editor-resolution">{action.resolution}</p>, action.template_id)}
                   </section>

@@ -16,6 +16,7 @@ import type {
   EncounterTemplateSaveRequest,
   EncounterTemplateHealth,
   EncounterTextSaveRequest,
+  EncounterVariableSaveRequest,
 } from "./encounter-editor-types";
 
 const CARD_ID = "11111111-1111-4111-8111-111111111111";
@@ -57,7 +58,17 @@ function candidate(rank: number, selected = false): EncounterEditorCandidate {
         ? `Draw ${String(rank)} cards`
         : "Gain Fixture Ally and Bell",
       rendered_template_parts: templateId === 1
-        ? [{ kind: "text" as const, text: `Draw ${String(rank)} cards` }]
+        ? [
+          { kind: "text" as const, text: "Draw " },
+          {
+            kind: "variable" as const,
+            placeholder: "{count}",
+            variableName: "count",
+            value: rank,
+            text: String(rank),
+          },
+          { kind: "text" as const, text: " cards" },
+        ]
         : [
           { kind: "text" as const, text: "Gain " },
           {
@@ -139,6 +150,7 @@ function client(overrides: Partial<EncounterEditorClient> = {}): EncounterEditor
     saveSelection: vi.fn(),
     saveTemplate: vi.fn(),
     saveText: vi.fn(),
+    saveVariable: vi.fn(),
     ...overrides,
   };
 }
@@ -321,6 +333,42 @@ describe("EncounterEditorApp", () => {
     expect(container.textContent).toContain("Prose for rank 1");
     expect(container.textContent).toContain("Rank 2 label 1");
     expect(container.textContent).not.toContain("Rank 1 label 1");
+    act(() => root.unmount());
+  });
+
+  it("increments a numeric template variable and persists the selected quantity", async () => {
+    const saveVariable = vi.fn().mockImplementation((request: EncounterVariableSaveRequest) => Promise.resolve({
+      clientRevision: request.clientRevision,
+      confirmation: {
+        cardId: request.cardId,
+        templatePairId: request.templatePairId,
+        actionTemplateId: request.actionTemplateId,
+        variableName: request.variableName,
+        value: request.value,
+      },
+    }));
+    const { container, root } = await renderLoaded(client({ saveVariable }));
+    const control = container.querySelector<HTMLElement>(
+      `[data-testid='encounter-variable-${CARD_ID}-pair-1-1-count']`,
+    )!;
+    expect(control.getAttribute("aria-label")).toBe("Count: 1");
+
+    await act(async () => {
+      control.querySelector<HTMLButtonElement>("[aria-label^='Increase Count']")!.click();
+      await Promise.resolve();
+    });
+
+    expect(saveVariable).toHaveBeenCalledWith({
+      cardId: CARD_ID,
+      templatePairId: "pair-1",
+      actionTemplateId: 1,
+      variableName: "count",
+      value: 2,
+      clientRevision: 1,
+    });
+    expect(container.querySelector("[data-encounter-variable='count']")?.textContent)
+      .toBe("2");
+    expect(container.textContent).toContain("Draw 2 cards");
     act(() => root.unmount());
   });
 

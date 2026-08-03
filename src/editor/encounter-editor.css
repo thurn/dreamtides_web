@@ -429,6 +429,40 @@
   font: var(--t-caption);
 }
 
+.encounter-editor-variable-list {
+  display: grid;
+  gap: var(--space-1);
+  padding-top: var(--space-1);
+  border-top: 1px solid var(--border-soft);
+}
+
+.encounter-editor-variable-control {
+  min-width: 0;
+}
+
+.encounter-editor-variable-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.encounter-editor-variable-control[data-save-status="error"]
+  .encounter-editor-variable-status {
+  position: static;
+  width: auto;
+  height: auto;
+  display: block;
+  margin-top: var(--space-1);
+  overflow: visible;
+  clip-path: none;
+  color: var(--danger);
+  font: var(--t-caption);
+  white-space: normal;
+}
+
 .encounter-editor-row [data-editor-field] {
   cursor: text;
 }

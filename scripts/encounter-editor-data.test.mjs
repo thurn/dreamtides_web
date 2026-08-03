@@ -15,6 +15,7 @@ import { describe, expect, it } from "vitest";
 import {
   commitEncounterCandidates,
   commitEncounterTemplates,
+  editEncounterCandidateVariable,
   editEncounterTemplate,
   editEncounterCandidateText,
   parseEncounterCandidates,
@@ -239,6 +240,39 @@ describe("encounter editor data", () => {
     expect(edited.actions[1].resolution).toBe("A revised resolution.");
     expect(edited.actions[1]).not.toHaveProperty("template");
     expect(edited.rank).toBe(1);
+  });
+
+  it("edits an existing numeric template variable by stable action identity", () => {
+    const result = editEncounterCandidateVariable(documentFixture(), {
+      cardId: CARD_ID,
+      templatePairId: "pair-1",
+      actionTemplateId: 10,
+      variableName: "count",
+      value: 3,
+    });
+    expect(result.confirmation).toEqual({
+      cardId: CARD_ID,
+      templatePairId: "pair-1",
+      actionTemplateId: 10,
+      variableName: "count",
+      value: 3,
+    });
+    expect(result.document[CARD_ID][0].actions[0].variables.count).toBe(3);
+    expect(documentFixture()[CARD_ID][0].actions[0].variables.count).toBe(1);
+    expect(() => editEncounterCandidateVariable(documentFixture(), {
+      cardId: CARD_ID,
+      templatePairId: "pair-1",
+      actionTemplateId: 10,
+      variableName: "missing",
+      value: 3,
+    })).toThrow("Variable missing was not found");
+    expect(() => editEncounterCandidateVariable(documentFixture(), {
+      cardId: CARD_ID,
+      templatePairId: "pair-1",
+      actionTemplateId: 10,
+      variableName: "count",
+      value: -1,
+    })).toThrow("non-negative integers");
   });
 
   it("renders ordinary variables while preserving runtime variables", () => {

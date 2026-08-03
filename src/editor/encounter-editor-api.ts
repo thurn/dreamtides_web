@@ -8,6 +8,7 @@ import type {
   EncounterSelectionSaveRequest,
   EncounterTemplateSaveRequest,
   EncounterTextSaveRequest,
+  EncounterVariableSaveRequest,
 } from "./encounter-editor-types";
 
 async function readResponse<T>(response: Response): Promise<T> {
@@ -81,6 +82,19 @@ export const encounterEditorClient: EncounterEditorClient = {
         ...(request.actionTemplateId === undefined
           ? {}
           : { actionTemplateId: request.actionTemplateId }),
+        value: request.value,
+        clientRevision: request.clientRevision,
+      },
+    );
+  },
+
+  saveVariable(request: EncounterVariableSaveRequest) {
+    return patch(
+      `/api/editor/encounters/${encodeURIComponent(request.cardId)}/candidates/${encodeURIComponent(request.templatePairId)}`,
+      {
+        field: "variable",
+        actionTemplateId: request.actionTemplateId,
+        variableName: request.variableName,
         value: request.value,
         clientRevision: request.clientRevision,
       },
