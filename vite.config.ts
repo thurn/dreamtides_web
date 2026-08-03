@@ -38,6 +38,8 @@ const imageViewerStatePath = path.join(
   "data",
   "image-viewer-state.json",
 );
+export const encounterCandidatesWatchPattern =
+  path.resolve(path.join(__dirname, "data", "encounter_candidates.json")) + "*";
 export const generatedCardDataWatchPaths = [
   path.join(__dirname, "data", "tabula", "cards.toml"),
   path.join(__dirname, "public", "card-data.json"),
@@ -882,6 +884,10 @@ export default defineConfig({
       ignored: [
         path.resolve(path.join(__dirname, "data", "tabula")) + "/**",
         imageViewerStatePath,
+        // Encounter editor saves atomically rotate the JSON source through
+        // sibling .tmp/.bak files. Ignore the source and transaction siblings
+        // so candidate selection and inline text saves stay in-place.
+        encounterCandidatesWatchPattern,
         // Saving a journey writes a JSON file here; ignore it so the save does
         // not trigger a full page reload that would close the debug overlay.
         path.resolve(path.join(__dirname, "saved-journeys")) + "/**",

@@ -4,6 +4,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it, vi } from "vitest";
 import viteConfig, {
+  encounterCandidatesWatchPattern,
   generatedCardDataDriftPlugin,
   generatedCardDataWatchPaths,
 } from "../vite.config.ts";
@@ -37,7 +38,9 @@ describe("generated card data drift Vite integration", () => {
     // The whole data/tabula directory is ignored so editor writes to any card
     // or tag TOML (not just the default cards.toml) never trigger a full
     // page reload. The image-viewer state file is ignored so favorite and used
-    // mutations remain in the current editor session. The saved-journeys
+    // mutations remain in the current editor session. Encounter candidate JSON
+    // and its atomic-write siblings are ignored so rank and text saves remain
+    // in the current editor session. The saved-journeys
     // directory is ignored so saving a journey from the debug overlay does not
     // reload the page. The .worktrees and
     // .claude/worktrees directories are ignored so creating a git worktree
@@ -55,6 +58,7 @@ describe("generated card data drift Vite integration", () => {
     expect(viteConfig.server?.watch?.ignored).toEqual([
       resolve(join(rootDir, "data", "tabula")) + "/**",
       resolve(join(rootDir, "data", "image-viewer-state.json")),
+      encounterCandidatesWatchPattern,
       resolve(join(rootDir, "saved-journeys")) + "/**",
       resolve(join(rootDir, ".worktrees")) + "/**",
       resolve(join(rootDir, ".claude", "worktrees")) + "/**",
