@@ -98,6 +98,8 @@
   );
   --cv-textbox-expanded-height: calc(var(--cv-textbox-height) * 3);
   --cv-transfiguration-change-badge-size: 6cqw;
+  /* Five pixels at the card's canonical 500px design width. */
+  --cv-rules-change-badge-corner-shift: 1cqw;
 
   /* Typography and its three-line readable rules-text cap. */
   --cv-name-font-size: 5.2cqw;

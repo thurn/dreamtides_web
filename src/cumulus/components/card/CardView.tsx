@@ -1374,9 +1374,9 @@ function GameCardSurface(props: CardViewProps) {
               style={{
                 position: "absolute",
                 right:
-                  "calc(var(--cv-transfiguration-change-badge-size) * -0.5)",
+                  "calc(var(--cv-transfiguration-change-badge-size) * -0.5 + var(--cv-rules-change-badge-corner-shift))",
                 bottom:
-                  "calc(var(--cv-transfiguration-change-badge-size) * -0.5)",
+                  "calc(var(--cv-transfiguration-change-badge-size) * -0.5 + var(--cv-rules-change-badge-corner-shift))",
                 zIndex: 2,
                 display: "inline-flex",
                 pointerEvents: "none",

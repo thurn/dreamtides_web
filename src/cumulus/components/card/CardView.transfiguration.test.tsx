@@ -71,7 +71,7 @@ afterEach(() => {
 });
 
 describe("CardView transfiguration rules marker", () => {
-  it("centers the shared hammer badge on the rules box corner when marked text changes", () => {
+  it("offsets the shared hammer badge inward from the rules box corner when marked text changes", () => {
     const { container, root } = mount(
       display(
         `Draw ${TRANSFIGURE_MARK_START}two${TRANSFIGURE_MARK_END} cards.`,
@@ -88,10 +88,10 @@ describe("CardView transfiguration rules marker", () => {
     expect(marker).not.toBeNull();
     expect(marker?.parentElement).toBe(rulesBox?.parentElement);
     expect(marker?.style.right).toBe(
-      "calc(var(--cv-transfiguration-change-badge-size) * -0.5)",
+      "calc(var(--cv-transfiguration-change-badge-size) * -0.5 + var(--cv-rules-change-badge-corner-shift))",
     );
     expect(marker?.style.bottom).toBe(
-      "calc(var(--cv-transfiguration-change-badge-size) * -0.5)",
+      "calc(var(--cv-transfiguration-change-badge-size) * -0.5 + var(--cv-rules-change-badge-corner-shift))",
     );
     expect(badge?.getAttribute("aria-label")).toBe(
       "Rules text changed by Amplified transfiguration",
