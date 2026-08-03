@@ -1273,6 +1273,12 @@ describe("revealedAtlasSite", () => {
 });
 
 describe("siteTypeDescription", () => {
+  it("uses the authored Purge hover-card copy", () => {
+    expect(siteTypeDescription("Purge")).toBe(
+      "Remove any number of cards from your deck",
+    );
+  });
+
   it("returns a non-empty string for every site type", () => {
     for (const t of ALL_SITE_TYPES) {
       const desc = siteTypeDescription(t);
