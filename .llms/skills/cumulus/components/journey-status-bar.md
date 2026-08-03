@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/journey-status-bar`
 
-Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
 
 The persistent, transparent bottom HUD for journey screens. Its journey variant shows the complete run inventory; its desktop-only battle variant keeps essence and bottom-up, right-to-left Dreamsign columns at the playable board's lower corners. It docks at `compact` on mobile and `grand` on desktop; choosing the battle demo enforces the production `grand` size.
 

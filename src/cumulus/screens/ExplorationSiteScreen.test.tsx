@@ -268,6 +268,11 @@ describe("ExplorationSiteScreen", () => {
         '[data-testid="cumulus-exploration-narrative-copy"]',
       )?.textContent,
     ).toBe("A synthetic encounter waits in the dark.");
+    expect(
+      container
+        .querySelector('[data-testid="cumulus-exploration-narrative-panel"]')
+        ?.querySelector("[data-glass-panel-header]"),
+    ).toBeNull();
     act(() =>
       container
         .querySelector<HTMLButtonElement>(

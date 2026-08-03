@@ -1044,6 +1044,11 @@ describe("ScreenRouter site-dispatch completeness", () => {
       String(selectedCard.imageNumber),
     );
     expect(frameBreak?.dataset.explorationFrameBreakPhase).toBe("open");
+    const statusBar = container.querySelector<HTMLElement>(
+      "[data-journey-status-bar-anchor]",
+    );
+    expect(statusBar).not.toBeNull();
+    expect(statusBar?.style.visibility).not.toBe("hidden");
     expect(mutations.completeSite).not.toHaveBeenCalled();
     expect(
       getLogEntries().find(

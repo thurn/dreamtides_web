@@ -19,6 +19,10 @@ import {
 import { CardBack } from "../components/battle/CardBack";
 import { GlassButton } from "../components/controls/GlassButton";
 import { IconButton } from "../components/controls/IconButton";
+import {
+  JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+  JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP,
+} from "../components/hud/JourneyStatusBar";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
@@ -170,6 +174,8 @@ const FRAME_BREAK_SECONDS = motionTimeSeconds("--dur-slow") * 2.5;
 const FRAME_BREAK_DELAY_SECONDS = motionTimeSeconds("--dur-fast");
 const FRAME_FRACTURE_SECONDS =
   motionTimeSeconds("--dur-base") + motionTimeSeconds("--dur-fast");
+const DESKTOP_NARRATIVE_PANEL_BOTTOM =
+  `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`;
 // The card preview cache appends a 21px watermark strip to a 259px-tall
 // content image. Licensed originals contain the 259px content region only.
 const CARD_PREVIEW_CONTENT_FRACTION = 259 / 280;
@@ -360,18 +366,11 @@ export function ExplorationSiteScreen({
     const presence = document.querySelector<HTMLElement>(
       "[data-coop-presence-status]",
     );
-    const statusAnchors = [
-      ...document.querySelectorAll<HTMLElement>(
-        "[data-journey-status-bar-anchor]",
-      ),
-    ];
-    const elements = presence === null ? statusAnchors : [presence, ...statusAnchors];
-    const previousVisibility = elements.map((element) => element.style.visibility);
-    for (const element of elements) element.style.visibility = "hidden";
+    if (presence === null) return;
+    const previousVisibility = presence.style.visibility;
+    presence.style.visibility = "hidden";
     return () => {
-      elements.forEach((element, index) => {
-        element.style.visibility = previousVisibility[index] ?? "";
-      });
+      presence.style.visibility = previousVisibility;
     };
   }, [frameBreakGeometry]);
 
@@ -991,7 +990,9 @@ export function ExplorationSiteScreen({
           style={{
             position: "fixed",
             left: `max(var(--safe-area-inset-left), ${token("--space-5")})`,
-            bottom: `max(var(--safe-area-inset-bottom), ${token("--space-5")})`,
+            bottom: isDesktop
+              ? DESKTOP_NARRATIVE_PANEL_BOTTOM
+              : JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
             zIndex: FRAME_BREAK_EXIT_LAYER,
             width: isDesktop
               ? "min(620px, calc(100vw - 48px))"
@@ -1001,10 +1002,6 @@ export function ExplorationSiteScreen({
           }}
         >
           <GlassPanel
-            eyebrow="Exploration"
-            title={view.response?.actionLabel ?? "What will you do?"}
-            headingLevel="h1"
-            headerSpacing="medium"
             footer={
               view.response === null ? undefined : (
                 <div
