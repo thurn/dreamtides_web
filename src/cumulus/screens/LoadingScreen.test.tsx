@@ -3,27 +3,27 @@
 import { act, createElement, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { asCardId, asCardName } from "../../types/card-identity";
+import type { CardData } from "../../types/cards";
 import { CumulusRoot } from "../CumulusRoot";
 import { LoadingScreen, type LoadingView } from "./LoadingScreen";
 
-vi.mock("framer-motion", () => {
-  function element(tag: string) {
-    return ({
+vi.mock("framer-motion", () => ({
+  motion: {
+    main: ({
       animate,
       children,
       initial,
-      onAnimationComplete: _onAnimationComplete,
       transition,
       ...props
     }: {
       readonly animate?: unknown;
       readonly children?: ReactNode;
       readonly initial?: unknown;
-      readonly onAnimationComplete?: () => void;
       readonly transition?: unknown;
     }) =>
       createElement(
-        tag,
+        "main",
         {
           ...props,
           "data-motion-animate": JSON.stringify(animate),
@@ -31,23 +31,40 @@ vi.mock("framer-motion", () => {
           "data-motion-transition": JSON.stringify(transition),
         },
         children,
-      );
-  }
+      ),
+  },
+  useReducedMotion: () => false,
+}));
 
+function card(
+  id: string,
+  cardNumber: number,
+  cardType: CardData["cardType"],
+): CardData {
   return {
-    motion: {
-      main: element("main"),
-      blockquote: element("blockquote"),
-      span: element("span"),
-    },
-    useReducedMotion: () => false,
+    id: asCardId(id),
+    name: asCardName(`Fixture ${String(cardNumber)}`),
+    cardNumber,
+    cardType,
+    subtype: cardType === "Character" ? "Fixture" : "",
+    isStarter: true,
+    energyCost: cardNumber,
+    spark: cardType === "Character" ? 3 : null,
+    isFast: false,
+    renderedText: "Fixture ability.",
+    imageNumber: cardNumber,
+    artOwned: true,
   };
-});
+}
 
+const CHAMPION = card("11111111-1111-4111-8111-111111111111", 1, "Character");
+const WORLDS = card("22222222-2222-4222-8222-222222222222", 2, "Event");
 const VIEW: LoadingView = {
-  quote:
-    "“I looked, and there before me was a pale horse, and its rider was named Death.”",
-  loadingLabel: "Loading",
+  runeboundChampion: {
+    cardId: CHAMPION.id,
+    displaySnapshot: CHAMPION,
+  },
+  worldsAwait: { cardId: WORLDS.id, displaySnapshot: WORLDS },
 };
 
 let root: Root | null = null;
@@ -66,115 +83,87 @@ beforeEach(() => {
     removeListener: vi.fn(),
     dispatchEvent: vi.fn(),
   }));
+  globalThis.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+  vi.spyOn(window, "requestAnimationFrame").mockReturnValue(1);
+  vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => {});
 });
 
 afterEach(() => {
   if (root !== null) act(() => root?.unmount());
   root = null;
   document.body.innerHTML = "";
+  vi.restoreAllMocks();
+  delete (globalThis as { ResizeObserver?: typeof ResizeObserver })
+    .ResizeObserver;
 });
 
-describe("LoadingScreen", () => {
-  it("renders the centered, balanced verse and repeating dots", () => {
-    const container = document.createElement("div");
-    document.body.append(container);
-    root = createRoot(container);
-    act(() =>
-      root?.render(
-        <CumulusRoot>
-          <LoadingScreen view={VIEW} />
-        </CumulusRoot>,
-      ),
-    );
+function renderLoadingScreen(playbackSpeed = 1): HTMLDivElement {
+  const container = document.createElement("div");
+  document.body.append(container);
+  root = createRoot(container);
+  act(() =>
+    root?.render(
+      <CumulusRoot>
+        <LoadingScreen view={VIEW} playbackSpeed={playbackSpeed} />
+      </CumulusRoot>,
+    ),
+  );
+  return container;
+}
 
-    const screen = container.querySelector<HTMLElement>("[data-loading-screen]");
-    const quote = container.querySelector<HTMLElement>("[data-loading-quote]");
-    const quoteText = container.querySelector<HTMLElement>(
-      "[data-loading-quote-text]",
-    );
-    const indicator = container.querySelector<HTMLElement>(
-      "[data-loading-indicator]",
+describe("LoadingScreen", () => {
+  it("renders both large cards with all four semantic callouts", () => {
+    const container = renderLoadingScreen();
+    const screen = container.querySelector<HTMLElement>(
+      "[data-loading-screen]",
     );
 
     expect(screen?.style.background).toBe("var(--bg-loading)");
-    expect(JSON.parse(screen?.dataset.motionTransition ?? "{}"))
-      .toMatchObject({ duration: 1.2 });
-    expect(quote?.textContent).toBe(VIEW.quote);
-    expect(quote?.style.maxWidth).toBe("48ch");
-    expect(quote?.style.textAlign).toBe("center");
-    expect(quote?.style.textWrap).toBe("balance");
-    expect(quoteText?.style.fontStyle).toBe("italic");
-    expect(container.querySelector("[data-loading-attribution]")).toBeNull();
-    expect(JSON.parse(quote?.dataset.motionTransition ?? "{}"))
-      .toMatchObject({ delay: 0, duration: 1.4 });
-    expect(indicator?.getAttribute("aria-label")).toBe("Loading...");
-    expect(container.querySelectorAll("[data-loading-dot]")).toHaveLength(3);
+    expect(JSON.parse(screen?.dataset.motionTransition ?? "{}")).toMatchObject({
+      duration: 1.2,
+    });
+    expect(
+      container.querySelector(`[data-card-id="${CHAMPION.id}"]`),
+    ).not.toBeNull();
+    expect(
+      container.querySelector(`[data-card-id="${WORLDS.id}"]`),
+    ).not.toBeNull();
+    expect(
+      [
+        ...container.querySelectorAll<HTMLElement>("[data-loading-callout]"),
+      ].map((callout) => callout.dataset.loadingCallout),
+    ).toEqual(["cost", "spark", "ability", "cardType"]);
+    expect(container.querySelector("[data-loading-quote]")).toBeNull();
+    expect(container.querySelector("[data-loading-indicator]")).toBeNull();
   });
 
-  it("scales every loading animation by the tutorial playback multiplier", () => {
-    const container = document.createElement("div");
-    document.body.append(container);
-    root = createRoot(container);
-    act(() =>
-      root?.render(
-        <CumulusRoot>
-          <LoadingScreen view={VIEW} playbackSpeed={4} />
-        </CumulusRoot>,
-      ),
+  it("anchors every callout to the intended rendered card region", () => {
+    const container = renderLoadingScreen();
+    const champion = container.querySelector<HTMLElement>(
+      '[data-loading-card-group="runeboundChampion"]',
+    );
+    const worlds = container.querySelector<HTMLElement>(
+      '[data-loading-card-group="worldsAwait"]',
     );
 
-    const screen = container.querySelector<HTMLElement>("[data-loading-screen]");
-    const quote = container.querySelector<HTMLElement>("[data-loading-quote]");
-    const dots = [
-      ...container.querySelectorAll<HTMLElement>("[data-loading-dot]"),
-    ];
+    expect(champion?.querySelector('[data-card-stat="energy"]')).not.toBeNull();
+    expect(champion?.querySelector('[data-card-stat="spark"]')).not.toBeNull();
+    expect(champion?.querySelector("[data-card-rules-text]")).not.toBeNull();
+    expect(worlds?.querySelector("[data-card-type-line]")).not.toBeNull();
+    expect(worlds?.querySelector('[data-card-stat="spark"]')).toBeNull();
+  });
 
+  it("scales the loading-screen fade by the tutorial playback multiplier", () => {
+    const container = renderLoadingScreen(4);
+    const screen = container.querySelector<HTMLElement>(
+      "[data-loading-screen]",
+    );
     expect(JSON.parse(screen?.dataset.motionTransition ?? "{}")).toMatchObject({
       duration: 0.3,
     });
-    expect(JSON.parse(quote?.dataset.motionTransition ?? "{}")).toMatchObject({
-      duration: 0.35,
-    });
-    expect(
-      dots.map((dot) => {
-        const transition = JSON.parse(
-          dot.dataset.motionTransition ?? "{}",
-        ) as { delay?: number; duration?: number };
-        return {
-          delay: transition.delay,
-          duration: transition.duration,
-        };
-      }),
-    ).toEqual([
-      { delay: 0, duration: 0.3 },
-      { delay: 0.045, duration: 0.3 },
-      { delay: 0.09, duration: 0.3 },
-    ]);
-  });
-
-  it("uses the compact serif voice on narrow screens", () => {
-    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    }));
-    const container = document.createElement("div");
-    document.body.append(container);
-    root = createRoot(container);
-    act(() =>
-      root?.render(
-        <CumulusRoot>
-          <LoadingScreen view={VIEW} />
-        </CumulusRoot>,
-      ),
-    );
-
-    const quote = container.querySelector<HTMLElement>("[data-loading-quote]");
-    expect(quote?.style.font).toBe("var(--t-hero-epithet)");
   });
 });

@@ -1006,6 +1006,7 @@ function GameCardSurface(props: CardViewProps) {
   // text, the label tracks the box's actual top however tall the box is.
   const typeLineNode = hasTypeLineContent ? (
     <div
+      data-card-type-line=""
       data-testid="card-type-line"
       style={{
         textAlign: "right",
@@ -1038,6 +1039,7 @@ function GameCardSurface(props: CardViewProps) {
   const rulesTextNode = showRulesText ? (
     <div
       ref={rulesFitRef}
+      data-card-rules-text=""
       style={{
         // The box shrinks to this element, so its height is the rules text up to
         // a three-line cap: shorter text makes a shorter box, while text longer

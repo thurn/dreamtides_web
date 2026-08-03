@@ -4,12 +4,19 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../cumulus/CumulusRoot";
+import {
+  TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
+  TUTORIAL_WORLDS_AWAIT_CARD_ID,
+} from "../../data/tutorial-cards";
 import { getLogEntries, resetLog } from "../../logging";
+import { asCardId, asCardName } from "../../types/card-identity";
+import type { CardData } from "../../types/cards";
 import { LoadingScreenAdapter } from "./LoadingScreenAdapter";
 
 const coopMocks = vi.hoisted(() => ({
   frontDoor: { phase: "loading", journeyId: "genesis:seed" },
   advanceFrontDoor: vi.fn().mockResolvedValue(1),
+  cardDatabase: new Map<number, CardData>(),
 }));
 
 vi.mock("../../state/front-door-context", () => ({
@@ -18,6 +25,27 @@ vi.mock("../../state/front-door-context", () => ({
     mutations: { advance: coopMocks.advanceFrontDoor },
   }),
 }));
+
+vi.mock("../../state/journey-context", () => ({
+  useJourney: () => ({ cardDatabase: coopMocks.cardDatabase }),
+}));
+
+function card(cardNumber: number, id: string): CardData {
+  return {
+    id: asCardId(id),
+    name: asCardName(`Fixture ${String(cardNumber)}`),
+    cardNumber,
+    cardType: cardNumber === 1 ? "Character" : "Event",
+    subtype: cardNumber === 1 ? "Fixture" : "",
+    isStarter: true,
+    energyCost: cardNumber,
+    spark: cardNumber === 1 ? 3 : null,
+    isFast: false,
+    renderedText: "Fixture rules.",
+    imageNumber: cardNumber,
+    artOwned: true,
+  };
+}
 
 beforeEach(() => {
   (
@@ -33,6 +61,16 @@ beforeEach(() => {
     removeListener: vi.fn(),
     dispatchEvent: vi.fn(),
   }));
+  globalThis.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+  coopMocks.cardDatabase.clear();
+  const champion = card(1, TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID);
+  const worlds = card(2, TUTORIAL_WORLDS_AWAIT_CARD_ID);
+  coopMocks.cardDatabase.set(champion.cardNumber, champion);
+  coopMocks.cardDatabase.set(worlds.cardNumber, worlds);
   vi.spyOn(console, "log").mockImplementation(() => {});
   vi.useFakeTimers();
   window.history.replaceState(null, "", "/loading?seed=7#journey");
@@ -44,6 +82,8 @@ afterEach(() => {
   vi.restoreAllMocks();
   vi.useRealTimers();
   document.body.innerHTML = "";
+  delete (globalThis as { ResizeObserver?: typeof ResizeObserver })
+    .ResizeObserver;
 });
 
 describe("LoadingScreenAdapter", () => {

@@ -513,6 +513,29 @@
       "description": "Optional stable test id for the face-down card object."
     }
   ],
+  "CardFeatureCallout": [
+    {
+      "name": "feature",
+      "tsType": "CardFeatureCalloutKind",
+      "unionMembers": [
+        "spark",
+        "cost",
+        "ability",
+        "cardType"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Semantic card region named by this callout."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional stable test id for product-screen QA."
+    }
+  ],
   "CardGalleryPanel": [
     {
       "name": "title",

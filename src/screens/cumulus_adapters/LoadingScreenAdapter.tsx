@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { LoadingScreen } from "../../cumulus/screens/LoadingScreen";
 import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
+import { useJourney } from "../../state/journey-context";
 import { buildLoadingView } from "./loading-view-model";
 
 const TUTORIAL_DELAY_MS = 5_000;
@@ -14,8 +15,9 @@ export function LoadingScreenAdapter({
 }) {
   const hasLoggedPresentation = useRef(false);
   const { state, mutations } = useFrontDoor();
+  const { cardDatabase } = useJourney();
   const source = state.journeyId?.startsWith("event:") ? "main_menu" : "direct";
-  const view = useMemo(() => buildLoadingView(), []);
+  const view = useMemo(() => buildLoadingView(cardDatabase), [cardDatabase]);
 
   useEffect(() => {
     if (hasLoggedPresentation.current) return;
