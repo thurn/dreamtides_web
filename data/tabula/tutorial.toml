@@ -368,7 +368,7 @@ delay = { card-seen = 1 }
 duration = 3
 bubbleWidth = 500
 match = { kind = "glossary", id = "discover" }
-text = "When you [yellow]discover[/yellow] a card, reveal 3 matching cards from your deck and pick one to draw."
+text = "To [yellow]discover[/yellow] a card, reveal 3 matching cards from your deck and pick one to draw."
 
 [[triggers]]
 id = "erode"
@@ -378,7 +378,7 @@ delay = { card-seen = 1 }
 duration = 10
 bubbleWidth = 500
 match = { kind = "glossary", id = "erode" }
-text = "[yellow]Erode[/yellow] means to put cards from a deck into the void. If the deck is empty, the opposing player scores 3⍟ per card instead."
+text = "[yellow]Erode[/yellow] means to put cards from a deck into the void."
 
 [[triggers]]
 id = "figment-created"
@@ -387,7 +387,7 @@ priority = 100
 duration = 8
 bubbleWidth = 500
 match = { kind = "any" }
-text = "Figments are token representations of characters. Multiple figments of the same type can be combined to form one character."
+text = "Figments are token representations of characters which can be merged together."
 
 [[triggers]]
 id = "banish"

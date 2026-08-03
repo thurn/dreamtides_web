@@ -9681,7 +9681,7 @@ art = { x = 0.21, y = 1, scale = 1.17 }
 name = "Rusted Colossus"
 mtg-name = ""
 id = "5ab11bef-5dcd-49f5-be49-ae2ccde76e70"
-rendered-text = "This character has +2✦ for each supporting character."
+rendered-text = "This character has +2✦ for each character supporting it."
 energy-cost = 6
 card-type = "Character"
 subtype = "Synth"
