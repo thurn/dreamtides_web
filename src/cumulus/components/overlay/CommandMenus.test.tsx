@@ -70,4 +70,49 @@ describe("ContextActionMenu", () => {
     expect(onDismiss).toHaveBeenCalled();
     act(() => root.unmount());
   });
+
+  it("validates and commits signed whole-number field commands", () => {
+    const onCommand = vi.fn<(value: number) => void>();
+    const onDismiss = vi.fn();
+    const integerActions: readonly CommandMenuItem[] = [{
+      kind: "group",
+      id: "spark",
+      label: "Add Spark",
+      glyph: GLYPHS.edit,
+      actions: [{
+        kind: "signed-integer",
+        id: "spark-amount",
+        label: "Amount",
+        placeholder: "+3 or -2",
+        commitLabel: "Apply",
+        onCommand,
+      }],
+    }];
+    const { root } = mount(<ContextActionMenu title="Card" actions={integerActions} anchor={{ kind: "point", x: 12, y: 12 }} onDismiss={onDismiss} />);
+    act(() => [...document.querySelectorAll<HTMLButtonElement>('[role="menuitem"]')]
+      .find((button) => button.textContent?.includes("Add Spark"))?.click());
+
+    const input = document.querySelector<HTMLInputElement>('[data-testid="command-menu-signed-integer-input"]');
+    const apply = [...document.querySelectorAll<HTMLButtonElement>("button")]
+      .find((button) => button.textContent?.trim() === "Apply");
+    expect(input).not.toBeNull();
+    expect(document.activeElement).toBe(input);
+    act(() => {
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set?.call(input, "1.5");
+      input?.dispatchEvent(new Event("input", { bubbles: true }));
+      apply?.click();
+    });
+    expect(document.querySelector('[role="alert"]')?.textContent).toBe("Enter a non-zero whole number.");
+    expect(onCommand).not.toHaveBeenCalled();
+    expect(onDismiss).not.toHaveBeenCalled();
+
+    act(() => {
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set?.call(input, "-4");
+      input?.dispatchEvent(new Event("input", { bubbles: true }));
+      apply?.click();
+    });
+    expect(onCommand).toHaveBeenCalledWith(-4);
+    expect(onDismiss).toHaveBeenCalledTimes(1);
+    act(() => root.unmount());
+  });
 });

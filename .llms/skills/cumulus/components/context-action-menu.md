@@ -31,7 +31,7 @@ The strict pointer/card command offering: a clamped desktop context menu and a r
 
 ## Usage
 
-Pass an activation point or source rectangle and typed commands. The component chooses the pointer menu or mobile dialog treatment.
+Pass an activation point or source rectangle and typed commands. Nested signed-integer fields validate and commit non-zero whole-number adjustments. The component chooses the pointer menu or mobile dialog treatment.
 
 ```tsx
 import { ContextActionMenu } from "src/cumulus/components/overlay/CommandMenus";

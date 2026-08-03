@@ -127,21 +127,18 @@ export function BattleContextMenu({
       result.push({
         label: "Add Spark",
         submenu: [
-          sparkItem(1),
-          sparkItem(2),
-          sparkItem(3),
-          { divider: true },
-          sparkItem(-1),
-          sparkItem(-2),
-          { divider: true },
           {
-            label: "Reset to 0",
-            action: () => onCommand({
+            signedInteger: true,
+            label: "Amount",
+            placeholder: "+3 or -2",
+            commitLabel: "Apply",
+            action: (amount: number) => onCommand({
               id: "DEBUG_EDIT",
               edit: {
-                kind: "SET_CARD_SPARK_DELTA",
-                battleCardId,
-                value: 0,
+                kind: "KINDLE",
+                amount,
+                preferredBattleCardId: battleCardId,
+                side: card.controller,
               },
               sourceSurface,
             }),
@@ -308,22 +305,6 @@ export function BattleContextMenu({
 
     return result;
 
-    function sparkItem(amount: number): ContextMenuItem {
-      return {
-        label: amount > 0 ? `+${String(amount)}` : String(amount),
-        action: () => onCommand({
-          id: "DEBUG_EDIT",
-          edit: {
-            kind: "KINDLE",
-            amount,
-            preferredBattleCardId: battleCardId,
-            side: card.controller,
-          },
-          sourceSurface,
-        }),
-      };
-    }
-
     function setStatus(status: Partial<BattleCardStatus>): void {
       onCommand({
         id: "DEBUG_EDIT",
@@ -487,6 +468,13 @@ export function BattleContextMenu({
 type ContextMenuItem =
   | { divider: true }
   | {
+    signedInteger: true;
+    label: string;
+    placeholder?: string;
+    commitLabel: string;
+    action: (value: number) => void;
+  }
+  | {
     label: string;
     action: () => void;
   }
@@ -503,6 +491,16 @@ function toCommandMenuItems(
   return items.map((item, index) => {
     const id = `${battleCardId}:${path}:${String(index)}`;
     if ("divider" in item) return { kind: "divider", id };
+    if ("signedInteger" in item) {
+      return {
+        kind: "signed-integer",
+        id,
+        label: item.label,
+        placeholder: item.placeholder,
+        commitLabel: item.commitLabel,
+        onCommand: item.action,
+      };
+    }
     if ("submenu" in item) {
       return {
         kind: "group",

@@ -14,8 +14,10 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { GlassDialog } from "./GlassDialog";
+import { GlassButton } from "../controls/GlassButton";
 import { IconButton } from "../controls/IconButton";
 import { GlowIcon } from "../controls/GlowIcon";
+import { TextField } from "../controls/TextField";
 import { Pressable } from "../../primitives/Pressable";
 import type { Glyph } from "../../primitives/glyph";
 import { GLYPHS } from "../../primitives/glyph";
@@ -62,11 +64,29 @@ export interface CommandMenuDivider {
   id: string;
 }
 
+/** A signed, non-zero whole-number command committed from an inline field. */
+export interface CommandMenuSignedInteger {
+  kind: "signed-integer";
+  /** Stable domain identity for the field command. */
+  id: string;
+  /** Visible label above the field. */
+  label: string;
+  /** Optional example value shown while the field is empty. */
+  placeholder?: string;
+  /** Label for the commit action beneath the field. */
+  commitLabel: string;
+  /** Receives the validated signed, non-zero whole number. */
+  onCommand: (value: number) => void;
+}
+
 /** The full typed hierarchy accepted by Cumulus command menus. */
 export type CommandMenuItem =
   | CommandMenuAction
   | CommandMenuGroup
+  | CommandMenuSignedInteger
   | CommandMenuDivider;
+
+type CommandMenuInteractiveItem = CommandMenuAction | CommandMenuGroup;
 
 /** The fixed app-chrome trigger for a corner utility menu. */
 export interface CornerUtilityMenuTrigger {
@@ -309,15 +329,22 @@ function HierarchicalMenu({
   const menuRef = useRef<HTMLDivElement>(null);
   const leafItems = items.filter((item) => item.kind !== "divider");
   const currentItems = menuItemsAtPath(items, path);
-  const interactive = currentItems.filter((item) => item.kind !== "divider");
+  const interactive = currentItems.filter(
+    (item): item is CommandMenuInteractiveItem =>
+      item.kind === "action" || item.kind === "group",
+  );
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     setActiveIndex(0);
-    menuRef.current?.focus();
+    const input = menuRef.current?.querySelector<HTMLInputElement>(
+      "[data-command-menu-signed-integer] input",
+    );
+    if (input !== null && input !== undefined) input.focus();
+    else menuRef.current?.focus();
   }, [path]);
 
-  function choose(item: Exclude<CommandMenuItem, CommandMenuDivider>): void {
+  function choose(item: CommandMenuInteractiveItem): void {
     if (item.disabled) return;
     if (item.kind === "group") {
       item.onOpen?.();
@@ -337,6 +364,7 @@ function HierarchicalMenu({
     }
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
+      if (interactive.length === 0) return;
       const direction = event.key === "ArrowDown" ? 1 : -1;
       setActiveIndex((previous) => (previous + direction + interactive.length) % interactive.length);
       return;
@@ -388,6 +416,15 @@ function HierarchicalMenu({
       )}
       {currentItems.map((item) => {
         if (item.kind === "divider") return <div key={item.id} role="separator" style={dividerStyle} />;
+        if (item.kind === "signed-integer") {
+          return (
+            <SignedIntegerCommand
+              key={item.id}
+              item={item}
+              onDismiss={onDismiss}
+            />
+          );
+        }
         const index = interactive.indexOf(item);
         return (
           <CommandRow
@@ -404,13 +441,77 @@ function HierarchicalMenu({
   );
 }
 
+function SignedIntegerCommand({
+  item,
+  onDismiss,
+}: {
+  item: CommandMenuSignedInteger;
+  onDismiss: () => void;
+}): ReactElement {
+  const [draft, setDraft] = useState("");
+  const [error, setError] = useState<string>();
+
+  function commit(): void {
+    const trimmed = draft.trim();
+    if (!/^[+-]?\d+$/.test(trimmed)) {
+      setError("Enter a non-zero whole number.");
+      return;
+    }
+    const value = Number(trimmed);
+    if (!Number.isSafeInteger(value) || value === 0) {
+      setError("Enter a non-zero whole number.");
+      return;
+    }
+    item.onCommand(value);
+    onDismiss();
+  }
+
+  return (
+    <form
+      data-command-menu-signed-integer={item.id}
+      onSubmit={(event) => {
+        event.preventDefault();
+        commit();
+      }}
+      onKeyDown={(event) => {
+        if (event.key !== "Escape") event.stopPropagation();
+      }}
+      style={{
+        display: "grid",
+        gap: token("--space-3"),
+        padding: token("--space-3"),
+      }}
+    >
+      <TextField
+        label={item.label}
+        value={draft}
+        onChange={(value) => {
+          setDraft(value);
+          setError(undefined);
+        }}
+        placeholder={item.placeholder}
+        error={error}
+        testId="command-menu-signed-integer-input"
+      />
+      <div style={{ display: "grid" }}>
+        <GlassButton
+          label={item.commitLabel}
+          variant="accent"
+          placement="onGlass"
+          onPress={commit}
+        />
+      </div>
+    </form>
+  );
+}
+
 function CommandRow({
   item,
   active,
   mobile,
   onActivate,
 }: {
-  item: Exclude<CommandMenuItem, CommandMenuDivider>;
+  item: CommandMenuInteractiveItem;
   active: boolean;
   mobile: boolean;
   onActivate: () => void;

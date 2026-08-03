@@ -11,6 +11,24 @@ const demoActions: readonly CommandMenuItem[] = [
   ] },
 ];
 
+const contextDemoActions: readonly CommandMenuItem[] = [
+  ...demoActions,
+  {
+    kind: "group",
+    id: "spark",
+    label: "Add Spark",
+    glyph: GLYPHS.edit,
+    actions: [{
+      kind: "signed-integer",
+      id: "spark-amount",
+      label: "Amount",
+      placeholder: "+3 or -2",
+      commitLabel: "Apply",
+      onCommand: () => undefined,
+    }],
+  },
+];
+
 function CommandMenusDemo() {
   const [count, setCount] = useState(0);
   const actions = demoActions.map((action) => action.kind === "action"
@@ -45,7 +63,7 @@ function ContextActionMenuDemo() {
   return (
     <>
       <GlassButton label="Open card actions" onPress={() => setOpen(true)} />
-      {open && <ContextActionMenu title="Demo Card" subtitle="Player · Hand" actions={demoActions} anchor={{ kind: "point", x: 160, y: 160 }} onDismiss={() => setOpen(false)} />}
+      {open && <ContextActionMenu title="Demo Card" subtitle="Player · Hand" actions={contextDemoActions} anchor={{ kind: "point", x: 160, y: 160 }} onDismiss={() => setOpen(false)} />}
     </>
   );
 }
@@ -59,7 +77,7 @@ export const contextActionMenuDemo: CumulusComponent = {
   docName: "ContextActionMenu",
   Component: ContextActionMenuDemo,
   usage: [{
-    note: "Pass an activation point or source rectangle and typed commands. The component chooses the pointer menu or mobile dialog treatment.",
+    note: "Pass an activation point or source rectangle and typed commands. Nested signed-integer fields validate and commit non-zero whole-number adjustments. The component chooses the pointer menu or mobile dialog treatment.",
     code: `import { ContextActionMenu } from "src/cumulus/components/overlay/CommandMenus";
 
 <ContextActionMenu

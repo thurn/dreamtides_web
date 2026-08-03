@@ -76,6 +76,54 @@ describe("BattleContextMenu", () => {
     act(() => root.unmount());
   });
 
+  it("accepts a typed signed spark adjustment instead of preset amounts", () => {
+    const board = state();
+    const battleCardId = board.sides.player.hand.find(
+      (id) => board.cardInstances[id]?.definition.battleCardKind === "character",
+    );
+    if (battleCardId === undefined) throw new Error("expected character");
+    const card = board.cardInstances[battleCardId];
+    const onCommand = vi.fn<(command: BattleCommand) => void>();
+    const host = document.createElement("div");
+    document.body.append(host);
+    const root = createRoot(host);
+    act(() => root.render(
+      <BattleContextMenu
+        battleCardId={battleCardId}
+        sourceSurface="hand-tray"
+        state={board}
+        x={200}
+        y={300}
+        onClose={() => undefined}
+        onCommand={onCommand}
+        onOpenNoteEditor={() => undefined}
+      />,
+    ));
+
+    act(() => [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')]
+      .find((element) => element.textContent?.trim() === "Add Spark")?.click());
+    expect(document.body.textContent).not.toContain("Reset to 0");
+    expect(document.body.textContent).not.toContain("+1");
+    const input = document.querySelector<HTMLInputElement>('[data-testid="command-menu-signed-integer-input"]');
+    act(() => {
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set?.call(input, "-4");
+      input?.dispatchEvent(new Event("input", { bubbles: true }));
+      [...document.querySelectorAll<HTMLButtonElement>("button")]
+        .find((button) => button.textContent?.trim() === "Apply")?.click();
+    });
+    expect(onCommand).toHaveBeenCalledWith({
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "KINDLE",
+        amount: -4,
+        preferredBattleCardId: battleCardId,
+        side: card.controller,
+      },
+      sourceSurface: "hand-tray",
+    });
+    act(() => root.unmount());
+  });
+
   it("does not offer stack-growth actions for figments", () => {
     const board = state();
     const battleCardId = board.sides.player.hand.find(
