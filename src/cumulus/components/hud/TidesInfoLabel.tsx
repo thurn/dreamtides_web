@@ -57,8 +57,13 @@ export function TidesInfoLabel() {
         cursor: "default",
       }}
     >
-      <InlineGlyph glyph={GLYPHS.infoFilled} />
-      {" "}Tides:
+      <span
+        data-tides-info-glyph=""
+        style={{ display: "inline-block", marginRight: token("--space-2") }}
+      >
+        <InlineGlyph glyph={GLYPHS.infoFilled} />
+      </span>
+      Tides:
     </Pressable>
   );
 }
