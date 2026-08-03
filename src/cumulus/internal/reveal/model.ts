@@ -61,6 +61,8 @@ export interface RevealSpec {
 
 export type RevealPointerType = "mouse" | "pen" | "touch";
 export type RevealReason = "hover" | "focus" | "press";
+/** Named source-level exception to the coordinator's automatic placement. */
+export type RevealPlacementPreference = "above-source";
 export type RevealDismissalReason =
   | "pointer-leave" | "pointer-cancel" | "movement" | "scroll" | "drag"
   | "resize" | "orientation-change" | "window-blur" | "route-change"

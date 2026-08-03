@@ -1,4 +1,4 @@
-import type { RevealPoint, RevealReason, RevealRect } from "./model";
+import type { RevealPlacementPreference, RevealPoint, RevealReason, RevealRect } from "./model";
 import type { VisualViewportSnapshot } from "./viewport";
 
 const MOBILE_WIDTH_FRACTION = 0.45;
@@ -15,6 +15,7 @@ export interface RevealPlacementInput {
   readonly viewport: VisualViewportSnapshot;
   readonly reason: RevealReason;
   readonly primaryKind: "source" | "gameCard" | "galleryAction" | "infoCard";
+  readonly placementPreference?: RevealPlacementPreference;
   readonly sourceRect: RevealRect;
   readonly touchPoint?: RevealPoint;
   readonly primarySize: RevealSize;
@@ -441,6 +442,26 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
     ? Math.max(input.minimumGameCardWidth ?? DESKTOP_GAME_CARD_WIDTH, sourceRect.width)
     : input.primarySize.width;
   const primarySize = scaled(input.primarySize, primaryWidth);
+  if (input.placementPreference === "above-source") {
+    const primaryX = clamp(
+      sourceRect.x + sourceRect.width / 2 - primaryWidth / 2,
+      safeLeft,
+      Math.max(safeLeft, safeRight - primaryWidth),
+    );
+    const desiredY = sourceRect.y - DESKTOP_SOURCE_GAP - primarySize.height;
+    const primaryY = Math.max(safeTop, desiredY);
+    const clearsSourceGap = primaryY + primarySize.height
+      <= sourceRect.y - DESKTOP_SOURCE_GAP;
+    return result(input, {
+      family: "desktop-above-source",
+      orientation: "primary-left",
+      primaryRect: rect(primaryX, primaryY, primarySize),
+      secondaryRects: [],
+      pressInPlace: false,
+      sideFallback: false,
+      bestEffortPrimaryOverlap: !clearsSourceGap,
+    });
+  }
   if (cardShaped) {
     if (input.sourceIsBattlefieldGameCard) {
       const sourceCenter = sourceRect.x + sourceRect.width / 2;

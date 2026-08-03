@@ -220,6 +220,7 @@ export function OfferTile({
       },
       secondaries: [],
     },
+    placementPreference: "above-source",
     onActivate: () => onPress(model.id),
   });
   const lastPointerType = useRef<string | null>(null);

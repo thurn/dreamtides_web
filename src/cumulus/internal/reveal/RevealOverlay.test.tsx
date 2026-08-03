@@ -140,6 +140,27 @@ describe("RevealOverlay", () => {
     expect(document.querySelector<HTMLElement>("[data-reveal-measurement-layer]")?.style.visibility).toBe("hidden");
   });
 
+  it("passes an above-source placement preference through measurement", () => {
+    let placedDecision: RevealPlacementDecision | undefined;
+    const onPlaced = vi.fn((decision: RevealPlacementDecision) => {
+      placedDecision = decision;
+    });
+    act(() =>
+      renderOverlay(
+        <RevealOverlay
+          active={active({
+            placementPreference: "above-source",
+            spec: makeTextRevealSpec("Primary", "Body"),
+          })}
+          onPlaced={onPlaced}
+        />,
+      ),
+    );
+
+    expect(placedDecision?.family).toBe("desktop-above-source");
+    expect(placedDecision?.primaryRect).toMatchObject({ x: 400, y: 136 });
+  });
+
   it("reserves the atlas reveal's full native width before placing secondaries", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect")
       .mockImplementation(function (this: HTMLElement) {

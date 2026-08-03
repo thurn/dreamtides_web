@@ -258,6 +258,34 @@ describe("selectRevealPlacement", () => {
     }
   });
 
+  it("centers an above-source desktop InfoCard over its source", () => {
+    const sourceRect = { x: 400, y: 500, width: 300, height: 300 };
+    const result = selectRevealPlacement({
+      ...base,
+      viewport: {
+        ...viewport,
+        layout: "desktop",
+        width: 1200,
+        height: 900,
+        safeArea: { top: 0, right: 0, bottom: 0, left: 0 },
+      },
+      reason: "hover",
+      touchPoint: undefined,
+      placementPreference: "above-source",
+      sourceRect,
+      primarySize: { width: 248, height: 100 },
+    });
+
+    expect(result.family).toBe("desktop-above-source");
+    expect(result.primaryRect.x + result.primaryRect.width / 2).toBe(
+      sourceRect.x + sourceRect.width / 2,
+    );
+    expect(result.primaryRect.y + result.primaryRect.height).toBe(
+      sourceRect.y - 14,
+    );
+    expect(result.bestEffortPrimaryOverlap).toBe(false);
+  });
+
   it("places only a complete leading secondary prefix beside the desktop primary", () => {
     const result = selectRevealPlacement({
       ...base,
