@@ -4,14 +4,14 @@ At a Delve site, the game selects one card from the player's deck as the
 narrative focus. The player enters a short event inspired by that card and
 chooses between two actions. Each action uses one mechanical effect template.
 
-Delve encounter-design requests contain five template pairs. Every pair has a
-stable ID and exactly two actions, and every action supplies a `template_id` and
-the corresponding canonical `template` string. The encounter designer
-preserves each pair, action, ID, and template string in the output while adding
-narrative labels and resolving the template's variables.
+The exploration encounter designer studies the selected card and its artwork,
+then chooses ten distinct effect templates and arranges them into five pairs.
+Every pair has a stable ID and exactly two actions. The designer preserves each
+pair, action, ID, and template string in the output while adding narrative
+labels and resolving the template's variables.
 
 The canonical effect catalog is
-[`../../.llms/skills/delve/references/templates.json`](../../.llms/skills/delve/references/templates.json).
+[`../../data/templates.json`](../../data/templates.json).
 Each catalog entry has this shape:
 
 ```json
@@ -21,15 +21,16 @@ Each catalog entry has this shape:
 }
 ```
 
-The complete request and response shapes are documented in
-[`../../.llms/skills/delve/references/contracts.md`](../../.llms/skills/delve/references/contracts.md).
-A random valid request can be generated from the repository root with:
+The complete request and response shapes are documented in the
+[exploration encounter contracts](../../.llms/skills/exploration-encounter-designer/references/contracts.md).
+A random canonical card can be generated from the repository root with:
 
 ```bash
-python3 scripts/generate-delve-input.py
+python3 .llms/skills/exploration-encounter-designer/scripts/generate-exploration-input.py
 ```
 
-Pass `--seed <integer>` to reproduce a generated request.
+Pass `--seed <integer>` to reproduce the selected card and `--card-type` with
+`character`, `event`, or `all` to choose its pool.
 
 ## Template Variables
 
@@ -102,7 +103,8 @@ it in `selection`:
 
 An unrestricted runtime variable omits `selection`. `$CUSTOM_CARD` and
 `$CUSTOM_DREAMSIGN` definitions are stored as structured objects in `variables`,
-including a new UUID and all fields required by the Delve JSON contract.
+including a new UUID and all fields required by the exploration encounter JSON
+contract.
 
 ## Applying a Template
 
@@ -115,4 +117,4 @@ For each action, the encounter designer:
 4. Writes complete display copy in `effect_text`, with every placeholder and
    runtime token resolved.
 5. Validates the request and output with
-   `.llms/skills/delve/scripts/validate-delve.py`.
+   `.llms/skills/exploration-encounter-designer/scripts/validate-exploration.py`.

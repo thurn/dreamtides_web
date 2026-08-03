@@ -33,8 +33,9 @@ exactly two actions.
 }
 ```
 
-Use the `template_id` and `template` values in [the canonical template catalog](../../delve/references/templates.json)
-exactly. The example shows one pair for brevity; a valid request contains five.
+Use the `template_id` and `template` values in
+[the canonical template catalog](../../../../data/templates.json) exactly. The
+example shows one pair for brevity; a valid request contains five.
 
 ## JSON output
 

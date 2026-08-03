@@ -100,7 +100,7 @@ commentary.
 
 1. Obtain the canonical card object from normal input or the random-card test
    generator. Do not open
-   `.llms/skills/delve/references/templates.json` yet.
+   `data/templates.json` yet.
 
 2. Resolve the full-size image from the supplied `image_number`:
 
@@ -226,7 +226,7 @@ commentary.
    without consulting a template.
 
 9. Only now read the complete canonical catalog at
-   `.llms/skills/delve/references/templates.json`. Treat template selection as
+   `data/templates.json`. Treat template selection as
    the final preparatory step before writing actions and populating effects.
    Review the whole catalog before committing; do not stop after finding the
    first ten plausible entries.

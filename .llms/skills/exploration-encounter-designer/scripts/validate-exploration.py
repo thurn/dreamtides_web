@@ -14,9 +14,7 @@ from typing import Any
 import tomllib
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
-DEFAULT_TEMPLATE_CATALOG = (
-    REPO_ROOT / ".llms/skills/delve/references/templates.json"
-)
+DEFAULT_TEMPLATE_CATALOG = REPO_ROOT / "data/templates.json"
 DEFAULT_CARDS_DATA = Path(__file__).resolve().parents[4] / "data/tabula/cards.toml"
 DEFAULT_DREAMSIGNS_DATA = (
     Path(__file__).resolve().parents[4] / "data/tabula/dreamsigns.toml"
