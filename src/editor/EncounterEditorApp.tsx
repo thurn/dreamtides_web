@@ -276,7 +276,12 @@ function EncounterEditorRow({
   }
 
   return (
-    <article ref={rowRef} className="encounter-editor-row" data-encounter-card-id={group.cardId}>
+    <article
+      ref={rowRef}
+      className="encounter-editor-row"
+      data-encounter-card-id={group.cardId}
+      id={`encounter-${group.cardId}`}
+    >
       <GlassPanel overflow="hidden" testId={`encounter-row-${group.cardId}`}>
         <div className="encounter-editor-row-grid">
           <div className="encounter-editor-art-frame">
@@ -384,6 +389,12 @@ export default function EncounterEditorApp({
     });
     return () => controller.abort();
   }, [client, loadRevision]);
+
+  useEffect(() => {
+    if (loadState !== "ready" || !window.location.hash.startsWith("#encounter-")) return;
+    const targetId = decodeURIComponent(window.location.hash.slice(1));
+    document.getElementById(targetId)?.scrollIntoView({ block: "start" });
+  }, [loadState]);
 
   const loadTemplateHealth = useCallback(async (reason: "open" | "refresh") => {
     const revision = templateHealthRequestRef.current + 1;

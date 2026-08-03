@@ -14,6 +14,7 @@ import type {
 } from "./encounter-editor-types";
 
 const CARD_ID = "11111111-1111-4111-8111-111111111111";
+let scrollIntoView = vi.fn<(arg?: boolean | ScrollIntoViewOptions) => void>();
 
 function candidate(rank: number, selected = false): EncounterEditorCandidate {
   return {
@@ -95,11 +96,15 @@ function setTextareaValue(textarea: HTMLTextAreaElement, value: string) {
 beforeEach(() => {
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean })
     .IS_REACT_ACT_ENVIRONMENT = true;
+  window.history.replaceState(null, "", "/encounters");
+  scrollIntoView = vi.fn<(arg?: boolean | ScrollIntoViewOptions) => void>();
+  Element.prototype.scrollIntoView = scrollIntoView;
   vi.spyOn(console, "log").mockImplementation(() => undefined);
 });
 
 afterEach(() => {
   document.body.innerHTML = "";
+  Reflect.deleteProperty(Element.prototype, "scrollIntoView");
   vi.restoreAllMocks();
 });
 
@@ -123,6 +128,15 @@ describe("EncounterEditorApp", () => {
     expect(container.textContent).not.toContain("Prose for rank 2");
     expect(container.querySelector("img")?.getAttribute("src"))
       .toBe("/api/editor/encounters/art/42");
+    expect(container.querySelector(`[data-encounter-card-id='${CARD_ID}']`)?.id)
+      .toBe(`encounter-${CARD_ID}`);
+    act(() => root.unmount());
+  });
+
+  it("scrolls a linked encounter into view after its group loads", async () => {
+    window.history.replaceState(null, "", `/encounters#encounter-${CARD_ID}`);
+    const { root } = await renderLoaded(client());
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: "start" });
     act(() => root.unmount());
   });
 
