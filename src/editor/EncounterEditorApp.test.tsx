@@ -35,6 +35,7 @@ function candidate(rank: number, selected = false): EncounterEditorCandidate {
 const GROUPS: EncounterEditorGroup[] = [{
   cardId: CARD_ID,
   cardName: "The Test Crossing",
+  cardAbilityText: "▸Materialized: Gain 1●, then foresee 1.",
   imageNumber: 42,
   encounters: [candidate(1, true), candidate(2), candidate(3)],
 }];
@@ -128,6 +129,10 @@ describe("EncounterEditorApp", () => {
     expect(container.textContent).toContain("Rank 1 effect 1");
     expect(container.textContent).toContain("Rank 1 resolution 1");
     expect(container.textContent).not.toContain("Prose for rank 2");
+    expect(container.querySelector(".encounter-editor-card-ability")?.textContent)
+      .toContain("▸Materialized: Gain 1, then foresee 1.");
+    expect(container.querySelector(".encounter-editor-card-ability [aria-label='energy']"))
+      .not.toBeNull();
     expect(container.querySelector("img")?.getAttribute("src"))
       .toBe("/api/editor/encounters/art/42");
     expect(container.querySelector(`[data-encounter-card-id='${CARD_ID}']`)?.id)

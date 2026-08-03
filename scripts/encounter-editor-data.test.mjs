@@ -21,6 +21,7 @@ import {
 } from "./encounter-editor-data.mjs";
 
 const CARD_ID = "11111111-1111-4111-8111-111111111111";
+const UNRELATED_CARD_ID = "22222222-2222-4222-8222-222222222222";
 
 function candidate(rank, selected = false) {
   return {
@@ -64,7 +65,7 @@ function writeFixtureRoot() {
   );
   writeFileSync(
     join(rootDir, "data", "tabula", "cards.toml"),
-    `[[cards]]\nid = "${CARD_ID}"\nname = "Fixture Guide"\nimage-number = 42\n`,
+    `[[cards]]\nid = "${CARD_ID}"\nname = "Fixture Guide"\nrendered-text = "Gain 1●."\nimage-number = 42\n\n[[cards]]\nid = "${UNRELATED_CARD_ID}"\nname = "Blank Rules Card"\nrendered-text = ""\nimage-number = 43\n`,
   );
   return rootDir;
 }
@@ -76,6 +77,7 @@ describe("encounter editor data", () => {
     expect(groups[0]).toMatchObject({
       cardId: CARD_ID,
       cardName: "Fixture Guide",
+      cardAbilityText: "Gain 1●.",
       imageNumber: 42,
     });
     expect(groups[0].encounters.find((entry) => entry.selected?.prose)?.rank).toBe(1);

@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/rules-text`
 
-Real consumers: **12** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **13** (imports outside `src/cumulus/docs/` and tests).
 
 Renders Dreamtides rules copy from card data — resource pips, Unicode trigger markers, and glossary keywords styled in place — with definition cards adapted to the exact rules sentence.
 

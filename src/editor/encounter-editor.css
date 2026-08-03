@@ -339,8 +339,8 @@
 
 .encounter-editor-copy-header {
   min-width: 0;
-  display: flex;
-  align-items: center;
+  display: grid;
+  gap: var(--space-1);
 }
 
 .encounter-editor-copy-header h2 {
@@ -350,6 +350,12 @@
   font: var(--t-title);
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.encounter-editor-card-ability {
+  min-width: 0;
+  color: var(--text-on-glass-muted);
+  font: var(--t-rules);
 }
 
 .encounter-editor-prose {

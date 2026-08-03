@@ -62,7 +62,7 @@ describe("encounter editor API", () => {
     );
     writeFileSync(
       join(rootDir, "data", "tabula", "cards.toml"),
-      `[[cards]]\nid = "${CARD_ID}"\nname = "The Test Crossing"\nimage-number = 42\n`,
+      `[[cards]]\nid = "${CARD_ID}"\nname = "The Test Crossing"\nrendered-text = "Gain 1●."\nimage-number = 42\n`,
     );
     middleware = createEncounterEditorApiMiddleware({
       rootDir,
@@ -98,6 +98,7 @@ describe("encounter editor API", () => {
     expect(result.body.groups[0]).toMatchObject({
       cardId: CARD_ID,
       cardName: "The Test Crossing",
+      cardAbilityText: "Gain 1●.",
       imageNumber: 42,
     });
   });

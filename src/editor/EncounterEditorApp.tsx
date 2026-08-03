@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { RulesText } from "../cumulus/components/card/RulesText";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
 import { IconButton } from "../cumulus/components/controls/IconButton";
 import { GlassPanel } from "../cumulus/components/overlay/GlassPanel";
@@ -383,6 +384,9 @@ function EncounterEditorRow({
           <div className="encounter-editor-copy">
             <header className="encounter-editor-copy-header">
               <h2>{group.cardName}</h2>
+              <div className="encounter-editor-card-ability">
+                <RulesText text={group.cardAbilityText} />
+              </div>
             </header>
             <div className="encounter-editor-prose">
               {selectionButton("prose", -1, selectedProseIndex)}

@@ -21,6 +21,7 @@ export interface EncounterEditorCandidate {
 export interface EncounterEditorGroup {
   cardId: string;
   cardName: string;
+  cardAbilityText: string;
   imageNumber: number;
   encounters: EncounterEditorCandidate[];
 }

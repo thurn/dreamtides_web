@@ -153,7 +153,7 @@ export function parseEncounterCandidates(source) {
   return validateEncounterCandidates(raw);
 }
 
-function readCardIndex(rootDir, cardTomlPath, fileSystem) {
+function readCardIndex(rootDir, cardTomlPath, fileSystem, encounterCardIds) {
   const source = fileSystem.readFileSync(join(rootDir, cardTomlPath), "utf8");
   const parsed = parseToml(source);
   if (!Array.isArray(parsed.cards)) {
@@ -163,12 +163,17 @@ function readCardIndex(rootDir, cardTomlPath, fileSystem) {
   for (const cardRaw of parsed.cards) {
     const card = objectRecord(cardRaw, "card");
     if (typeof card.id !== "string") continue;
+    if (!encounterCardIds.has(card.id)) continue;
     const name = requiredString(card.name, `card ${card.id} name`);
+    const abilityText = requiredString(
+      card["rendered-text"],
+      `card ${card.id} rendered-text`,
+    );
     const imageNumber = card["image-number"];
     if (!Number.isInteger(imageNumber) || imageNumber < 0) {
       continue;
     }
-    index.set(card.id, { name, imageNumber });
+    index.set(card.id, { name, abilityText, imageNumber });
   }
   return index;
 }
@@ -181,7 +186,12 @@ export function readEncounterEditorGroups({
 } = {}) {
   const source = fileSystem.readFileSync(join(rootDir, candidatesPath), "utf8");
   const groups = parseEncounterCandidates(source);
-  const cards = readCardIndex(rootDir, cardTomlPath, fileSystem);
+  const cards = readCardIndex(
+    rootDir,
+    cardTomlPath,
+    fileSystem,
+    new Set(Object.keys(groups)),
+  );
   return Object.entries(groups).map(([cardId, encounters]) => {
     const card = cards.get(cardId);
     if (card === undefined) {
@@ -190,6 +200,7 @@ export function readEncounterEditorGroups({
     return {
       cardId,
       cardName: card.name,
+      cardAbilityText: card.abilityText,
       imageNumber: card.imageNumber,
       encounters,
     };
