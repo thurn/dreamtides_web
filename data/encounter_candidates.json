@@ -166,7 +166,7 @@
   "738a5af0-f848-4d48-bceb-9a43c9b11066": [
     {
       "template_pair_id": "pair-1",
-      "prose": "You find an armored traveler hunched beside a doorway veiled in luminous grids.",
+      "prose": "An armored traveler hunches beside a doorway veiled in luminous grids.",
       "actions": [
         {
           "label": "Open the Passage",

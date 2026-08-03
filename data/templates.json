@@ -65,7 +65,7 @@
   },
   {
     "template_id": 17,
-    "template": "Apply a transfiguration of your choice to a chosen card"
+    "template": "Apply a transfiguration to a chosen card"
   },
   {
     "template_id": 18,
@@ -221,7 +221,7 @@
   },
   {
     "template_id": 58,
-    "template": "Change a chosen Character card to have {subtype}"
+    "template": "Change a chosen character card to be a {subtype}"
   },
   {
     "template_id": 59,
