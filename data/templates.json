@@ -53,11 +53,11 @@
   },
   {
     "template_id": 14,
-    "template": "Draft a {predicate} card from 4 choices"
+    "template": "Draft a {predicate} from 4 choices"
   },
   {
     "template_id": 15,
-    "template": "Draft a {predicate} card from 4 choices and gain {count} copies of it"
+    "template": "Draft a {predicate} from 4 choices and gain {count} copies of it"
   },
   {
     "template_id": 16,
@@ -233,7 +233,7 @@
   },
   {
     "template_id": 61,
-    "template": "Purge a chosen card and gain a copy of another chosen card"
+    "template": "Purge a chosen card and gain a copy of another chosen card in your deck"
   },
   {
     "template_id": 62,

@@ -494,7 +494,7 @@
   "8b5eb29c-146f-46fb-9407-55004128fba7": [
     {
       "template_pair_id": "pair-1",
-      "prose": "Before you, a skull-faced guardian extends a lantern ablaze with drifting motes.",
+      "prose": "A skull-faced guardian extends a lantern ablaze with drifting motes.",
       "actions": [
         {
           "label": "Accept the Lantern",
@@ -687,15 +687,11 @@
         "overall": 9
       },
       "rank": 1,
-      "ranking_rationale": "The precise triangular composition supports two exceptionally clear threshold interactions with strong immediate and future consequences.",
-      "selected": {
-        "prose": true,
-        "actions": true
-      }
+      "ranking_rationale": "The precise triangular composition supports two exceptionally clear threshold interactions with strong immediate and future consequences."
     },
     {
       "template_pair_id": "pair-1",
-      "prose": "A suited gunman stands braced as thick cables stream past him.",
+      "prose": "A gunman stands braced as cables of shadow stream from him.",
       "actions": [
         {
           "label": "Answer His Signal",
@@ -725,7 +721,11 @@
         "overall": 9
       },
       "rank": 2,
-      "ranking_rationale": "The braced operative and streaming cables anchor two convincing recruitment chains that directly deepen phasing and outsider scoring."
+      "ranking_rationale": "The braced operative and streaming cables anchor two convincing recruitment chains that directly deepen phasing and outsider scoring.",
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-4",
@@ -1009,7 +1009,6 @@
       "rank": 1,
       "ranking_rationale": "The precise overhead encounter supports both a thematically exact Spirit Animal reward and a flexible tribal draft.",
       "selected": {
-        "prose": true,
         "actions": true
       }
     },
@@ -1072,7 +1071,10 @@
         "overall": 9
       },
       "rank": 3,
-      "ranking_rationale": "The banking whale grounds selective or sweeping subtype conversion, though the larger transformation is more abstract."
+      "ranking_rationale": "The banking whale grounds selective or sweeping subtype conversion, though the larger transformation is more abstract.",
+      "selected": {
+        "prose": true
+      }
     },
     {
       "template_pair_id": "pair-4",
@@ -1142,7 +1144,7 @@
       "prose": "A vast elephant lowers its trunk, one tusk shining amid luminous mist.",
       "actions": [
         {
-          "label": "Reach toward the tusk",
+          "label": "Reach toward the tusks",
           "resolution": "A braided charm gleams beneath its curved tip.",
           "template_id": 27,
           "variables": {
@@ -1172,13 +1174,12 @@
       "rank": 1,
       "ranking_rationale": "The vivid tusk encounter supports a superb materialization relic and a resonant tribal call.",
       "selected": {
-        "prose": true,
         "actions": true
       }
     },
     {
       "template_pair_id": "pair-2",
-      "prose": "An elephant looms through starry haze, its bright tusk sharply curved.",
+      "prose": "An elephant looms through starry haze, bright tusks sharply curved.",
       "actions": [
         {
           "label": "Call for one companion",
@@ -1205,7 +1206,10 @@
         "overall": 9
       },
       "rank": 2,
-      "ranking_rationale": "Clear calls make both recruitment scales natural while strongly advancing the Spirit Animal plan."
+      "ranking_rationale": "Clear calls make both recruitment scales natural while strongly advancing the Spirit Animal plan.",
+      "selected": {
+        "prose": true
+      }
     },
     {
       "template_pair_id": "pair-4",
@@ -1317,7 +1321,7 @@
   "886c9d49-b25f-4ddd-97f0-2ec4b42eda89": [
     {
       "template_pair_id": "pair-2",
-      "prose": "Above you, a colossal rider looms through star-filled haze, long hair streaming.",
+      "prose": "A colossal rider looms through star-filled haze, long hair streaming.",
       "actions": [
         {
           "label": "Welcome Their Envoy",
@@ -1354,8 +1358,7 @@
       "rank": 1,
       "ranking_rationale": "The imposing silhouette supports two natural forms of recruitment that directly strengthen the card's low-cost Warrior engine.",
       "selected": {
-        "prose": true,
-        "actions": true
+        "prose": true
       }
     },
     {
@@ -1416,7 +1419,10 @@
         "overall": 9
       },
       "rank": 3,
-      "ranking_rationale": "The rider's overwhelming presence credibly musters a new force or empowers the existing company, though both rewards are broad."
+      "ranking_rationale": "The rider's overwhelming presence credibly musters a new force or empowers the existing company, though both rewards are broad.",
+      "selected": {
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-4",
@@ -1512,7 +1518,6 @@
       "rank": 1,
       "ranking_rationale": "The branching discharge makes speed and dangerous overloading immediate consequences, while both outcomes strongly reward a reactive counterspell deck.",
       "selected": {
-        "prose": true,
         "actions": true
       }
     },
@@ -1551,7 +1556,7 @@
     },
     {
       "template_pair_id": "pair-2",
-      "prose": "You watch branching current surround a synth kneeling inside the ruptured chamber.",
+      "prose": "Branching currents surround a figure kneeling inside the ruptured chamber.",
       "actions": [
         {
           "label": "Read the branching current",
@@ -1579,7 +1584,10 @@
         "overall": 9
       },
       "rank": 3,
-      "ranking_rationale": "The patterned discharge supports focused repetition or broader selection, with either route adding events to a reactive strategy."
+      "ranking_rationale": "The patterned discharge supports focused repetition or broader selection, with either route adding events to a reactive strategy.",
+      "selected": {
+        "prose": true
+      }
     },
     {
       "template_pair_id": "pair-4",
@@ -1670,8 +1678,7 @@
       "rank": 1,
       "ranking_rationale": "The raised standard supports both recruitment and momentum with exceptional clarity while advancing a Warrior strategy.",
       "selected": {
-        "prose": true,
-        "actions": true
+        "prose": true
       }
     },
     {
@@ -1703,7 +1710,10 @@
         "overall": 9
       },
       "rank": 2,
-      "ranking_rationale": "The uphill charge strongly grounds a rally or risky acceleration, and both outcomes reward a character-heavy deck."
+      "ranking_rationale": "The uphill charge strongly grounds a rally or risky acceleration, and both outcomes reward a character-heavy deck.",
+      "selected": {
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-4",
@@ -2146,8 +2156,7 @@
       "rank": 1,
       "ranking_rationale": "The hovering-stone formation supports two clear acts, while both rewards directly strengthen the event-heavy strategy.",
       "selected": {
-        "prose": true,
-        "actions": true
+        "prose": true
       }
     },
     {
@@ -2248,7 +2257,10 @@
         "overall": 8
       },
       "rank": 4,
-      "ranking_rationale": "The held stone pattern supports reading or releasing an omen, though the rewards are less specifically tied to event play."
+      "ranking_rationale": "The held stone pattern supports reading or releasing an omen, though the rewards are less specifically tied to event play.",
+      "selected": {
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-4",
