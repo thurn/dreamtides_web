@@ -62,6 +62,10 @@ if (pathname === "/editor" || pathname === "/cards") {
   const { default: GlossaryEditorApp } =
     await import("./editor/GlossaryEditorApp");
   renderStrict(<GlossaryEditorApp />);
+} else if (pathname === "/encounters") {
+  const { default: EncounterEditorApp } =
+    await import("./editor/EncounterEditorApp");
+  renderStrict(<EncounterEditorApp />);
 } else if (
   pathname === "/dream-avatars" ||
   pathname === "/avatars" ||

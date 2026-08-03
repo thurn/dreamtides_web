@@ -7,6 +7,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Plugin, ViteDevServer } from "vite";
 import { createCardEditorApiMiddleware } from "./scripts/card-editor-api.mjs";
+import { createEncounterEditorApiMiddleware } from "./scripts/encounter-editor-api.mjs";
 import { createDreamsignEditorApiMiddleware } from "./scripts/dreamsign-editor-api.mjs";
 import { createDreamAvatarEditorApiMiddleware } from "./scripts/dream-avatar-editor-api.mjs";
 import { createTidesEditorApiMiddleware } from "./scripts/tides-editor-api.mjs";
@@ -95,6 +96,19 @@ function cardEditorApiPlugin(): Plugin {
     apply: "serve",
     configureServer(server) {
       server.middlewares.use(createCardEditorApiMiddleware({ rootDir: __dirname }));
+    },
+  };
+}
+
+/** Vite plugin that serves the JSON-backed encounter editor. */
+function encounterEditorApiPlugin(): Plugin {
+  return {
+    name: "encounter-editor-api",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(
+        createEncounterEditorApiMiddleware({ rootDir: __dirname }),
+      );
     },
   };
 }
@@ -825,6 +839,7 @@ export default defineConfig({
     tailwindcss(),
     journeyLogPlugin(),
     cardEditorApiPlugin(),
+    encounterEditorApiPlugin(),
     dreamsignEditorApiPlugin(),
     glossaryEditorApiPlugin(),
     glossaryDataHotReloadPlugin(),

@@ -1,0 +1,221 @@
+.encounter-editor-shell {
+  min-width: 1080px;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  padding: var(--space-8);
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 20%, transparent), transparent 34%),
+    radial-gradient(circle at bottom left, color-mix(in srgb, var(--accent-bright) 10%, transparent), transparent 38%),
+    var(--surface-chrome-strong);
+  color: var(--text-primary);
+  font: var(--t-body);
+}
+
+.encounter-editor-page-header,
+.encounter-editor-list {
+  max-width: 1500px;
+  margin-inline: auto;
+}
+
+.encounter-editor-page-header {
+  min-height: 44px;
+  margin-bottom: var(--space-6);
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.encounter-editor-page-header h1,
+.encounter-editor-page-header p {
+  margin: 0;
+}
+
+.encounter-editor-page-header h1 {
+  font: var(--t-title);
+}
+
+.encounter-editor-page-header p {
+  margin-bottom: var(--space-1);
+  color: var(--text-muted);
+  font: var(--t-eyebrow);
+  text-transform: uppercase;
+}
+
+.encounter-editor-page-header > span {
+  color: var(--text-muted);
+  font: var(--t-caption);
+}
+
+.encounter-editor-list {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.encounter-editor-row {
+  height: 352px;
+  min-width: 0;
+}
+
+.encounter-editor-row-grid {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 44fr) minmax(0, 56fr);
+}
+
+.encounter-editor-art-frame {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--surface-placeholder);
+}
+
+.encounter-editor-art {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.encounter-editor-copy {
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+}
+
+.encounter-editor-copy-header {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+}
+
+.encounter-editor-copy-header h2 {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  font: var(--t-title);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.encounter-editor-rank-navigation {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.encounter-editor-rank-copy {
+  min-width: 132px;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-1);
+}
+
+.encounter-editor-rank-copy strong {
+  font: var(--t-body-sm);
+}
+
+.encounter-editor-rank-copy span {
+  max-width: 180px;
+  overflow: hidden;
+  color: var(--text-on-glass-muted);
+  font: var(--t-caption);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.encounter-editor-prose {
+  min-height: 42px;
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--border-accent);
+}
+
+.encounter-editor-prose p {
+  margin: 0;
+  color: var(--text-on-glass);
+  font: var(--t-body);
+}
+
+.encounter-editor-actions {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.encounter-editor-action {
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-inset);
+  background: color-mix(in srgb, var(--surface-raised) 64%, transparent);
+}
+
+.encounter-editor-action-number {
+  color: var(--text-on-glass-muted);
+  font: var(--t-eyebrow);
+  text-transform: uppercase;
+}
+
+.encounter-editor-action h3,
+.encounter-editor-action p {
+  margin: 0;
+}
+
+.encounter-editor-action h3 {
+  color: var(--text-on-glass);
+  font: var(--t-button);
+}
+
+.encounter-editor-action p {
+  color: var(--text-on-glass);
+  font: var(--t-body-sm);
+}
+
+.encounter-editor-action .encounter-editor-resolution {
+  margin-top: auto;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-soft);
+  color: var(--text-on-glass-muted);
+  font: var(--t-caption);
+}
+
+.encounter-editor-row [data-editor-field] {
+  cursor: text;
+}
+
+.encounter-editor-row [data-editor-field]:hover > :not(input, textarea) {
+  color: var(--accent-bright);
+}
+
+.encounter-editor-notice,
+.encounter-editor-error {
+  max-width: 720px;
+  margin: var(--space-12) auto;
+}
+
+.encounter-editor-notice {
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.encounter-editor-error {
+  height: 220px;
+}
+
+.encounter-editor-error-action {
+  padding: var(--space-6);
+}
