@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useRef, type ReactNode } from "react";
+import { AnimatePresence, motion, useIsPresent } from "framer-motion";
 import { logEvent } from "../logging";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import {
@@ -65,13 +65,9 @@ export function ScreenRouter({
 
   return (
     <AnimatePresence mode="sync">
-      <motion.div
+      <JourneyScreenFrame
         key={screenKey(screen)}
-        data-journey-screen={screen.type}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0, pointerEvents: "none" }}
-        transition={{ duration: 0.35 }}
+        screenType={screen.type}
       >
         <ErrorBoundary
           scope={`screen:${screen.type}`}
@@ -79,8 +75,40 @@ export function ScreenRouter({
         >
           {content}
         </ErrorBoundary>
-      </motion.div>
+      </JourneyScreenFrame>
     </AnimatePresence>
+  );
+}
+
+/**
+ * Owns the route-presence boundary so a retained exiting screen cannot keep
+ * receiving input. `pointer-events: none` on an ancestor is insufficient when
+ * a fixed descendant explicitly restores `pointer-events: auto`; the native
+ * `inert` attribute disables the whole subtree while its fade finishes.
+ */
+function JourneyScreenFrame({
+  screenType,
+  children,
+}: {
+  screenType: Screen["type"];
+  children: ReactNode;
+}) {
+  const isPresent = useIsPresent();
+
+  return (
+    <motion.div
+      data-journey-screen={screenType}
+      data-journey-screen-presence={isPresent ? "present" : "exiting"}
+      inert={isPresent ? undefined : true}
+      aria-hidden={isPresent ? undefined : true}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, pointerEvents: "none" }}
+      transition={{ duration: 0.35 }}
+      style={isPresent ? undefined : { pointerEvents: "none" }}
+    >
+      {children}
+    </motion.div>
   );
 }
 

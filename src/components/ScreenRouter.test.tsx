@@ -41,7 +41,10 @@ import {
 } from "../journey_v2";
 import { EXPLORATION_CARD_IDS } from "../screens/cumulus_adapters/exploration-view-model";
 
-const reducedMotionPreference = vi.hoisted(() => ({ value: false }));
+const motionPreference = vi.hoisted(() => ({
+  reduced: false,
+  isPresent: true,
+}));
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({
@@ -51,7 +54,8 @@ vi.mock("framer-motion", () => ({
     children: ReactNode;
     mode?: string;
   }) => <div data-animate-presence-mode={mode}>{children}</div>,
-  useReducedMotion: () => reducedMotionPreference.value,
+  useReducedMotion: () => motionPreference.reduced,
+  useIsPresent: () => motionPreference.isPresent,
   motion: {
     div: ({
       children,
@@ -98,7 +102,8 @@ beforeEach(() => {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
     }
   ).IS_REACT_ACT_ENVIRONMENT = true;
-  reducedMotionPreference.value = false;
+  motionPreference.reduced = false;
+  motionPreference.isPresent = true;
   globalThis.ResizeObserver = class ResizeObserverStub {
     observe(): void {}
     unobserve(): void {}
@@ -418,6 +423,24 @@ describe("ScreenRouter DreamAugury routing", () => {
         .querySelector("[data-journey-screen]")
         ?.getAttribute("data-exit-pointer-events"),
     ).toBe("none");
+  });
+
+  it("makes an exiting route subtree inert", () => {
+    motionPreference.isPresent = false;
+    const site = makeSite("DreamAugury");
+    const container = renderWithJourney({
+      state: makeStateFor(site),
+      journeyContent: merchantContent(),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
+    });
+
+    const frame = container.querySelector<HTMLElement>(
+      "[data-journey-screen]",
+    );
+    expect(frame?.dataset.journeyScreenPresence).toBe("exiting");
+    expect(frame?.hasAttribute("inert")).toBe(true);
+    expect(frame?.getAttribute("aria-hidden")).toBe("true");
+    expect(frame?.style.pointerEvents).toBe("none");
   });
 
   it("renders the Cumulus Dream Augury screen", () => {
@@ -922,7 +945,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
   });
 
   it("routes Exploration to its fullscreen frame-break prototype", () => {
-    reducedMotionPreference.value = true;
+    motionPreference.reduced = true;
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
       function getBoundingClientRect(this: HTMLElement) {
         if (this.hasAttribute("data-exploration-card-slot")) {
