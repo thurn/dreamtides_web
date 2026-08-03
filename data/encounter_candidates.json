@@ -27,15 +27,11 @@
         "overall": 9
       },
       "rank": 1,
-      "ranking_rationale": "The lantern and star doorway make both recruitment and dreamsign discovery immediately legible, while both rewards support a rematerialization deck.",
-      "selected": {
-        "prose": true,
-        "actions": true
-      }
+      "ranking_rationale": "The lantern and star doorway make both recruitment and dreamsign discovery immediately legible, while both rewards support a rematerialization deck."
     },
     {
       "template_pair_id": "pair-2",
-      "prose": "Before you, a young lantern bearer approaches a towering window of stars.",
+      "prose": "A young lantern bearer approaches a towering window of stars.",
       "actions": [
         {
           "label": "Lead a companion across",
@@ -68,7 +64,10 @@
         "overall": 9
       },
       "rank": 2,
-      "ranking_rationale": "The threshold strongly supports transformation and doubling, with both rewards deepening a low-cost materialization engine."
+      "ranking_rationale": "The threshold strongly supports transformation and doubling, with both rewards deepening a low-cost materialization engine.",
+      "selected": {
+        "prose": true
+      }
     },
     {
       "template_pair_id": "pair-3",
@@ -127,7 +126,10 @@
         "overall": 9
       },
       "rank": 4,
-      "ranking_rationale": "The opening convincingly admits a new ally or alters a possession, with useful but slightly abstract action framing."
+      "ranking_rationale": "The opening convincingly admits a new ally or alters a possession, with useful but slightly abstract action framing.",
+      "selected": {
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-4",

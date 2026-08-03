@@ -53,15 +53,15 @@
   },
   {
     "template_id": 14,
-    "template": "Draft a {predicate} card from 4 random choices"
+    "template": "Draft a {predicate} card from 4 choices"
   },
   {
     "template_id": 15,
-    "template": "Draft a {predicate} card from 4 random choices and gain {count} copies of it"
+    "template": "Draft a {predicate} card from 4 choices and gain {count} copies of it"
   },
   {
     "template_id": 16,
-    "template": "Take any number of {predicate} cards from 4 random choices"
+    "template": "Take any number of {predicate} cards from 4 choices"
   },
   {
     "template_id": 17,
