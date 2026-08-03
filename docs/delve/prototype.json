@@ -10,24 +10,73 @@
     },
     "events": [
       {
-        "template_pair_id": "pair-1",
-        "prose": "A lantern-bearing figure stands beside you, dwarfed by a narrow opening onto the cosmos.",
+        "template_pair_id": "pair-4",
+        "prose": "A child raises a round lantern before a narrow window of stars.",
         "actions": [
           {
-            "label": "Search the Opening",
-            "resolution": "A familiar outline emerges among the distant points.",
-            "template_id": 55,
-            "template": "Select 4 random cards from your deck and choose one to gain a copy of",
+            "label": "Exchange Familiar Forms",
+            "resolution": "One silhouette recedes as another emerges beside its double.",
+            "template_id": 61,
+            "template": "Purge a chosen card and gain a copy of another chosen card",
             "variables": {},
-            "effect_text": "Select 4 random cards from your deck and choose one to gain a copy of"
+            "effect_text": "Purge a chosen card and gain a copy of another chosen card"
           },
           {
-            "label": "Dim the Lantern",
-            "resolution": "Its fading glow yields to the vast radiance.",
-            "template_id": 32,
-            "template": "Purge $STARTER_CARD",
-            "variables": {},
-            "effect_text": "Purge a random starter card"
+            "label": "Request the Round Lantern",
+            "resolution": "The child lowers its steady glow into your hands.",
+            "template_id": 31,
+            "template": "Gain $CUSTOM_DREAMSIGN",
+            "variables": {
+              "custom_dreamsign": {
+                "id": "F46E59CB-32EC-4B50-8774-18F571B8FCE1",
+                "name": "Passage Lantern",
+                "rendered_text": "The first time each turn you rematerialize a character, it gains +1✦."
+              }
+            },
+            "effect_text": "Gain Passage Lantern. The first time each turn you rematerialize a character, it gains +1✦."
+          }
+        ],
+        "scores": {
+          "scene_quality": 10,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 10,
+          "overall": 10
+        },
+        "rank": 1,
+        "ranking_rationale": "The child and lantern create two direct exchanges, while either selective duplication or repeated rematerialization sharply advances the likely character engine."
+      },
+      {
+        "template_pair_id": "pair-3",
+        "prose": "A small lantern-bearer reaches toward a towering opening filled with distant stars.",
+        "actions": [
+          {
+            "label": "Invite the Lantern-Bearer",
+            "resolution": "The small figure steps through beside you.",
+            "template_id": 26,
+            "template": "Gain $CUSTOM_CARD",
+            "variables": {
+              "custom_card": {
+                "id": "F1108604-8C0A-4FA1-93FE-DA1506EEC29E",
+                "name": "Lantern Scout",
+                "energy_cost": 1,
+                "card_type": "Character",
+                "subtype": "Guide",
+                "rendered_text": "▸Materialized: Foresee 1.",
+                "spark": 1
+              }
+            },
+            "effect_text": "Gain Lantern Scout (1● Guide Character, 1✦ — ▸Materialized: Foresee 1.)"
+          },
+          {
+            "label": "Trade a Familiar Outline",
+            "resolution": "A different silhouette approaches through the opening.",
+            "template_id": 7,
+            "template": "Purge a chosen {predicate} card and gain a random {predicate} replacement",
+            "variables": {
+              "predicate": "≤2● cost Character"
+            },
+            "effect_text": "Purge a chosen ≤2● cost Character card and gain a random ≤2● cost Character replacement"
           }
         ],
         "scores": {
@@ -37,51 +86,16 @@
           "archetype_fit": 9,
           "overall": 9
         },
-        "rank": 1,
-        "ranking_rationale": "The immense opening creates the clearest encounter, while searching and dimming support two useful forms of deck refinement."
-      },
-      {
-        "template_pair_id": "pair-2",
-        "prose": "A slender figure lifts a lantern while a vast cosmic opening towers over you both.",
-        "actions": [
-          {
-            "label": "Focus the Radiance",
-            "resolution": "Several familiar silhouettes strengthen within the concentrated radiance.",
-            "template_id": 21,
-            "template": "Apply {transfiguration} to {count} chosen {predicate} cards",
-            "variables": {
-              "transfiguration": "Kindled",
-              "count": 4,
-              "predicate": "≤2● cost Character"
-            },
-            "effect_text": "Apply Kindled to 4 chosen ≤2● cost Character cards"
-          },
-          {
-            "label": "Widen the Opening",
-            "resolution": "Countless distant forms change as the opening expands.",
-            "template_id": 40,
-            "template": "Transfigure all cards in your deck",
-            "variables": {},
-            "effect_text": "Transfigure all cards in your deck"
-          }
-        ],
-        "scores": {
-          "scene_quality": 9,
-          "action_quality": 9,
-          "mechanical_connection": 9,
-          "archetype_fit": 10,
-          "overall": 9
-        },
         "rank": 2,
-        "ranking_rationale": "The scale remains immediate, and targeted strength competes with broad change while supporting a low-cost character engine."
+        "ranking_rationale": "The reaching figure supports both arrivals cleanly, and each reward improves a low-cost character plan built around materialization triggers."
       },
       {
-        "template_pair_id": "pair-5",
-        "prose": "A lantern-bearing figure reaches into the cosmic opening as bright points surround you.",
+        "template_pair_id": "pair-1",
+        "prose": "Beside you, a lone figure holds a bright orb toward the cosmos.",
         "actions": [
           {
-            "label": "Call Through the Opening",
-            "resolution": "Nearby silhouettes return bearing unfamiliar outlines.",
+            "label": "Widen the Cosmic Opening",
+            "resolution": "Familiar silhouettes emerge bearing unfamiliar shapes.",
             "template_id": 22,
             "template": "Apply a transfiguration to {count} random {predicate} cards",
             "variables": {
@@ -91,34 +105,8 @@
             "effect_text": "Apply a transfiguration to 4 random ≤2● cost Character cards"
           },
           {
-            "label": "Dismiss Distant Visions",
-            "resolution": "Their images thin across the dark expanse.",
-            "template_id": 6,
-            "template": "Purge up to {count} chosen {predicate} cards",
-            "variables": {
-              "count": 3,
-              "predicate": "Event"
-            },
-            "effect_text": "Purge up to 3 chosen Event cards"
-          }
-        ],
-        "scores": {
-          "scene_quality": 9,
-          "action_quality": 8,
-          "mechanical_connection": 8,
-          "archetype_fit": 9,
-          "overall": 9
-        },
-        "rank": 3,
-        "ranking_rationale": "The reaching posture grounds both responses, and either upgrading cheap bodies or trimming events strengthens the likely strategy."
-      },
-      {
-        "template_pair_id": "pair-3",
-        "prose": "Before you, a figure holds a lantern as bright points fill an immense cosmic opening.",
-        "actions": [
-          {
-            "label": "Release Familiar Forms",
-            "resolution": "Different silhouettes approach as familiar forms recede.",
+            "label": "Release Familiar Silhouettes",
+            "resolution": "New outlines approach as old ones recede.",
             "template_id": 8,
             "template": "Purge up to {count} chosen {predicate} cards and gain a random {predicate} replacement for each card purged",
             "variables": {
@@ -126,47 +114,80 @@
               "predicate": "≤2● cost Character"
             },
             "effect_text": "Purge up to 3 chosen ≤2● cost Character cards and gain a random ≤2● cost Character replacement for each card purged"
-          },
-          {
-            "label": "Gather the Floating Points",
-            "resolution": "They cluster densely within your reach.",
-            "template_id": 68,
-            "template": "Double your current essence.",
-            "variables": {},
-            "effect_text": "Double your current essence."
           }
         ],
         "scores": {
           "scene_quality": 9,
-          "action_quality": 8,
-          "mechanical_connection": 8,
-          "archetype_fit": 8,
-          "overall": 8
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 10,
+          "overall": 9
         },
-        "rank": 4,
-        "ranking_rationale": "Visible points and the opening ground both actions, though the flexible economy choice is less specific to the character engine."
+        "rank": 3,
+        "ranking_rationale": "The orb and opening anchor both transformations, while upgrading or selectively replacing cheap characters offers two strong forms of engine refinement."
       },
       {
-        "template_pair_id": "pair-4",
-        "prose": "A silhouetted figure and hanging lantern stand between you and a vertical cosmic expanse.",
+        "template_pair_id": "pair-2",
+        "prose": "Before you, a lantern-bearing figure faces an immense star-filled threshold.",
         "actions": [
           {
-            "label": "Cross Without Delay",
-            "resolution": "Distant silhouettes follow you in a sudden rush.",
-            "template_id": 66,
-            "template": "All cards in your deck become ❖ (fast)",
-            "variables": {},
-            "effect_text": "All cards in your deck become ❖ (fast)"
+            "label": "Focus the Lantern Inward",
+            "resolution": "Its concentrated beam strengthens a nearby silhouette.",
+            "template_id": 19,
+            "template": "Apply {transfiguration} to $DECK_CARD",
+            "variables": {
+              "transfiguration": "Kindled"
+            },
+            "selection": {
+              "$DECK_CARD": {
+                "predicate": "≤2● cost Character"
+              }
+            },
+            "effect_text": "Apply Kindled to a random ≤2● cost Character card from your deck"
           },
           {
-            "label": "Offer the Lantern",
-            "resolution": "Familiar silhouettes return bearing altered outlines.",
-            "template_id": 24,
-            "template": "Transfigure {count} random starter cards",
+            "label": "Cast the Light Beyond",
+            "resolution": "Distant offerings shimmer in unfamiliar forms.",
+            "template_id": 37,
+            "template": "The next draft or shop site you visit will contain transfigured cards",
+            "variables": {},
+            "effect_text": "The next draft or shop site you visit will contain transfigured cards"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 8,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 4,
+        "ranking_rationale": "The concentrated light makes both changes legible, though the delayed offering is less specifically tied to the source card's materialization plan."
+      },
+      {
+        "template_pair_id": "pair-5",
+        "prose": "A hanging lantern glows beside you as countless stars fill a narrow opening.",
+        "actions": [
+          {
+            "label": "Call Your Companions Forward",
+            "resolution": "Each answering silhouette carries a bright point.",
+            "template_id": 59,
+            "template": "Gain {essence_per_card} essence for each {predicate} card in your deck",
             "variables": {
-              "count": 5
+              "essence_per_card": 10,
+              "predicate": "≤2● cost Character"
             },
-            "effect_text": "Transfigure 5 random starter cards"
+            "effect_text": "Gain 10 essence for each ≤2● cost Character card in your deck"
+          },
+          {
+            "label": "Call Through the Opening",
+            "resolution": "Matching shapes cross from the distant opening.",
+            "template_id": 12,
+            "template": "Gain {count} copies of $OFFERED_CARD",
+            "variables": {
+              "count": 2
+            },
+            "effect_text": "Gain 2 copies of the offered card"
           }
         ],
         "scores": {
@@ -177,7 +198,7 @@
           "overall": 8
         },
         "rank": 5,
-        "ranking_rationale": "The spatial relationship is strong, but the broad speed reward has a looser connection to the depicted exchange."
+        "ranking_rationale": "The lantern and opening support both calls, but the economy and random duplication rewards connect less directly to repeated materialization."
       }
     ]
   },
@@ -192,61 +213,71 @@
     },
     "events": [
       {
-        "template_pair_id": "pair-5",
-        "prose": "A helmeted figure sits beside a luminous doorway amid ruins that dwarf you both.",
+        "template_pair_id": "pair-1",
+        "prose": "Before you, an armored sentinel rests beside a fractured doorway glowing amid ruins.",
         "actions": [
           {
-            "label": "Offer the Broken Slabs",
-            "resolution": "The armored figure accepts each piece without payment.",
-            "template_id": 56,
-            "template": "All items in the next shop you visit are free",
-            "variables": {},
-            "effect_text": "All items in the next shop you visit are free"
+            "label": "Invite the Sentinel",
+            "resolution": "The guardian rises and walks beside you.",
+            "template_id": 26,
+            "template": "Gain $CUSTOM_CARD",
+            "variables": {
+              "custom_card": {
+                "id": "c33cdbe5-0c3b-4180-bd11-0912dfa19486",
+                "name": "Ruinwatch Custodian",
+                "energy_cost": 2,
+                "card_type": "Character",
+                "subtype": "Survivor",
+                "rendered_text": "▸Dissolved: Choose another character in your void to gain reclaim 2●.\n\nReclaim 2●.",
+                "spark": 2
+              }
+            },
+            "effect_text": "Gain Ruinwatch Custodian (2● Survivor Character, 2✦ — ▸Dissolved: Choose another character in your void to gain reclaim 2●. Reclaim 2●.)"
           },
           {
-            "label": "Enter the Luminous Frame",
-            "resolution": "The opening redraws every shape passing through.",
-            "template_id": 40,
-            "template": "Transfigure all cards in your deck",
-            "variables": {},
-            "effect_text": "Transfigure all cards in your deck"
+            "label": "Study the Guardian",
+            "resolution": "Your companions adopt its measured discipline among the ruins.",
+            "template_id": 20,
+            "template": "Apply a transfiguration to {count} chosen {predicate} cards",
+            "variables": {
+              "count": 2,
+              "predicate": "Survivor"
+            },
+            "effect_text": "Apply a transfiguration to 2 chosen Survivor cards"
           }
         ],
         "scores": {
-          "scene_quality": 9,
+          "scene_quality": 10,
           "action_quality": 9,
-          "mechanical_connection": 10,
-          "archetype_fit": 9,
-          "overall": 9
+          "mechanical_connection": 9,
+          "archetype_fit": 10,
+          "overall": 10
         },
         "rank": 1,
-        "ranking_rationale": "The imposing scale supports two unusually direct action chains, while either sweeping reward advances the source card's recursive strategy."
+        "ranking_rationale": "The focused sentinel tableau supports recruitment and instruction, while both rewards directly strengthen repeated Survivor recursion."
       },
       {
-        "template_pair_id": "pair-4",
-        "prose": "A hunched armored figure rests beside a bright opening as rubble surrounds you.",
+        "template_pair_id": "pair-5",
+        "prose": "Before you, a broken grid of light shimmers behind an armored sentinel.",
         "actions": [
           {
-            "label": "Gather the Drifting Motes",
-            "resolution": "Their glow condenses along the doorway's fractured edges.",
-            "template_id": 59,
-            "template": "Gain {essence_per_card} essence for each {predicate} card in your deck",
+            "label": "Exchange the Weary",
+            "resolution": "Fresh travelers arrive as their tired companions depart.",
+            "template_id": 8,
+            "template": "Purge up to {count} chosen {predicate} cards and gain a random {predicate} replacement for each card purged",
             "variables": {
-              "essence_per_card": 30,
-              "predicate": "Reclaim"
+              "count": 2,
+              "predicate": "Survivor"
             },
-            "predicate_exception_rationale": "The source ability preserves reclaimed cards, and the canonical pool contains 60 cards that mention reclaim.",
-            "effect_text": "Gain 30 essence for each Reclaim card in your deck"
+            "effect_text": "Purge up to 2 chosen Survivor cards and gain a random Survivor replacement for each card purged"
           },
           {
-            "label": "Welcome Returning Figures",
-            "resolution": "Chosen silhouettes step forward from the bright opening.",
-            "template_id": 51,
-            "template": "Gain one copy of each of {count} chosen cards",
-            "variables": {
-              "count": 2
-            },
-            "effect_text": "Gain one copy of each of 2 chosen cards"
+            "label": "Rearrange the Grid",
+            "resolution": "Unfamiliar emblems brighten across the fractured surface.",
+            "template_id": 30,
+            "template": "Replace a chosen dreamsign with one of 3 offered dreamsigns",
+            "variables": {},
+            "effect_text": "Replace a chosen dreamsign with one of 3 offered dreamsigns"
           }
         ],
         "scores": {
@@ -257,115 +288,119 @@
           "overall": 9
         },
         "rank": 2,
-        "ranking_rationale": "The doorway cleanly supports gathering and arrival, and both calibrated rewards strongly favor a deck built around repeated reclamation."
+        "ranking_rationale": "The luminous grid grounds exchange and dreamsign selection, with Survivor replacement offering especially precise support for the source strategy."
       },
       {
-        "template_pair_id": "pair-2",
-        "prose": "A helmeted figure leans toward a fractured opening while luminous motes drift around you.",
+        "template_pair_id": "pair-4",
+        "prose": "Beside you, a seated sentinel keeps watch over a shattered, radiant doorway.",
         "actions": [
           {
-            "label": "Study the Shifting Grid",
-            "resolution": "Flickering patterns reveal what waits beyond the frame.",
-            "template_id": 38,
-            "template": "Draw {count} additional cards at the start of your next battle",
+            "label": "Request a Gate Fragment",
+            "resolution": "A glassy shard settles into your open hand.",
+            "template_id": 31,
+            "template": "Gain $CUSTOM_DREAMSIGN",
             "variables": {
-              "count": 4
+              "custom_dreamsign": {
+                "id": "82026f5c-4c81-4303-bd59-c2812d303272",
+                "name": "Threshold Fragment",
+                "rendered_text": "Once per turn, when you reclaim a character, that character gains +1✦."
+              }
             },
-            "effect_text": "Draw 4 additional cards at the start of your next battle"
+            "effect_text": "Gain Threshold Fragment. Once per turn, when you reclaim a character, that character gains +1✦."
           },
           {
-            "label": "Offer a Broken Fragment",
-            "resolution": "An armored figure emerges as the shard dissolves.",
-            "template_id": 34,
-            "template": "Purge a random starter card and gain a {predicate} card",
-            "variables": {
-              "predicate": "Survivor"
-            },
-            "effect_text": "Purge a random starter card and gain a Survivor card"
+            "label": "Call a Formidable Guardian",
+            "resolution": "A commanding figure steps through the radiant breach.",
+            "template_id": 72,
+            "template": "Gain a random legendary card.",
+            "variables": {},
+            "effect_text": "Gain a random legendary card."
           }
         ],
         "scores": {
           "scene_quality": 9,
-          "action_quality": 8,
+          "action_quality": 9,
           "mechanical_connection": 8,
           "archetype_fit": 9,
           "overall": 9
         },
         "rank": 3,
-        "ranking_rationale": "Visible projections support discovery and exchange, while immediate draw power competes credibly with permanent Survivor-focused deck refinement."
+        "ranking_rationale": "The guarded doorway makes both a recovered fragment and a formidable arrival feel immediate, though the legendary reward is strategically broad."
       },
       {
-        "template_pair_id": "pair-1",
-        "prose": "A solitary armored figure sits near you, dwarfed by a radiant rectangular portal.",
+        "template_pair_id": "pair-2",
+        "prose": "Dust drifts around you as a seated guardian watches beside a bright gateway.",
         "actions": [
           {
-            "label": "Touch the Radiant Threshold",
-            "resolution": "Distant emblems flare beyond a deepening darkness.",
-            "template_id": 71,
-            "template": "Gain {count} \"Nightmare\" bane cards. Gain one of 3 offered dreamsigns.",
+            "label": "Call Beyond the Gate",
+            "resolution": "Weathered travelers gather beyond the shining opening.",
+            "template_id": 36,
+            "template": "Choose one of 2 packs of {predicate} cards to add to your deck",
             "variables": {
-              "count": 1
+              "predicate": "Survivor"
             },
-            "effect_text": "Gain 1 \"Nightmare\" bane card. Gain one of 3 offered dreamsigns."
+            "effect_text": "Choose one of 2 packs of Survivor cards to add to your deck"
           },
           {
-            "label": "Call Through the Frame",
-            "resolution": "Returning silhouettes gather beyond the fractured opening.",
-            "template_id": 52,
-            "template": "Gain one copy of each of {count} random {predicate} cards",
+            "label": "Train Beside the Guardian",
+            "resolution": "Patient instruction hardens a companion for harsher journeys.",
+            "template_id": 19,
+            "template": "Apply {transfiguration} to $DECK_CARD",
             "variables": {
-              "count": 2,
-              "predicate": "Reclaim"
+              "transfiguration": "Kindled"
             },
-            "predicate_exception_rationale": "The source ability preserves reclaimed cards, and the canonical pool contains 60 cards that mention reclaim.",
-            "effect_text": "Gain one copy of each of 2 random Reclaim cards"
+            "selection": {
+              "$DECK_CARD": {
+                "predicate": "Survivor"
+              }
+            },
+            "effect_text": "Apply Kindled to a chosen Survivor card in your deck"
           }
         ],
         "scores": {
           "scene_quality": 9,
           "action_quality": 8,
           "mechanical_connection": 8,
-          "archetype_fit": 8,
-          "overall": 8
+          "archetype_fit": 10,
+          "overall": 9
         },
         "rank": 4,
-        "ranking_rationale": "The vast portal gives both calls clear consequences, though the risky dreamsign offer serves the source strategy less directly."
+        "ranking_rationale": "Calling and training follow naturally from the guarded gateway, while both outcomes deepen the Survivor plan despite the generic transfiguration bridge."
       },
       {
         "template_pair_id": "pair-3",
-        "prose": "A seated armored figure and a glowing frame loom beyond broken slabs before you.",
+        "prose": "You find a solitary guardian bowed beside a luminous frame half-buried in rubble.",
         "actions": [
           {
-            "label": "Cast Away a Fragment",
-            "resolution": "The loose shard vanishes beyond the opening.",
-            "template_id": 4,
-            "template": "Purge a chosen {predicate} card",
+            "label": "Signal the Outer Ruins",
+            "resolution": "A hardy traveler emerges from behind the debris.",
+            "template_id": 9,
+            "template": "Gain a random {predicate} card",
             "variables": {
-              "predicate": "non-Reclaim"
+              "predicate": "Survivor"
             },
-            "predicate_exception_rationale": "The source preserves cards with reclaim, while 460 canonical cards omit reclaim and provide valid trim targets.",
-            "effect_text": "Purge a chosen non-Reclaim card"
+            "effect_text": "Gain a random Survivor card"
           },
           {
-            "label": "Align the Floating Shards",
-            "resolution": "The luminous grid answers with a steady pulse.",
-            "template_id": 1,
-            "template": "Gain {essence} essence",
+            "label": "Trade a Companion's Watch",
+            "resolution": "The departing traveler leaves precious salvage by the frame.",
+            "template_id": 60,
+            "template": "Purge a chosen card and gain {essence_per_energy} essence for each ✦ it had",
             "variables": {
-              "essence": 250
+              "essence_per_energy": 40
             },
-            "effect_text": "Gain 250 essence"
+            "effect_text": "Purge a chosen card and gain 40 essence for each ✦ it had"
           }
         ],
         "scores": {
           "scene_quality": 8,
           "action_quality": 8,
           "mechanical_connection": 8,
-          "archetype_fit": 8,
+          "archetype_fit": 9,
           "overall": 8
         },
         "rank": 5,
-        "ranking_rationale": "The removal and activation remain clear and useful, but their causal link to the depicted tableau is less immediate than higher-ranked designs."
+        "ranking_rationale": "The bowed guardian supports arrival and departure, but converting a companion into currency is the set's least direct causal chain."
       }
     ]
   },
@@ -381,27 +416,27 @@
     "events": [
       {
         "template_pair_id": "pair-1",
-        "prose": "A crouched archer separates you from a colossal wolf advancing through burning grass.",
+        "prose": "Before you, a colossal wolf advances through burning grass, pale eyes fixed ahead.",
         "actions": [
           {
-            "label": "Study the Archer's Patience",
-            "resolution": "The poised bow reveals when movement matters.",
-            "template_id": 38,
-            "template": "Draw {count} additional cards at the start of your next battle",
+            "label": "Feed the Fire",
+            "resolution": "The blaze consumes what you cast away.",
+            "template_id": 4,
+            "template": "Purge a chosen {predicate} card",
             "variables": {
-              "count": 2
+              "predicate": "Event"
             },
-            "effect_text": "Draw 2 additional cards at the start of your next battle"
+            "effect_text": "Purge a chosen Event card"
           },
           {
-            "label": "Call Beyond the Fire",
-            "resolution": "An answering howl rolls across the field.",
-            "template_id": 14,
-            "template": "Draft a {predicate} card from 4 random choices",
+            "label": "Welcome Its Kin",
+            "resolution": "Other wolves emerge through the heated haze.",
+            "template_id": 36,
+            "template": "Choose one of 2 packs of {predicate} cards to add to your deck",
             "variables": {
               "predicate": "Spirit Animal"
             },
-            "effect_text": "Draft a Spirit Animal card from 4 random choices"
+            "effect_text": "Choose one of 2 packs of Spirit Animal cards to add to your deck"
           }
         ],
         "scores": {
@@ -412,32 +447,29 @@
           "overall": 9
         },
         "rank": 1,
-        "ranking_rationale": "The scale, posture, and closing distance read instantly, while patience and calling create two strong rewards for a creature-focused strategy."
+        "ranking_rationale": "The wolf's advance anchors two direct responses, while both choices sharpen a character-dense Spirit Animal strategy."
       },
       {
-        "template_pair_id": "pair-5",
-        "prose": "A vast wolf approaches with luminous eyes fixed past an archer crouched in the grass.",
+        "template_pair_id": "pair-2",
+        "prose": "A giant wolf emerges from the blaze, dwarfing the crouched archer.",
         "actions": [
           {
-            "label": "Join the Giant's Pack",
-            "resolution": "A chosen companion answers with a wild growl.",
-            "template_id": 58,
-            "template": "Change a chosen Character card to have {subtype}",
+            "label": "Invite a Wild Companion",
+            "resolution": "Another great beast strides through the smoke.",
+            "template_id": 9,
+            "template": "Gain a random {predicate} card",
             "variables": {
-              "subtype": "Spirit Animal"
+              "predicate": "Spirit Animal"
             },
-            "effect_text": "Change a chosen Character card to have Spirit Animal"
+            "effect_text": "Gain a random Spirit Animal card"
           },
           {
-            "label": "Welcome Its Distant Kin",
-            "resolution": "Answering footfalls approach through the heated grass.",
-            "template_id": 15,
-            "template": "Draft a {predicate} card from 4 random choices and gain {count} copies of it",
-            "variables": {
-              "predicate": "Spirit Animal",
-              "count": 1
-            },
-            "effect_text": "Draft a Spirit Animal card from 4 random choices and gain 1 copy of it"
+            "label": "Seek the Wolf's Mark",
+            "resolution": "Its luminous gaze remakes one prized possession.",
+            "template_id": 17,
+            "template": "Apply a transfiguration of your choice to a chosen card",
+            "variables": {},
+            "effect_text": "Apply a transfiguration of your choice to a chosen card"
           }
         ],
         "scores": {
@@ -448,114 +480,105 @@
           "overall": 9
         },
         "rank": 2,
-        "ranking_rationale": "The direct gaze and unequal scale remain vivid, and both invitations deepen the card's established Spirit Animal affiliation without an automatic choice."
+        "ranking_rationale": "The scale contrast is vivid, and calling a beast or seeking its mark gives equally clear, useful outcomes."
       },
       {
-        "template_pair_id": "pair-2",
-        "prose": "A lone archer crouches before you as a towering wolf steps through the fire.",
+        "template_pair_id": "pair-4",
+        "prose": "Across the blazing grass, a vast wolf lowers its head toward you.",
         "actions": [
           {
-            "label": "Call Companions Forward",
-            "resolution": "Waiting figures rise beyond the crouched archer.",
-            "template_id": 54,
-            "template": "Modify {count} random cards to become {card_type} cards",
+            "label": "Echo the Wolf's Arrival",
+            "resolution": "One companion arrives, departs, then returns bearing light.",
+            "template_id": 19,
+            "template": "Apply {transfiguration} to $DECK_CARD",
             "variables": {
-              "count": 2,
-              "card_type": "Character"
+              "transfiguration": "Resonant"
             },
-            "effect_text": "Modify 2 random cards to become Character cards"
+            "effect_text": "Apply Resonant to a card in your deck"
           },
           {
-            "label": "Voice a Rallying Howl",
-            "resolution": "The giant's reply swells above the burning grass.",
-            "template_id": 21,
-            "template": "Apply {transfiguration} to {count} chosen {predicate} cards",
-            "variables": {
-              "transfiguration": "Resonant",
-              "count": 2,
-              "predicate": "Spirit Animal"
-            },
-            "effect_text": "Apply Resonant to 2 chosen Spirit Animal cards"
-          }
-        ],
-        "scores": {
-          "scene_quality": 8,
-          "action_quality": 8,
-          "mechanical_connection": 8,
-          "archetype_fit": 9,
-          "overall": 8
-        },
-        "rank": 3,
-        "ranking_rationale": "The visible advance supports rallying responses, while Character conversion and Resonant Spirit Animals both reinforce repeated materialization play."
-      },
-      {
-        "template_pair_id": "pair-3",
-        "prose": "A colossal wolf bears down beyond a lone archer crouched amid blazing grass.",
-        "actions": [
-          {
-            "label": "Calm the Standoff",
-            "resolution": "The archer lowers the bow as the giant pauses.",
-            "template_id": 1,
-            "template": "Gain {essence} essence",
-            "variables": {
-              "essence": 200
-            },
-            "effect_text": "Gain 200 essence"
-          },
-          {
-            "label": "Urge the Archer Back",
-            "resolution": "The taut string slackens as the giant slows.",
-            "template_id": 6,
-            "template": "Purge up to {count} chosen {predicate} cards",
-            "variables": {
-              "count": 3,
-              "predicate": "Event"
-            },
-            "effect_text": "Purge up to 3 chosen Event cards"
+            "label": "Face the Wolf Together",
+            "resolution": "Your oldest companions emerge through the blaze changed.",
+            "template_id": 25,
+            "template": "Transfigure all starter cards",
+            "variables": {},
+            "effect_text": "Transfigure all starter cards"
           }
         ],
         "scores": {
           "scene_quality": 9,
           "action_quality": 8,
-          "mechanical_connection": 7,
+          "mechanical_connection": 9,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 3,
+        "ranking_rationale": "The lowered head makes collective confrontation immediate, and Resonant directly deepens the source card's Materialized plan."
+      },
+      {
+        "template_pair_id": "pair-5",
+        "prose": "Heat shimmers around a massive wolf stepping through the charred meadow.",
+        "actions": [
+          {
+            "label": "Cast Away Your Burden",
+            "resolution": "The fire takes it without a trace.",
+            "template_id": 3,
+            "template": "Purge a chosen card",
+            "variables": {},
+            "effect_text": "Purge a chosen card"
+          },
+          {
+            "label": "Trace Its Passage",
+            "resolution": "The scorched trail reaches a place of refuge.",
+            "template_id": 46,
+            "template": "Choose one of three site types to add to this dreamscape.",
+            "variables": {},
+            "effect_text": "Choose one of three site types to add to this dreamscape."
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 8,
+          "mechanical_connection": 8,
           "archetype_fit": 8,
           "overall": 8
         },
         "rank": 4,
-        "ranking_rationale": "The confrontation is exceptionally clear, though its peaceful interventions connect less directly to currency and deck pruning than the higher-ranked actions."
+        "ranking_rationale": "Fire and the wolf's passage support clean disposal and travel chains, though the site reward is strategically broad."
       },
       {
-        "template_pair_id": "pair-4",
-        "prose": "A bow-bearing figure crouches between you and a giant wolf emerging through the burning field.",
+        "template_pair_id": "pair-3",
+        "prose": "Through the firelit grass, a towering wolf bears down on the lone archer.",
         "actions": [
           {
-            "label": "Yield to the Luminous Gaze",
-            "resolution": "The familiar horizon changes beneath those unblinking eyes.",
-            "template_id": 63,
-            "template": "Replace all of your dreamsigns with random dreamsigns",
-            "variables": {},
-            "effect_text": "Replace all of your dreamsigns with random dreamsigns"
+            "label": "Call to the Wild",
+            "resolution": "Distant beasts answer with newly luminous eyes.",
+            "template_id": 22,
+            "template": "Apply a transfiguration to {count} random {predicate} cards",
+            "variables": {
+              "count": 2,
+              "predicate": "Spirit Animal"
+            },
+            "effect_text": "Apply a transfiguration to 2 random Spirit Animal cards"
           },
           {
-            "label": "Trade for Safe Passage",
-            "resolution": "The archer accepts your offering and clears the way.",
-            "template_id": 60,
-            "template": "Purge a chosen card and gain {essence_per_energy} essence for each ✦ it had",
-            "variables": {
-              "essence_per_energy": 50
-            },
-            "effect_text": "Purge a chosen card and gain 50 essence for each ✦ it had"
+            "label": "Accept the Wolf's Escort",
+            "resolution": "At its approach, every merchant lowers their price.",
+            "template_id": 56,
+            "template": "All items in the next shop you visit are free",
+            "variables": {},
+            "effect_text": "All items in the next shop you visit are free"
           }
         ],
         "scores": {
           "scene_quality": 8,
-          "action_quality": 7,
+          "action_quality": 8,
           "mechanical_connection": 7,
-          "archetype_fit": 7,
-          "overall": 7
+          "archetype_fit": 8,
+          "overall": 8
         },
         "rank": 5,
-        "ranking_rationale": "The spatial tableau remains faithful, but replacing every dreamsign and sacrificing a card require broader interpretive bridges than the other pairs."
+        "ranking_rationale": "The beast-calling chain strongly serves Spirit Animals, while the merchant response remains clear but relies on a broader extrapolation."
       }
     ]
   },
@@ -571,29 +594,30 @@
     "events": [
       {
         "template_pair_id": "pair-5",
-        "prose": "You face a vast skull-headed figure; its hanging lantern nearly fills the space between you.",
+        "prose": "Before you, a skull-faced colossus lowers a radiant lantern toward a child.",
         "actions": [
           {
-            "label": "Gather the Lantern's Warmth",
-            "resolution": "A warm point of radiance settles in your palm.",
-            "template_id": 31,
-            "template": "Gain $CUSTOM_DREAMSIGN",
-            "variables": {
-              "custom_dreamsign": {
-                "id": "ae8f64fe-5303-4c7c-b62a-401e461f7653",
-                "name": "Threshold Beacon",
-                "rendered_text": "The first time each turn you materialize a non-figment ≤2● cost character, gain 1●."
+            "label": "Invite a Lantern Visitor",
+            "resolution": "A new figure steps from between the panes.",
+            "template_id": 11,
+            "template": "Gain $OFFERED_CARD",
+            "variables": {},
+            "selection": {
+              "$OFFERED_CARD": {
+                "predicate": "≤2● cost Character"
               }
             },
-            "effect_text": "Gain Threshold Beacon. The first time each turn you materialize a non-figment ≤2● cost character, gain 1●."
+            "effect_text": "Gain an offered ≤2● cost Character card"
           },
           {
-            "label": "Cast Away a Burden",
-            "resolution": "The giant closes one skeletal hand around it.",
-            "template_id": 3,
-            "template": "Purge a chosen card",
-            "variables": {},
-            "effect_text": "Purge a chosen card"
+            "label": "Trade Away a Figure",
+            "resolution": "A skeletal hand accepts the chosen offering.",
+            "template_id": 60,
+            "template": "Purge a chosen card and gain {essence_per_energy} essence for each ✦ it had",
+            "variables": {
+              "essence_per_energy": 40
+            },
+            "effect_text": "Purge a chosen card and gain 40 essence for each ✦ it had"
           }
         ],
         "scores": {
@@ -604,64 +628,98 @@
           "overall": 10
         },
         "rank": 1,
-        "ranking_rationale": "The intimate scale contrast supports two clear exchanges, while the tailored dreamsign and flexible purge strongly serve a cheap-character engine."
+        "ranking_rationale": "The depicted exchange makes invitation and surrender immediate, while a tailored cheap character or spark conversion supports the source engine."
+      },
+      {
+        "template_pair_id": "pair-1",
+        "prose": "A child reaches into the lantern of a towering, skull-faced watcher.",
+        "actions": [
+          {
+            "label": "Search Beyond the Glass",
+            "resolution": "Altered silhouettes gather behind the shining panes.",
+            "template_id": 37,
+            "template": "The next draft or shop site you visit will contain transfigured cards",
+            "variables": {},
+            "effect_text": "The next draft or shop site you visit will contain transfigured cards"
+          },
+          {
+            "label": "Reach Into the Radiance",
+            "resolution": "Familiar forms return with strengthened outlines.",
+            "template_id": 24,
+            "template": "Transfigure {count} random starter cards",
+            "variables": {
+              "count": 2
+            },
+            "effect_text": "Transfigure 2 random starter cards"
+          }
+        ],
+        "scores": {
+          "scene_quality": 10,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 8,
+          "overall": 9
+        },
+        "rank": 2,
+        "ranking_rationale": "The lantern's altered forms strongly ground both transfiguration outcomes, though those flexible improvements serve the source engine less specifically."
       },
       {
         "template_pair_id": "pair-2",
-        "prose": "From the ledge beside you, a small figure reaches toward a lantern in a skeletal hand.",
+        "prose": "A small figure beside you reaches into a skull-faced colossus's hanging lantern.",
         "actions": [
           {
-            "label": "Feed the Lantern",
-            "resolution": "Radiance closes around your offering as the giant nods.",
-            "template_id": 60,
-            "template": "Purge a chosen card and gain {essence_per_energy} essence for each ✦ it had",
+            "label": "Trace Figures on Glass",
+            "resolution": "Solid figures emerge from the lantern's chamber.",
+            "template_id": 54,
+            "template": "Modify {count} random cards to become {card_type} cards",
             "variables": {
-              "essence_per_energy": 40
+              "count": 2,
+              "card_type": "Character"
             },
-            "effect_text": "Purge a chosen card and gain 40 essence for each ✦ it had"
+            "effect_text": "Modify 2 random cards to become Character cards"
           },
           {
-            "label": "Accept the Giant's Gift",
-            "resolution": "A new shape settles into your waiting hand.",
-            "template_id": 11,
-            "template": "Gain $OFFERED_CARD",
-            "variables": {},
-            "effect_text": "Gain a random offered card"
+            "label": "Offer a Familiar Silhouette",
+            "resolution": "A fresh traveler emerges as the familiar outline fades.",
+            "template_id": 34,
+            "template": "Purge a random starter card and gain a {predicate} card",
+            "variables": {
+              "predicate": "≤2● cost Character"
+            },
+            "effect_text": "Purge a random starter card and gain a ≤2● cost Character card"
           }
         ],
         "scores": {
           "scene_quality": 9,
           "action_quality": 9,
           "mechanical_connection": 9,
-          "archetype_fit": 9,
+          "archetype_fit": 10,
           "overall": 9
         },
-        "rank": 2,
-        "ranking_rationale": "The reaching exchange makes surrender and acceptance equally legible, with either deck-thinning conversion or a flexible new card supporting the strategy."
+        "rank": 3,
+        "ranking_rationale": "The reaching gesture supports creation and exchange, while both effects increase access to characters that trigger the source ability."
       },
       {
-        "template_pair_id": "pair-4",
-        "prose": "A rag-draped giant extends a lantern across the gulf, its skull looming above you.",
+        "template_pair_id": "pair-3",
+        "prose": "A vast lantern hangs before you from a skull-faced giant's hand.",
         "actions": [
           {
-            "label": "Offer a Burden",
-            "resolution": "The hanging radiance reveals a leaner form within.",
-            "template_id": 18,
-            "template": "Apply {transfiguration} to a chosen card",
+            "label": "Release Familiar Forms",
+            "resolution": "New figures gather where the older silhouettes stood.",
+            "template_id": 35,
+            "template": "Purge all starter cards and replace each one with a {predicate} card",
             "variables": {
-              "transfiguration": "Empowered"
+              "predicate": "≤2● cost Character"
             },
-            "effect_text": "Apply Empowered to a chosen card"
+            "effect_text": "Purge all starter cards and replace each one with a ≤2● cost Character card"
           },
           {
-            "label": "Study the Glass",
-            "resolution": "Layered shapes sharpen behind the glowing panes.",
-            "template_id": 38,
-            "template": "Draw {count} additional cards at the start of your next battle",
-            "variables": {
-              "count": 3
-            },
-            "effect_text": "Draw 3 additional cards at the start of your next battle"
+            "label": "Shape One Reflection",
+            "resolution": "The chosen outline changes beneath your guiding hand.",
+            "template_id": 17,
+            "template": "Apply a transfiguration of your choice to a chosen card",
+            "variables": {},
+            "effect_text": "Apply a transfiguration of your choice to a chosen card"
           }
         ],
         "scores": {
@@ -671,30 +729,30 @@
           "archetype_fit": 9,
           "overall": 9
         },
-        "rank": 3,
-        "ranking_rationale": "The suspended lantern grounds both inspection and offering, while cost reduction and extra draw each advance repeated low-cost materialization."
+        "rank": 4,
+        "ranking_rationale": "The lantern's chamber clearly supports wholesale replacement and a chosen alteration, with both outcomes improving a cheap-character deck."
       },
       {
-        "template_pair_id": "pair-1",
-        "prose": "Before you, a towering skull-faced figure lowers a radiant lantern toward a child on the ledge.",
+        "template_pair_id": "pair-4",
+        "prose": "A rag-draped giant holds a lantern over the narrow ledge before you.",
         "actions": [
           {
-            "label": "Touch the Warm Glass",
-            "resolution": "Heat gathers beneath your palm and lingers.",
-            "template_id": 39,
-            "template": "Gain {count} additional energy at the start of your next battle",
+            "label": "Cross the Narrow Ledge",
+            "resolution": "A chosen companion returns steady from the far side.",
+            "template_id": 58,
+            "template": "Change a chosen Character card to have {subtype}",
             "variables": {
-              "count": 5
+              "subtype": "Survivor"
             },
-            "effect_text": "Gain 5 additional energy at the start of your next battle"
+            "effect_text": "Change a chosen Character card to have Survivor"
           },
           {
-            "label": "Step Beneath the Lantern",
-            "resolution": "The giant sweeps it forward above your stride.",
-            "template_id": 66,
-            "template": "All cards in your deck become ❖ (fast)",
+            "label": "Guide the Lantern Higher",
+            "resolution": "Distant stalls appear beneath the scattered stars.",
+            "template_id": 43,
+            "template": "Add a dreamsign bazaar site to this dreamscape",
             "variables": {},
-            "effect_text": "All cards in your deck become ❖ (fast)"
+            "effect_text": "Add a dreamsign bazaar site to this dreamscape"
           }
         ],
         "scores": {
@@ -704,45 +762,8 @@
           "archetype_fit": 8,
           "overall": 8
         },
-        "rank": 4,
-        "ranking_rationale": "The descending lantern creates vivid contact and motion, though the burst energy and universal speed connect less specifically to the source archetype."
-      },
-      {
-        "template_pair_id": "pair-3",
-        "prose": "A lantern hangs close above you while a skull-faced colossus towers beyond the ledge.",
-        "actions": [
-          {
-            "label": "Twist the Lantern Frame",
-            "resolution": "Its inner reflections rearrange beneath your touch.",
-            "template_id": 63,
-            "template": "Replace all of your dreamsigns with random dreamsigns",
-            "variables": {},
-            "effect_text": "Replace all of your dreamsigns with random dreamsigns"
-          },
-          {
-            "label": "Reach Through the Glass",
-            "resolution": "A small wanderer rises from the radiant chamber.",
-            "template_id": 70,
-            "template": "Gain {count} \"Nightmare\" bane cards. Gain {card_name}.",
-            "variables": {
-              "count": 1,
-              "card_name": {
-                "id": "87f075b1-b058-4570-a75f-c4f8f544e192",
-                "display_name": "Aether Diver"
-              }
-            },
-            "effect_text": "Gain 1 \"Nightmare\" bane card. Gain Aether Diver."
-          }
-        ],
-        "scores": {
-          "scene_quality": 8,
-          "action_quality": 8,
-          "mechanical_connection": 7,
-          "archetype_fit": 9,
-          "overall": 8
-        },
         "rank": 5,
-        "ranking_rationale": "The close lantern supports alteration and emergence, but random dreamsign replacement makes the pair's weaker action less reliably useful."
+        "ranking_rationale": "The giant and lantern ground endurance and revelation, though adding a bazaar advances the source strategy only indirectly."
       }
     ]
   },
@@ -757,76 +778,65 @@
     },
     "events": [
       {
-        "template_pair_id": "pair-2",
-        "prose": "A lone gunman stands above you, outlined by a luminous triangle amid smoke.",
+        "template_pair_id": "pair-1",
+        "prose": "A luminous triangle encloses an armed figure as black cables stream outward.",
         "actions": [
           {
-            "label": "Study the Signal",
-            "resolution": "The bright edges resolve into ordered signs.",
-            "template_id": 38,
-            "template": "Draw {count} additional cards at the start of your next battle",
+            "label": "Enter the Luminous Frame",
+            "resolution": "Its bright outline alters one waiting silhouette.",
+            "template_id": 58,
+            "template": "Change a chosen Character card to have {subtype}",
             "variables": {
-              "count": 2
+              "subtype": "Outsider"
             },
-            "effect_text": "Draw 2 additional cards at the start of your next battle"
+            "effect_text": "Change a chosen Character card to have Outsider"
           },
           {
-            "label": "Invite the Gunman",
-            "resolution": "He steps from the glowing frame beside you.",
-            "template_id": 26,
-            "template": "Gain $CUSTOM_CARD",
-            "variables": {
-              "custom_card": {
-                "id": "ad5ec714-66c0-480b-97c8-d7316ded0ca4",
-                "name": "Signal-Bound Operative",
-                "energy_cost": 1,
-                "card_type": "Character",
-                "subtype": "Outsider",
-                "rendered_text": "Phasing\n\n▸Materialized: Foresee 1.",
-                "spark": 1
-              }
-            },
-            "effect_text": "Gain Signal-Bound Operative (1● Outsider Character, 1✦ — Phasing; ▸Materialized: Foresee 1.)"
+            "label": "Expand the Luminous Frame",
+            "resolution": "The widening glow reshapes every distant silhouette.",
+            "template_id": 67,
+            "template": "All characters in your deck become the subtype of your choice.",
+            "variables": {},
+            "effect_text": "All characters in your deck become the subtype of your choice."
           }
         ],
         "scores": {
-          "scene_quality": 9,
-          "action_quality": 10,
-          "mechanical_connection": 9,
+          "scene_quality": 10,
+          "action_quality": 9,
+          "mechanical_connection": 10,
           "archetype_fit": 10,
-          "overall": 9
+          "overall": 10
         },
         "rank": 1,
-        "ranking_rationale": "The high-contrast threshold scene anchors both learning and recruitment, and the tailored ally directly advances repeated scoring and foresight."
+        "ranking_rationale": "The enclosing frame directly grounds both alterations, and either selective or sweeping conversion sharply strengthens the source card's Outsider engine."
       },
       {
-        "template_pair_id": "pair-5",
-        "prose": "A luminous triangle frames a lone gunman while cables sweep between you through smoke.",
+        "template_pair_id": "pair-4",
+        "prose": "A gunman turns beneath black cables sweeping through the haze.",
         "actions": [
           {
-            "label": "Call Through the Frame",
-            "resolution": "Several armed silhouettes approach through the opening.",
-            "template_id": 16,
-            "template": "Take any number of {predicate} cards from 4 random choices",
+            "label": "Welcome the Veiled Operative",
+            "resolution": "A trench-coated silhouette emerges as the smoke darkens.",
+            "template_id": 70,
+            "template": "Gain {count} \"Nightmare\" bane cards. Gain {card_name}.",
             "variables": {
-              "predicate": "Outsider"
-            },
-            "predicate_exception_rationale": "The source ability rewards Outsiders scoring, and all 5 canonical Outsiders are eligible for this four-choice offer.",
-            "effect_text": "Take any number of Outsider cards from 4 random choices"
-          },
-          {
-            "label": "Grasp the Cables",
-            "resolution": "Their grip tightens as a knotted charm appears.",
-            "template_id": 69,
-            "template": "Gain {count} \"Nightmare\" bane cards. Gain {dreamsign}.",
-            "variables": {
-              "count": 2,
-              "dreamsign": {
-                "id": "39260DD5-CB43-47D5-A007-EFFBE13D6417",
-                "display_name": "Ginger Root"
+              "count": 1,
+              "card_name": {
+                "id": "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "display_name": "Abyssal Deputy"
               }
             },
-            "effect_text": "Gain 2 \"Nightmare\" bane cards. Gain Ginger Root."
+            "effect_text": "Gain 1 \"Nightmare\" bane card. Gain Abyssal Deputy."
+          },
+          {
+            "label": "Sever the Trailing Cables",
+            "resolution": "Stored current flashes through the falling lengths.",
+            "template_id": 39,
+            "template": "Gain {count} additional energy at the start of your next battle",
+            "variables": {
+              "count": 5
+            },
+            "effect_text": "Gain 5 additional energy at the start of your next battle"
           }
         ],
         "scores": {
@@ -837,64 +847,63 @@
           "overall": 9
         },
         "rank": 2,
-        "ranking_rationale": "The frame and cables support an arrival-or-bargain choice, with either additional Outsiders or a foresight payoff strengthening the strategy."
+        "ranking_rationale": "The cables support recruitment and stored power, while the canonical reward is a visually resonant Outsider that doubles the scoring payoff."
       },
       {
         "template_pair_id": "pair-3",
-        "prose": "A suited figure looks left as cables stream past you through dense smoke.",
+        "prose": "A radiant triangle isolates an armed figure within dense smoke.",
         "actions": [
           {
-            "label": "Reroute the Cables",
-            "resolution": "One line withdraws as another slides forward.",
-            "template_id": 8,
-            "template": "Purge up to {count} chosen {predicate} cards and gain a random {predicate} replacement for each card purged",
+            "label": "Study the Radiant Frame",
+            "resolution": "Layered possibilities resolve along its gleaming edges.",
+            "template_id": 38,
+            "template": "Draw {count} additional cards at the start of your next battle",
             "variables": {
-              "count": 1,
-              "predicate": "Outsider"
+              "count": 5
             },
-            "predicate_exception_rationale": "The source ability rewards Outsiders scoring, and the canonical card pool contains 5 Outsiders eligible for replacement.",
-            "effect_text": "Purge up to 1 chosen Outsider card and gain a random Outsider replacement for each card purged"
+            "effect_text": "Draw 5 additional cards at the start of your next battle"
           },
           {
-            "label": "Inspect the Frame",
-            "resolution": "Strange emblems surface along its luminous edges.",
-            "template_id": 29,
-            "template": "Gain one of 3 offered dreamsigns",
+            "label": "Step Through the Triangle",
+            "resolution": "Every familiar form returns with altered contours.",
+            "template_id": 40,
+            "template": "Transfigure all cards in your deck",
             "variables": {},
-            "effect_text": "Gain one of 3 offered dreamsigns"
+            "effect_text": "Transfigure all cards in your deck"
           }
         ],
         "scores": {
           "scene_quality": 9,
-          "action_quality": 8,
-          "mechanical_connection": 8,
+          "action_quality": 9,
+          "mechanical_connection": 9,
           "archetype_fit": 9,
           "overall": 9
         },
         "rank": 3,
-        "ranking_rationale": "The moving cables make exchange feel immediate, while the emblem response naturally opens flexible long-term rewards."
+        "ranking_rationale": "The radiant geometry makes study and total passage immediate, with a doubled opening hand competing against permanent deck-wide change."
       },
       {
-        "template_pair_id": "pair-4",
-        "prose": "A suited gunman looks left while cables arc between you and the smoke.",
+        "template_pair_id": "pair-2",
+        "prose": "Three bright edges frame a gunman as smoke billows around him.",
         "actions": [
           {
-            "label": "Trace the Triangle",
-            "resolution": "Its light settles around the object you present.",
-            "template_id": 18,
-            "template": "Apply {transfiguration} to a chosen card",
-            "variables": {
-              "transfiguration": "Amplified"
-            },
-            "effect_text": "Apply Amplified to a chosen card"
+            "label": "Trace the Bright Edges",
+            "resolution": "Three distant destinations sharpen beyond the glowing frame.",
+            "template_id": 46,
+            "template": "Choose one of three site types to add to this dreamscape.",
+            "variables": {},
+            "effect_text": "Choose one of three site types to add to this dreamscape."
           },
           {
-            "label": "Tap the Cable",
-            "resolution": "An extraordinary answer travels back through the smoke.",
-            "template_id": 72,
-            "template": "Gain a random legendary card.",
-            "variables": {},
-            "effect_text": "Gain a random legendary card."
+            "label": "Signal Through the Smoke",
+            "resolution": "Unfamiliar figures emerge as old companions recede.",
+            "template_id": 35,
+            "template": "Purge all starter cards and replace each one with a {predicate} card",
+            "variables": {
+              "predicate": "Outsider"
+            },
+            "predicate_exception_rationale": "The source ability rewards Outsiders scoring, and the canonical pool contains 5 eligible Outsider cards for replacement.",
+            "effect_text": "Purge all starter cards and replace each one with an Outsider card"
           }
         ],
         "scores": {
@@ -905,43 +914,44 @@
           "overall": 8
         },
         "rank": 4,
-        "ranking_rationale": "Both actions follow clearly from the luminous apparatus, though the legendary response is less specific to the source strategy."
+        "ranking_rationale": "The frame supports destination-finding and arrivals, though the site choice connects less specifically than converting the starter package into Outsiders."
       },
       {
-        "template_pair_id": "pair-1",
-        "prose": "A bearded gunman stands motionless while thick cables curl around the ledge before you.",
+        "template_pair_id": "pair-5",
+        "prose": "A solitary figure stands beneath thick cables arcing through smoke.",
         "actions": [
           {
-            "label": "Sever Incoming Signals",
-            "resolution": "The cut lines recoil beyond the glowing frame.",
-            "template_id": 6,
-            "template": "Purge up to {count} chosen {predicate} cards",
-            "variables": {
-              "count": 2,
-              "predicate": "Event"
-            },
-            "effect_text": "Purge up to 2 chosen Event cards"
+            "label": "Cut the Nearest Cable",
+            "resolution": "The severed line reveals a silent chamber.",
+            "template_id": 45,
+            "template": "Add a purge site to this dreamscape.",
+            "variables": {},
+            "effect_text": "Add a purge site to this dreamscape."
           },
           {
-            "label": "Offer What Hinders",
-            "resolution": "A cable draws the offering into smoke.",
-            "template_id": 5,
-            "template": "Purge up to {count} chosen cards",
+            "label": "Gather the Loose Strands",
+            "resolution": "A dark lock settles heavily across your palm.",
+            "template_id": 69,
+            "template": "Gain {count} \"Nightmare\" bane cards. Gain {dreamsign}.",
             "variables": {
-              "count": 1
+              "count": 2,
+              "dreamsign": {
+                "id": "4E51F321-9089-4872-A0E2-AB909E242B33",
+                "display_name": "Hair Lock"
+              }
             },
-            "effect_text": "Purge up to 1 chosen card"
+            "effect_text": "Gain 2 \"Nightmare\" bane cards. Gain Hair Lock."
           }
         ],
         "scores": {
-          "scene_quality": 8,
+          "scene_quality": 9,
           "action_quality": 8,
           "mechanical_connection": 7,
-          "archetype_fit": 8,
+          "archetype_fit": 9,
           "overall": 8
         },
         "rank": 5,
-        "ranking_rationale": "The taut cables support two credible release actions, but removing cards connects less directly to the depicted figure and scoring plan."
+        "ranking_rationale": "The visible cables ground cutting and gathering, but the mixed bane-and-dreamsign bargain gives the set's loosest causal bridge."
       }
     ]
   },
@@ -957,67 +967,63 @@
     "events": [
       {
         "template_pair_id": "pair-3",
-        "prose": "A giant owl holds your gaze while a smaller figure stands motionless beside it.",
+        "prose": "Beside a silent figure, an immense owl stares through drifting motes.",
         "actions": [
           {
-            "label": "Join the Silent Vigil",
-            "resolution": "A low call rolls through the enclosing boughs.",
-            "template_id": 21,
-            "template": "Apply {transfiguration} to {count} chosen {predicate} cards",
+            "label": "Ask the Figure's Counsel",
+            "resolution": "The smaller figure indicates several shapes in the haze.",
+            "template_id": 14,
+            "template": "Draft a {predicate} card from 4 random choices",
             "variables": {
-              "transfiguration": "Resonant",
-              "count": 2,
-              "predicate": "has a ▸Dawn ability"
+              "predicate": "≤2● cost Character"
             },
-            "predicate_exception_rationale": "The source card has a ▸Dawn ability, Resonant directly extends that trigger, and the canonical pool contains 40 eligible cards.",
-            "effect_text": "Apply Resonant to 2 chosen cards with a ▸Dawn ability"
+            "effect_text": "Draft a ≤2● cost Character card from 4 random choices"
           },
           {
-            "label": "Invite Forest Kin",
-            "resolution": "Animal shapes emerge between the tangled boughs.",
-            "template_id": 13,
-            "template": "Gain {count} random {predicate} cards",
+            "label": "Welcome the Owl's Kin",
+            "resolution": "Calls answer as animal forms settle among the branches.",
+            "template_id": 16,
+            "template": "Take any number of {predicate} cards from 4 random choices",
             "variables": {
-              "count": 2,
               "predicate": "Spirit Animal"
             },
-            "effect_text": "Gain 2 random Spirit Animal cards"
+            "effect_text": "Take any number of Spirit Animal cards from 4 random choices"
           }
         ],
         "scores": {
-          "scene_quality": 10,
+          "scene_quality": 9,
           "action_quality": 9,
           "mechanical_connection": 9,
           "archetype_fit": 10,
-          "overall": 10
+          "overall": 9
         },
         "rank": 1,
-        "ranking_rationale": "The unwavering shared vigil supports both calls, while repeatable Dawn triggers and additional spirit animals directly deepen the source card's strategy."
+        "ranking_rationale": "The clear shared vigil supports guidance and gathering, while curated cheap characters and optional spirit animals both strengthen the source card's low-cost tribal plan."
       },
       {
-        "template_pair_id": "pair-4",
-        "prose": "A small figure's streaming hair catches the moonlight beside an enormous, bright-eyed owl.",
+        "template_pair_id": "pair-5",
+        "prose": "A huge owl faces you, talons clenched around the shadowed branch.",
         "actions": [
           {
-            "label": "Request a Braided Token",
-            "resolution": "A single tress settles softly across your palm.",
-            "template_id": 27,
-            "template": "Gain {dreamsign_name}",
-            "variables": {
-              "dreamsign_name": {
-                "id": "4E51F321-9089-4872-A0E2-AB909E242B33",
-                "display_name": "Hair Lock"
-              }
-            },
-            "effect_text": "Gain Hair Lock"
+            "label": "Borrow Its Steady Gaze",
+            "resolution": "Every companion stands taller beneath the unbroken stare.",
+            "template_id": 64,
+            "template": "All characters in your deck gain +1✦",
+            "variables": {},
+            "effect_text": "All characters in your deck gain +1✦"
           },
           {
-            "label": "Release Old Keepsakes",
-            "resolution": "Bright motes gather, each carrying an unfamiliar token.",
-            "template_id": 63,
-            "template": "Replace all of your dreamsigns with random dreamsigns",
-            "variables": {},
-            "effect_text": "Replace all of your dreamsigns with random dreamsigns"
+            "label": "Send One into the Forest",
+            "resolution": "A quiet wolf returns in their place.",
+            "template_id": 47,
+            "template": "Choose a card to purge and replace it with {card_id}",
+            "variables": {
+              "card_id": {
+                "id": "7992dbb5-ca45-4066-aca3-ff1d6d87619e",
+                "display_name": "Moonbound Wolf"
+              }
+            },
+            "effect_text": "Choose a card to purge and replace it with Moonbound Wolf"
           }
         ],
         "scores": {
@@ -1028,120 +1034,107 @@
           "overall": 9
         },
         "rank": 2,
-        "ranking_rationale": "The figure's streaming hair grounds the precise reward, while the visible motes support a riskier exchange that preserves meaningful choice."
+        "ranking_rationale": "The owl's fixed stare grounds both empowerment and exchange, with either broad character strength or a direct Dawn enabler serving the deck."
       },
       {
-        "template_pair_id": "pair-1",
-        "prose": "A colossal owl occupies the branch while a much smaller figure stands beneath its gaze.",
+        "template_pair_id": "pair-2",
+        "prose": "The owl grips a narrow branch, watching you without a blink.",
         "actions": [
           {
-            "label": "Summon Your Wild Company",
-            "resolution": "A great bird acknowledges each arrival with a slow blink.",
-            "template_id": 59,
-            "template": "Gain {essence_per_card} essence for each {predicate} card in your deck",
-            "variables": {
-              "essence_per_card": 10,
-              "predicate": "Spirit Animal"
-            },
-            "effect_text": "Gain 10 essence for each Spirit Animal card in your deck"
+            "label": "Offer a Worn Burden",
+            "resolution": "A hooked beak carries the small burden away.",
+            "template_id": 33,
+            "template": "Purge a random starter card",
+            "variables": {},
+            "effect_text": "Purge a random starter card"
           },
           {
-            "label": "Accept the Crescent's Bargain",
-            "resolution": "A wolf arrives, with darker shapes close behind.",
-            "template_id": 70,
-            "template": "Gain {count} \"Nightmare\" bane cards. Gain {card_name}.",
+            "label": "Trade a Treasured Token",
+            "resolution": "Bright motes spill from beneath the lifted wing.",
+            "template_id": 62,
+            "template": "Purge a chosen dreamsign and gain {essence} essence",
             "variables": {
-              "count": 1,
-              "card_name": {
-                "id": "7992dbb5-ca45-4066-aca3-ff1d6d87619e",
-                "display_name": "Moonbound Wolf"
-              }
+              "essence": 200
             },
-            "effect_text": "Gain 1 \"Nightmare\" bane card. Gain Moonbound Wolf."
+            "effect_text": "Purge a chosen dreamsign and gain 200 essence"
           }
         ],
         "scores": {
           "scene_quality": 9,
           "action_quality": 9,
           "mechanical_connection": 8,
-          "archetype_fit": 10,
+          "archetype_fit": 8,
           "overall": 9
         },
         "rank": 3,
-        "ranking_rationale": "The dramatic difference in scale supports homage and bargain, offering either substantial tribal value or a potent Dawn enabler with a real drawback."
+        "ranking_rationale": "The watchful bird makes both offerings immediate and credible, balancing free deck refinement against a substantial dreamsign conversion."
       },
       {
-        "template_pair_id": "pair-5",
-        "prose": "A broad-eyed owl watches from a branch as bright motes drift beneath the crescent.",
+        "template_pair_id": "pair-4",
+        "prose": "An enormous owl perches above you, framed by a bright crescent.",
         "actions": [
           {
-            "label": "Gather the Drifting Lights",
-            "resolution": "Every mote brightens, then settles around you.",
-            "template_id": 68,
-            "template": "Double your current essence.",
-            "variables": {},
-            "effect_text": "Double your current essence."
+            "label": "Accept Its Feathered Burden",
+            "resolution": "Dark pinions settle on you; the passage clears.",
+            "template_id": 65,
+            "template": "All cards in your deck are reduced in cost by 1●. Gain {count} \"Nightmare\" bane cards.",
+            "variables": {
+              "count": 3
+            },
+            "effect_text": "All cards in your deck are reduced in cost by 1●. Gain 3 \"Nightmare\" bane cards."
           },
           {
-            "label": "Request a Feathered Token",
-            "resolution": "A curved pinion settles softly into your hand.",
-            "template_id": 31,
-            "template": "Gain $CUSTOM_DREAMSIGN",
-            "variables": {
-              "custom_dreamsign": {
-                "id": "C2C03F72-0F45-4107-8B04-ED71A2A2F962",
-                "name": "Crescent Pinion",
-                "rendered_text": "The first time each battle you foresee, gain 1●."
-              }
-            },
-            "effect_text": "Gain Crescent Pinion"
-          }
-        ],
-        "scores": {
-          "scene_quality": 9,
-          "action_quality": 8,
-          "mechanical_connection": 7,
-          "archetype_fit": 9,
-          "overall": 8
-        },
-        "rank": 4,
-        "ranking_rationale": "Visible motes and the immense bird ground both acts, balancing an immediate economy windfall against a persistent reward tailored to foresee."
-      },
-      {
-        "template_pair_id": "pair-2",
-        "prose": "A vast owl faces you while a lone figure stands on the same narrow branch.",
-        "actions": [
-          {
-            "label": "Seek the Figure's Guidance",
-            "resolution": "A chosen companion takes shape upon the branch.",
-            "template_id": 53,
-            "template": "Change $DECK_CARD to become a {card_type}",
-            "variables": {
-              "card_type": "Character"
-            },
-            "effect_text": "Change a chosen card in your deck to become a Character"
-          },
-          {
-            "label": "Follow the Owl's Call",
-            "resolution": "Distant figures answer together from the tangled trees.",
-            "template_id": 54,
-            "template": "Modify {count} random cards to become {card_type} cards",
+            "label": "Call Into the Canopy",
+            "resolution": "Answering cries gather among the hidden branches.",
+            "template_id": 52,
+            "template": "Gain one copy of each of {count} random {predicate} cards",
             "variables": {
               "count": 2,
-              "card_type": "Character"
+              "predicate": "Spirit Animal"
             },
-            "effect_text": "Modify 2 random cards to become Character cards"
+            "effect_text": "Gain one copy of each of 2 random Spirit Animal cards"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 8,
+          "mechanical_connection": 8,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 4,
+        "ranking_rationale": "The elevated bird supports a burden-or-summons choice, pairing a risky universal discount with focused spirit-animal reinforcement."
+      },
+      {
+        "template_pair_id": "pair-1",
+        "prose": "A giant owl fills your view, its round eyes bright beneath tangled boughs.",
+        "actions": [
+          {
+            "label": "Call Toward High Boughs",
+            "resolution": "A majestic figure descends through the glowing forest.",
+            "template_id": 72,
+            "template": "Gain a random legendary card.",
+            "variables": {},
+            "effect_text": "Gain a random legendary card."
+          },
+          {
+            "label": "Scatter Your Talismans",
+            "resolution": "The owl gathers them, then releases stranger shapes.",
+            "template_id": 63,
+            "template": "Replace all of your dreamsigns with random dreamsigns",
+            "variables": {},
+            "effect_text": "Replace all of your dreamsigns with random dreamsigns"
           }
         ],
         "scores": {
           "scene_quality": 9,
           "action_quality": 8,
           "mechanical_connection": 7,
-          "archetype_fit": 8,
+          "archetype_fit": 7,
           "overall": 8
         },
         "rank": 5,
-        "ranking_rationale": "The paired figures support two routes into a character-heavy plan, though both transformation chains are less immediate than the higher-ranked rewards."
+        "ranking_rationale": "The owl's scale carries both supernatural responses, though either randomized reward advances the source strategy only indirectly."
       }
     ]
   },
@@ -1156,100 +1149,31 @@
     },
     "events": [
       {
-        "template_pair_id": "pair-3",
-        "prose": "You drift beside a vast whale whose nearest fin dwarfs your entire skiff.",
+        "template_pair_id": "pair-2",
+        "prose": "A whale’s shadowed bulk crosses the stars above your small craft.",
         "actions": [
           {
-            "label": "Study Its Effortless Motion",
-            "resolution": "Nearby creatures settle into the same measured rhythm.",
-            "template_id": 20,
-            "template": "Apply a transfiguration to {count} chosen {predicate} cards",
-            "variables": {
-              "count": 2,
-              "predicate": "Spirit Animal"
-            },
-            "effect_text": "Apply a transfiguration to 2 chosen Spirit Animal cards"
-          },
-          {
-            "label": "Call Across the Stars",
-            "resolution": "A distant pod turns toward your small vessel.",
-            "template_id": 36,
-            "template": "Choose one of 2 packs of {predicate} cards to add to your deck",
-            "variables": {
-              "predicate": "Spirit Animal"
-            },
-            "effect_text": "Choose one of 2 packs of Spirit Animal cards to add to your deck"
-          }
-        ],
-        "scores": {
-          "scene_quality": 10,
-          "action_quality": 9,
-          "mechanical_connection": 9,
-          "archetype_fit": 10,
-          "overall": 10
-        },
-        "rank": 1,
-        "ranking_rationale": "The intimate scale contrast supports imitation and calling equally well, and both choices strongly advance the Spirit Animal plan."
-      },
-      {
-        "template_pair_id": "pair-5",
-        "prose": "A massive whale passes overhead, and your narrow skiff seems weightless beneath it.",
-        "actions": [
-          {
-            "label": "Call a Stronger Swimmer",
-            "resolution": "A familiar traveler departs as broad fins approach.",
-            "template_id": 34,
-            "template": "Purge a random starter card and gain a {predicate} card",
-            "variables": {
-              "predicate": "Spirit Animal"
-            },
-            "effect_text": "Purge a random starter card and gain a Spirit Animal card"
-          },
-          {
-            "label": "Share the Weightless Current",
-            "resolution": "A nearby traveler assumes a graceful aquatic shape.",
-            "template_id": 58,
-            "template": "Change a chosen Character card to have {subtype}",
-            "variables": {
-              "subtype": "Spirit Animal"
-            },
-            "effect_text": "Change a chosen Character card to have Spirit Animal"
-          }
-        ],
-        "scores": {
-          "scene_quality": 9,
-          "action_quality": 9,
-          "mechanical_connection": 9,
-          "archetype_fit": 10,
-          "overall": 9
-        },
-        "rank": 2,
-        "ranking_rationale": "The overhead passage grounds two persuasive changes of company while both outcomes concentrate the card's tribal engine."
-      },
-      {
-        "template_pair_id": "pair-1",
-        "prose": "You watch a colossal whale glide above a tiny skiff, blotting out the stars.",
-        "actions": [
-          {
-            "label": "Welcome the Smaller Swimmer",
-            "resolution": "A bright fish circles beneath the passing giant.",
+            "label": "Welcome a Smaller Swimmer",
+            "resolution": "A bright new shape circles beneath the giant.",
             "template_id": 27,
             "template": "Gain {dreamsign_name}",
             "variables": {
               "dreamsign_name": {
-                "id": "3A22A33F-5682-4D00-B0EC-86E43B6ED9DF",
+                "id": "3a22a33f-5682-4d00-b0ec-86e43b6ed9df",
                 "display_name": "Magic Fish"
               }
             },
             "effect_text": "Gain Magic Fish"
           },
           {
-            "label": "Read the Starry Passage",
-            "resolution": "Several star patterns sharpen where the immense body passed.",
-            "template_id": 30,
-            "template": "Replace a chosen dreamsign with one of 3 offered dreamsigns",
-            "variables": {},
-            "effect_text": "Replace a chosen dreamsign with one of 3 offered dreamsigns"
+            "label": "Release a Fellow Swimmer",
+            "resolution": "Another broad silhouette rises into the open sky.",
+            "template_id": 7,
+            "template": "Purge a chosen {predicate} card and gain a random {predicate} replacement",
+            "variables": {
+              "predicate": "Spirit Animal"
+            },
+            "effect_text": "Purge a chosen Spirit Animal card and gain a random Spirit Animal replacement"
           }
         ],
         "scores": {
@@ -1259,27 +1183,26 @@
           "archetype_fit": 10,
           "overall": 9
         },
-        "rank": 3,
-        "ranking_rationale": "The eclipsing scale is immediately legible, and the fish reward is exceptional even though the exchange chain is less direct."
+        "rank": 1,
+        "ranking_rationale": "The intimate scale contrast supports both exchanges, and each reward directly strengthens a spirit-animal strategy."
       },
       {
-        "template_pair_id": "pair-4",
-        "prose": "A soaring whale fills your view, its outstretched fin wider than the nearby skiff.",
+        "template_pair_id": "pair-1",
+        "prose": "An immense whale glides above you through a star-filled sky.",
         "actions": [
           {
-            "label": "Signal the Distant Pod",
-            "resolution": "Faraway swimmers return with unfamiliar markings.",
-            "template_id": 22,
-            "template": "Apply a transfiguration to {count} random {predicate} cards",
+            "label": "Enter Its Wake",
+            "resolution": "Its passage bears you swiftly beneath gathering darkness.",
+            "template_id": 65,
+            "template": "All cards in your deck are reduced in cost by 1●. Gain {count} \"Nightmare\" bane cards.",
             "variables": {
-              "count": 2,
-              "predicate": "Spirit Animal"
+              "count": 5
             },
-            "effect_text": "Apply a transfiguration to 2 random Spirit Animal cards"
+            "effect_text": "All cards in your deck are reduced in cost by 1●. Gain 5 \"Nightmare\" bane cards."
           },
           {
-            "label": "Chart the Gentle Ascent",
-            "resolution": "A waiting traveler rises with surprising ease.",
+            "label": "Rise Beside It",
+            "resolution": "The great body carries you toward the stars.",
             "template_id": 18,
             "template": "Apply {transfiguration} to a chosen card",
             "variables": {
@@ -1295,42 +1218,108 @@
           "archetype_fit": 9,
           "overall": 9
         },
-        "rank": 4,
-        "ranking_rationale": "The immense fin gives the scene force, while the two improvement chains are useful but slightly more interpretive."
+        "rank": 2,
+        "ranking_rationale": "The whale’s sweeping passage grounds both ascent and peril, while cheaper cards accelerate repeated spirit-animal plays."
       },
       {
-        "template_pair_id": "pair-2",
-        "prose": "A whale fills the starry sky while you stand on a skiff below.",
+        "template_pair_id": "pair-5",
+        "prose": "Your tiny craft hangs beneath an immense whale crossing the stars.",
         "actions": [
           {
-            "label": "Invite a New Passenger",
-            "resolution": "A traveler boards as another quietly rows away.",
-            "template_id": 61,
-            "template": "Purge a chosen card and gain a copy of another chosen card",
-            "variables": {},
-            "effect_text": "Purge a chosen card and gain a copy of another chosen card"
+            "label": "Follow Its Slow Arc",
+            "resolution": "Its measured course reveals what waits ahead.",
+            "template_id": 38,
+            "template": "Draw {count} additional cards at the start of your next battle",
+            "variables": {
+              "count": 2
+            },
+            "effect_text": "Draw 2 additional cards at the start of your next battle"
           },
           {
-            "label": "Call Across the Expanse",
-            "resolution": "Distant swimmers arrive trailing concentrated starlight.",
-            "template_id": 59,
-            "template": "Gain {essence_per_card} essence for each {predicate} card in your deck",
-            "variables": {
-              "essence_per_card": 10,
-              "predicate": "Spirit Animal"
-            },
-            "effect_text": "Gain 10 essence for each Spirit Animal card in your deck"
+            "label": "Shed Weight Beneath It",
+            "resolution": "A clear landing opens beyond its sweeping tail.",
+            "template_id": 45,
+            "template": "Add a purge site to this dreamscape.",
+            "variables": {},
+            "effect_text": "Add a purge site to this dreamscape."
           }
         ],
         "scores": {
           "scene_quality": 9,
           "action_quality": 8,
+          "mechanical_connection": 8,
+          "archetype_fit": 8,
+          "overall": 8
+        },
+        "rank": 3,
+        "ranking_rationale": "The small craft makes following and lightening the load natural, offering immediate tempo or long-term deck refinement."
+      },
+      {
+        "template_pair_id": "pair-4",
+        "prose": "A vast whale floats among distant stars beyond your tiny vessel.",
+        "actions": [
+          {
+            "label": "Call Forth Its Twin",
+            "resolution": "A second vast outline gathers beside it.",
+            "template_id": 50,
+            "template": "Gain {count} copies of a chosen card",
+            "variables": {
+              "count": 1
+            },
+            "effect_text": "Gain 1 copy of a chosen card"
+          },
+          {
+            "label": "Chart Its Returning Course",
+            "resolution": "A bright mooring appears along the mapped route.",
+            "template_id": 41,
+            "template": "Add a duplication site to this dreamscape",
+            "variables": {},
+            "effect_text": "Add a duplication site to this dreamscape"
+          }
+        ],
+        "scores": {
+          "scene_quality": 8,
+          "action_quality": 8,
+          "mechanical_connection": 8,
+          "archetype_fit": 8,
+          "overall": 8
+        },
+        "rank": 4,
+        "ranking_rationale": "The lone giant makes doubling visually immediate, while the choices trade a guaranteed copy for a later duplication opportunity."
+      },
+      {
+        "template_pair_id": "pair-3",
+        "prose": "The enormous whale drifts overhead, its ridged belly filling your view.",
+        "actions": [
+          {
+            "label": "Reach Into Its Wake",
+            "resolution": "Luminous flecks settle around your outstretched hand.",
+            "template_id": 2,
+            "template": "Gain a random amount of essence between {essence1} and {essence2}",
+            "variables": {
+              "essence1": 150,
+              "essence2": 300
+            },
+            "effect_text": "Gain a random amount of essence between 150 and 300"
+          },
+          {
+            "label": "Pass Under Its Shadow",
+            "resolution": "Familiar shapes emerge changed beyond its trailing fins.",
+            "template_id": 40,
+            "template": "Transfigure all cards in your deck",
+            "variables": {},
+            "effect_text": "Transfigure all cards in your deck"
+          }
+        ],
+        "scores": {
+          "scene_quality": 8,
+          "action_quality": 7,
           "mechanical_connection": 7,
-          "archetype_fit": 9,
+          "archetype_fit": 8,
           "overall": 8
         },
         "rank": 5,
-        "ranking_rationale": "The scene remains faithful and strategically sound, but exchanging passengers connects less immediately than the higher-ranked action pairs."
+        "ranking_rationale": "The overhead passage supports both discoveries, though the broad transfiguration outcome has a looser connection to the image."
       }
     ]
   },
@@ -1345,28 +1334,33 @@
     },
     "events": [
       {
-        "template_pair_id": "pair-4",
-        "prose": "A colossal elephant faces you, its luminous tusks nearly spanning the mist between you.",
+        "template_pair_id": "pair-1",
+        "prose": "An enormous elephant emerges from starlit mist, its curved tusks shining.",
         "actions": [
           {
-            "label": "Call Through the Haze",
-            "resolution": "Immense shapes answer beyond the scattered lights.",
-            "template_id": 36,
-            "template": "Choose one of 2 packs of {predicate} cards to add to your deck",
+            "label": "Welcome the Great Beast",
+            "resolution": "The elephant kneels as the surrounding haze darkens.",
+            "template_id": 70,
+            "template": "Gain {count} \"Nightmare\" bane cards. Gain {card_name}.",
             "variables": {
-              "predicate": "Spirit Animal"
+              "count": 1,
+              "card_name": {
+                "id": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+                "display_name": "Emerald Guardian"
+              }
             },
-            "effect_text": "Choose one of 2 packs of Spirit Animal cards to add to your deck"
+            "effect_text": "Gain 1 \"Nightmare\" bane card. Gain Emerald Guardian."
           },
           {
-            "label": "Touch a Shining Tusk",
-            "resolution": "Radiance gathers around your outstretched hand.",
-            "template_id": 1,
-            "template": "Gain {essence} essence",
+            "label": "Call the Distant Herd",
+            "resolution": "Great animal shapes approach through the radiant mist.",
+            "template_id": 52,
+            "template": "Gain one copy of each of {count} random {predicate} cards",
             "variables": {
-              "essence": 200
+              "count": 2,
+              "predicate": "Spirit Animal"
             },
-            "effect_text": "Gain 200 essence"
+            "effect_text": "Gain one copy of each of 2 random Spirit Animal cards"
           }
         ],
         "scores": {
@@ -1377,95 +1371,60 @@
           "overall": 9
         },
         "rank": 1,
-        "ranking_rationale": "The central confrontation supports both a resonant animal summons and a direct exchange for a live-scale resource reward."
-      },
-      {
-        "template_pair_id": "pair-3",
-        "prose": "A vast elephant lowers its trunk beside shining tusks that dwarf you.",
-        "actions": [
-          {
-            "label": "Enter the Radiance",
-            "resolution": "The shining haze closes softly around you.",
-            "template_id": 40,
-            "template": "Transfigure all cards in your deck",
-            "variables": {},
-            "effect_text": "Transfigure all cards in your deck"
-          },
-          {
-            "label": "Walk in Its Wake",
-            "resolution": "A heavy footfall clears space for approaching kin.",
-            "template_id": 34,
-            "template": "Purge a random starter card and gain a {predicate} card",
-            "variables": {
-              "predicate": "Spirit Animal"
-            },
-            "effect_text": "Purge a random starter card and gain a Spirit Animal card"
-          }
-        ],
-        "scores": {
-          "scene_quality": 9,
-          "action_quality": 9,
-          "mechanical_connection": 9,
-          "archetype_fit": 9,
-          "overall": 9
-        },
-        "rank": 2,
-        "ranking_rationale": "The animal's overwhelming scale grounds both total immersion in its radiance and a focused exchange for kindred support."
-      },
-      {
-        "template_pair_id": "pair-5",
-        "prose": "A towering elephant meets your gaze while its bright tusks divide the starry haze.",
-        "actions": [
-          {
-            "label": "Urge It Forward",
-            "resolution": "A thunderous stride sends the haze streaming past.",
-            "template_id": 66,
-            "template": "All cards in your deck become ❖ (fast)",
-            "variables": {},
-            "effect_text": "All cards in your deck become ❖ (fast)"
-          },
-          {
-            "label": "Mark the Meeting Place",
-            "resolution": "A lasting glow settles where the giant stood.",
-            "template_id": 44,
-            "template": "Add a transfiguration site to this dreamscape",
-            "variables": {},
-            "effect_text": "Add a transfiguration site to this dreamscape"
-          }
-        ],
-        "scores": {
-          "scene_quality": 9,
-          "action_quality": 9,
-          "mechanical_connection": 9,
-          "archetype_fit": 9,
-          "overall": 9
-        },
-        "rank": 3,
-        "ranking_rationale": "The poised giant supports sudden forward motion and a memorable illuminated landmark, though the speed reward is broadly useful."
+        "ranking_rationale": "The luminous elephant supports both a costly welcome and a call to its kin, while each reward directly strengthens the source card's Spirit Animal plan."
       },
       {
         "template_pair_id": "pair-2",
-        "prose": "A huge elephant stands over you as floating lights fill the haze.",
+        "prose": "A lone woman stands beneath an elephant towering through the luminous haze.",
         "actions": [
           {
-            "label": "Receive Its Favor",
-            "resolution": "A gentle touch leaves radiance across your palm.",
-            "template_id": 56,
-            "template": "All items in the next shop you visit are free",
+            "label": "Honor the Colossal Beast",
+            "resolution": "The elephant steps forward beneath the scattered stars.",
+            "template_id": 72,
+            "template": "Gain a random legendary card.",
             "variables": {},
-            "effect_text": "All items in the next shop you visit are free"
+            "effect_text": "Gain a random legendary card."
           },
           {
-            "label": "Share Its Strength",
-            "resolution": "A deep rumble travels outward through the haze.",
-            "template_id": 23,
-            "template": "Apply {transfiguration} to {count} random {predicate} cards",
+            "label": "Approach the Lone Traveler",
+            "resolution": "A new guide emerges from the glowing haze.",
+            "template_id": 57,
+            "template": "Pick a new Dream Avatar from 3 choices",
+            "variables": {},
+            "effect_text": "Pick a new Dream Avatar from 3 choices"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 8,
+          "overall": 9
+        },
+        "rank": 2,
+        "ranking_rationale": "The artwork's two figures give each action an immediate subject, though the broad rewards serve the source strategy less precisely than the top-ranked pair."
+      },
+      {
+        "template_pair_id": "pair-4",
+        "prose": "Radiant mist surrounds a vast elephant watching a solitary traveler.",
+        "actions": [
+          {
+            "label": "Follow the Luminous Tusks",
+            "resolution": "A busy exchange awaits beyond their glowing arc.",
+            "template_id": 42,
+            "template": "Add a card market site to this dreamscape",
+            "variables": {},
+            "effect_text": "Add a card market site to this dreamscape"
+          },
+          {
+            "label": "Exchange Your Old Company",
+            "resolution": "Great animal shapes gather in their vacated places.",
+            "template_id": 35,
+            "template": "Purge all starter cards and replace each one with a {predicate} card",
             "variables": {
-              "transfiguration": "Empowered",
-              "count": 3,
               "predicate": "Spirit Animal"
             },
-            "effect_text": "Apply Empowered to 3 random Spirit Animal cards"
+            "effect_text": "Purge all starter cards and replace each one with a Spirit Animal card"
           }
         ],
         "scores": {
@@ -1475,45 +1434,75 @@
           "archetype_fit": 9,
           "overall": 9
         },
-        "rank": 4,
-        "ranking_rationale": "The immense animal makes shared strength convincing, while its favor provides flexible value through a less immediate narrative bridge."
+        "rank": 3,
+        "ranking_rationale": "The radiant tusks provide a clear route onward and the elephant grounds a Spirit Animal exchange, with the market connection requiring a modest interpretive step."
       },
       {
-        "template_pair_id": "pair-1",
-        "prose": "A colossal elephant looms before you, twin tusks glowing across the mist.",
+        "template_pair_id": "pair-5",
+        "prose": "A giant elephant lowers its bright tusks above a still human figure.",
         "actions": [
           {
-            "label": "Step Into the Glow",
-            "resolution": "Light from both tusks washes over you.",
-            "template_id": 25,
-            "template": "Transfigure all starter cards",
+            "label": "Follow the Elephant's Passage",
+            "resolution": "Its heavy steps lead toward a secluded clearing.",
+            "template_id": 45,
+            "template": "Add a purge site to this dreamscape.",
             "variables": {},
-            "effect_text": "Transfigure all starter cards"
+            "effect_text": "Add a purge site to this dreamscape."
           },
           {
-            "label": "Accept Its Burden",
-            "resolution": "The elephant lowers a luminous tusk toward you.",
-            "template_id": 69,
-            "template": "Gain {count} \"Nightmare\" bane cards. Gain {dreamsign}.",
+            "label": "Offer a Burden",
+            "resolution": "A curved tusk lifts it into the starlit haze.",
+            "template_id": 60,
+            "template": "Purge a chosen card and gain {essence_per_energy} essence for each ✦ it had",
             "variables": {
-              "count": 2,
-              "dreamsign": {
-                "id": "a42c99b2-f480-4f63-91a0-bd556120427d",
-                "display_name": "Green Amulet"
-              }
+              "essence_per_energy": 40
             },
-            "effect_text": "Gain 2 \"Nightmare\" bane cards. Gain Green Amulet."
+            "effect_text": "Purge a chosen card and gain 40 essence for each ✦ it had"
           }
         ],
         "scores": {
           "scene_quality": 9,
           "action_quality": 8,
-          "mechanical_connection": 7,
+          "mechanical_connection": 8,
           "archetype_fit": 8,
           "overall": 8
         },
+        "rank": 4,
+        "ranking_rationale": "The elephant's movement and tusks support a journey and an offering, while the flexible pruning rewards connect broadly rather than specifically to the source engine."
+      },
+      {
+        "template_pair_id": "pair-3",
+        "prose": "A massive elephant stands before you amid drifting lights and haze.",
+        "actions": [
+          {
+            "label": "Join the Great Herd",
+            "resolution": "Every companion enters bearing a single animal likeness.",
+            "template_id": 67,
+            "template": "All characters in your deck become the subtype of your choice.",
+            "variables": {},
+            "effect_text": "All characters in your deck become the subtype of your choice."
+          },
+          {
+            "label": "Call Figures from the Mist",
+            "resolution": "Living silhouettes emerge beside the towering elephant.",
+            "template_id": 54,
+            "template": "Modify {count} random cards to become {card_type} cards",
+            "variables": {
+              "count": 2,
+              "card_type": "Character"
+            },
+            "effect_text": "Modify 2 random cards to become Character cards"
+          }
+        ],
+        "scores": {
+          "scene_quality": 8,
+          "action_quality": 8,
+          "mechanical_connection": 7,
+          "archetype_fit": 9,
+          "overall": 8
+        },
         "rank": 5,
-        "ranking_rationale": "The tusks strongly ground renewal and acceptance, but the mixed bane-and-dreamsign consequence requires the set's loosest causal bridge."
+        "ranking_rationale": "The immense animal supports gathering and affiliation, but both wholesale transformations require a broader causal bridge than the higher-ranked designs."
       }
     ]
   },
@@ -1528,101 +1517,136 @@
     },
     "events": [
       {
-        "template_pair_id": "pair-1",
-        "prose": "You watch two backpacked travelers face a colossal horse and mounted silhouette overhead.",
+        "template_pair_id": "pair-2",
+        "prose": "Above you, a colossal horseman thins into drifting starlight.",
         "actions": [
           {
-            "label": "Follow the Quiet Guide",
-            "resolution": "A backpacked traveler leads you along the limb.",
-            "template_id": 47,
-            "template": "Choose a card to purge and replace it with {card_id}",
+            "label": "Call Into the Distance",
+            "resolution": "A clear bell tolls beneath the distant horse.",
+            "template_id": 27,
+            "template": "Gain {dreamsign_name}",
             "variables": {
-              "card_id": {
-                "id": "96e2c30c-930c-47af-abb0-d4fbab454d56",
-                "display_name": "Winterbough Guide"
+              "dreamsign_name": {
+                "id": "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5",
+                "display_name": "Bell"
               }
             },
-            "effect_text": "Choose a card to purge and replace it with Winterbough Guide"
+            "effect_text": "Gain Bell"
           },
           {
-            "label": "Call to Distant Guardians",
-            "resolution": "Armed silhouettes gather beneath the immense horse.",
+            "label": "Gather the Falling Light",
+            "resolution": "A waiting traveler's outline shines with renewed strength.",
+            "template_id": 19,
+            "template": "Apply {transfiguration} to $DECK_CARD",
+            "variables": {
+              "transfiguration": "Kindled"
+            },
+            "selection": {
+              "$DECK_CARD": {
+                "predicate": "≤2● cost Character"
+              }
+            },
+            "effect_text": "Apply Kindled to a chosen ≤2● cost Character card from your deck"
+          }
+        ],
+        "scores": {
+          "scene_quality": 10,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 10,
+          "overall": 10
+        },
+        "rank": 1,
+        "ranking_rationale": "The fading giant supports two precise responses, while Bell and a strengthened cheap character directly reinforce void materialization."
+      },
+      {
+        "template_pair_id": "pair-1",
+        "prose": "You watch an immense horse and rider dissolve against the star-filled sky.",
+        "actions": [
+          {
+            "label": "Follow the Changing Figure",
+            "resolution": "Its scattered outline settles into unfamiliar forms.",
+            "template_id": 37,
+            "template": "The next draft or shop site you visit will contain transfigured cards",
+            "variables": {},
+            "effect_text": "The next draft or shop site you visit will contain transfigured cards"
+          },
+          {
+            "label": "Take the High Saddle",
+            "resolution": "A traveler ascends with the horseman's martial bearing.",
+            "template_id": 58,
+            "template": "Change a chosen Character card to have {subtype}",
+            "variables": {
+              "subtype": "Warrior"
+            },
+            "effect_text": "Change a chosen Character card to have Warrior"
+          }
+        ],
+        "scores": {
+          "scene_quality": 10,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 2,
+        "ranking_rationale": "Visible dissolution grounds the altered offers, and taking the saddle creates another warrior trigger for the source strategy."
+      },
+      {
+        "template_pair_id": "pair-5",
+        "prose": "Before you, a towering horseman emerges beyond the overgrown limb.",
+        "actions": [
+          {
+            "label": "Call the Mounted Host",
+            "resolution": "More silhouettes emerge through the luminous haze.",
             "template_id": 16,
             "template": "Take any number of {predicate} cards from 4 random choices",
             "variables": {
               "predicate": "Warrior"
             },
             "effect_text": "Take any number of Warrior cards from 4 random choices"
-          }
-        ],
-        "scores": {
-          "scene_quality": 9,
-          "action_quality": 9,
-          "mechanical_connection": 9,
-          "archetype_fit": 10,
-          "overall": 9
-        },
-        "rank": 1,
-        "ranking_rationale": "The imposing encounter supports a specific guide reward and a warrior choice that both reinforce the source strategy."
-      },
-      {
-        "template_pair_id": "pair-3",
-        "prose": "You peer between two travelers as an enormous mounted figure dissolves into starlight.",
-        "actions": [
-          {
-            "label": "Touch the Drifting Specks",
-            "resolution": "Each bright mote settles into a different form.",
-            "template_id": 40,
-            "template": "Transfigure all cards in your deck",
-            "variables": {},
-            "effect_text": "Transfigure all cards in your deck"
           },
           {
-            "label": "Reach Through the Silhouette",
-            "resolution": "A living figure emerges from the thinning outline.",
-            "template_id": 53,
-            "template": "Change $DECK_CARD to become a {card_type}",
-            "variables": {
-              "card_type": "Character"
-            },
-            "selection": {
-              "$DECK_CARD": {
-                "predicate": "≤2● cost Event"
-              }
-            },
-            "predicate_exception_rationale": "The source can materialize ≤2● cost characters from the void, and 94 canonical ≤2● cost Events are eligible for conversion.",
-            "effect_text": "Change a ≤2● cost Event card in your deck to become a Character"
+            "label": "Clear the Overgrown Limb",
+            "resolution": "Loose moss falls away, exposing clean bark.",
+            "template_id": 45,
+            "template": "Add a purge site to this dreamscape.",
+            "variables": {},
+            "effect_text": "Add a purge site to this dreamscape."
           }
         ],
         "scores": {
           "scene_quality": 9,
           "action_quality": 9,
-          "mechanical_connection": 9,
-          "archetype_fit": 10,
+          "mechanical_connection": 8,
+          "archetype_fit": 9,
           "overall": 9
         },
-        "rank": 2,
-        "ranking_rationale": "Visible dissolution makes both alterations direct, while converting a cheap Event creates a new target for the source ability."
+        "rank": 3,
+        "ranking_rationale": "The mounted silhouette and mossy limb support both actions cleanly, with warrior selection providing the stronger strategic connection."
       },
       {
         "template_pair_id": "pair-4",
-        "prose": "Before you, two small travelers stand beneath a horse whose shadow fills the sky.",
+        "prose": "Above you, an immense horse dissolves into drifting points of light.",
         "actions": [
           {
-            "label": "Invite Another Traveler",
-            "resolution": "A newcomer steps onto the broad trunk.",
-            "template_id": 11,
-            "template": "Gain $OFFERED_CARD",
+            "label": "Call for Its Double",
+            "resolution": "A second silhouette forms beside the fading horse.",
+            "template_id": 41,
+            "template": "Add a duplication site to this dreamscape",
             "variables": {},
-            "effect_text": "Gain the offered card"
+            "effect_text": "Add a duplication site to this dreamscape"
           },
           {
-            "label": "Address the Colossal Figure",
-            "resolution": "The mounted figure descends beside the travelers.",
-            "template_id": 72,
-            "template": "Gain a random legendary card.",
-            "variables": {},
-            "effect_text": "Gain a random legendary card."
+            "label": "Gather the Drifting Motes",
+            "resolution": "Bright specks collect among the moss-covered roots.",
+            "template_id": 2,
+            "template": "Gain a random amount of essence between {essence1} and {essence2}",
+            "variables": {
+              "essence1": 200,
+              "essence2": 300
+            },
+            "effect_text": "Gain a random amount of essence between 200 and 300"
           }
         ],
         "scores": {
@@ -1632,82 +1656,45 @@
           "archetype_fit": 8,
           "overall": 9
         },
-        "rank": 3,
-        "ranking_rationale": "The extreme scale is immediately clear and supports two arrivals, while the rewards advance the deck less specifically."
+        "rank": 4,
+        "ranking_rationale": "The dissolving horse makes doubling and gathering immediate, though both rewards offer broad value rather than focused source synergy."
       },
       {
-        "template_pair_id": "pair-2",
-        "prose": "A vast horse looms above you and two travelers balanced on a mossy fallen trunk.",
+        "template_pair_id": "pair-3",
+        "prose": "A moss-covered limb stretches beneath you toward the colossal horseman.",
         "actions": [
           {
-            "label": "Make Room on the Limb",
-            "resolution": "A second companion climbs into the cleared space.",
-            "template_id": 49,
-            "template": "Gain {count} copies of $DECK_CARD",
-            "variables": {
-              "count": 1
-            },
-            "selection": {
-              "$DECK_CARD": {
-                "predicate": "≤2● cost Character"
-              }
-            },
-            "effect_text": "Gain 1 copy of a chosen ≤2● cost Character card from your deck"
-          },
-          {
-            "label": "Signal the Distant Silhouette",
-            "resolution": "Armed strangers descend through the glittering air.",
-            "template_id": 13,
-            "template": "Gain {count} random {predicate} cards",
+            "label": "Search Beneath the Moss",
+            "resolution": "A brown acorn drops free with clinging roots.",
+            "template_id": 69,
+            "template": "Gain {count} \"Nightmare\" bane cards. Gain {dreamsign}.",
             "variables": {
               "count": 2,
-              "predicate": "Warrior"
+              "dreamsign": {
+                "id": "9F34B5F6-4766-4A7E-A841-D7B945CAD504",
+                "display_name": "Brown Acorn"
+              }
             },
-            "effect_text": "Gain 2 random Warrior cards"
-          }
-        ],
-        "scores": {
-          "scene_quality": 8,
-          "action_quality": 8,
-          "mechanical_connection": 7,
-          "archetype_fit": 10,
-          "overall": 8
-        },
-        "rank": 4,
-        "ranking_rationale": "Both rewards strongly serve cheap-character and warrior play, but the duplicate's arrival is less visually specific."
-      },
-      {
-        "template_pair_id": "pair-5",
-        "prose": "You look past two travelers toward a mounted giant breaking into scattered light.",
-        "actions": [
-          {
-            "label": "Call for an Escort",
-            "resolution": "A disciplined company assembles along the broad limb.",
-            "template_id": 36,
-            "template": "Choose one of 2 packs of {predicate} cards to add to your deck",
-            "variables": {
-              "predicate": "Warrior"
-            },
-            "effect_text": "Choose one of 2 packs of Warrior cards to add to your deck"
+            "effect_text": "Gain 2 \"Nightmare\" bane cards. Gain Brown Acorn."
           },
           {
-            "label": "Touch the Falling Light",
-            "resolution": "The scattered points trade places throughout the sky.",
-            "template_id": 63,
-            "template": "Replace all of your dreamsigns with random dreamsigns",
+            "label": "Share the Horseman's Bearing",
+            "resolution": "Every companion assumes the same imposing posture.",
+            "template_id": 67,
+            "template": "All characters in your deck become the subtype of your choice.",
             "variables": {},
-            "effect_text": "Replace all of your dreamsigns with random dreamsigns"
+            "effect_text": "All characters in your deck become the subtype of your choice."
           }
         ],
         "scores": {
-          "scene_quality": 8,
+          "scene_quality": 9,
           "action_quality": 8,
           "mechanical_connection": 7,
           "archetype_fit": 9,
           "overall": 8
         },
         "rank": 5,
-        "ranking_rationale": "The dissolving silhouette supports both responses, though the random dreamsign exchange is only flexible rather than archetype-specific."
+        "ranking_rationale": "The branch grounds the warrior-supporting acorn and shared bearing, but the Nightmare burden has the set's least direct visual bridge."
       }
     ]
   }

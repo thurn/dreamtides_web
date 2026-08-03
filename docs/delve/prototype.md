@@ -4,35 +4,35 @@
 
 ![Source artwork for Starlight Guide](</Users/dthurn/Documents/shutterstock/images/stock-photo-fantasy-scene-of-the-kid-holding-a-lantern-and-looking-at-the-stars-dimensional-window-digital-art-2022594419.jpg>)
 
-1. A lantern-bearing figure stands beside you, dwarfed by a narrow opening onto the cosmos.
-   - ***Search the Opening*** — Select 4 random cards from your deck and choose one to gain a copy of
-     - **Response:** A familiar outline emerges among the distant points.
-   - ***Dim the Lantern*** — Purge a random starter card
-     - **Response:** Its fading glow yields to the vast radiance.
+1. A child raises a round lantern before a narrow window of stars.
+   - ***Exchange Familiar Forms*** — Purge a chosen card and gain a copy of another chosen card
+     - **Response:** One silhouette recedes as another emerges beside its double.
+   - ***Request the Round Lantern*** — Gain Passage Lantern. The first time each turn you rematerialize a character, it gains +1✦.
+     - **Response:** The child lowers its steady glow into your hands.
 
-2. A slender figure lifts a lantern while a vast cosmic opening towers over you both.
-   - ***Focus the Radiance*** — Apply Kindled to 4 chosen ≤2● cost Character cards
-     - **Response:** Several familiar silhouettes strengthen within the concentrated radiance.
-   - ***Widen the Opening*** — Transfigure all cards in your deck
-     - **Response:** Countless distant forms change as the opening expands.
+2. A small lantern-bearer reaches toward a towering opening filled with distant stars.
+   - ***Invite the Lantern-Bearer*** — Gain Lantern Scout (1● Guide Character, 1✦ — ▸Materialized: Foresee 1.)
+     - **Response:** The small figure steps through beside you.
+   - ***Trade a Familiar Outline*** — Purge a chosen ≤2● cost Character card and gain a random ≤2● cost Character replacement
+     - **Response:** A different silhouette approaches through the opening.
 
-3. A lantern-bearing figure reaches into the cosmic opening as bright points surround you.
-   - ***Call Through the Opening*** — Apply a transfiguration to 4 random ≤2● cost Character cards
-     - **Response:** Nearby silhouettes return bearing unfamiliar outlines.
-   - ***Dismiss Distant Visions*** — Purge up to 3 chosen Event cards
-     - **Response:** Their images thin across the dark expanse.
+3. Beside you, a lone figure holds a bright orb toward the cosmos.
+   - ***Widen the Cosmic Opening*** — Apply a transfiguration to 4 random ≤2● cost Character cards
+     - **Response:** Familiar silhouettes emerge bearing unfamiliar shapes.
+   - ***Release Familiar Silhouettes*** — Purge up to 3 chosen ≤2● cost Character cards and gain a random ≤2● cost Character replacement for each card purged
+     - **Response:** New outlines approach as old ones recede.
 
-4. Before you, a figure holds a lantern as bright points fill an immense cosmic opening.
-   - ***Release Familiar Forms*** — Purge up to 3 chosen ≤2● cost Character cards and gain a random ≤2● cost Character replacement for each card purged
-     - **Response:** Different silhouettes approach as familiar forms recede.
-   - ***Gather the Floating Points*** — Double your current essence.
-     - **Response:** They cluster densely within your reach.
+4. Before you, a lantern-bearing figure faces an immense star-filled threshold.
+   - ***Focus the Lantern Inward*** — Apply Kindled to a random ≤2● cost Character card from your deck
+     - **Response:** Its concentrated beam strengthens a nearby silhouette.
+   - ***Cast the Light Beyond*** — The next draft or shop site you visit will contain transfigured cards
+     - **Response:** Distant offerings shimmer in unfamiliar forms.
 
-5. A silhouetted figure and hanging lantern stand between you and a vertical cosmic expanse.
-   - ***Cross Without Delay*** — All cards in your deck become ❖ (fast)
-     - **Response:** Distant silhouettes follow you in a sudden rush.
-   - ***Offer the Lantern*** — Transfigure 5 random starter cards
-     - **Response:** Familiar silhouettes return bearing altered outlines.
+5. A hanging lantern glows beside you as countless stars fill a narrow opening.
+   - ***Call Your Companions Forward*** — Gain 10 essence for each ≤2● cost Character card in your deck
+     - **Response:** Each answering silhouette carries a bright point.
+   - ***Call Through the Opening*** — Gain 2 copies of the offered card
+     - **Response:** Matching shapes cross from the distant opening.
 
 ---
 
@@ -44,35 +44,35 @@ Cards you reclaim are not banished when they leave play.
 
 ![Source artwork for Seeker of Lost Paths](</Users/dthurn/Documents/shutterstock/images/stock-photo-futuristic-man-sitting-guarding-the-dimensional-gate-in-an-abandoned-place-digital-art-style-2287436067.jpg>)
 
-1. A helmeted figure sits beside a luminous doorway amid ruins that dwarf you both.
-   - ***Offer the Broken Slabs*** — All items in the next shop you visit are free
-     - **Response:** The armored figure accepts each piece without payment.
-   - ***Enter the Luminous Frame*** — Transfigure all cards in your deck
-     - **Response:** The opening redraws every shape passing through.
+1. Before you, an armored sentinel rests beside a fractured doorway glowing amid ruins.
+   - ***Invite the Sentinel*** — Gain Ruinwatch Custodian (2● Survivor Character, 2✦ — ▸Dissolved: Choose another character in your void to gain reclaim 2●. Reclaim 2●.)
+     - **Response:** The guardian rises and walks beside you.
+   - ***Study the Guardian*** — Apply a transfiguration to 2 chosen Survivor cards
+     - **Response:** Your companions adopt its measured discipline among the ruins.
 
-2. A hunched armored figure rests beside a bright opening as rubble surrounds you.
-   - ***Gather the Drifting Motes*** — Gain 30 essence for each Reclaim card in your deck
-     - **Response:** Their glow condenses along the doorway's fractured edges.
-   - ***Welcome Returning Figures*** — Gain one copy of each of 2 chosen cards
-     - **Response:** Chosen silhouettes step forward from the bright opening.
+2. Before you, a broken grid of light shimmers behind an armored sentinel.
+   - ***Exchange the Weary*** — Purge up to 2 chosen Survivor cards and gain a random Survivor replacement for each card purged
+     - **Response:** Fresh travelers arrive as their tired companions depart.
+   - ***Rearrange the Grid*** — Replace a chosen dreamsign with one of 3 offered dreamsigns
+     - **Response:** Unfamiliar emblems brighten across the fractured surface.
 
-3. A helmeted figure leans toward a fractured opening while luminous motes drift around you.
-   - ***Study the Shifting Grid*** — Draw 4 additional cards at the start of your next battle
-     - **Response:** Flickering patterns reveal what waits beyond the frame.
-   - ***Offer a Broken Fragment*** — Purge a random starter card and gain a Survivor card
-     - **Response:** An armored figure emerges as the shard dissolves.
+3. Beside you, a seated sentinel keeps watch over a shattered, radiant doorway.
+   - ***Request a Gate Fragment*** — Gain Threshold Fragment. Once per turn, when you reclaim a character, that character gains +1✦.
+     - **Response:** A glassy shard settles into your open hand.
+   - ***Call a Formidable Guardian*** — Gain a random legendary card.
+     - **Response:** A commanding figure steps through the radiant breach.
 
-4. A solitary armored figure sits near you, dwarfed by a radiant rectangular portal.
-   - ***Touch the Radiant Threshold*** — Gain 1 "Nightmare" bane card. Gain one of 3 offered dreamsigns.
-     - **Response:** Distant emblems flare beyond a deepening darkness.
-   - ***Call Through the Frame*** — Gain one copy of each of 2 random Reclaim cards
-     - **Response:** Returning silhouettes gather beyond the fractured opening.
+4. Dust drifts around you as a seated guardian watches beside a bright gateway.
+   - ***Call Beyond the Gate*** — Choose one of 2 packs of Survivor cards to add to your deck
+     - **Response:** Weathered travelers gather beyond the shining opening.
+   - ***Train Beside the Guardian*** — Apply Kindled to a chosen Survivor card in your deck
+     - **Response:** Patient instruction hardens a companion for harsher journeys.
 
-5. A seated armored figure and a glowing frame loom beyond broken slabs before you.
-   - ***Cast Away a Fragment*** — Purge a chosen non-Reclaim card
-     - **Response:** The loose shard vanishes beyond the opening.
-   - ***Align the Floating Shards*** — Gain 250 essence
-     - **Response:** The luminous grid answers with a steady pulse.
+5. You find a solitary guardian bowed beside a luminous frame half-buried in rubble.
+   - ***Signal the Outer Ruins*** — Gain a random Survivor card
+     - **Response:** A hardy traveler emerges from behind the debris.
+   - ***Trade a Companion's Watch*** — Purge a chosen card and gain 40 essence for each ✦ it had
+     - **Response:** The departing traveler leaves precious salvage by the frame.
 
 ---
 
@@ -82,35 +82,35 @@ Cards you reclaim are not banished when they leave play.
 
 ![Source artwork for Soulflame Predator](</Users/dthurn/Documents/shutterstock/images/stock-photo-hunter-with-a-bow-facing-a-giant-wolf-in-the-fire-meadow-digital-art-style-illustration-painting-2278837667.jpg>)
 
-1. A crouched archer separates you from a colossal wolf advancing through burning grass.
-   - ***Study the Archer's Patience*** — Draw 2 additional cards at the start of your next battle
-     - **Response:** The poised bow reveals when movement matters.
-   - ***Call Beyond the Fire*** — Draft a Spirit Animal card from 4 random choices
-     - **Response:** An answering howl rolls across the field.
+1. Before you, a colossal wolf advances through burning grass, pale eyes fixed ahead.
+   - ***Feed the Fire*** — Purge a chosen Event card
+     - **Response:** The blaze consumes what you cast away.
+   - ***Welcome Its Kin*** — Choose one of 2 packs of Spirit Animal cards to add to your deck
+     - **Response:** Other wolves emerge through the heated haze.
 
-2. A vast wolf approaches with luminous eyes fixed past an archer crouched in the grass.
-   - ***Join the Giant's Pack*** — Change a chosen Character card to have Spirit Animal
-     - **Response:** A chosen companion answers with a wild growl.
-   - ***Welcome Its Distant Kin*** — Draft a Spirit Animal card from 4 random choices and gain 1 copy of it
-     - **Response:** Answering footfalls approach through the heated grass.
+2. A giant wolf emerges from the blaze, dwarfing the crouched archer.
+   - ***Invite a Wild Companion*** — Gain a random Spirit Animal card
+     - **Response:** Another great beast strides through the smoke.
+   - ***Seek the Wolf's Mark*** — Apply a transfiguration of your choice to a chosen card
+     - **Response:** Its luminous gaze remakes one prized possession.
 
-3. A lone archer crouches before you as a towering wolf steps through the fire.
-   - ***Call Companions Forward*** — Modify 2 random cards to become Character cards
-     - **Response:** Waiting figures rise beyond the crouched archer.
-   - ***Voice a Rallying Howl*** — Apply Resonant to 2 chosen Spirit Animal cards
-     - **Response:** The giant's reply swells above the burning grass.
+3. Across the blazing grass, a vast wolf lowers its head toward you.
+   - ***Echo the Wolf's Arrival*** — Apply Resonant to a card in your deck
+     - **Response:** One companion arrives, departs, then returns bearing light.
+   - ***Face the Wolf Together*** — Transfigure all starter cards
+     - **Response:** Your oldest companions emerge through the blaze changed.
 
-4. A colossal wolf bears down beyond a lone archer crouched amid blazing grass.
-   - ***Calm the Standoff*** — Gain 200 essence
-     - **Response:** The archer lowers the bow as the giant pauses.
-   - ***Urge the Archer Back*** — Purge up to 3 chosen Event cards
-     - **Response:** The taut string slackens as the giant slows.
+4. Heat shimmers around a massive wolf stepping through the charred meadow.
+   - ***Cast Away Your Burden*** — Purge a chosen card
+     - **Response:** The fire takes it without a trace.
+   - ***Trace Its Passage*** — Choose one of three site types to add to this dreamscape.
+     - **Response:** The scorched trail reaches a place of refuge.
 
-5. A bow-bearing figure crouches between you and a giant wolf emerging through the burning field.
-   - ***Yield to the Luminous Gaze*** — Replace all of your dreamsigns with random dreamsigns
-     - **Response:** The familiar horizon changes beneath those unblinking eyes.
-   - ***Trade for Safe Passage*** — Purge a chosen card and gain 50 essence for each ✦ it had
-     - **Response:** The archer accepts your offering and clears the way.
+5. Through the firelit grass, a towering wolf bears down on the lone archer.
+   - ***Call to the Wild*** — Apply a transfiguration to 2 random Spirit Animal cards
+     - **Response:** Distant beasts answer with newly luminous eyes.
+   - ***Accept the Wolf's Escort*** — All items in the next shop you visit are free
+     - **Response:** At its approach, every merchant lowers their price.
 
 ---
 
@@ -120,35 +120,35 @@ When you materialize a non-figment ≤2● cost character, draw a card with ephe
 
 ![Source artwork for Keeper of Forgotten Light](</Users/dthurn/Documents/shutterstock/images/stock-photo-girl-handing-a-lantern-to-the-watcher-digital-art-style-illustration-painting-2155438705.jpg>)
 
-1. You face a vast skull-headed figure; its hanging lantern nearly fills the space between you.
-   - ***Gather the Lantern's Warmth*** — Gain Threshold Beacon. The first time each turn you materialize a non-figment ≤2● cost character, gain 1●.
-     - **Response:** A warm point of radiance settles in your palm.
-   - ***Cast Away a Burden*** — Purge a chosen card
-     - **Response:** The giant closes one skeletal hand around it.
+1. Before you, a skull-faced colossus lowers a radiant lantern toward a child.
+   - ***Invite a Lantern Visitor*** — Gain an offered ≤2● cost Character card
+     - **Response:** A new figure steps from between the panes.
+   - ***Trade Away a Figure*** — Purge a chosen card and gain 40 essence for each ✦ it had
+     - **Response:** A skeletal hand accepts the chosen offering.
 
-2. From the ledge beside you, a small figure reaches toward a lantern in a skeletal hand.
-   - ***Feed the Lantern*** — Purge a chosen card and gain 40 essence for each ✦ it had
-     - **Response:** Radiance closes around your offering as the giant nods.
-   - ***Accept the Giant's Gift*** — Gain a random offered card
-     - **Response:** A new shape settles into your waiting hand.
+2. A child reaches into the lantern of a towering, skull-faced watcher.
+   - ***Search Beyond the Glass*** — The next draft or shop site you visit will contain transfigured cards
+     - **Response:** Altered silhouettes gather behind the shining panes.
+   - ***Reach Into the Radiance*** — Transfigure 2 random starter cards
+     - **Response:** Familiar forms return with strengthened outlines.
 
-3. A rag-draped giant extends a lantern across the gulf, its skull looming above you.
-   - ***Offer a Burden*** — Apply Empowered to a chosen card
-     - **Response:** The hanging radiance reveals a leaner form within.
-   - ***Study the Glass*** — Draw 3 additional cards at the start of your next battle
-     - **Response:** Layered shapes sharpen behind the glowing panes.
+3. A small figure beside you reaches into a skull-faced colossus's hanging lantern.
+   - ***Trace Figures on Glass*** — Modify 2 random cards to become Character cards
+     - **Response:** Solid figures emerge from the lantern's chamber.
+   - ***Offer a Familiar Silhouette*** — Purge a random starter card and gain a ≤2● cost Character card
+     - **Response:** A fresh traveler emerges as the familiar outline fades.
 
-4. Before you, a towering skull-faced figure lowers a radiant lantern toward a child on the ledge.
-   - ***Touch the Warm Glass*** — Gain 5 additional energy at the start of your next battle
-     - **Response:** Heat gathers beneath your palm and lingers.
-   - ***Step Beneath the Lantern*** — All cards in your deck become ❖ (fast)
-     - **Response:** The giant sweeps it forward above your stride.
+4. A vast lantern hangs before you from a skull-faced giant's hand.
+   - ***Release Familiar Forms*** — Purge all starter cards and replace each one with a ≤2● cost Character card
+     - **Response:** New figures gather where the older silhouettes stood.
+   - ***Shape One Reflection*** — Apply a transfiguration of your choice to a chosen card
+     - **Response:** The chosen outline changes beneath your guiding hand.
 
-5. A lantern hangs close above you while a skull-faced colossus towers beyond the ledge.
-   - ***Twist the Lantern Frame*** — Replace all of your dreamsigns with random dreamsigns
-     - **Response:** Its inner reflections rearrange beneath your touch.
-   - ***Reach Through the Glass*** — Gain 1 "Nightmare" bane card. Gain Aether Diver.
-     - **Response:** A small wanderer rises from the radiant chamber.
+5. A rag-draped giant holds a lantern over the narrow ledge before you.
+   - ***Cross the Narrow Ledge*** — Change a chosen Character card to have Survivor
+     - **Response:** A chosen companion returns steady from the far side.
+   - ***Guide the Lantern Higher*** — Add a dreamsign bazaar site to this dreamscape
+     - **Response:** Distant stalls appear beneath the scattered stars.
 
 ---
 
@@ -160,35 +160,35 @@ When an outsider you control scores ⍟, foresee 1 and draw a card.
 
 ![Source artwork for Paradox Corps Enforcer](</Users/dthurn/Documents/shutterstock/images/stock-photo-man-with-the-gun-standing-against-smoke-background-with-mysterious-glowing-triangle-digital-art-1726923523.jpg>)
 
-1. A lone gunman stands above you, outlined by a luminous triangle amid smoke.
-   - ***Study the Signal*** — Draw 2 additional cards at the start of your next battle
-     - **Response:** The bright edges resolve into ordered signs.
-   - ***Invite the Gunman*** — Gain Signal-Bound Operative (1● Outsider Character, 1✦ — Phasing; ▸Materialized: Foresee 1.)
-     - **Response:** He steps from the glowing frame beside you.
+1. A luminous triangle encloses an armed figure as black cables stream outward.
+   - ***Enter the Luminous Frame*** — Change a chosen Character card to have Outsider
+     - **Response:** Its bright outline alters one waiting silhouette.
+   - ***Expand the Luminous Frame*** — All characters in your deck become the subtype of your choice.
+     - **Response:** The widening glow reshapes every distant silhouette.
 
-2. A luminous triangle frames a lone gunman while cables sweep between you through smoke.
-   - ***Call Through the Frame*** — Take any number of Outsider cards from 4 random choices
-     - **Response:** Several armed silhouettes approach through the opening.
-   - ***Grasp the Cables*** — Gain 2 "Nightmare" bane cards. Gain Ginger Root.
-     - **Response:** Their grip tightens as a knotted charm appears.
+2. A gunman turns beneath black cables sweeping through the haze.
+   - ***Welcome the Veiled Operative*** — Gain 1 "Nightmare" bane card. Gain Abyssal Deputy.
+     - **Response:** A trench-coated silhouette emerges as the smoke darkens.
+   - ***Sever the Trailing Cables*** — Gain 5 additional energy at the start of your next battle
+     - **Response:** Stored current flashes through the falling lengths.
 
-3. A suited figure looks left as cables stream past you through dense smoke.
-   - ***Reroute the Cables*** — Purge up to 1 chosen Outsider card and gain a random Outsider replacement for each card purged
-     - **Response:** One line withdraws as another slides forward.
-   - ***Inspect the Frame*** — Gain one of 3 offered dreamsigns
-     - **Response:** Strange emblems surface along its luminous edges.
+3. A radiant triangle isolates an armed figure within dense smoke.
+   - ***Study the Radiant Frame*** — Draw 5 additional cards at the start of your next battle
+     - **Response:** Layered possibilities resolve along its gleaming edges.
+   - ***Step Through the Triangle*** — Transfigure all cards in your deck
+     - **Response:** Every familiar form returns with altered contours.
 
-4. A suited gunman looks left while cables arc between you and the smoke.
-   - ***Trace the Triangle*** — Apply Amplified to a chosen card
-     - **Response:** Its light settles around the object you present.
-   - ***Tap the Cable*** — Gain a random legendary card.
-     - **Response:** An extraordinary answer travels back through the smoke.
+4. Three bright edges frame a gunman as smoke billows around him.
+   - ***Trace the Bright Edges*** — Choose one of three site types to add to this dreamscape.
+     - **Response:** Three distant destinations sharpen beyond the glowing frame.
+   - ***Signal Through the Smoke*** — Purge all starter cards and replace each one with an Outsider card
+     - **Response:** Unfamiliar figures emerge as old companions recede.
 
-5. A bearded gunman stands motionless while thick cables curl around the ledge before you.
-   - ***Sever Incoming Signals*** — Purge up to 2 chosen Event cards
-     - **Response:** The cut lines recoil beyond the glowing frame.
-   - ***Offer What Hinders*** — Purge up to 1 chosen card
-     - **Response:** A cable draws the offering into smoke.
+5. A solitary figure stands beneath thick cables arcing through smoke.
+   - ***Cut the Nearest Cable*** — Add a purge site to this dreamscape.
+     - **Response:** The severed line reveals a silent chamber.
+   - ***Gather the Loose Strands*** — Gain 2 "Nightmare" bane cards. Gain Hair Lock.
+     - **Response:** A dark lock settles heavily across your palm.
 
 ---
 
@@ -200,35 +200,35 @@ When an outsider you control scores ⍟, foresee 1 and draw a card.
 
 ![Source artwork for Looming Oracle](</Users/dthurn/Documents/shutterstock/images/stock-photo-the-giant-owl-and-its-owner-standing-on-a-branch-in-night-forest-with-green-sky-digital-art-style-717263287.jpg>)
 
-1. A giant owl holds your gaze while a smaller figure stands motionless beside it.
-   - ***Join the Silent Vigil*** — Apply Resonant to 2 chosen cards with a ▸Dawn ability
-     - **Response:** A low call rolls through the enclosing boughs.
-   - ***Invite Forest Kin*** — Gain 2 random Spirit Animal cards
-     - **Response:** Animal shapes emerge between the tangled boughs.
+1. Beside a silent figure, an immense owl stares through drifting motes.
+   - ***Ask the Figure's Counsel*** — Draft a ≤2● cost Character card from 4 random choices
+     - **Response:** The smaller figure indicates several shapes in the haze.
+   - ***Welcome the Owl's Kin*** — Take any number of Spirit Animal cards from 4 random choices
+     - **Response:** Calls answer as animal forms settle among the branches.
 
-2. A small figure's streaming hair catches the moonlight beside an enormous, bright-eyed owl.
-   - ***Request a Braided Token*** — Gain Hair Lock
-     - **Response:** A single tress settles softly across your palm.
-   - ***Release Old Keepsakes*** — Replace all of your dreamsigns with random dreamsigns
-     - **Response:** Bright motes gather, each carrying an unfamiliar token.
+2. A huge owl faces you, talons clenched around the shadowed branch.
+   - ***Borrow Its Steady Gaze*** — All characters in your deck gain +1✦
+     - **Response:** Every companion stands taller beneath the unbroken stare.
+   - ***Send One into the Forest*** — Choose a card to purge and replace it with Moonbound Wolf
+     - **Response:** A quiet wolf returns in their place.
 
-3. A colossal owl occupies the branch while a much smaller figure stands beneath its gaze.
-   - ***Summon Your Wild Company*** — Gain 10 essence for each Spirit Animal card in your deck
-     - **Response:** A great bird acknowledges each arrival with a slow blink.
-   - ***Accept the Crescent's Bargain*** — Gain 1 "Nightmare" bane card. Gain Moonbound Wolf.
-     - **Response:** A wolf arrives, with darker shapes close behind.
+3. The owl grips a narrow branch, watching you without a blink.
+   - ***Offer a Worn Burden*** — Purge a random starter card
+     - **Response:** A hooked beak carries the small burden away.
+   - ***Trade a Treasured Token*** — Purge a chosen dreamsign and gain 200 essence
+     - **Response:** Bright motes spill from beneath the lifted wing.
 
-4. A broad-eyed owl watches from a branch as bright motes drift beneath the crescent.
-   - ***Gather the Drifting Lights*** — Double your current essence.
-     - **Response:** Every mote brightens, then settles around you.
-   - ***Request a Feathered Token*** — Gain Crescent Pinion
-     - **Response:** A curved pinion settles softly into your hand.
+4. An enormous owl perches above you, framed by a bright crescent.
+   - ***Accept Its Feathered Burden*** — All cards in your deck are reduced in cost by 1●. Gain 3 "Nightmare" bane cards.
+     - **Response:** Dark pinions settle on you; the passage clears.
+   - ***Call Into the Canopy*** — Gain one copy of each of 2 random Spirit Animal cards
+     - **Response:** Answering cries gather among the hidden branches.
 
-5. A vast owl faces you while a lone figure stands on the same narrow branch.
-   - ***Seek the Figure's Guidance*** — Change a chosen card in your deck to become a Character
-     - **Response:** A chosen companion takes shape upon the branch.
-   - ***Follow the Owl's Call*** — Modify 2 random cards to become Character cards
-     - **Response:** Distant figures answer together from the tangled trees.
+5. A giant owl fills your view, its round eyes bright beneath tangled boughs.
+   - ***Call Toward High Boughs*** — Gain a random legendary card.
+     - **Response:** A majestic figure descends through the glowing forest.
+   - ***Scatter Your Talismans*** — Replace all of your dreamsigns with random dreamsigns
+     - **Response:** The owl gathers them, then releases stranger shapes.
 
 ---
 
@@ -238,35 +238,35 @@ Once per turn, when you play a spirit animal, materialize a 1✦ spirit animal f
 
 ![Source artwork for Dreamborne Leviathan](</Users/dthurn/Documents/shutterstock/images/stock-photo-outer-space-journey-concept-showing-a-man-looking-at-the-giant-whale-flying-in-the-beautiful-sky-1723965970.jpg>)
 
-1. You drift beside a vast whale whose nearest fin dwarfs your entire skiff.
-   - ***Study Its Effortless Motion*** — Apply a transfiguration to 2 chosen Spirit Animal cards
-     - **Response:** Nearby creatures settle into the same measured rhythm.
-   - ***Call Across the Stars*** — Choose one of 2 packs of Spirit Animal cards to add to your deck
-     - **Response:** A distant pod turns toward your small vessel.
+1. A whale’s shadowed bulk crosses the stars above your small craft.
+   - ***Welcome a Smaller Swimmer*** — Gain Magic Fish
+     - **Response:** A bright new shape circles beneath the giant.
+   - ***Release a Fellow Swimmer*** — Purge a chosen Spirit Animal card and gain a random Spirit Animal replacement
+     - **Response:** Another broad silhouette rises into the open sky.
 
-2. A massive whale passes overhead, and your narrow skiff seems weightless beneath it.
-   - ***Call a Stronger Swimmer*** — Purge a random starter card and gain a Spirit Animal card
-     - **Response:** A familiar traveler departs as broad fins approach.
-   - ***Share the Weightless Current*** — Change a chosen Character card to have Spirit Animal
-     - **Response:** A nearby traveler assumes a graceful aquatic shape.
+2. An immense whale glides above you through a star-filled sky.
+   - ***Enter Its Wake*** — All cards in your deck are reduced in cost by 1●. Gain 5 "Nightmare" bane cards.
+     - **Response:** Its passage bears you swiftly beneath gathering darkness.
+   - ***Rise Beside It*** — Apply Empowered to a chosen card
+     - **Response:** The great body carries you toward the stars.
 
-3. You watch a colossal whale glide above a tiny skiff, blotting out the stars.
-   - ***Welcome the Smaller Swimmer*** — Gain Magic Fish
-     - **Response:** A bright fish circles beneath the passing giant.
-   - ***Read the Starry Passage*** — Replace a chosen dreamsign with one of 3 offered dreamsigns
-     - **Response:** Several star patterns sharpen where the immense body passed.
+3. Your tiny craft hangs beneath an immense whale crossing the stars.
+   - ***Follow Its Slow Arc*** — Draw 2 additional cards at the start of your next battle
+     - **Response:** Its measured course reveals what waits ahead.
+   - ***Shed Weight Beneath It*** — Add a purge site to this dreamscape.
+     - **Response:** A clear landing opens beyond its sweeping tail.
 
-4. A soaring whale fills your view, its outstretched fin wider than the nearby skiff.
-   - ***Signal the Distant Pod*** — Apply a transfiguration to 2 random Spirit Animal cards
-     - **Response:** Faraway swimmers return with unfamiliar markings.
-   - ***Chart the Gentle Ascent*** — Apply Empowered to a chosen card
-     - **Response:** A waiting traveler rises with surprising ease.
+4. A vast whale floats among distant stars beyond your tiny vessel.
+   - ***Call Forth Its Twin*** — Gain 1 copy of a chosen card
+     - **Response:** A second vast outline gathers beside it.
+   - ***Chart Its Returning Course*** — Add a duplication site to this dreamscape
+     - **Response:** A bright mooring appears along the mapped route.
 
-5. A whale fills the starry sky while you stand on a skiff below.
-   - ***Invite a New Passenger*** — Purge a chosen card and gain a copy of another chosen card
-     - **Response:** A traveler boards as another quietly rows away.
-   - ***Call Across the Expanse*** — Gain 10 essence for each Spirit Animal card in your deck
-     - **Response:** Distant swimmers arrive trailing concentrated starlight.
+5. The enormous whale drifts overhead, its ridged belly filling your view.
+   - ***Reach Into Its Wake*** — Gain a random amount of essence between 150 and 300
+     - **Response:** Luminous flecks settle around your outstretched hand.
+   - ***Pass Under Its Shadow*** — Transfigure all cards in your deck
+     - **Response:** Familiar shapes emerge changed beyond its trailing fins.
 
 ---
 
@@ -278,35 +278,35 @@ Once per turn, when you play a spirit animal, materialize a 1✦ spirit animal f
 
 ![Source artwork for Emerald Guardian](</Users/dthurn/Documents/shutterstock/images/stock-photo-young-woman-facing-the-giant-elephant-with-glowing-green-tusks-digital-art-style-illustration-1169640025.jpg>)
 
-1. A colossal elephant faces you, its luminous tusks nearly spanning the mist between you.
-   - ***Call Through the Haze*** — Choose one of 2 packs of Spirit Animal cards to add to your deck
-     - **Response:** Immense shapes answer beyond the scattered lights.
-   - ***Touch a Shining Tusk*** — Gain 200 essence
-     - **Response:** Radiance gathers around your outstretched hand.
+1. An enormous elephant emerges from starlit mist, its curved tusks shining.
+   - ***Welcome the Great Beast*** — Gain 1 "Nightmare" bane card. Gain Emerald Guardian.
+     - **Response:** The elephant kneels as the surrounding haze darkens.
+   - ***Call the Distant Herd*** — Gain one copy of each of 2 random Spirit Animal cards
+     - **Response:** Great animal shapes approach through the radiant mist.
 
-2. A vast elephant lowers its trunk beside shining tusks that dwarf you.
-   - ***Enter the Radiance*** — Transfigure all cards in your deck
-     - **Response:** The shining haze closes softly around you.
-   - ***Walk in Its Wake*** — Purge a random starter card and gain a Spirit Animal card
-     - **Response:** A heavy footfall clears space for approaching kin.
+2. A lone woman stands beneath an elephant towering through the luminous haze.
+   - ***Honor the Colossal Beast*** — Gain a random legendary card.
+     - **Response:** The elephant steps forward beneath the scattered stars.
+   - ***Approach the Lone Traveler*** — Pick a new Dream Avatar from 3 choices
+     - **Response:** A new guide emerges from the glowing haze.
 
-3. A towering elephant meets your gaze while its bright tusks divide the starry haze.
-   - ***Urge It Forward*** — All cards in your deck become ❖ (fast)
-     - **Response:** A thunderous stride sends the haze streaming past.
-   - ***Mark the Meeting Place*** — Add a transfiguration site to this dreamscape
-     - **Response:** A lasting glow settles where the giant stood.
+3. Radiant mist surrounds a vast elephant watching a solitary traveler.
+   - ***Follow the Luminous Tusks*** — Add a card market site to this dreamscape
+     - **Response:** A busy exchange awaits beyond their glowing arc.
+   - ***Exchange Your Old Company*** — Purge all starter cards and replace each one with a Spirit Animal card
+     - **Response:** Great animal shapes gather in their vacated places.
 
-4. A huge elephant stands over you as floating lights fill the haze.
-   - ***Receive Its Favor*** — All items in the next shop you visit are free
-     - **Response:** A gentle touch leaves radiance across your palm.
-   - ***Share Its Strength*** — Apply Empowered to 3 random Spirit Animal cards
-     - **Response:** A deep rumble travels outward through the haze.
+4. A giant elephant lowers its bright tusks above a still human figure.
+   - ***Follow the Elephant's Passage*** — Add a purge site to this dreamscape.
+     - **Response:** Its heavy steps lead toward a secluded clearing.
+   - ***Offer a Burden*** — Purge a chosen card and gain 40 essence for each ✦ it had
+     - **Response:** A curved tusk lifts it into the starlit haze.
 
-5. A colossal elephant looms before you, twin tusks glowing across the mist.
-   - ***Step Into the Glow*** — Transfigure all starter cards
-     - **Response:** Light from both tusks washes over you.
-   - ***Accept Its Burden*** — Gain 2 "Nightmare" bane cards. Gain Green Amulet.
-     - **Response:** The elephant lowers a luminous tusk toward you.
+5. A massive elephant stands before you amid drifting lights and haze.
+   - ***Join the Great Herd*** — All characters in your deck become the subtype of your choice.
+     - **Response:** Every companion enters bearing a single animal likeness.
+   - ***Call Figures from the Mist*** — Modify 2 random cards to become Character cards
+     - **Response:** Living silhouettes emerge beside the towering elephant.
 
 ---
 
@@ -316,32 +316,32 @@ When you play a warrior, you may materialize a ≤2● cost character from your 
 
 ![Source artwork for Aurora Rider](</Users/dthurn/Documents/shutterstock/images/stock-photo-two-brothers-standing-on-a-huge-branch-looking-at-the-mysterious-horseman-in-the-shadows-digital-2256745747.jpg>)
 
-1. You watch two backpacked travelers face a colossal horse and mounted silhouette overhead.
-   - ***Follow the Quiet Guide*** — Choose a card to purge and replace it with Winterbough Guide
-     - **Response:** A backpacked traveler leads you along the limb.
-   - ***Call to Distant Guardians*** — Take any number of Warrior cards from 4 random choices
-     - **Response:** Armed silhouettes gather beneath the immense horse.
+1. Above you, a colossal horseman thins into drifting starlight.
+   - ***Call Into the Distance*** — Gain Bell
+     - **Response:** A clear bell tolls beneath the distant horse.
+   - ***Gather the Falling Light*** — Apply Kindled to a chosen ≤2● cost Character card from your deck
+     - **Response:** A waiting traveler's outline shines with renewed strength.
 
-2. You peer between two travelers as an enormous mounted figure dissolves into starlight.
-   - ***Touch the Drifting Specks*** — Transfigure all cards in your deck
-     - **Response:** Each bright mote settles into a different form.
-   - ***Reach Through the Silhouette*** — Change a ≤2● cost Event card in your deck to become a Character
-     - **Response:** A living figure emerges from the thinning outline.
+2. You watch an immense horse and rider dissolve against the star-filled sky.
+   - ***Follow the Changing Figure*** — The next draft or shop site you visit will contain transfigured cards
+     - **Response:** Its scattered outline settles into unfamiliar forms.
+   - ***Take the High Saddle*** — Change a chosen Character card to have Warrior
+     - **Response:** A traveler ascends with the horseman's martial bearing.
 
-3. Before you, two small travelers stand beneath a horse whose shadow fills the sky.
-   - ***Invite Another Traveler*** — Gain the offered card
-     - **Response:** A newcomer steps onto the broad trunk.
-   - ***Address the Colossal Figure*** — Gain a random legendary card.
-     - **Response:** The mounted figure descends beside the travelers.
+3. Before you, a towering horseman emerges beyond the overgrown limb.
+   - ***Call the Mounted Host*** — Take any number of Warrior cards from 4 random choices
+     - **Response:** More silhouettes emerge through the luminous haze.
+   - ***Clear the Overgrown Limb*** — Add a purge site to this dreamscape.
+     - **Response:** Loose moss falls away, exposing clean bark.
 
-4. A vast horse looms above you and two travelers balanced on a mossy fallen trunk.
-   - ***Make Room on the Limb*** — Gain 1 copy of a chosen ≤2● cost Character card from your deck
-     - **Response:** A second companion climbs into the cleared space.
-   - ***Signal the Distant Silhouette*** — Gain 2 random Warrior cards
-     - **Response:** Armed strangers descend through the glittering air.
+4. Above you, an immense horse dissolves into drifting points of light.
+   - ***Call for Its Double*** — Add a duplication site to this dreamscape
+     - **Response:** A second silhouette forms beside the fading horse.
+   - ***Gather the Drifting Motes*** — Gain a random amount of essence between 200 and 300
+     - **Response:** Bright specks collect among the moss-covered roots.
 
-5. You look past two travelers toward a mounted giant breaking into scattered light.
-   - ***Call for an Escort*** — Choose one of 2 packs of Warrior cards to add to your deck
-     - **Response:** A disciplined company assembles along the broad limb.
-   - ***Touch the Falling Light*** — Replace all of your dreamsigns with random dreamsigns
-     - **Response:** The scattered points trade places throughout the sky.
+5. A moss-covered limb stretches beneath you toward the colossal horseman.
+   - ***Search Beneath the Moss*** — Gain 2 "Nightmare" bane cards. Gain Brown Acorn.
+     - **Response:** A brown acorn drops free with clinging roots.
+   - ***Share the Horseman's Bearing*** — All characters in your deck become the subtype of your choice.
+     - **Response:** Every companion assumes the same imposing posture.
