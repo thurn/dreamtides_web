@@ -37,8 +37,12 @@ function request(method, url, body) {
 function response() {
   return {
     status: 0,
+    headers: {},
     body: "",
-    writeHead(status) { this.status = status; },
+    writeHead(status, headers = {}) {
+      this.status = status;
+      this.headers = headers;
+    },
     end(body = "") { this.body = body; },
   };
 }
@@ -50,6 +54,8 @@ describe("encounter editor API", () => {
   beforeEach(() => {
     rootDir = mkdtempSync(join(tmpdir(), "encounter-editor-api-"));
     mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+    mkdirSync(join(rootDir, "curated-art"), { recursive: true });
+    mkdirSync(join(rootDir, "source-art"), { recursive: true });
     writeFileSync(
       join(rootDir, "data", "encounter_candidates.json"),
       `${JSON.stringify({ [CARD_ID]: [candidate(1, true), candidate(2)] }, null, 2)}\n`,
@@ -58,7 +64,11 @@ describe("encounter editor API", () => {
       join(rootDir, "data", "tabula", "cards.toml"),
       `[[cards]]\nid = "${CARD_ID}"\nname = "The Test Crossing"\nimage-number = 42\n`,
     );
-    middleware = createEncounterEditorApiMiddleware({ rootDir });
+    middleware = createEncounterEditorApiMiddleware({
+      rootDir,
+      curatedArtDir: join(rootDir, "curated-art"),
+      sourceArtDir: join(rootDir, "source-art"),
+    });
   });
 
   afterEach(() => rmSync(rootDir, { recursive: true, force: true }));
@@ -67,7 +77,19 @@ describe("encounter editor API", () => {
     const res = response();
     const next = vi.fn();
     await middleware(request(method, url, body), res, next);
-    return { body: res.body === "" ? null : JSON.parse(res.body), next, status: res.status };
+    return {
+      body: res.body === "" ? null : JSON.parse(String(res.body)),
+      headers: res.headers,
+      next,
+      status: res.status,
+    };
+  }
+
+  async function callRaw(method, url) {
+    const res = response();
+    const next = vi.fn();
+    await middleware(request(method, url), res, next);
+    return { body: res.body, headers: res.headers, next, status: res.status };
   }
 
   it("loads validated groups enriched with canonical card display data", async () => {
@@ -77,6 +99,44 @@ describe("encounter editor API", () => {
       cardId: CARD_ID,
       cardName: "The Test Crossing",
       imageNumber: 42,
+    });
+  });
+
+  it("serves a Shutterstock source image when the curated set has no match", async () => {
+    writeFileSync(
+      join(rootDir, "source-art", "stock-photo-test-crossing-42.png"),
+      "source-png",
+    );
+    const result = await callRaw("GET", "/api/editor/encounters/art/42");
+    expect(result.status).toBe(200);
+    expect(result.headers["Content-Type"]).toBe("image/png");
+    expect(result.body.toString()).toBe("source-png");
+  });
+
+  it("prefers the curated full-resolution image when both sources match", async () => {
+    writeFileSync(join(rootDir, "curated-art", "42.jpg"), "curated-jpg");
+    writeFileSync(
+      join(rootDir, "source-art", "stock-photo-test-crossing-42.jpg"),
+      "source-jpg",
+    );
+    const result = await callRaw("GET", "/api/editor/encounters/art/42");
+    expect(result.status).toBe(200);
+    expect(result.headers["Content-Type"]).toBe("image/jpeg");
+    expect(result.body.toString()).toBe("curated-jpg");
+  });
+
+  it("rejects invalid and ambiguous artwork identities", async () => {
+    const invalid = await call("GET", "/api/editor/encounters/art/not-a-number");
+    writeFileSync(join(rootDir, "source-art", "first-42.jpg"), "first");
+    writeFileSync(join(rootDir, "source-art", "second-42.webp"), "second");
+    const ambiguous = await call("GET", "/api/editor/encounters/art/42");
+    expect(invalid).toMatchObject({
+      status: 400,
+      body: { error: { code: "INVALID_ART_ID" } },
+    });
+    expect(ambiguous).toMatchObject({
+      status: 409,
+      body: { error: { code: "AMBIGUOUS_ART" } },
     });
   });
 

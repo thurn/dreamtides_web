@@ -1,3 +1,7 @@
 Unresolved: `npm audit` reports `brace-expansion` 4.0.0–5.0.8 through
 `node_modules/brace-expansion-core` as vulnerable to GHSA-rgw5-rvv9-x895. The
 audit recommends upgrading that transitive package to 5.0.9.
+
+Unresolved: the standalone encounter editor has a fixed 1080px content width
+at narrow viewports. At a 390px viewport, `document.documentElement.scrollWidth`
+is 1080px and the encounter copy sits offscreen behind horizontal scrolling.

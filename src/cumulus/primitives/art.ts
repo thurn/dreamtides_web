@@ -68,6 +68,11 @@ export type ArtRef =
       readonly kind: "exploration-card";
       readonly imageNumber: number;
     }
+  | {
+      /** Local source artwork shown by the development-only encounter editor. */
+      readonly kind: "encounter-editor-card";
+      readonly imageNumber: number;
+    }
   | CharacterPortraitArtRef;
 
 /** Resolve an {@link ArtRef} to a hosted art URL through the asset pipeline. */
@@ -89,6 +94,8 @@ export function resolveArtRef(ref: ArtRef): string {
       return assetUrl(`/dream-guides/${ref.guideId}.png`);
     case "exploration-card":
       return assetUrl(`/exploration/${String(ref.imageNumber)}.jpg`);
+    case "encounter-editor-card":
+      return `/api/editor/encounters/art/${String(ref.imageNumber)}`;
     case "character-portrait":
       switch (ref.characterId) {
         case "mira":
@@ -123,6 +130,10 @@ export const artRef = {
   }),
   explorationCard: (imageNumber: number): ArtRef => ({
     kind: "exploration-card",
+    imageNumber,
+  }),
+  encounterEditorCard: (imageNumber: number): ArtRef => ({
+    kind: "encounter-editor-card",
     imageNumber,
   }),
   characterPortrait: (

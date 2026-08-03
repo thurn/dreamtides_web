@@ -284,7 +284,7 @@ function EncounterEditorRow({
               alt={`Art for ${group.cardName}`}
               className="encounter-editor-art"
               loading={index < 2 ? "eager" : "lazy"}
-              src={resolveArtRef(artRef.explorationCard(group.imageNumber))}
+              src={resolveArtRef(artRef.encounterEditorCard(group.imageNumber))}
             />
           </div>
           <div className="encounter-editor-copy">

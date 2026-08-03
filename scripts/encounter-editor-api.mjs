@@ -1,4 +1,7 @@
-import { resolve } from "node:path";
+import { existsSync } from "node:fs";
+import { readFile, readdir } from "node:fs/promises";
+import { basename, extname, join, resolve } from "node:path";
+import { homedir } from "node:os";
 import { fileURLToPath } from "node:url";
 import {
   editEncounterCandidateText,
@@ -10,9 +13,29 @@ import { readEncounterTemplateHealth } from "./encounter-template-health.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/encounters";
+const DEFAULT_CURATED_ART_DIR = join(
+  homedir(),
+  "Documents",
+  "shutterstock",
+  "quest_prototype_assets",
+  "exploration",
+);
+const DEFAULT_SOURCE_ART_DIR = join(
+  homedir(),
+  "Documents",
+  "shutterstock",
+  "images",
+);
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
 const PAIR_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
+const IMAGE_NUMBER_PATTERN = /^\d+$/u;
+const IMAGE_CONTENT_TYPES = new Map([
+  [".jpeg", "image/jpeg"],
+  [".jpg", "image/jpeg"],
+  [".png", "image/png"],
+  [".webp", "image/webp"],
+]);
 
 function respond(res, status, body) {
   res.writeHead(status, { "Content-Type": "application/json; charset=utf-8" });
@@ -21,6 +44,62 @@ function respond(res, status, body) {
 
 function fail(res, status, code, message) {
   respond(res, status, { error: { code, message } });
+}
+
+function artError(code, message) {
+  const error = new Error(message);
+  error.code = code;
+  return error;
+}
+
+async function imageFiles(directory) {
+  if (!existsSync(directory)) return [];
+  const entries = await readdir(directory, { withFileTypes: true });
+  return entries
+    .filter((entry) => entry.isFile() || entry.isSymbolicLink())
+    .map((entry) => join(directory, entry.name))
+    .filter((path) => IMAGE_CONTENT_TYPES.has(extname(path).toLowerCase()));
+}
+
+/** Resolve editor art using the curated full-resolution set before Shutterstock sources. */
+export async function resolveEncounterEditorArt(
+  imageNumber,
+  {
+    curatedArtDir = DEFAULT_CURATED_ART_DIR,
+    sourceArtDir = DEFAULT_SOURCE_ART_DIR,
+  } = {},
+) {
+  if (!IMAGE_NUMBER_PATTERN.test(imageNumber)) {
+    throw artError("INVALID_ART_ID", "Artwork image number must contain digits only.");
+  }
+  const curatedMatches = (await imageFiles(curatedArtDir)).filter(
+    (path) => basename(path, extname(path)) === imageNumber,
+  );
+  if (curatedMatches.length > 1) {
+    throw artError(
+      "AMBIGUOUS_ART",
+      `Multiple curated artwork files match image number ${imageNumber}.`,
+    );
+  }
+  if (curatedMatches.length === 1) return curatedMatches[0];
+
+  const trailingNumber = new RegExp(`(?<!\\d)${imageNumber}$`, "u");
+  const sourceMatches = (await imageFiles(sourceArtDir)).filter((path) =>
+    trailingNumber.test(basename(path, extname(path))),
+  );
+  if (sourceMatches.length === 0) {
+    throw artError(
+      "ART_NOT_FOUND",
+      `No artwork file matches image number ${imageNumber}.`,
+    );
+  }
+  if (sourceMatches.length > 1) {
+    throw artError(
+      "AMBIGUOUS_ART",
+      `Multiple Shutterstock artwork files match image number ${imageNumber}.`,
+    );
+  }
+  return sourceMatches[0];
 }
 
 function readBody(req) {
@@ -58,6 +137,9 @@ function routeFor(url) {
   const parts = path.slice(BASE_PATH.length + 1).split("/");
   const decoded = parts.map(decodeSegment);
   if (decoded.some((part) => part === null)) return { kind: "invalid" };
+  if (parts.length === 2 && decoded[0] === "art") {
+    return { kind: "art", imageNumber: decoded[1] };
+  }
   if (parts.length === 2 && decoded[1] === "selection") {
     return { kind: "selection", cardId: decoded[0] };
   }
@@ -68,15 +150,20 @@ function routeFor(url) {
 }
 
 function statusFor(error) {
-  if (["ENCOUNTER_NOT_FOUND", "CANDIDATE_NOT_FOUND", "ACTION_NOT_FOUND"].includes(error.code)) {
+  if (["ENCOUNTER_NOT_FOUND", "CANDIDATE_NOT_FOUND", "ACTION_NOT_FOUND", "ART_NOT_FOUND"].includes(error.code)) {
     return 404;
   }
+  if (error.code === "AMBIGUOUS_ART") return 409;
   return 400;
 }
 
 export function createEncounterEditorApiMiddleware(options = {}) {
   const rootDir = options.rootDir ?? ROOT;
   const fileSystem = options.fileSystem;
+  const artOptions = {
+    curatedArtDir: options.curatedArtDir ?? DEFAULT_CURATED_ART_DIR,
+    sourceArtDir: options.sourceArtDir ?? DEFAULT_SOURCE_ART_DIR,
+  };
   const templateHealthReader = options.templateHealthReader ?? readEncounterTemplateHealth;
   const dataOptions = { rootDir, ...(fileSystem === undefined ? {} : { fileSystem }) };
   return async function encounterEditorApi(req, res, next) {
@@ -96,6 +183,22 @@ export function createEncounterEditorApiMiddleware(options = {}) {
           return;
         }
         respond(res, 200, { groups: readEncounterEditorGroups(dataOptions) });
+        return;
+      }
+      if (route.kind === "art") {
+        if (req.method !== "GET") {
+          fail(res, 405, "METHOD_NOT_ALLOWED", "This endpoint only supports GET.");
+          return;
+        }
+        const artPath = await resolveEncounterEditorArt(route.imageNumber, artOptions);
+        const contentType = IMAGE_CONTENT_TYPES.get(extname(artPath).toLowerCase());
+        const body = await readFile(artPath);
+        res.writeHead(200, {
+          "Cache-Control": "no-cache",
+          "Content-Length": String(body.byteLength),
+          "Content-Type": contentType,
+        });
+        res.end(body);
         return;
       }
       if (route.kind === "templateHealth") {

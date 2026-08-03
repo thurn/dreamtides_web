@@ -121,7 +121,8 @@ describe("EncounterEditorApp", () => {
     expect(container.textContent).toContain("Rank 1 effect 1");
     expect(container.textContent).toContain("Rank 1 resolution 1");
     expect(container.textContent).not.toContain("Prose for rank 2");
-    expect(container.querySelector("img")?.getAttribute("src")).toContain("/exploration/42.jpg");
+    expect(container.querySelector("img")?.getAttribute("src"))
+      .toBe("/api/editor/encounters/art/42");
     act(() => root.unmount());
   });
 
