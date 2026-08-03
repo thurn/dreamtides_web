@@ -77,7 +77,8 @@ export function BattleSiteRoute({
           view={{
             kind: "recoverableError",
             title: "Unable to Prepare Battle",
-            message: "The battle preview could not be prepared from this game state.",
+            message:
+              "The battle preview could not be prepared from this game state.",
           }}
         />
       );
@@ -97,7 +98,11 @@ export function BattleSiteRoute({
 
   return (
     <CumulusJourneyChrome variant="battle">
-      <PlayableBattleScreen site={site} aiMode={runtimeConfig.aiMode} />
+      <PlayableBattleScreen
+        site={site}
+        aiMode={runtimeConfig.aiMode}
+        battlefieldDividerVariation={runtimeConfig.battlefieldDividerVariation}
+      />
     </CumulusJourneyChrome>
   );
 }

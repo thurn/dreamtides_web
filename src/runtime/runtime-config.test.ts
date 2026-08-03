@@ -14,6 +14,7 @@ describe("parseRuntimeConfig", () => {
     expect(parseRuntimeConfig("")).toEqual({
       seedOverride: null,
       aiMode: false,
+      battlefieldDividerVariation: "space",
       tutorialPlaybackSpeed: 1,
       gameId: null,
       databaseMode: "emulator",
@@ -43,7 +44,9 @@ describe("parseRuntimeConfig", () => {
     it("returns null when loadJourney is absent or blank", () => {
       expect(parseRuntimeConfig("").loadJourneyName).toBeNull();
       expect(parseRuntimeConfig("?loadJourney=").loadJourneyName).toBeNull();
-      expect(parseRuntimeConfig("?loadJourney=%20%20").loadJourneyName).toBeNull();
+      expect(
+        parseRuntimeConfig("?loadJourney=%20%20").loadJourneyName,
+      ).toBeNull();
     });
 
     it("returns the trimmed, decoded name when loadJourney is present", () => {
@@ -66,11 +69,40 @@ describe("parseRuntimeConfig", () => {
     });
   });
 
+  describe("battlefieldDividerVariation", () => {
+    it("accepts each named comparison treatment", () => {
+      expect(
+        parseRuntimeConfig("?battleDivider=space").battlefieldDividerVariation,
+      ).toBe("space");
+      expect(
+        parseRuntimeConfig("?battleDivider=hairline")
+          .battlefieldDividerVariation,
+      ).toBe("hairline");
+      expect(
+        parseRuntimeConfig("?battleDivider=glow").battlefieldDividerVariation,
+      ).toBe("glow");
+      expect(
+        parseRuntimeConfig("?battleDivider=stitch").battlefieldDividerVariation,
+      ).toBe("stitch");
+      expect(
+        parseRuntimeConfig("?battleDivider=sigil").battlefieldDividerVariation,
+      ).toBe("sigil");
+    });
+
+    it("uses open space when the value is absent or unknown", () => {
+      expect(parseRuntimeConfig("").battlefieldDividerVariation).toBe("space");
+      expect(
+        parseRuntimeConfig("?battleDivider=unknown")
+          .battlefieldDividerVariation,
+      ).toBe("space");
+    });
+  });
+
   describe("tutorialPlaybackSpeed", () => {
     it("parses a positive decimal multiplier", () => {
-      expect(
-        parseRuntimeConfig("?tutorialSpeed=4").tutorialPlaybackSpeed,
-      ).toBe(4);
+      expect(parseRuntimeConfig("?tutorialSpeed=4").tutorialPlaybackSpeed).toBe(
+        4,
+      );
       expect(
         parseRuntimeConfig("?tutorialSpeed=0.5").tutorialPlaybackSpeed,
       ).toBe(0.5);
@@ -81,9 +113,9 @@ describe("parseRuntimeConfig", () => {
 
     it("uses normal speed for absent or invalid values", () => {
       expect(parseRuntimeConfig("").tutorialPlaybackSpeed).toBe(1);
-      expect(
-        parseRuntimeConfig("?tutorialSpeed=0").tutorialPlaybackSpeed,
-      ).toBe(1);
+      expect(parseRuntimeConfig("?tutorialSpeed=0").tutorialPlaybackSpeed).toBe(
+        1,
+      );
       expect(
         parseRuntimeConfig("?tutorialSpeed=-2").tutorialPlaybackSpeed,
       ).toBe(1);
@@ -251,9 +283,7 @@ describe("removeUiParamFromSearch", () => {
       removeUiParamFromSearch(
         "?game=room-7&ui=legacy&algo=fresh20&ui=cumulus&deviceFrame=iphone16",
       ),
-    ).toBe(
-      "?game=room-7&algo=fresh20&deviceFrame=iphone16",
-    );
+    ).toBe("?game=room-7&algo=fresh20&deviceFrame=iphone16");
   });
 
   it("returns an empty search when ui was the only key", () => {
@@ -272,9 +302,7 @@ describe("contentConfigFromRuntime", () => {
 
   it("reflects the fresh20 draft mode, pack size, and current journey", () => {
     expect(
-      contentConfigFromRuntime(
-        parseRuntimeConfig("?algo=fresh20&packsize=15"),
-      ),
+      contentConfigFromRuntime(parseRuntimeConfig("?algo=fresh20&packsize=15")),
     ).toEqual({
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "fresh20",

@@ -19,7 +19,11 @@ import {
 import { loadTutorialConfiguration } from "./data/tutorial-actions";
 import { getFirebaseDatabase } from "./firebase/app-config";
 import { RoomGate } from "./coop/RoomGate";
-import { CoopProvider, useConfirmedHead, useConnectedCount } from "./coop/hooks";
+import {
+  CoopProvider,
+  useConfirmedHead,
+  useConnectedCount,
+} from "./coop/hooks";
 import { EventLogViewer } from "./coop/EventLogViewer";
 import { registerGameProviders } from "./coop/providers/register-game-providers";
 import { useJourney } from "./state/journey-context";
@@ -43,7 +47,11 @@ import { STARTER_CARD_NUMBERS } from "./data/starter-cards";
 import { getSavedJourney } from "./state/saved-journeys";
 import { logEvent } from "./logging";
 import type { RuntimeConfig } from "./runtime/runtime-config";
-import { DECK_VIEWER_SCENE_ID, POOL_VIEWER_SCENE_ID, findQaScene } from "./runtime/qa-scenes";
+import {
+  DECK_VIEWER_SCENE_ID,
+  POOL_VIEWER_SCENE_ID,
+  findQaScene,
+} from "./runtime/qa-scenes";
 import { useJourneyUrlSync } from "./runtime/use-journey-url-sync";
 import type { JourneyState, SiteState } from "./types/journey";
 
@@ -577,7 +585,9 @@ export default function App({
   directTutorialBattle?: boolean;
   previewTutorialVictory?: boolean;
 }) {
-  const [journeyContent, setJourneyContent] = useState<JourneyContent | null>(null);
+  const [journeyContent, setJourneyContent] = useState<JourneyContent | null>(
+    null,
+  );
   const [loadError, setLoadError] = useState<string | null>(null);
   const [database, setDatabase] = useState<Database | null>(null);
   const [firebaseError, setFirebaseError] = useState<string | null>(null);
@@ -743,14 +753,15 @@ export default function App({
     >
       {(context) => (
         <CoopProvider context={context}>
-          {import.meta.env.VITE_FUZZ_TEST === "1" ? (
-            <FuzzProbe />
-          ) : null}
+          {import.meta.env.VITE_FUZZ_TEST === "1" ? <FuzzProbe /> : null}
           <CoopJourneyProvider journeyContent={journeyContent}>
             <FrontDoorProvider>
               <HostedPlaytestShell claimUnownedBattle={directTutorialBattle}>
                 <FrontDoorRouter
                   dreamAvatars={journeyContent.dreamAvatars}
+                  battlefieldDividerVariation={
+                    runtimeConfig.battlefieldDividerVariation
+                  }
                   tutorialPlaybackSpeed={
                     runtimeConfig.tutorialPlaybackSpeed ?? 1
                   }

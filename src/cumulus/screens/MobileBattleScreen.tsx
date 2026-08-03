@@ -74,6 +74,7 @@ import {
   MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS,
 } from "./mobile-battle-layout";
 import { useIsDesktop } from "./use-is-desktop";
+import type { BattlefieldDividerVariation } from "../../runtime/runtime-config";
 import {
   BattleResultSurface,
   type MobileBattleResultAction,
@@ -206,12 +207,7 @@ export interface MobileBattleCardPickerCandidateView {
   readonly cardUuid: string;
   readonly owner: MobileBattleOwner;
   readonly zone:
-    | "hand"
-    | "deck"
-    | "void"
-    | "banished"
-    | "backRank"
-    | "frontRank";
+    "hand" | "deck" | "void" | "banished" | "backRank" | "frontRank";
   readonly card: MobileBattleCardView;
   readonly highlighted: boolean;
 }
@@ -227,6 +223,8 @@ export interface MobileBattleChoicePromptView {
 export interface MobileBattleScreenProps {
   readonly view: MobileBattleView;
   readonly interactions?: MobileBattleInteractions;
+  /** Named visual treatment separating the two facing battlefield grids. */
+  readonly battlefieldDividerVariation?: BattlefieldDividerVariation;
   /** One short-lived resource result attached to its physical battlefield card. */
   readonly cardOverlay?: MobileBattleCardOverlayView | null;
   /**
@@ -581,10 +579,8 @@ const PHASE_LIGHT_STREAK_HEIGHT = 2;
 const PHASE_COMET_TAIL_START_SCALE = 0.35;
 const PHASE_COMET_TAIL_PEAK_SCALE = 1.55;
 const PHASE_CHALLENGE_PULSE_PEAK_SCALE = 1.65;
-const FIGMENT_MERGE_ANIMATION_SECONDS =
-  motionTimeSeconds("--dur-slow") * 2;
-const FIGMENT_MERGE_NOTICE_MS =
-  motionTimeSeconds("--dur-slow") * 4 * 1_000;
+const FIGMENT_MERGE_ANIMATION_SECONDS = motionTimeSeconds("--dur-slow") * 2;
+const FIGMENT_MERGE_NOTICE_MS = motionTimeSeconds("--dur-slow") * 4 * 1_000;
 // Pointer-dragged cards lift to z100 inside their rank; the merge disc must
 // remain visible above the physical card occupying the destination.
 const FIGMENT_MERGE_INDICATOR_Z_INDEX = 110;
@@ -683,6 +679,161 @@ const MOBILE_GRID_ROWS =
   "minmax(0, 9fr) minmax(0, 12fr) minmax(0, 20fr) minmax(0, 20fr) minmax(0, 12fr) minmax(0, 27fr)";
 const DESKTOP_PLAY_AREA_HEIGHT_PERCENT = 23;
 const DESKTOP_GRID_ROWS = `minmax(0, 8fr) minmax(0, 11fr) minmax(0, ${String(DESKTOP_PLAY_AREA_HEIGHT_PERCENT)}fr) minmax(0, ${String(DESKTOP_PLAY_AREA_HEIGHT_PERCENT)}fr) minmax(0, 11fr) minmax(0, 24fr)`;
+
+function battlefieldCenterOffset(
+  variation: BattlefieldDividerVariation,
+): string {
+  return token(
+    variation === "space" || variation === "sigil" ? "--space-5" : "--space-4",
+  );
+}
+
+function BattlefieldDivider({
+  variation,
+}: {
+  readonly variation: BattlefieldDividerVariation;
+}) {
+  const sharedStyle: CSSProperties = {
+    gridColumn: 1,
+    gridRow: "3 / 5",
+    alignSelf: "center",
+    justifySelf: "stretch",
+    position: "relative",
+    zIndex: 0,
+    height: token("--space-6"),
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    pointerEvents: "none",
+  };
+
+  if (variation === "space") {
+    return (
+      <div
+        aria-hidden="true"
+        data-battlefield-divider="space"
+        style={sharedStyle}
+      />
+    );
+  }
+
+  if (variation === "hairline") {
+    return (
+      <div
+        aria-hidden="true"
+        data-battlefield-divider="hairline"
+        style={sharedStyle}
+      >
+        <div
+          style={{
+            width: "82%",
+            height: token("--space-1"),
+            opacity: 0.58,
+            background: `linear-gradient(90deg, transparent, ${token("--border-soft")} 16%, ${token("--border-accent")} 50%, ${token("--border-soft")} 84%, transparent)`,
+          }}
+        />
+      </div>
+    );
+  }
+
+  if (variation === "glow") {
+    return (
+      <div
+        aria-hidden="true"
+        data-battlefield-divider="glow"
+        style={sharedStyle}
+      >
+        <div
+          style={{
+            width: "72%",
+            height: token("--space-6"),
+            opacity: 0.72,
+            background:
+              `radial-gradient(ellipse at center, ${token("--accent-tint")} 0%, transparent 70%), ` +
+              `linear-gradient(90deg, transparent, ${token("--border-soft")} 24%, ${token("--border-mid")} 50%, ${token("--border-soft")} 76%, transparent) center / 100% ${token("--space-1")} no-repeat`,
+          }}
+        />
+      </div>
+    );
+  }
+
+  if (variation === "stitch") {
+    return (
+      <div
+        aria-hidden="true"
+        data-battlefield-divider="stitch"
+        style={sharedStyle}
+      >
+        <div
+          style={{
+            width: "64%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          {Array.from({ length: 11 }, (_unused, index) => (
+            <span
+              key={index}
+              style={{
+                width: token(index === 5 ? "--space-4" : "--space-2"),
+                height: token("--space-1"),
+                borderRadius: token("--radius-pill"),
+                opacity: index === 5 ? 0.82 : 0.5,
+                background: token(
+                  index === 5 ? "--border-accent" : "--border-soft",
+                ),
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      aria-hidden="true"
+      data-battlefield-divider="sigil"
+      style={sharedStyle}
+    >
+      <div
+        style={{
+          width: "76%",
+          display: "flex",
+          alignItems: "center",
+          gap: token("--space-5"),
+          opacity: 0.68,
+        }}
+      >
+        <span
+          style={{
+            flex: 1,
+            height: token("--space-1"),
+            background: `linear-gradient(90deg, transparent, ${token("--border-soft")})`,
+          }}
+        />
+        <span
+          style={{
+            width: token("--space-4"),
+            aspectRatio: "1",
+            border: `${token("--space-1")} solid ${token("--border-accent")}`,
+            background: token("--accent-tint"),
+            transform: "rotate(45deg)",
+            boxSizing: "border-box",
+          }}
+        />
+        <span
+          style={{
+            flex: 1,
+            height: token("--space-1"),
+            background: `linear-gradient(90deg, ${token("--border-soft")}, transparent)`,
+          }}
+        />
+      </div>
+    </div>
+  );
+}
 
 const ROOT_STYLE: CSSProperties = {
   position: "fixed",
@@ -855,7 +1006,9 @@ function FigmentMergeTargetIndicator({
             position: "absolute",
             inset: token("--space-2"),
             border: `${token("--space-1")} solid ${ringColor}`,
-            borderTopColor: blocked ? token("--danger") : token("--accent-bright"),
+            borderTopColor: blocked
+              ? token("--danger")
+              : token("--accent-bright"),
             borderRadius: token("--radius-pill"),
           }}
         />
@@ -1544,11 +1697,7 @@ function inverseLinearTransform(element: HTMLElement | null): LinearTransform {
   };
 }
 
-function ChallengerChevron({
-  owner,
-}: {
-  readonly owner: MobileBattleOwner;
-}) {
+function ChallengerChevron({ owner }: { readonly owner: MobileBattleOwner }) {
   return (
     <div
       role="img"
@@ -1918,9 +2067,7 @@ function FaceUpCard({
       }}
     >
       <motion.div
-        layoutId={
-          snapLayoutMotion ? undefined : battleCardLayoutId(card.id)
-        }
+        layoutId={snapLayoutMotion ? undefined : battleCardLayoutId(card.id)}
         data-battle-card-motion=""
         data-battle-card-layout-id={
           snapLayoutMotion ? undefined : battleCardLayoutId(card.id)
@@ -2071,12 +2218,7 @@ function BattleCardPointsOverlay({
           }}
         />
         <span data-battle-card-points-value="">{overlay.points}</span>
-        <GlowIcon
-          iconClass={GLYPHS.points}
-          color="points"
-          size="1em"
-          shadow
-        />
+        <GlowIcon iconClass={GLYPHS.points} color="points" size="1em" shadow />
       </motion.div>
     </div>
   );
@@ -2218,10 +2360,11 @@ function battlefieldCardSize(
   layoutBackSlotCount: number,
   isDesktop: boolean,
   densityBackSlotCount: number,
+  centerOffset: string,
 ): string {
   const slotCount = Math.max(layoutBackSlotCount, 1);
   if (!isDesktop && densityBackSlotCount >= MOBILE_BATTLE_MAX_BACK_RANK_SLOTS) {
-    return `min(22cqw, calc((${String(BATTLEFIELD_FULL_WIDTH_PERCENT)}cqw - 0 * ${token("--space-1")}) / 10), calc((200cqh - 0 * ${token("--space-1")}) / 4))`;
+    return `min(22cqw, calc((${String(BATTLEFIELD_FULL_WIDTH_PERCENT)}cqw - 0 * ${token("--space-1")}) / 10), calc((100cqh - ${centerOffset} - ${centerOffset}) / 2))`;
   }
   const horizontalGapCount = Math.max(slotCount - 1, 0);
   const density = isDesktop
@@ -2231,7 +2374,7 @@ function battlefieldCardSize(
       }
     : mobileBattlefieldDensity(densityBackSlotCount);
   const battlefieldWidthPercent = 100 - density.sideInsetPercent * 2;
-  return `min(22cqw, calc((${String(battlefieldWidthPercent)}cqw - ${String(horizontalGapCount)} * ${density.gap}) / ${String(slotCount)}), calc((200cqh - 3 * ${density.gap}) / 4))`;
+  return `min(22cqw, calc((${String(battlefieldWidthPercent)}cqw - ${String(horizontalGapCount)} * ${density.gap}) / ${String(slotCount)}), calc((100cqh - ${density.gap} - ${centerOffset} - ${centerOffset}) / 2))`;
 }
 
 function desktopControlCardSize(layoutBackSlotCount: number): string {
@@ -2324,13 +2467,13 @@ function findBattleCardView(
   return cards.find((card) => card.id === battleCardId) ?? null;
 }
 
-function findSlotElement(
-  target: MobileBattleSlotTarget,
-): HTMLElement | null {
+function findSlotElement(target: MobileBattleSlotTarget): HTMLElement | null {
   return (
-    [...document.querySelectorAll<HTMLElement>(
-      '[data-battle-mobile-drop-kind="slot"]',
-    )].find((element) => {
+    [
+      ...document.querySelectorAll<HTMLElement>(
+        '[data-battle-mobile-drop-kind="slot"]',
+      ),
+    ].find((element) => {
       const elementTarget = slotTargetFromElement(element);
       return elementTarget !== null && sameSlotTarget(elementTarget, target);
     }) ?? null
@@ -2372,6 +2515,7 @@ function Rank({
   densityBackSlotCount,
   centerAsymmetricDesktopRanks,
   cardSize,
+  centerOffset,
   order,
   draggingCardId,
   snapLayoutCardId,
@@ -2396,6 +2540,7 @@ function Rank({
   readonly densityBackSlotCount: number;
   readonly centerAsymmetricDesktopRanks: boolean;
   readonly cardSize: string;
+  readonly centerOffset: string;
   readonly order: number;
   readonly draggingCardId: string | null;
   readonly snapLayoutCardId: string | null;
@@ -2448,7 +2593,6 @@ function Rank({
   const trackSlotCount = Math.max(visibleSlots.length, 1);
   const isCenterFacingRank =
     (position === "far" && order === 1) || (position === "near" && order === 0);
-  const centerOffset = token("--space-1");
   const density = isDesktop
     ? {
         gap: token("--space-2"),
@@ -2556,7 +2700,9 @@ function Rank({
               onDragLeave={(event) => {
                 if (
                   mergeTargetHovered &&
-                  !event.currentTarget.contains(event.relatedTarget as Node | null)
+                  !event.currentTarget.contains(
+                    event.relatedTarget as Node | null,
+                  )
                 ) {
                   onMergeTargetHover(null);
                 }
@@ -2725,6 +2871,7 @@ function PlayArea({
   densityBackSlotCount,
   centerAsymmetricDesktopRanks,
   cardSize,
+  centerOffset,
   draggingCardId,
   snapLayoutCardId,
   cardPicker,
@@ -2748,6 +2895,7 @@ function PlayArea({
   readonly densityBackSlotCount: number;
   readonly centerAsymmetricDesktopRanks: boolean;
   readonly cardSize: string;
+  readonly centerOffset: string;
   readonly draggingCardId: string | null;
   readonly snapLayoutCardId: string | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
@@ -2784,6 +2932,7 @@ function PlayArea({
       data-battle-play-area={owner}
       style={{
         ...ROW_STYLE,
+        gridColumn: 1,
         gridRow: position === "far" ? 3 : 4,
         overflow:
           showChallengerChevrons || allowSharedLayoutOverflow
@@ -2807,6 +2956,7 @@ function PlayArea({
           densityBackSlotCount={densityBackSlotCount}
           centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks}
           cardSize={cardSize}
+          centerOffset={centerOffset}
           order={order}
           draggingCardId={draggingCardId}
           snapLayoutCardId={snapLayoutCardId}
@@ -3402,8 +3552,7 @@ function closestOpenBackRankSlot(
   if (!Number.isFinite(clientX) || !Number.isFinite(clientY)) return undefined;
 
   let closest:
-    | { readonly slotId: string; readonly distanceSquared: number }
-    | undefined;
+    { readonly slotId: string; readonly distanceSquared: number } | undefined;
   const slots = battleScreen.querySelectorAll<HTMLElement>(
     `[data-battle-rank="${owner}-back"] [data-battle-slot-filled="false"]`,
   );
@@ -4540,6 +4689,7 @@ function BattleInspectorRail({
 export function MobileBattleScreen({
   view,
   interactions,
+  battlefieldDividerVariation = "space",
   cardOverlay = null,
   inspectorDefault = "responsive",
   phaseNavigation = "both",
@@ -4598,8 +4748,7 @@ export function MobileBattleScreen({
   const snapLayoutOriginView = useRef<MobileBattleView | null>(null);
   const near = view.perspective === "player" ? view.player : view.enemy;
   const far = view.perspective === "player" ? view.enemy : view.player;
-  const banishedCardCount =
-    near.banishedCardCount + far.banishedCardCount;
+  const banishedCardCount = near.banishedCardCount + far.banishedCardCount;
   const initialBanishedOwner =
     near.banishedCardCount > 0 ? near.owner : far.owner;
   const nearHandNeededByPrompt =
@@ -4617,9 +4766,9 @@ export function MobileBattleScreen({
     interactions?.targetSelectionCardId === null ||
     interactions?.targetSelectionCardId === undefined
       ? null
-      : nearHandCards.find(
+      : (nearHandCards.find(
           (card) => card.id === interactions.targetSelectionCardId,
-        ) ?? null;
+        ) ?? null);
   const displayedNearHandCards =
     targetingCard === null
       ? nearHandCards
@@ -4631,10 +4780,12 @@ export function MobileBattleScreen({
     : view.farHand.cards;
   const layoutBackSlotCount = battlefieldLayoutBackSlotCount(view, isDesktop);
   const densityBackSlotCount = battlefieldDensityBackSlotCount(view);
+  const centerOffset = battlefieldCenterOffset(battlefieldDividerVariation);
   const cardSize = battlefieldCardSize(
     layoutBackSlotCount,
     isDesktop,
     densityBackSlotCount,
+    centerOffset,
   );
   const centerAsymmetricDesktopRanks =
     isDesktop &&
@@ -4675,17 +4826,20 @@ export function MobileBattleScreen({
 
   const beginFigmentMerge = useCallback(
     (target: MobileBattleFigmentMergeTarget): void => {
-      const sourceCard = findBattleCardView(
-        view,
-        target.sourceBattleCardId,
-      );
+      const sourceCard = findBattleCardView(view, target.sourceBattleCardId);
       const sourceElement =
-        [...document.querySelectorAll<HTMLElement>("[data-battle-card-id]")].find(
+        [
+          ...document.querySelectorAll<HTMLElement>("[data-battle-card-id]"),
+        ].find(
           (element) =>
             element.dataset.battleCardId === target.sourceBattleCardId,
         ) ?? null;
       const targetElement = findSlotElement(target.target);
-      if (sourceCard !== null && sourceElement !== null && targetElement !== null) {
+      if (
+        sourceCard !== null &&
+        sourceElement !== null &&
+        targetElement !== null
+      ) {
         setMergeAnimation({
           key: mergeAnimationSequence.current,
           sourceCard,
@@ -4697,10 +4851,7 @@ export function MobileBattleScreen({
       }
       setMergeConfirmation(null);
       setHoveredMergeTarget(null);
-      interactions?.onFigmentMerge?.(
-        target.sourceBattleCardId,
-        target.target,
-      );
+      interactions?.onFigmentMerge?.(target.sourceBattleCardId, target.target);
     },
     [interactions, view],
   );
@@ -4776,14 +4927,12 @@ export function MobileBattleScreen({
           ? document.elementsFromPoint(event.clientX, event.clientY)
           : typeof document.elementFromPoint === "function"
             ? [document.elementFromPoint(event.clientX, event.clientY)].filter(
-              (element): element is Element => element !== null,
-            )
+                (element): element is Element => element !== null,
+              )
             : [];
       const targets = elements
         .map((element) => slotTargetFromElement(element))
-        .filter(
-          (target): target is MobileBattleSlotTarget => target !== null,
-        );
+        .filter((target): target is MobileBattleSlotTarget => target !== null);
       if (targets.length === 0) return;
       const next =
         interactions.figmentMergeTargets?.find((candidate) =>
@@ -4800,10 +4949,7 @@ export function MobileBattleScreen({
       window.removeEventListener("pointermove", updateHoveredTarget);
       window.removeEventListener("dragover", updateHoveredTarget);
     };
-  }, [
-    interactions?.figmentMergeTargets,
-    interactions?.pendingCardId,
-  ]);
+  }, [interactions?.figmentMergeTargets, interactions?.pendingCardId]);
 
   useEffect(() => {
     setSelectedSide("player");
@@ -4977,6 +5123,7 @@ export function MobileBattleScreen({
       }}
     >
       <BattleBackdrop isDesktop={isDesktop} />
+      <BattlefieldDivider variation={battlefieldDividerVariation} />
       <div
         aria-hidden="true"
         data-battle-mobile-safe-area-backdrop=""
@@ -5026,6 +5173,7 @@ export function MobileBattleScreen({
           densityBackSlotCount={densityBackSlotCount}
           centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks}
           cardSize={cardSize}
+          centerOffset={centerOffset}
           draggingCardId={isCardDragActive ? snapLayoutCardId : null}
           snapLayoutCardId={snapLayoutCardId}
           cardPicker={boardCardPicker}
@@ -5052,6 +5200,7 @@ export function MobileBattleScreen({
           densityBackSlotCount={densityBackSlotCount}
           centerAsymmetricDesktopRanks={centerAsymmetricDesktopRanks}
           cardSize={cardSize}
+          centerOffset={centerOffset}
           draggingCardId={isCardDragActive ? snapLayoutCardId : null}
           snapLayoutCardId={snapLayoutCardId}
           cardPicker={boardCardPicker}
@@ -5077,9 +5226,7 @@ export function MobileBattleScreen({
           isDesktop={isDesktop}
           interactions={interactions}
           layoutBackSlotCount={layoutBackSlotCount}
-          nextPhaseLabel={
-            view.dreamwell === null ? "Next Phase" : "Continue"
-          }
+          nextPhaseLabel={view.dreamwell === null ? "Next Phase" : "Continue"}
           phaseNavigation={phaseNavigation}
           perspective={view.perspective}
           tutorialNextLabel={
@@ -5115,8 +5262,7 @@ export function MobileBattleScreen({
           interactions={interactions}
         />
       </BattleCardLayoutGroup>
-      {view.revealedHandCard !== undefined &&
-      view.revealedHandCard !== null ? (
+      {view.revealedHandCard !== undefined && view.revealedHandCard !== null ? (
         <SharedHandCardReveal
           card={view.revealedHandCard}
           isDesktop={isDesktop}
@@ -5301,8 +5447,8 @@ export function MobileBattleScreen({
                 font: token("--t-body"),
               }}
             >
-              Only {mergeConfirmation.addedSpark}✦ from this Legionnaire will
-              be added. Its Warrior-count bonus does not transfer. This merge
+              Only {mergeConfirmation.addedSpark}✦ from this Legionnaire will be
+              added. Its Warrior-count bonus does not transfer. This merge
               cannot be undone.
             </p>
             <div

@@ -20,6 +20,7 @@ const adapterMocks = vi.hoisted(() => ({
   tutorialSpeed: null as number | null,
   tutorialDirectLive: null as boolean | null,
   tutorialVictoryPreview: null as boolean | null,
+  tutorialBattlefieldDivider: null as string | null,
 }));
 const DREAM_AVATARS = [] as const;
 
@@ -61,10 +62,14 @@ vi.mock("../screens/cumulus_adapters/TutorialScreenAdapter", () => ({
 vi.mock("../screens/cumulus_adapters/TutorialBattleScreenAdapter", () => ({
   TutorialBattleScreenAdapter: ({
     previewVictory,
+    battlefieldDividerVariation,
   }: {
     previewVictory?: boolean;
+    battlefieldDividerVariation?: string;
   }) => {
     adapterMocks.tutorialVictoryPreview = previewVictory ?? false;
+    adapterMocks.tutorialBattlefieldDivider =
+      battlefieldDividerVariation ?? null;
     return <main data-tutorial-live-battle />;
   },
 }));
@@ -82,6 +87,7 @@ beforeEach(() => {
   adapterMocks.tutorialSpeed = null;
   adapterMocks.tutorialDirectLive = null;
   adapterMocks.tutorialVictoryPreview = null;
+  adapterMocks.tutorialBattlefieldDivider = null;
 });
 
 afterEach(() => {
@@ -188,6 +194,7 @@ describe("FrontDoorRouter", () => {
         <FrontDoorRouter
           dreamAvatars={DREAM_AVATARS}
           previewTutorialVictory
+          battlefieldDividerVariation="glow"
         />,
       ),
     );
@@ -199,10 +206,12 @@ describe("FrontDoorRouter", () => {
         <FrontDoorRouter
           dreamAvatars={DREAM_AVATARS}
           previewTutorialVictory
+          battlefieldDividerVariation="glow"
         />,
       ),
     );
     expect(adapterMocks.tutorialVictoryPreview).toBe(true);
+    expect(adapterMocks.tutorialBattlefieldDivider).toBe("glow");
 
     act(() => root.unmount());
   });

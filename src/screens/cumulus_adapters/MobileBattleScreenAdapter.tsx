@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import {
   MobileBattleScreen,
   type MobileBattleInteractions,
@@ -11,6 +11,8 @@ import {
   type MobileBattleInit,
   type MobileBattlePendingPrompt,
 } from "./mobile-battle-view-model";
+import type { BattlefieldDividerVariation } from "../../runtime/runtime-config";
+import { logEvent } from "../../logging";
 
 export function MobileBattleScreenAdapter({
   init,
@@ -25,6 +27,7 @@ export function MobileBattleScreenAdapter({
   confirmedPromptId,
   isResultOverlayDismissed,
   interactions,
+  battlefieldDividerVariation = "space",
 }: {
   init: MobileBattleInit;
   board: MobileBattleBoard;
@@ -38,6 +41,7 @@ export function MobileBattleScreenAdapter({
   confirmedPromptId: number | null;
   isResultOverlayDismissed: boolean;
   interactions: MobileBattleInteractions;
+  battlefieldDividerVariation?: BattlefieldDividerVariation;
 }) {
   const view = useMemo(
     () =>
@@ -67,5 +71,19 @@ export function MobileBattleScreenAdapter({
     ],
   );
 
-  return <MobileBattleScreen view={view} interactions={interactions} />;
+  useEffect(() => {
+    logEvent("battlefield_divider_rendered", {
+      battleId: view.battleId,
+      surface: "journey-battle",
+      variation: battlefieldDividerVariation,
+    });
+  }, [battlefieldDividerVariation, view.battleId]);
+
+  return (
+    <MobileBattleScreen
+      view={view}
+      interactions={interactions}
+      battlefieldDividerVariation={battlefieldDividerVariation}
+    />
+  );
 }

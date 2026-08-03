@@ -92,6 +92,18 @@ The standalone tutorial battle uses its own event-log-driven automated opponent.
 Its automation is independent of this parameter, including when the journey
 battle AI is left at the manual default.
 
+## `battleDivider`
+
+Selects one of five presentation-only battlefield divider treatments for visual
+review on both journey battles and the standalone tutorial battle. The accepted
+values are `space`, `hairline`, `glow`, `stitch`, and `sigil`; an absent or
+unrecognized value uses `space`.
+
+```
+http://localhost:5173/?goto=battle&battleDivider=hairline
+http://localhost:5173/?goto=tutorial-battle&battleDivider=sigil
+```
+
 ## `realtime`
 
 Selects the Firebase Realtime Database target. When set to exactly `1`, the app

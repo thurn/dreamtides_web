@@ -72,6 +72,7 @@ import { BattleTutorialGuidance } from "../../cumulus/screens/BattleTutorialGuid
 import { buildBattleTutorialGuidanceView } from "../../screens/cumulus_adapters/battle-tutorial-guidance-view-model";
 import { useBattleTutorialGuidance } from "../use-battle-tutorial-guidance";
 import { selectBattlefieldFigmentMergeTargets } from "../state/figments";
+import type { BattlefieldDividerVariation } from "../../runtime/runtime-config";
 
 // `BattleLogDrawer` renders from the append-only coop fold, so its
 // `history` prop is supplied an empty undo/redo envelope.
@@ -110,17 +111,17 @@ type PendingDragState =
     }
   | null;
 
-function isDeveloperBattleSurface(
-  source: BattleCommandSourceSurface,
-): boolean {
-  return source === "inspector" ||
+function isDeveloperBattleSurface(source: BattleCommandSourceSurface): boolean {
+  return (
+    source === "inspector" ||
     source === "debug-menu" ||
     source === "debug-panel" ||
     source === "pool-viewer" ||
     source === "note-editor" ||
     source === "card-badges" ||
     source === "figment-creator" ||
-    source === "deck-order-picker";
+    source === "deck-order-picker"
+  );
 }
 
 function affectedBattleCardIds(command: BattleCommand): readonly string[] {
@@ -130,7 +131,11 @@ function affectedBattleCardIds(command: BattleCommand): readonly string[] {
   if ("battleCardId" in edit) ids.add(edit.battleCardId);
   if ("sourceBattleCardId" in edit) ids.add(edit.sourceBattleCardId);
   if (edit.kind === "FORESEE") {
-    for (const id of [...edit.viewedCardIds, ...edit.orderedCardIds, ...edit.voidCardIds]) {
+    for (const id of [
+      ...edit.viewedCardIds,
+      ...edit.orderedCardIds,
+      ...edit.voidCardIds,
+    ]) {
       ids.add(id);
     }
   } else if (edit.kind === "REORDER_DECK") {
@@ -143,7 +148,9 @@ function selectedBattleCardId(command: BattleCommand): string | null {
   return affectedBattleCardIds(command)[0] ?? null;
 }
 
-function canonicalCommandTargets(command: BattleCommand): Record<string, unknown> {
+function canonicalCommandTargets(
+  command: BattleCommand,
+): Record<string, unknown> {
   if (command.id === "FORCE_RESULT") return { result: command.result };
   if (command.id !== "DEBUG_EDIT") return {};
   const edit = command.edit;
@@ -161,19 +168,33 @@ function canonicalCommandTargets(command: BattleCommand): Record<string, unknown
 export function PlayableBattleScreen({
   site,
   aiMode = false,
+  battlefieldDividerVariation = "space",
 }: {
   site: SiteState;
   aiMode?: boolean;
+  battlefieldDividerVariation?: BattlefieldDividerVariation;
 }) {
   const battle = useGameState().battle;
   if (battle === null) {
     return null; // BattleSiteRoute already shows the loading/reveal state.
   }
   void site;
-  return <PlayableBattleScreenInner key={battle.init.battleId} aiMode={aiMode} />;
+  return (
+    <PlayableBattleScreenInner
+      key={battle.init.battleId}
+      aiMode={aiMode}
+      battlefieldDividerVariation={battlefieldDividerVariation}
+    />
+  );
 }
 
-function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
+function PlayableBattleScreenInner({
+  aiMode,
+  battlefieldDividerVariation,
+}: {
+  aiMode: boolean;
+  battlefieldDividerVariation: BattlefieldDividerVariation;
+}) {
   const gameState = useGameState();
   const battle = gameState.battle;
   if (battle === null) {
@@ -260,7 +281,8 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   }, [battleInit.battleId, clearPerspectiveBoundPresentation]);
 
   const handlePerspectiveToggle = useCallback((): void => {
-    const nextSide: BattleSide = perspectiveSide === "player" ? "enemy" : "player";
+    const nextSide: BattleSide =
+      perspectiveSide === "player" ? "enemy" : "player";
     clearPerspectiveBoundPresentation();
     logEvent("battle_perspective_changed", {
       ...createBattleLogBaseFields(board, {
@@ -273,7 +295,13 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       aiDriverPaused: aiMode && nextSide === "enemy",
     });
     setPerspectiveSide(nextSide);
-  }, [aiMode, board, clearPerspectiveBoundPresentation, clientId, perspectiveSide]);
+  }, [
+    aiMode,
+    board,
+    clearPerspectiveBoundPresentation,
+    clientId,
+    perspectiveSide,
+  ]);
 
   // Win/turn/energy caps for the AI planner, sourced from the battle init.
   // Wrapped in `useMemo` so the object is referentially stable across renders;
@@ -332,10 +360,10 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         characterDestination === undefined
           ? undefined
           : {
-            side: characterDestination.side,
-            zone: "backRank",
-            slotId: characterDestination.slotId,
-          },
+              side: characterDestination.side,
+              zone: "backRank",
+              slotId: characterDestination.slotId,
+            },
       );
     },
     [actions, board.battleId, board.turnNumber, clientId],
@@ -423,8 +451,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           destinationBattleCardId: candidate.destinationBattleCardId,
           target: {
             owner: candidate.location.side,
-            rank:
-              candidate.location.zone === "backRank" ? "back" : "front",
+            rank: candidate.location.zone === "backRank" ? "back" : "front",
             slotId: candidate.location.slotId,
           },
           figmentLabel:
@@ -543,13 +570,13 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     (command: BattleCommand): void => {
       setPendingDrag(null);
       const sourceSurface = command.sourceSurface ?? "action-bar";
-      const actor = command.actor ?? (
-        sourceSurface === "auto-system"
+      const actor =
+        command.actor ??
+        (sourceSurface === "auto-system"
           ? "system"
           : isDeveloperBattleSurface(sourceSurface)
             ? "debug"
-            : perspectiveSide
-      );
+            : perspectiveSide);
       const attributedCommand: BattleCommand = { ...command, actor };
       if (actor === "player" || actor === "enemy") {
         logEvent("battle_perspective_action_requested", {
@@ -560,7 +587,10 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           perspectiveSide,
           semanticActingSide: actor,
           commandId: attributedCommand.id,
-          editKind: attributedCommand.id === "DEBUG_EDIT" ? attributedCommand.edit.kind : null,
+          editKind:
+            attributedCommand.id === "DEBUG_EDIT"
+              ? attributedCommand.edit.kind
+              : null,
           affectedBattleCardIds: affectedBattleCardIds(attributedCommand),
           canonicalTargets: canonicalCommandTargets(attributedCommand),
         });
@@ -755,13 +785,15 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         ...baseFields,
         enemyHandBattleCardIds: [...board.sides.enemy.hand],
         enemyHandCardUuids: board.sides.enemy.hand.map(
-          (battleCardId) => board.cardInstances[battleCardId]?.definition.cardId ?? null,
+          (battleCardId) =>
+            board.cardInstances[battleCardId]?.definition.cardId ?? null,
         ),
         enemyHandSize: board.sides.enemy.hand.length,
         openingHandSize: battleInit.openingHandSize,
         playerHandBattleCardIds: [...board.sides.player.hand],
         playerHandCardUuids: board.sides.player.hand.map(
-          (battleCardId) => board.cardInstances[battleCardId]?.definition.cardId ?? null,
+          (battleCardId) =>
+            board.cardInstances[battleCardId]?.definition.cardId ?? null,
         ),
       },
     );
@@ -1217,7 +1249,9 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       handleCommand(
         createPoolCardDropCommand(
           pendingDrag.definition,
-          zone === "deck" ? { side, zone: "deck", position: "top" } : { side, zone },
+          zone === "deck"
+            ? { side, zone: "deck", position: "top" }
+            : { side, zone },
           Date.now(),
         ),
       );
@@ -1449,11 +1483,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           state={board}
           onClose={() => setOpenZoneBrowser(null)}
           onSideChange={(side) =>
-            handleOpenZoneBrowser(
-              side,
-              "banished",
-              "zone-browser-banished",
-            )
+            handleOpenZoneBrowser(side, "banished", "zone-browser-banished")
           }
           onCardContextMenu={handleCardContextMenu}
           onCardDoubleTap={(battleCardId, sourceSurface) =>
@@ -1643,6 +1673,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
             handleFillAsymmetricBattlefieldPreview,
           onInspectorAction: handleCumulusInspectorAction,
         }}
+        battlefieldDividerVariation={battlefieldDividerVariation}
       />
       {contextMenu !== null ? (
         <BattleContextMenu

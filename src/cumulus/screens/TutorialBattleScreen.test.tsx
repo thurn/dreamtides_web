@@ -77,9 +77,7 @@ class ResizeObserverStub {
   disconnect() {}
 }
 
-function view(
-  overrides: Partial<TutorialBattleView> = {},
-): TutorialBattleView {
+function view(overrides: Partial<TutorialBattleView> = {}): TutorialBattleView {
   const result: TutorialBattleView = {
     battle: {
       battleId: "tutorial-battle",
@@ -140,6 +138,8 @@ function mount(
   onPresentationVisible = vi.fn(),
   onNewJourney = vi.fn(),
   screenInteractions = interactions,
+  battlefieldDividerVariation:
+    "space" | "hairline" | "glow" | "stitch" | "sigil" = "space",
 ) {
   const container = document.createElement("div");
   document.body.append(container);
@@ -150,6 +150,7 @@ function mount(
         <TutorialBattleScreen
           view={screenView}
           interactions={screenInteractions}
+          battlefieldDividerVariation={battlefieldDividerVariation}
           movementStatusMessage={movementStatusMessage}
           onMovementStatusDismiss={onMovementStatusDismiss}
           onForeseeConfirm={() => {}}
@@ -184,6 +185,24 @@ afterEach(() => {
 });
 
 describe("TutorialBattleScreen", () => {
+  it("passes the selected battlefield divider treatment to the shared board", () => {
+    const { root } = mount(
+      view(),
+      null,
+      vi.fn(),
+      vi.fn(),
+      vi.fn(),
+      interactions,
+      "sigil",
+    );
+
+    expect(mobileBattleProps).toHaveBeenCalledWith(
+      expect.objectContaining({ battlefieldDividerVariation: "sigil" }),
+    );
+
+    act(() => root.unmount());
+  });
+
   it("holds Victory centered before its slower move and action reveal", () => {
     const onNewJourney = vi.fn();
     const { container, root } = mount(
@@ -193,9 +212,7 @@ describe("TutorialBattleScreen", () => {
       vi.fn(),
       onNewJourney,
     );
-    const victory = container.querySelector(
-      "[data-tutorial-victory-screen]",
-    );
+    const victory = container.querySelector("[data-tutorial-victory-screen]");
     const button = container.querySelector<HTMLButtonElement>(
       '[data-testid="tutorial-battle-new-journey"]',
     );
@@ -236,9 +253,9 @@ describe("TutorialBattleScreen", () => {
     expect(action?.style.animation).toContain(
       "calc(3s + var(--dur-slow) * 3) both",
     );
-    expect(
-      action?.hasAttribute("data-tutorial-victory-action-entering"),
-    ).toBe(true);
+    expect(action?.hasAttribute("data-tutorial-victory-action-entering")).toBe(
+      true,
+    );
     expect(victory?.querySelectorAll("h1, h2, p")).toHaveLength(1);
     act(() => button?.click());
     expect(onNewJourney).toHaveBeenCalledOnce();
@@ -317,9 +334,7 @@ describe("TutorialBattleScreen", () => {
     expect(prompt?.style.width).toBe("90vw");
     expect(prompt?.style.maxWidth).toBe("416px");
     expect(prompt?.querySelector("h2")?.textContent).toBe("Choose a Target");
-    expect(prompt?.textContent).toContain(
-      "Select a highlighted legal target.",
-    );
+    expect(prompt?.textContent).toContain("Select a highlighted legal target.");
     expect(header?.contains(cancelButton ?? null)).toBe(true);
     expect(prompt?.querySelector("[data-glass-panel-footer]")).toBeNull();
     act(() => cancelButton?.click());
@@ -349,17 +364,17 @@ describe("TutorialBattleScreen", () => {
 
     expect(container.querySelector('[role="dialog"]')).toBeNull();
     expect(
-      container.querySelector('[data-tutorial-opponent-play-reveal]'),
+      container.querySelector("[data-tutorial-opponent-play-reveal]"),
     ).not.toBeNull();
     expect(
-      container.querySelector(
-        '[data-testid="tutorial-opponent-play-card"]',
-      ),
+      container.querySelector('[data-testid="tutorial-opponent-play-card"]'),
     ).not.toBeNull();
-    expect(mobileBattleProps).toHaveBeenLastCalledWith(expect.objectContaining({
-      cardLayoutGroup: "inherited",
-      viewport: "contained",
-    }));
+    expect(mobileBattleProps).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        cardLayoutGroup: "inherited",
+        viewport: "contained",
+      }),
+    );
     expect(
       container.querySelector<HTMLElement>(
         "[data-tutorial-opponent-play-reveal]",
@@ -372,12 +387,12 @@ describe("TutorialBattleScreen", () => {
       sharedLayoutGroup?.querySelector("[data-test-mobile-battle]"),
     ).not.toBeNull();
     expect(
-      sharedLayoutGroup?.querySelector(
-        "[data-tutorial-opponent-play-reveal]",
-      ),
+      sharedLayoutGroup?.querySelector("[data-tutorial-opponent-play-reveal]"),
     ).not.toBeNull();
-    expect(container.querySelector<HTMLElement>("[data-tutorial-live-battle]")?.style)
-      .toMatchObject({ position: "fixed", width: "100vw", height: "100dvh" });
+    expect(
+      container.querySelector<HTMLElement>("[data-tutorial-live-battle]")
+        ?.style,
+    ).toMatchObject({ position: "fixed", width: "100vw", height: "100dvh" });
     expect(onPresentationVisible).not.toHaveBeenCalled();
     const revealTravelMs = TUTORIAL_BATTLE_REVEAL_TRAVEL_SECONDS * 1_000;
     act(() => {
@@ -472,21 +487,18 @@ describe("TutorialBattleScreen", () => {
       configurable: true,
       value: animate,
     });
-    vi.spyOn(
-      HTMLElement.prototype,
-      "getBoundingClientRect",
-    ).mockImplementation(function getSyntheticChallengeRect(
-      this: HTMLElement,
-    ) {
-      if (this.dataset.battleCardId !== "player-loser-uuid") {
-        return this.closest("[data-battle-zone='enemy-void']") === null
-          ? new DOMRect(900, 200, 90, 90)
-          : new DOMRect(300, 80, 100, 70);
-      }
-      return this.closest("[data-battle-zone='player-void']") === null
-        ? new DOMRect(100, 120, 80, 96)
-        : new DOMRect(700, 520, 100, 70);
-    });
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function getSyntheticChallengeRect(this: HTMLElement) {
+        if (this.dataset.battleCardId !== "player-loser-uuid") {
+          return this.closest("[data-battle-zone='enemy-void']") === null
+            ? new DOMRect(900, 200, 90, 90)
+            : new DOMRect(300, 80, 100, 70);
+        }
+        return this.closest("[data-battle-zone='player-void']") === null
+          ? new DOMRect(100, 120, 80, 96)
+          : new DOMRect(700, 520, 100, 70);
+      },
+    );
     const originBattle = {
       battleId: "tutorial-battle",
       inspector: { turn: "2" },

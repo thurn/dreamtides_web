@@ -31,8 +31,10 @@ import {
   BattleTutorialGuidance,
   type BattleTutorialGuidanceView,
 } from "./BattleTutorialGuidance";
+import type { BattlefieldDividerVariation } from "../../runtime/runtime-config";
 
-export type TutorialBattleOwnership = "driver" | "observer" | "paused-driver-absent" | "terminal";
+export type TutorialBattleOwnership =
+  "driver" | "observer" | "paused-driver-absent" | "terminal";
 export const TUTORIAL_CHALLENGE_TRAVEL_SECONDS =
   motionTimeSeconds("--dur-slow");
 
@@ -56,43 +58,49 @@ export interface TutorialBattleView {
    * A persisted, event-log-owned dwell checkpoint. The materialized source
    * stays in its battlefield or Dreamwell position while it is active.
    */
-  readonly presentation: {
-    readonly kind: "opponent-play";
-    readonly presentationId: string;
-    /** UUID of the catalog card presented before automation continues. */
-    readonly cardId: string;
-    readonly battleCardId: string;
-    readonly cardKind: "character" | "event";
-    readonly card: MobileBattleCardView;
-  } | {
-    readonly kind: "dreamwell-reveal";
-    readonly presentationId: string;
-    /** UUID of the Dreamwell source card shown before its effect prompt. */
-    readonly cardId: string;
-    readonly side: "player" | "enemy";
-  } | {
-    readonly kind: "opponent-block";
-    readonly presentationId: string;
-  } | {
-    readonly kind: "challenge-resolved";
-    readonly presentationId: string;
-    readonly paired: boolean;
-    readonly dissolved: readonly {
-      readonly battleCardId: string;
-      readonly side: "player" | "enemy";
-    }[];
-    readonly scored: {
-      readonly battleCardId: string;
-      readonly side: "player" | "enemy";
-      readonly points: number;
-    } | null;
-  } | null;
+  readonly presentation:
+    | {
+        readonly kind: "opponent-play";
+        readonly presentationId: string;
+        /** UUID of the catalog card presented before automation continues. */
+        readonly cardId: string;
+        readonly battleCardId: string;
+        readonly cardKind: "character" | "event";
+        readonly card: MobileBattleCardView;
+      }
+    | {
+        readonly kind: "dreamwell-reveal";
+        readonly presentationId: string;
+        /** UUID of the Dreamwell source card shown before its effect prompt. */
+        readonly cardId: string;
+        readonly side: "player" | "enemy";
+      }
+    | {
+        readonly kind: "opponent-block";
+        readonly presentationId: string;
+      }
+    | {
+        readonly kind: "challenge-resolved";
+        readonly presentationId: string;
+        readonly paired: boolean;
+        readonly dissolved: readonly {
+          readonly battleCardId: string;
+          readonly side: "player" | "enemy";
+        }[];
+        readonly scored: {
+          readonly battleCardId: string;
+          readonly side: "player" | "enemy";
+          readonly points: number;
+        } | null;
+      }
+    | null;
   readonly victoryVisible: boolean;
 }
 
 export interface TutorialBattleScreenProps {
   readonly view: TutorialBattleView;
   readonly interactions: MobileBattleInteractions;
+  readonly battlefieldDividerVariation?: BattlefieldDividerVariation;
   readonly movementStatusMessage: string | null;
   readonly onMovementStatusDismiss: () => void;
   readonly onForeseeConfirm: (resolution: {
@@ -111,6 +119,7 @@ export interface TutorialBattleScreenProps {
 export function TutorialBattleScreen({
   view,
   interactions,
+  battlefieldDividerVariation = "space",
   movementStatusMessage,
   onMovementStatusDismiss,
   onForeseeConfirm,
@@ -121,8 +130,7 @@ export function TutorialBattleScreen({
   onPresentationVisible,
 }: TutorialBattleScreenProps): ReactElement {
   const reduceMotion = useReducedMotion();
-  const turnAnnouncementKey =
-    `${view.battle.battleId}:${view.battle.inspector.turn}:${view.battle.activeSide}`;
+  const turnAnnouncementKey = `${view.battle.battleId}:${view.battle.inspector.turn}:${view.battle.activeSide}`;
   const [completedTurnAnnouncementKey, setCompletedTurnAnnouncementKey] =
     useState<string | null>(null);
   const completeTurnAnnouncement = useCallback(
@@ -147,8 +155,7 @@ export function TutorialBattleScreen({
           originBattle: view.challengeOriginBattle,
         }
       : null;
-  const challengeTravelPresentationId =
-    challengeTravel?.presentationId ?? null;
+  const challengeTravelPresentationId = challengeTravel?.presentationId ?? null;
   const [
     startedChallengeTravelPresentationId,
     setStartedChallengeTravelPresentationId,
@@ -185,9 +192,7 @@ export function TutorialBattleScreen({
   useEffect(() => {
     if (challengeTravelPresentationId === null) return;
     if (reduceMotion) {
-      setStartedChallengeTravelPresentationId(
-        challengeTravelPresentationId,
-      );
+      setStartedChallengeTravelPresentationId(challengeTravelPresentationId);
       return;
     }
     let destinationFrame = 0;
@@ -195,10 +200,7 @@ export function TutorialBattleScreen({
       destinationFrame = window.requestAnimationFrame(() => {
         const root = screenRef.current;
         const rects = new Map<string, DOMRect>();
-        if (
-          root !== null &&
-          view.presentation?.kind === "challenge-resolved"
-        ) {
+        if (root !== null && view.presentation?.kind === "challenge-resolved") {
           for (const entry of view.presentation.dissolved) {
             const source = renderedBattleCard(root, entry.battleCardId);
             if (source !== null) {
@@ -210,9 +212,7 @@ export function TutorialBattleScreen({
           presentationId: challengeTravelPresentationId,
           rects,
         };
-        setStartedChallengeTravelPresentationId(
-          challengeTravelPresentationId,
-        );
+        setStartedChallengeTravelPresentationId(challengeTravelPresentationId);
       });
     });
     return () => {
@@ -278,10 +278,14 @@ export function TutorialBattleScreen({
           fill: "both",
         },
       );
-      animation.addEventListener("finish", () => {
-        animation.cancel();
-        delete destination.dataset.tutorialChallengeVoidTravel;
-      }, { once: true });
+      animation.addEventListener(
+        "finish",
+        () => {
+          animation.cancel();
+          delete destination.dataset.tutorialChallengeVoidTravel;
+        },
+        { once: true },
+      );
       animations.push({ element: destination, animation });
     }
     return () => {
@@ -327,6 +331,7 @@ export function TutorialBattleScreen({
         <MobileBattleScreen
           view={displayedBattle}
           interactions={interactions}
+          battlefieldDividerVariation={battlefieldDividerVariation}
           cardOverlay={challengeCardOverlay}
           cardLayoutGroup="inherited"
           inspectorDefault="collapsed"
@@ -335,8 +340,7 @@ export function TutorialBattleScreen({
           viewport="contained"
           onTurnAnnouncementComplete={completeTurnAnnouncement}
         />
-        {view.presentation?.kind === "opponent-play" &&
-        presentationVisible ? (
+        {view.presentation?.kind === "opponent-play" && presentationVisible ? (
           <TutorialOpponentPlayReveal
             presentation={view.presentation}
             onVisible={onPresentationVisible}
@@ -704,9 +708,7 @@ function TutorialVictorySurface({
       </div>
       <div
         data-tutorial-victory-action=""
-        data-tutorial-victory-action-entering={
-          actionSettled ? undefined : ""
-        }
+        data-tutorial-victory-action-entering={actionSettled ? undefined : ""}
         data-tutorial-victory-action-settled={actionSettled ? "" : undefined}
         onAnimationEnd={(event) => {
           if (event.currentTarget === event.target) {
@@ -766,15 +768,11 @@ function TutorialOpponentPlayReveal({
       data-tutorial-opponent-play-reveal=""
       data-battle-card-id={presentation.battleCardId}
       data-battle-card-layout-id={
-        reduceMotion
-          ? undefined
-          : battleCardLayoutId(presentation.battleCardId)
+        reduceMotion ? undefined : battleCardLayoutId(presentation.battleCardId)
       }
       data-battle-card-layout-motion={reduceMotion ? "snap" : "travel"}
       layoutId={
-        reduceMotion
-          ? undefined
-          : battleCardLayoutId(presentation.battleCardId)
+        reduceMotion ? undefined : battleCardLayoutId(presentation.battleCardId)
       }
       initial={{
         x: "-50%",
@@ -789,9 +787,7 @@ function TutorialOpponentPlayReveal({
         scale: 1,
       }}
       transition={{
-        duration: reduceMotion
-          ? 0
-          : TUTORIAL_BATTLE_REVEAL_TRAVEL_SECONDS,
+        duration: reduceMotion ? 0 : TUTORIAL_BATTLE_REVEAL_TRAVEL_SECONDS,
         ease: [0.22, 0.61, 0.36, 1],
       }}
       style={{

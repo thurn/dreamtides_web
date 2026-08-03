@@ -7,6 +7,7 @@ import { TutorialBattleScreenAdapter } from "../screens/cumulus_adapters/Tutoria
 import { battleModeOf } from "../rules/battle/fold";
 import { useFrontDoor } from "../state/front-door-context";
 import type { DreamAvatarContent } from "../types/content";
+import type { BattlefieldDividerVariation } from "../runtime/runtime-config";
 
 /** Reflects the room's shared front-door fold and renders its current scene. */
 export function FrontDoorRouter({
@@ -14,12 +15,14 @@ export function FrontDoorRouter({
   tutorialPlaybackSpeed = 1,
   directTutorialBattle = false,
   previewTutorialVictory = false,
+  battlefieldDividerVariation = "space",
   journey = null,
 }: {
   readonly dreamAvatars: readonly DreamAvatarContent[];
   readonly tutorialPlaybackSpeed?: number;
   readonly directTutorialBattle?: boolean;
   readonly previewTutorialVictory?: boolean;
+  readonly battlefieldDividerVariation?: BattlefieldDividerVariation;
   readonly journey?: ReactNode;
 }) {
   const { state, battle } = useFrontDoor();
@@ -62,6 +65,7 @@ export function FrontDoorRouter({
       return (
         <TutorialBattleScreenAdapter
           previewVictory={previewTutorialVictory}
+          battlefieldDividerVariation={battlefieldDividerVariation}
         />
       );
     }

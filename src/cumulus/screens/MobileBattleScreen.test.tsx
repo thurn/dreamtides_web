@@ -256,6 +256,35 @@ function mount(
 }
 
 describe("MobileBattleScreen", () => {
+  it("renders all five named battlefield divider treatments", () => {
+    const variations = [
+      ["space", "var(--space-5)"],
+      ["hairline", "var(--space-4)"],
+      ["glow", "var(--space-4)"],
+      ["stitch", "var(--space-4)"],
+      ["sigil", "var(--space-5)"],
+    ] as const;
+
+    for (const [variation, expectedOffset] of variations) {
+      const { container, root } = mount(makeView(), undefined, {
+        battlefieldDividerVariation: variation,
+      });
+      expect(
+        container.querySelector(`[data-battlefield-divider="${variation}"]`),
+      ).not.toBeNull();
+      expect(
+        container.querySelector<HTMLElement>('[data-battle-rank="enemy-front"]')
+          ?.style.bottom,
+      ).toBe(expectedOffset);
+      expect(
+        container.querySelector<HTMLElement>(
+          '[data-battle-rank="player-front"]',
+        )?.style.top,
+      ).toBe(expectedOffset);
+      act(() => root.unmount());
+    }
+  });
+
   it("supports a collapsed inspector with hidden phase navigation", () => {
     mockDesktopViewport(true);
     const container = document.createElement("div");
@@ -301,13 +330,9 @@ describe("MobileBattleScreen", () => {
     const { container, root } = mount(makeView(), undefined, {
       cardLayoutGroup: "inherited",
     });
-    const board = container.querySelector<HTMLElement>(
-      "[data-battle-mobile]",
-    );
+    const board = container.querySelector<HTMLElement>("[data-battle-mobile]");
     const cardMotion = container
-      .querySelector<HTMLElement>(
-        '[data-battle-card-id="enemy-back-card"]',
-      )
+      .querySelector<HTMLElement>('[data-battle-card-id="enemy-back-card"]')
       ?.querySelector<HTMLElement>(":scope > [data-battle-card-motion]");
 
     expect(board?.dataset.battleCardLayoutGroup).toBe("inherited");
@@ -315,9 +340,8 @@ describe("MobileBattleScreen", () => {
       "battle-card:enemy-back-card",
     );
     expect(
-      container.querySelector<HTMLElement>(
-        '[data-battle-play-area="enemy"]',
-      )?.style.overflow,
+      container.querySelector<HTMLElement>('[data-battle-play-area="enemy"]')
+        ?.style.overflow,
     ).toBe("visible");
 
     act(() => root.unmount());
@@ -473,9 +497,8 @@ describe("MobileBattleScreen", () => {
       playerChevron?.querySelectorAll("polyline")[1]?.getAttribute("stroke"),
     ).toBe("var(--battle-challenger-chevron)");
     expect(
-      container.querySelector<HTMLElement>(
-        '[data-battle-play-area="player"]',
-      )?.style.zIndex,
+      container.querySelector<HTMLElement>('[data-battle-play-area="player"]')
+        ?.style.zIndex,
     ).toBe("6");
     expect(
       container.querySelector('[data-battle-challenger-chevron="enemy"]'),
@@ -509,9 +532,8 @@ describe("MobileBattleScreen", () => {
       "rotate(180deg)",
     );
     expect(
-      container.querySelector<HTMLElement>(
-        '[data-battle-play-area="enemy"]',
-      )?.style.zIndex,
+      container.querySelector<HTMLElement>('[data-battle-play-area="enemy"]')
+        ?.style.zIndex,
     ).toBe("6");
 
     act(() => root.unmount());
@@ -1803,9 +1825,7 @@ describe("MobileBattleScreen", () => {
       owner: "player",
       zone: "void",
     });
-    expect(
-      container.querySelector('[data-battle-zone="banished"]'),
-    ).toBeNull();
+    expect(container.querySelector('[data-battle-zone="banished"]')).toBeNull();
 
     act(() => root.unmount());
   });
@@ -1932,9 +1952,7 @@ describe("MobileBattleScreen", () => {
       },
     );
 
-    expect(
-      container.querySelector('[data-battle-zone="banished"]'),
-    ).toBeNull();
+    expect(container.querySelector('[data-battle-zone="banished"]')).toBeNull();
 
     act(() => root.unmount());
   });
@@ -1961,18 +1979,15 @@ describe("MobileBattleScreen", () => {
     };
     render(view);
 
-    expect(
-      container.querySelector("[data-radial-announcement]"),
-    ).toBeNull();
+    expect(container.querySelector("[data-radial-announcement]")).toBeNull();
 
     render({ ...view, activeSide: "enemy" });
     const opponentAnnouncement = container.querySelector<HTMLElement>(
       '[data-radial-announcement="enemy"]',
     );
     expect(
-      opponentAnnouncement?.querySelector(
-        "[data-radial-announcement-copy]",
-      )?.textContent,
+      opponentAnnouncement?.querySelector("[data-radial-announcement-copy]")
+        ?.textContent,
     ).toBe("Opponent Turn");
     expect(opponentAnnouncement?.querySelector("i, svg")).toBeNull();
 
@@ -1985,17 +2000,14 @@ describe("MobileBattleScreen", () => {
     );
 
     expect(
-      playerAnnouncement?.querySelector(
-        "[data-radial-announcement-copy]",
-      )?.textContent,
+      playerAnnouncement?.querySelector("[data-radial-announcement-copy]")
+        ?.textContent,
     ).toBe("Your Turn");
     expect(playerAnnouncement?.querySelector("i, svg")).toBeNull();
     expect(playerDisc?.style.width).toBe("184px");
     expect(playerDisc?.style.height).toBe("184px");
     expect(playerDisc?.style.borderRadius).toBe("var(--radius-pill)");
-    expect(playerDisc?.style.animation).toContain(
-      "radial-announcement-disc",
-    );
+    expect(playerDisc?.style.animation).toContain("radial-announcement-disc");
 
     act(() => {
       vi.advanceTimersByTime(699);
@@ -2010,9 +2022,7 @@ describe("MobileBattleScreen", () => {
     });
     expect(onTurnAnnouncementComplete).toHaveBeenCalledOnce();
     expect(onTurnAnnouncementComplete).toHaveBeenCalledWith("player");
-    expect(
-      container.querySelector("[data-radial-announcement]"),
-    ).toBeNull();
+    expect(container.querySelector("[data-radial-announcement]")).toBeNull();
 
     act(() => root.unmount());
     vi.useRealTimers();
@@ -2022,15 +2032,11 @@ describe("MobileBattleScreen", () => {
     vi.useFakeTimers();
     const { container, root } = mount(makeView());
 
-    expect(
-      container.querySelector("[data-radial-announcement]"),
-    ).toBeNull();
+    expect(container.querySelector("[data-radial-announcement]")).toBeNull();
     act(() => {
       vi.advanceTimersByTime(2_100);
     });
-    expect(
-      container.querySelector("[data-radial-announcement]"),
-    ).toBeNull();
+    expect(container.querySelector("[data-radial-announcement]")).toBeNull();
 
     act(() => root.unmount());
     vi.useRealTimers();
@@ -2199,7 +2205,7 @@ describe("MobileBattleScreen", () => {
       expect(backRank?.style.zIndex).toBe("1");
       expect(frontRank?.style.zIndex).toBe("2");
       expect(backRank?.style.height).toBe(frontRank?.style.height);
-      expect(backRank?.style.height).toContain("200cqh");
+      expect(backRank?.style.height).toContain("100cqh");
       const backTrack = backRank?.querySelector<HTMLElement>(
         "[data-battle-rank-track]",
       );
@@ -2932,7 +2938,7 @@ describe("MobileBattleScreen", () => {
         expect(rankElement?.style.height).toContain(
           "88cqw - 9 * var(--space-2)",
         );
-        expect(rankElement?.style.height).toContain("200cqh");
+        expect(rankElement?.style.height).toContain("100cqh");
         expect(track?.style.gridTemplateColumns).toContain(
           rank === "back" ? "repeat(10," : "repeat(9,",
         );
@@ -2941,7 +2947,7 @@ describe("MobileBattleScreen", () => {
         );
         expect(track?.style.columnGap).toBe("var(--space-2)");
         expect(slots[0]?.style.width).toContain("var(--space-2)");
-        expect(slots[0]?.style.width).toContain("200cqh");
+        expect(slots[0]?.style.width).toContain("100cqh");
         expect(slots[0]?.style.height).toBe("");
       }
     }
@@ -2958,8 +2964,8 @@ describe("MobileBattleScreen", () => {
     const playerBack = container.querySelector<HTMLElement>(
       '[data-battle-rank="player-back"]',
     );
-    expect(enemyFront?.style.bottom).toBe("var(--space-1)");
-    expect(playerFront?.style.top).toBe("var(--space-1)");
+    expect(enemyFront?.style.bottom).toBe("var(--space-5)");
+    expect(playerFront?.style.top).toBe("var(--space-5)");
     expect(enemyBack?.style.bottom).toContain("var(--space-2)");
     expect(playerBack?.style.top).toContain("var(--space-2)");
 
@@ -3078,10 +3084,10 @@ describe("MobileBattleScreen", () => {
     expect(backRank?.style.right).toBe("1%");
     expect(backTrack?.style.columnGap).toBe("0px");
     expect(backRank?.style.height).toBe(
-      "min(22cqw, calc((98cqw - 0 * var(--space-1)) / 10), calc((200cqh - 0 * var(--space-1)) / 4))",
+      "min(22cqw, calc((98cqw - 0 * var(--space-1)) / 10), calc((100cqh - var(--space-5) - var(--space-5)) / 2))",
     );
-    expect(backRank?.style.top).toContain("+ 0px + var(--space-1)");
-    expect(enemyBackRank?.style.bottom).toContain("+ 0px + var(--space-1)");
+    expect(backRank?.style.top).toContain("+ 0px + var(--space-5)");
+    expect(enemyBackRank?.style.bottom).toContain("+ 0px + var(--space-5)");
     expect(backTrack?.style.width).toBe("98cqw");
 
     act(() => root.unmount());
@@ -3706,7 +3712,12 @@ describe("MobileBattleScreen", () => {
     const view = makeView();
     const sourceCard = view.player.frontRank[0]?.card;
     const destinationCard = view.player.backRank[1]?.card;
-    if (sourceCard === null || sourceCard === undefined || destinationCard === null || destinationCard === undefined) {
+    if (
+      sourceCard === null ||
+      sourceCard === undefined ||
+      destinationCard === null ||
+      destinationCard === undefined
+    ) {
       throw new Error("fixture requires occupied player ranks");
     }
     const onFigmentMerge = vi.fn();
@@ -3779,7 +3790,12 @@ describe("MobileBattleScreen", () => {
     const view = makeView();
     const sourceCard = view.player.frontRank[0]?.card;
     const destinationCard = view.player.backRank[1]?.card;
-    if (sourceCard === null || sourceCard === undefined || destinationCard === null || destinationCard === undefined) {
+    if (
+      sourceCard === null ||
+      sourceCard === undefined ||
+      destinationCard === null ||
+      destinationCard === undefined
+    ) {
       throw new Error("fixture requires occupied player ranks");
     }
     const interactions: MobileBattleInteractions = {
@@ -3836,7 +3852,12 @@ describe("MobileBattleScreen", () => {
     const view = makeView();
     const sourceCard = view.player.frontRank[0]?.card;
     const destinationCard = view.player.backRank[1]?.card;
-    if (sourceCard === null || sourceCard === undefined || destinationCard === null || destinationCard === undefined) {
+    if (
+      sourceCard === null ||
+      sourceCard === undefined ||
+      destinationCard === null ||
+      destinationCard === undefined
+    ) {
       throw new Error("fixture requires occupied player ranks");
     }
     const onFigmentMerge = vi.fn();
@@ -5225,13 +5246,16 @@ describe("MobileBattleScreen", () => {
     expect(face?.dataset.gameCardPresentation).toBe("full");
 
     act(() => {
-      reveal?.querySelector<HTMLElement>('[data-battle-card-zone="shared-reveal"]')
-        ?.dispatchEvent(new MouseEvent("contextmenu", {
-          bubbles: true,
-          cancelable: true,
-          clientX: 1020,
-          clientY: 440,
-        }));
+      reveal
+        ?.querySelector<HTMLElement>('[data-battle-card-zone="shared-reveal"]')
+        ?.dispatchEvent(
+          new MouseEvent("contextmenu", {
+            bubbles: true,
+            cancelable: true,
+            clientX: 1020,
+            clientY: 440,
+          }),
+        );
     });
     expect(interactions.onRevealedHandCardDebugActivate).toHaveBeenCalledWith(
       "shared-hand-card",
