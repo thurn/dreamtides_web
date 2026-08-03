@@ -2,6 +2,7 @@ import { EditorApiRequestError } from "./editor-api";
 import type {
   EncounterEditorClient,
   EncounterEditorGroup,
+  EncounterTemplateHealth,
   EncounterSelectionSaveRequest,
   EncounterTextSaveRequest,
 } from "./encounter-editor-types";
@@ -39,6 +40,15 @@ export const encounterEditorClient: EncounterEditorClient = {
     });
     const body = await readResponse<{ groups: EncounterEditorGroup[] }>(response);
     return body.groups;
+  },
+
+  async loadTemplateHealth(signal) {
+    const response = await fetch("/api/editor/encounters/template-health", {
+      headers: { Accept: "application/json" },
+      signal,
+    });
+    const body = await readResponse<{ templateHealth: EncounterTemplateHealth }>(response);
+    return body.templateHealth;
   },
 
   saveSelection(request: EncounterSelectionSaveRequest) {

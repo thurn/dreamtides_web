@@ -105,7 +105,7 @@ for (const name of [
   "EditableCard", "EditableDreamAvatar", "EditableDreamscape", "EditableDreamsign",
   "EditableDreamwell", "EditableField", "EditableFigment", "FigmentEditorApp",
   "FocusedCardEditor", "ManageTagsModal", "TagChip", "TagFilterControl",
-  "EncounterEditorApp", "GlossaryEditorApp",
+  "EncounterEditorApp", "EncounterTemplateHealthRail", "GlossaryEditorApp",
   "TidePoolModal", "TideSourcePreview", "TidesDetailView", "TidesEditorApp",
   "TidesListView",
 ]) {

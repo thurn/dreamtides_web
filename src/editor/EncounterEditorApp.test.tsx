@@ -9,6 +9,7 @@ import type {
   EncounterEditorCandidate,
   EncounterEditorClient,
   EncounterEditorGroup,
+  EncounterTemplateHealth,
   EncounterTextSaveRequest,
 } from "./encounter-editor-types";
 
@@ -36,6 +37,26 @@ const GROUPS: EncounterEditorGroup[] = [{
   encounters: [candidate(1, true), candidate(2), candidate(3)],
 }];
 
+const TEMPLATE_HEALTH: EncounterTemplateHealth = {
+  completedCards: 9,
+  recordedTemplateUses: 90,
+  catalogTemplateCount: 70,
+  meanUsesPerTemplate: 1.286,
+  softWarningThreshold: 2,
+  omissionThreshold: 3,
+  recordedRankOneTemplateUses: 18,
+  meanRankOneUsesPerTemplate: 0.257,
+  rankOneSoftWarningThreshold: 1,
+  rankOneOmissionThreshold: 2,
+  guidance: "Prefer fewer prior rank-1 uses first.",
+  templates: [
+    { templateId: 14, template: "Draw a card", usageCount: 9, rankOneUsageCount: 6, status: "hidden", reasons: ["rank_1", "overall"] },
+    { templateId: 37, template: "Gain a dreamsign", usageCount: 2, rankOneUsageCount: 1, status: "warning", reasons: ["rank_1", "overall"] },
+    { templateId: 1, template: "Gain essence", usageCount: 0, rankOneUsageCount: 0, status: "unused", reasons: [] },
+    { templateId: 2, template: "Purge a card", usageCount: 1, rankOneUsageCount: 0, status: "available", reasons: [] },
+  ],
+};
+
 function deferred<T>() {
   let resolve!: (value: T) => void;
   let reject!: (reason: unknown) => void;
@@ -49,6 +70,7 @@ function deferred<T>() {
 function client(overrides: Partial<EncounterEditorClient> = {}): EncounterEditorClient {
   return {
     load: vi.fn().mockResolvedValue(structuredClone(GROUPS)),
+    loadTemplateHealth: vi.fn().mockResolvedValue(structuredClone(TEMPLATE_HEALTH)),
     saveSelection: vi.fn(),
     saveText: vi.fn(),
     ...overrides,
@@ -100,6 +122,42 @@ describe("EncounterEditorApp", () => {
     expect(container.textContent).toContain("Rank 1 resolution 1");
     expect(container.textContent).not.toContain("Prose for rank 2");
     expect(container.querySelector("img")?.getAttribute("src")).toContain("/exploration/42.jpg");
+    act(() => root.unmount());
+  });
+
+  it("loads template health lazily and filters outliers, unused templates, and candidates", async () => {
+    const loadTemplateHealth = vi.fn().mockResolvedValue(structuredClone(TEMPLATE_HEALTH));
+    const { container, root } = await renderLoaded(client({ loadTemplateHealth }));
+    expect(loadTemplateHealth).not.toHaveBeenCalled();
+
+    await act(async () => {
+      container.querySelector<HTMLButtonElement>("[data-testid='template-health-trigger']")!.click();
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(loadTemplateHealth).toHaveBeenCalledOnce();
+    expect(container.textContent).toContain("Rank-1 diversity");
+    expect(container.textContent).toContain("Draw a card");
+    expect(container.textContent).toContain("Gain a dreamsign");
+    expect(container.textContent).not.toContain("Gain essence");
+
+    const unused = [...container.querySelectorAll<HTMLButtonElement>("[role='tab']")]
+      .find((button) => button.textContent === "Unused")!;
+    act(() => unused.click());
+    expect(container.textContent).toContain("Gain essence");
+    expect(container.textContent).toContain("Never used");
+    expect(container.textContent).not.toContain("Balanced usage");
+    expect(container.textContent).not.toContain("Draw a card");
+
+    const candidates = [...container.querySelectorAll<HTMLButtonElement>("[role='tab']")]
+      .find((button) => button.textContent === "Candidates")!;
+    act(() => candidates.click());
+    expect(container.textContent).toContain("Gain essence");
+    expect(container.textContent).toContain("Purge a card");
+    expect(container.textContent).not.toContain("Draw a card");
+
+    act(() => container.querySelector<HTMLButtonElement>("[aria-label='Close template health']")!.click());
+    expect(container.querySelector("[data-testid='encounter-template-health-rail']")).toBeNull();
     act(() => root.unmount());
   });
 

@@ -24,6 +24,39 @@ export interface EncounterEditorGroup {
   encounters: EncounterEditorCandidate[];
 }
 
+export type EncounterTemplateHealthStatus =
+  | "hidden"
+  | "warning"
+  | "reintroduced"
+  | "unused"
+  | "available";
+
+export type EncounterTemplateHealthReason = "rank_1" | "overall";
+
+export interface EncounterTemplateHealthEntry {
+  templateId: number;
+  template: string;
+  usageCount: number;
+  rankOneUsageCount: number;
+  status: EncounterTemplateHealthStatus;
+  reasons: EncounterTemplateHealthReason[];
+}
+
+export interface EncounterTemplateHealth {
+  completedCards: number;
+  recordedTemplateUses: number;
+  catalogTemplateCount: number;
+  meanUsesPerTemplate: number;
+  softWarningThreshold: number;
+  omissionThreshold: number;
+  recordedRankOneTemplateUses: number;
+  meanRankOneUsesPerTemplate: number;
+  rankOneSoftWarningThreshold: number;
+  rankOneOmissionThreshold: number;
+  guidance: string;
+  templates: EncounterTemplateHealthEntry[];
+}
+
 export interface EncounterTextSaveRequest {
   cardId: string;
   templatePairId: string;
@@ -41,6 +74,7 @@ export interface EncounterSelectionSaveRequest {
 
 export interface EncounterEditorClient {
   load(signal?: AbortSignal): Promise<EncounterEditorGroup[]>;
+  loadTemplateHealth(signal?: AbortSignal): Promise<EncounterTemplateHealth>;
   saveSelection(request: EncounterSelectionSaveRequest): Promise<{
     clientRevision: number;
     confirmation: {

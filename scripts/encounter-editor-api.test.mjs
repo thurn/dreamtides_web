@@ -80,6 +80,30 @@ describe("encounter editor API", () => {
     });
   });
 
+  it("loads template health from its dedicated read-only endpoint", async () => {
+    const templateHealthReader = vi.fn().mockReturnValue({
+      completedCards: 1,
+      templates: [{ templateId: 14, status: "hidden" }],
+    });
+    middleware = createEncounterEditorApiMiddleware({ rootDir, templateHealthReader });
+    const result = await call("GET", "/api/editor/encounters/template-health");
+    expect(result).toMatchObject({
+      status: 200,
+      body: {
+        templateHealth: {
+          completedCards: 1,
+          templates: [{ templateId: 14, status: "hidden" }],
+        },
+      },
+    });
+    expect(templateHealthReader).toHaveBeenCalledWith({ rootDir });
+  });
+
+  it("rejects writes to the template-health endpoint", async () => {
+    const result = await call("PATCH", "/api/editor/encounters/template-health", {});
+    expect(result).toMatchObject({ status: 405, body: { error: { code: "METHOD_NOT_ALLOWED" } } });
+  });
+
   it("persists selection by stable identities and echoes the revision", async () => {
     const result = await call("PATCH", `/api/editor/encounters/${CARD_ID}/selection`, {
       templatePairId: "pair-2",

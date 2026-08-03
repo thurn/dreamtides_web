@@ -6,6 +6,7 @@ import {
   selectEncounterCandidate,
   updateEncounterCandidates,
 } from "./encounter-editor-data.mjs";
+import { readEncounterTemplateHealth } from "./encounter-template-health.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/encounters";
@@ -52,6 +53,7 @@ function decodeSegment(segment) {
 function routeFor(url) {
   const path = (url ?? "/").split("?", 1)[0];
   if (path === BASE_PATH) return { kind: "collection" };
+  if (path === `${BASE_PATH}/template-health`) return { kind: "templateHealth" };
   if (!path.startsWith(`${BASE_PATH}/`)) return null;
   const parts = path.slice(BASE_PATH.length + 1).split("/");
   const decoded = parts.map(decodeSegment);
@@ -75,6 +77,7 @@ function statusFor(error) {
 export function createEncounterEditorApiMiddleware(options = {}) {
   const rootDir = options.rootDir ?? ROOT;
   const fileSystem = options.fileSystem;
+  const templateHealthReader = options.templateHealthReader ?? readEncounterTemplateHealth;
   const dataOptions = { rootDir, ...(fileSystem === undefined ? {} : { fileSystem }) };
   return async function encounterEditorApi(req, res, next) {
     const route = routeFor(req.url);
@@ -93,6 +96,14 @@ export function createEncounterEditorApiMiddleware(options = {}) {
           return;
         }
         respond(res, 200, { groups: readEncounterEditorGroups(dataOptions) });
+        return;
+      }
+      if (route.kind === "templateHealth") {
+        if (req.method !== "GET") {
+          fail(res, 405, "METHOD_NOT_ALLOWED", "This endpoint only supports GET.");
+          return;
+        }
+        respond(res, 200, { templateHealth: templateHealthReader({ rootDir }) });
         return;
       }
       if (req.method !== "PATCH") {

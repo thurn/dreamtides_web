@@ -165,6 +165,20 @@ class ListTemplateCandidatesTests(unittest.TestCase):
         )
         self.assertEqual(output["balance"]["soft_warnings"], [])
         self.assertEqual(output["balance"]["omitted_templates"], [])
+        self.assertEqual(
+            output["template_diagnostics"],
+            [
+                {
+                    "template_id": template_id,
+                    "template": f"Synthetic template {template_id}",
+                    "usage_count": 0,
+                    "rank_1_usage_count": 0,
+                    "status": "unused",
+                    "reasons": [],
+                }
+                for template_id in range(1, 5)
+            ],
+        )
 
     def test_warns_then_omits_above_the_least_used_template(self) -> None:
         templates = self.synthetic_templates(6)
@@ -210,6 +224,13 @@ class ListTemplateCandidatesTests(unittest.TestCase):
             [entry["template_id"] for entry in output["templates"]],
             [4, 5, 6, 3],
         )
+        self.assertEqual(
+            {
+                entry["template_id"]: entry["status"]
+                for entry in output["template_diagnostics"]
+            },
+            {1: "hidden", 2: "hidden", 3: "warning", 4: "unused", 5: "unused", 6: "unused"},
+        )
         self.assertEqual(output["special_variables"], ["$SYNTHETIC_CARD"])
 
     def test_retains_minimum_candidate_pool_under_extreme_skew(self) -> None:
@@ -247,6 +268,24 @@ class ListTemplateCandidatesTests(unittest.TestCase):
                     "reasons": ["overall"],
                 },
             ],
+        )
+        self.assertEqual(
+            {
+                entry["template_id"]: entry["status"]
+                for entry in output["template_diagnostics"]
+                if entry["template_id"] <= 9
+            },
+            {
+                1: "reintroduced",
+                2: "reintroduced",
+                3: "reintroduced",
+                4: "reintroduced",
+                5: "reintroduced",
+                6: "reintroduced",
+                7: "reintroduced",
+                8: "hidden",
+                9: "hidden",
+            },
         )
 
     def test_rank_one_usage_is_an_independent_primary_guard(self) -> None:

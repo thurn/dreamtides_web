@@ -8,11 +8,15 @@ import { logEvent } from "../logging";
 import EditableField from "./EditableField";
 import { EditorApiRequestError } from "./editor-api";
 import { encounterEditorClient } from "./encounter-editor-api";
+import {
+  EncounterTemplateHealthRail,
+} from "./EncounterTemplateHealthRail";
 import type {
   EncounterEditorAction,
   EncounterEditorCandidate,
   EncounterEditorClient,
   EncounterEditorGroup,
+  EncounterTemplateHealth,
   EncounterTextField,
 } from "./encounter-editor-types";
 import {
@@ -347,6 +351,12 @@ export default function EncounterEditorApp({
   const [saveState, setSaveStateValue] = useState<EditableSaveState>(EMPTY_EDITOR_SAVE_STATE);
   const saveStateRef = useRef(saveState);
   const [selectionStates, setSelectionStates] = useState<Record<string, SelectionState>>({});
+  const [templateHealthOpen, setTemplateHealthOpen] = useState(false);
+  const [templateHealth, setTemplateHealth] = useState<EncounterTemplateHealth | null>(null);
+  const [templateHealthLoadState, setTemplateHealthLoadState] = useState<LoadState>("loading");
+  const [templateHealthLoadMessage, setTemplateHealthLoadMessage] = useState("");
+  const templateHealthRequestRef = useRef(0);
+  const templateHealthControllerRef = useRef<AbortController | null>(null);
 
   const setSaveState = useCallback((update: (state: EditableSaveState) => EditableSaveState) => {
     const next = update(saveStateRef.current);
@@ -375,47 +385,134 @@ export default function EncounterEditorApp({
     return () => controller.abort();
   }, [client, loadRevision]);
 
+  const loadTemplateHealth = useCallback(async (reason: "open" | "refresh") => {
+    const revision = templateHealthRequestRef.current + 1;
+    templateHealthRequestRef.current = revision;
+    templateHealthControllerRef.current?.abort();
+    const controller = new AbortController();
+    templateHealthControllerRef.current = controller;
+    setTemplateHealthLoadState("loading");
+    setTemplateHealthLoadMessage("");
+    try {
+      const loaded = await client.loadTemplateHealth(controller.signal);
+      if (controller.signal.aborted || templateHealthRequestRef.current !== revision) return;
+      setTemplateHealth(loaded);
+      setTemplateHealthLoadState("ready");
+      logEvent("encounter_editor_template_health_loaded", {
+        reason,
+        completedCards: loaded.completedCards,
+        catalogTemplateCount: loaded.catalogTemplateCount,
+        hiddenTemplateCount: loaded.templates.filter((entry) => entry.status === "hidden").length,
+        warningTemplateCount: loaded.templates.filter((entry) => entry.status === "warning").length,
+        unusedTemplateCount: loaded.templates.filter((entry) => entry.status === "unused").length,
+      });
+    } catch (error) {
+      if (controller.signal.aborted || templateHealthRequestRef.current !== revision) return;
+      setTemplateHealthLoadMessage(messageFor(error));
+      setTemplateHealthLoadState("error");
+      logEvent("encounter_editor_template_health_load_failed", {
+        reason,
+        message: messageFor(error),
+      });
+    }
+  }, [client]);
+
+  useEffect(() => {
+    if (templateHealthOpen && templateHealth === null && templateHealthLoadState === "loading") {
+      void loadTemplateHealth("open");
+    }
+  }, [loadTemplateHealth, templateHealth, templateHealthLoadState, templateHealthOpen]);
+
+  useEffect(() => {
+    if (!templateHealthOpen) return undefined;
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setTemplateHealthOpen(false);
+    }
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [templateHealthOpen]);
+
+  useEffect(() => () => templateHealthControllerRef.current?.abort(), []);
+
+  function toggleTemplateHealth() {
+    setTemplateHealthOpen((open) => {
+      const next = !open;
+      logEvent(next
+        ? "encounter_editor_template_health_opened"
+        : "encounter_editor_template_health_closed", {});
+      return next;
+    });
+  }
+
   return (
-    <main className="cumulus encounter-editor-shell">
-      <header className="encounter-editor-page-header">
-        <div>
-          <p>Exploration workshop</p>
-          <h1>Encounter designs</h1>
-        </div>
-        {loadState === "ready" && <span>{groups.length} encounters · click any text to edit</span>}
-      </header>
-      {loadState === "loading" && <div className="encounter-editor-notice">Loading encounter designs…</div>}
-      {loadState === "error" && (
-        <div className="encounter-editor-error">
-          <GlassPanel title="Encounter designs could not be loaded" subtitle={loadMessage}>
-            <div className="encounter-editor-error-action">
+    <div
+      className="cumulus encounter-editor-layout"
+      data-template-health-open={templateHealthOpen ? "true" : "false"}
+    >
+      <main className="encounter-editor-shell">
+        <header className="encounter-editor-page-header">
+          <div>
+            <p>Exploration workshop</p>
+            <h1>Encounter designs</h1>
+          </div>
+          {loadState === "ready" && (
+            <div className="encounter-editor-page-actions">
+              <span>{groups.length} encounters · click any text to edit</span>
               <GlassButton
-                label="Retry"
-                placement="onGlass"
-                variant="accent"
-                onPress={() => setLoadRevision((revision) => revision + 1)}
+                label="Template health"
+                glyph={GLYPHS.sidebarRight}
+                pressed={templateHealthOpen}
+                testId="template-health-trigger"
+                onPress={toggleTemplateHealth}
               />
             </div>
-          </GlassPanel>
+          )}
+        </header>
+        {loadState === "loading" && <div className="encounter-editor-notice">Loading encounter designs…</div>}
+        {loadState === "error" && (
+          <div className="encounter-editor-error">
+            <GlassPanel title="Encounter designs could not be loaded" subtitle={loadMessage}>
+              <div className="encounter-editor-error-action">
+                <GlassButton
+                  label="Retry"
+                  placement="onGlass"
+                  variant="accent"
+                  onPress={() => setLoadRevision((revision) => revision + 1)}
+                />
+              </div>
+            </GlassPanel>
+          </div>
+        )}
+        {loadState === "ready" && (
+          <div className="encounter-editor-list">
+            {groups.map((group, index) => (
+              <EncounterEditorRow
+                client={client}
+                group={group}
+                index={index}
+                key={group.cardId}
+                saveState={saveState}
+                selectionState={selectionStates[group.cardId] ?? { status: "idle", revision: 0, message: null }}
+                setGroups={setGroups}
+                setSaveState={setSaveState}
+                setSelectionStates={setSelectionStates}
+              />
+            ))}
+          </div>
+        )}
+      </main>
+      {templateHealthOpen && (
+        <div className="encounter-template-health-track">
+          <EncounterTemplateHealthRail
+            health={templateHealth}
+            loadState={templateHealthLoadState}
+            loadMessage={templateHealthLoadMessage}
+            onClose={() => setTemplateHealthOpen(false)}
+            onRefresh={() => void loadTemplateHealth("refresh")}
+            onFilterChange={(filter) => logEvent("encounter_editor_template_health_filter_changed", { filter })}
+          />
         </div>
       )}
-      {loadState === "ready" && (
-        <div className="encounter-editor-list">
-          {groups.map((group, index) => (
-            <EncounterEditorRow
-              client={client}
-              group={group}
-              index={index}
-              key={group.cardId}
-              saveState={saveState}
-              selectionState={selectionStates[group.cardId] ?? { status: "idle", revision: 0, message: null }}
-              setGroups={setGroups}
-              setSaveState={setSaveState}
-              setSelectionStates={setSelectionStates}
-            />
-          ))}
-        </div>
-      )}
-    </main>
+    </div>
   );
 }

@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/segmented-control`
 
-Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **7** (imports outside `src/cumulus/docs/` and tests).
 
 The compact tab and filter switch used for type filters, sort direction, and small mode toggles. Its surface is the shared glass control material — the same one Select renders from — so a filter and a sort dropdown side by side read as one cluster.
 

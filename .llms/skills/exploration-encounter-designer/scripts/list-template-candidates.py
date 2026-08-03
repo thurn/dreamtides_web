@@ -229,6 +229,55 @@ def build_output(
         or rank_one_counts[entry["template_id"]]
         >= rank_one_soft_warning_threshold
     ]
+    warning_id_set = set(warning_ids)
+    reintroduced_id_set = set(reintroduced_ids)
+
+    def reasons_for(template_id: int, *, omitted: bool) -> list[str]:
+        overall_threshold = (
+            omission_threshold if omitted else soft_warning_threshold
+        )
+        rank_one_threshold = (
+            rank_one_omission_threshold
+            if omitted
+            else rank_one_soft_warning_threshold
+        )
+        return [
+            reason
+            for reason, applies in (
+                ("rank_1", rank_one_counts[template_id] >= rank_one_threshold),
+                ("overall", counts[template_id] >= overall_threshold),
+            )
+            if applies
+        ]
+
+    template_diagnostics = []
+    for entry in catalog:
+        template_id = entry["template_id"]
+        if template_id in omitted_ids:
+            status = "hidden"
+            reasons = reasons_for(template_id, omitted=True)
+        elif template_id in reintroduced_id_set:
+            status = "reintroduced"
+            reasons = reasons_for(template_id, omitted=True)
+        elif template_id in warning_id_set:
+            status = "warning"
+            reasons = reasons_for(template_id, omitted=False)
+        elif counts[template_id] == 0:
+            status = "unused"
+            reasons = []
+        else:
+            status = "available"
+            reasons = []
+        template_diagnostics.append(
+            {
+                "template_id": template_id,
+                "template": entry["template"],
+                "usage_count": counts[template_id],
+                "rank_1_usage_count": rank_one_counts[template_id],
+                "status": status,
+                "reasons": reasons,
+            }
+        )
     special_variables = sorted(
         {
             token
@@ -262,21 +311,7 @@ def build_output(
                     "template_id": template_id,
                     "usage_count": counts[template_id],
                     "rank_1_usage_count": rank_one_counts[template_id],
-                    "reasons": [
-                        reason
-                        for reason, applies in (
-                            (
-                                "rank_1",
-                                rank_one_counts[template_id]
-                                >= rank_one_soft_warning_threshold,
-                            ),
-                            (
-                                "overall",
-                                counts[template_id] >= soft_warning_threshold,
-                            ),
-                        )
-                        if applies
-                    ],
+                    "reasons": reasons_for(template_id, omitted=False),
                 }
                 for template_id in warning_ids
             ],
@@ -285,21 +320,7 @@ def build_output(
                     "template_id": template_id,
                     "usage_count": counts[template_id],
                     "rank_1_usage_count": rank_one_counts[template_id],
-                    "reasons": [
-                        reason
-                        for reason, applies in (
-                            (
-                                "rank_1",
-                                rank_one_counts[template_id]
-                                >= rank_one_omission_threshold,
-                            ),
-                            (
-                                "overall",
-                                counts[template_id] >= omission_threshold,
-                            ),
-                        )
-                        if applies
-                    ],
+                    "reasons": reasons_for(template_id, omitted=True),
                 }
                 for template_id in sorted(
                     omitted_ids,
@@ -315,6 +336,7 @@ def build_output(
                 for template_id in reintroduced_ids
             ],
         },
+        "template_diagnostics": template_diagnostics,
         "special_variables": special_variables,
         "templates": allowed_entries,
     }
