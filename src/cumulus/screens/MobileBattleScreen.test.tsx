@@ -269,9 +269,17 @@ describe("MobileBattleScreen", () => {
       const { container, root } = mount(makeView(), undefined, {
         battlefieldDividerVariation: variation,
       });
-      expect(
-        container.querySelector(`[data-battlefield-divider="${variation}"]`),
-      ).not.toBeNull();
+      const divider = container.querySelector(
+        `[data-battlefield-divider="${variation}"]`,
+      );
+      const contrastBed = divider?.firstElementChild as HTMLElement | null;
+      expect(divider).not.toBeNull();
+      expect(contrastBed?.style.background).toContain(
+        "var(--surface-chrome-strong)",
+      );
+      if (variation !== "space") {
+        expect(contrastBed?.querySelector("span")).not.toBeNull();
+      }
       expect(
         container.querySelector<HTMLElement>('[data-battle-rank="enemy-front"]')
           ?.style.bottom,
