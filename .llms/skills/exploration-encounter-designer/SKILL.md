@@ -67,6 +67,69 @@ sub-bullet, then put its `resolution` in a nested response bullet. Use
 `effect_text`, not the unresolved `template`, so every placeholder and special
 token is populated for display.
 
+## Special template variables
+
+An uppercase `$SPECIAL_VARIABLE` in a template is resolved after the designer
+chooses the template. It is different from a braced `{placeholder}`: ordinary
+placeholders always receive literal values in `variables`, while a special
+variable either selects content when the event is created or refers to new
+content defined by the designer.
+
+The canonical catalog currently contains these special variables:
+
+- `$OFFERED_CARD` resolves to one random eligible card offered from the event's
+  card pool when the event is created. It does not refer to a card already in
+  the player's deck. In `Gain {count} copies of $OFFERED_CARD`, all copies are
+  of that same resolved card.
+- `$DECK_CARD` resolves to one random eligible card from the player's current
+  deck. Templates that copy, modify, or transfigure it all act on the card
+  selected from that deck.
+- `$STARTER_CARD` resolves to one random eligible starter card that is currently
+  in the player's deck. It is narrower than `$DECK_CARD`: a card must satisfy
+  both the starter requirement and any explicit selection predicate.
+- `$CUSTOM_CARD` refers to a new card authored specifically for this encounter;
+  it is not selected from a runtime pool. Define it in
+  `variables.custom_card` with a new UUID, name, energy cost, card type,
+  subtype, complete rendered rules text, and spark. For an Event, use empty
+  strings for subtype and spark; for a Character, use a non-empty subtype and
+  an integer spark.
+- `$CUSTOM_DREAMSIGN` refers to a new dreamsign authored specifically for this
+  encounter; it is not selected from a runtime pool. Define it in
+  `variables.custom_dreamsign` with a new UUID, name, and complete rendered
+  rules text.
+
+For `$OFFERED_CARD`, `$DECK_CARD`, and `$STARTER_CARD`, put an eligibility rule
+under the token's exact name in `selection` only when a restriction materially
+improves the design:
+
+```json
+{
+  "selection": {
+    "$OFFERED_CARD": {
+      "predicate": "Spirit Animal"
+    }
+  }
+}
+```
+
+Omitting that token from `selection` means unrestricted. Do not put the custom
+variables in `selection`; their authored definitions belong in `variables`.
+Use the standard predicate vocabulary and exception rules in **Mechanical
+standards** for every selection predicate.
+
+Because runtime-selected card identity is unknown while authoring, its
+`effect_text` uses a readable generic description that includes any restriction,
+such as `Gain an offered Spirit Animal card` or `Apply Kindled to a random
+Survivor card from your deck`. Custom content is already known, so its
+`effect_text` names the custom card or dreamsign and gives enough of its rules
+text to make the reward clear. No completed `effect_text` may contain a literal
+`$SPECIAL_VARIABLE` token.
+
+After opening the canonical catalog in workflow step 9, enumerate every
+`$SPECIAL_VARIABLE` it contains. If the catalog contains a token not defined in
+this section, stop and report the documentation gap instead of inferring its
+meaning.
+
 ## Test mode
 
 Use **test mode** when the user explicitly requests it. Test mode obtains a
@@ -483,12 +546,10 @@ commentary.
   narratively unrelated. In particular, select a thematically resonant
   dreamsign rather than forcing an arbitrary dreamsign into the narrative.
 - Invent content only for explicit `$CUSTOM_CARD` or `$CUSTOM_DREAMSIGN`
-  templates. Give custom content a new UUID and the complete structured record
-  required by the contract. Custom card names describe archetypes rather than
-  proper-named individuals.
-- Record restrictions for `$DECK_CARD`, `$OFFERED_CARD`, `$STARTER_CARD`, or
-  other special variables in `selection`. Omission means unrestricted and is
-  the standard `none` choice.
+  templates. Follow **Special template variables** for their structured records.
+  Custom card names describe archetypes rather than proper-named individuals.
+- Follow **Special template variables** for the source, timing, restrictions,
+  and display treatment of every special variable.
 - Write `effect_text` as readable display copy with all placeholders and special
   tokens resolved. Keep the exact template and structured values authoritative.
 - Choose conservative values when balance evidence is incomplete, but keep
