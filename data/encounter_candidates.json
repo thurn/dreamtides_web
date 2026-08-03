@@ -1,0 +1,1684 @@
+[
+  {
+    "card_id": "161482b6-af07-4d9e-822d-8c738672beb9",
+    "encounters": [
+      {
+        "template_pair_id": "pair-1",
+        "prose": "Before a star-filled opening, a child extends a glowing round lantern.",
+        "actions": [
+          {
+            "label": "Study the opening",
+            "resolution": "A distant figure sharpens within its depths.",
+            "template_id": 14,
+            "template": "Draft a {predicate} card from 4 random choices",
+            "variables": {
+              "predicate": "≤2● cost Character"
+            },
+            "effect_text": "Draft a ≤2● cost Character card from 4 random choices"
+          },
+          {
+            "label": "Share the lantern's glow",
+            "resolution": "Its radiance settles across your chosen companions.",
+            "template_id": 20,
+            "template": "Apply a transfiguration to {count} chosen {predicate} cards",
+            "variables": {
+              "count": 2,
+              "predicate": "≤2● cost Character"
+            },
+            "effect_text": "Apply a transfiguration to 2 chosen ≤2● cost Character cards"
+          }
+        ],
+        "scores": {
+          "scene_quality": 10,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 10,
+          "overall": 10
+        },
+        "rank": 1,
+        "ranking_rationale": "The clearest image supports two equally natural, highly useful ways to improve a materialization-focused character suite."
+      },
+      {
+        "template_pair_id": "pair-5",
+        "prose": "Drifting light surrounds a child reaching toward the narrow starry opening.",
+        "actions": [
+          {
+            "label": "Welcome the lantern bearer",
+            "resolution": "The child lowers the light and joins you.",
+            "template_id": 10,
+            "template": "Gain {card_id}",
+            "variables": {
+              "card_id": {
+                "id": "33cf7dca-d8d2-42b7-854a-b3f503b03488",
+                "display_name": "Lumin-Gate Seer"
+              }
+            },
+            "effect_text": "Gain Lumin-Gate Seer"
+          },
+          {
+            "label": "Ask about the stars",
+            "resolution": "The raised lantern reveals unfamiliar constellations.",
+            "template_id": 29,
+            "template": "Gain one of 3 offered dreamsigns",
+            "variables": {},
+            "effect_text": "Gain one of 3 offered dreamsigns"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 10,
+          "overall": 9
+        },
+        "rank": 2,
+        "ranking_rationale": "The inviting figure and celestial opening support a strong engine ally or a flexible strategic omen with equal clarity."
+      },
+      {
+        "template_pair_id": "pair-2",
+        "prose": "A child holds a bright lantern toward a towering field of stars.",
+        "actions": [
+          {
+            "label": "Lead a companion forward",
+            "resolution": "The opening's light gathers around their outline.",
+            "template_id": 18,
+            "template": "Apply {transfiguration} to a chosen card",
+            "variables": {
+              "transfiguration": "Resonant"
+            },
+            "effect_text": "Apply Resonant to a chosen card"
+          },
+          {
+            "label": "Guide the light homeward",
+            "resolution": "Its glow reaches your oldest companions.",
+            "template_id": 24,
+            "template": "Transfigure {count} random starter cards",
+            "variables": {
+              "count": 2
+            },
+            "effect_text": "Transfigure 2 random starter cards"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 8,
+          "archetype_fit": 10,
+          "overall": 9
+        },
+        "rank": 3,
+        "ranking_rationale": "Directed lanternlight makes both transformations convincing, with Resonant offering exceptional trigger synergy and starter changes adding breadth."
+      },
+      {
+        "template_pair_id": "pair-3",
+        "prose": "The young figure faces a tall starry opening, lantern held outward.",
+        "actions": [
+          {
+            "label": "Call into the stars",
+            "resolution": "A wild creature crosses the narrow opening.",
+            "template_id": 9,
+            "template": "Gain a random {predicate} card",
+            "variables": {
+              "predicate": "Spirit Animal"
+            },
+            "effect_text": "Gain a random Spirit Animal card"
+          },
+          {
+            "label": "Signal distant guardians",
+            "resolution": "Armored travelers gather beyond the radiant opening.",
+            "template_id": 36,
+            "template": "Choose one of 2 packs of {predicate} cards to add to your deck",
+            "variables": {
+              "predicate": "Warrior"
+            },
+            "effect_text": "Choose one of 2 packs of Warrior cards to add to your deck"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 8,
+          "mechanical_connection": 8,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 4,
+        "ranking_rationale": "The opening credibly answers either call, and the two rewards serve the source card's distinct tribal homes."
+      },
+      {
+        "template_pair_id": "pair-4",
+        "prose": "A round lantern glows in the child's hand beside a star-filled opening.",
+        "actions": [
+          {
+            "label": "Study the distant stars",
+            "resolution": "Distant constellations sharpen within the lanternlight.",
+            "template_id": 38,
+            "template": "Draw {count} additional cards at the start of your next battle",
+            "variables": {
+              "count": 2
+            },
+            "effect_text": "Draw 2 additional cards at the start of your next battle"
+          },
+          {
+            "label": "Carry the lanternlight onward",
+            "resolution": "The lantern's radiance remains bright beyond the opening.",
+            "template_id": 39,
+            "template": "Gain {count} additional energy at the start of your next battle",
+            "variables": {
+              "count": 2
+            },
+            "effect_text": "Gain 2 additional energy at the start of your next battle"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 8,
+          "mechanical_connection": 7,
+          "archetype_fit": 7,
+          "overall": 8
+        },
+        "rank": 5,
+        "ranking_rationale": "The visual chains are clean and balanced, though temporary battle preparation supports the deck less specifically than permanent character growth."
+      }
+    ]
+  },
+  {
+    "card_id": "738a5af0-f848-4d48-bceb-9a43c9b11066",
+    "encounters": [
+      {
+        "template_pair_id": "pair-1",
+        "prose": "A bowed figure keeps watch beside a gateway filled with fractured light.",
+        "actions": [
+          {
+            "label": "Welcome the traveler",
+            "resolution": "A new silhouette steps through the radiance.",
+            "template_id": 11,
+            "template": "Gain $OFFERED_CARD",
+            "variables": {},
+            "selection": {
+              "$OFFERED_CARD": {
+                "predicate": "≤2● cost Character"
+              }
+            },
+            "effect_text": "Gain one random offered ≤2● cost Character."
+          },
+          {
+            "label": "Call someone home",
+            "resolution": "A familiar outline forms beyond the threshold.",
+            "template_id": 49,
+            "template": "Gain {count} copies of $DECK_CARD",
+            "variables": {
+              "count": 1
+            },
+            "selection": {
+              "$DECK_CARD": {
+                "predicate": "≤2● cost Character"
+              }
+            },
+            "effect_text": "Gain 1 copy of a random ≤2● cost Character from your deck."
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 1,
+        "ranking_rationale": "The paired arrivals make the gateway image and low-cost character recursion reinforce each other with exceptional clarity."
+      },
+      {
+        "template_pair_id": "pair-2",
+        "prose": "Dust glitters around a seated figure silhouetted against the radiant gateway.",
+        "actions": [
+          {
+            "label": "Send someone ahead",
+            "resolution": "An armored figure returns from the light.",
+            "template_id": 47,
+            "template": "Choose a card to purge and replace it with {card_id}",
+            "variables": {
+              "card_id": {
+                "id": "fa7dadd8-c72f-42e7-b203-3d22aa36122f",
+                "display_name": "Reforged Construct"
+              }
+            },
+            "effect_text": "Choose a card to purge and replace it with Reforged Construct."
+          },
+          {
+            "label": "Walk beside another",
+            "resolution": "The crossing leaves their form cleanly altered.",
+            "template_id": 17,
+            "template": "Apply a transfiguration of your choice to a chosen card",
+            "variables": {},
+            "effect_text": "Apply a transfiguration of your choice to a chosen card."
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 2,
+        "ranking_rationale": "Both crossings transform a chosen companion, with the armored return providing especially concrete visual and strategic payoff."
+      },
+      {
+        "template_pair_id": "pair-3",
+        "prose": "Drifting motes surround a solitary figure resting beside the luminous gateway.",
+        "actions": [
+          {
+            "label": "Hold the pattern",
+            "resolution": "The glowing grid steadies one wavering form.",
+            "template_id": 19,
+            "template": "Apply {transfiguration} to $DECK_CARD",
+            "variables": {
+              "transfiguration": "Enduring"
+            },
+            "selection": {
+              "$DECK_CARD": {
+                "predicate": "≤2● cost Character"
+              }
+            },
+            "effect_text": "Apply Enduring to a random ≤2● cost Character from your deck."
+          },
+          {
+            "label": "Rebuild the silhouette",
+            "resolution": "Scattered pieces settle into a human shape.",
+            "template_id": 53,
+            "template": "Change $DECK_CARD to become a {card_type}",
+            "variables": {
+              "card_type": "Character"
+            },
+            "selection": {
+              "$DECK_CARD": {
+                "predicate": "Event"
+              }
+            },
+            "effect_text": "Change a random Event from your deck to become a Character."
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 8,
+          "mechanical_connection": 9,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 3,
+        "ranking_rationale": "The fractured grid supports two distinct forms of reconstruction that directly enable the card's reclaim plan."
+      },
+      {
+        "template_pair_id": "pair-4",
+        "prose": "A lone figure bends beside the gateway as bright fragments hover within.",
+        "actions": [
+          {
+            "label": "Study the arriving forms",
+            "resolution": "Several figures sharpen briefly within the glow.",
+            "template_id": 14,
+            "template": "Draft a {predicate} card from 4 random choices",
+            "variables": {
+              "predicate": "≤2● cost Character"
+            },
+            "effect_text": "Draft a ≤2● cost Character from 4 random choices."
+          },
+          {
+            "label": "Read the glowing pattern",
+            "resolution": "A clear omen emerges from the shifting grid.",
+            "template_id": 29,
+            "template": "Gain one of 3 offered dreamsigns",
+            "variables": {},
+            "effect_text": "Gain one of 3 offered dreamsigns."
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 8,
+          "mechanical_connection": 8,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 4,
+        "ranking_rationale": "The luminous display supports both character selection and omen reading, though the latter is less archetype-specific."
+      },
+      {
+        "template_pair_id": "pair-5",
+        "prose": "Beside the radiant gateway, a solitary figure bows beneath drifting motes.",
+        "actions": [
+          {
+            "label": "Sketch the gateway's frame",
+            "resolution": "A second doorway gleams among the ruins.",
+            "template_id": 41,
+            "template": "Add a duplication site to this dreamscape",
+            "variables": {},
+            "effect_text": "Add a duplication site to this dreamscape."
+          },
+          {
+            "label": "Repair the glowing grid",
+            "resolution": "Its fractured pattern locks firmly into alignment.",
+            "template_id": 44,
+            "template": "Add a transfiguration site to this dreamscape",
+            "variables": {},
+            "effect_text": "Add a transfiguration site to this dreamscape."
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 8,
+          "mechanical_connection": 8,
+          "archetype_fit": 7,
+          "overall": 8
+        },
+        "rank": 5,
+        "ranking_rationale": "The gateway naturally inspires new journey sites, while the duplication branch connects less directly to reclaim."
+      }
+    ]
+  },
+  {
+    "card_id": "401bb341-8385-41e9-8f6f-7b48e9ce174d",
+    "encounters": [
+      {
+        "template_pair_id": "pair-1",
+        "prose": "A giant wolf prowls through burning grass toward a crouched archer.",
+        "actions": [
+          {
+            "label": "Call the giant forward",
+            "resolution": "The wolf crosses the fire and joins you.",
+            "template_id": 10,
+            "template": "Gain {card_id}",
+            "variables": {
+              "card_id": {
+                "id": "401bb341-8385-41e9-8f6f-7b48e9ce174d",
+                "display_name": "Soulflame Predator"
+              }
+            },
+            "effect_text": "Gain Soulflame Predator"
+          },
+          {
+            "label": "Signal the waiting archer",
+            "resolution": "They score a wolf mark into scorched earth.",
+            "template_id": 27,
+            "template": "Gain {dreamsign_name}",
+            "variables": {
+              "dreamsign_name": {
+                "id": "1CCD8D69-E14C-4788-BE1D-CB6A1B703225",
+                "display_name": "Wolf Sigil"
+              }
+            },
+            "effect_text": "Gain Wolf Sigil"
+          }
+        ],
+        "scores": {
+          "scene_quality": 10,
+          "action_quality": 9,
+          "mechanical_connection": 10,
+          "archetype_fit": 10,
+          "overall": 10
+        },
+        "rank": 1,
+        "ranking_rationale": "The focused confrontation supports two exact, strongly thematic rewards that both reinforce the card's Spirit Animal strategy."
+      },
+      {
+        "template_pair_id": "pair-3",
+        "prose": "A crouched archer holds position as a giant wolf crosses the fire.",
+        "actions": [
+          {
+            "label": "Answer the wolf's challenge",
+            "resolution": "A kindred presence answers from beyond the flames.",
+            "template_id": 12,
+            "template": "Gain {count} copies of $OFFERED_CARD",
+            "variables": {
+              "count": 2
+            },
+            "selection": {
+              "$OFFERED_CARD": {
+                "predicate": "Spirit Animal"
+              }
+            },
+            "effect_text": "Gain 2 copies of one random eligible Spirit Animal offered from the event's card pool"
+          },
+          {
+            "label": "Call across the meadow",
+            "resolution": "Distant howls answer through the smoke and fire.",
+            "template_id": 13,
+            "template": "Gain {count} random {predicate} cards",
+            "variables": {
+              "count": 2,
+              "predicate": "Spirit Animal"
+            },
+            "effect_text": "Gain 2 random Spirit Animal cards"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 10,
+          "overall": 9
+        },
+        "rank": 2,
+        "ranking_rationale": "Both calls earn Spirit Animal reinforcements, with a meaningful choice between focused duplication and broader variety."
+      },
+      {
+        "template_pair_id": "pair-4",
+        "prose": "Fire sweeps the grass while a giant wolf closes on the archer.",
+        "actions": [
+          {
+            "label": "Send the archer back",
+            "resolution": "They retreat as another beast enters the firelight.",
+            "template_id": 34,
+            "template": "Purge a random starter card and gain a {predicate} card",
+            "variables": {
+              "predicate": "Spirit Animal"
+            },
+            "effect_text": "Purge a random starter card and gain a random Spirit Animal card"
+          },
+          {
+            "label": "Make room for the wolf",
+            "resolution": "The archer withdraws as the giant approaches.",
+            "template_id": 47,
+            "template": "Choose a card to purge and replace it with {card_id}",
+            "variables": {
+              "card_id": {
+                "id": "401bb341-8385-41e9-8f6f-7b48e9ce174d",
+                "display_name": "Soulflame Predator"
+              }
+            },
+            "effect_text": "Choose a card to purge and replace it with Soulflame Predator"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 8,
+          "archetype_fit": 10,
+          "overall": 9
+        },
+        "rank": 3,
+        "ranking_rationale": "The clean exchange imagery supports two useful refinement paths, though the random replacement chain is slightly less precise."
+      },
+      {
+        "template_pair_id": "pair-2",
+        "prose": "Through the burning meadow, a giant wolf advances on a waiting archer.",
+        "actions": [
+          {
+            "label": "Trail the advancing wolf",
+            "resolution": "Its tracks cross others beyond the burning meadow.",
+            "template_id": 14,
+            "template": "Draft a {predicate} card from 4 random choices",
+            "variables": {
+              "predicate": "Spirit Animal"
+            },
+            "effect_text": "Draft a Spirit Animal card from 4 random choices"
+          },
+          {
+            "label": "Study the archer's stance",
+            "resolution": "Their steady breathing fixes the lesson in memory.",
+            "template_id": 38,
+            "template": "Draw {count} additional cards at the start of your next battle",
+            "variables": {
+              "count": 2
+            },
+            "effect_text": "Draw 2 additional cards at the start of your next battle"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 8,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 4,
+        "ranking_rationale": "Tracking and observation create clear acts with useful growth or preparation, but the temporary reward is less archetype-specific."
+      },
+      {
+        "template_pair_id": "pair-5",
+        "prose": "A giant wolf emerges from the burning field before a lone archer.",
+        "actions": [
+          {
+            "label": "Search behind the archer",
+            "resolution": "Carved tokens lie warm beneath the flattened grass.",
+            "template_id": 29,
+            "template": "Gain one of 3 offered dreamsigns",
+            "variables": {},
+            "effect_text": "Gain one of 3 offered dreamsigns"
+          },
+          {
+            "label": "Hold beside the archer",
+            "resolution": "They rise as the wolf surges through fire.",
+            "template_id": 39,
+            "template": "Gain {count} additional energy at the start of your next battle",
+            "variables": {
+              "count": 2
+            },
+            "effect_text": "Gain 2 additional energy at the start of your next battle"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 8,
+          "mechanical_connection": 8,
+          "archetype_fit": 8,
+          "overall": 8
+        },
+        "rank": 5,
+        "ranking_rationale": "The scene remains vivid and both acts are legible, while the general rewards connect less directly to Spirit Animal construction."
+      }
+    ]
+  },
+  {
+    "card_id": "8b5eb29c-146f-46fb-9407-55004128fba7",
+    "encounters": [
+      {
+        "template_pair_id": "pair-1",
+        "prose": "A skull-headed giant suspends a blazing lantern before the reaching child.",
+        "actions": [
+          {
+            "label": "Search the Lantern",
+            "resolution": "Faint figures gather behind the shining panes.",
+            "template_id": 14,
+            "template": "Draft a {predicate} card from 4 random choices",
+            "variables": {
+              "predicate": "≤2● cost Character"
+            },
+            "effect_text": "Draft a ≤2● cost Character card from 4 random choices"
+          },
+          {
+            "label": "Study the Lantern's Glow",
+            "resolution": "The bright chamber reveals shapes beyond the glass.",
+            "template_id": 38,
+            "template": "Draw {count} additional cards at the start of your next battle",
+            "variables": {
+              "count": 3
+            },
+            "effect_text": "Draw 3 additional cards at the start of your next battle"
+          }
+        ],
+        "scores": {
+          "scene_quality": 10,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 10,
+          "overall": 10
+        },
+        "rank": 1,
+        "ranking_rationale": "The clearest lantern tableau supports two strong discovery chains and directly advances low-cost character flow."
+      },
+      {
+        "template_pair_id": "pair-2",
+        "prose": "A child's outstretched hand enters the giant lantern's radiance.",
+        "actions": [
+          {
+            "label": "Accept the Watcher's Offering",
+            "resolution": "A slight figure steps from the open lantern.",
+            "template_id": 11,
+            "template": "Gain $OFFERED_CARD",
+            "variables": {},
+            "selection": {
+              "$OFFERED_CARD": {
+                "predicate": "≤2● cost Character"
+              }
+            },
+            "effect_text": "Gain a random offered ≤2● cost Character card"
+          },
+          {
+            "label": "Share the Lantern's Radiance",
+            "resolution": "Its radiance settles over a familiar companion.",
+            "template_id": 19,
+            "template": "Apply {transfiguration} to $DECK_CARD",
+            "variables": {
+              "transfiguration": "Inspired"
+            },
+            "selection": {
+              "$DECK_CARD": {
+                "predicate": "≤2● cost Character"
+              }
+            },
+            "effect_text": "Apply Inspired to a random ≤2● cost Character card from your deck"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 10,
+          "overall": 9
+        },
+        "rank": 2,
+        "ranking_rationale": "The offered radiance naturally supports either recruiting a cheap character or inspiring one already in the deck."
+      },
+      {
+        "template_pair_id": "pair-3",
+        "prose": "At the precipice, a child reaches one hand into a luminous lantern.",
+        "actions": [
+          {
+            "label": "Reach Through the Glow",
+            "resolution": "A waiting silhouette steps through the shining panes.",
+            "template_id": 15,
+            "template": "Draft a {predicate} card from 4 random choices and gain {count} copies of it",
+            "variables": {
+              "predicate": "≤2● cost Character",
+              "count": 2
+            },
+            "effect_text": "Draft a ≤2● cost Character card from 4 random choices and gain 2 copies of it"
+          },
+          {
+            "label": "Steady the Lantern",
+            "resolution": "Steady radiance spreads far beyond the glass.",
+            "template_id": 64,
+            "template": "All characters in your deck gain +1✦",
+            "variables": {},
+            "effect_text": "All characters in your deck gain +1✦"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 8,
+          "archetype_fit": 10,
+          "overall": 9
+        },
+        "rank": 3,
+        "ranking_rationale": "The focused reach supports a strong recruit-or-strengthen choice, though the deck-wide radiance chain is broader."
+      },
+      {
+        "template_pair_id": "pair-5",
+        "prose": "A tattered giant holds a bright lantern within the child's reach.",
+        "actions": [
+          {
+            "label": "Touch the Inner Glow",
+            "resolution": "The glass repeats a familiar silhouette.",
+            "template_id": 55,
+            "template": "Select 4 random cards from your deck and choose one to gain a copy of",
+            "variables": {},
+            "effect_text": "Select 4 random cards from your deck and choose one to gain a copy of"
+          },
+          {
+            "label": "Peer Through the Lantern",
+            "resolution": "Distant forms emerge altered through the bright glass.",
+            "template_id": 37,
+            "template": "The next draft or shop site you visit will contain transfigured cards",
+            "variables": {},
+            "effect_text": "The next draft or shop site you visit will contain transfigured cards"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 8,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 4,
+        "ranking_rationale": "Reflected and altered forms fit the lantern convincingly, with flexible rewards that support engine pieces and future upgrades."
+      },
+      {
+        "template_pair_id": "pair-4",
+        "prose": "Beneath scattered stars, the child reaches toward a watcher's shining lantern.",
+        "actions": [
+          {
+            "label": "Offer a Greeting",
+            "resolution": "The towering figure extends one open hand.",
+            "template_id": 1,
+            "template": "Gain {essence} essence",
+            "variables": {
+              "essence": 200
+            },
+            "effect_text": "Gain 200 essence"
+          },
+          {
+            "label": "Seize the Lantern",
+            "resolution": "The lantern flares, casting long distorted silhouettes.",
+            "template_id": 65,
+            "template": "All cards in your deck are reduced in cost by 1●. Gain {count} \"Nightmare\" bane cards.",
+            "variables": {
+              "count": 3
+            },
+            "effect_text": "All cards in your deck are reduced in cost by 1●. Gain 3 \"Nightmare\" bane cards."
+          }
+        ],
+        "scores": {
+          "scene_quality": 8,
+          "action_quality": 8,
+          "mechanical_connection": 8,
+          "archetype_fit": 9,
+          "overall": 8
+        },
+        "rank": 5,
+        "ranking_rationale": "The greeting and seizure remain credible, but the flexible essence reward has the set's least specific deck connection."
+      }
+    ]
+  },
+  {
+    "card_id": "954e8d50-d494-4fb2-b4c7-74979083b774",
+    "encounters": [
+      {
+        "template_pair_id": "pair-1",
+        "prose": "A bright triangle frames a suited gunman among curling black cables.",
+        "actions": [
+          {
+            "label": "Bring a Companion Forward",
+            "resolution": "The outline settles around the waiting companion.",
+            "template_id": 58,
+            "template": "Change a chosen Character card to have {subtype}",
+            "variables": {
+              "subtype": "Outsider"
+            },
+            "effect_text": "Change a chosen Character card to have Outsider"
+          },
+          {
+            "label": "Signal Through the Smoke",
+            "resolution": "Several figures answer from the surrounding haze.",
+            "template_id": 14,
+            "template": "Draft a {predicate} card from 4 random choices",
+            "variables": {
+              "predicate": "≤2● cost Character"
+            },
+            "effect_text": "Draft a ≤2● cost Character card from 4 random choices"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 10,
+          "overall": 9
+        },
+        "rank": 1,
+        "ranking_rationale": "The luminous framing grounds both conversion and recruitment while each reward directly advances the cheap-Outsider scoring engine."
+      },
+      {
+        "template_pair_id": "pair-2",
+        "prose": "A suited gunman stands motionless as thick cables arc behind him.",
+        "actions": [
+          {
+            "label": "Invite His Counterpart",
+            "resolution": "Another operative emerges beside the arcing cables.",
+            "template_id": 10,
+            "template": "Gain {card_id}",
+            "variables": {
+              "card_id": {
+                "id": "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+                "display_name": "Abyssal Deputy"
+              }
+            },
+            "effect_text": "Gain Abyssal Deputy"
+          },
+          {
+            "label": "Study His Precision",
+            "resolution": "Your companions adopt his practiced discipline.",
+            "template_id": 20,
+            "template": "Apply a transfiguration to {count} chosen {predicate} cards",
+            "variables": {
+              "count": 2,
+              "predicate": "≤2● cost Character"
+            },
+            "effect_text": "Apply a transfiguration to 2 chosen ≤2● cost Character cards"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 2,
+        "ranking_rationale": "A still, disciplined figure naturally supports either recruiting a canonical Outsider or refining the deck's cheap scoring bodies."
+      },
+      {
+        "template_pair_id": "pair-3",
+        "prose": "Dark cables sweep around a suited gunman standing amid luminous smoke.",
+        "actions": [
+          {
+            "label": "Request Reinforcements",
+            "resolution": "A familiar ally steps from the smoke.",
+            "template_id": 49,
+            "template": "Gain {count} copies of $DECK_CARD",
+            "variables": {
+              "count": 1
+            },
+            "selection": {
+              "$DECK_CARD": {
+                "predicate": "≤2● cost Character"
+              }
+            },
+            "effect_text": "Gain 1 copy of a random ≤2● cost Character from your deck"
+          },
+          {
+            "label": "Offer an Exchange",
+            "resolution": "He dismisses one silhouette and beckons another.",
+            "template_id": 61,
+            "template": "Purge a chosen card and gain a copy of another chosen card",
+            "variables": {},
+            "effect_text": "Purge a chosen card and gain a copy of another chosen card"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 8,
+          "mechanical_connection": 8,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 3,
+        "ranking_rationale": "The smoky meeting supports two clear reinforcement bargains, balancing a safe cheap-card duplicate against precise deck conversion."
+      },
+      {
+        "template_pair_id": "pair-5",
+        "prose": "Thick cables cross the haze around a still, sharply dressed gunman.",
+        "actions": [
+          {
+            "label": "Accept His Terms",
+            "resolution": "Smoke darkens as another operative joins you.",
+            "template_id": 70,
+            "template": "Gain {count} \"Nightmare\" bane cards. Gain {card_name}.",
+            "variables": {
+              "count": 1,
+              "card_name": {
+                "id": "87aba308-00b4-40d8-a46f-4e6f58a664a8",
+                "display_name": "Breach Artist"
+              }
+            },
+            "effect_text": "Gain 1 \"Nightmare\" bane card. Gain Breach Artist."
+          },
+          {
+            "label": "Call a New Ally",
+            "resolution": "A new figure steps through the haze.",
+            "template_id": 11,
+            "template": "Gain $OFFERED_CARD",
+            "variables": {},
+            "selection": {
+              "$OFFERED_CARD": {
+                "predicate": "≤2● cost Character"
+              }
+            },
+            "effect_text": "Gain a random offered ≤2● cost Character card"
+          }
+        ],
+        "scores": {
+          "scene_quality": 8,
+          "action_quality": 9,
+          "mechanical_connection": 8,
+          "archetype_fit": 9,
+          "overall": 8
+        },
+        "rank": 4,
+        "ranking_rationale": "The hazy recruitment scene makes the choice legible: accept a bane for a known Outsider or take a safer flexible recruit."
+      },
+      {
+        "template_pair_id": "pair-4",
+        "prose": "Smoke billows behind a watchful gunman ringed by sweeping cables.",
+        "actions": [
+          {
+            "label": "Ask His Assessment",
+            "resolution": "He singles out one familiar silhouette.",
+            "template_id": 55,
+            "template": "Select 4 random cards from your deck and choose one to gain a copy of",
+            "variables": {},
+            "effect_text": "Select 4 random cards from your deck and choose one to gain a copy of"
+          },
+          {
+            "label": "Study His Bearing",
+            "resolution": "A companion carries his measured focus onward.",
+            "template_id": 18,
+            "template": "Apply {transfiguration} to a chosen card",
+            "variables": {
+              "transfiguration": "Inspired"
+            },
+            "effect_text": "Apply Inspired to a chosen card"
+          }
+        ],
+        "scores": {
+          "scene_quality": 8,
+          "action_quality": 8,
+          "mechanical_connection": 8,
+          "archetype_fit": 9,
+          "overall": 8
+        },
+        "rank": 5,
+        "ranking_rationale": "The figure's alert composure supports assessment and instruction, though these broad consistency rewards connect less specifically to Outsiders."
+      }
+    ]
+  },
+  {
+    "card_id": "b8ecc46d-bd92-4826-a416-7ce177e69cbf",
+    "encounters": [
+      {
+        "template_pair_id": "pair-1",
+        "prose": "A vast owl grips a forest branch, its round eyes fixed on you.",
+        "actions": [
+          {
+            "label": "Follow Its Gaze",
+            "resolution": "Its steady stare settles on several waiting animal shapes.",
+            "template_id": 14,
+            "template": "Draft a {predicate} card from 4 random choices",
+            "variables": {
+              "predicate": "Spirit Animal"
+            },
+            "effect_text": "Draft a Spirit Animal card from 4 random choices"
+          },
+          {
+            "label": "Request Its Insight",
+            "resolution": "The owl inclines its head over your chosen companion.",
+            "template_id": 17,
+            "template": "Apply a transfiguration of your choice to a chosen card",
+            "variables": {},
+            "effect_text": "Apply a transfiguration of your choice to a chosen card"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 1,
+        "ranking_rationale": "The focused stare supports both selective recruitment and deliberate improvement with exceptional clarity."
+      },
+      {
+        "template_pair_id": "pair-2",
+        "prose": "An enormous owl watches from a branch beneath tangled forest limbs.",
+        "actions": [
+          {
+            "label": "Call Into the Canopy",
+            "resolution": "Answering wingbeats gather beyond the tangled limbs.",
+            "template_id": 36,
+            "template": "Choose one of 2 packs of {predicate} cards to add to your deck",
+            "variables": {
+              "predicate": "Spirit Animal"
+            },
+            "effect_text": "Choose one of 2 packs of Spirit Animal cards to add to your deck"
+          },
+          {
+            "label": "Present Your Animal Kin",
+            "resolution": "The owl spreads its wings above your gathered companions.",
+            "template_id": 59,
+            "template": "Gain {essence_per_card} essence for each {predicate} card in your deck",
+            "variables": {
+              "essence_per_card": 25,
+              "predicate": "Spirit Animal"
+            },
+            "effect_text": "Gain 25 essence for each Spirit Animal card in your deck"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 8,
+          "archetype_fit": 10,
+          "overall": 9
+        },
+        "rank": 2,
+        "ranking_rationale": "The canopy interaction creates a vivid choice between expanding and cashing in a Spirit Animal strategy."
+      },
+      {
+        "template_pair_id": "pair-4",
+        "prose": "A slender figure stands behind an immense owl gripping the branch.",
+        "actions": [
+          {
+            "label": "Approach the Silent Figure",
+            "resolution": "They beckon a waiting figure from the luminous haze.",
+            "template_id": 11,
+            "template": "Gain $OFFERED_CARD",
+            "variables": {},
+            "selection": {
+              "$OFFERED_CARD": {
+                "predicate": "≤2● cost Character"
+              }
+            },
+            "effect_text": "Gain an offered ≤2● cost Character card"
+          },
+          {
+            "label": "Bow Before the Owl",
+            "resolution": "Its broad eyes brighten over one animal companion.",
+            "template_id": 19,
+            "template": "Apply {transfiguration} to $DECK_CARD",
+            "variables": {
+              "transfiguration": "Inspired"
+            },
+            "selection": {
+              "$DECK_CARD": {
+                "predicate": "Spirit Animal"
+              }
+            },
+            "effect_text": "Apply Inspired to a random Spirit Animal card from your deck"
+          }
+        ],
+        "scores": {
+          "scene_quality": 8,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 3,
+        "ranking_rationale": "Both visible figures support strong actions, balancing a new cheap ally against a focused Spirit Animal upgrade."
+      },
+      {
+        "template_pair_id": "pair-3",
+        "prose": "A broad-eyed owl perches before you in the backlit forest.",
+        "actions": [
+          {
+            "label": "Study Its Reflections",
+            "resolution": "Clear signs gather across the owl's shining eyes.",
+            "template_id": 29,
+            "template": "Gain one of 3 offered dreamsigns",
+            "variables": {},
+            "effect_text": "Gain one of 3 offered dreamsigns"
+          },
+          {
+            "label": "Recount Your Companions",
+            "resolution": "Its gaze returns to one familiar shape.",
+            "template_id": 55,
+            "template": "Select 4 random cards from your deck and choose one to gain a copy of",
+            "variables": {},
+            "effect_text": "Select 4 random cards from your deck and choose one to gain a copy of"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 8,
+          "mechanical_connection": 8,
+          "archetype_fit": 8,
+          "overall": 8
+        },
+        "rank": 4,
+        "ranking_rationale": "The owl's reflective eyes make both divination choices legible, though the deck-copying chain is less immediate."
+      },
+      {
+        "template_pair_id": "pair-5",
+        "prose": "An owl fills the forest opening, unblinking above its hooked talons.",
+        "actions": [
+          {
+            "label": "Rest Beneath Its Wings",
+            "resolution": "The owl lowers one wing, enclosing you in stillness.",
+            "template_id": 39,
+            "template": "Gain {count} additional energy at the start of your next battle",
+            "variables": {
+              "count": 2
+            },
+            "effect_text": "Gain 2 additional energy at the start of your next battle"
+          },
+          {
+            "label": "Answer the Owl's Call",
+            "resolution": "Its low call settles into a steady cadence.",
+            "template_id": 27,
+            "template": "Gain {dreamsign_name}",
+            "variables": {
+              "dreamsign_name": {
+                "id": "4F5BDCAC-64CB-4A45-8121-E37F5E4D3074",
+                "display_name": "Notes"
+              }
+            },
+            "effect_text": "Gain Notes"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 8,
+          "mechanical_connection": 7,
+          "archetype_fit": 8,
+          "overall": 8
+        },
+        "rank": 5,
+        "ranking_rationale": "The owl's shelter and call are vivid, but preparation for the next battle forms the set's weakest causal bridge."
+      }
+    ]
+  },
+  {
+    "card_id": "e2f542eb-090f-4a22-a42c-a120eb6caaa3",
+    "encounters": [
+      {
+        "template_pair_id": "pair-1",
+        "prose": "Your small boat passes beneath a whale drifting across the stars.",
+        "actions": [
+          {
+            "label": "Answer its call",
+            "resolution": "Distant creatures answer across the luminous sky.",
+            "template_id": 14,
+            "template": "Draft a {predicate} card from 4 random choices",
+            "variables": {
+              "predicate": "Spirit Animal"
+            },
+            "effect_text": "Draft a Spirit Animal card from 4 random choices."
+          },
+          {
+            "label": "Follow its passage",
+            "resolution": "Its glowing wake surrounds you with shifting light.",
+            "template_id": 17,
+            "template": "Apply a transfiguration of your choice to a chosen card",
+            "variables": {},
+            "effect_text": "Apply a transfiguration of your choice to a chosen card."
+          }
+        ],
+        "scores": {
+          "scene_quality": 10,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 10,
+          "overall": 10
+        },
+        "rank": 1,
+        "ranking_rationale": "The clean passage beneath the whale supports an answering recruit and a wake-borne transformation with exceptional Spirit Animal utility."
+      },
+      {
+        "template_pair_id": "pair-3",
+        "prose": "A whale sweeps overhead, its broad belly lit by distant stars.",
+        "actions": [
+          {
+            "label": "Echo its cry",
+            "resolution": "A chorus of distant creatures answers from afar.",
+            "template_id": 12,
+            "template": "Gain {count} copies of $OFFERED_CARD",
+            "variables": {
+              "count": 2
+            },
+            "selection": {
+              "$OFFERED_CARD": {
+                "predicate": "Spirit Animal"
+              }
+            },
+            "effect_text": "Gain 2 copies of a random offered Spirit Animal card."
+          },
+          {
+            "label": "Lighten the boat",
+            "resolution": "The hull rises as a wild shape descends.",
+            "template_id": 34,
+            "template": "Purge a random starter card and gain a {predicate} card",
+            "variables": {
+              "predicate": "Spirit Animal"
+            },
+            "effect_text": "Purge a random starter card and gain a random Spirit Animal card."
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 10,
+          "overall": 9
+        },
+        "rank": 2,
+        "ranking_rationale": "The overhead sweep grounds both a resonant call and a boat-lightening exchange, while each outcome sharply increases Spirit Animal density."
+      },
+      {
+        "template_pair_id": "pair-4",
+        "prose": "Above your slender boat, an immense whale crosses the luminous sky.",
+        "actions": [
+          {
+            "label": "Sail in its wake",
+            "resolution": "The radiant current strengthens your chosen companions.",
+            "template_id": 20,
+            "template": "Apply a transfiguration to {count} chosen {predicate} cards",
+            "variables": {
+              "count": 2,
+              "predicate": "Spirit Animal"
+            },
+            "effect_text": "Apply a transfiguration to 2 chosen Spirit Animal cards."
+          },
+          {
+            "label": "Guide another skyward",
+            "resolution": "A familiar shape adapts to the open sky.",
+            "template_id": 53,
+            "template": "Change $DECK_CARD to become a {card_type}",
+            "variables": {
+              "card_type": "Spirit Animal"
+            },
+            "effect_text": "Change a random card from your deck to become a Spirit Animal."
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 8,
+          "mechanical_connection": 9,
+          "archetype_fit": 10,
+          "overall": 9
+        },
+        "rank": 3,
+        "ranking_rationale": "The whale's luminous crossing convincingly supports strengthening existing companions or adapting another, producing two strong tribal development paths."
+      },
+      {
+        "template_pair_id": "pair-2",
+        "prose": "A vast whale glides through starlight above your narrow boat.",
+        "actions": [
+          {
+            "label": "Call across the stars",
+            "resolution": "A broad-winged shape rises beside the whale.",
+            "template_id": 10,
+            "template": "Gain {card_id}",
+            "variables": {
+              "card_id": {
+                "id": "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5",
+                "display_name": "Cloudmantle Ray"
+              }
+            },
+            "effect_text": "Gain Cloudmantle Ray."
+          },
+          {
+            "label": "Carry its song onward",
+            "resolution": "The deep refrain strengthens every traveling companion.",
+            "template_id": 64,
+            "template": "All characters in your deck gain +1✦",
+            "variables": {},
+            "effect_text": "All characters in your deck gain +1✦."
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 8,
+          "mechanical_connection": 8,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 4,
+        "ranking_rationale": "The starlit glide strongly welcomes a thematically matched Spirit Animal, though the deck-wide song chain is slightly more figurative."
+      },
+      {
+        "template_pair_id": "pair-5",
+        "prose": "A whale's dark underside fills the sky beyond your drifting boat.",
+        "actions": [
+          {
+            "label": "Study its course",
+            "resolution": "The crossing reveals patterns for what lies ahead.",
+            "template_id": 38,
+            "template": "Draw {count} additional cards at the start of your next battle",
+            "variables": {
+              "count": 2
+            },
+            "effect_text": "Draw 2 additional cards at the start of your next battle."
+          },
+          {
+            "label": "Race beneath its tail",
+            "resolution": "The swift passage lends force to your arrival.",
+            "template_id": 39,
+            "template": "Gain {count} additional energy at the start of your next battle",
+            "variables": {
+              "count": 1
+            },
+            "effect_text": "Gain 1 additional energy at the start of your next battle."
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 7,
+          "archetype_fit": 8,
+          "overall": 8
+        },
+        "rank": 5,
+        "ranking_rationale": "The imposing underside makes observation and racing vivid, but these short-term preparations connect less specifically to the Spirit Animal strategy."
+      }
+    ]
+  },
+  {
+    "card_id": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+    "encounters": [
+      {
+        "template_pair_id": "pair-2",
+        "prose": "Glowing tusks pierce the haze as an immense elephant watches you.",
+        "actions": [
+          {
+            "label": "Echo its low call",
+            "resolution": "A distant howl answers from beyond the mist.",
+            "template_id": 10,
+            "template": "Gain {card_id}",
+            "variables": {
+              "card_id": {
+                "id": "7992dbb5-ca45-4066-aca3-ff1d6d87619e",
+                "display_name": "Moonbound Wolf"
+              }
+            },
+            "effect_text": "Gain Moonbound Wolf"
+          },
+          {
+            "label": "Receive its insight",
+            "resolution": "Its luminous eye steadies every wandering thought.",
+            "template_id": 18,
+            "template": "Apply {transfiguration} to a chosen card",
+            "variables": {
+              "transfiguration": "Inspired"
+            },
+            "effect_text": "Apply Inspired to a chosen card"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 10,
+          "archetype_fit": 10,
+          "overall": 9
+        },
+        "rank": 1,
+        "ranking_rationale": "The elephant’s call naturally earns a perfectly synergistic ally, while its radiant gaze convincingly supports an Inspired upgrade."
+      },
+      {
+        "template_pair_id": "pair-4",
+        "prose": "An immense elephant regards you through starry haze, its tusks aglow.",
+        "actions": [
+          {
+            "label": "Follow its gaze",
+            "resolution": "Distant forms resolve clearly within the starry haze.",
+            "template_id": 38,
+            "template": "Draw {count} additional cards at the start of your next battle",
+            "variables": {
+              "count": 2
+            },
+            "effect_text": "Draw 2 additional cards at the start of your next battle"
+          },
+          {
+            "label": "Touch the shining tusk",
+            "resolution": "Steady warmth passes through your open hand.",
+            "template_id": 1,
+            "template": "Gain {essence} essence",
+            "variables": {
+              "essence": 150
+            },
+            "effect_text": "Gain 150 essence"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 2,
+        "ranking_rationale": "The eye-and-tusk interactions make both card flow and essence feel immediate, balanced, and faithful to the source strategy."
+      },
+      {
+        "template_pair_id": "pair-1",
+        "prose": "Beneath scattered stars, a colossal elephant fixes you with a radiant eye.",
+        "actions": [
+          {
+            "label": "Call to its kindred",
+            "resolution": "The elephant’s rumble rolls outward and returns manyfold.",
+            "template_id": 59,
+            "template": "Gain {essence_per_card} essence for each {predicate} card in your deck",
+            "variables": {
+              "essence_per_card": 30,
+              "predicate": "Spirit Animal"
+            },
+            "effect_text": "Gain 30 essence for each Spirit Animal card in your deck"
+          },
+          {
+            "label": "Ask for a guide",
+            "resolution": "Its answering rumble draws kindred shapes near.",
+            "template_id": 14,
+            "template": "Draft a {predicate} card from 4 random choices",
+            "variables": {
+              "predicate": "Spirit Animal"
+            },
+            "effect_text": "Draft a Spirit Animal card from 4 random choices"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 8,
+          "mechanical_connection": 8,
+          "archetype_fit": 10,
+          "overall": 9
+        },
+        "rank": 3,
+        "ranking_rationale": "The immense animal strongly anchors kindred recruitment and herd-based value, though the per-card reward is slightly more abstract."
+      },
+      {
+        "template_pair_id": "pair-3",
+        "prose": "A great elephant lowers its glowing tusks through the starry haze.",
+        "actions": [
+          {
+            "label": "Accept its shaping gaze",
+            "resolution": "Its bright eye reveals a form worth choosing.",
+            "template_id": 17,
+            "template": "Apply a transfiguration of your choice to a chosen card",
+            "variables": {},
+            "effect_text": "Apply a transfiguration of your choice to a chosen card"
+          },
+          {
+            "label": "Share its insight",
+            "resolution": "Its low breath stirs fresh purpose among kindred.",
+            "template_id": 21,
+            "template": "Apply {transfiguration} to {count} chosen {predicate} cards",
+            "variables": {
+              "transfiguration": "Inspired",
+              "count": 2,
+              "predicate": "Spirit Animal"
+            },
+            "effect_text": "Apply Inspired to 2 chosen Spirit Animal cards"
+          }
+        ],
+        "scores": {
+          "scene_quality": 8,
+          "action_quality": 8,
+          "mechanical_connection": 8,
+          "archetype_fit": 9,
+          "overall": 8
+        },
+        "rank": 4,
+        "ranking_rationale": "The luminous gaze supports transformation well, but sharing the same blessing across multiple Spirit Animals relies on broader extrapolation."
+      },
+      {
+        "template_pair_id": "pair-5",
+        "prose": "An immense elephant emerges from luminous mist, one bright eye trained on you.",
+        "actions": [
+          {
+            "label": "Answer the deep call",
+            "resolution": "Kindred footsteps stir beyond the glowing mist.",
+            "template_id": 12,
+            "template": "Gain {count} copies of $OFFERED_CARD",
+            "variables": {
+              "count": 2
+            },
+            "selection": {
+              "$OFFERED_CARD": {
+                "predicate": "Spirit Animal"
+              }
+            },
+            "effect_text": "Gain 2 copies of a random Spirit Animal card offered from this event's card pool"
+          },
+          {
+            "label": "Read the starry haze",
+            "resolution": "A clear omen gathers between the scattered lights.",
+            "template_id": 29,
+            "template": "Gain one of 3 offered dreamsigns",
+            "variables": {},
+            "effect_text": "Gain one of 3 offered dreamsigns"
+          }
+        ],
+        "scores": {
+          "scene_quality": 8,
+          "action_quality": 8,
+          "mechanical_connection": 7,
+          "archetype_fit": 8,
+          "overall": 8
+        },
+        "rank": 5,
+        "ranking_rationale": "The mist credibly carries both arrivals and omens, though the offered outcomes connect less specifically to the elephant itself."
+      }
+    ]
+  },
+  {
+    "card_id": "886c9d49-b25f-4ddd-97f0-2ec4b42eda89",
+    "encounters": [
+      {
+        "template_pair_id": "pair-1",
+        "prose": "A vast mounted silhouette scatters into stars above two watching travelers.",
+        "actions": [
+          {
+            "label": "Hail the mounted figure",
+            "resolution": "The silhouette turns and raises a steady hand.",
+            "template_id": 9,
+            "template": "Gain a random {predicate} card",
+            "variables": {
+              "predicate": "Warrior"
+            },
+            "effect_text": "Gain a random Warrior card"
+          },
+          {
+            "label": "Adopt their martial bearing",
+            "resolution": "The mounted stranger demonstrates a disciplined salute.",
+            "template_id": 58,
+            "template": "Change a chosen Character card to have {subtype}",
+            "variables": {
+              "subtype": "Warrior"
+            },
+            "effect_text": "Change a chosen Character card to have Warrior"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 10,
+          "overall": 9
+        },
+        "rank": 1,
+        "ranking_rationale": "Both vivid action chains directly increase Warrior density, making the source card's recursion trigger more reliable."
+      },
+      {
+        "template_pair_id": "pair-2",
+        "prose": "Above you, a shadowed rider dissolves across the star-filled sky.",
+        "actions": [
+          {
+            "label": "Follow the falling starlight",
+            "resolution": "A narrow descent glows through the dark canopy.",
+            "template_id": 14,
+            "template": "Draft a {predicate} card from 4 random choices",
+            "variables": {
+              "predicate": "≤2● cost Character"
+            },
+            "effect_text": "Draft a ≤2● cost Character card from 4 random choices"
+          },
+          {
+            "label": "Call the figure back",
+            "resolution": "Their scattered outline gathers above the bough again.",
+            "template_id": 19,
+            "template": "Apply {transfiguration} to $DECK_CARD",
+            "variables": {
+              "transfiguration": "Enduring"
+            },
+            "selection": {
+              "$DECK_CARD": {
+                "predicate": "≤2● cost Character"
+              }
+            },
+            "effect_text": "Apply Enduring to a random ≤2● cost Character from your deck"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 9,
+          "archetype_fit": 10,
+          "overall": 9
+        },
+        "rank": 2,
+        "ranking_rationale": "The dispersing figure naturally supports discovery and return while both effects strengthen low-cost recursion."
+      },
+      {
+        "template_pair_id": "pair-3",
+        "prose": "A dark horse and mounted figure disperse into starlight beyond a moss-covered bough.",
+        "actions": [
+          {
+            "label": "Invite the figure onward",
+            "resolution": "The silhouette beckons, and distant companions approach.",
+            "template_id": 16,
+            "template": "Take any number of {predicate} cards from 4 random choices",
+            "variables": {
+              "predicate": "Warrior"
+            },
+            "effect_text": "Take any number of Warrior cards from 4 random choices"
+          },
+          {
+            "label": "Read the drifting lights",
+            "resolution": "A clear pattern settles among the scattered points.",
+            "template_id": 29,
+            "template": "Gain one of 3 offered dreamsigns",
+            "variables": {},
+            "effect_text": "Gain one of 3 offered dreamsigns"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 9,
+          "mechanical_connection": 8,
+          "archetype_fit": 9,
+          "overall": 9
+        },
+        "rank": 3,
+        "ranking_rationale": "Recruiting Warriors is strategically exact, while interpreting the starfield offers a flexible dreamsign alternative."
+      },
+      {
+        "template_pair_id": "pair-5",
+        "prose": "A colossal horse and mounted silhouette fade into the luminous sky overhead.",
+        "actions": [
+          {
+            "label": "Study the changing outline",
+            "resolution": "The mounted shape reforms with unfamiliar contours.",
+            "template_id": 17,
+            "template": "Apply a transfiguration of your choice to a chosen card",
+            "variables": {},
+            "effect_text": "Apply a transfiguration of your choice to a chosen card"
+          },
+          {
+            "label": "Offer a valued possession",
+            "resolution": "The figure accepts it and drops a weighty crystal.",
+            "template_id": 60,
+            "template": "Purge a chosen card and gain {essence_per_energy} essence for each ✦ it had",
+            "variables": {
+              "essence_per_energy": 40
+            },
+            "effect_text": "Purge a chosen card and gain 40 essence for each ✦ it had"
+          }
+        ],
+        "scores": {
+          "scene_quality": 9,
+          "action_quality": 8,
+          "mechanical_connection": 8,
+          "archetype_fit": 8,
+          "overall": 8
+        },
+        "rank": 4,
+        "ranking_rationale": "The fading form grounds two credible exchanges that refine the deck or convert an expendable card into economy."
+      },
+      {
+        "template_pair_id": "pair-4",
+        "prose": "Starlight shows through a mounted figure breaking apart above the forest.",
+        "actions": [
+          {
+            "label": "Study the dispersal",
+            "resolution": "The final points arrange in a lucid pattern.",
+            "template_id": 38,
+            "template": "Draw {count} additional cards at the start of your next battle",
+            "variables": {
+              "count": 2
+            },
+            "effect_text": "Draw 2 additional cards at the start of your next battle"
+          },
+          {
+            "label": "Pursue the fading figure",
+            "resolution": "The figure spurs ahead, leaving a luminous trail.",
+            "template_id": 39,
+            "template": "Gain {count} additional energy at the start of your next battle",
+            "variables": {
+              "count": 2
+            },
+            "effect_text": "Gain 2 additional energy at the start of your next battle"
+          }
+        ],
+        "scores": {
+          "scene_quality": 8,
+          "action_quality": 8,
+          "mechanical_connection": 7,
+          "archetype_fit": 8,
+          "overall": 8
+        },
+        "rank": 5,
+        "ranking_rationale": "The watch-or-pursue choice is clear and balanced, though its battle preparation supports the archetype less specifically."
+      }
+    ]
+  }
+]
