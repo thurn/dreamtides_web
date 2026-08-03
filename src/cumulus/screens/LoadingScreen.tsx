@@ -337,6 +337,9 @@ export function LoadingScreen({
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
   const [ready, setReady] = useState(false);
+  const [titleTop, setTitleTop] = useState<number | null>(null);
+  const titleRef = useRef<HTMLHeadingElement | null>(null);
+  const titleBoundaryRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
     setReady(false);
@@ -346,6 +349,55 @@ export function LoadingScreen({
     );
     return () => window.clearTimeout(timeout);
   }, [playbackSpeed]);
+
+  useLayoutEffect(() => {
+    const title = titleRef.current;
+    const boundary = titleBoundaryRef.current;
+    if (title === null || boundary === null) return;
+    const screen = title.closest<HTMLElement>("[data-loading-screen]");
+    if (screen === null) return;
+
+    const content = [
+      ...screen.querySelectorAll<HTMLElement>(
+        "[data-loading-card], [data-loading-callout]",
+      ),
+    ];
+    let frame = 0;
+    const measure = () => {
+      const screenRect = screen.getBoundingClientRect();
+      const titleRect = title.getBoundingClientRect();
+      const boundaryRect = boundary.getBoundingClientRect();
+      const contentRects = content
+        .map((element) => element.getBoundingClientRect())
+        .filter((rect) => rect.width > 0 && rect.height > 0);
+      if (titleRect.height <= 0 || contentRects.length === 0) return;
+      const contentTop = Math.min(...contentRects.map((rect) => rect.top));
+      const nextTop =
+        boundaryRect.top +
+        (contentTop - boundaryRect.top - titleRect.height) / 2 -
+        screenRect.top;
+      setTitleTop((current) =>
+        current !== null && Math.abs(current - nextTop) < 0.25
+          ? current
+          : nextTop,
+      );
+    };
+    const scheduleMeasure = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(measure);
+    };
+    const observer = new ResizeObserver(scheduleMeasure);
+    observer.observe(screen);
+    observer.observe(title);
+    content.forEach((element) => observer.observe(element));
+    window.addEventListener("resize", scheduleMeasure);
+    measure();
+    return () => {
+      observer.disconnect();
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", scheduleMeasure);
+    };
+  }, [isDesktop]);
 
   return (
     <motion.main
@@ -368,11 +420,27 @@ export function LoadingScreen({
         color: token("--text-loading"),
       }}
     >
+      <span
+        ref={titleBoundaryRef}
+        aria-hidden="true"
+        data-loading-title-boundary
+        style={{
+          position: "absolute",
+          top: `calc(${token(SAFE_AREA_INSET_PROPERTIES.top)} + ${token("--space-2")})`,
+          left: 0,
+          width: 0,
+          height: 0,
+          pointerEvents: "none",
+        }}
+      />
       <h1
+        ref={titleRef}
         data-loading-card-types-label
         style={{
           position: "absolute",
-          top: `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-2")})`,
+          top:
+            titleTop ??
+            `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-2")})`,
           right: 0,
           left: 0,
           zIndex: 10,
