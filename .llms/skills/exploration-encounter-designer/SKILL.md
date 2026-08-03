@@ -438,9 +438,10 @@ commentary.
     count or essence value, inspect relevant economy, pricing, pool, and effect
     data in the repository. Compare the likely low, typical, and high result of
     each choice. Do not guess a small-looking number in an economy whose units
-    operate at a different order of magnitude. Choose each predicate
-    independently; never carry a predicate into another action merely because
-    it fit once.
+    operate at a different order of magnitude. A `{count}` placeholder always
+    requires a value greater than 1; if the effect cannot support at least 2,
+    choose a different template. Choose each predicate independently; never
+    carry a predicate into another action merely because it fit once.
 
 16. Compare all five designs using the contract rubric, then assign unique
     ranks. Rank vivid descriptive precision, art fidelity, focus, and mechanical
@@ -646,6 +647,9 @@ commentary.
   Character`. A special runtime variable may instead remain unrestricted by
   omitting its `selection` entry. Do not manufacture a restriction merely to
   make an effect appear tailored.
+- Populate every `{count}` placeholder with a value greater than 1. The
+  placeholder implies that the effect requires multiple items, so `1` is not a
+  valid value.
 - Never use `"Character"` as a predicate in `variables` or `selection`. It
   covers roughly 70% of the card catalog and does not create a mechanically
   interesting restriction; use no constraint instead.
