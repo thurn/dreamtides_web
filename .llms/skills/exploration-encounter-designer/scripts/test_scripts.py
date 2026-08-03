@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -12,6 +13,7 @@ from pathlib import Path
 
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
+SKILL_DIR = SCRIPTS_DIR.parent
 GENERATOR = SCRIPTS_DIR / "generate-exploration-input.py"
 VALIDATOR = SCRIPTS_DIR / "validate-exploration.py"
 TEMPLATE_CATALOG = SCRIPTS_DIR.parents[3] / "data/templates.json"
@@ -92,6 +94,33 @@ class ValidateExplorationTests(unittest.TestCase):
 
         self.assertNotIn(26, template_ids)
         self.assertNotIn(31, template_ids)
+
+    def test_authoring_docs_do_not_nominate_catalog_templates(self) -> None:
+        templates = json.loads(TEMPLATE_CATALOG.read_text(encoding="utf-8"))
+        canonical_by_id = {
+            entry["template_id"]: entry["template"] for entry in templates
+        }
+        documentation = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in [
+                SKILL_DIR / "SKILL.md",
+                *sorted((SKILL_DIR / "references").glob("*.md")),
+            ]
+        )
+
+        documented_ids = {
+            int(match)
+            for match in re.findall(r'"template_id"\s*:\s*(\d+)', documentation)
+        }
+        leaked_ids = documented_ids.intersection(canonical_by_id)
+        leaked_templates = {
+            template_id: template
+            for template_id, template in canonical_by_id.items()
+            if template in documentation
+        }
+
+        self.assertEqual(leaked_ids, set())
+        self.assertEqual(leaked_templates, {})
 
     def run_validator(self, template_ids: list[int]) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as directory:

@@ -27,6 +27,17 @@ aside and build a fresh selection from the canonical template catalog. Read
 [`references/contracts.md`](references/contracts.md) before designing or
 validating an encounter.
 
+## Example isolation
+
+Treat every snippet and comparison in this skill and its references as a
+structural, stylistic, or quality-boundary illustration only. Documentation
+does not nominate any mechanical option. Do not copy or favor a documented
+prose line, action label, resolution, predicate, value, template, pairing,
+card, or dreamsign. Derive every design-specific choice from the supplied card,
+viewed artwork, canonical data, economy, and complete template catalog at the
+workflow stage assigned to it. In particular, never convert placeholders or
+sentinel values in `references/contracts.md` into design defaults.
+
 ## Output modes
 
 - Use **JSON mode** by default. Return the complete validated event objects as
@@ -78,8 +89,8 @@ The canonical catalog currently contains these special variables:
 
 - `$OFFERED_CARD` resolves to one random eligible card offered from the event's
   card pool when the event is created. It does not refer to a card already in
-  the player's deck. In `Gain {count} copies of $OFFERED_CARD`, all copies are
-  of that same resolved card.
+  the player's deck. When an effect grants multiple copies, all copies use that
+  same resolved card.
 - `$DECK_CARD` resolves to one random eligible card from the player's current
   deck. Templates that copy, modify, or transfigure it all act on the card
   selected from that deck.
@@ -94,7 +105,7 @@ improves the design:
 {
   "selection": {
     "$OFFERED_CARD": {
-      "predicate": "Spirit Animal"
+      "predicate": "<eligible predicate>"
     }
   }
 }
@@ -105,9 +116,8 @@ predicate vocabulary and exception rules in **Mechanical standards** for every
 selection predicate.
 
 Because runtime-selected card identity is unknown while authoring, its
-`effect_text` uses a readable generic description that includes any restriction,
-such as `Gain an offered Spirit Animal card` or `Apply Kindled to a random
-Survivor card from your deck`. No completed `effect_text` may contain a literal
+`effect_text` uses a readable generic description that states the runtime source
+and any restriction. No completed `effect_text` may contain a literal
 `$SPECIAL_VARIABLE` token.
 
 After opening the canonical catalog in workflow step 9, enumerate every
@@ -341,9 +351,8 @@ commentary.
 
 14. Write a 5–10 word `resolution` for each action. Show the immediate response
     to the player's act and bridge naturally into the displayed effect without
-    restating it. For example: `Call Down Its Kin` → `Winged shapes descend
-    through the heated sky.` The scene, label, resolution, and effect should
-    read as one causal sequence.
+    restating it. The scene, label, resolution, and effect should read as one
+    causal sequence.
 
 15. Calibrate mechanical values against the current game. Before choosing a
     count or essence value, inspect relevant economy, pricing, pool, and effect

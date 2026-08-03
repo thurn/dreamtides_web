@@ -1,5 +1,14 @@
 # Exploration encounter JSON contracts
 
+## Contract notation
+
+The snippets in this file are structural schemas, not encounter-design
+examples. Angle-bracket strings and nonpositive integers are documentation
+sentinels that must be replaced with values derived from the current card,
+artwork, canonical content, and complete template catalog. They are
+deliberately ineligible for validation and do not nominate any prose,
+mechanic, template, predicate, value, pairing, label, or resolution.
+
 ## Input
 
 Pass one object. Exactly five pair objects are required, and every pair contains
@@ -8,24 +17,24 @@ exactly two actions.
 ```json
 {
   "card": {
-    "id": "18ff6a45-148a-40bf-85ae-4a51f32f406a",
-    "name": "Blazing Emberwing",
-    "ability": "☪: Gain 1● for each character you control.",
-    "image_number": 2123360855,
-    "card_type": "Character",
-    "subtype": "Spirit Animal"
+    "id": "<canonical card UUID>",
+    "name": "<canonical card name>",
+    "ability": "<complete canonical ability>",
+    "image_number": 0,
+    "card_type": "<canonical card type>",
+    "subtype": "<canonical subtype or empty string>"
   },
   "template_pairs": [
     {
       "id": "pair-1",
       "actions": [
         {
-          "template_id": 16,
-          "template": "Take any number of {predicate} cards from 4 random choices"
+          "template_id": 0,
+          "template": "<exact first catalog template string>"
         },
         {
-          "template_id": 52,
-          "template": "Gain one copy of each of {count} random {predicate} cards"
+          "template_id": -1,
+          "template": "<exact second catalog template string>"
         }
       ]
     }
@@ -35,7 +44,8 @@ exactly two actions.
 
 Use the `template_id` and `template` values in
 [the canonical template catalog](../../../../data/templates.json) exactly. The
-example shows one pair for brevity; a valid request contains five.
+schema shows one pair for brevity; a valid request contains five, and each
+sentinel represents a different deliberately selected catalog entry.
 
 ## JSON output
 
@@ -44,62 +54,62 @@ Return a bare JSON list of five event objects sorted by ascending `rank`:
 ```json
 [
   {
-    "template_pair_id": "pair-1",
-    "prose": "The figure of a bird towers above you, wreathed in flame.",
+    "template_pair_id": "<input pair ID>",
+    "prose": "<distinct frozen scene prose>",
     "actions": [
       {
-        "label": "Call Others to Witness",
-        "resolution": "Distant figures gather beneath the burning wings.",
-        "template_id": 16,
-        "template": "Take any number of {predicate} cards from 4 random choices",
+        "label": "<first scene-grounded action label>",
+        "resolution": "<first immediate world response>",
+        "template_id": 0,
+        "template": "<exact first input template string>",
         "variables": {
-          "predicate": "Spirit Animal"
+          "<required placeholder name>": "<resolved value>"
         },
-        "effect_text": "Take any number of Spirit Animal cards from 4 random choices"
+        "effect_text": "<fully populated first effect text>"
       },
       {
-        "label": "Call Down Its Kin",
-        "resolution": "Winged shapes descend through the heated sky.",
-        "template_id": 52,
-        "template": "Gain one copy of each of {count} random {predicate} cards",
+        "label": "<second scene-grounded action label>",
+        "resolution": "<second immediate world response>",
+        "template_id": -1,
+        "template": "<exact second input template string>",
         "variables": {
-          "count": 2,
-          "predicate": "Spirit Animal"
+          "<required placeholder name>": "<resolved value>"
         },
-        "effect_text": "Gain one copy of each of 2 random Spirit Animal cards"
+        "effect_text": "<fully populated second effect text>"
       }
     ],
     "scores": {
-      "scene_quality": 9,
-      "action_quality": 9,
-      "mechanical_connection": 9,
-      "archetype_fit": 10,
-      "overall": 9
+      "scene_quality": 0,
+      "action_quality": 0,
+      "mechanical_connection": 0,
+      "archetype_fit": 0,
+      "overall": 0
     },
-    "rank": 1,
-    "ranking_rationale": "The imposing tableau supports two causal action chains, while both rewards remain useful to the card's character-heavy strategy."
+    "rank": 0,
+    "ranking_rationale": "<concise design-specific ranking rationale>"
   }
 ]
 ```
 
-The example shows one event for brevity; a valid output contains five.
+The schema shows one event for brevity; a valid output contains five. Replace
+all score and rank sentinels with validated values.
 
 This JSON contract is authoritative in both output modes. In display mode,
 validate the complete JSON first, then render only the user-facing fields as
 Markdown:
 
 ```markdown
-# Blazing Emberwing
+# <card name>
 
-☪: Gain 1● for each character you control.
+<complete card ability>
 
-![Source artwork for Blazing Emberwing](</absolute/path/to/source-image>)
+![Source artwork for <card name>](</absolute/path/to/source-image>)
 
-1. The figure of a bird towers above you, wreathed in flame.
-   - ***Call Others to Witness*** — Take any number of Spirit Animal cards from 4 random choices
-     - **Response:** Distant figures gather beneath the burning wings.
-   - ***Call Down Its Kin*** — Gain one copy of each of 2 random Spirit Animal cards
-     - **Response:** Winged shapes descend through the heated sky.
+1. <prose>
+   - ***<action label>*** — <fully populated effect_text>
+     - **Response:** <resolution>
+   - ***<action label>*** — <fully populated effect_text>
+     - **Response:** <resolution>
 ```
 
 The display starts with the canonical card `name` and complete `ability`, then
@@ -137,8 +147,8 @@ For an existing card or dreamsign, store identity and display text together:
 
 `effect_text` renders the display name. Logic consumes the UUID.
 Use the same entity-reference shape for the catalog's `{card_name}` and
-`{dreamsign}` placeholders. Use an exact canonical name such as `Empowered` for
-`{transfiguration}`.
+`{dreamsign}` placeholders. Verify every `{transfiguration}` value against the
+canonical transfiguration types.
 
 For a special runtime variable, add `selection` only when eligibility is
 restricted:
@@ -147,7 +157,7 @@ restricted:
 {
   "selection": {
     "$DECK_CARD": {
-      "predicate": "Spirit Animal"
+      "predicate": "<eligible predicate>"
     }
   }
 }
@@ -169,9 +179,9 @@ pool contains enough eligible targets for the template, then put a concise
 ```json
 {
   "variables": {
-    "predicate": "has a ▸Dawn ability"
+    "predicate": "<verified card-specific predicate>"
   },
-  "predicate_exception_rationale": "The source ability repeats ▸Dawn triggers, and the relevant pool contains 18 eligible cards."
+  "predicate_exception_rationale": "<source-card connection and verified eligible-target count>"
 }
 ```
 
