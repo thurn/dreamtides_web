@@ -55,14 +55,17 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def load_json_array(path: Path, label: str) -> list[Any]:
+def load_json(path: Path, label: str) -> Any:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
+        return json.loads(path.read_text(encoding="utf-8"))
     except FileNotFoundError as error:
         raise CandidateListError(f"{label} does not exist: {path}") from error
     except json.JSONDecodeError as error:
         raise CandidateListError(f"{label} is not valid JSON: {path}: {error}") from error
 
+
+def load_json_array(path: Path, label: str) -> list[Any]:
+    value = load_json(path, label)
     if not isinstance(value, list):
         raise CandidateListError(f"{label} must contain a top-level JSON array: {path}")
     return value
@@ -102,49 +105,52 @@ def load_catalog(path: Path) -> tuple[list[dict[str, Any]], dict[int, dict[str, 
 def count_template_uses(
     path: Path, catalog_ids: set[int]
 ) -> tuple[int, Counter[int], Counter[int]]:
-    cards = load_json_array(path, "Encounter candidates")
+    cards = load_json(path, "Encounter candidates")
+    if not isinstance(cards, dict):
+        raise CandidateListError(
+            f"Encounter candidates must contain a card-ID-keyed JSON object: {path}"
+        )
     counts: Counter[int] = Counter()
     rank_one_counts: Counter[int] = Counter()
 
-    for card_index, raw_card in enumerate(cards):
-        if not isinstance(raw_card, dict):
+    for card_id, encounters in cards.items():
+        if not isinstance(card_id, str) or not card_id:
             raise CandidateListError(
-                f"Encounter candidates card entry {card_index} must be an object"
+                "Encounter candidates keys must be non-empty card IDs"
             )
-        encounters = raw_card.get("encounters")
         if not isinstance(encounters, list):
             raise CandidateListError(
-                f"Encounter candidates card entry {card_index} must have an encounters array"
+                f"Encounter candidates entry {card_id} must be an encounters array"
             )
         for encounter_index, raw_encounter in enumerate(encounters):
             if not isinstance(raw_encounter, dict):
                 raise CandidateListError(
-                    f"Encounter {card_index}:{encounter_index} must be an object"
+                    f"Encounter {card_id}:{encounter_index} must be an object"
                 )
             actions = raw_encounter.get("actions")
             if not isinstance(actions, list):
                 raise CandidateListError(
-                    f"Encounter {card_index}:{encounter_index} must have an actions array"
+                    f"Encounter {card_id}:{encounter_index} must have an actions array"
                 )
             rank = raw_encounter.get("rank")
             if not isinstance(rank, int) or isinstance(rank, bool):
                 raise CandidateListError(
-                    f"Encounter {card_index}:{encounter_index} has a non-integer rank"
+                    f"Encounter {card_id}:{encounter_index} has a non-integer rank"
                 )
             for action_index, raw_action in enumerate(actions):
                 if not isinstance(raw_action, dict):
                     raise CandidateListError(
-                        f"Action {card_index}:{encounter_index}:{action_index} must be an object"
+                        f"Action {card_id}:{encounter_index}:{action_index} must be an object"
                     )
                 template_id = raw_action.get("template_id")
                 if not isinstance(template_id, int) or isinstance(template_id, bool):
                     raise CandidateListError(
-                        f"Action {card_index}:{encounter_index}:{action_index} "
+                        f"Action {card_id}:{encounter_index}:{action_index} "
                         "has a non-integer template_id"
                     )
                 if template_id not in catalog_ids:
                     raise CandidateListError(
-                        f"Action {card_index}:{encounter_index}:{action_index} uses "
+                        f"Action {card_id}:{encounter_index}:{action_index} uses "
                         f"unknown template_id {template_id}"
                     )
                 counts[template_id] += 1

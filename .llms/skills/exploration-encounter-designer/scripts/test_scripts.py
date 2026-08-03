@@ -101,38 +101,35 @@ class ListTemplateCandidatesTests(unittest.TestCase):
             catalog_path = root / "templates.json"
             catalog_path.write_text(json.dumps(templates), encoding="utf-8")
             candidates_path = root / "encounter_candidates.json"
-            candidates = [
-                {
-                    "card_id": f"synthetic-card-{card_index}",
-                    "encounters": (
-                        [
-                            {
-                                "rank": 1,
-                                "actions": [
-                                    {"template_id": template_id}
-                                    for template_id in template_uses[
-                                        :rank_one_actions_per_card
-                                    ]
-                                ],
-                            }
-                        ]
-                        if rank_one_actions_per_card
-                        else []
-                    )
-                    + [
+            candidates = {
+                f"synthetic-card-{card_index}": (
+                    [
                         {
-                            "rank": 2,
+                            "rank": 1,
                             "actions": [
                                 {"template_id": template_id}
                                 for template_id in template_uses[
-                                    rank_one_actions_per_card:
+                                    :rank_one_actions_per_card
                                 ]
                             ],
                         }
-                    ],
-                }
+                    ]
+                    if rank_one_actions_per_card
+                    else []
+                )
+                + [
+                    {
+                        "rank": 2,
+                        "actions": [
+                            {"template_id": template_id}
+                            for template_id in template_uses[
+                                rank_one_actions_per_card:
+                            ]
+                        ],
+                    }
+                ]
                 for card_index, template_uses in enumerate(card_template_uses)
-            ]
+            }
             candidates_path.write_text(json.dumps(candidates), encoding="utf-8")
             return subprocess.run(
                 [
