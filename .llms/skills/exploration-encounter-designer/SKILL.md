@@ -10,12 +10,14 @@ entered the dream depicted by one card. Give every description distinct wording,
 though all five may share the same overall narrative and strongest visual focus.
 Choose prose for vivid descriptive precision, art fidelity, and its ability to
 support two actions. The artwork supplies the material truth of the scene, but
-the prose selects only its strongest image instead of inventorying the whole
-frame. Study and freeze the scene before inspecting mechanics, then deliberately
-select ten distinct templates and arrange them into five pairs whose effects fit
-both the depicted world and the source card's deck intent. Return strict JSON by
-default, or render the validated designs as user-facing Markdown in display
-mode.
+the prose describes only the scene's single most prominent element instead of
+inventorying the whole frame. When multiple entities appear, describe only the
+one occupying the largest image area. Deemphasize background details and render
+the primary figure in evocative, specific detail. Study and freeze the scene
+before inspecting mechanics, then deliberately select ten distinct templates
+and arrange them into five pairs whose effects fit both the depicted world and
+the source card's deck intent. Return strict JSON by default, or render the
+validated designs as user-facing Markdown in display mode.
 
 ## Required input
 
@@ -188,7 +190,11 @@ commentary.
    or coils of shadow where dark cables curl are descriptive; a threshold that
    chooses someone or smoke that forgets its shape invents a poetic conceit.
    Note concrete subjects, setting, motion, scale, posture, distance, mood, and
-   sensory atmosphere. Before naming a figure's posture, verify its visible
+   sensory atmosphere. Identify the single most prominent element before
+   drafting. If the scene contains multiple entities, estimate their visible
+   image area and lock the largest as the only entity prose may describe; do not
+   mention smaller entities merely because they create a relationship or
+   action. Before naming the primary figure's posture, verify its visible
    support points and joint geometry; if sitting, kneeling, or crouching cannot
    be distinguished confidently, describe only the clearly visible pose or
    action. If a claim depends on exact color, measure the image rather than
@@ -213,14 +219,14 @@ commentary.
    offscreen lore.
 
 6. With templates still hidden, build a private scene bank from the artwork.
-   Choose one dominant visual image: usually a subject or action, plus at most
-   one supporting detail of scale, light, texture, motion, stillness, or
-   atmosphere. Omit secondary subjects and props freely. Describe that image
-   with specific nouns, strong verbs, and economical modifiers. Aim for the
-   clarity of “The figure of a bird towers above you, wreathed in flame” or
-   “Coils of shadow curl around an enigmatic figure.” Both are materially
-   descriptive, selective, and atmospheric without explaining what the image
-   symbolizes or making the scene behave impossibly.
+   Choose the single most prominent element. When entities are present, this is
+   the entity occupying the largest visible area of the image, regardless of
+   narrative importance. Describe that entity alone: omit every smaller figure,
+   creature, vehicle, or other entity. Add at most one subordinate background
+   detail of light, texture, motion, stillness, weather, or setting, and never
+   let framing geometry or scenery become the sentence's subject when a figure
+   is more prominent. Describe the primary figure with specific nouns, strong
+   verbs, evocative sensory detail, and economical modifiers.
 
    Draft only enough candidates to identify excellent scene prose. Draft enough
    faithful variants to give every final `prose` field distinct wording.
@@ -240,9 +246,13 @@ commentary.
      features, actions, and physical conditions visible or strongly implied?
      Reject invented companions, crowds, creatures, props, structures, weather
      events, histories, or incidents.
-   - **Focus gate:** Does the line select one dominant image, or does it inventory
-     actors, equipment, positions, and background elements? Reject exhaustive
-     captions. Omission—not metaphor—is the primary way to avoid flat alt text.
+   - **Focus gate:** Does the line describe only the most prominent element? If
+     multiple entities appear in the artwork, reject any line that names or
+     describes more than the single entity occupying the largest visible image
+     area. Reject lines led by framing geometry or background scenery when a
+     figure is more prominent. Any retained background detail must remain
+     subordinate. Omission—not metaphor—is the primary way to avoid flat alt
+     text.
    - **Vividness gate:** Do precise nouns, verbs, and restrained modifiers give
      the selected image atmosphere, motion, texture, or scale? Reject generic
      descriptions such as `a man stands near a shape`, even when accurate.
@@ -436,32 +446,33 @@ commentary.
   as a witch, `they`/`their` when gender is not established) instead of an
   ambiguous or dehumanizing `it`/`its`; do not turn uncertain visual details
   into interactable marks, symbols, or props.
-- Build each line around one dominant image and one optional atmospheric detail.
-  Strong verbs, exact nouns, restrained adjectives, rhythm, and omission create
-  intensity without metaphor. A concise line may be wholly literal and still
-  excellent when it chooses the image's most striking subject, motion, scale,
-  light, or texture.
+- Build each line around only the single most prominent element. When the art
+  contains multiple entities, describe only the entity occupying the largest
+  visible image area and omit all others. Give that primary figure evocative,
+  detailed treatment through strong verbs, exact nouns, restrained adjectives,
+  and supported qualities of posture, motion, scale, light, or texture. Permit
+  at most one background detail, keep it grammatically subordinate, and do not
+  let scenery or framing compete with the primary figure.
 - Reject caption-shaped prose even when it is specific, spatially accurate, and
   written in second person. Naming every subject, its equipment, its position,
-  the opposing subject, and the setting produces alt text. Keep the strongest
-  image and omit the rest.
+  another entity, and the setting produces alt text. Keep the largest-area
+  entity and omit the rest.
 - Do not use poetic conceits. Reject metaphors, similes, personification,
   symbolic equations, impossible agency, and conclusions about reality. Allow
   conventional descriptive imagery such as `wreathed in flame` and `coils of
   shadow` when it is a compact account of visible appearance rather than a claim
   that the scene thinks, chooses, remembers, or means something hidden.
 - Use these caption-regression comparisons as a quality floor:
-  - Reject “You watch two backpacked travelers face a colossal horse and mounted
-    silhouette overhead.” Prefer “A colossal rider fades into starlight above two
-    waiting travelers.”
-  - Reject “A lone gunman stands above you, outlined by a luminous triangle amid
-    smoke.” Prefer “Coils of shadow curl around an enigmatic figure.”
-  - Reject “You face a vast skull-headed figure; its hanging lantern nearly fills
-    the space between you.” Prefer “A child reaches into the lantern of a
-    towering, skull-faced watcher.”
-  - Reject “A crouched archer separates you from a colossal wolf advancing
-    through burning grass.” Prefer “A lone archer crouches as a colossal wolf
-    emerges from the fire.”
+  - Reject “Your small boat passes beneath a whale drifting across the stars.”
+    Prefer “A whale sweeps overhead, its broad belly lit by distant stars.”
+  - Reject “A slender figure stands behind an immense owl gripping the branch.”
+    Prefer “A vast owl grips a forest branch, its round eyes fixed on you.”
+  - Reject “A bright triangle frames a suited gunman among curling black cables.”
+    Prefer “A suited gunman stands motionless as thick cables arc behind him.”
+  - Reject “A skull-headed giant suspends a blazing lantern before the reaching
+    child.” Prefer “A skull-headed giant suspends a blazing lantern.”
+  - Reject “A giant wolf prowls through burning grass toward a crouched archer.”
+    Prefer “A giant wolf prowls through burning grass.”
 - Do not optimize for different compositions or sensory focuses across the five
   scenes. Every `prose` field must nevertheless have distinct wording. Rephrase
   a shared dominant image through syntax, reader position, or a different

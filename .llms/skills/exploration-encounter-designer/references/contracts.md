@@ -215,18 +215,22 @@ Score each component from 1–10:
 - `scene_quality` (40%): Whether the prose is a coherent, focused, vivid, and
   materially faithful description of the card's artwork. Score it with mechanics
   and actions hidden. Subjects, objects, setting features, depicted actions, and
-  physical conditions must be visible or strongly implied. Require one dominant
-  image expressed through precise nouns, strong verbs, and restrained details of
-  scale, light, texture, motion, stillness, or atmosphere. Reject a candidate
-  before scoring if it inventories the frame, uses generic caption language,
-  introduces metaphor, simile, personification, symbolic equivalence, impossible
-  agency, or a reality-bending conclusion, quotes the source name as a proper
-  noun, or invents a material fact. Conventional visual phrasing such as
-  `wreathed in flame` and `coils of shadow` is allowed when it directly describes
-  appearance. An ordinary word from the source name remains available when it
-  independently gives the strongest description. Reusing a strong visual focus
-  across distinctly worded scenes does not lower this score; novelty does not
-  raise it.
+  physical conditions must be visible or strongly implied. Require the single
+  most prominent element, expressed through precise nouns, strong verbs, and
+  restrained details of scale, light, texture, motion, stillness, or atmosphere.
+  When multiple entities appear, prose may describe only the entity occupying
+  the largest visible image area; smaller entities must be omitted. Background
+  detail must remain subordinate, while the primary figure receives evocative,
+  specific treatment. Reject a candidate before scoring if it inventories the
+  frame, foregrounds framing or scenery over a more prominent figure, uses
+  generic caption language, introduces metaphor, simile, personification,
+  symbolic equivalence, impossible agency, or a reality-bending conclusion,
+  quotes the source name as a proper noun, or invents a material fact.
+  Conventional visual phrasing such as `wreathed in flame` and `coils of shadow`
+  is allowed when it directly describes appearance. An ordinary word from the
+  source name remains available when it independently gives the strongest
+  description. Reusing a strong visual focus across distinctly worded scenes
+  does not lower this score; novelty does not raise it.
 - `action_quality` (15%): Whether both labels are distinct, purposeful things to
   do in the scene and both resolutions are concise, vivid responses.
 - `mechanical_connection` (30%): Whether each label and resolution make its
