@@ -94,6 +94,7 @@ class ListTemplateCandidatesTests(unittest.TestCase):
         templates: list[dict[str, object]],
         card_template_uses: list[list[int]],
         required_template_count: int = 2,
+        rank_one_actions_per_card: int = 0,
     ) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -103,12 +104,30 @@ class ListTemplateCandidatesTests(unittest.TestCase):
             candidates = [
                 {
                     "card_id": f"synthetic-card-{card_index}",
-                    "encounters": [
+                    "encounters": (
+                        [
+                            {
+                                "rank": 1,
+                                "actions": [
+                                    {"template_id": template_id}
+                                    for template_id in template_uses[
+                                        :rank_one_actions_per_card
+                                    ]
+                                ],
+                            }
+                        ]
+                        if rank_one_actions_per_card
+                        else []
+                    )
+                    + [
                         {
+                            "rank": 2,
                             "actions": [
                                 {"template_id": template_id}
-                                for template_id in template_uses
-                            ]
+                                for template_id in template_uses[
+                                    rank_one_actions_per_card:
+                                ]
+                            ],
                         }
                     ],
                 }
@@ -163,13 +182,31 @@ class ListTemplateCandidatesTests(unittest.TestCase):
         self.assertEqual(balance["soft_warning_threshold"], 1)
         self.assertEqual(balance["omission_threshold"], 2)
         self.assertEqual(
-            balance["soft_warnings"], [{"template_id": 3, "usage_count": 1}]
+            balance["soft_warnings"],
+            [
+                {
+                    "template_id": 3,
+                    "usage_count": 1,
+                    "rank_1_usage_count": 0,
+                    "reasons": ["overall"],
+                }
+            ],
         )
         self.assertEqual(
             balance["omitted_templates"],
             [
-                {"template_id": 1, "usage_count": 3},
-                {"template_id": 2, "usage_count": 2},
+                {
+                    "template_id": 1,
+                    "usage_count": 3,
+                    "rank_1_usage_count": 0,
+                    "reasons": ["overall"],
+                },
+                {
+                    "template_id": 2,
+                    "usage_count": 2,
+                    "rank_1_usage_count": 0,
+                    "reasons": ["overall"],
+                },
             ],
         )
         self.assertEqual(
@@ -200,8 +237,44 @@ class ListTemplateCandidatesTests(unittest.TestCase):
         self.assertEqual(
             output["balance"]["omitted_templates"],
             [
-                {"template_id": 8, "usage_count": 8},
-                {"template_id": 9, "usage_count": 8},
+                {
+                    "template_id": 8,
+                    "usage_count": 8,
+                    "rank_1_usage_count": 0,
+                    "reasons": ["overall"],
+                },
+                {
+                    "template_id": 9,
+                    "usage_count": 8,
+                    "rank_1_usage_count": 0,
+                    "reasons": ["overall"],
+                },
+            ],
+        )
+
+    def test_rank_one_usage_is_an_independent_primary_guard(self) -> None:
+        result = self.run_lister(
+            self.synthetic_templates(6),
+            [[1, 2, 3], [1, 4, 5, 6]],
+            rank_one_actions_per_card=1,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        output = json.loads(result.stdout)
+        balance = output["balance"]
+        self.assertEqual(balance["recorded_rank_1_template_uses"], 2)
+        self.assertEqual(balance["minimum_rank_1_uses_per_template"], 0)
+        self.assertEqual(balance["rank_1_soft_warning_threshold"], 1)
+        self.assertEqual(balance["rank_1_omission_threshold"], 2)
+        self.assertEqual(
+            balance["omitted_templates"],
+            [
+                {
+                    "template_id": 1,
+                    "usage_count": 2,
+                    "rank_1_usage_count": 2,
+                    "reasons": ["rank_1"],
+                }
             ],
         )
 
@@ -227,11 +300,53 @@ class ListTemplateCandidatesTests(unittest.TestCase):
         self.assertEqual(balance["omission_threshold"], 16)
         self.assertEqual(
             balance["omitted_templates"],
-            [{"template_id": 1, "usage_count": 16}],
+            [
+                {
+                    "template_id": 1,
+                    "usage_count": 16,
+                    "rank_1_usage_count": 0,
+                    "reasons": ["overall"],
+                }
+            ],
         )
         self.assertEqual(
             [warning["template_id"] for warning in balance["soft_warnings"]],
             list(range(2, 20)),
+        )
+
+    def test_rank_one_balance_avoids_five_uses_at_one_hundred_cards(self) -> None:
+        rank_one_uses = [(index % 70) + 1 for index in range(200)]
+        rank_one_uses[59] = 1
+        cards = [
+            rank_one_uses[index : index + 2]
+            for index in range(0, len(rank_one_uses), 2)
+        ]
+        result = self.run_lister(
+            self.synthetic_templates(70),
+            cards,
+            required_template_count=10,
+            rank_one_actions_per_card=2,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        output = json.loads(result.stdout)
+        balance = output["balance"]
+        self.assertEqual(balance["completed_cards"], 100)
+        self.assertEqual(balance["recorded_rank_1_template_uses"], 200)
+        self.assertEqual(balance["mean_rank_1_uses_per_template"], 2.857)
+        self.assertEqual(balance["minimum_rank_1_uses_per_template"], 2)
+        self.assertEqual(balance["rank_1_soft_warning_threshold"], 3)
+        self.assertEqual(balance["rank_1_omission_threshold"], 4)
+        self.assertEqual(
+            balance["omitted_templates"],
+            [
+                {
+                    "template_id": 1,
+                    "usage_count": 4,
+                    "rank_1_usage_count": 4,
+                    "reasons": ["rank_1", "overall"],
+                }
+            ],
         )
 
 

@@ -354,12 +354,14 @@ commentary.
    `soft_warnings` remains selectable, but prefer an unflagged template when it
    fits the scene and deck intent comparably well. Entries in
    `omitted_templates` are diagnostic IDs, not candidates; do not select them or
-   reopen the raw catalog to recover them. The script orders candidates from
-   least used to most used, warns at one use above the current least-used
-   template, and temporarily omits at two uses above that low-water mark. This
-   keeps template use advancing in balanced rounds. If an extremely skewed data
-   set would leave fewer than ten choices, the script restores the least-used
-   omitted entries and lists them in
+   reopen the raw catalog to recover them. The script counts rank-1 uses and
+   total uses separately, then orders candidates by fewest prior rank-1 uses
+   first and fewest total uses second. Each dimension warns at one use above its
+   current least-used template and temporarily omits at two uses above that
+   low-water mark. This gives rank-1 diversity priority while keeping the full
+   candidate set balanced. If an extremely skewed data set would leave fewer
+   than ten choices, the script restores the least-used omitted entries and
+   lists them in
    `reintroduced_to_preserve_minimum_pool`; treat each restored entry as
    strongly discouraged but available when necessary.
 
@@ -446,7 +448,10 @@ commentary.
     mechanical connection by the weaker of the two action chains, not their
     average. Revise any chain below 7/10. A shared narrative or visual focus
     loses no points, and textual novelty earns no points beyond satisfying the
-    distinct-wording requirement.
+    distinct-wording requirement. When two designs are otherwise comparable,
+    use the step-9 rank-1 usage counts as the tie-breaker: give the better rank
+    to the pair whose templates have fewer prior rank-1 uses. Never promote a
+    materially weaker design solely to improve historical balance.
 
 17. Sort the five completed event objects by ascending `rank` as a final
     readability pass, so rank 1 appears first and rank 5 last. Keep each event's

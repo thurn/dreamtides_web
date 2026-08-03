@@ -100,9 +100,10 @@ def load_catalog(path: Path) -> tuple[list[dict[str, Any]], dict[int, dict[str, 
 
 def count_template_uses(
     path: Path, catalog_ids: set[int]
-) -> tuple[int, Counter[int]]:
+) -> tuple[int, Counter[int], Counter[int]]:
     cards = load_json_array(path, "Encounter candidates")
     counts: Counter[int] = Counter()
+    rank_one_counts: Counter[int] = Counter()
 
     for card_index, raw_card in enumerate(cards):
         if not isinstance(raw_card, dict):
@@ -124,6 +125,11 @@ def count_template_uses(
                 raise CandidateListError(
                     f"Encounter {card_index}:{encounter_index} must have an actions array"
                 )
+            rank = raw_encounter.get("rank")
+            if not isinstance(rank, int) or isinstance(rank, bool):
+                raise CandidateListError(
+                    f"Encounter {card_index}:{encounter_index} has a non-integer rank"
+                )
             for action_index, raw_action in enumerate(actions):
                 if not isinstance(raw_action, dict):
                     raise CandidateListError(
@@ -141,8 +147,10 @@ def count_template_uses(
                         f"unknown template_id {template_id}"
                     )
                 counts[template_id] += 1
+                if rank == 1:
+                    rank_one_counts[template_id] += 1
 
-    return len(cards), counts
+    return len(cards), counts, rank_one_counts
 
 
 def build_output(
@@ -150,6 +158,7 @@ def build_output(
     by_id: dict[int, dict[str, Any]],
     completed_cards: int,
     counts: Counter[int],
+    rank_one_counts: Counter[int],
     required_template_count: int,
 ) -> dict[str, Any]:
     if required_template_count <= 0:
@@ -166,10 +175,19 @@ def build_output(
     soft_warning_threshold = minimum_uses + 1
     omission_threshold = soft_warning_threshold + 1
 
+    total_rank_one_uses = sum(rank_one_counts.values())
+    mean_rank_one_uses = total_rank_one_uses / len(catalog)
+    minimum_rank_one_uses = min(
+        rank_one_counts[template_id] for template_id in by_id
+    )
+    rank_one_soft_warning_threshold = minimum_rank_one_uses + 1
+    rank_one_omission_threshold = rank_one_soft_warning_threshold + 1
+
     overused_ids = {
         template_id
         for template_id in by_id
         if counts[template_id] >= omission_threshold
+        or rank_one_counts[template_id] >= rank_one_omission_threshold
     }
     allowed_ids = set(by_id) - overused_ids
     reintroduced_ids: list[int] = []
@@ -177,19 +195,30 @@ def build_output(
     if len(allowed_ids) < required_template_count:
         needed = required_template_count - len(allowed_ids)
         reintroduced_ids = sorted(
-            overused_ids, key=lambda template_id: (counts[template_id], template_id)
+            overused_ids,
+            key=lambda template_id: (
+                rank_one_counts[template_id],
+                counts[template_id],
+                template_id,
+            ),
         )[:needed]
         allowed_ids.update(reintroduced_ids)
 
     omitted_ids = overused_ids - set(reintroduced_ids)
     allowed_entries = sorted(
         (by_id[template_id] for template_id in allowed_ids),
-        key=lambda entry: (counts[entry["template_id"]], entry["template_id"]),
+        key=lambda entry: (
+            rank_one_counts[entry["template_id"]],
+            counts[entry["template_id"]],
+            entry["template_id"],
+        ),
     )
     warning_ids = [
         entry["template_id"]
         for entry in allowed_entries
         if counts[entry["template_id"]] >= soft_warning_threshold
+        or rank_one_counts[entry["template_id"]]
+        >= rank_one_soft_warning_threshold
     ]
     special_variables = sorted(
         {
@@ -208,15 +237,37 @@ def build_output(
             "minimum_uses_per_template": minimum_uses,
             "soft_warning_threshold": soft_warning_threshold,
             "omission_threshold": omission_threshold,
+            "recorded_rank_1_template_uses": total_rank_one_uses,
+            "mean_rank_1_uses_per_template": round(mean_rank_one_uses, 3),
+            "minimum_rank_1_uses_per_template": minimum_rank_one_uses,
+            "rank_1_soft_warning_threshold": rank_one_soft_warning_threshold,
+            "rank_1_omission_threshold": rank_one_omission_threshold,
             "required_template_count": required_template_count,
             "soft_warning_guidance": (
-                "Prefer a less-used unflagged template when it fits comparably well. "
-                "A warned template remains selectable when it is materially stronger."
+                "Prefer fewer prior rank-1 uses first and fewer total uses second "
+                "when templates fit comparably well. A warned template remains "
+                "selectable when it is materially stronger."
             ),
             "soft_warnings": [
                 {
                     "template_id": template_id,
                     "usage_count": counts[template_id],
+                    "rank_1_usage_count": rank_one_counts[template_id],
+                    "reasons": [
+                        reason
+                        for reason, applies in (
+                            (
+                                "rank_1",
+                                rank_one_counts[template_id]
+                                >= rank_one_soft_warning_threshold,
+                            ),
+                            (
+                                "overall",
+                                counts[template_id] >= soft_warning_threshold,
+                            ),
+                        )
+                        if applies
+                    ],
                 }
                 for template_id in warning_ids
             ],
@@ -224,15 +275,33 @@ def build_output(
                 {
                     "template_id": template_id,
                     "usage_count": counts[template_id],
+                    "rank_1_usage_count": rank_one_counts[template_id],
+                    "reasons": [
+                        reason
+                        for reason, applies in (
+                            (
+                                "rank_1",
+                                rank_one_counts[template_id]
+                                >= rank_one_omission_threshold,
+                            ),
+                            (
+                                "overall",
+                                counts[template_id] >= omission_threshold,
+                            ),
+                        )
+                        if applies
+                    ],
                 }
                 for template_id in sorted(
-                    omitted_ids, key=lambda item: (-counts[item], item)
+                    omitted_ids,
+                    key=lambda item: (-rank_one_counts[item], -counts[item], item),
                 )
             ],
             "reintroduced_to_preserve_minimum_pool": [
                 {
                     "template_id": template_id,
                     "usage_count": counts[template_id],
+                    "rank_1_usage_count": rank_one_counts[template_id],
                 }
                 for template_id in reintroduced_ids
             ],
@@ -246,7 +315,7 @@ def main() -> int:
     args = parse_args()
     try:
         catalog, by_id = load_catalog(args.template_catalog)
-        completed_cards, counts = count_template_uses(
+        completed_cards, counts, rank_one_counts = count_template_uses(
             args.encounter_candidates, set(by_id)
         )
         output = build_output(
@@ -254,6 +323,7 @@ def main() -> int:
             by_id,
             completed_cards,
             counts,
+            rank_one_counts,
             args.required_template_count,
         )
     except (CandidateListError, OSError) as error:
