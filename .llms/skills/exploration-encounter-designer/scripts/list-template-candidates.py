@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import sys
 from collections import Counter
@@ -172,7 +173,7 @@ def build_output(
     total_uses = sum(counts.values())
     mean_uses = total_uses / len(catalog)
     minimum_uses = min(counts[template_id] for template_id in by_id)
-    soft_warning_threshold = minimum_uses + 1
+    soft_warning_threshold = max(minimum_uses + 1, math.ceil(mean_uses))
     omission_threshold = soft_warning_threshold + 1
 
     total_rank_one_uses = sum(rank_one_counts.values())
@@ -180,7 +181,9 @@ def build_output(
     minimum_rank_one_uses = min(
         rank_one_counts[template_id] for template_id in by_id
     )
-    rank_one_soft_warning_threshold = minimum_rank_one_uses + 1
+    rank_one_soft_warning_threshold = max(
+        minimum_rank_one_uses + 1, math.ceil(mean_rank_one_uses)
+    )
     rank_one_omission_threshold = rank_one_soft_warning_threshold + 1
 
     overused_ids = {

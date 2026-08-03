@@ -349,6 +349,27 @@ class ListTemplateCandidatesTests(unittest.TestCase):
             ],
         )
 
+    def test_fair_share_prevents_a_rare_template_from_freezing_progress(self) -> None:
+        cards = [
+            [
+                ((card_index * 10 + action_index) % 60) + 1
+                for action_index in range(10)
+            ]
+            for card_index in range(100)
+        ]
+        result = self.run_lister(
+            self.synthetic_templates(70), cards, required_template_count=10
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        output = json.loads(result.stdout)
+        balance = output["balance"]
+        self.assertEqual(balance["completed_cards"], 100)
+        self.assertEqual(balance["minimum_uses_per_template"], 0)
+        self.assertEqual(balance["mean_uses_per_template"], 14.286)
+        self.assertEqual(balance["soft_warning_threshold"], 15)
+        self.assertEqual(balance["omission_threshold"], 16)
+
 
 class ValidateExplorationTests(unittest.TestCase):
     def test_canonical_catalog_excludes_custom_content_templates(self) -> None:

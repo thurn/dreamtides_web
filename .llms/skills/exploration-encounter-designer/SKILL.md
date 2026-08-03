@@ -356,12 +356,14 @@ commentary.
    `omitted_templates` are diagnostic IDs, not candidates; do not select them or
    reopen the raw catalog to recover them. The script counts rank-1 uses and
    total uses separately, then orders candidates by fewest prior rank-1 uses
-   first and fewest total uses second. Each dimension warns at one use above its
-   current least-used template and temporarily omits at two uses above that
-   low-water mark. This gives rank-1 diversity priority while keeping the full
-   candidate set balanced. If an extremely skewed data set would leave fewer
-   than ten choices, the script restores the least-used omitted entries and
-   lists them in
+   first and fewest total uses second. In each dimension, the warning threshold
+   is the larger of one use above the current least-used template and the
+   ceiling of current mean usage; omission begins one use above that warning
+   threshold. This gives rank-1 diversity priority, scales the target with
+   completed work, and prevents a rare-fit template from freezing the rest of
+   the catalog near zero. If an extremely skewed data set would leave fewer than
+   ten choices, the script restores the least-used omitted entries and lists
+   them in
    `reintroduced_to_preserve_minimum_pool`; treat each restored entry as
    strongly discouraged but available when necessary.
 
