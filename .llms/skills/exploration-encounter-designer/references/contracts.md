@@ -216,13 +216,14 @@ Score each component from 1–10:
   materially faithful description of the card's artwork. Score it with mechanics
   and actions hidden. Subjects, objects, setting features, depicted actions, and
   physical conditions must be visible or strongly implied. For a Character
-  card, reject a candidate before scoring unless it exclusively describes the
-  canonical character identified by the card name. Every noun, modifier, and
-  clause must refer to that character or their own visible body, attire, pose,
-  expression, gesture, motion, or texture. Any mention of another figure,
-  entity, person, creature, object, prop, architecture, terrain, weather, light
-  source, framing shape, background element, or relationship to one is an
-  automatic rejection. This subject selection overrides relative image area.
+  card, reject a candidate before scoring unless the canonical character
+  identified by the card name is the primary subject and the only person,
+  creature, or character-like figure described. Visible non-character elements
+  such as props, architecture, terrain, weather, light, and framing shapes may
+  appear, as may the source character's relationships to them, when they sharpen
+  the scene without inventorying the frame or displacing the character. Any
+  mention of another character is an automatic rejection. This character
+  selection overrides relative image area.
   For other card types, require the single most prominent element, expressed
   through precise nouns, strong verbs, and restrained details of scale, light,
   texture, motion, stillness, or atmosphere. When multiple entities appear,
@@ -237,9 +238,9 @@ Score each component from 1–10:
   Conventional visual phrasing such as `wreathed in flame` and `coils of shadow`
   is allowed when it directly describes appearance. An ordinary word from the
   source name remains available when it independently gives the strongest
-  description. Neither allowance overrides the Character-only exclusion of
-  every separate scene element. Reusing a strong visual focus across distinctly
-  worded scenes does not lower this score; novelty does not raise it.
+  description. Neither allowance overrides the one-character rule or permits
+  scenery to displace the source character. Reusing a strong visual focus across
+  distinctly worded scenes does not lower this score; novelty does not raise it.
 - `action_quality` (15%): Whether both labels are distinct, purposeful things to
   do in the scene and both resolutions are concise, vivid responses.
 - `mechanical_connection` (30%): Whether each label and resolution make its
