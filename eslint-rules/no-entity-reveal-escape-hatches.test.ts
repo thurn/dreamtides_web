@@ -69,6 +69,13 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
         const binding = useRevealSource({ identity: { entityType: "dream-avatar-ability", entityId: revealEntityId("dream-avatar-ability", id) }, spec });`,
     },
     {
+      name: "Tides info label owns its semantic reveal and identity",
+      filename: "src/cumulus/components/hud/TidesInfoLabel.tsx",
+      code: `import { useRevealSource } from "../../internal/reveal/context";
+        import { revealEntityId } from "../../internal/reveal/identity";
+        const binding = useRevealSource({ identity: { entityType: "glossary-term", entityId: revealEntityId("glossary-term", "tides") }, spec });`,
+    },
+    {
       name: "Wager prize card owns its semantic reveal and identity",
       filename: "src/cumulus/components/card/PlayingCard.tsx",
       code: `import { useRevealSource } from "../../internal/reveal/context";

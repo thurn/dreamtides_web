@@ -74,7 +74,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run cumulus-docs) -->
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
-| Pressable | Primitives | 32 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Pressable | Primitives | 33 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Resource Chip | Components | 4 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
 | Essence Value | Components | 10 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
 | Icon Button | Components | 19 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
@@ -96,13 +96,14 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | DisclosureSection | Components | 5 | [components/disclosure-section.md](components/disclosure-section.md) | A controlled Cumulus section for progressively revealing dense secondary information. |
 | CardOrderEditor | Components | 1 | [components/card-order-editor.md](components/card-order-editor.md) | An identity-safe top-to-bottom card ordering control for the battle deck-order workflow. |
 | Tide Disc | Components | 1 | [components/tide-disc.md](components/tide-disc.md) | The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal, sized 'sm' or 'lg'. |
+| Tides Info Label | Components | 1 | [components/tides-info-label.md](components/tides-info-label.md) | The typographic Tides eyebrow: uppercase copy followed by a filled one-em information glyph, with one shared definition reveal across the complete label. |
 | Transfiguration Form Button | Components | 1 | [components/transfiguration-form-button.md](components/transfiguration-form-button.md) | The canonical forge-form choice: compact and price-bearing controls with shared glyph, color, state, and accessibility behavior. |
 | Transient Status Toast | Components | 3 | [components/transient-status-toast.md](components/transient-status-toast.md) | The fixed, safe-area-aware short-lived status surface for player notices that need a semantic severity and structured copy. |
 | Radial Announcement | Components | 2 | [components/radial-announcement.md](components/radial-announcement.md) | The orbiting circular status moment for turn handoffs, wins, and failures. |
 | Motes | Components | 11 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | 8 | [components/info-card.md](components/info-card.md) | The strict information-card presentation. |
 | Group Panel | Components | 8 | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a flat, solid deep-plum card that collects dense, related values into one unit. |
-| Inline Glyph | Primitives | 6 | [components/inline-glyph.md](components/inline-glyph.md) | The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size. |
+| Inline Glyph | Primitives | 7 | [components/inline-glyph.md](components/inline-glyph.md) | The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size. |
 | Glow Icon | Primitives | 16 | [components/glow-icon.md](components/glow-icon.md) | The resource-glyph renderer for card marks: a Boxicons glyph that paints in the caller's resource hue, with an optional content-protection shadow and an optional emitted-light glow pinned to its own font-size so both scale with the mark. |
 | Pip Badge | Components | 2 | [components/pip-badge.md](components/pip-badge.md) | The compact circled number used in dense card rows and inline rules text for spark or energy values. |
 | Journey Status Bar | Components | 6 | [components/journey-status-bar.md](components/journey-status-bar.md) | The persistent, transparent bottom HUD for journey screens. |

@@ -6,7 +6,7 @@ const STRONG_MECHANICAL_PROPS = new Set(["anchorRect", "portalTarget", "revealSi
 const CONTROLLED_PROPS = new Set(["open", "shown", "isOpen", "isShown", "revealOpen", "revealShown"]);
 const INTERACTION_ESCAPE_PROPS = new Set(["onMouseEnter", "onMouseMove", "onMouseLeave", "onPointerEnter", "onPointerMove", "onPointerLeave", "onPointerDown", "onPointerUp", "onPointerCancel", "onMouseDown", "onMouseUp", "onTouchStart", "onTouchMove", "onTouchEnd"]);
 const CONTENT_PROPS = new Set(["content", "children", "card", "reveal", "renderedContent"]);
-const NAMED_REVEAL_COMPONENTS = new Set(["GameCard", "CompactGameCardRow", "InfoCard", "AtlasNode", "GlossaryTerm", "BattleGameCard", "Dreamsign", "WagerPrizeCard", "DreamAvatarPortrait", "DreamAvatarAbilityText", "TideDisc", "ResourceChip", "PipBadge", "CardStatOrb", "JourneyStatusBar", "SiteNode", "TransfigurationFormButton", "OfferTile"]);
+const NAMED_REVEAL_COMPONENTS = new Set(["GameCard", "CompactGameCardRow", "InfoCard", "AtlasNode", "GlossaryTerm", "BattleGameCard", "Dreamsign", "WagerPrizeCard", "DreamAvatarPortrait", "DreamAvatarAbilityText", "TideDisc", "TidesInfoLabel", "ResourceChip", "PipBadge", "CardStatOrb", "JourneyStatusBar", "SiteNode", "TransfigurationFormButton", "OfferTile"]);
 const GENERIC_REVEAL_WRAPPERS = new Set(["HoverPopover", "RevealPopover", "EntityReveal", "GenericReveal", "RevealWrapper", "EntityRevealWrapper"]);
 
 const CONTEXT_COMPONENTS = [
@@ -28,6 +28,7 @@ const CONTEXT_COMPONENTS = [
   "src/cumulus/components/hud/JourneyStatusBar.tsx",
   "src/cumulus/components/hud/ResourceChip.tsx",
   "src/cumulus/components/hud/TideDisc.tsx",
+  "src/cumulus/components/hud/TidesInfoLabel.tsx",
   "src/cumulus/components/hud/TideSelectionButton.tsx",
 ];
 const IDENTITY_COMPONENTS = CONTEXT_COMPONENTS.filter((file) => !file.endsWith("CardView.tsx") && !file.endsWith("CompactGameCardRow.tsx"));

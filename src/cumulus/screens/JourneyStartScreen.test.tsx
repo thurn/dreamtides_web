@@ -139,6 +139,13 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     );
     expect(cluster).not.toBeNull();
     expect(cluster?.querySelectorAll("[data-tide-disc]")).toHaveLength(2);
+    const label = container.querySelector<HTMLElement>(
+      '[data-dream-avatar-page="caller-2"] [data-tides-info-label]',
+    );
+    expect(label?.getAttribute("aria-label")).toBe("Tides information");
+    expect(label?.querySelector("i")?.className).toBe("bxf bx-info-circle");
+    expect(label?.dataset.revealPrimaryVariant).toBe("text");
+    expect(label?.dataset.revealFeedback).toBe("stationary");
 
     act(() => {
       root.unmount();
@@ -452,6 +459,11 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
     );
     expect(tides).not.toBeNull();
     expect(tides?.querySelectorAll("[data-tide-disc]")).toHaveLength(2);
+    expect(
+      container.querySelector(
+        '[data-dream-avatar-column="caller-2"] [data-tides-info-label]',
+      ),
+    ).not.toBeNull();
 
     act(() => {
       root.unmount();

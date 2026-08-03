@@ -57,6 +57,7 @@ import { selectDemo } from "./demos/select";
 import { siteNodeDemo } from "./demos/site-node";
 import { speechBubbleDemo } from "./demos/speech-bubble";
 import { tideDiscDemo } from "./demos/tide-disc";
+import { tidesInfoLabelDemo } from "./demos/tides-info-label";
 import { textFieldDemo } from "./demos/text-field";
 import { textAreaDemo } from "./demos/text-area";
 import { transfigurationFormButtonDemo } from "./demos/transfiguration-form-button";
@@ -177,6 +178,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   disclosureSectionDemo,
   cardOrderEditorDemo,
   tideDiscDemo,
+  tidesInfoLabelDemo,
   transfigurationFormButtonDemo,
   transientStatusToastDemo,
   radialAnnouncementDemo,

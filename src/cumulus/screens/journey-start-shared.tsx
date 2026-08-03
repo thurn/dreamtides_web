@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { ResourceChip } from "../components/hud/ResourceChip";
 import { IconButton } from "../components/controls/IconButton";
 import { TideDisc, type TideDiscSize } from "../components/hud/TideDisc";
+import { TidesInfoLabel } from "../components/hud/TidesInfoLabel";
 import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
 import { type Tide } from "../components/hud/tide-spec";
 import { token } from "../primitives/tokens";
@@ -75,27 +76,9 @@ export function TideDiscReveal({
   );
 }
 
-/** The plain "Tides:" caption above/beside a tide-disc row — the uppercase
- * eyebrow both layouts label their tides with. A static caption, not a reveal
- * trigger. */
-export function TidesLabel() {
-  return (
-    <span
-      style={{
-        font: token("--t-eyebrow"),
-        letterSpacing: token("--tracking-eyebrow"),
-        textTransform: "uppercase",
-        color: token("--text-secondary"),
-        lineHeight: 1,
-      }}
-    >
-      Tides:
-    </span>
-  );
-}
-
 /** The tides cluster shared by BOTH DreamAvatar-select layouts: a top row with
- * the "Tides:" caption on the left and the starting-essence on the right, and —
+ * the revealing "Tides: (i)" label on the left and starting essence on the
+ * right, and —
  * below it, left-aligned under the caption — the tide discs at the larger 'lg'
  * size (capped at {@link MAX_TIDE_DISCS}). The desktop triptych and the mobile
  * carousel both render this so the arrangement (discs stacked beneath the
@@ -127,7 +110,7 @@ export function TidesEssenceBlock({
           gap: token("--space-5"),
         }}
       >
-        {hasTides ? <TidesLabel /> : <span />}
+        {hasTides ? <TidesInfoLabel /> : <span />}
         <EssenceReveal dreamAvatar={dreamAvatar} />
       </div>
 
