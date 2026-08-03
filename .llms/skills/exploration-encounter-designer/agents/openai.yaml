@@ -1,0 +1,4 @@
+interface:
+  display_name: "Exploration Encounter Designer"
+  short_description: "Design encounters with art-matched mechanics"
+  default_prompt: "Use $exploration-encounter-designer to design five exploration encounters for this Dreamtides card."
