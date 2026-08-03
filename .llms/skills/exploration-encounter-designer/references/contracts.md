@@ -150,6 +150,12 @@ Use the same entity-reference shape for the catalog's `{card_name}` and
 `{dreamsign}` placeholders. Verify every `{transfiguration}` value against the
 canonical transfiguration types.
 
+Every card entity reference must use a UUID different from `card.id` in the
+input. The source card is ineligible for all template resolutions. Eligibility
+is UUID-based, so a different canonical UUID remains eligible when it shares
+the source card's display name. No `effect_text` or other action field may
+identify the source card as the resolved target.
+
 For a special runtime variable, add `selection` only when eligibility is
 restricted:
 
@@ -164,11 +170,12 @@ restricted:
 ```
 
 The standard predicate values are exactly `Event`, `Warrior`, `Spirit Animal`,
-`Survivor`, and `≤2● cost Character`. For a special runtime variable, omitting
-its `selection` entry is the standard `none` choice and leaves it unrestricted.
-For a `{predicate}` placeholder, choose one of the five standard values.
-`Character` is always forbidden because no constraint is the more useful broad
-option.
+`Survivor`, and `≤2● cost Character`. Every special card variable removes the
+input `card.id` from its eligible pool before applying any predicate. Omitting
+its `selection` entry is the standard `none` choice and leaves the remaining
+pool unrestricted. For a `{predicate}` placeholder, choose one of the five
+standard values. `Character` is always forbidden because no constraint is the
+more useful broad option.
 
 Use a nonstandard predicate only for a strong, card-specific design reason that
 none of the standard values can express. Verify that the relevant canonical

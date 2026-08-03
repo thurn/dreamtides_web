@@ -253,13 +253,17 @@ def validate_entity_reference(
     value: Any,
     path: str,
     entities: dict[str, dict[str, Any]],
+    excluded_entity_id: str | None = None,
 ) -> None:
     obj = require_object(value, path)
     entity_id = require_uuid(obj.get("id"), f"{path}.id")
     display_name = require_string(obj.get("display_name"), f"{path}.display_name")
-    canonical = entities.get(normalized_uuid(entity_id))
+    normalized_entity_id = normalized_uuid(entity_id)
+    canonical = entities.get(normalized_entity_id)
     if canonical is None:
         fail(f"{path}.id", "does not identify canonical content")
+    if excluded_entity_id is not None and normalized_entity_id == excluded_entity_id:
+        fail(f"{path}.id", "must not identify the source card")
     if display_name != canonical.get("name"):
         fail(
             f"{path}.display_name",
@@ -291,6 +295,7 @@ def validate_variables(
     cards: dict[str, dict[str, Any]],
     dreamsigns: dict[str, dict[str, Any]],
     transfigurations: set[str],
+    source_card_id: str,
 ) -> None:
     variables = require_object(action.get("variables"), f"{path}.variables")
     predicate_exception_rationale = action.get("predicate_exception_rationale")
@@ -301,7 +306,12 @@ def validate_variables(
         value = variables[placeholder]
         value_path = f"{path}.variables.{placeholder}"
         if placeholder in {"card_id", "card_name"}:
-            validate_entity_reference(value, value_path, cards)
+            validate_entity_reference(
+                value,
+                value_path,
+                cards,
+                excluded_entity_id=source_card_id,
+            )
         elif placeholder in {"dreamsign", "dreamsign_name"}:
             validate_entity_reference(value, value_path, dreamsigns)
         elif placeholder == "transfiguration":
@@ -359,6 +369,7 @@ def validate_output(
     if len(events) != 5:
         fail("$output", "must contain exactly 5 events")
 
+    source_card_id = normalized_uuid(request["card"]["id"])
     input_pairs_by_id = {pair["id"]: pair for pair in request["template_pairs"]}
     seen_pair_ids: set[str] = set()
     seen_ranks: set[int] = set()
@@ -412,6 +423,7 @@ def validate_output(
                 cards,
                 dreamsigns,
                 transfigurations,
+                source_card_id,
             )
             effect_text = require_string(
                 action_obj.get("effect_text"), f"{action_path}.effect_text"

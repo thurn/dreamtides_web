@@ -97,6 +97,9 @@ The canonical catalog currently contains these special variables:
 - `$STARTER_CARD` resolves to one random eligible starter card that is currently
   in the player's deck. It is narrower than `$DECK_CARD`: a card must satisfy
   both the starter requirement and any explicit selection predicate.
+Every special card variable resolves after excluding the source card's UUID
+from its eligible pool. This exclusion is unconditional: a predicate may narrow
+the remaining pool, but no selection rule may restore the source card.
 For `$OFFERED_CARD`, `$DECK_CARD`, and `$STARTER_CARD`, put an eligibility rule
 under the token's exact name in `selection` only when a restriction materially
 improves the design:
@@ -111,14 +114,15 @@ improves the design:
 }
 ```
 
-Omitting that token from `selection` means unrestricted. Use the standard
-predicate vocabulary and exception rules in **Mechanical standards** for every
-selection predicate.
+Omitting that token from `selection` means unrestricted among eligible cards
+after the source UUID is excluded. Use the standard predicate vocabulary and
+exception rules in **Mechanical standards** for every selection predicate.
 
 Because runtime-selected card identity is unknown while authoring, its
 `effect_text` uses a readable generic description that states the runtime source
-and any restriction. No completed `effect_text` may contain a literal
-`$SPECIAL_VARIABLE` token.
+and any restriction. It must not describe the source card as the selected
+target. No completed `effect_text` may contain a literal `$SPECIAL_VARIABLE`
+token.
 
 After opening the canonical catalog in workflow step 9, enumerate every
 `$SPECIAL_VARIABLE` it contains. If the catalog contains a token not defined in
@@ -300,7 +304,8 @@ commentary.
       source card's likely deck while leaving room for a real alternative.
     - **Satisfiable specificity:** Prefer templates whose predicates, card or
       dreamsign references, transfigurations, and values can be populated with
-      canonical content that fits both the scene and the strategy.
+      canonical content that fits both the scene and the strategy. Reject any
+      card reference or runtime selection that can resolve to the source card.
     - **Chain strength:** Judge the prospective label, resolution, and effect as
       one causal chain. A merely thematic reward with no convincing player act
       is a weak fit.
@@ -380,9 +385,11 @@ commentary.
 18. Before validation, scan every `prose`, `label`, and `resolution` for
     the complete card name, distinctive multiword fragments used as names, and
     mechanical repetition of source-name language. Replace those matches while
-    preserving independently useful ordinary words. Then write the complete
-    event objects to JSON, validate them, and fix every error regardless of
-    output mode:
+    preserving independently useful ordinary words. Scan every action's
+    structured card references and runtime card selections by UUID, and its
+    `effect_text` for a source-card target, rejecting any that identify or can
+    resolve to the source card. Then write the complete event objects to JSON,
+    validate them, and fix every error regardless of output mode:
 
     ```bash
     python3 .llms/skills/exploration-encounter-designer/scripts/validate-exploration.py \
@@ -542,6 +549,13 @@ commentary.
 - Reference existing cards and dreamsigns with real canonical UUIDs. Resolve
   names only for display. Validate transfiguration names and other fixed content
   against repository sources. Never key, compare, or select cards by name.
+- Exclude the source card UUID from every template resolution. A structured
+  `{card_id}` or `{card_name}` reference must identify a different canonical
+  card, and `$OFFERED_CARD`, `$DECK_CARD`, and `$STARTER_CARD` always select from
+  a pool with the source UUID removed. This rule is unconditional, including
+  when the source card would otherwise satisfy the chosen predicate or appear
+  in the player's deck or event pool. Do not identify the source card as an
+  action's resolved target in `effect_text` or any other template field.
 - Choose exact cards, dreamsigns, predicates, and other variables for three-way
   fit: they must suit the depicted world, the label-and-resolution chain, and
   the deck strategy. Reject a named reward that is mechanically useful but

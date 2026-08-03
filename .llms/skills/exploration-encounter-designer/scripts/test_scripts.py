@@ -193,6 +193,130 @@ rendered-text = "Gain 1 energy."
                 check=False,
             )
 
+    def run_output_validator(
+        self, referenced_card_id: str, placeholder: str = "card_id"
+    ) -> subprocess.CompletedProcess[str]:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            templates = [
+                {
+                    "template_id": index,
+                    "template": (
+                        f"Reference {{{placeholder}}}"
+                        if index == 1
+                        else f"Synthetic template {index}"
+                    ),
+                }
+                for index in range(1, 11)
+            ]
+            catalog_path = root / "templates.json"
+            catalog_path.write_text(json.dumps(templates), encoding="utf-8")
+            cards_path = root / "cards.toml"
+            cards_path.write_text(
+                """
+[[cards]]
+id = "11111111-1111-4111-8111-111111111111"
+name = "Synthetic Animal"
+rendered-text = "Gain 1 energy."
+image-number = 123456
+card-type = "Character"
+subtype = "Spirit Animal"
+
+[[cards]]
+id = "33333333-3333-4333-8333-333333333333"
+name = "Synthetic Animal"
+rendered-text = "Gain 2 energy."
+image-number = 654321
+card-type = "Character"
+subtype = "Spirit Animal"
+""".strip(),
+                encoding="utf-8",
+            )
+            dreamsigns_path = root / "dreamsigns.toml"
+            dreamsigns_path.write_text(
+                """
+[[dreamsign]]
+id = "22222222-2222-4222-8222-222222222222"
+name = "Synthetic Sign"
+rendered-text = "Gain 1 energy."
+""".strip(),
+                encoding="utf-8",
+            )
+            transfigurations_path = root / "journey.ts"
+            transfigurations_path.write_text(
+                'export type TransfigurationType = "Empowered";', encoding="utf-8"
+            )
+            request = {
+                "card": canonical_card(),
+                "template_pairs": [
+                    {
+                        "id": f"pair-{index + 1}",
+                        "actions": templates[index * 2 : index * 2 + 2],
+                    }
+                    for index in range(5)
+                ],
+            }
+            events = []
+            for event_index, pair in enumerate(request["template_pairs"]):
+                actions = []
+                for action in pair["actions"]:
+                    variables = {}
+                    if action["template_id"] == 1:
+                        variables[placeholder] = {
+                            "id": referenced_card_id,
+                            "display_name": "Synthetic Animal",
+                        }
+                    actions.append(
+                        {
+                            **action,
+                            "label": "Take reward",
+                            "resolution": "The figure offers a quiet answer",
+                            "variables": variables,
+                            "effect_text": "Reference Synthetic Animal",
+                        }
+                    )
+                events.append(
+                    {
+                        "template_pair_id": pair["id"],
+                        "prose": f"A synthetic scene waits here number {event_index + 1}",
+                        "actions": actions,
+                        "scores": {
+                            "scene_quality": 8,
+                            "action_quality": 8,
+                            "mechanical_connection": 8,
+                            "archetype_fit": 8,
+                            "overall": 8,
+                        },
+                        "rank": event_index + 1,
+                        "ranking_rationale": "A concise synthetic rationale supports this rank.",
+                    }
+                )
+            input_path = root / "request.json"
+            input_path.write_text(json.dumps(request), encoding="utf-8")
+            output_path = root / "events.json"
+            output_path.write_text(json.dumps(events), encoding="utf-8")
+            return subprocess.run(
+                [
+                    sys.executable,
+                    str(VALIDATOR),
+                    "--input",
+                    str(input_path),
+                    "--output",
+                    str(output_path),
+                    "--template-catalog",
+                    str(catalog_path),
+                    "--cards-data",
+                    str(cards_path),
+                    "--dreamsigns-data",
+                    str(dreamsigns_path),
+                    "--transfigurations-data",
+                    str(transfigurations_path),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
     def test_accepts_ten_distinct_templates(self) -> None:
         result = self.run_validator(list(range(1, 11)))
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -201,6 +325,22 @@ rendered-text = "Gain 1 energy."
         result = self.run_validator([1, 2, 3, 4, 5, 6, 7, 8, 9, 1])
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("must be unique across all pairs", result.stderr)
+
+    def test_rejects_source_card_as_a_template_variable(self) -> None:
+        for placeholder in ("card_id", "card_name"):
+            with self.subTest(placeholder=placeholder):
+                result = self.run_output_validator(
+                    "11111111-1111-4111-8111-111111111111",
+                    placeholder,
+                )
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("must not identify the source card", result.stderr)
+
+    def test_accepts_distinct_card_uuid_with_the_same_display_name(self) -> None:
+        result = self.run_output_validator(
+            "33333333-3333-4333-8333-333333333333"
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
 
 
 if __name__ == "__main__":
