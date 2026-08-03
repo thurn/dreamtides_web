@@ -32,6 +32,22 @@ vi.mock("framer-motion", () => ({
         },
         children,
       ),
+    rect: ({
+      animate,
+      initial,
+      transition,
+      ...props
+    }: {
+      readonly animate?: unknown;
+      readonly initial?: unknown;
+      readonly transition?: unknown;
+    }) =>
+      createElement("rect", {
+        ...props,
+        "data-motion-animate": JSON.stringify(animate),
+        "data-motion-initial": JSON.stringify(initial),
+        "data-motion-transition": JSON.stringify(transition),
+      }),
   },
   useReducedMotion: () => false,
 }));
@@ -138,7 +154,32 @@ describe("LoadingScreen", () => {
       ].map((callout) => callout.dataset.loadingCallout),
     ).toEqual(["cost", "spark", "ability", "cardType"]);
     expect(container.querySelector("[data-loading-quote]")).toBeNull();
-    expect(container.querySelector("[data-loading-indicator]")).toBeNull();
+    expect(container.querySelector("[data-loading-indicator]")?.textContent).toBe(
+      "Loading",
+    );
+    expect(
+      container.querySelector("[data-loading-card-types-label]")?.textContent,
+    ).toBe("Card Types");
+  });
+
+  it("fills every spinner segment across the five-second loading interval", () => {
+    const container = renderLoadingScreen();
+    const segments = [
+      ...container.querySelectorAll<SVGRectElement>(
+        "[data-loading-spinner-segment]",
+      ),
+    ];
+
+    expect(segments).toHaveLength(12);
+    expect(
+      JSON.parse(segments[0]?.dataset.motionTransition ?? "{}"),
+    ).toMatchObject({ delay: 0, duration: 5 / 12 });
+    const lastTransition = JSON.parse(
+      segments[segments.length - 1]?.dataset.motionTransition ?? "{}",
+    ) as { delay?: number; duration?: number };
+    expect(
+      (lastTransition.delay ?? 0) + (lastTransition.duration ?? 0),
+    ).toBeCloseTo(5);
   });
 
   it("anchors every callout to the intended rendered card region", () => {
@@ -165,5 +206,16 @@ describe("LoadingScreen", () => {
     expect(JSON.parse(screen?.dataset.motionTransition ?? "{}")).toMatchObject({
       duration: 0.3,
     });
+    const segments = [
+      ...container.querySelectorAll<SVGRectElement>(
+        "[data-loading-spinner-segment]",
+      ),
+    ];
+    const lastTransition = JSON.parse(
+      segments[segments.length - 1]?.dataset.motionTransition ?? "{}",
+    ) as { delay?: number; duration?: number };
+    expect(
+      (lastTransition.delay ?? 0) + (lastTransition.duration ?? 0),
+    ).toBeCloseTo(1.25);
   });
 });

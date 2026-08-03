@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useRef } from "react";
 import { LoadingScreen } from "../../cumulus/screens/LoadingScreen";
 import { logEvent } from "../../logging";
+import { LOADING_SCREEN_DURATION_MS } from "../../runtime/front-door-timing";
 import { useFrontDoor } from "../../state/front-door-context";
 import { useJourney } from "../../state/journey-context";
 import { buildLoadingView } from "./loading-view-model";
-
-const TUTORIAL_DELAY_MS = 5_000;
 
 /** Coop-backed `/loading` wiring and presentation logging. */
 export function LoadingScreenAdapter({
@@ -37,7 +36,7 @@ export function LoadingScreenAdapter({
       void mutations.advance("loading", journeyId).catch((error: unknown) => {
         console.error("Coop loading transition failed", error);
       });
-    }, TUTORIAL_DELAY_MS / playbackSpeed);
+    }, LOADING_SCREEN_DURATION_MS / playbackSpeed);
     return () => window.clearTimeout(timeout);
   }, [mutations, playbackSpeed, state.journeyId, state.phase]);
 

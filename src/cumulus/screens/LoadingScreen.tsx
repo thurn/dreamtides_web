@@ -19,6 +19,7 @@ import {
   type LoadingCalloutLeaderLine,
 } from "./loading-callout-geometry";
 import { useIsDesktop } from "./use-is-desktop";
+import { LOADING_SCREEN_DURATION_MS } from "../../runtime/front-door-timing";
 
 export interface LoadingView {
   readonly runeboundChampion: GameCardModel;
@@ -44,6 +45,57 @@ interface MeasuredAnnotation extends LoadingCalloutLeaderLine {
 }
 
 const SCREEN_FADE_SECONDS = motionTimeSeconds("--dur-loading-screen-fade");
+const LOADING_DURATION_SECONDS = LOADING_SCREEN_DURATION_MS / 1_000;
+const LOADING_SPINNER_SEGMENTS = 12;
+const LOADING_SPINNER_SEGMENT_SECONDS =
+  LOADING_DURATION_SECONDS / LOADING_SPINNER_SEGMENTS;
+
+function SegmentedLoadingSpinner({
+  playbackSpeed,
+  reduceMotion,
+}: {
+  readonly playbackSpeed: number;
+  readonly reduceMotion: boolean;
+}): ReactElement {
+  return (
+    <svg
+      aria-hidden="true"
+      data-loading-spinner
+      viewBox="0 0 32 32"
+      width="32"
+      height="32"
+      style={{ display: "block", flex: "0 0 auto" }}
+    >
+      {Array.from({ length: LOADING_SPINNER_SEGMENTS }, (_, index) => {
+        const duration = reduceMotion
+          ? 0
+          : LOADING_SPINNER_SEGMENT_SECONDS / playbackSpeed;
+        const delay = reduceMotion
+          ? 0
+          : (index * LOADING_SPINNER_SEGMENT_SECONDS) / playbackSpeed;
+        return (
+          <motion.rect
+            key={index}
+            data-loading-spinner-segment={index}
+            x="14"
+            y="2"
+            width="4"
+            height="8"
+            rx="2"
+            transform={`rotate(${String(index * (360 / LOADING_SPINNER_SEGMENTS))} 16 16)`}
+            initial={{
+              fill: reduceMotion
+                ? token("--accent-bright")
+                : token("--accent-tint"),
+            }}
+            animate={{ fill: token("--accent-bright") }}
+            transition={{ duration, delay, ease: "linear" }}
+          />
+        );
+      })}
+    </svg>
+  );
+}
 
 const RUNEBOUND_ANNOTATIONS: readonly AnnotationSpec[] = [
   {
@@ -301,6 +353,29 @@ export function LoadingScreen({
         color: token("--text-loading"),
       }}
     >
+      <header
+        role="status"
+        data-loading-indicator
+        style={{
+          position: "absolute",
+          top: `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-2")})`,
+          left: "50%",
+          zIndex: 10,
+          display: "flex",
+          alignItems: "center",
+          gap: token("--space-3"),
+          margin: 0,
+          color: token("--text-loading"),
+          font: token("--t-lead"),
+          transform: "translateX(-50%)",
+        }}
+      >
+        <SegmentedLoadingSpinner
+          playbackSpeed={playbackSpeed}
+          reduceMotion={reduceMotion}
+        />
+        <span>Loading</span>
+      </header>
       <section
         aria-label="Card anatomy"
         data-loading-card-stage
@@ -332,6 +407,22 @@ export function LoadingScreen({
           isDesktop={isDesktop}
         />
       </section>
+      <p
+        data-loading-card-types-label
+        style={{
+          position: "absolute",
+          right: 0,
+          bottom: isDesktop ? "14%" : token("--space-1"),
+          left: 0,
+          zIndex: 10,
+          margin: 0,
+          color: token("--text-loading"),
+          font: token("--t-title-sm"),
+          textAlign: "center",
+        }}
+      >
+        Card Types
+      </p>
     </motion.main>
   );
 }
