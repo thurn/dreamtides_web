@@ -113,6 +113,9 @@ function captureAllDrafts(): EventDraft[] {
   void actions.rerollDraftOffer("site-1");
   void actions.enterDraftSite("site-1");
   void actions.openSite("site-1");
+  void actions.resolveExplorationChoice("site-1", "action-1", {
+    entryIds: ["entry-1"],
+  });
   void actions.completeDreamAugury("site-1");
   void actions.acceptReward("site-1");
   void actions.acceptDreamsignOffer("site-1", "ds-1");

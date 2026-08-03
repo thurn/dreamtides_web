@@ -1,0 +1,224 @@
+# Exploration encounters are keyed by the UUID of the card whose artwork and
+# mechanics inspire the scene. Each encounter has exactly two player actions.
+
+[[custom-card]]
+id = "c33cdbe5-0c3b-4180-bd11-0912dfa19486"
+name = "Ruinwatch Custodian"
+card-number = 10001
+card-type = "Character"
+subtype = "Survivor"
+energy-cost = 2
+spark = 2
+rendered-text = """
+▸Dissolved: Choose another character in your void to gain reclaim 2●.
+
+Reclaim 2●."""
+image-number = 2287436067
+art-owned = false
+
+[[custom-card]]
+id = "b0a2c3d4-e5f6-4789-8abc-0def12345678"
+name = "Nightmare"
+card-number = 10002
+card-type = "Event"
+subtype = ""
+energy-cost = 0
+rendered-text = "Bane."
+image-number = 1169640025
+art-owned = false
+
+[[custom-dreamsign]]
+id = "F46E59CB-32EC-4B50-8774-18F571B8FCE1"
+name = "Passage Lantern"
+rendered-text = "The first time each turn you rematerialize a character, it gains +1✦."
+
+[[encounter]]
+card-id = "161482b6-af07-4d9e-822d-8c738672beb9"
+prose = "A child raises a round lantern before a narrow window of stars."
+
+[[encounter.action]]
+id = "161482b6-af07-4d9e-822d-8c738672beb9:exchange-familiar-forms"
+label = "Exchange Familiar Forms"
+effect-text = "Purge a chosen card and gain a copy of another chosen card"
+response-text = "One silhouette recedes as another emerges beside its double."
+effect-kind = "purge-and-copy"
+
+[[encounter.action]]
+id = "161482b6-af07-4d9e-822d-8c738672beb9:request-round-lantern"
+label = "Request the Round Lantern"
+effect-text = "Gain Passage Lantern. The first time each turn you rematerialize a character, it gains +1✦."
+response-text = "The child lowers its steady glow into your hands."
+effect-kind = "gain-dreamsign"
+dreamsign-id = "F46E59CB-32EC-4B50-8774-18F571B8FCE1"
+
+[[encounter]]
+card-id = "738a5af0-f848-4d48-bceb-9a43c9b11066"
+prose = "Before you, an armored sentinel rests beside a fractured doorway glowing amid ruins."
+
+[[encounter.action]]
+id = "738a5af0-f848-4d48-bceb-9a43c9b11066:invite-sentinel"
+label = "Invite the Sentinel"
+effect-text = "Gain Ruinwatch Custodian (2● Survivor Character, 2✦ — ▸Dissolved: Choose another character in your void to gain reclaim 2●. Reclaim 2●.)"
+response-text = "The guardian rises and walks beside you."
+effect-kind = "gain-card"
+card-id = "c33cdbe5-0c3b-4180-bd11-0912dfa19486"
+
+[[encounter.action]]
+id = "738a5af0-f848-4d48-bceb-9a43c9b11066:study-guardian"
+label = "Study the Guardian"
+effect-text = "Apply a transfiguration to 2 chosen Survivor cards"
+response-text = "Your companions adopt its measured discipline among the ruins."
+effect-kind = "transfigure-selected"
+predicate = "survivor"
+count = 2
+
+[[encounter]]
+card-id = "401bb341-8385-41e9-8f6f-7b48e9ce174d"
+prose = "Before you, a colossal wolf advances through burning grass, pale eyes fixed ahead."
+
+[[encounter.action]]
+id = "401bb341-8385-41e9-8f6f-7b48e9ce174d:feed-fire"
+label = "Feed the Fire"
+effect-text = "Purge a chosen Event card"
+response-text = "The blaze consumes what you cast away."
+effect-kind = "purge-selected"
+predicate = "event"
+count = 1
+
+[[encounter.action]]
+id = "401bb341-8385-41e9-8f6f-7b48e9ce174d:welcome-kin"
+label = "Welcome Its Kin"
+effect-text = "Choose one of 2 packs of Spirit Animal cards to add to your deck"
+response-text = "Other wolves emerge through the heated haze."
+effect-kind = "choose-pack"
+predicate = "spirit-animal"
+pack-count = 2
+pack-size = 3
+
+[[encounter]]
+card-id = "8b5eb29c-146f-46fb-9407-55004128fba7"
+prose = "Before you, a skull-faced colossus lowers a radiant lantern toward a child."
+
+[[encounter.action]]
+id = "8b5eb29c-146f-46fb-9407-55004128fba7:invite-lantern-visitor"
+label = "Invite a Lantern Visitor"
+effect-text = "Gain an offered ≤2● cost Character card"
+response-text = "A new figure steps from between the panes."
+effect-kind = "draft-card"
+predicate = "cheap-character"
+offer-count = 4
+
+[[encounter.action]]
+id = "8b5eb29c-146f-46fb-9407-55004128fba7:trade-away-figure"
+label = "Trade Away a Figure"
+effect-text = "Purge a chosen card and gain 40 essence for each ✦ it had"
+response-text = "A skeletal hand accepts the chosen offering."
+effect-kind = "purge-for-essence"
+essence-per-spark = 40
+
+[[encounter]]
+card-id = "954e8d50-d494-4fb2-b4c7-74979083b774"
+prose = "A luminous triangle encloses an armed figure as black cables stream outward."
+
+[[encounter.action]]
+id = "954e8d50-d494-4fb2-b4c7-74979083b774:enter-frame"
+label = "Enter the Luminous Frame"
+effect-text = "Change a chosen Character card to have Outsider"
+response-text = "Its bright outline alters one waiting silhouette."
+effect-kind = "change-subtype-selected"
+predicate = "character"
+subtype = "Outsider"
+
+[[encounter.action]]
+id = "954e8d50-d494-4fb2-b4c7-74979083b774:expand-frame"
+label = "Expand the Luminous Frame"
+effect-text = "All characters in your deck become the subtype of your choice."
+response-text = "The widening glow reshapes every distant silhouette."
+effect-kind = "change-subtype-all"
+subtype-options = ["Warrior", "Spirit Animal", "Survivor", "Outsider"]
+
+[[encounter]]
+card-id = "b8ecc46d-bd92-4826-a416-7ce177e69cbf"
+prose = "Beside a silent figure, an immense owl stares through drifting motes."
+
+[[encounter.action]]
+id = "b8ecc46d-bd92-4826-a416-7ce177e69cbf:ask-counsel"
+label = "Ask the Figure's Counsel"
+effect-text = "Draft a ≤2● cost Character card from 4 random choices"
+response-text = "The smaller figure indicates several shapes in the haze."
+effect-kind = "draft-card"
+predicate = "cheap-character"
+offer-count = 4
+
+[[encounter.action]]
+id = "b8ecc46d-bd92-4826-a416-7ce177e69cbf:welcome-owl-kin"
+label = "Welcome the Owl's Kin"
+effect-text = "Take any number of Spirit Animal cards from 4 random choices"
+response-text = "Calls answer as animal forms settle among the branches."
+effect-kind = "take-cards"
+predicate = "spirit-animal"
+offer-count = 4
+
+[[encounter]]
+card-id = "e2f542eb-090f-4a22-a42c-a120eb6caaa3"
+prose = "A whale’s shadowed bulk crosses the stars above your small craft."
+
+[[encounter.action]]
+id = "e2f542eb-090f-4a22-a42c-a120eb6caaa3:welcome-swimmer"
+label = "Welcome a Smaller Swimmer"
+effect-text = "Gain Magic Fish"
+response-text = "A bright new shape circles beneath the giant."
+effect-kind = "gain-dreamsign"
+dreamsign-id = "3A22A33F-5682-4D00-B0EC-86E43B6ED9DF"
+
+[[encounter.action]]
+id = "e2f542eb-090f-4a22-a42c-a120eb6caaa3:release-swimmer"
+label = "Release a Fellow Swimmer"
+effect-text = "Purge a chosen Spirit Animal card and gain a random Spirit Animal replacement"
+response-text = "Another broad silhouette rises into the open sky."
+effect-kind = "replace-selected"
+predicate = "spirit-animal"
+
+[[encounter]]
+card-id = "46783333-78f9-4146-a8ec-0d1b81e1bf2f"
+prose = "An enormous elephant emerges from starlit mist, its curved tusks shining."
+
+[[encounter.action]]
+id = "46783333-78f9-4146-a8ec-0d1b81e1bf2f:welcome-great-beast"
+label = "Welcome the Great Beast"
+effect-text = "Gain 1 \"Nightmare\" bane card. Gain Emerald Guardian."
+response-text = "The elephant kneels as the surrounding haze darkens."
+effect-kind = "gain-bane-and-card"
+bane-card-id = "b0a2c3d4-e5f6-4789-8abc-0def12345678"
+bane-count = 1
+card-id = "46783333-78f9-4146-a8ec-0d1b81e1bf2f"
+
+[[encounter.action]]
+id = "46783333-78f9-4146-a8ec-0d1b81e1bf2f:call-herd"
+label = "Call the Distant Herd"
+effect-text = "Gain one copy of each of 2 random Spirit Animal cards"
+response-text = "Great animal shapes approach through the radiant mist."
+effect-kind = "gain-random-cards"
+predicate = "spirit-animal"
+count = 2
+
+[[encounter]]
+card-id = "886c9d49-b25f-4ddd-97f0-2ec4b42eda89"
+prose = "Above you, a colossal horseman thins into drifting starlight."
+
+[[encounter.action]]
+id = "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:call-distance"
+label = "Call Into the Distance"
+effect-text = "Gain Bell"
+response-text = "A clear bell tolls beneath the distant horse."
+effect-kind = "gain-dreamsign"
+dreamsign-id = "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5"
+
+[[encounter.action]]
+id = "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:gather-light"
+label = "Gather the Falling Light"
+effect-text = "Apply Kindled to a chosen ≤2● cost Character card from your deck"
+response-text = "A waiting traveler's outline shines with renewed strength."
+effect-kind = "transfigure-fixed-selected"
+predicate = "cheap-character"
+transfiguration = "Kindled"

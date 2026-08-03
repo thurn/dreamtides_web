@@ -24,6 +24,10 @@ import { generatePoolFromData } from "../draft/pool/generate.ts";
 import { buildPoolData } from "../draft/pool/pool-data";
 import { loadFigmentDatabase } from "./figment-database";
 import {
+  loadExplorationContent,
+  type ExplorationContent,
+} from "./exploration";
+import {
   buildIdIndex,
   buildLegendaryCardNumbers,
   loadAffinityCorpus,
@@ -85,6 +89,8 @@ import {
 
 export interface JourneyContent {
   cardDatabase: Map<number, CardData>;
+  /** Authored Exploration encounters and their site-specific reward content. */
+  exploration?: ExplorationContent;
   dreamAvatars: DreamAvatarContent[];
   /** The shared Dreamwell deck source, drawn from during battle. */
   dreamwellCards: readonly DreamwellCard[];
@@ -781,6 +787,7 @@ export async function loadJourneyContent(
   const poolNeedsTides5 = POOL_VARIANTS_NEEDING_TIDES5.has(poolVariant);
   const [
     cardDatabase,
+    exploration,
     draftDreamAvatars,
     dreamwellCards,
     dreamsignTemplates,
@@ -805,6 +812,7 @@ export async function loadJourneyContent(
     _figmentCatalog,
   ] = await Promise.all([
     loadCardsV2Database(),
+    loadExplorationContent(),
     loadDreamAvatarsV2(),
     loadDreamwellCards(),
     loadDreamsignTemplates(),
@@ -867,6 +875,16 @@ export async function loadJourneyContent(
     loadFigmentDatabase().catch(() => undefined),
   ]);
 
+  const draftPoolCards = [...cardDatabase.values()];
+  for (const customCard of exploration.customCards) {
+    if (cardDatabase.has(customCard.cardNumber)) {
+      throw new Error(
+        `Exploration custom card number collision: ${String(customCard.cardNumber)}`,
+      );
+    }
+    cardDatabase.set(customCard.cardNumber, customCard);
+  }
+
   const dreamAvatars: DreamAvatarContent[] = draftDreamAvatars.map((dc) => ({
     id: dc.id,
     name: dc.name,
@@ -885,7 +903,7 @@ export async function loadJourneyContent(
   const legendaryCardNumbers = buildLegendaryCardNumbers(cardDatabase);
 
   const poolData = buildPoolData(
-    Array.from(cardDatabase.values()),
+    draftPoolCards,
     decklists,
     // The pick-data variants key on stable card ids, so feed them the
     // records' id arrays.
@@ -942,6 +960,7 @@ export async function loadJourneyContent(
 
   return {
     cardDatabase,
+    exploration,
     dreamAvatars,
     dreamwellCards,
     dreamsignTemplates,

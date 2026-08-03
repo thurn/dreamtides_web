@@ -1,5 +1,3 @@
-// Wiring-only adapter for the Exploration prototype encounter.
-
 import { useCallback, useEffect, useMemo } from "react";
 import { ExplorationSiteScreen } from "../../cumulus/screens/ExplorationSiteScreen";
 import { logEvent, logEventOnce } from "../../logging";
@@ -7,8 +5,6 @@ import { useJourney } from "../../state/journey-context";
 import {
   buildExplorationSiteView,
   resolveExplorationGuide,
-  resolveExplorationCardPool,
-  selectExplorationCard,
 } from "./exploration-view-model";
 
 export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
@@ -23,39 +19,44 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
       ? { ...candidate, type: candidate.type }
       : null;
   const guide = resolveExplorationGuide(journeyContent.guides);
-  const card = useMemo(
-    () =>
-      site === null
-        ? null
-        : selectExplorationCard({
-            cardDatabase: journeyContent.cardDatabase,
-            journeySeed: state.seed,
-            siteId: site.id,
-          }),
-    [journeyContent.cardDatabase, site, state.seed],
-  );
+  const runtime = state.siteRuntime[siteId];
+  const explorationRuntime = runtime?.kind === "exploration" ? runtime : null;
+
+  useEffect(() => {
+    if (site !== null && runtime === undefined) {
+      mutations.ensureExplorationSiteRuntime(site.id);
+    }
+  }, [mutations, runtime, site]);
+
   const view = useMemo(
     () =>
-      site === null || card === null
+      site === null || explorationRuntime === null
         ? null
         : buildExplorationSiteView({
             sceneNode: node,
             site,
             guide,
-            card,
+            runtime: explorationRuntime,
+            state,
+            content: journeyContent,
           }),
-    [card, guide, node, site],
+    [explorationRuntime, guide, journeyContent, node, site, state],
   );
 
   useEffect(() => {
-    if (site === null || card === null) return;
+    if (site === null || explorationRuntime === null || view === null) return;
     logEventOnce(`exploration:${site.id}:site-entered`, "site_entered", {
       siteType: site.type,
       isEnhanced: site.isEnhanced,
-      presentedCardId: card.id,
-      prototypePoolSize: resolveExplorationCardPool(
-        journeyContent.cardDatabase,
-      ).length,
+      presentedCardId: explorationRuntime.encounterCardId,
+      actionIds: explorationRuntime.actionOffers.map((offer) => offer.actionId),
+      offers: explorationRuntime.actionOffers.map((offer) => ({
+        actionId: offer.actionId,
+        offeredCardIds: offer.offeredCardIds,
+        packCardIds: offer.packCardIds,
+        replacementCardIdByEntryId: offer.replacementCardIdByEntryId,
+        transfigurationByEntryId: offer.transfigurationByEntryId,
+      })),
     });
     if (guide !== null) {
       logEventOnce(
@@ -68,35 +69,60 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
         },
       );
     }
-  }, [card, guide, journeyContent.cardDatabase, site]);
+  }, [explorationRuntime, guide, site, view]);
+
+  useEffect(() => {
+    const resolution = explorationRuntime?.resolution;
+    if (site === null || explorationRuntime === null || resolution == null) return;
+    logEventOnce(
+      `exploration:${site.id}:resolved:${resolution.actionId}`,
+      "exploration_choice_resolved",
+      {
+        siteId: site.id,
+        presentedCardId: explorationRuntime.encounterCardId,
+        ...resolution,
+      },
+    );
+  }, [explorationRuntime, site]);
 
   const handleChannel = useCallback(() => {
-    if (site === null || card === null) return;
+    if (site === null || explorationRuntime === null || view === null) return;
     logEvent("exploration_frame_break_started", {
       siteId: site.id,
-      cardId: card.id,
-      highResolutionImageNumber: card.imageNumber,
+      cardId: explorationRuntime.encounterCardId,
+      highResolutionImageNumber:
+        view.fullArt.kind === "exploration-card"
+          ? view.fullArt.imageNumber
+          : null,
       isEnhanced: site.isEnhanced,
     });
-  }, [card, site]);
+  }, [explorationRuntime, site, view]);
+
+  const handleResolve = useCallback(
+    (actionId: string, selection?: unknown) => {
+      if (site === null || explorationRuntime === null) return;
+      logEvent("exploration_choice_requested", {
+        siteId: site.id,
+        presentedCardId: explorationRuntime.encounterCardId,
+        actionId,
+        selection,
+      });
+      mutations.resolveExplorationChoice(site.id, actionId, selection);
+    },
+    [explorationRuntime, mutations, site],
+  );
 
   const handleExit = useCallback(() => {
-    if (site === null || card === null) return;
-    logEvent("exploration_left", {
+    if (site === null || explorationRuntime?.resolution == null) return;
+    logEvent("exploration_completed", {
       siteId: site.id,
-      cardId: card.id,
-      highResolutionImageNumber: card.imageNumber,
+      presentedCardId: explorationRuntime.encounterCardId,
+      actionId: explorationRuntime.resolution.actionId,
       isEnhanced: site.isEnhanced,
     });
-    mutations.completeSite(site.id, "exploration_left");
-  }, [card, mutations, site]);
+    mutations.completeSite(site.id, "exploration_completed");
+  }, [explorationRuntime, mutations, site]);
 
   if (site === null || view === null) return null;
-  return (
-    <ExplorationSiteScreen
-      view={view}
-      onChannel={handleChannel}
-      onExit={handleExit}
-    />
-  );
+  return <ExplorationSiteScreen view={view} onChannel={handleChannel} onResolve={handleResolve} onExit={handleExit} />;
 }

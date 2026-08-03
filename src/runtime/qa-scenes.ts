@@ -581,6 +581,55 @@ function parkOnSite(siteType: SiteType, isEnhanced: boolean): QaScene["build"] {
   };
 }
 
+/** Exploration scene with enough eligible cards to exercise every follow-up. */
+function explorationScene(isEnhanced: boolean): QaScene {
+  return {
+    id: isEnhanced ? "exploration-enhanced" : "exploration",
+    label: isEnhanced ? "Exploration (Enhanced)" : "Exploration",
+    description:
+      "The Exploration site with Event, Survivor, cheap Character, and Spirit Animal cards available for interaction QA.",
+    build: (journeyContent) => {
+      const state = parkOnSite("Exploration", isEnhanced)(journeyContent);
+      if (state === null) return null;
+      const cards = [...journeyContent.cardDatabase.values()];
+      const selected = new Map<number, (typeof cards)[number]>();
+      const add = (matches: (card: (typeof cards)[number]) => boolean, count: number): void => {
+        for (const card of cards) {
+          if (!matches(card) || selected.has(card.cardNumber)) continue;
+          selected.set(card.cardNumber, card);
+          if ([...selected.values()].filter(matches).length >= count) return;
+        }
+      };
+      add((card) => card.cardType === "Event", 1);
+      add(
+        (card) => card.cardType === "Character" && card.subtype === "Survivor",
+        2,
+      );
+      add(
+        (card) =>
+          card.cardType === "Character" &&
+          card.energyCost !== null &&
+          card.energyCost <= 2,
+        4,
+      );
+      add(
+        (card) =>
+          card.cardType === "Character" && card.subtype === "Spirit Animal",
+        6,
+      );
+      return {
+        ...state,
+        deck: [...selected.values()].map((card, index) => ({
+          entryId: `exploration-qa-${String(index + 1)}`,
+          cardNumber: card.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        })),
+      };
+    },
+  };
+}
+
 /**
  * The journey victory end screen, shown after the final boss is defeated. Built
  * by parking the run on the `journeyComplete` screen with a full completion count,
@@ -763,13 +812,8 @@ export const QA_SCENES: readonly QaScene[] = [
     "Gamble",
     true,
   ),
-  siteScene("exploration", "Exploration", "Exploration"),
-  siteScene(
-    "exploration-enhanced",
-    "Exploration (Enhanced)",
-    "Exploration",
-    true,
-  ),
+  explorationScene(false),
+  explorationScene(true),
   siteScene(
     "dreamsign-revelation",
     "Dreamsign Revelation",

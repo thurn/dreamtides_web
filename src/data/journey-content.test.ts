@@ -100,6 +100,22 @@ describe("loadJourneyContent", () => {
         deck.map((name) => idByName.get(name) ?? name.toLowerCase()),
       );
     const failingPathSet = new Set(failingPaths);
+    const explorationData = {
+      customCards: [],
+      customDreamsigns: [],
+      encounters: Array.from({ length: 9 }, (_value, encounterIndex) => ({
+        cardId: `exploration-source-${String(encounterIndex + 1)}`,
+        prose: `Exploration fixture ${String(encounterIndex + 1)}.`,
+        action: [0, 1].map((actionIndex) => ({
+          id: `exploration-${String(encounterIndex + 1)}-${String(actionIndex + 1)}`,
+          label: `Choice ${String(actionIndex + 1)}`,
+          effectText: "Gain the fixture card.",
+          responseText: "The fixture responds.",
+          effectKind: "gain-card",
+          cardId: String(cards[0]?.id ?? "fixture-card"),
+        })),
+      })),
+    };
     vi.stubGlobal(
       "fetch",
       vi.fn((input: string | URL) => {
@@ -125,6 +141,12 @@ describe("loadJourneyContent", () => {
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve(dreamsigns),
+          });
+        }
+        if (path === "/exploration-data.json") {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(explorationData),
           });
         }
         if (path === "/dreamwell-data.json") {

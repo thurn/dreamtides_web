@@ -10,6 +10,7 @@ import {
   type RefObject,
 } from "react";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
+import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import {
   CARD_ASPECT_RATIO,
   CARD_ASPECT_RATIO_VALUE,
@@ -49,6 +50,73 @@ export interface ExplorationSiteView {
   card: GameCardModel;
   /** Licensed full-resolution source for the selected card's frame break. */
   fullArt: ArtRef;
+  /** Opening authored prose shown once the frame break fills the viewport. */
+  narrative: string;
+  /** The two authored actions for this encounter. */
+  actions: readonly [ExplorationActionView, ExplorationActionView];
+  /** Persisted response after one action has resolved. */
+  response: ExplorationResponseView | null;
+}
+
+export interface ExplorationCardChoiceView {
+  /** Deck-entry UUID for deck cards, card UUID for catalog offers. */
+  entryId: string;
+  /** Complete resolved card presentation. */
+  model: GameCardModel;
+  /** Whether this deck entry is a Bane. */
+  isBane: boolean;
+}
+
+export type ExplorationFollowupView =
+  | { readonly kind: "none" }
+  | {
+      readonly kind: "cards";
+      readonly title: string;
+      readonly subtitle: string;
+      readonly cards: readonly ExplorationCardChoiceView[];
+      readonly mode: "single" | "exact" | "purge-and-copy";
+      readonly selectionKey: "entryIds" | "cardIds";
+      readonly min: number;
+      readonly max: number;
+    }
+  | {
+      readonly kind: "packs";
+      readonly title: string;
+      readonly subtitle: string;
+      readonly packs: readonly {
+        readonly index: number;
+        readonly cards: readonly ExplorationCardChoiceView[];
+      }[];
+    }
+  | {
+      readonly kind: "subtypes";
+      readonly title: string;
+      readonly subtitle: string;
+      readonly options: readonly string[];
+    }
+  | {
+      readonly kind: "dreamsigns";
+      readonly title: string;
+      readonly subtitle: string;
+      readonly dreamsigns: readonly {
+        readonly id: string;
+        readonly name: string;
+        readonly effectText: string;
+      }[];
+    };
+
+export interface ExplorationActionView {
+  readonly id: string;
+  readonly label: string;
+  readonly effectText: string;
+  readonly responseText: string;
+  readonly followup: ExplorationFollowupView;
+  readonly available: boolean;
+}
+
+export interface ExplorationResponseView {
+  readonly actionLabel: string;
+  readonly text: string;
 }
 
 export interface ExplorationSiteScreenProps {
@@ -56,6 +124,8 @@ export interface ExplorationSiteScreenProps {
   view: ExplorationSiteView;
   /** Record the start of this client's frame-break presentation. */
   onChannel: () => void;
+  /** Resolve one authored action with its UUID-only selection payload. */
+  onResolve: (actionId: string, selection?: unknown) => void;
   /** Complete the site after the card has returned to the journey deck. */
   onExit: () => void;
 }
@@ -239,6 +309,7 @@ function useCardTrajectory(
 export function ExplorationSiteScreen({
   view,
   onChannel,
+  onResolve,
   onExit,
 }: ExplorationSiteScreenProps) {
   const reduceMotion = useReducedMotion() === true;
@@ -255,12 +326,30 @@ export function ExplorationSiteScreen({
     useState<CollapseIntent>("preview");
   const [returnTrajectory, setReturnTrajectory] =
     useState<CardTrajectory | null>(null);
+  const [activeActionId, setActiveActionId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<readonly string[]>([]);
+  const [purgeEntryId, setPurgeEntryId] = useState<string | null>(null);
+  const [selectedPackIndex, setSelectedPackIndex] = useState<number | null>(null);
+  const [selectedSubtype, setSelectedSubtype] = useState<string | null>(null);
+  const [replacedDreamsignId, setReplacedDreamsignId] = useState<string | null>(null);
   const fullArtUrl = resolveArtRef(view.fullArt);
   const trajectory = useCardTrajectory(
     cardTargetRef,
     view.card.cardId,
     reduceMotion,
   );
+  const activeAction =
+    view.actions.find((action) => action.id === activeActionId) ?? null;
+
+  useEffect(() => {
+    if (view.response === null) return;
+    setActiveActionId(null);
+    setSelectedIds([]);
+    setPurgeEntryId(null);
+    setSelectedPackIndex(null);
+    setSelectedSubtype(null);
+    setReplacedDreamsignId(null);
+  }, [view.response]);
 
   useEffect(() => {
     if (reduceMotion) setRevealed(true);
@@ -271,11 +360,18 @@ export function ExplorationSiteScreen({
     const presence = document.querySelector<HTMLElement>(
       "[data-coop-presence-status]",
     );
-    if (presence === null) return;
-    const previousVisibility = presence.style.visibility;
-    presence.style.visibility = "hidden";
+    const statusAnchors = [
+      ...document.querySelectorAll<HTMLElement>(
+        "[data-journey-status-bar-anchor]",
+      ),
+    ];
+    const elements = presence === null ? statusAnchors : [presence, ...statusAnchors];
+    const previousVisibility = elements.map((element) => element.style.visibility);
+    for (const element of elements) element.style.visibility = "hidden";
     return () => {
-      presence.style.visibility = previousVisibility;
+      elements.forEach((element, index) => {
+        element.style.visibility = previousVisibility[index] ?? "";
+      });
     };
   }, [frameBreakGeometry]);
 
@@ -283,6 +379,12 @@ export function ExplorationSiteScreen({
     if (frameBreakGeometry === null || frameBreakPhase !== "open") return;
     const onKeyDown = (event: KeyboardEvent): void => {
       if (event.key !== "Escape") return;
+      if (activeAction !== null && view.response === null) {
+        setActiveActionId(null);
+        setSelectedIds([]);
+        setPurgeEntryId(null);
+        return;
+      }
       setCollapseIntent("preview");
       setFrameBreakActive(false);
       if (reduceMotion) {
@@ -294,7 +396,7 @@ export function ExplorationSiteScreen({
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [frameBreakGeometry, frameBreakPhase, reduceMotion]);
+  }, [activeAction, frameBreakGeometry, frameBreakPhase, reduceMotion, view.response]);
 
   const startFrameBreak = (): void => {
     const geometry = measureFrameBreak(cardTargetRef.current);
@@ -360,6 +462,95 @@ export function ExplorationSiteScreen({
   const exitEdgeInset = isDesktop
     ? MENU_EDGE_INSET_DESKTOP_PX
     : MENU_EDGE_INSET_MOBILE_PX;
+
+  const openAction = (action: ExplorationActionView): void => {
+    if (action.followup.kind === "none") {
+      onResolve(action.id);
+      return;
+    }
+    setActiveActionId(action.id);
+    setSelectedIds([]);
+    setPurgeEntryId(null);
+    setSelectedPackIndex(null);
+    setSelectedSubtype(null);
+    setReplacedDreamsignId(null);
+  };
+
+  const toggleCard = (entryId: string): void => {
+    if (activeAction?.followup.kind !== "cards") return;
+    const followup = activeAction.followup;
+    if (followup.mode === "purge-and-copy") {
+      if (purgeEntryId === null) {
+        setPurgeEntryId(entryId);
+        setSelectedIds([]);
+      } else if (entryId === purgeEntryId) {
+        setPurgeEntryId(null);
+        setSelectedIds([]);
+      } else {
+        setSelectedIds((current) =>
+          current.includes(entryId) ? [] : [entryId],
+        );
+      }
+      return;
+    }
+    setSelectedIds((current) => {
+      if (current.includes(entryId)) {
+        return current.filter((candidate) => candidate !== entryId);
+      }
+      if (followup.mode === "single") return [entryId];
+      if (current.length >= followup.max) return current;
+      return [...current, entryId];
+    });
+  };
+
+  const commitFollowup = (): void => {
+    if (activeAction === null) return;
+    const followup = activeAction.followup;
+    if (followup.kind === "cards") {
+      if (followup.mode === "purge-and-copy") {
+        const copyEntryId = selectedIds[0];
+        if (purgeEntryId === null || copyEntryId === undefined) return;
+        onResolve(activeAction.id, { purgeEntryId, copyEntryId });
+        return;
+      }
+      if (selectedIds.length < followup.min || selectedIds.length > followup.max) return;
+      onResolve(activeAction.id, { [followup.selectionKey]: selectedIds });
+      return;
+    }
+    if (followup.kind === "packs") {
+      if (selectedPackIndex === null) return;
+      onResolve(activeAction.id, { packIndex: selectedPackIndex });
+      return;
+    }
+    if (followup.kind === "subtypes") {
+      if (selectedSubtype === null) return;
+      onResolve(activeAction.id, { subtype: selectedSubtype });
+      return;
+    }
+    if (followup.kind === "dreamsigns") {
+      if (replacedDreamsignId === null) return;
+      onResolve(activeAction.id, { replacedDreamsignId });
+    }
+  };
+
+  const closeFollowup = (): void => {
+    setActiveActionId(null);
+    setSelectedIds([]);
+    setPurgeEntryId(null);
+  };
+
+  const canCommitFollowup = (() => {
+    const followup = activeAction?.followup;
+    if (followup === undefined || followup.kind === "none") return false;
+    if (followup.kind === "cards") {
+      return followup.mode === "purge-and-copy"
+        ? purgeEntryId !== null && selectedIds.length === 1
+        : selectedIds.length >= followup.min && selectedIds.length <= followup.max;
+    }
+    if (followup.kind === "packs") return selectedPackIndex !== null;
+    if (followup.kind === "subtypes") return selectedSubtype !== null;
+    return replacedDreamsignId !== null;
+  })();
 
   return (
     <GuideGallerySiteLayout
@@ -788,7 +979,277 @@ export function ExplorationSiteScreen({
           </Pressable>
         </motion.div>
       )}
-      {frameBreakGeometry !== null && frameBreakPhase === "open" && (
+      {frameBreakGeometry !== null && frameBreakPhase === "open" && activeAction === null && (
+        <motion.section
+          data-exploration-narrative=""
+          initial={{ opacity: 0, y: reduceMotion ? 0 : 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+            ease: DREAM_EASE,
+          }}
+          style={{
+            position: "fixed",
+            left: `max(var(--safe-area-inset-left), ${token("--space-5")})`,
+            bottom: `max(var(--safe-area-inset-bottom), ${token("--space-5")})`,
+            zIndex: FRAME_BREAK_EXIT_LAYER,
+            width: isDesktop
+              ? "min(620px, calc(100vw - 48px))"
+              : `calc(100vw - ${token("--space-5")} - ${token("--space-5")})`,
+            maxHeight: "calc(100vh - 96px)",
+            pointerEvents: "auto",
+          }}
+        >
+          <GlassPanel
+            eyebrow="Exploration"
+            title={view.response?.actionLabel ?? "What will you do?"}
+            headingLevel="h1"
+            headerSpacing="medium"
+            footer={
+              view.response === null ? undefined : (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    padding: token("--space-5"),
+                    paddingTop: 0,
+                  }}
+                >
+                  <GlassButton
+                    label="Continue"
+                    variant="accent"
+                    placement="onGlass"
+                    onPress={exitExploration}
+                    testId="cumulus-exploration-continue"
+                  />
+                </div>
+              )
+            }
+            testId="cumulus-exploration-narrative-panel"
+          >
+            <div
+              style={{
+                display: "grid",
+                gap: token("--space-5"),
+                padding: token("--space-6"),
+                paddingTop: token("--space-5"),
+              }}
+            >
+              <p
+                data-testid="cumulus-exploration-narrative-copy"
+                style={{
+                  margin: 0,
+                  font: token("--t-body"),
+                  color: token("--text-on-glass"),
+                  lineHeight: 1.55,
+                }}
+              >
+                {view.response?.text ?? view.narrative}
+              </p>
+              {view.response === null && (
+                <div
+                  role="group"
+                  aria-label="Exploration choices"
+                  style={{ display: "grid", gap: token("--space-3") }}
+                >
+                  {view.actions.map((action, index) => (
+                    <Pressable
+                      key={action.id}
+                      as="button"
+                      disabled={!action.available}
+                      aria-describedby={`exploration-effect-${String(index)}`}
+                      data-testid={`cumulus-exploration-choice-${String(index)}`}
+                      onClick={() => openAction(action)}
+                      style={{
+                        width: "100%",
+                        minHeight: token("--touch-min"),
+                        display: "grid",
+                        gridTemplateColumns: "minmax(0, 1fr) auto",
+                        alignItems: "center",
+                        gap: token("--space-4"),
+                        padding: token("--space-4"),
+                        border: `1px solid ${token("--border-soft")}`,
+                        borderRadius: token("--radius-control"),
+                        background: token("--glass-on-glass-fill"),
+                        color: token("--text-on-glass"),
+                        textAlign: "left",
+                        opacity: action.available ? 1 : 0.46,
+                      }}
+                    >
+                      <span style={{ minWidth: 0, display: "grid", gap: token("--space-1") }}>
+                        <strong style={{ font: token("--t-button") }}>{action.label}</strong>
+                        <span
+                          id={`exploration-effect-${String(index)}`}
+                          style={{ font: token("--t-caption"), color: token("--text-muted") }}
+                        >
+                          {action.effectText}
+                        </span>
+                      </span>
+                      <span aria-hidden="true" style={{ font: token("--t-title") }}>›</span>
+                    </Pressable>
+                  ))}
+                </div>
+              )}
+            </div>
+          </GlassPanel>
+        </motion.section>
+      )}
+      {frameBreakGeometry !== null && frameBreakPhase === "open" && activeAction !== null && (
+        <motion.section
+          data-exploration-followup={activeAction.followup.kind}
+          initial={{ opacity: 0, y: reduceMotion ? 0 : 14, scale: reduceMotion ? 1 : 0.985 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"), ease: DREAM_EASE }}
+          style={{
+            position: "fixed",
+            zIndex: FRAME_BREAK_EXIT_LAYER + 1,
+            top: isDesktop
+              ? `max(var(--safe-area-inset-top), ${token("--space-8")})`
+              : `calc(max(var(--safe-area-inset-top), ${token("--space-4")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`,
+            right: isDesktop
+              ? `calc(max(var(--safe-area-inset-right), ${token("--space-8")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`
+              : `max(var(--safe-area-inset-right), ${token("--space-4")})`,
+            bottom: isDesktop
+              ? `max(var(--safe-area-inset-bottom), ${token("--space-8")})`
+              : `max(var(--safe-area-inset-bottom), ${token("--space-4")})`,
+            left: isDesktop
+              ? "auto"
+              : `max(var(--safe-area-inset-left), ${token("--space-4")})`,
+            width: isDesktop ? "min(920px, calc(100vw - 64px))" : undefined,
+            minHeight: 0,
+            display: "grid",
+            alignItems: "center",
+            pointerEvents: "auto",
+          }}
+        >
+          {activeAction.followup.kind === "cards" && (
+            <CardGalleryPanel
+              title={activeAction.followup.title}
+              subtitle={activeAction.followup.subtitle}
+              rightAccessory={{
+                kind: "glassButton",
+                label: "Back",
+                onPress: closeFollowup,
+                testId: "cumulus-exploration-followup-back",
+              }}
+              footerAction={{
+                label:
+                  activeAction.followup.mode === "purge-and-copy" && purgeEntryId === null
+                    ? "Choose a card to purge"
+                    : activeAction.followup.mode === "purge-and-copy" && selectedIds.length === 0
+                      ? "Choose a card to copy"
+                      : "Confirm Choice",
+                onPress: commitFollowup,
+                disabled: !canCommitFollowup,
+                variant: "accent",
+                testId: "cumulus-exploration-followup-confirm",
+              }}
+              cards={activeAction.followup.cards.map((card) => ({
+                entryId: card.entryId,
+                model: card.model,
+                selected:
+                  card.entryId === purgeEntryId || selectedIds.includes(card.entryId),
+                selectionColor: card.entryId === purgeEntryId ? "danger" : "selected",
+                emphasis: card.isBane ? "danger" : undefined,
+                testId: `cumulus-exploration-card-${card.entryId}`,
+              }))}
+              emptyLabel="No eligible cards are available."
+              columns={isDesktop ? "four" : "three"}
+              cardSize="standard"
+              frame="floating"
+              widthMode="fill"
+              heightMode="fill"
+              spacing={isDesktop ? "regular" : "compact"}
+              testId="cumulus-exploration-card-followup"
+              onCardPress={toggleCard}
+            />
+          )}
+          {activeAction.followup.kind === "packs" && (
+            <GlassPanel
+              eyebrow="Exploration"
+              title={activeAction.followup.title}
+              subtitle={activeAction.followup.subtitle}
+              headingLevel="h1"
+              rightAccessory={{ kind: "glassButton", label: "Back", onPress: closeFollowup }}
+              footer={
+                <div style={{ display: "flex", justifyContent: "flex-end", padding: token("--space-5") }}>
+                  <GlassButton label="Take This Pack" variant="accent" placement="onGlass" disabled={!canCommitFollowup} onPress={commitFollowup} testId="cumulus-exploration-followup-confirm" />
+                </div>
+              }
+            >
+              <div style={{ display: "grid", gridTemplateColumns: isDesktop ? "repeat(2, minmax(0, 1fr))" : "1fr", gap: token("--space-4"), padding: token("--space-5"), overflow: "auto" }}>
+                {activeAction.followup.packs.map((pack) => (
+                  <Pressable
+                    key={pack.index}
+                    as="button"
+                    aria-pressed={selectedPackIndex === pack.index}
+                    data-testid={`cumulus-exploration-pack-${String(pack.index)}`}
+                    onClick={() => setSelectedPackIndex(pack.index)}
+                    style={{
+                      display: "grid",
+                      gap: token("--space-3"),
+                      padding: token("--space-4"),
+                      borderRadius: token("--radius-panel"),
+                      border: `2px solid ${selectedPackIndex === pack.index ? token("--selected") : token("--border-soft")}`,
+                      background: token("--glass-on-glass-fill"),
+                      color: token("--text-on-glass"),
+                    }}
+                  >
+                    <strong style={{ font: token("--t-button"), textAlign: "left" }}>Pack {String(pack.index + 1)}</strong>
+                    <span style={{ display: "grid", gridTemplateColumns: `repeat(${String(pack.cards.length)}, minmax(0, 1fr))`, gap: token("--space-2") }}>
+                      {pack.cards.map((card) => <GameCard key={card.entryId} model={card.model} />)}
+                    </span>
+                  </Pressable>
+                ))}
+              </div>
+            </GlassPanel>
+          )}
+          {(activeAction.followup.kind === "subtypes" || activeAction.followup.kind === "dreamsigns") && (
+            <GlassPanel
+              eyebrow="Exploration"
+              title={activeAction.followup.title}
+              subtitle={activeAction.followup.subtitle}
+              headingLevel="h1"
+              rightAccessory={{ kind: "glassButton", label: "Back", onPress: closeFollowup }}
+              footer={
+                <div style={{ display: "flex", justifyContent: "flex-end", padding: token("--space-5") }}>
+                  <GlassButton label="Confirm Choice" variant="accent" placement="onGlass" disabled={!canCommitFollowup} onPress={commitFollowup} testId="cumulus-exploration-followup-confirm" />
+                </div>
+              }
+            >
+              <div role="radiogroup" style={{ display: "grid", gap: token("--space-3"), padding: token("--space-5") }}>
+                {activeAction.followup.kind === "subtypes"
+                  ? activeAction.followup.options.map((option) => (
+                      <Pressable
+                        key={option}
+                        as="button"
+                        role="radio"
+                        aria-checked={selectedSubtype === option}
+                        onClick={() => setSelectedSubtype(option)}
+                        style={{ minHeight: token("--touch-min"), padding: token("--space-4"), borderRadius: token("--radius-control"), border: `2px solid ${selectedSubtype === option ? token("--selected") : token("--border-soft")}`, background: token("--glass-on-glass-fill"), color: token("--text-on-glass"), textAlign: "left", font: token("--t-button") }}
+                      >
+                        {option}
+                      </Pressable>
+                    ))
+                  : activeAction.followup.dreamsigns.map((dreamsign) => (
+                      <Pressable
+                        key={dreamsign.id}
+                        as="button"
+                        role="radio"
+                        aria-checked={replacedDreamsignId === dreamsign.id}
+                        onClick={() => setReplacedDreamsignId(dreamsign.id)}
+                        style={{ minHeight: token("--touch-min"), display: "grid", gap: token("--space-1"), padding: token("--space-4"), borderRadius: token("--radius-control"), border: `2px solid ${replacedDreamsignId === dreamsign.id ? token("--selected") : token("--border-soft")}`, background: token("--glass-on-glass-fill"), color: token("--text-on-glass"), textAlign: "left" }}
+                      >
+                        <strong style={{ font: token("--t-button") }}>{dreamsign.name}</strong>
+                        <span style={{ font: token("--t-caption"), color: token("--text-muted") }}>{dreamsign.effectText}</span>
+                      </Pressable>
+                    ))}
+              </div>
+            </GlassPanel>
+          )}
+        </motion.section>
+      )}
+      {frameBreakGeometry !== null && frameBreakPhase === "open" && activeAction === null && (
         <motion.div
           data-exploration-exit-control=""
           initial={{ opacity: 0, scale: 0.92 }}
@@ -808,8 +1269,8 @@ export function ExplorationSiteScreen({
         >
           <IconButton
             glyph={GLYPHS.close}
-            label="Leave Exploration"
-            onPress={exitExploration}
+            label="Return to Exploration"
+            onPress={collapseFrameBreak}
             testId="cumulus-exploration-exit"
           />
         </motion.div>

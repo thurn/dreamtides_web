@@ -236,6 +236,8 @@ function makeMutations(): JourneyMutations {
     rerollDreamAvatarOffer: vi.fn(),
     completeSite: vi.fn(),
     ensureGambleSiteRuntime: vi.fn(),
+    ensureExplorationSiteRuntime: vi.fn(),
+    resolveExplorationChoice: vi.fn(),
     placeGravokWager: vi.fn(),
     settleGravokWager: vi.fn(),
     playAgainGravokWager: vi.fn(),

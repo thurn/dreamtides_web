@@ -422,6 +422,34 @@ export interface GambleSiteRuntime {
   result: GravokWagerResult | null;
 }
 
+/** Deterministic follow-up offers prepared when an Exploration site opens. */
+export interface ExplorationActionOfferRuntime {
+  actionId: string;
+  offeredCardIds: string[];
+  packCardIds: string[][];
+  replacementCardIdByEntryId: Record<string, string>;
+  transfigurationByEntryId: Record<string, TransfigurationType>;
+}
+
+/** Persisted result shown with the authored response before leaving the site. */
+export interface ExplorationResolution {
+  actionId: string;
+  gainedCardIds: string[];
+  gainedDreamsignIds: string[];
+  purgedCardIds: string[];
+  affectedEntryIds: string[];
+  essenceGained: number;
+  chosenSubtype?: string;
+}
+
+/** Shared, replayable runtime for one Exploration encounter. */
+export interface ExplorationSiteRuntime {
+  kind: "exploration";
+  encounterCardId: string;
+  actionOffers: ExplorationActionOfferRuntime[];
+  resolution: ExplorationResolution | null;
+}
+
 /** Serialized runtime state keyed by site id. */
 export type SiteRuntimeState =
   | ShopSiteRuntime
@@ -430,7 +458,8 @@ export type SiteRuntimeState =
   | EssenceSiteRuntime
   | CardChoiceSiteRuntime
   | DreamAugurySiteRuntime
-  | GambleSiteRuntime;
+  | GambleSiteRuntime
+  | ExplorationSiteRuntime;
 
 /** Discriminated union for the current screen. */
 export type Screen =

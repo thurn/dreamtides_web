@@ -1,34 +1,39 @@
-// Pure view-model construction for the Exploration prototype encounter.
+// Pure view-model construction for the Exploration encounter.
 
+import { resolveDeckEntryCard } from "../../card-type-change";
 import type { GameCardModel } from "../../cumulus/components/card/CardView";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
-import type { ExplorationSiteView } from "../../cumulus/screens/ExplorationSiteScreen";
+import type {
+  ExplorationActionView,
+  ExplorationCardChoiceView,
+  ExplorationFollowupView,
+  ExplorationSiteView,
+} from "../../cumulus/screens/ExplorationSiteScreen";
+import {
+  EXPLORATION_ESSENCE_PER_SPARK,
+  explorationEncounterForCard,
+  type ExplorationActionContent,
+  type ExplorationPredicate,
+} from "../../data/exploration";
+import type { JourneyContent } from "../../data/journey-content";
 import { guideForSiteType } from "../../data/dreamscapes";
-import { hashStringToSeed } from "../../data/journey-content";
-import { asCardId, type CardId } from "../../types/card-identity";
+import { asCardId } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
-import type { DreamscapeNode, SiteState } from "../../types/journey";
+import type {
+  DeckEntry,
+  DreamscapeNode,
+  ExplorationActionOfferRuntime,
+  ExplorationSiteRuntime,
+  JourneyState,
+  SiteState,
+} from "../../types/journey";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
-
-// Resolved from the user-supplied Shutterstock image numbers. The three image
-// numbers without cards_v2 TOML records are intentionally absent.
-export const EXPLORATION_CARD_IDS = [
-  asCardId("161482b6-af07-4d9e-822d-8c738672beb9"), // 2022594419
-  asCardId("738a5af0-f848-4d48-bceb-9a43c9b11066"), // 2287436067
-  asCardId("401bb341-8385-41e9-8f6f-7b48e9ce174d"), // 2278837667
-  asCardId("8b5eb29c-146f-46fb-9407-55004128fba7"), // 2155438705
-  asCardId("954e8d50-d494-4fb2-b4c7-74979083b774"), // 1726923523
-  asCardId("b8ecc46d-bd92-4826-a416-7ce177e69cbf"), // 717263287
-  asCardId("e2f542eb-090f-4a22-a42c-a120eb6caaa3"), // 1723965970
-  asCardId("46783333-78f9-4146-a8ec-0d1b81e1bf2f"), // 1169640025
-  asCardId("886c9d49-b25f-4ddd-97f0-2ec4b42eda89"), // 2256745747
-] as const satisfies readonly CardId[];
 
 const FALLBACK_GUIDE_ID = "layaway";
 const FALLBACK_GUIDE_NAME = '"Layaway"';
 const FALLBACK_GUIDE_LINE =
-  "Every card dreams, choom. Draw one, and we'll delve inside.";
+  "Every card dreams, choom. Draw one, and we'll step inside.";
 
 /** Resolve Layaway, the resident guide for Exploration. */
 export function resolveExplorationGuide(
@@ -37,60 +42,310 @@ export function resolveExplorationGuide(
   return guideForSiteType(guides, "Exploration");
 }
 
-/** Resolve the UUID pool against the loaded catalog, preserving authored order. */
-export function resolveExplorationCardPool(
-  cardDatabase: ReadonlyMap<number, CardData>,
-): readonly CardData[] {
-  const cardsById = new Map<CardId, CardData>();
-  for (const card of cardDatabase.values()) cardsById.set(card.id, card);
-  return EXPLORATION_CARD_IDS.flatMap((cardId) => {
-    const card = cardsById.get(cardId);
-    return card === undefined ? [] : [card];
+function matchesPredicate(card: CardData, predicate: ExplorationPredicate): boolean {
+  switch (predicate) {
+    case "character":
+      return card.cardType === "Character";
+    case "event":
+      return card.cardType === "Event";
+    case "cheap-character":
+      return card.cardType === "Character" && card.energyCost !== null && card.energyCost <= 2;
+    case "spirit-animal":
+      return card.cardType === "Character" && card.subtype === "Spirit Animal";
+    case "survivor":
+      return card.cardType === "Character" && card.subtype === "Survivor";
+  }
+}
+
+function cardById(content: JourneyContent, cardId: string): CardData | null {
+  const normalized = cardId.toLowerCase();
+  return (
+    [...content.cardDatabase.values()].find(
+      (card) => card.id.toLowerCase() === normalized,
+    ) ?? null
+  );
+}
+
+function modelForCard(card: CardData): GameCardModel {
+  return { cardId: card.id, displaySnapshot: card };
+}
+
+function deckCardChoice(
+  entry: DeckEntry,
+  content: JourneyContent,
+): ExplorationCardChoiceView | null {
+  const base = content.cardDatabase.get(entry.cardNumber);
+  if (base === undefined) return null;
+  const resolved = resolveDeckEntryCard(base, entry);
+  return {
+    entryId: entry.entryId,
+    model: modelForCard(resolved),
+    isBane: entry.isBane,
+  };
+}
+
+function eligibleDeckCards(
+  state: JourneyState,
+  content: JourneyContent,
+  predicate?: ExplorationPredicate,
+): readonly ExplorationCardChoiceView[] {
+  return state.deck.flatMap((entry) => {
+    const card = deckCardChoice(entry, content);
+    if (card === null) return [];
+    if (
+      predicate !== undefined &&
+      !matchesPredicate(card.model.displaySnapshot, predicate)
+    ) {
+      return [];
+    }
+    return [card];
   });
 }
 
-/**
- * Select one prototype card from the room seed and stable site id. This keeps
- * the draw random across rooms while every connected client sees the same card.
- */
-export function selectExplorationCard(params: {
-  cardDatabase: ReadonlyMap<number, CardData>;
-  journeySeed: string;
-  siteId: string;
-}): CardData | null {
-  const pool = resolveExplorationCardPool(params.cardDatabase);
-  if (pool.length === 0) return null;
-  const hash = hashStringToSeed(
-    `${params.journeySeed}:${params.siteId}:exploration-card`,
-  );
-  return pool[hash % pool.length] ?? null;
+function offeredCards(
+  ids: readonly string[],
+  content: JourneyContent,
+): readonly ExplorationCardChoiceView[] {
+  return ids.flatMap((id) => {
+    const card = cardById(content, id);
+    return card === null
+      ? []
+      : [{ entryId: card.id, model: modelForCard(card), isBane: false }];
+  });
 }
 
-/** Build the complete Exploration presentation from resolved domain data. */
+function deckFollowup(
+  title: string,
+  subtitle: string,
+  cards: readonly ExplorationCardChoiceView[],
+  mode: "single" | "exact" | "purge-and-copy",
+  count = 1,
+  selectionKey: "entryIds" | "cardIds" = "entryIds",
+): ExplorationFollowupView {
+  return {
+    kind: "cards",
+    title,
+    subtitle,
+    cards,
+    mode,
+    selectionKey,
+    min: count,
+    max: count,
+  };
+}
+
+function followupForAction(
+  action: ExplorationActionContent,
+  offer: ExplorationActionOfferRuntime,
+  state: JourneyState,
+  content: JourneyContent,
+): ExplorationFollowupView {
+  const deckCards = eligibleDeckCards(state, content, action.predicate);
+  switch (action.effectKind) {
+    case "purge-and-copy":
+      return deckFollowup(
+        "Exchange Familiar Forms",
+        "First choose a card to purge, then choose a different card to copy.",
+        eligibleDeckCards(state, content),
+        "purge-and-copy",
+        2,
+      );
+    case "transfigure-selected":
+      return deckFollowup(
+        "Study the Guardian",
+        `Choose ${String(action.count ?? 2)} Survivor cards.`,
+        deckCards.filter((card) =>
+          Object.prototype.hasOwnProperty.call(
+            offer.transfigurationByEntryId,
+            card.entryId,
+          ),
+        ),
+        "exact",
+        action.count ?? 2,
+      );
+    case "purge-selected":
+      return deckFollowup("Feed the Fire", "Choose an Event to purge.", deckCards, "single");
+    case "purge-for-essence":
+      return deckFollowup(
+        "Trade Away a Figure",
+        `Choose a card to purge for ${String(action.essencePerSpark ?? EXPLORATION_ESSENCE_PER_SPARK)} essence per ✦.`,
+        eligibleDeckCards(state, content),
+        "single",
+      );
+    case "change-subtype-selected":
+      return deckFollowup(
+        "Enter the Luminous Frame",
+        `Choose a Character to become ${action.subtype ?? "Outsider"}.`,
+        deckCards,
+        "single",
+      );
+    case "replace-selected":
+      return deckFollowup(
+        "Release a Fellow Swimmer",
+        "Choose a Spirit Animal to exchange.",
+        deckCards.filter((card) =>
+          Object.prototype.hasOwnProperty.call(
+            offer.replacementCardIdByEntryId,
+            card.entryId,
+          ),
+        ),
+        "single",
+      );
+    case "transfigure-fixed-selected":
+      return deckFollowup(
+        "Gather the Falling Light",
+        `Choose a Character to become ${action.transfiguration ?? "Kindled"}.`,
+        deckCards.filter(
+          (card) =>
+            state.deck.find((entry) => entry.entryId === card.entryId)
+              ?.transfiguration === null,
+        ),
+        "single",
+      );
+    case "draft-card":
+      return deckFollowup(
+        action.label,
+        "Choose one offered card.",
+        offeredCards(offer.offeredCardIds, content),
+        "single",
+        1,
+        "cardIds",
+      );
+    case "take-cards": {
+      const cards = offeredCards(offer.offeredCardIds, content);
+      return {
+        kind: "cards",
+        title: action.label,
+        subtitle: "Choose any number of offered cards.",
+        cards,
+        mode: "exact",
+        selectionKey: "cardIds",
+        min: 0,
+        max: cards.length,
+      };
+    }
+    case "choose-pack":
+      return {
+        kind: "packs",
+        title: action.label,
+        subtitle: "Choose one pack to add to your deck.",
+        packs: offer.packCardIds.map((ids, index) => ({
+          index,
+          cards: offeredCards(ids, content),
+        })),
+      };
+    case "change-subtype-all":
+      return {
+        kind: "subtypes",
+        title: action.label,
+        subtitle: "Choose the subtype for every Character in your deck.",
+        options: action.subtypeOptions ?? [],
+      };
+    case "gain-dreamsign":
+      if (state.dreamsigns.length >= state.maxDreamsigns) {
+        return {
+          kind: "dreamsigns",
+          title: action.label,
+          subtitle: "Choose a Dreamsign to replace.",
+          dreamsigns: state.dreamsigns.flatMap((dreamsign) =>
+            dreamsign.id === undefined
+              ? []
+              : [
+                  {
+                    id: dreamsign.id,
+                    name: dreamsign.name,
+                    effectText: dreamsign.effectDescription,
+                  },
+                ],
+          ),
+        };
+      }
+      return { kind: "none" };
+    case "gain-card":
+    case "gain-bane-and-card":
+    case "gain-random-cards":
+      return { kind: "none" };
+  }
+}
+
+function actionView(
+  action: ExplorationActionContent,
+  offer: ExplorationActionOfferRuntime,
+  state: JourneyState,
+  content: JourneyContent,
+): ExplorationActionView {
+  const followup = followupForAction(action, offer, state, content);
+  const available =
+    followup.kind === "none" ||
+    (followup.kind === "cards" && followup.cards.length >= followup.min) ||
+    (followup.kind === "packs" && followup.packs.length > 0) ||
+    (followup.kind === "subtypes" && followup.options.length > 0) ||
+    (followup.kind === "dreamsigns" && followup.dreamsigns.length > 0);
+  return {
+    id: action.id,
+    label: action.label,
+    effectText: action.effectText,
+    responseText: action.responseText,
+    followup,
+    available,
+  };
+}
+
+/** Build the complete Exploration presentation from persisted domain data. */
 export function buildExplorationSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Exploration" };
   guide: DreamGuideContent | null;
-  card: CardData;
-}): ExplorationSiteView {
+  runtime: ExplorationSiteRuntime;
+  state: JourneyState;
+  content: JourneyContent;
+}): ExplorationSiteView | null {
+  const exploration = params.content.exploration;
+  if (exploration === undefined) return null;
+  const encounter = explorationEncounterForCard(
+    exploration,
+    params.runtime.encounterCardId,
+  );
+  const sourceCard = cardById(params.content, params.runtime.encounterCardId);
+  if (encounter === null || sourceCard === null) return null;
+  const actions = encounter.actions.flatMap((action) => {
+    const offer = params.runtime.actionOffers.find(
+      (candidate) => candidate.actionId === action.id,
+    );
+    return offer === undefined
+      ? []
+      : [actionView(action, offer, params.state, params.content)];
+  });
+  if (actions.length !== 2) return null;
+  const resolvedAction =
+    params.runtime.resolution === null
+      ? null
+      : actions.find(
+          (action) => action.id === params.runtime.resolution?.actionId,
+        ) ?? null;
   const guideId = params.guide?.id ?? FALLBACK_GUIDE_ID;
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
-  const card: GameCardModel = {
-    cardId: params.card.id,
-    displaySnapshot: params.card,
-  };
   return {
     siteId: params.site.id,
     scene,
     isEnhanced: params.site.isEnhanced,
-    fullArt: artRef.explorationCard(params.card.imageNumber),
+    fullArt: artRef.explorationCard(sourceCard.imageNumber),
     guide: {
       id: guideId,
       name: params.guide?.name ?? FALLBACK_GUIDE_NAME,
       line: params.guide?.dialog[0] ?? FALLBACK_GUIDE_LINE,
       art: artRef.dreamGuide(guideId),
     },
-    card,
+    card: { cardId: asCardId(sourceCard.id), displaySnapshot: sourceCard },
+    narrative: encounter.prose,
+    actions: actions as [ExplorationActionView, ExplorationActionView],
+    response:
+      resolvedAction === null
+        ? null
+        : {
+            actionLabel: resolvedAction.label,
+            text: resolvedAction.responseText,
+          },
   };
 }

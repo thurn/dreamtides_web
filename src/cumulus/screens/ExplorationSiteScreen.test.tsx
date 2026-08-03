@@ -49,6 +49,7 @@ vi.mock("framer-motion", async () => {
       div: MotionElement,
       img: MotionElement,
       main: MotionElement,
+      section: MotionElement,
     },
     useReducedMotion: () => reducedMotionPreference.value,
   };
@@ -71,7 +72,7 @@ function makeCard(): CardData {
   };
 }
 
-function view(): ExplorationSiteView {
+function view(resolved = false): ExplorationSiteView {
   const selected = makeCard();
   return {
     siteId: "exploration-site",
@@ -80,7 +81,7 @@ function view(): ExplorationSiteView {
     guide: {
       id: "layaway",
       name: '"Layaway"',
-      line: "Every card dreams, choom. Draw one, and we'll delve inside.",
+      line: "Every card dreams, choom. Draw one, and we'll step inside.",
       art: artRef.dreamGuide("layaway"),
     },
     card: {
@@ -88,6 +89,28 @@ function view(): ExplorationSiteView {
       displaySnapshot: selected,
     },
     fullArt: artRef.explorationCard(selected.imageNumber),
+    narrative: "A synthetic encounter waits in the dark.",
+    actions: [
+      {
+        id: "choice-a",
+        label: "Choose A",
+        effectText: "Gain the fixture.",
+        responseText: "The fixture answers.",
+        followup: { kind: "none" },
+        available: true,
+      },
+      {
+        id: "choice-b",
+        label: "Choose B",
+        effectText: "Change the fixture.",
+        responseText: "The fixture changes.",
+        followup: { kind: "none" },
+        available: true,
+      },
+    ],
+    response: resolved
+      ? { actionLabel: "Choose A", text: "The fixture answers." }
+      : null,
   };
 }
 
@@ -159,6 +182,7 @@ describe("ExplorationSiteScreen", () => {
       <ExplorationSiteScreen
         view={view()}
         onChannel={onChannel}
+        onResolve={vi.fn()}
         onExit={onExit}
       />,
     );
@@ -218,6 +242,186 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
+  it("shows the authored narrative and resolves a direct choice", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={view()}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    expect(
+      container.querySelector(
+        '[data-testid="cumulus-exploration-narrative-copy"]',
+      )?.textContent,
+    ).toBe("A synthetic encounter waits in the dark.");
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+    expect(onResolve).toHaveBeenCalledWith("choice-a");
+    act(() => root.unmount());
+  });
+
+  it("collects a card follow-up before resolving the choice", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const followupView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          followup: {
+            kind: "cards",
+            title: "Choose a Fixture",
+            subtitle: "Choose one card.",
+            cards: [
+              { entryId: "entry-fixture", model: base.card, isBane: false },
+            ],
+            mode: "single",
+            selectionKey: "entryIds",
+            min: 1,
+            max: 1,
+          },
+        },
+        base.actions[1],
+      ],
+    };
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={followupView}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+    expect(
+      container.querySelector('[data-exploration-followup="cards"]'),
+    ).not.toBeNull();
+    act(() =>
+      container
+        .querySelector<HTMLElement>(
+          '[data-testid="cumulus-exploration-card-entry-fixture"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-followup-confirm"]',
+        )
+        ?.click(),
+    );
+    expect(onResolve).toHaveBeenCalledWith("choice-a", {
+      entryIds: ["entry-fixture"],
+    });
+    act(() => root.unmount());
+  });
+
+  it("lets the player undo the purge target in a purge-and-copy follow-up", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const followupView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          followup: {
+            kind: "cards",
+            title: "Exchange Familiar Forms",
+            subtitle: "Choose a card to purge, then a card to copy.",
+            cards: [
+              { entryId: "entry-a", model: base.card, isBane: false },
+              { entryId: "entry-b", model: base.card, isBane: false },
+            ],
+            mode: "purge-and-copy",
+            selectionKey: "entryIds",
+            min: 2,
+            max: 2,
+          },
+        },
+        base.actions[1],
+      ],
+    };
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={followupView}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+    const purgeCard = container.querySelector<HTMLElement>(
+      '[data-testid="cumulus-exploration-card-entry-a"]',
+    );
+    const confirm = container.querySelector<HTMLButtonElement>(
+      '[data-testid="cumulus-exploration-followup-confirm"]',
+    );
+    act(() => purgeCard?.click());
+    expect(confirm?.textContent).toContain("Choose a card to copy");
+
+    act(() =>
+      container
+        .querySelector<HTMLElement>(
+          '[data-testid="cumulus-exploration-card-entry-a"]',
+        )
+        ?.click(),
+    );
+    expect(confirm?.textContent).toContain("Choose a card to purge");
+    act(() => root.unmount());
+  });
+
   it("collapses the art and returns the card to the deck before leaving", () => {
     reducedMotionPreference.value = false;
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
@@ -238,8 +442,9 @@ describe("ExplorationSiteScreen", () => {
     const onExit = vi.fn();
     const { container, root } = mount(
       <ExplorationSiteScreen
-        view={view()}
+        view={view(true)}
         onChannel={vi.fn()}
+        onResolve={vi.fn()}
         onExit={onExit}
       />,
     );
@@ -262,9 +467,9 @@ describe("ExplorationSiteScreen", () => {
         ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
     });
     const exitButton = container.querySelector<HTMLButtonElement>(
-      '[data-testid="cumulus-exploration-exit"]',
+      '[data-testid="cumulus-exploration-continue"]',
     );
-    expect(exitButton?.getAttribute("aria-label")).toBe("Leave Exploration");
+    expect(exitButton?.textContent).toContain("Continue");
 
     act(() => exitButton?.click());
     expect(onExit).not.toHaveBeenCalled();
@@ -324,6 +529,7 @@ describe("ExplorationSiteScreen", () => {
       <ExplorationSiteScreen
         view={view()}
         onChannel={vi.fn()}
+        onResolve={vi.fn()}
         onExit={vi.fn()}
       />,
     );

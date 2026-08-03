@@ -470,6 +470,11 @@ export function routeDomain(
     // --- sites ---
     case "OPEN_SITE":
       return journeyCase(state, sites.openSite(journey, payload, ctx));
+    case "RESOLVE_EXPLORATION_CHOICE":
+      return journeyCase(
+        state,
+        sites.resolveExplorationChoice(journey, payload, ctx),
+      );
     case "COMPLETE_DREAM_AUGURY":
       return journeyCase(state, sites.completeDreamAugury(journey, payload));
     case "ACCEPT_REWARD":

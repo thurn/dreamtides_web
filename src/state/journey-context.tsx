@@ -38,6 +38,14 @@ export interface JourneyMutations {
   completeSite: (siteId: string, source: string) => void;
   /** Materialize the shared Three-Gate Wager deck commitment and Dreamsign. */
   ensureGambleSiteRuntime: (siteId: string) => void;
+  /** Materialize the shared encounter and every randomized follow-up offer. */
+  ensureExplorationSiteRuntime: (siteId: string) => void;
+  /** Resolve one authored choice and its optional card-selection payload. */
+  resolveExplorationChoice: (
+    siteId: string,
+    actionId: string,
+    selection?: unknown,
+  ) => void;
   /** Commit one gate choice; the reducer derives the draw, cost, and payout. */
   placeGravokWager: (siteId: string, gateId: GravokGateId) => void;
   /** Apply the wager's payout when the result announcement appears. */

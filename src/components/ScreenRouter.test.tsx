@@ -39,7 +39,6 @@ import {
   MERCHANT_ARCHETYPE_LABELS,
   type MerchantArchetypeId,
 } from "../journey_v2";
-import { EXPLORATION_CARD_IDS } from "../screens/cumulus_adapters/exploration-view-model";
 
 const motionPreference = vi.hoisted(() => ({
   reduced: false,
@@ -84,6 +83,9 @@ vi.mock("framer-motion", () => ({
     }) => <img {...props} />,
     main: ({ children, ...props }: { children: ReactNode }) => (
       <main {...props}>{children}</main>
+    ),
+    section: ({ children, ...props }: { children: ReactNode }) => (
+      <section {...props}>{children}</section>
     ),
   },
 }));
@@ -208,6 +210,8 @@ function makeMutations(): JourneyMutations {
     rerollDreamAvatarOffer: vi.fn(),
     completeSite: vi.fn(),
     ensureGambleSiteRuntime: vi.fn(),
+    ensureExplorationSiteRuntime: vi.fn(),
+    resolveExplorationChoice: vi.fn(),
     placeGravokWager: vi.fn(),
     settleGravokWager: vi.fn(),
     playAgainGravokWager: vi.fn(),
@@ -960,10 +964,54 @@ describe("ScreenRouter site-dispatch completeness", () => {
     const site = makeSite("Exploration");
     const mutations = makeMutations();
     const journeyContent = merchantContent();
-    const selectedCard = card(EXPLORATION_CARD_IDS[0], 901);
+    const selectedCard = card(
+      asCardId("161482b6-af07-4d9e-822d-8c738672beb9"),
+      901,
+    );
     journeyContent.cardDatabase.set(selectedCard.cardNumber, selectedCard);
+    journeyContent.exploration = {
+      customCards: [],
+      customDreamsigns: [],
+      encounters: [
+        {
+          cardId: selectedCard.id,
+          prose: "The fixture waits beyond the frame.",
+          actions: [
+            {
+              id: "fixture-action-a",
+              label: "Accept the Fixture",
+              effectText: "Gain the fixture card.",
+              responseText: "The fixture joins you.",
+              effectKind: "gain-card",
+              cardId: selectedCard.id,
+            },
+            {
+              id: "fixture-action-b",
+              label: "Echo the Fixture",
+              effectText: "Gain the fixture card.",
+              responseText: "The fixture echoes.",
+              effectKind: "gain-card",
+              cardId: selectedCard.id,
+            },
+          ],
+        },
+      ],
+    };
+    const state = makeStateFor(site);
+    state.siteRuntime[site.id] = {
+      kind: "exploration",
+      encounterCardId: selectedCard.id,
+      actionOffers: ["fixture-action-a", "fixture-action-b"].map((actionId) => ({
+        actionId,
+        offeredCardIds: [],
+        packCardIds: [],
+        replacementCardIdByEntryId: {},
+        transfigurationByEntryId: {},
+      })),
+      resolution: null,
+    };
     const container = renderWithJourney({
-      state: makeStateFor(site),
+      state,
       journeyContent,
       mutations,
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
@@ -1007,25 +1055,28 @@ describe("ScreenRouter site-dispatch completeness", () => {
       highResolutionImageNumber: selectedCard.imageNumber,
     });
 
-    const exitButton = container.querySelector(
-      '[data-testid="cumulus-exploration-exit"]',
+    const choiceButton = container.querySelector(
+      '[data-testid="cumulus-exploration-choice-0"]',
     );
-    if (!(exitButton instanceof HTMLButtonElement)) {
-      throw new Error("expected a Leave Exploration button");
+    if (!(choiceButton instanceof HTMLButtonElement)) {
+      throw new Error("expected an Exploration choice button");
     }
     act(() => {
-      exitButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      choiceButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
-    expect(mutations.completeSite).toHaveBeenCalledWith(
+    expect(mutations.resolveExplorationChoice).toHaveBeenCalledWith(
       site.id,
-      "exploration_left",
+      "fixture-action-a",
+      undefined,
     );
     expect(
-      getLogEntries().find((entry) => entry.event === "exploration_left"),
+      getLogEntries().find(
+        (entry) => entry.event === "exploration_choice_requested",
+      ),
     ).toMatchObject({
       siteId: site.id,
-      cardId: selectedCard.id,
-      highResolutionImageNumber: selectedCard.imageNumber,
+      presentedCardId: selectedCard.id,
+      actionId: "fixture-action-a",
     });
   });
 });

@@ -129,6 +129,14 @@ export interface SiteContentProvider {
     /** This event's seq — the same value `mintEntryId` keys new ids off of. */
     seq: number;
   }): JourneyState | null;
+
+  /** Resolve one Exploration action against its persisted deterministic offer. */
+  resolveExploration?(input: {
+    journey: JourneyState;
+    site: SiteState;
+    payload: Record<string, unknown>;
+    seq: number;
+  }): JourneyState | null;
 }
 
 /**
@@ -340,7 +348,8 @@ export function openSite(
     case "DreamsignMarket":
     case "Transfiguration":
     case "Duplication":
-    case "Gamble": {
+    case "Gamble":
+    case "Exploration": {
       const provider = contentProvider;
       if (provider === null) return null;
       const result = provider.openSite({ journey, site, rng: ctx.rng });
@@ -350,10 +359,25 @@ export function openSite(
       return { ...next, remainingDreamsignPool: [...result.remainingDreamsignPool] };
     }
     default:
-      // Battle / Draft / Purge / TemptingOffer / Exploration carry no
+      // Battle / Draft / Purge / TemptingOffer carry no
       // site runtime — nothing to generate.
       return null;
   }
+}
+
+/** Resolve one authored Exploration action while leaving its response on screen. */
+export function resolveExplorationChoice(
+  journey: JourneyState,
+  payload: Record<string, unknown>,
+  ctx: EventContext,
+): JourneyState | null {
+  const siteId = asString(payload.siteId);
+  if (siteId === null) return null;
+  const site = findSite(journey, siteId);
+  if (site?.type !== "Exploration") return null;
+  const provider = contentProvider;
+  if (provider?.resolveExploration === undefined) return null;
+  return provider.resolveExploration({ journey, site, payload, seq: ctx.seq });
 }
 
 // ---------------------------------------------------------------------------
@@ -776,6 +800,9 @@ export function completeSite(
     runtime?.kind === "gamble" &&
     runtime.result?.essenceSettled === false
   ) {
+    return null;
+  }
+  if (runtime?.kind === "exploration" && runtime.resolution === null) {
     return null;
   }
   return completeAndReturn(journey, siteId);

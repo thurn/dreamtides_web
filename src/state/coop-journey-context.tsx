@@ -287,10 +287,14 @@ export function CoopJourneyProvider({
         dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
       ensureGambleSiteRuntime: (siteId) =>
         dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
+      ensureExplorationSiteRuntime: (siteId) =>
+        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined)),
 
       // ---- sites: player actions ----
       completeSite: (siteId) =>
         dispatch(actions.completeSite(siteId, stateRef.current.runId ?? undefined)),
+      resolveExplorationChoice: (siteId, actionId, selection) =>
+        dispatch(actions.resolveExplorationChoice(siteId, actionId, selection)),
       placeGravokWager: (siteId, gateId) =>
         dispatch(actions.placeGravokWager(siteId, gateId)),
       settleGravokWager: (siteId, shuffleCommitment) =>

@@ -660,6 +660,104 @@ export function transformDreamsign(dreamsign, altTextByImageName = new Map()) {
   };
 }
 
+const EXPLORATION_EFFECT_KINDS = new Set([
+  "purge-and-copy",
+  "gain-dreamsign",
+  "gain-card",
+  "transfigure-selected",
+  "purge-selected",
+  "choose-pack",
+  "draft-card",
+  "purge-for-essence",
+  "change-subtype-selected",
+  "change-subtype-all",
+  "take-cards",
+  "replace-selected",
+  "gain-bane-and-card",
+  "gain-random-cards",
+  "transfigure-fixed-selected",
+]);
+
+function transformTomlRecord(record) {
+  const result = {};
+  for (const [key, value] of Object.entries(record)) {
+    const transformed = Array.isArray(value)
+      ? value.map((entry) =>
+          typeof entry === "object" && entry !== null
+            ? transformTomlRecord(entry)
+            : entry,
+        )
+      : typeof value === "object" && value !== null
+        ? transformTomlRecord(value)
+        : value;
+    result[kebabToCamel(key)] = transformed;
+  }
+  return result;
+}
+
+/** Convert and validate the authored Exploration encounter catalog. */
+export function transformExplorationData(source) {
+  const customCards = (source["custom-card"] ?? []).map((raw) => {
+    const card = transformTomlRecord(raw);
+    return {
+      ...card,
+      spark: typeof card.spark === "number" ? card.spark : null,
+      isFast: false,
+      isStarter: false,
+    };
+  });
+  const customDreamsigns = (source["custom-dreamsign"] ?? []).map((raw) => {
+    const dreamsign = transformTomlRecord(raw);
+    return {
+      id: dreamsign.id,
+      name: dreamsign.name,
+      effectDescription: dreamsign.renderedText ?? "",
+      isBane: false,
+    };
+  });
+  const encounters = (source.encounter ?? []).map(transformTomlRecord);
+
+  if (encounters.length !== 9) {
+    throw new Error(
+      `exploration.toml: expected 9 encounters, found ${String(encounters.length)}`,
+    );
+  }
+  const encounterIds = new Set();
+  const actionIds = new Set();
+  for (const encounter of encounters) {
+    if (typeof encounter.cardId !== "string" || encounter.cardId.length === 0) {
+      throw new Error("exploration.toml: every encounter requires card-id");
+    }
+    if (encounterIds.has(encounter.cardId.toLowerCase())) {
+      throw new Error(`exploration.toml: duplicate encounter card-id ${encounter.cardId}`);
+    }
+    encounterIds.add(encounter.cardId.toLowerCase());
+    if (!Array.isArray(encounter.action) || encounter.action.length !== 2) {
+      throw new Error(
+        `exploration.toml: encounter ${encounter.cardId} must have exactly 2 actions`,
+      );
+    }
+    for (const action of encounter.action) {
+      if (typeof action.id !== "string" || actionIds.has(action.id)) {
+        throw new Error(`exploration.toml: missing or duplicate action id ${String(action.id)}`);
+      }
+      actionIds.add(action.id);
+      if (!EXPLORATION_EFFECT_KINDS.has(action.effectKind)) {
+        throw new Error(
+          `exploration.toml: action ${action.id} has unknown effect-kind ${String(action.effectKind)}`,
+        );
+      }
+      for (const key of ["label", "effectText", "responseText"]) {
+        if (typeof action[key] !== "string" || action[key].trim() === "") {
+          throw new Error(`exploration.toml: action ${action.id} requires ${key}`);
+        }
+      }
+    }
+  }
+
+  return { customCards, customDreamsigns, encounters };
+}
+
 /**
  * Convert a TOML figment record to its JSON representation with camelCase keys.
  * Figment spark is a plain non-negative integer (a Legion's stored value is the
@@ -1044,6 +1142,7 @@ export function setupAssets({
   dreamsignSignaturesTomlPath = join(DATA_DIR, "tabula", "dreamsign_signatures.toml"),
   dreamscapesTomlPath = join(DATA_DIR, "tabula", "dreamscapes.toml"),
   dreamGuidesTomlPath = join(DATA_DIR, "tabula", "dream_guides.toml"),
+  explorationTomlPath = join(DATA_DIR, "tabula", "exploration.toml"),
   affiliationsTomlPath = join(DATA_DIR, "tabula", "affiliations.toml"),
   atlasConfigTomlPath = join(DATA_DIR, "tabula", "atlas_config.toml"),
   apollyonIncarnationsTomlPath = join(
@@ -1106,6 +1205,7 @@ export function setupAssets({
   const dreamsignSignaturesJsonPath = join(publicDir, "dreamsign-signatures-data.json");
   const dreamscapesJsonPath = join(publicDir, "dreamscapes-data.json");
   const dreamGuidesJsonPath = join(publicDir, "dream-guides-data.json");
+  const explorationJsonPath = join(publicDir, "exploration-data.json");
   const affiliationsJsonPath = join(publicDir, "affiliations-data.json");
   const atlasConfigJsonPath = join(publicDir, "atlas-config-data.json");
   const apollyonIncarnationsJsonPath = join(
@@ -1419,6 +1519,54 @@ export function setupAssets({
   );
   console.log(
     `Wrote ${jsonDreamsigns.length} dreamsigns to dreamsign-data.json`,
+  );
+
+  console.log("Parsing exploration.toml...");
+  const explorationSource = parse(readFileSync(explorationTomlPath, "utf8"));
+  const explorationData = transformExplorationData(explorationSource);
+  const knownCardIds = new Set(
+    [...jsonCardsV2, ...explorationData.customCards].map((card) =>
+      String(card.id).toLowerCase(),
+    ),
+  );
+  const knownDreamsignIds = new Set(
+    [...jsonDreamsigns, ...explorationData.customDreamsigns].map((dreamsign) =>
+      String(dreamsign.id).toLowerCase(),
+    ),
+  );
+  for (const encounter of explorationData.encounters) {
+    if (!knownCardIds.has(encounter.cardId.toLowerCase())) {
+      throw new Error(
+        `exploration.toml: encounter references unknown card UUID ${encounter.cardId}`,
+      );
+    }
+    for (const action of encounter.action) {
+      for (const field of ["cardId", "baneCardId"]) {
+        if (
+          typeof action[field] === "string" &&
+          !knownCardIds.has(action[field].toLowerCase())
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} references unknown card UUID ${action[field]}`,
+          );
+        }
+      }
+      if (
+        typeof action.dreamsignId === "string" &&
+        !knownDreamsignIds.has(action.dreamsignId.toLowerCase())
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} references unknown Dreamsign UUID ${action.dreamsignId}`,
+        );
+      }
+    }
+  }
+  writeFileSync(
+    explorationJsonPath,
+    JSON.stringify(explorationData, null, 2) + "\n",
+  );
+  console.log(
+    `Wrote ${explorationData.encounters.length} Exploration encounters to exploration-data.json`,
   );
 
   // Dreamsign profiles: parse the curated TOML and write the kebab->camel JSON

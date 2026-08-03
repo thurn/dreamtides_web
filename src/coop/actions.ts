@@ -131,6 +131,11 @@ export interface CoopActions {
 
   // --- sites ---
   openSite: (siteId: string, runId?: string) => Promise<number>;
+  resolveExplorationChoice: (
+    siteId: string,
+    actionId: string,
+    selection?: unknown,
+  ) => Promise<number>;
   completeDreamAugury: (siteId: string) => Promise<number>;
   acceptReward: (siteId: string, choiceIndex?: number) => Promise<number>;
   acceptDreamsignOffer: (
@@ -414,6 +419,12 @@ export function makeActions(append: AppendFn): CoopActions {
     // --- sites ---
     openSite: (siteId, runId) =>
       emit("OPEN_SITE", { siteId }, siteIntentKey("open-site", siteId, runId)),
+    resolveExplorationChoice: (siteId, actionId, selection) =>
+      emit("RESOLVE_EXPLORATION_CHOICE", {
+        siteId,
+        actionId,
+        ...(selection === undefined ? {} : { selection }),
+      }),
     completeDreamAugury: (siteId) => emit("COMPLETE_DREAM_AUGURY", { siteId }),
     acceptReward: (siteId, choiceIndex) =>
       emit(

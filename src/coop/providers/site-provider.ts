@@ -50,6 +50,10 @@ import type {
 } from "../../rules/journey/sites";
 import { streamFromKeyed } from "./rng-stream";
 import { readDreamsignPool } from "../../dreamsign/dreamsign-pool";
+import {
+  buildExplorationRuntime,
+  resolveExplorationChoice,
+} from "./exploration-provider";
 
 function asString(value: unknown): string | null {
   return typeof value === "string" ? value : null;
@@ -335,6 +339,13 @@ export function createSiteContentProvider(
             runtime: buildGambleRuntime(journey, site, content, stream),
           };
         }
+        case "Exploration": {
+          const runtime = buildExplorationRuntime(journey, site, content, stream);
+          if (runtime === null) return null;
+          return {
+            runtime,
+          };
+        }
         default:
           return null;
       }
@@ -408,5 +419,8 @@ export function createSiteContentProvider(
       });
       return result.ok ? result.state : null;
     },
+
+    resolveExploration: ({ journey, site, payload, seq }) =>
+      resolveExplorationChoice({ journey, site, payload, seq, content }),
   };
 }

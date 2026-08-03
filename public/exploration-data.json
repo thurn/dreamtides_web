@@ -1,0 +1,256 @@
+{
+  "customCards": [
+    {
+      "id": "c33cdbe5-0c3b-4180-bd11-0912dfa19486",
+      "name": "Ruinwatch Custodian",
+      "cardNumber": 10001,
+      "cardType": "Character",
+      "subtype": "Survivor",
+      "energyCost": 2,
+      "spark": 2,
+      "renderedText": "▸Dissolved: Choose another character in your void to gain reclaim 2●.\n\nReclaim 2●.",
+      "imageNumber": 2287436067,
+      "artOwned": false,
+      "isFast": false,
+      "isStarter": false
+    },
+    {
+      "id": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+      "name": "Nightmare",
+      "cardNumber": 10002,
+      "cardType": "Event",
+      "subtype": "",
+      "energyCost": 0,
+      "renderedText": "Bane.",
+      "imageNumber": 1169640025,
+      "artOwned": false,
+      "spark": null,
+      "isFast": false,
+      "isStarter": false
+    }
+  ],
+  "customDreamsigns": [
+    {
+      "id": "F46E59CB-32EC-4B50-8774-18F571B8FCE1",
+      "name": "Passage Lantern",
+      "effectDescription": "The first time each turn you rematerialize a character, it gains +1✦.",
+      "isBane": false
+    }
+  ],
+  "encounters": [
+    {
+      "cardId": "161482b6-af07-4d9e-822d-8c738672beb9",
+      "prose": "A child raises a round lantern before a narrow window of stars.",
+      "action": [
+        {
+          "id": "161482b6-af07-4d9e-822d-8c738672beb9:exchange-familiar-forms",
+          "label": "Exchange Familiar Forms",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card",
+          "responseText": "One silhouette recedes as another emerges beside its double.",
+          "effectKind": "purge-and-copy"
+        },
+        {
+          "id": "161482b6-af07-4d9e-822d-8c738672beb9:request-round-lantern",
+          "label": "Request the Round Lantern",
+          "effectText": "Gain Passage Lantern. The first time each turn you rematerialize a character, it gains +1✦.",
+          "responseText": "The child lowers its steady glow into your hands.",
+          "effectKind": "gain-dreamsign",
+          "dreamsignId": "F46E59CB-32EC-4B50-8774-18F571B8FCE1"
+        }
+      ]
+    },
+    {
+      "cardId": "738a5af0-f848-4d48-bceb-9a43c9b11066",
+      "prose": "Before you, an armored sentinel rests beside a fractured doorway glowing amid ruins.",
+      "action": [
+        {
+          "id": "738a5af0-f848-4d48-bceb-9a43c9b11066:invite-sentinel",
+          "label": "Invite the Sentinel",
+          "effectText": "Gain Ruinwatch Custodian (2● Survivor Character, 2✦ — ▸Dissolved: Choose another character in your void to gain reclaim 2●. Reclaim 2●.)",
+          "responseText": "The guardian rises and walks beside you.",
+          "effectKind": "gain-card",
+          "cardId": "c33cdbe5-0c3b-4180-bd11-0912dfa19486"
+        },
+        {
+          "id": "738a5af0-f848-4d48-bceb-9a43c9b11066:study-guardian",
+          "label": "Study the Guardian",
+          "effectText": "Apply a transfiguration to 2 chosen Survivor cards",
+          "responseText": "Your companions adopt its measured discipline among the ruins.",
+          "effectKind": "transfigure-selected",
+          "predicate": "survivor",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "401bb341-8385-41e9-8f6f-7b48e9ce174d",
+      "prose": "Before you, a colossal wolf advances through burning grass, pale eyes fixed ahead.",
+      "action": [
+        {
+          "id": "401bb341-8385-41e9-8f6f-7b48e9ce174d:feed-fire",
+          "label": "Feed the Fire",
+          "effectText": "Purge a chosen Event card",
+          "responseText": "The blaze consumes what you cast away.",
+          "effectKind": "purge-selected",
+          "predicate": "event",
+          "count": 1
+        },
+        {
+          "id": "401bb341-8385-41e9-8f6f-7b48e9ce174d:welcome-kin",
+          "label": "Welcome Its Kin",
+          "effectText": "Choose one of 2 packs of Spirit Animal cards to add to your deck",
+          "responseText": "Other wolves emerge through the heated haze.",
+          "effectKind": "choose-pack",
+          "predicate": "spirit-animal",
+          "packCount": 2,
+          "packSize": 3
+        }
+      ]
+    },
+    {
+      "cardId": "8b5eb29c-146f-46fb-9407-55004128fba7",
+      "prose": "Before you, a skull-faced colossus lowers a radiant lantern toward a child.",
+      "action": [
+        {
+          "id": "8b5eb29c-146f-46fb-9407-55004128fba7:invite-lantern-visitor",
+          "label": "Invite a Lantern Visitor",
+          "effectText": "Gain an offered ≤2● cost Character card",
+          "responseText": "A new figure steps from between the panes.",
+          "effectKind": "draft-card",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        },
+        {
+          "id": "8b5eb29c-146f-46fb-9407-55004128fba7:trade-away-figure",
+          "label": "Trade Away a Figure",
+          "effectText": "Purge a chosen card and gain 40 essence for each ✦ it had",
+          "responseText": "A skeletal hand accepts the chosen offering.",
+          "effectKind": "purge-for-essence",
+          "essencePerSpark": 40
+        }
+      ]
+    },
+    {
+      "cardId": "954e8d50-d494-4fb2-b4c7-74979083b774",
+      "prose": "A luminous triangle encloses an armed figure as black cables stream outward.",
+      "action": [
+        {
+          "id": "954e8d50-d494-4fb2-b4c7-74979083b774:enter-frame",
+          "label": "Enter the Luminous Frame",
+          "effectText": "Change a chosen Character card to have Outsider",
+          "responseText": "Its bright outline alters one waiting silhouette.",
+          "effectKind": "change-subtype-selected",
+          "predicate": "character",
+          "subtype": "Outsider"
+        },
+        {
+          "id": "954e8d50-d494-4fb2-b4c7-74979083b774:expand-frame",
+          "label": "Expand the Luminous Frame",
+          "effectText": "All characters in your deck become the subtype of your choice.",
+          "responseText": "The widening glow reshapes every distant silhouette.",
+          "effectKind": "change-subtype-all",
+          "subtypeOptions": [
+            "Warrior",
+            "Spirit Animal",
+            "Survivor",
+            "Outsider"
+          ]
+        }
+      ]
+    },
+    {
+      "cardId": "b8ecc46d-bd92-4826-a416-7ce177e69cbf",
+      "prose": "Beside a silent figure, an immense owl stares through drifting motes.",
+      "action": [
+        {
+          "id": "b8ecc46d-bd92-4826-a416-7ce177e69cbf:ask-counsel",
+          "label": "Ask the Figure's Counsel",
+          "effectText": "Draft a ≤2● cost Character card from 4 random choices",
+          "responseText": "The smaller figure indicates several shapes in the haze.",
+          "effectKind": "draft-card",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        },
+        {
+          "id": "b8ecc46d-bd92-4826-a416-7ce177e69cbf:welcome-owl-kin",
+          "label": "Welcome the Owl's Kin",
+          "effectText": "Take any number of Spirit Animal cards from 4 random choices",
+          "responseText": "Calls answer as animal forms settle among the branches.",
+          "effectKind": "take-cards",
+          "predicate": "spirit-animal",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "e2f542eb-090f-4a22-a42c-a120eb6caaa3",
+      "prose": "A whale’s shadowed bulk crosses the stars above your small craft.",
+      "action": [
+        {
+          "id": "e2f542eb-090f-4a22-a42c-a120eb6caaa3:welcome-swimmer",
+          "label": "Welcome a Smaller Swimmer",
+          "effectText": "Gain Magic Fish",
+          "responseText": "A bright new shape circles beneath the giant.",
+          "effectKind": "gain-dreamsign",
+          "dreamsignId": "3A22A33F-5682-4D00-B0EC-86E43B6ED9DF"
+        },
+        {
+          "id": "e2f542eb-090f-4a22-a42c-a120eb6caaa3:release-swimmer",
+          "label": "Release a Fellow Swimmer",
+          "effectText": "Purge a chosen Spirit Animal card and gain a random Spirit Animal replacement",
+          "responseText": "Another broad silhouette rises into the open sky.",
+          "effectKind": "replace-selected",
+          "predicate": "spirit-animal"
+        }
+      ]
+    },
+    {
+      "cardId": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+      "prose": "An enormous elephant emerges from starlit mist, its curved tusks shining.",
+      "action": [
+        {
+          "id": "46783333-78f9-4146-a8ec-0d1b81e1bf2f:welcome-great-beast",
+          "label": "Welcome the Great Beast",
+          "effectText": "Gain 1 \"Nightmare\" bane card. Gain Emerald Guardian.",
+          "responseText": "The elephant kneels as the surrounding haze darkens.",
+          "effectKind": "gain-bane-and-card",
+          "baneCardId": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+          "baneCount": 1,
+          "cardId": "46783333-78f9-4146-a8ec-0d1b81e1bf2f"
+        },
+        {
+          "id": "46783333-78f9-4146-a8ec-0d1b81e1bf2f:call-herd",
+          "label": "Call the Distant Herd",
+          "effectText": "Gain one copy of each of 2 random Spirit Animal cards",
+          "responseText": "Great animal shapes approach through the radiant mist.",
+          "effectKind": "gain-random-cards",
+          "predicate": "spirit-animal",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "886c9d49-b25f-4ddd-97f0-2ec4b42eda89",
+      "prose": "Above you, a colossal horseman thins into drifting starlight.",
+      "action": [
+        {
+          "id": "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:call-distance",
+          "label": "Call Into the Distance",
+          "effectText": "Gain Bell",
+          "responseText": "A clear bell tolls beneath the distant horse.",
+          "effectKind": "gain-dreamsign",
+          "dreamsignId": "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5"
+        },
+        {
+          "id": "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:gather-light",
+          "label": "Gather the Falling Light",
+          "effectText": "Apply Kindled to a chosen ≤2● cost Character card from your deck",
+          "responseText": "A waiting traveler's outline shines with renewed strength.",
+          "effectKind": "transfigure-fixed-selected",
+          "predicate": "cheap-character",
+          "transfiguration": "Kindled"
+        }
+      ]
+    }
+  ]
+}

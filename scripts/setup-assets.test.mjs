@@ -10,6 +10,7 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { parse } from "smol-toml";
 import {
   buildDraftRecords,
   DEFAULT_STARTING_ESSENCE,
@@ -19,8 +20,28 @@ import {
   setupAssets,
   stripJsonComments,
   transformCard,
+  transformExplorationData,
   validateDreamAvatarMapping,
 } from "./setup-assets.mjs";
+
+describe("transformExplorationData", () => {
+  it("compiles nine UUID-keyed encounters with two actions each", () => {
+    const source = parse(
+      readFileSync(
+        join(import.meta.dirname, "../data/tabula/exploration.toml"),
+        "utf8",
+      ),
+    );
+    const compiled = transformExplorationData(source);
+    const actions = compiled.encounters.flatMap((encounter) => encounter.action);
+
+    expect(compiled.encounters).toHaveLength(9);
+    expect(actions).toHaveLength(18);
+    expect(new Set(compiled.encounters.map((encounter) => encounter.cardId)).size)
+      .toBe(9);
+    expect(new Set(actions.map((action) => action.id)).size).toBe(18);
+  });
+});
 
 afterEach(() => {
   vi.restoreAllMocks();

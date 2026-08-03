@@ -94,6 +94,11 @@ export interface EventPayloads {
 
   // --- sites ---
   OPEN_SITE: { siteId: string };
+  RESOLVE_EXPLORATION_CHOICE: {
+    siteId: string;
+    actionId: string;
+    selection?: unknown;
+  };
   COMPLETE_DREAM_AUGURY: { siteId: string };
   ACCEPT_REWARD: { siteId: string; choiceIndex?: number };
   ACCEPT_DREAMSIGN_OFFER: { siteId: string; dreamsignId: string };
@@ -290,6 +295,7 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   REROLL_DRAFT_OFFER: true,
   ENTER_DRAFT_SITE: true,
   OPEN_SITE: true,
+  RESOLVE_EXPLORATION_CHOICE: true,
   COMPLETE_DREAM_AUGURY: true,
   ACCEPT_REWARD: true,
   ACCEPT_DREAMSIGN_OFFER: true,

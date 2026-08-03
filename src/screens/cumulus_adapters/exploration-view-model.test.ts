@@ -1,15 +1,16 @@
 import { describe, expect, it } from "vitest";
+import type { JourneyContent } from "../../data/journey-content";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
-import type { SiteState } from "../../types/journey";
+import type { ExplorationSiteRuntime, SiteState } from "../../types/journey";
+import { createDefaultState } from "../../state/journey-context";
 import {
-  EXPLORATION_CARD_IDS,
   buildExplorationSiteView,
-  resolveExplorationCardPool,
   resolveExplorationGuide,
-  selectExplorationCard,
 } from "./exploration-view-model";
+
+const sourceId = asCardId("161482b6-af07-4d9e-822d-8c738672beb9");
 
 function card(id: CardData["id"], cardNumber: number): CardData {
   return {
@@ -17,7 +18,7 @@ function card(id: CardData["id"], cardNumber: number): CardData {
     name: asCardName(`Fixture Card ${String(cardNumber)}`),
     cardNumber,
     cardType: "Character",
-    subtype: "Fixture",
+    subtype: "Survivor",
     isStarter: false,
     energyCost: 2,
     spark: 2,
@@ -40,85 +41,208 @@ const guide: DreamGuideContent = {
   name: "Fixture Guide",
   homeDreamscapeId: "fixture-dreamscape",
   siteType: "Exploration",
-  dialog: ["Every card dreams. Draw one, and we'll delve inside."],
+  dialog: ["Every card dreams. Draw one, and we'll step inside."],
   homeSpecialty: "Fixture specialty.",
 };
 
 describe("exploration-view-model", () => {
-  it("keeps only UUIDs from the prototype pool that exist in the loaded catalog", () => {
-    const first = card(EXPLORATION_CARD_IDS[0], 101);
-    const last = card(
-      EXPLORATION_CARD_IDS[EXPLORATION_CARD_IDS.length - 1],
-      202,
-    );
-    const unrelated = card(asCardId("unrelated-card-id"), 303);
-    const database = new Map(
-      [last, unrelated, first].map((entry) => [entry.cardNumber, entry]),
-    );
+  it("builds authored narrative, two actions, and a persisted response", () => {
+    const source = card(sourceId, 17);
+    const state = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "entry-a",
+          cardNumber: source.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+    };
+    const runtime: ExplorationSiteRuntime = {
+      kind: "exploration",
+      encounterCardId: source.id,
+      actionOffers: [
+        {
+          actionId: "action-a",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+        {
+          actionId: "action-b",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+      ],
+      resolution: {
+        actionId: "action-b",
+        gainedCardIds: [],
+        gainedDreamsignIds: [],
+        purgedCardIds: [],
+        affectedEntryIds: [],
+        essenceGained: 0,
+      },
+    };
+    const content = {
+      cardDatabase: new Map([[source.cardNumber, source]]),
+      dreamAvatars: [],
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      dreamscapes: [],
+      affiliations: [],
+      guides: [guide],
+      atlasConfig: { completionLevels: [] },
+      exploration: {
+        customCards: [],
+        customDreamsigns: [],
+        encounters: [
+          {
+            cardId: source.id,
+            prose: "The authored scene appears.",
+            actions: [
+              {
+                id: "action-a",
+                label: "First choice",
+                effectText: "Purge a card and copy another.",
+                responseText: "The first response.",
+                effectKind: "purge-and-copy",
+              },
+              {
+                id: "action-b",
+                label: "Second choice",
+                effectText: "Gain the card.",
+                responseText: "The second response.",
+                effectKind: "gain-card",
+                cardId: source.id,
+              },
+            ],
+          },
+        ],
+      },
+    } as unknown as JourneyContent;
 
-    expect(
-      resolveExplorationCardPool(database).map((entry) => entry.id),
-    ).toEqual([first.id, last.id]);
-  });
-
-  it("selects the same UUID for the same room seed and site id", () => {
-    const cards = EXPLORATION_CARD_IDS.slice(0, 3).map((id, index) =>
-      card(id, index + 1),
-    );
-    const database = new Map(cards.map((entry) => [entry.cardNumber, entry]));
-
-    const first = selectExplorationCard({
-      cardDatabase: database,
-      journeySeed: "fixture-room-seed",
-      siteId: explorationSite.id,
-    });
-    const second = selectExplorationCard({
-      cardDatabase: database,
-      journeySeed: "fixture-room-seed",
-      siteId: explorationSite.id,
-    });
-
-    expect(first?.id).toBe(second?.id);
-    expect(EXPLORATION_CARD_IDS).toContain(first?.id);
-  });
-
-  it("builds a UUID-backed card and Layaway presentation from synthetic data", () => {
-    const selected = card(EXPLORATION_CARD_IDS[2], 17);
     const view = buildExplorationSiteView({
       sceneNode: null,
       site: explorationSite,
       guide,
-      card: selected,
+      runtime,
+      state,
+      content,
     });
 
     expect(resolveExplorationGuide([guide])).toBe(guide);
     expect(view).toMatchObject({
       siteId: explorationSite.id,
-      scene: null,
-      isEnhanced: true,
-      fullArt: {
-        kind: "exploration-card",
-        imageNumber: selected.imageNumber,
+      narrative: "The authored scene appears.",
+      actions: [
+        { id: "action-a", followup: { kind: "cards" } },
+        { id: "action-b", followup: { kind: "none" } },
+      ],
+      response: {
+        actionLabel: "Second choice",
+        text: "The second response.",
       },
-      guide: {
-        id: guide.id,
-        name: guide.name,
-        line: guide.dialog[0],
-      },
-      card: {
-        cardId: selected.id,
-        displaySnapshot: selected,
-      },
+      card: { cardId: source.id },
     });
   });
 
-  it("returns null when none of the prototype UUIDs exist in the catalog", () => {
-    expect(
-      selectExplorationCard({
-        cardDatabase: new Map(),
-        journeySeed: "fixture-room-seed",
-        siteId: explorationSite.id,
-      }),
-    ).toBeNull();
+  it("omits already-transfigured cards from a fixed transfiguration choice", () => {
+    const source = card(sourceId, 17);
+    const state = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "entry-eligible",
+          cardNumber: source.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
+        {
+          entryId: "entry-transfigured",
+          cardNumber: source.cardNumber,
+          transfiguration: "Inspired" as const,
+          isBane: false,
+        },
+      ],
+    };
+    const runtime: ExplorationSiteRuntime = {
+      kind: "exploration",
+      encounterCardId: source.id,
+      actionOffers: [
+        {
+          actionId: "gather-light",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+        {
+          actionId: "gain-card",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+      ],
+      resolution: null,
+    };
+    const content = {
+      cardDatabase: new Map([[source.cardNumber, source]]),
+      dreamAvatars: [],
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      dreamscapes: [],
+      affiliations: [],
+      guides: [guide],
+      atlasConfig: { completionLevels: [] },
+      exploration: {
+        customCards: [],
+        customDreamsigns: [],
+        encounters: [
+          {
+            cardId: source.id,
+            prose: "The authored scene appears.",
+            actions: [
+              {
+                id: "gather-light",
+                label: "Gather the Falling Light",
+                effectText: "Transfigure a cheap Character.",
+                responseText: "The light gathers.",
+                effectKind: "transfigure-fixed-selected",
+                predicate: "cheap-character",
+                transfiguration: "Kindled",
+              },
+              {
+                id: "gain-card",
+                label: "Gain the card",
+                effectText: "Gain the card.",
+                responseText: "The card joins you.",
+                effectKind: "gain-card",
+                cardId: source.id,
+              },
+            ],
+          },
+        ],
+      },
+    } as unknown as JourneyContent;
+
+    const view = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      runtime,
+      state,
+      content,
+    });
+    if (view === null) throw new Error("Expected Exploration view");
+
+    expect(view.actions[0].followup).toMatchObject({
+      kind: "cards",
+      cards: [{ entryId: "entry-eligible" }],
+    });
   });
 });
