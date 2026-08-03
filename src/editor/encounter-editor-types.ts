@@ -1,3 +1,6 @@
+import type { CardData } from "../types/cards";
+import type { Dreamsign } from "../types/journey";
+
 export type EncounterCandidateTextField = "prose" | "label" | "resolution";
 export type EncounterEditableTextField = EncounterCandidateTextField | "template";
 export type EncounterSelectionKind = "prose" | "actions";
@@ -9,7 +12,19 @@ export type EncounterRenderedTemplatePart =
     placeholder: string;
     cardId: string;
     cardName: string;
+  }
+  | {
+    kind: "dreamsign";
+    placeholder: string;
+    dreamsignId: string;
+    dreamsignName: string;
   };
+
+export interface EncounterEditorLoadResult {
+  groups: EncounterEditorGroup[];
+  cards: CardData[];
+  dreamsigns: Dreamsign[];
+}
 
 export interface EncounterRuntimeCardSelection {
   placeholder: string;
@@ -104,7 +119,7 @@ export interface EncounterSelectionSaveRequest {
 }
 
 export interface EncounterEditorClient {
-  load(signal?: AbortSignal): Promise<EncounterEditorGroup[]>;
+  load(signal?: AbortSignal): Promise<EncounterEditorLoadResult>;
   loadTemplateHealth(signal?: AbortSignal): Promise<EncounterTemplateHealth>;
   saveSelection(request: EncounterSelectionSaveRequest): Promise<{
     clientRevision: number;

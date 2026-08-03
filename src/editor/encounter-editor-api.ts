@@ -1,4 +1,6 @@
 import { EditorApiRequestError } from "./editor-api";
+import { loadCardDatabase } from "../data/card-database";
+import { createDreamsign, loadDreamsignTemplates } from "../data/dreamsigns";
 import type {
   EncounterEditorClient,
   EncounterEditorGroup,
@@ -35,12 +37,20 @@ async function patch<T>(path: string, body: unknown): Promise<T> {
 
 export const encounterEditorClient: EncounterEditorClient = {
   async load(signal) {
-    const response = await fetch("/api/editor/encounters", {
-      headers: { Accept: "application/json" },
-      signal,
-    });
+    const [response, cardDatabase, dreamsignTemplates] = await Promise.all([
+      fetch("/api/editor/encounters", {
+        headers: { Accept: "application/json" },
+        signal,
+      }),
+      loadCardDatabase(),
+      loadDreamsignTemplates(),
+    ]);
     const body = await readResponse<{ groups: EncounterEditorGroup[] }>(response);
-    return body.groups;
+    return {
+      groups: body.groups,
+      cards: [...cardDatabase.values()],
+      dreamsigns: dreamsignTemplates.map((template) => createDreamsign(template)),
+    };
   },
 
   async loadTemplateHealth(signal) {

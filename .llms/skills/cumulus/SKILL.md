@@ -74,7 +74,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 <!-- BEGIN GENERATED COMPONENT INDEX (npm run cumulus-docs) -->
 | Component | Group | Consumers | Reference | What it is |
 | --- | --- | --- | --- | --- |
-| Pressable | Primitives | 33 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Pressable | Primitives | 34 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
 | Resource Chip | Components | 4 | [components/resource-chip.md](components/resource-chip.md) | The sized, self-contained value-and-mark chip for the game economy. |
 | Essence Value | Components | 10 | [components/essence-value.md](components/essence-value.md) | The tight inline essence amount: a tabular number glued to the filled essence glyph, for player-facing currency text outside rules copy. |
 | Icon Button | Components | 19 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc — neutral or purple accent liquid glass, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
@@ -113,6 +113,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Dreamwell Card | Components | 5 | [components/dreamwell-card.md](components/dreamwell-card.md) | The static landscape card drawn from the Dreamwell: UUID-keyed art, energy grant, name, and complete rules text in one readable object. |
 | DreamAvatar Ability Text | Components | 2 | [components/dream-avatar-ability-text.md](components/dream-avatar-ability-text.md) | The complete DreamAvatar rules-text source: hovering, focusing, or touch-holding anywhere in the ability reveals one compact title-free card containing every defined term in rules-text occurrence order, using DreamAvatar-specific exhaust guidance. |
 | DreamAvatar Portrait | Components | 17 | [components/dream-avatar-portrait.md](components/dream-avatar-portrait.md) | The shared framed and stage-filling DreamAvatar art surface: the transparent full-body cutout in one of six fixed framings. |
+| Entity Reference | Components | 1 | [components/entity-reference.md](components/entity-reference.md) | An inline, underlined card or Dreamsign name that reveals the canonical full entity on hover, keyboard focus, or touch hold through the shared coordinator. |
 | Rich Text | Components | 15 | [components/rich-text.md](components/rich-text.md) | The design system's model for a run of formatted copy. |
 | Rules Text | Components | 13 | [components/rules-text.md](components/rules-text.md) | Renders Dreamtides rules copy from card data — resource pips, Unicode trigger markers, and glossary keywords styled in place — with definition cards adapted to the exact rules sentence. |
 | Playing Card | Components | 1 | [components/playing-card.md](components/playing-card.md) | The standard playing-card object: full rank-and-suit, focused rank, colored suit, rank-target, and fitted 4×4 checkerboard treatments on a quartic-superellipse square made from the shared liquid glass. |
@@ -126,7 +127,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Atlas Node | Components | 2 | [components/atlas-node.md](components/atlas-node.md) | One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — including a frame-shaped violet outline that visibly widens and contracts around the next selectable dreamscape — and which reveals its scene / detail card on hover or press. |
 | Atlas Edge | Components | 1 | [components/atlas-edge.md](components/atlas-edge.md) | The connector between two Atlas nodes, drawn inside the map's SVG. |
 | Atlas Map | Components | 1 | [components/atlas-map.md](components/atlas-map.md) | The Dream Atlas map surface — the run graph of dreamscape nodes and their connectors, fitted into a fixed portrait design stage that uniformly scales to fit its container (letterboxed). |
-| Dreamsign | Components | 10 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
+| Dreamsign | Components | 11 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
 | Dreamsign Gallery Panel | Components | 1 | [components/dreamsign-gallery-panel.md](components/dreamsign-gallery-panel.md) | The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action. |
 | Site Node | Components | 2 | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node carrying a glyph and accent ring. |
 | Wager Prize Card | Components | 1 | [components/wager-prize-card.md](components/wager-prize-card.md) | The Three Gates prize object: one PlayingCard superellipse with a target title, a single reward sentence, an optional whole-face Dreamsign reveal, and a committed-card reverse face. |

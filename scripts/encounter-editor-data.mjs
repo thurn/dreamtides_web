@@ -18,6 +18,8 @@ export const DEFAULT_ENCOUNTER_TEMPLATES_PATH = join("data", "templates.json");
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
+const ENTITY_UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 const TEMPLATE_PAIR_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 const ACTION_FIELDS = new Set(["label", "resolution"]);
 const LEGACY_ACTION_FIELDS = new Set(["effect_text", "template"]);
@@ -123,6 +125,44 @@ export function renderEncounterTemplate(template, variables) {
     }
     return displayVariable(values[placeholder], `variables.${placeholder}`);
   });
+}
+
+function renderEncounterVariableParts(template, variables) {
+  const values = objectRecord(variables, "variables");
+  const parts = [];
+  let cursor = 0;
+  for (const match of template.matchAll(PLACEHOLDER_PATTERN)) {
+    if (match.index > cursor) {
+      parts.push({ kind: "text", text: template.slice(cursor, match.index) });
+    }
+    const placeholder = match[1];
+    if (!Object.hasOwn(values, placeholder)) {
+      throw new Error(`variables is missing {${placeholder}}.`);
+    }
+    const value = values[placeholder];
+    const text = displayVariable(value, `variables.${placeholder}`);
+    const entityKind = placeholder === "card_id"
+      ? "card"
+      : placeholder === "dreamsign_name"
+        ? "dreamsign"
+        : null;
+    if (entityKind === null || value === null || typeof value !== "object" || Array.isArray(value)) {
+      parts.push({ kind: "text", text });
+    } else {
+      const id = requiredString(value.id, `variables.${placeholder}.id`);
+      if (!ENTITY_UUID_PATTERN.test(id)) {
+        throw new Error(`variables.${placeholder}.id must be a UUID.`);
+      }
+      parts.push(entityKind === "card"
+        ? { kind: "card", placeholder: `{${placeholder}}`, cardId: id, cardName: text }
+        : { kind: "dreamsign", placeholder: `{${placeholder}}`, dreamsignId: id, dreamsignName: text });
+    }
+    cursor = match.index + match[0].length;
+  }
+  if (cursor < template.length) {
+    parts.push({ kind: "text", text: template.slice(cursor) });
+  }
+  return parts;
 }
 
 function validateTemplateUsage(document, templatesById) {
@@ -372,7 +412,13 @@ function runtimeCardSelection(placeholder, selection, cards, playerDeck, random)
 }
 
 function renderRuntimeTemplate(template, variables, selection, cards, playerDeck, random) {
-  const withVariables = renderEncounterTemplate(template, variables);
+  const variableParts = renderEncounterVariableParts(template, variables);
+  const withVariables = variableParts.map((part) =>
+    part.kind === "card"
+      ? part.cardName
+      : part.kind === "dreamsign"
+        ? part.dreamsignName
+        : part.text).join("");
   const placeholders = [...new Set(withVariables.match(SPECIAL_PATTERN) ?? [])]
     .filter((placeholder) => RUNTIME_CARD_PLACEHOLDERS.has(placeholder));
   const runtimeSelections = placeholders.map((placeholder) =>
@@ -381,30 +427,40 @@ function renderRuntimeTemplate(template, variables, selection, cards, playerDeck
     runtimeSelections.map((runtimeSelection) => [runtimeSelection.placeholder, runtimeSelection]),
   );
   const parts = [];
-  let cursor = 0;
-  for (const match of withVariables.matchAll(SPECIAL_PATTERN)) {
-    if (match.index > cursor) {
-      parts.push({ kind: "text", text: withVariables.slice(cursor, match.index) });
+  for (const variablePart of variableParts) {
+    if (variablePart.kind !== "text") {
+      parts.push(variablePart);
+      continue;
     }
-    const runtimeSelection = selectionsByPlaceholder.get(match[0]);
-    if (runtimeSelection === undefined) {
-      parts.push({ kind: "text", text: match[0] });
-    } else {
-      parts.push({
-        kind: "card",
-        placeholder: runtimeSelection.placeholder,
-        cardId: runtimeSelection.cardId,
-        cardName: runtimeSelection.cardName,
-      });
+    let cursor = 0;
+    for (const match of variablePart.text.matchAll(SPECIAL_PATTERN)) {
+      if (match.index > cursor) {
+        parts.push({ kind: "text", text: variablePart.text.slice(cursor, match.index) });
+      }
+      const runtimeSelection = selectionsByPlaceholder.get(match[0]);
+      if (runtimeSelection === undefined) {
+        parts.push({ kind: "text", text: match[0] });
+      } else {
+        parts.push({
+          kind: "card",
+          placeholder: runtimeSelection.placeholder,
+          cardId: runtimeSelection.cardId,
+          cardName: runtimeSelection.cardName,
+        });
+      }
+      cursor = match.index + match[0].length;
     }
-    cursor = match.index + match[0].length;
-  }
-  if (cursor < withVariables.length) {
-    parts.push({ kind: "text", text: withVariables.slice(cursor) });
+    if (cursor < variablePart.text.length) {
+      parts.push({ kind: "text", text: variablePart.text.slice(cursor) });
+    }
   }
   return {
     renderedTemplate: parts.map((part) =>
-      part.kind === "card" ? part.cardName : part.text).join(""),
+      part.kind === "card"
+        ? part.cardName
+        : part.kind === "dreamsign"
+          ? part.dreamsignName
+          : part.text).join(""),
     renderedTemplateParts: parts,
     runtimeCardSelections: runtimeSelections,
   };

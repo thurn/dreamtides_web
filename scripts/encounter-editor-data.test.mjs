@@ -27,6 +27,7 @@ const CARD_ID = "11111111-1111-4111-8111-111111111111";
 const UNRELATED_CARD_ID = "22222222-2222-4222-8222-222222222222";
 const SPIRIT_CARD_ID = "33333333-3333-4333-8333-333333333333";
 const STARTER_CARD_ID = "44444444-4444-4444-8444-444444444444";
+const DREAMSIGN_ID = "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5";
 
 function candidate(rank, selected = false) {
   return {
@@ -251,6 +252,71 @@ describe("encounter editor data", () => {
         },
       },
     )).toBe("Gain 2 copies of $OFFERED_CARD named Fixture Ally");
+  });
+
+  it("preserves UUID-backed card and dreamsign variables as rendered entity parts", () => {
+    const rootDir = mkdtempSync(join(tmpdir(), "journey-encounter-entity-references-"));
+    mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+    writeFileSync(
+      join(rootDir, "data", "encounter_candidates.json"),
+      `${JSON.stringify({
+        [CARD_ID]: [{
+          template_pair_id: "pair-1",
+          prose: "A test encounter.",
+          actions: [
+            {
+              label: "Take the ally",
+              resolution: "The ally joins you.",
+              template_id: 1,
+              variables: {
+                card_id: { id: UNRELATED_CARD_ID, display_name: "Fixture Ally" },
+              },
+            },
+            {
+              label: "Take the sign",
+              resolution: "The sign joins you.",
+              template_id: 2,
+              variables: {
+                dreamsign_name: { id: DREAMSIGN_ID, display_name: "Bell" },
+              },
+            },
+          ],
+          rank: 1,
+          selected: { prose: true, actions: true },
+        }],
+      }, null, 2)}\n`,
+    );
+    writeFileSync(
+      join(rootDir, "data", "templates.json"),
+      `${JSON.stringify([
+        { template_id: 1, template: "Gain {card_id}" },
+        { template_id: 2, template: "Gain {dreamsign_name}" },
+      ], null, 2)}\n`,
+    );
+    writeFileSync(
+      join(rootDir, "data", "tabula", "cards.toml"),
+      `[[cards]]\nid = "${CARD_ID}"\nname = "Fixture Guide"\nrendered-text = "Gain 1●."\nimage-number = 42\n\n[[cards]]\nid = "${UNRELATED_CARD_ID}"\nname = "Fixture Ally"\nrendered-text = "Gain 2●."\nimage-number = 43\n`,
+    );
+
+    const [group] = readEncounterEditorGroups({ rootDir, random: () => 0 });
+    expect(group.encounters[0].actions[0].rendered_template_parts).toEqual([
+      { kind: "text", text: "Gain " },
+      {
+        kind: "card",
+        placeholder: "{card_id}",
+        cardId: UNRELATED_CARD_ID,
+        cardName: "Fixture Ally",
+      },
+    ]);
+    expect(group.encounters[0].actions[1].rendered_template_parts).toEqual([
+      { kind: "text", text: "Gain " },
+      {
+        kind: "dreamsign",
+        placeholder: "{dreamsign_name}",
+        dreamsignId: DREAMSIGN_ID,
+        dreamsignName: "Bell",
+      },
+    ]);
   });
 
   it("edits canonical templates and rejects placeholder changes that invalidate candidates", () => {

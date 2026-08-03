@@ -1561,6 +1561,81 @@ export interface GameCardProps {
   readonly testId?: string;
 }
 
+export interface GameCardRevealOptions {
+  /** Whether the reading copy carries the source selection ring. */
+  readonly selected?: boolean;
+  /** Named selection-ring color inherited from the source. */
+  readonly selectionColor?: CumulusColor;
+  /** Whether the source currently carries the Exhausted glossary state. */
+  readonly exhausted?: boolean;
+  /** Whether the reading copy uses the canonical Figment presentation. */
+  readonly figment?: boolean;
+}
+
+/** Build the complete canonical reveal used by every UUID-backed card source. */
+export function gameCardRevealSpec(
+  model: GameCardModel,
+  {
+    selected = false,
+    selectionColor,
+    exhausted = false,
+    figment = false,
+  }: GameCardRevealOptions = {},
+) {
+  const displaySnapshot = figment
+    ? {
+        ...model.displaySnapshot,
+        name: figmentCardDisplayName(
+          model.displaySnapshot.name,
+          model.displaySnapshot.subtype,
+        ),
+      }
+    : model.displaySnapshot;
+  const statusCards = exhausted
+    ? [
+        glossaryInfoCard(GLOSSARY_IDS.exhausted, {
+          variant: "text",
+          leadGlyph: GLYPHS.exhaust,
+        }),
+      ]
+    : [];
+  const figmentStatusCards = figment
+    ? [glossaryInfoCard(GLOSSARY_IDS.figment)]
+    : [];
+  const figmentCards = extractMaterializedFigmentPreviews(
+    displaySnapshot.renderedText,
+  ).map((preview) => ({
+    kind: "gameCard" as const,
+    cardId: preview.card.id,
+    displaySnapshot: preview.card,
+    figment: true,
+    selected: true,
+    selectionColor: "accent-bright" as const,
+  }));
+  return {
+    primary: {
+      kind: "gameCard" as const,
+      cardId: model.cardId,
+      displaySnapshot,
+      ...(model.transfiguration === undefined
+        ? {}
+        : { transfiguration: model.transfiguration }),
+      ...(selected ? { selected: true, selectionColor } : {}),
+      ...(figment ? { figment: true } : {}),
+    },
+    secondaries: [
+      ...statusCards,
+      ...figmentStatusCards,
+      ...cardTimingInfoCards(displaySnapshot),
+      ...cardRulesTextDefinitionCards(
+        displaySnapshot,
+        figment ? [GLOSSARY_IDS.figment] : [],
+      ),
+    ],
+    adjacentCards: figmentCards,
+  };
+}
+
 /**
  * Player-facing card entity. It derives its complete reading copy and glossary
  * secondaries from semantic card data and registers them with the root reveal
@@ -1591,53 +1666,14 @@ export function GameCard({
         ),
       }
     : model.displaySnapshot;
-  const timingCards = cardTimingInfoCards(displaySnapshot);
-  const glossaryCards = cardRulesTextDefinitionCards(
-    displaySnapshot,
-    figment ? [GLOSSARY_IDS.figment] : [],
-  );
-  const statusCards = exhausted
-    ? [
-        glossaryInfoCard(GLOSSARY_IDS.exhausted, {
-          variant: "text",
-          leadGlyph: GLYPHS.exhaust,
-        }),
-      ]
-    : [];
-  const figmentStatusCards = figment
-    ? [glossaryInfoCard(GLOSSARY_IDS.figment)]
-    : [];
-  const figmentCards = extractMaterializedFigmentPreviews(
-    displaySnapshot.renderedText,
-  ).map((preview) => ({
-    kind: "gameCard" as const,
-    cardId: preview.card.id,
-    displaySnapshot: preview.card,
-    figment: true,
-    selected: true,
-    selectionColor: "accent-bright" as const,
-  }));
   const binding = useRevealSource({
     identity: { entityType: "game-card", entityId: model.cardId },
-    spec: {
-      primary: {
-        kind: "gameCard",
-        cardId: model.cardId,
-        displaySnapshot,
-        ...(model.transfiguration === undefined
-          ? {}
-          : { transfiguration: model.transfiguration }),
-        ...(selected ? { selected: true, selectionColor } : {}),
-        ...(figment ? { figment: true } : {}),
-      },
-      secondaries: [
-        ...statusCards,
-        ...figmentStatusCards,
-        ...timingCards,
-        ...glossaryCards,
-      ],
-      adjacentCards: figmentCards,
-    },
+    spec: gameCardRevealSpec(model, {
+      selected,
+      selectionColor,
+      exhausted,
+      figment,
+    }),
     onActivate: unavailable ? undefined : onActivate,
   });
   const pointerDown = binding.sourceProps.onPointerDown;

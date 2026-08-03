@@ -4,6 +4,9 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
+import { asCardId, asCardName } from "../types/card-identity";
+import type { CardData } from "../types/cards";
+import type { Dreamsign } from "../types/journey";
 import EncounterEditorApp from "./EncounterEditorApp";
 import type {
   EncounterEditorCandidate,
@@ -17,7 +20,31 @@ import type {
 
 const CARD_ID = "11111111-1111-4111-8111-111111111111";
 const OTHER_CARD_ID = "22222222-2222-4222-8222-222222222222";
+const DREAMSIGN_ID = "33333333-3333-4333-8333-333333333333";
 let scrollIntoView = vi.fn<(arg?: boolean | ScrollIntoViewOptions) => void>();
+
+const REFERENCE_CARD: CardData = {
+  id: asCardId(OTHER_CARD_ID),
+  name: asCardName("Fixture Ally"),
+  cardNumber: 84,
+  cardType: "Character",
+  subtype: "Guide",
+  isStarter: false,
+  energyCost: 2,
+  spark: 3,
+  isFast: false,
+  renderedText: "Support — Supported allies have +1✦.",
+  imageNumber: 84,
+  artOwned: true,
+};
+const REFERENCE_DREAMSIGN: Dreamsign = {
+  id: DREAMSIGN_ID,
+  name: "Bell",
+  effectDescription: "At the start of battle, gain 1●.",
+  imageName: "bell.png",
+  imageAlt: "A small silver bell",
+  isBane: false,
+};
 
 function candidate(rank: number, selected = false): EncounterEditorCandidate {
   return {
@@ -28,7 +55,7 @@ function candidate(rank: number, selected = false): EncounterEditorCandidate {
       template: templateId === 1 ? "Draw {count} cards" : "Gain $OFFERED_CARD",
       rendered_template: templateId === 1
         ? `Draw ${String(rank)} cards`
-        : "Gain Fixture Ally",
+        : "Gain Fixture Ally and Bell",
       rendered_template_parts: templateId === 1
         ? [{ kind: "text" as const, text: `Draw ${String(rank)} cards` }]
         : [
@@ -38,6 +65,13 @@ function candidate(rank: number, selected = false): EncounterEditorCandidate {
             placeholder: "$OFFERED_CARD",
             cardId: OTHER_CARD_ID,
             cardName: "Fixture Ally",
+          },
+          { kind: "text" as const, text: " and " },
+          {
+            kind: "dreamsign" as const,
+            placeholder: "{dreamsign_name}",
+            dreamsignId: DREAMSIGN_ID,
+            dreamsignName: "Bell",
           },
         ],
       runtime_card_selections: templateId === 1 ? [] : [{
@@ -96,7 +130,11 @@ function deferred<T>() {
 
 function client(overrides: Partial<EncounterEditorClient> = {}): EncounterEditorClient {
   return {
-    load: vi.fn().mockResolvedValue(structuredClone(GROUPS)),
+    load: vi.fn().mockResolvedValue({
+      groups: structuredClone(GROUPS),
+      cards: [structuredClone(REFERENCE_CARD)],
+      dreamsigns: [structuredClone(REFERENCE_DREAMSIGN)],
+    }),
     loadTemplateHealth: vi.fn().mockResolvedValue(structuredClone(TEMPLATE_HEALTH)),
     saveSelection: vi.fn(),
     saveTemplate: vi.fn(),
@@ -155,10 +193,26 @@ describe("EncounterEditorApp", () => {
     expect(container.textContent).toContain("Gain Fixture Ally");
     expect(container.textContent).not.toContain("$OFFERED_CARD");
     const selectedCardName = container.querySelector<HTMLElement>(
-      `u[data-runtime-card-id='${OTHER_CARD_ID}']`,
+      `[data-runtime-card-id='${OTHER_CARD_ID}']`,
     );
     expect(selectedCardName?.textContent).toBe("Fixture Ally");
     expect(selectedCardName?.dataset.runtimeCardPlaceholder).toBe("$OFFERED_CARD");
+    const cardReference = selectedCardName?.querySelector<HTMLElement>(
+      '[data-entity-reference="card"]',
+    );
+    expect(cardReference?.dataset.entityReferenceId).toBe(OTHER_CARD_ID);
+    expect(cardReference?.dataset.revealPrimaryVariant).toBe("gameCard");
+    const selectedDreamsignName = container.querySelector<HTMLElement>(
+      `[data-runtime-dreamsign-id='${DREAMSIGN_ID}']`,
+    );
+    expect(selectedDreamsignName?.textContent).toBe("Bell");
+    expect(selectedDreamsignName?.dataset.runtimeDreamsignPlaceholder)
+      .toBe("{dreamsign_name}");
+    expect(
+      selectedDreamsignName?.querySelector<HTMLElement>(
+        '[data-entity-reference="dreamsign"]',
+      )?.dataset.revealPrimaryVariant,
+    ).toBe("object");
     expect(container.textContent).toContain("Rank 1 resolution 1");
     expect(container.textContent).not.toContain("Prose for rank 2");
     expect(container.querySelector(".encounter-editor-card-ability")?.textContent)
@@ -359,7 +413,11 @@ describe("EncounterEditorApp", () => {
         cardName: "The Other Crossing",
       },
     ];
-    const load = vi.fn().mockResolvedValue(repeatedGroups);
+    const load = vi.fn().mockResolvedValue({
+      groups: repeatedGroups,
+      cards: [structuredClone(REFERENCE_CARD)],
+      dreamsigns: [structuredClone(REFERENCE_DREAMSIGN)],
+    });
     const { container, root } = await renderLoaded(client({ load }));
     const occurrences = container.querySelectorAll<HTMLElement>(
       "[data-editor-field='template']",

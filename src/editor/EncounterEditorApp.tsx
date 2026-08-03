@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { EntityReference } from "../cumulus/components/card/EntityReference";
 import { RulesText } from "../cumulus/components/card/RulesText";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
 import { IconButton } from "../cumulus/components/controls/IconButton";
@@ -6,6 +7,8 @@ import { GlassPanel } from "../cumulus/components/overlay/GlassPanel";
 import { artRef, resolveArtRef } from "../cumulus/primitives/art";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import { logEvent } from "../logging";
+import type { CardData } from "../types/cards";
+import type { Dreamsign } from "../types/journey";
 import EditableField from "./EditableField";
 import { EditorApiRequestError } from "./editor-api";
 import { encounterEditorClient } from "./encounter-editor-api";
@@ -47,9 +50,18 @@ interface SelectionState {
 }
 type SelectionStates = Record<EncounterSelectionKind, SelectionState>;
 
+interface EncounterReferenceCatalog {
+  cardsById: ReadonlyMap<string, CardData>;
+  dreamsignsById: ReadonlyMap<string, Dreamsign>;
+}
+
 const IDLE_SELECTION_STATES: SelectionStates = {
   prose: { status: "idle", revision: 0, message: null },
   actions: { status: "idle", revision: 0, message: null },
+};
+const EMPTY_REFERENCE_CATALOG: EncounterReferenceCatalog = {
+  cardsById: new Map(),
+  dreamsignsById: new Map(),
 };
 
 function messageFor(error: unknown): string {
@@ -134,18 +146,43 @@ function fieldTarget(
   };
 }
 
-function renderedTemplate(parts: EncounterRenderedTemplatePart[]) {
-  return parts.map((part, index) => part.kind === "text"
-    ? <span key={`text-${String(index)}`}>{part.text}</span>
-    : (
-      <u
-        data-runtime-card-id={part.cardId}
-        data-runtime-card-placeholder={part.placeholder}
-        key={`${part.placeholder}-${part.cardId}-${String(index)}`}
+function renderedTemplate(
+  parts: EncounterRenderedTemplatePart[],
+  references: EncounterReferenceCatalog,
+) {
+  return parts.map((part, index) => {
+    if (part.kind === "text") {
+      return <span key={`text-${String(index)}`}>{part.text}</span>;
+    }
+    if (part.kind === "card") {
+      const card = references.cardsById.get(part.cardId.toLowerCase());
+      return (
+        <span
+          data-runtime-card-id={part.cardId}
+          data-runtime-card-placeholder={part.placeholder}
+          key={`${part.placeholder}-${part.cardId}-${String(index)}`}
+        >
+          {card === undefined
+            ? <u data-entity-reference-unresolved="card">{part.cardName}</u>
+            : <EntityReference entity={{ kind: "card", card }} />}
+        </span>
+      );
+    }
+    const dreamsign = references.dreamsignsById.get(
+      part.dreamsignId.toLowerCase(),
+    );
+    return (
+      <span
+        data-runtime-dreamsign-id={part.dreamsignId}
+        data-runtime-dreamsign-placeholder={part.placeholder}
+        key={`${part.placeholder}-${part.dreamsignId}-${String(index)}`}
       >
-        {part.cardName}
-      </u>
-    ));
+        {dreamsign === undefined
+          ? <u data-entity-reference-unresolved="dreamsign">{part.dreamsignName}</u>
+          : <EntityReference entity={{ kind: "dreamsign", dreamsign }} />}
+      </span>
+    );
+  });
 }
 
 function EncounterEditorRow({
@@ -153,6 +190,7 @@ function EncounterEditorRow({
   group,
   index,
   selectionStates,
+  references,
   saveState,
   setGroups,
   setSaveState,
@@ -162,6 +200,7 @@ function EncounterEditorRow({
   group: EncounterEditorGroup;
   index: number;
   selectionStates: SelectionStates;
+  references: EncounterReferenceCatalog;
   saveState: EditableSaveState;
   setGroups: React.Dispatch<React.SetStateAction<EncounterEditorGroup[]>>;
   setSaveState: (update: (state: EditableSaveState) => EditableSaveState) => void;
@@ -452,7 +491,7 @@ function EncounterEditorRow({
                       selectedActions,
                       "template",
                       action.template,
-                      <p>{renderedTemplate(action.rendered_template_parts)}</p>,
+                      <p>{renderedTemplate(action.rendered_template_parts, references)}</p>,
                       action.template_id,
                     )}
                     {editable(selectedActions, "resolution", action.resolution, <p className="encounter-editor-resolution">{action.resolution}</p>, action.template_id)}
@@ -475,6 +514,9 @@ export default function EncounterEditorApp({
   client?: EncounterEditorClient;
 }) {
   const [groups, setGroups] = useState<EncounterEditorGroup[]>([]);
+  const [references, setReferences] = useState<EncounterReferenceCatalog>(
+    EMPTY_REFERENCE_CATALOG,
+  );
   const [loadState, setLoadState] = useState<LoadState>("loading");
   const [loadMessage, setLoadMessage] = useState("");
   const [loadRevision, setLoadRevision] = useState(0);
@@ -498,19 +540,26 @@ export default function EncounterEditorApp({
     const controller = new AbortController();
     setLoadState("loading");
     client.load(controller.signal).then((loaded) => {
-      loaded.forEach((group) => {
+      loaded.groups.forEach((group) => {
         selectedCandidate(group, "prose");
         selectedCandidate(group, "actions");
       });
-      setGroups(loaded);
-      setSelectionStates(Object.fromEntries(loaded.map((group) => [
+      setGroups(loaded.groups);
+      setReferences({
+        cardsById: new Map(loaded.cards.map((card) => [card.id.toLowerCase(), card])),
+        dreamsignsById: new Map(loaded.dreamsigns.flatMap((dreamsign) =>
+          dreamsign.id === undefined
+            ? []
+            : [[dreamsign.id.toLowerCase(), dreamsign]])),
+      });
+      setSelectionStates(Object.fromEntries(loaded.groups.map((group) => [
         group.cardId,
         structuredClone(IDLE_SELECTION_STATES),
       ])));
       setLoadState("ready");
       logEvent("encounter_editor_loaded", {
-        encounterGroupCount: loaded.length,
-        runtimeCardSelections: loaded.flatMap((group) =>
+        encounterGroupCount: loaded.groups.length,
+        runtimeCardSelections: loaded.groups.flatMap((group) =>
           group.encounters.flatMap((candidate) =>
             candidate.actions.flatMap((action) =>
               action.runtime_card_selections.map((selection) => ({
@@ -641,6 +690,7 @@ export default function EncounterEditorApp({
                 group={group}
                 index={index}
                 key={group.cardId}
+                references={references}
                 saveState={saveState}
                 selectionStates={selectionStates[group.cardId] ?? IDLE_SELECTION_STATES}
                 setGroups={setGroups}
