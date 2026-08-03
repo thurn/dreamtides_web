@@ -1,11 +1,14 @@
 import { motion, useReducedMotion } from "framer-motion";
 import {
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
   type ReactElement,
 } from "react";
+import { LOADING_SCREEN_DURATION_MS } from "../../runtime/front-door-timing";
+import { GlassButton } from "../components/controls/GlassButton";
 import {
   CardFeatureCallout,
   type CardFeatureCalloutKind,
@@ -19,7 +22,6 @@ import {
   type LoadingCalloutLeaderLine,
 } from "./loading-callout-geometry";
 import { useIsDesktop } from "./use-is-desktop";
-import { LOADING_SCREEN_DURATION_MS } from "../../runtime/front-door-timing";
 
 export interface LoadingView {
   readonly runeboundChampion: GameCardModel;
@@ -30,6 +32,8 @@ export interface LoadingScreenProps {
   readonly view: LoadingView;
   /** Multiplier applied to the tutorial entry sequence's presentation timing. */
   readonly playbackSpeed?: number;
+  /** Continues into the tutorial after the loading interval completes. */
+  readonly onBegin: () => void;
 }
 
 interface AnnotationSpec {
@@ -328,15 +332,26 @@ function AnnotatedLoadingCard({
 export function LoadingScreen({
   view,
   playbackSpeed = 1,
+  onBegin,
 }: LoadingScreenProps): ReactElement {
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    setReady(false);
+    const timeout = window.setTimeout(
+      () => setReady(true),
+      LOADING_SCREEN_DURATION_MS / playbackSpeed,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [playbackSpeed]);
 
   return (
     <motion.main
       className="cumulus"
       data-loading-screen
-      aria-busy="true"
+      aria-busy={!ready}
       initial={{ opacity: reduceMotion ? 1 : 0 }}
       animate={{ opacity: 1 }}
       transition={{
@@ -353,29 +368,22 @@ export function LoadingScreen({
         color: token("--text-loading"),
       }}
     >
-      <header
-        role="status"
-        data-loading-indicator
+      <h1
+        data-loading-card-types-label
         style={{
           position: "absolute",
           top: `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-2")})`,
-          left: "50%",
+          right: 0,
+          left: 0,
           zIndex: 10,
-          display: "flex",
-          alignItems: "center",
-          gap: token("--space-3"),
           margin: 0,
           color: token("--text-loading"),
-          font: token("--t-lead"),
-          transform: "translateX(-50%)",
+          font: token(isDesktop ? "--t-title" : "--t-title-sm"),
+          textAlign: "center",
         }}
       >
-        <SegmentedLoadingSpinner
-          playbackSpeed={playbackSpeed}
-          reduceMotion={reduceMotion}
-        />
-        <span>Loading</span>
-      </header>
+        Dreamtides Card Types
+      </h1>
       <section
         aria-label="Card anatomy"
         data-loading-card-stage
@@ -407,22 +415,45 @@ export function LoadingScreen({
           isDesktop={isDesktop}
         />
       </section>
-      <p
-        data-loading-card-types-label
+      <footer
+        data-loading-footer
         style={{
           position: "absolute",
           right: 0,
           bottom: isDesktop ? "14%" : token("--space-1"),
           left: 0,
           zIndex: 10,
-          margin: 0,
-          color: token("--text-loading"),
-          font: token("--t-title-sm"),
-          textAlign: "center",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
-        Card Types
-      </p>
+        {ready ? (
+          <GlassButton
+            label="Begin"
+            onPress={onBegin}
+            variant="accent"
+            testId="loading-begin"
+          />
+        ) : (
+          <div
+            role="status"
+            data-loading-indicator
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: token("--space-3"),
+              color: token("--text-loading"),
+              font: token("--t-title"),
+            }}
+          >
+            <SegmentedLoadingSpinner
+              playbackSpeed={playbackSpeed}
+              reduceMotion={reduceMotion}
+            />
+            <span>Loading</span>
+          </div>
+        )}
+      </footer>
     </motion.main>
   );
 }

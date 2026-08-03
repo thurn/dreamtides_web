@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { LoadingScreen } from "../../cumulus/screens/LoadingScreen";
 import { logEvent } from "../../logging";
-import { LOADING_SCREEN_DURATION_MS } from "../../runtime/front-door-timing";
 import { useFrontDoor } from "../../state/front-door-context";
 import { useJourney } from "../../state/journey-context";
 import { buildLoadingView } from "./loading-view-model";
@@ -27,18 +26,25 @@ export function LoadingScreenAdapter({
     });
   }, [playbackSpeed, source, view]);
 
-  useEffect(() => {
+  const handleBegin = useCallback(() => {
     if (state.phase !== "loading" || state.journeyId === null) {
-      return undefined;
+      return;
     }
     const journeyId = state.journeyId;
-    const timeout = window.setTimeout(() => {
-      void mutations.advance("loading", journeyId).catch((error: unknown) => {
-        console.error("Coop loading transition failed", error);
-      });
-    }, LOADING_SCREEN_DURATION_MS / playbackSpeed);
-    return () => window.clearTimeout(timeout);
-  }, [mutations, playbackSpeed, state.journeyId, state.phase]);
+    logEvent("loading_begin_pressed", {
+      source,
+      tutorialPlaybackSpeed: playbackSpeed,
+    });
+    void mutations.advance("loading", journeyId).catch((error: unknown) => {
+      console.error("Coop loading transition failed", error);
+    });
+  }, [mutations, playbackSpeed, source, state.journeyId, state.phase]);
 
-  return <LoadingScreen view={view} playbackSpeed={playbackSpeed} />;
+  return (
+    <LoadingScreen
+      view={view}
+      playbackSpeed={playbackSpeed}
+      onBegin={handleBegin}
+    />
+  );
 }

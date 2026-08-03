@@ -113,15 +113,33 @@ describe("LoadingScreenAdapter", () => {
     act(() => {
       vi.advanceTimersByTime(1_249);
     });
-    expect(container.querySelector("[data-loading-screen]")).not.toBeNull();
+    expect(container.querySelector("[data-loading-indicator]")).not.toBeNull();
+    expect(container.querySelector('[data-testid="loading-begin"]')).toBeNull();
     expect(coopMocks.advanceFrontDoor).not.toHaveBeenCalled();
 
     act(() => {
       vi.advanceTimersByTime(1);
     });
+    expect(container.querySelector("[data-loading-indicator]")).toBeNull();
+    const begin = container.querySelector<HTMLButtonElement>(
+      '[data-testid="loading-begin"]',
+    );
+    expect(begin).not.toBeNull();
+    expect(coopMocks.advanceFrontDoor).not.toHaveBeenCalled();
+
+    act(() => begin?.click());
     expect(coopMocks.advanceFrontDoor).toHaveBeenCalledWith(
       "loading",
       "genesis:seed",
+    );
+    expect(getLogEntries()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          event: "loading_begin_pressed",
+          source: "direct",
+          tutorialPlaybackSpeed: 4,
+        }),
+      ]),
     );
 
     act(() => root.unmount());

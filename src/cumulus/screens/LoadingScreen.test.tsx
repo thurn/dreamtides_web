@@ -112,19 +112,27 @@ afterEach(() => {
   if (root !== null) act(() => root?.unmount());
   root = null;
   document.body.innerHTML = "";
+  vi.useRealTimers();
   vi.restoreAllMocks();
   delete (globalThis as { ResizeObserver?: typeof ResizeObserver })
     .ResizeObserver;
 });
 
-function renderLoadingScreen(playbackSpeed = 1): HTMLDivElement {
+function renderLoadingScreen(
+  playbackSpeed = 1,
+  onBegin: () => void = vi.fn(),
+): HTMLDivElement {
   const container = document.createElement("div");
   document.body.append(container);
   root = createRoot(container);
   act(() =>
     root?.render(
       <CumulusRoot>
-        <LoadingScreen view={VIEW} playbackSpeed={playbackSpeed} />
+        <LoadingScreen
+          view={VIEW}
+          playbackSpeed={playbackSpeed}
+          onBegin={onBegin}
+        />
       </CumulusRoot>,
     ),
   );
@@ -159,7 +167,7 @@ describe("LoadingScreen", () => {
     );
     expect(
       container.querySelector("[data-loading-card-types-label]")?.textContent,
-    ).toBe("Card Types");
+    ).toBe("Dreamtides Card Types");
   });
 
   it("fills every spinner segment across the five-second loading interval", () => {
@@ -180,6 +188,30 @@ describe("LoadingScreen", () => {
     expect(
       (lastTransition.delay ?? 0) + (lastTransition.duration ?? 0),
     ).toBeCloseTo(5);
+  });
+
+  it("replaces Loading with Begin after five seconds and reports the action", () => {
+    vi.useFakeTimers();
+    const onBegin = vi.fn();
+    const container = renderLoadingScreen(1, onBegin);
+
+    act(() => {
+      vi.advanceTimersByTime(4_999);
+    });
+    expect(container.querySelector("[data-loading-indicator]")).not.toBeNull();
+    expect(container.querySelector('[data-testid="loading-begin"]')).toBeNull();
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(container.querySelector("[data-loading-indicator]")).toBeNull();
+    const begin = container.querySelector<HTMLButtonElement>(
+      '[data-testid="loading-begin"]',
+    );
+    expect(begin).not.toBeNull();
+
+    act(() => begin?.click());
+    expect(onBegin).toHaveBeenCalledTimes(1);
   });
 
   it("anchors every callout to the intended rendered card region", () => {

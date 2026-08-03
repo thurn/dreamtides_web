@@ -20,7 +20,8 @@ the resulting address.
 One room runtime owns the full shared experience. `New Journey` appends a
 menu action that starts the main-menu exit animation; animation completion
 appends the transition to `/loading`; after five seconds the loading scene
-appends the transition to `/tutorial`. Every connected client reflects the same
+reveals **Begin**, which appends the transition to `/tutorial` when pressed.
+Every connected client reflects the same
 folded phase and journey screen into its own pathname while preserving the room
 query string and hash. The initial pathname is used only while creating a room;
 joining an existing `?game=` follows that room's folded phase. `/loading` and
