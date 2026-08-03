@@ -11,7 +11,8 @@
 // sits beside. Neutral glass serves secondary actions; the purple accent
 // recipe lets a primary action retain the same material language. A
 // text `label` (a resolved string, never caller markup) sits in the control
-// font; an optional leading `glyph` paints a `GlowIcon` before it. Press/hover
+// font; an optional leading `glyph` paints a `GlowIcon` before it. Prominent
+// primary actions can opt into the larger 56px treatment. Press/hover
 // feedback routes through the one shared `Pressable` primitive (scale-down on
 // press, up on hover); `disabled` dims the full control, marks it
 // `aria-disabled`, and detaches its click and press feedback.
@@ -28,8 +29,13 @@ import {
   glassAccentChrome,
 } from "../../internal/control-treatment";
 
-/** The md control height (px) — matches the Select / SegmentedControl cluster. */
-const GLASS_BUTTON_HEIGHT = 42;
+/** Named control heights (px): standard aligns with the control cluster while
+ * prominent supplies the larger primary-action target. */
+const GLASS_BUTTON_HEIGHT = {
+  compact: 42,
+  standard: 42,
+  prominent: 56,
+} as const;
 
 /** Visual treatment for the glass button surface. */
 export type GlassButtonVariant = "default" | "danger" | "accent";
@@ -38,7 +44,7 @@ export type GlassButtonVariant = "default" | "danger" | "accent";
 export type GlassButtonEssenceCostStyle = "parenthetical" | "separated";
 
 /** Horizontal density and label scale; both sizes preserve the 42px target. */
-export type GlassButtonSize = "standard" | "compact";
+export type GlassButtonSize = "prominent" | "standard" | "compact";
 
 /** One possible label/essence-cost state whose intrinsic width is reserved. */
 export interface GlassButtonWidthReservation {
@@ -87,7 +93,8 @@ export interface GlassButtonProps {
   essenceCost?: number | null;
   /** Parenthesized cost, or a centered-dot-separated wager price. */
   essenceCostStyle?: GlassButtonEssenceCostStyle;
-  /** Standard label spacing, or compact spacing for narrow parallel actions. */
+  /** Prominent primary-action sizing, standard label spacing, or compact
+   * spacing for narrow parallel actions. */
   size?: GlassButtonSize;
   /**
    * Possible dynamic label/essence-cost states. The button reserves the widest
@@ -153,10 +160,21 @@ export function GlassButton({
         alignItems: "center",
         justifyContent: "center",
         gap: 8,
-        height: GLASS_BUTTON_HEIGHT,
-        padding: size === "compact" ? "0 8px" : "0 14px",
+        height: GLASS_BUTTON_HEIGHT[size],
+        padding:
+          size === "prominent"
+            ? "0 24px"
+            : size === "compact"
+              ? "0 8px"
+              : "0 14px",
         boxSizing: "border-box",
-        font: token(size === "compact" ? "--t-button-sm" : "--t-button"),
+        font: token(
+          size === "prominent"
+            ? "--t-button-lg"
+            : size === "compact"
+              ? "--t-button-sm"
+              : "--t-button",
+        ),
         color: token("--text-on-glass"),
         textAlign: "center",
         whiteSpace: "nowrap",

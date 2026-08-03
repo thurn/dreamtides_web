@@ -150,6 +150,16 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
 />`,
     },
     {
+      label: "Prominent primary action",
+      note: "Use the prominent size for a singular primary action that anchors a spacious screen.",
+      code: `<GlassButton
+  label="Begin"
+  size="prominent"
+  variant="accent"
+  onPress={begin}
+/>`,
+    },
+    {
       label: "Compact parallel action",
       note: "Use the compact label scale and horizontal spacing when several actions must remain separate in a narrow row. The touch target stays 42px tall.",
       code: `<GlassButton

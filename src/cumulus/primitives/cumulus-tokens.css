@@ -403,6 +403,7 @@
   --t-body: 500 15px/1.45 var(--primitive-font-sans);        /* default body */
   --t-body-sm: 500 13px/1.45 var(--primitive-font-sans);     /* dense UI body */
   --t-rules: 500 14px/1.32 var(--primitive-font-rules);      /* card / ability rules text */
+  --t-button-lg: 700 19px/1 var(--primitive-font-sans);      /* prominent primary action */
   --t-button: 700 16px/1 var(--primitive-font-sans);         /* button face */
   --t-button-sm: 700 14px/1 var(--primitive-font-sans);
   --t-caption: 600 12px/1.35 var(--primitive-font-sans);     /* metadata */

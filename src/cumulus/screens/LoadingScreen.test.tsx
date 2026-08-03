@@ -48,6 +48,28 @@ vi.mock("framer-motion", () => ({
         "data-motion-initial": JSON.stringify(initial),
         "data-motion-transition": JSON.stringify(transition),
       }),
+    div: ({
+      animate,
+      children,
+      initial,
+      transition,
+      ...props
+    }: {
+      readonly animate?: unknown;
+      readonly children?: ReactNode;
+      readonly initial?: unknown;
+      readonly transition?: unknown;
+    }) =>
+      createElement(
+        "div",
+        {
+          ...props,
+          "data-motion-animate": JSON.stringify(animate),
+          "data-motion-initial": JSON.stringify(initial),
+          "data-motion-transition": JSON.stringify(transition),
+        },
+        children,
+      ),
   },
   useReducedMotion: () => false,
 }));
@@ -167,7 +189,17 @@ describe("LoadingScreen", () => {
     );
     expect(
       container.querySelector("[data-loading-card-types-label]")?.textContent,
-    ).toBe("Dreamtides Card Types");
+    ).toBe("Dreamtides Card Types:");
+    expect(
+      container.querySelector(
+        '[data-loading-card-type-label="runeboundChampion"]',
+      )?.textContent,
+    ).toBe("Character");
+    expect(
+      container.querySelector(
+        '[data-loading-card-type-label="worldsAwait"]',
+      )?.textContent,
+    ).toBe("Event");
   });
 
   it("fills every spinner segment across the five-second loading interval", () => {
@@ -209,6 +241,22 @@ describe("LoadingScreen", () => {
       '[data-testid="loading-begin"]',
     );
     expect(begin).not.toBeNull();
+    expect(begin?.style.height).toBe("56px");
+    expect(begin?.style.font).toBe("var(--t-button-lg)");
+    const entry = container.querySelector<HTMLElement>(
+      "[data-loading-begin-entry]",
+    );
+    expect(JSON.parse(entry?.dataset.motionInitial ?? "{}")).toMatchObject({
+      opacity: 0,
+      scale: 0.84,
+    });
+    expect(JSON.parse(entry?.dataset.motionAnimate ?? "{}")).toMatchObject({
+      opacity: 1,
+      scale: 1,
+    });
+    expect(JSON.parse(entry?.dataset.motionTransition ?? "{}")).toMatchObject({
+      duration: 0.42,
+    });
 
     act(() => begin?.click());
     expect(onBegin).toHaveBeenCalledTimes(1);

@@ -138,6 +138,19 @@ Use the centered-dot cost treatment for parallel wager choices whose price is pa
 />
 ```
 
+### Prominent primary action
+
+Use the prominent size for a singular primary action that anchors a spacious screen.
+
+```tsx
+<GlassButton
+  label="Begin"
+  size="prominent"
+  variant="accent"
+  onPress={begin}
+/>
+```
+
 ### Compact parallel action
 
 Use the compact label scale and horizontal spacing when several actions must remain separate in a narrow row. The touch target stays 42px tall.

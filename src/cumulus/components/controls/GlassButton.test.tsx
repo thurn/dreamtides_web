@@ -243,6 +243,19 @@ describe("GlassButton", () => {
     act(() => root.unmount());
   });
 
+  it("offers a prominent primary-action size", () => {
+    const { container, root } = mount(
+      <GlassButton label="Begin" size="prominent" onPress={() => {}} />,
+    );
+
+    const button = container.querySelector<HTMLButtonElement>("button");
+    expect(button?.style.height).toBe("56px");
+    expect(button?.style.padding).toBe("0px 24px");
+    expect(button?.style.font).toBe("var(--t-button-lg)");
+
+    act(() => root.unmount());
+  });
+
   it("omits the `<i>` when no glyph is given", () => {
     const { container, root } = mount(
       <GlassButton label="Filter" onPress={() => {}} />,

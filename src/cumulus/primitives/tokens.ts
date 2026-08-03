@@ -224,6 +224,7 @@ export const TOKENS = {
   "--t-body": { var: "var(--t-body)", value: "500 15px/1.45 var(--primitive-font-sans)" },
   "--t-body-sm": { var: "var(--t-body-sm)", value: "500 13px/1.45 var(--primitive-font-sans)" },
   "--t-rules": { var: "var(--t-rules)", value: "500 14px/1.32 var(--primitive-font-rules)" },
+  "--t-button-lg": { var: "var(--t-button-lg)", value: "700 19px/1 var(--primitive-font-sans)" },
   "--t-button": { var: "var(--t-button)", value: "700 16px/1 var(--primitive-font-sans)" },
   "--t-button-sm": { var: "var(--t-button-sm)", value: "700 14px/1 var(--primitive-font-sans)" },
   "--t-caption": { var: "var(--t-caption)", value: "600 12px/1.35 var(--primitive-font-sans)" },

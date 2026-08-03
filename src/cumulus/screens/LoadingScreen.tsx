@@ -179,11 +179,13 @@ function calloutPosition(
 
 function AnnotatedLoadingCard({
   groupId,
+  cardTypeLabel,
   model,
   annotations,
   isDesktop,
 }: {
   readonly groupId: "runeboundChampion" | "worldsAwait";
+  readonly cardTypeLabel: "Character" | "Event";
   readonly model: GameCardModel;
   readonly annotations: readonly AnnotationSpec[];
   readonly isDesktop: boolean;
@@ -253,7 +255,12 @@ function AnnotatedLoadingCard({
     };
   }, [annotations, isDesktop]);
 
-  const cardWidth = isDesktop ? "min(26vw, 300px)" : "min(51vw, 220px)";
+  const cardWidth = isDesktop
+    ? "min(26vw, 300px)"
+    : `min(51vw, 220px, calc(35.7dvh - ${token("--space-12")} - ${token("--space-3")}))`;
+  const cardTypeTop = isDesktop
+    ? `calc(50% + min(18.2vw, 210px) + ${token("--space-3")})`
+    : `calc(50% + min(35.7vw, 154px, calc(25dvh - ${token("--space-11")} - ${token("--space-1")})) + ${token("--space-3")})`;
 
   return (
     <div
@@ -263,7 +270,9 @@ function AnnotatedLoadingCard({
         position: "relative",
         flex: "0 0 auto",
         width: isDesktop ? "min(47vw, 560px)" : "100%",
-        height: isDesktop ? "min(72dvh, 650px)" : "min(71.4vw, 308px)",
+        height: isDesktop
+          ? "min(72dvh, 650px)"
+          : `min(71.4vw, 308px, calc(50dvh - ${token("--space-12")} - ${token("--space-9")} - ${token("--space-1")}))`,
       }}
     >
       <div
@@ -280,6 +289,24 @@ function AnnotatedLoadingCard({
       >
         <GameCard model={model} unavailable />
       </div>
+
+      <p
+        data-loading-card-type-label={groupId}
+        style={{
+          position: "absolute",
+          top: cardTypeTop,
+          right: 0,
+          left: 0,
+          zIndex: 8,
+          margin: 0,
+          color: token("--text-loading"),
+          font: token(isDesktop ? "--t-title-sm" : "--t-lead"),
+          textAlign: "center",
+          pointerEvents: "none",
+        }}
+      >
+        {cardTypeLabel}
+      </p>
 
       <svg
         aria-hidden="true"
@@ -450,7 +477,7 @@ export function LoadingScreen({
           textAlign: "center",
         }}
       >
-        Dreamtides Card Types
+        Dreamtides Card Types:
       </h1>
       <section
         aria-label="Card anatomy"
@@ -463,21 +490,25 @@ export function LoadingScreen({
           flexDirection: isDesktop ? "row" : "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: isDesktop ? token("--space-4") : token("--space-5"),
+          gap: isDesktop ? token("--space-4") : token("--space-9"),
           paddingTop: `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-3")})`,
           paddingRight: token("--space-2"),
-          paddingBottom: `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-3")})`,
+          paddingBottom: isDesktop
+            ? `max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-3")})`
+            : `calc(max(${token(SAFE_AREA_INSET_PROPERTIES.bottom)}, ${token("--space-3")}) + ${token("--space-12")})`,
           paddingLeft: token("--space-2"),
         }}
       >
         <AnnotatedLoadingCard
           groupId="runeboundChampion"
+          cardTypeLabel="Character"
           model={view.runeboundChampion}
           annotations={RUNEBOUND_ANNOTATIONS}
           isDesktop={isDesktop}
         />
         <AnnotatedLoadingCard
           groupId="worldsAwait"
+          cardTypeLabel="Event"
           model={view.worldsAwait}
           annotations={WORLDS_AWAIT_ANNOTATIONS}
           isDesktop={isDesktop}
@@ -496,12 +527,28 @@ export function LoadingScreen({
         }}
       >
         {ready ? (
-          <GlassButton
-            label="Begin"
-            onPress={onBegin}
-            variant="accent"
-            testId="loading-begin"
-          />
+          <motion.div
+            data-loading-begin-entry
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.84 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: reduceMotion
+                ? 0
+                : motionTimeSeconds("--dur-slow") / playbackSpeed,
+            }}
+            style={{
+              display: "grid",
+              width: isDesktop ? "min(22vw, 280px)" : "min(72vw, 260px)",
+            }}
+          >
+            <GlassButton
+              label="Begin"
+              onPress={onBegin}
+              size="prominent"
+              variant="accent"
+              testId="loading-begin"
+            />
+          </motion.div>
         ) : (
           <div
             role="status"
