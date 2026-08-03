@@ -132,7 +132,7 @@ describe("PurgeSiteScreen", () => {
     ).toBeNull();
     expect(container.querySelector("h2")?.textContent).toBe("Purge Cards");
     expect(container.textContent).toContain(
-      "Choose any number of cards to remove from your deck",
+      "Choose any number of cards to remove from your deck for an essence cost",
     );
     expect(
       container.querySelector('[data-testid="cumulus-purge-header-action"]')

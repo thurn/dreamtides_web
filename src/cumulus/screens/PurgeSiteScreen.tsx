@@ -168,7 +168,7 @@ function PurgeGallery({
     >
       <CardGalleryPanel
         title="Purge Cards"
-        subtitle="Choose any number of cards to remove from your deck"
+        subtitle="Choose any number of cards to remove from your deck for an essence cost"
         rightAccessory={{
           kind: "glassButton",
           label:

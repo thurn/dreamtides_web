@@ -70,7 +70,7 @@ function CardGalleryPanelDemo() {
     <div style={{ width: "min(940px, 100%)", maxHeight: 720 }}>
       <CardGalleryPanel
         title="Purge Cards"
-        subtitle="Choose any number of cards to remove from your deck"
+        subtitle="Choose any number of cards to remove from your deck for an essence cost"
         rightAccessory={{
           kind: "glassButton",
           label: selected === null ? "Decline" : "Purge 1",
@@ -147,7 +147,7 @@ export const cardGalleryPanelDemo: CumulusComponent = {
 
 <CardGalleryPanel
   title="Purge Cards"
-  subtitle="Choose any number of cards to remove from your deck"
+  subtitle="Choose any number of cards to remove from your deck for an essence cost"
   rightAccessory={{
     kind: "glassButton",
     label: selectedCount === 0 ? "Decline" : \`Purge \${selectedCount}\`,
