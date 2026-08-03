@@ -421,6 +421,14 @@ commentary.
   symbol or give it impossible behavior. If the art shows a lone figure, keep
   the figure alone; do not add a column, crowd, companion, or hidden population
   to service a Character effect.
+- Do not infer physical scale from a close crop or portrait composition: a
+  subject filling the frame does not imply that it towers over the reader or
+  that its features are massive or enormous. In action labels and resolutions,
+  name a visible person or use clear personal pronouns supported by the
+  canonical identity (`she`/`her` when the character is explicitly described
+  as a witch, `they`/`their` when gender is not established) instead of an
+  ambiguous or dehumanizing `it`/`its`; do not turn uncertain visual details
+  into interactable marks, symbols, or props.
 - Build each line around one dominant image and one optional atmospheric detail.
   Strong verbs, exact nouns, restrained adjectives, rhythm, and omission create
   intensity without metaphor. A concise line may be wholly literal and still
