@@ -748,7 +748,7 @@ export default function App({
           ) : null}
           <CoopJourneyProvider journeyContent={journeyContent}>
             <FrontDoorProvider>
-              <HostedPlaytestShell>
+              <HostedPlaytestShell claimUnownedBattle={directTutorialBattle}>
                 <FrontDoorRouter
                   dreamAvatars={journeyContent.dreamAvatars}
                   tutorialPlaybackSpeed={

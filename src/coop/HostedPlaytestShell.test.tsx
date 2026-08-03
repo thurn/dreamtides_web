@@ -76,6 +76,13 @@ function unclaimedTutorialState(): FoldState {
   };
 }
 
+function unclaimedTutorialBattleState(): FoldState {
+  return {
+    ...unclaimedTutorialState(),
+    battle: {} as FoldState["battle"],
+  };
+}
+
 function collaborativeJourneyState(): FoldState {
   return {
     ...state(null),
@@ -161,6 +168,27 @@ describe("HostedPlaytestShell", () => {
     expect(container.querySelector("[inert]")).toBeNull();
     expect(container.textContent).toBe("Play");
     expect(mocks.takeControl).not.toHaveBeenCalled();
+    act(() => root.unmount());
+  });
+
+  it("claims an unowned direct tutorial battle for the current client", () => {
+    mocks.state = unclaimedTutorialBattleState();
+    mocks.connectedClientIds = ["viewer"];
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(
+        <HostedPlaytestShell claimUnownedBattle>
+          <button data-player-action>Play</button>
+        </HostedPlaytestShell>,
+      );
+    });
+
+    expect(mocks.takeControl).toHaveBeenCalledOnce();
+    expect(mocks.takeControl).toHaveBeenCalledWith(null);
+    expect(container.querySelector("[inert]")).toBeNull();
+    expect(container.textContent).toBe("Play");
     act(() => root.unmount());
   });
 

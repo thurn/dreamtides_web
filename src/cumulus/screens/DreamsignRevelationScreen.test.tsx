@@ -86,8 +86,9 @@ afterEach(() => {
 });
 
 describe("DreamsignRevelationScreen", () => {
-  it("waits one second before revealing Mira beside the resident guide dialogue", () => {
+  it("waits one second before revealing Mira below the desktop app chrome", () => {
     vi.useFakeTimers();
+    stubMatchMedia(true);
     const onTutorialShown = vi.fn();
     const tutorialView: DreamsignRevelationView = {
       ...view(),
@@ -140,6 +141,10 @@ describe("DreamsignRevelationScreen", () => {
       container.querySelector('[data-testid="revelation-site-tutorial-dialogue"]')
         ?.textContent,
     ).toContain("A Dreamsign gives ongoing benefits.");
+    expect(
+      container.querySelector<HTMLElement>("[data-revelation-site-tutorial]")
+        ?.style.top,
+    ).toBe("var(--space-4)");
     expect(onTutorialShown).toHaveBeenCalledOnce();
     expect(
       container.querySelector('[data-testid="revelation-guide-art"]'),

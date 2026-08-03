@@ -356,9 +356,7 @@ function GuideScene({
           data-revelation-site-tutorial=""
           style={{
             position: "absolute",
-            top: desktop
-              ? `calc(-1 * ${token("--space-12")})`
-              : token("--space-4"),
+            top: token("--space-4"),
             left: desktop ? "calc(100% - 240px)" : "34vw",
             width: desktop
               ? `min(calc(100vw - (${token("--space-4")} * 2)), ${String(view.tutorial.bubbleWidth)}px)`
