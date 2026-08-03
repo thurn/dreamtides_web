@@ -14,6 +14,7 @@ from pathlib import Path
 SCRIPTS_DIR = Path(__file__).resolve().parent
 GENERATOR = SCRIPTS_DIR / "generate-exploration-input.py"
 VALIDATOR = SCRIPTS_DIR / "validate-exploration.py"
+TEMPLATE_CATALOG = SCRIPTS_DIR.parents[3] / "data/templates.json"
 
 
 def canonical_card() -> dict[str, object]:
@@ -85,6 +86,13 @@ subtype = ""
 
 
 class ValidateExplorationTests(unittest.TestCase):
+    def test_canonical_catalog_excludes_custom_content_templates(self) -> None:
+        templates = json.loads(TEMPLATE_CATALOG.read_text(encoding="utf-8"))
+        template_ids = {entry["template_id"] for entry in templates}
+
+        self.assertNotIn(26, template_ids)
+        self.assertNotIn(31, template_ids)
+
     def run_validator(self, template_ids: list[int]) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

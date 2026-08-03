@@ -24,16 +24,10 @@
           {
             "label": "Request the Round Lantern",
             "resolution": "The child lowers its steady glow into your hands.",
-            "template_id": 31,
-            "template": "Gain $CUSTOM_DREAMSIGN",
-            "variables": {
-              "custom_dreamsign": {
-                "id": "F46E59CB-32EC-4B50-8774-18F571B8FCE1",
-                "name": "Passage Lantern",
-                "rendered_text": "The first time each turn you rematerialize a character, it gains +1✦."
-              }
-            },
-            "effect_text": "Gain Passage Lantern. The first time each turn you rematerialize a character, it gains +1✦."
+            "template_id": 28,
+            "template": "Gain a random dreamsign",
+            "variables": {},
+            "effect_text": "Gain a random dreamsign"
           }
         ],
         "scores": {
@@ -53,20 +47,12 @@
           {
             "label": "Invite the Lantern-Bearer",
             "resolution": "The small figure steps through beside you.",
-            "template_id": 26,
-            "template": "Gain $CUSTOM_CARD",
+            "template_id": 9,
+            "template": "Gain a random {predicate} card",
             "variables": {
-              "custom_card": {
-                "id": "F1108604-8C0A-4FA1-93FE-DA1506EEC29E",
-                "name": "Lantern Scout",
-                "energy_cost": 1,
-                "card_type": "Character",
-                "subtype": "Guide",
-                "rendered_text": "▸Materialized: Foresee 1.",
-                "spark": 1
-              }
+              "predicate": "≤2● cost Character"
             },
-            "effect_text": "Gain Lantern Scout (1● Guide Character, 1✦ — ▸Materialized: Foresee 1.)"
+            "effect_text": "Gain a random ≤2● cost Character card"
           },
           {
             "label": "Trade a Familiar Outline",
@@ -219,20 +205,15 @@
           {
             "label": "Invite the Sentinel",
             "resolution": "The guardian rises and walks beside you.",
-            "template_id": 26,
-            "template": "Gain $CUSTOM_CARD",
+            "template_id": 10,
+            "template": "Gain {card_id}",
             "variables": {
-              "custom_card": {
-                "id": "c33cdbe5-0c3b-4180-bd11-0912dfa19486",
-                "name": "Ruinwatch Custodian",
-                "energy_cost": 2,
-                "card_type": "Character",
-                "subtype": "Survivor",
-                "rendered_text": "▸Dissolved: Choose another character in your void to gain reclaim 2●.\n\nReclaim 2●.",
-                "spark": 2
+              "card_id": {
+                "id": "fa7dadd8-c72f-42e7-b203-3d22aa36122f",
+                "display_name": "Reforged Construct"
               }
             },
-            "effect_text": "Gain Ruinwatch Custodian (2● Survivor Character, 2✦ — ▸Dissolved: Choose another character in your void to gain reclaim 2●. Reclaim 2●.)"
+            "effect_text": "Gain Reforged Construct"
           },
           {
             "label": "Study the Guardian",
@@ -295,18 +276,17 @@
         "prose": "Beside you, a seated sentinel keeps watch over a shattered, radiant doorway.",
         "actions": [
           {
-            "label": "Request a Gate Fragment",
-            "resolution": "A glassy shard settles into your open hand.",
-            "template_id": 31,
-            "template": "Gain $CUSTOM_DREAMSIGN",
+            "label": "Gather the Dark Fragment",
+            "resolution": "Dim light beads across the salvaged shard.",
+            "template_id": 27,
+            "template": "Gain {dreamsign_name}",
             "variables": {
-              "custom_dreamsign": {
-                "id": "82026f5c-4c81-4303-bd59-c2812d303272",
-                "name": "Threshold Fragment",
-                "rendered_text": "Once per turn, when you reclaim a character, that character gains +1✦."
+              "dreamsign_name": {
+                "id": "1ECE0E16-08DE-4C99-8552-2D1D3A2BD517",
+                "display_name": "Shadow Droplet"
               }
             },
-            "effect_text": "Gain Threshold Fragment. Once per turn, when you reclaim a character, that character gains +1✦."
+            "effect_text": "Gain Shadow Droplet"
           },
           {
             "label": "Call a Formidable Guardian",

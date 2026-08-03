@@ -85,8 +85,6 @@ is created:
 - `$DECK_CARD` is a random card selected from the player's current deck.
 - `$STARTER_CARD` is a random starter card selected from the player's current
   deck.
-- `$CUSTOM_CARD` is a custom card designed for this event.
-- `$CUSTOM_DREAMSIGN` is a custom dreamsign designed for this event.
 
 When a runtime card variable has an eligibility restriction, the action records
 it in `selection`:
@@ -101,10 +99,7 @@ it in `selection`:
 }
 ```
 
-An unrestricted runtime variable omits `selection`. `$CUSTOM_CARD` and
-`$CUSTOM_DREAMSIGN` definitions are stored as structured objects in `variables`,
-including a new UUID and all fields required by the exploration encounter JSON
-contract.
+An unrestricted runtime variable omits `selection`.
 
 ## Applying a Template
 
@@ -112,8 +107,7 @@ For each action, the encounter designer:
 
 1. Preserves the catalog's `template_id` and exact `template` string.
 2. Adds every required braced value to `variables`.
-3. Adds structured custom content or restricted runtime selection rules when
-   the template calls for them.
+3. Adds restricted runtime selection rules when the template calls for them.
 4. Writes complete display copy in `effect_text`, with every placeholder and
    runtime token resolved.
 5. Validates the request and output with

@@ -180,29 +180,6 @@ availability. Mechanical variety, visual flavor, and the source card's own type
 or cost are not strong reasons. Choose predicates independently for each action;
 do not reuse one merely because it appeared elsewhere in the set.
 
-For `$CUSTOM_CARD`, set `variables.custom_card`:
-
-```json
-{
-  "custom_card": {
-    "id": "<new UUID>",
-    "name": "<archetypal card name>",
-    "energy_cost": 2,
-    "card_type": "Character",
-    "subtype": "Spirit Animal",
-    "rendered_text": "<complete ability text>",
-    "spark": 2
-  }
-}
-```
-
-A custom Event uses `"card_type": "Event"`, an empty-string `subtype`, and an
-empty-string `spark`, matching canonical Event records. A custom Character
-requires a non-empty subtype and an integer spark.
-
-For `$CUSTOM_DREAMSIGN`, set `variables.custom_dreamsign` with a new UUID,
-`name`, and complete `rendered_text`.
-
 `effect_text` is complete player-facing copy. It contains no `{placeholder}` or
 `$SPECIAL_VARIABLE` tokens. The `template`, `variables`, and `selection` fields
 remain the authoritative machine-readable design.
@@ -237,7 +214,7 @@ Score each component from 1–10:
   do in the scene and both resolutions are concise, vivid responses.
 - `mechanical_connection` (30%): Whether each label and resolution make its
   effect feel like a plausible consequence, including the thematic fit of any
-  selected card, dreamsign, predicate, or custom reward. Score the weaker
+  selected card, dreamsign, or predicate. Score the weaker
   action chain rather than averaging the two; revise scores below 7.
 - `archetype_fit` (15%): Whether both mechanical outcomes are credible and
   useful for the strategy implied by owning the source card.

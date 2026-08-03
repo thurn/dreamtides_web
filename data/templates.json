@@ -100,10 +100,6 @@
     "template": "Transfigure all starter cards"
   },
   {
-    "template_id": 26,
-    "template": "Gain $CUSTOM_CARD"
-  },
-  {
     "template_id": 27,
     "template": "Gain {dreamsign_name}"
   },
@@ -118,10 +114,6 @@
   {
     "template_id": 30,
     "template": "Replace a chosen dreamsign with one of 3 offered dreamsigns"
-  },
-  {
-    "template_id": 31,
-    "template": "Gain $CUSTOM_DREAMSIGN"
   },
   {
     "template_id": 32,

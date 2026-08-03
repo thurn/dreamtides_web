@@ -1,6 +1,6 @@
 ---
 name: exploration-encounter-designer
-description: Design and rank five Dreamtides exploration encounters from a canonical card and its full-size artwork, selecting and pairing ten distinct mechanical event templates only after understanding the scene and deck intent. Use when creating encounter prose, narrative choice labels, template variables, custom rewards, validated encounter JSON, a user-facing Markdown display, or a random-card display-mode test where the designer should choose the best-fitting templates.
+description: Design and rank five Dreamtides exploration encounters from a canonical card and its full-size artwork, selecting and pairing ten distinct mechanical event templates only after understanding the scene and deck intent. Use when creating encounter prose, narrative choice labels, template variables, validated encounter JSON, a user-facing Markdown display, or a random-card display-mode test where the designer should choose the best-fitting templates.
 ---
 
 # Exploration Encounter Design
@@ -72,8 +72,7 @@ token is populated for display.
 An uppercase `$SPECIAL_VARIABLE` in a template is resolved after the designer
 chooses the template. It is different from a braced `{placeholder}`: ordinary
 placeholders always receive literal values in `variables`, while a special
-variable either selects content when the event is created or refers to new
-content defined by the designer.
+variable selects content when the event is created.
 
 The canonical catalog currently contains these special variables:
 
@@ -87,17 +86,6 @@ The canonical catalog currently contains these special variables:
 - `$STARTER_CARD` resolves to one random eligible starter card that is currently
   in the player's deck. It is narrower than `$DECK_CARD`: a card must satisfy
   both the starter requirement and any explicit selection predicate.
-- `$CUSTOM_CARD` refers to a new card authored specifically for this encounter;
-  it is not selected from a runtime pool. Define it in
-  `variables.custom_card` with a new UUID, name, energy cost, card type,
-  subtype, complete rendered rules text, and spark. For an Event, use empty
-  strings for subtype and spark; for a Character, use a non-empty subtype and
-  an integer spark.
-- `$CUSTOM_DREAMSIGN` refers to a new dreamsign authored specifically for this
-  encounter; it is not selected from a runtime pool. Define it in
-  `variables.custom_dreamsign` with a new UUID, name, and complete rendered
-  rules text.
-
 For `$OFFERED_CARD`, `$DECK_CARD`, and `$STARTER_CARD`, put an eligibility rule
 under the token's exact name in `selection` only when a restriction materially
 improves the design:
@@ -112,17 +100,14 @@ improves the design:
 }
 ```
 
-Omitting that token from `selection` means unrestricted. Do not put the custom
-variables in `selection`; their authored definitions belong in `variables`.
-Use the standard predicate vocabulary and exception rules in **Mechanical
-standards** for every selection predicate.
+Omitting that token from `selection` means unrestricted. Use the standard
+predicate vocabulary and exception rules in **Mechanical standards** for every
+selection predicate.
 
 Because runtime-selected card identity is unknown while authoring, its
 `effect_text` uses a readable generic description that includes any restriction,
 such as `Gain an offered Spirit Animal card` or `Apply Kindled to a random
-Survivor card from your deck`. Custom content is already known, so its
-`effect_text` names the custom card or dreamsign and gives enough of its rules
-text to make the reward clear. No completed `effect_text` may contain a literal
+Survivor card from your deck`. No completed `effect_text` may contain a literal
 `$SPECIAL_VARIABLE` token.
 
 After opening the canonical catalog in workflow step 9, enumerate every
@@ -545,9 +530,6 @@ commentary.
   the deck strategy. Reject a named reward that is mechanically useful but
   narratively unrelated. In particular, select a thematically resonant
   dreamsign rather than forcing an arbitrary dreamsign into the narrative.
-- Invent content only for explicit `$CUSTOM_CARD` or `$CUSTOM_DREAMSIGN`
-  templates. Follow **Special template variables** for their structured records.
-  Custom card names describe archetypes rather than proper-named individuals.
 - Follow **Special template variables** for the source, timing, restrictions,
   and display treatment of every special variable.
 - Write `effect_text` as readable display copy with all placeholders and special

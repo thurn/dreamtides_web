@@ -267,48 +267,6 @@ def validate_entity_reference(
         )
 
 
-def validate_custom_card(
-    value: Any,
-    path: str,
-    cards: dict[str, dict[str, Any]],
-    dreamsigns: dict[str, dict[str, Any]],
-) -> None:
-    obj = require_object(value, path)
-    custom_id = require_uuid(obj.get("id"), f"{path}.id")
-    if normalized_uuid(custom_id) in cards or normalized_uuid(custom_id) in dreamsigns:
-        fail(f"{path}.id", "must be a new UUID")
-    for key in ("name", "card_type", "rendered_text"):
-        require_string(obj.get(key), f"{path}.{key}")
-    require_int(obj.get("energy_cost"), f"{path}.energy_cost", 0)
-    card_type = obj["card_type"]
-    if card_type == "Character":
-        require_string(obj.get("subtype"), f"{path}.subtype")
-        require_int(obj.get("spark"), f"{path}.spark", 0)
-    elif card_type == "Event":
-        subtype = require_text(obj.get("subtype"), f"{path}.subtype")
-        spark = require_text(obj.get("spark"), f"{path}.spark")
-        if subtype != "":
-            fail(f"{path}.subtype", "must be an empty string for an Event")
-        if spark != "":
-            fail(f"{path}.spark", "must be an empty string for an Event")
-    else:
-        fail(f"{path}.card_type", "must be Character or Event")
-
-
-def validate_custom_dreamsign(
-    value: Any,
-    path: str,
-    cards: dict[str, dict[str, Any]],
-    dreamsigns: dict[str, dict[str, Any]],
-) -> None:
-    obj = require_object(value, path)
-    custom_id = require_uuid(obj.get("id"), f"{path}.id")
-    if normalized_uuid(custom_id) in cards or normalized_uuid(custom_id) in dreamsigns:
-        fail(f"{path}.id", "must be a new UUID")
-    require_string(obj.get("name"), f"{path}.name")
-    require_string(obj.get("rendered_text"), f"{path}.rendered_text")
-
-
 def validate_predicate(
     value: Any,
     path: str,
@@ -372,21 +330,6 @@ def validate_variables(
             require_int(value, value_path, 1)
         elif isinstance(value, (dict, list)) or value is None or value == "":
             fail(value_path, "must be a non-empty JSON primitive")
-
-    if "$CUSTOM_CARD" in template:
-        validate_custom_card(
-            variables.get("custom_card"),
-            f"{path}.variables.custom_card",
-            cards,
-            dreamsigns,
-        )
-    if "$CUSTOM_DREAMSIGN" in template:
-        validate_custom_dreamsign(
-            variables.get("custom_dreamsign"),
-            f"{path}.variables.custom_dreamsign",
-            cards,
-            dreamsigns,
-        )
 
     selection = action.get("selection")
     if selection is not None:
