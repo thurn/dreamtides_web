@@ -75,7 +75,7 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<string, BattleTriggeredEffectScrip
     triggers: { dissolved: [{ kind: "edits", build: (ctx) => [{ kind: "DRAW_CARD", side: ctx.side }] }], abandoned: [{ kind: "edits", build: (ctx) => [{ kind: "DRAW_CARD", side: ctx.side }] }] },
   },
   "5ab11bef-5dcd-49f5-be49-ae2ccde76e70": {
-    id: "5ab11bef-5dcd-49f5-be49-ae2ccde76e70", textHash: "3a0bae05", triggers: {},
+    id: "5ab11bef-5dcd-49f5-be49-ae2ccde76e70", textHash: "42ad9866", triggers: {},
   },
   "4408b942-09a0-4f4e-a403-10c708c6e3c5": {
     id: "4408b942-09a0-4f4e-a403-10c708c6e3c5", textHash: "ad1c27c7",
