@@ -28,8 +28,10 @@ import { InlineGlyph } from "../typography/InlineGlyph";
 import { glyph, GLYPHS } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { CardStatOrb } from "./CardStatOrb";
+import { CardChangeBadge } from "../../internal/CardChangeBadge";
 import { TRANSFIGURATION_ICONS } from "../../../runtime/transfiguration-display";
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
+import { TRANSFIGURE_MARK_START } from "../../../runtime/transfigure-markers";
 import { renderRulesText } from "./RulesText";
 import { useFitText } from "../controls/useFitText";
 import { DESKTOP_MIN_WIDTH } from "../../screens/use-is-desktop";
@@ -652,8 +654,8 @@ export interface CardViewProps {
   /**
    * When set, paints the card as transfigured: a small colored gem follows the
    * name, changed corner stats gain their Empowered/Kindled shape badges, and
-   * only the added/changed rules text is tinted (driven by the descriptor's
-   * marked text). The card
+   * added/changed rules text is tinted and gains the shared hammer badge in its
+   * lower-right corner (driven by the descriptor's marked text). The card
    * itself should already carry the transfigured stats and rules text — pass the
    * `card` and `display` from `buildTransfigurationDisplay` together.
    */
@@ -831,6 +833,8 @@ function GameCardSurface(props: CardViewProps) {
     !battlefieldPresentation &&
     !hideRulesText &&
     card.renderedText.trim() !== "";
+  const rulesTextChanged =
+    transfiguration?.markedText.includes(TRANSFIGURE_MARK_START) === true;
   const slotContext: CardViewSlotContext = {
     card,
     large,
@@ -1048,6 +1052,9 @@ function GameCardSurface(props: CardViewProps) {
         fontSize: `min(var(--cv-rules-font-cap), ${String(rulesFontPx)}px)`,
         lineHeight: "var(--cv-rules-line-height)",
         textShadow: "var(--cv-rules-text-shadow)",
+        paddingRight: rulesTextChanged
+          ? "calc(var(--cv-transfiguration-change-badge-size) + var(--cv-rules-change-badge-gap))"
+          : undefined,
       }}
     >
       {renderRulesText(transfiguration?.markedText ?? card.renderedText, {
@@ -1341,9 +1348,11 @@ function GameCardSurface(props: CardViewProps) {
           {hasTextboxContent ? (
             <div
               ref={bandBoxRef}
+              data-card-rules-box=""
               style={
                 {
                   ...textboxSizing,
+                  position: "relative",
                   overflow: "hidden",
                   display: "flex",
                   flexDirection: "column",
@@ -1360,6 +1369,24 @@ function GameCardSurface(props: CardViewProps) {
               }
             >
               {renderedRulesNode}
+              {rulesTextChanged ? (
+                <span
+                  data-card-rules-text-change={transfiguration?.type}
+                  title={`Rules text changed by ${transfiguration?.type ?? "unknown"} transfiguration`}
+                  style={{
+                    position: "absolute",
+                    right: "var(--cv-textbox-pad-x)",
+                    bottom: "var(--cv-textbox-pad-y)",
+                    zIndex: 2,
+                    display: "inline-flex",
+                  }}
+                >
+                  <CardChangeBadge
+                    sizeVar="var(--cv-transfiguration-change-badge-size)"
+                    ariaLabel={`Rules text changed by ${transfiguration?.type ?? "unknown"} transfiguration`}
+                  />
+                </span>
+              ) : null}
             </div>
           ) : null}
         </div>

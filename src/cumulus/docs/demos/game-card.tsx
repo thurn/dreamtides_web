@@ -12,15 +12,22 @@
 // The curated UUIDs are read live from data/tabula/cards.toml (via the served
 // card-data.json), so the demo always reflects current card data rather than
 // hardcoding stats or rules text that would drift. The set exercises the card's
-// real variety: keyword highlighting, Unicode trigger markers, fast/interrupt bolts,
-// Character vs Event chrome, and the Legendary rarity shimmer.
+// real variety: a resolved text-changing transfiguration, keyword highlighting,
+// Unicode trigger markers, fast/interrupt bolts, Character vs Event chrome, and
+// the Legendary rarity shimmer.
 
 import { useEffect, useState } from "react";
 import type { CardData } from "../../../types/cards";
 import { loadCardDatabase } from "../../../data/card-database";
 import { loadFigmentDatabase } from "../../../data/figment-database";
+import { TRANSFIGURATION_TINT_COLORS } from "../../../runtime/transfiguration-display";
+import {
+  TRANSFIGURE_MARK_END,
+  TRANSFIGURE_MARK_START,
+} from "../../../runtime/transfigure-markers";
 import {
   GameCard,
+  type GameCardModel,
   type GameCardPresentation,
 } from "../../components/card/CardView";
 import { type CumulusColor } from "../../primitives/color";
@@ -59,6 +66,34 @@ interface GameCardDemoArgs {
   figment?: boolean;
   /** Show the complete card or its art-and-spark battlefield face. */
   presentation?: GameCardPresentation;
+}
+
+/**
+ * Presentation-only Amplified fixture for the first showcase card. The real
+ * transfiguration logic lives outside Cumulus; this mirrors the resolved model
+ * a caller supplies by incrementing and marking the first authored number.
+ */
+function amplifiedDemoModel(card: CardData): GameCardModel {
+  const match = /\d+/.exec(card.renderedText);
+  if (match === null || match.index === undefined) {
+    return { cardId: card.id, displaySnapshot: card };
+  }
+  const amplifiedNumber = String(Number(match[0]) + 1);
+  const before = card.renderedText.slice(0, match.index);
+  const after = card.renderedText.slice(match.index + match[0].length);
+  const renderedText = `${before}${amplifiedNumber}${after}`;
+  return {
+    cardId: card.id,
+    displaySnapshot: { ...card, renderedText },
+    transfiguration: {
+      type: "Amplified",
+      color: TRANSFIGURATION_TINT_COLORS.Amplified,
+      markedText: `${before}${TRANSFIGURE_MARK_START}${amplifiedNumber}${TRANSFIGURE_MARK_END}${after}`,
+      energyChanged: false,
+      sparkChanged: false,
+      fastChanged: false,
+    },
+  };
 }
 
 function GameCardDemo({
@@ -124,10 +159,14 @@ function GameCardDemo({
         alignItems: "flex-start",
       }}
     >
-      {cards.map((card) => (
+      {cards.map((card, index) => (
         <div key={card.id} style={{ width: 168, flex: "0 0 auto" }}>
           <GameCard
-            model={{ cardId: card.id, displaySnapshot: card }}
+            model={
+              index === 0
+                ? amplifiedDemoModel(card)
+                : { cardId: card.id, displaySnapshot: card }
+            }
             selected={selected}
             selectionColor={selectionColor}
             hideRulesText={hideRulesText}
@@ -147,7 +186,7 @@ export const gameCardDemo: CumulusComponent = {
   blurb:
     "The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name.",
   callout:
-    "GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment; every figment uses the same \"<Identity> Figment\" title bar and authored art crop. The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, exhausted status, focus, press, activation, and drag dismissal are automatic. On desktop, rules that explicitly materialize an authored figment add a small UUID-backed card with a violet glowing border beyond the definition stack; a figment's own reading copy stays unoutlined. Touch layouts keep the compact reading pair.",
+    "GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment; every figment uses the same \"<Identity> Figment\" title bar and authored art crop. Transfiguration changes use the shared hammer-in-circle marker on changed stats and in the rules panel whenever marked rules text is present. The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, exhausted status, focus, press, activation, and drag dismissal are automatic. On desktop, rules that explicitly materialize an authored figment add a small UUID-backed card with a violet glowing border beyond the definition stack; a figment's own reading copy stays unoutlined. Touch layouts keep the compact reading pair.",
   group: "Components",
   docName: "GameCard",
   Component: GameCardDemo,

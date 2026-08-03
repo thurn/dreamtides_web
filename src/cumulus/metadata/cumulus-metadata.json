@@ -1121,7 +1121,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "When set, paints the card as transfigured: a small colored gem follows the\nname, changed corner stats gain their Empowered/Kindled shape badges, and\nonly the added/changed rules text is tinted (driven by the descriptor's\nmarked text). The card\nitself should already carry the transfigured stats and rules text — pass the\n`card` and `display` from `buildTransfigurationDisplay` together.",
+      "description": "When set, paints the card as transfigured: a small colored gem follows the\nname, changed corner stats gain their Empowered/Kindled shape badges, and\nadded/changed rules text is tinted and gains the shared hammer badge in its\nlower-right corner (driven by the descriptor's marked text). The card\nitself should already carry the transfigured stats and rules text — pass the\n`card` and `display` from `buildTransfigurationDisplay` together.",
       "nested": {
         "name": "CardTransfigurationDisplay",
         "fields": [

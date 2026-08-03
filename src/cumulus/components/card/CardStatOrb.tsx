@@ -7,8 +7,9 @@ import {
   SPARK_ICON_COLOR,
 } from "../controls/GlowIcon";
 import { useFitText } from "../controls/useFitText";
-import { type Glyph, GLYPHS } from "../../primitives/glyph";
+import { type Glyph } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
+import { CardChangeBadge } from "../../internal/CardChangeBadge";
 
 export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";
 export type CardStatChangeBadge = "empowered" | "kindled";
@@ -23,14 +24,12 @@ const DEFAULT_LABEL: Readonly<Record<CardStatOrbVariant, string>> = {
 };
 
 const CHANGE_BADGE_BY_TYPE: Readonly<
-  Record<CardStatChangeBadge, { glyph: Glyph; label: string }>
+  Record<CardStatChangeBadge, { label: string }>
 > = {
   empowered: {
-    glyph: GLYPHS.transfigurationSite,
     label: "Empowered",
   },
   kindled: {
-    glyph: GLYPHS.transfigurationSite,
     label: "Kindled",
   },
 };
@@ -243,20 +242,11 @@ export function CardStatOrb({
             bottom: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO * -CHANGE_BADGE_OUTSIDE_FRACTION)})`,
             zIndex: 2,
             display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO)})`,
-            height: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO)})`,
-            borderRadius: "50%",
-            background: "#000000",
-            border: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO / 30)}) solid #ffffff`,
-            color: "#ffffff",
-            boxSizing: "border-box",
-            fontSize: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO * 0.62)})`,
-            lineHeight: 1,
           }}
         >
-          <i className={badge.glyph} aria-hidden="true" />
+          <CardChangeBadge
+            sizeVar={`calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO)})`}
+          />
         </span>
       )}
     </span>

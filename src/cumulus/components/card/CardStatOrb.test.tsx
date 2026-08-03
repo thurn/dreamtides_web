@@ -49,6 +49,7 @@ describe("CardStatOrb transfiguration badge", () => {
     const badge = container.querySelector<HTMLElement>(
       `[data-card-stat-change="${changeBadge}"]`,
     );
+    const badgeFace = badge?.querySelector<HTMLElement>(":scope > span");
 
     expect(orb?.getAttribute("aria-label")).toContain(
       changeBadge === "empowered" ? "Empowered" : "Kindled",
@@ -56,11 +57,11 @@ describe("CardStatOrb transfiguration badge", () => {
     expect(orb?.querySelector<HTMLElement>(":scope > div")?.style.color).toBe(
       "rgb(255, 255, 255)",
     );
-    expect(badge?.style.width).toBe("calc(30px)");
+    expect(badgeFace?.style.width).toBe("calc(30px)");
     expect(badge?.style.right).toBe("calc(-9px)");
-    expect(badge?.style.background).toBe("rgb(0, 0, 0)");
-    expect(badge?.style.border).toContain("rgb(255, 255, 255)");
-    expect(badge?.querySelector(`.${glyphClass}`)).not.toBeNull();
+    expect(badgeFace?.style.background).toBe("rgb(0, 0, 0)");
+    expect(badgeFace?.style.border).toContain("rgb(255, 255, 255)");
+    expect(badgeFace?.querySelector(`.${glyphClass}`)).not.toBeNull();
 
     act(() => root.unmount());
     container.remove();
