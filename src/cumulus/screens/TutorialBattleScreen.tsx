@@ -13,6 +13,7 @@ import { GlassButton } from "../components/controls/GlassButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { Motes } from "../components/hud/Motes";
 import { TransientStatusToast } from "../components/status/TransientStatusToast";
+import { safeAreaInsetAtLeast } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { RADIAL_DISC_BACKGROUND } from "../primitives/radial-disc-material";
@@ -554,9 +555,9 @@ function TutorialVictorySurface({
         alignItems: "center",
         justifyContent: "center",
         gap: token("--space-8"),
-        paddingTop: `max(var(--safe-area-inset-top), ${token("--space-8")})`,
+        paddingTop: safeAreaInsetAtLeast("top", "--space-8"),
         paddingRight: `max(var(--safe-area-inset-right), ${token("--space-6")})`,
-        paddingBottom: `max(var(--safe-area-inset-bottom), ${token("--space-8")})`,
+        paddingBottom: safeAreaInsetAtLeast("bottom", "--space-8"),
         paddingLeft: `max(var(--safe-area-inset-left), ${token("--space-6")})`,
       }}
     >

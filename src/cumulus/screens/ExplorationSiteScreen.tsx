@@ -28,6 +28,7 @@ import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { Pressable } from "../primitives/Pressable";
+import { safeAreaInsetAtLeast } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
 import {
   MENU_BUTTON_PX,
@@ -1101,13 +1102,13 @@ export function ExplorationSiteScreen({
             position: "fixed",
             zIndex: FRAME_BREAK_EXIT_LAYER + 1,
             top: isDesktop
-              ? `max(var(--safe-area-inset-top), ${token("--space-8")})`
+              ? safeAreaInsetAtLeast("top", "--space-8")
               : `calc(max(var(--safe-area-inset-top), ${token("--space-4")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`,
             right: isDesktop
               ? `calc(max(var(--safe-area-inset-right), ${token("--space-8")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`
               : `max(var(--safe-area-inset-right), ${token("--space-4")})`,
             bottom: isDesktop
-              ? `max(var(--safe-area-inset-bottom), ${token("--space-8")})`
+              ? safeAreaInsetAtLeast("bottom", "--space-8")
               : `max(var(--safe-area-inset-bottom), ${token("--space-4")})`,
             left: isDesktop
               ? "auto"
