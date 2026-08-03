@@ -688,25 +688,6 @@ function battlefieldCenterOffset(
   );
 }
 
-function protectedDividerBedStyle({
-  width,
-  height,
-}: {
-  readonly width: string;
-  readonly height: string;
-}): CSSProperties {
-  return {
-    position: "relative",
-    width,
-    height,
-    borderRadius: token("--radius-pill"),
-    background: `linear-gradient(90deg, transparent, ${token("--surface-chrome-strong")} 12%, ${token("--surface-chrome-strong")} 88%, transparent)`,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  };
-}
-
 function BattlefieldDivider({
   variation,
 }: {
@@ -732,17 +713,7 @@ function BattlefieldDivider({
         aria-hidden="true"
         data-battlefield-divider="space"
         style={sharedStyle}
-      >
-        <div
-          style={{
-            ...protectedDividerBedStyle({
-              width: "86%",
-              height: token("--space-5"),
-            }),
-            opacity: 0.78,
-          }}
-        />
-      </div>
+      />
     );
   }
 
@@ -755,21 +726,12 @@ function BattlefieldDivider({
       >
         <div
           style={{
-            ...protectedDividerBedStyle({
-              width: "84%",
-              height: token("--space-4"),
-            }),
-            opacity: 0.94,
+            width: "82%",
+            height: token("--space-1"),
+            opacity: 0.58,
+            background: `linear-gradient(90deg, transparent, ${token("--border-soft")} 16%, ${token("--border-accent")} 50%, ${token("--border-soft")} 84%, transparent)`,
           }}
-        >
-          <span
-            style={{
-              width: "92%",
-              height: token("--space-1"),
-              background: `linear-gradient(90deg, transparent, ${token("--text-primary")} 14%, ${token("--accent-bright")} 50%, ${token("--text-primary")} 86%, transparent)`,
-            }}
-          />
-        </div>
+        />
       </div>
     );
   }
@@ -783,23 +745,14 @@ function BattlefieldDivider({
       >
         <div
           style={{
-            ...protectedDividerBedStyle({
-              width: "74%",
-              height: token("--space-6"),
-            }),
-            opacity: 0.92,
+            width: "72%",
+            height: token("--space-6"),
+            opacity: 0.72,
+            background:
+              `radial-gradient(ellipse at center, ${token("--accent-tint")} 0%, transparent 70%), ` +
+              `linear-gradient(90deg, transparent, ${token("--border-soft")} 24%, ${token("--border-mid")} 50%, ${token("--border-soft")} 76%, transparent) center / 100% ${token("--space-1")} no-repeat`,
           }}
-        >
-          <span
-            style={{
-              width: "84%",
-              height: token("--space-1"),
-              borderRadius: token("--radius-pill"),
-              background: `linear-gradient(90deg, transparent, ${token("--accent-bright")} 24%, ${token("--text-primary")} 50%, ${token("--accent-bright")} 76%, transparent)`,
-              boxShadow: token("--glow-accent-soft"),
-            }}
-          />
-        </div>
+        />
       </div>
     );
   }
@@ -813,35 +766,26 @@ function BattlefieldDivider({
       >
         <div
           style={{
-            ...protectedDividerBedStyle({
-              width: "68%",
-              height: token("--space-5"),
-            }),
-            opacity: 0.94,
+            width: "64%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
-          <div
-            style={{
-              width: "84%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            {Array.from({ length: 11 }, (_unused, index) => (
-              <span
-                key={index}
-                style={{
-                  width: token(index === 5 ? "--space-5" : "--space-3"),
-                  height: token("--space-1"),
-                  borderRadius: token("--radius-pill"),
-                  background: token(
-                    index === 5 ? "--accent-bright" : "--text-primary",
-                  ),
-                }}
-              />
-            ))}
-          </div>
+          {Array.from({ length: 11 }, (_unused, index) => (
+            <span
+              key={index}
+              style={{
+                width: token(index === 5 ? "--space-4" : "--space-2"),
+                height: token("--space-1"),
+                borderRadius: token("--radius-pill"),
+                opacity: index === 5 ? 0.82 : 0.5,
+                background: token(
+                  index === 5 ? "--border-accent" : "--border-soft",
+                ),
+              }}
+            />
+          ))}
         </div>
       </div>
     );
@@ -855,48 +799,37 @@ function BattlefieldDivider({
     >
       <div
         style={{
-          ...protectedDividerBedStyle({
-            width: "78%",
-            height: token("--space-6"),
-          }),
-          opacity: 0.94,
+          width: "76%",
+          display: "flex",
+          alignItems: "center",
+          gap: token("--space-5"),
         }}
       >
-        <div
+        <span
+          data-battlefield-divider-line=""
           style={{
-            width: "88%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            gap: token("--space-5"),
+            flex: 1,
+            borderTop: token("--battlefield-slot-border"),
           }}
-        >
-          <span
-            style={{
-              flex: 1,
-              height: token("--space-1"),
-              background: `linear-gradient(90deg, transparent, ${token("--text-primary")})`,
-            }}
-          />
-          <span
-            style={{
-              width: token("--space-5"),
-              aspectRatio: "1",
-              border: `${token("--space-1")} solid ${token("--accent-bright")}`,
-              background: token("--surface-chrome-strong"),
-              boxShadow: token("--glow-accent-soft"),
-              transform: "rotate(45deg)",
-              boxSizing: "border-box",
-            }}
-          />
-          <span
-            style={{
-              flex: 1,
-              height: token("--space-1"),
-              background: `linear-gradient(90deg, ${token("--text-primary")}, transparent)`,
-            }}
-          />
-        </div>
+        />
+        <span
+          data-battlefield-divider-sigil=""
+          style={{
+            width: token("--space-5"),
+            aspectRatio: "1",
+            border: `${token("--space-1")} solid ${token("--border-accent")}`,
+            background: token("--accent-tint"),
+            transform: "rotate(45deg)",
+            boxSizing: "border-box",
+          }}
+        />
+        <span
+          data-battlefield-divider-line=""
+          style={{
+            flex: 1,
+            borderTop: token("--battlefield-slot-border"),
+          }}
+        />
       </div>
     </div>
   );

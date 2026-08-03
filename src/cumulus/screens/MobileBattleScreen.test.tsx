@@ -272,14 +272,7 @@ describe("MobileBattleScreen", () => {
       const divider = container.querySelector(
         `[data-battlefield-divider="${variation}"]`,
       );
-      const contrastBed = divider?.firstElementChild as HTMLElement | null;
       expect(divider).not.toBeNull();
-      expect(contrastBed?.style.background).toContain(
-        "var(--surface-chrome-strong)",
-      );
-      if (variation !== "space") {
-        expect(contrastBed?.querySelector("span")).not.toBeNull();
-      }
       expect(
         container.querySelector<HTMLElement>('[data-battle-rank="enemy-front"]')
           ?.style.bottom,
@@ -291,6 +284,28 @@ describe("MobileBattleScreen", () => {
       ).toBe(expectedOffset);
       act(() => root.unmount());
     }
+  });
+
+  it("renders the sigil with the battlefield grid stroke and no backing plate", () => {
+    const { container, root } = mount(makeView(), undefined, {
+      battlefieldDividerVariation: "sigil",
+    });
+    const divider = container.querySelector<HTMLElement>(
+      '[data-battlefield-divider="sigil"]',
+    );
+    const composition = divider?.firstElementChild as HTMLElement | null;
+    const lines = container.querySelectorAll<HTMLElement>(
+      "[data-battlefield-divider-line]",
+    );
+
+    expect(composition?.style.background).toBe("");
+    expect(lines).toHaveLength(2);
+    expect(lines[0]?.style.borderTop).toBe("var(--battlefield-slot-border)");
+    expect(
+      container.querySelector("[data-battlefield-divider-sigil]"),
+    ).not.toBeNull();
+
+    act(() => root.unmount());
   });
 
   it("supports a collapsed inspector with hidden phase navigation", () => {
