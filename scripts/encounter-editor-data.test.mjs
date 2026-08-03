@@ -52,7 +52,7 @@ function candidate(rank, selected = false) {
 }
 
 function documentFixture() {
-  return [{ card_id: CARD_ID, encounters: [candidate(1, true), candidate(2)] }];
+  return { [CARD_ID]: [candidate(1, true), candidate(2)] };
 }
 
 function writeFixtureRoot() {
@@ -92,12 +92,12 @@ describe("encounter editor data", () => {
       selectedTemplatePairId: "pair-2",
       selectedRank: 2,
     });
-    expect(result.document[0].encounters.map((entry) => entry.rank)).toEqual([1, 2]);
-    expect(result.document[0].encounters.map((entry) => entry.selected)).toEqual([
+    expect(result.document[CARD_ID].map((entry) => entry.rank)).toEqual([1, 2]);
+    expect(result.document[CARD_ID].map((entry) => entry.selected)).toEqual([
       undefined,
       true,
     ]);
-    expect(before[0].encounters[0].selected).toBe(true);
+    expect(before[CARD_ID][0].selected).toBe(true);
   });
 
   it("edits prose and action copy by stable identities while preserving metadata", () => {
@@ -114,7 +114,7 @@ describe("encounter editor data", () => {
       field: "resolution",
       value: "A revised resolution.",
     });
-    const edited = action.document[0].encounters[0];
+    const edited = action.document[CARD_ID][0];
     expect(edited.prose).toBe("A revised scene.");
     expect(edited.actions[1].resolution).toBe("A revised resolution.");
     expect(edited.actions[1].template).toBe("Gain something else");
@@ -132,9 +132,15 @@ describe("encounter editor data", () => {
     ).toThrow("value must be nonblank text");
 
     const ambiguous = documentFixture();
-    ambiguous[0].encounters[1].selected = true;
+    ambiguous[CARD_ID][1].selected = true;
     expect(() => parseEncounterCandidates(JSON.stringify(ambiguous))).toThrow(
       `${CARD_ID} must have exactly one selected encounter; found 2.`,
+    );
+  });
+
+  it("rejects the legacy array document shape", () => {
+    expect(() => parseEncounterCandidates(JSON.stringify([]))).toThrow(
+      "Encounter candidates must be an object.",
     );
   });
 

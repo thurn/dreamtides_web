@@ -52,7 +52,7 @@ describe("encounter editor API", () => {
     mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
     writeFileSync(
       join(rootDir, "data", "encounter_candidates.json"),
-      `${JSON.stringify([{ card_id: CARD_ID, encounters: [candidate(1, true), candidate(2)] }], null, 2)}\n`,
+      `${JSON.stringify({ [CARD_ID]: [candidate(1, true), candidate(2)] }, null, 2)}\n`,
     );
     writeFileSync(
       join(rootDir, "data", "tabula", "cards.toml"),
@@ -90,7 +90,7 @@ describe("encounter editor API", () => {
       body: { clientRevision: 7, confirmation: { selectedRank: 2 } },
     });
     const saved = JSON.parse(readFileSync(join(rootDir, "data", "encounter_candidates.json"), "utf8"));
-    expect(saved[0].encounters.map((entry) => entry.selected)).toEqual([undefined, true]);
+    expect(saved[CARD_ID].map((entry) => entry.selected)).toEqual([undefined, true]);
   });
 
   it("persists only the targeted action text", async () => {

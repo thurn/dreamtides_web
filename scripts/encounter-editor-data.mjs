@@ -91,28 +91,24 @@ function validateCandidate(raw, label) {
 }
 
 export function validateEncounterCandidates(raw) {
-  if (!Array.isArray(raw) || raw.length === 0) {
-    throw new Error("Encounter candidates must be a non-empty array.");
+  const document = objectRecord(raw, "Encounter candidates");
+  const groups = Object.entries(document);
+  if (groups.length === 0) {
+    throw new Error("Encounter candidates must be a non-empty object.");
   }
-  const cardIds = new Set();
-  for (const [groupIndex, groupRaw] of raw.entries()) {
-    const label = `encounter groups[${String(groupIndex)}]`;
-    const group = objectRecord(groupRaw, label);
-    const cardId = canonicalUuid(group.card_id, `${label}.card_id`);
-    if (cardIds.has(cardId)) {
-      throw new Error(`Duplicate encounter card UUID ${cardId}.`);
-    }
-    cardIds.add(cardId);
-    if (!Array.isArray(group.encounters) || group.encounters.length === 0) {
-      throw new Error(`${label}.encounters must be a non-empty array.`);
+  for (const [cardIdRaw, encounters] of groups) {
+    const cardId = canonicalUuid(cardIdRaw, "Encounter card UUID");
+    const label = `encounter candidates.${cardId}`;
+    if (!Array.isArray(encounters) || encounters.length === 0) {
+      throw new Error(`${label} must be a non-empty array.`);
     }
     const pairIds = new Set();
     const ranks = new Set();
     let selectedCount = 0;
-    group.encounters.forEach((candidateRaw, candidateIndex) => {
+    encounters.forEach((candidateRaw, candidateIndex) => {
       const candidate = validateCandidate(
         candidateRaw,
-        `${label}.encounters[${String(candidateIndex)}]`,
+        `${label}[${String(candidateIndex)}]`,
       );
       if (pairIds.has(candidate.template_pair_id)) {
         throw new Error(`${cardId} has duplicate template_pair_id ${candidate.template_pair_id}.`);
@@ -130,7 +126,7 @@ export function validateEncounterCandidates(raw) {
       );
     }
   }
-  return raw;
+  return document;
 }
 
 export function parseEncounterCandidates(source) {
@@ -172,32 +168,31 @@ export function readEncounterEditorGroups({
   const source = fileSystem.readFileSync(join(rootDir, candidatesPath), "utf8");
   const groups = parseEncounterCandidates(source);
   const cards = readCardIndex(rootDir, cardTomlPath, fileSystem);
-  return groups.map((group) => {
-    const card = cards.get(group.card_id);
+  return Object.entries(groups).map(([cardId, encounters]) => {
+    const card = cards.get(cardId);
     if (card === undefined) {
-      throw new Error(`Encounter candidate references unknown card UUID ${group.card_id}.`);
+      throw new Error(`Encounter candidate references unknown card UUID ${cardId}.`);
     }
     return {
-      cardId: group.card_id,
+      cardId,
       cardName: card.name,
       imageNumber: card.imageNumber,
-      encounters: group.encounters,
+      encounters,
     };
   });
 }
 
 function groupFor(document, cardId) {
-  const group = document.find((candidate) => candidate.card_id === cardId);
-  if (group === undefined) {
+  if (!Object.hasOwn(document, cardId)) {
     const error = new Error(`Encounter card UUID ${cardId} was not found.`);
     error.code = "ENCOUNTER_NOT_FOUND";
     throw error;
   }
-  return group;
+  return document[cardId];
 }
 
-function candidateFor(group, templatePairId) {
-  const candidate = group.encounters.find(
+function candidateFor(encounters, templatePairId) {
+  const candidate = encounters.find(
     (encounter) => encounter.template_pair_id === templatePairId,
   );
   if (candidate === undefined) {
@@ -216,9 +211,9 @@ export function selectEncounterCandidate(document, { cardId, templatePairId }) {
   canonicalUuid(cardId, "cardId");
   requiredString(templatePairId, "templatePairId");
   const next = cloneDocument(document);
-  const group = groupFor(next, cardId);
-  const selected = candidateFor(group, templatePairId);
-  for (const candidate of group.encounters) {
+  const encounters = groupFor(next, cardId);
+  const selected = candidateFor(encounters, templatePairId);
+  for (const candidate of encounters) {
     if (candidate === selected) {
       candidate.selected = true;
     } else {
@@ -244,8 +239,8 @@ export function editEncounterCandidateText(
   requiredString(templatePairId, "templatePairId");
   const confirmedValue = requiredString(value, "value");
   const next = cloneDocument(document);
-  const group = groupFor(next, cardId);
-  const candidate = candidateFor(group, templatePairId);
+  const encounters = groupFor(next, cardId);
+  const candidate = candidateFor(encounters, templatePairId);
   if (field === "prose") {
     if (actionTemplateId !== undefined) {
       throw new Error("prose edits must not include actionTemplateId.");
