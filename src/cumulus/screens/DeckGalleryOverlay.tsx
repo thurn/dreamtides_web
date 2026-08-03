@@ -4,7 +4,6 @@ import {
   CardGalleryPanel,
   type CardGalleryCardView,
 } from "../components/card/CardGalleryPanel";
-import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { MENU_BUTTON_PX, MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
@@ -20,8 +19,8 @@ export interface DeckGalleryOverlayProps {
   cards: readonly CardGalleryCardView[];
   /** Copy shown if no deck entries can be resolved. */
   emptyLabel: string;
-  /** Accessible label for the close control and dialog. */
-  closeLabel: string;
+  /** Visible label for the primary header action. */
+  actionLabel: string;
   /** Reserve the mobile top-left band for persistent journey menu chrome. */
   clearMobileJourneyMenu?: boolean;
   /** Dismisses the gallery. */
@@ -39,7 +38,7 @@ export function DeckGalleryOverlay({
   subtitle,
   cards,
   emptyLabel,
-  closeLabel,
+  actionLabel,
   clearMobileJourneyMenu = false,
   onClose,
 }: DeckGalleryOverlayProps): ReactElement {
@@ -110,9 +109,9 @@ export function DeckGalleryOverlay({
               title={title}
               subtitle={subtitle}
               rightAccessory={{
-                kind: "iconButton",
-                glyph: GLYPHS.close,
-                label: closeLabel,
+                kind: "glassButton",
+                label: actionLabel,
+                variant: "accent",
                 onPress: onClose,
               }}
               cards={cards}

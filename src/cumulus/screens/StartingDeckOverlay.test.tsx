@@ -290,17 +290,17 @@ describe("StartingDeckOverlay", () => {
     });
   });
 
-  it("exposes only a labeled close control (no Continue/sort/filter/summary chrome)", () => {
+  it("exposes only a purple Begin Journey action (no sort/filter/summary chrome)", () => {
     const { container, root } = mount(
       <StartingDeckOverlay isOpen view={makeView()} onClose={vi.fn()} />,
     );
 
     const buttons = Array.from(container.querySelectorAll("button"));
     expect(buttons).toHaveLength(1);
-    expect(buttons[0]?.getAttribute("aria-label")).toBe("Close starting deck");
+    expect(buttons[0]?.textContent).toBe("Begin Journey");
+    expect(buttons[0]?.dataset.glassVariant).toBe("accent");
 
     const text = container.textContent ?? "";
-    expect(text).not.toContain("Continue");
     expect(text).not.toContain("Sort");
     expect(text).not.toContain("Filter");
 
@@ -309,7 +309,7 @@ describe("StartingDeckOverlay", () => {
     });
   });
 
-  it("calls onClose when the close disc is clicked", () => {
+  it("calls onClose when Begin Journey is clicked", () => {
     const onClose = vi.fn();
     const { container, root } = mount(
       <StartingDeckOverlay isOpen view={makeView()} onClose={onClose} />,
@@ -317,9 +317,7 @@ describe("StartingDeckOverlay", () => {
 
     act(() => {
       container
-        .querySelector<HTMLButtonElement>(
-          'button[aria-label="Close starting deck"]',
-        )
+        .querySelector<HTMLButtonElement>('button[data-glass-variant="accent"]')
         ?.click();
     });
     expect(onClose).toHaveBeenCalledTimes(1);
@@ -345,7 +343,7 @@ describe("StartingDeckOverlay", () => {
     });
   });
 
-  it("does not dismiss on a click of the panel or backdrop (close disc or Escape only)", () => {
+  it("does not dismiss on a click of the panel or backdrop (action or Escape only)", () => {
     const onClose = vi.fn();
     const { container, root } = mount(
       <StartingDeckOverlay isOpen view={makeView()} onClose={onClose} />,

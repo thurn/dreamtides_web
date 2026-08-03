@@ -3,8 +3,8 @@
 //
 // The first time a run has a DreamAvatar and has not yet seen its deck, the app
 // shows the player the cards they begin the journey with. This is that popup: a
-// CardGalleryPanel with the same left-aligned title/subtitle, trailing close
-// accessory, and internal card-grid scroll used by card-selection sites.
+// CardGalleryPanel with the same left-aligned title/subtitle, trailing primary
+// action, and internal card-grid scroll used by card-selection sites.
 //
 // The body is a scrolling grid of the starting cards in acquisition order. Each
 // GameCard grows in place on hover (desktop), while mobile uses the same
@@ -12,9 +12,8 @@
 // the screen: desktop uses a roomy floating five-column glass panel, while
 // mobile uses a full-bleed four-column alpha scrim with the gallery body's
 // scroll affordance handled by CardGalleryPanel. The content is
-// intentionally minimal — the title, one line of intro copy, and the cards;
-// there are no filter, sort, or "Continue" controls. Dismissal is the close disc
-// or Escape.
+// intentionally minimal — the title, one line of intro copy, the cards, and
+// the Begin Journey action. Dismissal is the action or Escape.
 //
 // PURE: renders from a view-model (`starting-deck-view-model.ts` builds it from
 // live journey state in the adapter) and reports dismissal through `onClose`.
@@ -49,13 +48,13 @@ export interface StartingDeckOverlayProps {
   isOpen: boolean;
   /** The resolved starting-deck cards to lay out. */
   view: StartingDeckView;
-  /** Dismisses the overlay; fires on the close disc and on Escape. */
+  /** Dismisses the overlay; fires on Begin Journey and on Escape. */
   onClose: () => void;
 }
 
 /**
  * The starting-deck reveal overlay: a modal CardGalleryPanel with a scrolling
- * grid of the starting cards. Closed by the trailing disc or Escape.
+ * grid of the starting cards. Closed by Begin Journey or Escape.
  */
 export function StartingDeckOverlay({
   isOpen,
@@ -69,7 +68,7 @@ export function StartingDeckOverlay({
       subtitle="These are the cards you begin the journey with."
       cards={view.cards}
       emptyLabel="No cards in starting deck."
-      closeLabel="Close starting deck"
+      actionLabel="Begin Journey"
       onClose={onClose}
     />
   );
