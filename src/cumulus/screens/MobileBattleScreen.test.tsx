@@ -720,6 +720,77 @@ describe("MobileBattleScreen", () => {
     act(() => root.unmount());
   });
 
+  it("stages a card awaiting a target outside the hand and battlefield", () => {
+    const view = makeView();
+    const targetingCard = view.playerHand[1];
+    if (targetingCard === undefined) {
+      throw new Error("targeting card fixture missing");
+    }
+    const interactions: MobileBattleInteractions = {
+      canInteract: true,
+      pendingCardId: null,
+      targetSelectionCardId: targetingCard.id,
+      targetSelectionPrompt: "Select a highlighted legal target.",
+      targetableCardIds: ["enemy-back-card"],
+      onHandCardActivate: vi.fn(),
+      onCardDragStart: vi.fn(),
+      onCardDragEnd: vi.fn(),
+      onSlotDrop: vi.fn(),
+      onZoneDrop: vi.fn(),
+      onPreviousPhase: vi.fn(),
+      onNextPhase: vi.fn(),
+    };
+    const { container, root } = mount(view, interactions);
+
+    const stage = container.querySelector<HTMLElement>(
+      "[data-battle-targeting-card-stage]",
+    );
+    const stagedCard = stage?.querySelector<HTMLElement>(
+      `[data-battle-card-id="${targetingCard.id}"]`,
+    );
+    const hand = container.querySelector<HTMLElement>(
+      '[data-battle-mobile-row="near-hand"]',
+    );
+
+    expect(stage?.style.gridRow).toBe("5");
+    expect(stagedCard?.dataset.battleCardZone).toBe("targeting-stage");
+    expect(
+      hand?.querySelector(`[data-battle-card-id="${targetingCard.id}"]`),
+    ).toBeNull();
+    expect(hand?.dataset.battleHandCount).toBe("4");
+    expect(hand?.dataset.battleHandVisibleCount).toBe("3");
+    expect(
+      stagedCard?.querySelector<HTMLElement>("[data-battle-card-motion]")
+        ?.dataset.battleCardLayoutId,
+    ).toBe(`battle-card:${targetingCard.id}`);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <MobileBattleScreen
+            view={view}
+            interactions={{
+              ...interactions,
+              targetSelectionCardId: null,
+              targetSelectionPrompt: null,
+            }}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(
+      container.querySelector("[data-battle-targeting-card-stage]"),
+    ).toBeNull();
+    expect(
+      container.querySelector(
+        `[data-battle-mobile-row="near-hand"] [data-battle-card-id="${targetingCard.id}"]`,
+      ),
+    ).not.toBeNull();
+
+    act(() => root.unmount());
+  });
+
   it("renders a points result only over its scoring battlefield character", () => {
     const { container, root } = mount(makeView(), undefined, {
       cardOverlay: {

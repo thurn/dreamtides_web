@@ -658,6 +658,10 @@ const NEXT_PHASE_CONTROL_WIDTH = 120;
 // room-shared reveal stays fully visible beside the battlefield.
 const SHARED_HAND_CARD_REVEAL_WIDTH = "min(240px, 45vw)";
 const PLAYER_HAND_Z_INDEX = 15;
+// A pending event remains a tangible card while leaving both the hand fan and
+// the playable ranks clear for target selection.
+const TARGETING_CARD_STAGE_WIDTH = 54;
+const DESKTOP_TARGETING_CARD_STAGE_WIDTH = 64;
 const BATTLEFIELD_RANK_Z_INDEX = {
   back: 1,
   front: 2,
@@ -2826,6 +2830,7 @@ function PlayArea({
 function NearHand({
   owner,
   cards,
+  totalCount,
   isDesktop,
   snapLayoutCardId,
   cardPicker,
@@ -2836,6 +2841,7 @@ function NearHand({
 }: {
   readonly owner: MobileBattleOwner;
   readonly cards: readonly MobileBattleCardView[];
+  readonly totalCount: number;
   readonly isDesktop: boolean;
   readonly snapLayoutCardId: string | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
@@ -2854,7 +2860,7 @@ function NearHand({
     <div
       data-battle-mobile-row="near-hand"
       data-battle-hand-owner={owner}
-      data-battle-hand-count={cards.length}
+      data-battle-hand-count={totalCount}
       data-battle-hand-visible-count={cards.length}
       data-battle-hand-card-hover-scale={String(BATTLE_HAND_CARD_HOVER_SCALE)}
       data-battle-mobile-drop-kind="zone"
@@ -3056,6 +3062,43 @@ function NearHand({
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function TargetingCardStage({
+  card,
+  isDesktop,
+}: {
+  readonly card: MobileBattleCardView;
+  readonly isDesktop: boolean;
+}) {
+  return (
+    <div
+      data-battle-targeting-card-stage=""
+      role="group"
+      aria-label="Card awaiting a target"
+      style={{
+        gridColumn: 1,
+        gridRow: 5,
+        alignSelf: "start",
+        justifySelf: "start",
+        width: isDesktop
+          ? DESKTOP_TARGETING_CARD_STAGE_WIDTH
+          : TARGETING_CARD_STAGE_WIDTH,
+        aspectRatio: CARD_ASPECT_RATIO,
+        marginTop: token("--space-2"),
+        marginLeft: `calc(var(${SAFE_AREA_INSET_PROPERTIES.left}) + ${token("--space-4")})`,
+        zIndex: PLAYER_HAND_Z_INDEX,
+        pointerEvents: "auto",
+      }}
+    >
+      <FaceUpCard
+        card={card}
+        zone="targeting-stage"
+        showRulesText
+        selection={{ selected: true, color: "gold-light" }}
+      />
     </div>
   );
 }
@@ -4570,6 +4613,17 @@ export function MobileBattleScreen({
       : view.perspective === "player"
         ? view.playerHand
         : view.nearHand.cards;
+  const targetingCard =
+    interactions?.targetSelectionCardId === null ||
+    interactions?.targetSelectionCardId === undefined
+      ? null
+      : nearHandCards.find(
+          (card) => card.id === interactions.targetSelectionCardId,
+        ) ?? null;
+  const displayedNearHandCards =
+    targetingCard === null
+      ? nearHandCards
+      : nearHandCards.filter((card) => card.id !== targetingCard.id);
   const farHandCards = view.inspector.isFarHandRevealed
     ? far.owner === "enemy"
       ? view.enemyHand
@@ -5034,6 +5088,9 @@ export function MobileBattleScreen({
               : "End Turn"
           }
         />
+        {targetingCard === null ? null : (
+          <TargetingCardStage card={targetingCard} isDesktop={isDesktop} />
+        )}
         <SideZones
           activeSide={view.activeSide}
           dreamwell={visibleDreamwell}
@@ -5047,7 +5104,8 @@ export function MobileBattleScreen({
         />
         <NearHand
           owner={near.owner}
-          cards={nearHandCards}
+          cards={displayedNearHandCards}
+          totalCount={nearHandCards.length}
           isDesktop={isDesktop}
           snapLayoutCardId={snapLayoutCardId}
           cardPicker={boardCardPicker}
