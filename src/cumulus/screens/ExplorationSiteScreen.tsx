@@ -995,7 +995,7 @@ export function ExplorationSiteScreen({
               : JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
             zIndex: FRAME_BREAK_EXIT_LAYER,
             width: isDesktop
-              ? "min(620px, calc(100vw - 48px))"
+              ? "min(400px, calc(100vw - 48px))"
               : `calc(100vw - ${token("--space-5")} - ${token("--space-5")})`,
             maxHeight: "calc(100vh - 96px)",
             pointerEvents: "auto",
