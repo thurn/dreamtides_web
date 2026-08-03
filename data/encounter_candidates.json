@@ -1632,5 +1632,886 @@
       "rank": 5,
       "ranking_rationale": "Both choices reward a Warrior commitment, but presenting the existing force has a less immediate causal link to its economic return."
     }
+  ],
+  "15b63630-d9f8-473b-9717-15ad91ff2f16": [
+    {
+      "template_pair_id": "pair-1",
+      "prose": "You face a kneeling synth beneath branching current from a broken aperture.",
+      "actions": [
+        {
+          "label": "Accept the charge",
+          "resolution": "The discharge races through every waiting connection.",
+          "template_id": 66,
+          "template": "All cards in your deck become ❖ (fast)",
+          "variables": {},
+          "effect_text": "All cards in your deck become ❖ (fast)"
+        },
+        {
+          "label": "Overload the aperture",
+          "resolution": "The opening flares, then sheds a dark residue.",
+          "template_id": 65,
+          "template": "All cards in your deck are reduced in cost by 1●. Gain {count} \"Nightmare\" bane cards.",
+          "variables": {
+            "count": 3
+          },
+          "effect_text": "All cards in your deck are reduced in cost by 1●. Gain 3 \"Nightmare\" bane cards."
+        }
+      ],
+      "scores": {
+        "scene_quality": 10,
+        "action_quality": 9,
+        "mechanical_connection": 10,
+        "archetype_fit": 10,
+        "overall": 10
+      },
+      "rank": 1,
+      "ranking_rationale": "The branching discharge makes speed and dangerous overloading immediate consequences, while both outcomes strongly reward a reactive counterspell deck.",
+      "selected": true
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "Before you, a kneeling synth braces one hand beneath a crackling breach.",
+      "actions": [
+        {
+          "label": "Catch the descending arc",
+          "resolution": "A sharp pulse passes cleanly through your grasp.",
+          "template_id": 18,
+          "template": "Apply {transfiguration} to a chosen card",
+          "variables": {
+            "transfiguration": "Hastened"
+          },
+          "effect_text": "Apply Hastened to a chosen card"
+        },
+        {
+          "label": "Ground the surging ring",
+          "resolution": "The diverted charge settles into steadier channels.",
+          "template_id": 21,
+          "template": "Apply {transfiguration} to {count} chosen {predicate} cards",
+          "variables": {
+            "transfiguration": "Empowered",
+            "count": 2,
+            "predicate": "Event"
+          },
+          "effect_text": "Apply Empowered to 2 chosen Event cards"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "Direct contact with the unstable current convincingly hastens or empowers cards, and both improvements strengthen efficient interrupt play."
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "You watch branching current surround a synth kneeling inside the ruptured chamber.",
+      "actions": [
+        {
+          "label": "Read the branching current",
+          "resolution": "The arcs settle into a repeatable sequence.",
+          "template_id": 15,
+          "template": "Draft a {predicate} card from 4 random choices and gain {count} copies of it",
+          "variables": {
+            "predicate": "Event",
+            "count": 2
+          },
+          "effect_text": "Draft an Event card from 4 random choices and gain 2 copies of it"
+        },
+        {
+          "label": "Widen the aperture",
+          "resolution": "Distinct configurations gather across its luminous surface.",
+          "template_id": 36,
+          "template": "Choose one of 2 packs of {predicate} cards to add to your deck",
+          "variables": {
+            "predicate": "Event"
+          },
+          "effect_text": "Choose one of 2 packs of Event cards to add to your deck"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 8,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "The patterned discharge supports focused repetition or broader selection, with either route adding events to a reactive strategy."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "Before you, a kneeling synth guards their shoulder as electrical arcs descend.",
+      "actions": [
+        {
+          "label": "Stabilize the aperture",
+          "resolution": "Its jagged rim locks around a steady opening.",
+          "template_id": 44,
+          "template": "Add a transfiguration site to this dreamscape",
+          "variables": {},
+          "effect_text": "Add a transfiguration site to this dreamscape"
+        },
+        {
+          "label": "Retune the aperture",
+          "resolution": "The opening fills with orderly moving displays.",
+          "template_id": 42,
+          "template": "Add a card market site to this dreamscape",
+          "variables": {},
+          "effect_text": "Add a card market site to this dreamscape"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 7,
+        "overall": 9
+      },
+      "rank": 4,
+      "ranking_rationale": "The damaged aperture strongly grounds either new destination, though both route rewards support the source strategy only indirectly."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "You approach a kneeling synth framed by a fractured, sparking aperture.",
+      "actions": [
+        {
+          "label": "Study their construction",
+          "resolution": "The current carries one stable pattern outward.",
+          "template_id": 67,
+          "template": "All characters in your deck become the subtype of your choice.",
+          "variables": {},
+          "effect_text": "All characters in your deck become the subtype of your choice."
+        },
+        {
+          "label": "Submit to the surge",
+          "resolution": "The charge recasts several familiar forms.",
+          "template_id": 54,
+          "template": "Modify {count} random cards to become {card_type} cards",
+          "variables": {
+            "count": 2,
+            "card_type": "Event"
+          },
+          "effect_text": "Modify 2 random cards to become Event cards"
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 8,
+        "mechanical_connection": 7,
+        "archetype_fit": 9,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "The synth and surge support structural change, but the wholesale deck transformations require a broader causal leap than the higher-ranked designs."
+    }
+  ],
+  "764b62f6-6af9-40ad-8d1f-653cc1a11030": [
+    {
+      "template_pair_id": "pair-1",
+      "prose": "A cloaked warrior leans forward, raising a bright-emblemed standard through smoke.",
+      "actions": [
+        {
+          "label": "Answer the Raised Standard",
+          "resolution": "The standard snaps overhead in a clear summons.",
+          "template_id": 15,
+          "template": "Draft a {predicate} card from 4 random choices and gain {count} copies of it",
+          "variables": {
+            "predicate": "Warrior",
+            "count": 2
+          },
+          "effect_text": "Draft a Warrior card from 4 random choices and gain 2 copies of it"
+        },
+        {
+          "label": "Set the Marching Pace",
+          "resolution": "The warrior's torn cloak snaps hard behind them.",
+          "template_id": 66,
+          "template": "All cards in your deck become ❖ (fast)",
+          "variables": {},
+          "effect_text": "All cards in your deck become ❖ (fast)"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "The raised standard supports both recruitment and momentum with exceptional clarity while advancing a Warrior strategy.",
+      "selected": true
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "Smoke rolls over a hooded warrior hauling the marked standard uphill.",
+      "actions": [
+        {
+          "label": "Rally at the Crest",
+          "resolution": "The marked cloth cracks sharply over the ridge.",
+          "template_id": 36,
+          "template": "Choose one of 2 packs of {predicate} cards to add to your deck",
+          "variables": {
+            "predicate": "Warrior"
+          },
+          "effect_text": "Choose one of 2 packs of Warrior cards to add to your deck"
+        },
+        {
+          "label": "Charge Through the Smoke",
+          "resolution": "The warrior crests the incline as smoke clings behind.",
+          "template_id": 65,
+          "template": "All cards in your deck are reduced in cost by 1●. Gain {count} \"Nightmare\" bane cards.",
+          "variables": {
+            "count": 3
+          },
+          "effect_text": "All cards in your deck are reduced in cost by 1●. Gain 3 \"Nightmare\" bane cards."
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "The uphill charge strongly grounds a rally or risky acceleration, and both outcomes reward a character-heavy deck."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "A ragged-cloaked warrior bears an illuminated standard into thickening smoke.",
+      "actions": [
+        {
+          "label": "Replace the Banner Emblem",
+          "resolution": "The warrior strips one marking and paints another.",
+          "template_id": 61,
+          "template": "Purge a chosen card and gain a copy of another chosen card",
+          "variables": {},
+          "effect_text": "Purge a chosen card and gain a copy of another chosen card"
+        },
+        {
+          "label": "Declare an Order",
+          "resolution": "The warrior binds your chosen pattern beneath the emblem.",
+          "template_id": 67,
+          "template": "All characters in your deck become the subtype of your choice.",
+          "variables": {},
+          "effect_text": "All characters in your deck become the subtype of your choice."
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "Reworking the visible standard creates a focused deck-shaping choice with excellent strategic fit, though its consequences are more abstract."
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "A hooded warrior grips the standard beneath a smoke-ringed sun.",
+      "actions": [
+        {
+          "label": "Trace the Lit Emblem",
+          "resolution": "Its glow brightens across the rippling cloth.",
+          "template_id": 1,
+          "template": "Gain {essence} essence",
+          "variables": {
+            "essence": 250
+          },
+          "effect_text": "Gain 250 essence"
+        },
+        {
+          "label": "Face the Veiled Sun",
+          "resolution": "The standard catches the sun's full rim of light.",
+          "template_id": 68,
+          "template": "Double your current essence.",
+          "variables": {},
+          "effect_text": "Double your current essence."
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 7,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "The illuminated cloth grounds both resource choices vividly, but neither outcome specifically strengthens the source card's storage plan."
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "Against the steep slope, a shrouded warrior steadies a streaming banner.",
+      "actions": [
+        {
+          "label": "Repeat the Signal",
+          "resolution": "The warrior sweeps the standard overhead once more.",
+          "template_id": 41,
+          "template": "Add a duplication site to this dreamscape",
+          "variables": {},
+          "effect_text": "Add a duplication site to this dreamscape"
+        },
+        {
+          "label": "Ground the Standard",
+          "resolution": "Its shaft bites firmly into the bare incline.",
+          "template_id": 45,
+          "template": "Add a purge site to this dreamscape.",
+          "variables": {},
+          "effect_text": "Add a purge site to this dreamscape."
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 8,
+        "mechanical_connection": 7,
+        "archetype_fit": 7,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "The standard provides clear route-marking acts and useful flexibility, though the purge destination has the set's loosest causal bridge."
+    }
+  ],
+  "e26e0ac8-d6c9-4b0c-8672-4f73651f2586": [
+    {
+      "template_pair_id": "pair-1",
+      "prose": "A solitary man pauses on a gnarled bough beneath suspended lanterns.",
+      "actions": [
+        {
+          "label": "Offer Him an Exchange",
+          "resolution": "He accepts one keepsake and returns another.",
+          "template_id": 61,
+          "template": "Purge a chosen card and gain a copy of another chosen card",
+          "variables": {},
+          "effect_text": "Purge a chosen card and gain a copy of another chosen card"
+        },
+        {
+          "label": "Present a Written Charm",
+          "resolution": "He angles a lantern across the waiting script.",
+          "template_id": 19,
+          "template": "Apply {transfiguration} to $DECK_CARD",
+          "variables": {
+            "transfiguration": "Inspired"
+          },
+          "selection": {
+            "$DECK_CARD": {
+              "predicate": "Event"
+            }
+          },
+          "effect_text": "Apply Inspired to a random Event card from your current deck"
+        }
+      ],
+      "scores": {
+        "scene_quality": 10,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 10
+      },
+      "rank": 1,
+      "ranking_rationale": "Direct exchange and lantern-lit inscription closely bind both rewards to the keeper's visible role and the source card's filtering strategy.",
+      "selected": true
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "A man stands poised on twisting wood beneath rows of lanterns.",
+      "actions": [
+        {
+          "label": "Leave a Worn Token",
+          "resolution": "He knots it securely to a bare branch.",
+          "template_id": 32,
+          "template": "Purge $STARTER_CARD",
+          "variables": {},
+          "effect_text": "Purge a random starter card from your current deck"
+        },
+        {
+          "label": "Hand Him a Burden",
+          "resolution": "He balances its weight beneath the nearest glow.",
+          "template_id": 18,
+          "template": "Apply {transfiguration} to a chosen card",
+          "variables": {
+            "transfiguration": "Empowered"
+          },
+          "effect_text": "Apply Empowered to a chosen card"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "The poised figure plausibly accepts or improves possessions, making both deck-cleaning actions clear and strategically useful."
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "A slender traveler steps carefully along a branch strung with lanterns.",
+      "actions": [
+        {
+          "label": "Follow His Careful Footing",
+          "resolution": "Nearby branches fill with lightly stepping visitors.",
+          "template_id": 15,
+          "template": "Draft a {predicate} card from 4 random choices and gain {count} copies of it",
+          "variables": {
+            "predicate": "≤2● cost Character",
+            "count": 2
+          },
+          "effect_text": "Draft a ≤2● cost Character card from 4 random choices and gain 2 copies of it"
+        },
+        {
+          "label": "Accept His Selection",
+          "resolution": "He unhooks one lantern; its pattern repeats nearby.",
+          "template_id": 12,
+          "template": "Gain {count} copies of $OFFERED_CARD",
+          "variables": {
+            "count": 2
+          },
+          "effect_text": "Gain 2 copies of a random offered card from this event's card pool"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "Careful movement and repeated lantern patterns support recruitment and duplication, though the offered-card chain is less literal."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "Above tangled limbs, a lone man studies the hanging lanterns.",
+      "actions": [
+        {
+          "label": "Take His Descending Route",
+          "resolution": "The branch opens onto a lanterned trading terrace.",
+          "template_id": 42,
+          "template": "Add a card market site to this dreamscape",
+          "variables": {},
+          "effect_text": "Add a card market site to this dreamscape"
+        },
+        {
+          "label": "Take His Rising Route",
+          "resolution": "Higher boughs reveal a workshop under hanging lights.",
+          "template_id": 44,
+          "template": "Add a transfiguration site to this dreamscape",
+          "variables": {},
+          "effect_text": "Add a transfiguration site to this dreamscape"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 8,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "The branching route naturally leads to two useful destinations, with clear choices but a looser connection to card filtering."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "A man crosses the narrow bough amid rows of glowing lanterns.",
+      "actions": [
+        {
+          "label": "Keep Pace Beside Him",
+          "resolution": "He leads you where wares hang freely offered.",
+          "template_id": 56,
+          "template": "All items in the next shop you visit are free",
+          "variables": {},
+          "effect_text": "All items in the next shop you visit are free"
+        },
+        {
+          "label": "Walk Beneath His Lights",
+          "resolution": "Their glow settles over finely altered wares.",
+          "template_id": 37,
+          "template": "The next draft or shop site you visit will contain transfigured cards",
+          "variables": {},
+          "effect_text": "The next draft or shop site you visit will contain transfigured cards"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 7,
+        "archetype_fit": 8,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "Following the lanterned path convincingly changes the next market, though altered wares rely more heavily on dream logic."
+    }
+  ],
+  "123baf70-305a-4583-bdba-a10b5153fbeb": [
+    {
+      "template_pair_id": "pair-1",
+      "prose": "A masked soldier braces a long rifle amid smoke-darkened wreckage.",
+      "actions": [
+        {
+          "label": "Call for Reinforcements",
+          "resolution": "The soldier signals; armored figures answer through smoke.",
+          "template_id": 15,
+          "template": "Draft a {predicate} card from 4 random choices and gain {count} copies of it",
+          "variables": {
+            "predicate": "Survivor",
+            "count": 2
+          },
+          "effect_text": "Draft a Survivor card from 4 random choices and gain 2 copies of it"
+        },
+        {
+          "label": "Request Field Training",
+          "resolution": "Their practiced stance hardens one companion for battle.",
+          "template_id": 19,
+          "template": "Apply {transfiguration} to $DECK_CARD",
+          "variables": {
+            "transfiguration": "Kindled"
+          },
+          "selection": {
+            "$DECK_CARD": {
+              "predicate": "Survivor"
+            }
+          },
+          "effect_text": "Apply Kindled to a random Survivor card from your current deck"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "The clearest battlefield portrait supports two natural actions that directly strengthen the Survivor plan.",
+      "selected": true
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "An armored survivor advances through rubble, rifle held low and ready.",
+      "actions": [
+        {
+          "label": "Join the Rotation",
+          "resolution": "One sentry withdraws as a fresh recruit advances.",
+          "template_id": 7,
+          "template": "Purge a chosen {predicate} card and gain a random {predicate} replacement",
+          "variables": {
+            "predicate": "Survivor"
+          },
+          "effect_text": "Purge a chosen Survivor card and gain a random Survivor replacement"
+        },
+        {
+          "label": "Study Their Technique",
+          "resolution": "Their precise drill steadies two battle-worn companions.",
+          "template_id": 20,
+          "template": "Apply a transfiguration to {count} chosen {predicate} cards",
+          "variables": {
+            "count": 2,
+            "predicate": "Survivor"
+          },
+          "effect_text": "Apply a transfiguration to 2 chosen Survivor cards"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 9,
+        "archetype_fit": 9,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "The advancing soldier gives both rotation and instruction immediate physical credibility and strong Survivor utility."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "Rifle lowered, a masked soldier picks through heaps of ruined metal.",
+      "actions": [
+        {
+          "label": "Search the Wreckage",
+          "resolution": "Useful salvage glints beneath the soldier's careful hands.",
+          "template_id": 2,
+          "template": "Gain a random amount of essence between {essence1} and {essence2}",
+          "variables": {
+            "essence1": 100,
+            "essence2": 180
+          },
+          "effect_text": "Gain a random amount of essence between 100 and 180"
+        },
+        {
+          "label": "Open the Field Kit",
+          "resolution": "Spare fittings settle onto familiar battered equipment.",
+          "template_id": 24,
+          "template": "Transfigure {count} random starter cards",
+          "variables": {
+            "count": 2
+          },
+          "effect_text": "Transfigure 2 random starter cards"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 7,
+        "overall": 8
+      },
+      "rank": 3,
+      "ranking_rationale": "Concrete wreckage and field equipment anchor two useful rewards, though their deck-plan fit is broader."
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "A respirator hides the soldier's face as they cross twisted debris.",
+      "actions": [
+        {
+          "label": "Shed Unneeded Gear",
+          "resolution": "The soldier clears your load for the crossing.",
+          "template_id": 5,
+          "template": "Purge up to {count} chosen cards",
+          "variables": {
+            "count": 2
+          },
+          "effect_text": "Purge up to 2 chosen cards"
+        },
+        {
+          "label": "Rotate the Patrol",
+          "resolution": "They dismiss spent sentries and wave replacements forward.",
+          "template_id": 8,
+          "template": "Purge up to {count} chosen {predicate} cards and gain a random {predicate} replacement for each card purged",
+          "variables": {
+            "count": 2,
+            "predicate": "Survivor"
+          },
+          "effect_text": "Purge up to 2 chosen Survivor cards and gain a random Survivor replacement for each card purged"
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "The debris crossing makes load reduction tangible while the patrol choice preserves strong Survivor alignment."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "The soldier's patched armor and breathing mask catch the smoky light.",
+      "actions": [
+        {
+          "label": "Answer Their Signal",
+          "resolution": "Two organized squads emerge across the ruined ground.",
+          "template_id": 36,
+          "template": "Choose one of 2 packs of {predicate} cards to add to your deck",
+          "variables": {
+            "predicate": "Survivor"
+          },
+          "effect_text": "Choose one of 2 packs of Survivor cards to add to your deck"
+        },
+        {
+          "label": "Learn the Wasteland Drill",
+          "resolution": "Their disciplined signals pass through your assembled ranks.",
+          "template_id": 67,
+          "template": "All characters in your deck become the subtype of your choice.",
+          "variables": {},
+          "effect_text": "All characters in your deck become the subtype of your choice."
+        }
+      ],
+      "scores": {
+        "scene_quality": 8,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 9,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "Military signals connect both choices cleanly, but the broad subtype conversion is less visually specific."
+    }
+  ],
+  "e455225f-c444-44a2-8796-805cae2b755f": [
+    {
+      "template_pair_id": "pair-1",
+      "prose": "Before you, a witch extends both hands as stones hover around her.",
+      "actions": [
+        {
+          "label": "Trace the nearest stones",
+          "resolution": "Her fingers close; one formation sharpens.",
+          "template_id": 15,
+          "template": "Draft a {predicate} card from 4 random choices and gain {count} copies of it",
+          "variables": {
+            "predicate": "Event",
+            "count": 1
+          },
+          "effect_text": "Draft an Event card from 4 random choices and gain 1 copy of it"
+        },
+        {
+          "label": "Scatter the outer fragments",
+          "resolution": "Two fragments break away and remain aloft.",
+          "template_id": 52,
+          "template": "Gain one copy of each of {count} random {predicate} cards",
+          "variables": {
+            "count": 2,
+            "predicate": "Event"
+          },
+          "effect_text": "Gain one copy of each of 2 random Event cards"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 9,
+        "mechanical_connection": 9,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 1,
+      "ranking_rationale": "The hovering-stone formation supports two clear acts, while both rewards directly strengthen the event-heavy strategy.",
+      "selected": true
+    },
+    {
+      "template_pair_id": "pair-2",
+      "prose": "Wind buffets you while a witch suspends rock fragments between open hands.",
+      "actions": [
+        {
+          "label": "Entrust a recent deed",
+          "resolution": "A hovering shard gathers light along its edges.",
+          "template_id": 19,
+          "template": "Apply {transfiguration} to $DECK_CARD",
+          "variables": {
+            "transfiguration": "Inspired"
+          },
+          "selection": {
+            "$DECK_CARD": {
+              "predicate": "Event"
+            }
+          },
+          "effect_text": "Apply Inspired to a random Event card from your deck"
+        },
+        {
+          "label": "Turn both palms outward",
+          "resolution": "The loose stones wheel into a new arrangement.",
+          "template_id": 54,
+          "template": "Modify {count} random cards to become {card_type} cards",
+          "variables": {
+            "count": 2,
+            "card_type": "Event"
+          },
+          "effect_text": "Modify 2 random cards to become Event cards"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 2,
+      "ranking_rationale": "The charged fragments ground both transformations, and each option converts resources into more effective event play."
+    },
+    {
+      "template_pair_id": "pair-5",
+      "prose": "You approach a witch on broken ground, loose stones suspended between her hands.",
+      "actions": [
+        {
+          "label": "Study every arrangement",
+          "resolution": "Each formation holds briefly beneath her outstretched hands.",
+          "template_id": 16,
+          "template": "Take any number of {predicate} cards from 4 random choices",
+          "variables": {
+            "predicate": "Event"
+          },
+          "effect_text": "Take any number of Event cards from 4 random choices"
+        },
+        {
+          "label": "Turn the central fragment",
+          "resolution": "Its hidden face reveals another remembered scene.",
+          "template_id": 47,
+          "template": "Choose a card to purge and replace it with {card_id}",
+          "variables": {
+            "card_id": {
+              "id": "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+              "display_name": "Glimpse of What Was"
+            }
+          },
+          "effect_text": "Choose a card to purge and replace it with Glimpse of What Was"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 10,
+        "overall": 9
+      },
+      "rank": 3,
+      "ranking_rationale": "The distinct stone arrangements convey possibility and exchange, with unusually precise support for event density and foresight."
+    },
+    {
+      "template_pair_id": "pair-3",
+      "prose": "You watch a witch hold scattered stones motionless above the jagged ledge.",
+      "actions": [
+        {
+          "label": "Read the suspended pattern",
+          "resolution": "A clear mark emerges across rough stone.",
+          "template_id": 28,
+          "template": "Gain a random dreamsign",
+          "variables": {},
+          "effect_text": "Gain a random dreamsign"
+        },
+        {
+          "label": "Break the suspended pattern",
+          "resolution": "The stones drop as their gathered force disperses.",
+          "template_id": 62,
+          "template": "Purge a chosen dreamsign and gain {essence} essence",
+          "variables": {
+            "essence": 50
+          },
+          "effect_text": "Purge a chosen dreamsign and gain 50 essence"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 8,
+        "archetype_fit": 8,
+        "overall": 8
+      },
+      "rank": 4,
+      "ranking_rationale": "The held stone pattern supports reading or releasing an omen, though the rewards are less specifically tied to event play."
+    },
+    {
+      "template_pair_id": "pair-4",
+      "prose": "You find a witch with both hands poised amid floating rubble.",
+      "actions": [
+        {
+          "label": "Hold her pattern steady",
+          "resolution": "The fragments settle into mirrored formations.",
+          "template_id": 41,
+          "template": "Add a duplication site to this dreamscape",
+          "variables": {},
+          "effect_text": "Add a duplication site to this dreamscape"
+        },
+        {
+          "label": "Shift the stone pattern",
+          "resolution": "Broken pieces recombine beneath her outstretched hands.",
+          "template_id": 44,
+          "template": "Add a transfiguration site to this dreamscape",
+          "variables": {},
+          "effect_text": "Add a transfiguration site to this dreamscape"
+        }
+      ],
+      "scores": {
+        "scene_quality": 9,
+        "action_quality": 8,
+        "mechanical_connection": 7,
+        "archetype_fit": 7,
+        "overall": 8
+      },
+      "rank": 5,
+      "ranking_rationale": "The stonework gives both site choices concrete visual causality, but their strategic support is broad rather than card-specific."
+    }
   ]
 }
