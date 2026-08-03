@@ -87,6 +87,7 @@ export interface TutorialBattleStartConfiguration {
 export type TutorialTriggerEvent =
   | "card-seen"
   | "card-play"
+  | "card-no-valid-targets"
   | "dreamwell-resolve"
   | "figment-created";
 
@@ -99,6 +100,10 @@ export type TutorialTriggerMatcher =
   | {
       readonly kind: "card-type";
       readonly cardType: "event";
+    }
+  | {
+      readonly kind: "card-id";
+      readonly cardId: string;
     }
   | {
       readonly kind: "any";

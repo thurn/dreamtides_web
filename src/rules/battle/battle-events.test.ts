@@ -737,6 +737,84 @@ describe("BATTLE_PLAY_CARD", () => {
     expect(legal.state.battle?.board.sides.enemy.void).toContain("target");
   });
 
+  it("opens UUID-authored guidance when a targeted card is attempted without any legal targets", () => {
+    const cardUuid = "4408b942-09a0-4f4e-a403-10c708c6e3c5";
+    const flashpoint = makeInstance("flashpoint", cardUuid);
+    flashpoint.definition = {
+      ...flashpoint.definition,
+      battleCardKind: "event",
+      energyCost: 3,
+      printedEnergyCost: 3,
+    };
+    const board = makeRichBoard({
+      instances: [flashpoint],
+      playerHand: ["flashpoint"],
+    });
+    board.sides.player.currentEnergy = 3;
+    const state = inBattleState(
+      {},
+      battleFrom(board, {
+        init: makeInit({
+          tutorialTriggers: [{
+            id: "flashpoint-no-valid-targets",
+            on: ["card-no-valid-targets"],
+            priority: 10,
+            speaker: "mira",
+            duration: 4,
+            horizontalOffset: 0,
+            verticalOffset: 0,
+            bubbleWidth: 500,
+            match: { kind: "card-id", cardId: cardUuid },
+            text: "There are no valid targets for this card",
+          }],
+        }),
+      }),
+    );
+
+    const opened = reduce(state, "BATTLE_PLAY_CARD", {
+      battleCardId: "flashpoint",
+      targetBattleCardIds: [],
+    });
+
+    expect(opened.outcome).toBe("applied");
+    expect(opened.state.battle?.tutorialPresentation).toMatchObject({
+      kind: "tutorial-guidance",
+      source: {
+        kind: "card",
+        cardId: cardUuid,
+        battleCardId: "flashpoint",
+        side: "player",
+      },
+      messages: [{
+        triggerId: "flashpoint-no-valid-targets",
+        text: "There are no valid targets for this card",
+      }],
+      continuation: { kind: "commands", commands: [] },
+    });
+    expect(opened.state.tutorialTriggerIdsSeen).toEqual([
+      "flashpoint-no-valid-targets",
+    ]);
+    expect(hashBoard(opened.state.battle?.board ?? board)).toBe(hashBoard(board));
+
+    const completed = reduce(
+      opened.state,
+      "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
+      {
+        presentationId: opened.state.battle?.tutorialPresentation?.id,
+        messageIndex: 0,
+      },
+    );
+    expect(completed.outcome).toBe("applied");
+    expect(completed.state.battle?.tutorialPresentation).toBeNull();
+    expect(hashBoard(completed.state.battle?.board ?? board)).toBe(hashBoard(board));
+
+    const repeated = reduce(completed.state, "BATTLE_PLAY_CARD", {
+      battleCardId: "flashpoint",
+      targetBattleCardIds: [],
+    });
+    expect(repeated.outcome).toBe("bounced");
+  });
+
   it("enforces the exact battlefield targets for both target-requiring Starter UUIDs", () => {
     const flashpoint = makeInstance("flashpoint", "4408b942-09a0-4f4e-a403-10c708c6e3c5");
     flashpoint.definition = { ...flashpoint.definition, battleCardKind: "event", energyCost: 3, printedEnergyCost: 3 };

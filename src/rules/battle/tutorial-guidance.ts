@@ -7,6 +7,7 @@ import type { BattleCardKind } from "../../battle/types";
 
 export interface TutorialGuidanceMatchInput {
   readonly event: TutorialTriggerEvent;
+  readonly cardId?: string;
   readonly renderedText: string;
   readonly cardKind?: BattleCardKind;
   readonly seenTriggerIds: ReadonlySet<string>;
@@ -37,6 +38,8 @@ export function matchTutorialGuidance(
           return glossaryIds.has(trigger.match.id);
         case "card-type":
           return input.cardKind === trigger.match.cardType;
+        case "card-id":
+          return input.cardId === trigger.match.cardId;
         case "any":
           return true;
       }

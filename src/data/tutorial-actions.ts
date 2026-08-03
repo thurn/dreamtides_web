@@ -605,6 +605,7 @@ export function parseTutorialActions(
 const TUTORIAL_TRIGGER_EVENTS: ReadonlySet<TutorialTriggerEvent> = new Set([
   "card-seen",
   "card-play",
+  "card-no-valid-targets",
   "dreamwell-resolve",
   "figment-created",
 ]);
@@ -702,6 +703,13 @@ export function parseTutorialTriggers(
         );
       }
       parsedMatch = { kind: "card-type", cardType: "event" };
+    } else if (match.kind === "card-id") {
+      if (typeof match.cardId !== "string" || !isCardId(match.cardId)) {
+        throw new Error(
+          `Tutorial trigger ${JSON.stringify(record.id)} must use a card UUID.`,
+        );
+      }
+      parsedMatch = { kind: "card-id", cardId: match.cardId };
     } else if (match.kind === "any") {
       parsedMatch = { kind: "any" };
     } else {

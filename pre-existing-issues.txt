@@ -15,3 +15,8 @@ The PlayingCard suit-optics test required the compact diamond glyph to be
 larger than its rank after commit 089e3eeb configured that glyph to 80% scale.
 The overlapping test now verifies the configured scale directly without the
 stale size-direction assumption.
+
+Opening the `?goto=tutorial-battle` QA scene creates a hosted tutorial battle
+with no controller client. The tutorial battle hides its manual controls in
+that state and does not render a Take Control surface, so the direct QA scene
+cannot advance until a control event is supplied externally.

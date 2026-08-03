@@ -128,6 +128,7 @@ export function selectCardTutorialGuidance(
     if (card === undefined) continue;
     const matches = matchTutorialGuidance(provider.triggers, {
       event: "card-seen",
+      cardId: card.id,
       renderedText: card.renderedText,
       cardKind: card.cardType === "Event" ? "event" : "character",
       seenTriggerIds,

@@ -98,7 +98,10 @@ import {
 } from "../../battle/state/selectors";
 import { hasTemporaryReclaimEligibility } from "./temporary-effects";
 import { planTutorialCharacterReposition } from "./tutorial-reposition";
-import type { TutorialAction } from "../../types/tutorial";
+import type {
+  TutorialAction,
+  TutorialTriggerEvent,
+} from "../../types/tutorial";
 import {
   consumeTutorialAiActionOverride,
   resolveTutorialAiPlayCardOverride,
@@ -107,6 +110,10 @@ import {
   isBattleCardSemanticPlayAutomated,
   semanticPlayTargetsAreLegal,
 } from "../../battle/semantic-play";
+import {
+  selectStarterCardLegalTargetIds,
+  starterCardRequiresTarget,
+} from "../../battle/starter-card-targets";
 import { TUTORIAL_DREAM_AVATAR_ID } from "../../data/tutorial-cards";
 import { resetJourney } from "../journey/lifecycle";
 import {
@@ -632,7 +639,7 @@ const DISCOVER_CHARACTER_SCRIPT_IDS = new Set<string>([
 function openTutorialGuidance(
   state: FoldState,
   battle: BattleFoldState,
-  event: "card-play" | "dreamwell-resolve" | "figment-created",
+  event: TutorialTriggerEvent,
   source: TutorialGuidanceSource,
   renderedText: string,
   cardKind: "character" | "event" | undefined,
@@ -641,6 +648,7 @@ function openTutorialGuidance(
   const seen = new Set(state.tutorialTriggerIdsSeen ?? []);
   const matches = matchTutorialGuidance(battle.init.tutorialTriggers ?? [], {
     event,
+    cardId: source.cardId,
     renderedText,
     cardKind,
     seenTriggerIds: seen,
@@ -1335,9 +1343,37 @@ function battlePlayCardInternal(
     (intent.tutorialAiActionOverrideId !== null && scriptedOverride === null) ||
     before.activeSide !== instance.controller ||
     before.phase !== "day" || instance.definition.isFast ||
-    before.sides[instance.controller].currentEnergy < instance.definition.energyCost ||
-    !semanticPlayTargetsAreLegal(before, instance.controller, instance.definition.cardId, intent.targetBattleCardIds)
+    before.sides[instance.controller].currentEnergy < instance.definition.energyCost
   ) return null;
+  const targetsAreLegal = semanticPlayTargetsAreLegal(
+    before,
+    instance.controller,
+    instance.definition.cardId,
+    intent.targetBattleCardIds,
+  );
+  if (!targetsAreLegal) {
+    const attemptedWithNoAvailableTargets =
+      !suppressGuidance &&
+      intent.targetBattleCardIds.length === 0 &&
+      starterCardRequiresTarget(instance.definition.cardId) &&
+      selectStarterCardLegalTargetIds(before, intent.battleCardId).length === 0;
+    if (!attemptedWithNoAvailableTargets) return null;
+    return openTutorialGuidance(
+      state,
+      battle,
+      "card-no-valid-targets",
+      {
+        kind: "card",
+        cardId: instance.definition.cardId,
+        battleCardId: intent.battleCardId,
+        cardKind: instance.definition.battleCardKind,
+        side: instance.controller,
+      },
+      instance.definition.renderedText,
+      instance.definition.battleCardKind,
+      { kind: "commands", commands: [] },
+    );
+  }
 
   const character = instance.definition.battleCardKind === "character";
   let destination: import("../../battle/debug/commands").BattleDebugZoneDestination;

@@ -850,6 +850,32 @@ describe("parseTutorialActions", () => {
       ]),
     ).toThrow(/delay must reference one of its trigger events/u);
   });
+
+  it("parses a UUID-matched no-valid-targets trigger", () => {
+    const cardId = "4408b942-09a0-4f4e-a403-10c708c6e3c5";
+    expect(
+      parseTutorialTriggers([{
+        id: "flashpoint-no-valid-targets",
+        on: ["card-no-valid-targets"],
+        priority: 10,
+        duration: 4,
+        bubbleWidth: 500,
+        match: { kind: "card-id", cardId },
+        text: "There are no valid targets for this card",
+      }]),
+    ).toEqual([{
+      id: "flashpoint-no-valid-targets",
+      on: ["card-no-valid-targets"],
+      priority: 10,
+      speaker: "mira",
+      duration: 4,
+      horizontalOffset: 0,
+      verticalOffset: 0,
+      bubbleWidth: 500,
+      match: { kind: "card-id", cardId },
+      text: "There are no valid targets for this card",
+    }]);
+  });
 });
 
 describe("parseTutorialDreamscapeConfiguration", () => {

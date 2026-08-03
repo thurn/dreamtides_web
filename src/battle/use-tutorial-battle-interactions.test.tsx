@@ -307,7 +307,7 @@ describe("useTutorialBattleInteractions", () => {
     act(() => root.unmount());
   });
 
-  it("does not open target selection for a required-target UUID with no legal target", () => {
+  it("submits a click attempt for shared guidance when a required-target UUID has no legal target", () => {
     mocks.state = stateWithoutLegalEventTarget();
     const root = mount();
 
@@ -317,7 +317,61 @@ describe("useTutorialBattleInteractions", () => {
 
     expect(latest?.interactions.targetSelectionCardId).toBeNull();
     expect(latest?.interactions.targetableCardIds).toEqual([]);
-    expect(mocks.battlePlayCard).not.toHaveBeenCalled();
+    expect(mocks.battlePlayCard).toHaveBeenCalledWith(
+      PLAYER_INSTANCE_ID,
+      [],
+      `tutorial-battle:tutorial-battle-uuid:no-valid-targets:${PLAYER_INSTANCE_ID}`,
+    );
+    expect(getLogEntries()).toContainEqual(
+      expect.objectContaining({
+        event: "tutorial_battle_human_intent_requested",
+        kind: "target-selection-unavailable",
+        battleCardId: PLAYER_INSTANCE_ID,
+        definitionId: REQUIRED_ENEMY_TARGET_EVENT_UUID,
+        input: "click",
+        legalTargetCount: 0,
+      }),
+    );
+
+    act(() => root.unmount());
+  });
+
+  it("submits a drag attempt for shared guidance when a required-target UUID has no legal target", () => {
+    mocks.state = stateWithoutLegalEventTarget();
+    const root = mount();
+
+    act(() => {
+      latest?.interactions.onCardDragStart(
+        PLAYER_INSTANCE_ID,
+        "near-hand",
+      );
+    });
+    expect(latest?.interactions.pendingCardId).toBe(PLAYER_INSTANCE_ID);
+
+    act(() => {
+      latest?.interactions.onHandCardDrop?.({
+        owner: "player",
+        rank: "back",
+        slotId: "B2",
+      });
+    });
+
+    expect(mocks.battlePlayCard).toHaveBeenCalledWith(
+      PLAYER_INSTANCE_ID,
+      [],
+      `tutorial-battle:tutorial-battle-uuid:no-valid-targets:${PLAYER_INSTANCE_ID}`,
+    );
+    expect(latest?.interactions.pendingCardId).toBeNull();
+    expect(getLogEntries()).toContainEqual(
+      expect.objectContaining({
+        event: "tutorial_battle_human_intent_requested",
+        kind: "target-selection-unavailable",
+        battleCardId: PLAYER_INSTANCE_ID,
+        definitionId: REQUIRED_ENEMY_TARGET_EVENT_UUID,
+        input: "drag",
+        legalTargetCount: 0,
+      }),
+    );
 
     act(() => root.unmount());
   });

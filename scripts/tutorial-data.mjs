@@ -35,6 +35,7 @@ const DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
 const TUTORIAL_TRIGGER_EVENTS = new Set([
   "card-seen",
   "card-play",
+  "card-no-valid-targets",
   "dreamwell-resolve",
   "figment-created",
 ]);
@@ -752,6 +753,12 @@ export function validateTutorialTriggers(value) {
       normalizedMatch = { kind: "glossary", id: match.id };
     } else if (match.kind === "card-type" && match.cardType === "event") {
       normalizedMatch = { kind: "card-type", cardType: "event" };
+    } else if (
+      match.kind === "card-id" &&
+      typeof match.cardId === "string" &&
+      CARD_UUID_PATTERN.test(match.cardId)
+    ) {
+      normalizedMatch = { kind: "card-id", cardId: match.cardId };
     } else if (match.kind === "any") {
       normalizedMatch = { kind: "any" };
     } else {

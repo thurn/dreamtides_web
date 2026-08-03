@@ -211,6 +211,24 @@ export function useTutorialBattleInteractions(
       ...detail,
     });
   }, [board, clientId]);
+  const submitUnavailableTargetAttempt = useCallback((
+    battleCardId: string,
+    definitionId: string,
+    input: "click" | "drag",
+  ): void => {
+    if (board === null) return;
+    logIntent("target-selection-unavailable", {
+      battleCardId,
+      definitionId,
+      input,
+      legalTargetCount: 0,
+    });
+    void actions.battlePlayCard(
+      battleCardId,
+      [],
+      `tutorial-battle:${board.battleId}:no-valid-targets:${battleCardId}`,
+    ).catch(() => undefined);
+  }, [actions, board, logIntent]);
   const submitMovement = useCallback((
     kind: "move-card" | "swap-battlefield-slots",
     attemptId: string,
@@ -387,11 +405,11 @@ export function useTutorialBattleInteractions(
         const legalTargetIds =
           selectStarterCardLegalTargetIds(board, battleCardId);
         if (legalTargetIds.length === 0) {
-          logIntent("target-selection-unavailable", {
+          submitUnavailableTargetAttempt(
             battleCardId,
             definitionId,
-            legalTargetCount: 0,
-          });
+            "click",
+          );
           return;
         }
         setTargetingCardId(battleCardId);
@@ -450,12 +468,11 @@ export function useTutorialBattleInteractions(
         const legalTargetIds =
           selectStarterCardLegalTargetIds(board, battleCardId);
         if (legalTargetIds.length === 0) {
-          logIntent("target-selection-unavailable", {
+          submitUnavailableTargetAttempt(
             battleCardId,
             definitionId,
-            input: "drag",
-            legalTargetCount: 0,
-          });
+            "drag",
+          );
           setPendingCard(null);
           return;
         }
@@ -601,7 +618,7 @@ export function useTutorialBattleInteractions(
     onCardPickerSubmit: (chosenIds) => resolvePrompt({ kind: "pick-cards", chosenIds: [...chosenIds] }),
     onCardPickerSkip: () => resolvePrompt({ kind: "pick-cards", chosenIds: [] }),
     onChoicePromptChoose: (optionIndex) => resolvePrompt({ kind: "choice", optionIndex }),
-  }), [actions, board, canAct, clientId, isSlotDropEligible, logIntent, logMovementDropResolution, pendingCard, reportMovementRejection, resolvePrompt, submitMovement, targetableCardIds, targetingCardId]);
+  }), [actions, board, canAct, clientId, isSlotDropEligible, logIntent, logMovementDropResolution, pendingCard, reportMovementRejection, resolvePrompt, submitMovement, submitUnavailableTargetAttempt, targetableCardIds, targetingCardId]);
   return {
     interactions,
     confirmedPromptId,

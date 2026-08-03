@@ -97,6 +97,35 @@ describe("matchTutorialGuidance", () => {
     });
     expect(secondMatches.map((match) => match.id)).toEqual(["erode"]);
   });
+
+  it("matches a card-specific trigger by UUID", () => {
+    const cardId = "4408b942-09a0-4f4e-a403-10c708c6e3c5";
+    const matches = matchTutorialGuidance(
+      [{
+        id: "flashpoint-no-valid-targets",
+        on: ["card-no-valid-targets"],
+        priority: 10,
+        speaker: "mira",
+        duration: 4,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 500,
+        match: { kind: "card-id", cardId },
+        text: "There are no valid targets for this card",
+      }],
+      {
+        event: "card-no-valid-targets",
+        cardId,
+        renderedText: "Dissolve a low-cost enemy.",
+        cardKind: "event",
+        seenTriggerIds: new Set(),
+      },
+    );
+
+    expect(matches.map((match) => match.id)).toEqual([
+      "flashpoint-no-valid-targets",
+    ]);
+  });
 });
 
 describe("tutorial trigger coverage", () => {
