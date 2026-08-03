@@ -103,7 +103,7 @@ function calloutPosition(
   const bottom =
     annotation.feature === "cardType"
       ? isDesktop
-        ? "16%"
+        ? "22%"
         : "14%"
       : isDesktop
         ? "18%"
