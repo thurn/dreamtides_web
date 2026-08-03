@@ -16,6 +16,7 @@ SCRIPTS_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPTS_DIR.parent
 GENERATOR = SCRIPTS_DIR / "generate-exploration-input.py"
 VALIDATOR = SCRIPTS_DIR / "validate-exploration.py"
+CANDIDATE_LISTER = SCRIPTS_DIR / "list-template-candidates.py"
 TEMPLATE_CATALOG = SCRIPTS_DIR.parents[3] / "data/templates.json"
 
 
@@ -85,6 +86,153 @@ subtype = ""
             self.assertEqual(event.returncode, 0, event.stderr)
             self.assertEqual(json.loads(character.stdout)["card"]["card_type"], "Character")
             self.assertEqual(json.loads(event.stdout)["card"]["card_type"], "Event")
+
+
+class ListTemplateCandidatesTests(unittest.TestCase):
+    def run_lister(
+        self,
+        templates: list[dict[str, object]],
+        card_template_uses: list[list[int]],
+        required_template_count: int = 2,
+    ) -> subprocess.CompletedProcess[str]:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            catalog_path = root / "templates.json"
+            catalog_path.write_text(json.dumps(templates), encoding="utf-8")
+            candidates_path = root / "encounter_candidates.json"
+            candidates = [
+                {
+                    "card_id": f"synthetic-card-{card_index}",
+                    "encounters": [
+                        {
+                            "actions": [
+                                {"template_id": template_id}
+                                for template_id in template_uses
+                            ]
+                        }
+                    ],
+                }
+                for card_index, template_uses in enumerate(card_template_uses)
+            ]
+            candidates_path.write_text(json.dumps(candidates), encoding="utf-8")
+            return subprocess.run(
+                [
+                    sys.executable,
+                    str(CANDIDATE_LISTER),
+                    "--template-catalog",
+                    str(catalog_path),
+                    "--encounter-candidates",
+                    str(candidates_path),
+                    "--required-template-count",
+                    str(required_template_count),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+    @staticmethod
+    def synthetic_templates(count: int) -> list[dict[str, object]]:
+        return [
+            {"template_id": index, "template": f"Synthetic template {index}"}
+            for index in range(1, count + 1)
+        ]
+
+    def test_prints_all_templates_when_no_usage_exists(self) -> None:
+        result = self.run_lister(self.synthetic_templates(4), [])
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        output = json.loads(result.stdout)
+        self.assertEqual(
+            [entry["template_id"] for entry in output["templates"]],
+            [1, 2, 3, 4],
+        )
+        self.assertEqual(output["balance"]["soft_warnings"], [])
+        self.assertEqual(output["balance"]["omitted_templates"], [])
+
+    def test_warns_then_omits_above_the_least_used_template(self) -> None:
+        templates = self.synthetic_templates(6)
+        templates[-1]["template"] = "Gain $SYNTHETIC_CARD"
+        result = self.run_lister(templates, [[1, 1, 1, 2, 2, 3]])
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        output = json.loads(result.stdout)
+        balance = output["balance"]
+        self.assertEqual(balance["mean_uses_per_template"], 1.0)
+        self.assertEqual(balance["minimum_uses_per_template"], 0)
+        self.assertEqual(balance["soft_warning_threshold"], 1)
+        self.assertEqual(balance["omission_threshold"], 2)
+        self.assertEqual(
+            balance["soft_warnings"], [{"template_id": 3, "usage_count": 1}]
+        )
+        self.assertEqual(
+            balance["omitted_templates"],
+            [
+                {"template_id": 1, "usage_count": 3},
+                {"template_id": 2, "usage_count": 2},
+            ],
+        )
+        self.assertEqual(
+            [entry["template_id"] for entry in output["templates"]],
+            [4, 5, 6, 3],
+        )
+        self.assertEqual(output["special_variables"], ["$SYNTHETIC_CARD"])
+
+    def test_retains_minimum_candidate_pool_under_extreme_skew(self) -> None:
+        result = self.run_lister(
+            self.synthetic_templates(12),
+            [[template_id for template_id in range(1, 10) for _ in range(8)]],
+            required_template_count=10,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        output = json.loads(result.stdout)
+        self.assertEqual(len(output["templates"]), 10)
+        self.assertEqual(
+            [
+                entry["template_id"]
+                for entry in output["balance"][
+                    "reintroduced_to_preserve_minimum_pool"
+                ]
+            ],
+            [1, 2, 3, 4, 5, 6, 7],
+        )
+        self.assertEqual(
+            output["balance"]["omitted_templates"],
+            [
+                {"template_id": 8, "usage_count": 8},
+                {"template_id": 9, "usage_count": 8},
+            ],
+        )
+
+    def test_scales_balance_thresholds_at_one_hundred_cards(self) -> None:
+        template_uses = [(index % 70) + 1 for index in range(1000)]
+        template_uses[19] = 1
+        cards = [
+            template_uses[index : index + 10]
+            for index in range(0, len(template_uses), 10)
+        ]
+        result = self.run_lister(
+            self.synthetic_templates(70), cards, required_template_count=10
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        output = json.loads(result.stdout)
+        balance = output["balance"]
+        self.assertEqual(balance["completed_cards"], 100)
+        self.assertEqual(balance["recorded_template_uses"], 1000)
+        self.assertEqual(balance["mean_uses_per_template"], 14.286)
+        self.assertEqual(balance["minimum_uses_per_template"], 14)
+        self.assertEqual(balance["soft_warning_threshold"], 15)
+        self.assertEqual(balance["omission_threshold"], 16)
+        self.assertEqual(
+            balance["omitted_templates"],
+            [{"template_id": 1, "usage_count": 16}],
+        )
+        self.assertEqual(
+            [warning["template_id"] for warning in balance["soft_warnings"]],
+            list(range(2, 20)),
+        )
 
 
 class ValidateExplorationTests(unittest.TestCase):

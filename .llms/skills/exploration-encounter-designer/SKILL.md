@@ -29,7 +29,7 @@ For normal operation, require one JSON request containing the canonical
 `card` object defined by
 [`references/contracts.md`](references/contracts.md). The caller does not
 supply authoritative template pairs. If `template_pairs` are present, set them
-aside and build a fresh selection from the canonical template catalog. Read
+aside and build a fresh selection from the balanced candidate catalog. Read
 [`references/contracts.md`](references/contracts.md) before designing or
 validating an encounter.
 
@@ -40,7 +40,7 @@ structural, stylistic, or quality-boundary illustration only. Documentation
 does not nominate any mechanical option. Do not copy or favor a documented
 prose line, action label, resolution, predicate, value, template, pairing,
 card, or dreamsign. Derive every design-specific choice from the supplied card,
-viewed artwork, canonical data, economy, and complete template catalog at the
+viewed artwork, canonical data, economy, and complete candidate catalog at the
 workflow stage assigned to it. In particular, never convert placeholders or
 sentinel values in `references/contracts.md` into design defaults.
 
@@ -130,8 +130,8 @@ and any restriction. It must not describe the source card as the selected
 target. No completed `effect_text` may contain a literal `$SPECIAL_VARIABLE`
 token.
 
-After opening the canonical catalog in workflow step 9, enumerate every
-`$SPECIAL_VARIABLE` it contains. If the catalog contains a token not defined in
+After generating the candidate catalog in workflow step 9, inspect every
+`$SPECIAL_VARIABLE` reported by the script. If it reports a token not defined in
 this section, stop and report the documentation gap instead of inferring its
 meaning.
 
@@ -338,14 +338,33 @@ commentary.
    depicted world's narrative affordances and the card's strategic affordances
    without consulting a template.
 
-9. Only now read the complete canonical catalog at
-   `data/templates.json`. Treat template selection as
-   the final preparatory step before writing actions and populating effects.
-   Review the whole catalog before committing; do not stop after finding the
-   first ten plausible entries.
+9. Only now generate the balanced candidate catalog for this run:
 
-10. Shortlist templates by testing each against the frozen scene bank and deck
-    intent:
+   ```bash
+   python3 .llms/skills/exploration-encounter-designer/scripts/list-template-candidates.py
+   ```
+
+   Do not open `data/templates.json` directly. The script reads the canonical
+   catalog and current usage in `data/encounter_candidates.json`, then prints
+   the complete selectable `templates` list for this run. Review every returned
+   template before committing; do not stop after finding the first ten
+   plausible entries.
+
+   Read the `balance` metadata before selecting. A template in
+   `soft_warnings` remains selectable, but prefer an unflagged template when it
+   fits the scene and deck intent comparably well. Entries in
+   `omitted_templates` are diagnostic IDs, not candidates; do not select them or
+   reopen the raw catalog to recover them. The script orders candidates from
+   least used to most used, warns at one use above the current least-used
+   template, and temporarily omits at two uses above that low-water mark. This
+   keeps template use advancing in balanced rounds. If an extremely skewed data
+   set would leave fewer than ten choices, the script restores the least-used
+   omitted entries and lists them in
+   `reintroduced_to_preserve_minimum_pool`; treat each restored entry as
+   strongly discouraged but available when necessary.
+
+10. Shortlist returned candidate templates by testing each against the frozen
+    scene bank and deck intent:
     - **Scene-grounded causality:** Imagine a 2–5 word act and immediate world
       response that make the effect follow naturally from something the player
       can engage with in the depicted scene.
@@ -366,11 +385,12 @@ commentary.
     flame, speed into motion, or random rewards into visible fragments. Prefer
     mechanics supported by plausible interaction and consequence.
 
-11. Choose exactly ten distinct `template_id` values and arrange them as five
-    ordered pairs of two. Form each pair around one frozen scene that can support
-    two comparably credible ways of engaging with it. The choices should differ
-    in purpose, cost, risk, flexibility, or deck-building role without one being
-    strictly dominant. Optimize the weaker action chain in each pair.
+11. Choose exactly ten distinct returned `template_id` values and arrange them
+    as five ordered pairs of two. Form each pair around one frozen scene that
+    can support two comparably credible ways of engaging with it. The choices
+    should differ in purpose, cost, risk, flexibility, or deck-building role
+    without one being strictly dominant. Optimize the weaker action chain in
+    each pair.
 
     Do not force category diversity: repeated mechanical families are
     acceptable when independently best. Template IDs may not repeat anywhere in
