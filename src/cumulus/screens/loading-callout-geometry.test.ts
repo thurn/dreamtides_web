@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { buildLoadingCalloutLeaderLine } from "./loading-callout-geometry";
 
 describe("buildLoadingCalloutLeaderLine", () => {
-  it("starts at the bubble edge and ends at the exact target center", () => {
+  it("connects a left callout to the target's left edge", () => {
     const line = buildLoadingCalloutLeaderLine(
       { left: 100, top: 50, right: 600, bottom: 650, width: 500, height: 600 },
       { left: 120, top: 140, right: 220, bottom: 188, width: 100, height: 48 },
@@ -12,13 +12,13 @@ describe("buildLoadingCalloutLeaderLine", () => {
     expect(line).toMatchObject({
       startX: 120,
       startY: 118,
-      endX: 178,
+      endX: 160,
       endY: 118,
     });
-    expect(line.path.endsWith("L 178 118")).toBe(true);
+    expect(line.path.endsWith("L 160 118")).toBe(true);
   });
 
-  it("uses the bubble's left edge when the callout sits right of the target", () => {
+  it("connects a right callout to the target's right edge", () => {
     const line = buildLoadingCalloutLeaderLine(
       { left: 0, top: 0, right: 500, bottom: 600, width: 500, height: 600 },
       { left: 380, top: 80, right: 480, bottom: 128, width: 100, height: 48 },
@@ -26,7 +26,7 @@ describe("buildLoadingCalloutLeaderLine", () => {
     );
 
     expect(line.startX).toBe(380);
-    expect(line.endX).toBe(350);
+    expect(line.endX).toBe(370);
     expect(line.endY).toBe(90);
   });
 
@@ -39,5 +39,6 @@ describe("buildLoadingCalloutLeaderLine", () => {
 
     expect(line.startY).toBe(208);
     expect(line.endY).toBe(160);
+    expect(line.path.endsWith("L 192 160 L 200 160")).toBe(true);
   });
 });

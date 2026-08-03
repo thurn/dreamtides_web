@@ -16,6 +16,7 @@ export interface LoadingCalloutLeaderLine {
 }
 
 const BUBBLE_EDGE_INSET = 8;
+const TARGET_APPROACH_RUN = 8;
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
@@ -26,7 +27,7 @@ function rounded(value: number): number {
 }
 
 /**
- * Connect one external callout bubble to the exact center of a rendered card
+ * Connect one external callout bubble to the facing edge of a rendered card
  * feature. Coordinates are returned relative to the annotated-card group.
  */
 export function buildLoadingCalloutLeaderLine(
@@ -34,10 +35,11 @@ export function buildLoadingCalloutLeaderLine(
   bubble: LoadingCalloutRect,
   target: LoadingCalloutRect,
 ): LoadingCalloutLeaderLine {
-  const targetX = target.left + target.width / 2;
   const targetY = target.top + target.height / 2;
   const bubbleCenterX = bubble.left + bubble.width / 2;
-  const startsOnRight = bubbleCenterX < targetX;
+  const targetCenterX = target.left + target.width / 2;
+  const startsOnRight = bubbleCenterX < targetCenterX;
+  const targetX = startsOnRight ? target.left : target.right;
   const startX = startsOnRight ? bubble.right : bubble.left;
   const startY = clamp(
     targetY,
@@ -48,15 +50,23 @@ export function buildLoadingCalloutLeaderLine(
   const relativeStartY = rounded(startY - group.top);
   const relativeEndX = rounded(targetX - group.left);
   const relativeEndY = rounded(targetY - group.top);
-  const elbowX = rounded(
-    relativeStartX + (relativeEndX - relativeStartX) * 0.45,
+  const approachRun = Math.min(
+    TARGET_APPROACH_RUN,
+    Math.abs(relativeEndX - relativeStartX) / 2,
   );
+  const approachX = rounded(
+    relativeEndX + (startsOnRight ? -approachRun : approachRun),
+  );
+  const path =
+    relativeStartY === relativeEndY
+      ? `M ${String(relativeStartX)} ${String(relativeStartY)} L ${String(relativeEndX)} ${String(relativeEndY)}`
+      : `M ${String(relativeStartX)} ${String(relativeStartY)} L ${String(approachX)} ${String(relativeStartY)} L ${String(approachX)} ${String(relativeEndY)} L ${String(relativeEndX)} ${String(relativeEndY)}`;
 
   return {
     startX: relativeStartX,
     startY: relativeStartY,
     endX: relativeEndX,
     endY: relativeEndY,
-    path: `M ${String(relativeStartX)} ${String(relativeStartY)} L ${String(elbowX)} ${String(relativeStartY)} L ${String(relativeEndX)} ${String(relativeEndY)}`,
+    path,
   };
 }

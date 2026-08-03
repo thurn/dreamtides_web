@@ -79,12 +79,6 @@ const WORLDS_AWAIT_ANNOTATIONS: readonly AnnotationSpec[] = [
   },
 ];
 
-function annotationColor(feature: CardFeatureCalloutKind): string {
-  if (feature === "cost") return token("--energy");
-  if (feature === "spark") return token("--spark");
-  return token("--text-on-glass");
-}
-
 function lineSetsMatch(
   first: readonly MeasuredAnnotation[],
   second: readonly MeasuredAnnotation[],
@@ -247,20 +241,16 @@ function AnnotatedLoadingCard({
         {lines.map((line) => (
           <g key={line.feature} data-loading-callout-line={line.feature}>
             <path
+              data-loading-callout-endpoint={line.feature}
+              data-loading-callout-end-x={line.endX}
+              data-loading-callout-end-y={line.endY}
               d={line.path}
               fill="none"
               stroke={token("--text-on-glass-muted")}
               strokeWidth="2"
-              strokeLinecap="round"
+              strokeLinecap="butt"
               strokeLinejoin="round"
               vectorEffect="non-scaling-stroke"
-            />
-            <circle
-              data-loading-callout-endpoint={line.feature}
-              cx={line.endX}
-              cy={line.endY}
-              r="4"
-              fill={annotationColor(line.feature)}
             />
           </g>
         ))}
