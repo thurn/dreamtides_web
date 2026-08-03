@@ -10,11 +10,13 @@ import type {
   EncounterEditorClient,
   EncounterEditorGroup,
   EncounterSelectionSaveRequest,
+  EncounterTemplateSaveRequest,
   EncounterTemplateHealth,
   EncounterTextSaveRequest,
 } from "./encounter-editor-types";
 
 const CARD_ID = "11111111-1111-4111-8111-111111111111";
+const OTHER_CARD_ID = "22222222-2222-4222-8222-222222222222";
 let scrollIntoView = vi.fn<(arg?: boolean | ScrollIntoViewOptions) => void>();
 
 function candidate(rank: number, selected = false): EncounterEditorCandidate {
@@ -23,8 +25,12 @@ function candidate(rank: number, selected = false): EncounterEditorCandidate {
     prose: `Prose for rank ${String(rank)}`,
     actions: [1, 2].map((templateId) => ({
       template_id: templateId,
+      template: templateId === 1 ? "Draw {count} cards" : "Gain $OFFERED_CARD",
+      rendered_template: templateId === 1
+        ? `Draw ${String(rank)} cards`
+        : "Gain $OFFERED_CARD",
+      variables: templateId === 1 ? { count: rank } : {},
       label: `Rank ${String(rank)} label ${String(templateId)}`,
-      effect_text: `Rank ${String(rank)} effect ${String(templateId)}`,
       resolution: `Rank ${String(rank)} resolution ${String(templateId)}`,
     })) as EncounterEditorCandidate["actions"],
     rank,
@@ -75,6 +81,7 @@ function client(overrides: Partial<EncounterEditorClient> = {}): EncounterEditor
     load: vi.fn().mockResolvedValue(structuredClone(GROUPS)),
     loadTemplateHealth: vi.fn().mockResolvedValue(structuredClone(TEMPLATE_HEALTH)),
     saveSelection: vi.fn(),
+    saveTemplate: vi.fn(),
     saveText: vi.fn(),
     ...overrides,
   };
@@ -126,7 +133,8 @@ describe("EncounterEditorApp", () => {
     expect(container.textContent).not.toContain("Choice 1");
     expect(container.textContent).toContain("Prose for rank 1");
     expect(container.textContent).toContain("Rank 1 label 1");
-    expect(container.textContent).toContain("Rank 1 effect 1");
+    expect(container.textContent).toContain("Draw 1 cards");
+    expect(container.textContent).toContain("Gain $OFFERED_CARD");
     expect(container.textContent).toContain("Rank 1 resolution 1");
     expect(container.textContent).not.toContain("Prose for rank 2");
     expect(container.querySelector(".encounter-editor-card-ability")?.textContent)
@@ -279,6 +287,67 @@ describe("EncounterEditorApp", () => {
       clientRevision: 3,
     });
     expect(container.textContent).toContain("A newly written encounter.");
+    act(() => root.unmount());
+  });
+
+  it("displays substituted templates, edits canonical template text, and refreshes every use", async () => {
+    const saveTemplate = vi.fn().mockImplementation((request: EncounterTemplateSaveRequest) => {
+      const groups = structuredClone(GROUPS);
+      for (const encounter of groups[0].encounters) {
+        const action = encounter.actions[0];
+        action.template = request.value;
+        action.rendered_template = request.value.replace("{count}", String(encounter.rank));
+      }
+      return Promise.resolve({
+        clientRevision: request.clientRevision,
+        confirmation: { templateId: request.templateId, template: request.value },
+        groups,
+      });
+    });
+    const { container, root } = await renderLoaded(client({ saveTemplate }));
+    expect(container.textContent).toContain("Draw 1 cards");
+    act(() => {
+      container.querySelector<HTMLElement>("[data-editor-field='template']")!.click();
+    });
+    const textarea = container.querySelector<HTMLTextAreaElement>("[data-editor-input-field='template']")!;
+    expect(textarea.value).toBe("Draw {count} cards");
+    act(() => setTextareaValue(textarea, "Draw {count} additional cards"));
+    await act(async () => {
+      textarea.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Enter" }));
+      await Promise.resolve();
+    });
+    expect(saveTemplate).toHaveBeenCalledWith({
+      templateId: 1,
+      value: "Draw {count} additional cards",
+      clientRevision: 3,
+    });
+    expect(container.textContent).toContain("Draw 1 additional cards");
+    act(() => root.unmount());
+  });
+
+  it("opens only the clicked occurrence when a canonical template is reused", async () => {
+    const repeatedGroups: EncounterEditorGroup[] = [
+      structuredClone(GROUPS[0]),
+      {
+        ...structuredClone(GROUPS[0]),
+        cardId: OTHER_CARD_ID,
+        cardName: "The Other Crossing",
+      },
+    ];
+    const load = vi.fn().mockResolvedValue(repeatedGroups);
+    const { container, root } = await renderLoaded(client({ load }));
+    const occurrences = container.querySelectorAll<HTMLElement>(
+      "[data-editor-field='template']",
+    );
+    expect(occurrences).toHaveLength(4);
+
+    act(() => occurrences[0].click());
+
+    expect(container.querySelectorAll("[data-editor-input-field='template']"))
+      .toHaveLength(1);
+    expect(container.querySelectorAll(
+      "[data-editor-field='template'][data-editor-save-status='editing']",
+    )).toHaveLength(1);
     act(() => root.unmount());
   });
 });

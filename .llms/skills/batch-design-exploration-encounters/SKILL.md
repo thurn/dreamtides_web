@@ -78,7 +78,11 @@ and the number of single-card subagent assignments.
 
    The aggregator refuses stale catalog state, duplicate card UUIDs, missing
    results, invalid events, and unresolved artwork before writing. It marks the
-   rank-1 candidate selected for the encounter editor. If it reports that the
+   rank-1 candidate selected for the encounter editor. Candidate actions store
+   `template_id`, `variables`, and optional selection metadata only; canonical
+   template wording remains exclusively in `data/templates.json`. The display
+   renderer substitutes braced variables and preserves runtime
+   `$SPECIAL_VARIABLE` tokens literally. If it reports that the
    catalog changed after selection, preserve the completed results, select a
    fresh batch, and reuse a result only when its UUID is selected again and the
    single-card validator still accepts it.
@@ -103,6 +107,9 @@ and the number of single-card subagent assignments.
 - Never overwrite an existing card entry or aggregate against a changed source
   digest.
 - Never let a subagent edit the shared candidate catalog.
+- Reject subagent actions containing copied `template` or `effect_text` fields.
+- Edit mechanical wording only in `data/templates.json`; candidate records do
+  not contain editable template copy.
 - Never finish with only temporary result files or display Markdown; the batch
   is complete only after the worktree catalog change is committed and pushed.
 - Never edit `data/encounter_candidates.json` in the primary checkout.

@@ -56,15 +56,13 @@ def events() -> list[dict[str, object]]:
                     "label": f"Choose option {action_index + 1}",
                     "resolution": "The synthetic world answers at once.",
                     "template_id": template_id,
-                    "template": f"Synthetic effect {template_id}",
-                    "variables": {},
-                    "effect_text": f"Synthetic effect {template_id}",
+                    "variables": {"count": 2} if template_id == 1 else {},
                 }
             )
         output.append(
             {
                 "template_pair_id": f"pair-{rank}",
-                "prose": f"You encounter synthetic scene number {rank}.",
+                "prose": f"A synthetic monument occupies scene number {rank}.",
                 "actions": actions,
                 "scores": {
                     "scene_quality": 8,
@@ -155,7 +153,13 @@ class BatchScriptTests(unittest.TestCase):
             )
 
         templates = [
-            {"template_id": index, "template": f"Synthetic effect {index}"}
+            {
+                "template_id": index,
+                "template": (
+                    "Synthetic {count} $RUNTIME_REWARD" if index == 1
+                    else f"Synthetic effect {index}"
+                ),
+            }
             for index in range(1, 11)
         ]
         (self.root / "templates.json").write_text(
@@ -220,12 +224,22 @@ class BatchScriptTests(unittest.TestCase):
         self.assertEqual(set(stored), set(CARD_IDS))
         for card_id in card_ids:
             self.assertEqual(len(stored[card_id]), 5)
-            self.assertTrue(stored[card_id][0]["selected"])
+            self.assertEqual(
+                stored[card_id][0]["selected"],
+                {"prose": True, "actions": True},
+            )
             self.assertFalse(any("selected" in event for event in stored[card_id][1:]))
         self.assertEqual(result.stdout, display_path.read_text())
         self.assertEqual(result.stdout.count("# Synthetic Card"), 2)
         self.assertIn("![Source artwork", result.stdout)
+        self.assertIn("Synthetic 2 $RUNTIME_REWARD", result.stdout)
         self.assertNotIn("template_pair_id", result.stdout)
+        self.assertFalse(any(
+            "template" in action or "effect_text" in action
+            for card_id in card_ids
+            for event in stored[card_id]
+            for action in event["actions"]
+        ))
 
     def test_aggregator_refuses_stale_catalog_state_without_writing(self) -> None:
         output, _ = self.prepare_aggregate()

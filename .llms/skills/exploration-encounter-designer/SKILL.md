@@ -64,9 +64,9 @@ scores, ranking rationale, IDs, raw templates, variables, or commentary:
 ![Source artwork for <card name>](</absolute/path/to/source-image>)
 
 1. <prose>
-   - ***<action label>*** — <fully populated effect_text>
+   - ***<action label>*** — <rendered canonical template>
      - **Response:** <resolution>
-   - ***<action label>*** — <fully populated effect_text>
+   - ***<action label>*** — <rendered canonical template>
      - **Response:** <resolution>
 
 2. <prose>
@@ -79,10 +79,11 @@ the next paragraph. Then use the absolute image path returned by
 renders inline. Include all five designs in ascending rank order. For each
 design, put `prose` at the top level, preserve the two actions' template-pair
 order, and render each action as a sub-bullet. Bold and italicize its thematic
-`label` with triple asterisks and put the complete `effect_text` on that same
-sub-bullet, then put its `resolution` in a nested response bullet. Use
-`effect_text`, not the unresolved `template`, so every placeholder and special
-token is populated for display.
+`label` with triple asterisks and put the rendered canonical template on that
+same sub-bullet, then put its `resolution` in a nested response bullet. Render the
+canonical string from `data/templates.json` by replacing every braced
+`{placeholder}` with its value from `variables`. Leave every uppercase
+`$SPECIAL_VARIABLE` literal because the runtime resolves it later.
 
 ## Special template variables
 
@@ -124,11 +125,9 @@ Omitting that token from `selection` means unrestricted among eligible cards
 after the source UUID is excluded. Use the standard predicate vocabulary and
 exception rules in **Mechanical standards** for every selection predicate.
 
-Because runtime-selected card identity is unknown while authoring, its
-`effect_text` uses a readable generic description that states the runtime source
-and any restriction. It must not describe the source card as the selected
-target. No completed `effect_text` may contain a literal `$SPECIAL_VARIABLE`
-token.
+Runtime-selected identity is unknown while authoring. Display the canonical
+`$SPECIAL_VARIABLE` token literally; do not replace it with descriptive copy or
+the source card. Eligibility belongs in the structured `selection` field.
 
 After generating the candidate catalog in workflow step 9, inspect every
 `$SPECIAL_VARIABLE` reported by the script. If it reports a token not defined in
@@ -399,9 +398,9 @@ commentary.
 
     Do not force category diversity: repeated mechanical families are
     acceptable when independently best. Template IDs may not repeat anywhere in
-    the five pairs. Preserve each selected catalog entry's exact `template_id`
-    and `template` string, preserve the chosen pair order, and preserve action
-    order within each pair. Use unique pair IDs such as `pair-1` through
+    the five pairs. Preserve each selected catalog entry's `template_id`, the
+    chosen pair order, and action order within each pair. Do not copy template
+    strings into the request. Use unique pair IDs such as `pair-1` through
     `pair-5`.
 
 12. Combine the card and selected pairs into the complete input contract, then
@@ -473,8 +472,7 @@ commentary.
     displace the source character, or includes a scene element unsupported by
     the artwork. Scan every
     action's structured card references and runtime card selections by UUID,
-    and its `effect_text` for a source-card target, rejecting any that identify
-    or can resolve to the source card. Then write the complete event objects to
+    rejecting any that identify or can resolve to the source card. Then write the complete event objects to
     JSON, validate them, and fix every error regardless of output mode:
 
     ```bash
@@ -622,7 +620,7 @@ commentary.
   `resolution`. Do not quote the complete name or treat an archetype label as a
   proper noun. Ordinary words from the name may still describe visible evidence
   when they are the most evocative choice. The Markdown heading and canonical
-  names required inside `effect_text` remain unchanged.
+  names produced by rendering canonical template variables remain unchanged.
 - Do not mirror a template's number in the fiction. Four offered cards do not
   imply four figures, sparks, doors, paths, or voices in the scene.
 - Do not translate mechanics into mystical synonyms. Purging is not erasing a
@@ -640,7 +638,9 @@ commentary.
 
 ## Mechanical standards
 
-- Preserve each `template_id` and exact canonical `template` string.
+- Store each action's `template_id`; canonical text exists only in
+  `data/templates.json`. Never emit a `template` or `effect_text` field in an
+  encounter action.
 - Populate every `{placeholder}` in `variables`. The standard predicate values
   are exactly `Event`, `Warrior`, `Spirit Animal`, `Survivor`, and `≤2● cost
   Character`. A special runtime variable may instead remain unrestricted by
@@ -667,7 +667,7 @@ commentary.
   a pool with the source UUID removed. This rule is unconditional, including
   when the source card would otherwise satisfy the chosen predicate or appear
   in the player's deck or event pool. Do not identify the source card as an
-  action's resolved target in `effect_text` or any other template field.
+  action's resolved target in any structured action field.
 - Choose exact cards, dreamsigns, predicates, and other variables for three-way
   fit: they must suit the depicted world, the label-and-resolution chain, and
   the deck strategy. Reject a named reward that is mechanically useful but
@@ -675,8 +675,9 @@ commentary.
   dreamsign rather than forcing an arbitrary dreamsign into the narrative.
 - Follow **Special template variables** for the source, timing, restrictions,
   and display treatment of every special variable.
-- Write `effect_text` as readable display copy with all placeholders and special
-  tokens resolved. Keep the exact template and structured values authoritative.
+- Render display copy from the canonical catalog at presentation time. Replace
+  braced placeholders with `variables`, using an entity reference's
+  `display_name`; preserve every `$SPECIAL_VARIABLE` token verbatim.
 - Choose conservative values when balance evidence is incomplete, but keep
   them on the live system's scale. Reject an option pair with an obvious
   universal best choice.

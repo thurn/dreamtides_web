@@ -11,9 +11,9 @@
      - **Response:** Their pattern sharpens into several distinct emblems.
 
 2. Before you, a young lantern bearer approaches a towering window of stars.
-   - ***Lead a companion across*** — Apply a transfiguration to 1 chosen ≤2● cost Character card
+   - ***Lead a companion across*** — Apply a transfiguration to 1 chosen ≤2● cost Character cards
      - **Response:** Stellar light reshapes their outline beyond the threshold.
-   - ***Call for a familiar*** — Gain 1 copy of a random ≤2● cost Character from your deck
+   - ***Call for a familiar*** — Gain 1 copies of $DECK_CARD
      - **Response:** A matching silhouette steps from the distant glow.
 
 3. You watch a child lift a glowing lantern beside the starry opening.
@@ -23,7 +23,7 @@
      - **Response:** Its star-filled interior steadies into a lasting passage.
 
 4. You approach a child standing on rocky ground, lantern raised toward stars.
-   - ***Invite someone through*** — Gain a random eligible ≤2● cost Character offered by this encounter
+   - ***Invite someone through*** — Gain $OFFERED_CARD
      - **Response:** A small silhouette emerges beside the lifted lantern.
    - ***Send a possession through*** — Apply a transfiguration of your choice to a chosen card
      - **Response:** It returns altered beneath the lantern's glow.
@@ -54,9 +54,9 @@ Cards you reclaim are not banished when they leave play.
      - **Response:** The grid resolves beneath the sentry's steady hand.
 
 3. You see an armored traveler, brow on one fist beside a glowing gate.
-   - ***Welcome the Arrival*** — Gain a random eligible ≤2● cost Character offered from the event's card pool
+   - ***Welcome the Arrival*** — Gain $OFFERED_CARD
      - **Response:** The gate opens; a new traveler steps through.
-   - ***Retrace Their Route*** — Gain 1 copy of a random ≤2● cost Character from your current deck
+   - ***Retrace Their Route*** — Gain 1 copies of $DECK_CARD
      - **Response:** A familiar silhouette emerges beside its luminous counterpart.
 
 4. You watch light catch a seated traveler's armor beside the gridded doorway.
@@ -91,7 +91,7 @@ Cards you reclaim are not banished when they leave play.
 3. A soot-dark wolf presses forward, firelight tracing its bristled shoulders.
    - ***Cross the Flames Together*** — All characters in your deck gain +1✦
      - **Response:** The wolf leads on; every companion emerges hardened.
-   - ***Share Its Burning Path*** — Apply Kindled to a random Spirit Animal card from your current deck
+   - ***Share Its Burning Path*** — Apply Kindled to $DECK_CARD
      - **Response:** A familiar beast emerges with embers caught in its fur.
 
 4. A wolf stalks through burning grass, heavy paws hidden beneath smoke.
@@ -120,7 +120,7 @@ When you materialize a non-figment ≤2● cost character, draw a card with ephe
 2. A ragged sentinel holds a brilliant lantern beneath scattered stars.
    - ***Welcome the Sparks*** — Gain 2 random ≤2● cost Character cards
      - **Response:** Bright motes scatter, taking unfamiliar shapes around you.
-   - ***Shield the Flame*** — Gain 2 copies of a random ≤2● cost Character from your deck
+   - ***Shield the Flame*** — Gain 2 copies of $DECK_CARD
      - **Response:** The lantern's glow divides around familiar silhouettes.
 
 3. Torn robes stream from a skeletal custodian bearing a radiant lantern.
@@ -245,7 +245,7 @@ Once per turn, when you play a spirit animal, materialize a 1✦ spirit animal f
      - **Response:** Their distant answers roll across the starfield.
 
 5. You watch a whale pass, starlight tracing its ridged belly.
-   - ***Study Its Long Passage*** — Draw 1 additional card at the start of your next battle
+   - ***Study Its Long Passage*** — Draw 1 additional cards at the start of your next battle
      - **Response:** The whale's route remains clear in memory.
    - ***Match Its Measured Pace*** — Gain 1 additional energy at the start of your next battle
      - **Response:** Its steady glide carries you onward.
@@ -270,13 +270,13 @@ Once per turn, when you play a spirit animal, materialize a 1✦ spirit animal f
      - **Response:** Many measured footfalls answer beyond the luminous fog.
 
 3. Before you, an elephant emerges from glowing fog, its trunk hanging still.
-   - ***Echo its low call*** — Gain 1 copy of a random Spirit Animal card from your current deck
+   - ***Echo its low call*** — Gain 1 copies of $DECK_CARD
      - **Response:** A familiar tread answers from beyond the fog.
    - ***Trace the tusk's arc*** — Gain Eternal Stag
      - **Response:** Branching antlers emerge through the glowing mist.
 
 4. An enormous elephant watches silently, pale radiance edging its long tusk.
-   - ***Touch the radiant tusk*** — Apply Empowered to a random Spirit Animal card from your current deck
+   - ***Touch the radiant tusk*** — Apply Empowered to $DECK_CARD
      - **Response:** Its cold glow settles over a distant companion.
    - ***Enter the elephant's breath*** — Change a chosen Character card to have Spirit Animal
      - **Response:** The warm exhalation reshapes a chosen companion.
@@ -293,31 +293,31 @@ When you play a warrior, you may materialize a ≤2● cost character from your 
 ![Source artwork for Aurora Rider](</Users/dthurn/Documents/shutterstock/images/stock-photo-two-brothers-standing-on-a-huge-branch-looking-at-the-mysterious-horseman-in-the-shadows-digital-2256745747.jpg>)
 
 1. Above you, a colossal rider looms through star-filled haze, long hair streaming.
-   - ***Welcome Their Envoy*** — Gain a random offered Warrior card.
+   - ***Welcome Their Envoy*** — Gain $OFFERED_CARD
      - **Response:** A lone warrior emerges beneath the rider's shadow.
-   - ***Offer a New Recruit*** — Change a random ≤2● cost Character from your deck to become a Warrior.
+   - ***Offer a New Recruit*** — Change $DECK_CARD to become a Warrior
      - **Response:** The rider's shadow settles across the waiting recruit.
 
 2. You face a shadowed rider suspended amid drifting stars and radiant mist.
-   - ***Make an Offering*** — Purge a random starter card and gain a random Warrior card.
+   - ***Make an Offering*** — Purge a random starter card and gain a Warrior card
      - **Response:** The rider accepts, and a warrior steps forward.
-   - ***Release a Veteran*** — Purge a chosen Warrior card and gain a random Warrior replacement.
+   - ***Release a Veteran*** — Purge a chosen Warrior card and gain a random Warrior replacement
      - **Response:** Another warrior emerges beneath the rider's streaming silhouette.
 
 3. Across the luminous sky, a vast rider's ragged outline scatters before you.
-   - ***Answer Their Muster*** — Choose one of 2 packs of Warrior cards to add to your deck.
+   - ***Answer Their Muster*** — Choose one of 2 packs of Warrior cards to add to your deck
      - **Response:** Warriors gather where their immense shadow touches down.
-   - ***Receive Their Blessing*** — All characters in your deck gain +1✦.
+   - ***Receive Their Blessing*** — All characters in your deck gain +1✦
      - **Response:** Their starlit shadow sweeps across your waiting company.
 
 4. Starlight glimmers through a towering rider as their hair streams overhead.
-   - ***Study Their Passage*** — Draw 2 additional cards at the start of your next battle.
+   - ***Study Their Passage*** — Draw 2 additional cards at the start of your next battle
      - **Response:** The stars brighten as their silhouette moves on.
-   - ***Follow Their Ascent*** — Gain 2 additional energy at the start of your next battle.
+   - ***Follow Their Ascent*** — Gain 2 additional energy at the start of your next battle
      - **Response:** Cold wind surges as the rider moves ahead.
 
 5. A dark rider stretches across the radiant mist above you, edges dispersing.
-   - ***Call for Their Vanguard*** — Draft a Warrior card from 4 random choices.
+   - ***Call for Their Vanguard*** — Draft a Warrior card from 4 random choices
      - **Response:** Their towering silhouette turns as warriors answer nearby.
-   - ***Present Your Vanguard*** — Gain 20 essence for each Warrior card in your deck.
+   - ***Present Your Vanguard*** — Gain 20 essence for each Warrior card in your deck
      - **Response:** Their shadow passes across every gathered warrior.

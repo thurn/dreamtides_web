@@ -8,19 +8,15 @@
           "label": "Signal through the doorway",
           "resolution": "Several distant silhouettes gather beyond the luminous opening.",
           "template_id": 14,
-          "template": "Draft a {predicate} card from 4 random choices",
           "variables": {
             "predicate": "≤2● cost Character"
-          },
-          "effect_text": "Draft a ≤2● cost Character card from 4 random choices."
+          }
         },
         {
           "label": "Study the gathered stars",
           "resolution": "Their pattern sharpens into several distinct emblems.",
           "template_id": 29,
-          "template": "Gain one of 3 offered dreamsigns",
-          "variables": {},
-          "effect_text": "Gain one of 3 offered dreamsigns"
+          "variables": {}
         }
       ],
       "scores": {
@@ -45,18 +41,15 @@
           "label": "Lead a companion across",
           "resolution": "Stellar light reshapes their outline beyond the threshold.",
           "template_id": 20,
-          "template": "Apply a transfiguration to {count} chosen {predicate} cards",
           "variables": {
             "count": 1,
             "predicate": "≤2● cost Character"
-          },
-          "effect_text": "Apply a transfiguration to 1 chosen ≤2● cost Character card"
+          }
         },
         {
           "label": "Call for a familiar",
           "resolution": "A matching silhouette steps from the distant glow.",
           "template_id": 49,
-          "template": "Gain {count} copies of $DECK_CARD",
           "variables": {
             "count": 1
           },
@@ -64,8 +57,7 @@
             "$DECK_CARD": {
               "predicate": "≤2● cost Character"
             }
-          },
-          "effect_text": "Gain 1 copy of a random ≤2● cost Character from your deck"
+          }
         }
       ],
       "scores": {
@@ -86,17 +78,13 @@
           "label": "Follow the lantern onward",
           "resolution": "The child enters, and stellar light floods the destination.",
           "template_id": 37,
-          "template": "The next draft or shop site you visit will contain transfigured cards",
-          "variables": {},
-          "effect_text": "The next draft or shop site you visit will contain transfigured cards"
+          "variables": {}
         },
         {
           "label": "Anchor the doorway",
           "resolution": "Its star-filled interior steadies into a lasting passage.",
           "template_id": 44,
-          "template": "Add a transfiguration site to this dreamscape",
-          "variables": {},
-          "effect_text": "Add a transfiguration site to this dreamscape"
+          "variables": {}
         }
       ],
       "scores": {
@@ -117,22 +105,18 @@
           "label": "Invite someone through",
           "resolution": "A small silhouette emerges beside the lifted lantern.",
           "template_id": 11,
-          "template": "Gain $OFFERED_CARD",
           "variables": {},
           "selection": {
             "$OFFERED_CARD": {
               "predicate": "≤2● cost Character"
             }
-          },
-          "effect_text": "Gain a random eligible ≤2● cost Character offered by this encounter"
+          }
         },
         {
           "label": "Send a possession through",
           "resolution": "It returns altered beneath the lantern's glow.",
           "template_id": 17,
-          "template": "Apply a transfiguration of your choice to a chosen card",
-          "variables": {},
-          "effect_text": "Apply a transfiguration of your choice to a chosen card"
+          "variables": {}
         }
       ],
       "scores": {
@@ -153,21 +137,17 @@
           "label": "Study the way ahead",
           "resolution": "The lifted lantern reveals the path beyond.",
           "template_id": 38,
-          "template": "Draw {count} additional cards at the start of your next battle",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Draw 2 additional cards at the start of your next battle"
+          }
         },
         {
           "label": "Walk beside the child",
           "resolution": "Together you cross while the lantern burns steadily.",
           "template_id": 39,
-          "template": "Gain {count} additional energy at the start of your next battle",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Gain 2 additional energy at the start of your next battle"
+          }
         }
       ],
       "scores": {
@@ -190,22 +170,18 @@
           "label": "Open the Passage",
           "resolution": "The traveler signals; distant silhouettes approach through the light.",
           "template_id": 13,
-          "template": "Gain {count} random {predicate} cards",
           "variables": {
             "count": 2,
             "predicate": "Survivor"
-          },
-          "effect_text": "Gain 2 random Survivor cards"
+          }
         },
         {
           "label": "Choose a Guide",
           "resolution": "The grid sharpens around a solitary waiting figure.",
           "template_id": 14,
-          "template": "Draft a {predicate} card from 4 random choices",
           "variables": {
             "predicate": "Survivor"
-          },
-          "effect_text": "Draft a Survivor card from 4 random choices"
+          }
         }
       ],
       "scores": {
@@ -230,22 +206,18 @@
           "label": "Knock on the Frame",
           "resolution": "A clear chime rolls outward; the sentry looks up.",
           "template_id": 27,
-          "template": "Gain {dreamsign_name}",
           "variables": {
             "dreamsign_name": {
               "id": "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5",
               "display_name": "Bell"
             }
-          },
-          "effect_text": "Gain Bell"
+          }
         },
         {
           "label": "Read the Lattice",
           "resolution": "The grid resolves beneath the sentry's steady hand.",
           "template_id": 29,
-          "template": "Gain one of 3 offered dreamsigns",
-          "variables": {},
-          "effect_text": "Gain one of 3 offered dreamsigns"
+          "variables": {}
         }
       ],
       "scores": {
@@ -266,20 +238,17 @@
           "label": "Welcome the Arrival",
           "resolution": "The gate opens; a new traveler steps through.",
           "template_id": 11,
-          "template": "Gain $OFFERED_CARD",
           "variables": {},
           "selection": {
             "$OFFERED_CARD": {
               "predicate": "≤2● cost Character"
             }
-          },
-          "effect_text": "Gain a random eligible ≤2● cost Character offered from the event's card pool"
+          }
         },
         {
           "label": "Retrace Their Route",
           "resolution": "A familiar silhouette emerges beside its luminous counterpart.",
           "template_id": 49,
-          "template": "Gain {count} copies of $DECK_CARD",
           "variables": {
             "count": 1
           },
@@ -287,8 +256,7 @@
             "$DECK_CARD": {
               "predicate": "≤2● cost Character"
             }
-          },
-          "effect_text": "Gain 1 copy of a random ≤2● cost Character from your current deck"
+          }
         }
       ],
       "scores": {
@@ -309,21 +277,17 @@
           "label": "Study Beside Them",
           "resolution": "The shifting grid settles into a clear sequence.",
           "template_id": 38,
-          "template": "Draw {count} additional cards at the start of your next battle",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Draw 2 additional cards at the start of your next battle"
+          }
         },
         {
           "label": "Rest Beside Them",
           "resolution": "They keep watch while you gather your strength.",
           "template_id": 39,
-          "template": "Gain {count} additional energy at the start of your next battle",
           "variables": {
             "count": 1
-          },
-          "effect_text": "Gain 1 additional energy at the start of your next battle"
+          }
         }
       ],
       "scores": {
@@ -344,22 +308,18 @@
           "label": "Offer Passage Fare",
           "resolution": "They accept the offering and secure it out of sight.",
           "template_id": 5,
-          "template": "Purge up to {count} chosen cards",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Purge up to 2 chosen cards"
+          }
         },
         {
           "label": "Name Your Companions",
           "resolution": "They count each name, then open a sealed cache.",
           "template_id": 59,
-          "template": "Gain {essence_per_card} essence for each {predicate} card in your deck",
           "variables": {
             "essence_per_card": 25,
             "predicate": "Survivor"
-          },
-          "effect_text": "Gain 25 essence for each Survivor card in your deck"
+          }
         }
       ],
       "scores": {
@@ -382,21 +342,17 @@
           "label": "Call Across the Fire",
           "resolution": "A distant animal cry answers through the smoke.",
           "template_id": 14,
-          "template": "Draft a {predicate} card from 4 random choices",
           "variables": {
             "predicate": "Spirit Animal"
-          },
-          "effect_text": "Draft a Spirit Animal card from 4 random choices"
+          }
         },
         {
           "label": "Invite Another to Follow",
           "resolution": "The wolf circles back, accepting them into its stride.",
           "template_id": 58,
-          "template": "Change a chosen Character card to have {subtype}",
           "variables": {
             "subtype": "Spirit Animal"
-          },
-          "effect_text": "Change a chosen Character card to have Spirit Animal"
+          }
         }
       ],
       "scores": {
@@ -421,19 +377,15 @@
           "label": "Run Beside the Wolf",
           "resolution": "The wolf breaks into a swift, unwavering charge.",
           "template_id": 66,
-          "template": "All cards in your deck become ❖ (fast)",
-          "variables": {},
-          "effect_text": "All cards in your deck become ❖ (fast)"
+          "variables": {}
         },
         {
           "label": "Study the Wolf's Advance",
           "resolution": "Its measured steps reveal safe ground through the fire.",
           "template_id": 38,
-          "template": "Draw {count} additional cards at the start of your next battle",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Draw 2 additional cards at the start of your next battle"
+          }
         }
       ],
       "scores": {
@@ -454,15 +406,12 @@
           "label": "Cross the Flames Together",
           "resolution": "The wolf leads on; every companion emerges hardened.",
           "template_id": 64,
-          "template": "All characters in your deck gain +1✦",
-          "variables": {},
-          "effect_text": "All characters in your deck gain +1✦"
+          "variables": {}
         },
         {
           "label": "Share Its Burning Path",
           "resolution": "A familiar beast emerges with embers caught in its fur.",
           "template_id": 19,
-          "template": "Apply {transfiguration} to $DECK_CARD",
           "variables": {
             "transfiguration": "Kindled"
           },
@@ -470,8 +419,7 @@
             "$DECK_CARD": {
               "predicate": "Spirit Animal"
             }
-          },
-          "effect_text": "Apply Kindled to a random Spirit Animal card from your current deck"
+          }
         }
       ],
       "scores": {
@@ -492,19 +440,15 @@
           "label": "Call Through the Smoke",
           "resolution": "An unfamiliar animal answers from the ember haze.",
           "template_id": 9,
-          "template": "Gain a random {predicate} card",
           "variables": {
             "predicate": "Spirit Animal"
-          },
-          "effect_text": "Gain a random Spirit Animal card"
+          }
         },
         {
           "label": "Follow a Familiar Track",
           "resolution": "The wolf returns along ground already known to you.",
           "template_id": 55,
-          "template": "Select 4 random cards from your deck and choose one to gain a copy of",
-          "variables": {},
-          "effect_text": "Select 4 random cards from your deck and choose one to gain a copy of"
+          "variables": {}
         }
       ],
       "scores": {
@@ -525,17 +469,13 @@
           "label": "Temper a Possession",
           "resolution": "Heat reshapes the offering without consuming it.",
           "template_id": 17,
-          "template": "Apply a transfiguration of your choice to a chosen card",
-          "variables": {},
-          "effect_text": "Apply a transfiguration of your choice to a chosen card"
+          "variables": {}
         },
         {
           "label": "Feed the Open Flames",
           "resolution": "The wolf watches as the offering burns away.",
           "template_id": 3,
-          "template": "Purge a chosen card",
-          "variables": {},
-          "effect_text": "Purge a chosen card"
+          "variables": {}
         }
       ],
       "scores": {
@@ -558,24 +498,20 @@
           "label": "Accept the Lantern",
           "resolution": "The guardian releases its handle into your keeping.",
           "template_id": 10,
-          "template": "Gain {card_id}",
           "variables": {
             "card_id": {
               "id": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
               "display_name": "Lantern Keeper"
             }
-          },
-          "effect_text": "Gain Lantern Keeper"
+          }
         },
         {
           "label": "Study the Motes",
           "resolution": "Their shifting pattern reveals several worthy companions.",
           "template_id": 14,
-          "template": "Draft a {predicate} card from 4 random choices",
           "variables": {
             "predicate": "≤2● cost Character"
-          },
-          "effect_text": "Draft a ≤2● cost Character card from 4 random choices"
+          }
         }
       ],
       "scores": {
@@ -600,18 +536,15 @@
           "label": "Welcome the Sparks",
           "resolution": "Bright motes scatter, taking unfamiliar shapes around you.",
           "template_id": 13,
-          "template": "Gain {count} random {predicate} cards",
           "variables": {
             "count": 2,
             "predicate": "≤2● cost Character"
-          },
-          "effect_text": "Gain 2 random ≤2● cost Character cards"
+          }
         },
         {
           "label": "Shield the Flame",
           "resolution": "The lantern's glow divides around familiar silhouettes.",
           "template_id": 49,
-          "template": "Gain {count} copies of $DECK_CARD",
           "variables": {
             "count": 2
           },
@@ -619,8 +552,7 @@
             "$DECK_CARD": {
               "predicate": "≤2● cost Character"
             }
-          },
-          "effect_text": "Gain 2 copies of a random ≤2● cost Character from your deck"
+          }
         }
       ],
       "scores": {
@@ -641,21 +573,17 @@
           "label": "Read the Sparks",
           "resolution": "Their motion settles into a clear pattern.",
           "template_id": 38,
-          "template": "Draw {count} additional cards at the start of your next battle",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Draw 2 additional cards at the start of your next battle"
+          }
         },
         {
           "label": "Follow the Lantern",
           "resolution": "The guardian strides ahead, illuminating firm ground.",
           "template_id": 39,
-          "template": "Gain {count} additional energy at the start of your next battle",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Gain 2 additional energy at the start of your next battle"
+          }
         }
       ],
       "scores": {
@@ -676,20 +604,16 @@
           "label": "Enter the Glow",
           "resolution": "Warm radiance settles into a shape you choose.",
           "template_id": 17,
-          "template": "Apply a transfiguration of your choice to a chosen card",
-          "variables": {},
-          "effect_text": "Apply a transfiguration of your choice to a chosen card"
+          "variables": {}
         },
         {
           "label": "Share the Glow",
           "resolution": "The warden angles the lantern across your retinue.",
           "template_id": 20,
-          "template": "Apply a transfiguration to {count} chosen {predicate} cards",
           "variables": {
             "count": 2,
             "predicate": "≤2● cost Character"
-          },
-          "effect_text": "Apply a transfiguration to 2 chosen ≤2● cost Character cards"
+          }
         }
       ],
       "scores": {
@@ -710,22 +634,18 @@
           "label": "Release a Burden",
           "resolution": "The warden accepts it, then offers the lantern.",
           "template_id": 47,
-          "template": "Choose a card to purge and replace it with {card_id}",
           "variables": {
             "card_id": {
               "id": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
               "display_name": "Lantern Keeper"
             }
-          },
-          "effect_text": "Choose a card to purge and replace it with Lantern Keeper"
+          }
         },
         {
           "label": "Stand Within the Glow",
           "resolution": "Steady brilliance washes across every waiting companion.",
           "template_id": 64,
-          "template": "All characters in your deck gain +1✦",
-          "variables": {},
-          "effect_text": "All characters in your deck gain +1✦"
+          "variables": {}
         }
       ],
       "scores": {
@@ -748,17 +668,13 @@
           "label": "Enter the Bright Frame",
           "resolution": "Its hard light alters what passes through.",
           "template_id": 17,
-          "template": "Apply a transfiguration of your choice to a chosen card",
-          "variables": {},
-          "effect_text": "Apply a transfiguration of your choice to a chosen card"
+          "variables": {}
         },
         {
           "label": "Turn the Frame Outward",
           "resolution": "The triangle's glow reaches into the smoke.",
           "template_id": 37,
-          "template": "The next draft or shop site you visit will contain transfigured cards",
-          "variables": {},
-          "effect_text": "The next draft or shop site you visit will contain transfigured cards"
+          "variables": {}
         }
       ],
       "scores": {
@@ -783,24 +699,20 @@
           "label": "Answer His Signal",
           "resolution": "Another operative steps through the bright frame.",
           "template_id": 10,
-          "template": "Gain {card_id}",
           "variables": {
             "card_id": {
               "id": "87aba308-00b4-40d8-a46f-4e6f58a664a8",
               "display_name": "Breach Artist"
             }
-          },
-          "effect_text": "Gain Breach Artist"
+          }
         },
         {
           "label": "Accept His Commission",
           "resolution": "He marks your chosen recruit for infiltration.",
           "template_id": 58,
-          "template": "Change a chosen Character card to have {subtype}",
           "variables": {
             "subtype": "Outsider"
-          },
-          "effect_text": "Change a chosen Character card to have Outsider"
+          }
         }
       ],
       "scores": {
@@ -821,21 +733,17 @@
           "label": "Wait for His Briefing",
           "resolution": "He reveals a route through the smoke.",
           "template_id": 38,
-          "template": "Draw {count} additional cards at the start of your next battle",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Draw 2 additional cards at the start of your next battle"
+          }
         },
         {
           "label": "Move on His Signal",
           "resolution": "He lifts his weapon toward a clear opening.",
           "template_id": 39,
-          "template": "Gain {count} additional energy at the start of your next battle",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Gain 2 additional energy at the start of your next battle"
+          }
         }
       ],
       "scores": {
@@ -856,19 +764,15 @@
           "label": "Search Beyond the Frame",
           "resolution": "Dim shapes sharpen beyond the glowing threshold.",
           "template_id": 14,
-          "template": "Draft a {predicate} card from 4 random choices",
           "variables": {
             "predicate": "≤2● cost Character"
-          },
-          "effect_text": "Draft a ≤2● cost Character card from 4 random choices"
+          }
         },
         {
           "label": "Study His Technique",
           "resolution": "He repeats each measured motion without a word.",
           "template_id": 55,
-          "template": "Select 4 random cards from your deck and choose one to gain a copy of",
-          "variables": {},
-          "effect_text": "Select 4 random cards from your deck and choose one to gain a copy of"
+          "variables": {}
         }
       ],
       "scores": {
@@ -889,17 +793,13 @@
           "label": "Train Under His Watch",
           "resolution": "His steady corrections strengthen every recruit's stance.",
           "template_id": 64,
-          "template": "All characters in your deck gain +1✦",
-          "variables": {},
-          "effect_text": "All characters in your deck gain +1✦"
+          "variables": {}
         },
         {
           "label": "Follow His Timing",
           "resolution": "His hand drops; the whole detail moves.",
           "template_id": 66,
-          "template": "All cards in your deck become ❖ (fast)",
-          "variables": {},
-          "effect_text": "All cards in your deck become ❖ (fast)"
+          "variables": {}
         }
       ],
       "scores": {
@@ -922,22 +822,18 @@
           "label": "Follow the owl's focus",
           "resolution": "Its pupils narrow toward rustling beyond the trees.",
           "template_id": 14,
-          "template": "Draft a {predicate} card from 4 random choices",
           "variables": {
             "predicate": "Spirit Animal"
-          },
-          "effect_text": "Draft a Spirit Animal card from 4 random choices"
+          }
         },
         {
           "label": "Answer its low call",
           "resolution": "Answering calls rise from deeper in the forest.",
           "template_id": 13,
-          "template": "Gain {count} random {predicate} cards",
           "variables": {
             "count": 2,
             "predicate": "Spirit Animal"
-          },
-          "effect_text": "Gain 2 random Spirit Animal cards"
+          }
         }
       ],
       "scores": {
@@ -962,22 +858,18 @@
           "label": "Follow its downward glance",
           "resolution": "A knotted root catches light beneath the branch.",
           "template_id": 27,
-          "template": "Gain {dreamsign_name}",
           "variables": {
             "dreamsign_name": {
               "id": "39260DD5-CB43-47D5-A007-EFFBE13D6417",
               "display_name": "Ginger Root"
             }
-          },
-          "effect_text": "Gain Ginger Root"
+          }
         },
         {
           "label": "Wait for another sign",
           "resolution": "The owl turns toward several glints beneath the bough.",
           "template_id": 29,
-          "template": "Gain one of 3 offered dreamsigns",
-          "variables": {},
-          "effect_text": "Gain one of 3 offered dreamsigns"
+          "variables": {}
         }
       ],
       "scores": {
@@ -998,21 +890,17 @@
           "label": "Name a kindred soul",
           "resolution": "The owl's hoot reshapes the one you name.",
           "template_id": 58,
-          "template": "Change a chosen Character card to have {subtype}",
           "variables": {
             "subtype": "Spirit Animal"
-          },
-          "effect_text": "Change a chosen Character card to have Spirit Animal"
+          }
         },
         {
           "label": "Invite its distant kin",
           "resolution": "A distant cry answers from the dark woods.",
           "template_id": 9,
-          "template": "Gain a random {predicate} card",
           "variables": {
             "predicate": "Spirit Animal"
-          },
-          "effect_text": "Gain a random Spirit Animal card"
+          }
         }
       ],
       "scores": {
@@ -1033,21 +921,17 @@
           "label": "Study the reflected lights",
           "resolution": "Its eyes gather shifting glimpses of the road ahead.",
           "template_id": 38,
-          "template": "Draw {count} additional cards at the start of your next battle",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Draw 2 additional cards at the start of your next battle"
+          }
         },
         {
           "label": "Keep the night's vigil",
           "resolution": "Stillness leaves you ready for the struggle ahead.",
           "template_id": 39,
-          "template": "Gain {count} additional energy at the start of your next battle",
           "variables": {
             "count": 1
-          },
-          "effect_text": "Gain 1 additional energy at the start of your next battle"
+          }
         }
       ],
       "scores": {
@@ -1068,17 +952,13 @@
           "label": "Show a familiar image",
           "resolution": "Its eyes return the likeness perfectly doubled.",
           "template_id": 55,
-          "template": "Select 4 random cards from your deck and choose one to gain a copy of",
-          "variables": {},
-          "effect_text": "Select 4 random cards from your deck and choose one to gain a copy of"
+          "variables": {}
         },
         {
           "label": "Invite a closer look",
           "resolution": "The owl's scrutiny reveals another possible form.",
           "template_id": 17,
-          "template": "Apply a transfiguration of your choice to a chosen card",
-          "variables": {},
-          "effect_text": "Apply a transfiguration of your choice to a chosen card"
+          "variables": {}
         }
       ],
       "scores": {
@@ -1101,24 +981,20 @@
           "label": "Call Across the Sky",
           "resolution": "A distant ray glides beneath the whale.",
           "template_id": 10,
-          "template": "Gain {card_id}",
           "variables": {
             "card_id": {
               "id": "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5",
               "display_name": "Cloudmantle Ray"
             }
-          },
-          "effect_text": "Gain Cloudmantle Ray"
+          }
         },
         {
           "label": "Follow Its Crossing",
           "resolution": "The whale turns as distant calls answer.",
           "template_id": 14,
-          "template": "Draft a {predicate} card from 4 random choices",
           "variables": {
             "predicate": "Spirit Animal"
-          },
-          "effect_text": "Draft a Spirit Animal card from 4 random choices"
+          }
         }
       ],
       "scores": {
@@ -1143,22 +1019,18 @@
           "label": "Answer Its Low Call",
           "resolution": "The whale calls; a kindred silhouette draws close.",
           "template_id": 15,
-          "template": "Draft a {predicate} card from 4 random choices and gain {count} copies of it",
           "variables": {
             "predicate": "Spirit Animal",
             "count": 2
-          },
-          "effect_text": "Draft a Spirit Animal card from 4 random choices and gain 2 copies of it"
+          }
         },
         {
           "label": "Welcome the Migration",
           "resolution": "The whale glides on as distant forms approach.",
           "template_id": 16,
-          "template": "Take any number of {predicate} cards from 4 random choices",
           "variables": {
             "predicate": "Spirit Animal"
-          },
-          "effect_text": "Take any number of Spirit Animal cards from 4 random choices"
+          }
         }
       ],
       "scores": {
@@ -1179,19 +1051,15 @@
           "label": "Invite One to Follow",
           "resolution": "The whale's turn draws a new swimmer skyward.",
           "template_id": 58,
-          "template": "Change a chosen Character card to have {subtype}",
           "variables": {
             "subtype": "Spirit Animal"
-          },
-          "effect_text": "Change a chosen Character card to have Spirit Animal"
+          }
         },
         {
           "label": "Join the Migration",
           "resolution": "The whale leads a broad procession through the stars.",
           "template_id": 67,
-          "template": "All characters in your deck become the subtype of your choice.",
-          "variables": {},
-          "effect_text": "All characters in your deck become the subtype of your choice."
+          "variables": {}
         }
       ],
       "scores": {
@@ -1212,20 +1080,16 @@
           "label": "Shelter in Its Wake",
           "resolution": "Its immense passage steadies every waiting ally.",
           "template_id": 64,
-          "template": "All characters in your deck gain +1✦",
-          "variables": {},
-          "effect_text": "All characters in your deck gain +1✦"
+          "variables": {}
         },
         {
           "label": "Call Its Kindred",
           "resolution": "Their distant answers roll across the starfield.",
           "template_id": 59,
-          "template": "Gain {essence_per_card} essence for each {predicate} card in your deck",
           "variables": {
             "essence_per_card": 10,
             "predicate": "Spirit Animal"
-          },
-          "effect_text": "Gain 10 essence for each Spirit Animal card in your deck"
+          }
         }
       ],
       "scores": {
@@ -1246,21 +1110,17 @@
           "label": "Study Its Long Passage",
           "resolution": "The whale's route remains clear in memory.",
           "template_id": 38,
-          "template": "Draw {count} additional cards at the start of your next battle",
           "variables": {
             "count": 1
-          },
-          "effect_text": "Draw 1 additional card at the start of your next battle"
+          }
         },
         {
           "label": "Match Its Measured Pace",
           "resolution": "Its steady glide carries you onward.",
           "template_id": 39,
-          "template": "Gain {count} additional energy at the start of your next battle",
           "variables": {
             "count": 1
-          },
-          "effect_text": "Gain 1 additional energy at the start of your next battle"
+          }
         }
       ],
       "scores": {
@@ -1283,25 +1143,21 @@
           "label": "Reach toward the tusk",
           "resolution": "A braided charm gleams beneath its curved tip.",
           "template_id": 27,
-          "template": "Gain {dreamsign_name}",
           "variables": {
             "dreamsign_name": {
               "id": "2D4EB3EE-0931-45ED-8365-69F18096EAD5",
               "display_name": "Charm Pouch"
             }
-          },
-          "effect_text": "Gain Charm Pouch"
+          }
         },
         {
           "label": "Sound a gathering call",
           "resolution": "The elephant answers with a deep, carrying rumble.",
           "template_id": 59,
-          "template": "Gain {essence_per_card} essence for each {predicate} card in your deck",
           "variables": {
             "essence_per_card": 15,
             "predicate": "Spirit Animal"
-          },
-          "effect_text": "Gain 15 essence for each Spirit Animal card in your deck"
+          }
         }
       ],
       "scores": {
@@ -1326,21 +1182,17 @@
           "label": "Call for one companion",
           "resolution": "A lone shape approaches through the starry haze.",
           "template_id": 14,
-          "template": "Draft a {predicate} card from 4 random choices",
           "variables": {
             "predicate": "Spirit Animal"
-          },
-          "effect_text": "Draft a Spirit Animal card from 4 random choices"
+          }
         },
         {
           "label": "Call for the whole herd",
           "resolution": "Many measured footfalls answer beyond the luminous fog.",
           "template_id": 36,
-          "template": "Choose one of 2 packs of {predicate} cards to add to your deck",
           "variables": {
             "predicate": "Spirit Animal"
-          },
-          "effect_text": "Choose one of 2 packs of Spirit Animal cards to add to your deck"
+          }
         }
       ],
       "scores": {
@@ -1361,7 +1213,6 @@
           "label": "Echo its low call",
           "resolution": "A familiar tread answers from beyond the fog.",
           "template_id": 49,
-          "template": "Gain {count} copies of $DECK_CARD",
           "variables": {
             "count": 1
           },
@@ -1369,21 +1220,18 @@
             "$DECK_CARD": {
               "predicate": "Spirit Animal"
             }
-          },
-          "effect_text": "Gain 1 copy of a random Spirit Animal card from your current deck"
+          }
         },
         {
           "label": "Trace the tusk's arc",
           "resolution": "Branching antlers emerge through the glowing mist.",
           "template_id": 10,
-          "template": "Gain {card_id}",
           "variables": {
             "card_id": {
               "id": "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6",
               "display_name": "Eternal Stag"
             }
-          },
-          "effect_text": "Gain Eternal Stag"
+          }
         }
       ],
       "scores": {
@@ -1404,7 +1252,6 @@
           "label": "Touch the radiant tusk",
           "resolution": "Its cold glow settles over a distant companion.",
           "template_id": 19,
-          "template": "Apply {transfiguration} to $DECK_CARD",
           "variables": {
             "transfiguration": "Empowered"
           },
@@ -1412,18 +1259,15 @@
             "$DECK_CARD": {
               "predicate": "Spirit Animal"
             }
-          },
-          "effect_text": "Apply Empowered to a random Spirit Animal card from your current deck"
+          }
         },
         {
           "label": "Enter the elephant's breath",
           "resolution": "The warm exhalation reshapes a chosen companion.",
           "template_id": 58,
-          "template": "Change a chosen Character card to have {subtype}",
           "variables": {
             "subtype": "Spirit Animal"
-          },
-          "effect_text": "Change a chosen Character card to have Spirit Animal"
+          }
         }
       ],
       "scores": {
@@ -1444,21 +1288,17 @@
           "label": "Follow its distant gaze",
           "resolution": "The starry distance opens with sudden clarity.",
           "template_id": 38,
-          "template": "Draw {count} additional cards at the start of your next battle",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Draw 2 additional cards at the start of your next battle"
+          }
         },
         {
           "label": "Match its measured breathing",
           "resolution": "A deep rhythm gathers within the luminous air.",
           "template_id": 39,
-          "template": "Gain {count} additional energy at the start of your next battle",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Gain 2 additional energy at the start of your next battle"
+          }
         }
       ],
       "scores": {
@@ -1481,20 +1321,17 @@
           "label": "Welcome Their Envoy",
           "resolution": "A lone warrior emerges beneath the rider's shadow.",
           "template_id": 11,
-          "template": "Gain $OFFERED_CARD",
           "variables": {},
           "selection": {
             "$OFFERED_CARD": {
               "predicate": "Warrior"
             }
-          },
-          "effect_text": "Gain a random offered Warrior card."
+          }
         },
         {
           "label": "Offer a New Recruit",
           "resolution": "The rider's shadow settles across the waiting recruit.",
           "template_id": 53,
-          "template": "Change $DECK_CARD to become a {card_type}",
           "variables": {
             "card_type": "Warrior"
           },
@@ -1502,8 +1339,7 @@
             "$DECK_CARD": {
               "predicate": "≤2● cost Character"
             }
-          },
-          "effect_text": "Change a random ≤2● cost Character from your deck to become a Warrior."
+          }
         }
       ],
       "scores": {
@@ -1528,21 +1364,17 @@
           "label": "Make an Offering",
           "resolution": "The rider accepts, and a warrior steps forward.",
           "template_id": 34,
-          "template": "Purge a random starter card and gain a {predicate} card",
           "variables": {
             "predicate": "Warrior"
-          },
-          "effect_text": "Purge a random starter card and gain a random Warrior card."
+          }
         },
         {
           "label": "Release a Veteran",
           "resolution": "Another warrior emerges beneath the rider's streaming silhouette.",
           "template_id": 7,
-          "template": "Purge a chosen {predicate} card and gain a random {predicate} replacement",
           "variables": {
             "predicate": "Warrior"
-          },
-          "effect_text": "Purge a chosen Warrior card and gain a random Warrior replacement."
+          }
         }
       ],
       "scores": {
@@ -1563,19 +1395,15 @@
           "label": "Answer Their Muster",
           "resolution": "Warriors gather where their immense shadow touches down.",
           "template_id": 36,
-          "template": "Choose one of 2 packs of {predicate} cards to add to your deck",
           "variables": {
             "predicate": "Warrior"
-          },
-          "effect_text": "Choose one of 2 packs of Warrior cards to add to your deck."
+          }
         },
         {
           "label": "Receive Their Blessing",
           "resolution": "Their starlit shadow sweeps across your waiting company.",
           "template_id": 64,
-          "template": "All characters in your deck gain +1✦",
-          "variables": {},
-          "effect_text": "All characters in your deck gain +1✦."
+          "variables": {}
         }
       ],
       "scores": {
@@ -1596,21 +1424,17 @@
           "label": "Study Their Passage",
           "resolution": "The stars brighten as their silhouette moves on.",
           "template_id": 38,
-          "template": "Draw {count} additional cards at the start of your next battle",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Draw 2 additional cards at the start of your next battle."
+          }
         },
         {
           "label": "Follow Their Ascent",
           "resolution": "Cold wind surges as the rider moves ahead.",
           "template_id": 39,
-          "template": "Gain {count} additional energy at the start of your next battle",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Gain 2 additional energy at the start of your next battle."
+          }
         }
       ],
       "scores": {
@@ -1631,22 +1455,18 @@
           "label": "Call for Their Vanguard",
           "resolution": "Their towering silhouette turns as warriors answer nearby.",
           "template_id": 14,
-          "template": "Draft a {predicate} card from 4 random choices",
           "variables": {
             "predicate": "Warrior"
-          },
-          "effect_text": "Draft a Warrior card from 4 random choices."
+          }
         },
         {
           "label": "Present Your Vanguard",
           "resolution": "Their shadow passes across every gathered warrior.",
           "template_id": 59,
-          "template": "Gain {essence_per_card} essence for each {predicate} card in your deck",
           "variables": {
             "essence_per_card": 20,
             "predicate": "Warrior"
-          },
-          "effect_text": "Gain 20 essence for each Warrior card in your deck."
+          }
         }
       ],
       "scores": {
@@ -1669,19 +1489,15 @@
           "label": "Accept the charge",
           "resolution": "The discharge races through every waiting connection.",
           "template_id": 66,
-          "template": "All cards in your deck become ❖ (fast)",
-          "variables": {},
-          "effect_text": "All cards in your deck become ❖ (fast)"
+          "variables": {}
         },
         {
           "label": "Overload the aperture",
           "resolution": "The opening flares, then sheds a dark residue.",
           "template_id": 65,
-          "template": "All cards in your deck are reduced in cost by 1●. Gain {count} \"Nightmare\" bane cards.",
           "variables": {
             "count": 3
-          },
-          "effect_text": "All cards in your deck are reduced in cost by 1●. Gain 3 \"Nightmare\" bane cards."
+          }
         }
       ],
       "scores": {
@@ -1706,23 +1522,19 @@
           "label": "Catch the descending arc",
           "resolution": "A sharp pulse passes cleanly through your grasp.",
           "template_id": 18,
-          "template": "Apply {transfiguration} to a chosen card",
           "variables": {
             "transfiguration": "Hastened"
-          },
-          "effect_text": "Apply Hastened to a chosen card"
+          }
         },
         {
           "label": "Ground the surging ring",
           "resolution": "The diverted charge settles into steadier channels.",
           "template_id": 21,
-          "template": "Apply {transfiguration} to {count} chosen {predicate} cards",
           "variables": {
             "transfiguration": "Empowered",
             "count": 2,
             "predicate": "Event"
-          },
-          "effect_text": "Apply Empowered to 2 chosen Event cards"
+          }
         }
       ],
       "scores": {
@@ -1743,22 +1555,18 @@
           "label": "Read the branching current",
           "resolution": "The arcs settle into a repeatable sequence.",
           "template_id": 15,
-          "template": "Draft a {predicate} card from 4 random choices and gain {count} copies of it",
           "variables": {
             "predicate": "Event",
             "count": 2
-          },
-          "effect_text": "Draft an Event card from 4 random choices and gain 2 copies of it"
+          }
         },
         {
           "label": "Widen the aperture",
           "resolution": "Distinct configurations gather across its luminous surface.",
           "template_id": 36,
-          "template": "Choose one of 2 packs of {predicate} cards to add to your deck",
           "variables": {
             "predicate": "Event"
-          },
-          "effect_text": "Choose one of 2 packs of Event cards to add to your deck"
+          }
         }
       ],
       "scores": {
@@ -1779,17 +1587,13 @@
           "label": "Stabilize the aperture",
           "resolution": "Its jagged rim locks around a steady opening.",
           "template_id": 44,
-          "template": "Add a transfiguration site to this dreamscape",
-          "variables": {},
-          "effect_text": "Add a transfiguration site to this dreamscape"
+          "variables": {}
         },
         {
           "label": "Retune the aperture",
           "resolution": "The opening fills with orderly moving displays.",
           "template_id": 42,
-          "template": "Add a card market site to this dreamscape",
-          "variables": {},
-          "effect_text": "Add a card market site to this dreamscape"
+          "variables": {}
         }
       ],
       "scores": {
@@ -1810,20 +1614,16 @@
           "label": "Study their construction",
           "resolution": "The current carries one stable pattern outward.",
           "template_id": 67,
-          "template": "All characters in your deck become the subtype of your choice.",
-          "variables": {},
-          "effect_text": "All characters in your deck become the subtype of your choice."
+          "variables": {}
         },
         {
           "label": "Submit to the surge",
           "resolution": "The charge recasts several familiar forms.",
           "template_id": 54,
-          "template": "Modify {count} random cards to become {card_type} cards",
           "variables": {
             "count": 2,
             "card_type": "Event"
-          },
-          "effect_text": "Modify 2 random cards to become Event cards"
+          }
         }
       ],
       "scores": {
@@ -1846,20 +1646,16 @@
           "label": "Answer the Raised Standard",
           "resolution": "The standard snaps overhead in a clear summons.",
           "template_id": 15,
-          "template": "Draft a {predicate} card from 4 random choices and gain {count} copies of it",
           "variables": {
             "predicate": "Warrior",
             "count": 2
-          },
-          "effect_text": "Draft a Warrior card from 4 random choices and gain 2 copies of it"
+          }
         },
         {
           "label": "Set the Marching Pace",
           "resolution": "The warrior's torn cloak snaps hard behind them.",
           "template_id": 66,
-          "template": "All cards in your deck become ❖ (fast)",
-          "variables": {},
-          "effect_text": "All cards in your deck become ❖ (fast)"
+          "variables": {}
         }
       ],
       "scores": {
@@ -1884,21 +1680,17 @@
           "label": "Rally at the Crest",
           "resolution": "The marked cloth cracks sharply over the ridge.",
           "template_id": 36,
-          "template": "Choose one of 2 packs of {predicate} cards to add to your deck",
           "variables": {
             "predicate": "Warrior"
-          },
-          "effect_text": "Choose one of 2 packs of Warrior cards to add to your deck"
+          }
         },
         {
           "label": "Charge Through the Smoke",
           "resolution": "The warrior crests the incline as smoke clings behind.",
           "template_id": 65,
-          "template": "All cards in your deck are reduced in cost by 1●. Gain {count} \"Nightmare\" bane cards.",
           "variables": {
             "count": 3
-          },
-          "effect_text": "All cards in your deck are reduced in cost by 1●. Gain 3 \"Nightmare\" bane cards."
+          }
         }
       ],
       "scores": {
@@ -1919,17 +1711,13 @@
           "label": "Replace the Banner Emblem",
           "resolution": "The warrior strips one marking and paints another.",
           "template_id": 61,
-          "template": "Purge a chosen card and gain a copy of another chosen card",
-          "variables": {},
-          "effect_text": "Purge a chosen card and gain a copy of another chosen card"
+          "variables": {}
         },
         {
           "label": "Declare an Order",
           "resolution": "The warrior binds your chosen pattern beneath the emblem.",
           "template_id": 67,
-          "template": "All characters in your deck become the subtype of your choice.",
-          "variables": {},
-          "effect_text": "All characters in your deck become the subtype of your choice."
+          "variables": {}
         }
       ],
       "scores": {
@@ -1950,19 +1738,15 @@
           "label": "Trace the Lit Emblem",
           "resolution": "Its glow brightens across the rippling cloth.",
           "template_id": 1,
-          "template": "Gain {essence} essence",
           "variables": {
             "essence": 250
-          },
-          "effect_text": "Gain 250 essence"
+          }
         },
         {
           "label": "Face the Veiled Sun",
           "resolution": "The standard catches the sun's full rim of light.",
           "template_id": 68,
-          "template": "Double your current essence.",
-          "variables": {},
-          "effect_text": "Double your current essence."
+          "variables": {}
         }
       ],
       "scores": {
@@ -1983,17 +1767,13 @@
           "label": "Repeat the Signal",
           "resolution": "The warrior sweeps the standard overhead once more.",
           "template_id": 41,
-          "template": "Add a duplication site to this dreamscape",
-          "variables": {},
-          "effect_text": "Add a duplication site to this dreamscape"
+          "variables": {}
         },
         {
           "label": "Ground the Standard",
           "resolution": "Its shaft bites firmly into the bare incline.",
           "template_id": 45,
-          "template": "Add a purge site to this dreamscape.",
-          "variables": {},
-          "effect_text": "Add a purge site to this dreamscape."
+          "variables": {}
         }
       ],
       "scores": {
@@ -2016,15 +1796,12 @@
           "label": "Offer Him an Exchange",
           "resolution": "He accepts one keepsake and returns another.",
           "template_id": 61,
-          "template": "Purge a chosen card and gain a copy of another chosen card",
-          "variables": {},
-          "effect_text": "Purge a chosen card and gain a copy of another chosen card"
+          "variables": {}
         },
         {
           "label": "Present a Written Charm",
           "resolution": "He angles a lantern across the waiting script.",
           "template_id": 19,
-          "template": "Apply {transfiguration} to $DECK_CARD",
           "variables": {
             "transfiguration": "Inspired"
           },
@@ -2032,8 +1809,7 @@
             "$DECK_CARD": {
               "predicate": "Event"
             }
-          },
-          "effect_text": "Apply Inspired to a random Event card from your current deck"
+          }
         }
       ],
       "scores": {
@@ -2058,19 +1834,15 @@
           "label": "Leave a Worn Token",
           "resolution": "He knots it securely to a bare branch.",
           "template_id": 32,
-          "template": "Purge $STARTER_CARD",
-          "variables": {},
-          "effect_text": "Purge a random starter card from your current deck"
+          "variables": {}
         },
         {
           "label": "Hand Him a Burden",
           "resolution": "He balances its weight beneath the nearest glow.",
           "template_id": 18,
-          "template": "Apply {transfiguration} to a chosen card",
           "variables": {
             "transfiguration": "Empowered"
-          },
-          "effect_text": "Apply Empowered to a chosen card"
+          }
         }
       ],
       "scores": {
@@ -2091,22 +1863,18 @@
           "label": "Follow His Careful Footing",
           "resolution": "Nearby branches fill with lightly stepping visitors.",
           "template_id": 15,
-          "template": "Draft a {predicate} card from 4 random choices and gain {count} copies of it",
           "variables": {
             "predicate": "≤2● cost Character",
             "count": 2
-          },
-          "effect_text": "Draft a ≤2● cost Character card from 4 random choices and gain 2 copies of it"
+          }
         },
         {
           "label": "Accept His Selection",
           "resolution": "He unhooks one lantern; its pattern repeats nearby.",
           "template_id": 12,
-          "template": "Gain {count} copies of $OFFERED_CARD",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Gain 2 copies of a random offered card from this event's card pool"
+          }
         }
       ],
       "scores": {
@@ -2127,17 +1895,13 @@
           "label": "Take His Descending Route",
           "resolution": "The branch opens onto a lanterned trading terrace.",
           "template_id": 42,
-          "template": "Add a card market site to this dreamscape",
-          "variables": {},
-          "effect_text": "Add a card market site to this dreamscape"
+          "variables": {}
         },
         {
           "label": "Take His Rising Route",
           "resolution": "Higher boughs reveal a workshop under hanging lights.",
           "template_id": 44,
-          "template": "Add a transfiguration site to this dreamscape",
-          "variables": {},
-          "effect_text": "Add a transfiguration site to this dreamscape"
+          "variables": {}
         }
       ],
       "scores": {
@@ -2158,17 +1922,13 @@
           "label": "Keep Pace Beside Him",
           "resolution": "He leads you where wares hang freely offered.",
           "template_id": 56,
-          "template": "All items in the next shop you visit are free",
-          "variables": {},
-          "effect_text": "All items in the next shop you visit are free"
+          "variables": {}
         },
         {
           "label": "Walk Beneath His Lights",
           "resolution": "Their glow settles over finely altered wares.",
           "template_id": 37,
-          "template": "The next draft or shop site you visit will contain transfigured cards",
-          "variables": {},
-          "effect_text": "The next draft or shop site you visit will contain transfigured cards"
+          "variables": {}
         }
       ],
       "scores": {
@@ -2191,18 +1951,15 @@
           "label": "Call for Reinforcements",
           "resolution": "The soldier signals; armored figures answer through smoke.",
           "template_id": 15,
-          "template": "Draft a {predicate} card from 4 random choices and gain {count} copies of it",
           "variables": {
             "predicate": "Survivor",
             "count": 2
-          },
-          "effect_text": "Draft a Survivor card from 4 random choices and gain 2 copies of it"
+          }
         },
         {
           "label": "Request Field Training",
           "resolution": "Their practiced stance hardens one companion for battle.",
           "template_id": 19,
-          "template": "Apply {transfiguration} to $DECK_CARD",
           "variables": {
             "transfiguration": "Kindled"
           },
@@ -2210,8 +1967,7 @@
             "$DECK_CARD": {
               "predicate": "Survivor"
             }
-          },
-          "effect_text": "Apply Kindled to a random Survivor card from your current deck"
+          }
         }
       ],
       "scores": {
@@ -2236,22 +1992,18 @@
           "label": "Join the Rotation",
           "resolution": "One sentry withdraws as a fresh recruit advances.",
           "template_id": 7,
-          "template": "Purge a chosen {predicate} card and gain a random {predicate} replacement",
           "variables": {
             "predicate": "Survivor"
-          },
-          "effect_text": "Purge a chosen Survivor card and gain a random Survivor replacement"
+          }
         },
         {
           "label": "Study Their Technique",
           "resolution": "Their precise drill steadies two battle-worn companions.",
           "template_id": 20,
-          "template": "Apply a transfiguration to {count} chosen {predicate} cards",
           "variables": {
             "count": 2,
             "predicate": "Survivor"
-          },
-          "effect_text": "Apply a transfiguration to 2 chosen Survivor cards"
+          }
         }
       ],
       "scores": {
@@ -2272,22 +2024,18 @@
           "label": "Search the Wreckage",
           "resolution": "Useful salvage glints beneath the soldier's careful hands.",
           "template_id": 2,
-          "template": "Gain a random amount of essence between {essence1} and {essence2}",
           "variables": {
             "essence1": 100,
             "essence2": 180
-          },
-          "effect_text": "Gain a random amount of essence between 100 and 180"
+          }
         },
         {
           "label": "Open the Field Kit",
           "resolution": "Spare fittings settle onto familiar battered equipment.",
           "template_id": 24,
-          "template": "Transfigure {count} random starter cards",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Transfigure 2 random starter cards"
+          }
         }
       ],
       "scores": {
@@ -2308,22 +2056,18 @@
           "label": "Shed Unneeded Gear",
           "resolution": "The soldier clears your load for the crossing.",
           "template_id": 5,
-          "template": "Purge up to {count} chosen cards",
           "variables": {
             "count": 2
-          },
-          "effect_text": "Purge up to 2 chosen cards"
+          }
         },
         {
           "label": "Rotate the Patrol",
           "resolution": "They dismiss spent sentries and wave replacements forward.",
           "template_id": 8,
-          "template": "Purge up to {count} chosen {predicate} cards and gain a random {predicate} replacement for each card purged",
           "variables": {
             "count": 2,
             "predicate": "Survivor"
-          },
-          "effect_text": "Purge up to 2 chosen Survivor cards and gain a random Survivor replacement for each card purged"
+          }
         }
       ],
       "scores": {
@@ -2344,19 +2088,15 @@
           "label": "Answer Their Signal",
           "resolution": "Two organized squads emerge across the ruined ground.",
           "template_id": 36,
-          "template": "Choose one of 2 packs of {predicate} cards to add to your deck",
           "variables": {
             "predicate": "Survivor"
-          },
-          "effect_text": "Choose one of 2 packs of Survivor cards to add to your deck"
+          }
         },
         {
           "label": "Learn the Wasteland Drill",
           "resolution": "Their disciplined signals pass through your assembled ranks.",
           "template_id": 67,
-          "template": "All characters in your deck become the subtype of your choice.",
-          "variables": {},
-          "effect_text": "All characters in your deck become the subtype of your choice."
+          "variables": {}
         }
       ],
       "scores": {
@@ -2379,23 +2119,19 @@
           "label": "Trace the nearest stones",
           "resolution": "Her fingers close; one formation sharpens.",
           "template_id": 15,
-          "template": "Draft a {predicate} card from 4 random choices and gain {count} copies of it",
           "variables": {
             "predicate": "Event",
             "count": 1
-          },
-          "effect_text": "Draft an Event card from 4 random choices and gain 1 copy of it"
+          }
         },
         {
           "label": "Scatter the outer fragments",
           "resolution": "Two fragments break away and remain aloft.",
           "template_id": 52,
-          "template": "Gain one copy of each of {count} random {predicate} cards",
           "variables": {
             "count": 2,
             "predicate": "Event"
-          },
-          "effect_text": "Gain one copy of each of 2 random Event cards"
+          }
         }
       ],
       "scores": {
@@ -2420,7 +2156,6 @@
           "label": "Entrust a recent deed",
           "resolution": "A hovering shard gathers light along its edges.",
           "template_id": 19,
-          "template": "Apply {transfiguration} to $DECK_CARD",
           "variables": {
             "transfiguration": "Inspired"
           },
@@ -2428,19 +2163,16 @@
             "$DECK_CARD": {
               "predicate": "Event"
             }
-          },
-          "effect_text": "Apply Inspired to a random Event card from your deck"
+          }
         },
         {
           "label": "Turn both palms outward",
           "resolution": "The loose stones wheel into a new arrangement.",
           "template_id": 54,
-          "template": "Modify {count} random cards to become {card_type} cards",
           "variables": {
             "count": 2,
             "card_type": "Event"
-          },
-          "effect_text": "Modify 2 random cards to become Event cards"
+          }
         }
       ],
       "scores": {
@@ -2461,24 +2193,20 @@
           "label": "Study every arrangement",
           "resolution": "Each formation holds briefly beneath her outstretched hands.",
           "template_id": 16,
-          "template": "Take any number of {predicate} cards from 4 random choices",
           "variables": {
             "predicate": "Event"
-          },
-          "effect_text": "Take any number of Event cards from 4 random choices"
+          }
         },
         {
           "label": "Turn the central fragment",
           "resolution": "Its hidden face reveals another remembered scene.",
           "template_id": 47,
-          "template": "Choose a card to purge and replace it with {card_id}",
           "variables": {
             "card_id": {
               "id": "2162742c-09d0-4e62-ae49-0f8f79b45adc",
               "display_name": "Glimpse of What Was"
             }
-          },
-          "effect_text": "Choose a card to purge and replace it with Glimpse of What Was"
+          }
         }
       ],
       "scores": {
@@ -2499,19 +2227,15 @@
           "label": "Read the suspended pattern",
           "resolution": "A clear mark emerges across rough stone.",
           "template_id": 28,
-          "template": "Gain a random dreamsign",
-          "variables": {},
-          "effect_text": "Gain a random dreamsign"
+          "variables": {}
         },
         {
           "label": "Break the suspended pattern",
           "resolution": "The stones drop as their gathered force disperses.",
           "template_id": 62,
-          "template": "Purge a chosen dreamsign and gain {essence} essence",
           "variables": {
             "essence": 50
-          },
-          "effect_text": "Purge a chosen dreamsign and gain 50 essence"
+          }
         }
       ],
       "scores": {
@@ -2532,17 +2256,13 @@
           "label": "Hold her pattern steady",
           "resolution": "The fragments settle into mirrored formations.",
           "template_id": 41,
-          "template": "Add a duplication site to this dreamscape",
-          "variables": {},
-          "effect_text": "Add a duplication site to this dreamscape"
+          "variables": {}
         },
         {
           "label": "Shift the stone pattern",
           "resolution": "Broken pieces recombine beneath her outstretched hands.",
           "template_id": 44,
-          "template": "Add a transfiguration site to this dreamscape",
-          "variables": {},
-          "effect_text": "Add a transfiguration site to this dreamscape"
+          "variables": {}
         }
       ],
       "scores": {

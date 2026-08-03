@@ -17,9 +17,10 @@ import type {
   EncounterEditorCandidate,
   EncounterEditorClient,
   EncounterEditorGroup,
+  EncounterEditableTextField,
   EncounterSelectionKind,
   EncounterTemplateHealth,
-  EncounterTextField,
+  EncounterCandidateTextField,
 } from "./encounter-editor-types";
 import {
   beginFieldEdit,
@@ -92,7 +93,7 @@ function updateConfirmedText(
   request: {
     cardId: string;
     templatePairId: string;
-    field: EncounterTextField;
+    field: EncounterCandidateTextField;
     actionTemplateId?: number;
     value: string;
   },
@@ -117,9 +118,15 @@ function updateConfirmedText(
 function fieldTarget(
   group: EncounterEditorGroup,
   candidate: EncounterEditorCandidate,
-  field: EncounterTextField,
+  field: EncounterEditableTextField,
   actionTemplateId?: number,
 ): FieldTarget {
+  if (field === "template") {
+    return {
+      cardId: `${group.cardId}:${candidate.template_pair_id}:${String(actionTemplateId)}:template`,
+      field,
+    };
+  }
   return {
     cardId: `${group.cardId}:${candidate.template_pair_id}:${actionTemplateId ?? "candidate"}`,
     field,
@@ -235,7 +242,7 @@ function EncounterEditorRow({
 
   function editable(
     candidate: EncounterEditorCandidate,
-    field: EncounterTextField,
+    field: EncounterEditableTextField,
     value: string,
     children: React.ReactNode,
     actionTemplateId?: number,
@@ -264,41 +271,65 @@ function EncounterEditorRow({
         revision = started.clientRevision;
         return started.state;
       });
-      const request = {
-        cardId: group.cardId,
-        templatePairId: candidate.template_pair_id,
-        field,
-        ...(actionTemplateId === undefined ? {} : { actionTemplateId }),
-        value: nextValue,
-        clientRevision: revision,
-      };
       try {
-        const response = await client.saveText(request);
-        const confirmed = response.confirmation;
-        if (
-          response.clientRevision !== revision ||
-          confirmed.cardId !== request.cardId ||
-          confirmed.templatePairId !== request.templatePairId ||
-          confirmed.field !== field ||
-          confirmed.actionTemplateId !== actionTemplateId ||
-          confirmed.value !== nextValue
-        ) {
-          throw new Error("The server returned a mismatched text confirmation.");
+        if (field === "template") {
+          if (actionTemplateId === undefined) {
+            throw new Error("Template edits require an action template id.");
+          }
+          const response = await client.saveTemplate({
+            templateId: actionTemplateId,
+            value: nextValue,
+            clientRevision: revision,
+          });
+          if (
+            response.clientRevision !== revision ||
+            response.confirmation.templateId !== actionTemplateId ||
+            response.confirmation.template !== nextValue
+          ) {
+            throw new Error("The server returned a mismatched template confirmation.");
+          }
+          setGroups(response.groups);
+          logEvent("encounter_editor_template_saved", {
+            templateId: actionTemplateId,
+          });
+        } else {
+          const request = {
+            cardId: group.cardId,
+            templatePairId: candidate.template_pair_id,
+            field,
+            ...(actionTemplateId === undefined ? {} : { actionTemplateId }),
+            value: nextValue,
+            clientRevision: revision,
+          };
+          const response = await client.saveText(request);
+          const confirmed = response.confirmation;
+          if (
+            response.clientRevision !== revision ||
+            confirmed.cardId !== request.cardId ||
+            confirmed.templatePairId !== request.templatePairId ||
+            confirmed.field !== field ||
+            confirmed.actionTemplateId !== actionTemplateId ||
+            confirmed.value !== nextValue
+          ) {
+            throw new Error("The server returned a mismatched text confirmation.");
+          }
+          setGroups((current) => updateConfirmedText(current, request));
+          logEvent("encounter_editor_text_saved", {
+            cardId: group.cardId,
+            templatePairId: candidate.template_pair_id,
+            field,
+            actionTemplateId,
+          });
         }
-        setGroups((current) => updateConfirmedText(current, request));
         update((state) => completeFieldSave(state, target, revision, nextValue));
-        logEvent("encounter_editor_text_saved", {
-          cardId: group.cardId,
-          templatePairId: candidate.template_pair_id,
-          field,
-          actionTemplateId,
-        });
       } catch (error) {
         const isRejected = error instanceof EditorApiRequestError && error.status < 500;
         update((state) => isRejected
           ? rejectSubmittedFieldSave(state, target, revision, value, messageFor(error))
           : failFieldSave(state, target, revision, value, messageFor(error)));
-        logEvent("encounter_editor_text_failed", {
+        logEvent(field === "template"
+          ? "encounter_editor_template_failed"
+          : "encounter_editor_text_failed", {
           cardId: group.cardId,
           templatePairId: candidate.template_pair_id,
           field,
@@ -402,7 +433,7 @@ function EncounterEditorRow({
                 {selectedActions.actions.map((action) => (
                   <section className="encounter-editor-action" key={action.template_id}>
                     {editable(selectedActions, "label", action.label, <h3>{action.label}</h3>, action.template_id, "single-line")}
-                    {editable(selectedActions, "effect_text", action.effect_text, <p>{action.effect_text}</p>, action.template_id)}
+                    {editable(selectedActions, "template", action.template, <p>{action.rendered_template}</p>, action.template_id)}
                     {editable(selectedActions, "resolution", action.resolution, <p className="encounter-editor-resolution">{action.resolution}</p>, action.template_id)}
                   </section>
                 ))}

@@ -1,10 +1,13 @@
-export type EncounterTextField = "prose" | "label" | "effect_text" | "resolution";
+export type EncounterCandidateTextField = "prose" | "label" | "resolution";
+export type EncounterEditableTextField = EncounterCandidateTextField | "template";
 export type EncounterSelectionKind = "prose" | "actions";
 
 export interface EncounterEditorAction {
   template_id: number;
+  template: string;
+  rendered_template: string;
+  variables: Record<string, unknown>;
   label: string;
-  effect_text: string;
   resolution: string;
   [key: string]: unknown;
 }
@@ -62,8 +65,14 @@ export interface EncounterTemplateHealth {
 export interface EncounterTextSaveRequest {
   cardId: string;
   templatePairId: string;
-  field: EncounterTextField;
+  field: EncounterCandidateTextField;
   actionTemplateId?: number;
+  value: string;
+  clientRevision: number;
+}
+
+export interface EncounterTemplateSaveRequest {
+  templateId: number;
   value: string;
   clientRevision: number;
 }
@@ -90,5 +99,13 @@ export interface EncounterEditorClient {
   saveText(request: EncounterTextSaveRequest): Promise<{
     clientRevision: number;
     confirmation: Omit<EncounterTextSaveRequest, "clientRevision">;
+  }>;
+  saveTemplate(request: EncounterTemplateSaveRequest): Promise<{
+    clientRevision: number;
+    confirmation: {
+      templateId: number;
+      template: string;
+    };
+    groups: EncounterEditorGroup[];
   }>;
 }

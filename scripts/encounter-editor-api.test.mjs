@@ -15,7 +15,7 @@ function candidate(rank, selected = false) {
     actions: [1, 2].map((templateId) => ({
       template_id: templateId,
       label: `Label ${String(templateId)}`,
-      effect_text: `Effect ${String(templateId)}`,
+      variables: templateId === 1 ? { count: rank } : {},
       resolution: `Resolution ${String(templateId)}`,
     })),
     rank,
@@ -61,6 +61,13 @@ describe("encounter editor API", () => {
       `${JSON.stringify({ [CARD_ID]: [candidate(1, true), candidate(2)] }, null, 2)}\n`,
     );
     writeFileSync(
+      join(rootDir, "data", "templates.json"),
+      `${JSON.stringify([
+        { template_id: 1, template: "Draw {count} cards and keep $RUNTIME_CARD" },
+        { template_id: 2, template: "Gain a dreamsign" },
+      ], null, 2)}\n`,
+    );
+    writeFileSync(
       join(rootDir, "data", "tabula", "cards.toml"),
       `[[cards]]\nid = "${CARD_ID}"\nname = "The Test Crossing"\nrendered-text = "Gain 1●."\nimage-number = 42\n`,
     );
@@ -100,6 +107,10 @@ describe("encounter editor API", () => {
       cardName: "The Test Crossing",
       cardAbilityText: "Gain 1●.",
       imageNumber: 42,
+    });
+    expect(result.body.groups[0].encounters[0].actions[0]).toMatchObject({
+      template: "Draw {count} cards and keep $RUNTIME_CARD",
+      rendered_template: "Draw 1 cards and keep $RUNTIME_CARD",
     });
   });
 
@@ -194,6 +205,40 @@ describe("encounter editor API", () => {
     });
     expect(result.status).toBe(200);
     expect(result.body.confirmation).toMatchObject({ actionTemplateId: 2, value: "A revised resolution" });
+  });
+
+  it("persists a template edit to templates.json and returns globally refreshed groups", async () => {
+    const result = await call("PATCH", "/api/editor/encounters/templates/1", {
+      value: "Draw {count} additional cards and keep $RUNTIME_CARD",
+      clientRevision: 9,
+    });
+    expect(result).toMatchObject({
+      status: 200,
+      body: {
+        clientRevision: 9,
+        confirmation: {
+          templateId: 1,
+          template: "Draw {count} additional cards and keep $RUNTIME_CARD",
+        },
+      },
+    });
+    expect(result.body.groups[0].encounters[0].actions[0].rendered_template)
+      .toBe("Draw 1 additional cards and keep $RUNTIME_CARD");
+    const templates = JSON.parse(readFileSync(join(rootDir, "data", "templates.json"), "utf8"));
+    expect(templates[0].template).toBe("Draw {count} additional cards and keep $RUNTIME_CARD");
+    const candidates = JSON.parse(readFileSync(join(rootDir, "data", "encounter_candidates.json"), "utf8"));
+    expect(candidates[CARD_ID][0].actions[0]).not.toHaveProperty("template");
+  });
+
+  it("rejects template edits that make stored variables invalid", async () => {
+    const path = join(rootDir, "data", "templates.json");
+    const before = readFileSync(path, "utf8");
+    const result = await call("PATCH", "/api/editor/encounters/templates/1", {
+      value: "Draw {amount} cards",
+    });
+    expect(result.status).toBe(400);
+    expect(result.body.error.message).toContain("variables is missing {amount}");
+    expect(readFileSync(path, "utf8")).toBe(before);
   });
 
   it("rejects malformed identities and missing targets without touching the file", async () => {

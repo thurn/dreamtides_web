@@ -4,10 +4,12 @@ import { basename, extname, join, resolve } from "node:path";
 import { homedir } from "node:os";
 import { fileURLToPath } from "node:url";
 import {
+  editEncounterTemplate,
   editEncounterCandidateText,
   readEncounterEditorGroups,
   selectEncounterCandidate,
   updateEncounterCandidates,
+  updateEncounterTemplate,
 } from "./encounter-editor-data.mjs";
 import { readEncounterTemplateHealth } from "./encounter-template-health.mjs";
 
@@ -30,6 +32,7 @@ const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
 const PAIR_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 const IMAGE_NUMBER_PATTERN = /^\d+$/u;
+const TEMPLATE_ID_PATTERN = /^\d+$/u;
 const IMAGE_CONTENT_TYPES = new Map([
   [".jpeg", "image/jpeg"],
   [".jpg", "image/jpeg"],
@@ -140,6 +143,9 @@ function routeFor(url) {
   if (parts.length === 2 && decoded[0] === "art") {
     return { kind: "art", imageNumber: decoded[1] };
   }
+  if (parts.length === 2 && decoded[0] === "templates") {
+    return { kind: "template", templateId: decoded[1] };
+  }
   if (parts.length === 2 && decoded[1] === "selection") {
     return { kind: "selection", cardId: decoded[0] };
   }
@@ -150,7 +156,7 @@ function routeFor(url) {
 }
 
 function statusFor(error) {
-  if (["ENCOUNTER_NOT_FOUND", "CANDIDATE_NOT_FOUND", "ACTION_NOT_FOUND", "ART_NOT_FOUND"].includes(error.code)) {
+  if (["ENCOUNTER_NOT_FOUND", "CANDIDATE_NOT_FOUND", "ACTION_NOT_FOUND", "TEMPLATE_NOT_FOUND", "ART_NOT_FOUND"].includes(error.code)) {
     return 404;
   }
   if (error.code === "AMBIGUOUS_ART") return 409;
@@ -207,6 +213,33 @@ export function createEncounterEditorApiMiddleware(options = {}) {
           return;
         }
         respond(res, 200, { templateHealth: templateHealthReader({ rootDir }) });
+        return;
+      }
+      if (route.kind === "template") {
+        if (req.method !== "PATCH") {
+          fail(res, 405, "METHOD_NOT_ALLOWED", "This endpoint only supports PATCH.");
+          return;
+        }
+        if (!TEMPLATE_ID_PATTERN.test(route.templateId ?? "")) {
+          fail(res, 400, "INVALID_TEMPLATE_ID", "Route template id must contain digits only.");
+          return;
+        }
+        const body = await readBody(req);
+        if (body === null || typeof body !== "object" || Array.isArray(body)) {
+          throw new Error("Request body must be an object.");
+        }
+        const confirmation = updateEncounterTemplate(
+          (templates, candidates) => editEncounterTemplate(templates, candidates, {
+            templateId: Number(route.templateId),
+            value: body.value,
+          }),
+          dataOptions,
+        );
+        respond(res, 200, {
+          confirmation,
+          groups: readEncounterEditorGroups(dataOptions),
+          ...(body.clientRevision === undefined ? {} : { clientRevision: body.clientRevision }),
+        });
         return;
       }
       if (req.method !== "PATCH") {

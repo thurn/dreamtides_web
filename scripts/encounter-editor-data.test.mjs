@@ -14,9 +14,12 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   commitEncounterCandidates,
+  commitEncounterTemplates,
+  editEncounterTemplate,
   editEncounterCandidateText,
   parseEncounterCandidates,
   readEncounterEditorGroups,
+  renderEncounterTemplate,
   selectEncounterCandidate,
 } from "./encounter-editor-data.mjs";
 
@@ -32,17 +35,13 @@ function candidate(rank, selected = false) {
         label: `First ${String(rank)}`,
         resolution: `First resolution ${String(rank)}`,
         template_id: rank * 10,
-        template: "Gain something",
-        variables: {},
-        effect_text: `First effect ${String(rank)}`,
+        variables: { count: rank },
       },
       {
         label: `Second ${String(rank)}`,
         resolution: `Second resolution ${String(rank)}`,
         template_id: rank * 10 + 1,
-        template: "Gain something else",
         variables: {},
-        effect_text: `Second effect ${String(rank)}`,
       },
     ],
     scores: { overall: 10 - rank },
@@ -64,6 +63,15 @@ function writeFixtureRoot() {
     `${JSON.stringify(documentFixture(), null, 2)}\n`,
   );
   writeFileSync(
+    join(rootDir, "data", "templates.json"),
+    `${JSON.stringify([
+      { template_id: 10, template: "Gain {count} cards and $KEEP_THIS" },
+      { template_id: 11, template: "Gain something else" },
+      { template_id: 20, template: "Gain {count} cards" },
+      { template_id: 21, template: "Gain another thing" },
+    ], null, 2)}\n`,
+  );
+  writeFileSync(
     join(rootDir, "data", "tabula", "cards.toml"),
     `[[cards]]\nid = "${CARD_ID}"\nname = "Fixture Guide"\nrendered-text = "Gain 1●."\nimage-number = 42\n\n[[cards]]\nid = "${UNRELATED_CARD_ID}"\nname = "Blank Rules Card"\nrendered-text = ""\nimage-number = 43\n`,
   );
@@ -82,6 +90,11 @@ describe("encounter editor data", () => {
     });
     expect(groups[0].encounters.find((entry) => entry.selected?.prose)?.rank).toBe(1);
     expect(groups[0].encounters.find((entry) => entry.selected?.actions)?.rank).toBe(1);
+    expect(groups[0].encounters[0].actions[0]).toMatchObject({
+      template_id: 10,
+      template: "Gain {count} cards and $KEEP_THIS",
+      rendered_template: "Gain 1 cards and $KEEP_THIS",
+    });
   });
 
   it("moves one selection marker without changing the other marker, rank, or source order", () => {
@@ -122,8 +135,40 @@ describe("encounter editor data", () => {
     const edited = action.document[CARD_ID][0];
     expect(edited.prose).toBe("A revised scene.");
     expect(edited.actions[1].resolution).toBe("A revised resolution.");
-    expect(edited.actions[1].template).toBe("Gain something else");
+    expect(edited.actions[1]).not.toHaveProperty("template");
     expect(edited.rank).toBe(1);
+  });
+
+  it("renders ordinary variables while preserving runtime variables", () => {
+    expect(renderEncounterTemplate(
+      "Gain {count} copies of $OFFERED_CARD named {card_id}",
+      {
+        count: 2,
+        card_id: {
+          id: "22222222-2222-4222-8222-222222222222",
+          display_name: "Fixture Ally",
+        },
+      },
+    )).toBe("Gain 2 copies of $OFFERED_CARD named Fixture Ally");
+  });
+
+  it("edits canonical templates and rejects placeholder changes that invalidate candidates", () => {
+    const templates = [
+      { template_id: 10, template: "Gain {count} cards" },
+      { template_id: 11, template: "Gain something else" },
+      { template_id: 20, template: "Gain {count} cards" },
+      { template_id: 21, template: "Gain another thing" },
+    ];
+    const edited = editEncounterTemplate(templates, documentFixture(), {
+      templateId: 10,
+      value: "Draw {count} cards",
+    });
+    expect(edited.document[0].template).toBe("Draw {count} cards");
+    expect(templates[0].template).toBe("Gain {count} cards");
+    expect(() => editEncounterTemplate(templates, documentFixture(), {
+      templateId: 10,
+      value: "Draw {amount} cards",
+    })).toThrow("variables is missing {amount}");
   });
 
   it("rejects blank text and ambiguous selected markers", () => {
@@ -173,6 +218,27 @@ describe("encounter editor data", () => {
     expect(() =>
       commitEncounterCandidates(next, { rootDir, fileSystem }),
     ).toThrow("Injected replacement failure");
+    expect(readFileSync(path, "utf8")).toBe(before);
+  });
+
+  it("restores the original template catalog when atomic replacement fails", () => {
+    const rootDir = writeFixtureRoot();
+    const path = join(rootDir, "data", "templates.json");
+    const before = readFileSync(path, "utf8");
+    const next = JSON.parse(before);
+    next[0].template = "Draw {count} cards and $KEEP_THIS";
+    const fileSystem = {
+      existsSync,
+      readFileSync,
+      renameSync(from, to) {
+        if (String(from).endsWith(".tmp")) throw new Error("Injected template failure");
+        renameSync(from, to);
+      },
+      rmSync,
+      writeFileSync,
+    };
+    expect(() => commitEncounterTemplates(next, { rootDir, fileSystem }))
+      .toThrow("Injected template failure");
     expect(readFileSync(path, "utf8")).toBe(before);
   });
 });

@@ -11,6 +11,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from template_rendering import render_template
+
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 SKILL_DIR = SCRIPTS_DIR.parent
@@ -442,7 +445,11 @@ class ValidateExplorationTests(unittest.TestCase):
         self.assertEqual(leaked_ids, set())
         self.assertEqual(leaked_templates, {})
 
-    def run_validator(self, template_ids: list[int]) -> subprocess.CompletedProcess[str]:
+    def run_validator(
+        self,
+        template_ids: list[int],
+        legacy_field: str | None = None,
+    ) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             templates = [
@@ -484,13 +491,17 @@ rendered-text = "Gain 1 energy."
                     {
                         "id": f"pair-{index + 1}",
                         "actions": [
-                            templates[template_ids[index * 2] - 1],
-                            templates[template_ids[index * 2 + 1] - 1],
+                            {"template_id": template_ids[index * 2]},
+                            {"template_id": template_ids[index * 2 + 1]},
                         ],
                     }
                     for index in range(5)
                 ],
             }
+            if legacy_field is not None:
+                request["template_pairs"][0]["actions"][0][legacy_field] = (
+                    "Copied template text"
+                )
             input_path = root / "request.json"
             input_path.write_text(json.dumps(request), encoding="utf-8")
             return subprocess.run(
@@ -574,7 +585,10 @@ rendered-text = "Gain 1 energy."
                 "template_pairs": [
                     {
                         "id": f"pair-{index + 1}",
-                        "actions": templates[index * 2 : index * 2 + 2],
+                        "actions": [
+                            {"template_id": action["template_id"]}
+                            for action in templates[index * 2 : index * 2 + 2]
+                        ],
                     }
                     for index in range(5)
                 ],
@@ -591,11 +605,10 @@ rendered-text = "Gain 1 energy."
                         }
                     actions.append(
                         {
-                            **action,
+                            "template_id": action["template_id"],
                             "label": "Take reward",
                             "resolution": "The figure offers a quiet answer",
                             "variables": variables,
-                            "effect_text": "Reference Synthetic Animal",
                         }
                     )
                 events.append(
@@ -645,10 +658,29 @@ rendered-text = "Gain 1 energy."
         result = self.run_validator(list(range(1, 11)))
         self.assertEqual(result.returncode, 0, result.stderr)
 
+    def test_renderer_substitutes_braced_variables_and_preserves_runtime_tokens(self) -> None:
+        self.assertEqual(
+            render_template(
+                "Draw {count} cards, then gain $OFFERED_CARD",
+                {"count": 2},
+            ),
+            "Draw 2 cards, then gain $OFFERED_CARD",
+        )
+
     def test_rejects_a_template_reused_across_pairs(self) -> None:
         result = self.run_validator([1, 2, 3, 4, 5, 6, 7, 8, 9, 1])
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("must be unique across all pairs", result.stderr)
+
+    def test_rejects_copied_template_text_fields(self) -> None:
+        for legacy_field in ("template", "effect_text"):
+            with self.subTest(legacy_field=legacy_field):
+                result = self.run_validator(list(range(1, 11)), legacy_field)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(
+                    f".{legacy_field}: is forbidden",
+                    result.stderr,
+                )
 
     def test_rejects_source_card_as_a_template_variable(self) -> None:
         for placeholder in ("card_id", "card_name"):

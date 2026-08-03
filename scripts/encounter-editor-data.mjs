@@ -14,12 +14,16 @@ export const DEFAULT_ENCOUNTER_CARD_PATH = join(
   "tabula",
   "cards.toml",
 );
+export const DEFAULT_ENCOUNTER_TEMPLATES_PATH = join("data", "templates.json");
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
 const TEMPLATE_PAIR_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
-const ACTION_FIELDS = new Set(["label", "effect_text", "resolution"]);
+const ACTION_FIELDS = new Set(["label", "resolution"]);
+const LEGACY_ACTION_FIELDS = new Set(["effect_text", "template"]);
 const SELECTION_KINDS = ["prose", "actions"];
+const PLACEHOLDER_PATTERN = /\{([a-z][a-z0-9_]*)\}/gu;
+const SPECIAL_PATTERN = /\$[A-Z][A-Z0-9_]*/gu;
 
 const defaultFileSystem = {
   existsSync,
@@ -55,13 +59,99 @@ function canonicalUuid(value, label) {
 
 function validateAction(raw, label) {
   const action = objectRecord(raw, label);
+  for (const legacyField of LEGACY_ACTION_FIELDS) {
+    if (Object.hasOwn(action, legacyField)) {
+      throw new Error(`${label}.${legacyField} is forbidden; template text lives only in data/templates.json.`);
+    }
+  }
   if (!Number.isInteger(action.template_id) || action.template_id < 0) {
     throw new Error(`${label}.template_id must be a non-negative integer.`);
   }
   requiredString(action.label, `${label}.label`);
-  requiredString(action.effect_text, `${label}.effect_text`);
   requiredString(action.resolution, `${label}.resolution`);
+  objectRecord(action.variables, `${label}.variables`);
   return action;
+}
+
+function parseEncounterTemplates(source) {
+  let raw;
+  try {
+    raw = JSON.parse(source);
+  } catch {
+    throw new Error("templates.json must contain valid JSON.");
+  }
+  if (!Array.isArray(raw) || raw.length === 0) {
+    throw new Error("templates.json must contain a non-empty array.");
+  }
+  const byId = new Map();
+  raw.forEach((entryRaw, index) => {
+    const entry = objectRecord(entryRaw, `templates[${String(index)}]`);
+    if (!Number.isInteger(entry.template_id) || entry.template_id < 0) {
+      throw new Error(`templates[${String(index)}].template_id must be a non-negative integer.`);
+    }
+    const template = requiredString(entry.template, `templates[${String(index)}].template`);
+    if (byId.has(entry.template_id)) {
+      throw new Error(`templates.json has duplicate template_id ${String(entry.template_id)}.`);
+    }
+    byId.set(entry.template_id, template);
+  });
+  return { document: raw, byId };
+}
+
+function displayVariable(value, label) {
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value);
+  }
+  if (value !== null && typeof value === "object" && !Array.isArray(value)) {
+    return requiredString(value.display_name, `${label}.display_name`);
+  }
+  throw new Error(`${label} must be a JSON primitive or an entity reference with display_name.`);
+}
+
+export function renderEncounterTemplate(template, variables) {
+  const values = objectRecord(variables, "variables");
+  return template.replace(PLACEHOLDER_PATTERN, (_match, placeholder) => {
+    if (!Object.hasOwn(values, placeholder)) {
+      throw new Error(`variables is missing {${placeholder}}.`);
+    }
+    return displayVariable(values[placeholder], `variables.${placeholder}`);
+  });
+}
+
+function validateTemplateUsage(document, templatesById) {
+  for (const [cardId, encounters] of Object.entries(document)) {
+    encounters.forEach((candidate, candidateIndex) => {
+      candidate.actions.forEach((action, actionIndex) => {
+        const path = `encounter candidates.${cardId}[${String(candidateIndex)}].actions[${String(actionIndex)}]`;
+        const template = templatesById.get(action.template_id);
+        if (template === undefined) {
+          throw new Error(`${path}.template_id does not identify a canonical template.`);
+        }
+        const placeholders = new Set(Array.from(template.matchAll(PLACEHOLDER_PATTERN), (match) => match[1]));
+        const variableKeys = Object.keys(action.variables);
+        const missing = [...placeholders].filter((placeholder) => !Object.hasOwn(action.variables, placeholder));
+        const extra = variableKeys.filter((key) => !placeholders.has(key));
+        if (missing.length > 0) {
+          throw new Error(`${path}.variables is missing ${missing.map((name) => `{${name}}`).join(", ")}.`);
+        }
+        if (extra.length > 0) {
+          throw new Error(`${path}.variables contains values absent from template ${String(action.template_id)}: ${extra.join(", ")}.`);
+        }
+        const specials = new Set(template.match(SPECIAL_PATTERN) ?? []);
+        if (action.selection !== undefined) {
+          const selection = objectRecord(action.selection, `${path}.selection`);
+          for (const [special, ruleRaw] of Object.entries(selection)) {
+            if (!specials.has(special)) {
+              throw new Error(`${path}.selection.${special} is absent from template ${String(action.template_id)}.`);
+            }
+            const rule = objectRecord(ruleRaw, `${path}.selection.${special}`);
+            requiredString(rule.predicate, `${path}.selection.${special}.predicate`);
+          }
+        }
+        renderEncounterTemplate(template, action.variables);
+      });
+    });
+  }
 }
 
 function validateCandidate(raw, label) {
@@ -182,10 +272,15 @@ export function readEncounterEditorGroups({
   rootDir = ROOT,
   candidatesPath = DEFAULT_ENCOUNTER_CANDIDATES_PATH,
   cardTomlPath = DEFAULT_ENCOUNTER_CARD_PATH,
+  templatesPath = DEFAULT_ENCOUNTER_TEMPLATES_PATH,
   fileSystem = defaultFileSystem,
 } = {}) {
   const source = fileSystem.readFileSync(join(rootDir, candidatesPath), "utf8");
   const groups = parseEncounterCandidates(source);
+  const templates = parseEncounterTemplates(
+    fileSystem.readFileSync(join(rootDir, templatesPath), "utf8"),
+  );
+  validateTemplateUsage(groups, templates.byId);
   const cards = readCardIndex(
     rootDir,
     cardTomlPath,
@@ -202,7 +297,17 @@ export function readEncounterEditorGroups({
       cardName: card.name,
       cardAbilityText: card.abilityText,
       imageNumber: card.imageNumber,
-      encounters,
+      encounters: encounters.map((candidate) => ({
+        ...candidate,
+        actions: candidate.actions.map((action) => {
+          const template = templates.byId.get(action.template_id);
+          return {
+            ...action,
+            template,
+            rendered_template: renderEncounterTemplate(template, action.variables),
+          };
+        }),
+      })),
     };
   });
 }
@@ -288,7 +393,7 @@ export function editEncounterCandidateText(
     candidate.prose = confirmedValue;
   } else {
     if (!ACTION_FIELDS.has(field)) {
-      throw new Error("Only prose, label, effect_text, and resolution are editable.");
+      throw new Error("Only prose, label, and resolution are encounter-candidate text fields.");
     }
     if (!Number.isInteger(actionTemplateId) || actionTemplateId < 0) {
       throw new Error("Action text edits require a non-negative actionTemplateId.");
@@ -317,6 +422,31 @@ export function editEncounterCandidateText(
 }
 
 export function serializeEncounterCandidates(document) {
+  return `${JSON.stringify(document, null, 2)}\n`;
+}
+
+export function editEncounterTemplate(templatesDocument, candidatesDocument, { templateId, value }) {
+  if (!Number.isInteger(templateId) || templateId < 0) {
+    throw new Error("templateId must be a non-negative integer.");
+  }
+  const confirmedValue = requiredString(value, "value");
+  const next = structuredClone(templatesDocument);
+  const entry = next.find((candidate) => candidate.template_id === templateId);
+  if (entry === undefined) {
+    const error = new Error(`Template ${String(templateId)} was not found.`);
+    error.code = "TEMPLATE_NOT_FOUND";
+    throw error;
+  }
+  entry.template = confirmedValue;
+  const parsed = parseEncounterTemplates(JSON.stringify(next));
+  validateTemplateUsage(candidatesDocument, parsed.byId);
+  return {
+    document: parsed.document,
+    confirmation: { templateId, template: confirmedValue },
+  };
+}
+
+export function serializeEncounterTemplates(document) {
   return `${JSON.stringify(document, null, 2)}\n`;
 }
 
@@ -359,6 +489,40 @@ export function commitEncounterCandidates(
   }
 }
 
+export function commitEncounterTemplates(
+  document,
+  {
+    rootDir = ROOT,
+    templatesPath = DEFAULT_ENCOUNTER_TEMPLATES_PATH,
+    fileSystem = defaultFileSystem,
+  } = {},
+) {
+  const parsed = parseEncounterTemplates(JSON.stringify(document));
+  const destination = join(rootDir, templatesPath);
+  const temp = tempPathFor(destination, "tmp");
+  const backup = tempPathFor(destination, "bak");
+  const hadDestination = fileSystem.existsSync(destination);
+  try {
+    fileSystem.writeFileSync(temp, serializeEncounterTemplates(parsed.document));
+    if (hadDestination) fileSystem.renameSync(destination, backup);
+    fileSystem.renameSync(temp, destination);
+  } catch (error) {
+    fileSystem.rmSync(temp, { force: true });
+    if (hadDestination && fileSystem.existsSync(backup)) {
+      fileSystem.rmSync(destination, { force: true });
+      fileSystem.renameSync(backup, destination);
+    }
+    throw error;
+  }
+  if (hadDestination) {
+    try {
+      fileSystem.rmSync(backup, { force: true });
+    } catch {
+      // The committed destination is authoritative; stale backup cleanup is best-effort.
+    }
+  }
+}
+
 export function updateEncounterCandidates(
   edit,
   {
@@ -375,5 +539,25 @@ export function updateEncounterCandidates(
     candidatesPath,
     fileSystem,
   });
+  return result.confirmation;
+}
+
+export function updateEncounterTemplate(
+  edit,
+  {
+    rootDir = ROOT,
+    candidatesPath = DEFAULT_ENCOUNTER_CANDIDATES_PATH,
+    templatesPath = DEFAULT_ENCOUNTER_TEMPLATES_PATH,
+    fileSystem = defaultFileSystem,
+  } = {},
+) {
+  const candidates = parseEncounterCandidates(
+    fileSystem.readFileSync(join(rootDir, candidatesPath), "utf8"),
+  );
+  const templates = parseEncounterTemplates(
+    fileSystem.readFileSync(join(rootDir, templatesPath), "utf8"),
+  );
+  const result = edit(templates.document, candidates);
+  commitEncounterTemplates(result.document, { rootDir, templatesPath, fileSystem });
   return result.confirmation;
 }

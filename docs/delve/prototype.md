@@ -7,11 +7,11 @@
 1. A child raises a round lantern before a narrow window of stars.
    - ***Exchange Familiar Forms*** — Purge a chosen card and gain a copy of another chosen card
      - **Response:** One silhouette recedes as another emerges beside its double.
-   - ***Request the Round Lantern*** — Gain Passage Lantern. The first time each turn you rematerialize a character, it gains +1✦.
+   - ***Request the Round Lantern*** — Gain a random dreamsign
      - **Response:** The child lowers its steady glow into your hands.
 
 2. A small lantern-bearer reaches toward a towering opening filled with distant stars.
-   - ***Invite the Lantern-Bearer*** — Gain Lantern Scout (1● Guide Character, 1✦ — ▸Materialized: Foresee 1.)
+   - ***Invite the Lantern-Bearer*** — Gain a random ≤2● cost Character card
      - **Response:** The small figure steps through beside you.
    - ***Trade a Familiar Outline*** — Purge a chosen ≤2● cost Character card and gain a random ≤2● cost Character replacement
      - **Response:** A different silhouette approaches through the opening.
@@ -23,7 +23,7 @@
      - **Response:** New outlines approach as old ones recede.
 
 4. Before you, a lantern-bearing figure faces an immense star-filled threshold.
-   - ***Focus the Lantern Inward*** — Apply Kindled to a random ≤2● cost Character card from your deck
+   - ***Focus the Lantern Inward*** — Apply Kindled to $DECK_CARD
      - **Response:** Its concentrated beam strengthens a nearby silhouette.
    - ***Cast the Light Beyond*** — The next draft or shop site you visit will contain transfigured cards
      - **Response:** Distant offerings shimmer in unfamiliar forms.
@@ -31,7 +31,7 @@
 5. A hanging lantern glows beside you as countless stars fill a narrow opening.
    - ***Call Your Companions Forward*** — Gain 10 essence for each ≤2● cost Character card in your deck
      - **Response:** Each answering silhouette carries a bright point.
-   - ***Call Through the Opening*** — Gain 2 copies of the offered card
+   - ***Call Through the Opening*** — Gain 2 copies of $OFFERED_CARD
      - **Response:** Matching shapes cross from the distant opening.
 
 ---
@@ -45,7 +45,7 @@ Cards you reclaim are not banished when they leave play.
 ![Source artwork for Seeker of Lost Paths](</Users/dthurn/Documents/shutterstock/images/stock-photo-futuristic-man-sitting-guarding-the-dimensional-gate-in-an-abandoned-place-digital-art-style-2287436067.jpg>)
 
 1. Before you, an armored sentinel rests beside a fractured doorway glowing amid ruins.
-   - ***Invite the Sentinel*** — Gain Ruinwatch Custodian (2● Survivor Character, 2✦ — ▸Dissolved: Choose another character in your void to gain reclaim 2●. Reclaim 2●.)
+   - ***Invite the Sentinel*** — Gain Reforged Construct
      - **Response:** The guardian rises and walks beside you.
    - ***Study the Guardian*** — Apply a transfiguration to 2 chosen Survivor cards
      - **Response:** Your companions adopt its measured discipline among the ruins.
@@ -57,7 +57,7 @@ Cards you reclaim are not banished when they leave play.
      - **Response:** Unfamiliar emblems brighten across the fractured surface.
 
 3. Beside you, a seated sentinel keeps watch over a shattered, radiant doorway.
-   - ***Request a Gate Fragment*** — Gain Threshold Fragment. Once per turn, when you reclaim a character, that character gains +1✦.
+   - ***Gather the Dark Fragment*** — Gain Shadow Droplet
      - **Response:** A glassy shard settles into your open hand.
    - ***Call a Formidable Guardian*** — Gain a random legendary card.
      - **Response:** A commanding figure steps through the radiant breach.
@@ -65,7 +65,7 @@ Cards you reclaim are not banished when they leave play.
 4. Dust drifts around you as a seated guardian watches beside a bright gateway.
    - ***Call Beyond the Gate*** — Choose one of 2 packs of Survivor cards to add to your deck
      - **Response:** Weathered travelers gather beyond the shining opening.
-   - ***Train Beside the Guardian*** — Apply Kindled to a chosen Survivor card in your deck
+   - ***Train Beside the Guardian*** — Apply Kindled to $DECK_CARD
      - **Response:** Patient instruction hardens a companion for harsher journeys.
 
 5. You find a solitary guardian bowed beside a luminous frame half-buried in rubble.
@@ -95,7 +95,7 @@ Cards you reclaim are not banished when they leave play.
      - **Response:** Its luminous gaze remakes one prized possession.
 
 3. Across the blazing grass, a vast wolf lowers its head toward you.
-   - ***Echo the Wolf's Arrival*** — Apply Resonant to a card in your deck
+   - ***Echo the Wolf's Arrival*** — Apply Resonant to $DECK_CARD
      - **Response:** One companion arrives, departs, then returns bearing light.
    - ***Face the Wolf Together*** — Transfigure all starter cards
      - **Response:** Your oldest companions emerge through the blaze changed.
@@ -121,7 +121,7 @@ When you materialize a non-figment ≤2● cost character, draw a card with ephe
 ![Source artwork for Keeper of Forgotten Light](</Users/dthurn/Documents/shutterstock/images/stock-photo-girl-handing-a-lantern-to-the-watcher-digital-art-style-illustration-painting-2155438705.jpg>)
 
 1. Before you, a skull-faced colossus lowers a radiant lantern toward a child.
-   - ***Invite a Lantern Visitor*** — Gain an offered ≤2● cost Character card
+   - ***Invite a Lantern Visitor*** — Gain $OFFERED_CARD
      - **Response:** A new figure steps from between the panes.
    - ***Trade Away a Figure*** — Purge a chosen card and gain 40 essence for each ✦ it had
      - **Response:** A skeletal hand accepts the chosen offering.
@@ -167,7 +167,7 @@ When an outsider you control scores ⍟, foresee 1 and draw a card.
      - **Response:** The widening glow reshapes every distant silhouette.
 
 2. A gunman turns beneath black cables sweeping through the haze.
-   - ***Welcome the Veiled Operative*** — Gain 1 "Nightmare" bane card. Gain Abyssal Deputy.
+   - ***Welcome the Veiled Operative*** — Gain 1 "Nightmare" bane cards. Gain Abyssal Deputy.
      - **Response:** A trench-coated silhouette emerges as the smoke darkens.
    - ***Sever the Trailing Cables*** — Gain 5 additional energy at the start of your next battle
      - **Response:** Stored current flashes through the falling lengths.
@@ -181,7 +181,7 @@ When an outsider you control scores ⍟, foresee 1 and draw a card.
 4. Three bright edges frame a gunman as smoke billows around him.
    - ***Trace the Bright Edges*** — Choose one of three site types to add to this dreamscape.
      - **Response:** Three distant destinations sharpen beyond the glowing frame.
-   - ***Signal Through the Smoke*** — Purge all starter cards and replace each one with an Outsider card
+   - ***Signal Through the Smoke*** — Purge all starter cards and replace each one with a Outsider card
      - **Response:** Unfamiliar figures emerge as old companions recede.
 
 5. A solitary figure stands beneath thick cables arcing through smoke.
@@ -257,7 +257,7 @@ Once per turn, when you play a spirit animal, materialize a 1✦ spirit animal f
      - **Response:** A clear landing opens beyond its sweeping tail.
 
 4. A vast whale floats among distant stars beyond your tiny vessel.
-   - ***Call Forth Its Twin*** — Gain 1 copy of a chosen card
+   - ***Call Forth Its Twin*** — Gain 1 copies of a chosen card
      - **Response:** A second vast outline gathers beside it.
    - ***Chart Its Returning Course*** — Add a duplication site to this dreamscape
      - **Response:** A bright mooring appears along the mapped route.
@@ -279,7 +279,7 @@ Once per turn, when you play a spirit animal, materialize a 1✦ spirit animal f
 ![Source artwork for Emerald Guardian](</Users/dthurn/Documents/shutterstock/images/stock-photo-young-woman-facing-the-giant-elephant-with-glowing-green-tusks-digital-art-style-illustration-1169640025.jpg>)
 
 1. An enormous elephant emerges from starlit mist, its curved tusks shining.
-   - ***Welcome the Great Beast*** — Gain 1 "Nightmare" bane card. Gain Emerald Guardian.
+   - ***Welcome the Great Beast*** — Gain 1 "Nightmare" bane cards. Gain Emerald Guardian.
      - **Response:** The elephant kneels as the surrounding haze darkens.
    - ***Call the Distant Herd*** — Gain one copy of each of 2 random Spirit Animal cards
      - **Response:** Great animal shapes approach through the radiant mist.
@@ -319,7 +319,7 @@ When you play a warrior, you may materialize a ≤2● cost character from your 
 1. Above you, a colossal horseman thins into drifting starlight.
    - ***Call Into the Distance*** — Gain Bell
      - **Response:** A clear bell tolls beneath the distant horse.
-   - ***Gather the Falling Light*** — Apply Kindled to a chosen ≤2● cost Character card from your deck
+   - ***Gather the Falling Light*** — Apply Kindled to $DECK_CARD
      - **Response:** A waiting traveler's outline shines with renewed strength.
 
 2. You watch an immense horse and rider dissolve against the star-filled sky.

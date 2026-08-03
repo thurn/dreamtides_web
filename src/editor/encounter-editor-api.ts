@@ -4,6 +4,7 @@ import type {
   EncounterEditorGroup,
   EncounterTemplateHealth,
   EncounterSelectionSaveRequest,
+  EncounterTemplateSaveRequest,
   EncounterTextSaveRequest,
 } from "./encounter-editor-types";
 
@@ -70,6 +71,16 @@ export const encounterEditorClient: EncounterEditorClient = {
         ...(request.actionTemplateId === undefined
           ? {}
           : { actionTemplateId: request.actionTemplateId }),
+        value: request.value,
+        clientRevision: request.clientRevision,
+      },
+    );
+  },
+
+  saveTemplate(request: EncounterTemplateSaveRequest) {
+    return patch(
+      `/api/editor/encounters/templates/${encodeURIComponent(String(request.templateId))}`,
+      {
         value: request.value,
         clientRevision: request.clientRevision,
       },

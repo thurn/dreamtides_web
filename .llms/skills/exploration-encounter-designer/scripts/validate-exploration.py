@@ -13,6 +13,8 @@ from typing import Any
 
 import tomllib
 
+from template_rendering import PLACEHOLDER_RE, SPECIAL_RE
+
 REPO_ROOT = Path(__file__).resolve().parents[4]
 DEFAULT_TEMPLATE_CATALOG = REPO_ROOT / "data/templates.json"
 DEFAULT_CARDS_DATA = Path(__file__).resolve().parents[4] / "data/tabula/cards.toml"
@@ -22,8 +24,6 @@ DEFAULT_DREAMSIGNS_DATA = (
 DEFAULT_TRANSFIGURATIONS_DATA = (
     Path(__file__).resolve().parents[4] / "src/types/journey.ts"
 )
-PLACEHOLDER_RE = re.compile(r"\{([a-z][a-z0-9_]*)\}")
-SPECIAL_RE = re.compile(r"\$[A-Z][A-Z0-9_]*")
 WORD_RE = re.compile(r"[^\W_]+(?:['’\-][^\W_]+)*", re.UNICODE)
 PROSE_PLAYER_REFERENCE_RE = re.compile(
     r"\b(?:i|me|my|mine|myself|we|us|our|ours|ourselves|"
@@ -186,15 +186,15 @@ def validate_template_action(
     action: Any, path: str, catalog: dict[int, str]
 ) -> dict[str, Any]:
     obj = require_object(action, path)
+    for legacy_field in ("template", "effect_text"):
+        if legacy_field in obj:
+            fail(
+                f"{path}.{legacy_field}",
+                "is forbidden; canonical template text lives only in data/templates.json",
+            )
     template_id = require_int(obj.get("template_id"), f"{path}.template_id", 1)
-    template = require_string(obj.get("template"), f"{path}.template")
     if template_id not in catalog:
         fail(f"{path}.template_id", "is not present in the template catalog")
-    if template != catalog[template_id]:
-        fail(
-            f"{path}.template",
-            f"does not match catalog template {template_id}: {catalog[template_id]!r}",
-        )
     return obj
 
 
@@ -346,6 +346,15 @@ def validate_variables(
         elif isinstance(value, (dict, list)) or value is None or value == "":
             fail(value_path, "must be a non-empty JSON primitive")
 
+    template_placeholders = set(PLACEHOLDER_RE.findall(template))
+    extra_variables = sorted(set(variables) - template_placeholders)
+    if extra_variables:
+        fail(
+            f"{path}.variables",
+            "contains values absent from the canonical template: "
+            + ", ".join(extra_variables),
+        )
+
     selection = action.get("selection")
     if selection is not None:
         selection_obj = require_object(selection, f"{path}.selection")
@@ -428,7 +437,7 @@ def validate_output(
             if not 5 <= len(resolution_words) <= 10:
                 fail(f"{action_path}.resolution", "must contain 5 to 10 words")
             validate_variables(
-                action_obj["template"],
+                catalog[action_obj["template_id"]],
                 action_obj,
                 action_path,
                 cards,
@@ -436,14 +445,6 @@ def validate_output(
                 transfigurations,
                 source_card_id,
             )
-            effect_text = require_string(
-                action_obj.get("effect_text"), f"{action_path}.effect_text"
-            )
-            if PLACEHOLDER_RE.search(effect_text) or SPECIAL_RE.search(effect_text):
-                fail(
-                    f"{action_path}.effect_text",
-                    "must resolve every placeholder and special variable",
-                )
 
         scores = require_object(event_obj.get("scores"), f"{event_path}.scores")
         scene_score = require_int(

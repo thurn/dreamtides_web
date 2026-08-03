@@ -29,12 +29,10 @@ exactly two actions.
       "id": "pair-1",
       "actions": [
         {
-          "template_id": 0,
-          "template": "<exact first catalog template string>"
+          "template_id": 0
         },
         {
-          "template_id": -1,
-          "template": "<exact second catalog template string>"
+          "template_id": -1
         }
       ]
     }
@@ -42,8 +40,8 @@ exactly two actions.
 }
 ```
 
-Use the `template_id` and `template` values in
-[the canonical template catalog](../../../../data/templates.json) exactly. The
+Use `template_id` values from
+[the canonical template catalog](../../../../data/templates.json). The
 schema shows one pair for brevity; a valid request contains five, and each
 sentinel represents a different deliberately selected catalog entry.
 
@@ -61,21 +59,17 @@ Return a bare JSON list of five event objects sorted by ascending `rank`:
         "label": "<first scene-grounded action label>",
         "resolution": "<first immediate world response>",
         "template_id": 0,
-        "template": "<exact first input template string>",
         "variables": {
           "<required placeholder name>": "<resolved value>"
-        },
-        "effect_text": "<fully populated first effect text>"
+        }
       },
       {
         "label": "<second scene-grounded action label>",
         "resolution": "<second immediate world response>",
         "template_id": -1,
-        "template": "<exact second input template string>",
         "variables": {
           "<required placeholder name>": "<resolved value>"
-        },
-        "effect_text": "<fully populated second effect text>"
+        }
       }
     ],
     "scores": {
@@ -106,18 +100,20 @@ Markdown:
 ![Source artwork for <card name>](</absolute/path/to/source-image>)
 
 1. <prose>
-   - ***<action label>*** — <fully populated effect_text>
+   - ***<action label>*** — <rendered canonical template>
      - **Response:** <resolution>
-   - ***<action label>*** — <fully populated effect_text>
+   - ***<action label>*** — <rendered canonical template>
      - **Response:** <resolution>
 ```
 
 The display starts with the canonical card `name` and complete `ability`, then
 the inline source artwork. It contains five top-level entries in ascending rank
 order. Each entry uses `prose` as its top-level text, preserves action order,
-places the bold-italic `label` and fully populated `effect_text` together in a
-sub-bullet, and places its `resolution` in a nested response bullet. Omit all
-other JSON fields and any surrounding commentary from the display response.
+places the bold-italic `label` and rendered canonical template together in a
+sub-bullet, and places its `resolution` in a nested response bullet. Rendering
+replaces each braced placeholder with its `variables` value (or an entity
+reference's `display_name`) and preserves `$SPECIAL_VARIABLE` tokens literally.
+Omit all other JSON fields and any surrounding commentary from the display response.
 
 Test mode uses `scripts/generate-exploration-input.py --card-type <type>` to
 choose a random canonical card from the `character`, `event`, or `all` pool.
@@ -145,7 +141,7 @@ For an existing card or dreamsign, store identity and display text together:
 }
 ```
 
-`effect_text` renders the display name. Logic consumes the UUID.
+Template rendering uses the display name. Logic consumes the UUID.
 Use the same entity-reference shape for the catalog's `{card_name}` and
 `{dreamsign}` placeholders. Verify every `{transfiguration}` value against the
 canonical transfiguration types.
@@ -153,8 +149,8 @@ canonical transfiguration types.
 Every card entity reference must use a UUID different from `card.id` in the
 input. The source card is ineligible for all template resolutions. Eligibility
 is UUID-based, so a different canonical UUID remains eligible when it shares
-the source card's display name. No `effect_text` or other action field may
-identify the source card as the resolved target.
+the source card's display name. No action field may identify the source card as
+the resolved target.
 
 For a special runtime variable, add `selection` only when eligibility is
 restricted:
@@ -180,8 +176,7 @@ more useful broad option.
 Use a nonstandard predicate only for a strong, card-specific design reason that
 none of the standard values can express. Verify that the relevant canonical
 pool contains enough eligible targets for the template, then put a concise
-`predicate_exception_rationale` on the action alongside `variables` and
-`effect_text`:
+`predicate_exception_rationale` on the action alongside `variables`:
 
 ```json
 {
@@ -197,16 +192,17 @@ availability. Mechanical variety, visual flavor, and the source card's own type
 or cost are not strong reasons. Choose predicates independently for each action;
 do not reuse one merely because it appeared elsewhere in the set.
 
-`effect_text` is complete player-facing copy. It contains no `{placeholder}` or
-`$SPECIAL_VARIABLE` tokens. The `template`, `variables`, and `selection` fields
-remain the authoritative machine-readable design.
+Actions contain `template_id`, `variables`, and optional `selection`; they do
+not copy canonical template text. `data/templates.json` is the sole source of
+template wording. Rendering replaces `{placeholder}` tokens and deliberately
+leaves `$SPECIAL_VARIABLE` tokens unchanged.
 
 ### Action resolutions
 
 Every action includes a `resolution` of 5–10 words. It is brief post-choice
 prose shown before or alongside the effect. It describes the world's immediate
 response to the label and makes the mechanical outcome feel earned without
-using game terminology or repeating `effect_text`.
+using game terminology or repeating the rendered template.
 
 ## Scoring and ranking
 

@@ -6,9 +6,9 @@ chooses between two actions. Each action uses one mechanical effect template.
 
 The exploration encounter designer studies the selected card and its artwork,
 then chooses ten distinct effect templates and arranges them into five pairs.
-Every pair has a stable ID and exactly two actions. The designer preserves each
-pair, action, ID, and template string in the output while adding narrative
-labels and resolving the template's variables.
+Every pair has a stable ID and exactly two actions. The designer stores each
+template ID with narrative labels and structured variable values. Canonical
+template wording remains in the catalog.
 
 The canonical effect catalog is
 [`../../data/templates.json`](../../data/templates.json).
@@ -36,8 +36,8 @@ Pass `--seed <integer>` to reproduce the selected card and `--card-type` with
 
 Braced variables such as `{count}`, `{predicate}`, and `{card_id}` are values
 chosen by the encounter designer. Every braced variable in a template receives
-a value in the action's `variables` object. The completed player-facing text is
-stored separately in `effect_text`.
+a value in the action's `variables` object. Player-facing text is rendered from
+the canonical template when it is displayed.
 
 For example, this template:
 
@@ -52,10 +52,11 @@ can be resolved as:
   "variables": {
     "count": 4,
     "predicate": "Event"
-  },
-  "effect_text": "Purge up to 4 chosen Event cards"
+  }
 }
 ```
+
+This action displays as `Purge up to 4 chosen Event cards`.
 
 A predicate is an objective rule that selects or classifies cards. Predicates
 can describe card type, subtype, cost, spark, ability, legendary status, or
@@ -64,8 +65,8 @@ forbidden because it covers roughly 70% of the card catalog. Use a narrower
 subtype, cost, spark, ability, or combined objective condition instead.
 
 Existing cards and dreamsigns use an object containing their canonical UUID and
-display name. Game logic consumes the UUID, while `effect_text` uses the display
-name:
+display name. Game logic consumes the UUID, while template rendering uses the
+display name:
 
 ```json
 {
@@ -100,15 +101,20 @@ it in `selection`:
 ```
 
 An unrestricted runtime variable omits `selection`.
+Runtime tokens remain literal in authoring displays. For example, the canonical
+template `Gain $OFFERED_CARD` displays exactly as `Gain $OFFERED_CARD` until the
+game creates the event.
 
 ## Applying a Template
 
 For each action, the encounter designer:
 
-1. Preserves the catalog's `template_id` and exact `template` string.
+1. Stores the catalog's `template_id` without copying its template string.
 2. Adds every required braced value to `variables`.
 3. Adds restricted runtime selection rules when the template calls for them.
-4. Writes complete display copy in `effect_text`, with every placeholder and
-   runtime token resolved.
-5. Validates the request and output with
+4. Renders display copy from `data/templates.json`, substituting braced values
+   while keeping runtime tokens literal.
+5. Edits template wording in `data/templates.json`, so every candidate using
+   that template ID receives the same canonical wording.
+6. Validates the request and output with
    `.llms/skills/exploration-encounter-designer/scripts/validate-exploration.py`.

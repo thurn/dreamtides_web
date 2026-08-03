@@ -19,6 +19,9 @@ from typing import Any
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parents[3]
 DESIGNER_SCRIPTS = REPO_ROOT / ".llms/skills/exploration-encounter-designer/scripts"
+sys.path.insert(0, str(DESIGNER_SCRIPTS))
+from template_rendering import render_template  # noqa: E402
+
 DEFAULT_CANDIDATES = REPO_ROOT / "data/encounter_candidates.json"
 DEFAULT_VALIDATOR = DESIGNER_SCRIPTS / "validate-exploration.py"
 DEFAULT_ART_FINDER = DESIGNER_SCRIPTS / "find-card-art.py"
@@ -136,10 +139,7 @@ def build_request(card: dict[str, Any], events: Any) -> dict[str, Any]:
             {
                 "id": event.get("template_pair_id"),
                 "actions": [
-                    {
-                        "template_id": action.get("template_id"),
-                        "template": action.get("template"),
-                    }
+                    {"template_id": action.get("template_id")}
                     if isinstance(action, dict)
                     else action
                     for action in actions
@@ -203,7 +203,32 @@ def find_art(card: dict[str, Any], args: argparse.Namespace) -> Path:
     return path.resolve()
 
 
-def render_card(card: dict[str, Any], events: list[Any], art_path: Path) -> str:
+def read_templates(path: Path) -> dict[int, str]:
+    catalog = load_json(path, "Template catalog")
+    if not isinstance(catalog, list):
+        raise AggregationError("Template catalog must be an array")
+    templates: dict[int, str] = {}
+    for index, entry in enumerate(catalog):
+        if not isinstance(entry, dict):
+            raise AggregationError(f"Template catalog entry {index} must be an object")
+        template_id = entry.get("template_id")
+        template = entry.get("template")
+        if isinstance(template_id, bool) or not isinstance(template_id, int):
+            raise AggregationError(f"Template catalog entry {index} has an invalid template_id")
+        if not isinstance(template, str) or not template.strip():
+            raise AggregationError(f"Template catalog entry {index} has an invalid template")
+        if template_id in templates:
+            raise AggregationError(f"Template catalog repeats template_id {template_id}")
+        templates[template_id] = template
+    return templates
+
+
+def render_card(
+    card: dict[str, Any],
+    events: list[Any],
+    art_path: Path,
+    templates: dict[int, str],
+) -> str:
     lines = [
         f"# {card['name']}",
         "",
@@ -215,7 +240,10 @@ def render_card(card: dict[str, Any], events: list[Any], art_path: Path) -> str:
     for index, event in enumerate(events, start=1):
         lines.append(f"{index}. {event['prose']}")
         for action in event["actions"]:
-            lines.append(f"   - ***{action['label']}*** — {action['effect_text']}")
+            rendered = render_template(
+                templates[action["template_id"]], action["variables"]
+            )
+            lines.append(f"   - ***{action['label']}*** — {rendered}")
             lines.append(f"     - **Response:** {action['resolution']}")
         if index != len(events):
             lines.append("")
@@ -227,7 +255,7 @@ def selected_for_storage(events: list[Any]) -> list[Any]:
     for event in stored:
         event.pop("selected", None)
         if event.get("rank") == 1:
-            event["selected"] = True
+            event["selected"] = {"prose": True, "actions": True}
     return stored
 
 
@@ -256,6 +284,7 @@ def aggregate(args: argparse.Namespace) -> str:
     document = read_candidate_document(
         args.encounter_candidates, manifest["encounter_candidates_sha256"]
     )
+    templates = read_templates(args.template_catalog)
 
     completed: list[tuple[dict[str, Any], list[Any], Path]] = []
     for card in manifest["cards"]:
@@ -271,7 +300,8 @@ def aggregate(args: argparse.Namespace) -> str:
     for card, events, _ in completed:
         document[card["id"]] = selected_for_storage(events)
     display = "\n\n".join(
-        render_card(card, events, art_path) for card, events, art_path in completed
+        render_card(card, events, art_path, templates)
+        for card, events, art_path in completed
     ) + "\n"
 
     if args.display_output is not None:
