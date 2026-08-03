@@ -113,8 +113,11 @@ harness commentary.
    or coils of shadow where dark cables curl are descriptive; a threshold that
    chooses someone or smoke that forgets its shape invents a poetic conceit.
    Note concrete subjects, setting, motion, scale, posture, distance, mood, and
-   sensory atmosphere. If a claim depends on exact color, measure the image
-   rather than trusting visual color perception.
+   sensory atmosphere. Before naming a figure's posture, verify its visible
+   support points and joint geometry; if sitting, kneeling, or crouching cannot
+   be distinguished confidently, describe only the clearly visible pose or
+   action. If a claim depends on exact color, measure the image rather than
+   trusting visual color perception.
 
 5. Interpret the card according to its canonical type, then make a private
    source-name watchlist. Do not quote the complete card name, use a distinctive
