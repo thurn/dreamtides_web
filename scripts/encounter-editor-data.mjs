@@ -24,6 +24,13 @@ const LEGACY_ACTION_FIELDS = new Set(["effect_text", "template"]);
 const SELECTION_KINDS = ["prose", "actions"];
 const PLACEHOLDER_PATTERN = /\{([a-z][a-z0-9_]*)\}/gu;
 const SPECIAL_PATTERN = /\$[A-Z][A-Z0-9_]*/gu;
+const LOW_COST_CARD_PATTERN = /^≤(\d+)● cost (Character|Event)$/u;
+const SIMULATED_PLAYER_DECK_SIZE = 30;
+const RUNTIME_CARD_PLACEHOLDERS = new Set([
+  "$DECK_CARD",
+  "$OFFERED_CARD",
+  "$STARTER_CARD",
+]);
 
 const defaultFileSystem = {
   existsSync,
@@ -243,7 +250,7 @@ export function parseEncounterCandidates(source) {
   return validateEncounterCandidates(raw);
 }
 
-function readCardIndex(rootDir, cardTomlPath, fileSystem, encounterCardIds) {
+function readCardCatalog(rootDir, cardTomlPath, fileSystem) {
   const source = fileSystem.readFileSync(join(rootDir, cardTomlPath), "utf8");
   const parsed = parseToml(source);
   if (!Array.isArray(parsed.cards)) {
@@ -253,19 +260,154 @@ function readCardIndex(rootDir, cardTomlPath, fileSystem, encounterCardIds) {
   for (const cardRaw of parsed.cards) {
     const card = objectRecord(cardRaw, "card");
     if (typeof card.id !== "string") continue;
-    if (!encounterCardIds.has(card.id)) continue;
+    const id = canonicalUuid(card.id, "card.id");
     const name = requiredString(card.name, `card ${card.id} name`);
-    const abilityText = requiredString(
-      card["rendered-text"],
-      `card ${card.id} rendered-text`,
-    );
-    const imageNumber = card["image-number"];
-    if (!Number.isInteger(imageNumber) || imageNumber < 0) {
-      continue;
+    if (index.has(id)) {
+      throw new Error(`${cardTomlPath} has duplicate card UUID ${id}.`);
     }
-    index.set(card.id, { name, abilityText, imageNumber });
+    index.set(id, {
+      id,
+      name,
+      cardType: typeof card["card-type"] === "string" ? card["card-type"] : "",
+      subtype: typeof card.subtype === "string" ? card.subtype : "",
+      energyCost: Number.isInteger(card["energy-cost"])
+        ? card["energy-cost"]
+        : null,
+      isStarter: card.rarity === "Starter",
+      isOfferable: card.rarity !== "Starter" && card.rarity !== "Special",
+      abilityText: typeof card["rendered-text"] === "string"
+        ? card["rendered-text"]
+        : null,
+      imageNumber: Number.isInteger(card["image-number"])
+        ? card["image-number"]
+        : null,
+    });
   }
   return index;
+}
+
+function randomIndex(length, random) {
+  if (length < 1) throw new Error("Cannot select from an empty card list.");
+  const value = random();
+  if (!Number.isFinite(value) || value < 0 || value >= 1) {
+    throw new Error("Encounter editor randomness must return a number in [0, 1).");
+  }
+  return Math.floor(value * length);
+}
+
+function shuffle(cards, random) {
+  const shuffled = [...cards];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = randomIndex(index + 1, random);
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+  return shuffled;
+}
+
+function buildSimulatedPlayerDeck(cards, random) {
+  const starterCards = cards.filter((card) => card.isStarter);
+  const selectedStarters = starterCards.length <= SIMULATED_PLAYER_DECK_SIZE
+    ? starterCards
+    : shuffle(starterCards, random).slice(0, SIMULATED_PLAYER_DECK_SIZE);
+  const remainingSlots = SIMULATED_PLAYER_DECK_SIZE - selectedStarters.length;
+  if (remainingSlots <= 0) return selectedStarters;
+  const draftedCards = shuffle(
+    cards.filter((card) => card.isOfferable),
+    random,
+  ).slice(0, remainingSlots);
+  return [...selectedStarters, ...draftedCards];
+}
+
+function matchesSelectionPredicate(card, predicate) {
+  if (predicate === null) return true;
+  const lowCost = LOW_COST_CARD_PATTERN.exec(predicate);
+  if (lowCost !== null) {
+    const maximumCost = Number(lowCost[1]);
+    return card.cardType === lowCost[2]
+      && card.energyCost !== null
+      && card.energyCost <= maximumCost;
+  }
+  if (predicate === "Character" || predicate === "Event") {
+    return card.cardType === predicate;
+  }
+  return card.subtype === predicate;
+}
+
+function runtimeCardSelection(placeholder, selection, cards, playerDeck, random) {
+  const rule = selection?.[placeholder];
+  const predicate = rule === undefined ? null : rule.predicate;
+  let candidates;
+  let source;
+  if (placeholder === "$DECK_CARD") {
+    candidates = playerDeck.filter((card) => matchesSelectionPredicate(card, predicate));
+    source = "player_deck";
+    if (candidates.length === 0) {
+      candidates = cards.filter((card) => matchesSelectionPredicate(card, predicate));
+      source = "catalog_fallback";
+    }
+  } else if (placeholder === "$OFFERED_CARD") {
+    candidates = cards.filter(
+      (card) => card.isOfferable && matchesSelectionPredicate(card, predicate),
+    );
+    source = "offer_pool";
+  } else {
+    candidates = playerDeck.filter(
+      (card) => card.isStarter && matchesSelectionPredicate(card, predicate),
+    );
+    source = "starter_deck";
+  }
+  if (candidates.length === 0) {
+    throw new Error(
+      `No card matches ${placeholder}${predicate === null ? "" : ` predicate ${predicate}`}.`,
+    );
+  }
+  const card = candidates[randomIndex(candidates.length, random)];
+  return {
+    placeholder,
+    predicate,
+    cardId: card.id,
+    cardName: card.name,
+    source,
+  };
+}
+
+function renderRuntimeTemplate(template, variables, selection, cards, playerDeck, random) {
+  const withVariables = renderEncounterTemplate(template, variables);
+  const placeholders = [...new Set(withVariables.match(SPECIAL_PATTERN) ?? [])]
+    .filter((placeholder) => RUNTIME_CARD_PLACEHOLDERS.has(placeholder));
+  const runtimeSelections = placeholders.map((placeholder) =>
+    runtimeCardSelection(placeholder, selection, cards, playerDeck, random));
+  const selectionsByPlaceholder = new Map(
+    runtimeSelections.map((runtimeSelection) => [runtimeSelection.placeholder, runtimeSelection]),
+  );
+  const parts = [];
+  let cursor = 0;
+  for (const match of withVariables.matchAll(SPECIAL_PATTERN)) {
+    if (match.index > cursor) {
+      parts.push({ kind: "text", text: withVariables.slice(cursor, match.index) });
+    }
+    const runtimeSelection = selectionsByPlaceholder.get(match[0]);
+    if (runtimeSelection === undefined) {
+      parts.push({ kind: "text", text: match[0] });
+    } else {
+      parts.push({
+        kind: "card",
+        placeholder: runtimeSelection.placeholder,
+        cardId: runtimeSelection.cardId,
+        cardName: runtimeSelection.cardName,
+      });
+    }
+    cursor = match.index + match[0].length;
+  }
+  if (cursor < withVariables.length) {
+    parts.push({ kind: "text", text: withVariables.slice(cursor) });
+  }
+  return {
+    renderedTemplate: parts.map((part) =>
+      part.kind === "card" ? part.cardName : part.text).join(""),
+    renderedTemplateParts: parts,
+    runtimeCardSelections: runtimeSelections,
+  };
 }
 
 export function readEncounterEditorGroups({
@@ -274,6 +416,7 @@ export function readEncounterEditorGroups({
   cardTomlPath = DEFAULT_ENCOUNTER_CARD_PATH,
   templatesPath = DEFAULT_ENCOUNTER_TEMPLATES_PATH,
   fileSystem = defaultFileSystem,
+  random = Math.random,
 } = {}) {
   const source = fileSystem.readFileSync(join(rootDir, candidatesPath), "utf8");
   const groups = parseEncounterCandidates(source);
@@ -281,30 +424,44 @@ export function readEncounterEditorGroups({
     fileSystem.readFileSync(join(rootDir, templatesPath), "utf8"),
   );
   validateTemplateUsage(groups, templates.byId);
-  const cards = readCardIndex(
-    rootDir,
-    cardTomlPath,
-    fileSystem,
-    new Set(Object.keys(groups)),
-  );
+  const cards = readCardCatalog(rootDir, cardTomlPath, fileSystem);
+  const catalog = [...cards.values()];
+  const playerDeck = buildSimulatedPlayerDeck(catalog, random);
   return Object.entries(groups).map(([cardId, encounters]) => {
     const card = cards.get(cardId);
     if (card === undefined) {
       throw new Error(`Encounter candidate references unknown card UUID ${cardId}.`);
     }
+    const abilityText = requiredString(
+      card.abilityText,
+      `card ${card.id} rendered-text`,
+    );
+    if (card.imageNumber === null || card.imageNumber < 0) {
+      throw new Error(`card ${card.id} image-number must be a non-negative integer.`);
+    }
     return {
       cardId,
       cardName: card.name,
-      cardAbilityText: card.abilityText,
+      cardAbilityText: abilityText,
       imageNumber: card.imageNumber,
       encounters: encounters.map((candidate) => ({
         ...candidate,
         actions: candidate.actions.map((action) => {
           const template = templates.byId.get(action.template_id);
+          const rendered = renderRuntimeTemplate(
+            template,
+            action.variables,
+            action.selection,
+            catalog,
+            playerDeck,
+            random,
+          );
           return {
             ...action,
             template,
-            rendered_template: renderEncounterTemplate(template, action.variables),
+            rendered_template: rendered.renderedTemplate,
+            rendered_template_parts: rendered.renderedTemplateParts,
+            runtime_card_selections: rendered.runtimeCardSelections,
           };
         }),
       })),

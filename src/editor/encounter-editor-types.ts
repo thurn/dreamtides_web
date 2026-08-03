@@ -2,10 +2,29 @@ export type EncounterCandidateTextField = "prose" | "label" | "resolution";
 export type EncounterEditableTextField = EncounterCandidateTextField | "template";
 export type EncounterSelectionKind = "prose" | "actions";
 
+export type EncounterRenderedTemplatePart =
+  | { kind: "text"; text: string }
+  | {
+    kind: "card";
+    placeholder: string;
+    cardId: string;
+    cardName: string;
+  };
+
+export interface EncounterRuntimeCardSelection {
+  placeholder: string;
+  predicate: string | null;
+  cardId: string;
+  cardName: string;
+  source: "player_deck" | "catalog_fallback" | "offer_pool" | "starter_deck";
+}
+
 export interface EncounterEditorAction {
   template_id: number;
   template: string;
   rendered_template: string;
+  rendered_template_parts: EncounterRenderedTemplatePart[];
+  runtime_card_selections: EncounterRuntimeCardSelection[];
   variables: Record<string, unknown>;
   label: string;
   resolution: string;

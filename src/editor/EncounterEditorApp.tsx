@@ -17,6 +17,7 @@ import type {
   EncounterEditorCandidate,
   EncounterEditorClient,
   EncounterEditorGroup,
+  EncounterRenderedTemplatePart,
   EncounterEditableTextField,
   EncounterSelectionKind,
   EncounterTemplateHealth,
@@ -131,6 +132,20 @@ function fieldTarget(
     cardId: `${group.cardId}:${candidate.template_pair_id}:${actionTemplateId ?? "candidate"}`,
     field,
   };
+}
+
+function renderedTemplate(parts: EncounterRenderedTemplatePart[]) {
+  return parts.map((part, index) => part.kind === "text"
+    ? <span key={`text-${String(index)}`}>{part.text}</span>
+    : (
+      <u
+        data-runtime-card-id={part.cardId}
+        data-runtime-card-placeholder={part.placeholder}
+        key={`${part.placeholder}-${part.cardId}-${String(index)}`}
+      >
+        {part.cardName}
+      </u>
+    ));
 }
 
 function EncounterEditorRow({
@@ -433,7 +448,13 @@ function EncounterEditorRow({
                 {selectedActions.actions.map((action) => (
                   <section className="encounter-editor-action" key={action.template_id}>
                     {editable(selectedActions, "label", action.label, <h3>{action.label}</h3>, action.template_id, "single-line")}
-                    {editable(selectedActions, "template", action.template, <p>{action.rendered_template}</p>, action.template_id)}
+                    {editable(
+                      selectedActions,
+                      "template",
+                      action.template,
+                      <p>{renderedTemplate(action.rendered_template_parts)}</p>,
+                      action.template_id,
+                    )}
                     {editable(selectedActions, "resolution", action.resolution, <p className="encounter-editor-resolution">{action.resolution}</p>, action.template_id)}
                   </section>
                 ))}
@@ -487,7 +508,18 @@ export default function EncounterEditorApp({
         structuredClone(IDLE_SELECTION_STATES),
       ])));
       setLoadState("ready");
-      logEvent("encounter_editor_loaded", { encounterGroupCount: loaded.length });
+      logEvent("encounter_editor_loaded", {
+        encounterGroupCount: loaded.length,
+        runtimeCardSelections: loaded.flatMap((group) =>
+          group.encounters.flatMap((candidate) =>
+            candidate.actions.flatMap((action) =>
+              action.runtime_card_selections.map((selection) => ({
+                encounterCardId: group.cardId,
+                templatePairId: candidate.template_pair_id,
+                actionTemplateId: action.template_id,
+                ...selection,
+              }))))),
+      });
     }).catch((error: unknown) => {
       if (controller.signal.aborted) return;
       setLoadMessage(messageFor(error));

@@ -25,6 +25,8 @@ import {
 
 const CARD_ID = "11111111-1111-4111-8111-111111111111";
 const UNRELATED_CARD_ID = "22222222-2222-4222-8222-222222222222";
+const SPIRIT_CARD_ID = "33333333-3333-4333-8333-333333333333";
+const STARTER_CARD_ID = "44444444-4444-4444-8444-444444444444";
 
 function candidate(rank, selected = false) {
   return {
@@ -78,6 +80,67 @@ function writeFixtureRoot() {
   return rootDir;
 }
 
+function writeRuntimeSelectionFixtureRoot() {
+  const rootDir = mkdtempSync(join(tmpdir(), "journey-encounter-runtime-cards-"));
+  mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+  writeFileSync(
+    join(rootDir, "data", "encounter_candidates.json"),
+    `${JSON.stringify({
+      [CARD_ID]: [{
+        template_pair_id: "pair-1",
+        prose: "A test encounter.",
+        actions: [
+          {
+            label: "Find a spirit",
+            resolution: "A spirit answers.",
+            template_id: 1,
+            variables: {},
+            selection: { "$DECK_CARD": { predicate: "Spirit Animal" } },
+          },
+          {
+            label: "Make an offer",
+            resolution: "Two cards change places.",
+            template_id: 2,
+            variables: {},
+            selection: { "$OFFERED_CARD": { predicate: "≤2● cost Character" } },
+          },
+        ],
+        rank: 1,
+        selected: { prose: true, actions: true },
+      }],
+    }, null, 2)}\n`,
+  );
+  writeFileSync(
+    join(rootDir, "data", "templates.json"),
+    `${JSON.stringify([
+      { template_id: 1, template: "Apply Kindled to $DECK_CARD" },
+      { template_id: 2, template: "Gain $OFFERED_CARD and purge $STARTER_CARD" },
+    ], null, 2)}\n`,
+  );
+  const decoys = Array.from({ length: 28 }, (_, index) => {
+    const suffix = (index + 1).toString(16).padStart(12, "0");
+    const isCheapCharacter = index === 0;
+    return [
+      "[[cards]]",
+      `id = "00000000-0000-4000-8000-${suffix}"`,
+      `name = "Decoy ${String(index + 1)}"`,
+      `card-type = "${isCheapCharacter ? "Character" : "Event"}"`,
+      `subtype = "${isCheapCharacter ? "Warrior" : ""}"`,
+      `energy-cost = ${isCheapCharacter ? "2" : "3"}`,
+    ].join("\n");
+  });
+  writeFileSync(
+    join(rootDir, "data", "tabula", "cards.toml"),
+    [
+      `[[cards]]\nid = "${SPIRIT_CARD_ID}"\nname = "Fallback Spirit"\ncard-type = "Character"\nsubtype = "Spirit Animal"\nenergy-cost = 4`,
+      `[[cards]]\nid = "${CARD_ID}"\nname = "Fixture Guide"\nrendered-text = "Gain 1●."\nimage-number = 42\ncard-type = "Event"\nsubtype = ""\nenergy-cost = 3`,
+      ...decoys,
+      `[[cards]]\nid = "${STARTER_CARD_ID}"\nname = "Starter Witness"\ncard-type = "Character"\nsubtype = "Visitor"\nenergy-cost = 3\nrarity = "Starter"`,
+    ].join("\n\n"),
+  );
+  return rootDir;
+}
+
 describe("encounter editor data", () => {
   it("loads validated groups enriched from UUID-keyed cards", () => {
     const groups = readEncounterEditorGroups({ rootDir: writeFixtureRoot() });
@@ -94,7 +157,45 @@ describe("encounter editor data", () => {
       template_id: 10,
       template: "Gain {count} cards and $KEEP_THIS",
       rendered_template: "Gain 1 cards and $KEEP_THIS",
+      runtime_card_selections: [],
     });
+  });
+
+  it("resolves runtime card placeholders by UUID and falls back outside the simulated deck", () => {
+    const groups = readEncounterEditorGroups({
+      rootDir: writeRuntimeSelectionFixtureRoot(),
+      random: () => 0,
+    });
+    const [deckAction, offeredAction] = groups[0].encounters[0].actions;
+    expect(deckAction.rendered_template).toBe("Apply Kindled to Fallback Spirit");
+    expect(deckAction.runtime_card_selections).toEqual([{
+      placeholder: "$DECK_CARD",
+      predicate: "Spirit Animal",
+      cardId: SPIRIT_CARD_ID,
+      cardName: "Fallback Spirit",
+      source: "catalog_fallback",
+    }]);
+    expect(offeredAction.rendered_template).toBe(
+      "Gain Decoy 1 and purge Starter Witness",
+    );
+    expect(offeredAction.runtime_card_selections).toEqual([
+      {
+        placeholder: "$OFFERED_CARD",
+        predicate: "≤2● cost Character",
+        cardId: "00000000-0000-4000-8000-000000000001",
+        cardName: "Decoy 1",
+        source: "offer_pool",
+      },
+      {
+        placeholder: "$STARTER_CARD",
+        predicate: null,
+        cardId: STARTER_CARD_ID,
+        cardName: "Starter Witness",
+        source: "starter_deck",
+      },
+    ]);
+    expect(offeredAction.rendered_template_parts.filter((part) => part.kind === "card"))
+      .toHaveLength(2);
   });
 
   it("moves one selection marker without changing the other marker, rank, or source order", () => {

@@ -28,7 +28,25 @@ function candidate(rank: number, selected = false): EncounterEditorCandidate {
       template: templateId === 1 ? "Draw {count} cards" : "Gain $OFFERED_CARD",
       rendered_template: templateId === 1
         ? `Draw ${String(rank)} cards`
-        : "Gain $OFFERED_CARD",
+        : "Gain Fixture Ally",
+      rendered_template_parts: templateId === 1
+        ? [{ kind: "text" as const, text: `Draw ${String(rank)} cards` }]
+        : [
+          { kind: "text" as const, text: "Gain " },
+          {
+            kind: "card" as const,
+            placeholder: "$OFFERED_CARD",
+            cardId: OTHER_CARD_ID,
+            cardName: "Fixture Ally",
+          },
+        ],
+      runtime_card_selections: templateId === 1 ? [] : [{
+        placeholder: "$OFFERED_CARD",
+        predicate: null,
+        cardId: OTHER_CARD_ID,
+        cardName: "Fixture Ally",
+        source: "offer_pool" as const,
+      }],
       variables: templateId === 1 ? { count: rank } : {},
       label: `Rank ${String(rank)} label ${String(templateId)}`,
       resolution: `Rank ${String(rank)} resolution ${String(templateId)}`,
@@ -134,7 +152,13 @@ describe("EncounterEditorApp", () => {
     expect(container.textContent).toContain("Prose for rank 1");
     expect(container.textContent).toContain("Rank 1 label 1");
     expect(container.textContent).toContain("Draw 1 cards");
-    expect(container.textContent).toContain("Gain $OFFERED_CARD");
+    expect(container.textContent).toContain("Gain Fixture Ally");
+    expect(container.textContent).not.toContain("$OFFERED_CARD");
+    const selectedCardName = container.querySelector<HTMLElement>(
+      `u[data-runtime-card-id='${OTHER_CARD_ID}']`,
+    );
+    expect(selectedCardName?.textContent).toBe("Fixture Ally");
+    expect(selectedCardName?.dataset.runtimeCardPlaceholder).toBe("$OFFERED_CARD");
     expect(container.textContent).toContain("Rank 1 resolution 1");
     expect(container.textContent).not.toContain("Prose for rank 2");
     expect(container.querySelector(".encounter-editor-card-ability")?.textContent)
@@ -297,6 +321,7 @@ describe("EncounterEditorApp", () => {
         const action = encounter.actions[0];
         action.template = request.value;
         action.rendered_template = request.value.replace("{count}", String(encounter.rank));
+        action.rendered_template_parts = [{ kind: "text", text: action.rendered_template }];
       }
       return Promise.resolve({
         clientRevision: request.clientRevision,
