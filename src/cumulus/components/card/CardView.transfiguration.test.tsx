@@ -71,7 +71,7 @@ afterEach(() => {
 });
 
 describe("CardView transfiguration rules marker", () => {
-  it("shows the shared hammer badge in the rules box when marked text changes", () => {
+  it("centers the shared hammer badge on the rules box corner when marked text changes", () => {
     const { container, root } = mount(
       display(
         `Draw ${TRANSFIGURE_MARK_START}two${TRANSFIGURE_MARK_END} cards.`,
@@ -80,14 +80,19 @@ describe("CardView transfiguration rules marker", () => {
     const rulesBox = container.querySelector<HTMLElement>(
       "[data-card-rules-box]",
     );
-    const marker = rulesBox?.querySelector<HTMLElement>(
+    const marker = container.querySelector<HTMLElement>(
       '[data-card-rules-text-change="Amplified"]',
     );
     const badge = marker?.querySelector<HTMLElement>("[role='img']");
 
     expect(marker).not.toBeNull();
-    expect(marker?.style.right).toBe("var(--cv-textbox-pad-x)");
-    expect(marker?.style.bottom).toBe("var(--cv-textbox-pad-y)");
+    expect(marker?.parentElement).toBe(rulesBox?.parentElement);
+    expect(marker?.style.right).toBe(
+      "calc(var(--cv-transfiguration-change-badge-size) * -0.5)",
+    );
+    expect(marker?.style.bottom).toBe(
+      "calc(var(--cv-transfiguration-change-badge-size) * -0.5)",
+    );
     expect(badge?.getAttribute("aria-label")).toBe(
       "Rules text changed by Amplified transfiguration",
     );
@@ -95,11 +100,7 @@ describe("CardView transfiguration rules marker", () => {
       "var(--cv-transfiguration-change-badge-size)",
     );
     expect(badge?.querySelector(".fa-hammer")).not.toBeNull();
-    expect(
-      (rulesBox?.firstElementChild as HTMLElement | null)?.style.paddingRight,
-    ).toBe(
-      "calc(var(--cv-transfiguration-change-badge-size) + var(--cv-rules-change-badge-gap))",
-    );
+    expect(badge?.querySelector("[data-inline-glyph]")).toBeNull();
 
     act(() => root.unmount());
     container.remove();

@@ -98,7 +98,6 @@
   );
   --cv-textbox-expanded-height: calc(var(--cv-textbox-height) * 3);
   --cv-transfiguration-change-badge-size: 6cqw;
-  --cv-rules-change-badge-gap: 1cqw;
 
   /* Typography and its three-line readable rules-text cap. */
   --cv-name-font-size: 5.2cqw;

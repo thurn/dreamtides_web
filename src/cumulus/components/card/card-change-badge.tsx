@@ -1,8 +1,7 @@
-import type { CSSProperties } from "react";
-import { GLYPHS } from "../primitives/glyph";
-import { InlineGlyph } from "../components/typography/InlineGlyph";
+import type { CSSProperties, ReactElement } from "react";
+import { GLYPHS } from "../../primitives/glyph";
 
-interface CardChangeBadgeProps {
+interface CardChangeBadgeOptions {
   /** CSS length for the badge diameter, resolved by the owning card surface. */
   readonly sizeVar: string;
   /** Accessible description when the badge conveys meaning on its own. */
@@ -10,14 +9,14 @@ interface CardChangeBadgeProps {
 }
 
 /**
- * The monochrome hammer-in-circle marker shared by changed card stats and rules
- * text. Positioning belongs to the card region that owns the marker; this
- * primitive owns the badge's fixed geometry and glyph treatment.
+ * Renders the monochrome hammer-in-circle marker shared by changed card stats
+ * and rules text. This keeps the original Font Awesome metric box used by the
+ * stat badges; the flowing-text InlineGlyph alignment is intentionally absent.
  */
-export function CardChangeBadge({
+export function renderCardChangeBadge({
   sizeVar,
   ariaLabel,
-}: CardChangeBadgeProps) {
+}: CardChangeBadgeOptions): ReactElement {
   return (
     <span
       aria-hidden={ariaLabel === undefined ? "true" : undefined}
@@ -40,7 +39,7 @@ export function CardChangeBadge({
         } satisfies CSSProperties
       }
     >
-      <InlineGlyph glyph={GLYPHS.transfigurationSite} />
+      <i className={GLYPHS.transfigurationSite} aria-hidden="true" />
     </span>
   );
 }

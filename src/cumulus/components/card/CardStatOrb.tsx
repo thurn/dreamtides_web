@@ -9,7 +9,7 @@ import {
 import { useFitText } from "../controls/useFitText";
 import { type Glyph } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
-import { CardChangeBadge } from "../../internal/CardChangeBadge";
+import { renderCardChangeBadge } from "./card-change-badge";
 
 export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";
 export type CardStatChangeBadge = "empowered" | "kindled";
@@ -244,9 +244,9 @@ export function CardStatOrb({
             display: "inline-flex",
           }}
         >
-          <CardChangeBadge
-            sizeVar={`calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO)})`}
-          />
+          {renderCardChangeBadge({
+            sizeVar: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO)})`,
+          })}
         </span>
       )}
     </span>

@@ -28,7 +28,7 @@ import { InlineGlyph } from "../typography/InlineGlyph";
 import { glyph, GLYPHS } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { CardStatOrb } from "./CardStatOrb";
-import { CardChangeBadge } from "../../internal/CardChangeBadge";
+import { renderCardChangeBadge } from "./card-change-badge";
 import { TRANSFIGURATION_ICONS } from "../../../runtime/transfiguration-display";
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import { TRANSFIGURE_MARK_START } from "../../../runtime/transfigure-markers";
@@ -1052,9 +1052,6 @@ function GameCardSurface(props: CardViewProps) {
         fontSize: `min(var(--cv-rules-font-cap), ${String(rulesFontPx)}px)`,
         lineHeight: "var(--cv-rules-line-height)",
         textShadow: "var(--cv-rules-text-shadow)",
-        paddingRight: rulesTextChanged
-          ? "calc(var(--cv-transfiguration-change-badge-size) + var(--cv-rules-change-badge-gap))"
-          : undefined,
       }}
     >
       {renderRulesText(transfiguration?.markedText ?? card.renderedText, {
@@ -1352,7 +1349,6 @@ function GameCardSurface(props: CardViewProps) {
               style={
                 {
                   ...textboxSizing,
-                  position: "relative",
                   overflow: "hidden",
                   display: "flex",
                   flexDirection: "column",
@@ -1369,25 +1365,28 @@ function GameCardSurface(props: CardViewProps) {
               }
             >
               {renderedRulesNode}
-              {rulesTextChanged ? (
-                <span
-                  data-card-rules-text-change={transfiguration?.type}
-                  title={`Rules text changed by ${transfiguration?.type ?? "unknown"} transfiguration`}
-                  style={{
-                    position: "absolute",
-                    right: "var(--cv-textbox-pad-x)",
-                    bottom: "var(--cv-textbox-pad-y)",
-                    zIndex: 2,
-                    display: "inline-flex",
-                  }}
-                >
-                  <CardChangeBadge
-                    sizeVar="var(--cv-transfiguration-change-badge-size)"
-                    ariaLabel={`Rules text changed by ${transfiguration?.type ?? "unknown"} transfiguration`}
-                  />
-                </span>
-              ) : null}
             </div>
+          ) : null}
+          {rulesTextChanged ? (
+            <span
+              data-card-rules-text-change={transfiguration?.type}
+              title={`Rules text changed by ${transfiguration?.type ?? "unknown"} transfiguration`}
+              style={{
+                position: "absolute",
+                right:
+                  "calc(var(--cv-transfiguration-change-badge-size) * -0.5)",
+                bottom:
+                  "calc(var(--cv-transfiguration-change-badge-size) * -0.5)",
+                zIndex: 2,
+                display: "inline-flex",
+                pointerEvents: "none",
+              }}
+            >
+              {renderCardChangeBadge({
+                sizeVar: "var(--cv-transfiguration-change-badge-size)",
+                ariaLabel: `Rules text changed by ${transfiguration?.type ?? "unknown"} transfiguration`,
+              })}
+            </span>
           ) : null}
         </div>
       ) : null}
