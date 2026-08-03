@@ -140,7 +140,7 @@ describe("RevealOverlay", () => {
     expect(document.querySelector<HTMLElement>("[data-reveal-measurement-layer]")?.style.visibility).toBe("hidden");
   });
 
-  it("passes an above-source placement preference through measurement", () => {
+  it("passes the one-off Dream Augury placement exception through measurement", () => {
     let placedDecision: RevealPlacementDecision | undefined;
     const onPlaced = vi.fn((decision: RevealPlacementDecision) => {
       placedDecision = decision;
@@ -149,7 +149,7 @@ describe("RevealOverlay", () => {
       renderOverlay(
         <RevealOverlay
           active={active({
-            placementPreference: "above-source",
+            placementException: "dream-augury-offer-above-source",
             spec: makeTextRevealSpec("Primary", "Body"),
           })}
           onPlaced={onPlaced}
@@ -157,7 +157,9 @@ describe("RevealOverlay", () => {
       ),
     );
 
-    expect(placedDecision?.family).toBe("desktop-above-source");
+    expect(placedDecision?.family).toBe(
+      "desktop-dream-augury-above-source",
+    );
     expect(placedDecision?.primaryRect).toMatchObject({ x: 400, y: 136 });
   });
 

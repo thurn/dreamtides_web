@@ -61,8 +61,12 @@ export interface RevealSpec {
 
 export type RevealPointerType = "mouse" | "pen" | "touch";
 export type RevealReason = "hover" | "focus" | "press";
-/** Named source-level exception to the coordinator's automatic placement. */
-export type RevealPlacementPreference = "above-source";
+/**
+ * The single one-off exception to normal Cumulus desktop reveal placement.
+ * Only Dream Augury OfferTile may use this value; every ordinary source relies
+ * on the coordinator's automatic beside-source rule.
+ */
+export type RevealPlacementException = "dream-augury-offer-above-source";
 export type RevealDismissalReason =
   | "pointer-leave" | "pointer-cancel" | "movement" | "scroll" | "drag"
   | "resize" | "orientation-change" | "window-blur" | "route-change"

@@ -197,7 +197,11 @@ export interface OfferTileProps {
  * A 300×300 framed symbolic Dream Augury offer button. Its circular gold frame
  * surrounds full-bleed card art, dreamsigns, and glyphs. Every inner
  * object is decorative and pointer-transparent. The complete tile is the only
- * hover/focus/press target and reveals one category InfoCard.
+ * hover/focus/press target and reveals one category InfoCard. Dream Augury is
+ * the single one-off exception to normal Cumulus desktop InfoCard placement:
+ * this card centers above its respective offer instead of sitting beside it.
+ * That placement is specific to comparing the two Dream Augury visions and is
+ * not a reusable pattern for any other reveal source.
  */
 export function OfferTile({
   model,
@@ -220,7 +224,9 @@ export function OfferTile({
       },
       secondaries: [],
     },
-    placementPreference: "above-source",
+    // One-off Dream Augury exception: ordinary Cumulus InfoCards use the
+    // coordinator's normal beside-source desktop placement.
+    placementException: "dream-augury-offer-above-source",
     onActivate: () => onPress(model.id),
   });
   const lastPointerType = useRef<string | null>(null);

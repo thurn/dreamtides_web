@@ -258,7 +258,7 @@ describe("selectRevealPlacement", () => {
     }
   });
 
-  it("centers an above-source desktop InfoCard over its source", () => {
+  it("keeps the one-off Dream Augury InfoCard centered above its offer", () => {
     const sourceRect = { x: 400, y: 500, width: 300, height: 300 };
     const result = selectRevealPlacement({
       ...base,
@@ -271,12 +271,12 @@ describe("selectRevealPlacement", () => {
       },
       reason: "hover",
       touchPoint: undefined,
-      placementPreference: "above-source",
+      placementException: "dream-augury-offer-above-source",
       sourceRect,
       primarySize: { width: 248, height: 100 },
     });
 
-    expect(result.family).toBe("desktop-above-source");
+    expect(result.family).toBe("desktop-dream-augury-above-source");
     expect(result.primaryRect.x + result.primaryRect.width / 2).toBe(
       sourceRect.x + sourceRect.width / 2,
     );

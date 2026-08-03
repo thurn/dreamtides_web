@@ -1,4 +1,4 @@
-import type { RevealPlacementPreference, RevealPoint, RevealReason, RevealRect } from "./model";
+import type { RevealPlacementException, RevealPoint, RevealReason, RevealRect } from "./model";
 import type { VisualViewportSnapshot } from "./viewport";
 
 const MOBILE_WIDTH_FRACTION = 0.45;
@@ -15,7 +15,8 @@ export interface RevealPlacementInput {
   readonly viewport: VisualViewportSnapshot;
   readonly reason: RevealReason;
   readonly primaryKind: "source" | "gameCard" | "galleryAction" | "infoCard";
-  readonly placementPreference?: RevealPlacementPreference;
+  /** The one-off Dream Augury OfferTile exception to normal placement. */
+  readonly placementException?: RevealPlacementException;
   readonly sourceRect: RevealRect;
   readonly touchPoint?: RevealPoint;
   readonly primarySize: RevealSize;
@@ -442,7 +443,11 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
     ? Math.max(input.minimumGameCardWidth ?? DESKTOP_GAME_CARD_WIDTH, sourceRect.width)
     : input.primarySize.width;
   const primarySize = scaled(input.primarySize, primaryWidth);
-  if (input.placementPreference === "above-source") {
+  // Dream Augury OfferTile is the single one-off exception to Cumulus's normal
+  // beside-source desktop InfoCard placement. Do not generalize this branch or
+  // reuse it for another source: the above-tile relationship is specific to
+  // comparing the two Dream Augury visions.
+  if (input.placementException === "dream-augury-offer-above-source") {
     const primaryX = clamp(
       sourceRect.x + sourceRect.width / 2 - primaryWidth / 2,
       safeLeft,
@@ -453,7 +458,7 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
     const clearsSourceGap = primaryY + primarySize.height
       <= sourceRect.y - DESKTOP_SOURCE_GAP;
     return result(input, {
-      family: "desktop-above-source",
+      family: "desktop-dream-augury-above-source",
       orientation: "primary-left",
       primaryRect: rect(primaryX, primaryY, primarySize),
       secondaryRects: [],

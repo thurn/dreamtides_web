@@ -6,7 +6,7 @@ import {
 import { logEvent } from "../../../logging";
 import type { RichText } from "../../components/card/rich-text";
 import { tideAlignmentLabel } from "../../components/hud/tide-spec";
-import { infoCardVariant, type RevealCoordinatorSource, type RevealDismissalReason, type RevealGameCard, type RevealInfoCardModel, type RevealPlacementPreference, type RevealSourceIdentity, type RevealSpec } from "./model";
+import { infoCardVariant, type RevealCoordinatorSource, type RevealDismissalReason, type RevealGameCard, type RevealInfoCardModel, type RevealPlacementException, type RevealSourceIdentity, type RevealSpec } from "./model";
 import {
   activationOutcomeForTouch, initialRevealCoordinatorState, reduceRevealState,
   REVEAL_INTENT_MS,
@@ -102,7 +102,7 @@ interface SourceRegistration {
   readonly description: string;
   readonly source: RevealCoordinatorSource;
   readonly spec: RevealSpec;
-  readonly placementPreference?: RevealPlacementPreference;
+  readonly placementException?: RevealPlacementException;
   readonly element: HTMLElement | null;
 }
 interface RevealCoordinatorValue {
@@ -248,9 +248,9 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
     ? {
         source: activeRegistration.source,
         spec: activeRegistration.spec,
-        ...(activeRegistration.placementPreference === undefined
+        ...(activeRegistration.placementException === undefined
           ? {}
-          : { placementPreference: activeRegistration.placementPreference }),
+          : { placementException: activeRegistration.placementException }),
         element: activeRegistration.element,
         reason: state.reason,
         interactionId: interactionSnapshot.id,
@@ -327,8 +327,11 @@ export function RevealCoordinatorProvider({ children }: { readonly children: Rea
 export interface RevealSourceRegistration {
   readonly identity: RevealSourceIdentity;
   readonly spec: RevealSpec;
-  /** Named exception to the coordinator's automatic placement. */
-  readonly placementPreference?: RevealPlacementPreference;
+  /**
+   * The one-off Dream Augury OfferTile exception to normal beside-source
+   * desktop placement. Ordinary reveal sources must leave this unset.
+   */
+  readonly placementException?: RevealPlacementException;
   readonly onActivate?: () => void;
   /** Source feedback policy. Readable inline copy stays stationary. */
   readonly feedback?: RevealFeedback;
@@ -344,7 +347,7 @@ export interface RevealSourceBinding {
       readonly "data-reveal-entity-type": string;
       readonly "data-reveal-entity-id": string;
       readonly "data-reveal-primary-variant": string;
-      readonly "data-reveal-placement-preference"?: RevealPlacementPreference;
+      readonly "data-reveal-placement-exception"?: RevealPlacementException;
       readonly "data-reveal-secondary-titles": string;
       readonly style: CSSProperties;
     };
@@ -363,7 +366,7 @@ export function useRevealSource(registration: RevealSourceRegistration): RevealS
   const spec = registration.spec;
   const specFingerprint = JSON.stringify(spec);
   const descriptionText = revealDescription(spec);
-  const placementPreference = registration.placementPreference;
+  const placementException = registration.placementException;
   const activate = registration.onActivate;
   const feedbackVariant = registration.feedback ?? "scale";
   const [feedback, setFeedback] = useState(() => feedbackForRect({ width: 1, height: 1 }, feedbackVariant));
@@ -379,13 +382,13 @@ export function useRevealSource(registration: RevealSourceRegistration): RevealS
     }
     const unregisterRegistration = registerSource(registrationKey, {
       descriptionId, description: descriptionText, source: mountedSource, spec,
-      ...(placementPreference === undefined
+      ...(placementException === undefined
         ? {}
-        : { placementPreference }),
+        : { placementException }),
       element: nodeRef.current,
     });
     return () => { if (intentTimer.current !== null) clearTimeout(intentTimer.current); unregisterRegistration(); unregisterSource(mountedSource); };
-  }, [registerSource, unregisterSource, descriptionId, descriptionText, identity.entityId, identity.entityType, placementPreference, registrationKey, specFingerprint, valid]);
+  }, [registerSource, unregisterSource, descriptionId, descriptionText, identity.entityId, identity.entityType, placementException, registrationKey, specFingerprint, valid]);
 
   const ref = useCallback<RefCallback<HTMLElement>>((node) => {
     nodeRef.current = node;
@@ -410,7 +413,7 @@ export function useRevealSource(registration: RevealSourceRegistration): RevealS
         : spec.primary.kind === "galleryAction"
           ? "galleryAction"
           : (spec.primary.card.variant ?? "text"),
-      "data-reveal-placement-preference": placementPreference,
+      "data-reveal-placement-exception": placementException,
       "data-reveal-secondary-titles": spec.secondaries.map((card) => card.title).join("\u001f"),
       style: { "--reveal-press-scale": String(feedback.pressScale), "--reveal-hover-scale": String(feedback.hoverScale) } as CSSProperties,
       onPointerEnter: (event) => { if (valid) { const hoverCapable = event.pointerType === "mouse" || (event.pointerType === "pen" && event.buttons === 0 && event.pressure === 0); if (hoverCapable && coordinator.state.touch === null) { const sourceRect = captureSourceRect(event.currentTarget); coordinator.beginInteraction(mountedSource, "hover", sourceRect, event.pointerType === "pen" ? "pen" : "mouse"); measureFeedback(sourceRect); } coordinator.dispatch({ type: "pointer-enter", source: mountedSource, pointerType: event.pointerType, hoverCapable, timestamp: event.timeStamp }); } },

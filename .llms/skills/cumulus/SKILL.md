@@ -359,7 +359,11 @@ adapter against its own inputs. Full rationale:
   and tangible game objects directly on the glass instead.
 - **Popup rule**: every reveal-on-interaction popup renders through
   `InfoCard` — pointer-anchored, no close button, no scrim; hover reveals on
-  fine pointers, touch-hold on touch.
+  fine pointers, touch-hold on touch. Desktop InfoCards normally sit beside
+  their source. Dream Augury `OfferTile` is the single one-off exception: each
+  offer's body-only InfoCard centers above that offer so the two choices remain
+  visually legible. This exception is specific to Dream Augury and is not a
+  reusable placement pattern for other Cumulus surfaces.
 - **Content voice**: second person, literary register; Title Case titles;
   uppercase monospaced eyebrows; no emoji anywhere.
 - **Variable-content siblings**: side-by-side cards or columns whose copy

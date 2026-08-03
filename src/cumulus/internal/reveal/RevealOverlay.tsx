@@ -8,14 +8,15 @@ import {
   type RevealSize,
 } from "./geometry";
 import { infoCardNativeWidth } from "../../components/overlay/InfoCard";
-import type { RevealCoordinatorSource, RevealGeometrySnapshot, RevealPlacementPreference, RevealPoint, RevealReason, RevealRect, RevealSpec } from "./model";
+import type { RevealCoordinatorSource, RevealGeometrySnapshot, RevealPlacementException, RevealPoint, RevealReason, RevealRect, RevealSpec } from "./model";
 import { renderRevealCard, renderRevealInfoCard } from "./render-reveal-card";
 import { captureVisualViewport, findRevealBoundary } from "./viewport";
 
 export interface RevealOverlayActive {
   readonly source: RevealCoordinatorSource;
   readonly spec: RevealSpec;
-  readonly placementPreference?: RevealPlacementPreference;
+  /** The one-off Dream Augury OfferTile placement exception. */
+  readonly placementException?: RevealPlacementException;
   readonly element: HTMLElement;
   readonly reason: RevealReason;
   readonly touchPoint?: RevealPoint;
@@ -87,9 +88,9 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
         viewport,
         reason: active.reason,
         primaryKind: active.spec.primary.kind,
-        ...(active.placementPreference === undefined
+        ...(active.placementException === undefined
           ? {}
-          : { placementPreference: active.placementPreference }),
+          : { placementException: active.placementException }),
         sourceRect: active.sourceRect,
         ...(active.touchPoint === undefined ? {} : { touchPoint: active.touchPoint }),
         primarySize: { width: primaryRect.width, height: primaryRect.height },
