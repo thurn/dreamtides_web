@@ -10,10 +10,13 @@ entered the dream depicted by one card. Give every description distinct wording,
 though all five may share the same overall narrative and strongest visual focus.
 Choose prose for vivid descriptive precision, art fidelity, and its ability to
 support two actions. The artwork supplies the material truth of the scene, but
-the prose describes only the scene's single most prominent element instead of
-inventorying the whole frame. When multiple entities appear, describe only the
-one occupying the largest image area. Deemphasize background details and render
-the primary figure in evocative, specific detail. Study and freeze the scene
+the prose describes only the scene's single required subject instead of
+inventorying the whole frame. For a Character card, the required subject is the
+canonical character identified by the card name: describe that character and
+nothing else. Do not mention any other figure, entity, person, object, or scene
+element. For other card types, when multiple entities appear, describe only the
+one occupying the largest image area and deemphasize background details. Render
+the required subject in evocative, specific detail. Study and freeze the scene
 before inspecting mechanics, then deliberately select ten distinct templates
 and arrange them into five pairs whose effects fit both the depicted world and
 the source card's deck intent. Return strict JSON by default, or render the
@@ -190,11 +193,16 @@ commentary.
    or coils of shadow where dark cables curl are descriptive; a threshold that
    chooses someone or smoke that forgets its shape invents a poetic conceit.
    Note concrete subjects, setting, motion, scale, posture, distance, mood, and
-   sensory atmosphere. Identify the single most prominent element before
-   drafting. If the scene contains multiple entities, estimate their visible
-   image area and lock the largest as the only entity prose may describe; do not
-   mention smaller entities merely because they create a relationship or
-   action. Before naming the primary figure's posture, verify its visible
+   sensory atmosphere. Before drafting for a Character card, use the canonical
+   card name and record to identify the depicted source character. Lock that
+   character as the only permissible subject, regardless of the visible area
+   occupied by any other entity. If the source character cannot be identified
+   unambiguously, stop and report the ambiguity instead of choosing another
+   figure. For other card types, identify the single most prominent element. If
+   multiple entities appear, estimate their visible image area and lock the
+   largest as the only entity prose may describe; do not mention smaller
+   entities merely because they create a relationship or action. Before naming
+   the primary figure's posture, verify its visible
    support points and joint geometry; if sitting, kneeling, or crouching cannot
    be distinguished confidently, describe only the clearly visible pose or
    action. If a claim depends on exact color, measure the image rather than
@@ -206,38 +214,50 @@ commentary.
    across `prose`, `label`, and `resolution`. Individual name words remain
    available when they are ordinary language and the strongest description of
    visible evidence; do not replace `rider` with `mounted silhouette` merely
-   because the card name contains `Rider`. For `Night Scavenger`, do not call
-   the subject `the Night Scavenger`, but `night` or `scavenging` may
-   appear when independently supported and evocative. Read a Character name as
-   an archetype label rather than a named individual. For an Event, use the name
-   and ability privately to identify the central action, change, or condition
-   without quoting their language as scene copy. An Event whose ability prevents
-   a played card should feel like interruption, refusal, or something arrested
-   before completion. This is an interpretive lens, not permission to add
-   objects, actors, outcomes, or rules text absent from the image. Do not invent
-   proper names, identifiable faces, fixed biographies, named locations, or
-   offscreen lore.
+   because the card name contains `Rider`. For `Night Scavenger`, use the name
+   to identify which depicted character the prose must describe, but do not call
+   the subject `the Night Scavenger`; `night` or `scavenging` may appear when
+   independently supported and evocative. Read a Character name as an archetype
+   label that selects the source character, not as a named individual to quote
+   in prose. The name is authoritative for subject identity even when another
+   depicted entity is larger. For an Event, use the name and ability privately
+   to identify the central action, change, or condition without quoting their
+   language as scene copy. An Event whose ability prevents a played card should
+   feel like interruption, refusal, or something arrested before completion.
+   This is an interpretive lens, not permission to add objects, actors, outcomes,
+   or rules text absent from the image. Do not invent proper names, identifiable
+   faces, fixed biographies, named locations, or offscreen lore.
 
 6. With templates still hidden, build a private scene bank from the artwork.
-   Choose the single most prominent element. When entities are present, this is
-   the entity occupying the largest visible area of the image, regardless of
-   narrative importance. Describe that entity alone: omit every smaller figure,
-   creature, vehicle, or other entity. Add at most one subordinate background
-   detail of light, texture, motion, stillness, weather, or setting, and never
-   let framing geometry or scenery become the sentence's subject when a figure
-   is more prominent. Describe the primary figure with specific nouns, strong
-   verbs, evocative sensory detail, and economical modifiers.
+   For a Character card, describe only the source character identified in step
+   4. Every word must characterize that figure through their own visible body,
+   attire, pose, expression, gesture, motion, or texture. Omit all other people,
+   creatures, figures, entities, objects, props, architecture, terrain, weather,
+   lighting sources, framing shapes, and background details. Do not express the
+   character through a spatial or causal relationship to anything else.
+
+   For other card types, choose the single most prominent element. When
+   entities are present, this is the entity occupying the largest visible area
+   of the image, regardless of narrative importance. Describe that entity alone:
+   omit every smaller figure, creature, vehicle, or other entity. Add at most
+   one subordinate background detail of light, texture, motion, stillness,
+   weather, or setting, and never let framing geometry or scenery become the
+   sentence's subject when a figure is more prominent. Describe the required
+   subject with specific nouns, strong verbs, evocative sensory detail, and
+   economical modifiers.
 
    Draft only enough candidates to identify excellent scene prose. Draft enough
    faithful variants to give every final `prose` field distinct wording.
-   Variants may share the same dominant image; vary syntax, reader position, or
-   which supported atmospheric detail accompanies it rather than adding
-   material for variety. A scene does not need conflict, danger, stakes, a
-   dilemma, a request, a problem, a resolution, or unresolved tension. Do not
-   use anticipated quantities, operations, reward concepts, or effect
-   recipients as scene ingredients.
+   Variants may share the same required subject. For a Character card, vary only
+   syntax or which visible trait of that same character receives emphasis; never
+   add atmosphere or scenery for variety. For other card types, vary syntax,
+   reader position, or which supported atmospheric detail accompanies the
+   subject. A scene does not need conflict, danger, stakes, a dilemma, a request,
+   a problem, a resolution, or unresolved tension. Do not use anticipated
+   quantities, operations, reward concepts, or effect recipients as scene
+   ingredients.
 
-7. Apply seven gates to every candidate with templates and actions hidden:
+7. Apply eight gates to every candidate with templates and actions hidden:
    - **Name gate:** Does it quote the complete source name, turn a distinctive
      portion of that name into a proper noun, or lean on repeated name words
      instead of fresh scene language? Reject it. Do not reject an independently
@@ -246,16 +266,29 @@ commentary.
      features, actions, and physical conditions visible or strongly implied?
      Reject invented companions, crowds, creatures, props, structures, weather
      events, histories, or incidents.
-   - **Focus gate:** Does the line describe only the most prominent element? If
-     multiple entities appear in the artwork, reject any line that names or
-     describes more than the single entity occupying the largest visible image
-     area. Reject lines led by framing geometry or background scenery when a
-     figure is more prominent. Any retained background detail must remain
-     subordinate. Omission—not metaphor—is the primary way to avoid flat alt
-     text.
+   - **Character-only gate:** If `card_type` is `Character`, does every noun,
+     modifier, and clause describe only the canonical character selected by the
+     card name? Reject the line if it describes or even mentions any other
+     figure, entity, person, creature, object, prop, architecture, terrain,
+     weather, light source, framing shape, or background element. Reject spatial
+     and causal relationships to anything else. The character's own visible
+     body, attire, pose, expression, gesture, motion, and texture are the only
+     permitted descriptive material. This is a mandatory pass/fail gate; visual
+     prominence, compositional importance, atmosphere, and mechanical fit cannot
+     override it.
+   - **Focus gate:** Does the line describe only the required subject? If
+     this is a Character card, apply the source-character selection and absolute
+     exclusions in the Character-only gate. Otherwise, if multiple entities
+     appear in the artwork, reject any line that names or describes more than
+     the single entity occupying the largest visible image area. Reject lines
+     led by framing geometry or background scenery when a figure is more
+     prominent. Any retained background detail must remain subordinate.
+     Omission—not metaphor—is the primary way to avoid flat alt text.
    - **Vividness gate:** Do precise nouns, verbs, and restrained modifiers give
-     the selected image atmosphere, motion, texture, or scale? Reject generic
-     descriptions such as `a man stands near a shape`, even when accurate.
+     the required subject atmosphere, motion, texture, or scale? For a Character
+     card, all vividness must come from the source character's own permitted
+     visible traits. Reject generic descriptions such as `a man stands near a
+     shape`, even when accurate.
    - **No-conceit gate:** Reject metaphor, simile, personification, symbolic
      equivalence, impossible agency, and reality-bending conclusions. In
      particular, thresholds do not choose, smoke does not forget, light does not
@@ -395,11 +428,14 @@ commentary.
 18. Before validation, scan every `prose`, `label`, and `resolution` for
     the complete card name, distinctive multiword fragments used as names, and
     mechanical repetition of source-name language. Replace those matches while
-    preserving independently useful ordinary words. Scan every action's
-    structured card references and runtime card selections by UUID, and its
-    `effect_text` for a source-card target, rejecting any that identify or can
-    resolve to the source card. Then write the complete event objects to JSON,
-    validate them, and fix every error regardless of output mode:
+    preserving independently useful ordinary words. For a Character card, audit
+    every `prose` noun, modifier, and clause against the Character-only gate and
+    reject the complete design if any descriptive material refers to anything
+    except the source character and their own visible traits. Scan every
+    action's structured card references and runtime card selections by UUID,
+    and its `effect_text` for a source-card target, rejecting any that identify
+    or can resolve to the source card. Then write the complete event objects to
+    JSON, validate them, and fix every error regardless of output mode:
 
     ```bash
     python3 .llms/skills/exploration-encounter-designer/scripts/validate-exploration.py \
@@ -438,6 +474,14 @@ commentary.
   symbol or give it impossible behavior. If the art shows a lone figure, keep
   the figure alone; do not add a column, crowd, companion, or hidden population
   to service a Character effect.
+- For every Character card, prose describes only the canonical character
+  identified by the card name. This rule overrides relative image area and all
+  other focus heuristics. Do not mention or describe any other figure, entity,
+  person, creature, object, prop, architecture, terrain, weather, light source,
+  framing shape, or background element. Do not locate the character relative to
+  anything else or describe an effect they have on another element. Fill the
+  line with evocative, detailed language about only the character's own visible
+  body, attire, pose, expression, gesture, motion, or texture.
 - Do not infer physical scale from a close crop or portrait composition: a
   subject filling the frame does not imply that it towers over the reader or
   that its features are massive or enormous. In action labels and resolutions,
@@ -446,13 +490,14 @@ commentary.
   as a witch, `they`/`their` when gender is not established) instead of an
   ambiguous or dehumanizing `it`/`its`; do not turn uncertain visual details
   into interactable marks, symbols, or props.
-- Build each line around only the single most prominent element. When the art
-  contains multiple entities, describe only the entity occupying the largest
-  visible image area and omit all others. Give that primary figure evocative,
-  detailed treatment through strong verbs, exact nouns, restrained adjectives,
-  and supported qualities of posture, motion, scale, light, or texture. Permit
-  at most one background detail, keep it grammatically subordinate, and do not
-  let scenery or framing compete with the primary figure.
+- For non-Character cards, build each line around only the single most prominent
+  element. When the art contains multiple entities, describe only the entity
+  occupying the largest visible image area and omit all others. Give that
+  primary figure evocative, detailed treatment through strong verbs, exact
+  nouns, restrained adjectives, and supported qualities of posture, motion,
+  scale, light, or texture. Permit at most one background detail, keep it
+  grammatically subordinate, and do not let scenery or framing compete with the
+  primary figure.
 - Reject caption-shaped prose even when it is specific, spatially accurate, and
   written in second person. Naming every subject, its equipment, its position,
   another entity, and the setting produces alt text. Keep the largest-area
@@ -461,23 +506,27 @@ commentary.
   symbolic equations, impossible agency, and conclusions about reality. Allow
   conventional descriptive imagery such as `wreathed in flame` and `coils of
   shadow` when it is a compact account of visible appearance rather than a claim
-  that the scene thinks, chooses, remembers, or means something hidden.
+  that the scene thinks, chooses, remembers, or means something hidden. This
+  allowance does not override the Character-only gate; Character prose cannot
+  mention flame, shadow, or any other separate scene element.
 - Use these caption-regression comparisons as a quality floor:
   - Reject “Your small boat passes beneath a whale drifting across the stars.”
-    Prefer “A whale sweeps overhead, its broad belly lit by distant stars.”
+    Prefer “A whale sweeps overhead, its broad belly gleaming.”
   - Reject “A slender figure stands behind an immense owl gripping the branch.”
-    Prefer “A vast owl grips a forest branch, its round eyes fixed on you.”
+    Prefer “A vast owl holds rigid, its round eyes unblinking.”
   - Reject “A bright triangle frames a suited gunman among curling black cables.”
-    Prefer “A suited gunman stands motionless as thick cables arc behind him.”
+    Prefer “A suited gunman stands motionless, his expression unreadable.”
   - Reject “A skull-headed giant suspends a blazing lantern before the reaching
-    child.” Prefer “A skull-headed giant suspends a blazing lantern.”
+    child.” Prefer “A skull-headed giant raises one gaunt hand.”
   - Reject “A giant wolf prowls through burning grass toward a crouched archer.”
-    Prefer “A giant wolf prowls through burning grass.”
+    Prefer “A giant wolf prowls low, its shoulders rolling beneath singed fur.”
 - Do not optimize for different compositions or sensory focuses across the five
   scenes. Every `prose` field must nevertheless have distinct wording. Rephrase
-  a shared dominant image through syntax, reader position, or a different
-  supported atmospheric detail, and keep each version at least as vivid,
-  faithful, and mechanically useful.
+  the shared required subject through syntax or a different supported detail.
+  For Character cards, that detail must be a visible trait of the source
+  character; atmosphere, scenery, other entities, and other scene elements
+  remain forbidden. Keep each version at least as vivid, faithful, and
+  mechanically useful.
 - For an Event card, foreground the depicted action or charged instant implied
   by its name and ability. Ask what is being prevented, completed, revealed,
   broken, escaped, or otherwise changed in the frame, and describe that instant
@@ -491,9 +540,9 @@ commentary.
   plausible material response after the player acts; the initial prose may not
   anticipate that response.
 - Use these art-fidelity regression checks:
-  - For art showing a lone twin-bladed warrior above burning ruins, prefer “A
-    twin-bladed warrior towers above the ruined street as cinders rise.” Reject
-    “A weary column gathers beneath a warrior” when no column appears.
+  - For a Character card showing a lone warrior above burning ruins, prefer “A
+    scarred warrior stands rigid, broad shoulders drawn taut.” Reject prose that
+    mentions the ruins, cinders, or any other scene element.
   - Reject “A resting runner studies suspended screens” when the art contains
     projections but no resting individual. Do not invent an observer to animate
     an abstract or environmental composition.
