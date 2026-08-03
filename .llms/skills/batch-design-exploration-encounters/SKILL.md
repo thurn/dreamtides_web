@@ -1,13 +1,16 @@
 ---
 name: batch-design-exploration-encounters
-description: Select a requested-size random batch of canonical Dreamtides cards that are absent from data/encounter_candidates.json, delegate one exploration-encounter-designer run per card, validate and append every completed encounter set atomically, and return the batch in display Markdown. Use when generating encounter candidates in parallel, running a batch of encounter-design subagents, or expanding the encounter candidate catalog by a target count.
+description: In a separate git worktree, select a requested-size random batch of canonical Dreamtides cards absent from data/encounter_candidates.json, delegate one exploration-encounter-designer run per card, append every validated encounter set atomically, commit and push the catalog update, and show the batch in display Markdown. Use when generating encounter candidates in parallel, running a batch of encounter-design subagents, or expanding the encounter candidate catalog by a target count.
 ---
 
 # Batch Design Exploration Encounters
 
-Produce one validated five-encounter set per randomly selected card. Keep card
-selection, collision detection, catalog writes, and display rendering in the
-bundled scripts; use subagents only for the creative single-card designs.
+Produce one validated five-encounter set per randomly selected card. The
+persistent deliverable is a committed update to `data/encounter_candidates.json`
+on a pushed worktree branch. The human-facing deliverable is the complete
+generated `display.md`. Keep card selection, collision detection, catalog
+writes, and display rendering in the bundled scripts; use subagents only for
+the creative single-card designs.
 
 ## Required input
 
@@ -17,10 +20,16 @@ and the number of single-card subagent assignments.
 
 ## Workflow
 
-1. Work from the repository root. Create a new empty temporary run directory.
-   Never place intermediate agent output in `data/`.
+1. Invoke `$wt` and establish a separate git worktree before reading repository
+   data or selecting cards. Perform the entire batch from that worktree's
+   repository root. For follow-up work on an unpromoted batch worktree, continue
+   in that same worktree as required by `$wt`. Never run the aggregation against
+   the user's primary checkout.
 
-2. Select the batch and create one canonical request per UUID:
+2. Create a new empty temporary run directory outside the repository. Never
+   place intermediate agent output in `data/`.
+
+3. Select the batch and create one canonical request per UUID:
 
    ```bash
    python3 .llms/skills/batch-design-exploration-encounters/scripts/select-batch.py \
@@ -33,7 +42,7 @@ and the number of single-card subagent assignments.
    reports fewer unrepresented cards than requested. Do not replace selected
    cards manually.
 
-3. Spawn exactly one subagent for every selected UUID. Dispatch concurrently up
+4. Spawn exactly one subagent for every selected UUID. Dispatch concurrently up
    to the available agent capacity; use additional waves when the batch is
    larger than the current capacity. Give each subagent only its own request
    path, its own result path, and this task:
@@ -52,12 +61,12 @@ and the number of single-card subagent assignments.
    exists. All subagents intentionally read the same committed candidate usage
    baseline; only the aggregator writes the shared catalog.
 
-4. Wait for every assignment. Confirm that each selected UUID has one result
+5. Wait for every assignment. Confirm that each selected UUID has one result
    file. When an agent fails or produces invalid JSON, send the validation error
    back to that same agent for repair; do not substitute another card or accept
    a partial batch.
 
-5. Validate every result against the single-card designer contract, resolve its
+6. Validate every result against the single-card designer contract, resolve its
    artwork, append the complete batch atomically, and capture the display copy:
 
    ```bash
@@ -74,10 +83,18 @@ and the number of single-card subagent assignments.
    fresh batch, and reuse a result only when its UUID is selected again and the
    single-card validator still accepts it.
 
-6. Return only the complete contents of `display.md` to the caller. Preserve
-   card order from the manifest and event rank order within each card. Do not
-   add an introduction, summary, raw JSON, IDs, templates, scores, or ranking
-   commentary.
+7. Confirm that aggregation modified the worktree's
+   `data/encounter_candidates.json` and that every manifest UUID has exactly one
+   newly appended catalog entry with five ranked events. Treat a successful
+   `display.md` without the corresponding catalog diff as a failed run. Run the
+   repository's required diff-aware review, commit the catalog update with a
+   detailed message, and immediately push the worktree branch.
+
+8. Return the complete contents of `display.md` to the caller. This Markdown is
+   the presentation of the committed catalog update, not a substitute for that
+   update. Preserve card order from the manifest and event rank order within
+   each card. Do not add an introduction, summary, raw JSON, IDs, templates,
+   scores, or ranking commentary.
 
 ## Safety invariants
 
@@ -86,5 +103,8 @@ and the number of single-card subagent assignments.
 - Never overwrite an existing card entry or aggregate against a changed source
   digest.
 - Never let a subagent edit the shared candidate catalog.
+- Never finish with only temporary result files or display Markdown; the batch
+  is complete only after the worktree catalog change is committed and pushed.
+- Never edit `data/encounter_candidates.json` in the primary checkout.
 - Use the scripts' path overrides only for synthetic tests or an explicitly
   supplied alternate repository data source.
