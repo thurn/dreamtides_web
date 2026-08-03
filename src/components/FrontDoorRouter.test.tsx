@@ -20,7 +20,6 @@ const adapterMocks = vi.hoisted(() => ({
   tutorialSpeed: null as number | null,
   tutorialDirectLive: null as boolean | null,
   tutorialVictoryPreview: null as boolean | null,
-  tutorialBattlefieldDivider: null as string | null,
 }));
 const DREAM_AVATARS = [] as const;
 
@@ -62,14 +61,10 @@ vi.mock("../screens/cumulus_adapters/TutorialScreenAdapter", () => ({
 vi.mock("../screens/cumulus_adapters/TutorialBattleScreenAdapter", () => ({
   TutorialBattleScreenAdapter: ({
     previewVictory,
-    battlefieldDividerVariation,
   }: {
     previewVictory?: boolean;
-    battlefieldDividerVariation?: string;
   }) => {
     adapterMocks.tutorialVictoryPreview = previewVictory ?? false;
-    adapterMocks.tutorialBattlefieldDivider =
-      battlefieldDividerVariation ?? null;
     return <main data-tutorial-live-battle />;
   },
 }));
@@ -87,7 +82,6 @@ beforeEach(() => {
   adapterMocks.tutorialSpeed = null;
   adapterMocks.tutorialDirectLive = null;
   adapterMocks.tutorialVictoryPreview = null;
-  adapterMocks.tutorialBattlefieldDivider = null;
 });
 
 afterEach(() => {
@@ -191,11 +185,7 @@ describe("FrontDoorRouter", () => {
 
     act(() =>
       root.render(
-        <FrontDoorRouter
-          dreamAvatars={DREAM_AVATARS}
-          previewTutorialVictory
-          battlefieldDividerVariation="glow"
-        />,
+        <FrontDoorRouter dreamAvatars={DREAM_AVATARS} previewTutorialVictory />,
       ),
     );
     expect(adapterMocks.tutorialDirectLive).toBe(true);
@@ -203,15 +193,10 @@ describe("FrontDoorRouter", () => {
     stateMocks.battle = { mode: { kind: "tutorial" } };
     act(() =>
       root.render(
-        <FrontDoorRouter
-          dreamAvatars={DREAM_AVATARS}
-          previewTutorialVictory
-          battlefieldDividerVariation="glow"
-        />,
+        <FrontDoorRouter dreamAvatars={DREAM_AVATARS} previewTutorialVictory />,
       ),
     );
     expect(adapterMocks.tutorialVictoryPreview).toBe(true);
-    expect(adapterMocks.tutorialBattlefieldDivider).toBe("glow");
 
     act(() => root.unmount());
   });

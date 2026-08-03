@@ -759,9 +759,6 @@ export default function App({
               <HostedPlaytestShell claimUnownedBattle={directTutorialBattle}>
                 <FrontDoorRouter
                   dreamAvatars={journeyContent.dreamAvatars}
-                  battlefieldDividerVariation={
-                    runtimeConfig.battlefieldDividerVariation
-                  }
                   tutorialPlaybackSpeed={
                     runtimeConfig.tutorialPlaybackSpeed ?? 1
                   }

@@ -7,15 +7,12 @@ import { useFrontDoor } from "../../state/front-door-context";
 import { buildTutorialBattleView } from "./tutorial-battle-view-model";
 import { useBattleTutorialGuidance } from "../../state/use-battle-tutorial-guidance";
 import { buildBattleTutorialGuidanceView } from "./battle-tutorial-guidance-view-model";
-import type { BattlefieldDividerVariation } from "../../runtime/runtime-config";
 
 /** Live, controller-owned continuation of the standalone tutorial handoff. */
 export function TutorialBattleScreenAdapter({
   previewVictory = false,
-  battlefieldDividerVariation = "space",
 }: {
   readonly previewVictory?: boolean;
-  readonly battlefieldDividerVariation?: BattlefieldDividerVariation;
 }) {
   const { battle: contextBattle, mutations } = useFrontDoor();
   const battle = contextBattle ?? null;
@@ -47,12 +44,11 @@ export function TutorialBattleScreenAdapter({
   const battleId = view?.battle.battleId ?? null;
   useEffect(() => {
     if (battleId === null) return;
-    logEvent("battlefield_divider_rendered", {
+    logEvent("battlefield_gap_rendered", {
       battleId,
       surface: "tutorial-battle",
-      variation: battlefieldDividerVariation,
     });
-  }, [battleId, battlefieldDividerVariation]);
+  }, [battleId]);
   const startNewJourney = useCallback(() => {
     const completedVictory =
       battle?.board.result === "victory" && controller.status === "terminal";
@@ -85,7 +81,6 @@ export function TutorialBattleScreenAdapter({
     <TutorialBattleScreen
       view={view}
       interactions={interactions}
-      battlefieldDividerVariation={battlefieldDividerVariation}
       movementStatusMessage={movementStatusMessage}
       onMovementStatusDismiss={dismissMovementStatus}
       onForeseeConfirm={(resolution) =>

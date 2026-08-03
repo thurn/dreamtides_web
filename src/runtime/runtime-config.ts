@@ -7,11 +7,6 @@ export interface RuntimeConfig {
   seedOverride: number | null;
   aiMode: boolean;
   /**
-   * Presentation-only battlefield divider treatment used while comparing the
-   * five visual directions requested for battle QA.
-   */
-  battlefieldDividerVariation?: BattlefieldDividerVariation;
-  /**
    * Local playback multiplier for the standalone tutorial sequence, from
    * `?tutorialSpeed=`. A positive finite decimal; absent or invalid values use
    * normal speed (`1`). This is presentation-only and is not pinned into room
@@ -79,16 +74,6 @@ export interface RuntimeConfig {
 }
 
 export type DatabaseMode = "emulator" | "realtime";
-
-export const BATTLEFIELD_DIVIDER_VARIATIONS = [
-  "space",
-  "hairline",
-  "glow",
-  "stitch",
-  "sigil",
-] as const;
-export type BattlefieldDividerVariation =
-  (typeof BATTLEFIELD_DIVIDER_VARIATIONS)[number];
 
 /**
  * Extracts the fold-relevant content slice a room pins into its genesis. Only
@@ -175,9 +160,6 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
   return {
     seedOverride: parseSeedOverride(params.get("seed")),
     aiMode: params.get("ai") === "1",
-    battlefieldDividerVariation: parseBattlefieldDividerVariation(
-      params.get("battleDivider"),
-    ),
     tutorialPlaybackSpeed: parseTutorialPlaybackSpeed(
       params.get("tutorialSpeed"),
     ),
@@ -190,16 +172,6 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     gotoScene: parseGotoScene(params.get("goto")),
     viewLogs: normalizeRoomId(params.get("viewLogs")),
   };
-}
-
-function parseBattlefieldDividerVariation(
-  rawVariation: string | null,
-): BattlefieldDividerVariation {
-  return (
-    BATTLEFIELD_DIVIDER_VARIATIONS.find(
-      (variation) => variation === rawVariation,
-    ) ?? "space"
-  );
 }
 
 function parseTutorialPlaybackSpeed(rawSpeed: string | null): number {

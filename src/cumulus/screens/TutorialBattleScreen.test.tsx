@@ -138,8 +138,6 @@ function mount(
   onPresentationVisible = vi.fn(),
   onNewJourney = vi.fn(),
   screenInteractions = interactions,
-  battlefieldDividerVariation:
-    "space" | "hairline" | "glow" | "stitch" | "sigil" = "space",
 ) {
   const container = document.createElement("div");
   document.body.append(container);
@@ -150,7 +148,6 @@ function mount(
         <TutorialBattleScreen
           view={screenView}
           interactions={screenInteractions}
-          battlefieldDividerVariation={battlefieldDividerVariation}
           movementStatusMessage={movementStatusMessage}
           onMovementStatusDismiss={onMovementStatusDismiss}
           onForeseeConfirm={() => {}}
@@ -185,24 +182,6 @@ afterEach(() => {
 });
 
 describe("TutorialBattleScreen", () => {
-  it("passes the selected battlefield divider treatment to the shared board", () => {
-    const { root } = mount(
-      view(),
-      null,
-      vi.fn(),
-      vi.fn(),
-      vi.fn(),
-      interactions,
-      "sigil",
-    );
-
-    expect(mobileBattleProps).toHaveBeenCalledWith(
-      expect.objectContaining({ battlefieldDividerVariation: "sigil" }),
-    );
-
-    act(() => root.unmount());
-  });
-
   it("holds Victory centered before its slower move and action reveal", () => {
     const onNewJourney = vi.fn();
     const { container, root } = mount(

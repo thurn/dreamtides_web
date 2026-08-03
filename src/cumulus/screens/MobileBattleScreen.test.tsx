@@ -256,54 +256,18 @@ function mount(
 }
 
 describe("MobileBattleScreen", () => {
-  it("renders all five named battlefield divider treatments", () => {
-    const variations = [
-      ["space", "var(--space-5)"],
-      ["hairline", "var(--space-4)"],
-      ["glow", "var(--space-4)"],
-      ["stitch", "var(--space-4)"],
-      ["sigil", "var(--space-5)"],
-    ] as const;
+  it("reserves whitespace between the two battlefield sides", () => {
+    const { container, root } = mount(makeView());
 
-    for (const [variation, expectedOffset] of variations) {
-      const { container, root } = mount(makeView(), undefined, {
-        battlefieldDividerVariation: variation,
-      });
-      const divider = container.querySelector(
-        `[data-battlefield-divider="${variation}"]`,
-      );
-      expect(divider).not.toBeNull();
-      expect(
-        container.querySelector<HTMLElement>('[data-battle-rank="enemy-front"]')
-          ?.style.bottom,
-      ).toBe(expectedOffset);
-      expect(
-        container.querySelector<HTMLElement>(
-          '[data-battle-rank="player-front"]',
-        )?.style.top,
-      ).toBe(expectedOffset);
-      act(() => root.unmount());
-    }
-  });
-
-  it("renders the sigil with the battlefield grid stroke and no backing plate", () => {
-    const { container, root } = mount(makeView(), undefined, {
-      battlefieldDividerVariation: "sigil",
-    });
-    const divider = container.querySelector<HTMLElement>(
-      '[data-battlefield-divider="sigil"]',
-    );
-    const composition = divider?.firstElementChild as HTMLElement | null;
-    const lines = container.querySelectorAll<HTMLElement>(
-      "[data-battlefield-divider-line]",
-    );
-
-    expect(composition?.style.background).toBe("");
-    expect(lines).toHaveLength(2);
-    expect(lines[0]?.style.borderTop).toBe("var(--battlefield-slot-border)");
+    expect(container.querySelector("[data-battlefield-divider]")).toBeNull();
     expect(
-      container.querySelector("[data-battlefield-divider-sigil]"),
-    ).not.toBeNull();
+      container.querySelector<HTMLElement>('[data-battle-rank="enemy-front"]')
+        ?.style.bottom,
+    ).toBe("var(--space-5)");
+    expect(
+      container.querySelector<HTMLElement>('[data-battle-rank="player-front"]')
+        ?.style.top,
+    ).toBe("var(--space-5)");
 
     act(() => root.unmount());
   });

@@ -72,7 +72,6 @@ import { BattleTutorialGuidance } from "../../cumulus/screens/BattleTutorialGuid
 import { buildBattleTutorialGuidanceView } from "../../screens/cumulus_adapters/battle-tutorial-guidance-view-model";
 import { useBattleTutorialGuidance } from "../use-battle-tutorial-guidance";
 import { selectBattlefieldFigmentMergeTargets } from "../state/figments";
-import type { BattlefieldDividerVariation } from "../../runtime/runtime-config";
 
 // `BattleLogDrawer` renders from the append-only coop fold, so its
 // `history` prop is supplied an empty undo/redo envelope.
@@ -168,11 +167,9 @@ function canonicalCommandTargets(
 export function PlayableBattleScreen({
   site,
   aiMode = false,
-  battlefieldDividerVariation = "space",
 }: {
   site: SiteState;
   aiMode?: boolean;
-  battlefieldDividerVariation?: BattlefieldDividerVariation;
 }) {
   const battle = useGameState().battle;
   if (battle === null) {
@@ -180,21 +177,11 @@ export function PlayableBattleScreen({
   }
   void site;
   return (
-    <PlayableBattleScreenInner
-      key={battle.init.battleId}
-      aiMode={aiMode}
-      battlefieldDividerVariation={battlefieldDividerVariation}
-    />
+    <PlayableBattleScreenInner key={battle.init.battleId} aiMode={aiMode} />
   );
 }
 
-function PlayableBattleScreenInner({
-  aiMode,
-  battlefieldDividerVariation,
-}: {
-  aiMode: boolean;
-  battlefieldDividerVariation: BattlefieldDividerVariation;
-}) {
+function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   const gameState = useGameState();
   const battle = gameState.battle;
   if (battle === null) {
@@ -1673,7 +1660,6 @@ function PlayableBattleScreenInner({
             handleFillAsymmetricBattlefieldPreview,
           onInspectorAction: handleCumulusInspectorAction,
         }}
-        battlefieldDividerVariation={battlefieldDividerVariation}
       />
       {contextMenu !== null ? (
         <BattleContextMenu

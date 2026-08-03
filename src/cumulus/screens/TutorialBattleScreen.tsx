@@ -31,7 +31,6 @@ import {
   BattleTutorialGuidance,
   type BattleTutorialGuidanceView,
 } from "./BattleTutorialGuidance";
-import type { BattlefieldDividerVariation } from "../../runtime/runtime-config";
 
 export type TutorialBattleOwnership =
   "driver" | "observer" | "paused-driver-absent" | "terminal";
@@ -100,7 +99,6 @@ export interface TutorialBattleView {
 export interface TutorialBattleScreenProps {
   readonly view: TutorialBattleView;
   readonly interactions: MobileBattleInteractions;
-  readonly battlefieldDividerVariation?: BattlefieldDividerVariation;
   readonly movementStatusMessage: string | null;
   readonly onMovementStatusDismiss: () => void;
   readonly onForeseeConfirm: (resolution: {
@@ -119,7 +117,6 @@ export interface TutorialBattleScreenProps {
 export function TutorialBattleScreen({
   view,
   interactions,
-  battlefieldDividerVariation = "space",
   movementStatusMessage,
   onMovementStatusDismiss,
   onForeseeConfirm,
@@ -331,7 +328,6 @@ export function TutorialBattleScreen({
         <MobileBattleScreen
           view={displayedBattle}
           interactions={interactions}
-          battlefieldDividerVariation={battlefieldDividerVariation}
           cardOverlay={challengeCardOverlay}
           cardLayoutGroup="inherited"
           inspectorDefault="collapsed"

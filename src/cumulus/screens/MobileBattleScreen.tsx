@@ -74,7 +74,6 @@ import {
   MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS,
 } from "./mobile-battle-layout";
 import { useIsDesktop } from "./use-is-desktop";
-import type { BattlefieldDividerVariation } from "../../runtime/runtime-config";
 import {
   BattleResultSurface,
   type MobileBattleResultAction,
@@ -223,8 +222,6 @@ export interface MobileBattleChoicePromptView {
 export interface MobileBattleScreenProps {
   readonly view: MobileBattleView;
   readonly interactions?: MobileBattleInteractions;
-  /** Named visual treatment separating the two facing battlefield grids. */
-  readonly battlefieldDividerVariation?: BattlefieldDividerVariation;
   /** One short-lived resource result attached to its physical battlefield card. */
   readonly cardOverlay?: MobileBattleCardOverlayView | null;
   /**
@@ -679,161 +676,7 @@ const MOBILE_GRID_ROWS =
   "minmax(0, 9fr) minmax(0, 12fr) minmax(0, 20fr) minmax(0, 20fr) minmax(0, 12fr) minmax(0, 27fr)";
 const DESKTOP_PLAY_AREA_HEIGHT_PERCENT = 23;
 const DESKTOP_GRID_ROWS = `minmax(0, 8fr) minmax(0, 11fr) minmax(0, ${String(DESKTOP_PLAY_AREA_HEIGHT_PERCENT)}fr) minmax(0, ${String(DESKTOP_PLAY_AREA_HEIGHT_PERCENT)}fr) minmax(0, 11fr) minmax(0, 24fr)`;
-
-function battlefieldCenterOffset(
-  variation: BattlefieldDividerVariation,
-): string {
-  return token(
-    variation === "space" || variation === "sigil" ? "--space-5" : "--space-4",
-  );
-}
-
-function BattlefieldDivider({
-  variation,
-}: {
-  readonly variation: BattlefieldDividerVariation;
-}) {
-  const sharedStyle: CSSProperties = {
-    gridColumn: 1,
-    gridRow: "3 / 5",
-    alignSelf: "center",
-    justifySelf: "stretch",
-    position: "relative",
-    zIndex: 0,
-    height: token("--space-6"),
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    pointerEvents: "none",
-  };
-
-  if (variation === "space") {
-    return (
-      <div
-        aria-hidden="true"
-        data-battlefield-divider="space"
-        style={sharedStyle}
-      />
-    );
-  }
-
-  if (variation === "hairline") {
-    return (
-      <div
-        aria-hidden="true"
-        data-battlefield-divider="hairline"
-        style={sharedStyle}
-      >
-        <div
-          style={{
-            width: "82%",
-            height: token("--space-1"),
-            opacity: 0.58,
-            background: `linear-gradient(90deg, transparent, ${token("--border-soft")} 16%, ${token("--border-accent")} 50%, ${token("--border-soft")} 84%, transparent)`,
-          }}
-        />
-      </div>
-    );
-  }
-
-  if (variation === "glow") {
-    return (
-      <div
-        aria-hidden="true"
-        data-battlefield-divider="glow"
-        style={sharedStyle}
-      >
-        <div
-          style={{
-            width: "72%",
-            height: token("--space-6"),
-            opacity: 0.72,
-            background:
-              `radial-gradient(ellipse at center, ${token("--accent-tint")} 0%, transparent 70%), ` +
-              `linear-gradient(90deg, transparent, ${token("--border-soft")} 24%, ${token("--border-mid")} 50%, ${token("--border-soft")} 76%, transparent) center / 100% ${token("--space-1")} no-repeat`,
-          }}
-        />
-      </div>
-    );
-  }
-
-  if (variation === "stitch") {
-    return (
-      <div
-        aria-hidden="true"
-        data-battlefield-divider="stitch"
-        style={sharedStyle}
-      >
-        <div
-          style={{
-            width: "64%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          {Array.from({ length: 11 }, (_unused, index) => (
-            <span
-              key={index}
-              style={{
-                width: token(index === 5 ? "--space-4" : "--space-2"),
-                height: token("--space-1"),
-                borderRadius: token("--radius-pill"),
-                opacity: index === 5 ? 0.82 : 0.5,
-                background: token(
-                  index === 5 ? "--border-accent" : "--border-soft",
-                ),
-              }}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      aria-hidden="true"
-      data-battlefield-divider="sigil"
-      style={sharedStyle}
-    >
-      <div
-        style={{
-          width: "76%",
-          display: "flex",
-          alignItems: "center",
-          gap: token("--space-5"),
-        }}
-      >
-        <span
-          data-battlefield-divider-line=""
-          style={{
-            flex: 1,
-            borderTop: token("--battlefield-slot-border"),
-          }}
-        />
-        <span
-          data-battlefield-divider-sigil=""
-          style={{
-            width: token("--space-5"),
-            aspectRatio: "1",
-            border: `${token("--space-1")} solid ${token("--border-accent")}`,
-            background: token("--accent-tint"),
-            transform: "rotate(45deg)",
-            boxSizing: "border-box",
-          }}
-        />
-        <span
-          data-battlefield-divider-line=""
-          style={{
-            flex: 1,
-            borderTop: token("--battlefield-slot-border"),
-          }}
-        />
-      </div>
-    </div>
-  );
-}
+const BATTLEFIELD_CENTER_OFFSET = token("--space-5");
 
 const ROOT_STYLE: CSSProperties = {
   position: "fixed",
@@ -4689,7 +4532,6 @@ function BattleInspectorRail({
 export function MobileBattleScreen({
   view,
   interactions,
-  battlefieldDividerVariation = "space",
   cardOverlay = null,
   inspectorDefault = "responsive",
   phaseNavigation = "both",
@@ -4780,7 +4622,7 @@ export function MobileBattleScreen({
     : view.farHand.cards;
   const layoutBackSlotCount = battlefieldLayoutBackSlotCount(view, isDesktop);
   const densityBackSlotCount = battlefieldDensityBackSlotCount(view);
-  const centerOffset = battlefieldCenterOffset(battlefieldDividerVariation);
+  const centerOffset = BATTLEFIELD_CENTER_OFFSET;
   const cardSize = battlefieldCardSize(
     layoutBackSlotCount,
     isDesktop,
@@ -5123,7 +4965,6 @@ export function MobileBattleScreen({
       }}
     >
       <BattleBackdrop isDesktop={isDesktop} />
-      <BattlefieldDivider variation={battlefieldDividerVariation} />
       <div
         aria-hidden="true"
         data-battle-mobile-safe-area-backdrop=""

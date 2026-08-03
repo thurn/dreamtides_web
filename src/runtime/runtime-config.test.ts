@@ -14,7 +14,6 @@ describe("parseRuntimeConfig", () => {
     expect(parseRuntimeConfig("")).toEqual({
       seedOverride: null,
       aiMode: false,
-      battlefieldDividerVariation: "space",
       tutorialPlaybackSpeed: 1,
       gameId: null,
       databaseMode: "emulator",
@@ -66,35 +65,6 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("?ai=0").aiMode).toBe(false);
       expect(parseRuntimeConfig("?ai=true").aiMode).toBe(false);
       expect(parseRuntimeConfig("?ai=").aiMode).toBe(false);
-    });
-  });
-
-  describe("battlefieldDividerVariation", () => {
-    it("accepts each named comparison treatment", () => {
-      expect(
-        parseRuntimeConfig("?battleDivider=space").battlefieldDividerVariation,
-      ).toBe("space");
-      expect(
-        parseRuntimeConfig("?battleDivider=hairline")
-          .battlefieldDividerVariation,
-      ).toBe("hairline");
-      expect(
-        parseRuntimeConfig("?battleDivider=glow").battlefieldDividerVariation,
-      ).toBe("glow");
-      expect(
-        parseRuntimeConfig("?battleDivider=stitch").battlefieldDividerVariation,
-      ).toBe("stitch");
-      expect(
-        parseRuntimeConfig("?battleDivider=sigil").battlefieldDividerVariation,
-      ).toBe("sigil");
-    });
-
-    it("uses open space when the value is absent or unknown", () => {
-      expect(parseRuntimeConfig("").battlefieldDividerVariation).toBe("space");
-      expect(
-        parseRuntimeConfig("?battleDivider=unknown")
-          .battlefieldDividerVariation,
-      ).toBe("space");
     });
   });
 
