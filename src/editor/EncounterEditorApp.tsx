@@ -16,6 +16,7 @@ import type {
   EncounterEditorCandidate,
   EncounterEditorClient,
   EncounterEditorGroup,
+  EncounterSelectionKind,
   EncounterTemplateHealth,
   EncounterTextField,
 } from "./encounter-editor-types";
@@ -41,15 +42,26 @@ interface SelectionState {
   revision: number;
   message: string | null;
 }
+type SelectionStates = Record<EncounterSelectionKind, SelectionState>;
+
+const IDLE_SELECTION_STATES: SelectionStates = {
+  prose: { status: "idle", revision: 0, message: null },
+  actions: { status: "idle", revision: 0, message: null },
+};
 
 function messageFor(error: unknown): string {
   return error instanceof Error ? error.message : "The request failed.";
 }
 
-function selectedCandidate(group: EncounterEditorGroup): EncounterEditorCandidate {
-  const selected = group.encounters.filter((candidate) => candidate.selected === true);
+function selectedCandidate(
+  group: EncounterEditorGroup,
+  selectionKind: EncounterSelectionKind,
+): EncounterEditorCandidate {
+  const selected = group.encounters.filter(
+    (candidate) => candidate.selected?.[selectionKind] === true,
+  );
   if (selected.length !== 1) {
-    throw new Error(`${group.cardName} must have exactly one selected encounter.`);
+    throw new Error(`${group.cardName} must have exactly one selected ${selectionKind} candidate.`);
   }
   return selected[0];
 }
@@ -58,16 +70,19 @@ function replaceSelection(
   groups: EncounterEditorGroup[],
   cardId: string,
   templatePairId: string,
+  selectionKind: EncounterSelectionKind,
 ): EncounterEditorGroup[] {
   return groups.map((group) => group.cardId !== cardId ? group : {
     ...group,
-    encounters: group.encounters.map((candidate) => ({
-      ...candidate,
-      ...(candidate.template_pair_id === templatePairId ? { selected: true as const } : {}),
-      ...(candidate.template_pair_id !== templatePairId && candidate.selected === true
-        ? { selected: undefined }
-        : {}),
-    })),
+    encounters: group.encounters.map((candidate) => {
+      const selected = { ...(candidate.selected ?? {}) };
+      if (candidate.template_pair_id === templatePairId) selected[selectionKind] = true;
+      else delete selected[selectionKind];
+      return {
+        ...candidate,
+        selected: Object.keys(selected).length === 0 ? undefined : selected,
+      };
+    }),
   });
 }
 
@@ -114,7 +129,7 @@ function EncounterEditorRow({
   client,
   group,
   index,
-  selectionState,
+  selectionStates,
   saveState,
   setGroups,
   setSaveState,
@@ -123,59 +138,94 @@ function EncounterEditorRow({
   client: EncounterEditorClient;
   group: EncounterEditorGroup;
   index: number;
-  selectionState: SelectionState;
+  selectionStates: SelectionStates;
   saveState: EditableSaveState;
   setGroups: React.Dispatch<React.SetStateAction<EncounterEditorGroup[]>>;
   setSaveState: (update: (state: EditableSaveState) => EditableSaveState) => void;
-  setSelectionStates: React.Dispatch<React.SetStateAction<Record<string, SelectionState>>>;
+  setSelectionStates: React.Dispatch<React.SetStateAction<Record<string, SelectionStates>>>;
 }) {
   const rowRef = useRef<HTMLElement | null>(null);
-  const selected = selectedCandidate(group);
+  const selectedProse = selectedCandidate(group, "prose");
+  const selectedActions = selectedCandidate(group, "actions");
   const ranked = [...group.encounters].sort((left, right) => left.rank - right.rank);
-  const selectedIndex = ranked.findIndex(
-    (candidate) => candidate.template_pair_id === selected.template_pair_id,
+  const selectedProseIndex = ranked.findIndex(
+    (candidate) => candidate.template_pair_id === selectedProse.template_pair_id,
   );
-  const isSelectionSaving = selectionState.status === "saving";
+  const selectedActionsIndex = ranked.findIndex(
+    (candidate) => candidate.template_pair_id === selectedActions.template_pair_id,
+  );
 
-  async function choose(direction: -1 | 1) {
+  async function choose(selectionKind: EncounterSelectionKind, direction: -1 | 1) {
+    const selectionState = selectionStates[selectionKind];
+    const selected = selectionKind === "prose" ? selectedProse : selectedActions;
+    const selectedIndex = selectionKind === "prose" ? selectedProseIndex : selectedActionsIndex;
     const next = ranked[selectedIndex + direction];
-    if (next === undefined || isSelectionSaving) return;
+    if (next === undefined || selectionState.status === "saving") return;
     const revision = selectionState.revision + 1;
-    setGroups((current) => replaceSelection(current, group.cardId, next.template_pair_id));
+    setGroups((current) => replaceSelection(
+      current,
+      group.cardId,
+      next.template_pair_id,
+      selectionKind,
+    ));
     setSelectionStates((current) => ({
       ...current,
-      [group.cardId]: { status: "saving", revision, message: null },
+      [group.cardId]: {
+        ...(current[group.cardId] ?? IDLE_SELECTION_STATES),
+        [selectionKind]: { status: "saving", revision, message: null },
+      },
     }));
     try {
       const response = await client.saveSelection({
         cardId: group.cardId,
         templatePairId: next.template_pair_id,
+        selectionKind,
         clientRevision: revision,
       });
       if (
         response.clientRevision !== revision ||
         response.confirmation.cardId !== group.cardId ||
+        response.confirmation.selectionKind !== selectionKind ||
         response.confirmation.selectedTemplatePairId !== next.template_pair_id
       ) {
         throw new Error("The server returned a mismatched selection confirmation.");
       }
-      setSelectionStates((current) => current[group.cardId]?.revision !== revision
+      setSelectionStates((current) => current[group.cardId]?.[selectionKind].revision !== revision
         ? current
-        : { ...current, [group.cardId]: { status: "saved", revision, message: null } });
+        : {
+            ...current,
+            [group.cardId]: {
+              ...current[group.cardId],
+              [selectionKind]: { status: "saved", revision, message: null },
+            },
+          });
       logEvent("encounter_editor_selection_saved", {
         cardId: group.cardId,
+        selectionKind,
         fromTemplatePairId: selected.template_pair_id,
         fromRank: selected.rank,
         toTemplatePairId: next.template_pair_id,
         toRank: next.rank,
       });
     } catch (error) {
-      setGroups((current) => replaceSelection(current, group.cardId, selected.template_pair_id));
-      setSelectionStates((current) => current[group.cardId]?.revision !== revision
+      setGroups((current) => replaceSelection(
+        current,
+        group.cardId,
+        selected.template_pair_id,
+        selectionKind,
+      ));
+      setSelectionStates((current) => current[group.cardId]?.[selectionKind].revision !== revision
         ? current
-        : { ...current, [group.cardId]: { status: "error", revision, message: messageFor(error) } });
+        : {
+            ...current,
+            [group.cardId]: {
+              ...current[group.cardId],
+              [selectionKind]: { status: "error", revision, message: messageFor(error) },
+            },
+          });
       logEvent("encounter_editor_selection_failed", {
         cardId: group.cardId,
+        selectionKind,
         templatePairId: next.template_pair_id,
         message: messageFor(error),
       });
@@ -183,13 +233,14 @@ function EncounterEditorRow({
   }
 
   function editable(
+    candidate: EncounterEditorCandidate,
     field: EncounterTextField,
     value: string,
     children: React.ReactNode,
     actionTemplateId?: number,
     mode: "single-line" | "multiline" = "multiline",
   ) {
-    const target = fieldTarget(group, selected, field, actionTemplateId);
+    const target = fieldTarget(group, candidate, field, actionTemplateId);
     const entry = fieldSaveEntry(saveState, target);
     const update = (operation: (state: EditableSaveState) => EditableSaveState) => {
       setSaveState(operation);
@@ -214,7 +265,7 @@ function EncounterEditorRow({
       });
       const request = {
         cardId: group.cardId,
-        templatePairId: selected.template_pair_id,
+        templatePairId: candidate.template_pair_id,
         field,
         ...(actionTemplateId === undefined ? {} : { actionTemplateId }),
         value: nextValue,
@@ -237,7 +288,7 @@ function EncounterEditorRow({
         update((state) => completeFieldSave(state, target, revision, nextValue));
         logEvent("encounter_editor_text_saved", {
           cardId: group.cardId,
-          templatePairId: selected.template_pair_id,
+          templatePairId: candidate.template_pair_id,
           field,
           actionTemplateId,
         });
@@ -248,7 +299,7 @@ function EncounterEditorRow({
           : failFieldSave(state, target, revision, value, messageFor(error)));
         logEvent("encounter_editor_text_failed", {
           cardId: group.cardId,
-          templatePairId: selected.template_pair_id,
+          templatePairId: candidate.template_pair_id,
           field,
           actionTemplateId,
           message: messageFor(error),
@@ -275,6 +326,43 @@ function EncounterEditorRow({
     );
   }
 
+  function selectionButton(
+    selectionKind: EncounterSelectionKind,
+    direction: -1 | 1,
+    selectedIndex: number,
+  ) {
+    const noun = selectionKind === "prose" ? "initial prose" : "choices";
+    const edgeIndex = direction === -1 ? 0 : ranked.length - 1;
+    return (
+      <IconButton
+        glyph={direction === -1 ? GLYPHS.chevronLeft : GLYPHS.chevronRight}
+        label={`${direction === -1 ? "Previous" : "Next"} ${noun} for ${group.cardName}`}
+        placement="onGlass"
+        size="sm"
+        disabled={selectedIndex === edgeIndex || selectionStates[selectionKind].status === "saving"}
+        onPress={() => void choose(selectionKind, direction)}
+        testId={`${direction === -1 ? "previous" : "next"}-${selectionKind}-${group.cardId}`}
+      />
+    );
+  }
+
+  function selectionStatus(selectionKind: EncounterSelectionKind) {
+    const state = selectionStates[selectionKind];
+    const noun = selectionKind === "prose" ? "Prose" : "Choice";
+    const message = state.status === "saving" ? `${noun} selection saving…` :
+      state.status === "saved" ? `${noun} selection saved` :
+        state.status === "error" ? state.message : "";
+    return (
+      <span
+        aria-live="polite"
+        className="encounter-editor-selection-status"
+        data-status={state.status}
+      >
+        {message}
+      </span>
+    );
+  }
+
   return (
     <article
       ref={rowRef}
@@ -295,47 +383,28 @@ function EncounterEditorRow({
           <div className="encounter-editor-copy">
             <header className="encounter-editor-copy-header">
               <h2>{group.cardName}</h2>
-              <div className="encounter-editor-rank-navigation">
-                <IconButton
-                  glyph={GLYPHS.chevronLeft}
-                  label={`Select previous design for ${group.cardName}`}
-                  placement="onGlass"
-                  size="sm"
-                  disabled={selectedIndex === 0 || isSelectionSaving}
-                  onPress={() => void choose(-1)}
-                  testId={`previous-${group.cardId}`}
-                />
-                <div className="encounter-editor-rank-copy">
-                  <strong>Selected rank {selected.rank} of {ranked.length}</strong>
-                  <span aria-live="polite">
-                    {selectionState.status === "saving" ? "Saving selection…" :
-                      selectionState.status === "saved" ? "Selection saved" :
-                        selectionState.status === "error" ? selectionState.message : "Encounter design"}
-                  </span>
-                </div>
-                <IconButton
-                  glyph={GLYPHS.chevronRight}
-                  label={`Select next design for ${group.cardName}`}
-                  placement="onGlass"
-                  size="sm"
-                  disabled={selectedIndex === ranked.length - 1 || isSelectionSaving}
-                  onPress={() => void choose(1)}
-                  testId={`next-${group.cardId}`}
-                />
-              </div>
             </header>
             <div className="encounter-editor-prose">
-              {editable("prose", selected.prose, <p>{selected.prose}</p>)}
+              {selectionButton("prose", -1, selectedProseIndex)}
+              <div className="encounter-editor-prose-copy">
+                {editable(selectedProse, "prose", selectedProse.prose, <p>{selectedProse.prose}</p>)}
+              </div>
+              {selectionButton("prose", 1, selectedProseIndex)}
+              {selectionStatus("prose")}
             </div>
-            <div className="encounter-editor-actions">
-              {selected.actions.map((action, actionIndex) => (
-                <section className="encounter-editor-action" key={action.template_id}>
-                  <span className="encounter-editor-action-number">Choice {actionIndex + 1}</span>
-                  {editable("label", action.label, <h3>{action.label}</h3>, action.template_id, "single-line")}
-                  {editable("effect_text", action.effect_text, <p>{action.effect_text}</p>, action.template_id)}
-                  {editable("resolution", action.resolution, <p className="encounter-editor-resolution">{action.resolution}</p>, action.template_id)}
-                </section>
-              ))}
+            <div className="encounter-editor-actions-shell">
+              {selectionButton("actions", -1, selectedActionsIndex)}
+              <div className="encounter-editor-actions">
+                {selectedActions.actions.map((action) => (
+                  <section className="encounter-editor-action" key={action.template_id}>
+                    {editable(selectedActions, "label", action.label, <h3>{action.label}</h3>, action.template_id, "single-line")}
+                    {editable(selectedActions, "effect_text", action.effect_text, <p>{action.effect_text}</p>, action.template_id)}
+                    {editable(selectedActions, "resolution", action.resolution, <p className="encounter-editor-resolution">{action.resolution}</p>, action.template_id)}
+                  </section>
+                ))}
+              </div>
+              {selectionButton("actions", 1, selectedActionsIndex)}
+              {selectionStatus("actions")}
             </div>
           </div>
         </div>
@@ -355,7 +424,7 @@ export default function EncounterEditorApp({
   const [loadRevision, setLoadRevision] = useState(0);
   const [saveState, setSaveStateValue] = useState<EditableSaveState>(EMPTY_EDITOR_SAVE_STATE);
   const saveStateRef = useRef(saveState);
-  const [selectionStates, setSelectionStates] = useState<Record<string, SelectionState>>({});
+  const [selectionStates, setSelectionStates] = useState<Record<string, SelectionStates>>({});
   const [templateHealthOpen, setTemplateHealthOpen] = useState(false);
   const [templateHealth, setTemplateHealth] = useState<EncounterTemplateHealth | null>(null);
   const [templateHealthLoadState, setTemplateHealthLoadState] = useState<LoadState>("loading");
@@ -373,11 +442,14 @@ export default function EncounterEditorApp({
     const controller = new AbortController();
     setLoadState("loading");
     client.load(controller.signal).then((loaded) => {
-      loaded.forEach(selectedCandidate);
+      loaded.forEach((group) => {
+        selectedCandidate(group, "prose");
+        selectedCandidate(group, "actions");
+      });
       setGroups(loaded);
       setSelectionStates(Object.fromEntries(loaded.map((group) => [
         group.cardId,
-        { status: "idle", revision: 0, message: null },
+        structuredClone(IDLE_SELECTION_STATES),
       ])));
       setLoadState("ready");
       logEvent("encounter_editor_loaded", { encounterGroupCount: loaded.length });
@@ -503,7 +575,7 @@ export default function EncounterEditorApp({
                 index={index}
                 key={group.cardId}
                 saveState={saveState}
-                selectionState={selectionStates[group.cardId] ?? { status: "idle", revision: 0, message: null }}
+                selectionStates={selectionStates[group.cardId] ?? IDLE_SELECTION_STATES}
                 setGroups={setGroups}
                 setSaveState={setSaveState}
                 setSelectionStates={setSelectionStates}

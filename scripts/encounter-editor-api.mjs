@@ -226,10 +226,14 @@ export function createEncounterEditorApiMiddleware(options = {}) {
         if (typeof body.templatePairId !== "string" || !PAIR_PATTERN.test(body.templatePairId)) {
           throw new Error("templatePairId must be a canonical slug.");
         }
+        if (body.selectionKind !== "prose" && body.selectionKind !== "actions") {
+          throw new Error("selectionKind must be prose or actions.");
+        }
         confirmation = updateEncounterCandidates(
           (document) => selectEncounterCandidate(document, {
             cardId: route.cardId,
             templatePairId: body.templatePairId,
+            selectionKind: body.selectionKind,
           }),
           dataOptions,
         );

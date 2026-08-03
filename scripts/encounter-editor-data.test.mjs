@@ -46,7 +46,7 @@ function candidate(rank, selected = false) {
     ],
     scores: { overall: 10 - rank },
     rank,
-    ...(selected ? { selected: true } : {}),
+    ...(selected ? { selected: { prose: true, actions: true } } : {}),
     ranking_rationale: `Rationale ${String(rank)}`,
   };
 }
@@ -78,26 +78,29 @@ describe("encounter editor data", () => {
       cardName: "Fixture Guide",
       imageNumber: 42,
     });
-    expect(groups[0].encounters.find((entry) => entry.selected)?.rank).toBe(1);
+    expect(groups[0].encounters.find((entry) => entry.selected?.prose)?.rank).toBe(1);
+    expect(groups[0].encounters.find((entry) => entry.selected?.actions)?.rank).toBe(1);
   });
 
-  it("moves the sole selected marker without changing rank or source order", () => {
+  it("moves one selection marker without changing the other marker, rank, or source order", () => {
     const before = documentFixture();
     const result = selectEncounterCandidate(before, {
       cardId: CARD_ID,
       templatePairId: "pair-2",
+      selectionKind: "prose",
     });
     expect(result.confirmation).toEqual({
       cardId: CARD_ID,
+      selectionKind: "prose",
       selectedTemplatePairId: "pair-2",
       selectedRank: 2,
     });
     expect(result.document[CARD_ID].map((entry) => entry.rank)).toEqual([1, 2]);
     expect(result.document[CARD_ID].map((entry) => entry.selected)).toEqual([
-      undefined,
-      true,
+      { actions: true },
+      { prose: true },
     ]);
-    expect(before[CARD_ID][0].selected).toBe(true);
+    expect(before[CARD_ID][0].selected).toEqual({ prose: true, actions: true });
   });
 
   it("edits prose and action copy by stable identities while preserving metadata", () => {
@@ -132,9 +135,9 @@ describe("encounter editor data", () => {
     ).toThrow("value must be nonblank text");
 
     const ambiguous = documentFixture();
-    ambiguous[CARD_ID][1].selected = true;
+    ambiguous[CARD_ID][1].selected = { prose: true };
     expect(() => parseEncounterCandidates(JSON.stringify(ambiguous))).toThrow(
-      `${CARD_ID} must have exactly one selected encounter; found 2.`,
+      `${CARD_ID} must have exactly one selected prose candidate; found 2.`,
     );
   });
 
@@ -151,6 +154,7 @@ describe("encounter editor data", () => {
     const next = selectEncounterCandidate(documentFixture(), {
       cardId: CARD_ID,
       templatePairId: "pair-2",
+      selectionKind: "actions",
     }).document;
     const fileSystem = {
       existsSync,

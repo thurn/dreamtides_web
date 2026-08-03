@@ -19,7 +19,7 @@ function candidate(rank, selected = false) {
       resolution: `Resolution ${String(templateId)}`,
     })),
     rank,
-    ...(selected ? { selected: true } : {}),
+    ...(selected ? { selected: { prose: true, actions: true } } : {}),
   };
 }
 
@@ -167,14 +167,21 @@ describe("encounter editor API", () => {
   it("persists selection by stable identities and echoes the revision", async () => {
     const result = await call("PATCH", `/api/editor/encounters/${CARD_ID}/selection`, {
       templatePairId: "pair-2",
+      selectionKind: "actions",
       clientRevision: 7,
     });
     expect(result).toMatchObject({
       status: 200,
-      body: { clientRevision: 7, confirmation: { selectedRank: 2 } },
+      body: {
+        clientRevision: 7,
+        confirmation: { selectionKind: "actions", selectedRank: 2 },
+      },
     });
     const saved = JSON.parse(readFileSync(join(rootDir, "data", "encounter_candidates.json"), "utf8"));
-    expect(saved[CARD_ID].map((entry) => entry.selected)).toEqual([undefined, true]);
+    expect(saved[CARD_ID].map((entry) => entry.selected)).toEqual([
+      { prose: true },
+      { actions: true },
+    ]);
   });
 
   it("persists only the targeted action text", async () => {
@@ -191,8 +198,14 @@ describe("encounter editor API", () => {
   it("rejects malformed identities and missing targets without touching the file", async () => {
     const path = join(rootDir, "data", "encounter_candidates.json");
     const before = readFileSync(path, "utf8");
-    const malformed = await call("PATCH", "/api/editor/encounters/not-a-uuid/selection", { templatePairId: "pair-2" });
-    const missing = await call("PATCH", `/api/editor/encounters/${OTHER_CARD_ID}/selection`, { templatePairId: "pair-2" });
+    const malformed = await call("PATCH", "/api/editor/encounters/not-a-uuid/selection", {
+      templatePairId: "pair-2",
+      selectionKind: "prose",
+    });
+    const missing = await call("PATCH", `/api/editor/encounters/${OTHER_CARD_ID}/selection`, {
+      templatePairId: "pair-2",
+      selectionKind: "prose",
+    });
     expect(malformed.status).toBe(400);
     expect(missing.status).toBe(404);
     expect(readFileSync(path, "utf8")).toBe(before);

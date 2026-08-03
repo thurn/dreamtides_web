@@ -32,7 +32,10 @@
       },
       "rank": 1,
       "ranking_rationale": "The lantern and star doorway make both recruitment and dreamsign discovery immediately legible, while both rewards support a rematerialization deck.",
-      "selected": true
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-2",
@@ -214,7 +217,10 @@
       },
       "rank": 1,
       "ranking_rationale": "The luminous passage supports both arrivals cleanly, while either choice strengthens a survivor-centered reclaim deck.",
-      "selected": true
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-5",
@@ -402,7 +408,10 @@
       },
       "rank": 1,
       "ranking_rationale": "The tightly focused wolf scene supports two equally credible Spirit Animal paths with excellent strategic relevance.",
-      "selected": true
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-2",
@@ -578,7 +587,10 @@
       },
       "rank": 1,
       "ranking_rationale": "The offered lantern supports both actions precisely, while either reward supplies an efficient new trigger for the source card.",
-      "selected": true
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-2",
@@ -758,7 +770,10 @@
       },
       "rank": 1,
       "ranking_rationale": "The precise triangular composition supports two exceptionally clear threshold interactions with strong immediate and future consequences.",
-      "selected": true
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-1",
@@ -934,7 +949,10 @@
       },
       "rank": 1,
       "ranking_rationale": "The owl's alert posture supports two strong calls to Spirit Animal growth with excellent strategic fit.",
-      "selected": true
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-4",
@@ -1112,7 +1130,10 @@
       },
       "rank": 1,
       "ranking_rationale": "The precise overhead encounter supports both a thematically exact Spirit Animal reward and a flexible tribal draft.",
-      "selected": true
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-2",
@@ -1292,7 +1313,10 @@
       },
       "rank": 1,
       "ranking_rationale": "The vivid tusk encounter supports a superb materialization relic and a resonant tribal call.",
-      "selected": true
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-2",
@@ -1491,7 +1515,10 @@
       },
       "rank": 1,
       "ranking_rationale": "The imposing silhouette supports two natural forms of recruitment that directly strengthen the card's low-cost Warrior engine.",
-      "selected": true
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-3",
@@ -1666,7 +1693,10 @@
       },
       "rank": 1,
       "ranking_rationale": "The branching discharge makes speed and dangerous overloading immediate consequences, while both outcomes strongly reward a reactive counterspell deck.",
-      "selected": true
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-3",
@@ -1841,7 +1871,10 @@
       },
       "rank": 1,
       "ranking_rationale": "The raised standard supports both recruitment and momentum with exceptional clarity while advancing a Warrior strategy.",
-      "selected": true
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-5",
@@ -2012,7 +2045,10 @@
       },
       "rank": 1,
       "ranking_rationale": "Direct exchange and lantern-lit inscription closely bind both rewards to the keeper's visible role and the source card's filtering strategy.",
-      "selected": true
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-3",
@@ -2187,7 +2223,10 @@
       },
       "rank": 1,
       "ranking_rationale": "The clearest battlefield portrait supports two natural actions that directly strengthen the Survivor plan.",
-      "selected": true
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-2",
@@ -2368,7 +2407,10 @@
       },
       "rank": 1,
       "ranking_rationale": "The hovering-stone formation supports two clear acts, while both rewards directly strengthen the event-heavy strategy.",
-      "selected": true
+      "selected": {
+        "prose": true,
+        "actions": true
+      }
     },
     {
       "template_pair_id": "pair-2",

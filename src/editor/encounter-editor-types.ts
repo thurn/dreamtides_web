@@ -1,4 +1,5 @@
 export type EncounterTextField = "prose" | "label" | "effect_text" | "resolution";
+export type EncounterSelectionKind = "prose" | "actions";
 
 export interface EncounterEditorAction {
   template_id: number;
@@ -13,7 +14,7 @@ export interface EncounterEditorCandidate {
   prose: string;
   actions: [EncounterEditorAction, EncounterEditorAction];
   rank: number;
-  selected?: true;
+  selected?: Partial<Record<EncounterSelectionKind, true>>;
   [key: string]: unknown;
 }
 
@@ -69,6 +70,7 @@ export interface EncounterTextSaveRequest {
 export interface EncounterSelectionSaveRequest {
   cardId: string;
   templatePairId: string;
+  selectionKind: EncounterSelectionKind;
   clientRevision: number;
 }
 
@@ -79,6 +81,7 @@ export interface EncounterEditorClient {
     clientRevision: number;
     confirmation: {
       cardId: string;
+      selectionKind: EncounterSelectionKind;
       selectedTemplatePairId: string;
       selectedRank: number;
     };

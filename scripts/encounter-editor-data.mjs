@@ -19,6 +19,7 @@ const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
 const TEMPLATE_PAIR_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
 const ACTION_FIELDS = new Set(["label", "effect_text", "resolution"]);
+const SELECTION_KINDS = ["prose", "actions"];
 
 const defaultFileSystem = {
   existsSync,
@@ -73,8 +74,17 @@ function validateCandidate(raw, label) {
   if (!Number.isInteger(candidate.rank) || candidate.rank < 1) {
     throw new Error(`${label}.rank must be a positive integer.`);
   }
-  if (Object.hasOwn(candidate, "selected") && candidate.selected !== true) {
-    throw new Error(`${label}.selected may only be present with the value true.`);
+  if (Object.hasOwn(candidate, "selected")) {
+    const selected = objectRecord(candidate.selected, `${label}.selected`);
+    const selectedKeys = Object.keys(selected);
+    if (selectedKeys.length === 0) {
+      throw new Error(`${label}.selected must mark prose, actions, or both.`);
+    }
+    for (const selectionKind of selectedKeys) {
+      if (!SELECTION_KINDS.includes(selectionKind) || selected[selectionKind] !== true) {
+        throw new Error(`${label}.selected may only mark prose or actions with the value true.`);
+      }
+    }
   }
   if (!Array.isArray(candidate.actions) || candidate.actions.length !== 2) {
     throw new Error(`${label}.actions must contain exactly two actions.`);
@@ -104,7 +114,7 @@ export function validateEncounterCandidates(raw) {
     }
     const pairIds = new Set();
     const ranks = new Set();
-    let selectedCount = 0;
+    const selectedCounts = { prose: 0, actions: 0 };
     encounters.forEach((candidateRaw, candidateIndex) => {
       const candidate = validateCandidate(
         candidateRaw,
@@ -118,12 +128,16 @@ export function validateEncounterCandidates(raw) {
       }
       pairIds.add(candidate.template_pair_id);
       ranks.add(candidate.rank);
-      if (candidate.selected === true) selectedCount += 1;
+      for (const selectionKind of SELECTION_KINDS) {
+        if (candidate.selected?.[selectionKind] === true) selectedCounts[selectionKind] += 1;
+      }
     });
-    if (selectedCount !== 1) {
-      throw new Error(
-        `${cardId} must have exactly one selected encounter; found ${String(selectedCount)}.`,
-      );
+    for (const selectionKind of SELECTION_KINDS) {
+      if (selectedCounts[selectionKind] !== 1) {
+        throw new Error(
+          `${cardId} must have exactly one selected ${selectionKind} candidate; found ${String(selectedCounts[selectionKind])}.`,
+        );
+      }
     }
   }
   return document;
@@ -207,17 +221,31 @@ function cloneDocument(document) {
   return structuredClone(document);
 }
 
-export function selectEncounterCandidate(document, { cardId, templatePairId }) {
+export function selectEncounterCandidate(document, { cardId, templatePairId, selectionKind }) {
   canonicalUuid(cardId, "cardId");
   requiredString(templatePairId, "templatePairId");
+  if (!SELECTION_KINDS.includes(selectionKind)) {
+    throw new Error("selectionKind must be prose or actions.");
+  }
   const next = cloneDocument(document);
   const encounters = groupFor(next, cardId);
   const selected = candidateFor(encounters, templatePairId);
   for (const candidate of encounters) {
+    const markers = { ...(candidate.selected ?? {}) };
     if (candidate === selected) {
-      candidate.selected = true;
+      markers[selectionKind] = true;
     } else {
+      delete markers[selectionKind];
+    }
+    const orderedMarkers = Object.fromEntries(
+      SELECTION_KINDS
+        .filter((kind) => markers[kind] === true)
+        .map((kind) => [kind, true]),
+    );
+    if (Object.keys(orderedMarkers).length === 0) {
       delete candidate.selected;
+    } else {
+      candidate.selected = orderedMarkers;
     }
   }
   validateEncounterCandidates(next);
@@ -225,6 +253,7 @@ export function selectEncounterCandidate(document, { cardId, templatePairId }) {
     document: next,
     confirmation: {
       cardId,
+      selectionKind,
       selectedTemplatePairId: templatePairId,
       selectedRank: selected.rank,
     },

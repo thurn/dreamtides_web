@@ -54,7 +54,11 @@ export const encounterEditorClient: EncounterEditorClient = {
   saveSelection(request: EncounterSelectionSaveRequest) {
     return patch(
       `/api/editor/encounters/${encodeURIComponent(request.cardId)}/selection`,
-      { templatePairId: request.templatePairId, clientRevision: request.clientRevision },
+      {
+        templatePairId: request.templatePairId,
+        selectionKind: request.selectionKind,
+        clientRevision: request.clientRevision,
+      },
     );
   },
 

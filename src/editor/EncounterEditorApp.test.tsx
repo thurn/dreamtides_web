@@ -9,6 +9,7 @@ import type {
   EncounterEditorCandidate,
   EncounterEditorClient,
   EncounterEditorGroup,
+  EncounterSelectionSaveRequest,
   EncounterTemplateHealth,
   EncounterTextSaveRequest,
 } from "./encounter-editor-types";
@@ -27,7 +28,7 @@ function candidate(rank: number, selected = false): EncounterEditorCandidate {
       resolution: `Rank ${String(rank)} resolution ${String(templateId)}`,
     })) as EncounterEditorCandidate["actions"],
     rank,
-    ...(selected ? { selected: true } : {}),
+    ...(selected ? { selected: { prose: true, actions: true } } : {}),
   };
 }
 
@@ -120,7 +121,8 @@ async function renderLoaded(apiClient: EncounterEditorClient) {
 describe("EncounterEditorApp", () => {
   it("renders only the selected candidate with prominent art and all editable copy", async () => {
     const { container, root } = await renderLoaded(client());
-    expect(container.textContent).toContain("Selected rank 1 of 3");
+    expect(container.textContent).not.toContain("Selected rank");
+    expect(container.textContent).not.toContain("Choice 1");
     expect(container.textContent).toContain("Prose for rank 1");
     expect(container.textContent).toContain("Rank 1 label 1");
     expect(container.textContent).toContain("Rank 1 effect 1");
@@ -176,42 +178,70 @@ describe("EncounterEditorApp", () => {
     act(() => root.unmount());
   });
 
-  it("optimistically selects the next ranked design and confirms by identity", async () => {
+  it("optimistically selects prose independently and confirms by identity", async () => {
     const pending = deferred<Awaited<ReturnType<EncounterEditorClient["saveSelection"]>>>();
     const saveSelection = vi.fn().mockReturnValue(pending.promise);
     const { container, root } = await renderLoaded(client({ saveSelection }));
-    const next = container.querySelector<HTMLButtonElement>(`[data-testid='next-${CARD_ID}']`)!;
+    const next = container.querySelector<HTMLButtonElement>(`[data-testid='next-prose-${CARD_ID}']`)!;
     act(() => next.click());
-    expect(container.textContent).toContain("Selected rank 2 of 3");
     expect(container.textContent).toContain("Prose for rank 2");
+    expect(container.textContent).toContain("Rank 1 label 1");
     expect(
-      container.querySelector<HTMLButtonElement>(`[data-testid='next-${CARD_ID}']`)
+      container.querySelector<HTMLButtonElement>(`[data-testid='next-prose-${CARD_ID}']`)
         ?.getAttribute("aria-disabled"),
     ).toBe("true");
     await act(async () => {
       pending.resolve({
         clientRevision: 1,
-        confirmation: { cardId: CARD_ID, selectedTemplatePairId: "pair-2", selectedRank: 2 },
+        confirmation: {
+          cardId: CARD_ID,
+          selectionKind: "prose",
+          selectedTemplatePairId: "pair-2",
+          selectedRank: 2,
+        },
       });
       await pending.promise;
     });
-    expect(container.textContent).toContain("Selection saved");
+    expect(container.textContent).toContain("Prose selection saved");
     expect(saveSelection).toHaveBeenCalledWith({
       cardId: CARD_ID,
       templatePairId: "pair-2",
+      selectionKind: "prose",
       clientRevision: 1,
     });
     act(() => root.unmount());
   });
 
-  it("rolls an optimistic selection back when persistence fails", async () => {
+  it("selects choices without changing prose", async () => {
+    const saveSelection = vi.fn().mockImplementation((request: EncounterSelectionSaveRequest) => Promise.resolve({
+      clientRevision: request.clientRevision,
+      confirmation: {
+        cardId: request.cardId,
+        selectionKind: request.selectionKind,
+        selectedTemplatePairId: request.templatePairId,
+        selectedRank: 2,
+      },
+    }));
+    const { container, root } = await renderLoaded(client({ saveSelection }));
+    await act(async () => {
+      container.querySelector<HTMLButtonElement>(`[data-testid='next-actions-${CARD_ID}']`)!.click();
+      await Promise.resolve();
+    });
+    expect(container.textContent).toContain("Prose for rank 1");
+    expect(container.textContent).toContain("Rank 2 label 1");
+    expect(container.textContent).not.toContain("Rank 1 label 1");
+    act(() => root.unmount());
+  });
+
+  it("rolls only the failed optimistic selection back", async () => {
     const saveSelection = vi.fn().mockRejectedValue(new Error("Disk unavailable"));
     const { container, root } = await renderLoaded(client({ saveSelection }));
     await act(async () => {
-      container.querySelector<HTMLButtonElement>(`[data-testid='next-${CARD_ID}']`)!.click();
+      container.querySelector<HTMLButtonElement>(`[data-testid='next-prose-${CARD_ID}']`)!.click();
       await Promise.resolve();
     });
-    expect(container.textContent).toContain("Selected rank 1 of 3");
+    expect(container.textContent).toContain("Prose for rank 1");
+    expect(container.textContent).toContain("Rank 1 label 1");
     expect(container.textContent).toContain("Disk unavailable");
     act(() => root.unmount());
   });
