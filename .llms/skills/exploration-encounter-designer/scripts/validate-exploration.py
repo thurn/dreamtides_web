@@ -25,6 +25,11 @@ DEFAULT_TRANSFIGURATIONS_DATA = (
 PLACEHOLDER_RE = re.compile(r"\{([a-z][a-z0-9_]*)\}")
 SPECIAL_RE = re.compile(r"\$[A-Z][A-Z0-9_]*")
 WORD_RE = re.compile(r"[^\W_]+(?:['’\-][^\W_]+)*", re.UNICODE)
+PROSE_PLAYER_REFERENCE_RE = re.compile(
+    r"\b(?:i|me|my|mine|myself|we|us|our|ours|ourselves|"
+    r"you|your|yours|yourself|yourselves|player|reader|viewer)\b",
+    re.IGNORECASE,
+)
 STANDARD_PREDICATES = {
     "Event",
     "Warrior",
@@ -393,6 +398,12 @@ def validate_output(
         prose = require_string(event_obj.get("prose"), f"{event_path}.prose")
         if len(words(prose)) > 16:
             fail(f"{event_path}.prose", "must contain at most 16 words")
+        if PROSE_PLAYER_REFERENCE_RE.search(prose):
+            fail(
+                f"{event_path}.prose",
+                "must use entity-focused third-person prose without referring "
+                "to the player, reader, or viewer",
+            )
 
         actions = require_list(event_obj.get("actions"), f"{event_path}.actions")
         if len(actions) != 2:

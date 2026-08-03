@@ -214,8 +214,11 @@ Score each component from 1–10:
 
 - `scene_quality` (40%): Whether the prose is a coherent, focused, vivid, and
   materially faithful description of the card's artwork. Score it with mechanics
-  and actions hidden. Subjects, objects, setting features, depicted actions, and
-  physical conditions must be visible or strongly implied. For a Character
+  and actions hidden. It uses entity-focused third-person present tense and
+  contains no first- or second-person pronouns, player, reader, viewer, implied
+  off-image observer, or viewpoint-relative framing. Subjects, objects, setting
+  features, depicted actions, and physical conditions must be visible or
+  strongly implied. For a Character
   card, reject a candidate before scoring unless the canonical character
   identified by the card name is the primary subject and the only person,
   creature, or character-like figure described. Visible non-character elements

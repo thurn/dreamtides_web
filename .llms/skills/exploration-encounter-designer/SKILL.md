@@ -5,8 +5,8 @@ description: Design and rank five Dreamtides exploration encounters from a canon
 
 # Exploration Encounter Design
 
-Create five production-ready encounters that make a player feel they have
-entered the dream depicted by one card. Give every description distinct wording,
+Create five production-ready encounters that depict the dream shown by one
+card as an independent scene. Give every description distinct wording,
 though all five may share the same overall narrative and strongest visual focus.
 Choose prose for vivid descriptive precision, art fidelity, and its ability to
 support two actions. The artwork supplies the material truth of the scene, but
@@ -258,8 +258,8 @@ commentary.
    syntax, a visible trait of that character, or the emphasis placed on a
    supported non-character scene element or relationship. Never add another
    character or unsupported scenery for variety. For other card types, vary
-   syntax, reader position, or which supported atmospheric detail accompanies
-   the subject. A scene does not need conflict, danger, stakes, a dilemma, a
+   syntax, subject posture or motion, or which supported atmospheric detail
+   accompanies the subject. A scene does not need conflict, danger, stakes, a dilemma, a
    request, a problem, a resolution, or unresolved tension. Do not use
    anticipated quantities, operations, reward concepts, or effect recipients as
    scene ingredients.
@@ -307,12 +307,13 @@ commentary.
    - **Clarity gate:** Can an ordinary reader understand the selected image on
      first reading? Mystery may come from what the image withholds, not from an
      opaque poetic claim.
-   - **Embodiment gate:** Does the prose assign the reader a body, clothing,
-     posture, biography, or precise emotion that the artwork does not establish
-     from the reader's point of view? Supported felt experience—pressure,
-     vertigo, hush, heat, awe, menace, or the world seeming small—is allowed.
-     Second person places the reader in the scene; it does not make every
-     depicted figure's physique or feelings the reader's own.
+   - **Entity-only gate:** Does the prose describe depicted entities and their
+     supported environment in third-person present tense? Reject first- or
+     second-person pronouns, direct references to a player, reader, or viewer,
+     implied off-image observers, and viewpoint-relative framing such as an
+     entity moving `toward you` or looming `above you`. Atmosphere must arise
+     from visible entities and scene conditions rather than a recipient's felt
+     experience.
 
    Also reject scenes that announce a decision, manufacture a predicament,
    depend on symbolic word substitution, or disguise a game operation. Freeze
@@ -463,7 +464,10 @@ commentary.
 18. Before validation, scan every `prose`, `label`, and `resolution` for
     the complete card name, distinctive multiword fragments used as names, and
     mechanical repetition of source-name language. Replace those matches while
-    preserving independently useful ordinary words. For a Character card, audit
+    preserving independently useful ordinary words. Reject any `prose` that
+    contains first- or second-person pronouns, names the player, reader, or
+    viewer, implies an off-image observer, or frames an entity relative to that
+    observer. For a Character card, audit
     every `prose` noun, modifier, and clause against the Character-focus gate and
     reject the complete design if it describes another character, lets scenery
     displace the source character, or includes a scene element unsupported by
@@ -486,10 +490,13 @@ commentary.
 
 ## Narrative standards
 
-- Write in second-person present tense. The interface already establishes that
-  the player entered the card, so begin inside the moment.
-- Treat every `prose` field as the reader's first glimpse of an independent
-  scene. Introduce material subjects clearly, but let the sentence lead with an
+- Write every `prose` field in entity-focused third-person present tense.
+  Describe depicted entities directly, without first- or second-person
+  pronouns, a player, a reader, a viewer, or any substitute for an off-image
+  observer. Do not orient the scene around an implied viewpoint with phrases
+  such as `before you`, `toward you`, or `above you`.
+- Treat every `prose` field as an independent scene description. Introduce
+  material subjects clearly, but let the sentence lead with an
   atmosphere, action, or sensory detail when that creates a
   stronger entrance. Use `a` or `an`, not `one`, when directly introducing a
   singular subject. A definite or possessive phrase may open the line when its
@@ -498,11 +505,11 @@ commentary.
 - Keep the entire `prose` field near 8–14 words and never above 16. Use more
   than one sentence only when the extra sentence adds real value.
 - Describe a scene, not a miniature quest or an illustrated reward. Establish
-  what the player encounters through selective visual description. Atmosphere
+  depicted entities through selective visual description. Atmosphere
   may arise from supported scale, posture, motion, stillness, light, texture,
   distance, weather, or obscurity. Do not diagnose a depicted subject's private
-  emotions, dictate a precise player emotion, or explain the image's symbolic
-  meaning. Nothing needs to be wrong, threatened, requested, or unresolved.
+  emotions, invent an off-image observer's response, or explain the image's
+  symbolic meaning. Nothing needs to be wrong, threatened, requested, or unresolved.
   Keep game terms such as card, deck, draft, purge, essence, dreamsign, and
   transfiguration out of the prose.
 - Treat the artwork as the source of truth for every material element in the
@@ -521,8 +528,8 @@ commentary.
   selection deliberate, keep the character central, and avoid cataloguing the
   frame.
 - Do not infer physical scale from a close crop or portrait composition: a
-  subject filling the frame does not imply that it towers over the reader or
-  that its features are massive or enormous. In action labels and resolutions,
+  subject filling the frame does not imply that its features are massive or
+  enormous. In action labels and resolutions,
   name a visible person or use clear personal pronouns supported by the
   canonical identity (`she`/`her` when the character is explicitly described
   as a witch, `they`/`their` when gender is not established) instead of an
@@ -537,8 +544,8 @@ commentary.
   grammatically subordinate, and do not let scenery or framing compete with the
   primary figure.
 - Reject caption-shaped prose even when it is specific, spatially accurate, and
-  written in second person. Naming every subject, prop, position, and setting
-  feature produces alt text. For Character cards, keep the source character
+  written in entity-focused third person. Naming every subject, prop, position,
+  and setting feature produces alt text. For Character cards, keep the source character
   central, omit other characters, and select only the non-character elements
   that sharpen the encounter. For other cards, keep the largest-area entity and
   omit the rest.
@@ -581,7 +588,7 @@ commentary.
   such as heat from visible fire or wind from visibly blown fabric. Do not add
   material subjects, props, architecture, terrain, weather, history, events,
   impossible agency, or symbolic meaning. A resolution may introduce a
-  plausible material response after the player acts; the initial prose may not
+  plausible material response after an action; the initial prose may not
   anticipate that response.
 - Use these art-fidelity regression checks:
   - For a Character card showing a lone warrior above burning ruins, prefer “A
@@ -602,8 +609,8 @@ commentary.
   offer, follow, receive, trade, or gather. Do not paraphrase the reward. Both
   labels must be plausible ways to engage with the scene and establish why the
   effect follows.
-- Reject context-free gestures such as “Raise Your Arms,” “Meet Its Gaze,” or
-  “Stand Your Ground” when the effect does not naturally answer that gesture.
+- Reject context-free gestures such as “Raise Both Arms,” “Meet the Gaze,” or
+  “Stand Firm” when the effect does not naturally answer that gesture.
   Observing, waiting, and listening suit effects involving knowledge, omens, or
   discovery; calling and welcoming suit new characters; offering and releasing
   suit losing or exchanging something; movement suits speed or travel.
@@ -624,8 +631,8 @@ commentary.
 - Avoid vague dream-fantasy filler—unexplained sparks, shadows, echoes, threads,
   paths, whispers, fragments, and transformations—unless each is a concrete,
   story-bearing part of this particular scene.
-- Avoid generic decision language such as “awaiting your answer,” “offers two
-  paths,” or “asks what you will choose.” Show the scene itself.
+- Avoid generic decision language such as “awaiting an answer,” “offers two
+  paths,” or “asks for a choice.” Show the scene itself.
 - Distinct wording is a presentation requirement, not a quality criterion.
   Similar scenes and the same overall narrative are acceptable across the set
   when each supports both choices. Never add abstraction, unsupported

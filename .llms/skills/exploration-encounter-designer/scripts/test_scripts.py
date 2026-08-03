@@ -514,7 +514,10 @@ rendered-text = "Gain 1 energy."
             )
 
     def run_output_validator(
-        self, referenced_card_id: str, placeholder: str = "card_id"
+        self,
+        referenced_card_id: str,
+        placeholder: str = "card_id",
+        prose: str | None = None,
     ) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -598,7 +601,8 @@ rendered-text = "Gain 1 energy."
                 events.append(
                     {
                         "template_pair_id": pair["id"],
-                        "prose": f"A synthetic scene waits here number {event_index + 1}",
+                        "prose": prose
+                        or f"A synthetic scene waits here number {event_index + 1}",
                         "actions": actions,
                         "scores": {
                             "scene_quality": 8,
@@ -661,6 +665,24 @@ rendered-text = "Gain 1 energy."
             "33333333-3333-4333-8333-333333333333"
         )
         self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_rejects_player_references_in_prose(self) -> None:
+        for prose in (
+            "You watch a silver owl spread its wings",
+            "A silver owl spreads its wings above your head",
+            "The player watches a silver owl spread its wings",
+            "A silver owl spreads its wings before the viewer",
+        ):
+            with self.subTest(prose=prose):
+                result = self.run_output_validator(
+                    "33333333-3333-4333-8333-333333333333",
+                    prose=prose,
+                )
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(
+                    "must use entity-focused third-person prose",
+                    result.stderr,
+                )
 
 
 if __name__ == "__main__":
