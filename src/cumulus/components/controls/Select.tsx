@@ -176,9 +176,9 @@ export function Select({
     setOpen(true);
   }, [options.length]);
 
-  // While open, dismiss on Escape, on an outside press, and on scroll/resize —
-  // the portaled menu is anchored to a captured box, so a moved trigger means
-  // the menu no longer belongs where it sits.
+  // While open, dismiss on Escape, on an outside press, and when the page or
+  // another container scrolls. Scrolling the menu itself must keep it open.
+  // Other scrolls can move the trigger away from this captured anchor.
   useEffect(() => {
     if (!open) return;
     function onKey(e: KeyboardEvent): void {
@@ -190,14 +190,19 @@ export function Select({
       if (triggerRef.current?.contains(target) === true) return;
       close();
     }
+    function onScroll(e: Event): void {
+      const target = e.target;
+      if (target instanceof Node && menuRef.current?.contains(target) === true) return;
+      close();
+    }
     window.addEventListener("keydown", onKey);
     window.addEventListener("pointerdown", onOutside, true);
-    window.addEventListener("scroll", close, true);
+    window.addEventListener("scroll", onScroll, true);
     window.addEventListener("resize", close);
     return () => {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("pointerdown", onOutside, true);
-      window.removeEventListener("scroll", close, true);
+      window.removeEventListener("scroll", onScroll, true);
       window.removeEventListener("resize", close);
     };
   }, [open, close]);

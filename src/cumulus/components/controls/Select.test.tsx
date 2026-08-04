@@ -121,4 +121,28 @@ describe("Select", () => {
       value: originalInnerHeight,
     });
   });
+
+  it("keeps the menu open while its options scroll", () => {
+    const { container, root } = mount(
+      <Select options={OPTIONS} value="" ariaLabel="Action" />,
+    );
+    const trigger = container.querySelector<HTMLButtonElement>("button");
+    if (trigger === null) throw new Error("Select trigger did not render");
+
+    act(() => trigger.click());
+    const menu = document.body.querySelector<HTMLElement>('[role="listbox"]');
+    if (menu === null) throw new Error("Select menu did not render");
+
+    act(() => {
+      menu.dispatchEvent(new Event("scroll"));
+    });
+    expect(document.body.querySelector('[role="listbox"]')).toBe(menu);
+
+    act(() => {
+      window.dispatchEvent(new Event("scroll"));
+    });
+    expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+
+    act(() => root.unmount());
+  });
 });
