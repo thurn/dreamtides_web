@@ -2348,7 +2348,7 @@ export function ExplorationSiteScreen({
                       data-testid={`cumulus-exploration-pack-${String(pack.index)}`}
                       style={{
                         display: "grid",
-                        gap: token("--space-4"),
+                        gap: 0,
                         padding: token("--space-5"),
                         borderRadius: token("--radius-panel"),
                         border: `2px solid ${token("--border-soft")}`,
@@ -2356,8 +2356,19 @@ export function ExplorationSiteScreen({
                         color: token("--text-on-glass"),
                       }}
                     >
-                      <strong style={{ font: token("--t-button"), textAlign: "left" }}>Pack {String(pack.index + 1)}</strong>
-                      <span style={{ display: "grid", gridTemplateColumns: `repeat(${String(pack.cards.length)}, minmax(0, 1fr))`, gap: token("--space-3") }}>
+                      <strong
+                        data-exploration-pack-title=""
+                        style={{
+                          font: token("--t-button"),
+                          textAlign: "left",
+                          margin: isDesktop
+                            ? `${token("--space-7")} ${token("--space-8")} ${token("--space-8")}`
+                            : `${token("--space-2")} 0 ${token("--space-4")}`,
+                        }}
+                      >
+                        Pack {String(pack.index + 1)}
+                      </strong>
+                      <span data-exploration-pack-cards="" style={{ display: "grid", gridTemplateColumns: `repeat(${String(pack.cards.length)}, minmax(0, 1fr))`, gap: token("--space-3") }}>
                         {pack.cards.map((card) => <GameCard key={card.entryId} model={card.model} />)}
                       </span>
                       <div
