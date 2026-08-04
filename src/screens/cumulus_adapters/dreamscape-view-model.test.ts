@@ -7,6 +7,7 @@ import type {
   SiteState,
 } from "../../types/journey";
 import { resolveArtRef } from "../../cumulus/primitives/art";
+import { createDefaultState } from "../../state/journey-context";
 import {
   battleLabel,
   buildDreamscapeHudView,
@@ -349,15 +350,59 @@ describe("buildDreamscapeView", () => {
 describe("buildDreamscapeHudView", () => {
   it("reads essence, deck size, dreamAvatar, and dreamsigns from live state", () => {
     const state = {
+      ...createDefaultState(),
       essence: 10,
-      deck: [{}, {}],
+      deck: [
+        {
+          entryId: "entry-a",
+          cardNumber: 1,
+          transfiguration: null,
+          isBane: false,
+        },
+        {
+          entryId: "entry-b",
+          cardNumber: 2,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
       dreamAvatar: null,
       dreamsigns: [],
-      completionLevel: 0,
-    } as unknown as JourneyState;
+    } satisfies JourneyState;
     const hud = buildDreamscapeHudView(state);
     expect(hud.essence).toBe(10);
     expect(hud.deck).toBe(2);
     expect(hud.dreamsigns).toEqual([]);
+  });
+
+  it("holds an Exploration Essence reward out of the HUD until the site presentation completes", () => {
+    const state = {
+      ...createDefaultState(),
+      essence: 290,
+      screen: { type: "site" as const, siteId: "exploration-site" },
+      siteRuntime: {
+        "exploration-site": {
+          kind: "exploration" as const,
+          encounterCardId: "encounter-card-id",
+          actionOffers: [],
+          resolution: {
+            actionId: "gain-essence",
+            gainedCardIds: [],
+            gainedDreamsignIds: [],
+            purgedCardIds: [],
+            affectedEntryIds: ["spirit-animal-entry"],
+            essenceGained: 90,
+          },
+        },
+      },
+    };
+
+    expect(buildDreamscapeHudView(state).essence).toBe(200);
+    expect(
+      buildDreamscapeHudView({
+        ...state,
+        screen: { type: "dreamscape" as const },
+      }).essence,
+    ).toBe(290);
   });
 });

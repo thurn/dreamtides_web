@@ -187,8 +187,16 @@ export function toQsbDreamsigns(
 
 /** The bottom-HUD slice of the view-model, from live run state. */
 export function buildDreamscapeHudView(state: JourneyState): JourneyChromeHudView {
+  const activeRuntime =
+    state.screen.type === "site"
+      ? state.siteRuntime[state.screen.siteId]
+      : undefined;
+  const pendingExplorationEssence =
+    activeRuntime?.kind === "exploration"
+      ? (activeRuntime.resolution?.essenceGained ?? 0)
+      : 0;
   return {
-    essence: state.essence,
+    essence: Math.max(0, state.essence - pendingExplorationEssence),
     deck: state.deck.length,
     dreamAvatar: toQsbDreamAvatar(state.dreamAvatar),
     dreamsigns: toQsbDreamsigns(state.dreamsigns),
