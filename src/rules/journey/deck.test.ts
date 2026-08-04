@@ -246,12 +246,13 @@ describe("SET_DECK_ENTRY_* apply", () => {
   it("SET_DECK_ENTRY_KEYWORDS sets the keyword modification", () => {
     const out = reduce(stateWithDeck(), "SET_DECK_ENTRY_KEYWORDS", {
       entryId: "deck-1",
-      keywords: { fast: true, reclaim: 2 },
+      keywords: { fast: true, reclaim: 2, energyCostReduction: 1 },
     });
     expect(out.outcome).toBe("applied");
     expect(out.state.journey.deck[0].keywordModification).toEqual({
       fast: true,
       reclaim: 2,
+      energyCostReduction: 1,
     });
   });
 

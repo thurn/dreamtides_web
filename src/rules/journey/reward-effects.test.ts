@@ -76,6 +76,13 @@ describe("applyJourneyRewardEffect", () => {
             cardNumber: 2,
             amount: 2,
           },
+          {
+            kind: "reduce_deck_entry_energy_cost",
+            entryId: "entry-b",
+            cardUuid: CARD_B,
+            cardNumber: 2,
+            amount: 1,
+          },
           { kind: "add_essence", amount: 7 },
         ],
       },
@@ -87,6 +94,7 @@ describe("applyJourneyRewardEffect", () => {
       "mint-1",
     ]);
     expect(next?.deck[0]?.sparkBonus).toBe(2);
+    expect(next?.deck[0]?.keywordModification?.energyCostReduction).toBe(1);
     expect(next?.deck[2]?.isBane).toBe(true);
     expect(next?.essence).toBe(10);
   });

@@ -35,6 +35,7 @@ interface ExplorationSelection {
   packIndex?: unknown;
   subtype?: unknown;
   replacedDreamsignId?: unknown;
+  dreamsignId?: unknown;
 }
 
 function idIndex(content: JourneyContent): ReadonlyMap<string, CardData> {
@@ -103,6 +104,7 @@ function emptyOffer(actionId: string): ExplorationActionOfferRuntime {
   return {
     actionId,
     offeredCardIds: [],
+    offeredDreamsignIds: [],
     packCardIds: [],
     replacementCardIdByEntryId: {},
     transfigurationByEntryId: {},
@@ -130,6 +132,17 @@ function buildActionOffer(
         offer.transfigurationByEntryId[entry.entryId] = selected.type;
       }
     }
+    return offer;
+  }
+  if (action.effectKind === "gain-random-dreamsign") {
+    const availableIds = new Set(
+      content.dreamsignTemplates.map((dreamsign) => dreamsign.id.toLowerCase()),
+    );
+    const candidates = journey.remainingDreamsignPool.filter((id) =>
+      availableIds.has(id.toLowerCase()),
+    );
+    const selected = shuffled(candidates, rng)[0];
+    if (selected !== undefined) offer.offeredDreamsignIds = [selected];
     return offer;
   }
   if (action.predicate === undefined) return offer;
@@ -327,6 +340,7 @@ function baseResolution(actionId: string): ExplorationResolution {
     gainedCardIds: [],
     gainedDreamsignIds: [],
     purgedCardIds: [],
+    purgedDreamsignIds: [],
     affectedEntryIds: [],
     essenceGained: 0,
   };
@@ -438,6 +452,20 @@ export function resolveExplorationChoice(input: {
       result.gainedDreamsignIds.push(action.dreamsignId);
       break;
     }
+    case "gain-random-dreamsign": {
+      const dreamsignId = offer.offeredDreamsignIds?.[0];
+      if (dreamsignId === undefined) return null;
+      const added = addDreamsign(
+        next,
+        content,
+        dreamsignId,
+        stringValue(selection.replacedDreamsignId),
+      );
+      if (added === null) return null;
+      next = added;
+      result.gainedDreamsignIds.push(dreamsignId);
+      break;
+    }
     case "gain-card": {
       if (action.cardId === undefined || !addCardIds([action.cardId])) return null;
       break;
@@ -502,7 +530,30 @@ export function resolveExplorationChoice(input: {
     case "draft-card": {
       const cardIds = stringArray(selection.cardIds);
       if (cardIds === null || cardIds.length !== 1 || !offer.offeredCardIds.includes(cardIds[0])) return null;
-      if (!addCardIds(cardIds)) return null;
+      const copies = action.count ?? 1;
+      if (!Number.isInteger(copies) || copies <= 0) return null;
+      if (!addCardIds(Array.from({ length: copies }, () => cardIds[0]))) return null;
+      break;
+    }
+    case "purge-dreamsign-for-essence": {
+      const dreamsignId = stringValue(selection.dreamsignId);
+      if (dreamsignId === null || action.essence === undefined) return null;
+      const targetIndex = next.dreamsigns.findIndex(
+        (dreamsign) => dreamsign.id?.toLowerCase() === dreamsignId.toLowerCase(),
+      );
+      if (targetIndex < 0 || !Number.isFinite(action.essence) || action.essence <= 0) {
+        return null;
+      }
+      next = {
+        ...next,
+        dreamsigns: next.dreamsigns.filter((_dreamsign, index) => index !== targetIndex),
+      };
+      if (!applyReward({ kind: "add_essence", amount: action.essence })) return null;
+      result.purgedDreamsignIds = [
+        ...(result.purgedDreamsignIds ?? []),
+        dreamsignId,
+      ];
+      result.essenceGained = action.essence;
       break;
     }
     case "purge-for-essence": {
@@ -664,6 +715,58 @@ export function resolveExplorationChoice(input: {
         })
       ) return null;
       result.affectedEntryIds.push(...affectedEntryIds);
+      break;
+    }
+    case "make-fast-all": {
+      const targets = next.deck.map((entry) => deckTarget(next, content, entry.entryId));
+      if (
+        targets.some((target) => target === null) ||
+        !applyReward({
+          kind: "composite",
+          children: (targets as Array<NonNullable<(typeof targets)[number]>>).map(
+            (target) => ({
+              kind: "change_deck_entry_keywords",
+              ...target,
+              keywords: { fast: true },
+            }),
+          ),
+        })
+      ) return null;
+      result.affectedEntryIds.push(...next.deck.map((entry) => entry.entryId));
+      break;
+    }
+    case "reduce-cost-all-and-gain-banes": {
+      if (
+        action.baneCardId === undefined ||
+        action.energyCostReduction === undefined ||
+        action.baneCount === undefined ||
+        !Number.isInteger(action.baneCount) ||
+        action.baneCount <= 0
+      ) return null;
+      const affectedEntryIds = next.deck.map((entry) => entry.entryId);
+      const targets = affectedEntryIds.map((entryId) => deckTarget(next, content, entryId));
+      const bane = addCardEffect(content, action.baneCardId, true);
+      if (
+        bane === null ||
+        targets.some((target) => target === null) ||
+        !applyReward({
+          kind: "composite",
+          children: [
+            ...(targets as Array<NonNullable<(typeof targets)[number]>>).map(
+              (target) => ({
+                kind: "reduce_deck_entry_energy_cost" as const,
+                ...target,
+                amount: action.energyCostReduction as number,
+              }),
+            ),
+            ...Array.from({ length: action.baneCount }, () => bane),
+          ],
+        })
+      ) return null;
+      result.affectedEntryIds.push(...affectedEntryIds);
+      result.gainedCardIds.push(
+        ...Array.from({ length: action.baneCount }, () => action.baneCardId as string),
+      );
       break;
     }
   }

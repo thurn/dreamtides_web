@@ -116,6 +116,20 @@ function offeredCards(
   });
 }
 
+function heldDreamsignChoices(state: JourneyState) {
+  return state.dreamsigns.flatMap((dreamsign) =>
+    dreamsign.id === undefined
+      ? []
+      : [
+          {
+            id: dreamsign.id,
+            name: dreamsign.name,
+            effectText: dreamsign.effectDescription,
+          },
+        ],
+  );
+}
+
 function deckFollowup(
   title: string,
   subtitle: string,
@@ -255,30 +269,32 @@ function followupForAction(
         options: action.subtypeOptions ?? [],
       };
     case "gain-dreamsign":
+    case "gain-random-dreamsign":
       if (state.dreamsigns.length >= state.maxDreamsigns) {
         return {
           kind: "dreamsigns",
           title: action.label,
           subtitle: "Choose a Dreamsign to replace.",
-          dreamsigns: state.dreamsigns.flatMap((dreamsign) =>
-            dreamsign.id === undefined
-              ? []
-              : [
-                  {
-                    id: dreamsign.id,
-                    name: dreamsign.name,
-                    effectText: dreamsign.effectDescription,
-                  },
-                ],
-          ),
+          selectionKey: "replacedDreamsignId",
+          dreamsigns: heldDreamsignChoices(state),
         };
       }
       return { kind: "none" };
+    case "purge-dreamsign-for-essence":
+      return {
+        kind: "dreamsigns",
+        title: action.label,
+        subtitle: "Choose a Dreamsign to purge.",
+        selectionKey: "dreamsignId",
+        dreamsigns: heldDreamsignChoices(state),
+      };
     case "gain-card":
     case "gain-bane-and-card":
     case "gain-random-cards":
     case "gain-essence-per-card":
     case "increase-spark-all":
+    case "make-fast-all":
+    case "reduce-cost-all-and-gain-banes":
       return { kind: "none" };
   }
 }
@@ -304,12 +320,16 @@ function actionView(
   content: JourneyContent,
 ): ExplorationActionView {
   const followup = followupForAction(action, offer, state, content);
-  const available =
+  const hasRequiredOffer =
+    action.effectKind !== "gain-random-dreamsign" ||
+    (offer.offeredDreamsignIds?.length ?? 0) > 0;
+  const available = hasRequiredOffer && (
     followup.kind === "none" ||
     (followup.kind === "cards" && followup.cards.length >= followup.min) ||
     (followup.kind === "packs" && followup.packs.length > 0) ||
     (followup.kind === "subtypes" && followup.options.length > 0) ||
-    (followup.kind === "dreamsigns" && followup.dreamsigns.length > 0);
+    (followup.kind === "dreamsigns" && followup.dreamsigns.length > 0)
+  );
   return {
     id: action.id,
     label: action.label,

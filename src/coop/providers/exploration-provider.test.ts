@@ -16,6 +16,7 @@ import {
 
 const SOURCE_CARD_ID = asCardId("161482b6-af07-4d9e-822d-8c738672beb9");
 const CHARM_POUCH_ID = "2D4EB3EE-0931-45ED-8365-69F18096EAD5";
+const NIGHTMARE_ID = asCardId("b0a2c3d4-e5f6-4789-8abc-0def12345678");
 
 function card(
   id: string,
@@ -43,6 +44,7 @@ function card(
 function catalogCards(): CardData[] {
   return [
     card(SOURCE_CARD_ID, 1, "Character", "Warrior", 1),
+    card(NIGHTMARE_ID, 2, "Event", "", 0),
     card("f0000000-0000-4000-8000-000000000001", 101, "Event", "", 1),
     ...Array.from({ length: 4 }, (_, index) =>
       card(
@@ -360,5 +362,134 @@ describe("Exploration provider", () => {
 
     expect(result.dreamsigns).toHaveLength(1);
     expect(result.dreamsigns[0]?.id).toBe(CHARM_POUCH_ID);
+  });
+
+  it("drafts one offered card and gains the authored number of copies", () => {
+    const draftAction: ExplorationActionContent = {
+      id: "draft-two-copies",
+      label: "Call for Reinforcements",
+      effectText: "Draft a Survivor from 4 choices and gain 2 copies of it",
+      responseText: "Reinforcements answer.",
+      effectKind: "draft-card",
+      predicate: "survivor",
+      offerCount: 4,
+      count: 2,
+    };
+    const fallbackAction: ExplorationActionContent = {
+      id: "gain-source",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      responseText: "A card arrives.",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([draftAction, fallbackAction]);
+    const state = buildState(content);
+    const selectedId = state.runtime.actionOffers[0]?.offeredCardIds[0];
+    if (selectedId === undefined) throw new Error("Expected a draft offer");
+
+    const result = resolve(content, state.journey, draftAction.id, {
+      cardIds: [selectedId],
+    });
+    const gained = result.siteRuntime[site.id];
+    expect(result.deck).toHaveLength(state.journey.deck.length + 2);
+    expect(gained).toMatchObject({
+      kind: "exploration",
+      resolution: { gainedCardIds: [selectedId, selectedId] },
+    });
+  });
+
+  it("mints a random Dreamsign offer and purges a UUID-selected Dreamsign for essence", () => {
+    const randomDreamsignAction: ExplorationActionContent = {
+      id: "random-dreamsign",
+      label: "Read the suspended pattern",
+      effectText: "Gain a random dreamsign",
+      responseText: "A mark emerges.",
+      effectKind: "gain-random-dreamsign",
+    };
+    const purgeDreamsignAction: ExplorationActionContent = {
+      id: "purge-dreamsign",
+      label: "Break the suspended pattern",
+      effectText: "Purge a chosen dreamsign and gain 50 essence",
+      responseText: "The force disperses.",
+      effectKind: "purge-dreamsign-for-essence",
+      essence: 50,
+    };
+    const content = contentFixture([randomDreamsignAction, purgeDreamsignAction]);
+    const randomState = buildState(content, {
+      ...journeyFixture(content),
+      remainingDreamsignPool: [CHARM_POUCH_ID],
+    });
+    expect(randomState.runtime.actionOffers[0]?.offeredDreamsignIds)
+      .toEqual([CHARM_POUCH_ID]);
+    const gained = resolve(content, randomState.journey, randomDreamsignAction.id);
+    expect(gained.dreamsigns.map((dreamsign) => dreamsign.id))
+      .toContain(CHARM_POUCH_ID);
+    expect(gained.remainingDreamsignPool).not.toContain(CHARM_POUCH_ID);
+
+    const purgeState = buildState(content, {
+      ...journeyFixture(content),
+      dreamsigns: [{
+        id: CHARM_POUCH_ID,
+        name: "Charm Pouch",
+        effectDescription: "A fixture effect.",
+        isBane: false,
+      }],
+    });
+    const purged = resolve(content, purgeState.journey, purgeDreamsignAction.id, {
+      dreamsignId: CHARM_POUCH_ID,
+    });
+    expect(purged.dreamsigns).toEqual([]);
+    expect(purged.essence).toBe(150);
+    expect(purged.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        purgedDreamsignIds: [CHARM_POUCH_ID],
+        essenceGained: 50,
+      },
+    });
+  });
+
+  it("makes the deck fast and applies cost reduction before adding Nightmare banes", () => {
+    const fastAction: ExplorationActionContent = {
+      id: "make-fast",
+      label: "Accept the charge",
+      effectText: "All cards in your deck become fast",
+      responseText: "The charge races onward.",
+      effectKind: "make-fast-all",
+    };
+    const costAction: ExplorationActionContent = {
+      id: "reduce-and-banes",
+      label: "Overload the aperture",
+      effectText: "Reduce all costs and gain three Nightmare banes",
+      responseText: "Dark residue remains.",
+      effectKind: "reduce-cost-all-and-gain-banes",
+      energyCostReduction: 1,
+      baneCardId: NIGHTMARE_ID,
+      baneCount: 3,
+    };
+    const content = contentFixture([fastAction, costAction]);
+    const fastState = buildState(content);
+    const fast = resolve(content, fastState.journey, fastAction.id);
+    expect(fast.deck.every((entry) => entry.keywordModification?.fast === true))
+      .toBe(true);
+
+    const costState = buildState(content);
+    const originalEntryIds = new Set(costState.journey.deck.map((entry) => entry.entryId));
+    const reduced = resolve(content, costState.journey, costAction.id);
+    expect(reduced.deck).toHaveLength(costState.journey.deck.length + 3);
+    for (const entry of reduced.deck) {
+      const base = content.cardDatabase.get(entry.cardNumber);
+      if (base === undefined) throw new Error("Expected a catalog card");
+      if (originalEntryIds.has(entry.entryId)) {
+        expect(entry.keywordModification?.energyCostReduction).toBe(1);
+        expect(resolveDeckEntryCard(base, entry).energyCost)
+          .toBe(base.energyCost === null ? null : Math.max(0, base.energyCost - 1));
+      } else {
+        expect(base.id).toBe(NIGHTMARE_ID);
+        expect(entry.isBane).toBe(true);
+        expect(entry.keywordModification?.energyCostReduction).toBeUndefined();
+      }
+    }
   });
 });

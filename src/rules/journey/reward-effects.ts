@@ -68,6 +68,13 @@ export type JourneyRewardEffect =
       amount: number;
     }
   | {
+      kind: "reduce_deck_entry_energy_cost";
+      entryId: string;
+      cardUuid: string;
+      cardNumber: number;
+      amount: number;
+    }
+  | {
       kind: "add_essence";
       amount: number;
     }
@@ -236,6 +243,24 @@ function applyEffect(
         deck: state.deck.map((entry) =>
           entry.entryId === effect.entryId
             ? { ...entry, sparkBonus: (entry.sparkBonus ?? 0) + effect.amount }
+            : entry,
+        ),
+      };
+    }
+    case "reduce_deck_entry_energy_cost": {
+      const target = validateDeckTarget(state, journeyContent, effect);
+      if (target === null || !Number.isFinite(effect.amount) || effect.amount <= 0) {
+        return null;
+      }
+      const keywordModification = mergeCardKeywordModification(
+        target.keywordModification,
+        { energyCostReduction: effect.amount },
+      );
+      return {
+        ...state,
+        deck: state.deck.map((entry) =>
+          entry.entryId === effect.entryId
+            ? { ...entry, keywordModification }
             : entry,
         ),
       };

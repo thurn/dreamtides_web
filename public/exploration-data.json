@@ -1,5 +1,20 @@
 {
-  "customCards": [],
+  "customCards": [
+    {
+      "id": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+      "name": "Nightmare",
+      "cardNumber": 10002,
+      "cardType": "Event",
+      "subtype": "",
+      "energyCost": 0,
+      "renderedText": "Bane.",
+      "imageNumber": 1169640025,
+      "artOwned": false,
+      "spark": null,
+      "isFast": false,
+      "isStarter": false
+    }
+  ],
   "customDreamsigns": [],
   "encounters": [
     {
@@ -295,6 +310,168 @@
           "templateVariables": {},
           "effectKind": "increase-spark-all",
           "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "15b63630-d9f8-473b-9717-15ad91ff2f16",
+      "prose": "Branching currents surround a figure kneeling inside the ruptured chamber.",
+      "action": [
+        {
+          "id": "15b63630-d9f8-473b-9717-15ad91ff2f16:pair-1:template-66",
+          "label": "Accept the charge",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "responseText": "The discharge races through every waiting connection.",
+          "templateId": 66,
+          "templateVariables": {},
+          "effectKind": "make-fast-all"
+        },
+        {
+          "id": "15b63630-d9f8-473b-9717-15ad91ff2f16:pair-1:template-65",
+          "label": "Overload the aperture",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 \"Nightmare\" bane cards.",
+          "responseText": "The opening flares, then sheds a dark residue.",
+          "templateId": 65,
+          "templateVariables": {
+            "count": 3
+          },
+          "effectKind": "reduce-cost-all-and-gain-banes",
+          "energyCostReduction": 1,
+          "baneCardId": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+          "baneCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+      "prose": "A cloaked warrior leans forward, raising a bright-emblemed standard through smoke.",
+      "action": [
+        {
+          "id": "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-36",
+          "label": "Rally at the Crest",
+          "effectText": "Choose one of 2 packs of Warrior cards to add to your deck",
+          "responseText": "The marked cloth cracks sharply over the ridge.",
+          "templateId": 36,
+          "templateVariables": {
+            "predicate": "Warrior"
+          },
+          "effectKind": "choose-pack",
+          "predicate": "warrior",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-65",
+          "label": "Charge Through the Smoke",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 \"Nightmare\" bane cards.",
+          "responseText": "The warrior crests the incline as smoke clings behind.",
+          "templateId": 65,
+          "templateVariables": {
+            "count": 3
+          },
+          "effectKind": "reduce-cost-all-and-gain-banes",
+          "energyCostReduction": 1,
+          "baneCardId": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+          "baneCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+      "prose": "A solitary man pauses on a gnarled bough beneath suspended lanterns.",
+      "action": [
+        {
+          "id": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586:pair-1:template-61",
+          "label": "Offer Him an Exchange",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "responseText": "He accepts one keepsake and returns another.",
+          "templateId": 61,
+          "templateVariables": {},
+          "effectKind": "purge-and-copy"
+        },
+        {
+          "id": "e26e0ac8-d6c9-4b0c-8672-4f73651f2586:pair-1:template-19",
+          "label": "Present a Written Charm",
+          "effectText": "Apply Inspired to $DECK_CARD",
+          "responseText": "He angles a lantern across the waiting script.",
+          "templateId": 19,
+          "templateVariables": {
+            "transfiguration": "Inspired"
+          },
+          "selection": {
+            "$DECK_CARD": {
+              "predicate": "Event"
+            }
+          },
+          "effectKind": "transfigure-fixed-selected",
+          "predicate": "event",
+          "transfiguration": "Inspired"
+        }
+      ]
+    },
+    {
+      "cardId": "123baf70-305a-4583-bdba-a10b5153fbeb",
+      "prose": "A masked soldier braces a long rifle amid smoke-darkened wreckage.",
+      "action": [
+        {
+          "id": "123baf70-305a-4583-bdba-a10b5153fbeb:pair-1:template-15",
+          "label": "Call for Reinforcements",
+          "effectText": "Draft a Survivor from 4 choices and gain 2 copies of it",
+          "responseText": "The soldier signals; armored figures answer through smoke.",
+          "templateId": 15,
+          "templateVariables": {
+            "predicate": "Survivor",
+            "count": 2
+          },
+          "effectKind": "draft-card",
+          "predicate": "survivor",
+          "offerCount": 4,
+          "count": 2
+        },
+        {
+          "id": "123baf70-305a-4583-bdba-a10b5153fbeb:pair-1:template-19",
+          "label": "Request Field Training",
+          "effectText": "Apply Kindled to $DECK_CARD",
+          "responseText": "Their practiced stance hardens one companion for battle.",
+          "templateId": 19,
+          "templateVariables": {
+            "transfiguration": "Kindled"
+          },
+          "selection": {
+            "$DECK_CARD": {
+              "predicate": "Survivor"
+            }
+          },
+          "effectKind": "transfigure-fixed-selected",
+          "predicate": "survivor",
+          "transfiguration": "Kindled"
+        }
+      ]
+    },
+    {
+      "cardId": "e455225f-c444-44a2-8796-805cae2b755f",
+      "prose": "Before you, a witch extends both hands as stones hover around her.",
+      "action": [
+        {
+          "id": "e455225f-c444-44a2-8796-805cae2b755f:pair-3:template-28",
+          "label": "Read the suspended pattern",
+          "effectText": "Gain a random dreamsign",
+          "responseText": "A clear mark emerges across rough stone.",
+          "templateId": 28,
+          "templateVariables": {},
+          "effectKind": "gain-random-dreamsign"
+        },
+        {
+          "id": "e455225f-c444-44a2-8796-805cae2b755f:pair-3:template-62",
+          "label": "Break the suspended pattern",
+          "effectText": "Purge a chosen dreamsign and gain 50 essence",
+          "responseText": "The stones drop as their gathered force disperses.",
+          "templateId": 62,
+          "templateVariables": {
+            "essence": 50
+          },
+          "effectKind": "purge-dreamsign-for-essence",
+          "essence": 50
         }
       ]
     }

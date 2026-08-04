@@ -65,6 +65,12 @@ const EXPLORATION_HIGH_RES_ART_DIR = join(
   "quest_prototype_assets",
   "exploration",
 );
+const EXPLORATION_SOURCE_ART_DIR = join(
+  homedir(),
+  "Documents",
+  "shutterstock",
+  "images",
+);
 const TUTORIAL_DIALOGUE_FRAME_ART_PATH = join(
   homedir(),
   "Documents",
@@ -679,6 +685,10 @@ const EXPLORATION_EFFECT_KINDS = new Set([
   "gain-offered-card",
   "gain-essence-per-card",
   "increase-spark-all",
+  "gain-random-dreamsign",
+  "purge-dreamsign-for-essence",
+  "make-fast-all",
+  "reduce-cost-all-and-gain-banes",
 ]);
 
 function transformTomlRecord(record) {
@@ -720,9 +730,9 @@ export function transformExplorationData(source) {
   });
   const encounters = (source.encounter ?? []).map(transformTomlRecord);
 
-  if (encounters.length !== 9) {
+  if (encounters.length !== 14) {
     throw new Error(
-      `exploration.toml: expected 9 encounters, found ${String(encounters.length)}`,
+      `exploration.toml: expected 14 encounters, found ${String(encounters.length)}`,
     );
   }
   const encounterIds = new Set();
@@ -769,6 +779,26 @@ export function transformExplorationData(source) {
       ) {
         throw new Error(
           `exploration.toml: action ${action.id} requires positive spark-bonus`,
+        );
+      }
+      if (
+        action.effectKind === "purge-dreamsign-for-essence" &&
+        (typeof action.essence !== "number" || action.essence <= 0)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires positive essence`,
+        );
+      }
+      if (
+        action.effectKind === "reduce-cost-all-and-gain-banes" &&
+        (typeof action.energyCostReduction !== "number" ||
+          action.energyCostReduction <= 0 ||
+          typeof action.baneCardId !== "string" ||
+          typeof action.baneCount !== "number" ||
+          action.baneCount <= 0)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires cost reduction and banes`,
         );
       }
     }
@@ -827,6 +857,61 @@ function recreateDir(dir) {
   // Node's retry support makes regeneration robust to those transient handles.
   rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 });
   mkdirSync(dir, { recursive: true });
+}
+
+/**
+ * Link the full-screen Exploration art for the authored encounter catalog.
+ * Curated full-resolution files win; encounters without one use the same
+ * source-art file that the development encounter editor serves.
+ */
+export function linkExplorationArt({
+  destinationDir,
+  highResArtDir,
+  sourceArtDir,
+  imageNumbers,
+}) {
+  recreateDir(destinationDir);
+  const wanted = new Set(imageNumbers.map(String));
+  const linked = new Set();
+  let highResolutionCount = 0;
+  let sourceCount = 0;
+
+  if (existsSync(highResArtDir)) {
+    for (const filename of readdirSync(highResArtDir)) {
+      const match = /^(\d+)\.jpg$/u.exec(filename);
+      if (match === null || !wanted.has(match[1])) continue;
+      symlinkSync(join(highResArtDir, filename), join(destinationDir, filename));
+      linked.add(match[1]);
+      highResolutionCount++;
+    }
+  }
+
+  const sourceFiles = existsSync(sourceArtDir)
+    ? readdirSync(sourceArtDir).filter((filename) => filename.toLowerCase().endsWith(".jpg"))
+    : [];
+  for (const imageNumber of wanted) {
+    if (linked.has(imageNumber)) continue;
+    const pattern = new RegExp(`(?<!\\d)${imageNumber}\\.jpg$`, "iu");
+    const matches = sourceFiles.filter((filename) => pattern.test(filename));
+    if (matches.length !== 1) {
+      console.warn(
+        `  Warning: expected one Exploration source image for ${imageNumber}, found ${String(matches.length)}`,
+      );
+      continue;
+    }
+    symlinkSync(
+      join(sourceArtDir, matches[0]),
+      join(destinationDir, `${imageNumber}.jpg`),
+    );
+    linked.add(imageNumber);
+    sourceCount++;
+  }
+
+  return {
+    highResolutionCount,
+    sourceCount,
+    missingCount: wanted.size - linked.size,
+  };
 }
 
 function defaultDreamAvatarArtDir() {
@@ -1179,6 +1264,7 @@ export function setupAssets({
   journeyArtDir = JOURNEY_ART_DIR,
   mainMenuBackgroundArtPath = MAIN_MENU_BACKGROUND_ART_PATH,
   explorationHighResArtDir = EXPLORATION_HIGH_RES_ART_DIR,
+  explorationSourceArtDir = EXPLORATION_SOURCE_ART_DIR,
   cardFrameArtDir = CARD_FRAME_ART_DIR,
   dreamscapeSceneArtDir = DREAMSCAPE_SCENE_ART_DIR,
   dreamscapeIconArtDir = DREAMSCAPE_ICON_ART_DIR,
@@ -1548,6 +1634,18 @@ export function setupAssets({
   console.log("Parsing exploration.toml...");
   const explorationSource = parse(readFileSync(explorationTomlPath, "utf8"));
   const explorationData = transformExplorationData(explorationSource);
+  const explorationCardById = new Map(
+    [...jsonCardsV2, ...explorationData.customCards].map((card) => [
+      String(card.id).toLowerCase(),
+      card,
+    ]),
+  );
+  const explorationImageNumbers = explorationData.encounters.map(
+    (encounter) => explorationCardById.get(encounter.cardId.toLowerCase())?.imageNumber,
+  );
+  if (explorationImageNumbers.some((imageNumber) => typeof imageNumber !== "number")) {
+    throw new Error("exploration.toml: every encounter card requires an image-number");
+  }
   const knownCardIds = new Set(
     [...jsonCardsV2, ...explorationData.customCards].map((card) =>
       String(card.id).toLowerCase(),
@@ -2108,26 +2206,21 @@ export function setupAssets({
     );
   }
 
-  // Exploration's frame-break prototype expands licensed card artwork to the
-  // viewport. The full-resolution originals stay in the developer's local art
-  // library; only generated public symlinks enter the Vite asset tree.
-  recreateDir(explorationDir);
-  let linkedExplorationArt = 0;
-  if (existsSync(explorationHighResArtDir)) {
-    for (const filename of readdirSync(explorationHighResArtDir)) {
-      if (!/^\d+\.jpg$/u.test(filename)) continue;
-      symlinkSync(
-        join(explorationHighResArtDir, filename),
-        join(explorationDir, filename),
-      );
-      linkedExplorationArt++;
-    }
-    console.log(
-      `Linked ${linkedExplorationArt} Exploration high-resolution images`,
-    );
-  } else {
+  // Exploration expands source-card art to the viewport. Prefer the curated
+  // full-resolution library and fall back to the source files used by the
+  // encounter editor when an encounter is still awaiting curated art.
+  const explorationArt = linkExplorationArt({
+    destinationDir: explorationDir,
+    highResArtDir: explorationHighResArtDir,
+    sourceArtDir: explorationSourceArtDir,
+    imageNumbers: explorationImageNumbers,
+  });
+  console.log(
+    `Linked ${String(explorationArt.highResolutionCount)} Exploration high-resolution images and ${String(explorationArt.sourceCount)} source images`,
+  );
+  if (explorationArt.missingCount > 0) {
     console.warn(
-      `  Warning: Exploration high-resolution art directory not found at ${explorationHighResArtDir}`,
+      `  Warning: ${String(explorationArt.missingCount)} Exploration images are unavailable`,
     );
   }
 

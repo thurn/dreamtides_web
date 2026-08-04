@@ -9,7 +9,10 @@ import { applyTransfigurationToCard } from "./transfiguration/transfiguration-lo
 
 type CardTypeFields = Pick<CardData, "cardType" | "subtype">;
 type CardStatFields = Pick<CardData, "energyCost" | "spark">;
-type CardKeywordFields = Pick<CardData, "isFast" | "renderedText"> & {
+type CardKeywordFields = Pick<
+  CardData,
+  "energyCost" | "energyCosts" | "isFast" | "renderedText"
+> & {
   reclaimCost?: number | null;
 };
 
@@ -36,11 +39,32 @@ export function applyCardKeywordModification<T extends CardKeywordFields>(
   const reclaimCost = normalizedReclaimCost(
     keywordModification?.setReclaim ?? keywordModification?.reclaim,
   );
-  if (keywordModification?.fast !== true && reclaimCost === null) {
+  const energyCostReduction = normalizedEnergyCostReduction(
+    keywordModification?.energyCostReduction,
+  );
+  if (
+    keywordModification?.fast !== true &&
+    reclaimCost === null &&
+    energyCostReduction === 0
+  ) {
     return card;
   }
   return {
     ...card,
+    energyCost:
+      card.energyCost === null
+        ? null
+        : Math.max(0, card.energyCost - energyCostReduction),
+    ...(card.energyCosts === undefined
+      ? {}
+      : {
+          energyCosts: card.energyCosts.map((label) => {
+            const value = Number(label);
+            return Number.isFinite(value)
+              ? String(Math.max(0, value - energyCostReduction))
+              : label;
+          }),
+        }),
     isFast: keywordModification?.fast === true ? true : card.isFast,
     renderedText: reclaimCost === null
       ? card.renderedText
@@ -61,11 +85,21 @@ export function mergeCardKeywordModification(
   if (incoming.reclaim !== undefined) {
     next.reclaim = (existing?.reclaim ?? 0) + incoming.reclaim;
   }
+  if (incoming.energyCostReduction !== undefined) {
+    next.energyCostReduction =
+      (existing?.energyCostReduction ?? 0) + incoming.energyCostReduction;
+  }
   if (incoming.setReclaim !== undefined) {
     next.setReclaim = incoming.setReclaim;
     delete next.reclaim;
   }
   return next;
+}
+
+function normalizedEnergyCostReduction(reduction: number | undefined): number {
+  return reduction === undefined || !Number.isFinite(reduction) || reduction <= 0
+    ? 0
+    : Math.trunc(reduction);
 }
 
 function normalizedReclaimCost(reclaim: number | undefined): number | null {

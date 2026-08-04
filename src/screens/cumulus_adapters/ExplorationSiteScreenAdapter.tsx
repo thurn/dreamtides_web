@@ -48,6 +48,7 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
       offers: explorationRuntime.actionOffers.map((offer) => ({
         actionId: offer.actionId,
         offeredCardIds: offer.offeredCardIds,
+        offeredDreamsignIds: offer.offeredDreamsignIds ?? [],
         packCardIds: offer.packCardIds,
         replacementCardIdByEntryId: offer.replacementCardIdByEntryId,
         transfigurationByEntryId: offer.transfigurationByEntryId,

@@ -15,6 +15,7 @@ import {
   buildDraftRecords,
   DEFAULT_STARTING_ESSENCE,
   imageHash,
+  linkExplorationArt,
   parseEnergyCost,
   parseSpark,
   setupAssets,
@@ -25,7 +26,7 @@ import {
 } from "./setup-assets.mjs";
 
 describe("transformExplorationData", () => {
-  it("compiles nine UUID-keyed encounters with two actions each", () => {
+  it("compiles fourteen UUID-keyed encounters with two actions each", () => {
     const source = parse(
       readFileSync(
         join(import.meta.dirname, "../data/tabula/exploration.toml"),
@@ -35,15 +36,23 @@ describe("transformExplorationData", () => {
     const compiled = transformExplorationData(source);
     const actions = compiled.encounters.flatMap((encounter) => encounter.action);
 
-    expect(compiled.encounters).toHaveLength(9);
-    expect(actions).toHaveLength(18);
+    expect(compiled.encounters).toHaveLength(14);
+    expect(actions).toHaveLength(28);
     expect(new Set(compiled.encounters.map((encounter) => encounter.cardId)).size)
-      .toBe(9);
-    expect(new Set(actions.map((action) => action.id)).size).toBe(18);
+      .toBe(14);
+    expect(new Set(actions.map((action) => action.id)).size).toBe(28);
+    expect(actions.map((action) => action.effectKind)).toEqual(
+      expect.arrayContaining([
+        "make-fast-all",
+        "reduce-cost-all-and-gain-banes",
+        "gain-random-dreamsign",
+        "purge-dreamsign-for-essence",
+      ]),
+    );
   });
 
   function syntheticExplorationSource(essencePerCard = 15) {
-    const encounters = Array.from({ length: 9 }, (_, encounterIndex) => ({
+    const encounters = Array.from({ length: 14 }, (_, encounterIndex) => ({
       "card-id": `source-${String(encounterIndex)}`,
       prose: `Synthetic prose ${String(encounterIndex)}`,
       action: Array.from({ length: 2 }, (_, actionIndex) => ({
@@ -537,6 +546,38 @@ rendered-text = ""
     const byNumber = new Map(cards.map((c) => [c.cardNumber, c]));
     expect(byNumber.get(401)?.rarity).toBe("Legendary");
     expect(byNumber.get(402)?.rarity).toBe(undefined);
+  });
+});
+
+describe("linkExplorationArt", () => {
+  it("prefers curated art and falls back to encounter-editor source art", () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), "exploration-art-"));
+    const destinationDir = join(tempRoot, "public", "exploration");
+    const highResArtDir = join(tempRoot, "curated");
+    const sourceArtDir = join(tempRoot, "source");
+    mkdirSync(highResArtDir, { recursive: true });
+    mkdirSync(sourceArtDir, { recursive: true });
+    writeFileSync(join(highResArtDir, "101.jpg"), "curated-101");
+    writeFileSync(join(sourceArtDir, "stock-photo-first-101.jpg"), "source-101");
+    writeFileSync(join(sourceArtDir, "stock-photo-second-202.jpg"), "source-202");
+
+    const result = linkExplorationArt({
+      destinationDir,
+      highResArtDir,
+      sourceArtDir,
+      imageNumbers: [101, 202, 303],
+    });
+
+    expect(result).toEqual({
+      highResolutionCount: 1,
+      sourceCount: 1,
+      missingCount: 1,
+    });
+    expect(readFileSync(join(destinationDir, "101.jpg"), "utf8"))
+      .toBe("curated-101");
+    expect(readFileSync(join(destinationDir, "202.jpg"), "utf8"))
+      .toBe("source-202");
+    expect(existsSync(join(destinationDir, "303.jpg"))).toBe(false);
   });
 });
 

@@ -272,6 +272,11 @@ function parseKeywordModification(
     if (typeof value.fast !== "boolean") return null;
     keywords.fast = value.fast;
   }
+  if ("energyCostReduction" in value) {
+    const energyCostReduction = finiteNumber(value.energyCostReduction);
+    if (energyCostReduction === null || energyCostReduction < 0) return null;
+    keywords.energyCostReduction = energyCostReduction;
+  }
   if ("reclaim" in value) {
     const reclaim = finiteNumber(value.reclaim);
     if (reclaim === null) return null;

@@ -103,7 +103,7 @@ describe("loadJourneyContent", () => {
     const explorationData = {
       customCards: [],
       customDreamsigns: [],
-      encounters: Array.from({ length: 9 }, (_value, encounterIndex) => ({
+      encounters: Array.from({ length: 14 }, (_value, encounterIndex) => ({
         cardId: `exploration-source-${String(encounterIndex + 1)}`,
         prose: `Exploration fixture ${String(encounterIndex + 1)}.`,
         action: [0, 1].map((actionIndex) => ({

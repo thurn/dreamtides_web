@@ -45,6 +45,17 @@ describe("applyCardKeywordModification", () => {
 
     expect(twice.renderedText).toBe("Draw a card.\n\nReclaim 2●");
   });
+
+  it("reduces numeric energy costs without changing variable cost labels", () => {
+    const card = makeCard({ energyCost: 3, energyCosts: ["3", "X"] });
+
+    const reduced = applyCardKeywordModification(card, {
+      energyCostReduction: 1,
+    });
+
+    expect(reduced.energyCost).toBe(2);
+    expect(reduced.energyCosts).toEqual(["2", "X"]);
+  });
 });
 
 function makeDeckEntry(overrides: Partial<DeckEntry> = {}): DeckEntry {
@@ -125,7 +136,7 @@ describe("resolveDeckEntryCard", () => {
         subtype: "Spirit",
         label: "Becomes a Spirit",
       },
-      keywordModification: { fast: true, reclaim: 2 },
+      keywordModification: { fast: true, reclaim: 2, energyCostReduction: 1 },
       sparkBonus: 2,
       statOverride: { spark: 7 },
     });
@@ -141,8 +152,8 @@ describe("resolveDeckEntryCard", () => {
     expect(result.renderedText).toContain("Reclaim 2●");
     // the absolute debug override is applied after the additive spark bonus
     expect(result.spark).toBe(7);
-    // statOverride layer (spark only; energyCost still transfiguration-derived 3)
-    expect(result.energyCost).toBe(3);
+    // The persistent reduction applies to the transfiguration-derived cost.
+    expect(result.energyCost).toBe(2);
   });
 
   it("applies an additive spark bonus after a transfiguration", () => {

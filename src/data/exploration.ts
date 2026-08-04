@@ -33,7 +33,11 @@ export type ExplorationEffectKind =
   | "transfigure-fixed-selected"
   | "gain-offered-card"
   | "gain-essence-per-card"
-  | "increase-spark-all";
+  | "increase-spark-all"
+  | "gain-random-dreamsign"
+  | "purge-dreamsign-for-essence"
+  | "make-fast-all"
+  | "reduce-cost-all-and-gain-banes";
 
 const TRANSFIGURATION_EXPLORATION_EFFECT_KINDS: ReadonlySet<ExplorationEffectKind> =
   new Set(["transfigure-selected", "transfigure-fixed-selected"]);
@@ -60,6 +64,8 @@ export interface ExplorationActionContent {
   essencePerSpark?: number;
   essencePerCard?: number;
   sparkBonus?: number;
+  essence?: number;
+  energyCostReduction?: number;
   subtype?: string;
   subtypeOptions?: readonly string[];
   baneCardId?: CardId;
@@ -137,9 +143,9 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
       actions: [validateAction(actions[0]), validateAction(actions[1])],
     } satisfies ExplorationEncounterContent;
   });
-  if (encounters.length !== 9) {
+  if (encounters.length !== 14) {
     throw new Error(
-      `Invalid Exploration data: expected 9 encounters, found ${String(encounters.length)}`,
+      `Invalid Exploration data: expected 14 encounters, found ${String(encounters.length)}`,
     );
   }
   return {

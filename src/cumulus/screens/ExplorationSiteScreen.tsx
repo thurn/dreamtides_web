@@ -103,6 +103,7 @@ export type ExplorationFollowupView =
       readonly kind: "dreamsigns";
       readonly title: string;
       readonly subtitle: string;
+      readonly selectionKey: "replacedDreamsignId" | "dreamsignId";
       readonly dreamsigns: readonly {
         readonly id: string;
         readonly name: string;
@@ -338,7 +339,7 @@ export function ExplorationSiteScreen({
   const [purgeEntryId, setPurgeEntryId] = useState<string | null>(null);
   const [selectedPackIndex, setSelectedPackIndex] = useState<number | null>(null);
   const [selectedSubtype, setSelectedSubtype] = useState<string | null>(null);
-  const [replacedDreamsignId, setReplacedDreamsignId] = useState<string | null>(null);
+  const [selectedDreamsignId, setSelectedDreamsignId] = useState<string | null>(null);
   const fullArtUrl = resolveArtRef(view.fullArt);
   const trajectory = useCardTrajectory(
     cardTargetRef,
@@ -355,7 +356,7 @@ export function ExplorationSiteScreen({
     setPurgeEntryId(null);
     setSelectedPackIndex(null);
     setSelectedSubtype(null);
-    setReplacedDreamsignId(null);
+    setSelectedDreamsignId(null);
   }, [view.response]);
 
   useEffect(() => {
@@ -473,7 +474,7 @@ export function ExplorationSiteScreen({
     setPurgeEntryId(null);
     setSelectedPackIndex(null);
     setSelectedSubtype(null);
-    setReplacedDreamsignId(null);
+    setSelectedDreamsignId(null);
   };
 
   const toggleCard = (entryId: string): void => {
@@ -528,8 +529,10 @@ export function ExplorationSiteScreen({
       return;
     }
     if (followup.kind === "dreamsigns") {
-      if (replacedDreamsignId === null) return;
-      onResolve(activeAction.id, { replacedDreamsignId });
+      if (selectedDreamsignId === null) return;
+      onResolve(activeAction.id, {
+        [followup.selectionKey]: selectedDreamsignId,
+      });
     }
   };
 
@@ -537,6 +540,9 @@ export function ExplorationSiteScreen({
     setActiveActionId(null);
     setSelectedIds([]);
     setPurgeEntryId(null);
+    setSelectedPackIndex(null);
+    setSelectedSubtype(null);
+    setSelectedDreamsignId(null);
   };
 
   const canCommitFollowup = (() => {
@@ -549,7 +555,7 @@ export function ExplorationSiteScreen({
     }
     if (followup.kind === "packs") return selectedPackIndex !== null;
     if (followup.kind === "subtypes") return selectedSubtype !== null;
-    return replacedDreamsignId !== null;
+    return selectedDreamsignId !== null;
   })();
 
   return (
@@ -1232,9 +1238,9 @@ export function ExplorationSiteScreen({
                         key={dreamsign.id}
                         as="button"
                         role="radio"
-                        aria-checked={replacedDreamsignId === dreamsign.id}
-                        onClick={() => setReplacedDreamsignId(dreamsign.id)}
-                        style={{ minHeight: token("--touch-min"), display: "grid", gap: token("--space-1"), padding: token("--space-4"), borderRadius: token("--radius-control"), border: `2px solid ${replacedDreamsignId === dreamsign.id ? token("--selected") : token("--border-soft")}`, background: token("--glass-on-glass-fill"), color: token("--text-on-glass"), textAlign: "left" }}
+                        aria-checked={selectedDreamsignId === dreamsign.id}
+                        onClick={() => setSelectedDreamsignId(dreamsign.id)}
+                        style={{ minHeight: token("--touch-min"), display: "grid", gap: token("--space-1"), padding: token("--space-4"), borderRadius: token("--radius-control"), border: `2px solid ${selectedDreamsignId === dreamsign.id ? token("--selected") : token("--border-soft")}`, background: token("--glass-on-glass-fill"), color: token("--text-on-glass"), textAlign: "left" }}
                       >
                         <strong style={{ font: token("--t-button") }}>{dreamsign.name}</strong>
                         <span style={{ font: token("--t-caption"), color: token("--text-muted") }}>{dreamsign.effectText}</span>

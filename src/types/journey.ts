@@ -33,6 +33,8 @@ export interface CardTypeChange {
 /** Persistent keyword overrides applied to one concrete deck entry. */
 export interface CardKeywordModification {
   fast?: boolean;
+  /** Persistent additive reduction applied to the resolved energy cost. */
+  energyCostReduction?: number;
   /** Added Reclaim cost. Repeated grants add to this value. */
   reclaim?: number;
   /** Exact Reclaim cost override for one concrete deck entry. */
@@ -428,6 +430,7 @@ export interface GambleSiteRuntime {
 export interface ExplorationActionOfferRuntime {
   actionId: string;
   offeredCardIds: string[];
+  offeredDreamsignIds?: string[];
   packCardIds: string[][];
   replacementCardIdByEntryId: Record<string, string>;
   transfigurationByEntryId: Record<string, TransfigurationType>;
@@ -439,6 +442,7 @@ export interface ExplorationResolution {
   gainedCardIds: string[];
   gainedDreamsignIds: string[];
   purgedCardIds: string[];
+  purgedDreamsignIds?: string[];
   affectedEntryIds: string[];
   essenceGained: number;
   chosenSubtype?: string;

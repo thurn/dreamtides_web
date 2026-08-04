@@ -348,4 +348,103 @@ describe("exploration-view-model", () => {
     });
     expect(view.actions[1].followup).toEqual({ kind: "none" });
   });
+
+  it("builds Dreamsign follow-ups with UUID-keyed selection contracts", () => {
+    const source = card(sourceId, 17);
+    const heldDreamsignId = "held-dreamsign-id";
+    const state = {
+      ...createDefaultState(),
+      dreamsigns: [{
+        id: heldDreamsignId,
+        name: "Held Dreamsign",
+        effectDescription: "A synthetic sign effect.",
+        isBane: false,
+      }],
+      maxDreamsigns: 1,
+    };
+    const runtime: ExplorationSiteRuntime = {
+      kind: "exploration",
+      encounterCardId: source.id,
+      actionOffers: [
+        {
+          actionId: "random-dreamsign",
+          offeredCardIds: [],
+          offeredDreamsignIds: ["offered-dreamsign-id"],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+        {
+          actionId: "purge-dreamsign",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+      ],
+      resolution: null,
+    };
+    const content = {
+      cardDatabase: new Map([[source.cardNumber, source]]),
+      dreamAvatars: [],
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      dreamscapes: [],
+      affiliations: [],
+      guides: [guide],
+      atlasConfig: { completionLevels: [] },
+      exploration: {
+        customCards: [],
+        customDreamsigns: [],
+        encounters: [{
+          cardId: source.id,
+          prose: "The authored scene appears.",
+          actions: [
+            {
+              id: "random-dreamsign",
+              label: "Read the pattern",
+              effectText: "Gain a random dreamsign",
+              responseText: "A mark emerges.",
+              effectKind: "gain-random-dreamsign",
+            },
+            {
+              id: "purge-dreamsign",
+              label: "Break the pattern",
+              effectText: "Purge a dreamsign for essence",
+              responseText: "The force disperses.",
+              effectKind: "purge-dreamsign-for-essence",
+              essence: 50,
+            },
+          ],
+        }],
+      },
+    } as unknown as JourneyContent;
+
+    const view = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      runtime,
+      state,
+      content,
+    });
+    if (view === null) throw new Error("Expected Exploration view");
+
+    expect(view.actions[0]).toMatchObject({
+      available: true,
+      followup: {
+        kind: "dreamsigns",
+        selectionKey: "replacedDreamsignId",
+        dreamsigns: [{ id: heldDreamsignId }],
+      },
+    });
+    expect(view.actions[1]).toMatchObject({
+      available: true,
+      followup: {
+        kind: "dreamsigns",
+        selectionKey: "dreamsignId",
+        dreamsigns: [{ id: heldDreamsignId }],
+      },
+    });
+  });
 });
