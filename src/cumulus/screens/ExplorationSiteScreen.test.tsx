@@ -921,6 +921,9 @@ describe("ExplorationSiteScreen", () => {
     const secondPack = container.querySelector<HTMLElement>(
       '[data-testid="cumulus-exploration-pack-1"]',
     );
+    expect(
+      container.querySelector("[data-exploration-pack-offer]"),
+    ).not.toBeNull();
     expect(secondPack?.tagName).toBe("SECTION");
     expect(
       container.querySelector(

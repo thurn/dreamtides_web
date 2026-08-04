@@ -1294,6 +1294,13 @@ export function ExplorationSiteScreen({
     if (followup.kind === "subtypes") return selectedSubtype !== null;
     return selectedDreamsignId !== null;
   })();
+  const centeredFollowupWidth =
+    activeAction?.followup.kind === "packs"
+      ? "min(1280px, calc(100vw - 64px))"
+      : activeAction?.followup.kind === "cards" &&
+          activeAction.followup.selectionKey === "cardIds"
+        ? "min(1120px, calc(100vw - 64px))"
+        : null;
 
   return (
     <GuideGallerySiteLayout
@@ -2140,8 +2147,7 @@ export function ExplorationSiteScreen({
               ? safeAreaInsetAtLeast("top", "--space-8")
               : `calc(max(var(--safe-area-inset-top), ${token("--space-4")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`,
             right: isDesktop
-              ? activeAction.followup.kind === "cards" &&
-                activeAction.followup.selectionKey === "cardIds"
+              ? centeredFollowupWidth !== null
                 ? 0
                 : `calc(max(var(--safe-area-inset-right), ${token("--space-8")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`
               : `max(var(--safe-area-inset-right), ${token("--space-4")})`,
@@ -2149,25 +2155,18 @@ export function ExplorationSiteScreen({
               ? DESKTOP_FLOATING_PANEL_BOTTOM
               : JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
             left: isDesktop
-              ? activeAction.followup.kind === "cards" &&
-                activeAction.followup.selectionKey === "cardIds"
+              ? centeredFollowupWidth !== null
                 ? 0
                 : "auto"
               : `max(var(--safe-area-inset-left), ${token("--space-4")})`,
             width:
-              isDesktop &&
-              activeAction.followup.kind === "cards" &&
-              activeAction.followup.selectionKey === "cardIds"
-                ? "min(1120px, calc(100vw - 64px))"
+              isDesktop && centeredFollowupWidth !== null
+                ? centeredFollowupWidth
                 : isDesktop
                   ? "min(920px, calc(100vw - 64px))"
                   : undefined,
             marginInline:
-              isDesktop &&
-              activeAction.followup.kind === "cards" &&
-              activeAction.followup.selectionKey === "cardIds"
-                ? "auto"
-                : undefined,
+              isDesktop && centeredFollowupWidth !== null ? "auto" : undefined,
             minHeight: 0,
             display: "grid",
             alignItems: "center",
@@ -2331,43 +2330,49 @@ export function ExplorationSiteScreen({
             />
           )}
           {activeAction.followup.kind === "packs" && (
-            <GlassPanel
-              eyebrow="Exploration"
-              title={activeAction.followup.title}
-              subtitle={activeAction.followup.subtitle}
-              headingLevel="h1"
+            <article
+              data-exploration-pack-offer=""
+              style={{ width: "100%", minHeight: 0, maxHeight: "100%" }}
             >
-              <div style={{ display: "grid", gridTemplateColumns: isDesktop ? "repeat(2, minmax(0, 1fr))" : "1fr", gap: token("--space-4"), padding: token("--space-5"), overflow: "auto" }}>
-                {activeAction.followup.packs.map((pack) => (
-                  <section
-                    key={pack.index}
-                    data-testid={`cumulus-exploration-pack-${String(pack.index)}`}
-                    style={{
-                      display: "grid",
-                      gap: token("--space-3"),
-                      padding: token("--space-4"),
-                      borderRadius: token("--radius-panel"),
-                      border: `2px solid ${token("--border-soft")}`,
-                      background: token("--glass-on-glass-fill"),
-                      color: token("--text-on-glass"),
-                    }}
-                  >
-                    <strong style={{ font: token("--t-button"), textAlign: "left" }}>Pack {String(pack.index + 1)}</strong>
-                    <span style={{ display: "grid", gridTemplateColumns: `repeat(${String(pack.cards.length)}, minmax(0, 1fr))`, gap: token("--space-2") }}>
-                      {pack.cards.map((card) => <GameCard key={card.entryId} model={card.model} />)}
-                    </span>
-                    <GlassButton
-                      label="Choose"
-                      accessibilityLabel={`Choose Pack ${String(pack.index + 1)}`}
-                      variant="accent"
-                      placement="onGlass"
-                      onPress={() => onResolve(activeAction.id, { packIndex: pack.index })}
-                      testId={`cumulus-exploration-pack-${String(pack.index)}-choose`}
-                    />
-                  </section>
-                ))}
-              </div>
-            </GlassPanel>
+              <GlassPanel
+                eyebrow="Exploration"
+                title={activeAction.followup.title}
+                subtitle={activeAction.followup.subtitle}
+                headingLevel="h1"
+                headerSpacing="medium"
+              >
+                <div style={{ display: "grid", gridTemplateColumns: isDesktop ? "repeat(2, minmax(0, 1fr))" : "1fr", gap: token("--space-6"), padding: token("--space-6"), overflow: "auto" }}>
+                  {activeAction.followup.packs.map((pack) => (
+                    <section
+                      key={pack.index}
+                      data-testid={`cumulus-exploration-pack-${String(pack.index)}`}
+                      style={{
+                        display: "grid",
+                        gap: token("--space-4"),
+                        padding: token("--space-5"),
+                        borderRadius: token("--radius-panel"),
+                        border: `2px solid ${token("--border-soft")}`,
+                        background: token("--glass-on-glass-fill"),
+                        color: token("--text-on-glass"),
+                      }}
+                    >
+                      <strong style={{ font: token("--t-button"), textAlign: "left" }}>Pack {String(pack.index + 1)}</strong>
+                      <span style={{ display: "grid", gridTemplateColumns: `repeat(${String(pack.cards.length)}, minmax(0, 1fr))`, gap: token("--space-3") }}>
+                        {pack.cards.map((card) => <GameCard key={card.entryId} model={card.model} />)}
+                      </span>
+                      <GlassButton
+                        label="Choose"
+                        accessibilityLabel={`Choose Pack ${String(pack.index + 1)}`}
+                        variant="accent"
+                        placement="onGlass"
+                        onPress={() => onResolve(activeAction.id, { packIndex: pack.index })}
+                        testId={`cumulus-exploration-pack-${String(pack.index)}-choose`}
+                      />
+                    </section>
+                  ))}
+                </div>
+              </GlassPanel>
+            </article>
           )}
           {(activeAction.followup.kind === "subtypes" || activeAction.followup.kind === "dreamsigns") && (
             <GlassPanel
