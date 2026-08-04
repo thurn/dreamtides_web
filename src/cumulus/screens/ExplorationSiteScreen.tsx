@@ -2360,14 +2360,25 @@ export function ExplorationSiteScreen({
                       <span style={{ display: "grid", gridTemplateColumns: `repeat(${String(pack.cards.length)}, minmax(0, 1fr))`, gap: token("--space-3") }}>
                         {pack.cards.map((card) => <GameCard key={card.entryId} model={card.model} />)}
                       </span>
-                      <GlassButton
-                        label="Choose"
-                        accessibilityLabel={`Choose Pack ${String(pack.index + 1)}`}
-                        variant="accent"
-                        placement="onGlass"
-                        onPress={() => onResolve(activeAction.id, { packIndex: pack.index })}
-                        testId={`cumulus-exploration-pack-${String(pack.index)}-choose`}
-                      />
+                      <div
+                        data-exploration-pack-action=""
+                        style={{
+                          display: isDesktop ? "flex" : "grid",
+                          justifyContent: isDesktop ? "center" : undefined,
+                          margin: isDesktop
+                            ? `${token("--space-8")} ${token("--space-8")} ${token("--space-7")}`
+                            : `${token("--space-4")} 0 ${token("--space-2")}`,
+                        }}
+                      >
+                        <GlassButton
+                          label="Choose"
+                          accessibilityLabel={`Choose Pack ${String(pack.index + 1)}`}
+                          variant="accent"
+                          placement="onGlass"
+                          onPress={() => onResolve(activeAction.id, { packIndex: pack.index })}
+                          testId={`cumulus-exploration-pack-${String(pack.index)}-choose`}
+                        />
+                      </div>
                     </section>
                   ))}
                 </div>
