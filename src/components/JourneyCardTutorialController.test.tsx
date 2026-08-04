@@ -18,6 +18,7 @@ const mocks = vi.hoisted(() => {
   return {
     open: vi.fn(() => Promise.resolve(1)),
     select: vi.fn(),
+    buildView: vi.fn(),
     context,
     state: {
       cardTutorialPresentation: null,
@@ -70,13 +71,19 @@ vi.mock("../rules/card-tutorial-guidance", () => ({
 vi.mock(
   "../screens/cumulus_adapters/card-tutorial-guidance-view-model",
   () => ({
-    buildCardTutorialGuidanceView: () => null,
+    buildCardTutorialGuidanceView: (...args: unknown[]) => {
+      const result: unknown = mocks.buildView(...args);
+      return result;
+    },
   }),
 );
 
 vi.mock("../cumulus/screens/BattleTutorialGuidance", () => ({
-  BattleTutorialGuidance: () => (
-    <div data-card-tutorial-guidance="">
+  BattleTutorialGuidance: ({ view }: { view: unknown }) => (
+    <div
+      data-card-tutorial-guidance=""
+      data-guidance-view={view === null ? "hidden" : "visible"}
+    >
       <div data-game-card-source="" data-card-id="overlay-card" />
     </div>
   ),
@@ -117,6 +124,13 @@ beforeEach(() => {
     toJSON: () => ({}),
   });
   mocks.open.mockClear();
+  mocks.buildView.mockReset();
+  mocks.buildView.mockImplementation((presentation: unknown) =>
+    presentation == null ? null : { presentation },
+  );
+  (
+    mocks.state as unknown as { cardTutorialPresentation: unknown }
+  ).cardTutorialPresentation = null;
   mocks.context = {
     screenKey: "journey:1:site:site-1",
     event: "card-seen",
@@ -241,6 +255,47 @@ describe("JourneyCardTutorialController", () => {
       "journey:1:site:exploration:concept:transfiguration",
       [],
     );
+
+    act(() => root.unmount());
+  });
+
+  it("withholds a shared Exploration presentation until the local action surface is visible", async () => {
+    mocks.context = {
+      screenKey: "journey:1:site:exploration:concept:transfiguration",
+      event: "transfiguration-seen",
+      visibilityGate: "exploration-actions",
+    };
+    (
+      mocks.state as unknown as { cardTutorialPresentation: unknown }
+    ).cardTutorialPresentation = {
+      screenKey: mocks.context.screenKey,
+      triggerId: "transfiguration",
+    };
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    await act(async () => {
+      root.render(<Harness cardIds={[]} />);
+      await Promise.resolve();
+    });
+    expect(
+      container.querySelector("[data-guidance-view]")?.getAttribute(
+        "data-guidance-view",
+      ),
+    ).toBe("hidden");
+
+    await act(async () => {
+      const source = document.createElement("section");
+      source.dataset.tutorialGuidanceConcept = "exploration-actions";
+      container.firstElementChild?.append(source);
+      await Promise.resolve();
+    });
+    expect(
+      container.querySelector("[data-guidance-view]")?.getAttribute(
+        "data-guidance-view",
+      ),
+    ).toBe("visible");
 
     act(() => root.unmount());
   });

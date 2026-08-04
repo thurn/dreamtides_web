@@ -3,6 +3,7 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
   type RefObject,
 } from "react";
 import {
@@ -75,23 +76,53 @@ export function JourneyCardTutorialController({
   const screenKey = context?.screenKey ?? null;
   const triggerEvent = context?.event ?? null;
   const visibilityGate = context?.visibilityGate;
+  const [visibilityGateReady, setVisibilityGateReady] = useState(false);
+  const presentationLocallyVisible =
+    visibilityGate === undefined || visibilityGateReady;
   const presentation = state.cardTutorialPresentation ?? null;
   const siteTutorialActive =
     activeFirstVisitTutorialSite(state.journey) !== null;
   const view = useMemo(
     () =>
       buildCardTutorialGuidanceView(
-        siteTutorialActive ? null : presentation,
+        siteTutorialActive || !presentationLocallyVisible
+          ? null
+          : presentation,
         cardDatabase,
       ),
-    [cardDatabase, presentation, siteTutorialActive],
+    [
+      cardDatabase,
+      presentation,
+      presentationLocallyVisible,
+      siteTutorialActive,
+    ],
   );
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    const inspect = (): void => {
+      setVisibilityGateReady(
+        stage !== null && tutorialContextIsVisible(stage, visibilityGate),
+      );
+    };
+    inspect();
+    if (stage === null || visibilityGate === undefined) return undefined;
+    const observer = new MutationObserver(inspect);
+    observer.observe(stage, {
+      attributeFilter: ["data-tutorial-guidance-concept"],
+      attributes: true,
+      childList: true,
+      subtree: true,
+    });
+    return () => observer.disconnect();
+  }, [screenKey, stageRef, visibilityGate]);
 
   useEffect(() => {
     const stage = stageRef.current;
     if (
       stage === null ||
       screenKey === null ||
+      !presentationLocallyVisible ||
       presentation !== null ||
       (state.cardTutorialScreenKeysSeen ?? []).includes(screenKey)
     ) {
@@ -139,6 +170,7 @@ export function JourneyCardTutorialController({
     };
   }, [
     actions,
+    presentationLocallyVisible,
     presentation,
     provider,
     screenKey,

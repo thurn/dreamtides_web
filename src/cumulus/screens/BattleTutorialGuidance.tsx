@@ -205,8 +205,7 @@ export function BattleTutorialGuidance({
   useEffect(() => {
     if (
       duration === null ||
-      view?.source.kind === "journey-card" ||
-      view?.source.kind === "journey-site"
+      view?.source.kind === "journey-card"
     ) {
       return undefined;
     }

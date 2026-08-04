@@ -553,4 +553,47 @@ describe("BattleTutorialGuidance", () => {
     boxSpy.mockRestore();
     vi.useRealTimers();
   });
+
+  it("dismisses site guidance after its authored visible duration", () => {
+    vi.useFakeTimers();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    const onDurationComplete = vi.fn();
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <BattleTutorialGuidance
+            view={{
+              presentationId: "site-tutorial:transfiguration",
+              triggerId: "transfiguration",
+              messageIndex: 0,
+              messageCount: 1,
+              delay: 1,
+              ...guidanceFields("Cards can be transfigured.", {
+                bubbleWidth: 500,
+              }),
+              duration: 5,
+              source: { kind: "journey-site" },
+            }}
+            onDismiss={() => undefined}
+            onDurationComplete={onDurationComplete}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(5_999);
+    });
+    expect(onDurationComplete).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(onDurationComplete).toHaveBeenCalledOnce();
+
+    act(() => root.unmount());
+    vi.useRealTimers();
+  });
 });
