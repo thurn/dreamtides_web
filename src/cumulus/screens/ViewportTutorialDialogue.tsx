@@ -9,7 +9,10 @@ import {
   type CharacterDialogueModel,
 } from "../components/overlay/CharacterDialogue";
 import { token } from "../primitives/tokens";
-import { placeCardTutorialDialogue } from "./card-tutorial-dialogue-placement";
+import {
+  placeCardTutorialDialogue,
+  placeTutorialDialogueAboveAnchor,
+} from "./card-tutorial-dialogue-placement";
 import { useIsDesktop } from "./use-is-desktop";
 
 export interface ViewportTutorialDialogueView {
@@ -51,9 +54,11 @@ export function ViewportTutorialDialogue({
 }: ViewportTutorialDialogueProps): ReactElement {
   const desktop = useIsDesktop();
   const layoutRef = useRef<HTMLDivElement | null>(null);
-  const [position, setPosition] = useState<{ left: number; top: number } | null>(
-    null,
-  );
+  const [position, setPosition] = useState<{
+    left: number;
+    top: number | null;
+    bottom: number | null;
+  } | null>(null);
 
   useLayoutEffect(() => {
     const layout = layoutRef.current;
@@ -78,21 +83,60 @@ export function ViewportTutorialDialogue({
         .filter((obstacle) => !layout.contains(obstacle))
         .map((obstacle) => obstacle.getBoundingClientRect())
         .filter((rect) => rect.width > 0 && rect.height > 0);
+      const anchor =
+        kind === "site"
+          ? document.querySelector<HTMLElement>(
+              "[data-tutorial-guidance-anchor]",
+            )
+          : null;
+      const anchorRect =
+        anchor === null
+          ? undefined
+          : {
+              left: anchor.offsetLeft,
+              top: anchor.offsetTop,
+              right: anchor.offsetLeft + anchor.offsetWidth,
+              bottom: anchor.offsetTop + anchor.offsetHeight,
+              width: anchor.offsetWidth,
+              height: anchor.offsetHeight,
+            };
       const gap = Number.parseFloat(
         window.getComputedStyle(layout).getPropertyValue("--space-4"),
       );
-      setPosition(
-        placeCardTutorialDialogue({
+      const resolvedGap = Number.isFinite(gap) ? gap : 0;
+      if (
+        anchorRect !== undefined &&
+        anchorRect.width > 0 &&
+        anchorRect.height > 0
+      ) {
+        const anchoredPosition = placeTutorialDialogueAboveAnchor({
           viewportWidth: window.innerWidth,
           viewportHeight: window.innerHeight,
           dialogueWidth: dialogueRect.width,
           dialogueHeight: dialogueRect.height,
-          cardRects,
-          obstacleRects,
-          gap: Number.isFinite(gap) ? gap : 0,
+          anchorRect,
+          gap: resolvedGap,
           horizontalOffset: view.horizontalOffset,
           verticalOffset: view.verticalOffset,
-        }),
+        });
+        if (anchoredPosition !== null) {
+          setPosition({ ...anchoredPosition, top: null });
+          return;
+        }
+      }
+      const floatingPosition = placeCardTutorialDialogue({
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight,
+        dialogueWidth: dialogueRect.width,
+        dialogueHeight: dialogueRect.height,
+        cardRects,
+        obstacleRects,
+        gap: resolvedGap,
+        horizontalOffset: view.horizontalOffset,
+        verticalOffset: view.verticalOffset,
+      });
+      setPosition(
+        { ...floatingPosition, bottom: null },
       );
     };
 
@@ -115,6 +159,7 @@ export function ViewportTutorialDialogue({
     view.horizontalOffset,
     view.id,
     view.verticalOffset,
+    kind,
   ]);
 
   return (
@@ -142,7 +187,8 @@ export function ViewportTutorialDialogue({
         style={{
           position: "absolute",
           left: position === null ? 0 : position.left,
-          top: position === null ? 0 : position.top,
+          top: position === null ? 0 : (position.top ?? undefined),
+          bottom: position?.bottom ?? undefined,
           visibility: position === null ? "hidden" : "visible",
           width: desktop
             ? `min(calc(100vw - (${token("--space-4")} * 2)), ${String(view.bubbleWidth)}px)`

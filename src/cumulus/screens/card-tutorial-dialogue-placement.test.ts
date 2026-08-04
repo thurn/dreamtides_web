@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { placeCardTutorialDialogue } from "./card-tutorial-dialogue-placement";
+import {
+  placeCardTutorialDialogue,
+  placeTutorialDialogueAboveAnchor,
+} from "./card-tutorial-dialogue-placement";
 
 function rect(left: number, top: number, width: number, height: number) {
   return {
@@ -86,5 +89,21 @@ describe("placeCardTutorialDialogue", () => {
 
     expect(position.top).toBe(196);
     expect(position.top).toBeGreaterThanOrEqual(obstacle.bottom + 8);
+  });
+
+  it("anchors site guidance directly above its narrative panel", () => {
+    const narrative = rect(12, 620, 400, 210);
+    const position = placeTutorialDialogueAboveAnchor({
+      viewportWidth: 1440,
+      viewportHeight: 900,
+      dialogueWidth: 500,
+      dialogueHeight: 100,
+      anchorRect: narrative,
+      gap: 8,
+    });
+
+    expect(position).toEqual({ left: 12, bottom: 288 });
+    if (position === null) throw new Error("Expected anchored placement.");
+    expect(900 - position.bottom - 100).toBe(512);
   });
 });

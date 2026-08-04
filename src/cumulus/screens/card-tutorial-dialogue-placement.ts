@@ -12,8 +12,50 @@ export interface CardTutorialPoint {
   readonly top: number;
 }
 
+export interface AnchoredTutorialPoint {
+  readonly left: number;
+  readonly bottom: number;
+}
+
 function clamp(value: number, minimum: number, maximum: number): number {
   return Math.min(Math.max(value, minimum), maximum);
+}
+
+/**
+ * Pin dialogue above a visible screen region by its bottom edge so late text
+ * reflow cannot move the bubble down across the anchored content.
+ */
+export function placeTutorialDialogueAboveAnchor(params: {
+  readonly viewportWidth: number;
+  readonly viewportHeight: number;
+  readonly dialogueWidth: number;
+  readonly dialogueHeight: number;
+  readonly anchorRect: CardTutorialRect;
+  readonly gap: number;
+  readonly horizontalOffset?: number;
+  readonly verticalOffset?: number;
+}): AnchoredTutorialPoint | null {
+  const {
+    viewportWidth,
+    viewportHeight,
+    dialogueWidth,
+    dialogueHeight,
+    anchorRect,
+    gap,
+    horizontalOffset = 0,
+    verticalOffset = 0,
+  } = params;
+  if (anchorRect.top - gap - dialogueHeight + verticalOffset < gap) {
+    return null;
+  }
+  return {
+    left: clamp(
+      anchorRect.left + horizontalOffset,
+      gap,
+      Math.max(gap, viewportWidth - gap - dialogueWidth),
+    ),
+    bottom: viewportHeight - anchorRect.top + gap - verticalOffset,
+  };
 }
 
 function overlaps(

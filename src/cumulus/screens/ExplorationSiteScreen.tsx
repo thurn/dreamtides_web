@@ -1373,6 +1373,7 @@ export function ExplorationSiteScreen({
         <motion.section
           data-exploration-narrative=""
           data-tutorial-guidance-concept="exploration-actions"
+          data-tutorial-guidance-anchor=""
           data-tutorial-guidance-obstacle=""
           initial={{ opacity: 0, y: reduceMotion ? 0 : 18 }}
           animate={{ opacity: 1, y: 0 }}

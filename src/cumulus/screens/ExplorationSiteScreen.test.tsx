@@ -318,12 +318,14 @@ describe("ExplorationSiteScreen", () => {
         '[data-testid="cumulus-exploration-narrative-copy"]',
       )?.textContent,
     ).toBe("A synthetic encounter waits in the dark.");
+    const tutorialAnchor = container.querySelector(
+      '[data-tutorial-guidance-concept="exploration-actions"]',
+    );
     expect(
-      container
-        .querySelector(
-          '[data-tutorial-guidance-concept="exploration-actions"]',
-        )
-        ?.hasAttribute("data-tutorial-guidance-obstacle"),
+      tutorialAnchor?.hasAttribute("data-tutorial-guidance-obstacle"),
+    ).toBe(true);
+    expect(
+      tutorialAnchor?.hasAttribute("data-tutorial-guidance-anchor"),
     ).toBe(true);
     expect(
       container
