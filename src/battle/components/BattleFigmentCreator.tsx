@@ -257,11 +257,12 @@ function buildDestination({
 }
 
 function formatCatalogOptionLabel(entry: FigmentCatalogEntry): string {
+  const displayName = entry.name?.trim() || entry.subtype;
   const keywordSuffix =
     entry.keyword === undefined
       ? ""
       : ` · ${FIGMENT_KEYWORD_LABELS[entry.keyword]}`;
-  return `${entry.subtype} (✦${String(entry.baseSpark)})${keywordSuffix}`;
+  return `${displayName} (✦${String(entry.baseSpark)})${keywordSuffix}`;
 }
 
 /**
