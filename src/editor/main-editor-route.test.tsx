@@ -54,6 +54,12 @@ vi.mock("./EncounterEditorApp", () => ({
   },
 }));
 
+vi.mock("./ExplorationEditorApp", () => ({
+  default: function MockExplorationEditorApp() {
+    return null;
+  },
+}));
+
 vi.mock("../debug/OffersDebugApp", () => ({
   default: function MockOffersDebugApp() {
     return null;
@@ -208,6 +214,18 @@ describe("main editor route", () => {
 
   it("mounts the isolated encounter editor for the Vite-served /encounters/ path", async () => {
     window.history.pushState(null, "", "/encounters/");
+
+    await import("../main.tsx");
+
+    expect(mocks.appImport).not.toHaveBeenCalled();
+    expect(mocks.createRoot).toHaveBeenCalledWith(
+      document.getElementById("root"),
+    );
+    expect(mocks.render).toHaveBeenCalledTimes(1);
+  });
+
+  it("mounts the isolated exploration editor for the Vite-served /exploration/ path", async () => {
+    window.history.pushState(null, "", "/exploration/");
 
     await import("../main.tsx");
 

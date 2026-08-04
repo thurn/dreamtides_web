@@ -572,6 +572,7 @@ rendered-text = "Gain 1 energy."
         referenced_card_id: str,
         placeholder: str = "card_id",
         prose: str | None = None,
+        variable_value: object | None = None,
     ) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -642,10 +643,14 @@ rendered-text = "Gain 1 energy."
                 for action in pair["actions"]:
                     variables = {}
                     if action["template_id"] == 1:
-                        variables[placeholder] = {
-                            "id": referenced_card_id,
-                            "display_name": "Synthetic Animal",
-                        }
+                        variables[placeholder] = (
+                            {
+                                "id": referenced_card_id,
+                                "display_name": "Synthetic Animal",
+                            }
+                            if variable_value is None
+                            else variable_value
+                        )
                     actions.append(
                         {
                             "template_id": action["template_id"],
@@ -739,6 +744,25 @@ rendered-text = "Gain 1 energy."
             "33333333-3333-4333-8333-333333333333"
         )
         self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_rejects_non_integer_values_for_editable_mechanical_placeholders(self) -> None:
+        for placeholder in (
+            "essence_per_spark",
+            "energy_cost_reduction",
+            "nightmare_count",
+            "offer_count",
+            "pack_count",
+            "pack_size",
+            "spark_bonus",
+        ):
+            with self.subTest(placeholder=placeholder):
+                result = self.run_output_validator(
+                    "33333333-3333-4333-8333-333333333333",
+                    placeholder=placeholder,
+                    variable_value="not a number",
+                )
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("must be an integer", result.stderr)
 
     def test_rejects_player_references_in_prose(self) -> None:
         for prose in (

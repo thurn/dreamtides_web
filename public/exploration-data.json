@@ -54,10 +54,12 @@
           "effectText": "Draft a Survivor from 4 choices",
           "templateId": 14,
           "templateVariables": {
-            "predicate": "Survivor"
+            "predicate": "Survivor",
+            "offer_count": 4
           },
           "effectKind": "draft-card",
           "predicate": "survivor",
+          "count": 1,
           "offerCount": 4
         }
       ]
@@ -72,10 +74,12 @@
           "effectText": "Draft a Spirit Animal from 4 choices",
           "templateId": 14,
           "templateVariables": {
-            "predicate": "Spirit Animal"
+            "predicate": "Spirit Animal",
+            "offer_count": 4
           },
           "effectKind": "draft-card",
           "predicate": "spirit-animal",
+          "count": 1,
           "offerCount": 4
         },
         {
@@ -116,10 +120,12 @@
           "effectText": "Draft a ≤2● cost Character from 4 choices",
           "templateId": 14,
           "templateVariables": {
-            "predicate": "≤2● cost Character"
+            "predicate": "≤2● cost Character",
+            "offer_count": 4
           },
           "effectKind": "draft-card",
           "predicate": "cheap-character",
+          "count": 1,
           "offerCount": 4
         }
       ]
@@ -166,10 +172,12 @@
           "effectText": "Draft a Spirit Animal from 4 choices",
           "templateId": 14,
           "templateVariables": {
-            "predicate": "Spirit Animal"
+            "predicate": "Spirit Animal",
+            "offer_count": 4
           },
           "effectKind": "draft-card",
           "predicate": "spirit-animal",
+          "count": 1,
           "offerCount": 4
         },
         {
@@ -211,10 +219,12 @@
           "effectText": "Draft a Spirit Animal from 4 choices",
           "templateId": 14,
           "templateVariables": {
-            "predicate": "Spirit Animal"
+            "predicate": "Spirit Animal",
+            "offer_count": 4
           },
           "effectKind": "draft-card",
           "predicate": "spirit-animal",
+          "count": 1,
           "offerCount": 4
         }
       ]
@@ -259,9 +269,11 @@
         {
           "id": "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:pair-5:template-36",
           "label": "Answer Their Muster",
-          "effectText": "Choose one of 2 packs of Warrior cards to add to your deck",
+          "effectText": "Choose one of 2 packs of 3 Warrior cards to add to your deck",
           "templateId": 36,
           "templateVariables": {
+            "pack_count": 2,
+            "pack_size": 3,
             "predicate": "Warrior"
           },
           "effectKind": "choose-pack",
@@ -274,7 +286,9 @@
           "label": "Receive Their Blessing",
           "effectText": "All characters in your deck gain +1✦",
           "templateId": 64,
-          "templateVariables": {},
+          "templateVariables": {
+            "spark_bonus": 1
+          },
           "effectKind": "increase-spark-all",
           "sparkBonus": 1
         }
@@ -298,7 +312,8 @@
           "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards.",
           "templateId": 65,
           "templateVariables": {
-            "count": 3
+            "energy_cost_reduction": 1,
+            "nightmare_count": 3
           },
           "effectKind": "reduce-cost-all-and-gain-nightmares",
           "energyCostReduction": 1,
@@ -313,9 +328,11 @@
         {
           "id": "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-36",
           "label": "Rally at the Crest",
-          "effectText": "Choose one of 2 packs of Warrior cards to add to your deck",
+          "effectText": "Choose one of 2 packs of 3 Warrior cards to add to your deck",
           "templateId": 36,
           "templateVariables": {
+            "pack_count": 2,
+            "pack_size": 3,
             "predicate": "Warrior"
           },
           "effectKind": "choose-pack",
@@ -329,7 +346,8 @@
           "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards.",
           "templateId": 65,
           "templateVariables": {
-            "count": 3
+            "energy_cost_reduction": 1,
+            "nightmare_count": 3
           },
           "effectKind": "reduce-cost-all-and-gain-nightmares",
           "energyCostReduction": 1,
@@ -379,12 +397,13 @@
           "templateId": 15,
           "templateVariables": {
             "predicate": "Survivor",
+            "offer_count": 4,
             "count": 2
           },
           "effectKind": "draft-card",
           "predicate": "survivor",
-          "offerCount": 4,
-          "count": 2
+          "count": 2,
+          "offerCount": 4
         },
         {
           "id": "123baf70-305a-4583-bdba-a10b5153fbeb:pair-1:template-19",

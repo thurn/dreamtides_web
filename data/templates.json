@@ -53,15 +53,15 @@
   },
   {
     "template_id": 14,
-    "template": "Draft a {predicate} from 4 choices"
+    "template": "Draft a {predicate} from {offer_count} choices"
   },
   {
     "template_id": 15,
-    "template": "Draft a {predicate} from 4 choices and gain {count} copies of it"
+    "template": "Draft a {predicate} from {offer_count} choices and gain {count} copies of it"
   },
   {
     "template_id": 16,
-    "template": "Take any number of {predicate} cards from 4 choices"
+    "template": "Take any number of {predicate} cards from {offer_count} choices"
   },
   {
     "template_id": 17,
@@ -133,7 +133,7 @@
   },
   {
     "template_id": 36,
-    "template": "Choose one of 2 packs of {predicate} cards to add to your deck"
+    "template": "Choose one of {pack_count} packs of {pack_size} {predicate} cards to add to your deck"
   },
   {
     "template_id": 37,
@@ -230,7 +230,7 @@
   },
   {
     "template_id": 60,
-    "template": "Purge a chosen card and gain {essence_per_energy} essence for each ✦ it had"
+    "template": "Purge a chosen card and gain {essence_per_spark} essence for each ✦ it had"
   },
   {
     "template_id": 61,
@@ -246,12 +246,12 @@
   },
   {
     "template_id": 64,
-    "template": "All characters in your deck gain +1✦",
+    "template": "All characters in your deck gain +{spark_bonus}✦",
     "balance_class": "unique_effect"
   },
   {
     "template_id": 65,
-    "template": "All cards in your deck are reduced in cost by 1●. Gain {count} Nightmare cards.",
+    "template": "All cards in your deck are reduced in cost by {energy_cost_reduction}●. Gain {nightmare_count} Nightmare cards.",
     "balance_class": "unique_effect"
   },
   {
@@ -274,7 +274,7 @@
   },
   {
     "template_id": 70,
-    "template": "Gain {count} Nightmare cards. Gain {card_name}."
+    "template": "Gain {nightmare_count} Nightmare cards. Gain {card_name}."
   },
   {
     "template_id": 71,

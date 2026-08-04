@@ -411,6 +411,39 @@ describe("Exploration provider", () => {
     });
   });
 
+  it("purges an unrestricted selected card when the action has no predicate", () => {
+    const purgeAction: ExplorationActionContent = {
+      id: "purge-any-card",
+      label: "Purge a chosen card",
+      effectText: "Purge a chosen card",
+      effectKind: "purge-selected",
+      count: 1,
+    };
+    const fallbackAction: ExplorationActionContent = {
+      id: "gain-source",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([purgeAction, fallbackAction]);
+    const state = buildState(content);
+    const selectedEntry = state.journey.deck[0];
+    if (selectedEntry === undefined) throw new Error("Expected a deck entry");
+    const purgedCardId = content.cardDatabase.get(selectedEntry.cardNumber)?.id;
+    if (purgedCardId === undefined) throw new Error("Expected a catalog card");
+
+    const result = resolve(content, state.journey, purgeAction.id, {
+      entryIds: [selectedEntry.entryId],
+    });
+    expect(result.deck).toHaveLength(state.journey.deck.length - 1);
+    expect(result.deck.some((entry) => entry.entryId === selectedEntry.entryId)).toBe(false);
+    expect(result.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: { affectedEntryIds: [], purgedCardIds: [purgedCardId] },
+    });
+  });
+
   it("mints a random Dreamsign offer and purges a UUID-selected Dreamsign for essence", () => {
     const randomDreamsignAction: ExplorationActionContent = {
       id: "random-dreamsign",

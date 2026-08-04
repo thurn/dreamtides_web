@@ -351,6 +351,13 @@ def validate_variables(
             "essence2",
             "essence_per_card",
             "essence_per_energy",
+            "essence_per_spark",
+            "energy_cost_reduction",
+            "nightmare_count",
+            "offer_count",
+            "pack_count",
+            "pack_size",
+            "spark_bonus",
         }:
             require_int(value, value_path, 1)
         elif isinstance(value, (dict, list)) or value is None or value == "":

@@ -66,6 +66,10 @@ if (pathname === "/editor" || pathname === "/cards") {
   const { default: EncounterEditorApp } =
     await import("./editor/EncounterEditorApp");
   renderStrict(<EncounterEditorApp />);
+} else if (pathname === "/exploration") {
+  const { default: ExplorationEditorApp } =
+    await import("./editor/ExplorationEditorApp");
+  renderStrict(<ExplorationEditorApp />);
 } else if (
   pathname === "/dream-avatars" ||
   pathname === "/avatars" ||
@@ -135,6 +139,7 @@ if (pathname === "/editor" || pathname === "/cards") {
     import.meta.hot.on("figment-data:changed", reloadForData);
     import.meta.hot.on("dreamwell-data:changed", reloadForData);
     import.meta.hot.on("config-data:changed", reloadForData);
+    import.meta.hot.on("exploration-data:changed", reloadForData);
   }
 
   const [

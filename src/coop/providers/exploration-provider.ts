@@ -498,9 +498,12 @@ export function resolveExplorationChoice(input: {
     case "purge-selected": {
       const entryIds = stringArray(selection.entryIds);
       const required = action.count ?? 1;
-      if (entryIds === null || entryIds.length !== required || action.predicate === undefined) return null;
+      if (entryIds === null || entryIds.length !== required) return null;
+      const predicate = action.predicate;
       const selected = entryIds.map((entryId) => cardForEntry(next, content, entryId));
-      if (selected.some((entry) => entry === null || !matchesPredicate(entry.card, action.predicate as ExplorationPredicate))) return null;
+      if (selected.some((entry) =>
+        entry === null ||
+        (predicate !== undefined && !matchesPredicate(entry.card, predicate)))) return null;
       const targets = entryIds.map((entryId) => deckTarget(next, content, entryId));
       if (
         targets.some((target) => target === null) ||

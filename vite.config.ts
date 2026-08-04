@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import type { Plugin, ViteDevServer } from "vite";
 import { createCardEditorApiMiddleware } from "./scripts/card-editor-api.mjs";
 import { createEncounterEditorApiMiddleware } from "./scripts/encounter-editor-api.mjs";
+import { createExplorationEditorApiMiddleware } from "./scripts/exploration-editor-api.mjs";
 import { createDreamsignEditorApiMiddleware } from "./scripts/dreamsign-editor-api.mjs";
 import { createDreamAvatarEditorApiMiddleware } from "./scripts/dream-avatar-editor-api.mjs";
 import { createTidesEditorApiMiddleware } from "./scripts/tides-editor-api.mjs";
@@ -110,6 +111,28 @@ function encounterEditorApiPlugin(): Plugin {
     configureServer(server) {
       server.middlewares.use(
         createEncounterEditorApiMiddleware({ rootDir: __dirname }),
+      );
+    },
+  };
+}
+
+/** Vite plugin that serves the TOML-backed Exploration production editor. */
+function explorationEditorApiPlugin(): Plugin {
+  return {
+    name: "exploration-editor-api",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(
+        createExplorationEditorApiMiddleware({
+          rootDir: __dirname,
+          onChanged(change) {
+            server.ws.send({
+              type: "custom",
+              event: "exploration-data:changed",
+              data: change,
+            });
+          },
+        }),
       );
     },
   };
@@ -842,6 +865,7 @@ export default defineConfig({
     journeyLogPlugin(),
     cardEditorApiPlugin(),
     encounterEditorApiPlugin(),
+    explorationEditorApiPlugin(),
     dreamsignEditorApiPlugin(),
     glossaryEditorApiPlugin(),
     glossaryDataHotReloadPlugin(),
@@ -888,6 +912,11 @@ export default defineConfig({
         // sibling .tmp/.bak files. Ignore the source and transaction siblings
         // so candidate selection and inline text saves stay in-place.
         encounterCandidatesWatchPattern,
+        // Exploration editor saves update canonical templates and regenerate
+        // the public runtime catalog. Its targeted websocket event refreshes
+        // journey pages while the editor keeps its in-progress UI state.
+        path.resolve(path.join(__dirname, "data", "templates.json")),
+        path.resolve(path.join(__dirname, "public", "exploration-data.json")),
         // Saving a journey writes a JSON file here; ignore it so the save does
         // not trigger a full page reload that would close the debug overlay.
         path.resolve(path.join(__dirname, "saved-journeys")) + "/**",

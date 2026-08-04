@@ -8,7 +8,8 @@
           "label": "Signal through the doorway",
           "template_id": 14,
           "variables": {
-            "predicate": "≤2● cost Character"
+            "predicate": "≤2● cost Character",
+            "offer_count": 4
           }
         },
         {
@@ -170,7 +171,8 @@
           "label": "Choose a Guide",
           "template_id": 14,
           "variables": {
-            "predicate": "Survivor"
+            "predicate": "Survivor",
+            "offer_count": 4
           }
         }
       ],
@@ -324,7 +326,8 @@
           "label": "Call Across the Fire",
           "template_id": 14,
           "variables": {
-            "predicate": "Spirit Animal"
+            "predicate": "Spirit Animal",
+            "offer_count": 4
           }
         },
         {
@@ -383,7 +386,9 @@
         {
           "label": "Cross the Flames Together",
           "template_id": 64,
-          "variables": {}
+          "variables": {
+            "spark_bonus": 1
+          }
         },
         {
           "label": "Share Its Burning Path",
@@ -480,7 +485,8 @@
           "label": "Study the Motes",
           "template_id": 14,
           "variables": {
-            "predicate": "≤2● cost Character"
+            "predicate": "≤2● cost Character",
+            "offer_count": 4
           }
         }
       ],
@@ -607,7 +613,9 @@
         {
           "label": "Stand Within the Glow",
           "template_id": 64,
-          "variables": {}
+          "variables": {
+            "spark_bonus": 1
+          }
         }
       ],
       "scores": {
@@ -720,7 +728,8 @@
           "label": "Search Beyond the Frame",
           "template_id": 14,
           "variables": {
-            "predicate": "≤2● cost Character"
+            "predicate": "≤2● cost Character",
+            "offer_count": 4
           }
         },
         {
@@ -746,7 +755,9 @@
         {
           "label": "Train Under His Watch",
           "template_id": 64,
-          "variables": {}
+          "variables": {
+            "spark_bonus": 1
+          }
         },
         {
           "label": "Follow His Timing",
@@ -774,7 +785,8 @@
           "label": "Follow the owl's focus",
           "template_id": 14,
           "variables": {
-            "predicate": "Spirit Animal"
+            "predicate": "Spirit Animal",
+            "offer_count": 4
           }
         },
         {
@@ -933,7 +945,8 @@
           "label": "Follow Its Crossing",
           "template_id": 14,
           "variables": {
-            "predicate": "Spirit Animal"
+            "predicate": "Spirit Animal",
+            "offer_count": 4
           }
         }
       ],
@@ -959,14 +972,16 @@
           "template_id": 15,
           "variables": {
             "predicate": "Spirit Animal",
-            "count": 2
+            "count": 2,
+            "offer_count": 4
           }
         },
         {
           "label": "Welcome the Migration",
           "template_id": 16,
           "variables": {
-            "predicate": "Spirit Animal"
+            "predicate": "Spirit Animal",
+            "offer_count": 4
           }
         }
       ],
@@ -1017,7 +1032,9 @@
         {
           "label": "Shelter in Its Wake",
           "template_id": 64,
-          "variables": {}
+          "variables": {
+            "spark_bonus": 1
+          }
         },
         {
           "label": "Call Its Kindred",
@@ -1113,14 +1130,17 @@
           "label": "Call for one companion",
           "template_id": 14,
           "variables": {
-            "predicate": "Spirit Animal"
+            "predicate": "Spirit Animal",
+            "offer_count": 4
           }
         },
         {
           "label": "Call for the whole herd",
           "template_id": 36,
           "variables": {
-            "predicate": "Spirit Animal"
+            "predicate": "Spirit Animal",
+            "pack_count": 2,
+            "pack_size": 3
           }
         }
       ],
@@ -1316,13 +1336,17 @@
           "label": "Answer Their Muster",
           "template_id": 36,
           "variables": {
-            "predicate": "Warrior"
+            "predicate": "Warrior",
+            "pack_count": 2,
+            "pack_size": 3
           }
         },
         {
           "label": "Receive Their Blessing",
           "template_id": 64,
-          "variables": {}
+          "variables": {
+            "spark_bonus": 1
+          }
         }
       ],
       "scores": {
@@ -1375,7 +1399,8 @@
           "label": "Call for Their Vanguard",
           "template_id": 14,
           "variables": {
-            "predicate": "Warrior"
+            "predicate": "Warrior",
+            "offer_count": 4
           }
         },
         {
@@ -1412,7 +1437,8 @@
           "label": "Overload the aperture",
           "template_id": 65,
           "variables": {
-            "count": 3
+            "energy_cost_reduction": 1,
+            "nightmare_count": 3
           }
         }
       ],
@@ -1469,14 +1495,17 @@
           "template_id": 15,
           "variables": {
             "predicate": "Event",
-            "count": 2
+            "count": 2,
+            "offer_count": 4
           }
         },
         {
           "label": "Widen the aperture",
           "template_id": 36,
           "variables": {
-            "predicate": "Event"
+            "predicate": "Event",
+            "pack_count": 2,
+            "pack_size": 3
           }
         }
       ],
@@ -1557,7 +1586,8 @@
           "template_id": 15,
           "variables": {
             "predicate": "Warrior",
-            "count": 2
+            "count": 2,
+            "offer_count": 4
           }
         },
         {
@@ -1587,14 +1617,17 @@
           "label": "Rally at the Crest",
           "template_id": 36,
           "variables": {
-            "predicate": "Warrior"
+            "predicate": "Warrior",
+            "pack_count": 2,
+            "pack_size": 3
           }
         },
         {
           "label": "Charge Through the Smoke",
           "template_id": 65,
           "variables": {
-            "count": 5
+            "energy_cost_reduction": 1,
+            "nightmare_count": 5
           }
         }
       ],
@@ -1762,7 +1795,8 @@
           "template_id": 15,
           "variables": {
             "predicate": "≤2● cost Character",
-            "count": 2
+            "count": 2,
+            "offer_count": 4
           }
         },
         {
@@ -1844,7 +1878,8 @@
           "template_id": 15,
           "variables": {
             "predicate": "Survivor",
-            "count": 2
+            "count": 2,
+            "offer_count": 4
           }
         },
         {
@@ -1972,7 +2007,9 @@
           "label": "Answer Their Signal",
           "template_id": 36,
           "variables": {
-            "predicate": "Survivor"
+            "predicate": "Survivor",
+            "pack_count": 2,
+            "pack_size": 3
           }
         },
         {
@@ -2002,7 +2039,8 @@
           "template_id": 15,
           "variables": {
             "predicate": "Event",
-            "count": 1
+            "count": 1,
+            "offer_count": 4
           }
         },
         {
@@ -2070,7 +2108,8 @@
           "label": "Study every arrangement",
           "template_id": 16,
           "variables": {
-            "predicate": "Event"
+            "predicate": "Event",
+            "offer_count": 4
           }
         },
         {
