@@ -49,8 +49,8 @@ const CURATED_CARD_IDS = [
   "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
   // Event, 3● — Legendary rarity (the shimmer overlay).
   "a911ef71-799c-4240-ad13-8fabd3caeafa",
-  // Character, 2●/2✦ — glossary definitions plus a Warrior figment preview.
-  "41044897-b70a-4e2b-8eb6-baf843a14a43",
+  // Character, 3●/2✦ — Materialized trigger plus the Legionnaire figment preview.
+  "4b4cc613-2e28-4851-975f-14146286a062",
 ] as const;
 
 interface GameCardDemoArgs {
@@ -186,7 +186,7 @@ export const gameCardDemo: CumulusComponent = {
   blurb:
     "The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name.",
   callout:
-    "GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment, including canonical fallbacks that keep those treatments intact outside a Cumulus token scope; every figment uses the same \"<Identity> Figment\" title bar and authored art crop. Transfiguration changes use the shared hammer-in-circle marker on changed stats and in the rules panel whenever marked rules text is present. The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, exhausted status, focus, press, activation, and drag dismissal are automatic. On desktop, rules that explicitly materialize an authored figment add a small UUID-backed card with a violet glowing border beyond the definition stack; a figment's own reading copy stays unoutlined. Touch layouts keep the compact reading pair.",
+    "GameCard registers its canonical UUID and complete display snapshot with the shared reveal coordinator. CardView.css owns the complete card frame, rarity, figment, event, and responsive typography treatment, including canonical fallbacks that keep those treatments intact outside a Cumulus token scope; every figment uses the same \"<Identity> Figment\" title bar and authored art crop. Transfiguration changes use the shared hammer-in-circle marker on changed stats and in the rules panel whenever marked rules text is present. The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, exhausted status, focus, press, activation, and drag dismissal are automatic. On desktop, rules that explicitly materialize an authored figment add a small UUID-backed card with a violet glowing border beyond the definition stack; that adjacent figment keeps its card size and doubles only its rules text. A figment's own reading copy stays unoutlined. Touch layouts keep the compact reading pair.",
   group: "Components",
   docName: "GameCard",
   Component: GameCardDemo,

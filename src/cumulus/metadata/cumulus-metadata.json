@@ -1350,6 +1350,16 @@
       "description": "Render the figment frame (rules §Figments): no energy orb, a canonical\n`\"<Identity> Figment\"` title bar, and a black-on-light frosted rules box."
     },
     {
+      "name": "rulesTextPresentation",
+      "tsType": "\"adjacent-figment\"",
+      "unionMembers": [
+        "adjacent-figment"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Use the doubled rules-text treatment for the small figment card shown\nbeside a materializing card's desktop reveal. Card geometry is unchanged."
+    },
+    {
       "name": "hideRulesText",
       "tsType": "boolean",
       "unionMembers": [],

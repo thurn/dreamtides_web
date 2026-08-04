@@ -104,8 +104,10 @@
   /* Typography and its three-line readable rules-text cap. */
   --cv-name-font-size: 5.2cqw;
   --cv-type-font-size: 4.95cqw;
-  --cv-rules-font-size: 4.5cqw;
-  --cv-rules-font-cap: 4.2cqw;
+  --cv-rules-font-size-base: 4.5cqw;
+  --cv-rules-font-cap-base: 4.2cqw;
+  --cv-rules-font-size: var(--cv-rules-font-size-base);
+  --cv-rules-font-cap: var(--cv-rules-font-cap-base);
   --cv-name-font-family: "EB Garamond", Georgia, serif;
   --cv-rules-font-family: "Fira Sans Condensed", "Inter", sans-serif;
   --cv-name-color: #f6f6f5;
@@ -138,8 +140,8 @@
  * MOBILE_CARD_TEXT_QUERY and use-is-desktop's DESKTOP_QUERY. */
 @media (max-width: 899.98px) {
   .card-view {
-    --cv-rules-font-size: 5.2cqw;
-    --cv-rules-font-cap: 4.85cqw;
+    --cv-rules-font-size-base: 5.2cqw;
+    --cv-rules-font-cap-base: 4.85cqw;
     --cv-name-font-size: 6cqw;
     --cv-type-font-size: 5.7cqw;
     --cv-energy-orb-size: 13.85cqw;
@@ -153,6 +155,14 @@
     --cv-namebar-pad-left-multi: 21.5cqw;
     --cv-namebar-pad-right: 1.75cqw;
   }
+}
+
+/* A materialized figment is a small adjacent object in a desktop card reveal.
+ * Its card keeps the canonical 150px reveal geometry while the authored rules
+ * voice doubles for legibility. */
+.card-view[data-card-rules-text-presentation="adjacent-figment"] {
+  --cv-rules-font-size: calc(var(--cv-rules-font-size-base) * 2);
+  --cv-rules-font-cap: calc(var(--cv-rules-font-cap-base) * 2);
 }
 
 .hover-zoom-card__gentle-copy {

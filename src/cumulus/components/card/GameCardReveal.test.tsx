@@ -441,7 +441,7 @@ describe("GameCard reveal contract", () => {
     vi.mocked(extractMaterializedFigmentPreviews).mockReturnValue([{
       card: Object.freeze({
         id: asCardId("bb1a5acd-1a03-4aa3-826d-f0a301843845"),
-        name: asCardName("Warrior"),
+        name: asCardName("Legionnaire"),
         cardNumber: 1,
         cardType: "Character",
         subtype: "Warrior",
@@ -449,7 +449,7 @@ describe("GameCard reveal contract", () => {
         energyCost: 0,
         spark: 1,
         isFast: false,
-        renderedText: "",
+        renderedText: "This character has +1✦ for each other warrior you control.",
         imageNumber: 436090582,
         artOwned: false,
         art: { x: 0, y: 0.123, scale: 1.2 },
@@ -487,6 +487,9 @@ describe("GameCard reveal contract", () => {
       '[data-card-id="bb1a5acd-1a03-4aa3-826d-f0a301843845"]',
     );
     expect(figmentCard?.getAttribute("data-figment")).toBe("true");
+    expect(
+      figmentCard?.getAttribute("data-card-rules-text-presentation"),
+    ).toBe("adjacent-figment");
     expect(figmentCard?.style.boxShadow).toContain(
       "0 0 0 3px var(--accent-bright)",
     );
@@ -495,7 +498,14 @@ describe("GameCard reveal contract", () => {
     );
     expect(
       figment?.querySelector("[data-testid=figment-title-bar]")?.textContent,
-    ).toContain("Warrior Figment");
+    ).toContain("Legionnaire Figment");
+    const sourceRulesFont = container
+      .querySelector<HTMLElement>("[data-card-rules-text]")
+      ?.style.fontSize.match(/([0-9.]+)px/u)?.[1];
+    const figmentRulesFont = figment
+      ?.querySelector<HTMLElement>("[data-card-rules-text]")
+      ?.style.fontSize.match(/([0-9.]+)px/u)?.[1];
+    expect(Number(figmentRulesFont)).toBeCloseTo(Number(sourceRulesFont) * 2);
     expect(Number.parseFloat(figment!.style.left)).toBe(
       Number.parseFloat(definition!.style.left)
         + Number.parseFloat(definition!.style.width)

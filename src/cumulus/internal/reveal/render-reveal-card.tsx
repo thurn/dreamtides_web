@@ -30,6 +30,7 @@ export function renderRevealCard(card: RevealCard, width: number): ReactElement 
           selected={card.selected}
           selectionColor={card.selectionColor}
           figment={card.figment}
+          rulesTextPresentation={card.rulesTextPresentation}
           eagerRulesFit
         />
       </div>

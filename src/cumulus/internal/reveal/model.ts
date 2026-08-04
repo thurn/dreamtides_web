@@ -36,6 +36,8 @@ export interface RevealGameCard {
   readonly selectionColor?: CumulusColor;
   /** Render the reading copy with the authored figment frame. */
   readonly figment?: boolean;
+  /** Use the legible rules treatment reserved for an adjacent figment preview. */
+  readonly rulesTextPresentation?: "adjacent-figment";
 }
 
 export type RevealCard =

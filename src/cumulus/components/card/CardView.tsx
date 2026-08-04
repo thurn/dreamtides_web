@@ -459,6 +459,7 @@ const SPARK_ORB_RATIO = 0.16;
 const RULES_FONT_RATIO = 0.042;
 const RULES_FONT_RATIO_MOBILE = 0.0485;
 const RULES_MIN_FONT_FRACTION = 0.5;
+const ADJACENT_FIGMENT_RULES_TEXT_SCALE = 2;
 
 /**
  * Below this viewport width a card lifts its rules-text sizing. Mirrors the
@@ -667,6 +668,11 @@ export interface CardViewProps {
    * `"<Identity> Figment"` title bar, and a black-on-light frosted rules box.
    */
   figment?: boolean;
+  /**
+   * Use the doubled rules-text treatment for the small figment card shown
+   * beside a materializing card's desktop reveal. Card geometry is unchanged.
+   */
+  rulesTextPresentation?: "adjacent-figment";
   /** Hide rules text for dense card surfaces that show identity and stats. */
   hideRulesText?: boolean;
   /**
@@ -731,6 +737,7 @@ function GameCardSurface(props: CardViewProps) {
     transfiguration,
     large = false,
     figment = false,
+    rulesTextPresentation,
     hideRulesText = false,
     presentation = "full",
     slots = {},
@@ -763,12 +770,16 @@ function GameCardSurface(props: CardViewProps) {
   const rulesFontRatio = mobileCardText
     ? RULES_FONT_RATIO_MOBILE
     : RULES_FONT_RATIO;
-  const rulesMaxFontPx = widthPx * rulesFontRatio;
+  const rulesTextScale =
+    rulesTextPresentation === "adjacent-figment"
+      ? ADJACENT_FIGMENT_RULES_TEXT_SCALE
+      : 1;
+  const rulesMaxFontPx = widthPx * rulesFontRatio * rulesTextScale;
   const rulesMinFontPx = rulesMaxFontPx * RULES_MIN_FONT_FRACTION;
   const { ref: rulesFitRef, fontSize: rulesFontPx } = useFitText(
     rulesMaxFontPx,
     rulesMinFontPx,
-    [card.renderedText, textScale],
+    [card.renderedText, textScale, rulesTextPresentation],
     { eager: eagerRulesFit },
   );
 
@@ -1213,6 +1224,7 @@ function GameCardSurface(props: CardViewProps) {
       data-card-type={card.cardType}
       data-card-presentation={presentation}
       data-figment={figment ? "true" : undefined}
+      data-card-rules-text-presentation={rulesTextPresentation}
       style={
         {
           aspectRatio: battlefieldPresentation
@@ -1611,6 +1623,7 @@ export function gameCardRevealSpec(
     figment: true,
     selected: true,
     selectionColor: "accent-bright" as const,
+    rulesTextPresentation: "adjacent-figment" as const,
   }));
   return {
     primary: {
