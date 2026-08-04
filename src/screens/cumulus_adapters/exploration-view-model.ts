@@ -378,7 +378,6 @@ export function buildExplorationSiteView(params: {
   return {
     siteId: params.site.id,
     scene,
-    isEnhanced: params.site.isEnhanced,
     fullArt: artRef.explorationCard(sourceCard.imageNumber),
     guide: {
       id: guideId,

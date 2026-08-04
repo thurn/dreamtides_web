@@ -77,7 +77,6 @@ function view(resolved = false): ExplorationSiteView {
   return {
     siteId: "exploration-site",
     scene: null,
-    isEnhanced: true,
     guide: {
       id: "layaway",
       name: '"Layaway"',
@@ -193,8 +192,19 @@ describe("ExplorationSiteScreen", () => {
     const channel = container.querySelector<HTMLButtonElement>(
       '[data-testid="cumulus-exploration-channel"]',
     );
-    expect(container.querySelector("h1")?.textContent).toBe(
-      "Channel A Possibility",
+    expect(
+      container.querySelector('[data-testid="cumulus-exploration-panel"]'),
+    ).toBeNull();
+    expect(container.querySelector("[data-guide-gallery-guide]")).toBeNull();
+    expect(
+      container.querySelector('[data-testid="cumulus-exploration-guide-art"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-testid="cumulus-exploration-speech"]'),
+    ).toBeNull();
+    expect(container.textContent).not.toContain("Channel A Possibility");
+    expect(container.textContent).not.toContain(
+      "A single thread rises from your deck.",
     );
     expect(cardSlot?.dataset.cardId).toBe(view().card.cardId);
     expect(
@@ -202,9 +212,9 @@ describe("ExplorationSiteScreen", () => {
         .querySelector('[data-testid="cumulus-exploration-revealed-card"]')
         ?.getAttribute("data-card-id"),
     ).toBe(view().card.cardId);
-    expect(channel?.textContent).toContain("Channel");
+    expect(channel?.textContent).toContain("Delve");
     expect(channel?.dataset.glassVariant).toBe("accent");
-    expect(channel?.dataset.glassPlacement).toBe("onGlass");
+    expect(channel?.dataset.glassPlacement).toBe("onMedia");
 
     act(() => channel?.click());
     expect(onChannel).toHaveBeenCalledOnce();

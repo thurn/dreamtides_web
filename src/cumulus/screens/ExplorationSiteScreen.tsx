@@ -47,8 +47,6 @@ export interface ExplorationSiteView {
   siteId: string;
   /** Current dreamscape scene art behind the encounter, when resolved. */
   scene: ArtRef | null;
-  /** Whether Layaway is offering the enhanced home-dreamscape version. */
-  isEnhanced: boolean;
   /** Resident Dream Guide art and greeting. */
   guide: GuideGalleryGuideView;
   /** UUID-backed card selected from the Exploration prototype pool. */
@@ -563,13 +561,14 @@ export function ExplorationSiteScreen({
       siteId={view.siteId}
       scene={view.scene}
       guide={view.guide}
+      guideVisible={false}
       screenTestId="cumulus-exploration-site-screen"
       guideArtTestId="cumulus-exploration-guide-art"
       speechAnchorTestId="cumulus-exploration-speech-anchor"
       speechBubbleTestId="cumulus-exploration-speech"
       renderGallery={(layout) => (
         <section
-          data-exploration-panel=""
+          data-exploration-gallery=""
           data-exploration-layout={layout}
           style={{
             position: "relative",
@@ -585,110 +584,90 @@ export function ExplorationSiteScreen({
             pointerEvents: "auto",
             alignSelf: layout === "desktop" ? "center" : "start",
             justifySelf: "center",
+            display: "grid",
+            placeItems: "center",
           }}
         >
-          <GlassPanel
-            eyebrow={
-              view.isEnhanced ? "Enhanced Exploration" : "Exploration"
-            }
-            title="Channel A Possibility"
-            subtitle="A single thread rises from your deck."
-            headingLevel="h1"
-            titleVoice="standard"
-            headerSpacing="medium"
-            testId="cumulus-exploration-panel"
+          <div
+            style={{
+              display: "grid",
+              justifyItems: "center",
+              gap: token("--space-6"),
+            }}
           >
             <div
+              ref={cardTargetRef}
+              data-exploration-card-slot=""
+              data-card-id={view.card.cardId}
               style={{
-                flex: "1 1 auto",
-                minHeight: 0,
-                display: "grid",
-                placeItems: "center",
-                padding: token("--space-7"),
+                position: "relative",
+                width:
+                  layout === "desktop"
+                    ? DESKTOP_CARD_WIDTH
+                    : MOBILE_CARD_WIDTH,
+                aspectRatio: CARD_ASPECT_RATIO,
               }}
             >
-              <div
-                style={{
-                  display: "grid",
-                  justifyItems: "center",
-                  gap: token("--space-6"),
-                }}
-              >
-                <div
-                  ref={cardTargetRef}
-                  data-exploration-card-slot=""
-                  data-card-id={view.card.cardId}
-                  style={{
-                    position: "relative",
-                    width:
-                      layout === "desktop"
-                        ? DESKTOP_CARD_WIDTH
-                        : MOBILE_CARD_WIDTH,
-                    aspectRatio: CARD_ASPECT_RATIO,
-                  }}
-                >
-                  {revealed && (
-                    <motion.div
-                      data-exploration-card-frame-state={frameBreakPhase}
-                      animate={
-                        frameBreakActive
-                          ? {
-                              scale: [1, 1.04, 0.98],
-                              rotateZ: [0, -1.2, 1.4, 0],
-                              opacity: [1, 1, 0],
-                            }
-                          : { scale: 1, rotateZ: 0, opacity: 1 }
-                      }
-                      transition={{
-                        duration: reduceMotion ? 0 : FRAME_FRACTURE_SECONDS,
-                        ease: DREAM_EASE,
-                      }}
-                      style={{ width: "100%", height: "100%" }}
-                    >
-                      <GameCard
-                        model={view.card}
-                        testId="cumulus-exploration-revealed-card"
-                      />
-                    </motion.div>
-                  )}
-                </div>
-                <div
-                  data-exploration-channel-state={
-                    !revealed
-                      ? "waiting"
-                      : frameBreakGeometry === null
-                        ? "revealed"
-                        : "channeling"
+              {revealed && (
+                <motion.div
+                  data-exploration-card-frame-state={frameBreakPhase}
+                  animate={
+                    frameBreakActive
+                      ? {
+                          scale: [1, 1.04, 0.98],
+                          rotateZ: [0, -1.2, 1.4, 0],
+                          opacity: [1, 1, 0],
+                        }
+                      : { scale: 1, rotateZ: 0, opacity: 1 }
                   }
-                  style={{
-                    minHeight: token("--touch-min"),
-                    display: "grid",
-                    placeItems: "center",
+                  transition={{
+                    duration: reduceMotion ? 0 : FRAME_FRACTURE_SECONDS,
+                    ease: DREAM_EASE,
+                  }}
+                  style={{ width: "100%", height: "100%" }}
+                >
+                  <GameCard
+                    model={view.card}
+                    testId="cumulus-exploration-revealed-card"
+                  />
+                </motion.div>
+              )}
+            </div>
+            <div
+              data-exploration-channel-state={
+                !revealed
+                  ? "waiting"
+                  : frameBreakGeometry === null
+                    ? "revealed"
+                    : "channeling"
+              }
+              style={{
+                minHeight: token("--touch-min"),
+                display: "grid",
+                placeItems: "center",
+              }}
+            >
+              {revealed && frameBreakGeometry === null && (
+                <motion.div
+                  initial={{ opacity: reduceMotion ? 1 : 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{
+                    duration: reduceMotion
+                      ? 0
+                      : motionTimeSeconds("--dur-base"),
                   }}
                 >
-                  {revealed && frameBreakGeometry === null && (
-                    <motion.div
-                      initial={{ opacity: reduceMotion ? 1 : 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{
-                        duration: reduceMotion
-                          ? 0
-                          : motionTimeSeconds("--dur-base"),
-                      }}
-                    >
-                      <GlassButton
-                        label="Channel"
-                        variant="accent"
-                        placement="onGlass"
-                        onPress={startFrameBreak}
-                        testId="cumulus-exploration-channel"
-                      />
-                    </motion.div>
-                  )}
-                </div>
-              </div>
+                  <GlassButton
+                    label="Delve"
+                    variant="accent"
+                    placement="onMedia"
+                    onPress={startFrameBreak}
+                    testId="cumulus-exploration-channel"
+                  />
+                </motion.div>
+              )}
             </div>
-          </GlassPanel>
+          </div>
         </section>
       )}
     >
