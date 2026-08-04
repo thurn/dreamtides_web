@@ -367,6 +367,97 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
+  it("presents four offered cards in the centered Augury choice grid without a Back button", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const offeredCards = ["offered-a", "offered-b", "offered-c", "offered-d"].map(
+      (entryId) => ({ entryId, model: base.card, isBane: false }),
+    );
+    const followupView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          label: "Choose a Guide",
+          followup: {
+            kind: "cards",
+            title: "Choose a Guide",
+            subtitle: "Choose one offered card.",
+            cards: offeredCards,
+            mode: "single",
+            selectionKey: "cardIds",
+            min: 1,
+            max: 1,
+          },
+        },
+        base.actions[1],
+      ],
+    };
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={followupView}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+
+    const offer = container.querySelector<HTMLElement>(
+      "[data-exploration-card-offer]",
+    );
+    expect(offer).not.toBeNull();
+    expect(
+      offer?.querySelector("[data-card-choice-grid]")?.getAttribute(
+        "data-card-choice-grid-columns",
+      ),
+    ).toBe("4");
+    expect(
+      container.querySelector('[data-testid="cumulus-exploration-card-followup"]'),
+    ).toBeNull();
+    expect(
+      [...container.querySelectorAll("button")].some(
+        (button) => button.textContent?.trim() === "Back",
+      ),
+    ).toBe(false);
+
+    act(() =>
+      container
+        .querySelector<HTMLElement>(
+          '[data-testid="cumulus-exploration-card-offered-c"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-followup-confirm"]',
+        )
+        ?.click(),
+    );
+    expect(onResolve).toHaveBeenCalledWith("choice-a", {
+      cardIds: ["offered-c"],
+    });
+    act(() => root.unmount());
+  });
+
   it("lets the player undo the purge target in a purge-and-copy follow-up", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),

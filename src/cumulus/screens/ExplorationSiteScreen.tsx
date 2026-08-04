@@ -10,6 +10,10 @@ import {
   type RefObject,
 } from "react";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
+import {
+  CardChoiceGrid,
+  type CardChoiceGridColumns,
+} from "../components/card/CardChoiceGrid";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import {
   CARD_ASPECT_RATIO,
@@ -184,6 +188,21 @@ const CARD_PREVIEW_CONTENT_FRACTION = 259 / 280;
 const FRAME_BREAK_LAYER = 39;
 const FRAME_BREAK_EXIT_LAYER = 61;
 const DREAM_EASE = [0.22, 0.61, 0.36, 1] as const;
+
+function cardChoiceColumns(
+  count: number,
+  layout: "mobile" | "desktop",
+): CardChoiceGridColumns {
+  const columns =
+    layout === "desktop"
+      ? Math.min(5, Math.max(1, count))
+      : Math.min(2, Math.max(1, count));
+  if (columns === 1) return "one";
+  if (columns === 2) return "two";
+  if (columns === 3) return "three";
+  if (columns === 4) return "four";
+  return "five";
+}
 
 function snapshotRect(rect: DOMRect): RectSnapshot {
   return {
@@ -532,15 +551,6 @@ export function ExplorationSiteScreen({
         [followup.selectionKey]: selectedDreamsignId,
       });
     }
-  };
-
-  const closeFollowup = (): void => {
-    setActiveActionId(null);
-    setSelectedIds([]);
-    setPurgeEntryId(null);
-    setSelectedPackIndex(null);
-    setSelectedSubtype(null);
-    setSelectedDreamsignId(null);
   };
 
   const canCommitFollowup = (() => {
@@ -1089,29 +1099,117 @@ export function ExplorationSiteScreen({
               ? safeAreaInsetAtLeast("top", "--space-8")
               : `calc(max(var(--safe-area-inset-top), ${token("--space-4")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`,
             right: isDesktop
-              ? `calc(max(var(--safe-area-inset-right), ${token("--space-8")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`
+              ? activeAction.followup.kind === "cards" &&
+                activeAction.followup.selectionKey === "cardIds"
+                ? 0
+                : `calc(max(var(--safe-area-inset-right), ${token("--space-8")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-3")})`
               : `max(var(--safe-area-inset-right), ${token("--space-4")})`,
             bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
             left: isDesktop
-              ? "auto"
+              ? activeAction.followup.kind === "cards" &&
+                activeAction.followup.selectionKey === "cardIds"
+                ? 0
+                : "auto"
               : `max(var(--safe-area-inset-left), ${token("--space-4")})`,
-            width: isDesktop ? "min(920px, calc(100vw - 64px))" : undefined,
+            width:
+              isDesktop &&
+              activeAction.followup.kind === "cards" &&
+              activeAction.followup.selectionKey === "cardIds"
+                ? "min(1120px, calc(100vw - 64px))"
+                : isDesktop
+                  ? "min(920px, calc(100vw - 64px))"
+                  : undefined,
+            marginInline:
+              isDesktop &&
+              activeAction.followup.kind === "cards" &&
+              activeAction.followup.selectionKey === "cardIds"
+                ? "auto"
+                : undefined,
             minHeight: 0,
             display: "grid",
             alignItems: "center",
             pointerEvents: "auto",
           }}
         >
-          {activeAction.followup.kind === "cards" && (
+          {activeAction.followup.kind === "cards" &&
+            activeAction.followup.selectionKey === "cardIds" && (
+            <article
+              data-exploration-card-offer=""
+              style={{
+                width: "100%",
+                height: isDesktop ? "min(660px, 100%)" : "100%",
+                minHeight: 0,
+              }}
+            >
+              <GlassPanel
+                title={activeAction.followup.title}
+                subtitle={activeAction.followup.subtitle}
+                headingLevel="h1"
+                headerSpacing="medium"
+                footer={
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      padding: isDesktop
+                        ? `0 ${token("--space-8")} ${token("--space-6")}`
+                        : `0 ${token("--space-4")} ${token("--space-4")}`,
+                    }}
+                  >
+                    <GlassButton
+                      label="Confirm Choice"
+                      variant="accent"
+                      placement="onGlass"
+                      disabled={!canCommitFollowup}
+                      onPress={commitFollowup}
+                      testId="cumulus-exploration-followup-confirm"
+                    />
+                  </div>
+                }
+              >
+                <div
+                  style={{
+                    flex: "1 1 auto",
+                    minWidth: 0,
+                    minHeight: 0,
+                    overflow: "hidden",
+                    containerType: "size",
+                    display: "grid",
+                    placeItems: "center",
+                    padding: isDesktop
+                      ? token("--space-7")
+                      : token("--space-4"),
+                    boxSizing: "border-box",
+                  }}
+                >
+                  <CardChoiceGrid
+                    cards={activeAction.followup.cards.map((card) => ({
+                      entryId: card.entryId,
+                      model: card.model,
+                      selected: selectedIds.includes(card.entryId),
+                      selectionColor: "accent-bright",
+                      testId: `cumulus-exploration-card-${card.entryId}`,
+                    }))}
+                    columns={cardChoiceColumns(
+                      activeAction.followup.cards.length,
+                      isDesktop ? "desktop" : "mobile",
+                    )}
+                    layout={{
+                      kind: "site",
+                      viewport: isDesktop ? "desktop" : "mobile",
+                      fit: "choice",
+                    }}
+                    onCardPress={toggleCard}
+                  />
+                </div>
+              </GlassPanel>
+            </article>
+          )}
+          {activeAction.followup.kind === "cards" &&
+            activeAction.followup.selectionKey === "entryIds" && (
             <CardGalleryPanel
               title={activeAction.followup.title}
               subtitle={activeAction.followup.subtitle}
-              rightAccessory={{
-                kind: "glassButton",
-                label: "Back",
-                onPress: closeFollowup,
-                testId: "cumulus-exploration-followup-back",
-              }}
               footerAction={{
                 label:
                   activeAction.followup.mode === "purge-and-copy" && purgeEntryId === null
@@ -1150,7 +1248,6 @@ export function ExplorationSiteScreen({
               title={activeAction.followup.title}
               subtitle={activeAction.followup.subtitle}
               headingLevel="h1"
-              rightAccessory={{ kind: "glassButton", label: "Back", onPress: closeFollowup }}
               footer={
                 <div style={{ display: "flex", justifyContent: "flex-end", padding: token("--space-5") }}>
                   <GlassButton label="Take This Pack" variant="accent" placement="onGlass" disabled={!canCommitFollowup} onPress={commitFollowup} testId="cumulus-exploration-followup-confirm" />
@@ -1190,7 +1287,6 @@ export function ExplorationSiteScreen({
               title={activeAction.followup.title}
               subtitle={activeAction.followup.subtitle}
               headingLevel="h1"
-              rightAccessory={{ kind: "glassButton", label: "Back", onPress: closeFollowup }}
               footer={
                 <div style={{ display: "flex", justifyContent: "flex-end", padding: token("--space-5") }}>
                   <GlassButton label="Confirm Choice" variant="accent" placement="onGlass" disabled={!canCommitFollowup} onPress={commitFollowup} testId="cumulus-exploration-followup-confirm" />

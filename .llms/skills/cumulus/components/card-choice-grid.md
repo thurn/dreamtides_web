@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/card-choice-grid`
 
-Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
 A frameless, responsive grid for presenting resolved GameCards as choices inside an existing site or panel surface.
 
