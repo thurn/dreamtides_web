@@ -5267,11 +5267,18 @@ describe("MobileBattleScreen", () => {
     const reveal = container.querySelector<HTMLElement>(
       '[data-battle-revealed-hand-card][data-battle-card-id="shared-hand-card"]',
     );
+    const revealLayer = container.querySelector<HTMLElement>(
+      "[data-battle-card-reveal-layer]",
+    );
     const face = reveal?.querySelector<HTMLElement>(
       '[data-testid="battle-card-face:shared-hand-card"]',
     );
 
     expect(reveal).not.toBeNull();
+    expect(revealLayer?.style.position).toBe("absolute");
+    expect(revealLayer?.style.pointerEvents).toBe("none");
+    expect(container.querySelectorAll("[data-battle-rank]")).toHaveLength(4);
+    expect(revealLayer?.querySelector("[data-battle-rank]")).toBeNull();
     expect(reveal?.style.gridRow).toBe("3 / 5");
     expect(face?.dataset.gameCardPresentation).toBe("full");
 

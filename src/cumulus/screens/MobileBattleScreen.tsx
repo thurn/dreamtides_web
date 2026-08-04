@@ -5119,11 +5119,30 @@ export function MobileBattleScreen({
         />
       </BattleCardLayoutGroup>
       {view.revealedHandCard !== undefined && view.revealedHandCard !== null ? (
-        <SharedHandCardReveal
-          card={view.revealedHandCard}
-          isDesktop={isDesktop}
-          interactions={interactions}
-        />
+        <div
+          data-battle-card-reveal-layer=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            boxSizing: "border-box",
+            display: "grid",
+            gridTemplateColumns: "minmax(0, 1fr)",
+            gridTemplateRows: isDesktop ? DESKTOP_GRID_ROWS : MOBILE_GRID_ROWS,
+            paddingTop: `var(${SAFE_AREA_INSET_PROPERTIES.top})`,
+            paddingRight: `var(${SAFE_AREA_INSET_PROPERTIES.right})`,
+            paddingBottom: `var(${SAFE_AREA_INSET_PROPERTIES.bottom})`,
+            paddingLeft: `var(${SAFE_AREA_INSET_PROPERTIES.left})`,
+            pointerEvents: "none",
+          }}
+        >
+          <SharedHandCardReveal
+            card={view.revealedHandCard}
+            isDesktop={isDesktop}
+            interactions={interactions}
+          />
+        </div>
       ) : null}
       <div
         data-battle-top-left-controls=""
