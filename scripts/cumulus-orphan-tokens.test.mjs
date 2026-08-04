@@ -97,8 +97,6 @@ export const BASELINE = [
   // Elevation / inset shadow scale members.
   "--inset-press",
   "--shadow-sheet",
-  // Radius scale member.
-  "--radius-sheet",
   // Type scale (--t-*) members — sanctioned complete scale; each bundles
   // weight + size + face for a voice UI code applies by role.
   "--t-popover-body",
