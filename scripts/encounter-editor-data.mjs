@@ -83,7 +83,7 @@ function validateAction(raw, label) {
   return action;
 }
 
-function parseEncounterTemplates(source) {
+export function parseEncounterTemplates(source) {
   let raw;
   try {
     raw = JSON.parse(source);

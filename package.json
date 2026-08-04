@@ -46,6 +46,7 @@
     "fuzz:replay": "node scripts/replay-fuzz.mjs",
     "demo:certify": "npm run fuzz:coop -- --runs 500 && npm run fuzz:demo:built",
     "generate-pool": "node scripts/generate-color-pool.mjs",
+    "generate-selected-encounters": "node scripts/generate-selected-encounters-toml.mjs",
     "simulate-pools": "node scripts/simulate-dream-avatar-pools.mjs",
     "pool-metrics": "node scripts/pool-metrics.mjs",
     "draft-replay-metric": "node scripts/draft-replay-experiment.mjs",
