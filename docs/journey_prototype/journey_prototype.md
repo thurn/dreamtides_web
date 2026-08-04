@@ -284,7 +284,7 @@ Every in-play card carries a `BattleCardStatus`: `isExhausted`, counters,
 `reclaimed`, `offering`, `ephemeral`, `veil`, and the granted keyword flags
 `grantedUnstoppable`, `grantedVengeful`, `grantedPreeminence`, and
 `grantedAwakened`. Figments are discrete entries (a `figments?: number[]` list)
-drawn from a 14-type catalog; the Figment creator on the debug rail produces
+drawn from a 10-type catalog; the Figment creator on the debug rail produces
 them. Effective spark counts each figment on a character, including one share
 of any applicable Support spark bonus per figment.
 
@@ -338,7 +338,7 @@ outcome.
 
 The debug rail is where the player resolves printed effects and drives manual
 gestures the rules leave to the controller. It provides Status toggles (and the
-☪ retreat control), Counters, Erode, the 14-type Figment creator, and
+☪ retreat control), Counters, Erode, the 10-type Figment creator, and
 Abandon / Rematerialize / Dreamwell-draw actions. Cards drag between zones, and
 every committed change flows through the `DEBUG_EDIT` command path so the battle
 log, undo, and redo all keep working.

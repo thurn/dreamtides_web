@@ -400,13 +400,14 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
   });
 
   it("scores the surviving Unstoppable topmost on top of the reserves", () => {
-    // Two 4✦ Ancient figments (Unstoppable). Topmost dissolves the 3✦ blocker and
+    // Two 4✦ Monstrosity figments granted Unstoppable. Topmost dissolves the 3✦ blocker and
     // survives, scoring 4⍟; the reserve scores 4⍟, for 8⍟ total.
     const figment = makeInstance("fig", {
       owner: "player",
       isFigment: true,
-      subtype: "Ancient",
+      subtype: "Monstrosity",
       figmentSparks: [4, 4],
+      status: { grantedUnstoppable: true },
     });
     const blocker = makeInstance("e0", { owner: "enemy", printedSpark: 3 });
     const state = lane0State(figment, blocker);
@@ -602,13 +603,6 @@ describe("hasCombatKeyword — detection precedence", () => {
   });
 
   it("detects a figment type's implicit keyword from its subtype", () => {
-    const ancient = makeInstance("fig", {
-      owner: "player",
-      isFigment: true,
-      subtype: "Ancient",
-    });
-    expect(hasCombatKeyword(ancient, "unstoppable")).toBe(true);
-
     const wraith = makeInstance("fig2", {
       owner: "player",
       isFigment: true,
@@ -616,13 +610,13 @@ describe("hasCombatKeyword — detection precedence", () => {
     });
     expect(hasCombatKeyword(wraith, "vengeful")).toBe(true);
 
-    // Celestial carries no inherent combat keyword.
-    const celestial = makeInstance("fig3", {
+    // Monstrosity carries no inherent combat keyword.
+    const monstrosity = makeInstance("fig3", {
       owner: "player",
       isFigment: true,
-      subtype: "Celestial",
+      subtype: "Monstrosity",
     });
-    expect(hasCombatKeyword(celestial, "preeminence")).toBe(false);
+    expect(hasCombatKeyword(monstrosity, "preeminence")).toBe(false);
 
     const ember = makeInstance("fig4", {
       owner: "player",
@@ -633,7 +627,7 @@ describe("hasCombatKeyword — detection precedence", () => {
   });
 
   it("does not read figment subtype keywords on a non-figment character", () => {
-    const instance = makeInstance("p0", { owner: "player", subtype: "Ancient" });
-    expect(hasCombatKeyword(instance, "unstoppable")).toBe(false);
+    const instance = makeInstance("p0", { owner: "player", subtype: "Wraith" });
+    expect(hasCombatKeyword(instance, "vengeful")).toBe(false);
   });
 });

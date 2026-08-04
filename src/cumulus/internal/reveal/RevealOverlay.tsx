@@ -55,7 +55,9 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
         ? null
         : captureVisualViewport(
             window,
-            findRevealBoundary(active.element),
+            active.placementException === "augury-offer-above-source"
+              ? null
+              : findRevealBoundary(active.element),
           ),
     [active, key],
   );

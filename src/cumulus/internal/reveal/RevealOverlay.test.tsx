@@ -163,6 +163,50 @@ describe("RevealOverlay", () => {
     expect(placedDecision?.primaryRect).toMatchObject({ x: 400, y: 136 });
   });
 
+  it("places the Augury reveal against the viewport instead of its horizontal offer row", () => {
+    Object.defineProperty(window, "visualViewport", {
+      configurable: true,
+      value: { width: 390, height: 844, offsetLeft: 0, offsetTop: 0 },
+    });
+    const row = document.createElement("div");
+    row.style.overflowX = "auto";
+    row.getBoundingClientRect = () => ({
+      x: 6,
+      y: 412,
+      left: 6,
+      top: 412,
+      right: 384,
+      bottom: 658,
+      width: 378,
+      height: 246,
+      toJSON: () => ({}),
+    });
+    const source = document.createElement("button");
+    row.append(source);
+    document.body.append(row);
+    let geometry: RevealGeometrySnapshot | undefined;
+
+    act(() =>
+      renderOverlay(
+        <RevealOverlay
+          active={active({
+            element: source,
+            placementException: "augury-offer-above-source",
+            reason: "press",
+            sourceRect: { x: 75, y: 412, width: 240, height: 240 },
+            modality: "touch",
+          })}
+          onPlaced={(_decision, placedGeometry) => {
+            geometry = placedGeometry;
+          }}
+        />,
+      ),
+    );
+
+    expect(geometry?.viewport.boundary).toBeUndefined();
+    expect(geometry?.finalRects.primary.y).toBeLessThan(412);
+  });
+
   it("reserves the atlas reveal's full native width before placing secondaries", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect")
       .mockImplementation(function (this: HTMLElement) {

@@ -1,5 +1,5 @@
 /**
- * The 14-type figment catalog (rules §Figments). Each figment type has a base
+ * The 10-type figment catalog (rules §Figments). Each figment type has a base
  * spark and may carry a single implicit keyword. Creating a figment of a given
  * type yields these defaults instead of free-typed values: the base spark seeds
  * the new figment's spark and the keyword is stamped onto its status.
@@ -103,21 +103,17 @@ function entry(
 }
 
 /**
- * The 14 figment types in rules-table order (rules §Figments). Base spark and
+ * The 10 figment types in rules-table order (rules §Figments). Base spark and
  * implicit keyword are taken directly from that table.
  */
 export const FIGMENT_CATALOG_ENTRIES: readonly FigmentCatalogEntry[] = [
   entry("Warrior", 1),
-  entry("Ancient", 4, "unstoppable"),
-  entry("Enigma", 0),
   entry("Shadow", 2),
   entry("Spirit Animal", 1),
   entry("Monstrosity", 4),
   entry("Survivor", 1),
-  entry("Celestial", 2),
   entry("Wraith", 0, "vengeful"),
   entry("Ethereal", 1),
-  entry("Radiant", 2),
   entry("Ember", 1, "awakened"),
   entry("Outsider", 1),
   entry("Legion", 1),

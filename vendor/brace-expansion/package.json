@@ -1,6 +1,6 @@
 {
   "name": "brace-expansion",
-  "version": "5.0.8",
+  "version": "5.0.9",
   "description": "CommonJS compatibility wrapper for brace-expansion 5",
   "license": "MIT",
   "main": "index.cjs",
@@ -8,6 +8,6 @@
     ".": "./index.cjs"
   },
   "dependencies": {
-    "brace-expansion-core": "npm:brace-expansion@5.0.8"
+    "brace-expansion-core": "npm:brace-expansion@5.0.9"
   }
 }

@@ -7,9 +7,9 @@ import {
 } from "./figment-catalog";
 
 describe("figment catalog", () => {
-  it("contains exactly the 14 figment types", () => {
-    expect(FIGMENT_CATALOG_ENTRIES).toHaveLength(14);
-    expect(Object.keys(FIGMENT_CATALOG)).toHaveLength(14);
+  it("contains exactly the 10 authored figment types", () => {
+    expect(FIGMENT_CATALOG_ENTRIES).toHaveLength(10);
+    expect(Object.keys(FIGMENT_CATALOG)).toHaveLength(10);
   });
 
   it("keys each entry by its own normalized subtype", () => {
@@ -31,7 +31,7 @@ describe("figment catalog", () => {
     }
   });
 
-  it("assigns keywords to exactly the three types that carry one", () => {
+  it("assigns keywords to exactly the two types that carry one", () => {
     const keywordsByKey = new Map(
       FIGMENT_CATALOG_ENTRIES.filter((entry) => entry.keyword !== undefined).map(
         (entry) => [entry.key, entry.keyword],
@@ -40,14 +40,13 @@ describe("figment catalog", () => {
 
     expect(keywordsByKey).toEqual(
       new Map([
-        ["ancient", "unstoppable"],
         ["wraith", "vengeful"],
         ["ember", "awakened"],
       ]),
     );
   });
 
-  it("leaves the other eleven types without a keyword", () => {
+  it("leaves the other eight types without a keyword", () => {
     const keywordless = FIGMENT_CATALOG_ENTRIES.filter(
       (entry) => entry.keyword === undefined,
     ).map((entry) => entry.key);
@@ -55,14 +54,11 @@ describe("figment catalog", () => {
     expect(new Set(keywordless)).toEqual(
       new Set([
         "warrior",
-        "enigma",
         "shadow",
         "spirit animal",
         "monstrosity",
         "survivor",
-        "celestial",
         "ethereal",
-        "radiant",
         "outsider",
         "legion",
       ]),
@@ -73,7 +69,7 @@ describe("figment catalog", () => {
     expect(lookupFigmentCatalogEntry("Warrior")?.baseSpark).toBe(
       FIGMENT_CATALOG.warrior.baseSpark,
     );
-    expect(lookupFigmentCatalogEntry("  ANCIENT  ")?.keyword).toBe("unstoppable");
+    expect(lookupFigmentCatalogEntry("  WRAITH  ")?.keyword).toBe("vengeful");
     expect(lookupFigmentCatalogEntry("Spirit Animal")).toBe(
       FIGMENT_CATALOG["spirit animal"],
     );
@@ -91,15 +87,11 @@ describe("figment catalog", () => {
 
     expect(baseSparkByKey).toMatchInlineSnapshot(`
       {
-        "ancient": 4,
-        "celestial": 2,
         "ember": 1,
-        "enigma": 0,
         "ethereal": 1,
         "legion": 1,
         "monstrosity": 4,
         "outsider": 1,
-        "radiant": 2,
         "shadow": 2,
         "spirit animal": 1,
         "survivor": 1,

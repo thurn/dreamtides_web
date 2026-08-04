@@ -66,10 +66,10 @@ describe("BattleFigmentCreator", () => {
   it("keeps type-derived spark and keyword display in the Cumulus form", () => {
     const board = state(); const host = document.createElement("div"); document.body.append(host); const root = createRoot(host);
     act(() => root.render(<BattleFigmentCreator initialSide="player" state={board} onClose={() => undefined} onSubmit={() => undefined} />));
-    chooseType("Ancient");
+    chooseType("Ember");
     const spark = document.querySelector<HTMLInputElement>('[data-battle-figment-field="spark"] input');
-    expect(spark?.value).toBe("4");
-    expect(document.querySelector('[data-battle-figment-keyword]')?.textContent).toContain("Unstoppable");
+    expect(spark?.value).toBe("1");
+    expect(document.querySelector('[data-battle-figment-keyword]')?.textContent).toContain("Awakened");
     act(() => root.unmount());
   });
 
@@ -134,7 +134,7 @@ describe("BattleFigmentCreator", () => {
         }}
       />,
     ));
-    chooseType("Ancient");
+    chooseType("Ember");
     act(() => root.unmount());
 
     const reopenedHost = document.createElement("div");
@@ -154,10 +154,10 @@ describe("BattleFigmentCreator", () => {
       document.querySelector<HTMLInputElement>(
         '[data-battle-figment-field="spark"] input',
       )?.value,
-    ).toBe("4");
+    ).toBe("1");
     expect(
       document.querySelector('[data-battle-figment-keyword]')?.textContent,
-    ).toContain("Unstoppable");
+    ).toContain("Awakened");
     act(() => reopenedRoot.unmount());
   });
 });
