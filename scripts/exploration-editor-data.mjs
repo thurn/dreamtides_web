@@ -368,9 +368,13 @@ export function normalizeExplorationAction(rawAction, context) {
     throw editorError("INVALID_EFFECT_KIND", `Unknown Exploration effect kind ${effectKind}.`);
   }
   const requestedTemplateId = Number.isInteger(raw.templateId) ? raw.templateId : undefined;
-  const templateId = definition.templateIds.includes(requestedTemplateId)
+  let templateId = definition.templateIds.includes(requestedTemplateId)
     ? requestedTemplateId
     : definition.templateIds[0];
+  if (effectKind === "purge-selected" && raw.predicate === "") {
+    if (templateId === 4) templateId = 3;
+    if (templateId === 6) templateId = 5;
+  }
   const action = {
     id: requiredString(raw.id, "action id"),
     label: requiredString(raw.label, "action label").trim(),

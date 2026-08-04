@@ -81,6 +81,48 @@ describe("exploration editor data", () => {
       .toEqual(transformExplorationData(document));
   });
 
+  it("moves an optional Any card purge to its predicate-free template", () => {
+    const rootDir = fixtureRoot();
+    const data = readExplorationEditorData({ rootDir });
+    const encounter = data.encounters[0];
+
+    let result = updateExplorationAction({
+      cardId: encounter.cardId,
+      slot: 0,
+      action: {
+        ...encounter.actions[0],
+        effectKind: "purge-selected",
+        templateId: 4,
+        predicate: "",
+      },
+    }, { rootDir });
+    expect(result.encounters[0].actions[0]).toMatchObject({
+      effectKind: "purge-selected",
+      templateId: 3,
+      effectText: "Purge a chosen card",
+      count: 1,
+    });
+    expect(result.encounters[0].actions[0]).not.toHaveProperty("predicate");
+
+    result = updateExplorationAction({
+      cardId: encounter.cardId,
+      slot: 0,
+      action: {
+        ...result.encounters[0].actions[0],
+        templateId: 6,
+        predicate: "",
+        count: 2,
+      },
+    }, { rootDir });
+    expect(result.encounters[0].actions[0]).toMatchObject({
+      effectKind: "purge-selected",
+      templateId: 5,
+      effectText: "Purge up to 2 chosen cards",
+      count: 2,
+    });
+    expect(result.encounters[0].actions[0]).not.toHaveProperty("predicate");
+  });
+
   it("preserves system-managed comments and unrelated records on targeted writes", () => {
     const rootDir = fixtureRoot();
     const path = join(rootDir, "data/tabula/exploration.toml");

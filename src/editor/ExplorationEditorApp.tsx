@@ -405,10 +405,22 @@ function ExplorationEditorRow({
     eventName = "exploration_editor_effect_field_saved",
   ) {
     const current = encounter.actions[slot];
-    void saveAction(slot, { ...current, [field]: value }, eventName, {
+    let templateId = current.templateId;
+    if (field === "predicate" && current.effectKind === "purge-selected") {
+      if (value === "") {
+        if (templateId === 4) templateId = 3;
+        if (templateId === 6) templateId = 5;
+      } else {
+        if (templateId === 3) templateId = 4;
+        if (templateId === 5) templateId = 6;
+      }
+    }
+    void saveAction(slot, { ...current, [field]: value, templateId }, eventName, {
       field,
       value,
       effectKind: current.effectKind,
+      fromTemplateId: current.templateId,
+      toTemplateId: templateId,
     });
   }
 
@@ -445,7 +457,9 @@ function ExplorationEditorRow({
             full
             size="sm"
             ariaLabel={field.label}
-            options={data.predicates}
+            options={field.optional
+              ? data.predicates
+              : data.predicates.filter((entry) => entry.value !== "")}
             value={typeof action.predicate === "string" ? action.predicate : ""}
             onChange={(value) => updateField(slot, field.key, value)}
           />

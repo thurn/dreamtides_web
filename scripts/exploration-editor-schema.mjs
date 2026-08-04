@@ -53,7 +53,7 @@ export const EXPLORATION_EFFECT_DEFINITIONS = [
     templateIds: [3, 4, 5, 6],
     fields: [
       field("predicate", "Card predicate", "predicate", {
-        optional: true, templateIds: [4, 6],
+        optional: true,
       }),
       field("count", "Count", "number", {
         defaultValue: 1, min: 1, templateIds: [5, 6],

@@ -80,6 +80,8 @@ const SERVER_DATA: ExplorationEditorServerData = {
     }],
   }],
   templates: [
+    { id: 3, text: "Purge a chosen card" },
+    { id: 4, text: "Purge a chosen {predicate} card" },
     { id: 9, text: "Gain a random {predicate} card" },
     { id: 10, text: "Gain {card_id}" },
     { id: 13, text: "Gain {count} random {predicate} cards" },
@@ -94,6 +96,16 @@ const SERVER_DATA: ExplorationEditorServerData = {
       { key: "packCount", label: "Pack count", control: "number", min: 1 },
       { key: "packSize", label: "Pack size", control: "number", min: 1 },
     ],
+  }, {
+    kind: "purge-selected",
+    label: "Purge selected cards",
+    templateIds: [3, 4],
+    fields: [{
+      key: "predicate",
+      label: "Card predicate",
+      control: "predicate",
+      optional: true,
+    }],
   }, {
     kind: "gain-card",
     label: "Gain card",
@@ -243,5 +255,87 @@ describe("ExplorationEditorApp", () => {
     expect(request?.action.effectKind).toBe("gain-random-cards");
     expect(request?.action.templateId).toBe(13);
     act(() => root.unmount());
+  });
+
+  it("submits Any card for optional predicates and hides it for required predicates", async () => {
+    const loaded = loadResult();
+    loaded.encounters[0].actions[0] = {
+      id: `${CARD_ID}:first`,
+      label: "Purge anything",
+      effectText: "Purge a chosen Character card",
+      templateId: 4,
+      template: "Purge a chosen {predicate} card",
+      templateVariables: { predicate: "Character" },
+      effectKind: "purge-selected",
+      predicate: "character",
+      count: 1,
+    };
+    const normalized = structuredClone(loaded);
+    normalized.encounters[0].actions[0] = {
+      ...normalized.encounters[0].actions[0],
+      effectText: "Purge a chosen card",
+      templateId: 3,
+      template: "Purge a chosen card",
+      templateVariables: {},
+    };
+    delete normalized.encounters[0].actions[0].predicate;
+    const { cards: _cards, dreamsigns: _dreamsigns, ...normalizedData } = normalized;
+    const { cards: _filteredCards, dreamsigns: _filteredDreamsigns, ...filteredData } = loaded;
+    const saveAction = vi.fn((
+      request: Parameters<ExplorationEditorClient["saveAction"]>[0],
+    ) => Promise.resolve({
+      clientRevision: request.clientRevision,
+      data: structuredClone(request.action.templateId === 3 ? normalizedData : filteredData),
+    }));
+    const { container, root } = await renderLoaded(client({
+      load: vi.fn().mockResolvedValue(loaded),
+      saveAction,
+    }));
+
+    const optionalPredicate = container.querySelector<HTMLButtonElement>(
+      "[aria-label='Card predicate']",
+    );
+    if (optionalPredicate === null) throw new Error("Optional predicate did not render");
+    act(() => optionalPredicate.click());
+    const anyCard = [...document.body.querySelectorAll<HTMLButtonElement>("[role='option']")]
+      .find((entry) => entry.textContent === "Any card");
+    expect(anyCard).toBeDefined();
+    await act(async () => {
+      anyCard?.click();
+      await Promise.resolve();
+    });
+    expect(saveAction.mock.calls[0]?.[0].action).toMatchObject({
+      predicate: "",
+      templateId: 3,
+    });
+    expect(container.querySelector("[aria-label='Card predicate']")).not.toBeNull();
+
+    const anyPredicate = container.querySelector<HTMLButtonElement>(
+      "[aria-label='Card predicate']",
+    );
+    if (anyPredicate === null) throw new Error("Any card predicate did not remain visible");
+    act(() => anyPredicate.click());
+    const character = [...document.body.querySelectorAll<HTMLButtonElement>("[role='option']")]
+      .find((entry) => entry.textContent === "Character");
+    await act(async () => {
+      character?.click();
+      await Promise.resolve();
+    });
+    expect(saveAction.mock.calls[1]?.[0].action).toMatchObject({
+      predicate: "character",
+      templateId: 4,
+    });
+
+    act(() => root.unmount());
+
+    const required = await renderLoaded(client());
+    const requiredPredicate = required.container.querySelector<HTMLButtonElement>(
+      "[aria-label='Card predicate']",
+    );
+    if (requiredPredicate === null) throw new Error("Required predicate did not render");
+    act(() => requiredPredicate.click());
+    expect([...document.body.querySelectorAll<HTMLElement>("[role='option']")]
+      .some((entry) => entry.textContent === "Any card")).toBe(false);
+    act(() => required.root.unmount());
   });
 });
