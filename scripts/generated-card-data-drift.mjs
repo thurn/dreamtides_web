@@ -2,7 +2,8 @@ import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parse } from "smol-toml";
-import { NIGHTMARE_CARD_ID, transformCard } from "./setup-assets.mjs";
+import { NIGHTMARE_CARD_ID } from "../src/data/nightmare-identity.ts";
+import { transformCard } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 
