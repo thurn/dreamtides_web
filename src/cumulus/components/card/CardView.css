@@ -159,10 +159,10 @@
 
 /* A materialized figment is a small adjacent object in a desktop card reveal.
  * Its card keeps the canonical 150px reveal geometry while the authored rules
- * voice doubles for legibility. */
+ * voice grows by half for legibility without overpowering the title. */
 .card-view[data-card-rules-text-presentation="adjacent-figment"] {
-  --cv-rules-font-size: calc(var(--cv-rules-font-size-base) * 2);
-  --cv-rules-font-cap: calc(var(--cv-rules-font-cap-base) * 2);
+  --cv-rules-font-size: calc(var(--cv-rules-font-size-base) * 1.5);
+  --cv-rules-font-cap: calc(var(--cv-rules-font-cap-base) * 1.5);
 }
 
 .hover-zoom-card__gentle-copy {

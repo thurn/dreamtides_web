@@ -505,7 +505,7 @@ describe("GameCard reveal contract", () => {
     const figmentRulesFont = figment
       ?.querySelector<HTMLElement>("[data-card-rules-text]")
       ?.style.fontSize.match(/([0-9.]+)px/u)?.[1];
-    expect(Number(figmentRulesFont)).toBeCloseTo(Number(sourceRulesFont) * 2);
+    expect(Number(figmentRulesFont)).toBeCloseTo(Number(sourceRulesFont) * 1.5);
     expect(Number.parseFloat(figment!.style.left)).toBe(
       Number.parseFloat(definition!.style.left)
         + Number.parseFloat(definition!.style.width)

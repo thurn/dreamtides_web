@@ -459,7 +459,7 @@ const SPARK_ORB_RATIO = 0.16;
 const RULES_FONT_RATIO = 0.042;
 const RULES_FONT_RATIO_MOBILE = 0.0485;
 const RULES_MIN_FONT_FRACTION = 0.5;
-const ADJACENT_FIGMENT_RULES_TEXT_SCALE = 2;
+const ADJACENT_FIGMENT_RULES_TEXT_SCALE = 1.5;
 
 /**
  * Below this viewport width a card lifts its rules-text sizing. Mirrors the
@@ -669,7 +669,7 @@ export interface CardViewProps {
    */
   figment?: boolean;
   /**
-   * Use the doubled rules-text treatment for the small figment card shown
+   * Use the enlarged rules-text treatment for the small figment card shown
    * beside a materializing card's desktop reveal. Card geometry is unchanged.
    */
   rulesTextPresentation?: "adjacent-figment";

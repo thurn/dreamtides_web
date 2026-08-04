@@ -1357,7 +1357,7 @@
       ],
       "required": false,
       "defaultValue": null,
-      "description": "Use the doubled rules-text treatment for the small figment card shown\nbeside a materializing card's desktop reveal. Card geometry is unchanged."
+      "description": "Use the enlarged rules-text treatment for the small figment card shown\nbeside a materializing card's desktop reveal. Card geometry is unchanged."
     },
     {
       "name": "hideRulesText",
