@@ -2128,6 +2128,7 @@ export function ExplorationSiteScreen({
         view.reward === null && (
         <motion.section
           data-exploration-narrative=""
+          data-cumulus-reveal-anchor=""
           data-tutorial-guidance-concept="exploration-actions"
           data-tutorial-guidance-anchor=""
           data-tutorial-guidance-obstacle=""

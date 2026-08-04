@@ -129,6 +129,58 @@ describe("RevealOverlay", () => {
     ).toBe("50px");
   });
 
+  it("places a reveal outside its nearest semantic anchor", () => {
+    const anchor = document.createElement("section");
+    anchor.dataset.cumulusRevealAnchor = "";
+    anchor.getBoundingClientRect = () => ({
+      x: 12,
+      y: 50,
+      left: 12,
+      top: 50,
+      right: 412,
+      bottom: 250,
+      width: 400,
+      height: 200,
+      toJSON: () => ({}),
+    });
+    const source = document.createElement("button");
+    anchor.append(source);
+    document.body.append(anchor);
+    let placedDecision: RevealPlacementDecision | undefined;
+    let placedGeometry: RevealGeometrySnapshot | undefined;
+    const onPlaced = vi.fn(
+      (
+        decision: RevealPlacementDecision,
+        geometry: RevealGeometrySnapshot,
+      ) => {
+        placedDecision = decision;
+        placedGeometry = geometry;
+      },
+    );
+
+    act(() =>
+      renderOverlay(
+        <RevealOverlay
+          active={active({
+            element: source,
+            sourceRect: { x: 27, y: 150, width: 370, height: 69 },
+            sourceIsEntityReference: true,
+            spec: makeTextRevealSpec("Primary", "Body"),
+          })}
+          onPlaced={onPlaced}
+        />,
+      ),
+    );
+
+    expect(placedDecision?.primaryRect.x).toBe(426);
+    expect(placedGeometry?.sourceRect).toEqual({
+      x: 12,
+      y: 50,
+      width: 400,
+      height: 200,
+    });
+  });
+
   it("measures invisibly, side-aligns the chosen complete prefix, and omits overflow", () => {
     act(() => renderOverlay(<RevealOverlay active={active()} />));
     const group = document.querySelector<HTMLElement>("[data-cumulus-reveal-group]")!;

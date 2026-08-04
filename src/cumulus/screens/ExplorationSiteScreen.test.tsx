@@ -433,6 +433,9 @@ describe("ExplorationSiteScreen", () => {
     expect(tutorialAnchor?.hasAttribute("data-tutorial-guidance-anchor")).toBe(
       true,
     );
+    expect(tutorialAnchor?.hasAttribute("data-cumulus-reveal-anchor")).toBe(
+      true,
+    );
     expect(
       container
         .querySelector('[data-testid="cumulus-exploration-narrative-panel"]')

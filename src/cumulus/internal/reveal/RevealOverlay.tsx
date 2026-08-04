@@ -51,9 +51,23 @@ function battleHandHoverScale(active: RevealOverlayActive): number {
   return Number.isFinite(scale) && scale > 0 ? scale : 1;
 }
 
+function revealPlacementSourceRect(active: RevealOverlayActive): RevealRect {
+  const anchor = active.element.closest<HTMLElement>(
+    "[data-cumulus-reveal-anchor]",
+  );
+  if (anchor === null) return active.sourceRect;
+  const rect = anchor.getBoundingClientRect();
+  if (!(rect.width > 0) || !(rect.height > 0)) return active.sourceRect;
+  return { x: rect.left, y: rect.top, width: rect.width, height: rect.height };
+}
+
 export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
   const key = active === null ? "" : `${active.source.registrationId}:${active.reason}:${String(active.interactionId)}`;
   const [measured, setMeasured] = useState<MeasuredDecision | null>(null);
+  const placementSourceRect = useMemo(
+    () => (active === null ? null : revealPlacementSourceRect(active)),
+    [active, key],
+  );
   const viewport = useMemo(
     () =>
       active === null
@@ -68,7 +82,11 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
   );
 
   useLayoutEffect(() => {
-    if (active === null || viewport === null) return;
+    if (
+      active === null ||
+      placementSourceRect === null ||
+      viewport === null
+    ) return;
     let disposed = false;
     const layer = document.querySelector<HTMLElement>("[data-reveal-measurement-layer]");
     if (layer?.dataset.revealMeasurementKey !== key) return;
@@ -98,7 +116,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
         ...(active.placementException === undefined
           ? {}
           : { placementException: active.placementException }),
-        sourceRect: active.sourceRect,
+        sourceRect: placementSourceRect,
         ...(active.touchPoint === undefined ? {} : { touchPoint: active.touchPoint }),
         primarySize: { width: primaryRect.width, height: primaryRect.height },
         minimumGameCardWidth,
@@ -108,7 +126,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
         sourceIsBattlefieldGameCard: active.sourceIsBattlefieldGameCard,
         sourceIsEntityReference: active.sourceIsEntityReference,
       });
-      setMeasured({ key, decision, sourceRect: active.sourceRect });
+      setMeasured({ key, decision, sourceRect: placementSourceRect });
       onPlaced?.(decision, {
         viewport: {
           layout: viewport.layout,
@@ -121,7 +139,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
             ? {}
             : { boundary: viewport.boundary }),
         },
-        sourceRect: active.sourceRect,
+        sourceRect: placementSourceRect,
         ...(active.touchPoint === undefined ? {} : { touchPoint: active.touchPoint }),
         placement: { family: decision.family, orientation: decision.orientation },
         finalRects: {
@@ -141,7 +159,7 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
     for (const secondary of secondaries) observer.observe(secondary);
     for (const adjacent of adjacents) observer.observe(adjacent);
     return () => { disposed = true; observer.disconnect(); };
-  }, [active, key, onPlaced, viewport]);
+  }, [active, key, onPlaced, placementSourceRect, viewport]);
 
   const decision = measured?.key === key ? measured.decision : null;
   const primaryIsCardShaped = active !== null
