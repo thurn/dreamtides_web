@@ -27,6 +27,8 @@ export interface RevealPlacementInput {
   readonly adjacentSizes?: readonly RevealSize[];
   readonly sourceShowsCompleteGameCard: boolean;
   readonly sourceIsBattlefieldGameCard: boolean;
+  /** The source is readable prose or a control naming the revealed entity. */
+  readonly sourceIsEntityReference: boolean;
 }
 
 export interface RevealPlacementDecision {
@@ -438,7 +440,8 @@ function desktopPlacement(input: RevealPlacementInput): RevealPlacementDecision 
       bestEffortPrimaryOverlap: false,
     });
   }
-  const cardShaped = input.primaryKind !== "infoCard";
+  const cardShaped =
+    input.primaryKind !== "infoCard" && !input.sourceIsEntityReference;
   const primaryWidth = cardShaped
     ? Math.max(input.minimumGameCardWidth ?? DESKTOP_GAME_CARD_WIDTH, sourceRect.width)
     : input.primarySize.width;

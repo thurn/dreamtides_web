@@ -6,6 +6,7 @@ const base: RevealPlacementInput = {
   viewport, reason: "press", primaryKind: "infoCard", sourceRect: { x: 170, y: 650, width: 50, height: 50 },
   touchPoint: { x: 195, y: 675 }, primarySize: { width: 248, height: 190 }, secondarySizes: [], sourceShowsCompleteGameCard: false,
   sourceIsBattlefieldGameCard: false,
+  sourceIsEntityReference: false,
 };
 
 describe("fitSecondaryPrefix", () => {
@@ -65,6 +66,34 @@ describe("selectRevealPlacement", () => {
     const alone = selectRevealPlacement(game);
     const supported = selectRevealPlacement({ ...game, secondarySizes: [{ width: 248, height: 120 }] });
     expect(supported.primaryRect).toEqual(alone.primaryRect);
+  });
+
+  it("places a GameCard named by a wide choice cell entirely beside the cell", () => {
+    const sourceRect = { x: 29, y: 648, width: 366, height: 53 };
+    const result = selectRevealPlacement({
+      ...base,
+      viewport: {
+        ...viewport,
+        layout: "desktop",
+        width: 1440,
+        height: 900,
+        safeArea: { top: 0, right: 0, bottom: 0, left: 0 },
+      },
+      reason: "hover",
+      touchPoint: undefined,
+      primaryKind: "gameCard",
+      sourceRect,
+      primarySize: { width: 240, height: 336 },
+      secondarySizes: [{ width: 248, height: 82 }],
+      sourceIsEntityReference: true,
+    });
+
+    expect(result.family).toBe("desktop-side-right");
+    expect(result.primaryRect.x).toBeGreaterThanOrEqual(
+      sourceRect.x + sourceRect.width + 14,
+    );
+    expect(result.primaryRect.width).toBe(240);
+    expect(result.bestEffortPrimaryOverlap).toBe(false);
   });
 
   it("keeps desktop card reading reveals inside their application boundary", () => {

@@ -29,7 +29,8 @@ function active(overrides: Partial<RevealOverlayActive> = {}): RevealOverlayActi
   return {
     source: { identity: { entityType: "test", entityId: UUID }, registrationId: "one" },
     spec: makeTextRevealSpec("Primary", "Body", ["First", "Second"]), element: source,
-    reason: "hover", sourceShowsCompleteGameCard: false, sourceIsBattlefieldGameCard: false, interactionId: 1,
+    reason: "hover", sourceShowsCompleteGameCard: false, sourceIsBattlefieldGameCard: false,
+    sourceIsEntityReference: false, interactionId: 1,
     sourceRect: { x: 400, y: 250, width: 100, height: 50 }, modality: "mouse",
     ...overrides,
   };
@@ -391,5 +392,27 @@ describe("RevealOverlay", () => {
     expect(value.element.style.opacity).toBe("0");
     act(() => renderOverlay(<RevealOverlay active={null} />));
     expect(value.element.style.opacity).toBe("");
+  });
+
+  it("keeps an entity-reference choice visible while placing its GameCard beside it", () => {
+    const cardId = asCardId(UUID);
+    const spec: RevealSpec = { primary: { kind: "gameCard", cardId, displaySnapshot: {
+      id: cardId, name: asCardName("Referenced Card"), cardNumber: 1, cardType: "Event", subtype: "",
+      isStarter: false, rarity: "Special", energyCost: 1, spark: null, isFast: false, renderedText: "Draw a card.",
+      imageNumber: 1, artOwned: false,
+    } }, secondaries: [] };
+    const value = active({
+      spec,
+      sourceIsEntityReference: true,
+      sourceRect: { x: 29, y: 200, width: 366, height: 53 },
+    });
+
+    act(() => renderOverlay(<RevealOverlay active={value} />));
+
+    const preview = document.querySelector<HTMLElement>(
+      '[data-cumulus-reveal-card="primary"]',
+    )!;
+    expect(value.element.style.opacity).toBe("");
+    expect(Number.parseFloat(preview.style.left)).toBeGreaterThanOrEqual(409);
   });
 });
