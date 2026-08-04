@@ -391,6 +391,7 @@ const FRAME_FRACTURE_SECONDS =
 const REWARD_READING_SECONDS = motionTimeSeconds("--dur-slow") * 4;
 const REWARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow") * 2;
 const REWARD_STAGGER_SECONDS = motionTimeSeconds("--dur-fast");
+const TYPEWRITER_SECONDS = motionTimeSeconds("--dur-exploration-typewriter");
 const DESKTOP_REWARD_CARD_WIDTH = 240;
 const DESKTOP_REWARD_DREAMSIGN_SIZE = 240;
 const MOBILE_REWARD_DREAMSIGN_SIZE = 180;
@@ -404,6 +405,118 @@ const CARD_PREVIEW_CONTENT_FRACTION = 259 / 280;
 const FRAME_BREAK_LAYER = 39;
 const FRAME_BREAK_EXIT_LAYER = 61;
 const DREAM_EASE = [0.22, 0.61, 0.36, 1] as const;
+
+function ExplorationNarrativeChoices({
+  narrative,
+  actions,
+  reduceMotion,
+  onActivate,
+}: {
+  readonly narrative: string;
+  readonly actions: ExplorationSiteView["actions"];
+  readonly reduceMotion: boolean;
+  readonly onActivate: (action: ExplorationActionView) => void;
+}) {
+  const characters = useMemo(() => Array.from(narrative), [narrative]);
+  const [visibleCharacterCount, setVisibleCharacterCount] = useState(
+    reduceMotion ? characters.length : 0,
+  );
+  const [choicesVisible, setChoicesVisible] = useState(reduceMotion);
+
+  useEffect(() => {
+    if (reduceMotion || characters.length === 0) {
+      setVisibleCharacterCount(characters.length);
+      setChoicesVisible(true);
+      return;
+    }
+
+    setVisibleCharacterCount(0);
+    setChoicesVisible(false);
+    const durationMs = TYPEWRITER_SECONDS * 1_000;
+    const timers = characters.map((_, index) => {
+      const nextCount = index + 1;
+      return window.setTimeout(() => {
+        setVisibleCharacterCount(nextCount);
+        if (nextCount === characters.length) setChoicesVisible(true);
+      }, (durationMs * nextCount) / characters.length);
+    });
+    return () => {
+      for (const timer of timers) window.clearTimeout(timer);
+    };
+  }, [characters, reduceMotion]);
+
+  const visibleNarrative = characters
+    .slice(0, visibleCharacterCount)
+    .join("");
+
+  return (
+    <>
+      <p
+        aria-label={narrative}
+        style={{
+          margin: 0,
+          display: "grid",
+          font: token("--t-body"),
+          color: token("--text-on-glass"),
+          lineHeight: 1.55,
+        }}
+      >
+        <span
+          aria-hidden="true"
+          style={{ gridArea: "1 / 1", visibility: "hidden" }}
+        >
+          {narrative}
+        </span>
+        <span
+          aria-hidden="true"
+          data-testid="cumulus-exploration-narrative-copy"
+          data-exploration-typewriter-state={
+            choicesVisible ? "complete" : "typing"
+          }
+          data-exploration-visible-character-count={visibleCharacterCount}
+          style={{ gridArea: "1 / 1" }}
+        >
+          {visibleNarrative}
+        </span>
+      </p>
+      <motion.div
+        role="group"
+        aria-label="Exploration choices"
+        aria-hidden={!choicesVisible}
+        data-exploration-choices-state={
+          choicesVisible ? "revealed" : "waiting"
+        }
+        initial={false}
+        animate={{
+          opacity: choicesVisible ? 1 : 0,
+          y: choicesVisible || reduceMotion ? 0 : token("--space-2"),
+        }}
+        transition={{
+          duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+          ease: DREAM_EASE,
+        }}
+        style={{
+          display: "grid",
+          gap: token("--space-3"),
+          visibility: choicesVisible ? "visible" : "hidden",
+          pointerEvents: choicesVisible ? "auto" : "none",
+        }}
+      >
+        {actions.map((action, index) => (
+          <ExplorationChoice
+            key={action.id}
+            action={{
+              ...action,
+              available: choicesVisible && action.available,
+            }}
+            index={index}
+            onActivate={() => onActivate(action)}
+          />
+        ))}
+      </motion.div>
+    </>
+  );
+}
 
 function cardChoiceColumns(
   count: number,
@@ -1573,31 +1686,12 @@ export function ExplorationSiteScreen({
                 paddingTop: token("--space-5"),
               }}
             >
-              <p
-                data-testid="cumulus-exploration-narrative-copy"
-                style={{
-                  margin: 0,
-                  font: token("--t-body"),
-                  color: token("--text-on-glass"),
-                  lineHeight: 1.55,
-                }}
-              >
-                {view.narrative}
-              </p>
-              <div
-                role="group"
-                aria-label="Exploration choices"
-                style={{ display: "grid", gap: token("--space-3") }}
-              >
-                  {view.actions.map((action, index) => (
-                    <ExplorationChoice
-                      key={action.id}
-                      action={action}
-                      index={index}
-                      onActivate={() => openAction(action)}
-                    />
-                  ))}
-              </div>
+              <ExplorationNarrativeChoices
+                narrative={view.narrative}
+                actions={view.actions}
+                reduceMotion={reduceMotion}
+                onActivate={openAction}
+              />
             </div>
           </GlassPanel>
         </motion.section>

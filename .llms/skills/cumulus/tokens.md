@@ -202,6 +202,7 @@ Durations, easings, and the two material-continuity transitions (object-travel, 
 | `--dur-fast` | `140ms` |  |
 | `--dur-base` | `240ms` |  |
 | `--dur-slow` | `420ms` |  |
+| `--dur-exploration-typewriter` | `1000ms` |  |
 | `--dur-loading-screen-fade` | `1200ms` |  |
 | `--dur-tutorial-dreamwell-emerge` | `1000ms` |  |
 | `--dur-tutorial-character-reposition` | `1000ms` |  |

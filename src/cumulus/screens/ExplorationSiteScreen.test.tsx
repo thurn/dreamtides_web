@@ -364,6 +364,92 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
+  it("types the narrative for one second before revealing the choices", () => {
+    vi.useFakeTimers();
+    window.requestAnimationFrame = (callback) => {
+      callback(0);
+      return 1;
+    };
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={view()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() => {
+      container
+        .querySelector<HTMLElement>("[data-exploration-card-travel]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() => {
+      container
+        .querySelector<HTMLElement>("[data-exploration-frame-break]")
+        ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+    });
+
+    const narrative = container.querySelector<HTMLElement>(
+      '[data-testid="cumulus-exploration-narrative-copy"]',
+    );
+    const choices = container.querySelector<HTMLElement>(
+      '[data-exploration-choices-state="waiting"]',
+    );
+    const firstChoice = container.querySelector<HTMLButtonElement>(
+      '[data-testid="cumulus-exploration-choice-0"]',
+    );
+    expect(narrative?.textContent).toBe("");
+    expect(narrative?.dataset.explorationTypewriterState).toBe("typing");
+    expect(choices?.style.visibility).toBe("hidden");
+    expect(firstChoice?.getAttribute("aria-disabled")).toBe("true");
+
+    act(() => {
+      vi.advanceTimersByTime(500);
+    });
+    const halfwayCount = Number(
+      narrative?.dataset.explorationVisibleCharacterCount,
+    );
+    expect(halfwayCount).toBeGreaterThan(0);
+    expect(halfwayCount).toBeLessThan(view().narrative.length);
+    expect(narrative?.textContent).toBe(
+      view().narrative.slice(0, halfwayCount),
+    );
+    expect(
+      container.querySelector("[data-exploration-choices-state='revealed']"),
+    ).toBeNull();
+
+    act(() => {
+      vi.advanceTimersByTime(499);
+    });
+    expect(narrative?.dataset.explorationTypewriterState).toBe("typing");
+    expect(firstChoice?.getAttribute("aria-disabled")).toBe("true");
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(narrative?.textContent).toBe(view().narrative);
+    expect(narrative?.dataset.explorationTypewriterState).toBe("complete");
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-exploration-choices-state='revealed']",
+      )?.style.visibility,
+    ).toBe("visible");
+    expect(firstChoice?.hasAttribute("aria-disabled")).toBe(false);
+    act(() => root.unmount());
+  });
+
   it("makes the full referenced choice cell the reveal and activation source", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
