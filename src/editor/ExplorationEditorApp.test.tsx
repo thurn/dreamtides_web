@@ -80,7 +80,9 @@ const SERVER_DATA: ExplorationEditorServerData = {
     }],
   }],
   templates: [
+    { id: 9, text: "Gain a random {predicate} card" },
     { id: 10, text: "Gain {card_id}" },
+    { id: 13, text: "Gain {count} random {predicate} cards" },
     { id: 36, text: "Choose one of {pack_count} packs of {pack_size} {predicate} cards to add to your deck" },
   ],
   effectDefinitions: [{
@@ -97,6 +99,14 @@ const SERVER_DATA: ExplorationEditorServerData = {
     label: "Gain card",
     templateIds: [10],
     fields: [{ key: "cardId", label: "Card", control: "card" }],
+  }, {
+    kind: "gain-random-cards",
+    label: "Gain random cards",
+    templateIds: [9, 13],
+    fields: [
+      { key: "predicate", label: "Card predicate", control: "predicate" },
+      { key: "count", label: "Count", control: "number", min: 1, templateIds: [13] },
+    ],
   }],
   predicates: [
     { value: "", label: "Any card" },
@@ -173,8 +183,8 @@ describe("ExplorationEditorApp", () => {
       .not.toBeNull();
     expect(container.querySelector(`[data-entity-reference-id='${REWARD_CARD_ID}']`))
       .not.toBeNull();
-    expect(container.querySelectorAll("[aria-label^='Effect kind for']")).toHaveLength(2);
-    expect(container.querySelectorAll("[aria-label^='Template for']")).toHaveLength(2);
+    expect(container.querySelectorAll("[aria-label^='Effect for']")).toHaveLength(2);
+    expect(container.querySelectorAll("[aria-label^='Template for']")).toHaveLength(0);
     act(() => root.unmount());
   });
 
@@ -204,7 +214,7 @@ describe("ExplorationEditorApp", () => {
     act(() => root.unmount());
   });
 
-  it("saves a newly selected effect kind immediately", async () => {
+  it("saves the selected effect and template pair immediately", async () => {
     const saveAction = vi.fn((
       request: Parameters<ExplorationEditorClient["saveAction"]>[0],
     ) => Promise.resolve({
@@ -213,11 +223,16 @@ describe("ExplorationEditorApp", () => {
     }));
     const { container, root } = await renderLoaded(client({ saveAction }));
     const trigger = container.querySelector<HTMLButtonElement>(
-      "[aria-label='Effect kind for Gather a company']",
+      "[aria-label='Effect for Gather a company']",
     )!;
     act(() => trigger.click());
-    const option = [...document.body.querySelectorAll<HTMLButtonElement>("[role='option']")]
-      .find((entry) => entry.textContent?.includes("Gain card"));
+    const options = [...document.body.querySelectorAll<HTMLButtonElement>("[role='option']")];
+    expect(options.map((entry) => entry.textContent)).toEqual(expect.arrayContaining([
+      "Gain random cards — Gain a random {predicate} card",
+      "Gain random cards — Gain {count} random {predicate} cards",
+    ]));
+    const option = options.find((entry) => entry.textContent ===
+        "Gain random cards — Gain {count} random {predicate} cards");
     await act(async () => {
       option!.click();
       await Promise.resolve();
@@ -225,8 +240,8 @@ describe("ExplorationEditorApp", () => {
     const request = saveAction.mock.calls[0]?.[0];
     expect(request?.cardId).toBe(CARD_ID);
     expect(request?.slot).toBe(0);
-    expect(request?.action.effectKind).toBe("gain-card");
-    expect(request?.action.templateId).toBe(-1);
+    expect(request?.action.effectKind).toBe("gain-random-cards");
+    expect(request?.action.templateId).toBe(13);
     act(() => root.unmount());
   });
 });

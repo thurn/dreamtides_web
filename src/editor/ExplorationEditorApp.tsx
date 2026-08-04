@@ -107,6 +107,25 @@ function actionTarget(cardId: string, slot: number): string {
   return `${cardId}:${String(slot)}`;
 }
 
+function effectTemplateValue(effectKind: string, templateId: number): string {
+  return `${effectKind}:${String(templateId)}`;
+}
+
+function parseEffectTemplateValue(value: string): {
+  effectKind: ExplorationEditorAction["effectKind"];
+  templateId: number;
+} {
+  const separator = value.lastIndexOf(":");
+  const templateId = Number(value.slice(separator + 1));
+  if (separator < 1 || !Number.isInteger(templateId)) {
+    throw new Error(`Invalid effect/template choice: ${value}`);
+  }
+  return {
+    effectKind: value.slice(0, separator) as ExplorationEditorAction["effectKind"],
+    templateId,
+  };
+}
+
 function ExplorationCardPicker({
   cards,
   query,
@@ -208,6 +227,15 @@ function ExplorationEditorRow({
     () => new Map(data.templates.map((template) => [template.id, template])),
     [data.templates],
   );
+  const effectTemplateOptions = useMemo(() => data.effectDefinitions.flatMap((definition) =>
+    definition.templateIds.flatMap((templateId) => {
+      const template = templates.get(templateId);
+      return template === undefined ? [] : [{
+        value: effectTemplateValue(definition.kind, templateId),
+        label: `${definition.label} — ${template.text}`,
+        triggerLabel: `${definition.label} — Template ${String(templateId)}`,
+      }];
+    })), [data.effectDefinitions, templates]);
 
   const saveAction = useCallback(async (
     slot: 0 | 1,
@@ -530,9 +558,6 @@ function ExplorationEditorRow({
 
   function actionPanel(action: ExplorationEditorAction, slot: 0 | 1) {
     const definition = definitions.get(action.effectKind) as ExplorationEditorEffectDefinition;
-    const compatibleTemplates = definition.templateIds
-      .map((id) => templates.get(id))
-      .filter((entry) => entry !== undefined);
     const status = actionStatuses[actionTarget(encounter.cardId, slot)];
     return (
       <section className="exploration-editor-action" key={action.id}>
@@ -551,42 +576,30 @@ function ExplorationEditorRow({
         )}
         <div className="exploration-editor-action-selects">
           <label className="exploration-editor-select-field">
-            <span>Effect kind</span>
+            <span>Effect</span>
             <Select
               full
               size="sm"
-              ariaLabel={`Effect kind for ${action.label}`}
-              options={data.effectDefinitions.map((entry) => ({
-                value: entry.kind,
-                label: entry.label,
-              }))}
-              value={action.effectKind}
-              onChange={(value) => void saveAction(
-                slot,
-                { ...action, effectKind: value as ExplorationEditorAction["effectKind"], templateId: -1 },
-                "exploration_editor_effect_kind_changed",
-                { fromEffectKind: action.effectKind, toEffectKind: value },
-              )}
-            />
-          </label>
-          <label className="exploration-editor-select-field">
-            <span>Template</span>
-            <Select
-              full
-              size="sm"
-              ariaLabel={`Template for ${action.label}`}
-              options={compatibleTemplates.map((entry) => ({
-                value: String(entry.id),
-                label: `${String(entry.id)} · ${entry.text}`,
-                triggerLabel: `Template ${String(entry.id)}`,
-              }))}
-              value={String(action.templateId)}
-              onChange={(value) => void saveAction(
-                slot,
-                { ...action, templateId: Number(value) },
-                "exploration_editor_template_selected",
-                { fromTemplateId: action.templateId, toTemplateId: Number(value) },
-              )}
+              ariaLabel={`Effect for ${action.label}`}
+              options={effectTemplateOptions}
+              value={effectTemplateValue(action.effectKind, action.templateId)}
+              onChange={(value) => {
+                const next = parseEffectTemplateValue(value);
+                const effectKindChanged = next.effectKind !== action.effectKind;
+                void saveAction(
+                  slot,
+                  { ...action, effectKind: next.effectKind, templateId: next.templateId },
+                  effectKindChanged
+                    ? "exploration_editor_effect_kind_changed"
+                    : "exploration_editor_template_selected",
+                  {
+                    fromEffectKind: action.effectKind,
+                    toEffectKind: next.effectKind,
+                    fromTemplateId: action.templateId,
+                    toTemplateId: next.templateId,
+                  },
+                );
+              }}
             />
           </label>
         </div>

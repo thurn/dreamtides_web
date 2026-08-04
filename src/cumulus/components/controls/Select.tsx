@@ -210,6 +210,12 @@ export function Select({
     anchor?.side === "above"
       ? { bottom: anchor.verticalOffset }
       : { top: anchor?.verticalOffset };
+  const menuMaxWidth = anchor === null
+    ? undefined
+    : Math.max(
+        anchor.width,
+        window.innerWidth - (align === "end" ? anchor.right : anchor.left) - 12,
+      );
   const hasSelection = options.some((option) => option.value === value);
 
   return (
@@ -317,6 +323,7 @@ export function Select({
               ...menuVerticalPosition,
               ...menuPosition,
               minWidth: anchor.width,
+              maxWidth: menuMaxWidth,
               maxHeight: anchor.maxHeight,
               zIndex: 90,
               // No inner padding: option rows run edge to edge so a selected /
@@ -385,7 +392,7 @@ function MenuItem({ option, active, onPick }: MenuItemProps): ReactElement {
         color: active ? token("--text-on-accent") : CONTROL_INACTIVE_COLOR,
         textAlign: "left",
         cursor: "pointer",
-        whiteSpace: "nowrap",
+        whiteSpace: "normal",
         WebkitTapHighlightColor: "transparent",
         transition: `background ${token("--dur-fast")}`,
       }}
