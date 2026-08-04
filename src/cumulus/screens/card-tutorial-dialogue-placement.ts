@@ -76,16 +76,9 @@ export function placeCardTutorialDialogue(params: {
     minTop,
     maxTop,
   );
-  if (cardRects.length === 0) {
+  if (cardRects.length === 0 && obstacleRects.length === 0) {
     return { left: centeredLeft, top: minTop };
   }
-
-  const cardsLeft = Math.min(...cardRects.map((rect) => rect.left));
-  const cardsTop = Math.min(...cardRects.map((rect) => rect.top));
-  const cardsRight = Math.max(...cardRects.map((rect) => rect.right));
-  const cardsBottom = Math.max(...cardRects.map((rect) => rect.bottom));
-  const cardsCenterX = (cardsLeft + cardsRight) / 2;
-  const cardsCenterY = (cardsTop + cardsBottom) / 2;
   const collisionRects = [...cardRects, ...obstacleRects];
   const fits = (candidate: CardTutorialPoint): boolean =>
     candidate.left >= minLeft &&
@@ -108,26 +101,34 @@ export function placeCardTutorialDialogue(params: {
     left: candidate.left + horizontalOffset,
     top: candidate.top + verticalOffset,
   });
-  const preferred: readonly CardTutorialPoint[] = [
-    {
-      left: clamp(cardsCenterX - dialogueWidth / 2, minLeft, maxLeft),
-      top: cardsTop - gap - dialogueHeight,
-    },
-    {
-      left: clamp(cardsCenterX - dialogueWidth / 2, minLeft, maxLeft),
-      top: cardsBottom + gap,
-    },
-    {
-      left: cardsLeft - gap - dialogueWidth,
-      top: clamp(cardsCenterY - dialogueHeight / 2, minTop, maxTop),
-    },
-    {
-      left: cardsRight + gap,
-      top: clamp(cardsCenterY - dialogueHeight / 2, minTop, maxTop),
-    },
-  ].map(applyOffset);
-  const preferredFit = preferred.find(fits);
-  if (preferredFit !== undefined) return preferredFit;
+  if (cardRects.length > 0) {
+    const cardsLeft = Math.min(...cardRects.map((rect) => rect.left));
+    const cardsTop = Math.min(...cardRects.map((rect) => rect.top));
+    const cardsRight = Math.max(...cardRects.map((rect) => rect.right));
+    const cardsBottom = Math.max(...cardRects.map((rect) => rect.bottom));
+    const cardsCenterX = (cardsLeft + cardsRight) / 2;
+    const cardsCenterY = (cardsTop + cardsBottom) / 2;
+    const preferred: readonly CardTutorialPoint[] = [
+      {
+        left: clamp(cardsCenterX - dialogueWidth / 2, minLeft, maxLeft),
+        top: cardsTop - gap - dialogueHeight,
+      },
+      {
+        left: clamp(cardsCenterX - dialogueWidth / 2, minLeft, maxLeft),
+        top: cardsBottom + gap,
+      },
+      {
+        left: cardsLeft - gap - dialogueWidth,
+        top: clamp(cardsCenterY - dialogueHeight / 2, minTop, maxTop),
+      },
+      {
+        left: cardsRight + gap,
+        top: clamp(cardsCenterY - dialogueHeight / 2, minTop, maxTop),
+      },
+    ].map(applyOffset);
+    const preferredFit = preferred.find(fits);
+    if (preferredFit !== undefined) return preferredFit;
+  }
 
   const leftCandidates = new Set<number>([minLeft, centeredLeft, maxLeft]);
   const topCandidates = new Set<number>([minTop, centeredTop, maxTop]);

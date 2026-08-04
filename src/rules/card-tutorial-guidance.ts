@@ -28,6 +28,8 @@ export interface CardTutorialGuidanceMatch {
 export interface CardTutorialGuidanceContext {
   readonly screenKey: string;
   readonly event: "card-seen" | "transfiguration-seen";
+  /** Local presentation milestone that must be visible before requesting guidance. */
+  readonly visibilityGate?: "exploration-actions";
 }
 
 export interface CardTutorialGuidanceContentProvider {
@@ -86,7 +88,17 @@ export function currentCardTutorialContext(
       : null;
   }
   if (
-    (site.type === "Augury" || site.type === "Exploration") &&
+    site.type === "Exploration" &&
+    provider?.hasVisibleTransfigurationReward(state.journey, site) === true
+  ) {
+    return {
+      screenKey: `${siteScreenKey}:concept:transfiguration`,
+      event: "transfiguration-seen",
+      visibilityGate: "exploration-actions",
+    };
+  }
+  if (
+    site.type === "Augury" &&
     provider?.hasVisibleTransfigurationReward(state.journey, site) === true
   ) {
     return {

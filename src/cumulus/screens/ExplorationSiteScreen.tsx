@@ -1372,6 +1372,8 @@ export function ExplorationSiteScreen({
       {frameBreakGeometry !== null && frameBreakPhase === "open" && activeAction === null && view.reward === null && (
         <motion.section
           data-exploration-narrative=""
+          data-tutorial-guidance-concept="exploration-actions"
+          data-tutorial-guidance-obstacle=""
           initial={{ opacity: 0, y: reduceMotion ? 0 : 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -1730,6 +1732,7 @@ export function ExplorationSiteScreen({
         view.reward === null && (
         <motion.div
           data-exploration-exit-control=""
+          data-tutorial-guidance-obstacle=""
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{

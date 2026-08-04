@@ -307,6 +307,19 @@ describe("card tutorial guidance fold", () => {
     });
   });
 
+  it("waits for the Exploration actions to be presented before requesting transfiguration guidance", () => {
+    const state = siteState("site-a", "Exploration");
+    const conceptProvider: CardTutorialGuidanceContentProvider = {
+      ...provider(),
+      hasVisibleTransfigurationReward: () => true,
+    };
+    expect(currentCardTutorialContext(state, conceptProvider)).toEqual({
+      screenKey: "journey:7:site:site-a:concept:transfiguration",
+      event: "transfiguration-seen",
+      visibilityGate: "exploration-actions",
+    });
+  });
+
   it("is eligible on a persisted Draft offer", () => {
     expect(
       currentCardTutorialScreenKey(draftOfferState(1, [1, 2, 3, 4])),

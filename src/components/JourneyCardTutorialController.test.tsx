@@ -10,6 +10,7 @@ const mocks = vi.hoisted(() => {
   const context: {
     screenKey: string;
     event: "card-seen" | "transfiguration-seen";
+    visibilityGate?: "exploration-actions";
   } = {
     screenKey: "journey:1:site:site-1",
     event: "card-seen",
@@ -204,6 +205,40 @@ describe("JourneyCardTutorialController", () => {
     );
     expect(mocks.open).toHaveBeenCalledWith(
       "journey:1:site:augury:concept:transfiguration",
+      [],
+    );
+
+    act(() => root.unmount());
+  });
+
+  it("waits until Exploration presents its action offers", async () => {
+    mocks.context = {
+      screenKey: "journey:1:site:exploration:concept:transfiguration",
+      event: "transfiguration-seen",
+      visibilityGate: "exploration-actions",
+    };
+    mocks.select.mockImplementation(() => ({
+      card: null,
+      trigger: { id: "transfiguration" },
+    }));
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    await act(async () => {
+      root.render(<Harness cardIds={[]} />);
+      await Promise.resolve();
+    });
+    expect(mocks.open).not.toHaveBeenCalled();
+
+    await act(async () => {
+      const source = document.createElement("section");
+      source.dataset.tutorialGuidanceConcept = "exploration-actions";
+      container.firstElementChild?.append(source);
+      await Promise.resolve();
+    });
+    expect(mocks.open).toHaveBeenCalledWith(
+      "journey:1:site:exploration:concept:transfiguration",
       [],
     );
 

@@ -320,6 +320,13 @@ describe("ExplorationSiteScreen", () => {
     ).toBe("A synthetic encounter waits in the dark.");
     expect(
       container
+        .querySelector(
+          '[data-tutorial-guidance-concept="exploration-actions"]',
+        )
+        ?.hasAttribute("data-tutorial-guidance-obstacle"),
+    ).toBe(true);
+    expect(
+      container
         .querySelector('[data-testid="cumulus-exploration-narrative-panel"]')
         ?.querySelector("[data-glass-panel-header]"),
     ).toBeNull();

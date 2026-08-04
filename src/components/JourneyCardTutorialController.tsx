@@ -39,6 +39,19 @@ function visibleCardIds(stage: HTMLElement): readonly string[] {
   return ids;
 }
 
+function tutorialContextIsVisible(
+  stage: HTMLElement,
+  visibilityGate: "exploration-actions" | undefined,
+): boolean {
+  if (visibilityGate === undefined) return true;
+  const source = stage.querySelector<HTMLElement>(
+    '[data-tutorial-guidance-concept="exploration-actions"]',
+  );
+  if (source === null) return false;
+  const rect = source.getBoundingClientRect();
+  return rect.width > 0 && rect.height > 0;
+}
+
 /**
  * App-shell bridge between visible site cards and the shared tutorial fold.
  * Screens remain props-only; the first connected client to observe the cards
@@ -61,6 +74,7 @@ export function JourneyCardTutorialController({
   const context = currentCardTutorialContext(state, provider);
   const screenKey = context?.screenKey ?? null;
   const triggerEvent = context?.event ?? null;
+  const visibilityGate = context?.visibilityGate;
   const presentation = state.cardTutorialPresentation ?? null;
   const siteTutorialActive =
     activeFirstVisitTutorialSite(state.journey) !== null;
@@ -86,6 +100,7 @@ export function JourneyCardTutorialController({
 
     const inspect = (): void => {
       if (triggerEvent === null) return;
+      if (!tutorialContextIsVisible(stage, visibilityGate)) return;
       const cardIds = triggerEvent === "card-seen" ? visibleCardIds(stage) : [];
       if (triggerEvent === "card-seen" && cardIds.length === 0) return;
       const signature = `${screenKey}:${cardIds.join(",")}`;
@@ -131,6 +146,7 @@ export function JourneyCardTutorialController({
     state.cardTutorialScreenKeysSeen,
     state.tutorialTriggerIdsSeen,
     triggerEvent,
+    visibilityGate,
   ]);
 
   const complete = useCallback(

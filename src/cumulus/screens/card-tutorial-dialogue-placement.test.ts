@@ -71,4 +71,20 @@ describe("placeCardTutorialDialogue", () => {
 
     expect(position).toEqual({ left: 570, top: 8 });
   });
+
+  it("avoids site controls when guidance has no card source", () => {
+    const obstacle = rect(8, 8, 784, 180);
+    const position = placeCardTutorialDialogue({
+      viewportWidth: 800,
+      viewportHeight: 600,
+      dialogueWidth: 420,
+      dialogueHeight: 120,
+      cardRects: [],
+      obstacleRects: [obstacle],
+      gap: 8,
+    });
+
+    expect(position.top).toBe(196);
+    expect(position.top).toBeGreaterThanOrEqual(obstacle.bottom + 8);
+  });
 });
