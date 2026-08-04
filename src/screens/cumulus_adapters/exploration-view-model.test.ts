@@ -533,6 +533,9 @@ describe("exploration-view-model", () => {
       kind: "cards",
       cards: [{ entryId: "entry-eligible" }],
     });
+    expect(view.actions[0].effectText).toBe(
+      "Transfigure a cheap Character. (Double its ✦, or set it to 1 if it is 0)",
+    );
   });
 
   it("resolves a deck-card placeholder to one UUID-keyed transfigured preview", () => {
@@ -633,7 +636,9 @@ describe("exploration-view-model", () => {
     if (view === null) throw new Error("Expected Exploration view");
 
     expect(view.actions[0]).toMatchObject({
-      effectText: `Apply Inspired to ${target.name}`,
+      effectText:
+        `Apply Inspired to ${target.name}` +
+        ' (Add "Draw a card" to its rules text)',
       effectParts: [
         { kind: "text", text: "Apply Inspired to " },
         {
@@ -646,6 +651,10 @@ describe("exploration-view-model", () => {
             },
             transfiguration: { type: "Inspired" },
           },
+        },
+        {
+          kind: "text",
+          text: ' (Add "Draw a card" to its rules text)',
         },
       ],
       followup: { kind: "none" },

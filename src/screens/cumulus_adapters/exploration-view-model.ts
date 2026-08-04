@@ -32,6 +32,7 @@ import type {
   ExplorationSiteRuntime,
   JourneyState,
   SiteState,
+  TransfigurationType,
 } from "../../types/journey";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import {
@@ -371,6 +372,55 @@ interface FixedTransfigurationTarget {
   readonly entity: Extract<EntityReferenceModel, { readonly kind: "card" }>;
 }
 
+function fixedTransfigurationEffect(
+  transfiguration: TransfigurationType,
+): string {
+  switch (transfiguration) {
+    case "Empowered":
+      return "Halve its ● cost, rounded down";
+    case "Kindled":
+      return "Double its ✦, or set it to 1 if it is 0";
+    case "Inspired":
+      return 'Add "Draw a card" to its rules text';
+    case "Enduring":
+      return 'Add "Reclaim" to its rules text';
+    case "Hastened":
+      return "Make it Fast";
+    case "Amplified":
+      return "Increase the first number in its rules text by 1";
+    case "Resonant":
+      return "Widen a named trigger to fire more often";
+    case "Attuned":
+      return "Reduce an activated ability's cost by 1●";
+    case "Perfected":
+      return "Apply every available transfiguration";
+  }
+}
+
+function appendFixedTransfigurationEffect(
+  effect: Pick<ExplorationActionView, "effectText" | "effectParts">,
+  action: ExplorationActionContent,
+): Pick<ExplorationActionView, "effectText" | "effectParts"> {
+  if (
+    action.effectKind !== "transfigure-fixed-selected" ||
+    action.transfiguration === undefined
+  ) {
+    return effect;
+  }
+  const suffix = ` (${fixedTransfigurationEffect(action.transfiguration)})`;
+  return {
+    effectText: `${effect.effectText}${suffix}`,
+    ...(effect.effectParts === undefined
+      ? {}
+      : {
+          effectParts: [
+            ...effect.effectParts,
+            { kind: "text" as const, text: suffix },
+          ],
+        }),
+  };
+}
+
 function fixedTransfigurationTarget(
   action: ExplorationActionContent,
   state: JourneyState,
@@ -562,15 +612,19 @@ function actionView(
       (followup.kind === "packs" && followup.packs.length > 0) ||
       (followup.kind === "subtypes" && followup.options.length > 0) ||
       (followup.kind === "dreamsigns" && followup.dreamsigns.length > 0));
-  return {
-    id: action.id,
-    label: action.label,
-    ...buildExplorationActionEffect(
+  const effect = appendFixedTransfigurationEffect(
+    buildExplorationActionEffect(
       action,
       offer,
       content,
       fixedTarget?.entity,
     ),
+    action,
+  );
+  return {
+    id: action.id,
+    label: action.label,
+    ...effect,
     followup,
     ...(action.effectKind === "gain-offered-card" &&
     offer.offeredCardIds[0] !== undefined
