@@ -13,6 +13,7 @@ import {
   type GameCardModel,
 } from "../components/card/CardView";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
+import { renderRulesSymbolsInline } from "../components/card/RulesText";
 import {
   BATTLEFIELD_CARD_ASPECT_RATIO,
   BATTLEFIELD_CARD_CORNER_RADIUS,
@@ -870,7 +871,11 @@ function FigmentMergeTargetIndicator({
           }}
         >
           <span>{label}</span>
-          {!blocked ? <span>+{target.addedSpark}✦</span> : null}
+          {!blocked ? (
+            <span>
+              {renderRulesSymbolsInline(`+${String(target.addedSpark)}✦`)}
+            </span>
+          ) : null}
         </span>
       </motion.div>
     </div>
@@ -5324,9 +5329,9 @@ export function MobileBattleScreen({
                 font: token("--t-body"),
               }}
             >
-              Only {mergeConfirmation.addedSpark}✦ from this Legionnaire will be
-              added. Its Warrior-count bonus does not transfer. This merge
-              cannot be undone.
+              {renderRulesSymbolsInline(
+                `Only ${String(mergeConfirmation.addedSpark)}✦ from this Legionnaire will be added. Its Warrior-count bonus does not transfer. This merge cannot be undone.`,
+              )}
             </p>
             <div
               style={{

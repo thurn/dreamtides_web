@@ -263,7 +263,9 @@ function ExplorationChoiceContents({
   return (
     <>
       <span style={{ minWidth: 0, display: "grid", gap: token("--space-1") }}>
-        <strong style={{ font: token("--t-button") }}>{action.label}</strong>
+        <strong style={{ font: token("--t-button") }}>
+          {renderRulesSymbolsInline(action.label)}
+        </strong>
         <span
           id={`exploration-effect-${String(index)}`}
           style={{ font: token("--t-caption"), color: token("--text-muted") }}

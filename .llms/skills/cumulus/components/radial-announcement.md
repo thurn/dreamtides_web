@@ -10,7 +10,7 @@ Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
 The orbiting circular status moment for turn handoffs, wins, failures, and iconic state changes.
 
-> **Guidance:** Use it only for a brief, non-interactive state change that deserves to interrupt the whole scene.
+> **Guidance:** Use it only for a brief, non-interactive state change that deserves to interrupt the whole scene. Resource symbols in headline and detail copy render through the canonical inline glyph treatment.
 
 ## Props
 

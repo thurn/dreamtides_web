@@ -7,6 +7,10 @@ import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { TRANSFIGURATION_TINT_COLORS } from "../../runtime/transfiguration-display";
 import { CumulusRoot } from "../CumulusRoot";
+import {
+  ENERGY_ICON_COLOR,
+  SPARK_ICON_COLOR,
+} from "../components/controls/GlowIcon";
 import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP } from "../components/hud/JourneyStatusBar";
 import { artRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
@@ -449,6 +453,59 @@ describe("ExplorationSiteScreen", () => {
         ?.click(),
     );
     expect(onResolve).toHaveBeenCalledWith("choice-a");
+    act(() => root.unmount());
+  });
+
+  it("renders resource marks in structured Exploration choice copy", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const resourceView: ExplorationSiteView = {
+      ...view(),
+      actions: [
+        {
+          ...view().actions[0],
+          effectText: "Spend 1● to gain +1✦ and Exploration Fixture.",
+          effectParts: [
+            { kind: "text", text: "Spend 1● to gain +1✦ and " },
+            { kind: "entity", entity: { kind: "card", card: makeCard() } },
+            { kind: "text", text: "." },
+          ],
+        },
+        view().actions[1],
+      ],
+    };
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={resourceView}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    const effect = container.querySelector<HTMLElement>(
+      "#exploration-effect-0",
+    );
+    const energyGlyph = effect?.querySelector<HTMLElement>(
+      '[data-inline-glyph][aria-label="energy"]',
+    );
+    const sparkGlyph = effect?.querySelector<HTMLElement>(
+      '[data-inline-glyph][aria-label="spark"]',
+    );
+    expect(effect?.textContent).not.toMatch(/[●✦]/u);
+    expect(energyGlyph?.querySelector("i")?.className).toContain("bx-fire-alt");
+    expect(energyGlyph?.parentElement?.style.color).toContain(ENERGY_ICON_COLOR);
+    expect(sparkGlyph?.querySelector("i")?.className).toContain("bx-sparkle");
+    expect(sparkGlyph?.parentElement?.style.color).toContain(SPARK_ICON_COLOR);
+
     act(() => root.unmount());
   });
 
@@ -1355,9 +1412,16 @@ describe("ExplorationSiteScreen", () => {
         (card) => card.dataset.explorationDeckEntryId,
       ),
     ).toEqual(["deck-entry-a", "deck-entry-b"]);
-    expect(
-      reward?.querySelector("[data-radial-announcement]")?.textContent,
-    ).toContain("+1 ✦");
+    const sparkAnnouncement = reward?.querySelector<HTMLElement>(
+      "[data-radial-announcement]",
+    );
+    const sparkGlyph = sparkAnnouncement?.querySelector<HTMLElement>(
+      '[data-inline-glyph][aria-label="spark"]',
+    );
+    expect(sparkAnnouncement?.textContent).toContain("+1");
+    expect(sparkAnnouncement?.textContent).not.toContain("✦");
+    expect(sparkGlyph?.querySelector("i")?.className).toContain("bx-sparkle");
+    expect(sparkGlyph?.parentElement?.style.color).toContain(SPARK_ICON_COLOR);
     expect(
       reward?.querySelector<HTMLElement>(
         '[data-testid="cumulus-exploration-deck-modification-card-deck-entry-a"] .card-view',
@@ -1443,11 +1507,20 @@ describe("ExplorationSiteScreen", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
     );
-    const modified = deckModificationRewardView("fast");
-    const deckModification =
+    const modified = deckModificationRewardView();
+    const baseDeckModification =
       modified.reward !== null && !("kind" in modified.reward)
         ? modified.reward.deckModification
         : null;
+    if (baseDeckModification === null) {
+      throw new Error("fixture requires a deck modification reward");
+    }
+    const deckModification = {
+      ...baseDeckModification,
+      kind: "energy-cost" as const,
+      headline: "−1 ●",
+      selectionColor: "energy" as const,
+    };
     const composite: ExplorationSiteView = {
       ...modified,
       reward: {
@@ -1465,6 +1538,17 @@ describe("ExplorationSiteScreen", () => {
       />,
     );
 
+    const modification = container.querySelector<HTMLElement>(
+      '[data-exploration-deck-modification-kind="energy-cost"]',
+    );
+    expect(modification).not.toBeNull();
+    const energyGlyph = modification?.querySelector<HTMLElement>(
+      '[data-inline-glyph][aria-label="energy"]',
+    );
+    expect(modification?.textContent).toContain("−1");
+    expect(modification?.textContent).not.toContain("●");
+    expect(energyGlyph?.querySelector("i")?.className).toContain("bx-fire-alt");
+    expect(energyGlyph?.parentElement?.style.color).toContain(ENERGY_ICON_COLOR);
     expect(
       container.querySelector("[data-exploration-deck-modification-reward]"),
     ).not.toBeNull();

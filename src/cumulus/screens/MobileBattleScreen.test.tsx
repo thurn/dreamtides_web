@@ -3800,10 +3800,12 @@ describe("MobileBattleScreen", () => {
     });
 
     expect(target?.dataset.battleFigmentMergeTarget).toBe("hovered");
-    expect(
-      container.querySelector("[data-battle-figment-merge-indicator]")
-        ?.textContent,
-    ).toContain("Merge+2✦");
+    const mergeIndicator = container.querySelector(
+      "[data-battle-figment-merge-indicator]",
+    );
+    expect(mergeIndicator?.textContent).toContain("Merge+2");
+    expect(mergeIndicator?.textContent).not.toContain("✦");
+    expect(mergeIndicator?.querySelector(".bx-sparkle")).not.toBeNull();
 
     act(() => {
       target?.dispatchEvent(
@@ -3939,10 +3941,14 @@ describe("MobileBattleScreen", () => {
       );
     });
 
+    const mergeConfirmationDialog = document.querySelector(
+      "[data-battle-figment-merge-confirmation]",
+    );
+    expect(mergeConfirmationDialog?.textContent).toContain("Only 1");
+    expect(mergeConfirmationDialog?.textContent).not.toContain("✦");
     expect(
-      document.querySelector("[data-battle-figment-merge-confirmation]")
-        ?.textContent,
-    ).toContain("Only 1✦");
+      mergeConfirmationDialog?.querySelector(".bx-sparkle"),
+    ).not.toBeNull();
     expect(onFigmentMerge).not.toHaveBeenCalled();
 
     act(() => {

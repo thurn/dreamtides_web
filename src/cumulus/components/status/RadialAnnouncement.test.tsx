@@ -3,6 +3,10 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it } from "vitest";
+import {
+  ENERGY_ICON_COLOR,
+  SPARK_ICON_COLOR,
+} from "../controls/GlowIcon";
 import { GLYPHS } from "../../primitives/glyph";
 import { RadialAnnouncement } from "./RadialAnnouncement";
 
@@ -68,7 +72,6 @@ describe("RadialAnnouncement", () => {
     act(() => root.unmount());
     container.remove();
   });
-
   it("renders a canonical glyph in place of the headline copy", () => {
     const container = document.createElement("div");
     document.body.append(container);
@@ -91,6 +94,35 @@ describe("RadialAnnouncement", () => {
     expect(
       headline?.querySelector("[data-inline-glyph] i")?.className,
     ).toContain("bx-bolt");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("renders energy and spark marks as resource-colored inline glyphs", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(
+        <RadialAnnouncement
+          headline="−1 ●"
+          detail="All characters gain +1 ✦"
+        />,
+      );
+    });
+
+    const energy = container.querySelector<HTMLElement>(
+      '[data-inline-glyph][aria-label="energy"]',
+    );
+    const spark = container.querySelector<HTMLElement>(
+      '[data-inline-glyph][aria-label="spark"]',
+    );
+    expect(container.textContent).not.toMatch(/[●✦]/u);
+    expect(energy?.querySelector("i")?.className).toContain("bx-fire-alt");
+    expect(energy?.parentElement?.style.color).toContain(ENERGY_ICON_COLOR);
+    expect(spark?.querySelector("i")?.className).toContain("bx-sparkle");
+    expect(spark?.parentElement?.style.color).toContain(SPARK_ICON_COLOR);
 
     act(() => root.unmount());
     container.remove();

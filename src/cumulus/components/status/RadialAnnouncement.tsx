@@ -2,6 +2,7 @@
 // wager-result moments.
 
 import type { ReactElement } from "react";
+import { renderRulesSymbolsInline } from "../card/RulesText";
 import { EssenceValue } from "../hud/EssenceValue";
 import { InlineGlyph } from "../typography/InlineGlyph";
 import type { Glyph } from "../../primitives/glyph";
@@ -229,7 +230,7 @@ export function RadialAnnouncement({
             }}
           >
             {headlineGlyph === undefined ? (
-              headline
+              renderRulesSymbolsInline(headline)
             ) : (
               <InlineGlyph glyph={headlineGlyph} label={headline} />
             )}
@@ -253,7 +254,7 @@ export function RadialAnnouncement({
                 color: token("--text-secondary"),
               }}
             >
-              {detail}
+              {renderRulesSymbolsInline(detail)}
             </span>
           )}
         </div>

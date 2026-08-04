@@ -24,7 +24,7 @@ export const radialAnnouncementDemo: CumulusComponent = {
   id: "radial-announcement",
   title: "Radial Announcement",
   blurb: "The orbiting circular status moment for turn handoffs, wins, failures, and iconic state changes.",
-  callout: "Use it only for a brief, non-interactive state change that deserves to interrupt the whole scene.",
+  callout: "Use it only for a brief, non-interactive state change that deserves to interrupt the whole scene. Resource symbols in headline and detail copy render through the canonical inline glyph treatment.",
   group: "Components",
   docName: "RadialAnnouncement",
   Component: RadialAnnouncementDemo,
