@@ -151,9 +151,11 @@ describe("exploration-view-model", () => {
       ],
       resolvedActionId: "action-b",
       reward: {
-        kind: "objects",
-        cards: [{ cardId: source.id }, { cardId: source.id }],
-        dreamsigns: [{ id: gainedDreamsign.id }],
+        objects: {
+          cards: [{ cardId: source.id }, { cardId: source.id }],
+          dreamsigns: [{ id: gainedDreamsign.id }],
+        },
+        deckModification: null,
       },
       card: { cardId: source.id },
     });
@@ -262,18 +264,179 @@ describe("exploration-view-model", () => {
     });
 
     expect(view?.reward).toMatchObject({
-      kind: "deck-spark",
-      amount: 1,
-      announcement: "All characters in your deck gain +1✦",
-      cards: [
-        {
-          entryId: "entry-character",
-          model: {
-            cardId: source.id,
-            displaySnapshot: { spark: 3 },
+      objects: { cards: [], dreamsigns: [] },
+      deckModification: {
+        kind: "spark",
+        headline: "+1 ✦",
+        announcement: "All characters in your deck gain +1✦",
+        selectionColor: "spark",
+        cards: [
+          {
+            entryId: "entry-character",
+            model: {
+              cardId: source.id,
+              displaySnapshot: { spark: 3 },
+            },
           },
+        ],
+      },
+    });
+  });
+
+  it("builds fast and composite cost rewards from post-resolution deck snapshots", () => {
+    const source = card(sourceId, 17);
+    const nightmare = {
+      ...card(NIGHTMARE_CARD_ID, 18),
+      name: asCardName("Nightmare"),
+      rarity: "Special" as const,
+    };
+    const actionOffers = ["make-fast", "reduce-cost"].map((actionId) => ({
+      actionId,
+      offeredCardIds: [],
+      packCardIds: [],
+      replacementCardIdByEntryId: {},
+      transfigurationByEntryId: {},
+    }));
+    const content = {
+      cardDatabase: new Map([
+        [source.cardNumber, source],
+        [nightmare.cardNumber, nightmare],
+      ]),
+      dreamAvatars: [],
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      dreamscapes: [],
+      affiliations: [],
+      guides: [guide],
+      atlasConfig: { completionLevels: [] },
+      exploration: {
+        customCards: [],
+        customDreamsigns: [],
+        encounters: [
+          {
+            cardId: source.id,
+            prose: "The authored scene appears.",
+            actions: [
+              {
+                id: "make-fast",
+                label: "Accept the charge",
+                effectText: "All cards in your deck become ❖ (fast)",
+                effectKind: "make-fast-all",
+              },
+              {
+                id: "reduce-cost",
+                label: "Overload the aperture",
+                effectText:
+                  "All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards.",
+                effectKind: "reduce-cost-all-and-gain-nightmares",
+                energyCostReduction: 1,
+                nightmareCount: 3,
+              },
+            ],
+          },
+        ],
+      },
+    } as unknown as JourneyContent;
+    const baseResolution = {
+      gainedDreamsignIds: [],
+      purgedCardIds: [],
+      affectedEntryIds: ["entry-character"],
+      essenceGained: 0,
+    };
+
+    const fastView = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      runtime: {
+        kind: "exploration",
+        encounterCardId: source.id,
+        actionOffers,
+        resolution: {
+          ...baseResolution,
+          actionId: "make-fast",
+          gainedCardIds: [],
         },
-      ],
+      },
+      state: {
+        ...createDefaultState(),
+        deck: [
+          {
+            entryId: "entry-character",
+            cardNumber: source.cardNumber,
+            transfiguration: null,
+            keywordModification: { fast: true },
+            isBane: false,
+          },
+        ],
+      },
+      content,
+    });
+
+    expect(fastView?.reward).toMatchObject({
+      objects: { cards: [], dreamsigns: [] },
+      deckModification: {
+        kind: "fast",
+        headline: "Fast",
+        selectionColor: "energy-bright",
+        cards: [
+          {
+            entryId: "entry-character",
+            model: { displaySnapshot: { isFast: true } },
+          },
+        ],
+      },
+    });
+
+    const costView = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      runtime: {
+        kind: "exploration",
+        encounterCardId: source.id,
+        actionOffers,
+        resolution: {
+          ...baseResolution,
+          actionId: "reduce-cost",
+          gainedCardIds: [NIGHTMARE_CARD_ID, NIGHTMARE_CARD_ID, NIGHTMARE_CARD_ID],
+        },
+      },
+      state: {
+        ...createDefaultState(),
+        deck: [
+          {
+            entryId: "entry-character",
+            cardNumber: source.cardNumber,
+            transfiguration: null,
+            keywordModification: { energyCostReduction: 1 },
+            isBane: false,
+          },
+        ],
+      },
+      content,
+    });
+
+    expect(costView?.reward).toMatchObject({
+      objects: {
+        cards: [
+          { cardId: NIGHTMARE_CARD_ID },
+          { cardId: NIGHTMARE_CARD_ID },
+          { cardId: NIGHTMARE_CARD_ID },
+        ],
+        dreamsigns: [],
+      },
+      deckModification: {
+        kind: "energy-cost",
+        headline: "−1 ●",
+        selectionColor: "energy",
+        cards: [
+          {
+            entryId: "entry-character",
+            model: { displaySnapshot: { energyCost: 1 } },
+          },
+        ],
+      },
     });
   });
 

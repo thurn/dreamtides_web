@@ -128,7 +128,10 @@ function twoCardRewardView(): ExplorationSiteView {
   };
   return {
     ...base,
-    reward: { kind: "objects", cards: [base.card, second], dreamsigns: [] },
+    reward: {
+      objects: { cards: [base.card, second], dreamsigns: [] },
+      deckModification: null,
+    },
   };
 }
 
@@ -136,46 +139,65 @@ function dreamsignRewardView(): ExplorationSiteView {
   return {
     ...view(true),
     reward: {
-      kind: "objects",
-      cards: [],
-      dreamsigns: [
-        {
-          id: "reward-dreamsign-id",
-          name: "Reward Dreamsign",
-          effectDescription: "A synthetic reward sign.",
-          imageName: "reward-dreamsign.webp",
-          imageAlt: "Reward Dreamsign art",
-          isNegative: false,
-        },
-      ],
+      objects: {
+        cards: [],
+        dreamsigns: [
+          {
+            id: "reward-dreamsign-id",
+            name: "Reward Dreamsign",
+            effectDescription: "A synthetic reward sign.",
+            imageName: "reward-dreamsign.webp",
+            imageAlt: "Reward Dreamsign art",
+            isNegative: false,
+          },
+        ],
+      },
+      deckModification: null,
     },
   };
 }
 
-function deckSparkRewardView(): ExplorationSiteView {
+function deckModificationRewardView(
+  kind: "spark" | "fast" = "spark",
+): ExplorationSiteView {
   const base = view(true);
+  const first =
+    kind === "fast"
+      ? {
+          ...base.card,
+          displaySnapshot: { ...base.card.displaySnapshot, isFast: true },
+        }
+      : base.card;
   const second = {
     ...base.card,
     cardId: asCardId("00000000-0000-4000-8000-000000000018"),
     displaySnapshot: {
       ...base.card.displaySnapshot,
       id: asCardId("00000000-0000-4000-8000-000000000018"),
-      name: asCardName("Second Spark Fixture"),
+      name: asCardName("Second Modified Fixture"),
       cardNumber: 18,
       spark: 4,
+      isFast: kind === "fast",
       imageNumber: 18,
     },
   };
   return {
     ...base,
     reward: {
-      kind: "deck-spark",
-      amount: 1,
-      announcement: "All characters in your deck gain +1✦",
-      cards: [
-        { entryId: "deck-entry-a", model: base.card, isBane: false },
-        { entryId: "deck-entry-b", model: second, isBane: false },
-      ],
+      objects: { cards: [], dreamsigns: [] },
+      deckModification: {
+        kind,
+        headline: kind === "spark" ? "+1 ✦" : "Fast",
+        announcement:
+          kind === "spark"
+            ? "All characters in your deck gain +1✦"
+            : "All cards in your deck become ❖ (fast)",
+        selectionColor: kind === "spark" ? "spark" : "energy-bright",
+        cards: [
+          { entryId: "deck-entry-a", model: first, isBane: false },
+          { entryId: "deck-entry-b", model: second, isBane: false },
+        ],
+      },
     },
   };
 }
@@ -1271,7 +1293,7 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("fans every affected character around a spark reward announcement", () => {
+  it("fans every affected card around a semantic deck-modification announcement", () => {
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
     reducedMotionPreference.value = false;
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
@@ -1288,7 +1310,7 @@ describe("ExplorationSiteScreen", () => {
     const onExit = vi.fn();
     const { container, root } = mount(
       <ExplorationSiteScreen
-        view={deckSparkRewardView()}
+        view={deckModificationRewardView()}
         onChannel={vi.fn()}
         onResolve={vi.fn()}
         onExit={onExit}
@@ -1314,12 +1336,13 @@ describe("ExplorationSiteScreen", () => {
     });
 
     const reward = container.querySelector<HTMLElement>(
-      "[data-exploration-deck-spark-reward]",
+      "[data-exploration-deck-modification-reward]",
     );
     const cards = reward?.querySelectorAll<HTMLElement>(
-      "[data-exploration-deck-spark-card]",
+      "[data-exploration-deck-modification-card]",
     );
-    expect(reward?.dataset.explorationDeckSparkCount).toBe("2");
+    expect(reward?.dataset.explorationDeckModificationKind).toBe("spark");
+    expect(reward?.dataset.explorationDeckModificationCount).toBe("2");
     expect(reward?.getAttribute("aria-label")).toBe(
       "All characters in your deck gain +1✦",
     );
@@ -1333,7 +1356,7 @@ describe("ExplorationSiteScreen", () => {
     ).toContain("+1 ✦");
     expect(
       reward?.querySelector<HTMLElement>(
-        '[data-testid="cumulus-exploration-deck-spark-card-deck-entry-a"] .card-view',
+        '[data-testid="cumulus-exploration-deck-modification-card-deck-entry-a"] .card-view',
       )?.style.boxShadow,
     ).toContain("var(--spark)");
     expect(onExit).not.toHaveBeenCalled();
@@ -1345,7 +1368,112 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("resumes a persisted spark reward directly at the reward moment", () => {
+  it("shows the fast modifier and canonical bolt on every modified card", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const fastView = deckModificationRewardView("fast");
+    const unresolvedFastView: ExplorationSiteView = {
+      ...fastView,
+      actions: [
+        {
+          ...fastView.actions[0],
+          effectText: "All cards in your deck become ❖ (fast)",
+        },
+        fastView.actions[1],
+      ],
+      resolvedActionId: null,
+      reward: null,
+    };
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={unresolvedFastView}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    const effect = container.querySelector<HTMLElement>(
+      "#exploration-effect-0",
+    );
+    expect(effect?.textContent).not.toContain("❖");
+    expect(effect?.querySelector("[data-inline-glyph] i")?.className).toContain(
+      "bx-bolt",
+    );
+    act(() => root.unmount());
+
+    const persisted = mount(
+      <ExplorationSiteScreen
+        view={deckModificationRewardView("fast")}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+    const reward = persisted.container.querySelector<HTMLElement>(
+      '[data-exploration-deck-modification-kind="fast"]',
+    );
+    expect(reward?.textContent).toContain("Fast");
+    expect(reward?.querySelectorAll('[data-attribute-chip="fast"]')).toHaveLength(2);
+    act(() => persisted.root.unmount());
+  });
+
+  it("presents tangible rewards after a composite deck modification", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const modified = deckModificationRewardView("fast");
+    const deckModification =
+      modified.reward !== null && !("kind" in modified.reward)
+        ? modified.reward.deckModification
+        : null;
+    const composite: ExplorationSiteView = {
+      ...modified,
+      reward: {
+        objects: { cards: [modified.card], dreamsigns: [] },
+        deckModification,
+      },
+    };
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={composite}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    expect(
+      container.querySelector("[data-exploration-deck-modification-reward]"),
+    ).not.toBeNull();
+    expect(container.querySelector("[data-exploration-reward-stage]"))
+      .toBeNull();
+
+    act(() => {
+      vi.advanceTimersByTime(3_360);
+    });
+    expect(
+      container.querySelector("[data-exploration-deck-modification-reward]"),
+    ).toBeNull();
+    expect(container.querySelector("[data-exploration-reward-stage]"))
+      .not.toBeNull();
+    expect(onExit).not.toHaveBeenCalled();
+    act(() => root.unmount());
+  });
+
+  it("resumes a persisted deck modification directly at the reward moment", () => {
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
     reducedMotionPreference.value = false;
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
@@ -1362,7 +1490,7 @@ describe("ExplorationSiteScreen", () => {
     const onExit = vi.fn();
     const { container, root } = mount(
       <ExplorationSiteScreen
-        view={deckSparkRewardView()}
+        view={deckModificationRewardView()}
         onChannel={vi.fn()}
         onResolve={vi.fn()}
         onExit={onExit}
@@ -1370,7 +1498,7 @@ describe("ExplorationSiteScreen", () => {
     );
 
     expect(
-      container.querySelector("[data-exploration-deck-spark-reward]"),
+      container.querySelector("[data-exploration-deck-modification-reward]"),
     ).not.toBeNull();
     expect(
       container.querySelector('[data-testid="cumulus-exploration-channel"]'),

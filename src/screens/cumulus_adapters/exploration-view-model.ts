@@ -507,20 +507,6 @@ function rewardForResolution(
   const resolvedAction = actions.find(
     (action) => action.id === resolution.actionId,
   );
-  if (resolvedAction?.effectKind === "increase-spark-all") {
-    const affectedEntryIds = new Set(resolution.affectedEntryIds);
-    const cards = state.deck.flatMap((entry) => {
-      if (!affectedEntryIds.has(entry.entryId)) return [];
-      const card = deckCardChoice(entry, content);
-      return card === null ? [] : [card];
-    });
-    return {
-      kind: "deck-spark",
-      amount: resolvedAction.sparkBonus ?? 1,
-      announcement: resolvedAction.effectText,
-      cards,
-    };
-  }
   if (
     resolvedAction?.effectKind === "gain-essence-per-card" &&
     resolvedAction.essencePerCard !== undefined
@@ -539,6 +525,52 @@ function rewardForResolution(
       totalEssence: resolution.essenceGained,
     };
   }
+  const deckModification = (() => {
+    if (resolvedAction === undefined) return null;
+    const affectedEntryIds = new Set(resolution.affectedEntryIds);
+    const cards = state.deck.flatMap((entry) => {
+      if (!affectedEntryIds.has(entry.entryId)) return [];
+      const card = deckCardChoice(entry, content);
+      return card === null ? [] : [card];
+    });
+    if (cards.length === 0) return null;
+    switch (resolvedAction.effectKind) {
+      case "increase-spark-all":
+        return {
+          kind: "spark" as const,
+          headline: `+${String(resolvedAction.sparkBonus ?? 1)} ✦`,
+          announcement: resolvedAction.effectText,
+          selectionColor: "spark" as const,
+          cards,
+        };
+      case "make-fast-all":
+        return {
+          kind: "fast" as const,
+          headline: "Fast",
+          announcement: resolvedAction.effectText,
+          selectionColor: "energy-bright" as const,
+          cards,
+        };
+      case "reduce-cost-all-and-gain-nightmares":
+        return {
+          kind: "energy-cost" as const,
+          headline: `−${String(resolvedAction.energyCostReduction ?? 0)} ●`,
+          announcement: resolvedAction.effectText,
+          selectionColor: "energy" as const,
+          cards,
+        };
+      case "change-subtype-all":
+        return {
+          kind: "subtype" as const,
+          headline: resolution.chosenSubtype ?? "Subtype",
+          announcement: resolvedAction.effectText,
+          selectionColor: "accent-bright" as const,
+          cards,
+        };
+      default:
+        return null;
+    }
+  })();
   const cards = resolution.gainedCardIds.flatMap((cardId) => {
     const card = cardById(content, cardId);
     return card === null ? [] : [modelForCard(card)];
@@ -550,9 +582,9 @@ function rewardForResolution(
     );
     return dreamsign === undefined ? [] : [dreamsign];
   });
-  return cards.length === 0 && dreamsigns.length === 0
+  return cards.length === 0 && dreamsigns.length === 0 && deckModification === null
     ? null
-    : { kind: "objects", cards, dreamsigns };
+    : { objects: { cards, dreamsigns }, deckModification };
 }
 
 /** Build the complete Exploration presentation from persisted domain data. */

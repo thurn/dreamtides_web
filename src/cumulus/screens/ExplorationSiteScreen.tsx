@@ -24,6 +24,7 @@ import {
   useEntityReferenceRevealSource,
 } from "../components/card/EntityReference";
 import { RichTextView, richText } from "../components/card/rich-text";
+import { renderRulesSymbolsInline } from "../components/card/RulesText";
 import {
   CARD_ASPECT_RATIO,
   CARD_ASPECT_RATIO_VALUE,
@@ -44,6 +45,7 @@ import {
   RadialAnnouncement,
 } from "../components/status/RadialAnnouncement";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
+import type { CumulusColor } from "../primitives/color";
 import { GLYPHS } from "../primitives/glyph";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { Pressable } from "../primitives/Pressable";
@@ -92,15 +94,13 @@ export interface ExplorationSiteView {
 }
 export type ExplorationRewardView =
   | {
-      readonly kind: "objects";
-      readonly cards: readonly GameCardModel[];
-      readonly dreamsigns: readonly DreamsignData[];
-    }
-  | {
-      readonly kind: "deck-spark";
-      readonly amount: number;
-      readonly announcement: string;
-      readonly cards: readonly ExplorationCardChoiceView[];
+      /** Tangible objects granted by the resolution. */
+      readonly objects: {
+        readonly cards: readonly GameCardModel[];
+        readonly dreamsigns: readonly DreamsignData[];
+      };
+      /** Persisted mutation applied to every affected UUID-keyed deck entry. */
+      readonly deckModification: ExplorationDeckModificationView | null;
     }
   | {
       readonly kind: "essence";
@@ -111,6 +111,19 @@ export type ExplorationRewardView =
       /** Authoritative total applied by the reducer. */
       readonly totalEssence: number;
     };
+
+export interface ExplorationDeckModificationView {
+  /** Semantic modifier used for the announcement and QA contract. */
+  readonly kind: "spark" | "fast" | "energy-cost" | "subtype";
+  /** Compact center copy for the radial announcement. */
+  readonly headline: string;
+  /** Complete authored effect copy exposed to assistive technology. */
+  readonly announcement: string;
+  /** Semantic selection-ring color shared by every affected card. */
+  readonly selectionColor: CumulusColor;
+  /** Exact post-resolution snapshots of the affected deck entries. */
+  readonly cards: readonly ExplorationCardChoiceView[];
+}
 
 export interface ExplorationCardChoiceView {
   /** Deck-entry UUID for deck cards, card UUID for catalog offers. */
@@ -256,10 +269,12 @@ function ExplorationChoiceContents({
           style={{ font: token("--t-caption"), color: token("--text-muted") }}
         >
           {action.effectParts === undefined
-            ? action.effectText
+            ? renderRulesSymbolsInline(action.effectText)
             : action.effectParts.map((part, partIndex) =>
                 part.kind === "text" ? (
-                  <span key={`text-${String(partIndex)}`}>{part.text}</span>
+                  <span key={`text-${String(partIndex)}`}>
+                    {renderRulesSymbolsInline(part.text)}
+                  </span>
                 ) : (
                   <ExplorationEntityLabel
                     key={`entity-${String(partIndex)}`}
@@ -432,12 +447,12 @@ const CHOICE_STAGGER_SECONDS = motionTimeSeconds(
 const DESKTOP_REWARD_CARD_WIDTH = 240;
 const DESKTOP_REWARD_DREAMSIGN_SIZE = 240;
 const MOBILE_REWARD_DREAMSIGN_SIZE = 180;
-const DESKTOP_DECK_SPARK_CARD_WIDTH = 126;
-const MOBILE_DECK_SPARK_CARD_WIDTH = 84;
-const DESKTOP_DECK_SPARK_RADIUS_X = 280;
-const DESKTOP_DECK_SPARK_RADIUS_Y = 175;
-const MOBILE_DECK_SPARK_RADIUS_X = 132;
-const MOBILE_DECK_SPARK_RADIUS_Y = 205;
+const DESKTOP_DECK_MODIFICATION_CARD_WIDTH = 126;
+const MOBILE_DECK_MODIFICATION_CARD_WIDTH = 84;
+const DESKTOP_DECK_MODIFICATION_RADIUS_X = 280;
+const DESKTOP_DECK_MODIFICATION_RADIUS_Y = 175;
+const MOBILE_DECK_MODIFICATION_RADIUS_X = 132;
+const MOBILE_DECK_MODIFICATION_RADIUS_Y = 205;
 const DESKTOP_ESSENCE_CARD_WIDTH = 156;
 const MOBILE_ESSENCE_CARD_WIDTH = "min(28vw, 112px)";
 const ESSENCE_CHIP_LAYER = 12;
@@ -711,15 +726,15 @@ function sourceRectFor(target: RectSnapshot): {
 function rewardItemsFor(
   reward: ExplorationRewardView | null,
 ): readonly ExplorationRewardItem[] {
-  if (reward === null || reward.kind !== "objects") return [];
+  if (reward === null || "kind" in reward) return [];
   return [
-    ...reward.cards.map((card, index) => ({
+    ...reward.objects.cards.map((card, index) => ({
       key: `card:${String(index)}:${card.cardId}`,
       kind: "card" as const,
       id: card.cardId,
       card,
     })),
-    ...reward.dreamsigns.map((dreamsign, index) => ({
+    ...reward.objects.dreamsigns.map((dreamsign, index) => ({
       key: `dreamsign:${String(index)}:${dreamsign.id ?? "missing"}`,
       kind: "dreamsign" as const,
       id: dreamsign.id ?? "missing",
@@ -728,7 +743,7 @@ function rewardItemsFor(
   ];
 }
 
-function deckSparkCardPose(
+function deckModificationCardPose(
   index: number,
   count: number,
   layout: "mobile" | "desktop",
@@ -737,12 +752,12 @@ function deckSparkCardPose(
   const radiusVariation = 0.9 + (index % 3) * 0.05;
   const radiusX =
     (layout === "desktop"
-      ? DESKTOP_DECK_SPARK_RADIUS_X
-      : MOBILE_DECK_SPARK_RADIUS_X) * radiusVariation;
+      ? DESKTOP_DECK_MODIFICATION_RADIUS_X
+      : MOBILE_DECK_MODIFICATION_RADIUS_X) * radiusVariation;
   const radiusY =
     (layout === "desktop"
-      ? DESKTOP_DECK_SPARK_RADIUS_Y
-      : MOBILE_DECK_SPARK_RADIUS_Y) * radiusVariation;
+      ? DESKTOP_DECK_MODIFICATION_RADIUS_Y
+      : MOBILE_DECK_MODIFICATION_RADIUS_Y) * radiusVariation;
   return {
     x: Math.cos(angle) * radiusX,
     y: Math.sin(angle) * radiusY,
@@ -866,6 +881,8 @@ export function ExplorationSiteScreen({
   const [essenceRewardPhase, setEssenceRewardPhase] = useState<
     "cards" | "announcement"
   >("cards");
+  const [deckModificationPresented, setDeckModificationPresented] =
+    useState(false);
   const fullArtUrl = resolveArtRef(view.fullArt);
   const trajectory = useCardTrajectory(
     cardTargetRef,
@@ -874,26 +891,30 @@ export function ExplorationSiteScreen({
   );
   const activeAction =
     view.actions.find((action) => action.id === activeActionId) ?? null;
-  const objectReward =
-    view.reward?.kind === "objects" ? view.reward : null;
-  const deckSparkReward =
-    view.reward?.kind === "deck-spark" ? view.reward : null;
+  const resolvedReward =
+    view.reward !== null && !("kind" in view.reward) ? view.reward : null;
+  const objectReward = resolvedReward?.objects ?? null;
+  const deckModification = resolvedReward?.deckModification ?? null;
   const essenceReward =
-    view.reward?.kind === "essence" ? view.reward : null;
+    view.reward !== null && "kind" in view.reward ? view.reward : null;
   const rewardItems = useMemo(() => rewardItemsFor(view.reward), [view.reward]);
+  const showDeckModification =
+    deckModification !== null && !deckModificationPresented;
+  const showObjectReward = !showDeckModification && rewardItems.length > 0;
   const rewardIdentity =
     view.resolvedActionId === null || view.reward === null
       ? null
-      : view.reward.kind === "objects"
+      : "kind" in view.reward
         ? [
             view.resolvedActionId,
             view.reward.kind,
-            ...rewardItems.map((item) => item.key),
+            ...view.reward.cards.map((card) => card.entryId),
           ].join("|")
         : [
             view.resolvedActionId,
-            view.reward.kind,
-            ...view.reward.cards.map((card) => card.entryId),
+            deckModification?.kind ?? "objects-only",
+            ...(deckModification?.cards.map((card) => card.entryId) ?? []),
+            ...rewardItems.map((item) => item.key),
           ].join("|");
   useEffect(() => {
     if (view.resolvedActionId === null) return;
@@ -912,6 +933,7 @@ export function ExplorationSiteScreen({
     rewardItemRefs.current.clear();
     setRewardTrajectories(null);
     setEssenceRewardPhase("cards");
+    setDeckModificationPresented(false);
   }, [rewardIdentity]);
 
   useLayoutEffect(() => {
@@ -1017,6 +1039,7 @@ export function ExplorationSiteScreen({
     if (
       rewardIdentity === null ||
       objectReward === null ||
+      !showObjectReward ||
       frameBreakPhase !== "open"
     ) {
       return;
@@ -1039,12 +1062,13 @@ export function ExplorationSiteScreen({
         target.style.visibility = visibility;
       }
     };
-  }, [frameBreakPhase, objectReward, rewardIdentity]);
+  }, [frameBreakPhase, objectReward, rewardIdentity, showObjectReward]);
 
   useEffect(() => {
     if (
       rewardIdentity === null ||
       rewardItems.length === 0 ||
+      !showObjectReward ||
       frameBreakPhase !== "open" ||
       rewardTrajectories !== null
     ) {
@@ -1084,26 +1108,33 @@ export function ExplorationSiteScreen({
     rewardIdentity,
     rewardItems,
     rewardTrajectories,
+    showObjectReward,
   ]);
 
   useEffect(() => {
     if (
       rewardIdentity === null ||
-      deckSparkReward === null ||
+      deckModification === null ||
+      !showDeckModification ||
       frameBreakPhase !== "open"
     ) {
       return;
     }
-    const timer = window.setTimeout(
-      completeExit,
-      RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
-    );
+    const timer = window.setTimeout(() => {
+      if (rewardItems.length === 0) {
+        completeExit();
+        return;
+      }
+      setDeckModificationPresented(true);
+    }, RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS);
     return () => window.clearTimeout(timer);
   }, [
     completeExit,
-    deckSparkReward,
+    deckModification,
     frameBreakPhase,
     rewardIdentity,
+    rewardItems.length,
+    showDeckModification,
   ]);
 
   useEffect(() => {
@@ -1717,7 +1748,7 @@ export function ExplorationSiteScreen({
         frameBreakPhase === "open" &&
         activeAction === null &&
         objectReward !== null &&
-        rewardItems.length > 0 &&
+        showObjectReward &&
         rewardTrajectories === null && (
           <motion.section
             data-exploration-reward-stage=""
@@ -1811,12 +1842,14 @@ export function ExplorationSiteScreen({
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&
-        deckSparkReward !== null && (
+        deckModification !== null &&
+        showDeckModification && (
           <motion.section
-            data-exploration-deck-spark-reward=""
-            data-exploration-deck-spark-count={deckSparkReward.cards.length}
+            data-exploration-deck-modification-reward=""
+            data-exploration-deck-modification-kind={deckModification.kind}
+            data-exploration-deck-modification-count={deckModification.cards.length}
             role="status"
-            aria-label={deckSparkReward.announcement}
+            aria-label={deckModification.announcement}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{
@@ -1834,19 +1867,19 @@ export function ExplorationSiteScreen({
               pointerEvents: "none",
             }}
           >
-            {deckSparkReward.cards.map((card, index) => {
+            {deckModification.cards.map((card, index) => {
               const cardWidth = isDesktop
-                ? DESKTOP_DECK_SPARK_CARD_WIDTH
-                : MOBILE_DECK_SPARK_CARD_WIDTH;
-              const pose = deckSparkCardPose(
+                ? DESKTOP_DECK_MODIFICATION_CARD_WIDTH
+                : MOBILE_DECK_MODIFICATION_CARD_WIDTH;
+              const pose = deckModificationCardPose(
                 index,
-                deckSparkReward.cards.length,
+                deckModification.cards.length,
                 isDesktop ? "desktop" : "mobile",
               );
               return (
                 <motion.div
                   key={card.entryId}
-                  data-exploration-deck-spark-card=""
+                  data-exploration-deck-modification-card=""
                   data-exploration-deck-entry-id={card.entryId}
                   data-card-id={card.model.cardId}
                   initial={{
@@ -1885,19 +1918,19 @@ export function ExplorationSiteScreen({
                   <GameCard
                     model={card.model}
                     selected
-                    selectionColor="spark"
+                    selectionColor={deckModification.selectionColor}
                     hideRulesText
-                    testId={`cumulus-exploration-deck-spark-card-${card.entryId}`}
+                    testId={`cumulus-exploration-deck-modification-card-${card.entryId}`}
                   />
                 </motion.div>
               );
             })}
             <RadialAnnouncement
-              headline={`+${String(deckSparkReward.amount)} ✦`}
+              headline={deckModification.headline}
               tone="reward"
               size={isDesktop ? "compact" : "mini"}
               duration="extended"
-              announcementId={`exploration-deck-spark:${view.resolvedActionId ?? "resolved"}`}
+              announcementId={`exploration-deck-modification:${deckModification.kind}:${view.resolvedActionId ?? "resolved"}`}
             />
           </motion.section>
         )}
