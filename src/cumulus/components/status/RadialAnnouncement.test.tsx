@@ -3,6 +3,7 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it } from "vitest";
+import { GLYPHS } from "../../primitives/glyph";
 import { RadialAnnouncement } from "./RadialAnnouncement";
 
 describe("RadialAnnouncement", () => {
@@ -54,15 +55,40 @@ describe("RadialAnnouncement", () => {
     });
 
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-radial-announcement-disc]",
-      )?.style.width,
+      container.querySelector<HTMLElement>("[data-radial-announcement-disc]")
+        ?.style.width,
     ).toBe("108px");
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-radial-announcement-ripple]",
-      )?.style.inset,
+      container.querySelector<HTMLElement>("[data-radial-announcement-ripple]")
+        ?.style.inset,
     ).toBe("calc(-1 * var(--space-1))");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("renders a canonical glyph in place of the headline copy", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(
+        <RadialAnnouncement headline="Fast" headlineGlyph={GLYPHS.bolt} />,
+      );
+    });
+
+    const headline = container.querySelector<HTMLElement>(
+      "[data-radial-announcement-headline-glyph]",
+    );
+    expect(headline?.textContent).not.toContain("Fast");
+    expect(
+      headline
+        ?.querySelector("[data-inline-glyph]")
+        ?.getAttribute("aria-label"),
+    ).toBe("Fast");
+    expect(
+      headline?.querySelector("[data-inline-glyph] i")?.className,
+    ).toContain("bx-bolt");
 
     act(() => root.unmount());
     container.remove();

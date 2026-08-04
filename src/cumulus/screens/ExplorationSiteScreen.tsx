@@ -1927,6 +1927,9 @@ export function ExplorationSiteScreen({
             })}
             <RadialAnnouncement
               headline={deckModification.headline}
+              headlineGlyph={
+                deckModification.kind === "fast" ? GLYPHS.bolt : undefined
+              }
               tone="reward"
               size={isDesktop ? "compact" : "mini"}
               duration="extended"

@@ -8,7 +8,7 @@ Components · Live demo & interactive props: `/cumulus#/radial-announcement`
 
 Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 
-The orbiting circular status moment for turn handoffs, wins, and failures.
+The orbiting circular status moment for turn handoffs, wins, failures, and iconic state changes.
 
 > **Guidance:** Use it only for a brief, non-interactive state change that deserves to interrupt the whole scene.
 
@@ -17,6 +17,7 @@ The orbiting circular status moment for turn handoffs, wins, and failures.
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `headline` | `string` | yes | — | Primary announcement copy. |
+| `headlineGlyph` | `Glyph` | no | — | Optional canonical glyph rendered in place of the headline copy. |
 | `detail` | `string` | no | — | Optional supporting copy beneath the headline. |
 | `essenceGained` | `number` | no | — | Optional gained Essence amount, rendered with the canonical currency glyph. |
 | `tone` | `RadialAnnouncementTone` = `"danger" \| "accent" \| "reward"` | no | `accent` | Semantic orbit and ripple color. Defaults to accent. |
@@ -28,9 +29,11 @@ The orbiting circular status moment for turn handoffs, wins, and failures.
 
 ```tsx
 import { RadialAnnouncement } from "src/cumulus/components/status/RadialAnnouncement";
+import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <RadialAnnouncement
-  headline="Won!"
+  headline="Fast"
+  headlineGlyph={GLYPHS.bolt}
   essenceGained={150}
   tone="reward"
   duration="extended"

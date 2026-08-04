@@ -3,6 +3,8 @@
 
 import type { ReactElement } from "react";
 import { EssenceValue } from "../hud/EssenceValue";
+import { InlineGlyph } from "../typography/InlineGlyph";
+import type { Glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { RADIAL_DISC_BACKGROUND } from "../../primitives/radial-disc-material";
 
@@ -94,6 +96,8 @@ export type RadialAnnouncementDuration = "standard" | "extended";
 export interface RadialAnnouncementProps {
   /** Primary announcement copy. */
   headline: string;
+  /** Optional canonical glyph rendered in place of the headline copy. */
+  headlineGlyph?: Glyph;
   /** Optional supporting copy beneath the headline. */
   detail?: string;
   /** Optional gained Essence amount, rendered with the canonical currency glyph. */
@@ -117,6 +121,7 @@ function toneColor(tone: RadialAnnouncementTone): string {
 /** Orbiting circular status moment shared by battle turns and game outcomes. */
 export function RadialAnnouncement({
   headline,
+  headlineGlyph,
   detail,
   essenceGained,
   tone = "accent",
@@ -180,9 +185,7 @@ export function RadialAnnouncement({
           style={{
             position: "absolute",
             inset: `calc(-1 * ${token(
-              size === "mini" || size === "wager"
-                ? "--space-1"
-                : "--space-4",
+              size === "mini" || size === "wager" ? "--space-1" : "--space-4",
             )})`,
             border: `${token("--space-1")} solid ${accent}`,
             borderRadius: token("--radius-pill"),
@@ -191,7 +194,7 @@ export function RadialAnnouncement({
                 ? "radial-announcement-ripple-mini"
                 : size === "wager"
                   ? "radial-announcement-ripple-wager"
-                : "radial-announcement-ripple"
+                  : "radial-announcement-ripple"
             } ${animationDuration} ${token("--ease-out")} both`,
           }}
         />
@@ -210,11 +213,24 @@ export function RadialAnnouncement({
           }}
         >
           <span
+            data-radial-announcement-headline-glyph={headlineGlyph}
             style={{
-              font: token(size === "mini" ? "--t-title-sm" : "--t-title"),
+              font: token(
+                headlineGlyph === undefined
+                  ? size === "mini"
+                    ? "--t-title-sm"
+                    : "--t-title"
+                  : size === "mini"
+                    ? "--t-title"
+                    : "--t-display",
+              ),
             }}
           >
-            {headline}
+            {headlineGlyph === undefined ? (
+              headline
+            ) : (
+              <InlineGlyph glyph={headlineGlyph} label={headline} />
+            )}
           </span>
           {essenceGained !== undefined && (
             <span

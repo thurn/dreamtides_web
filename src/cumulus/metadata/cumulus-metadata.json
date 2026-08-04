@@ -4262,6 +4262,14 @@
       "description": "Primary announcement copy."
     },
     {
+      "name": "headlineGlyph",
+      "tsType": "Glyph",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional canonical glyph rendered in place of the headline copy."
+    },
+    {
       "name": "detail",
       "tsType": "string",
       "unionMembers": [],
