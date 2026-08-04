@@ -907,6 +907,82 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
+  it("resolves a Dreamsign follow-up directly from its UUID-backed artwork", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const dreamsignId = "held-dreamsign-id";
+    const followupView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          followup: {
+            kind: "dreamsigns",
+            title: "Break the suspended pattern",
+            subtitle: "Choose a Dreamsign to purge.",
+            selectionKey: "dreamsignId",
+            dreamsigns: [
+              {
+                id: dreamsignId,
+                name: "Amplified Acorn",
+                effectDescription: "A synthetic Dreamsign effect.",
+                imageName: "amplified-acorn.webp",
+                imageAlt: "Amplified Acorn art",
+                isNegative: false,
+              },
+            ],
+          },
+        },
+        base.actions[1],
+      ],
+    };
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={followupView}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+
+    const choice = container.querySelector<HTMLElement>(
+      `[data-testid="cumulus-exploration-dreamsign-${dreamsignId}"]`,
+    );
+    expect(choice?.dataset.dreamsignId).toBe(dreamsignId);
+    expect(choice?.querySelector("img")?.getAttribute("src")).toContain(
+      "/dreamsigns/amplified-acorn.webp",
+    );
+    expect(
+      container.querySelector(
+        '[data-testid="cumulus-exploration-followup-confirm"]',
+      ),
+    ).toBeNull();
+
+    act(() => choice?.click());
+    expect(onResolve).toHaveBeenCalledWith("choice-a", {
+      dreamsignId,
+    });
+    act(() => root.unmount());
+  });
+
   it("uses the standard transfiguration picker and commits the chosen free form", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),

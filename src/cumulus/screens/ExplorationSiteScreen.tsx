@@ -179,11 +179,7 @@ export type ExplorationFollowupView =
       readonly title: string;
       readonly subtitle: string;
       readonly selectionKey: "replacedDreamsignId" | "dreamsignId";
-      readonly dreamsigns: readonly {
-        readonly id: string;
-        readonly name: string;
-        readonly effectText: string;
-      }[];
+      readonly dreamsigns: readonly (DreamsignData & { readonly id: string })[];
     };
 
 export interface ExplorationActionView {
@@ -461,6 +457,8 @@ const CHOICE_STAGGER_SECONDS = motionTimeSeconds(
 const DESKTOP_REWARD_CARD_WIDTH = 240;
 const DESKTOP_REWARD_DREAMSIGN_SIZE = 240;
 const MOBILE_REWARD_DREAMSIGN_SIZE = 180;
+const DESKTOP_DREAMSIGN_CHOICE_SIZE = 154;
+const MOBILE_DREAMSIGN_CHOICE_SIZE = 120;
 const DESKTOP_DECK_MODIFICATION_CARD_WIDTH = 126;
 const MOBILE_DECK_MODIFICATION_CARD_WIDTH = 84;
 const DESKTOP_DECK_MODIFICATION_RADIUS_X = 280;
@@ -882,7 +880,6 @@ export function ExplorationSiteScreen({
   const [selectedIds, setSelectedIds] = useState<readonly string[]>([]);
   const [purgeEntryId, setPurgeEntryId] = useState<string | null>(null);
   const [selectedSubtype, setSelectedSubtype] = useState<string | null>(null);
-  const [selectedDreamsignId, setSelectedDreamsignId] = useState<string | null>(null);
   const [selectedTransfigurationEntryId, setSelectedTransfigurationEntryId] =
     useState<string | null>(null);
   const [selectedTransfigurationFormType, setSelectedTransfigurationFormType] =
@@ -960,7 +957,6 @@ export function ExplorationSiteScreen({
     setSelectedIds([]);
     setPurgeEntryId(null);
     setSelectedSubtype(null);
-    setSelectedDreamsignId(null);
     setSelectedTransfigurationEntryId(null);
     setSelectedTransfigurationFormType(null);
     setTransfigurationConfirming(false);
@@ -1335,7 +1331,6 @@ export function ExplorationSiteScreen({
     setSelectedIds([]);
     setPurgeEntryId(null);
     setSelectedSubtype(null);
-    setSelectedDreamsignId(null);
     setSelectedTransfigurationEntryId(null);
     setSelectedTransfigurationFormType(null);
     setTransfigurationConfirming(false);
@@ -1387,12 +1382,13 @@ export function ExplorationSiteScreen({
       onResolve(activeAction.id, { subtype: selectedSubtype });
       return;
     }
-    if (followup.kind === "dreamsigns") {
-      if (selectedDreamsignId === null) return;
-      onResolve(activeAction.id, {
-        [followup.selectionKey]: selectedDreamsignId,
-      });
-    }
+  };
+
+  const chooseDreamsign = (dreamsignId: string): void => {
+    if (activeAction?.followup.kind !== "dreamsigns") return;
+    onResolve(activeAction.id, {
+      [activeAction.followup.selectionKey]: dreamsignId,
+    });
   };
 
   const canCommitFollowup = (() => {
@@ -1406,7 +1402,7 @@ export function ExplorationSiteScreen({
     }
     if (followup.kind === "packs") return false;
     if (followup.kind === "subtypes") return selectedSubtype !== null;
-    return selectedDreamsignId !== null;
+    return false;
   })();
   const centeredFollowupWidth =
     activeAction?.followup.kind === "packs"
@@ -2678,7 +2674,7 @@ export function ExplorationSiteScreen({
               </GlassPanel>
             </article>
           )}
-          {(activeAction.followup.kind === "subtypes" || activeAction.followup.kind === "dreamsigns") && (
+          {activeAction.followup.kind === "subtypes" && (
             <GlassPanel
               eyebrow="Exploration"
               title={activeAction.followup.title}
@@ -2691,32 +2687,58 @@ export function ExplorationSiteScreen({
               }
             >
               <div role="radiogroup" style={{ display: "grid", gap: token("--space-3"), padding: token("--space-5") }}>
-                {activeAction.followup.kind === "subtypes"
-                  ? activeAction.followup.options.map((option) => (
-                      <Pressable
-                        key={option}
-                        as="button"
-                        role="radio"
-                        aria-checked={selectedSubtype === option}
-                        onClick={() => setSelectedSubtype(option)}
-                        style={{ minHeight: token("--touch-min"), padding: token("--space-4"), borderRadius: token("--radius-control"), border: `2px solid ${selectedSubtype === option ? token("--selected") : token("--border-soft")}`, background: token("--glass-on-glass-fill"), color: token("--text-on-glass"), textAlign: "left", font: token("--t-button") }}
-                      >
-                        {option}
-                      </Pressable>
-                    ))
-                  : activeAction.followup.dreamsigns.map((dreamsign) => (
-                      <Pressable
-                        key={dreamsign.id}
-                        as="button"
-                        role="radio"
-                        aria-checked={selectedDreamsignId === dreamsign.id}
-                        onClick={() => setSelectedDreamsignId(dreamsign.id)}
-                        style={{ minHeight: token("--touch-min"), display: "grid", gap: token("--space-1"), padding: token("--space-4"), borderRadius: token("--radius-control"), border: `2px solid ${selectedDreamsignId === dreamsign.id ? token("--selected") : token("--border-soft")}`, background: token("--glass-on-glass-fill"), color: token("--text-on-glass"), textAlign: "left" }}
-                      >
-                        <strong style={{ font: token("--t-button") }}>{dreamsign.name}</strong>
-                        <span style={{ font: token("--t-caption"), color: token("--text-muted") }}>{dreamsign.effectText}</span>
-                      </Pressable>
-                    ))}
+                {activeAction.followup.options.map((option) => (
+                  <Pressable
+                    key={option}
+                    as="button"
+                    role="radio"
+                    aria-checked={selectedSubtype === option}
+                    onClick={() => setSelectedSubtype(option)}
+                    style={{ minHeight: token("--touch-min"), padding: token("--space-4"), borderRadius: token("--radius-control"), border: `2px solid ${selectedSubtype === option ? token("--selected") : token("--border-soft")}`, background: token("--glass-on-glass-fill"), color: token("--text-on-glass"), textAlign: "left", font: token("--t-button") }}
+                  >
+                    {option}
+                  </Pressable>
+                ))}
+              </div>
+            </GlassPanel>
+          )}
+          {activeAction.followup.kind === "dreamsigns" && (
+            <GlassPanel
+              eyebrow="Exploration"
+              title={activeAction.followup.title}
+              subtitle={activeAction.followup.subtitle}
+              headingLevel="h1"
+            >
+              <div
+                role="group"
+                aria-label={activeAction.followup.subtitle}
+                data-exploration-dreamsign-choices=""
+                style={{
+                  flex: "1 1 auto",
+                  display: "grid",
+                  gridTemplateColumns: `repeat(auto-fit, minmax(${String(isDesktop ? DESKTOP_DREAMSIGN_CHOICE_SIZE : MOBILE_DREAMSIGN_CHOICE_SIZE)}px, 1fr))`,
+                  gap: isDesktop ? token("--space-9") : token("--space-5"),
+                  placeItems: "center",
+                  alignContent: "center",
+                  minHeight: 0,
+                  maxHeight: "min(70dvh, 620px)",
+                  overflow: "auto",
+                  padding: isDesktop ? token("--space-8") : token("--space-5"),
+                }}
+              >
+                {activeAction.followup.dreamsigns.map((dreamsign) => (
+                  <Dreamsign
+                    key={dreamsign.id}
+                    dreamsign={dreamsign}
+                    sizePx={
+                      isDesktop
+                        ? DESKTOP_DREAMSIGN_CHOICE_SIZE
+                        : MOBILE_DREAMSIGN_CHOICE_SIZE
+                    }
+                    testid={`cumulus-exploration-dreamsign-${dreamsign.id}`}
+                    onPress={() => chooseDreamsign(dreamsign.id)}
+                  />
+                ))}
               </div>
             </GlassPanel>
           )}

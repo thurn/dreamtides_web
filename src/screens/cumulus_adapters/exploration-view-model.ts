@@ -189,16 +189,9 @@ function offeredCards(
 }
 
 function heldDreamsignChoices(state: JourneyState) {
-  return state.dreamsigns.flatMap((dreamsign) =>
-    dreamsign.id === undefined
-      ? []
-      : [
-          {
-            id: dreamsign.id,
-            name: dreamsign.name,
-            effectText: dreamsign.effectDescription,
-          },
-        ],
+  return state.dreamsigns.filter(
+    (dreamsign): dreamsign is typeof dreamsign & { readonly id: string } =>
+      dreamsign.id !== undefined,
   );
 }
 

@@ -1188,7 +1188,13 @@ describe("exploration-view-model", () => {
       followup: {
         kind: "dreamsigns",
         selectionKey: "dreamsignId",
-        dreamsigns: [{ id: heldDreamsignId }],
+        dreamsigns: [
+          {
+            id: heldDreamsignId,
+            imageName: "held-dreamsign.webp",
+            imageAlt: "Held Dreamsign art",
+          },
+        ],
       },
     });
 
