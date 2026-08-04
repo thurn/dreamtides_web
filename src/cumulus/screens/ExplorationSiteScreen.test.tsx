@@ -80,7 +80,7 @@ function view(resolved = false): ExplorationSiteView {
     guide: {
       id: "layaway",
       name: '"Layaway"',
-      line: "Every card dreams, choom. Draw one, and we'll step inside.",
+      line: "Every card dreams, friend. Draw one, and we'll step inside.",
       art: artRef.dreamGuide("layaway"),
     },
     card: {
@@ -235,7 +235,9 @@ describe("ExplorationSiteScreen", () => {
     expect(
       container.querySelector('[data-testid="cumulus-exploration-panel"]'),
     ).toBeNull();
-    expect(container.querySelector("[data-guide-gallery-guide]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-guide-gallery-guide]"),
+    ).not.toBeNull();
     expect(
       container.querySelector('[data-testid="cumulus-exploration-guide-art"]'),
     ).not.toBeNull();
@@ -324,9 +326,9 @@ describe("ExplorationSiteScreen", () => {
     expect(
       tutorialAnchor?.hasAttribute("data-tutorial-guidance-obstacle"),
     ).toBe(true);
-    expect(
-      tutorialAnchor?.hasAttribute("data-tutorial-guidance-anchor"),
-    ).toBe(true);
+    expect(tutorialAnchor?.hasAttribute("data-tutorial-guidance-anchor")).toBe(
+      true,
+    );
     expect(
       container
         .querySelector('[data-testid="cumulus-exploration-narrative-panel"]')
@@ -484,9 +486,12 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(100, 100, 240, 336),
     );
     const base = view();
-    const offeredCards = ["offered-a", "offered-b", "offered-c", "offered-d"].map(
-      (entryId) => ({ entryId, model: base.card, isBane: false }),
-    );
+    const offeredCards = [
+      "offered-a",
+      "offered-b",
+      "offered-c",
+      "offered-d",
+    ].map((entryId) => ({ entryId, model: base.card, isBane: false }));
     const followupView: ExplorationSiteView = {
       ...base,
       actions: [
@@ -537,12 +542,14 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(offer).not.toBeNull();
     expect(
-      offer?.querySelector("[data-card-choice-grid]")?.getAttribute(
-        "data-card-choice-grid-columns",
-      ),
+      offer
+        ?.querySelector("[data-card-choice-grid]")
+        ?.getAttribute("data-card-choice-grid-columns"),
     ).toBe("4");
     expect(
-      container.querySelector('[data-testid="cumulus-exploration-card-followup"]'),
+      container.querySelector(
+        '[data-testid="cumulus-exploration-card-followup"]',
+      ),
     ).toBeNull();
     expect(
       [...container.querySelectorAll("button")].some(
@@ -734,9 +741,7 @@ describe("ExplorationSiteScreen", () => {
     expect(cardReturn?.getAttribute("data-exploration-destination")).toBe(
       "journey-deck",
     );
-    expect(
-      cardReturn?.querySelector('[data-card-back=""]'),
-    ).not.toBeNull();
+    expect(cardReturn?.querySelector('[data-card-back=""]')).not.toBeNull();
     expect(
       container.querySelector('[data-testid="cumulus-exploration-channel"]'),
     ).toBeNull();
@@ -884,9 +889,7 @@ describe("ExplorationSiteScreen", () => {
         ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
     });
     expect(
-      container.querySelector(
-        '[data-exploration-reward-object="dreamsign"]',
-      ),
+      container.querySelector('[data-exploration-reward-object="dreamsign"]'),
     ).not.toBeNull();
     expect(dreamsignTarget.style.visibility).toBe("hidden");
 

@@ -36,7 +36,7 @@ import { dreamscapeSceneRef } from "./dreamscape-view-model";
 const FALLBACK_GUIDE_ID = "layaway";
 const FALLBACK_GUIDE_NAME = '"Layaway"';
 const FALLBACK_GUIDE_LINE =
-  "Every card dreams, choom. Draw one, and we'll step inside.";
+  "Every card dreams, friend. Draw one, and we'll step inside.";
 
 /** Resolve Layaway, the resident guide for Exploration. */
 export function resolveExplorationGuide(
@@ -45,14 +45,21 @@ export function resolveExplorationGuide(
   return guideForSiteType(guides, "Exploration");
 }
 
-function matchesPredicate(card: CardData, predicate: ExplorationPredicate): boolean {
+function matchesPredicate(
+  card: CardData,
+  predicate: ExplorationPredicate,
+): boolean {
   switch (predicate) {
     case "character":
       return card.cardType === "Character";
     case "event":
       return card.cardType === "Event";
     case "cheap-character":
-      return card.cardType === "Character" && card.energyCost !== null && card.energyCost <= 2;
+      return (
+        card.cardType === "Character" &&
+        card.energyCost !== null &&
+        card.energyCost <= 2
+      );
     case "spirit-animal":
       return card.cardType === "Character" && card.subtype === "Spirit Animal";
     case "survivor":
@@ -200,7 +207,12 @@ function followupForAction(
         action.count ?? 2,
       );
     case "purge-selected":
-      return deckFollowup("Feed the Fire", "Choose an Event to purge.", deckCards, "single");
+      return deckFollowup(
+        "Feed the Fire",
+        "Choose an Event to purge.",
+        deckCards,
+        "single",
+      );
     case "purge-for-essence":
       return deckFollowup(
         "Trade Away a Figure",
@@ -416,13 +428,13 @@ function actionView(
       : action.effectKind === "gain-offered-card"
         ? offer.offeredCardIds.length === 1
         : true;
-  const available = hasRequiredOffer && (
-    followup.kind === "none" ||
-    (followup.kind === "cards" && followup.cards.length >= followup.min) ||
-    (followup.kind === "packs" && followup.packs.length > 0) ||
-    (followup.kind === "subtypes" && followup.options.length > 0) ||
-    (followup.kind === "dreamsigns" && followup.dreamsigns.length > 0)
-  );
+  const available =
+    hasRequiredOffer &&
+    (followup.kind === "none" ||
+      (followup.kind === "cards" && followup.cards.length >= followup.min) ||
+      (followup.kind === "packs" && followup.packs.length > 0) ||
+      (followup.kind === "subtypes" && followup.options.length > 0) ||
+      (followup.kind === "dreamsigns" && followup.dreamsigns.length > 0));
   return {
     id: action.id,
     label: action.label,
@@ -489,9 +501,9 @@ export function buildExplorationSiteView(params: {
   const resolvedAction =
     params.runtime.resolution === null
       ? null
-      : actions.find(
+      : (actions.find(
           (action) => action.id === params.runtime.resolution?.actionId,
-        ) ?? null;
+        ) ?? null);
   const guideId = params.guide?.id ?? FALLBACK_GUIDE_ID;
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
@@ -511,10 +523,10 @@ export function buildExplorationSiteView(params: {
     response:
       resolvedAction === null
         ? null
-          : {
-              actionLabel: resolvedAction.label,
-              text: resolvedAction.responseText,
-            },
+        : {
+            actionLabel: resolvedAction.label,
+            text: resolvedAction.responseText,
+          },
     reward: rewardForResolution(params.runtime, params.state, params.content),
   };
 }

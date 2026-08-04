@@ -119,7 +119,7 @@ name = "\"Layaway\""
 home-dreamscape-id = "grid_city"
 site-type = "Exploration"
 dialog = [
-  "Every card dreams, choom. Draw one, and we'll step inside.",
+  "Every card dreams, friend. Draw one, and we'll step inside.",
   "Pick a direction. The dream will make the path.",
 ]
 home-specialty = "Layaway guides you deeper into the dream within the drawn card."
