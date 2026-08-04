@@ -641,6 +641,38 @@ function rewardForResolution(
   const resolvedAction = actions.find(
     (action) => action.id === resolution.actionId,
   );
+  if (
+    resolvedAction?.effectKind === "transfigure-selected" ||
+    resolvedAction?.effectKind === "transfigure-fixed-selected"
+  ) {
+    const entryId = resolution.affectedEntryIds[0];
+    const entry = state.deck.find((candidate) => candidate.entryId === entryId);
+    const type =
+      resolution.chosenTransfiguration ?? resolvedAction.transfiguration;
+    const base =
+      entry === undefined ? undefined : content.cardDatabase.get(entry.cardNumber);
+    if (entryId !== undefined && entry !== undefined && type !== undefined && base !== undefined) {
+      const before = resolveDeckEntryCard(base, {
+        ...entry,
+        transfiguration: null,
+      });
+      const after = resolveDeckEntryCard(base, {
+        ...entry,
+        transfiguration: type,
+      });
+      const display = buildTransfigurationDisplay(base, type).display;
+      return {
+        kind: "transfiguration",
+        entryId,
+        before: modelForCard(before),
+        after: {
+          cardId: after.id,
+          displaySnapshot: after,
+          transfiguration: display,
+        },
+      };
+    }
+  }
   if (resolvedAction?.effectKind === "purge-dreamsign-for-essence") {
     const purgedDreamsignId = resolution.purgedDreamsignIds?.[0];
     const purgedDreamsign =

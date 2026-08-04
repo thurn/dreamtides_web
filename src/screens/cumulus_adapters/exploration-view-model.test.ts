@@ -663,6 +663,117 @@ describe("exploration-view-model", () => {
     });
   });
 
+  it("builds the persisted before-and-after reward for a fixed transfiguration", () => {
+    const source = card(sourceId, 17);
+    const target = card(
+      asCardId("f0000000-0000-4000-8000-000000000018"),
+      18,
+    );
+    const state = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "entry-target",
+          cardNumber: target.cardNumber,
+          transfiguration: "Kindled" as const,
+          isBane: false,
+        },
+      ],
+    };
+    const actionId = "kindle-target";
+    const runtime: ExplorationSiteRuntime = {
+      kind: "exploration",
+      encounterCardId: source.id,
+      actionOffers: [
+        {
+          actionId,
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+        {
+          actionId: "gain-card",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+      ],
+      resolution: {
+        actionId,
+        gainedCardIds: [],
+        gainedDreamsignIds: [],
+        purgedCardIds: [],
+        affectedEntryIds: ["entry-target"],
+        essenceGained: 0,
+      },
+    };
+    const content = {
+      cardDatabase: new Map([
+        [source.cardNumber, source],
+        [target.cardNumber, target],
+      ]),
+      dreamAvatars: [],
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      dreamscapes: [],
+      affiliations: [],
+      guides: [guide],
+      atlasConfig: { completionLevels: [] },
+      exploration: {
+        customCards: [],
+        customDreamsigns: [],
+        encounters: [
+          {
+            cardId: source.id,
+            prose: "The authored scene appears.",
+            actions: [
+              {
+                id: actionId,
+                label: "Gather the Falling Light",
+                effectText: "Apply Kindled to a chosen card.",
+                effectKind: "transfigure-fixed-selected",
+                predicate: "survivor",
+                transfiguration: "Kindled",
+              },
+              {
+                id: "gain-card",
+                label: "Gain the card",
+                effectText: "Gain the card.",
+                effectKind: "gain-card",
+                cardId: source.id,
+              },
+            ],
+          },
+        ],
+      },
+    } as unknown as JourneyContent;
+
+    const view = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      runtime,
+      state,
+      content,
+    });
+
+    expect(view?.reward).toMatchObject({
+      kind: "transfiguration",
+      entryId: "entry-target",
+      before: {
+        cardId: target.id,
+        displaySnapshot: { spark: 2 },
+      },
+      after: {
+        cardId: target.id,
+        displaySnapshot: { spark: 4 },
+        transfiguration: { type: "Kindled", sparkChanged: true },
+      },
+    });
+  });
+
   it("builds the standard free-form transfiguration picker with zero-cost forms", () => {
     const source = card(sourceId, 17);
     const state = {

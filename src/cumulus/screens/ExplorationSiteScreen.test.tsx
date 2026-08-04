@@ -182,6 +182,33 @@ function dreamsignRewardView(): ExplorationSiteView {
   };
 }
 
+function transfigurationRewardView(): ExplorationSiteView {
+  const base = view(true);
+  return {
+    ...base,
+    reward: {
+      kind: "transfiguration",
+      entryId: "deck-entry-transfigured",
+      before: base.card,
+      after: {
+        cardId: base.card.cardId,
+        displaySnapshot: {
+          ...base.card.displaySnapshot,
+          spark: (base.card.displaySnapshot.spark ?? 0) * 2,
+        },
+        transfiguration: {
+          type: "Kindled",
+          color: TRANSFIGURATION_TINT_COLORS.Kindled,
+          markedText: base.card.displaySnapshot.renderedText,
+          energyChanged: false,
+          sparkChanged: true,
+          fastChanged: false,
+        },
+      },
+    },
+  };
+}
+
 function deckModificationRewardView(
   kind: "spark" | "fast" = "spark",
 ): ExplorationSiteView {
@@ -1424,6 +1451,82 @@ describe("ExplorationSiteScreen", () => {
     expect(
       container.querySelector('[data-testid="cumulus-exploration-channel"]'),
     ).toBeNull();
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      cardReturn?.dispatchEvent(
+        new MouseEvent("contextmenu", { bubbles: true }),
+      );
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("flips a deck card into its transfigured form and returns it to the deck", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function getBoundingClientRect(this: HTMLElement) {
+        if (this.hasAttribute("data-exploration-card-slot")) {
+          return new DOMRect(900, 180, 240, 336);
+        }
+        if (this.hasAttribute("data-exploration-transfiguration-card")) {
+          return new DOMRect(520, 170, 240, 336);
+        }
+        if (this instanceof HTMLImageElement && this.alt !== "") {
+          return new DOMRect(780, 150, 480, 291);
+        }
+        return new DOMRect(0, 0, 100, 100);
+      },
+    );
+    const deckTarget = document.createElement("button");
+    deckTarget.dataset.journeyDeckTarget = "";
+    deckTarget.getBoundingClientRect = () =>
+      new DOMRect(1210, 720, 50, 70);
+    document.body.append(deckTarget);
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={transfigurationRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    const reward = container.querySelector<HTMLElement>(
+      "[data-exploration-transfiguration-reward]",
+    );
+    expect(reward?.dataset.explorationTransfigurationPhase).toBe("original");
+    expect(reward?.dataset.explorationDeckEntryId).toBe(
+      "deck-entry-transfigured",
+    );
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(1_000);
+    });
+    expect(
+      container.querySelector<HTMLElement>(
+        "[data-exploration-transfiguration-reward]",
+      )?.dataset.explorationTransfigurationPhase,
+    ).toBe("transfigured");
+    expect(
+      container.querySelector(
+        '[data-testid="cumulus-exploration-transfigured-card"] [aria-label="Kindled transfiguration"]',
+      ),
+    ).not.toBeNull();
+
+    act(() => {
+      vi.advanceTimersByTime(5_000);
+    });
+    const cardReturn = container.querySelector<HTMLElement>(
+      "[data-exploration-transfiguration-return]",
+    );
+    expect(cardReturn?.dataset.explorationDestination).toBe("journey-deck");
+    expect(cardReturn?.dataset.explorationDeckEntryId).toBe(
+      "deck-entry-transfigured",
+    );
     expect(onExit).not.toHaveBeenCalled();
 
     act(() => {

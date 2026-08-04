@@ -105,6 +105,17 @@ export type ExplorationRewardView =
       readonly deckModification: ExplorationDeckModificationView | null;
     }
   | {
+      readonly kind: "transfiguration";
+      /** Concrete deck entry whose persisted form changed. */
+      readonly entryId: string;
+      /** Card as it appeared immediately before the transfiguration. */
+      readonly before: GameCardModel;
+      /** Persisted transformed card, including its marked display descriptor. */
+      readonly after: GameCardModel & {
+        readonly transfiguration: NonNullable<GameCardModel["transfiguration"]>;
+      };
+    }
+  | {
       readonly kind: "essence";
       /** Exact deck entries that contributed to the Essence reward. */
       readonly cards: readonly ExplorationCardChoiceView[];
@@ -450,11 +461,16 @@ const DREAMSIGN_PURGE_SECONDS = motionTimeSeconds("--dur-slow") * 4;
 const ESSENCE_CARD_READING_SECONDS = motionTimeSeconds("--dur-slow") * 8;
 const REWARD_TRAVEL_SECONDS = motionTimeSeconds("--dur-slow") * 2;
 const REWARD_STAGGER_SECONDS = motionTimeSeconds("--dur-fast");
+const TRANSFIGURATION_ORIGINAL_SECONDS = motionTimeSeconds("--dur-slow") * 2;
+const TRANSFIGURATION_FLIP_SECONDS = motionTimeSeconds("--dur-slow") * 2;
+const TRANSFIGURATION_READING_SECONDS = motionTimeSeconds("--dur-slow") * 4;
 const TYPEWRITER_SECONDS = motionTimeSeconds("--dur-exploration-typewriter");
 const CHOICE_STAGGER_SECONDS = motionTimeSeconds(
   "--delay-exploration-choice-stagger",
 );
 const DESKTOP_REWARD_CARD_WIDTH = 240;
+const DESKTOP_TRANSFIGURATION_CARD_WIDTH = 240;
+const MOBILE_TRANSFIGURATION_CARD_WIDTH = "min(58vw, 240px)";
 const DESKTOP_REWARD_DREAMSIGN_SIZE = 240;
 const MOBILE_REWARD_DREAMSIGN_SIZE = 180;
 const DESKTOP_DREAMSIGN_CHOICE_SIZE = 154;
@@ -865,6 +881,7 @@ export function ExplorationSiteScreen({
   const exitCompletedRef = useRef(false);
   const resumedResolutionRef = useRef<string | null>(null);
   const rewardItemRefs = useRef(new Map<string, HTMLDivElement>());
+  const transfigurationCardRef = useRef<HTMLDivElement>(null);
   const completedRewardItemsRef = useRef(new Set<string>());
   const [revealed, setRevealed] = useState(reduceMotion);
   const [frameBreakGeometry, setFrameBreakGeometry] =
@@ -897,6 +914,10 @@ export function ExplorationSiteScreen({
   >("purging");
   const [deckModificationPresented, setDeckModificationPresented] =
     useState(false);
+  const [transfigurationRevealed, setTransfigurationRevealed] =
+    useState(false);
+  const [transfigurationReturn, setTransfigurationReturn] =
+    useState<RewardTrajectory | null>(null);
   const fullArtUrl = resolveArtRef(view.fullArt);
   const trajectory = useCardTrajectory(
     cardTargetRef,
@@ -909,6 +930,8 @@ export function ExplorationSiteScreen({
     view.reward !== null && !("kind" in view.reward) ? view.reward : null;
   const effectReward =
     view.reward !== null && "kind" in view.reward ? view.reward : null;
+  const transfigurationReward =
+    effectReward?.kind === "transfiguration" ? effectReward : null;
   const objectReward = resolvedReward?.objects ?? null;
   const purgedRewardCards = objectReward?.purgedCards ?? [];
   const deckModification = resolvedReward?.deckModification ?? null;
@@ -938,12 +961,20 @@ export function ExplorationSiteScreen({
               view.reward.kind,
               ...view.reward.cards.map((card) => card.entryId),
             ].join("|")
-          : [
-              view.resolvedActionId,
-              view.reward.kind,
-              view.reward.dreamsign.id ?? "missing",
-              view.reward.totalEssence,
-            ].join("|")
+          : view.reward.kind === "transfiguration"
+            ? [
+                view.resolvedActionId,
+                view.reward.kind,
+                view.reward.entryId,
+                view.reward.after.cardId,
+                view.reward.after.transfiguration.type,
+              ].join("|")
+            : [
+                view.resolvedActionId,
+                view.reward.kind,
+                view.reward.dreamsign.id ?? "missing",
+                view.reward.totalEssence,
+              ].join("|")
         : [
             view.resolvedActionId,
             deckModification?.kind ?? "objects-only",
@@ -969,6 +1000,8 @@ export function ExplorationSiteScreen({
     setEssenceRewardPhase("cards");
     setDreamsignPurgeRewardPhase("purging");
     setDeckModificationPresented(false);
+    setTransfigurationRevealed(false);
+    setTransfigurationReturn(null);
   }, [rewardIdentity]);
 
   useLayoutEffect(() => {
@@ -1069,6 +1102,71 @@ export function ExplorationSiteScreen({
     exitCompletedRef.current = true;
     onExit();
   }, [onExit]);
+
+  useEffect(() => {
+    if (
+      transfigurationReward === null ||
+      frameBreakPhase !== "open" ||
+      transfigurationRevealed ||
+      transfigurationReturn !== null
+    ) {
+      return;
+    }
+    if (reduceMotion) {
+      completeExit();
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      setTransfigurationRevealed(true);
+    }, TRANSFIGURATION_ORIGINAL_SECONDS * 1_000);
+    return () => window.clearTimeout(timer);
+  }, [
+    completeExit,
+    frameBreakPhase,
+    reduceMotion,
+    transfigurationReturn,
+    transfigurationRevealed,
+    transfigurationReward,
+  ]);
+
+  useEffect(() => {
+    if (
+      transfigurationReward === null ||
+      frameBreakPhase !== "open" ||
+      !transfigurationRevealed ||
+      transfigurationReturn !== null ||
+      reduceMotion
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      const sourceRect =
+        transfigurationCardRef.current?.getBoundingClientRect();
+      if (
+        sourceRect === undefined ||
+        sourceRect.width <= 0 ||
+        sourceRect.height <= 0
+      ) {
+        completeExit();
+        return;
+      }
+      const source = snapshotRect(sourceRect);
+      const destination = sourceRectFor(source);
+      setTransfigurationReturn({
+        source,
+        target: destination.rect,
+        destinationKind: destination.kind,
+      });
+    }, (TRANSFIGURATION_FLIP_SECONDS + TRANSFIGURATION_READING_SECONDS) * 1_000);
+    return () => window.clearTimeout(timer);
+  }, [
+    completeExit,
+    frameBreakPhase,
+    reduceMotion,
+    transfigurationReturn,
+    transfigurationRevealed,
+    transfigurationReward,
+  ]);
 
   useLayoutEffect(() => {
     if (
@@ -1827,6 +1925,135 @@ export function ExplorationSiteScreen({
               }}
             />
           </Pressable>
+        </motion.div>
+      )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        transfigurationReward !== null &&
+        transfigurationReturn === null && (
+          <motion.section
+            data-exploration-transfiguration-reward=""
+            data-exploration-deck-entry-id={transfigurationReward.entryId}
+            data-exploration-transfiguration-phase={
+              transfigurationRevealed ? "transfigured" : "original"
+            }
+            role="status"
+            aria-label={`Transfiguring ${transfigurationReward.before.displaySnapshot.name} into its ${transfigurationReward.after.transfiguration.type} form`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: motionTimeSeconds("--dur-base"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              top: safeAreaInsetAtLeast("top", "--space-9"),
+              right: token("--space-6"),
+              bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+              left: token("--space-6"),
+              zIndex: FRAME_BREAK_EXIT_LAYER + 1,
+              display: "grid",
+              placeItems: "center",
+              pointerEvents: "none",
+              perspective: 1200,
+            }}
+          >
+            <motion.div
+              ref={transfigurationCardRef}
+              data-exploration-transfiguration-card=""
+              initial={false}
+              animate={{ rotateY: transfigurationRevealed ? 180 : 0 }}
+              transition={{
+                duration: TRANSFIGURATION_FLIP_SECONDS,
+                ease: DREAM_EASE,
+              }}
+              style={{
+                position: "relative",
+                width: isDesktop
+                  ? DESKTOP_TRANSFIGURATION_CARD_WIDTH
+                  : MOBILE_TRANSFIGURATION_CARD_WIDTH,
+                aspectRatio: CARD_ASPECT_RATIO,
+                transformStyle: "preserve-3d",
+              }}
+            >
+              <div
+                data-exploration-transfiguration-face="original"
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  backfaceVisibility: "hidden",
+                }}
+              >
+                <GameCard model={transfigurationReward.before} />
+              </div>
+              <div
+                data-exploration-transfiguration-face="transfigured"
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  transform: "rotateY(180deg)",
+                  backfaceVisibility: "hidden",
+                }}
+              >
+                <GameCard
+                  model={transfigurationReward.after}
+                  selected
+                  selectionColor={transfigurationReward.after.transfiguration.color}
+                  testId="cumulus-exploration-transfigured-card"
+                />
+              </div>
+            </motion.div>
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        transfigurationReward !== null &&
+        transfigurationReturn !== null && (
+        <motion.div
+          data-exploration-transfiguration-return=""
+          data-exploration-deck-entry-id={transfigurationReward.entryId}
+          data-exploration-destination={
+            transfigurationReturn.destinationKind
+          }
+          initial={{
+            x: transfigurationReturn.source.left,
+            y: transfigurationReturn.source.top,
+            scale: 1,
+            opacity: 1,
+          }}
+          animate={{
+            x: transfigurationReturn.target.left,
+            y: transfigurationReturn.target.top,
+            scale: Math.min(
+              transfigurationReturn.target.width /
+                transfigurationReturn.source.width,
+              transfigurationReturn.target.height /
+                transfigurationReturn.source.height,
+            ),
+            opacity: 1,
+          }}
+          transition={{
+            duration: REWARD_TRAVEL_SECONDS,
+            ease: DREAM_EASE,
+          }}
+          onAnimationComplete={completeExit}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+            width: transfigurationReturn.source.width,
+            height: transfigurationReturn.source.height,
+            transformOrigin: "top left",
+            pointerEvents: "none",
+          }}
+        >
+          <GameCard
+            model={transfigurationReward.after}
+            selected
+            selectionColor={transfigurationReward.after.transfiguration.color}
+          />
         </motion.div>
       )}
       {frameBreakGeometry !== null &&
