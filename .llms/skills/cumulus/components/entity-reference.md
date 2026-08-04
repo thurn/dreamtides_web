@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/entity-reference`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
 An inline, underlined card or Dreamsign name that reveals the canonical full entity on hover, keyboard focus, or touch hold through the shared coordinator.
 

@@ -295,6 +295,69 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
+  it("reveals a referenced entity without resolving its surrounding choice", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const referencedCard = makeCard();
+    const referencedView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          effectText: `Gain ${referencedCard.name}.`,
+          effectParts: [
+            { kind: "text", text: "Gain " },
+            {
+              kind: "entity",
+              entity: { kind: "card", card: referencedCard },
+            },
+            { kind: "text", text: "." },
+          ],
+        },
+        base.actions[1],
+      ],
+    };
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={referencedView}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    const source = container.querySelector<HTMLElement>(
+      '[data-entity-reference="card"]',
+    );
+    expect(source?.textContent).toBe(referencedCard.name);
+    expect(source?.dataset.entityReferenceId).toBe(referencedCard.id);
+    expect(source?.dataset.revealPrimaryVariant).toBe("gameCard");
+    expect(source?.style.textDecoration).toBe("underline");
+    act(() => source?.focus());
+    expect(source?.dataset.revealActive).toBe("true");
+    act(() => source?.click());
+    expect(onResolve).not.toHaveBeenCalled();
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+    expect(onResolve).toHaveBeenCalledWith("choice-a");
+    act(() => root.unmount());
+  });
+
   it("collects a card follow-up before resolving the choice", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),

@@ -6,6 +6,7 @@ import type { DreamGuideContent } from "../../types/content";
 import type { ExplorationSiteRuntime, SiteState } from "../../types/journey";
 import { createDefaultState } from "../../state/journey-context";
 import {
+  buildExplorationActionEffect,
   buildExplorationSiteView,
   resolveExplorationGuide,
 } from "./exploration-view-model";
@@ -338,6 +339,13 @@ describe("exploration-view-model", () => {
 
     expect(view.actions[0]).toMatchObject({
       effectText: `Gain ${offered.name}`,
+      effectParts: [
+        { kind: "text", text: "Gain " },
+        {
+          kind: "entity",
+          entity: { kind: "card", card: { id: offered.id } },
+        },
+      ],
       available: true,
       followup: {
         kind: "cards",
@@ -347,6 +355,112 @@ describe("exploration-view-model", () => {
       },
     });
     expect(view.actions[1].followup).toEqual({ kind: "none" });
+  });
+
+  it("builds UUID-backed references for fixed cards, banes, and Dreamsigns", () => {
+    const fixedCard = card(
+      asCardId("f0000000-0000-4000-8000-000000000019"),
+      19,
+    );
+    const baneCard = {
+      ...card(asCardId("f0000000-0000-4000-8000-000000000020"), 20),
+      name: asCardName("Nightmare"),
+    };
+    const dreamsignId = "f0000000-0000-4000-8000-000000000021";
+    const content = {
+      cardDatabase: new Map([
+        [fixedCard.cardNumber, fixedCard],
+        [baneCard.cardNumber, baneCard],
+      ]),
+      dreamAvatars: [],
+      dreamwellCards: [],
+      dreamsignTemplates: [
+        {
+          id: dreamsignId,
+          name: "Fixture Sign",
+          effectDescription: "Draw a card, then discard a card.",
+          imageName: "fixture.png",
+          imageAlt: "A fixture sign",
+        },
+      ],
+      dreamscapes: [],
+      affiliations: [],
+      guides: [],
+      atlasConfig: { completionLevels: [] },
+      exploration: {
+        customCards: [],
+        customDreamsigns: [],
+        encounters: [],
+      },
+    } as unknown as JourneyContent;
+    const offer = {
+      actionId: "fixture-action",
+      offeredCardIds: [],
+      packCardIds: [],
+      replacementCardIdByEntryId: {},
+      transfigurationByEntryId: {},
+    };
+
+    const fixed = buildExplorationActionEffect(
+      {
+        id: "fixed-card",
+        label: "Gain a card",
+        effectText: `Gain ${fixedCard.name}`,
+        responseText: "The card arrives.",
+        effectKind: "gain-card",
+        cardId: fixedCard.id,
+      },
+      offer,
+      content,
+    );
+    const bane = buildExplorationActionEffect(
+      {
+        id: "bane-card",
+        label: "Accept the cost",
+        effectText: 'Gain 3 "Nightmare" bane cards.',
+        responseText: "The nightmares gather.",
+        effectKind: "reduce-cost-all-and-gain-banes",
+        baneCardId: baneCard.id,
+      },
+      offer,
+      content,
+    );
+    const dreamsign = buildExplorationActionEffect(
+      {
+        id: "fixed-dreamsign",
+        label: "Take the sign",
+        effectText: "Gain Fixture Sign",
+        responseText: "The sign gleams.",
+        effectKind: "gain-dreamsign",
+        dreamsignId,
+      },
+      offer,
+      content,
+    );
+
+    expect(fixed.effectParts).toMatchObject([
+      { kind: "text", text: "Gain " },
+      {
+        kind: "entity",
+        entity: { kind: "card", card: { id: fixedCard.id } },
+      },
+    ]);
+    expect(bane.effectText).toBe('Gain 3 "Nightmare" bane cards.');
+    expect(bane.effectParts).toMatchObject([
+      { kind: "text", text: 'Gain 3 "' },
+      {
+        kind: "entity",
+        entity: { kind: "card", card: { id: baneCard.id } },
+      },
+      { kind: "text", text: '" bane cards.' },
+    ]);
+    expect(dreamsign.effectParts).toMatchObject([
+      { kind: "text", text: "Gain " },
+      {
+        kind: "entity",
+        entity: { kind: "dreamsign", dreamsign: { id: dreamsignId } },
+      },
+    ]);
   });
 
   it("builds Dreamsign follow-ups with UUID-keyed selection contracts", () => {

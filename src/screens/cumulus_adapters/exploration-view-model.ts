@@ -2,8 +2,10 @@
 
 import { resolveDeckEntryCard } from "../../card-type-change";
 import type { GameCardModel } from "../../cumulus/components/card/CardView";
+import type { EntityReferenceModel } from "../../cumulus/components/card/EntityReference";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
+  ExplorationActionEffectPart,
   ExplorationActionView,
   ExplorationCardChoiceView,
   ExplorationFollowupView,
@@ -15,6 +17,7 @@ import {
   type ExplorationActionContent,
   type ExplorationPredicate,
 } from "../../data/exploration";
+import { createDreamsign } from "../../data/dreamsigns";
 import type { JourneyContent } from "../../data/journey-content";
 import { guideForSiteType } from "../../data/dreamscapes";
 import { asCardId } from "../../types/card-identity";
@@ -66,6 +69,21 @@ function cardById(content: JourneyContent, cardId: string): CardData | null {
       (card) => card.id.toLowerCase() === normalized,
     ) ?? null
   );
+}
+
+function dreamsignById(
+  content: JourneyContent,
+  dreamsignId: string,
+): ReturnType<typeof createDreamsign> | null {
+  const normalized = dreamsignId.toLowerCase();
+  const customDreamsign = content.exploration?.customDreamsigns.find(
+    (dreamsign) => dreamsign.id?.toLowerCase() === normalized,
+  );
+  if (customDreamsign !== undefined) return customDreamsign;
+  const template = content.dreamsignTemplates.find(
+    (dreamsign) => dreamsign.id.toLowerCase() === normalized,
+  );
+  return template === undefined ? null : createDreamsign(template);
 }
 
 function modelForCard(card: CardData): GameCardModel {
@@ -299,18 +317,97 @@ function followupForAction(
   }
 }
 
-function effectTextForAction(
+interface ExplorationEffectReference {
+  readonly needle: string;
+  readonly entity: EntityReferenceModel;
+}
+
+function effectReferencesForAction(
   action: ExplorationActionContent,
   offer: ExplorationActionOfferRuntime,
   content: JourneyContent,
-): string {
-  if (!action.effectText.includes("$OFFERED_CARD")) return action.effectText;
-  const offeredCardId = offer.offeredCardIds[0];
-  if (offeredCardId === undefined) return action.effectText;
-  const offeredCard = cardById(content, offeredCardId);
-  return offeredCard === null
-    ? action.effectText
-    : action.effectText.split("$OFFERED_CARD").join(offeredCard.name);
+): readonly ExplorationEffectReference[] {
+  const references: ExplorationEffectReference[] = [];
+  if (action.effectText.includes("$OFFERED_CARD")) {
+    const offeredCardId = offer.offeredCardIds[0];
+    const offeredCard =
+      offeredCardId === undefined ? null : cardById(content, offeredCardId);
+    if (offeredCard !== null) {
+      references.push({
+        needle: "$OFFERED_CARD",
+        entity: { kind: "card", card: offeredCard },
+      });
+    }
+  }
+  for (const cardId of [action.cardId, action.baneCardId]) {
+    if (cardId === undefined) continue;
+    const card = cardById(content, cardId);
+    if (card !== null) {
+      references.push({
+        needle: card.name,
+        entity: { kind: "card", card },
+      });
+    }
+  }
+  if (action.dreamsignId !== undefined) {
+    const dreamsign = dreamsignById(content, action.dreamsignId);
+    if (dreamsign !== null) {
+      references.push({
+        needle: dreamsign.name,
+        entity: { kind: "dreamsign", dreamsign },
+      });
+    }
+  }
+  return references;
+}
+
+/** Build UUID-backed inline entity parts for an Exploration option's effect. */
+export function buildExplorationActionEffect(
+  action: ExplorationActionContent,
+  offer: ExplorationActionOfferRuntime,
+  content: JourneyContent,
+): Pick<ExplorationActionView, "effectText" | "effectParts"> {
+  const references = effectReferencesForAction(action, offer, content);
+  const parts: ExplorationActionEffectPart[] = [];
+  let cursor = 0;
+  while (cursor < action.effectText.length) {
+    const next = references
+      .map((reference) => ({
+        reference,
+        index: action.effectText
+          .toLowerCase()
+          .indexOf(reference.needle.toLowerCase(), cursor),
+      }))
+      .filter((candidate) => candidate.index >= cursor)
+      .sort((left, right) => left.index - right.index)[0];
+    if (next === undefined) break;
+    if (next.index > cursor) {
+      parts.push({
+        kind: "text",
+        text: action.effectText.slice(cursor, next.index),
+      });
+    }
+    parts.push({ kind: "entity", entity: next.reference.entity });
+    cursor = next.index + next.reference.needle.length;
+  }
+  if (!parts.some((part) => part.kind === "entity")) {
+    return { effectText: action.effectText };
+  }
+  if (cursor < action.effectText.length) {
+    parts.push({ kind: "text", text: action.effectText.slice(cursor) });
+  }
+  return {
+    effectText: parts
+      .map((part) =>
+        part.kind === "text"
+          ? part.text
+          : part.entity.kind === "card"
+            ? part.entity.card.name
+            : part.entity.dreamsign.name,
+      )
+      .join(""),
+    effectParts: parts,
+  };
 }
 
 function actionView(
@@ -333,7 +430,7 @@ function actionView(
   return {
     id: action.id,
     label: action.label,
-    effectText: effectTextForAction(action, offer, content),
+    ...buildExplorationActionEffect(action, offer, content),
     responseText: action.responseText,
     followup,
     available,

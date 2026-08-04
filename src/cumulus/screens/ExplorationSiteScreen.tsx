@@ -17,6 +17,10 @@ import {
 } from "../components/card/CardChoiceGrid";
 import { CardGalleryPanel } from "../components/card/CardGalleryPanel";
 import {
+  EntityReference,
+  type EntityReferenceModel,
+} from "../components/card/EntityReference";
+import {
   CARD_ASPECT_RATIO,
   CARD_ASPECT_RATIO_VALUE,
   CARD_CORNER_RADIUS,
@@ -118,10 +122,15 @@ export interface ExplorationActionView {
   readonly id: string;
   readonly label: string;
   readonly effectText: string;
+  readonly effectParts?: readonly ExplorationActionEffectPart[];
   readonly responseText: string;
   readonly followup: ExplorationFollowupView;
   readonly available: boolean;
 }
+
+export type ExplorationActionEffectPart =
+  | { readonly kind: "text"; readonly text: string }
+  | { readonly kind: "entity"; readonly entity: EntityReferenceModel };
 
 export interface ExplorationResponseView {
   readonly actionLabel: string;
@@ -1058,7 +1067,15 @@ export function ExplorationSiteScreen({
                       disabled={!action.available}
                       aria-describedby={`exploration-effect-${String(index)}`}
                       data-testid={`cumulus-exploration-choice-${String(index)}`}
-                      onClick={() => openAction(action)}
+                      onClick={(event) => {
+                        if (
+                          event.target instanceof Element &&
+                          event.target.closest("[data-entity-reference]") !== null
+                        ) {
+                          return;
+                        }
+                        openAction(action);
+                      }}
                       style={{
                         width: "100%",
                         minHeight: token("--touch-min"),
@@ -1081,7 +1098,21 @@ export function ExplorationSiteScreen({
                           id={`exploration-effect-${String(index)}`}
                           style={{ font: token("--t-caption"), color: token("--text-muted") }}
                         >
-                          {action.effectText}
+                          {action.effectParts === undefined
+                            ? action.effectText
+                            : action.effectParts.map((part, partIndex) =>
+                                part.kind === "text" ? (
+                                  <span key={`text-${String(partIndex)}`}>
+                                    {part.text}
+                                  </span>
+                                ) : (
+                                  <EntityReference
+                                    key={`entity-${String(partIndex)}`}
+                                    entity={part.entity}
+                                    testId={`cumulus-exploration-choice-${String(index)}-entity-${String(partIndex)}`}
+                                  />
+                                ),
+                              )}
                         </span>
                       </span>
                       <span aria-hidden="true" style={{ font: token("--t-title") }}>›</span>
