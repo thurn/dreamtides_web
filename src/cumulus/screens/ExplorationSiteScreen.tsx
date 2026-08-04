@@ -53,9 +53,17 @@ import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
+import {
+  TransfigurationDetailPanel,
+  TransfigurationPickerPanel,
+  type TransfigurationCandidateView,
+} from "./TransfigurationSiteScreen";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import { useIsDesktop } from "./use-is-desktop";
-import type { Dreamsign as DreamsignData } from "../../types/journey";
+import type {
+  Dreamsign as DreamsignData,
+  TransfigurationType,
+} from "../../types/journey";
 
 export interface ExplorationSiteView {
   /** Stable site id exposed to QA and logging. */
@@ -94,6 +102,10 @@ export interface ExplorationCardChoiceView {
 
 export type ExplorationFollowupView =
   | { readonly kind: "none" }
+  | {
+      readonly kind: "transfiguration";
+      readonly candidates: readonly TransfigurationCandidateView[];
+    }
   | {
       readonly kind: "cards";
       readonly title: string;
@@ -789,6 +801,12 @@ export function ExplorationSiteScreen({
   const [selectedPackIndex, setSelectedPackIndex] = useState<number | null>(null);
   const [selectedSubtype, setSelectedSubtype] = useState<string | null>(null);
   const [selectedDreamsignId, setSelectedDreamsignId] = useState<string | null>(null);
+  const [selectedTransfigurationEntryId, setSelectedTransfigurationEntryId] =
+    useState<string | null>(null);
+  const [selectedTransfigurationFormType, setSelectedTransfigurationFormType] =
+    useState<TransfigurationType | null>(null);
+  const [transfigurationConfirming, setTransfigurationConfirming] =
+    useState(false);
   const [rewardTrajectories, setRewardTrajectories] = useState<
     ReadonlyMap<string, RewardTrajectory> | null
   >(null);
@@ -817,6 +835,9 @@ export function ExplorationSiteScreen({
     setSelectedPackIndex(null);
     setSelectedSubtype(null);
     setSelectedDreamsignId(null);
+    setSelectedTransfigurationEntryId(null);
+    setSelectedTransfigurationFormType(null);
+    setTransfigurationConfirming(false);
   }, [view.resolvedActionId]);
 
   useEffect(() => {
@@ -851,6 +872,9 @@ export function ExplorationSiteScreen({
         setActiveActionId(null);
         setSelectedIds([]);
         setPurgeEntryId(null);
+        setSelectedTransfigurationEntryId(null);
+        setSelectedTransfigurationFormType(null);
+        setTransfigurationConfirming(false);
         return;
       }
       setCollapseIntent("preview");
@@ -1049,6 +1073,9 @@ export function ExplorationSiteScreen({
     setSelectedPackIndex(null);
     setSelectedSubtype(null);
     setSelectedDreamsignId(null);
+    setSelectedTransfigurationEntryId(null);
+    setSelectedTransfigurationFormType(null);
+    setTransfigurationConfirming(false);
   };
 
   const toggleCard = (entryId: string): void => {
@@ -1113,6 +1140,7 @@ export function ExplorationSiteScreen({
   const canCommitFollowup = (() => {
     const followup = activeAction?.followup;
     if (followup === undefined || followup.kind === "none") return false;
+    if (followup.kind === "transfiguration") return false;
     if (followup.kind === "cards") {
       return followup.mode === "purge-and-copy"
         ? purgeEntryId !== null && selectedIds.length === 1
@@ -1783,6 +1811,51 @@ export function ExplorationSiteScreen({
             pointerEvents: "auto",
           }}
         >
+          {activeAction.followup.kind === "transfiguration" &&
+            (() => {
+              const candidate =
+                activeAction.followup.candidates.find(
+                  (choice) =>
+                    choice.entryId === selectedTransfigurationEntryId,
+                ) ?? null;
+              return candidate === null ? (
+                <TransfigurationPickerPanel
+                  layout={isDesktop ? "desktop" : "mobile"}
+                  ready
+                  isEnhanced
+                  candidates={activeAction.followup.candidates}
+                  onClose={() => setActiveActionId(null)}
+                  onPick={(entryId) => {
+                    setSelectedTransfigurationEntryId(entryId);
+                    setSelectedTransfigurationFormType(null);
+                  }}
+                />
+              ) : (
+                <TransfigurationDetailPanel
+                  layout={isDesktop ? "desktop" : "mobile"}
+                  candidate={candidate}
+                  selectedFormType={selectedTransfigurationFormType}
+                  confirming={transfigurationConfirming}
+                  alreadyAccepted={false}
+                  onBack={() => {
+                    setSelectedTransfigurationEntryId(null);
+                    setSelectedTransfigurationFormType(null);
+                  }}
+                  onSelectForm={(type) =>
+                    setSelectedTransfigurationFormType((current) =>
+                      current === type ? null : type,
+                    )
+                  }
+                  onConfirm={(form) => {
+                    setTransfigurationConfirming(true);
+                    onResolve(activeAction.id, {
+                      entryIds: [candidate.entryId],
+                      transfiguration: form.type,
+                    });
+                  }}
+                />
+              );
+            })()}
           {activeAction.followup.kind === "cards" &&
             activeAction.followup.selectionKey === "cardIds" && (
             <article

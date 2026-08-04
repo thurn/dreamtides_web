@@ -445,6 +445,7 @@ export interface ExplorationResolution {
   purgedDreamsignIds?: string[];
   affectedEntryIds: string[];
   essenceGained: number;
+  chosenTransfiguration?: TransfigurationType;
   chosenSubtype?: string;
 }
 

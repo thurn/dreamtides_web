@@ -201,18 +201,39 @@ describe("Exploration provider", () => {
     });
 
     const transfigureState = buildState(content);
-    const transfigurations =
-      transfigureState.runtime.actionOffers[1]?.transfigurationByEntryId ?? {};
-    const entryId = Object.keys(transfigurations)[0];
-    if (entryId === undefined) throw new Error("Expected a transfiguration offer");
+    const entryId = transfigureState.journey.deck[0]?.entryId;
+    if (entryId === undefined) throw new Error("Expected a deck entry");
+    expect(
+      transfigureState.runtime.actionOffers[1]?.transfigurationByEntryId,
+    ).toEqual({});
     const transfigured = resolve(
       content,
       transfigureState.journey,
       transfigureAction.id,
-      { entryIds: [entryId] },
+      { entryIds: [entryId], transfiguration: "Empowered" },
     );
     expect(transfigured.deck.find((entry) => entry.entryId === entryId)?.transfiguration)
-      .toBe(transfigurations[entryId]);
+      .toBe("Empowered");
+    expect(transfigured.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        affectedEntryIds: [entryId],
+        chosenTransfiguration: "Empowered",
+      },
+    });
+
+    expect(
+      resolveExplorationChoice({
+        journey: transfigureState.journey,
+        site,
+        payload: {
+          actionId: transfigureAction.id,
+          selection: { entryIds: [entryId], transfiguration: "Perfected" },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
   });
 
   it("derives essence from matching deck entries and stacks spark on every Character", () => {

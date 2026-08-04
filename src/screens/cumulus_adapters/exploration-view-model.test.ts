@@ -252,6 +252,107 @@ describe("exploration-view-model", () => {
     });
   });
 
+  it("builds the standard free-form transfiguration picker with zero-cost forms", () => {
+    const source = card(sourceId, 17);
+    const state = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "entry-eligible",
+          cardNumber: source.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
+        {
+          entryId: "entry-transfigured",
+          cardNumber: source.cardNumber,
+          transfiguration: "Inspired" as const,
+          isBane: false,
+        },
+      ],
+    };
+    const runtime: ExplorationSiteRuntime = {
+      kind: "exploration",
+      encounterCardId: source.id,
+      actionOffers: [
+        {
+          actionId: "transfigure",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+        {
+          actionId: "gain-card",
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+      ],
+      resolution: null,
+    };
+    const content = {
+      cardDatabase: new Map([[source.cardNumber, source]]),
+      dreamAvatars: [],
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      dreamscapes: [],
+      affiliations: [],
+      guides: [guide],
+      atlasConfig: { completionLevels: [] },
+      exploration: {
+        customCards: [],
+        customDreamsigns: [],
+        encounters: [
+          {
+            cardId: source.id,
+            prose: "The authored scene appears.",
+            actions: [
+              {
+                id: "transfigure",
+                label: "Send a possession through",
+                effectText: "Apply a transfiguration to a chosen card",
+                effectKind: "transfigure-selected",
+                count: 1,
+              },
+              {
+                id: "gain-card",
+                label: "Gain the card",
+                effectText: "Gain the card.",
+                effectKind: "gain-card",
+                cardId: source.id,
+              },
+            ],
+          },
+        ],
+      },
+    } as unknown as JourneyContent;
+
+    const view = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      runtime,
+      state,
+      content,
+    });
+    if (view === null) throw new Error("Expected Exploration view");
+
+    expect(view.actions[0].followup).toMatchObject({
+      kind: "transfiguration",
+      candidates: [
+        {
+          entryId: "entry-eligible",
+          forms: [
+            { type: "Empowered", essenceCost: 0, affordable: true },
+            { type: "Kindled", essenceCost: 0, affordable: true },
+          ],
+        },
+      ],
+    });
+  });
+
   it("resolves an offered-card placeholder and presents the UUID-backed card", () => {
     const source = card(sourceId, 17);
     const offered = card(

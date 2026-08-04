@@ -5,6 +5,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
+import { TRANSFIGURATION_TINT_COLORS } from "../../runtime/transfiguration-display";
 import { CumulusRoot } from "../CumulusRoot";
 import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP } from "../components/hud/JourneyStatusBar";
 import { artRef } from "../primitives/art";
@@ -693,6 +694,112 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(onResolve).toHaveBeenCalledWith("choice-a", {
       entryIds: ["entry-fixture"],
+    });
+    act(() => root.unmount());
+  });
+
+  it("uses the standard transfiguration picker and commits the chosen free form", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const transformed = {
+      ...base.card.displaySnapshot,
+      energyCost: 1,
+    };
+    const followupView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          followup: {
+            kind: "transfiguration",
+            candidates: [
+              {
+                entryId: "entry-fixture",
+                model: base.card,
+                availability: "available",
+                reforgedType: null,
+                forms: [
+                  {
+                    type: "Empowered",
+                    description: "Energy cost: 2 → 1",
+                    effectDetails: { energyCost: { before: 2, after: 1 } },
+                    essenceCost: 0,
+                    affordable: true,
+                    previewModel: {
+                      cardId: transformed.id,
+                      displaySnapshot: transformed,
+                      transfiguration: {
+                        type: "Empowered",
+                        color: TRANSFIGURATION_TINT_COLORS.Empowered,
+                        markedText: transformed.renderedText,
+                        energyChanged: true,
+                        sparkChanged: false,
+                        fastChanged: false,
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        },
+        base.actions[1],
+      ],
+    };
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={followupView}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+    expect(
+      container.querySelector('[data-testid="cumulus-transfiguration-picker"]'),
+    ).not.toBeNull();
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-transfiguration-card-entry-fixture"]',
+        )
+        ?.click(),
+    );
+    const form = container.querySelector<HTMLButtonElement>(
+      '[data-testid="cumulus-transfiguration-form-Empowered"]',
+    );
+    expect(form?.textContent).toBe("EmpoweredFree");
+    expect(form?.getAttribute("aria-disabled")).toBeNull();
+    act(() => form?.click());
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-transfiguration-confirm"]',
+        )
+        ?.click(),
+    );
+
+    expect(onResolve).toHaveBeenCalledWith("choice-a", {
+      entryIds: ["entry-fixture"],
+      transfiguration: "Empowered",
     });
     act(() => root.unmount());
   });

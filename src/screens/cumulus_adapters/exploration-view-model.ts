@@ -11,6 +11,7 @@ import type {
   ExplorationFollowupView,
   ExplorationSiteView,
 } from "../../cumulus/screens/ExplorationSiteScreen";
+import type { TransfigurationCandidateView } from "../../cumulus/screens/TransfigurationSiteScreen";
 import {
   EXPLORATION_ESSENCE_PER_SPARK,
   explorationEncounterForCard,
@@ -33,6 +34,11 @@ import type {
   SiteState,
 } from "../../types/journey";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
+import {
+  buildTransfigurationDisplay,
+  offeredTransfigurationForms,
+  transfigurationEffectDetails,
+} from "../../transfiguration/transfiguration-logic";
 
 const FALLBACK_GUIDE_ID = "layaway";
 const FALLBACK_GUIDE_NAME = '"Layaway"';
@@ -130,6 +136,45 @@ function eligibleDeckCards(
   });
 }
 
+function freeTransfigurationCandidates(
+  state: JourneyState,
+  content: JourneyContent,
+  predicate?: ExplorationPredicate,
+): readonly TransfigurationCandidateView[] {
+  return state.deck.flatMap((entry) => {
+    if (entry.transfiguration !== null) return [];
+    const base = content.cardDatabase.get(entry.cardNumber);
+    if (base === undefined) return [];
+    const card = resolveDeckEntryCard(base, entry);
+    if (predicate !== undefined && !matchesPredicate(card, predicate)) return [];
+    const forms = offeredTransfigurationForms(card, null).map((offer) => {
+      const preview = buildTransfigurationDisplay(card, offer.type);
+      return {
+        type: offer.type,
+        description: offer.description,
+        effectDetails: transfigurationEffectDetails(offer, card),
+        essenceCost: 0,
+        affordable: true,
+        previewModel: {
+          cardId: card.id,
+          displaySnapshot: preview.card,
+          transfiguration: preview.display,
+        },
+      };
+    });
+    if (forms.length === 0) return [];
+    return [
+      {
+        entryId: entry.entryId,
+        model: modelForCard(card),
+        availability: "available" as const,
+        reforgedType: null,
+        forms,
+      },
+    ];
+  });
+}
+
 function offeredCards(
   ids: readonly string[],
   content: JourneyContent,
@@ -193,20 +238,13 @@ function followupForAction(
         2,
       );
     case "transfigure-selected":
-      return deckFollowup(
-        action.label,
-        action.count === undefined || action.count === 1
-          ? "Choose a card to transfigure."
-          : `Choose ${String(action.count)} cards to transfigure.`,
-        deckCards.filter((card) =>
-          Object.prototype.hasOwnProperty.call(
-            offer.transfigurationByEntryId,
-            card.entryId,
-          ),
-        ),
-        "exact",
-        action.count ?? 2,
-      );
+      return {
+        kind: "transfiguration",
+        candidates:
+          action.count === undefined || action.count === 1
+            ? freeTransfigurationCandidates(state, content, action.predicate)
+            : [],
+      };
     case "purge-selected":
       return deckFollowup(
         "Feed the Fire",
@@ -439,6 +477,8 @@ function actionView(
   const available =
     hasRequiredOffer &&
     (followup.kind === "none" ||
+      (followup.kind === "transfiguration" &&
+        followup.candidates.length > 0) ||
       (followup.kind === "cards" && followup.cards.length >= followup.min) ||
       (followup.kind === "packs" && followup.packs.length > 0) ||
       (followup.kind === "subtypes" && followup.options.length > 0) ||

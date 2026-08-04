@@ -249,14 +249,16 @@ export function TransfigurationSiteScreen({
             }}
           >
             {picked === null ? (
-              <PickerPanel
+              <TransfigurationPickerPanel
                 layout={layout}
-                view={view}
+                ready={view.ready}
+                isEnhanced={view.isEnhanced}
+                candidates={view.candidates}
                 onClose={onClose}
                 onPick={(entryId) => beginPick(entryId, layout)}
               />
             ) : (
-              <DetailPanel
+              <TransfigurationDetailPanel
                 layout={layout}
                 candidate={picked}
                 selectedFormType={selectedFormType}
@@ -299,7 +301,7 @@ export function TransfigurationSiteScreen({
                   pointerEvents: "none",
                 }}
               >
-                <DetailPanel
+                <TransfigurationDetailPanel
                   layout={layout}
                   candidate={fallbackCandidate}
                   selectedFormType={null}
@@ -346,24 +348,28 @@ export function TransfigurationSiteScreen({
   );
 }
 
-function PickerPanel({
+export function TransfigurationPickerPanel({
   layout,
-  view,
+  ready,
+  isEnhanced,
+  candidates,
   onClose,
   onPick,
 }: {
   readonly layout: "mobile" | "desktop";
-  readonly view: TransfigurationSiteView;
+  readonly ready: boolean;
+  readonly isEnhanced: boolean;
+  readonly candidates: readonly TransfigurationCandidateView[];
   readonly onClose: () => void;
   readonly onPick: (entryId: string) => void;
 }) {
   const desktop = layout === "desktop";
-  const enhanced = view.isEnhanced;
+  const enhanced = isEnhanced;
   return (
     <CardGalleryPanel
       title="Transfiguration"
       subtitle={
-        view.ready
+        ready
           ? enhanced
             ? "Pick any card to reforge"
             : "Choose a card to reforge"
@@ -388,7 +394,7 @@ function PickerPanel({
             }
           : undefined
       }
-      cards={view.candidates.map((candidate) => ({
+      cards={candidates.map((candidate) => ({
         entryId: candidate.entryId,
         model: candidate.model,
         testId: `cumulus-transfiguration-card-${candidate.entryId}`,
@@ -403,7 +409,7 @@ function PickerPanel({
               },
       }))}
       emptyLabel={
-        view.ready ? "No eligible cards to reforge." : "Heating the forge…"
+        ready ? "No eligible cards to reforge." : "Heating the forge…"
       }
       columns={enhanced ? (desktop ? "five" : "four") : "three"}
       cardSize={enhanced ? "standard" : desktop ? "showcase" : "standard"}
@@ -416,7 +422,7 @@ function PickerPanel({
   );
 }
 
-function DetailPanel({
+export function TransfigurationDetailPanel({
   layout,
   candidate,
   selectedFormType,

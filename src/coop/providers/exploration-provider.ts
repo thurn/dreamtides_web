@@ -30,6 +30,7 @@ import {
 
 interface ExplorationSelection {
   entryIds?: unknown;
+  transfiguration?: unknown;
   purgeEntryId?: unknown;
   copyEntryId?: unknown;
   cardIds?: unknown;
@@ -120,21 +121,6 @@ function buildActionOffer(
   encounterCardId: string,
 ): ExplorationActionOfferRuntime {
   const offer = emptyOffer(action.id);
-  if (action.effectKind === "transfigure-selected") {
-    const deckCards = resolvedDeckCards(journey, content).filter(
-      ({ card }) =>
-        action.predicate === undefined || matchesPredicate(card, action.predicate),
-    );
-    for (const { entry, card } of deckCards) {
-      if (entry.transfiguration !== null) continue;
-      const forms = offeredTransfigurationForms(card, entry.transfiguration);
-      const selected = forms[Math.floor(rng() * forms.length)];
-      if (selected !== undefined) {
-        offer.transfigurationByEntryId[entry.entryId] = selected.type;
-      }
-    }
-    return offer;
-  }
   if (action.effectKind === "gain-random-dreamsign") {
     const availableIds = new Set(
       content.dreamsignTemplates.map((dreamsign) => dreamsign.id.toLowerCase()),
@@ -484,20 +470,29 @@ export function resolveExplorationChoice(input: {
     case "transfigure-selected": {
       const entryIds = stringArray(selection.entryIds);
       const required = action.count ?? 1;
-      if (entryIds === null || entryIds.length !== required) return null;
-      if (entryIds.some((entryId) => offer.transfigurationByEntryId[entryId] === undefined)) return null;
-      const children = entryIds.map((entryId): JourneyRewardEffect | null => {
-        const target = deckTarget(next, content, entryId);
-        const transfiguration = offer.transfigurationByEntryId[entryId];
-        return target === null || transfiguration === undefined
-          ? null
-          : { kind: "transfigure_deck_entry", ...target, transfiguration };
-      });
+      if (required !== 1 || entryIds === null || entryIds.length !== 1) return null;
+      const selected = cardForEntry(next, content, entryIds[0]);
+      if (selected === null) return null;
       if (
-        children.some((child) => child === null) ||
-        !applyReward({ kind: "composite", children: children as JourneyRewardEffect[] })
+        action.predicate !== undefined &&
+        !matchesPredicate(selected.card, action.predicate)
       ) return null;
-      result.affectedEntryIds.push(...entryIds);
+      const transfiguration = offeredTransfigurationForms(
+        selected.card,
+        selected.entry.transfiguration,
+      ).find((form) => form.type === selection.transfiguration)?.type;
+      const target = deckTarget(next, content, entryIds[0]);
+      if (
+        transfiguration === undefined ||
+        target === null ||
+        !applyReward({
+          kind: "transfigure_deck_entry",
+          ...target,
+          transfiguration,
+        })
+      ) return null;
+      result.affectedEntryIds.push(entryIds[0]);
+      result.chosenTransfiguration = transfiguration;
       break;
     }
     case "purge-selected": {
