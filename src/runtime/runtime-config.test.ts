@@ -22,6 +22,7 @@ describe("parseRuntimeConfig", () => {
       fresh20PackSize: undefined,
       loadJourneyName: null,
       gotoScene: null,
+      explorationCardId: null,
       viewLogs: null,
     });
   });
@@ -36,6 +37,29 @@ describe("parseRuntimeConfig", () => {
     it("returns the trimmed, decoded scene id when goto is present", () => {
       expect(parseRuntimeConfig("?goto=atlas").gotoScene).toBe("atlas");
       expect(parseRuntimeConfig("?goto=%20atlas%20").gotoScene).toBe("atlas");
+    });
+  });
+
+  describe("explorationCardId", () => {
+    const cardId = "a7c4e2b1-5d83-4f09-9a16-2cb8e6d71f30";
+
+    it("normalizes a UUID from card", () => {
+      expect(
+        parseRuntimeConfig(
+          `?goto=exploration&card=%20${cardId.toUpperCase()}%20`,
+        ).explorationCardId,
+      ).toBe(cardId);
+    });
+
+    it("returns null when card is absent, blank, or not a UUID", () => {
+      expect(parseRuntimeConfig("?goto=exploration").explorationCardId).toBeNull();
+      expect(
+        parseRuntimeConfig("?goto=exploration&card=%20%20").explorationCardId,
+      ).toBeNull();
+      expect(
+        parseRuntimeConfig("?goto=exploration&card=Moonlit%20Guide")
+          .explorationCardId,
+      ).toBeNull();
     });
   });
 

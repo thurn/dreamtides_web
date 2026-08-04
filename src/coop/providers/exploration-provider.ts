@@ -183,16 +183,23 @@ export function buildExplorationRuntime(
   site: SiteState,
   content: JourneyContent,
   rng: () => number,
+  encounterCardId?: string | null,
 ): ExplorationSiteRuntime | null {
   if (content.exploration === undefined) return null;
   const availableEncounters = content.exploration.encounters.filter(
     (encounter) => idIndex(content).has(encounter.cardId.toLowerCase()),
   );
   if (availableEncounters.length === 0) return null;
-  const encounterIndex =
-    hashStringToSeed(`${journey.seed}:${site.id}:exploration-card`) %
-    availableEncounters.length;
-  const encounter = availableEncounters[encounterIndex];
+  const encounter =
+    encounterCardId === undefined || encounterCardId === null
+      ? availableEncounters[
+          hashStringToSeed(`${journey.seed}:${site.id}:exploration-card`) %
+            availableEncounters.length
+        ]
+      : availableEncounters.find(
+          (candidate) =>
+            candidate.cardId.toLowerCase() === encounterCardId.toLowerCase(),
+        );
   if (encounter === undefined) return null;
   return {
     kind: "exploration",

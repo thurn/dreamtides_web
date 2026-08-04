@@ -207,7 +207,10 @@ export interface JourneyMutations {
    * selected. Optional because only the live multiplayer provider implements
    * it; lightweight test/demo mutation stubs omit it.
    */
-  bootstrapQaScene?: (sceneId: string) => void;
+  bootstrapQaScene?: (
+    sceneId: string,
+    explorationCardId?: string | null,
+  ) => void;
   /**
    * Debug-only: replaces the entire journey state with a previously saved
    * snapshot (a named save loaded from the developer's file system via the

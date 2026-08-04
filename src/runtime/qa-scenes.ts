@@ -6,6 +6,12 @@ import { createDefaultState } from "../state/journey-context";
 import { createDreamsign } from "../data/dreamsigns";
 import { TUTORIAL_DREAM_AVATAR_ID } from "../data/tutorial-cards";
 import { createQaJourneyFoundation } from "./qa-journey-foundation";
+import { buildExplorationRuntime } from "../coop/providers/exploration-provider";
+
+export interface QaSceneBuildOptions {
+  /** Exact authored encounter source-card UUID for Exploration QA scenes. */
+  explorationCardId?: string | null;
+}
 
 /**
  * Developer-only "QA scenes": named jump points to screens that are otherwise
@@ -40,7 +46,10 @@ export interface QaScene {
    * Builds the parked journey state from current journey content, or returns null
    * when required content is missing.
    */
-  build: (journeyContent: JourneyContent) => JourneyState | null;
+  build: (
+    journeyContent: JourneyContent,
+    options?: QaSceneBuildOptions,
+  ) => JourneyState | null;
 }
 
 /**
@@ -588,7 +597,7 @@ function explorationScene(isEnhanced: boolean): QaScene {
     label: isEnhanced ? "Exploration (Enhanced)" : "Exploration",
     description:
       "The Exploration site with Event, Survivor, cheap Character, and Spirit Animal cards available for interaction QA.",
-    build: (journeyContent) => {
+    build: (journeyContent, options) => {
       const state = parkOnSite("Exploration", isEnhanced)(journeyContent);
       if (state === null) return null;
       const cards = [...journeyContent.cardDatabase.values()];
@@ -617,7 +626,7 @@ function explorationScene(isEnhanced: boolean): QaScene {
           card.cardType === "Character" && card.subtype === "Spirit Animal",
         6,
       );
-      return {
+      const qaState: JourneyState = {
         ...state,
         deck: [...selected.values()].map((card, index) => ({
           entryId: `exploration-qa-${String(index + 1)}`,
@@ -625,6 +634,29 @@ function explorationScene(isEnhanced: boolean): QaScene {
           transfiguration: null,
           isBane: false,
         })),
+      };
+      const requestedCardId = options?.explorationCardId ?? null;
+      if (requestedCardId === null) return qaState;
+
+      const node = qaState.atlas.nodes[qaState.currentDreamscape ?? ""];
+      const site = node?.sites.find(
+        (candidate) => candidate.id === qaState.activeSiteId,
+      );
+      if (site === undefined) return null;
+      const runtime = buildExplorationRuntime(
+        qaState,
+        site,
+        journeyContent,
+        () => 0.37,
+        requestedCardId,
+      );
+      if (runtime === null) return null;
+      return {
+        ...qaState,
+        siteRuntime: {
+          ...qaState.siteRuntime,
+          [site.id]: runtime,
+        },
       };
     },
   };
@@ -847,6 +879,7 @@ export function qaSceneLoadsBattle(id: string): boolean {
 export function buildQaScene(
   id: string,
   journeyContent: JourneyContent,
+  options: QaSceneBuildOptions = {},
 ): JourneyState | null {
-  return findQaScene(id)?.build(journeyContent) ?? null;
+  return findQaScene(id)?.build(journeyContent, options) ?? null;
 }

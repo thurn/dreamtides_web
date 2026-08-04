@@ -125,8 +125,17 @@ export function JourneyApp({
     }
 
     gotoSceneFiredRef.current = true;
-    mutations.bootstrapQaScene(gotoScene);
-  }, [confirmedHead, runtimeConfig.gotoScene, state.dreamAvatar, mutations]);
+    mutations.bootstrapQaScene(
+      gotoScene,
+      runtimeConfig.explorationCardId ?? null,
+    );
+  }, [
+    confirmedHead,
+    runtimeConfig.explorationCardId,
+    runtimeConfig.gotoScene,
+    state.dreamAvatar,
+    mutations,
+  ]);
 
   // `?goto=deckviewer`: the deck-viewer overlay is App-local state, not a
   // `Screen`, so its QA scene parks on the dreamscape (via `bootstrapQaScene`

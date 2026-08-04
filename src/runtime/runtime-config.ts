@@ -2,6 +2,7 @@ import { DEFAULT_POOL_VARIANT, resolvePoolVariant } from "../draft/pool";
 import type { PoolVariant } from "../draft/pool";
 import { normalizeRoomId } from "../eventlog/room";
 import type { ContentConfig } from "../eventlog/types";
+import { asCardId, isCardId, type CardId } from "../types/card-identity";
 
 export interface RuntimeConfig {
   seedOverride: number | null;
@@ -61,6 +62,12 @@ export interface RuntimeConfig {
    * it; it is optional only so test config literals can omit it.
    */
   gotoScene?: string | null;
+  /**
+   * Exploration encounter source-card UUID from `?card=`. This is consumed by
+   * the `exploration` and `exploration-enhanced` QA scenes so browser QA can
+   * open one exact authored encounter. Null when absent or malformed.
+   */
+  explorationCardId?: CardId | null;
   /**
    * Room id whose persisted journey log should be displayed, from
    * `?viewLogs=<roomId>`. When set, the app renders the read-only log viewer
@@ -170,8 +177,15 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     fresh20PackSize: parsePackSize(params.get("packsize")),
     loadJourneyName: parseLoadJourneyName(params.get("loadJourney")),
     gotoScene: parseGotoScene(params.get("goto")),
+    explorationCardId: parseExplorationCardId(params.get("card")),
     viewLogs: normalizeRoomId(params.get("viewLogs")),
   };
+}
+
+function parseExplorationCardId(rawCardId: string | null): CardId | null {
+  if (rawCardId === null) return null;
+  const normalized = rawCardId.trim().toLowerCase();
+  return isCardId(normalized) ? asCardId(normalized) : null;
 }
 
 function parseTutorialPlaybackSpeed(rawSpeed: string | null): number {

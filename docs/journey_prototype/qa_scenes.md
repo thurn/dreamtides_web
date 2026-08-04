@@ -43,6 +43,17 @@ is created on entry by the screen itself, exactly as in normal play. An
 (for example, the Duplication site offering the whole deck instead of a small
 random hand).
 
+## Exploration card
+
+`?goto=exploration&card=<UUID>` opens the Exploration scene with the authored
+encounter for that exact source-card UUID. The same option composes with
+`?goto=exploration-enhanced`. The UUID must identify one of the source cards in
+the Exploration encounter catalog.
+
+```
+http://localhost:5174/?goto=exploration&card=161482b6-af07-4d9e-822d-8c738672beb9
+```
+
 ## Atlas layers
 
 `?goto=atlasN` opens the Dream Atlas resting screen the UI labels **"Layer N"** —

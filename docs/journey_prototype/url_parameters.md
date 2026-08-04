@@ -268,12 +268,17 @@ room. That selection presents the three authored Valor tides from
 `data/tabula/tutorial_journey_pool.toml`; choosing the avatar starts a journey with
 their 150-card pool and collaborative room control.
 
+For the Exploration QA scenes, `card=<UUID>` selects the authored encounter for
+that exact source-card UUID. It works with both `goto=exploration` and
+`goto=exploration-enhanced`.
+
 ```
 http://localhost:5173/?goto=atlas
 http://localhost:5173/?goto=tutorial-dream-avatar-select
 http://localhost:5173/?goto=duplication-enhanced
 http://localhost:5173/?goto=tutorial-battle
 http://localhost:5173/?goto=tutorial-victory
+http://localhost:5173/?goto=exploration&card=161482b6-af07-4d9e-822d-8c738672beb9
 ```
 
 ## `identicons`

@@ -349,6 +349,72 @@ describe("site QA scenes", () => {
   });
 });
 
+describe('the "exploration" QA scene', () => {
+  function explorationContent(): {
+    content: JourneyContent;
+    encounterCardId: CardData["id"];
+  } {
+    const content = makeJourneyContent();
+    const encounterCardId = [...content.cardDatabase.values()][0]?.id;
+    if (encounterCardId === undefined) {
+      throw new Error("Exploration QA fixture requires a catalog card.");
+    }
+    content.exploration = {
+      customCards: [],
+      customDreamsigns: [],
+      encounters: [
+        {
+          cardId: encounterCardId,
+          prose: "A precise encounter.",
+          actions: [
+            {
+              id: "precise-choice-a",
+              label: "Choose A",
+              effectText: "Gain Essence.",
+              responseText: "You gain Essence.",
+              effectKind: "gain-essence-per-card",
+            },
+            {
+              id: "precise-choice-b",
+              label: "Choose B",
+              effectText: "Gain Essence.",
+              responseText: "You gain Essence.",
+              effectKind: "gain-essence-per-card",
+            },
+          ],
+        },
+      ],
+    };
+    return { content, encounterCardId };
+  }
+
+  it("prebuilds the encounter for the requested source-card UUID", () => {
+    const { content, encounterCardId } = explorationContent();
+
+    const state = buildQaScene("exploration", content, {
+      explorationCardId: encounterCardId,
+    });
+
+    const runtime = Object.values(state?.siteRuntime ?? {}).find(
+      (candidate) => candidate.kind === "exploration",
+    );
+    expect(runtime?.kind).toBe("exploration");
+    if (runtime?.kind === "exploration") {
+      expect(runtime.encounterCardId).toBe(encounterCardId);
+    }
+  });
+
+  it("fails to build when the requested UUID has no authored encounter", () => {
+    const { content } = explorationContent();
+
+    expect(
+      buildQaScene("exploration", content, {
+        explorationCardId: "missing-exploration-card",
+      }),
+    ).toBeNull();
+  });
+});
+
 describe('the "dreamscape-with-essence" QA scene', () => {
   it("parks on the dreamscape overview with an unvisited Essence site", () => {
     const state = buildQaScene("dreamscape-with-essence", makeJourneyContent());
