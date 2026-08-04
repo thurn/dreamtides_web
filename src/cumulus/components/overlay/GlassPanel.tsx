@@ -62,6 +62,9 @@ export type GlassPanelRadius = "panel" | "popover" | "control";
 /** Named tint for the floating liquid-glass material. */
 export type GlassPanelTint = "default" | "popover";
 
+/** Whether the panel hugs its contents or fills a definite-height wrapper. */
+export type GlassPanelHeightMode = "content" | "fill";
+
 /** Header padding presets shared by titled panels. */
 export type GlassPanelHeaderSpacing =
   "compact" | "medium" | "regular" | "spacious";
@@ -101,6 +104,13 @@ export interface GlassPanelProps {
   radius?: GlassPanelRadius;
   /** Floating glass tint. Defaults to `default`. */
   tint?: GlassPanelTint;
+  /**
+   * Vertical sizing contract. `content` hugs the header, body, and footer and
+   * is the default for ordinary panels. `fill` consumes a caller-owned
+   * definite height and is reserved for rails, galleries, and composition
+   * stages whose content must scroll or center inside that height.
+   */
+  heightMode?: GlassPanelHeightMode;
   /** Clip content to the panel edge. Defaults to `hidden`. */
   overflow?: "hidden" | "visible";
   /** Panel body content. */
@@ -203,6 +213,7 @@ export function GlassPanel({
   frame = "floating",
   radius = "panel",
   tint = "default",
+  heightMode = "content",
   overflow = "hidden",
   children,
   footer,
@@ -242,6 +253,7 @@ export function GlassPanel({
       data-glass-panel-frame={frame}
       data-glass-panel-radius={radius}
       data-glass-panel-tint={tint}
+      data-glass-panel-height-mode={heightMode}
       style={{
         ...(frame === "fullBleed"
           ? {
@@ -256,7 +268,7 @@ export function GlassPanel({
             }),
         position: "relative",
         width: "100%",
-        height: "100%",
+        height: heightMode === "fill" ? "100%" : "fit-content",
         minWidth: 0,
         minHeight: 0,
         maxWidth: "100%",
@@ -359,7 +371,7 @@ export function GlassPanel({
       <div
         data-glass-panel-content=""
         style={{
-          flex: "1 1 auto",
+          flex: heightMode === "fill" ? "1 1 auto" : "0 1 auto",
           minWidth: 0,
           minHeight: 0,
           display: "flex",

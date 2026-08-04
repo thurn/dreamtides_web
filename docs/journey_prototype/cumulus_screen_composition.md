@@ -17,6 +17,25 @@ The scaled frame is a presentation concern of `src/cumulus/screens/*`. View-mode
 builders produce plain screen data and do not know the viewport, frame scale, or
 device class. Adapters only choose the data and callbacks to pass to the screen.
 
+## Content-Sized Panels
+
+`GlassPanel` hugs its header, body, and footer. Screen wrappers constrain the
+panel's width, place it within the stage, and provide viewport-safe maximums;
+they do not assign height simply because space is available. Prompts, menus,
+summaries, confirmation surfaces, and small choice sets therefore remain compact
+and leave the scene visible around them.
+
+`heightMode="fill"` is the explicit definite-height contract. Use it for a
+docked rail, a scrolling gallery, or an authored composition stage whose
+children need a real height for scrolling, centering, or container queries. A
+fill panel requires a caller-owned definite-height wrapper. If removing the
+height leaves every control visible and the content readable, the surface is a
+content panel.
+
+During browser QA, measure the panel against its header, content, and footer.
+Unassigned interior space is a layout finding unless the panel is an explicit
+fill stage and the empty region has a named compositional purpose.
+
 ## Backdrop And Motes
 
 Each screen decides its backdrop policy. A dreamscape screen renders the current

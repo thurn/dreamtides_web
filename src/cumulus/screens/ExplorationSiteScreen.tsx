@@ -1404,13 +1404,19 @@ export function ExplorationSiteScreen({
     if (followup.kind === "subtypes") return selectedSubtype !== null;
     return false;
   })();
+  const dreamsignChoiceColumns =
+    activeAction?.followup.kind === "dreamsigns"
+      ? Math.min(4, Math.max(1, activeAction.followup.dreamsigns.length))
+      : 0;
   const centeredFollowupWidth =
     activeAction?.followup.kind === "packs"
       ? "min(1280px, calc(100vw - 64px))"
       : activeAction?.followup.kind === "cards" &&
           activeAction.followup.selectionKey === "cardIds"
         ? "min(1120px, calc(100vw - 64px))"
-        : null;
+        : activeAction?.followup.kind === "dreamsigns"
+          ? `min(max(420px, calc(${String(dreamsignChoiceColumns)} * ${String(DESKTOP_DREAMSIGN_CHOICE_SIZE)}px + ${String(dreamsignChoiceColumns - 1)} * ${token("--space-9")} + 2 * ${token("--space-8")})), calc(100vw - 64px))`
+          : null;
 
   return (
     <GuideGallerySiteLayout
@@ -2504,6 +2510,7 @@ export function ExplorationSiteScreen({
                 title={activeAction.followup.title}
                 subtitle={activeAction.followup.subtitle}
                 headingLevel="h1"
+                heightMode="fill"
                 headerSpacing="medium"
                 footer={
                   <div
@@ -2714,12 +2721,10 @@ export function ExplorationSiteScreen({
                 aria-label={activeAction.followup.subtitle}
                 data-exploration-dreamsign-choices=""
                 style={{
-                  flex: "1 1 auto",
                   display: "grid",
                   gridTemplateColumns: `repeat(auto-fit, minmax(${String(isDesktop ? DESKTOP_DREAMSIGN_CHOICE_SIZE : MOBILE_DREAMSIGN_CHOICE_SIZE)}px, 1fr))`,
                   gap: isDesktop ? token("--space-9") : token("--space-5"),
                   placeItems: "center",
-                  alignContent: "center",
                   minHeight: 0,
                   maxHeight: "min(70dvh, 620px)",
                   overflow: "auto",

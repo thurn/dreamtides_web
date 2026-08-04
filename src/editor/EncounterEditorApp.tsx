@@ -610,7 +610,11 @@ function EncounterEditorRow({
       data-encounter-card-id={group.cardId}
       id={`encounter-${group.cardId}`}
     >
-      <GlassPanel overflow="hidden" testId={`encounter-row-${group.cardId}`}>
+      <GlassPanel
+        heightMode="fill"
+        overflow="hidden"
+        testId={`encounter-row-${group.cardId}`}
+      >
         <div className="encounter-editor-row-grid">
           <div className="encounter-editor-art-frame">
             <img

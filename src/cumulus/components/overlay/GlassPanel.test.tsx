@@ -62,6 +62,8 @@ describe("GlassPanel", () => {
       '[data-testid="glass-panel"]',
     );
     expect(panel?.dataset.glassPanelFrame).toBe("floating");
+    expect(panel?.dataset.glassPanelHeightMode).toBe("content");
+    expect(panel?.style.height).toBe("fit-content");
     expect(panel?.style.backdropFilter).toContain("--glass-blur");
     expect(panel?.style.borderRadius).toBe("var(--radius-panel)");
     expect(panel?.querySelector("h2")?.textContent).toBe(
@@ -117,6 +119,33 @@ describe("GlassPanel", () => {
     expect(panel?.style.borderStyle).toBe("none");
     expect(panel?.style.borderRadius).toBe("0px");
     expect(panel?.style.boxShadow).toBe("none");
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("fills a definite-height wrapper only through the explicit height mode", () => {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <GlassPanel heightMode="fill" testId="fill-panel">
+          <span>Scrollable stage</span>
+        </GlassPanel>,
+      );
+    });
+
+    const panel = container.querySelector<HTMLElement>(
+      '[data-testid="fill-panel"]',
+    );
+    expect(panel?.dataset.glassPanelHeightMode).toBe("fill");
+    expect(panel?.style.height).toBe("100%");
+    expect(
+      panel?.querySelector<HTMLElement>("[data-glass-panel-content]")?.style
+        .flex,
+    ).toBe("1 1 auto");
 
     act(() => root.unmount());
     container.remove();

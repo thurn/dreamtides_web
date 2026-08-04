@@ -760,6 +760,11 @@ export function CardGalleryPanel({
         frame={frame}
         radius="popover"
         tint="popover"
+        heightMode={
+          frame === "fullBleed" || heightMode === "fill"
+            ? "fill"
+            : "content"
+        }
         headerSpacing={panelHeaderSpacingFor(spacing)}
         footer={footerNode}
       >

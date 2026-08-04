@@ -2954,6 +2954,17 @@
       "description": "Floating glass tint. Defaults to `default`."
     },
     {
+      "name": "heightMode",
+      "tsType": "GlassPanelHeightMode",
+      "unionMembers": [
+        "content",
+        "fill"
+      ],
+      "required": false,
+      "defaultValue": "content",
+      "description": "Vertical sizing contract. `content` hugs the header, body, and footer and\nis the default for ordinary panels. `fill` consumes a caller-owned\ndefinite height and is reserved for rails, galleries, and composition\nstages whose content must scroll or center inside that height."
+    },
+    {
       "name": "overflow",
       "tsType": "\"hidden\" | \"visible\"",
       "unionMembers": [

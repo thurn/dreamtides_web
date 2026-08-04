@@ -971,6 +971,11 @@ describe("ExplorationSiteScreen", () => {
       "/dreamsigns/amplified-acorn.webp",
     );
     expect(
+      container.querySelector<HTMLElement>(
+        '[data-exploration-followup="dreamsigns"] [data-glass-panel-height-mode]',
+      )?.dataset.glassPanelHeightMode,
+    ).toBe("content");
+    expect(
       container.querySelector(
         '[data-testid="cumulus-exploration-followup-confirm"]',
       ),

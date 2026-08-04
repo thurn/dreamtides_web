@@ -81,7 +81,7 @@ contract test rejects local `JourneyStatusBar` or journey-menu rendering under
 | Main Menu Button | Components | 1 | [components/main-menu-button.md](components/main-menu-button.md) | The text-first action for the Dreamtides main menu: outlined white at rest, showing the shared Cumulus liquid-glass material on hover or focus. |
 | Glass Button | Components | 31 | [components/glass-button.md](components/glass-button.md) | The labeled glass action — a bold text label with optional numerical essence cost on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface. |
 | Offer Tile | Components | 2 | [components/offer-tile.md](components/offer-tile.md) | The circular symbolic Augury offer button in named 300×300 desktop and 240×240 mobile sizes: UUID-backed full-bleed card art, Dreamsigns and site glyphs over authored full-art fields, and centered operation marks inside the gold-and-feather frame. |
-| Glass Panel | Components | 13 | [components/glass-panel.md](components/glass-panel.md) | The shared liquid-glass content container: an optional structured header, a composed body, and an optional footer on the canonical floating material. |
+| Glass Panel | Components | 13 | [components/glass-panel.md](components/glass-panel.md) | The content-hugging liquid-glass container: an optional structured header, a composed body, and an optional footer on the canonical floating material. |
 | Glass Dialog | Components | 14 | [components/glass-dialog.md](components/glass-dialog.md) | The glass overlay shell: a modal dialog with a bounded desktop panel and a full-bleed mobile overlay by default, plus centered content-sized and companion-paired popup presentations. |
 | Developer Rail | Components | 3 | [components/developer-rail.md](components/developer-rail.md) | The shared edge-attached shell for persistent developer tools, with canonical glass, header hierarchy, close action, scrolling body, and optional footer. |
 | Corner Utility Menu | Components | 2 | [components/corner-utility-menu.md](components/corner-utility-menu.md) | The strict app-chrome command offering: a fixed icon trigger and a hierarchical inward-opening utility menu. |
@@ -347,6 +347,12 @@ adapter against its own inputs. Full rationale:
 
 ## Core rendering rules
 
+- **Panels hug content by default**: `GlassPanel` sizes to its header, body,
+  and footer. A wrapper may constrain width and placement, but it does not add
+  decorative height. Use `heightMode="fill"` only for a definite-height rail,
+  scrolling gallery, or authored composition stage whose layout demonstrably
+  needs that height; ordinary prompts, menus, summaries, and choices remain
+  content-sized.
 - **Material continuity**: meaningful objects travel or expand between
   states (object-travel / container-transform); nothing pops in or out.
 - **Always in motion**: tangible game objects (cards, dreamsigns, resources)
