@@ -415,4 +415,51 @@ describe("RevealOverlay", () => {
     expect(value.element.style.opacity).toBe("");
     expect(Number.parseFloat(preview.style.left)).toBeGreaterThanOrEqual(409);
   });
+
+  it("renders every copy in an exact repeated-card entity reveal", async () => {
+    const cardId = asCardId(UUID);
+    const spec: RevealSpec = {
+      primary: {
+        kind: "gameCard",
+        cardId,
+        copies: 3,
+        displaySnapshot: {
+          id: cardId,
+          name: asCardName("Repeated Card"),
+          cardNumber: 1,
+          cardType: "Event",
+          subtype: "",
+          isStarter: false,
+          rarity: "Special",
+          energyCost: 1,
+          spark: null,
+          isFast: false,
+          renderedText: "Draw a card.",
+          imageNumber: 1,
+          artOwned: false,
+        },
+      },
+      secondaries: [],
+    };
+    await act(async () => {
+      await import("../../components/card/CardView");
+      renderOverlay(
+        <RevealOverlay
+          active={active({ spec, sourceIsEntityReference: true })}
+        />,
+      );
+    });
+    const measured = document.querySelector<HTMLElement>(
+      '[data-reveal-measure="primary"]',
+    );
+    expect(Number.parseFloat(measured?.style.width ?? "0")).toBe(
+      DESKTOP_GAME_CARD_WIDTH * 1.5,
+    );
+    expect(
+      measured?.querySelectorAll("[data-reveal-game-card-copy]"),
+    ).toHaveLength(3);
+    expect(
+      measured?.querySelector("[data-reveal-game-card-copy-count='3']"),
+    ).not.toBeNull();
+  });
 });

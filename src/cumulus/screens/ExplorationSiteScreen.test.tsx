@@ -567,14 +567,14 @@ describe("ExplorationSiteScreen", () => {
       actions: [
         {
           ...base.actions[0],
-          effectText: `Gain ${referencedCard.name}.`,
+          effectText: `Gain 3 ${referencedCard.name} cards.`,
           effectParts: [
-            { kind: "text", text: "Gain " },
+            { kind: "text", text: "Gain 3 " },
             {
               kind: "entity",
-              entity: { kind: "card", card: referencedCard },
+              entity: { kind: "card", card: referencedCard, copies: 3 },
             },
-            { kind: "text", text: "." },
+            { kind: "text", text: " cards." },
           ],
         },
         base.actions[1],
@@ -606,6 +606,7 @@ describe("ExplorationSiteScreen", () => {
     expect(source?.textContent).toContain(referencedCard.name);
     expect(source?.dataset.entityReference).toBe("card");
     expect(source?.dataset.entityReferenceId).toBe(referencedCard.id);
+    expect(source?.dataset.entityReferenceCopies).toBe("3");
     expect(source?.dataset.revealPrimaryVariant).toBe("gameCard");
     expect(label?.textContent).toBe(referencedCard.name);
     expect(label?.querySelector("span")?.style.textDecoration).toBe(

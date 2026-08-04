@@ -304,6 +304,7 @@ function ExplorationEntityLabel({
     <span
       data-entity-reference-label={entity.kind}
       data-entity-reference-id={details.id}
+      data-entity-reference-copies={details.copies}
       data-testid={testId}
     >
       <RichTextView value={richText.underline(details.name)} />
@@ -358,6 +359,7 @@ function EntityExplorationChoice({
       aria-describedby={`${revealDescriptionId ?? ""} exploration-effect-${String(index)}`.trim()}
       data-entity-reference={entity.kind}
       data-entity-reference-id={details.id}
+      data-entity-reference-copies={details.copies}
       data-testid={`cumulus-exploration-choice-${String(index)}`}
       onPointerDown={(event) => {
         suppressCompatibilityClick.current = event.pointerType === "touch";

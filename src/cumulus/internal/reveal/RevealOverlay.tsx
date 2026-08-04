@@ -9,7 +9,11 @@ import {
 } from "./geometry";
 import { infoCardNativeWidth } from "../../components/overlay/InfoCard";
 import type { RevealCoordinatorSource, RevealGeometrySnapshot, RevealPlacementException, RevealPoint, RevealReason, RevealRect, RevealSpec } from "./model";
-import { renderRevealCard, renderRevealInfoCard } from "./render-reveal-card";
+import {
+  renderRevealCard,
+  renderRevealInfoCard,
+  revealGameCardGroupWidthScale,
+} from "./render-reveal-card";
 import { captureVisualViewport, findRevealBoundary } from "./viewport";
 
 export interface RevealOverlayActive {
@@ -163,6 +167,8 @@ export function RevealOverlay({ active, onPlaced }: RevealOverlayProps) {
     ? mobileWidth
     : active.spec.primary.kind === "infoCard"
       ? infoCardNativeWidth(active.spec.primary.card.variant)
+      : active.spec.primary.kind === "gameCard" && active.spec.primary.copies !== undefined
+        ? desktopGameCardWidth * revealGameCardGroupWidthScale(active.spec.primary)
       : primaryIsCardShaped
         ? Math.max(desktopGameCardWidth, active.sourceRect.width)
         : 248;

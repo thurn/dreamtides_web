@@ -13,6 +13,8 @@ export type EntityReferenceModel =
       readonly kind: "card";
       /** Complete card data resolved by UUID immediately before display. */
       readonly card: FrozenCardData;
+      /** Exact number of identical copies named by the surrounding sentence. */
+      readonly copies?: number;
     }
   | {
       /** Show the canonical Dreamsign object InfoCard. */
@@ -33,6 +35,14 @@ export interface EntityReferenceDisplayDetails {
   readonly id: string;
   /** Display name resolved from the canonical entity object. */
   readonly name: string;
+  /** Exact number of identical objects represented by the reference. */
+  readonly copies: number;
+}
+
+function normalizedCopies(copies: number | undefined): number {
+  return copies !== undefined && Number.isInteger(copies) && copies > 1
+    ? copies
+    : 1;
 }
 
 /** Resolve canonical display details for an entity reference. */
@@ -40,10 +50,15 @@ export function entityReferenceDisplayDetails(
   entity: EntityReferenceModel,
 ): EntityReferenceDisplayDetails {
   return entity.kind === "card"
-    ? { id: entity.card.id, name: entity.card.name }
+    ? {
+        id: entity.card.id,
+        name: entity.card.name,
+        copies: normalizedCopies(entity.copies),
+      }
     : {
         id: requireDreamsignId(entity.dreamsign, "Entity reference"),
         name: entity.dreamsign.name,
+        copies: 1,
       };
 }
 
@@ -51,14 +66,23 @@ function entityReferenceRevealDetails(
   entity: EntityReferenceModel,
 ) {
   if (entity.kind === "card") {
+    const copies = normalizedCopies(entity.copies);
+    const spec = gameCardRevealSpec({
+      cardId: entity.card.id,
+      displaySnapshot: entity.card,
+    });
     return {
       id: entity.card.id,
       name: entity.card.name,
-      identity: { entityType: "game-card", entityId: entity.card.id },
-      spec: gameCardRevealSpec({
-        cardId: entity.card.id,
-        displaySnapshot: entity.card,
-      }),
+      copies,
+      identity: {
+        entityType: copies === 1 ? "game-card" : "game-card-copies",
+        entityId: entity.card.id,
+      },
+      spec:
+        copies === 1
+          ? spec
+          : { ...spec, primary: { ...spec.primary, copies } },
     };
   }
 
@@ -66,6 +90,7 @@ function entityReferenceRevealDetails(
   return {
     id,
     name: entity.dreamsign.name,
+    copies: 1,
     identity: {
       entityType: "dreamsign",
       entityId: revealEntityId("dreamsign", id),
@@ -119,9 +144,14 @@ export function EntityReference({
       pressFeedback="stationary"
       hoverFeedback="stationary"
       tabIndex={0}
-      aria-label={`${entity.kind === "card" ? "Card" : "Dreamsign"}: ${details.name}`}
+      aria-label={
+        details.copies > 1
+          ? `${String(details.copies)} copies of card: ${details.name}`
+          : `${entity.kind === "card" ? "Card" : "Dreamsign"}: ${details.name}`
+      }
       data-entity-reference={entity.kind}
       data-entity-reference-id={details.id}
+      data-entity-reference-copies={details.copies}
       data-testid={testId}
       style={{
         ...binding.sourceProps.style,

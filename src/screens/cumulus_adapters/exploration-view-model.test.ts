@@ -918,6 +918,7 @@ describe("exploration-view-model", () => {
         label: "Accept the cost",
         effectText: "Gain 3 Nightmare cards.",
         effectKind: "reduce-cost-all-and-gain-nightmares",
+        nightmareCount: 3,
       },
       offer,
       content,
@@ -946,7 +947,11 @@ describe("exploration-view-model", () => {
       { kind: "text", text: "Gain 3 " },
       {
         kind: "entity",
-        entity: { kind: "card", card: { id: nightmareCard.id } },
+        entity: {
+          kind: "card",
+          card: { id: nightmareCard.id },
+          copies: 3,
+        },
       },
       { kind: "text", text: " cards." },
     ]);

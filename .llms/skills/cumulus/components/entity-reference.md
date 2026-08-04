@@ -10,7 +10,7 @@ Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 
 An inline, underlined card or Dreamsign name that reveals the canonical full entity on hover, keyboard focus, or touch hold through the shared coordinator.
 
-> **Guidance:** Resolve the complete entity by UUID immediately before rendering. The component owns the displayed name and reveal model so duplicate names cannot affect identity.
+> **Guidance:** Resolve the complete entity by UUID immediately before rendering. The component owns the displayed name and reveal model so duplicate names cannot affect identity; pass copies when prose names several identical card objects.
 
 ## Props
 
@@ -48,5 +48,17 @@ import { EntityReference } from "src/cumulus/components/card/EntityReference";
 
 <p>
   Gain <EntityReference entity={{ kind: "dreamsign", dreamsign }} />.
+</p>
+```
+
+### Repeated card objects
+
+Pass the exact copy count when the sentence grants several identical cards; the reveal fans that many canonical card objects.
+
+```tsx
+import { EntityReference } from "src/cumulus/components/card/EntityReference";
+
+<p>
+  Gain 3 <EntityReference entity={{ kind: "card", card, copies: 3 }} /> cards.
 </p>
 ```

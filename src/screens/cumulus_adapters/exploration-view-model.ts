@@ -394,9 +394,20 @@ function effectReferencesForAction(
     if (cardId === undefined) continue;
     const card = cardById(content, cardId);
     if (card !== null) {
+      const copies =
+        cardId === NIGHTMARE_CARD_ID &&
+        action.nightmareCount !== undefined &&
+        Number.isInteger(action.nightmareCount) &&
+        action.nightmareCount > 1
+          ? action.nightmareCount
+          : undefined;
       references.push({
         needle: card.name,
-        entity: { kind: "card", card },
+        entity: {
+          kind: "card",
+          card,
+          ...(copies === undefined ? {} : { copies }),
+        },
       });
     }
   }

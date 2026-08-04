@@ -66,6 +66,7 @@ describe("EntityReference", () => {
     );
     expect(container.querySelector("p")?.textContent).toBe("Gain Fixture Ally.");
     expect(source?.dataset.entityReferenceId).toBe(CARD_ID);
+    expect(source?.dataset.entityReferenceCopies).toBe("1");
     expect(source?.dataset.revealEntityType).toBe("game-card");
     expect(source?.dataset.revealPrimaryVariant).toBe("gameCard");
     expect(source?.style.textDecoration).toBe("underline");
@@ -73,6 +74,24 @@ describe("EntityReference", () => {
     expect(source?.dataset.revealFeedback).toBe("stationary");
     act(() => source?.focus());
     expect(source?.dataset.revealActive).toBe("true");
+    act(() => root.unmount());
+  });
+
+  it("registers an exact repeated-card reveal without changing the displayed name", () => {
+    const { container, root } = mount(
+      <p>
+        Gain 3 <EntityReference entity={{ kind: "card", card: CARD, copies: 3 }} /> cards.
+      </p>,
+    );
+    const source = container.querySelector<HTMLElement>(
+      '[data-entity-reference="card"]',
+    );
+    expect(container.querySelector("p")?.textContent).toBe(
+      "Gain 3 Fixture Ally cards.",
+    );
+    expect(source?.dataset.entityReferenceCopies).toBe("3");
+    expect(source?.dataset.revealEntityType).toBe("game-card-copies");
+    expect(source?.dataset.revealEntityId).toBe(CARD_ID);
     act(() => root.unmount());
   });
 

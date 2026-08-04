@@ -38,6 +38,8 @@ export interface RevealGameCard {
   readonly figment?: boolean;
   /** Use the legible rules treatment reserved for an adjacent figment preview. */
   readonly rulesTextPresentation?: "adjacent-figment";
+  /** Exact number of identical card objects represented by this reveal. */
+  readonly copies?: number;
 }
 
 export type RevealCard =
