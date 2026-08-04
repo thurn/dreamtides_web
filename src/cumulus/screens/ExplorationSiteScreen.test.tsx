@@ -195,13 +195,13 @@ describe("ExplorationSiteScreen", () => {
     expect(
       container.querySelector('[data-testid="cumulus-exploration-panel"]'),
     ).toBeNull();
-    expect(container.querySelector("[data-guide-gallery-guide]")).toBeNull();
+    expect(container.querySelector("[data-guide-gallery-guide]")).not.toBeNull();
     expect(
       container.querySelector('[data-testid="cumulus-exploration-guide-art"]'),
-    ).toBeNull();
+    ).not.toBeNull();
     expect(
       container.querySelector('[data-testid="cumulus-exploration-speech"]'),
-    ).toBeNull();
+    ).not.toBeNull();
     expect(container.textContent).not.toContain("Channel A Possibility");
     expect(container.textContent).not.toContain(
       "A single thread rises from your deck.",

@@ -49,8 +49,6 @@ export interface GuideGallerySiteLayoutProps {
   mobileRegionSize?: "standard" | "expanded";
   /** Whether the guide's speech bubble is rendered. Defaults to visible. */
   speechBubbleVisible?: boolean;
-  /** Whether resident guide art and dialogue staging render. Defaults to visible. */
-  guideVisible?: boolean;
   /** Stable test id for the screen root. */
   screenTestId?: string;
   /** Stable test id for the guide art. */
@@ -109,7 +107,6 @@ export function GuideGallerySiteLayout({
   mobileComposition = "band",
   mobileRegionSize = "standard",
   speechBubbleVisible = true,
-  guideVisible = true,
   screenTestId,
   guideArtTestId,
   speechAnchorTestId,
@@ -164,28 +161,7 @@ export function GuideGallerySiteLayout({
       )}
       <Motes on tint="warm" />
 
-      {!guideVisible ? (
-        <main
-          data-guide-gallery-region="gallery-only"
-          style={{
-            position: "absolute",
-            top: isDesktop
-              ? `calc(${token("--space-8")} + max(var(--safe-area-inset-top), ${token("--safe-top")}))`
-              : "max(var(--safe-area-inset-top, 0px), var(--safe-top, 0px))",
-            left: 0,
-            right: 0,
-            bottom: isDesktop
-              ? DESKTOP_HUD_CLEARANCE
-              : JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
-            display: "grid",
-            placeItems: "center",
-            zIndex: 20,
-            pointerEvents: "none",
-          }}
-        >
-          {renderGallery(isDesktop ? "desktop" : "mobile")}
-        </main>
-      ) : isDesktop ? (
+      {isDesktop ? (
         <DesktopComposition
           guide={guide}
           renderGallery={renderGallery}

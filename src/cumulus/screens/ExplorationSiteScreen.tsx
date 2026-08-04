@@ -561,7 +561,6 @@ export function ExplorationSiteScreen({
       siteId={view.siteId}
       scene={view.scene}
       guide={view.guide}
-      guideVisible={false}
       screenTestId="cumulus-exploration-site-screen"
       guideArtTestId="cumulus-exploration-guide-art"
       speechAnchorTestId="cumulus-exploration-speech-anchor"
