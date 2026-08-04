@@ -3,6 +3,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import {
+  useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -178,6 +179,7 @@ const FRAME_BREAK_SECONDS = motionTimeSeconds("--dur-slow") * 2.5;
 const FRAME_BREAK_DELAY_SECONDS = motionTimeSeconds("--dur-fast");
 const FRAME_FRACTURE_SECONDS =
   motionTimeSeconds("--dur-base") + motionTimeSeconds("--dur-fast");
+const RESPONSE_TEXT_DURATION_MS = 3_000;
 const DESKTOP_NARRATIVE_PANEL_BOTTOM =
   `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-9")})`;
 // The card preview cache appends a 21px watermark strip to a 259px-tall
@@ -397,6 +399,7 @@ export function ExplorationSiteScreen({
     if (frameBreakGeometry === null || frameBreakPhase !== "open") return;
     const onKeyDown = (event: KeyboardEvent): void => {
       if (event.key !== "Escape") return;
+      if (view.response !== null) return;
       if (activeAction !== null && view.response === null) {
         setActiveActionId(null);
         setSelectedIds([]);
@@ -437,13 +440,13 @@ export function ExplorationSiteScreen({
     }
   };
 
-  const completeExit = (): void => {
+  const completeExit = useCallback((): void => {
     if (exitCompletedRef.current) return;
     exitCompletedRef.current = true;
     onExit();
-  };
+  }, [onExit]);
 
-  const exitExploration = (): void => {
+  const exitExploration = useCallback((): void => {
     setCollapseIntent("exit");
     setFrameBreakActive(false);
     if (reduceMotion) {
@@ -454,7 +457,29 @@ export function ExplorationSiteScreen({
     } else {
       setFrameBreakPhase("collapsing");
     }
-  };
+  }, [completeExit, reduceMotion]);
+
+  useEffect(() => {
+    if (
+      view.response === null ||
+      frameBreakGeometry === null ||
+      frameBreakPhase !== "open" ||
+      activeAction !== null
+    ) {
+      return;
+    }
+    const timeout = window.setTimeout(
+      exitExploration,
+      RESPONSE_TEXT_DURATION_MS,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [
+    activeAction,
+    exitExploration,
+    frameBreakGeometry,
+    frameBreakPhase,
+    view.response,
+  ]);
 
   const finishFrameBreakMotion = (): void => {
     if (frameBreakActive) {
@@ -911,7 +936,9 @@ export function ExplorationSiteScreen({
             pressFeedback="stationary"
             hoverFeedback="stationary"
             onClick={
-              frameBreakPhase === "open" ? collapseFrameBreak : undefined
+              frameBreakPhase === "open" && view.response === null
+                ? collapseFrameBreak
+                : undefined
             }
             style={{
               position: "absolute",
@@ -997,26 +1024,6 @@ export function ExplorationSiteScreen({
           }}
         >
           <GlassPanel
-            footer={
-              view.response === null ? undefined : (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    padding: token("--space-5"),
-                    paddingTop: 0,
-                  }}
-                >
-                  <GlassButton
-                    label="Continue"
-                    variant="accent"
-                    placement="onGlass"
-                    onPress={exitExploration}
-                    testId="cumulus-exploration-continue"
-                  />
-                </div>
-              )
-            }
             testId="cumulus-exploration-narrative-panel"
           >
             <div
@@ -1325,7 +1332,10 @@ export function ExplorationSiteScreen({
           )}
         </motion.section>
       )}
-      {frameBreakGeometry !== null && frameBreakPhase === "open" && activeAction === null && (
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        view.response === null && (
         <motion.div
           data-exploration-exit-control=""
           initial={{ opacity: 0, scale: 0.92 }}

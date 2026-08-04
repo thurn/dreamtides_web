@@ -158,6 +158,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   vi.restoreAllMocks();
   document.body.innerHTML = "";
 });
@@ -528,7 +529,12 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("collapses the art and returns the card to the deck before leaving", () => {
+  it("shows the response for three seconds, then returns the card and leaves", () => {
+    vi.useFakeTimers();
+    window.requestAnimationFrame = (callback) => {
+      callback(0);
+      return 1;
+    };
     reducedMotionPreference.value = false;
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
       function getBoundingClientRect(this: HTMLElement) {
@@ -572,13 +578,31 @@ describe("ExplorationSiteScreen", () => {
         .querySelector("[data-exploration-frame-break]")
         ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
     });
-    const exitButton = container.querySelector<HTMLButtonElement>(
-      '[data-testid="cumulus-exploration-continue"]',
-    );
-    expect(exitButton?.textContent).toContain("Continue");
+    expect(
+      container.querySelector(
+        '[data-testid="cumulus-exploration-narrative-copy"]',
+      )?.textContent,
+    ).toBe("The fixture answers.");
+    expect(
+      container.querySelector('[data-testid="cumulus-exploration-continue"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-testid="cumulus-exploration-exit"]'),
+    ).toBeNull();
 
-    act(() => exitButton?.click());
+    act(() => {
+      vi.advanceTimersByTime(2_999);
+    });
+    expect(
+      container
+        .querySelector("[data-exploration-frame-break]")
+        ?.getAttribute("data-exploration-frame-break-phase"),
+    ).toBe("open");
     expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
     expect(
       container
         .querySelector("[data-exploration-frame-break]")
