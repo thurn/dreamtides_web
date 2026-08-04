@@ -174,6 +174,8 @@ class ListTemplateCandidatesTests(unittest.TestCase):
                 {
                     "template_id": template_id,
                     "template": f"Synthetic template {template_id}",
+                    "required_variables": [],
+                    "special_variables": [],
                     "usage_count": 0,
                     "rank_1_usage_count": 0,
                     "status": "unused",
@@ -182,6 +184,23 @@ class ListTemplateCandidatesTests(unittest.TestCase):
                 for template_id in range(1, 5)
             ],
         )
+
+    def test_reports_exact_variables_for_each_template(self) -> None:
+        templates = self.synthetic_templates(2)
+        templates[0]["template"] = (
+            "Gain {essence_per_energy} essence for $OFFERED_CARD"
+        )
+        result = self.run_lister(templates, [])
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        output = json.loads(result.stdout)
+        by_id = {entry["template_id"]: entry for entry in output["templates"]}
+        self.assertEqual(
+            by_id[1]["required_variables"], ["essence_per_energy"]
+        )
+        self.assertEqual(by_id[1]["special_variables"], ["$OFFERED_CARD"])
+        self.assertEqual(by_id[2]["required_variables"], [])
+        self.assertEqual(by_id[2]["special_variables"], [])
 
     def test_warns_then_omits_above_the_least_used_template(self) -> None:
         templates = self.synthetic_templates(6)
@@ -573,6 +592,10 @@ rendered-text = "Gain 1 energy."
         placeholder: str = "card_id",
         prose: str | None = None,
         variable_value: object | None = None,
+        *,
+        omit_variable: bool = False,
+        extra_variable: tuple[str, object] | None = None,
+        derive_template_pairs_from_output: bool = False,
     ) -> subprocess.CompletedProcess[str]:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -642,7 +665,7 @@ rendered-text = "Gain 1 energy."
                 actions = []
                 for action in pair["actions"]:
                     variables = {}
-                    if action["template_id"] == 1:
+                    if action["template_id"] == 1 and not omit_variable:
                         variables[placeholder] = (
                             {
                                 "id": referenced_card_id,
@@ -651,6 +674,9 @@ rendered-text = "Gain 1 energy."
                             if variable_value is None
                             else variable_value
                         )
+                    if action["template_id"] == 1 and extra_variable is not None:
+                        extra_name, extra_value = extra_variable
+                        variables[extra_name] = extra_value
                     actions.append(
                         {
                             "template_id": action["template_id"],
@@ -676,17 +702,26 @@ rendered-text = "Gain 1 energy."
                     }
                 )
             input_path = root / "request.json"
-            input_path.write_text(json.dumps(request), encoding="utf-8")
+            validation_input = (
+                {"card": request["card"]}
+                if derive_template_pairs_from_output
+                else request
+            )
+            input_path.write_text(json.dumps(validation_input), encoding="utf-8")
             output_path = root / "events.json"
             output_path.write_text(json.dumps(events), encoding="utf-8")
-            return subprocess.run(
+            command = [
+                sys.executable,
+                str(VALIDATOR),
+                "--input",
+                str(input_path),
+                "--output",
+                str(output_path),
+            ]
+            if derive_template_pairs_from_output:
+                command.append("--derive-template-pairs-from-output")
+            command.extend(
                 [
-                    sys.executable,
-                    str(VALIDATOR),
-                    "--input",
-                    str(input_path),
-                    "--output",
-                    str(output_path),
                     "--template-catalog",
                     str(catalog_path),
                     "--cards-data",
@@ -695,7 +730,10 @@ rendered-text = "Gain 1 energy."
                     str(dreamsigns_path),
                     "--transfigurations-data",
                     str(transfigurations_path),
-                ],
+                ]
+            )
+            return subprocess.run(
+                command,
                 capture_output=True,
                 text=True,
                 check=False,
@@ -744,6 +782,40 @@ rendered-text = "Gain 1 energy."
             "33333333-3333-4333-8333-333333333333"
         )
         self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_validates_exact_output_from_a_card_only_request(self) -> None:
+        result = self.run_output_validator(
+            "33333333-3333-4333-8333-333333333333",
+            derive_template_pairs_from_output=True,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_rejects_a_missing_required_variable(self) -> None:
+        result = self.run_output_validator(
+            "33333333-3333-4333-8333-333333333333",
+            placeholder="essence_per_energy",
+            omit_variable=True,
+            derive_template_pairs_from_output=True,
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("is missing {essence_per_energy}", result.stderr)
+
+    def test_rejects_a_variable_absent_from_the_template(self) -> None:
+        result = self.run_output_validator(
+            "33333333-3333-4333-8333-333333333333",
+            placeholder="essence_per_energy",
+            variable_value=25,
+            extra_variable=("offer_count", 4),
+            derive_template_pairs_from_output=True,
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn(
+            "contains values absent from the canonical template: offer_count",
+            result.stderr,
+        )
 
     def test_rejects_non_integer_values_for_editable_mechanical_placeholders(self) -> None:
         for placeholder in (

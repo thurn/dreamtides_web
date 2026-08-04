@@ -119,6 +119,12 @@ and complete JSON output.
 
 ### Action variables
 
+The balanced candidate catalog reports `required_variables` and
+`special_variables` for every selectable template. An action's `variables`
+object contains exactly the keys in `required_variables`. A listed
+`special_variables` token may receive an eligibility rule in `selection`; it is
+not a key in `variables`.
+
 Use JSON primitives for counts, essence values, predicates, card types, and
 transfiguration names.
 
@@ -192,6 +198,18 @@ Actions contain `template_id`, `variables`, and optional `selection`; they do
 not copy canonical template text. `data/templates.json` is the sole source of
 template wording. Rendering replaces `{placeholder}` tokens and deliberately
 leaves `$SPECIAL_VARIABLE` tokens unchanged.
+
+Validate the exact final result file from its canonical card-only request with:
+
+```bash
+python3 .llms/skills/exploration-encounter-designer/scripts/validate-exploration.py \
+  --input <card-request.json> \
+  --output <events.json> \
+  --derive-template-pairs-from-output
+```
+
+This mode derives the five template pairs from the delivered events and
+validates the card, pair structure, actions, and variables as one contract.
 
 ## Scoring and ranking
 

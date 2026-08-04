@@ -6,18 +6,18 @@ from __future__ import annotations
 import argparse
 import json
 import math
-import re
 import sys
 from collections import Counter
 from pathlib import Path
 from typing import Any
+
+from template_rendering import PLACEHOLDER_RE, SPECIAL_RE
 
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parents[3]
 DEFAULT_TEMPLATE_CATALOG = REPO_ROOT / "data/templates.json"
 DEFAULT_ENCOUNTER_CANDIDATES = REPO_ROOT / "data/encounter_candidates.json"
-SPECIAL_VARIABLE_PATTERN = re.compile(r"\$[A-Z][A-Z0-9_]*")
 UNIQUE_EFFECT_BALANCE_CLASS = "unique_effect"
 SUPPORTED_BALANCE_CLASSES = {UNIQUE_EFFECT_BALANCE_CLASS}
 
@@ -259,6 +259,14 @@ def build_output(
     warning_id_set = set(warning_ids)
     reintroduced_id_set = set(reintroduced_ids)
 
+    def authoring_entry(entry: dict[str, Any]) -> dict[str, Any]:
+        template = entry["template"]
+        return {
+            **entry,
+            "required_variables": sorted(set(PLACEHOLDER_RE.findall(template))),
+            "special_variables": sorted(set(SPECIAL_RE.findall(template))),
+        }
+
     def reasons_for(template_id: int, *, omitted: bool) -> list[str]:
         overall_threshold = (
             overall_omission_threshold_for(template_id)
@@ -299,8 +307,7 @@ def build_output(
             reasons = []
         template_diagnostics.append(
             {
-                "template_id": template_id,
-                "template": entry["template"],
+                **authoring_entry(entry),
                 "usage_count": counts[template_id],
                 "rank_1_usage_count": rank_one_counts[template_id],
                 "status": status,
@@ -311,7 +318,7 @@ def build_output(
         {
             token
             for entry in catalog
-            for token in SPECIAL_VARIABLE_PATTERN.findall(entry["template"])
+            for token in SPECIAL_RE.findall(entry["template"])
         }
     )
 
@@ -373,7 +380,7 @@ def build_output(
         },
         "template_diagnostics": template_diagnostics,
         "special_variables": special_variables,
-        "templates": allowed_entries,
+        "templates": [authoring_entry(entry) for entry in allowed_entries],
     }
 
 

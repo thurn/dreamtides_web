@@ -264,6 +264,35 @@ def validate_input(
     return root
 
 
+def derive_template_pairs_from_output(input_data: Any, output_data: Any) -> dict[str, Any]:
+    root = require_object(input_data, "$input")
+    if "template_pairs" in root:
+        fail(
+            "$input.template_pairs",
+            "must be omitted when deriving template pairs from the output",
+        )
+    events = require_list(output_data, "$output")
+    pairs: list[dict[str, Any]] = []
+    for event_index, event in enumerate(events):
+        event_path = f"$output[{event_index}]"
+        event_obj = require_object(event, event_path)
+        actions = require_list(event_obj.get("actions"), f"{event_path}.actions")
+        pairs.append(
+            {
+                "id": event_obj.get("template_pair_id"),
+                "actions": [
+                    {
+                        "template_id": require_object(
+                            action, f"{event_path}.actions[{action_index}]"
+                        ).get("template_id")
+                    }
+                    for action_index, action in enumerate(actions)
+                ],
+            }
+        )
+    return {"card": root.get("card"), "template_pairs": pairs}
+
+
 def validate_entity_reference(
     value: Any,
     path: str,
@@ -537,6 +566,14 @@ def main() -> int:
     parser.add_argument("--input", required=True, type=Path, dest="input_path")
     parser.add_argument("--output", type=Path, dest="output_path")
     parser.add_argument(
+        "--derive-template-pairs-from-output",
+        action="store_true",
+        help=(
+            "Treat --input as a card-only request and derive the five template "
+            "pairs from the exact --output file before validating both contracts."
+        ),
+    )
+    parser.add_argument(
         "--template-catalog",
         type=Path,
         default=DEFAULT_TEMPLATE_CATALOG,
@@ -556,10 +593,21 @@ def main() -> int:
             args.cards_data, args.dreamsigns_data
         )
         transfigurations = read_transfiguration_types(args.transfigurations_data)
-        request = validate_input(load_json(args.input_path), catalog, cards)
-        if args.output_path is not None:
+        input_data = load_json(args.input_path)
+        output_data = (
+            load_json(args.output_path) if args.output_path is not None else None
+        )
+        if args.derive_template_pairs_from_output:
+            if output_data is None:
+                fail(
+                    "$output",
+                    "--derive-template-pairs-from-output requires --output",
+                )
+            input_data = derive_template_pairs_from_output(input_data, output_data)
+        request = validate_input(input_data, catalog, cards)
+        if output_data is not None:
             validate_output(
-                load_json(args.output_path),
+                output_data,
                 request,
                 catalog,
                 cards,

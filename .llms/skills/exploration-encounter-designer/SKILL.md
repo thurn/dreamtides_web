@@ -346,7 +346,11 @@ commentary.
    catalog and current usage in `data/encounter_candidates.json`, then prints
    the complete selectable `templates` list for this run. Review every returned
    template before committing; do not stop after finding the first ten
-   plausible entries.
+   plausible entries. Every selectable template reports `required_variables`
+   and `special_variables` derived from its canonical wording. Treat
+   `required_variables` as the exact set of keys for the action's `variables`
+   object: populate every listed key and add no others. Use `selection` only for
+   a listed special variable when its eligibility should be restricted.
 
    Read the `balance` metadata before selecting. A template in
    `soft_warnings` remains selectable, but prefer an unflagged template when it
@@ -486,8 +490,16 @@ commentary.
 
     ```bash
     python3 .llms/skills/exploration-encounter-designer/scripts/validate-exploration.py \
-      --input <request.json> --output <events.json>
+      --input <card-request.json> \
+      --output <events.json> \
+      --derive-template-pairs-from-output
     ```
+
+    Run this command against the exact final output path after the last write.
+    It derives the template-pair contract from that file, validates the original
+    canonical card request and all five completed events together, and must exit
+    successfully. Do not edit the output afterward or report completion after a
+    nonzero exit.
 
 18. Emit the validated result in the selected output mode. In JSON mode, emit
     the bare JSON list with no Markdown fence or surrounding commentary. In
@@ -645,7 +657,9 @@ commentary.
 - Store each action's `template_id`; canonical text exists only in
   `data/templates.json`. Never emit a `template` or `effect_text` field in an
   encounter action.
-- Populate every `{placeholder}` in `variables`. The standard predicate values
+- Make the keys in `variables` exactly equal the selected template's
+  `required_variables`: populate every `{placeholder}` and add no other keys.
+  The standard predicate values
   are exactly `Event`, `Warrior`, `Spirit Animal`, `Survivor`, and `≤2● cost
   Character`. A special runtime variable may instead remain unrestricted by
   omitting its `selection` entry. Do not manufacture a restriction merely to

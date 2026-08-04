@@ -121,46 +121,16 @@ def read_candidate_document(path: Path, expected_digest: str) -> dict[str, Any]:
     return document
 
 
-def build_request(card: dict[str, Any], events: Any) -> dict[str, Any]:
-    if not isinstance(events, list):
-        raise AggregationError(f"Result for {card['id']} must be a bare JSON array")
-    pairs: list[dict[str, Any]] = []
-    for event_index, event in enumerate(events):
-        if not isinstance(event, dict):
-            raise AggregationError(
-                f"Result for {card['id']} event {event_index} must be an object"
-            )
-        actions = event.get("actions")
-        if not isinstance(actions, list):
-            raise AggregationError(
-                f"Result for {card['id']} event {event_index} has no actions array"
-            )
-        pairs.append(
-            {
-                "id": event.get("template_pair_id"),
-                "actions": [
-                    {"template_id": action.get("template_id")}
-                    if isinstance(action, dict)
-                    else action
-                    for action in actions
-                ],
-            }
-        )
-    return {"card": card, "template_pairs": pairs}
-
-
 def validate_result(
     *,
     card: dict[str, Any],
-    events: Any,
     result_path: Path,
     args: argparse.Namespace,
 ) -> None:
-    request = build_request(card, events)
     with tempfile.TemporaryDirectory(prefix="encounter-batch-validate-") as directory:
         request_path = Path(directory) / "request.json"
         request_path.write_text(
-            json.dumps(request, ensure_ascii=False, indent=2) + "\n",
+            json.dumps({"card": card}, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
         command = [
@@ -170,6 +140,7 @@ def validate_result(
             str(request_path),
             "--output",
             str(result_path),
+            "--derive-template-pairs-from-output",
             "--template-catalog",
             str(args.template_catalog),
             "--cards-data",
@@ -286,15 +257,25 @@ def aggregate(args: argparse.Namespace) -> str:
     templates = read_templates(args.template_catalog)
 
     completed: list[tuple[dict[str, Any], list[Any], Path]] = []
+    result_errors: list[str] = []
     for card in manifest["cards"]:
         card_id = card["id"]
         if card_id in document:
             raise AggregationError(f"Card {card_id} already has encounter candidates")
         result_path = args.results_dir / f"{card_id}.json"
-        events = load_json(result_path, f"Result for {card_id}")
-        validate_result(card=card, events=events, result_path=result_path, args=args)
-        art_path = find_art(card, args)
+        try:
+            events = load_json(result_path, f"Result for {card_id}")
+            validate_result(card=card, result_path=result_path, args=args)
+            art_path = find_art(card, args)
+        except (AggregationError, OSError) as error:
+            result_errors.append(str(error))
+            continue
         completed.append((card, events, art_path))
+
+    if result_errors:
+        raise AggregationError(
+            "Batch results failed validation:\n- " + "\n- ".join(result_errors)
+        )
 
     for card, events, _ in completed:
         document[card["id"]] = selected_for_storage(events)

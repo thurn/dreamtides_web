@@ -266,6 +266,35 @@ class BatchScriptTests(unittest.TestCase):
         self.assertIn("does not exist", result.stderr)
         self.assertEqual(self.candidates_path.read_bytes(), before)
 
+    def test_aggregator_reports_every_invalid_result_without_writing(self) -> None:
+        output, card_ids = self.prepare_aggregate()
+        results_dir = Path(output["results_dir"])
+
+        first_path = results_dir / f"{card_ids[0]}.json"
+        first_events = json.loads(first_path.read_text(encoding="utf-8"))
+        first_events[0]["actions"][0]["variables"] = {}
+        first_path.write_text(json.dumps(first_events), encoding="utf-8")
+
+        second_path = results_dir / f"{card_ids[1]}.json"
+        second_events = json.loads(second_path.read_text(encoding="utf-8"))
+        second_events[0]["actions"][1]["variables"] = {"offer_count": 4}
+        second_path.write_text(json.dumps(second_events), encoding="utf-8")
+        before = self.candidates_path.read_bytes()
+
+        result = subprocess.run(
+            self.aggregate_command(output), capture_output=True, text=True, check=False
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn(card_ids[0], result.stderr)
+        self.assertIn("is missing {count}", result.stderr)
+        self.assertIn(card_ids[1], result.stderr)
+        self.assertIn(
+            "contains values absent from the canonical template: offer_count",
+            result.stderr,
+        )
+        self.assertEqual(self.candidates_path.read_bytes(), before)
+
 
 if __name__ == "__main__":
     unittest.main()

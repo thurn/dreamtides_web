@@ -2198,7 +2198,7 @@
           "label": "Feed the open flames",
           "template_id": 60,
           "variables": {
-            "essence_per_energy": 25
+            "essence_per_spark": 25
           }
         },
         {
@@ -2289,7 +2289,8 @@
           "label": "Explore the side streets",
           "template_id": 16,
           "variables": {
-            "predicate": "Event"
+            "predicate": "Event",
+            "offer_count": 4
           }
         },
         {
@@ -2347,7 +2348,7 @@
           "label": "Strip the intact sections",
           "template_id": 60,
           "variables": {
-            "essence_per_energy": 40
+            "essence_per_spark": 40
           }
         },
         {
@@ -2506,7 +2507,7 @@
           "label": "Follow the Lingering Light",
           "template_id": 70,
           "variables": {
-            "count": 2,
+            "nightmare_count": 2,
             "card_name": {
               "id": "a37876f4-08a7-4352-bb3a-6d24f5c9407d",
               "display_name": "Guiding Light"
@@ -2568,7 +2569,8 @@
           "label": "Study the Sunken Face",
           "template_id": 16,
           "variables": {
-            "predicate": "Event"
+            "predicate": "Event",
+            "offer_count": 4
           }
         }
       ],
@@ -2653,7 +2655,8 @@
           "label": "Call the flock closer",
           "template_id": 16,
           "variables": {
-            "predicate": "≤2● cost Character"
+            "predicate": "≤2● cost Character",
+            "offer_count": 4
           }
         }
       ],
@@ -2868,7 +2871,7 @@
           "label": "Trade your finest possession",
           "template_id": 60,
           "variables": {
-            "essence_per_energy": 25
+            "essence_per_spark": 25
           }
         }
       ],

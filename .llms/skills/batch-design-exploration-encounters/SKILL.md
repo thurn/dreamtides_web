@@ -64,7 +64,8 @@ and the number of single-card subagent assignments.
 5. Wait for every assignment. Confirm that each selected UUID has one result
    file. When an agent fails or produces invalid JSON, send the validation error
    back to that same agent for repair; do not substitute another card or accept
-   a partial batch.
+   a partial batch. Batch validation reports every invalid result together, so
+   route each UUID's error to its corresponding agent before retrying.
 
 6. Validate every result against the single-card designer contract, resolve its
    artwork, append the complete batch atomically, and capture the display copy:
@@ -77,7 +78,9 @@ and the number of single-card subagent assignments.
    ```
 
    The aggregator refuses stale catalog state, duplicate card UUIDs, missing
-   results, invalid events, and unresolved artwork before writing. It marks the
+   results, invalid events, and unresolved artwork before writing. It validates
+   the exact delivered result files from their card-only requests and reports
+   all per-card failures in one pass. It marks the
    rank-1 candidate selected for the encounter editor. Candidate actions store
    `label`, `template_id`, `variables`, and optional selection metadata;
    canonical template wording remains exclusively in `data/templates.json`.
