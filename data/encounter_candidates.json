@@ -1594,7 +1594,7 @@
           "label": "Charge Through the Smoke",
           "template_id": 65,
           "variables": {
-            "count": 3
+            "count": 5
           }
         }
       ],
